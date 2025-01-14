@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : general settings page
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2020-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -39,7 +39,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 	connect(ui.cbLoadOnStart, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbTitleBar, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbUnits, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
-	connect(ui.cbDecimalSeparator, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
+	connect(ui.cbNumberFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.chkGUMTerms, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkOmitGroupSeparator, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkOmitLeadingZeroInExponent, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
@@ -63,45 +63,8 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent)
 	autoSaveChanged(ui.chkAutoSave->isChecked());
 }
 
-/* returns decimal separator (as SettingsGeneralPage::DecimalSeparator) of given locale (default: system setting) */
-SettingsGeneralPage::DecimalSeparator SettingsGeneralPage::decimalSeparator(QLocale locale) {
-	DEBUG(Q_FUNC_INFO << ", LOCALE: " << STDSTRING(locale.name()) << ", " << locale.language())
-	const auto decimalPoint = locale.decimalPoint();
-	DEBUG(Q_FUNC_INFO << ", SEPARATING CHAR: " << STDSTRING(QString(decimalPoint)))
-	if (decimalPoint == QLatin1Char('.'))
-		return DecimalSeparator::Dot;
-	else if (decimalPoint == QLatin1Char(','))
-		return DecimalSeparator::Comma;
-
-	return DecimalSeparator::Arabic;
-}
-
-QLocale::Language SettingsGeneralPage::decimalSeparatorLocale() const {
-	int currentIndex = ui.cbDecimalSeparator->currentIndex();
-	DEBUG(Q_FUNC_INFO << ", SYSTEM LOCALE: " << STDSTRING(QLocale().name()) << ':' << QLocale().language())
-	DEBUG(Q_FUNC_INFO << ", SYSTEM SEPARATING CHAR: " << STDSTRING(QString(QLocale().decimalPoint())))
-
-	const auto groupSeparator = QLocale().groupSeparator();
-	switch (currentIndex) {
-	case static_cast<int>(DecimalSeparator::Dot):
-		if (groupSeparator == QLocale(QLocale::Language::Zarma).groupSeparator()) // \u00a0
-			return QLocale::Language::Zarma; // . \u00a0
-		else if (groupSeparator == QLocale(QLocale::Language::SwissGerman).groupSeparator()) // \u2019
-			return QLocale::Language::SwissGerman; // . \u2019
-		else
-			return QLocale::Language::C; // . ,
-	case static_cast<int>(DecimalSeparator::Comma):
-		if (groupSeparator == QLocale(QLocale::Language::French).groupSeparator()) // \u00a0
-			return QLocale::Language::French; // , \u00a0
-		else if (groupSeparator == QLocale(QLocale::Language::Walser).groupSeparator()) // \u2019
-			return QLocale::Language::Walser; // , \u2019
-		else
-			return QLocale::Language::German; // , .
-	case static_cast<int>(DecimalSeparator::Arabic):
-		return QLocale::Language::Arabic; // \u066b \u066c
-	default: // automatic
-		return QLocale::Language::AnyLanguage;
-	}
+QLocale::Language SettingsGeneralPage::numberFormat() const {
+	return static_cast<QLocale::Language>(ui.cbNumberFormat->currentData().toInt());
 }
 
 bool SettingsGeneralPage::applySettings() {
@@ -115,10 +78,9 @@ bool SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("NewProjectNotebook"), ui.cbNewProjectNotebook->currentText());
 	group.writeEntry(QLatin1String("TitleBar"), ui.cbTitleBar->currentIndex());
 	group.writeEntry(QLatin1String("Units"), ui.cbUnits->currentIndex());
-	if (ui.cbDecimalSeparator->currentIndex() == static_cast<int>(DecimalSeparator::Automatic)) // need to overwrite previous setting
-		group.writeEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage));
-	else
-		group.writeEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(decimalSeparatorLocale()));
+	group.writeEntry(QLatin1String("NumberFormat"), ui.cbNumberFormat->currentData().toInt());
+
+	// number options
 	QLocale::NumberOptions numberOptions{QLocale::DefaultNumberOptions};
 	if (ui.chkOmitGroupSeparator->isChecked())
 		numberOptions |= QLocale::OmitGroupSeparator;
@@ -126,8 +88,9 @@ bool SettingsGeneralPage::applySettings() {
 		numberOptions |= QLocale::OmitLeadingZeroInExponent;
 	if (ui.chkIncludeTrailingZeroesAfterDot->isChecked())
 		numberOptions |= QLocale::IncludeTrailingZeroesAfterDot;
-	group.writeEntry(QLatin1String("GUMTerms"), ui.chkGUMTerms->isChecked());
 	group.writeEntry(QLatin1String("NumberOptions"), static_cast<int>(numberOptions));
+
+	group.writeEntry(QLatin1String("GUMTerms"), ui.chkGUMTerms->isChecked());
 	group.writeEntry(QLatin1String("AutoSave"), ui.chkAutoSave->isChecked());
 	group.writeEntry(QLatin1String("AutoSaveInterval"), ui.sbAutoSaveInterval->value());
 	group.writeEntry(QLatin1String("SaveDockStates"), ui.chkSaveDockStates->isChecked());
@@ -152,7 +115,7 @@ void SettingsGeneralPage::restoreDefaults() {
 	ui.cbNewProject->setCurrentIndex(ui.cbNewProject->findData(static_cast<int>(MainWin::NewProject::WithSpreadsheet)));
 	ui.cbTitleBar->setCurrentIndex(0);
 	ui.cbUnits->setCurrentIndex(0);
-	ui.cbDecimalSeparator->setCurrentIndex(static_cast<int>(DecimalSeparator::Automatic));
+	ui.cbNumberFormat->setCurrentIndex(ui.cbNumberFormat->findData(static_cast<int>(QLocale::AnyLanguage)));
 	ui.chkGUMTerms->setChecked(false);
 	ui.chkOmitGroupSeparator->setChecked(true);
 	ui.chkOmitLeadingZeroInExponent->setChecked(true);
@@ -192,14 +155,29 @@ void SettingsGeneralPage::loadSettings() {
 	ui.cbDockWindowPositionReopen->setCurrentIndex(ui.cbDockWindowPositionReopen->findData(static_cast<int>(Settings::readDockPosBehavior())));
 
 	ui.cbUnits->setCurrentIndex(group.readEntry(QLatin1String("Units"), 0));
-	// must be done, because locale.language() will return the default locale if AnyLanguage is passed
-	const auto l = static_cast<QLocale::Language>(group.readEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage)));
-	QLocale locale(l);
-	if (l == QLocale::Language::AnyLanguage) // no or default setting
-		ui.cbDecimalSeparator->setCurrentIndex(static_cast<int>(DecimalSeparator::Automatic));
-	else
-		ui.cbDecimalSeparator->setCurrentIndex(static_cast<int>(decimalSeparator(locale)));
 	ui.chkGUMTerms->setChecked(group.readEntry<bool>(QLatin1String("GUMTerms"), false));
+
+	// nubmer format
+	if (group.hasKey(QLatin1String("DecimalSeparatorLocale"))) {
+		// migrate from the versions older than 2.12 that had the decimal separator only:
+		// map from the old enum values for the decimal separator to new values of the used languages for the number format,
+		// use languages that don't use any group separator for this.
+		// old enum class DecimalSeparator { Dot, Comma, Arabic, Automatic };
+		int decimalSeparator = group.readEntry(QLatin1String("DecimalSeparatorLocale"), 0);
+		if (decimalSeparator == 0) // Dot
+			ui.cbNumberFormat->setCurrentIndex(ui.cbNumberFormat->findData(QLocale::C));
+		else if (decimalSeparator == 1) // Comma
+			ui.cbNumberFormat->setCurrentIndex(ui.cbNumberFormat->findData(QLocale::Estonian));
+		else if (decimalSeparator == 2) // Arabic
+			ui.cbNumberFormat->setCurrentIndex(ui.cbNumberFormat->findData(QLocale::Arabic));
+		else if (decimalSeparator == 3) // Automatic
+			ui.cbNumberFormat->setCurrentIndex(ui.cbNumberFormat->findData(QLocale::AnyLanguage));
+	} else {
+		const auto language = group.readEntry(QLatin1String("NumberFormat"), static_cast<int>(QLocale::AnyLanguage));
+		ui.cbNumberFormat->setCurrentIndex(ui.cbNumberFormat->findData(language));
+	}
+
+	// number options
 	QLocale::NumberOptions numberOptions{
 		static_cast<QLocale::NumberOptions>(group.readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)))};
 	if (numberOptions & QLocale::OmitGroupSeparator)
@@ -249,13 +227,23 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbTitleBar->addItem(i18n("Show File Name"));
 	ui.cbTitleBar->addItem(i18n("Show Project Name"));
 
+	ui.cbUnits->clear();
 	ui.cbUnits->addItem(i18n("Metric"));
 	ui.cbUnits->addItem(i18n("Imperial"));
 
-	ui.cbDecimalSeparator->addItem(i18n("Dot (.)"));
-	ui.cbDecimalSeparator->addItem(i18n("Comma (,)"));
-	ui.cbDecimalSeparator->addItem(i18n("Arabic (٫)"));
-	ui.cbDecimalSeparator->addItem(i18n("Automatic"));
+	msg = i18n("Characters for the decimal and group separators defining the number format");
+	ui.lNumberFormat->setToolTip(msg);
+	ui.cbNumberFormat->setToolTip(msg);
+	ui.cbNumberFormat->clear();
+	ui.cbNumberFormat->addItem(i18n("%1 (System)", QLocale().toString(1000.01)), static_cast<int>(QLocale::Language::AnyLanguage));
+	ui.cbNumberFormat->insertSeparator(1);
+	ui.cbNumberFormat->addItem(QLatin1String("1000.01"), static_cast<int>(QLocale::Language::C));
+	ui.cbNumberFormat->addItem(QLatin1String("1000,01"), static_cast<int>(QLocale::Language::Estonian));
+	ui.cbNumberFormat->addItem(QLatin1String("1 000,01"), static_cast<int>(QLocale::Language::Ukrainian));
+	ui.cbNumberFormat->addItem(QLatin1String("1,000.01"), static_cast<int>(QLocale::Language::English));
+	ui.cbNumberFormat->addItem(QLatin1String("1.000,01"), static_cast<int>(QLocale::Language::German));
+	ui.cbNumberFormat->addItem(QString::fromUtf8("1’000,01"), static_cast<int>(QLocale::Language::SwissGerman));
+	ui.cbNumberFormat->addItem(QString::fromUtf8("١٬٠٠٠٫٠١"), static_cast<int>(QLocale::Language::Arabic));
 
 	msg = i18n(
 		"Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of Uncertainty "

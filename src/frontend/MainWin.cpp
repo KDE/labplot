@@ -2542,16 +2542,17 @@ void MainWin::dropEvent(QDropEvent* event) {
 		event->ignore();
 }
 
+/*!
+ * set the default locale of the application to the locale specified in the application settings for the number format and options.
+ */
 void MainWin::updateLocale() {
-	// Set default locale
-	auto numberLocaleLanguage =
-		static_cast<QLocale::Language>(Settings::group(QStringLiteral("Settings_General"))
-										   .readEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage)));
+	// language used for the number format
+	const auto group = Settings::group(QStringLiteral("Settings_General"));
+	auto language = static_cast<QLocale::Language>(group.readEntry(QLatin1String("NumberFormat"), static_cast<int>(QLocale::Language::AnyLanguage)));
+	QLocale l(language == QLocale::AnyLanguage ? QLocale() : language);
 
-	auto numberOptions = static_cast<QLocale::NumberOptions>(
-		Settings::group(QStringLiteral("Settings_General")).readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)));
-
-	QLocale l(numberLocaleLanguage == QLocale::AnyLanguage ? QLocale() : numberLocaleLanguage);
+	// number options
+	auto numberOptions = static_cast<QLocale::NumberOptions>(group.readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)));
 	l.setNumberOptions(numberOptions);
 	QLocale::setDefault(l);
 }

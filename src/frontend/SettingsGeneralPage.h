@@ -17,15 +17,12 @@ class SettingsGeneralPage : public SettingsPage {
 	Q_OBJECT
 
 public:
-	enum class DecimalSeparator { Dot, Comma, Arabic, Automatic };
-
 	explicit SettingsGeneralPage(QWidget*);
-
-	static DecimalSeparator decimalSeparator(QLocale locale = QLocale());
-	QLocale::Language decimalSeparatorLocale() const;
 
 	bool applySettings() override;
 	void restoreDefaults() override;
+
+	QLocale::Language numberFormat() const;
 
 private:
 	Ui::SettingsGeneralPage ui;
