@@ -150,7 +150,7 @@ if(ENABLE_VECTOR_BLF)
         target_compile_definitions(labplotlib PUBLIC HAVE_VECTOR_BLF)
         add_definitions (-DHAVE_VECTOR_BLF)
         # manually install so
-	install(FILES ${Vector_BLF_LIBRARIES} DESTINATION lib64)
+	install(FILES ${Vector_BLF_LIBRARIES} DESTINATION ${KDE_INSTALL_LIBDIR})
     endif()
   endif()
 else()
