@@ -224,6 +224,7 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbNumberFormat->insertSeparator(1);
 	ui.cbNumberFormat->addItem(QLatin1String("1,000.01"), static_cast<int>(QLocale::Language::English));
 	ui.cbNumberFormat->addItem(QLatin1String("1.000,01"), static_cast<int>(QLocale::Language::German));
+	ui.cbNumberFormat->addItem(QLatin1String("1 000.01"), static_cast<int>(QLocale::Language::Zarma));
 	ui.cbNumberFormat->addItem(QLatin1String("1 000,01"), static_cast<int>(QLocale::Language::Ukrainian));
 	ui.cbNumberFormat->addItem(QString::fromUtf8("1’000,01"), static_cast<int>(QLocale::Language::SwissGerman));
 	ui.cbNumberFormat->addItem(QString::fromUtf8("١٬٠٠٠٫٠١"), static_cast<int>(QLocale::Language::Arabic));
