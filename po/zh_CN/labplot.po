@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-13 00:37+0000\n"
+"POT-Creation-Date: 2025-01-16 00:37+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -361,13 +361,13 @@ msgstr "输入%1"
 msgid "Import Data"
 msgstr "导入数据"
 
-#: src/backend/core/AbstractPart.cpp:116 src/frontend/MainWin.cpp:672
-#: src/frontend/MainWin.cpp:681
+#: src/backend/core/AbstractPart.cpp:116 src/frontend/MainWin.cpp:675
+#: src/frontend/MainWin.cpp:684
 #, kde-format
 msgid "From File..."
 msgstr "来自文件..."
 
-#: src/backend/core/AbstractPart.cpp:118 src/frontend/MainWin.cpp:693
+#: src/backend/core/AbstractPart.cpp:118 src/frontend/MainWin.cpp:696
 #, kde-format
 msgid "From SQL Database..."
 msgstr "来自 SQL 数据库..."
@@ -392,7 +392,7 @@ msgstr "打印"
 msgid "Print Preview"
 msgstr "打印预览"
 
-#: src/backend/core/AbstractPart.cpp:137 src/frontend/MainWin.cpp:765
+#: src/backend/core/AbstractPart.cpp:137 src/frontend/MainWin.cpp:768
 #, kde-format
 msgid "&Close"
 msgstr "关闭(&C)"
@@ -1903,7 +1903,7 @@ msgid "Unknown"
 msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:643 src/frontend/MainWin.cpp:1988
+#: src/frontend/MainWin.cpp:646 src/frontend/MainWin.cpp:1991
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -8315,7 +8315,7 @@ msgid "Reference Range"
 msgstr "参照区间"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
-#: src/frontend/MainWin.cpp:891 src/frontend/notebook/NotebookView.cpp:168
+#: src/frontend/MainWin.cpp:894 src/frontend/notebook/NotebookView.cpp:168
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:294
 #: src/frontend/worksheet/WorksheetView.cpp:433
@@ -11401,7 +11401,6 @@ msgid "Data format && preview"
 msgstr "数据格式与预览"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1352
-#: src/frontend/SettingsGeneralPage.cpp:258
 #, kde-format
 msgid "Automatic"
 msgstr "自动"
@@ -11786,7 +11785,7 @@ msgid "Open LabPlot Project"
 msgstr ""
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:1484
+#: src/frontend/MainWin.cpp:1487
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "LabPlot 工程 (%1)"
@@ -11810,8 +11809,8 @@ msgstr "文件夹名称："
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:71 src/frontend/MainWin.cpp:637
-#: src/frontend/MainWin.cpp:1970 src/frontend/SettingsDialog.cpp:68
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:71 src/frontend/MainWin.cpp:640
+#: src/frontend/MainWin.cpp:1973 src/frontend/SettingsDialog.cpp:68
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12046,7 +12045,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2790
+#: src/frontend/MainWin.cpp:2819
 #, kde-format
 msgid "Warning"
 msgstr "警告"
@@ -13688,7 +13687,7 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/frontend/GuiObserver.cpp:177 src/frontend/MainWin.cpp:1391
+#: src/frontend/GuiObserver.cpp:177 src/frontend/MainWin.cpp:1394
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -14238,98 +14237,98 @@ msgstr ""
 msgid "Clear History"
 msgstr "清除历史"
 
-#: src/frontend/LabPlot.cpp:44
+#: src/frontend/LabPlot.cpp:43
 #, kde-format
 msgid "Visit website:"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:46
+#: src/frontend/LabPlot.cpp:45
 #, kde-format
 msgid "Watch video tutorials:"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:47
+#: src/frontend/LabPlot.cpp:46
 #, kde-format
 msgid "Discuss on Mastodon:"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:48
+#: src/frontend/LabPlot.cpp:47
 #, kde-format
 msgid "Development:"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:49
+#: src/frontend/LabPlot.cpp:48
 #, kde-format
 msgid "Please report bugs to:"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:53
+#: src/frontend/LabPlot.cpp:52
 #, kde-format
 msgid ""
 "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
 "Analysis software accessible to everyone."
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:55
+#: src/frontend/LabPlot.cpp:54
 #, kde-format
 msgid "(c) 2007-2025 LabPlot authors"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:57
+#: src/frontend/LabPlot.cpp:56
 #, kde-format
 msgid "Stefan Gerlach"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:57 src/frontend/LabPlot.cpp:58
-#: src/frontend/LabPlot.cpp:59 src/frontend/LabPlot.cpp:60
+#: src/frontend/LabPlot.cpp:56 src/frontend/LabPlot.cpp:57
+#: src/frontend/LabPlot.cpp:58 src/frontend/LabPlot.cpp:59
 #, kde-format
 msgctxt "@info:credit"
 msgid "Developer"
 msgstr "开发商"
 
-#: src/frontend/LabPlot.cpp:58
+#: src/frontend/LabPlot.cpp:57
 #, kde-format
 msgid "Alexander Semke"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:59
+#: src/frontend/LabPlot.cpp:58
 #, kde-format
 msgid "Fábián Kristóf-Szabolcs"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:60
+#: src/frontend/LabPlot.cpp:59
 #, kde-format
 msgid "Martin Marmsoler"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:61
+#: src/frontend/LabPlot.cpp:60
 #, kde-format
 msgid "Dariusz Laska"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:62
+#: src/frontend/LabPlot.cpp:61
 #, kde-format
 msgctxt "@info:credit"
 msgid "Conceptual work, documentation, example projects"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:65
+#: src/frontend/LabPlot.cpp:64
 #, kde-format
 msgid "Andreas Kainz"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:65
+#: src/frontend/LabPlot.cpp:64
 #, kde-format
 msgctxt "@info:credit"
 msgid "Icon designer"
 msgstr "图标设计师"
 
-#: src/frontend/LabPlot.cpp:69
+#: src/frontend/LabPlot.cpp:68
 #, kde-format
 msgid "Yuri Chornoivan"
 msgstr "Yuri Chornoivan"
 
-#: src/frontend/LabPlot.cpp:70
+#: src/frontend/LabPlot.cpp:69
 #, kde-format
 msgctxt "@info:credit"
 msgid ""
@@ -14337,51 +14336,51 @@ msgid ""
 "topics"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:73
+#: src/frontend/LabPlot.cpp:72
 #, kde-format
 msgid "Garvit Khatri"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:74
+#: src/frontend/LabPlot.cpp:73
 #, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:77
+#: src/frontend/LabPlot.cpp:76
 #, kde-format
 msgid "Christoph Roick"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:78
+#: src/frontend/LabPlot.cpp:77
 #, kde-format
 msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:101
+#: src/frontend/LabPlot.cpp:100
 #, kde-format
 msgid "Disable splash screen"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:104
+#: src/frontend/LabPlot.cpp:103
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:107
+#: src/frontend/LabPlot.cpp:106
 #, kde-format
 msgid "Open a project file."
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:126
+#: src/frontend/LabPlot.cpp:125
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
 "to exit the application."
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:127
+#: src/frontend/LabPlot.cpp:126
 #, kde-format
 msgid "Failed to Open"
 msgstr ""
@@ -14502,386 +14501,386 @@ msgid "&Windows"
 msgstr "窗口(&W)"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
-#: src/frontend/MainWin.cpp:201 src/frontend/ui/settingsworksheetpage.ui:75
+#: src/frontend/MainWin.cpp:204 src/frontend/ui/settingsworksheetpage.ui:75
 #: src/frontend/worksheet/WorksheetView.cpp:268
 #, kde-format
 msgid "Presenter Mode"
 msgstr "演示模式"
 
-#: src/frontend/MainWin.cpp:201
+#: src/frontend/MainWin.cpp:204
 #, kde-format
 msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
 "started."
 msgstr "工程中没有可用的工作表。演示模式将不会启动。"
 
-#: src/frontend/MainWin.cpp:215
+#: src/frontend/MainWin.cpp:218
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "欢迎使用 LabPlot %1"
 
-#: src/frontend/MainWin.cpp:606
+#: src/frontend/MainWin.cpp:609
 #, kde-format
 msgid "&Open Example"
 msgstr "打开示例(&O)"
 
-#: src/frontend/MainWin.cpp:627 src/frontend/MainWin.cpp:1954
+#: src/frontend/MainWin.cpp:630 src/frontend/MainWin.cpp:1957
 #, kde-format
 msgid "Workbook"
 msgstr "工作薄"
 
-#: src/frontend/MainWin.cpp:629
+#: src/frontend/MainWin.cpp:632
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr "创建新的工作簿，用于存放工作表、矩阵"
 
-#: src/frontend/MainWin.cpp:632 src/frontend/MainWin.cpp:1962
+#: src/frontend/MainWin.cpp:635 src/frontend/MainWin.cpp:1965
 #, kde-format
 msgid "Data Extractor"
 msgstr "数据点提取器"
 
-#: src/frontend/MainWin.cpp:633
+#: src/frontend/MainWin.cpp:636
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "创建新的数据点提取器，用于从图片中获取数据点"
 
-#: src/frontend/MainWin.cpp:639
+#: src/frontend/MainWin.cpp:642
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "创建新的数据表，用于编辑数据"
 
-#: src/frontend/MainWin.cpp:645
+#: src/frontend/MainWin.cpp:648
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "创建新的矩阵，用于编辑数据"
 
-#: src/frontend/MainWin.cpp:649 src/frontend/MainWin.cpp:2006
+#: src/frontend/MainWin.cpp:652 src/frontend/MainWin.cpp:2009
 #: src/frontend/SettingsDialog.cpp:63
 #, kde-format
 msgid "Worksheet"
 msgstr "工作表"
 
-#: src/frontend/MainWin.cpp:651
+#: src/frontend/MainWin.cpp:654
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "创建新的工作表，用于数据绘图"
 
-#: src/frontend/MainWin.cpp:655 src/frontend/MainWin.cpp:2014
+#: src/frontend/MainWin.cpp:658 src/frontend/MainWin.cpp:2017
 #, kde-format
 msgid "Note"
 msgstr "备注"
 
-#: src/frontend/MainWin.cpp:656
+#: src/frontend/MainWin.cpp:659
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "创建新的备注，用于记录文本"
 
-#: src/frontend/MainWin.cpp:660 src/frontend/MainWin.cpp:1946
+#: src/frontend/MainWin.cpp:663 src/frontend/MainWin.cpp:1949
 #, kde-format
 msgid "Folder"
 msgstr "文件夹"
 
-#: src/frontend/MainWin.cpp:661
+#: src/frontend/MainWin.cpp:664
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "创建新的文件夹，用于存放工作表等其他元素"
 
-#: src/frontend/MainWin.cpp:666
+#: src/frontend/MainWin.cpp:669
 #, kde-format
 msgid "Live Data Source..."
 msgstr "实时数据源..."
 
-#: src/frontend/MainWin.cpp:667
+#: src/frontend/MainWin.cpp:670
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr "创建实时数据源，用于从实时设备读取数据"
 
-#: src/frontend/MainWin.cpp:674 src/frontend/MainWin.cpp:683
+#: src/frontend/MainWin.cpp:677 src/frontend/MainWin.cpp:686
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "从常规文件导入数据"
 
-#: src/frontend/MainWin.cpp:688
+#: src/frontend/MainWin.cpp:691
 #, kde-format
 msgid "From kaggle.com..."
 msgstr "来自 kaggle.com..."
 
-#: src/frontend/MainWin.cpp:689
+#: src/frontend/MainWin.cpp:692
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr "从 kaggle.com 导入数据"
 
-#: src/frontend/MainWin.cpp:694
+#: src/frontend/MainWin.cpp:697
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "从 SQL 数据库导入数据"
 
-#: src/frontend/MainWin.cpp:698
+#: src/frontend/MainWin.cpp:701
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "来自数据集库..."
 
-#: src/frontend/MainWin.cpp:699
+#: src/frontend/MainWin.cpp:702
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr "从在线数据集导入数据"
 
-#: src/frontend/MainWin.cpp:703
+#: src/frontend/MainWin.cpp:706
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "LabPlot 工程文件..."
 
-#: src/frontend/MainWin.cpp:704
+#: src/frontend/MainWin.cpp:707
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "从 LabPlot 工程文件 (.lml) 导入到当前工程"
 
-#: src/frontend/MainWin.cpp:709
+#: src/frontend/MainWin.cpp:712
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Origin 工程文件 (OPJ)..."
 
-#: src/frontend/MainWin.cpp:710
+#: src/frontend/MainWin.cpp:713
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr "从 OriginLab Origin 工程文件 (.opj) 导入到当前工程"
 
-#: src/frontend/MainWin.cpp:715
+#: src/frontend/MainWin.cpp:718
 #, kde-format
 msgid "Export..."
 msgstr "导出..."
 
-#: src/frontend/MainWin.cpp:716
+#: src/frontend/MainWin.cpp:719
 #, kde-format
 msgid "Export selected element"
 msgstr "导出选中的元素"
 
-#: src/frontend/MainWin.cpp:722 src/frontend/MainWin.cpp:2492
-#: src/frontend/MainWin.cpp:2500
+#: src/frontend/MainWin.cpp:725 src/frontend/MainWin.cpp:2495
+#: src/frontend/MainWin.cpp:2503
 #, kde-format
 msgid "Share"
 msgstr "分享"
 
-#: src/frontend/MainWin.cpp:727
+#: src/frontend/MainWin.cpp:730
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "浏览色阶"
 
-#: src/frontend/MainWin.cpp:728
+#: src/frontend/MainWin.cpp:731
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "打开对话框以浏览可用的色阶。"
 
-#: src/frontend/MainWin.cpp:737
+#: src/frontend/MainWin.cpp:740
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "FITS 元数据编辑器..."
 
-#: src/frontend/MainWin.cpp:738
+#: src/frontend/MainWin.cpp:741
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "打开 FITS 元数据编辑器"
 
-#: src/frontend/MainWin.cpp:747
+#: src/frontend/MainWin.cpp:750
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "撤销/重做历史..."
 
-#: src/frontend/MainWin.cpp:767
+#: src/frontend/MainWin.cpp:770
 #, kde-format
 msgid "Close the active window"
 msgstr "关闭当前窗口"
 
-#: src/frontend/MainWin.cpp:770
+#: src/frontend/MainWin.cpp:773
 #, kde-format
 msgid "Close &All"
 msgstr "全部关闭(&A)"
 
-#: src/frontend/MainWin.cpp:771
+#: src/frontend/MainWin.cpp:774
 #, kde-format
 msgid "Close all the windows"
 msgstr "关闭所有窗口"
 
-#: src/frontend/MainWin.cpp:774
+#: src/frontend/MainWin.cpp:777
 #, kde-format
 msgid "Ne&xt"
 msgstr "下一个(&X)"
 
-#: src/frontend/MainWin.cpp:776
+#: src/frontend/MainWin.cpp:779
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "将焦点移动到下一个窗口"
 
-#: src/frontend/MainWin.cpp:779
+#: src/frontend/MainWin.cpp:782
 #, kde-format
 msgid "Pre&vious"
 msgstr "上一个(&V)"
 
-#: src/frontend/MainWin.cpp:781
+#: src/frontend/MainWin.cpp:784
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "将焦点移动到上一个窗口"
 
-#: src/frontend/MainWin.cpp:788
+#: src/frontend/MainWin.cpp:791
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "仅当前文件夹(&F)"
 
-#: src/frontend/MainWin.cpp:793
+#: src/frontend/MainWin.cpp:796
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "当前文件夹及子文件夹(&S)"
 
-#: src/frontend/MainWin.cpp:797
+#: src/frontend/MainWin.cpp:800
 #, kde-format
 msgid "&All"
 msgstr "全部(&A)"
 
-#: src/frontend/MainWin.cpp:819
+#: src/frontend/MainWin.cpp:822
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "显示内存使用情况"
 
-#: src/frontend/MainWin.cpp:827
+#: src/frontend/MainWin.cpp:830
 #, kde-format
 msgid "Project Explorer"
 msgstr "工程浏览器"
 
-#: src/frontend/MainWin.cpp:832
+#: src/frontend/MainWin.cpp:835
 #, kde-format
 msgid "Properties Explorer"
 msgstr "属性浏览器"
 
-#: src/frontend/MainWin.cpp:837
+#: src/frontend/MainWin.cpp:840
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "工作表预览"
 
-#: src/frontend/MainWin.cpp:860
+#: src/frontend/MainWin.cpp:863
 #, kde-format
 msgid "Configure CAS..."
 msgstr "配置 CAS..."
 
-#: src/frontend/MainWin.cpp:861
+#: src/frontend/MainWin.cpp:864
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
 "systems or to enable new ones"
 msgstr "打开计算机代数系统 (CAS) 的设置，对可用系统做出修改或启用新系统"
 
-#: src/frontend/MainWin.cpp:921
+#: src/frontend/MainWin.cpp:924
 #, kde-format
 msgid "Window Visibility"
 msgstr "窗口可见性"
 
-#: src/frontend/MainWin.cpp:938
+#: src/frontend/MainWin.cpp:941
 #, kde-format
 msgid "Color Scheme"
 msgstr "配色方案"
 
-#: src/frontend/MainWin.cpp:996
+#: src/frontend/MainWin.cpp:999
 #, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:997
+#: src/frontend/MainWin.cpp:1000
 #, kde-format
 msgid "Save Project"
 msgstr "保存工程"
 
-#: src/frontend/MainWin.cpp:1352
+#: src/frontend/MainWin.cpp:1355
 #, kde-format
 msgid "%1: created"
 msgstr "%1：创建"
 
-#: src/frontend/MainWin.cpp:1378
+#: src/frontend/MainWin.cpp:1381
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "工程浏览器"
 
-#: src/frontend/MainWin.cpp:1403
+#: src/frontend/MainWin.cpp:1406
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "工作表预览"
 
-#: src/frontend/MainWin.cpp:1412
+#: src/frontend/MainWin.cpp:1415
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "内容"
 
-#: src/frontend/MainWin.cpp:1489
+#: src/frontend/MainWin.cpp:1492
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Origin 工程文件 (%1)"
 
-#: src/frontend/MainWin.cpp:1495
+#: src/frontend/MainWin.cpp:1498
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "Cantor 工程文件 (*.cws)"
 
-#: src/frontend/MainWin.cpp:1496
+#: src/frontend/MainWin.cpp:1499
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Jupyter 笔记本文件 (*.ipynb)"
 
-#: src/frontend/MainWin.cpp:1503
+#: src/frontend/MainWin.cpp:1506
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "所有支持的文件 (%1)"
 
-#: src/frontend/MainWin.cpp:1507
+#: src/frontend/MainWin.cpp:1510
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "打开工程"
 
-#: src/frontend/MainWin.cpp:1524
+#: src/frontend/MainWin.cpp:1527
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "工程文件 %1 已经处于打开状态。"
 
-#: src/frontend/MainWin.cpp:1524 src/frontend/MainWin.cpp:1532
-#: src/frontend/MainWin.cpp:1537
+#: src/frontend/MainWin.cpp:1527 src/frontend/MainWin.cpp:1535
+#: src/frontend/MainWin.cpp:1540
 #, kde-format
 msgid "Open Project"
 msgstr "打开工程"
 
-#: src/frontend/MainWin.cpp:1532
+#: src/frontend/MainWin.cpp:1535
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "工程文件 %1 不存在。"
 
-#: src/frontend/MainWin.cpp:1537
+#: src/frontend/MainWin.cpp:1540
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "无法读取工程文件 %1。"
 
-#: src/frontend/MainWin.cpp:1545
+#: src/frontend/MainWin.cpp:1548
 #, kde-format
 msgid "Loading %1..."
 msgstr "正在加载 %1..."
 
-#: src/frontend/MainWin.cpp:1599
+#: src/frontend/MainWin.cpp:1602
 #, kde-format
 msgid "%1: opened"
 msgstr "%1：打开"
 
-#: src/frontend/MainWin.cpp:1634
+#: src/frontend/MainWin.cpp:1637
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "工程打开成功 (耗时 %1 秒)。"
 
-#: src/frontend/MainWin.cpp:1726
+#: src/frontend/MainWin.cpp:1729
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "工程另存为"
 
-#: src/frontend/MainWin.cpp:1728
+#: src/frontend/MainWin.cpp:1731
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -14890,70 +14889,70 @@ msgstr ""
 "LabPlot 工程文件 (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:1755
+#: src/frontend/MainWin.cpp:1758
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "无法打开临时文件进行写入。"
 
-#: src/frontend/MainWin.cpp:1835
+#: src/frontend/MainWin.cpp:1838
 #, kde-format
 msgid "Project saved"
 msgstr "工程已保存"
 
-#: src/frontend/MainWin.cpp:1851
+#: src/frontend/MainWin.cpp:1854
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "无法保存文件“%1”。"
 
-#: src/frontend/MainWin.cpp:1856
+#: src/frontend/MainWin.cpp:1859
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "无法打开文件“%1”进行写入."
 
-#: src/frontend/MainWin.cpp:1906
+#: src/frontend/MainWin.cpp:1909
 #, kde-format
 msgid "Changed"
 msgstr "已更改"
 
-#: src/frontend/MainWin.cpp:1921 src/frontend/MainWin.cpp:1933
+#: src/frontend/MainWin.cpp:1924 src/frontend/MainWin.cpp:1936
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "正在准备打印 %1"
 
-#: src/frontend/MainWin.cpp:1923 src/frontend/MainWin.cpp:1935
+#: src/frontend/MainWin.cpp:1926 src/frontend/MainWin.cpp:1938
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 已打印"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2455
+#: src/frontend/MainWin.cpp:2458
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
 #: src/frontend/worksheet/WorksheetView.cpp:362
 #, kde-format
 msgid "Cursor"
 msgstr "辅助标尺"
 
-#: src/frontend/MainWin.cpp:2492
+#: src/frontend/MainWin.cpp:2495
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "分享工程时出现问题：%1"
 
-#: src/frontend/MainWin.cpp:2496
+#: src/frontend/MainWin.cpp:2499
 #, kde-format
 msgid "Project shared successfully"
 msgstr "工程分享成功"
 
-#: src/frontend/MainWin.cpp:2499
+#: src/frontend/MainWin.cpp:2502
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "您可以在此找到已分享的工程：<a href=\"%1\">%1</a>"
 
-#: src/frontend/MainWin.cpp:2689
+#: src/frontend/MainWin.cpp:2718
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
 msgstr "运行 Kaggle 命令行工具失败"
 
-#: src/frontend/MainWin.cpp:2690
+#: src/frontend/MainWin.cpp:2719
 #, kde-format
 msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
@@ -14962,32 +14961,32 @@ msgstr ""
 "请按照 <a href=\"https://www.kaggle.com/docs/api\">\"How to Use Kaggle\"</a> "
 "介绍的步骤配置 Kaggle 命令行工具。"
 
-#: src/frontend/MainWin.cpp:2753
+#: src/frontend/MainWin.cpp:2782
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 已导出"
 
-#: src/frontend/MainWin.cpp:2760
+#: src/frontend/MainWin.cpp:2789
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS 文件已保存"
 
-#: src/frontend/MainWin.cpp:2772
+#: src/frontend/MainWin.cpp:2801
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT 客户端 %1"
 
-#: src/frontend/MainWin.cpp:2790
+#: src/frontend/MainWin.cpp:2819
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "该主机已有连接的 MQTT 客户端！"
 
-#: src/frontend/MainWin.cpp:2794
+#: src/frontend/MainWin.cpp:2823
 #, kde-format
 msgid "Live data source%1"
 msgstr "实时数据源 %1"
 
-#: src/frontend/MainWin.cpp:2839
+#: src/frontend/MainWin.cpp:2868
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "创建新的 %1 笔记本"
@@ -15678,7 +15677,7 @@ msgstr "首选项 [已修改]"
 
 #. i18n: ectx: property (text), widget (QLabel, lMin)
 #. i18n: ectx: property (text), widget (QLabel, lMinDateTime)
-#: src/frontend/SettingsGeneralPage.cpp:29
+#: src/frontend/SettingsGeneralPage.cpp:30
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:54
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:241
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:317
@@ -15687,99 +15686,95 @@ msgstr "首选项 [已修改]"
 msgid "min."
 msgstr " 分钟"
 
-#: src/frontend/SettingsGeneralPage.cpp:224
+#: src/frontend/SettingsGeneralPage.cpp:187
 #, kde-format
 msgid "Create New Project"
 msgstr "创建新工程"
 
-#: src/frontend/SettingsGeneralPage.cpp:225
+#: src/frontend/SettingsGeneralPage.cpp:188
 #, kde-format
 msgid "Load Last Used Project"
 msgstr "加载上次使用的工程"
 
-#: src/frontend/SettingsGeneralPage.cpp:229
+#: src/frontend/SettingsGeneralPage.cpp:192
 #, kde-format
 msgid "With Spreadsheet"
 msgstr "数据表"
 
-#: src/frontend/SettingsGeneralPage.cpp:230
+#: src/frontend/SettingsGeneralPage.cpp:193
 #, kde-format
 msgid "With Worksheet"
 msgstr "工作表"
 
-#: src/frontend/SettingsGeneralPage.cpp:231
+#: src/frontend/SettingsGeneralPage.cpp:194
 #, kde-format
 msgid "With Spreadsheet and Worksheet"
 msgstr "数据表与工作表"
 
-#: src/frontend/SettingsGeneralPage.cpp:233
+#: src/frontend/SettingsGeneralPage.cpp:196
 #, kde-format
 msgid "With Notebook"
 msgstr "笔记本"
 
-#: src/frontend/SettingsGeneralPage.cpp:236
+#: src/frontend/SettingsGeneralPage.cpp:199
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr "启动时自动创建的笔记本类型"
 
-#: src/frontend/SettingsGeneralPage.cpp:240
+#: src/frontend/SettingsGeneralPage.cpp:203
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened"
 msgstr "将浮动面板关闭后，重新打开时显示在什么位置"
 
-#: src/frontend/SettingsGeneralPage.cpp:244
+#: src/frontend/SettingsGeneralPage.cpp:207
 #, kde-format
 msgid "Original Position"
 msgstr "保持原来的位置"
 
-#: src/frontend/SettingsGeneralPage.cpp:245
+#: src/frontend/SettingsGeneralPage.cpp:208
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr "与上一个打开的浮动面板合并"
 
-#: src/frontend/SettingsGeneralPage.cpp:248
+#: src/frontend/SettingsGeneralPage.cpp:211
 #, kde-format
 msgid "Show File Path"
 msgstr "文件路径"
 
-#: src/frontend/SettingsGeneralPage.cpp:249
+#: src/frontend/SettingsGeneralPage.cpp:212
 #, kde-format
 msgid "Show File Name"
 msgstr "文件名称"
 
-#: src/frontend/SettingsGeneralPage.cpp:250
+#: src/frontend/SettingsGeneralPage.cpp:213
 #, kde-format
 msgid "Show Project Name"
 msgstr "工程名称"
 
-#: src/frontend/SettingsGeneralPage.cpp:252
+#: src/frontend/SettingsGeneralPage.cpp:216
 #, kde-format
 msgid "Metric"
 msgstr "公制"
 
-#: src/frontend/SettingsGeneralPage.cpp:253
+#: src/frontend/SettingsGeneralPage.cpp:217
 #, kde-format
 msgid "Imperial"
 msgstr "英制"
 
-#: src/frontend/SettingsGeneralPage.cpp:255
+#: src/frontend/SettingsGeneralPage.cpp:219
 #, kde-format
-msgid "Dot (.)"
-msgstr "圆点 (.)"
+msgid ""
+"Characters for the decimal and group separators defining the number format"
+msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:256
+#: src/frontend/SettingsGeneralPage.cpp:223
 #, kde-format
-msgid "Comma (,)"
-msgstr "逗号 (,)"
+msgid "%1 (System, %2)"
+msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:257
-#, kde-format
-msgid "Arabic (٫)"
-msgstr "阿拉伯语 (٫)"
-
-#: src/frontend/SettingsGeneralPage.cpp:261
+#: src/frontend/SettingsGeneralPage.cpp:232
 #, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
@@ -15790,7 +15785,7 @@ msgstr ""
 "JCGM_100_2008_E.pdf\">《测量不确定度表达指南》(Guide to the Expression of "
 "Uncertainty in Measurement, GUM)</a>的术语"
 
-#: src/frontend/SettingsGeneralPage.cpp:266
+#: src/frontend/SettingsGeneralPage.cpp:237
 #, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
@@ -15802,7 +15797,7 @@ msgstr ""
 "此处的设置决定新工程的默认行为。\n"
 "可在工程属性中单独更改每个工程的设置。"
 
-#: src/frontend/SettingsGeneralPage.cpp:273
+#: src/frontend/SettingsGeneralPage.cpp:244
 #, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
@@ -15818,26 +15813,26 @@ msgstr ""
 "此处的设置决定新工程的默认行为。\n"
 "可在工程属性中单独更改每个工程的设置。"
 
-#: src/frontend/SettingsGeneralPage.cpp:280
+#: src/frontend/SettingsGeneralPage.cpp:251
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
 msgstr "在终端输出更详细的日志信息。"
 
-#: src/frontend/SettingsGeneralPage.cpp:281
+#: src/frontend/SettingsGeneralPage.cpp:252
 #, kde-format
 msgid ""
 "Info trace - helpful to get information and warnings when running the "
 "application."
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:282
+#: src/frontend/SettingsGeneralPage.cpp:253
 #, kde-format
 msgid ""
 "Debug trace - helpful to diagnose the application, can have a negative "
 "impact on the performance."
 msgstr "调试日志 - 可用于诊断应用程序的问题，但会对性能产生负面影响。"
 
-#: src/frontend/SettingsGeneralPage.cpp:283
+#: src/frontend/SettingsGeneralPage.cpp:254
 #, kde-format
 msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
@@ -19418,7 +19413,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:91
 #: src/frontend/ui/datasources/jsonoptionswidget.ui:76
-#: src/frontend/ui/settingsgeneralpage.ui:132
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:239
 #, kde-format
 msgid "Decimal separator:"
@@ -21007,7 +21001,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lAutoSaveInterval)
 #. i18n: ectx: property (text), widget (QLabel, lUpdateInterval)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:113
-#: src/frontend/ui/settingsgeneralpage.ui:251
+#: src/frontend/ui/settingsgeneralpage.ui:369
 #, kde-format
 msgid "Interval:"
 msgstr "间隔："
@@ -21167,7 +21161,7 @@ msgstr "创建时间："
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveDockStates)
 #: src/frontend/ui/dockwidgets/projectdock.ui:80
-#: src/frontend/ui/settingsgeneralpage.ui:284
+#: src/frontend/ui/settingsgeneralpage.ui:432
 #, kde-format
 msgid "Save Dock States:"
 msgstr "保存浮动面板状态："
@@ -21251,14 +21245,14 @@ msgstr ""
 msgid "Center Line"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
-#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
+#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:17
-#: src/frontend/ui/settingsgeneralpage.ui:228
-#: src/frontend/ui/settingsgeneralpage.ui:291
-#: src/frontend/ui/settingsgeneralpage.ui:305
+#: src/frontend/ui/settingsgeneralpage.ui:53
+#: src/frontend/ui/settingsgeneralpage.ui:74
+#: src/frontend/ui/settingsgeneralpage.ui:346
 #, kde-format
 msgid "Enabled"
 msgstr "启用"
@@ -22539,50 +22533,34 @@ msgstr "文件数 - "
 msgid "Clear"
 msgstr "清除"
 
-#. i18n: ectx: property (text), widget (QLabel, lStartup)
+#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
 #: src/frontend/ui/settingsgeneralpage.ui:17
+#, kde-format
+msgid "Auto-save:"
+msgstr "自动保存："
+
+#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
+#: src/frontend/ui/settingsgeneralpage.ui:46
+#, fuzzy, kde-format
+#| msgid "Dock widget placement:"
+msgid "Dock Widget Placement:"
+msgstr "浮动面板位置："
+
+#. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
+#: src/frontend/ui/settingsgeneralpage.ui:60
+#, fuzzy, kde-format
+#| msgid "Number options:"
+msgid "Number Format:"
+msgstr "数字选项："
+
+#. i18n: ectx: property (text), widget (QLabel, lStartup)
+#: src/frontend/ui/settingsgeneralpage.ui:67
 #, kde-format
 msgid "Startup:"
 msgstr "启动时："
 
-#. i18n: ectx: property (text), widget (QLabel, lNewProject)
-#: src/frontend/ui/settingsgeneralpage.ui:50
-#, kde-format
-msgid "New Project:"
-msgstr "新工程自带："
-
-#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
-#: src/frontend/ui/settingsgeneralpage.ui:60
-#, kde-format
-msgid "Notebook:"
-msgstr "笔记本："
-
-#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
-#: src/frontend/ui/settingsgeneralpage.ui:86
-#, kde-format
-msgid "Dock widget placement:"
-msgstr "浮动面板位置："
-
-#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
-#: src/frontend/ui/settingsgeneralpage.ui:96
-#, kde-format
-msgid "Title Bar:"
-msgstr "标题栏显示："
-
-#. i18n: ectx: property (text), widget (QLabel, lUnits)
-#: src/frontend/ui/settingsgeneralpage.ui:122
-#, kde-format
-msgid "Units:"
-msgstr "单位："
-
-#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
-#: src/frontend/ui/settingsgeneralpage.ui:142
-#, kde-format
-msgid "Terms:"
-msgstr "术语："
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
-#: src/frontend/ui/settingsgeneralpage.ui:149
+#: src/frontend/ui/settingsgeneralpage.ui:84
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
@@ -22596,55 +22574,13 @@ msgstr ""
 "of Uncertainty in Measurement, GUM)</span></a>的术语</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
-#: src/frontend/ui/settingsgeneralpage.ui:152
+#: src/frontend/ui/settingsgeneralpage.ui:87
 #, kde-format
 msgid "GUM compliant"
 msgstr "遵循 GUM 标准"
 
-#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
-#: src/frontend/ui/settingsgeneralpage.ui:159
-#, kde-format
-msgid "Number options:"
-msgstr "数字选项："
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
-#: src/frontend/ui/settingsgeneralpage.ui:166
-#, kde-format
-msgid "Omit group separator"
-msgstr "省略分组分隔符"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
-#: src/frontend/ui/settingsgeneralpage.ui:173
-#, kde-format
-msgid "Omit leading zero in exponent"
-msgstr "省略科学记数法指数部分的前导零"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
-#: src/frontend/ui/settingsgeneralpage.ui:180
-#, kde-format
-msgid "Include trailing zeroes after dot"
-msgstr "显示小数部分的尾随零"
-
-#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
-#: src/frontend/ui/settingsgeneralpage.ui:203
-#, kde-format
-msgid "Auto-save:"
-msgstr "自动保存："
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/settingsgeneralpage.ui:298
-#, kde-format
-msgid "Save  Calculations:"
-msgstr "保存计算结果："
-
-#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
-#: src/frontend/ui/settingsgeneralpage.ui:312
-#, kde-format
-msgid "Compatibility:"
-msgstr "兼容性："
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
-#: src/frontend/ui/settingsgeneralpage.ui:319
+#: src/frontend/ui/settingsgeneralpage.ui:97
 #, kde-format
 msgid ""
 "<html><head/><body><p>Save projects in a compatible format that can be "
@@ -22654,36 +22590,103 @@ msgstr ""
 "body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
-#: src/frontend/ui/settingsgeneralpage.ui:322
+#: src/frontend/ui/settingsgeneralpage.ui:100
 #, kde-format
 msgid "Save in compatible format"
 msgstr "以兼容格式保存"
 
+#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
+#: src/frontend/ui/settingsgeneralpage.ui:107
+#, fuzzy, kde-format
+#| msgid "Number options:"
+msgid "Number Options:"
+msgstr "数字选项："
+
+#. i18n: ectx: property (text), widget (QLabel, lUnits)
+#: src/frontend/ui/settingsgeneralpage.ui:114
+#, kde-format
+msgid "Units:"
+msgstr "单位："
+
+#. i18n: ectx: property (text), widget (QLabel, lNewProject)
+#: src/frontend/ui/settingsgeneralpage.ui:121
+#, kde-format
+msgid "New Project:"
+msgstr "新工程自带："
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
+#: src/frontend/ui/settingsgeneralpage.ui:128
+#, kde-format
+msgid "Include trailing zeroes after dot"
+msgstr "显示小数部分的尾随零"
+
+#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
+#: src/frontend/ui/settingsgeneralpage.ui:135
+#, kde-format
+msgid "Notebook:"
+msgstr "笔记本："
+
+#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
+#: src/frontend/ui/settingsgeneralpage.ui:155
+#, kde-format
+msgid "Compatibility:"
+msgstr "兼容性："
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
+#: src/frontend/ui/settingsgeneralpage.ui:197
+#, kde-format
+msgid "Omit group separator"
+msgstr "省略分组分隔符"
+
 #. i18n: ectx: property (text), widget (QLabel, lTracing)
-#: src/frontend/ui/settingsgeneralpage.ui:329
+#: src/frontend/ui/settingsgeneralpage.ui:214
 #, kde-format
 msgid "Tracing:"
 msgstr "日志输出："
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkInfoTrace)
-#: src/frontend/ui/settingsgeneralpage.ui:360
+#: src/frontend/ui/settingsgeneralpage.ui:245
 #, kde-format
 msgid "Info"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
-#: src/frontend/ui/settingsgeneralpage.ui:396
+#: src/frontend/ui/settingsgeneralpage.ui:281
 #: src/frontend/ui/settingsworksheetpage.ui:111
 #, kde-format
 msgid "Performance"
 msgstr "性能"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDebugTrace)
-#: src/frontend/ui/settingsgeneralpage.ui:416
+#: src/frontend/ui/settingsgeneralpage.ui:301
 #, kde-format
 msgid "Debug"
 msgstr "调试"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
+#: src/frontend/ui/settingsgeneralpage.ui:311
+#, kde-format
+msgid "Omit leading zero in exponent"
+msgstr "省略科学记数法指数部分的前导零"
+
+#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
+#: src/frontend/ui/settingsgeneralpage.ui:318
+#, kde-format
+msgid "Title Bar:"
+msgstr "标题栏显示："
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/frontend/ui/settingsgeneralpage.ui:402
+#, kde-format
+msgid "Save  Calculations:"
+msgstr "保存计算结果："
+
+#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
+#: src/frontend/ui/settingsgeneralpage.ui:409
+#, kde-format
+msgid "Terms:"
+msgstr "术语："
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -24446,3 +24449,12 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
+
+#~ msgid "Dot (.)"
+#~ msgstr "圆点 (.)"
+
+#~ msgid "Comma (,)"
+#~ msgstr "逗号 (,)"
+
+#~ msgid "Arabic (٫)"
+#~ msgstr "阿拉伯语 (٫)"

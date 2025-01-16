@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-13 00:37+0000\n"
+"POT-Creation-Date: 2025-01-16 00:37+0000\n"
 "PO-Revision-Date: 2024-12-29 23:07+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -365,13 +365,13 @@ msgstr "In%1"
 msgid "Import Data"
 msgstr "डाटा आयात करें"
 
-#: src/backend/core/AbstractPart.cpp:116 src/frontend/MainWin.cpp:672
-#: src/frontend/MainWin.cpp:681
+#: src/backend/core/AbstractPart.cpp:116 src/frontend/MainWin.cpp:675
+#: src/frontend/MainWin.cpp:684
 #, kde-format
 msgid "From File..."
 msgstr "सञ्चिकातः..."
 
-#: src/backend/core/AbstractPart.cpp:118 src/frontend/MainWin.cpp:693
+#: src/backend/core/AbstractPart.cpp:118 src/frontend/MainWin.cpp:696
 #, kde-format
 msgid "From SQL Database..."
 msgstr "SQL Database तः..."
@@ -396,7 +396,7 @@ msgstr "मुद्रण"
 msgid "Print Preview"
 msgstr "मुद्रण पूर्वावलोकनम्"
 
-#: src/backend/core/AbstractPart.cpp:137 src/frontend/MainWin.cpp:765
+#: src/backend/core/AbstractPart.cpp:137 src/frontend/MainWin.cpp:768
 #, kde-format
 msgid "&Close"
 msgstr "&पिधानं करोतु"
@@ -1919,7 +1919,7 @@ msgid "Unknown"
 msgstr "अज्ञात"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:643 src/frontend/MainWin.cpp:1988
+#: src/frontend/MainWin.cpp:646 src/frontend/MainWin.cpp:1991
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -8349,7 +8349,7 @@ msgid "Reference Range"
 msgstr "सन्दर्भ श्रेणी"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
-#: src/frontend/MainWin.cpp:891 src/frontend/notebook/NotebookView.cpp:168
+#: src/frontend/MainWin.cpp:894 src/frontend/notebook/NotebookView.cpp:168
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:294
 #: src/frontend/worksheet/WorksheetView.cpp:433
@@ -11474,7 +11474,6 @@ msgid "Data format && preview"
 msgstr "डेटा प्रारूप && पूर्वावलोकन"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1352
-#: src/frontend/SettingsGeneralPage.cpp:258
 #, kde-format
 msgid "Automatic"
 msgstr "स्वतः"
@@ -11875,7 +11874,7 @@ msgid "Open LabPlot Project"
 msgstr "LabPlot परियोजना उद्घाटयन्तु"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:1484
+#: src/frontend/MainWin.cpp:1487
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "LabPlot परियोजना (%1) 1.1."
@@ -11899,8 +11898,8 @@ msgstr "पुटस्य नाम :"
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:71 src/frontend/MainWin.cpp:637
-#: src/frontend/MainWin.cpp:1970 src/frontend/SettingsDialog.cpp:68
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:71 src/frontend/MainWin.cpp:640
+#: src/frontend/MainWin.cpp:1973 src/frontend/SettingsDialog.cpp:68
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12179,7 +12178,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2790
+#: src/frontend/MainWin.cpp:2819
 #, kde-format
 msgid "Warning"
 msgstr "चेतवानी"
@@ -13854,7 +13853,7 @@ msgid ""
 "installation."
 msgstr "उदाहरणसङ्ग्रहसञ्चिकां %1 उद्घाटयितुं न शक्तवान् । कृपया स्वस्य संस्थापनं पश्यन्तु।"
 
-#: src/frontend/GuiObserver.cpp:177 src/frontend/MainWin.cpp:1391
+#: src/frontend/GuiObserver.cpp:177 src/frontend/MainWin.cpp:1394
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -14408,32 +14407,32 @@ msgstr "किं भवन्तः वास्तवमेव पूर्व
 msgid "Clear History"
 msgstr "इतिहासं स्पष्टं कुरुत"
 
-#: src/frontend/LabPlot.cpp:44
+#: src/frontend/LabPlot.cpp:43
 #, kde-format
 msgid "Visit website:"
 msgstr "वेबसाइट् पश्यन्तु :"
 
-#: src/frontend/LabPlot.cpp:46
+#: src/frontend/LabPlot.cpp:45
 #, kde-format
 msgid "Watch video tutorials:"
 msgstr "विडियो पाठ्यक्रमं पश्यन्तु:"
 
-#: src/frontend/LabPlot.cpp:47
+#: src/frontend/LabPlot.cpp:46
 #, kde-format
 msgid "Discuss on Mastodon:"
 msgstr "मस्टोडन् विषये चर्चां कुर्वन्तु :"
 
-#: src/frontend/LabPlot.cpp:48
+#: src/frontend/LabPlot.cpp:47
 #, kde-format
 msgid "Development:"
 msgstr "विकासः:"
 
-#: src/frontend/LabPlot.cpp:49
+#: src/frontend/LabPlot.cpp:48
 #, kde-format
 msgid "Please report bugs to:"
 msgstr "कृपया दोषान् सूचयन्तु:"
 
-#: src/frontend/LabPlot.cpp:53
+#: src/frontend/LabPlot.cpp:52
 #, kde-format
 msgid ""
 "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
@@ -14442,67 +14441,67 @@ msgstr ""
 "LabPlot इति निःशुल्कं, मुक्त-स्रोत-पार-मञ्चं Data Visualization and Analysis सॉफ्टवेयरं "
 "सर्वेषां कृते सुलभम् अस्ति ।"
 
-#: src/frontend/LabPlot.cpp:55
+#: src/frontend/LabPlot.cpp:54
 #, fuzzy, kde-format
 #| msgid "(c) 2007-2024 LabPlot authors"
 msgid "(c) 2007-2025 LabPlot authors"
 msgstr "(ग) 2007-2024 लैबप्लॉट लेखक"
 
-#: src/frontend/LabPlot.cpp:57
+#: src/frontend/LabPlot.cpp:56
 #, kde-format
 msgid "Stefan Gerlach"
 msgstr "स्टीफन् गेर्लाच्"
 
-#: src/frontend/LabPlot.cpp:57 src/frontend/LabPlot.cpp:58
-#: src/frontend/LabPlot.cpp:59 src/frontend/LabPlot.cpp:60
+#: src/frontend/LabPlot.cpp:56 src/frontend/LabPlot.cpp:57
+#: src/frontend/LabPlot.cpp:58 src/frontend/LabPlot.cpp:59
 #, kde-format
 msgctxt "@info:credit"
 msgid "Developer"
 msgstr "विकासकः"
 
-#: src/frontend/LabPlot.cpp:58
+#: src/frontend/LabPlot.cpp:57
 #, kde-format
 msgid "Alexander Semke"
 msgstr "अलेक्जेण्डर सेम्के"
 
-#: src/frontend/LabPlot.cpp:59
+#: src/frontend/LabPlot.cpp:58
 #, kde-format
 msgid "Fábián Kristóf-Szabolcs"
 msgstr "Fábián Kristóf-Szabolcs"
 
-#: src/frontend/LabPlot.cpp:60
+#: src/frontend/LabPlot.cpp:59
 #, kde-format
 msgid "Martin Marmsoler"
 msgstr "मार्टिन् मार्मसोलर"
 
-#: src/frontend/LabPlot.cpp:61
+#: src/frontend/LabPlot.cpp:60
 #, kde-format
 msgid "Dariusz Laska"
 msgstr "दारियुस् लस्का"
 
-#: src/frontend/LabPlot.cpp:62
+#: src/frontend/LabPlot.cpp:61
 #, kde-format
 msgctxt "@info:credit"
 msgid "Conceptual work, documentation, example projects"
 msgstr "अवधारणात्मकं कार्यं, दस्तावेजीकरणं, उदाहरणप्रकल्पाः"
 
-#: src/frontend/LabPlot.cpp:65
+#: src/frontend/LabPlot.cpp:64
 #, kde-format
 msgid "Andreas Kainz"
 msgstr "आन्द्रियास कैन्ज"
 
-#: src/frontend/LabPlot.cpp:65
+#: src/frontend/LabPlot.cpp:64
 #, kde-format
 msgctxt "@info:credit"
 msgid "Icon designer"
 msgstr "चिह्न डिजाइनर"
 
-#: src/frontend/LabPlot.cpp:69
+#: src/frontend/LabPlot.cpp:68
 #, kde-format
 msgid "Yuri Chornoivan"
 msgstr "युरी चोरनोइवान"
 
-#: src/frontend/LabPlot.cpp:70
+#: src/frontend/LabPlot.cpp:69
 #, kde-format
 msgctxt "@info:credit"
 msgid ""
@@ -14510,44 +14509,44 @@ msgid ""
 "topics"
 msgstr "KDE-मूलसंरचनायाः अनुवादसम्बद्धविषयाणां च विषये अनेकेषु प्रश्नेषु सहायतां कुर्वन्तु"
 
-#: src/frontend/LabPlot.cpp:73
+#: src/frontend/LabPlot.cpp:72
 #, kde-format
 msgid "Garvit Khatri"
 msgstr "गरवित खत्री"
 
-#: src/frontend/LabPlot.cpp:74
+#: src/frontend/LabPlot.cpp:73
 #, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
 msgstr "LabPlot इत्यस्य KF5 मध्ये पोर्ट् करणं तथा च Cantor इत्यनेन सह एकीकरणम्"
 
-#: src/frontend/LabPlot.cpp:77
+#: src/frontend/LabPlot.cpp:76
 #, kde-format
 msgid "Christoph Roick"
 msgstr "क्रिस्टोफ रॉक्"
 
-#: src/frontend/LabPlot.cpp:78
+#: src/frontend/LabPlot.cpp:77
 #, kde-format
 msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr "ROOT (CERN) TH1 हिस्टोग्रामस्य आयातस्य समर्थनम्"
 
-#: src/frontend/LabPlot.cpp:101
+#: src/frontend/LabPlot.cpp:100
 #, kde-format
 msgid "Disable splash screen"
 msgstr "स्पलैश स्क्रीन अक्षमम्"
 
-#: src/frontend/LabPlot.cpp:104
+#: src/frontend/LabPlot.cpp:103
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr "प्रस्तोता मोड् मध्ये आरभत"
 
-#: src/frontend/LabPlot.cpp:107
+#: src/frontend/LabPlot.cpp:106
 #, kde-format
 msgid "Open a project file."
 msgstr "परियोजनासञ्चिकां उद्घाटयन्तु ।"
 
-#: src/frontend/LabPlot.cpp:126
+#: src/frontend/LabPlot.cpp:125
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -14556,7 +14555,7 @@ msgstr ""
 "'%1' सञ्चिकां उद्घाटयितुं न शक्यते । आरम्भं कर्तुं 'Continue' नुदन्तु अथवा अनुप्रयोगात् निर्गन्तुं "
 "'Cancel' नुदन्तु ।"
 
-#: src/frontend/LabPlot.cpp:127
+#: src/frontend/LabPlot.cpp:126
 #, kde-format
 msgid "Failed to Open"
 msgstr "उद्घाटयितुं असफलम्"
@@ -14677,268 +14676,268 @@ msgid "&Windows"
 msgstr "&विण्डोज"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
-#: src/frontend/MainWin.cpp:201 src/frontend/ui/settingsworksheetpage.ui:75
+#: src/frontend/MainWin.cpp:204 src/frontend/ui/settingsworksheetpage.ui:75
 #: src/frontend/worksheet/WorksheetView.cpp:268
 #, kde-format
 msgid "Presenter Mode"
 msgstr "वर्तमान फैशन"
 
-#: src/frontend/MainWin.cpp:201
+#: src/frontend/MainWin.cpp:204
 #, kde-format
 msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
 "started."
 msgstr "परियोजनायां कार्यपत्रकाणि न उपलभ्यन्ते । प्रस्तोताविधिः न आरभ्यते ।"
 
-#: src/frontend/MainWin.cpp:215
+#: src/frontend/MainWin.cpp:218
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "LabPlot %1 इत्यत्र स्वागतम्"
 
-#: src/frontend/MainWin.cpp:606
+#: src/frontend/MainWin.cpp:609
 #, kde-format
 msgid "&Open Example"
 msgstr "&उदाहरणं उद्घाटयतु"
 
-#: src/frontend/MainWin.cpp:627 src/frontend/MainWin.cpp:1954
+#: src/frontend/MainWin.cpp:630 src/frontend/MainWin.cpp:1957
 #, kde-format
 msgid "Workbook"
 msgstr "कार्यपुस्तिका"
 
-#: src/frontend/MainWin.cpp:629
+#: src/frontend/MainWin.cpp:632
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr "संग्रहस्प्रेड्शीट्, मैट्रिक्स, प्लॉट् च कृते नूतनं कार्यपुस्तकं निर्माति"
 
-#: src/frontend/MainWin.cpp:632 src/frontend/MainWin.cpp:1962
+#: src/frontend/MainWin.cpp:635 src/frontend/MainWin.cpp:1965
 #, kde-format
 msgid "Data Extractor"
 msgstr "डाटा एक्सट्रैक्टर"
 
-#: src/frontend/MainWin.cpp:633
+#: src/frontend/MainWin.cpp:636
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "चित्रात् दत्तांशं प्राप्तुं दत्तांशनिष्कासकं निर्माति"
 
-#: src/frontend/MainWin.cpp:639
+#: src/frontend/MainWin.cpp:642
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "दत्तांशसम्पादनार्थं नूतनं स्प्रेड्शीट् निर्माति"
 
-#: src/frontend/MainWin.cpp:645
+#: src/frontend/MainWin.cpp:648
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "दत्तांशसम्पादनार्थं नूतनं मैट्रिक्सं निर्माति"
 
-#: src/frontend/MainWin.cpp:649 src/frontend/MainWin.cpp:2006
+#: src/frontend/MainWin.cpp:652 src/frontend/MainWin.cpp:2009
 #: src/frontend/SettingsDialog.cpp:63
 #, kde-format
 msgid "Worksheet"
 msgstr "कार्यपत्रकम्"
 
-#: src/frontend/MainWin.cpp:651
+#: src/frontend/MainWin.cpp:654
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "दत्तांशप्लॉटिङ्ग् कृते नूतनं कार्यपत्रकं निर्माति"
 
-#: src/frontend/MainWin.cpp:655 src/frontend/MainWin.cpp:2014
+#: src/frontend/MainWin.cpp:658 src/frontend/MainWin.cpp:2017
 #, kde-format
 msgid "Note"
 msgstr "टीका"
 
-#: src/frontend/MainWin.cpp:656
+#: src/frontend/MainWin.cpp:659
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "मनमाना पाठस्य कृते नूतनं टिप्पणं निर्माति"
 
-#: src/frontend/MainWin.cpp:660 src/frontend/MainWin.cpp:1946
+#: src/frontend/MainWin.cpp:663 src/frontend/MainWin.cpp:1949
 #, kde-format
 msgid "Folder"
 msgstr "समुच्चय"
 
-#: src/frontend/MainWin.cpp:661
+#: src/frontend/MainWin.cpp:664
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "पत्रिकाः अन्ये च तत्त्वानि संग्रहीतुं नूतनं पुटं निर्माति"
 
-#: src/frontend/MainWin.cpp:666
+#: src/frontend/MainWin.cpp:669
 #, kde-format
 msgid "Live Data Source..."
 msgstr "लाइव डाटा स्रोत..."
 
-#: src/frontend/MainWin.cpp:667
+#: src/frontend/MainWin.cpp:670
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr "वास्तविकसमययन्त्रात् दत्तांशं पठितुं लाइव् डाटा स्रोतः निर्माति"
 
-#: src/frontend/MainWin.cpp:674 src/frontend/MainWin.cpp:683
+#: src/frontend/MainWin.cpp:677 src/frontend/MainWin.cpp:686
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "नियमितसञ्चिकातः दत्तांशं आयातयन्तु"
 
-#: src/frontend/MainWin.cpp:688
+#: src/frontend/MainWin.cpp:691
 #, kde-format
 msgid "From kaggle.com..."
 msgstr "kaggle.com इत्यस्मात्..."
 
-#: src/frontend/MainWin.cpp:689
+#: src/frontend/MainWin.cpp:692
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr "kaggle.com इत्यस्मात् आँकडाम् आयातयन्तु"
 
-#: src/frontend/MainWin.cpp:694
+#: src/frontend/MainWin.cpp:697
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "SQL आँकडाधारात् आँकडा आयातयन्तु"
 
-#: src/frontend/MainWin.cpp:698
+#: src/frontend/MainWin.cpp:701
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "डाटासेट् संग्रहात्..."
 
-#: src/frontend/MainWin.cpp:699
+#: src/frontend/MainWin.cpp:702
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr "ऑनलाइन-दत्तांशसमूहात् दत्तांशं आयातयन्तु"
 
-#: src/frontend/MainWin.cpp:703
+#: src/frontend/MainWin.cpp:706
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "LabPlot परियोजना..."
 
-#: src/frontend/MainWin.cpp:704
+#: src/frontend/MainWin.cpp:707
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "LabPlot परियोजनासञ्चिकातः (.lml) परियोजनां आयातयन्तु ।"
 
-#: src/frontend/MainWin.cpp:709
+#: src/frontend/MainWin.cpp:712
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "उत्पत्ति परियोजना (OPJ)..."
 
-#: src/frontend/MainWin.cpp:710
+#: src/frontend/MainWin.cpp:713
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr "OriginLab Origin परियोजनासञ्चिकातः (.opj) परियोजनां आयातयन्तु ।"
 
-#: src/frontend/MainWin.cpp:715
+#: src/frontend/MainWin.cpp:718
 #, kde-format
 msgid "Export..."
 msgstr "निर्यात..."
 
-#: src/frontend/MainWin.cpp:716
+#: src/frontend/MainWin.cpp:719
 #, kde-format
 msgid "Export selected element"
 msgstr "चयनितं तत्त्वं निर्यातयन्तु"
 
-#: src/frontend/MainWin.cpp:722 src/frontend/MainWin.cpp:2492
-#: src/frontend/MainWin.cpp:2500
+#: src/frontend/MainWin.cpp:725 src/frontend/MainWin.cpp:2495
+#: src/frontend/MainWin.cpp:2503
 #, kde-format
 msgid "Share"
 msgstr "संविभागः"
 
-#: src/frontend/MainWin.cpp:727
+#: src/frontend/MainWin.cpp:730
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "रङ्ग मानचित्र ब्राउज़र"
 
-#: src/frontend/MainWin.cpp:728
+#: src/frontend/MainWin.cpp:731
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "उपलब्धवर्णनक्शान् ब्राउज् कर्तुं संवादं उद्घाटयन्तु ।"
 
-#: src/frontend/MainWin.cpp:737
+#: src/frontend/MainWin.cpp:740
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "FITS मेटाडाटा सम्पादकः..."
 
-#: src/frontend/MainWin.cpp:738
+#: src/frontend/MainWin.cpp:741
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "FITS मेटा डाटा सम्पादयितुं सम्पादकं उद्घाटयन्तु"
 
-#: src/frontend/MainWin.cpp:747
+#: src/frontend/MainWin.cpp:750
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "पूर्ववत/पुनः करो इतिहास..."
 
-#: src/frontend/MainWin.cpp:767
+#: src/frontend/MainWin.cpp:770
 #, kde-format
 msgid "Close the active window"
 msgstr "सक्रियविण्डो पिधाय"
 
-#: src/frontend/MainWin.cpp:770
+#: src/frontend/MainWin.cpp:773
 #, kde-format
 msgid "Close &All"
 msgstr "बन्द &सर्व"
 
-#: src/frontend/MainWin.cpp:771
+#: src/frontend/MainWin.cpp:774
 #, kde-format
 msgid "Close all the windows"
 msgstr "सर्वाणि खिडकानि पिधाय"
 
-#: src/frontend/MainWin.cpp:774
+#: src/frontend/MainWin.cpp:777
 #, kde-format
 msgid "Ne&xt"
 msgstr "अग्रिम"
 
-#: src/frontend/MainWin.cpp:776
+#: src/frontend/MainWin.cpp:779
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "फोकसः अग्रिमविण्डो प्रति चालयन्तु"
 
-#: src/frontend/MainWin.cpp:779
+#: src/frontend/MainWin.cpp:782
 #, kde-format
 msgid "Pre&vious"
 msgstr "पूर्वतनम्‌"
 
-#: src/frontend/MainWin.cpp:781
+#: src/frontend/MainWin.cpp:784
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "पूर्वविण्डो प्रति फोकस चालयन्तु"
 
-#: src/frontend/MainWin.cpp:788
+#: src/frontend/MainWin.cpp:791
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "वर्तमान &Folder Only"
 
-#: src/frontend/MainWin.cpp:793
+#: src/frontend/MainWin.cpp:796
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "वर्तमान समुच्चय तथा &Subfolders"
 
-#: src/frontend/MainWin.cpp:797
+#: src/frontend/MainWin.cpp:800
 #, kde-format
 msgid "&All"
 msgstr "&सर्वे"
 
-#: src/frontend/MainWin.cpp:819
+#: src/frontend/MainWin.cpp:822
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "स्मृतिप्रयोगं दर्शयतु"
 
-#: src/frontend/MainWin.cpp:827
+#: src/frontend/MainWin.cpp:830
 #, kde-format
 msgid "Project Explorer"
 msgstr "परियोजना अन्वेषक"
 
-#: src/frontend/MainWin.cpp:832
+#: src/frontend/MainWin.cpp:835
 #, kde-format
 msgid "Properties Explorer"
 msgstr "गुण अन्वेषक"
 
-#: src/frontend/MainWin.cpp:837
+#: src/frontend/MainWin.cpp:840
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "कार्यपत्रक पूर्वावलोकनम्"
 
-#: src/frontend/MainWin.cpp:860
+#: src/frontend/MainWin.cpp:863
 #, kde-format
 msgid "Configure CAS..."
 msgstr "CAS विन्यस्तं कुर्वन्तु..."
 
-#: src/frontend/MainWin.cpp:861
+#: src/frontend/MainWin.cpp:864
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
@@ -14947,118 +14946,118 @@ msgstr ""
 "उपलब्धप्रणालीं परिवर्तयितुं वा नूतनान् सक्षमान् कर्तुं वा Computer Algebra Systems इत्यस्य "
 "सेटिङ्ग्स् उद्घाटयति"
 
-#: src/frontend/MainWin.cpp:921
+#: src/frontend/MainWin.cpp:924
 #, kde-format
 msgid "Window Visibility"
 msgstr "विण्डो दृश्यता"
 
-#: src/frontend/MainWin.cpp:938
+#: src/frontend/MainWin.cpp:941
 #, kde-format
 msgid "Color Scheme"
 msgstr "रङ्ग योजना"
 
-#: src/frontend/MainWin.cpp:996
+#: src/frontend/MainWin.cpp:999
 #, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "वर्तमानपरियोजना \"%1\" परिवर्तिता अस्ति । किं त्वं तत् रक्षितुम् इच्छसि ?"
 
-#: src/frontend/MainWin.cpp:997
+#: src/frontend/MainWin.cpp:1000
 #, kde-format
 msgid "Save Project"
 msgstr "परियोजना रक्षतु"
 
-#: src/frontend/MainWin.cpp:1352
+#: src/frontend/MainWin.cpp:1355
 #, kde-format
 msgid "%1: created"
 msgstr "%1: निर्मितम्"
 
-#: src/frontend/MainWin.cpp:1378
+#: src/frontend/MainWin.cpp:1381
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "परियोजना अन्वेषक"
 
-#: src/frontend/MainWin.cpp:1403
+#: src/frontend/MainWin.cpp:1406
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "कार्यपत्रक पूर्वावलोकनम्"
 
-#: src/frontend/MainWin.cpp:1412
+#: src/frontend/MainWin.cpp:1415
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "विषयः"
 
-#: src/frontend/MainWin.cpp:1489
+#: src/frontend/MainWin.cpp:1492
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "उत्पत्ति परियोजना (%1) 1.1."
 
-#: src/frontend/MainWin.cpp:1495
+#: src/frontend/MainWin.cpp:1498
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "कैन्टर परियोजना (*.cws) 1.1."
 
-#: src/frontend/MainWin.cpp:1496
+#: src/frontend/MainWin.cpp:1499
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "बृहस्पति नोटबुक (*.ipynb)"
 
-#: src/frontend/MainWin.cpp:1503
+#: src/frontend/MainWin.cpp:1506
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "सर्वाणि समर्थितसञ्चिकाः (%1)"
 
-#: src/frontend/MainWin.cpp:1507
+#: src/frontend/MainWin.cpp:1510
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Open Project इति परियोजना"
 
-#: src/frontend/MainWin.cpp:1524
+#: src/frontend/MainWin.cpp:1527
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "%1 परियोजनासञ्चिका पूर्वमेव उद्घाटिता अस्ति ।"
 
-#: src/frontend/MainWin.cpp:1524 src/frontend/MainWin.cpp:1532
-#: src/frontend/MainWin.cpp:1537
+#: src/frontend/MainWin.cpp:1527 src/frontend/MainWin.cpp:1535
+#: src/frontend/MainWin.cpp:1540
 #, kde-format
 msgid "Open Project"
 msgstr "Open Project इति परियोजना"
 
-#: src/frontend/MainWin.cpp:1532
+#: src/frontend/MainWin.cpp:1535
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "परियोजनासञ्चिका %1 नास्ति ।"
 
-#: src/frontend/MainWin.cpp:1537
+#: src/frontend/MainWin.cpp:1540
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "%1 परियोजनासञ्चिकां पठितुं न शक्तवान् ।"
 
-#: src/frontend/MainWin.cpp:1545
+#: src/frontend/MainWin.cpp:1548
 #, kde-format
 msgid "Loading %1..."
 msgstr "%1 लोड् भवति..."
 
-#: src/frontend/MainWin.cpp:1599
+#: src/frontend/MainWin.cpp:1602
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: उद्घाटितम्"
 
-#: src/frontend/MainWin.cpp:1634
+#: src/frontend/MainWin.cpp:1637
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "परियोजना सफलतया उद्घाटिता (%1 सेकेण्ड् मध्ये) ।"
 
-#: src/frontend/MainWin.cpp:1726
+#: src/frontend/MainWin.cpp:1729
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "परियोजना यथा रक्षन्तु"
 
-#: src/frontend/MainWin.cpp:1728
+#: src/frontend/MainWin.cpp:1731
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15067,70 +15066,70 @@ msgstr ""
 "लैबप्लॉट परियोजनाएँ (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:1755
+#: src/frontend/MainWin.cpp:1758
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "लेखनार्थं अस्थायीसञ्चिकां उद्घाटयितुं न शक्तवान्।"
 
-#: src/frontend/MainWin.cpp:1835
+#: src/frontend/MainWin.cpp:1838
 #, kde-format
 msgid "Project saved"
 msgstr "परियोजना रक्षिता"
 
-#: src/frontend/MainWin.cpp:1851
+#: src/frontend/MainWin.cpp:1854
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "'%1' इति सञ्चिकां रक्षितुं न शक्यते ।"
 
-#: src/frontend/MainWin.cpp:1856
+#: src/frontend/MainWin.cpp:1859
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "लेखनार्थं '%1' इति सञ्चिकां उद्घाटयितुं न शक्तम् ।"
 
-#: src/frontend/MainWin.cpp:1906
+#: src/frontend/MainWin.cpp:1909
 #, kde-format
 msgid "Changed"
 msgstr "परिवर्तितः"
 
-#: src/frontend/MainWin.cpp:1921 src/frontend/MainWin.cpp:1933
+#: src/frontend/MainWin.cpp:1924 src/frontend/MainWin.cpp:1936
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "%1 इत्यस्य मुद्रणस्य सज्जीकरणं"
 
-#: src/frontend/MainWin.cpp:1923 src/frontend/MainWin.cpp:1935
+#: src/frontend/MainWin.cpp:1926 src/frontend/MainWin.cpp:1938
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 मुद्रितम्"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2455
+#: src/frontend/MainWin.cpp:2458
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
 #: src/frontend/worksheet/WorksheetView.cpp:362
 #, kde-format
 msgid "Cursor"
 msgstr "कर्सर"
 
-#: src/frontend/MainWin.cpp:2492
+#: src/frontend/MainWin.cpp:2495
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "परियोजनायाः साझेदारीयां समस्या आसीत्: %1"
 
-#: src/frontend/MainWin.cpp:2496
+#: src/frontend/MainWin.cpp:2499
 #, kde-format
 msgid "Project shared successfully"
 msgstr "परियोजना सफलतया साझां कृतवती"
 
-#: src/frontend/MainWin.cpp:2499
+#: src/frontend/MainWin.cpp:2502
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "साझाप्रकल्पं भवान् अत्र द्रष्टुं शक्नोति: <a href=\"%1\">%1</a>"
 
-#: src/frontend/MainWin.cpp:2689
+#: src/frontend/MainWin.cpp:2718
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
 msgstr "Kaggle CLI साधनस्य चालनं विफलम् अभवत्"
 
-#: src/frontend/MainWin.cpp:2690
+#: src/frontend/MainWin.cpp:2719
 #, kde-format
 msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
@@ -15139,32 +15138,32 @@ msgstr ""
 "कृपया Kaggle CLI साधनं सेटअप कर्तुं <a href=\"https://www.kaggle.com/docs/api"
 "\">&quot;How to Use Kaggle&quot;</a> इत्यस्य निर्देशान् अनुसरणं कुर्वन्तु ।"
 
-#: src/frontend/MainWin.cpp:2753
+#: src/frontend/MainWin.cpp:2782
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 निर्यातितम्"
 
-#: src/frontend/MainWin.cpp:2760
+#: src/frontend/MainWin.cpp:2789
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS सञ्चिकाः रक्षिताः"
 
-#: src/frontend/MainWin.cpp:2772
+#: src/frontend/MainWin.cpp:2801
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT Client%1"
 
-#: src/frontend/MainWin.cpp:2790
+#: src/frontend/MainWin.cpp:2819
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "अस्मिन् होस्ट् इत्यनेन सह पूर्वमेव MQTTClient अस्ति!"
 
-#: src/frontend/MainWin.cpp:2794
+#: src/frontend/MainWin.cpp:2823
 #, kde-format
 msgid "Live data source%1"
 msgstr "लाइव दत्तांशस्रोतः%1"
 
-#: src/frontend/MainWin.cpp:2839
+#: src/frontend/MainWin.cpp:2868
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "नूतनं %1 नोटबुकं निर्माति"
@@ -15859,7 +15858,7 @@ msgstr "प्राधान्यानि [परिवर्तितम्]
 
 #. i18n: ectx: property (text), widget (QLabel, lMin)
 #. i18n: ectx: property (text), widget (QLabel, lMinDateTime)
-#: src/frontend/SettingsGeneralPage.cpp:29
+#: src/frontend/SettingsGeneralPage.cpp:30
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:54
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:241
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:317
@@ -15868,99 +15867,95 @@ msgstr "प्राधान्यानि [परिवर्तितम्]
 msgid "min."
 msgstr "मि."
 
-#: src/frontend/SettingsGeneralPage.cpp:224
+#: src/frontend/SettingsGeneralPage.cpp:187
 #, kde-format
 msgid "Create New Project"
 msgstr "New Project रचयन्तु"
 
-#: src/frontend/SettingsGeneralPage.cpp:225
+#: src/frontend/SettingsGeneralPage.cpp:188
 #, kde-format
 msgid "Load Last Used Project"
 msgstr "अन्तिमप्रयुक्त परियोजना लोड् कुर्वन्तु"
 
-#: src/frontend/SettingsGeneralPage.cpp:229
+#: src/frontend/SettingsGeneralPage.cpp:192
 #, kde-format
 msgid "With Spreadsheet"
 msgstr "स्प्रेड्शीट् इत्यनेन सह"
 
-#: src/frontend/SettingsGeneralPage.cpp:230
+#: src/frontend/SettingsGeneralPage.cpp:193
 #, kde-format
 msgid "With Worksheet"
 msgstr "कार्यपत्रकेन सह"
 
-#: src/frontend/SettingsGeneralPage.cpp:231
+#: src/frontend/SettingsGeneralPage.cpp:194
 #, kde-format
 msgid "With Spreadsheet and Worksheet"
 msgstr "स्प्रेड्शीट् तथा वर्कशीट् इत्यनेन सह"
 
-#: src/frontend/SettingsGeneralPage.cpp:233
+#: src/frontend/SettingsGeneralPage.cpp:196
 #, kde-format
 msgid "With Notebook"
 msgstr "नोटबुक सह"
 
-#: src/frontend/SettingsGeneralPage.cpp:236
+#: src/frontend/SettingsGeneralPage.cpp:199
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr "स्टार्टअप-समये स्वयमेव निर्मातुं नोटबुक-प्रकारः"
 
-#: src/frontend/SettingsGeneralPage.cpp:240
+#: src/frontend/SettingsGeneralPage.cpp:203
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened"
 msgstr "पुनः उद्घाटितस्य अनन्तरं डॉक् विजेट् कुत्र स्थापिताः इति व्यवहारं नियन्त्रयति"
 
-#: src/frontend/SettingsGeneralPage.cpp:244
+#: src/frontend/SettingsGeneralPage.cpp:207
 #, kde-format
 msgid "Original Position"
 msgstr "मूल पद"
 
-#: src/frontend/SettingsGeneralPage.cpp:245
+#: src/frontend/SettingsGeneralPage.cpp:208
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr "अन्तिमस्य सक्रियस्य Dock Widget इत्यस्य उपरि"
 
-#: src/frontend/SettingsGeneralPage.cpp:248
+#: src/frontend/SettingsGeneralPage.cpp:211
 #, kde-format
 msgid "Show File Path"
 msgstr "सञ्चिकामार्गं दर्शयतु"
 
-#: src/frontend/SettingsGeneralPage.cpp:249
+#: src/frontend/SettingsGeneralPage.cpp:212
 #, kde-format
 msgid "Show File Name"
 msgstr "सञ्चिकानाम दर्शयतु"
 
-#: src/frontend/SettingsGeneralPage.cpp:250
+#: src/frontend/SettingsGeneralPage.cpp:213
 #, kde-format
 msgid "Show Project Name"
 msgstr "परियोजनानाम दर्शयतु"
 
-#: src/frontend/SettingsGeneralPage.cpp:252
+#: src/frontend/SettingsGeneralPage.cpp:216
 #, kde-format
 msgid "Metric"
 msgstr "मेट्रिक"
 
-#: src/frontend/SettingsGeneralPage.cpp:253
+#: src/frontend/SettingsGeneralPage.cpp:217
 #, kde-format
 msgid "Imperial"
 msgstr "शाही"
 
-#: src/frontend/SettingsGeneralPage.cpp:255
+#: src/frontend/SettingsGeneralPage.cpp:219
 #, kde-format
-msgid "Dot (.)"
-msgstr "बिन्दु (.)"
+msgid ""
+"Characters for the decimal and group separators defining the number format"
+msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:256
+#: src/frontend/SettingsGeneralPage.cpp:223
 #, kde-format
-msgid "Comma (,)"
-msgstr "अल्पविराम (,)"
+msgid "%1 (System, %2)"
+msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:257
-#, kde-format
-msgid "Arabic (٫)"
-msgstr "अरबी (٫)"
-
-#: src/frontend/SettingsGeneralPage.cpp:261
+#: src/frontend/SettingsGeneralPage.cpp:232
 #, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
@@ -15970,7 +15965,7 @@ msgstr ""
 "<a href=\"http://www.bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf"
 "\">मापने अनिश्चिततायाः अभिव्यक्तिमार्गदर्शिकायाः (GUM)</a> अनुरूपपदानां उपयोगं कुर्वन्तु ।"
 
-#: src/frontend/SettingsGeneralPage.cpp:266
+#: src/frontend/SettingsGeneralPage.cpp:237
 #, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
@@ -15982,7 +15977,7 @@ msgstr ""
 "नूतनप्रकल्पानां कृते पूर्वनिर्धारितव्यवहारं निर्धारयति । \n"
 "प्रत्येकस्य परियोजनायाः कृते परियोजनागुणेषु पृथक् पृथक् सेटिंग् परिवर्तयितुं शक्यते ।"
 
-#: src/frontend/SettingsGeneralPage.cpp:273
+#: src/frontend/SettingsGeneralPage.cpp:244
 #, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
@@ -15999,19 +15994,19 @@ msgstr ""
 "नूतनप्रकल्पानां कृते पूर्वनिर्धारितव्यवहारं निर्धारयति । \n"
 "प्रत्येकस्य परियोजनायाः कृते परियोजनागुणेषु पृथक् पृथक् सेटिंग् परिवर्तयितुं शक्यते ।"
 
-#: src/frontend/SettingsGeneralPage.cpp:280
+#: src/frontend/SettingsGeneralPage.cpp:251
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
 msgstr "टर्मिनल् मध्ये अतिरिक्तं ट्रेसिंग् आउटपुट् सक्रियं करोति ।"
 
-#: src/frontend/SettingsGeneralPage.cpp:281
+#: src/frontend/SettingsGeneralPage.cpp:252
 #, kde-format
 msgid ""
 "Info trace - helpful to get information and warnings when running the "
 "application."
 msgstr "Info trace - अनुप्रयोगं चालयति समये सूचनां चेतावनी च प्राप्तुं सहायकम्।"
 
-#: src/frontend/SettingsGeneralPage.cpp:282
+#: src/frontend/SettingsGeneralPage.cpp:253
 #, kde-format
 msgid ""
 "Debug trace - helpful to diagnose the application, can have a negative "
@@ -16020,7 +16015,7 @@ msgstr ""
 "त्रुटिनिवारणं अनुसन्धानं - अनुप्रयोगस्य निदानार्थं सहायकं, कार्यप्रदर्शने नकारात्मकं प्रभावं कर्तुं "
 "शक्नोति ।"
 
-#: src/frontend/SettingsGeneralPage.cpp:283
+#: src/frontend/SettingsGeneralPage.cpp:254
 #, kde-format
 msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
@@ -19627,7 +19622,6 @@ msgstr "आयातम् तः :"
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:91
 #: src/frontend/ui/datasources/jsonoptionswidget.ui:76
-#: src/frontend/ui/settingsgeneralpage.ui:132
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:239
 #, kde-format
 msgid "Decimal separator:"
@@ -21219,7 +21213,7 @@ msgstr "विषयाः"
 #. i18n: ectx: property (text), widget (QLabel, lAutoSaveInterval)
 #. i18n: ectx: property (text), widget (QLabel, lUpdateInterval)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:113
-#: src/frontend/ui/settingsgeneralpage.ui:251
+#: src/frontend/ui/settingsgeneralpage.ui:369
 #, kde-format
 msgid "Interval:"
 msgstr "अन्तरालः :"
@@ -21379,7 +21373,7 @@ msgstr "निर्मितः :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveDockStates)
 #: src/frontend/ui/dockwidgets/projectdock.ui:80
-#: src/frontend/ui/settingsgeneralpage.ui:284
+#: src/frontend/ui/settingsgeneralpage.ui:432
 #, kde-format
 msgid "Save Dock States:"
 msgstr "गोदी राज्यानि रक्षन्तु:"
@@ -21463,14 +21457,14 @@ msgstr "केंद्र:"
 msgid "Center Line"
 msgstr "केन्द्ररेखा"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
-#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
+#. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:17
-#: src/frontend/ui/settingsgeneralpage.ui:228
-#: src/frontend/ui/settingsgeneralpage.ui:291
-#: src/frontend/ui/settingsgeneralpage.ui:305
+#: src/frontend/ui/settingsgeneralpage.ui:53
+#: src/frontend/ui/settingsgeneralpage.ui:74
+#: src/frontend/ui/settingsgeneralpage.ui:346
 #, kde-format
 msgid "Enabled"
 msgstr "सक्षमम्"
@@ -22764,50 +22758,34 @@ msgstr "सञ्चिकाः - ९. "
 msgid "Clear"
 msgstr "स्पष्टः"
 
-#. i18n: ectx: property (text), widget (QLabel, lStartup)
+#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
 #: src/frontend/ui/settingsgeneralpage.ui:17
+#, kde-format
+msgid "Auto-save:"
+msgstr "स्वतः रक्षतु :"
+
+#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
+#: src/frontend/ui/settingsgeneralpage.ui:46
+#, fuzzy, kde-format
+#| msgid "Dock widget placement:"
+msgid "Dock Widget Placement:"
+msgstr "डॉक विजेट् स्थापनम् :"
+
+#. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
+#: src/frontend/ui/settingsgeneralpage.ui:60
+#, fuzzy, kde-format
+#| msgid "Number format:"
+msgid "Number Format:"
+msgstr "संख्यास्वरूपम् :"
+
+#. i18n: ectx: property (text), widget (QLabel, lStartup)
+#: src/frontend/ui/settingsgeneralpage.ui:67
 #, kde-format
 msgid "Startup:"
 msgstr "प्रारम्भः :"
 
-#. i18n: ectx: property (text), widget (QLabel, lNewProject)
-#: src/frontend/ui/settingsgeneralpage.ui:50
-#, kde-format
-msgid "New Project:"
-msgstr "नवीन परियोजना :"
-
-#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
-#: src/frontend/ui/settingsgeneralpage.ui:60
-#, kde-format
-msgid "Notebook:"
-msgstr "नोटबुकः"
-
-#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
-#: src/frontend/ui/settingsgeneralpage.ui:86
-#, kde-format
-msgid "Dock widget placement:"
-msgstr "डॉक विजेट् स्थापनम् :"
-
-#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
-#: src/frontend/ui/settingsgeneralpage.ui:96
-#, kde-format
-msgid "Title Bar:"
-msgstr "शीर्षक पट्टी :"
-
-#. i18n: ectx: property (text), widget (QLabel, lUnits)
-#: src/frontend/ui/settingsgeneralpage.ui:122
-#, kde-format
-msgid "Units:"
-msgstr "एककाः :"
-
-#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
-#: src/frontend/ui/settingsgeneralpage.ui:142
-#, kde-format
-msgid "Terms:"
-msgstr "उपधा:"
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
-#: src/frontend/ui/settingsgeneralpage.ui:149
+#: src/frontend/ui/settingsgeneralpage.ui:84
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
@@ -22821,55 +22799,13 @@ msgstr ""
 "अनुरूपपदानां उपयोगं कुर्वन्तु ।</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
-#: src/frontend/ui/settingsgeneralpage.ui:152
+#: src/frontend/ui/settingsgeneralpage.ui:87
 #, kde-format
 msgid "GUM compliant"
 msgstr "गुम अनुरूप"
 
-#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
-#: src/frontend/ui/settingsgeneralpage.ui:159
-#, kde-format
-msgid "Number options:"
-msgstr "संख्याविकल्पाः :"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
-#: src/frontend/ui/settingsgeneralpage.ui:166
-#, kde-format
-msgid "Omit group separator"
-msgstr "समूहविभाजकं लोपयतु"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
-#: src/frontend/ui/settingsgeneralpage.ui:173
-#, kde-format
-msgid "Omit leading zero in exponent"
-msgstr "घाताङ्के अग्रणीशून्यं परित्यजन्तु"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
-#: src/frontend/ui/settingsgeneralpage.ui:180
-#, kde-format
-msgid "Include trailing zeroes after dot"
-msgstr "बिन्दुस्य अनन्तरं अनुवर्तमानशून्यान् समावेशयन्तु"
-
-#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
-#: src/frontend/ui/settingsgeneralpage.ui:203
-#, kde-format
-msgid "Auto-save:"
-msgstr "स्वतः रक्षतु :"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/settingsgeneralpage.ui:298
-#, kde-format
-msgid "Save  Calculations:"
-msgstr "गणनाः रक्षन्तु :"
-
-#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
-#: src/frontend/ui/settingsgeneralpage.ui:312
-#, kde-format
-msgid "Compatibility:"
-msgstr "संगतता :"
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
-#: src/frontend/ui/settingsgeneralpage.ui:319
+#: src/frontend/ui/settingsgeneralpage.ui:97
 #, kde-format
 msgid ""
 "<html><head/><body><p>Save projects in a compatible format that can be "
@@ -22879,36 +22815,103 @@ msgstr ""
 "LabPlot संस्करणेषु उद्घाटयितुं शक्यते ।</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
-#: src/frontend/ui/settingsgeneralpage.ui:322
+#: src/frontend/ui/settingsgeneralpage.ui:100
 #, kde-format
 msgid "Save in compatible format"
 msgstr "संगतस्वरूपेण रक्षन्तु"
 
+#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
+#: src/frontend/ui/settingsgeneralpage.ui:107
+#, fuzzy, kde-format
+#| msgid "Number options:"
+msgid "Number Options:"
+msgstr "संख्याविकल्पाः :"
+
+#. i18n: ectx: property (text), widget (QLabel, lUnits)
+#: src/frontend/ui/settingsgeneralpage.ui:114
+#, kde-format
+msgid "Units:"
+msgstr "एककाः :"
+
+#. i18n: ectx: property (text), widget (QLabel, lNewProject)
+#: src/frontend/ui/settingsgeneralpage.ui:121
+#, kde-format
+msgid "New Project:"
+msgstr "नवीन परियोजना :"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
+#: src/frontend/ui/settingsgeneralpage.ui:128
+#, kde-format
+msgid "Include trailing zeroes after dot"
+msgstr "बिन्दुस्य अनन्तरं अनुवर्तमानशून्यान् समावेशयन्तु"
+
+#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
+#: src/frontend/ui/settingsgeneralpage.ui:135
+#, kde-format
+msgid "Notebook:"
+msgstr "नोटबुकः"
+
+#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
+#: src/frontend/ui/settingsgeneralpage.ui:155
+#, kde-format
+msgid "Compatibility:"
+msgstr "संगतता :"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
+#: src/frontend/ui/settingsgeneralpage.ui:197
+#, kde-format
+msgid "Omit group separator"
+msgstr "समूहविभाजकं लोपयतु"
+
 #. i18n: ectx: property (text), widget (QLabel, lTracing)
-#: src/frontend/ui/settingsgeneralpage.ui:329
+#: src/frontend/ui/settingsgeneralpage.ui:214
 #, kde-format
 msgid "Tracing:"
 msgstr "अनुसन्धानम् :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkInfoTrace)
-#: src/frontend/ui/settingsgeneralpage.ui:360
+#: src/frontend/ui/settingsgeneralpage.ui:245
 #, kde-format
 msgid "Info"
 msgstr "Info"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
-#: src/frontend/ui/settingsgeneralpage.ui:396
+#: src/frontend/ui/settingsgeneralpage.ui:281
 #: src/frontend/ui/settingsworksheetpage.ui:111
 #, kde-format
 msgid "Performance"
 msgstr "प्रदर्शनम्‌"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDebugTrace)
-#: src/frontend/ui/settingsgeneralpage.ui:416
+#: src/frontend/ui/settingsgeneralpage.ui:301
 #, kde-format
 msgid "Debug"
 msgstr "त्रुटिनिवारणम्"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
+#: src/frontend/ui/settingsgeneralpage.ui:311
+#, kde-format
+msgid "Omit leading zero in exponent"
+msgstr "घाताङ्के अग्रणीशून्यं परित्यजन्तु"
+
+#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
+#: src/frontend/ui/settingsgeneralpage.ui:318
+#, kde-format
+msgid "Title Bar:"
+msgstr "शीर्षक पट्टी :"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/frontend/ui/settingsgeneralpage.ui:402
+#, kde-format
+msgid "Save  Calculations:"
+msgstr "गणनाः रक्षन्तु :"
+
+#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
+#: src/frontend/ui/settingsgeneralpage.ui:409
+#, kde-format
+msgid "Terms:"
+msgstr "उपधा:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -24693,6 +24696,15 @@ msgstr "परिवर्तन प्रक्रिया विफल, न�
 #, kde-format
 msgid "Unable to open file:"
 msgstr "सञ्चिकां उद्घाटयितुं असमर्थः :"
+
+#~ msgid "Dot (.)"
+#~ msgstr "बिन्दु (.)"
+
+#~ msgid "Comma (,)"
+#~ msgstr "अल्पविराम (,)"
+
+#~ msgid "Arabic (٫)"
+#~ msgstr "अरबी (٫)"
 
 #~ msgid "xy-curve"
 #~ msgstr "xy-वक्रम्"
