@@ -140,7 +140,7 @@ if(ENABLE_VECTOR_BLF)
       target_compile_definitions(labplotbackendlib PRIVATE HAVE_VECTOR_BLF)
       target_compile_definitions(labplotlib PUBLIC HAVE_VECTOR_BLF)
       add_definitions (-DHAVE_VECTOR_BLF)
-      # manually install so
+      # manually install lib
       install(TARGETS Vector_BLF)
   else()
     pkg_check_modules(Vector_BLF IMPORTED_TARGET GLOBAL Vector_BLF)
@@ -149,8 +149,8 @@ if(ENABLE_VECTOR_BLF)
         target_compile_definitions(labplotbackendlib PRIVATE HAVE_VECTOR_BLF)
         target_compile_definitions(labplotlib PUBLIC HAVE_VECTOR_BLF)
         add_definitions (-DHAVE_VECTOR_BLF)
-        # manually install so
-	install(FILES ${Vector_BLF_LIBRARIES} DESTINATION ${KDE_INSTALL_LIBDIR})
+        # manually install lib
+	install(FILES ${Vector_BLF_LINK_LIBRARIES} DESTINATION ${KDE_INSTALL_LIBDIR})
     endif()
   endif()
 else()
