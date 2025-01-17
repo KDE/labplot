@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-16 00:37+0000\n"
-"PO-Revision-Date: 2025-01-11 12:08+0100\n"
+"POT-Creation-Date: 2025-01-17 00:38+0000\n"
+"PO-Revision-Date: 2025-01-16 14:36+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.12.0\n"
+"X-Generator: Lokalize 24.12.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -8638,20 +8638,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: Muisaanwijzer1 aanzetten"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1757
-#: src/backend/worksheet/Worksheet.cpp:846
+#: src/backend/worksheet/Worksheet.cpp:838
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: thema %2 inlezen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1759
-#: src/backend/worksheet/Worksheet.cpp:848
+#: src/backend/worksheet/Worksheet.cpp:840
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: standaard thema inlezen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1761
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5567
-#: src/backend/worksheet/Worksheet.cpp:850
+#: src/backend/worksheet/Worksheet.cpp:842
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: thema instellen"
@@ -8854,50 +8854,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: hoekradius rand instellen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
-#: src/backend/worksheet/Worksheet.cpp:718
-#: src/backend/worksheet/Worksheet.cpp:719
+#: src/backend/worksheet/Worksheet.cpp:710
+#: src/backend/worksheet/Worksheet.cpp:711
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: marge bovenkant instellen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:251
-#: src/backend/worksheet/Worksheet.cpp:728
-#: src/backend/worksheet/Worksheet.cpp:729
+#: src/backend/worksheet/Worksheet.cpp:720
+#: src/backend/worksheet/Worksheet.cpp:721
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: marge onderkant instellen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:258
-#: src/backend/worksheet/Worksheet.cpp:738
-#: src/backend/worksheet/Worksheet.cpp:739
+#: src/backend/worksheet/Worksheet.cpp:730
+#: src/backend/worksheet/Worksheet.cpp:731
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: marge linkerkant instellen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:265
-#: src/backend/worksheet/Worksheet.cpp:748
-#: src/backend/worksheet/Worksheet.cpp:749
+#: src/backend/worksheet/Worksheet.cpp:740
+#: src/backend/worksheet/Worksheet.cpp:741
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: marge rechterkant instellen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:272
-#: src/backend/worksheet/Worksheet.cpp:758
-#: src/backend/worksheet/Worksheet.cpp:759
+#: src/backend/worksheet/Worksheet.cpp:750
+#: src/backend/worksheet/Worksheet.cpp:751
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: verticale tussenruimte instellen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:279
-#: src/backend/worksheet/Worksheet.cpp:768
-#: src/backend/worksheet/Worksheet.cpp:769
+#: src/backend/worksheet/Worksheet.cpp:760
+#: src/backend/worksheet/Worksheet.cpp:761
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: horizontale tussenruimte instellen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:286
-#: src/backend/worksheet/Worksheet.cpp:788
-#: src/backend/worksheet/Worksheet.cpp:789
+#: src/backend/worksheet/Worksheet.cpp:780
+#: src/backend/worksheet/Worksheet.cpp:781
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: aantal kolommen instellen"
@@ -9957,42 +9957,42 @@ msgstr "%1: randstijl instellen"
 msgid "%1: set border"
 msgstr "%1: rand instellen"
 
-#: src/backend/worksheet/Worksheet.cpp:246
+#: src/backend/worksheet/Worksheet.cpp:242
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Werkblad afdrukken"
 
-#: src/backend/worksheet/Worksheet.cpp:688
+#: src/backend/worksheet/Worksheet.cpp:680
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: groottetype wijzigen"
 
-#: src/backend/worksheet/Worksheet.cpp:700
+#: src/backend/worksheet/Worksheet.cpp:692
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: eigenschap \"inhoud herschalen\" wijzigen"
 
-#: src/backend/worksheet/Worksheet.cpp:708
-#: src/backend/worksheet/Worksheet.cpp:709
+#: src/backend/worksheet/Worksheet.cpp:700
+#: src/backend/worksheet/Worksheet.cpp:701
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1 opmaak instellen"
 
-#: src/backend/worksheet/Worksheet.cpp:778
-#: src/backend/worksheet/Worksheet.cpp:779
+#: src/backend/worksheet/Worksheet.cpp:770
+#: src/backend/worksheet/Worksheet.cpp:771
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: aantal rijen instellen"
 
-#: src/backend/worksheet/Worksheet.cpp:819
-#: src/backend/worksheet/Worksheet.cpp:820
+#: src/backend/worksheet/Worksheet.cpp:811
+#: src/backend/worksheet/Worksheet.cpp:812
 #: src/frontend/dockwidgets/WorksheetDock.cpp:376
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: paginagrootte instellen"
 
-#: src/backend/worksheet/Worksheet.cpp:1571
+#: src/backend/worksheet/Worksheet.cpp:1563
 #, kde-format
 msgid "Curves"
 msgstr "Krommen"
@@ -16087,15 +16087,14 @@ msgstr "Imperial"
 #, kde-format
 msgid ""
 "Characters for the decimal and group separators defining the number format"
-msgstr ""
+msgstr "Decimale en groepsscheidingstekens definiëren de getalindeling"
 
 #: src/frontend/SettingsGeneralPage.cpp:223
-#, fuzzy, kde-format
-#| msgid "%1 (%2%)"
+#, kde-format
 msgid "%1 (System, %2)"
-msgstr "%1 (%2%)"
+msgstr "%1 (Systeem, %2)"
 
-#: src/frontend/SettingsGeneralPage.cpp:232
+#: src/frontend/SettingsGeneralPage.cpp:233
 #, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
@@ -16106,7 +16105,7 @@ msgstr ""
 "common/documents/jcgm/JCGM_100_2008_E.pdf\">Gids voor het uitdrukken van "
 "onzekerheid in metingen (GUM)</a>"
 
-#: src/frontend/SettingsGeneralPage.cpp:237
+#: src/frontend/SettingsGeneralPage.cpp:238
 #, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
@@ -16120,7 +16119,7 @@ msgstr ""
 "De instelling kan gewijzigd worden voor elk project apart in de "
 "eigenschappen van het project."
 
-#: src/frontend/SettingsGeneralPage.cpp:244
+#: src/frontend/SettingsGeneralPage.cpp:245
 #, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
@@ -16138,12 +16137,12 @@ msgstr ""
 "De instelling kan voor elk apart project gewijzigd worden in de "
 "eigenschappen van het project."
 
-#: src/frontend/SettingsGeneralPage.cpp:251
+#: src/frontend/SettingsGeneralPage.cpp:252
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
 msgstr "Activeert extra uitvoer voor trace in de terminal."
 
-#: src/frontend/SettingsGeneralPage.cpp:252
+#: src/frontend/SettingsGeneralPage.cpp:253
 #, kde-format
 msgid ""
 "Info trace - helpful to get information and warnings when running the "
@@ -16152,7 +16151,7 @@ msgstr ""
 "Pad dat informatie volgt - behulpzaam om informatie en waarschuwingen te "
 "krijgen bij uitvoeren van de toepassing."
 
-#: src/frontend/SettingsGeneralPage.cpp:253
+#: src/frontend/SettingsGeneralPage.cpp:254
 #, kde-format
 msgid ""
 "Debug trace - helpful to diagnose the application, can have a negative "
@@ -16161,7 +16160,7 @@ msgstr ""
 "Debug-trace - behulpzaam om de toepassing te diagnosticeren, kan een "
 "negatieve invloed hebben op de prestaties."
 
-#: src/frontend/SettingsGeneralPage.cpp:254
+#: src/frontend/SettingsGeneralPage.cpp:255
 #, kde-format
 msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
@@ -22939,17 +22938,15 @@ msgstr "Auto-Save:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
 #: src/frontend/ui/settingsgeneralpage.ui:46
-#, fuzzy, kde-format
-#| msgid "Dock widget placement:"
+#, kde-format
 msgid "Dock Widget Placement:"
 msgstr "Plaatsing van vastgezette widget"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
 #: src/frontend/ui/settingsgeneralpage.ui:60
-#, fuzzy, kde-format
-#| msgid "Number format:"
+#, kde-format
 msgid "Number Format:"
-msgstr "Formaat getallen "
+msgstr "Getalopmaak:"
 
 #. i18n: ectx: property (text), widget (QLabel, lStartup)
 #: src/frontend/ui/settingsgeneralpage.ui:67
@@ -22995,8 +22992,7 @@ msgstr "Opslaan in een compatibel formaat"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
 #: src/frontend/ui/settingsgeneralpage.ui:107
-#, fuzzy, kde-format
-#| msgid "Number options:"
+#, kde-format
 msgid "Number Options:"
 msgstr "Opties voor getallen:"
 

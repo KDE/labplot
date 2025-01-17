@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-16 00:37+0000\n"
-"PO-Revision-Date: 2025-01-11 17:07+0300\n"
+"POT-Creation-Date: 2025-01-17 00:38+0000\n"
+"PO-Revision-Date: 2025-01-16 16:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -8631,20 +8631,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: İmleç1 etkinleştir"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1757
-#: src/backend/worksheet/Worksheet.cpp:846
+#: src/backend/worksheet/Worksheet.cpp:838
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: %2 temasını yükle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1759
-#: src/backend/worksheet/Worksheet.cpp:848
+#: src/backend/worksheet/Worksheet.cpp:840
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: Öntanımlı temayı yükle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1761
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5567
-#: src/backend/worksheet/Worksheet.cpp:850
+#: src/backend/worksheet/Worksheet.cpp:842
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: Temayı ayarla"
@@ -8847,50 +8847,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: Kenarlık köşeleri yarıçapını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
-#: src/backend/worksheet/Worksheet.cpp:718
-#: src/backend/worksheet/Worksheet.cpp:719
+#: src/backend/worksheet/Worksheet.cpp:710
+#: src/backend/worksheet/Worksheet.cpp:711
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: Yerleşim üst boşluğunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:251
-#: src/backend/worksheet/Worksheet.cpp:728
-#: src/backend/worksheet/Worksheet.cpp:729
+#: src/backend/worksheet/Worksheet.cpp:720
+#: src/backend/worksheet/Worksheet.cpp:721
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: Yerleşim alt boşluğunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:258
-#: src/backend/worksheet/Worksheet.cpp:738
-#: src/backend/worksheet/Worksheet.cpp:739
+#: src/backend/worksheet/Worksheet.cpp:730
+#: src/backend/worksheet/Worksheet.cpp:731
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: Yerleşim sol boşluğunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:265
-#: src/backend/worksheet/Worksheet.cpp:748
-#: src/backend/worksheet/Worksheet.cpp:749
+#: src/backend/worksheet/Worksheet.cpp:740
+#: src/backend/worksheet/Worksheet.cpp:741
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: Yerleşim sağ boşluğunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:272
-#: src/backend/worksheet/Worksheet.cpp:758
-#: src/backend/worksheet/Worksheet.cpp:759
+#: src/backend/worksheet/Worksheet.cpp:750
+#: src/backend/worksheet/Worksheet.cpp:751
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: Yerleşim dikey boşluğunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:279
-#: src/backend/worksheet/Worksheet.cpp:768
-#: src/backend/worksheet/Worksheet.cpp:769
+#: src/backend/worksheet/Worksheet.cpp:760
+#: src/backend/worksheet/Worksheet.cpp:761
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: Yerleşim yatay boşluğunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:286
-#: src/backend/worksheet/Worksheet.cpp:788
-#: src/backend/worksheet/Worksheet.cpp:789
+#: src/backend/worksheet/Worksheet.cpp:780
+#: src/backend/worksheet/Worksheet.cpp:781
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: Yerleşim sütun sayısını ayarla"
@@ -9952,42 +9952,42 @@ msgstr "%1: Kenarlık şeklini ayarla"
 msgid "%1: set border"
 msgstr "%1: Kenarlık ayarla"
 
-#: src/backend/worksheet/Worksheet.cpp:246
+#: src/backend/worksheet/Worksheet.cpp:242
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Çalışma Sayfasını Yazdır"
 
-#: src/backend/worksheet/Worksheet.cpp:688
+#: src/backend/worksheet/Worksheet.cpp:680
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: Boyut türünü değiştir"
 
-#: src/backend/worksheet/Worksheet.cpp:700
+#: src/backend/worksheet/Worksheet.cpp:692
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: “İçeriği yeniden ölçeklendir özelliği”ni değiştir"
 
-#: src/backend/worksheet/Worksheet.cpp:708
-#: src/backend/worksheet/Worksheet.cpp:709
+#: src/backend/worksheet/Worksheet.cpp:700
+#: src/backend/worksheet/Worksheet.cpp:701
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: Yerleşimi ayarla"
 
-#: src/backend/worksheet/Worksheet.cpp:778
-#: src/backend/worksheet/Worksheet.cpp:779
+#: src/backend/worksheet/Worksheet.cpp:770
+#: src/backend/worksheet/Worksheet.cpp:771
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: Yerleşim satır sayısını ayarla"
 
-#: src/backend/worksheet/Worksheet.cpp:819
-#: src/backend/worksheet/Worksheet.cpp:820
+#: src/backend/worksheet/Worksheet.cpp:811
+#: src/backend/worksheet/Worksheet.cpp:812
 #: src/frontend/dockwidgets/WorksheetDock.cpp:376
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: Sayfa boyutunu ayarla"
 
-#: src/backend/worksheet/Worksheet.cpp:1571
+#: src/backend/worksheet/Worksheet.cpp:1563
 #, kde-format
 msgid "Curves"
 msgstr "Eğriler"
@@ -16052,13 +16052,15 @@ msgstr "İmparatorluk"
 msgid ""
 "Characters for the decimal and group separators defining the number format"
 msgstr ""
+"Sayı biçimini tanımlayan, ondalık ve grup ayırıcıları için kullanılan "
+"karakterler"
 
 #: src/frontend/SettingsGeneralPage.cpp:223
 #, kde-format
 msgid "%1 (System, %2)"
-msgstr ""
+msgstr "%1 (Sistem, %2)"
 
-#: src/frontend/SettingsGeneralPage.cpp:232
+#: src/frontend/SettingsGeneralPage.cpp:233
 #, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
@@ -16069,7 +16071,7 @@ msgstr ""
 "\">Ölçümde Belirsizliğin İfadesi Kılavuzu (GUM)</a> ile uyumlu terimler "
 "kullanın"
 
-#: src/frontend/SettingsGeneralPage.cpp:237
+#: src/frontend/SettingsGeneralPage.cpp:238
 #, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
@@ -16081,7 +16083,7 @@ msgstr ""
 "Yeni projeler için öntanımlı davranışı belirler.\n"
 "Bu ayar, her bir proje için proje ayarlarında ayrı ayrı değiştirilebilir."
 
-#: src/frontend/SettingsGeneralPage.cpp:244
+#: src/frontend/SettingsGeneralPage.cpp:245
 #, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
@@ -16099,12 +16101,12 @@ msgstr ""
 "Yeni projeler için öntanımlı davranışı belirler.\n"
 "Bu ayar, her bir proje için proje ayarlarında ayrı ayrı değiştirilebilir."
 
-#: src/frontend/SettingsGeneralPage.cpp:251
+#: src/frontend/SettingsGeneralPage.cpp:252
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
 msgstr "Uçbirimde ek izleme çıktısını etkinleştirir."
 
-#: src/frontend/SettingsGeneralPage.cpp:252
+#: src/frontend/SettingsGeneralPage.cpp:253
 #, kde-format
 msgid ""
 "Info trace - helpful to get information and warnings when running the "
@@ -16113,7 +16115,7 @@ msgstr ""
 "Bilgi izi — uygulamayı çalıştırırken ek bilgi ve uyarılar almak için "
 "kullanılır."
 
-#: src/frontend/SettingsGeneralPage.cpp:253
+#: src/frontend/SettingsGeneralPage.cpp:254
 #, kde-format
 msgid ""
 "Debug trace - helpful to diagnose the application, can have a negative "
@@ -16122,7 +16124,7 @@ msgstr ""
 "Hata ayıklama izi — uygulamayı tanılamada yardımcı olur; ancak başarımı "
 "azaltır."
 
-#: src/frontend/SettingsGeneralPage.cpp:254
+#: src/frontend/SettingsGeneralPage.cpp:255
 #, kde-format
 msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
@@ -22892,15 +22894,13 @@ msgstr "Otomatik kaydet:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
 #: src/frontend/ui/settingsgeneralpage.ui:46
-#, fuzzy, kde-format
-#| msgid "Dock widget placement:"
+#, kde-format
 msgid "Dock Widget Placement:"
-msgstr "Rıhtım araç takımı konumlandırması:"
+msgstr "Rıhtım araç takımı konumu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
 #: src/frontend/ui/settingsgeneralpage.ui:60
-#, fuzzy, kde-format
-#| msgid "Number format:"
+#, kde-format
 msgid "Number Format:"
 msgstr "Sayı biçimi:"
 
@@ -22948,8 +22948,7 @@ msgstr "Uyumlu biçimde kaydet"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
 #: src/frontend/ui/settingsgeneralpage.ui:107
-#, fuzzy, kde-format
-#| msgid "Number options:"
+#, kde-format
 msgid "Number Options:"
 msgstr "Sayı seçenekleri:"
 

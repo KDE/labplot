@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-16 00:37+0000\n"
+"POT-Creation-Date: 2025-01-17 00:38+0000\n"
 "PO-Revision-Date: 2024-12-11 23:18+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -8674,20 +8674,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: Cursor 1 aktivieren"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1757
-#: src/backend/worksheet/Worksheet.cpp:846
+#: src/backend/worksheet/Worksheet.cpp:838
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: Motiv %2 laden"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1759
-#: src/backend/worksheet/Worksheet.cpp:848
+#: src/backend/worksheet/Worksheet.cpp:840
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: Standardmotiv laden"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1761
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5567
-#: src/backend/worksheet/Worksheet.cpp:850
+#: src/backend/worksheet/Worksheet.cpp:842
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: Motiv festlegen"
@@ -8890,50 +8890,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: Eckenradius des Rahmens festlegen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
-#: src/backend/worksheet/Worksheet.cpp:718
-#: src/backend/worksheet/Worksheet.cpp:719
+#: src/backend/worksheet/Worksheet.cpp:710
+#: src/backend/worksheet/Worksheet.cpp:711
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: Oberen Rand des Layouts festlegen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:251
-#: src/backend/worksheet/Worksheet.cpp:728
-#: src/backend/worksheet/Worksheet.cpp:729
+#: src/backend/worksheet/Worksheet.cpp:720
+#: src/backend/worksheet/Worksheet.cpp:721
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: Unteren Rand des Layouts festlegen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:258
-#: src/backend/worksheet/Worksheet.cpp:738
-#: src/backend/worksheet/Worksheet.cpp:739
+#: src/backend/worksheet/Worksheet.cpp:730
+#: src/backend/worksheet/Worksheet.cpp:731
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: Linken Rand des Layouts festlegen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:265
-#: src/backend/worksheet/Worksheet.cpp:748
-#: src/backend/worksheet/Worksheet.cpp:749
+#: src/backend/worksheet/Worksheet.cpp:740
+#: src/backend/worksheet/Worksheet.cpp:741
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: Rechten Rand des Layouts festlegen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:272
-#: src/backend/worksheet/Worksheet.cpp:758
-#: src/backend/worksheet/Worksheet.cpp:759
+#: src/backend/worksheet/Worksheet.cpp:750
+#: src/backend/worksheet/Worksheet.cpp:751
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: Senkrechter Abstand im Layout"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:279
-#: src/backend/worksheet/Worksheet.cpp:768
-#: src/backend/worksheet/Worksheet.cpp:769
+#: src/backend/worksheet/Worksheet.cpp:760
+#: src/backend/worksheet/Worksheet.cpp:761
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: Waagerechter Abstand im Layout"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:286
-#: src/backend/worksheet/Worksheet.cpp:788
-#: src/backend/worksheet/Worksheet.cpp:789
+#: src/backend/worksheet/Worksheet.cpp:780
+#: src/backend/worksheet/Worksheet.cpp:781
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: Anzahl der Spalten im Layout"
@@ -9994,42 +9994,42 @@ msgstr "%1: Rahmenform festlegen"
 msgid "%1: set border"
 msgstr "%1: Rahmen festlegen"
 
-#: src/backend/worksheet/Worksheet.cpp:246
+#: src/backend/worksheet/Worksheet.cpp:242
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Arbeitsblatt drucken"
 
-#: src/backend/worksheet/Worksheet.cpp:688
+#: src/backend/worksheet/Worksheet.cpp:680
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: Größentyp ändern"
 
-#: src/backend/worksheet/Worksheet.cpp:700
+#: src/backend/worksheet/Worksheet.cpp:692
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: Eigenschaft \"Inhalt neu skalieren\" ändern"
 
-#: src/backend/worksheet/Worksheet.cpp:708
-#: src/backend/worksheet/Worksheet.cpp:709
+#: src/backend/worksheet/Worksheet.cpp:700
+#: src/backend/worksheet/Worksheet.cpp:701
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: Layout festlegen"
 
-#: src/backend/worksheet/Worksheet.cpp:778
-#: src/backend/worksheet/Worksheet.cpp:779
+#: src/backend/worksheet/Worksheet.cpp:770
+#: src/backend/worksheet/Worksheet.cpp:771
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: Anzahl der Spalten im Layout festlegen"
 
-#: src/backend/worksheet/Worksheet.cpp:819
-#: src/backend/worksheet/Worksheet.cpp:820
+#: src/backend/worksheet/Worksheet.cpp:811
+#: src/backend/worksheet/Worksheet.cpp:812
 #: src/frontend/dockwidgets/WorksheetDock.cpp:376
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: Seitengröße festlegen"
 
-#: src/backend/worksheet/Worksheet.cpp:1571
+#: src/backend/worksheet/Worksheet.cpp:1563
 #, kde-format
 msgid "Curves"
 msgstr "Kurven"
@@ -16071,7 +16071,7 @@ msgstr ""
 msgid "%1 (System, %2)"
 msgstr "%1 (%2%)"
 
-#: src/frontend/SettingsGeneralPage.cpp:232
+#: src/frontend/SettingsGeneralPage.cpp:233
 #, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
@@ -16082,7 +16082,7 @@ msgstr ""
 "common/documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of "
 "Uncertainty in Measurement (GUM)</a>"
 
-#: src/frontend/SettingsGeneralPage.cpp:237
+#: src/frontend/SettingsGeneralPage.cpp:238
 #, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
@@ -16095,7 +16095,7 @@ msgstr ""
 "Die Einstellung kann für jedes Projekt einzeln in den Projekteigenschaften "
 "geändert werden."
 
-#: src/frontend/SettingsGeneralPage.cpp:244
+#: src/frontend/SettingsGeneralPage.cpp:245
 #, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
@@ -16113,12 +16113,12 @@ msgstr ""
 "Die Einstellung kann für jedes Projekt einzeln in den Projekteigenschaften "
 "geändert werden."
 
-#: src/frontend/SettingsGeneralPage.cpp:251
+#: src/frontend/SettingsGeneralPage.cpp:252
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
 msgstr "Aktiviert zusätzliche Ausgabe im Terminal zur Nachverfolgung."
 
-#: src/frontend/SettingsGeneralPage.cpp:252
+#: src/frontend/SettingsGeneralPage.cpp:253
 #, kde-format
 msgid ""
 "Info trace - helpful to get information and warnings when running the "
@@ -16127,7 +16127,7 @@ msgstr ""
 "Infomeldungen - hilfereich um Informationen und Warnungen während der "
 "Laufzeit zu bekommen."
 
-#: src/frontend/SettingsGeneralPage.cpp:253
+#: src/frontend/SettingsGeneralPage.cpp:254
 #, kde-format
 msgid ""
 "Debug trace - helpful to diagnose the application, can have a negative "
@@ -16136,7 +16136,7 @@ msgstr ""
 "Fehlernachverfolgung - Hilfreich zur Diagnose der Anwendung. Kann sich "
 "negativeauf die Performance auswirken."
 
-#: src/frontend/SettingsGeneralPage.cpp:254
+#: src/frontend/SettingsGeneralPage.cpp:255
 #, kde-format
 msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
