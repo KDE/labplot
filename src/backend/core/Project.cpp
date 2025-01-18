@@ -726,6 +726,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 	return !reader->hasError();
 }
 
+#ifndef SDK
 bool Project::loadNotebook(const QString& filename) {
 	bool rc = false;
 #ifdef HAVE_CANTOR_LIBS
@@ -835,6 +836,7 @@ bool Project::loadNotebook(const QString& filename) {
 
 	return rc;
 }
+#endif
 
 void Project::retransformElements(AbstractAspect* aspect) {
 	bool hasChildren = aspect->childCount<AbstractAspect>();

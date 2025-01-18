@@ -69,7 +69,9 @@ public:
 	void save(const QPixmap&, QXmlStreamWriter*);
 	bool load(XmlStreamReader*, bool preview) override;
 	bool load(const QString&, bool preview = false);
+#ifndef SDK
 	bool loadNotebook(const QString&);
+#endif
 	static void restorePointers(AbstractAspect*);
 	static void retransformElements(AbstractAspect*);
 
