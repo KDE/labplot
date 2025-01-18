@@ -10,6 +10,7 @@
 #include "SettingsNotebookPage.h"
 
 #include <KConfigDialogManager>
+#include <KConfigGroup>
 #include <KPageDialog>
 #include <KPageWidgetItem>
 
@@ -67,7 +68,9 @@ QList<Settings::Type> SettingsNotebookPage::applySettings() {
 	for (auto* manager : m_cantorBackendConfigManagers)
 		manager->updateSettings();
 
+#ifdef HAVE_CANTOR_LIBS
 	changes << Settings::Type::Notebook;
+#endif
 	return changes;
 }
 
