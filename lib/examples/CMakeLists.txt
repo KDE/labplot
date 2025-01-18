@@ -16,7 +16,7 @@ list(PREPEND CMAKE_SYSTEM_PREFIX_PATH ${CI_INSTALL_PATH})
 
 find_package(LabPlot REQUIRED COMPONENTS SDK)
 
-file(GLOB EXAMPLE_FOLDERS *example*)
+file(GLOB EXAMPLE_FOLDERS *_ex)
 foreach(DIR ${EXAMPLE_FOLDERS})
     add_subdirectory(${DIR})
 endforeach()
