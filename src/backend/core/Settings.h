@@ -8,19 +8,19 @@ class KConfigGroup;
 namespace Settings {
 
 enum class Type {
-		General,
-		General_Number_Format,
-		General_Units,
-		Worksheet,
-		Spreadsheet,
+	General,
+	General_Number_Format,
+	General_Units,
+	Worksheet,
+	Spreadsheet,
 #ifdef HAVE_CANTOR_LIBS
-		Notebook,
+	Notebook,
 #endif
-		Datasets,
+	Datasets,
 #ifdef HAVE_KUSERFEEDBACK
-		Feedback
+	Feedback
 #endif
-	};
+};
 
 KConfigGroup group(const QString& name);
 KConfigGroup settingsGeneral();
@@ -32,7 +32,6 @@ bool sync();
 
 enum class DockPosBehavior { OriginalPos, AboveLastActive };
 SETUP_SETTING2(DockPosBehavior, DockPosBehavior)
-
 
 }
 
