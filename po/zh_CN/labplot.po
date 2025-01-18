@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-17 00:38+0000\n"
+"POT-Creation-Date: 2025-01-18 11:34+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -62,7 +62,7 @@ msgstr "重命名"
 #: src/backend/spreadsheet/Spreadsheet.cpp:733
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:487
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
-#: src/frontend/worksheet/WorksheetView.cpp:139
+#: src/frontend/worksheet/WorksheetView.cpp:140
 #, kde-format
 msgid "Delete"
 msgstr "删除"
@@ -276,7 +276,7 @@ msgstr "大整数"
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:280
 #: src/frontend/widgets/LabelWidget.cpp:489
-#: src/frontend/worksheet/WorksheetView.cpp:223
+#: src/frontend/worksheet/WorksheetView.cpp:224
 #, kde-format
 msgid "Text"
 msgstr "文本"
@@ -356,24 +356,24 @@ msgctxt "default labels of filter input ports"
 msgid "In%1"
 msgstr "输入%1"
 
-#: src/backend/core/AbstractPart.cpp:115
+#: src/backend/core/AbstractPart.cpp:121
 #, kde-format
 msgid "Import Data"
 msgstr "导入数据"
 
-#: src/backend/core/AbstractPart.cpp:116 src/frontend/MainWin.cpp:675
+#: src/backend/core/AbstractPart.cpp:122 src/frontend/MainWin.cpp:675
 #: src/frontend/MainWin.cpp:684
 #, kde-format
 msgid "From File..."
 msgstr "来自文件..."
 
-#: src/backend/core/AbstractPart.cpp:118 src/frontend/MainWin.cpp:696
+#: src/backend/core/AbstractPart.cpp:124 src/frontend/MainWin.cpp:696
 #, kde-format
 msgid "From SQL Database..."
 msgstr "来自 SQL 数据库..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:127
+#: src/backend/core/AbstractPart.cpp:133
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:335
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
@@ -382,22 +382,22 @@ msgstr "来自 SQL 数据库..."
 msgid "Export"
 msgstr "导出"
 
-#: src/backend/core/AbstractPart.cpp:128
+#: src/backend/core/AbstractPart.cpp:134
 #, kde-format
 msgid "Print"
 msgstr "打印"
 
-#: src/backend/core/AbstractPart.cpp:129
+#: src/backend/core/AbstractPart.cpp:135
 #, kde-format
 msgid "Print Preview"
 msgstr "打印预览"
 
-#: src/backend/core/AbstractPart.cpp:137 src/frontend/MainWin.cpp:768
+#: src/backend/core/AbstractPart.cpp:143 src/frontend/MainWin.cpp:768
 #, kde-format
 msgid "&Close"
 msgstr "关闭(&C)"
 
-#: src/backend/core/AbstractPart.cpp:142 src/backend/core/AbstractPart.cpp:155
+#: src/backend/core/AbstractPart.cpp:148 src/backend/core/AbstractPart.cpp:161
 #, kde-format
 msgid "Show"
 msgstr "显示"
@@ -779,12 +779,12 @@ msgstr ""
 msgid "Invalid project modification time. Using current time."
 msgstr ""
 
-#: src/backend/core/Workbook.cpp:207
+#: src/backend/core/Workbook.cpp:217
 #, kde-format
 msgid "matrix"
 msgstr "矩阵"
 
-#: src/backend/core/Workbook.cpp:214
+#: src/backend/core/Workbook.cpp:224
 #, kde-format
 msgid "unknown workbook element '%1'"
 msgstr ""
@@ -1253,9 +1253,9 @@ msgstr ""
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:301
-#: src/backend/datasources/filters/FITSFilter.cpp:332
-#: src/backend/datasources/filters/FITSFilter.cpp:342
-#: src/backend/datasources/filters/FITSFilter.cpp:537
+#: src/backend/datasources/filters/FITSFilter.cpp:334
+#: src/backend/datasources/filters/FITSFilter.cpp:344
+#: src/backend/datasources/filters/FITSFilter.cpp:539
 #: src/backend/datasources/filters/HDF5Filter.cpp:1631
 #: src/backend/datasources/filters/HDF5Filter.cpp:1748
 #: src/backend/datasources/filters/HDF5Filter.cpp:1798
@@ -1290,35 +1290,35 @@ msgstr "无效的文件。"
 msgid "No messages read."
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:227
+#: src/backend/datasources/filters/FITSFilter.cpp:229
 #, kde-format
 msgid "Images: %1"
 msgstr "图像：%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:232
+#: src/backend/datasources/filters/FITSFilter.cpp:234
 #, kde-format
 msgid "Tables: %1"
 msgstr "表格：%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:262
+#: src/backend/datasources/filters/FITSFilter.cpp:264
 #: src/backend/datasources/filters/MatioFilter.cpp:647
 #, kde-format
 msgid "Failed to open the file."
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:270
-#: src/backend/datasources/filters/FITSFilter.cpp:349
+#: src/backend/datasources/filters/FITSFilter.cpp:272
+#: src/backend/datasources/filters/FITSFilter.cpp:351
 #, kde-format
 msgid "Failed to read the file."
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:291
+#: src/backend/datasources/filters/FITSFilter.cpp:293
 #, kde-format
 msgid "Zero dimensions."
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1029
-#: src/backend/datasources/filters/FITSFilter.cpp:1549
+#: src/backend/datasources/filters/FITSFilter.cpp:1037
+#: src/backend/datasources/filters/FITSFilter.cpp:1557
 #: src/frontend/datasources/FITSOptionsWidget.cpp:42
 #: src/frontend/datasources/FITSOptionsWidget.cpp:75
 #: src/frontend/datasources/FITSOptionsWidget.cpp:144
@@ -1326,27 +1326,27 @@ msgstr ""
 msgid "Primary header"
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1031
+#: src/backend/datasources/filters/FITSFilter.cpp:1039
 #, kde-format
 msgid "IMAGE #%1"
 msgstr "图像 #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1034
+#: src/backend/datasources/filters/FITSFilter.cpp:1042
 #, kde-format
 msgid "ASCII_TBL #%1"
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1037
+#: src/backend/datasources/filters/FITSFilter.cpp:1045
 #, kde-format
 msgid "BINARY_TBL #%1"
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1542
+#: src/backend/datasources/filters/FITSFilter.cpp:1550
 #, kde-format
 msgid "Images"
 msgstr "图像"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1568
+#: src/backend/datasources/filters/FITSFilter.cpp:1576
 #, kde-format
 msgid "Tables"
 msgstr "表格"
@@ -6046,39 +6046,39 @@ msgstr ""
 msgid "ep"
 msgstr ""
 
-#: src/backend/lib/Range.h:52 src/backend/nsl/nsl_interp.c:14
+#: src/backend/lib/Range.h:57 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:459
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:519
 #, kde-format
 msgid "Linear"
 msgstr "线性函数"
 
-#: src/backend/lib/Range.h:52
+#: src/backend/lib/Range.h:57
 #, kde-format
 msgid "Log10"
 msgstr "log10"
 
-#: src/backend/lib/Range.h:52
+#: src/backend/lib/Range.h:57
 #, kde-format
 msgid "Log2"
 msgstr "log2"
 
-#: src/backend/lib/Range.h:52
+#: src/backend/lib/Range.h:57
 #, kde-format
 msgid "Ln"
 msgstr "ln"
 
-#: src/backend/lib/Range.h:52
+#: src/backend/lib/Range.h:57
 #, kde-format
 msgid "Sqrt"
 msgstr "平方根"
 
-#: src/backend/lib/Range.h:52
+#: src/backend/lib/Range.h:57
 #, kde-format
 msgid "Square"
 msgstr "平方"
 
-#: src/backend/lib/Range.h:52
+#: src/backend/lib/Range.h:57
 #, kde-format
 msgid "Inverse"
 msgstr "倒数"
@@ -6099,72 +6099,72 @@ msgstr ""
 msgid "unexpected end of document"
 msgstr ""
 
-#: src/backend/matrix/Matrix.cpp:129
+#: src/backend/matrix/Matrix.cpp:135
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3828
 #, kde-format
 msgid "FITS image"
 msgstr "FITS 图像"
 
-#: src/backend/matrix/Matrix.cpp:129
+#: src/backend/matrix/Matrix.cpp:135
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3828
 #, kde-format
 msgid "FITS table"
 msgstr "FITS 表格"
 
-#: src/backend/matrix/Matrix.cpp:168
+#: src/backend/matrix/Matrix.cpp:175
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Matrix"
 msgstr "打印矩阵"
 
-#: src/backend/matrix/Matrix.cpp:254
+#: src/backend/matrix/Matrix.cpp:268
 #, kde-format
 msgid "%1: x-start changed"
 msgstr ""
 
-#: src/backend/matrix/Matrix.cpp:261
+#: src/backend/matrix/Matrix.cpp:275
 #, kde-format
 msgid "%1: x-end changed"
 msgstr ""
 
-#: src/backend/matrix/Matrix.cpp:268
+#: src/backend/matrix/Matrix.cpp:282
 #, kde-format
 msgid "%1: y-start changed"
 msgstr ""
 
-#: src/backend/matrix/Matrix.cpp:275
+#: src/backend/matrix/Matrix.cpp:289
 #, kde-format
 msgid "%1: y-end changed"
 msgstr ""
 
-#: src/backend/matrix/Matrix.cpp:282
+#: src/backend/matrix/Matrix.cpp:296
 #, kde-format
 msgid "%1: numeric format changed"
 msgstr ""
 
-#: src/backend/matrix/Matrix.cpp:289
+#: src/backend/matrix/Matrix.cpp:303
 #, kde-format
 msgid "%1: precision changed"
 msgstr ""
 
-#: src/backend/matrix/Matrix.cpp:513
+#: src/backend/matrix/Matrix.cpp:529
 #, kde-format
 msgid "%1: set matrix size to %2x%3"
 msgstr ""
 
-#: src/backend/matrix/Matrix.cpp:537
+#: src/backend/matrix/Matrix.cpp:554
 #, kde-format
 msgid "%1: add %2 row"
 msgid_plural "%1: add %2 rows"
 msgstr[0] ""
 
-#: src/backend/matrix/Matrix.cpp:549
+#: src/backend/matrix/Matrix.cpp:568
 #, kde-format
 msgid "%1: add %2 column"
 msgid_plural "%1: add %2 columns"
 msgstr[0] ""
 
-#: src/backend/matrix/Matrix.cpp:676 src/backend/matrix/matrixcommands.h:131
+#: src/backend/matrix/Matrix.cpp:696 src/backend/matrix/matrixcommands.h:131
 #: src/backend/spreadsheet/Spreadsheet.cpp:680
 #, kde-format
 msgid "%1: clear"
@@ -6230,18 +6230,18 @@ msgstr "%1：水平镜像"
 msgid "%1: mirror vertically"
 msgstr "%1：垂直镜像"
 
-#: src/backend/note/Note.cpp:67
+#: src/backend/note/Note.cpp:70
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
 msgstr "打印备注"
 
-#: src/backend/note/Note.cpp:85
+#: src/backend/note/Note.cpp:95
 #, kde-format
 msgid "Text file (*.txt)"
 msgstr ""
 
-#: src/backend/note/Note.cpp:87
+#: src/backend/note/Note.cpp:97
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:282
 #, kde-format
@@ -6249,38 +6249,38 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "导出至文件"
 
-#: src/backend/note/Note.cpp:101
+#: src/backend/note/Note.cpp:111
 #, kde-format
 msgid "Export failed"
 msgstr ""
 
-#: src/backend/note/Note.cpp:101
+#: src/backend/note/Note.cpp:111
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr ""
 
-#: src/backend/note/Note.cpp:124
+#: src/backend/note/Note.cpp:134
 #, kde-format
 msgid "%1: set text"
 msgstr ""
 
-#: src/backend/note/Note.cpp:131 src/backend/worksheet/TextLabel.cpp:260
+#: src/backend/note/Note.cpp:141 src/backend/worksheet/TextLabel.cpp:260
 #: src/backend/worksheet/TextLabel.cpp:299
 #, kde-format
 msgid "%1: set background color"
 msgstr ""
 
-#: src/backend/note/Note.cpp:138
+#: src/backend/note/Note.cpp:148
 #, kde-format
 msgid "%1: set text color"
 msgstr ""
 
-#: src/backend/note/Note.cpp:145
+#: src/backend/note/Note.cpp:155
 #, kde-format
 msgid "%1: set text font"
 msgstr ""
 
-#: src/backend/note/Note.cpp:183
+#: src/backend/note/Note.cpp:197
 #, kde-format
 msgid "no note element found"
 msgstr ""
@@ -8282,8 +8282,8 @@ msgstr "垂直坐标轴"
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:110
 #: src/frontend/widgets/BackgroundWidget.cpp:123
-#: src/frontend/worksheet/WorksheetView.cpp:224
-#: src/frontend/worksheet/WorksheetView.cpp:1342
+#: src/frontend/worksheet/WorksheetView.cpp:225
+#: src/frontend/worksheet/WorksheetView.cpp:1343
 #, kde-format
 msgid "Image"
 msgstr "图像"
@@ -8317,8 +8317,8 @@ msgstr "参照区间"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
 #: src/frontend/MainWin.cpp:894 src/frontend/notebook/NotebookView.cpp:168
 #: src/frontend/workbook/WorkbookView.cpp:135
-#: src/frontend/worksheet/WorksheetView.cpp:294
-#: src/frontend/worksheet/WorksheetView.cpp:433
+#: src/frontend/worksheet/WorksheetView.cpp:295
+#: src/frontend/worksheet/WorksheetView.cpp:434
 #, kde-format
 msgid "Add New"
 msgstr "添加"
@@ -8346,7 +8346,7 @@ msgstr "分析"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:650
 #: src/frontend/ThemeHandler.cpp:49 src/frontend/ThemeHandler.cpp:144
-#: src/frontend/worksheet/WorksheetView.cpp:543
+#: src/frontend/worksheet/WorksheetView.cpp:544
 #, kde-format
 msgid "Theme"
 msgstr "主题"
@@ -8718,8 +8718,8 @@ msgid "%1: add function curve"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2166
-#: src/frontend/worksheet/WorksheetView.cpp:1338
 #: src/frontend/worksheet/WorksheetView.cpp:1339
+#: src/frontend/worksheet/WorksheetView.cpp:1340
 #, kde-format
 msgid "Text Label"
 msgstr "文本标签"
@@ -10330,8 +10330,8 @@ msgstr "全部复制"
 #: src/frontend/datapicker/DatapickerImageView.cpp:125
 #: src/frontend/matrix/MatrixView.cpp:192
 #: src/frontend/notebook/NotebookView.cpp:54
-#: src/frontend/worksheet/WorksheetView.cpp:148
-#: src/frontend/worksheet/WorksheetView.cpp:381
+#: src/frontend/worksheet/WorksheetView.cpp:149
+#: src/frontend/worksheet/WorksheetView.cpp:382
 #, kde-format
 msgid "Zoom In"
 msgstr "放大"
@@ -10339,41 +10339,41 @@ msgstr "放大"
 #: src/frontend/datapicker/DatapickerImageView.cpp:128
 #: src/frontend/matrix/MatrixView.cpp:193
 #: src/frontend/notebook/NotebookView.cpp:58
-#: src/frontend/worksheet/WorksheetView.cpp:149
-#: src/frontend/worksheet/WorksheetView.cpp:385
+#: src/frontend/worksheet/WorksheetView.cpp:150
+#: src/frontend/worksheet/WorksheetView.cpp:386
 #, kde-format
 msgid "Zoom Out"
 msgstr "缩小"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:131
 #: src/frontend/matrix/MatrixView.cpp:194
-#: src/frontend/worksheet/WorksheetView.cpp:150
+#: src/frontend/worksheet/WorksheetView.cpp:151
 #, kde-format
 msgid "Original Size"
 msgstr "原始大小"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:134
-#: src/frontend/worksheet/WorksheetView.cpp:172
+#: src/frontend/worksheet/WorksheetView.cpp:173
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Height"
 msgstr "适合高度"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:135
-#: src/frontend/worksheet/WorksheetView.cpp:175
+#: src/frontend/worksheet/WorksheetView.cpp:176
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Width"
 msgstr "适合宽度"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:138
-#: src/frontend/worksheet/WorksheetView.cpp:189
+#: src/frontend/worksheet/WorksheetView.cpp:190
 #, kde-format
 msgid "Navigate"
 msgstr "导航"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:142
-#: src/frontend/worksheet/WorksheetView.cpp:192
+#: src/frontend/worksheet/WorksheetView.cpp:193
 #, kde-format
 msgid "Select and Zoom"
 msgstr "缩放到选区"
@@ -10419,38 +10419,38 @@ msgid "Shift Down"
 msgstr "下移"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:172
-#: src/frontend/worksheet/WorksheetView.cpp:196
+#: src/frontend/worksheet/WorksheetView.cpp:197
 #, kde-format
 msgid "No Magnification"
 msgstr "关闭放大镜"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:176
-#: src/frontend/worksheet/WorksheetView.cpp:200
+#: src/frontend/worksheet/WorksheetView.cpp:201
 #, kde-format
 msgid "2x Magnification"
 msgstr "放大 2 倍"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:179
-#: src/frontend/worksheet/WorksheetView.cpp:203
+#: src/frontend/worksheet/WorksheetView.cpp:204
 #, kde-format
 msgid "3x Magnification"
 msgstr "放大 3 倍"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:182
-#: src/frontend/worksheet/WorksheetView.cpp:206
+#: src/frontend/worksheet/WorksheetView.cpp:207
 #, kde-format
 msgid "4x Magnification"
 msgstr "放大 4 倍"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:185
-#: src/frontend/worksheet/WorksheetView.cpp:209
+#: src/frontend/worksheet/WorksheetView.cpp:210
 #, kde-format
 msgid "5x Magnification"
 msgstr "放大 5 倍"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:218
-#: src/frontend/worksheet/WorksheetView.cpp:440
-#: src/frontend/worksheet/WorksheetView.cpp:491
+#: src/frontend/worksheet/WorksheetView.cpp:441
+#: src/frontend/worksheet/WorksheetView.cpp:492
 #, kde-format
 msgid "Mouse Mode"
 msgstr "鼠标模式"
@@ -10466,7 +10466,7 @@ msgid "Move Last Point"
 msgstr "移动最后一个点"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:241
-#: src/frontend/worksheet/WorksheetView.cpp:457
+#: src/frontend/worksheet/WorksheetView.cpp:458
 #, kde-format
 msgid "Magnification"
 msgstr "放大镜"
@@ -10505,7 +10505,7 @@ msgstr "曲线"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2197
+#: src/frontend/worksheet/WorksheetView.cpp:2202
 #, kde-format
 msgid "Failed to export"
 msgstr "导出失败"
@@ -10513,7 +10513,7 @@ msgstr "导出失败"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2197
+#: src/frontend/worksheet/WorksheetView.cpp:2202
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "无法写入“%1”。请检查路径。"
@@ -13195,25 +13195,25 @@ msgid ""
 msgstr "如果选中此项，将在大小更改时缩放工作表中的内容，否则只调整画布的大小。"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:280
-#: src/frontend/worksheet/WorksheetView.cpp:241
+#: src/frontend/worksheet/WorksheetView.cpp:242
 #, kde-format
 msgid "No Layout"
 msgstr "取消布局"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:281
-#: src/frontend/worksheet/WorksheetView.cpp:232
+#: src/frontend/worksheet/WorksheetView.cpp:233
 #, kde-format
 msgid "Vertical Layout"
 msgstr "垂直布局"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:282
-#: src/frontend/worksheet/WorksheetView.cpp:235
+#: src/frontend/worksheet/WorksheetView.cpp:236
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "水平布局"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:283
-#: src/frontend/worksheet/WorksheetView.cpp:238
+#: src/frontend/worksheet/WorksheetView.cpp:239
 #, kde-format
 msgid "Grid Layout"
 msgstr "网格布局"
@@ -14502,7 +14502,7 @@ msgstr "窗口(&W)"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
 #: src/frontend/MainWin.cpp:204 src/frontend/ui/settingsworksheetpage.ui:75
-#: src/frontend/worksheet/WorksheetView.cpp:268
+#: src/frontend/worksheet/WorksheetView.cpp:269
 #, kde-format
 msgid "Presenter Mode"
 msgstr "演示模式"
@@ -14927,7 +14927,7 @@ msgstr "%1 已打印"
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/frontend/MainWin.cpp:2458
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
-#: src/frontend/worksheet/WorksheetView.cpp:362
+#: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Cursor"
 msgstr "辅助标尺"
@@ -15051,7 +15051,7 @@ msgstr "清除内容(&R)"
 #: src/frontend/matrix/MatrixView.cpp:125
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:311
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:288
-#: src/frontend/worksheet/WorksheetView.cpp:135
+#: src/frontend/worksheet/WorksheetView.cpp:136
 #, kde-format
 msgid "Select All"
 msgstr "全部选中"
@@ -15191,7 +15191,7 @@ msgid "Header Format"
 msgstr "表头格式"
 
 #: src/frontend/matrix/MatrixView.cpp:295
-#: src/frontend/worksheet/WorksheetView.cpp:446
+#: src/frontend/worksheet/WorksheetView.cpp:447
 #, kde-format
 msgid "Zoom"
 msgstr "缩放"
@@ -15555,7 +15555,7 @@ msgid "Do you really want to delete %1?"
 msgstr ""
 
 #: src/frontend/ProjectExplorer.cpp:919
-#: src/frontend/worksheet/WorksheetView.cpp:1433
+#: src/frontend/worksheet/WorksheetView.cpp:1434
 #, kde-format
 msgid "Delete selected object"
 msgid_plural "Delete selected objects"
@@ -19989,7 +19989,7 @@ msgstr "字体颜色："
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1620
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:441
-#: src/frontend/worksheet/WorksheetView.cpp:473
+#: src/frontend/worksheet/WorksheetView.cpp:474
 #, kde-format
 msgid "Grid"
 msgstr "网格"
@@ -20423,7 +20423,7 @@ msgstr "扩展："
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:547
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:620
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:265
-#: src/frontend/worksheet/WorksheetView.cpp:465
+#: src/frontend/worksheet/WorksheetView.cpp:466
 #, kde-format
 msgid "Layout"
 msgstr "布局"
@@ -24161,26 +24161,26 @@ msgstr ""
 msgid "Pin the navigation panel"
 msgstr ""
 
-#: src/frontend/worksheet/WorksheetView.cpp:168
+#: src/frontend/worksheet/WorksheetView.cpp:169
 #, kde-format
 msgctxt "Zoom"
 msgid "No fit"
 msgstr "关闭适合视图"
 
-#: src/frontend/worksheet/WorksheetView.cpp:178
+#: src/frontend/worksheet/WorksheetView.cpp:179
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit to Selection"
 msgstr "适合选中内容"
 
-#: src/frontend/worksheet/WorksheetView.cpp:181
+#: src/frontend/worksheet/WorksheetView.cpp:182
 #, kde-format
 msgctxt "Zoom"
 msgid "Fit"
 msgstr "适合视图"
 
-#: src/frontend/worksheet/WorksheetView.cpp:186
-#: src/frontend/worksheet/WorksheetView.cpp:337
+#: src/frontend/worksheet/WorksheetView.cpp:187
+#: src/frontend/worksheet/WorksheetView.cpp:338
 #, kde-format
 msgid "Select and Edit"
 msgstr "选择并编辑"
@@ -24188,207 +24188,207 @@ msgstr "选择并编辑"
 #. i18n("Selection"), mouseModeActionGroup);
 #. selectionModeAction->setCheckable(true);
 #. "Add new" related actions
-#: src/frontend/worksheet/WorksheetView.cpp:217
+#: src/frontend/worksheet/WorksheetView.cpp:218
 #, kde-format
 msgid "Four Axes"
 msgstr "四坐标轴"
 
-#: src/frontend/worksheet/WorksheetView.cpp:218
+#: src/frontend/worksheet/WorksheetView.cpp:219
 #, kde-format
 msgid "Two Axes"
 msgstr "两坐标轴"
 
-#: src/frontend/worksheet/WorksheetView.cpp:219
+#: src/frontend/worksheet/WorksheetView.cpp:220
 #, kde-format
 msgid "Two Axes, Centered"
 msgstr "两坐标轴 (居中)"
 
-#: src/frontend/worksheet/WorksheetView.cpp:221
+#: src/frontend/worksheet/WorksheetView.cpp:222
 #, kde-format
 msgid "Two Axes, Crossing at Origin"
 msgstr "两坐标轴 (原点相交)"
 
-#: src/frontend/worksheet/WorksheetView.cpp:222
+#: src/frontend/worksheet/WorksheetView.cpp:223
 #, kde-format
 msgid "Load from Template"
 msgstr "从模板加载"
 
-#: src/frontend/worksheet/WorksheetView.cpp:245
+#: src/frontend/worksheet/WorksheetView.cpp:246
 #, kde-format
 msgid "No Grid"
 msgstr "无网格"
 
-#: src/frontend/worksheet/WorksheetView.cpp:250
+#: src/frontend/worksheet/WorksheetView.cpp:251
 #, kde-format
 msgid "Dense Line Grid"
 msgstr "稠密直线网格"
 
-#: src/frontend/worksheet/WorksheetView.cpp:253
+#: src/frontend/worksheet/WorksheetView.cpp:254
 #, kde-format
 msgid "Sparse Line Grid"
 msgstr "稀疏直线网格"
 
-#: src/frontend/worksheet/WorksheetView.cpp:256
+#: src/frontend/worksheet/WorksheetView.cpp:257
 #, kde-format
 msgid "Dense Dot Grid"
 msgstr "稠密点状网格"
 
-#: src/frontend/worksheet/WorksheetView.cpp:259
+#: src/frontend/worksheet/WorksheetView.cpp:260
 #, kde-format
 msgid "Sparse Dot Grid"
 msgstr "稀疏点状网格"
 
-#: src/frontend/worksheet/WorksheetView.cpp:262
+#: src/frontend/worksheet/WorksheetView.cpp:263
 #, kde-format
 msgid "Custom Grid"
 msgstr "自定义网格"
 
-#: src/frontend/worksheet/WorksheetView.cpp:265
+#: src/frontend/worksheet/WorksheetView.cpp:266
 #, kde-format
 msgid "Snap to Grid"
 msgstr "吸附到网格"
 
-#: src/frontend/worksheet/WorksheetView.cpp:285
+#: src/frontend/worksheet/WorksheetView.cpp:286
 #, kde-format
 msgid "Interactive Plots"
 msgstr "绘图可交互"
 
-#: src/frontend/worksheet/WorksheetView.cpp:286
+#: src/frontend/worksheet/WorksheetView.cpp:287
 #, kde-format
 msgid ""
 "If not activated, plots on the worksheet don't react on drag and mouse wheel "
 "events."
 msgstr "如果关闭，工作表中的绘图不会对鼠标拖动与滚轮事件作出响应。"
 
-#: src/frontend/worksheet/WorksheetView.cpp:303
-#: src/frontend/worksheet/WorksheetView.cpp:317
+#: src/frontend/worksheet/WorksheetView.cpp:304
+#: src/frontend/worksheet/WorksheetView.cpp:318
 #, kde-format
 msgid "Selected Plot Areas"
 msgstr "选中的绘制区域"
 
-#: src/frontend/worksheet/WorksheetView.cpp:305
-#: src/frontend/worksheet/WorksheetView.cpp:319
+#: src/frontend/worksheet/WorksheetView.cpp:306
+#: src/frontend/worksheet/WorksheetView.cpp:320
 #, kde-format
 msgid "All Plot Areas"
 msgstr "所有绘制区域"
 
-#: src/frontend/worksheet/WorksheetView.cpp:307
+#: src/frontend/worksheet/WorksheetView.cpp:308
 #, kde-format
 msgid "All Plot Areas X"
 msgstr "所有绘制区域 (X 方向)"
 
-#: src/frontend/worksheet/WorksheetView.cpp:309
+#: src/frontend/worksheet/WorksheetView.cpp:310
 #, kde-format
 msgid "All Plot Areas Y"
 msgstr "所有绘制区域 (Y 方向)"
 
-#: src/frontend/worksheet/WorksheetView.cpp:342
+#: src/frontend/worksheet/WorksheetView.cpp:343
 #, kde-format
 msgid "Crosshair"
 msgstr "十字准线"
 
-#: src/frontend/worksheet/WorksheetView.cpp:347
+#: src/frontend/worksheet/WorksheetView.cpp:348
 #, kde-format
 msgid "Select Region and Zoom In"
 msgstr "缩放到选区"
 
-#: src/frontend/worksheet/WorksheetView.cpp:352
+#: src/frontend/worksheet/WorksheetView.cpp:353
 #, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr "缩放到 X 轴选区"
 
-#: src/frontend/worksheet/WorksheetView.cpp:357
+#: src/frontend/worksheet/WorksheetView.cpp:358
 #, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr "缩放到 Y 轴选区"
 
-#: src/frontend/worksheet/WorksheetView.cpp:369
+#: src/frontend/worksheet/WorksheetView.cpp:370
 #, kde-format
 msgid "Auto Scale"
 msgstr "自动比例"
 
-#: src/frontend/worksheet/WorksheetView.cpp:373
+#: src/frontend/worksheet/WorksheetView.cpp:374
 #, kde-format
 msgid "Auto Scale X"
 msgstr "X 轴自动比例"
 
-#: src/frontend/worksheet/WorksheetView.cpp:377
+#: src/frontend/worksheet/WorksheetView.cpp:378
 #, kde-format
 msgid "Auto Scale Y"
 msgstr "Y 轴自动比例"
 
-#: src/frontend/worksheet/WorksheetView.cpp:389
+#: src/frontend/worksheet/WorksheetView.cpp:390
 #, kde-format
 msgid "Zoom In X"
 msgstr "X 方向放大"
 
-#: src/frontend/worksheet/WorksheetView.cpp:393
+#: src/frontend/worksheet/WorksheetView.cpp:394
 #, kde-format
 msgid "Zoom Out X"
 msgstr "X 方向缩小"
 
-#: src/frontend/worksheet/WorksheetView.cpp:397
+#: src/frontend/worksheet/WorksheetView.cpp:398
 #, kde-format
 msgid "Zoom In Y"
 msgstr "Y 方向放大"
 
-#: src/frontend/worksheet/WorksheetView.cpp:401
+#: src/frontend/worksheet/WorksheetView.cpp:402
 #, kde-format
 msgid "Zoom Out Y"
 msgstr "Y 方向缩小"
 
-#: src/frontend/worksheet/WorksheetView.cpp:405
+#: src/frontend/worksheet/WorksheetView.cpp:406
 #, kde-format
 msgid "Shift Left X"
 msgstr "X 方向左移"
 
-#: src/frontend/worksheet/WorksheetView.cpp:407
+#: src/frontend/worksheet/WorksheetView.cpp:408
 #, kde-format
 msgid "Shift Right X"
 msgstr "X 方向右移"
 
-#: src/frontend/worksheet/WorksheetView.cpp:409
+#: src/frontend/worksheet/WorksheetView.cpp:410
 #, kde-format
 msgid "Shift Up Y"
 msgstr "Y 方向上移"
 
-#: src/frontend/worksheet/WorksheetView.cpp:411
+#: src/frontend/worksheet/WorksheetView.cpp:412
 #, kde-format
 msgid "Shift Down Y"
 msgstr "Y 方向下移"
 
-#: src/frontend/worksheet/WorksheetView.cpp:425
-#: src/frontend/worksheet/WorksheetView.cpp:488
-#: src/frontend/worksheet/WorksheetView.cpp:1294
-#: src/frontend/worksheet/WorksheetView.cpp:1301
-#: src/frontend/worksheet/WorksheetView.cpp:1308
-#: src/frontend/worksheet/WorksheetView.cpp:1315
+#: src/frontend/worksheet/WorksheetView.cpp:426
+#: src/frontend/worksheet/WorksheetView.cpp:489
+#: src/frontend/worksheet/WorksheetView.cpp:1295
+#: src/frontend/worksheet/WorksheetView.cpp:1302
+#: src/frontend/worksheet/WorksheetView.cpp:1309
+#: src/frontend/worksheet/WorksheetView.cpp:1316
 #, kde-format
 msgid "Plot Area"
 msgstr "绘制区域"
 
-#: src/frontend/worksheet/WorksheetView.cpp:501
+#: src/frontend/worksheet/WorksheetView.cpp:502
 #, kde-format
 msgid "Zoom/Navigate"
 msgstr "缩放/导航"
 
-#: src/frontend/worksheet/WorksheetView.cpp:522
+#: src/frontend/worksheet/WorksheetView.cpp:523
 #, kde-format
 msgid "Apply Actions to"
 msgstr "将操作应用到"
 
-#: src/frontend/worksheet/WorksheetView.cpp:529
+#: src/frontend/worksheet/WorksheetView.cpp:530
 #, kde-format
 msgid "Apply Cursor to"
 msgstr "将辅助标尺应用到"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1432
+#: src/frontend/worksheet/WorksheetView.cpp:1433
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
 msgstr[0] "您确定要删除选中的 %1 个对象吗？"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1440
+#: src/frontend/worksheet/WorksheetView.cpp:1441
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr ""

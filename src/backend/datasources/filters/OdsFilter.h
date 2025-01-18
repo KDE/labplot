@@ -16,7 +16,12 @@
 class OdsFilterPrivate;
 class QTreeWidgetItem;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT OdsFilter : public AbstractFileFilter {
+#else
 class OdsFilter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
 public:
 	explicit OdsFilter();

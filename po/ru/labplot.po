@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-17 00:38+0000\n"
+"POT-Creation-Date: 2025-01-18 11:34+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -66,7 +66,7 @@ msgstr "Переименовать"
 #: src/backend/spreadsheet/Spreadsheet.cpp:733
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:487
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
-#: src/frontend/worksheet/WorksheetView.cpp:139
+#: src/frontend/worksheet/WorksheetView.cpp:140
 #, kde-format
 msgid "Delete"
 msgstr "Удалить"
@@ -281,7 +281,7 @@ msgstr "Большое целое число"
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:280
 #: src/frontend/widgets/LabelWidget.cpp:489
-#: src/frontend/worksheet/WorksheetView.cpp:223
+#: src/frontend/worksheet/WorksheetView.cpp:224
 #, kde-format
 msgid "Text"
 msgstr "Текст"
@@ -368,25 +368,25 @@ msgid "In%1"
 msgstr "In%1"
 
 # BUGME: please add semantic ctxt --aspotashev
-#: src/backend/core/AbstractPart.cpp:115
+#: src/backend/core/AbstractPart.cpp:121
 #, kde-format
 msgid "Import Data"
 msgstr "Импорт данных"
 
-#: src/backend/core/AbstractPart.cpp:116 src/frontend/MainWin.cpp:675
+#: src/backend/core/AbstractPart.cpp:122 src/frontend/MainWin.cpp:675
 #: src/frontend/MainWin.cpp:684
 #, kde-format
 msgid "From File..."
 msgstr "Из файла…"
 
-#: src/backend/core/AbstractPart.cpp:118 src/frontend/MainWin.cpp:696
+#: src/backend/core/AbstractPart.cpp:124 src/frontend/MainWin.cpp:696
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Из базы данных SQL…"
 
 # BUGME: please split strings --aspotashev
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:127
+#: src/backend/core/AbstractPart.cpp:133
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:335
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
@@ -395,22 +395,22 @@ msgstr "Из базы данных SQL…"
 msgid "Export"
 msgstr "Экспорт"
 
-#: src/backend/core/AbstractPart.cpp:128
+#: src/backend/core/AbstractPart.cpp:134
 #, kde-format
 msgid "Print"
 msgstr "Печать"
 
-#: src/backend/core/AbstractPart.cpp:129
+#: src/backend/core/AbstractPart.cpp:135
 #, kde-format
 msgid "Print Preview"
 msgstr "Предварительный просмотр"
 
-#: src/backend/core/AbstractPart.cpp:137 src/frontend/MainWin.cpp:768
+#: src/backend/core/AbstractPart.cpp:143 src/frontend/MainWin.cpp:768
 #, kde-format
 msgid "&Close"
 msgstr "&Закрыть"
 
-#: src/backend/core/AbstractPart.cpp:142 src/backend/core/AbstractPart.cpp:155
+#: src/backend/core/AbstractPart.cpp:148 src/backend/core/AbstractPart.cpp:161
 #, kde-format
 msgid "Show"
 msgstr "Показать"
@@ -806,12 +806,12 @@ msgstr "Не удалось открыть проект"
 msgid "Invalid project modification time. Using current time."
 msgstr "Недопустимое время изменения проекта. Используется текущее время."
 
-#: src/backend/core/Workbook.cpp:207
+#: src/backend/core/Workbook.cpp:217
 #, kde-format
 msgid "matrix"
 msgstr "матрица"
 
-#: src/backend/core/Workbook.cpp:214
+#: src/backend/core/Workbook.cpp:224
 #, kde-format
 msgid "unknown workbook element '%1'"
 msgstr "Неизвестный элемент книги «%1»"
@@ -1298,9 +1298,9 @@ msgstr "Не удалось открыть устройство."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:301
-#: src/backend/datasources/filters/FITSFilter.cpp:332
-#: src/backend/datasources/filters/FITSFilter.cpp:342
-#: src/backend/datasources/filters/FITSFilter.cpp:537
+#: src/backend/datasources/filters/FITSFilter.cpp:334
+#: src/backend/datasources/filters/FITSFilter.cpp:344
+#: src/backend/datasources/filters/FITSFilter.cpp:539
 #: src/backend/datasources/filters/HDF5Filter.cpp:1631
 #: src/backend/datasources/filters/HDF5Filter.cpp:1748
 #: src/backend/datasources/filters/HDF5Filter.cpp:1798
@@ -1337,37 +1337,37 @@ msgstr "Недопустимый файл blf"
 msgid "No messages read."
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:227
+#: src/backend/datasources/filters/FITSFilter.cpp:229
 #, kde-format
 msgid "Images: %1"
 msgstr "Изображения: %1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:232
+#: src/backend/datasources/filters/FITSFilter.cpp:234
 #, kde-format
 msgid "Tables: %1"
 msgstr "Таблицы: %1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:262
+#: src/backend/datasources/filters/FITSFilter.cpp:264
 #: src/backend/datasources/filters/MatioFilter.cpp:647
 #, fuzzy, kde-format
 #| msgid "Failed to open the file '%1'."
 msgid "Failed to open the file."
 msgstr "Не удалось открыть файл «%1»."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:270
-#: src/backend/datasources/filters/FITSFilter.cpp:349
+#: src/backend/datasources/filters/FITSFilter.cpp:272
+#: src/backend/datasources/filters/FITSFilter.cpp:351
 #, fuzzy, kde-format
 #| msgid "Unable to read the file"
 msgid "Failed to read the file."
 msgstr "Не удалось прочитать файл"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:291
+#: src/backend/datasources/filters/FITSFilter.cpp:293
 #, fuzzy, kde-format
 msgid "Zero dimensions."
 msgstr "Размеры:"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1029
-#: src/backend/datasources/filters/FITSFilter.cpp:1549
+#: src/backend/datasources/filters/FITSFilter.cpp:1037
+#: src/backend/datasources/filters/FITSFilter.cpp:1557
 #: src/frontend/datasources/FITSOptionsWidget.cpp:42
 #: src/frontend/datasources/FITSOptionsWidget.cpp:75
 #: src/frontend/datasources/FITSOptionsWidget.cpp:144
@@ -1375,29 +1375,29 @@ msgstr "Размеры:"
 msgid "Primary header"
 msgstr "Основной заголовок"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1031
+#: src/backend/datasources/filters/FITSFilter.cpp:1039
 #, kde-format
 msgid "IMAGE #%1"
 msgstr "ИЗОБРАЖЕНИЕ #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1034
+#: src/backend/datasources/filters/FITSFilter.cpp:1042
 #, kde-format
 msgid "ASCII_TBL #%1"
 msgstr "ASCII_TBL #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1037
+#: src/backend/datasources/filters/FITSFilter.cpp:1045
 #, kde-format
 msgid "BINARY_TBL #%1"
 msgstr "BINARY_TBL #%1"
 
 # BUGME: please add ctxt --aspotashev
-#: src/backend/datasources/filters/FITSFilter.cpp:1542
+#: src/backend/datasources/filters/FITSFilter.cpp:1550
 #, kde-format
 msgid "Images"
 msgstr "Изображения"
 
 # BUGME: please add context --aspotashev
-#: src/backend/datasources/filters/FITSFilter.cpp:1568
+#: src/backend/datasources/filters/FITSFilter.cpp:1576
 #, kde-format
 msgid "Tables"
 msgstr "Таблицы"
@@ -6353,40 +6353,40 @@ msgid "ep"
 msgstr ""
 
 # "Тип шкалы: [...]" --aspotashev
-#: src/backend/lib/Range.h:52 src/backend/nsl/nsl_interp.c:14
+#: src/backend/lib/Range.h:57 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:459
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:519
 #, kde-format
 msgid "Linear"
 msgstr "Линейная"
 
-#: src/backend/lib/Range.h:52
+#: src/backend/lib/Range.h:57
 #, kde-format
 msgid "Log10"
 msgstr "Логарифмическая (Log10)"
 
-#: src/backend/lib/Range.h:52
+#: src/backend/lib/Range.h:57
 #, kde-format
 msgid "Log2"
 msgstr "Логарифмическая (Log2)"
 
 # BUGME: please split --aspotashev
-#: src/backend/lib/Range.h:52
+#: src/backend/lib/Range.h:57
 #, kde-format
 msgid "Ln"
 msgstr "Логарифмическая (Ln)"
 
-#: src/backend/lib/Range.h:52
+#: src/backend/lib/Range.h:57
 #, kde-format
 msgid "Sqrt"
 msgstr "Квадратного корня"
 
-#: src/backend/lib/Range.h:52
+#: src/backend/lib/Range.h:57
 #, kde-format
 msgid "Square"
 msgstr "Квадратичная"
 
-#: src/backend/lib/Range.h:52
+#: src/backend/lib/Range.h:57
 #, kde-format
 msgid "Inverse"
 msgstr "Обратных величин"
@@ -6407,60 +6407,60 @@ msgstr "строка %1, столбец %2: %3"
 msgid "unexpected end of document"
 msgstr "Неожиданное завершение документа"
 
-#: src/backend/matrix/Matrix.cpp:129
+#: src/backend/matrix/Matrix.cpp:135
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3828
 #, kde-format
 msgid "FITS image"
 msgstr "Изображение FITS"
 
-#: src/backend/matrix/Matrix.cpp:129
+#: src/backend/matrix/Matrix.cpp:135
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3828
 #, kde-format
 msgid "FITS table"
 msgstr "Таблица FITS"
 
-#: src/backend/matrix/Matrix.cpp:168
+#: src/backend/matrix/Matrix.cpp:175
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Matrix"
 msgstr "Печать матрицы"
 
-#: src/backend/matrix/Matrix.cpp:254
+#: src/backend/matrix/Matrix.cpp:268
 #, kde-format
 msgid "%1: x-start changed"
 msgstr "%1: изменение начального значения X"
 
-#: src/backend/matrix/Matrix.cpp:261
+#: src/backend/matrix/Matrix.cpp:275
 #, kde-format
 msgid "%1: x-end changed"
 msgstr "%1: изменение конечного значения X"
 
-#: src/backend/matrix/Matrix.cpp:268
+#: src/backend/matrix/Matrix.cpp:282
 #, kde-format
 msgid "%1: y-start changed"
 msgstr "%1: изменение %1: изменение начального значения Y"
 
-#: src/backend/matrix/Matrix.cpp:275
+#: src/backend/matrix/Matrix.cpp:289
 #, kde-format
 msgid "%1: y-end changed"
 msgstr "%1: изменение %1: изменение конечного значения Y"
 
-#: src/backend/matrix/Matrix.cpp:282
+#: src/backend/matrix/Matrix.cpp:296
 #, kde-format
 msgid "%1: numeric format changed"
 msgstr "%1: изменение числового формата"
 
-#: src/backend/matrix/Matrix.cpp:289
+#: src/backend/matrix/Matrix.cpp:303
 #, kde-format
 msgid "%1: precision changed"
 msgstr "%1: изменение точности"
 
-#: src/backend/matrix/Matrix.cpp:513
+#: src/backend/matrix/Matrix.cpp:529
 #, kde-format
 msgid "%1: set matrix size to %2x%3"
 msgstr "%1: задание размера матрицы %2x%3"
 
-#: src/backend/matrix/Matrix.cpp:537
+#: src/backend/matrix/Matrix.cpp:554
 #, fuzzy, kde-format
 msgid "%1: add %2 row"
 msgid_plural "%1: add %2 rows"
@@ -6469,7 +6469,7 @@ msgstr[1] "%1: добавление %2 рядов"
 msgstr[2] "%1: добавление %2 рядов"
 msgstr[3] "%1: добавление %2 ряда"
 
-#: src/backend/matrix/Matrix.cpp:549
+#: src/backend/matrix/Matrix.cpp:568
 #, kde-format
 msgid "%1: add %2 column"
 msgid_plural "%1: add %2 columns"
@@ -6478,7 +6478,7 @@ msgstr[1] "%1: добавление %2 столбцов"
 msgstr[2] "%1: добавление %2 столбцов"
 msgstr[3] "%1: добавление %2 столбца"
 
-#: src/backend/matrix/Matrix.cpp:676 src/backend/matrix/matrixcommands.h:131
+#: src/backend/matrix/Matrix.cpp:696 src/backend/matrix/matrixcommands.h:131
 #: src/backend/spreadsheet/Spreadsheet.cpp:680
 #, kde-format
 msgid "%1: clear"
@@ -6556,19 +6556,19 @@ msgstr "%1: горизонтальное отражение"
 msgid "%1: mirror vertically"
 msgstr "%1: вертикальное отражение"
 
-#: src/backend/note/Note.cpp:67
+#: src/backend/note/Note.cpp:70
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
 msgstr "Печать"
 
-#: src/backend/note/Note.cpp:85
+#: src/backend/note/Note.cpp:95
 #, fuzzy, kde-format
 msgid "Text file (*.txt)"
 msgstr "Файлы LaTeX (*.tex)"
 
 # BUGME: please split strings --aspotashev
-#: src/backend/note/Note.cpp:87
+#: src/backend/note/Note.cpp:97
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:282
 #, kde-format
@@ -6577,41 +6577,41 @@ msgid "Export to File"
 msgstr "Экспорт в файл"
 
 # BUGME: please split strings --aspotashev
-#: src/backend/note/Note.cpp:101
+#: src/backend/note/Note.cpp:111
 #, fuzzy, kde-format
 msgid "Export failed"
 msgstr "Экспорт в файл"
 
-#: src/backend/note/Note.cpp:101
+#: src/backend/note/Note.cpp:111
 #, fuzzy, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Не удалось открыть файл «%1» для записи."
 
-#: src/backend/note/Note.cpp:124
+#: src/backend/note/Note.cpp:134
 #, fuzzy, kde-format
 #| msgid "%1: set type"
 msgid "%1: set text"
 msgstr "%1: задание типа"
 
-#: src/backend/note/Note.cpp:131 src/backend/worksheet/TextLabel.cpp:260
+#: src/backend/note/Note.cpp:141 src/backend/worksheet/TextLabel.cpp:260
 #: src/backend/worksheet/TextLabel.cpp:299
 #, kde-format
 msgid "%1: set background color"
 msgstr "%1: задание цвета фона"
 
-#: src/backend/note/Note.cpp:138
+#: src/backend/note/Note.cpp:148
 #, fuzzy, kde-format
 #| msgid "%1: set font color"
 msgid "%1: set text color"
 msgstr "%1: задание цвета шрифта"
 
-#: src/backend/note/Note.cpp:145
+#: src/backend/note/Note.cpp:155
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set text font"
 msgstr "%1: задание шрифта"
 
-#: src/backend/note/Note.cpp:183
+#: src/backend/note/Note.cpp:197
 #, kde-format
 msgid "no note element found"
 msgstr "Не найден элемент «note»"
@@ -8681,8 +8681,8 @@ msgstr "Вертикальная ось"
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:110
 #: src/frontend/widgets/BackgroundWidget.cpp:123
-#: src/frontend/worksheet/WorksheetView.cpp:224
-#: src/frontend/worksheet/WorksheetView.cpp:1342
+#: src/frontend/worksheet/WorksheetView.cpp:225
+#: src/frontend/worksheet/WorksheetView.cpp:1343
 #, kde-format
 msgid "Image"
 msgstr "Изображение"
@@ -8717,8 +8717,8 @@ msgstr "Справочный диапазон"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
 #: src/frontend/MainWin.cpp:894 src/frontend/notebook/NotebookView.cpp:168
 #: src/frontend/workbook/WorkbookView.cpp:135
-#: src/frontend/worksheet/WorksheetView.cpp:294
-#: src/frontend/worksheet/WorksheetView.cpp:433
+#: src/frontend/worksheet/WorksheetView.cpp:295
+#: src/frontend/worksheet/WorksheetView.cpp:434
 #, kde-format
 msgid "Add New"
 msgstr "Добавить элемент"
@@ -8748,7 +8748,7 @@ msgstr "Анализ"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:650
 #: src/frontend/ThemeHandler.cpp:49 src/frontend/ThemeHandler.cpp:144
-#: src/frontend/worksheet/WorksheetView.cpp:543
+#: src/frontend/worksheet/WorksheetView.cpp:544
 #, kde-format
 msgid "Theme"
 msgstr "Тема"
@@ -9147,8 +9147,8 @@ msgid "%1: add function curve"
 msgstr "%1: добавка кривой приближения"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2166
-#: src/frontend/worksheet/WorksheetView.cpp:1338
 #: src/frontend/worksheet/WorksheetView.cpp:1339
+#: src/frontend/worksheet/WorksheetView.cpp:1340
 #, kde-format
 msgid "Text Label"
 msgstr "Текстовая подпись"
@@ -10832,8 +10832,8 @@ msgstr "Скопировать всё"
 #: src/frontend/datapicker/DatapickerImageView.cpp:125
 #: src/frontend/matrix/MatrixView.cpp:192
 #: src/frontend/notebook/NotebookView.cpp:54
-#: src/frontend/worksheet/WorksheetView.cpp:148
-#: src/frontend/worksheet/WorksheetView.cpp:381
+#: src/frontend/worksheet/WorksheetView.cpp:149
+#: src/frontend/worksheet/WorksheetView.cpp:382
 #, kde-format
 msgid "Zoom In"
 msgstr "Увеличить масштаб"
@@ -10841,21 +10841,21 @@ msgstr "Увеличить масштаб"
 #: src/frontend/datapicker/DatapickerImageView.cpp:128
 #: src/frontend/matrix/MatrixView.cpp:193
 #: src/frontend/notebook/NotebookView.cpp:58
-#: src/frontend/worksheet/WorksheetView.cpp:149
-#: src/frontend/worksheet/WorksheetView.cpp:385
+#: src/frontend/worksheet/WorksheetView.cpp:150
+#: src/frontend/worksheet/WorksheetView.cpp:386
 #, kde-format
 msgid "Zoom Out"
 msgstr "Уменьшить масштаб"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:131
 #: src/frontend/matrix/MatrixView.cpp:194
-#: src/frontend/worksheet/WorksheetView.cpp:150
+#: src/frontend/worksheet/WorksheetView.cpp:151
 #, kde-format
 msgid "Original Size"
 msgstr "Исходный размер"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:134
-#: src/frontend/worksheet/WorksheetView.cpp:172
+#: src/frontend/worksheet/WorksheetView.cpp:173
 #, fuzzy, kde-format
 #| msgid "Fit to Height"
 msgctxt "Zoom"
@@ -10864,7 +10864,7 @@ msgstr "Подогнать по высоте"
 
 # BUGME: please split --aspotashev
 #: src/frontend/datapicker/DatapickerImageView.cpp:135
-#: src/frontend/worksheet/WorksheetView.cpp:175
+#: src/frontend/worksheet/WorksheetView.cpp:176
 #, fuzzy, kde-format
 #| msgid "Fit to Width"
 msgctxt "Zoom"
@@ -10872,13 +10872,13 @@ msgid "Fit to Width"
 msgstr "Подогнать по ширине"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:138
-#: src/frontend/worksheet/WorksheetView.cpp:189
+#: src/frontend/worksheet/WorksheetView.cpp:190
 #, kde-format
 msgid "Navigate"
 msgstr "Перемещение"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:142
-#: src/frontend/worksheet/WorksheetView.cpp:192
+#: src/frontend/worksheet/WorksheetView.cpp:193
 #, kde-format
 msgid "Select and Zoom"
 msgstr "Выбор и масштабирование"
@@ -10924,38 +10924,38 @@ msgid "Shift Down"
 msgstr "Сместиться вниз"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:172
-#: src/frontend/worksheet/WorksheetView.cpp:196
+#: src/frontend/worksheet/WorksheetView.cpp:197
 #, kde-format
 msgid "No Magnification"
 msgstr "Без увеличения"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:176
-#: src/frontend/worksheet/WorksheetView.cpp:200
+#: src/frontend/worksheet/WorksheetView.cpp:201
 #, kde-format
 msgid "2x Magnification"
 msgstr "Увеличение 2х"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:179
-#: src/frontend/worksheet/WorksheetView.cpp:203
+#: src/frontend/worksheet/WorksheetView.cpp:204
 #, kde-format
 msgid "3x Magnification"
 msgstr "Увеличение 3х"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:182
-#: src/frontend/worksheet/WorksheetView.cpp:206
+#: src/frontend/worksheet/WorksheetView.cpp:207
 #, kde-format
 msgid "4x Magnification"
 msgstr "Увеличение 4х"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:185
-#: src/frontend/worksheet/WorksheetView.cpp:209
+#: src/frontend/worksheet/WorksheetView.cpp:210
 #, kde-format
 msgid "5x Magnification"
 msgstr "Увеличение 5х"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:218
-#: src/frontend/worksheet/WorksheetView.cpp:440
-#: src/frontend/worksheet/WorksheetView.cpp:491
+#: src/frontend/worksheet/WorksheetView.cpp:441
+#: src/frontend/worksheet/WorksheetView.cpp:492
 #, kde-format
 msgid "Mouse Mode"
 msgstr "Режим мыши"
@@ -10971,7 +10971,7 @@ msgid "Move Last Point"
 msgstr "Перемещение последней точки"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:241
-#: src/frontend/worksheet/WorksheetView.cpp:457
+#: src/frontend/worksheet/WorksheetView.cpp:458
 #, kde-format
 msgid "Magnification"
 msgstr "Увеличение"
@@ -11010,7 +11010,7 @@ msgstr "Кривая"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2197
+#: src/frontend/worksheet/WorksheetView.cpp:2202
 #, kde-format
 msgid "Failed to export"
 msgstr "Не удалось выполнить экспортирование"
@@ -11018,7 +11018,7 @@ msgstr "Не удалось выполнить экспортирование"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2197
+#: src/frontend/worksheet/WorksheetView.cpp:2202
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Не удалось выполнить запись в «%1». Проверьте путь."
@@ -13920,25 +13920,25 @@ msgstr ""
 "В противном случае меняется только масштаб холста."
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:280
-#: src/frontend/worksheet/WorksheetView.cpp:241
+#: src/frontend/worksheet/WorksheetView.cpp:242
 #, kde-format
 msgid "No Layout"
 msgstr "Без разметки"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:281
-#: src/frontend/worksheet/WorksheetView.cpp:232
+#: src/frontend/worksheet/WorksheetView.cpp:233
 #, kde-format
 msgid "Vertical Layout"
 msgstr "Вертикальная разметка"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:282
-#: src/frontend/worksheet/WorksheetView.cpp:235
+#: src/frontend/worksheet/WorksheetView.cpp:236
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "Горизонтальная разметка"
 
 #: src/frontend/dockwidgets/WorksheetDock.cpp:283
-#: src/frontend/worksheet/WorksheetView.cpp:238
+#: src/frontend/worksheet/WorksheetView.cpp:239
 #, kde-format
 msgid "Grid Layout"
 msgstr "Разметка по сетке"
@@ -15292,7 +15292,7 @@ msgstr "&Окно"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
 #: src/frontend/MainWin.cpp:204 src/frontend/ui/settingsworksheetpage.ui:75
-#: src/frontend/worksheet/WorksheetView.cpp:268
+#: src/frontend/worksheet/WorksheetView.cpp:269
 #, kde-format
 msgid "Presenter Mode"
 msgstr "Режим презентации"
@@ -15738,7 +15738,7 @@ msgstr "%1 напечатан"
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/frontend/MainWin.cpp:2458
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
-#: src/frontend/worksheet/WorksheetView.cpp:362
+#: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Cursor"
 msgstr "Курсор"
@@ -15866,7 +15866,7 @@ msgstr "Сня&ть выделение"
 #: src/frontend/matrix/MatrixView.cpp:125
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:311
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:288
-#: src/frontend/worksheet/WorksheetView.cpp:135
+#: src/frontend/worksheet/WorksheetView.cpp:136
 #, kde-format
 msgid "Select All"
 msgstr "Выбрать всё"
@@ -16012,7 +16012,7 @@ msgid "Header Format"
 msgstr "Формат заголовков"
 
 #: src/frontend/matrix/MatrixView.cpp:295
-#: src/frontend/worksheet/WorksheetView.cpp:446
+#: src/frontend/worksheet/WorksheetView.cpp:447
 #, kde-format
 msgid "Zoom"
 msgstr "Масштабирование"
@@ -16386,7 +16386,7 @@ msgid "Do you really want to delete %1?"
 msgstr "Удалить %1?"
 
 #: src/frontend/ProjectExplorer.cpp:919
-#: src/frontend/worksheet/WorksheetView.cpp:1433
+#: src/frontend/worksheet/WorksheetView.cpp:1434
 #, kde-format
 msgid "Delete selected object"
 msgid_plural "Delete selected objects"
@@ -21041,7 +21041,7 @@ msgstr "Цвет шрифта:"
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1620
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:441
-#: src/frontend/worksheet/WorksheetView.cpp:473
+#: src/frontend/worksheet/WorksheetView.cpp:474
 #, kde-format
 msgid "Grid"
 msgstr "Сетка"
@@ -21484,7 +21484,7 @@ msgstr "Дополнить:"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:547
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:620
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:265
-#: src/frontend/worksheet/WorksheetView.cpp:465
+#: src/frontend/worksheet/WorksheetView.cpp:466
 #, kde-format
 msgid "Layout"
 msgstr "Разметка"
@@ -25378,29 +25378,29 @@ msgstr "Завершить презентацию"
 msgid "Pin the navigation panel"
 msgstr ""
 
-#: src/frontend/worksheet/WorksheetView.cpp:168
+#: src/frontend/worksheet/WorksheetView.cpp:169
 #, fuzzy, kde-format
 #| msgid "No fit"
 msgctxt "Zoom"
 msgid "No fit"
 msgstr "Без подгонки"
 
-#: src/frontend/worksheet/WorksheetView.cpp:178
+#: src/frontend/worksheet/WorksheetView.cpp:179
 #, fuzzy, kde-format
 #| msgid "Fit to Selection"
 msgctxt "Zoom"
 msgid "Fit to Selection"
 msgstr "Подогнать по области выделения"
 
-#: src/frontend/worksheet/WorksheetView.cpp:181
+#: src/frontend/worksheet/WorksheetView.cpp:182
 #, fuzzy, kde-format
 #| msgid "Fit"
 msgctxt "Zoom"
 msgid "Fit"
 msgstr "Подбор"
 
-#: src/frontend/worksheet/WorksheetView.cpp:186
-#: src/frontend/worksheet/WorksheetView.cpp:337
+#: src/frontend/worksheet/WorksheetView.cpp:187
+#: src/frontend/worksheet/WorksheetView.cpp:338
 #, kde-format
 msgid "Select and Edit"
 msgstr "Выделение и редактирование"
@@ -25408,72 +25408,72 @@ msgstr "Выделение и редактирование"
 #. i18n("Selection"), mouseModeActionGroup);
 #. selectionModeAction->setCheckable(true);
 #. "Add new" related actions
-#: src/frontend/worksheet/WorksheetView.cpp:217
+#: src/frontend/worksheet/WorksheetView.cpp:218
 #, kde-format
 msgid "Four Axes"
 msgstr "Четыре оси"
 
-#: src/frontend/worksheet/WorksheetView.cpp:218
+#: src/frontend/worksheet/WorksheetView.cpp:219
 #, kde-format
 msgid "Two Axes"
 msgstr "Две оси"
 
-#: src/frontend/worksheet/WorksheetView.cpp:219
+#: src/frontend/worksheet/WorksheetView.cpp:220
 #, kde-format
 msgid "Two Axes, Centered"
 msgstr "Две оси с пересечением в центре"
 
-#: src/frontend/worksheet/WorksheetView.cpp:221
+#: src/frontend/worksheet/WorksheetView.cpp:222
 #, kde-format
 msgid "Two Axes, Crossing at Origin"
 msgstr "Две оси с пересечением в начале координат"
 
-#: src/frontend/worksheet/WorksheetView.cpp:222
+#: src/frontend/worksheet/WorksheetView.cpp:223
 #, kde-format
 msgid "Load from Template"
 msgstr "Загрузить из шаблона"
 
-#: src/frontend/worksheet/WorksheetView.cpp:245
+#: src/frontend/worksheet/WorksheetView.cpp:246
 #, kde-format
 msgid "No Grid"
 msgstr "Без сетки"
 
-#: src/frontend/worksheet/WorksheetView.cpp:250
+#: src/frontend/worksheet/WorksheetView.cpp:251
 #, kde-format
 msgid "Dense Line Grid"
 msgstr "Плотная сетка"
 
-#: src/frontend/worksheet/WorksheetView.cpp:253
+#: src/frontend/worksheet/WorksheetView.cpp:254
 #, kde-format
 msgid "Sparse Line Grid"
 msgstr "Разреженная сетка"
 
-#: src/frontend/worksheet/WorksheetView.cpp:256
+#: src/frontend/worksheet/WorksheetView.cpp:257
 #, kde-format
 msgid "Dense Dot Grid"
 msgstr "Плотная точечная сетка"
 
-#: src/frontend/worksheet/WorksheetView.cpp:259
+#: src/frontend/worksheet/WorksheetView.cpp:260
 #, kde-format
 msgid "Sparse Dot Grid"
 msgstr "Разреженная точечная сетка"
 
-#: src/frontend/worksheet/WorksheetView.cpp:262
+#: src/frontend/worksheet/WorksheetView.cpp:263
 #, kde-format
 msgid "Custom Grid"
 msgstr "Настраиваемая сетка"
 
-#: src/frontend/worksheet/WorksheetView.cpp:265
+#: src/frontend/worksheet/WorksheetView.cpp:266
 #, kde-format
 msgid "Snap to Grid"
 msgstr "Привязка к сетке"
 
-#: src/frontend/worksheet/WorksheetView.cpp:285
+#: src/frontend/worksheet/WorksheetView.cpp:286
 #, fuzzy, kde-format
 msgid "Interactive Plots"
 msgstr "Неинтерактивный график"
 
-#: src/frontend/worksheet/WorksheetView.cpp:286
+#: src/frontend/worksheet/WorksheetView.cpp:287
 #, fuzzy, kde-format
 msgid ""
 "If not activated, plots on the worksheet don't react on drag and mouse wheel "
@@ -25482,130 +25482,130 @@ msgstr ""
 "Когда параметр включен, графики на листе не реагируют на события "
 "перетаскивания и вращения колеса мыши."
 
-#: src/frontend/worksheet/WorksheetView.cpp:303
-#: src/frontend/worksheet/WorksheetView.cpp:317
+#: src/frontend/worksheet/WorksheetView.cpp:304
+#: src/frontend/worksheet/WorksheetView.cpp:318
 #, kde-format
 msgid "Selected Plot Areas"
 msgstr "Выделенным областям графиков"
 
-#: src/frontend/worksheet/WorksheetView.cpp:305
-#: src/frontend/worksheet/WorksheetView.cpp:319
+#: src/frontend/worksheet/WorksheetView.cpp:306
+#: src/frontend/worksheet/WorksheetView.cpp:320
 #, kde-format
 msgid "All Plot Areas"
 msgstr "Всем областям графиков"
 
-#: src/frontend/worksheet/WorksheetView.cpp:307
+#: src/frontend/worksheet/WorksheetView.cpp:308
 #, kde-format
 msgid "All Plot Areas X"
 msgstr "Всем областям графиков по X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:309
+#: src/frontend/worksheet/WorksheetView.cpp:310
 #, kde-format
 msgid "All Plot Areas Y"
 msgstr "Всем областям графиков по Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:342
+#: src/frontend/worksheet/WorksheetView.cpp:343
 #, kde-format
 msgid "Crosshair"
 msgstr "Перекрестие"
 
-#: src/frontend/worksheet/WorksheetView.cpp:347
+#: src/frontend/worksheet/WorksheetView.cpp:348
 #, kde-format
 msgid "Select Region and Zoom In"
 msgstr "Выделение и увеличение"
 
-#: src/frontend/worksheet/WorksheetView.cpp:352
+#: src/frontend/worksheet/WorksheetView.cpp:353
 #, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr "Выделение и увеличение по X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:357
+#: src/frontend/worksheet/WorksheetView.cpp:358
 #, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr "Выделение и увеличение по Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:369
+#: src/frontend/worksheet/WorksheetView.cpp:370
 #, kde-format
 msgid "Auto Scale"
 msgstr "Автомасштабирование"
 
-#: src/frontend/worksheet/WorksheetView.cpp:373
+#: src/frontend/worksheet/WorksheetView.cpp:374
 #, kde-format
 msgid "Auto Scale X"
 msgstr "Автомасштабирование по X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:377
+#: src/frontend/worksheet/WorksheetView.cpp:378
 #, kde-format
 msgid "Auto Scale Y"
 msgstr "Автомасштабирование по Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:389
+#: src/frontend/worksheet/WorksheetView.cpp:390
 #, kde-format
 msgid "Zoom In X"
 msgstr "Увеличить масштаб по оси X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:393
+#: src/frontend/worksheet/WorksheetView.cpp:394
 #, kde-format
 msgid "Zoom Out X"
 msgstr "Уменьшить масштаб по оси X"
 
-#: src/frontend/worksheet/WorksheetView.cpp:397
+#: src/frontend/worksheet/WorksheetView.cpp:398
 #, kde-format
 msgid "Zoom In Y"
 msgstr "Увеличить масштаб по оси Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:401
+#: src/frontend/worksheet/WorksheetView.cpp:402
 #, kde-format
 msgid "Zoom Out Y"
 msgstr "Уменьшить масштаб по оси Y"
 
-#: src/frontend/worksheet/WorksheetView.cpp:405
+#: src/frontend/worksheet/WorksheetView.cpp:406
 #, kde-format
 msgid "Shift Left X"
 msgstr "Сместиться влево"
 
-#: src/frontend/worksheet/WorksheetView.cpp:407
+#: src/frontend/worksheet/WorksheetView.cpp:408
 #, kde-format
 msgid "Shift Right X"
 msgstr "Сместиться вправо"
 
-#: src/frontend/worksheet/WorksheetView.cpp:409
+#: src/frontend/worksheet/WorksheetView.cpp:410
 #, kde-format
 msgid "Shift Up Y"
 msgstr "Сместиться вверх"
 
-#: src/frontend/worksheet/WorksheetView.cpp:411
+#: src/frontend/worksheet/WorksheetView.cpp:412
 #, kde-format
 msgid "Shift Down Y"
 msgstr "Сместиться вниз"
 
-#: src/frontend/worksheet/WorksheetView.cpp:425
-#: src/frontend/worksheet/WorksheetView.cpp:488
-#: src/frontend/worksheet/WorksheetView.cpp:1294
-#: src/frontend/worksheet/WorksheetView.cpp:1301
-#: src/frontend/worksheet/WorksheetView.cpp:1308
-#: src/frontend/worksheet/WorksheetView.cpp:1315
+#: src/frontend/worksheet/WorksheetView.cpp:426
+#: src/frontend/worksheet/WorksheetView.cpp:489
+#: src/frontend/worksheet/WorksheetView.cpp:1295
+#: src/frontend/worksheet/WorksheetView.cpp:1302
+#: src/frontend/worksheet/WorksheetView.cpp:1309
+#: src/frontend/worksheet/WorksheetView.cpp:1316
 #, kde-format
 msgid "Plot Area"
 msgstr "Область построения"
 
-#: src/frontend/worksheet/WorksheetView.cpp:501
+#: src/frontend/worksheet/WorksheetView.cpp:502
 #, kde-format
 msgid "Zoom/Navigate"
 msgstr "Масштабирование/Перемещение"
 
-#: src/frontend/worksheet/WorksheetView.cpp:522
+#: src/frontend/worksheet/WorksheetView.cpp:523
 #, kde-format
 msgid "Apply Actions to"
 msgstr "Применить действия к"
 
 # BUGME: please add ctxt --aspotashev
-#: src/frontend/worksheet/WorksheetView.cpp:529
+#: src/frontend/worksheet/WorksheetView.cpp:530
 #, kde-format
 msgid "Apply Cursor to"
 msgstr "Применить курсор к"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1432
+#: src/frontend/worksheet/WorksheetView.cpp:1433
 #, kde-format
 msgid "Do you really want to delete the selected object?"
 msgid_plural "Do you really want to delete the selected %1 objects?"
@@ -25614,7 +25614,7 @@ msgstr[1] "Удалить %1 выбранных объекта?"
 msgstr[2] "Удалить %1 выбранных объектов?"
 msgstr[3] "Удалить %1 выбранный объект?"
 
-#: src/frontend/worksheet/WorksheetView.cpp:1440
+#: src/frontend/worksheet/WorksheetView.cpp:1441
 #, kde-format
 msgid "%1: Remove selected worksheet elements."
 msgstr "%1: Удаление выбранных элементов листа."

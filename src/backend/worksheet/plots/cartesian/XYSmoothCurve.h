@@ -19,7 +19,12 @@ extern "C" {
 
 class XYSmoothCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYSmoothCurve : public XYAnalysisCurve {
+#else
 class XYSmoothCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:

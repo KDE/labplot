@@ -19,7 +19,12 @@ class ImagePrivate;
 class QBrush;
 class QFont;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Image : public WorksheetElement {
+#else
 class Image : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:

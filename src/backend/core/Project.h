@@ -22,7 +22,12 @@ class ProjectPrivate;
 class QMimeData;
 class QString;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Project : public Folder {
+#else
 class Project : public Folder {
+#endif
 	Q_OBJECT
 
 public:

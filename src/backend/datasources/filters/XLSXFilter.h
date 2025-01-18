@@ -19,7 +19,12 @@
 class XLSXFilterPrivate;
 class QTreeWidgetItem;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XLSXFilter : public AbstractFileFilter {
+#else
 class XLSXFilter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
 public:
 	explicit XLSXFilter();

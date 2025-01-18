@@ -546,8 +546,6 @@ set(GENERATED_SOURCES
 INCLUDE_DIRECTORIES(. ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR})
 set(LABPLOT_SRCS ${GUI_SOURCES})
 ki18n_wrap_ui(LABPLOT_SRCS ${UI_SOURCES})
-# see also QT_MIN_VERSION in CMakeLists.txt
-add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50F00)
 
 # static library
 add_library(labplotnsllib STATIC ${NSL_SOURCES})

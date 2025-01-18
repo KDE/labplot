@@ -14,7 +14,12 @@
 class QTreeWidgetItem;
 class HDF5FilterPrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT HDF5Filter : public AbstractFileFilter {
+#else
 class HDF5Filter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
 
 public:

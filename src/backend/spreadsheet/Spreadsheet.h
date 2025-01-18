@@ -21,7 +21,12 @@ class SpreadsheetModel;
 class SpreadsheetPrivate;
 class StatisticsSpreadsheet;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Spreadsheet : public AbstractDataSource {
+#else
 class Spreadsheet : public AbstractDataSource {
+#endif
 	Q_OBJECT
 
 public:

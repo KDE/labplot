@@ -17,7 +17,12 @@ extern "C" {
 
 class XYHilbertTransformCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYHilbertTransformCurve : public XYAnalysisCurve {
+#else
 class XYHilbertTransformCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:

@@ -13,7 +13,12 @@
 
 #include "backend/core/column/Column.h"
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT ColumnStringIO : public AbstractColumn {
+#else
 class ColumnStringIO : public AbstractColumn {
+#endif
 	Q_OBJECT
 
 public:

@@ -24,7 +24,12 @@ class QTime;
 template<class T>
 class Interval;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT AbstractColumn : public AbstractAspect {
+#else
 class AbstractColumn : public AbstractAspect {
+#endif
 	Q_OBJECT
 
 public:

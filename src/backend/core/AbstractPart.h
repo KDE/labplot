@@ -11,11 +11,17 @@
 #define ABSTRACT_PART_H
 
 #include "AbstractAspect.h"
-
+#ifndef SDK
 class ContentDockWidget;
+#endif
 class QMenu;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT AbstractPart : public AbstractAspect {
+#else
 class AbstractPart : public AbstractAspect {
+#endif
 	Q_OBJECT
 
 public:
@@ -25,8 +31,9 @@ public:
 	virtual QWidget* view() const = 0;
 	bool viewCreated() const;
 	void deleteView() const;
-
+#ifndef SDK
 	ContentDockWidget* dockWidget() const;
+#endif
 	bool dockWidgetExists() const;
 	bool hasMdiSubWindow() const;
 
@@ -45,7 +52,9 @@ public:
 	void suppressDeletion(bool suppress);
 
 private:
+#ifndef SDK
 	mutable ContentDockWidget* m_dockWidget{nullptr};
+#endif
 	bool m_suppressDeletion{false};
 
 protected:

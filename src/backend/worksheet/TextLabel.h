@@ -22,7 +22,12 @@ class TextLabelPrivate;
 class CartesianPlot;
 class QPen;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT TextLabel : public WorksheetElement {
+#else
 class TextLabel : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:

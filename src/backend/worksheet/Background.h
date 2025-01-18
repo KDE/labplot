@@ -16,7 +16,12 @@
 class BackgroundPrivate;
 class KConfigGroup;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Background : public AbstractAspect {
+#else
 class Background : public AbstractAspect {
+#endif
 	Q_OBJECT
 
 public:

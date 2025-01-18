@@ -19,7 +19,12 @@ extern "C" {
 
 class XYDataReductionCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYDataReductionCurve : public XYAnalysisCurve {
+#else
 class XYDataReductionCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:

@@ -17,7 +17,12 @@ class CartesianCoordinateSystemPrivate;
 class CartesianCoordinateSystemSetScalePropertiesCmd;
 class CartesianPlot;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT CartesianCoordinateSystem : public AbstractCoordinateSystem {
+#else
 class CartesianCoordinateSystem : public AbstractCoordinateSystem {
+#endif
 	Q_GADGET
 public:
 	enum class Dimension { X, Y };

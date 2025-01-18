@@ -19,7 +19,12 @@ extern "C" {
 
 class XYFourierTransformCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYFourierTransformCurve : public XYAnalysisCurve {
+#else
 class XYFourierTransformCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:

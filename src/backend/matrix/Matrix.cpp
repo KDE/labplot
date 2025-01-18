@@ -16,7 +16,9 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/matrix/MatrixModel.h"
+#ifndef SDK
 #include "frontend/matrix/MatrixView.h"
+#endif
 #include "frontend/spreadsheet/ExportSpreadsheetDialog.h"
 #include "matrixcommands.h"
 
@@ -102,6 +104,7 @@ QMenu* Matrix::createContextMenu() {
 }
 
 QWidget* Matrix::view() const {
+#ifndef SDK
 	if (!m_partView) {
 		m_view = new MatrixView(const_cast<Matrix*>(this));
 		m_partView = m_view;
@@ -117,6 +120,9 @@ QWidget* Matrix::view() const {
 		});
 	}
 	return m_partView;
+#else
+	return nullptr;
+#endif
 }
 
 bool Matrix::exportView() const {
@@ -162,6 +168,7 @@ bool Matrix::exportView() const {
 }
 
 bool Matrix::printView() {
+#ifndef SDK
 	QPrinter printer;
 	auto* dlg = new QPrintDialog(&printer, m_view);
 	bool ret;
@@ -172,12 +179,19 @@ bool Matrix::printView() {
 	delete dlg;
 
 	return ret;
+#else
+	return false;
+#endif
 }
 
 bool Matrix::printPreview() const {
+#ifndef SDK
 	auto* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &MatrixView::print);
 	return dlg->exec();
+#else
+	return false;
+#endif
 }
 
 // ##############################################################################
@@ -295,8 +309,10 @@ void Matrix::setHeaderFormat(Matrix::HeaderFormat format) {
 	d->headerFormat = format;
 	m_model->updateHeader();
 
+#ifndef SDK
 	if (m_view)
 		m_view->resizeHeaders();
+#endif
 
 	Q_EMIT headerFormatChanged(format);
 }
@@ -529,6 +545,7 @@ void Matrix::setDimensions(int rows, int cols) {
 }
 
 void Matrix::addRows() {
+#ifndef SDK
 	Q_D(Matrix);
 	if (!m_view)
 		return;
@@ -538,9 +555,11 @@ void Matrix::addRows() {
 	exec(new MatrixInsertRowsCmd(d, rowCount(), count));
 	endMacro();
 	RESET_CURSOR;
+#endif
 }
 
 void Matrix::addColumns() {
+#ifndef SDK
 	Q_D(Matrix);
 	if (!m_view)
 		return;
@@ -550,6 +569,7 @@ void Matrix::addColumns() {
 	exec(new MatrixInsertColumnsCmd(d, columnCount(), count));
 	endMacro();
 	RESET_CURSOR;
+#endif
 }
 
 void Matrix::setCoordinates(double x1, double x2, double y1, double y2) {
@@ -827,7 +847,9 @@ MatrixPrivate::~MatrixPrivate() {
 }
 
 void MatrixPrivate::updateViewHeader() {
+#ifndef SDK
 	q->m_view->model()->updateHeader();
+#endif
 }
 
 /*!

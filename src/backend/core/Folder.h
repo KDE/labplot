@@ -14,7 +14,12 @@
 
 #include "AbstractAspect.h"
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Folder : public AbstractAspect {
+#else
 class Folder : public AbstractAspect {
+#endif
 	Q_OBJECT
 
 public:

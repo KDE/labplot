@@ -18,7 +18,12 @@ extern "C" {
 
 class XYFourierFilterCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYFourierFilterCurve : public XYAnalysisCurve {
+#else
 class XYFourierFilterCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:
