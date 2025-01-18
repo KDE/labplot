@@ -10,6 +10,7 @@ namespace Settings {
 enum class Type {
 		General,
 		General_Number_Format,
+		General_Units,
 		Worksheet,
 		Spreadsheet,
 #ifdef HAVE_CANTOR_LIBS

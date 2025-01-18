@@ -2586,64 +2586,80 @@ void MainWin::migrateSettings() {
 }
 
 void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
+	WAIT_CURSOR;
 	const auto group = Settings::group(QStringLiteral("Settings_General"));
 
-	// title bar
-	MainWin::TitleBarMode titleBarMode = static_cast<MainWin::TitleBarMode>(group.readEntry("TitleBar", 0));
-	if (titleBarMode != m_titleBarMode) {
-		m_titleBarMode = titleBarMode;
-		updateTitleBar();
-	}
-
-	// window visibility
-	auto vis = Project::DockVisibility(group.readEntry("DockVisibility", 0));
-	if (m_project && (vis != m_project->dockVisibility())) {
-		if (vis == Project::DockVisibility::folderOnly)
-			m_visibilityFolderAction->setChecked(true);
-		else if (vis == Project::DockVisibility::folderAndSubfolders)
-			m_visibilitySubfolderAction->setChecked(true);
-		else
-			m_visibilityAllAction->setChecked(true);
-		m_project->setDockVisibility(vis);
-	}
-
-	// autosave
-	bool autoSave = group.readEntry("AutoSave", 0);
-	if (m_autoSaveActive != autoSave) {
-		m_autoSaveActive = autoSave;
-		if (autoSave)
-			m_autoSaveTimer.start();
-		else
-			m_autoSaveTimer.stop();
-	}
-
-	int interval = group.readEntry("AutoSaveInterval", 1);
-	interval *= 60 * 1000;
-	if (interval != m_autoSaveTimer.interval())
-		m_autoSaveTimer.setInterval(interval);
-
-	// update the locale and the units in the dock widgets
+	// handle general settings
+	// TODO: handle only those settings that were really changed, similar to how it's done for the nubmer format, etc. further below
 	if (changes.contains(Settings::Type::General_Number_Format)) {
-		updateLocale();
+		// title bar
+		MainWin::TitleBarMode titleBarMode = static_cast<MainWin::TitleBarMode>(group.readEntry("TitleBar", 0));
+		if (titleBarMode != m_titleBarMode) {
+			m_titleBarMode = titleBarMode;
+			updateTitleBar();
+		}
 
-		// update the locale in all dock widgets
+		// window visibility
+		auto vis = Project::DockVisibility(group.readEntry("DockVisibility", 0));
+		if (m_project && (vis != m_project->dockVisibility())) {
+			if (vis == Project::DockVisibility::folderOnly)
+				m_visibilityFolderAction->setChecked(true);
+			else if (vis == Project::DockVisibility::folderAndSubfolders)
+				m_visibilitySubfolderAction->setChecked(true);
+			else
+				m_visibilityAllAction->setChecked(true);
+			m_project->setDockVisibility(vis);
+		}
+
+		// autosave
+		bool autoSave = group.readEntry("AutoSave", 0);
+		if (m_autoSaveActive != autoSave) {
+			m_autoSaveActive = autoSave;
+			if (autoSave)
+				m_autoSaveTimer.start();
+			else
+				m_autoSaveTimer.stop();
+		}
+
+		int interval = group.readEntry("AutoSaveInterval", 1);
+		interval *= 60 * 1000;
+		if (interval != m_autoSaveTimer.interval())
+			m_autoSaveTimer.setInterval(interval);
+
+
+		// update spreadsheet header
+		if (m_project) {
+			const auto& spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* spreadsheet : spreadsheets)
+				spreadsheet->updateHorizontalHeader();
+		}
+
+		// bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
+		// if (m_showWelcomeScreen != showWelcomeScreen)
+		// 	m_showWelcomeScreen = showWelcomeScreen;
+	}
+
+	// update the number format in all visible dock widgets, worksheet elements and spreadsheets, if changed
+	if (changes.contains(Settings::Type::General_Number_Format)) {
+		updateLocale(); // set the new default runtime locale
+
+		// dock widgets
 		if (stackedWidget) {
 			for (int i = 0; i < stackedWidget->count(); ++i) {
 				auto* widget = stackedWidget->widget(i);
 				auto* dock = dynamic_cast<BaseDock*>(widget);
-				if (dock) {
+				if (dock)
 					dock->updateLocale();
-					dock->updateUnits();
-				} else {
+				else {
 					auto* labelWidget = dynamic_cast<LabelWidget*>(widget);
 					if (labelWidget)
-						labelWidget->updateUnits();
+						labelWidget->updateLocale();
 				}
 			}
 		}
 
+		// worksheet elements
 		if (m_project) {
-			// worksheet elements
 			const auto& worksheets = m_project->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (const auto* worksheet : worksheets) {
 				if (worksheet->viewCreated()) {
@@ -2662,18 +2678,22 @@ void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
 		}
 	}
 
-	// update spreadsheet header
-	if (m_project) {
-		const auto& spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
-		for (auto* spreadsheet : spreadsheets) {
-			spreadsheet->updateHorizontalHeader();
-			spreadsheet->updateLocale();
+	// update units in all dock widgets, if changed
+	if (changes.contains(Settings::Type::General_Units)) {
+		if (stackedWidget) {
+			for (int i = 0; i < stackedWidget->count(); ++i) {
+				auto* widget = stackedWidget->widget(i);
+				auto* dock = dynamic_cast<BaseDock*>(widget);
+				if (dock)
+					dock->updateUnits();
+				else {
+					auto* labelWidget = dynamic_cast<LabelWidget*>(widget);
+					if (labelWidget)
+						labelWidget->updateUnits();
+				}
+			}
 		}
 	}
-
-	// bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
-	// if (m_showWelcomeScreen != showWelcomeScreen)
-	// 	m_showWelcomeScreen = showWelcomeScreen;
 
 #ifdef HAVE_CANTOR_LIBS
 	if (changes.contains(Settings::Type::Notebook))
@@ -2681,6 +2701,8 @@ void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
 #else
 	Q_UNUSED(changes)
 #endif
+
+	RESET_CURSOR;
 }
 
 void MainWin::openDatasetExample() {

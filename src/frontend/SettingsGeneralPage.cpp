@@ -74,8 +74,18 @@ QList<Settings::Type> SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("NewProject"), ui.cbNewProject->currentData().toInt());
 	group.writeEntry(QLatin1String("NewProjectNotebook"), ui.cbNewProjectNotebook->currentText());
 	group.writeEntry(QLatin1String("TitleBar"), ui.cbTitleBar->currentIndex());
-	group.writeEntry(QLatin1String("Units"), ui.cbUnits->currentIndex());
-	group.writeEntry(QLatin1String("NumberFormat"), ui.cbNumberFormat->currentData().toInt());
+
+	// units
+	if (ui.cbUnits->currentIndex() != group.readEntry(QLatin1String("Units"), 0)) {
+		group.writeEntry(QLatin1String("Units"), ui.cbUnits->currentIndex());
+		changes << Settings::Type::General_Units;
+	}
+
+	// number format
+	if (ui.cbNumberFormat->currentData().toInt() != group.readEntry(QLatin1String("NumberFormat"), 0)) {
+		group.writeEntry(QLatin1String("NumberFormat"), ui.cbNumberFormat->currentData().toInt());
+		changes << Settings::Type::General_Number_Format;
+	}
 
 	// number options
 	QLocale::NumberOptions numberOptions{QLocale::DefaultNumberOptions};
@@ -85,7 +95,12 @@ QList<Settings::Type> SettingsGeneralPage::applySettings() {
 		numberOptions |= QLocale::OmitLeadingZeroInExponent;
 	if (ui.chkIncludeTrailingZeroesAfterDot->isChecked())
 		numberOptions |= QLocale::IncludeTrailingZeroesAfterDot;
-	group.writeEntry(QLatin1String("NumberOptions"), static_cast<int>(numberOptions));
+
+	if (static_cast<int>(numberOptions) != group.readEntry(QLatin1String("NumberOptions"), 0)) {
+		group.writeEntry(QLatin1String("NumberOptions"), static_cast<int>(numberOptions));
+		if (changes.indexOf(Settings::Type::General_Number_Format) == -1)
+			changes << Settings::Type::General_Number_Format;
+	}
 
 	group.writeEntry(QLatin1String("GUMTerms"), ui.chkGUMTerms->isChecked());
 	group.writeEntry(QLatin1String("AutoSave"), ui.chkAutoSave->isChecked());
