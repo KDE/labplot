@@ -5,6 +5,7 @@ New features:
 		* Add links and button to copy configuration and show external libraries in the About Dialog
 		* Make the changes in Note undo/redo-able
 		* For the number format, allow to specify in the application settings both - the decimal and the group - separators
+		* Automatically update the visualizations on number format changes without restart
 	* [import]
 		* Download datasets from kaggle.com
 		* Only allow selecting matching import filter
