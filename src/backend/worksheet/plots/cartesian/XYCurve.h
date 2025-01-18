@@ -126,6 +126,7 @@ public:
 	void recalc() override;
 	void enableLineOptimization(bool);
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	void updateLocale() override;
 	double y(double x, double& x_new, bool& valueFound) const;
 	int getNextValue(double xpos, int index, double& x, double& y, bool& valueFound) const;
 

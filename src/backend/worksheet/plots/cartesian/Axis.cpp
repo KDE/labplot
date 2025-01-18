@@ -423,6 +423,11 @@ void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageR
 	d->title->handleResize(horizontalRatio, verticalRatio, pageResize);
 }
 
+void Axis::updateLocale() {
+	Q_D(Axis);
+	d->retransformTickLabelStrings();
+}
+
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::RangeType, rangeType, rangeType)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::Orientation, orientation, orientation)

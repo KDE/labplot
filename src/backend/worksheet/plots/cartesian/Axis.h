@@ -185,6 +185,7 @@ public:
 	void retransform() override;
 	void retransformTickLabelStrings();
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	void updateLocale() override;
 
 protected:
 	Axis(const QString&, Orientation, AxisPrivate*);
