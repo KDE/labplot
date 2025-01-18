@@ -36,7 +36,7 @@ public:
 		, m_plotImage(plotImage)
 		, m_originalImage(originalImage)
 		, m_settings(settings)
-		, m_background(std::move(background)) {};
+		, m_background(std::move(background)){};
 
 	void run() override {
 		for (int y = m_start; y < m_end; ++y) {

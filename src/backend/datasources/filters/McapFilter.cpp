@@ -547,9 +547,7 @@ int McapFilterPrivate::mcapToJson(const QString& fileName, int lines) {
 				break;
 			}
 		}
-	} catch (const std::exception& e) {
-		std::cerr << "Error parsing MCAP file: " << e.what() << std::endl;
-	}
+	} catch (const std::exception& e) { std::cerr << "Error parsing MCAP file: " << e.what() << std::endl; }
 
 	QJsonDocument finalJsonDocument(jsonArray);
 

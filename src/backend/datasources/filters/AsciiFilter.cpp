@@ -734,9 +734,7 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 	try {
 		const auto newRowCount = qMax(dataContainerStartIndex * 2, numberRowsReallocation);
 		m_DataContainer.resize(newRowCount); // reserve to not having to reallocate all the time
-	} catch (std::bad_alloc&) {
-		return Status::NotEnoughMemory;
-	}
+	} catch (std::bad_alloc&) { return Status::NotEnoughMemory; }
 
 	auto handleError = [this](Status status) {
 		setLastError(status);

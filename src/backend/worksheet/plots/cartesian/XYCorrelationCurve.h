@@ -28,7 +28,7 @@ class XYCorrelationCurve : public XYAnalysisCurve {
 
 public:
 	struct CorrelationData {
-		CorrelationData() {};
+		CorrelationData(){};
 
 		double samplingInterval{1.}; // sampling interval used when no x-axis is present
 		nsl_corr_type_type type{nsl_corr_type_linear}; // linear or circular
