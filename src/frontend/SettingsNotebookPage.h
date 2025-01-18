@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Settings page for Notebook
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -23,7 +23,7 @@ class SettingsNotebookPage : public SettingsPage {
 public:
 	explicit SettingsNotebookPage(QWidget*);
 
-	bool applySettings() override;
+	QList<Settings::Type> applySettings() override;
 	void restoreDefaults() override;
 
 	void addSubPages(KPageWidgetItem*, KPageDialog*) override;

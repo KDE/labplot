@@ -4,7 +4,7 @@
 	Description          : Base class for all Worksheet children.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -88,6 +88,7 @@ public:
 	virtual void setVisible(bool on);
 	virtual bool isVisible() const;
 	virtual bool isFullyVisible() const;
+	virtual void updateLocale() {};
 	void setSuppressRetransform(bool);
 
 	virtual void setPrinting(bool);
@@ -126,7 +127,7 @@ private:
 
 protected:
 	WorksheetElement(const QString&, WorksheetElementPrivate* dd, AspectType);
-	int m_cSystemIndex{0}; // index of coordinate system used from plot
+	int m_cSystemIndex{0}; // index of the coordinate system used from plot
 	const CartesianCoordinateSystem* cSystem{nullptr}; // current cSystem
 
 	virtual void handleAspectUpdated(const QString& path, const AbstractAspect*);
@@ -173,7 +174,7 @@ Q_SIGNALS:
 	void changed();
 	void hoveredChanged(bool) const;
 
-	void objectPositionChanged(); // Position changed, independend of logical or scene, bot are triggering this
+	void objectPositionChanged(); // Position changed, independent of logical or scene, both are triggering this
 
 	void hovered();
 	void unhovered();

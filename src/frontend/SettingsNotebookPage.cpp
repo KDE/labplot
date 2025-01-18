@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Settings page for Notebook
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -49,9 +49,10 @@ SettingsNotebookPage::SettingsNotebookPage(QWidget* parent)
 	loadSettings();
 }
 
-bool SettingsNotebookPage::applySettings() {
+QList<Settings::Type> SettingsNotebookPage::applySettings() {
+	QList<Settings::Type> changes;
 	if (!m_changed)
-		return false;
+		return changes;
 
 	KConfigGroup group = Settings::group(QStringLiteral("Settings_Notebook"));
 
@@ -66,11 +67,11 @@ bool SettingsNotebookPage::applySettings() {
 	group.writeEntry(QLatin1String("ReevaluateEntries"), ui.chkReevaluateEntries->isChecked());
 	group.writeEntry(QLatin1String("AskConfirmation"), ui.chkAskConfirmation->isChecked());
 
-	for (auto* manager : m_cantorBackendConfigManagers) {
+	for (auto* manager : m_cantorBackendConfigManagers)
 		manager->updateSettings();
-	}
 
-	return true;
+	changes << Settings::Type::Notebook;
+	return changes;
 }
 
 void SettingsNotebookPage::restoreDefaults() {

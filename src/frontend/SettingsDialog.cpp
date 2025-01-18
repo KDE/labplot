@@ -137,19 +137,14 @@ void SettingsDialog::changed() {
 
 void SettingsDialog::applySettings() {
 	m_changed = false;
-	QList<SettingsType> changes;
-	if (m_generalPage->applySettings())
-		changes.append(SettingsType::General);
-	if (m_worksheetPage->applySettings())
-		changes.append(SettingsType::Worksheet);
-	if (m_spreadsheetPage->applySettings())
-		changes.append(SettingsType::Spreadsheet);
+	QList<Settings::Type> changes;
+	changes << m_generalPage->applySettings();
+	changes << m_worksheetPage->applySettings();
+	changes << m_spreadsheetPage->applySettings();
 #ifdef HAVE_CANTOR_LIBS
-	if (m_notebookPage->applySettings())
-		changes.append(SettingsType::Notebook);
+	changes << m_notebookPage->applySettings();
 #endif
-	if (m_datasetsPage->applySettings())
-		changes.append(SettingsType::Datasets);
+	changes << m_datasetsPage->applySettings();
 
 	Settings::sync();
 
@@ -159,7 +154,8 @@ void SettingsDialog::applySettings() {
 	mainWin->userFeedbackProvider().setSurveyInterval(m_userFeedbackWidget->surveyInterval());
 #endif
 
-	Q_EMIT settingsChanged(changes);
+	if (!changes.isEmpty())
+		Q_EMIT settingsChanged(changes);
 }
 
 void SettingsDialog::restoreDefaults() {

@@ -21,7 +21,7 @@ class SettingsGeneralPage : public SettingsPage {
 public:
 	explicit SettingsGeneralPage(QWidget*, const QLocale&);
 
-	bool applySettings() override;
+	QList<Settings::Type> applySettings() override;
 	void restoreDefaults() override;
 
 	QLocale::Language numberFormat() const;

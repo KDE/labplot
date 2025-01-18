@@ -284,7 +284,7 @@ private Q_SLOTS:
 	void handleCurrentAspectChanged(AbstractAspect*);
 	void handleShowSubWindowRequested();
 
-	void handleSettingsChanges(QList<SettingsDialog::SettingsType>);
+	void handleSettingsChanges(QList<Settings::Type>);
 
 	void setDockVisibility(QAction*);
 	void updateDockWindowVisibility() const;

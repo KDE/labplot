@@ -2585,7 +2585,7 @@ void MainWin::migrateSettings() {
 	}
 }
 
-void MainWin::handleSettingsChanges(QList<SettingsDialog::SettingsType> changes) {
+void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
 	const auto group = Settings::group(QStringLiteral("Settings_General"));
 
 	// title bar
@@ -2623,18 +2623,41 @@ void MainWin::handleSettingsChanges(QList<SettingsDialog::SettingsType> changes)
 		m_autoSaveTimer.setInterval(interval);
 
 	// update the locale and the units in the dock widgets
-	updateLocale();
-	if (stackedWidget) {
-		for (int i = 0; i < stackedWidget->count(); ++i) {
-			auto* widget = stackedWidget->widget(i);
-			auto* dock = dynamic_cast<BaseDock*>(widget);
-			if (dock) {
-				dock->updateLocale();
-				dock->updateUnits();
-			} else {
-				auto* labelWidget = dynamic_cast<LabelWidget*>(widget);
-				if (labelWidget)
-					labelWidget->updateUnits();
+	if (changes.contains(Settings::Type::General_Number_Format)) {
+		updateLocale();
+
+		// update the locale in all dock widgets
+		if (stackedWidget) {
+			for (int i = 0; i < stackedWidget->count(); ++i) {
+				auto* widget = stackedWidget->widget(i);
+				auto* dock = dynamic_cast<BaseDock*>(widget);
+				if (dock) {
+					dock->updateLocale();
+					dock->updateUnits();
+				} else {
+					auto* labelWidget = dynamic_cast<LabelWidget*>(widget);
+					if (labelWidget)
+						labelWidget->updateUnits();
+				}
+			}
+		}
+
+		if (m_project) {
+			// worksheet elements
+			const auto& worksheets = m_project->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (const auto* worksheet : worksheets) {
+				if (worksheet->viewCreated()) {
+					const auto& elements = worksheet->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
+					for (auto* element : elements)
+						element->updateLocale();
+				}
+			}
+
+			// spreadsheets
+			const auto& spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* spreadsheet : spreadsheets) {
+				if (spreadsheet->viewCreated())
+					spreadsheet->updateLocale();
 			}
 		}
 	}
@@ -2653,7 +2676,7 @@ void MainWin::handleSettingsChanges(QList<SettingsDialog::SettingsType> changes)
 	// 	m_showWelcomeScreen = showWelcomeScreen;
 
 #ifdef HAVE_CANTOR_LIBS
-	if (changes.contains(SettingsDialog::SettingsType::Notebook))
+	if (changes.contains(Settings::Type::Notebook))
 		updateNotebookActions();
 #else
 	Q_UNUSED(changes)

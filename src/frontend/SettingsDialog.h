@@ -10,6 +10,7 @@
 #ifndef SETTINGSDIALOG_H
 #define SETTINGSDIALOG_H
 
+#include "backend/core/Settings.h"
 #include <QLocale>
 #include <KPageDialog>
 
@@ -34,19 +35,6 @@ public:
 	explicit SettingsDialog(QWidget*, const QLocale&);
 	~SettingsDialog() override;
 
-	enum class SettingsType {
-		General,
-		Worksheet,
-		Spreadsheet,
-#ifdef HAVE_CANTOR_LIBS
-		Notebook,
-#endif
-		Datasets,
-#ifdef HAVE_KUSERFEEDBACK
-		Feedback
-#endif
-	};
-
 private Q_SLOTS:
 	void changed();
 	void slotButtonClicked(QAbstractButton*);
@@ -70,7 +58,7 @@ private:
 	void restoreDefaults();
 
 Q_SIGNALS:
-	void settingsChanged(QList<SettingsType>);
+	void settingsChanged(QList<Settings::Type>);
 	void resetWelcomeScreen();
 };
 
