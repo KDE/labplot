@@ -16,18 +16,14 @@
 #include "SettingsSpreadsheetPage.h"
 #include "SettingsWorksheetPage.h"
 
-#include "backend/core/Settings.h"
-
 #ifdef HAVE_CANTOR_LIBS
 #include "SettingsNotebookPage.h"
 #endif
 
 #include <KConfigGroup>
-#include <KLocalizedString>
 #include <KMessageBox>
 
 #include <KWindowConfig>
-#include <kcoreaddons_version.h>
 
 #ifdef HAVE_KUSERFEEDBACK
 #include <KUserFeedback/FeedbackConfigWidget>

@@ -12,13 +12,9 @@
 #ifdef HAVE_CANTOR_LIBS
 #include <cantor/backend.h>
 #endif
-#include "backend/core/Settings.h"
-#include "backend/lib/Debug.h"
-#include "backend/lib/macros.h"
 #include "frontend/MainWin.h" // LoadOnStart
 
 #include <KConfigGroup>
-#include <KLocalizedString>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.

@@ -9,12 +9,10 @@
 */
 
 #include "SettingsWorksheetPage.h"
-#include "backend/core/Settings.h"
 #include "frontend/widgets/ThemesComboBox.h"
 #include "tools/TeXRenderer.h"
 
 #include <KConfigGroup>
-#include <KLocalizedString>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.

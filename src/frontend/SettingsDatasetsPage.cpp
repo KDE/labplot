@@ -8,13 +8,9 @@
 */
 
 #include "SettingsDatasetsPage.h"
-#include "backend/core/Settings.h"
-#include "backend/lib/macros.h"
 #include "frontend/GuiTools.h"
-#include "frontend/SettingsPage.h"
 
 #include <KConfigGroup>
-#include <KLocalizedString>
 #include <QDir>
 #include <QDirIterator>
 #include <QMessageBox>

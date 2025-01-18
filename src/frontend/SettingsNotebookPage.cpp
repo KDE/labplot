@@ -8,11 +8,8 @@
 */
 
 #include "SettingsNotebookPage.h"
-#include "backend/core/Settings.h"
 
 #include <KConfigDialogManager>
-#include <KConfigGroup>
-#include <KLocalizedString>
 #include <KPageDialog>
 #include <KPageWidgetItem>
 

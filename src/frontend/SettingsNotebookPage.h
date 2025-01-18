@@ -13,8 +13,6 @@
 #include "SettingsPage.h"
 #include "ui_settingsnotebookpage.h"
 
-class KPageWidgetItem;
-class KPageDialog;
 class KConfigDialogManager;
 
 class SettingsNotebookPage : public SettingsPage {
