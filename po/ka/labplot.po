@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-17 00:38+0000\n"
-"PO-Revision-Date: 2025-01-16 03:01+0100\n"
+"PO-Revision-Date: 2025-01-17 03:17+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -13117,6 +13117,9 @@ msgid ""
 "min(sigma, IQR / 1.34) * n^(-0.2)</li><li>Scott -  1.059 * sigma * n^(-0.2)</"
 "li><li>Custom - custom value for the kernel bandwidth</li></ul>"
 msgstr ""
+"ბირთვის გამტარობის ასარჩევად გამოყენებული მეთოდი:<ul><li>Silverman -  0.9 * "
+"მინ(sigma, IQR / 1.34) * n^(-0.2)</li><li>Scott -  1.059 * sigma * n^(-0.2)</"
+"li><li>ხელით - ხელით მითითებული მნიშვნელობა ბირთვის გამტარობისთვის</li></ul>"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:191
 #, kde-format
@@ -13278,6 +13281,8 @@ msgid ""
 "Metric of the dataset used to determine where the center line should be "
 "placed at"
 msgstr ""
+"მონაცემთა ნაკრების მეტრიკა, რომელიც გამოიყენება დასადგენად, სად მოთავსდება "
+"ცენტრალური ხაზი"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:57
 #, kde-format
@@ -22767,15 +22772,13 @@ msgstr "ავტომატური-შენახვა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
 #: src/frontend/ui/settingsgeneralpage.ui:46
-#, fuzzy, kde-format
-#| msgid "Dock widget placement:"
+#, kde-format
 msgid "Dock Widget Placement:"
 msgstr "დოკის ვიჯეტის განთავსება:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
 #: src/frontend/ui/settingsgeneralpage.ui:60
-#, fuzzy, kde-format
-#| msgid "Number format:"
+#, kde-format
 msgid "Number Format:"
 msgstr "რიცხვის ფორმატი:"
 
@@ -22823,8 +22826,7 @@ msgstr "თავსებადი ფორმატით შენახვ�
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
 #: src/frontend/ui/settingsgeneralpage.ui:107
-#, fuzzy, kde-format
-#| msgid "Number options:"
+#, kde-format
 msgid "Number Options:"
 msgstr "რაოდენობის მორგება:"
 

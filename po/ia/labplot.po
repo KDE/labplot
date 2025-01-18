@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-17 00:38+0000\n"
-"PO-Revision-Date: 2025-01-08 15:20+0100\n"
+"PO-Revision-Date: 2025-01-17 12:43+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -779,12 +779,12 @@ msgstr "Falleva a aperir le file '%1'."
 #: src/backend/core/Project.cpp:827
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
-msgstr ""
+msgstr "Falleva a processar le contento del file '%1'."
 
 #: src/backend/core/Project.cpp:830
 #, kde-format
 msgid "Failed to open project"
-msgstr ""
+msgstr "Falleva a aperir projecto"
 
 #: src/backend/core/Project.cpp:1294
 #, kde-format
@@ -1061,7 +1061,7 @@ msgstr ""
 #: src/backend/datasources/DatasetHandler.cpp:236
 #, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
-msgstr ""
+msgstr "FAlleva a crear le directorio %1 per salveguardar le insumul de datos."
 
 #: src/backend/datasources/DatasetHandler.cpp:259
 #, kde-format
@@ -1088,7 +1088,7 @@ msgstr "Dispositivo al fin"
 #: src/backend/datasources/filters/AsciiFilter.cpp:196
 #, kde-format
 msgid "Not enough rows selected. Increase number of rows."
-msgstr ""
+msgstr "Non assatis de rangos selectionate. Augmenta le numero de rangos."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:198
 #, kde-format
@@ -1098,7 +1098,7 @@ msgstr "Incapace a aperir dispositivo"
 #: src/backend/datasources/filters/AsciiFilter.cpp:202
 #, kde-format
 msgid "Unable to determine the separator"
-msgstr ""
+msgstr "Incapace a determinar le separator"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:204
 #, kde-format
@@ -1113,12 +1113,12 @@ msgstr "Numero invalide de nomines de columna"
 #: src/backend/datasources/filters/AsciiFilter.cpp:208
 #, kde-format
 msgid "Matrix: Unsupported column mode"
-msgstr ""
+msgstr "Matrice: modo de columna non supportate"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:210
 #, kde-format
 msgid "Insufficient memory (RAM)"
-msgstr ""
+msgstr "Memoria (RAM) insufficiente"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:212
 #, kde-format
@@ -1128,32 +1128,34 @@ msgstr "Incapace a analysar capite"
 #: src/backend/datasources/filters/AsciiFilter.cpp:214
 #, kde-format
 msgid "Unsupported data source"
-msgstr ""
+msgstr "Fonte da datos non supportate"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:218
 #, kde-format
 msgid "Live: No column separator selected"
-msgstr ""
+msgstr "Live: numme separator de columna seligite"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:220
 #, kde-format
 msgid "Live: No column modes set"
-msgstr ""
+msgstr "Live: nulle modos de columna assignate"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:222
 #, kde-format
 msgid "Datetime column found, but no Datetime format provided"
 msgstr ""
+"Columna de tempore de date (datetime) trovate, ma nulle formato de Datetime "
+"fornite"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:224
 #, kde-format
 msgid "Header reading from device not allowed"
-msgstr ""
+msgstr "Lectura de capite ex dispositivo non permittite"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:226
 #, kde-format
 msgid "Separator detection not allowed"
-msgstr ""
+msgstr "Discoperta de separator non permittite"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:228
 #, kde-format
@@ -1168,12 +1170,12 @@ msgstr "Filtro non initialisate"
 #: src/backend/datasources/filters/AsciiFilter.cpp:232
 #, kde-format
 msgid "Wrong end column. Is it smaller than start column?"
-msgstr ""
+msgstr "Errate columna de fin. Il es plus parve del columna de initio?"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:234
 #, kde-format
 msgid "Wrong end row. Is it smaller than start row?"
-msgstr ""
+msgstr "Errate rango de fin Il es plus parve del rango de initio?"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:236
 #, kde-format
@@ -1189,16 +1191,18 @@ msgstr "Nulle columnas"
 #, kde-format
 msgid "Unable to determine column modes. Check if they are correctly written"
 msgstr ""
+"Incapace a determinar modos de columna. Verifica si illos es correctemente "
+"scribite"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:242
 #, kde-format
 msgid "UTF16 encoding is not supported"
-msgstr ""
+msgstr "Codifica de UTF16 non es supportate"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:244
 #, kde-format
 msgid "Unhandled case"
-msgstr ""
+msgstr "Caso non maneate"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:270
 #, kde-format
@@ -1305,7 +1309,7 @@ msgstr "File invalide."
 #: src/backend/datasources/filters/CANFilter.cpp:226
 #, kde-format
 msgid "No messages read."
-msgstr ""
+msgstr "Nulle message legite."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:227
 #, kde-format
@@ -1457,30 +1461,30 @@ msgstr "Grandor total de spatio libere: %1 bytes"
 #: src/backend/datasources/filters/HDF5Filter.cpp:234
 #, kde-format
 msgid "Version of shared object header: %1"
-msgstr ""
+msgstr "Version de capite de objecto compartite: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:236
 #: src/backend/datasources/filters/HDF5Filter.cpp:249
 #, kde-format
 msgid "Size of shared object header: %1 bytes"
-msgstr ""
+msgstr "Grandor de capite de objecto compartite: %1 bytes"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:238
 #: src/backend/datasources/filters/HDF5Filter.cpp:251
 #, kde-format
 msgid "Size of all shared object header indexes: %1 bytes"
-msgstr ""
+msgstr "Grandor de indices de omne capite de objecto compartite: %1  bytes"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:240
 #: src/backend/datasources/filters/HDF5Filter.cpp:253
 #, kde-format
 msgid "Size of the heap: %1 bytes"
-msgstr ""
+msgstr "Grandor de heap (cumulo) : %1 bytes"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:265
 #, kde-format
 msgid "Cache config version: %1"
-msgstr ""
+msgstr "Version de config de cache: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:267
 #: src/backend/datasources/filters/HDF5Filter.cpp:307
@@ -22534,8 +22538,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
 #: src/frontend/ui/settingsgeneralpage.ui:60
-#, fuzzy, kde-format
-#| msgid "Number format:"
+#, kde-format
 msgid "Number Format:"
 msgstr "Formato de Numero:"
 
@@ -22577,8 +22580,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
 #: src/frontend/ui/settingsgeneralpage.ui:107
-#, fuzzy, kde-format
-#| msgid "Number options:"
+#, kde-format
 msgid "Number Options:"
 msgstr "Optiones de numero:"
 

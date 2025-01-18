@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-17 00:38+0000\n"
-"PO-Revision-Date: 2025-01-11 10:32+0100\n"
+"PO-Revision-Date: 2025-01-16 10:48+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -16239,11 +16239,13 @@ msgstr "Imperial"
 msgid ""
 "Characters for the decimal and group separators defining the number format"
 msgstr ""
+"Caràcters per als separadors decimals i de grup que definixen el format "
+"numèric"
 
 #: src/frontend/SettingsGeneralPage.cpp:223
 #, kde-format
 msgid "%1 (System, %2)"
-msgstr ""
+msgstr "%1 (Sistema, %2)"
 
 #: src/frontend/SettingsGeneralPage.cpp:233
 #, kde-format
@@ -23125,15 +23127,13 @@ msgstr "Guarda automàticament:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
 #: src/frontend/ui/settingsgeneralpage.ui:46
-#, fuzzy, kde-format
-#| msgid "Dock widget placement:"
+#, kde-format
 msgid "Dock Widget Placement:"
 msgstr "Situació del giny acoblat:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
 #: src/frontend/ui/settingsgeneralpage.ui:60
-#, fuzzy, kde-format
-#| msgid "Number format:"
+#, kde-format
 msgid "Number Format:"
 msgstr "Format numèric:"
 
@@ -23182,8 +23182,7 @@ msgstr "Guarda en un format compatible"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
 #: src/frontend/ui/settingsgeneralpage.ui:107
-#, fuzzy, kde-format
-#| msgid "Number options:"
+#, kde-format
 msgid "Number Options:"
 msgstr "Opcions dels nombres:"
 
@@ -25069,13 +25068,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-# skip-rule: t-pu_desp
-#~ msgid "Dot (.)"
-#~ msgstr "Punt (.)"
-
-#~ msgid "Comma (,)"
-#~ msgstr "Coma (,)"
-
-#~ msgid "Arabic (٫)"
-#~ msgstr "Àrab (٫)"
