@@ -78,7 +78,8 @@ public:
 		// QMatrix
 		// etc.
 	};
-	Q_ENUM(ColumnMode)
+	// TODO: breaks linking
+	// Q_ENUM(ColumnMode)
 	enum class Properties { // TODO: why bit pattern? Aren't they exclusive?
 		No = 0x00, // invalid values or masked values
 		Constant = 0x01,
