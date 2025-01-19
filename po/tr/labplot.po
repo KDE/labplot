@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-18 11:34+0000\n"
+"POT-Creation-Date: 2025-01-19 00:37+0000\n"
 "PO-Revision-Date: 2025-01-16 16:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -361,24 +361,24 @@ msgctxt "default labels of filter input ports"
 msgid "In%1"
 msgstr "İçinde:%1"
 
-#: src/backend/core/AbstractPart.cpp:121
+#: src/backend/core/AbstractPart.cpp:125
 #, kde-format
 msgid "Import Data"
 msgstr "Veri İçe Aktar"
 
-#: src/backend/core/AbstractPart.cpp:122 src/frontend/MainWin.cpp:675
+#: src/backend/core/AbstractPart.cpp:126 src/frontend/MainWin.cpp:675
 #: src/frontend/MainWin.cpp:684
 #, kde-format
 msgid "From File..."
 msgstr "Dosyadan…"
 
-#: src/backend/core/AbstractPart.cpp:124 src/frontend/MainWin.cpp:696
+#: src/backend/core/AbstractPart.cpp:128 src/frontend/MainWin.cpp:696
 #, kde-format
 msgid "From SQL Database..."
 msgstr "SQL Veritabanından…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:133
+#: src/backend/core/AbstractPart.cpp:137
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:335
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
@@ -387,22 +387,22 @@ msgstr "SQL Veritabanından…"
 msgid "Export"
 msgstr "Dışa Aktar"
 
-#: src/backend/core/AbstractPart.cpp:134
+#: src/backend/core/AbstractPart.cpp:138
 #, kde-format
 msgid "Print"
 msgstr "Yazdır"
 
-#: src/backend/core/AbstractPart.cpp:135
+#: src/backend/core/AbstractPart.cpp:139
 #, kde-format
 msgid "Print Preview"
 msgstr "Yazdırma Önizleme"
 
-#: src/backend/core/AbstractPart.cpp:143 src/frontend/MainWin.cpp:768
+#: src/backend/core/AbstractPart.cpp:147 src/frontend/MainWin.cpp:768
 #, kde-format
 msgid "&Close"
 msgstr "&Kapat"
 
-#: src/backend/core/AbstractPart.cpp:148 src/backend/core/AbstractPart.cpp:161
+#: src/backend/core/AbstractPart.cpp:152 src/backend/core/AbstractPart.cpp:165
 #, kde-format
 msgid "Show"
 msgstr "Göster"
@@ -770,23 +770,23 @@ msgstr "proje ögesi bulunamadı"
 msgid "no valid XML document found"
 msgstr "geçerli XML belgesi bulunamadı"
 
-#: src/backend/core/Project.cpp:764 src/backend/core/Project.cpp:770
-#: src/backend/core/Project.cpp:821
+#: src/backend/core/Project.cpp:765 src/backend/core/Project.cpp:771
+#: src/backend/core/Project.cpp:822
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "“%1” dosyası açılamadı."
 
-#: src/backend/core/Project.cpp:827
+#: src/backend/core/Project.cpp:828
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "“%1” dosyasının içeriği işlenemedi."
 
-#: src/backend/core/Project.cpp:830
+#: src/backend/core/Project.cpp:831
 #, kde-format
 msgid "Failed to open project"
 msgstr "Proje açılamadı"
 
-#: src/backend/core/Project.cpp:1294
+#: src/backend/core/Project.cpp:1296
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Geçersiz proje değiştirme zamanı. Geçerli zaman kullanılıyor."
@@ -7598,7 +7598,7 @@ msgid "%1: set connectionline curve name"
 msgstr "%1: Bağlantı çizgisi eğrisini ayarla"
 
 #: src/backend/worksheet/Line.cpp:100
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:569
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:574
 #, kde-format
 msgid "%1: line type changed"
 msgstr "%1: Satır türü değişti"
@@ -7742,286 +7742,286 @@ msgstr "Biçem"
 msgid "Color"
 msgstr "Renk"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:546
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:551
 #, kde-format
 msgid "%1: set axis range type"
 msgstr "%1: Eksen erim türünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:571
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:576
 #: src/frontend/dockwidgets/AxisDock.cpp:622
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr "%1: Eksen yönelimini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:578
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:583
 #, kde-format
 msgid "%1: set axis position"
 msgstr "%1: Eksen konumunu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:586
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:591
 #, kde-format
 msgid "%1: set axis offset"
 msgstr "%1: Eksen ofsetini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:601
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:606
 #, kde-format
 msgid "%1: set axis range"
 msgstr "%1: Eksen erimini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:640
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:645
 #, kde-format
 msgid "%1: set range scale"
 msgstr "%1: Erim ölçeğini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:647
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:652
 #, kde-format
 msgid "%1: set scale"
 msgstr "%1: Ölçeği ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:654
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:659
 #, kde-format
 msgid "%1: set major tick start type"
 msgstr "%1: Ana imlerin başlangıç türünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:661
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:666
 #, kde-format
 msgid "%1: set major tick start offset"
 msgstr "%1: Ana imlerin başlangıç ofsetini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:669
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:674
 #, kde-format
 msgid "%1: set major tick start value"
 msgstr "%1: Ana imlerin başlangıç değerini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:681
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:686
 #, kde-format
 msgid "%1: set axis scaling factor"
 msgstr "%1: Eksenin ölçekleme çarpanını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:690
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:695
 #, kde-format
 msgid "%1: set axis zero offset"
 msgstr "%1: Eksenin sıfır ofsetini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:696
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:701
 #, kde-format
 msgid "%1: show scale and offset"
 msgstr "%1: Ekseni ve ofseti göster"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:703
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:708
 #, kde-format
 msgid "%1: set axis logical position"
 msgstr "%1: Eksenin mantıksal konumunu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:711
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:718
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:716
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:723
 #, kde-format
 msgid "%1: set title offset"
 msgstr "%1: Başlık ofsetini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:726
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:731
 #, kde-format
 msgid "%1: set arrow type"
 msgstr "%1: Ok türünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:733
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:738
 #, kde-format
 msgid "%1: set arrow position"
 msgstr "%1: Ok konumunu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:740
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:745
 #, kde-format
 msgid "%1: set arrow size"
 msgstr "%1: Ok boyutunu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:748
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:753
 #, kde-format
 msgid "%1: set major ticks direction"
 msgstr "%1: Ana imlerin yönünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:755
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:760
 #, kde-format
 msgid "%1: set major ticks type"
 msgstr "%1: Ana imlerin türünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:763
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:768
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
 msgstr "%1: Ana imlerin otomatik numaralandırmasını aç/kapat"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:765
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:780
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:770
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:785
 #, kde-format
 msgid "%1: set the total number of the major ticks"
 msgstr "%1: Ana imlerin toplam sayısını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:782
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:866
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:787
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:871
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
 msgstr "%1: Ana imlerin otomatik numaralandırmasını devre dışı bırak"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:807
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:812
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
 msgstr "%1: Ana imlerin boşluklandırmasını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:814
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:819
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr "%1: Ana imlerin değerlerini ata"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:828
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:833
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr "%1: Ana imlerin uzunluğunu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:836
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:841
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr "%1: Küçük imlerin yönünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:843
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:848
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr "%1: Küçük imlerin türünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:851
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:856
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr "%1: Küçük imlerin otomatik numaralandırmasını aç/kapat"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:854
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:865
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:859
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:870
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr "%1: Küçük imlerin toplam sayısını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:898
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:903
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
 msgstr "%1: Küçük imlerin boşluklandırmasını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:905
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:910
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr "%1: Küçük imlerin değerlerini ata"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:919
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:924
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr "%1: Küçük imlerin uzunluğunu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:928
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:933
 #, kde-format
 msgid "%1: set labels format"
 msgstr "%1: Etiketlerin biçimini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:935
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:940
 #, kde-format
 msgid "%1: set labels format automatic"
 msgstr "%1: Etiketlerin otomatik biçimlendirmesini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:942
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:949
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:947
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:954
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: Etiketlerin keskinliğini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:956
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:961
 #, kde-format
 msgid "%1: set labels datetime format"
 msgstr "%1: Etiketlerin tarih–zaman biçimini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:963
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:968
 #, kde-format
 msgid "%1: set labels position"
 msgstr "%1: Etiketlerin konumunu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:970
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:975
 #, kde-format
 msgid "%1: set label offset"
 msgstr "%1: Etiket ofsetini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:977
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:982
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr "%1: Etiket döndürme açısını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:984
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:989
 #, kde-format
 msgid "%1: set labels text type"
 msgstr "%1: Etiketlerin metin türünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:991
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:996
 #, kde-format
 msgid "%1: set labels text column"
 msgstr "%1: Etiketlerin metin sütununu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1005
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1010
 #, kde-format
 msgid "%1: set label color"
 msgstr "%1: Etiket rengini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1012
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1017
 #, kde-format
 msgid "%1: set label font"
 msgstr "%1: Etiket yazıtipini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1019
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1024
 #, kde-format
 msgid "%1: set labels background type"
 msgstr "%1: Etiketlerin arka plan türünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1026
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1031
 #, kde-format
 msgid "%1: set label background color"
 msgstr "%1: Etiket arka plan rengini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1033
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1038
 #, kde-format
 msgid "%1: set label prefix"
 msgstr "%1: Etiket önekini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1040
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1045
 #, kde-format
 msgid "%1: set label suffix"
 msgstr "%1: Etiket sonekini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1047
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1052
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr "%1: Etiketlerin matlığını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:279
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:286
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:284
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:291
 #, kde-format
 msgid "%1: set x column"
 msgstr "%1: x sütununu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:291
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:296
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:511
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:298
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:303
 #, kde-format
 msgid "%1: set data columns"
 msgstr "%1: Veri sütunlarını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:303
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:308
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:418
 #, kde-format
 msgid "%1: set type"
 msgstr "%1: Türü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:310
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:315
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:525
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:305
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:310
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:186
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:214
 #, kde-format
 msgid "%1: set orientation"
 msgstr "%1: Yönelimi ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:317
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:322
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:539
 #, kde-format
 msgid "%1: width factor changed"
@@ -8111,29 +8111,29 @@ msgid "%1: jitterring changed"
 msgstr "%1: Titremeler değişti"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:584
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:514
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:702
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:519
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:707
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: Kilim aç/kapat"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:591
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:521
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:716
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:526
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:721
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: Kilim genişliğini değiştir"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:598
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:528
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:723
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:533
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:728
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: Kilim genişliğini değiştir"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:605
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:535
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:730
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:540
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:735
 #, kde-format
 msgid "%1: change rug offset"
 msgstr "%1: Kilim ofsetini değiştir"
@@ -8964,7 +8964,7 @@ msgstr "Poisson Dağılımını Sığdır"
 msgid "Fit Binomial Distribution"
 msgstr "İki Terimli Dağılımı Sığdır"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:396
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:401
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:244
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:394
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:406
@@ -8974,52 +8974,52 @@ msgstr "İki Terimli Dağılımı Sığdır"
 msgid "%1: set data column"
 msgstr "%1: +delta_X sütununu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:408
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:413
 #, kde-format
 msgid "%1: set histogram type"
 msgstr "%1: Histogram türünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:415
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:420
 #, kde-format
 msgid "%1: set histogram orientation"
 msgstr "%1: Histogram yönelimini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:422
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:427
 #, kde-format
 msgid "%1: set histogram normalization"
 msgstr "%1: Histogram normalleştirmesini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:429
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:434
 #, kde-format
 msgid "%1: set binning method"
 msgstr "%1: Kovalama yöntemini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:436
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:441
 #, kde-format
 msgid "%1: set bin count"
 msgstr "%1: Kova sayısını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:443
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:448
 #, kde-format
 msgid "%1: set bin width"
 msgstr "%1: Kova genişliğini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:451
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:456
 #, kde-format
 msgid "%1: change auto bin ranges"
 msgstr "%1: Otomatik kova erimlerini değiştir"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:499
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:504
 #, kde-format
 msgid "%1: set bin ranges start"
 msgstr "%1: Kova erimleri başlangıcını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:506
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:511
 #, kde-format
 msgid "%1: set bin ranges end"
 msgstr "%1: Kova erimleri bitişini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:840
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:845
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger than "
@@ -9439,79 +9439,79 @@ msgid "club"
 msgstr "sinek"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:114
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:598
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:603
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: Değerler türlerini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:125
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:605
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:610
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: Değerler sütunlarını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:137
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:624
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:629
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: Değerlerin konumlarını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:144
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:631
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:636
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: Değerlerin uzaklıklarını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:151
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:638
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:643
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: Değerleri döndür"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:158
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:645
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:650
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: Değerlerin matlığını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:165
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:652
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:657
 #, kde-format
 msgid "%1: set values numeric format"
 msgstr "%1: Değerlerin sayısal biçimini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:172
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:659
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:664
 #, kde-format
 msgid "%1: set values precision"
 msgstr "%1: Değerlerin kesinliğini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:179
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:666
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:671
 #, kde-format
 msgid "%1: set values datetime format"
 msgstr "%1: Değerlerin tarih–saat biçimini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:186
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:673
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:678
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: Değerlerin önekini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:193
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:680
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:685
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: Değerlerin sonekini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:200
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:687
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:692
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: Değerlerin yazıtipini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:207
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:694
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:699
 #, kde-format
 msgid "%1: set values color"
 msgstr "%1: Değerlerin rengini ayarla"
@@ -9567,52 +9567,52 @@ msgstr "%1: Seçenekleri ayarla ve bağıntıyı gerçekleştir"
 msgid "Navigate to \"%1\""
 msgstr "“%1” konumuna rotayı ayarla"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:544
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:549
 #, kde-format
 msgid "%1: x-data source changed"
 msgstr "%1: x verisi kaynağı değişti"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:551
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:556
 #, kde-format
 msgid "%1: y-data source changed"
 msgstr "%1: y verisi kaynağı değişti"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:576
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:581
 #, kde-format
 msgid "%1: set skip line gaps"
 msgstr "%1: Atlama satırı boşluklarını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:583
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:588
 #, kde-format
 msgid "%1: set increasing X"
 msgstr "%1: Artan X’i ayarla"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:590
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:595
 #, kde-format
 msgid "%1: set the number of interpolation points"
 msgstr "%1: Aradeğerleme noktalarının sayısını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:709
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:714
 #, kde-format
 msgid "%1: set rug orientation"
 msgstr "%1: Kilim yönelimini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1562
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1567
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr "Hata: Akima yivi aradeğerlemesi en az 5 puan gerektirir."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1564
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1569
 #, kde-format
 msgid "Error: Could not initialize the spline function."
 msgstr "Hata: Yiv işlevi ilklendirilemedi."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1577
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1582
 #, kde-format
 msgid "x values must be monotonically increasing."
 msgstr "x değerleri monoton olarak artmalıdır."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1580
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1585
 #, kde-format
 msgid "Error: %1"
 msgstr "Hata: %1"
@@ -11965,7 +11965,7 @@ msgstr "Klasör adı:"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:71 src/frontend/MainWin.cpp:640
-#: src/frontend/MainWin.cpp:1973 src/frontend/SettingsDialog.cpp:68
+#: src/frontend/MainWin.cpp:1973 src/frontend/SettingsDialog.cpp:64
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12246,7 +12246,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2819
+#: src/frontend/MainWin.cpp:2864
 #, kde-format
 msgid "Warning"
 msgstr "Uyarı"
@@ -14827,7 +14827,7 @@ msgid "Creates a new matrix for data editing"
 msgstr "Veri düzenleme için yeni bir matris oluşturur"
 
 #: src/frontend/MainWin.cpp:652 src/frontend/MainWin.cpp:2009
-#: src/frontend/SettingsDialog.cpp:63
+#: src/frontend/SettingsDialog.cpp:59
 #, kde-format
 msgid "Worksheet"
 msgstr "Çalışma Sayfası"
@@ -15222,12 +15222,12 @@ msgstr "Proje başarıyla paylaşıldı"
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Paylaşılan projeyi şurada bulabilirsiniz: <a href=\"%1\">%1</a>"
 
-#: src/frontend/MainWin.cpp:2718
+#: src/frontend/MainWin.cpp:2763
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
 msgstr "Kaggle komut satırı aracı çalıştırılamadı"
 
-#: src/frontend/MainWin.cpp:2719
+#: src/frontend/MainWin.cpp:2764
 #, kde-format
 msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
@@ -15237,32 +15237,32 @@ msgstr ""
 "kaggle.com/docs/api\">“How to Use Kaggle”</a> adresindeki yönergeleri "
 "izleyin."
 
-#: src/frontend/MainWin.cpp:2782
+#: src/frontend/MainWin.cpp:2827
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 dışa aktarıldı"
 
-#: src/frontend/MainWin.cpp:2789
+#: src/frontend/MainWin.cpp:2834
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS dosyaları kaydedildi"
 
-#: src/frontend/MainWin.cpp:2801
+#: src/frontend/MainWin.cpp:2846
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT İstemcisi%1"
 
-#: src/frontend/MainWin.cpp:2819
+#: src/frontend/MainWin.cpp:2864
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Bu makineyle halihazırda bir MQTT istemcisi var!"
 
-#: src/frontend/MainWin.cpp:2823
+#: src/frontend/MainWin.cpp:2868
 #, kde-format
 msgid "Live data source%1"
 msgstr "Canlı veri kaynağı%1"
 
-#: src/frontend/MainWin.cpp:2868
+#: src/frontend/MainWin.cpp:2913
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Yeni bir %1 defteri oluşturur"
@@ -15679,8 +15679,8 @@ msgstr "Çizim Alanı Şablonları"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/frontend/PlotTemplateDialog.cpp:44
-#: src/frontend/SettingsWorksheetPage.cpp:62
-#: src/frontend/SettingsWorksheetPage.cpp:73
+#: src/frontend/SettingsWorksheetPage.cpp:61
+#: src/frontend/SettingsWorksheetPage.cpp:74
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:99
 #: src/frontend/widgets/ThemesComboBox.cpp:72
 #: src/frontend/widgets/ThemesWidget.cpp:71
@@ -15848,48 +15848,48 @@ msgid_plural "Project Explorer: delete %1 selected objects"
 msgstr[0] "Proje Gezgini: Seçili %1 nesneyi sil"
 msgstr[1] "Proje Gezgini: Seçili %1 nesneyi sil"
 
-#: src/frontend/SettingsDatasetsPage.cpp:31
+#: src/frontend/SettingsDatasetsPage.cpp:27
 #, kde-format
 msgid "Clear downloaded files"
 msgstr "İndirilen dosyaları temizle"
 
-#: src/frontend/SettingsDatasetsPage.cpp:34
+#: src/frontend/SettingsDatasetsPage.cpp:30
 #, kde-format
 msgid "How to Use Kaggle"
 msgstr "Kaggle Kullanımı"
 
-#: src/frontend/SettingsDatasetsPage.cpp:87
+#: src/frontend/SettingsDatasetsPage.cpp:85
 #, kde-format
 msgid "Files - %1"
 msgstr "Dosyalar — %1"
 
-#: src/frontend/SettingsDatasetsPage.cpp:102
+#: src/frontend/SettingsDatasetsPage.cpp:100
 #, kde-format
 msgid "Total size - %1"
 msgstr "Toplam boyut — %1"
 
-#: src/frontend/SettingsDatasetsPage.cpp:112
+#: src/frontend/SettingsDatasetsPage.cpp:110
 #, kde-format
 msgid "Files - 0"
 msgstr "Dosyalar — 0"
 
-#: src/frontend/SettingsDatasetsPage.cpp:113
+#: src/frontend/SettingsDatasetsPage.cpp:111
 #, kde-format
 msgid "Total size - 0B"
 msgstr "Toplam boyut — 0 B"
 
-#: src/frontend/SettingsDatasetsPage.cpp:115
+#: src/frontend/SettingsDatasetsPage.cpp:113
 #, kde-format
 msgid "Datasets cache"
 msgstr "Veri kümeleri önbelleği"
 
-#: src/frontend/SettingsDatasetsPage.cpp:115
+#: src/frontend/SettingsDatasetsPage.cpp:113
 #, kde-format
 msgid "Downloaded files successfully deleted."
 msgstr "İndirilen dosyalar başarıyla silindi."
 
-#: src/frontend/SettingsDialog.cpp:49 src/frontend/SettingsDialog.cpp:119
-#: src/frontend/SettingsDialog.cpp:126
+#: src/frontend/SettingsDialog.cpp:45 src/frontend/SettingsDialog.cpp:115
+#: src/frontend/SettingsDialog.cpp:122
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
@@ -15900,7 +15900,7 @@ msgstr "Tercihler"
 #. i18n: ectx: property (text), widget (QLabel, lGeneral)
 #. i18n: ectx: property (text), widget (QLabel, lValuesGeneral)
 #. i18n: ectx: attribute (title), widget (QWidget, tGeneral)
-#: src/frontend/SettingsDialog.cpp:58
+#: src/frontend/SettingsDialog.cpp:54
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:95
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:101
 #: src/frontend/ui/datapickercurvewidget.ui:27
@@ -15930,28 +15930,28 @@ msgstr "Tercihler"
 msgid "General"
 msgstr "Genel"
 
-#: src/frontend/SettingsDialog.cpp:74
+#: src/frontend/SettingsDialog.cpp:70
 #, kde-format
 msgid "Notebook"
 msgstr "Defter"
 
-#: src/frontend/SettingsDialog.cpp:81
+#: src/frontend/SettingsDialog.cpp:77
 #, kde-format
 msgid "Datasets"
 msgstr "Veri Kümeleri"
 
-#: src/frontend/SettingsDialog.cpp:96
+#: src/frontend/SettingsDialog.cpp:92
 #, kde-format
 msgid "User Feedback"
 msgstr "Kullanıcı Geri Bildirimi"
 
-#: src/frontend/SettingsDialog.cpp:123
+#: src/frontend/SettingsDialog.cpp:119
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr ""
 "Tüm ayarlar öntanımlı değerlere sıfırlanacak. Sürdürmek istiyor musunuz?"
 
-#: src/frontend/SettingsDialog.cpp:134
+#: src/frontend/SettingsDialog.cpp:130
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences    [Changed]"
@@ -15959,7 +15959,7 @@ msgstr "Tercihler [Değiştirildi]"
 
 #. i18n: ectx: property (text), widget (QLabel, lMin)
 #. i18n: ectx: property (text), widget (QLabel, lMinDateTime)
-#: src/frontend/SettingsGeneralPage.cpp:30
+#: src/frontend/SettingsGeneralPage.cpp:26
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:54
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:241
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:317
@@ -15968,42 +15968,42 @@ msgstr "Tercihler [Değiştirildi]"
 msgid "min."
 msgstr "en küç."
 
-#: src/frontend/SettingsGeneralPage.cpp:187
+#: src/frontend/SettingsGeneralPage.cpp:200
 #, kde-format
 msgid "Create New Project"
 msgstr "Yeni Proje Oluştur"
 
-#: src/frontend/SettingsGeneralPage.cpp:188
+#: src/frontend/SettingsGeneralPage.cpp:201
 #, kde-format
 msgid "Load Last Used Project"
 msgstr "Son Kullanılan Projeyi Yükle"
 
-#: src/frontend/SettingsGeneralPage.cpp:192
+#: src/frontend/SettingsGeneralPage.cpp:205
 #, kde-format
 msgid "With Spreadsheet"
 msgstr "Hesap Tablosu ile"
 
-#: src/frontend/SettingsGeneralPage.cpp:193
+#: src/frontend/SettingsGeneralPage.cpp:206
 #, kde-format
 msgid "With Worksheet"
 msgstr "Çalışma Sayfası ile"
 
-#: src/frontend/SettingsGeneralPage.cpp:194
+#: src/frontend/SettingsGeneralPage.cpp:207
 #, kde-format
 msgid "With Spreadsheet and Worksheet"
 msgstr "Hesap Tablosu ve Çalışma Sayfası ile"
 
-#: src/frontend/SettingsGeneralPage.cpp:196
+#: src/frontend/SettingsGeneralPage.cpp:209
 #, kde-format
 msgid "With Notebook"
 msgstr "Defter ile"
 
-#: src/frontend/SettingsGeneralPage.cpp:199
+#: src/frontend/SettingsGeneralPage.cpp:212
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr "Başlangıçta kendiliğinden oluşturulacak defter türü"
 
-#: src/frontend/SettingsGeneralPage.cpp:203
+#: src/frontend/SettingsGeneralPage.cpp:216
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
@@ -16012,42 +16012,42 @@ msgstr ""
 "Rıhtım araç takımlarının yeniden açıldıktan sonra nice davranacaklarını "
 "denetler"
 
-#: src/frontend/SettingsGeneralPage.cpp:207
+#: src/frontend/SettingsGeneralPage.cpp:220
 #, kde-format
 msgid "Original Position"
 msgstr "Özgün Konum"
 
-#: src/frontend/SettingsGeneralPage.cpp:208
+#: src/frontend/SettingsGeneralPage.cpp:221
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr "Son etkin rıhtım araç takımının üzerinde"
 
-#: src/frontend/SettingsGeneralPage.cpp:211
+#: src/frontend/SettingsGeneralPage.cpp:224
 #, kde-format
 msgid "Show File Path"
 msgstr "Dosya Yolunu Göster"
 
-#: src/frontend/SettingsGeneralPage.cpp:212
+#: src/frontend/SettingsGeneralPage.cpp:225
 #, kde-format
 msgid "Show File Name"
 msgstr "Dosya Adını Göster"
 
-#: src/frontend/SettingsGeneralPage.cpp:213
+#: src/frontend/SettingsGeneralPage.cpp:226
 #, kde-format
 msgid "Show Project Name"
 msgstr "Proje Adını Göster"
 
-#: src/frontend/SettingsGeneralPage.cpp:216
+#: src/frontend/SettingsGeneralPage.cpp:229
 #, kde-format
 msgid "Metric"
 msgstr "Metrik"
 
-#: src/frontend/SettingsGeneralPage.cpp:217
+#: src/frontend/SettingsGeneralPage.cpp:230
 #, kde-format
 msgid "Imperial"
 msgstr "İmparatorluk"
 
-#: src/frontend/SettingsGeneralPage.cpp:219
+#: src/frontend/SettingsGeneralPage.cpp:232
 #, kde-format
 msgid ""
 "Characters for the decimal and group separators defining the number format"
@@ -16055,12 +16055,12 @@ msgstr ""
 "Sayı biçimini tanımlayan, ondalık ve grup ayırıcıları için kullanılan "
 "karakterler"
 
-#: src/frontend/SettingsGeneralPage.cpp:223
+#: src/frontend/SettingsGeneralPage.cpp:236
 #, kde-format
 msgid "%1 (System, %2)"
 msgstr "%1 (Sistem, %2)"
 
-#: src/frontend/SettingsGeneralPage.cpp:233
+#: src/frontend/SettingsGeneralPage.cpp:246
 #, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
@@ -16071,7 +16071,7 @@ msgstr ""
 "\">Ölçümde Belirsizliğin İfadesi Kılavuzu (GUM)</a> ile uyumlu terimler "
 "kullanın"
 
-#: src/frontend/SettingsGeneralPage.cpp:238
+#: src/frontend/SettingsGeneralPage.cpp:251
 #, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
@@ -16083,7 +16083,7 @@ msgstr ""
 "Yeni projeler için öntanımlı davranışı belirler.\n"
 "Bu ayar, her bir proje için proje ayarlarında ayrı ayrı değiştirilebilir."
 
-#: src/frontend/SettingsGeneralPage.cpp:245
+#: src/frontend/SettingsGeneralPage.cpp:258
 #, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
@@ -16101,12 +16101,12 @@ msgstr ""
 "Yeni projeler için öntanımlı davranışı belirler.\n"
 "Bu ayar, her bir proje için proje ayarlarında ayrı ayrı değiştirilebilir."
 
-#: src/frontend/SettingsGeneralPage.cpp:252
+#: src/frontend/SettingsGeneralPage.cpp:265
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
 msgstr "Uçbirimde ek izleme çıktısını etkinleştirir."
 
-#: src/frontend/SettingsGeneralPage.cpp:253
+#: src/frontend/SettingsGeneralPage.cpp:266
 #, kde-format
 msgid ""
 "Info trace - helpful to get information and warnings when running the "
@@ -16115,7 +16115,7 @@ msgstr ""
 "Bilgi izi — uygulamayı çalıştırırken ek bilgi ve uyarılar almak için "
 "kullanılır."
 
-#: src/frontend/SettingsGeneralPage.cpp:254
+#: src/frontend/SettingsGeneralPage.cpp:267
 #, kde-format
 msgid ""
 "Debug trace - helpful to diagnose the application, can have a negative "
@@ -16124,7 +16124,7 @@ msgstr ""
 "Hata ayıklama izi — uygulamayı tanılamada yardımcı olur; ancak başarımı "
 "azaltır."
 
-#: src/frontend/SettingsGeneralPage.cpp:255
+#: src/frontend/SettingsGeneralPage.cpp:268
 #, kde-format
 msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
@@ -16133,22 +16133,22 @@ msgstr ""
 "Başarım izi — ilgili başarım konularını ve tıkanıklıklarını çözümlemede "
 "yararlıdır."
 
-#: src/frontend/SettingsNotebookPage.cpp:32
+#: src/frontend/SettingsNotebookPage.cpp:30
 #, kde-format
 msgid "Enable syntax highlighting"
 msgstr "Sözdizim vurgulamayı etkinleştir"
 
-#: src/frontend/SettingsNotebookPage.cpp:33
+#: src/frontend/SettingsNotebookPage.cpp:31
 #, kde-format
 msgid "Enable syntax completion"
 msgstr "Sözdizim tamamlamayı etkinleştir"
 
-#: src/frontend/SettingsNotebookPage.cpp:34
+#: src/frontend/SettingsNotebookPage.cpp:32
 #, kde-format
 msgid "Show line numbers"
 msgstr "Satır numaralarını göster"
 
-#: src/frontend/SettingsNotebookPage.cpp:35
+#: src/frontend/SettingsNotebookPage.cpp:33
 #, kde-format
 msgid ""
 "Use LaTeX typesetting for the results of calculations, if supported by the "
@@ -16157,47 +16157,47 @@ msgstr ""
 "Arka uç sistemi tarafından destekleniyorsa hesaplamaların sonuçları için "
 "LaTeX dizgisini kullan."
 
-#: src/frontend/SettingsNotebookPage.cpp:36
+#: src/frontend/SettingsNotebookPage.cpp:34
 #, kde-format
 msgid "Animate transitions"
 msgstr "Geçişleri canlandır"
 
-#: src/frontend/SettingsNotebookPage.cpp:38
+#: src/frontend/SettingsNotebookPage.cpp:36
 #, kde-format
 msgid "Automatically re-evaluate all entries below the current one."
 msgstr "Geçerlinin altındaki tüm girdileri kendiliğinden yeniden değerlendir."
 
-#: src/frontend/SettingsNotebookPage.cpp:39
+#: src/frontend/SettingsNotebookPage.cpp:37
 #, kde-format
 msgid "Ask for confirmation when restarting the backend system."
 msgstr "Arka uç sistemini yeniden başlatırken onay iste."
 
-#: src/frontend/SettingsWorksheetPage.cpp:28
+#: src/frontend/SettingsWorksheetPage.cpp:26
 #, kde-format
 msgid "Default theme for newly created worksheets and worksheet objects"
 msgstr ""
 "Yeni oluşturulan çalışma sayfaları ve çalışma sayfası nesneleri için "
 "öntanımlı tema"
 
-#: src/frontend/SettingsWorksheetPage.cpp:134
+#: src/frontend/SettingsWorksheetPage.cpp:135
 #, kde-format
 msgid ""
 "No LaTeX installation found or selected. LaTeX typesetting not possible."
 msgstr ""
 "LaTeX kurulumu bulunamadı veya seçilmedi. LaTeX dizgisi olanaklı değil."
 
-#: src/frontend/SettingsWorksheetPage.cpp:144
+#: src/frontend/SettingsWorksheetPage.cpp:145
 #, kde-format
 msgid "No 'convert' found. LaTeX typesetting not possible."
 msgstr "“convert” bulunamadı. LaTeX dizgisi olanaklı değil."
 
-#: src/frontend/SettingsWorksheetPage.cpp:150
+#: src/frontend/SettingsWorksheetPage.cpp:151
 #, kde-format
 msgid "No 'dvips' found. LaTeX typesetting not possible."
 msgstr "“dvips” bulunamadı. LaTeX dizgisi olanaklı değil."
 
-#: src/frontend/SettingsWorksheetPage.cpp:157
-#: src/frontend/SettingsWorksheetPage.cpp:163
+#: src/frontend/SettingsWorksheetPage.cpp:158
+#: src/frontend/SettingsWorksheetPage.cpp:164
 #, kde-format
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr "Ghostscript bulunamadı. LaTeX dizgisi olanaklı değil."
