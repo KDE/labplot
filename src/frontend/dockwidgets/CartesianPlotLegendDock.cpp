@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for cartesian plot legend properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -49,6 +49,24 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 	borderLineWidget = new LineWidget(ui.tabBackground);
 	gridLayout->addWidget(borderLineWidget, 4, 0, 1, 3);
 
+	// "Layout"-tab
+	QString suffix;
+	if (m_units == Units::Metric)
+		suffix = QLatin1String(" cm");
+	else
+		suffix = QLatin1String(" in");
+
+	ui.sbLineSymbolWidth->setSuffix(suffix);
+	ui.sbPositionX->setSuffix(suffix);
+	ui.sbPositionY->setSuffix(suffix);
+	ui.sbBorderCornerRadius->setSuffix(suffix);
+	ui.sbLayoutTopMargin->setSuffix(suffix);
+	ui.sbLayoutBottomMargin->setSuffix(suffix);
+	ui.sbLayoutLeftMargin->setSuffix(suffix);
+	ui.sbLayoutRightMargin->setSuffix(suffix);
+	ui.sbLayoutHorizontalSpacing->setSuffix(suffix);
+	ui.sbLayoutVerticalSpacing->setSuffix(suffix);
+
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
 		auto layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
@@ -60,7 +78,8 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 		layout->setVerticalSpacing(2);
 	}
 
-	CartesianPlotLegendDock::updateLocale();
+	updateLocale();
+	retranslateUi();
 
 	// SIGNAL/SLOT
 
@@ -106,12 +125,6 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 	connect(templateHandler, &TemplateHandler::info, this, &CartesianPlotLegendDock::info);
 
 	ui.verticalLayout->addWidget(frame);
-
-	init();
-}
-
-void CartesianPlotLegendDock::init() {
-	this->retranslateUi();
 }
 
 void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
@@ -242,48 +255,37 @@ void CartesianPlotLegendDock::updateUnits() {
 void CartesianPlotLegendDock::retranslateUi() {
 	CONDITIONAL_LOCK_RETURN;
 
-	QString info = i18n("Use the main color of the plot (line, symbol, etc.) for the color of the name in the legend.");
-	ui.lUsePlotColor->setToolTip(info);
-	ui.chkUsePlotColor->setToolTip(info);
-
+	ui.cbOrder->clear();
 	ui.cbOrder->addItem(i18n("Column Major"));
 	ui.cbOrder->addItem(i18n("Row Major"));
 
 	// Positioning and alignment
+	ui.cbPositionX->clear();
 	ui.cbPositionX->addItem(i18n("Left"));
 	ui.cbPositionX->addItem(i18n("Center"));
 	ui.cbPositionX->addItem(i18n("Right"));
 	ui.cbPositionX->addItem(i18n("Relative to plot"));
 
+	ui.cbPositionY->clear();
 	ui.cbPositionY->addItem(i18n("Top"));
 	ui.cbPositionY->addItem(i18n("Center"));
 	ui.cbPositionY->addItem(i18n("Bottom"));
 	ui.cbPositionY->addItem(i18n("Relative to plot"));
 
+	ui.cbHorizontalAlignment->clear();
 	ui.cbHorizontalAlignment->addItem(i18n("Left"));
 	ui.cbHorizontalAlignment->addItem(i18n("Center"));
 	ui.cbHorizontalAlignment->addItem(i18n("Right"));
 
+	ui.cbVerticalAlignment->clear();
 	ui.cbVerticalAlignment->addItem(i18n("Top"));
 	ui.cbVerticalAlignment->addItem(i18n("Center"));
 	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
 
-	QString suffix;
-	if (m_units == Units::Metric)
-		suffix = QLatin1String(" cm");
-	else
-		suffix = QLatin1String(" in");
-
-	ui.sbLineSymbolWidth->setSuffix(suffix);
-	ui.sbPositionX->setSuffix(suffix);
-	ui.sbPositionY->setSuffix(suffix);
-	ui.sbBorderCornerRadius->setSuffix(suffix);
-	ui.sbLayoutTopMargin->setSuffix(suffix);
-	ui.sbLayoutBottomMargin->setSuffix(suffix);
-	ui.sbLayoutLeftMargin->setSuffix(suffix);
-	ui.sbLayoutRightMargin->setSuffix(suffix);
-	ui.sbLayoutHorizontalSpacing->setSuffix(suffix);
-	ui.sbLayoutVerticalSpacing->setSuffix(suffix);
+	// tooltip texts
+	QString info = i18n("Use the main color of the plot (line, symbol, etc.) for the color of the name in the legend.");
+	ui.lUsePlotColor->setToolTip(info);
+	ui.chkUsePlotColor->setToolTip(info);
 }
 
 // "General"-tab

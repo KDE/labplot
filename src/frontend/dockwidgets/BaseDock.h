@@ -4,7 +4,7 @@
 	Description      : Base dock widget
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2019 Martin Marmsoler <martin.marmsoler@gmail.com>
-	SPDX-FileCopyrightText: 2019-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2020-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -36,6 +36,7 @@ public:
 
 	enum class Units { Metric, Imperial };
 
+	virtual void retranslateUi() = 0;
 	virtual void updateLocale(){};
 	virtual void updateUnits(){};
 	static void spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue = NAN);

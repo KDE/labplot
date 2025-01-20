@@ -3,18 +3,16 @@
 	Project              : LabPlot
 	Description          : settings page for Worksheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "SettingsWorksheetPage.h"
-#include "backend/core/Settings.h"
 #include "frontend/widgets/ThemesComboBox.h"
 #include "tools/TeXRenderer.h"
 
 #include <KConfigGroup>
-#include <KLocalizedString>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
@@ -54,9 +52,10 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent)
 	loadSettings();
 }
 
-bool SettingsWorksheetPage::applySettings() {
+QList<Settings::Type> SettingsWorksheetPage::applySettings() {
+	QList<Settings::Type> changes;
 	if (!m_changed)
-		return false;
+		return changes;
 
 	KConfigGroup group = Settings::group(QStringLiteral("Settings_Worksheet"));
 	if (m_cbThemes->currentText() == i18n("Default"))
@@ -66,7 +65,9 @@ bool SettingsWorksheetPage::applySettings() {
 	group.writeEntry(QLatin1String("PresenterModeInteractive"), ui.chkPresenterModeInteractive->isChecked());
 	group.writeEntry(QLatin1String("DoubleBuffering"), ui.chkDoubleBuffering->isChecked());
 	group.writeEntry(QLatin1String("LaTeXEngine"), ui.cbTexEngine->itemData(ui.cbTexEngine->currentIndex()));
-	return true;
+
+	changes << Settings::Type::Worksheet;
+	return changes;
 }
 
 void SettingsWorksheetPage::restoreDefaults() {

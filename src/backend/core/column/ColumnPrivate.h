@@ -4,7 +4,7 @@
 	Description          : Private data class of Column
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -12,7 +12,7 @@
 #ifndef COLUMNPRIVATE_H
 #define COLUMNPRIVATE_H
 
-#include "backend/core/AbstractColumn.h"
+#include "backend/core/AbstractColumnPrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/IntervalAttribute.h"
 
@@ -21,7 +21,7 @@
 class Column;
 class ColumnSetGlobalFormulaCmd;
 
-class ColumnPrivate : public QObject {
+class ColumnPrivate : public AbstractColumnPrivate {
 	Q_OBJECT
 
 public:
@@ -290,7 +290,7 @@ private:
 			resizeTo(row + 1);
 
 		static_cast<QVector<T>*>(m_data)->replace(row, new_value);
-		if (!q->m_suppressDataChangedSignal)
+		if (!m_suppressDataChangedSignal)
 			Q_EMIT q->dataChanged(q);
 	}
 
@@ -319,7 +319,7 @@ private:
 				ptr[first + i] = new_values.at(i);
 		}
 
-		if (!q->m_suppressDataChangedSignal)
+		if (!m_suppressDataChangedSignal)
 			Q_EMIT q->dataChanged(q);
 	}
 

@@ -135,6 +135,9 @@
 MainWin::MainWin(QWidget* parent, const QString& fileName)
 	: KXmlGuiWindow(parent)
 	, m_schemeManager(new KColorSchemeManager(this)) {
+	migrateSettings(); // call this at the very beginning to migrate the application settings first
+	updateLocale();
+
 	DEBUG(Q_FUNC_INFO << ", file name = " << fileName.toStdString())
 	initGUI(fileName);
 	setAcceptDrops(true);
@@ -287,7 +290,7 @@ void MainWin::initGUI(const QString& fileName) {
 	m_hamburgerMenu->hideActionsOf(toolBar());
 	m_hamburgerMenu->setMenuBar(menuBar());
 
-	setWindowIcon(QIcon::fromTheme(QLatin1String("LabPlot"), QGuiApplication::windowIcon()));
+	setWindowIcon(QIcon::fromTheme(QLatin1String("labplot"), QGuiApplication::windowIcon()));
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	// make the status bar of a fixed size in order to avoid height changes when placing a ProgressBar there.
@@ -868,7 +871,6 @@ void MainWin::initActions() {
 void MainWin::initMenus() {
 #ifdef HAVE_PURPOSE
 	m_shareMenu = new Purpose::Menu(this);
-	m_shareMenu->model()->setPluginType(QStringLiteral("Export"));
 	connect(m_shareMenu, &Purpose::Menu::finished, this, &MainWin::shareActionFinished);
 	m_shareAction->setMenu(m_shareMenu);
 #endif
@@ -2484,6 +2486,7 @@ void MainWin::fillShareMenu() {
 	QMimeType mime;
 	m_shareMenu->model()->setInputData(
 		QJsonObject{{QStringLiteral("mimeType"), mime.name()}, {QStringLiteral("urls"), QJsonArray{QUrl::fromLocalFile(m_project->fileName()).toString()}}});
+	m_shareMenu->model()->setPluginType(QStringLiteral("Export"));
 	m_shareMenu->reload();
 }
 
@@ -2542,93 +2545,164 @@ void MainWin::dropEvent(QDropEvent* event) {
 		event->ignore();
 }
 
+/*!
+ * set the default locale of the application to the locale specified in the application settings for the number format and options.
+ */
 void MainWin::updateLocale() {
-	// Set default locale
-	auto numberLocaleLanguage =
-		static_cast<QLocale::Language>(Settings::group(QStringLiteral("Settings_General"))
-										   .readEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage)));
+	// language used for the number format
+	const auto group = Settings::group(QStringLiteral("Settings_General"));
+	auto language = static_cast<QLocale::Language>(group.readEntry(QLatin1String("NumberFormat"), static_cast<int>(QLocale::Language::AnyLanguage)));
+	QLocale newLocale(language == QLocale::AnyLanguage ? m_defaultSystemLocale : language);
 
-	auto numberOptions = static_cast<QLocale::NumberOptions>(
-		Settings::group(QStringLiteral("Settings_General")).readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)));
-
-	QLocale l(numberLocaleLanguage == QLocale::AnyLanguage ? QLocale() : numberLocaleLanguage);
-	l.setNumberOptions(numberOptions);
-	QLocale::setDefault(l);
+	// number options
+	auto numberOptions = static_cast<QLocale::NumberOptions>(group.readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)));
+	newLocale.setNumberOptions(numberOptions);
+	QLocale::setDefault(newLocale);
 }
 
-void MainWin::handleSettingsChanges(QList<SettingsDialog::SettingsType> changes) {
+/*!
+ * used to migrate application settings if there were changes between the releases.
+ */
+void MainWin::migrateSettings() {
+	// migrate the settings for the number format for versions older than 2.12 that had the decimal separator only:
+	auto group = Settings::group(QStringLiteral("Settings_General"));
+	if (group.hasKey(QLatin1String("DecimalSeparatorLocale"))) {
+		// map from the old enum values for the decimal separator to new values of the used languages for the number format,
+		// use languages that don't use any group separator for this.
+		// old enum class DecimalSeparator { Dot, Comma, Arabic, Automatic };
+		QLocale::Language language(QLocale::AnyLanguage); // AnyLanguage was used for 'Automatic'
+		int decimalSeparator = group.readEntry(QLatin1String("DecimalSeparatorLocale"), 0);
+		if (decimalSeparator == 0) // Dot
+			language = QLocale::English;
+		else if (decimalSeparator == 1) // Comma
+			language = QLocale::German;
+		else if (decimalSeparator == 2) // Arabic
+			language = QLocale::Arabic;
+
+		// delete the old entry and write the new one
+		group.deleteEntry(QLatin1String("DecimalSeparatorLocale"));
+		group.writeEntry(QLatin1String("NumberFormat"), static_cast<int>(language));
+	}
+}
+
+void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
+	WAIT_CURSOR;
 	const auto group = Settings::group(QStringLiteral("Settings_General"));
 
-	// title bar
-	MainWin::TitleBarMode titleBarMode = static_cast<MainWin::TitleBarMode>(group.readEntry("TitleBar", 0));
-	if (titleBarMode != m_titleBarMode) {
-		m_titleBarMode = titleBarMode;
-		updateTitleBar();
+	// handle general settings
+	// TODO: handle only those settings that were really changed, similar to how it's done for the nubmer format, etc. further below
+	if (changes.contains(Settings::Type::General_Number_Format)) {
+		// title bar
+		MainWin::TitleBarMode titleBarMode = static_cast<MainWin::TitleBarMode>(group.readEntry("TitleBar", 0));
+		if (titleBarMode != m_titleBarMode) {
+			m_titleBarMode = titleBarMode;
+			updateTitleBar();
+		}
+
+		// window visibility
+		auto vis = Project::DockVisibility(group.readEntry("DockVisibility", 0));
+		if (m_project && (vis != m_project->dockVisibility())) {
+			if (vis == Project::DockVisibility::folderOnly)
+				m_visibilityFolderAction->setChecked(true);
+			else if (vis == Project::DockVisibility::folderAndSubfolders)
+				m_visibilitySubfolderAction->setChecked(true);
+			else
+				m_visibilityAllAction->setChecked(true);
+			m_project->setDockVisibility(vis);
+		}
+
+		// autosave
+		bool autoSave = group.readEntry("AutoSave", 0);
+		if (m_autoSaveActive != autoSave) {
+			m_autoSaveActive = autoSave;
+			if (autoSave)
+				m_autoSaveTimer.start();
+			else
+				m_autoSaveTimer.stop();
+		}
+
+		int interval = group.readEntry("AutoSaveInterval", 1);
+		interval *= 60 * 1000;
+		if (interval != m_autoSaveTimer.interval())
+			m_autoSaveTimer.setInterval(interval);
+
+
+		// update spreadsheet header
+		if (m_project) {
+			const auto& spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* spreadsheet : spreadsheets)
+				spreadsheet->updateHorizontalHeader();
+		}
+
+		// bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
+		// if (m_showWelcomeScreen != showWelcomeScreen)
+		// 	m_showWelcomeScreen = showWelcomeScreen;
 	}
 
-	// window visibility
-	auto vis = Project::DockVisibility(group.readEntry("DockVisibility", 0));
-	if (m_project && (vis != m_project->dockVisibility())) {
-		if (vis == Project::DockVisibility::folderOnly)
-			m_visibilityFolderAction->setChecked(true);
-		else if (vis == Project::DockVisibility::folderAndSubfolders)
-			m_visibilitySubfolderAction->setChecked(true);
-		else
-			m_visibilityAllAction->setChecked(true);
-		m_project->setDockVisibility(vis);
-	}
+	// update the number format in all visible dock widgets, worksheet elements and spreadsheets, if changed
+	if (changes.contains(Settings::Type::General_Number_Format)) {
+		updateLocale(); // set the new default runtime locale
 
-	// autosave
-	bool autoSave = group.readEntry("AutoSave", 0);
-	if (m_autoSaveActive != autoSave) {
-		m_autoSaveActive = autoSave;
-		if (autoSave)
-			m_autoSaveTimer.start();
-		else
-			m_autoSaveTimer.stop();
-	}
+		// dock widgets
+		if (stackedWidget) {
+			for (int i = 0; i < stackedWidget->count(); ++i) {
+				auto* widget = stackedWidget->widget(i);
+				auto* dock = dynamic_cast<BaseDock*>(widget);
+				if (dock)
+					dock->updateLocale();
+				else {
+					auto* labelWidget = dynamic_cast<LabelWidget*>(widget);
+					if (labelWidget)
+						labelWidget->updateLocale();
+				}
+			}
+		}
 
-	int interval = group.readEntry("AutoSaveInterval", 1);
-	interval *= 60 * 1000;
-	if (interval != m_autoSaveTimer.interval())
-		m_autoSaveTimer.setInterval(interval);
+		// worksheet elements
+		if (m_project) {
+			const auto& worksheets = m_project->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (const auto* worksheet : worksheets) {
+				if (worksheet->viewCreated()) {
+					const auto& elements = worksheet->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
+					for (auto* element : elements)
+						element->updateLocale();
+				}
+			}
 
-	// update the locale and the units in the dock widgets
-	updateLocale();
-	if (stackedWidget) {
-		for (int i = 0; i < stackedWidget->count(); ++i) {
-			auto* widget = stackedWidget->widget(i);
-			auto* dock = dynamic_cast<BaseDock*>(widget);
-			if (dock) {
-				dock->updateLocale();
-				dock->updateUnits();
-			} else {
-				auto* labelWidget = dynamic_cast<LabelWidget*>(widget);
-				if (labelWidget)
-					labelWidget->updateUnits();
+			// spreadsheets
+			const auto& spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* spreadsheet : spreadsheets) {
+				if (spreadsheet->viewCreated())
+					spreadsheet->updateLocale();
 			}
 		}
 	}
 
-	// update spreadsheet header
-	if (m_project) {
-		const auto& spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
-		for (auto* spreadsheet : spreadsheets) {
-			spreadsheet->updateHorizontalHeader();
-			spreadsheet->updateLocale();
+	// update units in all dock widgets, if changed
+	if (changes.contains(Settings::Type::General_Units)) {
+		if (stackedWidget) {
+			for (int i = 0; i < stackedWidget->count(); ++i) {
+				auto* widget = stackedWidget->widget(i);
+				auto* dock = dynamic_cast<BaseDock*>(widget);
+				if (dock)
+					dock->updateUnits();
+				else {
+					auto* labelWidget = dynamic_cast<LabelWidget*>(widget);
+					if (labelWidget)
+						labelWidget->updateUnits();
+				}
+			}
 		}
 	}
 
-	// bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
-	// if (m_showWelcomeScreen != showWelcomeScreen)
-	// 	m_showWelcomeScreen = showWelcomeScreen;
-
 #ifdef HAVE_CANTOR_LIBS
-	if (changes.contains(SettingsDialog::SettingsType::Notebook))
+	if (changes.contains(Settings::Type::Notebook))
 		updateNotebookActions();
 #else
 	Q_UNUSED(changes)
 #endif
+
+	RESET_CURSOR;
 }
 
 void MainWin::openDatasetExample() {
@@ -2818,7 +2892,7 @@ void MainWin::addAspectToProject(AbstractAspect* aspect) {
 }
 
 void MainWin::settingsDialog() {
-	auto* dlg = new SettingsDialog(this);
+	auto* dlg = new SettingsDialog(this, m_defaultSystemLocale);
 	connect(dlg, &SettingsDialog::settingsChanged, this, &MainWin::handleSettingsChanges);
 	// 	connect (dlg, &SettingsDialog::resetWelcomeScreen, this, &MainWin::resetWelcomeScreen);
 	dlg->exec();

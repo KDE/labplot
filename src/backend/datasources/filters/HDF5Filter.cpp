@@ -15,7 +15,7 @@
 
 #include "backend/datasources/filters/HDF5Filter.h"
 #include "backend/core/column/Column.h"
-#include "backend/datasources/LiveDataSource.h"
+#include "backend/datasources/AbstractDataSource.h"
 #include "backend/datasources/filters/HDF5FilterPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/hostprocess.h"

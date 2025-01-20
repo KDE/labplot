@@ -91,7 +91,7 @@ QVector<AbstractColumn::ColumnMode> ReadStatFilter::columnModes() const {
 
 ///////////////////////////////////////////////////////////////////////
 #ifdef HAVE_READSTAT
-int ReadStatFilter::getMetaData(readstat_metadata_t* metadata, void* md) {
+static int getMetaData(readstat_metadata_t* metadata, void* md) {
 	*(readstat_metadata_t*)md = *metadata;
 
 	return READSTAT_HANDLER_OK;

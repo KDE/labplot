@@ -23,6 +23,7 @@
 class AboutDialog: public KAboutApplicationDialog {
 	Q_OBJECT
 public:
+	~AboutDialog() override;
 	static QString systemInfo();
 	static QVector<QStringList> components();	// list of additional components
 	explicit AboutDialog(const KAboutData&, QWidget*);

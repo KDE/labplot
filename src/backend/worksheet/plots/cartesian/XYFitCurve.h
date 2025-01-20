@@ -102,7 +102,6 @@ public:
 	POINTER_D_ACCESSOR_DECL(const Histogram, dataSourceHistogram, DataSourceHistogram)
 	const QString& dataSourceHistogramPath() const;
 
-	void recalculate() override;
 	void evaluate(bool preview);
 	virtual const XYAnalysisCurve::Result& result() const override;
 	void initStartValues(const XYCurve*);

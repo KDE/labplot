@@ -24,14 +24,17 @@ SettingsSpreadsheetPage::SettingsSpreadsheetPage(QWidget* parent)
 	loadSettings();
 }
 
-bool SettingsSpreadsheetPage::applySettings() {
+QList<Settings::Type> SettingsSpreadsheetPage::applySettings() {
+	QList<Settings::Type> changes;
 	if (!m_changed)
-		return false;
+		return changes;
 
 	KConfigGroup group = Settings::group(QStringLiteral("Settings_Spreadsheet"));
 	group.writeEntry(QLatin1String("ShowColumnType"), ui.chkShowColumnType->isChecked());
 	group.writeEntry(QLatin1String("ShowPlotDesignation"), ui.chkShowPlotDesignation->isChecked());
-	return true;
+
+	changes << Settings::Type::Spreadsheet;
+	return changes;
 }
 
 void SettingsSpreadsheetPage::restoreDefaults() {

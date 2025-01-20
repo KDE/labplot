@@ -3,19 +3,16 @@
 	Project              : LabPlot
 	Description          : widget for matrix properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "MatrixDock.h"
-#include "frontend/matrix/MatrixView.h"
 #include "frontend/TemplateHandler.h"
 
 #include <KConfig>
 #include <KConfigGroup>
-
-#include <QDir>
 
 /*!
  \class MatrixDock
@@ -28,21 +25,13 @@ MatrixDock::MatrixDock(QWidget* parent)
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
 
-	ui.cbFormat->addItem(i18n("Decimal"), QVariant('f'));
-	ui.cbFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
-	ui.cbFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
-	ui.cbFormat->addItem(i18n("Automatic (g)"), QVariant('g'));
-	ui.cbFormat->addItem(i18n("Automatic (G)"), QVariant('G'));
-
-	ui.cbHeader->addItem(i18n("Rows and Columns"));
-	ui.cbHeader->addItem(i18n("xy-Values"));
-	ui.cbHeader->addItem(i18n("Rows, Columns and xy-Values"));
-
 	// Validators
 	ui.leXStart->setValidator(new QDoubleValidator(ui.leXStart));
 	ui.leXEnd->setValidator(new QDoubleValidator(ui.leXEnd));
 	ui.leYStart->setValidator(new QDoubleValidator(ui.leYStart));
 	ui.leYEnd->setValidator(new QDoubleValidator(ui.leYEnd));
+
+	retranslateUi();
 
 	connect(ui.sbColumnCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &MatrixDock::columnCountChanged);
 	connect(ui.sbRowCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &MatrixDock::rowCountChanged);
@@ -72,7 +61,6 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 	this->load();
 
 	// undo functions
-
 	connect(m_matrix, &Matrix::rowCountChanged, this, &MatrixDock::matrixRowCountChanged);
 	connect(m_matrix, &Matrix::columnCountChanged, this, &MatrixDock::matrixColumnCountChanged);
 
@@ -84,6 +72,22 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 	connect(m_matrix, &Matrix::numericFormatChanged, this, &MatrixDock::matrixNumericFormatChanged);
 	connect(m_matrix, &Matrix::precisionChanged, this, &MatrixDock::matrixPrecisionChanged);
 	connect(m_matrix, &Matrix::headerFormatChanged, this, &MatrixDock::matrixHeaderFormatChanged);
+}
+
+void MatrixDock::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
+
+	ui.cbFormat->clear();
+	ui.cbFormat->addItem(i18n("Decimal"), QVariant('f'));
+	ui.cbFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
+	ui.cbFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
+	ui.cbFormat->addItem(i18n("Automatic (g)"), QVariant('g'));
+	ui.cbFormat->addItem(i18n("Automatic (G)"), QVariant('G'));
+
+	ui.cbHeader->clear();
+	ui.cbHeader->addItem(i18n("Rows and Columns"));
+	ui.cbHeader->addItem(i18n("xy-Values"));
+	ui.cbHeader->addItem(i18n("Rows, Columns and xy-Values"));
 }
 
 //*************************************************************

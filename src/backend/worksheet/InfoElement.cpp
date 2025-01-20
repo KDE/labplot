@@ -44,6 +44,11 @@ InfoElement::MarkerPoints_T::MarkerPoints_T(CustomPoint* custompoint, const XYCu
 		visible = custompoint->isVisible();
 }
 
+/**
+ * \class InfoElement
+ * \brief Marker which can highlight points of curves and show their values.
+ * \ingroup CartesianPlotArea
+ */
 InfoElement::InfoElement(const QString& name, CartesianPlot* plot)
 	: WorksheetElement(name, new InfoElementPrivate(this), AspectType::InfoElement) {
 	Q_D(InfoElement);

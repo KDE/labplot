@@ -244,8 +244,11 @@ QMenu* Column::createContextMenu() {
 	// pasting of data is only possible for spreadsheet columns
 	if (parentAspect()->type() == AspectType::Spreadsheet) {
 		const auto* mimeData = QApplication::clipboard()->mimeData();
-		if (mimeData->hasFormat(QStringLiteral("text/plain")))
-			menu->insertAction(firstAction, m_pasteDataAction);
+		if (mimeData->hasFormat(QStringLiteral("text/plain"))) {
+			const QString& text = QApplication::clipboard()->text();
+			if (!text.startsWith(QLatin1String("<?xml version=\"1.0\"?><!DOCTYPE LabPlotCopyPasteXML>")))
+				menu->insertAction(firstAction, m_pasteDataAction);
+		}
 	}
 
 	menu->insertSeparator(firstAction);
@@ -311,13 +314,6 @@ void Column::pasteData() {
 	if (spreadsheet)
 		static_cast<SpreadsheetView*>(spreadsheet->view())->pasteIntoSelection();
 #endif
-}
-
-/*!
- *
- */
-void Column::setSuppressDataChangedSignal(bool b) {
-	m_suppressDataChangedSignal = b;
 }
 
 void Column::addUsedInPlots(QVector<CartesianPlot*>& plotAreas) {
@@ -986,17 +982,6 @@ int Column::integerAt(int row) const {
  */
 qint64 Column::bigIntAt(int row) const {
 	return d->bigIntAt(row);
-}
-
-/*
- * call this function if the data of the column was changed directly via the data()-pointer
- * and not via the setValueAt() in order to Q_EMIT the dataChanged-signal.
- * This is used e.g. in \c XYFitCurvePrivate::recalculate()
- */
-void Column::setChanged() {
-	invalidateProperties();
-	if (!m_suppressDataChangedSignal)
-		Q_EMIT dataChanged(this);
 }
 
 bool Column::valueLabelsInitialized() const {
@@ -1789,7 +1774,7 @@ void Column::handleFormatChange() {
 	}
 
 	Q_EMIT aspectDescriptionChanged(this); // the icon for the type changed
-	if (!m_suppressDataChangedSignal)
+	if (!d->m_suppressDataChangedSignal)
 		Q_EMIT formatChanged(this); // all cells must be repainted
 
 	d->available.setUnavailable();

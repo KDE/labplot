@@ -20,7 +20,12 @@ class MatioFilterPrivate;
 // Example data:
 //      https://github.com/cran/R.matlab/tree/master/inst/mat-files
 //      https://github.com/scipy/scipy/tree/master/scipy/io/matlab/tests/data/
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT MatioFilter : public AbstractFileFilter {
+#else
 class MatioFilter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
 
 public:

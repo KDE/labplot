@@ -4,15 +4,16 @@
 	Description          : Base class of Aspects with MDI windows as views.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2012-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "backend/core/AbstractPart.h"
 #include "backend/core/Settings.h"
+#ifndef SDK
 #include "frontend/core/ContentDockWidget.h"
-
 #include <DockManager.h>
+#endif
 #include <QMenu>
 #include <QStyle>
 
@@ -27,8 +28,10 @@ AbstractPart::AbstractPart(const QString& name, AspectType type)
 }
 
 AbstractPart::~AbstractPart() {
+#ifndef SDK
 	if (m_dockWidget)
 		delete m_dockWidget;
+#endif
 }
 
 /**
@@ -40,7 +43,7 @@ AbstractPart::~AbstractPart() {
  * This method may be called multiple times during the life time of a Part, or it might not get
  * called at all. Parts must not depend on the existence of a view for their operation.
  */
-
+#ifndef SDK
 /**
  * \brief Wrap the view() into a PartMdiView.
  *
@@ -48,7 +51,6 @@ AbstractPart::~AbstractPart() {
  * after that, a pointer to the pre-existing view is returned.
  */
 ContentDockWidget* AbstractPart::dockWidget() const {
-#ifndef SDK
 	if (!m_dockWidget) {
 		m_dockWidget = new ContentDockWidget(const_cast<AbstractPart*>(this));
 		connect(m_dockWidget, &ads::CDockWidget::closed, [this] {
@@ -60,20 +62,28 @@ ContentDockWidget* AbstractPart::dockWidget() const {
 			}
 		});
 	}
-#endif
 	return m_dockWidget;
 }
+#endif
 
+#ifndef SDK
 bool AbstractPart::dockWidgetExists() const {
 	return m_dockWidget != nullptr;
 }
+#endif
 
 void AbstractPart::suppressDeletion(bool suppress) {
 	m_suppressDeletion = suppress;
 }
 
+#ifndef SDK
 bool AbstractPart::hasMdiSubWindow() const {
 	return m_dockWidget;
+}
+#endif
+
+bool AbstractPart::viewCreated() const {
+	return m_partView != nullptr;
 }
 
 /*!

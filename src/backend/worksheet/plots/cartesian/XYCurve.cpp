@@ -3,24 +3,15 @@
 	Project              : LabPlot
 	Description          : A xy-curve
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYCurve
-  \brief A 2D-curve, provides an interface for editing many properties of the curve.
-
-  \ingroup worksheet
-*/
-
 #include "XYCurve.h"
 #include "XYCurvePrivate.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
-#include "backend/core/column/Column.h"
 #include "backend/gsl/errors.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -29,9 +20,6 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "tools/ImageTools.h"
 
@@ -52,12 +40,20 @@
 
 #include <frontend/GuiTools.h>
 
-using Dimension = CartesianCoordinateSystem::Dimension;
-
 CURVE_COLUMN_CONNECT(XYCurve, X, x, recalc)
 CURVE_COLUMN_CONNECT(XYCurve, Y, y, recalc)
 CURVE_COLUMN_CONNECT(XYCurve, Values, values, recalc)
 
+/*!
+ * \class XYCurve
+ * \brief This class implements the visualization of a 2D/xy curve.
+ *
+ * The visualization of the curve can be parametrized via varios parameters and can be used
+ * to achieve the visualizations that are commonly named as line plot, scatter plot, error bar plot,
+ * line+symbol plot, rug plot, etc. or any combinations of them.
+ *
+ * \ingroup CartesianPlots
+ */
 XYCurve::XYCurve(const QString& name, AspectType type, bool loading)
 	: Plot(name, new XYCurvePrivate(this), type) {
 	init(loading);
@@ -297,8 +293,6 @@ QIcon XYCurve::icon() const {
 }
 
 QIcon XYCurve::staticIcon(Plot::PlotType type) {
-	QPainter pa;
-	pa.setRenderHint(QPainter::Antialiasing);
 	static const int iconSize = 20;
 	QPixmap pm(iconSize, iconSize);
 	pm.fill(Qt::transparent);
@@ -306,7 +300,10 @@ QIcon XYCurve::staticIcon(Plot::PlotType type) {
 	QPen pen(Qt::SolidLine);
 	pen.setColor(GuiTools::isDarkMode() ? Qt::white : Qt::black);
 	pen.setWidthF(0.0);
+
+	QPainter pa;
 	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
 	pa.setPen(pen);
 	pa.setBrush(QBrush(pen.color()));
 
@@ -362,6 +359,11 @@ QIcon XYCurve::staticIcon(Plot::PlotType type) {
 
 	pa.end();
 	return {pm};
+}
+
+void XYCurve::updateLocale() {
+	Q_D(XYCurve);
+	d->updateValues();
 }
 
 // ##############################################################################
@@ -746,6 +748,20 @@ void XYCurve::recalc() {
 	d->recalc();
 }
 
+/*!
+ * if \c enable is set to true, enables the line optimization to reduce the total number of lines to be drawn,
+ * disables it otherwise. On default, the line optimization is activated.
+ * Used when exporting/printing the parent worksheet to disable the line optimization to get better result.
+ */
+void XYCurve::enableLineOptimization(bool enable) {
+	Q_D(XYCurve);
+	if (d->line->style() != Qt::NoPen) {
+		d->suppressRecalc = true;
+		d->updateLines(enable);
+		d->suppressRecalc = false;
+	}
+}
+
 void XYCurve::updateValues() {
 	Q_D(XYCurve);
 	d->updateValues();
@@ -962,7 +978,6 @@ void XYCurvePrivate::calculateScenePoints() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
-	const bool performanceOptimization = !q->isPrinting();
 	const bool suppressed = !isVisible() || q->isLoading() || suppressRetransform || !plot();
 	DEBUG("\n" << Q_FUNC_INFO << ", name = " << STDSTRING(name()) << ", suppressRetransform = " << suppressRetransform);
 	trackRetransformCalled(suppressed);
@@ -992,7 +1007,7 @@ void XYCurvePrivate::retransform() {
 	}
 
 	suppressRecalc = true;
-	updateLines(performanceOptimization);
+	updateLines();
 	updateDropLines();
 	updateSymbols();
 	updateRug();
@@ -2804,9 +2819,8 @@ void XYCurvePrivate::draw(QPainter* painter) {
 			// would like to have one complete path for a curve not many paths
 			for (auto& line : m_lines)
 				painter->drawLine(line);
-		} else {
+		} else
 			painter->drawPath(linePath);
-		}
 	}
 
 	// draw drop lines
@@ -2861,7 +2875,7 @@ void XYCurvePrivate::updatePixmap() {
 	m_pixmap = QPixmap(ceil(m_boundingRectangle.width()), ceil(m_boundingRectangle.height()));
 	m_pixmap.fill(Qt::transparent);
 	QPainter painter(&m_pixmap);
-	painter.setRenderHint(QPainter::Antialiasing, true);
+	painter.setRenderHint(QPainter::Antialiasing);
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
@@ -2891,12 +2905,16 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 
 	painter->setPen(Qt::NoPen);
 	painter->setBrush(Qt::NoBrush);
-	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+	painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
 	if (!q->isPrinting() && Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
 		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
+
+	// no need to handle the selection/hover effect if the cached pixmap is empty
+	if (m_pixmap.isNull())
+		return;
 
 	if (isHovered() && !isSelected() && !q->isPrinting()) {
 		if (m_hoverEffectImageIsDirty) {
@@ -2965,7 +2983,6 @@ void XYCurvePrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 
 	event->ignore();
 	setSelected(false);
-	QGraphicsItem::mousePressEvent(event);
 }
 
 // ##############################################################################

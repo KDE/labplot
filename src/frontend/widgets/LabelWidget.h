@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : label settings widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2014 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -40,6 +40,7 @@ public:
 	void setAxes(QList<Axis*>);
 	void updateUnits() override;
 	void updateLocale() override;
+	void retranslateUi() override;
 
 	void load();
 	void loadConfig(KConfigGroup&);

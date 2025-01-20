@@ -75,10 +75,7 @@ QColor getColorFromHTMLText(const QString& text, const QString& colortype) {
 	/* QCOMPARE(actual.text, expected.text); Cannot be used, because then also in the expected html text the color must be replaced*/
 
 #define COMPARETEXTPROPERTIESLABEL(label, expected)                                                                                                            \
-	{                                                                                                                                                          \
-		STORETEXTPROPERTIES(label, propertyVariable)                                                                                                           \
-		COMPARETEXTPROPERTIES(propertyVariable, expected)                                                                                                      \
-	}
+	{ STORETEXTPROPERTIES(label, propertyVariable) COMPARETEXTPROPERTIES(propertyVariable, expected) }
 
 #define VERIFYLABELCOLORS(label, fontcolor_, backgroundColor_)                                                                                                 \
 	{                                                                                                                                                          \
@@ -104,7 +101,7 @@ void TextLabelTest::addPlot() {
 	QCOMPARE(l->text().mode, TextLabel::Mode::Text);
 	VERIFYLABELCOLORS(l, Qt::black, Qt::transparent);
 	QCOMPARE(l->fontColor(), Qt::black);
-	QCOMPARE(l->backgroundColor(), Qt::transparent);
+	QCOMPARE(l->backgroundColor(), QColor(1, 1, 1, 0));
 
 	// add title?
 

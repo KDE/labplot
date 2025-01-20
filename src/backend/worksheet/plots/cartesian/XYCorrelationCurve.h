@@ -18,7 +18,12 @@ extern "C" {
 
 class XYCorrelationCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYCorrelationCurve : public XYAnalysisCurve {
+#else
 class XYCorrelationCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:
@@ -39,7 +44,6 @@ public:
 	typedef XYAnalysisCurve::Result CorrelationResult;
 	virtual const XYAnalysisCurve::Result& result() const override;
 
-	void recalculate() override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

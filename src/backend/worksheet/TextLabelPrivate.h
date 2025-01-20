@@ -16,16 +16,11 @@
 #include "tools/TeXRenderer.h"
 #include <QFutureWatcher>
 #include <QScreen>
-#include <QStaticText>
 
 #include <gsl/gsl_const_cgs.h>
 
-class QGraphicsSceneHoverEvent;
-class CartesianPlot;
-class CartesianCoordinateSystem;
 class ScaledTextItem;
 class TextLabel;
-class QStaticText;
 
 class TextLabelPrivate : public WorksheetElementPrivate {
 public:
@@ -39,7 +34,7 @@ public:
 	TextLabel::TextWrapper textWrapper;
 	QFont teXFont{QStringLiteral("Computer Modern"), 12}; // reasonable default font and size
 	QColor fontColor{Qt::black}; // used only by the theme for unformatted text. The text font is in the HTML and so this variable is never set
-	QColor backgroundColor{Qt::transparent}; // same as fontColor
+	QColor backgroundColor{1, 1, 1, 0}; // white transparent
 	QImage teXImage;
 	QByteArray teXPdfData;
 	QFutureWatcher<QByteArray> teXImageFutureWatcher;
@@ -65,6 +60,7 @@ public:
 
 	ScaledTextItem* m_textItem{nullptr};
 
+	QRectF boundingRectangleText; // bounding rectangle of the text, doesn't include the border shape
 	QPainterPath borderShapePath;
 	QPainterPath labelShape;
 

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the bar plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -49,24 +49,6 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	m_gridLayout->setVerticalSpacing(2);
 	ui.frameDataColumns->setLayout(m_gridLayout);
 
-	ui.cbType->addItem(i18n("Grouped"));
-	ui.cbType->addItem(i18n("Stacked"));
-	ui.cbType->addItem(i18n("Stacked 100%"));
-
-	ui.cbOrientation->addItem(i18n("Horizontal"));
-	ui.cbOrientation->addItem(i18n("Vertical"));
-
-	// Tab "Bars"
-	QString msg = i18n("Select the data column for which the properties should be shown and edited");
-	ui.lNumber->setToolTip(msg);
-	ui.cbNumber->setToolTip(msg);
-	ui.lErrorBarsNumber->setToolTip(msg);
-	ui.cbErrorBarsNumber->setToolTip(msg);
-
-	msg = i18n("Specify the factor in percent to control the width of the bar relative to its default value, applying to all bars");
-	ui.lWidthFactor->setToolTip(msg);
-	ui.sbWidthFactor->setToolTip(msg);
-
 	// filling
 	auto* gridLayout = static_cast<QGridLayout*>(ui.tabBars->layout());
 	backgroundWidget = new BackgroundWidget(ui.tabBars);
@@ -102,6 +84,9 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 		layout->setHorizontalSpacing(2);
 		layout->setVerticalSpacing(2);
 	}
+
+	updateLocale();
+	retranslateUi();
 
 	// SLOTS
 	// Tab "General"
@@ -168,9 +153,6 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	load();
 	updatePlotRangeList();
 
-	// set the current locale
-	updateLocale();
-
 	// SIGNALs/SLOTs
 	// general
 	connect(m_barPlot, &BarPlot::typeChanged, this, &BarPlotDock::plotTypeChanged);
@@ -188,13 +170,6 @@ void BarPlotDock::setModel() {
 	cbXColumn->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 	cbXColumn->setModel(model);
 	errorBarWidget->setModel(model);
-}
-
-/*
- * updates the locale in the widgets. called when the application settins are changed.
- */
-void BarPlotDock::updateLocale() {
-	lineWidget->updateLocale();
 }
 
 void BarPlotDock::loadDataColumns() {
@@ -275,6 +250,37 @@ void BarPlotDock::setDataColumns() const {
 	}
 
 	m_barPlot->setDataColumns(columns);
+}
+
+/*
+ * updates the locale in the widgets. called when the application settins are changed.
+ */
+void BarPlotDock::updateLocale() {
+	lineWidget->updateLocale();
+}
+
+void BarPlotDock::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
+
+	ui.cbType->clear();
+	ui.cbType->addItem(i18n("Grouped"));
+	ui.cbType->addItem(i18n("Stacked"));
+	ui.cbType->addItem(i18n("Stacked 100%"));
+
+	ui.cbOrientation->clear();
+	ui.cbOrientation->addItem(i18n("Horizontal"));
+	ui.cbOrientation->addItem(i18n("Vertical"));
+
+	// tooltip texts
+	QString msg = i18n("Select the data column for which the properties should be shown and edited");
+	ui.lNumber->setToolTip(msg);
+	ui.cbNumber->setToolTip(msg);
+	ui.lErrorBarsNumber->setToolTip(msg);
+	ui.cbErrorBarsNumber->setToolTip(msg);
+
+	msg = i18n("Specify the factor in percent to control the width of the bar relative to its default value, applying to all bars");
+	ui.lWidthFactor->setToolTip(msg);
+	ui.sbWidthFactor->setToolTip(msg);
 }
 
 //**********************************************************

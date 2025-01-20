@@ -555,10 +555,13 @@ private:
 			reader->raiseMissingAttributeWarning(QStringLiteral("fontSize"));                                                                                  \
 		else {                                                                                                                                                 \
 			int size = str.toInt();                                                                                                                            \
-			QFont tempFont;                                                                                                                                    \
-			tempFont.setPixelSize(size);                                                                                                                       \
-			if (size != -1)                                                                                                                                    \
+			if (size > 0) {                                                                                                                                    \
+				QFont tempFont;                                                                                                                                \
+				tempFont.setPixelSize(size);                                                                                                                   \
 				font.setPointSizeF(QFontInfo(tempFont).pointSizeF());                                                                                          \
+			} else {                                                                                                                                           \
+				reader->raiseWarning(QStringLiteral("Invalid font size: %1").arg(size));                                                                       \
+			}                                                                                                                                                  \
 		}                                                                                                                                                      \
                                                                                                                                                                \
 		str = attribs.value(QStringLiteral("fontPointSize")).toString();                                                                                       \

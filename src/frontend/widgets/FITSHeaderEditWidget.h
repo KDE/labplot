@@ -12,6 +12,9 @@
 #include "backend/datasources/filters/FITSFilter.h"
 #include <QWidget>
 
+class QTreeWidgetItem;
+class QTableWidgetItem;
+
 namespace Ui {
 class FITSHeaderEditWidget;
 }

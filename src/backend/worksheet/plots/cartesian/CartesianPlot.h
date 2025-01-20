@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Cartesian plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -19,10 +19,8 @@
 
 #include "backend/nsl/nsl_sf_stats.h"
 
-class AbstractColumn;
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
-class CartesianCoordinateSystem;
 class CartesianPlotDock;
 class Histogram;
 class InfoElementDialog;
@@ -30,8 +28,6 @@ class Line;
 class XYCurve;
 class KConfig;
 class Plot;
-
-using Dimension = CartesianCoordinateSystem::Dimension;
 
 #ifdef SDK
 #include "labplot_export.h"

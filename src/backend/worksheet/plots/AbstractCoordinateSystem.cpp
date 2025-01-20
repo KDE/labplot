@@ -19,7 +19,7 @@
  * \class AbstractCoordinateSystem
  * \brief Base class of all worksheet coordinate systems.
  *
- *  \ingroup backend\worksheet
+ *  \ingroup worksheet
  */
 
 AbstractCoordinateSystem::AbstractCoordinateSystem(AbstractPlot*) {

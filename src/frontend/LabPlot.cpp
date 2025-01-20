@@ -38,7 +38,6 @@
 int main(int argc, char* argv[]) {
 	QApplication app(argc, argv);
 	KLocalizedString::setApplicationDomain("labplot");
-	MainWin::updateLocale();
 
 	QString systemInfo{AboutDialog::systemInfo()};
 	QString links = i18n("Visit website:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://labplot.org")) + QLatin1Char('\n')
@@ -52,7 +51,7 @@ int main(int argc, char* argv[]) {
 						 QLatin1String(LVERSION),
 						 i18n("LabPlot is a FREE, open-source and cross-platform Data Visualization and Analysis software accessible to everyone."),
 						 KAboutLicense::GPL,
-						 i18n("(c) 2007-2024 LabPlot authors"),
+						 i18n("(c) 2007-2025 LabPlot authors"),
 						 systemInfo + QLatin1Char('\n') + links);
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18nc("@info:credit", "Developer"), QStringLiteral("stefan.gerlach@uni.kn"), QString());
 	aboutData.addAuthor(i18n("Alexander Semke"), i18nc("@info:credit", "Developer"), QStringLiteral("alexander.semke@web.de"), QString());

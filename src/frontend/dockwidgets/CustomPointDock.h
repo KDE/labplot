@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the custom point on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2015-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -25,6 +25,7 @@ public:
 	explicit CustomPointDock(QWidget*);
 	void setPoints(QList<CustomPoint*>);
 	void updateLocale() override;
+	void retranslateUi() override;
 
 private:
 	Ui::CustomPointDock ui;

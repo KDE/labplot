@@ -225,6 +225,10 @@ void ProcessBehaviorChartDock::retranslateUi() {
 	info = i18n("Allow negative values for the lower limit.");
 	ui.lNegativeLowerLimit->setToolTip(info);
 	ui.chbNegativeLowerLimit->setToolTip(info);
+
+	info = i18n("If checked, exact limits are calculated for every individual sample (\"stair-step limits\"), straight lines are drawn for the limits otherwise.");
+	ui.lExactLimits->setToolTip(info);
+	ui.chbExactLimits->setToolTip(info);
 }
 
 /*
@@ -297,6 +301,8 @@ void ProcessBehaviorChartDock::typeChanged(int index) {
 	visible = (type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U);
 	ui.lData2Column->setVisible(visible);
 	cbData2Column->setVisible(visible);
+	ui.lExactLimits->setVisible(visible);
+	ui.chbExactLimits->setVisible(visible);
 
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* plot : m_plots)

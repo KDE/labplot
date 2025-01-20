@@ -20,7 +20,12 @@ class CartesianPlot;
 class Line;
 class PlotAreaPrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT PlotArea : public WorksheetElement {
+#else
 class PlotArea : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:

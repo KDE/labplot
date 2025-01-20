@@ -3,16 +3,10 @@
 	Project              : LabPlot
 	Description          : KDE Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class KDEPlot
-  \brief
-
-  \ingroup worksheet
-  */
 #include "KDEPlot.h"
 #include "KDEPlotPrivate.h"
 #include "backend/core/column/Column.h"
@@ -37,6 +31,17 @@
 
 CURVE_COLUMN_CONNECT(KDEPlot, Data, data, recalc)
 
+/*!
+ * \class KDEPlot
+ * \brief This class implements the kernel density estimation plot - a visualization of the estimated probability density
+ * of one-dimensional numerical data.
+ *
+ * The estimation can be performed based on one of the supported kernels types (\sa nsl_kernel_type) and based on the
+ * different methods to define the bandwidth (\sa nsl_kde_bandwidth_type). A rug plot to visualize the provided data points
+ * can be enabled additionally to the the visualization of the curve for the estimated dencity.
+ *
+ * \ingroup CartesianPlots
+ */
 KDEPlot::KDEPlot(const QString& name)
 	: Plot(name, new KDEPlotPrivate(this), AspectType::KDEPlot) {
 	init();
@@ -100,6 +105,18 @@ void KDEPlot::init() {
 		Q_D(KDEPlot);
 		d->estimationCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 		d->rugCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
+	});
+
+	// propage the visual changes to the parent
+	connect(d->estimationCurve, &XYCurve::changed, this, &KDEPlot::changed);
+	connect(d->rugCurve, &XYCurve::changed, this, &KDEPlot::changed);
+
+	// synchronize the color of the data curve with the color of the rug curve (symbol color is used)
+	connect(d->estimationCurve->line(), &Line::colorChanged, [=](const QColor& color) {
+		auto* symbol = d->rugCurve->symbol();
+		symbol->setUndoAware(false);
+		symbol->setColor(color);
+		symbol->setUndoAware(true);
 	});
 }
 
@@ -269,7 +286,7 @@ void KDEPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(KDEPlot);
 	if (aspect == d->dataColumn) {
 		d->dataColumn = nullptr;
-		d->retransform();
+		d->recalc();
 		Q_EMIT dataChanged();
 		Q_EMIT changed();
 	}
@@ -551,7 +568,10 @@ void KDEPlot::loadThemeConfig(const KConfig& config) {
 
 	d->estimationCurve->line()->loadThemeConfig(group, themeColor);
 	d->estimationCurve->background()->loadThemeConfig(group, themeColor);
+
 	d->rugCurve->symbol()->loadThemeConfig(group, themeColor);
+	d->rugCurve->line()->setStyle(Qt::NoPen);
+	d->rugCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
 	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();

@@ -447,7 +447,7 @@ public Q_SLOTS:
 	void remove(QUndoCommand* parent);
 	void copy();
 	void duplicate();
-	void paste(bool duplicate = false);
+	void paste(bool duplicate = false, int index = -1);
 
 private Q_SLOTS:
 	void moveUp();

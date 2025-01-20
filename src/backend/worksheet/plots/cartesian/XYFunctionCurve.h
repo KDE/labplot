@@ -34,8 +34,6 @@ public:
 	// and is deleted during the cleanup in QGraphicsScene
 	virtual ~XYFunctionCurve() override = default;
 
-	void recalculate() override;
-
 	QIcon icon() const override;
 	inline static constexpr ConstLatin1String saveName = "xyFunctionCurve";
 	void save(QXmlStreamWriter*) const override;

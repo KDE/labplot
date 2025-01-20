@@ -4,6 +4,7 @@
 	Description          : Tests for Axis
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2022-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -40,8 +41,8 @@ void AxisTest::axisLine() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
@@ -137,8 +138,8 @@ void AxisTest::majorTicksAutoNumberEnableDisable() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
@@ -237,8 +238,8 @@ void AxisTest::minorTicksAutoNumberEnableDisable() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
@@ -302,8 +303,8 @@ void AxisTest::majorTicksStartValue() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
@@ -375,9 +376,8 @@ void AxisTest::TestSetCoordinateSystem() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	QVERIFY(p != nullptr);
-
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
@@ -415,10 +415,12 @@ void AxisTest::TestSetRange() {
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
+
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	QVERIFY(p != nullptr);
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	ws->addChild(p);
+
 	auto axes = p->children<Axis>();
 	QCOMPARE(axes.count(), 2);
 	auto xAxis = axes.at(0);
@@ -475,9 +477,8 @@ void AxisTest::TestAddingHorizontalAxis() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	QVERIFY(p != nullptr);
-
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	ws->addChild(p);
 
 	p->addHorizontalAxis(); // should not crash
@@ -490,9 +491,8 @@ void AxisTest::TestAddingVerticalAxis() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	QVERIFY(p != nullptr);
-
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	ws->addChild(p);
 
 	p->addVerticalAxis(); // should not crash
@@ -506,8 +506,8 @@ void AxisTest::tickLabelRepresentationAutomatic() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
@@ -570,8 +570,8 @@ void AxisTest::tickLabelRepresentationManual() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
@@ -828,8 +828,8 @@ void AxisTest::automaticTicNumberUpdateDockMajorTicks() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
@@ -869,8 +869,8 @@ void AxisTest::automaticTicNumberUpdateDockMinorTicks() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
@@ -902,6 +902,37 @@ void AxisTest::automaticTicNumberUpdateDockMinorTicks() {
 	QCOMPARE(yAxis->minorTicksNumber(), 1);
 	QCOMPARE(xAxis->minorTicksAutoNumber(), true);
 	QCOMPARE(dock.ui.sbMinorTicksNumber->value(), 1);
+}
+
+/*!
+ * checks the spacing of the ticks that is automatically calculated and set
+ * after the switch from "number" to "spacing" ticks type in the dock widget.
+ */
+void AxisTest::tickSpacingUpdateDockMajorTicks() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	QVERIFY(p != nullptr);
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	ws->addChild(p);
+
+	auto axes = p->children<Axis>();
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+
+	AxisDock dock(nullptr);
+	dock.setAxes({xAxis});
+	dock.ui.cbMajorTicksType->setCurrentIndex(dock.ui.cbMajorTicksType->findData((int)Axis::TicksType::Spacing));
+	dock.ui.cbMinorTicksType->setCurrentIndex(dock.ui.cbMinorTicksType->findData((int)Axis::TicksType::Spacing));
+
+	// initially, the spacing is not set (equal to zero) and after the switch to "spacing"
+	// it's adjusted to the current spacing determined by the total number of the ticks:
+	// * for major ticks, for the range 0-1 and the initial number of ticks is 6 and it corresponds to spacing = 0.2
+	// * for minor ticks, the spacing between the major ticks is 0.2 and the number of minor ticks is 1 which corresponds to spacing = 0.1
+	QCOMPARE(xAxis->majorTicksSpacing(), 0.2);
+	QCOMPARE(xAxis->minorTicksSpacing(), 0.1);
 }
 
 QTEST_MAIN(AxisTest)

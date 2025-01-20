@@ -4,6 +4,7 @@
 	Description          : DatapickerImage view for datapicker
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-FileCopyrightText: 2015-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -11,7 +12,8 @@
 #ifndef DATAPICKERIMAGEVIEW_H
 #define DATAPICKERIMAGEVIEW_H
 
-#include "frontend/worksheet/WorksheetView.h"
+#include "backend/worksheet/Worksheet.h"
+#include <QGraphicsView>
 
 class AbstractAspect;
 class DatapickerImage;
@@ -33,7 +35,7 @@ public:
 	~DatapickerImageView() override;
 
 	void setScene(QGraphicsScene*);
-	void exportToFile(const QString&, const WorksheetView::ExportFormat, const int);
+	bool exportToFile(const QString&, const Worksheet::ExportFormat, const int);
 
 private:
 	enum class MouseMode { Navigation, ZoomSelection, ReferencePointsEntry, CurvePointsEntry, CurveSegmentsEntry };

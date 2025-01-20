@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the reference range on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -21,9 +21,6 @@ ReferenceRangeDock::ReferenceRangeDock(QWidget* parent)
 	setBaseWidgets(ui.leName, ui.teComment);
 	setVisibilityWidgets(ui.chkVisible);
 
-	ui.cbOrientation->addItem(i18n("Horizontal"));
-	ui.cbOrientation->addItem(i18n("Vertical"));
-
 	// background
 	auto* layout = static_cast<QGridLayout*>(ui.tabGeneral->layout());
 	backgroundWidget = new BackgroundWidget(ui.tabGeneral);
@@ -32,6 +29,9 @@ ReferenceRangeDock::ReferenceRangeDock(QWidget* parent)
 	// border line
 	lineWidget = new LineWidget(ui.tabGeneral);
 	layout->addWidget(lineWidget, 15, 0, 1, 3);
+
+	updateLocale();
+	retranslateUi();
 
 	// SLOTS
 	// General
@@ -79,6 +79,14 @@ void ReferenceRangeDock::updateLocale() {
 	ui.sbPositionEnd->setLocale(numberLocale);
 
 	// TODO datetime
+}
+
+void ReferenceRangeDock::retranslateUi(){
+	CONDITIONAL_LOCK_RETURN;
+
+	ui.cbOrientation->clear();
+	ui.cbOrientation->addItem(i18n("Horizontal"));
+	ui.cbOrientation->addItem(i18n("Vertical"));
 }
 
 //**********************************************************

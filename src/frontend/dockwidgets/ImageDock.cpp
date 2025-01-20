@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for image properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -43,26 +43,6 @@ ImageDock::ImageDock(QWidget* parent)
 	ui.bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
 	ui.leFileName->setCompleter(new QCompleter(new QFileSystemModel, this));
 
-	// 	ui.cbSize->addItem(i18n("Original"));
-	// 	ui.cbSize->addItem(i18n("Custom"));
-
-	// Positioning and alignment
-	ui.cbPositionX->addItem(i18n("Left"));
-	ui.cbPositionX->addItem(i18n("Center"));
-	ui.cbPositionX->addItem(i18n("Right"));
-
-	ui.cbPositionY->addItem(i18n("Top"));
-	ui.cbPositionY->addItem(i18n("Center"));
-	ui.cbPositionY->addItem(i18n("Bottom"));
-
-	ui.cbHorizontalAlignment->addItem(i18n("Left"));
-	ui.cbHorizontalAlignment->addItem(i18n("Center"));
-	ui.cbHorizontalAlignment->addItem(i18n("Right"));
-
-	ui.cbVerticalAlignment->addItem(i18n("Top"));
-	ui.cbVerticalAlignment->addItem(i18n("Center"));
-	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
-
 	auto* layout = static_cast<QHBoxLayout*>(ui.tabBorder->layout());
 	borderLineWidget = new LineWidget(ui.tabBorder);
 	layout->insertWidget(0, borderLineWidget);
@@ -78,7 +58,8 @@ ImageDock::ImageDock(QWidget* parent)
 	ui.sbPositionX->setSuffix(suffix);
 	ui.sbPositionY->setSuffix(suffix);
 
-	ImageDock::updateLocale();
+	updateLocale();
+	retranslateUi();
 
 	// SLOTs
 	// General
@@ -148,18 +129,6 @@ void ImageDock::setImages(QList<Image*> list) {
 	connect(m_image, &Image::rotationAngleChanged, this, &ImageDock::imageRotationAngleChanged);
 }
 
-/*
- * updates the locale in the widgets. called when the application settins are changed.
- */
-void ImageDock::updateLocale() {
-	const auto numberLocale = QLocale();
-	ui.sbWidth->setLocale(numberLocale);
-	ui.sbHeight->setLocale(numberLocale);
-	ui.sbPositionX->setLocale(numberLocale);
-	ui.sbPositionY->setLocale(numberLocale);
-	borderLineWidget->updateLocale();
-}
-
 void ImageDock::updateUnits() {
 	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
@@ -191,6 +160,43 @@ void ImageDock::updateUnits() {
 	ui.sbHeight->setSuffix(suffix);
 	ui.sbPositionX->setSuffix(suffix);
 	ui.sbPositionY->setSuffix(suffix);
+}
+
+/*
+ * updates the locale in the widgets. called when the application settins are changed.
+ */
+void ImageDock::updateLocale() {
+	const auto numberLocale = QLocale();
+	ui.sbWidth->setLocale(numberLocale);
+	ui.sbHeight->setLocale(numberLocale);
+	ui.sbPositionX->setLocale(numberLocale);
+	ui.sbPositionY->setLocale(numberLocale);
+	borderLineWidget->updateLocale();
+}
+
+void ImageDock::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
+
+	// Positioning and alignment
+	ui.cbPositionX->clear();
+	ui.cbPositionX->addItem(i18n("Left"));
+	ui.cbPositionX->addItem(i18n("Center"));
+	ui.cbPositionX->addItem(i18n("Right"));
+
+	ui.cbPositionY->clear();
+	ui.cbPositionY->addItem(i18n("Top"));
+	ui.cbPositionY->addItem(i18n("Center"));
+	ui.cbPositionY->addItem(i18n("Bottom"));
+
+	ui.cbHorizontalAlignment->clear();
+	ui.cbHorizontalAlignment->addItem(i18n("Left"));
+	ui.cbHorizontalAlignment->addItem(i18n("Center"));
+	ui.cbHorizontalAlignment->addItem(i18n("Right"));
+
+	ui.cbVerticalAlignment->clear();
+	ui.cbVerticalAlignment->addItem(i18n("Top"));
+	ui.cbVerticalAlignment->addItem(i18n("Center"));
+	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
 }
 
 //*************************************************************

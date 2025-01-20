@@ -48,6 +48,8 @@
   by AbstractAspect (managing the list of columns, notification of column insertion/removal)
   and Column (changing and monitoring state of the actual data).
 
+  Spreadsheet is a data container for related columns to be treated as a single entity.
+
   Spreadsheet stores a pointer to its primary view of class SpreadsheetView. SpreadsheetView calls the Spreadsheet
   API but Spreadsheet only notifies SpreadsheetView by signals without calling its API directly. This ensures a
   maximum independence of UI and backend. SpreadsheetView can be easily replaced by a different class.
@@ -60,6 +62,13 @@
   \ingroup backend
 */
 
+/*!
+ * @brief Constructor.
+ *
+ * Constructs a Spreadsheet with default 2 columns each with 100 rows.
+ *
+ * @param name The Spreadsheet name.
+ */
 Spreadsheet::Spreadsheet(const QString& name, bool loading, AspectType type)
 	: AbstractDataSource(name, type)
 	, d_ptr(new SpreadsheetPrivate(this)) {
@@ -67,6 +76,11 @@ Spreadsheet::Spreadsheet(const QString& name, bool loading, AspectType type)
 		init();
 }
 
+/*!
+ * @brief Destructor.
+ *
+ * Destroys the Spreadsheet and its child columns.
+ */
 Spreadsheet::~Spreadsheet() {
 	delete m_model;
 	delete d_ptr;
@@ -156,6 +170,12 @@ bool Spreadsheet::printPreview() const {
 #endif
 }
 
+/*!
+ * Returns a pointer to the StatisticsSpreadsheet for the current Spreadsheet if exists or nullptr.
+ * @see StatisticsSpreadsheet()
+ * @see toggleStatisticsSpreadsheet(bool)
+ * @return StatisticsSpreadsheet* or nullptr
+ */
 StatisticsSpreadsheet* Spreadsheet::statisticsSpreadsheet() const {
 	Q_D(const Spreadsheet);
 	return d->statisticsSpreadsheet;
@@ -184,13 +204,17 @@ void Spreadsheet::updateHorizontalHeader() {
 #endif
 }
 
+/*!
+ * Updates locale for all columns from QLocale.
+ */
 void Spreadsheet::updateLocale() {
 	for (auto* col : children<Column>())
 		col->updateLocale();
 }
 
 /*!
-  Returns the maximum number of rows in the spreadsheet.
+ * Returns the number of rows in the \c Spreadsheet.
+ * @return The number of rows in the \c Spreadsheet.
  */
 int Spreadsheet::rowCount() const {
 	int result = 0;
@@ -256,6 +280,11 @@ private:
 	int m_last;
 };
 
+/*!
+ * Removes \c count rows starting from the \c first row index in the spreadsheet.
+ * @param count The number of rows to remove.
+ * @param first The row index to start removing rows from.
+ */
 void Spreadsheet::removeRows(int first, int count, QUndoCommand* parent) {
 	if (count < 1 || first < 0 || first + count > rowCount())
 		return;
@@ -269,6 +298,11 @@ void Spreadsheet::removeRows(int first, int count, QUndoCommand* parent) {
 		exec(command);
 }
 
+/*!
+ * Inserts \c count rows before the \c before row index in the spreadsheet.
+ * @param count The number of rows to insert.
+ * @param before The row index before which the rows are inserted.
+ */
 void Spreadsheet::insertRows(int before, int count, QUndoCommand* parent) {
 	if (count < 1 || before < 0 || before > rowCount())
 		return;
@@ -282,16 +316,23 @@ void Spreadsheet::insertRows(int before, int count, QUndoCommand* parent) {
 		exec(command);
 }
 
+/*!
+ * Inserts \c count rows before the last row index in the spreadsheet.
+ * @param count The number of rows to insert.
+ */
 void Spreadsheet::appendRows(int count) {
 	insertRows(rowCount(), count);
 }
 
+/*!
+ * Inserts a row before the last row index in the spreadsheet.
+ */
 void Spreadsheet::appendRow() {
 	insertRows(rowCount(), 1);
 }
 
 /*!
- * removes all rows in the spreadsheet if the value in one of the columns is missing/empty.
+ * Removes all rows in the spreadsheet in which the value of one or more of its columns is missing/empty.
  */
 void Spreadsheet::removeEmptyRows() {
 	const auto& rows = rowsWithMissingValues();
@@ -309,7 +350,7 @@ void Spreadsheet::removeEmptyRows() {
 }
 
 /*!
- * masks all rows in the spreadsheet if the value in one of the columns is missing/empty.
+ * Masks all rows in the spreadsheet in which the value of one or more of its columns is missing/empty.
  */
 void Spreadsheet::maskEmptyRows() {
 	const auto& rows = rowsWithMissingValues();
@@ -347,21 +388,33 @@ QVector<int> Spreadsheet::rowsWithMissingValues() const {
 	return rows;
 }
 
+/*!
+ * Inserts \c count columns before the last column index in the spreadsheet.
+ * @param count The number of columns to insert.
+ */
 void Spreadsheet::appendColumns(int count) {
 	insertColumns(columnCount(), count);
 }
 
+/*!
+ * Inserts a column before the last column index in the spreadsheet.
+ */
 void Spreadsheet::appendColumn() {
 	insertColumns(columnCount(), 1);
 }
 
+/*!
+ * Inserts \c count columns before the first column index in the spreadsheet.
+ * @param count The number of columns to insert.
+ */
 void Spreadsheet::prependColumns(int count) {
 	insertColumns(0, count);
 }
 
 /*!
-  Sets the number of rows of the spreadsheet to \c new_size
-*/
+ * Grows/shrinks the number of rows in the spreadsheet to \c new_size.
+ * @param new_size The new number of rows in the spreadsheet.
+ */
 void Spreadsheet::setRowCount(int new_size, QUndoCommand* parent) {
 	int current_size = rowCount();
 	if (new_size > current_size)
@@ -463,29 +516,35 @@ QString Spreadsheet::linkedSpreadsheetPath() const {
 }
 
 /*!
-  Returns the column with the number \c index.
-  Shallow wrapper around \sa AbstractAspect::child() - see there for caveat.
-*/
+ * Returns the \c Column at the index \c index.
+ * @param index The zero-based index of the \c Column.
+ * @return The \c Column at the index \c index.
+ */
 Column* Spreadsheet::column(int index) const {
 	return child<Column>(index);
 }
 
 /*!
-  Returns the column with the name \c name.
-*/
+ * Returns a pointer to the \c Column with the name \c name.
+ * @param name The \c Column name.
+ * @return Pointer to the \c Column with the name \c name.
+ */
 Column* Spreadsheet::column(const QString& name) const {
 	return child<Column>(name);
 }
 
 /*!
-  Returns the total number of columns in the spreadsheet.
-*/
+ * Returns the number of columns in the Spreadsheet.
+ * @return The number of columns in the Spreadsheet.
+ */
 int Spreadsheet::columnCount() const {
 	return childCount<Column>();
 }
 
 /*!
-  Returns the number of columns matching the given designation.
+ * Returns the number of columns in the \c Spreadsheet matching the plot designation.
+ * @param pd The plot designation the columns are matched against.
+ * @return The number of columns in the \c Spreadsheet matching the passed plot designation.
  */
 int Spreadsheet::columnCount(AbstractColumn::PlotDesignation pd) const {
 	int count = 0;
@@ -549,6 +608,11 @@ private:
 	int m_last;
 };
 
+/*!
+ * Removes \c count columns starting from the \c first column index in the spreadsheet.
+ * @param count The number of columns to remove.
+ * @param first The column index to start removing column from.
+ */
 void Spreadsheet::removeColumns(int first, int count, QUndoCommand* parent) {
 	if (count < 1 || first < 0 || first + count > columnCount())
 		return;
@@ -568,6 +632,11 @@ void Spreadsheet::removeColumns(int first, int count, QUndoCommand* parent) {
 		exec(command);
 }
 
+/*!
+ * Inserts \c count columns before the \c before column index in the spreadsheet.
+ * @param count The number of columns to insert.
+ * @param before The column index before which the columns are inserted.
+ */
 void Spreadsheet::insertColumns(int before, int count, QUndoCommand* parent) {
 	auto* command = new SpreadsheetSetColumnsCountCmd(this, true, before, count, parent);
 	bool execute = false;
@@ -589,8 +658,9 @@ void Spreadsheet::insertColumns(int before, int count, QUndoCommand* parent) {
 }
 
 /*!
-  Sets the number of columns to \c new_size
-*/
+ * Grows/shrinks the number of columns in the spreadsheet to \c new_size.
+ * @param new_size The new number of columns in the spreadsheet.
+ */
 void Spreadsheet::setColumnCount(int new_size, QUndoCommand* parent) {
 	int old_size = columnCount();
 	if (old_size == new_size || new_size < 0)
@@ -603,8 +673,8 @@ void Spreadsheet::setColumnCount(int new_size, QUndoCommand* parent) {
 }
 
 /*!
-  Clears the whole spreadsheet.
-*/
+ * Clears all values in the spreadsheet.
+ */
 void Spreadsheet::clear() {
 	WAIT_CURSOR;
 	beginMacro(i18n("%1: clear", name()));
@@ -614,6 +684,10 @@ void Spreadsheet::clear() {
 	RESET_CURSOR;
 }
 
+/*!
+ * Clears all values in the specified \c columns.
+ * @param columns The columns in the spreadsheet to clear.
+ */
 void Spreadsheet::clear(const QVector<Column*>& columns) {
 	auto* parent = new LongExecutionCmd(i18n("%1: clear selected columns", name()));
 
@@ -635,8 +709,8 @@ void Spreadsheet::clear(const QVector<Column*>& columns) {
 }
 
 /*!
-  Clears all mask in the spreadsheet.
-*/
+ * Clears all masks in the spreadsheet.
+ */
 void Spreadsheet::clearMasks() {
 	WAIT_CURSOR;
 	beginMacro(i18n("%1: clear all masks", name()));
@@ -676,6 +750,11 @@ void Spreadsheet::fillColumnContextMenu(QMenu* menu, Column* column) {
 #endif
 }
 
+/*!
+ * Move column at \c from index to \c to index.
+ * @param from The current index of the column.
+ * @param to The future index of the column.
+ */
 void Spreadsheet::moveColumn(int from, int to) {
 	const auto& columns = children<Column>();
 	auto* col = columns.at(from);
@@ -685,57 +764,10 @@ void Spreadsheet::moveColumn(int from, int to) {
 	endMacro();
 }
 
-// FIXME: replace index-based API with Column*-based one
 /*!
-  Determines the corresponding X column.
-*/
-int Spreadsheet::colX(int col) {
-	for (int i = col - 1; i >= 0; i--) {
-		if (column(i)->plotDesignation() == AbstractColumn::PlotDesignation::X)
-			return i;
-	}
-	int cols = columnCount();
-	for (int i = col + 1; i < cols; i++) {
-		if (column(i)->plotDesignation() == AbstractColumn::PlotDesignation::X)
-			return i;
-	}
-	return -1;
-}
-
-/*!
-  Determines the corresponding Y column.
-*/
-int Spreadsheet::colY(int col) {
-	int cols = columnCount();
-
-	if (column(col)->plotDesignation() == AbstractColumn::PlotDesignation::XError
-		|| column(col)->plotDesignation() == AbstractColumn::PlotDesignation::YError) {
-		// look to the left first
-		for (int i = col - 1; i >= 0; i--) {
-			if (column(i)->plotDesignation() == AbstractColumn::PlotDesignation::Y)
-				return i;
-		}
-		for (int i = col + 1; i < cols; i++) {
-			if (column(i)->plotDesignation() == AbstractColumn::PlotDesignation::Y)
-				return i;
-		}
-	} else {
-		// look to the right first
-		for (int i = col + 1; i < cols; i++) {
-			if (column(i)->plotDesignation() == AbstractColumn::PlotDesignation::Y)
-				return i;
-		}
-		for (int i = col - 1; i >= 0; i--) {
-			if (column(i)->plotDesignation() == AbstractColumn::PlotDesignation::Y)
-				return i;
-		}
-	}
-	return -1;
-}
-
-/*! Sorts the given list of column.
-  If 'leading' is a null pointer, each column is sorted separately.
-*/
+ * Clears all values in the specified columns.
+ * @param cols The columns in the spreadsheet to clear.
+ */
 void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, bool ascending) {
 	DEBUG(Q_FUNC_INFO << ", ascending = " << ascending)
 	if (cols.isEmpty())
@@ -1106,8 +1138,11 @@ QIcon Spreadsheet::icon() const {
 }
 
 /*!
-  Returns the text displayed in the given cell.
-*/
+ * Returns a text representation of the data in cell at \c row index and \c col index.
+ * @param row The cell row.
+ * @param col The cell column.
+ * @return Text representation of the data in cell.
+ */
 QString Spreadsheet::text(int row, int col) const {
 	Column* c = column(col);
 	if (!c)
@@ -1184,6 +1219,10 @@ QVector<AspectType> Spreadsheet::dropableOn() const {
 	return vec;
 }
 
+/*!
+ * Toggles the StatisticsSpreadsheet for the current spreadsheet.
+ * @param on Enable/disable the StatisticsSpreadsheet if true/false.
+ */
 void Spreadsheet::toggleStatisticsSpreadsheet(bool on) {
 	Q_D(Spreadsheet);
 	if (on) {

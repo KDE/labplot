@@ -3,14 +3,14 @@
 	Project              : LabPlot
 	Description          : export worksheet dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef EXPORTWORKSHEETDIALOG_H
 #define EXPORTWORKSHEETDIALOG_H
 
-#include "frontend/worksheet/WorksheetView.h"
+#include "backend/worksheet/Worksheet.h"
 #include <QDialog>
 
 namespace Ui {
@@ -30,8 +30,8 @@ public:
 	QString path() const;
 	void setProjectFileName(const QString&);
 	void setFileName(const QString&);
-	WorksheetView::ExportFormat exportFormat() const;
-	WorksheetView::ExportArea exportArea() const;
+	Worksheet::ExportFormat exportFormat() const;
+	Worksheet::ExportArea exportArea() const;
 	bool exportBackground() const;
 	int exportResolution() const;
 

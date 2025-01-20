@@ -11,11 +11,11 @@
 #ifndef XYCURVE_H
 #define XYCURVE_H
 
-#include "Plot.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
+#include "backend/worksheet/plots/cartesian/Plot.h"
+
 #include <QFont>
 
-class AbstractColumn;
 class Background;
 class Line;
 class Symbol;
@@ -124,7 +124,9 @@ public:
 
 	void retransform() override;
 	void recalc() override;
+	void enableLineOptimization(bool);
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	void updateLocale() override;
 	double y(double x, double& x_new, bool& valueFound) const;
 	int getNextValue(double xpos, int index, double& x, double& y, bool& valueFound) const;
 

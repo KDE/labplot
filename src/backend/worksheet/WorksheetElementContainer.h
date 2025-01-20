@@ -16,7 +16,12 @@
 class WorksheetElementContainerPrivate;
 class ResizeItem;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT WorksheetElementContainer : public WorksheetElement {
+#else
 class WorksheetElementContainer : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:

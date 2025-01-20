@@ -12,7 +12,6 @@
 
 #include "Plot.h"
 
-class AbstractColumn;
 class Line;
 class ProcessBehaviorChartPrivate;
 class Symbol;

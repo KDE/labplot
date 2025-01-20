@@ -12,18 +12,13 @@
 
 #include "TextLabel.h"
 #include "TextLabelPrivate.h"
-#include "Worksheet.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
-#include "backend/worksheet/plots/PlotArea.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "frontend/GuiTools.h"
 
-#include <QApplication>
 #include <QBuffer>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
@@ -38,7 +33,6 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <QIcon>
 
 #ifdef HAVE_DISCOUNT
 extern "C" {
@@ -85,7 +79,7 @@ private:
 
 /**
  * \class TextLabel
- * \brief A label supporting rendering of html- and tex-formatted texts.
+ * \brief A label supporting rendering of HTML, Markdown and LaTeX formatted texts.
  *
  * The label is aligned relative to the specified position.
  * The position can be either specified by providing the x- and y- coordinates
@@ -298,7 +292,7 @@ void TextLabel::setText(const TextWrapper& textWrapper) {
 				QTextEdit te;
 				te.setHtml(textWrapper.text);
 				te.selectAll();
-				if (textWrapper.text.indexOf(QStringLiteral("background-color:#")) != -1) {
+				if (textWrapper.text.indexOf(QStringLiteral("background-color:")) != -1) {
 					const auto& bgColor = te.textBackgroundColor();
 					if (bgColor != d->backgroundColor) {
 						parent = new QUndoCommand(ki18n("%1: set label text").subs(name()).toString());
@@ -674,10 +668,10 @@ void TextLabelPrivate::updateBoundingRect() {
 	}
 
 	// DEBUG(Q_FUNC_INFO << ", scale factor = " << scaleFactor << ", w/h = " << w << " / " << h)
-	m_boundingRectangle.setX(-w / 2);
-	m_boundingRectangle.setY(-h / 2);
-	m_boundingRectangle.setWidth(w);
-	m_boundingRectangle.setHeight(h);
+	boundingRectangleText.setX(-w / 2);
+	boundingRectangleText.setY(-h / 2);
+	boundingRectangleText.setWidth(w);
+	boundingRectangleText.setHeight(h);
 
 	updatePosition();
 	updateBorder();
@@ -703,7 +697,7 @@ void TextLabelPrivate::updateBorder() {
 	using GluePoint = TextLabel::GluePoint;
 
 	borderShapePath = QPainterPath();
-	const auto& br = m_boundingRectangle;
+	const auto& br = boundingRectangleText;
 	switch (borderShape) {
 	case (TextLabel::BorderShape::NoBorder): {
 		m_gluePoints.clear();
@@ -964,8 +958,10 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 	if (borderShape != TextLabel::BorderShape::NoBorder) {
 		labelShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderPen));
 		m_boundingRectangle = labelShape.boundingRect();
-	} else
-		labelShape.addRect(m_boundingRectangle);
+	} else {
+		labelShape.addRect(boundingRectangleText);
+		m_boundingRectangle = boundingRectangleText;
+	}
 
 	Q_EMIT q->changed();
 }

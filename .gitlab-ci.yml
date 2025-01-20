@@ -34,6 +34,67 @@ include:
 #      - /gitlab-templates/craft-windows-mingw64.yml
 #      - /gitlab-templates/craft-windows-mingw64-qt6.yml
 
+freebsd14_qt68:
+  only: []
+
+freebsd14_qt68_t:
+  extends: freebsd14_qt68
+  script:
+    - !reference [freebsd14_qt68, script]
+    - mkdir -p build_examples && cd build_examples
+    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
+    - ninja
+  only:
+    - branches
+    - tags
+    - pushes
+    - merge_requests
+    - pipelines
+    - schedules
+    - triggers
+    - web
+
+suse_tumbleweed_qt68:
+  only: []
+
+suse_tumbleweed_qt68_t:
+  extends: suse_tumbleweed_qt68
+  script:
+    - !reference [suse_tumbleweed_qt68, script]
+    - mkdir -p build_examples && cd build_examples
+    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
+    - ninja
+  only:
+    - branches
+    - tags
+    - pushes
+    - merge_requests
+    - pipelines
+    - schedules
+    - triggers
+    - web
+
+windows_qt68:
+  only: []
+
+windows_qt68_t:
+  extends: windows_qt68
+  script:
+    - !reference [windows_qt68, script]
+    - mkdir -p build_examples && cd build_examples
+    - $env:Path = 'C:\Craft\windows-msvc2022_64-cl\bin;C:\Craft\windows-msvc2022_64-cl\lib;C:\Craft\windows-msvc2022_64-cl\dev-utils\bin;' + $env:Path
+    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
+    - ninja
+  only:
+    - branches
+    - tags
+    - pushes
+    - merge_requests
+    - pipelines
+    - schedules
+    - triggers
+    - web
+
 #craft_appimage_qt515_x86_64:
 #  rules:
 #    - if: '$CI_COMMIT_REF_NAME == "master"'

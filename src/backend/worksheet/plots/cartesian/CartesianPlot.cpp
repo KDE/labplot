@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Cartesian plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2017-2018 Garvit Khatri <garvitdelhi@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -17,15 +17,12 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
@@ -46,8 +43,6 @@
 #include <QMenu>
 #include <QPainter>
 #include <QWidgetAction>
-
-using Dimension = CartesianCoordinateSystem::Dimension;
 
 namespace {
 enum Action {
@@ -105,7 +100,11 @@ Action evaluateKeys(int key, Qt::KeyboardModifiers) {
 
 /**
  * \class CartesianPlot
- * \brief A xy-plot.
+ * \brief This class implements the cartesian plot and the actual plot area that is visualized on the \c Worksheet.
+ *
+ * The definition of the cartesian coordinate systems as well as of the to be plotted data ranges is done in this class.
+ *
+ * \ingroup CartesianPlotArea
  */
 CartesianPlot::CartesianPlot(const QString& name, bool loading)
 	: AbstractPlot(name, new CartesianPlotPrivate(this), AspectType::CartesianPlot) {
@@ -788,7 +787,7 @@ QMenu* CartesianPlot::createContextMenu() {
 
 	if (children<XYCurve>().isEmpty()) {
 		addInfoElementAction->setEnabled(false);
-		addInfoElementAction->setToolTip(QStringLiteral("No curve inside plot."));
+		addInfoElementAction->setToolTip(i18n("No curves inside the plot area."));
 	} else {
 		addInfoElementAction->setEnabled(true);
 		addInfoElementAction->setToolTip(QString());
@@ -834,6 +833,7 @@ QVector<AbstractAspect*> CartesianPlot::dependsOn() const {
 	// aspects which the plotted data in the worksheet depends on (spreadsheets and later matrices)
 	QVector<AbstractAspect*> aspects;
 
+	// TODO: handle other plot types
 	for (const auto* curve : children<XYCurve>()) {
 		if (curve->xColumn() && curve->xColumn()->parentAspect()->type() == AspectType::Spreadsheet)
 			aspects << curve->xColumn()->parentAspect();
@@ -853,6 +853,8 @@ QVector<AspectType> CartesianPlot::pasteTypes() const {
 							  AspectType::BoxPlot,
 							  AspectType::KDEPlot,
 							  AspectType::QQPlot,
+							  AspectType::RunChart,
+							  AspectType::ProcessBehaviorChart,
 							  AspectType::Axis,
 							  AspectType::XYEquationCurve,
 							  AspectType::XYFunctionCurve,

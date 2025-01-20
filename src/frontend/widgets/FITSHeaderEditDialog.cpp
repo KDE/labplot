@@ -16,6 +16,7 @@
 #include <QVBoxLayout>
 #include <QWindow>
 
+#include <KLocalizedString>
 #include <KWindowConfig>
 
 /*! \class FITSHeaderEditDialog

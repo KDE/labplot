@@ -14,7 +14,9 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#ifndef SDK
 #include "frontend/note/NoteView.h"
+#endif
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -62,6 +64,7 @@ QIcon Note::icon() const {
 }
 
 bool Note::printView() {
+#ifndef SDK
 	QPrinter printer;
 	auto* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18nc("@title:window", "Print Note"));
@@ -71,12 +74,19 @@ bool Note::printView() {
 
 	delete dlg;
 	return ret;
+#else
+	return false;
+#endif
 }
 
 bool Note::printPreview() const {
+#ifndef SDK
 	auto* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &NoteView::print);
 	return dlg->exec();
+#else
+	return false;
+#endif
 }
 
 bool Note::exportView() const {
@@ -146,11 +156,15 @@ void Note::setTextFont(const QFont& font) {
 }
 
 QWidget* Note::view() const {
+#ifndef SDK
 	if (!m_partView) {
 		m_view = new NoteView(const_cast<Note*>(this));
 		m_partView = m_view;
 	}
 	return m_partView;
+#else
+	return nullptr;
+#endif
 }
 
 // ##############################################################################

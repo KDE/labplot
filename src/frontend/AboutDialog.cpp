@@ -9,11 +9,12 @@
 */
 
 #include "AboutDialog.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
 
 #include <KLocalizedString>
 #include <KTitleWidget>
-#include <kxmlgui_version.h>
+#include <KWindowConfig>
 
 #include <QClipboard>
 #include <QDesktopServices>
@@ -27,6 +28,7 @@
 #include <QStandardPaths>
 #include <QTabWidget>
 #include <QTextDocumentFragment>
+#include <QWindow>
 
 #ifdef HAVE_POPPLER
 #include <poppler-version.h>
@@ -70,7 +72,7 @@
 	\class AboutDialog
 	\brief Custom about dialog (not used at the moment)
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 //AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : QDialog(parent), aboutData(aboutData) {
 AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutApplicationDialog(aboutData, parent) {
@@ -103,6 +105,21 @@ AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutA
 
 	// when deriving from QDialog
 	//init();
+
+	// restore saved settings if available
+	create(); // ensure there's a window created
+	const KConfigGroup conf = Settings::group(QStringLiteral("AboutDialog"));
+	if (conf.exists()) {
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
+		resize(QSize(400, 600).expandedTo(minimumSize()));
+}
+
+AboutDialog::~AboutDialog() {
+	// save current window size
+	KConfigGroup conf = Settings::group(QStringLiteral("AboutDialog"));
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
 /*
@@ -156,7 +173,12 @@ QVector<QStringList> AboutDialog::components() {
 	QVector<QStringList> components;
 
 	// compiler info
-	components << (QStringList() << i18n("C++ Compiler: ") + QLatin1String(CXX_COMPILER) << i18n("C++ Compiler Flags: ") + QLatin1String(CXX_COMPILER_FLAGS) << QString() << QString());
+	components << (QStringList() << i18n("C++ Compiler: ") + QLatin1String(CXX_COMPILER) << QString() << QString() << QString());
+
+	// compiler flags
+	auto flags = QString::fromLatin1(CXX_COMPILER_FLAGS);
+	flags.replace(QLatin1String(" -"), QStringLiteral("\n-")); // add line breaks to avoid too long window width
+	components << (QStringList() << i18n("C++ Compiler Flags:") << flags << QString() << QString());
 
 	// alphabetically
 #ifdef HAVE_CANTOR_LIBS

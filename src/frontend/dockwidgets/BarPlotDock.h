@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the bar plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -30,6 +30,7 @@ public:
 	explicit BarPlotDock(QWidget*);
 	void setBarPlots(QList<BarPlot*>);
 	void updateLocale() override;
+	void retranslateUi() override;
 
 private:
 	Ui::BarPlotDock ui;
@@ -54,7 +55,6 @@ private:
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in BarPlotDock
-
 	//"General"-tab
 	void xColumnChanged(const QModelIndex&);
 	void removeXColumn();

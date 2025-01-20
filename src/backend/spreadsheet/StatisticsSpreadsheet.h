@@ -12,7 +12,12 @@
 
 #include "backend/spreadsheet/Spreadsheet.h"
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT StatisticsSpreadsheet : public Spreadsheet {
+#else
 class StatisticsSpreadsheet : public Spreadsheet {
+#endif
 	Q_OBJECT
 
 public:

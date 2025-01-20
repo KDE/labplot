@@ -387,7 +387,7 @@ void XYFitCurveDock::checkDataColumns() {
 }
 
 //*************************************************************
-//**** SLOTs for changes triggered in XYFitCurveDock *****
+//******* SLOTs for changes triggered in XYFitCurveDock *******
 //*************************************************************
 void XYFitCurveDock::dataSourceTypeChanged(int index) {
 	DEBUG(Q_FUNC_INFO << ", m_initializing = " << m_initializing)
@@ -1078,6 +1078,14 @@ void XYFitCurveDock::showFunctions() {
 	menu.exec(uiGeneralTab.tbFunctions->mapToGlobal(pos));
 }
 
+void XYFitCurveDock::insertFunction(const QString& functionName) const {
+	uiGeneralTab.teEquation->insertPlainText(functionName + ExpressionParser::functionArgumentString(functionName, XYEquationCurve::EquationType::Cartesian));
+}
+
+void XYFitCurveDock::insertConstant(const QString& constantsName) const {
+	uiGeneralTab.teEquation->insertPlainText(constantsName);
+}
+
 void XYFitCurveDock::algorithmChanged(int index) {
 	m_fitData.algorithm = (nsl_fit_algorithm)index;
 
@@ -1160,14 +1168,6 @@ void XYFitCurveDock::showOptions() {
 
 	QPoint pos(-menu.sizeHint().width() + uiGeneralTab.pbOptions->width(), 0);
 	menu.exec(uiGeneralTab.pbOptions->mapToGlobal(pos));
-}
-
-void XYFitCurveDock::insertFunction(const QString& functionName) const {
-	uiGeneralTab.teEquation->insertPlainText(functionName + ExpressionParser::functionArgumentString(functionName, XYEquationCurve::EquationType::Cartesian));
-}
-
-void XYFitCurveDock::insertConstant(const QString& constantsName) const {
-	uiGeneralTab.teEquation->insertPlainText(constantsName);
 }
 
 /*!

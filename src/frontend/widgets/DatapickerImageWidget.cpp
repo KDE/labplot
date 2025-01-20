@@ -4,7 +4,7 @@
 	Description          : widget for datapicker properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015-2016 Ankit Wagadre <wagadre.ankit@gmail.com>
-	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -21,13 +21,9 @@
 #include <KLocalizedString>
 
 #include <QCompleter>
-#include <QDir>
 #include <QFileSystemModel>
 #include <QGraphicsScene>
-#include <QPainter>
 #include <QStandardPaths>
-
-#include <cmath>
 
 HistogramView::HistogramView(QWidget* parent, int range)
 	: QGraphicsView(parent)
@@ -80,7 +76,7 @@ void HistogramView::drawBackground(QPainter* painter, const QRectF& rect) {
 		return;
 
 	painter->save();
-	painter->setRenderHint(QPainter::Antialiasing, true);
+	painter->setRenderHint(QPainter::Antialiasing);
 	int max = 1;
 	for (int i = 0; i <= m_range; i++)
 		if (bins[i] > max)
@@ -128,41 +124,24 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 	editTabLayout->setVerticalSpacing(4);
 
 	ssHue = new SpanSlider(Qt::Horizontal, ui.tEdit);
-	ssHue->setToolTip(i18n("Select the range for the hue.\nEverything outside of this range will be set to white."));
 	ssHue->setRange(0, 360);
 	editTabLayout->addWidget(ssHue, 3, 2);
 
 	ssSaturation = new SpanSlider(Qt::Horizontal, ui.tEdit);
-	ssSaturation->setToolTip(i18n("Select the range for the saturation.\nEverything outside of this range will be set to white."));
 	ssSaturation->setRange(0, 100);
 	editTabLayout->addWidget(ssSaturation, 5, 2);
 
 	ssValue = new SpanSlider(Qt::Horizontal, ui.tEdit);
-	ssValue->setToolTip(i18n("Select the range for the value, the degree of lightness of the color.\nEverything outside of this range will be set to white."));
 	ssValue->setRange(0, 100);
 	editTabLayout->addWidget(ssValue, 7, 2);
 
 	ssIntensity = new SpanSlider(Qt::Horizontal, ui.tEdit);
-	ssIntensity->setToolTip(i18n("Select the range for the intensity.\nEverything outside of this range will be set to white."));
 	ssIntensity->setRange(0, 100);
 	editTabLayout->addWidget(ssIntensity, 9, 2);
 
 	ssForeground = new SpanSlider(Qt::Horizontal, ui.tEdit);
-	ssForeground->setToolTip(
-		i18n("Select the range for the colors that are not part of the background color.\nEverything outside of this range will be set to white."));
 	ssForeground->setRange(0, 100);
 	editTabLayout->addWidget(ssForeground, 11, 2);
-
-	ui.cbGraphType->addItem(i18n("Cartesian (x, y)"), (int)DatapickerImage::GraphType::Linear);
-	ui.cbGraphType->addItem(i18n("Polar (x, y°)"), (int)DatapickerImage::GraphType::PolarInDegree);
-	ui.cbGraphType->addItem(i18n("Polar (x, y(rad))"), (int)DatapickerImage::GraphType::PolarInRadians);
-	ui.cbGraphType->addItem(i18n("Logarithmic (ln(x), ln(y))"), (int)DatapickerImage::GraphType::LnXY);
-	ui.cbGraphType->addItem(i18n("Logarithmic (ln(x), y)"), (int)DatapickerImage::GraphType::LnX);
-	ui.cbGraphType->addItem(i18n("Logarithmic (x, ln(y))"), (int)DatapickerImage::GraphType::LnY);
-	ui.cbGraphType->addItem(i18n("Logarithmic (log(x), log(y))"), (int)DatapickerImage::GraphType::Log10XY);
-	ui.cbGraphType->addItem(i18n("Logarithmic (log(x), y)"), (int)DatapickerImage::GraphType::Log10X);
-	ui.cbGraphType->addItem(i18n("Logarithmic (x, log(y))"), (int)DatapickerImage::GraphType::Log10Y);
-	ui.cbGraphType->addItem(i18n("Ternary (x, y, z)"), (int)DatapickerImage::GraphType::Ternary);
 
 	ui.lTernaryScale->setHidden(true);
 	ui.sbTernaryScale->setHidden(true);
@@ -173,41 +152,32 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 	ui.sbPositionZ2->setHidden(true);
 	ui.sbPositionZ3->setHidden(true);
 
-	ui.cbPlotImageType->addItem(i18n("No Image"));
-	ui.cbPlotImageType->addItem(i18n("Original Image"));
-	ui.cbPlotImageType->addItem(i18n("Processed Image"));
-
 	QString valueFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("pics/colorchooser/colorchooser_value.xpm"));
 	QString hueFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("pics/colorchooser/colorchooser_hue.xpm"));
 	QString saturationFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("pics/colorchooser/colorchooser_saturation.xpm"));
 
 	gvHue = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::ColorAttributes::Hue));
-	gvHue->setToolTip(i18n("Select the range for the hue.\nEverything outside of this range will be set to white."));
 	editTabLayout->addWidget(gvHue, 2, 2);
 	gvHue->setScalePixmap(hueFile);
 
 	gvSaturation = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::ColorAttributes::Saturation));
-	gvSaturation->setToolTip(i18n("Select the range for the saturation.\nEverything outside of this range will be set to white."));
 	editTabLayout->addWidget(gvSaturation, 4, 2);
 	gvSaturation->setScalePixmap(saturationFile);
 
 	gvValue = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::ColorAttributes::Value));
-	gvValue->setToolTip(i18n("Select the range for the value, the degree of lightness of the color.\nEverything outside of this range will be set to white."));
 	editTabLayout->addWidget(gvValue, 6, 2);
 	gvValue->setScalePixmap(valueFile);
 
 	gvIntensity = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::ColorAttributes::Intensity));
-	gvIntensity->setToolTip(i18n("Select the range for the intensity.\nEverything outside of this range will be set to white."));
 	editTabLayout->addWidget(gvIntensity, 8, 2);
 	gvIntensity->setScalePixmap(valueFile);
 
 	gvForeground = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::ColorAttributes::Foreground));
-	gvForeground->setToolTip(
-		i18n("Select the range for the colors that are not part of the background color.\nEverything outside of this range will be set to white."));
 	editTabLayout->addWidget(gvForeground, 10, 2);
 	gvForeground->setScalePixmap(valueFile);
 
-	DatapickerImageWidget::updateLocale();
+	updateLocale();
+	retranslateUi();
 
 	// SLOTS
 	// general
@@ -354,6 +324,40 @@ void DatapickerImageWidget::updateLocale() {
 	ui.dtePositionX1->setLocale(locale);
 	ui.dtePositionX2->setLocale(locale);
 	ui.dtePositionX3->setLocale(locale);
+}
+
+void DatapickerImageWidget::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
+
+	ui.cbGraphType->clear();
+	ui.cbGraphType->addItem(i18n("Cartesian (x, y)"), (int)DatapickerImage::GraphType::Linear);
+	ui.cbGraphType->addItem(i18n("Polar (x, y°)"), (int)DatapickerImage::GraphType::PolarInDegree);
+	ui.cbGraphType->addItem(i18n("Polar (x, y(rad))"), (int)DatapickerImage::GraphType::PolarInRadians);
+	ui.cbGraphType->addItem(i18n("Logarithmic (ln(x), ln(y))"), (int)DatapickerImage::GraphType::LnXY);
+	ui.cbGraphType->addItem(i18n("Logarithmic (ln(x), y)"), (int)DatapickerImage::GraphType::LnX);
+	ui.cbGraphType->addItem(i18n("Logarithmic (x, ln(y))"), (int)DatapickerImage::GraphType::LnY);
+	ui.cbGraphType->addItem(i18n("Logarithmic (log(x), log(y))"), (int)DatapickerImage::GraphType::Log10XY);
+	ui.cbGraphType->addItem(i18n("Logarithmic (log(x), y)"), (int)DatapickerImage::GraphType::Log10X);
+	ui.cbGraphType->addItem(i18n("Logarithmic (x, log(y))"), (int)DatapickerImage::GraphType::Log10Y);
+	ui.cbGraphType->addItem(i18n("Ternary (x, y, z)"), (int)DatapickerImage::GraphType::Ternary);
+
+	ui.cbPlotImageType->clear();
+	ui.cbPlotImageType->addItem(i18n("No Image"));
+	ui.cbPlotImageType->addItem(i18n("Original Image"));
+	ui.cbPlotImageType->addItem(i18n("Processed Image"));
+
+	// tooltip texts
+	ssValue->setToolTip(i18n("Select the range for the value, the degree of lightness of the color.\nEverything outside of this range will be set to white."));
+	ssIntensity->setToolTip(i18n("Select the range for the intensity.\nEverything outside of this range will be set to white."));
+	ssForeground->setToolTip(
+		i18n("Select the range for the colors that are not part of the background color.\nEverything outside of this range will be set to white."));
+	ssHue->setToolTip(i18n("Select the range for the hue.\nEverything outside of this range will be set to white."));
+	ssSaturation->setToolTip(i18n("Select the range for the saturation.\nEverything outside of this range will be set to white."));
+	gvHue->setToolTip(i18n("Select the range for the hue.\nEverything outside of this range will be set to white."));
+	gvSaturation->setToolTip(i18n("Select the range for the saturation.\nEverything outside of this range will be set to white."));
+	gvValue->setToolTip(i18n("Select the range for the value, the degree of lightness of the color.\nEverything outside of this range will be set to white."));
+	gvIntensity->setToolTip(i18n("Select the range for the intensity.\nEverything outside of this range will be set to white."));
+	gvForeground->setToolTip(i18n("Select the range for the colors that are not part of the background color.\nEverything outside of this range will be set to white."));
 }
 
 void DatapickerImageWidget::updateFileRelativePathCheckBoxEnable() {

@@ -1,4 +1,0 @@
-/*!
-  \defgroup commonfrontend Common frontend
-  Contains classes which are shared between both, the KDE4 and the "Qt-only", frontends.
- */

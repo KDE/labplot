@@ -21,7 +21,12 @@ class SpreadsheetModel;
 class SpreadsheetPrivate;
 class StatisticsSpreadsheet;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Spreadsheet : public AbstractDataSource {
+#else
 class Spreadsheet : public AbstractDataSource {
+#endif
 	Q_OBJECT
 
 public:
@@ -58,8 +63,6 @@ public:
 	void removeColumns(int first, int count, QUndoCommand* parent = nullptr);
 	void insertColumns(int before, int count, QUndoCommand* parent = nullptr);
 
-	int colX(int col);
-	int colY(int col);
 	QString text(int row, int col) const;
 
 	void save(QXmlStreamWriter*) const override;

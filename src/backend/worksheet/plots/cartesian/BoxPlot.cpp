@@ -10,10 +10,8 @@
 
 #include "BoxPlot.h"
 #include "BoxPlotPrivate.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/Folder.h"
 #include "backend/core/Settings.h"
-#include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macrosCurve.h"
@@ -21,15 +19,11 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "frontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
 #include <QActionGroup>
-#include <QApplication>
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QPainter>
@@ -40,9 +34,15 @@
 
 /**
  * \class BoxPlot
- * \brief Box Plot
+ * \brief This class implements the box plot that is used to visualize the spread of numerical data
+ * with the help of their quartiles.
+ *
+ * The implementation supports the visualization of multiple data sets (column) at the same time with different ways to order them
+ * and to modify their properties separately. Notches, jittering of the data as well as the rug plot are possible to get more insights
+ * into the structure of the visualized data.
+ *
+ * \ingroup CartesianPlots
  */
-
 BoxPlot::BoxPlot(const QString& name, bool loading)
 	: Plot(name, new BoxPlotPrivate(this), AspectType::BoxPlot) {
 	init(loading);
@@ -203,17 +203,17 @@ QIcon BoxPlot::icon() const {
 }
 
 QIcon BoxPlot::staticIcon() {
-	QPainter pa;
-	pa.setRenderHint(QPainter::Antialiasing);
 	int iconSize = 20;
 	QPixmap pm(iconSize, iconSize);
+	pm.fill(Qt::transparent);
 
 	QPen pen(Qt::SolidLine);
 	pen.setColor(GuiTools::isDarkMode() ? Qt::white : Qt::black);
 	pen.setWidthF(0.0);
 
-	pm.fill(Qt::transparent);
+	QPainter pa;
 	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
 	pa.setPen(pen);
 	pa.drawRect(6, 6, 8, 8); // box
 	pa.drawLine(10, 6, 10, 0); // upper whisker
@@ -880,6 +880,8 @@ void BoxPlotPrivate::recalc() {
 	if (variableWidth) {
 		m_widthScaleFactor = -INFINITY;
 		for (const auto* col : dataColumns) {
+			if (!col)
+				continue;
 			auto* column = static_cast<const Column*>(col);
 			if (column->statistics().size > m_widthScaleFactor)
 				m_widthScaleFactor = column->statistics().size;
@@ -895,12 +897,14 @@ void BoxPlotPrivate::recalc() {
 		if (ordering == BoxPlot::Ordering::MedianAscending || ordering == BoxPlot::Ordering::MedianDescending) {
 			for (int i = 0; i < count; ++i) {
 				auto* column = static_cast<const Column*>(dataColumns.at(i));
-				newOrdering.push_back(std::make_pair(column->statistics().median, i));
+				if (column)
+					newOrdering.push_back(std::make_pair(column->statistics().median, i));
 			}
 		} else {
 			for (int i = 0; i < count; ++i) {
 				auto* column = static_cast<const Column*>(dataColumns.at(i));
-				newOrdering.push_back(std::make_pair(column->statistics().arithmeticMean, i));
+				if (column)
+					newOrdering.push_back(std::make_pair(column->statistics().arithmeticMean, i));
 			}
 		}
 
@@ -1573,7 +1577,7 @@ void BoxPlotPrivate::updatePixmap() {
 	}
 	m_pixmap.fill(Qt::transparent);
 	QPainter painter(&m_pixmap);
-	painter.setRenderHint(QPainter::Antialiasing, true);
+	painter.setRenderHint(QPainter::Antialiasing);
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
@@ -1681,12 +1685,16 @@ void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 
 	painter->setPen(Qt::NoPen);
 	painter->setBrush(Qt::NoBrush);
-	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+	painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
 	if (!q->isPrinting() && Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
 		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
+
+	// no need to handle the selection/hover effect if the cached pixmap is empty
+	if (m_pixmap.isNull())
+		return;
 
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		if (m_hoverEffectImageIsDirty) {

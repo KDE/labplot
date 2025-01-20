@@ -12,8 +12,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core)
 message(STATUS "Found Qt ${QT_VERSION}")
 set(QT_MAJOR_VERSION ${QT_VERSION_MAJOR})
-# see also -DQT_DISABLE_DEPRECATED_BEFORE in src/CMakeLists.txt
+
 set(QT_MIN_VERSION "6.5.0")
+add_definitions(-DQT_DISABLE_DEPRECATED_UP_TO=0x50F00)
+
 set(KF_MAJOR_VERSION "6")
 set(KF_MIN_VERSION "5.240.0")
 
@@ -298,7 +300,9 @@ endif()
 option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
 option(ENABLE_TESTS "Build with tests" ON)
 option(ENABLE_SDK "Build with SDK support" ON)
-
+if(ENABLE_SDK)
+    option(ENABLE_SDK_EXAMPLES "Build SDK examples" OFF)
+endif()
 
 ### OS macros ####################################
 if(WIN32)

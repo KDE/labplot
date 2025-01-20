@@ -3,13 +3,15 @@
 	Project              : LabPlot
 	Description          : application settings dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef SETTINGSDIALOG_H
 #define SETTINGSDIALOG_H
 
+#include "backend/core/Settings.h"
+#include <QLocale>
 #include <KPageDialog>
 
 class QAbstractButton;
@@ -30,21 +32,8 @@ class SettingsDialog : public KPageDialog {
 	Q_OBJECT
 
 public:
-	explicit SettingsDialog(QWidget*);
+	explicit SettingsDialog(QWidget*, const QLocale&);
 	~SettingsDialog() override;
-
-	enum class SettingsType {
-		General,
-		Worksheet,
-		Spreadsheet,
-#ifdef HAVE_CANTOR_LIBS
-		Notebook,
-#endif
-		Datasets,
-#ifdef HAVE_KUSERFEEDBACK
-		Feedback
-#endif
-	};
 
 private Q_SLOTS:
 	void changed();
@@ -69,7 +58,7 @@ private:
 	void restoreDefaults();
 
 Q_SIGNALS:
-	void settingsChanged(QList<SettingsType>);
+	void settingsChanged(QList<Settings::Type>);
 	void resetWelcomeScreen();
 };
 

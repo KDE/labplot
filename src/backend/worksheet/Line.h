@@ -18,7 +18,12 @@
 class LinePrivate;
 class KConfigGroup;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Line : public AbstractAspect {
+#else
 class Line : public AbstractAspect {
+#endif
 	Q_OBJECT
 
 public:

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the box plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -30,6 +30,7 @@ public:
 	explicit BoxPlotDock(QWidget*);
 	void setBoxPlots(QList<BoxPlot*>);
 	void updateLocale() override;
+	void retranslateUi() override;
 
 private:
 	Ui::BoxPlotDock ui;
@@ -57,7 +58,6 @@ private:
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in BoxPlotDock
-
 	//"General"-tab
 	void addDataColumn();
 	void removeDataColumn();

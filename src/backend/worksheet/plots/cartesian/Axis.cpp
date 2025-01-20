@@ -3,23 +3,20 @@
 	Project              : LabPlot
 	Description          : Axis for cartesian coordinate systems.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "AxisPrivate.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
 #include "backend/core/Time.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
-#include "backend/worksheet/Worksheet.h"
 #include "frontend/GuiTools.h"
 
 #include "backend/nsl/nsl_math.h"
@@ -37,8 +34,6 @@
 #include <QTextDocument>
 #include <QtMath>
 
-using Dimension = CartesianCoordinateSystem::Dimension;
-
 namespace {
 constexpr int maxNumberMajorTicks = 100;
 constexpr int _maxNumberMajorTicksCustomColumn = 21; // Use one more because one will be subtracted below
@@ -53,7 +48,7 @@ constexpr int hoverSelectionEffectPenWidth = 2;
  * This allows to use a different z-values for the grid lines (z=0, drawn below all other objects )
  * and for the axis (z=FLT_MAX, drawn on top of all other objects)
  *
- *  \ingroup worksheet
+ *  \ingroup CartesianPlotArea
  */
 class AxisGrid : public QGraphicsItem {
 public:
@@ -99,9 +94,13 @@ private:
 
 /**
  * \class Axis
- * \brief Axis for cartesian coordinate systems.
+ * \brief Axis for a cartesian coordinate system.
  *
- *  \ingroup worksheet
+ * Note, this class doesn't define the acttualy coordinate system and the data range to be plotted - this is
+ * done in \c CartesianPlot. In this class only the properties and the drawing of the visual object "axis" is
+ * handled.
+ *
+ * \ingroup CartesianPlotArea
  */
 Axis::Axis(const QString& name, Orientation orientation, bool loading)
 	: WorksheetElement(name, new AxisPrivate(this), AspectType::Axis) {
@@ -422,6 +421,11 @@ void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageR
 	d->labelsFont.setPointSizeF(d->labelsFont.pointSizeF() * ratio); // TODO: take into account rotated labels
 	d->labelsOffset *= ratio;
 	d->title->handleResize(horizontalRatio, verticalRatio, pageResize);
+}
+
+void Axis::updateLocale() {
+	Q_D(Axis);
+	d->retransformTickLabelStrings();
 }
 
 /* ============================ getter methods ================= */
@@ -797,6 +801,8 @@ void Axis::setMajorTicksSpacing(qreal majorTicksSpacing) {
 		if (range / majorTicksSpacing > maxNumberMajorTicks)
 			majorTicksSpacing = range / maxNumberMajorTicks;
 
+		Q_D(Axis);
+		d->majorTicksSpacing = majorTicksSpacing;
 		Q_EMIT majorTicksSpacingChanged(majorTicksSpacing);
 		return;
 	}
@@ -887,6 +893,8 @@ void Axis::setMinorTicksSpacing(qreal minorTicksSpacing) {
 		if (numberTicks > 100) // maximum 100 minor ticks
 			minorTicksSpacing = range / (majorTicks - 1) / (100 + 1);
 
+		Q_D(Axis);
+		d->minorTicksIncrement = minorTicksSpacing;
 		Q_EMIT minorTicksIncrementChanged(minorTicksSpacing);
 		return;
 	}
@@ -1518,7 +1526,7 @@ void AxisPrivate::retransformTicks() {
 			start += majorTickStartOffset;
 		else {
 			auto startDt = QDateTime::fromMSecsSinceEpoch(start, QTimeZone::UTC);
-			startDt.setTimeSpec(Qt::TimeSpec::UTC);
+			startDt.setTimeZone(QTimeZone::utc());
 			const auto& dt = DateTime::dateTime(majorTickStartOffset);
 			startDt = startDt.addYears(dt.year);
 			startDt = startDt.addMonths(dt.month);

@@ -25,7 +25,12 @@ class QGraphicsItem;
 class QMenu;
 class XYCurve;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT InfoElement : public WorksheetElement {
+#else
 class InfoElement : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:

@@ -53,6 +53,17 @@ double nsl_kde(const double* data, double x, nsl_kernel_type kernel, double h, s
 	return density / (n * h);
 }
 
+/*!
+ * returns the kernel bandwidth for the bandwidth selection rule/type \c nsl_kde_bandwidth_type.
+ * References:
+ * - Silverman, B.W. (1986) "Density Estimation."
+ * - Scott, D.W. (1992) "Multivariate Density Estimation: Theory, Practice, and Visualization."
+ * - https://bookdown.org/egarpor/NP-UC3M/kde-i-bwd.html
+ * \param n the size of the dataset for which to calculate the bandwidth
+ * \param sigma the standard deviation of the dataset
+ * \param iqr interquartile range (IQR) of the dataset
+ * \param type bandwidth selection type
+ */
 double nsl_kde_bandwidth(int n, double sigma, double iqr, nsl_kde_bandwidth_type type) {
 	switch (type) {
 	case nsl_kde_bandwidth_silverman:

@@ -56,6 +56,7 @@ endif()
 if(BUILD_QXLSX)
     set(BUILD_SHARED_LIBS OFF)
     add_subdirectory(QXlsx EXCLUDE_FROM_ALL)
+    set_property(TARGET QXlsx PROPERTY POSITION_INDEPENDENT_CODE ON)
 endif()
 
 # preview.sty
@@ -121,7 +122,14 @@ if(ENABLE_VECTOR_BLF)
       )
       set(CMAKE_PROJECT_Vector_BLF_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/vector_blf_config.cmake")
       # TODO: link static and don't install (see dbc_parser_cpp)
-      FetchContent_MakeAvailable(vector_blf)
+      # FetchContent_MakeAvailable(vector_blf)
+      # don't install vector_blf
+      # see https://stackoverflow.com/questions/65527126/disable-install-for-fetchcontent
+      FetchContent_GetProperties(vector_blf)
+      if(NOT vector_blf_POPULATED)
+          FetchContent_Populate(vector_blf)
+          add_subdirectory(${vector_blf_SOURCE_DIR} ${vector_blf_BINARY_DIR} EXCLUDE_FROM_ALL)
+      endif()
       # headerfiles of the projects are referring to <Vector/BLF/someheader.h> and therefore
       # the path must be added
       set(CMAKE_SYSTEM_INCLUDE_PATH ${CMAKE_SYSTEM_INCLUDE_PATH}
@@ -133,13 +141,17 @@ if(ENABLE_VECTOR_BLF)
       target_compile_definitions(labplotbackendlib PRIVATE HAVE_VECTOR_BLF)
       target_compile_definitions(labplotlib PUBLIC HAVE_VECTOR_BLF)
       add_definitions (-DHAVE_VECTOR_BLF)
+      # manually install lib
+      install(TARGETS Vector_BLF)
   else()
     pkg_check_modules(Vector_BLF IMPORTED_TARGET GLOBAL Vector_BLF)
     if(Vector_BLF_FOUND)
-        target_link_libraries(labplotbackendlib PkgConfig::Vector_BLF)
+        target_link_libraries(labplotbackendlib ${Vector_BLF_LIBRARIES})
         target_compile_definitions(labplotbackendlib PRIVATE HAVE_VECTOR_BLF)
         target_compile_definitions(labplotlib PUBLIC HAVE_VECTOR_BLF)
         add_definitions (-DHAVE_VECTOR_BLF)
+        # manually install lib
+	install(FILES ${Vector_BLF_LINK_LIBRARIES} DESTINATION ${KDE_INSTALL_LIBDIR})
     endif()
   endif()
 else()

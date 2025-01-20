@@ -11,7 +11,6 @@
 #ifndef TEXTLABEL_H
 #define TEXTLABEL_H
 
-#include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "tools/TeXRenderer.h"
 
@@ -23,7 +22,12 @@ class TextLabelPrivate;
 class CartesianPlot;
 class QPen;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT TextLabel : public WorksheetElement {
+#else
 class TextLabel : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:

@@ -8,26 +8,22 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYDataReductionCurve
-  \brief A xy-curve defined by a data reduction
-
-  \ingroup worksheet
-*/
-
 #include "XYDataReductionCurve.h"
-#include "CartesianCoordinateSystem.h"
 #include "XYDataReductionCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 
 #include <KLocalizedString>
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
 
+/*!
+ * \class XYDataReductionCurve
+ * \brief A xy-curve defined by a data reduction.
+ * \ingroup CartesianAnalysisPlots
+ */
 XYDataReductionCurve::XYDataReductionCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYDataReductionCurvePrivate(this), AspectType::XYDataReductionCurve) {
 }
@@ -39,11 +35,6 @@ XYDataReductionCurve::XYDataReductionCurve(const QString& name, XYDataReductionC
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 XYDataReductionCurve::~XYDataReductionCurve() = default;
-
-void XYDataReductionCurve::recalculate() {
-	Q_D(XYDataReductionCurve);
-	d->recalculate();
-}
 
 const XYAnalysisCurve::Result& XYDataReductionCurve::result() const {
 	Q_D(const XYDataReductionCurve);

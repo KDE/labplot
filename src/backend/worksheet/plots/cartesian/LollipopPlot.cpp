@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Lollipop Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -16,8 +16,6 @@
 #include "backend/lib/macrosCurve.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "frontend/GuiTools.h"
@@ -32,11 +30,16 @@
 #include <QMenu>
 #include <QPainter>
 
-/**
+/*!
  * \class LollipopPlot
- * \brief Lollipop Plot
- */
+ * \brief This class implements the lollipop plot that is used to visualize categorical data.
 
+ * This visualization type is very similar to the bar plot with the difference that lines and symbols instead of baras are used.
+ * The implementation supports the visualization of multiple data sets (column) at the same time with different ways to order them
+ * and to modify their properties separately.
+ *
+ * \ingroup CartesianPlots
+ */
 CURVE_COLUMN_CONNECT(LollipopPlot, X, x, recalc)
 
 LollipopPlot::LollipopPlot(const QString& name)
@@ -76,17 +79,17 @@ QIcon LollipopPlot::icon() const {
 }
 
 QIcon LollipopPlot::staticIcon() {
-	QPainter pa;
-	pa.setRenderHint(QPainter::Antialiasing);
 	int iconSize = 20;
 	QPixmap pm(iconSize, iconSize);
+	pm.fill(Qt::transparent);
 
 	QPen pen(Qt::SolidLine);
 	pen.setColor(GuiTools::isDarkMode() ? Qt::white : Qt::black);
 	pen.setWidthF(0.0);
 
-	pm.fill(Qt::transparent);
+	QPainter pa;
 	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
 	pa.setPen(pen);
 	pa.setBrush(pen.color());
 	pa.drawLine(10, 6, 10, 14);
@@ -149,6 +152,11 @@ void LollipopPlot::recalc() {
 }
 
 void LollipopPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
+}
+
+void LollipopPlot::updateLocale() {
+	Q_D(LollipopPlot);
+	d->updateValues();
 }
 
 /* ============================ getter methods ================= */
@@ -309,7 +317,9 @@ void LollipopPlot::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(LollipopPlot);
 	if (aspect == d->xColumn) {
 		d->xColumn = nullptr;
-		CURVE_COLUMN_REMOVED(x);
+		d->recalc();
+		Q_EMIT dataChanged();
+		Q_EMIT changed();
 	}
 }
 
@@ -318,7 +328,7 @@ void LollipopPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	for (int i = 0; i < d->dataColumns.size(); ++i) {
 		if (aspect == d->dataColumns.at(i)) {
 			d->dataColumns[i] = nullptr;
-			d->retransform();
+			d->recalc();
 			Q_EMIT dataChanged();
 			Q_EMIT changed();
 			break;
@@ -496,6 +506,8 @@ void LollipopPlotPrivate::recalc() {
 	int barGroupsCount = 0;
 	int columnIndex = 0;
 	for (auto* column : std::as_const(dataColumns)) {
+		if (!column)
+			continue;
 		int size = static_cast<const Column*>(column)->statistics().size;
 		m_barLines[columnIndex].resize(size);
 		m_symbolPoints[columnIndex].resize(size);
@@ -529,6 +541,9 @@ void LollipopPlotPrivate::recalc() {
 		yMin = 0;
 		yMax = -INFINITY;
 		for (auto* column : dataColumns) {
+			if (!column)
+				continue;
+
 			double max = column->maximum();
 			if (max > yMax)
 				yMax = max;
@@ -593,6 +608,9 @@ void LollipopPlotPrivate::verticalPlot(int columnIndex) {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	const auto* column = static_cast<const Column*>(dataColumns.at(columnIndex));
+	if (!column)
+		return;
+
 	QVector<QLineF> barLines; // lines for all bars for one colum in scene coordinates
 	QVector<QPointF> symbolPoints;
 
@@ -630,6 +648,9 @@ void LollipopPlotPrivate::horizontalPlot(int columnIndex) {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	const auto* column = static_cast<const Column*>(dataColumns.at(columnIndex));
+	if (!column)
+		return;
+
 	QVector<QLineF> barLines; // lines for all bars for one colum in scene coordinates
 	QVector<QPointF> symbolPoints;
 
@@ -873,7 +894,7 @@ void LollipopPlotPrivate::updatePixmap() {
 	}
 	m_pixmap.fill(Qt::transparent);
 	QPainter painter(&m_pixmap);
-	painter.setRenderHint(QPainter::Antialiasing, true);
+	painter.setRenderHint(QPainter::Antialiasing);
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
@@ -921,12 +942,16 @@ void LollipopPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIte
 
 	painter->setPen(Qt::NoPen);
 	painter->setBrush(Qt::NoBrush);
-	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+	painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
 	if (!q->isPrinting() && Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
 		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
+
+	// no need to handle the selection/hover effect if the cached pixmap is empty
+	if (m_pixmap.isNull())
+		return;
 
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		if (m_hoverEffectImageIsDirty) {

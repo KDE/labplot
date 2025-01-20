@@ -7,12 +7,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class ProcessBehaviorChart
-  \brief
-
-  \ingroup worksheet
-  */
 #include "ProcessBehaviorChart.h"
 #include "ProcessBehaviorChartPrivate.h"
 #include "backend/core/column/Column.h"
@@ -40,6 +34,17 @@ extern "C" {
 CURVE_COLUMN_CONNECT(ProcessBehaviorChart, Data, data, recalc)
 CURVE_COLUMN_CONNECT(ProcessBehaviorChart, Data2, data2, recalc)
 
+/*!
+ * \class ProcessBehaviorChart
+ * \brief This class implements the process behavior chart.
+ *
+ * The sub-types XmR, mR, XbarR, R, XbarS, S, P, NP, C, U are implemented and the implementation follows
+ * the conventions used in the book "Making Sense of Data", Donald J. Wheeler.
+ * The visual properties of the plotted line for the controll limits and for the actual data can be modified
+ * independently of each other.
+ *
+ * \ingroup CartesianPlots
+ */
 ProcessBehaviorChart::ProcessBehaviorChart(const QString& name)
 	: Plot(name, new ProcessBehaviorChartPrivate(this), AspectType::ProcessBehaviorChart) {
 	init();
@@ -157,6 +162,12 @@ void ProcessBehaviorChart::init() {
 	// synchronize the names of the internal XYCurves with the name of the current plot
 	// so we have the same name shown on the undo stack
 	connect(this, &AbstractAspect::aspectDescriptionChanged, this, &ProcessBehaviorChart::renameInternalCurves);
+
+	// propage the visual changes to the parent
+	connect(d->centerCurve, &XYCurve::changed, this, &ProcessBehaviorChart::changed);
+	connect(d->dataCurve, &XYCurve::changed, this, &ProcessBehaviorChart::changed);
+	connect(d->upperLimitCurve, &XYCurve::changed, this, &ProcessBehaviorChart::changed);
+	connect(d->lowerLimitCurve, &XYCurve::changed, this, &ProcessBehaviorChart::changed);
 }
 
 void ProcessBehaviorChart::finalizeAdd() {
@@ -452,7 +463,9 @@ void ProcessBehaviorChart::dataColumnAboutToBeRemoved(const AbstractAspect* aspe
 	Q_D(ProcessBehaviorChart);
 	if (aspect == d->dataColumn) {
 		d->dataColumn = nullptr;
-		CURVE_COLUMN_REMOVED(data);
+		d->recalc();
+		Q_EMIT dataChanged();
+		Q_EMIT changed();
 	}
 }
 
@@ -460,7 +473,9 @@ void ProcessBehaviorChart::data2ColumnAboutToBeRemoved(const AbstractAspect* asp
 	Q_D(ProcessBehaviorChart);
 	if (aspect == d->data2Column) {
 		d->data2Column = nullptr;
-		CURVE_COLUMN_REMOVED(data2);
+		d->recalc();
+		Q_EMIT dataChanged();
+		Q_EMIT changed();
 	}
 }
 
@@ -507,6 +522,8 @@ void ProcessBehaviorChartPrivate::recalc() {
 		center = 0.;
 		upperLimit = 0.;
 		lowerLimit = 0.;
+		xColumn->clear();
+		yColumn->clear();
 		xCenterColumn->clear();
 		yCenterColumn->clear();
 		xUpperLimitColumn->clear();

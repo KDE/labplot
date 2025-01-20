@@ -752,7 +752,8 @@ const QVector<Column::ValueLabel<qint64>>* ColumnPrivate::ValueLabels::bigIntVal
 // ######################################################################################################
 
 ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
-	: q(owner)
+	: AbstractColumnPrivate(owner)
+	, q(owner)
 	, m_columnMode(mode) {
 	initIOFilters();
 }
@@ -761,7 +762,8 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
  * \brief Special ctor (to be called from Column only!)
  */
 ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode, void* data)
-	: q(owner)
+	: AbstractColumnPrivate(owner)
+	, q(owner)
 	, m_columnMode(mode)
 	, m_data(data) {
 	initIOFilters();
@@ -1362,9 +1364,7 @@ void ColumnPrivate::replaceData(void* data) {
 	Q_EMIT q->dataAboutToChange(q);
 
 	m_data = data;
-	invalidate();
-	if (!q->m_suppressDataChangedSignal)
-		Q_EMIT q->dataChanged(q);
+	q->setChanged();
 }
 
 /**
@@ -1426,10 +1426,7 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
 	}
 	}
 
-	invalidate();
-
-	if (!q->m_suppressDataChangedSignal)
-		Q_EMIT q->dataChanged(q);
+	q->setChanged();
 
 	DEBUG(Q_FUNC_INFO << ", done")
 	return true;
@@ -1492,10 +1489,7 @@ bool ColumnPrivate::copy(const AbstractColumn* source, int source_start, int des
 		break;
 	}
 
-	invalidate();
-
-	if (!q->m_suppressDataChangedSignal)
-		Q_EMIT q->dataChanged(q);
+	q->setChanged();
 
 	return true;
 }
@@ -1552,10 +1546,7 @@ bool ColumnPrivate::copy(const ColumnPrivate* other) {
 		break;
 	}
 
-	invalidate();
-
-	if (!q->m_suppressDataChangedSignal)
-		Q_EMIT q->dataChanged(q);
+	q->setChanged();
 
 	return true;
 }
@@ -1617,10 +1608,7 @@ bool ColumnPrivate::copy(const ColumnPrivate* source, int source_start, int dest
 		break;
 	}
 
-	invalidate();
-
-	if (!q->m_suppressDataChangedSignal)
-		Q_EMIT q->dataChanged(q);
+	q->setChanged();
 
 	return true;
 }
@@ -2792,9 +2780,8 @@ void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) 
 			return; // failed to allocate memory
 	}
 
-	invalidate();
-
 	Q_EMIT q->dataAboutToChange(q);
+
 	if (first < 0)
 		*static_cast<QVector<double>*>(m_data) = new_values;
 	else {
@@ -2806,8 +2793,7 @@ void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) 
 			ptr[first + i] = new_values.at(i);
 	}
 
-	if (!q->m_suppressDataChangedSignal)
-		Q_EMIT q->dataChanged(q);
+	q->setChanged();
 }
 
 void ColumnPrivate::addValueLabel(const QString& value, const QString& label) {

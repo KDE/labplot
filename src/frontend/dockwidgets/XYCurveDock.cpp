@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for XYCurve properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2022 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -65,13 +65,6 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	cbValuesColumn = new TreeViewComboBox(ui.tabValues);
 	gridLayout->addWidget(cbValuesColumn, 2, 2, 1, 1);
 
-	// add formats for numeric values
-	ui.cbValuesNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
-	ui.cbValuesNumericFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
-	ui.cbValuesNumericFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
-	ui.cbValuesNumericFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
-	ui.cbValuesNumericFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
-
 	// add format for date, time and datetime values
 	for (const auto& s : AbstractColumn::dateTimeFormats())
 		ui.cbValuesDateTimeFormat->addItem(s, QVariant(s));
@@ -92,11 +85,6 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	auto* vLayout = qobject_cast<QVBoxLayout*>(ui.tabErrorBars->layout());
 	vLayout->insertWidget(0, errorBarWidget);
 
-	// Tab "Margin Plots"
-	ui.cbRugOrientation->addItem(i18n("Vertical"));
-	ui.cbRugOrientation->addItem(i18n("Horizontal"));
-	ui.cbRugOrientation->addItem(i18n("Both"));
-
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
 		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
@@ -108,7 +96,9 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 		layout->setVerticalSpacing(2);
 	}
 
-	XYCurveDock::updateLocale();
+	updateLocale();
+	retranslateUi();
+	init();
 
 	// Slots
 
@@ -152,9 +142,6 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	connect(templateHandler, &TemplateHandler::info, this, &XYCurveDock::info);
 
 	ui.verticalLayout->addWidget(frame);
-
-	retranslateUi();
-	init();
 }
 
 XYCurveDock::~XYCurveDock() {
@@ -187,22 +174,6 @@ void XYCurveDock::setupGeneral() {
 }
 
 void XYCurveDock::init() {
-	m_initializing = true;
-
-	// Line
-	ui.cbLineType->addItem(i18n("None"));
-	ui.cbLineType->addItem(i18n("Line"));
-	ui.cbLineType->addItem(i18n("Horiz. Start"));
-	ui.cbLineType->addItem(i18n("Vert. Start"));
-	ui.cbLineType->addItem(i18n("Horiz. Midpoint"));
-	ui.cbLineType->addItem(i18n("Vert. Midpoint"));
-	ui.cbLineType->addItem(i18n("2-segments"));
-	ui.cbLineType->addItem(i18n("3-segments"));
-	ui.cbLineType->addItem(i18n("Cubic Spline (Natural)"));
-	ui.cbLineType->addItem(i18n("Cubic Spline (Periodic)"));
-	ui.cbLineType->addItem(i18n("Akima-spline (Natural)"));
-	ui.cbLineType->addItem(i18n("Akima-spline (Periodic)"));
-
 	QPainter pa;
 	// TODO size of the icon depending on the actual height of the combobox?
 	int iconSize = 20;
@@ -326,27 +297,11 @@ void XYCurveDock::init() {
 	pa.drawEllipse(15, 15, 4, 4);
 	pa.rotate(45);
 	pa.drawArc(2 * sqrt(2), -4, 17 * sqrt(2), 20, 30 * 16, 120 * 16);
-
 	pa.end();
 	ui.cbLineType->setItemIcon(8, pm);
 	ui.cbLineType->setItemIcon(9, pm);
 	ui.cbLineType->setItemIcon(10, pm);
 	ui.cbLineType->setItemIcon(11, pm);
-
-	m_initializing = false;
-
-	// Values
-	ui.cbValuesType->addItem(i18n("No Values"));
-	ui.cbValuesType->addItem(QStringLiteral("x"));
-	ui.cbValuesType->addItem(QStringLiteral("y"));
-	ui.cbValuesType->addItem(QStringLiteral("x, y"));
-	ui.cbValuesType->addItem(QStringLiteral("(x, y)"));
-	ui.cbValuesType->addItem(i18n("Custom Column"));
-
-	ui.cbValuesPosition->addItem(i18n("Above"));
-	ui.cbValuesPosition->addItem(i18n("Below"));
-	ui.cbValuesPosition->addItem(i18n("Left"));
-	ui.cbValuesPosition->addItem(i18n("Right"));
 }
 
 void XYCurveDock::setModel() {
@@ -522,16 +477,58 @@ void XYCurveDock::updateLocale() {
 //********** SLOTs for changes triggered in XYCurveDock ********
 //*************************************************************
 void XYCurveDock::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
+
+	// Line
+	ui.cbLineType->clear();
+	ui.cbLineType->addItem(i18n("None"));
+	ui.cbLineType->addItem(i18n("Line"));
+	ui.cbLineType->addItem(i18n("Horiz. Start"));
+	ui.cbLineType->addItem(i18n("Vert. Start"));
+	ui.cbLineType->addItem(i18n("Horiz. Midpoint"));
+	ui.cbLineType->addItem(i18n("Vert. Midpoint"));
+	ui.cbLineType->addItem(i18n("2-segments"));
+	ui.cbLineType->addItem(i18n("3-segments"));
+	ui.cbLineType->addItem(i18n("Cubic Spline (Natural)"));
+	ui.cbLineType->addItem(i18n("Cubic Spline (Periodic)"));
+	ui.cbLineType->addItem(i18n("Akima-spline (Natural)"));
+	ui.cbLineType->addItem(i18n("Akima-spline (Periodic)"));
+
+
+	// formats for numeric values
+	ui.cbValuesNumericFormat->clear();
+	ui.cbValuesNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
+	ui.cbValuesNumericFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
+	ui.cbValuesNumericFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
+	ui.cbValuesNumericFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
+	ui.cbValuesNumericFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
+
+	// Values
+	ui.cbValuesType->clear();
+	ui.cbValuesType->addItem(i18n("No Values"));
+	ui.cbValuesType->addItem(QStringLiteral("x"));
+	ui.cbValuesType->addItem(QStringLiteral("y"));
+	ui.cbValuesType->addItem(QStringLiteral("x, y"));
+	ui.cbValuesType->addItem(QStringLiteral("(x, y)"));
+	ui.cbValuesType->addItem(i18n("Custom Column"));
+
+	ui.cbValuesPosition->clear();
+	ui.cbValuesPosition->addItem(i18n("Above"));
+	ui.cbValuesPosition->addItem(i18n("Below"));
+	ui.cbValuesPosition->addItem(i18n("Left"));
+	ui.cbValuesPosition->addItem(i18n("Right"));
+
+	// Margin Plots
+	ui.cbRugOrientation->clear();
+	ui.cbRugOrientation->addItem(i18n("Vertical"));
+	ui.cbRugOrientation->addItem(i18n("Horizontal"));
+	ui.cbRugOrientation->addItem(i18n("Both"));
+
+	// tooltip texts
 	ui.lLineSkipGaps->setToolTip(i18n("If checked, connect neighbour points with lines even if there are gaps (invalid or masked values) between them"));
 	ui.chkLineSkipGaps->setToolTip(i18n("If checked, connect neighbour points with lines even if there are gaps (invalid or masked values) between them"));
 	ui.lLineIncreasingXOnly->setToolTip(i18n("If checked, connect data points only for strictly increasing values of X"));
 	ui.chkLineIncreasingXOnly->setToolTip(i18n("If checked, connect data points only for strictly increasing values of X"));
-	// TODO:
-	// 	uiGeneralTab.lName->setText(i18n("Name"));
-	// 	uiGeneralTab.lComment->setText(i18n("Comment"));
-	// 	uiGeneralTab.chkVisible->setText(i18n("Visible"));
-	// 	uiGeneralTab.lXColumn->setText(i18n("x-data"));
-	// 	uiGeneralTab.lYColumn->setText(i18n("y-data"));
 
 	// TODO updatePenStyles, updateBrushStyles for all comboboxes
 }

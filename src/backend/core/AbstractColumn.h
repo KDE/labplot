@@ -4,7 +4,7 @@
 	Description          : Interface definition for data with column logic
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2013 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -24,7 +24,12 @@ class QTime;
 template<class T>
 class Interval;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT AbstractColumn : public AbstractAspect {
+#else
 class AbstractColumn : public AbstractAspect {
+#endif
 	Q_OBJECT
 
 public:
@@ -214,6 +219,8 @@ public:
 	void setHeatmapFormat(const HeatmapFormat&);
 	void removeFormat();
 	void reset();
+	void setChanged();
+	void setSuppressDataChangedSignal(const bool);
 
 Q_SIGNALS:
 	void plotDesignationAboutToChange(const AbstractColumn* source);
