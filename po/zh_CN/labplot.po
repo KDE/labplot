@@ -22541,17 +22541,15 @@ msgstr "自动保存："
 
 #. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
 #: src/frontend/ui/settingsgeneralpage.ui:46
-#, fuzzy, kde-format
-#| msgid "Dock widget placement:"
+#, kde-format
 msgid "Dock Widget Placement:"
-msgstr "浮动面板位置："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
 #: src/frontend/ui/settingsgeneralpage.ui:60
-#, fuzzy, kde-format
-#| msgid "Number options:"
+#, kde-format
 msgid "Number Format:"
-msgstr "数字选项："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lStartup)
 #: src/frontend/ui/settingsgeneralpage.ui:67
@@ -22597,10 +22595,9 @@ msgstr "以兼容格式保存"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
 #: src/frontend/ui/settingsgeneralpage.ui:107
-#, fuzzy, kde-format
-#| msgid "Number options:"
+#, kde-format
 msgid "Number Options:"
-msgstr "数字选项："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lUnits)
 #: src/frontend/ui/settingsgeneralpage.ui:114
@@ -24449,12 +24446,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
-
-#~ msgid "Dot (.)"
-#~ msgstr "圆点 (.)"
-
-#~ msgid "Comma (,)"
-#~ msgstr "逗号 (,)"
-
-#~ msgid "Arabic (٫)"
-#~ msgstr "阿拉伯语 (٫)"
