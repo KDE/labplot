@@ -573,6 +573,7 @@ target_link_libraries(labplotnsllib
     ${GSL_CBLAS_LIBRARIES}
 )
 target_link_libraries(labplotbackendlib
+    PUBLIC
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Gui    # QColor
     Qt${QT_MAJOR_VERSION}::Widgets    # QApplication
@@ -618,14 +619,14 @@ target_link_libraries(labplotlib
 )
 
 if(Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
-    target_link_libraries(labplotbackendlib Qt${QT_MAJOR_VERSION}::SerialPort)
+    target_link_libraries(labplotbackendlib PUBLIC Qt${QT_MAJOR_VERSION}::SerialPort)
     target_link_libraries(labplotlib Qt${QT_MAJOR_VERSION}::SerialPort)
 endif()
 if(Qt${QT_MAJOR_VERSION}Svg_FOUND)
     target_link_libraries(labplotlib Qt${QT_MAJOR_VERSION}::Svg)
 endif()
 if(Qt${QT_MAJOR_VERSION}Mqtt_FOUND)
-    target_link_libraries(labplotbackendlib Qt${QT_MAJOR_VERSION}::Mqtt)
+    target_link_libraries(labplotbackendlib PUBLIC Qt${QT_MAJOR_VERSION}::Mqtt)
     target_link_libraries(labplotlib Qt${QT_MAJOR_VERSION}::Mqtt)
 endif()
 if(KF${KF_MAJOR_VERSION}SyntaxHighlighting_FOUND)
@@ -647,12 +648,12 @@ if(KF${KF_MAJOR_VERSION}Purpose_FOUND)
     target_link_libraries(labplotlib KF${KF_MAJOR_VERSION}::PurposeWidgets)
 endif()
 if(ZSTD_FOUND)
-        target_link_libraries(labplotbackendlib ${ZSTD_LIBRARIES})
+        target_link_libraries(labplotbackendlib PUBLIC ${ZSTD_LIBRARIES})
 endif()
 
 if(Cantor_FOUND)
     # KFX::Service, KFX::Parts is optional but probably required by Cantor
-    target_link_libraries(labplotbackendlib Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts)
+    target_link_libraries(labplotbackendlib PUBLIC Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts)
     target_link_libraries(labplotlib Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts)
 endif()
 
@@ -668,7 +669,7 @@ if(ENABLE_READSTAT)
             target_link_libraries (labplotbackendlib ${ICONV_LIBRARIES})
         endif()
     endif()
-        target_link_libraries(labplotbackendlib ${READSTAT_LIBRARIES} ${ZLIB_LIBRARIES})
+        target_link_libraries(labplotbackendlib PUBLIC ${READSTAT_LIBRARIES} ${ZLIB_LIBRARIES})
 endif()
 
 if(ENABLE_XLSX)
@@ -686,7 +687,7 @@ if(ENABLE_XLSX)
     endif()
 
     if(QXLSX_FOUND OR BUILD_QXLSX)
-    target_link_libraries(labplotbackendlib QXlsx)
+    target_link_libraries(labplotbackendlib PUBLIC QXlsx)
     endif()
 endif()
 
@@ -694,11 +695,11 @@ if(ENABLE_LIBORIGIN)
     if(LIBORIGIN_FOUND)
         # ifsystem headers are missing: use the provided
         target_include_directories(labplotbackendlib PRIVATE ${LIBORIGIN_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
-        target_link_libraries(labplotbackendlib ${LIBORIGIN_LIBRARIES})
+        target_link_libraries(labplotbackendlib PUBLIC ${LIBORIGIN_LIBRARIES})
         target_include_directories(labplotlib PRIVATE ${LIBORIGIN_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
     else() # own version
         target_include_directories(labplotbackendlib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
-        target_link_libraries(labplotbackendlib liborigin-static)
+        target_link_libraries(labplotbackendlib PUBLIC liborigin-static)
         target_include_directories(labplotlib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
     endif()
 endif()
