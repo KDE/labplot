@@ -130,6 +130,7 @@ if(ENABLE_VECTOR_BLF)
           ${vector_blf_BINARY_DIR}/src) # config.h is in there
       target_include_directories(Vector_BLF PUBLIC ${vector_blf_SOURCE_DIR}/src
                           ${vector_blf_BINARY_DIR}/src) # config.h is in there
+      # link private so the headers don't get installed during installation of labplot
       target_link_libraries(labplotbackendlib PRIVATE Vector_BLF)
       target_compile_definitions(labplotbackendlib PRIVATE HAVE_VECTOR_BLF)
       target_compile_definitions(labplotlib PUBLIC HAVE_VECTOR_BLF)
