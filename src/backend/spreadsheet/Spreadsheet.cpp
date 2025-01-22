@@ -626,7 +626,7 @@ void Spreadsheet::removeColumns(int first, int count, QUndoCommand* parent) {
 
 	const auto& columns = children<Column>();
 	for (int i = (first + count - 1); i >= first; i--)
-		columns.at(i)->remove(parent);
+		columns.at(i)->remove();
 
 	if (execute)
 		exec(command);
@@ -650,7 +650,7 @@ void Spreadsheet::insertColumns(int before, int count, QUndoCommand* parent) {
 		auto* new_col = new Column(QString::number(cols + i + 1), AbstractColumn::ColumnMode::Double);
 		new_col->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 		new_col->insertRows(0, rows);
-		insertChild(new_col, before + i, parent);
+		insertChild(new_col, before + i);
 	}
 
 	if (execute)
