@@ -1,12 +1,21 @@
 function(patch_dir DIR_NAME PATCH_NAME)
     file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/${DIR_NAME}" DESTINATION "${CMAKE_BINARY_DIR}/_deps")
 
+    if("$ENV{CI}" STREQUAL "true")
+        set(BINARY_DIR "_build")
+    else()
+        set(BINARY_DIR "build")
+    endif()
+
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/patches/${PATCH_NAME}.in" "${CMAKE_CURRENT_BINARY_DIR}/${PATCH_NAME}" @ONLY)
+
     execute_process(
-    COMMAND patch -p1
+    # Note: paths is patch file must be relative to git project root
+    COMMAND git apply "${CMAKE_CURRENT_BINARY_DIR}/${PATCH_NAME}"
+    # COMMAND patch -p1
     # Note: command must be run from git project root
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-    # Note: paths is patch file must be relative to git project root
-    INPUT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/patches/${PATCH_NAME}"
+    # INPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/${PATCH_NAME}"
     COMMAND_ERROR_IS_FATAL ANY)
 
     set(${DIR_NAME}_SOURCE_DIR "${CMAKE_BINARY_DIR}/_deps/${DIR_NAME}" PARENT_SCOPE)
