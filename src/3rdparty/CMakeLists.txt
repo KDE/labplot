@@ -1,3 +1,17 @@
+function(patch_dir DIR_NAME PATCH_NAME)
+    file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/${DIR_NAME}" DESTINATION "${CMAKE_BINARY_DIR}/_deps")
+
+    execute_process(
+    # Note: paths is patch file must be relative to git project root
+    COMMAND git apply "${CMAKE_CURRENT_SOURCE_DIR}/patches/${PATCH_NAME}"
+    # Note: command must be run from git project root
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+    COMMAND_ERROR_IS_FATAL ANY)
+
+    set(${DIR_NAME}_SOURCE_DIR "${CMAKE_BINARY_DIR}/_deps/${DIR_NAME}" PARENT_SCOPE)
+    set(${DIR_NAME}_BINARY_DIR "${CMAKE_BINARY_DIR}/_deps/${DIR_NAME}-build" PARENT_SCOPE)
+endfunction()
+
 if(APPLE AND ENABLE_TOUCHBAR)
     add_subdirectory(kdmactouchbar)
 endif()
@@ -114,48 +128,18 @@ if(ENABLE_VECTOR_BLF)
     endif()
   endif()
   
-  if(${LOCAL_VECTOR_BLF})
-      FetchContent_Declare(
-        vector_blf
-        #GIT_REPOSITORY https://github.com/Technica-Engineering/vector_blf.git
-        #GIT_TAG 02f0a2fe1f7915da1e24025869b98f6d15de937b
-        GIT_REPOSITORY https://github.com/israelsgalaxy/vector_blf.git
-        GIT_TAG 19a57054ca4033a02f6cb6f2e2d05ccd8c12087a
-      )
-      set(CMAKE_PROJECT_Vector_BLF_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/vector_blf_config.cmake")
-      # TODO: link static and don't install (see dbc_parser_cpp)
-      # FetchContent_MakeAvailable(vector_blf)
-      # don't install vector_blf
-      # see https://stackoverflow.com/questions/65527126/disable-install-for-fetchcontent
-      FetchContent_GetProperties(vector_blf)
-      if(NOT vector_blf_POPULATED)
-          FetchContent_Populate(vector_blf)
-          add_subdirectory(${vector_blf_SOURCE_DIR} ${vector_blf_BINARY_DIR} EXCLUDE_FROM_ALL)
-      endif()
-      # headerfiles of the projects are referring to <Vector/BLF/someheader.h> and therefore
-      # the path must be added
-      set(CMAKE_SYSTEM_INCLUDE_PATH ${CMAKE_SYSTEM_INCLUDE_PATH}
-          ${vector_blf_SOURCE_DIR}/src
-          ${vector_blf_BINARY_DIR}/src) # config.h is in there
-      target_include_directories(Vector_BLF PUBLIC ${vector_blf_SOURCE_DIR}/src
-                          ${vector_blf_BINARY_DIR}/src) # config.h is in there
-      target_link_libraries(labplotbackendlib Vector_BLF)
-      target_compile_definitions(labplotbackendlib PRIVATE HAVE_VECTOR_BLF)
-      target_compile_definitions(labplotlib PUBLIC HAVE_VECTOR_BLF)
-      add_definitions(-DHAVE_VECTOR_BLF)
-      # manually install lib
-      install(TARGETS Vector_BLF EXPORT LabPlotTargets)
-  else()
-    pkg_check_modules(Vector_BLF IMPORTED_TARGET GLOBAL Vector_BLF)
-    if(Vector_BLF_FOUND)
-        target_link_libraries(labplotbackendlib ${Vector_BLF_LIBRARIES})
-        target_compile_definitions(labplotbackendlib PRIVATE HAVE_VECTOR_BLF)
-        target_compile_definitions(labplotlib PUBLIC HAVE_VECTOR_BLF)
-        add_definitions(-DHAVE_VECTOR_BLF)
-        # manually install lib
-        install(FILES ${Vector_BLF_LINK_LIBRARIES} DESTINATION ${KDE_INSTALL_LIBDIR})
-    endif()
-  endif()
+  patch_dir(vector_blf vector_blf.patch)
+
+  add_subdirectory(${vector_blf_SOURCE_DIR} ${vector_blf_BINARY_DIR} EXCLUDE_FROM_ALL)
+  list(APPEND CMAKE_SYSTEM_INCLUDE_PATH ${vector_blf_SOURCE_DIR}/src ${vector_blf_BINARY_DIR}/src)
+  set_property(TARGET Vector_BLF PROPERTY AUTOMOC OFF)
+  target_include_directories(Vector_BLF PUBLIC ${vector_blf_SOURCE_DIR}/src ${vector_blf_BINARY_DIR}/src)
+
+  target_link_libraries(labplotbackendlib Vector_BLF)
+  target_compile_definitions(labplotbackendlib PRIVATE HAVE_VECTOR_BLF)
+  target_compile_definitions(labplotlib PUBLIC HAVE_VECTOR_BLF)
+
+  add_definitions(-DHAVE_VECTOR_BLF)
 else()
     add_definitions(-DVECTOR_BLF_DISABLED)
 endif()
