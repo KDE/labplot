@@ -20,7 +20,11 @@
 #ifdef HAVE_ORCUS
 #include <orcus/orcus_ods.hpp>
 #include <orcus/spreadsheet/factory.hpp>
+// env.hpp of libixion currently contains a bug (#if _WIN32) which breaks the build with -Werror
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wundef"
 #include <orcus/spreadsheet/sheet.hpp>
+#pragma GCC diagnostic pop
 
 #include <ixion/model_context.hpp>
 
