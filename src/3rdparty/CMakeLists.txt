@@ -1,11 +1,7 @@
 function(patch_dir DIR_NAME PATCH_NAME)
     file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/${DIR_NAME}" DESTINATION "${CMAKE_BINARY_DIR}/_deps")
 
-    if("$ENV{CI}" STREQUAL "true")
-        set(BINARY_DIR "_build")
-    else()
-        set(BINARY_DIR "build")
-    endif()
+    cmake_path(RELATIVE_PATH CMAKE_BINARY_DIR BASE_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_VARIABLE BIN_DIR)
 
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/patches/${PATCH_NAME}.in" "${CMAKE_CURRENT_BINARY_DIR}/${PATCH_NAME}" @ONLY)
 
