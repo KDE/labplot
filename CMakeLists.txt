@@ -678,6 +678,18 @@ else()
     message(STATUS "Eigen3 support DISABLED")
 endif()
 
+# Qt Advanced Docking System (required) #####################
+find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG)
+if(NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
+    option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
+    option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)
+    if(TARGET Qt${QT_VERSION_MAJOR}::GuiPrivate)
+        message(STATUS "Building local version of Qt-Advanced-Docking-System.")
+    else ()
+        message(FATAL_ERROR "Missing Qt${QT_VERSION_MAJOR}::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
+    endif()
+endif()
+
 ### Touch bar on macOS (optional) #############################
 if(APPLE AND ENABLE_TOUCHBAR)
     add_definitions(-DHAVE_TOUCHBAR)

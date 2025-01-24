@@ -6,17 +6,6 @@ set(TOOLS_DIR "${CMAKE_CURRENT_LIST_DIR}/tools")
 set(CMAKE_AUTOMOC ON)
 set(SRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 
-find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG)
-if(NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
-    option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
-    option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)
-    if(TARGET Qt${QT_VERSION_MAJOR}::GuiPrivate)
-        message(STATUS "Building local version of Qt-Advanced-Docking-System.")
-    else ()
-        message(FATAL_ERROR "Missing Qt${QT_VERSION_MAJOR}::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
-    endif()
-endif()
-
 set(GUI_SOURCES
     ${FRONTEND_DIR}/AboutDialog.cpp
     ${FRONTEND_DIR}/DatasetModel.cpp
