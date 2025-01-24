@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-19 00:37+0000\n"
+"POT-Creation-Date: 2025-01-24 00:38+0000\n"
 "PO-Revision-Date: 2025-01-04 07:27+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -1284,7 +1284,7 @@ msgstr "Nie udało się otworzyć urządzenia/pliku lub jest on pusty."
 #: src/backend/datasources/filters/NetCDFFilter.cpp:758
 #: src/backend/datasources/filters/NetCDFFilter.cpp:869
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1001
-#: src/backend/datasources/filters/OdsFilter.cpp:388
+#: src/backend/datasources/filters/OdsFilter.cpp:392
 #: src/backend/datasources/filters/ReadStatFilter.cpp:528
 #: src/backend/datasources/filters/ROOTFilter.cpp:235
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
@@ -2156,39 +2156,39 @@ msgstr "Rodzaj danych nie jest jeszcze obsługiwany."
 msgid "%1 dimensional data of type %2 not supported yet"
 msgstr "%1 wymiarowe dane rodzaju %2 nie są jeszcze obsługiwane"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:53
+#: src/backend/datasources/filters/OdsFilter.cpp:57
 #: src/backend/datasources/filters/XLSXFilter.cpp:47
 #, kde-format
 msgid "Sheet count: %1"
 msgstr "Liczba arkuszy: %1"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:215
+#: src/backend/datasources/filters/OdsFilter.cpp:219
 #: src/backend/datasources/filters/XLSXFilter.cpp:626
 #, kde-format
 msgid "No sheet selected."
 msgstr "Nie wybrano żadnego arkusza."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:250
+#: src/backend/datasources/filters/OdsFilter.cpp:254
 #, kde-format
 msgid "Selected sheet not found."
 msgstr "Nie znaleziono wybranego arkusza."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:257
+#: src/backend/datasources/filters/OdsFilter.cpp:261
 #, kde-format
 msgid "Invalid sheet."
 msgstr "Nieprawidłowy arkusz."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:318
+#: src/backend/datasources/filters/OdsFilter.cpp:322
 #, kde-format
 msgid "Formulas not supported yet."
 msgstr "Równania nie są jeszcze obsługiwane."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:473
+#: src/backend/datasources/filters/OdsFilter.cpp:477
 #, kde-format
 msgid "Sheet not found."
 msgstr "Nie znaleziono arkusza."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:480
+#: src/backend/datasources/filters/OdsFilter.cpp:484
 #, kde-format
 msgid "Invalid sheet index."
 msgstr "Nieprawidłowy indeks arkusza."
