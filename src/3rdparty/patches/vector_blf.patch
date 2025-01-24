@@ -1,7 +1,7 @@
-diff --git a/@BIN_DIR@/_deps/vector_blf/CMakeLists.txt b/@BIN_DIR@/_deps/vector_blf/CMakeLists.txt
+diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 82da81b..12d5ade 100644
---- a/@BIN_DIR@/_deps/vector_blf/CMakeLists.txt
-+++ b/@BIN_DIR@/_deps/vector_blf/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
 @@ -9,7 +9,7 @@ project(Vector_BLF
      DESCRIPTION "Vector Binary Log File support library")
  
@@ -11,10 +11,10 @@ index 82da81b..12d5ade 100644
  
  # static code analysis
  option(OPTION_RUN_CCCC "Run CCCC" OFF)
-diff --git a/@BIN_DIR@/_deps/vector_blf/src/Vector/BLF/CMakeLists.txt b/@BIN_DIR@/_deps/vector_blf/src/Vector/BLF/CMakeLists.txt
+diff --git a/src/Vector/BLF/CMakeLists.txt b/src/Vector/BLF/CMakeLists.txt
 index b028ea1..41c457a 100644
---- a/@BIN_DIR@/_deps/vector_blf/src/Vector/BLF/CMakeLists.txt
-+++ b/@BIN_DIR@/_deps/vector_blf/src/Vector/BLF/CMakeLists.txt
+--- a/src/Vector/BLF/CMakeLists.txt
++++ b/src/Vector/BLF/CMakeLists.txt
 @@ -6,7 +6,7 @@
  include(GenerateExportHeader)
  
