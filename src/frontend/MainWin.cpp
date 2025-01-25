@@ -138,7 +138,8 @@ MainWin::MainWin(QWidget* parent, const QString& fileName)
 	migrateSettings(); // call this at the very beginning to migrate the application settings first
 	updateLocale();
 
-	DEBUG(Q_FUNC_INFO << ", file name = " << fileName.toStdString())
+	if (!fileName.isEmpty())
+		DEBUG(Q_FUNC_INFO << ", file name = " << fileName.toStdString())
 	initGUI(fileName);
 	setAcceptDrops(true);
 
@@ -588,7 +589,27 @@ void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
 		m_projectExplorer->setCurrentAspect(view->part());
 }
 
+void MainWin::checkIconTheme() {
+	auto themeName = QIcon::themeName();
+	bool isDarkMode = QApplication::palette().color(QPalette::Window).value() < 128;
+	QDEBUG(Q_FUNC_INFO << ", current icon theme:" << themeName << "," << (isDarkMode ? "dark mode" : "light mode"))
+	if (isDarkMode) {
+		if (themeName == QLatin1String("breeze")) {
+			DEBUG(Q_FUNC_INFO << ", set icon theme to breeze-dark")
+			QIcon::setThemeName(QLatin1String("breeze-dark"));
+		}
+	} else {
+		if (themeName == QLatin1String("breeze-dark")) {
+			DEBUG(Q_FUNC_INFO << ", set icon theme to breeze")
+			QIcon::setThemeName(QLatin1String("breeze"));
+		}
+	}
+	//QDEBUG(Q_FUNC_INFO << ", used icon theme:" << QIcon::themeName())
+}
+
 void MainWin::initActions() {
+	checkIconTheme();
+
 	// ******************** File-menu *******************************
 	// add some standard actions
 	m_newProjectAction = KStandardAction::openNew(
@@ -983,6 +1004,8 @@ void MainWin::initMenus() {
 }
 
 void MainWin::colorSchemeChanged(QAction* action) {
+	checkIconTheme();
+
 	// save the selected color scheme
 	auto group = Settings::group(QStringLiteral("Settings_General"));
 	const auto& schemeName = KLocalizedString::removeAcceleratorMarker(action->text());
