@@ -758,7 +758,7 @@ if(APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 endif()
 
 add_executable(labplot ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC})
-target_link_libraries(labplot labplotlib labplotbackendlib labplotnsllib)
+target_link_libraries(labplot PRIVATE labplotlib labplotbackendlib labplotnsllib)
 
 #if(KUserFeedbackQt6_FOUND)
 #    target_link_libraries(labplot KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6)
