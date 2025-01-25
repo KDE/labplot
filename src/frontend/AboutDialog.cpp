@@ -173,11 +173,12 @@ QVector<QStringList> AboutDialog::components() {
 	QVector<QStringList> components;
 
 	// compiler info
-	components << (QStringList() << i18n("C++ Compiler: ") + QLatin1String(CXX_COMPILER) << QString() << QString() << QString());
+	components << (QStringList() << i18n("C++ Compiler: ") + QLatin1String(CXX_COMPILER_ID) << QLatin1String(CXX_COMPILER_VERSION) << QString() << QString());
 
 	// compiler flags
 	auto flags = QString::fromLatin1(CXX_COMPILER_FLAGS);
-	flags.replace(QLatin1String(" -"), QStringLiteral("\n-")); // add line breaks to avoid too long window width
+	// TODO: creates a big gap in the Components windows
+	flags.replace(QLatin1String(" -"), QStringLiteral("\n-")); // add line breaks to avoid big window width
 	components << (QStringList() << i18n("C++ Compiler Flags:") << flags << QString() << QString());
 
 	// alphabetically
