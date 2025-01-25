@@ -434,21 +434,21 @@ void Column::invalidateProperties() {
 /**
  * \brief Insert some empty (or initialized with zero) rows
  */
-void Column::handleRowInsertion(int before, int count, QUndoCommand* parent) {
-	Q_ASSERT(parent);
-	AbstractColumn::handleRowInsertion(before, count, parent);
-	new ColumnInsertRowsCmd(d, before, count, parent);
+void Column::handleRowInsertion(int before, int count) {
+	AbstractColumn::handleRowInsertion(before, count);
+	exec(new ColumnInsertRowsCmd(d, before, count));
+	if (!d->m_suppressDataChangedSignal)
+		Q_EMIT dataChanged(this);
 }
 
 /**
  * \brief Remove 'count' rows starting from row 'first'
  */
-void Column::handleRowRemoval(int first, int count, QUndoCommand* parent) {
-	Q_ASSERT(parent);
-	AbstractColumn::handleRowRemoval(first, count, parent);
-	auto* command = new ColumnRemoveRowsCmd(d, first, count, parent);
-	if (!parent)
-		exec(command);
+void Column::handleRowRemoval(int first, int count) {
+	AbstractColumn::handleRowRemoval(first, count);
+	exec(new ColumnRemoveRowsCmd(d, first, count));
+	if (!d->m_suppressDataChangedSignal)
+		Q_EMIT dataChanged(this);
 }
 
 /**
@@ -476,22 +476,14 @@ void Column::setWidth(int value) {
 /**
  * \brief Clear the content of the column (data and formula definition)
  */
-void Column::clear(QUndoCommand* parent) {
-	if (d->formula().isEmpty()) {
-		auto* command = new ColumnClearCmd(d, parent);
-		if (!parent)
-			exec(command);
-	} else {
-		auto* command = new QUndoCommand(i18n("%1: clear column", name()), parent);
-		bool execute = false;
-		if (!parent) {
-			execute = true;
-			parent = command;
-		}
-		new ColumnClearCmd(d, parent);
-		new ColumnSetGlobalFormulaCmd(d, QString(), QStringList(), QVector<Column*>(), false /* auto update */, true /* auto resize */, parent);
-		if (execute)
-			exec(parent);
+void Column::clear() {
+	if (d->formula().isEmpty())
+		exec(new ColumnClearCmd(d));
+	else {
+		beginMacro(i18n("%1: clear column", name()));
+		exec(new ColumnClearCmd(d));
+		exec(new ColumnSetGlobalFormulaCmd(d, QString(), QStringList(), QVector<Column*>(), false /* auto update */, true /* auto resize */));
+		endMacro();
 	}
 }
 

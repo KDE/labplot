@@ -547,28 +547,12 @@ void AbstractAspect::addChildFast(AbstractAspect* child) {
  */
 void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* before) {
 	insertChild(child, d->indexOfChild(before));
-	Q_CHECK_PTR(child);
-
-	QString new_name = uniqueNameFor(child->name());
-	beginMacro(before ? i18n("%1: insert %2 before %3", name(), new_name, before->name()) : i18n("%1: insert %2 before end", name(), new_name));
-	if (new_name != child->name()) {
-		info(i18n(R"(Renaming "%1" to "%2" in order to avoid name collision.)", child->name(), new_name));
-		child->setName(new_name);
-	}
-	int index = d->indexOfChild(before);
-	if (index == -1)
-		index = d->m_children.count();
-
-	exec(new AspectChildAddCmd(d, child, index));
-	endMacro();
-
 }
 
 void AbstractAspect::insertChild(AbstractAspect* child, int index) {
 	Q_CHECK_PTR(child);
 	if (index == -1)
 		index = d->m_children.count();
-
 
 	const auto* before = this->child<AbstractAspect>(index);
 	QString new_name = uniqueNameFor(child->name());
