@@ -712,14 +712,6 @@ QVector<AspectType> AbstractAspect::pasteTypes() const {
 	return {};
 }
 
-void AbstractAspect::setPasted(bool pasted) {
-	d->m_pasted = pasted;
-}
-
-bool AbstractAspect::isPasted() const {
-	return d->m_pasted;
-}
-
 /*!
  * copies the aspect to the clipboard. The standard XML-serialization
  * via AbstractAspect::load() is used.
@@ -797,7 +789,6 @@ void AbstractAspect::paste(bool duplicate, int index) {
 				aspect = AspectFactory::createAspect(type, this);
 		} else {
 			if (aspect) {
-				aspect->setPasted(true);
 				aspect->setIsLoading(true);
 				aspect->load(&reader, false);
 				break;
@@ -824,10 +815,10 @@ void AbstractAspect::paste(bool duplicate, int index) {
 		}
 
 		project()->restorePointers(aspect);
-		aspect->setIsLoading(false);
-		project()->retransformElements(aspect);
-		aspect->setPasted(false);
 		endMacro();
+
+		aspect->setIsLoading(false); // set back to false before calling retransformElements()
+		project()->retransformElements(aspect);
 	}
 	RESET_CURSOR;
 }

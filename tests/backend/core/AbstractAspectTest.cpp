@@ -143,6 +143,35 @@ void AbstractAspectTest::testAddChildUndoRedo() {
 	QCOMPARE(undoStack->count(), 3);
 }
 
+void AbstractAspectTest::testDuplicateChildUndoRedo() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	plot->addChild(curve);
+	curve->duplicate();
+
+	auto* undoStack = project.undoStack();
+
+	// there should be 4 entries on the undo stack:
+	// 1. add worksheet
+	// 2. add plot
+	// 3. add curve
+	// 4. duplicate of curve
+	QCOMPARE(undoStack->count(), 4);
+
+	// the number of entries should stay the same after undo/redo
+	undoStack->undo();
+	QCOMPARE(undoStack->count(), 4);
+	undoStack->redo();
+	QCOMPARE(undoStack->count(), 4);
+}
+
 void AbstractAspectTest::copyPaste() {
 	Project project;
 
