@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -16,6 +16,8 @@
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/Project.h"
 #include "backend/core/aspectcommands.h"
+#include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
 #include "backend/lib/PropertyChangeCommand.h"
 #include "backend/lib/SignallingUndoCommand.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -742,8 +744,10 @@ QVector<AspectType> AbstractAspect::pasteTypes() const {
 	return {};
 }
 
+STD_SETTER_CMD_IMPL(AbstractAspect, SetPasted, bool, m_pasted)
 void AbstractAspect::setPasted(bool pasted) {
-	d->m_pasted = pasted;
+	if (pasted != d->m_pasted)
+		exec(new AbstractAspectSetPastedCmd(d, pasted, ki18n("%1: pasted")));
 }
 
 bool AbstractAspect::isPasted() const {
@@ -827,7 +831,6 @@ void AbstractAspect::paste(bool duplicate, int index) {
 				aspect = AspectFactory::createAspect(type, this);
 		} else {
 			if (aspect) {
-				aspect->setPasted(true);
 				aspect->setIsLoading(true);
 				aspect->load(&reader, false);
 				break;
@@ -843,9 +846,11 @@ void AbstractAspect::paste(bool duplicate, int index) {
 			aspect->setName(i18n("Copy of '%1'", aspect->name()));
 		}
 
-		if (aspect->type() != AspectType::CartesianPlotLegend)
+		if (aspect->type() != AspectType::CartesianPlotLegend) {
+			setPasted(true);
 			insertChild(aspect, index);
-		else {
+			setPasted(true);
+		} else {
 			// special handling for the legend since only one single
 			// legend object is allowed per plot
 			auto* plot = static_cast<CartesianPlot*>(this);
@@ -856,7 +861,6 @@ void AbstractAspect::paste(bool duplicate, int index) {
 		project()->restorePointers(aspect);
 		aspect->setIsLoading(false);
 		project()->retransformElements(aspect);
-		aspect->setPasted(false);
 		endMacro();
 	}
 	RESET_CURSOR;
@@ -1225,6 +1229,10 @@ AbstractAspectPrivate::AbstractAspectPrivate(AbstractAspect* owner, const QStrin
 AbstractAspectPrivate::~AbstractAspectPrivate() {
 	for (auto* child : std::as_const(m_children))
 		delete child;
+}
+
+QString AbstractAspectPrivate::name() const {
+	return q->name();
 }
 
 /*!

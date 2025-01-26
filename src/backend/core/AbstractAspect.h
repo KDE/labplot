@@ -420,6 +420,8 @@ public:
 	static AspectType clipboardAspectType(QString&);
 	static QString uniqueNameFor(const QString& name, const QStringList& names);
 
+	typedef AbstractAspectPrivate Private;
+
 protected:
 	void info(const QString& text) {
 		Q_EMIT statusInfo(text);

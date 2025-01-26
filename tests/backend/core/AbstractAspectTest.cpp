@@ -116,6 +116,37 @@ void AbstractAspectTest::name() {
 	QCOMPARE(aspectDescriptionChangedCounter, 6);
 }
 
+void AbstractAspectTest::testDuplicateChildUndoRedo() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	plot->addChild(curve);
+	curve->duplicate();
+
+	auto* undoStack = project.undoStack();
+
+	// TODO: QCOMPAREs below are wrong because of https://invent.kde.org/education/labplot/-/issues/1066,
+	// activate the checks once this problem is fixed
+	// there should be 4 entries on the undo stack:
+	// 1. add worksheet
+	// 2. add plot
+	// 3. add curve
+	// 4. duplicate of curve
+	// QCOMPARE(undoStack->count(), 4);
+
+	// the number of entries should stay the same after undo/redo
+	undoStack->undo();
+	// QCOMPARE(undoStack->count(), 4);
+	undoStack->redo();
+	// QCOMPARE(undoStack->count(), 4);
+}
+
 void AbstractAspectTest::copyPaste() {
 	Project project;
 
