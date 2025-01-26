@@ -18,6 +18,7 @@
 class AbstractColumn;
 class Spreadsheet;
 class ProjectPrivate;
+class UndoStack;
 
 class QMimeData;
 class QString;
@@ -43,7 +44,7 @@ public:
 	Project* project() override {
 		return this;
 	}
-	QUndoStack* undoStack() const override;
+	UndoStack* undoStack() const override;
 	QString path() const override {
 		return name();
 	}

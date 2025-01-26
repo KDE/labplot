@@ -19,12 +19,12 @@ class AbstractAspectPrivate;
 class Folder;
 class Project;
 class XmlStreamReader;
+class UndoStack;
 
 class QDateTime;
 class QIcon;
 class QMenu;
 class QUndoCommand;
-class QUndoStack;
 class QXmlStreamWriter;
 
 /// Information about class inheritance
@@ -399,7 +399,7 @@ public:
 
 	// undo/redo related functions
 	void setUndoAware(bool);
-	virtual QUndoStack* undoStack() const;
+	virtual UndoStack* undoStack() const;
 	void exec(QUndoCommand*);
 	void exec(QUndoCommand* command,
 			  const char* preChangeSignal,

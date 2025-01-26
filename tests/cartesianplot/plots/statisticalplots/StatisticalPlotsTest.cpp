@@ -24,7 +24,7 @@
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
 
-#include <QUndoStack>
+#include "backend/lib/UndoStack.h"
 
 // ##############################################################################
 // ############################## Histogram #####################################
