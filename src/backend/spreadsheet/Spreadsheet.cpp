@@ -102,6 +102,26 @@ void Spreadsheet::init() {
 		addChild(new_col);
 	}
 	setRowCount(rows);
+
+	// TODO: move these connects below to a dedicated function which is called every time first/last columns were changed
+	const auto* lastColumn = children<Column>().constLast();
+	connect(lastColumn, &AbstractColumn::rowsAboutToBeInserted, this, [=](const AbstractColumn* sender, int before, int count)  {
+		Q_EMIT rowsAboutToBeInserted(before, before + count - 1);
+	});
+	connect(lastColumn, &AbstractColumn::rowsInserted, this, [=](const AbstractColumn* sender, int, int)  {
+		Q_EMIT rowsInserted(sender->rowCount());
+		Q_EMIT rowCountChanged(sender->rowCount());
+	});
+
+	const auto* firstColumn = children<Column>().constFirst();
+	connect(firstColumn, &AbstractColumn::rowsAboutToBeRemoved, this, [=](const AbstractColumn*, int first, int count) {
+		Q_EMIT rowsAboutToBeRemoved(first, first + count - 1);
+	});
+	connect(firstColumn, &AbstractColumn::rowsRemoved, this, [=](const AbstractColumn* sender, int, int) {
+		Q_EMIT rowsRemoved(sender->rowCount());
+		Q_EMIT rowCountChanged(sender->rowCount());
+	});
+
 }
 
 void Spreadsheet::setSuppressSetCommentFinalizeImport(bool suppress) {
@@ -212,29 +232,6 @@ void Spreadsheet::updateLocale() {
 		col->updateLocale();
 }
 
-class SpreadsheetSetRowsCountCmd : public QUndoCommand {
-public:
-	SpreadsheetSetRowsCountCmd(Spreadsheet* spreadsheet, int oldCount, int newCount)
-		: m_spreadsheet(spreadsheet)
-		, m_oldCount(oldCount)
-		, m_newCount (newCount) {
-	}
-
-	virtual void redo() override {
-		Q_EMIT m_spreadsheet->rowCountChanged(m_newCount);
-	}
-
-	virtual void undo() override {
-		qSwap(m_oldCount, m_newCount);
-		redo();
-	}
-
-private:
-	Spreadsheet* m_spreadsheet;
-	int m_oldCount;
-	int m_newCount;
-};
-
 /*!
  * Grows/shrinks the number of rows in the spreadsheet to \c new_size.
  * @param new_size The new number of rows in the spreadsheet.
@@ -271,15 +268,9 @@ void Spreadsheet::removeRows(int first, int count) {
 		return;
 
 	WAIT_CURSOR;
-	const int oldCount = rowCount();
 	beginMacro(i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count));
-
-	Q_EMIT rowsAboutToBeRemoved(first, first + count - 1);
 	for (auto* col : children<Column>())
 		col->removeRows(first, count);
-	Q_EMIT rowsRemoved(rowCount());
-
-	exec(new SpreadsheetSetRowsCountCmd(this, oldCount, rowCount()));
 	endMacro();
 	RESET_CURSOR;
 }
@@ -293,16 +284,10 @@ void Spreadsheet::insertRows(int before, int count) {
 	if (count < 1 || before < 0 || before > rowCount())
 		return;
 
-	const int oldCount = rowCount();
 	WAIT_CURSOR;
 	beginMacro(i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count));
-
-	Q_EMIT rowsAboutToBeInserted(before, before + count - 1);
 	for (auto* col : children<Column>())
 		col->insertRows(before, count);
-	Q_EMIT rowsInserted(rowCount());
-
-	exec(new SpreadsheetSetRowsCountCmd(this, oldCount, rowCount()));
 	endMacro();
 	RESET_CURSOR;
 }
