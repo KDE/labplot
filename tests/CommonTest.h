@@ -15,6 +15,8 @@
 
 #include <gsl/gsl_math.h>
 
+class UndoStack;
+
 ///////////////////////// macros ///////////
 
 // Comparing two values. First a direct comparsion will be done, because for std::nan nsl_math_aproximately_equal does not work
@@ -157,8 +159,7 @@ protected:
 			QVERIFY(!gsl_fcmp(actual, expected, delta));
 		}
 	}
-	static void listStack(QUndoStack* stack);
-
 	void wait(int milliseconds);
+	static void listStack(UndoStack* stack);
 };
 #endif
