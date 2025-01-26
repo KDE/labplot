@@ -21,6 +21,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/UndoStack.h"
 
 #include <KStandardAction>
 #include <QClipboard>
@@ -1017,7 +1018,7 @@ bool AbstractAspect::isUndoAware() const {
  * The only requirement is that the root Aspect reimplements undoStack() to get the
  * undo stack from somewhere (the default implementation just delegates to parentAspect()).
  */
-QUndoStack* AbstractAspect::undoStack() const {
+UndoStack* AbstractAspect::undoStack() const {
 	return parentAspect() ? parentAspect()->undoStack() : nullptr;
 }
 
