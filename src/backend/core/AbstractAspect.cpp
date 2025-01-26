@@ -746,6 +746,8 @@ QVector<AspectType> AbstractAspect::pasteTypes() const {
 
 STD_SETTER_CMD_IMPL(AbstractAspect, SetPasted, bool, m_pasted)
 void AbstractAspect::setPasted(bool pasted) {
+	// this property is part of the aspect state which is evaluated during the duplicate/paste steps,
+	// its modification needs to be put onto the undo stack.
 	if (pasted != d->m_pasted)
 		exec(new AbstractAspectSetPastedCmd(d, pasted, ki18n("%1: pasted")));
 }
@@ -849,7 +851,7 @@ void AbstractAspect::paste(bool duplicate, int index) {
 		if (aspect->type() != AspectType::CartesianPlotLegend) {
 			setPasted(true);
 			insertChild(aspect, index);
-			setPasted(true);
+			setPasted(false);
 		} else {
 			// special handling for the legend since only one single
 			// legend object is allowed per plot
