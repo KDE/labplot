@@ -325,9 +325,7 @@ bool AbstractColumn::copy(const AbstractColumn* /*source*/, int /*source_start*/
  */
 void AbstractColumn::insertRows(int before, int count) {
 	beginMacro(i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count));
-	Q_EMIT rowsAboutToBeInserted(this, before, count);
 	handleRowInsertion(before, count);
-	Q_EMIT rowsInserted(this, before, count);
 	endMacro();
 }
 
@@ -340,11 +338,8 @@ void AbstractColumn::handleRowInsertion(int before, int count) {
  */
 void AbstractColumn::removeRows(int first, int count) {
 	beginMacro(i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count));
-	Q_EMIT rowsAboutToBeRemoved(this, first, count);
 	handleRowRemoval(first, count);
-	Q_EMIT rowsRemoved(this, first, count);
 	endMacro();
-
 }
 
 void AbstractColumn::handleRowRemoval(int first, int count) {
