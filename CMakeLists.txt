@@ -225,7 +225,8 @@ endif()
 include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 add_definitions(-DLVERSION=\"${labplot_VERSION}\")
-add_definitions(-DCXX_COMPILER=\"${CMAKE_CXX_COMPILER_ID}\ ${CMAKE_CXX_COMPILER_VERSION}\")
+add_definitions(-DCXX_COMPILER_ID=\"${CMAKE_CXX_COMPILER_ID}\")
+add_definitions(-DCXX_COMPILER_VERSION=\"${CMAKE_CXX_COMPILER_VERSION}\")
 add_definitions(-DCXX_COMPILER_FLAGS=\"${CMAKE_CXX_FLAGS}\")
 set(BUILD_SHARED_LIBS true)
 
@@ -676,6 +677,18 @@ if(ENABLE_EIGEN3)
     endif()
 else()
     message(STATUS "Eigen3 support DISABLED")
+endif()
+
+# Qt Advanced Docking System (required) #####################
+find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG)
+if(NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
+    option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
+    option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)
+    if(TARGET Qt${QT_VERSION_MAJOR}::GuiPrivate)
+        message(STATUS "Building local version of Qt-Advanced-Docking-System.")
+    else ()
+        message(FATAL_ERROR "Missing Qt${QT_VERSION_MAJOR}::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
+    endif()
 endif()
 
 ### Touch bar on macOS (optional) #############################

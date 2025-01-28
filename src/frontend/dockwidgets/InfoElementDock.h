@@ -28,6 +28,7 @@ public:
 	explicit InfoElementDock(QWidget* parent = nullptr);
 	~InfoElementDock();
 	void setInfoElements(QList<InfoElement*>);
+	void updateLocale() override;
 	void retranslateUi() override;
 
 public Q_SLOTS:
