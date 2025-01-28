@@ -592,15 +592,15 @@ void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
 void MainWin::checkIconTheme() {
 	auto themeName = QIcon::themeName();
 	bool isDarkMode = QApplication::palette().color(QPalette::Window).value() < 128;
-	QDEBUG(Q_FUNC_INFO << ", current icon theme:" << themeName << "," << (isDarkMode ? "dark mode" : "light mode"))
+	INFO(Q_FUNC_INFO << ", current icon theme: \"" << themeName.toStdString() << "\", " << (isDarkMode ? "dark mode" : "light mode"))
 	if (isDarkMode) {
 		if (themeName == QLatin1String("breeze")) {
-			DEBUG(Q_FUNC_INFO << ", set icon theme to breeze-dark")
+			INFO(Q_FUNC_INFO << ", set icon theme to breeze-dark")
 			QIcon::setThemeName(QLatin1String("breeze-dark"));
 		}
 	} else {
 		if (themeName == QLatin1String("breeze-dark")) {
-			DEBUG(Q_FUNC_INFO << ", set icon theme to breeze")
+			INFO(Q_FUNC_INFO << ", set icon theme to breeze")
 			QIcon::setThemeName(QLatin1String("breeze"));
 		}
 	}
