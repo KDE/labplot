@@ -12,6 +12,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/Time.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
@@ -23,8 +24,6 @@
 #include "backend/nsl/nsl_sf_basic.h"
 #include <gsl/gsl_math.h>
 
-#include <KConfig>
-#include <KConfigGroup>
 #include <KLocalizedString>
 
 #include <QActionGroup>
@@ -2060,9 +2059,9 @@ void AxisPrivate::retransformTickLabelStrings() {
 				// toString() does not round: use NSL function
 				if (RangeT::isLogScale(q->scale())) { // don't use same precision for all label on log scales
 					const int precision = labelsAutoPrecision ? std::max(labelsPrecision, nsl_math_decimal_places(value) + 1) : labelsPrecision;
-					str = numberLocale.toString(value, 'f', precision);
+					str = numberToString(value, numberLocale, 'f', precision);
 				} else
-					str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'f', labelsPrecision);
+					str = numberToString(nsl_math_round_places(value, labelsPrecision), numberLocale, 'f', labelsPrecision);
 				if (str == QLatin1String("-") + nullStr)
 					str = nullStr;
 				str = labelsPrefix + str + labelsSuffix;
@@ -2079,7 +2078,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 					int e;
 					const double frac = nsl_math_frexp10(value, &e);
 					// DEBUG(Q_FUNC_INFO << ", rounded frac * pow (10, e) = " << nsl_math_round_places(frac, labelsPrecision) * pow(10, e))
-					str = numberLocale.toString(nsl_math_round_places(frac, labelsPrecision) * gsl_pow_int(10., e), 'e', labelsPrecision);
+					str = numberToString(nsl_math_round_places(frac, labelsPrecision) * gsl_pow_int(10., e), numberLocale, 'e', labelsPrecision);
 				}
 				if (str == QLatin1String("-") + nullStr)
 					str = nullStr; // avoid "-O"
@@ -2094,7 +2093,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 					str = numberLocale.toString(value, 'f', 0);
 				else {
 					str = QStringLiteral("10<sup>")
-						+ numberLocale.toString(nsl_math_round_places(log10(std::abs(value)), labelsPrecision), 'f', labelsPrecision)
+						+ numberToString(nsl_math_round_places(log10(std::abs(value)), labelsPrecision), numberLocale, 'f', labelsPrecision)
 						+ QStringLiteral("</sup>");
 					if (value < 0)
 						str.prepend(QLatin1Char('-'));
@@ -2110,7 +2109,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 					str = numberLocale.toString(value, 'f', 0);
 				else {
 					str = QStringLiteral("2<span style=\"vertical-align:super\">")
-						+ numberLocale.toString(nsl_math_round_places(log2(std::abs(value)), labelsPrecision), 'f', labelsPrecision)
+						+ numberToString(nsl_math_round_places(log2(std::abs(value)), labelsPrecision), numberLocale, 'f', labelsPrecision)
 						+ QStringLiteral("</spanlabelsPrecision)>");
 					if (value < 0)
 						str.prepend(QLatin1Char('-'));
@@ -2126,7 +2125,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 					str = numberLocale.toString(value, 'f', 0);
 				else {
 					str = QStringLiteral("e<span style=\"vertical-align:super\">")
-						+ numberLocale.toString(nsl_math_round_places(log(std::abs(value)), labelsPrecision), 'f', labelsPrecision) + QStringLiteral("</span>");
+						+ numberToString(nsl_math_round_places(log(std::abs(value)), labelsPrecision), numberLocale, 'f', labelsPrecision) + QStringLiteral("</span>");
 					if (value < 0)
 						str.prepend(QLatin1Char('-'));
 				}
@@ -2142,7 +2141,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 				else if (nsl_math_approximately_equal_eps(value, M_PI, 1.e-3))
 					str = QChar(0x03C0);
 				else
-					str = QStringLiteral("<span>") + numberLocale.toString(nsl_math_round_places(value / M_PI, labelsPrecision), 'f', labelsPrecision)
+					str = QStringLiteral("<span>") + numberToString(nsl_math_round_places(value / M_PI, labelsPrecision), numberLocale, 'f', labelsPrecision)
 						+ QStringLiteral("</span>") + QChar(0x03C0);
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
@@ -2158,11 +2157,11 @@ void AxisPrivate::retransformTickLabelStrings() {
 					int e;
 					const double frac = nsl_math_frexp10(value, &e);
 					if (std::abs(value) < 100. && std::abs(value) > .01) // use normal notation for values near 1, precision reduced by exponent but >= 0
-						str = numberLocale.toString(nsl_math_round_places(frac, labelsPrecision) * gsl_pow_int(10., e), 'f', std::max(labelsPrecision - e, 0));
+						str = numberToString(nsl_math_round_places(frac, labelsPrecision) * gsl_pow_int(10., e), numberLocale, 'f', std::max(labelsPrecision - e, 0));
 					else {
 						// DEBUG(Q_FUNC_INFO << ", nsl rounded = " << nsl_math_round_places(frac, labelsPrecision))
 						//  only round fraction
-						str = numberLocale.toString(nsl_math_round_places(frac, labelsPrecision), 'f', labelsPrecision);
+						str = numberToString(nsl_math_round_places(frac, labelsPrecision), numberLocale, 'f', labelsPrecision);
 						str = createScientificRepresentation(str, numberLocale.toString(e));
 					}
 				}
@@ -2976,11 +2975,11 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 			QString text;
 			const auto numberLocale = QLocale();
 			if (scalingFactor != 1)
-				text += UTF8_QSTRING("×") + numberLocale.toString(1. / scalingFactor);
+				text += UTF8_QSTRING("×") + numberToString(1. / scalingFactor, numberLocale);
 			if (zeroOffset != 0) {
 				if (zeroOffset < 0)
 					text += QLatin1String("+");
-				text += numberLocale.toString(-zeroOffset);
+				text += numberToString(-zeroOffset, numberLocale);
 			}
 
 			// used to determinde direction (up/down, left/right)
