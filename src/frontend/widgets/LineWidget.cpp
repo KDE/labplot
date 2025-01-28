@@ -122,8 +122,7 @@ void LineWidget::setEnabled(bool enabled) {
 }
 
 void LineWidget::updateLocale() {
-	const auto numberLocale = QLocale();
-	ui.sbWidth->setLocale(numberLocale);
+	ui.sbWidth->setLocale(QLocale());
 }
 
 //*************************************************************
