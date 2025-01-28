@@ -97,8 +97,6 @@ void ImageDock::setImages(QList<Image*> list) {
 	m_image = list.first();
 	setAspects(list);
 
-	updateLocale();
-
 	QList<Line*> lines;
 	for (auto* image : m_imageList)
 		lines << image->borderLine();
@@ -163,7 +161,7 @@ void ImageDock::updateUnits() {
 }
 
 /*
- * updates the locale in the widgets. called when the application settins are changed.
+ * updates the locale in the widgets. called when the application settings are changed.
  */
 void ImageDock::updateLocale() {
 	const auto numberLocale = QLocale();
