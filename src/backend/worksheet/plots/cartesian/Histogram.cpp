@@ -1236,7 +1236,8 @@ void HistogramPrivate::updateValues() {
 
 			switch (xColMode) {
 			case AbstractColumn::ColumnMode::Double:
-				valuesStrings << valuesPrefix + numberToString(valuesColumn->valueAt(i), numberLocale, value->numericFormat(), value->precision()) + valuesSuffix;
+				valuesStrings << valuesPrefix + numberToString(valuesColumn->valueAt(i), numberLocale, value->numericFormat(), value->precision())
+						+ valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:

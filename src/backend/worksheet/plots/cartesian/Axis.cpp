@@ -10,9 +10,9 @@
 
 #include "AxisPrivate.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/core/Time.h"
 #include "backend/core/column/Column.h"
-#include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
@@ -2125,7 +2125,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 					str = numberLocale.toString(value, 'f', 0);
 				else {
 					str = QStringLiteral("e<span style=\"vertical-align:super\">")
-						+ numberToString(nsl_math_round_places(log(std::abs(value)), labelsPrecision), numberLocale, 'f', labelsPrecision) + QStringLiteral("</span>");
+						+ numberToString(nsl_math_round_places(log(std::abs(value)), labelsPrecision), numberLocale, 'f', labelsPrecision)
+						+ QStringLiteral("</span>");
 					if (value < 0)
 						str.prepend(QLatin1Char('-'));
 				}
@@ -2157,7 +2158,10 @@ void AxisPrivate::retransformTickLabelStrings() {
 					int e;
 					const double frac = nsl_math_frexp10(value, &e);
 					if (std::abs(value) < 100. && std::abs(value) > .01) // use normal notation for values near 1, precision reduced by exponent but >= 0
-						str = numberToString(nsl_math_round_places(frac, labelsPrecision) * gsl_pow_int(10., e), numberLocale, 'f', std::max(labelsPrecision - e, 0));
+						str = numberToString(nsl_math_round_places(frac, labelsPrecision) * gsl_pow_int(10., e),
+											 numberLocale,
+											 'f',
+											 std::max(labelsPrecision - e, 0));
 					else {
 						// DEBUG(Q_FUNC_INFO << ", nsl rounded = " << nsl_math_round_places(frac, labelsPrecision))
 						//  only round fraction
