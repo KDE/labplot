@@ -1118,7 +1118,6 @@ CartesianPlot* WorksheetElement::plot() const {
  */
 QString WorksheetElementPrivate::numberToString(int value, const QLocale& locale) {
 	QString result = locale.toString(value);
-	result.replace(0, 1, QString::fromUtf8("−"));
 	if (value < 0)
 		handleNegativeNumber(result);
 	return result;
