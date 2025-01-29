@@ -624,13 +624,13 @@ void LollipopPlotPrivate::verticalPlot(int columnIndex) {
 		const double value = column->valueAt(i);
 		double x;
 
+		// translate to the beginning of the group
 		if (xColumn)
-			x = xColumn->valueAt(i);
+			x = xColumn->valueAt(i) - m_groupWidth / 2;
 		else
-			x = m_groupGap
-				+ valueIndex * m_groupWidth; // translate to the beginning of the group - 1st group is placed between 0 and 1, 2nd between 1 and 2, etc.
+			x = valueIndex * m_groupWidth; // for m_groupWidth = 1, 1st group is placed between 0 and 1, 2nd between 1 and 2, etc.
 
-		x += (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
+		x += m_groupGap + (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
 
 		symbolPoints << QPointF(x + width / 2, value);
 		m_valuesPointsLogical << QPointF(x + width / 2, value);
