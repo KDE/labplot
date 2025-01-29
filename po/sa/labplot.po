@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-26 00:38+0000\n"
+"POT-Creation-Date: 2025-01-29 00:37+0000\n"
 "PO-Revision-Date: 2024-12-29 23:07+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -6353,8 +6353,8 @@ msgstr "परिपत्रम्"
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto2)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto)
 #: src/backend/nsl/nsl_conv.c:21 src/frontend/dockwidgets/AxisDock.cpp:235
-#: src/frontend/dockwidgets/InfoElementDock.cpp:130
-#: src/frontend/dockwidgets/InfoElementDock.cpp:279
+#: src/frontend/dockwidgets/InfoElementDock.cpp:126
+#: src/frontend/dockwidgets/InfoElementDock.cpp:285
 #: src/frontend/ui/dockwidgets/axisdock.ui:473
 #: src/frontend/ui/dockwidgets/axisdock.ui:670
 #: src/frontend/ui/dockwidgets/axisdock.ui:904
@@ -7628,7 +7628,7 @@ msgstr "%1: अधः गद्दी सेट् कुर्वन्तु"
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:283
 #: src/frontend/dockwidgets/HistogramDock.cpp:269
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:245
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:99
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:90
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:88
 #: src/frontend/dockwidgets/XYCurveDock.cpp:524
 #, kde-format
@@ -7648,7 +7648,7 @@ msgstr "क्षैतिज"
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:907
 #: src/frontend/dockwidgets/HistogramDock.cpp:268
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:246
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:100
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:91
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:89
 #: src/frontend/dockwidgets/XYCurveDock.cpp:523
 #, kde-format
@@ -10128,151 +10128,151 @@ msgstr "कर्नेलः : "
 msgid "C++ Compiler: "
 msgstr "C++ संकलकः : "
 
-#: src/frontend/AboutDialog.cpp:181
+#: src/frontend/AboutDialog.cpp:182
 #, fuzzy, kde-format
 #| msgid "C++ Compiler Flags: "
 msgid "C++ Compiler Flags:"
 msgstr "C++ संकलक ध्वजाः: "
 
-#: src/frontend/AboutDialog.cpp:185
+#: src/frontend/AboutDialog.cpp:186
 #, kde-format
 msgid "Frontend to Mathematical Applications"
 msgstr "गणितीय अनुप्रयोगानाम् अग्रभागः"
 
-#: src/frontend/AboutDialog.cpp:187 src/frontend/AboutDialog.cpp:192
-#: src/frontend/AboutDialog.cpp:197 src/frontend/AboutDialog.cpp:202
-#: src/frontend/AboutDialog.cpp:207 src/frontend/AboutDialog.cpp:213
-#: src/frontend/AboutDialog.cpp:218 src/frontend/AboutDialog.cpp:223
-#: src/frontend/AboutDialog.cpp:228 src/frontend/AboutDialog.cpp:233
-#: src/frontend/AboutDialog.cpp:238 src/frontend/AboutDialog.cpp:244
-#: src/frontend/AboutDialog.cpp:249 src/frontend/AboutDialog.cpp:254
-#: src/frontend/AboutDialog.cpp:259 src/frontend/AboutDialog.cpp:264
-#: src/frontend/AboutDialog.cpp:270 src/frontend/AboutDialog.cpp:275
-#: src/frontend/AboutDialog.cpp:280 src/frontend/AboutDialog.cpp:285
-#: src/frontend/AboutDialog.cpp:291 src/frontend/AboutDialog.cpp:296
-#: src/frontend/AboutDialog.cpp:313
+#: src/frontend/AboutDialog.cpp:188 src/frontend/AboutDialog.cpp:193
+#: src/frontend/AboutDialog.cpp:198 src/frontend/AboutDialog.cpp:203
+#: src/frontend/AboutDialog.cpp:208 src/frontend/AboutDialog.cpp:214
+#: src/frontend/AboutDialog.cpp:219 src/frontend/AboutDialog.cpp:224
+#: src/frontend/AboutDialog.cpp:229 src/frontend/AboutDialog.cpp:234
+#: src/frontend/AboutDialog.cpp:239 src/frontend/AboutDialog.cpp:245
+#: src/frontend/AboutDialog.cpp:250 src/frontend/AboutDialog.cpp:255
+#: src/frontend/AboutDialog.cpp:260 src/frontend/AboutDialog.cpp:265
+#: src/frontend/AboutDialog.cpp:271 src/frontend/AboutDialog.cpp:276
+#: src/frontend/AboutDialog.cpp:281 src/frontend/AboutDialog.cpp:286
+#: src/frontend/AboutDialog.cpp:292 src/frontend/AboutDialog.cpp:297
+#: src/frontend/AboutDialog.cpp:314
 #, kde-format
 msgid "missing"
 msgstr "असमेत"
 
-#: src/frontend/AboutDialog.cpp:190
+#: src/frontend/AboutDialog.cpp:191
 #, kde-format
 msgid ""
 "Support data files in FITS (Flexible Image Transport System) data format"
 msgstr ""
 "FITS (Flexible Image Transport System) इति आँकडास्वरूपे आँकडासञ्चिकानां समर्थनं कुर्वन्तु"
 
-#: src/frontend/AboutDialog.cpp:195
+#: src/frontend/AboutDialog.cpp:196
 #, kde-format
 msgid "Markdown markup language support"
 msgstr "मार्कडाउन मार्कअप भाषा समर्थन"
 
-#: src/frontend/AboutDialog.cpp:200
+#: src/frontend/AboutDialog.cpp:201
 #, kde-format
 msgid "C++ library for linear algebra"
 msgstr "रेखीयबीजगणितस्य कृते C++ पुस्तकालयः"
 
-#: src/frontend/AboutDialog.cpp:205
+#: src/frontend/AboutDialog.cpp:206
 #, kde-format
 msgid "Fastest Fourier Transform in the West"
 msgstr "पश्चिमे द्रुततमं फूरियररूपान्तरणं"
 
-#: src/frontend/AboutDialog.cpp:209
+#: src/frontend/AboutDialog.cpp:210
 #, kde-format
 msgid "GNU Scientific Library"
 msgstr "जीएनयू वैज्ञानिक पुस्तकालय"
 
-#: src/frontend/AboutDialog.cpp:211
+#: src/frontend/AboutDialog.cpp:212
 #, kde-format
 msgid "High-performance data management and storage suite"
 msgstr "उच्च-प्रदर्शन-दत्तांश-प्रबन्धन-भण्डारण-समूहः"
 
-#: src/frontend/AboutDialog.cpp:216
+#: src/frontend/AboutDialog.cpp:217
 #, kde-format
 msgid "Syntax highlighting engine"
 msgstr "वाक्यविन्यास हाइलाइटिंग इञ्जिन"
 
-#: src/frontend/AboutDialog.cpp:221
+#: src/frontend/AboutDialog.cpp:222
 #, kde-format
 msgid "Support collecting feedback from users"
 msgstr "उपयोक्तृभ्यः प्रतिक्रियासङ्ग्रहणस्य समर्थनं करोति"
 
-#: src/frontend/AboutDialog.cpp:226
+#: src/frontend/AboutDialog.cpp:227
 #, kde-format
 msgid "Complex error and related functions"
 msgstr "जटिलदोषः तथा तत्सम्बद्धाः कार्याः"
 
-#: src/frontend/AboutDialog.cpp:231
+#: src/frontend/AboutDialog.cpp:232
 #, kde-format
 msgid "importing Origin OPJ project files"
 msgstr "Origin OPJ परियोजना सञ्चिकाः आयातयन्"
 
-#: src/frontend/AboutDialog.cpp:236
+#: src/frontend/AboutDialog.cpp:237
 #, kde-format
 msgid "Import binary MATLAB MAT files"
 msgstr "द्विचक्रीय MATLAB MAT सञ्चिकाः आयातयन्तु"
 
-#: src/frontend/AboutDialog.cpp:241
+#: src/frontend/AboutDialog.cpp:242
 #, kde-format
 msgid "MCAP file support"
 msgstr "MCAP सञ्चिकासमर्थनम्"
 
-#: src/frontend/AboutDialog.cpp:247
+#: src/frontend/AboutDialog.cpp:248
 #, kde-format
 msgid "Network Common Data Form"
 msgstr "संजाल सामान्य आँकडा प्रपत्र"
 
-#: src/frontend/AboutDialog.cpp:252
+#: src/frontend/AboutDialog.cpp:253
 #, kde-format
 msgid "Import ODS (Open Document Spreadsheet) files"
 msgstr "ODS (Open Document Spreadsheet) सञ्चिकाः आयातयन्तु"
 
-#: src/frontend/AboutDialog.cpp:257
+#: src/frontend/AboutDialog.cpp:258
 #, kde-format
 msgid "PDF rendering library"
 msgstr "PDF प्रतिपादन पुस्तकालयः"
 
-#: src/frontend/AboutDialog.cpp:262
+#: src/frontend/AboutDialog.cpp:263
 #, kde-format
 msgid "Offers available actions for a specific purpose"
 msgstr "विशिष्टप्रयोजनाय उपलब्धानि क्रियाणि प्रस्तावति"
 
-#: src/frontend/AboutDialog.cpp:266
+#: src/frontend/AboutDialog.cpp:267
 #, kde-format
 msgid "Qt Advanced Docking System"
 msgstr "Qt उन्नत डॉकिंग प्रणाली"
 
-#: src/frontend/AboutDialog.cpp:268
+#: src/frontend/AboutDialog.cpp:269
 #, kde-format
 msgid "Support data from MQTT brokers"
 msgstr "MQTT दलालानां समर्थनदत्तांशः"
 
-#: src/frontend/AboutDialog.cpp:273
+#: src/frontend/AboutDialog.cpp:274
 #, kde-format
 msgid "Serial port functionality support"
 msgstr "क्रमिक पोर्ट कार्यक्षमता समर्थन"
 
-#: src/frontend/AboutDialog.cpp:278
+#: src/frontend/AboutDialog.cpp:279
 #, kde-format
 msgid "SVG export support"
 msgstr "SVG निर्यातसमर्थनम्"
 
-#: src/frontend/AboutDialog.cpp:283
+#: src/frontend/AboutDialog.cpp:284
 #, kde-format
 msgid "Import Excel xlsx files"
 msgstr "Excel xlsx सञ्चिकाः आयातयन्तु"
 
-#: src/frontend/AboutDialog.cpp:289
+#: src/frontend/AboutDialog.cpp:290
 #, kde-format
 msgid "Read (and write) data sets from SAS, Stata, and SPSS"
 msgstr "SAS, Stata, SPSS इत्येतयोः दत्तांशसमूहान् पठन्तु (लेखयन्तु च)"
 
-#: src/frontend/AboutDialog.cpp:294
+#: src/frontend/AboutDialog.cpp:295
 #, kde-format
 msgid "Binary Log File (BLF) file support"
 msgstr "द्विचक्रीयलॉगसञ्चिका (BLF) सञ्चिकासमर्थनम्"
 
-#: src/frontend/AboutDialog.cpp:311
+#: src/frontend/AboutDialog.cpp:312
 #, kde-format
 msgid "Components:"
 msgstr "घटकाः :"
@@ -12268,8 +12268,8 @@ msgstr "दत्तांशप्रदेशाः"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:270
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:281
 #: src/frontend/dockwidgets/CustomPointDock.cpp:134
-#: src/frontend/dockwidgets/ImageDock.cpp:187
-#: src/frontend/dockwidgets/ImageDock.cpp:197
+#: src/frontend/dockwidgets/ImageDock.cpp:185
+#: src/frontend/dockwidgets/ImageDock.cpp:195
 #: src/frontend/widgets/LabelWidget.cpp:503
 #: src/frontend/widgets/LabelWidget.cpp:514
 #, kde-format
@@ -12283,8 +12283,8 @@ msgstr "उपरितन"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:272
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:283
 #: src/frontend/dockwidgets/CustomPointDock.cpp:136
-#: src/frontend/dockwidgets/ImageDock.cpp:189
-#: src/frontend/dockwidgets/ImageDock.cpp:199
+#: src/frontend/dockwidgets/ImageDock.cpp:187
+#: src/frontend/dockwidgets/ImageDock.cpp:197
 #: src/frontend/widgets/LabelWidget.cpp:505
 #: src/frontend/widgets/LabelWidget.cpp:516
 #, kde-format
@@ -12364,8 +12364,8 @@ msgstr "अर्धपूरितः, बृहत्"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:264
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:276
 #: src/frontend/dockwidgets/CustomPointDock.cpp:129
-#: src/frontend/dockwidgets/ImageDock.cpp:182
-#: src/frontend/dockwidgets/ImageDock.cpp:192
+#: src/frontend/dockwidgets/ImageDock.cpp:180
+#: src/frontend/dockwidgets/ImageDock.cpp:190
 #: src/frontend/dockwidgets/XYCurveDock.cpp:518
 #: src/frontend/widgets/BackgroundWidget.cpp:118
 #: src/frontend/widgets/LabelWidget.cpp:497
@@ -12382,8 +12382,8 @@ msgstr "वामः"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:266
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:278
 #: src/frontend/dockwidgets/CustomPointDock.cpp:131
-#: src/frontend/dockwidgets/ImageDock.cpp:184
-#: src/frontend/dockwidgets/ImageDock.cpp:194
+#: src/frontend/dockwidgets/ImageDock.cpp:182
+#: src/frontend/dockwidgets/ImageDock.cpp:192
 #: src/frontend/dockwidgets/XYCurveDock.cpp:519
 #: src/frontend/widgets/BackgroundWidget.cpp:119
 #: src/frontend/widgets/LabelWidget.cpp:499
@@ -12542,7 +12542,7 @@ msgstr "%1 अक्षाः: टेम्पलेट् \"%2\" लोड् �
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:454
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:237
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:237
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
@@ -12936,10 +12936,10 @@ msgstr "पंक्ति प्रमुख"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:282
 #: src/frontend/dockwidgets/CustomPointDock.cpp:130
 #: src/frontend/dockwidgets/CustomPointDock.cpp:135
-#: src/frontend/dockwidgets/ImageDock.cpp:183
-#: src/frontend/dockwidgets/ImageDock.cpp:188
-#: src/frontend/dockwidgets/ImageDock.cpp:193
-#: src/frontend/dockwidgets/ImageDock.cpp:198
+#: src/frontend/dockwidgets/ImageDock.cpp:181
+#: src/frontend/dockwidgets/ImageDock.cpp:186
+#: src/frontend/dockwidgets/ImageDock.cpp:191
+#: src/frontend/dockwidgets/ImageDock.cpp:196
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:296
 #: src/frontend/widgets/LabelWidget.cpp:498
 #: src/frontend/widgets/LabelWidget.cpp:504
@@ -13107,12 +13107,12 @@ msgstr "संभाव्यता घनत्व"
 msgid "%1 histograms: template \"%2\" loaded"
 msgstr "%1 हिस्टोग्रामाः: टेम्पलेट् \"%2\" लोड् अभवत्"
 
-#: src/frontend/dockwidgets/InfoElementDock.cpp:221
+#: src/frontend/dockwidgets/InfoElementDock.cpp:227
 #, kde-format
 msgid "%1 info elements: curve \"%2\" removed"
 msgstr "%1 info elements: वक्रं \"%2\" निष्कासितम्"
 
-#: src/frontend/dockwidgets/InfoElementDock.cpp:223
+#: src/frontend/dockwidgets/InfoElementDock.cpp:229
 #, kde-format
 msgid "%1: curve \"%2\" removed"
 msgstr "%1: वक्रं \"%2\" निष्कासितम्"
@@ -13297,7 +13297,7 @@ msgid ""
 "percentiles of the provided data"
 msgstr ""
 
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:235
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:226
 #, kde-format
 msgid "%1 reference lines: template \"%2\" loaded"
 msgstr "%1 सन्दर्भपङ्क्तयः: टेम्पलेट् \"%2\" लोड् कृतम्"
@@ -14531,22 +14531,22 @@ msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr "ROOT (CERN) TH1 हिस्टोग्रामस्य आयातस्य समर्थनम्"
 
-#: src/frontend/LabPlot.cpp:100
+#: src/frontend/LabPlot.cpp:111
 #, kde-format
 msgid "Disable splash screen"
 msgstr "स्पलैश स्क्रीन अक्षमम्"
 
-#: src/frontend/LabPlot.cpp:103
+#: src/frontend/LabPlot.cpp:114
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr "प्रस्तोता मोड् मध्ये आरभत"
 
-#: src/frontend/LabPlot.cpp:106
+#: src/frontend/LabPlot.cpp:117
 #, kde-format
 msgid "Open a project file."
 msgstr "परियोजनासञ्चिकां उद्घाटयन्तु ।"
 
-#: src/frontend/LabPlot.cpp:125
+#: src/frontend/LabPlot.cpp:136
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -14555,7 +14555,7 @@ msgstr ""
 "'%1' सञ्चिकां उद्घाटयितुं न शक्यते । आरम्भं कर्तुं 'Continue' नुदन्तु अथवा अनुप्रयोगात् निर्गन्तुं "
 "'Cancel' नुदन्तु ।"
 
-#: src/frontend/LabPlot.cpp:126
+#: src/frontend/LabPlot.cpp:137
 #, kde-format
 msgid "Failed to Open"
 msgstr "उद्घाटयितुं असफलम्"

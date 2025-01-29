@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-26 00:38+0000\n"
+"POT-Creation-Date: 2025-01-29 00:37+0000\n"
 "PO-Revision-Date: 2025-01-12 08:18+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -6376,8 +6376,8 @@ msgstr "Cirkulero"
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto2)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto)
 #: src/backend/nsl/nsl_conv.c:21 src/frontend/dockwidgets/AxisDock.cpp:235
-#: src/frontend/dockwidgets/InfoElementDock.cpp:130
-#: src/frontend/dockwidgets/InfoElementDock.cpp:279
+#: src/frontend/dockwidgets/InfoElementDock.cpp:126
+#: src/frontend/dockwidgets/InfoElementDock.cpp:285
 #: src/frontend/ui/dockwidgets/axisdock.ui:473
 #: src/frontend/ui/dockwidgets/axisdock.ui:670
 #: src/frontend/ui/dockwidgets/axisdock.ui:904
@@ -7651,7 +7651,7 @@ msgstr "%1: starigis malsupran kompletigo"
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:283
 #: src/frontend/dockwidgets/HistogramDock.cpp:269
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:245
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:99
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:90
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:88
 #: src/frontend/dockwidgets/XYCurveDock.cpp:524
 #, kde-format
@@ -7671,7 +7671,7 @@ msgstr "Horizontala"
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:907
 #: src/frontend/dockwidgets/HistogramDock.cpp:268
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:246
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:100
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:91
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:89
 #: src/frontend/dockwidgets/XYCurveDock.cpp:523
 #, kde-format
@@ -10157,33 +10157,33 @@ msgstr "Kerno:"
 msgid "C++ Compiler: "
 msgstr "C++ Kompililo:"
 
-#: src/frontend/AboutDialog.cpp:181
+#: src/frontend/AboutDialog.cpp:182
 #, kde-format
 msgid "C++ Compiler Flags:"
 msgstr "C++ Kompililaj Flagoj:"
 
-#: src/frontend/AboutDialog.cpp:185
+#: src/frontend/AboutDialog.cpp:186
 #, kde-format
 msgid "Frontend to Mathematical Applications"
 msgstr "Frontend al Matematikaj Aplikoj"
 
-#: src/frontend/AboutDialog.cpp:187 src/frontend/AboutDialog.cpp:192
-#: src/frontend/AboutDialog.cpp:197 src/frontend/AboutDialog.cpp:202
-#: src/frontend/AboutDialog.cpp:207 src/frontend/AboutDialog.cpp:213
-#: src/frontend/AboutDialog.cpp:218 src/frontend/AboutDialog.cpp:223
-#: src/frontend/AboutDialog.cpp:228 src/frontend/AboutDialog.cpp:233
-#: src/frontend/AboutDialog.cpp:238 src/frontend/AboutDialog.cpp:244
-#: src/frontend/AboutDialog.cpp:249 src/frontend/AboutDialog.cpp:254
-#: src/frontend/AboutDialog.cpp:259 src/frontend/AboutDialog.cpp:264
-#: src/frontend/AboutDialog.cpp:270 src/frontend/AboutDialog.cpp:275
-#: src/frontend/AboutDialog.cpp:280 src/frontend/AboutDialog.cpp:285
-#: src/frontend/AboutDialog.cpp:291 src/frontend/AboutDialog.cpp:296
-#: src/frontend/AboutDialog.cpp:313
+#: src/frontend/AboutDialog.cpp:188 src/frontend/AboutDialog.cpp:193
+#: src/frontend/AboutDialog.cpp:198 src/frontend/AboutDialog.cpp:203
+#: src/frontend/AboutDialog.cpp:208 src/frontend/AboutDialog.cpp:214
+#: src/frontend/AboutDialog.cpp:219 src/frontend/AboutDialog.cpp:224
+#: src/frontend/AboutDialog.cpp:229 src/frontend/AboutDialog.cpp:234
+#: src/frontend/AboutDialog.cpp:239 src/frontend/AboutDialog.cpp:245
+#: src/frontend/AboutDialog.cpp:250 src/frontend/AboutDialog.cpp:255
+#: src/frontend/AboutDialog.cpp:260 src/frontend/AboutDialog.cpp:265
+#: src/frontend/AboutDialog.cpp:271 src/frontend/AboutDialog.cpp:276
+#: src/frontend/AboutDialog.cpp:281 src/frontend/AboutDialog.cpp:286
+#: src/frontend/AboutDialog.cpp:292 src/frontend/AboutDialog.cpp:297
+#: src/frontend/AboutDialog.cpp:314
 #, kde-format
 msgid "missing"
 msgstr "mankas"
 
-#: src/frontend/AboutDialog.cpp:190
+#: src/frontend/AboutDialog.cpp:191
 #, kde-format
 msgid ""
 "Support data files in FITS (Flexible Image Transport System) data format"
@@ -10191,117 +10191,117 @@ msgstr ""
 "Subteni datumdosierojn en formato de datumoj FITS (Flexible Image Transport "
 "System)."
 
-#: src/frontend/AboutDialog.cpp:195
+#: src/frontend/AboutDialog.cpp:196
 #, kde-format
 msgid "Markdown markup language support"
 msgstr "Markdown-subteno de markdown"
 
-#: src/frontend/AboutDialog.cpp:200
+#: src/frontend/AboutDialog.cpp:201
 #, kde-format
 msgid "C++ library for linear algebra"
 msgstr "C++-biblioteko por lineara algebro"
 
-#: src/frontend/AboutDialog.cpp:205
+#: src/frontend/AboutDialog.cpp:206
 #, kde-format
 msgid "Fastest Fourier Transform in the West"
 msgstr "Plej Rapida Transformo de Fourier en la Okcidento"
 
-#: src/frontend/AboutDialog.cpp:209
+#: src/frontend/AboutDialog.cpp:210
 #, kde-format
 msgid "GNU Scientific Library"
 msgstr "GNU-Scienca Biblioteko"
 
-#: src/frontend/AboutDialog.cpp:211
+#: src/frontend/AboutDialog.cpp:212
 #, kde-format
 msgid "High-performance data management and storage suite"
 msgstr "Alt-efikeca datuma administrado kaj konvservado"
 
-#: src/frontend/AboutDialog.cpp:216
+#: src/frontend/AboutDialog.cpp:217
 #, kde-format
 msgid "Syntax highlighting engine"
 msgstr "Sintakso reliefiganta motoron"
 
-#: src/frontend/AboutDialog.cpp:221
+#: src/frontend/AboutDialog.cpp:222
 #, kde-format
 msgid "Support collecting feedback from users"
 msgstr "Subteni kolekti komentojn de uzantoj"
 
-#: src/frontend/AboutDialog.cpp:226
+#: src/frontend/AboutDialog.cpp:227
 #, kde-format
 msgid "Complex error and related functions"
 msgstr "Kompleksa eraro kaj rilataj funkcioj"
 
-#: src/frontend/AboutDialog.cpp:231
+#: src/frontend/AboutDialog.cpp:232
 #, kde-format
 msgid "importing Origin OPJ project files"
 msgstr "importado de Originaj OPJ-projektdosieroj"
 
-#: src/frontend/AboutDialog.cpp:236
+#: src/frontend/AboutDialog.cpp:237
 #, kde-format
 msgid "Import binary MATLAB MAT files"
 msgstr "Importi duumajn dosierojn MATLAB MAT"
 
-#: src/frontend/AboutDialog.cpp:241
+#: src/frontend/AboutDialog.cpp:242
 #, kde-format
 msgid "MCAP file support"
 msgstr "MCAP-dosiersubteno"
 
-#: src/frontend/AboutDialog.cpp:247
+#: src/frontend/AboutDialog.cpp:248
 #, kde-format
 msgid "Network Common Data Form"
 msgstr "Formularo de Komuna Datumo de Reto"
 
-#: src/frontend/AboutDialog.cpp:252
+#: src/frontend/AboutDialog.cpp:253
 #, kde-format
 msgid "Import ODS (Open Document Spreadsheet) files"
 msgstr "Importi dosierojn ODS (Open Document Spreadsheet)."
 
-#: src/frontend/AboutDialog.cpp:257
+#: src/frontend/AboutDialog.cpp:258
 #, kde-format
 msgid "PDF rendering library"
 msgstr "Biblioteko de bildigo de PDF"
 
-#: src/frontend/AboutDialog.cpp:262
+#: src/frontend/AboutDialog.cpp:263
 #, kde-format
 msgid "Offers available actions for a specific purpose"
 msgstr "Proponas disponeblajn agojn por specifa celo"
 
-#: src/frontend/AboutDialog.cpp:266
+#: src/frontend/AboutDialog.cpp:267
 #, kde-format
 msgid "Qt Advanced Docking System"
 msgstr "Qt Altnivela Aldoksistemo"
 
-#: src/frontend/AboutDialog.cpp:268
+#: src/frontend/AboutDialog.cpp:269
 #, kde-format
 msgid "Support data from MQTT brokers"
 msgstr "Subtenaj datumoj de MQTT-makleristoj"
 
-#: src/frontend/AboutDialog.cpp:273
+#: src/frontend/AboutDialog.cpp:274
 #, kde-format
 msgid "Serial port functionality support"
 msgstr "Subteno pri seria porda funkcio"
 
-#: src/frontend/AboutDialog.cpp:278
+#: src/frontend/AboutDialog.cpp:279
 #, kde-format
 msgid "SVG export support"
 msgstr "SVG-eksportsubteno"
 
-#: src/frontend/AboutDialog.cpp:283
+#: src/frontend/AboutDialog.cpp:284
 #, kde-format
 msgid "Import Excel xlsx files"
 msgstr "Importi Excel xlsx-dosierojn"
 
-#: src/frontend/AboutDialog.cpp:289
+#: src/frontend/AboutDialog.cpp:290
 #, kde-format
 msgid "Read (and write) data sets from SAS, Stata, and SPSS"
 msgstr "Legi (kaj skribi) datumajn arojn de SAS, Stata kaj SPSS"
 
-#: src/frontend/AboutDialog.cpp:294
+#: src/frontend/AboutDialog.cpp:295
 #, kde-format
 msgid "Binary Log File (BLF) file support"
 msgstr "Subteno de dosieroj de Binary Log File (BLF)."
 
-#: src/frontend/AboutDialog.cpp:311
+#: src/frontend/AboutDialog.cpp:312
 #, kde-format
 msgid "Components:"
 msgstr "Komponantoj:"
@@ -12325,8 +12325,8 @@ msgstr "Datumaj regionoj"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:270
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:281
 #: src/frontend/dockwidgets/CustomPointDock.cpp:134
-#: src/frontend/dockwidgets/ImageDock.cpp:187
-#: src/frontend/dockwidgets/ImageDock.cpp:197
+#: src/frontend/dockwidgets/ImageDock.cpp:185
+#: src/frontend/dockwidgets/ImageDock.cpp:195
 #: src/frontend/widgets/LabelWidget.cpp:503
 #: src/frontend/widgets/LabelWidget.cpp:514
 #, kde-format
@@ -12340,8 +12340,8 @@ msgstr "Supre"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:272
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:283
 #: src/frontend/dockwidgets/CustomPointDock.cpp:136
-#: src/frontend/dockwidgets/ImageDock.cpp:189
-#: src/frontend/dockwidgets/ImageDock.cpp:199
+#: src/frontend/dockwidgets/ImageDock.cpp:187
+#: src/frontend/dockwidgets/ImageDock.cpp:197
 #: src/frontend/widgets/LabelWidget.cpp:505
 #: src/frontend/widgets/LabelWidget.cpp:516
 #, kde-format
@@ -12422,8 +12422,8 @@ msgstr "Duonplenigita, Granda"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:264
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:276
 #: src/frontend/dockwidgets/CustomPointDock.cpp:129
-#: src/frontend/dockwidgets/ImageDock.cpp:182
-#: src/frontend/dockwidgets/ImageDock.cpp:192
+#: src/frontend/dockwidgets/ImageDock.cpp:180
+#: src/frontend/dockwidgets/ImageDock.cpp:190
 #: src/frontend/dockwidgets/XYCurveDock.cpp:518
 #: src/frontend/widgets/BackgroundWidget.cpp:118
 #: src/frontend/widgets/LabelWidget.cpp:497
@@ -12440,8 +12440,8 @@ msgstr "Maldekstre"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:266
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:278
 #: src/frontend/dockwidgets/CustomPointDock.cpp:131
-#: src/frontend/dockwidgets/ImageDock.cpp:184
-#: src/frontend/dockwidgets/ImageDock.cpp:194
+#: src/frontend/dockwidgets/ImageDock.cpp:182
+#: src/frontend/dockwidgets/ImageDock.cpp:192
 #: src/frontend/dockwidgets/XYCurveDock.cpp:519
 #: src/frontend/widgets/BackgroundWidget.cpp:119
 #: src/frontend/widgets/LabelWidget.cpp:499
@@ -12600,7 +12600,7 @@ msgstr "%1 aksoj: ŝablono \"%2\" ŝargita"
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:454
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:237
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:237
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
@@ -13003,10 +13003,10 @@ msgstr "Vico Major"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:282
 #: src/frontend/dockwidgets/CustomPointDock.cpp:130
 #: src/frontend/dockwidgets/CustomPointDock.cpp:135
-#: src/frontend/dockwidgets/ImageDock.cpp:183
-#: src/frontend/dockwidgets/ImageDock.cpp:188
-#: src/frontend/dockwidgets/ImageDock.cpp:193
-#: src/frontend/dockwidgets/ImageDock.cpp:198
+#: src/frontend/dockwidgets/ImageDock.cpp:181
+#: src/frontend/dockwidgets/ImageDock.cpp:186
+#: src/frontend/dockwidgets/ImageDock.cpp:191
+#: src/frontend/dockwidgets/ImageDock.cpp:196
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:296
 #: src/frontend/widgets/LabelWidget.cpp:498
 #: src/frontend/widgets/LabelWidget.cpp:504
@@ -13175,12 +13175,12 @@ msgstr "Probableca Denso"
 msgid "%1 histograms: template \"%2\" loaded"
 msgstr "%1 histogramoj: ŝablono \"%2\" ŝargita"
 
-#: src/frontend/dockwidgets/InfoElementDock.cpp:221
+#: src/frontend/dockwidgets/InfoElementDock.cpp:227
 #, kde-format
 msgid "%1 info elements: curve \"%2\" removed"
 msgstr "%1 infoelementoj: kurbo \"%2\" forigita"
 
-#: src/frontend/dockwidgets/InfoElementDock.cpp:223
+#: src/frontend/dockwidgets/InfoElementDock.cpp:229
 #, kde-format
 msgid "%1: curve \"%2\" removed"
 msgstr "%1: kurbo \"%2\" forigita"
@@ -13373,7 +13373,7 @@ msgstr ""
 "Distribuo uzata por kalkuli la procentojn kompareblajn kun la procentoj de "
 "la provizitaj datumoj"
 
-#: src/frontend/dockwidgets/ReferenceLineDock.cpp:235
+#: src/frontend/dockwidgets/ReferenceLineDock.cpp:226
 #, kde-format
 msgid "%1 reference lines: template \"%2\" loaded"
 msgstr "%1 referenclinioj: ŝablono \"%2\" ŝargita"
@@ -14616,22 +14616,22 @@ msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr "Subteni importadon de Histogramoj ROOT (CERN) TH1"
 
-#: src/frontend/LabPlot.cpp:100
+#: src/frontend/LabPlot.cpp:111
 #, kde-format
 msgid "Disable splash screen"
 msgstr "Malebligi plaŭdan ekranon"
 
-#: src/frontend/LabPlot.cpp:103
+#: src/frontend/LabPlot.cpp:114
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr "Komenci en la prezentisto-reĝimo"
 
-#: src/frontend/LabPlot.cpp:106
+#: src/frontend/LabPlot.cpp:117
 #, kde-format
 msgid "Open a project file."
 msgstr "Malfermi projektdosieron."
 
-#: src/frontend/LabPlot.cpp:125
+#: src/frontend/LabPlot.cpp:136
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -14640,7 +14640,7 @@ msgstr ""
 "Ne eblis malfermi dosieron '%1'. Alklaku 'Daŭrigu' por komenci komenci aŭ "
 "'Nuligi' por eliri la aplikaĵon."
 
-#: src/frontend/LabPlot.cpp:126
+#: src/frontend/LabPlot.cpp:137
 #, kde-format
 msgid "Failed to Open"
 msgstr "Malsukcesis malfermi"
