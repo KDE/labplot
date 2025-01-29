@@ -21,8 +21,6 @@
 #include "frontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
-#include <KConfig>
-#include <KConfigGroup>
 #include <KLocalizedString>
 
 #include <QActionGroup>
@@ -698,6 +696,7 @@ void LollipopPlotPrivate::updateValues() {
 	q->cSystem->mapLogicalToScene(m_valuesPointsLogical, pointsScene, visiblePoints);
 	const auto& prefix = value->prefix();
 	const auto& suffix = value->suffix();
+	const auto numberLocale = QLocale();
 	if (value->type() == Value::BinEntries) {
 		for (int i = 0; i < m_valuesPointsLogical.count(); ++i) {
 			if (!visiblePoints[i])
@@ -705,9 +704,9 @@ void LollipopPlotPrivate::updateValues() {
 
 			auto& point = m_valuesPointsLogical.at(i);
 			if (orientation == LollipopPlot::Orientation::Vertical)
-				m_valuesStrings << prefix + QString::number(point.y()) + suffix;
+				m_valuesStrings << prefix + numberToString(point.y(), numberLocale) + suffix;
 			else
-				m_valuesStrings << prefix + QString::number(point.x()) + suffix;
+				m_valuesStrings << prefix + numberToString(point.x(), numberLocale) + suffix;
 		}
 	} else if (value->type() == Value::CustomColumn) {
 		const auto* valuesColumn = value->column();
@@ -724,11 +723,11 @@ void LollipopPlotPrivate::updateValues() {
 
 			switch (xColMode) {
 			case AbstractColumn::ColumnMode::Double:
-				m_valuesStrings << prefix + QString::number(valuesColumn->valueAt(i), value->numericFormat(), value->precision()) + suffix;
+				m_valuesStrings << prefix + numberToString(valuesColumn->valueAt(i), numberLocale, value->numericFormat(), value->precision()) + suffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
-				m_valuesStrings << prefix + QString::number(valuesColumn->valueAt(i)) + suffix;
+				m_valuesStrings << prefix + numberToString(valuesColumn->valueAt(i), numberLocale) + suffix;
 				break;
 			case AbstractColumn::ColumnMode::Text:
 				m_valuesStrings << prefix + valuesColumn->textAt(i) + suffix;
