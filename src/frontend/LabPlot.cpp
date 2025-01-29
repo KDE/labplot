@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : main function
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2008-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2008-2016 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -19,9 +19,15 @@
 #include <KColorSchemeManager>
 #include <KConfigGroup>
 #include <KCrash>
+#include <KIconTheme>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <kcoreaddons_version.h>
+
+#define HAVE_STYLE_MANAGER __has_include(<KStyleManager>)
+#if HAVE_STYLE_MANAGER
+#include <KStyleManager>
+#endif
 
 #include <QApplication>
 #include <QCommandLineParser>
@@ -36,7 +42,22 @@
 #endif
 
 int main(int argc, char* argv[]) {
+	// trigger initialisation of proper icon theme
+	KIconTheme::initTheme();
+
 	QApplication app(argc, argv);
+
+#if HAVE_STYLE_MANAGER
+	//trigger initialisation of proper application style
+	KStyleManager::initStyle();
+#else
+	// For Windows and macOS: use Breeze if available
+	// Of all tested styles that works the best for us
+#if defined(Q_OS_MACOS) || defined(Q_OS_WIN)
+	QApplication::setStyle(QStringLiteral("breeze"));
+#endif
+#endif
+
 	KLocalizedString::setApplicationDomain("labplot");
 
 	QString systemInfo{AboutDialog::systemInfo()};

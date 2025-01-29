@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Main window of the application
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2008-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -596,12 +596,12 @@ void MainWin::checkIconTheme() {
 	if (isDarkMode) {
 		if (themeName == QLatin1String("breeze")) {
 			INFO(Q_FUNC_INFO << ", set icon theme to breeze-dark")
-			QIcon::setThemeName(QLatin1String("breeze-dark"));
+			// QIcon::setThemeName(QLatin1String("breeze-dark"));
 		}
 	} else {
 		if (themeName == QLatin1String("breeze-dark")) {
 			INFO(Q_FUNC_INFO << ", set icon theme to breeze")
-			QIcon::setThemeName(QLatin1String("breeze"));
+			// QIcon::setThemeName(QLatin1String("breeze"));
 		}
 	}
 	//QDEBUG(Q_FUNC_INFO << ", used icon theme:" << QIcon::themeName())
