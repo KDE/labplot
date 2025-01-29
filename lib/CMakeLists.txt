@@ -163,7 +163,6 @@ set(SDK_DEPENDENCY_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
     ${BACKEND_DIR}/core/column/ColumnStringIO.cpp
     ${BACKEND_DIR}/lib/Range.h
-    ${BACKEND_DIR}/lib/XmlStreamReader.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/CartesianScale.cpp
 )
 
@@ -233,6 +232,7 @@ set(SDK_INTERNAL_SOURCES
     ${BACKEND_DIR}/note/Note.cpp
     ${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
     ${BACKEND_DIR}/worksheet/ResizeItem.cpp
+    ${BACKEND_DIR}/lib/XmlStreamReader.cpp
 )
 
 if(ENABLE_LIBORIGIN)
