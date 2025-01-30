@@ -1,24 +1,3 @@
-function(patch_dir DIR_NAME PATCH_NAME)
-    file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/${DIR_NAME}" DESTINATION "${CMAKE_BINARY_DIR}/_deps")
-
-    # cmake_path(RELATIVE_PATH CMAKE_BINARY_DIR BASE_DIRECTORY ${CMAKE_SOURCE_DIR} OUTPUT_VARIABLE BIN_DIR)
-
-    # configure_file("${CMAKE_CURRENT_SOURCE_DIR}/patches/${PATCH_NAME}.in" "${CMAKE_CURRENT_BINARY_DIR}/${PATCH_NAME}" @ONLY)
-
-    execute_process(
-    # Note: paths is patch file must be relative to git project root
-    # COMMAND git apply "${CMAKE_CURRENT_BINARY_DIR}/${PATCH_NAME}"
-    COMMAND patch -p1
-    # Note: command must be run from git project root
-    # WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/_deps/${DIR_NAME}"
-    INPUT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/patches/${PATCH_NAME}"
-    COMMAND_ERROR_IS_FATAL ANY)
-
-    set(${DIR_NAME}_SOURCE_DIR "${CMAKE_BINARY_DIR}/_deps/${DIR_NAME}" PARENT_SCOPE)
-    set(${DIR_NAME}_BINARY_DIR "${CMAKE_BINARY_DIR}/_deps/${DIR_NAME}-build" PARENT_SCOPE)
-endfunction()
-
 if(APPLE AND ENABLE_TOUCHBAR)
     add_subdirectory(kdmactouchbar)
 endif()
@@ -134,21 +113,28 @@ if(ENABLE_VECTOR_BLF)
         add_definitions(-DHAVE_DBC_PARSER)
     endif()
   endif()
-  
-  patch_dir(vector_blf vector_blf.patch)
 
-  add_subdirectory(${vector_blf_SOURCE_DIR} ${vector_blf_BINARY_DIR} EXCLUDE_FROM_ALL)
-  list(APPEND CMAKE_SYSTEM_INCLUDE_PATH ${vector_blf_SOURCE_DIR}/src ${vector_blf_BINARY_DIR}/src)
-  set_property(TARGET Vector_BLF PROPERTY AUTOMOC OFF)
-  target_include_directories(Vector_BLF PUBLIC ${vector_blf_SOURCE_DIR}/src ${vector_blf_BINARY_DIR}/src)
+  if(${LOCAL_VECTOR_BLF})
+    add_subdirectory(vector_blf EXCLUDE_FROM_ALL)
+    set_property(TARGET Vector_BLF PROPERTY AUTOMOC OFF)
+    target_include_directories(Vector_BLF PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/vector_blf/src ${CMAKE_CURRENT_BINARY_DIR}/vector_blf/src)
+    list(APPEND CMAKE_SYSTEM_INCLUDE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/vector_blf/src ${CMAKE_CURRENT_BINARY_DIR}/vector_blf/src)
 
-  target_link_libraries(labplotbackendlib Vector_BLF)
-  target_compile_definitions(labplotbackendlib PRIVATE HAVE_VECTOR_BLF)
-  target_compile_definitions(labplotlib PUBLIC HAVE_VECTOR_BLF)
-
-  add_definitions(-DHAVE_VECTOR_BLF)
+    target_link_libraries(labplotbackendlib Vector_BLF)
+    target_compile_definitions(labplotbackendlib PRIVATE HAVE_VECTOR_BLF)
+    target_compile_definitions(labplotlib PUBLIC HAVE_VECTOR_BLF)
+    add_definitions(-DHAVE_VECTOR_BLF)
+  else()
+    pkg_check_modules(Vector_BLF IMPORTED_TARGET GLOBAL Vector_BLF)
+    if(Vector_BLF_FOUND)
+      target_link_libraries(labplotbackendlib ${Vector_BLF_LIBRARIES})
+      target_compile_definitions(labplotbackendlib PRIVATE HAVE_VECTOR_BLF)
+      target_compile_definitions(labplotlib PUBLIC HAVE_VECTOR_BLF)
+      add_definitions(-DHAVE_VECTOR_BLF)
+    endif()
+  endif()
 else()
-    add_definitions(-DVECTOR_BLF_DISABLED)
+  add_definitions(-DVECTOR_BLF_DISABLED)
 endif()
 
 if(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD)
