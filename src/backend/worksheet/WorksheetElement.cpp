@@ -67,13 +67,13 @@ void WorksheetElement::finalizeAdd() {
 		// * child XYCurves in QQPlot
 		// * etc.
 		d->m_plot = dynamic_cast<CartesianPlot*>(parent(AspectType::CartesianPlot));
-	}
 
-	if (d->m_plot) {
-		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->m_plot->coordinateSystem(m_cSystemIndex));
-		Q_EMIT plotRangeListChanged();
-	} else
-		DEBUG(Q_FUNC_INFO << ", WARNING: no plot available.")
+		if (d->m_plot) {
+			cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->m_plot->coordinateSystem(m_cSystemIndex));
+			Q_EMIT plotRangeListChanged();
+		} else
+			DEBUG(Q_FUNC_INFO << ", WARNING: no plot available.")
+	}
 }
 
 /**

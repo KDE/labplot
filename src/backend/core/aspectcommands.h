@@ -151,7 +151,7 @@ public:
 		Q_EMIT m_target->q->childAspectAboutToBeAdded(m_target->q, m_index, m_child);
 		m_target->insertChild(m_index, m_child);
 		if (!m_addChildFinalized) {
-			// finalizAdd() is used to finalize the initialization of objects internally, no need to call it again during the undo/redo steps
+			// finalizeAdd() is used to finalize the initialization of objects internally, no need to call it again during the undo/redo steps
 			m_child->finalizeAdd();
 			m_addChildFinalized = true;
 		}
