@@ -2592,7 +2592,7 @@ void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
 
 	// handle general settings
 	// TODO: handle only those settings that were really changed, similar to how it's done for the nubmer format, etc. further below
-	if (changes.contains(Settings::Type::General_Number_Format)) {
+	if (changes.contains(Settings::Type::General)) {
 		// title bar
 		MainWin::TitleBarMode titleBarMode = static_cast<MainWin::TitleBarMode>(group.readEntry("TitleBar", 0));
 		if (titleBarMode != m_titleBarMode) {
@@ -2626,18 +2626,6 @@ void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
 		interval *= 60 * 1000;
 		if (interval != m_autoSaveTimer.interval())
 			m_autoSaveTimer.setInterval(interval);
-
-
-		// update spreadsheet header
-		if (m_project) {
-			const auto& spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
-			for (auto* spreadsheet : spreadsheets)
-				spreadsheet->updateHorizontalHeader();
-		}
-
-		// bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
-		// if (m_showWelcomeScreen != showWelcomeScreen)
-		// 	m_showWelcomeScreen = showWelcomeScreen;
 	}
 
 	// update the number format in all visible dock widgets, worksheet elements and spreadsheets, if changed
@@ -2695,6 +2683,19 @@ void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
 			}
 		}
 	}
+
+	if (changes.contains(Settings::Type::Spreadsheet)) {
+		// update spreadsheet header
+		if (m_project) {
+			const auto& spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* spreadsheet : spreadsheets)
+				spreadsheet->updateHorizontalHeader();
+		}
+	}
+
+	// bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
+	// if (m_showWelcomeScreen != showWelcomeScreen)
+	// 	m_showWelcomeScreen = showWelcomeScreen;
 
 #ifdef HAVE_CANTOR_LIBS
 	if (changes.contains(Settings::Type::Notebook))
