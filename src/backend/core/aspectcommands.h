@@ -6,7 +6,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -150,7 +150,11 @@ public:
 		Q_EMIT m_target->q->childAspectAboutToBeAdded(m_target->q, nullptr, m_child);
 		Q_EMIT m_target->q->childAspectAboutToBeAdded(m_target->q, m_index, m_child);
 		m_target->insertChild(m_index, m_child);
-		m_child->finalizeAdd();
+		if (!m_addChildFinalized) {
+			// finalizAdd() is used to finalize the initialization of objects internally, no need to call it again during the undo/redo steps
+			m_child->finalizeAdd();
+			m_addChildFinalized = true;
+		}
 		Q_EMIT m_target->q->childAspectAdded(m_child);
 	}
 
@@ -158,6 +162,7 @@ protected:
 	AbstractAspectPrivate* m_target{nullptr};
 	AbstractAspect* m_child{nullptr};
 	int m_index{-1};
+	bool m_addChildFinalized{false};
 };
 
 class AspectChildAddCmd : public AspectChildRemoveCmd {
