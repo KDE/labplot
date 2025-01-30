@@ -9,6 +9,7 @@
 #pragma once
 
 #include <Vector/BLF/config.h>
+#include <cstdint>
 
 /* GCC */
 #ifdef __GNUC__

@@ -6,7 +6,7 @@
 include(GenerateExportHeader)
 
 # targets
-add_library(${PROJECT_NAME} SHARED "")
+add_library(${PROJECT_NAME} STATIC "")
 
 # search paths
 include_directories(
@@ -341,17 +341,19 @@ endif()
 
 # install
 install(
-    TARGETS ${PROJECT_NAME}
-    DESTINATION ${CMAKE_INSTALL_LIBDIR})
-install(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
-install(
-    FILES
-        ${CMAKE_CURRENT_BINARY_DIR}/vector_blf_export.h
-        ${CMAKE_CURRENT_BINARY_DIR}/config.h
-        $<TARGET_PROPERTY:${PROJECT_NAME},INTERFACE_SOURCES>
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Vector/BLF)
+    TARGETS ${PROJECT_NAME})
+
+if (NOT FETCH_CONTENT_INCLUSION)
+    install(
+        FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pc
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+    install(
+        FILES
+            ${CMAKE_CURRENT_BINARY_DIR}/vector_blf_export.h
+            ${CMAKE_CURRENT_BINARY_DIR}/config.h
+            $<TARGET_PROPERTY:${PROJECT_NAME},INTERFACE_SOURCES>
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Vector/BLF)
+endif()
 
 # sub directories
 add_subdirectory(docs)
