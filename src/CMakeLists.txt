@@ -558,6 +558,7 @@ target_compile_definitions(labplotlib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 target_link_libraries(labplotnsllib
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Widgets    # QApplication
+    ${GSL_CBLAS_LIBRARIES}
     ${GSL_LIBRARIES}
     ${LIBCERF_LIBRARIES}
 )
@@ -576,8 +577,8 @@ target_link_libraries(labplotbackendlib
     KF${KF_MAJOR_VERSION}::CoreAddons    # kcoreaddons_version.h
     ${ZLIB_LIBRARIES}
     ${LZ4_LIBRARIES}
-    ${GSL_LIBRARIES}
     ${GSL_CBLAS_LIBRARIES}
+    ${GSL_LIBRARIES}
     ${HDF5_LIBRARIES}
     ${FFTW3_LIBRARIES}
     ${netCDF_LIBRARIES}
