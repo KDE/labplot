@@ -21783,7 +21783,7 @@ msgstr "Cor de fondo:"
 #: src/kdefrontend/ui/labelwidget.ui:484 src/kdefrontend/ui/labelwidget.ui:704
 #, kde-format
 msgid "Distance to the axis tick labels"
-msgstr "Distancia ás etiquetas das marcas do eixo."
+msgstr "Distancia ás etiquetas das marcas do eixe."
 
 #. i18n: ectx: property (text), widget (QLabel, lOffsetX)
 #: src/kdefrontend/ui/labelwidget.ui:487
