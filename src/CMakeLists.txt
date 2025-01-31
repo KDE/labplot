@@ -579,7 +579,7 @@ target_link_libraries(labplotbackendlib
     ${ZLIB_LIBRARIES}
     ${LZ4_LIBRARIES}
     ${GSL_LIBRARIES}
-    ${GSL_CBLAS_LIBRARIES}
+#    ${GSL_CBLAS_LIBRARIES}
     ${HDF5_LIBRARIES}
     ${FFTW3_LIBRARIES}
     ${netCDF_LIBRARIES}
