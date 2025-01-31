@@ -559,8 +559,6 @@ target_link_libraries(labplotnsllib
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Widgets    # QApplication
     ${GSL_LIBRARIES}
-    ${GSL_CBLAS_LIBRARIES}
-    ${FFTW3_LIBRARIES}
     ${LIBCERF_LIBRARIES}
 )
 target_link_libraries(labplotbackendlib
