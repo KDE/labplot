@@ -42,6 +42,7 @@ public:
 	void setEndRow(const int);
 	int endRow() const;
 
+// remove condition to fix LTO warnings
 #ifdef SPICEFILTERTEST_EN
 	void setReaderBulkLineCount(int count) {
 		mBulkLineCount = count;
