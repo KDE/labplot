@@ -558,7 +558,9 @@ target_compile_definitions(labplotlib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 target_link_libraries(labplotnsllib
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Widgets    # QApplication
+    -Wl,--no-as-needed
     ${GSL_LIBRARIES}
+    -Wl,--as-needed
     ${LIBCERF_LIBRARIES}
     ${FFTW3_LIBRARIES}
 )
