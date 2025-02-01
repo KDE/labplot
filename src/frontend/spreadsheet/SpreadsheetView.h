@@ -159,6 +159,10 @@ private:
 	QAction* action_statistics_all_columns{nullptr};
 	QAction* action_statistics_spreadsheet{nullptr};
 
+	// hypothesis related actions
+	QAction* action_pivot_table{nullptr};
+	QAction* action_do_hypothesis_test{nullptr};
+
 	// column related actions
 	QAction* action_insert_column_left{nullptr};
 	QAction* action_insert_column_right{nullptr};
@@ -232,6 +236,8 @@ private:
 	QMenu* m_spreadsheetMenu{nullptr};
 	QMenu* m_plotDataMenu{nullptr};
 	QMenu* m_analyzePlotMenu{nullptr};
+	// hypothesis related menu
+	QMenu* m_statisticalAnalysisMenu{nullptr};
 
 	bool m_suppressResize{false};
 

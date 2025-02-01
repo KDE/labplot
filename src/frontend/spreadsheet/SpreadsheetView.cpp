@@ -24,6 +24,7 @@
 #include "backend/spreadsheet/StatisticsSpreadsheet.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h" //TODO: needed for the icon only, remove later once we have a breeze icon
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/statistics/HypothesisTest.h"
 #include "frontend/spreadsheet/SpreadsheetHeaderView.h"
 
 #ifndef SDK
@@ -348,6 +349,8 @@ void SpreadsheetView::initActions() {
 	action_clear_columns = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clear Content"), this);
 	action_freeze_columns = new QAction(i18n("Freeze Column"), this);
 
+	action_do_hypothesis_test = new QAction(i18n("Hypothesis Test"), this);
+
 	// TODO: action collection?
 	action_set_as_none = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::NoDesignation, false), this);
 	action_set_as_none->setData(static_cast<int>(AbstractColumn::PlotDesignation::NoDesignation));
@@ -621,6 +624,9 @@ void SpreadsheetView::initMenus() {
 	// Column menu
 	m_columnMenu = new QMenu(this);
 	m_columnMenu->addMenu(m_plotDataMenu);
+
+	m_statisticalAnalysisMenu = new QMenu(i18n("Statistical Analysis"), this);
+	m_statisticalAnalysisMenu->addAction(action_do_hypothesis_test);
 
 	// Data fit sub-menu
 	QMenu* dataFitMenu = new QMenu(i18nc("Curve fitting", "Fit"), this);
@@ -935,6 +941,12 @@ void SpreadsheetView::connectActions() {
 	connect(addAnalysisActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotAnalysisData);
 	connect(addFitActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotAnalysisData);
 	connect(addDistributionFitActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotDataDistributionFit);
+
+	connect(action_do_hypothesis_test, &QAction::triggered, this, [=] {
+		auto* test = new HypothesisTest(i18n("Hypothesis Test for %1", m_spreadsheet->name()));
+		test->setDataSourceSpreadsheet(m_spreadsheet);
+		m_spreadsheet->parentAspect()->addChild(test);
+	});
 }
 
 void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
@@ -992,6 +1004,7 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 	if (m_spreadsheet->columnCount() > 0 && m_spreadsheet->rowCount() > 0) {
 		menu->insertMenu(firstAction, m_plotDataMenu);
 		menu->insertMenu(firstAction, m_analyzePlotMenu);
+		menu->insertMenu(firstAction,m_statisticalAnalysisMenu);
 		menu->insertSeparator(firstAction);
 	}
 	menu->insertMenu(firstAction, m_selectionMenu);
@@ -1036,6 +1049,7 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	QAction* firstAction = menu->actions().at(1);
 	menu->insertMenu(firstAction, m_plotDataMenu);
 	menu->insertMenu(firstAction, m_analyzePlotMenu);
+	menu->insertMenu(firstAction,m_statisticalAnalysisMenu);
 	menu->insertSeparator(firstAction);
 
 	if (numeric)
@@ -1663,6 +1677,8 @@ void SpreadsheetView::checkColumnMenus(const QVector<Column*>& columns) {
 
 	m_plotDataMenu->setEnabled(plottable && hasValues);
 	m_analyzePlotMenu->setEnabled(numeric && hasValues);
+	m_statisticalAnalysisMenu->setEnabled(numeric && hasValues);
+
 	m_columnSetAsMenu->setEnabled(numeric);
 	action_statistics_columns->setEnabled(hasEnoughValues);
 	action_clear_columns->setEnabled(hasValues);
