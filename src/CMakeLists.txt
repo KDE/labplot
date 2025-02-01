@@ -661,7 +661,7 @@ if(ENABLE_READSTAT)
             target_link_libraries(labplotbackendlib ${ICONV_LIBRARIES})
         endif()
     endif()
-        target_link_libraries(labplotbackendlib -Wl,--no-as-needed ${READSTAT_LIBRARIES} -Wl,--as-needed ${ZLIB_LIBRARIES})
+        target_link_libraries(labplotbackendlib ${READSTAT_LIBRARIES} ${ZLIB_LIBRARIES})
 endif()
 
 if(ENABLE_XLSX)
