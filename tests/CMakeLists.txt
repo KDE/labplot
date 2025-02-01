@@ -3,9 +3,9 @@ include_directories(${SRC_DIR} ${GSL_INCLUDE_DIR})
 
 # shared code
 add_library(labplottest STATIC CommonTest.cpp analysis/AnalysisTest.cpp nsl/NSLTest.h ../src/backend/lib/Debug.cpp)
-target_link_libraries(labplottest labplotnsllib Qt${QT_MAJOR_VERSION}::Test KF${KF_MAJOR_VERSION}::ConfigCore KF${KF_MAJOR_VERSION}::I18n)
+target_link_libraries(labplottest ${GSL_CBLAS_LIBRARY} labplotnsllib Qt${QT_MAJOR_VERSION}::Test KF${KF_MAJOR_VERSION}::ConfigCore KF${KF_MAJOR_VERSION}::I18n)
 add_library(labplotmetatest STATIC CommonMetaTest.cpp)
-target_link_libraries(labplotmetatest labplotbackendlib labplotlib labplottest ${Poppler_LIBRARIES})
+target_link_libraries(labplotmetatest labplotbackendlib labplotlib labplottest)
 
 if(KUserFeedback_FOUND AND QT_MAJOR_VERSION EQUAL 6)
     target_link_libraries(labplottest KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6)
