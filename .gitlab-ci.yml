@@ -74,27 +74,27 @@ suse_tumbleweed_qt68_t:
     - triggers
     - web
 
-windows_qt68:
-  only: []
+#windows_qt68:
+#  only: []
 
-windows_qt68_t:
-  extends: windows_qt68
-  script:
-    - !reference [windows_qt68, script]
-    # disable the build of the sdk examples on windows since it is flaky. fails with a linker error sometimes
-    # - mkdir -p build_examples && cd build_examples
-    # - $env:Path = 'C:\Craft\windows-msvc2022_64-cl\bin;C:\Craft\windows-msvc2022_64-cl\lib;C:\Craft\windows-msvc2022_64-cl\dev-utils\bin;' + $env:Path
-    # - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
-    # - ninja
-  only:
-    - branches
-    - tags
-    - pushes
-    - merge_requests
-    - pipelines
-    - schedules
-    - triggers
-    - web
+#windows_qt68_t:
+#  extends: windows_qt68
+#  script:
+#    - !reference [windows_qt68, script]
+#    # disable the build of the sdk examples on windows since it is flaky. fails with a linker error sometimes
+#    # - mkdir -p build_examples && cd build_examples
+#    # - $env:Path = 'C:\Craft\windows-msvc2022_64-cl\bin;C:\Craft\windows-msvc2022_64-cl\lib;C:\Craft\windows-msvc2022_64-cl\dev-utils\bin;' + $env:Path
+#    # - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
+#    # - ninja
+#  only:
+#    - branches
+#    - tags
+#    - pushes
+#    - merge_requests
+#    - pipelines
+#    - schedules
+#    - triggers
+##   - web
 
 #craft_appimage_qt515_x86_64:
 #  rules:
