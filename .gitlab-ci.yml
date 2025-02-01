@@ -9,11 +9,8 @@ include:
 # reuse-lint fails
 #      - /gitlab-templates/reuse-lint.yml
       - /gitlab-templates/clang-format.yml
-#      - /gitlab-templates/linux.yml
-#      - /gitlab-templates/windows.yml
       - /gitlab-templates/linux-qt6.yml
       - /gitlab-templates/windows-qt6.yml
-#      - /gitlab-templates/freebsd.yml
       - /gitlab-templates/freebsd-qt6.yml
 ### DEPLOY
 #      - /gitlab-templates/craft-appimage.yml
@@ -93,7 +90,7 @@ windows_qt68_t:
     - pipelines
     - schedules
     - triggers
-#   - web
+    - web
 
 #craft_appimage_qt515_x86_64:
 #  rules:
