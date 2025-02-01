@@ -122,7 +122,7 @@ set (GENERIC_FLAGS "-Wall -Wextra -Wundef -Wpointer-arith -Wunreachable-code -Wu
 #set (GENERIC_GNU_FLAGS "${COMPILER_OPTIMIZATION_FLAG} -Wcast-align -Wswitch-enum -fvisibility=default -pedantic")
 set (GENERIC_GNU_FLAGS "${COMPILER_OPTIMIZATION_FLAG} -Wcast-align -Wswitch-enum -fvisibility=default -pedantic -ffunction-sections -fdata-sections -pipe")
 if(APPLE)
-    set (GENERIC_GNU_LINK_FLAGS "-Wl,--as-needed -Wl,--no-undefined")
+    set (GENERIC_GNU_LINK_FLAGS "-Wl,--no-undefined")
 else()
     set (GENERIC_GNU_LINK_FLAGS "-Wl,--gc-sections -Wl,--as-needed -Wl,--no-undefined")
 endif()
