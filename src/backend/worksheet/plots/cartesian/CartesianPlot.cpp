@@ -2063,10 +2063,8 @@ void CartesianPlot::addFitCurve() {
 		if (action) {
 			auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
 			curve->initFitData(type);
-		} else {
+		} else
 			DEBUG(Q_FUNC_INFO << "WARNING: no action found!")
-		}
-		curve->initStartValues(curCurve);
 
 		// fit with weights for y if the curve has error bars for y
 		if (curCurve->errorBar()->yErrorType() == ErrorBar::ErrorType::Symmetric && curCurve->errorBar()->yPlusColumn()) {

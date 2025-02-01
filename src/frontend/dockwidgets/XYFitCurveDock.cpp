@@ -391,7 +391,7 @@ void XYFitCurveDock::checkDataColumns() {
 //*************************************************************
 void XYFitCurveDock::dataSourceTypeChanged(int index) {
 	DEBUG(Q_FUNC_INFO << ", m_initializing = " << m_initializing)
-	const auto type = static_cast<XYAnalysisCurve::DataSourceType>(uiGeneralTab.cbDataSourceType->currentIndex());
+	const auto type = static_cast<XYAnalysisCurve::DataSourceType>(index);
 	DEBUG(Q_FUNC_INFO << ", source type = " << ENUM_TO_STRING(XYAnalysisCurve, DataSourceType, type))
 	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		uiGeneralTab.cbCategory->setEnabled(true);
@@ -482,7 +482,7 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	// set model dependent start values from new data
 	DEBUG(Q_FUNC_INFO)
-	static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData, m_curve);
+	static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData);
 	// udpate parameter widget
 	fitParametersWidget->setFitData(&m_fitData);
 	enableRecalculate(); // update preview
@@ -505,7 +505,7 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	// set model dependent start values from new data
 	DEBUG(Q_FUNC_INFO)
-	static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData, m_curve);
+	static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData);
 	// update parameter widget
 	fitParametersWidget->setFitData(&m_fitData);
 	enableRecalculate(); // update preview
@@ -812,7 +812,7 @@ void XYFitCurveDock::categoryChanged(int index) {
  * Updates the model type dependent widgets in the general-tab and calls \c updateModelEquation() to update the preview pixmap.
  */
 void XYFitCurveDock::modelTypeChanged(int index) {
-	DEBUG(Q_FUNC_INFO << ", type = " << (unsigned int)index << ", initializing = " << m_initializing << ", current type = " << m_fitData.modelType);
+	DEBUG(Q_FUNC_INFO << ", type = " << index << ", initializing = " << m_initializing << ", current type = " << m_fitData.modelType);
 	// leave if no selection
 	if (index == -1)
 		return;
@@ -947,7 +947,7 @@ void XYFitCurveDock::updateModelEquation() {
 		// set model dependent start values from curve data
 		// invalidate result
 		m_fitCurve->clearFitResult();
-		static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData, m_curve);
+		static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData);
 		// udpate parameter widget
 		fitParametersWidget->setFitData(&m_fitData);
 		if (m_messageWidget && m_messageWidget->isVisible()) {

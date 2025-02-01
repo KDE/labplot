@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : A xy-curve defined by a fit model
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -65,20 +65,9 @@ const XYAnalysisCurve::Result& XYFitCurve::result() const {
 	Q_D(const XYFitCurve);
 	return d->fitResult;
 }
-void XYFitCurve::initStartValues(const XYCurve* curve) {
-	Q_D(XYFitCurve);
-	XYFitCurve::FitData& fitData = d->fitData;
-	initStartValues(fitData, curve);
-}
 
-void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* curve) {
+void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData) {
 	DEBUG(Q_FUNC_INFO);
-	// TODO: curve used for anything?
-	if (!curve) {
-		DEBUG(Q_FUNC_INFO << ", WARNING: no curve given");
-		return;
-	}
-
 	Q_D(XYFitCurve);
 	const Column* xColumn = dynamic_cast<const Column*>(d->xDataColumn);
 	const Column* yColumn = dynamic_cast<const Column*>(d->yDataColumn);
@@ -387,7 +376,7 @@ void XYFitCurve::initFitData(XYAnalysisCurve::AnalysisAction action) {
 		return;
 
 	Q_D(XYFitCurve);
-	XYFitCurve::FitData& fitData = d->fitData;
+	auto& fitData = d->fitData;
 	if (action == XYAnalysisCurve::AnalysisAction::FitLinear) {
 		// Linear
 		fitData.modelCategory = nsl_fit_model_basic;
@@ -440,7 +429,8 @@ void XYFitCurve::initFitData(XYAnalysisCurve::AnalysisAction action) {
 		fitData.modelType = 0;
 	}
 
-	XYFitCurve::initFitData(fitData);
+	initFitData(fitData);
+	initStartValues(fitData);
 }
 
 /*!
