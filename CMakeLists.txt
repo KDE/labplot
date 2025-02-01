@@ -330,6 +330,7 @@ endif()
 
 ### GSL (required) ###############################
 find_package(GSL REQUIRED)
+message(STATUS "GSL libraries: ${GSL_LIBRARIES}, GSL library: ${GSL_LIBRARY}, GSL CBLAS library: ${GSL_CBLAS_LIBRARY}")
 
 find_package(Poppler "0.62.0" COMPONENTS Qt${QT_MAJOR_VERSION})
 if(Poppler_FOUND)
