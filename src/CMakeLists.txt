@@ -579,7 +579,9 @@ target_link_libraries(labplotbackendlib
     KF${KF_MAJOR_VERSION}::CoreAddons    # kcoreaddons_version.h
     ${ZLIB_LIBRARIES}
     ${LZ4_LIBRARIES}
+    -Wl,--no-as-needed
     ${GSL_LIBRARIES}
+    -Wl,--as-needed
     ${HDF5_LIBRARIES}
     ${FFTW3_LIBRARIES}
     ${netCDF_LIBRARIES}
