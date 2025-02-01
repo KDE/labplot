@@ -3,7 +3,7 @@
 	Project          : LabPlot
 	Description      : widget for editing properties of fit curves
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -122,16 +122,16 @@ void XYFitCurveDock::setupGeneral() {
 	}
 
 	// TODO: setting checked background color to unchecked color
-	//	p = uiGeneralTab.lData->palette();
+	//	p = uiGeneralTab.tbData->palette();
 	// QWidget::palette().color(QWidget::backgroundRole())
 	// not working with 'transparent'
 	//	p.setColor(QPalette::Base, Qt::transparent);
-	//	uiGeneralTab.lData->setPalette(p);
+	//	uiGeneralTab.tbData->setPalette(p);
 	// see https://forum.qt.io/topic/41325/solved-background-of-checked-qpushbutton-with-stylesheet/2
 	// Styles not usable (here: text color not theme dependent). see https://forum.qt.io/topic/60546/qpushbutton-default-windows-style-sheet/9
-	//	uiGeneralTab.lData->setStyleSheet(QStringLiteral("QToolButton:checked{background-color: transparent;border: 3px transparent;padding: 3px;}"));
+	//	uiGeneralTab.tbData->setStyleSheet(QStringLiteral("QToolButton:checked{background-color: transparent;border: 3px transparent;padding: 3px;}"));
 
-	//	uiGeneralTab.lData->setAutoFillBackground(true);
+	//	uiGeneralTab.tbData->setAutoFillBackground(true);
 
 	uiGeneralTab.twLog->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	uiGeneralTab.twParameters->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -182,7 +182,7 @@ void XYFitCurveDock::setupGeneral() {
 
 	// Slots
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::dataSourceTypeChanged);
-	connect(uiGeneralTab.lWeights, &QPushButton::clicked, this, &XYFitCurveDock::showWeightsOptions);
+	connect(uiGeneralTab.tbWeights, &QPushButton::clicked, this, &XYFitCurveDock::showWeightsOptions);
 	connect(uiGeneralTab.cbXWeight, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::xWeightChanged);
 	connect(uiGeneralTab.cbYWeight, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::yWeightChanged);
 	connect(uiGeneralTab.cbCategory, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::categoryChanged);
@@ -194,10 +194,10 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.pbOptions, &QPushButton::clicked, this, &XYFitCurveDock::showOptions);
 	connect(uiGeneralTab.cbAlgorithm, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::algorithmChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYFitCurveDock::recalculateClicked);
-	connect(uiGeneralTab.lData, &QPushButton::clicked, this, &XYFitCurveDock::showDataOptions);
-	connect(uiGeneralTab.lFit, &QPushButton::clicked, this, &XYFitCurveDock::showFitOptions);
-	connect(uiGeneralTab.lParameters, &QPushButton::clicked, this, &XYFitCurveDock::showParameters);
-	connect(uiGeneralTab.lResults, &QPushButton::clicked, this, &XYFitCurveDock::showResults);
+	connect(uiGeneralTab.tbData, &QPushButton::clicked, this, &XYFitCurveDock::showDataOptions);
+	connect(uiGeneralTab.tbFit, &QPushButton::clicked, this, &XYFitCurveDock::showFitOptions);
+	connect(uiGeneralTab.tbParameters, &QPushButton::clicked, this, &XYFitCurveDock::showParameters);
+	connect(uiGeneralTab.tbResults, &QPushButton::clicked, this, &XYFitCurveDock::showResults);
 	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::plotRangeChanged);
 
 	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYFitCurveDock::dataSourceCurveChanged);
@@ -391,37 +391,21 @@ void XYFitCurveDock::checkDataColumns() {
 //*************************************************************
 void XYFitCurveDock::dataSourceTypeChanged(int index) {
 	DEBUG(Q_FUNC_INFO << ", m_initializing = " << m_initializing)
-	const auto type = (XYAnalysisCurve::DataSourceType)index;
+	const auto type = static_cast<XYAnalysisCurve::DataSourceType>(uiGeneralTab.cbDataSourceType->currentIndex());
 	DEBUG(Q_FUNC_INFO << ", source type = " << ENUM_TO_STRING(XYAnalysisCurve, DataSourceType, type))
 	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		uiGeneralTab.cbCategory->setEnabled(true);
-		uiGeneralTab.lDataSourceCurve->hide();
-		cbDataSourceCurve->hide();
-		uiGeneralTab.lXColumn->show();
-		cbXDataColumn->show();
-		uiGeneralTab.lYColumn->show();
-		cbYDataColumn->show();
-
-		QList<AspectType> list{AspectType::Folder, AspectType::Workbook, AspectType::Spreadsheet, AspectType::Datapicker};
-		cbDataSourceCurve->setTopLevelClasses(list);
+		cbDataSourceCurve->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 
 		// when the dock is initialized, this functions is called before setModel(),
 		// we need this nullptr check
 		if (m_dataSourceModel) {
-			list = {AspectType::Column};
-			m_dataSourceModel->setSelectableAspects(list);
+			m_dataSourceModel->setSelectableAspects({AspectType::Column});
 
 			// TODO: why do we need to reset the model here and below again to get the combobox updated?
 			cbDataSourceCurve->setModel(m_dataSourceModel);
 		}
 	} else { // curve or histogram
-		uiGeneralTab.lDataSourceCurve->show();
-		cbDataSourceCurve->show();
-		uiGeneralTab.lXColumn->hide();
-		cbXDataColumn->hide();
-		uiGeneralTab.lYColumn->hide();
-		cbYDataColumn->hide();
-
 		if (type == XYAnalysisCurve::DataSourceType::Curve) {
 			uiGeneralTab.cbCategory->setEnabled(true);
 			uiGeneralTab.lDataSourceCurve->setText(i18n("Curve:"));
@@ -458,6 +442,8 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 			}
 		}
 	}
+
+	showDataOptions(uiGeneralTab.tbData->isChecked()); // show/hide data source widgets for the current type
 
 	enableRecalculate();
 
@@ -556,13 +542,29 @@ void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
 
 void XYFitCurveDock::showDataOptions(bool checked) {
 	if (checked) {
-		uiGeneralTab.lData->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
+		uiGeneralTab.tbData->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
 		uiGeneralTab.lDataSourceType->show();
 		uiGeneralTab.cbDataSourceType->show();
-		// select options for current source type
-		dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
+
+		// show/hide data source widgets depending on the current type
+		const auto type = static_cast<XYAnalysisCurve::DataSourceType>(uiGeneralTab.cbDataSourceType->currentIndex());
+		if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
+			uiGeneralTab.lDataSourceCurve->hide();
+			cbDataSourceCurve->hide();
+			uiGeneralTab.lXColumn->show();
+			cbXDataColumn->show();
+			uiGeneralTab.lYColumn->show();
+			cbYDataColumn->show();
+		} else { // curve or histogram
+			uiGeneralTab.lDataSourceCurve->show();
+			cbDataSourceCurve->show();
+			uiGeneralTab.lXColumn->hide();
+			cbXDataColumn->hide();
+			uiGeneralTab.lYColumn->hide();
+			cbYDataColumn->hide();
+		}
 	} else {
-		uiGeneralTab.lData->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
+		uiGeneralTab.tbData->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
 		uiGeneralTab.lDataSourceType->hide();
 		uiGeneralTab.cbDataSourceType->hide();
 		uiGeneralTab.lXColumn->hide();
@@ -576,7 +578,7 @@ void XYFitCurveDock::showDataOptions(bool checked) {
 
 void XYFitCurveDock::showWeightsOptions(bool checked) {
 	if (checked) {
-		uiGeneralTab.lWeights->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
+		uiGeneralTab.tbWeights->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
 		uiGeneralTab.lXWeight->show();
 		uiGeneralTab.cbXWeight->show();
 		uiGeneralTab.lXErrorCol->show();
@@ -586,7 +588,7 @@ void XYFitCurveDock::showWeightsOptions(bool checked) {
 		uiGeneralTab.lYErrorCol->show();
 		cbYErrorColumn->show();
 	} else {
-		uiGeneralTab.lWeights->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
+		uiGeneralTab.tbWeights->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
 		uiGeneralTab.lXWeight->hide();
 		uiGeneralTab.cbXWeight->hide();
 		uiGeneralTab.lXErrorCol->hide();
@@ -600,7 +602,7 @@ void XYFitCurveDock::showWeightsOptions(bool checked) {
 
 void XYFitCurveDock::showFitOptions(bool checked) {
 	if (checked) {
-		uiGeneralTab.lFit->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
+		uiGeneralTab.tbFit->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
 		uiGeneralTab.lCategory->show();
 		uiGeneralTab.cbCategory->show();
 		uiGeneralTab.lModel->show();
@@ -610,7 +612,7 @@ void XYFitCurveDock::showFitOptions(bool checked) {
 		CONDITIONAL_LOCK_RETURN; // do not change start parameter
 		modelTypeChanged(uiGeneralTab.cbModel->currentIndex());
 	} else {
-		uiGeneralTab.lFit->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
+		uiGeneralTab.tbFit->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
 		uiGeneralTab.lCategory->hide();
 		uiGeneralTab.cbCategory->hide();
 		uiGeneralTab.lModel->hide();
@@ -627,20 +629,20 @@ void XYFitCurveDock::showFitOptions(bool checked) {
 
 void XYFitCurveDock::showParameters(bool checked) {
 	if (checked) {
-		uiGeneralTab.lParameters->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
+		uiGeneralTab.tbParameters->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
 		uiGeneralTab.frameParameters->show();
 	} else {
-		uiGeneralTab.lParameters->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
+		uiGeneralTab.tbParameters->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
 		uiGeneralTab.frameParameters->hide();
 	}
 }
 
 void XYFitCurveDock::showResults(bool checked) {
 	if (checked) {
-		uiGeneralTab.lResults->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
+		uiGeneralTab.tbResults->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
 		uiGeneralTab.twResults->show();
 	} else {
-		uiGeneralTab.lResults->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
+		uiGeneralTab.tbResults->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
 		uiGeneralTab.twResults->hide();
 	}
 }
