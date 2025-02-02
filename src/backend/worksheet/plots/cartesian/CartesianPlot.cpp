@@ -2082,7 +2082,7 @@ void CartesianPlot::addFitCurve() {
 		curve->retransform();
 	} else {
 		beginMacro(i18n("%1: add fit curve", name()));
-		curve->initFitData(XYAnalysisCurve::AnalysisAction::FitLinear); //TODO: should happen directly in the constructor of XYFitCurve
+		curve->initFitData(XYAnalysisCurve::AnalysisAction::FitLinear); // TODO: should happen directly in the constructor of XYFitCurve
 		this->addChild(curve);
 	}
 
