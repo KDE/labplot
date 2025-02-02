@@ -342,7 +342,7 @@ void ImportFileWidget::loadSettings() {
 	}
 
 	ui.sbPreviewLines->setValue(conf.readEntry("PreviewLines", 100));
-	ui.chbFirstRowAsColName->setCheckState((Qt::CheckState)conf.readEntry("ExcelFirstLineAsColNames", (int)Qt::CheckState::Unchecked));
+	ui.chbFirstRowAsColName->setChecked(conf.readEntry("ExcelFirstLineAsColNames", false));
 
 	// live data related settings
 	ui.cbBaudRate->setCurrentIndex(conf.readEntry("BaudRate", 13)); // index for bautrate 19200b/s
@@ -354,8 +354,8 @@ void ImportFileWidget::loadSettings() {
 	ui.lePort->setText(conf.readEntry("Port", ""));
 	ui.sbSampleSize->setValue(conf.readEntry("SampleSize", 1));
 	ui.sbUpdateInterval->setValue(conf.readEntry("UpdateInterval", 1000));
-	ui.chbLinkFile->setCheckState((Qt::CheckState)conf.readEntry("LinkFile", (int)Qt::CheckState::Unchecked));
-	ui.chbRelativePath->setCheckState((Qt::CheckState)conf.readEntry("RelativePath", (int)Qt::CheckState::Unchecked));
+	ui.chbLinkFile->setChecked(conf.readEntry("LinkFile", false));
+	ui.chbRelativePath->setChecked(conf.readEntry("RelativePath", false));
 
 #ifdef HAVE_MQTT
 	// read available MQTT connections
@@ -457,8 +457,8 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("Host", ui.leHost->text());
 	conf.writeEntry("Port", ui.lePort->text());
 	conf.writeEntry("UpdateInterval", ui.sbUpdateInterval->value());
-	conf.writeEntry("LinkFile", (int)ui.chbLinkFile->checkState());
-	conf.writeEntry("RelativePath", (int)ui.chbRelativePath->checkState());
+	conf.writeEntry("LinkFile", ui.chbLinkFile->isChecked());
+	conf.writeEntry("RelativePath", ui.chbRelativePath->isChecked());
 
 #ifdef HAVE_MQTT
 	// MQTT related settings
