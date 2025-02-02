@@ -565,8 +565,8 @@ if(NOT ICONV_LIBRARIES)
     set(ICONV_LIBRARIES "")
 endif()
 if(!APPLE)
-    set(TURN_OFF_AS_NEEDED -Wl,--no-as-needed)
-    set(TURN_ON_AS_NEEDED -Wl,--as-needed)
+    set(TURN_OFF_AS_NEEDED "-Wl,--no-as-needed")
+    set(TURN_ON_AS_NEEDED "-Wl,--as-needed")
 endif()
 target_link_libraries(labplotnsllib
     Qt${QT_MAJOR_VERSION}::Core
