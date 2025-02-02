@@ -13,18 +13,17 @@
 #include "HypothesisTest.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
+#include <QLabel>
 #include <QList>
 #include <QString>
 #include <cmath>
 #include <gsl/gsl_cdf.h>
-#include <QLabel>
 
 HypothesisTest::HypothesisTest(const QString& name)
 	: GeneralTest(name, AspectType::HypothesisTest)
 	, m_populationMean(0.0)
 	, m_significanceLevel(0.05)
-	, m_tail(TailTwo)
-{
+	, m_tail(TailTwo) {
 }
 
 HypothesisTest::~HypothesisTest() {
@@ -76,18 +75,8 @@ void HypothesisTest::performOneSampleTTest() {
 	}
 
 		   // Create an HTML table with basic statistics.
-	QVariant statsData[] = {
-		QString(),
-		QLatin1String("N"),
-		QLatin1String("Sum"),
-		QLatin1String("Mean"),
-		QLatin1String("Std Dev"),
-		m_columns[0]->name(),
-		n,
-		sum,
-		mean,
-		stdDev
-	};
+	QVariant statsData[] =
+		{QString(), QLatin1String("N"), QLatin1String("Sum"), QLatin1String("Mean"), QLatin1String("Std Dev"), m_columns[0]->name(), n, sum, mean, stdDev};
 
 	m_statsTable = buildHtmlTable(2, 5, statsData);
 
@@ -128,30 +117,49 @@ double HypothesisTest::calculatePValue(double& tValue, const QString& col1Name, 
 	QString nullHypothesisSign;
 	QString alternateHypothesisSign;
 
+		   // Determine the p-value and the alternate hypothesis sign based on m_tail.
 	switch (m_tail) {
 	case TailNegative:
 		pValue = gsl_cdf_tdist_P(tValue, df);
-		nullHypothesisSign = UTF8_QSTRING("≥");
 		alternateHypothesisSign = UTF8_QSTRING("<");
 		break;
 	case TailPositive:
-		tValue *= -1;  // Adjust tValue for one-sided test.
+		tValue *= -1; // Adjust tValue for one-sided test.
 		pValue = gsl_cdf_tdist_P(tValue, df);
-		nullHypothesisSign = UTF8_QSTRING("≤");
 		alternateHypothesisSign = UTF8_QSTRING(">");
 		break;
 	case TailTwo:
 		pValue = 2.0 * gsl_cdf_tdist_P(-fabs(tValue), df);
-		nullHypothesisSign = UTF8_QSTRING("=");
 		alternateHypothesisSign = UTF8_QSTRING("≠");
 		break;
 	}
 
-		   // Display the hypotheses.
+		   // Now, determine the null hypothesis sign based on the user-selected m_nullHypothesisType.
+	switch (m_nullHypothesisType) {
+	case NullEquality:
+		nullHypothesisSign = UTF8_QSTRING("=");
+		break;
+	case NullLessEqual:
+		nullHypothesisSign = UTF8_QSTRING("≤");
+		break;
+	case NullGreaterEqual:
+		nullHypothesisSign = UTF8_QSTRING("≥");
+		break;
+	}
+
+	// Display the hypotheses.
 	displayLine(0, i18n("<b>Null Hypothesis:</b> µ %1 µ₀", nullHypothesisSign), QLatin1String("black"));
 	displayLine(1, i18n("<b>Alternate Hypothesis:</b> µ %1 µ₀", alternateHypothesisSign), QLatin1String("black"));
 
 	return (pValue > 1.0) ? 1.0 : pValue;
+}
+
+HypothesisTest::NullHypothesisType HypothesisTest::nullHypothesis() const {
+	return m_nullHypothesisType;
+}
+
+void HypothesisTest::setNullHypothesis(NullHypothesisType type) {
+	m_nullHypothesisType = type;
 }
 
 void HypothesisTest::logError(const QString& errorMsg) {

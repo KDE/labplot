@@ -50,6 +50,7 @@ GeneralTest::GeneralTest(const QString& name, const AspectType& type)
 	, m_summaryLayout(new QVBoxLayout())
 	, m_inputStatsTableModel(new TableModel())
 {
+	m_inputStatsTableModel->setParent(this);
 	for (int i = 0; i < RESULT_LINES_COUNT; i++) {
 		m_resultLabels[i] = new QLabel();
 		m_summaryLayout->addWidget(m_resultLabels[i]);
@@ -311,10 +312,11 @@ GeneralTest::GeneralErrorType GeneralTest::computeCategoricalStats(Column* colum
 QString GeneralTest::buildHtmlTable(int row, int column, QVariant* data) {
 	QString table;
 	table = QLatin1String("<style type='text/css'>")
-		+ QLatin1String("table {border-collapse: collapse; width: 100%;}")
-		+ QLatin1String("th, td {border: 1px solid black; padding: 8px; text-align: center;}")
-		+ QLatin1String("th {background-color: #f2f2f2;}")
+		+ QLatin1String("table {border-collapse: collapse; margin: auto; width: 80%; font-size: 18px;}")  // Increased width and font size
+		+ QLatin1String("th, td {border: 1px solid black; padding: 12px; text-align: center; font-size: 16px;}") // Bigger padding and text
+		+ QLatin1String("th {background-color: #f2f2f2; font-size: 18px;}")
 		+ QLatin1String("</style>")
+		+ QLatin1String("<div style='text-align: center;'>")
 		+ QLatin1String("<table>");
 	table += QLatin1String("<tr>");
 	// Add column headers.
@@ -329,6 +331,7 @@ QString GeneralTest::buildHtmlTable(int row, int column, QVariant* data) {
 		table += QLatin1String("</tr>");
 	}
 	table += QLatin1String("</table>");
+	table += QLatin1String("</table></div>");
 	return table;
 }
 

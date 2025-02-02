@@ -49,8 +49,12 @@ GeneralTestView::GeneralTestView(GeneralTest* test)
 	// Set up the input statistics widget.
 	auto* inputStatsLayout = new QVBoxLayout(m_inputStatsWidget);
 	inputStatsLayout->addWidget(m_labelInputStatsTable);
-	inputStatsLayout->addWidget(m_inputStatsTable);
-	inputStatsLayout->addWidget(m_clearInputStats);
+	auto* tableContainerLayout = new QHBoxLayout();
+	tableContainerLayout->addStretch();
+	tableContainerLayout->addWidget(m_inputStatsTable);
+	tableContainerLayout->addStretch();
+	inputStatsLayout->addLayout(tableContainerLayout);
+	inputStatsLayout->addWidget(m_clearInputStats, 0, Qt::AlignCenter);
 
 	m_statsTable->setReadOnly(true);
 
@@ -73,7 +77,7 @@ GeneralTestView::GeneralTestView(GeneralTest* test)
 	m_clearInputStats->setText(i18n("Clear"));
 	m_clearInputStats->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 
-	layout->addWidget(m_inputStatsWidget);
+	layout->addWidget(m_inputStatsWidget, 0, Qt::AlignCenter);
 	layout->addWidget(m_testName);
 	layout->addWidget(m_statsTable);
 	layout->addWidget(m_summaryResults);
@@ -162,7 +166,8 @@ void GeneralTestView::updateDisplay() {
 	if (m_generalTest->getStatsTable().isEmpty())
 		m_statsTable->hide();
 	else {
-		m_statsTable->setHtml(m_generalTest->getStatsTable());
+		QString centeredHtml = QLatin1String("<div style='text-align: center; width: 100%;'>") + m_generalTest->getStatsTable() + QLatin1String("</div>");
+		m_statsTable->setHtml(centeredHtml);
 		m_statsTable->show();
 	}
 

@@ -22,6 +22,12 @@ public:
 	explicit HypothesisTest(const QString& name);
 	~HypothesisTest() override;
 
+	enum NullHypothesisType {
+		NullEquality,       // H0: μ = μ₀
+		NullLessEqual,      // H0: μ ≤ μ₀
+		NullGreaterEqual    // H0: μ ≥ μ₀
+	};
+
 	enum HypothesisTailType {
 		TailPositive,
 		TailNegative,
@@ -32,7 +38,8 @@ public:
 	void setPopulationMean(double mean);
 	void setSignificanceLevel(double alpha);
 	void setTail(HypothesisTailType tail);
-
+	void setNullHypothesis(NullHypothesisType type);
+	NullHypothesisType nullHypothesis() const;
 	// Run the test
 	void runTest();
 	void performOneSampleTTest();
@@ -42,7 +49,7 @@ private:
 	void displayTestResults(double tStatistic, double pValue, int df);
 	void logError(const QString& errorMsg);
 	QString generatePValueTooltip(const double& pValue);
-
+	NullHypothesisType m_nullHypothesisType = NullEquality; // default
 	double m_populationMean;
 	double m_significanceLevel;
 	HypothesisTailType m_tail;
