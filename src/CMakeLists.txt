@@ -557,8 +557,11 @@ target_compile_definitions(labplotlib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
 if(READSTAT_FOUND)   # system readstat needs libiconv
     find_library(ICONV_LIBRARIES NAMES iconv libiconv libconv-2)
-    message(status "FOUND iconv: ${ICONV_LIBRARIES}. Adding with --no-as-needed")
-else()
+    if(ICONV_LIBRARIES)
+        message(status "FOUND iconv: ${ICONV_LIBRARIES}. Adding with --no-as-needed")
+    endif()
+endif()
+if(NOT ICONV_LIBRARIES)
     set(ICONV_LIBRARIES "")
 endif()
 if(!APPLE)
