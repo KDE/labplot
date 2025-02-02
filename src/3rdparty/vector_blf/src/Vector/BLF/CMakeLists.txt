@@ -356,5 +356,10 @@ if (NOT FETCH_CONTENT_INCLUSION)
 endif()
 
 # sub directories
-add_subdirectory(docs)
-add_subdirectory(tests)
+if (OPTION_RUN_DOXYGEN)
+    add_subdirectory(docs)
+endif()
+
+if (OPTION_BUILD_TESTS)
+    add_subdirectory(tests)
+endif()

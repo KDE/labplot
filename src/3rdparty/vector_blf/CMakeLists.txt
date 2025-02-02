@@ -9,7 +9,7 @@ project(Vector_BLF
     DESCRIPTION "Vector Binary Log File support library")
 
 # source code documentation
-option(OPTION_RUN_DOXYGEN "Run Doxygen" ON)
+option(OPTION_RUN_DOXYGEN "Run Doxygen" OFF)
 
 # static code analysis
 option(OPTION_RUN_CCCC "Run CCCC" OFF)
