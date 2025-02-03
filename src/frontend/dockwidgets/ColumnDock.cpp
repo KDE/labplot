@@ -33,18 +33,16 @@ ColumnDock::ColumnDock(QWidget* parent)
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
 
-	// add formats for numeric values
-	ui.cbNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
-	ui.cbNumericFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
-	ui.cbNumericFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
-	ui.cbNumericFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
-	ui.cbNumericFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
-
 	// add format for date, time and datetime values
 	for (const auto& s : AbstractColumn::dateTimeFormats())
 		ui.cbDateTimeFormat->addItem(s, QVariant(s));
 
 	ui.cbDateTimeFormat->setEditable(true);
+
+	// plot designations
+	ui.cbPlotDesignation->clear();
+	for (int i = 0; i < ENUM_COUNT(AbstractColumn, PlotDesignation); i++)
+		ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation(i), false));
 
 	ui.twLabels->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
 	ui.twLabels->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
@@ -174,7 +172,12 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 	case AbstractColumn::ColumnMode::DateTime: {
 		auto* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
 		// 			DEBUG("	set column format: " << STDSTRING(filter->format()));
-		ui.cbDateTimeFormat->setCurrentIndex(ui.cbDateTimeFormat->findData(filter->format()));
+		const auto& format = filter->format();
+		const int index = ui.cbDateTimeFormat->findData(format);
+		if (index != -1)
+			ui.cbDateTimeFormat->setCurrentIndex(index);
+		else
+			ui.cbDateTimeFormat->setCurrentText(format); // custom format, not in the list of pre-defined formats
 		break;
 	}
 	case AbstractColumn::ColumnMode::Integer: // nothing to set
@@ -297,6 +300,7 @@ void ColumnDock::showValueLabels() {
 void ColumnDock::retranslateUi() {
 	CONDITIONAL_LOCK_RETURN;
 
+	// data type
 	ui.cbType->clear();
 	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Double), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Double)));
 	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Integer), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Integer)));
@@ -307,10 +311,15 @@ void ColumnDock::retranslateUi() {
 	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::DateTime),
 					   QVariant(static_cast<int>(AbstractColumn::ColumnMode::DateTime)));
 
-	ui.cbPlotDesignation->clear();
-	for (int i = 0; i < ENUM_COUNT(AbstractColumn, PlotDesignation); i++)
-		ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation(i), false));
+	// formats for numeric values
+	ui.cbNumericFormat->clear();
+	ui.cbNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
+	ui.cbNumericFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
+	ui.cbNumericFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
+	ui.cbNumericFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
+	ui.cbNumericFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
 
+	// tooltip texts
 	ui.bAddLabel->setToolTip(i18n("Add a new value label"));
 	ui.bRemoveLabel->setToolTip(i18n("Remove the selected value label"));
 	ui.bBatchEditLabels->setToolTip(i18n("Modify multiple values labels in a batch mode"));
