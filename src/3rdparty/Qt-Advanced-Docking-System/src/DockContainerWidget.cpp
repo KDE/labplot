@@ -1,17 +1,17 @@
 /*******************************************************************************
 ** Qt Advanced Docking System
 ** Copyright (C) 2017 Uwe Kindler
-**
+** 
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
 ** version 2.1 of the License, or (at your option) any later version.
-**
+** 
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Lesser General Public License for more details.
-**
+** 
 ** You should have received a copy of the GNU Lesser General Public
 ** License along with this library; If not, see <http://www.gnu.org/licenses/>.
 ******************************************************************************/
@@ -961,7 +961,7 @@ void DockContainerWidgetPrivate::saveChildNodesState(QXmlStreamWriter& s, QWidge
 			s.writeStartElement("Sizes");
 			for (auto Size : Splitter->sizes())
 			{
-				s.writeCharacters(QString::number(Size) + QStringLiteral(" "));
+				s.writeCharacters(QString::number(Size) + " ");
 			}
 			s.writeEndElement();
 		s.writeEndElement();
@@ -1000,14 +1000,14 @@ bool DockContainerWidgetPrivate::restoreSplitter(CDockingStateReader& s,
 	QString OrientationStr = s.attributes().value("Orientation").toString();
 
 	// Check if the orientation string is right
-	if (!OrientationStr.startsWith(QStringLiteral("|")) && !OrientationStr.startsWith(QStringLiteral("-")))
+	if (!OrientationStr.startsWith("|") && !OrientationStr.startsWith("-"))
 	{
 		return false;
 	}
 
 	// The "|" shall indicate a vertical splitter handle which in turn means
 	// a Horizontal orientation of the splitter layout.
-	bool HorizontalSplitter = OrientationStr.startsWith(QStringLiteral("|"));
+	bool HorizontalSplitter = OrientationStr.startsWith("|");
 	// In version 0 we had a small bug. The "|" indicated a vertical orientation,
 	// but this is wrong, because only the splitter handle is vertical, the
 	// layout of the splitter is a horizontal layout. We fix this here
@@ -1763,7 +1763,7 @@ void CDockContainerWidget::dropFloatingWidget(CFloatingDockContainer* FloatingWi
 	}
 
 	if (Dropped)
-	{
+	{ 
 		// Fix https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System/issues/351
 		FloatingWidget->finishDropOperation();
 

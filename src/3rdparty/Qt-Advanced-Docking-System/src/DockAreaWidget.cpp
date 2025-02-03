@@ -34,7 +34,6 @@
 
 #include <QStackedLayout>
 #include <QScrollBar>
-#include <QWheelEvent>
 #include <QStyle>
 #include <QPushButton>
 #include <QDebug>
@@ -269,6 +268,14 @@ struct DockAreaWidgetPrivate
 	 * Private data constructor
 	 */
 	DockAreaWidgetPrivate(CDockAreaWidget* _public);
+
+	/**
+	 * Convenience function to ease components factory access
+	 */
+	QSharedPointer<ads::CDockComponentsFactory> componentsFactory() const
+	{
+        return DockManager->componentsFactory();
+    }
 
 	/**
 	 * Creates the layout for top area with tabs and close button
@@ -923,7 +930,7 @@ void CDockAreaWidget::saveState(QXmlStreamWriter& s) const
 	s.writeStartElement("Area");
 	s.writeAttribute("Tabs", QString::number(d->ContentsLayout->count()));
 	auto CurrentDockWidget = currentDockWidget();
-	QString Name = CurrentDockWidget ? CurrentDockWidget->objectName() : QStringLiteral("");
+	QString Name = CurrentDockWidget ? CurrentDockWidget->objectName() : "";
 	s.writeAttribute("Current", Name);
 
 	if (d->AllowedAreas != DefaultAllowedAreas)
