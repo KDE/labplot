@@ -52,8 +52,8 @@ public:
 		double eps{1.e-4};
 		size_t evaluatedPoints{1000};
 		bool useDataErrors{true}; // use given data errors when fitting (default)
-		bool useResults{true}; // use results as new start values (default)
-		bool previewEnabled{true}; // preview fit function with given start parameters
+		bool useResults{false}; // use results as new start values (default)
+		bool previewEnabled{false}; // preview fit function with given start parameters
 		double confidenceInterval{95.}; // confidence interval for fit result
 
 		bool autoRange{true}; // use all data points? (default)
