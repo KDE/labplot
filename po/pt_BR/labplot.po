@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-02 00:38+0000\n"
+"POT-Creation-Date: 2025-02-03 00:37+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -90,7 +90,7 @@ msgstr "Para cima"
 #: src/backend/core/AbstractAspect.cpp:528
 #: src/backend/core/aspectcommands.h:172
 #: src/backend/datapicker/Datapicker.cpp:220
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2204
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2205
 #, kde-format
 msgid "%1: add %2"
 msgstr "%1: adicionar %2"
@@ -1097,7 +1097,7 @@ msgstr "Não foi possível abrir o arquivo %1 para leitura."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:192
 #: src/backend/gsl/errors.h:20
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2055
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2053
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1222
 #, kde-format
 msgid "Success"
@@ -1968,7 +1968,7 @@ msgstr "UInt64"
 #: src/backend/datasources/filters/MatioFilter.cpp:452
 #: src/backend/nsl/nsl_interp.c:26
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:446
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2108
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2109
 #, kde-format
 msgid "Function"
 msgstr "Função"
@@ -2290,7 +2290,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/datasources/filters/QJsonModel.cpp:133
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1872
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:145
 #: src/frontend/matrix/MatrixView.cpp:619
@@ -7045,7 +7045,7 @@ msgstr "Distribuição Logística"
 
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:499
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1858
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1856
 #: src/frontend/datasources/ImportFileWidget.cpp:1353
 #: src/frontend/dockwidgets/AxisDock.cpp:237
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:172
@@ -8653,7 +8653,7 @@ msgstr "Não há pontos de dados disponíveis."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:145
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5239
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5240
 #: src/frontend/ui/dockwidgets/axisdock.ui:483
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:542
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:478
@@ -8712,7 +8712,7 @@ msgstr "Ajustar:"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:420
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:503
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2092
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2093
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:514
 #, fuzzy, kde-format
 #| msgid "Fourier filter"
@@ -8830,7 +8830,7 @@ msgstr "Funções de erro"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLegendVisible)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:529
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2134
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2135
 #: src/frontend/ui/dockwidgets/barplotdock.ui:235
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:248
 #: src/frontend/ui/dockwidgets/histogramdock.ui:385
@@ -8868,7 +8868,7 @@ msgid "Vertical Axis"
 msgstr "Eixo vertical"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:536
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2181
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2182
 #: src/frontend/datasources/ImportFileWidget.cpp:112
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:110
@@ -8880,14 +8880,14 @@ msgid "Image"
 msgstr "Imagem"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:537
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2157
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2158
 #, fuzzy, kde-format
 #| msgid "Increment"
 msgid "Info Element"
 msgstr "Incremento"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:538
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2201
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2202
 #, fuzzy, kde-format
 #| msgid "custom point"
 msgid "Custom Point"
@@ -8895,14 +8895,14 @@ msgstr "ponto personalizado"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabReferenceLine)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:539
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2226
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2227
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:176
 #, kde-format
 msgid "Reference Line"
 msgstr "Linha de referência"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:540
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2239
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2240
 #, fuzzy, kde-format
 #| msgid "Reference Line"
 msgid "Reference Range"
@@ -9205,7 +9205,7 @@ msgid "%1: load default theme"
 msgstr "%1: adicionar %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1761
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5565
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5566
 #: src/backend/worksheet/Worksheet.cpp:842
 #, fuzzy, kde-format
 #| msgid "%1: set cell value"
@@ -9339,67 +9339,67 @@ msgstr "derivada"
 msgid "%1: add fit curve"
 msgstr "%1: adicionar nova curva."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2095
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2096
 #, fuzzy, kde-format
 #| msgid "Fourier filter"
 msgid "%1: Fourier filtering of '%2'"
 msgstr "Filtro de Fourier"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2096
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2097
 #, fuzzy, kde-format
 #| msgid "Fourier filter"
 msgid "Fourier filtering of '%1'"
 msgstr "Filtro de Fourier"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2100
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2101
 #, fuzzy, kde-format
 #| msgid "%1: add new curve."
 msgid "%1: add Fourier filter curve"
 msgstr "%1: adicionar nova curva."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2111
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2112
 #, fuzzy, kde-format
 #| msgid "Smooth"
 msgid "%1: add function of '%2'"
 msgstr "Suave"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2112
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2113
 #, fuzzy, kde-format
 #| msgid "Smooth"
 msgid "Function of '%1'"
 msgstr "Suave"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2115
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2116
 #, fuzzy, kde-format
 #| msgid "%1: add new curve."
 msgid "%1: add function curve"
 msgstr "%1: adicionar nova curva."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2164
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2165
 #: src/frontend/worksheet/WorksheetView.cpp:1339
 #: src/frontend/worksheet/WorksheetView.cpp:1340
 #, kde-format
 msgid "Text Label"
 msgstr "Legenda de texto"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3932
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3933
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4156
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4177
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4157
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4178
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4164
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4190
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4165
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4191
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4209
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4210
 #, kde-format
 msgid "x=%1"
 msgstr ""
@@ -10303,119 +10303,119 @@ msgstr "%1: definir as opções e efetuar a interpoção"
 msgid "%1: set equation"
 msgstr "%1: definir a equação"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:918
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:916
 #, fuzzy, kde-format
 #| msgid "%1: drop line type changed"
 msgid "%1: data source histogram changed"
 msgstr "%1: o tipo de linha foi alterado"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:930
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:928
 #, fuzzy, kde-format
 #| msgid "%1: assign y-data"
 msgid "%1: assign x-error"
 msgstr "%1: atribuir dados em Y"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:945
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:943
 #, fuzzy, kde-format
 #| msgid "%1: assign y-data"
 msgid "%1: assign y-error"
 msgstr "%1: atribuir dados em Y"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:961
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:959
 #, kde-format
 msgid "%1: set fit options and perform the fit"
 msgstr "%1: definir as opções de ajuste e ajustar"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1810
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1808
 #, fuzzy, kde-format
 #| msgid "Results:"
 msgctxt "Curve fitting"
 msgid "Fit Results"
 msgstr "Resultados:"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1834
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1832
 #, kde-format
 msgid "Nonlinear Fit to X/Y data"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1840
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1838
 #, kde-format
 msgid "MODEL"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1844
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1842
 #, kde-format
 msgid "Degree"
 msgstr "Grau"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1849
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1847
 #, kde-format
 msgid "Peaks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1868
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1866
 #, kde-format
 msgid "PARAMETERS"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1872
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:145
 #, kde-format
 msgid "Uncertainty"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1872
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
 #, kde-format
 msgid "Uncertainty,%"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1872
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "t Statistic"
 msgstr "Estatísticas"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1873
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1871
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:146
 #, fuzzy, kde-format
 #| msgid "Power"
 msgid "Lower"
 msgstr "Potência"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1873
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1871
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:146
 #, fuzzy, kde-format
 #| msgid "Upper Cutoff"
 msgid "Upper"
 msgstr "Corte superior"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1889
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1887
 #, kde-format
 msgid "GOODNESS OF FIT"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1891
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1889
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:956
 #, fuzzy, kde-format
 #| msgid "sum of squared errors"
 msgid "Sum of squared residuals"
 msgstr "soma dos erros ao quadrado"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1892
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1890
 #, fuzzy, kde-format
 #| msgid "residual mean square"
 msgid "Residuals mean square"
 msgstr "quadrado da média residual"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1893
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1891
 #, fuzzy, kde-format
 #| msgid "root-mean squared error"
 msgid "Root mean square deviation"
 msgstr "erro da raiz da média ao quadrado"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1894
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1892
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:986
 #, fuzzy, kde-format
 #| msgid "coefficient of determination (R²)"
@@ -10423,7 +10423,7 @@ msgid "Coefficient of determination"
 msgstr "coeficiente determinístico (R²)"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1895
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1893
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:996
 #, fuzzy, kde-format
 #| msgid "adj. coefficient of determination (R²)"
@@ -10432,7 +10432,7 @@ msgstr "coeficiente adj. determinístico (R²)"
 
 #. i18n: ectx: property (text), widget (QPushButton, bTest)
 #. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1896
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1894
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:177
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:263
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:208
@@ -10440,47 +10440,47 @@ msgstr "coeficiente adj. determinístico (R²)"
 msgid "Test"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1897
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1895
 #, kde-format
 msgid "F-Test"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1899
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1897
 #, fuzzy, kde-format
 #| msgid "mean absolute error"
 msgid "Mean absolute error"
 msgstr "erro absoluto da média"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1900
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1898
 #, kde-format
 msgid "Akaike information criterion"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1901
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1899
 #, kde-format
 msgid "Bayesian information criterion"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2241
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2239
 #, fuzzy, kde-format
 #| msgid "Model has no parameters."
 msgid "Model has no parameters!"
 msgstr "O modelo não tem parâmetros."
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2248
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2246
 #, fuzzy, kde-format
 #| msgid "Not sufficient weight data points provided."
 msgid "Not sufficient weight data points provided!"
 msgstr "Não foram fornecidos pontos de dados de ponderação suficientes."
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2325
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2323
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:370
 #, fuzzy, kde-format
 #| msgid "No data points available."
 msgid "No X data available!"
 msgstr "Não há pontos de dados disponíveis."
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2332
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2330
 #, fuzzy, kde-format
 #| msgid ""
 #| "The number of data points (%1) must be greater than or equal to the "
@@ -10492,12 +10492,12 @@ msgstr ""
 "O número de pontos de dados (%1) deve ser maior ou igual ao número de "
 "parâmetros (%2)."
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2339
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2337
 #, kde-format
 msgid "Fit model not specified!"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3082
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3080
 #, fuzzy, kde-format
 #| msgid "Results:"
 msgctxt "Curve Fitting"
