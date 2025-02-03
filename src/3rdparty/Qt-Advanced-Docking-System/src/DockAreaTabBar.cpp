@@ -111,7 +111,7 @@ void DockAreaTabBarPrivate::updateTabs()
 			// Sometimes the synchronous calculation of the rectangular area fails
 			// Therefore we use QTimer::singleShot here to execute the call
 			// within the event loop - see #520
-			QTimer::singleShot(0, TabWidget, [&, TabWidget]
+			QTimer::singleShot(0, _this, [&, TabWidget]
 			{
 				_this->ensureWidgetVisible(TabWidget);
 			});
@@ -160,18 +160,8 @@ CDockAreaTabBar::~CDockAreaTabBar()
 //============================================================================
 void CDockAreaTabBar::wheelEvent(QWheelEvent* Event)
 {
-	Event->accept();
-	const int direction = Event->angleDelta().y();
-	if (direction < 0)
-	{
-		horizontalScrollBar()->setValue(horizontalScrollBar()->value() + 20);
-	}
-	else
-	{
-		horizontalScrollBar()->setValue(horizontalScrollBar()->value() - 20);
-	}
+    QCoreApplication::sendEvent(horizontalScrollBar(), Event);
 }
-
 
 //============================================================================
 void CDockAreaTabBar::setCurrentIndex(int index)
@@ -356,7 +346,7 @@ void CDockAreaTabBar::onCloseOtherTabsRequested()
 				CDockWidget::DockWidgetDeleteOnClose) ? 1 : 0;
 			closeTab(i);
 
-			// If the the dock widget blocks closing, i.e. if the flag
+			// If the dock widget blocks closing, i.e. if the flag
 			// CustomCloseHandling is set, and the dock widget is still open,
 			// then we do not need to correct the index
 			if (Tab->dockWidget()->isClosed())
@@ -390,15 +380,18 @@ void CDockAreaTabBar::onTabWidgetMoved(const QPoint& GlobalPos)
 
 	int fromIndex = d->TabsLayout->indexOf(MovingTab);
 	auto MousePos = mapFromGlobal(GlobalPos);
-	MousePos.rx() = qMax(d->firstTab()->geometry().left(), MousePos.x());
-	MousePos.rx() = qMin(d->lastTab()->geometry().right(), MousePos.x());
+	MousePos.rx() = qMax(0, MousePos.x());
+	MousePos.rx() = qMin(width(), MousePos.x());
 	int toIndex = -1;
 	// Find tab under mouse
 	for (int i = 0; i < count(); ++i)
 	{
 		CDockWidgetTab* DropTab = tab(i);
+		auto TabGeometry = DropTab->geometry();
+		TabGeometry.setTopLeft(d->TabsContainerWidget->mapToParent(TabGeometry.topLeft()));
+		TabGeometry.setBottomRight(d->TabsContainerWidget->mapToParent(TabGeometry.bottomRight()));
 		if (DropTab == MovingTab || !DropTab->isVisibleTo(this)
-		    || !DropTab->geometry().contains(MousePos))
+		    || !TabGeometry.contains(MousePos))
 		{
 			continue;
 		}
@@ -469,6 +462,15 @@ bool CDockAreaTabBar::eventFilter(QObject *watched, QEvent *event)
     case QEvent::LayoutRequest:
          updateGeometry();
          break;
+
+    // Manage wheel event
+    case QEvent::Wheel:
+    	// Ignore wheel events if tab is currently dragged
+    	if (Tab->dragState() == DraggingInactive)
+    	{
+    		wheelEvent((QWheelEvent* )event);
+    	}
+        break;
 
 	default:
 		break;
@@ -543,6 +545,13 @@ int CDockAreaTabBar::tabInsertIndexAt(const QPoint& Pos) const
 	{
 		return (Index < 0) ? 0 : Index;
 	}
+}
+
+
+//===========================================================================
+bool CDockAreaTabBar::areTabsOverflowing() const
+{
+	return d->TabsContainerWidget->width() > width();
 }
 
 } // namespace ads

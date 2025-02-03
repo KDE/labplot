@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(QtAdvancedDockingSystem LANGUAGES CXX VERSION ${VERSION_SHORT})
+include(GNUInstallDirs)
 if (${QT_VERSION_MAJOR})
   message(STATUS "Forced to use Qt version ${QT_VERSION_MAJOR}")
   find_package(QT NAMES Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
@@ -70,7 +71,7 @@ if (UNIX AND NOT APPLE)
     set(ads_HEADERS linux/FloatingWidgetTitleBar.h ${ads_HEADERS})
 endif()
 
-set(library_name "qt${QT_VERSION_MAJOR}advanceddocking")
+set(library_name "qtadvanceddocking-qt${QT_VERSION_MAJOR}")
 if(BUILD_STATIC)
     add_library(${library_name} STATIC ${ads_SRCS} ${ads_HEADERS})
     target_compile_definitions( ${library_name} PUBLIC ADS_STATIC)
@@ -80,10 +81,6 @@ else()
 endif()
 
 add_library(ads::${library_name} ALIAS ${library_name})
-
-if(NOT MSVC_FOUND)
-    target_compile_options(${library_name} PRIVATE -Wno-switch-enum)
-endif()
 
 target_link_libraries(${library_name} PUBLIC Qt${QT_VERSION_MAJOR}::Core 
                                                Qt${QT_VERSION_MAJOR}::Gui 

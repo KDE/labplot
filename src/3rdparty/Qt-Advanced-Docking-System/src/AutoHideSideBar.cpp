@@ -414,7 +414,14 @@ void CAutoHideSideBar::saveState(QXmlStreamWriter& s) const
 QSize CAutoHideSideBar::minimumSizeHint() const
 {
 	QSize Size = sizeHint();
-	Size.setWidth(10);
+	if (d->isHorizontal())
+	{
+		Size.setWidth(0);
+	}
+	else
+	{
+		Size.setHeight(0);
+	}
 	return Size;
 }
 

@@ -85,7 +85,7 @@ xcb_atom_t xcb_get_atom(const char *name)
 	{
 		return XCB_ATOM_NONE;
 	}
-	auto key = QString(QLatin1String(name));
+	auto key = QString(name);
 	if(_xcb_atom_cache.contains(key))
 	{
 		return _xcb_atom_cache[key];
@@ -261,14 +261,14 @@ QString detectWindowManagerX11()
 	// See: https://specifications.freedesktop.org/wm-spec/1.3/ar01s03.html#idm46018259946000
     if (!is_platform_x11())
 	{
-		return QStringLiteral("UNKNOWN");
+		return "UNKNOWN";
 	}
 	xcb_connection_t *connection = x11_connection();
 	xcb_screen_t *first_screen = xcb_setup_roots_iterator (xcb_get_setup (connection)).data;
 	if(!first_screen)
 	{
 		ADS_PRINT("No screen found via XCB.");
-		return QStringLiteral("UNKNOWN");
+		return "UNKNOWN";
 	}
 	// Get supporting window ()
 	xcb_window_t root = first_screen->root;
@@ -283,15 +283,15 @@ QString detectWindowManagerX11()
 	}
 	if(sup_windows.length() == 0)
 	{
-		ADS_PRINT("Failed to get the supporting window on non EWMH comform WM.");
-		return QStringLiteral("UNKNOWN");
+		ADS_PRINT("Failed to get the supporting window on non EWMH conform WM.");
+		return "UNKNOWN";
 	}
 	support_win = sup_windows[0];
 	QString ret = xcb_get_prop_string(support_win, "_NET_WM_NAME");
 	if(ret.length() == 0)
 	{
 		ADS_PRINT("Empty WM name occurred.");
-		return QStringLiteral("UNKNOWN");
+		return "UNKNOWN";
 	}
 	return ret;
 }
