@@ -1807,6 +1807,7 @@ void XYFitCurvePrivate::prepareResultColumns() {
 	if (!resultsNote) {
 		resultsNote = new Note(i18nc("Curve fitting", "Fit Results"));
 		resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
+		resultsNote->setBackgroundColor(QColor(Qt::white));
 		q->addChild(resultsNote);
 	}
 	if (!residualsColumn) {
@@ -3079,6 +3080,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	// add result note (not saved in projects)
 	d->resultsNote = new Note(i18nc("Curve Fitting", "Fit Results"));
 	d->resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
+	d->resultsNote->setBackgroundColor(QColor(Qt::white));
 	addChild(d->resultsNote);
 
 	////////////////////////////// fix old projects /////////////////////////
