@@ -930,7 +930,7 @@ void CDockAreaWidget::saveState(QXmlStreamWriter& s) const
 	s.writeStartElement("Area");
 	s.writeAttribute("Tabs", QString::number(d->ContentsLayout->count()));
 	auto CurrentDockWidget = currentDockWidget();
-	QString Name = CurrentDockWidget ? CurrentDockWidget->objectName() : "";
+	QString Name = CurrentDockWidget ? CurrentDockWidget->objectName() : QStringLiteral("");
 	s.writeAttribute("Current", Name);
 
 	if (d->AllowedAreas != DefaultAllowedAreas)

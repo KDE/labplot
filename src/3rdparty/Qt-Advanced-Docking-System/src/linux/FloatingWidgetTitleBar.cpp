@@ -80,16 +80,16 @@ void FloatingWidgetTitleBarPrivate::createLayout()
 {
 	TitleLabel = new tTabLabel();
 	TitleLabel->setElideMode(Qt::ElideRight);
-	TitleLabel->setText("DockWidget->windowTitle()");
-	TitleLabel->setObjectName("floatingTitleLabel");
+	TitleLabel->setText(QStringLiteral("DockWidget->windowTitle()"));
+	TitleLabel->setObjectName(QStringLiteral("floatingTitleLabel"));
     TitleLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
 	CloseButton = new tCloseButton();
-	CloseButton->setObjectName("floatingTitleCloseButton");
+	CloseButton->setObjectName(QStringLiteral("floatingTitleCloseButton"));
     CloseButton->setAutoRaise(true);
 
 	MaximizeButton = new tMaximizeButton();
-	MaximizeButton->setObjectName("floatingTitleMaximizeButton");
+	MaximizeButton->setObjectName(QStringLiteral("floatingTitleMaximizeButton"));
 	MaximizeButton->setAutoRaise(true);
 
 	// The standard icons do does not look good on high DPI screens
@@ -229,7 +229,7 @@ void CFloatingWidgetTitleBar::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if (event->buttons() & Qt::LeftButton)
     {
-        emit maximizeRequested();
+        Q_EMIT maximizeRequested();
         event->accept();
     }
     else
