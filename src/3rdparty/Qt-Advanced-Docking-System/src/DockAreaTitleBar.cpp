@@ -258,7 +258,7 @@ void DockAreaTitleBarPrivate::createButtons()
 //============================================================================
 void DockAreaTitleBarPrivate::createAutoHideTitleLabel()
 {
-	AutoHideTitleLabel = new CElidingLabel("");
+	AutoHideTitleLabel = new CElidingLabel(QStringLiteral(""));
 	AutoHideTitleLabel->setObjectName("autoHideTitleLabel");
 	// At position 0 is the tab bar - insert behind tab bar
 	Layout->insertWidget(1, AutoHideTitleLabel);
@@ -1005,7 +1005,7 @@ bool CTitleBarButton::isInAutoHideArea() const
 CSpacerWidget::CSpacerWidget(QWidget* Parent /*= 0*/) : Super(Parent)
 {
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	setStyleSheet("border: none; background: none;");
+	setStyleSheet(QStringLiteral("border: none; background: none;"));
 }
 
 
