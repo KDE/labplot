@@ -23,6 +23,7 @@ New features:
 		* Read calculated value instead of formula text from excel sheets
 	* [analysis]
 		* Add possibility to do calculations on curves (define a new curve as a function of another curve)
+		* improve fit results note (color and alignment)
 	* [live data]
 		* Automatically recalculate analysis curves on data changes
 		* Enabled conditional formatting, statistics spreadsheet, sparklines, plot data dialog, etc. also for live data source spreadsheets
