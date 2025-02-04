@@ -602,6 +602,7 @@ target_link_libraries(labplotbackendlib
     ${CFITSIO_LIBRARIES}
     ${LIBCERF_LIBRARIES}
     ${MATIO_LIBRARIES}
+    ${READSTAT_LIBRARIES}
     ads::qt${QT_VERSION_MAJOR}advanceddocking
 )
 target_link_libraries(labplotlib
