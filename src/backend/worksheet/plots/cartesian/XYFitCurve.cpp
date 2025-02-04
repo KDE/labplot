@@ -1940,17 +1940,38 @@ void XYFitCurvePrivate::updateResultsNote() {
 	// goodness of fit
 	text += i18n("GOODNESS OF FIT") + NEWLINE + NEWLINE;
 
-	text += i18n("Sum of squared residuals") + UTF8_QSTRING(" (χ²)") + TAB + TAB + numberLocale.toString(fitResult.sse) + NEWLINE;
-	text += i18n("Residuals mean square") + UTF8_QSTRING(" (χ²/dof)") + TAB + TAB + numberLocale.toString(fitResult.rms) + NEWLINE;
-	text += i18n("Root mean square deviation") + QStringLiteral(" (RMSD/SD)") + TAB + numberLocale.toString(fitResult.rsd) + NEWLINE;
-	text += i18n("Coefficient of determination") + QStringLiteral(" (R²)") + TAB + numberLocale.toString(fitResult.rsquare) + NEWLINE;
-	text += i18n("Adj. coefficient of determination") + QStringLiteral(" (R̄²)") + TAB + numberLocale.toString(fitResult.rsquareAdj) + NEWLINE;
-	text += UTF8_QSTRING("χ²-") + i18n("Test") + UTF8_QSTRING(" (P > χ²)") + TAB + TAB + TAB + numberLocale.toString(fitResult.chisq_p, 'g', 3) + NEWLINE;
-	text += i18n("F-Test") + TAB + TAB + TAB + TAB + numberLocale.toString(fitResult.fdist_F, 'g', 3) + NEWLINE;
-	text += QStringLiteral("P > F") + TAB + TAB + TAB + TAB + numberLocale.toString(fitResult.fdist_p, 'g', 3) + NEWLINE;
-	text += i18n("Mean absolute error") + QStringLiteral(" (MAE)") + TAB + TAB + numberLocale.toString(fitResult.mae) + NEWLINE;
-	text += i18n("Akaike information criterion") + QStringLiteral(" (AIC)") + TAB + numberLocale.toString(fitResult.aic, 'g', 3) + NEWLINE;
-	text += i18n("Bayesian information criterion") + QStringLiteral(" (BIC)") + TAB + numberLocale.toString(fitResult.bic, 'g', 3) + NEWLINE;
+	QString SSRString = i18n("Sum of squared residuals") + UTF8_QSTRING(" (χ²)");
+	QString RMSString = i18n("Residuals mean square") + UTF8_QSTRING(" (χ²/dof)");
+	QString RMSDString = i18n("Root mean square deviation") + QStringLiteral(" (RMSD/SD)");
+	QString R2String = i18n("Coefficient of determination") + QStringLiteral(" (R²)");
+	QString ACDString = i18n("Adj. coefficient of determination") + QStringLiteral(" (R̄²)");
+	QString CHIString = UTF8_QSTRING("χ²-") + i18n("Test") + UTF8_QSTRING(" (P > χ²)");
+	QString FString = i18n("F-Test");
+	QString PString = QStringLiteral("P > F");
+	QString MAEString = i18n("Mean absolute error") + QStringLiteral(" (MAE)");
+	QString AICString = i18n("Akaike information criterion") + QStringLiteral(" (AIC)");
+	QString BICString = i18n("Bayesian information criterion") + QStringLiteral(" (BIC)");
+
+	auto resultStringList = QStringList() << SSRString << RMSString << RMSDString << R2String << ACDString << CHIString << FString << PString << MAEString
+										  << AICString << BICString;
+
+	int maxLength = 0;
+	for (const auto& s : resultStringList) {
+		maxLength = qMax(maxLength, s.length());
+	}
+	maxLength++;
+
+	text += SSRString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.sse) + NEWLINE;
+	text += RMSString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.rms) + NEWLINE;
+	text += RMSDString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.rsd) + NEWLINE;
+	text += R2String.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.rsquare) + NEWLINE;
+	text += ACDString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.rsquareAdj) + NEWLINE;
+	text += CHIString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.chisq_p, 'g', 3) + NEWLINE;
+	text += FString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.fdist_F, 'g', 3) + NEWLINE;
+	text += PString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.fdist_p, 'g', 3) + NEWLINE;
+	text += MAEString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.mae) + NEWLINE;
+	text += AICString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.aic, 'g', 3) + NEWLINE;
+	text += BICString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.bic, 'g', 3) + NEWLINE;
 
 	resultsNote->setText(text);
 
