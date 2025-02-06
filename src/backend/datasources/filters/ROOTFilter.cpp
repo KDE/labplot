@@ -206,7 +206,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 	if (pos == 0) // is not changed???
 		return;
 
-	DEBUG("start/end row = " << startRow << " " << endRow)
+	// DEBUG("start/end row = " << startRow << " " << endRow)
 
 	if (type == FileType::Hist) {
 		auto bins = readHistogram(pos);
@@ -216,7 +216,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		int first = std::max(std::abs(startRow), 0);
 		int last = endRow < 0 ? nbins - 1 : std::max(first - 1, std::min(endRow, nbins - 1));
 
-		DEBUG("first/last = " << first << " " << last)
+		// DEBUG("first/last = " << first << " " << last)
 
 		QStringList headers;
 		for (const auto& l : columns)
@@ -237,7 +237,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		}
 
 		// read data
-		DEBUG("	reading " << last - first + 1 << " lines");
+		// DEBUG("	reading " << last - first + 1 << " lines");
 
 		int c = 0;
 		auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
@@ -277,7 +277,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		int first = std::max(std::abs(startRow), 0);
 		int last = std::max(first - 1, std::min(endRow, nentries - 1));
 
-		DEBUG("first/last = " << first << " " << last << ", nentries = " << nentries)
+		// DEBUG("first/last = " << first << " " << last << ", nentries = " << nentries)
 
 		QStringList headers;
 		for (const auto& l : columns) {
