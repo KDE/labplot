@@ -1,0 +1,184 @@
+<typesystem package="pylabplot">
+    <load-typesystem name="typesystem_widgets.xml" generate="no"/>
+
+    <!-- Global -->
+    <enum-type name="AspectType"/>
+
+    <!-- Abstract Classes -->
+    <object-type name="AbstractAspect" force-abstract="yes" disable-wrapper="yes"/>
+    <object-type name="AbstractColumn" force-abstract="yes" disable-wrapper="yes">
+        <enum-type name="ColumnMode"/>
+    </object-type>
+    <object-type name="AbstractCoordinateSystem" force-abstract="yes" disable-wrapper="yes"/>
+    <object-type name="AbstractDataSource" force-abstract="yes" disable-wrapper="yes"/>
+    <object-type name="AbstractFileFilter" force-abstract="yes" disable-wrapper="yes">
+        <enum-type name="ImportMode"/>
+    </object-type>
+    <object-type name="AbstractPart" force-abstract="yes" disable-wrapper="yes"/>
+    <object-type name="AbstractPlot" force-abstract="yes" disable-wrapper="yes"/>
+    <object-type name="Plot" force-abstract="yes" disable-wrapper="yes"/>
+    <object-type name="WorksheetElement" force-abstract="yes" disable-wrapper="yes"/>
+    <object-type name="WorksheetElementContainer" force-abstract="yes" disable-wrapper="yes"/>
+    <object-type name="XYAnalysisCurve" force-abstract="yes" disable-wrapper="yes">
+        <enum-type name="DataSourceType"/>
+    </object-type>
+
+    <!-- Aspect Containers -->
+    <object-type name="Folder"/>
+    <object-type name="Project"/>
+
+    <!-- Column -->
+    <object-type name="Column"/>
+
+    <!-- Data Containers -->
+    <object-type name="Spreadsheet"/>
+    <object-type name="Matrix"/>
+
+    <!-- Filters -->
+    <object-type name="AsciiFilter">
+        <object-type name="Properties"/>
+    </object-type>
+    <object-type name="BinaryFilter"/>
+    <object-type name="CANFilter"/>
+    <object-type name="FITSFilter"/>
+    <object-type name="HDF5Filter"/>
+    <object-type name="ImageFilter"/>
+    <object-type name="JsonFilter"/>
+    <object-type name="MatioFilter"/>
+    <object-type name="McapFilter"/>
+    <object-type name="NetCDFFilter"/>
+    <object-type name="OdsFilter"/>
+    <object-type name="ReadStatFilter"/>
+    <object-type name="ROOTFilter"/>
+    <object-type name="SpiceFilter"/>
+    <object-type name="VectorBLFFilter"/>
+    <object-type name="XLSXFilter"/>
+
+    <!-- Helper Classes -->
+    <object-type name="Background"/>
+    <object-type name="CartesianCoordinateSystem"/>
+    <object-type name="CartesianScale"/>
+    <object-type name="ColumnStringIO"/>
+    <object-type name="ErrorBar"/>
+    <object-type name="Line"/>
+    <object-type name="PlotArea"/>
+    <object-type name="StatisticsSpreadsheet"/>
+    <object-type name="Symbol">
+        <enum-type name="Style"/>
+    </object-type>
+    <object-type name="Value"/>
+
+    <!-- Plot Area Elements -->
+    <object-type name="Axis"/>
+    <object-type name="CartesianPlotLegend"/>
+    <object-type name="CustomPoint"/>
+    <object-type name="ReferenceLine"/>
+    <object-type name="ReferenceRange"/>
+    
+    <!-- Plots -->
+    <object-type name="BarPlot"/>
+    <object-type name="BoxPlot"/>
+    <object-type name="Histogram">
+        <enum-type name="Normalization"/>
+    </object-type>
+    <object-type name="KDEPlot"/>
+    <object-type name="LollipopPlot"/>
+    <object-type name="ProcessBehaviorChart"/>
+    <object-type name="QQPlot"/>
+    <object-type name="RunChart"/>
+    <object-type name="XYCurve">
+        <enum-type name="LineType"/>
+    </object-type>
+    <object-type name="XYEquationCurve">
+        <object-type name="EquationData"/>
+    </object-type>
+    
+    <!-- Analysis Plots -->
+    <object-type name="XYConvolutionCurve">
+        <object-type name="ConvolutionData"/>
+    </object-type>
+    <object-type name="XYCorrelationCurve">
+        <object-type name="CorrelationData"/>
+    </object-type>
+    <object-type name="XYDataReductionCurve">
+        <object-type name="DataReductionData"/>
+    </object-type>
+    <object-type name="XYDifferentiationCurve">
+        <object-type name="DifferentiationData"/>
+    </object-type>
+    <object-type name="XYFitCurve">
+        <object-type name="FitData"/>
+    </object-type>
+    <object-type name="XYFourierFilterCurve">
+        <object-type name="FilterData"/>
+    </object-type>
+    <object-type name="XYFourierTransformCurve">
+        <object-type name="TransformData"/>
+    </object-type>
+    <object-type name="XYFunctionCurve">
+        <object-type name="FunctionData"/>
+    </object-type>
+    <object-type name="XYHilbertTransformCurve">
+        <object-type name="TransformData"/>
+    </object-type>
+    <object-type name="XYIntegrationCurve">
+        <object-type name="IntegrationData"/>
+    </object-type>
+    <object-type name="XYInterpolationCurve">
+        <object-type name="InterpolationData"/>
+    </object-type>
+    <object-type name="XYSmoothCurve">
+        <object-type name="SmoothData"/>
+    </object-type>
+
+    <!-- Worksheet -->
+    <object-type name="Worksheet">
+        <enum-type name="ExportFormat"/>
+    </object-type>
+
+    <!-- Worksheet Element Containers -->
+    <object-type name="CartesianPlot">
+        <enum-type name="Type"/>
+    </object-type>
+
+    <!-- Worksheet Elements -->
+    <object-type name="Image"/>
+    <object-type name="InfoElement"/>    
+    <object-type name="TextLabel"/>
+
+    <!-- NSL -->
+    <enum-type name="nsl_fit_model_category"/>
+    <enum-type name="nsl_sf_stats_distribution"/>
+    <enum-type name="nsl_fit_algorithm"/>
+    <enum-type name="round_method"/>
+    <enum-type name="nsl_kernel_type"/>
+    <enum-type name="nsl_kde_bandwidth_type"/>
+    <enum-type name="nsl_conv_direction_type"/>
+    <enum-type name="nsl_conv_type_type"/>
+    <enum-type name="nsl_conv_method_type"/>
+    <enum-type name="nsl_conv_norm_type"/>
+    <enum-type name="nsl_conv_wrap_type"/>
+    <enum-type name="nsl_conv_kernel_type"/>
+    <enum-type name="nsl_corr_type_type"/>
+    <enum-type name="nsl_corr_norm_type"/>
+    <enum-type name="nsl_geom_linesim_type"/>
+    <enum-type name="nsl_diff_deriv_order_type"/>
+    <enum-type name="nsl_fit_model_type_basic"/>
+    <enum-type name="nsl_fit_model_type_peak"/>
+    <enum-type name="nsl_fit_model_type_growth"/>
+    <enum-type name="nsl_fit_weight_type"/>
+    <enum-type name="nsl_filter_type"/>
+    <enum-type name="nsl_filter_form"/>
+    <enum-type name="nsl_filter_cutoff_unit"/>
+    <enum-type name="nsl_sf_window_type"/>
+    <enum-type name="nsl_dft_result_type"/>
+    <enum-type name="nsl_dft_xscale"/>
+    <enum-type name="nsl_hilbert_result_type"/>
+    <enum-type name="nsl_int_method_type"/>
+    <enum-type name="nsl_interp_type"/>
+    <enum-type name="nsl_interp_pch_variant"/>
+    <enum-type name="nsl_interp_evaluate"/>
+    <enum-type name="nsl_smooth_type"/>
+    <enum-type name="nsl_smooth_pad_mode"/>
+    <enum-type name="nsl_smooth_weight_type"/>
+</typesystem>

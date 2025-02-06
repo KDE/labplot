@@ -1,6 +1,10 @@
+#include <QApplication>
+
 #include <labplot.h>
 
 int main(int argc, char** argv) {
+	QApplication app(argc, argv);
+
 	// create a spreadsheet and import the data into it
 	auto* spreadsheet = new Spreadsheet(QStringLiteral("data"));
 	AsciiFilter filter;
@@ -25,7 +29,7 @@ int main(int argc, char** argv) {
 	auto* fitCurve = new XYFitCurve(QStringLiteral("fit"));
 	fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Histogram);
 	fitCurve->setDataSourceHistogram(histogram);
-	plotArea->addChild(histogram);
+	plotArea->addChild(fitCurve);
 
 	// initialize the fit
 	auto fitData = fitCurve->fitData();
