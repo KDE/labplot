@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-05 00:38+0000\n"
+"POT-Creation-Date: 2025-02-07 00:38+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -1364,10 +1364,10 @@ msgstr "Não foi possível aceder ao dispositivo."
 #: src/backend/datasources/filters/FITSFilter.cpp:334
 #: src/backend/datasources/filters/FITSFilter.cpp:344
 #: src/backend/datasources/filters/FITSFilter.cpp:539
-#: src/backend/datasources/filters/HDF5Filter.cpp:1631
-#: src/backend/datasources/filters/HDF5Filter.cpp:1748
-#: src/backend/datasources/filters/HDF5Filter.cpp:1798
-#: src/backend/datasources/filters/HDF5Filter.cpp:1954
+#: src/backend/datasources/filters/HDF5Filter.cpp:1642
+#: src/backend/datasources/filters/HDF5Filter.cpp:1759
+#: src/backend/datasources/filters/HDF5Filter.cpp:1809
+#: src/backend/datasources/filters/HDF5Filter.cpp:1965
 #: src/backend/datasources/filters/ImageFilter.cpp:165
 #: src/backend/datasources/filters/JsonFilter.cpp:540
 #: src/backend/datasources/filters/MatioFilter.cpp:890
@@ -1695,86 +1695,86 @@ msgstr "O 'h5dump' não foi encontrado."
 msgid "Reading from file %1 failed."
 msgstr "Não foi possível ler do ficheiro %1."
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1300
+#: src/backend/datasources/filters/HDF5Filter.cpp:1311
 #, kde-format
 msgid "data type"
 msgstr "tipo de dados"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1351
+#: src/backend/datasources/filters/HDF5Filter.cpp:1362
 #, kde-format
 msgid "rank %1 not supported yet"
 msgstr "a posição = %1 ainda não é suportada"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1358
+#: src/backend/datasources/filters/HDF5Filter.cpp:1369
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:75
 #, kde-format
 msgid "data set"
 msgstr "conjunto de dados"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1376
+#: src/backend/datasources/filters/HDF5Filter.cpp:1387
 #, kde-format
 msgid "symbolic link"
 msgstr "ligação simbólica"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1376
+#: src/backend/datasources/filters/HDF5Filter.cpp:1387
 #, kde-format
 msgid "link to %1"
 msgstr "ligação a %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1389
+#: src/backend/datasources/filters/HDF5Filter.cpp:1400
 #, kde-format
 msgid "hard link"
 msgstr "ligação forte"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1453
+#: src/backend/datasources/filters/HDF5Filter.cpp:1464
 #, kde-format
 msgid "unknown"
 msgstr "desconhecido"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1513
-#: src/backend/datasources/filters/HDF5Filter.cpp:2140
+#: src/backend/datasources/filters/HDF5Filter.cpp:1524
+#: src/backend/datasources/filters/HDF5Filter.cpp:2151
 #, fuzzy, kde-format
 #| msgid "No data set selected"
 msgid "No data set selected."
 msgstr "Sem conjunto de dados seleccionado"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1582
+#: src/backend/datasources/filters/HDF5Filter.cpp:1593
 #, kde-format
 msgid "rank 0 not implemented yet for type %1"
 msgstr "a posição = 0 ainda não está implementada para o tipo %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1721
-#: src/backend/datasources/filters/HDF5Filter.cpp:1870
+#: src/backend/datasources/filters/HDF5Filter.cpp:1732
+#: src/backend/datasources/filters/HDF5Filter.cpp:1881
 #, kde-format
 msgid "unsupported integer type for rank 1"
 msgstr "o tipo inteiro não é suportado para a posição=1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1734
+#: src/backend/datasources/filters/HDF5Filter.cpp:1745
 #, kde-format
 msgid "unsupported float type for rank 1"
 msgstr "o tipo de vírgula flutuante não é suportado para a posição=1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1885
+#: src/backend/datasources/filters/HDF5Filter.cpp:1896
 #, kde-format
 msgid "rank 1 not implemented yet for type %1"
 msgstr "a posição = 1 ainda não está implementada para o tipo %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2018
+#: src/backend/datasources/filters/HDF5Filter.cpp:2029
 #, kde-format
 msgid "unsupported integer type for rank 2"
 msgstr "o tipo inteiro não é suportado para a posição=2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2031
+#: src/backend/datasources/filters/HDF5Filter.cpp:2042
 #, kde-format
 msgid "unsupported float type for rank 2"
 msgstr "o tipo de vírgula flutuante não é suportado para a posição=2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2094
+#: src/backend/datasources/filters/HDF5Filter.cpp:2105
 #, kde-format
 msgid "rank 2 not implemented yet for type %1"
 msgstr "a posição = 2 ainda não está implementada para o tipo %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2103
+#: src/backend/datasources/filters/HDF5Filter.cpp:2114
 #, kde-format
 msgid "rank %1 not implemented yet for type %2"
 msgstr "a posição = %1 ainda não está implementada para o tipo %2"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-05 00:38+0000\n"
+"POT-Creation-Date: 2025-02-07 00:38+0000\n"
 "PO-Revision-Date: 2014-02-09 10:11+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -1273,10 +1273,10 @@ msgstr ""
 #: src/backend/datasources/filters/FITSFilter.cpp:334
 #: src/backend/datasources/filters/FITSFilter.cpp:344
 #: src/backend/datasources/filters/FITSFilter.cpp:539
-#: src/backend/datasources/filters/HDF5Filter.cpp:1631
-#: src/backend/datasources/filters/HDF5Filter.cpp:1748
-#: src/backend/datasources/filters/HDF5Filter.cpp:1798
-#: src/backend/datasources/filters/HDF5Filter.cpp:1954
+#: src/backend/datasources/filters/HDF5Filter.cpp:1642
+#: src/backend/datasources/filters/HDF5Filter.cpp:1759
+#: src/backend/datasources/filters/HDF5Filter.cpp:1809
+#: src/backend/datasources/filters/HDF5Filter.cpp:1965
 #: src/backend/datasources/filters/ImageFilter.cpp:165
 #: src/backend/datasources/filters/JsonFilter.cpp:540
 #: src/backend/datasources/filters/MatioFilter.cpp:890
@@ -1600,85 +1600,85 @@ msgstr ""
 msgid "Reading from file %1 failed."
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1300
+#: src/backend/datasources/filters/HDF5Filter.cpp:1311
 #, kde-format
 msgid "data type"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1351
+#: src/backend/datasources/filters/HDF5Filter.cpp:1362
 #, kde-format
 msgid "rank %1 not supported yet"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1358
+#: src/backend/datasources/filters/HDF5Filter.cpp:1369
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:75
 #, kde-format
 msgid "data set"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1376
+#: src/backend/datasources/filters/HDF5Filter.cpp:1387
 #, kde-format
 msgid "symbolic link"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1376
+#: src/backend/datasources/filters/HDF5Filter.cpp:1387
 #, kde-format
 msgid "link to %1"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1389
+#: src/backend/datasources/filters/HDF5Filter.cpp:1400
 #, kde-format
 msgid "hard link"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1453
+#: src/backend/datasources/filters/HDF5Filter.cpp:1464
 #, kde-format
 msgid "unknown"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1513
-#: src/backend/datasources/filters/HDF5Filter.cpp:2140
+#: src/backend/datasources/filters/HDF5Filter.cpp:1524
+#: src/backend/datasources/filters/HDF5Filter.cpp:2151
 #, kde-format
 msgid "No data set selected."
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1582
+#: src/backend/datasources/filters/HDF5Filter.cpp:1593
 #, kde-format
 msgid "rank 0 not implemented yet for type %1"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1721
-#: src/backend/datasources/filters/HDF5Filter.cpp:1870
+#: src/backend/datasources/filters/HDF5Filter.cpp:1732
+#: src/backend/datasources/filters/HDF5Filter.cpp:1881
 #, kde-format
 msgid "unsupported integer type for rank 1"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1734
+#: src/backend/datasources/filters/HDF5Filter.cpp:1745
 #, kde-format
 msgid "unsupported float type for rank 1"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1885
+#: src/backend/datasources/filters/HDF5Filter.cpp:1896
 #, kde-format
 msgid "rank 1 not implemented yet for type %1"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2018
+#: src/backend/datasources/filters/HDF5Filter.cpp:2029
 #, kde-format
 msgid "unsupported integer type for rank 2"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2031
+#: src/backend/datasources/filters/HDF5Filter.cpp:2042
 #, kde-format
 msgid "unsupported float type for rank 2"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2094
+#: src/backend/datasources/filters/HDF5Filter.cpp:2105
 #, kde-format
 msgid "rank 2 not implemented yet for type %1"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2103
+#: src/backend/datasources/filters/HDF5Filter.cpp:2114
 #, kde-format
 msgid "rank %1 not implemented yet for type %2"
 msgstr ""

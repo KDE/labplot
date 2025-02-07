@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-05 00:38+0000\n"
+"POT-Creation-Date: 2025-02-07 00:38+0000\n"
 "PO-Revision-Date: 2025-01-30 16:45+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -1280,10 +1280,10 @@ msgstr "Aygıt/dosya açılamadı veya boş."
 #: src/backend/datasources/filters/FITSFilter.cpp:334
 #: src/backend/datasources/filters/FITSFilter.cpp:344
 #: src/backend/datasources/filters/FITSFilter.cpp:539
-#: src/backend/datasources/filters/HDF5Filter.cpp:1631
-#: src/backend/datasources/filters/HDF5Filter.cpp:1748
-#: src/backend/datasources/filters/HDF5Filter.cpp:1798
-#: src/backend/datasources/filters/HDF5Filter.cpp:1954
+#: src/backend/datasources/filters/HDF5Filter.cpp:1642
+#: src/backend/datasources/filters/HDF5Filter.cpp:1759
+#: src/backend/datasources/filters/HDF5Filter.cpp:1809
+#: src/backend/datasources/filters/HDF5Filter.cpp:1965
 #: src/backend/datasources/filters/ImageFilter.cpp:165
 #: src/backend/datasources/filters/JsonFilter.cpp:540
 #: src/backend/datasources/filters/MatioFilter.cpp:890
@@ -1605,85 +1605,85 @@ msgstr "h5dump bulunamadı."
 msgid "Reading from file %1 failed."
 msgstr "%1 dosyasından okuma başarısız."
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1300
+#: src/backend/datasources/filters/HDF5Filter.cpp:1311
 #, kde-format
 msgid "data type"
 msgstr "veri türü"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1351
+#: src/backend/datasources/filters/HDF5Filter.cpp:1362
 #, kde-format
 msgid "rank %1 not supported yet"
 msgstr "sıra %1 henüz desteklenmiyor"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1358
+#: src/backend/datasources/filters/HDF5Filter.cpp:1369
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:75
 #, kde-format
 msgid "data set"
 msgstr "veri kümesi"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1376
+#: src/backend/datasources/filters/HDF5Filter.cpp:1387
 #, kde-format
 msgid "symbolic link"
 msgstr "sembolik bağ"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1376
+#: src/backend/datasources/filters/HDF5Filter.cpp:1387
 #, kde-format
 msgid "link to %1"
 msgstr "%1 ögesine bağlantıla"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1389
+#: src/backend/datasources/filters/HDF5Filter.cpp:1400
 #, kde-format
 msgid "hard link"
 msgstr "sabit bağlantı"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1453
+#: src/backend/datasources/filters/HDF5Filter.cpp:1464
 #, kde-format
 msgid "unknown"
 msgstr "bilinmeyen"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1513
-#: src/backend/datasources/filters/HDF5Filter.cpp:2140
+#: src/backend/datasources/filters/HDF5Filter.cpp:1524
+#: src/backend/datasources/filters/HDF5Filter.cpp:2151
 #, kde-format
 msgid "No data set selected."
 msgstr "Seçili veri kümesi yok."
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1582
+#: src/backend/datasources/filters/HDF5Filter.cpp:1593
 #, kde-format
 msgid "rank 0 not implemented yet for type %1"
 msgstr "tür %1 için sıra 0 henüz gerçeklenmedi"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1721
-#: src/backend/datasources/filters/HDF5Filter.cpp:1870
+#: src/backend/datasources/filters/HDF5Filter.cpp:1732
+#: src/backend/datasources/filters/HDF5Filter.cpp:1881
 #, kde-format
 msgid "unsupported integer type for rank 1"
 msgstr "sıra 1 için desteklenmeyen tam sayı türü"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1734
+#: src/backend/datasources/filters/HDF5Filter.cpp:1745
 #, kde-format
 msgid "unsupported float type for rank 1"
 msgstr "sıra 1 için desteklenmeyen kayan noktalı sayı türü"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1885
+#: src/backend/datasources/filters/HDF5Filter.cpp:1896
 #, kde-format
 msgid "rank 1 not implemented yet for type %1"
 msgstr "tür %1 için sıra 1 henüz gerçeklenmedi"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2018
+#: src/backend/datasources/filters/HDF5Filter.cpp:2029
 #, kde-format
 msgid "unsupported integer type for rank 2"
 msgstr "sıra 2 için desteklenmeyen tam sayı türü"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2031
+#: src/backend/datasources/filters/HDF5Filter.cpp:2042
 #, kde-format
 msgid "unsupported float type for rank 2"
 msgstr "sıra 2 için desteklenmeyen kayan noktalı sayı türü"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2094
+#: src/backend/datasources/filters/HDF5Filter.cpp:2105
 #, kde-format
 msgid "rank 2 not implemented yet for type %1"
 msgstr "tür %1 için sıra 2 henüz gerçeklenmedi"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2103
+#: src/backend/datasources/filters/HDF5Filter.cpp:2114
 #, kde-format
 msgid "rank %1 not implemented yet for type %2"
 msgstr "tür %2 için sıra %1 henüz gerçeklenmedi"

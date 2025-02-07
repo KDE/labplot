@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-05 00:38+0000\n"
+"POT-Creation-Date: 2025-02-07 00:38+0000\n"
 "PO-Revision-Date: 2024-11-15 10:08+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -1387,10 +1387,10 @@ msgstr "Avaaminen epäonnistui"
 #: src/backend/datasources/filters/FITSFilter.cpp:334
 #: src/backend/datasources/filters/FITSFilter.cpp:344
 #: src/backend/datasources/filters/FITSFilter.cpp:539
-#: src/backend/datasources/filters/HDF5Filter.cpp:1631
-#: src/backend/datasources/filters/HDF5Filter.cpp:1748
-#: src/backend/datasources/filters/HDF5Filter.cpp:1798
-#: src/backend/datasources/filters/HDF5Filter.cpp:1954
+#: src/backend/datasources/filters/HDF5Filter.cpp:1642
+#: src/backend/datasources/filters/HDF5Filter.cpp:1759
+#: src/backend/datasources/filters/HDF5Filter.cpp:1809
+#: src/backend/datasources/filters/HDF5Filter.cpp:1965
 #: src/backend/datasources/filters/ImageFilter.cpp:165
 #: src/backend/datasources/filters/JsonFilter.cpp:540
 #: src/backend/datasources/filters/MatioFilter.cpp:890
@@ -1728,95 +1728,95 @@ msgstr "Tiedoston tiedot"
 msgid "Reading from file %1 failed."
 msgstr "Luku tiedostosta %1 epäonnistui."
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1300
+#: src/backend/datasources/filters/HDF5Filter.cpp:1311
 #, fuzzy, kde-format
 #| msgid "Data:"
 msgid "data type"
 msgstr "Data:"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1351
+#: src/backend/datasources/filters/HDF5Filter.cpp:1362
 #, fuzzy, kde-format
 #| msgid "Not yet implemented."
 msgid "rank %1 not supported yet"
 msgstr "Ei vielä toteutettu."
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1358
+#: src/backend/datasources/filters/HDF5Filter.cpp:1369
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:75
 #, fuzzy, kde-format
 #| msgid "Dataset"
 msgid "data set"
 msgstr "Datajoukko"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1376
+#: src/backend/datasources/filters/HDF5Filter.cpp:1387
 #, fuzzy, kde-format
 #| msgid "solid line"
 msgid "symbolic link"
 msgstr "yhtenäinen viiva"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1376
+#: src/backend/datasources/filters/HDF5Filter.cpp:1387
 #, fuzzy, kde-format
 #| msgid "Drawing &order"
 msgid "link to %1"
 msgstr "Piirto&järjestys"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1389
+#: src/backend/datasources/filters/HDF5Filter.cpp:1400
 #, fuzzy, kde-format
 #| msgid "horiz. lines"
 msgid "hard link"
 msgstr "vaakaviivat"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1453
+#: src/backend/datasources/filters/HDF5Filter.cpp:1464
 #, kde-format
 msgid "unknown"
 msgstr "tuntematon"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1513
-#: src/backend/datasources/filters/HDF5Filter.cpp:2140
+#: src/backend/datasources/filters/HDF5Filter.cpp:1524
+#: src/backend/datasources/filters/HDF5Filter.cpp:2151
 #, fuzzy, kde-format
 #| msgid "&Normalize Selection"
 msgid "No data set selected."
 msgstr "N&ormalisoi valinta"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1582
+#: src/backend/datasources/filters/HDF5Filter.cpp:1593
 #, fuzzy, kde-format
 #| msgid "Not yet implemented."
 msgid "rank 0 not implemented yet for type %1"
 msgstr "Ei vielä toteutettu."
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1721
-#: src/backend/datasources/filters/HDF5Filter.cpp:1870
+#: src/backend/datasources/filters/HDF5Filter.cpp:1732
+#: src/backend/datasources/filters/HDF5Filter.cpp:1881
 #, kde-format
 msgid "unsupported integer type for rank 1"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1734
+#: src/backend/datasources/filters/HDF5Filter.cpp:1745
 #, kde-format
 msgid "unsupported float type for rank 1"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1885
+#: src/backend/datasources/filters/HDF5Filter.cpp:1896
 #, fuzzy, kde-format
 #| msgid "Not yet implemented."
 msgid "rank 1 not implemented yet for type %1"
 msgstr "Ei vielä toteutettu."
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2018
+#: src/backend/datasources/filters/HDF5Filter.cpp:2029
 #, kde-format
 msgid "unsupported integer type for rank 2"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2031
+#: src/backend/datasources/filters/HDF5Filter.cpp:2042
 #, kde-format
 msgid "unsupported float type for rank 2"
 msgstr ""
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2094
+#: src/backend/datasources/filters/HDF5Filter.cpp:2105
 #, fuzzy, kde-format
 #| msgid "Not yet implemented."
 msgid "rank 2 not implemented yet for type %1"
 msgstr "Ei vielä toteutettu."
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2103
+#: src/backend/datasources/filters/HDF5Filter.cpp:2114
 #, fuzzy, kde-format
 #| msgid "Not yet implemented."
 msgid "rank %1 not implemented yet for type %2"
