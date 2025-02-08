@@ -60,7 +60,11 @@ if(BUILD_QXLSX)
 endif()
 
 # preview.sty
-install(FILES preview.sty DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME}/latex)
+if(APPLE)
+    install(FILES preview.sty DESTINATION ${KDE_INSTALL_DATADIR}/latex)
+else()
+    install(FILES preview.sty DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME}/latex)
+endif()
 
 Include(FetchContent)
 
