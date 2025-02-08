@@ -237,7 +237,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		}
 
 		// read data
-		DEBUG("	reading " << last - first + 1 << " lines");
+		DEBUG(Q_FUNC_INFO << ", reading " << last - first + 1 << " lines");
 
 		int c = 0;
 		auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
@@ -277,7 +277,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		int first = std::max(std::abs(startRow), 0);
 		int last = std::max(first - 1, std::min(endRow, nentries - 1));
 
-		DEBUG("first/last = " << first << " " << last << ", nentries = " << nentries)
+		DEBUG(Q_FUNC_INFO << ", first/last = " << first << " " << last << ", nentries = " << nentries)
 
 		QStringList headers;
 		for (const auto& l : columns) {
@@ -407,7 +407,7 @@ QVector<QStringList> ROOTFilterPrivate::listLeaves(const QString& fileName, quin
 }
 
 QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& fileName, int first, int last) {
-	DEBUG(Q_FUNC_INFO);
+	DEBUG(Q_FUNC_INFO << ", first/last = " << first << " " << last);
 
 	long int pos = 0;
 	auto type = currentObjectPosition(fileName, pos);
@@ -421,7 +421,7 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 		last = std::min(nbins - 1, last);
 
 		QVector<QStringList> preview(std::max(last - first + 2, 1));
-		DEBUG("	reading " << preview.size() - 1 << " lines");
+		DEBUG(Q_FUNC_INFO << ", reading " << preview.size() - 1 << " lines");
 
 		// set headers
 		for (const auto& l : columns) {
@@ -452,7 +452,7 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 		last = std::min(last, currentROOTData->treeEntries(pos) - 1);
 
 		QVector<QStringList> preview(std::max(last - first + 2, 1));
-		DEBUG("	reading " << preview.size() - 1 << " lines");
+		DEBUG(Q_FUNC_INFO << ", TREE: reading " << preview.size() - 1 << " lines");
 
 		// read data leaf by leaf and set headers
 		for (const auto& l : columns) {
@@ -484,6 +484,7 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 }
 
 int ROOTFilterPrivate::rowsInCurrentObject(const QString& fileName) {
+	DEBUG(Q_FUNC_INFO)
 	long int pos = 0;
 	auto type = currentObjectPosition(fileName, pos);
 	if (pos == 0)
@@ -525,7 +526,7 @@ std::vector<ROOTData::BinPars> ROOTFilterPrivate::readHistogram(quint64 pos) {
 }
 
 std::vector<double> ROOTFilterPrivate::readTree(quint64 pos, const QString& branchName, const QString& leafName, int element, int last) {
-	// QDEBUG("branch/leaf name =" << branchName << " " << leafName << ", element/last =" << element << " " << last)
+	DEBUG("branch/leaf name =" << branchName.toStdString() << " " << leafName.toStdString() << ", element/last =" << element << " " << last)
 	return currentROOTData->listEntries<double>(pos, branchName.toStdString(), leafName.toStdString(), element, last + 1);
 }
 
@@ -633,6 +634,7 @@ using namespace ROOTDataHelpers;
 
 ROOTData::ROOTData(const std::string& filename)
 	: filename(filename) {
+	DEBUG(Q_FUNC_INFO << ", filename = " << filename)
 	// The file structure is described in root/io/io/src/TFile.cxx
 	std::ifstream is(filename, std::ifstream::binary);
 	std::string root(4, 0);
@@ -746,6 +748,7 @@ ROOTData::ROOTData(const std::string& filename)
 				break;
 			case ContentType::Tree:
 			case ContentType::NTuple: {
+				DEBUG(Q_FUNC_INFO << ", treekeys ..")
 				auto it = treedirs.find(pseek);
 				if (it == treedirs.end())
 					it = treedirs.begin();
@@ -994,10 +997,12 @@ std::string ROOTData::treeName(long int pos) {
 }
 
 int ROOTData::treeEntries(long int pos) {
+	DEBUG(Q_FUNC_INFO << ", pos = " << pos)
 	auto it = treekeys.find(pos);
-	if (it != treekeys.end())
+	if (it != treekeys.end()) {
+		DEBUG(Q_FUNC_INFO << ", rows = " << it->second.nrows)
 		return it->second.nrows;
-	else
+	} else
 		return 0;
 }
 
