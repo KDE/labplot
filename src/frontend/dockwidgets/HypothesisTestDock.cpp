@@ -28,21 +28,19 @@
   \ingroup frontend
 */
 HypothesisTestDock::HypothesisTestDock(QWidget* parent)
-	: BaseDock(parent) {
+	: BaseDock(parent)
+{
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
 
-	// Create and insert the spreadsheet combo box.
 	spreadsheetComboBox = new TreeViewComboBox;
 	ui.gridLayout->addWidget(spreadsheetComboBox, 4, 3, 1, 3);
 
-	// Add One-Sample T-Test to the test type combo box.
 	ui.cbTest->addItem(i18n("One-Sample T-Test"));
 
 	ui.lPopulationSigma->setText(UTF8_QSTRING("σ"));
 	ui.chbCalculateStats->setChecked(true);
 
-	// Hide UI elements not needed initially.
 	ui.pbLeveneTest->hide();
 	ui.lCategorical->hide();
 	ui.chbCategorical->hide();
@@ -57,7 +55,6 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent)
 	const QString mu = UTF8_QSTRING("μ");
 	const QString mu0 = UTF8_QSTRING("μₒ");
 
-	// Set hypothesis labels.
 	ui.rbH1OneTail1->setText(i18n("%1 > %2", mu, mu0));
 	ui.rbH1OneTail2->setText(i18n("%1 < %2", mu, mu0));
 	ui.rbH1TwoTail->setText(i18n("%1 ≠ %2", mu, mu0));
@@ -65,8 +62,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent)
 	ui.rbH0OneTail2->setText(i18n("%1 ≥ %2", mu, mu0));
 	ui.rbH0TwoTail->setText(i18n("%1 = %2", mu, mu0));
 
-	// Configure population mean and significance level.
-	ui.lMuo->setText(QLatin1String("mu0"));
+	ui.lMuo->setText(QStringLiteral("μ₀"));
 	ui.lAlpha->setText(QString::fromUtf8("α"));
 	ui.leMuo->setText(QLocale().toString(0.0));
 	ui.leAlpha->setText(QLocale().toString(0.05));
@@ -74,8 +70,18 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent)
 	ui.leAlpha->setValidator(new QDoubleValidator(ui.leAlpha));
 	ui.pbPerformTest->setIcon(QIcon::fromTheme(QLatin1String("run-build")));
 
-	connect(spreadsheetComboBox, &TreeViewComboBox::currentModelIndexChanged, this, &HypothesisTestDock::onSpreadsheetSelectionChanged);
-	connect(ui.pbPerformTest, &QPushButton::clicked, this, &HypothesisTestDock::runHypothesisTest);
+	ui.rbH1TwoTail->setEnabled(false);
+	ui.rbH1OneTail1->setEnabled(false);
+	ui.rbH1OneTail2->setEnabled(false);
+
+	connect(ui.rbH0TwoTail, &QRadioButton::clicked, this, &HypothesisTestDock::onNullTwoTailClicked);
+	connect(ui.rbH0OneTail1, &QRadioButton::clicked, this, &HypothesisTestDock::onNullOneTail1Clicked);
+	connect(ui.rbH0OneTail2, &QRadioButton::clicked, this, &HypothesisTestDock::onNullOneTail2Clicked);
+
+	connect(spreadsheetComboBox, &TreeViewComboBox::currentModelIndexChanged,
+			this, &HypothesisTestDock::onSpreadsheetSelectionChanged);
+	connect(ui.pbPerformTest, &QPushButton::clicked,
+			this, &HypothesisTestDock::runHypothesisTest);
 
 	ui.cbTest->setCurrentIndex(0);
 	Q_EMIT ui.cbTest->currentIndexChanged(0);
@@ -87,21 +93,21 @@ void HypothesisTestDock::initializeTest(HypothesisTest* test) {
 
 	m_aspectTreeModel = new AspectTreeModel(m_test->project());
 
-	const QList<AspectType> topLevelAspects{AspectType::Folder, AspectType::Workbook, AspectType::Spreadsheet, AspectType::LiveDataSource};
+	const QList<AspectType> topLevelAspects{AspectType::Folder, AspectType::Workbook,
+											AspectType::Spreadsheet, AspectType::LiveDataSource};
 	spreadsheetComboBox->setTopLevelClasses(topLevelAspects);
 
 	const QList<AspectType> selectableAspects{AspectType::Spreadsheet, AspectType::LiveDataSource};
 	m_aspectTreeModel->setSelectableAspects(selectableAspects);
 	spreadsheetComboBox->setModel(m_aspectTreeModel);
 
-	// Display the test properties.
 	ui.leName->setText(m_test->name());
 	ui.teComment->setText(m_test->comment());
 	updateAspectComboBoxIndex(spreadsheetComboBox, m_test->getDataSourceSpreadsheet());
 	refreshColumnComboBox(m_test->getDataSourceSpreadsheet());
 
-	// Connect undo functions.
-	connect(m_test, &HypothesisTest::aspectDescriptionChanged, this, &HypothesisTestDock::aspectDescriptionChanged);
+	connect(m_test, &HypothesisTest::aspectDescriptionChanged,
+			this, &HypothesisTestDock::aspectDescriptionChanged);
 }
 
 void HypothesisTestDock::updateAspectComboBoxIndex(TreeViewComboBox* comboBox, const AbstractAspect* aspect) {
@@ -111,43 +117,57 @@ void HypothesisTestDock::updateAspectComboBoxIndex(TreeViewComboBox* comboBox, c
 		comboBox->setCurrentModelIndex(QModelIndex());
 }
 
-void HypothesisTestDock::runHypothesisTest() { // Set the alternative hypothesis (H1)
-	if (ui.rbH1OneTail1->isChecked())
-		m_test->setTail(HypothesisTest::TailPositive); // e.g., μ > μ₀
-	else if (ui.rbH1OneTail2->isChecked())
-		m_test->setTail(HypothesisTest::TailNegative); // e.g., μ < μ₀
-	else if (ui.rbH1TwoTail->isChecked())
-		m_test->setTail(HypothesisTest::TailTwo); // two-tailed alternative
 
-	// Set the null hypothesis (H0) based on the new enum.
-	if (ui.rbH0TwoTail->isChecked())
-		m_test->setNullHypothesis(HypothesisTest::NullEquality); // H0: μ = μ₀
-	else if (ui.rbH0OneTail1->isChecked())
-		m_test->setNullHypothesis(HypothesisTest::NullLessEqual); // H0: μ ≤ μ₀
-	else if (ui.rbH0OneTail2->isChecked())
-		m_test->setNullHypothesis(HypothesisTest::NullGreaterEqual); // H0: μ ≥ μ₀
+void HypothesisTestDock::onNullTwoTailClicked() {
+	ui.rbH1TwoTail->setChecked(true);
+	ui.rbH1TwoTail->setEnabled(true);
+	ui.rbH1OneTail1->setEnabled(false);
+	ui.rbH1OneTail2->setEnabled(false);
+}
 
-		   // Retrieve population mean.
+void HypothesisTestDock::onNullOneTail1Clicked() {
+	ui.rbH1OneTail1->setChecked(true);
+	ui.rbH1OneTail1->setEnabled(true);
+	ui.rbH1TwoTail->setEnabled(false);
+	ui.rbH1OneTail2->setEnabled(false);
+}
+
+void HypothesisTestDock::onNullOneTail2Clicked() {
+	ui.rbH1OneTail2->setChecked(true);
+	ui.rbH1OneTail2->setEnabled(true);
+	ui.rbH1TwoTail->setEnabled(false);
+	ui.rbH1OneTail1->setEnabled(false);
+}
+
+void HypothesisTestDock::runHypothesisTest() {
+	if (ui.rbH0TwoTail->isChecked()) {
+		m_test->setNullHypothesis(HypothesisTest::NullEquality);
+		m_test->setTail(HypothesisTest::TailTwo);
+	} else if (ui.rbH0OneTail1->isChecked()) {
+		m_test->setNullHypothesis(HypothesisTest::NullLessEqual);
+		m_test->setTail(HypothesisTest::TailPositive);
+	} else if (ui.rbH0OneTail2->isChecked()) {
+		m_test->setNullHypothesis(HypothesisTest::NullGreaterEqual);
+		m_test->setTail(HypothesisTest::TailNegative);
+	}
+
 	bool ok = false;
 	double popMean = QLocale().toDouble(ui.leMuo->text(), &ok);
 	if (!ok)
 		return; // TODO: Handle conversion error
 	m_test->setPopulationMean(popMean);
 
-		   // Retrieve significance level.
 	double alpha = QLocale().toDouble(ui.leAlpha->text(), &ok);
 	if (!ok)
 		return; // TODO: Handle conversion error
 	m_test->setSignificanceLevel(alpha);
 
-		   // Retrieve the selected column(s).
 	if (ui.cbCol1->count() == 0)
 		return;
 	QVector<Column*> columns;
 	columns << reinterpret_cast<Column*>(ui.cbCol1->currentData().toLongLong());
 	m_test->setColumns(columns);
 
-		   // Run the hypothesis test.
 	m_test->runTest();
 }
 
@@ -161,7 +181,8 @@ void HypothesisTestDock::onSpreadsheetSelectionChanged(const QModelIndex& index)
 void HypothesisTestDock::refreshColumnComboBox(Spreadsheet* spreadsheet) {
 	ui.cbCol1->clear();
 	for (auto* col : spreadsheet->children<Column>()) {
-		if (col->columnMode() == AbstractColumn::ColumnMode::Integer || col->columnMode() == AbstractColumn::ColumnMode::Double)
+		if (col->columnMode() == AbstractColumn::ColumnMode::Integer ||
+			col->columnMode() == AbstractColumn::ColumnMode::Double)
 			ui.cbCol1->addItem(col->name(), qint64(col));
 	}
 	ui.pbPerformTest->setEnabled(hasSelectedColumns());

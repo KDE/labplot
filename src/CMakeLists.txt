@@ -458,6 +458,7 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/statistics/HypothesisTest.cpp
     ${BACKEND_DIR}/statistics/TableModel.cpp
     ${BACKEND_DIR}/statistics/TextEdit.cpp
+    ${BACKEND_DIR}/statistics/HtmlTableBuilder.cpp
 )
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)

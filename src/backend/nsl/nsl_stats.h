@@ -137,7 +137,7 @@ double nsl_stats_independent_t_p(const double sample1[], size_t n1, const double
 
 /* One Sample Student's t-test */
 double nsl_stats_one_sample_t(const double sample[], size_t n, double hypothesized_mean);
-double nsl_stats_one_sample_t_p(const double sample[], size_t n, double hypothesized_mean);
+double nsl_stats_one_sample_t_p(const double sample[], size_t n, double hypothesized_mean, int tail);
 
 __END_DECLS
 

@@ -312,8 +312,8 @@ GeneralTest::GeneralErrorType GeneralTest::computeCategoricalStats(Column* colum
 QString GeneralTest::buildHtmlTable(int row, int column, QVariant* data) {
 	QString table;
 	table = QLatin1String("<style type='text/css'>")
-		+ QLatin1String("table {border-collapse: collapse; margin: auto; width: 80%; font-size: 18px;}")  // Increased width and font size
-		+ QLatin1String("th, td {border: 1px solid black; padding: 12px; text-align: center; font-size: 16px;}") // Bigger padding and text
+		+ QLatin1String("table {border-collapse: collapse; margin: auto; width: 80%; font-size: 18px;}")
+		+ QLatin1String("th, td {border: 1px solid black; padding: 12px; text-align: center; font-size: 16px;}")
 		+ QLatin1String("th {background-color: #f2f2f2; font-size: 18px;}")
 		+ QLatin1String("</style>")
 		+ QLatin1String("<div style='text-align: center;'>")

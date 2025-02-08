@@ -7,17 +7,24 @@
 	SPDX-FileCopyrightText: 2023  Alexander Semke
 	SPDX-FileCopyrightText: 2025  Kuntal Bar
 
-	SPDX-License-Identifier: GPL-2.0-or-later
+ SPDX-License-Identifier: GPL-2.0-or-later
 ***************************************************************************/
 
 #include "HypothesisTest.h"
+#include "HtmlTableBuilder.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
 #include <QLabel>
 #include <QList>
 #include <QString>
+#include <QVector>
 #include <cmath>
 #include <gsl/gsl_cdf.h>
+
+// Include the updated nsl_stats functions.
+extern "C" {
+#include "backend/nsl/nsl_stats.h"
+}
 
 HypothesisTest::HypothesisTest(const QString& name)
 	: GeneralTest(name, AspectType::HypothesisTest)
@@ -41,6 +48,10 @@ void HypothesisTest::setTail(HypothesisTailType tail) {
 	m_tail = tail;
 }
 
+void HypothesisTest::setNullHypothesis(NullHypothesisType type) {
+	m_nullHypothesisType = type;
+}
+
 void HypothesisTest::runTest() {
 	m_currentTestName = QLatin1String("<h2>") + i18n("One Sample Test") + QLatin1String("</h2>");
 	performOneSampleTTest();
@@ -48,12 +59,10 @@ void HypothesisTest::runTest() {
 }
 
 void HypothesisTest::performOneSampleTTest() {
-	// Ensure exactly one column is selected.
 	if (m_columns.size() != 1) {
 		displayError(i18n("Inappropriate number of columns selected."));
 		return;
 	}
-
 	if (!m_columns[0]->isNumeric()) {
 		displayError(i18n("Only numeric columns can be used for the test."));
 		return;
@@ -62,7 +71,6 @@ void HypothesisTest::performOneSampleTTest() {
 	int n = 0;
 	double sum = 0.0, mean = 0.0, stdDev = 0.0;
 	GeneralTest::GeneralErrorType errorCode = computeColumnStats(m_columns[0], n, sum, mean, stdDev);
-
 	switch (errorCode) {
 	case ErrorEmptyColumn:
 		displayError(i18n("The selected column is empty."));
@@ -74,94 +82,87 @@ void HypothesisTest::performOneSampleTTest() {
 		break;
 	}
 
-		   // Create an HTML table with basic statistics.
-	QVariant statsData[] =
-		{QString(), QLatin1String("N"), QLatin1String("Sum"), QLatin1String("Mean"), QLatin1String("Std Dev"), m_columns[0]->name(), n, sum, mean, stdDev};
-
-	m_statsTable = buildHtmlTable(2, 5, statsData);
+	HtmlTableBuilder tableBuilder;
+	tableBuilder.setStyle(
+		QStringLiteral("table { border-collapse: collapse; margin: auto; width: 90%; font-size: 16px; } "
+					   "th, td { border: 1px solid #333; padding: 8px; text-align: center; } "
+					   "th { background-color: #ddd; }"));
+	tableBuilder.setTableAttributes(QStringLiteral("id='statsTable'"));
+	HtmlRow headerRow;
+	headerRow.addCell(HtmlCell(QStringLiteral(""), true))
+		.addCell(HtmlCell(QStringLiteral("N"), true))
+		.addCell(HtmlCell(QStringLiteral("Sum"), true))
+		.addCell(HtmlCell(QStringLiteral("Mean"), true))
+		.addCell(HtmlCell(QStringLiteral("Std Dev"), true));
+	tableBuilder.addRow(headerRow);
+	HtmlRow dataRow;
+	dataRow.addCell(HtmlCell(m_columns[0]->name()))
+		.addCell(HtmlCell(QString::number(n)))
+		.addCell(HtmlCell(QString::number(sum)))
+		.addCell(HtmlCell(formatRoundedValue(mean)))
+		.addCell(HtmlCell(formatRoundedValue(stdDev)));
+	tableBuilder.addRow(dataRow);
+	m_statsTable = tableBuilder.build();
 
 	if (stdDev == 0.0) {
 		displayError(i18n("Standard deviation is zero."));
 		return;
 	}
 
-		   // Compute T-Value and Degrees of Freedom.
-	int df = n - 1;
-	double tValue = (mean - m_populationMean) / (stdDev / sqrt(n));
-	m_statisticValue.append(tValue);
-
-	displayLine(6, i18n("<b>Degrees of Freedom:</b> %1", df), QLatin1String("black"));
-
-		   // Calculate the P-Value.
-	double pValue = calculatePValue(tValue, m_columns[0]->name(), i18n("%1", m_populationMean), df);
-	m_pValue.append(pValue);
-
-		   // Display test header, significance level, and results.
-	m_currentTestName = QLatin1String("<h2>") + i18n("One Sample T-Test for %1", m_columns[0]->name()) + QLatin1String("</h2>");
-	displayLine(2, i18n("<b>Significance Level:</b> %1", m_significanceLevel), QLatin1String("black"));
-	displayLine(4, i18n("<b>T-Value:</b> %1", formatRoundedValue(tValue)), QLatin1String("black"));
-	displayLine(5, i18n("<b>P-Value:</b> %1", formatRoundedValue(pValue, 4)), QLatin1String("black"));
-
-		   // Display the conclusion.
-	QString conclusion;
-	if (pValue < m_significanceLevel) {
-		conclusion = QLatin1String("<span style='color:black;'><b>Conclusion:</b> Reject the Null Hypothesis.</span>");
-	} else {
-		conclusion = QLatin1String("<span style='color:red;'><b>Conclusion:</b> Fail to Reject the Null Hypothesis.</span>");
+		   // Build an array of sample values from the column.
+	QVector<double> sample;
+	sample.reserve(n);
+	for (int i = 0; i < n; ++i) {
+		sample.append(m_columns[0]->valueAt(i));
 	}
-	displayLine(7, conclusion, QLatin1String("black"));
-}
 
-double HypothesisTest::calculatePValue(double& tValue, const QString& col1Name, const QString& col2Name, int df) {
-	double pValue = 0.0;
+	// Map our tail enum to an integer parameter for the nsl_stats function:
+	// TailTwo → 0, TailNegative → 1, TailPositive → 2.
+	int tail_param = 0;
 	QString nullHypothesisSign;
 	QString alternateHypothesisSign;
 
-		   // Determine the p-value and the alternate hypothesis sign based on m_tail.
 	switch (m_tail) {
 	case TailNegative:
-		pValue = gsl_cdf_tdist_P(tValue, df);
+		nullHypothesisSign = UTF8_QSTRING("≥");
 		alternateHypothesisSign = UTF8_QSTRING("<");
+		tail_param = 1;
 		break;
 	case TailPositive:
-		tValue *= -1; // Adjust tValue for one-sided test.
-		pValue = gsl_cdf_tdist_P(tValue, df);
+		nullHypothesisSign = UTF8_QSTRING("≤");
 		alternateHypothesisSign = UTF8_QSTRING(">");
+		tail_param = 2;
 		break;
 	case TailTwo:
-		pValue = 2.0 * gsl_cdf_tdist_P(-fabs(tValue), df);
-		alternateHypothesisSign = UTF8_QSTRING("≠");
-		break;
-	}
-
-		   // Now, determine the null hypothesis sign based on the user-selected m_nullHypothesisType.
-	switch (m_nullHypothesisType) {
-	case NullEquality:
 		nullHypothesisSign = UTF8_QSTRING("=");
-		break;
-	case NullLessEqual:
-		nullHypothesisSign = UTF8_QSTRING("≤");
-		break;
-	case NullGreaterEqual:
-		nullHypothesisSign = UTF8_QSTRING("≥");
+		alternateHypothesisSign = UTF8_QSTRING("≠");
+		tail_param = 0;
 		break;
 	}
 
-	// Display the hypotheses.
-	displayLine(0, i18n("<b>Null Hypothesis:</b> µ %1 µ₀", nullHypothesisSign), QLatin1String("black"));
-	displayLine(1, i18n("<b>Alternate Hypothesis:</b> µ %1 µ₀", alternateHypothesisSign), QLatin1String("black"));
+	double tValue = nsl_stats_one_sample_t(sample.constData(), static_cast<size_t>(n), m_populationMean);
+	double pValue = nsl_stats_one_sample_t_p(sample.constData(), static_cast<size_t>(n), m_populationMean, tail_param);
 
-	return (pValue > 1.0) ? 1.0 : pValue;
+	displayLine(0, i18n("<b>Null Hypothesis:</b> µ %1 µ₀", nullHypothesisSign), QStringLiteral("black"));
+	displayLine(1, i18n("<b>Alternate Hypothesis:</b> µ %1 µ₀", alternateHypothesisSign), QStringLiteral("black"));
+
+	int df = n - 1;
+	m_statisticValue.append(tValue);
+	displayLine(6, i18n("<b>Degrees of Freedom:</b> %1", df), QStringLiteral("black"));
+
+	m_currentTestName = QStringLiteral("<h2>") + i18n("One Sample T-Test for %1", m_columns[0]->name()) + QStringLiteral("</h2>");
+	displayLine(2, i18n("<b>Significance Level:</b> %1", m_significanceLevel), QStringLiteral("black"));
+	displayLine(4, i18n("<b>T-Value:</b> %1", formatRoundedValue(tValue)), QStringLiteral("black"));
+	displayLine(5, i18n("<b>P-Value:</b> %1", formatRoundedValue(pValue, 4)), QStringLiteral("black"));
+
+	QString conclusion;
+	if (pValue < m_significanceLevel) {
+		conclusion = QStringLiteral("<span style='color:black;'><b>Conclusion:</b> Reject the Null Hypothesis.</span>");
+	} else {
+		conclusion = QStringLiteral("<span style='color:red;'><b>Conclusion:</b> Fail to Reject the Null Hypothesis.</span>");
+	}
+	displayLine(7, conclusion, QStringLiteral("black"));
 }
-
-HypothesisTest::NullHypothesisType HypothesisTest::nullHypothesis() const {
-	return m_nullHypothesisType;
-}
-
-void HypothesisTest::setNullHypothesis(NullHypothesisType type) {
-	m_nullHypothesisType = type;
-}
-
 void HypothesisTest::logError(const QString& errorMsg) {
 	qCritical() << errorMsg;
 }

@@ -15,41 +15,39 @@
 #include "GeneralTest.h"
 #include <QVector>
 
+/*!
+ * \brief The HypothesisTest class implements a one-sample t-test.
+ */
 class HypothesisTest : public GeneralTest {
 	Q_OBJECT
 
 public:
 	explicit HypothesisTest(const QString& name);
 	~HypothesisTest() override;
-
 	enum NullHypothesisType {
 		NullEquality,       // H0: μ = μ₀
 		NullLessEqual,      // H0: μ ≤ μ₀
 		NullGreaterEqual    // H0: μ ≥ μ₀
 	};
-
 	enum HypothesisTailType {
 		TailPositive,
 		TailNegative,
 		TailTwo
 	};
-
-	// Set test parameters
 	void setPopulationMean(double mean);
 	void setSignificanceLevel(double alpha);
 	void setTail(HypothesisTailType tail);
 	void setNullHypothesis(NullHypothesisType type);
 	NullHypothesisType nullHypothesis() const;
-	// Run the test
+
 	void runTest();
 	void performOneSampleTTest();
-	double calculatePValue(double& tValue, const QString& col1Name, const QString& col2Name, int df);
 
 private:
-	void displayTestResults(double tStatistic, double pValue, int df);
 	void logError(const QString& errorMsg);
 	QString generatePValueTooltip(const double& pValue);
-	NullHypothesisType m_nullHypothesisType = NullEquality; // default
+
+	NullHypothesisType m_nullHypothesisType = NullEquality; // default null hypothesis type
 	double m_populationMean;
 	double m_significanceLevel;
 	HypothesisTailType m_tail;
