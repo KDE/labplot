@@ -30,13 +30,13 @@ Boston, MA  02110-1301  USA
 #include "backend/core/AbstractPart.h"
 #include "frontend/statistics/GeneralTestView.h"
 
-#include <QVariant>
+#include <QAbstractItemModel>
+#include <QLabel>
 #include <QString>
 #include <QStringList>
-#include <QVector>
 #include <QVBoxLayout>
-#include <QLabel>
-#include <QAbstractItemModel>
+#include <QVariant>
+#include <QVector>
 
 class Spreadsheet;
 class Column;
@@ -51,7 +51,7 @@ public:
 	explicit GeneralTest(const QString& name, const AspectType& type);
 	~GeneralTest() override;
 
-		   // Structure representing a cell in an HTML table.
+	// Structure representing a cell in an HTML table.
 	struct HtmlText {
 		QString data;
 		int level;
@@ -59,9 +59,7 @@ public:
 		QString tooltip;
 		int rowSpanCount;
 		int columnSpanCount;
-		HtmlText(QVariant cellData, int lvl = 0, bool header = false,
-				 QString tip = QString(), int rowSpan = 1, int colSpan = 1)
-		{
+		HtmlText(QVariant cellData, int lvl = 0, bool header = false, QString tip = QString(), int rowSpan = 1, int colSpan = 1) {
 			data = cellData.toString();
 			level = lvl;
 			isHeader = header;
@@ -77,19 +75,19 @@ public:
 	void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
 	Spreadsheet* getDataSourceSpreadsheet() const;
 
-		   // Column selection methods.
+	// Column selection methods.
 	void setColumns(const QVector<Column*>& cols);
 	void setColumns(const QStringList& cols);
 	QStringList getAllColumns() const;
 
-		   // Getters for test properties.
+	// Getters for test properties.
 	QString getTestName() const;
 	QString getStatsTable() const;
 
 	QVBoxLayout* getSummaryLayout() const;
 	QAbstractItemModel* getInputStatsTableModel() const;
 
-		   // Virtual methods.
+	// Virtual methods.
 	QMenu* createContextMenu() override;
 	QWidget* view() const override;
 	bool exportView() const override;
@@ -120,7 +118,7 @@ protected:
 
 	TableModel* m_inputStatsTableModel;
 
-		   // Helper functions with renamed versions.
+	// Helper functions with renamed versions.
 	int extractTestType(int test);
 	int extractTestSubtype(int test);
 
@@ -129,15 +127,17 @@ protected:
 	double calculateSumOfSquares(const Column* column, int N = -1);
 	void countUniquePartitions(Column* column, int& np, int& totalRows);
 
-	GeneralErrorType computeColumnStats(const Column* column, int& count, double& sum,
-										double& mean, double& stdDev);
-	GeneralErrorType computePairedColumnStats(const Column* column1, const Column* column2,
-											  int& count, double& sum, double& mean,
-											  double& stdDev);
-	GeneralErrorType computeCategoricalStats(Column* column1, Column* column2,
-											 int n[], double sum[], double mean[],
-											 double stdDev[], QMap<QString, int>& colName,
-											 const int& np, const int& totalRows);
+	GeneralErrorType computeColumnStats(const Column* column, int& count, double& sum, double& mean, double& stdDev);
+	GeneralErrorType computePairedColumnStats(const Column* column1, const Column* column2, int& count, double& sum, double& mean, double& stdDev);
+	GeneralErrorType computeCategoricalStats(Column* column1,
+											 Column* column2,
+											 int n[],
+											 double sum[],
+											 double mean[],
+											 double stdDev[],
+											 QMap<QString, int>& colName,
+											 const int& np,
+											 const int& totalRows);
 
 	QString buildHtmlTable(int row, int column, QVariant* data);
 	QString buildHtmlTableFromCells(const QList<HtmlText*>& cells);

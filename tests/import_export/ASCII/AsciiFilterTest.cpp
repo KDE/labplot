@@ -3644,7 +3644,9 @@ void AsciiFilterTest::determineColumns() {
 
 	expectedHeader = QStringList{QStringLiteral("header1"), QStringLiteral("header2"), QStringLiteral("header3")};
 	p.simplifyWhitespaces = true;
-	QBENCHMARK { QCOMPARE(AsciiFilterPrivate::determineColumnsSimplifyWhiteSpace(QStringLiteral("header1,header2,header3\n"), p), expectedHeader); }
+	QBENCHMARK {
+		QCOMPARE(AsciiFilterPrivate::determineColumnsSimplifyWhiteSpace(QStringLiteral("header1,header2,header3\n"), p), expectedHeader);
+	}
 }
 
 void AsciiFilterTest::determineColumnsWhiteSpaces() {

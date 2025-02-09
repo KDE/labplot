@@ -11,27 +11,27 @@
 #ifndef TEXTEDIT_H
 #define TEXTEDIT_H
 
-#include <QTextEdit>
 #include <QMap>
 #include <QPair>
+#include <QTextEdit>
 
 class TextEdit : public QTextEdit {
 	Q_OBJECT
 
 public:
 	explicit TextEdit(QWidget* parent = nullptr);
-	void setHtml(const QString &htmlText);
+	void setHtml(const QString& htmlText);
 
 protected:
-	bool event(QEvent *event) override;
+	bool event(QEvent* event) override;
 
 private:
 	// Processes the tooltip markup in the given text.
 	// If updateTooltips is true, the extracted tooltip ranges and texts
 	// are stored in m_tooltips.
-	void processToolTipTags(QString &text, bool updateTooltips);
+	void processToolTipTags(QString& text, bool updateTooltips);
 
-		   // Map of text ranges (start, end) to tooltip text.
+	// Map of text ranges (start, end) to tooltip text.
 	QMap<QPair<int, int>, QString> m_tooltips;
 };
 

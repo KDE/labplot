@@ -109,7 +109,7 @@ void HypothesisTest::performOneSampleTTest() {
 		return;
 	}
 
-		   // Build an array of sample values from the column.
+	// Build an array of sample values from the column.
 	QVector<double> sample;
 	sample.reserve(n);
 	for (int i = 0; i < n; ++i) {

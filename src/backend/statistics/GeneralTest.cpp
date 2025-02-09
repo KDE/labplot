@@ -33,9 +33,9 @@ Boston, MA  02110-1301  USA
 #include "frontend/statistics/GeneralTestView.h"
 
 #include <QLabel>
+#include <QMenu>
 #include <QStandardItemModel>
 #include <QVBoxLayout>
-#include <QMenu>
 
 #include <KLocalizedString>
 
@@ -48,8 +48,7 @@ extern "C" {
 GeneralTest::GeneralTest(const QString& name, const AspectType& type)
 	: AbstractPart(name, type)
 	, m_summaryLayout(new QVBoxLayout())
-	, m_inputStatsTableModel(new TableModel())
-{
+	, m_inputStatsTableModel(new TableModel()) {
 	m_inputStatsTableModel->setParent(this);
 	for (int i = 0; i < RESULT_LINES_COUNT; i++) {
 		m_resultLabels[i] = new QLabel();
@@ -163,9 +162,7 @@ double GeneralTest::calculateSumOfSquares(const Column* column, int N) {
 	return sumSq;
 }
 
-GeneralTest::GeneralErrorType GeneralTest::computeColumnStats(const Column* column,
-															  int& count, double& sum,
-															  double& mean, double& stdDev) {
+GeneralTest::GeneralErrorType GeneralTest::computeColumnStats(const Column* column, int& count, double& sum, double& mean, double& stdDev) {
 	const auto& statistics = column->statistics();
 	count = statistics.size;
 	if (count < 1)
@@ -177,10 +174,8 @@ GeneralTest::GeneralErrorType GeneralTest::computeColumnStats(const Column* colu
 	return GeneralTest::NoError;
 }
 
-GeneralTest::GeneralErrorType GeneralTest::computePairedColumnStats(const Column* column1,
-																	const Column* column2,
-																	int& count, double& sum,
-																	double& mean, double& stdDev) {
+GeneralTest::GeneralErrorType
+GeneralTest::computePairedColumnStats(const Column* column1, const Column* column2, int& count, double& sum, double& mean, double& stdDev) {
 	sum = 0;
 	mean = 0;
 	stdDev = 0;
@@ -230,7 +225,7 @@ void GeneralTest::countUniquePartitions(Column* column, int& np, int& totalRows)
 	QString cellValue;
 	QMap<QString, bool> discoveredValues;
 
-		   // Temporarily switch the column mode to text.
+	// Temporarily switch the column mode to text.
 	AbstractColumn::ColumnMode originalMode = column->columnMode();
 	column->setColumnMode(AbstractColumn::ColumnMode::Text);
 
@@ -257,7 +252,7 @@ GeneralTest::GeneralErrorType GeneralTest::computeCategoricalStats(Column* colum
 																   QMap<QString, int>& colName,
 																   const int& np,
 																   const int& totalRows) {
-	Column* columns[] = { column1, column2 };
+	Column* columns[] = {column1, column2};
 
 	for (int i = 0; i < np; i++) {
 		n[i] = 0;
@@ -311,12 +306,9 @@ GeneralTest::GeneralErrorType GeneralTest::computeCategoricalStats(Column* colum
 
 QString GeneralTest::buildHtmlTable(int row, int column, QVariant* data) {
 	QString table;
-	table = QLatin1String("<style type='text/css'>")
-		+ QLatin1String("table {border-collapse: collapse; margin: auto; width: 80%; font-size: 18px;}")
+	table = QLatin1String("<style type='text/css'>") + QLatin1String("table {border-collapse: collapse; margin: auto; width: 80%; font-size: 18px;}")
 		+ QLatin1String("th, td {border: 1px solid black; padding: 12px; text-align: center; font-size: 16px;}")
-		+ QLatin1String("th {background-color: #f2f2f2; font-size: 18px;}")
-		+ QLatin1String("</style>")
-		+ QLatin1String("<div style='text-align: center;'>")
+		+ QLatin1String("th {background-color: #f2f2f2; font-size: 18px;}") + QLatin1String("</style>") + QLatin1String("<div style='text-align: center;'>")
 		+ QLatin1String("<table>");
 	table += QLatin1String("<tr>");
 	// Add column headers.
@@ -340,7 +332,7 @@ QString GeneralTest::buildHtmlTableFromCells(const QList<HtmlText*>& cells) {
 	if (cellCount == 0)
 		return QString();
 
-		   // HTML tooltip markers.
+	// HTML tooltip markers.
 	const QString startToolTip = QLatin1String("[tooltip]");
 	const QString endToolTip = QLatin1String("[/tooltip]");
 	const QString startData = QLatin1String("[data]");
@@ -371,29 +363,23 @@ QString GeneralTest::buildHtmlTableFromCells(const QList<HtmlText*>& cells) {
 		QString cellEndTag = currentCell->isHeader ? QLatin1String("</th>") : QLatin1String("</td>");
 		QString cellContent = i18n("%1", currentCell->data);
 		if (!currentCell->tooltip.isEmpty())
-			cellContent = startToolTip + startData + cellContent + endData + startTip +
-				i18n("%1", currentCell->tooltip) + endTip + endToolTip;
-		table += cellStartTag + QLatin1String("rowspan=") + QString::number(currentCell->rowSpanCount) +
-			QLatin1String(" colspan=") + QString::number(currentCell->columnSpanCount) +
-			QLatin1String(">") + cellContent + cellEndTag;
+			cellContent = startToolTip + startData + cellContent + endData + startTip + i18n("%1", currentCell->tooltip) + endTip + endToolTip;
+		table += cellStartTag + QLatin1String("rowspan=") + QString::number(currentCell->rowSpanCount) + QLatin1String(" colspan=")
+			+ QString::number(currentCell->columnSpanCount) + QLatin1String(">") + cellContent + cellEndTag;
 	}
 	table += QLatin1String("</tr></table>");
 	return table;
 }
 
 QString GeneralTest::formatHtmlLine(const QString& msg, const QString& color) {
-	return QLatin1String("<p style='color:") + color +
-		QLatin1String(";'>") + i18n("%1", msg) +
-		QLatin1String("</p>");
+	return QLatin1String("<p style='color:") + color + QLatin1String(";'>") + i18n("%1", msg) + QLatin1String("</p>");
 }
 
 void GeneralTest::displayLine(const int& index, const QString& msg, const QString& color) {
 	if (index < 0 || index >= RESULT_LINES_COUNT)
 		return;
 
-	QString formattedMsg = QLatin1String("<p style='color:") + color +
-		QLatin1String("; font-size:14px;'>") +
-		i18n("%1", msg) + QLatin1String("</p>");
+	QString formattedMsg = QLatin1String("<p style='color:") + color + QLatin1String("; font-size:14px;'>") + i18n("%1", msg) + QLatin1String("</p>");
 	m_resultLabels[index]->setText(formattedMsg);
 }
 

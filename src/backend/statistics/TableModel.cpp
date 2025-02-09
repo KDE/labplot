@@ -26,12 +26,11 @@ Boston, MA  02110-1301  USA
 
 #include "TableModel.h"
 
-#include <QFont>
 #include <QColor>
+#include <QFont>
 
 TableModel::TableModel(QObject* parent)
-	: QStandardItemModel(parent)
-{
+	: QStandardItemModel(parent) {
 }
 
 QVariant TableModel::data(const QModelIndex& index, int role) const {
@@ -46,7 +45,7 @@ QVariant TableModel::data(const QModelIndex& index, int role) const {
 		return headerFont;
 	}
 
-		   // Set custom foreground colors.
+	// Set custom foreground colors.
 	if (role == Qt::ForegroundRole) {
 		if (index.row() == 0)
 			return QColor(Qt::white);
