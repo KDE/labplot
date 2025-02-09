@@ -315,7 +315,8 @@ void SymbolWidget::loadConfig(const KConfigGroup& group) {
 	ui.kcbFillingColor->setColor(group.readEntry("SymbolFillingColor", m_symbol->brush().color()));
 	ui.cbBorderStyle->setCurrentIndex(group.readEntry("SymbolBorderStyle", (int)m_symbol->pen().style()));
 	ui.kcbBorderColor->setColor(group.readEntry("SymbolBorderColor", m_symbol->pen().color()));
-	ui.sbBorderWidth->setValue(std::round(Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth", m_symbol->pen().widthF()), Worksheet::Unit::Point)));
+	ui.sbBorderWidth->setValue(
+		std::round(Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth", m_symbol->pen().widthF()), Worksheet::Unit::Point)));
 
 	GuiTools::updateBrushStyles(ui.cbFillingStyle, ui.kcbFillingColor->color());
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());

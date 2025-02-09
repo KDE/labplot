@@ -387,23 +387,24 @@ void ImportFileDialog::checkOkButton() {
 		}
 	}
 
+	// m_importFileWidget->isValid()
 	QString fileName = ImportFileWidget::absolutePath(m_importFileWidget->fileName());
 	const auto sourceType = m_importFileWidget->currentSourceType();
 	switch (sourceType) {
-		case LiveDataSource::SourceType::FileOrPipe: // fall through
-		case LiveDataSource::SourceType::LocalSocket: {
-			if (fileName.isEmpty()) {
-				okButton->setEnabled(false);
-				okButton->setToolTip(i18n("No file provided for import."));
-				return;
-			}
-			break;
+	case LiveDataSource::SourceType::FileOrPipe: // fall through
+	case LiveDataSource::SourceType::LocalSocket: {
+		if (fileName.isEmpty()) {
+			okButton->setEnabled(false);
+			okButton->setToolTip(i18n("No file provided for import."));
+			return;
 		}
-		case LiveDataSource::SourceType::NetworkTCPSocket: // fall through
-		case LiveDataSource::SourceType::NetworkUDPSocket: // fall through
-		case LiveDataSource::SourceType::SerialPort: // fall through
-		case LiveDataSource::SourceType::MQTT: // fall through
-			break;
+		break;
+	}
+	case LiveDataSource::SourceType::NetworkTCPSocket: // fall through
+	case LiveDataSource::SourceType::NetworkUDPSocket: // fall through
+	case LiveDataSource::SourceType::SerialPort: // fall through
+	case LiveDataSource::SourceType::MQTT: // fall through
+		break;
 	}
 
 	// process all events first so the dialog is completely drawn before we wait for the socket connect below

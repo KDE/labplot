@@ -10,11 +10,11 @@
 #include "LollipopPlotDock.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/macros.h"
-#include "frontend/widgets/TreeViewComboBox.h"
 #include "frontend/GuiTools.h"
 #include "frontend/TemplateHandler.h"
 #include "frontend/widgets/LineWidget.h"
 #include "frontend/widgets/SymbolWidget.h"
+#include "frontend/widgets/TreeViewComboBox.h"
 #include "frontend/widgets/ValueWidget.h"
 
 #include <QPushButton>

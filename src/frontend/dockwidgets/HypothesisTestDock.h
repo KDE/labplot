@@ -30,6 +30,7 @@ class HypothesisTestDock : public BaseDock {
 public:
 	explicit HypothesisTestDock(QWidget*);
 	void initializeTest(HypothesisTest* test);
+	void retranslateUi() override;
 
 private:
 	Ui::HypothesisTestDock ui;

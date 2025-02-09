@@ -282,7 +282,7 @@ void WorksheetDock::retranslateUi() {
 	ui.cbLayout->addItem(QIcon::fromTheme(QStringLiteral("labplot-editvlayout")), i18n("Horizontal Layout"));
 	ui.cbLayout->addItem(QIcon::fromTheme(QStringLiteral("labplot-editgrid")), i18n("Grid Layout"));
 
-	//Background
+	// Background
 	backgroundWidget->retranslateUi();
 }
 
@@ -617,8 +617,11 @@ void WorksheetDock::loadConfig(KConfig& config) {
 
 	// Geometry
 	ui.chScaleContent->setChecked(group.readEntry(QStringLiteral("ScaleContent"), false));
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("Width"), m_worksheet->pageRect().width()), m_units), m_worksheetUnit));
-	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("Height"), m_worksheet->pageRect().height()), m_units), m_worksheetUnit));
+	ui.sbWidth->setValue(
+		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("Width"), m_worksheet->pageRect().width()), m_units), m_worksheetUnit));
+	ui.sbHeight->setValue(
+		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("Height"), m_worksheet->pageRect().height()), m_units),
+										 m_worksheetUnit));
 	if (group.readEntry(QStringLiteral("UseViewSize"), false))
 		ui.cbSizeType->setCurrentIndex(0);
 	else
@@ -630,17 +633,23 @@ void WorksheetDock::loadConfig(KConfig& config) {
 	// Layout
 	ui.cbLayout->setCurrentIndex(group.readEntry(QStringLiteral("Layout"), (int)m_worksheet->layout()));
 	ui.sbLayoutTopMargin->setValue(
-		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("LayoutTopMargin"), m_worksheet->layoutTopMargin()), m_units), m_worksheetUnit));
+		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("LayoutTopMargin"), m_worksheet->layoutTopMargin()), m_units),
+										 m_worksheetUnit));
 	ui.sbLayoutBottomMargin->setValue(
-		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("LayoutBottomMargin"), m_worksheet->layoutBottomMargin()), m_units), m_worksheetUnit));
+		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("LayoutBottomMargin"), m_worksheet->layoutBottomMargin()), m_units),
+										 m_worksheetUnit));
 	ui.sbLayoutLeftMargin->setValue(
-		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("LayoutLeftMargin"), m_worksheet->layoutLeftMargin()), m_units), m_worksheetUnit));
+		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("LayoutLeftMargin"), m_worksheet->layoutLeftMargin()), m_units),
+										 m_worksheetUnit));
 	ui.sbLayoutRightMargin->setValue(
-		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("LayoutRightMargin"), m_worksheet->layoutRightMargin()), m_units), m_worksheetUnit));
-	ui.sbLayoutHorizontalSpacing->setValue(
-		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("LayoutHorizontalSpacing"), m_worksheet->layoutHorizontalSpacing()), m_units), m_worksheetUnit));
-	ui.sbLayoutVerticalSpacing->setValue(
-		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("LayoutVerticalSpacing"), m_worksheet->layoutVerticalSpacing()), m_units), m_worksheetUnit));
+		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("LayoutRightMargin"), m_worksheet->layoutRightMargin()), m_units),
+										 m_worksheetUnit));
+	ui.sbLayoutHorizontalSpacing->setValue(Worksheet::convertFromSceneUnits(
+		roundSceneValue(group.readEntry(QStringLiteral("LayoutHorizontalSpacing"), m_worksheet->layoutHorizontalSpacing()), m_units),
+		m_worksheetUnit));
+	ui.sbLayoutVerticalSpacing->setValue(Worksheet::convertFromSceneUnits(
+		roundSceneValue(group.readEntry(QStringLiteral("LayoutVerticalSpacing"), m_worksheet->layoutVerticalSpacing()), m_units),
+		m_worksheetUnit));
 
 	ui.sbLayoutRowCount->setValue(group.readEntry(QStringLiteral("LayoutRowCount"), m_worksheet->layoutRowCount()));
 	ui.sbLayoutColumnCount->setValue(group.readEntry(QStringLiteral("LayoutColumnCount"), m_worksheet->layoutColumnCount()));

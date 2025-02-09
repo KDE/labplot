@@ -45,11 +45,11 @@ int nsl_hilbert_transform(double data[], size_t stride, size_t n, nsl_hilbert_re
 	for (i = n + 1; i < N; i++)
 		result[i] = 0;
 
-	/*	for (i = 0; i < N; i++)
-			printf(" %g", result[i]);
-		printf("\n");
-	*/
-	/* 3. back transform */
+		/*	for (i = 0; i < N; i++)
+				printf(" %g", result[i]);
+			printf("\n");
+		*/
+		/* 3. back transform */
 #ifdef HAVE_FFTW3
 	fftw_complex* o = (fftw_complex*)malloc(N * sizeof(double));
 	fftw_plan pb = fftw_plan_dft_1d((int)n, o, o, FFTW_BACKWARD, FFTW_ESTIMATE);

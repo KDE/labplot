@@ -66,9 +66,9 @@ PlotDataDialog::PlotDataDialog(AbstractAspect* parentAspect, Plot::PlotType type
 	setWindowIcon(QIcon::fromTheme(QStringLiteral("office-chart-line")));
 
 	m_basicPlotType = (m_plotType == Plot::PlotType::Line || m_plotType == Plot::PlotType::LineHorizontalStep || m_plotType == Plot::PlotType::LineVerticalStep
-			|| m_plotType == Plot::PlotType::LineSpline || m_plotType == Plot::PlotType::Scatter || m_plotType == Plot::PlotType::ScatterYError
-			|| m_plotType == Plot::PlotType::ScatterXYError || m_plotType == Plot::PlotType::LineSymbol || m_plotType == Plot::PlotType::LineSymbol2PointSegment
-			|| m_plotType == Plot::PlotType::LineSymbol3PointSegment);
+					   || m_plotType == Plot::PlotType::LineSpline || m_plotType == Plot::PlotType::Scatter || m_plotType == Plot::PlotType::ScatterYError
+					   || m_plotType == Plot::PlotType::ScatterXYError || m_plotType == Plot::PlotType::LineSymbol
+					   || m_plotType == Plot::PlotType::LineSymbol2PointSegment || m_plotType == Plot::PlotType::LineSymbol3PointSegment);
 
 	auto* mainWidget = new QWidget(this);
 	ui->setupUi(mainWidget);

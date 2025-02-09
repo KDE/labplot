@@ -47,7 +47,7 @@ template<class target_class, typename value_type>
 class StandardSetterCmd : public QUndoCommand {
 public:
 	StandardSetterCmd(target_class* target,
-					  value_type target_class::* field,
+					  value_type target_class::*field,
 					  value_type newValue,
 					  const KLocalizedString& description,
 					  QUndoCommand* parent = nullptr) // use ki18n("%1: ...")
@@ -78,7 +78,7 @@ public:
 
 protected:
 	target_class* m_target;
-	value_type target_class::* m_field;
+	value_type target_class::*m_field;
 	value_type m_otherValue;
 };
 
@@ -86,7 +86,7 @@ template<class target_class, typename value_type>
 class StandardQVectorSetterCmd : public QUndoCommand {
 public:
 	StandardQVectorSetterCmd(target_class* target,
-							 QVector<value_type> target_class::* field,
+							 QVector<value_type> target_class::*field,
 							 int index,
 							 value_type newValue,
 							 const KLocalizedString& description) // use ki18n("%1: ...")
@@ -118,7 +118,7 @@ public:
 
 protected:
 	target_class* m_target;
-	QVector<value_type> target_class::* m_field;
+	QVector<value_type> target_class::*m_field;
 	int m_index;
 	value_type m_otherValue;
 };
@@ -127,7 +127,7 @@ template<class target_class, typename value_type>
 class StandardMacroSetterCmd : public QUndoCommand {
 public:
 	StandardMacroSetterCmd(target_class* target,
-						   value_type target_class::* field,
+						   value_type target_class::*field,
 						   value_type newValue,
 						   const KLocalizedString& description) // use ki18n("%1: ...")
 		: m_target(target)
@@ -166,7 +166,7 @@ public:
 
 protected:
 	target_class* m_target;
-	value_type target_class::* m_field;
+	value_type target_class::*m_field;
 	value_type m_otherValue;
 };
 

@@ -22,9 +22,9 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/StatisticsSpreadsheet.h"
+#include "backend/statistics/HypothesisTest.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h" //TODO: needed for the icon only, remove later once we have a breeze icon
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/statistics/HypothesisTest.h"
 #include "frontend/spreadsheet/SpreadsheetHeaderView.h"
 
 #ifndef SDK
@@ -1004,7 +1004,7 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 	if (m_spreadsheet->columnCount() > 0 && m_spreadsheet->rowCount() > 0) {
 		menu->insertMenu(firstAction, m_plotDataMenu);
 		menu->insertMenu(firstAction, m_analyzePlotMenu);
-		menu->insertMenu(firstAction,m_statisticalAnalysisMenu);
+		menu->insertMenu(firstAction, m_statisticalAnalysisMenu);
 		menu->insertSeparator(firstAction);
 	}
 	menu->insertMenu(firstAction, m_selectionMenu);
@@ -1049,7 +1049,7 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	QAction* firstAction = menu->actions().at(1);
 	menu->insertMenu(firstAction, m_plotDataMenu);
 	menu->insertMenu(firstAction, m_analyzePlotMenu);
-	menu->insertMenu(firstAction,m_statisticalAnalysisMenu);
+	menu->insertMenu(firstAction, m_statisticalAnalysisMenu);
 	menu->insertSeparator(firstAction);
 
 	if (numeric)
@@ -3783,8 +3783,7 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 	if (indexes.empty() || indexes.count() == 1) {
 		Q_EMIT m_spreadsheet->statusInfo(QString());
 		return;
-	}
-	else if (indexes.count() > 10000) { // more than 10k selected cells, skip the expensive logic below to check for maskes values, etc.
+	} else if (indexes.count() > 10000) { // more than 10k selected cells, skip the expensive logic below to check for maskes values, etc.
 		Q_EMIT m_spreadsheet->statusInfo(i18n("Selected: %1 cells", indexes.count()));
 		return;
 	}

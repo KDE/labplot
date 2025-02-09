@@ -7,10 +7,10 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
+#include "frontend/examples/ExamplesWidget.h"
 #include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
 #include "frontend/examples/ExamplesManager.h"
-#include "frontend/examples/ExamplesWidget.h"
 
 #include <QCompleter>
 #include <QMessageBox>

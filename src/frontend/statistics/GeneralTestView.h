@@ -47,11 +47,9 @@ protected:
 	void initializeMenus();
 	void setupConnections();
 
-	void exportDataToFile(const QString& path, bool exportHeader,
-						  const QString& separator, QLocale::Language language) const;
-	void exportDataToLaTeX(const QString& path, bool exportHeaders, bool gridLines,
-						   bool captions, bool latexHeaders, bool skipEmptyRows,
-						   bool exportEntire) const;
+	void exportDataToFile(const QString& path, bool exportHeader, const QString& separator, QLocale::Language language) const;
+	void
+	exportDataToLaTeX(const QString& path, bool exportHeaders, bool gridLines, bool captions, bool latexHeaders, bool skipEmptyRows, bool exportEntire) const;
 
 	GeneralTest* m_generalTest;
 	QLabel* m_testName;

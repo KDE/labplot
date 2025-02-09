@@ -68,10 +68,10 @@
 #endif
 
 namespace {
-	enum FilterSettingsHandlingIndex {
-		Automatic = 0,
-		Custom = 1,
-	};
+enum FilterSettingsHandlingIndex {
+	Automatic = 0,
+	Custom = 1,
+};
 }
 
 QString ImportFileWidget::absolutePath(const QString& fileName) {
@@ -275,7 +275,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	m_templateHandler->setToolButtonStyle(Qt::ToolButtonStyle::ToolButtonIconOnly);
 	ui.hLayoutFilter->addWidget(m_templateHandler);
 	connect(m_templateHandler, &TemplateHandler::saveConfigRequested, this, &ImportFileWidget::saveConfigAsTemplate);
-	connect(ui.sbEndRow, &QSpinBox::valueChanged, [this] (int value) {
+	connect(ui.sbEndRow, &QSpinBox::valueChanged, [this](int value) {
 		if (value > 0) {
 			ui.sbPreviewLines->setEnabled(false);
 			ui.sbPreviewLines->setToolTip(i18n("The number of rows is calculated from the values of the data portion tab"));
@@ -284,7 +284,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 			ui.sbPreviewLines->setToolTip(QStringLiteral(""));
 		}
 	});
-	connect(ui.sbPreviewPrecision, &QSpinBox::valueChanged, [this] (int value) {
+	connect(ui.sbPreviewPrecision, &QSpinBox::valueChanged, [this](int value) {
 		if (m_currentFilter)
 			m_currentFilter->setPreviewPrecision(value);
 	});
@@ -323,7 +323,7 @@ void ImportFileWidget::loadSettings() {
 	if (m_fileName.isEmpty())
 		m_cbFileName->setUrl(QUrl(conf.readEntry("LastImportedFile", "")));
 	else {
-		if (m_fileName.contains(QLatin1Char('\\')))	// Windows path
+		if (m_fileName.contains(QLatin1Char('\\'))) // Windows path
 			m_cbFileName->setUrl(QUrl::fromLocalFile(m_fileName));
 		else
 			m_cbFileName->setUrl(QUrl(m_fileName));
@@ -335,7 +335,7 @@ void ImportFileWidget::loadSettings() {
 	if (m_dbcFileName.isEmpty())
 		m_cbDBCFileName->setUrl(QUrl(conf.readEntry("LastImportedDBCFile", "")));
 	else {
-		if (m_fileName.contains(QLatin1Char('\\')))	// Windows path
+		if (m_fileName.contains(QLatin1Char('\\'))) // Windows path
 			m_cbDBCFileName->setUrl(QUrl::fromLocalFile(m_dbcFileName));
 		else
 			m_cbDBCFileName->setUrl(QUrl(m_dbcFileName));
@@ -1860,8 +1860,7 @@ void ImportFileWidget::refreshPreview() {
 				}
 				tcpSocket.disconnectFromHost();
 			} else {
-				DEBUG("failed to connect to TCP socket within " << timeoutTime_ms << "ms"
-					  << " - " << STDSTRING(tcpSocket.errorString()));
+				DEBUG("failed to connect to TCP socket " << " - " << STDSTRING(tcpSocket.errorString()));
 				errorMessage = i18n("Socket operation timed out.");
 			}
 
@@ -1890,8 +1889,7 @@ void ImportFileWidget::refreshPreview() {
 					DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
 					udpSocket.disconnectFromHost();
 				} else {
-					DEBUG("failed to connect to UDP socket - " << STDSTRING(udpSocket.errorString()));
-					errorMessage = i18n("Socket operation timed out.");
+				DEBUG("failed to connect to UDP socket " << " - " << STDSTRING(udpSocket.errorString()));
 				}
 			} else {
 				DEBUG("Unable to bind" << udpSocket.errorString().toStdString());
@@ -2193,7 +2191,7 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	WAIT_CURSOR;
-	CleanupNoArguments cleanup([] () {
+	CleanupNoArguments cleanup([]() {
 		RESET_CURSOR;
 	});
 
@@ -2587,7 +2585,7 @@ void ImportFileWidget::mqttConnectionChanged() {
 	}
 
 	WAIT_CURSOR;
-	CleanupNoArguments cleanup([] () {
+	CleanupNoArguments cleanup([]() {
 		RESET_CURSOR;
 	});
 	Q_EMIT error(QString());

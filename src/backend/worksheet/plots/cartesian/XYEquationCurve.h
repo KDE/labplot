@@ -30,7 +30,7 @@ public:
 	struct EquationData {
 		EquationData()
 			: min(QLatin1String("0"))
-			, max(QLatin1String("1")) { };
+			, max(QLatin1String("1")) {};
 
 		EquationType type{EquationType::Cartesian};
 		QString expression1; // Expression for Cartesian, Polar, ...

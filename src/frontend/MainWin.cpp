@@ -21,8 +21,8 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #ifdef HAVE_LIBORIGIN
-#include "frontend/datasources/ImportOriginLayersDialog.h"
 #include "backend/datasources/projects/OriginProjectParser.h"
+#include "frontend/datasources/ImportOriginLayersDialog.h"
 #endif
 #include "backend/datapicker/Datapicker.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -51,8 +51,8 @@
 #include "frontend/dockwidgets/CursorDock.h"
 #include "frontend/dockwidgets/ProjectDock.h"
 #include "frontend/examples/ExamplesDialog.h"
-#include "frontend/note/NoteView.h"
 #include "frontend/matrix/MatrixView.h"
+#include "frontend/note/NoteView.h"
 #include "frontend/spreadsheet/SpreadsheetView.h"
 #include "frontend/widgets/FITSHeaderEditDialog.h"
 #include "frontend/widgets/LabelWidget.h"
@@ -396,33 +396,32 @@ void MainWin::initGUI(const QString& fileName) {
 		toggleMemoryInfo();
 
 	// hide "Donate" in the help menu
-        auto* donateAction = actionCollection()->action(QStringLiteral("help_donate"));
+	auto* donateAction = actionCollection()->action(QStringLiteral("help_donate"));
 	if (donateAction)
 		actionCollection()->removeAction(donateAction);
 
 	// custom about dialog
-        auto* aboutAction = actionCollection()->action(QStringLiteral("help_about_app"));
-        if (aboutAction) {
+	auto* aboutAction = actionCollection()->action(QStringLiteral("help_about_app"));
+	if (aboutAction) {
 		// disconnect default slot
 		disconnect(aboutAction, nullptr, nullptr, nullptr);
 		connect(aboutAction, &QAction::triggered, this, &MainWin::customAboutDialog);
-        }
+	}
 
 	// restore the geometry
 	if (groupMainWin.hasKey(QStringLiteral("geometry")))
 		restoreGeometry(groupMainWin.readEntry("geometry", QByteArray()));
 
 	m_lastOpenFileFilter = groupMainWin.readEntry(QLatin1String("lastOpenFileFilter"), QString());
-
 }
 
 void MainWin::customAboutDialog() {
 	// default dialog
-        // KAboutApplicationDialog aboutDialog(KAboutData::applicationData(), this);
+	// KAboutApplicationDialog aboutDialog(KAboutData::applicationData(), this);
 	// custom about dialog (not used)
-        AboutDialog aboutDialog(KAboutData::applicationData(), this);
+	AboutDialog aboutDialog(KAboutData::applicationData(), this);
 
-        aboutDialog.exec();
+	aboutDialog.exec();
 }
 
 /**
@@ -997,8 +996,11 @@ void MainWin::colorSchemeChanged(QAction* action) {
  */
 bool MainWin::warnModified() {
 	if (m_project->hasChanged()) {
-		int option = KMessageBox::warningTwoActionsCancel(this, i18n("The current project \"%1\" has been modified. Do you want to save it?", m_project->name()),
-				i18n("Save Project"), KStandardGuiItem::save(), KStandardGuiItem::dontSave());
+		int option = KMessageBox::warningTwoActionsCancel(this,
+														  i18n("The current project \"%1\" has been modified. Do you want to save it?", m_project->name()),
+														  i18n("Save Project"),
+														  KStandardGuiItem::save(),
+														  KStandardGuiItem::dontSave());
 		switch (option) {
 		case KMessageBox::PrimaryAction:
 			return !saveProject();
@@ -1714,8 +1716,8 @@ bool MainWin::saveProject() {
 	else {
 		// don't overwrite OPJ files, replace ending
 		if (fileName.endsWith(QLatin1String(".opj"), Qt::CaseInsensitive)) {
-			//fileName.replace(QLatin1String(".opj"), QLatin1String(".lml"), Qt::CaseInsensitive);
-			// better append ending (don't overwrite existing project.lml file)
+			// fileName.replace(QLatin1String(".opj"), QLatin1String(".lml"), Qt::CaseInsensitive);
+			//  better append ending (don't overwrite existing project.lml file)
 			fileName.append(QLatin1String(".lml"));
 			DEBUG(Q_FUNC_INFO << ", renamed file name to " << fileName.toStdString())
 		}

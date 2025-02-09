@@ -13,8 +13,8 @@
 #include "backend/core/Project.h"
 #include "backend/datapicker/DatapickerCurve.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "frontend/spreadsheet/SpreadsheetView.h"
 #include "frontend/TemplateHandler.h"
+#include "frontend/spreadsheet/SpreadsheetView.h"
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -50,7 +50,6 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &SpreadsheetDock::saveConfigAsTemplate);
 	connect(templateHandler, &TemplateHandler::info, this, &SpreadsheetDock::info);
 }
-
 
 void SpreadsheetDock::retranslateUi() {
 	// tooltip texts

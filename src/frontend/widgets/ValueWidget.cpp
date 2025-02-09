@@ -11,8 +11,8 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
-#include "frontend/widgets/TreeViewComboBox.h"
 #include "frontend/dockwidgets/BaseDock.h"
+#include "frontend/widgets/TreeViewComboBox.h"
 
 /*!
 	\class ValueWidget

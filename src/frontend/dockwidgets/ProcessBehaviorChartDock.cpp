@@ -226,7 +226,8 @@ void ProcessBehaviorChartDock::retranslateUi() {
 	ui.lNegativeLowerLimit->setToolTip(info);
 	ui.chbNegativeLowerLimit->setToolTip(info);
 
-	info = i18n("If checked, exact limits are calculated for every individual sample (\"stair-step limits\"), straight lines are drawn for the limits otherwise.");
+	info =
+		i18n("If checked, exact limits are calculated for every individual sample (\"stair-step limits\"), straight lines are drawn for the limits otherwise.");
 	ui.lExactLimits->setToolTip(info);
 	ui.chbExactLimits->setToolTip(info);
 }
@@ -288,7 +289,7 @@ void ProcessBehaviorChartDock::typeChanged(int index) {
 
 	// depending on the current type, show/hide the settings for the metric used to define the limits
 	visible = (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::XbarR
-				|| type == ProcessBehaviorChart::Type::R);
+			   || type == ProcessBehaviorChart::Type::R);
 	ui.lLimitsMetric->setVisible(visible);
 	ui.cbLimitsMetric->setVisible(visible);
 

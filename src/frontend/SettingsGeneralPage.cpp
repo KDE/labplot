@@ -243,7 +243,8 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.lNumberFormat->setToolTip(msg);
 	ui.cbNumberFormat->setToolTip(msg);
 	ui.cbNumberFormat->clear();
-	ui.cbNumberFormat->addItem(i18n("%1 (System, %2)", m_defaultSystemLocale.toString(1000.01), QLocale::languageToString(m_defaultSystemLocale.language())), static_cast<int>(QLocale::Language::AnyLanguage));
+	ui.cbNumberFormat->addItem(i18n("%1 (System, %2)", m_defaultSystemLocale.toString(1000.01), QLocale::languageToString(m_defaultSystemLocale.language())),
+							   static_cast<int>(QLocale::Language::AnyLanguage));
 	ui.cbNumberFormat->insertSeparator(1);
 	ui.cbNumberFormat->addItem(QLatin1String("1,000.01"), static_cast<int>(QLocale::Language::English));
 	ui.cbNumberFormat->addItem(QLatin1String("1.000,01"), static_cast<int>(QLocale::Language::German));

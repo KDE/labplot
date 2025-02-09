@@ -21,9 +21,9 @@
 #include <cmath>
 #include <gsl/gsl_cdf.h>
 
-// Include the updated nsl_stats functions.
+// Include the updated nsl_statistical_test functions.
 extern "C" {
-#include "backend/nsl/nsl_stats.h"
+#include "backend/nsl/nsl_statistical_test.h"
 }
 
 HypothesisTest::HypothesisTest(const QString& name)

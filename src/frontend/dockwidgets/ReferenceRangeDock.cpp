@@ -81,7 +81,7 @@ void ReferenceRangeDock::updateLocale() {
 	// TODO datetime
 }
 
-void ReferenceRangeDock::retranslateUi(){
+void ReferenceRangeDock::retranslateUi() {
 	CONDITIONAL_LOCK_RETURN;
 
 	ui.cbOrientation->clear();

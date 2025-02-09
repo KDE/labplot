@@ -11,8 +11,8 @@
 #define SETTINGSDIALOG_H
 
 #include "backend/core/Settings.h"
-#include <QLocale>
 #include <KPageDialog>
+#include <QLocale>
 
 class QAbstractButton;
 class SettingsGeneralPage;

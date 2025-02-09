@@ -29,7 +29,7 @@ class XYDifferentiationCurve : public XYAnalysisCurve {
 
 public:
 	struct DifferentiationData {
-		DifferentiationData() { };
+		DifferentiationData() {};
 
 		nsl_diff_deriv_order_type derivOrder{nsl_diff_deriv_order_first}; // order of differentiation
 		int accOrder{2}; // order of accuracy

@@ -20,12 +20,12 @@ class SettingsPage : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit SettingsPage(QWidget*){};
+	explicit SettingsPage(QWidget*) {};
 	~SettingsPage() override = default;
 
 	virtual QList<Settings::Type> applySettings() = 0;
 	virtual void restoreDefaults() = 0;
-	virtual void addSubPages(KPageWidgetItem*, KPageDialog*){
+	virtual void addSubPages(KPageWidgetItem*, KPageDialog*) {
 
 	};
 };

@@ -11,10 +11,10 @@
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/RunChart.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
-#include "frontend/widgets/TreeViewComboBox.h"
 #include "frontend/TemplateHandler.h"
 #include "frontend/widgets/LineWidget.h"
 #include "frontend/widgets/SymbolWidget.h"
+#include "frontend/widgets/TreeViewComboBox.h"
 
 #include <QFrame>
 

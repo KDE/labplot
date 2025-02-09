@@ -1,4 +1,5 @@
-add_executable(NSLStatsTest NSLStatsTest.cpp)
+add_executable(NSLStatsTest NSLStatsTest.cpp
+    NSLStatisticalTestTest.cpp)
 
 target_link_libraries(NSLStatsTest labplottest)
 

@@ -17,12 +17,6 @@ class NSLStatsTest : public NSLTest {
 
 private Q_SLOTS:
 	void testQuantile();
-	void testMannWhitney();
-	void testAnovaOneWay();
-	void testKruskalWallis();
-	void testLogRankTest();
-	void testIndependentT();
-	void testOneSampleT();
 	// performance
 	// void testPerformance();
 };

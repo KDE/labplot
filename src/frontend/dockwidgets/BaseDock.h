@@ -37,8 +37,8 @@ public:
 	enum class Units { Metric, Imperial };
 
 	virtual void retranslateUi() = 0;
-	virtual void updateLocale(){};
-	virtual void updateUnits(){};
+	virtual void updateLocale() {};
+	virtual void updateUnits() {};
 	static void spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue = NAN);
 
 	template<typename T>
@@ -104,10 +104,10 @@ protected:
 	static double roundSceneValue(double value, Units units = Units::Metric) {
 		if (units == Units::Metric)
 			return Worksheet::convertToSceneUnits(std::round(10. * Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Centimeter)) / 10.,
-				Worksheet::Unit::Centimeter);
+												  Worksheet::Unit::Centimeter);
 		else
 			return Worksheet::convertToSceneUnits(std::round(10. * Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Inch)) / 10.,
-				Worksheet::Unit::Inch);
+												  Worksheet::Unit::Inch);
 	}
 
 	virtual void updatePlotRangeList(); // used in worksheet element docks

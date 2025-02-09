@@ -8,11 +8,11 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
+#include "frontend/widgets/TreeViewComboBox.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/lib/macros.h"
-#include "frontend/widgets/TreeViewComboBox.h"
 
 #include <KLocalizedString>
 
@@ -93,10 +93,10 @@ void TreeViewComboBox::setModel(AspectTreeModel* model) {
 	overload to handle base class setModel()
  */
 void TreeViewComboBox::setModel(QAbstractItemModel* model) {
-    if (auto* aspectModel = qobject_cast<AspectTreeModel*>(model))
-        setModel(aspectModel);
-    else
-        QComboBox::setModel(model);
+	if (auto* aspectModel = qobject_cast<AspectTreeModel*>(model))
+		setModel(aspectModel);
+	else
+		QComboBox::setModel(model);
 }
 
 /*!
@@ -201,23 +201,24 @@ void TreeViewComboBox::setInvalid(bool invalid, const QString& tooltip) {
  * for the data source those top level aspects only that can have Column as a child.
  */
 QList<AspectType> TreeViewComboBox::plotColumnTopLevelClasses() {
-	return {AspectType::Folder,
-			AspectType::Workbook,
-			AspectType::Datapicker,
-			AspectType::DatapickerCurve,
-			AspectType::Spreadsheet,
-			AspectType::StatisticsSpreadsheet,
-			AspectType::LiveDataSource,
-			AspectType::Column,
-			AspectType::Worksheet,
-			AspectType::CartesianPlot,
-			AspectType::XYFitCurve,
-			AspectType::XYSmoothCurve,
-			AspectType::Notebook,
-			AspectType::MQTTClient, // All three must be listed, because they are parents of the column
-			AspectType::MQTTSubscription,
-			AspectType::MQTTTopic,
-			};
+	return {
+		AspectType::Folder,
+		AspectType::Workbook,
+		AspectType::Datapicker,
+		AspectType::DatapickerCurve,
+		AspectType::Spreadsheet,
+		AspectType::StatisticsSpreadsheet,
+		AspectType::LiveDataSource,
+		AspectType::Column,
+		AspectType::Worksheet,
+		AspectType::CartesianPlot,
+		AspectType::XYFitCurve,
+		AspectType::XYSmoothCurve,
+		AspectType::Notebook,
+		AspectType::MQTTClient, // All three must be listed, because they are parents of the column
+		AspectType::MQTTSubscription,
+		AspectType::MQTTTopic,
+	};
 }
 
 /*!

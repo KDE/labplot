@@ -135,7 +135,6 @@ private:
 	// hypothesis test
 	HypothesisTestDock* m_hypothesisTestDock{nullptr};
 
-
 #ifdef HAVE_CANTOR_LIBS
 	NotebookDock* m_notebookDock{nullptr};
 #endif

@@ -1940,11 +1940,15 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 
 	// Layout
 	ui.sbPaddingHorizontal->setValue(
-		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("HorizontalPadding"), m_plot->horizontalPadding()), m_units), m_worksheetUnit));
+		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("HorizontalPadding"), m_plot->horizontalPadding()), m_units),
+										 m_worksheetUnit));
 	ui.sbPaddingVertical->setValue(
-		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("VerticalPadding"), m_plot->verticalPadding()), m_units), m_worksheetUnit));
-	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("RightPadding"), m_plot->rightPadding()), m_units), m_worksheetUnit));
-	ui.sbPaddingBottom->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("BottomPadding"), m_plot->bottomPadding()), m_units), m_worksheetUnit));
+		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("VerticalPadding"), m_plot->verticalPadding()), m_units),
+										 m_worksheetUnit));
+	ui.sbPaddingRight->setValue(
+		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("RightPadding"), m_plot->rightPadding()), m_units), m_worksheetUnit));
+	ui.sbPaddingBottom->setValue(
+		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("BottomPadding"), m_plot->bottomPadding()), m_units), m_worksheetUnit));
 	ui.cbPaddingSymmetric->setChecked(group.readEntry(QStringLiteral("SymmetricPadding"), m_plot->symmetricPadding()));
 
 	// Area
@@ -1959,7 +1963,8 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 
 	borderLineWidget->loadConfig(group);
 	ui.sbBorderCornerRadius->setValue(
-		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("BorderCornerRadius"), plotArea->borderCornerRadius()), m_units), m_worksheetUnit));
+		Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry(QStringLiteral("BorderCornerRadius"), plotArea->borderCornerRadius()), m_units),
+										 m_worksheetUnit));
 }
 
 void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {

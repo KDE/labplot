@@ -10,9 +10,9 @@
 #include "ErrorBarWidget.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Settings.h"
-#include "frontend/widgets/TreeViewComboBox.h"
 #include "frontend/dockwidgets/BaseDock.h"
 #include "frontend/widgets/LineWidget.h"
+#include "frontend/widgets/TreeViewComboBox.h"
 
 #include <KConfigGroup>
 #include <QPainter>

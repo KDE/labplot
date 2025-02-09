@@ -10,7 +10,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/worksheet/Image.h"
@@ -29,8 +28,8 @@
 #include "backend/datapicker/Datapicker.h"
 
 #include "frontend/GuiObserver.h"
-#include "frontend/ProjectExplorer.h"
 #include "frontend/MainWin.h"
+#include "frontend/ProjectExplorer.h"
 #include "frontend/dockwidgets/AspectDock.h"
 #include "frontend/dockwidgets/AxisDock.h"
 #include "frontend/dockwidgets/BarPlotDock.h"

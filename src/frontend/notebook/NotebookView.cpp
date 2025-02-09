@@ -11,9 +11,9 @@
 #include "NotebookView.h"
 #include "backend/core/column/Column.h"
 #include "backend/notebook/Notebook.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "frontend/spreadsheet/PlotDataDialog.h"
 #include "frontend/spreadsheet/StatisticsDialog.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 #include <QActionGroup>
 #include <QHBoxLayout>

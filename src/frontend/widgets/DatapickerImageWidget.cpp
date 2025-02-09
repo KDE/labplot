@@ -14,8 +14,8 @@
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/ImageEditor.h"
 #include "frontend/GuiTools.h"
-#include "frontend/widgets/qxtspanslider.h"
 #include "frontend/widgets/SymbolWidget.h"
+#include "frontend/widgets/qxtspanslider.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -357,7 +357,8 @@ void DatapickerImageWidget::retranslateUi() {
 	gvSaturation->setToolTip(i18n("Select the range for the saturation.\nEverything outside of this range will be set to white."));
 	gvValue->setToolTip(i18n("Select the range for the value, the degree of lightness of the color.\nEverything outside of this range will be set to white."));
 	gvIntensity->setToolTip(i18n("Select the range for the intensity.\nEverything outside of this range will be set to white."));
-	gvForeground->setToolTip(i18n("Select the range for the colors that are not part of the background color.\nEverything outside of this range will be set to white."));
+	gvForeground->setToolTip(
+		i18n("Select the range for the colors that are not part of the background color.\nEverything outside of this range will be set to white."));
 }
 
 void DatapickerImageWidget::updateFileRelativePathCheckBoxEnable() {

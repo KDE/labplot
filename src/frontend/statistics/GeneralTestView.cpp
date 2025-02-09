@@ -10,22 +10,22 @@
 ***************************************************************************/
 
 #include "GeneralTestView.h"
-#include "backend/statistics/GeneralTest.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
+#include "backend/statistics/GeneralTest.h"
 #include "backend/statistics/TextEdit.h"
 
 #include <QFile>
-#include <QVBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
 #include <QPainter>
-#include <QPrinter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
-#include <QLabel>
-#include <QTableView>
-#include <QHeaderView>
+#include <QPrinter>
 #include <QPushButton>
 #include <QStandardItemModel>
+#include <QTableView>
+#include <QVBoxLayout>
 
 #include <KLocalizedString>
 
@@ -36,16 +36,15 @@
 */
 
 GeneralTestView::GeneralTestView(GeneralTest* test)
-	: QWidget(),
-	m_generalTest(test),
-	m_testName(new QLabel()),
-	m_statsTable(new TextEdit()),
-	m_summaryResults(new QWidget()),
-	m_inputStatsWidget(new QWidget()),
-	m_labelInputStatsTable(new QLabel()),
-	m_inputStatsTable(new QTableView()),
-	m_clearInputStats(new QPushButton()) {
-
+	: QWidget()
+	, m_generalTest(test)
+	, m_testName(new QLabel())
+	, m_statsTable(new TextEdit())
+	, m_summaryResults(new QWidget())
+	, m_inputStatsWidget(new QWidget())
+	, m_labelInputStatsTable(new QLabel())
+	, m_inputStatsTable(new QTableView())
+	, m_clearInputStats(new QPushButton()) {
 	// Set up the input statistics widget.
 	auto* inputStatsLayout = new QVBoxLayout(m_inputStatsWidget);
 	inputStatsLayout->addWidget(m_labelInputStatsTable);
@@ -70,10 +69,8 @@ GeneralTestView::GeneralTestView(GeneralTest* test)
 
 	auto* layout = new QVBoxLayout(this);
 	m_labelInputStatsTable->setText(QLatin1String("<h3>") + i18n("Statistic Table"));
-	m_labelInputStatsTable->setToolTip(i18n("Fill this table with pre-calculated statistic value and then press recalculate")
-									   + QLatin1String("<br><br>")
-									   + i18n("You can leave one or more columns empty if you feel they are not useful")
-									   + QLatin1String("</h3>"));
+	m_labelInputStatsTable->setToolTip(i18n("Fill this table with pre-calculated statistic value and then press recalculate") + QLatin1String("<br><br>")
+									   + i18n("You can leave one or more columns empty if you feel they are not useful") + QLatin1String("</h3>"));
 	m_clearInputStats->setText(i18n("Clear"));
 	m_clearInputStats->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 
@@ -173,15 +170,13 @@ void GeneralTestView::updateDisplay() {
 
 	m_summaryResults->setLayout(m_generalTest->getSummaryLayout());
 
-	if (m_inputStatsTable->model()->rowCount() > 0 &&
-		m_inputStatsTable->model()->columnCount() > 0)
+	if (m_inputStatsTable->model()->rowCount() > 0 && m_inputStatsTable->model()->columnCount() > 0)
 		m_inputStatsWidget->show();
 	else
 		m_inputStatsWidget->hide();
 }
 
-void GeneralTestView::exportDataToFile(const QString& path, bool exportHeader,
-									   const QString& separator, QLocale::Language language) const {
+void GeneralTestView::exportDataToFile(const QString& path, bool exportHeader, const QString& separator, QLocale::Language language) const {
 	Q_UNUSED(exportHeader);
 	Q_UNUSED(separator);
 	Q_UNUSED(language);
@@ -191,9 +186,13 @@ void GeneralTestView::exportDataToFile(const QString& path, bool exportHeader,
 	// File export logic goes here.
 }
 
-void GeneralTestView::exportDataToLaTeX(const QString& path, bool exportHeaders,
-										bool gridLines, bool captions, bool latexHeaders,
-										bool skipEmptyRows, bool exportEntire) const {
+void GeneralTestView::exportDataToLaTeX(const QString& path,
+										bool exportHeaders,
+										bool gridLines,
+										bool captions,
+										bool latexHeaders,
+										bool skipEmptyRows,
+										bool exportEntire) const {
 	Q_UNUSED(exportHeaders);
 	Q_UNUSED(gridLines);
 	Q_UNUSED(captions);

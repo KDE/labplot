@@ -42,7 +42,7 @@ Boston, MA  02110-1301  USA
 #include <gsl/gsl_math.h>
 #include <math.h>
 extern "C" {
-#include "backend/nsl/nsl_stats.h"
+#include "backend/nsl/nsl_statistical_test.h"
 }
 
 GeneralTest::GeneralTest(const QString& name, const AspectType& type)

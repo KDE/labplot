@@ -494,7 +494,6 @@ void XYCurveDock::retranslateUi() {
 	ui.cbLineType->addItem(i18n("Akima-spline (Natural)"));
 	ui.cbLineType->addItem(i18n("Akima-spline (Periodic)"));
 
-
 	// formats for numeric values
 	ui.cbValuesNumericFormat->clear();
 	ui.cbValuesNumericFormat->addItem(i18n("Decimal"), QVariant('f'));

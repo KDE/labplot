@@ -2100,8 +2100,8 @@ void AxisDock::loadConfig(KConfig& config) {
 	const auto majorTickStartValue = group.readEntry(QStringLiteral("MajorTickStartValue"), m_axis->majorTickStartValue());
 	ui.sbMajorTickStartValue->setValue(majorTickStartValue);
 	ui.sbMajorTickStartDateTime->setMSecsSinceEpochUTC(majorTickStartValue);
-	ui.sbMajorTicksLength->setValue(std::round(
-		Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("MajorTicksLength"), m_axis->majorTicksLength()), Worksheet::Unit::Point)));
+	ui.sbMajorTicksLength->setValue(
+		std::round(Worksheet::convertFromSceneUnits(group.readEntry(QStringLiteral("MajorTicksLength"), m_axis->majorTicksLength()), Worksheet::Unit::Point)));
 	majorTicksLineWidget->loadConfig(group);
 
 	// Minor ticks
@@ -2113,7 +2113,8 @@ void AxisDock::loadConfig(KConfig& config) {
 		ui.sbMinorTicksSpacingNumeric->setValue(value);
 	else
 		dtsbMinorTicksIncrement->setValue(value);
-	ui.sbMinorTicksLength->setValue(std::round(Worksheet::convertFromSceneUnits(group.readEntry("MinorTicksLength", m_axis->minorTicksLength()), Worksheet::Unit::Point)));
+	ui.sbMinorTicksLength->setValue(
+		std::round(Worksheet::convertFromSceneUnits(group.readEntry("MinorTicksLength", m_axis->minorTicksLength()), Worksheet::Unit::Point)));
 	minorTicksLineWidget->loadConfig(group);
 
 	// Extra ticks
