@@ -746,7 +746,6 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 		m_DataContainer.resize(newRowCount); // reserve to not having to reallocate all the time
 	} catch (std::bad_alloc&) { return Status::NotEnoughMemory; }
 
-
 	auto handleError = [this](Status status) {
 		setLastError(status);
 		m_DataContainer.resize(0);

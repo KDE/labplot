@@ -42,7 +42,7 @@ public:
 		QVector<double> xRange{0., 0.}; // x range for integration
 	};
 	struct FilterResult : XYAnalysisCurve::Result {
-		FilterResult() {};
+		FilterResult(){};
 	};
 
 	explicit XYFourierFilterCurve(const QString& name);

@@ -308,7 +308,6 @@ void NSLDFTTest::testPerformance_onesided() {
 
 	QBENCHMARK { nsl_dft_transform(data, 1, NN, ONESIDED, nsl_dft_result_real); }
 
-
 	delete[] data;
 }
 
@@ -319,7 +318,6 @@ void NSLDFTTest::testPerformance_twosided() {
 		data[i] = 1.;
 
 	QBENCHMARK { nsl_dft_transform(data, 1, NN, TWOSIDED, nsl_dft_result_real); }
-
 
 	delete[] data;
 }

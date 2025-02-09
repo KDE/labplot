@@ -41,7 +41,7 @@ public:
 		QVector<double> xRange{0., 0.}; // x range for integration
 	};
 	struct DataReductionResult : public XYAnalysisCurve::Result {
-		DataReductionResult() {};
+		DataReductionResult(){};
 
 		size_t npoints{0};
 		double posError{0};
