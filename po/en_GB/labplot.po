@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-07 00:38+0000\n"
+"POT-Creation-Date: 2025-02-09 00:37+0000\n"
 "PO-Revision-Date: 2024-11-23 12:07+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -2309,42 +2309,42 @@ msgstr "No column available"
 msgid "Unsupported file type, neither histogram no tree."
 msgstr "Unsupported file type, neither histogram no tree."
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1501
+#: src/backend/datasources/filters/ROOTFilter.cpp:1506
 #, kde-format
 msgid "Not a ROOT file"
 msgstr "Not a ROOT file"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1506
+#: src/backend/datasources/filters/ROOTFilter.cpp:1511
 #, kde-format
 msgid "File format version: %1"
 msgstr "File format version: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1514
+#: src/backend/datasources/filters/ROOTFilter.cpp:1519
 #, kde-format
 msgid "FREE data record size: %1 bytes"
 msgstr "FREE data record size: %1 bytes"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1516
+#: src/backend/datasources/filters/ROOTFilter.cpp:1521
 #, kde-format
 msgid "Number of free data records: %1"
 msgstr "Number of free data records: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1518
+#: src/backend/datasources/filters/ROOTFilter.cpp:1523
 #, kde-format
 msgid "TNamed size: %1 bytes"
 msgstr "TNamed size: %1 bytes"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1520
+#: src/backend/datasources/filters/ROOTFilter.cpp:1525
 #, kde-format
 msgid "Size of file pointers: %1 bytes"
 msgstr "Size of file pointers: %1 bytes"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1525
+#: src/backend/datasources/filters/ROOTFilter.cpp:1530
 #, kde-format
 msgid "Compression level and algorithm: %1"
 msgstr "Compression level and algorithm: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1530
+#: src/backend/datasources/filters/ROOTFilter.cpp:1535
 #, kde-format
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "Size of TStreamerInfo record: %1 bytes"
