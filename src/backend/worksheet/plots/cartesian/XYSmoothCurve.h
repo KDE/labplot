@@ -29,7 +29,7 @@ class XYSmoothCurve : public XYAnalysisCurve {
 
 public:
 	struct SmoothData {
-		SmoothData() {};
+		SmoothData(){};
 
 		nsl_smooth_type type{nsl_smooth_type_moving_average}; // type of smoothing
 		size_t points{5}; // number of points

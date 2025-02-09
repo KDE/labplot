@@ -29,7 +29,7 @@ class XYDataReductionCurve : public XYAnalysisCurve {
 
 public:
 	struct DataReductionData {
-		DataReductionData() {};
+		DataReductionData(){};
 
 		nsl_geom_linesim_type type{nsl_geom_linesim_type_douglas_peucker_variant}; // type of simplification
 		bool autoTolerance{true}; // automatic tolerance

@@ -89,9 +89,8 @@ void NSLSFWindowTest::testPerformance_triangle() {
 	const int N = 1e6;
 	double* data = new double[N];
 
-	QBENCHMARK {
-		nsl_sf_apply_window(data, N, nsl_sf_window_triangle);
-	}
+	QBENCHMARK { nsl_sf_apply_window(data, N, nsl_sf_window_triangle); }
+
 	delete[] data;
 }
 
@@ -99,9 +98,8 @@ void NSLSFWindowTest::testPerformance_welch() {
 	const int N = 1e6;
 	double* data = new double[N];
 
-	QBENCHMARK {
-		nsl_sf_apply_window(data, N, nsl_sf_window_welch);
-	}
+	QBENCHMARK { nsl_sf_apply_window(data, N, nsl_sf_window_flat_top); }
+
 	delete[] data;
 }
 

@@ -28,7 +28,7 @@ class XYFourierFilterCurve : public XYAnalysisCurve {
 
 public:
 	struct FilterData {
-		FilterData() {};
+		FilterData(){};
 
 		nsl_filter_type type{nsl_filter_type_low_pass};
 		nsl_filter_form form{nsl_filter_form_ideal};

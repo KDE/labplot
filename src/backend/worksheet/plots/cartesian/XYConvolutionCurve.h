@@ -28,7 +28,7 @@ class XYConvolutionCurve : public XYAnalysisCurve {
 
 public:
 	struct ConvolutionData {
-		ConvolutionData() {};
+		ConvolutionData(){};
 
 		double samplingInterval{1.}; // sampling interval used when no x-axis is present
 		nsl_conv_kernel_type kernel{nsl_conv_kernel_avg}; // kernel to use when no response selected
