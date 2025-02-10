@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-09 00:37+0000\n"
-"PO-Revision-Date: 2025-01-04 07:27+0100\n"
+"PO-Revision-Date: 2025-02-09 08:30+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 24.12.0\n"
+"X-Generator: Lokalize 24.12.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -120,10 +120,9 @@ msgid "%1: remove all children"
 msgstr "%1: usuń wszystkie podrzędne"
 
 #: src/backend/core/AbstractAspect.cpp:752
-#, fuzzy, kde-format
-#| msgid "%1: pasted '%2'"
+#, kde-format
 msgid "%1: pasted"
-msgstr "%1: wklejone '%2'"
+msgstr "%1: wklejone"
 
 #: src/backend/core/AbstractAspect.cpp:845
 #, kde-format
@@ -11735,10 +11734,9 @@ msgid "Not a HDF5 file: %1"
 msgstr "To nie jest plik HDF5: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2229
-#, fuzzy, kde-format
-#| msgid "Reading from file %1 failed."
+#, kde-format
 msgid "Parsing ODS file %1 failed."
-msgstr "Nie udało się odczytać z pliku %1."
+msgstr "Nie udało się przetworzyć pliku ODS %1."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2641
 #, kde-format
@@ -16114,13 +16112,12 @@ msgstr "Imperialne"
 #, kde-format
 msgid ""
 "Characters for the decimal and group separators defining the number format"
-msgstr ""
+msgstr "Znaki znaków dziesiętnych i grup określające zapis liczb"
 
 #: src/frontend/SettingsGeneralPage.cpp:246
-#, fuzzy, kde-format
-#| msgid "%1 (%2%)"
+#, kde-format
 msgid "%1 (System, %2)"
-msgstr "%1 (%2%)"
+msgstr "%1 (System, %2)"
 
 #: src/frontend/SettingsGeneralPage.cpp:255
 #, kde-format
@@ -16128,6 +16125,8 @@ msgid ""
 "Use the hyphen sign instead of the minus sign for negative numbers shown on "
 "the worksheet"
 msgstr ""
+"Użyj znaku myślnika zamiast minusa dla liczb ujemnych pokazywanych na "
+"arkuszu pracy"
 
 #: src/frontend/SettingsGeneralPage.cpp:259
 #, kde-format
@@ -22969,17 +22968,15 @@ msgstr "Samozapis:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
 #: src/frontend/ui/settingsgeneralpage.ui:46
-#, fuzzy, kde-format
-#| msgid "Dock widget placement:"
+#, kde-format
 msgid "Dock Widget Placement:"
 msgstr "Umieszczenie doku:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
 #: src/frontend/ui/settingsgeneralpage.ui:60
-#, fuzzy, kde-format
-#| msgid "Number format:"
+#, kde-format
 msgid "Number Format:"
-msgstr "Format liczb:"
+msgstr "Zapis liczb:"
 
 #. i18n: ectx: property (text), widget (QLabel, lStartup)
 #: src/frontend/ui/settingsgeneralpage.ui:67
@@ -23026,8 +23023,7 @@ msgstr "Zapisz w zgodnym formacie"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
 #: src/frontend/ui/settingsgeneralpage.ui:107
-#, fuzzy, kde-format
-#| msgid "Number options:"
+#, kde-format
 msgid "Number Options:"
 msgstr "Ustawienia liczb:"
 
@@ -23121,7 +23117,7 @@ msgstr "Wyrażenia:"
 #: src/frontend/ui/settingsgeneralpage.ui:439
 #, kde-format
 msgid "Use Hyphen '-' instead of Minus '–'"
-msgstr ""
+msgstr "Użyj myślnika '-' zamiast minusa '–'"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
