@@ -119,10 +119,9 @@ msgid "%1: remove all children"
 msgstr "%1: odstranit všechny potomky"
 
 #: src/backend/core/AbstractAspect.cpp:752
-#, fuzzy, kde-format
-#| msgid "%1: pasted '%2'"
+#, kde-format
 msgid "%1: pasted"
-msgstr "%1: Vloženo '%2'"
+msgstr ""
 
 #: src/backend/core/AbstractAspect.cpp:845
 #, kde-format
@@ -1098,16 +1097,14 @@ msgid "Unable to determine the separator"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:204
-#, fuzzy, kde-format
-#| msgid "Number of columns: %1"
+#, kde-format
 msgid "Invalid number of data columns"
-msgstr "Počet sloupců: %1"
+msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:206
-#, fuzzy, kde-format
-#| msgid "Number of columns: %1"
+#, kde-format
 msgid "Invalid number of column names"
-msgstr "Počet sloupců: %1"
+msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:208
 #, kde-format
@@ -1120,16 +1117,14 @@ msgid "Insufficient memory (RAM)"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:212
-#, fuzzy, kde-format
-#| msgid "Unable to open file:"
+#, kde-format
 msgid "Unable to parse header"
-msgstr "Nelze otevřít soubor:"
+msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:214
-#, fuzzy, kde-format
-#| msgid "Live data source%1"
+#, kde-format
 msgid "Unsupported data source"
-msgstr "Zdroj měnících se dat %1"
+msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:218
 #, kde-format
@@ -1157,16 +1152,14 @@ msgid "Separator detection not allowed"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:228
-#, fuzzy, kde-format
-#| msgid "Decimal separator:"
+#, kde-format
 msgid "Invalid separator"
-msgstr "Oddělovač desetinných míst:"
+msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:230
-#, fuzzy, kde-format
-#| msgid "Failed to initialize %1."
+#, kde-format
 msgid "Filter not initialized"
-msgstr "Selhala inicializace %1."
+msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:232
 #, kde-format
@@ -1184,11 +1177,9 @@ msgid "No data destination set"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:238
-#, fuzzy, kde-format
-#| msgid "column"
-#| msgid_plural "columns"
+#, kde-format
 msgid "No columns"
-msgstr "sloupec"
+msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:240
 #, kde-format
@@ -2465,10 +2456,9 @@ msgid "Device already opened."
 msgstr ""
 
 #: src/backend/datasources/LiveDataSource.cpp:717
-#, fuzzy, kde-format
-#| msgid "Device is not opened."
+#, kde-format
 msgid "Device is not open."
-msgstr "Zařízení není otevřeno."
+msgstr ""
 
 #: src/backend/datasources/LiveDataSource.cpp:720
 #, kde-format
@@ -2521,10 +2511,9 @@ msgid "%1: Import from %2"
 msgstr "%1: Importovat z %2"
 
 #: src/backend/gsl/constants.cpp:15
-#, fuzzy, kde-format
-#| msgid "Boltzmann constant"
+#, kde-format
 msgid "Programming constants"
-msgstr "Boltzmannova konstanta"
+msgstr ""
 
 #: src/backend/gsl/constants.cpp:17
 #, kde-format
@@ -3627,10 +3616,9 @@ msgid "Unknown Function"
 msgstr "Neznámá funkce"
 
 #: src/backend/gsl/functions.cpp:241
-#, fuzzy, kde-format
-#| msgid "Delete variable"
+#, kde-format
 msgid "Cell (index; variable)"
-msgstr "Smazat proměnnou"
+msgstr ""
 
 #: src/backend/gsl/functions.cpp:242
 #, kde-format
@@ -6298,10 +6286,9 @@ msgid "Failed to open '%1' for writing."
 msgstr "Nelze otevřít '%1' pro zápis."
 
 #: src/backend/note/Note.cpp:134
-#, fuzzy, kde-format
-#| msgid "%1: set height"
+#, kde-format
 msgid "%1: set text"
-msgstr "%1: nastavit výšku"
+msgstr ""
 
 #: src/backend/note/Note.cpp:141 src/backend/worksheet/TextLabel.cpp:260
 #: src/backend/worksheet/TextLabel.cpp:299
@@ -6310,16 +6297,14 @@ msgid "%1: set background color"
 msgstr "%1: nastavit barvu pozadí"
 
 #: src/backend/note/Note.cpp:148
-#, fuzzy, kde-format
-#| msgid "%1: set background color"
+#, kde-format
 msgid "%1: set text color"
-msgstr "%1: nastavit barvu pozadí"
+msgstr ""
 
 #: src/backend/note/Note.cpp:155
-#, fuzzy, kde-format
-#| msgid "%1: set font"
+#, kde-format
 msgid "%1: set text font"
-msgstr "%1: nastavit písmo"
+msgstr ""
 
 #: src/backend/note/Note.cpp:197
 #, kde-format
@@ -8383,10 +8368,9 @@ msgid "Add New"
 msgstr "Přidat nové"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:565
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Formula Plot"
-msgstr "Vzorec:"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:566
 #, kde-format
@@ -8394,10 +8378,9 @@ msgid "Add a new xy-plot that is defined via a mathematical expression."
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:573
-#, fuzzy, kde-format
-#| msgid "Analysis"
+#, kde-format
 msgid "Analysis Plots"
-msgstr "Analýza"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:609
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:186
@@ -8413,40 +8396,34 @@ msgid "Theme"
 msgstr "Motiv"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:672
-#, fuzzy, kde-format
-#| msgid "Plots"
+#, kde-format
 msgid "Line Plots"
-msgstr "Grafy"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:678
-#, fuzzy, kde-format
-#| msgid "Horizontal"
+#, kde-format
 msgid "Horizontal Step"
-msgstr "Vodorovný"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:682
-#, fuzzy, kde-format
-#| msgid "Vertical Line"
+#, kde-format
 msgid "Vertical Step"
-msgstr "Svislý oddělovač"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:686
-#, fuzzy, kde-format
-#| msgid "Interpolate"
+#, kde-format
 msgid "Spline Interpolated"
-msgstr "Interpolovat"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:693
-#, fuzzy, kde-format
-#| msgid "Bar Plot"
+#, kde-format
 msgid "Scatter Plots"
-msgstr "Sloupcový graf"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:695
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgid "Scatter"
-msgstr "Vzorek"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lYError)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:699
@@ -8456,10 +8433,9 @@ msgid "Y Error"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:703
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgid "XY Error"
-msgstr "Chyba"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:710
 #, kde-format
@@ -8467,22 +8443,19 @@ msgid "Line and Symbol Plots"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:712
-#, fuzzy, kde-format
-#| msgid "Symbol"
+#, kde-format
 msgid "Line + Symbol"
-msgstr "Symbol"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:716
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "2 Point Segment"
-msgstr "Segmenty"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:720
-#, fuzzy, kde-format
-#| msgid "Segments"
+#, kde-format
 msgid "3 Point Segment"
-msgstr "Segmenty"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:727
 #, kde-format
@@ -8823,10 +8796,9 @@ msgid "%1: set font"
 msgstr "%1: nastavit písmo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:207
-#, fuzzy, kde-format
-#| msgid "%1: set background color"
+#, kde-format
 msgid "%1: use plot's color"
-msgstr "%1: nastavit barvu pozadí"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:214
 #: src/backend/worksheet/TextLabel.cpp:347
@@ -9067,10 +9039,9 @@ msgid "%1: change negative lower limit"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:446
-#, fuzzy, kde-format
-#| msgid "%1: change comment"
+#, kde-format
 msgid "%1: change exact limits"
-msgstr "%1: změnit komentář"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:604
 #, kde-format
@@ -10140,16 +10111,14 @@ msgid "System:"
 msgstr "Systém:"
 
 #: src/frontend/AboutDialog.cpp:164
-#, fuzzy, kde-format
-#| msgid "Locale: "
+#, kde-format
 msgid "Locale:"
-msgstr "Lokalizace: "
+msgstr ""
 
 #: src/frontend/AboutDialog.cpp:165
-#, fuzzy, kde-format
-#| msgid "Number options:"
+#, kde-format
 msgid "Number Settings:"
-msgstr "Volby čísel:"
+msgstr ""
 
 #: src/frontend/AboutDialog.cpp:165
 #, kde-format
@@ -10172,16 +10141,14 @@ msgid "C++ Compiler: "
 msgstr "Kompilátor C++: "
 
 #: src/frontend/AboutDialog.cpp:182
-#, fuzzy, kde-format
-#| msgid "C++ Compiler: "
+#, kde-format
 msgid "C++ Compiler Flags:"
-msgstr "Kompilátor C++: "
+msgstr ""
 
 #: src/frontend/AboutDialog.cpp:186
-#, fuzzy, kde-format
-#| msgid "Standard Mathematical Functions"
+#, kde-format
 msgid "Frontend to Mathematical Applications"
-msgstr "Standardní matematické funkce"
+msgstr ""
 
 #: src/frontend/AboutDialog.cpp:188 src/frontend/AboutDialog.cpp:193
 #: src/frontend/AboutDialog.cpp:198 src/frontend/AboutDialog.cpp:203
@@ -10231,10 +10198,9 @@ msgid "High-performance data management and storage suite"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:217
-#, fuzzy, kde-format
-#| msgid "Syntax Highlighting"
+#, kde-format
 msgid "Syntax highlighting engine"
-msgstr "Zvýrazňování syntaxe"
+msgstr ""
 
 #: src/frontend/AboutDialog.cpp:222
 #, kde-format
@@ -10242,10 +10208,9 @@ msgid "Support collecting feedback from users"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:227
-#, fuzzy, kde-format
-#| msgid "Complementary error function"
+#, kde-format
 msgid "Complex error and related functions"
-msgstr "Doplňková chybová funkce"
+msgstr ""
 
 #: src/frontend/AboutDialog.cpp:232
 #, kde-format
@@ -10313,10 +10278,9 @@ msgid "Read (and write) data sets from SAS, Stata, and SPSS"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:295
-#, fuzzy, kde-format
-#| msgid "Vector Binary Logfile (BLF)"
+#, kde-format
 msgid "Binary Log File (BLF) file support"
-msgstr "Vector Binary Logfile (BLF)"
+msgstr ""
 
 #: src/frontend/AboutDialog.cpp:312
 #, kde-format
@@ -10730,10 +10694,9 @@ msgid "%1 or %2"
 msgstr "%1 nebo %2"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:252
-#, fuzzy, kde-format
-#| msgid "File not found"
+#, kde-format
 msgid "Datatype not found: %1"
-msgstr "Soubor nenalezen"
+msgstr ""
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
@@ -11574,10 +11537,9 @@ msgid "Preview: Failed to connect to TCP socket - %1"
 msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1880
-#, fuzzy, kde-format
-#| msgid "Error: %1"
+#, kde-format
 msgid "Parse Error: %1"
-msgstr "Chyba: %1"
+msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1882
 #, kde-format
@@ -14293,11 +14255,9 @@ msgid "Discuss on Mastodon:"
 msgstr ""
 
 #: src/frontend/LabPlot.cpp:68
-#, fuzzy, kde-format
-#| msgctxt "@info:credit"
-#| msgid "Developer"
+#, kde-format
 msgid "Development:"
-msgstr "Vývojář"
+msgstr ""
 
 #: src/frontend/LabPlot.cpp:69
 #, kde-format
@@ -14312,10 +14272,9 @@ msgid ""
 msgstr ""
 
 #: src/frontend/LabPlot.cpp:75
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2024"
+#, kde-format
 msgid "(c) 2007-2025 LabPlot authors"
-msgstr "(c) 2007-2024"
+msgstr ""
 
 #: src/frontend/LabPlot.cpp:77
 #, kde-format
@@ -14823,10 +14782,9 @@ msgid "Color Scheme"
 msgstr "Barevné schéma"
 
 #: src/frontend/MainWin.cpp:1000
-#, fuzzy, kde-format
-#| msgid "The current project %1 has been modified. Do you want to save it?"
+#, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
-msgstr "Současný projekt %1 byl změněn. Chcete jej uložit?"
+msgstr ""
 
 #: src/frontend/MainWin.cpp:1001
 #, kde-format
@@ -17663,10 +17621,9 @@ msgid "Selected 1: %1 rows, %2 columns"
 msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3772
-#, fuzzy, kde-format
-#| msgid "Select All"
+#, kde-format
 msgid "Selected: %1 cells"
-msgstr "Vybrat vše"
+msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3791
 #, kde-format
@@ -17726,10 +17683,9 @@ msgid ", "
 msgstr ", "
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3801
-#, fuzzy, kde-format
-#| msgid "Selected: %1 %2 , %3 %4%5 %6 %7 %8"
+#, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
-msgstr "Vybráno: %1 %2 , %3 %4%5 %6 %7 %8"
+msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3811
 #, kde-format
@@ -18706,10 +18662,9 @@ msgstr "Formát data a času:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:43
-#, fuzzy, kde-format
-#| msgid "Skip empty parts"
+#, kde-format
 msgid "Skip empty Parts"
-msgstr "Přeskočit prázdné části"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbConvertNaNToZero)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:50
@@ -18721,10 +18676,9 @@ msgstr "Převést NaN na 0"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnMode)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:73
-#, fuzzy, kde-format
-#| msgid "Column labels"
+#, kde-format
 msgid "Column Datatypes:"
-msgstr "Popisky sloupců"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:80
@@ -18767,10 +18721,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:194
-#, fuzzy, kde-format
-#| msgid "Years"
+#, kde-format
 msgid "Year Base:"
-msgstr "Roky"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:201
@@ -20719,10 +20672,9 @@ msgstr "Vodor. zarov.:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUsePlotColor)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:463
-#, fuzzy, kde-format
-#| msgid "Font Color:"
+#, kde-format
 msgid "Plot's Color:"
-msgstr "Barva písma:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:552
@@ -21029,10 +20981,9 @@ msgstr "Rozsah zákresu:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabKDE)
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:210
-#, fuzzy, kde-format
-#| msgid "Estimation"
+#, kde-format
 msgid "Estimation Line"
-msgstr "Odhad"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bUpdateNow)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:67
@@ -22613,10 +22564,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
 #: src/frontend/ui/settingsgeneralpage.ui:60
-#, fuzzy, kde-format
-#| msgid "Number format:"
+#, kde-format
 msgid "Number Format:"
-msgstr "Číselný formát:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lStartup)
 #: src/frontend/ui/settingsgeneralpage.ui:67
@@ -22656,10 +22606,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
 #: src/frontend/ui/settingsgeneralpage.ui:107
-#, fuzzy, kde-format
-#| msgid "Number options:"
+#, kde-format
 msgid "Number Options:"
-msgstr "Volby čísel:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lUnits)
 #: src/frontend/ui/settingsgeneralpage.ui:114
@@ -24516,71 +24465,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Nelze otevřít soubor:"
-
-#~ msgid "Data Type:"
-#~ msgstr "Datový typ:"
-
-#~ msgid "Dot (.)"
-#~ msgstr "Tečka (.)"
-
-#~ msgid "Comma (,)"
-#~ msgstr "Čárka (,)"
-
-#~ msgid "Arabic (٫)"
-#~ msgstr "Arabsky (٫)"
-
-#, fuzzy
-#~| msgid "Executable: %1"
-#~ msgid "Executable Path:"
-#~ msgstr "Program: %1"
-
-#, fuzzy
-#~| msgid "Count"
-#~ msgid "Discount"
-#~ msgstr "Počet"
-
-#, fuzzy
-#~| msgid "User Feedback"
-#~ msgid "KUserfeedback"
-#~ msgstr "Zpětná vazba uživatele"
-
-#, fuzzy
-#~| msgid "Syntax Highlighting"
-#~ msgid "KSyntaxHighlighting"
-#~ msgstr "Zvýrazňování syntaxe"
-
-#, fuzzy
-#~| msgid "Serial Port"
-#~ msgid "Qt SerialPort"
-#~ msgstr "Sériový port"
-
-#, fuzzy
-#~| msgid "Ready"
-#~ msgid "ReadStat"
-#~ msgstr "Připraven"
-
-#, fuzzy
-#~| msgid "Equation"
-#~ msgid "Matio"
-#~ msgstr "Rovnice"
-
-#, fuzzy
-#~| msgid "MCAP Data"
-#~ msgid "MCAP"
-#~ msgstr "Data MCAP"
-
-#, fuzzy
-#~| msgid "Vectors:"
-#~ msgid "Vector BLF"
-#~ msgstr "Vektory:"
-
-#, fuzzy
-#~| msgid "Number of lines: %1"
-#~ msgid "Number of elements in vector x"
-#~ msgstr "Počet řádků: %1"
-
-#~ msgid "Value %1"
-#~ msgstr "Hodnota %1"
-
-#~ msgid "Continue reading"
-#~ msgstr "Pokračovat ve čtení"
