@@ -370,6 +370,7 @@ void LiveDataSource::setHost(const QString& host) {
 		m_host = QStringLiteral("127.0.0.1");
 	else
 		m_host = host.simplified();
+	qDebug()<<"setting host " << host;
 	initDevice();
 }
 
