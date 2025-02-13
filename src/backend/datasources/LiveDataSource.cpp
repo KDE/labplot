@@ -476,7 +476,8 @@ void LiveDataSource::readOnUpdate() {
 }
 
 void LiveDataSource::initDevice() {
-	DEBUG("	Preparing device: update type = " << ENUM_TO_STRING(LiveDataSource, UpdateType, m_updateType));
+	// DEBUG("	Preparing device: update type = " << ENUM_TO_STRING(LiveDataSource, UpdateType, m_updateType));
+	qDebug()<<"initDevice";
 	switch (m_sourceType) {
 	case SourceType::FileOrPipe:
 		delete m_device;
@@ -486,7 +487,9 @@ void LiveDataSource::initDevice() {
 		if (!m_tcpSocket)
 			m_tcpSocket = new QTcpSocket(this);
 		m_device = m_tcpSocket;
+		qDebug()<<"tcp socket " << m_tcpSocket;
 		m_tcpSocket->abort();
+		qDebug()<<"connectToHost";
 		m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
 
 		connect(m_tcpSocket, &QTcpSocket::readyRead, this, &LiveDataSource::readyRead);
