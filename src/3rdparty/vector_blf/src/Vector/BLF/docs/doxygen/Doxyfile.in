@@ -1,0 +1,20 @@
+# SPDX-FileCopyrightText: 2013-2021 Tobias Lorenz <tobias.lorenz@gmx.net>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+PROJECT_NAME           = "Vector BLF"
+OUTPUT_DIRECTORY       = @PROJECT_BINARY_DIR@/src/Vector/BLF/docs/doxygen
+STRIP_FROM_PATH        = @PROJECT_SOURCE_DIR@/src/Vector/BLF/
+BUILTIN_STL_SUPPORT    = YES
+INPUT                  = @PROJECT_SOURCE_DIR@/src/Vector/BLF/
+GENERATE_HTMLHELP      = @DOXYGEN_GENERATE_HTMLHELP@
+HHC_LOCATION           = "@HTML_HELP_COMPILER@"
+GENERATE_TREEVIEW      = @DOXYGEN_GENERATE_TREEVIEW@
+GENERATE_LATEX         = NO
+GENERATE_MAN           = @DOXYGEN_GENERATE_MAN@
+GENERATE_TAGFILE       = doxygen.tag
+HAVE_DOT               = @GRAPHVIZ_DOT_FOUND@
+UML_LOOK               = YES
+INTERACTIVE_SVG        = YES
+DOT_PATH               = "@GRAPHVIZ_DOT_PATH@"
+DOT_MULTI_TARGETS      = YES

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : main function
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2008-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2008-2016 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -19,9 +19,15 @@
 #include <KColorSchemeManager>
 #include <KConfigGroup>
 #include <KCrash>
+#include <KIconTheme>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <kcoreaddons_version.h>
+
+#define HAVE_STYLE_MANAGER __has_include(<KStyleManager>)
+#if HAVE_STYLE_MANAGER
+#include <KStyleManager>
+#endif
 
 #include <QApplication>
 #include <QCommandLineParser>
@@ -36,7 +42,22 @@
 #endif
 
 int main(int argc, char* argv[]) {
+	// trigger initialisation of proper icon theme
+	KIconTheme::initTheme();
+
 	QApplication app(argc, argv);
+
+#if HAVE_STYLE_MANAGER
+	//trigger initialisation of proper application style
+	KStyleManager::initStyle();
+#else
+	// For Windows and macOS: use Breeze if available
+	// Of all tested styles that works the best for us
+#if defined(Q_OS_MACOS) || defined(Q_OS_WIN)
+	QApplication::setStyle(QStringLiteral("breeze"));
+#endif
+#endif
+
 	KLocalizedString::setApplicationDomain("labplot");
 
 	QString systemInfo{AboutDialog::systemInfo()};
@@ -81,6 +102,22 @@ int main(int argc, char* argv[]) {
 	aboutData.setDesktopFileName(QStringLiteral("org.kde.labplot"));
 	aboutData.setProgramLogo(QIcon::fromTheme(QStringLiteral("labplot")));
 
+	const auto& group = Settings::settingsGeneral();
+	enableInfoTrace(group.readEntry<bool>(QLatin1String("InfoTrace"), false));
+	enableDebugTrace(group.readEntry<bool>(QLatin1String("DebugTrace"), false));
+	enablePerfTrace(group.readEntry<bool>(QLatin1String("PerfTrace"), false));
+
+#ifdef _WIN32
+	// enable debugging on console
+	if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+		freopen("CONOUT$", "w", stdout);
+		freopen("CONOUT$", "w", stderr);
+	}
+#endif
+	INFO("INFO messages enabled")
+	DEBUG("DEBUG debugging enabled")
+	QDEBUG("QDEBUG debugging enabled")
+
 	// components
 	for (auto c: AboutDialog::components())
 		aboutData.addComponent(c.at(0), c.at(1), c.at(2), c.at(3));
@@ -89,11 +126,6 @@ int main(int argc, char* argv[]) {
 	KAboutData::setApplicationData(aboutData);
 
 	KCrash::initialize();
-
-	const auto& group = Settings::settingsGeneral();
-	enableInfoTrace(group.readEntry<bool>(QLatin1String("InfoTrace"), false));
-	enableDebugTrace(group.readEntry<bool>(QLatin1String("DebugTrace"), false));
-	enablePerfTrace(group.readEntry<bool>(QLatin1String("PerfTrace"), false));
 
 	QCommandLineParser parser;
 
@@ -143,17 +175,6 @@ int main(int argc, char* argv[]) {
 	// TODO: redesign/remove this
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
 	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
-
-#ifdef _WIN32
-	// enable debugging on console
-	if (AttachConsole(ATTACH_PARENT_PROCESS)) {
-		freopen("CONOUT$", "w", stdout);
-		freopen("CONOUT$", "w", stderr);
-	}
-#endif
-	INFO("INFO messages enabled")
-	DEBUG("DEBUG debugging enabled")
-	QDEBUG("QDEBUG debugging enabled")
 
 	INFO("Current path: " << STDSTRING(QDir::currentPath()))
 	const QString applicationPath = QCoreApplication::applicationDirPath();
