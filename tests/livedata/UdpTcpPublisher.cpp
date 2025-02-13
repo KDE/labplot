@@ -1,8 +1,8 @@
 #include <QCoreApplication>
 #include <QDebug>
 #include <QThread>
-#include <QUdpSocket>
 #include <QTimer>
+#include <QUdpSocket>
 
 int main(int argc, char* argv[]) {
 	QCoreApplication a(argc, argv);

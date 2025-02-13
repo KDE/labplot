@@ -56,7 +56,7 @@ void LiveDataTest::initTestCase() {
 
 	// initialize the UDP socket
 	m_udpSocket = new QUdpSocket(this);
-	QVERIFY (m_udpSocket->bind(QHostAddress(hostname), 56080)); // This port must be different to the udp port!
+	QVERIFY(m_udpSocket->bind(QHostAddress(hostname), 56080)); // This port must be different to the udp port!
 	auto* timer = new QTimer(this);
 	QCoreApplication::connect(timer, &QTimer::timeout, [this]() {
 		this->m_udpSocket->writeDatagram("1,2", QHostAddress(QStringLiteral(HOSTNAME)), UDP_PORT);
@@ -1493,6 +1493,5 @@ void LiveDataTest::testUdpReadContinuousFixed00() {
 	QCOMPARE(dataSource.column(0)->valueAt(dataSource.rowCount() - 1), 1.);
 	QCOMPARE(dataSource.column(1)->valueAt(dataSource.rowCount() - 1), 2.);
 }
-
 
 QTEST_MAIN(LiveDataTest)

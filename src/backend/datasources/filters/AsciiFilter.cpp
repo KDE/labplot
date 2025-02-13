@@ -25,9 +25,9 @@
 #include <QSerialPort>
 #endif
 #include <QNetworkDatagram>
+#include <QTcpSocket>
 #include <QTimer>
 #include <QUdpSocket>
-#include <QTcpSocket>
 
 #include <fstream>
 

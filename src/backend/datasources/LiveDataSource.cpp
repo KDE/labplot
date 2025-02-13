@@ -370,7 +370,6 @@ void LiveDataSource::setHost(const QString& host) {
 		m_host = QStringLiteral("127.0.0.1");
 	else
 		m_host = host.simplified();
-	qDebug()<<"setting host " << host;
 	initDevice();
 }
 
@@ -476,8 +475,6 @@ void LiveDataSource::readOnUpdate() {
 }
 
 void LiveDataSource::initDevice() {
-	// DEBUG("	Preparing device: update type = " << ENUM_TO_STRING(LiveDataSource, UpdateType, m_updateType));
-	qDebug()<<"initDevice";
 	switch (m_sourceType) {
 	case SourceType::FileOrPipe:
 		delete m_device;
@@ -487,9 +484,7 @@ void LiveDataSource::initDevice() {
 		if (!m_tcpSocket)
 			m_tcpSocket = new QTcpSocket(this);
 		m_device = m_tcpSocket;
-		qDebug()<<"tcp socket " << m_tcpSocket;
 		m_tcpSocket->abort();
-		qDebug()<<"connectToHost";
 		m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
 
 		connect(m_tcpSocket, &QTcpSocket::readyRead, this, &LiveDataSource::readyRead);
@@ -507,19 +502,18 @@ void LiveDataSource::initDevice() {
 			if (m_updateType == UpdateType::NewData)
 				connect(m_udpSocket, &QUdpSocket::readyRead, this, &LiveDataSource::readyRead);
 			m_udpSocket->connectToHost(m_host, 0, QUdpSocket::ReadOnly);
+
+			// only connect to readyRead when update is on new data
 			if (m_udpSocket->waitForConnected()) {
-				// only connect to readyRead when update is on new data
 				connect(m_udpSocket,
 						static_cast<void (QUdpSocket::*)(QAbstractSocket::SocketError)>(&QUdpSocket::errorOccurred),
 						this,
 						&LiveDataSource::tcpSocketError);
-			} else {
-				DEBUG("failed to connect to UDP socket - "
-					  << STDSTRING(m_udpSocket->errorString()));
-			}
-		} else {
+			} else
+				DEBUG("failed to connect to UDP socket - "  << STDSTRING(m_udpSocket->errorString()));
+		} else
 			DEBUG("Unable to bind - " << m_udpSocket->errorString().toStdString());
-		}
+
 		break;
 	}
 	case SourceType::LocalSocket:
