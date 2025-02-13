@@ -118,10 +118,9 @@ msgid "%1: remove all children"
 msgstr ""
 
 #: src/backend/core/AbstractAspect.cpp:752
-#, fuzzy, kde-format
-#| msgid "%1: created"
+#, kde-format
 msgid "%1: pasted"
-msgstr "%1：创建"
+msgstr ""
 
 #: src/backend/core/AbstractAspect.cpp:845
 #, kde-format
@@ -24461,6 +24460,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
-
-#~ msgid "Data Type:"
-#~ msgstr "数据类型："
