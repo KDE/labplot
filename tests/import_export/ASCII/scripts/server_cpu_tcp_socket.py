@@ -15,14 +15,11 @@ print ('listening ...')
 conn, addr = serv.accept()
 
 while True:
-
-  #message = str(psutil.cpu_percent())
-  # multiple values
-  message = str(psutil.cpu_percent()) + " " + str(psutil.boot_time()) + " " + str(psutil.cpu_count()) + "\n"
+  message = str(psutil.cpu_percent()) + " " + str(psutil.cpu_freq().current) +  "\n"
   try:
     conn.send(message.encode())
     print('written ' + message)
-    time.sleep(0.1)
+    time.sleep(0.5)
   except:
     conn.close()
     print('client disconnected')

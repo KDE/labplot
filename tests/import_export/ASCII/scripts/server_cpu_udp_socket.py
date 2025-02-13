@@ -1,7 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 from socket import *
-import psutil
+import psutil, time
 
 HOST = 'localhost'
 PORT = 1027
@@ -10,6 +10,7 @@ ADDR = (HOST,PORT)
 serv = socket(AF_INET, SOCK_DGRAM)
 serv.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
 while True:
-  cpu_percent = "1,2\n" #str(psutil.cpu_percent(interval=0.1)) + "\n"
-  serv.sendto(cpu_percent.encode(), ADDR)
-  print('written ' + cpu_percent, ADDR)
+  message = str(psutil.cpu_percent()) + " " + str(psutil.cpu_freq().current) +  "\n"
+  serv.sendto(message.encode(), ADDR)
+  print('written ' + message)
+  time.sleep(0.5)
