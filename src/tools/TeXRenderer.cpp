@@ -234,7 +234,7 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const QString& 
 		return {};
 	}
 
-	QByteArray ba = pdfFile.readAll();
+	auto ba = pdfFile.readAll();
 	pdfFile.close();
 	QFile::remove(baseName + QStringLiteral(".pdf"));
 	res->successful = true;
@@ -276,7 +276,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	QProcess convertProcess;
 #if defined(HAVE_WINDOWS)
 	// need to set path to magick coder modules (which are in the labplot directory)
-	QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+	auto env = QProcessEnvironment::systemEnvironment();
 	env.insert(QStringLiteral("MAGICK_CODER_MODULE_PATH"), QString::fromLocal8Bit(qgetenv("PROGRAMFILES")) + QStringLiteral("\\labplot"));
 	convertProcess.setProcessEnvironment(env);
 #endif
@@ -318,7 +318,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 		return {};
 	}
 
-	QByteArray ba = pdfFile.readAll();
+	auto ba = pdfFile.readAll();
 	QFile::remove(baseName + QStringLiteral(".pdf"));
 	res->successful = true;
 	res->errorMessage = QString();
@@ -327,7 +327,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 }
 
 bool TeXRenderer::enabled() {
-	KConfigGroup group = Settings::group(QStringLiteral("Settings_Worksheet"));
+	auto group = Settings::group(QStringLiteral("Settings_Worksheet"));
 	QString engine = group.readEntry("LaTeXEngine", "");
 	if (engine.isEmpty()) {
 		// empty string was found in the settings (either the settings never saved or no tex engine was available during the last save)
