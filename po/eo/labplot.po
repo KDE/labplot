@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-09 00:37+0000\n"
-"PO-Revision-Date: 2025-01-12 08:18+0100\n"
+"PO-Revision-Date: 2025-02-13 22:57+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -120,20 +120,19 @@ msgid "%1: remove all children"
 msgstr "%1: forigi ĉiujn infanojn"
 
 #: src/backend/core/AbstractAspect.cpp:752
-#, fuzzy, kde-format
-#| msgid "%1: pasted '%2'"
+#, kde-format
 msgid "%1: pasted"
-msgstr "%1: algluita '%2'"
+msgstr "%1: algluita"
 
 #: src/backend/core/AbstractAspect.cpp:845
 #, kde-format
 msgid "%1: pasted '%2'"
-msgstr "%1: algluita '%2'"
+msgstr "%1: algluis '%2'"
 
 #: src/backend/core/AbstractAspect.cpp:847
 #, kde-format
 msgid "%1: duplicated '%2'"
-msgstr "%1: duobligita '%2'"
+msgstr "%1: duobligis '%2'"
 
 #: src/backend/core/AbstractAspect.cpp:848
 #, kde-format
@@ -22894,17 +22893,15 @@ msgstr "Aŭtomate konservado:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
 #: src/frontend/ui/settingsgeneralpage.ui:46
-#, fuzzy, kde-format
-#| msgid "Dock widget placement:"
+#, kde-format
 msgid "Dock Widget Placement:"
-msgstr "Lokigo de doka fenestraĵo:"
+msgstr "Lokigo de Doka Fenestraĵo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
 #: src/frontend/ui/settingsgeneralpage.ui:60
-#, fuzzy, kde-format
-#| msgid "Number format:"
+#, kde-format
 msgid "Number Format:"
-msgstr "Formato de nombro:"
+msgstr "Formato de Nombro:"
 
 #. i18n: ectx: property (text), widget (QLabel, lStartup)
 #: src/frontend/ui/settingsgeneralpage.ui:67
@@ -22950,10 +22947,9 @@ msgstr "Konservi en kongrua formato"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
 #: src/frontend/ui/settingsgeneralpage.ui:107
-#, fuzzy, kde-format
-#| msgid "Number options:"
+#, kde-format
 msgid "Number Options:"
-msgstr "Nombraj elektoj:"
+msgstr "Elektoj de Nombro:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnits)
 #: src/frontend/ui/settingsgeneralpage.ui:114
@@ -24835,15 +24831,3 @@ msgstr "konvertprocezo malsukcesis, elirkodo ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ne eblas malfermi dosieron:"
-
-#~ msgid "Data Type:"
-#~ msgstr "Tipo de datumoj:"
-
-#~ msgid "Dot (.)"
-#~ msgstr "Punkto (.)"
-
-#~ msgid "Comma (,)"
-#~ msgstr "Komo (,)"
-
-#~ msgid "Arabic (٫)"
-#~ msgstr "La araba (.)"
