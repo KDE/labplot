@@ -1375,12 +1375,8 @@ void MainWin::initDocks() {
 	ads::CDockManager::setAutoHideConfigFlags(ads::CDockManager::DefaultAutoHideConfig);
 	ads::CDockManager::setAutoHideConfigFlag(ads::CDockManager::AutoHideShowOnMouseOver, true);
 
-	bool isWayLand = QString::compare(QApplication::platformName(), QStringLiteral("wayland"), Qt::CaseInsensitive) == 0;
-
 	// main dock manager for the default docks of the application (project explorer, etc)
 	m_dockManagerMain = new ads::CDockManager(this);
-	if (isWayLand) // disable undocking and creating a floating window on wayland. see https://invent.kde.org/education/labplot/-/issues/1067
-		m_dockManagerMain->lockDockWidgetFeaturesGlobally(ads::CDockWidget::DockWidgetFloatable);
 
 	// project explorer
 	m_projectExplorerDock = new ads::CDockWidget(i18nc("@title:window", "Project Explorer"));
@@ -1420,9 +1416,6 @@ void MainWin::initDocks() {
 	auto contentDock = new ads::CDockWidget(i18nc("@title:window", "Content"));
 	contentDock->setObjectName(QLatin1String("content-dock"));
 	m_dockManagerContent = new ads::CDockManager(contentDock);
-	if (isWayLand) // disable undocking and creating a floating window on wayland. see https://invent.kde.org/education/labplot/-/issues/1067
-		m_dockManagerContent->lockDockWidgetFeaturesGlobally(ads::CDockWidget::DockWidgetFloatable);
-
 	contentDock->setWidget(m_dockManagerContent);
 
 	// resize to the minimal sizes
@@ -1475,9 +1468,7 @@ void MainWin::initDocks() {
  */
 void MainWin::restoreDefaultDockState() const {
 	auto group = Settings::group(QStringLiteral("MainWin"));
-	bool isWayLand = QString::compare(QApplication::platformName(), QStringLiteral("wayland"), Qt::CaseInsensitive) == 0;
-	// disable restoring dock state on wayland incase there was a floating window. see https://invent.kde.org/education/labplot/-/issues/1067
-	if (group.hasKey(QStringLiteral("DockWidgetState")) && !isWayLand) {
+	if (group.hasKey(QStringLiteral("DockWidgetState"))) {
 		auto state = group.readEntry(QStringLiteral("DockWidgetState"), QByteArray());
 		m_dockManagerMain->restoreState(state); // restore the state of of the default docks
 	} else {
@@ -1616,9 +1607,7 @@ void MainWin::openProject(const QString& fileName) {
 	updateGUI(); // there are most probably worksheets or spreadsheets in the open project -> update the GUI
 
 	const auto& dockWidgetsState = m_project->dockWidgetState().toUtf8();
-	bool isWayLand = QString::compare(QApplication::platformName(), QStringLiteral("wayland"), Qt::CaseInsensitive) == 0;
-	// disable restoring of dock state on wayland incase there was a floating window. see https://invent.kde.org/education/labplot/-/issues/1067
-	if (!dockWidgetsState.isEmpty() && !isWayLand) {
+	if (!dockWidgetsState.isEmpty()) {
 		for (auto dock : m_dockManagerContent->dockWidgetsMap()) {
 			auto* d = dynamic_cast<ContentDockWidget*>(dock);
 			if (d)
