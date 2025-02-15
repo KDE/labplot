@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-09 00:37+0000\n"
+"POT-Creation-Date: 2025-02-15 00:38+0000\n"
 "PO-Revision-Date: 2024-12-29 23:07+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -14415,32 +14415,32 @@ msgstr "किं भवन्तः वास्तवमेव पूर्व
 msgid "Clear History"
 msgstr "इतिहासं स्पष्टं कुरुत"
 
-#: src/frontend/LabPlot.cpp:64
+#: src/frontend/LabPlot.cpp:71
 #, kde-format
 msgid "Visit website:"
 msgstr "वेबसाइट् पश्यन्तु :"
 
-#: src/frontend/LabPlot.cpp:66
+#: src/frontend/LabPlot.cpp:73
 #, kde-format
 msgid "Watch video tutorials:"
 msgstr "विडियो पाठ्यक्रमं पश्यन्तु:"
 
-#: src/frontend/LabPlot.cpp:67
+#: src/frontend/LabPlot.cpp:74
 #, kde-format
 msgid "Discuss on Mastodon:"
 msgstr "मस्टोडन् विषये चर्चां कुर्वन्तु :"
 
-#: src/frontend/LabPlot.cpp:68
+#: src/frontend/LabPlot.cpp:75
 #, kde-format
 msgid "Development:"
 msgstr "विकासः:"
 
-#: src/frontend/LabPlot.cpp:69
+#: src/frontend/LabPlot.cpp:76
 #, kde-format
 msgid "Please report bugs to:"
 msgstr "कृपया दोषान् सूचयन्तु:"
 
-#: src/frontend/LabPlot.cpp:73
+#: src/frontend/LabPlot.cpp:80
 #, kde-format
 msgid ""
 "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
@@ -14449,67 +14449,67 @@ msgstr ""
 "LabPlot इति निःशुल्कं, मुक्त-स्रोत-पार-मञ्चं Data Visualization and Analysis सॉफ्टवेयरं "
 "सर्वेषां कृते सुलभम् अस्ति ।"
 
-#: src/frontend/LabPlot.cpp:75
+#: src/frontend/LabPlot.cpp:82
 #, fuzzy, kde-format
 #| msgid "(c) 2007-2024 LabPlot authors"
 msgid "(c) 2007-2025 LabPlot authors"
 msgstr "(ग) 2007-2024 लैबप्लॉट लेखक"
 
-#: src/frontend/LabPlot.cpp:77
+#: src/frontend/LabPlot.cpp:84
 #, kde-format
 msgid "Stefan Gerlach"
 msgstr "स्टीफन् गेर्लाच्"
 
-#: src/frontend/LabPlot.cpp:77 src/frontend/LabPlot.cpp:78
-#: src/frontend/LabPlot.cpp:79 src/frontend/LabPlot.cpp:80
+#: src/frontend/LabPlot.cpp:84 src/frontend/LabPlot.cpp:85
+#: src/frontend/LabPlot.cpp:86 src/frontend/LabPlot.cpp:87
 #, kde-format
 msgctxt "@info:credit"
 msgid "Developer"
 msgstr "विकासकः"
 
-#: src/frontend/LabPlot.cpp:78
+#: src/frontend/LabPlot.cpp:85
 #, kde-format
 msgid "Alexander Semke"
 msgstr "अलेक्जेण्डर सेम्के"
 
-#: src/frontend/LabPlot.cpp:79
+#: src/frontend/LabPlot.cpp:86
 #, kde-format
 msgid "Fábián Kristóf-Szabolcs"
 msgstr "Fábián Kristóf-Szabolcs"
 
-#: src/frontend/LabPlot.cpp:80
+#: src/frontend/LabPlot.cpp:87
 #, kde-format
 msgid "Martin Marmsoler"
 msgstr "मार्टिन् मार्मसोलर"
 
-#: src/frontend/LabPlot.cpp:81
+#: src/frontend/LabPlot.cpp:88
 #, kde-format
 msgid "Dariusz Laska"
 msgstr "दारियुस् लस्का"
 
-#: src/frontend/LabPlot.cpp:82
+#: src/frontend/LabPlot.cpp:89
 #, kde-format
 msgctxt "@info:credit"
 msgid "Conceptual work, documentation, example projects"
 msgstr "अवधारणात्मकं कार्यं, दस्तावेजीकरणं, उदाहरणप्रकल्पाः"
 
-#: src/frontend/LabPlot.cpp:85
+#: src/frontend/LabPlot.cpp:92
 #, kde-format
 msgid "Andreas Kainz"
 msgstr "आन्द्रियास कैन्ज"
 
-#: src/frontend/LabPlot.cpp:85
+#: src/frontend/LabPlot.cpp:92
 #, kde-format
 msgctxt "@info:credit"
 msgid "Icon designer"
 msgstr "चिह्न डिजाइनर"
 
-#: src/frontend/LabPlot.cpp:89
+#: src/frontend/LabPlot.cpp:96
 #, kde-format
 msgid "Yuri Chornoivan"
 msgstr "युरी चोरनोइवान"
 
-#: src/frontend/LabPlot.cpp:90
+#: src/frontend/LabPlot.cpp:97
 #, kde-format
 msgctxt "@info:credit"
 msgid ""
@@ -14517,44 +14517,44 @@ msgid ""
 "topics"
 msgstr "KDE-मूलसंरचनायाः अनुवादसम्बद्धविषयाणां च विषये अनेकेषु प्रश्नेषु सहायतां कुर्वन्तु"
 
-#: src/frontend/LabPlot.cpp:93
+#: src/frontend/LabPlot.cpp:100
 #, kde-format
 msgid "Garvit Khatri"
 msgstr "गरवित खत्री"
 
-#: src/frontend/LabPlot.cpp:94
+#: src/frontend/LabPlot.cpp:101
 #, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
 msgstr "LabPlot इत्यस्य KF5 मध्ये पोर्ट् करणं तथा च Cantor इत्यनेन सह एकीकरणम्"
 
-#: src/frontend/LabPlot.cpp:97
+#: src/frontend/LabPlot.cpp:104
 #, kde-format
 msgid "Christoph Roick"
 msgstr "क्रिस्टोफ रॉक्"
 
-#: src/frontend/LabPlot.cpp:98
+#: src/frontend/LabPlot.cpp:105
 #, kde-format
 msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr "ROOT (CERN) TH1 हिस्टोग्रामस्य आयातस्य समर्थनम्"
 
-#: src/frontend/LabPlot.cpp:132
+#: src/frontend/LabPlot.cpp:139
 #, kde-format
 msgid "Disable splash screen"
 msgstr "स्पलैश स्क्रीन अक्षमम्"
 
-#: src/frontend/LabPlot.cpp:135
+#: src/frontend/LabPlot.cpp:142
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr "प्रस्तोता मोड् मध्ये आरभत"
 
-#: src/frontend/LabPlot.cpp:138
+#: src/frontend/LabPlot.cpp:145
 #, kde-format
 msgid "Open a project file."
 msgstr "परियोजनासञ्चिकां उद्घाटयन्तु ।"
 
-#: src/frontend/LabPlot.cpp:157
+#: src/frontend/LabPlot.cpp:164
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -14563,7 +14563,7 @@ msgstr ""
 "'%1' सञ्चिकां उद्घाटयितुं न शक्यते । आरम्भं कर्तुं 'Continue' नुदन्तु अथवा अनुप्रयोगात् निर्गन्तुं "
 "'Cancel' नुदन्तु ।"
 
-#: src/frontend/LabPlot.cpp:158
+#: src/frontend/LabPlot.cpp:165
 #, kde-format
 msgid "Failed to Open"
 msgstr "उद्घाटयितुं असफलम्"

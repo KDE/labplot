@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-09 00:37+0000\n"
+"POT-Creation-Date: 2025-02-15 00:38+0000\n"
 "PO-Revision-Date: 2025-01-30 22:35+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -14619,32 +14619,32 @@ msgstr "Ви справді хочете спорожнити журнал ск�
 msgid "Clear History"
 msgstr "Спорожнити журнал"
 
-#: src/frontend/LabPlot.cpp:64
+#: src/frontend/LabPlot.cpp:71
 #, kde-format
 msgid "Visit website:"
 msgstr "Відвідати сайт:"
 
-#: src/frontend/LabPlot.cpp:66
+#: src/frontend/LabPlot.cpp:73
 #, kde-format
 msgid "Watch video tutorials:"
 msgstr "Перегляд відеопідручників:"
 
-#: src/frontend/LabPlot.cpp:67
+#: src/frontend/LabPlot.cpp:74
 #, kde-format
 msgid "Discuss on Mastodon:"
 msgstr "Обговорення у Mastodon:"
 
-#: src/frontend/LabPlot.cpp:68
+#: src/frontend/LabPlot.cpp:75
 #, kde-format
 msgid "Development:"
 msgstr "Розробка:"
 
-#: src/frontend/LabPlot.cpp:69
+#: src/frontend/LabPlot.cpp:76
 #, kde-format
 msgid "Please report bugs to:"
 msgstr "Про вади, будь ласка, повідомляйте тут:"
 
-#: src/frontend/LabPlot.cpp:73
+#: src/frontend/LabPlot.cpp:80
 #, kde-format
 msgid ""
 "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
@@ -14654,66 +14654,66 @@ msgstr ""
 "відкритим кодом, яке працює на багатьох платформах і виконує візуалізацію та "
 "аналіз даних."
 
-#: src/frontend/LabPlot.cpp:75
+#: src/frontend/LabPlot.cpp:82
 #, kde-format
 msgid "(c) 2007-2025 LabPlot authors"
 msgstr "© Автори LabPlot, 2007–2025"
 
-#: src/frontend/LabPlot.cpp:77
+#: src/frontend/LabPlot.cpp:84
 #, kde-format
 msgid "Stefan Gerlach"
 msgstr "Stefan Gerlach"
 
-#: src/frontend/LabPlot.cpp:77 src/frontend/LabPlot.cpp:78
-#: src/frontend/LabPlot.cpp:79 src/frontend/LabPlot.cpp:80
+#: src/frontend/LabPlot.cpp:84 src/frontend/LabPlot.cpp:85
+#: src/frontend/LabPlot.cpp:86 src/frontend/LabPlot.cpp:87
 #, kde-format
 msgctxt "@info:credit"
 msgid "Developer"
 msgstr "Розробник"
 
-#: src/frontend/LabPlot.cpp:78
+#: src/frontend/LabPlot.cpp:85
 #, kde-format
 msgid "Alexander Semke"
 msgstr "Олександр Семке"
 
-#: src/frontend/LabPlot.cpp:79
+#: src/frontend/LabPlot.cpp:86
 #, kde-format
 msgid "Fábián Kristóf-Szabolcs"
 msgstr "Fábián Kristóf-Szabolcs"
 
-#: src/frontend/LabPlot.cpp:80
+#: src/frontend/LabPlot.cpp:87
 #, kde-format
 msgid "Martin Marmsoler"
 msgstr "Martin Marmsoler"
 
-#: src/frontend/LabPlot.cpp:81
+#: src/frontend/LabPlot.cpp:88
 #, kde-format
 msgid "Dariusz Laska"
 msgstr "Даріуш Ласка"
 
-#: src/frontend/LabPlot.cpp:82
+#: src/frontend/LabPlot.cpp:89
 #, kde-format
 msgctxt "@info:credit"
 msgid "Conceptual work, documentation, example projects"
 msgstr "Концептуальна робота, документування, приклади проєктів"
 
-#: src/frontend/LabPlot.cpp:85
+#: src/frontend/LabPlot.cpp:92
 #, kde-format
 msgid "Andreas Kainz"
 msgstr "Andreas Kainz"
 
-#: src/frontend/LabPlot.cpp:85
+#: src/frontend/LabPlot.cpp:92
 #, kde-format
 msgctxt "@info:credit"
 msgid "Icon designer"
 msgstr "Автор піктограми"
 
-#: src/frontend/LabPlot.cpp:89
+#: src/frontend/LabPlot.cpp:96
 #, kde-format
 msgid "Yuri Chornoivan"
 msgstr "Юрій Чорноіван"
 
-#: src/frontend/LabPlot.cpp:90
+#: src/frontend/LabPlot.cpp:97
 #, kde-format
 msgctxt "@info:credit"
 msgid ""
@@ -14721,44 +14721,44 @@ msgid ""
 "topics"
 msgstr "Допомога у багатьох питаннях щодо інфраструктури KDE та перекладів"
 
-#: src/frontend/LabPlot.cpp:93
+#: src/frontend/LabPlot.cpp:100
 #, kde-format
 msgid "Garvit Khatri"
 msgstr "Garvit Khatri"
 
-#: src/frontend/LabPlot.cpp:94
+#: src/frontend/LabPlot.cpp:101
 #, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
 msgstr "Портування LabPlot на KF5 та інтеграція з Cantor"
 
-#: src/frontend/LabPlot.cpp:97
+#: src/frontend/LabPlot.cpp:104
 #, kde-format
 msgid "Christoph Roick"
 msgstr "Christoph Roick"
 
-#: src/frontend/LabPlot.cpp:98
+#: src/frontend/LabPlot.cpp:105
 #, kde-format
 msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr "Підтримка імпортування гістограм TH1 з ROOT (CERN)"
 
-#: src/frontend/LabPlot.cpp:132
+#: src/frontend/LabPlot.cpp:139
 #, kde-format
 msgid "Disable splash screen"
 msgstr "Вимкнути вікно вітання"
 
-#: src/frontend/LabPlot.cpp:135
+#: src/frontend/LabPlot.cpp:142
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr "Запустити у режимі презентації"
 
-#: src/frontend/LabPlot.cpp:138
+#: src/frontend/LabPlot.cpp:145
 #, kde-format
 msgid "Open a project file."
 msgstr "Відкрити файл проєкту."
 
-#: src/frontend/LabPlot.cpp:157
+#: src/frontend/LabPlot.cpp:164
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -14767,7 +14767,7 @@ msgstr ""
 "Не вдалося відкрити файл «%1». Натисніть кнопку «Продовжити», щоб продовжити "
 "запуск, або кнопку «Скасувати», щоб завершити роботу програми."
 
-#: src/frontend/LabPlot.cpp:158
+#: src/frontend/LabPlot.cpp:165
 #, kde-format
 msgid "Failed to Open"
 msgstr "Не вдалося відкрити"
