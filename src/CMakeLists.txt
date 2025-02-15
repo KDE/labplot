@@ -493,6 +493,8 @@ set(NSL_SOURCES
     ${BACKEND_DIR}/nsl/nsl_smooth.c
     ${BACKEND_DIR}/nsl/nsl_sort.c
     ${BACKEND_DIR}/nsl/nsl_stats.c
+    ${BACKEND_DIR}/nsl/nsl_statistical_test.c
+
 )
 
 if(NOT MSVC_FOUND)
