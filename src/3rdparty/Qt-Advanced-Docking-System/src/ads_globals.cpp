@@ -417,7 +417,7 @@ void setButtonIcon(QAbstractButton* Button, QStyle::StandardPixmap StandarPixmap
 #else
 	// The standard icons does not look good on high DPI screens so we create
 	// our own "standard" icon here.
-	QPixmap normalPixmap = Button->style()->standardPixmap(StandarPixmap, 0, Button);
+	QPixmap normalPixmap = Button->style()->standardPixmap(StandarPixmap, nullptr, Button);
 	Icon.addPixmap(internal::createTransparentPixmap(normalPixmap, 0.25), QIcon::Disabled);
 	Icon.addPixmap(normalPixmap, QIcon::Normal);
 	Button->setIcon(Icon);
