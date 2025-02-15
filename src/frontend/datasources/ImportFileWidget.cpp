@@ -4,7 +4,7 @@
 	Description          : import file data widget
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2018 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -1814,7 +1814,7 @@ void ImportFileWidget::refreshPreview() {
 			auto p = filter->properties();
 			filter->initialize(p);
 			if (!filter->lastError().isEmpty()) {
-				Q_EMIT error(i18n("Preview: Initialization failed: %1", filter->lastError()));
+				Q_EMIT error(i18n("Initialization failed: %1", filter->lastError()));
 				return;
 			}
 		}
@@ -1839,7 +1839,7 @@ void ImportFileWidget::refreshPreview() {
 				// read-only socket is disconnected immediately (no waitForDisconnected())
 			} else {
 				DEBUG("failed connect to local socket " << STDSTRING(file) << " - " << STDSTRING(lsocket.errorString()));
-				Q_EMIT error(i18n("Preview: Failed to connect to local socket %1 - %2", file, lsocket.errorString()));
+				Q_EMIT error(i18n("Failed to connect to the local socket: %1", lsocket.errorString()));
 				return;
 			}
 
@@ -1848,7 +1848,7 @@ void ImportFileWidget::refreshPreview() {
 		case LiveDataSource::SourceType::NetworkTCPSocket: {
 			QTcpSocket tcpSocket{this};
 			tcpSocket.connectToHost(host(), port().toInt(), QTcpSocket::ReadOnly);
-			constexpr auto timeoutTime_ms = 5000;
+			constexpr auto timeoutTime_ms = 2000;
 			if (tcpSocket.waitForConnected(timeoutTime_ms)) {
 				DEBUG("connected to TCP socket");
 				if (tcpSocket.waitForReadyRead(timeoutTime_ms)) {
@@ -1856,12 +1856,14 @@ void ImportFileWidget::refreshPreview() {
 					importedStrings = filter->preview(tcpSocket, lines, true);
 				} else {
 					DEBUG("failed connect to TCP socket " << STDSTRING(tcpSocket.errorString()));
-					errorMessage = i18n("Preview: Failed to connect to TCP socket - %1", tcpSocket.errorString());
+					errorMessage = i18n("Failed to connect to the TCP socket. %1", tcpSocket.errorString());
 				}
 				tcpSocket.disconnectFromHost();
-			} else
+			} else {
 				DEBUG("failed to connect to TCP socket within " << timeoutTime_ms << "ms"
 					  << " - " << STDSTRING(tcpSocket.errorString()));
+				errorMessage = i18n("Socket operation timed out.");
+			}
 
 			break;
 		}
@@ -1888,9 +1890,8 @@ void ImportFileWidget::refreshPreview() {
 					DEBUG("UDP Socket: DISCONNECT PREVIEW, state = " << udpSocket.state());
 					udpSocket.disconnectFromHost();
 				} else {
-					DEBUG("failed to connect to UDP socket "
-						  << " - " << STDSTRING(udpSocket.errorString()));
-					errorMessage = i18n("Unable to connect to host: ") + udpSocket.errorString();
+					DEBUG("failed to connect to UDP socket - " << STDSTRING(udpSocket.errorString()));
+					errorMessage = i18n("Socket operation timed out.");
 				}
 			} else {
 				DEBUG("Unable to bind" << udpSocket.errorString().toStdString());
@@ -1913,11 +1914,11 @@ void ImportFileWidget::refreshPreview() {
 					if (!filter->lastError().isEmpty())
 						errorMessage = i18n("Parse Error: %1", filter->lastError());
 				} else
-					errorMessage = i18n("ERROR: not ready for read after 2 sec");
+					errorMessage = i18n("Not ready for read after 2 sec");
 
 				sPort.close();
 			} else
-				errorMessage = i18n("ERROR: failed to open serial port. error: %1", sPort.error());
+				errorMessage = i18n("Failed to open serial port. error: %1", sPort.error());
 #endif
 			break;
 		}
@@ -2552,8 +2553,10 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 	updateHeaderOptions();
 
-	Q_EMIT sourceTypeChanged();
-	refreshPreview();
+	if (!m_suppressRefresh) {
+		Q_EMIT sourceTypeChanged(); // don't notify the parent dialog during the inial load of settings, will be done at the end
+		refreshPreview();
+	}
 }
 
 void ImportFileWidget::enableDataPortionSelection(bool enabled) {
