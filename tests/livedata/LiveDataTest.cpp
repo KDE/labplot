@@ -1454,6 +1454,9 @@ void LiveDataTest::testTcpReadContinuousFixed00() {
 	QCOMPARE(dataSource.column(1)->valueAt(dataSource.rowCount() - 1), 2.);
 }
 
+// ##############################################################################
+// ##################################  UDP ######################################
+// ##############################################################################
 void LiveDataTest::testUdpReadContinuousFixed00() {
 	// initialize the live data source
 	LiveDataSource dataSource(QStringLiteral("test"), false);

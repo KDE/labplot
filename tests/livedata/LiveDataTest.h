@@ -22,7 +22,7 @@ private:
 	void initTestCase() override;
 	void cleanupTestCase();
 
-	template <typename T1, typename T2>
+	template<typename T1, typename T2>
 	bool waitForSignal(T1* sender, T2 signal) {
 		QTimer timer(this);
 		timer.setSingleShot(true);

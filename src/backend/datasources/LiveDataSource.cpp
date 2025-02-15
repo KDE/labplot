@@ -503,14 +503,14 @@ void LiveDataSource::initDevice() {
 				connect(m_udpSocket, &QUdpSocket::readyRead, this, &LiveDataSource::readyRead);
 			m_udpSocket->connectToHost(m_host, 0, QUdpSocket::ReadOnly);
 
-			// only connect to readyRead when update is on new data
 			if (m_udpSocket->waitForConnected()) {
+				// only connect to readyRead when update is on new data
 				connect(m_udpSocket,
 						static_cast<void (QUdpSocket::*)(QAbstractSocket::SocketError)>(&QUdpSocket::errorOccurred),
 						this,
 						&LiveDataSource::tcpSocketError);
 			} else
-				DEBUG("failed to connect to UDP socket - "  << STDSTRING(m_udpSocket->errorString()));
+				DEBUG("failed to connect to UDP socket - " << STDSTRING(m_udpSocket->errorString()));
 		} else
 			DEBUG("Unable to bind - " << m_udpSocket->errorString().toStdString());
 
@@ -539,7 +539,7 @@ void LiveDataSource::initDevice() {
 		m_serialPort->setPortName(m_serialPortName);
 		// m_serialPort->open(QIODevice::ReadOnly); // Not required
 
-			   // only connect to readyRead when update is on new data
+		// only connect to readyRead when update is on new data
 		if (m_updateType == UpdateType::NewData)
 			connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
 		connect(m_serialPort, &QSerialPort::errorOccurred, this, &LiveDataSource::serialPortError);
