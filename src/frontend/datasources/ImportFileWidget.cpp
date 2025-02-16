@@ -553,28 +553,28 @@ void ImportFileWidget::enableFirstRowAsColNames(bool enable) {
  *  and for some target data containers (Spreadsheet) only
  */
 void ImportFileWidget::updateHeaderOptions() {
-	// disable the header options for non-file sources because:
-	//* for sockets we allow to import one single value only at the moment
-	//* for MQTT topics we don't allow to set the vector names since the different topics can have different number of columns
-	// For files this option still can be useful if the user have to re-read the whole file
-	// and wants to use the header to set the column names or the user provides manually the column names.
-	// TODO: adjust this logic later once we allow to import multiple columns from sockets,
-	// it should be possible to provide the names of the columns
+	// disable the option "Names at Line" for column names for ASCII for non-file sources because:
+	// * for files this option can be useful if the user have to re-read the whole file and wants to use the header line to set the names
+	// * for sockets we have a constant stream of data without any "header", the user still can provide the names manually
+	// * for MQTT topics we don't allow to set the vector names since the different topics can have different number of columns
 
-	auto fileType = currentFileType();
+	const auto fileType = currentFileType();
 	bool spreadsheet = true; // assume it's spreadsheet on default if no container is selected yet
 	if (m_targetContainer)
 		spreadsheet = m_targetContainer->type() == AspectType::Spreadsheet;
 
 	// handle ASCII
-	bool visible = (fileType == AbstractFileFilter::FileType::Ascii) && spreadsheet && currentSourceType() == LiveDataSource::SourceType::FileOrPipe;
-	if (m_asciiOptionsWidget)
-		m_asciiOptionsWidget->showAsciiHeaderOptions(visible);
+	if (m_asciiOptionsWidget) {
+		const auto sourceType = currentSourceType();
+		bool headerLinevisible = (fileType == AbstractFileFilter::FileType::Ascii) && spreadsheet && sourceType == LiveDataSource::SourceType::FileOrPipe;
+		bool columnNamesVisible = (sourceType != LiveDataSource::SourceType::MQTT);
+		m_asciiOptionsWidget->showAsciiHeaderOptions(headerLinevisible, columnNamesVisible);
+	}
 
 	// handle XLSX or ODS
-	visible = (fileType == AbstractFileFilter::FileType::XLSX || fileType == AbstractFileFilter::FileType::Ods) && spreadsheet;
-	ui.lFirstRowAsColNames->setVisible(visible);
-	ui.chbFirstRowAsColName->setVisible(visible);
+	bool headerLinevisible = (fileType == AbstractFileFilter::FileType::XLSX || fileType == AbstractFileFilter::FileType::Ods) && spreadsheet;
+	ui.lFirstRowAsColNames->setVisible(headerLinevisible);
+	ui.chbFirstRowAsColName->setVisible(headerLinevisible);
 }
 
 void ImportFileWidget::showJsonModel(bool b) {
