@@ -4770,7 +4770,6 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeEndElement();
 
-
 	// x-ranges
 	writer->writeStartElement(QStringLiteral("xRanges"));
 	for (const auto& range : d->xRanges) {
