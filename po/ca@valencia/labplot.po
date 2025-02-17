@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-16 00:38+0000\n"
-"PO-Revision-Date: 2025-01-30 10:21+0100\n"
+"POT-Creation-Date: 2025-02-17 00:37+0000\n"
+"PO-Revision-Date: 2025-02-16 09:38+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -1113,10 +1113,9 @@ msgid "Unable to open device"
 msgstr "No s'ha pogut obrir el dispositiu"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:209
-#, fuzzy, kde-format
-#| msgid "No sheet selected."
+#, kde-format
 msgid "No new line detected"
-msgstr "No s'ha seleccionat cap full."
+msgstr "No s'ha detectat cap línia nova"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, kde-format
@@ -1189,6 +1188,7 @@ msgstr "Separador no vàlid"
 #, kde-format
 msgid "Serial devices must be initialized before reading data from it"
 msgstr ""
+"Els dispositius en sèrie s'han de restablir abans de llegir-ne les dades"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
 #, kde-format
@@ -8258,7 +8258,7 @@ msgstr "sense informació disponible"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:145
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5240
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5231
 #: src/frontend/ui/dockwidgets/axisdock.ui:483
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:542
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:478
@@ -8761,7 +8761,7 @@ msgid "%1: load default theme"
 msgstr "%1: carrega el tema predeterminat"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1761
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5566
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5557
 #: src/backend/worksheet/Worksheet.cpp:842
 #, kde-format
 msgid "%1: set theme"
@@ -10882,16 +10882,28 @@ msgid "Custom column names, comma separated. E.g. \"x, y\""
 msgstr "Noms de columna personalitzats, separats per comes. P. ex., «x,y»"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:115
-#, kde-format
-msgid "Custom column modes, comma separated"
+#, fuzzy, kde-format
+#| msgid "Custom column modes, comma separated"
+msgid "Custom column data types, comma separated"
 msgstr "Noms de columna personalitzats, separats per comes"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If not empty, the number of columns must match the number of column names "
+#| "if provided and it must match the number of columns in the imported file."
+#| "<br>Datatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
+#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
+#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
+#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
+#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
+#| "td><td>Datetime with the format from the datetime text box if not empty, "
+#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
+#| "td></tr></table>"
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
-"<br>Datatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
+"<br>Data Types:<table><tr><td>%1</td><td>Integer number with 32bit size "
 "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
 "number with 64bit size (−9.223.372.036.854.775.808 .. "
 "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
@@ -10917,7 +10929,7 @@ msgstr ""
 msgid "%1 or %2"
 msgstr "%1 o %2"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:252
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:249
 #, kde-format
 msgid "Datatype not found: %1"
 msgstr "El tipus de dada no s'ha trobat: %1"
@@ -11790,40 +11802,35 @@ msgstr ""
 "«Fila final» cal que siga més gran que la «Fila inicial» o -1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1817
-#, fuzzy, kde-format
-#| msgid "Preview: Initialization failed: %1"
+#, kde-format
 msgid "Initialization failed: %1"
-msgstr "Vista prèvia: Ha fallat la inicialització: %1"
+msgstr "Ha fallat la inicialització: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1842
-#, fuzzy, kde-format
-#| msgid "Preview: Failed to connect to local socket %1 - %2"
+#, kde-format
 msgid "Failed to connect to the local socket: %1"
-msgstr "Vista prèvia: No s'ha pogut connectar amb el sòcol local %1 - %2"
+msgstr "No s'ha pogut connectar amb el sòcol local: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1859
-#, fuzzy, kde-format
-#| msgid "Preview: Failed to connect to TCP socket - %1"
+#, kde-format
 msgid "Failed to connect to the TCP socket. %1"
-msgstr "Vista prèvia: No s'ha pogut connectar amb el sòcol TCP - %1"
+msgstr "No s'ha pogut connectar amb el sòcol TCP. %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1865
 #: src/frontend/datasources/ImportFileWidget.cpp:1894
 #, kde-format
 msgid "Socket operation timed out."
-msgstr ""
+msgstr "L'operació del sòcol ha excedit el temps."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1879
-#, fuzzy, kde-format
-#| msgid "ERROR: not ready for read after 2 sec"
+#, kde-format
 msgid "Not ready for read after 2s:"
-msgstr "ERROR: no està preparat per a llegir després de 2 s"
+msgstr "No està preparat per a llegir després de 2 s:"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1898
-#, fuzzy, kde-format
-#| msgid "Unable to open file:"
+#, kde-format
 msgid "Unable to bind: "
-msgstr "No s'ha pogut obrir el fitxer:"
+msgstr "No s'ha pogut vincular: "
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1915
 #, kde-format
@@ -11831,16 +11838,14 @@ msgid "Parse Error: %1"
 msgstr "S'ha produït un error d'anàlisi: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1917
-#, fuzzy, kde-format
-#| msgid "ERROR: not ready for read after 2 sec"
+#, kde-format
 msgid "Not ready for read after 2 sec"
-msgstr "ERROR: no està preparat per a llegir després de 2 s"
+msgstr "No està preparat per a llegir després de 2 s"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1921
-#, fuzzy, kde-format
-#| msgid "ERROR: failed to open serial port. error: %1"
+#, kde-format
 msgid "Failed to open serial port. error: %1"
-msgstr "ERROR: ha fallat en obrir el port sèrie. Error: %1"
+msgstr "No s'ha pogut obrir el port sèrie. Error: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1940
 #, kde-format
@@ -19233,8 +19238,9 @@ msgstr "Omet les parts buides"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnMode)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:33
-#, kde-format
-msgid "Column Datatypes:"
+#, fuzzy, kde-format
+#| msgid "Column Datatypes:"
+msgid "Column Data Types:"
 msgstr "Tipus de dades de les columnes:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chbSimplifyWhitespaces)
@@ -19286,9 +19292,10 @@ msgstr "Any base quan només es proporcionen 2 dígits per a l'any"
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:116
-#, kde-format
-msgid "Custom Names:"
-msgstr "Noms personalitzats:"
+#, fuzzy, kde-format
+#| msgid "Column labels"
+msgid "Column Names:"
+msgstr "Etiquetes de columnes"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:123
@@ -20540,9 +20547,11 @@ msgstr "Opacitat:"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsDateTimeFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsFormat)
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
+#. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1373
 #: src/frontend/ui/dockwidgets/axisdock.ui:1478
 #: src/frontend/ui/dockwidgets/columndock.ui:30
+#: src/frontend/ui/dockwidgets/columndock.ui:214
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:65
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:56
 #, kde-format
@@ -21278,15 +21287,6 @@ msgstr "Radi del cantó:"
 msgid "Labels:"
 msgstr "Etiquetes:"
 
-#. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
-#. i18n: ectx: property (text), widget (QLabel, lValuesNumericFormat)
-#: src/frontend/ui/dockwidgets/columndock.ui:214
-#: src/frontend/ui/dockwidgets/valuewidget.ui:201
-#: src/frontend/ui/dockwidgets/xycurvedock.ui:506
-#, kde-format
-msgid "Numeric:"
-msgstr "Numèric:"
-
 #. i18n: ectx: property (text), widget (QLabel, lPlotDesignation)
 #: src/frontend/ui/dockwidgets/columndock.ui:311
 #, kde-format
@@ -21883,6 +21883,14 @@ msgstr "No selecciones res"
 #, kde-format
 msgid "Distance:"
 msgstr "Distància:"
+
+#. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
+#. i18n: ectx: property (text), widget (QLabel, lValuesNumericFormat)
+#: src/frontend/ui/dockwidgets/valuewidget.ui:201
+#: src/frontend/ui/dockwidgets/xycurvedock.ui:506
+#, kde-format
+msgid "Numeric:"
+msgstr "Numèric:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDateTimeFormat)
@@ -25107,8 +25115,5 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
 
-#~ msgid "Filter not initialized"
-#~ msgstr "Filtre no inicialitzat"
-
-#~ msgid "Data Type:"
-#~ msgstr "Tipus de dades:"
+#~ msgid "Custom Names:"
+#~ msgstr "Noms personalitzats:"

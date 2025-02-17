@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-16 00:38+0000\n"
-"PO-Revision-Date: 2025-02-07 10:45+0300\n"
+"POT-Creation-Date: 2025-02-17 00:37+0000\n"
+"PO-Revision-Date: 2025-02-16 12:59+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1102,10 +1102,9 @@ msgid "Unable to open device"
 msgstr "Aygıt açılamıyor"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:209
-#, fuzzy, kde-format
-#| msgid "No sheet selected."
+#, kde-format
 msgid "No new line detected"
-msgstr "Seçili sayfa yok."
+msgstr "Algılanan yeni çizgi yok"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, kde-format
@@ -1175,7 +1174,7 @@ msgstr "Geçersiz ayırıcı"
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
 #, kde-format
 msgid "Serial devices must be initialized before reading data from it"
-msgstr ""
+msgstr "Onlardan veri okumadan önce seri aygıtlar ilklendirilmelidir"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
 #, kde-format
@@ -8158,7 +8157,7 @@ msgstr "kullanılabilir veri yok"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:145
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5240
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5231
 #: src/frontend/ui/dockwidgets/axisdock.ui:483
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:542
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:478
@@ -8656,7 +8655,7 @@ msgid "%1: load default theme"
 msgstr "%1: Öntanımlı temayı yükle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1761
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5566
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5557
 #: src/backend/worksheet/Worksheet.cpp:842
 #, kde-format
 msgid "%1: set theme"
@@ -10760,16 +10759,28 @@ msgid "Custom column names, comma separated. E.g. \"x, y\""
 msgstr "Özel sütun adları, virgülle ayrılmış. Örneğin, “x, y”"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:115
-#, kde-format
-msgid "Custom column modes, comma separated"
+#, fuzzy, kde-format
+#| msgid "Custom column modes, comma separated"
+msgid "Custom column data types, comma separated"
 msgstr "Özel sütun kipleri, virgülle ayrılmış"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If not empty, the number of columns must match the number of column names "
+#| "if provided and it must match the number of columns in the imported file."
+#| "<br>Datatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
+#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
+#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
+#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
+#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
+#| "td><td>Datetime with the format from the datetime text box if not empty, "
+#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
+#| "td></tr></table>"
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
-"<br>Datatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
+"<br>Data Types:<table><tr><td>%1</td><td>Integer number with 32bit size "
 "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
 "number with 64bit size (−9.223.372.036.854.775.808 .. "
 "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
@@ -10793,7 +10804,7 @@ msgstr ""
 msgid "%1 or %2"
 msgstr "%1 veya %2"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:252
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:249
 #, kde-format
 msgid "Datatype not found: %1"
 msgstr "Veri türü bulunamadı: %1"
@@ -11659,40 +11670,35 @@ msgstr ""
 "veya −1 olmalıdır."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1817
-#, fuzzy, kde-format
-#| msgid "Preview: Initialization failed: %1"
+#, kde-format
 msgid "Initialization failed: %1"
-msgstr "Önizleme: İlklendirme başarısız: %1"
+msgstr "İlklendirme başarısız: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1842
-#, fuzzy, kde-format
-#| msgid "Preview: Failed to connect to local socket %1 - %2"
+#, kde-format
 msgid "Failed to connect to the local socket: %1"
-msgstr "Önizleme: Yerel %1 yuvasına bağlanılamadı — %2"
+msgstr "Yerel yuvaya bağlanılamadı: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1859
-#, fuzzy, kde-format
-#| msgid "Preview: Failed to connect to TCP socket - %1"
+#, kde-format
 msgid "Failed to connect to the TCP socket. %1"
-msgstr "Önizleme: TCP yuvasına bağlanılamadı — %1"
+msgstr "TCP yuvasına bağlanılamadı. %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1865
 #: src/frontend/datasources/ImportFileWidget.cpp:1894
 #, kde-format
 msgid "Socket operation timed out."
-msgstr ""
+msgstr "Yuva işlemi zaman aşımına uğradı."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1879
-#, fuzzy, kde-format
-#| msgid "ERROR: not ready for read after 2 sec"
+#, kde-format
 msgid "Not ready for read after 2s:"
-msgstr "HATA: 2 saniye sonrasında okunmaya hazır değil"
+msgstr "2 saniye sonrasında okunmaya hazır değil:"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1898
-#, fuzzy, kde-format
-#| msgid "Unable to open file:"
+#, kde-format
 msgid "Unable to bind: "
-msgstr "Dosya açılamadı:"
+msgstr "Bağlantılanamadı: "
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1915
 #, kde-format
@@ -11700,16 +11706,14 @@ msgid "Parse Error: %1"
 msgstr "Ayrıştırma hatası: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1917
-#, fuzzy, kde-format
-#| msgid "ERROR: not ready for read after 2 sec"
+#, kde-format
 msgid "Not ready for read after 2 sec"
-msgstr "HATA: 2 saniye sonrasında okunmaya hazır değil"
+msgstr "2 saniye sonrasında okunmaya hazır değil"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1921
-#, fuzzy, kde-format
-#| msgid "ERROR: failed to open serial port. error: %1"
+#, kde-format
 msgid "Failed to open serial port. error: %1"
-msgstr "HATA: Seri kapı açılamadı. Hata: %1"
+msgstr "Seri kapı açılamadı. Hata: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1940
 #, kde-format
@@ -19018,8 +19022,9 @@ msgstr "Boş bölümleri atla"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnMode)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:33
-#, kde-format
-msgid "Column Datatypes:"
+#, fuzzy, kde-format
+#| msgid "Column Datatypes:"
+msgid "Column Data Types:"
 msgstr "Sütun veri türleri:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chbSimplifyWhitespaces)
@@ -19071,9 +19076,10 @@ msgstr "Yıl için yalnızca 2 basamak sağlandığında taban yıl"
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:116
-#, kde-format
-msgid "Custom Names:"
-msgstr "Özel adlar:"
+#, fuzzy, kde-format
+#| msgid "Column labels"
+msgid "Column Names:"
+msgstr "Sütun etiketleri"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:123
@@ -20320,9 +20326,11 @@ msgstr "Matlık:"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsDateTimeFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsFormat)
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
+#. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1373
 #: src/frontend/ui/dockwidgets/axisdock.ui:1478
 #: src/frontend/ui/dockwidgets/columndock.ui:30
+#: src/frontend/ui/dockwidgets/columndock.ui:214
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:65
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:56
 #, kde-format
@@ -21054,15 +21062,6 @@ msgstr "Köşe yarıçapı:"
 msgid "Labels:"
 msgstr "Etiketler:"
 
-#. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
-#. i18n: ectx: property (text), widget (QLabel, lValuesNumericFormat)
-#: src/frontend/ui/dockwidgets/columndock.ui:214
-#: src/frontend/ui/dockwidgets/valuewidget.ui:201
-#: src/frontend/ui/dockwidgets/xycurvedock.ui:506
-#, kde-format
-msgid "Numeric:"
-msgstr "Sayısal:"
-
 #. i18n: ectx: property (text), widget (QLabel, lPlotDesignation)
 #: src/frontend/ui/dockwidgets/columndock.ui:311
 #, kde-format
@@ -21659,6 +21658,14 @@ msgstr "Hiçbirini Seçme"
 #, kde-format
 msgid "Distance:"
 msgstr "Uzaklık:"
+
+#. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
+#. i18n: ectx: property (text), widget (QLabel, lValuesNumericFormat)
+#: src/frontend/ui/dockwidgets/valuewidget.ui:201
+#: src/frontend/ui/dockwidgets/xycurvedock.ui:506
+#, kde-format
+msgid "Numeric:"
+msgstr "Sayısal:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDateTimeFormat)
@@ -24873,6 +24880,9 @@ msgstr "dönüştürme süreci başarısız, çıkış kodu ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Dosya açılamadı:"
+
+#~ msgid "Custom Names:"
+#~ msgstr "Özel adlar:"
 
 #~ msgid "Filter not initialized"
 #~ msgstr "Süzgeç ilklendirilmedi"

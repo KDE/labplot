@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-16 00:38+0000\n"
+"POT-Creation-Date: 2025-02-17 00:37+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -8457,7 +8457,7 @@ msgstr "Nenhuma informação disponível"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:145
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5240
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5231
 #: src/frontend/ui/dockwidgets/axisdock.ui:483
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:542
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:478
@@ -8969,7 +8969,7 @@ msgid "%1: load default theme"
 msgstr "%1: carregar o tema predefinido"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1761
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5566
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5557
 #: src/backend/worksheet/Worksheet.cpp:842
 #, kde-format
 msgid "%1: set theme"
@@ -11144,7 +11144,7 @@ msgstr "Nomes de colunas personalizados, separados por espaços. P.ex., \"x y\""
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:115
 #, fuzzy, kde-format
 #| msgid "Custom column names, space separated. E.g. \"x y\""
-msgid "Custom column modes, comma separated"
+msgid "Custom column data types, comma separated"
 msgstr "Nomes de colunas personalizados, separados por espaços. P.ex., \"x y\""
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
@@ -11152,7 +11152,7 @@ msgstr "Nomes de colunas personalizados, separados por espaços. P.ex., \"x y\""
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
-"<br>Datatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
+"<br>Data Types:<table><tr><td>%1</td><td>Integer number with 32bit size "
 "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
 "number with 64bit size (−9.223.372.036.854.775.808 .. "
 "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
@@ -11167,7 +11167,7 @@ msgstr ""
 msgid "%1 or %2"
 msgstr ""
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:252
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:249
 #, fuzzy, kde-format
 #| msgid "rank %1 not supported yet"
 msgid "Datatype not found: %1"
@@ -19522,7 +19522,7 @@ msgstr "Ignorar as partes vazias"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:33
 #, fuzzy, kde-format
 #| msgid "Column labels"
-msgid "Column Datatypes:"
+msgid "Column Data Types:"
 msgstr "Legendas das colunas"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chbSimplifyWhitespaces)
@@ -19574,9 +19574,10 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:116
-#, kde-format
-msgid "Custom Names:"
-msgstr "Nomes Personalizados:"
+#, fuzzy, kde-format
+#| msgid "Column labels"
+msgid "Column Names:"
+msgstr "Legendas das colunas"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:123
@@ -20831,9 +20832,11 @@ msgstr "Opacidade:"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsDateTimeFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsFormat)
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
+#. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1373
 #: src/frontend/ui/dockwidgets/axisdock.ui:1478
 #: src/frontend/ui/dockwidgets/columndock.ui:30
+#: src/frontend/ui/dockwidgets/columndock.ui:214
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:65
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:56
 #, kde-format
@@ -21568,15 +21571,6 @@ msgstr "Raio do canto:"
 msgid "Labels:"
 msgstr "Legendas:"
 
-#. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
-#. i18n: ectx: property (text), widget (QLabel, lValuesNumericFormat)
-#: src/frontend/ui/dockwidgets/columndock.ui:214
-#: src/frontend/ui/dockwidgets/valuewidget.ui:201
-#: src/frontend/ui/dockwidgets/xycurvedock.ui:506
-#, kde-format
-msgid "Numeric:"
-msgstr "Numérico:"
-
 #. i18n: ectx: property (text), widget (QLabel, lPlotDesignation)
 #: src/frontend/ui/dockwidgets/columndock.ui:311
 #, kde-format
@@ -22192,6 +22186,14 @@ msgstr "Selecção"
 #, kde-format
 msgid "Distance:"
 msgstr "Distância:"
+
+#. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
+#. i18n: ectx: property (text), widget (QLabel, lValuesNumericFormat)
+#: src/frontend/ui/dockwidgets/valuewidget.ui:201
+#: src/frontend/ui/dockwidgets/xycurvedock.ui:506
+#, kde-format
+msgid "Numeric:"
+msgstr "Numérico:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDateTimeFormat)
@@ -25426,6 +25428,9 @@ msgstr "o processo de conversão falhou com o código de saída ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Não foi possível aceder ao ficheiro:"
+
+#~ msgid "Custom Names:"
+#~ msgstr "Nomes Personalizados:"
 
 #, fuzzy
 #~| msgid "Failed to initialize %1."

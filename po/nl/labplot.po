@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-16 00:38+0000\n"
-"PO-Revision-Date: 2025-01-30 10:23+0100\n"
+"POT-Creation-Date: 2025-02-17 00:37+0000\n"
+"PO-Revision-Date: 2025-02-16 14:10+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.12.1\n"
+"X-Generator: Lokalize 24.12.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1101,10 +1101,9 @@ msgid "Unable to open device"
 msgstr "Kon apparaat niet openen"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:209
-#, fuzzy, kde-format
-#| msgid "No sheet selected."
+#, kde-format
 msgid "No new line detected"
-msgstr "Geen rekenblad geselecteerd."
+msgstr "Geen nieuwe regel gedetecteerd"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, kde-format
@@ -1175,6 +1174,8 @@ msgstr "Ongeldig scheidingsteken"
 #, kde-format
 msgid "Serial devices must be initialized before reading data from it"
 msgstr ""
+"Seriële apparaten moeten geïnitialiseerd worden voordat er gegevens van "
+"gelezen kunnen worden"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
 #, kde-format
@@ -8163,7 +8164,7 @@ msgstr "geen informatie beschikbaar."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:145
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5240
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5231
 #: src/frontend/ui/dockwidgets/axisdock.ui:483
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:542
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:478
@@ -8663,7 +8664,7 @@ msgid "%1: load default theme"
 msgstr "%1: standaard thema inlezen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1761
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5566
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5557
 #: src/backend/worksheet/Worksheet.cpp:842
 #, kde-format
 msgid "%1: set theme"
@@ -10764,16 +10765,28 @@ msgid "Custom column names, comma separated. E.g. \"x, y\""
 msgstr "Aangepaste kolomnamen, gescheiden door komma's. Bijv.: \"x, y\""
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:115
-#, kde-format
-msgid "Custom column modes, comma separated"
+#, fuzzy, kde-format
+#| msgid "Custom column modes, comma separated"
+msgid "Custom column data types, comma separated"
 msgstr "Aangepaste kolommodi, gescheiden door komma's"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If not empty, the number of columns must match the number of column names "
+#| "if provided and it must match the number of columns in the imported file."
+#| "<br>Datatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
+#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
+#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
+#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
+#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
+#| "td><td>Datetime with the format from the datetime text box if not empty, "
+#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
+#| "td></tr></table>"
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
-"<br>Datatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
+"<br>Data Types:<table><tr><td>%1</td><td>Integer number with 32bit size "
 "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
 "number with 64bit size (−9.223.372.036.854.775.808 .. "
 "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
@@ -10798,7 +10811,7 @@ msgstr ""
 msgid "%1 or %2"
 msgstr "%1 of %2"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:252
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:249
 #, kde-format
 msgid "Datatype not found: %1"
 msgstr "Gegevenstype niet gevonden: %1"
@@ -11670,41 +11683,35 @@ msgstr ""
 "groter zijn dan 'Beginrij' of -1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1817
-#, fuzzy, kde-format
-#| msgid "Preview: Initialization failed: %1"
+#, kde-format
 msgid "Initialization failed: %1"
-msgstr "Vooruitblik: initialisatie is mislukt: %1"
+msgstr "Initialisatie is mislukt: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1842
-#, fuzzy, kde-format
-#| msgid "Preview: Failed to connect to local socket %1 - %2"
+#, kde-format
 msgid "Failed to connect to the local socket: %1"
-msgstr "Vooruitblik: verbinden met lokale socket %1 - %2 is mislukt"
+msgstr "Verbinden is mislukt met lokale socket: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1859
-#, fuzzy, kde-format
-#| msgid "Preview: Failed to connect to TCP socket - %1"
+#, kde-format
 msgid "Failed to connect to the TCP socket. %1"
-msgstr "Vooruitblik: verbinden met TCP-socket is mislukt - %1"
+msgstr "Verbinden is mislukt met TCP-socket. %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1865
 #: src/frontend/datasources/ImportFileWidget.cpp:1894
-#, fuzzy, kde-format
-#| msgid "The device timed out."
+#, kde-format
 msgid "Socket operation timed out."
-msgstr "Tijd voor apparaat is verlopen."
+msgstr "Tijdslimiet voor bewerking met socket is verstreken."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1879
-#, fuzzy, kde-format
-#| msgid "ERROR: not ready for read after 2 sec"
+#, kde-format
 msgid "Not ready for read after 2s:"
-msgstr "FOUT: niet gereed om te lezen na 2 sec"
+msgstr "Niet gereed om te lezen na 2 sec:"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1898
-#, fuzzy, kde-format
-#| msgid "Unable to open file:"
+#, kde-format
 msgid "Unable to bind: "
-msgstr "Kon bestand niet openen:"
+msgstr "Kan niet verbinden: "
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1915
 #, kde-format
@@ -11712,16 +11719,14 @@ msgid "Parse Error: %1"
 msgstr "Fout bij ontleden: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1917
-#, fuzzy, kde-format
-#| msgid "ERROR: not ready for read after 2 sec"
+#, kde-format
 msgid "Not ready for read after 2 sec"
-msgstr "FOUT: niet gereed om te lezen na 2 sec"
+msgstr "Niet gereed voor lezen na 2 sec"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1921
-#, fuzzy, kde-format
-#| msgid "ERROR: failed to open serial port. error: %1"
+#, kde-format
 msgid "Failed to open serial port. error: %1"
-msgstr "FOUT: seriële poort openen is mislukt. fout: %1"
+msgstr "Seriële poort openen is mislukt. fout: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1940
 #, kde-format
@@ -19061,8 +19066,9 @@ msgstr "Lege delen overslaan"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnMode)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:33
-#, kde-format
-msgid "Column Datatypes:"
+#, fuzzy, kde-format
+#| msgid "Column Datatypes:"
+msgid "Column Data Types:"
 msgstr "Gegevenstypen van kolom:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chbSimplifyWhitespaces)
@@ -19114,9 +19120,10 @@ msgstr "Basis jaar wanneer slechts 2 cijfers zijn geleverd voor het jaar"
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:116
-#, kde-format
-msgid "Custom Names:"
-msgstr "Aangepaste namen:"
+#, fuzzy, kde-format
+#| msgid "Column labels"
+msgid "Column Names:"
+msgstr "Kolomlabels"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:123
@@ -20365,9 +20372,11 @@ msgstr "Dekking:"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsDateTimeFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsFormat)
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
+#. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1373
 #: src/frontend/ui/dockwidgets/axisdock.ui:1478
 #: src/frontend/ui/dockwidgets/columndock.ui:30
+#: src/frontend/ui/dockwidgets/columndock.ui:214
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:65
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:56
 #, kde-format
@@ -21099,15 +21108,6 @@ msgstr "Hoekradius:"
 msgid "Labels:"
 msgstr "Labels:"
 
-#. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
-#. i18n: ectx: property (text), widget (QLabel, lValuesNumericFormat)
-#: src/frontend/ui/dockwidgets/columndock.ui:214
-#: src/frontend/ui/dockwidgets/valuewidget.ui:201
-#: src/frontend/ui/dockwidgets/xycurvedock.ui:506
-#, kde-format
-msgid "Numeric:"
-msgstr "Numeriek:"
-
 #. i18n: ectx: property (text), widget (QLabel, lPlotDesignation)
 #: src/frontend/ui/dockwidgets/columndock.ui:311
 #, kde-format
@@ -21704,6 +21704,14 @@ msgstr "Niets selecteren"
 #, kde-format
 msgid "Distance:"
 msgstr "Afstand:"
+
+#. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
+#. i18n: ectx: property (text), widget (QLabel, lValuesNumericFormat)
+#: src/frontend/ui/dockwidgets/valuewidget.ui:201
+#: src/frontend/ui/dockwidgets/xycurvedock.ui:506
+#, kde-format
+msgid "Numeric:"
+msgstr "Numeriek:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDateTimeFormat)
@@ -24915,6 +24923,9 @@ msgstr "conversie is mislukt, exitcode ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Kon bestand niet openen:"
+
+#~ msgid "Custom Names:"
+#~ msgstr "Aangepaste namen:"
 
 #~ msgid "Filter not initialized"
 #~ msgstr "Filter niet geïnitialiseerd"

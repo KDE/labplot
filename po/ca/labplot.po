@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-16 00:38+0000\n"
-"PO-Revision-Date: 2025-01-30 10:21+0100\n"
+"POT-Creation-Date: 2025-02-17 00:37+0000\n"
+"PO-Revision-Date: 2025-02-16 09:38+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -1111,10 +1111,9 @@ msgid "Unable to open device"
 msgstr "No s'ha pogut obrir el dispositiu"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:209
-#, fuzzy, kde-format
-#| msgid "No sheet selected."
+#, kde-format
 msgid "No new line detected"
-msgstr "No s'ha seleccionat cap full."
+msgstr "No s'ha detectat cap línia nova"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, kde-format
@@ -1187,6 +1186,7 @@ msgstr "Separador no vàlid"
 #, kde-format
 msgid "Serial devices must be initialized before reading data from it"
 msgstr ""
+"Els dispositius en sèrie s'han d'inicialitzar abans de llegir-ne les dades"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
 #, kde-format
@@ -8256,7 +8256,7 @@ msgstr "sense informació disponible"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:145
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5240
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5231
 #: src/frontend/ui/dockwidgets/axisdock.ui:483
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:542
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:478
@@ -8760,7 +8760,7 @@ msgid "%1: load default theme"
 msgstr "%1: carrega el tema predeterminat"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1761
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5566
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5557
 #: src/backend/worksheet/Worksheet.cpp:842
 #, kde-format
 msgid "%1: set theme"
@@ -10881,16 +10881,28 @@ msgid "Custom column names, comma separated. E.g. \"x, y\""
 msgstr "Noms de columna personalitzats, separats per comes. P. ex., «x,y»"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:115
-#, kde-format
-msgid "Custom column modes, comma separated"
+#, fuzzy, kde-format
+#| msgid "Custom column modes, comma separated"
+msgid "Custom column data types, comma separated"
 msgstr "Noms de columna personalitzats, separats per comes"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "If not empty, the number of columns must match the number of column names "
+#| "if provided and it must match the number of columns in the imported file."
+#| "<br>Datatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
+#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
+#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
+#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
+#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
+#| "td><td>Datetime with the format from the datetime text box if not empty, "
+#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
+#| "td></tr></table>"
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
-"<br>Datatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
+"<br>Data Types:<table><tr><td>%1</td><td>Integer number with 32bit size "
 "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
 "number with 64bit size (−9.223.372.036.854.775.808 .. "
 "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
@@ -10915,7 +10927,7 @@ msgstr ""
 msgid "%1 or %2"
 msgstr "%1 o %2"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:252
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:249
 #, kde-format
 msgid "Datatype not found: %1"
 msgstr "El tipus de dada no s'ha trobat: %1"
@@ -11790,41 +11802,35 @@ msgstr ""
 "«Fila final» cal que sigui més gran que la «Fila inicial» o -1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1817
-#, fuzzy, kde-format
-#| msgid "Preview: Initialization failed: %1"
+#, kde-format
 msgid "Initialization failed: %1"
-msgstr "Vista prèvia: Ha fallat la inicialització: %1"
+msgstr "Ha fallat la inicialització: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1842
-#, fuzzy, kde-format
-#| msgid "Preview: Failed to connect to local socket %1 - %2"
+#, kde-format
 msgid "Failed to connect to the local socket: %1"
-msgstr "Vista prèvia: Ha fallat en connectar amb el sòcol local %1 - %2"
+msgstr "Ha fallat en connectar amb el sòcol local: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1859
-#, fuzzy, kde-format
-#| msgid "Preview: Failed to connect to TCP socket - %1"
+#, kde-format
 msgid "Failed to connect to the TCP socket. %1"
-msgstr "Vista prèvia: Ha fallat en connectar amb el sòcol TCP - %1"
+msgstr "Ha fallat en connectar amb el sòcol TCP. %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1865
 #: src/frontend/datasources/ImportFileWidget.cpp:1894
-#, fuzzy, kde-format
-#| msgid "The device timed out."
+#, kde-format
 msgid "Socket operation timed out."
-msgstr "El dispositiu ha excedit el temps."
+msgstr "L'operació del sòcol ha excedit el temps."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1879
-#, fuzzy, kde-format
-#| msgid "ERROR: not ready for read after 2 sec"
+#, kde-format
 msgid "Not ready for read after 2s:"
-msgstr "ERROR: no està preparat per llegir després de 2 s"
+msgstr "No està preparat per llegir després de 2 s:"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1898
-#, fuzzy, kde-format
-#| msgid "Unable to open file:"
+#, kde-format
 msgid "Unable to bind: "
-msgstr "No s'ha pogut obrir el fitxer:"
+msgstr "No s'ha pogut vincular: "
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1915
 #, kde-format
@@ -11832,16 +11838,14 @@ msgid "Parse Error: %1"
 msgstr "Error d'anàlisi: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1917
-#, fuzzy, kde-format
-#| msgid "ERROR: not ready for read after 2 sec"
+#, kde-format
 msgid "Not ready for read after 2 sec"
-msgstr "ERROR: no està preparat per llegir després de 2 s"
+msgstr "No està preparat per llegir després de 2 s"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1921
-#, fuzzy, kde-format
-#| msgid "ERROR: failed to open serial port. error: %1"
+#, kde-format
 msgid "Failed to open serial port. error: %1"
-msgstr "ERROR: ha fallat en obrir el port en sèrie. Error: %1"
+msgstr "Ha fallat en obrir el port en sèrie. Error: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1940
 #, kde-format
@@ -19231,8 +19235,9 @@ msgstr "Omet les parts buides"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnMode)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:33
-#, kde-format
-msgid "Column Datatypes:"
+#, fuzzy, kde-format
+#| msgid "Column Datatypes:"
+msgid "Column Data Types:"
 msgstr "Tipus de dades de les columnes:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chbSimplifyWhitespaces)
@@ -19284,9 +19289,10 @@ msgstr "Any base quan només es proporcionen 2 dígits per a l'any"
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:116
-#, kde-format
-msgid "Custom Names:"
-msgstr "Noms personalitzats:"
+#, fuzzy, kde-format
+#| msgid "Column labels"
+msgid "Column Names:"
+msgstr "Etiquetes de columnes"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:123
@@ -20537,9 +20543,11 @@ msgstr "Opacitat:"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsDateTimeFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsFormat)
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
+#. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1373
 #: src/frontend/ui/dockwidgets/axisdock.ui:1478
 #: src/frontend/ui/dockwidgets/columndock.ui:30
+#: src/frontend/ui/dockwidgets/columndock.ui:214
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:65
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:56
 #, kde-format
@@ -21275,15 +21283,6 @@ msgstr "Radi de la cantonada:"
 msgid "Labels:"
 msgstr "Etiquetes:"
 
-#. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
-#. i18n: ectx: property (text), widget (QLabel, lValuesNumericFormat)
-#: src/frontend/ui/dockwidgets/columndock.ui:214
-#: src/frontend/ui/dockwidgets/valuewidget.ui:201
-#: src/frontend/ui/dockwidgets/xycurvedock.ui:506
-#, kde-format
-msgid "Numeric:"
-msgstr "Numèric:"
-
 #. i18n: ectx: property (text), widget (QLabel, lPlotDesignation)
 #: src/frontend/ui/dockwidgets/columndock.ui:311
 #, kde-format
@@ -21880,6 +21879,14 @@ msgstr "No seleccionis res"
 #, kde-format
 msgid "Distance:"
 msgstr "Distància:"
+
+#. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
+#. i18n: ectx: property (text), widget (QLabel, lValuesNumericFormat)
+#: src/frontend/ui/dockwidgets/valuewidget.ui:201
+#: src/frontend/ui/dockwidgets/xycurvedock.ui:506
+#, kde-format
+msgid "Numeric:"
+msgstr "Numèric:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDateTimeFormat)
@@ -25103,221 +25110,5 @@ msgstr "El procés «convert» ha fallat, codi de sortida ="
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
 
-#~ msgid "Filter not initialized"
-#~ msgstr "Filtre no inicialitzat"
-
-#~ msgid "Data Type:"
-#~ msgstr "Tipus de dades:"
-
-# skip-rule: t-pu_desp
-#~ msgid "Dot (.)"
-#~ msgstr "Punt (.)"
-
-#~ msgid "Comma (,)"
-#~ msgstr "Coma (,)"
-
-#~ msgid "Arabic (٫)"
-#~ msgstr "Àrab (٫)"
-
-#~ msgid "xy-curve"
-#~ msgstr "Corba XY"
-
-#~ msgid "xy-curve from a Formula"
-#~ msgstr "Corba XY des d'una fórmula"
-
-#~ msgid "Analysis Curve"
-#~ msgstr "Corba d'anàlisi"
-
-#~ msgid "Executable Path:"
-#~ msgstr "Camí cap a l'executable:"
-
-#~ msgid "QADS"
-#~ msgstr "QADS"
-
-#~ msgid "Cantor"
-#~ msgstr "Cantor"
-
-#~ msgid "Poppler"
-#~ msgstr "Poppler"
-
-#~ msgid "Discount"
-#~ msgstr "Discount"
-
-#~ msgid "KUserfeedback"
-#~ msgstr "KUserfeedback"
-
-#~ msgid "KSyntaxHighlighting"
-#~ msgstr "KSyntaxHighlighting"
-
-#~ msgid "Purpose"
-#~ msgstr "Purpose"
-
-#~ msgid "Qt SerialPort"
-#~ msgstr "Qt SerialPort"
-
-#~ msgid "Qt MQTT"
-#~ msgstr "Qt MQTT"
-
-#~ msgid "GSL"
-#~ msgstr "GSL"
-
-#~ msgid "FFTW3"
-#~ msgstr "FFTW3"
-
-#~ msgid "libcerf"
-#~ msgstr "libcerf"
-
-#~ msgid "Eigen3"
-#~ msgstr "Eigen3"
-
-#~ msgid "liborigin"
-#~ msgstr "liborigin"
-
-#~ msgid "HDF5"
-#~ msgstr "HDF5"
-
-#~ msgid "NetCDF"
-#~ msgstr "NetCDF"
-
-#~ msgid "CFITSIO"
-#~ msgstr "CFITSIO"
-
-#~ msgid "ReadStat"
-#~ msgstr "ReadStat"
-
-#~ msgid "Matio"
-#~ msgstr "Matio"
-
-#~ msgid "QXlsx"
-#~ msgstr "QXlsx"
-
-#~ msgid "ORCUS"
-#~ msgstr "ORCUS"
-
-#~ msgid "MCAP"
-#~ msgstr "MCAP"
-
-#~ msgid "Vector BLF"
-#~ msgstr "Vector BLF"
-
-#~ msgid "Number of elements in vector x"
-#~ msgstr "Nombre d'elements en un vector x"
-
-#~ msgid "Value %1"
-#~ msgstr "Valor %1"
-
-#~ msgid "Failed to prepare device/file: %1"
-#~ msgstr "Ha fallat en preparar el dispositiu/fitxer: %1"
-
-#~ msgid "Continue reading"
-#~ msgstr "Continua llegint"
-
-#~ msgid "Pause reading"
-#~ msgstr "Fa una pausa a la lectura"
-
-#~ msgid "%1: set subgroup size"
-#~ msgstr "%1: estableix la mida del subgrup"
-
-#~ msgid "Subgroup Size:"
-#~ msgstr "Mida del subgrup:"
-
-#~ msgid "Evaluate Worksheet"
-#~ msgstr "Avalua el full de treball"
-
-#~ msgid "Couldn't find panel plugins. Please check your installation."
-#~ msgstr ""
-#~ "No s'han pogut trobar els connectors del plafó. Comproveu la instal·lació."
-
-#~ msgid ""
-#~ "Couldn't find the dynamic library 'cantorpart'. Please check your "
-#~ "installation."
-#~ msgstr ""
-#~ "No s'ha pogut trobar la biblioteca dinàmica «cantorpart». Comproveu la "
-#~ "instal·lació."
-
-#~ msgid "Failed to open the device."
-#~ msgstr "Ha fallat en obrir el dispositiu."
-
-#~ msgid "Failed to read data. The device is removed."
-#~ msgstr "Ha fallat en llegir les dades. El dispositiu està extret."
-
-#~ msgid "Could not connect to the provided serial port."
-#~ msgstr "No s'ha pogut connectar amb el port en sèrie proporcionat."
-
-#~ msgctxt "@title:window"
-#~ msgid "CAS Preferences"
-#~ msgstr "Preferències del CAS"
-
-#~ msgid "No Cantor backends found. Please install the ones you want to use."
-#~ msgstr ""
-#~ "No s'ha trobat cap dorsal del Cantor. Instal·leu els que vulgueu emprar."
-
-#~ msgid "Excel"
-#~ msgstr "Excel"
-
-#~ msgid "ROOT (CERN) Histograms"
-#~ msgstr "Histogrames ROOT (CERN)"
-
-#~ msgid "Add %1"
-#~ msgstr "Afegeix %1"
-
-#~ msgid "%1 name:"
-#~ msgstr "Nom %1:"
-
-#~ msgid "Fit not possible. Please check if data is given."
-#~ msgstr "L'ajust no és possible. Comproveu si s'han indicat les dades."
-
-#~ msgid "CartesianPlot"
-#~ msgstr "DiagramaCartesià"
-
-#~ msgid "cumulative distribution function P"
-#~ msgstr "Funció de distribució acumulada P"
-
-#~| msgid "1st quartile"
-#~ msgid "p-th quantile"
-#~ msgstr "Quantil p-è"
-
-#~ msgid "%1: copy %2"
-#~ msgstr "%1: copia %2"
-
-#~ msgid "Column Format"
-#~ msgstr "Format de columna"
-
-#~ msgid "test"
-#~ msgstr "test"
-
-#~ msgid "Debug Output:"
-#~ msgstr "Sortida de depuració:"
-
-#~ msgid "Specify the name of the file to import."
-#~ msgstr "Indiqueu el nom del fitxer a importar."
-
-#~ msgid "%1: move down"
-#~ msgstr "%1: mou avall"
-
-#~ msgid "%1: move behind %2."
-#~ msgstr "%1: mou al darrere de %2."
-
-#~ msgid "%1: move in front of %2."
-#~ msgstr "%1: mou al davant de %2."
-
-#~ msgid "Invalid metadata file"
-#~ msgstr "Fitxer de metadades no vàlid"
-
-#~ msgid "Failed to download the dataset"
-#~ msgstr "Ha fallat en baixar el conjunt de dades"
-
-#~ msgid "Failed to save the dataset"
-#~ msgstr "Ha fallat en desar el conjunt de dades"
-
-#~ msgid "Variable contains no data"
-#~ msgstr "La variable no conté cap dada"
-
-#~ msgid "Not implemented yet"
-#~ msgstr "Encara no s'ha implementat"
-
-#~ msgid "Invalid dbc file"
-#~ msgstr "Fitxer «dbc» no vàlid"
-
-#~ msgid "Parse Errors"
-#~ msgstr "Errors d'anàlisi"
+#~ msgid "Custom Names:"
+#~ msgstr "Noms personalitzats:"
