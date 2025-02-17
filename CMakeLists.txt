@@ -9,15 +9,13 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core)
-message(STATUS "Found Qt ${QT_VERSION}")
-set(QT_MAJOR_VERSION ${QT_VERSION_MAJOR})
-
+set(QT_MAJOR_VERSION 6)
 set(QT_MIN_VERSION "6.5.0")
-add_definitions(-DQT_DISABLE_DEPRECATED_UP_TO=0x50F00)
+set(QT_VERSION_MAJOR ${QT_MAJOR_VERSION}) # used by QADS
+add_definitions(-DQT_DISABLE_DEPRECATED_UP_TO=0x60000)
 
 set(KF_MAJOR_VERSION "6")
-set(KF_MIN_VERSION "5.240.0")
+set(KF_MIN_VERSION "6.3.0")
 
 set(APPLE_SUPPRESS_X11_WARNING ON)
 
@@ -39,6 +37,7 @@ include(FeatureSummary)
 string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 
 find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
+    Core
     Concurrent
     Gui
 #     Qml
@@ -119,14 +118,21 @@ else()
     set(COMPILER_OPTIMIZATION_FLAG "-O0")
 endif()
 set (GENERIC_FLAGS "-Wall -Wextra -Wundef -Wpointer-arith -Wunreachable-code -Wunused -Wdeprecated-declarations -fno-omit-frame-pointer -fstack-protector-strong")
-set (GENERIC_GNU_FLAGS "${COMPILER_OPTIMIZATION_FLAG} -Wcast-align -Wswitch-enum -fvisibility=default -pedantic")
+#set (GENERIC_GNU_FLAGS "${COMPILER_OPTIMIZATION_FLAG} -Wcast-align -Wswitch-enum -fvisibility=default -pedantic")
+set (GENERIC_GNU_FLAGS "${COMPILER_OPTIMIZATION_FLAG} -Wcast-align -Wswitch-enum -fvisibility=default -pedantic -ffunction-sections -fdata-sections -pipe")
+if(NOT APPLE)
+    set (GENERIC_GNU_LINK_FLAGS "-Wl,--gc-sections -Wl,--as-needed -Wl,--no-undefined")
+endif()
 set (GENERIC_C_FLAGS "${GENERIC_FLAGS} -fno-exceptions")
 # liborigin needs exceptions
 set (GENERIC_CXX_FLAGS "${GENERIC_FLAGS} -fexceptions -std=c++17")
 
 if("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
     message(STATUS "GNU C compiler ${CMAKE_C_COMPILER_VERSION} detected, adding compile flags")
+    # -flto is too heavy even with TMPDIR=/dev/shm
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GENERIC_C_FLAGS} ${GENERIC_GNU_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GENERIC_GNU_LINK_FLAGS}")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${GENERIC_GNU_LINK_FLAGS}")
     if(CMAKE_C_COMPILER_VERSION VERSION_GREATER 10.99 AND CMAKE_C_COMPILER_VERSION VERSION_LESS 12)	# GCC 11 fails building readstat 1.1.8
         message(STATUS "Building ReadStat disabled due to GNU C compiler version 11")
         set(DONT_BUILD_READSTAT TRUE)
@@ -136,7 +142,11 @@ if("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
     endif()
 elseif("${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
     message(STATUS "Clang C compiler ${CMAKE_C_COMPILER_VERSION} detected, adding compile flags")
+    # even -flto=thin takes too long
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE ${GENERIC_C_FLAGS} ${GENERIC_GNU_FLAGS}")
+    # TRY: -flto=thin -flto-jobs=2
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GENERIC_GNU_LINK_FLAGS}")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${GENERIC_GNU_LINK_FLAGS}")
 elseif("${CMAKE_C_COMPILER_ID}" MATCHES "Intel")
     message(STATUS "Intel C compiler detected, adding compile flags")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE -O3 ${GENERIC_C_FLAGS}")
@@ -160,19 +170,21 @@ endif()
 message(STATUS "CFLAGS =${CMAKE_C_FLAGS}")
 
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
-    if(QT_VERSION VERSION_GREATER_EQUAL 5.7.0 AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "9")
+    if(QT_VERSION VERSION_GREATER_EQUAL 6.7.0 AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "9")
 	# see Qt supported compiler
         message(FATAL_ERROR "Insufficient GNU C++ version ${CMAKE_CXX_COMPILER_VERSION} (Qt 6.7+ requires at least GNU g++ 9)")
     else()
         message(STATUS "GNU C++ compiler ${CMAKE_CXX_COMPILER_VERSION} detected, adding compile flags")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant") # -Wzero-as-null-pointer-constant since version 5
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant")
+	# see linker flags of gcc
     endif()
     if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 14) # overwrite -Werror=hardened to not fail
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=hardened")
     endif()
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     message(STATUS "Clang C++ compiler ${CMAKE_CXX_COMPILER_VERSION} detected, adding compile flags")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant") # -Wzero-as-null-pointer-constant since version 5
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant")
+    # see linker flags of clang
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Intel")
     message(STATUS "Intel C++ compiler detected, adding compile flags")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE ${GENERIC_CXX_FLAGS}")
@@ -318,6 +330,7 @@ endif()
 
 ### GSL (required) ###############################
 find_package(GSL REQUIRED)
+message(STATUS "GSL libraries: ${GSL_LIBRARIES}, GSL library: ${GSL_LIBRARY}, GSL CBLAS library: ${GSL_CBLAS_LIBRARY}")
 
 find_package(Poppler "0.62.0" COMPONENTS Qt${QT_MAJOR_VERSION})
 if(Poppler_FOUND)
@@ -569,7 +582,7 @@ if(ENABLE_READSTAT)
         find_library(ICONV_LIBRARIES NAMES iconv libiconv libiconv-2)
         if(ICONV_LIBRARIES) # non-glibc
             message(STATUS "Iconv library FOUND: ${ICONV_LIBRARIES}")
-            set(READSTAT_LIBRARIES ${CMAKE_BINARY_DIR}/src/3rdparty/install/lib/libreadstat.a ${ICONV_LIBRARIES})
+            set(READSTAT_LIBRARIES ${ICONV_LIBRARIES} ${CMAKE_BINARY_DIR}/src/3rdparty/install/lib/libreadstat.a)
         else()
             message(STATUS "Iconv library NOT FOUND")
             set(READSTAT_LIBRARIES ${CMAKE_BINARY_DIR}/src/3rdparty/install/lib/libreadstat.a)

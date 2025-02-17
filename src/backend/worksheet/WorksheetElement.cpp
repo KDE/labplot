@@ -4,7 +4,7 @@
 	Description          : Base class for all Worksheet children.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -13,6 +13,7 @@
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Worksheet.h"
@@ -1108,4 +1109,40 @@ void WorksheetElementPrivate::setHover(bool on) {
 CartesianPlot* WorksheetElement::plot() const {
 	Q_D(const WorksheetElement);
 	return d->m_plot;
+}
+
+/*
+ * Returns a localized representation of the integer \c value according
+ * to \locale and to the current settings for the minus sign for negative values.
+ * if it's clear the value is always strictly positive, QLocale::toNumber() can be used directly.
+ */
+QString WorksheetElementPrivate::numberToString(int value, const QLocale& locale) {
+	QString result = locale.toString(value);
+	if (value < 0)
+		handleNegativeNumber(result);
+	return result;
+}
+
+/*
+ * Returns a localized representation of the double \c value according
+ * to \locale and to the current settings for the minus sign for negative values.
+ * if it's clear the value is always strictly positive, QLocale::toNumber() can be used directly.
+ */
+QString WorksheetElementPrivate::numberToString(double value, const QLocale& locale, char format, int precision) {
+	QString result = locale.toString(value, format, precision);
+	if (value < 0)
+		handleNegativeNumber(result);
+
+	return result;
+}
+
+/*!
+ * helper function replacing the hyphen with the minus sign in the localized string of the numerical value,
+ * if this setting is active
+ */
+void WorksheetElementPrivate::handleNegativeNumber(QString& value) {
+	const auto group = Settings::settingsGeneral();
+	const bool useHyphen = group.readEntry<bool>(QLatin1String("UseHyphen"), false);
+	if (!useHyphen)
+		value.replace(0, 1, QString::fromUtf8("−"));
 }

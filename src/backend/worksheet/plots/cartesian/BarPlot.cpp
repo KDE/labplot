@@ -28,8 +28,6 @@
 #include <QMenu>
 #include <QPainter>
 
-#include <KConfig>
-#include <KConfigGroup>
 #include <KLocalizedString>
 
 /**
@@ -1095,14 +1093,14 @@ void BarPlotPrivate::updateValues() {
 			auto& point = valuesPointsLogical.at(i);
 			if (orientation == BarPlot::Orientation::Vertical) {
 				if (type == BarPlot::Type::Stacked_100_Percent)
-					m_valuesStrings << prefix + numberLocale.toString(point.y(), value->numericFormat(), 1) + QLatin1String("%") + suffix;
+					m_valuesStrings << prefix + numberToString(point.y(), numberLocale, value->numericFormat(), 1) + QLatin1String("%") + suffix;
 				else
-					m_valuesStrings << prefix + numberLocale.toString(point.y()) + suffix;
+					m_valuesStrings << prefix + numberToString(point.y(), numberLocale) + suffix;
 			} else {
 				if (type == BarPlot::Type::Stacked_100_Percent)
-					m_valuesStrings << prefix + numberLocale.toString(point.x(), value->numericFormat(), 1) + QLatin1String("%") + suffix;
+					m_valuesStrings << prefix + numberToString(point.x(), numberLocale, value->numericFormat(), 1) + QLatin1String("%") + suffix;
 				else
-					m_valuesStrings << prefix + numberLocale.toString(point.x()) + suffix;
+					m_valuesStrings << prefix + numberToString(point.x(), numberLocale) + suffix;
 			}
 		}
 	} else if (value->type() == Value::CustomColumn) {
@@ -1121,13 +1119,13 @@ void BarPlotPrivate::updateValues() {
 			switch (xColMode) {
 			case AbstractColumn::ColumnMode::Double:
 				if (type == BarPlot::Type::Stacked_100_Percent)
-					m_valuesStrings << prefix + numberLocale.toString(valuesColumn->valueAt(i), value->numericFormat(), 1) + QString::fromStdString("%");
+					m_valuesStrings << prefix + numberToString(valuesColumn->valueAt(i), numberLocale, value->numericFormat(), 1) + QString::fromStdString("%");
 				else
-					m_valuesStrings << prefix + numberLocale.toString(valuesColumn->valueAt(i), value->numericFormat(), value->precision()) + suffix;
+					m_valuesStrings << prefix + numberToString(valuesColumn->valueAt(i), numberLocale, value->numericFormat(), value->precision()) + suffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
-				m_valuesStrings << prefix + numberLocale.toString(valuesColumn->valueAt(i)) + suffix;
+				m_valuesStrings << prefix + numberToString(valuesColumn->valueAt(i), numberLocale) + suffix;
 				break;
 			case AbstractColumn::ColumnMode::Text:
 				m_valuesStrings << prefix + valuesColumn->textAt(i) + suffix;

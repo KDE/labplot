@@ -4,6 +4,8 @@
 
 add_subdirectory(BLF)
 
-install(
-    FILES BLF.h
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Vector)
+if (NOT FETCH_CONTENT_INCLUSION)
+    install(
+        FILES BLF.h
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Vector)
+endif()

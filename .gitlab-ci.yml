@@ -9,12 +9,10 @@ include:
 # reuse-lint fails
 #      - /gitlab-templates/reuse-lint.yml
       - /gitlab-templates/clang-format.yml
-#      - /gitlab-templates/linux.yml
-#      - /gitlab-templates/windows.yml
-# currently fails linking
       - /gitlab-templates/linux-qt6.yml
+# Fails finding ECM (2025-02-13)
+#      - /gitlab-templates/linux-qt6-next.yml
       - /gitlab-templates/windows-qt6.yml
-#      - /gitlab-templates/freebsd.yml
       - /gitlab-templates/freebsd-qt6.yml
 ### DEPLOY
 #      - /gitlab-templates/craft-appimage.yml

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Main window of the application
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2008-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -589,27 +589,7 @@ void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
 		m_projectExplorer->setCurrentAspect(view->part());
 }
 
-void MainWin::checkIconTheme() {
-	auto themeName = QIcon::themeName();
-	bool isDarkMode = QApplication::palette().color(QPalette::Window).value() < 128;
-	INFO(Q_FUNC_INFO << ", current icon theme: \"" << themeName.toStdString() << "\", " << (isDarkMode ? "dark mode" : "light mode"))
-	if (isDarkMode) {
-		if (themeName == QLatin1String("breeze")) {
-			INFO(Q_FUNC_INFO << ", set icon theme to breeze-dark")
-			QIcon::setThemeName(QLatin1String("breeze-dark"));
-		}
-	} else {
-		if (themeName == QLatin1String("breeze-dark")) {
-			INFO(Q_FUNC_INFO << ", set icon theme to breeze")
-			QIcon::setThemeName(QLatin1String("breeze"));
-		}
-	}
-	//QDEBUG(Q_FUNC_INFO << ", used icon theme:" << QIcon::themeName())
-}
-
 void MainWin::initActions() {
-	checkIconTheme();
-
 	// ******************** File-menu *******************************
 	// add some standard actions
 	m_newProjectAction = KStandardAction::openNew(
@@ -1004,8 +984,6 @@ void MainWin::initMenus() {
 }
 
 void MainWin::colorSchemeChanged(QAction* action) {
-	checkIconTheme();
-
 	// save the selected color scheme
 	auto group = Settings::group(QStringLiteral("Settings_General"));
 	const auto& schemeName = KLocalizedString::removeAcceleratorMarker(action->text());
@@ -2614,7 +2592,7 @@ void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
 
 	// handle general settings
 	// TODO: handle only those settings that were really changed, similar to how it's done for the nubmer format, etc. further below
-	if (changes.contains(Settings::Type::General_Number_Format)) {
+	if (changes.contains(Settings::Type::General)) {
 		// title bar
 		MainWin::TitleBarMode titleBarMode = static_cast<MainWin::TitleBarMode>(group.readEntry("TitleBar", 0));
 		if (titleBarMode != m_titleBarMode) {
@@ -2648,18 +2626,6 @@ void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
 		interval *= 60 * 1000;
 		if (interval != m_autoSaveTimer.interval())
 			m_autoSaveTimer.setInterval(interval);
-
-
-		// update spreadsheet header
-		if (m_project) {
-			const auto& spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
-			for (auto* spreadsheet : spreadsheets)
-				spreadsheet->updateHorizontalHeader();
-		}
-
-		// bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
-		// if (m_showWelcomeScreen != showWelcomeScreen)
-		// 	m_showWelcomeScreen = showWelcomeScreen;
 	}
 
 	// update the number format in all visible dock widgets, worksheet elements and spreadsheets, if changed
@@ -2717,6 +2683,19 @@ void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
 			}
 		}
 	}
+
+	if (changes.contains(Settings::Type::Spreadsheet)) {
+		// update spreadsheet header
+		if (m_project) {
+			const auto& spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* spreadsheet : spreadsheets)
+				spreadsheet->updateHorizontalHeader();
+		}
+	}
+
+	// bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
+	// if (m_showWelcomeScreen != showWelcomeScreen)
+	// 	m_showWelcomeScreen = showWelcomeScreen;
 
 #ifdef HAVE_CANTOR_LIBS
 	if (changes.contains(Settings::Type::Notebook))

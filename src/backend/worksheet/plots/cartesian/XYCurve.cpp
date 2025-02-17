@@ -23,8 +23,6 @@
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "tools/ImageTools.h"
 
-#include <KConfig>
-#include <KConfigGroup>
 #include <KLocalizedString>
 
 #include <QGraphicsSceneMouseEvent>
@@ -1855,7 +1853,7 @@ void XYCurvePrivate::updateValues() {
 				continue;
 			QString value;
 			if (xRangeFormat == RangeT::Format::Numeric)
-				value = numberLocale.toString(point.x(), valuesNumericFormat, precision);
+				value = numberToString(point.x(), numberLocale, valuesNumericFormat, precision);
 			else
 				value = QDateTime::fromMSecsSinceEpoch(point.x(), QTimeZone::UTC).toString(valuesDateTimeFormat);
 			m_valueStrings << valuesPrefix + value + valuesSuffix;
@@ -1872,7 +1870,7 @@ void XYCurvePrivate::updateValues() {
 				continue;
 			QString value;
 			if (rangeFormat == RangeT::Format::Numeric)
-				value = numberLocale.toString(point.y(), valuesNumericFormat, precision);
+				value = numberToString(point.y(), numberLocale, valuesNumericFormat, precision);
 			else
 				value = QDateTime::fromMSecsSinceEpoch(point.y(), QTimeZone::UTC).toString(valuesDateTimeFormat);
 			m_valueStrings << valuesPrefix + value + valuesSuffix;
@@ -1899,12 +1897,12 @@ void XYCurvePrivate::updateValues() {
 			if (valuesType == XYCurve::ValuesType::XYBracketed)
 				value = QLatin1Char('(');
 			if (xRangeFormat == RangeT::Format::Numeric)
-				value += numberLocale.toString(point.x(), valuesNumericFormat, xPrecision);
+				value += numberToString(point.x(), numberLocale, valuesNumericFormat, xPrecision);
 			else
 				value += QDateTime::fromMSecsSinceEpoch(point.x(), QTimeZone::UTC).toString(valuesDateTimeFormat);
 
 			if (yRangeFormat == RangeT::Format::Numeric)
-				value += QLatin1Char(',') + numberLocale.toString(point.y(), valuesNumericFormat, yPrecision);
+				value += QLatin1Char(',') + numberToString(point.y(), numberLocale, valuesNumericFormat, yPrecision);
 			else
 				value += QLatin1Char(',') + QDateTime::fromMSecsSinceEpoch(point.y(), QTimeZone::UTC).toString(valuesDateTimeFormat);
 
@@ -1962,11 +1960,11 @@ void XYCurvePrivate::updateValues() {
 
 			switch (vColMode) {
 			case AbstractColumn::ColumnMode::Double:
-				m_valueStrings << valuesPrefix + numberLocale.toString(valuesColumn->valueAt(i), valuesNumericFormat, valuesPrecision) + valuesSuffix;
+				m_valueStrings << valuesPrefix + numberToString(valuesColumn->valueAt(i), numberLocale, valuesNumericFormat, valuesPrecision) + valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
-				m_valueStrings << valuesPrefix + numberLocale.toString(valuesColumn->valueAt(i)) + valuesSuffix;
+				m_valueStrings << valuesPrefix + numberToString(valuesColumn->valueAt(i), numberLocale) + valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Text:
 				m_valueStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;

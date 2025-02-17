@@ -8,6 +8,8 @@
 
 #include <Vector/BLF/platform.h>
 
+#include <cstdint>
+
 #include <Vector/BLF/AbstractFile.h>
 
 #include <Vector/BLF/vector_blf_export.h>

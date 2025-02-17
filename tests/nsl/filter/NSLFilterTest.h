@@ -16,7 +16,7 @@ class NSLFilterTest : public NSLTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
+	void initTestCase() override;
 
 	void testForm();
 	// performance

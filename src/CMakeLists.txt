@@ -493,6 +493,8 @@ set(NSL_SOURCES
     ${BACKEND_DIR}/nsl/nsl_smooth.c
     ${BACKEND_DIR}/nsl/nsl_sort.c
     ${BACKEND_DIR}/nsl/nsl_stats.c
+    ${BACKEND_DIR}/nsl/nsl_statistical_test.c
+
 )
 
 if(NOT MSVC_FOUND)
@@ -555,11 +557,28 @@ endif()
 target_compile_definitions(labplotbackendlib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 target_compile_definitions(labplotlib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
+if(READSTAT_FOUND)   # system readstat needs libiconv
+    find_library(ICONV_LIBRARIES NAMES iconv libiconv libconv-2)
+    if(ICONV_LIBRARIES)
+        message(status "FOUND iconv: ${ICONV_LIBRARIES}. Adding with --no-as-needed")
+    endif()
+endif()
+if(NOT ICONV_LIBRARIES)
+    set(ICONV_LIBRARIES "")
+endif()
+if(NOT APPLE)
+    set(TURN_OFF_AS_NEEDED "-Wl,--no-as-needed")
+    set(TURN_ON_AS_NEEDED "-Wl,--as-needed")
+endif()
 target_link_libraries(labplotnsllib
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Widgets    # QApplication
+    ${TURN_OFF_AS_NEEDED}
     ${GSL_LIBRARIES}
-    ${GSL_CBLAS_LIBRARIES}
+    ${ICONV_LIBRARIES}
+    ${TURN_ON_AS_NEEDED}
+    ${LIBCERF_LIBRARIES}
+    ${FFTW3_LIBRARIES}
 )
 target_link_libraries(labplotbackendlib
     Qt${QT_MAJOR_VERSION}::Core
@@ -576,14 +595,16 @@ target_link_libraries(labplotbackendlib
     KF${KF_MAJOR_VERSION}::CoreAddons    # kcoreaddons_version.h
     ${ZLIB_LIBRARIES}
     ${LZ4_LIBRARIES}
+    ${TURN_OFF_AS_NEEDED}
     ${GSL_LIBRARIES}
-    ${GSL_CBLAS_LIBRARIES}
+    ${TURN_ON_AS_NEEDED}
     ${HDF5_LIBRARIES}
     ${FFTW3_LIBRARIES}
     ${netCDF_LIBRARIES}
     ${CFITSIO_LIBRARIES}
     ${LIBCERF_LIBRARIES}
     ${MATIO_LIBRARIES}
+    ${READSTAT_LIBRARIES}
     ads::qt${QT_VERSION_MAJOR}advanceddocking
 )
 target_link_libraries(labplotlib
@@ -650,14 +671,9 @@ if(ENABLE_READSTAT)
     if(BUILD_READSTAT)
         add_dependencies(labplotbackendlib 3rdparty_readstat)
     endif()
-    # link system readstat with iconv
     if(READSTAT_FOUND)
-        find_library(ICONV_LIBRARIES NAMES iconv libiconv libconv-2)
-        if(ICONV_LIBRARIES)
-            target_link_libraries(labplotbackendlib ${ICONV_LIBRARIES})
-        endif()
-    endif()
         target_link_libraries(labplotbackendlib ${READSTAT_LIBRARIES} ${ZLIB_LIBRARIES})
+    endif()
 endif()
 
 if(ENABLE_XLSX)
@@ -692,7 +708,7 @@ if(ENABLE_LIBORIGIN)
     endif()
 endif()
 
-IF(LZ4_FOUND)
+if(LZ4_FOUND)
     target_include_directories(labplotbackendlib PUBLIC ${LZ4_INCLUDE_DIR})
 endif()
 

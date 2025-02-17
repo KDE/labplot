@@ -21,7 +21,7 @@ private Q_SLOTS:
 	// void init(); // Called before each test is executed
 	// void cleanup(); // Called after each test is executed
 
-	void initTestCase();
+	void initTestCase() override;
 
 	// check superior and inferior relations
 	void testContainFalse();

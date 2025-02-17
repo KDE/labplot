@@ -199,7 +199,6 @@ private:
 
 	void initActions();
 	void initMenus();
-	void checkIconTheme();
 	bool warnModified();
 	void activateSubWindowForAspect(const AbstractAspect*);
 	bool save(const QString&);

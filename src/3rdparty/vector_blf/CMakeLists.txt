@@ -9,7 +9,7 @@ project(Vector_BLF
     DESCRIPTION "Vector Binary Log File support library")
 
 # source code documentation
-option(OPTION_RUN_DOXYGEN "Run Doxygen" ON)
+option(OPTION_RUN_DOXYGEN "Run Doxygen" OFF)
 
 # static code analysis
 option(OPTION_RUN_CCCC "Run CCCC" OFF)
@@ -21,6 +21,8 @@ option(OPTION_BUILD_TESTS "Build tests" OFF)
 option(OPTION_USE_GCOV "Build with gcov to generate coverage data on execution" OFF)
 option(OPTION_USE_GPROF "Build with gprof" OFF)
 option(OPTION_ADD_LCOV "Add lcov targets to generate HTML coverage report" OFF)
+# Turn OFF, if you are using FetchContent to include it to your project
+option(FETCH_CONTENT_INCLUSION "Include project with FetchContent_Declare in another project. In this case the headers and the cmake files are not needed, only the library" OFF)
 
 # directories
 include(GNUInstallDirs)

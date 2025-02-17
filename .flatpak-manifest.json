@@ -64,8 +64,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-25.01.0.tar.xz",
-                    "sha256": "7eefc122207bbbd72a303c5e0743f4941e8ae861e24dcf0501e18ce1d1414112"
+                    "url": "https://poppler.freedesktop.org/poppler-25.02.0.tar.xz",
+                    "sha256": "21234cb2a9647d73c752ce4031e65a79d11a511a835f2798284c2497b8701dee"
                 }
             ],
             "modules": [
@@ -117,8 +117,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/24.12.0/src/cantor-24.12.0.tar.xz",
-			    "sha256": "3c327a33377e0cd6895936b438fb33a1cea274ba394b997fb0002a80d273f337"
+			    "url": "https://download.kde.org/stable/release-service/24.12.1/src/cantor-24.12.1.tar.xz",
+			    "sha256": "06b2d67e37046c832de741ed00557c4ab13c873223f6df3818a5af4721e79065"
 		    }
 	    ]
         },
@@ -147,8 +147,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/Unidata/netcdf-c/archive/v4.9.2.tar.gz",
-                    "sha256": "bc104d101278c68b303359b3dc4192f81592ae8640f1aee486921138f7f88cb7"
+                    "url": "https://github.com/Unidata/netcdf-c/archive/v4.9.3.tar.gz",
+                    "sha256": "990f46d49525d6ab5dc4249f8684c6deeaf54de6fec63a187e9fb382cc0ffdff"
                 }
             ]
         },
@@ -299,8 +299,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/2.1.1/mdds-2.1.1.tar.xz",
-                    "sha256": "1483d90cefb8aa4563c4d0a85cb7b243aa95217d235d422e9ca6722fd5b97e56"
+                    "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/3.0.0/mdds-3.0.0.tar.xz",
+                    "sha256": "9b077e8d929050e9a432cc131beed2380ac85cfe98b17fc26d01d0ed532129c8"
                 }
             ]
         },
@@ -309,12 +309,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/api/v4/projects/ixion%2Fixion/packages/generic/source/0.19.0/libixion-0.19.0.tar.xz",
-                    "sha256": "b4864d7a55351a09adbe9be44e5c65b1d417e80e946c947951d0e8428b9dcd15"
-                },
-		{
-                    "type": "patch",
-                    "path": "admin/patches/libixion-0.19.0_win32.patch"
+                    "url": "https://gitlab.com/api/v4/projects/ixion%2Fixion/packages/generic/source/0.20.0/libixion-0.20.0.tar.xz",
+                    "sha256": "8466a05f19f60b7568641a449704666308848f7bcaf8335f92ee9474a451e4cd"
                 }
             ]
         },
@@ -323,8 +319,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/api/v4/projects/orcus%2Forcus/packages/generic/source/0.19.2/liborcus-0.19.2.tar.xz",
-                    "sha256": "69ed26a00d4aaa7688e62a6e003cbc81928521a45e96605e53365aa499719e39"
+                    "url": "https://gitlab.com/api/v4/projects/orcus%2Forcus/packages/generic/source/0.20.0/liborcus-0.20.0.tar.xz",
+                    "sha256": "fb6438977a75e7f455b772acf80d861fbc787ab18d52f7997af44a212311a507"
                 }
             ]
         },

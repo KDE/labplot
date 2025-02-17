@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : A xy-curve defined by a fit model
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -22,6 +22,7 @@
 
 #include <QDateTime>
 #include <QElapsedTimer>
+#include <QFontDatabase>
 #include <QIcon>
 #include <QThreadPool>
 
@@ -65,20 +66,9 @@ const XYAnalysisCurve::Result& XYFitCurve::result() const {
 	Q_D(const XYFitCurve);
 	return d->fitResult;
 }
-void XYFitCurve::initStartValues(const XYCurve* curve) {
-	Q_D(XYFitCurve);
-	XYFitCurve::FitData& fitData = d->fitData;
-	initStartValues(fitData, curve);
-}
 
-void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* curve) {
+void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData) {
 	DEBUG(Q_FUNC_INFO);
-	// TODO: curve used for anything?
-	if (!curve) {
-		DEBUG(Q_FUNC_INFO << ", WARNING: no curve given");
-		return;
-	}
-
 	Q_D(XYFitCurve);
 	const Column* xColumn = dynamic_cast<const Column*>(d->xDataColumn);
 	const Column* yColumn = dynamic_cast<const Column*>(d->yDataColumn);
@@ -387,7 +377,7 @@ void XYFitCurve::initFitData(XYAnalysisCurve::AnalysisAction action) {
 		return;
 
 	Q_D(XYFitCurve);
-	XYFitCurve::FitData& fitData = d->fitData;
+	auto& fitData = d->fitData;
 	if (action == XYAnalysisCurve::AnalysisAction::FitLinear) {
 		// Linear
 		fitData.modelCategory = nsl_fit_model_basic;
@@ -440,7 +430,8 @@ void XYFitCurve::initFitData(XYAnalysisCurve::AnalysisAction action) {
 		fitData.modelType = 0;
 	}
 
-	XYFitCurve::initFitData(fitData);
+	initFitData(fitData);
+	initStartValues(fitData);
 }
 
 /*!
@@ -1817,6 +1808,8 @@ void XYFitCurvePrivate::prepareResultColumns() {
 	if (!resultsNote) {
 		resultsNote = new Note(i18nc("Curve fitting", "Fit Results"));
 		resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
+		resultsNote->setBackgroundColor(QColor(Qt::white));
+		resultsNote->setTextFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 		q->addChild(resultsNote);
 	}
 	if (!residualsColumn) {
@@ -1877,16 +1870,67 @@ void XYFitCurvePrivate::updateResultsNote() {
 
 	int np = fitResult.paramValues.size();
 
-	text += TAB + i18n("Value") + TAB + i18n("Uncertainty") + TAB + i18n("Uncertainty,%") + TAB + i18n("t Statistic") + TAB + QStringLiteral("P > |t|") + TAB
-		+ i18n("Lower") + TAB + i18n("Upper") + NEWLINE;
+	auto valueString = i18n("Value");
+	auto errorString = i18n("Uncertainty");
+	auto errorPString = i18n("Uncertainty,%");
+	auto tValueString = i18n("t Statistic");
+	auto pValueString = QStringLiteral("P > |t|");
+	auto lowerString = i18n("Lower");
+	auto upperString = i18n("Upper");
+	int maxParameterLength = 0;
+	int maxValueLength = valueString.size();
+	int maxErrorLength = errorString.size();
+	int maxErrorPLength = errorPString.size();
+	int maxTValueLength = tValueString.size();
+	int maxPValueLength = pValueString.size();
+	int maxLowerLength = lowerString.size();
+	// calculate max length of all fields
 	for (int i = 0; i < np; i++) {
-		text += fitData.paramNames.at(i) + TAB + numberLocale.toString(fitResult.paramValues.at(i)) + TAB + numberLocale.toString(fitResult.errorValues.at(i))
-			+ TAB + TAB + numberLocale.toString(fitResult.errorValues.at(i) / fitResult.paramValues.at(i) * 100.) + TAB + TAB
-			+ numberLocale.toString(fitResult.tdist_tValues.at(i)) + TAB
-			+ numberLocale.toString(fitResult.tdist_pValues.at(i))
-			// TODO: margin2Values?
-			+ TAB + numberLocale.toString(fitResult.paramValues.at(i) - fitResult.marginValues.at(i)) + TAB
-			+ numberLocale.toString(fitResult.paramValues.at(i) + fitResult.marginValues.at(i)) + NEWLINE;
+		int parameterLength = fitData.paramNames.at(i).size();
+		int valueLength = numberLocale.toString(fitResult.paramValues.at(i)).size();
+		int errorLength = numberLocale.toString(fitResult.errorValues.at(i)).size();
+		int errorPLength = numberLocale.toString(fitResult.errorValues.at(i) / fitResult.paramValues.at(i) * 100.).size();
+		int tValueLength = numberLocale.toString(fitResult.tdist_tValues.at(i)).size();
+		int pValueLength = numberLocale.toString(fitResult.tdist_pValues.at(i)).size();
+		int lowerLength = numberLocale.toString(fitResult.paramValues.at(i) - fitResult.marginValues.at(i)).size();
+		if (parameterLength > maxParameterLength)
+			maxParameterLength = parameterLength;
+		if (valueLength > maxValueLength)
+			maxValueLength = valueLength;
+		if (errorLength > maxErrorLength)
+			maxErrorLength = errorLength;
+		if (errorPLength > maxErrorPLength)
+			maxErrorPLength = errorPLength;
+		if (tValueLength > maxTValueLength)
+			maxTValueLength = tValueLength;
+		if (pValueLength > maxPValueLength)
+			maxPValueLength = pValueLength;
+		if (lowerLength > maxLowerLength)
+			maxLowerLength = lowerLength;
+	}
+	// header
+	text += QString(maxParameterLength + 1, SPACE) + valueString + QString(maxValueLength + 1 - valueString.size(), SPACE) + errorString
+		+ QString(maxErrorLength + 1 - errorString.size(), SPACE) + errorPString + QString(maxErrorPLength + 1 - errorPString.size(), SPACE) + tValueString
+		+ QString(maxTValueLength + 1 - tValueString.size(), SPACE) + pValueString + QString(maxPValueLength + 1 - pValueString.size(), SPACE) + lowerString
+		+ QString(maxLowerLength + 1 - lowerString.size(), SPACE) + upperString + NEWLINE;
+	for (int i = 0; i < np; i++) {
+		auto parameterName = fitData.paramNames.at(i);
+		valueString = numberLocale.toString(fitResult.paramValues.at(i));
+		errorString = numberLocale.toString(fitResult.errorValues.at(i));
+		errorPString = numberLocale.toString(fitResult.errorValues.at(i) / fitResult.paramValues.at(i) * 100.);
+		tValueString = numberLocale.toString(fitResult.tdist_tValues.at(i));
+		pValueString = numberLocale.toString(fitResult.tdist_pValues.at(i));
+		lowerString = numberLocale.toString(fitResult.paramValues.at(i) - fitResult.marginValues.at(i));
+		upperString = numberLocale.toString(fitResult.paramValues.at(i) + fitResult.marginValues.at(i));
+		parameterName.resize(maxParameterLength + 1, SPACE);
+		valueString.resize(maxValueLength + 1, SPACE);
+		errorString.resize(maxErrorLength + 1, SPACE);
+		errorPString.resize(maxErrorPLength + 1, SPACE);
+		tValueString.resize(maxTValueLength + 1, SPACE);
+		pValueString.resize(maxPValueLength + 1, SPACE);
+		lowerString.resize(maxLowerLength + 1, SPACE);
+		text += parameterName + valueString + errorString + errorPString + tValueString + pValueString + lowerString + upperString + NEWLINE;
+		// TODO: margin2Values?
 
 		// for (unsigned int j = 0; j <= i; j++)
 		//	d->fitResult.correlationMatrix << gsl_matrix_get(cov, i, j) / sqrt(gsl_matrix_get(cov, i, i)) / sqrt(gsl_matrix_get(cov, j, j));
@@ -1896,17 +1940,38 @@ void XYFitCurvePrivate::updateResultsNote() {
 	// goodness of fit
 	text += i18n("GOODNESS OF FIT") + NEWLINE + NEWLINE;
 
-	text += i18n("Sum of squared residuals") + UTF8_QSTRING(" (χ²)") + TAB + TAB + numberLocale.toString(fitResult.sse) + NEWLINE;
-	text += i18n("Residuals mean square") + UTF8_QSTRING(" (χ²/dof)") + TAB + TAB + numberLocale.toString(fitResult.rms) + NEWLINE;
-	text += i18n("Root mean square deviation") + QStringLiteral(" (RMSD/SD)") + TAB + numberLocale.toString(fitResult.rsd) + NEWLINE;
-	text += i18n("Coefficient of determination") + QStringLiteral(" (R²)") + TAB + numberLocale.toString(fitResult.rsquare) + NEWLINE;
-	text += i18n("Adj. coefficient of determination") + QStringLiteral(" (R̄²)") + TAB + numberLocale.toString(fitResult.rsquareAdj) + NEWLINE;
-	text += UTF8_QSTRING("χ²-") + i18n("Test") + UTF8_QSTRING(" (P > χ²)") + TAB + TAB + TAB + numberLocale.toString(fitResult.chisq_p, 'g', 3) + NEWLINE;
-	text += i18n("F-Test") + TAB + TAB + TAB + TAB + numberLocale.toString(fitResult.fdist_F, 'g', 3) + NEWLINE;
-	text += QStringLiteral("P > F") + TAB + TAB + TAB + TAB + numberLocale.toString(fitResult.fdist_p, 'g', 3) + NEWLINE;
-	text += i18n("Mean absolute error") + QStringLiteral(" (MAE)") + TAB + TAB + numberLocale.toString(fitResult.mae) + NEWLINE;
-	text += i18n("Akaike information criterion") + QStringLiteral(" (AIC)") + TAB + numberLocale.toString(fitResult.aic, 'g', 3) + NEWLINE;
-	text += i18n("Bayesian information criterion") + QStringLiteral(" (BIC)") + TAB + numberLocale.toString(fitResult.bic, 'g', 3) + NEWLINE;
+	QString SSRString = i18n("Sum of squared residuals") + UTF8_QSTRING(" (χ²)");
+	QString RMSString = i18n("Residuals mean square") + UTF8_QSTRING(" (χ²/dof)");
+	QString RMSDString = i18n("Root mean square deviation") + QStringLiteral(" (RMSD/SD)");
+	QString R2String = i18n("Coefficient of determination") + QStringLiteral(" (R²)");
+	QString ACDString = i18n("Adj. coefficient of determination") + QStringLiteral(" (R̄²)");
+	QString CHIString = UTF8_QSTRING("χ²-") + i18n("Test") + UTF8_QSTRING(" (P > χ²)");
+	QString FString = i18n("F-Test");
+	QString PString = QStringLiteral("P > F");
+	QString MAEString = i18n("Mean absolute error") + QStringLiteral(" (MAE)");
+	QString AICString = i18n("Akaike information criterion") + QStringLiteral(" (AIC)");
+	QString BICString = i18n("Bayesian information criterion") + QStringLiteral(" (BIC)");
+
+	auto resultStringList = QStringList() << SSRString << RMSString << RMSDString << R2String << ACDString << CHIString << FString << PString << MAEString
+										  << AICString << BICString;
+
+	int maxLength = 0;
+	for (const auto& s : resultStringList) {
+		maxLength = qMax(maxLength, s.length());
+	}
+	maxLength++;
+
+	text += SSRString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.sse) + NEWLINE;
+	text += RMSString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.rms) + NEWLINE;
+	text += RMSDString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.rsd) + NEWLINE;
+	text += R2String.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.rsquare) + NEWLINE;
+	text += ACDString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.rsquareAdj) + NEWLINE;
+	text += CHIString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.chisq_p, 'g', 3) + NEWLINE;
+	text += FString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.fdist_F, 'g', 3) + NEWLINE;
+	text += PString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.fdist_p, 'g', 3) + NEWLINE;
+	text += MAEString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.mae) + NEWLINE;
+	text += AICString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.aic, 'g', 3) + NEWLINE;
+	text += BICString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.bic, 'g', 3) + NEWLINE;
 
 	resultsNote->setText(text);
 
@@ -3089,6 +3154,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	// add result note (not saved in projects)
 	d->resultsNote = new Note(i18nc("Curve Fitting", "Fit Results"));
 	d->resultsNote->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
+	d->resultsNote->setBackgroundColor(QColor(Qt::white));
+	d->resultsNote->setTextFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 	addChild(d->resultsNote);
 
 	////////////////////////////// fix old projects /////////////////////////

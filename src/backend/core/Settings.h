@@ -1,8 +1,7 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-class KConfigGroup;
-
+#include <KConfigGroup>
 #include <KSharedConfig>
 
 namespace Settings {

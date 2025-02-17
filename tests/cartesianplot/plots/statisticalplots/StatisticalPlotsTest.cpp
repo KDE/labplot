@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for statistical plots like Q-Q plot, KDE plot, etc.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -225,10 +225,9 @@ void StatisticalPlotsTest::testKDEPlotInit() {
 	children = p->children<KDEPlot>();
 	QCOMPARE(children.size(), 0);
 
-	// TODO: crash!!!
-	// project.undoStack()->redo();
-	// children = p->children<KDEPlot>();
-	// QCOMPARE(children.size(), 1);
+	project.undoStack()->redo();
+	children = p->children<KDEPlot>();
+	QCOMPARE(children.size(), 1);
 }
 
 /*!
@@ -318,10 +317,9 @@ void StatisticalPlotsTest::testQQPlotInit() {
 	children = p->children<QQPlot>();
 	QCOMPARE(children.size(), 0);
 
-	// TODO: crash!!!
-	// project.undoStack()->redo();
-	// children = p->children<QQPlot>();
-	// QCOMPARE(children.size(), 1);
+	project.undoStack()->redo();
+	children = p->children<QQPlot>();
+	QCOMPARE(children.size(), 1);
 }
 
 /*!
@@ -530,10 +528,9 @@ void StatisticalPlotsTest::testPBChartInit() {
 	children = p->children<ProcessBehaviorChart>();
 	QCOMPARE(children.size(), 0);
 
-	// TODO: crash!!!
-	// project.undoStack()->redo();
-	// children = p->children<ProcessBehaviorChart>();
-	// QCOMPARE(children.size(), 1);
+	project.undoStack()->redo();
+	children = p->children<ProcessBehaviorChart>();
+	QCOMPARE(children.size(), 1);
 }
 
 /*!
@@ -1087,10 +1084,9 @@ void StatisticalPlotsTest::testRunChartInit() {
 	children = p->children<RunChart>();
 	QCOMPARE(children.size(), 0);
 
-	// TODO: crash!!!
-	// project.undoStack()->redo();
-	// children = p->children<ProcessBehaviorChart>();
-	// QCOMPARE(children.size(), 1);
+	project.undoStack()->redo();
+	children = p->children<RunChart>();
+	QCOMPARE(children.size(), 1);
 }
 
 /*!
