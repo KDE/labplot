@@ -11521,22 +11521,19 @@ msgid ""
 msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1817
-#, fuzzy, kde-format
-#| msgid "Interpolation of '%1'"
+#, kde-format
 msgid "Initialization failed: %1"
-msgstr "'%1' 的插值"
+msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1842
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the broker '%1:%2'."
+#, kde-format
 msgid "Failed to connect to the local socket: %1"
-msgstr "无法连接到代理“%1:%2”。"
+msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1859
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the broker '%1:%2'."
+#, kde-format
 msgid "Failed to connect to the TCP socket. %1"
-msgstr "无法连接到代理“%1:%2”。"
+msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1865
 #: src/frontend/datasources/ImportFileWidget.cpp:1894
@@ -11565,10 +11562,9 @@ msgid "Not ready for read after 2 sec"
 msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1921
-#, fuzzy, kde-format
-#| msgid "Failed to load JSON document. Error: %1."
+#, kde-format
 msgid "Failed to open serial port. error: %1"
-msgstr "加载 JSON 文件失败。错误：%1。"
+msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1940
 #, kde-format
@@ -18679,10 +18675,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnMode)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:33
-#, fuzzy, kde-format
-#| msgid "Data type:"
+#, kde-format
 msgid "Column Data Types:"
-msgstr "数据类型："
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chbSimplifyWhitespaces)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:43
@@ -18731,10 +18726,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:116
-#, fuzzy, kde-format
-#| msgid "Custom Names:"
+#, kde-format
 msgid "Column Names:"
-msgstr "自定义列名称："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:123

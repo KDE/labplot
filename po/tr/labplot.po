@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-17 00:37+0000\n"
-"PO-Revision-Date: 2025-02-16 12:59+0300\n"
+"PO-Revision-Date: 2025-02-17 11:08+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -10759,24 +10759,12 @@ msgid "Custom column names, comma separated. E.g. \"x, y\""
 msgstr "Özel sütun adları, virgülle ayrılmış. Örneğin, “x, y”"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:115
-#, fuzzy, kde-format
-#| msgid "Custom column modes, comma separated"
+#, kde-format
 msgid "Custom column data types, comma separated"
-msgstr "Özel sütun kipleri, virgülle ayrılmış"
+msgstr "Özel sütun veri türleri, virgülle ayrılmış"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
-#, fuzzy, kde-format
-#| msgid ""
-#| "If not empty, the number of columns must match the number of column names "
-#| "if provided and it must match the number of columns in the imported file."
-#| "<br>Datatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
-#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
-#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
-#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
-#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
-#| "td><td>Datetime with the format from the datetime text box if not empty, "
-#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-#| "td></tr></table>"
+#, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
@@ -19022,8 +19010,7 @@ msgstr "Boş bölümleri atla"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnMode)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:33
-#, fuzzy, kde-format
-#| msgid "Column Datatypes:"
+#, kde-format
 msgid "Column Data Types:"
 msgstr "Sütun veri türleri:"
 
@@ -19076,10 +19063,9 @@ msgstr "Yıl için yalnızca 2 basamak sağlandığında taban yıl"
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:116
-#, fuzzy, kde-format
-#| msgid "Column labels"
+#, kde-format
 msgid "Column Names:"
-msgstr "Sütun etiketleri"
+msgstr "Sütun adları:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:123
