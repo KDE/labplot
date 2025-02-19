@@ -909,6 +909,46 @@ void WorksheetElementTest::mouseMoveRelative() {
 	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
 	auto pp = element->position();
 	pp.point = QPointF(0, 0);
+
+	element->setPosition(pp);
+	element->setCoordinateBindingEnabled(false);
+
+	QCOMPARE(element->horizontalAlignment(), AbstractPlot::HorizontalAlignment::Center);
+	QCOMPARE(element->verticalAlignment(), AbstractPlot::VerticalAlignment::Center);
+
+	pp = element->position();
+	pp.horizontalPosition = AbstractPlot::HorizontalPosition::Relative;
+	pp.verticalPosition = AbstractPlot::VerticalPosition::Relative;
+	element->setPosition(pp);
+
+	QCOMPARE(element->positionLogical().x(), 0.0);
+	QCOMPARE(element->positionLogical().y(), 1.0);
+	QCOMPARE(dock->ui.sbPositionX->value(), 0.0);
+	QCOMPARE(dock->ui.sbPositionY->value(), 0.0);
+
+	/* Simulate mouse move */
+	element->d_ptr->setPos(QPointF(25, -10)); /* itemChange() will be called (negative value is up) */
+	QCOMPARE(element->positionLogical().x(), 0.0); /* 25/50 * 0.5 + 0.5 */
+	QCOMPARE(element->positionLogical().y(), 1.0);
+
+	QCOMPARE(dock->ui.sbPositionX->value(), 0.75 * 100.0);
+	QCOMPARE(dock->ui.sbPositionY->value(), 0.4 * 100.0);
+}
+
+void WorksheetElementTest::mouseMoveRelativeWithBinding() {
+	// WORKSHEETELEMENT_TEST()
+	SETUP_PROJECT
+	auto* element = new TextLabel(QStringLiteral("element"));
+	p->addChild(element);
+	auto* dock = new LabelWidget(nullptr);
+	// MACRO_NAME(element, dockSetElementsMethodName);
+	dock->setLabels({element});
+
+	// #define WORKSHEETELEMENT_MOUSE_MOVE(element, dockSetElementsMethodName)
+	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	auto pp = element->position();
+	pp.point = QPointF(0, 0);
+
 	element->setPosition(pp);
 	element->setCoordinateBindingEnabled(true);
 
@@ -921,13 +961,17 @@ void WorksheetElementTest::mouseMoveRelative() {
 	pp = element->position();
 	pp.horizontalPosition = AbstractPlot::HorizontalPosition::Relative;
 	pp.verticalPosition = AbstractPlot::VerticalPosition::Relative;
+	QCOMPARE(dock->ui.sbPositionX->value(), 0.0);
+	QCOMPARE(dock->ui.sbPositionY->value(), 0.0);
 	element->setPosition(pp);
 
 	QCOMPARE(element->positionLogical().x(), 0.5);
 	QCOMPARE(element->positionLogical().y(), 0.5);
+	QCOMPARE(dock->ui.sbPositionX->value(), 5000.0);
+	QCOMPARE(dock->ui.sbPositionY->value(), -5000.0);
 
 	/* Simulate mouse move */
-	element->d_ptr->setPos(QPointF(25, -10)); /* item change will be called (negative value is up) */
+	element->d_ptr->setPos(QPointF(25, -10)); /* itemChange() will be called (negative value is up) */
 	QCOMPARE(element->positionLogical().x(), 0.75); /* 25/50 * 0.5 + 0.5 */
 	QCOMPARE(element->positionLogical().y(), 0.6);
 
@@ -939,6 +983,43 @@ void WorksheetElementTest::mouseMoveRelative() {
 }
 
 void WorksheetElementTest::positionRelative() {
+	// WORKSHEETELEMENT_TEST()
+	SETUP_PROJECT
+	auto* element = new TextLabel(QStringLiteral("element"));
+	p->addChild(element);
+	auto* dock = new LabelWidget(nullptr);
+	// MACRO_NAME(element, dockSetElementsMethodName);
+	dock->setLabels({element});
+
+	// #define WORKSHEETELEMENT_MOUSE_MOVE(element, dockSetElementsMethodName)
+	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	auto pp = element->position();
+	pp.point = QPointF(0, 0);
+	element->setPosition(pp);
+	element->setCoordinateBindingEnabled(false);
+
+	QCOMPARE(element->positionLogical().x(), 0.0);
+	QCOMPARE(element->positionLogical().y(), 0.0);
+
+	QCOMPARE(element->horizontalAlignment(), AbstractPlot::HorizontalAlignment::Center);
+	QCOMPARE(element->verticalAlignment(), AbstractPlot::VerticalAlignment::Center);
+
+	pp = element->position();
+	pp.horizontalPosition = AbstractPlot::HorizontalPosition::Relative;
+	pp.verticalPosition = AbstractPlot::VerticalPosition::Relative;
+	pp.point = QPointF(0.2, 0.8); // 20% and 80%
+	element->setPosition(pp);
+
+	QCOMPARE(element->positionLogical().x(), 0.2);
+	// TODO
+	// QCOMPARE(element->positionLogical().y(), 0.8);
+	QCOMPARE(element->positionLogical().y(), 0.2);
+
+	QCOMPARE(dock->ui.sbPositionX->value(), 0.2 * 100.0);
+	QCOMPARE(dock->ui.sbPositionY->value(), 0.8 * 100.0);
+}
+
+void WorksheetElementTest::positionRelativeWithBinding() {
 	// WORKSHEETELEMENT_TEST()
 	SETUP_PROJECT
 	auto* element = new TextLabel(QStringLiteral("element"));
@@ -980,6 +1061,48 @@ void WorksheetElementTest::positionRelative() {
 }
 
 void WorksheetElementTest::positionRelativeDock() {
+	// WORKSHEETELEMENT_TEST()
+	SETUP_PROJECT
+	auto* element = new TextLabel(QStringLiteral("element"));
+	p->addChild(element);
+	auto* dock = new LabelWidget(nullptr);
+	// MACRO_NAME(element, dockSetElementsMethodName);
+	dock->setLabels({element});
+
+	// #define WORKSHEETELEMENT_MOUSE_MOVE(element, dockSetElementsMethodName)
+	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	auto pp = element->position();
+	pp.point = QPointF(0, 0);
+	element->setPosition(pp);
+	element->setCoordinateBindingEnabled(false);
+
+	QCOMPARE(element->positionLogical().x(), 0.0);
+	QCOMPARE(element->positionLogical().y(), 0.0);
+
+	QCOMPARE(element->horizontalAlignment(), AbstractPlot::HorizontalAlignment::Center);
+	QCOMPARE(element->verticalAlignment(), AbstractPlot::VerticalAlignment::Center);
+
+	pp = element->position();
+	pp.horizontalPosition = AbstractPlot::HorizontalPosition::Relative;
+	pp.verticalPosition = AbstractPlot::VerticalPosition::Relative;
+	// element->setPositionHorizontal(AbstractPlot::HorizontalAlignment::Relative);
+	// element->setPositionVertical(AbstractPlot::VerticalAlignment::Relative);
+
+	// Set values in dock
+	dock->ui.sbPositionX->setValue(20);
+	dock->ui.sbPositionY->setValue(80);
+
+	// TODO
+	// QCOMPARE(element->positionLogical().x(), 0.2);
+	// QCOMPARE(element->positionLogical().y(), 0.8);
+	QCOMPARE(element->positionLogical().x(), 20.5);
+	QCOMPARE(element->positionLogical().y(), 80.5);
+
+	QCOMPARE(dock->ui.sbPositionX->value(), 0.2 * 100.0);
+	QCOMPARE(dock->ui.sbPositionY->value(), 0.8 * 100.0);
+}
+
+void WorksheetElementTest::positionRelativeDockWithBinding() {
 	// WORKSHEETELEMENT_TEST()
 	SETUP_PROJECT
 	auto* element = new TextLabel(QStringLiteral("element"));

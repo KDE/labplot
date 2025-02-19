@@ -788,9 +788,10 @@ void WorksheetElement::setVerticalAlignment(const WorksheetElement::VerticalAlig
 
 STD_SETTER_CMD_IMPL_S(WorksheetElement, SetCoordinateBindingEnabled, bool, coordinateBindingEnabled) // do I need a final method?
 bool WorksheetElement::setCoordinateBindingEnabled(bool on) {
-	Q_D(WorksheetElement);
 	if (on && !cSystem)
 		return false;
+
+	Q_D(WorksheetElement);
 	if (on != d->coordinateBindingEnabled) {
 		// Must not be in the Undo Command,
 		// because if done once, logical and
@@ -977,9 +978,9 @@ void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 
 	QDEBUG(Q_FUNC_INFO << ", new position =" << pos() << ", old position (relative) =" << position.point)
 	// convert new position
-	QRectF parentRect = q->parentRect();
 	auto point = q->align(pos(), boundingRect(), horizontalAlignment, verticalAlignment, false);
 	// in percentage
+	auto parentRect = q->parentRect();
 	point.setX(point.x() / parentRect.width() + 0.5);
 	point.setY(point.y() / parentRect.height() + 0.5);
 	QDEBUG(Q_FUNC_INFO << ", new position (relative) =" << point)
@@ -999,7 +1000,6 @@ void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 }
 
 QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QVariant& value) {
-	DEBUG(Q_FUNC_INFO)
 	if (suppressItemChangeEvent)
 		return value;
 
@@ -1021,7 +1021,8 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 		// don't use setPosition here, because then all small changes are on the undo stack
 		// setPosition is used then in mouseReleaseEvent
 		if (coordinateBindingEnabled) {
-			DEBUG("coordinateBindingEnabled")
+			DEBUG(Q_FUNC_INFO << ", coordinate binding enabled")
+			// TODO: also fix and convert to percentage here?
 			if (!q->cSystem->isValid())
 				return QGraphicsItem::itemChange(change, value);
 			auto pos = q->align(newPos, m_boundingRectangle, horizontalAlignment, verticalAlignment, false);
@@ -1030,11 +1031,13 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 			Q_EMIT q->positionLogicalChanged(positionLogical);
 			Q_EMIT q->objectPositionChanged();
 		} else {
-			DEBUG("NOT coordinateBindingEnabled")
-			// convert item's center point in parent's coordinates
+			DEBUG(Q_FUNC_INFO << ", coordinate binding disabled")
 			auto tempPosition = position;
-			tempPosition.point = q->parentPosToRelativePos(newPos, position);
-			tempPosition.point = q->align(tempPosition.point, boundingRect(), horizontalAlignment, verticalAlignment, false);
+			tempPosition.point = q->align(newPos, boundingRect(), horizontalAlignment, verticalAlignment, false);
+			// in percentage
+			auto parentRect = q->parentRect();
+			tempPosition.point.setX(tempPosition.point.x() / parentRect.width() + 0.5);
+			tempPosition.point.setY(tempPosition.point.y() / parentRect.height() + 0.5);
 
 			// Q_EMIT the signals in order to notify the UI.
 			Q_EMIT q->positionChanged(tempPosition);

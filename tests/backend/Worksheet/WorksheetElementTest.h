@@ -72,8 +72,11 @@ private Q_SLOTS:
 
 	// relative positioning
 	void mouseMoveRelative();
+	void mouseMoveRelativeWithBinding();
 	void positionRelative();
+	void positionRelativeWithBinding();
 	void positionRelativeDock();
+	void positionRelativeDockWithBinding();
 };
 
 #endif // WORKSHEETELEMENTTEST_H
