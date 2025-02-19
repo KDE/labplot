@@ -803,6 +803,7 @@ void AbstractAspect::paste(bool duplicate, int index) {
 				aspect = AspectFactory::createAspect(type, this);
 		} else {
 			if (aspect) {
+				aspect->setPasted(true);
 				aspect->setIsLoading(true);
 				aspect->load(&reader, false);
 				break;
@@ -831,12 +832,10 @@ void AbstractAspect::paste(bool duplicate, int index) {
 		}
 
 		project()->restorePointers(aspect);
-		aspect->setIsLoading(false);
-		project()->retransformElements(aspect);
-		endMacro();
-
 		aspect->setIsLoading(false); // set back to false before calling retransformElements()
 		project()->retransformElements(aspect);
+		aspect->setPasted(false);
+		endMacro();
 	}
 	RESET_CURSOR;
 }

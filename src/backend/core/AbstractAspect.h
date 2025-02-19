@@ -414,6 +414,8 @@ public:
 	// save/load
 	virtual void save(QXmlStreamWriter*) const = 0;
 	virtual bool load(XmlStreamReader*, bool preview) = 0;
+	void setPasted(bool);
+	bool isPasted() const;
 
 	static AspectType clipboardAspectType(QString&);
 	static QString uniqueNameFor(const QString& name, const QStringList& names);
