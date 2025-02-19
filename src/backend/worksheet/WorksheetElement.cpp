@@ -1022,7 +1022,6 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 		// setPosition is used then in mouseReleaseEvent
 		if (coordinateBindingEnabled) {
 			DEBUG(Q_FUNC_INFO << ", coordinate binding enabled")
-			// TODO: also fix and convert to percentage here?
 			if (!q->cSystem->isValid())
 				return QGraphicsItem::itemChange(change, value);
 			auto pos = q->align(newPos, m_boundingRectangle, horizontalAlignment, verticalAlignment, false);

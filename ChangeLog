@@ -59,6 +59,7 @@ Bug fixes:
 	* Fix accuracy of spin boxes(BUG 496804)
 	* Don't crash when saving plots having multiple data source columns (box plot, etc.) after one of the columns was deleted (BUG 497712)
 	* Don't crash selecting ODS import filter with invalid files
+	* Fix moving objects by mouse (BUG 496478)
 
 Internal:
 	* use name LabPlot/labplot consistenly (renamed LabPlot2/labplot2)
