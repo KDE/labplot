@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-09 00:37+0000\n"
+"POT-Creation-Date: 2025-02-17 00:37+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -265,7 +265,7 @@ msgid "Y-Error -"
 msgstr "Erro em Y -"
 
 #: src/backend/core/AbstractColumn.cpp:227
-#: src/backend/datasources/filters/AsciiFilter.cpp:599
+#: src/backend/datasources/filters/AsciiFilter.cpp:609
 #: src/backend/datasources/filters/MatioFilter.cpp:382
 #: src/backend/datasources/filters/MatioFilter.cpp:428
 #, kde-format
@@ -288,7 +288,7 @@ msgstr "Interpolação"
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:233
-#: src/backend/datasources/filters/AsciiFilter.cpp:600
+#: src/backend/datasources/filters/AsciiFilter.cpp:610
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:535
 #: src/frontend/notebook/NotebookView.cpp:97
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:208
@@ -504,7 +504,7 @@ msgid "%1   (no values)"
 msgstr "%1   (sem valores)"
 
 #: src/backend/core/AspectTreeModel.cpp:235
-#: src/frontend/datasources/ImportFileWidget.cpp:1638
+#: src/frontend/datasources/ImportFileWidget.cpp:1651
 #, kde-format
 msgid "Size: %1"
 msgstr "Tamanho: %1"
@@ -1097,7 +1097,7 @@ msgid ""
 "%2"
 msgstr "Não foi possível abrir o arquivo %1 para leitura."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:192
+#: src/backend/datasources/filters/AsciiFilter.cpp:201
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2128
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1222
@@ -1105,162 +1105,167 @@ msgstr "Não foi possível abrir o arquivo %1 para leitura."
 msgid "Success"
 msgstr "Sucesso"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:194
+#: src/backend/datasources/filters/AsciiFilter.cpp:203
 #, fuzzy, kde-format
 #| msgid "The project file %1 is already opened."
 msgid "Device at end"
 msgstr "O arquivo de projeto %1 já está aberto."
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:196
+#: src/backend/datasources/filters/AsciiFilter.cpp:205
 #, kde-format
 msgid "Not enough rows selected. Increase number of rows."
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:198
+#: src/backend/datasources/filters/AsciiFilter.cpp:207
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Unable to open device"
 msgstr "Falha ao abrir"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:202
+#: src/backend/datasources/filters/AsciiFilter.cpp:209
+#, fuzzy, kde-format
+#| msgid "&Normalize Selection"
+msgid "No new line detected"
+msgstr "&Normalizar a seleção"
+
+#: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Unable to determine the separator"
 msgstr "Falha ao abrir"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:204
+#: src/backend/datasources/filters/AsciiFilter.cpp:213
 #, fuzzy, kde-format
 #| msgid "invalid row value"
 msgid "Invalid number of data columns"
 msgstr "valor da linha inválido"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:206
+#: src/backend/datasources/filters/AsciiFilter.cpp:215
 #, fuzzy, kde-format
 #| msgid "invalid row value"
 msgid "Invalid number of column names"
 msgstr "valor da linha inválido"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:208
+#: src/backend/datasources/filters/AsciiFilter.cpp:217
 #, kde-format
 msgid "Matrix: Unsupported column mode"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:210
+#: src/backend/datasources/filters/AsciiFilter.cpp:219
 #, kde-format
 msgid "Insufficient memory (RAM)"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:212
+#: src/backend/datasources/filters/AsciiFilter.cpp:221
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Unable to parse header"
 msgstr "Falha ao abrir"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:214
+#: src/backend/datasources/filters/AsciiFilter.cpp:223
 #, fuzzy, kde-format
 #| msgid "File data source"
 msgid "Unsupported data source"
 msgstr "Fonte de dados em arquivo"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:218
+#: src/backend/datasources/filters/AsciiFilter.cpp:227
 #, kde-format
 msgid "Live: No column separator selected"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:220
+#: src/backend/datasources/filters/AsciiFilter.cpp:229
 #, kde-format
 msgid "Live: No column modes set"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:222
+#: src/backend/datasources/filters/AsciiFilter.cpp:231
 #, kde-format
 msgid "Datetime column found, but no Datetime format provided"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:224
+#: src/backend/datasources/filters/AsciiFilter.cpp:233
 #, kde-format
 msgid "Header reading from device not allowed"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:226
+#: src/backend/datasources/filters/AsciiFilter.cpp:235
 #, kde-format
 msgid "Separator detection not allowed"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:228
+#: src/backend/datasources/filters/AsciiFilter.cpp:237
 #, fuzzy, kde-format
 #| msgid "Export to file"
 msgid "Invalid separator"
 msgstr "Exportar para arquivo"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:230
-#, fuzzy, kde-format
-#| msgid "Failed to open"
-msgid "Filter not initialized"
-msgstr "Falha ao abrir"
+#: src/backend/datasources/filters/AsciiFilter.cpp:239
+#, kde-format
+msgid "Serial devices must be initialized before reading data from it"
+msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:232
+#: src/backend/datasources/filters/AsciiFilter.cpp:241
 #, kde-format
 msgid "Wrong end column. Is it smaller than start column?"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:234
+#: src/backend/datasources/filters/AsciiFilter.cpp:243
 #, kde-format
 msgid "Wrong end row. Is it smaller than start row?"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:236
+#: src/backend/datasources/filters/AsciiFilter.cpp:245
 #, fuzzy, kde-format
 #| msgid "&Normalize Selection"
 msgid "No data destination set"
 msgstr "&Normalizar a seleção"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:238
+#: src/backend/datasources/filters/AsciiFilter.cpp:247
 #, fuzzy, kde-format
 #| msgid "Sort columns"
 msgid "No columns"
 msgstr "Ordenar as colunas"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:240
+#: src/backend/datasources/filters/AsciiFilter.cpp:249
 #, kde-format
 msgid "Unable to determine column modes. Check if they are correctly written"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:242
+#: src/backend/datasources/filters/AsciiFilter.cpp:251
 #, kde-format
 msgid "UTF16 encoding is not supported"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:244
+#: src/backend/datasources/filters/AsciiFilter.cpp:253
 #, kde-format
 msgid "Unhandled case"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:270
+#: src/backend/datasources/filters/AsciiFilter.cpp:279
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "Número de colunas: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:272
+#: src/backend/datasources/filters/AsciiFilter.cpp:281
 #, kde-format
 msgid "Number of lines: %1"
 msgstr "Número de linhas: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:514
-#: src/backend/datasources/filters/AsciiFilter.cpp:1285
+#: src/backend/datasources/filters/AsciiFilter.cpp:524
+#: src/backend/datasources/filters/AsciiFilter.cpp:1307
 #: src/backend/datasources/filters/JsonFilter.cpp:284
 #, kde-format
 msgid "Column %1"
 msgstr "Coluna %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:584
-#: src/backend/datasources/filters/AsciiFilter.cpp:1308
+#: src/backend/datasources/filters/AsciiFilter.cpp:594
+#: src/backend/datasources/filters/AsciiFilter.cpp:1330
 #, kde-format
 msgid "Timestamp"
 msgstr ""
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:588
-#: src/backend/datasources/filters/AsciiFilter.cpp:1312
+#: src/backend/datasources/filters/AsciiFilter.cpp:598
+#: src/backend/datasources/filters/AsciiFilter.cpp:1334
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1268,20 +1273,20 @@ msgstr ""
 msgid "Index"
 msgstr "Índice"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:601
+#: src/backend/datasources/filters/AsciiFilter.cpp:611
 #, fuzzy, kde-format
 #| msgid "Date and Time"
 msgid "DateTime"
 msgstr "Data e Hora"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:602
+#: src/backend/datasources/filters/AsciiFilter.cpp:612
 #, fuzzy, kde-format
 #| msgctxt "default labels of filter input ports"
 #| msgid "In%1"
 msgid "Int"
 msgstr "Ent%1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:603
+#: src/backend/datasources/filters/AsciiFilter.cpp:613
 #: src/backend/datasources/filters/MatioFilter.cpp:398
 #: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
@@ -1646,7 +1651,7 @@ msgstr "Informações do arquivo"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/frontend/datasources/ImportFileWidget.cpp:1613
+#: src/frontend/datasources/ImportFileWidget.cpp:1626
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr ""
@@ -2572,52 +2577,52 @@ msgstr ""
 msgid "Invalid region specified."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:708
+#: src/backend/datasources/LiveDataSource.cpp:730
 #, fuzzy, kde-format
 #| msgid "The project file is empty."
 msgid "Device doesn't exist."
 msgstr "O arquivo de projeto está vazio."
 
-#: src/backend/datasources/LiveDataSource.cpp:711
+#: src/backend/datasources/LiveDataSource.cpp:733
 #, kde-format
 msgid "User doesn't have enough permissions to open the device."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:714
+#: src/backend/datasources/LiveDataSource.cpp:736
 #, fuzzy, kde-format
 #| msgid "The project file %1 is already opened."
 msgid "Device already opened."
 msgstr "O arquivo de projeto %1 já está aberto."
 
-#: src/backend/datasources/LiveDataSource.cpp:717
+#: src/backend/datasources/LiveDataSource.cpp:739
 #, fuzzy, kde-format
 #| msgid "The project file %1 is already opened."
 msgid "Device is not open."
 msgstr "O arquivo de projeto %1 já está aberto."
 
-#: src/backend/datasources/LiveDataSource.cpp:720
+#: src/backend/datasources/LiveDataSource.cpp:742
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to read data."
 msgstr "Falha ao abrir"
 
-#: src/backend/datasources/LiveDataSource.cpp:723
+#: src/backend/datasources/LiveDataSource.cpp:745
 #, fuzzy, kde-format
 #| msgid "Delete variable"
 msgid "Device not available."
 msgstr "Excluir variável"
 
-#: src/backend/datasources/LiveDataSource.cpp:726
+#: src/backend/datasources/LiveDataSource.cpp:748
 #, kde-format
 msgid "Timeout occured."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:731
+#: src/backend/datasources/LiveDataSource.cpp:753
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr ""
 
-#: src/backend/datasources/LiveDataSource.cpp:742
+#: src/backend/datasources/LiveDataSource.cpp:764
 #, kde-format
 msgid "Serial Port Error"
 msgstr ""
@@ -7048,7 +7053,7 @@ msgstr "Distribuição Logística"
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:499
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1859
-#: src/frontend/datasources/ImportFileWidget.cpp:1353
+#: src/frontend/datasources/ImportFileWidget.cpp:1366
 #: src/frontend/dockwidgets/AxisDock.cpp:237
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:172
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
@@ -8655,7 +8660,7 @@ msgstr "Não há pontos de dados disponíveis."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:145
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5240
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5231
 #: src/frontend/ui/dockwidgets/axisdock.ui:483
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:542
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:478
@@ -9207,7 +9212,7 @@ msgid "%1: load default theme"
 msgstr "%1: adicionar %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1761
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5566
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5557
 #: src/backend/worksheet/Worksheet.cpp:842
 #, fuzzy, kde-format
 #| msgid "%1: set cell value"
@@ -11446,7 +11451,7 @@ msgstr "Nomes dos vetores, separados por espaços. P.ex., \"x y\""
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:115
 #, fuzzy, kde-format
 #| msgid "Vector names, space separated. E.g. \"x y\""
-msgid "Custom column modes, comma separated"
+msgid "Custom column data types, comma separated"
 msgstr "Nomes dos vetores, separados por espaços. P.ex., \"x y\""
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
@@ -11454,7 +11459,7 @@ msgstr "Nomes dos vetores, separados por espaços. P.ex., \"x y\""
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
-"<br>Datatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
+"<br>Data Types:<table><tr><td>%1</td><td>Integer number with 32bit size "
 "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
 "number with 64bit size (−9.223.372.036.854.775.808 .. "
 "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
@@ -11469,7 +11474,7 @@ msgstr ""
 msgid "%1 or %2"
 msgstr ""
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:252
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:249
 #, fuzzy, kde-format
 #| msgid "File info"
 msgid "Datatype not found: %1"
@@ -11732,51 +11737,51 @@ msgstr "Conjunto de dados"
 msgid "Description"
 msgstr "Direção"
 
-#: src/frontend/datasources/ImportDialog.cpp:51
+#: src/frontend/datasources/ImportDialog.cpp:52
 #, fuzzy, kde-format
 #| msgid "new Workbook"
 msgid "New Workbook"
 msgstr "Nova folha de trabalho"
 
-#: src/frontend/datasources/ImportDialog.cpp:52
+#: src/frontend/datasources/ImportDialog.cpp:53
 #, fuzzy, kde-format
 #| msgid "new Spreadsheet"
 msgid "New Spreadsheet"
 msgstr "nova planilha"
 
-#: src/frontend/datasources/ImportDialog.cpp:53
+#: src/frontend/datasources/ImportDialog.cpp:54
 #, fuzzy, kde-format
 #| msgid "new Matrix"
 msgid "New Matrix"
 msgstr "Nova matriz"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbImportTo)
-#: src/frontend/datasources/ImportDialog.cpp:74
+#: src/frontend/datasources/ImportDialog.cpp:75
 #: src/frontend/ui/datasources/importprojectwidget.ui:108
 #, fuzzy, kde-format
 #| msgid "Import To"
 msgid "Import to"
 msgstr "Importar para"
 
-#: src/frontend/datasources/ImportDialog.cpp:76
+#: src/frontend/datasources/ImportDialog.cpp:77
 #, fuzzy, kde-format
 #| msgid "Data container"
 msgid "Data container:"
 msgstr "Contêiner de dados"
 
-#: src/frontend/datasources/ImportDialog.cpp:77
-#: src/frontend/datasources/ImportDialog.cpp:83
+#: src/frontend/datasources/ImportDialog.cpp:78
+#: src/frontend/datasources/ImportDialog.cpp:84
 #, kde-format
 msgid "Data container where the data has to be imported into"
 msgstr ""
 
-#: src/frontend/datasources/ImportDialog.cpp:96
+#: src/frontend/datasources/ImportDialog.cpp:97
 #, fuzzy, kde-format
 #| msgid "&New"
 msgid "New"
 msgstr "&Novo"
 
-#: src/frontend/datasources/ImportDialog.cpp:99
+#: src/frontend/datasources/ImportDialog.cpp:100
 #, fuzzy, kde-format
 #| msgid "Data container"
 msgid "Add new data container to the project"
@@ -11789,7 +11794,7 @@ msgstr "Contêiner de dados"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsPosition)
 #. i18n: ectx: property (text), widget (QLabel, lValuesPosition)
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTime)
-#: src/frontend/datasources/ImportDialog.cpp:102
+#: src/frontend/datasources/ImportDialog.cpp:103
 #: src/frontend/ui/dockwidgets/axisdock.ui:65
 #: src/frontend/ui/dockwidgets/axisdock.ui:616
 #: src/frontend/ui/dockwidgets/axisdock.ui:1272
@@ -11803,57 +11808,65 @@ msgstr "Contêiner de dados"
 msgid "Position:"
 msgstr "Posição:"
 
-#: src/frontend/datasources/ImportDialog.cpp:108
+#: src/frontend/datasources/ImportDialog.cpp:109
 #, kde-format
 msgid "Append"
 msgstr "Anexar"
 
-#: src/frontend/datasources/ImportDialog.cpp:109
+#: src/frontend/datasources/ImportDialog.cpp:110
 #, kde-format
 msgid "Prepend"
 msgstr "Anteceder"
 
-#: src/frontend/datasources/ImportDialog.cpp:110
+#: src/frontend/datasources/ImportDialog.cpp:111
 #: src/frontend/notebook/NotebookView.cpp:66
 #, kde-format
 msgid "Replace"
 msgstr "Substituir"
 
-#: src/frontend/datasources/ImportDialog.cpp:145
+#: src/frontend/datasources/ImportDialog.cpp:146
 #, fuzzy, kde-format
 #| msgid "new Workbook"
 msgid "Add a new Workbook"
 msgstr "Nova folha de trabalho"
 
-#: src/frontend/datasources/ImportDialog.cpp:146
+#: src/frontend/datasources/ImportDialog.cpp:147
 #, fuzzy, kde-format
 #| msgid "Workbook"
 msgid "Workbook name:"
 msgstr "Folha de trabalho"
 
-#: src/frontend/datasources/ImportDialog.cpp:148
+#: src/frontend/datasources/ImportDialog.cpp:149
 #, fuzzy, kde-format
 #| msgid "Add new Spreadsheet"
 msgid "Add a new Spreadsheet"
 msgstr "Adicionar uma nova planilha"
 
-#: src/frontend/datasources/ImportDialog.cpp:149
+#: src/frontend/datasources/ImportDialog.cpp:150
 #, fuzzy, kde-format
 #| msgid "Spreadsheet"
 msgid "Spreadsheet name:"
 msgstr "Planilha"
 
-#: src/frontend/datasources/ImportDialog.cpp:151
+#: src/frontend/datasources/ImportDialog.cpp:152
 #, fuzzy, kde-format
 #| msgid "Add new Matrix"
 msgid "Add a new Matrix"
 msgstr "Adicionar nova matriz"
 
-#: src/frontend/datasources/ImportDialog.cpp:152
+#: src/frontend/datasources/ImportDialog.cpp:153
 #, fuzzy, kde-format
 #| msgid "Matrix"
 msgid "Matrix name:"
 msgstr "Matriz"
+
+#: src/frontend/datasources/ImportDialog.cpp:202
+#: src/frontend/datasources/ImportFileDialog.cpp:365
+#: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:158
+#, fuzzy, kde-format
+#| msgid "Choose how to import the image"
+msgid "Close the dialog and import the data."
+msgstr "Escolha como importar a imagem"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:73
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:40
@@ -11870,8 +11883,8 @@ msgctxt "@title:window"
 msgid "Add New Live Data Source"
 msgstr "Fonte de dados em arquivo"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:107
-#: src/frontend/datasources/ImportFileDialog.cpp:349
+#: src/frontend/datasources/ImportFileDialog.cpp:106
+#: src/frontend/datasources/ImportFileDialog.cpp:346
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:145
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:366
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:116
@@ -11880,8 +11893,8 @@ msgstr "Fonte de dados em arquivo"
 msgid "Hide Options"
 msgstr "Ocultar opções"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:107
-#: src/frontend/datasources/ImportFileDialog.cpp:349
+#: src/frontend/datasources/ImportFileDialog.cpp:106
+#: src/frontend/datasources/ImportFileDialog.cpp:346
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:145
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:366
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:116
@@ -11890,94 +11903,81 @@ msgstr "Ocultar opções"
 msgid "Show Options"
 msgstr "Mostrar opções"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:151
+#: src/frontend/datasources/ImportFileDialog.cpp:148
 #, fuzzy, kde-format
 #| msgid "File data source created in %1 seconds."
 msgid "Live data source created in %1 seconds."
 msgstr "O arquivo de fonte de dados foi criado em %1 segundos."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:179
+#: src/frontend/datasources/ImportFileDialog.cpp:176
 #, fuzzy, kde-format
 #| msgid "&Normalize Selection"
 msgid "No target data container selected"
 msgstr "&Normalizar a seleção"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:324
+#: src/frontend/datasources/ImportFileDialog.cpp:321
 #, kde-format
 msgid "File %1 imported in %2 seconds."
 msgstr "O arquivo %1 foi importado em %2 segundos."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:368
-#: src/frontend/datasources/ImportFileDialog.cpp:425
-#: src/frontend/datasources/ImportFileDialog.cpp:452
-#: src/frontend/datasources/ImportFileDialog.cpp:476
-#: src/frontend/datasources/ImportFileDialog.cpp:501
-#: src/frontend/datasources/ImportFileDialog.cpp:534
-#: src/frontend/datasources/ImportFileDialog.cpp:557
-#: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:158
-#, fuzzy, kde-format
-#| msgid "Choose how to import the image"
-msgid "Close the dialog and import the data."
-msgstr "Escolha como importar a imagem"
-
-#: src/frontend/datasources/ImportFileDialog.cpp:370
+#: src/frontend/datasources/ImportFileDialog.cpp:367
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:152
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileDialog.cpp:386
+#: src/frontend/datasources/ImportFileDialog.cpp:379
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:136
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileDialog.cpp:406
+#: src/frontend/datasources/ImportFileDialog.cpp:397
 #, kde-format
 msgid "No file provided for import."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileDialog.cpp:428
+#: src/frontend/datasources/ImportFileDialog.cpp:422
 #, fuzzy, kde-format
 #| msgid "The project file is empty."
 msgid "The provided file doesn't exist."
 msgstr "O arquivo de projeto está vazio."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:456
+#: src/frontend/datasources/ImportFileDialog.cpp:442
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileDialog.cpp:462
+#: src/frontend/datasources/ImportFileDialog.cpp:446
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileDialog.cpp:481
+#: src/frontend/datasources/ImportFileDialog.cpp:461
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr "Falha ao abrir"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:487
-#: src/frontend/datasources/ImportFileDialog.cpp:513
+#: src/frontend/datasources/ImportFileDialog.cpp:465
+#: src/frontend/datasources/ImportFileDialog.cpp:485
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileDialog.cpp:507
+#: src/frontend/datasources/ImportFileDialog.cpp:481
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Falha ao abrir"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:544
+#: src/frontend/datasources/ImportFileDialog.cpp:513
 #, kde-format
 msgid "Serial port number is missing."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileDialog.cpp:560
+#: src/frontend/datasources/ImportFileDialog.cpp:525
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
@@ -12187,39 +12187,39 @@ msgid ""
 "The number of rows is calculated from the values of the data portion tab"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:991
+#: src/frontend/datasources/ImportFileWidget.cpp:1004
 #, fuzzy, kde-format
 #| msgid "Select the File Data Source"
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Selecionar a fonte de dados do arquivo"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1021
+#: src/frontend/datasources/ImportFileWidget.cpp:1034
 #, fuzzy, kde-format
 #| msgid "Select the image file"
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Selecionar o arquivo de imagem"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1021
+#: src/frontend/datasources/ImportFileWidget.cpp:1034
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1108
+#: src/frontend/datasources/ImportFileWidget.cpp:1121
 #, kde-format
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1111
+#: src/frontend/datasources/ImportFileWidget.cpp:1124
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/frontend/datasources/ImportFileWidget.cpp:1259
+#: src/frontend/datasources/ImportFileWidget.cpp:1272
 #: src/frontend/ui/datasources/importfilewidget.ui:416
 #, fuzzy, kde-format
 #| msgid "Data format"
@@ -12227,7 +12227,7 @@ msgid "Data Format"
 msgstr "Formato dos dados"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/frontend/datasources/ImportFileWidget.cpp:1260
+#: src/frontend/datasources/ImportFileWidget.cpp:1273
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
 #, kde-format
@@ -12235,7 +12235,7 @@ msgid "Preview"
 msgstr "Visualização"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/frontend/datasources/ImportFileWidget.cpp:1262
+#: src/frontend/datasources/ImportFileWidget.cpp:1275
 #: src/frontend/ui/datasources/importfilewidget.ui:582
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:239
 #, fuzzy, kde-format
@@ -12243,235 +12243,254 @@ msgstr "Visualização"
 msgid "Data Portion to Read"
 msgstr "A porção de dados a ler"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1305
+#: src/frontend/datasources/ImportFileWidget.cpp:1318
 #, kde-format
 msgid "Data format && preview"
 msgstr "Formato e visualização dos dados"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1352
+#: src/frontend/datasources/ImportFileWidget.cpp:1365
 #, kde-format
 msgid "Automatic"
 msgstr "Automático"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1605
+#: src/frontend/datasources/ImportFileWidget.cpp:1618
 #, fuzzy, kde-format
 #| msgid "File info"
 msgid "file command not found"
 msgstr "Informações do arquivo"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1616
+#: src/frontend/datasources/ImportFileWidget.cpp:1629
 #, kde-format
 msgid "cannot open"
 msgstr "não foi possível abrir"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1621
+#: src/frontend/datasources/ImportFileWidget.cpp:1634
 #, fuzzy, kde-format
 #| msgid "File type: %1"
 msgid "<b>File type:</b> %1"
 msgstr "Tipo de arquivo: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1626
+#: src/frontend/datasources/ImportFileWidget.cpp:1639
 #, kde-format
 msgid "General:"
 msgstr "Geral:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1628
-#: src/frontend/datasources/ImportFileWidget.cpp:1629
-#: src/frontend/datasources/ImportFileWidget.cpp:1630
+#: src/frontend/datasources/ImportFileWidget.cpp:1641
+#: src/frontend/datasources/ImportFileWidget.cpp:1642
+#: src/frontend/datasources/ImportFileWidget.cpp:1643
 #, kde-format
 msgid "yes"
 msgstr "sim"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1628
-#: src/frontend/datasources/ImportFileWidget.cpp:1629
-#: src/frontend/datasources/ImportFileWidget.cpp:1630
+#: src/frontend/datasources/ImportFileWidget.cpp:1641
+#: src/frontend/datasources/ImportFileWidget.cpp:1642
+#: src/frontend/datasources/ImportFileWidget.cpp:1643
 #, kde-format
 msgid "no"
 msgstr "não"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1628
+#: src/frontend/datasources/ImportFileWidget.cpp:1641
 #, kde-format
 msgid "Readable: %1"
 msgstr "Leitura: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1629
+#: src/frontend/datasources/ImportFileWidget.cpp:1642
 #, kde-format
 msgid "Writable: %1"
 msgstr "Gravação: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1630
+#: src/frontend/datasources/ImportFileWidget.cpp:1643
 #, kde-format
 msgid "Executable: %1"
 msgstr "Execução: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1632
+#: src/frontend/datasources/ImportFileWidget.cpp:1645
 #, kde-format
 msgid "Birth time: %1"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1633
+#: src/frontend/datasources/ImportFileWidget.cpp:1646
 #, fuzzy, kde-format
 #| msgid "Last read: %1"
 msgid "Last metadata changed: %1"
 msgstr "Última leitura: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1634
+#: src/frontend/datasources/ImportFileWidget.cpp:1647
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Última modificação: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1635
+#: src/frontend/datasources/ImportFileWidget.cpp:1648
 #, kde-format
 msgid "Last read: %1"
 msgstr "Última leitura: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1636
+#: src/frontend/datasources/ImportFileWidget.cpp:1649
 #, kde-format
 msgid "Owner: %1"
 msgstr "Proprietário: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1637
+#: src/frontend/datasources/ImportFileWidget.cpp:1650
 #, kde-format
 msgid "Group: %1"
 msgstr "Grupo: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1638
+#: src/frontend/datasources/ImportFileWidget.cpp:1651
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] "%1 cByte"
 msgstr[1] "%1 cBytes"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1641
+#: src/frontend/datasources/ImportFileWidget.cpp:1654
 #, kde-format
 msgid "Summary:"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1664
-#: src/frontend/datasources/ImportFileWidget.cpp:1669
+#: src/frontend/datasources/ImportFileWidget.cpp:1677
+#: src/frontend/datasources/ImportFileWidget.cpp:1682
 #, fuzzy, kde-format
 #| msgid "Continuity"
 msgid "Content:"
 msgstr "Continuidade"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1700
+#: src/frontend/datasources/ImportFileWidget.cpp:1713
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Não foi possível abrir o arquivo %1 para leitura."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1784
+#: src/frontend/datasources/ImportFileWidget.cpp:1806
 #, kde-format
 msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
 "be larger than 'Start Row' or -1"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1795
+#: src/frontend/datasources/ImportFileWidget.cpp:1817
+#, fuzzy, kde-format
+#| msgid "Connection:"
+msgid "Initialization failed: %1"
+msgstr "Conexão:"
+
+#: src/frontend/datasources/ImportFileWidget.cpp:1842
+#, fuzzy, kde-format
+#| msgid "Failed to open"
+msgid "Failed to connect to the local socket: %1"
+msgstr "Falha ao abrir"
+
+#: src/frontend/datasources/ImportFileWidget.cpp:1859
+#, fuzzy, kde-format
+#| msgid "Failed to open"
+msgid "Failed to connect to the TCP socket. %1"
+msgstr "Falha ao abrir"
+
+#: src/frontend/datasources/ImportFileWidget.cpp:1865
+#: src/frontend/datasources/ImportFileWidget.cpp:1894
 #, kde-format
-msgid "Preview: Initialization failed: %1"
+msgid "Socket operation timed out."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1820
+#: src/frontend/datasources/ImportFileWidget.cpp:1879
+#, kde-format
+msgid "Not ready for read after 2s:"
+msgstr ""
+
+#: src/frontend/datasources/ImportFileWidget.cpp:1898
 #, fuzzy, kde-format
 #| msgid "Failed to open"
-msgid "Preview: Failed to connect to local socket %1 - %2"
+msgid "Unable to bind: "
 msgstr "Falha ao abrir"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1835
-#, fuzzy, kde-format
-#| msgid "Failed to open"
-msgid "Preview: Failed to connect to TCP socket - %1"
-msgstr "Falha ao abrir"
-
-#: src/frontend/datasources/ImportFileWidget.cpp:1880
+#: src/frontend/datasources/ImportFileWidget.cpp:1915
 #, fuzzy, kde-format
 #| msgctxt "prefix for XML error messages"
 #| msgid "XML reader error: "
 msgid "Parse Error: %1"
 msgstr "Erro de leitura do XML: "
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1882
+#: src/frontend/datasources/ImportFileWidget.cpp:1917
 #, kde-format
-msgid "ERROR: not ready for read after 2 sec"
+msgid "Not ready for read after 2 sec"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1886
-#, kde-format
-msgid "ERROR: failed to open serial port. error: %1"
-msgstr ""
+#: src/frontend/datasources/ImportFileWidget.cpp:1921
+#, fuzzy, kde-format
+#| msgid "Failed to open"
+msgid "Failed to open serial port. error: %1"
+msgstr "Falha ao abrir"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1905
+#: src/frontend/datasources/ImportFileWidget.cpp:1940
 #, fuzzy, kde-format
 #| msgid "&Normalize Selection"
 msgid "No data arrived yet for the selected topic"
 msgstr "&Normalizar a seleção"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2171
+#: src/frontend/datasources/ImportFileWidget.cpp:2206
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2229
+#: src/frontend/datasources/ImportFileWidget.cpp:2264
 #, kde-format
 msgid "Parsing ODS file %1 failed."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2641
+#: src/frontend/datasources/ImportFileWidget.cpp:2672
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2649
+#: src/frontend/datasources/ImportFileWidget.cpp:2680
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to connect to '%1'. Error %2."
 msgstr "Falha ao abrir"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2671
+#: src/frontend/datasources/ImportFileWidget.cpp:2702
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2737
+#: src/frontend/datasources/ImportFileWidget.cpp:2768
 #, fuzzy, kde-format
 #| msgid "Variables"
 msgid "Available (%1)"
 msgstr "Variáveis"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2841
+#: src/frontend/datasources/ImportFileWidget.cpp:2872
 #, kde-format
 msgid "Wrong username or password"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2844
+#: src/frontend/datasources/ImportFileWidget.cpp:2875
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2848
+#: src/frontend/datasources/ImportFileWidget.cpp:2879
 #, fuzzy, kde-format
 #| msgid "The value couldn't be calculated."
 msgid "The broker %1 couldn't be reached."
 msgstr "Não foi possível calcular o valor."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2851
+#: src/frontend/datasources/ImportFileWidget.cpp:2882
 #, fuzzy, kde-format
 #| msgid "Delete selected objects"
 msgid "The client is not authorized to connect."
 msgstr "Excluir os objetos selecionados"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2854
+#: src/frontend/datasources/ImportFileWidget.cpp:2885
 #, kde-format
 msgid "An unknown error occurred."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2860
-#: src/frontend/datasources/ImportFileWidget.cpp:2863
+#: src/frontend/datasources/ImportFileWidget.cpp:2891
+#: src/frontend/datasources/ImportFileWidget.cpp:2894
 #, kde-format
 msgid "An error occurred."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2877
+#: src/frontend/datasources/ImportFileWidget.cpp:2908
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "Connecting to '%1:%2' timed out."
@@ -15366,102 +15385,102 @@ msgstr "Deseja realmente limpar todo o histórico para desfazer/refazer ações?
 msgid "Clear History"
 msgstr "Limpar histórico"
 
-#: src/frontend/LabPlot.cpp:64
+#: src/frontend/LabPlot.cpp:71
 #, kde-format
 msgid "Visit website:"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:66
+#: src/frontend/LabPlot.cpp:73
 #, kde-format
 msgid "Watch video tutorials:"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:67
+#: src/frontend/LabPlot.cpp:74
 #, kde-format
 msgid "Discuss on Mastodon:"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:68
+#: src/frontend/LabPlot.cpp:75
 #, fuzzy, kde-format
 #| msgid "developer"
 msgid "Development:"
 msgstr "Desenvolvedor"
 
-#: src/frontend/LabPlot.cpp:69
+#: src/frontend/LabPlot.cpp:76
 #, kde-format
 msgid "Please report bugs to:"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:73
+#: src/frontend/LabPlot.cpp:80
 #, kde-format
 msgid ""
 "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
 "Analysis software accessible to everyone."
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:75
+#: src/frontend/LabPlot.cpp:82
 #, fuzzy, kde-format
 #| msgid "(c) 2007-2016"
 msgid "(c) 2007-2025 LabPlot authors"
 msgstr "(c) 2007-2016"
 
-#: src/frontend/LabPlot.cpp:77
+#: src/frontend/LabPlot.cpp:84
 #, kde-format
 msgid "Stefan Gerlach"
 msgstr "Stefan Gerlach"
 
-#: src/frontend/LabPlot.cpp:77 src/frontend/LabPlot.cpp:78
-#: src/frontend/LabPlot.cpp:79 src/frontend/LabPlot.cpp:80
+#: src/frontend/LabPlot.cpp:84 src/frontend/LabPlot.cpp:85
+#: src/frontend/LabPlot.cpp:86 src/frontend/LabPlot.cpp:87
 #, fuzzy, kde-format
 #| msgid "developer"
 msgctxt "@info:credit"
 msgid "Developer"
 msgstr "Desenvolvedor"
 
-#: src/frontend/LabPlot.cpp:78
+#: src/frontend/LabPlot.cpp:85
 #, kde-format
 msgid "Alexander Semke"
 msgstr "Alexander Semke"
 
-#: src/frontend/LabPlot.cpp:79
+#: src/frontend/LabPlot.cpp:86
 #, kde-format
 msgid "Fábián Kristóf-Szabolcs"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:80
+#: src/frontend/LabPlot.cpp:87
 #, kde-format
 msgid "Martin Marmsoler"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:81
+#: src/frontend/LabPlot.cpp:88
 #, kde-format
 msgid "Dariusz Laska"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:82
+#: src/frontend/LabPlot.cpp:89
 #, kde-format
 msgctxt "@info:credit"
 msgid "Conceptual work, documentation, example projects"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:85
+#: src/frontend/LabPlot.cpp:92
 #, kde-format
 msgid "Andreas Kainz"
 msgstr "Andreas Kainz"
 
-#: src/frontend/LabPlot.cpp:85
+#: src/frontend/LabPlot.cpp:92
 #, fuzzy, kde-format
 #| msgid "icon designer"
 msgctxt "@info:credit"
 msgid "Icon designer"
 msgstr "Desenhista dos ícones"
 
-#: src/frontend/LabPlot.cpp:89
+#: src/frontend/LabPlot.cpp:96
 #, kde-format
 msgid "Yuri Chornoivan"
 msgstr "Yuri Chornoivan"
 
-#: src/frontend/LabPlot.cpp:90
+#: src/frontend/LabPlot.cpp:97
 #, fuzzy, kde-format
 #| msgid ""
 #| "Help on many questions about the KDE-infrastructure and translation "
@@ -15474,47 +15493,47 @@ msgstr ""
 "Auxílio em muitas questões sobre a infraestrutura do KDE e tradução dos "
 "tópicos relacionados"
 
-#: src/frontend/LabPlot.cpp:93
+#: src/frontend/LabPlot.cpp:100
 #, fuzzy, kde-format
 #| msgid "Print Matrix"
 msgid "Garvit Khatri"
 msgstr "Imprimir matriz"
 
-#: src/frontend/LabPlot.cpp:94
+#: src/frontend/LabPlot.cpp:101
 #, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:97
+#: src/frontend/LabPlot.cpp:104
 #, kde-format
 msgid "Christoph Roick"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:98
+#: src/frontend/LabPlot.cpp:105
 #, kde-format
 msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:132
+#: src/frontend/LabPlot.cpp:139
 #, fuzzy, kde-format
 #| msgid "do not show the splash screen"
 msgid "Disable splash screen"
 msgstr "não mostrar a tela de apresentação"
 
-#: src/frontend/LabPlot.cpp:135
+#: src/frontend/LabPlot.cpp:142
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:138
+#: src/frontend/LabPlot.cpp:145
 #, fuzzy, kde-format
 #| msgid "open a project file"
 msgid "Open a project file."
 msgstr "abrir um arquivo de projeto"
 
-#: src/frontend/LabPlot.cpp:157
+#: src/frontend/LabPlot.cpp:164
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -15523,7 +15542,7 @@ msgstr ""
 "Não foi possível abrir o arquivo '%1'. Clique em 'Continuar' para prosseguir "
 "com o início ou em 'Cancelar' para sair do aplicativo."
 
-#: src/frontend/LabPlot.cpp:158
+#: src/frontend/LabPlot.cpp:165
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to Open"
@@ -20123,51 +20142,22 @@ msgstr "Saturação"
 msgid "Foreground:"
 msgstr "Frente"
 
-#. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
-#: src/frontend/ui/datasources/asciioptionswidget.ui:36
-#, fuzzy, kde-format
-#| msgid "Data format"
-msgid "DateTime Format:"
-msgstr "Formato dos dados"
-
 #. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
-#: src/frontend/ui/datasources/asciioptionswidget.ui:43
+#: src/frontend/ui/datasources/asciioptionswidget.ui:23
 #, fuzzy, kde-format
 #| msgid "Skip empty parts"
 msgid "Skip empty Parts"
 msgstr "Ignorar as partes vazias"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chbConvertNaNToZero)
-#: src/frontend/ui/datasources/asciioptionswidget.ui:50
-#: src/frontend/ui/datasources/jsonoptionswidget.ui:30
-#: src/frontend/ui/datasources/mcapoptionswidget.ui:49
-#, kde-format
-msgid "Convert NaN to 0"
-msgstr ""
-
 #. i18n: ectx: property (text), widget (QLabel, lColumnMode)
-#: src/frontend/ui/datasources/asciioptionswidget.ui:73
+#: src/frontend/ui/datasources/asciioptionswidget.ui:33
 #, fuzzy, kde-format
 #| msgid "no labels"
-msgid "Column Datatypes:"
+msgid "Column Data Types:"
 msgstr "sem legendas"
 
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: src/frontend/ui/datasources/asciioptionswidget.ui:80
-#, fuzzy, kde-format
-#| msgid "Comment character"
-msgid "Comment Character:"
-msgstr "Caractere de comentário"
-
-#. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
-#: src/frontend/ui/datasources/asciioptionswidget.ui:87
-#, fuzzy, kde-format
-#| msgid "Decimal notation"
-msgid "Decimal Separator:"
-msgstr "Notação decimal"
-
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chbSimplifyWhitespaces)
-#: src/frontend/ui/datasources/asciioptionswidget.ui:94
+#: src/frontend/ui/datasources/asciioptionswidget.ui:43
 #: src/frontend/ui/datasources/datasetmetadatamanagerwidget.ui:124
 #, kde-format
 msgid ""
@@ -20178,72 +20168,101 @@ msgstr ""
 "de espaços internos por um único espaço."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSimplifyWhitespaces)
-#: src/frontend/ui/datasources/asciioptionswidget.ui:97
+#: src/frontend/ui/datasources/asciioptionswidget.ui:46
 #, fuzzy, kde-format
 #| msgid "Simplify whitespaces"
 msgid "Simplify Whitespaces"
 msgstr "Simplificar os espaços em branco"
 
 #. i18n: ectx: property (text), widget (QLabel, lSeparatingCharacter)
-#: src/frontend/ui/datasources/asciioptionswidget.ui:133
+#: src/frontend/ui/datasources/asciioptionswidget.ui:56
 #, fuzzy, kde-format
 #| msgid "column major"
 msgid "Column Separator:"
 msgstr "coluna maior"
 
-#. i18n: ectx: property (toolTip), widget (QSpinBox, sbYearBase)
-#: src/frontend/ui/datasources/asciioptionswidget.ui:143
-#, kde-format
-msgid "Base year when only 2 digits are provided for the year"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/datasources/asciioptionswidget.ui:194
-#, fuzzy, kde-format
-#| msgid "zero baseline"
-msgid "Year Base:"
-msgstr "linha base"
-
-#. i18n: ectx: property (text), widget (QLabel, lVectorNames)
-#: src/frontend/ui/datasources/asciioptionswidget.ui:201
-#, fuzzy, kde-format
-#| msgid "Custom grid"
-msgid "Custom Names:"
-msgstr "Grade personalizada"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
-#: src/frontend/ui/datasources/asciioptionswidget.ui:208
-#, fuzzy, kde-format
-#| msgid "Remo&ve Rows"
-msgid "Remove Quotes"
-msgstr "Remo&ver linhas"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chbHeader)
-#: src/frontend/ui/datasources/asciioptionswidget.ui:222
-#, fuzzy, kde-format
-#| msgid "dash line"
-msgid "Names at Line:"
-msgstr "linha tracejada"
-
 #. i18n: ectx: property (text), widget (QCheckBox, chbCreateTimestamp)
-#: src/frontend/ui/datasources/asciioptionswidget.ui:239
+#: src/frontend/ui/datasources/asciioptionswidget.ui:73
 #, fuzzy, kde-format
 #| msgid "Create new color map"
 msgid "Create Timestamp "
 msgstr "Criar um novo mapa de cores"
 
+#. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
+#: src/frontend/ui/datasources/asciioptionswidget.ui:80
+#, fuzzy, kde-format
+#| msgid "Decimal notation"
+msgid "Decimal Separator:"
+msgstr "Notação decimal"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chbIntAsDouble)
+#: src/frontend/ui/datasources/asciioptionswidget.ui:87
+#, kde-format
+msgid "Import Integer as Double"
+msgstr ""
+
+#. i18n: ectx: property (toolTip), widget (QSpinBox, sbYearBase)
+#: src/frontend/ui/datasources/asciioptionswidget.ui:97
+#, kde-format
+msgid "Base year when only 2 digits are provided for the year"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lVectorNames)
+#: src/frontend/ui/datasources/asciioptionswidget.ui:116
+#, fuzzy, kde-format
+#| msgid "no labels"
+msgid "Column Names:"
+msgstr "sem legendas"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
+#: src/frontend/ui/datasources/asciioptionswidget.ui:123
+#, fuzzy, kde-format
+#| msgid "Remo&ve Rows"
+msgid "Remove Quotes"
+msgstr "Remo&ver linhas"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/frontend/ui/datasources/asciioptionswidget.ui:130
+#, fuzzy, kde-format
+#| msgid "zero baseline"
+msgid "Year Base:"
+msgstr "linha base"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: src/frontend/ui/datasources/asciioptionswidget.ui:137
+#, fuzzy, kde-format
+#| msgid "Comment character"
+msgid "Comment Character:"
+msgstr "Caractere de comentário"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chbConvertNaNToZero)
+#: src/frontend/ui/datasources/asciioptionswidget.ui:180
+#: src/frontend/ui/datasources/jsonoptionswidget.ui:30
+#: src/frontend/ui/datasources/mcapoptionswidget.ui:49
+#, kde-format
+msgid "Convert NaN to 0"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QCheckBox, chbCreateIndex)
-#: src/frontend/ui/datasources/asciioptionswidget.ui:246
+#: src/frontend/ui/datasources/asciioptionswidget.ui:190
 #, fuzzy, kde-format
 #| msgid "Created"
 msgid "Create Index"
 msgstr "Criado em"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chbIntAsDouble)
-#: src/frontend/ui/datasources/asciioptionswidget.ui:253
-#, kde-format
-msgid "Import Integer as Double"
-msgstr ""
+#. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
+#: src/frontend/ui/datasources/asciioptionswidget.ui:239
+#, fuzzy, kde-format
+#| msgid "Data format"
+msgid "DateTime Format:"
+msgstr "Formato dos dados"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chbHeader)
+#: src/frontend/ui/datasources/asciioptionswidget.ui:246
+#, fuzzy, kde-format
+#| msgid "dash line"
+msgid "Names at Line:"
+msgstr "linha tracejada"
 
 #. i18n: ectx: property (text), widget (QLabel, lSkipBytes)
 #: src/frontend/ui/datasources/binaryoptionswidget.ui:17
@@ -21522,9 +21541,11 @@ msgstr "Opacidade:"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsDateTimeFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsFormat)
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
+#. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1373
 #: src/frontend/ui/dockwidgets/axisdock.ui:1478
 #: src/frontend/ui/dockwidgets/columndock.ui:30
+#: src/frontend/ui/dockwidgets/columndock.ui:214
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:65
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:56
 #, kde-format
@@ -22304,16 +22325,6 @@ msgstr "Raio do canto"
 msgid "Labels:"
 msgstr "Legendas"
 
-#. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
-#. i18n: ectx: property (text), widget (QLabel, lValuesNumericFormat)
-#: src/frontend/ui/dockwidgets/columndock.ui:214
-#: src/frontend/ui/dockwidgets/valuewidget.ui:201
-#: src/frontend/ui/dockwidgets/xycurvedock.ui:506
-#, fuzzy, kde-format
-#| msgid "Numeric"
-msgid "Numeric:"
-msgstr "Numérico"
-
 #. i18n: ectx: property (text), widget (QLabel, lPlotDesignation)
 #: src/frontend/ui/dockwidgets/columndock.ui:311
 #, fuzzy, kde-format
@@ -22981,6 +22992,15 @@ msgstr "Seleção"
 #| msgid "Distance"
 msgid "Distance:"
 msgstr "Distância"
+
+#. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
+#. i18n: ectx: property (text), widget (QLabel, lValuesNumericFormat)
+#: src/frontend/ui/dockwidgets/valuewidget.ui:201
+#: src/frontend/ui/dockwidgets/xycurvedock.ui:506
+#, fuzzy, kde-format
+#| msgid "Numeric"
+msgid "Numeric:"
+msgstr "Numérico"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDateTimeFormat)
@@ -26467,6 +26487,16 @@ msgstr ""
 #| msgid "Failed to open"
 msgid "Unable to open file:"
 msgstr "Falha ao abrir"
+
+#, fuzzy
+#~| msgid "Custom grid"
+#~ msgid "Custom Names:"
+#~ msgstr "Grade personalizada"
+
+#, fuzzy
+#~| msgid "Failed to open"
+#~ msgid "Filter not initialized"
+#~ msgstr "Falha ao abrir"
 
 #, fuzzy
 #~| msgid "Data Type"

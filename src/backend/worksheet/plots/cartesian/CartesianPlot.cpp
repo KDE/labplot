@@ -4770,8 +4770,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeEndElement();
 
-	// coordinate system and padding
-	// new style
+	// x-ranges
 	writer->writeStartElement(QStringLiteral("xRanges"));
 	for (const auto& range : d->xRanges) {
 		writer->writeStartElement(QStringLiteral("xRange"));
@@ -4784,6 +4783,8 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 		writer->writeEndElement();
 	}
 	writer->writeEndElement();
+
+	// y-ranges
 	writer->writeStartElement(QStringLiteral("yRanges"));
 	for (const auto& range : d->yRanges) {
 		writer->writeStartElement(QStringLiteral("yRange"));
@@ -4796,14 +4797,18 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 		writer->writeEndElement();
 	}
 	writer->writeEndElement();
+
+	// coordinate systems, data range settings and padding
 	writer->writeStartElement(QStringLiteral("coordinateSystems"));
 	writer->writeAttribute(QStringLiteral("defaultCoordinateSystem"), QString::number(defaultCoordinateSystemIndex()));
-	// padding
 	writer->writeAttribute(QStringLiteral("horizontalPadding"), QString::number(d->horizontalPadding));
 	writer->writeAttribute(QStringLiteral("verticalPadding"), QString::number(d->verticalPadding));
 	writer->writeAttribute(QStringLiteral("rightPadding"), QString::number(d->rightPadding));
 	writer->writeAttribute(QStringLiteral("bottomPadding"), QString::number(d->bottomPadding));
 	writer->writeAttribute(QStringLiteral("symmetricPadding"), QString::number(d->symmetricPadding));
+	writer->writeAttribute(QStringLiteral("rangeType"), QString::number(static_cast<int>(d->rangeType)));
+	writer->writeAttribute(QStringLiteral("rangeFirstValues"), QString::number(d->rangeFirstValues));
+	writer->writeAttribute(QStringLiteral("rangeLastValues"), QString::number(d->rangeLastValues));
 	writer->writeAttribute(QStringLiteral("niceExtend"), QString::number(d->niceExtend));
 	for (const auto& cSystem : m_coordinateSystems) {
 		writer->writeStartElement(QStringLiteral("coordinateSystem"));
@@ -4813,23 +4818,6 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 		writer->writeEndElement();
 	}
 	writer->writeEndElement();
-	// OLD style (pre 2.9.0)
-	//	writer->writeStartElement( QStringLiteral("coordinateSystem") );
-	//	writer->writeAttribute( QStringLiteral("autoScaleX"), QString::number(d->autoScaleX) );
-	//	writer->writeAttribute( QStringLiteral("autoScaleY"), QString::number(d->autoScaleY) );
-	//	writer->writeAttribute( QStringLiteral("xMin"), QString::number(d->range(Dimension::X, 0).start(), 'g', 16));
-	//	writer->writeAttribute( QStringLiteral("xMax"), QString::number(d->range(Dimension::X, 0).end(), 'g', 16) );
-	//	writer->writeAttribute( QStringLiteral("yMin"), QString::number(d->yRange.range.start(), 'g', 16) );
-	//	writer->writeAttribute( QStringLiteral("yMax"), QString::number(d->yRange.range.end(), 'g', 16) );
-	//	writer->writeAttribute( QStringLiteral("xScale"), QString::number(static_cast<int>(d->range(Dimension::X, 0).scale())) );
-	//	writer->writeAttribute( QStringLiteral("yScale"), QString::number(static_cast<int>(d->yScale)) );
-	//	writer->writeAttribute( QStringLiteral("xRangeFormat"), QString::number(static_cast<int>(xRangeFormat(0))) );
-	//	writer->writeAttribute( QStringLiteral("yRangeFormat"), QString::number(static_cast<int>(d->yRangeFormat)) );
-	//	writer->writeAttribute( QStringLiteral("horizontalPadding"), QString::number(d->horizontalPadding) );
-	//	writer->writeAttribute( QStringLiteral("verticalPadding"), QString::number(d->verticalPadding) );
-	//	writer->writeAttribute( QStringLiteral("rightPadding"), QString::number(d->rightPadding) );
-	//	writer->writeAttribute( QStringLiteral("bottomPadding"), QString::number(d->bottomPadding) );
-	//	writer->writeAttribute( QStringLiteral("symmetricPadding"), QString::number(d->symmetricPadding));
 
 	// x-scale breaks
 	if (d->xRangeBreakingEnabled || !d->xRangeBreaks.list.isEmpty()) {
@@ -5029,6 +5017,10 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("symmetricPadding", symmetricPadding, bool);
 			hasCoordinateSystems = true;
 
+			READ_INT_VALUE("rangeType", rangeType, CartesianPlot::RangeType);
+			READ_INT_VALUE("rangeFirstValues", rangeFirstValues, int);
+			READ_INT_VALUE("rangeLastValues", rangeLastValues, int);
+
 			if (Project::xmlVersion() < 7) {
 				d->niceExtend = true;
 			} else {
@@ -5038,7 +5030,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				else
 					d->niceExtend = str.toInt();
 			}
-
 		} else if (!preview && reader->name() == QLatin1String("coordinateSystem")) {
 			attribs = reader->attributes();
 			// new style
