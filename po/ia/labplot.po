@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-17 00:37+0000\n"
-"PO-Revision-Date: 2025-01-30 11:00+0100\n"
+"PO-Revision-Date: 2025-02-18 15:11+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -1103,10 +1103,9 @@ msgid "Unable to open device"
 msgstr "Incapace a aperir dispositivo"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:209
-#, fuzzy, kde-format
-#| msgid "No sheet selected."
+#, kde-format
 msgid "No new line detected"
-msgstr "Nulle folio seligite"
+msgstr "Nulle nove linea discoperite"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, kde-format
@@ -11521,22 +11520,19 @@ msgid ""
 msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1817
-#, fuzzy, kde-format
-#| msgid "Modification time: %1"
+#, kde-format
 msgid "Initialization failed: %1"
-msgstr "Tempore de modification: %1"
+msgstr "Initialization falleva: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1842
-#, fuzzy, kde-format
-#| msgid "Preview: Failed to connect to local socket %1 - %2"
+#, kde-format
 msgid "Failed to connect to the local socket: %1"
-msgstr "Vista preliminar: Il falleva a connecter a socket local  %1 - %2"
+msgstr "Il falleva a connecter a socket local:  %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1859
-#, fuzzy, kde-format
-#| msgid "Preview: Failed to connect to TCP socket - %1"
+#, kde-format
 msgid "Failed to connect to the TCP socket. %1"
-msgstr "Vista preliminar: Il falleva a connecter a socket TCP   - %1"
+msgstr "Il falleva a connecter a socket TCP. %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1865
 #: src/frontend/datasources/ImportFileWidget.cpp:1894
@@ -11550,10 +11546,9 @@ msgid "Not ready for read after 2s:"
 msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1898
-#, fuzzy, kde-format
-#| msgid "Unable to open file:"
+#, kde-format
 msgid "Unable to bind: "
-msgstr "Incapace a aperir file:"
+msgstr "Incapace a ligar:"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1915
 #, kde-format
@@ -11566,10 +11561,9 @@ msgid "Not ready for read after 2 sec"
 msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1921
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open serial port. error: %1"
-msgstr "Falleva a aperir le file '%1'."
+msgstr "Falleva a aperir le porto serial : %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1940
 #, kde-format
@@ -15793,7 +15787,7 @@ msgstr ""
 #: src/frontend/SettingsGeneralPage.cpp:246
 #, kde-format
 msgid "%1 (System, %2)"
-msgstr ""
+msgstr "%1 (Systema, %2)"
 
 #: src/frontend/SettingsGeneralPage.cpp:255
 #, kde-format
@@ -18666,8 +18660,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnMode)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:33
-#, fuzzy, kde-format
-#| msgid "Column Datatypes:"
+#, kde-format
 msgid "Column Data Types:"
 msgstr "Typo de datos de Columna:"
 
@@ -18718,10 +18711,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:116
-#, fuzzy, kde-format
-#| msgid "Column labels"
+#, kde-format
 msgid "Column Names:"
-msgstr "Etiquettas de columna"
+msgstr "Nomines de columna:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:123

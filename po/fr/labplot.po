@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-17 00:37+0000\n"
-"PO-Revision-Date: 2025-01-31 09:54+0100\n"
+"PO-Revision-Date: 2025-02-17 12:23+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 24.12.1\n"
+"X-Generator: Lokalize 24.12.2\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
@@ -1121,10 +1121,9 @@ msgid "Unable to open device"
 msgstr "Impossible d'ouvrir le périphérique"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:209
-#, fuzzy, kde-format
-#| msgid "No sheet selected."
+#, kde-format
 msgid "No new line detected"
-msgstr "Aucune feuille sélectionnée."
+msgstr "Aucune nouvelle ligne détectée"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, kde-format
@@ -1196,6 +1195,7 @@ msgstr "Séparateur non valable"
 #, kde-format
 msgid "Serial devices must be initialized before reading data from it"
 msgstr ""
+"Les périphériques série doivent être initialisés avant d'en lire les données."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
 #, kde-format
@@ -11774,41 +11774,35 @@ msgstr ""
 "ligne » ou -1."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1817
-#, fuzzy, kde-format
-#| msgid "Preview: Initialization failed: %1"
+#, kde-format
 msgid "Initialization failed: %1"
-msgstr "Aperçu : échec de l'initialisation : %1"
+msgstr "Échec de l'initialisation : %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1842
-#, fuzzy, kde-format
-#| msgid "Preview: Failed to connect to local socket %1 - %2"
+#, kde-format
 msgid "Failed to connect to the local socket: %1"
-msgstr "Aperçu : impossible de se connecter au socket local %1 - %2"
+msgstr "Impossible de se connecter au socket local : %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1859
-#, fuzzy, kde-format
-#| msgid "Preview: Failed to connect to TCP socket - %1"
+#, kde-format
 msgid "Failed to connect to the TCP socket. %1"
-msgstr "Aperçu : impossible de se connecter au socket « TCP » - %1"
+msgstr "Impossible de se connecter au socket « TCP ». %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1865
 #: src/frontend/datasources/ImportFileWidget.cpp:1894
-#, fuzzy, kde-format
-#| msgid "The device timed out."
+#, kde-format
 msgid "Socket operation timed out."
-msgstr "Le périphérique a expiré."
+msgstr "L'opération sur le socket n'a pu être réalisée dans le temps imparti."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1879
-#, fuzzy, kde-format
-#| msgid "ERROR: not ready for read after 2 sec"
+#, kde-format
 msgid "Not ready for read after 2s:"
-msgstr "ERREUR : non prêt pour la lecture après 2 secondes"
+msgstr "Non prêt pour la lecture après 2 secondes :"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1898
-#, fuzzy, kde-format
-#| msgid "Unable to open file:"
+#, kde-format
 msgid "Unable to bind: "
-msgstr "Impossible d'ouvrir un fichier :"
+msgstr "Impossible de faire l'association :"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1915
 #, kde-format
@@ -11816,16 +11810,14 @@ msgid "Parse Error: %1"
 msgstr "Erreur d'analyse : %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1917
-#, fuzzy, kde-format
-#| msgid "ERROR: not ready for read after 2 sec"
+#, kde-format
 msgid "Not ready for read after 2 sec"
-msgstr "ERREUR : non prêt pour la lecture après 2 secondes"
+msgstr "Non prêt pour la lecture après 2 secondes"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1921
-#, fuzzy, kde-format
-#| msgid "ERROR: failed to open serial port. error: %1"
+#, kde-format
 msgid "Failed to open serial port. error: %1"
-msgstr "ERREUR : échec de l'ouverture du port série. Erreur : %1"
+msgstr "Échec de l'ouverture du port série. Erreur : %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1940
 #, kde-format
