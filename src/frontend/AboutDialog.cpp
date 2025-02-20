@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Custom about dialog
     --------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2020-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -86,9 +86,14 @@ AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutA
 	linkLabel->setText(text.replace(QLatin1Char('\n'), QStringLiteral("<br />")));
 
 	// button to copy config
-	auto* copyButton = new QPushButton(i18n("Copy Info"));
-	copyButton->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
-	connect(copyButton, &QPushButton::clicked, this, &AboutDialog::copyConfig);
+	auto* copyEnvButton = new QPushButton(i18n("Copy Environment"));
+	copyEnvButton->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
+	connect(copyEnvButton, &QPushButton::clicked, this, &AboutDialog::copyEnvironment);
+
+	// button to copy citation
+	auto* copyCiteButton = new QPushButton(i18n("Copy Citation"));
+	copyCiteButton->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
+	connect(copyCiteButton, &QPushButton::clicked, this, &AboutDialog::copyCitation);
 
 	auto* donateButton = new QPushButton(i18n("Donate"));
 	// no $ icon
@@ -98,7 +103,8 @@ AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutA
 	auto* linkCopyLayout = new QHBoxLayout;
 	linkCopyLayout->addWidget(linkLabel);
 	linkCopyLayout->addStretch();
-	linkCopyLayout->addWidget(copyButton);
+	linkCopyLayout->addWidget(copyEnvButton);
+	linkCopyLayout->addWidget(copyCiteButton);
 	linkCopyLayout->addWidget(donateButton);
 
 	((QVBoxLayout *)layout())->insertLayout(1, linkCopyLayout);
@@ -301,7 +307,7 @@ QVector<QStringList> AboutDialog::components() {
 
 }
 
-void AboutDialog::copyConfig() {
+void AboutDialog::copyEnvironment() {
 	QString text;
 	text += QLatin1String("LabPlot ") + QLatin1String(LVERSION) + QLatin1Char('\n');
 
@@ -313,6 +319,13 @@ void AboutDialog::copyConfig() {
 	for (auto c: AboutDialog::components())
 		if (c.at(1) != i18n("missing"))	// only available components
 			text += c.at(0) + QLatin1Char(' ') + c.at(2) + QLatin1Char('\n');
+
+	QApplication::clipboard()->setText(text);
+}
+
+void AboutDialog::copyCitation() {
+	QString text;
+	text += i18n("LabPlot Team (2025), LabPlot: A FREE, open source, cross-platform Data Visualization and Analysis software accessible to everyone, (Version %1) [Computer software]. %2.", QLatin1String(LVERSION), QStringLiteral("https://labplot.org"));
 
 	QApplication::clipboard()->setText(text);
 }
