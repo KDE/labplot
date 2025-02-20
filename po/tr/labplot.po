@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-17 00:37+0000\n"
-"PO-Revision-Date: 2025-02-17 11:08+0300\n"
+"POT-Creation-Date: 2025-02-20 00:38+0000\n"
+"PO-Revision-Date: 2025-02-19 10:23+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -295,7 +295,7 @@ msgstr "Metin"
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:120
 #, kde-format
 msgid "Date & Time"
-msgstr "Tarih ve Zaman"
+msgstr "Tarih ve zaman"
 
 #: src/backend/core/AbstractColumn.cpp:237
 #, kde-format
@@ -512,12 +512,12 @@ msgstr "Formül:"
 #: src/backend/core/AspectTreeModel.cpp:266
 #, kde-format
 msgid "auto update: true"
-msgstr "otomatik güncelle: doğru"
+msgstr "kendiliğinden güncelle: doğru"
 
 #: src/backend/core/AspectTreeModel.cpp:268
 #, kde-format
 msgid "auto update: false"
-msgstr "otomatik güncelle: yanlış"
+msgstr "kendiliğinden güncelle: yanlış"
 
 #: src/backend/core/AspectTreeModel.cpp:439
 #, kde-format
@@ -945,7 +945,7 @@ msgstr "%1: Görünürlüğünü ayarla"
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:146
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:143
 #: src/backend/worksheet/WorksheetElement.cpp:163
-#: src/backend/worksheet/WorksheetElement.cpp:796
+#: src/backend/worksheet/WorksheetElement.cpp:801
 #: src/backend/worksheet/WorksheetElementContainer.cpp:68
 #: src/backend/worksheet/WorksheetElementContainer.cpp:86
 #, kde-format
@@ -970,7 +970,7 @@ msgid "%1: upload new image"
 msgstr "%1: Yeni görsel yükle"
 
 #: src/backend/datapicker/DatapickerImage.cpp:388
-#: src/backend/worksheet/WorksheetElement.cpp:837
+#: src/backend/worksheet/WorksheetElement.cpp:842
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: Döndürme açısını ayarla"
@@ -1003,7 +1003,7 @@ msgstr "Görsel verisi okunamadı"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:218
 #: src/backend/worksheet/InfoElement.cpp:842
-#: src/backend/worksheet/WorksheetElement.cpp:758
+#: src/backend/worksheet/WorksheetElement.cpp:762
 #, kde-format
 msgid "%1: set position"
 msgstr "%1: Konum ayarla"
@@ -1566,7 +1566,7 @@ msgstr "Günlükleme etkinleştirildi: %1"
 #: src/backend/datasources/filters/HDF5Filter.cpp:309
 #, kde-format
 msgid "Events are currently logged: %1"
-msgstr "Olaylar, şu anda günlükleniyor: %1"
+msgstr "Olaylar şu anda günlükleniyor: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:317
 #, kde-format
@@ -2545,47 +2545,47 @@ msgstr "Temel sabitler"
 #: src/backend/gsl/constants.cpp:21
 #, kde-format
 msgid "Astronomy and Astrophysics"
-msgstr "Gökbilim ve Gökfizik"
+msgstr "Gökbilim ve gökfizik"
 
 #: src/backend/gsl/constants.cpp:23
 #, kde-format
 msgid "Atomic and Nuclear Physics"
-msgstr "Atomik ve Nükleer Fizik"
+msgstr "Atomik ve nükleer fizik"
 
 #: src/backend/gsl/constants.cpp:25
 #, kde-format
 msgid "Measurement of Time"
-msgstr "Zamanın Ölçümü"
+msgstr "Zamanın ölçümü"
 
 #: src/backend/gsl/constants.cpp:27
 #, kde-format
 msgid "Imperial Units"
-msgstr "İmparatorluk Birimleri"
+msgstr "İmparatorluk birimleri"
 
 #: src/backend/gsl/constants.cpp:29
 #, kde-format
 msgid "Speed and Nautical Units"
-msgstr "Hız ve Denizcilik Birimleri"
+msgstr "Hız ve denizcilik birimleri"
 
 #: src/backend/gsl/constants.cpp:31
 #, kde-format
 msgid "Printers Units"
-msgstr "Yazıcı Birimleri"
+msgstr "Yazıcı birimleri"
 
 #: src/backend/gsl/constants.cpp:33
 #, kde-format
 msgid "Volume, Area and Length"
-msgstr "Hacim, Alan ve Uzunluk"
+msgstr "Hacim, alan ve uzunluk"
 
 #: src/backend/gsl/constants.cpp:35
 #, kde-format
 msgid "Mass and Weight"
-msgstr "Kütle ve Ağırlık"
+msgstr "Kütle ve ağırlık"
 
 #: src/backend/gsl/constants.cpp:37
 #, kde-format
 msgid "Thermal Energy and Power"
-msgstr "Isıl Enerji ve Güç"
+msgstr "Isıl enerji ve güç"
 
 #: src/backend/gsl/constants.cpp:39
 #, kde-format
@@ -2600,7 +2600,7 @@ msgstr "Viskozite"
 #: src/backend/gsl/constants.cpp:43
 #, kde-format
 msgid "Light and Illumination"
-msgstr "Işık ve Aydınlatma"
+msgstr "Işık ve aydınlatma"
 
 #: src/backend/gsl/constants.cpp:45
 #, kde-format
@@ -2610,12 +2610,12 @@ msgstr "Radyoaktivite"
 #: src/backend/gsl/constants.cpp:47
 #, kde-format
 msgid "Force and Energy"
-msgstr "Güç ve Enerji"
+msgstr "Güç ve enerji"
 
 #: src/backend/gsl/constants.cpp:51
 #, kde-format
 msgid "Unknown Constant"
-msgstr "Bilinmeyen Sabit"
+msgstr "Bilinmeyen sabit"
 
 #: src/backend/gsl/constants.cpp:63
 #, kde-format
@@ -3710,7 +3710,7 @@ msgstr "Boyut"
 #: src/frontend/ui/mqttwillsettingswidget.ui:31
 #, kde-format
 msgid "Minimum"
-msgstr "En Düşük Değer"
+msgstr "En düşük değer"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMaximum)
@@ -3723,7 +3723,7 @@ msgstr "En Düşük Değer"
 #: src/frontend/ui/mqttwillsettingswidget.ui:42
 #, kde-format
 msgid "Maximum"
-msgstr "En Yüksek Değer"
+msgstr "En yüksek değer"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbArithmeticMean)
@@ -6425,7 +6425,7 @@ msgstr "Dairesel"
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:61
 #, kde-format
 msgid "Auto"
-msgstr "Otomatik"
+msgstr "Kendiliğinden"
 
 #: src/backend/nsl/nsl_conv.c:21
 #, kde-format
@@ -8247,7 +8247,7 @@ msgstr "(Ters) Evrişim"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:516
 #, kde-format
 msgid "Auto-/Cross-Correlation"
-msgstr "Otomatik/Çapraz Bağlılık"
+msgstr "Kendiliğinden/Çapraz Bağlılık"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:440
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:513
@@ -8600,7 +8600,7 @@ msgstr "%1: %2 erimi %3 biçimi değiştir"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1306
 #, kde-format
 msgid "%1: change %2-range %3 auto scaling"
-msgstr "%1: %2 erimi %3 otomatik ölçeklemeyi değiştir"
+msgstr "%1: %2 erimi %3 kendiliğinden ölçeklemeyi değiştir"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1547
 #, kde-format
@@ -9019,7 +9019,7 @@ msgstr "%1: Kova genişliğini ayarla"
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:454
 #, kde-format
 msgid "%1: change auto bin ranges"
-msgstr "%1: Otomatik kova erimlerini değiştir"
+msgstr "%1: Kendiliğinden kova erimlerini değiştir"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:502
 #, kde-format
@@ -10076,22 +10076,22 @@ msgstr "Geri&ye taşı"
 msgid "Move in &front of"
 msgstr "Ö&ne taşı"
 
-#: src/backend/worksheet/WorksheetElement.cpp:770
+#: src/backend/worksheet/WorksheetElement.cpp:774
 #, kde-format
 msgid "%1: set horizontal alignment"
 msgstr "%1: Yatay hizalamayı ayarla"
 
-#: src/backend/worksheet/WorksheetElement.cpp:782
+#: src/backend/worksheet/WorksheetElement.cpp:786
 #, kde-format
 msgid "%1: set vertical alignment"
 msgstr "%1: Dikey hizalamayı ayarla"
 
-#: src/backend/worksheet/WorksheetElement.cpp:796
+#: src/backend/worksheet/WorksheetElement.cpp:801
 #, kde-format
 msgid "%1: use logical coordinates"
 msgstr "%1: Mantıksal koordinatlar kullan"
 
-#: src/backend/worksheet/WorksheetElement.cpp:806
+#: src/backend/worksheet/WorksheetElement.cpp:811
 #, kde-format
 msgid "%1: set logical position"
 msgstr "%1: Mantıksal konum ayarla"
@@ -11112,13 +11112,13 @@ msgstr "İliştir"
 #: src/frontend/datasources/ImportDialog.cpp:110
 #, kde-format
 msgid "Prepend"
-msgstr "Öne İliştir"
+msgstr "Öne iliştir"
 
 #: src/frontend/datasources/ImportDialog.cpp:111
 #: src/frontend/notebook/NotebookView.cpp:66
 #, kde-format
 msgid "Replace"
-msgstr "Yer Değiştir"
+msgstr "Yer değiştir"
 
 #: src/frontend/datasources/ImportDialog.cpp:146
 #, kde-format
@@ -11860,13 +11860,13 @@ msgstr ""
 #: src/frontend/datasources/ImportProjectDialog.cpp:159
 #, kde-format
 msgid "As Plot Area"
-msgstr "Çizim Alanı Olarak"
+msgstr "Çizim alanı olarak"
 
 #: src/frontend/datasources/ImportOriginLayersDialog.cpp:39
 #: src/frontend/datasources/ImportProjectDialog.cpp:160
 #, kde-format
 msgid "As Coordinate System"
-msgstr "Koordinat Sistemi Olarak"
+msgstr "Koordinat sistemi olarak"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:83
 #: src/frontend/datasources/ImportProjectDialog.cpp:512
@@ -12018,7 +12018,7 @@ msgstr "Tablo"
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:43
 #, kde-format
 msgid "Custom Query"
-msgstr "Özel Sorgu"
+msgstr "Özel sorgu"
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:46
 #, kde-format
@@ -12398,7 +12398,7 @@ msgstr "Mantıksal"
 #: src/frontend/dockwidgets/AxisDock.cpp:236
 #, kde-format
 msgid "Auto Data"
-msgstr "Otomatik Veri"
+msgstr "Kendiliğinden Veri"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:240
 #, kde-format
@@ -12409,11 +12409,11 @@ msgid ""
 "points, respectively</li><li>Custom - manually specify the start and end "
 "points of the axis</li></ul>"
 msgstr ""
-"Eksen erimi:<ul><li>Otomatik — Eksenin başlangıç ve bitiş noktalarını "
-"kendiliğinden geçerli çizim erimlerine ayarla</li><li>Otomatik Veri — "
-"Eksenin başlangıç ve bitiş noktalarını otomatik olarak en küçük ve en büyük "
+"Eksen erimi:<ul><li>Kendiliğinden — Eksenin başlangıç ve bitiş noktalarını "
+"kendiliğinden geçerli çizim erimlerine ayarla</li><li>Kendiliğinden Veri — "
+"Eksenin başlangıç ve bitiş noktalarını kendiliğinden en küçük ve en büyük "
 "çizilmiş veri noktalarına sırasıyla ayarla</li><li>Özel — Eksenin başlangıç "
-"ve bitiş noktalarını el ile ayarla</li></ul>"
+"ve bitiş noktalarını elle ayarla</li></ul>"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:260
 #, kde-format
@@ -13017,13 +13017,13 @@ msgstr "%1 kartezyen çizimleri: “%2” şablonu yüklendi"
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:246
 #, kde-format
 msgid "Column Major"
-msgstr "Ana Sütun"
+msgstr "Ana sütun"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:260
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:247
 #, kde-format
 msgid "Row Major"
-msgstr "Ana Satır"
+msgstr "Ana satır"
 
 #. i18n: ectx: property (text), widget (QLabel, lCenter)
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:265
@@ -13931,7 +13931,7 @@ msgstr "değer: %1"
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:79
 #, kde-format
 msgid "Auto (5x data points)"
-msgstr "Otomatik (5× veri noktası)"
+msgstr "Kendiliğinden (5× veri noktası)"
 
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:80
 #, kde-format
@@ -14112,7 +14112,7 @@ msgstr "Özellikler: Evrişim/Ters Evrişim"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
-msgstr "Özellikler: Otomatik/Çapraz Bağlılık"
+msgstr "Özellikler: Kendiliğinden/Çapraz Bağlılık"
 
 #: src/frontend/GuiObserver.cpp:348
 #, kde-format
@@ -14267,27 +14267,27 @@ msgstr "Çizgisiz"
 #: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
 msgid "Solid Line"
-msgstr "Düz Çizgi"
+msgstr "Düz çizgi"
 
 #: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
 msgid "Dash Line"
-msgstr "Tire Çizgisi"
+msgstr "Tire çizgisi"
 
 #: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
 msgid "Dot Line"
-msgstr "Nokta Çizgisi"
+msgstr "Nokta çizgisi"
 
 #: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
 msgid "Dash-dot Line"
-msgstr "Tire–Nokta Çizgisi"
+msgstr "Tire–Nokta çizgisi"
 
 #: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
 msgid "Dash-dot-dot Line"
-msgstr "Tire–Nokta–Nokta Çizgisi"
+msgstr "Tire–Nokta–Nokta çizgisi"
 
 #: src/frontend/GuiTools.cpp:151
 #, kde-format
@@ -15879,7 +15879,7 @@ msgstr "İndirilen dosyaları temizle"
 #: src/frontend/SettingsDatasetsPage.cpp:30
 #, kde-format
 msgid "How to Use Kaggle"
-msgstr "Kaggle Kullanımı"
+msgstr "Kaggle kullanımı"
 
 #: src/frontend/SettingsDatasetsPage.cpp:85
 #, kde-format
@@ -16428,7 +16428,7 @@ msgstr "Değer Etiketlerini Düzenle"
 #: src/frontend/spreadsheet/BatchEditValueLabelsDialog.cpp:40
 #, kde-format
 msgid "Value Labels:"
-msgstr "Değer Etiketleri:"
+msgstr "Değer etiketleri:"
 
 #: src/frontend/spreadsheet/BatchEditValueLabelsDialog.cpp:154
 #, kde-format
@@ -16447,21 +16447,21 @@ msgstr "Eşittir"
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:231
 #, kde-format
 msgid "Not Equal to"
-msgstr "Eşit Değildir"
+msgstr "Eşit değildir"
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:47
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:223
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:232
 #, kde-format
 msgid "Between (Incl. End Points)"
-msgstr "Arasında (Son noktalar dahil)"
+msgstr "Arasında (Son noktalar içerilir)"
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:48
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:224
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:233
 #, kde-format
 msgid "Between (Excl. End Points)"
-msgstr "Arasında (Son noktalar hariç)"
+msgstr "Arasında (Son noktalar içerilmez)"
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:49
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:225
@@ -16475,7 +16475,7 @@ msgstr "Büyüktür"
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:235
 #, kde-format
 msgid "Greater than or Equal to"
-msgstr "Büyük Eşittir"
+msgstr "Büyük eşittir"
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:51
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:227
@@ -16489,7 +16489,7 @@ msgstr "Küçüktür"
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:237
 #, kde-format
 msgid "Less than or Equal to"
-msgstr "Küçük Eşittir"
+msgstr "Küçük eşittir"
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:57
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:212
@@ -16501,19 +16501,19 @@ msgstr "Eşittir"
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:213
 #, kde-format
 msgid "Not Equal To"
-msgstr "Eşit Değildir"
+msgstr "Eşit değildir"
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:59
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:214
 #, kde-format
 msgid "Starts With"
-msgstr "Şununla Başlar"
+msgstr "Şununla başlar"
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:60
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:215
 #, kde-format
 msgid "Ends With"
-msgstr "Şununla Biter"
+msgstr "Şununla biter"
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:61
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:216
@@ -16808,12 +16808,12 @@ msgstr "&Biçim"
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:230
 #, kde-format
 msgid "Background"
-msgstr "Arka Plan"
+msgstr "Arka plan"
 
 #: src/frontend/spreadsheet/FormattingHeatmapDialog.cpp:62
 #, kde-format
 msgid "Font Color"
-msgstr "Yazıtipi Rengi"
+msgstr "Yazıtipi rengi"
 
 #: src/frontend/spreadsheet/FormattingHeatmapDialog.cpp:63
 #, kde-format
@@ -17148,14 +17148,14 @@ msgstr "Örnek Değerler"
 #: src/frontend/ui/spreadsheet/samplevalueswidget.ui:30
 #, kde-format
 msgid "Period:"
-msgstr "Periyod:"
+msgstr "Periyot:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSampleSize)
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:105
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:159
 #, kde-format
 msgid "Sample Size:"
-msgstr "Örnek Boyut:"
+msgstr "Örnek boyut:"
 
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:205
 #, kde-format
@@ -18814,7 +18814,7 @@ msgstr "En düşük bölüt uzunluğu algılaması"
 #: src/frontend/ui/datapickerimagewidget.ui:248
 #, kde-format
 msgid "Min. Length:"
-msgstr "En Düşük Uzunluk:"
+msgstr "En düşük uzunluk:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint1)
 #: src/frontend/ui/datapickerimagewidget.ui:280
@@ -18945,7 +18945,7 @@ msgstr "Ayırma:"
 #: src/frontend/ui/datapickerimagewidget.ui:812
 #, kde-format
 msgid "Datetime"
-msgstr "TarihZaman"
+msgstr "Tarih ve zaman"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tSymbol)
 #: src/frontend/ui/datapickerimagewidget.ui:820
@@ -19000,7 +19000,7 @@ msgstr "Doygunluk:"
 #: src/frontend/ui/datapickerimagewidget.ui:957
 #, kde-format
 msgid "Foreground:"
-msgstr "Ön Plan:"
+msgstr "Ön plan:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:23
@@ -19029,7 +19029,7 @@ msgstr ""
 #: src/frontend/ui/datasources/asciioptionswidget.ui:46
 #, kde-format
 msgid "Simplify Whitespaces"
-msgstr "Boşlukları Yalınlaştır"
+msgstr "Boşlukları yalınlaştır"
 
 #. i18n: ectx: property (text), widget (QLabel, lSeparatingCharacter)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:56
@@ -19071,7 +19071,7 @@ msgstr "Sütun adları:"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:123
 #, kde-format
 msgid "Remove Quotes"
-msgstr "Tırnakları Kaldır"
+msgstr "Tırnakları kaldır"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:130
@@ -19097,7 +19097,7 @@ msgstr "NaN’ı 0’a dönüştür"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:190
 #, kde-format
 msgid "Create Index"
-msgstr "İndeks Oluştur"
+msgstr "İndeks oluştur"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:239
@@ -19356,7 +19356,7 @@ msgstr "Boş bölümleri atla"
 #: src/frontend/ui/datasources/datasetmetadatamanagerwidget.ui:144
 #, kde-format
 msgid "Remove quotes"
-msgstr "Tırnakları Kaldır"
+msgstr "Tırnakları kaldır"
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/frontend/ui/datasources/datasetmetadatamanagerwidget.ui:193
@@ -19785,7 +19785,7 @@ msgstr "Şuradan içe aktar:"
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:239
 #, kde-format
 msgid "Decimal separator:"
-msgstr "Ondalık ayırıcı:"
+msgstr "Ondalık ayırıcısı:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbQuery)
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:137
@@ -22484,7 +22484,7 @@ msgstr "Uydurma için kullanılacak veri erimini seç"
 #: src/frontend/ui/fitoptionswidget.ui:144
 #, kde-format
 msgid "Auto fit range"
-msgstr "Otomatik uyum erimi"
+msgstr "Kendiliğinden uyum erimi"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbAutoEvalRange)
 #: src/frontend/ui/fitoptionswidget.ui:154
@@ -22496,7 +22496,7 @@ msgstr "Sonuçtaki uyum işlevini değerlendirmek için erimi seç"
 #: src/frontend/ui/fitoptionswidget.ui:157
 #, kde-format
 msgid "Auto evaluation range"
-msgstr "Otomatik değerlendirme erimi"
+msgstr "Kendiliğinden değerlendirme erimi"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbUseResults)
 #: src/frontend/ui/fitoptionswidget.ui:167
@@ -22917,7 +22917,7 @@ msgstr "Temizle"
 #: src/frontend/ui/settingsgeneralpage.ui:17
 #, kde-format
 msgid "Auto-save:"
-msgstr "Otomatik kaydet:"
+msgstr "Kendiliğinden kaydet:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
 #: src/frontend/ui/settingsgeneralpage.ui:46
@@ -23131,7 +23131,7 @@ msgstr "Yeniden başlatırken onay iste"
 #: src/frontend/ui/settingsprintingpage.ui:16
 #, kde-format
 msgid "Auto-Save"
-msgstr "Otomatik Kaydet"
+msgstr "Kendiliğinden Kaydet"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/settingsprintingpage.ui:22
@@ -23271,7 +23271,7 @@ msgstr "Metin Değerleri"
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:203
 #, kde-format
 msgid "DateTime Values"
-msgstr "TarihZaman Değerleri"
+msgstr "Tarih ve zaman değerleri"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:97
@@ -23813,17 +23813,17 @@ msgstr "Üçlü (x, y, z)"
 #: src/frontend/widgets/DatapickerImageWidget.cpp:345
 #, kde-format
 msgid "No Image"
-msgstr "Görsel Yok"
+msgstr "Görsel yok"
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:346
 #, kde-format
 msgid "Original Image"
-msgstr "Özgün Görsel"
+msgstr "Özgün görsel"
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:347
 #, kde-format
 msgid "Processed Image"
-msgstr "İşlenmiş Görsel"
+msgstr "İşlenmiş görsel"
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:350
 #: src/frontend/widgets/DatapickerImageWidget.cpp:358
@@ -24566,7 +24566,7 @@ msgstr "Dikey boşluklandırma:"
 #: src/frontend/worksheet/SlidingPanel.cpp:86
 #, kde-format
 msgid "Quit Presentation"
-msgstr "Sunumdan çık"
+msgstr "Sunumdan Çık"
 
 #: src/frontend/worksheet/SlidingPanel.cpp:131
 #, kde-format
@@ -24719,17 +24719,17 @@ msgstr "Y Bölgesi Seç ve Yakınlaştır"
 #: src/frontend/worksheet/WorksheetView.cpp:370
 #, kde-format
 msgid "Auto Scale"
-msgstr "Otomatik Ölçekleme"
+msgstr "Kendiliğinden Ölçekleme"
 
 #: src/frontend/worksheet/WorksheetView.cpp:374
 #, kde-format
 msgid "Auto Scale X"
-msgstr "Otomatik Ölçekleme X"
+msgstr "Kendiliğinden Ölçekleme X"
 
 #: src/frontend/worksheet/WorksheetView.cpp:378
 #, kde-format
 msgid "Auto Scale Y"
-msgstr "Otomatik Ölçekleme Y"
+msgstr "Kendiliğinden Ölçekleme Y"
 
 #: src/frontend/worksheet/WorksheetView.cpp:390
 #, kde-format
