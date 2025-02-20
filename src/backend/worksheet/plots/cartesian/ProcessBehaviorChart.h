@@ -66,6 +66,7 @@ public:
 	void recalc() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 	void setVisible(bool) override;
+	void setZValue(qreal) override;
 
 	int xIndexCount() const;
 	bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const override;
