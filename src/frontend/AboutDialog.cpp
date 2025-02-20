@@ -325,7 +325,7 @@ void AboutDialog::copyEnvironment() {
 
 void AboutDialog::copyCitation() {
 	QString text;
-	text += i18n("LabPlot Team (2025), LabPlot: A FREE, open source, cross-platform Data Visualization and Analysis software accessible to everyone, (Version %1) [Computer software]. %2.", QLatin1String(LVERSION), QStringLiteral("https://labplot.org"));
+	text += i18n("LabPlot Team (%1), LabPlot: A FREE, open source, cross-platform Data Visualization and Analysis software accessible to everyone, (Version %2) [Computer software]. %3.", QLatin1String(YEAR), QLatin1String(LVERSION), QLatin1String("https://labplot.org"));
 
 	QApplication::clipboard()->setText(text);
 }
