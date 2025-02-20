@@ -211,10 +211,10 @@ void ProcessBehaviorChart::setVisible(bool on) {
 }
 
 /*!
-* override the default implementation to handle the visibility of the internal curves
-* and to set the z-value of the data curve to 1 higher than the z-value of the other curves.
-*/
-void ProcessBehaviorChart:: setZValue(qreal value) {
+ * override the default implementation to handle the visibility of the internal curves
+ * and to set the z-value of the data curve to 1 higher than the z-value of the other curves.
+ */
+void ProcessBehaviorChart::setZValue(qreal value) {
 	Q_D(ProcessBehaviorChart);
 	d->centerCurve->setZValue(value);
 	d->upperLimitCurve->setZValue(value);
