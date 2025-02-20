@@ -2,7 +2,7 @@
 New features:
 	* [general]
 		* Detail info view mode in the Color Maps Browser
-		* Add links and button to copy configuration and show external libraries in the About Dialog
+		* Extend About dialog: Add links and buttons to copy environment and citation, show external depenencies
 		* Make the changes in Note undo/redo-able
 		* For the number format, allow to specify in the application settings both - the decimal and the group - separators
 		* Automatically update the visualizations on number format changes without restart
