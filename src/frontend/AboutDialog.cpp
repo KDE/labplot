@@ -172,15 +172,6 @@ QString AboutDialog::systemInfo() {
 QVector<QStringList> AboutDialog::components() {
 	QVector<QStringList> components;
 
-	// compiler info
-	components << (QStringList() << i18n("C++ Compiler: ") + QLatin1String(CXX_COMPILER_ID) << QLatin1String(CXX_COMPILER_VERSION) << QString() << QString());
-
-	// compiler flags
-	auto flags = QString::fromLatin1(CXX_COMPILER_FLAGS);
-	// TODO: creates a big gap in the Components windows
-	flags.replace(QLatin1String(" -"), QStringLiteral("\n-")); // add line breaks to avoid big window width
-	components << (QStringList() << i18n("C++ Compiler Flags:") << flags << QString() << QString());
-
 	// alphabetically
 #ifdef HAVE_CANTOR_LIBS
 	components << (QStringList() << QLatin1String("Cantor") << i18n("Frontend to Mathematical Applications") << QLatin1String(CANTOR_VERSION_STRING) << QStringLiteral("https://cantor.kde.org/"));
@@ -296,6 +287,15 @@ QVector<QStringList> AboutDialog::components() {
 #else
 	components << (QStringList() << QLatin1String("<em>") + QLatin1String("Vector BLF") + QLatin1String("</em>") << i18n("missing") << QString() << QStringLiteral("https://github.com/Technica-Engineering/vector_blf"));
 #endif
+
+	// compiler info
+	components << (QStringList() << i18n("C++ Compiler: ") + QLatin1String(CXX_COMPILER_ID) << QLatin1String(CXX_COMPILER_VERSION) << QString() << QString());
+
+	// compiler flags
+	auto flags = QString::fromLatin1(CXX_COMPILER_FLAGS);
+	// TODO: creates a big gap in the Components windows
+	flags.replace(QLatin1String(" -"), QStringLiteral("\n-")); // add line breaks to avoid big window width
+	components << (QStringList() << i18n("C++ Compiler Flags:") << flags << QString() << QString());
 
 	return components;
 
