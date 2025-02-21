@@ -111,9 +111,16 @@ AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutA
 	// when deriving from QDialog
 	//init();
 
+	// Find and hide the "Copy to Clipboard" button
+	auto buttons = findChildren<QPushButton *>();
+	for (auto* button : buttons) {
+		if (button->text() == i18n("Copy to Clipboard"))
+			button->hide();
+	}
+
 	// restore saved settings if available
 	create(); // ensure there's a window created
-	const KConfigGroup conf = Settings::group(QStringLiteral("AboutDialog"));
+	const auto conf = Settings::group(QStringLiteral("AboutDialog"));
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -123,7 +130,7 @@ AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutA
 
 AboutDialog::~AboutDialog() {
 	// save current window size
-	KConfigGroup conf = Settings::group(QStringLiteral("AboutDialog"));
+	auto conf = Settings::group(QStringLiteral("AboutDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
@@ -298,7 +305,6 @@ QVector<QStringList> AboutDialog::components() {
 
 	// compiler flags
 	auto flags = QString::fromLatin1(CXX_COMPILER_FLAGS);
-	// TODO: creates a big gap in the Components windows
 	flags.replace(QLatin1String(" -"), QStringLiteral("\n-")); // add line breaks to avoid big window width
 	components << (QStringList() << i18n("C++ Compiler Flags:") << flags << QString() << QString());
 
