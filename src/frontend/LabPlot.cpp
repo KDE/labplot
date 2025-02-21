@@ -14,8 +14,8 @@
 #include "backend/lib/macros.h"
 #include "frontend/AboutDialog.h"
 
-#include <KAboutComponent>
 #include <KAboutData>
+#include <KAboutComponent>
 #include <KColorSchemeManager>
 #include <KConfigGroup>
 #include <KCrash>
@@ -49,13 +49,13 @@ int main(int argc, char* argv[]) {
 	qputenv("QT_QPA_PLATFORM", xcbQtQpaEnvVar);
 #endif
 
-	// trigger initialisation of proper icon theme
+		   // trigger initialisation of proper icon theme
 	KIconTheme::initTheme();
 
 	QApplication app(argc, argv);
 
 #if HAVE_STYLE_MANAGER
-	// trigger initialisation of proper application style
+	//trigger initialisation of proper application style
 	KStyleManager::initStyle();
 #else
 	// For Windows and macOS: use Breeze if available
@@ -68,12 +68,11 @@ int main(int argc, char* argv[]) {
 	KLocalizedString::setApplicationDomain("labplot");
 
 	QString systemInfo{AboutDialog::systemInfo()};
-	QString links = i18n("Visit website:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://labplot.org"))
-		+ QLatin1Char('\n')		//Release notes: LINK ?
-				+ i18n("Watch video tutorials:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://tube.kockatoo.org/c/l))
-		+ QLatin1Char('\n') + i18n("Discuss on Mastodon:") + QLatin1Char(' ')
-		+ QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://floss.social/@LabPlot")) + QLatin1Char('\n') + i18n("Development:")
-		+ QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://invent.kde.org/education/labplot")) + QLatin1Char('\n')
+	QString links = i18n("Visit website:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://labplot.org")) + QLatin1Char('\n')
+																																									   // Release notes: LINK ?
+		+ i18n("Watch video tutorials:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://www.youtube.com/@LabPlot")) + QLatin1Char('\n')
+		+ i18n("Discuss on Mastodon:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://floss.social/@LabPlot")) + QLatin1Char('\n')
+		+ i18n("Development:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://invent.kde.org/education/labplot")) + QLatin1Char('\n')
 		+ i18n("Please report bugs to:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://bugs.kde.org"));
 	KAboutData aboutData(QStringLiteral("labplot"),
 						 QStringLiteral("LabPlot"),
@@ -126,11 +125,11 @@ int main(int argc, char* argv[]) {
 	DEBUG("DEBUG debugging enabled")
 	QDEBUG("QDEBUG debugging enabled")
 
-	// components
-	for (auto c : AboutDialog::components())
+		   // components
+	for (auto c: AboutDialog::components())
 		aboutData.addComponent(c.at(0), c.at(1), c.at(2), c.at(3));
 
-	// no translators set (too many to mention)
+		   // no translators set (too many to mention)
 	KAboutData::setApplicationData(aboutData);
 
 	KCrash::initialize();
@@ -179,8 +178,8 @@ int main(int argc, char* argv[]) {
 		splash->show();
 	}
 
-	// needed in order to have the signals triggered by SignallingUndoCommand
-	// TODO: redesign/remove this
+		   // needed in order to have the signals triggered by SignallingUndoCommand
+		   // TODO: redesign/remove this
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
 	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 
