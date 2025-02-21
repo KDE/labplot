@@ -427,7 +427,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		}
 		break;
 	case AspectType::HypothesisTest:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Hypothesis Test"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: One Sample T-Test"));
 		raiseDock(m_hypothesisTestDock, m_mainWindow->stackedWidget);
 		m_hypothesisTestDock->initializeTest(static_cast<HypothesisTest*>(selectedAspects.first()));
 		break;
