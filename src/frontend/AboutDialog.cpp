@@ -315,6 +315,8 @@ void AboutDialog::copyEnvironment() {
 
 	// components
 	text += QLatin1Char('\n') + i18n("Components:") + QLatin1Char('\n');
+	text += i18n("Qt") + QLatin1Char(' ') + QLatin1String(QT_VERSION_STR) + QLatin1Char('\n');
+	text += i18n("KDE Frameworks") + QLatin1Char(' ') + QLatin1String(KCOREADDONS_VERSION_STRING) + QLatin1Char('\n');
 	for (auto c: AboutDialog::components())
 		if (QTextDocumentFragment::fromHtml(c.at(1)).toPlainText() == i18n("missing"))
 			text += QTextDocumentFragment::fromHtml(c.at(0)).toPlainText() + QLatin1Char(' ') + i18n("missing") + QLatin1Char('\n');
