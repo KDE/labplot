@@ -732,10 +732,11 @@ void MatrixView::pasteIntoSelection() {
 
 	rows = last_row - first_row + 1;
 	cols = last_col - first_col + 1;
+	const auto numberLocale = QLocale();
 	for (int r = 0; r < rows && r < input_row_count; r++) {
 		for (int c = 0; c < cols && c < input_col_count; c++) {
 			if (isCellSelected(first_row + r, first_col + c) && (c < cell_texts.at(r).count()))
-				m_matrix->setCell(first_row + r, first_col + c, cell_texts.at(r).at(c).toDouble());
+				m_matrix->setCell(first_row + r, first_col + c, numberLocale.toDouble(cell_texts.at(r).at(c)));
 		}
 	}
 
