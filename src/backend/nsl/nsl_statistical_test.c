@@ -19,7 +19,6 @@ double nsl_stats_mannwhitney_u(const double sample1[], size_t n1, const double s
 	size_t n = n1 + n2;
 	Rank combined[1000];
 
-	
 	for (size_t i = 0; i < n1; i++) {
 		combined[i].value = sample1[i];
 		combined[i].group = 0;
@@ -39,7 +38,6 @@ double nsl_stats_mannwhitney_u(const double sample1[], size_t n1, const double s
 		}
 	}
 
-	
 	double ranks[1000];
 	size_t i = 0;
 	while (i < n) {
@@ -52,7 +50,6 @@ double nsl_stats_mannwhitney_u(const double sample1[], size_t n1, const double s
 		i = j;
 	}
 
-	
 	double rank_sum1 = 0.0;
 	for (size_t idx = 0; idx < n; idx++) {
 		if (combined[idx].group == 0)

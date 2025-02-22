@@ -34,11 +34,11 @@ ImportOriginLayersDialog::ImportOriginLayersDialog(QWidget* parent)
 		"</ul>");
 	ui->lInfo->setText(info);
 
-	// add options to control how to read Origin's graph layers - as new plot areas or as new coordinate systems
+		   // add options to control how to read Origin's graph layers - as new plot areas or as new coordinate systems
 	ui->cbGraphLayer->addItem(i18n("As Plot Area"));
 	ui->cbGraphLayer->addItem(i18n("As Coordinate System"));
 
-	// restore saved settings if available
+		   // restore saved settings if available
 	create(); // ensure there's a window created
 	KConfigGroup conf = Settings::group(QStringLiteral("ImportOriginLayersDialog"));
 	if (conf.exists()) {
@@ -46,6 +46,7 @@ ImportOriginLayersDialog::ImportOriginLayersDialog(QWidget* parent)
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
 	} else
 		resize(QSize(300, 0).expandedTo(minimumSize()));
+
 
 	ui->cbGraphLayer->setCurrentIndex(conf.readEntry(QStringLiteral("GraphLayer"), 0));
 }

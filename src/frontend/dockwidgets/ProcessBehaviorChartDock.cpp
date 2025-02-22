@@ -26,7 +26,7 @@
   \class ProcessBehaviorChartDock
   \brief  Provides a widget for editing the properties of process behavior charts.
 
-  \ingroup frontend
+\ingroup frontend
 */
 ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	: BaseDock(parent)
@@ -37,12 +37,12 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	setBaseWidgets(ui.leName, ui.teComment);
 	setVisibilityWidgets(ui.chkVisible, ui.chkLegendVisible);
 
-	// Tab "General"
+		   // Tab "General"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
 	gridLayout->addWidget(cbDataColumn, 4, 2, 1, 1);
 	gridLayout->addWidget(cbData2Column, 5, 2, 1, 1);
 
-	// Tab "Data Line"
+		   // Tab "Data Line"
 	auto* hBoxLayout = static_cast<QHBoxLayout*>(ui.tabDataLine->layout());
 	dataLineWidget = new LineWidget(ui.tabDataLine);
 	hBoxLayout->insertWidget(1, dataLineWidget);
@@ -50,7 +50,7 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	dataSymbolWidget = new SymbolWidget(ui.tabDataLine);
 	hBoxLayout->insertWidget(3, dataSymbolWidget);
 
-	// Tab "Contol Limit Lines"
+		   // Tab "Contol Limit Lines"
 	hBoxLayout = static_cast<QHBoxLayout*>(ui.tabControlLimitLines->layout());
 	centerLineWidget = new LineWidget(ui.tabControlLimitLines);
 	hBoxLayout->insertWidget(1, centerLineWidget);
@@ -59,7 +59,7 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	lowerLimitLineWidget = new LineWidget(ui.tabControlLimitLines);
 	hBoxLayout->insertWidget(9, lowerLimitLineWidget);
 
-	// adjust layouts in the tabs
+		   // adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
 		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
@@ -70,8 +70,8 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 		layout->setVerticalSpacing(2);
 	}
 
-	// Slots
-	// General
+		   // Slots
+		   // General
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &ProcessBehaviorChartDock::dataColumnChanged);
 	connect(cbData2Column, &TreeViewComboBox::currentModelIndexChanged, this, &ProcessBehaviorChartDock::data2ColumnChanged);
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::typeChanged);
@@ -80,7 +80,7 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	connect(ui.chbNegativeLowerLimit, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::negativeLowerLimitEnabledChanged);
 	connect(ui.chbExactLimits, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::exactLimitsEnabledChanged);
 
-	// template handler
+		   // template handler
 	auto* frame = new QFrame(this);
 	auto* layout = new QHBoxLayout(frame);
 	layout->setContentsMargins(0, 11, 0, 11);
@@ -118,7 +118,7 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 	Q_ASSERT(m_plot);
 	setModel();
 
-	// initialize widgets for common properties
+		   // initialize widgets for common properties
 	QList<Line*> dataLines;
 	QList<Symbol*> dataSymbols;
 	QList<Line*> centerLines;
@@ -139,7 +139,7 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 	if (m_plot->lowerLimitAvailable())
 		lowerLimitLineWidget->setLines(lowerLimitLines);
 
-	// if there are more then one curve in the list, disable the content in the tab "general"
+		   // if there are more then one curve in the list, disable the content in the tab "general"
 	if (m_plots.size() == 1) {
 		cbDataColumn->setEnabled(true);
 		cbDataColumn->setAspect(m_plot->dataColumn(), m_plot->dataColumnPath());
@@ -155,18 +155,18 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 	ui.chkLegendVisible->setChecked(m_plot->legendVisible());
 	ui.chkVisible->setChecked(m_plot->isVisible());
 
-	// hide the properties for the lower limit line if the lower limit is not available for the current plot
+		   // hide the properties for the lower limit line if the lower limit is not available for the current plot
 	bool visible = m_plot->lowerLimitAvailable();
 	ui.lLowerLimit->setVisible(visible);
 	lowerLimitLineWidget->setVisible(visible);
 
-	// load the remaining properties
+		   // load the remaining properties
 	load();
 
 	updatePlotRangeList();
 
-	// Slots
-	// General-tab
+		   // Slots
+		   // General-tab
 	connect(m_plot, &ProcessBehaviorChart::dataColumnChanged, this, &ProcessBehaviorChartDock::plotDataColumnChanged);
 	connect(m_plot, &ProcessBehaviorChart::data2ColumnChanged, this, &ProcessBehaviorChartDock::plotData2ColumnChanged);
 	connect(m_plot, &ProcessBehaviorChart::typeChanged, this, &ProcessBehaviorChartDock::plotTypeChanged);
@@ -194,7 +194,7 @@ void ProcessBehaviorChartDock::retranslateUi() {
 	ui.cbType->addItem(QStringLiteral("C"), static_cast<int>(ProcessBehaviorChart::Type::C));
 	ui.cbType->addItem(QStringLiteral("U"), static_cast<int>(ProcessBehaviorChart::Type::U));
 
-	// tooltips
+		   // tooltips
 	QString info = i18n(
 		"The supported chart types are grouped according to the plotted statistics and to the metric defining the limits.<br><br>"
 		"Individual Values and Moving Ranges, Limits Based on the Average or Median Moving Range:"
@@ -226,8 +226,7 @@ void ProcessBehaviorChartDock::retranslateUi() {
 	ui.lNegativeLowerLimit->setToolTip(info);
 	ui.chbNegativeLowerLimit->setToolTip(info);
 
-	info =
-		i18n("If checked, exact limits are calculated for every individual sample (\"stair-step limits\"), straight lines are drawn for the limits otherwise.");
+	info = i18n("If checked, exact limits are calculated for every individual sample (\"stair-step limits\"), straight lines are drawn for the limits otherwise.");
 	ui.lExactLimits->setToolTip(info);
 	ui.chbExactLimits->setToolTip(info);
 }
@@ -281,24 +280,24 @@ void ProcessBehaviorChartDock::data2ColumnChanged(const QModelIndex& index) {
 void ProcessBehaviorChartDock::typeChanged(int index) {
 	const auto type = static_cast<ProcessBehaviorChart::Type>(ui.cbType->itemData(index).toInt());
 
-	// depending on the current type, show/hide the settings for the sample type
+		   // depending on the current type, show/hide the settings for the sample type
 	bool visible = (type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::XbarS
 					|| type == ProcessBehaviorChart::Type::S || type == ProcessBehaviorChart::Type::NP);
 	ui.lSampleSize->setVisible(visible);
 	ui.sbSampleSize->setVisible(visible);
 
-	// depending on the current type, show/hide the settings for the metric used to define the limits
+		   // depending on the current type, show/hide the settings for the metric used to define the limits
 	visible = (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::XbarR
 			   || type == ProcessBehaviorChart::Type::R);
 	ui.lLimitsMetric->setVisible(visible);
 	ui.cbLimitsMetric->setVisible(visible);
 
-	// allow negative value
+		   // allow negative value
 	visible = (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::XbarS);
 	ui.lNegativeLowerLimit->setVisible(visible);
 	ui.chbNegativeLowerLimit->setVisible(visible);
 
-	// second data column
+		   // second data column
 	visible = (type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U);
 	ui.lData2Column->setVisible(visible);
 	cbData2Column->setVisible(visible);
@@ -400,44 +399,44 @@ void ProcessBehaviorChartDock::load() {
 	int index = ui.cbType->findData(static_cast<int>(m_plot->type()));
 	ui.cbType->setCurrentIndex(index);
 
-	// limits metric
+		   // limits metric
 	index = ui.cbLimitsMetric->findData(static_cast<int>(m_plot->limitsMetric()));
 	ui.cbLimitsMetric->setCurrentIndex(index);
 
-	// sample size
+		   // sample size
 	ui.sbSampleSize->setValue(static_cast<int>(m_plot->sampleSize()));
 
-	// allow negative values for the lower limit
+		   // allow negative values for the lower limit
 	ui.chbNegativeLowerLimit->setChecked(m_plot->negativeLowerLimitEnabled());
 
-	// user exact/individual limits, relevant for P and U charts only
+		   // user exact/individual limits, relevant for P and U charts only
 	ui.chbExactLimits->setChecked(m_plot->exactLimitsEnabled());
 }
 
 void ProcessBehaviorChartDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("ProcessBehaviorChart"));
 
-	// type
+		   // type
 	const auto type = group.readEntry(QStringLiteral("Type"), static_cast<int>(m_plot->type()));
 	int index = ui.cbType->findData(static_cast<int>(type));
 	ui.cbType->setCurrentIndex(index);
 
-	// limits metric
+		   // limits metric
 	const auto limitsMetric = group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(m_plot->limitsMetric()));
 	index = ui.cbLimitsMetric->findData(static_cast<int>(limitsMetric));
 	ui.cbLimitsMetric->setCurrentIndex(index);
 
-	// sample size
+		   // sample size
 	const int size = group.readEntry(QStringLiteral("SampleSize"), static_cast<int>(m_plot->sampleSize()));
 	ui.sbSampleSize->setValue(size);
 
-	// allow negative values for the lower limit
+		   // allow negative values for the lower limit
 	ui.chbNegativeLowerLimit->setChecked(group.readEntry(QStringLiteral("NegativeLowerLimitEnabled"), false));
 
-	// user exact/individual limits, relevant for P and U charts only
+		   // user exact/individual limits, relevant for P and U charts only
 	ui.chbExactLimits->setChecked(group.readEntry(QStringLiteral("ExactLimitsEnabled"), false));
 
-	// properties of the data and limit curves
+		   // properties of the data and limit curves
 	dataLineWidget->loadConfig(group);
 	dataSymbolWidget->loadConfig(group);
 	centerLineWidget->loadConfig(group);
@@ -462,14 +461,14 @@ void ProcessBehaviorChartDock::loadConfigFromTemplate(KConfig& config) {
 void ProcessBehaviorChartDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group(QStringLiteral("ProcessBehaviorChart"));
 
-	// general
+		   // general
 	group.writeEntry(QStringLiteral("Type"), static_cast<int>(m_plot->type()));
 	group.writeEntry(QStringLiteral("LimitsMetric"), static_cast<int>(m_plot->limitsMetric()));
 	group.writeEntry(QStringLiteral("SampleSize"), m_plot->sampleSize());
 	group.writeEntry(QStringLiteral("NegativeLowerLimitEnabled"), m_plot->negativeLowerLimitEnabled());
 	group.writeEntry(QStringLiteral("ExactLimitsEnabled"), m_plot->exactLimitsEnabled());
 
-	// properties of the data and limit curves
+		   // properties of the data and limit curves
 	dataLineWidget->saveConfig(group);
 	dataSymbolWidget->saveConfig(group);
 	centerLineWidget->saveConfig(group);
