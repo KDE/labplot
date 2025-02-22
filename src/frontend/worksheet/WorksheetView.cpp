@@ -2088,11 +2088,10 @@ bool WorksheetView::exportToFile(const QString& path,
 		sourceRect = scene()->itemsBoundingRect();
 	else if (area == Worksheet::ExportArea::Selection) {
 		if (!m_selectedItems.isEmpty()) {
-			// TODO doesn't work: rect = scene()->selectionArea().boundingRect();
 			for (const auto* item : m_selectedItems)
 				sourceRect = sourceRect.united(item->mapToScene(item->boundingRect()).boundingRect());
 		} else
-			sourceRect = scene()->sceneRect(); // export everything if nothing is selected
+			sourceRect = scene()->sceneRect();
 	} else
 		sourceRect = scene()->sceneRect();
 
@@ -2205,7 +2204,6 @@ bool WorksheetView::exportToFile(const QString& path,
 
 	return rc;
 }
-
 void WorksheetView::exportToPixmap(QPixmap& pixmap) {
 	const auto& sourceRect = scene()->sceneRect();
 
@@ -2299,7 +2297,7 @@ void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, con
 	// draw the scene items
 	if (!selection) // if no selection effects have to be exported, set the printing flag to suppress it in the paint()'s of the children
 		m_worksheet->setPrinting(true);
-	scene()->render(painter, QRectF(), sourceRect);
+	scene()->render(painter, targetRect, sourceRect);
 	if (!selection)
 		m_worksheet->setPrinting(false);
 	m_isPrinting = false;
