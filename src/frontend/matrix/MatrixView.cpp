@@ -610,7 +610,8 @@ void MatrixView::handleVerticalSectionResized(int logicalIndex, int /*oldSize*/,
 void MatrixView::fillWithFunctionValues() {
 #ifndef SDK
 	auto* dlg = new MatrixFunctionDialog(m_matrix);
-	dlg->exec();
+	if (dlg->exec() == QDialog::Accepted)
+		resizeHeaders(); // new values were created, resize the headers to fit the new content
 #endif
 }
 
