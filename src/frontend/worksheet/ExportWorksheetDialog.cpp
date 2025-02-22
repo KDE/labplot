@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : export worksheet dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -171,13 +171,7 @@ QString ExportWorksheetDialog::path() const {
 }
 
 Worksheet::ExportFormat ExportWorksheetDialog::exportFormat() const {
-	int index = ui->cbFormat->currentIndex();
-
-	// we have a separator in the format combobox at the 3th position -> skip it
-	if (index > 2)
-		index--;
-
-	return Worksheet::ExportFormat(index);
+	return static_cast<Worksheet::ExportFormat>(ui->cbFormat->currentData().toInt());
 }
 
 Worksheet::ExportArea ExportWorksheetDialog::exportArea() const {
