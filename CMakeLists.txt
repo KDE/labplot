@@ -549,6 +549,7 @@ IF(ENABLE_MCAP)
     endif()
 
     add_definitions(-DHAVE_MCAP)
+    include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/mcap/include)
     find_package(ZSTD)
     if(ZSTD_FOUND)
         message(STATUS "Found ZSTD (used for MCAP ZSTD support)")

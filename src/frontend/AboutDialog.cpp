@@ -65,7 +65,7 @@
 #include <matio_pubconf.h>
 #endif
 #ifdef HAVE_MCAP
-//TODO: #include "mcap/types.hpp"
+#include "mcap/types.hpp"
 #endif
 
 /*!
@@ -255,7 +255,7 @@ QVector<QStringList> AboutDialog::components() {
 #endif
 	components << (QStringList() << QLatin1String("Matio") << i18n("Import binary MATLAB MAT files") << version << QStringLiteral("https://github.com/tbeu/matio"));
 #ifdef HAVE_MCAP
-	version = QString();	// TODO: QLatin1String(MCAP_LIBRARY_VERSION)
+	version = QLatin1String(MCAP_LIBRARY_VERSION);
 #else
 	version = missing;
 #endif
@@ -284,6 +284,7 @@ QVector<QStringList> AboutDialog::components() {
 	version = missing;
 #endif
 	components << (QStringList() << QLatin1String("Purpose") << i18n("Offers available actions for a specific purpose") << version << QStringLiteral("https://api.kde.org/frameworks/purpose/html/index.html"));
+	//TODO: QADS version
 	components << (QStringList() << QLatin1String("QADS") << i18n("Qt Advanced Docking System") << QString() << QStringLiteral("https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System"));
 #ifdef HAVE_MQTT
 	version = QLatin1String(QTMQTT_VERSION_STR);
