@@ -2087,6 +2087,7 @@ bool WorksheetView::exportToFile(const QString& path,
 	if (area == Worksheet::ExportArea::BoundingBox)
 		sourceRect = scene()->itemsBoundingRect();
 	else if (area == Worksheet::ExportArea::Selection) {
+		// TODO doesn't work: rect = scene()->selectionArea().boundingRect();
 		if (!m_selectedItems.isEmpty()) {
 			for (const auto* item : m_selectedItems)
 				sourceRect = sourceRect.united(item->mapToScene(item->boundingRect()).boundingRect());
@@ -2204,6 +2205,7 @@ bool WorksheetView::exportToFile(const QString& path,
 
 	return rc;
 }
+
 void WorksheetView::exportToPixmap(QPixmap& pixmap) {
 	const auto& sourceRect = scene()->sceneRect();
 
