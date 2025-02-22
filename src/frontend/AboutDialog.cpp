@@ -194,7 +194,7 @@ QVector<QStringList> AboutDialog::components() {
 #endif
 	components << (QStringList() << QLatin1String("Cantor") << i18n("Frontend to Mathematical Applications") << version << QStringLiteral("https://cantor.kde.org/"));
 #ifdef HAVE_FITS
-	version = QLatin1String(CFITSIO_VERSION_STRING);	//TODO: check
+	version = QLatin1String(CFITSIO_VERSION_STRING);
 #else
 	version = missing;
 #endif
