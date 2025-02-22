@@ -106,7 +106,9 @@ QMenu* Matrix::createContextMenu() {
 void Matrix::updateLocale() {
 	// the width of the cells might change with the new locale,
 	// resize the headers to fit the new content which will also trigger the redraw of the table using the new locale
+#ifndef SDK
 	m_view->resizeHeaders();
+#endif
 }
 
 QWidget* Matrix::view() const {
