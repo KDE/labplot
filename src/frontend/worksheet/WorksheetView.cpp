@@ -2085,16 +2085,16 @@ bool WorksheetView::exportToFile(const QString& path,
 
 	if (area == Worksheet::ExportArea::BoundingBox) {
 		const QList<QGraphicsItem*> items = scene()->items();
-		QRectF unionRect;
 		if (!items.isEmpty()) {
-			unionRect = items.first()->mapToScene(items.first()->shape().boundingRect()).boundingRect();
+			sourceRect = items.first()->mapToScene(items.first()->shape().boundingRect()).boundingRect();
 			for (int i = 1; i < items.size(); ++i) {
 				QRectF itemRect = items[i]->mapToScene(items[i]->shape().boundingRect()).boundingRect();
-				unionRect = unionRect.united(itemRect);
+				sourceRect = sourceRect.united(itemRect);
 			}
-		} else {
-			unionRect = scene()->sceneRect();
-		}
+		} else
+			sourceRect = scene()->sceneRect();
+
+		sourceRect = QRectF(0, 0, sourceRect.width(), sourceRect.height());
 	} else if (area == Worksheet::ExportArea::Selection) {
 		if (!m_selectedItems.isEmpty()) {
 			// Union the bounding rectangles of selected items
@@ -2102,13 +2102,10 @@ bool WorksheetView::exportToFile(const QString& path,
 				QRectF itemRect = item->mapToScene(item->boundingRect()).boundingRect();
 				sourceRect = sourceRect.united(itemRect);
 			}
-		} else {
+		} else
 			sourceRect = scene()->sceneRect();
-		}
-	} else {
+	} else
 		sourceRect = scene()->sceneRect();
-	}
-
 	switch (format) {
 	case Worksheet::ExportFormat::PDF: {
 		QPrinter printer;
@@ -2131,10 +2128,7 @@ bool WorksheetView::exportToFile(const QString& path,
 
 		// Create the target rectangle using the converted width and height
 		QRectF targetRect(0, 0, w, h);
-
-		// Render the scene mapping sourceRect to targetRect.
-		// Using Qt::IgnoreAspectRatio ensures an exact fit.
-		scene()->render(&painter, targetRect, sourceRect, Qt::IgnoreAspectRatio);
+		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
 		break;
 	}
@@ -2179,7 +2173,7 @@ bool WorksheetView::exportToFile(const QString& path,
 		rc = painter.begin(&image);
 		if (!rc)
 			return false;
-		painter.setRenderHint(QPainter::Antialiasing);
+		painter.setRenderHint(QPainter::Antialiasing, false);
 		painter.save();
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.restore();
