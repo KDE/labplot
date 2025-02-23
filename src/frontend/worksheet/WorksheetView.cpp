@@ -2295,8 +2295,8 @@ void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, con
 	m_isPrinting = true;
 	if (background) {
 		painter->save();
-		const  qreal scaleX = targetRect.width() / sourceRect.width();
-		const  qreal scaleY = targetRect.height() / sourceRect.height();
+		const qreal scaleX = targetRect.width() / sourceRect.width();
+		const qreal scaleY = targetRect.height() / sourceRect.height();
 		painter->scale(scaleX, scaleY);
 		drawBackground(painter, targetRect);
 		painter->restore();
