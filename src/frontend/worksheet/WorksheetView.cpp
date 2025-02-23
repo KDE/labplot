@@ -2087,15 +2087,14 @@ bool WorksheetView::exportToFile(const QString& path,
 		const QList<QGraphicsItem*> items = scene()->items();
 		QRectF unionRect;
 		if (!items.isEmpty()) {
-			unionRect = items.first()->mapToScene(items.first()->boundingRect()).boundingRect();
+			unionRect = items.first()->mapToScene(items.first()->shape().boundingRect()).boundingRect();
 			for (int i = 1; i < items.size(); ++i) {
-				QRectF itemRect = items[i]->mapToScene(items[i]->boundingRect()).boundingRect();
+				QRectF itemRect = items[i]->mapToScene(items[i]->shape().boundingRect()).boundingRect();
 				unionRect = unionRect.united(itemRect);
 			}
 		} else {
 			unionRect = scene()->sceneRect();
 		}
-		sourceRect = QRectF(0, 0, unionRect.width(), unionRect.height());
 	} else if (area == Worksheet::ExportArea::Selection) {
 		if (!m_selectedItems.isEmpty()) {
 			// Union the bounding rectangles of selected items
@@ -2286,7 +2285,6 @@ void WorksheetView::exportToClipboard() {
 			}
 		} else
 			unionRect = scene()->sceneRect();
-		sourceRect = QRectF(0, 0, unionRect.width(), unionRect.height());
 	} else {
 		// export selection
 		// Union the bounding rectangles of selected items
@@ -2295,7 +2293,6 @@ void WorksheetView::exportToClipboard() {
 			sourceRect = sourceRect.united(itemRect);
 		}
 	}
-
 	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
 	w = w * GuiTools::dpi(this).first / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
