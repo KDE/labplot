@@ -2256,16 +2256,8 @@ void WorksheetView::exportToClipboard() {
 	QRectF sourceRect;
 
 	if (m_selectedItems.size() == 0) {
-		const QList<QGraphicsItem*> items = scene()->items();
-		QRectF unionRect;
-		if (!items.isEmpty()) {
-			unionRect = items.first()->mapToScene(items.first()->boundingRect()).boundingRect();
-			for (int i = 1; i < items.size(); ++i) {
-				QRectF itemRect = items[i]->mapToScene(items[i]->boundingRect()).boundingRect();
-				unionRect = unionRect.united(itemRect);
-			}
-		} else
-			unionRect = scene()->sceneRect();
+		sourceRect = scene()->itemsBoundingRect();
+		sourceRect = QRect(0, 0, sourceRect.width() + sourceRect.x(), sourceRect.height());
 	} else {
 		// export selection
 		// Union the bounding rectangles of selected items
