@@ -214,7 +214,7 @@ void WorksheetView::initActions() {
 	// 	selectionModeAction = new QAction(QIcon::fromTheme(QStringLiteral("select-rectangular")), i18n("Selection"), mouseModeActionGroup);
 	// 	selectionModeAction->setCheckable(true);
 
-	//"Add new" related actions
+	// "Add new" related actions
 	addCartesianPlot1Action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-four-axes")), i18n("Four Axes"), addNewActionGroup);
 	addCartesianPlot2Action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes")), i18n("Two Axes"), addNewActionGroup);
 	addCartesianPlot3Action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered")), i18n("Two Axes, Centered"), addNewActionGroup);
@@ -312,7 +312,7 @@ void WorksheetView::initActions() {
 	setCartesianPlotActionMode(m_worksheet->cartesianPlotActionMode());
 	connect(cartesianPlotActionModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotActionModeChanged);
 
-	// cursor apply to all/selected
+		   // cursor apply to all/selected
 	auto* plotActionCursorGroup = new QActionGroup(this);
 	plotActionCursorGroup->setExclusive(true);
 	cartesianPlotApplyToSelectionCursor = new QAction(i18n("Selected Plot Areas"), plotActionCursorGroup);
@@ -324,7 +324,7 @@ void WorksheetView::initActions() {
 
 	initPlotNavigationActions();
 
-	// set some default values
+		   // set some default values
 	selectionModeAction->setChecked(true);
 	currentZoomAction = zoomInViewAction;
 	currentMagnificationAction = noMagnificationAction;
@@ -359,7 +359,7 @@ void WorksheetView::initPlotNavigationActions() {
 	cartesianPlotZoomYSelectionModeAction->setData(static_cast<int>(CartesianPlot::MouseMode::ZoomYSelection));
 	cartesianPlotZoomYSelectionModeAction->setCheckable(true);
 
-	// TODO: change ICON
+		   // TODO: change ICON
 	cartesianPlotCursorModeAction = new QAction(QIcon::fromTheme(QStringLiteral("debug-execute-from-cursor")), i18n("Cursor"), plotMouseModeActionGroup);
 	cartesianPlotCursorModeAction->setData(static_cast<int>(CartesianPlot::MouseMode::Cursor));
 	cartesianPlotCursorModeAction->setCheckable(true);
@@ -540,7 +540,7 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotActionModeMenu);
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotCursorModeMenu);
 
-	// themes menu
+		   // themes menu
 	m_themeMenu = new QMenu(i18n("Theme"), this);
 	m_themeMenu->setIcon(QIcon::fromTheme(QStringLiteral("color-management")));
 #ifndef SDK
@@ -924,7 +924,7 @@ void WorksheetView::mouseReleaseEvent(QMouseEvent* event) {
 		m_selectionBandIsShown = false;
 		viewport()->repaint(QRect(m_selectionStart, m_selectionEnd).normalized());
 
-		// don't zoom if very small region was selected, avoid occasional/unwanted zooming
+			   // don't zoom if very small region was selected, avoid occasional/unwanted zooming
 		m_selectionEnd = event->pos();
 		if (abs(m_selectionEnd.x() - m_selectionStart.x()) > 20 && abs(m_selectionEnd.y() - m_selectionStart.y()) > 20)
 			fitInView(mapToScene(QRect(m_selectionStart, m_selectionEnd).normalized()).boundingRect(), Qt::KeepAspectRatio);
@@ -1135,7 +1135,7 @@ void WorksheetView::dropEvent(QDropEvent* event) {
 	const auto* mimeData = event->mimeData();
 	plot->processDropEvent(plot->project()->droppedAspects(mimeData));
 
-	// select the worksheet in the project explorer and bring the view to the foreground
+		   // select the worksheet in the project explorer and bring the view to the foreground
 	m_worksheet->setSelectedInView(true); // FIXME: doesn't work
 }
 
@@ -1155,7 +1155,7 @@ void WorksheetView::useViewSizeChanged(bool useViewSize) {
 		if (tbZoom)
 			tbZoom->setDefaultAction(zoomInViewAction);
 
-		// determine and set the current view size
+			   // determine and set the current view size
 		this->processResize();
 	} else {
 		zoomFitPageHeightAction->setVisible(true);
@@ -1387,7 +1387,7 @@ void WorksheetView::addNew(QAction* action) {
 		connect(m_fadeInTimeLine, &QTimeLine::valueChanged, this, &WorksheetView::fadeIn);
 	}
 
-	// if there is already an element fading in, stop the time line and show the element with the full opacity.
+		   // if there is already an element fading in, stop the time line and show the element with the full opacity.
 	if (m_fadeInTimeLine->state() == QTimeLine::Running) {
 		m_fadeInTimeLine->stop();
 		auto* effect = new QGraphicsOpacityEffect(this);
@@ -1395,7 +1395,7 @@ void WorksheetView::addNew(QAction* action) {
 		lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 	}
 
-	// create the opacity effect and start the actual fade-in
+		   // create the opacity effect and start the actual fade-in
 	lastAddedWorksheetElement = aspect;
 	auto* effect = new QGraphicsOpacityEffect(this);
 	effect->setOpacity(0);
@@ -1412,7 +1412,7 @@ void WorksheetView::selectAllElements() {
 	for (auto* item : m_selectedItems)
 		m_worksheet->setItemSelectedInView(item, false);
 
-	// select top-level items
+		   // select top-level items
 	for (auto* item : scene()->items()) {
 		if (!item->parentItem())
 			item->setSelected(true);
@@ -1462,12 +1462,12 @@ void WorksheetView::aspectAboutToBeRemoved(const AbstractAspect* /* aspect */) {
 			connect(m_fadeOutTimeLine, SIGNAL(valueChanged(qreal)), this, SLOT(fadeOut(qreal)));
 		}
 
-		//if there is already an element fading out, stop the time line
-		if (m_fadeOutTimeLine->state() == QTimeLine::Running)
-			m_fadeOutTimeLine->stop();
+		 //if there is already an element fading out, stop the time line
+		 if (m_fadeOutTimeLine->state() == QTimeLine::Running)
+			 m_fadeOutTimeLine->stop();
 
-		m_fadeOutTimeLine->start();
-	*/
+		  m_fadeOutTimeLine->start();
+	  */
 }
 
 void WorksheetView::fadeIn(qreal value) {
@@ -1633,7 +1633,7 @@ void WorksheetView::selectionChanged() {
 		for (const auto* item : items)
 			m_worksheet->setItemSelectedInView(item, true);
 
-		// items selected -> deselect the worksheet in the project explorer
+			   // items selected -> deselect the worksheet in the project explorer
 		// prevents unwanted multiple selection with worksheet (if it was selected before)
 		m_worksheet->setSelectedInView(false);
 	}
@@ -2086,15 +2086,14 @@ bool WorksheetView::exportToFile(const QString& path,
 	if (area == Worksheet::ExportArea::BoundingBox) {
 		const QList<QGraphicsItem*> items = scene()->items();
 		if (!items.isEmpty()) {
-			sourceRect = items.first()->mapToScene(items.first()->shape().boundingRect()).boundingRect();
+			sourceRect = items.first()->mapToScene(items.first()->boundingRect()).boundingRect();
 			for (int i = 1; i < items.size(); ++i) {
-				QRectF itemRect = items[i]->mapToScene(items[i]->shape().boundingRect()).boundingRect();
+				QRectF itemRect = items[i]->mapToScene(items[i]->boundingRect()).boundingRect();
 				sourceRect = sourceRect.united(itemRect);
 			}
 		} else
 			sourceRect = scene()->sceneRect();
-
-		sourceRect = QRectF(0, 0, sourceRect.width(), sourceRect.height());
+		sourceRect = QRect(0, 0, sourceRect.width() + sourceRect.x(), sourceRect.height());
 	} else if (area == Worksheet::ExportArea::Selection) {
 		if (!m_selectedItems.isEmpty()) {
 			// Union the bounding rectangles of selected items
@@ -2112,7 +2111,6 @@ bool WorksheetView::exportToFile(const QString& path,
 		printer.setOutputFormat(QPrinter::PdfFormat);
 		printer.setOutputFileName(path);
 
-		// Convert the scene width/height to millimeters (or desired unit)
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
 		printer.setPageSize(QPageSize(QSizeF(w, h), QPageSize::Millimeter));
@@ -2125,8 +2123,6 @@ bool WorksheetView::exportToFile(const QString& path,
 		if (!rc)
 			return false;
 		painter.setRenderHint(QPainter::Antialiasing);
-
-		// Create the target rectangle using the converted width and height
 		QRectF targetRect(0, 0, w, h);
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
@@ -2348,13 +2344,13 @@ void WorksheetView::print(QPrinter* printer) {
 	QPainter painter(printer);
 	painter.setRenderHint(QPainter::Antialiasing);
 
-	// draw background
+		   // draw background
 	const auto& page_rect = printer->pageLayout().paintRectPixels(printer->resolution());
 	const auto& scene_rect = scene()->sceneRect();
 	float scale = std::max(scene_rect.width() / page_rect.width(), scene_rect.height() / page_rect.height());
 	drawBackgroundItems(&painter, QRectF(0, 0, scene_rect.width() / scale, scene_rect.height() / scale));
 
-	// draw scene
+		   // draw scene
 	scene()->render(&painter);
 	m_worksheet->setPrinting(false);
 	m_isPrinting = false;
