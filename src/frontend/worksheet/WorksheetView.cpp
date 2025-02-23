@@ -2096,8 +2096,7 @@ bool WorksheetView::exportToFile(const QString& path,
 			unionRect = scene()->sceneRect();
 		}
 		sourceRect = QRectF(0, 0, unionRect.width(), unionRect.height());
-	}
-	else if (area == Worksheet::ExportArea::Selection) {
+	} else if (area == Worksheet::ExportArea::Selection) {
 		if (!m_selectedItems.isEmpty()) {
 			// Union the bounding rectangles of selected items
 			for (const auto* item : m_selectedItems) {
@@ -2107,8 +2106,7 @@ bool WorksheetView::exportToFile(const QString& path,
 		} else {
 			sourceRect = scene()->sceneRect();
 		}
-	}
-	else {
+	} else {
 		sourceRect = scene()->sceneRect();
 	}
 
@@ -2222,8 +2220,7 @@ bool WorksheetView::exportToFile(const QString& path,
 #ifndef SDK
 	if (!rc) {
 		RESET_CURSOR;
-		QMessageBox::critical(nullptr, i18n("Failed to export"),
-							  i18n("Failed to write to '%1'. Please check the path.", path));
+		QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
 	}
 #endif
 
@@ -2278,12 +2275,25 @@ bool WorksheetView::eventFilter(QObject* /*watched*/, QEvent* event) {
 void WorksheetView::exportToClipboard() {
 	QRectF sourceRect;
 
-	if (m_selectedItems.size() == 0)
-		sourceRect = scene()->itemsBoundingRect();
-	else {
+	if (m_selectedItems.size() == 0) {
+		const QList<QGraphicsItem*> items = scene()->items();
+		QRectF unionRect;
+		if (!items.isEmpty()) {
+			unionRect = items.first()->mapToScene(items.first()->boundingRect()).boundingRect();
+			for (int i = 1; i < items.size(); ++i) {
+				QRectF itemRect = items[i]->mapToScene(items[i]->boundingRect()).boundingRect();
+				unionRect = unionRect.united(itemRect);
+			}
+		} else
+			unionRect = scene()->sceneRect();
+		sourceRect = QRectF(0, 0, unionRect.width(), unionRect.height());
+	} else {
 		// export selection
-		for (const auto* item : m_selectedItems)
-			sourceRect = sourceRect.united(item->mapToScene(item->boundingRect()).boundingRect());
+		// Union the bounding rectangles of selected items
+		for (const auto* item : m_selectedItems) {
+			QRectF itemRect = item->mapToScene(item->boundingRect()).boundingRect();
+			sourceRect = sourceRect.united(itemRect);
+		}
 	}
 
 	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
@@ -2311,7 +2321,7 @@ void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, con
 		m_magnificationWindow->setVisible(false);
 	}
 
-	// draw the background
+		   // draw the background
 	m_isPrinting = true;
 	if (background) {
 		painter->save();
@@ -2322,15 +2332,15 @@ void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, con
 		painter->restore();
 	}
 
-	// draw the scene items
+		   // draw the scene items
 	if (!selection) // if no selection effects have to be exported, set the printing flag to suppress it in the paint()'s of the children
 		m_worksheet->setPrinting(true);
-	scene()->render(painter, targetRect, sourceRect, Qt::IgnoreAspectRatio);
+	scene()->render(painter, QRectF(), sourceRect, Qt::IgnoreAspectRatio);
 	if (!selection)
 		m_worksheet->setPrinting(false);
 	m_isPrinting = false;
 
-	// show the magnification window if it was active before
+		   // show the magnification window if it was active before
 	if (magnificationActive)
 		m_magnificationWindow->setVisible(true);
 }
@@ -2347,13 +2357,13 @@ void WorksheetView::print(QPrinter* printer) {
 	QPainter painter(printer);
 	painter.setRenderHint(QPainter::Antialiasing);
 
-	// draw background
+		   // draw background
 	const auto& page_rect = printer->pageLayout().paintRectPixels(printer->resolution());
 	const auto& scene_rect = scene()->sceneRect();
 	float scale = std::max(scene_rect.width() / page_rect.width(), scene_rect.height() / page_rect.height());
 	drawBackgroundItems(&painter, QRectF(0, 0, scene_rect.width() / scale, scene_rect.height() / scale));
 
-	// draw scene
+		   // draw scene
 	scene()->render(&painter);
 	m_worksheet->setPrinting(false);
 	m_isPrinting = false;
