@@ -12,3 +12,6 @@ Steps to update the library:
     * replace keyword 'signals' with 'Q_SIGNALS'
     * make use of QStringLiteral for char* strings
 * Update this readme file to mention the new commit id
+
+Our Modifications:
+* The 4.4.0 version introduced a regression which we reverted in our copy. See https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System/pull/640

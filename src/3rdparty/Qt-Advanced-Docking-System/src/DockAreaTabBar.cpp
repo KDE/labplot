@@ -111,7 +111,7 @@ void DockAreaTabBarPrivate::updateTabs()
 			// Sometimes the synchronous calculation of the rectangular area fails
 			// Therefore we use QTimer::singleShot here to execute the call
 			// within the event loop - see #520
-			QTimer::singleShot(0, _this, [&, TabWidget]
+			QTimer::singleShot(0, TabWidget, [&, TabWidget]
 			{
 				_this->ensureWidgetVisible(TabWidget);
 			});
