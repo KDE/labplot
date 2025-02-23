@@ -2321,7 +2321,7 @@ void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, con
 		m_magnificationWindow->setVisible(false);
 	}
 
-		   // draw the background
+	// draw the background
 	m_isPrinting = true;
 	if (background) {
 		painter->save();
@@ -2332,7 +2332,7 @@ void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, con
 		painter->restore();
 	}
 
-		   // draw the scene items
+	// draw the scene items
 	if (!selection) // if no selection effects have to be exported, set the printing flag to suppress it in the paint()'s of the children
 		m_worksheet->setPrinting(true);
 	scene()->render(painter, QRectF(), sourceRect, Qt::IgnoreAspectRatio);
@@ -2340,7 +2340,7 @@ void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, con
 		m_worksheet->setPrinting(false);
 	m_isPrinting = false;
 
-		   // show the magnification window if it was active before
+	// show the magnification window if it was active before
 	if (magnificationActive)
 		m_magnificationWindow->setVisible(true);
 }
@@ -2357,13 +2357,13 @@ void WorksheetView::print(QPrinter* printer) {
 	QPainter painter(printer);
 	painter.setRenderHint(QPainter::Antialiasing);
 
-		   // draw background
+	// draw background
 	const auto& page_rect = printer->pageLayout().paintRectPixels(printer->resolution());
 	const auto& scene_rect = scene()->sceneRect();
 	float scale = std::max(scene_rect.width() / page_rect.width(), scene_rect.height() / page_rect.height());
 	drawBackgroundItems(&painter, QRectF(0, 0, scene_rect.width() / scale, scene_rect.height() / scale));
 
-		   // draw scene
+	// draw scene
 	scene()->render(&painter);
 	m_worksheet->setPrinting(false);
 	m_isPrinting = false;
