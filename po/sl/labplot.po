@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-17 00:37+0000\n"
-"PO-Revision-Date: 2025-02-16 08:26+0100\n"
+"POT-Creation-Date: 2025-02-23 00:37+0000\n"
+"PO-Revision-Date: 2025-02-22 08:48+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -394,7 +394,7 @@ msgstr "Iz zbirke podatkov SQL..."
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:335
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:211
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:205
 #, kde-format
 msgid "Export"
 msgstr "Izvozi"
@@ -952,7 +952,7 @@ msgstr "%1: nastavite vidno"
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:146
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:143
 #: src/backend/worksheet/WorksheetElement.cpp:163
-#: src/backend/worksheet/WorksheetElement.cpp:796
+#: src/backend/worksheet/WorksheetElement.cpp:801
 #: src/backend/worksheet/WorksheetElementContainer.cpp:68
 #: src/backend/worksheet/WorksheetElementContainer.cpp:86
 #, kde-format
@@ -977,7 +977,7 @@ msgid "%1: upload new image"
 msgstr "%1: naložite novo sliko"
 
 #: src/backend/datapicker/DatapickerImage.cpp:388
-#: src/backend/worksheet/WorksheetElement.cpp:837
+#: src/backend/worksheet/WorksheetElement.cpp:842
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: določite kot vrtenja"
@@ -1010,7 +1010,7 @@ msgstr "Branja podatkov o sliki ni uspelo"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:218
 #: src/backend/worksheet/InfoElement.cpp:842
-#: src/backend/worksheet/WorksheetElement.cpp:758
+#: src/backend/worksheet/WorksheetElement.cpp:762
 #, kde-format
 msgid "%1: set position"
 msgstr "%1: določite položaj"
@@ -2219,7 +2219,7 @@ msgstr "Ključ"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1873
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:145
-#: src/frontend/matrix/MatrixView.cpp:619
+#: src/frontend/matrix/MatrixView.cpp:620
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2505
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2526
@@ -6179,60 +6179,60 @@ msgstr "vrstica %1, stolpec %2: %3"
 msgid "unexpected end of document"
 msgstr "nepričakovan konec dokumenta"
 
-#: src/backend/matrix/Matrix.cpp:135
+#: src/backend/matrix/Matrix.cpp:143
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3828
 #, kde-format
 msgid "FITS image"
 msgstr "Slika FITS"
 
-#: src/backend/matrix/Matrix.cpp:135
+#: src/backend/matrix/Matrix.cpp:143
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3828
 #, kde-format
 msgid "FITS table"
 msgstr "Tabela FITS"
 
-#: src/backend/matrix/Matrix.cpp:175
+#: src/backend/matrix/Matrix.cpp:183
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Matrix"
 msgstr "Matrika tiskanja"
 
-#: src/backend/matrix/Matrix.cpp:268
+#: src/backend/matrix/Matrix.cpp:276
 #, kde-format
 msgid "%1: x-start changed"
 msgstr "%1: x-začetek spremenjen"
 
-#: src/backend/matrix/Matrix.cpp:275
+#: src/backend/matrix/Matrix.cpp:283
 #, kde-format
 msgid "%1: x-end changed"
 msgstr "%1: x-konec spremenjen"
 
-#: src/backend/matrix/Matrix.cpp:282
+#: src/backend/matrix/Matrix.cpp:290
 #, kde-format
 msgid "%1: y-start changed"
 msgstr "%1: y-začetek spremenjen"
 
-#: src/backend/matrix/Matrix.cpp:289
+#: src/backend/matrix/Matrix.cpp:297
 #, kde-format
 msgid "%1: y-end changed"
 msgstr "%1: y-konec spremenjen"
 
-#: src/backend/matrix/Matrix.cpp:296
+#: src/backend/matrix/Matrix.cpp:304
 #, kde-format
 msgid "%1: numeric format changed"
 msgstr "%1: spremenjena številčna oblika"
 
-#: src/backend/matrix/Matrix.cpp:303
+#: src/backend/matrix/Matrix.cpp:311
 #, kde-format
 msgid "%1: precision changed"
 msgstr "%1: natančnost spremenjena"
 
-#: src/backend/matrix/Matrix.cpp:529
+#: src/backend/matrix/Matrix.cpp:537
 #, kde-format
 msgid "%1: set matrix size to %2x%3"
 msgstr "%1: določitev velikosti matrike na %2x%3"
 
-#: src/backend/matrix/Matrix.cpp:554
+#: src/backend/matrix/Matrix.cpp:562
 #, kde-format
 msgid "%1: add %2 row"
 msgid_plural "%1: add %2 rows"
@@ -6241,7 +6241,7 @@ msgstr[1] "%1: dodaj %2 stolpca"
 msgstr[2] "%1: dodaj %2 stolpce"
 msgstr[3] "%1: dodaj %2 stolpcev"
 
-#: src/backend/matrix/Matrix.cpp:568
+#: src/backend/matrix/Matrix.cpp:576
 #, kde-format
 msgid "%1: add %2 column"
 msgid_plural "%1: add %2 columns"
@@ -6250,7 +6250,7 @@ msgstr[1] "%1: dodaj %2 stolpca"
 msgstr[2] "%1: dodaj %2 stolpce"
 msgstr[3] "%1: dodaj %2 stolpcev"
 
-#: src/backend/matrix/Matrix.cpp:696 src/backend/matrix/matrixcommands.h:131
+#: src/backend/matrix/Matrix.cpp:704 src/backend/matrix/matrixcommands.h:131
 #: src/backend/spreadsheet/Spreadsheet.cpp:680
 #, kde-format
 msgid "%1: clear"
@@ -6341,7 +6341,7 @@ msgstr "Besedilna datoteka (*.txt)"
 
 #: src/backend/note/Note.cpp:97
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:282
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:276
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to File"
@@ -8065,7 +8065,7 @@ msgid "%1: set data columns"
 msgstr "%1: nastavi podatkovne stolpce"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:306
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:418
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:430
 #, kde-format
 msgid "%1: set type"
 msgstr "%1: nastavi vrsto"
@@ -9024,10 +9024,10 @@ msgstr "Prilegajoča binomska porazdelitev"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:399
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:244
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:394
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:406
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:418
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:260
-#: src/backend/worksheet/plots/cartesian/RunChart.cpp:251
+#: src/backend/worksheet/plots/cartesian/RunChart.cpp:261
 #, kde-format
 msgid "%1: set data column"
 msgstr "%1: nastavite podatkovni stolpec"
@@ -9106,27 +9106,27 @@ msgstr "%1: nastavite pasovno širino"
 msgid "%1: legend visibility changed"
 msgstr "%1: vidnost legende spremenjena"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:425
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:437
 #, kde-format
 msgid "%1: set limits metric"
 msgstr "%1: nastavite metriko omejitev"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:432
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:444
 #, kde-format
 msgid "%1: set sample size"
 msgstr "%1: določi velikost vzorca"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:439
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:451
 #, kde-format
 msgid "%1: change negative lower limit"
 msgstr "%1: spremeni negativno spodnjo mejo"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:446
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:458
 #, kde-format
 msgid "%1: change exact limits"
 msgstr "%1: spremeni natančne meje"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:604
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:616
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "Zadnji vzorec je nepopoln in je bil izpuščen."
@@ -9151,7 +9151,7 @@ msgstr "%1: nastavi začetni logični položaj"
 msgid "%1: set end logical position"
 msgstr "%1: nastavi končni logični položaj"
 
-#: src/backend/worksheet/plots/cartesian/RunChart.cpp:263
+#: src/backend/worksheet/plots/cartesian/RunChart.cpp:273
 #, kde-format
 msgid "%1: set center metric"
 msgstr "%1: nastavi center metrike"
@@ -10124,258 +10124,279 @@ msgstr "Premakni za"
 msgid "Move in &front of"
 msgstr "Premakni pred"
 
-#: src/backend/worksheet/WorksheetElement.cpp:770
+#: src/backend/worksheet/WorksheetElement.cpp:774
 #, kde-format
 msgid "%1: set horizontal alignment"
 msgstr "%1: nastavite vodoravno poravnavo"
 
-#: src/backend/worksheet/WorksheetElement.cpp:782
+#: src/backend/worksheet/WorksheetElement.cpp:786
 #, kde-format
 msgid "%1: set vertical alignment"
 msgstr "%1: določite navpično poravnavo"
 
-#: src/backend/worksheet/WorksheetElement.cpp:796
+#: src/backend/worksheet/WorksheetElement.cpp:801
 #, kde-format
 msgid "%1: use logical coordinates"
 msgstr "%1: uporabite logične koordinate"
 
-#: src/backend/worksheet/WorksheetElement.cpp:806
+#: src/backend/worksheet/WorksheetElement.cpp:811
 #, kde-format
 msgid "%1: set logical position"
 msgstr "%1: določi logični položaj"
 
 #: src/frontend/AboutDialog.cpp:89
 #, kde-format
-msgid "Copy Info"
-msgstr "Kopiraj informacije"
+msgid "Copy Environment"
+msgstr "Kopiraj okolje"
 
-#: src/frontend/AboutDialog.cpp:93
+#: src/frontend/AboutDialog.cpp:94
+#, kde-format
+msgid "Copy Citation"
+msgstr "Kopiraj sklic"
+
+#: src/frontend/AboutDialog.cpp:98
 #, kde-format
 msgid "Donate"
 msgstr "Doniraj"
 
-#: src/frontend/AboutDialog.cpp:131
+#: src/frontend/AboutDialog.cpp:117
+#, kde-format
+msgid "Copy to Clipboard"
+msgstr "Kopiraj na odložišče"
+
+#: src/frontend/AboutDialog.cpp:143
 #, kde-format
 msgid "Release build "
 msgstr "Gradnja izdaje "
 
-#: src/frontend/AboutDialog.cpp:133
+#: src/frontend/AboutDialog.cpp:145
 #, kde-format
 msgid "Debug build "
 msgstr "Gradnja za razhroščevanje "
 
-#: src/frontend/AboutDialog.cpp:136 src/frontend/AboutDialog.cpp:139
+#: src/frontend/AboutDialog.cpp:148 src/frontend/AboutDialog.cpp:151
 #, kde-format
 msgid "Decimal point "
 msgstr "Decimalna vejica "
 
-#: src/frontend/AboutDialog.cpp:137 src/frontend/AboutDialog.cpp:140
+#: src/frontend/AboutDialog.cpp:149 src/frontend/AboutDialog.cpp:152
 #, kde-format
 msgid "Group separator "
 msgstr "Ločilo skupin "
 
-#: src/frontend/AboutDialog.cpp:141
+#: src/frontend/AboutDialog.cpp:153
 #, kde-format
 msgid "Exponential "
 msgstr "Eksponentno "
 
-#: src/frontend/AboutDialog.cpp:141
+#: src/frontend/AboutDialog.cpp:153
 #, kde-format
 msgid "Zero digit "
 msgstr "Ničelna števika "
 
-#: src/frontend/AboutDialog.cpp:142
+#: src/frontend/AboutDialog.cpp:154
 #, kde-format
 msgid "Percent "
 msgstr "Odstotek "
 
-#: src/frontend/AboutDialog.cpp:143
+#: src/frontend/AboutDialog.cpp:155
 #, kde-format
 msgid "Positive/Negative sign "
 msgstr "Pozitiven/negativen znak "
 
-#: src/frontend/AboutDialog.cpp:163
+#: src/frontend/AboutDialog.cpp:175
 #, kde-format
 msgid "System:"
 msgstr "Sistem:"
 
-#: src/frontend/AboutDialog.cpp:164
+#: src/frontend/AboutDialog.cpp:176
 #, kde-format
 msgid "Locale:"
 msgstr "Lokalno:"
 
-#: src/frontend/AboutDialog.cpp:165
+#: src/frontend/AboutDialog.cpp:177
 #, kde-format
 msgid "Number Settings:"
 msgstr "Nastavitve števil:"
 
-#: src/frontend/AboutDialog.cpp:165
+#: src/frontend/AboutDialog.cpp:177
 #, kde-format
 msgid "Updated on restart"
 msgstr "Posodobljeno ob ponovnem zagonu"
 
-#: src/frontend/AboutDialog.cpp:166
+#: src/frontend/AboutDialog.cpp:178
 #, kde-format
 msgid "Architecture:"
 msgstr "Arhitektura:"
 
-#: src/frontend/AboutDialog.cpp:167
+#: src/frontend/AboutDialog.cpp:179
 #, kde-format
 msgid "Kernel: "
 msgstr "Jedro: "
 
-#: src/frontend/AboutDialog.cpp:176
-#, kde-format
-msgid "C++ Compiler: "
-msgstr "Prevajalnik C++: "
-
-#: src/frontend/AboutDialog.cpp:182
-#, kde-format
-msgid "C++ Compiler Flags:"
-msgstr "Zastavice prevajalnika C++:"
-
-#: src/frontend/AboutDialog.cpp:186
-#, kde-format
-msgid "Frontend to Mathematical Applications"
-msgstr "Začelje za matematične aplikacije"
-
-#: src/frontend/AboutDialog.cpp:188 src/frontend/AboutDialog.cpp:193
-#: src/frontend/AboutDialog.cpp:198 src/frontend/AboutDialog.cpp:203
-#: src/frontend/AboutDialog.cpp:208 src/frontend/AboutDialog.cpp:214
-#: src/frontend/AboutDialog.cpp:219 src/frontend/AboutDialog.cpp:224
-#: src/frontend/AboutDialog.cpp:229 src/frontend/AboutDialog.cpp:234
-#: src/frontend/AboutDialog.cpp:239 src/frontend/AboutDialog.cpp:245
-#: src/frontend/AboutDialog.cpp:250 src/frontend/AboutDialog.cpp:255
-#: src/frontend/AboutDialog.cpp:260 src/frontend/AboutDialog.cpp:265
-#: src/frontend/AboutDialog.cpp:271 src/frontend/AboutDialog.cpp:276
-#: src/frontend/AboutDialog.cpp:281 src/frontend/AboutDialog.cpp:286
-#: src/frontend/AboutDialog.cpp:292 src/frontend/AboutDialog.cpp:297
-#: src/frontend/AboutDialog.cpp:314
+#: src/frontend/AboutDialog.cpp:189 src/frontend/AboutDialog.cpp:350
+#: src/frontend/AboutDialog.cpp:351
 #, kde-format
 msgid "missing"
 msgstr "manjkajoča"
 
-#: src/frontend/AboutDialog.cpp:191
+#: src/frontend/AboutDialog.cpp:195
+#, kde-format
+msgid "Frontend to Mathematical Applications"
+msgstr "Začelje za matematične aplikacije"
+
+#: src/frontend/AboutDialog.cpp:201
 #, kde-format
 msgid ""
 "Support data files in FITS (Flexible Image Transport System) data format"
 msgstr ""
 "Podpora podatkovnim datotekam formata FITS (Flexible Image Transport System)"
 
-#: src/frontend/AboutDialog.cpp:196
+#: src/frontend/AboutDialog.cpp:207
 #, kde-format
 msgid "Markdown markup language support"
 msgstr "Podpora jeziku markdown"
 
-#: src/frontend/AboutDialog.cpp:201
+#: src/frontend/AboutDialog.cpp:213
 #, kde-format
 msgid "C++ library for linear algebra"
 msgstr "Knjižnica C++ za linearno algebro"
 
-#: src/frontend/AboutDialog.cpp:206
+#: src/frontend/AboutDialog.cpp:219
 #, kde-format
 msgid "Fastest Fourier Transform in the West"
 msgstr "Najhitrejša Fourierova transformacija za zahodu"
 
-#: src/frontend/AboutDialog.cpp:210
+#: src/frontend/AboutDialog.cpp:220
 #, kde-format
 msgid "GNU Scientific Library"
 msgstr "GNU znanstvena knjižnica"
 
-#: src/frontend/AboutDialog.cpp:212
+#: src/frontend/AboutDialog.cpp:226
 #, kde-format
 msgid "High-performance data management and storage suite"
 msgstr "Visoko zmogljiva zbirka upravljanja in hrambe podatkov"
 
-#: src/frontend/AboutDialog.cpp:217
+#: src/frontend/AboutDialog.cpp:232
 #, kde-format
 msgid "Syntax highlighting engine"
 msgstr "Motor poudarjanja skladnje"
 
-#: src/frontend/AboutDialog.cpp:222
+#: src/frontend/AboutDialog.cpp:238
 #, kde-format
 msgid "Support collecting feedback from users"
 msgstr "Podpora zbiranja povratnih informacij uporabnikov"
 
-#: src/frontend/AboutDialog.cpp:227
+#: src/frontend/AboutDialog.cpp:244
 #, kde-format
 msgid "Complex error and related functions"
 msgstr "Kompleksne napake in sorodne funkcije"
 
-#: src/frontend/AboutDialog.cpp:232
+#: src/frontend/AboutDialog.cpp:250
 #, kde-format
 msgid "importing Origin OPJ project files"
 msgstr "uvažanje datotek projekta Origin OPJ"
 
-#: src/frontend/AboutDialog.cpp:237
+#: src/frontend/AboutDialog.cpp:256
 #, kde-format
 msgid "Import binary MATLAB MAT files"
 msgstr "Uvoz binarnih datotek MATLAB MAT"
 
-#: src/frontend/AboutDialog.cpp:242
+#: src/frontend/AboutDialog.cpp:262
 #, kde-format
 msgid "MCAP file support"
 msgstr "Podpora datotek MCAP"
 
-#: src/frontend/AboutDialog.cpp:248
+#: src/frontend/AboutDialog.cpp:268
 #, kde-format
 msgid "Network Common Data Form"
 msgstr "Network Common Data Form"
 
-#: src/frontend/AboutDialog.cpp:253
+#: src/frontend/AboutDialog.cpp:274
 #, kde-format
 msgid "Import ODS (Open Document Spreadsheet) files"
 msgstr "Odpri datoteke ODS (Open Document Spreadsheet)"
 
-#: src/frontend/AboutDialog.cpp:258
+#: src/frontend/AboutDialog.cpp:280
 #, kde-format
 msgid "PDF rendering library"
 msgstr "Knjižnica upodobitve PDF"
 
-#: src/frontend/AboutDialog.cpp:263
+#: src/frontend/AboutDialog.cpp:286
 #, kde-format
 msgid "Offers available actions for a specific purpose"
 msgstr "Nudi razpoložljive dejavnosti za določen namen"
 
-#: src/frontend/AboutDialog.cpp:267
+#: src/frontend/AboutDialog.cpp:288
 #, kde-format
 msgid "Qt Advanced Docking System"
 msgstr "Qt Advanced Docking System"
 
-#: src/frontend/AboutDialog.cpp:269
+#: src/frontend/AboutDialog.cpp:294
 #, kde-format
 msgid "Support data from MQTT brokers"
 msgstr "Podpora podatkom brokerjev MQTT"
 
-#: src/frontend/AboutDialog.cpp:274
+#: src/frontend/AboutDialog.cpp:300
 #, kde-format
 msgid "Serial port functionality support"
 msgstr "Podpora funkcionalnosti serijskih vrat"
 
-#: src/frontend/AboutDialog.cpp:279
+#: src/frontend/AboutDialog.cpp:306
 #, kde-format
 msgid "SVG export support"
 msgstr "Podpora izvozu SVG"
 
-#: src/frontend/AboutDialog.cpp:284
+#: src/frontend/AboutDialog.cpp:312
 #, kde-format
 msgid "Import Excel xlsx files"
 msgstr "Uvoz datotek Excel xlsx"
 
-#: src/frontend/AboutDialog.cpp:290
+#: src/frontend/AboutDialog.cpp:318
 #, kde-format
 msgid "Read (and write) data sets from SAS, Stata, and SPSS"
 msgstr "Bere (in piše) zbirke podatkov iz SAS-a, Stata in SPSS-a"
 
-#: src/frontend/AboutDialog.cpp:295
+#: src/frontend/AboutDialog.cpp:324
 #, kde-format
 msgid "Binary Log File (BLF) file support"
 msgstr "Podpora datoteke dnevnika (BLF)"
 
-#: src/frontend/AboutDialog.cpp:312
+#: src/frontend/AboutDialog.cpp:327 src/frontend/AboutDialog.cpp:352
+#, kde-format
+msgid "C++ Compiler: "
+msgstr "Prevajalnik C++: "
+
+#: src/frontend/AboutDialog.cpp:332 src/frontend/AboutDialog.cpp:352
+#, kde-format
+msgid "C++ Compiler Flags:"
+msgstr "Zastavice prevajalnika C++:"
+
+#: src/frontend/AboutDialog.cpp:346
 #, kde-format
 msgid "Components:"
 msgstr "Komponente:"
+
+#: src/frontend/AboutDialog.cpp:347
+#, kde-format
+msgid "Qt"
+msgstr "Qt"
+
+#: src/frontend/AboutDialog.cpp:348
+#, kde-format
+msgid "KDE Frameworks"
+msgstr "KDE Frameworks"
+
+#: src/frontend/AboutDialog.cpp:362
+#, kde-format
+msgid ""
+"LabPlot Team (%1), LabPlot: A FREE, open source, cross-platform Data "
+"Visualization and Analysis software accessible to everyone, (Version %2) "
+"[Computer software]. %3."
+msgstr ""
+"LabPlot Team (%1), LabPlot: PROSTA, odprtokodna programska oprema za "
+"večplatformsko vizualizacijo in analizo podatkov, dostopna vsem, (Različica "
+"%2) [Računalniška programska oprema]. %3."
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -10802,24 +10823,12 @@ msgid "Custom column names, comma separated. E.g. \"x, y\""
 msgstr "Imena stolpcev po meri, ločena z vejico. Npr. »x, y«"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:115
-#, fuzzy, kde-format
-#| msgid "Custom column modes, comma separated"
+#, kde-format
 msgid "Custom column data types, comma separated"
-msgstr "Načini stolpcev po meri, ločeni z vejico"
+msgstr "Podatkovni tipi stolpcev po meri, ločeni z vejicami"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
-#, fuzzy, kde-format
-#| msgid ""
-#| "If not empty, the number of columns must match the number of column names "
-#| "if provided and it must match the number of columns in the imported file."
-#| "<br>Datatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
-#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
-#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
-#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
-#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
-#| "td><td>Datetime with the format from the datetime text box if not empty, "
-#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-#| "td></tr></table>"
+#, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
@@ -10834,14 +10843,14 @@ msgid ""
 msgstr ""
 "Če ni prazno, se mora število stolpcev ujemati s številom imen stolpcev, če "
 "so navedena, in se mora ujemati s številom stolpcev v uvoženi datoteki."
-"<br>Vrste podatkov:<table><tr><td>%1</td><td>Celo število z 32-bitno "
+"<br>Tipi podatkov:<table><tr><td>%1</td><td>Celo število z 32-bitno "
 "velikostjo (−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</"
 "td><td>Celo število s 64-bitno velikostjo (−9.223.372.036.854.775.808 .. "
 "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Število s plavajočo "
 "vejico 64-bitna velikost. Ločljivost približno 16 števk.</td></tr><tr><td>"
 "%4</td><td>Datum in čas z obliko iz besedilnega polja za datum in čas, če ni "
-"prazno, se določi samodejno.</td> </tr><tr><td>%5</td><td>Besedilo.</td></"
-"tr></table>"
+"prazno, sicer se določi samodejno.</td> </tr><tr><td>%5</td><td>Besedilo.</"
+"td></tr></table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:138
 #, kde-format
@@ -11232,7 +11241,7 @@ msgstr "Dodaj nov vir podatkov v živo"
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:145
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:366
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:116
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:239
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:233
 #, kde-format
 msgid "Hide Options"
 msgstr "Skrij možnosti"
@@ -11242,7 +11251,7 @@ msgstr "Skrij možnosti"
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:145
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:366
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:116
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:239
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:233
 #, kde-format
 msgid "Show Options"
 msgstr "Pokaži možnosti"
@@ -11754,7 +11763,7 @@ msgstr "Napaka pri razčlenjevanju: %1"
 #: src/frontend/datasources/ImportFileWidget.cpp:1917
 #, kde-format
 msgid "Not ready for read after 2 sec"
-msgstr "Ni pripravljeno za branje po 2 s:"
+msgstr "Ni pripravljeno za branje po 2 sekundah"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1921
 #, kde-format
@@ -12334,7 +12343,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2866
+#: src/frontend/MainWin.cpp:2873
 #, kde-format
 msgid "Warning"
 msgstr "Opozorilo"
@@ -14628,8 +14637,8 @@ msgstr ""
 
 #: src/frontend/LabPlot.cpp:82
 #, kde-format
-msgid "(c) 2007-2025 LabPlot authors"
-msgstr "(c) 2007-2025 avtorji LabPlota"
+msgid "(c) 2007-%1 LabPlot Team"
+msgstr "(c) 2007-%1 LabPlot Team"
 
 #: src/frontend/LabPlot.cpp:84
 #, kde-format
@@ -15313,12 +15322,12 @@ msgstr "Projekt je uspešno deljen"
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Skupni projekt najdete na: <a href=\"%1\">%1</a>"
 
-#: src/frontend/MainWin.cpp:2765
+#: src/frontend/MainWin.cpp:2772
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
 msgstr "Poganjanje orodja Kaggle CLI ni uspelo"
 
-#: src/frontend/MainWin.cpp:2766
+#: src/frontend/MainWin.cpp:2773
 #, kde-format
 msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
@@ -15327,32 +15336,32 @@ msgstr ""
 "Sledite navodilom v <a href=\"https://www.kaggle.com/docs/api\">\"Kako "
 "uporabljati Kaggle - How to Use Kaggle\"</a> za nastavitev orodja Kaggle CLI."
 
-#: src/frontend/MainWin.cpp:2829
+#: src/frontend/MainWin.cpp:2836
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 izvoženo"
 
-#: src/frontend/MainWin.cpp:2836
+#: src/frontend/MainWin.cpp:2843
 #, kde-format
 msgid "FITS files saved"
 msgstr "Datoteke FITS shranjene"
 
-#: src/frontend/MainWin.cpp:2848
+#: src/frontend/MainWin.cpp:2855
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Odjemalec MQTT%1"
 
-#: src/frontend/MainWin.cpp:2866
+#: src/frontend/MainWin.cpp:2873
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "S tem gostiteljem že obstaja MQTTClient!"
 
-#: src/frontend/MainWin.cpp:2870
+#: src/frontend/MainWin.cpp:2877
 #, kde-format
 msgid "Live data source%1"
 msgstr "Vir podatkov v živo%1"
 
-#: src/frontend/MainWin.cpp:2915
+#: src/frontend/MainWin.cpp:2922
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Ustvari novo %1 zvezek"
@@ -15581,53 +15590,53 @@ msgstr "Vnesite stolpec"
 msgid "Enter row"
 msgstr "Vnesite vrstico"
 
-#: src/frontend/matrix/MatrixView.cpp:619
+#: src/frontend/matrix/MatrixView.cpp:620
 #, kde-format
 msgid "Fill the matrix with constant value"
 msgstr "Napolni matriko s konstantno vrednostjo"
 
-#: src/frontend/matrix/MatrixView.cpp:638
+#: src/frontend/matrix/MatrixView.cpp:639
 #, kde-format
 msgid "%1: cut selected cell(s)"
 msgstr "%1: izreži izbrane celice"
 
-#: src/frontend/matrix/MatrixView.cpp:689
+#: src/frontend/matrix/MatrixView.cpp:690
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1820
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: prilepi iz odložišča"
 
-#: src/frontend/matrix/MatrixView.cpp:759
+#: src/frontend/matrix/MatrixView.cpp:761
 #, kde-format
 msgid "%1: clear selected cell(s)"
 msgstr "%1: počisti izbrane celice"
 
-#: src/frontend/matrix/MatrixView.cpp:912
+#: src/frontend/matrix/MatrixView.cpp:914
 #, kde-format
 msgid "%1: insert empty column(s)"
 msgstr "%1: vstavite prazne stolpce"
 
-#: src/frontend/matrix/MatrixView.cpp:936
+#: src/frontend/matrix/MatrixView.cpp:938
 #, kde-format
 msgid "%1: remove selected column(s)"
 msgstr "%1: odstrani izbrane stolpce"
 
-#: src/frontend/matrix/MatrixView.cpp:946
+#: src/frontend/matrix/MatrixView.cpp:948
 #, kde-format
 msgid "%1: clear selected column(s)"
 msgstr "%1: počisti izbrane stolpce"
 
-#: src/frontend/matrix/MatrixView.cpp:972
+#: src/frontend/matrix/MatrixView.cpp:974
 #, kde-format
 msgid "%1: insert empty rows(s)"
 msgstr "%1: vstavite prazne vrstice"
 
-#: src/frontend/matrix/MatrixView.cpp:996
+#: src/frontend/matrix/MatrixView.cpp:998
 #, kde-format
 msgid "%1: remove selected rows(s)"
 msgstr "%1: odstrani izbrane vrstice"
 
-#: src/frontend/matrix/MatrixView.cpp:1011
+#: src/frontend/matrix/MatrixView.cpp:1013
 #, kde-format
 msgid "%1: clear selected rows(s)"
 msgstr "%1: počisti izbrane vrstice"
@@ -16764,7 +16773,7 @@ msgid "Export matrix"
 msgstr "Izvozi matriko"
 
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:334
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:210
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:204
 #, kde-format
 msgid "The file already exists. Do you really want to overwrite it?"
 msgstr "Datoteka že obstaja. Ali jo res želite prepisati?"
@@ -19099,10 +19108,9 @@ msgstr "Preskoči prazne dele"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnMode)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:33
-#, fuzzy, kde-format
-#| msgid "Column Datatypes:"
+#, kde-format
 msgid "Column Data Types:"
-msgstr "Vrste podatkov stolpca:"
+msgstr "Tipi podatkov stolpca:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chbSimplifyWhitespaces)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:43
@@ -19153,10 +19161,9 @@ msgstr "Osnovno leto, ko sta za leto na voljo samo 2 števki"
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:116
-#, fuzzy, kde-format
-#| msgid "Column labels"
+#, kde-format
 msgid "Column Names:"
-msgstr "Oznake stolpcev"
+msgstr "Imena stolpcev:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:123
@@ -24579,52 +24586,52 @@ msgctxt "@title:window"
 msgid "Export Worksheet"
 msgstr "Izvozi delovni list"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:257
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:251
 #, kde-format
 msgid "Portable Data Format (*.pdf *.PDF)"
 msgstr "PDF - Portable Data Format (*.pdf *.PDF)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:260
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:254
 #, kde-format
 msgid "Scalable Vector Graphics (*.svg *.SVG)"
 msgstr "SVG - Scalable Vector Graphics (*.svg *.SVG)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:263
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:257
 #, kde-format
 msgid "Portable Network Graphics (*.png *.PNG)"
 msgstr "PNG - Portable Network Graphics (*.png *.PNG)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:266
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:260
 #, kde-format
 msgid "Joint Photographic Experts Group (*.jpg *.jpeg *.JPG *.JPEG)"
 msgstr "JPEG - Joint Photographic Experts Group (*.jpg *.jpeg *.JPG *.JPEG)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:269
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:263
 #, kde-format
 msgid "Windows Bitmap (*.bmp *.BMP)"
 msgstr "BMP - Windows Bitmap (*.bmp *.BMP)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:272
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:266
 #, kde-format
 msgid "Portable Pixmap (*.ppm *.PPM)"
 msgstr "PPM - Portable Pixmap (*.ppm *.PPM)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:275
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:269
 #, kde-format
 msgid "X11 Bitmap (*.xbm *.XBM)"
 msgstr "Bitna slika X11 (*.xbm *. XBM)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:278
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:272
 #, kde-format
 msgid "X11 Bitmap (*.xpm *.XPM)"
 msgstr "Bitna slika X11 (*.xpm *. XPM)"
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:357
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:351
 #, kde-format
 msgid "Export to file and close the dialog."
 msgstr "Izvozi v datoteko in zapre pogovorno okno."
 
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:360
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:354
 #, kde-format
 msgid "Export to clipboard and close the dialog."
 msgstr "Izvozi v odložišče in zapre pogovorno okno."
@@ -24953,6 +24960,9 @@ msgstr "proces convert je izpadel, izhodna koda ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ni mogoče odpreti datoteke:"
+
+#~ msgid "Copy Info"
+#~ msgstr "Kopiraj informacije"
 
 #~ msgid "Custom Names:"
 #~ msgstr "Imena po meri:"

@@ -41,6 +41,7 @@ public:
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	QWidget* view() const override;
+	void updateLocale();
 
 	bool exportView() const override;
 	bool printView() override;

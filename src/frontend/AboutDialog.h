@@ -29,7 +29,8 @@ public:
 	explicit AboutDialog(const KAboutData&, QWidget*);
 
 private Q_SLOTS:
-	void copyConfig();
+	void copyEnvironment();
+	void copyCitation();
 	void openDonateLink();
 
 // used only when deriving from QDialog

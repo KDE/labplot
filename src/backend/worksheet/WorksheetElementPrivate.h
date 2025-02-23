@@ -30,7 +30,7 @@ public:
 	WorksheetElement::HorizontalAlignment horizontalAlignment{WorksheetElement::HorizontalAlignment::Center};
 	WorksheetElement::VerticalAlignment verticalAlignment{WorksheetElement::VerticalAlignment::Center};
 	bool positionInvalid{false};
-	bool coordinateBindingEnabled{false};
+	bool coordinateBindingEnabled{false}; // bind position to scene coordinates
 	QPointF positionLogical;
 	bool suppressItemChangeEvent{false};
 	bool suppressRetransform{false};

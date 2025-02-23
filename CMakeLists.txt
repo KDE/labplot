@@ -1,6 +1,7 @@
 # see https://community.kde.org/Policies/CMake_Coding_Style
 cmake_minimum_required(VERSION 3.17.0 FATAL_ERROR)
 project(labplot VERSION 2.11.80 LANGUAGES CXX C)
+set(YEAR 2025)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -237,6 +238,7 @@ endif()
 include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 add_definitions(-DLVERSION=\"${labplot_VERSION}\")
+add_definitions(-DYEAR=\"${YEAR}\")
 add_definitions(-DCXX_COMPILER_ID=\"${CMAKE_CXX_COMPILER_ID}\")
 add_definitions(-DCXX_COMPILER_VERSION=\"${CMAKE_CXX_COMPILER_VERSION}\")
 add_definitions(-DCXX_COMPILER_FLAGS=\"${CMAKE_CXX_FLAGS}\")
@@ -547,6 +549,7 @@ IF(ENABLE_MCAP)
     endif()
 
     add_definitions(-DHAVE_MCAP)
+    include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/mcap/include)
     find_package(ZSTD)
     if(ZSTD_FOUND)
         message(STATUS "Found ZSTD (used for MCAP ZSTD support)")

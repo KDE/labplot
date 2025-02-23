@@ -2647,8 +2647,8 @@ void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
 			}
 		}
 
-		// worksheet elements
 		if (m_project) {
+			// worksheet elements
 			const auto& worksheets = m_project->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (const auto* worksheet : worksheets) {
 				if (worksheet->viewCreated()) {
@@ -2663,6 +2663,13 @@ void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
 			for (auto* spreadsheet : spreadsheets) {
 				if (spreadsheet->viewCreated())
 					spreadsheet->updateLocale();
+			}
+
+			// matrices
+			const auto& matrices = m_project->children<Matrix>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* matrix : matrices) {
+				if (matrix->viewCreated())
+					matrix->updateLocale();
 			}
 		}
 	}
