@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-24 00:38+0000\n"
-"PO-Revision-Date: 2025-02-19 07:24+0100\n"
+"PO-Revision-Date: 2025-02-24 07:30+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -10132,13 +10132,12 @@ msgstr "%1: definir a posición lóxica"
 #: src/frontend/AboutDialog.cpp:89
 #, kde-format
 msgid "Copy Environment"
-msgstr ""
+msgstr "Copiar o contorno"
 
 #: src/frontend/AboutDialog.cpp:94
-#, fuzzy, kde-format
-#| msgid "Copy Selection"
+#, kde-format
 msgid "Copy Citation"
-msgstr "Copiar a selección"
+msgstr "Copiar a cita"
 
 #: src/frontend/AboutDialog.cpp:98
 #, kde-format
@@ -10146,10 +10145,9 @@ msgid "Donate"
 msgstr "Doar"
 
 #: src/frontend/AboutDialog.cpp:117
-#, fuzzy, kde-format
-#| msgid "Clipboard"
+#, kde-format
 msgid "Copy to Clipboard"
-msgstr "Portapapeis"
+msgstr "Copiar no portapapeis"
 
 #: src/frontend/AboutDialog.cpp:143
 #, kde-format
@@ -10368,25 +10366,23 @@ msgstr "Compoñentes:"
 #: src/frontend/AboutDialog.cpp:347
 #, kde-format
 msgid "Qt"
-msgstr ""
+msgstr "Qt"
 
 #: src/frontend/AboutDialog.cpp:348
 #, kde-format
 msgid "KDE Frameworks"
-msgstr ""
+msgstr "Infraestruturas de KDE"
 
 #: src/frontend/AboutDialog.cpp:362
-#, fuzzy, kde-format
-#| msgid ""
-#| "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
-#| "Analysis software accessible to everyone."
+#, kde-format
 msgid ""
 "LabPlot Team (%1), LabPlot: A FREE, open source, cross-platform Data "
 "Visualization and Analysis software accessible to everyone, (Version %2) "
 "[Computer software]. %3."
 msgstr ""
-"LabPlot é un programa libre, de código aberto e multiplataforma de "
-"visualización e análise de datos, a disposición de calquera."
+"Equipo de LabPlot (%1), LabPlot: un programa libre, de código aberto e "
+"multiplataforma de visualización e análise de datos, a disposición de "
+"calquera., (Versión %2) [programa de computador]. %3."
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -14643,10 +14639,9 @@ msgstr ""
 "visualización e análise de datos, a disposición de calquera."
 
 #: src/frontend/LabPlot.cpp:82
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2025 LabPlot authors"
+#, kde-format
 msgid "(c) 2007-%1 LabPlot Team"
-msgstr "© 2007-2025 Persoas autoras de LabPlot"
+msgstr "© 2007-%1 Equipo de LabPlot"
 
 #: src/frontend/LabPlot.cpp:84
 #, kde-format
