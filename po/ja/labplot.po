@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-23 00:37+0000\n"
+"POT-Creation-Date: 2025-02-24 00:38+0000\n"
 "PO-Revision-Date: 2014-02-22 22:22-0800\n"
 "Last-Translator: Japanese KDE translation team <kde-jp@kde.org>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -10532,7 +10532,7 @@ msgstr ""
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2202
+#: src/frontend/worksheet/WorksheetView.cpp:2203
 #, kde-format
 msgid "Failed to export"
 msgstr ""
@@ -10540,7 +10540,7 @@ msgstr ""
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2202
+#: src/frontend/worksheet/WorksheetView.cpp:2203
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr ""

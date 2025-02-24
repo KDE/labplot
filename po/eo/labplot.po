@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-23 00:37+0000\n"
-"PO-Revision-Date: 2025-02-22 21:54+0100\n"
+"POT-Creation-Date: 2025-02-24 00:38+0000\n"
+"PO-Revision-Date: 2025-02-23 13:36+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1173,7 +1173,7 @@ msgstr "Nevalida apartigilo"
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
 #, kde-format
 msgid "Serial devices must be initialized before reading data from it"
-msgstr ""
+msgstr "Seriaj aparatoj estu prevalorizitaj antaŭ ol legi datumojn el ili"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
 #, kde-format
@@ -10087,7 +10087,7 @@ msgstr "%1: starigis logikan pozicion"
 #: src/frontend/AboutDialog.cpp:89
 #, kde-format
 msgid "Copy Environment"
-msgstr ""
+msgstr "Kopii Medion"
 
 #: src/frontend/AboutDialog.cpp:94
 #, kde-format
@@ -10321,12 +10321,12 @@ msgstr "Komponantoj:"
 #: src/frontend/AboutDialog.cpp:347
 #, kde-format
 msgid "Qt"
-msgstr ""
+msgstr "Qt"
 
 #: src/frontend/AboutDialog.cpp:348
 #, kde-format
 msgid "KDE Frameworks"
-msgstr ""
+msgstr "KDE Frameworks"
 
 #: src/frontend/AboutDialog.cpp:362
 #, kde-format
@@ -10603,7 +10603,7 @@ msgstr "Kurbo"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2202
+#: src/frontend/worksheet/WorksheetView.cpp:2203
 #, kde-format
 msgid "Failed to export"
 msgstr "Malsukcesis eksporti"
@@ -10611,7 +10611,7 @@ msgstr "Malsukcesis eksporti"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2202
+#: src/frontend/worksheet/WorksheetView.cpp:2203
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Malsukcesis skribi al '%1'. Bonvolu kontroli la vojon."
@@ -16086,11 +16086,12 @@ msgstr "Imperia"
 msgid ""
 "Characters for the decimal and group separators defining the number format"
 msgstr ""
+"Signoj por la dekumaj kaj grupaj apartigiloj difinantaj la nombroformaton"
 
 #: src/frontend/SettingsGeneralPage.cpp:246
 #, kde-format
 msgid "%1 (System, %2)"
-msgstr ""
+msgstr "%1 (Sistemo, %2)"
 
 #: src/frontend/SettingsGeneralPage.cpp:255
 #, kde-format
@@ -16098,6 +16099,8 @@ msgid ""
 "Use the hyphen sign instead of the minus sign for negative numbers shown on "
 "the worksheet"
 msgstr ""
+"Uzi la streketo-signon anstataŭ la minus-signon por negativaj nombroj "
+"montritaj sur la laborfolio"
 
 #: src/frontend/SettingsGeneralPage.cpp:259
 #, kde-format
@@ -23079,7 +23082,7 @@ msgstr "Kondiĉoj:"
 #: src/frontend/ui/settingsgeneralpage.ui:439
 #, kde-format
 msgid "Use Hyphen '-' instead of Minus '–'"
-msgstr ""
+msgstr "Uzi Streketon '-' anstataŭ Minuson '–'"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)

@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-23 00:37+0000\n"
-"PO-Revision-Date: 2025-02-18 10:54+0100\n"
+"POT-Creation-Date: 2025-02-24 00:38+0000\n"
+"PO-Revision-Date: 2025-02-22 09:23+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -10177,13 +10177,12 @@ msgstr "%1 : définir la position logique"
 #: src/frontend/AboutDialog.cpp:89
 #, kde-format
 msgid "Copy Environment"
-msgstr ""
+msgstr "Copier l'environnement"
 
 #: src/frontend/AboutDialog.cpp:94
-#, fuzzy, kde-format
-#| msgid "Copy Selection"
+#, kde-format
 msgid "Copy Citation"
-msgstr "Copier la sélection"
+msgstr "Copier la citation"
 
 #: src/frontend/AboutDialog.cpp:98
 #, kde-format
@@ -10424,17 +10423,15 @@ msgid "KDE Frameworks"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:362
-#, fuzzy, kde-format
-#| msgid ""
-#| "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
-#| "Analysis software accessible to everyone."
+#, kde-format
 msgid ""
 "LabPlot Team (%1), LabPlot: A FREE, open source, cross-platform Data "
 "Visualization and Analysis software accessible to everyone, (Version %2) "
 "[Computer software]. %3."
 msgstr ""
-"LabPlot est un logiciel d'affichage et d'analyse de données, libre, « Open-"
-"source » et multi-plate-forme, accessible à tous."
+"L'équipe de LabPlot (%1), LabPlot : un logiciel d'affichage et d'analyse de "
+"données, libre, « Open source » et multi-plate-forme, accessible à tous "
+"(Version %2)[Logiciel pour ordinateur]. %3."
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -10704,7 +10701,7 @@ msgstr "Courbe"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2202
+#: src/frontend/worksheet/WorksheetView.cpp:2203
 #, kde-format
 msgid "Failed to export"
 msgstr "Exportation impossible"
@@ -10712,7 +10709,7 @@ msgstr "Exportation impossible"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2202
+#: src/frontend/worksheet/WorksheetView.cpp:2203
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Impossible d'écrire dans « %1 ». Veuillez vérifier l'emplacement."
@@ -14736,10 +14733,9 @@ msgstr ""
 "source » et multi-plate-forme, accessible à tous."
 
 #: src/frontend/LabPlot.cpp:82
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2025 LabPlot authors"
+#, kde-format
 msgid "(c) 2007-%1 LabPlot Team"
-msgstr "(c) 2007 - 2025, l'équipe de développement de LabPlot"
+msgstr "(c) 2007 - %1, l'équipe de développement de LabPlot"
 
 #: src/frontend/LabPlot.cpp:84
 #, kde-format

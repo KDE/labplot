@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-23 00:37+0000\n"
-"PO-Revision-Date: 2025-02-21 11:38+0100\n"
+"POT-Creation-Date: 2025-02-24 00:38+0000\n"
+"PO-Revision-Date: 2025-02-23 12:00+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -10119,10 +10119,9 @@ msgid "Donate"
 msgstr "Doneren"
 
 #: src/frontend/AboutDialog.cpp:117
-#, fuzzy, kde-format
-#| msgid "Clipboard"
+#, kde-format
 msgid "Copy to Clipboard"
-msgstr "Klembord"
+msgstr "Naar klembord kopiëren"
 
 #: src/frontend/AboutDialog.cpp:143
 #, kde-format
@@ -10339,15 +10338,14 @@ msgid "Components:"
 msgstr "Componenten:"
 
 #: src/frontend/AboutDialog.cpp:347
-#, fuzzy, kde-format
-#| msgid "Quit"
+#, kde-format
 msgid "Qt"
-msgstr "Verlaten"
+msgstr "Qt"
 
 #: src/frontend/AboutDialog.cpp:348
 #, kde-format
 msgid "KDE Frameworks"
-msgstr ""
+msgstr "KDE Frameworks"
 
 #: src/frontend/AboutDialog.cpp:362
 #, kde-format
@@ -10625,7 +10623,7 @@ msgstr "Kromme"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2202
+#: src/frontend/worksheet/WorksheetView.cpp:2203
 #, kde-format
 msgid "Failed to export"
 msgstr "Exporteren is mislukt"
@@ -10633,7 +10631,7 @@ msgstr "Exporteren is mislukt"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2202
+#: src/frontend/worksheet/WorksheetView.cpp:2203
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Schrijven naar '%1' is mislukt. Controleer a.u.b. het pad."
