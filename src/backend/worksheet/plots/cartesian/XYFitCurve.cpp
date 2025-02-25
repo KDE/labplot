@@ -673,7 +673,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("μ") << QStringLiteral("k");
 			break;
 		case nsl_fit_model_hill:
-			paramNames << QStringLiteral("a") << QStringLiteral("n") << QStringLiteral("a");
+			paramNames << QStringLiteral("a") << QStringLiteral("n") << QStringLiteral("s");
 			paramNamesUtf8 << QStringLiteral("A") << QStringLiteral("n") << UTF8_QSTRING("σ");
 			break;
 		case nsl_fit_model_gompertz:
