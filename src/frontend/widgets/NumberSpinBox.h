@@ -58,10 +58,12 @@ public:
 	void setMinimum(double min);
 	double maximum() const;
 	void setMaximum(double max);
-	void updateLocale(const QLocale &locale) {
-		setLocale(locale);
-		// Force text update without changing the actual value
-		setValue(value());
+	void setLocale(const QLocale& l) {
+		if (locale() != l) {
+			QDoubleSpinBox::setLocale(l);
+			// update text without changing the actual value
+			setValue(value());
+		}
 	}
 
 Q_SIGNALS:
