@@ -346,13 +346,14 @@ void AboutDialog::copyEnvironment() {
 	text += QLatin1Char('\n') + i18n("Components:") + QLatin1Char('\n');
 	text += i18n("Qt") + QLatin1Char(' ') + QLatin1String(QT_VERSION_STR) + QLatin1Char('\n');
 	text += i18n("KDE Frameworks") + QLatin1Char(' ') + QLatin1String(KCOREADDONS_VERSION_STRING) + QLatin1Char('\n');
-	for (auto c: AboutDialog::components())
-		if (QTextDocumentFragment::fromHtml(c.at(1)).toPlainText() == i18n("missing"))
+	for (auto c: AboutDialog::components()) {
+		if (QTextDocumentFragment::fromHtml(c.at(2)).toPlainText() == i18n("missing"))
 			text += QTextDocumentFragment::fromHtml(c.at(0)).toPlainText() + QLatin1Char(' ') + i18n("missing") + QLatin1Char('\n');
 		else if (c.at(0) == i18n("C++ Compiler: ") + QLatin1String(CXX_COMPILER_ID) || c.at(0) == i18n("C++ Compiler Flags:"))
 			text += c.at(0) + QLatin1Char(' ') + c.at(1) + QLatin1Char('\n');
 		else
 			text += c.at(0) + QLatin1Char(' ') + c.at(2) + QLatin1Char('\n');
+	}
 
 	QApplication::clipboard()->setText(text);
 }
