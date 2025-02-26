@@ -180,11 +180,15 @@ int main(int argc, char* argv[]) {
 	const QString applicationPath = QCoreApplication::applicationDirPath();
 	INFO("Application dir: " << STDSTRING(applicationPath))
 
-#ifdef _WIN32
+#ifdef defined(Q_OS_WIN) ||  defined(Q_OS_MACOS)
 	// append application path to PATH to find Cantor backends
 	QString path = qEnvironmentVariable("PATH");
 	INFO("Old PATH = " << STDSTRING(path))
+#ifdef defined(Q_OS_WIN)
 	path.append(QLatin1String(";") + applicationPath);
+#else
+	path.append(QLatin1String(":") + applicationPath);
+#endif
 	qputenv("PATH", qPrintable(path));
 	INFO("New PATH = " << STDSTRING(qEnvironmentVariable("PATH")))
 #endif
