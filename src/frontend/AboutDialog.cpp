@@ -96,7 +96,7 @@ AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutA
 	connect(copyCiteButton, &QPushButton::clicked, this, &AboutDialog::copyCitation);
 
 	auto* donateButton = new QPushButton(i18n("Donate"));
-	donateButton->setIcon(QIcon::fromTheme(QLatin1String("donate-symbolic")));
+	donateButton->setIcon(QIcon::fromTheme(QLatin1String("love-symbolic")));
 	connect(donateButton, &QPushButton::clicked, this, &AboutDialog::openDonateLink);
 
 	auto* linkCopyLayout = new QHBoxLayout;
