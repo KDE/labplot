@@ -181,6 +181,20 @@ QString AboutDialog::systemInfo() {
 		+ QLatin1String("</table>") + QLatin1Char('\n');
 }
 
+// build a formatted list of helpful links
+QString AboutDialog::links() {
+	QString links = QLatin1String("<table>")
+		+ QLatin1String("<tr><td>") + i18n("Visit website:") + QLatin1String("</td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://labplot.org")) + QLatin1String("</td></tr>")
+		// Release notes: LINK ?
+		+ QLatin1String("<tr><td>") + i18n("Watch video tutorials:") + QLatin1String("</td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://www.youtube.com/@LabPlot")) + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Discuss on Mastodon:") + QLatin1String("</td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://floss.social/@LabPlot")) + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Development:") + QLatin1String("</td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://invent.kde.org/education/labplot")) + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Please report bugs to:") + QLatin1String("</td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://bugs.kde.org"))
+		+ QLatin1String("</table>");
+
+	return links;
+}
+
 QVector<QStringList> AboutDialog::components() {
 	QVector<QStringList> components;
 

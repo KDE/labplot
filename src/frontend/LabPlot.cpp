@@ -67,20 +67,13 @@ int main(int argc, char* argv[]) {
 
 	KLocalizedString::setApplicationDomain("labplot");
 
-	QString systemInfo{AboutDialog::systemInfo()};
-	QString links = i18n("Visit website:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://labplot.org")) + QLatin1Char('\n')
-		// Release notes: LINK ?
-		+ i18n("Watch video tutorials:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://www.youtube.com/@LabPlot")) + QLatin1Char('\n')
-		+ i18n("Discuss on Mastodon:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://floss.social/@LabPlot")) + QLatin1Char('\n')
-		+ i18n("Development:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://invent.kde.org/education/labplot")) + QLatin1Char('\n')
-		+ i18n("Please report bugs to:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://bugs.kde.org"));
 	KAboutData aboutData(QStringLiteral("labplot"),
 						 QStringLiteral("LabPlot"),
 						 QLatin1String(LVERSION),
 						 i18n("LabPlot is a FREE, open-source and cross-platform Data Visualization and Analysis software accessible to everyone."),
 						 KAboutLicense::GPL,
 						 i18n("(c) 2007-%1 LabPlot Team", QLatin1String(YEAR)),
-						 systemInfo + QLatin1Char('\n') + links);
+						 AboutDialog::systemInfo() + AboutDialog::links());
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18nc("@info:credit", "Developer"), QStringLiteral("stefan.gerlach@uni.kn"), QString());
 	aboutData.addAuthor(i18n("Alexander Semke"), i18nc("@info:credit", "Developer"), QStringLiteral("alexander.semke@web.de"), QString());
 	aboutData.addAuthor(i18n("Fábián Kristóf-Szabolcs"), i18nc("@info:credit", "Developer"), QStringLiteral("f-kristof@hotmail.com"), QString());
