@@ -57,7 +57,7 @@ double nsl_stats_mannwhitney_u(const double sample1[], size_t n1, const double s
 	}
 
 	double U1 = rank_sum1 - (n1 * (n1 + 1)) / 2.0;
-	//double U2 = n1 * n2 - U1;
+	// double U2 = n1 * n2 - U1;
 	return U1;
 }
 
@@ -290,7 +290,7 @@ double nsl_stats_log_rank_test_statistic(const double* time,
 
 		size_t d = 0;
 		size_t d1 = 0;
-		//size_t d2 = 0;
+		// size_t d2 = 0;
 		size_t n_risk_at_time_1 = n_risk_1;
 		size_t n_risk_at_time_2 = n_risk_2;
 		size_t n_risk_at_time_total = n_risk_total;
@@ -301,7 +301,7 @@ double nsl_stats_log_rank_test_statistic(const double* time,
 				if (observations[k].group == 1) {
 					d1++;
 				} else {
-					//d2++;
+					// d2++;
 				}
 			}
 		}

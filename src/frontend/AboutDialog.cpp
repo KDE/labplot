@@ -144,26 +144,27 @@ QString AboutDialog::systemInfo() {
 #else
 	const QString buildType(i18n("Debug build ") + QLatin1String(GIT_COMMIT));
 #endif
-	QLocale locale;
-	const QString numberSystemInfo{QStringLiteral("(") + i18n("Decimal point ") + QLatin1Char('\'') + QString(locale.decimalPoint()) + QLatin1String("\', ")
-								   + i18n("Group separator ") + QLatin1Char('\'') + QString(locale.groupSeparator()) + QLatin1Char('\'')};
 
-	const QString numberLocaleInfo{QStringLiteral(" ") + i18n("Decimal point ") + QLatin1Char('\'') + QString(QLocale().decimalPoint()) + QLatin1String("\', ")
-								   + i18n("Group separator ") + QLatin1Char('\'') + QString(QLocale().groupSeparator()) + QLatin1String("\', ")
-								   + i18n("Exponential ") + QLatin1Char('\'') + QString(QLocale().exponential()) + QLatin1String("\', ") + i18n("Zero digit ")
-								   + QLatin1Char('\'') + QString(QLocale().zeroDigit()) + QLatin1String("\', ") + i18n("Percent ") + QLatin1Char('\'')
-								   + QString(QLocale().percent()) + QLatin1String("\', ") + i18n("Positive/Negative sign ") + QLatin1Char('\'')
-								   + QString(QLocale().positiveSign()) + QLatin1Char('\'') + QLatin1Char('/') + QLatin1Char('\'')
-								   + QString(QLocale().negativeSign()) + QLatin1Char('\'')};
+	QLocale locale = QLocale();
+	const QString usedLanguage = QLocale::languageToString(locale.language()) + QStringLiteral(", ") + QLocale::countryToString(locale.country());
+
+	// read number format locale from settings (MainWin is not initialized yet)
+	const auto group = Settings::group(QStringLiteral("Settings_General"));
+        auto language = static_cast<QLocale::Language>(group.readEntry(QLatin1String("NumberFormat"), static_cast<int>(QLocale::Language::AnyLanguage)));
+        QLocale numberLocale(language);
+        // number options
+        auto numberOptions = static_cast<QLocale::NumberOptions>(group.readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)));
+        numberLocale.setNumberOptions(numberOptions);
+	const QString numberFormat{numberLocale.toString(1000.01)};
 
 	// get language set in 'switch language'
-	const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
-	QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
-	languageoverride.beginGroup(QStringLiteral("Language"));
-	QString usedLocale = languageoverride.value(qAppName(), QString()).toString(); // something like "en_US"
-	if (!usedLocale.isEmpty())
-		locale = QLocale(usedLocale);
-	QString usedLanguage = QLocale::languageToString(locale.language()) + QStringLiteral(",") + QLocale::countryToString(locale.country());
+	//const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+	//QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
+	//languageoverride.beginGroup(QStringLiteral("Language"));
+	//QString usedLocale = languageoverride.value(qAppName(), QString()).toString(); // something like "en_US"
+	//if (!usedLocale.isEmpty())
+	//	locale = QLocale(usedLocale);
+
 // not included for privacy
 //	QString path = QProcessEnvironment::systemEnvironment().value(QLatin1String("PATH"));
 
@@ -173,8 +174,8 @@ QString AboutDialog::systemInfo() {
 #endif
 		+ QLatin1String("<table>")
 		+ QLatin1String("<tr><td>") + i18n("System:") + QLatin1String("</td><td>") + QSysInfo::prettyProductName() + QLatin1String("</td></tr>")
-		+ QLatin1String("<tr><td>") + i18n("Locale:") + QLatin1String("</td><td>") + usedLanguage + QLatin1Char(' ') + numberSystemInfo + QLatin1String("</td></tr>")
-		+ QLatin1String("<tr><td>") + i18n("Number Settings:") + QLatin1String("</td><td>") + numberLocaleInfo + QLatin1String(" (") + i18n("Updated on restart") + QLatin1Char(')') + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Locale:") + QLatin1String("</td><td>") + usedLanguage + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Number Format:") + QLatin1String("</td><td>") + numberFormat + QStringLiteral(" (") + i18n("Updated on restart") + QStringLiteral(")")  + QLatin1String("</td></tr>")
 		+ QLatin1String("<tr><td>") + i18n("Architecture:") + QLatin1String("</td><td>") + QSysInfo::buildAbi() + QLatin1String("</td></tr>")
 		+ QLatin1String("<tr><td>") + i18n("Kernel: ") + QLatin1String("</td><td>") + QSysInfo::kernelType() + QLatin1Char(' ') + QSysInfo::kernelVersion() + QLatin1String("</td></tr>")
 //		+ QLatin1String("<tr><td>") +i18n("Executable Path:") + QLatin1String("</td><td>") + path + QLatin1String("</td></tr>")
