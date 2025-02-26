@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-24 00:38+0000\n"
-"PO-Revision-Date: 2025-02-17 10:10+0100\n"
+"PO-Revision-Date: 2025-02-22 08:38+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -10215,13 +10215,12 @@ msgstr "%1: establix la posició lògica"
 #: src/frontend/AboutDialog.cpp:89
 #, kde-format
 msgid "Copy Environment"
-msgstr ""
+msgstr "Copia l'entorn"
 
 #: src/frontend/AboutDialog.cpp:94
-#, fuzzy, kde-format
-#| msgid "Copy Selection"
+#, kde-format
 msgid "Copy Citation"
-msgstr "Copia la selecció"
+msgstr "Copia la cita"
 
 #: src/frontend/AboutDialog.cpp:98
 #, kde-format
@@ -10229,10 +10228,9 @@ msgid "Donate"
 msgstr "Donació de diners"
 
 #: src/frontend/AboutDialog.cpp:117
-#, fuzzy, kde-format
-#| msgid "Clipboard"
+#, kde-format
 msgid "Copy to Clipboard"
-msgstr "Porta-retalls"
+msgstr "Copia a dins del porta-retalls"
 
 #: src/frontend/AboutDialog.cpp:143
 #, kde-format
@@ -10454,25 +10452,23 @@ msgstr "Components:"
 #: src/frontend/AboutDialog.cpp:347
 #, kde-format
 msgid "Qt"
-msgstr ""
+msgstr "Qt"
 
 #: src/frontend/AboutDialog.cpp:348
 #, kde-format
 msgid "KDE Frameworks"
-msgstr ""
+msgstr "Frameworks de KDE"
 
 #: src/frontend/AboutDialog.cpp:362
-#, fuzzy, kde-format
-#| msgid ""
-#| "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
-#| "Analysis software accessible to everyone."
+#, kde-format
 msgid ""
 "LabPlot Team (%1), LabPlot: A FREE, open source, cross-platform Data "
 "Visualization and Analysis software accessible to everyone, (Version %2) "
 "[Computer software]. %3."
 msgstr ""
-"LabPlot és un programari de visualització i anàlisi de dades LLIURE, de codi "
-"obert i multiplataforma, accessible a tothom."
+"Equip de LabPlot (%1), LabPlot: és un programari de visualització i anàlisi "
+"de dades LLIURE, de codi obert i multiplataforma, accessible a tothom, "
+"(Versió %2) [Programari de l'ordinador]. %3."
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -14761,10 +14757,9 @@ msgstr ""
 "obert i multiplataforma, accessible a tothom."
 
 #: src/frontend/LabPlot.cpp:82
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2025 LabPlot authors"
+#, kde-format
 msgid "(c) 2007-%1 LabPlot Team"
-msgstr "(c) 2007-2025 Autors de LabPlot"
+msgstr "(c) 2007-%1 Equip de LabPlot"
 
 #: src/frontend/LabPlot.cpp:84
 #, kde-format
@@ -25126,6 +25121,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Copy Info"
-#~ msgstr "Copia la informació"
