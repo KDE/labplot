@@ -299,8 +299,7 @@ QVector<QStringList> AboutDialog::components() {
 	version = missing;
 #endif
 	components << (QStringList() << QLatin1String("Purpose") << i18n("Offers available actions for a specific purpose") << version << QStringLiteral("https://api.kde.org/frameworks/purpose/html/index.html"));
-	//TODO: QADS version
-	components << (QStringList() << QLatin1String("QADS") << i18n("Qt Advanced Docking System") << QString() << QStringLiteral("https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System"));
+	components << (QStringList() << QLatin1String("QADS") << i18n("Qt Advanced Docking System") << QLatin1String(QADS_VERSION_STRING) << QStringLiteral("https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System"));
 #ifdef HAVE_MQTT
 	version = QLatin1String(QTMQTT_VERSION_STR);
 #else
@@ -320,7 +319,7 @@ QVector<QStringList> AboutDialog::components() {
 #endif
 	components << (QStringList() << QLatin1String("Qt Svg") << i18n("SVG export support") << version << QStringLiteral("https://doc.qt.io/qt-6/qtsvg-index.html"));
 #ifdef HAVE_QXLSX
-	version = QString();	// TODO
+	version = QLatin1String(QXLSX_VERSION_STRING);
 #else
 	version = missing;
 #endif
@@ -332,7 +331,7 @@ QVector<QStringList> AboutDialog::components() {
 #endif
 	components << (QStringList() << QLatin1String("ReadStat") << i18n("Read (and write) data sets from SAS, Stata, and SPSS") << version << QStringLiteral("https://github.com/WizardMac/ReadStat"));
 #ifdef HAVE_VECTOR_BLF
-	version = QString();    // TODO
+	version = QLatin1String(VECTOR_BLF_VERSION_STRING);
 #else
 	version = missing;
 #endif
