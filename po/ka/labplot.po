@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-24 00:38+0000\n"
+"POT-Creation-Date: 2025-02-27 00:37+0000\n"
 "PO-Revision-Date: 2025-02-22 06:27+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -10140,78 +10140,74 @@ msgstr "საბოლოო აგება "
 msgid "Debug build "
 msgstr "გამართვის აგება "
 
-#: src/frontend/AboutDialog.cpp:148 src/frontend/AboutDialog.cpp:151
-#, kde-format
-msgid "Decimal point "
-msgstr "წილადის გამყოფი "
-
-#: src/frontend/AboutDialog.cpp:149 src/frontend/AboutDialog.cpp:152
-#, kde-format
-msgid "Group separator "
-msgstr "ჯგუფის გამყოფი "
-
-#: src/frontend/AboutDialog.cpp:153
-#, kde-format
-msgid "Exponential "
-msgstr "ექსპოტენციალური "
-
-#: src/frontend/AboutDialog.cpp:153
-#, kde-format
-msgid "Zero digit "
-msgstr "ნულოვანი ციფრი "
-
-#: src/frontend/AboutDialog.cpp:154
-#, kde-format
-msgid "Percent "
-msgstr "პროცენტი "
-
-#: src/frontend/AboutDialog.cpp:155
-#, kde-format
-msgid "Positive/Negative sign "
-msgstr "დადებით/უარყოფითი ნიშანი "
-
-#: src/frontend/AboutDialog.cpp:175
+#: src/frontend/AboutDialog.cpp:176
 #, kde-format
 msgid "System:"
 msgstr "სისტემა:"
 
-#: src/frontend/AboutDialog.cpp:176
+#: src/frontend/AboutDialog.cpp:177
 #, kde-format
 msgid "Locale:"
 msgstr "ენა:"
 
-#: src/frontend/AboutDialog.cpp:177
+#. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
+#: src/frontend/AboutDialog.cpp:178 src/frontend/ui/settingsgeneralpage.ui:60
 #, kde-format
-msgid "Number Settings:"
-msgstr "რიცხვის პარამეტრები:"
+msgid "Number Format:"
+msgstr "რიცხვის ფორმატი:"
 
-#: src/frontend/AboutDialog.cpp:177
+#: src/frontend/AboutDialog.cpp:178
 #, kde-format
 msgid "Updated on restart"
 msgstr "განახლებულია გადატვირთვისას"
 
-#: src/frontend/AboutDialog.cpp:178
+#: src/frontend/AboutDialog.cpp:179
 #, kde-format
 msgid "Architecture:"
 msgstr "არქიტექტურა:"
 
-#: src/frontend/AboutDialog.cpp:179
+#: src/frontend/AboutDialog.cpp:180
 #, kde-format
 msgid "Kernel: "
 msgstr "ბირთვი: "
 
-#: src/frontend/AboutDialog.cpp:189 src/frontend/AboutDialog.cpp:350
-#: src/frontend/AboutDialog.cpp:351
+#: src/frontend/AboutDialog.cpp:188
+#, kde-format
+msgid "Visit website:"
+msgstr "საიტზე გადასვლა:"
+
+#: src/frontend/AboutDialog.cpp:190
+#, kde-format
+msgid "Watch video tutorials:"
+msgstr "ვიდეოგაკვეთილებს ყურება:"
+
+#: src/frontend/AboutDialog.cpp:191
+#, kde-format
+msgid "Discuss on Mastodon:"
+msgstr "განხილვა Mastodon-ზე:"
+
+#: src/frontend/AboutDialog.cpp:192
+#, kde-format
+msgid "Development:"
+msgstr "განვითარება:"
+
+#: src/frontend/AboutDialog.cpp:193
+#, kde-format
+msgid "Please report bugs to:"
+msgstr "მისწერეთ შეცდომებზე:"
+
+#: src/frontend/AboutDialog.cpp:204 src/frontend/AboutDialog.cpp:365
+#: src/frontend/AboutDialog.cpp:366
 #, kde-format
 msgid "missing"
 msgstr "აკლია"
 
-#: src/frontend/AboutDialog.cpp:195
+#: src/frontend/AboutDialog.cpp:210
 #, kde-format
 msgid "Frontend to Mathematical Applications"
 msgstr "წინაბოლო მათემატიკური აპლიკაციებისთვის"
 
-#: src/frontend/AboutDialog.cpp:201
+#: src/frontend/AboutDialog.cpp:216
 #, kde-format
 msgid ""
 "Support data files in FITS (Flexible Image Transport System) data format"
@@ -10219,142 +10215,142 @@ msgstr ""
 "FITS (მოქნილი გამოსახულების ტრანსპორტის სისტემის მონაცემთა ფორმატი) "
 "მონაცემების ფაილების მხარდაჭერა"
 
-#: src/frontend/AboutDialog.cpp:207
+#: src/frontend/AboutDialog.cpp:222
 #, kde-format
 msgid "Markdown markup language support"
 msgstr "Markdown მარკირების ენის მხარდაჭერა"
 
-#: src/frontend/AboutDialog.cpp:213
+#: src/frontend/AboutDialog.cpp:228
 #, kde-format
 msgid "C++ library for linear algebra"
 msgstr "C++ ბიბლიოთეკა წრფივი ალგებრისთვის"
 
-#: src/frontend/AboutDialog.cpp:219
+#: src/frontend/AboutDialog.cpp:234
 #, kde-format
 msgid "Fastest Fourier Transform in the West"
 msgstr "უსწრაფესი ფურიეს გარდაქმნა დასავლეთში"
 
-#: src/frontend/AboutDialog.cpp:220
+#: src/frontend/AboutDialog.cpp:235
 #, kde-format
 msgid "GNU Scientific Library"
 msgstr "GNU სამეცნიერო ბიბლიოთეკა"
 
-#: src/frontend/AboutDialog.cpp:226
+#: src/frontend/AboutDialog.cpp:241
 #, kde-format
 msgid "High-performance data management and storage suite"
 msgstr "მაღალი წარმადობის მქონე მონაცემების მართვისა და საცავის პაკეტი"
 
-#: src/frontend/AboutDialog.cpp:232
+#: src/frontend/AboutDialog.cpp:247
 #, kde-format
 msgid "Syntax highlighting engine"
 msgstr "სინტაქსის გამოკვეთის ძრავა"
 
-#: src/frontend/AboutDialog.cpp:238
+#: src/frontend/AboutDialog.cpp:253
 #, kde-format
 msgid "Support collecting feedback from users"
 msgstr "მომხმარებლებისგან უკუკავშირის შეგროვების მხარდაჭერა"
 
-#: src/frontend/AboutDialog.cpp:244
+#: src/frontend/AboutDialog.cpp:259
 #, kde-format
 msgid "Complex error and related functions"
 msgstr "კომპლექსური შეცდომის და მასთან დაკავშირებული ფუნქციები"
 
-#: src/frontend/AboutDialog.cpp:250
+#: src/frontend/AboutDialog.cpp:265
 #, kde-format
 msgid "importing Origin OPJ project files"
 msgstr "Origin-ის OPJ პროექტის ფაილების შემოტანა"
 
-#: src/frontend/AboutDialog.cpp:256
+#: src/frontend/AboutDialog.cpp:271
 #, kde-format
 msgid "Import binary MATLAB MAT files"
 msgstr "ბინარული MATLAB MAT ფაილების შემოტანა"
 
-#: src/frontend/AboutDialog.cpp:262
+#: src/frontend/AboutDialog.cpp:277
 #, kde-format
 msgid "MCAP file support"
 msgstr "MCAP ფაილის მხარდაჭერა"
 
-#: src/frontend/AboutDialog.cpp:268
+#: src/frontend/AboutDialog.cpp:283
 #, kde-format
 msgid "Network Common Data Form"
 msgstr "ქსელური ზოგადი მონაცემების ფორმა"
 
-#: src/frontend/AboutDialog.cpp:274
+#: src/frontend/AboutDialog.cpp:289
 #, kde-format
 msgid "Import ODS (Open Document Spreadsheet) files"
 msgstr "ODS (ღია დოკუმენტი - ელცხრილი) ფაილების შემოტანა"
 
-#: src/frontend/AboutDialog.cpp:280
+#: src/frontend/AboutDialog.cpp:295
 #, kde-format
 msgid "PDF rendering library"
 msgstr "PDF-ის რენდერის ბიბლიოთეკა"
 
-#: src/frontend/AboutDialog.cpp:286
+#: src/frontend/AboutDialog.cpp:301
 #, kde-format
 msgid "Offers available actions for a specific purpose"
 msgstr "გთავაზობთ ხელმისაწვდომ მოქმედებებს კონკრეტული მიზნისთვის"
 
-#: src/frontend/AboutDialog.cpp:288
+#: src/frontend/AboutDialog.cpp:303
 #, kde-format
 msgid "Qt Advanced Docking System"
 msgstr "Qt-ის დამატებითი მიმაგრების სისტემა"
 
-#: src/frontend/AboutDialog.cpp:294
+#: src/frontend/AboutDialog.cpp:309
 #, kde-format
 msgid "Support data from MQTT brokers"
 msgstr "მონაცემების მიღების მხარდაჭერა MQTT ბროკერებიდან"
 
-#: src/frontend/AboutDialog.cpp:300
+#: src/frontend/AboutDialog.cpp:315
 #, kde-format
 msgid "Serial port functionality support"
 msgstr "სერიული პორტის ფუნქციონალის მხარდაჭერა"
 
-#: src/frontend/AboutDialog.cpp:306
+#: src/frontend/AboutDialog.cpp:321
 #, kde-format
 msgid "SVG export support"
 msgstr "SVG-ში გადატანის მხარდაჭერა"
 
-#: src/frontend/AboutDialog.cpp:312
+#: src/frontend/AboutDialog.cpp:327
 #, kde-format
 msgid "Import Excel xlsx files"
 msgstr "შემოტანა Excel-ის .xlsx ფაილებიდან"
 
-#: src/frontend/AboutDialog.cpp:318
+#: src/frontend/AboutDialog.cpp:333
 #, kde-format
 msgid "Read (and write) data sets from SAS, Stata, and SPSS"
 msgstr "მონაცემების წაკითხვა (და ჩაწერა) პროგრამებიდან SAS, Stata და SPSS"
 
-#: src/frontend/AboutDialog.cpp:324
+#: src/frontend/AboutDialog.cpp:339
 #, kde-format
 msgid "Binary Log File (BLF) file support"
 msgstr "ბინარული ჟურნალის ფაილის (BLF) მხარდაჭერა"
 
-#: src/frontend/AboutDialog.cpp:327 src/frontend/AboutDialog.cpp:352
+#: src/frontend/AboutDialog.cpp:342 src/frontend/AboutDialog.cpp:367
 #, kde-format
 msgid "C++ Compiler: "
 msgstr "C++ კომპილატორი: "
 
-#: src/frontend/AboutDialog.cpp:332 src/frontend/AboutDialog.cpp:352
+#: src/frontend/AboutDialog.cpp:347 src/frontend/AboutDialog.cpp:367
 #, kde-format
 msgid "C++ Compiler Flags:"
 msgstr "C++ კომპილატორის ალმები:"
 
-#: src/frontend/AboutDialog.cpp:346
+#: src/frontend/AboutDialog.cpp:361
 #, kde-format
 msgid "Components:"
 msgstr "კომპონენტები:"
 
-#: src/frontend/AboutDialog.cpp:347
+#: src/frontend/AboutDialog.cpp:362
 #, kde-format
 msgid "Qt"
 msgstr "Qt"
 
-#: src/frontend/AboutDialog.cpp:348
+#: src/frontend/AboutDialog.cpp:363
 #, kde-format
 msgid "KDE Frameworks"
 msgstr "KDE-ის გამოყენებული ბიბლიოთეკები"
 
-#: src/frontend/AboutDialog.cpp:362
+#: src/frontend/AboutDialog.cpp:378
 #, kde-format
 msgid ""
 "LabPlot Team (%1), LabPlot: A FREE, open source, cross-platform Data "
@@ -14575,32 +14571,7 @@ msgstr "მართლა გსურთ გაუქმების ისტ
 msgid "Clear History"
 msgstr "ისტორიის გაწმენდა"
 
-#: src/frontend/LabPlot.cpp:71
-#, kde-format
-msgid "Visit website:"
-msgstr "საიტზე გადასვლა:"
-
 #: src/frontend/LabPlot.cpp:73
-#, kde-format
-msgid "Watch video tutorials:"
-msgstr "ვიდეოგაკვეთილებს ყურება:"
-
-#: src/frontend/LabPlot.cpp:74
-#, kde-format
-msgid "Discuss on Mastodon:"
-msgstr "განხილვა Mastodon-ზე:"
-
-#: src/frontend/LabPlot.cpp:75
-#, kde-format
-msgid "Development:"
-msgstr "განვითარება:"
-
-#: src/frontend/LabPlot.cpp:76
-#, kde-format
-msgid "Please report bugs to:"
-msgstr "მისწერეთ შეცდომებზე:"
-
-#: src/frontend/LabPlot.cpp:80
 #, kde-format
 msgid ""
 "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
@@ -14609,66 +14580,66 @@ msgstr ""
 "Labplot-ი ყველასთვის ხელმისაწვდომი, უფასო, ღია კოდის და პლატფორმათაშორისი, "
 "მონაცემების ვიზუალიზაციისა და ანალიზის პროგრამაა."
 
-#: src/frontend/LabPlot.cpp:82
+#: src/frontend/LabPlot.cpp:75
 #, kde-format
 msgid "(c) 2007-%1 LabPlot Team"
 msgstr "(c) 2007-%1 LabPlot-ის გუნდი"
 
-#: src/frontend/LabPlot.cpp:84
+#: src/frontend/LabPlot.cpp:77
 #, kde-format
 msgid "Stefan Gerlach"
 msgstr "Stefan Gerlach"
 
-#: src/frontend/LabPlot.cpp:84 src/frontend/LabPlot.cpp:85
-#: src/frontend/LabPlot.cpp:86 src/frontend/LabPlot.cpp:87
+#: src/frontend/LabPlot.cpp:77 src/frontend/LabPlot.cpp:78
+#: src/frontend/LabPlot.cpp:79 src/frontend/LabPlot.cpp:80
 #, kde-format
 msgctxt "@info:credit"
 msgid "Developer"
 msgstr "პროგრამისტი"
 
-#: src/frontend/LabPlot.cpp:85
+#: src/frontend/LabPlot.cpp:78
 #, kde-format
 msgid "Alexander Semke"
 msgstr "Alexander Semke"
 
-#: src/frontend/LabPlot.cpp:86
+#: src/frontend/LabPlot.cpp:79
 #, kde-format
 msgid "Fábián Kristóf-Szabolcs"
 msgstr "Fábián Kristóf-Szabolcs"
 
-#: src/frontend/LabPlot.cpp:87
+#: src/frontend/LabPlot.cpp:80
 #, kde-format
 msgid "Martin Marmsoler"
 msgstr "Martin Marmsoler"
 
-#: src/frontend/LabPlot.cpp:88
+#: src/frontend/LabPlot.cpp:81
 #, kde-format
 msgid "Dariusz Laska"
 msgstr "Dariusz Laska"
 
-#: src/frontend/LabPlot.cpp:89
+#: src/frontend/LabPlot.cpp:82
 #, kde-format
 msgctxt "@info:credit"
 msgid "Conceptual work, documentation, example projects"
 msgstr "კონცეპტუალური სამუშაო, დოკუმენტაცია, მაგალითი პროექტები"
 
-#: src/frontend/LabPlot.cpp:92
+#: src/frontend/LabPlot.cpp:85
 #, kde-format
 msgid "Andreas Kainz"
 msgstr "Andreas Kainz"
 
-#: src/frontend/LabPlot.cpp:92
+#: src/frontend/LabPlot.cpp:85
 #, kde-format
 msgctxt "@info:credit"
 msgid "Icon designer"
 msgstr "ხატულების დიზაინერი"
 
-#: src/frontend/LabPlot.cpp:96
+#: src/frontend/LabPlot.cpp:89
 #, kde-format
 msgid "Yuri Chornoivan"
 msgstr "Yuri Chornoivan"
 
-#: src/frontend/LabPlot.cpp:97
+#: src/frontend/LabPlot.cpp:90
 #, kde-format
 msgctxt "@info:credit"
 msgid ""
@@ -14678,44 +14649,44 @@ msgstr ""
 "დახმარება KDE- ინფრასტრუქტურისა და თარგმანთან დაკავშირებული თემების შესახებ "
 "ბევრ კითხვაზე"
 
-#: src/frontend/LabPlot.cpp:100
+#: src/frontend/LabPlot.cpp:93
 #, kde-format
 msgid "Garvit Khatri"
 msgstr "Garvit Khatri"
 
-#: src/frontend/LabPlot.cpp:101
+#: src/frontend/LabPlot.cpp:94
 #, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
 msgstr "LabPlot- ის KF5-ზე გადატანა და Cantor-თან ინტეგრაცია"
 
-#: src/frontend/LabPlot.cpp:104
+#: src/frontend/LabPlot.cpp:97
 #, kde-format
 msgid "Christoph Roick"
 msgstr "Christoph Roick"
 
-#: src/frontend/LabPlot.cpp:105
+#: src/frontend/LabPlot.cpp:98
 #, kde-format
 msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr "ROOT (CERN) TH1 ჰისტოგრამების შემოტანის მხარდაჭერა"
 
-#: src/frontend/LabPlot.cpp:139
+#: src/frontend/LabPlot.cpp:132
 #, kde-format
 msgid "Disable splash screen"
 msgstr "გაშვების ეკრანის გათიშვა"
 
-#: src/frontend/LabPlot.cpp:142
+#: src/frontend/LabPlot.cpp:135
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr "გაშვება პრეზენტაციის რეჟიმში"
 
-#: src/frontend/LabPlot.cpp:145
+#: src/frontend/LabPlot.cpp:138
 #, kde-format
 msgid "Open a project file."
 msgstr "პროექტის ფაილის გახსნა."
 
-#: src/frontend/LabPlot.cpp:164
+#: src/frontend/LabPlot.cpp:157
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -14724,7 +14695,7 @@ msgstr ""
 "ფაილი '%1' ვერ გავხსენი. დააწკაპუნეთ ღილაკზე 'გამეორება' გაშვების "
 "გასაგრძელებლად, ან 'გაუქმებაზე', რომ აპლიკაციიდან გახვიდეთ."
 
-#: src/frontend/LabPlot.cpp:165
+#: src/frontend/LabPlot.cpp:158
 #, kde-format
 msgid "Failed to Open"
 msgstr "გახსნის შეცდომა"
@@ -22974,12 +22945,6 @@ msgstr "ავტომატური-შენახვა:"
 msgid "Dock Widget Placement:"
 msgstr "დოკის ვიჯეტის განთავსება:"
 
-#. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
-#: src/frontend/ui/settingsgeneralpage.ui:60
-#, kde-format
-msgid "Number Format:"
-msgstr "რიცხვის ფორმატი:"
-
 #. i18n: ectx: property (text), widget (QLabel, lStartup)
 #: src/frontend/ui/settingsgeneralpage.ui:67
 #, kde-format
@@ -24913,6 +24878,27 @@ msgstr "გადაყვანის პროცესი ჩავარდ�
 #, kde-format
 msgid "Unable to open file:"
 msgstr "ფაილის გახსნა შეუძლებელია:"
+
+#~ msgid "Decimal point "
+#~ msgstr "წილადის გამყოფი "
+
+#~ msgid "Group separator "
+#~ msgstr "ჯგუფის გამყოფი "
+
+#~ msgid "Exponential "
+#~ msgstr "ექსპოტენციალური "
+
+#~ msgid "Zero digit "
+#~ msgstr "ნულოვანი ციფრი "
+
+#~ msgid "Percent "
+#~ msgstr "პროცენტი "
+
+#~ msgid "Positive/Negative sign "
+#~ msgstr "დადებით/უარყოფითი ნიშანი "
+
+#~ msgid "Number Settings:"
+#~ msgstr "რიცხვის პარამეტრები:"
 
 #~ msgid "Copy Info"
 #~ msgstr "ინფორმაციის კოპირება"
