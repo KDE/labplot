@@ -95,7 +95,7 @@ void FloatingWidgetTitleBarPrivate::createLayout()
 	// The standard icons do does not look good on high DPI screens
 	QIcon CloseIcon;
 	QPixmap normalPixmap = _this->style()->standardPixmap(
-	    QStyle::SP_TitleBarCloseButton, 0, CloseButton);
+	    QStyle::SP_TitleBarCloseButton, nullptr, CloseButton);
 	CloseIcon.addPixmap(normalPixmap, QIcon::Normal);
 	CloseIcon.addPixmap(internal::createTransparentPixmap(normalPixmap, 0.25),
 	    QIcon::Disabled);
