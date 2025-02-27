@@ -78,9 +78,8 @@
 AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutApplicationDialog(aboutData, parent) {
 
 	//const auto homepage = aboutData.homepage();
-	const auto homepage = QStringLiteral("https://labplot.org");
 	
-	auto text = QStringLiteral("<a href=\"%1\">%1</a>").arg(homepage);
+	QString text = QStringLiteral("<a href=\"https://labplot.org/changelog/#%1\">").arg(QLatin1String(LVERSION)) + i18n("What's new") + QStringLiteral("</a>");
 	auto* linkLabel = new QLabel();
 	linkLabel->setOpenExternalLinks(true);
 	linkLabel->setText(text.replace(QLatin1Char('\n'), QStringLiteral("<br />")));
