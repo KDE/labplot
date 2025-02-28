@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-27 00:37+0000\n"
+"POT-Creation-Date: 2025-02-28 00:38+0000\n"
 "PO-Revision-Date: 2025-02-11 10:40+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -10122,247 +10122,252 @@ msgstr "%1: Logische Koordinaten verwenden"
 msgid "%1: set logical position"
 msgstr "%1: Logische Position festlegen"
 
-#: src/frontend/AboutDialog.cpp:89
+#: src/frontend/AboutDialog.cpp:82
+#, kde-format
+msgid "What's new"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:88
 #, kde-format
 msgid "Copy Environment"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:94
+#: src/frontend/AboutDialog.cpp:93
 #, fuzzy, kde-format
 #| msgid "Copy Selection"
 msgid "Copy Citation"
 msgstr "Auswahl kopieren"
 
-#: src/frontend/AboutDialog.cpp:98
+#: src/frontend/AboutDialog.cpp:97
 #, kde-format
 msgid "Donate"
 msgstr "Spenden"
 
-#: src/frontend/AboutDialog.cpp:117
+#: src/frontend/AboutDialog.cpp:116
 #, fuzzy, kde-format
 #| msgid "Clipboard"
 msgid "Copy to Clipboard"
 msgstr "Zwischenablage"
 
-#: src/frontend/AboutDialog.cpp:143
+#: src/frontend/AboutDialog.cpp:142
 #, kde-format
 msgid "Release build "
 msgstr "Veröffentlichungsversion "
 
-#: src/frontend/AboutDialog.cpp:145
+#: src/frontend/AboutDialog.cpp:144
 #, kde-format
 msgid "Debug build "
 msgstr "Fehlersuchversion "
 
-#: src/frontend/AboutDialog.cpp:176
+#: src/frontend/AboutDialog.cpp:175
 #, kde-format
 msgid "System:"
 msgstr "System:"
 
-#: src/frontend/AboutDialog.cpp:177
+#: src/frontend/AboutDialog.cpp:176
 #, kde-format
 msgid "Locale:"
 msgstr "Lokalisierung:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
-#: src/frontend/AboutDialog.cpp:178 src/frontend/ui/settingsgeneralpage.ui:60
+#: src/frontend/AboutDialog.cpp:177 src/frontend/ui/settingsgeneralpage.ui:60
 #, kde-format
 msgid "Number Format:"
 msgstr "Zahlenformat:"
 
-#: src/frontend/AboutDialog.cpp:178
+#: src/frontend/AboutDialog.cpp:177
 #, kde-format
 msgid "Updated on restart"
 msgstr "Aktualisiert beim Neustart"
 
-#: src/frontend/AboutDialog.cpp:179
+#: src/frontend/AboutDialog.cpp:178
 #, kde-format
 msgid "Architecture:"
 msgstr "Architektur:"
 
-#: src/frontend/AboutDialog.cpp:180
+#: src/frontend/AboutDialog.cpp:179
 #, kde-format
 msgid "Kernel: "
 msgstr "Kernel: "
 
-#: src/frontend/AboutDialog.cpp:188
+#: src/frontend/AboutDialog.cpp:187
 #, kde-format
 msgid "Visit website:"
 msgstr "Besuche Webseite:"
 
-#: src/frontend/AboutDialog.cpp:190
+#: src/frontend/AboutDialog.cpp:189
 #, kde-format
 msgid "Watch video tutorials:"
 msgstr "Videotutorien schauen:"
 
-#: src/frontend/AboutDialog.cpp:191
+#: src/frontend/AboutDialog.cpp:190
 #, kde-format
 msgid "Discuss on Mastodon:"
 msgstr "Auf Mastodon diskutieren:"
 
-#: src/frontend/AboutDialog.cpp:192
+#: src/frontend/AboutDialog.cpp:191
 #, kde-format
 msgid "Development:"
 msgstr "Entwicklung:"
 
-#: src/frontend/AboutDialog.cpp:193
+#: src/frontend/AboutDialog.cpp:192
 #, kde-format
 msgid "Please report bugs to:"
 msgstr "Bitte Fehler melden an:"
 
-#: src/frontend/AboutDialog.cpp:204 src/frontend/AboutDialog.cpp:365
-#: src/frontend/AboutDialog.cpp:366
+#: src/frontend/AboutDialog.cpp:203 src/frontend/AboutDialog.cpp:363
+#: src/frontend/AboutDialog.cpp:364
 #, kde-format
 msgid "missing"
 msgstr "fehlt"
 
-#: src/frontend/AboutDialog.cpp:210
+#: src/frontend/AboutDialog.cpp:209
 #, kde-format
 msgid "Frontend to Mathematical Applications"
 msgstr "Frontend für Mathematische Anwendungen"
 
-#: src/frontend/AboutDialog.cpp:216
+#: src/frontend/AboutDialog.cpp:215
 #, kde-format
 msgid ""
 "Support data files in FITS (Flexible Image Transport System) data format"
 msgstr "Flexible Image Transport System Data Format (FITS)"
 
-#: src/frontend/AboutDialog.cpp:222
+#: src/frontend/AboutDialog.cpp:221
 #, kde-format
 msgid "Markdown markup language support"
 msgstr "Markdown Auszeichnungssprache"
 
-#: src/frontend/AboutDialog.cpp:228
+#: src/frontend/AboutDialog.cpp:227
 #, kde-format
 msgid "C++ library for linear algebra"
 msgstr "C++ Bibliothek für Lineare Algebra"
 
-#: src/frontend/AboutDialog.cpp:234
+#: src/frontend/AboutDialog.cpp:233
 #, kde-format
 msgid "Fastest Fourier Transform in the West"
 msgstr "Fastest Fourier Transform in the West"
 
-#: src/frontend/AboutDialog.cpp:235
+#: src/frontend/AboutDialog.cpp:234
 #, kde-format
 msgid "GNU Scientific Library"
 msgstr "GNU Scientific Library"
 
-#: src/frontend/AboutDialog.cpp:241
+#: src/frontend/AboutDialog.cpp:240
 #, kde-format
 msgid "High-performance data management and storage suite"
 msgstr "Hoch-performante Datenmanagement und -speicher Software"
 
-#: src/frontend/AboutDialog.cpp:247
+#: src/frontend/AboutDialog.cpp:246
 #, kde-format
 msgid "Syntax highlighting engine"
 msgstr "Syntaxhervorhebung"
 
-#: src/frontend/AboutDialog.cpp:253
+#: src/frontend/AboutDialog.cpp:252
 #, kde-format
 msgid "Support collecting feedback from users"
 msgstr "Unterstützt Feedback der Nutzer zu sammeln"
 
-#: src/frontend/AboutDialog.cpp:259
+#: src/frontend/AboutDialog.cpp:258
 #, kde-format
 msgid "Complex error and related functions"
 msgstr "Fehlerfunktionen und verwandte Funktionen"
 
-#: src/frontend/AboutDialog.cpp:265
+#: src/frontend/AboutDialog.cpp:264
 #, kde-format
 msgid "importing Origin OPJ project files"
 msgstr "Origin OPJ-Projekte importieren"
 
-#: src/frontend/AboutDialog.cpp:271
+#: src/frontend/AboutDialog.cpp:270
 #, kde-format
 msgid "Import binary MATLAB MAT files"
 msgstr "Import von MATLAB MAT Datei"
 
-#: src/frontend/AboutDialog.cpp:277
+#: src/frontend/AboutDialog.cpp:276
 #, kde-format
 msgid "MCAP file support"
 msgstr "MCAP Datei Unterstützung"
 
-#: src/frontend/AboutDialog.cpp:283
+#: src/frontend/AboutDialog.cpp:282
 #, kde-format
 msgid "Network Common Data Form"
 msgstr "Network Common Data Format"
 
-#: src/frontend/AboutDialog.cpp:289
+#: src/frontend/AboutDialog.cpp:288
 #, kde-format
 msgid "Import ODS (Open Document Spreadsheet) files"
 msgstr "Einlesen von OpenDocument Tabellen (ODS)"
 
-#: src/frontend/AboutDialog.cpp:295
+#: src/frontend/AboutDialog.cpp:294
 #, kde-format
 msgid "PDF rendering library"
 msgstr "PDF Render Bibliothek"
 
-#: src/frontend/AboutDialog.cpp:301
+#: src/frontend/AboutDialog.cpp:300
 #, kde-format
 msgid "Offers available actions for a specific purpose"
 msgstr "Verfügbare Aktionen für spezielle Zwecke anbieten"
 
-#: src/frontend/AboutDialog.cpp:303
+#: src/frontend/AboutDialog.cpp:301
 #, kde-format
 msgid "Qt Advanced Docking System"
 msgstr "Qt Advanced Docking System"
 
-#: src/frontend/AboutDialog.cpp:309
+#: src/frontend/AboutDialog.cpp:307
 #, kde-format
 msgid "Support data from MQTT brokers"
 msgstr "Daten aus MQTT Quellen"
 
-#: src/frontend/AboutDialog.cpp:315
+#: src/frontend/AboutDialog.cpp:313
 #, kde-format
 msgid "Serial port functionality support"
 msgstr "Unterstützung für Seriellen Port"
 
-#: src/frontend/AboutDialog.cpp:321
+#: src/frontend/AboutDialog.cpp:319
 #, kde-format
 msgid "SVG export support"
 msgstr "SVG Export"
 
-#: src/frontend/AboutDialog.cpp:327
+#: src/frontend/AboutDialog.cpp:325
 #, kde-format
 msgid "Import Excel xlsx files"
 msgstr "Excel XLSX Dateien importieren"
 
-#: src/frontend/AboutDialog.cpp:333
+#: src/frontend/AboutDialog.cpp:331
 #, kde-format
 msgid "Read (and write) data sets from SAS, Stata, and SPSS"
 msgstr "Lesen (und Schreiben) von Datensätzen aus SAS, Stata und SPSS"
 
-#: src/frontend/AboutDialog.cpp:339
+#: src/frontend/AboutDialog.cpp:337
 #, kde-format
 msgid "Binary Log File (BLF) file support"
 msgstr "Lesen von Vektor Binär Logdateien (BLF)"
 
-#: src/frontend/AboutDialog.cpp:342 src/frontend/AboutDialog.cpp:367
+#: src/frontend/AboutDialog.cpp:340 src/frontend/AboutDialog.cpp:365
 #, kde-format
 msgid "C++ Compiler: "
 msgstr "C++ Compiler: "
 
-#: src/frontend/AboutDialog.cpp:347 src/frontend/AboutDialog.cpp:367
+#: src/frontend/AboutDialog.cpp:345 src/frontend/AboutDialog.cpp:365
 #, kde-format
 msgid "C++ Compiler Flags:"
 msgstr "C++ Compiler Optionen:"
 
-#: src/frontend/AboutDialog.cpp:361
+#: src/frontend/AboutDialog.cpp:359
 #, kde-format
 msgid "Components:"
 msgstr "Komponenten:"
 
-#: src/frontend/AboutDialog.cpp:362
+#: src/frontend/AboutDialog.cpp:360
 #, kde-format
 msgid "Qt"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:363
+#: src/frontend/AboutDialog.cpp:361
 #, kde-format
 msgid "KDE Frameworks"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:378
+#: src/frontend/AboutDialog.cpp:376
 #, fuzzy, kde-format
 #| msgid ""
 #| "LabPlot is a FREE, open-source and cross-platform Data Visualization and "

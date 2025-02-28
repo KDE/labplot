@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-27 00:37+0000\n"
+"POT-Creation-Date: 2025-02-28 00:38+0000\n"
 "PO-Revision-Date: 2024-12-29 23:07+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -10057,250 +10057,255 @@ msgstr "%1: तार्किकनिर्देशाङ्कानां �
 msgid "%1: set logical position"
 msgstr "%1: तार्किकस्थानं सेट् कुर्वन्तु"
 
-#: src/frontend/AboutDialog.cpp:89
+#: src/frontend/AboutDialog.cpp:82
+#, kde-format
+msgid "What's new"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:88
 #, kde-format
 msgid "Copy Environment"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:94
+#: src/frontend/AboutDialog.cpp:93
 #, fuzzy, kde-format
 #| msgid "Copy Selection"
 msgid "Copy Citation"
 msgstr "प्रतिलिपि चयनम्"
 
-#: src/frontend/AboutDialog.cpp:98
+#: src/frontend/AboutDialog.cpp:97
 #, kde-format
 msgid "Donate"
 msgstr "वितरणं"
 
-#: src/frontend/AboutDialog.cpp:117
+#: src/frontend/AboutDialog.cpp:116
 #, fuzzy, kde-format
 #| msgid "Clipboard"
 msgid "Copy to Clipboard"
 msgstr "क्लिपबोर्ड"
 
-#: src/frontend/AboutDialog.cpp:143
+#: src/frontend/AboutDialog.cpp:142
 #, kde-format
 msgid "Release build "
 msgstr "निर्माणं विमोचयतु "
 
-#: src/frontend/AboutDialog.cpp:145
+#: src/frontend/AboutDialog.cpp:144
 #, kde-format
 msgid "Debug build "
 msgstr "बिल्ड् डिबग् "
 
-#: src/frontend/AboutDialog.cpp:176
+#: src/frontend/AboutDialog.cpp:175
 #, kde-format
 msgid "System:"
 msgstr "व्यवस्था:"
 
-#: src/frontend/AboutDialog.cpp:177
+#: src/frontend/AboutDialog.cpp:176
 #, kde-format
 msgid "Locale:"
 msgstr "स्थानिक:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
-#: src/frontend/AboutDialog.cpp:178 src/frontend/ui/settingsgeneralpage.ui:60
+#: src/frontend/AboutDialog.cpp:177 src/frontend/ui/settingsgeneralpage.ui:60
 #, fuzzy, kde-format
 #| msgid "Number format:"
 msgid "Number Format:"
 msgstr "संख्यास्वरूपम् :"
 
-#: src/frontend/AboutDialog.cpp:178
+#: src/frontend/AboutDialog.cpp:177
 #, kde-format
 msgid "Updated on restart"
 msgstr "पुनः आरम्भे अद्यतनम्"
 
-#: src/frontend/AboutDialog.cpp:179
+#: src/frontend/AboutDialog.cpp:178
 #, kde-format
 msgid "Architecture:"
 msgstr "संरचना:"
 
-#: src/frontend/AboutDialog.cpp:180
+#: src/frontend/AboutDialog.cpp:179
 #, kde-format
 msgid "Kernel: "
 msgstr "कर्नेलः : "
 
-#: src/frontend/AboutDialog.cpp:188
+#: src/frontend/AboutDialog.cpp:187
 #, kde-format
 msgid "Visit website:"
 msgstr "वेबसाइट् पश्यन्तु :"
 
-#: src/frontend/AboutDialog.cpp:190
+#: src/frontend/AboutDialog.cpp:189
 #, kde-format
 msgid "Watch video tutorials:"
 msgstr "विडियो पाठ्यक्रमं पश्यन्तु:"
 
-#: src/frontend/AboutDialog.cpp:191
+#: src/frontend/AboutDialog.cpp:190
 #, kde-format
 msgid "Discuss on Mastodon:"
 msgstr "मस्टोडन् विषये चर्चां कुर्वन्तु :"
 
-#: src/frontend/AboutDialog.cpp:192
+#: src/frontend/AboutDialog.cpp:191
 #, kde-format
 msgid "Development:"
 msgstr "विकासः:"
 
-#: src/frontend/AboutDialog.cpp:193
+#: src/frontend/AboutDialog.cpp:192
 #, kde-format
 msgid "Please report bugs to:"
 msgstr "कृपया दोषान् सूचयन्तु:"
 
-#: src/frontend/AboutDialog.cpp:204 src/frontend/AboutDialog.cpp:365
-#: src/frontend/AboutDialog.cpp:366
+#: src/frontend/AboutDialog.cpp:203 src/frontend/AboutDialog.cpp:363
+#: src/frontend/AboutDialog.cpp:364
 #, kde-format
 msgid "missing"
 msgstr "असमेत"
 
-#: src/frontend/AboutDialog.cpp:210
+#: src/frontend/AboutDialog.cpp:209
 #, kde-format
 msgid "Frontend to Mathematical Applications"
 msgstr "गणितीय अनुप्रयोगानाम् अग्रभागः"
 
-#: src/frontend/AboutDialog.cpp:216
+#: src/frontend/AboutDialog.cpp:215
 #, kde-format
 msgid ""
 "Support data files in FITS (Flexible Image Transport System) data format"
 msgstr ""
 "FITS (Flexible Image Transport System) इति आँकडास्वरूपे आँकडासञ्चिकानां समर्थनं कुर्वन्तु"
 
-#: src/frontend/AboutDialog.cpp:222
+#: src/frontend/AboutDialog.cpp:221
 #, kde-format
 msgid "Markdown markup language support"
 msgstr "मार्कडाउन मार्कअप भाषा समर्थन"
 
-#: src/frontend/AboutDialog.cpp:228
+#: src/frontend/AboutDialog.cpp:227
 #, kde-format
 msgid "C++ library for linear algebra"
 msgstr "रेखीयबीजगणितस्य कृते C++ पुस्तकालयः"
 
-#: src/frontend/AboutDialog.cpp:234
+#: src/frontend/AboutDialog.cpp:233
 #, kde-format
 msgid "Fastest Fourier Transform in the West"
 msgstr "पश्चिमे द्रुततमं फूरियररूपान्तरणं"
 
-#: src/frontend/AboutDialog.cpp:235
+#: src/frontend/AboutDialog.cpp:234
 #, kde-format
 msgid "GNU Scientific Library"
 msgstr "जीएनयू वैज्ञानिक पुस्तकालय"
 
-#: src/frontend/AboutDialog.cpp:241
+#: src/frontend/AboutDialog.cpp:240
 #, kde-format
 msgid "High-performance data management and storage suite"
 msgstr "उच्च-प्रदर्शन-दत्तांश-प्रबन्धन-भण्डारण-समूहः"
 
-#: src/frontend/AboutDialog.cpp:247
+#: src/frontend/AboutDialog.cpp:246
 #, kde-format
 msgid "Syntax highlighting engine"
 msgstr "वाक्यविन्यास हाइलाइटिंग इञ्जिन"
 
-#: src/frontend/AboutDialog.cpp:253
+#: src/frontend/AboutDialog.cpp:252
 #, kde-format
 msgid "Support collecting feedback from users"
 msgstr "उपयोक्तृभ्यः प्रतिक्रियासङ्ग्रहणस्य समर्थनं करोति"
 
-#: src/frontend/AboutDialog.cpp:259
+#: src/frontend/AboutDialog.cpp:258
 #, kde-format
 msgid "Complex error and related functions"
 msgstr "जटिलदोषः तथा तत्सम्बद्धाः कार्याः"
 
-#: src/frontend/AboutDialog.cpp:265
+#: src/frontend/AboutDialog.cpp:264
 #, kde-format
 msgid "importing Origin OPJ project files"
 msgstr "Origin OPJ परियोजना सञ्चिकाः आयातयन्"
 
-#: src/frontend/AboutDialog.cpp:271
+#: src/frontend/AboutDialog.cpp:270
 #, kde-format
 msgid "Import binary MATLAB MAT files"
 msgstr "द्विचक्रीय MATLAB MAT सञ्चिकाः आयातयन्तु"
 
-#: src/frontend/AboutDialog.cpp:277
+#: src/frontend/AboutDialog.cpp:276
 #, kde-format
 msgid "MCAP file support"
 msgstr "MCAP सञ्चिकासमर्थनम्"
 
-#: src/frontend/AboutDialog.cpp:283
+#: src/frontend/AboutDialog.cpp:282
 #, kde-format
 msgid "Network Common Data Form"
 msgstr "संजाल सामान्य आँकडा प्रपत्र"
 
-#: src/frontend/AboutDialog.cpp:289
+#: src/frontend/AboutDialog.cpp:288
 #, kde-format
 msgid "Import ODS (Open Document Spreadsheet) files"
 msgstr "ODS (Open Document Spreadsheet) सञ्चिकाः आयातयन्तु"
 
-#: src/frontend/AboutDialog.cpp:295
+#: src/frontend/AboutDialog.cpp:294
 #, kde-format
 msgid "PDF rendering library"
 msgstr "PDF प्रतिपादन पुस्तकालयः"
 
-#: src/frontend/AboutDialog.cpp:301
+#: src/frontend/AboutDialog.cpp:300
 #, kde-format
 msgid "Offers available actions for a specific purpose"
 msgstr "विशिष्टप्रयोजनाय उपलब्धानि क्रियाणि प्रस्तावति"
 
-#: src/frontend/AboutDialog.cpp:303
+#: src/frontend/AboutDialog.cpp:301
 #, kde-format
 msgid "Qt Advanced Docking System"
 msgstr "Qt उन्नत डॉकिंग प्रणाली"
 
-#: src/frontend/AboutDialog.cpp:309
+#: src/frontend/AboutDialog.cpp:307
 #, kde-format
 msgid "Support data from MQTT brokers"
 msgstr "MQTT दलालानां समर्थनदत्तांशः"
 
-#: src/frontend/AboutDialog.cpp:315
+#: src/frontend/AboutDialog.cpp:313
 #, kde-format
 msgid "Serial port functionality support"
 msgstr "क्रमिक पोर्ट कार्यक्षमता समर्थन"
 
-#: src/frontend/AboutDialog.cpp:321
+#: src/frontend/AboutDialog.cpp:319
 #, kde-format
 msgid "SVG export support"
 msgstr "SVG निर्यातसमर्थनम्"
 
-#: src/frontend/AboutDialog.cpp:327
+#: src/frontend/AboutDialog.cpp:325
 #, kde-format
 msgid "Import Excel xlsx files"
 msgstr "Excel xlsx सञ्चिकाः आयातयन्तु"
 
-#: src/frontend/AboutDialog.cpp:333
+#: src/frontend/AboutDialog.cpp:331
 #, kde-format
 msgid "Read (and write) data sets from SAS, Stata, and SPSS"
 msgstr "SAS, Stata, SPSS इत्येतयोः दत्तांशसमूहान् पठन्तु (लेखयन्तु च)"
 
-#: src/frontend/AboutDialog.cpp:339
+#: src/frontend/AboutDialog.cpp:337
 #, kde-format
 msgid "Binary Log File (BLF) file support"
 msgstr "द्विचक्रीयलॉगसञ्चिका (BLF) सञ्चिकासमर्थनम्"
 
-#: src/frontend/AboutDialog.cpp:342 src/frontend/AboutDialog.cpp:367
+#: src/frontend/AboutDialog.cpp:340 src/frontend/AboutDialog.cpp:365
 #, kde-format
 msgid "C++ Compiler: "
 msgstr "C++ संकलकः : "
 
-#: src/frontend/AboutDialog.cpp:347 src/frontend/AboutDialog.cpp:367
+#: src/frontend/AboutDialog.cpp:345 src/frontend/AboutDialog.cpp:365
 #, fuzzy, kde-format
 #| msgid "C++ Compiler Flags: "
 msgid "C++ Compiler Flags:"
 msgstr "C++ संकलक ध्वजाः: "
 
-#: src/frontend/AboutDialog.cpp:361
+#: src/frontend/AboutDialog.cpp:359
 #, kde-format
 msgid "Components:"
 msgstr "घटकाः :"
 
-#: src/frontend/AboutDialog.cpp:362
+#: src/frontend/AboutDialog.cpp:360
 #, kde-format
 msgid "Qt"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:363
+#: src/frontend/AboutDialog.cpp:361
 #, kde-format
 msgid "KDE Frameworks"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:378
+#: src/frontend/AboutDialog.cpp:376
 #, fuzzy, kde-format
 #| msgid ""
 #| "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
