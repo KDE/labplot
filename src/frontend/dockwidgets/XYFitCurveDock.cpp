@@ -351,7 +351,9 @@ bool XYFitCurveDock::eventFilter(QObject* obj, QEvent* event) {
 }
 
 void XYFitCurveDock::checkDataColumns() {
-	DEBUG(Q_FUNC_INFO)
+	if (m_initializing)
+		return;
+
 	if (!m_messageWidget) {
 		m_messageWidget = new KMessageWidget(this);
 		uiGeneralTab.gridLayout_2->addWidget(m_messageWidget, 23, 2, 1, 2);
@@ -845,9 +847,6 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 	// with no xColumn: show all models (assume 100 data points)
 	const int availableRowCount = xColumn ? xColumn->availableRowCount(100) : 100;
 	DEBUG(Q_FUNC_INFO << ", available row count = " << availableRowCount)
-	auto yColumn = m_fitCurve->yDataColumn();
-	if (availableRowCount == 0 || !xColumn || !yColumn)
-		checkDataColumns();
 
 	bool disableFit = false;
 	switch (m_fitData.modelCategory) {
@@ -955,7 +954,8 @@ void XYFitCurveDock::updateModelEquation() {
 			m_messageWidget->animatedHide();
 		}
 
-		showFitResult(); // show result of preview
+		if (m_fitData.previewEnabled)
+			showFitResult(); // show result of preview
 	}
 
 	// variables/parameter that are known
