@@ -1845,16 +1845,15 @@ void SpreadsheetView::pasteIntoSelection() {
 
 		const auto numberLocale = QLocale();
 		// TEST ' ' as group separator:
-		// numberLocale = QLocale(QLocale::French, QLocale::France);
-		const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 		for (int i = 0; i < input_row_count; i++) {
+			const auto& rowText = input_rows.at(i).trimmed();
 			if (hasTabs)
-				cellTexts.append(input_rows.at(i).split(QLatin1Char('\t')));
+				cellTexts.append(rowText.split(QLatin1Char('\t')));
 			else if (numberLocale.groupSeparator().trimmed().isEmpty()
 					 && !(numberLocale.numberOptions() & QLocale::OmitGroupSeparator)) // locale with ' ' as group separator && omit group separator not set
-				cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s\\s")), (Qt::SplitBehavior)0x1)); // split with two spaces
+				cellTexts.append(rowText.split(QRegularExpression(QStringLiteral("\\s\\s")), (Qt::SplitBehavior)0x1)); // split with two spaces
 			else
-				cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s+"))));
+				cellTexts.append(rowText.split(QRegularExpression(QStringLiteral("\\s+"))));
 
 			if (cellTexts.at(i).count() > input_col_count)
 				input_col_count = cellTexts.at(i).count();
