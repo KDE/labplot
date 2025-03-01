@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-28 00:38+0000\n"
-"PO-Revision-Date: 2025-02-22 16:17+0100\n"
+"PO-Revision-Date: 2025-02-28 19:42+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -10103,7 +10103,7 @@ msgstr "%1: ställ in logisk position"
 #: src/frontend/AboutDialog.cpp:82
 #, kde-format
 msgid "What's new"
-msgstr ""
+msgstr "Vad är nytt"
 
 #: src/frontend/AboutDialog.cpp:88
 #, kde-format

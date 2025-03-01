@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-28 00:38+0000\n"
-"PO-Revision-Date: 2025-02-22 08:48+0100\n"
+"PO-Revision-Date: 2025-02-28 07:22+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -10147,7 +10147,7 @@ msgstr "%1: določi logični položaj"
 #: src/frontend/AboutDialog.cpp:82
 #, kde-format
 msgid "What's new"
-msgstr ""
+msgstr "Kaj je novega"
 
 #: src/frontend/AboutDialog.cpp:88
 #, kde-format

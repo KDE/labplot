@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-28 00:38+0000\n"
-"PO-Revision-Date: 2025-02-22 08:38+0100\n"
+"PO-Revision-Date: 2025-02-28 09:55+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -10215,7 +10215,7 @@ msgstr "%1: establix la posició lògica"
 #: src/frontend/AboutDialog.cpp:82
 #, kde-format
 msgid "What's new"
-msgstr ""
+msgstr "Què hi ha de nou"
 
 #: src/frontend/AboutDialog.cpp:88
 #, kde-format
@@ -25091,24 +25091,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Decimal point "
-#~ msgstr "Coma decimal"
-
-#~ msgid "Group separator "
-#~ msgstr "Separador de grups"
-
-#~ msgid "Exponential "
-#~ msgstr "Exponencial "
-
-#~ msgid "Zero digit "
-#~ msgstr "Dígit zero "
-
-#~ msgid "Percent "
-#~ msgstr "Percentatge "
-
-#~ msgid "Positive/Negative sign "
-#~ msgstr "Signe positiu/negatiu "
-
-#~ msgid "Number Settings:"
-#~ msgstr "Configureu els nombres:"

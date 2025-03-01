@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-28 00:38+0000\n"
-"PO-Revision-Date: 2025-02-22 08:38+0100\n"
+"PO-Revision-Date: 2025-02-28 09:55+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -10213,7 +10213,7 @@ msgstr "%1: estableix la posició lògica"
 #: src/frontend/AboutDialog.cpp:82
 #, kde-format
 msgid "What's new"
-msgstr ""
+msgstr "Què hi ha de nou"
 
 #: src/frontend/AboutDialog.cpp:88
 #, kde-format

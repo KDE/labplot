@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-28 00:38+0000\n"
-"PO-Revision-Date: 2025-02-23 12:00+0100\n"
+"PO-Revision-Date: 2025-02-28 10:50+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -10106,7 +10106,7 @@ msgstr "%1: logische positie instellen"
 #: src/frontend/AboutDialog.cpp:82
 #, kde-format
 msgid "What's new"
-msgstr ""
+msgstr "Wat is nieuw"
 
 #: src/frontend/AboutDialog.cpp:88
 #, kde-format
