@@ -956,18 +956,20 @@ AsciiFilterPrivate::determineColumnModes(const QVector<QStringList>& rows, const
 
 			if (first)
 				modes[columnIndex] = mode;
-			else if (mode == Mode::Double && modes[columnIndex] == Mode::Integer) {
-				// numeric: integer -> numeric
-				modes[columnIndex] = mode;
-			} else if (mode == Mode::Text && modes[columnIndex] != Mode::Text) {
-				// text: non text -> text
-				modes[columnIndex] = mode;
-			} else if (mode == Mode::BigInt && modes[columnIndex] == Mode::Integer)
-				modes[columnIndex] = mode;
-			/* else if (mode != Mode::Text && modes[columnIndex] == Mode::Text) {
-				// numeric: text -> numeric/integer
-				modes[columnIndex] = mode;
-			}*/
+			else if (!column.isEmpty()) {
+				if (mode == Mode::Double && modes[columnIndex] == Mode::Integer) {
+					// numeric: integer -> numeric
+					modes[columnIndex] = mode;
+				} else if (mode == Mode::Text && modes[columnIndex] != Mode::Text) {
+					// text: non text -> text
+					modes[columnIndex] = mode;
+				} else if (mode == Mode::BigInt && modes[columnIndex] == Mode::Integer)
+					modes[columnIndex] = mode;
+				/* else if (mode != Mode::Text && modes[columnIndex] == Mode::Text) {
+					// numeric: text -> numeric/integer
+					modes[columnIndex] = mode;
+				}*/
+			}
 			columnIndex++;
 		}
 		first = false;
