@@ -60,6 +60,10 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	lowerLimitLineWidget = new LineWidget(ui.tabControlLimitLines);
 	hBoxLayout->insertWidget(9, lowerLimitLineWidget);
 
+	gridLayout = qobject_cast<QGridLayout*>(ui.tabControlLimitValues->layout());
+	valuesBorderLineWidget = new LineWidget(this);
+	gridLayout->addWidget(valuesBorderLineWidget, 7, 0, 1, 3);
+
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
 		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
@@ -393,8 +397,11 @@ void ProcessBehaviorChartDock::valuesBackgroundColorChanged(const QColor& color)
 }
 
 void ProcessBehaviorChartDock::valuesBorderShapeChanged(int) {
-	CONDITIONAL_LOCK_RETURN;
 	const auto shape = static_cast<TextLabel::BorderShape>(ui.cbValuesBorderShape->currentData().toInt());
+	const bool visible = (shape != TextLabel::BorderShape::NoBorder);
+	valuesBorderLineWidget->setVisible(visible);
+
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* plot : m_plots)
 		plot->setValuesBorderShape(shape);
 }
@@ -513,6 +520,11 @@ void ProcessBehaviorChartDock::load() {
 	// Border
 	index = ui.cbValuesBorderShape->findData(static_cast<int>(m_plot->valuesBorderShape()));
 	ui.cbValuesBorderShape->setCurrentIndex(index);
+
+	QList<Line*> borderLines;
+	for (auto* plot : m_plots)
+		borderLines << plot->valuesBorderLine();
+	valuesBorderLineWidget->setLines(borderLines);
 }
 
 void ProcessBehaviorChartDock::loadConfig(KConfig& config) {

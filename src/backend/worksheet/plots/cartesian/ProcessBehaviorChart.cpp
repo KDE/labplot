@@ -164,6 +164,17 @@ void ProcessBehaviorChart::init() {
 	// text labels for the values
 	d->valuesEnabled = group.readEntry(QStringLiteral("ValuesEnabled"), true);
 
+	// border line for value labels
+	d->valuesBorderLine = new Line(QStringLiteral("borderLine"));
+	d->valuesBorderLine->setPrefix(QStringLiteral("Border"));
+	d->valuesBorderLine->setCreateXmlElement(false);
+	d->valuesBorderLine->setHidden(true);
+	addChild(d->valuesBorderLine);
+	connect(d->valuesBorderLine, &Line::styleChanged, this, &ProcessBehaviorChart::valuesBorderStyleChanged);
+	connect(d->valuesBorderLine, &Line::widthChanged, this, &ProcessBehaviorChart::valuesBorderWidthChanged);
+	connect(d->valuesBorderLine, &Line::colorChanged, this, &ProcessBehaviorChart::valuesBorderColorChanged);
+	connect(d->valuesBorderLine, &Line::opacityChanged, this, &ProcessBehaviorChart::valuesBorderOpacityChanged);
+
 	d->upperLimitValueLabel = new TextLabel(QStringLiteral("upper"));
 	d->upperLimitValueLabel->setHidden(true);
 	d->upperLimitValueLabel->setBorderShape(TextLabel::BorderShape::LeftPointingRectangle);
@@ -297,14 +308,9 @@ TextLabel::BorderShape ProcessBehaviorChart::valuesBorderShape() const {
 	return d->centerValueLabel->borderShape();
 }
 
-QPen ProcessBehaviorChart::valuesBorderPen() const {
+Line* ProcessBehaviorChart::valuesBorderLine() const {
 	Q_D(const ProcessBehaviorChart);
-	return d->centerValueLabel->borderPen();
-}
-
-qreal ProcessBehaviorChart::valuesBorderOpacity() const {
-	Q_D(const ProcessBehaviorChart);
-	return d->centerValueLabel->borderOpacity();
+	return d->valuesBorderLine;
 }
 
 /*!
@@ -548,7 +554,6 @@ void ProcessBehaviorChart::setValuesBorderShape(TextLabel::BorderShape shape) {
 	}
 }
 
-
 // ##############################################################################
 // #################################  SLOTS  ####################################
 // ##############################################################################
@@ -579,6 +584,50 @@ void ProcessBehaviorChart::data2ColumnAboutToBeRemoved(const AbstractAspect* asp
 		d->recalc();
 		Q_EMIT dataChanged();
 		Q_EMIT changed();
+	}
+}
+
+void ProcessBehaviorChart::valuesBorderStyleChanged(Qt::PenStyle style) {
+	Q_D(ProcessBehaviorChart);
+	if (style != d->centerValueLabel->borderLine()->style()) {
+		beginMacro(i18n("%1: set values border style", name()));
+		d->centerValueLabel->borderLine()->setStyle(style);
+		d->upperLimitValueLabel->borderLine()->setStyle(style);
+		d->lowerLimitValueLabel->borderLine()->setStyle(style);
+		endMacro();
+	}
+}
+
+void ProcessBehaviorChart::valuesBorderWidthChanged(double width) {
+	Q_D(ProcessBehaviorChart);
+	if (width != d->centerValueLabel->borderLine()->width()) {
+		beginMacro(i18n("%1: set values border width", name()));
+		d->centerValueLabel->borderLine()->setWidth(width);
+		d->upperLimitValueLabel->borderLine()->setWidth(width);
+		d->lowerLimitValueLabel->borderLine()->setWidth(width);
+		endMacro();
+	}
+}
+
+void ProcessBehaviorChart::valuesBorderColorChanged(const QColor& color) {
+	Q_D(ProcessBehaviorChart);
+	if (color != d->centerValueLabel->borderLine()->color()) {
+		beginMacro(i18n("%1: set values border color", name()));
+		d->centerValueLabel->borderLine()->setColor(color);
+		d->upperLimitValueLabel->borderLine()->setColor(color);
+		d->lowerLimitValueLabel->borderLine()->setColor(color);
+		endMacro();
+	}
+}
+
+void ProcessBehaviorChart::valuesBorderOpacityChanged(float opacity) {
+	Q_D(ProcessBehaviorChart);
+	if (opacity != d->centerValueLabel->borderLine()->opacity()) {
+		beginMacro(i18n("%1: set values border color", name()));
+		d->centerValueLabel->borderLine()->setOpacity(opacity);
+		d->upperLimitValueLabel->borderLine()->setOpacity(opacity);
+		d->lowerLimitValueLabel->borderLine()->setOpacity(opacity);
+		endMacro();
 	}
 }
 

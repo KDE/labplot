@@ -67,6 +67,7 @@ public:
 
 	// text labels for control limit values
 	bool valuesEnabled{true};
+	Line* valuesBorderLine{nullptr};
 	TextLabel* upperLimitValueLabel{nullptr};
 	TextLabel* centerValueLabel{nullptr};
 	TextLabel* lowerLimitValueLabel{nullptr};
