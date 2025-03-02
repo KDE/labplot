@@ -80,7 +80,13 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	connect(ui.sbSampleSize, &QSpinBox::valueChanged, this, &ProcessBehaviorChartDock::sampleSizeChanged);
 	connect(ui.chbNegativeLowerLimit, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::negativeLowerLimitEnabledChanged);
 	connect(ui.chbExactLimits, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::exactLimitsEnabledChanged);
+
+	// values
 	connect(ui.chbValuesEnabled, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::valuesEnabledChanged);
+	connect(ui.kfrValuesFont, &KFontRequester::fontSelected, this, &ProcessBehaviorChartDock::valuesFontChanged);
+	connect(ui.kcbValuesFontColor, &KColorButton::changed, this, &ProcessBehaviorChartDock::valuesFontColorChanged);
+	connect(ui.kcbValuesBackgroundColor, &KColorButton::changed, this, &ProcessBehaviorChartDock::valuesBackgroundColorChanged);
+	connect(ui.cbValuesBorderShape, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::valuesBorderShapeChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -176,8 +182,14 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 	connect(m_plot, &ProcessBehaviorChart::sampleSizeChanged, this, &ProcessBehaviorChartDock::plotSampleSizeChanged);
 	connect(m_plot, &ProcessBehaviorChart::negativeLowerLimitEnabledChanged, this, &ProcessBehaviorChartDock::plotNegativeLowerLimitEnabledChanged);
 	connect(m_plot, &ProcessBehaviorChart::exactLimitsEnabledChanged, this, &ProcessBehaviorChartDock::plotExactLimitsEnabledChanged);
-	connect(m_plot, &ProcessBehaviorChart::valuesEnabledChanged, this, &ProcessBehaviorChartDock::plotValuesEnabledChanged);
 	connect(m_plot, &ProcessBehaviorChart::statusInfo, this, &ProcessBehaviorChartDock::showStatusInfo);
+
+	// Values-tab
+	connect(m_plot, &ProcessBehaviorChart::valuesEnabledChanged, this, &ProcessBehaviorChartDock::plotValuesEnabledChanged);
+	connect(m_plot, &ProcessBehaviorChart::valuesFontChanged, this, &ProcessBehaviorChartDock::plotValuesFontChanged);
+	connect(m_plot, &ProcessBehaviorChart::valuesFontColorChanged, this, &ProcessBehaviorChartDock::plotValuesFontColorChanged);
+	connect(m_plot, &ProcessBehaviorChart::valuesBackgroundColorChanged, this, &ProcessBehaviorChartDock::plotValuesBackgroundColorChanged);
+	connect(m_plot, &ProcessBehaviorChart::valuesBorderShapeChanged, this, &ProcessBehaviorChartDock::plotValuesBorderShapeChanged);
 }
 
 void ProcessBehaviorChartDock::retranslateUi() {
@@ -359,12 +371,32 @@ void ProcessBehaviorChartDock::valuesEnabledChanged(bool enabled) {
 	ui.kcbValuesFontColor->setVisible(enabled);
 	ui.lValuesBackgroundColor->setVisible(enabled);
 	ui.kcbValuesBackgroundColor->setVisible(enabled);
+	ui.lValuesBorder->setVisible(enabled);
 	ui.lValuesBorderShape->setVisible(enabled);
 	ui.cbValuesBorderShape->setVisible(enabled);
 
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* plot : m_plots)
 		plot->setValuesEnabled(enabled);
+}
+
+void ProcessBehaviorChartDock::valuesFontChanged(const QFont& font) {
+	CONDITIONAL_LOCK_RETURN;
+
+}
+void ProcessBehaviorChartDock::valuesFontColorChanged(const QColor& color) {
+	CONDITIONAL_LOCK_RETURN;
+}
+
+void ProcessBehaviorChartDock::valuesBackgroundColorChanged(const QColor& color) {
+	CONDITIONAL_LOCK_RETURN;
+}
+
+void ProcessBehaviorChartDock::valuesBorderShapeChanged(int) {
+	CONDITIONAL_LOCK_RETURN;
+	const auto shape = static_cast<TextLabel::BorderShape>(ui.cbValuesBorderShape->currentData().toInt());
+	for (auto* plot : m_plots)
+		plot->setValuesBorderShape(shape);
 }
 
 //*************************************************************
@@ -414,6 +446,26 @@ void ProcessBehaviorChartDock::plotValuesEnabledChanged(bool enabled) {
 	ui.chbValuesEnabled->setChecked(enabled);
 }
 
+void ProcessBehaviorChartDock::plotValuesFontChanged(const QFont& font) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.kfrValuesFont->setFont(font);
+}
+
+void ProcessBehaviorChartDock::plotValuesFontColorChanged(const QColor& color) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.kcbValuesFontColor->setColor(color);
+}
+
+void ProcessBehaviorChartDock::plotValuesBackgroundColorChanged(const QColor& color) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.kcbValuesBackgroundColor->setColor(color);
+}
+
+void ProcessBehaviorChartDock::plotValuesBorderShapeChanged(TextLabel::BorderShape shape) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.cbValuesBorderShape->setCurrentIndex(static_cast<int>(shape));
+}
+
 void ProcessBehaviorChartDock::showStatusInfo(const QString& info) {
 	if (info.isEmpty()) {
 		if (m_messageWidget && m_messageWidget->isVisible())
@@ -454,6 +506,13 @@ void ProcessBehaviorChartDock::load() {
 	// values
 	ui.chbValuesEnabled->setChecked(m_plot->valuesEnabled());
 	valuesEnabledChanged(ui.chbValuesEnabled->isChecked());
+	ui.kfrValuesFont->setFont(m_plot->valuesFont());
+	ui.kcbValuesFontColor->setColor(m_plot->valuesFontColor());
+	ui.kcbValuesBackgroundColor->setColor(m_plot->valuesBackgroundColor());
+
+	// Border
+	index = ui.cbValuesBorderShape->findData(static_cast<int>(m_plot->valuesBorderShape()));
+	ui.cbValuesBorderShape->setCurrentIndex(index);
 }
 
 void ProcessBehaviorChartDock::loadConfig(KConfig& config) {

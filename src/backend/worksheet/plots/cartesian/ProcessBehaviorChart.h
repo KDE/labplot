@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Process Behavior Chart
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -11,6 +11,7 @@
 #define PROCESSBEHAVIORCHART_H
 
 #include "Plot.h"
+#include "backend/worksheet/TextLabel.h"
 
 class Line;
 class ProcessBehaviorChartPrivate;
@@ -54,7 +55,14 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, sampleSize, SampleSize)
 	BASIC_D_ACCESSOR_DECL(bool, negativeLowerLimitEnabled, NegativeLowerLimitEnabled)
 	BASIC_D_ACCESSOR_DECL(bool, exactLimitsEnabled, ExactLimitsEnabled)
+
 	BASIC_D_ACCESSOR_DECL(bool, valuesEnabled, ValuesEnabled)
+	BASIC_D_ACCESSOR_DECL(QColor, valuesFontColor, ValuesFontColor)
+	BASIC_D_ACCESSOR_DECL(QColor, valuesBackgroundColor, ValuesBackgroundColor)
+	CLASS_D_ACCESSOR_DECL(QFont, valuesFont, ValuesFont)
+	BASIC_D_ACCESSOR_DECL(TextLabel::BorderShape, valuesBorderShape, ValuesBorderShape)
+	CLASS_D_ACCESSOR_DECL(QPen, valuesBorderPen, ValuesBorderPen)
+	BASIC_D_ACCESSOR_DECL(qreal, valuesBorderOpacity, ValuesBorderOpacity)
 
 	Symbol* dataSymbol() const;
 	Line* dataLine() const;
@@ -70,12 +78,12 @@ public:
 	void setZValue(qreal) override;
 
 	int xIndexCount() const;
-	bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const override;
+	bool minMax(const CartesianCoordinateSystem::Dimension, const Range<int>& indexRange, Range<double>&, bool includeErrorBars = true) const override;
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
 	bool usingColumn(const AbstractColumn*, bool indirect) const override;
-	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
+	void handleAspectUpdated(const QString& path, const AbstractAspect*) override;
 	QColor color() const override;
 
 	typedef ProcessBehaviorChartPrivate Private;
@@ -104,7 +112,7 @@ private:
 Q_SIGNALS:
 	void linesUpdated(const ProcessBehaviorChart*, const QVector<QLineF>&);
 
-	// General-Tab
+	// General
 	void typeChanged(ProcessBehaviorChart::Type);
 	void limitsMetricChanged(ProcessBehaviorChart::LimitsMetric);
 	void dataDataChanged();
@@ -114,7 +122,13 @@ Q_SIGNALS:
 	void sampleSizeChanged(int);
 	void negativeLowerLimitEnabledChanged(bool);
 	void exactLimitsEnabledChanged(bool);
+
+	// Values
 	void valuesEnabledChanged(bool);
+	void valuesFontChanged(const QFont);
+	void valuesFontColorChanged(const QColor);
+	void valuesBackgroundColorChanged(const QColor);
+	void valuesBorderShapeChanged(TextLabel::BorderShape);
 };
 
 #endif

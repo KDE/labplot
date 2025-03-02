@@ -19,7 +19,6 @@ extern "C" {
 }
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
@@ -274,7 +273,39 @@ BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, dataColu
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, dataColumnPath, dataColumnPath)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, data2Column, data2Column)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, data2ColumnPath, data2ColumnPath)
+
+// values
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, bool, valuesEnabled, valuesEnabled)
+
+QColor ProcessBehaviorChart::valuesFontColor() const {
+	Q_D(const ProcessBehaviorChart);
+	return d->centerValueLabel->fontColor();
+}
+
+QColor ProcessBehaviorChart::valuesBackgroundColor() const {
+	Q_D(const ProcessBehaviorChart);
+	return d->centerValueLabel->backgroundColor();
+}
+
+QFont ProcessBehaviorChart::valuesFont() const {
+	Q_D(const ProcessBehaviorChart);
+	return d->centerValueLabel->teXFont();
+}
+
+TextLabel::BorderShape ProcessBehaviorChart::valuesBorderShape() const {
+	Q_D(const ProcessBehaviorChart);
+	return d->centerValueLabel->borderShape();
+}
+
+QPen ProcessBehaviorChart::valuesBorderPen() const {
+	Q_D(const ProcessBehaviorChart);
+	return d->centerValueLabel->borderPen();
+}
+
+qreal ProcessBehaviorChart::valuesBorderOpacity() const {
+	Q_D(const ProcessBehaviorChart);
+	return d->centerValueLabel->borderOpacity();
+}
 
 /*!
  * returns the number of index values used for x.
@@ -505,6 +536,18 @@ void ProcessBehaviorChart::setValuesEnabled(bool enabled) {
 	if (enabled != d->valuesEnabled)
 		exec(new ProcessBehaviorChartSetValuesEnabledCmd(d, enabled, ki18n("%1: enable control values")));
 }
+
+void ProcessBehaviorChart::setValuesBorderShape(TextLabel::BorderShape shape) {
+	Q_D(ProcessBehaviorChart);
+	if (shape != d->centerValueLabel->borderShape()) {
+		beginMacro(i18n("%1: set values border shape", name()));
+		d->centerValueLabel->setBorderShape(shape);
+		d->upperLimitValueLabel->setBorderShape(shape);
+		d->lowerLimitValueLabel->setBorderShape(shape);
+		endMacro();
+	}
+}
+
 
 // ##############################################################################
 // #################################  SLOTS  ####################################
