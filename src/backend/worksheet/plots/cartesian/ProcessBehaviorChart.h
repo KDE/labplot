@@ -61,8 +61,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(QColor, valuesBackgroundColor, ValuesBackgroundColor)
 	CLASS_D_ACCESSOR_DECL(QFont, valuesFont, ValuesFont)
 	BASIC_D_ACCESSOR_DECL(TextLabel::BorderShape, valuesBorderShape, ValuesBorderShape)
-	CLASS_D_ACCESSOR_DECL(QPen, valuesBorderPen, ValuesBorderPen)
-	BASIC_D_ACCESSOR_DECL(qreal, valuesBorderOpacity, ValuesBorderOpacity)
+	Line* valuesBorderLine() const;
 
 	Symbol* dataSymbol() const;
 	Line* dataLine() const;
@@ -92,6 +91,10 @@ private Q_SLOTS:
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 	void data2ColumnAboutToBeRemoved(const AbstractAspect*);
 	void renameInternalCurves();
+	void valuesBorderStyleChanged(Qt::PenStyle);
+	void valuesBorderWidthChanged(double);
+	void valuesBorderColorChanged(const QColor&);
+	void valuesBorderOpacityChanged(float);
 
 protected:
 	ProcessBehaviorChart(const QString& name, ProcessBehaviorChartPrivate* dd);

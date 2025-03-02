@@ -46,6 +46,7 @@ protected:
 	LineWidget* centerLineWidget{nullptr};
 	LineWidget* upperLimitLineWidget{nullptr};
 	LineWidget* lowerLimitLineWidget{nullptr};
+	LineWidget* valuesBorderLineWidget{nullptr};
 	KMessageWidget* m_messageWidget{nullptr};
 
 	QList<ProcessBehaviorChart*> m_plots;
