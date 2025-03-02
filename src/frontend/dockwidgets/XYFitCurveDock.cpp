@@ -385,10 +385,10 @@ void XYFitCurveDock::checkDataColumns() {
  * updates the locale in the widgets. called when the application settings are changed.
  */
 void XYFitCurveDock::updateLocale() {
-	// TODO: update the locale in the parameters widget
-
-	if (m_fitCurve)
+	if (m_fitCurve) {
+		fitParametersWidget->setFitData(&m_fitData);
 		showFitResult();
+	}
 }
 
 void XYFitCurveDock::retranslateUi() {
@@ -400,11 +400,12 @@ void XYFitCurveDock::retranslateUi() {
 	uiGeneralTab.cbDataSourceType->addItem(i18n("Histogram"));
 
 	// header labels
-	QStringList headerLabels;
-	headerLabels << QString() << i18n("Value") << i18n("Uncertainty") << i18n("Uncertainty, %") << i18n("t statistic") << QLatin1String("P > |t|")
-				 << i18n("Lower") << i18n("Upper");
-	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
+	QStringList labels{QString(), i18n("Value"), i18n("Uncertainty"), i18n("Uncertainty, %"), i18n("t statistic"), QLatin1String("P > |t|"), i18n("Lower"), i18n("Upper")};
+	uiGeneralTab.twParameters->setHorizontalHeaderLabels(labels);
 
+	fitParametersWidget->retranslateUi();
+
+	// retranslate fit results, if available
 	if (m_fitCurve)
 		showFitResult();
 }
