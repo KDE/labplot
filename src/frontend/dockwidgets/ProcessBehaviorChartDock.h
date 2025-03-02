@@ -63,7 +63,13 @@ private Q_SLOTS:
 	void sampleSizeChanged(int);
 	void negativeLowerLimitEnabledChanged(bool);
 	void exactLimitsEnabledChanged(bool);
+
+	// Values-tab
 	void valuesEnabledChanged(bool);
+	void valuesFontChanged(const QFont&);
+	void valuesFontColorChanged(const QColor&);
+	void valuesBackgroundColorChanged(const QColor&);
+	void valuesBorderShapeChanged(int);
 
 	// SLOTs for changes triggered in ProcessBehaviorChart
 	// General-Tab
@@ -77,6 +83,10 @@ private Q_SLOTS:
 
 	// Values-tab
 	void plotValuesEnabledChanged(bool);
+	void plotValuesFontChanged(const QFont&);
+	void plotValuesFontColorChanged(const QColor&);
+	void plotValuesBackgroundColorChanged(const QColor&);
+	void plotValuesBorderShapeChanged(TextLabel::BorderShape);
 
 	void showStatusInfo(const QString&);
 
