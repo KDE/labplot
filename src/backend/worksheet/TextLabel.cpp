@@ -4,7 +4,7 @@
 	Description          : Text label supporting reach text and latex formatting
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2019-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -17,6 +17,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#include "backend/worksheet/Line.h"
 #include "frontend/GuiTools.h"
 
 #include <QBuffer>
@@ -150,6 +151,20 @@ void TextLabel::init() {
 	if (engine == QLatin1String("lualatex"))
 		d->teXFont.setFamily(QStringLiteral("Latin Modern Roman"));
 
+	// border line
+	d->borderLine = new Line(QStringLiteral("borderLine"));
+	d->borderLine->setPrefix(QStringLiteral("Border"));
+	d->borderLine->setCreateXmlElement(false);
+	d->borderLine->setHidden(true);
+	addChild(d->borderLine);
+	connect(d->borderLine, &Line::updatePixmapRequested, [=] {
+		d->update();
+	});
+	connect(d->borderLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+		Q_EMIT changed();
+	});
+
 	// read settings from config if group exists
 	if (group.isValid()) {
 		// properties common to all types
@@ -162,10 +177,7 @@ void TextLabel::init() {
 
 		// border
 		d->borderShape = (TextLabel::BorderShape)group.readEntry(QStringLiteral("BorderShape"), (int)d->borderShape);
-		d->borderPen = QPen(group.readEntry(QStringLiteral("BorderColor"), d->borderPen.color()),
-							group.readEntry(QStringLiteral("BorderWidth"), d->borderPen.width()),
-							(Qt::PenStyle)group.readEntry(QStringLiteral("BorderStyle"), (int)(d->borderPen.style())));
-		d->borderOpacity = group.readEntry(QStringLiteral("BorderOpacity"), d->borderOpacity);
+		d->borderLine->init(group);
 
 		// position and alignment relevant properties
 		d->position.point.setX(group.readEntry(QStringLiteral("PositionXValue"), 0.));
@@ -247,9 +259,14 @@ BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::TextWrapper, text, textWrapper)
 BASIC_SHARED_D_READER_IMPL(TextLabel, QColor, fontColor, fontColor)
 BASIC_SHARED_D_READER_IMPL(TextLabel, QColor, backgroundColor, backgroundColor)
 BASIC_SHARED_D_READER_IMPL(TextLabel, QFont, teXFont, teXFont)
+
+// border
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::BorderShape, borderShape, borderShape)
-BASIC_SHARED_D_READER_IMPL(TextLabel, QPen, borderPen, borderPen)
-BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, borderOpacity, borderOpacity)
+
+Line* TextLabel::borderLine() const {
+	Q_D(const TextLabel);
+	return d->borderLine;
+}
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXBackgroundColor, QColor, backgroundColor, updateText)
@@ -353,20 +370,6 @@ void TextLabel::setBorderShape(TextLabel::BorderShape shape) {
 	Q_D(TextLabel);
 	if (shape != d->borderShape)
 		exec(new TextLabelSetBorderShapeCmd(d, shape, ki18n("%1: set border shape")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetBorderPen, QPen, borderPen, update)
-void TextLabel::setBorderPen(const QPen& pen) {
-	Q_D(TextLabel);
-	if (pen != d->borderPen)
-		exec(new TextLabelSetBorderPenCmd(d, pen, ki18n("%1: set border")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetBorderOpacity, qreal, borderOpacity, update)
-void TextLabel::setBorderOpacity(qreal opacity) {
-	Q_D(TextLabel);
-	if (opacity != d->borderOpacity)
-		exec(new TextLabelSetBorderOpacityCmd(d, opacity, ki18n("%1: set border opacity")));
 }
 
 // misc
@@ -956,7 +959,7 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 
 	labelShape = QPainterPath();
 	if (borderShape != TextLabel::BorderShape::NoBorder) {
-		labelShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderPen));
+		labelShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderLine->pen()));
 		m_boundingRectangle = labelShape.boundingRect();
 	} else {
 		labelShape.addRect(boundingRectangleText);
@@ -995,9 +998,8 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	// draw the border
 	if (borderShape != TextLabel::BorderShape::NoBorder) {
 		painter->save();
-		painter->setPen(borderPen);
-		painter->setOpacity(borderOpacity);
-
+		painter->setPen(borderLine->pen());
+		painter->setOpacity(borderLine->opacity());
 		painter->drawPath(borderShapePath);
 		painter->restore();
 	}
@@ -1082,8 +1084,7 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 	// border
 	writer->writeStartElement(QStringLiteral("border"));
 	writer->writeAttribute(QStringLiteral("borderShape"), QString::number(static_cast<int>(d->borderShape)));
-	WRITE_QPEN(d->borderPen);
-	writer->writeAttribute(QStringLiteral("borderOpacity"), QString::number(d->borderOpacity));
+	d->borderLine->save(writer);
 	writer->writeEndElement();
 
 	if (d->textWrapper.mode == TextLabel::Mode::LaTeX) {
@@ -1140,8 +1141,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("border")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("borderShape", borderShape, BorderShape);
-			READ_QPEN(d->borderPen);
-			READ_DOUBLE_VALUE("borderOpacity", borderOpacity);
+			d->borderLine->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("teXPdfData")) {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
@@ -1225,12 +1225,7 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	fontColorChanged(d->fontColor);
 
 	group = config.group(QStringLiteral("CartesianPlot"));
-	QPen pen = this->borderPen();
-	pen.setColor(group.readEntry(QStringLiteral("BorderColor"), pen.color()));
-	pen.setStyle((Qt::PenStyle)(group.readEntry(QStringLiteral("BorderStyle"), (int)pen.style())));
-	pen.setWidthF(group.readEntry(QStringLiteral("BorderWidth"), pen.widthF()));
-	this->setBorderPen(pen);
-	this->setBorderOpacity(group.readEntry(QStringLiteral("BorderOpacity"), this->borderOpacity()));
+	d->borderLine->loadThemeConfig(group);
 }
 
 void TextLabel::saveThemeConfig(const KConfig& config) {
