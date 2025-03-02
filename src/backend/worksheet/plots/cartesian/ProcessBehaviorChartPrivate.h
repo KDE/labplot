@@ -25,6 +25,7 @@ public:
 	void recalc();
 	void recalcShapeAndBoundingRect() override;
 	void updateControlLimits();
+	void updateValueLabels();
 
 	ProcessBehaviorChart::Type type{ProcessBehaviorChart::Type::XmR};
 	ProcessBehaviorChart::LimitsMetric limitsMetric{ProcessBehaviorChart::LimitsMetric::Average};
