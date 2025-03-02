@@ -167,27 +167,18 @@ void ProcessBehaviorChart::init() {
 
 	d->upperLimitValueLabel = new TextLabel(QStringLiteral("upper"));
 	d->upperLimitValueLabel->setHidden(true);
-	d->upperLimitValueLabel->setCoordinateBindingEnabled(true);
 	d->upperLimitValueLabel->setBorderShape(TextLabel::BorderShape::LeftPointingRectangle);
-	addChild(d->upperLimitValueLabel);
-	d->upperLimitValueLabel->setParentGraphicsItem(graphicsItem());
-	d->upperLimitValueLabel->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+	d->upperLimitValueLabel->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
 
 	d->centerValueLabel = new TextLabel(QStringLiteral("center"));
 	d->centerValueLabel->setHidden(true);
-	d->centerValueLabel->setCoordinateBindingEnabled(true);
 	d->centerValueLabel->setBorderShape(TextLabel::BorderShape::LeftPointingRectangle);
-	addChild(d->centerValueLabel);
-	d->centerValueLabel->setParentGraphicsItem(graphicsItem());
-	d->centerValueLabel->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+	d->centerValueLabel->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
 
 	d->lowerLimitValueLabel = new TextLabel(QStringLiteral("lower"));
 	d->lowerLimitValueLabel->setHidden(true);
-	d->lowerLimitValueLabel->setCoordinateBindingEnabled(true);
 	d->lowerLimitValueLabel->setBorderShape(TextLabel::BorderShape::LeftPointingRectangle);
-	addChild(d->lowerLimitValueLabel);
-	d->lowerLimitValueLabel->setParentGraphicsItem(graphicsItem());
-	d->lowerLimitValueLabel->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+	d->lowerLimitValueLabel->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
 
 	// synchronize the names of the internal XYCurves with the name of the current plot
 	// so we have the same name shown on the undo stack
@@ -203,11 +194,28 @@ void ProcessBehaviorChart::init() {
 void ProcessBehaviorChart::finalizeAdd() {
 	Q_D(ProcessBehaviorChart);
 	WorksheetElement::finalizeAdd();
+
+	// curves
 	addChildFast(d->centerCurve);
 	addChildFast(d->upperLimitCurve);
 	addChildFast(d->lowerLimitCurve);
 	addChildFast(d->dataCurve);
-	d->centerValueLabel->setCoordinateSystemIndex(plot()->coordinateSystemIndex());
+
+	// labels
+	addChildFast(d->upperLimitValueLabel);
+	d->upperLimitValueLabel->setCoordinateBindingEnabled(true);
+	d->upperLimitValueLabel->setParentGraphicsItem(graphicsItem());
+	d->upperLimitValueLabel->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+
+	addChildFast(d->centerValueLabel);
+	d->centerValueLabel->setCoordinateBindingEnabled(true);
+	d->centerValueLabel->setParentGraphicsItem(graphicsItem());
+	d->centerValueLabel->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+
+	addChildFast(d->lowerLimitValueLabel);
+	d->lowerLimitValueLabel->setCoordinateBindingEnabled(true);
+	d->lowerLimitValueLabel->setParentGraphicsItem(graphicsItem());
+	d->lowerLimitValueLabel->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
 void ProcessBehaviorChart::renameInternalCurves() {
@@ -491,7 +499,7 @@ void ProcessBehaviorChart::setExactLimitsEnabled(bool enabled) {
 }
 
 // values
-STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetValuesEnabled, bool, valuesEnabled, recalc)
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetValuesEnabled, bool, valuesEnabled, updateValueLabels)
 void ProcessBehaviorChart::setValuesEnabled(bool enabled) {
 	Q_D(ProcessBehaviorChart);
 	if (enabled != d->valuesEnabled)
@@ -550,22 +558,21 @@ ProcessBehaviorChartPrivate::~ProcessBehaviorChartPrivate() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void ProcessBehaviorChartPrivate::retransform() {
-	const bool suppressed = suppressRetransform || q->isLoading();
-	if (suppressed)
+	if (suppressRetransform || q->isLoading())
 		return;
 
 	if (!isVisible())
 		return;
 
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
+
+	// curves
 	dataCurve->retransform();
 	centerCurve->retransform();
 	upperLimitCurve->retransform();
 	lowerLimitCurve->retransform();
-	centerValueLabel->retransform();
-	upperLimitValueLabel->retransform();
-	lowerLimitValueLabel->retransform();
 
+	// values
 	// update the position of the value labels
 	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
 	const auto& xRange = q->plot()->range(Dimension::X, cs->index(Dimension::X));
@@ -573,6 +580,9 @@ void ProcessBehaviorChartPrivate::retransform() {
 	centerValueLabel->setPositionLogical(QPointF(x, center));
 	upperLimitValueLabel->setPositionLogical(QPointF(x, upperLimit));
 	lowerLimitValueLabel->setPositionLogical(QPointF(x, lowerLimit));
+	centerValueLabel->retransform();
+	upperLimitValueLabel->retransform();
+	lowerLimitValueLabel->retransform();
 
 	recalcShapeAndBoundingRect();
 }
@@ -1058,10 +1068,28 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 	}
 
 	// update the texts in the value labels
-	// TODO: use QLocale
-	centerValueLabel->setText(QString::number(center));
-	upperLimitValueLabel->setText(QString::number(upperLimit));
-	lowerLimitValueLabel->setText(QString::number(lowerLimit));
+	updateValueLabels();
+}
+
+void ProcessBehaviorChartPrivate::updateValueLabels() {
+	centerValueLabel->setVisible(valuesEnabled);
+	upperLimitValueLabel->setVisible(valuesEnabled);
+	lowerLimitValueLabel->setVisible(valuesEnabled);
+
+	if (valuesEnabled) {
+		const auto numberLocale = QLocale();
+		centerValueLabel->setText(numberLocale.toString(center));
+		upperLimitValueLabel->setText(numberLocale.toString(upperLimit));
+		lowerLimitValueLabel->setText(numberLocale.toString(lowerLimit));
+
+		// update the position of the value labels
+		auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
+		const auto& xRange = q->plot()->range(Dimension::X, cs->index(Dimension::X));
+		double x = xRange.end();
+		centerValueLabel->setPositionLogical(QPointF(x, center));
+		upperLimitValueLabel->setPositionLogical(QPointF(x, upperLimit));
+		lowerLimitValueLabel->setPositionLogical(QPointF(x, lowerLimit));
+	}
 }
 
 /*!
@@ -1073,10 +1101,14 @@ void ProcessBehaviorChartPrivate::recalcShapeAndBoundingRect() {
 
 	prepareGeometryChange();
 	m_shape = QPainterPath();
+
+	// curves
 	m_shape.addPath(dataCurve->graphicsItem()->shape());
 	m_shape.addPath(centerCurve->graphicsItem()->shape());
 	m_shape.addPath(upperLimitCurve->graphicsItem()->shape());
 	m_shape.addPath(lowerLimitCurve->graphicsItem()->shape());
+
+	// labels
 	m_shape.addPath(centerValueLabel->graphicsItem()->shape());
 	m_shape.addPath(upperLimitValueLabel->graphicsItem()->shape());
 	m_shape.addPath(lowerLimitValueLabel->graphicsItem()->shape());
@@ -1263,6 +1295,10 @@ void ProcessBehaviorChart::loadThemeConfig(const KConfig& config) {
 
 	d->lowerLimitCurve->line()->loadThemeConfig(group, themeColor);
 	d->lowerLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
+
+	d->centerValueLabel->loadThemeConfig(config);
+	d->upperLimitValueLabel->loadThemeConfig(config);
+	d->lowerLimitValueLabel->loadThemeConfig(config);
 
 	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
