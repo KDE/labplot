@@ -36,8 +36,8 @@ public:
 	Q_DECLARE_FLAGS(BorderType, BorderTypeFlags)
 
 	QGraphicsItem* graphicsItem() const override;
-	void loadThemeConfig(const KConfig& config) override;
-	void saveThemeConfig(const KConfig& config) override;
+	void loadThemeConfig(const KConfig&) override;
+	void saveThemeConfig(const KConfig&) override;
 	bool isHovered() const;
 	bool isSelected() const;
 
@@ -67,7 +67,6 @@ private:
 Q_SIGNALS:
 	void borderTypeChanged(PlotArea::BorderType);
 	void borderCornerRadiusChanged(qreal);
-	void borderOpacityChanged(qreal);
 
 private:
 	CartesianPlot* m_parent;

@@ -533,6 +533,8 @@ void CartesianPlotDock::updateLocale() {
 	// update the title label
 	labelWidget->updateLocale();
 
+	borderLineWidget->updateLocale();
+
 	// update plot range list locale
 	updatePlotRangeList();
 }

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of TextLabel
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2019-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -40,11 +40,8 @@ public:
 	QFutureWatcher<QByteArray> teXImageFutureWatcher;
 	TeXRenderer::Result teXRenderResult;
 
-	// see TextLabel::init() for type specific default settings
-
 	TextLabel::BorderShape borderShape{TextLabel::BorderShape::NoBorder};
-	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
-	qreal borderOpacity{1.0};
+	Line* borderLine{nullptr};
 
 	void retransform() override;
 	void updateBoundingRect();

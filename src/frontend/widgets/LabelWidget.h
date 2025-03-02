@@ -24,6 +24,7 @@ class SyntaxHighlighter;
 #endif
 
 class Label;
+class LineWidget;
 class Axis;
 class QMenu;
 class KMessageWidget;
@@ -64,6 +65,7 @@ private:
 	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter;
 	KSyntaxHighlighting::Repository m_repository;
 #endif
+	LineWidget* borderLineWidget{nullptr};
 	KMessageWidget* m_messageWidget;
 
 	QVector<QMetaObject::Connection> m_connections;
@@ -122,10 +124,6 @@ private Q_SLOTS:
 	void offsetYChanged(double);
 
 	void borderShapeChanged(int);
-	void borderStyleChanged(int);
-	void borderColorChanged(const QColor&);
-	void borderWidthChanged(double);
-	void borderOpacityChanged(int);
 
 	void lockChanged(bool);
 	void bindingChanged(bool checked);
@@ -147,8 +145,6 @@ private Q_SLOTS:
 	void labelRotationAngleChanged(qreal);
 
 	void labelBorderShapeChanged(TextLabel::BorderShape);
-	void labelBorderPenChanged(const QPen&);
-	void labelBorderOpacityChanged(float);
 
 	void labelLockChanged(bool);
 	void labelCartesianPlotParent(bool on);
