@@ -172,24 +172,24 @@ QString AboutDialog::systemInfo() {
 		+ QStringLiteral("%1, %2").arg(QLatin1String(__DATE__), QLatin1String(__TIME__)) + QLatin1Char('\n')
 #endif
 		+ QLatin1String("<table>")
-		+ QLatin1String("<tr><td>") + i18n("System:") + QLatin1String("</td><td>") + QSysInfo::prettyProductName() + QLatin1String("</td></tr>")
-		+ QLatin1String("<tr><td>") + i18n("Locale:") + QLatin1String("</td><td>") + usedLanguage + QLatin1String("</td></tr>")
-		+ QLatin1String("<tr><td>") + i18n("Number Format:") + QLatin1String("</td><td>") + numberFormat + QStringLiteral(" (") + i18n("Updated on restart") + QStringLiteral(")")  + QLatin1String("</td></tr>")
-		+ QLatin1String("<tr><td>") + i18n("Architecture:") + QLatin1String("</td><td>") + QSysInfo::buildAbi() + QLatin1String("</td></tr>")
-		+ QLatin1String("<tr><td>") + i18n("Kernel: ") + QLatin1String("</td><td>") + QSysInfo::kernelType() + QLatin1Char(' ') + QSysInfo::kernelVersion() + QLatin1String("</td></tr>")
-//		+ QLatin1String("<tr><td>") +i18n("Executable Path:") + QLatin1String("</td><td>") + path + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("System:") + QLatin1String(" </td><td>") + QSysInfo::prettyProductName() + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Locale:") + QLatin1String(" </td><td>") + usedLanguage + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Number Format:") + QLatin1String(" </td><td>") + numberFormat + QStringLiteral(" (") + i18n("Updated on restart") + QStringLiteral(")")  + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Architecture:") + QLatin1String(" </td><td>") + QSysInfo::buildAbi() + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Kernel: ") + QLatin1String(" </td><td>") + QSysInfo::kernelType() + QLatin1Char(' ') + QSysInfo::kernelVersion() + QLatin1String("</td></tr>")
+//		+ QLatin1String("<tr><td>") +i18n("Executable Path:") + QLatin1String(" </td><td>") + path + QLatin1String("</td></tr>")
 		+ QLatin1String("</table>") + QLatin1Char('\n');
 }
 
 // build a formatted list of helpful links
 QString AboutDialog::links() {
 	QString links = QLatin1String("<table>")
-		+ QLatin1String("<tr><td>") + i18n("Visit website:") + QLatin1String("</td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://labplot.org")) + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Visit website:") + QLatin1String(" </td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://labplot.org")) + QLatin1String("</td></tr>")
 		// Release notes: LINK ?
-		+ QLatin1String("<tr><td>") + i18n("Watch video tutorials:") + QLatin1String("</td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://www.youtube.com/@LabPlot")) + QLatin1String("</td></tr>")
-		+ QLatin1String("<tr><td>") + i18n("Discuss on Mastodon:") + QLatin1String("</td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://floss.social/@LabPlot")) + QLatin1String("</td></tr>")
-		+ QLatin1String("<tr><td>") + i18n("Development:") + QLatin1String("</td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://invent.kde.org/education/labplot")) + QLatin1String("</td></tr>")
-		+ QLatin1String("<tr><td>") + i18n("Please report bugs to:") + QLatin1String("</td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://bugs.kde.org"))
+		+ QLatin1String("<tr><td>") + i18n("Watch video tutorials:") + QLatin1String(" </td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://www.youtube.com/@LabPlot")) + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Discuss on Mastodon:") + QLatin1String(" </td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://floss.social/@LabPlot")) + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Development:") + QLatin1String(" </td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://invent.kde.org/education/labplot")) + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Please report bugs to:") + QLatin1String(" </td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://bugs.kde.org"))
 		+ QLatin1String("</table>");
 
 	return links;
