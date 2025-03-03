@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-02 00:37+0000\n"
+"POT-Creation-Date: 2025-03-03 00:38+0000\n"
 "PO-Revision-Date: 2025-02-23 09:47+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -294,7 +294,7 @@ msgstr "Entier long"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1524
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:280
-#: src/frontend/widgets/LabelWidget.cpp:489
+#: src/frontend/widgets/LabelWidget.cpp:477
 #: src/frontend/worksheet/WorksheetView.cpp:224
 #, kde-format
 msgid "Text"
@@ -1099,7 +1099,7 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:201
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2128
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1243
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1244
 #, kde-format
 msgid "Success"
 msgstr "Succès"
@@ -2245,7 +2245,7 @@ msgstr "Clé"
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1873
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:404
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #: src/frontend/matrix/MatrixView.cpp:620
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2504
@@ -6396,8 +6396,8 @@ msgstr "Impossible d'ouvrir « %1 » en écriture."
 msgid "%1: set text"
 msgstr "%1 : définir un texte"
 
-#: src/backend/note/Note.cpp:141 src/backend/worksheet/TextLabel.cpp:260
-#: src/backend/worksheet/TextLabel.cpp:299
+#: src/backend/note/Note.cpp:141 src/backend/worksheet/TextLabel.cpp:277
+#: src/backend/worksheet/TextLabel.cpp:316
 #, kde-format
 msgid "%1: set background color"
 msgstr "%1 : définir la couleur de l'arrière-plan"
@@ -6768,7 +6768,7 @@ msgstr "Statistiques (Distributions)"
 #: src/frontend/dockwidgets/AxisDock.cpp:237
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:172
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:805
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:806
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:81
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:549
 #, kde-format
@@ -7625,7 +7625,7 @@ msgstr "%1 : définir une image"
 msgid "%1: embed image"
 msgstr "%1 : intégrer une image"
 
-#: src/backend/worksheet/Image.cpp:152 src/backend/worksheet/TextLabel.cpp:369
+#: src/backend/worksheet/Image.cpp:152
 #, kde-format
 msgid "%1: set border opacity"
 msgstr "%1 : définir l'opacité de bordure"
@@ -7708,13 +7708,13 @@ msgstr "%1 : définir l'opacité de ligne"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1339
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1341
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1: définir le remplissage horizontal"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1365
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1367
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1: définir le remplissage vertical"
@@ -7756,8 +7756,8 @@ msgstr "Horizontal"
 #: src/frontend/dockwidgets/AxisDock.cpp:256
 #: src/frontend/dockwidgets/BarPlotDock.cpp:272
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:284
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:903
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:907
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:905
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:909
 #: src/frontend/dockwidgets/HistogramDock.cpp:268
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:246
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:91
@@ -8908,7 +8908,7 @@ msgid "%1: use plot's color"
 msgstr "%1 : utiliser la couleur du tracé"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:214
-#: src/backend/worksheet/TextLabel.cpp:347
+#: src/backend/worksheet/TextLabel.cpp:364
 #, kde-format
 msgid "%1: set font color"
 msgstr "%1 : définir la couleur de police"
@@ -9767,7 +9767,7 @@ msgid "PARAMETERS"
 msgstr "PARAMÈTRES"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1874
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:404
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
 msgid "Uncertainty"
 msgstr "Incertitude"
@@ -9783,13 +9783,13 @@ msgid "t Statistic"
 msgstr "Statistiques T"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1878
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:405
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
 msgid "Lower"
 msgstr "Borne inférieure"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1879
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:405
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
 msgid "Upper"
 msgstr "Borne supérieure"
@@ -10013,34 +10013,29 @@ msgstr "%1 : le type de bordure a été modifié"
 msgid "%1: set plot area corner radius"
 msgstr "%1 : définir le rayon de coin de la zone de tracé"
 
-#: src/backend/worksheet/TextLabel.cpp:288
-#: src/backend/worksheet/TextLabel.cpp:298
-#: src/backend/worksheet/TextLabel.cpp:301
-#: src/backend/worksheet/TextLabel.cpp:307
-#: src/backend/worksheet/TextLabel.cpp:316
+#: src/backend/worksheet/TextLabel.cpp:305
+#: src/backend/worksheet/TextLabel.cpp:315
+#: src/backend/worksheet/TextLabel.cpp:318
+#: src/backend/worksheet/TextLabel.cpp:324
+#: src/backend/worksheet/TextLabel.cpp:333
 #, kde-format
 msgid "%1: set label text"
 msgstr "%1 : définir le texte de l'étiquette"
 
-#: src/backend/worksheet/TextLabel.cpp:333
+#: src/backend/worksheet/TextLabel.cpp:350
 #, kde-format
 msgid "%1: set label placeholdertext"
 msgstr "%1 : définir le texte de l'étiquette"
 
-#: src/backend/worksheet/TextLabel.cpp:340
+#: src/backend/worksheet/TextLabel.cpp:357
 #, kde-format
 msgid "%1: set TeX main font"
 msgstr "%1 : définir la police principale pour « TeX »"
 
-#: src/backend/worksheet/TextLabel.cpp:355
+#: src/backend/worksheet/TextLabel.cpp:372
 #, kde-format
 msgid "%1: set border shape"
 msgstr "%1 : définir le style de bordure"
-
-#: src/backend/worksheet/TextLabel.cpp:362
-#, kde-format
-msgid "%1: set border"
-msgstr "%1 : définir la bordure"
 
 #: src/backend/worksheet/Worksheet.cpp:242
 #, kde-format
@@ -10125,7 +10120,7 @@ msgstr "%1 : déverrouiller"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:43
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:103
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:240
-#: src/frontend/ui/labelwidget.ui:323
+#: src/frontend/ui/labelwidget.ui:376
 #, kde-format
 msgid "Visible"
 msgstr "Visible"
@@ -10503,18 +10498,18 @@ msgstr "Vue en liste avec détails"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:314
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1374
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1380
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1386
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1375
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1381
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1387
 #, kde-format
 msgid "Copy Selection"
 msgstr "Copier la sélection"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:315
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1375
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1381
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1387
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1376
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1382
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1388
 #, kde-format
 msgid "Copy All"
 msgstr "Tout copier"
@@ -12504,8 +12499,8 @@ msgstr "Zone de données"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:134
 #: src/frontend/dockwidgets/ImageDock.cpp:185
 #: src/frontend/dockwidgets/ImageDock.cpp:195
-#: src/frontend/widgets/LabelWidget.cpp:503
-#: src/frontend/widgets/LabelWidget.cpp:514
+#: src/frontend/widgets/LabelWidget.cpp:491
+#: src/frontend/widgets/LabelWidget.cpp:502
 #, kde-format
 msgid "Top"
 msgstr "En haut"
@@ -12519,8 +12514,8 @@ msgstr "En haut"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:136
 #: src/frontend/dockwidgets/ImageDock.cpp:187
 #: src/frontend/dockwidgets/ImageDock.cpp:197
-#: src/frontend/widgets/LabelWidget.cpp:505
-#: src/frontend/widgets/LabelWidget.cpp:516
+#: src/frontend/widgets/LabelWidget.cpp:493
+#: src/frontend/widgets/LabelWidget.cpp:504
 #, kde-format
 msgid "Bottom"
 msgstr "En bas"
@@ -12604,8 +12599,8 @@ msgstr "semi-rempli, grand"
 #: src/frontend/dockwidgets/ImageDock.cpp:190
 #: src/frontend/dockwidgets/XYCurveDock.cpp:518
 #: src/frontend/widgets/BackgroundWidget.cpp:118
+#: src/frontend/widgets/LabelWidget.cpp:485
 #: src/frontend/widgets/LabelWidget.cpp:497
-#: src/frontend/widgets/LabelWidget.cpp:509
 #: src/frontend/widgets/ValueWidget.cpp:37
 #, kde-format
 msgid "Left"
@@ -12622,8 +12617,8 @@ msgstr "À gauche"
 #: src/frontend/dockwidgets/ImageDock.cpp:192
 #: src/frontend/dockwidgets/XYCurveDock.cpp:519
 #: src/frontend/widgets/BackgroundWidget.cpp:119
+#: src/frontend/widgets/LabelWidget.cpp:487
 #: src/frontend/widgets/LabelWidget.cpp:499
-#: src/frontend/widgets/LabelWidget.cpp:511
 #: src/frontend/widgets/ValueWidget.cpp:38
 #, kde-format
 msgid "Right"
@@ -12769,7 +12764,7 @@ msgstr "%1 axes : modèle « %2 » chargé"
 #: src/frontend/dockwidgets/AxisDock.cpp:2042
 #: src/frontend/dockwidgets/BarPlotDock.cpp:509
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:735
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1840
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1842
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:803
 #: src/frontend/dockwidgets/CustomPointDock.cpp:385
 #: src/frontend/dockwidgets/HistogramDock.cpp:558
@@ -13005,31 +13000,31 @@ msgstr "%1 tracés en boîte : modèle « %2 » chargé"
 msgid "Save current plot area definition as template"
 msgstr "Enregistrer la définition courante de la zone de tracé comme modèle"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:623
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:625
 #, kde-format
 msgid "%1-Ranges:"
 msgstr "%1 - Intervalles :"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:625
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:627
 #, kde-format
 msgid "%1-Range:"
 msgstr "%1 - Intervalles :"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:649
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:651
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:53
 #, kde-format
 msgid "Numeric"
 msgstr "Numérique"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:795
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:797
 #, kde-format
 msgid "Plot Ranges:"
 msgstr "Intervalles du tracé :"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:797
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:799
 #: src/frontend/ui/dockwidgets/axisdock.ui:262
 #: src/frontend/ui/dockwidgets/barplotdock.ui:186
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:90
@@ -13056,34 +13051,34 @@ msgstr "Intervalles du tracé :"
 msgid "Plot Range:"
 msgstr "Intervalle du tracé :"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:896
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:898
 #, kde-format
 msgid "Free"
 msgstr "Libre"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:897
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:899
 #, kde-format
 msgid "Last Points"
 msgstr "Derniers points"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:898
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:900
 #, kde-format
 msgid "First Points"
 msgstr "Premiers points"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:902
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:906
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:904
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:908
 #, kde-format
 msgid "Simple"
 msgstr "Simple"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:904
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:908
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:906
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:910
 #, kde-format
 msgid "Sloped"
 msgstr "Incliné"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:912
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:914
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -13095,32 +13090,32 @@ msgstr ""
 "tracé,</li><li>Premiers points - Un nombre donné de premiers points est "
 "tracé.</li></ul>"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:921
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:923
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
 "Si cette option est sélectionnée, étend automatiquement la plage de tracé à "
 "de valeurs agréables."
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1164
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1166
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr "L'intervalle %1 en %2 est utilisé pour l'intervalle %3 de tracé."
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1165
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1218
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1167
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1220
 #, kde-format
 msgid "Really remove it?"
 msgstr "Voulez-vous vraiment le supprimer ?"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1218
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1220
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr "L'intervalle %1 de tracé est utilisé par l'élément %2."
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1311
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1313
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:560
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:769
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:342
@@ -13130,7 +13125,7 @@ msgstr "Horizontale :"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1312
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1314
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:861
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:724
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:428
@@ -13140,7 +13135,7 @@ msgstr "Verticale :"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1314
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1316
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:796
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:717
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:414
@@ -13150,7 +13145,7 @@ msgstr "Gauche :"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1315
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1317
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:803
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:666
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:407
@@ -13158,18 +13153,18 @@ msgstr "Gauche :"
 msgid "Top:"
 msgstr "Haut : "
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1647
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1649
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr "Sélectionnez le modèle de fichier d'enregistrement"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1649
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1651
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr "Modèles de tracés pour Labplot (*%1)"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1838
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1840
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "%1 tracés cartésiens : modèle « %2 » chargé"
@@ -13198,11 +13193,11 @@ msgstr "Ligne principale"
 #: src/frontend/dockwidgets/ImageDock.cpp:191
 #: src/frontend/dockwidgets/ImageDock.cpp:196
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:296
+#: src/frontend/widgets/LabelWidget.cpp:486
+#: src/frontend/widgets/LabelWidget.cpp:492
 #: src/frontend/widgets/LabelWidget.cpp:498
-#: src/frontend/widgets/LabelWidget.cpp:504
-#: src/frontend/widgets/LabelWidget.cpp:510
-#: src/frontend/widgets/LabelWidget.cpp:515
-#: src/frontend/widgets/LabelWidget.cpp:570
+#: src/frontend/widgets/LabelWidget.cpp:503
+#: src/frontend/widgets/LabelWidget.cpp:550
 #: src/frontend/widgets/ValueWidget.cpp:94
 #: src/frontend/widgets/ValueWidget.cpp:95
 #, kde-format
@@ -13211,8 +13206,8 @@ msgstr "Centrer"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:267
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:273
-#: src/frontend/widgets/LabelWidget.cpp:500
-#: src/frontend/widgets/LabelWidget.cpp:506
+#: src/frontend/widgets/LabelWidget.cpp:488
+#: src/frontend/widgets/LabelWidget.cpp:494
 #, kde-format
 msgid "Relative to plot"
 msgstr "Relatif vers le tracé"
@@ -13944,18 +13939,18 @@ msgstr "Aucune colonne en Y disponible !"
 msgid "No Y data available!"
 msgstr "Aucun valeur en Y n'est disponible !"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:404
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
 msgid "Uncertainty, %"
 msgstr "Incertitude, %"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:404
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
 msgid "t statistic"
 msgstr "Statistiques T"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:434
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:435
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:217
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:359
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:452
@@ -13969,40 +13964,40 @@ msgstr "Statistiques T"
 msgid "Curve:"
 msgstr "Courbe :"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:455
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:456
 #, kde-format
 msgid "Histogram:"
 msgstr "Histogramme :"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:853
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:854
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:510
 #, kde-format
 msgid "Degree:"
 msgstr "Degrés :"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:913
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:914
 #, kde-format
 msgid "Number of peaks:"
 msgstr "Nombre de pics :"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1244
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1245
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "État d'ajustement : %1"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1255
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1256
 #, kde-format
 msgid "No data source available!"
 msgstr "Aucun source de données disponible !"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1426
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1427
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "Diminuer le niveau de confiance de %1 %"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1427
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1428
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "Augmenter le niveau de confiance de %1 %"
@@ -15757,7 +15752,7 @@ msgid "Command"
 msgstr "Commande"
 
 #: src/frontend/notebook/NotebookView.cpp:103
-#: src/frontend/widgets/LabelWidget.cpp:492
+#: src/frontend/widgets/LabelWidget.cpp:480
 #, kde-format
 msgid "Markdown"
 msgstr "Markdown"
@@ -15765,7 +15760,7 @@ msgstr "Markdown"
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/frontend/notebook/NotebookView.cpp:107
 #: src/frontend/ui/settingsworksheetpage.ui:147
-#: src/frontend/widgets/LabelWidget.cpp:490
+#: src/frontend/widgets/LabelWidget.cpp:478
 #, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
@@ -18534,7 +18529,7 @@ msgstr "Type d'erreur en Y :"
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:40
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:524
 #: src/frontend/ui/fitsheadereditnewkeywordwidget.ui:27
-#: src/frontend/ui/labelwidget.ui:24
+#: src/frontend/ui/labelwidget.ui:715
 #, kde-format
 msgid "Comment:"
 msgstr "Commentaire :"
@@ -18586,7 +18581,7 @@ msgstr "Commentaire :"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:372
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:257
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:554
-#: src/frontend/ui/labelwidget.ui:316
+#: src/frontend/ui/labelwidget.ui:725
 #, kde-format
 msgid "Name:"
 msgstr "Nom :"
@@ -18635,9 +18630,8 @@ msgstr "Barres d'erreurs"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1005
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1130
 #: src/frontend/ui/dockwidgets/linewidget.ui:78
-#: src/frontend/ui/labelwidget.ui:619 src/frontend/ui/symbolwidget.ui:45
-#: src/frontend/ui/symbolwidget.ui:184 src/frontend/ui/symbolwidget.ui:240
-#: src/frontend/worksheet/GridDialog.cpp:41
+#: src/frontend/ui/symbolwidget.ui:45 src/frontend/ui/symbolwidget.ui:184
+#: src/frontend/ui/symbolwidget.ui:240 src/frontend/worksheet/GridDialog.cpp:41
 #, kde-format
 msgid "Style:"
 msgstr "Style : "
@@ -18657,8 +18651,7 @@ msgstr "Style : "
 #: src/frontend/ui/dockwidgets/linewidget.ui:92
 #: src/frontend/ui/dockwidgets/valuewidget.ui:320
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:401
-#: src/frontend/ui/labelwidget.ui:104 src/frontend/ui/symbolwidget.ui:194
-#: src/frontend/ui/symbolwidget.ui:250
+#: src/frontend/ui/symbolwidget.ui:194 src/frontend/ui/symbolwidget.ui:250
 #: src/frontend/widgets/BackgroundWidget.cpp:201
 #: src/frontend/widgets/BackgroundWidget.cpp:225
 #: src/frontend/widgets/BackgroundWidget.cpp:253
@@ -18677,7 +18670,7 @@ msgstr "Couleur : "
 #: src/frontend/ui/dockwidgets/axisdock.ui:539
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:694
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:181
-#: src/frontend/ui/labelwidget.ui:70 src/frontend/ui/symbolwidget.ui:78
+#: src/frontend/ui/labelwidget.ui:369 src/frontend/ui/symbolwidget.ui:78
 #, kde-format
 msgid "Size:"
 msgstr "Taille : "
@@ -18685,12 +18678,12 @@ msgstr "Taille : "
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbSize)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbBorderWidth)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbConfidenceInterval)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionYLogical)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionXLogical)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbOffsetX)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbOffsetY)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionY)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionYLogical)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbOffsetX)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionX)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbOffsetY)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbErrorBarSize)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbTop)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPaddingHorizontal)
@@ -18855,11 +18848,11 @@ msgstr "Taille : "
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:197
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:210
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:437
-#: src/frontend/ui/fitoptionswidget.ui:248 src/frontend/ui/labelwidget.ui:94
-#: src/frontend/ui/labelwidget.ui:131 src/frontend/ui/labelwidget.ui:241
-#: src/frontend/ui/labelwidget.ui:303 src/frontend/ui/labelwidget.ui:504
-#: src/frontend/ui/labelwidget.ui:561 src/frontend/ui/labelwidget.ui:754
-#: src/frontend/ui/symbolwidget.ui:293 src/frontend/ui/symbolwidget.ui:312
+#: src/frontend/ui/fitoptionswidget.ui:248 src/frontend/ui/labelwidget.ui:85
+#: src/frontend/ui/labelwidget.ui:122 src/frontend/ui/labelwidget.ui:167
+#: src/frontend/ui/labelwidget.ui:272 src/frontend/ui/labelwidget.ui:574
+#: src/frontend/ui/labelwidget.ui:589 src/frontend/ui/symbolwidget.ui:293
+#: src/frontend/ui/symbolwidget.ui:312
 #, kde-format
 msgid "Spinbox for numbers."
 msgstr "Boîte à cocher pour les nombres."
@@ -18900,9 +18893,8 @@ msgstr "Boîte à cocher pour les nombres."
 #: src/frontend/ui/dockwidgets/linewidget.ui:146
 #: src/frontend/ui/dockwidgets/valuewidget.ui:356
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:552
-#: src/frontend/ui/labelwidget.ui:244 src/frontend/ui/labelwidget.ui:306
-#: src/frontend/ui/labelwidget.ui:507 src/frontend/ui/symbolwidget.ui:296
-#: src/frontend/ui/symbolwidget.ui:315
+#: src/frontend/ui/labelwidget.ui:275 src/frontend/ui/labelwidget.ui:592
+#: src/frontend/ui/symbolwidget.ui:296 src/frontend/ui/symbolwidget.ui:315
 #, kde-format
 msgid " pt"
 msgstr " pt"
@@ -18964,7 +18956,7 @@ msgstr "x + y + z ="
 #: src/frontend/ui/dockwidgets/imagedock.ui:83
 #: src/frontend/ui/dockwidgets/valuewidget.ui:108
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:421
-#: src/frontend/ui/labelwidget.ui:662 src/frontend/ui/symbolwidget.ui:85
+#: src/frontend/ui/labelwidget.ui:646 src/frontend/ui/symbolwidget.ui:85
 #, kde-format
 msgid "Rotation:"
 msgstr "Rotation :"
@@ -18985,7 +18977,7 @@ msgstr "Segments"
 #: src/frontend/ui/dockwidgets/imagedock.ui:387
 #: src/frontend/ui/dockwidgets/valuewidget.ui:121
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:483
-#: src/frontend/ui/labelwidget.ui:205 src/frontend/ui/symbolwidget.ui:101
+#: src/frontend/ui/labelwidget.ui:353 src/frontend/ui/symbolwidget.ui:101
 #, kde-format
 msgid "°"
 msgstr "°"
@@ -19161,7 +19153,7 @@ msgstr "Intensité :"
 #: src/frontend/ui/dockwidgets/custompointdock.ui:290
 #: src/frontend/ui/dockwidgets/imagedock.ui:130
 #: src/frontend/ui/dockwidgets/imagedock.ui:310
-#: src/frontend/ui/labelwidget.ui:545 src/frontend/ui/labelwidget.ui:573
+#: src/frontend/ui/labelwidget.ui:106 src/frontend/ui/labelwidget.ui:230
 #, kde-format
 msgid "Vertical position relative to label's parent"
 msgstr "Position verticale par rapport au parent de l'étiquette"
@@ -20258,7 +20250,6 @@ msgid "Arrow"
 msgstr "Flèche"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbOpacity)
-#. i18n: ectx: property (toolTip), widget (QSpinBox, sbBorderOpacity)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbArrowSize)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbLabelsOpacity)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbValuesOpacity)
@@ -20269,7 +20260,7 @@ msgstr "Flèche"
 #: src/frontend/ui/dockwidgets/linewidget.ui:105
 #: src/frontend/ui/dockwidgets/valuewidget.ui:150
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:340
-#: src/frontend/ui/labelwidget.ui:173 src/frontend/ui/symbolwidget.ui:133
+#: src/frontend/ui/symbolwidget.ui:133
 #, kde-format
 msgid ""
 "The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is "
@@ -20460,7 +20451,7 @@ msgstr "Position"
 #: src/frontend/ui/dockwidgets/notedock.ui:92
 #: src/frontend/ui/dockwidgets/valuewidget.ui:310
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:301
-#: src/frontend/ui/labelwidget.ui:652
+#: src/frontend/ui/labelwidget.ui:259
 #, kde-format
 msgid "Font:"
 msgstr "Police :"
@@ -20487,7 +20478,6 @@ msgid "Offset:"
 msgstr "Décalage : "
 
 #. i18n: ectx: property (text), widget (QLabel, lOpacity)
-#. i18n: ectx: property (text), widget (QLabel, lBorderOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lValuesOpacity)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1366
@@ -20496,8 +20486,7 @@ msgstr "Décalage : "
 #: src/frontend/ui/dockwidgets/linewidget.ui:127
 #: src/frontend/ui/dockwidgets/valuewidget.ui:137
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:294
-#: src/frontend/ui/labelwidget.ui:17 src/frontend/ui/symbolwidget.ui:120
-#: src/frontend/worksheet/GridDialog.cpp:73
+#: src/frontend/ui/symbolwidget.ui:120 src/frontend/worksheet/GridDialog.cpp:73
 #, kde-format
 msgid "Opacity:"
 msgstr "Opacité :"
@@ -20519,7 +20508,6 @@ msgid "Format:"
 msgstr "Format :"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbOpacity)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbBorderOpacity)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbYBreakPosition)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbXBreakPosition)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbLabelsOpacity)
@@ -20532,8 +20520,7 @@ msgstr "Format :"
 #: src/frontend/ui/dockwidgets/linewidget.ui:108
 #: src/frontend/ui/dockwidgets/valuewidget.ui:153
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:343
-#: src/frontend/ui/labelwidget.ui:176 src/frontend/ui/symbolwidget.ui:136
-#: src/frontend/worksheet/GridDialog.cpp:81
+#: src/frontend/ui/symbolwidget.ui:136 src/frontend/worksheet/GridDialog.cpp:81
 #, no-c-format, kde-format
 msgid " %"
 msgstr " % "
@@ -20551,7 +20538,7 @@ msgstr "Préfixe : "
 #. i18n: ectx: property (text), widget (QLabel, lFontColor)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsColor)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1512
-#: src/frontend/ui/labelwidget.ui:530
+#: src/frontend/ui/labelwidget.ui:213
 #, kde-format
 msgid "Font Color:"
 msgstr "Couleur de police :"
@@ -20615,8 +20602,8 @@ msgstr "Seconde couleur :"
 msgid "visible"
 msgstr "visible"
 
-#. i18n: ectx: property (text), widget (QLabel, lPositionXLogicalDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lPositionX)
+#. i18n: ectx: property (text), widget (QLabel, lPositionXLogicalDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lXData)
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTime)
@@ -20632,7 +20619,7 @@ msgstr "visible"
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:102
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:99
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:220
-#: src/frontend/ui/labelwidget.ui:221 src/frontend/ui/labelwidget.ui:769
+#: src/frontend/ui/labelwidget.ui:65 src/frontend/ui/labelwidget.ui:632
 #, kde-format
 msgid "x:"
 msgstr "x :"
@@ -20663,7 +20650,7 @@ msgstr "Données :"
 #: src/frontend/ui/dockwidgets/custompointdock.ui:277
 #: src/frontend/ui/dockwidgets/custompointdock.ui:293
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:50
-#: src/frontend/ui/labelwidget.ui:576
+#: src/frontend/ui/labelwidget.ui:233
 #, kde-format
 msgid "y:"
 msgstr "y :"
@@ -20684,7 +20671,7 @@ msgstr "Barres"
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:596
 #: src/frontend/ui/dockwidgets/imagedock.ui:557
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:303
-#: src/frontend/ui/labelwidget.ui:602 src/frontend/ui/symbolwidget.ui:233
+#: src/frontend/ui/labelwidget.ui:296 src/frontend/ui/symbolwidget.ui:233
 #: src/frontend/widgets/SymbolWidget.cpp:133
 #, kde-format
 msgid "Border"
@@ -20842,7 +20829,7 @@ msgstr "Tracé de la couverture"
 #: src/frontend/ui/dockwidgets/linewidget.ui:71
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:115
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:648
-#: src/frontend/ui/labelwidget.ui:286 src/frontend/ui/symbolwidget.ui:267
+#: src/frontend/ui/symbolwidget.ui:267
 #, kde-format
 msgid "Width:"
 msgstr "Largeur :"
@@ -21055,7 +21042,7 @@ msgstr " cm"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:594
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:212
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:59
-#: src/frontend/ui/labelwidget.ui:645
+#: src/frontend/ui/labelwidget.ui:343
 #, kde-format
 msgid "Geometry"
 msgstr "Géométrie"
@@ -21213,7 +21200,7 @@ msgstr "Ordre :"
 #: src/frontend/ui/dockwidgets/imagedock.ui:549
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:240
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:333
-#: src/frontend/ui/labelwidget.ui:293
+#: src/frontend/ui/labelwidget.ui:683
 #, kde-format
 msgid "Locked"
 msgstr "Verrouillé"
@@ -21262,8 +21249,8 @@ msgstr "Curseur 1"
 msgid "Cursor 2"
 msgstr "Curseur 2"
 
-#. i18n: ectx: property (toolTip), widget (KComboBox, cbPositionX)
 #. i18n: ectx: property (toolTip), widget (QLabel, lPositionX)
+#. i18n: ectx: property (toolTip), widget (KComboBox, cbPositionX)
 #. i18n: ectx: property (toolTip), widget (QLabel, lPosition)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbPositionX)
 #. i18n: ectx: property (toolTip), widget (QLabel, lPositionEnd)
@@ -21274,7 +21261,7 @@ msgstr "Curseur 2"
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:96
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:102
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:310
-#: src/frontend/ui/labelwidget.ui:738 src/frontend/ui/labelwidget.ui:766
+#: src/frontend/ui/labelwidget.ui:62 src/frontend/ui/labelwidget.ui:558
 #, kde-format
 msgid "Horizontal position relative to label's parent"
 msgstr "Position horizontale par rapport au parent de l'étiquette"
@@ -21418,21 +21405,21 @@ msgstr "Position Y :"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionYLogical)
 #: src/frontend/ui/dockwidgets/imagedock.ui:186
-#: src/frontend/ui/labelwidget.ui:198
+#: src/frontend/ui/labelwidget.ui:639
 #, kde-format
 msgid "Y:"
 msgstr "Y :"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionXLogical)
 #: src/frontend/ui/dockwidgets/imagedock.ui:212
-#: src/frontend/ui/labelwidget.ui:517
+#: src/frontend/ui/labelwidget.ui:625
 #, kde-format
 msgid "X:"
 msgstr "X :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbBindLogicalPos)
 #: src/frontend/ui/dockwidgets/imagedock.ui:219
-#: src/frontend/ui/labelwidget.ui:40
+#: src/frontend/ui/labelwidget.ui:618
 #, kde-format
 msgid "Logical Coordinates"
 msgstr "Coordonnées logiques"
@@ -21683,12 +21670,14 @@ msgstr "Lignes centrale et de limites"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:340
+#: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
 msgid "Upper Limit"
 msgstr "Limite supérieure"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:384
+#: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
 msgid "Lower Limit"
 msgstr "Limite inférieure"
@@ -22753,39 +22742,29 @@ msgstr "Ouvrir un fichier..."
 msgid "Close File"
 msgstr "Fermer le fichier"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chbShowPlaceholderText)
-#: src/frontend/ui/labelwidget.ui:47
-#, kde-format
-msgid "Show Placeholder Text (editable)"
-msgstr "Afficher le texte de remplacement (modifiable)"
-
-#. i18n: ectx: property (text), widget (QLabel, lHorizontalAlignment)
-#: src/frontend/ui/labelwidget.ui:77
-#, kde-format
-msgid "Hor. Alignment:"
-msgstr "Alignement horizontal :"
-
-#. i18n: ectx: property (text), widget (QLabel, lVerticalAlignment)
-#: src/frontend/ui/labelwidget.ui:84
-#, kde-format
-msgid "Vert. Alignment:"
-msgstr "Alignement vertical :"
-
-#. i18n: ectx: property (text), widget (QLabel, lFontTeX)
-#: src/frontend/ui/labelwidget.ui:111
-#, kde-format
-msgid "Main font:"
-msgstr "Police principale :"
-
 #. i18n: ectx: property (html), widget (ResizableTextEdit, teLabel)
-#: src/frontend/ui/labelwidget.ui:160
-#, kde-format
+#: src/frontend/ui/labelwidget.ui:55
+#, fuzzy, kde-format
+#| msgid ""
+#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
+#| "REC-html40/strict.dtd\">\n"
+#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
+#| "css\">\n"
+#| "p, li { white-space: pre-wrap; }\n"
+#| "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
+#| "font-weight:400; font-style:normal;\">\n"
+#| "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
+#| "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
+#| "\"><br /></p></body></html>"
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
-"\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
+"\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
 "weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
@@ -22804,44 +22783,68 @@ msgstr ""
 "\"><br /></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
-#: src/frontend/ui/labelwidget.ui:231
+#: src/frontend/ui/labelwidget.ui:72
 #, kde-format
 msgid "Background Color:"
 msgstr "Couleur d'arrière-plan :"
 
-#. i18n: ectx: property (toolTip), widget (QLabel, lOffsetX)
-#. i18n: ectx: property (toolTip), widget (QLabel, lOffsetY)
-#: src/frontend/ui/labelwidget.ui:484 src/frontend/ui/labelwidget.ui:704
-#, kde-format
-msgid "Distance to the axis tick labels"
-msgstr "Distance des étiquettes des graduations à l'axe"
-
-#. i18n: ectx: property (text), widget (QLabel, lOffsetX)
-#: src/frontend/ui/labelwidget.ui:487
-#, kde-format
-msgid "Offset X:"
-msgstr "Décalage X :"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/labelwidget.ui:494
-#, kde-format
-msgid "Mode:"
-msgstr "Mode :"
-
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
-#: src/frontend/ui/labelwidget.ui:586
+#: src/frontend/ui/labelwidget.ui:134
 #, kde-format
 msgid "Shape:"
 msgstr "Forme :"
 
+#. i18n: ectx: property (toolTip), widget (QLabel, lOffsetY)
+#. i18n: ectx: property (toolTip), widget (QLabel, lOffsetX)
+#: src/frontend/ui/labelwidget.ui:180 src/frontend/ui/labelwidget.ui:220
+#, kde-format
+msgid "Distance to the axis tick labels"
+msgstr "Distance des étiquettes des graduations à l'axe"
+
 #. i18n: ectx: property (text), widget (QLabel, lOffsetY)
-#: src/frontend/ui/labelwidget.ui:707
+#: src/frontend/ui/labelwidget.ui:183
 #, kde-format
 msgid "Offset Y:"
 msgstr "Décalage Y :"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chbShowPlaceholderText)
+#: src/frontend/ui/labelwidget.ui:193
+#, kde-format
+msgid "Show Placeholder Text (editable)"
+msgstr "Afficher le texte de remplacement (modifiable)"
+
+#. i18n: ectx: property (text), widget (QLabel, lOffsetX)
+#: src/frontend/ui/labelwidget.ui:223
+#, kde-format
+msgid "Offset X:"
+msgstr "Décalage X :"
+
+#. i18n: ectx: property (text), widget (QLabel, lFontTeX)
+#: src/frontend/ui/labelwidget.ui:602
+#, kde-format
+msgid "Main font:"
+msgstr "Police principale :"
+
+#. i18n: ectx: property (text), widget (QLabel, lHorizontalAlignment)
+#: src/frontend/ui/labelwidget.ui:653
+#, kde-format
+msgid "Hor. Alignment:"
+msgstr "Alignement horizontal :"
+
+#. i18n: ectx: property (text), widget (QLabel, lVerticalAlignment)
+#: src/frontend/ui/labelwidget.ui:660
+#, kde-format
+msgid "Vert. Alignment:"
+msgstr "Alignement vertical :"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/frontend/ui/labelwidget.ui:690
+#, kde-format
+msgid "Mode:"
+msgstr "Mode :"
+
 #. i18n: ectx: property (text), widget (QLabel, lText)
-#: src/frontend/ui/labelwidget.ui:785
+#: src/frontend/ui/labelwidget.ui:705
 #, kde-format
 msgid "Text:"
 msgstr "Texte :"
@@ -24153,25 +24156,16 @@ msgstr "Barres avec terminaisons"
 msgid "Data, +-:"
 msgstr "Données, + / - :"
 
-#: src/frontend/widgets/FitParametersWidget.cpp:39
-#, kde-format
-msgid "Start value"
-msgstr "Valeur de démarrage"
+#: src/frontend/widgets/FitParametersWidget.cpp:192
+#, fuzzy, kde-format
+#| msgid "Start Value:"
+msgid "Start Value"
+msgstr "Valeur de début :"
 
-#: src/frontend/widgets/FitParametersWidget.cpp:43
+#: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
 msgid "Fixed"
 msgstr "Fixe"
-
-#: src/frontend/widgets/FitParametersWidget.cpp:47
-#, kde-format
-msgid "Lower limit"
-msgstr "Borne basse"
-
-#: src/frontend/widgets/FitParametersWidget.cpp:51
-#, kde-format
-msgid "Upper limit"
-msgstr "Limite supérieure"
 
 #: src/frontend/widgets/FITSHeaderEditAddUnitDialog.cpp:30
 #, kde-format
@@ -24329,97 +24323,67 @@ msgstr "Impossible de supprimer le mot clé obligatoire."
 msgid "Removing Keyword"
 msgstr "Suppression d'un mot clé en cours..."
 
-#: src/frontend/widgets/LabelWidget.cpp:520
+#: src/frontend/widgets/LabelWidget.cpp:508
 #, kde-format
 msgid "No Border"
 msgstr "Aucune bordure"
 
-#: src/frontend/widgets/LabelWidget.cpp:521
+#: src/frontend/widgets/LabelWidget.cpp:509
 #, kde-format
 msgid "Rectangle"
 msgstr "Rectangle"
 
-#: src/frontend/widgets/LabelWidget.cpp:522
+#: src/frontend/widgets/LabelWidget.cpp:510
 #, kde-format
 msgid "Ellipse"
 msgstr "Ellipse"
 
-#: src/frontend/widgets/LabelWidget.cpp:523
+#: src/frontend/widgets/LabelWidget.cpp:511
 #, kde-format
 msgid "Round sided rectangle"
 msgstr "Rectangles à coins arrondis"
 
-#: src/frontend/widgets/LabelWidget.cpp:524
+#: src/frontend/widgets/LabelWidget.cpp:512
 #, kde-format
 msgid "Round corner rectangle"
 msgstr "Rectangles à coins arrondis"
 
-#: src/frontend/widgets/LabelWidget.cpp:525
+#: src/frontend/widgets/LabelWidget.cpp:513
 #, kde-format
 msgid "Inwards round corner rectangle"
 msgstr "Rectangles à coins arrondis vers l'intérieur"
 
-#: src/frontend/widgets/LabelWidget.cpp:526
+#: src/frontend/widgets/LabelWidget.cpp:514
 #, kde-format
 msgid "Dented border rectangle"
 msgstr "Rectangle à bord dentelé"
 
-#: src/frontend/widgets/LabelWidget.cpp:527
+#: src/frontend/widgets/LabelWidget.cpp:515
 #, kde-format
 msgid "Cuboid"
 msgstr "Cuboïde"
 
-#: src/frontend/widgets/LabelWidget.cpp:528
+#: src/frontend/widgets/LabelWidget.cpp:516
 #, kde-format
 msgid "Up Pointing rectangle"
 msgstr "Rectangle avec flèche vers le haut"
 
-#: src/frontend/widgets/LabelWidget.cpp:529
+#: src/frontend/widgets/LabelWidget.cpp:517
 #, kde-format
 msgid "Down Pointing rectangle"
 msgstr "Rectangle avec flèche vers le bas"
 
-#: src/frontend/widgets/LabelWidget.cpp:530
+#: src/frontend/widgets/LabelWidget.cpp:518
 #, kde-format
 msgid "Left Pointing rectangle"
 msgstr "Rectangle avec flèche vers la gauche"
 
-#: src/frontend/widgets/LabelWidget.cpp:531
+#: src/frontend/widgets/LabelWidget.cpp:519
 #, kde-format
 msgid "Right Pointing rectangle"
 msgstr "Rectangle avec flèche vers la droite"
 
-#: src/frontend/widgets/LabelWidget.cpp:534
-#, kde-format
-msgid "No line"
-msgstr "Aucune ligne"
-
-#: src/frontend/widgets/LabelWidget.cpp:535
-#, kde-format
-msgid "Solid line"
-msgstr "Ligne pleine"
-
-#: src/frontend/widgets/LabelWidget.cpp:536
-#, kde-format
-msgid "Dash line"
-msgstr "Ligne en tirets"
-
-#: src/frontend/widgets/LabelWidget.cpp:537
-#, kde-format
-msgid "Dot line"
-msgstr "Ligne pointillée"
-
-#: src/frontend/widgets/LabelWidget.cpp:538
-#, kde-format
-msgid "Dash dot line"
-msgstr "Ligne tiret-point"
-
-#: src/frontend/widgets/LabelWidget.cpp:539
-#, kde-format
-msgid "Dash dot dot line"
-msgstr "Ligne tiret-point-point"
-
-#: src/frontend/widgets/LabelWidget.cpp:542
+#: src/frontend/widgets/LabelWidget.cpp:522
 #, kde-format
 msgid ""
 "Use logical instead of absolute coordinates to specify the position on the "
@@ -24428,7 +24392,7 @@ msgstr ""
 "Utiliser des coordonnées logiques au lieu d'absolues pour spécifier la "
 "position sur le tracé."
 
-#: src/frontend/widgets/LabelWidget.cpp:547
+#: src/frontend/widgets/LabelWidget.cpp:527
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -24441,7 +24405,7 @@ msgstr ""
 "est nécessaire,</li><li>Markdown - Configuration du texte par utilisation du "
 "langage à balises « Markdown ».</li></ul>"
 
-#: src/frontend/widgets/LabelWidget.cpp:555
+#: src/frontend/widgets/LabelWidget.cpp:535
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -24453,69 +24417,69 @@ msgstr ""
 "du texte par utilisation du format « LaTeX ». L'installation de « LaTeX » "
 "est nécessaire,</li></ul>"
 
-#: src/frontend/widgets/LabelWidget.cpp:563
+#: src/frontend/widgets/LabelWidget.cpp:543
 #, kde-format
 msgid "Bold"
 msgstr "Gras"
 
-#: src/frontend/widgets/LabelWidget.cpp:564
+#: src/frontend/widgets/LabelWidget.cpp:544
 #, kde-format
 msgid "Italic"
 msgstr "Italique"
 
-#: src/frontend/widgets/LabelWidget.cpp:565
+#: src/frontend/widgets/LabelWidget.cpp:545
 #, kde-format
 msgid "Underline"
 msgstr "Souligner"
 
-#: src/frontend/widgets/LabelWidget.cpp:566
+#: src/frontend/widgets/LabelWidget.cpp:546
 #, kde-format
 msgid "Strike Out"
 msgstr "Barré"
 
-#: src/frontend/widgets/LabelWidget.cpp:567
+#: src/frontend/widgets/LabelWidget.cpp:547
 #, kde-format
 msgid "Super Script"
 msgstr "Super script"
 
-#: src/frontend/widgets/LabelWidget.cpp:568
+#: src/frontend/widgets/LabelWidget.cpp:548
 #, kde-format
 msgid "Sub-Script"
 msgstr "Sous-script"
 
-#: src/frontend/widgets/LabelWidget.cpp:569
+#: src/frontend/widgets/LabelWidget.cpp:549
 #, kde-format
 msgid "Left Align"
 msgstr "Alignement à gauche"
 
-#: src/frontend/widgets/LabelWidget.cpp:571
+#: src/frontend/widgets/LabelWidget.cpp:551
 #, kde-format
 msgid "Right Align"
 msgstr "Alignement à droite"
 
-#: src/frontend/widgets/LabelWidget.cpp:572
+#: src/frontend/widgets/LabelWidget.cpp:552
 #, kde-format
 msgid "Justify"
 msgstr "Justifier"
 
-#: src/frontend/widgets/LabelWidget.cpp:573
+#: src/frontend/widgets/LabelWidget.cpp:553
 #, kde-format
 msgid "Insert Symbol"
 msgstr "Insérer un symbole"
 
-#: src/frontend/widgets/LabelWidget.cpp:574
+#: src/frontend/widgets/LabelWidget.cpp:554
 #, kde-format
 msgid "Insert Date/Time"
 msgstr "Insérer une Date / Heure"
 
-#: src/frontend/widgets/LabelWidget.cpp:919
-#: src/frontend/widgets/LabelWidget.cpp:945
+#: src/frontend/widgets/LabelWidget.cpp:899
+#: src/frontend/widgets/LabelWidget.cpp:925
 #, kde-format
 msgid "Date"
 msgstr "Date"
 
-#: src/frontend/widgets/LabelWidget.cpp:927
-#: src/frontend/widgets/LabelWidget.cpp:953
+#: src/frontend/widgets/LabelWidget.cpp:907
+#: src/frontend/widgets/LabelWidget.cpp:933
 #, kde-format
 msgid "Date and Time"
 msgstr "Date et heure"
@@ -25074,6 +25038,36 @@ msgstr "Le processus « conversion » a échoué avec le code de sortie ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Impossible d'ouvrir un fichier :"
+
+#~ msgid "%1: set border"
+#~ msgstr "%1 : définir la bordure"
+
+#~ msgid "Start value"
+#~ msgstr "Valeur de démarrage"
+
+#~ msgid "Lower limit"
+#~ msgstr "Borne basse"
+
+#~ msgid "Upper limit"
+#~ msgstr "Limite supérieure"
+
+#~ msgid "No line"
+#~ msgstr "Aucune ligne"
+
+#~ msgid "Solid line"
+#~ msgstr "Ligne pleine"
+
+#~ msgid "Dash line"
+#~ msgstr "Ligne en tirets"
+
+#~ msgid "Dot line"
+#~ msgstr "Ligne pointillée"
+
+#~ msgid "Dash dot line"
+#~ msgstr "Ligne tiret-point"
+
+#~ msgid "Dash dot dot line"
+#~ msgstr "Ligne tiret-point-point"
 
 #~ msgid "Decimal point "
 #~ msgstr "Point décimal"
