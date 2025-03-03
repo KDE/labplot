@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-16 03:05+0000\n"
-"PO-Revision-Date: 2025-02-14 08:12+0100\n"
-"Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
+"PO-Revision-Date: 2025-03-01 08:32+0100\n"
+"Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
@@ -958,12 +958,12 @@ msgstr "Imprimir a imaxe do selector de datos"
 #: src/backend/datapicker/DatapickerImage.cpp:367
 #, kde-format
 msgid "%1: upload image"
-msgstr "%1: enviar unha imaxe"
+msgstr "%1: subir unha imaxe"
 
 #: src/backend/datapicker/DatapickerImage.cpp:366
 #, kde-format
 msgid "%1: upload new image"
-msgstr "%1: enviar unha nova imaxe"
+msgstr "%1: subir unha nova imaxe"
 
 #: src/backend/datapicker/DatapickerImage.cpp:386
 #: src/backend/worksheet/WorksheetElement.cpp:836
