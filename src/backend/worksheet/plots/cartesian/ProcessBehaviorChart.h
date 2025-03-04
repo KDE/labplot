@@ -57,8 +57,8 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, exactLimitsEnabled, ExactLimitsEnabled)
 
 	BASIC_D_ACCESSOR_DECL(bool, valuesEnabled, ValuesEnabled)
-	BASIC_D_ACCESSOR_DECL(QColor, valuesFontColor, ValuesFontColor)
-	BASIC_D_ACCESSOR_DECL(QColor, valuesBackgroundColor, ValuesBackgroundColor)
+	CLASS_D_ACCESSOR_DECL(QColor, valuesFontColor, ValuesFontColor)
+	CLASS_D_ACCESSOR_DECL(QColor, valuesBackgroundColor, ValuesBackgroundColor)
 	CLASS_D_ACCESSOR_DECL(QFont, valuesFont, ValuesFont)
 	BASIC_D_ACCESSOR_DECL(TextLabel::BorderShape, valuesBorderShape, ValuesBorderShape)
 	Line* valuesBorderLine() const;

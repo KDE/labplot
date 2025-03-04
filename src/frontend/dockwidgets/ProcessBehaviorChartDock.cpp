@@ -378,6 +378,7 @@ void ProcessBehaviorChartDock::valuesEnabledChanged(bool enabled) {
 	ui.lValuesBorder->setVisible(enabled);
 	ui.lValuesBorderShape->setVisible(enabled);
 	ui.cbValuesBorderShape->setVisible(enabled);
+	valuesBorderLineWidget->setVisible(enabled);
 
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* plot : m_plots)
@@ -386,14 +387,19 @@ void ProcessBehaviorChartDock::valuesEnabledChanged(bool enabled) {
 
 void ProcessBehaviorChartDock::valuesFontChanged(const QFont& font) {
 	CONDITIONAL_LOCK_RETURN;
-
+	for (auto* plot : m_plots)
+		plot->setValuesFont(font);
 }
 void ProcessBehaviorChartDock::valuesFontColorChanged(const QColor& color) {
 	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plots)
+		plot->setValuesFontColor(color);
 }
 
 void ProcessBehaviorChartDock::valuesBackgroundColorChanged(const QColor& color) {
 	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plots)
+		plot->setValuesBackgroundColor(color);
 }
 
 void ProcessBehaviorChartDock::valuesBorderShapeChanged(int) {

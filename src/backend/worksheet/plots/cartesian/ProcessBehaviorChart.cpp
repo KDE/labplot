@@ -22,9 +22,6 @@ extern "C" {
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
-#include <QMenu>
-#include <QPainter>
-
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -300,7 +297,10 @@ QColor ProcessBehaviorChart::valuesBackgroundColor() const {
 
 QFont ProcessBehaviorChart::valuesFont() const {
 	Q_D(const ProcessBehaviorChart);
-	return d->centerValueLabel->teXFont();
+	auto textWrapper = d->centerValueLabel->text();
+	QTextEdit te(textWrapper.text);
+	const auto& format = te.currentCharFormat();
+	return format.font();
 }
 
 TextLabel::BorderShape ProcessBehaviorChart::valuesBorderShape() const {
@@ -552,6 +552,57 @@ void ProcessBehaviorChart::setValuesBorderShape(TextLabel::BorderShape shape) {
 		d->lowerLimitValueLabel->setBorderShape(shape);
 		endMacro();
 	}
+}
+
+void ProcessBehaviorChart::setValuesFont(const QFont& font) {
+	Q_D(ProcessBehaviorChart);
+	auto textWrapper = d->centerValueLabel->text();
+	QTextEdit te(textWrapper.text);
+	te.selectAll();
+	if (font != te.font()) {
+		te.setFontFamily(font.family());
+		te.setFontPointSize(font.pointSize());
+		te.setFont(font);
+
+		beginMacro(i18n("%1: set values font", name()));
+		textWrapper.text = te.toHtml();
+		d->centerValueLabel->setText(textWrapper);
+
+		textWrapper = d->upperLimitValueLabel->text();
+		te.setText(textWrapper.text);
+		te.selectAll();
+		te.setFontFamily(font.family());
+		te.setFontPointSize(font.pointSize());
+		te.setFont(font);
+		textWrapper.text = te.toHtml();
+		d->upperLimitValueLabel->setText(textWrapper);
+
+		textWrapper = d->lowerLimitValueLabel->text();
+		te.setText(textWrapper.text);
+		te.selectAll();
+		te.setFontFamily(font.family());
+		te.setFontPointSize(font.pointSize());
+		te.setFont(font);
+		textWrapper.text = te.toHtml();
+		d->lowerLimitValueLabel->setText(textWrapper);
+		endMacro();
+	}
+}
+
+void ProcessBehaviorChart::setValuesFontColor(const QColor& color) {
+	Q_D(ProcessBehaviorChart);
+	if (color != d->centerValueLabel->fontColor()) {
+		beginMacro(i18n("%1: set values font color", name()));
+		d->centerValueLabel->setFontColor(color);
+		d->upperLimitValueLabel->setFontColor(color);
+		d->lowerLimitValueLabel->setFontColor(color);
+		endMacro();
+	}
+}
+
+void ProcessBehaviorChart::setValuesBackgroundColor(const QColor& color) {
+	Q_D(ProcessBehaviorChart);
+	// TODO
 }
 
 // ##############################################################################
@@ -1240,6 +1291,15 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeEndElement();
 
+	writer->writeStartElement(QStringLiteral("values"));
+	writer->writeAttribute(QStringLiteral("enabled"), QString::number(d->valuesEnabled));
+	d->valuesBorderLine->save(writer);
+	writer->writeEndElement();
+
+	d->centerValueLabel->save(writer);
+	d->lowerLimitValueLabel->save(writer);
+	d->lowerLimitValueLabel->save(writer);
+
 	// save the internal columns, above only the references to them were saved
 	d->xColumn->save(writer);
 	d->yColumn->save(writer);
@@ -1311,6 +1371,10 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 			else
 				d->setVisible(str.toInt());
+		} else if (!preview && reader->name() == QLatin1String("values")) {
+			attribs = reader->attributes();
+			READ_INT_VALUE("enabled", valuesEnabled, bool);
+			d->valuesBorderLine->load(reader, preview);
 		} else if (reader->name() == QLatin1String("column")) {
 			attribs = reader->attributes();
 			bool rc = false;
@@ -1345,6 +1409,18 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 				rc = d->upperLimitCurve->load(reader, preview);
 			else if (attribs.value(QStringLiteral("name")) == QLatin1String("lowerLimit"))
 				rc = d->lowerLimitCurve->load(reader, preview);
+
+			if (!rc)
+				return false;
+		} else if (reader->name() == QLatin1String("textLabel")) {
+			attribs = reader->attributes();
+			bool rc = false;
+			if (attribs.value(QStringLiteral("name")) == QLatin1String("center"))
+				rc = d->centerValueLabel->load(reader, preview);
+			else if (attribs.value(QStringLiteral("name")) == QLatin1String("lower"))
+				rc = d->lowerLimitValueLabel->load(reader, preview);
+			else if (attribs.value(QStringLiteral("name")) == QLatin1String("upper"))
+				rc = d->upperLimitValueLabel->load(reader, preview);
 
 			if (!rc)
 				return false;
