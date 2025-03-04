@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-03 00:38+0000\n"
-"PO-Revision-Date: 2025-02-28 09:55+0100\n"
+"PO-Revision-Date: 2025-03-03 08:59+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -22763,18 +22763,7 @@ msgstr "Tanca el fitxer"
 
 #. i18n: ectx: property (html), widget (ResizableTextEdit, teLabel)
 #: src/frontend/ui/labelwidget.ui:55
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#| "font-weight:400; font-style:normal;\">\n"
-#| "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-#| "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
-#| "\"><br /></p></body></html>"
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -22792,9 +22781,12 @@ msgid ""
 msgstr ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
-"\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
+"\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
 "weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
@@ -24170,10 +24162,9 @@ msgid "Data, +-:"
 msgstr "Dades, +-:"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
-#, fuzzy, kde-format
-#| msgid "Start Value:"
+#, kde-format
 msgid "Start Value"
-msgstr "Valor inicial:"
+msgstr "Valor inicial"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
@@ -25050,57 +25041,3 @@ msgstr "El procés «convert» ha fallat, codi de sortida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "%1: set border"
-#~ msgstr "%1: estableix la vora"
-
-#~ msgid "Start value"
-#~ msgstr "Valor inicial"
-
-#~ msgid "Lower limit"
-#~ msgstr "Límit inferior"
-
-#~ msgid "Upper limit"
-#~ msgstr "Límit superior"
-
-#~ msgid "No line"
-#~ msgstr "Sense línia"
-
-#~ msgid "Solid line"
-#~ msgstr "Línia contínua"
-
-#~ msgid "Dash line"
-#~ msgstr "Línia de guions"
-
-#~ msgid "Dot line"
-#~ msgstr "Línia de punts"
-
-#~ msgid "Dash dot line"
-#~ msgstr "Línia de guió-punt"
-
-#~ msgid "Dash dot dot line"
-#~ msgstr "Línia de guió-punt-punt"
-
-#~ msgid "Decimal point "
-#~ msgstr "Coma decimal"
-
-#~ msgid "Group separator "
-#~ msgstr "Separador de grups"
-
-#~ msgid "Exponential "
-#~ msgstr "Exponencial "
-
-#~ msgid "Zero digit "
-#~ msgstr "Dígit zero "
-
-#~ msgid "Percent "
-#~ msgstr "Percentatge "
-
-#~ msgid "Positive/Negative sign "
-#~ msgstr "Signe positiu/negatiu "
-
-#~ msgid "Number Settings:"
-#~ msgstr "Configuració dels nombres:"
-
-#~ msgid "Copy Info"
-#~ msgstr "Copia la informació"
