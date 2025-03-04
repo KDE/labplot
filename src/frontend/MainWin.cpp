@@ -1596,6 +1596,7 @@ void MainWin::openProject(const QString& fileName) {
 
 	if (!rc) {
 		closeProject();
+		newProject();
 		return;
 	}
 
