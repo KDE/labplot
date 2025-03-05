@@ -172,20 +172,23 @@ void ProcessBehaviorChart::init() {
 	connect(d->valuesBorderLine, &Line::colorChanged, this, &ProcessBehaviorChart::valuesBorderColorChanged);
 	connect(d->valuesBorderLine, &Line::opacityChanged, this, &ProcessBehaviorChart::valuesBorderOpacityChanged);
 
-	d->upperLimitValueLabel = new TextLabel(QStringLiteral("upper"));
+	d->upperLimitValueLabel = new TextLabel(QStringLiteral("upperLimitValue"));
 	d->upperLimitValueLabel->setHidden(true);
 	d->upperLimitValueLabel->setBorderShape(TextLabel::BorderShape::LeftPointingRectangle);
 	d->upperLimitValueLabel->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
+	connect(d->upperLimitValueLabel, &TextLabel::textWrapperChanged, d->upperLimitValueLabel, &TextLabel::retransform); //re-position on text changes
 
-	d->centerValueLabel = new TextLabel(QStringLiteral("center"));
+	d->centerValueLabel = new TextLabel(QStringLiteral("centerValue"));
 	d->centerValueLabel->setHidden(true);
 	d->centerValueLabel->setBorderShape(TextLabel::BorderShape::LeftPointingRectangle);
 	d->centerValueLabel->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
+	connect(d->centerValueLabel, &TextLabel::textWrapperChanged, d->centerValueLabel, &TextLabel::retransform);
 
-	d->lowerLimitValueLabel = new TextLabel(QStringLiteral("lower"));
+	d->lowerLimitValueLabel = new TextLabel(QStringLiteral("lowerLimitValue"));
 	d->lowerLimitValueLabel->setHidden(true);
 	d->lowerLimitValueLabel->setBorderShape(TextLabel::BorderShape::LeftPointingRectangle);
 	d->lowerLimitValueLabel->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
+	connect(d->lowerLimitValueLabel, &TextLabel::textWrapperChanged, d->lowerLimitValueLabel, &TextLabel::retransform);
 
 	// synchronize the names of the internal XYCurves with the name of the current plot
 	// so we have the same name shown on the undo stack
@@ -715,7 +718,6 @@ void ProcessBehaviorChartPrivate::retransform() {
 	upperLimitCurve->retransform();
 	lowerLimitCurve->retransform();
 
-	// values
 	// update the position of the value labels
 	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
 	const auto& xRange = q->plot()->range(Dimension::X, cs->index(Dimension::X));
@@ -1215,6 +1217,9 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 }
 
 void ProcessBehaviorChartPrivate::updateValueLabels() {
+	if (!q->plot())
+		return;
+
 	centerValueLabel->setVisible(valuesEnabled);
 	upperLimitValueLabel->setVisible(valuesEnabled);
 	lowerLimitValueLabel->setVisible(valuesEnabled);
@@ -1298,7 +1303,7 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 
 	d->centerValueLabel->save(writer);
 	d->lowerLimitValueLabel->save(writer);
-	d->lowerLimitValueLabel->save(writer);
+	d->upperLimitValueLabel->save(writer);
 
 	// save the internal columns, above only the references to them were saved
 	d->xColumn->save(writer);
@@ -1415,11 +1420,11 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == QLatin1String("textLabel")) {
 			attribs = reader->attributes();
 			bool rc = false;
-			if (attribs.value(QStringLiteral("name")) == QLatin1String("center"))
+			if (attribs.value(QStringLiteral("name")) == QLatin1String("centerValue"))
 				rc = d->centerValueLabel->load(reader, preview);
-			else if (attribs.value(QStringLiteral("name")) == QLatin1String("lower"))
+			else if (attribs.value(QStringLiteral("name")) == QLatin1String("lowerLimitValue"))
 				rc = d->lowerLimitValueLabel->load(reader, preview);
-			else if (attribs.value(QStringLiteral("name")) == QLatin1String("upper"))
+			else if (attribs.value(QStringLiteral("name")) == QLatin1String("upperLimitValue"))
 				rc = d->upperLimitValueLabel->load(reader, preview);
 
 			if (!rc)
@@ -1467,6 +1472,9 @@ void ProcessBehaviorChart::loadThemeConfig(const KConfig& config) {
 	d->centerValueLabel->loadThemeConfig(config);
 	d->upperLimitValueLabel->loadThemeConfig(config);
 	d->lowerLimitValueLabel->loadThemeConfig(config);
+
+	group = config.group(QStringLiteral("CartesianPlot"));
+	d->valuesBorderLine->loadThemeConfig(group);
 
 	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();

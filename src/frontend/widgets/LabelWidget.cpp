@@ -513,10 +513,10 @@ void LabelWidget::retranslateUi() {
 	ui.cbBorderShape->addItem(i18n("Inwards round corner rectangle"), static_cast<int>(TextLabel::BorderShape::InwardsRoundCornerRect));
 	ui.cbBorderShape->addItem(i18n("Dented border rectangle"), static_cast<int>(TextLabel::BorderShape::DentedBorderRect));
 	ui.cbBorderShape->addItem(i18n("Cuboid"), static_cast<int>(TextLabel::BorderShape::Cuboid));
-	ui.cbBorderShape->addItem(i18n("Up Pointing rectangle"), static_cast<int>(TextLabel::BorderShape::UpPointingRectangle));
-	ui.cbBorderShape->addItem(i18n("Down Pointing rectangle"), static_cast<int>(TextLabel::BorderShape::DownPointingRectangle));
-	ui.cbBorderShape->addItem(i18n("Left Pointing rectangle"), static_cast<int>(TextLabel::BorderShape::LeftPointingRectangle));
-	ui.cbBorderShape->addItem(i18n("Right Pointing rectangle"), static_cast<int>(TextLabel::BorderShape::RightPointingRectangle));
+	ui.cbBorderShape->addItem(i18n("Up pointing rectangle"), static_cast<int>(TextLabel::BorderShape::UpPointingRectangle));
+	ui.cbBorderShape->addItem(i18n("Down pointing rectangle"), static_cast<int>(TextLabel::BorderShape::DownPointingRectangle));
+	ui.cbBorderShape->addItem(i18n("Left pointing rectangle"), static_cast<int>(TextLabel::BorderShape::LeftPointingRectangle));
+	ui.cbBorderShape->addItem(i18n("Right pointing rectangle"), static_cast<int>(TextLabel::BorderShape::RightPointingRectangle));
 
 	// tooltip texts
 	QString msg = i18n("Use logical instead of absolute coordinates to specify the position on the plot");

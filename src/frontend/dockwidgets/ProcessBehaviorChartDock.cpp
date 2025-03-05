@@ -222,10 +222,10 @@ void ProcessBehaviorChartDock::retranslateUi() {
 	ui.cbValuesBorderShape->addItem(i18n("Inwards round corner rectangle"), static_cast<int>(TextLabel::BorderShape::InwardsRoundCornerRect));
 	ui.cbValuesBorderShape->addItem(i18n("Dented border rectangle"), static_cast<int>(TextLabel::BorderShape::DentedBorderRect));
 	ui.cbValuesBorderShape->addItem(i18n("Cuboid"), static_cast<int>(TextLabel::BorderShape::Cuboid));
-	ui.cbValuesBorderShape->addItem(i18n("Up Pointing rectangle"), static_cast<int>(TextLabel::BorderShape::UpPointingRectangle));
-	ui.cbValuesBorderShape->addItem(i18n("Down Pointing rectangle"), static_cast<int>(TextLabel::BorderShape::DownPointingRectangle));
-	ui.cbValuesBorderShape->addItem(i18n("Left Pointing rectangle"), static_cast<int>(TextLabel::BorderShape::LeftPointingRectangle));
-	ui.cbValuesBorderShape->addItem(i18n("Right Pointing rectangle"), static_cast<int>(TextLabel::BorderShape::RightPointingRectangle));
+	ui.cbValuesBorderShape->addItem(i18n("Up pointing rectangle"), static_cast<int>(TextLabel::BorderShape::UpPointingRectangle));
+	ui.cbValuesBorderShape->addItem(i18n("Down pointing rectangle"), static_cast<int>(TextLabel::BorderShape::DownPointingRectangle));
+	ui.cbValuesBorderShape->addItem(i18n("Left pointing rectangle"), static_cast<int>(TextLabel::BorderShape::LeftPointingRectangle));
+	ui.cbValuesBorderShape->addItem(i18n("Right pointing rectangle"), static_cast<int>(TextLabel::BorderShape::RightPointingRectangle));
 
 	// tooltips
 	QString info = i18n(
