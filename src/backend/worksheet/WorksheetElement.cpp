@@ -985,11 +985,13 @@ void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 	point.setY(point.y() / parentRect.height() + 0.5);
 	QDEBUG(Q_FUNC_INFO << ", new position (relative) =" << point)
 
-	if (point != position.point) {
-		// position was changed -> set the position related member variables
+	if (point != position.point) { // position was changed
 		suppressRetransform = true;
 		auto tempPosition = position;
 		tempPosition.point = point;
+		// switch to relative
+		tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Relative;
+		tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Relative;
 		q->setPosition(tempPosition);
 		updatePosition(); // to update the logical position if available
 		suppressRetransform = false;
