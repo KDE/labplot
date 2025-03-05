@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-03 00:38+0000\n"
+"POT-Creation-Date: 2025-03-05 00:39+0000\n"
 "PO-Revision-Date: 2024-11-23 12:07+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -1932,7 +1932,7 @@ msgid "Unknown"
 msgstr "Unknown"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:647 src/frontend/MainWin.cpp:1992
+#: src/frontend/MainWin.cpp:647 src/frontend/MainWin.cpp:1993
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -12069,7 +12069,7 @@ msgstr "Folder name:"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398 src/frontend/MainWin.cpp:641
-#: src/frontend/MainWin.cpp:1974 src/frontend/SettingsDialog.cpp:64
+#: src/frontend/MainWin.cpp:1975 src/frontend/SettingsDialog.cpp:64
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12352,7 +12352,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2873
+#: src/frontend/MainWin.cpp:2874
 #, kde-format
 msgid "Warning"
 msgstr "Warning"
@@ -14872,7 +14872,7 @@ msgstr "Welcome to LabPlot %1"
 msgid "&Open Example"
 msgstr "&Open Example"
 
-#: src/frontend/MainWin.cpp:631 src/frontend/MainWin.cpp:1958
+#: src/frontend/MainWin.cpp:631 src/frontend/MainWin.cpp:1959
 #, kde-format
 msgid "Workbook"
 msgstr "Workbook"
@@ -14882,7 +14882,7 @@ msgstr "Workbook"
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr "Creates a new workbook for collection spreadsheets, matrices and plots"
 
-#: src/frontend/MainWin.cpp:636 src/frontend/MainWin.cpp:1966
+#: src/frontend/MainWin.cpp:636 src/frontend/MainWin.cpp:1967
 #, kde-format
 msgid "Data Extractor"
 msgstr "Data Extractor"
@@ -14902,7 +14902,7 @@ msgstr "Creates a new spreadsheet for data editing"
 msgid "Creates a new matrix for data editing"
 msgstr "Creates a new matrix for data editing"
 
-#: src/frontend/MainWin.cpp:653 src/frontend/MainWin.cpp:2010
+#: src/frontend/MainWin.cpp:653 src/frontend/MainWin.cpp:2011
 #: src/frontend/SettingsDialog.cpp:59
 #, kde-format
 msgid "Worksheet"
@@ -14913,7 +14913,7 @@ msgstr "Worksheet"
 msgid "Creates a new worksheet for data plotting"
 msgstr "Creates a new worksheet for data plotting"
 
-#: src/frontend/MainWin.cpp:659 src/frontend/MainWin.cpp:2018
+#: src/frontend/MainWin.cpp:659 src/frontend/MainWin.cpp:2019
 #, kde-format
 msgid "Note"
 msgstr "Note"
@@ -14923,7 +14923,7 @@ msgstr "Note"
 msgid "Creates a new note for arbitrary text"
 msgstr "Creates a new note for arbitrary text"
 
-#: src/frontend/MainWin.cpp:664 src/frontend/MainWin.cpp:1950
+#: src/frontend/MainWin.cpp:664 src/frontend/MainWin.cpp:1951
 #, kde-format
 msgid "Folder"
 msgstr "Folder"
@@ -15003,8 +15003,8 @@ msgstr "Export..."
 msgid "Export selected element"
 msgstr "Export selected element"
 
-#: src/frontend/MainWin.cpp:726 src/frontend/MainWin.cpp:2496
-#: src/frontend/MainWin.cpp:2504
+#: src/frontend/MainWin.cpp:726 src/frontend/MainWin.cpp:2497
+#: src/frontend/MainWin.cpp:2505
 #, kde-format
 msgid "Share"
 msgstr "Share"
@@ -15214,23 +15214,23 @@ msgstr "Could not read the project file %1."
 msgid "Loading %1..."
 msgstr "Loading %1..."
 
-#: src/frontend/MainWin.cpp:1603
+#: src/frontend/MainWin.cpp:1604
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: opened"
 
-#: src/frontend/MainWin.cpp:1638
+#: src/frontend/MainWin.cpp:1639
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Project successfully opened (in %1 seconds)."
 
-#: src/frontend/MainWin.cpp:1730
+#: src/frontend/MainWin.cpp:1731
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Save Project As"
 
-#: src/frontend/MainWin.cpp:1732
+#: src/frontend/MainWin.cpp:1733
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15239,70 +15239,70 @@ msgstr ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:1759
+#: src/frontend/MainWin.cpp:1760
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Could not open the temporary file for writing."
 
-#: src/frontend/MainWin.cpp:1839
+#: src/frontend/MainWin.cpp:1840
 #, kde-format
 msgid "Project saved"
 msgstr "Project saved"
 
-#: src/frontend/MainWin.cpp:1855
+#: src/frontend/MainWin.cpp:1856
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Could not save the file '%1'."
 
-#: src/frontend/MainWin.cpp:1860
+#: src/frontend/MainWin.cpp:1861
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Could not open the file '%1' for writing."
 
-#: src/frontend/MainWin.cpp:1910
+#: src/frontend/MainWin.cpp:1911
 #, kde-format
 msgid "Changed"
 msgstr "Changed"
 
-#: src/frontend/MainWin.cpp:1925 src/frontend/MainWin.cpp:1937
+#: src/frontend/MainWin.cpp:1926 src/frontend/MainWin.cpp:1938
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Preparing printing of %1"
 
-#: src/frontend/MainWin.cpp:1927 src/frontend/MainWin.cpp:1939
+#: src/frontend/MainWin.cpp:1928 src/frontend/MainWin.cpp:1940
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 printed"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2459
+#: src/frontend/MainWin.cpp:2460
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
 #: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Cursor"
 msgstr "Cursor"
 
-#: src/frontend/MainWin.cpp:2496
+#: src/frontend/MainWin.cpp:2497
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "There was a problem sharing the project: %1"
 
-#: src/frontend/MainWin.cpp:2500
+#: src/frontend/MainWin.cpp:2501
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Project shared successfully"
 
-#: src/frontend/MainWin.cpp:2503
+#: src/frontend/MainWin.cpp:2504
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "You can find the shared project at: <a href=\"%1\">%1</a>"
 
-#: src/frontend/MainWin.cpp:2772
+#: src/frontend/MainWin.cpp:2773
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
 msgstr "Running Kaggle CLI tool failed"
 
-#: src/frontend/MainWin.cpp:2773
+#: src/frontend/MainWin.cpp:2774
 #, kde-format
 msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
@@ -15311,32 +15311,32 @@ msgstr ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
 "\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
 
-#: src/frontend/MainWin.cpp:2836
+#: src/frontend/MainWin.cpp:2837
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exported"
 
-#: src/frontend/MainWin.cpp:2843
+#: src/frontend/MainWin.cpp:2844
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS files saved"
 
-#: src/frontend/MainWin.cpp:2855
+#: src/frontend/MainWin.cpp:2856
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT Client%1"
 
-#: src/frontend/MainWin.cpp:2873
+#: src/frontend/MainWin.cpp:2874
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "There already is a MQTTClient with this host!"
 
-#: src/frontend/MainWin.cpp:2877
+#: src/frontend/MainWin.cpp:2878
 #, kde-format
 msgid "Live data source%1"
 msgstr "Live data source%1"
 
-#: src/frontend/MainWin.cpp:2922
+#: src/frontend/MainWin.cpp:2923
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Creates a new %1 notebook"

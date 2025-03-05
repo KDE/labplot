@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-03 00:38+0000\n"
+"POT-Creation-Date: 2025-03-05 00:39+0000\n"
 "PO-Revision-Date: 2025-03-03 08:35+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -1952,7 +1952,7 @@ msgid "Unknown"
 msgstr "Невідомий"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:647 src/frontend/MainWin.cpp:1992
+#: src/frontend/MainWin.cpp:647 src/frontend/MainWin.cpp:1993
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -12104,7 +12104,7 @@ msgstr "Назва теки:"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398 src/frontend/MainWin.cpp:641
-#: src/frontend/MainWin.cpp:1974 src/frontend/SettingsDialog.cpp:64
+#: src/frontend/MainWin.cpp:1975 src/frontend/SettingsDialog.cpp:64
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12389,7 +12389,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2873
+#: src/frontend/MainWin.cpp:2874
 #, kde-format
 msgid "Warning"
 msgstr "Попередження"
@@ -14924,7 +14924,7 @@ msgstr "Вітаємо у LabPlot %1"
 msgid "&Open Example"
 msgstr "Від&крити приклад"
 
-#: src/frontend/MainWin.cpp:631 src/frontend/MainWin.cpp:1958
+#: src/frontend/MainWin.cpp:631 src/frontend/MainWin.cpp:1959
 #, kde-format
 msgid "Workbook"
 msgstr "Робоча книга"
@@ -14935,7 +14935,7 @@ msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 "Створює робочу книгу для збирання електронних таблиць, матриць та креслень"
 
-#: src/frontend/MainWin.cpp:636 src/frontend/MainWin.cpp:1966
+#: src/frontend/MainWin.cpp:636 src/frontend/MainWin.cpp:1967
 #, kde-format
 msgid "Data Extractor"
 msgstr "Засіб видобування даних"
@@ -14955,7 +14955,7 @@ msgstr "Створює електронну таблицю для редагув
 msgid "Creates a new matrix for data editing"
 msgstr "Створює матрицю для редагування даних"
 
-#: src/frontend/MainWin.cpp:653 src/frontend/MainWin.cpp:2010
+#: src/frontend/MainWin.cpp:653 src/frontend/MainWin.cpp:2011
 #: src/frontend/SettingsDialog.cpp:59
 #, kde-format
 msgid "Worksheet"
@@ -14966,7 +14966,7 @@ msgstr "Робочий аркуш"
 msgid "Creates a new worksheet for data plotting"
 msgstr "Створює робочий аркуш для креслення графіків даних"
 
-#: src/frontend/MainWin.cpp:659 src/frontend/MainWin.cpp:2018
+#: src/frontend/MainWin.cpp:659 src/frontend/MainWin.cpp:2019
 #, kde-format
 msgid "Note"
 msgstr "Нотатка"
@@ -14976,7 +14976,7 @@ msgstr "Нотатка"
 msgid "Creates a new note for arbitrary text"
 msgstr "Створює нотатку для довільного тексту"
 
-#: src/frontend/MainWin.cpp:664 src/frontend/MainWin.cpp:1950
+#: src/frontend/MainWin.cpp:664 src/frontend/MainWin.cpp:1951
 #, kde-format
 msgid "Folder"
 msgstr "Тека"
@@ -15056,8 +15056,8 @@ msgstr "Експортувати…"
 msgid "Export selected element"
 msgstr "Експортувати позначений елемент"
 
-#: src/frontend/MainWin.cpp:726 src/frontend/MainWin.cpp:2496
-#: src/frontend/MainWin.cpp:2504
+#: src/frontend/MainWin.cpp:726 src/frontend/MainWin.cpp:2497
+#: src/frontend/MainWin.cpp:2505
 #, kde-format
 msgid "Share"
 msgstr "Оприлюднити"
@@ -15266,23 +15266,23 @@ msgstr "Не вдалося прочитати файл проєкту %1."
 msgid "Loading %1..."
 msgstr "Завантажуємо %1…"
 
-#: src/frontend/MainWin.cpp:1603
+#: src/frontend/MainWin.cpp:1604
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: відкрито"
 
-#: src/frontend/MainWin.cpp:1638
+#: src/frontend/MainWin.cpp:1639
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Проєкт успішно відкрито (за %1 секунд)."
 
-#: src/frontend/MainWin.cpp:1730
+#: src/frontend/MainWin.cpp:1731
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Збереження проєкту із новою назвою"
 
-#: src/frontend/MainWin.cpp:1732
+#: src/frontend/MainWin.cpp:1733
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15291,70 +15291,70 @@ msgstr ""
 "проєкти LabPlot (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:1759
+#: src/frontend/MainWin.cpp:1760
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Не вдалося відкрити тимчасовий файл для запису."
 
-#: src/frontend/MainWin.cpp:1839
+#: src/frontend/MainWin.cpp:1840
 #, kde-format
 msgid "Project saved"
 msgstr "Проєкт збережено"
 
-#: src/frontend/MainWin.cpp:1855
+#: src/frontend/MainWin.cpp:1856
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Не вдалося зберегти файл «%1»."
 
-#: src/frontend/MainWin.cpp:1860
+#: src/frontend/MainWin.cpp:1861
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Не вдалося відкрити файл «%1» для запису."
 
-#: src/frontend/MainWin.cpp:1910
+#: src/frontend/MainWin.cpp:1911
 #, kde-format
 msgid "Changed"
 msgstr "Змінено"
 
-#: src/frontend/MainWin.cpp:1925 src/frontend/MainWin.cpp:1937
+#: src/frontend/MainWin.cpp:1926 src/frontend/MainWin.cpp:1938
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Готуємося до друку %1"
 
-#: src/frontend/MainWin.cpp:1927 src/frontend/MainWin.cpp:1939
+#: src/frontend/MainWin.cpp:1928 src/frontend/MainWin.cpp:1940
 #, kde-format
 msgid "%1 printed"
 msgstr "Надруковано %1"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2459
+#: src/frontend/MainWin.cpp:2460
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
 #: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Cursor"
 msgstr "Курсор"
 
-#: src/frontend/MainWin.cpp:2496
+#: src/frontend/MainWin.cpp:2497
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "Під час спроби оприлюднити проєкт виникли проблеми: %1"
 
-#: src/frontend/MainWin.cpp:2500
+#: src/frontend/MainWin.cpp:2501
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Проєкт успішно оприлюднено"
 
-#: src/frontend/MainWin.cpp:2503
+#: src/frontend/MainWin.cpp:2504
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Оприлюднений проєкт можна знайти тут: <a href=\"%1\">%1</a>"
 
-#: src/frontend/MainWin.cpp:2772
+#: src/frontend/MainWin.cpp:2773
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
 msgstr "Не вдалося запустити інструмент командного рядка Kaggle"
 
-#: src/frontend/MainWin.cpp:2773
+#: src/frontend/MainWin.cpp:2774
 #, kde-format
 msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
@@ -15364,32 +15364,32 @@ msgstr ""
 "kaggle.com/docs/api\">користуватися Kaggle</a>, щоб налаштувати інструмент "
 "командного рядка Kaggle."
 
-#: src/frontend/MainWin.cpp:2836
+#: src/frontend/MainWin.cpp:2837
 #, kde-format
 msgid "%1 exported"
 msgstr "Експортовано %1"
 
-#: src/frontend/MainWin.cpp:2843
+#: src/frontend/MainWin.cpp:2844
 #, kde-format
 msgid "FITS files saved"
 msgstr "Файли FITS збережено"
 
-#: src/frontend/MainWin.cpp:2855
+#: src/frontend/MainWin.cpp:2856
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Клієнт MQTT%1"
 
-#: src/frontend/MainWin.cpp:2873
+#: src/frontend/MainWin.cpp:2874
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "На цьому вузлі вже є MQTTClient!"
 
-#: src/frontend/MainWin.cpp:2877
+#: src/frontend/MainWin.cpp:2878
 #, kde-format
 msgid "Live data source%1"
 msgstr "Інтерактивне джерело даних%1"
 
-#: src/frontend/MainWin.cpp:2922
+#: src/frontend/MainWin.cpp:2923
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Створює нотатник %1"

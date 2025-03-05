@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-03 00:38+0000\n"
-"PO-Revision-Date: 2025-02-24 16:44+0100\n"
+"POT-Creation-Date: 2025-03-05 00:39+0000\n"
+"PO-Revision-Date: 2025-03-04 15:18+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -1937,7 +1937,7 @@ msgid "Unknown"
 msgstr "Incognite"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:647 src/frontend/MainWin.cpp:1992
+#: src/frontend/MainWin.cpp:647 src/frontend/MainWin.cpp:1993
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -11850,7 +11850,7 @@ msgstr "Nomine de dossier:"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:398 src/frontend/MainWin.cpp:641
-#: src/frontend/MainWin.cpp:1974 src/frontend/SettingsDialog.cpp:64
+#: src/frontend/MainWin.cpp:1975 src/frontend/SettingsDialog.cpp:64
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12085,7 +12085,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2873
+#: src/frontend/MainWin.cpp:2874
 #, kde-format
 msgid "Warning"
 msgstr "Aviso"
@@ -14533,7 +14533,7 @@ msgstr ""
 msgid "&Open Example"
 msgstr "&Aperi Exemplo"
 
-#: src/frontend/MainWin.cpp:631 src/frontend/MainWin.cpp:1958
+#: src/frontend/MainWin.cpp:631 src/frontend/MainWin.cpp:1959
 #, kde-format
 msgid "Workbook"
 msgstr ""
@@ -14543,7 +14543,7 @@ msgstr ""
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:636 src/frontend/MainWin.cpp:1966
+#: src/frontend/MainWin.cpp:636 src/frontend/MainWin.cpp:1967
 #, kde-format
 msgid "Data Extractor"
 msgstr ""
@@ -14563,7 +14563,7 @@ msgstr ""
 msgid "Creates a new matrix for data editing"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:653 src/frontend/MainWin.cpp:2010
+#: src/frontend/MainWin.cpp:653 src/frontend/MainWin.cpp:2011
 #: src/frontend/SettingsDialog.cpp:59
 #, kde-format
 msgid "Worksheet"
@@ -14574,7 +14574,7 @@ msgstr "Folio de labor"
 msgid "Creates a new worksheet for data plotting"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:659 src/frontend/MainWin.cpp:2018
+#: src/frontend/MainWin.cpp:659 src/frontend/MainWin.cpp:2019
 #, kde-format
 msgid "Note"
 msgstr "Nota"
@@ -14584,7 +14584,7 @@ msgstr "Nota"
 msgid "Creates a new note for arbitrary text"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:664 src/frontend/MainWin.cpp:1950
+#: src/frontend/MainWin.cpp:664 src/frontend/MainWin.cpp:1951
 #, kde-format
 msgid "Folder"
 msgstr "Dossier"
@@ -14664,8 +14664,8 @@ msgstr "Exporta..."
 msgid "Export selected element"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:726 src/frontend/MainWin.cpp:2496
-#: src/frontend/MainWin.cpp:2504
+#: src/frontend/MainWin.cpp:726 src/frontend/MainWin.cpp:2497
+#: src/frontend/MainWin.cpp:2505
 #, kde-format
 msgid "Share"
 msgstr "Comparti"
@@ -14872,125 +14872,125 @@ msgstr "Non poteva leger le file de projecto %1."
 msgid "Loading %1..."
 msgstr "Cargante %1..."
 
-#: src/frontend/MainWin.cpp:1603
+#: src/frontend/MainWin.cpp:1604
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: Aperite"
 
-#: src/frontend/MainWin.cpp:1638
+#: src/frontend/MainWin.cpp:1639
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1730
+#: src/frontend/MainWin.cpp:1731
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1732
+#: src/frontend/MainWin.cpp:1733
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1759
+#: src/frontend/MainWin.cpp:1760
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1839
+#: src/frontend/MainWin.cpp:1840
 #, kde-format
 msgid "Project saved"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1855
+#: src/frontend/MainWin.cpp:1856
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1860
+#: src/frontend/MainWin.cpp:1861
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1910
+#: src/frontend/MainWin.cpp:1911
 #, kde-format
 msgid "Changed"
 msgstr "Modificate"
 
-#: src/frontend/MainWin.cpp:1925 src/frontend/MainWin.cpp:1937
+#: src/frontend/MainWin.cpp:1926 src/frontend/MainWin.cpp:1938
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1927 src/frontend/MainWin.cpp:1939
+#: src/frontend/MainWin.cpp:1928 src/frontend/MainWin.cpp:1940
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 imprimite: "
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2459
+#: src/frontend/MainWin.cpp:2460
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
 #: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Cursor"
 msgstr "Cursor"
 
-#: src/frontend/MainWin.cpp:2496
+#: src/frontend/MainWin.cpp:2497
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2500
+#: src/frontend/MainWin.cpp:2501
 #, kde-format
 msgid "Project shared successfully"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2503
+#: src/frontend/MainWin.cpp:2504
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2772
+#: src/frontend/MainWin.cpp:2773
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2773
+#: src/frontend/MainWin.cpp:2774
 #, kde-format
 msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
 "\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2836
+#: src/frontend/MainWin.cpp:2837
 #, kde-format
 msgid "%1 exported"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2843
+#: src/frontend/MainWin.cpp:2844
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2855
+#: src/frontend/MainWin.cpp:2856
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2873
+#: src/frontend/MainWin.cpp:2874
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2877
+#: src/frontend/MainWin.cpp:2878
 #, kde-format
 msgid "Live data source%1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2922
+#: src/frontend/MainWin.cpp:2923
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr ""
@@ -22172,18 +22172,7 @@ msgstr "Claude file"
 
 #. i18n: ectx: property (html), widget (ResizableTextEdit, teLabel)
 #: src/frontend/ui/labelwidget.ui:55
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#| "font-weight:400; font-style:normal;\">\n"
-#| "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-#| "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
-#| "\"><br /></p></body></html>"
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -22201,14 +22190,17 @@ msgid ""
 msgstr ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
-"\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
+"\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Sans Serif'; font-size:9pt; font-"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
 "weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"></"
-"p></body></html>"
+"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
+"\"><br /></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
 #: src/frontend/ui/labelwidget.ui:72
@@ -23555,10 +23547,9 @@ msgid "Data, +-:"
 msgstr "Datos, +-:"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
-#, fuzzy, kde-format
-#| msgid "Start Value:"
+#, kde-format
 msgid "Start Value"
-msgstr "Valor de initio:"
+msgstr "Valor de initio"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
