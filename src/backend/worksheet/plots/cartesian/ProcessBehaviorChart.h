@@ -56,12 +56,14 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, negativeLowerLimitEnabled, NegativeLowerLimitEnabled)
 	BASIC_D_ACCESSOR_DECL(bool, exactLimitsEnabled, ExactLimitsEnabled)
 
-	BASIC_D_ACCESSOR_DECL(bool, valuesEnabled, ValuesEnabled)
-	CLASS_D_ACCESSOR_DECL(QColor, valuesFontColor, ValuesFontColor)
-	CLASS_D_ACCESSOR_DECL(QColor, valuesBackgroundColor, ValuesBackgroundColor)
-	CLASS_D_ACCESSOR_DECL(QFont, valuesFont, ValuesFont)
-	BASIC_D_ACCESSOR_DECL(TextLabel::BorderShape, valuesBorderShape, ValuesBorderShape)
-	Line* valuesBorderLine() const;
+	BASIC_D_ACCESSOR_DECL(bool, labelsEnabled, LabelsEnabled)
+	BASIC_D_ACCESSOR_DECL(bool, labelsAutoPrecision, LabelsAutoPrecision)
+	BASIC_D_ACCESSOR_DECL(int, labelsPrecision, LabelsPrecision)
+	CLASS_D_ACCESSOR_DECL(QColor, labelsFontColor, LabelsFontColor)
+	CLASS_D_ACCESSOR_DECL(QColor, labelsBackgroundColor, LabelsBackgroundColor)
+	CLASS_D_ACCESSOR_DECL(QFont, labelsFont, LabelsFont)
+	BASIC_D_ACCESSOR_DECL(TextLabel::BorderShape, labelsBorderShape, LabelsBorderShape)
+	Line* labelsBorderLine() const;
 
 	Symbol* dataSymbol() const;
 	Line* dataLine() const;
@@ -91,10 +93,10 @@ private Q_SLOTS:
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 	void data2ColumnAboutToBeRemoved(const AbstractAspect*);
 	void renameInternalCurves();
-	void valuesBorderStyleChanged(Qt::PenStyle);
-	void valuesBorderWidthChanged(double);
-	void valuesBorderColorChanged(const QColor&);
-	void valuesBorderOpacityChanged(float);
+	void labelsBorderStyleChanged(Qt::PenStyle);
+	void labelsBorderWidthChanged(double);
+	void labelsBorderColorChanged(const QColor&);
+	void labelsBorderOpacityChanged(float);
 
 protected:
 	ProcessBehaviorChart(const QString& name, ProcessBehaviorChartPrivate* dd);
@@ -126,12 +128,14 @@ Q_SIGNALS:
 	void negativeLowerLimitEnabledChanged(bool);
 	void exactLimitsEnabledChanged(bool);
 
-	// Values
-	void valuesEnabledChanged(bool);
-	void valuesFontChanged(const QFont);
-	void valuesFontColorChanged(const QColor);
-	void valuesBackgroundColorChanged(const QColor);
-	void valuesBorderShapeChanged(TextLabel::BorderShape);
+	// labels for the control limits
+	void labelsEnabledChanged(bool);
+	void labelsAutoPrecisionChanged(bool);
+	void labelsPrecisionChanged(int);
+	void labelsFontChanged(const QFont);
+	void labelsFontColorChanged(const QColor);
+	void labelsBackgroundColorChanged(const QColor);
+	void labelsBorderShapeChanged(TextLabel::BorderShape);
 };
 
 #endif

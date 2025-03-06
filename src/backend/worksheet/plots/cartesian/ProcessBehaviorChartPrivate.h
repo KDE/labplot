@@ -25,7 +25,7 @@ public:
 	void recalc();
 	void recalcShapeAndBoundingRect() override;
 	void updateControlLimits();
-	void updateValueLabels();
+	void updateLabels();
 
 	ProcessBehaviorChart::Type type{ProcessBehaviorChart::Type::XmR};
 	ProcessBehaviorChart::LimitsMetric limitsMetric{ProcessBehaviorChart::LimitsMetric::Average};
@@ -65,12 +65,14 @@ public:
 	Column* yLowerLimitColumn{nullptr};
 	QString yLowerLimitColumnPath;
 
-	// text labels for control limit values
-	bool valuesEnabled{true};
-	Line* valuesBorderLine{nullptr};
-	TextLabel* upperLimitValueLabel{nullptr};
-	TextLabel* centerValueLabel{nullptr};
-	TextLabel* lowerLimitValueLabel{nullptr};
+	// labels for control limit values
+	bool labelsEnabled{true};
+	int labelsPrecision{1};
+	bool labelsAutoPrecision{true};
+	Line* labelsBorderLine{nullptr};
+	TextLabel* upperLimitLabel{nullptr};
+	TextLabel* centerLabel{nullptr};
+	TextLabel* lowerLimitLabel{nullptr};
 
 	int sampleSize{5};
 	bool negativeLowerLimitEnabled{false};

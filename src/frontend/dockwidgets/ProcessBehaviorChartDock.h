@@ -46,7 +46,7 @@ protected:
 	LineWidget* centerLineWidget{nullptr};
 	LineWidget* upperLimitLineWidget{nullptr};
 	LineWidget* lowerLimitLineWidget{nullptr};
-	LineWidget* valuesBorderLineWidget{nullptr};
+	LineWidget* labelsBorderLineWidget{nullptr};
 	KMessageWidget* m_messageWidget{nullptr};
 
 	QList<ProcessBehaviorChart*> m_plots;
@@ -65,12 +65,14 @@ private Q_SLOTS:
 	void negativeLowerLimitEnabledChanged(bool);
 	void exactLimitsEnabledChanged(bool);
 
-	// Values-tab
-	void valuesEnabledChanged(bool);
-	void valuesFontChanged(const QFont&);
-	void valuesFontColorChanged(const QColor&);
-	void valuesBackgroundColorChanged(const QColor&);
-	void valuesBorderShapeChanged(int);
+	// Labels-tab
+	void labelsEnabledChanged(bool);
+	void labelsPrecisionChanged(int);
+	void labelsAutoPrecisionChanged(bool);
+	void labelsFontChanged(const QFont&);
+	void labelsFontColorChanged(const QColor&);
+	void labelsBackgroundColorChanged(const QColor&);
+	void labelsBorderShapeChanged(int);
 
 	// SLOTs for changes triggered in ProcessBehaviorChart
 	// General-Tab
@@ -82,12 +84,14 @@ private Q_SLOTS:
 	void plotNegativeLowerLimitEnabledChanged(bool);
 	void plotExactLimitsEnabledChanged(bool);
 
-	// Values-tab
-	void plotValuesEnabledChanged(bool);
-	void plotValuesFontChanged(const QFont&);
-	void plotValuesFontColorChanged(const QColor&);
-	void plotValuesBackgroundColorChanged(const QColor&);
-	void plotValuesBorderShapeChanged(TextLabel::BorderShape);
+	// Labels-tab
+	void plotLabelsEnabledChanged(bool);
+	void plotLabelsAutoPrecisionChanged(bool);
+	void plotLabelsPrecisionChanged(int);
+	void plotLabelsFontChanged(const QFont&);
+	void plotLabelsFontColorChanged(const QColor&);
+	void plotLabelsBackgroundColorChanged(const QColor&);
+	void plotLabelsBorderShapeChanged(TextLabel::BorderShape);
 
 	void showStatusInfo(const QString&);
 

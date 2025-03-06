@@ -60,9 +60,9 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	lowerLimitLineWidget = new LineWidget(ui.tabControlLimitLines);
 	hBoxLayout->insertWidget(9, lowerLimitLineWidget);
 
-	gridLayout = qobject_cast<QGridLayout*>(ui.tabControlLimitValues->layout());
-	valuesBorderLineWidget = new LineWidget(this);
-	gridLayout->addWidget(valuesBorderLineWidget, 7, 0, 1, 3);
+	gridLayout = qobject_cast<QGridLayout*>(ui.tabControlLimitLabels->layout());
+	labelsBorderLineWidget = new LineWidget(this);
+	gridLayout->addWidget(labelsBorderLineWidget, 11, 0, 1, 3);
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -85,12 +85,14 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	connect(ui.chbNegativeLowerLimit, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::negativeLowerLimitEnabledChanged);
 	connect(ui.chbExactLimits, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::exactLimitsEnabledChanged);
 
-	// values
-	connect(ui.chbValuesEnabled, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::valuesEnabledChanged);
-	connect(ui.kfrValuesFont, &KFontRequester::fontSelected, this, &ProcessBehaviorChartDock::valuesFontChanged);
-	connect(ui.kcbValuesFontColor, &KColorButton::changed, this, &ProcessBehaviorChartDock::valuesFontColorChanged);
-	connect(ui.kcbValuesBackgroundColor, &KColorButton::changed, this, &ProcessBehaviorChartDock::valuesBackgroundColorChanged);
-	connect(ui.cbValuesBorderShape, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::valuesBorderShapeChanged);
+	// labels
+	connect(ui.chbLabelsEnabled, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::labelsEnabledChanged);
+	connect(ui.sbLabelsPrecision, QOverload<int>::of(&QSpinBox::valueChanged), this, &ProcessBehaviorChartDock::labelsPrecisionChanged);
+	connect(ui.chkLabelsAutoPrecision, &QCheckBox::toggled, this, &ProcessBehaviorChartDock::labelsAutoPrecisionChanged);
+	connect(ui.kfrLabelsFont, &KFontRequester::fontSelected, this, &ProcessBehaviorChartDock::labelsFontChanged);
+	connect(ui.kcbLabelsFontColor, &KColorButton::changed, this, &ProcessBehaviorChartDock::labelsFontColorChanged);
+	connect(ui.kcbLabelsBackgroundColor, &KColorButton::changed, this, &ProcessBehaviorChartDock::labelsBackgroundColorChanged);
+	connect(ui.cbLabelsBorderShape, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::labelsBorderShapeChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -188,12 +190,12 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 	connect(m_plot, &ProcessBehaviorChart::exactLimitsEnabledChanged, this, &ProcessBehaviorChartDock::plotExactLimitsEnabledChanged);
 	connect(m_plot, &ProcessBehaviorChart::statusInfo, this, &ProcessBehaviorChartDock::showStatusInfo);
 
-	// Values-tab
-	connect(m_plot, &ProcessBehaviorChart::valuesEnabledChanged, this, &ProcessBehaviorChartDock::plotValuesEnabledChanged);
-	connect(m_plot, &ProcessBehaviorChart::valuesFontChanged, this, &ProcessBehaviorChartDock::plotValuesFontChanged);
-	connect(m_plot, &ProcessBehaviorChart::valuesFontColorChanged, this, &ProcessBehaviorChartDock::plotValuesFontColorChanged);
-	connect(m_plot, &ProcessBehaviorChart::valuesBackgroundColorChanged, this, &ProcessBehaviorChartDock::plotValuesBackgroundColorChanged);
-	connect(m_plot, &ProcessBehaviorChart::valuesBorderShapeChanged, this, &ProcessBehaviorChartDock::plotValuesBorderShapeChanged);
+	// Labels-tab
+	connect(m_plot, &ProcessBehaviorChart::labelsEnabledChanged, this, &ProcessBehaviorChartDock::plotLabelsEnabledChanged);
+	connect(m_plot, &ProcessBehaviorChart::labelsFontChanged, this, &ProcessBehaviorChartDock::plotLabelsFontChanged);
+	connect(m_plot, &ProcessBehaviorChart::labelsFontColorChanged, this, &ProcessBehaviorChartDock::plotLabelsFontColorChanged);
+	connect(m_plot, &ProcessBehaviorChart::labelsBackgroundColorChanged, this, &ProcessBehaviorChartDock::plotLabelsBackgroundColorChanged);
+	connect(m_plot, &ProcessBehaviorChart::labelsBorderShapeChanged, this, &ProcessBehaviorChartDock::plotLabelsBorderShapeChanged);
 }
 
 void ProcessBehaviorChartDock::retranslateUi() {
@@ -213,26 +215,26 @@ void ProcessBehaviorChartDock::retranslateUi() {
 	ui.cbType->addItem(QStringLiteral("C"), static_cast<int>(ProcessBehaviorChart::Type::C));
 	ui.cbType->addItem(QStringLiteral("U"), static_cast<int>(ProcessBehaviorChart::Type::U));
 
-	ui.cbValuesBorderShape->clear();
-	ui.cbValuesBorderShape->addItem(i18n("No Border"), static_cast<int>(TextLabel::BorderShape::NoBorder));
-	ui.cbValuesBorderShape->addItem(i18n("Rectangle"), static_cast<int>(TextLabel::BorderShape::Rect));
-	ui.cbValuesBorderShape->addItem(i18n("Ellipse"), static_cast<int>(TextLabel::BorderShape::Ellipse));
-	ui.cbValuesBorderShape->addItem(i18n("Round sided rectangle"), static_cast<int>(TextLabel::BorderShape::RoundSideRect));
-	ui.cbValuesBorderShape->addItem(i18n("Round corner rectangle"), static_cast<int>(TextLabel::BorderShape::RoundCornerRect));
-	ui.cbValuesBorderShape->addItem(i18n("Inwards round corner rectangle"), static_cast<int>(TextLabel::BorderShape::InwardsRoundCornerRect));
-	ui.cbValuesBorderShape->addItem(i18n("Dented border rectangle"), static_cast<int>(TextLabel::BorderShape::DentedBorderRect));
-	ui.cbValuesBorderShape->addItem(i18n("Cuboid"), static_cast<int>(TextLabel::BorderShape::Cuboid));
-	ui.cbValuesBorderShape->addItem(i18n("Up pointing rectangle"), static_cast<int>(TextLabel::BorderShape::UpPointingRectangle));
-	ui.cbValuesBorderShape->addItem(i18n("Down pointing rectangle"), static_cast<int>(TextLabel::BorderShape::DownPointingRectangle));
-	ui.cbValuesBorderShape->addItem(i18n("Left pointing rectangle"), static_cast<int>(TextLabel::BorderShape::LeftPointingRectangle));
-	ui.cbValuesBorderShape->addItem(i18n("Right pointing rectangle"), static_cast<int>(TextLabel::BorderShape::RightPointingRectangle));
+	ui.cbLabelsBorderShape->clear();
+	ui.cbLabelsBorderShape->addItem(i18n("No Border"), static_cast<int>(TextLabel::BorderShape::NoBorder));
+	ui.cbLabelsBorderShape->addItem(i18n("Rectangle"), static_cast<int>(TextLabel::BorderShape::Rect));
+	ui.cbLabelsBorderShape->addItem(i18n("Ellipse"), static_cast<int>(TextLabel::BorderShape::Ellipse));
+	ui.cbLabelsBorderShape->addItem(i18n("Round sided rectangle"), static_cast<int>(TextLabel::BorderShape::RoundSideRect));
+	ui.cbLabelsBorderShape->addItem(i18n("Round corner rectangle"), static_cast<int>(TextLabel::BorderShape::RoundCornerRect));
+	ui.cbLabelsBorderShape->addItem(i18n("Inwards round corner rectangle"), static_cast<int>(TextLabel::BorderShape::InwardsRoundCornerRect));
+	ui.cbLabelsBorderShape->addItem(i18n("Dented border rectangle"), static_cast<int>(TextLabel::BorderShape::DentedBorderRect));
+	ui.cbLabelsBorderShape->addItem(i18n("Cuboid"), static_cast<int>(TextLabel::BorderShape::Cuboid));
+	ui.cbLabelsBorderShape->addItem(i18n("Up pointing rectangle"), static_cast<int>(TextLabel::BorderShape::UpPointingRectangle));
+	ui.cbLabelsBorderShape->addItem(i18n("Down pointing rectangle"), static_cast<int>(TextLabel::BorderShape::DownPointingRectangle));
+	ui.cbLabelsBorderShape->addItem(i18n("Left pointing rectangle"), static_cast<int>(TextLabel::BorderShape::LeftPointingRectangle));
+	ui.cbLabelsBorderShape->addItem(i18n("Right pointing rectangle"), static_cast<int>(TextLabel::BorderShape::RightPointingRectangle));
 
 	// tooltips
 	QString info = i18n(
 		"The supported chart types are grouped according to the plotted statistics and to the metric defining the limits.<br><br>"
-		"Individual Values and Moving Ranges, Limits Based on the Average or Median Moving Range:"
+		"Individual Labels and Moving Ranges, Limits Based on the Average or Median Moving Range:"
 		"<ul>"
-		"<li>X (XmR) - plot the <b>individual values</b>.</li>"
+		"<li>X (XmR) - plot the <b>individual labels</b>.</li>"
 		"<li>mR - plot the <b>moving ranges</b>.</li>"
 		"</ul>"
 		"Averages and Ranges, Limits based on the Average or Median Range:"
@@ -255,7 +257,7 @@ void ProcessBehaviorChartDock::retranslateUi() {
 	ui.lType->setToolTip(info);
 	ui.cbType->setToolTip(info);
 
-	info = i18n("Allow negative values for the lower limit.");
+	info = i18n("Allow negative labels for the lower limit.");
 	ui.lNegativeLowerLimit->setToolTip(info);
 	ui.chbNegativeLowerLimit->setToolTip(info);
 
@@ -273,6 +275,7 @@ void ProcessBehaviorChartDock::updateLocale() {
 	centerLineWidget->updateLocale();
 	upperLimitLineWidget->updateLocale();
 	lowerLimitLineWidget->updateLocale();
+	labelsBorderLineWidget->updateLocale();
 }
 
 //*************************************************************
@@ -367,49 +370,67 @@ void ProcessBehaviorChartDock::exactLimitsEnabledChanged(bool enabled) {
 		plot->setExactLimitsEnabled(enabled);
 }
 
-// Values-tab
-void ProcessBehaviorChartDock::valuesEnabledChanged(bool enabled) {
-	ui.lValuesFont->setVisible(enabled);
-	ui.kfrValuesFont->setVisible(enabled);
-	ui.lValuesFontColor->setVisible(enabled);
-	ui.kcbValuesFontColor->setVisible(enabled);
-	ui.lValuesBackgroundColor->setVisible(enabled);
-	ui.kcbValuesBackgroundColor->setVisible(enabled);
-	ui.lValuesBorder->setVisible(enabled);
-	ui.lValuesBorderShape->setVisible(enabled);
-	ui.cbValuesBorderShape->setVisible(enabled);
-	valuesBorderLineWidget->setVisible(enabled);
+// Labels-tab
+void ProcessBehaviorChartDock::labelsEnabledChanged(bool enabled) {
+	ui.lLabelsText->setVisible(enabled);
+	ui.lLabelsPrecision->setVisible(enabled);
+	ui.frameLabelsPrecision->setVisible(enabled);
+	ui.lLabelsFont->setVisible(enabled);
+	ui.kfrLabelsFont->setVisible(enabled);
+	ui.lLabelsFontColor->setVisible(enabled);
+	ui.kcbLabelsFontColor->setVisible(enabled);
+	ui.lLabelsBackgroundColor->setVisible(enabled);
+	ui.kcbLabelsBackgroundColor->setVisible(enabled);
+	ui.lLabelsBorder->setVisible(enabled);
+	ui.lLabelsBorderShape->setVisible(enabled);
+	ui.cbLabelsBorderShape->setVisible(enabled);
+	labelsBorderLineWidget->setVisible(enabled);
 
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* plot : m_plots)
-		plot->setValuesEnabled(enabled);
+		plot->setLabelsEnabled(enabled);
+}
+void ProcessBehaviorChartDock::labelsPrecisionChanged(int value) {
+	CONDITIONAL_LOCK_RETURN;
+
+	for (auto* plot : m_plots)
+		plot->setLabelsPrecision(value);
 }
 
-void ProcessBehaviorChartDock::valuesFontChanged(const QFont& font) {
+void ProcessBehaviorChartDock::labelsAutoPrecisionChanged(bool state) {
+	ui.sbLabelsPrecision->setEnabled(!state);
+
 	CONDITIONAL_LOCK_RETURN;
+
 	for (auto* plot : m_plots)
-		plot->setValuesFont(font);
-}
-void ProcessBehaviorChartDock::valuesFontColorChanged(const QColor& color) {
-	CONDITIONAL_LOCK_RETURN;
-	for (auto* plot : m_plots)
-		plot->setValuesFontColor(color);
+		plot->setLabelsAutoPrecision(state);
 }
 
-void ProcessBehaviorChartDock::valuesBackgroundColorChanged(const QColor& color) {
+void ProcessBehaviorChartDock::labelsFontChanged(const QFont& font) {
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* plot : m_plots)
-		plot->setValuesBackgroundColor(color);
+		plot->setLabelsFont(font);
+}
+void ProcessBehaviorChartDock::labelsFontColorChanged(const QColor& color) {
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plots)
+		plot->setLabelsFontColor(color);
 }
 
-void ProcessBehaviorChartDock::valuesBorderShapeChanged(int) {
-	const auto shape = static_cast<TextLabel::BorderShape>(ui.cbValuesBorderShape->currentData().toInt());
+void ProcessBehaviorChartDock::labelsBackgroundColorChanged(const QColor& color) {
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plots)
+		plot->setLabelsBackgroundColor(color);
+}
+
+void ProcessBehaviorChartDock::labelsBorderShapeChanged(int) {
+	const auto shape = static_cast<TextLabel::BorderShape>(ui.cbLabelsBorderShape->currentData().toInt());
 	const bool visible = (shape != TextLabel::BorderShape::NoBorder);
-	valuesBorderLineWidget->setVisible(visible);
+	labelsBorderLineWidget->setVisible(visible);
 
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* plot : m_plots)
-		plot->setValuesBorderShape(shape);
+		plot->setLabelsBorderShape(shape);
 }
 
 //*************************************************************
@@ -453,30 +474,40 @@ void ProcessBehaviorChartDock::plotExactLimitsEnabledChanged(bool enabled) {
 	ui.chbExactLimits->setChecked(enabled);
 }
 
-// Values-tab
-void ProcessBehaviorChartDock::plotValuesEnabledChanged(bool enabled) {
+// Labels-tab
+void ProcessBehaviorChartDock::plotLabelsEnabledChanged(bool enabled) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.chbValuesEnabled->setChecked(enabled);
+	ui.chbLabelsEnabled->setChecked(enabled);
 }
 
-void ProcessBehaviorChartDock::plotValuesFontChanged(const QFont& font) {
+void ProcessBehaviorChartDock::plotLabelsAutoPrecisionChanged(bool on) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.kfrValuesFont->setFont(font);
+	ui.chkLabelsAutoPrecision->setChecked(on);
 }
 
-void ProcessBehaviorChartDock::plotValuesFontColorChanged(const QColor& color) {
+void ProcessBehaviorChartDock::plotLabelsPrecisionChanged(int precision) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.kcbValuesFontColor->setColor(color);
+	ui.sbLabelsPrecision->setValue(precision);
 }
 
-void ProcessBehaviorChartDock::plotValuesBackgroundColorChanged(const QColor& color) {
+void ProcessBehaviorChartDock::plotLabelsFontChanged(const QFont& font) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.kcbValuesBackgroundColor->setColor(color);
+	ui.kfrLabelsFont->setFont(font);
 }
 
-void ProcessBehaviorChartDock::plotValuesBorderShapeChanged(TextLabel::BorderShape shape) {
+void ProcessBehaviorChartDock::plotLabelsFontColorChanged(const QColor& color) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.cbValuesBorderShape->setCurrentIndex(static_cast<int>(shape));
+	ui.kcbLabelsFontColor->setColor(color);
+}
+
+void ProcessBehaviorChartDock::plotLabelsBackgroundColorChanged(const QColor& color) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.kcbLabelsBackgroundColor->setColor(color);
+}
+
+void ProcessBehaviorChartDock::plotLabelsBorderShapeChanged(TextLabel::BorderShape shape) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.cbLabelsBorderShape->setCurrentIndex(static_cast<int>(shape));
 }
 
 void ProcessBehaviorChartDock::showStatusInfo(const QString& info) {
@@ -510,27 +541,29 @@ void ProcessBehaviorChartDock::load() {
 	// sample size
 	ui.sbSampleSize->setValue(static_cast<int>(m_plot->sampleSize()));
 
-	// allow negative values for the lower limit
+	// allow negative labels for the lower limit
 	ui.chbNegativeLowerLimit->setChecked(m_plot->negativeLowerLimitEnabled());
 
 	// user exact/individual limits, relevant for P and U charts only
 	ui.chbExactLimits->setChecked(m_plot->exactLimitsEnabled());
 
-	// values
-	ui.chbValuesEnabled->setChecked(m_plot->valuesEnabled());
-	valuesEnabledChanged(ui.chbValuesEnabled->isChecked());
-	ui.kfrValuesFont->setFont(m_plot->valuesFont());
-	ui.kcbValuesFontColor->setColor(m_plot->valuesFontColor());
-	ui.kcbValuesBackgroundColor->setColor(m_plot->valuesBackgroundColor());
+	// labels
+	ui.chbLabelsEnabled->setChecked(m_plot->labelsEnabled());
+	ui.chkLabelsAutoPrecision->setChecked((int)m_plot->labelsAutoPrecision());
+	ui.sbLabelsPrecision->setValue((int)m_plot->labelsPrecision());
+	labelsEnabledChanged(ui.chbLabelsEnabled->isChecked());
+	ui.kfrLabelsFont->setFont(m_plot->labelsFont());
+	ui.kcbLabelsFontColor->setColor(m_plot->labelsFontColor());
+	ui.kcbLabelsBackgroundColor->setColor(m_plot->labelsBackgroundColor());
 
 	// Border
-	index = ui.cbValuesBorderShape->findData(static_cast<int>(m_plot->valuesBorderShape()));
-	ui.cbValuesBorderShape->setCurrentIndex(index);
+	index = ui.cbLabelsBorderShape->findData(static_cast<int>(m_plot->labelsBorderShape()));
+	ui.cbLabelsBorderShape->setCurrentIndex(index);
 
 	QList<Line*> borderLines;
 	for (auto* plot : m_plots)
-		borderLines << plot->valuesBorderLine();
-	valuesBorderLineWidget->setLines(borderLines);
+		borderLines << plot->labelsBorderLine();
+	labelsBorderLineWidget->setLines(borderLines);
 }
 
 void ProcessBehaviorChartDock::loadConfig(KConfig& config) {
@@ -550,14 +583,16 @@ void ProcessBehaviorChartDock::loadConfig(KConfig& config) {
 	const int size = group.readEntry(QStringLiteral("SampleSize"), static_cast<int>(m_plot->sampleSize()));
 	ui.sbSampleSize->setValue(size);
 
-	// allow negative values for the lower limit
+	// allow negative labels for the lower limit
 	ui.chbNegativeLowerLimit->setChecked(group.readEntry(QStringLiteral("NegativeLowerLimitEnabled"), false));
 
 	// user exact/individual limits, relevant for P and U charts only
 	ui.chbExactLimits->setChecked(group.readEntry(QStringLiteral("ExactLimitsEnabled"), false));
 
-	ui.chbValuesEnabled->setChecked(group.readEntry(QStringLiteral("ValuesEnabled"), false));
-	valuesEnabledChanged(ui.chbValuesEnabled->isChecked());
+	ui.chbLabelsEnabled->setChecked(group.readEntry(QStringLiteral("LabelsEnabled"), false));
+	labelsEnabledChanged(ui.chbLabelsEnabled->isChecked());
+	ui.chkLabelsAutoPrecision->setChecked(group.readEntry(QStringLiteral("LabelsAutoPrecision"), (int)m_plot->labelsAutoPrecision()));
+	ui.sbLabelsPrecision->setValue(group.readEntry(QStringLiteral("LabelsPrecision"), (int)m_plot->labelsPrecision()));
 
 	// properties of the data and limit curves
 	dataLineWidget->loadConfig(group);

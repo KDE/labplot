@@ -158,37 +158,39 @@ void ProcessBehaviorChart::init() {
 	addChildFast(d->yLowerLimitColumn);
 	d->lowerLimitCurve->setYColumn(d->yLowerLimitColumn);
 
-	// text labels for the values
-	d->valuesEnabled = group.readEntry(QStringLiteral("ValuesEnabled"), true);
+	// text labels for the labels
+	d->labelsEnabled = group.readEntry(QStringLiteral("LabelsEnabled"), false);
+	d->labelsAutoPrecision = group.readEntry(QStringLiteral("LabelsAutoPrecision"), true);
+	d->labelsPrecision = group.readEntry(QStringLiteral("LabelsPrecision"), 1);
 
 	// border line for value labels
-	d->valuesBorderLine = new Line(QStringLiteral("borderLine"));
-	d->valuesBorderLine->setPrefix(QStringLiteral("Border"));
-	d->valuesBorderLine->setCreateXmlElement(false);
-	d->valuesBorderLine->setHidden(true);
-	addChild(d->valuesBorderLine);
-	connect(d->valuesBorderLine, &Line::styleChanged, this, &ProcessBehaviorChart::valuesBorderStyleChanged);
-	connect(d->valuesBorderLine, &Line::widthChanged, this, &ProcessBehaviorChart::valuesBorderWidthChanged);
-	connect(d->valuesBorderLine, &Line::colorChanged, this, &ProcessBehaviorChart::valuesBorderColorChanged);
-	connect(d->valuesBorderLine, &Line::opacityChanged, this, &ProcessBehaviorChart::valuesBorderOpacityChanged);
+	d->labelsBorderLine = new Line(QStringLiteral("borderLine"));
+	d->labelsBorderLine->setPrefix(QStringLiteral("Border"));
+	d->labelsBorderLine->setCreateXmlElement(false);
+	d->labelsBorderLine->setHidden(true);
+	addChild(d->labelsBorderLine);
+	connect(d->labelsBorderLine, &Line::styleChanged, this, &ProcessBehaviorChart::labelsBorderStyleChanged);
+	connect(d->labelsBorderLine, &Line::widthChanged, this, &ProcessBehaviorChart::labelsBorderWidthChanged);
+	connect(d->labelsBorderLine, &Line::colorChanged, this, &ProcessBehaviorChart::labelsBorderColorChanged);
+	connect(d->labelsBorderLine, &Line::opacityChanged, this, &ProcessBehaviorChart::labelsBorderOpacityChanged);
 
-	d->upperLimitValueLabel = new TextLabel(QStringLiteral("upperLimitValue"));
-	d->upperLimitValueLabel->setHidden(true);
-	d->upperLimitValueLabel->setBorderShape(TextLabel::BorderShape::LeftPointingRectangle);
-	d->upperLimitValueLabel->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
-	connect(d->upperLimitValueLabel, &TextLabel::textWrapperChanged, d->upperLimitValueLabel, &TextLabel::retransform); //re-position on text changes
+	d->upperLimitLabel = new TextLabel(QStringLiteral("upperLimitValue"));
+	d->upperLimitLabel->setHidden(true);
+	d->upperLimitLabel->setBorderShape(TextLabel::BorderShape::LeftPointingRectangle);
+	d->upperLimitLabel->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
+	connect(d->upperLimitLabel, &TextLabel::textWrapperChanged, d->upperLimitLabel, &TextLabel::retransform); //re-position on text changes
 
-	d->centerValueLabel = new TextLabel(QStringLiteral("centerValue"));
-	d->centerValueLabel->setHidden(true);
-	d->centerValueLabel->setBorderShape(TextLabel::BorderShape::LeftPointingRectangle);
-	d->centerValueLabel->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
-	connect(d->centerValueLabel, &TextLabel::textWrapperChanged, d->centerValueLabel, &TextLabel::retransform);
+	d->centerLabel = new TextLabel(QStringLiteral("centerValue"));
+	d->centerLabel->setHidden(true);
+	d->centerLabel->setBorderShape(TextLabel::BorderShape::LeftPointingRectangle);
+	d->centerLabel->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
+	connect(d->centerLabel, &TextLabel::textWrapperChanged, d->centerLabel, &TextLabel::retransform);
 
-	d->lowerLimitValueLabel = new TextLabel(QStringLiteral("lowerLimitValue"));
-	d->lowerLimitValueLabel->setHidden(true);
-	d->lowerLimitValueLabel->setBorderShape(TextLabel::BorderShape::LeftPointingRectangle);
-	d->lowerLimitValueLabel->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
-	connect(d->lowerLimitValueLabel, &TextLabel::textWrapperChanged, d->lowerLimitValueLabel, &TextLabel::retransform);
+	d->lowerLimitLabel = new TextLabel(QStringLiteral("lowerLimitValue"));
+	d->lowerLimitLabel->setHidden(true);
+	d->lowerLimitLabel->setBorderShape(TextLabel::BorderShape::LeftPointingRectangle);
+	d->lowerLimitLabel->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
+	connect(d->lowerLimitLabel, &TextLabel::textWrapperChanged, d->lowerLimitLabel, &TextLabel::retransform);
 
 	// synchronize the names of the internal XYCurves with the name of the current plot
 	// so we have the same name shown on the undo stack
@@ -212,20 +214,20 @@ void ProcessBehaviorChart::finalizeAdd() {
 	addChildFast(d->dataCurve);
 
 	// labels
-	addChildFast(d->upperLimitValueLabel);
-	d->upperLimitValueLabel->setCoordinateBindingEnabled(true);
-	d->upperLimitValueLabel->setParentGraphicsItem(graphicsItem());
-	d->upperLimitValueLabel->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+	addChildFast(d->upperLimitLabel);
+	d->upperLimitLabel->setCoordinateBindingEnabled(true);
+	d->upperLimitLabel->setParentGraphicsItem(graphicsItem());
+	d->upperLimitLabel->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 
-	addChildFast(d->centerValueLabel);
-	d->centerValueLabel->setCoordinateBindingEnabled(true);
-	d->centerValueLabel->setParentGraphicsItem(graphicsItem());
-	d->centerValueLabel->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+	addChildFast(d->centerLabel);
+	d->centerLabel->setCoordinateBindingEnabled(true);
+	d->centerLabel->setParentGraphicsItem(graphicsItem());
+	d->centerLabel->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 
-	addChildFast(d->lowerLimitValueLabel);
-	d->lowerLimitValueLabel->setCoordinateBindingEnabled(true);
-	d->lowerLimitValueLabel->setParentGraphicsItem(graphicsItem());
-	d->lowerLimitValueLabel->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+	addChildFast(d->lowerLimitLabel);
+	d->lowerLimitLabel->setCoordinateBindingEnabled(true);
+	d->lowerLimitLabel->setParentGraphicsItem(graphicsItem());
+	d->lowerLimitLabel->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
 void ProcessBehaviorChart::renameInternalCurves() {
@@ -285,39 +287,41 @@ BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, dataColumnPath, dataCo
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, data2Column, data2Column)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, data2ColumnPath, data2ColumnPath)
 
-// values
-BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, bool, valuesEnabled, valuesEnabled)
+// labels
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, bool, labelsEnabled, labelsEnabled)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, bool, labelsAutoPrecision, labelsAutoPrecision)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, int, labelsPrecision, labelsPrecision)
 
-QColor ProcessBehaviorChart::valuesFontColor() const {
+QColor ProcessBehaviorChart::labelsFontColor() const {
 	Q_D(const ProcessBehaviorChart);
-	return d->centerValueLabel->fontColor();
+	return d->centerLabel->fontColor();
 }
 
-QColor ProcessBehaviorChart::valuesBackgroundColor() const {
+QColor ProcessBehaviorChart::labelsBackgroundColor() const {
 	Q_D(const ProcessBehaviorChart);
-	return d->centerValueLabel->backgroundColor();
+	return d->centerLabel->backgroundColor();
 }
 
-QFont ProcessBehaviorChart::valuesFont() const {
+QFont ProcessBehaviorChart::labelsFont() const {
 	Q_D(const ProcessBehaviorChart);
-	auto textWrapper = d->centerValueLabel->text();
+	auto textWrapper = d->centerLabel->text();
 	QTextEdit te(textWrapper.text);
 	const auto& format = te.currentCharFormat();
 	return format.font();
 }
 
-TextLabel::BorderShape ProcessBehaviorChart::valuesBorderShape() const {
+TextLabel::BorderShape ProcessBehaviorChart::labelsBorderShape() const {
 	Q_D(const ProcessBehaviorChart);
-	return d->centerValueLabel->borderShape();
+	return d->centerLabel->borderShape();
 }
 
-Line* ProcessBehaviorChart::valuesBorderLine() const {
+Line* ProcessBehaviorChart::labelsBorderLine() const {
 	Q_D(const ProcessBehaviorChart);
-	return d->valuesBorderLine;
+	return d->labelsBorderLine;
 }
 
 /*!
- * returns the number of index values used for x.
+ * returns the number of index labels used for x.
  */
 int ProcessBehaviorChart::xIndexCount() const {
 	Q_D(const ProcessBehaviorChart);
@@ -538,28 +542,42 @@ void ProcessBehaviorChart::setExactLimitsEnabled(bool enabled) {
 		exec(new ProcessBehaviorChartSetExactLimitsEnabledCmd(d, enabled, ki18n("%1: change exact limits")));
 }
 
-// values
-STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetValuesEnabled, bool, valuesEnabled, updateValueLabels)
-void ProcessBehaviorChart::setValuesEnabled(bool enabled) {
+// labels
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetLabelsEnabled, bool, labelsEnabled, updateLabels)
+void ProcessBehaviorChart::setLabelsEnabled(bool enabled) {
 	Q_D(ProcessBehaviorChart);
-	if (enabled != d->valuesEnabled)
-		exec(new ProcessBehaviorChartSetValuesEnabledCmd(d, enabled, ki18n("%1: enable control values")));
+	if (enabled != d->labelsEnabled)
+		exec(new ProcessBehaviorChartSetLabelsEnabledCmd(d, enabled, ki18n("%1: enable control labels")));
 }
 
-void ProcessBehaviorChart::setValuesBorderShape(TextLabel::BorderShape shape) {
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetLabelsAutoPrecision, bool, labelsAutoPrecision, updateLabels)
+void ProcessBehaviorChart::setLabelsAutoPrecision(bool labelsAutoPrecision) {
 	Q_D(ProcessBehaviorChart);
-	if (shape != d->centerValueLabel->borderShape()) {
-		beginMacro(i18n("%1: set values border shape", name()));
-		d->centerValueLabel->setBorderShape(shape);
-		d->upperLimitValueLabel->setBorderShape(shape);
-		d->lowerLimitValueLabel->setBorderShape(shape);
+	if (labelsAutoPrecision != d->labelsAutoPrecision)
+		exec(new ProcessBehaviorChartSetLabelsAutoPrecisionCmd(d, labelsAutoPrecision, ki18n("%1: set labels precision")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetLabelsPrecision, int, labelsPrecision, updateLabels)
+void ProcessBehaviorChart::setLabelsPrecision(int labelsPrecision) {
+	Q_D(ProcessBehaviorChart);
+	if (labelsPrecision != d->labelsPrecision)
+		exec(new ProcessBehaviorChartSetLabelsPrecisionCmd(d, labelsPrecision, ki18n("%1: set labels precision")));
+}
+
+void ProcessBehaviorChart::setLabelsBorderShape(TextLabel::BorderShape shape) {
+	Q_D(ProcessBehaviorChart);
+	if (shape != d->centerLabel->borderShape()) {
+		beginMacro(i18n("%1: set labels border shape", name()));
+		d->centerLabel->setBorderShape(shape);
+		d->upperLimitLabel->setBorderShape(shape);
+		d->lowerLimitLabel->setBorderShape(shape);
 		endMacro();
 	}
 }
 
-void ProcessBehaviorChart::setValuesFont(const QFont& font) {
+void ProcessBehaviorChart::setLabelsFont(const QFont& font) {
 	Q_D(ProcessBehaviorChart);
-	auto textWrapper = d->centerValueLabel->text();
+	auto textWrapper = d->centerLabel->text();
 	QTextEdit te(textWrapper.text);
 	te.selectAll();
 	if (font != te.font()) {
@@ -567,43 +585,43 @@ void ProcessBehaviorChart::setValuesFont(const QFont& font) {
 		te.setFontPointSize(font.pointSize());
 		te.setFont(font);
 
-		beginMacro(i18n("%1: set values font", name()));
+		beginMacro(i18n("%1: set labels font", name()));
 		textWrapper.text = te.toHtml();
-		d->centerValueLabel->setText(textWrapper);
+		d->centerLabel->setText(textWrapper);
 
-		textWrapper = d->upperLimitValueLabel->text();
+		textWrapper = d->upperLimitLabel->text();
 		te.setText(textWrapper.text);
 		te.selectAll();
 		te.setFontFamily(font.family());
 		te.setFontPointSize(font.pointSize());
 		te.setFont(font);
 		textWrapper.text = te.toHtml();
-		d->upperLimitValueLabel->setText(textWrapper);
+		d->upperLimitLabel->setText(textWrapper);
 
-		textWrapper = d->lowerLimitValueLabel->text();
+		textWrapper = d->lowerLimitLabel->text();
 		te.setText(textWrapper.text);
 		te.selectAll();
 		te.setFontFamily(font.family());
 		te.setFontPointSize(font.pointSize());
 		te.setFont(font);
 		textWrapper.text = te.toHtml();
-		d->lowerLimitValueLabel->setText(textWrapper);
+		d->lowerLimitLabel->setText(textWrapper);
 		endMacro();
 	}
 }
 
-void ProcessBehaviorChart::setValuesFontColor(const QColor& color) {
+void ProcessBehaviorChart::setLabelsFontColor(const QColor& color) {
 	Q_D(ProcessBehaviorChart);
-	if (color != d->centerValueLabel->fontColor()) {
-		beginMacro(i18n("%1: set values font color", name()));
-		d->centerValueLabel->setFontColor(color);
-		d->upperLimitValueLabel->setFontColor(color);
-		d->lowerLimitValueLabel->setFontColor(color);
+	if (color != d->centerLabel->fontColor()) {
+		beginMacro(i18n("%1: set labels font color", name()));
+		d->centerLabel->setFontColor(color);
+		d->upperLimitLabel->setFontColor(color);
+		d->lowerLimitLabel->setFontColor(color);
 		endMacro();
 	}
 }
 
-void ProcessBehaviorChart::setValuesBackgroundColor(const QColor& color) {
+void ProcessBehaviorChart::setLabelsBackgroundColor(const QColor& color) {
 	Q_D(ProcessBehaviorChart);
 	// TODO
 }
@@ -641,46 +659,46 @@ void ProcessBehaviorChart::data2ColumnAboutToBeRemoved(const AbstractAspect* asp
 	}
 }
 
-void ProcessBehaviorChart::valuesBorderStyleChanged(Qt::PenStyle style) {
+void ProcessBehaviorChart::labelsBorderStyleChanged(Qt::PenStyle style) {
 	Q_D(ProcessBehaviorChart);
-	if (style != d->centerValueLabel->borderLine()->style()) {
-		beginMacro(i18n("%1: set values border style", name()));
-		d->centerValueLabel->borderLine()->setStyle(style);
-		d->upperLimitValueLabel->borderLine()->setStyle(style);
-		d->lowerLimitValueLabel->borderLine()->setStyle(style);
+	if (style != d->centerLabel->borderLine()->style()) {
+		beginMacro(i18n("%1: set labels border style", name()));
+		d->centerLabel->borderLine()->setStyle(style);
+		d->upperLimitLabel->borderLine()->setStyle(style);
+		d->lowerLimitLabel->borderLine()->setStyle(style);
 		endMacro();
 	}
 }
 
-void ProcessBehaviorChart::valuesBorderWidthChanged(double width) {
+void ProcessBehaviorChart::labelsBorderWidthChanged(double width) {
 	Q_D(ProcessBehaviorChart);
-	if (width != d->centerValueLabel->borderLine()->width()) {
-		beginMacro(i18n("%1: set values border width", name()));
-		d->centerValueLabel->borderLine()->setWidth(width);
-		d->upperLimitValueLabel->borderLine()->setWidth(width);
-		d->lowerLimitValueLabel->borderLine()->setWidth(width);
+	if (width != d->centerLabel->borderLine()->width()) {
+		beginMacro(i18n("%1: set labels border width", name()));
+		d->centerLabel->borderLine()->setWidth(width);
+		d->upperLimitLabel->borderLine()->setWidth(width);
+		d->lowerLimitLabel->borderLine()->setWidth(width);
 		endMacro();
 	}
 }
 
-void ProcessBehaviorChart::valuesBorderColorChanged(const QColor& color) {
+void ProcessBehaviorChart::labelsBorderColorChanged(const QColor& color) {
 	Q_D(ProcessBehaviorChart);
-	if (color != d->centerValueLabel->borderLine()->color()) {
-		beginMacro(i18n("%1: set values border color", name()));
-		d->centerValueLabel->borderLine()->setColor(color);
-		d->upperLimitValueLabel->borderLine()->setColor(color);
-		d->lowerLimitValueLabel->borderLine()->setColor(color);
+	if (color != d->centerLabel->borderLine()->color()) {
+		beginMacro(i18n("%1: set labels border color", name()));
+		d->centerLabel->borderLine()->setColor(color);
+		d->upperLimitLabel->borderLine()->setColor(color);
+		d->lowerLimitLabel->borderLine()->setColor(color);
 		endMacro();
 	}
 }
 
-void ProcessBehaviorChart::valuesBorderOpacityChanged(float opacity) {
+void ProcessBehaviorChart::labelsBorderOpacityChanged(float opacity) {
 	Q_D(ProcessBehaviorChart);
-	if (opacity != d->centerValueLabel->borderLine()->opacity()) {
-		beginMacro(i18n("%1: set values border color", name()));
-		d->centerValueLabel->borderLine()->setOpacity(opacity);
-		d->upperLimitValueLabel->borderLine()->setOpacity(opacity);
-		d->lowerLimitValueLabel->borderLine()->setOpacity(opacity);
+	if (opacity != d->centerLabel->borderLine()->opacity()) {
+		beginMacro(i18n("%1: set labels border color", name()));
+		d->centerLabel->borderLine()->setOpacity(opacity);
+		d->upperLimitLabel->borderLine()->setOpacity(opacity);
+		d->lowerLimitLabel->borderLine()->setOpacity(opacity);
 		endMacro();
 	}
 }
@@ -722,12 +740,12 @@ void ProcessBehaviorChartPrivate::retransform() {
 	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
 	const auto& xRange = q->plot()->range(Dimension::X, cs->index(Dimension::X));
 	double x = xRange.end();
-	centerValueLabel->setPositionLogical(QPointF(x, center));
-	upperLimitValueLabel->setPositionLogical(QPointF(x, upperLimit));
-	lowerLimitValueLabel->setPositionLogical(QPointF(x, lowerLimit));
-	centerValueLabel->retransform();
-	upperLimitValueLabel->retransform();
-	lowerLimitValueLabel->retransform();
+	centerLabel->setPositionLogical(QPointF(x, center));
+	upperLimitLabel->setPositionLogical(QPointF(x, upperLimit));
+	lowerLimitLabel->setPositionLogical(QPointF(x, lowerLimit));
+	centerLabel->retransform();
+	upperLimitLabel->retransform();
+	lowerLimitLabel->retransform();
 
 	recalcShapeAndBoundingRect();
 }
@@ -749,9 +767,9 @@ void ProcessBehaviorChartPrivate::recalc() {
 		yUpperLimitColumn->clear();
 		xLowerLimitColumn->clear();
 		yLowerLimitColumn->clear();
-		centerValueLabel->setText(QString());
-		upperLimitValueLabel->setText(QString());
-		lowerLimitValueLabel->setText(QString());
+		centerLabel->setText(QString());
+		upperLimitLabel->setText(QString());
+		lowerLimitLabel->setText(QString());
 		Q_EMIT q->dataChanged();
 		return;
 	}
@@ -773,7 +791,7 @@ void ProcessBehaviorChartPrivate::recalc() {
 
 	dataCurve->setXColumn(xColumn);
 
-	// min and max values for x
+	// min and max labels for x
 	xCenterColumn->setIntegerAt(0, xMin);
 	xCenterColumn->setIntegerAt(1, xMax);
 
@@ -816,7 +834,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 	yColumn->resizeTo(xColumn->rowCount());
 	Q_EMIT q->statusInfo(QString()); // reset the previous info message
 
-	// determine the number of values in the source data to be taken into account
+	// determine the number of labels in the source data to be taken into account
 	int count = dataColumn->rowCount();
 	if (type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::XbarS
 		|| type == ProcessBehaviorChart::Type::S) {
@@ -843,7 +861,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 
 			// upper and lower limits
 			const double meanMovingRange = gsl_stats_mean(movingRange.data(), 1, movingRange.size());
-			const double E2 = 3 / nsl_pcm_d2(2); // n = 2, two values used to calculate the ranges
+			const double E2 = 3 / nsl_pcm_d2(2); // n = 2, two labels used to calculate the ranges
 			upperLimit = mean + E2 * meanMovingRange;
 			lowerLimit = mean - E2 * meanMovingRange;
 		} else {
@@ -853,7 +871,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 
 			// upper and lower limits
 			const double medianMovingRange = gsl_stats_median(movingRange.data(), 1, movingRange.size());
-			const double E5 = 3 / nsl_pcm_d4(2); // n = 2, two values used to calculate the ranges
+			const double E5 = 3 / nsl_pcm_d4(2); // n = 2, two labels used to calculate the ranges
 			upperLimit = median + E5 * medianMovingRange;
 			lowerLimit = median - E5 * medianMovingRange;
 		}
@@ -1213,30 +1231,30 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 	}
 
 	// update the texts in the value labels
-	updateValueLabels();
+	updateLabels();
 }
 
-void ProcessBehaviorChartPrivate::updateValueLabels() {
+void ProcessBehaviorChartPrivate::updateLabels() {
 	if (!q->plot())
 		return;
 
-	centerValueLabel->setVisible(valuesEnabled);
-	upperLimitValueLabel->setVisible(valuesEnabled);
-	lowerLimitValueLabel->setVisible(valuesEnabled);
+	centerLabel->setVisible(labelsEnabled);
+	upperLimitLabel->setVisible(labelsEnabled);
+	lowerLimitLabel->setVisible(labelsEnabled);
 
-	if (valuesEnabled) {
+	if (labelsEnabled) {
 		const auto numberLocale = QLocale();
-		centerValueLabel->setText(numberLocale.toString(center));
-		upperLimitValueLabel->setText(numberLocale.toString(upperLimit));
-		lowerLimitValueLabel->setText(numberLocale.toString(lowerLimit));
+		centerLabel->setText(numberLocale.toString(center, 'f', labelsPrecision));
+		upperLimitLabel->setText(numberLocale.toString(upperLimit, 'f', labelsPrecision));
+		lowerLimitLabel->setText(numberLocale.toString(lowerLimit, 'f', labelsPrecision));
 
 		// update the position of the value labels
 		auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
 		const auto& xRange = q->plot()->range(Dimension::X, cs->index(Dimension::X));
 		double x = xRange.end();
-		centerValueLabel->setPositionLogical(QPointF(x, center));
-		upperLimitValueLabel->setPositionLogical(QPointF(x, upperLimit));
-		lowerLimitValueLabel->setPositionLogical(QPointF(x, lowerLimit));
+		centerLabel->setPositionLogical(QPointF(x, center));
+		upperLimitLabel->setPositionLogical(QPointF(x, upperLimit));
+		lowerLimitLabel->setPositionLogical(QPointF(x, lowerLimit));
 	}
 }
 
@@ -1257,9 +1275,9 @@ void ProcessBehaviorChartPrivate::recalcShapeAndBoundingRect() {
 	m_shape.addPath(lowerLimitCurve->graphicsItem()->shape());
 
 	// labels
-	m_shape.addPath(centerValueLabel->graphicsItem()->shape());
-	m_shape.addPath(upperLimitValueLabel->graphicsItem()->shape());
-	m_shape.addPath(lowerLimitValueLabel->graphicsItem()->shape());
+	m_shape.addPath(centerLabel->graphicsItem()->shape());
+	m_shape.addPath(upperLimitLabel->graphicsItem()->shape());
+	m_shape.addPath(lowerLimitLabel->graphicsItem()->shape());
 
 	m_boundingRectangle = m_shape.boundingRect();
 }
@@ -1296,14 +1314,16 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeEndElement();
 
-	writer->writeStartElement(QStringLiteral("values"));
-	writer->writeAttribute(QStringLiteral("enabled"), QString::number(d->valuesEnabled));
-	d->valuesBorderLine->save(writer);
+	writer->writeStartElement(QStringLiteral("labels"));
+	writer->writeAttribute(QStringLiteral("enabled"), QString::number(d->labelsEnabled));
+	writer->writeAttribute(QStringLiteral("precision"), QString::number(d->labelsPrecision));
+	writer->writeAttribute(QStringLiteral("autoPrecision"), QString::number(d->labelsAutoPrecision));
+	d->labelsBorderLine->save(writer);
 	writer->writeEndElement();
 
-	d->centerValueLabel->save(writer);
-	d->lowerLimitValueLabel->save(writer);
-	d->upperLimitValueLabel->save(writer);
+	d->centerLabel->save(writer);
+	d->lowerLimitLabel->save(writer);
+	d->upperLimitLabel->save(writer);
 
 	// save the internal columns, above only the references to them were saved
 	d->xColumn->save(writer);
@@ -1376,10 +1396,12 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 			else
 				d->setVisible(str.toInt());
-		} else if (!preview && reader->name() == QLatin1String("values")) {
+		} else if (!preview && reader->name() == QLatin1String("labels")) {
 			attribs = reader->attributes();
-			READ_INT_VALUE("enabled", valuesEnabled, bool);
-			d->valuesBorderLine->load(reader, preview);
+			READ_INT_VALUE("enabled", labelsEnabled, bool);
+			READ_INT_VALUE("precision", labelsPrecision, int);
+			READ_INT_VALUE("autoPrecision", labelsAutoPrecision, bool);
+			d->labelsBorderLine->load(reader, preview);
 		} else if (reader->name() == QLatin1String("column")) {
 			attribs = reader->attributes();
 			bool rc = false;
@@ -1421,11 +1443,11 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 			bool rc = false;
 			if (attribs.value(QStringLiteral("name")) == QLatin1String("centerValue"))
-				rc = d->centerValueLabel->load(reader, preview);
+				rc = d->centerLabel->load(reader, preview);
 			else if (attribs.value(QStringLiteral("name")) == QLatin1String("lowerLimitValue"))
-				rc = d->lowerLimitValueLabel->load(reader, preview);
+				rc = d->lowerLimitLabel->load(reader, preview);
 			else if (attribs.value(QStringLiteral("name")) == QLatin1String("upperLimitValue"))
-				rc = d->upperLimitValueLabel->load(reader, preview);
+				rc = d->upperLimitLabel->load(reader, preview);
 
 			if (!rc)
 				return false;
@@ -1469,12 +1491,12 @@ void ProcessBehaviorChart::loadThemeConfig(const KConfig& config) {
 	d->lowerLimitCurve->line()->loadThemeConfig(group, themeColor);
 	d->lowerLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
-	d->centerValueLabel->loadThemeConfig(config);
-	d->upperLimitValueLabel->loadThemeConfig(config);
-	d->lowerLimitValueLabel->loadThemeConfig(config);
+	d->centerLabel->loadThemeConfig(config);
+	d->upperLimitLabel->loadThemeConfig(config);
+	d->lowerLimitLabel->loadThemeConfig(config);
 
 	group = config.group(QStringLiteral("CartesianPlot"));
-	d->valuesBorderLine->loadThemeConfig(group);
+	d->labelsBorderLine->loadThemeConfig(group);
 
 	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
