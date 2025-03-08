@@ -60,7 +60,6 @@ ProcessBehaviorChart::~ProcessBehaviorChart() = default;
 void ProcessBehaviorChart::init(bool loading) {
 	Q_D(ProcessBehaviorChart);
 
-
 	// curve and columns for the data points
 	d->dataCurve = new XYCurve(QStringLiteral("data"));
 	d->dataCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
@@ -190,10 +189,10 @@ void ProcessBehaviorChart::init(bool loading) {
 	d->labelsEnabled = group.readEntry(QStringLiteral("LabelsEnabled"), false);
 	d->labelsAutoPrecision = group.readEntry(QStringLiteral("LabelsAutoPrecision"), true);
 	d->labelsPrecision = group.readEntry(QStringLiteral("LabelsPrecision"), 1);
-	const auto borderShape = static_cast<TextLabel::BorderShape>(group.readEntry(QStringLiteral("BorderShape"), (int)TextLabel::BorderShape::LeftPointingRectangle));
-	d->upperLimitLabel->setBorderShape(borderShape);
-	d->centerLabel->setBorderShape(borderShape);
-	d->lowerLimitLabel->setBorderShape(borderShape);
+	const auto shape = static_cast<TextLabel::BorderShape>(group.readEntry(QStringLiteral("BorderShape"), (int)TextLabel::BorderShape::LeftPointingRectangle));
+	d->upperLimitLabel->setBorderShape(shape);
+	d->centerLabel->setBorderShape(shape);
+	d->lowerLimitLabel->setBorderShape(shape);
 }
 
 void ProcessBehaviorChart::finalizeAdd() {
