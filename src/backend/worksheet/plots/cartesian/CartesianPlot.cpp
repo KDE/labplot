@@ -5486,7 +5486,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			else
 				return false;
 		} else if (reader->name() == QLatin1String("ProcessBehaviorChart")) {
-			auto* plot = new ProcessBehaviorChart(QStringLiteral("Process Behavior Chart"));
+			auto* plot = new ProcessBehaviorChart(QStringLiteral("Process Behavior Chart"), true);
 			plot->setIsLoading(true);
 			if (plot->load(reader, preview))
 				addChildFast(plot);

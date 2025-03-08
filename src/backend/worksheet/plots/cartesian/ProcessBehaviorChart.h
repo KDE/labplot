@@ -33,7 +33,7 @@ public:
 	enum class Type { XmR, mR, XbarR, R, XbarS, S, P, NP, C, U };
 	enum class LimitsMetric { Average, Median };
 
-	explicit ProcessBehaviorChart(const QString& name);
+	explicit ProcessBehaviorChart(const QString& name, bool loading = false);
 	~ProcessBehaviorChart() override;
 
 	void finalizeAdd() override;
@@ -103,7 +103,7 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(ProcessBehaviorChart)
-	void init();
+	void init(bool loading = false);
 	void connectDataColumn(const AbstractColumn*);
 	void connectData2Column(const AbstractColumn*);
 

@@ -384,12 +384,16 @@ void ProcessBehaviorChartDock::labelsEnabledChanged(bool enabled) {
 	ui.lLabelsBorder->setVisible(enabled);
 	ui.lLabelsBorderShape->setVisible(enabled);
 	ui.cbLabelsBorderShape->setVisible(enabled);
-	labelsBorderLineWidget->setVisible(enabled);
+
+	const auto shape = static_cast<TextLabel::BorderShape>(ui.cbLabelsBorderShape->currentData().toInt());
+	const bool visible = (shape != TextLabel::BorderShape::NoBorder);
+	labelsBorderLineWidget->setVisible(enabled && visible);
 
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* plot : m_plots)
 		plot->setLabelsEnabled(enabled);
 }
+
 void ProcessBehaviorChartDock::labelsPrecisionChanged(int value) {
 	CONDITIONAL_LOCK_RETURN;
 
@@ -551,7 +555,6 @@ void ProcessBehaviorChartDock::load() {
 	ui.chbLabelsEnabled->setChecked(m_plot->labelsEnabled());
 	ui.chkLabelsAutoPrecision->setChecked((int)m_plot->labelsAutoPrecision());
 	ui.sbLabelsPrecision->setValue((int)m_plot->labelsPrecision());
-	labelsEnabledChanged(ui.chbLabelsEnabled->isChecked());
 	ui.kfrLabelsFont->setFont(m_plot->labelsFont());
 	ui.kcbLabelsFontColor->setColor(m_plot->labelsFontColor());
 	ui.kcbLabelsBackgroundColor->setColor(m_plot->labelsBackgroundColor());
@@ -564,6 +567,8 @@ void ProcessBehaviorChartDock::load() {
 	for (auto* plot : m_plots)
 		borderLines << plot->labelsBorderLine();
 	labelsBorderLineWidget->setLines(borderLines);
+
+	labelsEnabledChanged(ui.chbLabelsEnabled->isChecked());
 }
 
 void ProcessBehaviorChartDock::loadConfig(KConfig& config) {
