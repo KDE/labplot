@@ -232,7 +232,7 @@ void ProcessBehaviorChartDock::retranslateUi() {
 	// tooltips
 	QString info = i18n(
 		"The supported chart types are grouped according to the plotted statistics and to the metric defining the limits.<br><br>"
-		"Individual Labels and Moving Ranges, Limits Based on the Average or Median Moving Range:"
+		"Individual Values and Moving Ranges, Limits Based on the Average or Median Moving Range:"
 		"<ul>"
 		"<li>X (XmR) - plot the <b>individual labels</b>.</li>"
 		"<li>mR - plot the <b>moving ranges</b>.</li>"
@@ -257,7 +257,7 @@ void ProcessBehaviorChartDock::retranslateUi() {
 	ui.lType->setToolTip(info);
 	ui.cbType->setToolTip(info);
 
-	info = i18n("Allow negative labels for the lower limit.");
+	info = i18n("Allow negative values for the lower limit.");
 	ui.lNegativeLowerLimit->setToolTip(info);
 	ui.chbNegativeLowerLimit->setToolTip(info);
 
