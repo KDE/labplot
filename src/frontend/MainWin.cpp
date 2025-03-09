@@ -4,7 +4,7 @@
 	Description          : Main window of the application
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -2907,6 +2907,7 @@ void MainWin::settingsDialog() {
 	dlg->exec();
 }
 
+#ifdef HAVE_CANTOR_LIBS
 void MainWin::settingsNotebookDialog() {
 	auto* dlg = new SettingsDialog(this, m_defaultSystemLocale);
 	connect(dlg, &SettingsDialog::settingsChanged, this, &MainWin::handleSettingsChanges);
@@ -2914,7 +2915,6 @@ void MainWin::settingsNotebookDialog() {
 	dlg->exec();
 }
 
-#ifdef HAVE_CANTOR_LIBS
 void MainWin::updateNotebookActions() {
 	auto* menu = static_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
 	unplugActionList(QLatin1String("backends_list"));
