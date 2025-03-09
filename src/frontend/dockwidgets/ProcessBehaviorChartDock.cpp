@@ -522,7 +522,7 @@ void ProcessBehaviorChartDock::showStatusInfo(const QString& info) {
 		if (!m_messageWidget) {
 			m_messageWidget = new KMessageWidget(this);
 			m_messageWidget->setMessageType(KMessageWidget::Warning);
-			static_cast<QGridLayout*>(ui.tabGeneral->layout())->addWidget(m_messageWidget, 13, 0, 1, 3);
+			static_cast<QGridLayout*>(ui.tabGeneral->layout())->addWidget(m_messageWidget, 11, 0, 1, 3);
 		}
 		m_messageWidget->setText(info);
 		m_messageWidget->animatedShow();
