@@ -171,7 +171,7 @@ private:
 	KToggleAction* m_statusBarAction;
 	QAction* m_memoryInfoAction;
 	KToggleFullScreenAction* m_fullScreenAction;
-	QAction* m_configureCASAction;
+	QAction* m_configureNotebookAction;
 
 	// window visibility
 	QAction* m_visibilityFolderAction;
@@ -257,6 +257,7 @@ private Q_SLOTS:
 	void exportDialog();
 	void editFitsFileDialog();
 	void settingsDialog();
+	void settingsNotebookDialog();
 	void projectChanged();
 	void colorSchemeChanged(QAction*);
 	void openDatasetExample();

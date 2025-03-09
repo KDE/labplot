@@ -861,11 +861,11 @@ void MainWin::initActions() {
 
 #ifdef HAVE_CANTOR_LIBS
 	// configure CAS backends
-	m_configureCASAction = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS..."), this);
-	m_configureCASAction->setWhatsThis(i18n("Opens the settings for Computer Algebra Systems to modify the available systems or to enable new ones"));
-	m_configureCASAction->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
-	actionCollection()->addAction(QLatin1String("configure_cas"), m_configureCASAction);
-	connect(m_configureCASAction, &QAction::triggered, this, &MainWin::settingsDialog); // TODO: go to the Notebook page in the settings dialog directly
+	m_configureNotebookAction = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS..."), this);
+	m_configureNotebookAction->setWhatsThis(i18n("Opens the settings for Computer Algebra Systems to modify the available systems or to enable new ones"));
+	m_configureNotebookAction->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
+	actionCollection()->addAction(QLatin1String("configure_cas"), m_configureNotebookAction);
+	connect(m_configureNotebookAction, &QAction::triggered, this, &MainWin::settingsNotebookDialog);
 #endif
 }
 
@@ -2904,7 +2904,13 @@ void MainWin::addAspectToProject(AbstractAspect* aspect) {
 void MainWin::settingsDialog() {
 	auto* dlg = new SettingsDialog(this, m_defaultSystemLocale);
 	connect(dlg, &SettingsDialog::settingsChanged, this, &MainWin::handleSettingsChanges);
-	// 	connect (dlg, &SettingsDialog::resetWelcomeScreen, this, &MainWin::resetWelcomeScreen);
+	dlg->exec();
+}
+
+void MainWin::settingsNotebookDialog() {
+	auto* dlg = new SettingsDialog(this, m_defaultSystemLocale);
+	connect(dlg, &SettingsDialog::settingsChanged, this, &MainWin::handleSettingsChanges);
+	dlg->navigateTo(Settings::Type::Notebook);
 	dlg->exec();
 }
 
@@ -2931,9 +2937,9 @@ void MainWin::updateNotebookActions() {
 	plugActionList(QLatin1String("backends_list"), newBackendActions);
 
 	menu->addSeparator();
-	menu->addAction(m_configureCASAction);
+	menu->addAction(m_configureNotebookAction);
 
 	m_newNotebookMenu->addSeparator();
-	m_newNotebookMenu->addAction(m_configureCASAction);
+	m_newNotebookMenu->addAction(m_configureNotebookAction);
 }
 #endif
