@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-05 00:39+0000\n"
+"POT-Creation-Date: 2025-03-09 00:38+0000\n"
 "PO-Revision-Date: 2025-03-04 09:20+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -292,6 +292,7 @@ msgstr "Entier long"
 #: src/frontend/notebook/NotebookView.cpp:97
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:208
 #: src/frontend/ui/dockwidgets/axisdock.ui:1524
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:568
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:280
 #: src/frontend/widgets/LabelWidget.cpp:477
@@ -940,7 +941,7 @@ msgstr "%1 : définir le style de contour de la barre d'erreur"
 #: src/backend/datapicker/DatapickerImage.cpp:417
 #: src/backend/worksheet/InfoElement.cpp:872
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:143
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:204
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:268
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:146
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:143
 #: src/backend/worksheet/WorksheetElement.cpp:163
@@ -954,7 +955,7 @@ msgstr "%1 : définir comme visible"
 #: src/backend/datapicker/DatapickerImage.cpp:417
 #: src/backend/worksheet/InfoElement.cpp:872
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:143
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:204
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:268
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:146
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:143
 #: src/backend/worksheet/WorksheetElement.cpp:163
@@ -3781,7 +3782,7 @@ msgstr "Moyenne arithmétique"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:261
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:183
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:204
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:73
@@ -6476,6 +6477,7 @@ msgstr "Circulaire"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:341
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:382
 #: src/frontend/ui/dockwidgets/histogramdock.ui:214
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:661
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:350
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:223
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:120
@@ -8004,6 +8006,8 @@ msgstr "%1 : définir automatiquement le format des étiquettes"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:946
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:953
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:579
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:586
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1 : définir la précision des étiquettes"
@@ -8087,7 +8091,7 @@ msgid "%1: set data columns"
 msgstr "%1 : définir les colonnes de données"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:306
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:430
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:527
 #, kde-format
 msgid "%1: set type"
 msgstr "%1 : définir un type"
@@ -9048,8 +9052,8 @@ msgstr "Ajuster vers une distribution binomiale"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:399
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:244
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:406
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:418
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:503
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:515
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:260
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:261
 #, kde-format
@@ -9130,27 +9134,90 @@ msgstr "%1 : définir la bande passante"
 msgid "%1: legend visibility changed"
 msgstr "%1 : modification de la visibilité de la légende"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:437
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:534
 #, kde-format
 msgid "%1: set limits metric"
 msgstr "%1 : définir la métrique des limites"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:444
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:541
 #, kde-format
 msgid "%1: set sample size"
 msgstr "%1 : définir la taille des échantillons"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:451
-#, kde-format
-msgid "%1: change negative lower limit"
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:549
+#, fuzzy, kde-format
+#| msgid "%1: change negative lower limit"
+msgid "%1: enable negative lower limit"
 msgstr "%1 : modifier la limite inférieure négative"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:458
-#, kde-format
-msgid "%1: change exact limits"
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:549
+#, fuzzy, kde-format
+#| msgid "%1: change negative lower limit"
+msgid "%1: disable negative lower limit"
+msgstr "%1 : modifier la limite inférieure négative"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:559
+#, fuzzy, kde-format
+#| msgid "%1: change exact limits"
+msgid "%1: enable exact limits"
 msgstr "%1 : modifier les limites exactes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:616
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:559
+#, fuzzy, kde-format
+#| msgid "%1: change exact limits"
+msgid "%1: disable exact limits"
+msgstr "%1 : modifier les limites exactes"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:570
+#, kde-format
+msgid "%1: enable control labels"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:570
+#, fuzzy, kde-format
+#| msgid "%1: set cell value"
+msgid "%1: disable control labels"
+msgstr "%1 : définir la valeur de cellule"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:592
+#, fuzzy, kde-format
+#| msgid "%1: set border shape"
+msgid "%1: set labels border shape"
+msgstr "%1 : définir le style de bordure"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:606
+#, fuzzy, kde-format
+#| msgid "%1: set label font"
+msgid "%1: set labels font"
+msgstr "%1 : définir la police de l'étiquette"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:640
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:668
+#, fuzzy, kde-format
+#| msgid "%1: set label background color"
+msgid "%1: set labels background color"
+msgstr "%1 : définir la couleur des étiquettes en arrière-plan"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:726
+#, fuzzy, kde-format
+#| msgid "%1: set border style"
+msgid "%1: set labels border style"
+msgstr "%1 : définir le style de bordure"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:737
+#, fuzzy, kde-format
+#| msgid "%1: set labels format"
+msgid "%1: set labels border width"
+msgstr "%1 : définir le format des étiquettes"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:748
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:759
+#, fuzzy, kde-format
+#| msgid "%1: set label color"
+msgid "%1: set labels border color"
+msgstr "%1 : définir la couleur de l'étiquette"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:905
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "Le dernier échantillon est incomplet et a été omis."
@@ -12771,7 +12838,7 @@ msgstr "%1 axes : modèle « %2 » chargé"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:375
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:452
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:454
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:617
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
@@ -13403,7 +13470,7 @@ msgid "Custom value for the kernel bandwidth"
 msgstr "Valeur personnalisée pour la bande passante du noyau"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:373
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:452
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:615
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1041
@@ -13483,19 +13550,109 @@ msgstr "%1 matrices : modèle « %2 » chargé"
 msgid "File Browser"
 msgstr "Navigateur de fichiers"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:182
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:203
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
 #, kde-format
 msgid "Average"
 msgstr "Moyenne"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:199
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:219
+#: src/frontend/widgets/LabelWidget.cpp:508
 #, kde-format
+msgid "No Border"
+msgstr "Aucune bordure"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:220
+#: src/frontend/widgets/LabelWidget.cpp:509
+#, kde-format
+msgid "Rectangle"
+msgstr "Rectangle"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:221
+#: src/frontend/widgets/LabelWidget.cpp:510
+#, kde-format
+msgid "Ellipse"
+msgstr "Ellipse"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:222
+#: src/frontend/widgets/LabelWidget.cpp:511
+#, kde-format
+msgid "Round sided rectangle"
+msgstr "Rectangles à coins arrondis"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:223
+#: src/frontend/widgets/LabelWidget.cpp:512
+#, kde-format
+msgid "Round corner rectangle"
+msgstr "Rectangles à coins arrondis"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:224
+#: src/frontend/widgets/LabelWidget.cpp:513
+#, kde-format
+msgid "Inwards round corner rectangle"
+msgstr "Rectangles à coins arrondis vers l'intérieur"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
+#: src/frontend/widgets/LabelWidget.cpp:514
+#, kde-format
+msgid "Dented border rectangle"
+msgstr "Rectangle à bord dentelé"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
+#: src/frontend/widgets/LabelWidget.cpp:515
+#, kde-format
+msgid "Cuboid"
+msgstr "Cuboïde"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
+#: src/frontend/widgets/LabelWidget.cpp:516
+#, fuzzy, kde-format
+#| msgid "Up Pointing rectangle"
+msgid "Up pointing rectangle"
+msgstr "Rectangle avec flèche vers le haut"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:228
+#: src/frontend/widgets/LabelWidget.cpp:517
+#, fuzzy, kde-format
+#| msgid "Down Pointing rectangle"
+msgid "Down pointing rectangle"
+msgstr "Rectangle avec flèche vers le bas"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:229
+#: src/frontend/widgets/LabelWidget.cpp:518
+#, fuzzy, kde-format
+#| msgid "Left Pointing rectangle"
+msgid "Left pointing rectangle"
+msgstr "Rectangle avec flèche vers la gauche"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
+#: src/frontend/widgets/LabelWidget.cpp:519
+#, fuzzy, kde-format
+#| msgid "Right Pointing rectangle"
+msgid "Right pointing rectangle"
+msgstr "Rectangle avec flèche vers la droite"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:234
+#, fuzzy, kde-format
+#| msgid ""
+#| "The supported chart types are grouped according to the plotted statistics "
+#| "and to the metric defining the limits.<br><br>Individual Values and "
+#| "Moving Ranges, Limits Based on the Average or Median Moving Range:"
+#| "<ul><li>X (XmR) - plot the <b>individual values</b>.</li><li>mR - plot "
+#| "the <b>moving ranges</b>.</li></ul>Averages and Ranges, Limits based on "
+#| "the Average or Median Range:<ul><li>X̅  (X̅R) - plot the <b>averages for "
+#| "each sample</b> .</li><li>R (X̅R) - plot the <b>ranges for each sample</b>."
+#| "</li></ul>Averages and Standard Deviations, Limits Based on the Standard "
+#| "Deviations:<ul><li>X̅  (X̅S) - plot the <b>averages for each sample</b>.</"
+#| "li><li>S (X̅S) - plot the <b>standard deviations for each sample</b>.</"
+#| "li></ul>Attributes:<ul><li>P - plot <b>binomial proportions</b>.</"
+#| "li><li>NP - plot <b>binomial counts</b>.</li><li>C - plot <b>Poisson "
+#| "counts</b>.</li><li>U - plot <b>Poisson rates</b>.</li></ul>"
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
 "and to the metric defining the limits.<br><br>Individual Values and Moving "
 "Ranges, Limits Based on the Average or Median Moving Range:<ul><li>X (XmR) - "
-"plot the <b>individual values</b>.</li><li>mR - plot the <b>moving ranges</"
+"plot the <b>individual labels</b>.</li><li>mR - plot the <b>moving ranges</"
 "b>.</li></ul>Averages and Ranges, Limits based on the Average or Median "
 "Range:<ul><li>X̅  (X̅R) - plot the <b>averages for each sample</b> .</li><li>R "
 "(X̅R) - plot the <b>ranges for each sample</b>.</li></ul>Averages and "
@@ -13521,12 +13678,12 @@ msgstr ""
 "binomiaux</b>.</li><li>C - tracé <b>Compteur de Poisson</b>.</li><li>U - "
 "tracé <b>Fréquences de Poisson</b>.</li></ul>"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:260
 #, kde-format
 msgid "Allow negative values for the lower limit."
 msgstr "Autoriser les valeurs négatives pour la limite inférieure."
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:229
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:264
 #, kde-format
 msgid ""
 "If checked, exact limits are calculated for every individual sample (\"stair-"
@@ -19767,6 +19924,7 @@ msgstr "Sujets :"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1168
 #: src/frontend/ui/dockwidgets/columndock.ui:204
 #: src/frontend/ui/dockwidgets/matrixdock.ui:285
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:617
 #: src/frontend/ui/dockwidgets/valuewidget.ui:211
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:238
 #, kde-format
@@ -20417,12 +20575,15 @@ msgstr "Étiquettes"
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbLabelsPrecision)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1165
 #: src/frontend/ui/dockwidgets/axisdock.ui:1202
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:614
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:651
 #, kde-format
 msgid "Number of digits after the decimal point"
 msgstr "Nombre de chiffres après la virgule"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkLabelsAutoPrecision)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1209
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:658
 #, kde-format
 msgid ""
 "Automatically determine the optimal number of digits after the decimal point"
@@ -20449,6 +20610,7 @@ msgstr "Position"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1420
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:126
 #: src/frontend/ui/dockwidgets/notedock.ui:92
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:485
 #: src/frontend/ui/dockwidgets/valuewidget.ui:310
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:301
 #: src/frontend/ui/labelwidget.ui:259
@@ -20537,7 +20699,9 @@ msgstr "Préfixe : "
 
 #. i18n: ectx: property (text), widget (QLabel, lFontColor)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsColor)
+#. i18n: ectx: property (text), widget (QLabel, lLabelsFontColor)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1512
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:595
 #: src/frontend/ui/labelwidget.ui:213
 #, kde-format
 msgid "Font Color:"
@@ -20568,12 +20732,14 @@ msgstr "Grille principale"
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, lRugEnabled)
+#. i18n: ectx: property (text), widget (QLabel, lLabelsEnabled)
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:42
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:794
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1034
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1041
 #: src/frontend/ui/dockwidgets/histogramdock.ui:491
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:332
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:575
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:611
 #: src/frontend/ui/mqttwillsettingswidget.ui:346
 #, kde-format
@@ -20665,11 +20831,13 @@ msgstr "Barres"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorder)
 #. i18n: ectx: attribute (title), widget (QWidget, tabBorder)
+#. i18n: ectx: property (text), widget (QLabel, lLabelsBorder)
 #: src/frontend/ui/dockwidgets/barplotdock.ui:264
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:449
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1328
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:596
 #: src/frontend/ui/dockwidgets/imagedock.ui:557
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:607
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:303
 #: src/frontend/ui/labelwidget.ui:296 src/frontend/ui/symbolwidget.ui:233
 #: src/frontend/widgets/SymbolWidget.cpp:133
@@ -21681,6 +21849,29 @@ msgstr "Limite supérieure"
 #, kde-format
 msgid "Lower Limit"
 msgstr "Limite inférieure"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLabels)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:421
+#, fuzzy, kde-format
+#| msgid "Center/Limits Lines"
+msgid "Center/Limit Values"
+msgstr "Lignes centrale et de limites"
+
+#. i18n: ectx: property (text), widget (QLabel, lBorderShape)
+#. i18n: ectx: property (text), widget (QLabel, lLabelsBorderShape)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:443
+#: src/frontend/ui/labelwidget.ui:134
+#, kde-format
+msgid "Shape:"
+msgstr "Forme :"
+
+#. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
+#. i18n: ectx: property (text), widget (QLabel, lLabelsBackgroundColor)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:492
+#: src/frontend/ui/labelwidget.ui:72
+#, kde-format
+msgid "Background Color:"
+msgstr "Couleur d'arrière-plan :"
 
 #. i18n: ectx: property (text), widget (QLabel, lVersion_2)
 #: src/frontend/ui/dockwidgets/projectdock.ui:66
@@ -22773,18 +22964,6 @@ msgstr ""
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
 "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
 "\"><br /></p></body></html>"
-
-#. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
-#: src/frontend/ui/labelwidget.ui:72
-#, kde-format
-msgid "Background Color:"
-msgstr "Couleur d'arrière-plan :"
-
-#. i18n: ectx: property (text), widget (QLabel, lBorderShape)
-#: src/frontend/ui/labelwidget.ui:134
-#, kde-format
-msgid "Shape:"
-msgstr "Forme :"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lOffsetY)
 #. i18n: ectx: property (toolTip), widget (QLabel, lOffsetX)
@@ -24314,66 +24493,6 @@ msgstr "Impossible de supprimer le mot clé obligatoire."
 msgid "Removing Keyword"
 msgstr "Suppression d'un mot clé en cours..."
 
-#: src/frontend/widgets/LabelWidget.cpp:508
-#, kde-format
-msgid "No Border"
-msgstr "Aucune bordure"
-
-#: src/frontend/widgets/LabelWidget.cpp:509
-#, kde-format
-msgid "Rectangle"
-msgstr "Rectangle"
-
-#: src/frontend/widgets/LabelWidget.cpp:510
-#, kde-format
-msgid "Ellipse"
-msgstr "Ellipse"
-
-#: src/frontend/widgets/LabelWidget.cpp:511
-#, kde-format
-msgid "Round sided rectangle"
-msgstr "Rectangles à coins arrondis"
-
-#: src/frontend/widgets/LabelWidget.cpp:512
-#, kde-format
-msgid "Round corner rectangle"
-msgstr "Rectangles à coins arrondis"
-
-#: src/frontend/widgets/LabelWidget.cpp:513
-#, kde-format
-msgid "Inwards round corner rectangle"
-msgstr "Rectangles à coins arrondis vers l'intérieur"
-
-#: src/frontend/widgets/LabelWidget.cpp:514
-#, kde-format
-msgid "Dented border rectangle"
-msgstr "Rectangle à bord dentelé"
-
-#: src/frontend/widgets/LabelWidget.cpp:515
-#, kde-format
-msgid "Cuboid"
-msgstr "Cuboïde"
-
-#: src/frontend/widgets/LabelWidget.cpp:516
-#, kde-format
-msgid "Up Pointing rectangle"
-msgstr "Rectangle avec flèche vers le haut"
-
-#: src/frontend/widgets/LabelWidget.cpp:517
-#, kde-format
-msgid "Down Pointing rectangle"
-msgstr "Rectangle avec flèche vers le bas"
-
-#: src/frontend/widgets/LabelWidget.cpp:518
-#, kde-format
-msgid "Left Pointing rectangle"
-msgstr "Rectangle avec flèche vers la gauche"
-
-#: src/frontend/widgets/LabelWidget.cpp:519
-#, kde-format
-msgid "Right Pointing rectangle"
-msgstr "Rectangle avec flèche vers la droite"
-
 #: src/frontend/widgets/LabelWidget.cpp:522
 #, kde-format
 msgid ""
@@ -25820,9 +25939,6 @@ msgstr "Impossible d'ouvrir un fichier :"
 #~ msgid "Font color:"
 #~ msgstr "Couleur de police :"
 
-#~ msgid "%1: set border style"
-#~ msgstr "%1 : définir le style de bordure"
-
 #~ msgid "%1: set vertical line style"
 #~ msgstr "%1 : définir un style de ligne verticale"
 
@@ -26668,11 +26784,6 @@ msgstr "Impossible d'ouvrir un fichier :"
 
 #~ msgid "BIC"
 #~ msgstr "BIC"
-
-#, fuzzy
-#~| msgid "%1: set cell value"
-#~ msgid "%1: disable theming"
-#~ msgstr "%1 : définir la valeur de cellule"
 
 #, fuzzy
 #~| msgid "Break layout"
