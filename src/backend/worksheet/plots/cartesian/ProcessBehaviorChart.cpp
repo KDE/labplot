@@ -881,6 +881,7 @@ void ProcessBehaviorChartPrivate::recalc() {
 
 	// emit dataChanged() in order to retransform everything with the new size/shape of the plot
 	Q_EMIT q->dataChanged();
+	Q_EMIT q->recalculated();
 }
 
 /*!

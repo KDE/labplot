@@ -64,6 +64,7 @@ private Q_SLOTS:
 	void sampleSizeChanged(int);
 	void negativeLowerLimitEnabledChanged(bool);
 	void exactLimitsEnabledChanged(bool);
+	void updateLowerLimitWidgets();
 
 	// Labels-tab
 	void labelsEnabledChanged(bool);

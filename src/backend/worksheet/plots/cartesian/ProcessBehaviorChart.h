@@ -115,7 +115,7 @@ private:
 	XYCurve* dataCurve() const;
 
 Q_SIGNALS:
-	void linesUpdated(const ProcessBehaviorChart*, const QVector<QLineF>&);
+	void recalculated();
 
 	// General
 	void typeChanged(ProcessBehaviorChart::Type);

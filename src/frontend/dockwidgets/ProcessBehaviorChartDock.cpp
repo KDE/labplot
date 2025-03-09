@@ -75,6 +75,9 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 		layout->setVerticalSpacing(2);
 	}
 
+	updateLocale();
+	retranslateUi();
+
 	// Slots
 	// General
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &ProcessBehaviorChartDock::dataColumnChanged);
@@ -106,9 +109,6 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	connect(templateHandler, &TemplateHandler::info, this, &ProcessBehaviorChartDock::info);
 
 	ui.verticalLayout->addWidget(frame);
-
-	updateLocale();
-	retranslateUi();
 }
 
 ProcessBehaviorChartDock::~ProcessBehaviorChartDock() = default;
@@ -169,11 +169,6 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 	ui.chkLegendVisible->setChecked(m_plot->legendVisible());
 	ui.chkVisible->setChecked(m_plot->isVisible());
 
-	// hide the properties for the lower limit line if the lower limit is not available for the current plot
-	bool visible = m_plot->lowerLimitAvailable();
-	ui.lLowerLimit->setVisible(visible);
-	lowerLimitLineWidget->setVisible(visible);
-
 	// load the remaining properties
 	load();
 
@@ -189,6 +184,7 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 	connect(m_plot, &ProcessBehaviorChart::negativeLowerLimitEnabledChanged, this, &ProcessBehaviorChartDock::plotNegativeLowerLimitEnabledChanged);
 	connect(m_plot, &ProcessBehaviorChart::exactLimitsEnabledChanged, this, &ProcessBehaviorChartDock::plotExactLimitsEnabledChanged);
 	connect(m_plot, &ProcessBehaviorChart::statusInfo, this, &ProcessBehaviorChartDock::showStatusInfo);
+	connect(m_plot, &ProcessBehaviorChart::recalculated, this, &ProcessBehaviorChartDock::updateLowerLimitWidgets);
 
 	// Labels-tab
 	connect(m_plot, &ProcessBehaviorChart::labelsEnabledChanged, this, &ProcessBehaviorChartDock::plotLabelsEnabledChanged);
@@ -368,6 +364,17 @@ void ProcessBehaviorChartDock::exactLimitsEnabledChanged(bool enabled) {
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* plot : m_plots)
 		plot->setExactLimitsEnabled(enabled);
+}
+
+/*!
+ * toggle the properties for the lower limit line if the lower limit is not available,
+ * called every time the chart is re-calculated since the precense of the lower limit
+ * is depending on multiple factors and on the current result for the control limits.
+ */
+void ProcessBehaviorChartDock::updateLowerLimitWidgets() {
+	const bool visible = m_plot->lowerLimitAvailable();
+	ui.lLowerLimit->setVisible(visible);
+	lowerLimitLineWidget->setVisible(visible);
 }
 
 // Labels-tab
@@ -550,6 +557,8 @@ void ProcessBehaviorChartDock::load() {
 
 	// user exact/individual limits, relevant for P and U charts only
 	ui.chbExactLimits->setChecked(m_plot->exactLimitsEnabled());
+
+	updateLowerLimitWidgets();
 
 	// labels
 	ui.chbLabelsEnabled->setChecked(m_plot->labelsEnabled());
