@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-09 00:38+0000\n"
+"POT-Creation-Date: 2025-03-10 00:38+0000\n"
 "PO-Revision-Date: 2025-03-03 08:59+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -3787,7 +3787,7 @@ msgstr "Mitjana aritmètica"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:261
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:204
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:200
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:73
@@ -9253,7 +9253,7 @@ msgstr "%1: establix el format de les etiquetes"
 msgid "%1: set labels border color"
 msgstr "%1: establix el color de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:905
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:906
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "L'última mostra és incompleta i s'ha omés."
@@ -12862,7 +12862,7 @@ msgstr "%1 eixos: s'ha carregat la plantilla «%2»"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:375
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:452
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:617
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:626
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
@@ -13497,7 +13497,7 @@ msgid "Custom value for the kernel bandwidth"
 msgstr "Valor personalitzat per a l'amplada de banda del nucli"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:373
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:615
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:624
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1041
@@ -13577,76 +13577,76 @@ msgstr "%1 matrius: s'ha carregat la plantilla «%2»"
 msgid "File Browser"
 msgstr "Navegador de fitxers"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:203
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:199
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
 #, kde-format
 msgid "Average"
 msgstr "Mitjana"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:219
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:215
 #: src/frontend/widgets/LabelWidget.cpp:508
 #, kde-format
 msgid "No Border"
 msgstr "Sense vores"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:220
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:216
 #: src/frontend/widgets/LabelWidget.cpp:509
 #, kde-format
 msgid "Rectangle"
 msgstr "Rectangle"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:221
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:217
 #: src/frontend/widgets/LabelWidget.cpp:510
 #, kde-format
 msgid "Ellipse"
 msgstr "El·lipse"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:222
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:218
 #: src/frontend/widgets/LabelWidget.cpp:511
 #, kde-format
 msgid "Round sided rectangle"
 msgstr "Rectangle amb els costats rodons"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:223
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:219
 #: src/frontend/widgets/LabelWidget.cpp:512
 #, kde-format
 msgid "Round corner rectangle"
 msgstr "Rectangle amb cantó arrodonit"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:224
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:220
 #: src/frontend/widgets/LabelWidget.cpp:513
 #, kde-format
 msgid "Inwards round corner rectangle"
 msgstr "Rectangle amb cantó arrodonit cap a dins"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:221
 #: src/frontend/widgets/LabelWidget.cpp:514
 #, kde-format
 msgid "Dented border rectangle"
 msgstr "Rectangle amb vora dentada"
 
 # Nota: https://ca.wikipedia.org/wiki/Ortoedre
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:222
 #: src/frontend/widgets/LabelWidget.cpp:515
 #, kde-format
 msgid "Cuboid"
 msgstr "Ortoedre"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:223
 #: src/frontend/widgets/LabelWidget.cpp:516
 #, fuzzy, kde-format
 #| msgid "Up Pointing rectangle"
 msgid "Up pointing rectangle"
 msgstr "Rectangle que assenyala cap amunt"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:228
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:224
 #: src/frontend/widgets/LabelWidget.cpp:517
 #, fuzzy, kde-format
 #| msgid "Down Pointing rectangle"
 msgid "Down pointing rectangle"
 msgstr "Rectangle que assenyala cap avall"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:229
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
 #: src/frontend/widgets/LabelWidget.cpp:518
 #, fuzzy, kde-format
 #| msgid "Left Pointing rectangle"
@@ -13654,7 +13654,7 @@ msgid "Left pointing rectangle"
 msgstr "Rectangle que assenyala cap a l'esquerra"
 
 # Nota: https://ca.wikipedia.org/wiki/Triangle_rectangle
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
 #: src/frontend/widgets/LabelWidget.cpp:519
 #, fuzzy, kde-format
 #| msgid "Right Pointing rectangle"
@@ -13662,7 +13662,7 @@ msgid "Right pointing rectangle"
 msgstr "Rectangle que assenyala cap a la dreta"
 
 # skip-rule: t-sc-plot
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:234
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
 #, fuzzy, kde-format
 #| msgid ""
 #| "The supported chart types are grouped according to the plotted statistics "
@@ -13708,12 +13708,12 @@ msgstr ""
 "li><li>C - dibuixa els <b>comptadors de Poisson</b>.</li><li>U - dibuixa les "
 "<b>ràtios de Poisson</b>.</li></ul>"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:260
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:256
 #, kde-format
 msgid "Allow negative values for the lower limit."
 msgstr "Permet valors negatius al límit inferior."
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:264
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:260
 #, kde-format
 msgid ""
 "If checked, exact limits are calculated for every individual sample (\"stair-"
@@ -15617,7 +15617,7 @@ msgstr "Ja hi ha un MQTTClient amb este amfitrió!"
 msgid "Live data source%1"
 msgstr "Origen de les dades en viu %1"
 
-#: src/frontend/MainWin.cpp:2923
+#: src/frontend/MainWin.cpp:2929
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Crea un bloc de notes nou de %1"
@@ -16247,8 +16247,8 @@ msgstr "Memòria cau dels conjunts de dades"
 msgid "Downloaded files successfully deleted."
 msgstr "Els fitxers baixats s'han suprimit correctament."
 
-#: src/frontend/SettingsDialog.cpp:45 src/frontend/SettingsDialog.cpp:115
-#: src/frontend/SettingsDialog.cpp:122
+#: src/frontend/SettingsDialog.cpp:45 src/frontend/SettingsDialog.cpp:144
+#: src/frontend/SettingsDialog.cpp:151
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
@@ -16304,14 +16304,14 @@ msgstr "Conjunts de dades"
 msgid "User Feedback"
 msgstr "Comentaris de l'usuari"
 
-#: src/frontend/SettingsDialog.cpp:119
+#: src/frontend/SettingsDialog.cpp:148
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr ""
 "Es reiniciarà tota la configuració als seus valors predeterminats. Voleu "
 "continuar?"
 
-#: src/frontend/SettingsDialog.cpp:130
+#: src/frontend/SettingsDialog.cpp:159
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences    [Changed]"
