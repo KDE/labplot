@@ -52,6 +52,10 @@ else ()
 
     set(LIBORCUS_VERSION ${PC_ORCUS_VERSION})
     set(LIBIXION_VERSION ${PC_IXION_VERSION})
+    if (NOT DEFINED LIBORCUS_VERSION)
+	# latest version
+        set(LIBORCUS_VERSION "0.20.0")
+    endif()
 
     include (FindPackageHandleStandardArgs)
     find_package_handle_standard_args (Orcus DEFAULT_MSG Orcus_LIBRARIES Orcus_INCLUDE_DIR Ixion_INCLUDE_DIR LIBORCUS_VERSION)
