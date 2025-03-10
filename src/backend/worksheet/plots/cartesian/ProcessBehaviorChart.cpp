@@ -816,7 +816,8 @@ void ProcessBehaviorChartPrivate::retransform() {
  */
 void ProcessBehaviorChartPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
-	if (!dataColumn || ((type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U) && !data2Column)) {
+	const int count = q->xIndexCount();
+	if (!dataColumn || ((type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U) && !data2Column) || count == 0) {
 		center = 0.;
 		upperLimit = 0.;
 		lowerLimit = 0.;
@@ -832,6 +833,12 @@ void ProcessBehaviorChartPrivate::recalc() {
 		upperLimitLabel->setText(QString());
 		lowerLimitLabel->setText(QString());
 		Q_EMIT q->dataChanged();
+		Q_EMIT q->recalculated();
+
+		// notify the dock widget if the sample size is bigger than the number of rows in the data column
+		if (count == 0)
+			Q_EMIT q->statusInfo(i18n("Not enough data provided."));
+
 		return;
 	}
 
@@ -842,7 +849,6 @@ void ProcessBehaviorChartPrivate::recalc() {
 	upperLimitCurve->setSuppressRetransform(true);
 	lowerLimitCurve->setSuppressRetransform(true);
 
-	const int count = q->xIndexCount();
 	const int xMin = 1;
 	const int xMax = count;
 	xColumn->clear();
