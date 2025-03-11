@@ -321,8 +321,9 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 					columnModes[col] = AbstractColumn::ColumnMode::Text;
 					break;
 				case ixion::formula_result::result_type::error:
-				// available with ixion >= 0.18
-				// case ixion::formula_result::result_type::boolean:
+#ifdef HAVE_AT_LEAST_IXION_0_18_0
+				case ixion::formula_result::result_type::boolean:
+#endif
 				case ixion::formula_result::result_type::matrix:
 					DEBUG(Q_FUNC_INFO << ", formula type not supported yet.")
 					q->setLastError(i18n("Formulas not supported yet."));
@@ -367,8 +368,9 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 					vectorNames << QString::fromStdString(formula.get_string());
 					break;
 				case ixion::formula_result::result_type::error:
-				// TODO: not available in ixion 0.17 ?
-				// case ixion::formula_result::result_type::boolean:
+#ifdef HAVE_AT_LEAST_IXION_0_18_0
+				case ixion::formula_result::result_type::boolean:
+#endif
 				case ixion::formula_result::result_type::matrix:
 					vectorNames << AbstractFileFilter::convertFromNumberToColumn(ranges.first.column + startColumn - 1 + col);
 					;
@@ -440,8 +442,9 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 						(*static_cast<QVector<QString>*>(dataContainer[col]))[row] = QString::fromStdString(formula.get_string());
 					break;
 				case ixion::formula_result::result_type::error:
-				// TODO: not available in ixion 0.17 ?
-				// case ixion::formula_result::result_type::boolean:
+#ifdef HAVE_AT_LEAST_IXION_0_18_0
+				case ixion::formula_result::result_type::boolean:
+#endif
 				case ixion::formula_result::result_type::matrix:
 					DEBUG(Q_FUNC_INFO << ", formula type not supported yet.")
 					break;
@@ -535,8 +538,9 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 					line << QString::fromStdString(formula.get_string());
 					break;
 				case ixion::formula_result::result_type::error:
-				// TODO: not available in ixion 0.17 ?
-				// case ixion::formula_result::result_type::boolean:
+#ifdef HAVE_AT_LEAST_IXION_0_18_0
+				case ixion::formula_result::result_type::boolean:
+#endif
 				case ixion::formula_result::result_type::matrix:
 					line << QString();
 					DEBUG(Q_FUNC_INFO << ", formula type error, boolean or matrix not implemented yet.")
