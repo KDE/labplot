@@ -52,9 +52,12 @@ else ()
 
     set(LIBORCUS_VERSION ${PC_ORCUS_VERSION})
     set(LIBIXION_VERSION ${PC_IXION_VERSION})
+    # latest version
     if (NOT DEFINED LIBORCUS_VERSION)
-	# latest version
         set(LIBORCUS_VERSION "0.20.0")
+    endif()
+    if (NOT DEFINED LIBIXION_VERSION)
+            set(LIBIXION_VERSION "0.20.0")
     endif()
 
     include (FindPackageHandleStandardArgs)
