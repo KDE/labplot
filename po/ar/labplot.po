@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-10 00:38+0000\n"
+"POT-Creation-Date: 2025-03-11 00:38+0000\n"
 "PO-Revision-Date: 2022-09-05 22:28+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -9409,7 +9409,13 @@ msgstr "%1: اضبط نمط الخط"
 msgid "%1: set labels border color"
 msgstr "أضف عمودًا..."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:906
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:840
+#, fuzzy, kde-format
+#| msgid "Number"
+msgid "Not enough data provided."
+msgstr "الرقم"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:912
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr ""

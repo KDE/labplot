@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-10 00:38+0000\n"
+"POT-Creation-Date: 2025-03-11 00:38+0000\n"
 "PO-Revision-Date: 2025-03-09 23:27+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -9145,7 +9145,13 @@ msgstr "%1: randbreedte van labels zetten"
 msgid "%1: set labels border color"
 msgstr "%1: randkleur van labels zetten"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:906
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:840
+#, fuzzy, kde-format
+#| msgid "Not enough data points available."
+msgid "Not enough data provided."
+msgstr "Niet genoeg waarden beschikbaar."
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:912
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "Het laatste sample is onvolledig en is niet overgeslagen."

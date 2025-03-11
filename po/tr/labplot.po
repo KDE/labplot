@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-10 00:38+0000\n"
+"POT-Creation-Date: 2025-03-11 00:38+0000\n"
 "PO-Revision-Date: 2025-03-09 13:43+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -9136,7 +9136,13 @@ msgstr "%1: Etiket kenarlığı genişliğini ayarla"
 msgid "%1: set labels border color"
 msgstr "%1: Etiket kenarlığı rengini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:906
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:840
+#, fuzzy, kde-format
+#| msgid "Not enough data points available."
+msgid "Not enough data provided."
+msgstr "Yeterli veri noktası yok."
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:912
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "Son örneklem tam değildi ve yok sayıldı."

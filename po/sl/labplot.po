@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-10 00:38+0000\n"
+"POT-Creation-Date: 2025-03-11 00:38+0000\n"
 "PO-Revision-Date: 2025-03-09 09:09+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -9182,7 +9182,13 @@ msgstr "%1: nastavi širino obrobe oznak"
 msgid "%1: set labels border color"
 msgstr "%1: nastavi barvo obrobe oznak"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:906
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:840
+#, fuzzy, kde-format
+#| msgid "Not enough data points available."
+msgid "Not enough data provided."
+msgstr "Na voljo ni dovolj podatkovnih točk."
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:912
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "Zadnji vzorec je nepopoln in je bil izpuščen."

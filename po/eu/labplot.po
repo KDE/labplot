@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-10 00:38+0000\n"
+"POT-Creation-Date: 2025-03-11 00:38+0000\n"
 "PO-Revision-Date: 2025-01-15 16:57+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -9215,7 +9215,13 @@ msgstr "%1: etiketen formatua ezarri"
 msgid "%1: set labels border color"
 msgstr "%1: etiketaren kolorea ezarri"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:906
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:840
+#, fuzzy, kde-format
+#| msgid "Not enough data points available."
+msgid "Not enough data provided."
+msgstr "Ez dago datu nahikorik erabilgarri."
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:912
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr ""

@@ -3,23 +3,23 @@
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Antoni Bella Pérez <antonibella5@yahoo.com>
+# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Antoni Bella Pérez <antonibella5@yahoo.com>
 # Orestes Mas <orestes@tsc.upc.edu>, 2018.
 # Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-10 00:38+0000\n"
-"PO-Revision-Date: 2025-03-03 08:59+0100\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"POT-Creation-Date: 2025-03-11 00:38+0000\n"
+"PO-Revision-Date: 2025-03-10 08:49+0100\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -9181,79 +9181,74 @@ msgid "%1: set sample size"
 msgstr "%1: establix la mida de la mostra"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:549
-#, fuzzy, kde-format
-#| msgid "%1: change negative lower limit"
+#, kde-format
 msgid "%1: enable negative lower limit"
-msgstr "%1: canvia el límit inferior negatiu"
+msgstr "%1: activa el límit inferior negatiu"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:549
-#, fuzzy, kde-format
-#| msgid "%1: change negative lower limit"
+#, kde-format
 msgid "%1: disable negative lower limit"
-msgstr "%1: canvia el límit inferior negatiu"
+msgstr "%1: desactiva el límit inferior negatiu"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:559
-#, fuzzy, kde-format
-#| msgid "%1: change exact limits"
+#, kde-format
 msgid "%1: enable exact limits"
-msgstr "%1: canvia els límits exactes"
+msgstr "%1: activa els límits exactes"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:559
-#, fuzzy, kde-format
-#| msgid "%1: change exact limits"
+#, kde-format
 msgid "%1: disable exact limits"
-msgstr "%1: canvia els límits exactes"
+msgstr "%1: desactiva els límits exactes"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:570
 #, kde-format
 msgid "%1: enable control labels"
-msgstr ""
+msgstr "%1: activa les etiquetes dels controls"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:570
-#, fuzzy, kde-format
-#| msgid "%1: set label offset"
+#, kde-format
 msgid "%1: disable control labels"
-msgstr "%1: establix el desplaçament de les etiquetes"
+msgstr "%1: desactiva les etiquetes dels controls"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:592
-#, fuzzy, kde-format
-#| msgid "%1: set border shape"
+#, kde-format
 msgid "%1: set labels border shape"
-msgstr "%1: establix la forma de la vora"
+msgstr "%1: establix la forma de la vora de les etiquetes"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:606
-#, fuzzy, kde-format
-#| msgid "%1: set label font"
+#, kde-format
 msgid "%1: set labels font"
 msgstr "%1: establix la lletra de les etiquetes"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:640
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:668
-#, fuzzy, kde-format
-#| msgid "%1: set label background color"
+#, kde-format
 msgid "%1: set labels background color"
-msgstr "%1: establix el color del fons de les etiquetes"
+msgstr "%1: establix el color de fons de les etiquetes"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:726
-#, fuzzy, kde-format
-#| msgid "%1: set labels text type"
+#, kde-format
 msgid "%1: set labels border style"
-msgstr "%1: establix el tipus de text de l'etiqueta"
+msgstr "%1: establix l'estil de forma de la vora"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:737
-#, fuzzy, kde-format
-#| msgid "%1: set labels format"
+#, kde-format
 msgid "%1: set labels border width"
-msgstr "%1: establix el format de les etiquetes"
+msgstr "%1: establix l'amplària de la vora de les etiquetes"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:748
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:759
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: set labels border color"
-msgstr "%1: establix el color de les etiquetes"
+msgstr "%1: establix el color de la vora de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:906
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:840
+#, fuzzy, kde-format
+#| msgid "Not enough data points available."
+msgid "Not enough data provided."
+msgstr "Encara no hi ha punts de dades disponibles."
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:912
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "L'última mostra és incompleta i s'ha omés."
@@ -13634,50 +13629,32 @@ msgstr "Ortoedre"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:223
 #: src/frontend/widgets/LabelWidget.cpp:516
-#, fuzzy, kde-format
-#| msgid "Up Pointing rectangle"
+#, kde-format
 msgid "Up pointing rectangle"
 msgstr "Rectangle que assenyala cap amunt"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:224
 #: src/frontend/widgets/LabelWidget.cpp:517
-#, fuzzy, kde-format
-#| msgid "Down Pointing rectangle"
+#, kde-format
 msgid "Down pointing rectangle"
 msgstr "Rectangle que assenyala cap avall"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
 #: src/frontend/widgets/LabelWidget.cpp:518
-#, fuzzy, kde-format
-#| msgid "Left Pointing rectangle"
+#, kde-format
 msgid "Left pointing rectangle"
 msgstr "Rectangle que assenyala cap a l'esquerra"
 
 # Nota: https://ca.wikipedia.org/wiki/Triangle_rectangle
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
 #: src/frontend/widgets/LabelWidget.cpp:519
-#, fuzzy, kde-format
-#| msgid "Right Pointing rectangle"
+#, kde-format
 msgid "Right pointing rectangle"
 msgstr "Rectangle que assenyala cap a la dreta"
 
 # skip-rule: t-sc-plot
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
-#, fuzzy, kde-format
-#| msgid ""
-#| "The supported chart types are grouped according to the plotted statistics "
-#| "and to the metric defining the limits.<br><br>Individual Values and "
-#| "Moving Ranges, Limits Based on the Average or Median Moving Range:"
-#| "<ul><li>X (XmR) - plot the <b>individual values</b>.</li><li>mR - plot "
-#| "the <b>moving ranges</b>.</li></ul>Averages and Ranges, Limits based on "
-#| "the Average or Median Range:<ul><li>X̅  (X̅R) - plot the <b>averages for "
-#| "each sample</b> .</li><li>R (X̅R) - plot the <b>ranges for each sample</b>."
-#| "</li></ul>Averages and Standard Deviations, Limits Based on the Standard "
-#| "Deviations:<ul><li>X̅  (X̅S) - plot the <b>averages for each sample</b>.</"
-#| "li><li>S (X̅S) - plot the <b>standard deviations for each sample</b>.</"
-#| "li></ul>Attributes:<ul><li>P - plot <b>binomial proportions</b>.</"
-#| "li><li>NP - plot <b>binomial counts</b>.</li><li>C - plot <b>Poisson "
-#| "counts</b>.</li><li>U - plot <b>Poisson rates</b>.</li></ul>"
+#, kde-format
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
 "and to the metric defining the limits.<br><br>Individual Values and Moving "
@@ -13696,7 +13673,7 @@ msgstr ""
 "Els tipus de diagrames admesos s'agrupen segons l'estadística dibuixada i a "
 "la mètrica que definix els límits.<br><br>Valors individuals i intervals "
 "mòbils, límits basats en la mitjana o interval de mediana mòbil:<ul><li>X "
-"(XmR) - dibuixa els <b>valors individuals</b>.</li><li>mR - dibuixa els "
+"(XmR) - dibuixa les <b>etiquetes individuals</b>.</li><li>mR - dibuixa els "
 "<b>intervals mòbils</b>.</li></ul>Mitjanes i intervals, límits basats en "
 "interval de la mitjana o mediana:<ul><li>X̅  (X̅R) - dibuixa les <b>mitjanes "
 "de cada mostra</b> .</li><li>R (X̅R) - dibuixa els <b>intervals de cada "
@@ -21880,10 +21857,9 @@ msgstr "Límit inferior"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLabels)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:421
-#, fuzzy, kde-format
-#| msgid "Center/Limits Lines"
+#, kde-format
 msgid "Center/Limit Values"
-msgstr "Línies de centre/límits"
+msgstr "Valors de centre/límits"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBorderShape)
