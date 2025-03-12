@@ -33,8 +33,14 @@ else ()
         PATH_SUFFIXES orcus
     )
     set(Orcus_LIBRARIES ${Orcus_LIBRARY} ${Orcus_parser_LIBRARY} ${Orcus_spreadsheet_LIBRARY})
-    if (NOT DEFINED Orcus_LIBRARY or NOT DEFINED Orcus_parser_LIBRARY or NOT DEFINED Orcus_spreadsheet_LIBRARY)
-	message(STATUS "Orcus libraries not found")
+    if (NOT DEFINED Orcus_LIBRARY)
+	message(STATUS "Orcus library not found")
+    endif ()
+    if (NOT DEFINED Orcus_parser_LIBRARY)
+	message(STATUS "Orcus parser library not found")
+    endif ()
+    if (NOT DEFINED Orcus_spreadsheet_LIBRARY)
+	message(STATUS "Orcus spreadsheet library not found")
     endif ()
 
     find_library (Ixion_LIBRARY
