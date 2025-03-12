@@ -33,6 +33,9 @@ else ()
         PATH_SUFFIXES orcus
     )
     set(Orcus_LIBRARIES ${Orcus_LIBRARY} ${Orcus_parser_LIBRARY} ${Orcus_spreadsheet_LIBRARY})
+    if (NOT DEFINED Orcus_LIBRARY or NOT DEFINED Orcus_parser_LIBRARY or NOT DEFINED Orcus_spreadsheet_LIBRARY)
+	message(STATUS "Orcus libraries not found")
+    endif ()
 
     find_library (Ixion_LIBRARY
         NAMES ixion ixion-0.20 ixion-0.19 ixion-0.18 ixion-0.17 ixion-0.16
@@ -49,6 +52,12 @@ else ()
 	HINTS ${PC_IXION_INCLUDE_DIRS}
         PATH_SUFFIXES ixion
     )
+    if (NOT DEFINED Ixion_INCLUDE_DIR)
+	    message(STATUS "Ixion includes not found")
+    endif ()
+    if (NOT DEFINED Orcus_INCLUDE_DIR)
+	message(STATUS "Orcus includes not found")
+    endif ()
 
     set(LIBORCUS_VERSION ${PC_ORCUS_VERSION})
     set(LIBIXION_VERSION ${PC_IXION_VERSION})
