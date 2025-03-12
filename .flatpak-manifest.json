@@ -305,22 +305,22 @@
             ]
         },
         {
-            "name": "libixion",
+            "name": "ixion",
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/api/v4/projects/ixion%2Fixion/packages/generic/source/0.20.0/libixion-0.20.0.tar.xz",
-                    "sha256": "8466a05f19f60b7568641a449704666308848f7bcaf8335f92ee9474a451e4cd"
+                    "url": "https://gitlab.com/ixion/ixion/-/archive/{ver}/ixion-0.20.0.tar.bz2",
+                    "sha256": "39e54cd486fed458c2a6e83a5e658d4c2e818862355b33645bb1342449428463"
                 }
             ]
         },
         {
-            "name": "liborcus",
+            "name": "orcus",
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/api/v4/projects/orcus%2Forcus/packages/generic/source/0.20.0/liborcus-0.20.0.tar.xz",
-                    "sha256": "fb6438977a75e7f455b772acf80d861fbc787ab18d52f7997af44a212311a507"
+                    "url": "https://gitlab.com/orcus/orcus/-/archive/{ver}/orcus-0.20.0.tar.bz2",
+                    "sha256": "767ddd06d72b18c5e6c65af74a78b8c7b9326c7163fde1066b97369769a68f35"
                 }
             ]
         },
