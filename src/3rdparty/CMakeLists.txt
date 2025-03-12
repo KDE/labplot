@@ -169,6 +169,7 @@ if(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD)
         FetchContent_Populate(qt_advanced_dock)
         add_subdirectory(${qt_advanced_dock_SOURCE_DIR} ${qt_advanced_dock_BINARY_DIR} EXCLUDE_FROM_ALL)
     endif()
+    target_compile_definitions(labplotlib PRIVATE QADS_VERSION_STRING=\"git\")
 elseif(LOCAL_QT_ADVANCED_DOCK_COPY)
     # https://cmake.org/cmake/help/latest/variable/CMAKE_PROJECT_INCLUDE.html
     set(CMAKE_PROJECT_QtADS_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/QtADS_config.cmake")
