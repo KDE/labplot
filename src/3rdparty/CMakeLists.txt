@@ -179,7 +179,10 @@ elseif(LOCAL_QT_ADVANCED_DOCK_COPY)
     get_target_property(QADS_VERSION qt${QT_VERSION_MAJOR}advanceddocking VERSION)
     message(STATUS "QADS VERSION ${QADS_VERSION}")
     target_compile_definitions(labplotlib PRIVATE QADS_VERSION_STRING=\"${QADS_VERSION}\")
+else()
+    target_compile_definitions(labplotlib PRIVATE QADS_VERSION_STRING=\"system\")
 endif()
+
 
 if(LOCAL_MCAP_DOWNLOAD)
     FetchContent_Declare(mcap
