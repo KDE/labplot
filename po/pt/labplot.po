@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-11 00:38+0000\n"
+"POT-Creation-Date: 2025-03-12 00:38+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -1380,7 +1380,7 @@ msgstr "Não foi possível aceder ao dispositivo."
 #: src/backend/datasources/filters/NetCDFFilter.cpp:758
 #: src/backend/datasources/filters/NetCDFFilter.cpp:869
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1001
-#: src/backend/datasources/filters/OdsFilter.cpp:392
+#: src/backend/datasources/filters/OdsFilter.cpp:400
 #: src/backend/datasources/filters/ReadStatFilter.cpp:528
 #: src/backend/datasources/filters/ROOTFilter.cpp:235
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
@@ -2271,44 +2271,44 @@ msgstr "a posição = %1 ainda não é suportada"
 msgid "%1 dimensional data of type %2 not supported yet"
 msgstr "os dados de %1 dimensões do tipo %2 ainda não são suportados"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:57
+#: src/backend/datasources/filters/OdsFilter.cpp:63
 #: src/backend/datasources/filters/XLSXFilter.cpp:47
 #, kde-format
 msgid "Sheet count: %1"
 msgstr "Número de folhas: %1"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:219
+#: src/backend/datasources/filters/OdsFilter.cpp:225
 #: src/backend/datasources/filters/XLSXFilter.cpp:626
 #, fuzzy, kde-format
 #| msgid "No data set selected"
 msgid "No sheet selected."
 msgstr "Sem conjunto de dados seleccionado"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:254
+#: src/backend/datasources/filters/OdsFilter.cpp:260
 #, fuzzy, kde-format
 #| msgid "ncdump not found."
 msgid "Selected sheet not found."
 msgstr "O 'ncdump' não foi encontrado."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:261
+#: src/backend/datasources/filters/OdsFilter.cpp:267
 #, fuzzy, kde-format
 #| msgid "Invalid image"
 msgid "Invalid sheet."
 msgstr "Imagem inválida"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:322
+#: src/backend/datasources/filters/OdsFilter.cpp:329
 #, fuzzy, kde-format
 #| msgid "rank %1 not supported yet"
 msgid "Formulas not supported yet."
 msgstr "a posição = %1 ainda não é suportada"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:477
+#: src/backend/datasources/filters/OdsFilter.cpp:486
 #, fuzzy, kde-format
 #| msgid "File not found"
 msgid "Sheet not found."
 msgstr "O ficheiro não foi encontrado"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:484
+#: src/backend/datasources/filters/OdsFilter.cpp:493
 #, fuzzy, kde-format
 #| msgid "Invalid metadata file"
 msgid "Invalid sheet index."

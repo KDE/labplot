@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-11 00:38+0000\n"
-"PO-Revision-Date: 2025-03-09 23:27+0100\n"
+"POT-Creation-Date: 2025-03-12 00:38+0000\n"
+"PO-Revision-Date: 2025-03-11 17:34+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -1296,7 +1296,7 @@ msgstr "Openen van het apparaat/bestand is mislukt of het is leeg."
 #: src/backend/datasources/filters/NetCDFFilter.cpp:758
 #: src/backend/datasources/filters/NetCDFFilter.cpp:869
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1001
-#: src/backend/datasources/filters/OdsFilter.cpp:392
+#: src/backend/datasources/filters/OdsFilter.cpp:400
 #: src/backend/datasources/filters/ReadStatFilter.cpp:528
 #: src/backend/datasources/filters/ROOTFilter.cpp:235
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
@@ -2162,39 +2162,39 @@ msgstr "Gegevenstype nog niet ondersteund."
 msgid "%1 dimensional data of type %2 not supported yet"
 msgstr "%1 dimensionele gegevens van type %2 nog niet ondersteund"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:57
+#: src/backend/datasources/filters/OdsFilter.cpp:63
 #: src/backend/datasources/filters/XLSXFilter.cpp:47
 #, kde-format
 msgid "Sheet count: %1"
 msgstr "Aantal rekenbladen: %1"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:219
+#: src/backend/datasources/filters/OdsFilter.cpp:225
 #: src/backend/datasources/filters/XLSXFilter.cpp:626
 #, kde-format
 msgid "No sheet selected."
 msgstr "Geen rekenblad geselecteerd."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:254
+#: src/backend/datasources/filters/OdsFilter.cpp:260
 #, kde-format
 msgid "Selected sheet not found."
 msgstr "Geselecteerd rekenblad niet gevonden."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:261
+#: src/backend/datasources/filters/OdsFilter.cpp:267
 #, kde-format
 msgid "Invalid sheet."
 msgstr "Ongeldig rekenblad."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:322
+#: src/backend/datasources/filters/OdsFilter.cpp:329
 #, kde-format
 msgid "Formulas not supported yet."
 msgstr "Formules nog niet ondersteund."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:477
+#: src/backend/datasources/filters/OdsFilter.cpp:486
 #, kde-format
 msgid "Sheet not found."
 msgstr "Rekenblad niet gevonden."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:484
+#: src/backend/datasources/filters/OdsFilter.cpp:493
 #, kde-format
 msgid "Invalid sheet index."
 msgstr "Ongeldige index van rekenblad."
@@ -9146,10 +9146,9 @@ msgid "%1: set labels border color"
 msgstr "%1: randkleur van labels zetten"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:840
-#, fuzzy, kde-format
-#| msgid "Not enough data points available."
+#, kde-format
 msgid "Not enough data provided."
-msgstr "Niet genoeg waarden beschikbaar."
+msgstr "Niet genoeg gegevens geleverd."
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:912
 #, kde-format

@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-11 00:38+0000\n"
-"PO-Revision-Date: 2025-03-04 09:20+0100\n"
+"POT-Creation-Date: 2025-03-12 00:38+0000\n"
+"PO-Revision-Date: 2025-03-10 09:40+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 24.12.2\n"
+"X-Generator: Lokalize 24.12.3\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
@@ -1319,7 +1319,7 @@ msgstr "Impossible d'ouvrir le périphérique / fichier ou celui-ci est vide."
 #: src/backend/datasources/filters/NetCDFFilter.cpp:758
 #: src/backend/datasources/filters/NetCDFFilter.cpp:869
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1001
-#: src/backend/datasources/filters/OdsFilter.cpp:392
+#: src/backend/datasources/filters/OdsFilter.cpp:400
 #: src/backend/datasources/filters/ReadStatFilter.cpp:528
 #: src/backend/datasources/filters/ROOTFilter.cpp:235
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
@@ -2199,39 +2199,39 @@ msgid "%1 dimensional data of type %2 not supported yet"
 msgstr ""
 "Les données dimensionnelles %1 de type %2 ne sont pas encore prises en charge"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:57
+#: src/backend/datasources/filters/OdsFilter.cpp:63
 #: src/backend/datasources/filters/XLSXFilter.cpp:47
 #, kde-format
 msgid "Sheet count: %1"
 msgstr "Compteur de feuilles : %1"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:219
+#: src/backend/datasources/filters/OdsFilter.cpp:225
 #: src/backend/datasources/filters/XLSXFilter.cpp:626
 #, kde-format
 msgid "No sheet selected."
 msgstr "Aucune feuille sélectionnée."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:254
+#: src/backend/datasources/filters/OdsFilter.cpp:260
 #, kde-format
 msgid "Selected sheet not found."
 msgstr "Impossible de trouver la feuille sélectionnée."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:261
+#: src/backend/datasources/filters/OdsFilter.cpp:267
 #, kde-format
 msgid "Invalid sheet."
 msgstr "Feuille de données non valable"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:322
+#: src/backend/datasources/filters/OdsFilter.cpp:329
 #, kde-format
 msgid "Formulas not supported yet."
 msgstr "Les formules ne sont pas encore prise en charge."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:477
+#: src/backend/datasources/filters/OdsFilter.cpp:486
 #, kde-format
 msgid "Sheet not found."
 msgstr "Impossible de trouver la feuille"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:484
+#: src/backend/datasources/filters/OdsFilter.cpp:493
 #, kde-format
 msgid "Invalid sheet index."
 msgstr "Indice de feuille non valable."
@@ -9145,77 +9145,66 @@ msgid "%1: set sample size"
 msgstr "%1 : définir la taille des échantillons"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:549
-#, fuzzy, kde-format
-#| msgid "%1: change negative lower limit"
+#, kde-format
 msgid "%1: enable negative lower limit"
-msgstr "%1 : modifier la limite inférieure négative"
+msgstr "%1 : activer la limite inférieure négative"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:549
-#, fuzzy, kde-format
-#| msgid "%1: change negative lower limit"
+#, kde-format
 msgid "%1: disable negative lower limit"
-msgstr "%1 : modifier la limite inférieure négative"
+msgstr "%1 : désactiver la limite inférieure négative"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:559
-#, fuzzy, kde-format
-#| msgid "%1: change exact limits"
+#, kde-format
 msgid "%1: enable exact limits"
-msgstr "%1 : modifier les limites exactes"
+msgstr "%1 : activer les limites exactes"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:559
-#, fuzzy, kde-format
-#| msgid "%1: change exact limits"
+#, kde-format
 msgid "%1: disable exact limits"
-msgstr "%1 : modifier les limites exactes"
+msgstr "%1 : désactiver les limites exactes"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:570
 #, kde-format
 msgid "%1: enable control labels"
-msgstr ""
+msgstr "%1 : activer les étiquettes de contrôle"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:570
-#, fuzzy, kde-format
-#| msgid "%1: set cell value"
+#, kde-format
 msgid "%1: disable control labels"
-msgstr "%1 : définir la valeur de cellule"
+msgstr "%1 : désactiver les étiquettes de contrôle"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:592
-#, fuzzy, kde-format
-#| msgid "%1: set border shape"
+#, kde-format
 msgid "%1: set labels border shape"
-msgstr "%1 : définir le style de bordure"
+msgstr "%1 : définir la forme des bordures d'étiquettes"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:606
-#, fuzzy, kde-format
-#| msgid "%1: set label font"
+#, kde-format
 msgid "%1: set labels font"
-msgstr "%1 : définir la police de l'étiquette"
+msgstr "%1 : définir la police des étiquettes"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:640
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:668
-#, fuzzy, kde-format
-#| msgid "%1: set label background color"
+#, kde-format
 msgid "%1: set labels background color"
-msgstr "%1 : définir la couleur des étiquettes en arrière-plan"
+msgstr "%1 : définir la couleur d'arrière-plan des étiquettes"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:726
-#, fuzzy, kde-format
-#| msgid "%1: set border style"
+#, kde-format
 msgid "%1: set labels border style"
-msgstr "%1 : définir le style de bordure"
+msgstr "%1 : définir le style des bordures d'étiquettes"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:737
-#, fuzzy, kde-format
-#| msgid "%1: set labels format"
+#, kde-format
 msgid "%1: set labels border width"
-msgstr "%1 : définir le format des étiquettes"
+msgstr "%1 : définir la largeur des bordures d'étiquettes"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:748
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:759
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: set labels border color"
-msgstr "%1 : définir la couleur de l'étiquette"
+msgstr "%1 : définir la couleur des bordures d'étiquettes"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:840
 #, fuzzy, kde-format
@@ -13612,29 +13601,25 @@ msgstr "Cuboïde"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:223
 #: src/frontend/widgets/LabelWidget.cpp:516
-#, fuzzy, kde-format
-#| msgid "Up Pointing rectangle"
+#, kde-format
 msgid "Up pointing rectangle"
 msgstr "Rectangle avec flèche vers le haut"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:224
 #: src/frontend/widgets/LabelWidget.cpp:517
-#, fuzzy, kde-format
-#| msgid "Down Pointing rectangle"
+#, kde-format
 msgid "Down pointing rectangle"
 msgstr "Rectangle avec flèche vers le bas"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
 #: src/frontend/widgets/LabelWidget.cpp:518
-#, fuzzy, kde-format
-#| msgid "Left Pointing rectangle"
+#, kde-format
 msgid "Left pointing rectangle"
 msgstr "Rectangle avec flèche vers la gauche"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
 #: src/frontend/widgets/LabelWidget.cpp:519
-#, fuzzy, kde-format
-#| msgid "Right Pointing rectangle"
+#, kde-format
 msgid "Right pointing rectangle"
 msgstr "Rectangle avec flèche vers la droite"
 
@@ -21858,10 +21843,9 @@ msgstr "Limite inférieure"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLabels)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:421
-#, fuzzy, kde-format
-#| msgid "Center/Limits Lines"
+#, kde-format
 msgid "Center/Limit Values"
-msgstr "Lignes centrale et de limites"
+msgstr "Valeurs centrale et de limites"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBorderShape)

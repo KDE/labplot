@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-11 00:38+0000\n"
-"PO-Revision-Date: 2025-03-09 16:39+0200\n"
+"POT-Creation-Date: 2025-03-12 00:38+0000\n"
+"PO-Revision-Date: 2025-03-11 19:40+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1307,7 +1307,7 @@ msgstr "Не вдалося відкрити пристрій або файл а
 #: src/backend/datasources/filters/NetCDFFilter.cpp:758
 #: src/backend/datasources/filters/NetCDFFilter.cpp:869
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1001
-#: src/backend/datasources/filters/OdsFilter.cpp:392
+#: src/backend/datasources/filters/OdsFilter.cpp:400
 #: src/backend/datasources/filters/ReadStatFilter.cpp:528
 #: src/backend/datasources/filters/ROOTFilter.cpp:235
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
@@ -2181,39 +2181,39 @@ msgstr "Підтримку цього типу даних ще не реаліз
 msgid "%1 dimensional data of type %2 not supported yet"
 msgstr "Підтримки розмірності даних %1 типу %2 ще не передбачено"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:57
+#: src/backend/datasources/filters/OdsFilter.cpp:63
 #: src/backend/datasources/filters/XLSXFilter.cpp:47
 #, kde-format
 msgid "Sheet count: %1"
 msgstr "Кількість аркушів: %1"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:219
+#: src/backend/datasources/filters/OdsFilter.cpp:225
 #: src/backend/datasources/filters/XLSXFilter.cpp:626
 #, kde-format
 msgid "No sheet selected."
 msgstr "Не вибрано аркуша."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:254
+#: src/backend/datasources/filters/OdsFilter.cpp:260
 #, kde-format
 msgid "Selected sheet not found."
 msgstr "Не знайдено вибраного аркуша."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:261
+#: src/backend/datasources/filters/OdsFilter.cpp:267
 #, kde-format
 msgid "Invalid sheet."
 msgstr "Некоректний аркуш."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:322
+#: src/backend/datasources/filters/OdsFilter.cpp:329
 #, kde-format
 msgid "Formulas not supported yet."
 msgstr "Підтримку формул ще не реалізовано."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:477
+#: src/backend/datasources/filters/OdsFilter.cpp:486
 #, kde-format
 msgid "Sheet not found."
 msgstr "Аркуш не знайдено."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:484
+#: src/backend/datasources/filters/OdsFilter.cpp:493
 #, kde-format
 msgid "Invalid sheet index."
 msgstr "Некоректний індекс аркуша."
@@ -9217,10 +9217,9 @@ msgid "%1: set labels border color"
 msgstr "%1: встановити колір рамки міток"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:840
-#, fuzzy, kde-format
-#| msgid "Not enough data points available."
+#, kde-format
 msgid "Not enough data provided."
-msgstr "Недостатньо точок даних."
+msgstr "Надано недостатньо даних."
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:912
 #, kde-format

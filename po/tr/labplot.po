@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-11 00:38+0000\n"
-"PO-Revision-Date: 2025-03-09 13:43+0300\n"
+"POT-Creation-Date: 2025-03-12 00:38+0000\n"
+"PO-Revision-Date: 2025-03-11 12:25+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.03.70\n"
+"X-Generator: Lokalize 25.07.70\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #, kde-format
@@ -1296,7 +1296,7 @@ msgstr "Aygıt/dosya açılamadı veya boş."
 #: src/backend/datasources/filters/NetCDFFilter.cpp:758
 #: src/backend/datasources/filters/NetCDFFilter.cpp:869
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1001
-#: src/backend/datasources/filters/OdsFilter.cpp:392
+#: src/backend/datasources/filters/OdsFilter.cpp:400
 #: src/backend/datasources/filters/ReadStatFilter.cpp:528
 #: src/backend/datasources/filters/ROOTFilter.cpp:235
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
@@ -2163,39 +2163,39 @@ msgstr "Veri türü henüz desteklenmiyor."
 msgid "%1 dimensional data of type %2 not supported yet"
 msgstr "%2 türü için %1 boyutsal veri henüz desteklenmiyor"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:57
+#: src/backend/datasources/filters/OdsFilter.cpp:63
 #: src/backend/datasources/filters/XLSXFilter.cpp:47
 #, kde-format
 msgid "Sheet count: %1"
 msgstr "Sayfa sayısı: %1"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:219
+#: src/backend/datasources/filters/OdsFilter.cpp:225
 #: src/backend/datasources/filters/XLSXFilter.cpp:626
 #, kde-format
 msgid "No sheet selected."
 msgstr "Seçili sayfa yok."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:254
+#: src/backend/datasources/filters/OdsFilter.cpp:260
 #, kde-format
 msgid "Selected sheet not found."
 msgstr "Seçili sayfa bulunamadı."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:261
+#: src/backend/datasources/filters/OdsFilter.cpp:267
 #, kde-format
 msgid "Invalid sheet."
 msgstr "Geçersiz sayfa."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:322
+#: src/backend/datasources/filters/OdsFilter.cpp:329
 #, kde-format
 msgid "Formulas not supported yet."
 msgstr "Formüller henüz desteklenmiyor."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:477
+#: src/backend/datasources/filters/OdsFilter.cpp:486
 #, kde-format
 msgid "Sheet not found."
 msgstr "Sayfa bulunamadı."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:484
+#: src/backend/datasources/filters/OdsFilter.cpp:493
 #, kde-format
 msgid "Invalid sheet index."
 msgstr "Geçersiz sayfa indeksi."
@@ -9137,10 +9137,9 @@ msgid "%1: set labels border color"
 msgstr "%1: Etiket kenarlığı rengini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:840
-#, fuzzy, kde-format
-#| msgid "Not enough data points available."
+#, kde-format
 msgid "Not enough data provided."
-msgstr "Yeterli veri noktası yok."
+msgstr "Sağlanan yeterli veri yok."
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:912
 #, kde-format

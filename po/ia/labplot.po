@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-11 00:38+0000\n"
-"PO-Revision-Date: 2025-03-04 15:18+0100\n"
+"POT-Creation-Date: 2025-03-12 00:38+0000\n"
+"PO-Revision-Date: 2025-03-11 10:24+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -1300,7 +1300,7 @@ msgstr "Falleva a aperir le dispositivo/file o illo es vacue."
 #: src/backend/datasources/filters/NetCDFFilter.cpp:758
 #: src/backend/datasources/filters/NetCDFFilter.cpp:869
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1001
-#: src/backend/datasources/filters/OdsFilter.cpp:392
+#: src/backend/datasources/filters/OdsFilter.cpp:400
 #: src/backend/datasources/filters/ReadStatFilter.cpp:528
 #: src/backend/datasources/filters/ROOTFilter.cpp:235
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
@@ -2166,39 +2166,39 @@ msgstr ""
 msgid "%1 dimensional data of type %2 not supported yet"
 msgstr ""
 
-#: src/backend/datasources/filters/OdsFilter.cpp:57
+#: src/backend/datasources/filters/OdsFilter.cpp:63
 #: src/backend/datasources/filters/XLSXFilter.cpp:47
 #, kde-format
 msgid "Sheet count: %1"
 msgstr "Computo de folio: %1"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:219
+#: src/backend/datasources/filters/OdsFilter.cpp:225
 #: src/backend/datasources/filters/XLSXFilter.cpp:626
 #, kde-format
 msgid "No sheet selected."
 msgstr "Nulle folio seligite"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:254
+#: src/backend/datasources/filters/OdsFilter.cpp:260
 #, kde-format
 msgid "Selected sheet not found."
 msgstr "Folio selectionate non trovate."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:261
+#: src/backend/datasources/filters/OdsFilter.cpp:267
 #, kde-format
 msgid "Invalid sheet."
 msgstr "Folio Invalide."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:322
+#: src/backend/datasources/filters/OdsFilter.cpp:329
 #, kde-format
 msgid "Formulas not supported yet."
 msgstr ""
 
-#: src/backend/datasources/filters/OdsFilter.cpp:477
+#: src/backend/datasources/filters/OdsFilter.cpp:486
 #, kde-format
 msgid "Sheet not found."
 msgstr "Folio non trovate."
 
-#: src/backend/datasources/filters/OdsFilter.cpp:484
+#: src/backend/datasources/filters/OdsFilter.cpp:493
 #, kde-format
 msgid "Invalid sheet index."
 msgstr "Invalide indice de folio."
@@ -9053,16 +9053,14 @@ msgid "%1: disable negative lower limit"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:559
-#, fuzzy, kde-format
-#| msgid "%1: change exact limits"
+#, kde-format
 msgid "%1: enable exact limits"
-msgstr "%1: Cambia limites exacte"
+msgstr "%1: habilita limites exacte"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:559
-#, fuzzy, kde-format
-#| msgid "%1: change exact limits"
+#, kde-format
 msgid "%1: disable exact limits"
-msgstr "%1: Cambia limites exacte"
+msgstr "%1: dishabilita limites exacte"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:570
 #, kde-format
@@ -9075,48 +9073,41 @@ msgid "%1: disable control labels"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:592
-#, fuzzy, kde-format
-#| msgid "%1: set error bar size"
+#, kde-format
 msgid "%1: set labels border shape"
-msgstr "%1: assigna grandor de barra de error"
+msgstr "%1: assigna forma de contorno de etiquettas"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:606
-#, fuzzy, kde-format
-#| msgid "%1: set text font"
+#, kde-format
 msgid "%1: set labels font"
-msgstr "%1: assigna font de texto"
+msgstr "%1: assigna font de etiquettas"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:640
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:668
-#, fuzzy, kde-format
-#| msgid "%1: set background color"
+#, kde-format
 msgid "%1: set labels background color"
-msgstr "%1: assigna color de fundo "
+msgstr "%1: assigna color de fundo de etiquettas"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:726
-#, fuzzy, kde-format
-#| msgid "%1: set error bar outline style"
+#, kde-format
 msgid "%1: set labels border style"
-msgstr "%1: assigna le stilo de contorno del barra de error"
+msgstr "%1: assigna le stilo de contorno de etiquettas"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:737
-#, fuzzy, kde-format
-#| msgid "%1: set bandwidth"
+#, kde-format
 msgid "%1: set labels border width"
-msgstr "%1: assigna largessa de banda"
+msgstr "%1: assigna largessa de contorno de etiquettas"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:748
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:759
-#, fuzzy, kde-format
-#| msgid "%1: set symbol color"
+#, kde-format
 msgid "%1: set labels border color"
-msgstr "%1: assigna color de symbolo"
+msgstr "%1: assigna color de contorno de etiquettas"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:840
-#, fuzzy, kde-format
-#| msgid "Not enough memory."
+#, kde-format
 msgid "Not enough data provided."
-msgstr "Non assatis memoria."
+msgstr "Non assatis datos fornite."
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:912
 #, kde-format
@@ -10128,7 +10119,7 @@ msgstr ""
 #: src/frontend/AboutDialog.cpp:82
 #, kde-format
 msgid "What's new"
-msgstr ""
+msgstr "Que es de novo"
 
 #: src/frontend/AboutDialog.cpp:88
 #, kde-format
@@ -10361,12 +10352,12 @@ msgstr "Componentes:"
 #: src/frontend/AboutDialog.cpp:360
 #, kde-format
 msgid "Qt"
-msgstr ""
+msgstr "Qt"
 
 #: src/frontend/AboutDialog.cpp:361
 #, kde-format
 msgid "KDE Frameworks"
-msgstr ""
+msgstr "KDE Frameworks"
 
 #: src/frontend/AboutDialog.cpp:376
 #, kde-format
@@ -21278,10 +21269,9 @@ msgstr "Limite inferior"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLabels)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:421
-#, fuzzy, kde-format
-#| msgid "Numeric Values"
+#, kde-format
 msgid "Center/Limit Values"
-msgstr "Valores numeric"
+msgstr "Centra/Limita Valores"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBorderShape)
