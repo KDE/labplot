@@ -33,25 +33,25 @@ include:
 #      - /gitlab-templates/craft-windows-mingw64.yml
 #      - /gitlab-templates/craft-windows-mingw64-qt6.yml
 
-freebsd14_qt68:
-  only: []
+#freebsd14_qt68:
+#  only: []
 
-freebsd14_qt68_t:
-  extends: freebsd14_qt68
-  script:
-    - !reference [freebsd14_qt68, script]
-    - mkdir -p build_examples && cd build_examples
-    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
-    - ninja
-  only:
-    - branches
-    - tags
-    - pushes
-    - merge_requests
-    - pipelines
-    - schedules
-    - triggers
-    - web
+#freebsd14_qt68_t:
+#  extends: freebsd14_qt68
+#  script:
+#    - !reference [freebsd14_qt68, script]
+#    - mkdir -p build_examples && cd build_examples
+#    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
+#    - ninja
+#  only:
+#    - branches
+#    - tags
+#    - pushes
+#    - merge_requests
+#    - pipelines
+#    - schedules
+#    - triggers
+#    - web
 
 suse_tumbleweed_qt68:
   only: []
