@@ -309,7 +309,7 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/ixion/ixion/-/archive/{ver}/ixion-0.20.0.tar.bz2",
+                    "url": "https://gitlab.com/ixion/ixion/-/archive/0.20.0/ixion-0.20.0.tar.bz2",
                     "sha256": "39e54cd486fed458c2a6e83a5e658d4c2e818862355b33645bb1342449428463"
                 }
             ]
@@ -319,7 +319,7 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/orcus/orcus/-/archive/{ver}/orcus-0.20.0.tar.bz2",
+                    "url": "https://gitlab.com/orcus/orcus/-/archive/0.20.0/orcus-0.20.0.tar.bz2",
                     "sha256": "767ddd06d72b18c5e6c65af74a78b8c7b9326c7163fde1066b97369769a68f35"
                 }
             ]
