@@ -139,9 +139,9 @@ AboutDialog::~AboutDialog() {
 QString AboutDialog::systemInfo() {
 	// build type
 #ifdef NDEBUG
-	const QString buildType(i18n("Release build ") + QLatin1String(GIT_COMMIT));
+	const QString buildType(i18n("Release build") + QLatin1Char(' ') + QLatin1String(GIT_COMMIT));
 #else
-	const QString buildType(i18n("Debug build ") + QLatin1String(GIT_COMMIT));
+	const QString buildType(i18n("Debug build") + QLatin1Char(' ') + QLatin1String(GIT_COMMIT));
 #endif
 
 	QLocale locale = QLocale();
