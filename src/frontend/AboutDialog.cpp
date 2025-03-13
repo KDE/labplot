@@ -147,6 +147,19 @@ QString AboutDialog::systemInfo() {
 	QLocale locale = QLocale();
 	const QString usedLanguage = QLocale::languageToString(locale.language()) + QStringLiteral(", ") + QLocale::countryToString(locale.country());
 
+	QLocale systemLocale = QLocale::system();
+	const QString systemLanguage = QLocale::languageToString(systemLocale.language()) + QStringLiteral(", ") + QLocale::countryToString(systemLocale.country());
+
+	// get language set in 'switch language'
+	//const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+	//QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
+	//languageoverride.beginGroup(QStringLiteral("Language"));
+	//QString setLanguageString = languageoverride.value(qAppName(), QString()).toString(); // something like "en_US"
+	//auto usedLocale = QLocale(setLanguageString);
+	//const QString setLanguage = QLocale::languageToString(usedLocale.language()) + QStringLiteral(", ") + QLocale::countryToString(usedLocale.country());
+	//if (!usedLocale.isEmpty())
+	//	locale = QLocale(usedLocale);
+
 	// read number format locale from settings (MainWin is not initialized yet)
 	const auto group = Settings::group(QStringLiteral("Settings_General"));
         auto language = static_cast<QLocale::Language>(group.readEntry(QLatin1String("NumberFormat"), static_cast<int>(QLocale::Language::AnyLanguage)));
@@ -155,14 +168,6 @@ QString AboutDialog::systemInfo() {
         auto numberOptions = static_cast<QLocale::NumberOptions>(group.readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)));
         numberLocale.setNumberOptions(numberOptions);
 	const QString numberFormat{numberLocale.toString(1000.01)};
-
-	// get language set in 'switch language'
-	//const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
-	//QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
-	//languageoverride.beginGroup(QStringLiteral("Language"));
-	//QString usedLocale = languageoverride.value(qAppName(), QString()).toString(); // something like "en_US"
-	//if (!usedLocale.isEmpty())
-	//	locale = QLocale(usedLocale);
 
 // not included for privacy
 //	QString path = QProcessEnvironment::systemEnvironment().value(QLatin1String("PATH"));
@@ -173,7 +178,8 @@ QString AboutDialog::systemInfo() {
 #endif
 		+ QLatin1String("<table>")
 		+ QLatin1String("<tr><td>") + i18n("System:") + QLatin1String(" </td><td>") + QSysInfo::prettyProductName() + QLatin1String("</td></tr>")
-		+ QLatin1String("<tr><td>") + i18n("Locale:") + QLatin1String(" </td><td>") + usedLanguage + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Locale:") + QLatin1String(" </td><td>") + systemLanguage + QLatin1String("</td></tr>")
+		// + QLatin1String("<tr><td>") + i18n("Used Locale:") + QLatin1String(" </td><td>") + usedLanguage + QLatin1String("</td></tr>")
 		+ QLatin1String("<tr><td>") + i18n("Number Format:") + QLatin1String(" </td><td>") + numberFormat + QStringLiteral(" (") + i18n("Updated on restart") + QStringLiteral(")")  + QLatin1String("</td></tr>")
 		+ QLatin1String("<tr><td>") + i18n("Architecture:") + QLatin1String(" </td><td>") + QSysInfo::buildAbi() + QLatin1String("</td></tr>")
 		+ QLatin1String("<tr><td>") + i18n("Kernel: ") + QLatin1String(" </td><td>") + QSysInfo::kernelType() + QLatin1Char(' ') + QSysInfo::kernelVersion() + QLatin1String("</td></tr>")

@@ -403,6 +403,9 @@ void MainWin::initGUI(const QString& fileName) {
 	// custom about dialog
         auto* aboutAction = actionCollection()->action(QStringLiteral("help_about_app"));
         if (aboutAction) {
+		// set menu icon
+		aboutAction->setIcon(KAboutData::applicationData().programLogo().value<QIcon>());
+
 		// disconnect default slot
 		disconnect(aboutAction, nullptr, nullptr, nullptr);
 		connect(aboutAction, &QAction::triggered, this, &MainWin::customAboutDialog);
@@ -419,7 +422,7 @@ void MainWin::initGUI(const QString& fileName) {
 void MainWin::customAboutDialog() {
 	// default dialog
         // KAboutApplicationDialog aboutDialog(KAboutData::applicationData(), this);
-	// custom about dialog (not used)
+	// custom about dialog
         AboutDialog aboutDialog(KAboutData::applicationData(), this);
 
         aboutDialog.exec();
