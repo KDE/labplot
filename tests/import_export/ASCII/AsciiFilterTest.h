@@ -106,6 +106,7 @@ private Q_SLOTS:
 
 	// datetime data
 	void testDateTime00();
+	void testDateTimeUTC();
 	void testDateTimeDefaultDateTimeFormat();
 	void testDateTimeAutodetect();
 	void testDateTimeHex();

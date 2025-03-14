@@ -2281,6 +2281,46 @@ void AsciiFilterTest::testDateTime00() {
 	QCOMPARE(spreadsheet.column(1)->valueAt(1), 14.8026);
 }
 
+void AsciiFilterTest::testDateTimeUTC() {
+	const QStringList content = {
+		QStringLiteral("DateTime,Pressure"),
+		QStringLiteral("2024-03-31 02:00:15,14.7982"),
+	};
+
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+
+	AsciiFilter filter;
+	auto p = filter.properties();
+	p.automaticSeparatorDetection = false;
+	p.separator = QStringLiteral(",");
+	p.headerEnabled = true;
+	p.headerLine = 1;
+	p.intAsDouble = false;
+	// p.dateTimeFormat; Default Datetime format is used!
+	p.baseYear = 2000;
+	filter.setProperties(p);
+
+	QString savePath;
+	SAVE_FILE("testfile", content);
+	filter.readDataFromFile(savePath, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+		   // spreadsheet size
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.rowCount(), 1);
+
+		   // column names
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("DateTime"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Pressure"));
+
+		   // data types
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
+
+		   // values
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(0), QDateTime::fromString(QStringLiteral("2024-03-31T02:00:15Z"), Qt::ISODate));
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 14.7982);
+}
+
 void AsciiFilterTest::testDateTimeDefaultDateTimeFormat() {
 	const QStringList content = {
 		QStringLiteral("Date,Water Pressure"),
