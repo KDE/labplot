@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-14 00:38+0000\n"
-"PO-Revision-Date: 2025-03-11 09:55+0100\n"
+"PO-Revision-Date: 2025-03-14 09:13+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -10292,16 +10292,14 @@ msgid "Copy to Clipboard"
 msgstr "Copia al porta-retalls"
 
 #: src/frontend/AboutDialog.cpp:142
-#, fuzzy, kde-format
-#| msgid "Release build "
+#, kde-format
 msgid "Release build"
-msgstr "Compilació de llançament "
+msgstr "Compilació de llançament"
 
 #: src/frontend/AboutDialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Debug build "
+#, kde-format
 msgid "Debug build"
-msgstr "Compilació de depuració "
+msgstr "Compilació de depuració"
 
 #: src/frontend/AboutDialog.cpp:180
 #, kde-format

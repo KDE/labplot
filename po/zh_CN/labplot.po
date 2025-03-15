@@ -10108,10 +10108,9 @@ msgid "Release build"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Debug"
+#, kde-format
 msgid "Debug build"
-msgstr "调试"
+msgstr ""
 
 #: src/frontend/AboutDialog.cpp:180
 #, kde-format

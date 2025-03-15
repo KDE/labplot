@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-14 00:38+0000\n"
-"PO-Revision-Date: 2025-03-11 17:34+0100\n"
+"PO-Revision-Date: 2025-03-14 12:08+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -10185,16 +10185,14 @@ msgid "Copy to Clipboard"
 msgstr "Naar klembord kopiëren"
 
 #: src/frontend/AboutDialog.cpp:142
-#, fuzzy, kde-format
-#| msgid "Release build "
+#, kde-format
 msgid "Release build"
-msgstr "Uitgave build"
+msgstr "Gebouwde voor uitgave"
 
 #: src/frontend/AboutDialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Debug build "
+#, kde-format
 msgid "Debug build"
-msgstr " Build debug"
+msgstr "Gebouwd voor foutopsporing (debug)"
 
 #: src/frontend/AboutDialog.cpp:180
 #, kde-format

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-14 00:38+0000\n"
-"PO-Revision-Date: 2025-03-11 03:05+0100\n"
+"PO-Revision-Date: 2025-03-14 04:19+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -10192,16 +10192,14 @@ msgid "Copy to Clipboard"
 msgstr "ბუფერში კოპირება"
 
 #: src/frontend/AboutDialog.cpp:142
-#, fuzzy, kde-format
-#| msgid "Release build "
+#, kde-format
 msgid "Release build"
-msgstr "საბოლოო აგება "
+msgstr "საბოლოო აგება"
 
 #: src/frontend/AboutDialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Debug build "
+#, kde-format
 msgid "Debug build"
-msgstr "გამართვის აგება "
+msgstr "აგება გამართვის ინფორმაციით"
 
 #: src/frontend/AboutDialog.cpp:180
 #, kde-format
