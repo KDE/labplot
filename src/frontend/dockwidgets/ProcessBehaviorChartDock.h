@@ -62,7 +62,8 @@ private Q_SLOTS:
 	void typeChanged(int);
 	void limitsMetricChanged(int);
 	void sampleSizeChanged(int);
-	void negativeLowerLimitEnabledChanged(bool);
+	void maxUpperLimitChanged(const QString&);
+	void minLowerLimitChanged(const QString&);
 	void exactLimitsEnabledChanged(bool);
 	void updateLowerLimitWidgets();
 
@@ -82,7 +83,8 @@ private Q_SLOTS:
 	void plotTypeChanged(ProcessBehaviorChart::Type);
 	void plotLimitsMetricChanged(ProcessBehaviorChart::LimitsMetric);
 	void plotSampleSizeChanged(int);
-	void plotNegativeLowerLimitEnabledChanged(bool);
+	void plotMaxUpperLimitChanged(double);
+	void plotMinLowerLimitChanged(double);
 	void plotExactLimitsEnabledChanged(bool);
 
 	// Labels-tab

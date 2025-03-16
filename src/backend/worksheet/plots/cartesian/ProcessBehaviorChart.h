@@ -53,8 +53,9 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
 	CLASS_D_ACCESSOR_DECL(QString, data2ColumnPath, Data2ColumnPath)
 	BASIC_D_ACCESSOR_DECL(int, sampleSize, SampleSize)
-	BASIC_D_ACCESSOR_DECL(bool, negativeLowerLimitEnabled, NegativeLowerLimitEnabled)
 	BASIC_D_ACCESSOR_DECL(bool, exactLimitsEnabled, ExactLimitsEnabled)
+	BASIC_D_ACCESSOR_DECL(double, maxUpperLimit, MaxUpperLimit)
+	BASIC_D_ACCESSOR_DECL(double, minLowerLimit, MinLowerLimit)
 
 	BASIC_D_ACCESSOR_DECL(bool, labelsEnabled, LabelsEnabled)
 	BASIC_D_ACCESSOR_DECL(bool, labelsAutoPrecision, LabelsAutoPrecision)
@@ -125,8 +126,10 @@ Q_SIGNALS:
 	void dataColumnChanged(const AbstractColumn*);
 	void data2ColumnChanged(const AbstractColumn*);
 	void sampleSizeChanged(int);
-	void negativeLowerLimitEnabledChanged(bool);
 	void exactLimitsEnabledChanged(bool);
+	void limitConstraintsChanged();
+	void maxUpperLimitChanged(double);
+	void minLowerLimitChanged(double);
 
 	// labels for the control limits
 	void labelsEnabledChanged(bool);

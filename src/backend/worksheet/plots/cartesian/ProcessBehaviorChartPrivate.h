@@ -24,6 +24,7 @@ public:
 	void retransform() override;
 	void recalc();
 	void recalcShapeAndBoundingRect() override;
+	void updateLimitConstraints();
 	void updateControlLimits();
 	void updateLabels();
 
@@ -75,7 +76,8 @@ public:
 	TextLabel* lowerLimitLabel{nullptr};
 
 	int sampleSize{5};
-	bool negativeLowerLimitEnabled{false};
+	double maxUpperLimit{INFINITY};
+	double minLowerLimit{-INFINITY};
 	bool exactLimitsEnabled{true};
 
 	ProcessBehaviorChart* const q;

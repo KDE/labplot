@@ -160,7 +160,7 @@ void ProcessBehaviorChart::init(bool loading) {
 	d->sampleSize = group.readEntry(QStringLiteral("SampleSize"), 5);
 	d->limitsMetric = static_cast<ProcessBehaviorChart::LimitsMetric>(
 		group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(ProcessBehaviorChart::LimitsMetric::Average)));
-	d->negativeLowerLimitEnabled = group.readEntry(QStringLiteral("NegativeLowerLimitEnabled"), false);
+	// TODO: limit contraints?
 	d->exactLimitsEnabled = group.readEntry(QStringLiteral("ExactLimitsEnabled"), true);
 
 	d->dataCurve->line()->init(group);
@@ -293,7 +293,8 @@ void ProcessBehaviorChart::setZValue(qreal value) {
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, ProcessBehaviorChart::Type, type, type)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, ProcessBehaviorChart::LimitsMetric, limitsMetric, limitsMetric)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, int, sampleSize, sampleSize)
-BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, bool, negativeLowerLimitEnabled, negativeLowerLimitEnabled)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, double, maxUpperLimit, maxUpperLimit)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, double, minLowerLimit, minLowerLimit)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, bool, exactLimitsEnabled, exactLimitsEnabled)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, dataColumn, dataColumn)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, dataColumnPath, dataColumnPath)
@@ -541,16 +542,6 @@ void ProcessBehaviorChart::setSampleSize(int sampleSize) {
 		exec(new ProcessBehaviorChartSetSampleSizeCmd(d, sampleSize, ki18n("%1: set sample size")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetNegativeLowerLimitEnabled, bool, negativeLowerLimitEnabled, recalc)
-void ProcessBehaviorChart::setNegativeLowerLimitEnabled(bool enabled) {
-	Q_D(ProcessBehaviorChart);
-	if (enabled != d->negativeLowerLimitEnabled) {
-		KLocalizedString msg;
-		enabled ? msg = ki18n("%1: enable negative lower limit") : msg = ki18n("%1: disable negative lower limit");
-		exec(new ProcessBehaviorChartSetNegativeLowerLimitEnabledCmd(d, enabled, msg));
-	}
-}
-
 STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetExactLimitsEnabled, bool, exactLimitsEnabled, recalc)
 void ProcessBehaviorChart::setExactLimitsEnabled(bool enabled) {
 	Q_D(ProcessBehaviorChart);
@@ -559,6 +550,20 @@ void ProcessBehaviorChart::setExactLimitsEnabled(bool enabled) {
 		enabled ? msg = ki18n("%1: enable exact limits") : msg = ki18n("%1: disable exact limits");
 		exec(new ProcessBehaviorChartSetExactLimitsEnabledCmd(d, enabled, msg));
 	}
+}
+
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetMaxUpperLimit, double, maxUpperLimit, recalc)
+void ProcessBehaviorChart::setMaxUpperLimit(double maxUpperLimit) {
+	Q_D(ProcessBehaviorChart);
+	if (maxUpperLimit != d->maxUpperLimit)
+		exec(new ProcessBehaviorChartSetMaxUpperLimitCmd(d, maxUpperLimit, ki18n("%1: set maximal upper limit")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetMinLowerLimit, double, minLowerLimit, recalc)
+void ProcessBehaviorChart::setMinLowerLimit(double minLowerLimit) {
+	Q_D(ProcessBehaviorChart);
+	if (minLowerLimit != d->minLowerLimit)
+		exec(new ProcessBehaviorChartSetMinLowerLimitCmd(d, minLowerLimit, ki18n("%1: set minimal lower limit")));
 }
 
 // labels
@@ -878,6 +883,7 @@ void ProcessBehaviorChartPrivate::recalc() {
 		xLowerLimitColumn->setIntegerAt(1, xMax);
 	}
 
+	updateLimitConstraints();
 	updateControlLimits();
 
 	dataCurve->setSuppressRetransform(false);
@@ -888,6 +894,33 @@ void ProcessBehaviorChartPrivate::recalc() {
 	// emit dataChanged() in order to retransform everything with the new size/shape of the plot
 	Q_EMIT q->dataChanged();
 	Q_EMIT q->recalculated();
+}
+
+void ProcessBehaviorChartPrivate::updateLimitConstraints() {
+	if (type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::S
+		|| type == ProcessBehaviorChart::Type::NP || type == ProcessBehaviorChart::Type::C || type == ProcessBehaviorChart::Type::U) {
+		if (minLowerLimit != 0.) {
+			minLowerLimit = 0.;
+			Q_EMIT q->minLowerLimitChanged(0.);
+		}
+	}
+
+	if (type == ProcessBehaviorChart::Type::NP ) {
+		if (maxUpperLimit > sampleSize) {
+			maxUpperLimit = sampleSize;
+			Q_EMIT q->maxUpperLimitChanged(maxUpperLimit);
+		}
+	} else if (type == ProcessBehaviorChart::Type::P ) {
+		if (minLowerLimit < 0. || minLowerLimit > 1.) {
+			minLowerLimit = 0.;
+			Q_EMIT q->minLowerLimitChanged(0.);
+		}
+
+		if (maxUpperLimit < 0. || maxUpperLimit > 1.) {
+			maxUpperLimit = 1.;
+			Q_EMIT q->maxUpperLimitChanged(1.);
+		}
+	}
 }
 
 /*!
@@ -1266,20 +1299,20 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 
 	QDEBUG(Q_FUNC_INFO << ", center: " << center << " , upper limit: " << upperLimit << ", lower limit: " << lowerLimit);
 
-	// further restrict the lower limit if it becomes negative
-	if (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::XbarS) {
-		// restrict the lower limit to 0, the curve for the lower limit line is always visible
-		if (lowerLimit < 0. && !negativeLowerLimitEnabled)
-			lowerLimit = 0.;
+	// restrict the calculated limits to the min/max values for the current chart type
+	if (lowerLimit < minLowerLimit)
+		lowerLimit = minLowerLimit;
+	if (upperLimit > maxUpperLimit)
+		upperLimit = maxUpperLimit;
 
-		lowerLimitCurve->setVisible(true);
-	} else if (type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::S
+	// show/hide the line for the lower limit depending on the chart type
+	if (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::XbarS)
+		lowerLimitCurve->setVisible(true); // lower limit line is always visible
+	else if (type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::S
 			   || type == ProcessBehaviorChart::Type::C) {
-		// restrict the lower limit to 0, hide the curve for the lower limit line
-		if (lowerLimit < 0.) {
-			lowerLimit = 0.;
+		if (lowerLimit == 0.)
 			lowerLimitCurve->setVisible(false);
-		} else
+		else
 			lowerLimitCurve->setVisible(true);
 	}
 
@@ -1310,20 +1343,24 @@ void ProcessBehaviorChartPrivate::updateLabels() {
 	upperLimitLabel->setUndoAware(false);
 	lowerLimitLabel->setUndoAware(false);
 
+	const bool lowerLimitAvailable = q->lowerLimitAvailable();
+
 	centerLabel->setVisible(labelsEnabled);
 	upperLimitLabel->setVisible(labelsEnabled);
-	lowerLimitLabel->setVisible(labelsEnabled);
+	lowerLimitLabel->setVisible(labelsEnabled && lowerLimitAvailable);
 
 	if (labelsEnabled) {
 		const auto numberLocale = QLocale();
 		if (labelsAutoPrecision) {
 			centerLabel->setText(numberLocale.toString(center));
 			upperLimitLabel->setText(numberLocale.toString(upperLimit));
-			lowerLimitLabel->setText(numberLocale.toString(lowerLimit));
+			if (lowerLimitAvailable)
+				lowerLimitLabel->setText(numberLocale.toString(lowerLimit));
 		} else {
 			centerLabel->setText(numberLocale.toString(center, 'f', labelsPrecision));
 			upperLimitLabel->setText(numberLocale.toString(upperLimit, 'f', labelsPrecision));
-			lowerLimitLabel->setText(numberLocale.toString(lowerLimit, 'f', labelsPrecision));
+			if (lowerLimitAvailable)
+				lowerLimitLabel->setText(numberLocale.toString(lowerLimit, 'f', labelsPrecision));
 		}
 
 		// update the position of the value labels
@@ -1400,7 +1437,8 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->type)));
 	writer->writeAttribute(QStringLiteral("limitsMetric"), QString::number(static_cast<int>(d->limitsMetric)));
 	writer->writeAttribute(QStringLiteral("sampleSize"), QString::number(d->sampleSize));
-	writer->writeAttribute(QStringLiteral("negativeLowerLimitEnabled"), QString::number(d->negativeLowerLimitEnabled));
+	writer->writeAttribute(QStringLiteral("minLowerLimit"), QString::number(d->minLowerLimit));
+	writer->writeAttribute(QStringLiteral("maxUpperLimit"), QString::number(d->maxUpperLimit));
 	writer->writeAttribute(QStringLiteral("exactLimitsEnabled"), QString::number(d->exactLimitsEnabled));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
@@ -1479,7 +1517,8 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("type", type, ProcessBehaviorChart::Type);
 			READ_INT_VALUE("limitsMetric", limitsMetric, ProcessBehaviorChart::LimitsMetric);
 			READ_INT_VALUE("sampleSize", sampleSize, int);
-			READ_INT_VALUE("negativeLowerLimitEnabled", negativeLowerLimitEnabled, bool);
+			READ_DOUBLE_VALUE("minLowerLimit", minLowerLimit);
+			READ_DOUBLE_VALUE("maxUpperLimit", maxUpperLimit);
 			READ_INT_VALUE("exactLimitsEnabled", exactLimitsEnabled, bool);
 			READ_INT_VALUE("legendVisible", legendVisible, bool);
 
