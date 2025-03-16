@@ -458,7 +458,7 @@ void BoxPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspec
 	if (!column)
 		return;
 
-	const auto dataColumnPaths = d->dataColumnPaths;
+	const auto& dataColumnPaths = d->dataColumnPaths;
 	auto dataColumns = d->dataColumns;
 	bool changed = false;
 

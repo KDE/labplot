@@ -62,7 +62,7 @@ private:
 	BaseDock::Units m_units{BaseDock::Units::Metric};
 	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
 #ifdef HAVE_KF_SYNTAX_HIGHLIGHTING
-	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter;
+	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter{nullptr};
 	KSyntaxHighlighting::Repository m_repository;
 #endif
 	LineWidget* borderLineWidget{nullptr};

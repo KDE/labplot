@@ -102,7 +102,7 @@ int main(int argc, char* argv[]) {
 	aboutData.setProgramLogo(QIcon::fromTheme(QStringLiteral("labplot")));
 
 	// components
-	for (auto c: AboutDialog::components())
+	for (const auto& c : AboutDialog::components())
 		aboutData.addComponent(c.at(0), c.at(1), c.at(2), c.at(3));
 
 	const auto& group = Settings::settingsGeneral();
