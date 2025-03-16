@@ -247,7 +247,7 @@ QVector<QStringList> CANFilterPrivate::preview(const QString& fileName, int line
 				break;
 			}
 			case AbstractColumn::ColumnMode::Double: {
-				const auto v = *static_cast<const QVector<double>*>(data_ptr);
+				const auto& v = *static_cast<const QVector<double>*>(data_ptr);
 				l.append(QString::number(v.at(i)));
 				break;
 			}

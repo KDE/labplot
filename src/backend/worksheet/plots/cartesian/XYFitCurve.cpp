@@ -1952,13 +1952,11 @@ void XYFitCurvePrivate::updateResultsNote() {
 	QString AICString = i18n("Akaike information criterion") + QStringLiteral(" (AIC)");
 	QString BICString = i18n("Bayesian information criterion") + QStringLiteral(" (BIC)");
 
-	auto resultStringList = QStringList() << SSRString << RMSString << RMSDString << R2String << ACDString << CHIString << FString << PString << MAEString
-										  << AICString << BICString;
-
+	QStringList resultStringList{SSRString, RMSString, RMSDString, R2String, ACDString, CHIString, FString, PString, MAEString, AICString, BICString};
 	int maxLength = 0;
-	for (const auto& s : resultStringList) {
+	for (const auto& s : resultStringList)
 		maxLength = qMax(maxLength, s.length());
-	}
+
 	maxLength++;
 
 	text += SSRString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.sse) + NEWLINE;
