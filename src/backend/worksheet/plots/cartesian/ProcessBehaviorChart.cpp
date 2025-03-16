@@ -245,10 +245,18 @@ void ProcessBehaviorChart::finalizeAdd() {
 
 void ProcessBehaviorChart::renameInternalCurves() {
 	Q_D(ProcessBehaviorChart);
+	d->dataCurve->setUndoAware(false);
+	d->centerCurve->setUndoAware(false);
+	d->upperLimitCurve->setUndoAware(false);
+	d->lowerLimitCurve->setUndoAware(false);
 	d->dataCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->centerCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->upperLimitCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->lowerLimitCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
+	d->dataCurve->setUndoAware(true);
+	d->centerCurve->setUndoAware(true);
+	d->upperLimitCurve->setUndoAware(true);
+	d->lowerLimitCurve->setUndoAware(true);
 }
 
 /*!
@@ -318,10 +326,8 @@ QColor ProcessBehaviorChart::labelsBackgroundColor() const {
 
 QFont ProcessBehaviorChart::labelsFont() const {
 	Q_D(const ProcessBehaviorChart);
-	auto textWrapper = d->centerLabel->text();
-	QTextEdit te(textWrapper.text);
-	const auto& format = te.currentCharFormat();
-	return format.font();
+	QTextEdit te(d->centerLabel->text().text);
+	return te.currentCharFormat().font();
 }
 
 TextLabel::BorderShape ProcessBehaviorChart::labelsBorderShape() const {
