@@ -48,6 +48,7 @@ public:
 		auto textOptions = document()->defaultTextOption();
 		textOptions.setWrapMode(QTextOption::NoWrap);
 		document()->setDefaultTextOption(textOptions);
+		document()->setDocumentMargin(0);
 	}
 
 	QRectF scaledBoundingRect() const {
