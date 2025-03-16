@@ -912,12 +912,12 @@ void ProcessBehaviorChartPrivate::updateLimitConstraints() {
 		}
 	}
 
-	if (type == ProcessBehaviorChart::Type::NP ) {
+	if (type == ProcessBehaviorChart::Type::NP) {
 		if (maxUpperLimit > sampleSize) {
 			maxUpperLimit = sampleSize;
 			Q_EMIT q->maxUpperLimitChanged(maxUpperLimit);
 		}
-	} else if (type == ProcessBehaviorChart::Type::P ) {
+	} else if (type == ProcessBehaviorChart::Type::P) {
 		if (minLowerLimit < 0. || minLowerLimit > 1.) {
 			minLowerLimit = 0.;
 			Q_EMIT q->minLowerLimitChanged(0.);
@@ -1317,7 +1317,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 	if (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::XbarS)
 		lowerLimitCurve->setVisible(true); // lower limit line is always visible
 	else if (type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::S
-			   || type == ProcessBehaviorChart::Type::C) {
+			 || type == ProcessBehaviorChart::Type::C) {
 		if (lowerLimit == 0.)
 			lowerLimitCurve->setVisible(false);
 		else
