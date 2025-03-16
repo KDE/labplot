@@ -517,9 +517,9 @@ void ProcessBehaviorChartDock::plotMinLowerLimitChanged(double value) {
 void ProcessBehaviorChartDock::plotMaxUpperLimitChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
 	if (value != INFINITY)
-		ui.leMinLowerLimit->setText(QLocale().toString(value));
+		ui.leMaxUpperLimit->setText(QLocale().toString(value));
 	else
-		ui.leMinLowerLimit->setText(QString());
+		ui.leMaxUpperLimit->setText(QString());
 }
 
 void ProcessBehaviorChartDock::plotExactLimitsEnabledChanged(bool enabled) {

@@ -806,12 +806,19 @@ void ProcessBehaviorChartPrivate::retransform() {
 	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
 	const auto& xRange = q->plot()->range(Dimension::X, cs->index(Dimension::X));
 	double x = xRange.end();
+
+	centerLabel->setUndoAware(false);
+	upperLimitLabel->setUndoAware(false);
+	lowerLimitLabel->setUndoAware(false);
 	centerLabel->setPositionLogical(QPointF(x, center));
 	upperLimitLabel->setPositionLogical(QPointF(x, upperLimit));
 	lowerLimitLabel->setPositionLogical(QPointF(x, lowerLimit));
 	centerLabel->retransform();
 	upperLimitLabel->retransform();
 	lowerLimitLabel->retransform();
+	centerLabel->setUndoAware(true);
+	upperLimitLabel->setUndoAware(true);
+	lowerLimitLabel->setUndoAware(true);
 
 	recalcShapeAndBoundingRect();
 }
@@ -1306,6 +1313,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		upperLimit = maxUpperLimit;
 
 	// show/hide the line for the lower limit depending on the chart type
+	lowerLimitCurve->setUndoAware(false);
 	if (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::XbarS)
 		lowerLimitCurve->setVisible(true); // lower limit line is always visible
 	else if (type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::S
@@ -1315,6 +1323,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		else
 			lowerLimitCurve->setVisible(true);
 	}
+	lowerLimitCurve->setUndoAware(true);
 
 	yCenterColumn->setValueAt(0, center);
 	yCenterColumn->setValueAt(1, center);
