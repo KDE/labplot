@@ -10256,10 +10256,9 @@ msgid "Copy to Clipboard"
 msgstr "Copier dans le presse-papier"
 
 #: src/frontend/AboutDialog.cpp:142
-#, fuzzy, kde-format
-#| msgid "Release build "
+#, kde-format
 msgid "Release build"
-msgstr "Compilation de la version"
+msgstr "Version de la compilation"
 
 #: src/frontend/AboutDialog.cpp:144
 #, fuzzy, kde-format

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-14 00:38+0000\n"
-"PO-Revision-Date: 2025-02-23 13:36+0100\n"
+"PO-Revision-Date: 2025-03-15 22:36+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -7804,7 +7804,7 @@ msgstr "%1: starigis aksan skalfaktoron"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:694
 #, kde-format
 msgid "%1: set axis zero offset"
-msgstr "%1: agordi nul-offseton de la akso"
+msgstr "%1: agordi nul-deŝovon de la akso"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:700
 #, kde-format
@@ -7946,7 +7946,7 @@ msgstr "%1: starigis la pozicion de etikedoj"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:974
 #, kde-format
 msgid "%1: set label offset"
-msgstr "%1: agordi etiked-offseton"
+msgstr "%1: agordi etiked-deŝovon"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:981
 #, kde-format
@@ -9064,83 +9064,71 @@ msgid "%1: set sample size"
 msgstr "%1: agordi specimenan grandecon"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:549
-#, fuzzy, kde-format
-#| msgid "%1: change negative lower limit"
+#, kde-format
 msgid "%1: enable negative lower limit"
-msgstr "%1: ŝanĝi negativan malsuperan limon"
+msgstr "%1: ebligi negativan malsupran limon"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:549
-#, fuzzy, kde-format
-#| msgid "%1: change negative lower limit"
+#, kde-format
 msgid "%1: disable negative lower limit"
-msgstr "%1: ŝanĝi negativan malsuperan limon"
+msgstr "%1: malebligi negativan malsupran limon"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:559
-#, fuzzy, kde-format
-#| msgid "%1: change exact limits"
+#, kde-format
 msgid "%1: enable exact limits"
-msgstr "%1: ŝanĝi precizajn limojn"
+msgstr "%1: ebligi precizajn limojn"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:559
-#, fuzzy, kde-format
-#| msgid "%1: change exact limits"
+#, kde-format
 msgid "%1: disable exact limits"
-msgstr "%1: ŝanĝi precizajn limojn"
+msgstr "%1: malebligi precizajn limojn"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:570
 #, kde-format
 msgid "%1: enable control labels"
-msgstr ""
+msgstr "%1: ebligi stir-etikedojn"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:570
-#, fuzzy, kde-format
-#| msgid "%1: set label offset"
+#, kde-format
 msgid "%1: disable control labels"
-msgstr "%1: agordi etiked-offseton"
+msgstr "%1: malebligi stir-etikedojn"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:592
-#, fuzzy, kde-format
-#| msgid "%1: set border shape"
+#, kde-format
 msgid "%1: set labels border shape"
-msgstr "%1: starigis randformon"
+msgstr "%1: meti randformon de etikedoj"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:606
-#, fuzzy, kde-format
-#| msgid "%1: set label font"
+#, kde-format
 msgid "%1: set labels font"
-msgstr "%1: agordi etikedtiparo"
+msgstr "%1: meti tiparon de etikedoj"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:640
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:668
-#, fuzzy, kde-format
-#| msgid "%1: set label background color"
+#, kde-format
 msgid "%1: set labels background color"
-msgstr "%1: agordi etikedan fonkoloron"
+msgstr "%1: meti fonkoloron de etikedoj"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:726
-#, fuzzy, kde-format
-#| msgid "%1: set labels text type"
+#, kde-format
 msgid "%1: set labels border style"
-msgstr "%1: agordi etikedojn tekstospecon"
+msgstr "%1: meti randstilon de etikedoj"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:737
-#, fuzzy, kde-format
-#| msgid "%1: set labels format"
+#, kde-format
 msgid "%1: set labels border width"
-msgstr "%1: agordi la formaton de etikedoj"
+msgstr "%1: meti randlarĝecon de etikedoj"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:748
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:759
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: set labels border color"
-msgstr "%1: agordi etikedkoloron"
+msgstr "%1: meti randkoloron de etikedoj"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:840
-#, fuzzy, kde-format
-#| msgid "Not enough data points available."
+#, kde-format
 msgid "Not enough data provided."
-msgstr "Ne sufiĉaj datumpunktoj haveblaj."
+msgstr "Proviziĝis nesufiĉaj datumoj."
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:912
 #, kde-format
@@ -10178,14 +10166,12 @@ msgid "Copy to Clipboard"
 msgstr "Kopii al Tondujo"
 
 #: src/frontend/AboutDialog.cpp:142
-#, fuzzy, kde-format
-#| msgid "Release build "
+#, kde-format
 msgid "Release build"
 msgstr "Eldona konstruo"
 
 #: src/frontend/AboutDialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Debug build "
+#, kde-format
 msgid "Debug build"
 msgstr "Sencimiga konstruo"
 
@@ -13463,31 +13449,27 @@ msgstr "Kuboida"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:223
 #: src/frontend/widgets/LabelWidget.cpp:516
-#, fuzzy, kde-format
-#| msgid "Up Pointing rectangle"
+#, kde-format
 msgid "Up pointing rectangle"
-msgstr "Supren Montranta rektangulo"
+msgstr "Supren montranta rektangulo"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:224
 #: src/frontend/widgets/LabelWidget.cpp:517
-#, fuzzy, kde-format
-#| msgid "Down Pointing rectangle"
+#, kde-format
 msgid "Down pointing rectangle"
-msgstr "Suben Montranta rektangulo"
+msgstr "Malsupren montranta rektangulo"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
 #: src/frontend/widgets/LabelWidget.cpp:518
-#, fuzzy, kde-format
-#| msgid "Left Pointing rectangle"
+#, kde-format
 msgid "Left pointing rectangle"
-msgstr "Maldekstren Punkta rektangulo"
+msgstr "Maldekstren montranta rektangulo"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
 #: src/frontend/widgets/LabelWidget.cpp:519
-#, fuzzy, kde-format
-#| msgid "Right Pointing rectangle"
+#, kde-format
 msgid "Right pointing rectangle"
-msgstr "Dekstra Indika rektangulo"
+msgstr "Dekstren montranta rektangulo"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
 #, fuzzy, kde-format
@@ -21654,8 +21636,7 @@ msgstr "Malsupra Limo"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLabels)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:421
-#, fuzzy, kde-format
-#| msgid "Center/Limits Lines"
+#, kde-format
 msgid "Center/Limit Values"
 msgstr "Centraj/Limigaj Linioj"
 
@@ -24121,10 +24102,9 @@ msgid "Data, +-:"
 msgstr "Datumoj, +-:"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
-#, fuzzy, kde-format
-#| msgid "Start Value:"
+#, kde-format
 msgid "Start Value"
-msgstr "Komenca Valoro:"
+msgstr "Komenca Valoro"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
@@ -24934,54 +24914,3 @@ msgstr "konvertprocezo malsukcesis, elirkodo ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ne eblas malfermi dosieron:"
-
-#~ msgid "%1: set border"
-#~ msgstr "%1: starigis randon"
-
-#~ msgid "Start value"
-#~ msgstr "Komenca valoro"
-
-#~ msgid "Lower limit"
-#~ msgstr "Malsupra limo"
-
-#~ msgid "Upper limit"
-#~ msgstr "Supra limo"
-
-#~ msgid "No line"
-#~ msgstr "Neniu linio"
-
-#~ msgid "Solid line"
-#~ msgstr "Solida linio"
-
-#~ msgid "Dash line"
-#~ msgstr "Strekolinio"
-
-#~ msgid "Dot line"
-#~ msgstr "Punkta linio"
-
-#~ msgid "Dash dot line"
-#~ msgstr "Punkta linio"
-
-#~ msgid "Dash dot dot line"
-#~ msgstr "Punktlinio"
-
-#~ msgid "Decimal point "
-#~ msgstr "Decimala punkto"
-
-#~ msgid "Group separator "
-#~ msgstr "Grupo apartigilo"
-
-#~ msgid "Exponential "
-#~ msgstr "Eksponenta"
-
-#~ msgid "Zero digit "
-#~ msgstr "Nula cifero"
-
-#~ msgid "Percent "
-#~ msgstr "Procento"
-
-#~ msgid "Positive/Negative sign "
-#~ msgstr "Pozitiva/Negativa signo"
-
-#~ msgid "Number Settings:"
-#~ msgstr "Nombraj Agordoj:"
