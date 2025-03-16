@@ -187,6 +187,7 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 	// load the remaining properties
 	load();
 
+	showStatusInfo(QString()); // remove the message from the previous chart, if available
 	updatePlotRangeList();
 
 	// Slots
