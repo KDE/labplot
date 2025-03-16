@@ -78,10 +78,6 @@ Action evaluateKeys(int key, Qt::KeyboardModifiers) {
 		return Action::NewReferenceLine;
 	else if (key == Qt::Key_I)
 		return Action::NewImage;
-	else if (key == Qt::Key_N)
-		return Action::NavigateNextCurve;
-	else if (key == Qt::Key_P)
-		return Action::NavigatePrevCurve;
 	else if (key == Qt::Key_M)
 		return Action::NewCustomPoint;
 	else if (key == Qt::Key_Escape)
