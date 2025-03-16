@@ -79,8 +79,8 @@ QString OdsFilter::fileInfoString(const QString& fileName) {
 	return info;
 #else
 	Q_UNUSED(fileName)
-#endif
 	return {};
+#endif
 }
 
 void OdsFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
