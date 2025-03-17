@@ -424,7 +424,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 			QList<DatapickerImage*> list;
 			for (auto* aspect : selectedAspects)
 				list << static_cast<Datapicker*>(aspect)->image();
-			m_datapickerImageDock->setImages(list);
+			m_datapickerImageDock->setImages(std::move(list));
 		}
 		break;
 	case AspectType::Project:
@@ -441,7 +441,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window %1 is a Cantor backend", "%1 Notebook", list.first()->backendName()));
 			else
 				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Notebook"));
-			m_notebookDock->setNotebooks(list);
+			m_notebookDock->setNotebooks(std::move(list));
 		}
 #endif
 		break;
