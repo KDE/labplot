@@ -236,7 +236,7 @@ QString AsciiFilter::statusToString(Status e) {
 	case Status::InvalidSeparator:
 		return i18n("Invalid separator");
 	case Status::SerialDeviceUninitialized:
-		return i18n("Serial devices must be initialized before reading data from it");
+		return i18n("Serial device must be initialized before reading data from it");
 	case Status::WrongEndColumn:
 		return i18n("Wrong end column. Is it smaller than start column?");
 	case Status::WrongEndRow:
