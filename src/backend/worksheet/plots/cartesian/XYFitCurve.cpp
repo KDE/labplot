@@ -1872,7 +1872,7 @@ void XYFitCurvePrivate::updateResultsNote() {
 
 	auto valueString = i18n("Value");
 	auto errorString = i18n("Uncertainty");
-	auto errorPString = i18n("Uncertainty,%");
+	auto errorPString = i18n("Uncertainty, %");
 	auto tValueString = i18n("t Statistic");
 	auto pValueString = QStringLiteral("P > |t|");
 	auto lowerString = i18n("Lower");
