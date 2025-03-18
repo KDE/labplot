@@ -587,6 +587,7 @@ void ProcessBehaviorChartDock::load() {
 	// type
 	int index = ui.cbType->findData(static_cast<int>(m_plot->type()));
 	ui.cbType->setCurrentIndex(index);
+	typeChanged(index);
 
 	// limits metric
 	index = ui.cbLimitsMetric->findData(static_cast<int>(m_plot->limitsMetric()));
@@ -641,6 +642,7 @@ void ProcessBehaviorChartDock::loadConfig(KConfig& config) {
 	const auto type = group.readEntry(QStringLiteral("Type"), static_cast<int>(m_plot->type()));
 	int index = ui.cbType->findData(static_cast<int>(type));
 	ui.cbType->setCurrentIndex(index);
+	typeChanged(index);
 
 	// limits metric
 	const auto limitsMetric = group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(m_plot->limitsMetric()));
