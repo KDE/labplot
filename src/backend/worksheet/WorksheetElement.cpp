@@ -981,8 +981,8 @@ void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 	auto point = q->align(pos(), boundingRect(), horizontalAlignment, verticalAlignment, false);
 	// in percentage
 	auto parentRect = q->parentRect();
-	point.setX(point.x() / parentRect.width() + 0.5);
-	point.setY(point.y() / parentRect.height() + 0.5);
+	point.setX((point.x() - parentRect.x()) / parentRect.width());
+	point.setY((point.y() - parentRect.y()) / parentRect.height());
 	QDEBUG(Q_FUNC_INFO << ", new position (relative) =" << point)
 
 	if (point != position.point) { // position was changed
@@ -1037,8 +1037,8 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 			tempPosition.point = q->align(newPos, boundingRect(), horizontalAlignment, verticalAlignment, false);
 			// in percentage
 			auto parentRect = q->parentRect();
-			tempPosition.point.setX(tempPosition.point.x() / parentRect.width() + 0.5);
-			tempPosition.point.setY(tempPosition.point.y() / parentRect.height() + 0.5);
+			tempPosition.point.setX((tempPosition.point.x() - parentRect.x()) / parentRect.width());
+			tempPosition.point.setY((tempPosition.point.y() - parentRect.y()) / parentRect.height());
 
 			// Q_EMIT the signals in order to notify the UI.
 			Q_EMIT q->positionChanged(tempPosition);
