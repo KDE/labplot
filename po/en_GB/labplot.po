@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-17 00:37+0000\n"
+"POT-Creation-Date: 2025-03-18 00:38+0000\n"
 "PO-Revision-Date: 2024-11-23 12:07+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -1174,7 +1174,7 @@ msgstr "Invalid separator"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
 #, kde-format
-msgid "Serial devices must be initialized before reading data from it"
+msgid "Serial device must be initialized before reading data from it"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
@@ -6302,18 +6302,18 @@ msgstr "%1: mirror horizontally"
 msgid "%1: mirror vertically"
 msgstr "%1: mirror vertically"
 
-#: src/backend/note/Note.cpp:70
+#: src/backend/note/Note.cpp:74
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
 msgstr "Print Note"
 
-#: src/backend/note/Note.cpp:95
+#: src/backend/note/Note.cpp:99
 #, kde-format
 msgid "Text file (*.txt)"
 msgstr "Text file (*.txt)"
 
-#: src/backend/note/Note.cpp:97
+#: src/backend/note/Note.cpp:101
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:276
 #, kde-format
@@ -6321,41 +6321,41 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Export to File"
 
-#: src/backend/note/Note.cpp:111
+#: src/backend/note/Note.cpp:115
 #, kde-format
 msgid "Export failed"
 msgstr "Export failed"
 
-#: src/backend/note/Note.cpp:111
+#: src/backend/note/Note.cpp:115
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Failed to open '%1' for writing."
 
-#: src/backend/note/Note.cpp:134
+#: src/backend/note/Note.cpp:138
 #, fuzzy, kde-format
 #| msgid "%1: set type"
 msgid "%1: set text"
 msgstr "%1: set type"
 
-#: src/backend/note/Note.cpp:141 src/backend/worksheet/TextLabel.cpp:278
+#: src/backend/note/Note.cpp:145 src/backend/worksheet/TextLabel.cpp:278
 #: src/backend/worksheet/TextLabel.cpp:317
 #, kde-format
 msgid "%1: set background color"
 msgstr "%1: set background colour"
 
-#: src/backend/note/Note.cpp:148
+#: src/backend/note/Note.cpp:152
 #, fuzzy, kde-format
 #| msgid "%1: set font color"
 msgid "%1: set text color"
 msgstr "%1: set font colour"
 
-#: src/backend/note/Note.cpp:155
+#: src/backend/note/Note.cpp:159
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set text font"
 msgstr "%1: set font"
 
-#: src/backend/note/Note.cpp:197
+#: src/backend/note/Note.cpp:201
 #, kde-format
 msgid "no note element found"
 msgstr "no note element found"

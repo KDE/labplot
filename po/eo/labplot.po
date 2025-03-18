@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-17 00:37+0000\n"
+"POT-Creation-Date: 2025-03-18 00:38+0000\n"
 "PO-Revision-Date: 2025-03-15 22:36+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -1172,8 +1172,9 @@ msgid "Invalid separator"
 msgstr "Nevalida apartigilo"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
-#, kde-format
-msgid "Serial devices must be initialized before reading data from it"
+#, fuzzy, kde-format
+#| msgid "Serial devices must be initialized before reading data from it"
+msgid "Serial device must be initialized before reading data from it"
 msgstr "Seriaj aparatoj estu prevalorizitaj antaŭ ol legi datumojn el ili"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
@@ -6289,18 +6290,18 @@ msgstr "%1: spegulo horizontale"
 msgid "%1: mirror vertically"
 msgstr "%1: spegulo vertikale"
 
-#: src/backend/note/Note.cpp:70
+#: src/backend/note/Note.cpp:74
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
 msgstr "Presi Noton"
 
-#: src/backend/note/Note.cpp:95
+#: src/backend/note/Note.cpp:99
 #, kde-format
 msgid "Text file (*.txt)"
 msgstr "Tekst-dosieroj (*.txt)"
 
-#: src/backend/note/Note.cpp:97
+#: src/backend/note/Note.cpp:101
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:276
 #, kde-format
@@ -6308,38 +6309,38 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Eksporti al Dosiero"
 
-#: src/backend/note/Note.cpp:111
+#: src/backend/note/Note.cpp:115
 #, kde-format
 msgid "Export failed"
 msgstr "Eksporto Malsukcesis"
 
-#: src/backend/note/Note.cpp:111
+#: src/backend/note/Note.cpp:115
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Malsukcesis malfermi la dosieron '%1' por skribado."
 
-#: src/backend/note/Note.cpp:134
+#: src/backend/note/Note.cpp:138
 #, kde-format
 msgid "%1: set text"
 msgstr "%1: agordi tekston"
 
-#: src/backend/note/Note.cpp:141 src/backend/worksheet/TextLabel.cpp:278
+#: src/backend/note/Note.cpp:145 src/backend/worksheet/TextLabel.cpp:278
 #: src/backend/worksheet/TextLabel.cpp:317
 #, kde-format
 msgid "%1: set background color"
 msgstr "%1: agordi fonkoloron"
 
-#: src/backend/note/Note.cpp:148
+#: src/backend/note/Note.cpp:152
 #, kde-format
 msgid "%1: set text color"
 msgstr "%1: agordi tekstokoloron"
 
-#: src/backend/note/Note.cpp:155
+#: src/backend/note/Note.cpp:159
 #, kde-format
 msgid "%1: set text font"
 msgstr "%1: agordi tekstan tiparon"
 
-#: src/backend/note/Note.cpp:197
+#: src/backend/note/Note.cpp:201
 #, kde-format
 msgid "no note element found"
 msgstr "neniu notelemento trovita"

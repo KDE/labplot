@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-17 00:37+0000\n"
+"POT-Creation-Date: 2025-03-18 00:38+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -1196,7 +1196,7 @@ msgstr "Недопустимый указатель"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
 #, kde-format
-msgid "Serial devices must be initialized before reading data from it"
+msgid "Serial device must be initialized before reading data from it"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
@@ -6570,19 +6570,19 @@ msgstr "%1: горизонтальное отражение"
 msgid "%1: mirror vertically"
 msgstr "%1: вертикальное отражение"
 
-#: src/backend/note/Note.cpp:70
+#: src/backend/note/Note.cpp:74
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
 msgstr "Печать"
 
-#: src/backend/note/Note.cpp:95
+#: src/backend/note/Note.cpp:99
 #, fuzzy, kde-format
 msgid "Text file (*.txt)"
 msgstr "Файлы LaTeX (*.tex)"
 
 # BUGME: please split strings --aspotashev
-#: src/backend/note/Note.cpp:97
+#: src/backend/note/Note.cpp:101
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:276
 #, kde-format
@@ -6591,41 +6591,41 @@ msgid "Export to File"
 msgstr "Экспорт в файл"
 
 # BUGME: please split strings --aspotashev
-#: src/backend/note/Note.cpp:111
+#: src/backend/note/Note.cpp:115
 #, fuzzy, kde-format
 msgid "Export failed"
 msgstr "Экспорт в файл"
 
-#: src/backend/note/Note.cpp:111
+#: src/backend/note/Note.cpp:115
 #, fuzzy, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Не удалось открыть файл «%1» для записи."
 
-#: src/backend/note/Note.cpp:134
+#: src/backend/note/Note.cpp:138
 #, fuzzy, kde-format
 #| msgid "%1: set type"
 msgid "%1: set text"
 msgstr "%1: задание типа"
 
-#: src/backend/note/Note.cpp:141 src/backend/worksheet/TextLabel.cpp:278
+#: src/backend/note/Note.cpp:145 src/backend/worksheet/TextLabel.cpp:278
 #: src/backend/worksheet/TextLabel.cpp:317
 #, kde-format
 msgid "%1: set background color"
 msgstr "%1: задание цвета фона"
 
-#: src/backend/note/Note.cpp:148
+#: src/backend/note/Note.cpp:152
 #, fuzzy, kde-format
 #| msgid "%1: set font color"
 msgid "%1: set text color"
 msgstr "%1: задание цвета шрифта"
 
-#: src/backend/note/Note.cpp:155
+#: src/backend/note/Note.cpp:159
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set text font"
 msgstr "%1: задание шрифта"
 
-#: src/backend/note/Note.cpp:197
+#: src/backend/note/Note.cpp:201
 #, kde-format
 msgid "no note element found"
 msgstr "Не найден элемент «note»"

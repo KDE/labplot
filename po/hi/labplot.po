@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-17 00:37+0000\n"
+"POT-Creation-Date: 2025-03-18 00:38+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -1174,7 +1174,7 @@ msgstr "अमान्य विभाजक"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
 #, kde-format
-msgid "Serial devices must be initialized before reading data from it"
+msgid "Serial device must be initialized before reading data from it"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
@@ -6268,18 +6268,18 @@ msgstr "%1: क्षैतिज रूप से प्रतिबिम्�
 msgid "%1: mirror vertically"
 msgstr "%1: लंबवत दर्पण"
 
-#: src/backend/note/Note.cpp:70
+#: src/backend/note/Note.cpp:74
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
 msgstr "नोट प्रिंट करें"
 
-#: src/backend/note/Note.cpp:95
+#: src/backend/note/Note.cpp:99
 #, kde-format
 msgid "Text file (*.txt)"
 msgstr "पाठ फ़ाइल (*.txt)"
 
-#: src/backend/note/Note.cpp:97
+#: src/backend/note/Note.cpp:101
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:276
 #, kde-format
@@ -6287,38 +6287,38 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "फ़ाइल में निर्यात करें"
 
-#: src/backend/note/Note.cpp:111
+#: src/backend/note/Note.cpp:115
 #, kde-format
 msgid "Export failed"
 msgstr "निर्यात विफल"
 
-#: src/backend/note/Note.cpp:111
+#: src/backend/note/Note.cpp:115
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "'%1' को लिखने के लिए खोलने में विफल."
 
-#: src/backend/note/Note.cpp:134
+#: src/backend/note/Note.cpp:138
 #, kde-format
 msgid "%1: set text"
 msgstr "%1: पाठ सेट करें"
 
-#: src/backend/note/Note.cpp:141 src/backend/worksheet/TextLabel.cpp:278
+#: src/backend/note/Note.cpp:145 src/backend/worksheet/TextLabel.cpp:278
 #: src/backend/worksheet/TextLabel.cpp:317
 #, kde-format
 msgid "%1: set background color"
 msgstr "%1: पृष्ठभूमि रंग सेट करें"
 
-#: src/backend/note/Note.cpp:148
+#: src/backend/note/Note.cpp:152
 #, kde-format
 msgid "%1: set text color"
 msgstr "%1: पाठ का रंग निर्धारित करें"
 
-#: src/backend/note/Note.cpp:155
+#: src/backend/note/Note.cpp:159
 #, kde-format
 msgid "%1: set text font"
 msgstr "%1: टेक्स्ट फ़ॉन्ट सेट करें"
 
-#: src/backend/note/Note.cpp:197
+#: src/backend/note/Note.cpp:201
 #, kde-format
 msgid "no note element found"
 msgstr "कोई नोट तत्व नहीं मिला"

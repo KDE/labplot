@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-17 00:37+0000\n"
-"PO-Revision-Date: 2025-03-14 07:20+0100\n"
+"POT-Creation-Date: 2025-03-18 00:38+0000\n"
+"PO-Revision-Date: 2025-03-17 06:27+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -1181,8 +1181,9 @@ msgid "Invalid separator"
 msgstr "Neveljaven ločilnik"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
-#, kde-format
-msgid "Serial devices must be initialized before reading data from it"
+#, fuzzy, kde-format
+#| msgid "Serial devices must be initialized before reading data from it"
+msgid "Serial device must be initialized before reading data from it"
 msgstr ""
 "Serijske naprave je treba inicializirati, preden z njih preberete podatke"
 
@@ -6329,18 +6330,18 @@ msgstr "%1: zrcaljenje vodoravno"
 msgid "%1: mirror vertically"
 msgstr "%1: zrcaljenje navpično"
 
-#: src/backend/note/Note.cpp:70
+#: src/backend/note/Note.cpp:74
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
 msgstr "Natisni opombo"
 
-#: src/backend/note/Note.cpp:95
+#: src/backend/note/Note.cpp:99
 #, kde-format
 msgid "Text file (*.txt)"
 msgstr "Besedilna datoteka (*.txt)"
 
-#: src/backend/note/Note.cpp:97
+#: src/backend/note/Note.cpp:101
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:276
 #, kde-format
@@ -6348,38 +6349,38 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Izvozi v datoteko"
 
-#: src/backend/note/Note.cpp:111
+#: src/backend/note/Note.cpp:115
 #, kde-format
 msgid "Export failed"
 msgstr "Izvozi ni uspel"
 
-#: src/backend/note/Note.cpp:111
+#: src/backend/note/Note.cpp:115
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "Datoteke '%1' ni bilo mogoče odpreti za pisanje."
 
-#: src/backend/note/Note.cpp:134
+#: src/backend/note/Note.cpp:138
 #, kde-format
 msgid "%1: set text"
 msgstr "%1: nastavi besedilo"
 
-#: src/backend/note/Note.cpp:141 src/backend/worksheet/TextLabel.cpp:278
+#: src/backend/note/Note.cpp:145 src/backend/worksheet/TextLabel.cpp:278
 #: src/backend/worksheet/TextLabel.cpp:317
 #, kde-format
 msgid "%1: set background color"
 msgstr "%1: nastavite barvo ozadja"
 
-#: src/backend/note/Note.cpp:148
+#: src/backend/note/Note.cpp:152
 #, kde-format
 msgid "%1: set text color"
 msgstr "%1: nastavi barvo besedila"
 
-#: src/backend/note/Note.cpp:155
+#: src/backend/note/Note.cpp:159
 #, kde-format
 msgid "%1: set text font"
 msgstr "%1: nastavi pisavo besedila"
 
-#: src/backend/note/Note.cpp:197
+#: src/backend/note/Note.cpp:201
 #, kde-format
 msgid "no note element found"
 msgstr "ni najdenega elementa opombe"
@@ -9131,16 +9132,14 @@ msgid "%1: disable exact limits"
 msgstr "%1: oneogoči natančne meje"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:565
-#, fuzzy, kde-format
-#| msgid "%1: set axis zero offset"
+#, kde-format
 msgid "%1: set maximal upper limit"
-msgstr "%1: nastavi odmik ničelne vrednosti osi"
+msgstr "%1: nastavi največjo zgornjo mejo"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:572
-#, fuzzy, kde-format
-#| msgid "%1: disable negative lower limit"
+#, kde-format
 msgid "%1: set minimal lower limit"
-msgstr "%1: onemogoči negativno spodnjo mejo"
+msgstr "%1: nastavi najmanjšo spodnjo mejo"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:581
 #, kde-format
@@ -13571,11 +13570,13 @@ msgstr ""
 #, kde-format
 msgid "Maximal value for the upper control limit. No constraint, if empty."
 msgstr ""
+"Največja vrednost za zgornjo kontrolno mejo. Brez omejitve, če je prazno."
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:265
 #, kde-format
 msgid "Minimal value for the lower control limit. No constraint, if empty."
 msgstr ""
+"Najmanjša vrednost za spodnjo kontrolno mejo. Brez omejitve, če je prazno."
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:269
 #, kde-format
@@ -21674,10 +21675,9 @@ msgstr "Velikosti vzorca:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:189
-#, fuzzy, kde-format
-#| msgid "Lower Limit"
+#, kde-format
 msgid "Min. Lower Limit:"
-msgstr "Spodnja omejitev"
+msgstr "Najmanjša spodnja omejitev:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:212
@@ -21687,10 +21687,9 @@ msgstr "Omejitve osnovanje na:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxUpperLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:232
-#, fuzzy, kde-format
-#| msgid "Upper Limit"
+#, kde-format
 msgid "Max. Upper Limit:"
-msgstr "Zgornja omejitev"
+msgstr "Največja zgornja omejitev:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:243

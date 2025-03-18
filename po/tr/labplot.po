@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-17 00:37+0000\n"
-"PO-Revision-Date: 2025-03-14 16:13+0300\n"
+"POT-Creation-Date: 2025-03-18 00:38+0000\n"
+"PO-Revision-Date: 2025-03-17 14:39+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1173,8 +1173,9 @@ msgid "Invalid separator"
 msgstr "Geçersiz ayırıcı"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
-#, kde-format
-msgid "Serial devices must be initialized before reading data from it"
+#, fuzzy, kde-format
+#| msgid "Serial devices must be initialized before reading data from it"
+msgid "Serial device must be initialized before reading data from it"
 msgstr "Onlardan veri okumadan önce seri aygıtlar ilklendirilmelidir"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
@@ -6301,18 +6302,18 @@ msgstr "%1: Yatay olarak yansıt"
 msgid "%1: mirror vertically"
 msgstr "%1: Dikey olarak yansıt"
 
-#: src/backend/note/Note.cpp:70
+#: src/backend/note/Note.cpp:74
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Note"
 msgstr "Notu Yazdır"
 
-#: src/backend/note/Note.cpp:95
+#: src/backend/note/Note.cpp:99
 #, kde-format
 msgid "Text file (*.txt)"
 msgstr "Metin dosyası (*.txt)"
 
-#: src/backend/note/Note.cpp:97
+#: src/backend/note/Note.cpp:101
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:276
 #, kde-format
@@ -6320,38 +6321,38 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Dosyaya Dışa Aktar"
 
-#: src/backend/note/Note.cpp:111
+#: src/backend/note/Note.cpp:115
 #, kde-format
 msgid "Export failed"
 msgstr "Dışa aktarma başarısız"
 
-#: src/backend/note/Note.cpp:111
+#: src/backend/note/Note.cpp:115
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr "“%1” dosyası yazmak için açılamadı."
 
-#: src/backend/note/Note.cpp:134
+#: src/backend/note/Note.cpp:138
 #, kde-format
 msgid "%1: set text"
 msgstr "%1: Metni ayarla"
 
-#: src/backend/note/Note.cpp:141 src/backend/worksheet/TextLabel.cpp:278
+#: src/backend/note/Note.cpp:145 src/backend/worksheet/TextLabel.cpp:278
 #: src/backend/worksheet/TextLabel.cpp:317
 #, kde-format
 msgid "%1: set background color"
 msgstr "%1: Arka plan rengini ayarla"
 
-#: src/backend/note/Note.cpp:148
+#: src/backend/note/Note.cpp:152
 #, kde-format
 msgid "%1: set text color"
 msgstr "%1: Metin rengini ayarla"
 
-#: src/backend/note/Note.cpp:155
+#: src/backend/note/Note.cpp:159
 #, kde-format
 msgid "%1: set text font"
 msgstr "%1: Metin yazıtipini ayarla"
 
-#: src/backend/note/Note.cpp:197
+#: src/backend/note/Note.cpp:201
 #, kde-format
 msgid "no note element found"
 msgstr "not elemanı bulunamadı"
@@ -9085,16 +9086,14 @@ msgid "%1: disable exact limits"
 msgstr "%1: Kesin sınırları devre dışı bırak"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:565
-#, fuzzy, kde-format
-#| msgid "%1: set axis zero offset"
+#, kde-format
 msgid "%1: set maximal upper limit"
-msgstr "%1: Eksenin sıfır ofsetini ayarla"
+msgstr "%1: En yüksek sınırı ayarla"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:572
-#, fuzzy, kde-format
-#| msgid "%1: disable negative lower limit"
+#, kde-format
 msgid "%1: set minimal lower limit"
-msgstr "%1: Negatif alt sınırı devre dışı bırak"
+msgstr "%1: En düşük sınırı ayarla"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:581
 #, kde-format
@@ -13515,12 +13514,12 @@ msgstr ""
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:261
 #, kde-format
 msgid "Maximal value for the upper control limit. No constraint, if empty."
-msgstr ""
+msgstr "Üst denetim sınırı için en yüksek değer. Boşsa kısıtlama yok."
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:265
 #, kde-format
 msgid "Minimal value for the lower control limit. No constraint, if empty."
-msgstr ""
+msgstr "Alt denetim sınırı için en düşük değer. Boşsa kısıtlama yok."
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:269
 #, kde-format
@@ -21598,10 +21597,9 @@ msgstr "Örneklem boyutları:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:189
-#, fuzzy, kde-format
-#| msgid "Lower Limit"
+#, kde-format
 msgid "Min. Lower Limit:"
-msgstr "Alt sınır"
+msgstr "En düşük alt sınır:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:212
@@ -21611,10 +21609,9 @@ msgstr "Şuna göre sınırlanır:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxUpperLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:232
-#, fuzzy, kde-format
-#| msgid "Upper Limit"
+#, kde-format
 msgid "Max. Upper Limit:"
-msgstr "Üst sınır"
+msgstr "En yüksek üst sınır:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:243
