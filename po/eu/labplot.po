@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-18 00:38+0000\n"
+"POT-Creation-Date: 2025-03-19 00:38+0000\n"
 "PO-Revision-Date: 2025-01-15 16:57+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -9850,9 +9850,10 @@ msgid "Uncertainty"
 msgstr "Ziurgabetasuna"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1875
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
-msgid "Uncertainty,%"
-msgstr "Ziurgabetasuna,%"
+msgid "Uncertainty, %"
+msgstr "Ziurgabetasuna, %"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1876
 #, kde-format
@@ -12688,7 +12689,7 @@ msgstr ""
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:375
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:452
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:679
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:681
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
@@ -13284,7 +13285,7 @@ msgid "Custom value for the kernel bandwidth"
 msgstr ""
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:373
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:677
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:679
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1041
@@ -13864,11 +13865,6 @@ msgstr "Ez da Y zutaberik zehaztu!"
 #| msgid "No column available"
 msgid "No Y data available!"
 msgstr "Ez dago zutaberik erabilgarri"
-
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
-#, kde-format
-msgid "Uncertainty, %"
-msgstr "Ziurgabetasuna, %"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
@@ -24925,6 +24921,9 @@ msgstr "«convert» prozesuak huts egin du, irteera kodea ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ez da fitxategia irekitzeko gai:"
+
+#~ msgid "Uncertainty,%"
+#~ msgstr "Ziurgabetasuna,%"
 
 #, fuzzy
 #~| msgid "%1: change comment"

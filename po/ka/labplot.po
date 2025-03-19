@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-18 00:38+0000\n"
-"PO-Revision-Date: 2025-03-17 03:28+0100\n"
+"POT-Creation-Date: 2025-03-19 00:38+0000\n"
+"PO-Revision-Date: 2025-03-18 05:39+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1173,8 +1173,7 @@ msgid "Invalid separator"
 msgstr "არასწორი გამყოფი"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
-#, fuzzy, kde-format
-#| msgid "Serial devices must be initialized before reading data from it"
+#, kde-format
 msgid "Serial device must be initialized before reading data from it"
 msgstr ""
 "სერიული მოწყობილობებიდან მონაცემების წაკითხვამდე აუცილებელია მათი "
@@ -9779,8 +9778,9 @@ msgid "Uncertainty"
 msgstr "გაურკვევლობა"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1875
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
-msgid "Uncertainty,%"
+msgid "Uncertainty, %"
 msgstr "გაურკვევლობა, %"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1876
@@ -12738,7 +12738,7 @@ msgstr "%1 ღერძები: ნიმუში \"%2\" ჩაიტვი�
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:375
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:452
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:679
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:681
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
@@ -13354,7 +13354,7 @@ msgid "Custom value for the kernel bandwidth"
 msgstr "მორგებული მნიშვნელობა ბირთვის გამტარობისთვის"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:373
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:677
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:679
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1041
@@ -13963,11 +13963,6 @@ msgstr "Y სვეტი მითითებული არაა!"
 #, kde-format
 msgid "No Y data available!"
 msgstr "Y მონაცემები ხელმიუწვდომელია!"
-
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
-#, kde-format
-msgid "Uncertainty, %"
-msgstr "გაურკვევლობა, %"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
@@ -24949,6 +24944,9 @@ msgstr "გადაყვანის პროცესი ჩავარდ�
 #, kde-format
 msgid "Unable to open file:"
 msgstr "ფაილის გახსნა შეუძლებელია:"
+
+#~ msgid "Uncertainty,%"
+#~ msgstr "გაურკვევლობა, %"
 
 #~ msgid "%1: enable negative lower limit"
 #~ msgstr "%1: უარყოფითი ქვედა ზღვარის ჩართვა"

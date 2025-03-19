@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-18 00:38+0000\n"
-"PO-Revision-Date: 2025-03-17 11:20+0100\n"
+"POT-Creation-Date: 2025-03-19 00:38+0000\n"
+"PO-Revision-Date: 2025-03-18 23:29+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -1172,12 +1172,11 @@ msgid "Invalid separator"
 msgstr "Ongeldig scheidingsteken"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
-#, fuzzy, kde-format
-#| msgid "Serial devices must be initialized before reading data from it"
+#, kde-format
 msgid "Serial device must be initialized before reading data from it"
 msgstr ""
-"Seriële apparaten moeten geïnitialiseerd worden voordat er gegevens van "
-"gelezen kunnen worden"
+"Serieel apparaat moet geïnitialiseerd worden voordat er gegevens van gelezen "
+"kunnen worden"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
 #, kde-format
@@ -9773,9 +9772,10 @@ msgid "Uncertainty"
 msgstr "Onzekerheid"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1875
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
-msgid "Uncertainty,%"
-msgstr "Onzekerheid,%"
+msgid "Uncertainty, %"
+msgstr "Onzekerheid, %"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1876
 #, kde-format
@@ -12727,7 +12727,7 @@ msgstr "%1 assen: sjabloon \"%2\" ingelezen"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:375
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:452
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:679
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:681
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
@@ -13354,7 +13354,7 @@ msgid "Custom value for the kernel bandwidth"
 msgstr "Aangepast waarde voor de kernelbandbreedte"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:373
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:677
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:679
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1041
@@ -13967,11 +13967,6 @@ msgstr "Geen Y-kolom gespecificeerd!"
 #, kde-format
 msgid "No Y data available!"
 msgstr "Geen Y-gegevens beschikbaar!"
-
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
-#, kde-format
-msgid "Uncertainty, %"
-msgstr "Onzekerheid, %"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
@@ -24966,6 +24961,9 @@ msgstr "conversie is mislukt, exitcode ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Kon bestand niet openen:"
+
+#~ msgid "Uncertainty,%"
+#~ msgstr "Onzekerheid,%"
 
 #~ msgid "%1: enable negative lower limit"
 #~ msgstr "%1: negatieve lage limiet inschakelen"
