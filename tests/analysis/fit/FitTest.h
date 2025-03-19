@@ -52,13 +52,17 @@ private Q_SLOTS:
 	void testNonLinearMisra1d_3(); // third set of start values
 	void testNonLinearMGH09();
 	void testNonLinearMGH09_2(); // second set of start values
-	void testNonLinearMGH09_3(); // third set of start values
+	void testNonLinearMGH09_3(); // exact start values
 	void testNonLinearMGH10();
 	void testNonLinearMGH10_2(); // second set of start values
 	void testNonLinearMGH10_3(); // third set of start values
 	void testNonLinearRat43();
 	void testNonLinearRat43_2(); // second set of start values
 	void testNonLinearRat43_3(); // third set of start values
+	// more fits
+	void testNonLinearHahn1();
+	void testNonLinearHahn1_2(); // second set of start values
+	void testNonLinearHahn1_3(); // exact start values
 
 	void testNonLinearMichaelis_Menten();
 
