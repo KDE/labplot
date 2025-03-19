@@ -1736,20 +1736,20 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				if (parser.parseErrors() > 0) // fallback to default locale
 					f_p = parser.parse(qPrintable(func), "en_US");
 
-				// scale step size with function value
-				double eps = 1.e-8;
+				// scale step size d with function value
+				double d = 1.e-9;
 				if (std::abs(f_p) > 0)
-					eps *= std::abs(f_p);
+					d *= std::abs(f_p);
 
 				// backward step
-				value -= eps;
+				value -= d;
 				parser.assign_symbol(qPrintable(paramNames->at(j)), value);
 				double f_pm = parser.parse(qPrintable(func), qPrintable(numberLocale.name()));
 				if (parser.parseErrors() > 0) // fallback to default locale
 					f_pm = parser.parse(qPrintable(func), "en_US");
 
 				// forward step
-				value += 2. * eps;
+				value += 2. * d;
 				parser.assign_symbol(qPrintable(paramNames->at(j)), value);
 				double f_pp = parser.parse(qPrintable(func), qPrintable(numberLocale.name()));
 				if (parser.parseErrors() > 0) // fallback to default locale
@@ -1762,7 +1762,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				if (fixed[j])
 					gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
 				else // calculate central finite difference
-					gsl_matrix_set(J, (size_t)i, (size_t)j, sqrt(weight[i]) * (f_pp - f_pm) / 2. / eps);
+					gsl_matrix_set(J, (size_t)i, (size_t)j, sqrt(weight[i]) * (f_pp - f_pm) / (2. * d));
 			}
 		}
 	}
