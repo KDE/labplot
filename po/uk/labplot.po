@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-18 00:38+0000\n"
-"PO-Revision-Date: 2025-03-17 11:10+0200\n"
+"POT-Creation-Date: 2025-03-19 00:38+0000\n"
+"PO-Revision-Date: 2025-03-18 08:46+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1179,12 +1179,11 @@ msgid "Invalid separator"
 msgstr "Некоректний роздільник"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
-#, fuzzy, kde-format
-#| msgid "Serial devices must be initialized before reading data from it"
+#, kde-format
 msgid "Serial device must be initialized before reading data from it"
 msgstr ""
-"Пристрої послідовного зв'язку має бути ініціалізовано, перш ніж з них можна "
-"буде читати дані"
+"Пристрій послідовного зв'язку має бути ініціалізовано, перш ніж з нього "
+"можна буде читати дані"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
 #, kde-format
@@ -9844,8 +9843,9 @@ msgid "Uncertainty"
 msgstr "Невизначеність"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1875
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
-msgid "Uncertainty,%"
+msgid "Uncertainty, %"
 msgstr "Невизначеність, %"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1876
@@ -12815,7 +12815,7 @@ msgstr "Вісі %1: завантажено шаблон «%2»"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:375
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:452
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:679
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:681
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
@@ -13433,7 +13433,7 @@ msgid "Custom value for the kernel bandwidth"
 msgstr "Нетипове значення ширини смуги ядра"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:373
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:677
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:679
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1041
@@ -14040,11 +14040,6 @@ msgstr "Не вказано стовпчика Y!"
 #, kde-format
 msgid "No Y data available!"
 msgstr "Немає доступних даних Y!"
-
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
-#, kde-format
-msgid "Uncertainty, %"
-msgstr "Невизначеність, %"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
@@ -25075,6 +25070,9 @@ msgstr "Не вдалося обробити convert, код виходу ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Не вдалося відкрити файл:"
+
+#~ msgid "Uncertainty,%"
+#~ msgstr "Невизначеність, %"
 
 #~ msgid "%1: enable negative lower limit"
 #~ msgstr "%1: увімкнути від'ємну нижню границю"

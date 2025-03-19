@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-18 00:38+0000\n"
+"POT-Creation-Date: 2025-03-19 00:38+0000\n"
 "PO-Revision-Date: 2025-02-11 10:40+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -9802,9 +9802,10 @@ msgid "Uncertainty"
 msgstr "Unsicherheit"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1875
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
-msgid "Uncertainty,%"
-msgstr "Unischerheit,%"
+msgid "Uncertainty, %"
+msgstr "Unischerheit, %"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1876
 #, kde-format
@@ -12741,7 +12742,7 @@ msgstr "%1-Achsen: Vorlage \"%2\" geladen"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:375
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:452
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:679
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:681
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
@@ -13358,7 +13359,7 @@ msgid "Custom value for the kernel bandwidth"
 msgstr "Eigener Wert für die Bandbreite des Kernel"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:373
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:677
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:679
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1041
@@ -13982,11 +13983,6 @@ msgstr "Keine Y Spalte angegeben!"
 #, kde-format
 msgid "No Y data available!"
 msgstr "Keine Y Daten verfügbar!"
-
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
-#, kde-format
-msgid "Uncertainty, %"
-msgstr "Unischerheit, %"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
@@ -24990,6 +24986,9 @@ msgstr "convert-Prozess fehlgeschlagen, Fehlercode ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Fehler beim Öffnen der Datei:"
+
+#~ msgid "Uncertainty,%"
+#~ msgstr "Unischerheit,%"
 
 #, fuzzy
 #~| msgid "%1: change negative lower limit"

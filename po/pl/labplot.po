@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-18 00:38+0000\n"
+"POT-Creation-Date: 2025-03-19 00:38+0000\n"
 "PO-Revision-Date: 2025-02-09 08:30+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -9816,9 +9816,10 @@ msgid "Uncertainty"
 msgstr "Niepewność"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1875
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
-msgid "Uncertainty,%"
-msgstr "Niepewność,%"
+msgid "Uncertainty, %"
+msgstr "Niepewność, %"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1876
 #, kde-format
@@ -12795,7 +12796,7 @@ msgstr "%1 osi: wczytano wzorzec \"%2\""
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:375
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:452
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:679
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:681
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
@@ -13409,7 +13410,7 @@ msgid "Custom value for the kernel bandwidth"
 msgstr "Własna wartość dla szerokości pasma jądra"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:373
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:677
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:679
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1041
@@ -14033,11 +14034,6 @@ msgstr "Nie podano kolumny Y!"
 #, kde-format
 msgid "No Y data available!"
 msgstr "Nie ma dostępnych żadnych danych Y!"
-
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
-#, kde-format
-msgid "Uncertainty, %"
-msgstr "Niepewność, %"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
@@ -25050,6 +25046,9 @@ msgstr "convert zakończył niepowodzeniem z kodem wyjścia ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Nie można otworzyć pliku:"
+
+#~ msgid "Uncertainty,%"
+#~ msgstr "Niepewność,%"
 
 #, fuzzy
 #~| msgid "%1: change negative lower limit"

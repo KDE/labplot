@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-18 00:38+0000\n"
+"POT-Creation-Date: 2025-03-19 00:38+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -10446,8 +10446,9 @@ msgid "Uncertainty"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1875
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
-msgid "Uncertainty,%"
+msgid "Uncertainty, %"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1876
@@ -13382,7 +13383,7 @@ msgstr ""
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:375
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:452
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:679
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:681
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
@@ -14000,7 +14001,7 @@ msgid "Custom value for the kernel bandwidth"
 msgstr ""
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:373
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:677
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:679
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1041
@@ -14610,11 +14611,6 @@ msgstr "%1: Klip markerede celler"
 #| msgid "%1: cut selected cell(s)"
 msgid "No Y data available!"
 msgstr "%1: Klip markerede celler"
-
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
-#, kde-format
-msgid "Uncertainty, %"
-msgstr ""
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, fuzzy, kde-format

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-18 00:38+0000\n"
+"POT-Creation-Date: 2025-03-19 00:38+0000\n"
 "PO-Revision-Date: 2025-03-11 10:24+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -9733,9 +9733,10 @@ msgid "Uncertainty"
 msgstr "Uncertainty (incertitude)"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1875
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
-msgid "Uncertainty,%"
-msgstr "Uncertainty (incertitude),%"
+msgid "Uncertainty, %"
+msgstr "Uncertainty (incertitude), %"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1876
 #, kde-format
@@ -12508,7 +12509,7 @@ msgstr ""
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:375
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:452
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:679
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:681
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
@@ -13098,7 +13099,7 @@ msgid "Custom value for the kernel bandwidth"
 msgstr ""
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:373
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:677
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:679
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1041
@@ -13671,11 +13672,6 @@ msgstr ""
 #, kde-format
 msgid "No Y data available!"
 msgstr ""
-
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
-#, kde-format
-msgid "Uncertainty, %"
-msgstr "Uncertainty (incertitude), %"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
@@ -24516,6 +24512,9 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Incapace a aperir file:"
+
+#~ msgid "Uncertainty,%"
+#~ msgstr "Uncertainty (incertitude),%"
 
 #~ msgid "Lower Limit < 0:"
 #~ msgstr "Limite inferior <0:"
