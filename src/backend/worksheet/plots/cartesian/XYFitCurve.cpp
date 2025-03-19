@@ -1730,19 +1730,30 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				}
 
 				value = nsl_fit_map_bound(gsl_vector_get(paramValues, j), min[j], max[j]);
+
 				parser.assign_symbol(qPrintable(paramNames->at(j)), value);
 				double f_p = parser.parse(qPrintable(func), qPrintable(numberLocale.name()));
 				if (parser.parseErrors() > 0) // fallback to default locale
 					f_p = parser.parse(qPrintable(func), "en_US");
 
-				double eps = 1.e-9;
+				// scale step size with function value
+				double eps = 1.e-8;
 				if (std::abs(f_p) > 0)
-					eps *= std::abs(f_p); // scale step size with function value
-				value += eps;
+					eps *= std::abs(f_p);
+
+				// backward step
+				value -= eps;
 				parser.assign_symbol(qPrintable(paramNames->at(j)), value);
-				double f_pdp = parser.parse(qPrintable(func), qPrintable(numberLocale.name()));
+				double f_pm = parser.parse(qPrintable(func), qPrintable(numberLocale.name()));
 				if (parser.parseErrors() > 0) // fallback to default locale
-					f_pdp = parser.parse(qPrintable(func), "en_US");
+					f_pm = parser.parse(qPrintable(func), "en_US");
+
+				// forward step
+				value += 2. * eps;
+				parser.assign_symbol(qPrintable(paramNames->at(j)), value);
+				double f_pp = parser.parse(qPrintable(func), qPrintable(numberLocale.name()));
+				if (parser.parseErrors() > 0) // fallback to default locale
+					f_pp = parser.parse(qPrintable(func), "en_US");
 
 				//				DEBUG("evaluate deriv"<<func<<": f(x["<<i<<"]) ="<<QString::number(f_p, 'g', 15));
 				//				DEBUG("evaluate deriv"<<func<<": f(x["<<i<<"]+dx) ="<<QString::number(f_pdp, 'g', 15));
@@ -1750,8 +1761,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 
 				if (fixed[j])
 					gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
-				else // calculate finite difference
-					gsl_matrix_set(J, (size_t)i, (size_t)j, sqrt(weight[i]) * (f_pdp - f_p) / eps);
+				else // calculate central finite difference
+					gsl_matrix_set(J, (size_t)i, (size_t)j, sqrt(weight[i]) * (f_pp - f_pm) / 2. / eps);
 			}
 		}
 	}
