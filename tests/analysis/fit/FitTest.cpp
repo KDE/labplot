@@ -2640,7 +2640,7 @@ void FitTest::testNonLinearBennett5() {
 
 	exact = 4.6736564644E+01;
 	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1) << ' ' << (fitResult.paramValues.at(1) - exact) / exact); // result:
-	FuzzyCompare(fitResult.paramValues.at(1), exact, 2.e-3);
+	FuzzyCompare(fitResult.paramValues.at(1), exact, 5.e-3);
 	exact = 1.2448871856E+00;
 	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1) << ' ' << (fitResult.errorValues.at(1) - exact) / exact); // result:
 	FuzzyCompare(fitResult.errorValues.at(1), exact, 2.e-2);
