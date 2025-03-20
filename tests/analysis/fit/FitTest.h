@@ -38,31 +38,34 @@ private Q_SLOTS:
 	void testLinearR_lm2();
 
 	// non-linear regression
-	void testNonLinearMisra1a();
+	void testNonLinearMisra1a(); // first set of start values
 	void testNonLinearMisra1a_2(); // second set of start values
 	void testNonLinearMisra1a_3(); // third set of start values
-	void testNonLinearMisra1b();
+	void testNonLinearMisra1b(); // first set of start values
 	void testNonLinearMisra1b_2(); // second set of start values
 	void testNonLinearMisra1b_3(); // third set of start values
-	void testNonLinearMisra1c();
+	void testNonLinearMisra1c(); // first set of start values
 	void testNonLinearMisra1c_2(); // second set of start values
 	void testNonLinearMisra1c_3(); // third set of start values
-	void testNonLinearMisra1d();
+	void testNonLinearMisra1d(); // first set of start values
 	void testNonLinearMisra1d_2(); // second set of start values
 	void testNonLinearMisra1d_3(); // third set of start values
-	void testNonLinearMGH09();
+	void testNonLinearMGH09(); // first set of start values
 	void testNonLinearMGH09_2(); // second set of start values
 	void testNonLinearMGH09_3(); // exact start values
-	void testNonLinearMGH10();
+	void testNonLinearMGH10(); // first set of start values
 	void testNonLinearMGH10_2(); // second set of start values
 	void testNonLinearMGH10_3(); // third set of start values
-	void testNonLinearRat43();
+	void testNonLinearRat43(); // first set of start values
 	void testNonLinearRat43_2(); // second set of start values
 	void testNonLinearRat43_3(); // third set of start values
-	// more fits
-	void testNonLinearHahn1();
+	// more non-linear fits
+	void testNonLinearHahn1(); // first set of start values
 	void testNonLinearHahn1_2(); // second set of start values
 	void testNonLinearHahn1_3(); // exact start values
+	void testNonLinearBennett5(); // first set of start values
+	void testNonLinearBennett5_2(); // second set of start values
+	void testNonLinearBennett5_3(); // exact start values
 
 	void testNonLinearMichaelis_Menten();
 
