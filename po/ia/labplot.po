@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-20 00:38+0000\n"
-"PO-Revision-Date: 2025-03-11 10:24+0100\n"
+"PO-Revision-Date: 2025-03-20 19:10+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -9053,16 +9053,14 @@ msgid "%1: disable exact limits"
 msgstr "%1: dishabilita limites exacte"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:565
-#, fuzzy, kde-format
-#| msgid "%1: set axis position"
+#, kde-format
 msgid "%1: set maximal upper limit"
-msgstr "%1: assigna position de axes"
+msgstr "%1: assigna maxime limite superior"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:572
-#, fuzzy, kde-format
-#| msgid "%1: enable exact limits"
+#, kde-format
 msgid "%1: set minimal lower limit"
-msgstr "%1: habilita limites exacte"
+msgstr "%1: assigna minime limite inferior"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:581
 #, kde-format
@@ -10150,8 +10148,7 @@ msgid "Release build"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Debug build "
+#, kde-format
 msgid "Debug build"
 msgstr "Construer de Debug"
 
@@ -21235,10 +21232,9 @@ msgstr "Dimensiones de exemplo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:189
-#, fuzzy, kde-format
-#| msgid "Lower Limit"
+#, kde-format
 msgid "Min. Lower Limit:"
-msgstr "Limite inferior"
+msgstr "Min. Limite inferior:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:212
@@ -21248,10 +21244,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxUpperLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:232
-#, fuzzy, kde-format
-#| msgid "Upper Limit"
+#, kde-format
 msgid "Max. Upper Limit:"
-msgstr "Limite superior"
+msgstr "Max. Limite superior:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:243

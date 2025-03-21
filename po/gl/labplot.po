@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-20 00:38+0000\n"
-"PO-Revision-Date: 2025-03-04 08:51+0100\n"
+"PO-Revision-Date: 2025-03-20 08:31+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.12.2\n"
+"X-Generator: Lokalize 24.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1176,10 +1176,9 @@ msgid "Invalid separator"
 msgstr "O separador non é válido."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
-#, fuzzy, kde-format
-#| msgid "Serial devices must be initialized before reading data from it"
+#, kde-format
 msgid "Serial device must be initialized before reading data from it"
-msgstr "Os dispositivos en serie deben prepararse antes de ler datos deles."
+msgstr "O dispositivo en serie debe prepararse antes de ler datos del."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
 #, kde-format
@@ -9103,16 +9102,14 @@ msgid "%1: set sample size"
 msgstr "%1: definir o tamaño da mostra"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:556
-#, fuzzy, kde-format
-#| msgid "%1: change exact limits"
+#, kde-format
 msgid "%1: enable exact limits"
-msgstr "%1: cambiar os límites exactos"
+msgstr "%1: activar os límites exactos"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:556
-#, fuzzy, kde-format
-#| msgid "%1: change exact limits"
+#, kde-format
 msgid "%1: disable exact limits"
-msgstr "%1: cambiar os límites exactos"
+msgstr "%1: desactivar os límites exactos"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:565
 #, fuzzy, kde-format

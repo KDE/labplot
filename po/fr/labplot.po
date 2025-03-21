@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-20 00:38+0000\n"
-"PO-Revision-Date: 2025-03-18 09:59+0100\n"
+"PO-Revision-Date: 2025-03-19 11:02+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -1193,11 +1193,10 @@ msgid "Invalid separator"
 msgstr "Séparateur non valable"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
-#, fuzzy, kde-format
-#| msgid "Serial devices must be initialized before reading data from it"
+#, kde-format
 msgid "Serial device must be initialized before reading data from it"
 msgstr ""
-"Les périphériques série doivent être initialisés avant d'en lire les données."
+"Le périphérique série doit être initialisé avant d'en lire les données."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
 #, kde-format

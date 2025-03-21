@@ -11,15 +11,15 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-20 00:38+0000\n"
-"PO-Revision-Date: 2025-03-18 09:33+0100\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"PO-Revision-Date: 2025-03-20 16:47+0100\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -1187,7 +1187,7 @@ msgstr "Separador no vàlid"
 #, kde-format
 msgid "Serial device must be initialized before reading data from it"
 msgstr ""
-"El dispositius en sèrie s'ha d'inicialitzar abans de llegir-ne les dades"
+"El dispositiu en sèrie s'ha d'inicialitzar abans de llegir-ne les dades"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
 #, kde-format
