@@ -645,7 +645,8 @@ void ProcessBehaviorChart::setLabelsFont(const QFont& font) {
 void ProcessBehaviorChart::setLabelsFontColor(const QColor& color) {
 	Q_D(ProcessBehaviorChart);
 	auto textWrapper = d->centerLabel->text();
-	QTextEdit te(textWrapper.text);
+	QTextEdit te;
+	te.setHtml(textWrapper.text);
 	te.selectAll();
 	if (color != te.textColor()) {
 		beginMacro(i18n("%1: set labels background color", name()));
@@ -661,7 +662,7 @@ void ProcessBehaviorChart::setLabelsFontColor(const QColor& color) {
 		d->upperLimitLabel->setText(textWrapper);
 
 		textWrapper = d->lowerLimitLabel->text();
-		te.setText(textWrapper.text);
+		te.setHtml(textWrapper.text);
 		te.selectAll();
 		te.setTextColor(color);
 		textWrapper.text = te.toHtml();
@@ -673,7 +674,8 @@ void ProcessBehaviorChart::setLabelsFontColor(const QColor& color) {
 void ProcessBehaviorChart::setLabelsBackgroundColor(const QColor& color) {
 	Q_D(ProcessBehaviorChart);
 	auto textWrapper = d->centerLabel->text();
-	QTextEdit te(textWrapper.text);
+	QTextEdit te;
+	te.setHtml(textWrapper.text);
 	te.selectAll();
 	if (color != te.textBackgroundColor()) {
 		beginMacro(i18n("%1: set labels background color", name()));
@@ -682,14 +684,14 @@ void ProcessBehaviorChart::setLabelsBackgroundColor(const QColor& color) {
 		d->centerLabel->setText(textWrapper);
 
 		textWrapper = d->upperLimitLabel->text();
-		te.setText(textWrapper.text);
+		te.setHtml(textWrapper.text);
 		te.selectAll();
 		te.setTextBackgroundColor(color);
 		textWrapper.text = te.toHtml();
 		d->upperLimitLabel->setText(textWrapper);
 
 		textWrapper = d->lowerLimitLabel->text();
-		te.setText(textWrapper.text);
+		te.setHtml(textWrapper.text);
 		te.selectAll();
 		te.setTextBackgroundColor(color);
 		textWrapper.text = te.toHtml();
@@ -1351,7 +1353,8 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 }
 
 void ProcessBehaviorChartPrivate::updateLabels() {
-	if (!q->plot())
+	// no need to update the labels during the load, the properties are set in label's load()
+	if (!q->plot() || q->isLoading())
 		return;
 
 	centerLabel->setUndoAware(false);
