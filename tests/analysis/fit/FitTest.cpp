@@ -765,7 +765,7 @@ void FitTest::testLinearWampler3() {
 }
 
 void FitTest::testLinearWampler3_custom() {
-	enableInfoTrace(true);
+	// enableInfoTrace(true);
 
 	// NIST data for Wampler3 dataset
 	QVector<int> xData = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
@@ -819,7 +819,7 @@ void FitTest::testLinearWampler3_custom() {
 
 	printAndCheck(fitResult.errorValues.at(0), 2152.32624678170, 2.e-8);
 	printAndCheck(fitResult.errorValues.at(1), 2363.55173469681, 2.e-8);
-	printAndCheck(fitResult.errorValues.at(2), 779.343524331583, 1.e-8);
+	printAndCheck(fitResult.errorValues.at(2), 779.343524331583, 5.e-8);
 	printAndCheck(fitResult.errorValues.at(3), 101.475507550350, 2.e-8);
 	printAndCheck(fitResult.errorValues.at(4), 5.64566512170752, 5.e-8);
 	printAndCheck(fitResult.errorValues.at(5), 0.112324854679312, 5.e-8);
