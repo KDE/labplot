@@ -1314,11 +1314,33 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 
 	QDEBUG(Q_FUNC_INFO << ", center: " << center << " , upper limit: " << upperLimit << ", lower limit: " << lowerLimit);
 
-	// restrict the calculated limits to the min/max values for the current chart type
-	if (lowerLimit < minLowerLimit)
-		lowerLimit = minLowerLimit;
-	if (upperLimit > maxUpperLimit)
-		upperLimit = maxUpperLimit;
+	// restrict the calculated limits to the min/max values for the current chart type:
+	// for P and U chart limits are calculated for every individual point ("stair-step limits"),
+	// for other charts straight lines are drawn
+	if ((type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U) && exactLimitsEnabled) {
+		for (int i = 0; i < yUpperLimitColumn->rowCount(); ++i) {
+			if (yUpperLimitColumn->valueAt(i) > maxUpperLimit)
+				yUpperLimitColumn->setValueAt(i, maxUpperLimit);
+		}
+
+		for (int i = 0; i < yLowerLimitColumn->rowCount(); ++i) {
+			if (yLowerLimitColumn->valueAt(i) < minLowerLimit)
+				yLowerLimitColumn->setValueAt(i, minLowerLimit);
+		}
+
+		upperLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
+		lowerLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
+	} else {
+		if (lowerLimit < minLowerLimit)
+			lowerLimit = minLowerLimit;
+		if (upperLimit > maxUpperLimit)
+			upperLimit = maxUpperLimit;
+
+		yUpperLimitColumn->setValueAt(0, upperLimit);
+		yUpperLimitColumn->setValueAt(1, upperLimit);
+		yLowerLimitColumn->setValueAt(0, lowerLimit);
+		yLowerLimitColumn->setValueAt(1, lowerLimit);
+	}
 
 	// show/hide the line for the lower limit depending on the chart type
 	lowerLimitCurve->setUndoAware(false);
@@ -1335,18 +1357,6 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 
 	yCenterColumn->setValueAt(0, center);
 	yCenterColumn->setValueAt(1, center);
-
-	// for P and U chart limits are calculated for every individual point ("stair-step limits"),
-	// for other charts straight lines are drawn
-	if ((type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U) && exactLimitsEnabled) {
-		upperLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
-		lowerLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
-	} else {
-		yUpperLimitColumn->setValueAt(0, upperLimit);
-		yUpperLimitColumn->setValueAt(1, upperLimit);
-		yLowerLimitColumn->setValueAt(0, lowerLimit);
-		yLowerLimitColumn->setValueAt(1, lowerLimit);
-	}
 
 	// update the texts in the value labels
 	updateLabels();
