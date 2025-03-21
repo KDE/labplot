@@ -887,6 +887,72 @@ void FitTest::testLinearWampler4() {
 	QCOMPARE(fitResult.fdist_F, 67.5524458240122);
 }
 
+void FitTest::testLinearWampler4_custom() {
+	// NIST data for Wampler4 dataset
+	QVector<int> xData = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+	QVector<int> yData = {75901,  -204794, 204863, -204436, 253665, -200894, 214131,  -185192, 221249,	-138370, 315911,
+						  -27644, 455253,  197434, 783995,	608816, 1370781, 1303798, 2205519, 2408860, 3444321};
+
+	// data source columns
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
+	xDataColumn.replaceInteger(0, xData);
+
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Integer);
+	yDataColumn.replaceInteger(0, yData);
+
+	XYFitCurve fitCurve(QStringLiteral("fit"));
+	fitCurve.setXDataColumn(&xDataColumn);
+	fitCurve.setYDataColumn(&yDataColumn);
+
+	// prepare the fit
+	XYFitCurve::FitData fitData = fitCurve.fitData();
+	fitData.modelCategory = nsl_fit_model_custom;
+	XYFitCurve::initFitData(fitData);
+	fitData.model = QStringLiteral("B0+B1*x+B2*x^2+B3*x^3+B4*x^4+B5*x^5");
+	fitData.paramNames << QStringLiteral("B0") << QStringLiteral("B1") << QStringLiteral("B2") << QStringLiteral("B3") << QStringLiteral("B4")
+					   << QStringLiteral("B5");
+	// fitData.eps = 1.e-12;
+	const int np = fitData.paramNames.size();
+	// start values
+	fitData.paramStartValues << 1. << 1. << 1. << 1. << 1. << 1.;
+	for (int i = 0; i < np; i++) {
+		fitData.paramLowerLimits << -std::numeric_limits<double>::max();
+		fitData.paramUpperLimits << std::numeric_limits<double>::max();
+	}
+	fitCurve.setFitData(fitData);
+
+	// perform the fit
+	fitCurve.recalculate();
+	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
+
+	// check the results
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	QCOMPARE(np, 6);
+
+	QCOMPARE(fitResult.paramValues.at(0), 1.0);
+	QCOMPARE(fitResult.paramValues.at(1), 1.0);
+	QCOMPARE(fitResult.paramValues.at(2), 1.0);
+	QCOMPARE(fitResult.paramValues.at(3), 1.0);
+	QCOMPARE(fitResult.paramValues.at(4), 1.0);
+	QCOMPARE(fitResult.paramValues.at(5), 1.0);
+
+	printAndCheck(fitResult.errorValues.at(0), 215232.624678170, 5.e-9);
+	printAndCheck(fitResult.errorValues.at(1), 236355.173469681, 1.e-7);
+	printAndCheck(fitResult.errorValues.at(2), 77934.3524331583, 1.e-7);
+	printAndCheck(fitResult.errorValues.at(3), 10147.5507550350, 1.e-7);
+	printAndCheck(fitResult.errorValues.at(4), 564.566512170752, 1.e-7);
+	printAndCheck(fitResult.errorValues.at(5), 11.2324854679312, 1.e-7);
+
+	QCOMPARE(fitResult.rsd, 236014.502379268);
+	QCOMPARE(fitResult.rsquare, 0.957478440825662);
+	QCOMPARE(fitResult.sse, 835542680000.000);
+	QCOMPARE(fitResult.rms, 55702845333.3333);
+	DEBUG(std::setprecision(15) << fitResult.fdist_F); // result: 67.5524458240122
+	QCOMPARE(fitResult.fdist_F, 67.5524458240122);
+}
+
 void FitTest::testLinearWampler5() {
 	// NIST data for Wampler5 dataset
 	QVector<int> xData = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
@@ -942,6 +1008,70 @@ void FitTest::testLinearWampler5() {
 	DEBUG(std::setprecision(15) << fitResult.fdist_F); // result: 0.00675524458240069
 	QCOMPARE(fitResult.fdist_F, 0.675524458240122E-02);
 }
+
+void FitTest::testLinearWampler5_custom() {
+	// NIST data for Wampler5 dataset
+	QVector<int> xData = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+	QVector<int> yData = {7590001,	 -20479994, 20480063,  -20479636, 25231365,	 -20476094, 20489331,  -20460392, 18417449,	 -20413570, 20591111,
+						  -20302844, 18651453,	-20077766, 21059195,  -19666384, 26348481,	-18971402, 22480719,  -17866340, 10958421};
+
+	// data source columns
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
+	xDataColumn.replaceInteger(0, xData);
+
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Integer);
+	yDataColumn.replaceInteger(0, yData);
+
+	XYFitCurve fitCurve(QStringLiteral("fit"));
+	fitCurve.setXDataColumn(&xDataColumn);
+	fitCurve.setYDataColumn(&yDataColumn);
+
+	// prepare the fit
+	XYFitCurve::FitData fitData = fitCurve.fitData();
+	fitData.modelCategory = nsl_fit_model_custom;
+	XYFitCurve::initFitData(fitData);
+	fitData.model = QStringLiteral("B0+B1*x+B2*x^2+B3*x^3+B4*x^4+B5*x^5");
+	fitData.paramNames << QStringLiteral("B0") << QStringLiteral("B1") << QStringLiteral("B2") << QStringLiteral("B3") << QStringLiteral("B4")
+					   << QStringLiteral("B5");
+	// fitData.eps = 1.e-12;
+	const int np = fitData.paramNames.size();
+	// start values
+	fitData.paramStartValues << 1. << 1. << 1. << 1. << 1. << 1.;
+	for (int i = 0; i < np; i++) {
+		fitData.paramLowerLimits << -std::numeric_limits<double>::max();
+		fitData.paramUpperLimits << std::numeric_limits<double>::max();
+	}
+	fitCurve.setFitData(fitData);
+
+	// perform the fit
+	fitCurve.recalculate();
+	const XYFitCurve::FitResult& fitResult = fitCurve.fitResult();
+
+	// check the results
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	QCOMPARE(np, 6);
+
+	for (int i = 0; i < np; i++)
+		QCOMPARE(fitResult.paramValues.at(i), 1.0);
+
+	printAndCheck(fitResult.errorValues.at(0), 21523262.4678170, 5.e-9);
+	printAndCheck(fitResult.errorValues.at(1), 23635517.3469681, 1.e-7);
+	printAndCheck(fitResult.errorValues.at(2), 7793435.24331583, 1.e-7);
+	printAndCheck(fitResult.errorValues.at(3), 1014755.07550350, 1.e-7);
+	printAndCheck(fitResult.errorValues.at(4), 56456.6512170752, 1.e-7);
+	printAndCheck(fitResult.errorValues.at(5), 1123.24854679312, 1.e-7);
+
+	QCOMPARE(fitResult.rsd, 23601450.2379268);
+	QCOMPARE(fitResult.rsquare, 0.224668921574940E-02);
+	QCOMPARE(fitResult.sse, 0.835542680000000E+16);
+	QCOMPARE(fitResult.rms, 557028453333333.);
+	DEBUG(std::setprecision(15) << fitResult.fdist_F); // result: 0.00675524458240069
+	QCOMPARE(fitResult.fdist_F, 0.675524458240122E-02);
+}
+
+/////////////////////////////////////////
 
 // taken from https://en.wikipedia.org/wiki/Ordinary_least_squares
 void FitTest::testLinearWP_OLS() {

@@ -38,7 +38,9 @@ private Q_SLOTS:
 	void testLinearWampler3();
 	void testLinearWampler3_custom(); // using custom model
 	void testLinearWampler4();
+	void testLinearWampler4_custom(); // using custom model
 	void testLinearWampler5();
+	void testLinearWampler5_custom(); // using custom model
 
 	void testLinearWP_OLS();
 	void testLinearR_lm2();
