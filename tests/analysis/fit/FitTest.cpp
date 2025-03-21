@@ -765,6 +765,8 @@ void FitTest::testLinearWampler3() {
 }
 
 void FitTest::testLinearWampler3_custom() {
+	enableInfoTrace(true);
+
 	// NIST data for Wampler3 dataset
 	QVector<int> xData = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
 	QVector<double> yData = {760.,	  -2042.,  2111.,	-1684.,	 3888.,	  1858.,	11379.,	  17560.,	39287.,	  64382.,  113159.,
