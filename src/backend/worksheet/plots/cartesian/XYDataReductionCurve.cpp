@@ -164,7 +164,7 @@ bool XYDataReductionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 		npoints = nsl_geom_linesim_opheim(xdata, ydata, n, tol, tol2, index);
 		break;
 	case nsl_geom_linesim_type_lang: // tol2 used as region
-		npoints = nsl_geom_linesim_opheim(xdata, ydata, n, tol, tol2, index);
+		npoints = nsl_geom_linesim_lang(xdata, ydata, n, tol, tol2, index);
 		break;
 	}
 
