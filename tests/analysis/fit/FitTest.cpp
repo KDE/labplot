@@ -28,7 +28,7 @@
 // Print value and relative deviation from exact value
 // also check with relative tolerance tol
 void FitTest::printAndCheck(double value, double exact, double tol) {
-	DEBUG(std::setprecision(15) << value << ' ' << (value - exact) / exact);
+	WARN(std::setprecision(15) << value << ' ' << (value - exact) / exact);
 	FuzzyCompare(value, exact, tol);
 }
 
