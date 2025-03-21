@@ -550,7 +550,7 @@ target_include_directories(labplotlib PUBLIC ${FRONTEND_DIR}/widgets) # so that 
 if(qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
     get_target_property(QADS_INCLUDES ads::qt${QT_VERSION_MAJOR}advanceddocking INTERFACE_INCLUDE_DIRECTORIES)
     get_target_property(QADS_LIBRARIES ads::qt${QT_VERSION_MAJOR}advanceddocking INTERFACE_LINK_LIBRARIES)
-    message(STATUS "QADS Found LINK_LIBRARIES: ${QADS_LIBRARIES} INCLUDES: ${QADS_INCLUDES}")
+    message(STATUS "QADS Found: ${QADS_LIBRARIES}, ${QADS_INCLUDES}")
     target_include_directories(labplotbackendlib PUBLIC ${QADS_INCLUDES})
     target_include_directories(labplotlib PUBLIC ${QADS_INCLUDES})
 endif()

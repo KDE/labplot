@@ -214,7 +214,7 @@ void WorksheetView::initActions() {
 	// 	selectionModeAction = new QAction(QIcon::fromTheme(QStringLiteral("select-rectangular")), i18n("Selection"), mouseModeActionGroup);
 	// 	selectionModeAction->setCheckable(true);
 
-	//"Add new" related actions
+	// "Add new" related actions
 	addCartesianPlot1Action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-four-axes")), i18n("Four Axes"), addNewActionGroup);
 	addCartesianPlot2Action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes")), i18n("Two Axes"), addNewActionGroup);
 	addCartesianPlot3Action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered")), i18n("Two Axes, Centered"), addNewActionGroup);
@@ -1463,11 +1463,11 @@ void WorksheetView::aspectAboutToBeRemoved(const AbstractAspect* /* aspect */) {
 		}
 
 		//if there is already an element fading out, stop the time line
-		if (m_fadeOutTimeLine->state() == QTimeLine::Running)
-			m_fadeOutTimeLine->stop();
+		 if (m_fadeOutTimeLine->state() == QTimeLine::Running)
+			 m_fadeOutTimeLine->stop();
 
-		m_fadeOutTimeLine->start();
-	*/
+		  m_fadeOutTimeLine->start();
+	  */
 }
 
 void WorksheetView::fadeIn(qreal value) {
@@ -2083,20 +2083,20 @@ bool WorksheetView::exportToFile(const QString& path,
 	bool rc = false;
 	QRectF sourceRect;
 
-	// determine the rectangular to print
-	if (area == Worksheet::ExportArea::BoundingBox)
+	if (area == Worksheet::ExportArea::BoundingBox) {
 		sourceRect = scene()->itemsBoundingRect();
-	else if (area == Worksheet::ExportArea::Selection) {
+		sourceRect = QRect(0, 0, sourceRect.width() + sourceRect.x(), sourceRect.height());
+	} else if (area == Worksheet::ExportArea::Selection) {
 		if (!m_selectedItems.isEmpty()) {
-			// TODO doesn't work: rect = scene()->selectionArea().boundingRect();
-			for (const auto* item : m_selectedItems)
-				sourceRect = sourceRect.united(item->mapToScene(item->boundingRect()).boundingRect());
+			// Union the bounding rectangles of selected items
+			for (const auto* item : m_selectedItems) {
+				QRectF itemRect = item->mapToScene(item->boundingRect()).boundingRect();
+				sourceRect = sourceRect.united(itemRect);
+			}
 		} else
-			sourceRect = scene()->sceneRect(); // export everything if nothing is selected
+			sourceRect = scene()->sceneRect();
 	} else
 		sourceRect = scene()->sceneRect();
-
-	// save
 	switch (format) {
 	case Worksheet::ExportFormat::PDF: {
 		QPrinter printer;
@@ -2113,8 +2113,8 @@ bool WorksheetView::exportToFile(const QString& path,
 		rc = painter.begin(&printer);
 		if (!rc)
 			return false;
-		painter.setRenderHint(QPainter::Antialiasing);
-		QRectF targetRect(0, 0, painter.device()->width(), painter.device()->height());
+		painter.setRenderHint(QPainter::Antialiasing, false);
+		QRectF targetRect(0, 0, w, h);
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
 		break;
@@ -2123,12 +2123,9 @@ bool WorksheetView::exportToFile(const QString& path,
 #ifdef HAVE_QTSVG
 		QSvgGenerator generator;
 		generator.setFileName(path);
-		// 		if (!generator.isValid()) {
-		// 			RESET_CURSOR;
-		// 			QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
-		// 		}
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
+		// Adjust for DPI conversion
 		w = w * GuiTools::dpi(this).first / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
 		h = h * GuiTools::dpi(this).second / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
 
@@ -2160,9 +2157,13 @@ bool WorksheetView::exportToFile(const QString& path,
 		QRectF targetRect(0, 0, w, h);
 
 		QPainter painter;
-		painter.begin(&image);
-		painter.setRenderHint(QPainter::Antialiasing);
+		rc = painter.begin(&image);
+		if (!rc)
+			return false;
+		painter.setRenderHint(QPainter::Antialiasing, false);
+		painter.save();
 		exportPaint(&painter, targetRect, sourceRect, background);
+		painter.restore();
 		painter.end();
 
 		if (!path.isEmpty()) {
@@ -2185,14 +2186,14 @@ bool WorksheetView::exportToFile(const QString& path,
 			case Worksheet::ExportFormat::XPM:
 				rc = image.save(path, "XPM");
 				break;
-			case Worksheet::ExportFormat::PDF:
-			case Worksheet::ExportFormat::SVG:
+			default:
 				break;
 			}
 		} else {
 			QApplication::clipboard()->setImage(image, QClipboard::Clipboard);
 			rc = true;
 		}
+		break;
 	}
 	}
 
@@ -2254,14 +2255,17 @@ bool WorksheetView::eventFilter(QObject* /*watched*/, QEvent* event) {
 void WorksheetView::exportToClipboard() {
 	QRectF sourceRect;
 
-	if (m_selectedItems.size() == 0)
+	if (m_selectedItems.size() == 0) {
 		sourceRect = scene()->itemsBoundingRect();
-	else {
+		sourceRect = QRect(0, 0, sourceRect.width() + sourceRect.x(), sourceRect.height());
+	} else {
 		// export selection
-		for (const auto* item : m_selectedItems)
-			sourceRect = sourceRect.united(item->mapToScene(item->boundingRect()).boundingRect());
+		// Union the bounding rectangles of selected items
+		for (const auto* item : m_selectedItems) {
+			QRectF itemRect = item->mapToScene(item->boundingRect()).boundingRect();
+			sourceRect = sourceRect.united(itemRect);
+		}
 	}
-
 	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
 	w = w * GuiTools::dpi(this).first / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
@@ -2291,15 +2295,17 @@ void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, con
 	m_isPrinting = true;
 	if (background) {
 		painter->save();
-		painter->scale(targetRect.width() / sourceRect.width(), targetRect.height() / sourceRect.height());
-		drawBackground(painter, sourceRect);
+		const qreal scaleX = targetRect.width() / sourceRect.width();
+		const qreal scaleY = targetRect.height() / sourceRect.height();
+		painter->scale(scaleX, scaleY);
+		drawBackground(painter, targetRect);
 		painter->restore();
 	}
 
 	// draw the scene items
 	if (!selection) // if no selection effects have to be exported, set the printing flag to suppress it in the paint()'s of the children
 		m_worksheet->setPrinting(true);
-	scene()->render(painter, QRectF(), sourceRect);
+	scene()->render(painter, QRectF(), sourceRect, Qt::IgnoreAspectRatio);
 	if (!selection)
 		m_worksheet->setPrinting(false);
 	m_isPrinting = false;

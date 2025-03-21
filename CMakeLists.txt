@@ -101,7 +101,7 @@ else()
     message(STATUS "KF SyntaxHighlighting not found")
 endif()
 
-find_package(KF${KF_MAJOR_VERSION}UserFeedback)
+find_package(KF${KF_MAJOR_VERSION}UserFeedback QUIET)
 if(KF${KF_MAJOR_VERSION}UserFeedback_FOUND)
     message(STATUS "Found KF${KF_MAJOR_VERSION}UserFeedback")
     add_definitions(-DHAVE_KUSERFEEDBACK)
@@ -334,7 +334,8 @@ endif()
 find_package(GSL REQUIRED)
 message(STATUS "GSL libraries: ${GSL_LIBRARIES}, GSL library: ${GSL_LIBRARY}, GSL CBLAS library: ${GSL_CBLAS_LIBRARY}")
 
-find_package(Poppler "0.62.0" COMPONENTS Qt${QT_MAJOR_VERSION})
+### Poppler (optional) ###############################
+find_package(Poppler "0.62.0" COMPONENTS Qt${QT_MAJOR_VERSION} QUIET)
 if(Poppler_FOUND)
     include_directories(${Poppler_INCLUDE_DIRS})
     message(STATUS "Poppler libraries: ${Poppler_LIBRARIES} (version \"${Poppler_VERSION}\")")
@@ -343,7 +344,7 @@ endif()
 
 ### liborigin (included) ###############################
 if(ENABLE_LIBORIGIN)
-    find_package(LibOrigin)
+    find_package(LibOrigin QUIET)
     if(NOT LIBORIGIN_FOUND)    # use own version
         if(CMAKE_BUILD_TYPE STREQUAL "debug" OR CMAKE_BUILD_TYPE STREQUAL "debugfull")
             message(STATUS "Origin project import (through internal liborigin) enabled (parser logging enabled)")
@@ -360,7 +361,7 @@ endif()
 
 ### Cantorlibs (optional) ###############################
 if(ENABLE_CANTOR)
-    find_package(Cantor "24.11.70")
+    find_package(Cantor "24.11.70" QUIET)
     if(Cantor_FOUND)
         message(STATUS "Found Cantor: ${Cantor_LIBRARIES}, ${Cantor_INCLUDE_DIR} (version \"${Cantor_VERSION}\")")
         add_definitions(-DHAVE_CANTOR_LIBS)
@@ -375,7 +376,7 @@ endif()
 
 ### FFTW (optional) #####################################
 if(ENABLE_FFTW)
-    find_package(FFTW3)
+    find_package(FFTW3 QUIET)
     if(FFTW3_FOUND)
         add_definitions(-DHAVE_FFTW3)
 	add_definitions(-DFFTW3_VERSION_STRING=\"${FFTW3_VERSION}\")
@@ -388,7 +389,7 @@ endif()
 
 ### HDF5 (optional) ##############################
 if(ENABLE_HDF5)
-    find_package(HDF5 COMPONENTS C)
+    find_package(HDF5 COMPONENTS C QUIET)
     set_package_properties(HDF5 PROPERTIES
         DESCRIPTION "Reading and writing self describing array data"
         URL "https://www.hdfgroup.org/solutions/hdf5/"
@@ -417,7 +418,7 @@ endif()
 
 ### NETCDF (optional) #############################
 if(ENABLE_NETCDF)
-    find_package(netCDF)
+    find_package(netCDF QUIET)
     SET_PACKAGE_PROPERTIES(netCDF PROPERTIES
         DESCRIPTION "Interfaces for array-oriented data access"
         URL "https://www.unidata.ucar.edu/software/netcdf/"
@@ -439,7 +440,7 @@ endif()
 
 ### MQTT (optional) ###############################
 if(ENABLE_MQTT)
-    find_package(Qt${QT_VERSION_MAJOR}Mqtt ${QT_MIN_VERSION} NO_MODULE)
+    find_package(Qt${QT_VERSION_MAJOR}Mqtt ${QT_MIN_VERSION} NO_MODULE QUIET)
     set_package_properties(Qt${QT_VERSION_MAJOR}Mqtt PROPERTIES
         DESCRIPTION "Qt Module to implement MQTT protocol version 3.1 and 3.1.1"
         URL "https://github.com/qt/qtmqtt")
@@ -455,7 +456,7 @@ endif()
 
 ### QtSerialPort (optional) ###############################
 if(ENABLE_QTSERIALPORT)
-    find_package(Qt${QT_MAJOR_VERSION}SerialPort ${QT_MIN_VERSION} NO_MODULE)
+    find_package(Qt${QT_MAJOR_VERSION}SerialPort ${QT_MIN_VERSION} NO_MODULE QUIET)
     set_package_properties(Qt{QT_MAJOR_VERSION}SerialPort PROPERTIES
         DESCRIPTION "Qt Serial Port library"
         URL "https://doc.qt.io/qt-6/qtserialport-index.html"
@@ -472,7 +473,7 @@ endif()
 
 ### QtSvg (optional) ###############################
 if(ENABLE_QTSVG)
-    find_package(Qt${QT_MAJOR_VERSION}Svg ${QT_MIN_VERSION} NO_MODULE)
+    find_package(Qt${QT_MAJOR_VERSION}Svg ${QT_MIN_VERSION} NO_MODULE QUIET)
     set_package_properties(Qt{QT_MAJOR_VERSION}Svg PROPERTIES
         DESCRIPTION "Qt SVG library"
         URL "https://doc.qt.io/qt-6/qtsvg-index.html"
@@ -489,7 +490,7 @@ endif()
 
 ### FITS (optional) ###############################
 if(ENABLE_FITS)
-    find_package(CFitsio)
+    find_package(CFitsio QUIET)
     set_package_properties(CFitsio PROPERTIES
         DESCRIPTION "FITS IO Library"
         URL "https://heasarc.gsfc.nasa.gov/fitsio/fitsio.html"
@@ -508,7 +509,7 @@ endif()
 
 ### LIBCERF (optional) #############################
 if(ENABLE_LIBCERF)
-    find_package(LIBCERF)
+    find_package(LIBCERF QUIET)
     if(LIBCERF_FOUND)
         add_definitions(-DHAVE_LIBCERF)
 	add_definitions(-DLIBCERF_VERSION_STRING=\"${LIBCERF_VERSION}\")
@@ -521,7 +522,7 @@ else()
 endif()
 
 ### ZLIB for ROOT and READSTAT #################
-find_package(ZLIB)
+find_package(ZLIB QUIET)
 set_package_properties(ZLIB PROPERTIES
     DESCRIPTION "General purpose compression library"
     URL "https://www.zlib.net/"
@@ -532,7 +533,7 @@ endif()
 
 ### LZ4 for ROOT and MCAP #################
 if(ENABLE_ROOT OR ENABLE_MCAP)
-    find_package(LZ4)
+    find_package(LZ4 QUIET)
     IF(LZ4_FOUND)
 	#message(STATUS "Found LZ4: ${LZ4_LIBRARIES}, ${LZ4_INCLUDE_DIR} (found version \"${LZ4_VERSION}\")")
         add_definitions(-DHAVE_LZ4)
@@ -550,7 +551,7 @@ IF(ENABLE_MCAP)
 
     add_definitions(-DHAVE_MCAP)
     include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/mcap/include)
-    find_package(ZSTD)
+    find_package(ZSTD QUIET)
     if(ZSTD_FOUND)
         message(STATUS "Found ZSTD (used for MCAP ZSTD support)")
         add_definitions(-DHAVE_ZSTD)
@@ -576,7 +577,7 @@ endif()
 
 ### ReadStat (optional) #############################
 if(ENABLE_READSTAT)
-    find_package(ReadStat)
+    find_package(ReadStat QUIET)
     if(NOT READSTAT_FOUND AND NOT WIN32 AND NOT DONT_BUILD_READSTAT)    # own version not on Windows and not when forbidden
         message(STATUS "ReadStat library NOT FOUND. Building own version")
         set(BUILD_READSTAT TRUE)
@@ -608,11 +609,11 @@ endif()
 
 ### XLSX (Excel) (optional) #############################
 if(ENABLE_XLSX)
-        find_package(QXlsx)
-        if(QXLSX_FOUND)
+    find_package(QXlsx QUIET)
+    if(QXLSX_FOUND)
         message(STATUS "QXlsx library FOUND.")
         add_definitions(-DHAVE_QXLSX)
-        else()
+    else()
         if(TARGET Qt${QT_VERSION_MAJOR}::GuiPrivate)
             set(BUILD_QXLSX TRUE)
 
@@ -621,7 +622,7 @@ if(ENABLE_XLSX)
         else()
             message(STATUS "Missing Qt${QT_VERSION_MAJOR}::GuiPrivate to build own QXlsx.")
         endif()
-        endif()
+    endif()
 else()
     add_definitions(-DXLSX_DISABLED)
     message(STATUS "XLSX support DISABLED")
@@ -629,7 +630,7 @@ endif()
 
 ###  Matio (optional) ##############################################
 if(ENABLE_MATIO)
-    find_package(Matio)
+    find_package(Matio QUIET)
     if(MATIO_FOUND)
         add_definitions(-DHAVE_MATIO)
     else()
@@ -642,7 +643,7 @@ endif()
 
 ### Discount (optional) #############################
 if(ENABLE_DISCOUNT)
-    find_package(Discount)
+    find_package(Discount QUIET)
     set_package_properties(Discount PROPERTIES
         DESCRIPTION "A C implementation of the Markdown markup language"
         URL "https://www.pell.portland.or.us/~orc/Code/discount/"
@@ -663,7 +664,7 @@ endif()
 
 ### Orcus (optional) #############################
 if(ENABLE_ORCUS)
-    find_package(Orcus)
+    find_package(Orcus QUIET)
     set_package_properties(Orcus PROPERTIES
         DESCRIPTION "a library that provides a collection of standalone file processing filters"
         URL "https://gitlab.com/orcus/orcus"
@@ -673,6 +674,14 @@ if(ENABLE_ORCUS)
 	add_definitions(-DORCUS_VERSION_STRING=\"${LIBORCUS_VERSION}\")
         include_directories(${Orcus_INCLUDE_DIR} ${Ixion_INCLUDE_DIR})
 	message(STATUS "Found Orcus version ${LIBORCUS_VERSION} and Ixion ${LIBIXION_VERSION}: ${Orcus_INCLUDE_DIR} ${Ixion_INCLUDE_DIR}, ${Orcus_LIBRARIES} ${Ixion_LIBRARY}")
+        if (LIBIXION_VERSION VERSION_GREATER_EQUAL "0.18.0")
+	    message(STATUS "Have Ixion version 0.18.0 or greater")
+	    add_definitions(-DHAVE_AT_LEAST_IXION_0_18_0)
+        endif()
+        if (LIBIXION_VERSION VERSION_GREATER_EQUAL "0.20.0")
+	    message(STATUS "Have Ixion version 0.20.0 or greater")
+	    add_definitions(-DHAVE_AT_LEAST_IXION_0_20_0)
+        endif()
     else()
         message(STATUS "Orcus library or Ixion NOT FOUND.")
     endif()
@@ -682,7 +691,7 @@ endif()
 
 ### Eigen (optional) #############################
 if(ENABLE_EIGEN3)
-    find_package(Eigen3)
+    find_package(Eigen3 QUIET)
     if(EIGEN3_FOUND)
 	    message(STATUS "Found Eigen3 library: ${EIGEN3_INCLUDE_DIR} (version \"${EIGEN3_VERSION_STRING}\")")
         add_definitions(-DHAVE_EIGEN3)
@@ -696,7 +705,7 @@ else()
 endif()
 
 # Qt Advanced Docking System (required) #####################
-find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG)
+find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG QUIET)
 if(NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
     option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
     option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)

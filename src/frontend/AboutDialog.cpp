@@ -78,9 +78,8 @@
 AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutApplicationDialog(aboutData, parent) {
 
 	//const auto homepage = aboutData.homepage();
-	const auto homepage = QStringLiteral("https://labplot.org");
 	
-	auto text = QStringLiteral("<a href=\"%1\">%1</a>").arg(homepage);
+	QString text = QStringLiteral("<a href=\"https://labplot.org/changelog/#%1\">").arg(QLatin1String(LVERSION)) + i18n("What's new") + QStringLiteral("</a>");
 	auto* linkLabel = new QLabel();
 	linkLabel->setOpenExternalLinks(true);
 	linkLabel->setText(text.replace(QLatin1Char('\n'), QStringLiteral("<br />")));
@@ -96,7 +95,7 @@ AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutA
 	connect(copyCiteButton, &QPushButton::clicked, this, &AboutDialog::copyCitation);
 
 	auto* donateButton = new QPushButton(i18n("Donate"));
-	donateButton->setIcon(QIcon::fromTheme(QLatin1String("donate-symbolic")));
+	donateButton->setIcon(QIcon::fromTheme(QLatin1String("love-symbolic")));
 	connect(donateButton, &QPushButton::clicked, this, &AboutDialog::openDonateLink);
 
 	auto* linkCopyLayout = new QHBoxLayout;
@@ -140,30 +139,36 @@ AboutDialog::~AboutDialog() {
 QString AboutDialog::systemInfo() {
 	// build type
 #ifdef NDEBUG
-	const QString buildType(i18n("Release build ") + QLatin1String(GIT_COMMIT));
+	const QString buildType(i18n("Release build") + QLatin1Char(' ') + QLatin1String(GIT_COMMIT));
 #else
-	const QString buildType(i18n("Debug build ") + QLatin1String(GIT_COMMIT));
+	const QString buildType(i18n("Debug build") + QLatin1Char(' ') + QLatin1String(GIT_COMMIT));
 #endif
-	QLocale locale;
-	const QString numberSystemInfo{QStringLiteral("(") + i18n("Decimal point ") + QLatin1Char('\'') + QString(locale.decimalPoint()) + QLatin1String("\', ")
-								   + i18n("Group separator ") + QLatin1Char('\'') + QString(locale.groupSeparator()) + QLatin1Char('\'')};
 
-	const QString numberLocaleInfo{QStringLiteral(" ") + i18n("Decimal point ") + QLatin1Char('\'') + QString(QLocale().decimalPoint()) + QLatin1String("\', ")
-								   + i18n("Group separator ") + QLatin1Char('\'') + QString(QLocale().groupSeparator()) + QLatin1String("\', ")
-								   + i18n("Exponential ") + QLatin1Char('\'') + QString(QLocale().exponential()) + QLatin1String("\', ") + i18n("Zero digit ")
-								   + QLatin1Char('\'') + QString(QLocale().zeroDigit()) + QLatin1String("\', ") + i18n("Percent ") + QLatin1Char('\'')
-								   + QString(QLocale().percent()) + QLatin1String("\', ") + i18n("Positive/Negative sign ") + QLatin1Char('\'')
-								   + QString(QLocale().positiveSign()) + QLatin1Char('\'') + QLatin1Char('/') + QLatin1Char('\'')
-								   + QString(QLocale().negativeSign()) + QLatin1Char('\'')};
+	QLocale locale = QLocale();
+	const QString usedLanguage = QLocale::languageToString(locale.language()) + QStringLiteral(", ") + QLocale::countryToString(locale.country());
+
+	QLocale systemLocale = QLocale::system();
+	const QString systemLanguage = QLocale::languageToString(systemLocale.language()) + QStringLiteral(", ") + QLocale::countryToString(systemLocale.country());
 
 	// get language set in 'switch language'
-	const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
-	QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
-	languageoverride.beginGroup(QStringLiteral("Language"));
-	QString usedLocale = languageoverride.value(qAppName(), QString()).toString(); // something like "en_US"
-	if (!usedLocale.isEmpty())
-		locale = QLocale(usedLocale);
-	QString usedLanguage = QLocale::languageToString(locale.language()) + QStringLiteral(",") + QLocale::countryToString(locale.country());
+	//const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+	//QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
+	//languageoverride.beginGroup(QStringLiteral("Language"));
+	//QString setLanguageString = languageoverride.value(qAppName(), QString()).toString(); // something like "en_US"
+	//auto usedLocale = QLocale(setLanguageString);
+	//const QString setLanguage = QLocale::languageToString(usedLocale.language()) + QStringLiteral(", ") + QLocale::countryToString(usedLocale.country());
+	//if (!usedLocale.isEmpty())
+	//	locale = QLocale(usedLocale);
+
+	// read number format locale from settings (MainWin is not initialized yet)
+	const auto group = Settings::group(QStringLiteral("Settings_General"));
+        auto language = static_cast<QLocale::Language>(group.readEntry(QLatin1String("NumberFormat"), static_cast<int>(QLocale::Language::AnyLanguage)));
+        QLocale numberLocale(language);
+        // number options
+        auto numberOptions = static_cast<QLocale::NumberOptions>(group.readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)));
+        numberLocale.setNumberOptions(numberOptions);
+	const QString numberFormat{numberLocale.toString(1000.01)};
+
 // not included for privacy
 //	QString path = QProcessEnvironment::systemEnvironment().value(QLatin1String("PATH"));
 
@@ -172,13 +177,28 @@ QString AboutDialog::systemInfo() {
 		+ QStringLiteral("%1, %2").arg(QLatin1String(__DATE__), QLatin1String(__TIME__)) + QLatin1Char('\n')
 #endif
 		+ QLatin1String("<table>")
-		+ QLatin1String("<tr><td>") + i18n("System:") + QLatin1String("</td><td>") + QSysInfo::prettyProductName() + QLatin1String("</td></tr>")
-		+ QLatin1String("<tr><td>") + i18n("Locale:") + QLatin1String("</td><td>") + usedLanguage + QLatin1Char(' ') + numberSystemInfo + QLatin1String("</td></tr>")
-		+ QLatin1String("<tr><td>") + i18n("Number Settings:") + QLatin1String("</td><td>") + numberLocaleInfo + QLatin1String(" (") + i18n("Updated on restart") + QLatin1Char(')') + QLatin1String("</td></tr>")
-		+ QLatin1String("<tr><td>") + i18n("Architecture:") + QLatin1String("</td><td>") + QSysInfo::buildAbi() + QLatin1String("</td></tr>")
-		+ QLatin1String("<tr><td>") + i18n("Kernel: ") + QLatin1String("</td><td>") + QSysInfo::kernelType() + QLatin1Char(' ') + QSysInfo::kernelVersion() + QLatin1String("</td></tr>")
-//		+ QLatin1String("<tr><td>") +i18n("Executable Path:") + QLatin1String("</td><td>") + path + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("System:") + QLatin1String(" </td><td>") + QSysInfo::prettyProductName() + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Locale:") + QLatin1String(" </td><td>") + systemLanguage + QLatin1String("</td></tr>")
+		// + QLatin1String("<tr><td>") + i18n("Used Locale:") + QLatin1String(" </td><td>") + usedLanguage + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Number Format:") + QLatin1String(" </td><td>") + numberFormat + QStringLiteral(" (") + i18n("Updated on restart") + QStringLiteral(")")  + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Architecture:") + QLatin1String(" </td><td>") + QSysInfo::buildAbi() + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Kernel: ") + QLatin1String(" </td><td>") + QSysInfo::kernelType() + QLatin1Char(' ') + QSysInfo::kernelVersion() + QLatin1String("</td></tr>")
+//		+ QLatin1String("<tr><td>") +i18n("Executable Path:") + QLatin1String(" </td><td>") + path + QLatin1String("</td></tr>")
 		+ QLatin1String("</table>") + QLatin1Char('\n');
+}
+
+// build a formatted list of helpful links
+QString AboutDialog::links() {
+	QString links = QLatin1String("<table>")
+		+ QLatin1String("<tr><td>") + i18n("Visit website:") + QLatin1String(" </td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://labplot.org")) + QLatin1String("</td></tr>")
+		// Release notes: LINK ?
+		+ QLatin1String("<tr><td>") + i18n("Watch video tutorials:") + QLatin1String(" </td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://www.youtube.com/@LabPlot")) + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Discuss on Mastodon:") + QLatin1String(" </td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://floss.social/@LabPlot")) + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Development:") + QLatin1String(" </td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://invent.kde.org/education/labplot")) + QLatin1String("</td></tr>")
+		+ QLatin1String("<tr><td>") + i18n("Please report bugs to:") + QLatin1String(" </td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://bugs.kde.org"))
+		+ QLatin1String("</table>");
+
+	return links;
 }
 
 QVector<QStringList> AboutDialog::components() {
@@ -284,8 +304,7 @@ QVector<QStringList> AboutDialog::components() {
 	version = missing;
 #endif
 	components << (QStringList() << QLatin1String("Purpose") << i18n("Offers available actions for a specific purpose") << version << QStringLiteral("https://api.kde.org/frameworks/purpose/html/index.html"));
-	//TODO: QADS version
-	components << (QStringList() << QLatin1String("QADS") << i18n("Qt Advanced Docking System") << QString() << QStringLiteral("https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System"));
+	components << (QStringList() << QLatin1String("QADS") << i18n("Qt Advanced Docking System") << QLatin1String(QADS_VERSION_STRING) << QStringLiteral("https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System"));
 #ifdef HAVE_MQTT
 	version = QLatin1String(QTMQTT_VERSION_STR);
 #else
@@ -305,7 +324,7 @@ QVector<QStringList> AboutDialog::components() {
 #endif
 	components << (QStringList() << QLatin1String("Qt Svg") << i18n("SVG export support") << version << QStringLiteral("https://doc.qt.io/qt-6/qtsvg-index.html"));
 #ifdef HAVE_QXLSX
-	version = QString();	// TODO
+	version = QLatin1String(QXLSX_VERSION_STRING);
 #else
 	version = missing;
 #endif
@@ -317,7 +336,7 @@ QVector<QStringList> AboutDialog::components() {
 #endif
 	components << (QStringList() << QLatin1String("ReadStat") << i18n("Read (and write) data sets from SAS, Stata, and SPSS") << version << QStringLiteral("https://github.com/WizardMac/ReadStat"));
 #ifdef HAVE_VECTOR_BLF
-	version = QString();    // TODO
+	version = QLatin1String(VECTOR_BLF_VERSION_STRING);
 #else
 	version = missing;
 #endif
@@ -346,13 +365,14 @@ void AboutDialog::copyEnvironment() {
 	text += QLatin1Char('\n') + i18n("Components:") + QLatin1Char('\n');
 	text += i18n("Qt") + QLatin1Char(' ') + QLatin1String(QT_VERSION_STR) + QLatin1Char('\n');
 	text += i18n("KDE Frameworks") + QLatin1Char(' ') + QLatin1String(KCOREADDONS_VERSION_STRING) + QLatin1Char('\n');
-	for (auto c: AboutDialog::components())
-		if (QTextDocumentFragment::fromHtml(c.at(1)).toPlainText() == i18n("missing"))
+	for (const auto& c : AboutDialog::components()) {
+		if (QTextDocumentFragment::fromHtml(c.at(2)).toPlainText() == i18n("missing"))
 			text += QTextDocumentFragment::fromHtml(c.at(0)).toPlainText() + QLatin1Char(' ') + i18n("missing") + QLatin1Char('\n');
 		else if (c.at(0) == i18n("C++ Compiler: ") + QLatin1String(CXX_COMPILER_ID) || c.at(0) == i18n("C++ Compiler Flags:"))
 			text += c.at(0) + QLatin1Char(' ') + c.at(1) + QLatin1Char('\n');
 		else
 			text += c.at(0) + QLatin1Char(' ') + c.at(2) + QLatin1Char('\n');
+	}
 
 	QApplication::clipboard()->setText(text);
 }

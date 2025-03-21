@@ -15,6 +15,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "frontend/GuiTools.h"
 #include "frontend/dockwidgets/BaseDock.h"
+#include "frontend/widgets/LineWidget.h"
 #include "tools/TeXRenderer.h"
 
 #include <KCharSelect>
@@ -114,7 +115,6 @@ LabelWidget::LabelWidget(QWidget* parent)
 	ui.sbPositionY->setSuffix(suffix);
 
 	m_dateTimeMenu->setSeparatorsCollapsible(false); // we don't want the first separator to be removed
-	ui.sbBorderWidth->setMinimum(0);
 
 	// Icons
 	ui.tbFontBold->setIcon(QIcon::fromTheme(QStringLiteral("format-text-bold")));
@@ -134,8 +134,6 @@ LabelWidget::LabelWidget(QWidget* parent)
 	ui.kcbBackgroundColor->setColor(QColor(0, 0, 0, 0)); // transparent
 	ui.kcbFontColor->setAlphaChannelEnabled(true);
 	ui.kcbFontColor->setColor(QColor(255, 255, 255, 255)); // black
-	ui.kcbBorderColor->setAlphaChannelEnabled(true);
-	ui.kcbBorderColor->setColor(QColor(255, 255, 255, 255)); // black
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teLabel->document());
@@ -143,10 +141,13 @@ LabelWidget::LabelWidget(QWidget* parent)
 												   : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
 #endif
 
+	auto* gridLayout = qobject_cast<QGridLayout*>(layout());
+	borderLineWidget = new LineWidget(this);
+	gridLayout->addWidget(borderLineWidget, 31, 0, 1, 4);
+
 	m_messageWidget = new KMessageWidget(this);
 	m_messageWidget->setMessageType(KMessageWidget::Error);
 	m_messageWidget->setWordWrap(true);
-	auto* gridLayout = qobject_cast<QGridLayout*>(layout());
 	gridLayout->addWidget(m_messageWidget, 6, 3);
 	m_messageWidget->hide(); // will be shown later once there is a latex render result
 
@@ -216,10 +217,6 @@ LabelWidget::LabelWidget(QWidget* parent)
 
 	// Border
 	connect(ui.cbBorderShape, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LabelWidget::borderShapeChanged);
-	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LabelWidget::borderStyleChanged);
-	connect(ui.kcbBorderColor, &KColorButton::changed, this, &LabelWidget::borderColorChanged);
-	connect(ui.sbBorderWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::borderWidthChanged);
-	connect(ui.sbBorderOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &LabelWidget::borderOpacityChanged);
 
 	// TODO: https://bugreports.qt.io/browse/QTBUG-25420
 	ui.tbFontUnderline->hide();
@@ -347,8 +344,6 @@ void LabelWidget::initConnections() {
 	m_connections << connect(m_label, &TextLabel::verticalAlignmentChanged, this, &LabelWidget::labelVerticalAlignmentChanged);
 	m_connections << connect(m_label, &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged);
 	m_connections << connect(m_label, &TextLabel::borderShapeChanged, this, &LabelWidget::labelBorderShapeChanged);
-	m_connections << connect(m_label, &TextLabel::borderPenChanged, this, &LabelWidget::labelBorderPenChanged);
-	m_connections << connect(m_label, &TextLabel::borderOpacityChanged, this, &LabelWidget::labelBorderOpacityChanged);
 	m_connections << connect(m_label, &TextLabel::lockChanged, this, &LabelWidget::labelLockChanged);
 
 	if (!m_label->parentAspect()) {
@@ -427,14 +422,7 @@ void LabelWidget::setBorderAvailable(bool b) {
 	ui.lBorder->setVisible(b);
 	ui.lBorderShape->setVisible(b);
 	ui.cbBorderShape->setVisible(b);
-	ui.lBorderStyle->setVisible(b);
-	ui.cbBorderStyle->setVisible(b);
-	ui.lBorderColor->setVisible(b);
-	ui.kcbBorderColor->setVisible(b);
-	ui.lBorderWidth->setVisible(b);
-	ui.sbBorderWidth->setVisible(b);
-	ui.lBorderOpacity->setVisible(b);
-	ui.sbBorderOpacity->setVisible(b);
+	borderLineWidget->setVisible(b);
 }
 
 void LabelWidget::updateUnits() {
@@ -478,7 +466,7 @@ void LabelWidget::updateLocale() {
 	ui.sbPositionY->setLocale(numberLocale);
 	ui.sbOffsetX->setLocale(numberLocale);
 	ui.sbOffsetY->setLocale(numberLocale);
-	ui.sbBorderWidth->setLocale(numberLocale);
+	borderLineWidget->updateLocale();
 }
 
 void LabelWidget::retranslateUi() {
@@ -525,18 +513,10 @@ void LabelWidget::retranslateUi() {
 	ui.cbBorderShape->addItem(i18n("Inwards round corner rectangle"), static_cast<int>(TextLabel::BorderShape::InwardsRoundCornerRect));
 	ui.cbBorderShape->addItem(i18n("Dented border rectangle"), static_cast<int>(TextLabel::BorderShape::DentedBorderRect));
 	ui.cbBorderShape->addItem(i18n("Cuboid"), static_cast<int>(TextLabel::BorderShape::Cuboid));
-	ui.cbBorderShape->addItem(i18n("Up Pointing rectangle"), static_cast<int>(TextLabel::BorderShape::UpPointingRectangle));
-	ui.cbBorderShape->addItem(i18n("Down Pointing rectangle"), static_cast<int>(TextLabel::BorderShape::DownPointingRectangle));
-	ui.cbBorderShape->addItem(i18n("Left Pointing rectangle"), static_cast<int>(TextLabel::BorderShape::LeftPointingRectangle));
-	ui.cbBorderShape->addItem(i18n("Right Pointing rectangle"), static_cast<int>(TextLabel::BorderShape::RightPointingRectangle));
-
-	ui.cbBorderStyle->clear();
-	ui.cbBorderStyle->addItem(i18n("No line"));
-	ui.cbBorderStyle->addItem(i18n("Solid line"));
-	ui.cbBorderStyle->addItem(i18n("Dash line"));
-	ui.cbBorderStyle->addItem(i18n("Dot line"));
-	ui.cbBorderStyle->addItem(i18n("Dash dot line"));
-	ui.cbBorderStyle->addItem(i18n("Dash dot dot line"));
+	ui.cbBorderShape->addItem(i18n("Up pointing rectangle"), static_cast<int>(TextLabel::BorderShape::UpPointingRectangle));
+	ui.cbBorderShape->addItem(i18n("Down pointing rectangle"), static_cast<int>(TextLabel::BorderShape::DownPointingRectangle));
+	ui.cbBorderShape->addItem(i18n("Left pointing rectangle"), static_cast<int>(TextLabel::BorderShape::LeftPointingRectangle));
+	ui.cbBorderShape->addItem(i18n("Right pointing rectangle"), static_cast<int>(TextLabel::BorderShape::RightPointingRectangle));
 
 	// tooltip texts
 	QString msg = i18n("Use logical instead of absolute coordinates to specify the position on the plot");
@@ -1143,62 +1123,12 @@ void LabelWidget::lockChanged(bool locked) {
 void LabelWidget::borderShapeChanged(int) {
 	const auto shape = static_cast<TextLabel::BorderShape>(ui.cbBorderShape->currentData().toInt());
 	bool b = (shape != TextLabel::BorderShape::NoBorder);
-	ui.lBorderStyle->setVisible(b);
-	ui.cbBorderStyle->setVisible(b);
-	ui.lBorderWidth->setVisible(b);
-	ui.sbBorderWidth->setVisible(b);
-	ui.lBorderColor->setVisible(b);
-	ui.kcbBorderColor->setVisible(b);
-	ui.lBorderOpacity->setVisible(b);
-	ui.sbBorderOpacity->setVisible(b);
+	borderLineWidget->setVisible(b);
 
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* label : m_labelsList)
 		label->setBorderShape(shape);
-}
-
-void LabelWidget::borderStyleChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto penStyle = Qt::PenStyle(index);
-	QPen pen;
-	for (auto* label : m_labelsList) {
-		pen = label->borderPen();
-		pen.setStyle(penStyle);
-		label->setBorderPen(pen);
-	}
-}
-
-void LabelWidget::borderColorChanged(const QColor& color) {
-	CONDITIONAL_LOCK_RETURN;
-
-	QPen pen;
-	for (auto* label : m_labelsList) {
-		pen = label->borderPen();
-		pen.setColor(color);
-		label->setBorderPen(pen);
-	}
-	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
-}
-
-void LabelWidget::borderWidthChanged(double value) {
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	QPen pen;
-	for (auto* label : m_labelsList) {
-		pen = label->borderPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		label->setBorderPen(pen);
-	}
-}
-
-void LabelWidget::borderOpacityChanged(int value) {
-	CONDITIONAL_LOCK_RETURN;
-
-	qreal opacity = (float)value / 100.;
-	for (auto* label : m_labelsList)
-		label->setBorderOpacity(opacity);
 }
 
 /*!
@@ -1405,22 +1335,6 @@ void LabelWidget::labelBorderShapeChanged(TextLabel::BorderShape shape) {
 	ui.cbBorderShape->setCurrentIndex(static_cast<int>(shape));
 }
 
-void LabelWidget::labelBorderPenChanged(const QPen& pen) {
-	CONDITIONAL_LOCK_RETURN;
-	if (ui.cbBorderStyle->currentIndex() != pen.style())
-		ui.cbBorderStyle->setCurrentIndex(pen.style());
-	if (ui.kcbBorderColor->color() != pen.color())
-		ui.kcbBorderColor->setColor(pen.color());
-	// Feedback needed therefore no condition
-	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-}
-
-void LabelWidget::labelBorderOpacityChanged(float value) {
-	CONDITIONAL_LOCK_RETURN;
-	const float v = (float)value * 100.;
-	ui.sbBorderOpacity->setValue(v);
-}
-
 void LabelWidget::labelCartesianPlotParent(bool on) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.chbBindLogicalPos->setVisible(on);
@@ -1567,11 +1481,11 @@ void LabelWidget::load() {
 	const int index = ui.cbBorderShape->findData(static_cast<int>(m_label->borderShape()));
 	ui.cbBorderShape->setCurrentIndex(index);
 	borderShapeChanged(index);
-	ui.kcbBorderColor->setColor(m_label->borderPen().color());
-	ui.cbBorderStyle->setCurrentIndex((int)m_label->borderPen().style());
-	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(m_label->borderPen().widthF(), Worksheet::Unit::Point));
-	ui.sbBorderOpacity->setValue(round(m_label->borderOpacity() * 100));
-	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
+
+	QList<Line*> borderLines;
+	for (auto* label : m_labelsList)
+		borderLines << label->borderLine();
+	borderLineWidget->setLines(borderLines);
 }
 
 // General updater function to update the dock (used also in the load method)
@@ -1677,10 +1591,6 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 
 	// Border
 	ui.cbBorderShape->setCurrentIndex(ui.cbBorderShape->findData(group.readEntry("BorderShape").toInt()));
-	ui.kcbBorderColor->setColor(group.readEntry("BorderColor", m_label->borderPen().color()));
-	ui.cbBorderStyle->setCurrentIndex(group.readEntry("BorderStyle", (int)m_label->borderPen().style()));
-	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_label->borderPen().widthF()), Worksheet::Unit::Point));
-	ui.sbBorderOpacity->setValue(group.readEntry("BorderOpacity", m_label->borderOpacity()) * 100);
 }
 
 void LabelWidget::saveConfig(KConfigGroup& group) {
@@ -1706,8 +1616,5 @@ void LabelWidget::saveConfig(KConfigGroup& group) {
 
 	// Border
 	group.writeEntry("BorderShape", ui.cbBorderShape->currentData().toInt());
-	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
-	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
-	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Unit::Point));
-	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value() / 100.0);
+	borderLineWidget->saveConfig(group);
 }

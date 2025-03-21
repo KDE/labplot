@@ -67,20 +67,12 @@ int main(int argc, char* argv[]) {
 
 	KLocalizedString::setApplicationDomain("labplot");
 
-	QString systemInfo{AboutDialog::systemInfo()};
-	QString links = i18n("Visit website:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://labplot.org")) + QLatin1Char('\n')
-		// Release notes: LINK ?
-		+ i18n("Watch video tutorials:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://www.youtube.com/@LabPlot")) + QLatin1Char('\n')
-		+ i18n("Discuss on Mastodon:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://floss.social/@LabPlot")) + QLatin1Char('\n')
-		+ i18n("Development:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://invent.kde.org/education/labplot")) + QLatin1Char('\n')
-		+ i18n("Please report bugs to:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://bugs.kde.org"));
 	KAboutData aboutData(QStringLiteral("labplot"),
 						 QStringLiteral("LabPlot"),
 						 QLatin1String(LVERSION),
 						 i18n("LabPlot is a FREE, open-source and cross-platform Data Visualization and Analysis software accessible to everyone."),
 						 KAboutLicense::GPL,
-						 i18n("(c) 2007-%1 LabPlot Team", QLatin1String(YEAR)),
-						 systemInfo + QLatin1Char('\n') + links);
+						 i18n("(c) 2007-%1 LabPlot Team", QLatin1String(YEAR)));
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18nc("@info:credit", "Developer"), QStringLiteral("stefan.gerlach@uni.kn"), QString());
 	aboutData.addAuthor(i18n("Alexander Semke"), i18nc("@info:credit", "Developer"), QStringLiteral("alexander.semke@web.de"), QString());
 	aboutData.addAuthor(i18n("Fábián Kristóf-Szabolcs"), i18nc("@info:credit", "Developer"), QStringLiteral("f-kristof@hotmail.com"), QString());
@@ -109,6 +101,10 @@ int main(int argc, char* argv[]) {
 	aboutData.setDesktopFileName(QStringLiteral("org.kde.labplot"));
 	aboutData.setProgramLogo(QIcon::fromTheme(QStringLiteral("labplot")));
 
+	// components
+	for (const auto& c : AboutDialog::components())
+		aboutData.addComponent(c.at(0), c.at(1), c.at(2), c.at(3));
+
 	const auto& group = Settings::settingsGeneral();
 	enableInfoTrace(group.readEntry<bool>(QLatin1String("InfoTrace"), false));
 	enableDebugTrace(group.readEntry<bool>(QLatin1String("DebugTrace"), false));
@@ -125,13 +121,6 @@ int main(int argc, char* argv[]) {
 	DEBUG("DEBUG debugging enabled")
 	QDEBUG("QDEBUG debugging enabled")
 
-	// components
-	for (auto c: AboutDialog::components())
-		aboutData.addComponent(c.at(0), c.at(1), c.at(2), c.at(3));
-
-	// no translators set (too many to mention)
-	KAboutData::setApplicationData(aboutData);
-
 	KCrash::initialize();
 
 	QCommandLineParser parser;
@@ -144,9 +133,11 @@ int main(int argc, char* argv[]) {
 
 	parser.addPositionalArgument(QStringLiteral("+[file]"), i18n("Open a project file."));
 
+
 	aboutData.setupCommandLine(&parser);
 	parser.process(app);
 	aboutData.processCommandLine(&parser);
+
 
 	const auto args = parser.positionalArguments();
 	QString fileName;
@@ -187,11 +178,15 @@ int main(int argc, char* argv[]) {
 	const QString applicationPath = QCoreApplication::applicationDirPath();
 	INFO("Application dir: " << STDSTRING(applicationPath))
 
-#ifdef _WIN32
+#if defined(Q_OS_WIN) ||  defined(Q_OS_MACOS)
 	// append application path to PATH to find Cantor backends
 	QString path = qEnvironmentVariable("PATH");
 	INFO("Old PATH = " << STDSTRING(path))
+#if defined(Q_OS_WIN)
 	path.append(QLatin1String(";") + applicationPath);
+#else
+	path.append(QLatin1String(":") + applicationPath);
+#endif
 	qputenv("PATH", qPrintable(path));
 	INFO("New PATH = " << STDSTRING(qEnvironmentVariable("PATH")))
 #endif
@@ -218,8 +213,18 @@ int main(int argc, char* argv[]) {
 	QApplication::setStyle(QStringLiteral("breeze"));
 #endif
 
+	// always show menu icons
+	QApplication::setAttribute(Qt::AA_DontShowIconsInMenus, false);
+
+	// before MainWin to have settings (displayName, etc.)
+	KAboutData::setApplicationData(aboutData);
+
 	auto* window = new MainWin(nullptr, fileName);
 	window->show();
+
+	// now that the locale settings are available
+	aboutData.setOtherText(AboutDialog::systemInfo() + AboutDialog::links());
+	KAboutData::setApplicationData(aboutData);
 
 	if (splash) {
 		splash->finish(window);

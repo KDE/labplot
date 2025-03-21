@@ -78,10 +78,6 @@ Action evaluateKeys(int key, Qt::KeyboardModifiers) {
 		return Action::NewReferenceLine;
 	else if (key == Qt::Key_I)
 		return Action::NewImage;
-	else if (key == Qt::Key_N)
-		return Action::NavigateNextCurve;
-	else if (key == Qt::Key_P)
-		return Action::NavigatePrevCurve;
 	else if (key == Qt::Key_M)
 		return Action::NewCustomPoint;
 	else if (key == Qt::Key_Escape)
@@ -4140,9 +4136,9 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos, int cS
 	int xIndex = cSystem->index(Dimension::X);
 	int yIndex = cSystem->index(Dimension::Y);
 
-	const auto xRangeFormat{range(Dimension::X, xIndex).format()};
-	const auto yRangeFormat{range(Dimension::Y, yIndex).format()};
-	const auto xRangeDateTimeFormat{range(Dimension::X, xIndex).dateTimeFormat()};
+	const auto& xRangeFormat{range(Dimension::X, xIndex).format()};
+	const auto& yRangeFormat{range(Dimension::Y, yIndex).format()};
+	const auto& xRangeDateTimeFormat{range(Dimension::X, xIndex).dateTimeFormat()};
 	if (!cSystem->isValid())
 		return;
 	const QPointF logicalStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
@@ -4197,8 +4193,8 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos, int cS
 }
 
 void CartesianPlotPrivate::mouseMoveCursorMode(int cursorNumber, QPointF logicalPos) {
-	const auto xRangeFormat{range(Dimension::X).format()};
-	const auto xRangeDateTimeFormat{range(Dimension::X).dateTimeFormat()};
+	const auto& xRangeFormat{range(Dimension::X).format()};
+	const auto& xRangeDateTimeFormat{range(Dimension::X).dateTimeFormat()};
 
 	QPointF p1(logicalPos.x(), 0);
 	cursorNumber == 0 ? cursor0Pos = p1 : cursor1Pos = p1;
@@ -4493,10 +4489,10 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 		yIndex = cSystem->index(Dimension::Y);
 	}
 
-	const auto xRangeFormat{range(Dimension::X, xIndex).format()};
-	const auto yRangeFormat{range(Dimension::Y, yIndex).format()};
-	const auto xRangeDateTimeFormat{range(Dimension::X, xIndex).dateTimeFormat()};
-	const auto yRangeDateTimeFormat{range(Dimension::Y, yIndex).dateTimeFormat()};
+	const auto& xRangeFormat{range(Dimension::X, xIndex).format()};
+	const auto& yRangeFormat{range(Dimension::Y, yIndex).format()};
+	const auto& xRangeDateTimeFormat{range(Dimension::X, xIndex).dateTimeFormat()};
+	const auto& yRangeDateTimeFormat{range(Dimension::Y, yIndex).dateTimeFormat()};
 	if (dataRect.contains(point)) {
 		if (!cSystem->isValid())
 			return;
@@ -5486,7 +5482,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			else
 				return false;
 		} else if (reader->name() == QLatin1String("ProcessBehaviorChart")) {
-			auto* plot = new ProcessBehaviorChart(QStringLiteral("Process Behavior Chart"));
+			auto* plot = new ProcessBehaviorChart(QStringLiteral("Process Behavior Chart"), true);
 			plot->setIsLoading(true);
 			if (plot->load(reader, preview))
 				addChildFast(plot);

@@ -569,6 +569,7 @@ void StatisticalPlotsTest::testPBChartXmRAverage() {
 	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
 	pbc->setType(ProcessBehaviorChart::Type::XmR);
 	pbc->setLimitsMetric(ProcessBehaviorChart::LimitsMetric::Average);
+	pbc->setMinLowerLimit(0.); // counts cannot become negative
 	pbc->setDataColumn(column);
 	p->addChild(pbc);
 
@@ -648,6 +649,7 @@ void StatisticalPlotsTest::testPBChartXmRMedian() {
 	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
 	pbc->setType(ProcessBehaviorChart::Type::XmR);
 	pbc->setLimitsMetric(ProcessBehaviorChart::LimitsMetric::Median);
+	pbc->setMinLowerLimit(0.); // counts cannot become negative
 	pbc->setDataColumn(column);
 	p->addChild(pbc);
 

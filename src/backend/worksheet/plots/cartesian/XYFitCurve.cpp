@@ -673,7 +673,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("μ") << QStringLiteral("k");
 			break;
 		case nsl_fit_model_hill:
-			paramNames << QStringLiteral("a") << QStringLiteral("n") << QStringLiteral("a");
+			paramNames << QStringLiteral("a") << QStringLiteral("n") << QStringLiteral("s");
 			paramNamesUtf8 << QStringLiteral("A") << QStringLiteral("n") << UTF8_QSTRING("σ");
 			break;
 		case nsl_fit_model_gompertz:
@@ -1730,19 +1730,30 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				}
 
 				value = nsl_fit_map_bound(gsl_vector_get(paramValues, j), min[j], max[j]);
+
 				parser.assign_symbol(qPrintable(paramNames->at(j)), value);
 				double f_p = parser.parse(qPrintable(func), qPrintable(numberLocale.name()));
 				if (parser.parseErrors() > 0) // fallback to default locale
 					f_p = parser.parse(qPrintable(func), "en_US");
 
-				double eps = 1.e-9;
+				// scale step size d with function value
+				double d = 1.e-9;
 				if (std::abs(f_p) > 0)
-					eps *= std::abs(f_p); // scale step size with function value
-				value += eps;
+					d *= std::abs(f_p);
+
+				// backward step
+				value -= d;
 				parser.assign_symbol(qPrintable(paramNames->at(j)), value);
-				double f_pdp = parser.parse(qPrintable(func), qPrintable(numberLocale.name()));
+				double f_pm = parser.parse(qPrintable(func), qPrintable(numberLocale.name()));
 				if (parser.parseErrors() > 0) // fallback to default locale
-					f_pdp = parser.parse(qPrintable(func), "en_US");
+					f_pm = parser.parse(qPrintable(func), "en_US");
+
+				// forward step
+				value += 2. * d;
+				parser.assign_symbol(qPrintable(paramNames->at(j)), value);
+				double f_pp = parser.parse(qPrintable(func), qPrintable(numberLocale.name()));
+				if (parser.parseErrors() > 0) // fallback to default locale
+					f_pp = parser.parse(qPrintable(func), "en_US");
 
 				//				DEBUG("evaluate deriv"<<func<<": f(x["<<i<<"]) ="<<QString::number(f_p, 'g', 15));
 				//				DEBUG("evaluate deriv"<<func<<": f(x["<<i<<"]+dx) ="<<QString::number(f_pdp, 'g', 15));
@@ -1750,8 +1761,8 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 
 				if (fixed[j])
 					gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
-				else // calculate finite difference
-					gsl_matrix_set(J, (size_t)i, (size_t)j, sqrt(weight[i]) * (f_pdp - f_p) / eps);
+				else // calculate central finite difference
+					gsl_matrix_set(J, (size_t)i, (size_t)j, sqrt(weight[i]) * (f_pp - f_pm) / (2. * d));
 			}
 		}
 	}
@@ -1872,7 +1883,7 @@ void XYFitCurvePrivate::updateResultsNote() {
 
 	auto valueString = i18n("Value");
 	auto errorString = i18n("Uncertainty");
-	auto errorPString = i18n("Uncertainty,%");
+	auto errorPString = i18n("Uncertainty, %");
 	auto tValueString = i18n("t Statistic");
 	auto pValueString = QStringLiteral("P > |t|");
 	auto lowerString = i18n("Lower");
@@ -1952,13 +1963,11 @@ void XYFitCurvePrivate::updateResultsNote() {
 	QString AICString = i18n("Akaike information criterion") + QStringLiteral(" (AIC)");
 	QString BICString = i18n("Bayesian information criterion") + QStringLiteral(" (BIC)");
 
-	auto resultStringList = QStringList() << SSRString << RMSString << RMSDString << R2String << ACDString << CHIString << FString << PString << MAEString
-										  << AICString << BICString;
-
+	QStringList resultStringList{SSRString, RMSString, RMSDString, R2String, ACDString, CHIString, FString, PString, MAEString, AICString, BICString};
 	int maxLength = 0;
-	for (const auto& s : resultStringList) {
+	for (const auto& s : resultStringList)
 		maxLength = qMax(maxLength, s.length());
-	}
+
 	maxLength++;
 
 	text += SSRString.leftJustified(maxLength, SPACE) + numberLocale.toString(fitResult.sse) + NEWLINE;

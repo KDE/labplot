@@ -224,13 +224,11 @@ void BarPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspec
 	if (!column)
 		return;
 
-	const auto dataColumnPaths = d->dataColumnPaths;
 	auto dataColumns = d->dataColumns;
 	bool changed = false;
 
-	for (int i = 0; i < dataColumnPaths.count(); ++i) {
-		const auto& path = dataColumnPaths.at(i);
-
+	for (int i = 0; i < d->dataColumnPaths.count(); ++i) {
+		const auto& path = d->dataColumnPaths.at(i);
 		if (path == aspectPath) {
 			dataColumns[i] = column;
 			changed = true;

@@ -59,6 +59,10 @@ Note::Note(const QString& name)
 	d->textFont = group.readEntry(QStringLiteral("TextFont"), QFont());
 }
 
+Note::~Note() {
+	delete d_ptr;
+}
+
 QIcon Note::icon() const {
 	return QIcon::fromTheme(QStringLiteral("document-new"));
 }

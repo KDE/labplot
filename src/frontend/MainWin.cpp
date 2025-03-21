@@ -4,7 +4,7 @@
 	Description          : Main window of the application
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -403,6 +403,9 @@ void MainWin::initGUI(const QString& fileName) {
 	// custom about dialog
         auto* aboutAction = actionCollection()->action(QStringLiteral("help_about_app"));
         if (aboutAction) {
+		// set menu icon
+		aboutAction->setIcon(KAboutData::applicationData().programLogo().value<QIcon>());
+
 		// disconnect default slot
 		disconnect(aboutAction, nullptr, nullptr, nullptr);
 		connect(aboutAction, &QAction::triggered, this, &MainWin::customAboutDialog);
@@ -419,7 +422,7 @@ void MainWin::initGUI(const QString& fileName) {
 void MainWin::customAboutDialog() {
 	// default dialog
         // KAboutApplicationDialog aboutDialog(KAboutData::applicationData(), this);
-	// custom about dialog (not used)
+	// custom about dialog
         AboutDialog aboutDialog(KAboutData::applicationData(), this);
 
         aboutDialog.exec();
@@ -861,11 +864,11 @@ void MainWin::initActions() {
 
 #ifdef HAVE_CANTOR_LIBS
 	// configure CAS backends
-	m_configureCASAction = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS..."), this);
-	m_configureCASAction->setWhatsThis(i18n("Opens the settings for Computer Algebra Systems to modify the available systems or to enable new ones"));
-	m_configureCASAction->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
-	actionCollection()->addAction(QLatin1String("configure_cas"), m_configureCASAction);
-	connect(m_configureCASAction, &QAction::triggered, this, &MainWin::settingsDialog); // TODO: go to the Notebook page in the settings dialog directly
+	m_configureNotebookAction = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS..."), this);
+	m_configureNotebookAction->setWhatsThis(i18n("Opens the settings for Computer Algebra Systems to modify the available systems or to enable new ones"));
+	m_configureNotebookAction->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
+	actionCollection()->addAction(QLatin1String("configure_cas"), m_configureNotebookAction);
+	connect(m_configureNotebookAction, &QAction::triggered, this, &MainWin::settingsNotebookDialog);
 #endif
 }
 
@@ -1596,6 +1599,7 @@ void MainWin::openProject(const QString& fileName) {
 
 	if (!rc) {
 		closeProject();
+		newProject();
 		return;
 	}
 
@@ -2903,11 +2907,17 @@ void MainWin::addAspectToProject(AbstractAspect* aspect) {
 void MainWin::settingsDialog() {
 	auto* dlg = new SettingsDialog(this, m_defaultSystemLocale);
 	connect(dlg, &SettingsDialog::settingsChanged, this, &MainWin::handleSettingsChanges);
-	// 	connect (dlg, &SettingsDialog::resetWelcomeScreen, this, &MainWin::resetWelcomeScreen);
 	dlg->exec();
 }
 
 #ifdef HAVE_CANTOR_LIBS
+void MainWin::settingsNotebookDialog() {
+	auto* dlg = new SettingsDialog(this, m_defaultSystemLocale);
+	connect(dlg, &SettingsDialog::settingsChanged, this, &MainWin::handleSettingsChanges);
+	dlg->navigateTo(Settings::Type::Notebook);
+	dlg->exec();
+}
+
 void MainWin::updateNotebookActions() {
 	auto* menu = static_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
 	unplugActionList(QLatin1String("backends_list"));
@@ -2930,9 +2940,9 @@ void MainWin::updateNotebookActions() {
 	plugActionList(QLatin1String("backends_list"), newBackendActions);
 
 	menu->addSeparator();
-	menu->addAction(m_configureCASAction);
+	menu->addAction(m_configureNotebookAction);
 
 	m_newNotebookMenu->addSeparator();
-	m_newNotebookMenu->addAction(m_configureCASAction);
+	m_newNotebookMenu->addAction(m_configureNotebookAction);
 }
 #endif

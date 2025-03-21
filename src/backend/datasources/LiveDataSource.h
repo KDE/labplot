@@ -141,9 +141,9 @@ private:
 	QString m_host;
 
 	AbstractFileFilter::FileType m_fileType{AbstractFileFilter::FileType::Ascii};
-	UpdateType m_updateType;
-	SourceType m_sourceType;
-	ReadingType m_readingType;
+	UpdateType m_updateType{UpdateType::TimeInterval};
+	SourceType m_sourceType{SourceType::FileOrPipe};
+	ReadingType m_readingType{ReadingType::ContinuousFixed};
 
 	bool m_fileWatched{false};
 	bool m_fileLinked{false};

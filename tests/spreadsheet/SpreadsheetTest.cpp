@@ -307,6 +307,32 @@ void SpreadsheetTest::testCopyPasteColumnMode06() {
 	QCOMPARE(sheet.column(1)->integerAt(1), 2);
 }
 
+/*!
+   insert one column with whitespaces surrounding the actual values.
+   the whitespaces have to be removed, one single column is processed only.
+*/
+void SpreadsheetTest::testCopyPasteColumnMode07() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
+	Spreadsheet sheet(QStringLiteral("test"), false);
+	sheet.setColumnCount(1);
+	sheet.setRowCount(100);
+
+	const QString str = QStringLiteral("  10  \n  20  \n");
+	QApplication::clipboard()->setText(str);
+
+	SpreadsheetView view(&sheet, false);
+	view.pasteIntoSelection();
+
+	// spreadsheet size and column mode
+	QCOMPARE(sheet.columnCount(), 1);
+	QCOMPARE(sheet.rowCount(), 100);
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	// values
+	QCOMPARE(sheet.column(0)->integerAt(0), 10);
+	QCOMPARE(sheet.column(0)->integerAt(1), 20);
+}
+
 //**********************************************************
 //********* Handling of spreadsheet size changes ***********
 //**********************************************************
@@ -2443,6 +2469,11 @@ void SpreadsheetTest::testInsertColumns() {
 
 	auto* model = new SpreadsheetModel(sheet);
 
+	// initial size
+	QCOMPARE(sheet->columnCount(), 2);
+	QCOMPARE(model->columnCount(), 2);
+
+	// count the number of signals emitted in the underlying data model (implemented in QAbstractItemModel)
 	int columnsAboutToBeInsertedCounter = 0;
 	connect(model, &SpreadsheetModel::columnsAboutToBeInserted, [&columnsAboutToBeInsertedCounter]() {
 		columnsAboutToBeInsertedCounter++;
@@ -2460,15 +2491,17 @@ void SpreadsheetTest::testInsertColumns() {
 		columnsRemovedCounter++;
 	});
 
-	QCOMPARE(sheet->columnCount(), 2);
-	QCOMPARE(model->columnCount(), 2);
-	sheet->setColumnCount(5); // No crash shall happen
+	// set the total number of columns to 5, 3 more columns added, and verify
+	sheet->setColumnCount(5);
 	QCOMPARE(sheet->columnCount(), 5);
 	QCOMPARE(model->columnCount(), 5);
 
+	// undo and verify, should be 2 again
 	sheet->undoStack()->undo();
 	QCOMPARE(sheet->columnCount(), 2);
 	QCOMPARE(model->columnCount(), 2);
+
+	// redo and verify, should be 5 again
 	sheet->undoStack()->redo();
 	QCOMPARE(sheet->columnCount(), 5);
 	QCOMPARE(model->columnCount(), 5);

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Process Behavior Chart
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -11,6 +11,7 @@
 #define PROCESSBEHAVIORCHART_H
 
 #include "Plot.h"
+#include "backend/worksheet/TextLabel.h"
 
 class Line;
 class ProcessBehaviorChartPrivate;
@@ -32,7 +33,7 @@ public:
 	enum class Type { XmR, mR, XbarR, R, XbarS, S, P, NP, C, U };
 	enum class LimitsMetric { Average, Median };
 
-	explicit ProcessBehaviorChart(const QString& name);
+	explicit ProcessBehaviorChart(const QString& name, bool loading = false);
 	~ProcessBehaviorChart() override;
 
 	void finalizeAdd() override;
@@ -52,8 +53,18 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
 	CLASS_D_ACCESSOR_DECL(QString, data2ColumnPath, Data2ColumnPath)
 	BASIC_D_ACCESSOR_DECL(int, sampleSize, SampleSize)
-	BASIC_D_ACCESSOR_DECL(bool, negativeLowerLimitEnabled, NegativeLowerLimitEnabled)
 	BASIC_D_ACCESSOR_DECL(bool, exactLimitsEnabled, ExactLimitsEnabled)
+	BASIC_D_ACCESSOR_DECL(double, maxUpperLimit, MaxUpperLimit)
+	BASIC_D_ACCESSOR_DECL(double, minLowerLimit, MinLowerLimit)
+
+	BASIC_D_ACCESSOR_DECL(bool, labelsEnabled, LabelsEnabled)
+	BASIC_D_ACCESSOR_DECL(bool, labelsAutoPrecision, LabelsAutoPrecision)
+	BASIC_D_ACCESSOR_DECL(int, labelsPrecision, LabelsPrecision)
+	CLASS_D_ACCESSOR_DECL(QColor, labelsFontColor, LabelsFontColor)
+	CLASS_D_ACCESSOR_DECL(QColor, labelsBackgroundColor, LabelsBackgroundColor)
+	CLASS_D_ACCESSOR_DECL(QFont, labelsFont, LabelsFont)
+	BASIC_D_ACCESSOR_DECL(TextLabel::BorderShape, labelsBorderShape, LabelsBorderShape)
+	Line* labelsBorderLine() const;
 
 	Symbol* dataSymbol() const;
 	Line* dataLine() const;
@@ -69,12 +80,12 @@ public:
 	void setZValue(qreal) override;
 
 	int xIndexCount() const;
-	bool minMax(const CartesianCoordinateSystem::Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const override;
+	bool minMax(const CartesianCoordinateSystem::Dimension, const Range<int>& indexRange, Range<double>&, bool includeErrorBars = true) const override;
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
 	bool usingColumn(const AbstractColumn*, bool indirect) const override;
-	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
+	void handleAspectUpdated(const QString& path, const AbstractAspect*) override;
 	QColor color() const override;
 
 	typedef ProcessBehaviorChartPrivate Private;
@@ -83,13 +94,17 @@ private Q_SLOTS:
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 	void data2ColumnAboutToBeRemoved(const AbstractAspect*);
 	void renameInternalCurves();
+	void labelsBorderStyleChanged(Qt::PenStyle);
+	void labelsBorderWidthChanged(double);
+	void labelsBorderColorChanged(const QColor&);
+	void labelsBorderOpacityChanged(float);
 
 protected:
 	ProcessBehaviorChart(const QString& name, ProcessBehaviorChartPrivate* dd);
 
 private:
 	Q_DECLARE_PRIVATE(ProcessBehaviorChart)
-	void init();
+	void init(bool loading = false);
 	void connectDataColumn(const AbstractColumn*);
 	void connectData2Column(const AbstractColumn*);
 
@@ -101,9 +116,9 @@ private:
 	XYCurve* dataCurve() const;
 
 Q_SIGNALS:
-	void linesUpdated(const ProcessBehaviorChart*, const QVector<QLineF>&);
+	void recalculated();
 
-	// General-Tab
+	// General
 	void typeChanged(ProcessBehaviorChart::Type);
 	void limitsMetricChanged(ProcessBehaviorChart::LimitsMetric);
 	void dataDataChanged();
@@ -111,8 +126,19 @@ Q_SIGNALS:
 	void dataColumnChanged(const AbstractColumn*);
 	void data2ColumnChanged(const AbstractColumn*);
 	void sampleSizeChanged(int);
-	void negativeLowerLimitEnabledChanged(bool);
 	void exactLimitsEnabledChanged(bool);
+	void limitConstraintsChanged();
+	void maxUpperLimitChanged(double);
+	void minLowerLimitChanged(double);
+
+	// labels for the control limits
+	void labelsEnabledChanged(bool);
+	void labelsAutoPrecisionChanged(bool);
+	void labelsPrecisionChanged(int);
+	void labelsFontChanged(const QFont);
+	void labelsFontColorChanged(const QColor);
+	void labelsBackgroundColorChanged(const QColor);
+	void labelsBorderShapeChanged(TextLabel::BorderShape);
 };
 
 #endif

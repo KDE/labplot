@@ -68,10 +68,6 @@ void XYFitCurveDock::setupGeneral() {
 	gridLayout->setHorizontalSpacing(2);
 	gridLayout->setVerticalSpacing(2);
 
-	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
-	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
-	uiGeneralTab.cbDataSourceType->addItem(i18n("Histogram"));
-
 	cbDataSourceCurve = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbDataSourceCurve, 5, 2, 1, 2);
 
@@ -140,12 +136,6 @@ void XYFitCurveDock::setupGeneral() {
 	// don't allow word wrapping in the log-table for the multi-line iterations string
 	uiGeneralTab.twLog->setWordWrap(false);
 
-	// header labels
-	QStringList headerLabels;
-	headerLabels << QString() << i18n("Value") << i18n("Uncertainty") << i18n("Uncertainty, %") << i18n("t statistic") << QLatin1String("P > |t|")
-				 << i18n("Lower") << i18n("Upper");
-	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
-
 	// show all options per default
 	showDataOptions(true);
 	showFitOptions(true);
@@ -179,6 +169,9 @@ void XYFitCurveDock::setupGeneral() {
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
+
+	updateLocale();
+	retranslateUi();
 
 	// Slots
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::dataSourceTypeChanged);
@@ -351,7 +344,9 @@ bool XYFitCurveDock::eventFilter(QObject* obj, QEvent* event) {
 }
 
 void XYFitCurveDock::checkDataColumns() {
-	DEBUG(Q_FUNC_INFO)
+	if (m_initializing)
+		return;
+
 	if (!m_messageWidget) {
 		m_messageWidget = new KMessageWidget(this);
 		uiGeneralTab.gridLayout_2->addWidget(m_messageWidget, 23, 2, 1, 2);
@@ -384,6 +379,35 @@ void XYFitCurveDock::checkDataColumns() {
 		m_messageWidget->animatedHide();
 		break;
 	}
+}
+
+/*
+ * updates the locale in the widgets. called when the application settings are changed.
+ */
+void XYFitCurveDock::updateLocale() {
+	if (m_fitCurve) {
+		fitParametersWidget->setFitData(&m_fitData);
+		showFitResult();
+	}
+}
+
+void XYFitCurveDock::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
+
+	uiGeneralTab.cbDataSourceType->clear();
+	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
+	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
+	uiGeneralTab.cbDataSourceType->addItem(i18n("Histogram"));
+
+	// header labels
+	QStringList labels{QString(), i18n("Value"), i18n("Uncertainty"), i18n("Uncertainty, %"), i18n("t statistic"), QLatin1String("P > |t|"), i18n("Lower"), i18n("Upper")};
+	uiGeneralTab.twParameters->setHorizontalHeaderLabels(labels);
+
+	fitParametersWidget->retranslateUi();
+
+	// retranslate fit results, if available
+	if (m_fitCurve)
+		showFitResult();
 }
 
 //*************************************************************
@@ -845,9 +869,6 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 	// with no xColumn: show all models (assume 100 data points)
 	const int availableRowCount = xColumn ? xColumn->availableRowCount(100) : 100;
 	DEBUG(Q_FUNC_INFO << ", available row count = " << availableRowCount)
-	auto yColumn = m_fitCurve->yDataColumn();
-	if (availableRowCount == 0 || !xColumn || !yColumn)
-		checkDataColumns();
 
 	bool disableFit = false;
 	switch (m_fitData.modelCategory) {
@@ -955,7 +976,8 @@ void XYFitCurveDock::updateModelEquation() {
 			m_messageWidget->animatedHide();
 		}
 
-		showFitResult(); // show result of preview
+		if (m_fitData.previewEnabled)
+			showFitResult(); // show result of preview
 	}
 
 	// variables/parameter that are known

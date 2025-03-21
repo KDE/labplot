@@ -2297,8 +2297,7 @@ void ColumnPrivate::updateFormula() {
 			valid = false;
 			break;
 		}
-		auto varName = formulaData.variableName();
-		formulaVariableNames << varName;
+		formulaVariableNames << formulaData.variableName();
 
 		if (column->columnMode() == AbstractColumn::ColumnMode::Double)
 			xVectors << static_cast<QVector<double>*>(column->data());
@@ -3155,8 +3154,10 @@ void ColumnPrivate::calculateStatistics() {
 	} else
 		statistics.geometricMean = std::pow(columnProduct, 1.0 / notNanCount);
 
-	statistics.harmonicMean = notNanCount / columnSumNeg;
-	statistics.contraharmonicMean = columnSumSquare / columnSum;
+	if (columnSumNeg != 0.)
+		statistics.harmonicMean = notNanCount / columnSumNeg;
+	if (columnSum != 0.)
+		statistics.contraharmonicMean = columnSumSquare / columnSum;
 
 	// calculate the mode, the most frequent value in the data set
 	int maxFreq = 0;

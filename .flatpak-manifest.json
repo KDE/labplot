@@ -64,8 +64,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-25.02.0.tar.xz",
-                    "sha256": "21234cb2a9647d73c752ce4031e65a79d11a511a835f2798284c2497b8701dee"
+                    "url": "https://poppler.freedesktop.org/poppler-25.03.0.tar.xz",
+                    "sha256": "97da4ff88517a6bbd729529f195f85c8d7a0c3bb4a3d57cb0c685cbb052fe837"
                 }
             ],
             "modules": [
@@ -305,22 +305,22 @@
             ]
         },
         {
-            "name": "libixion",
+            "name": "ixion",
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/api/v4/projects/ixion%2Fixion/packages/generic/source/0.20.0/libixion-0.20.0.tar.xz",
-                    "sha256": "8466a05f19f60b7568641a449704666308848f7bcaf8335f92ee9474a451e4cd"
+                    "url": "https://gitlab.com/ixion/ixion/-/archive/0.20.0/ixion-0.20.0.tar.bz2",
+                    "sha256": "39e54cd486fed458c2a6e83a5e658d4c2e818862355b33645bb1342449428463"
                 }
             ]
         },
         {
-            "name": "liborcus",
+            "name": "orcus",
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/api/v4/projects/orcus%2Forcus/packages/generic/source/0.20.0/liborcus-0.20.0.tar.xz",
-                    "sha256": "fb6438977a75e7f455b772acf80d861fbc787ab18d52f7997af44a212311a507"
+                    "url": "https://gitlab.com/orcus/orcus/-/archive/0.20.0/orcus-0.20.0.tar.bz2",
+                    "sha256": "767ddd06d72b18c5e6c65af74a78b8c7b9326c7163fde1066b97369769a68f35"
                 }
             ]
         },

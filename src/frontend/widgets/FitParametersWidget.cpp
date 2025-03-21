@@ -31,31 +31,9 @@ FitParametersWidget::FitParametersWidget(QWidget* parent)
 
 	ui.tableWidget->setColumnCount(5);
 
-	auto* headerItem = new QTableWidgetItem();
-	headerItem->setText(QString());
-	ui.tableWidget->setHorizontalHeaderItem(0, headerItem);
-
-	headerItem = new QTableWidgetItem();
-	headerItem->setText(i18n("Start value"));
-	ui.tableWidget->setHorizontalHeaderItem(1, headerItem);
-
-	headerItem = new QTableWidgetItem();
-	headerItem->setText(i18n("Fixed"));
-	ui.tableWidget->setHorizontalHeaderItem(2, headerItem);
-
-	headerItem = new QTableWidgetItem();
-	headerItem->setText(i18n("Lower limit"));
-	ui.tableWidget->setHorizontalHeaderItem(3, headerItem);
-
-	headerItem = new QTableWidgetItem();
-	headerItem->setText(i18n("Upper limit"));
-	ui.tableWidget->setHorizontalHeaderItem(4, headerItem);
-
-	ui.tableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
-	ui.tableWidget->horizontalHeader()->setStretchLastSection(true);
+	retranslateUi();
 
 	ui.tableWidget->installEventFilter(this);
-
 	connect(ui.tableWidget, &QTableWidget::cellChanged, this, &FitParametersWidget::changed);
 	updateTableSize();
 }
@@ -208,6 +186,13 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 	m_initializing = false;
 
 	updateTableSize();
+}
+
+void FitParametersWidget::retranslateUi() {
+	QStringList labels{QString(), i18n("Start Value"), i18n("Fixed"), i18n("Lower Limit"), i18n("Upper Limit")};
+	ui.tableWidget->setHorizontalHeaderLabels(labels);
+	ui.tableWidget->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+	ui.tableWidget->horizontalHeader()->setStretchLastSection(true);
 }
 
 bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {

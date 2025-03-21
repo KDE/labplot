@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-23 00:37+0000\n"
+"POT-Creation-Date: 2025-03-20 00:38+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -89,7 +89,7 @@ msgstr ""
 #: src/backend/core/AbstractAspect.cpp:528
 #: src/backend/core/aspectcommands.h:172
 #: src/backend/datapicker/Datapicker.cpp:220
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2205
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2201
 #, kde-format
 msgid "%1: add %2"
 msgstr "%1: pridať %2"
@@ -294,13 +294,14 @@ msgstr "Celé číslo"
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:233
 #: src/backend/datasources/filters/AsciiFilter.cpp:610
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:535
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:531
 #: src/frontend/notebook/NotebookView.cpp:97
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:208
 #: src/frontend/ui/dockwidgets/axisdock.ui:1524
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:590
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:280
-#: src/frontend/widgets/LabelWidget.cpp:489
+#: src/frontend/widgets/LabelWidget.cpp:477
 #: src/frontend/worksheet/WorksheetView.cpp:224
 #, kde-format
 msgid "Text"
@@ -372,14 +373,14 @@ msgid "%1: unmask cells"
 msgstr ""
 
 #: src/backend/core/abstractcolumncommands.cpp:246
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2603
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2602
 #, fuzzy, kde-format
 #| msgid "%1: set layout"
 msgid "%1: set heatmap format"
 msgstr "%1: nastaviť rozloženie"
 
 #: src/backend/core/abstractcolumncommands.cpp:273
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2621
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2620
 #, fuzzy, kde-format
 #| msgid "%1: set layout"
 msgid "%1: remove heatmap format"
@@ -396,14 +397,14 @@ msgstr "V%1"
 msgid "Import Data"
 msgstr "Importovať dáta"
 
-#: src/backend/core/AbstractPart.cpp:126 src/frontend/MainWin.cpp:676
-#: src/frontend/MainWin.cpp:685
+#: src/backend/core/AbstractPart.cpp:126 src/frontend/MainWin.cpp:679
+#: src/frontend/MainWin.cpp:688
 #, fuzzy, kde-format
 #| msgid "From File"
 msgid "From File..."
 msgstr "Zo súboru"
 
-#: src/backend/core/AbstractPart.cpp:128 src/frontend/MainWin.cpp:697
+#: src/backend/core/AbstractPart.cpp:128 src/frontend/MainWin.cpp:700
 #, kde-format
 msgid "From SQL Database..."
 msgstr ""
@@ -428,7 +429,7 @@ msgstr "Tlačiť"
 msgid "Print Preview"
 msgstr "Náhľad tlače"
 
-#: src/backend/core/AbstractPart.cpp:147 src/frontend/MainWin.cpp:769
+#: src/backend/core/AbstractPart.cpp:147 src/frontend/MainWin.cpp:772
 #, fuzzy, kde-format
 #| msgid "Close &All"
 msgid "&Close"
@@ -450,7 +451,7 @@ msgstr ""
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1912
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1910
 #, kde-format
 msgid "unknown element '%1'"
 msgstr "neznámy prvok '%1'"
@@ -645,7 +646,7 @@ msgid "%1: change cell values"
 msgstr "%1: zmeniť komentár"
 
 #: src/backend/core/column/columncommands.cpp:521
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2828
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2827
 #, kde-format
 msgid "%1: set plot designation"
 msgstr ""
@@ -856,16 +857,16 @@ msgstr "neznámy prvok '%1'"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/Datapicker.cpp:45
 #: src/backend/datapicker/Datapicker.cpp:356
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1780
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1786
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1792
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1798
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1804
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1810
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1816
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1822
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1828
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1834
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1776
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1782
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1788
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1794
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1800
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1806
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1812
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1818
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1824
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1830
 #: src/frontend/ui/datapickerimagewidget.ui:260
 #, kde-format
 msgid "Plot"
@@ -988,10 +989,10 @@ msgstr "%1: nastaviť rozloženie"
 #: src/backend/datapicker/DatapickerCurve.cpp:392
 #: src/backend/datapicker/DatapickerImage.cpp:417
 #: src/backend/worksheet/InfoElement.cpp:872
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:143
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:204
-#: src/backend/worksheet/plots/cartesian/QQPlot.cpp:146
-#: src/backend/worksheet/plots/cartesian/RunChart.cpp:143
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:276
+#: src/backend/worksheet/plots/cartesian/QQPlot.cpp:150
+#: src/backend/worksheet/plots/cartesian/RunChart.cpp:147
 #: src/backend/worksheet/WorksheetElement.cpp:163
 #: src/backend/worksheet/WorksheetElementContainer.cpp:65
 #: src/backend/worksheet/WorksheetElementContainer.cpp:66
@@ -1002,10 +1003,10 @@ msgstr ""
 #: src/backend/datapicker/DatapickerCurve.cpp:392
 #: src/backend/datapicker/DatapickerImage.cpp:417
 #: src/backend/worksheet/InfoElement.cpp:872
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:143
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:204
-#: src/backend/worksheet/plots/cartesian/QQPlot.cpp:146
-#: src/backend/worksheet/plots/cartesian/RunChart.cpp:143
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:276
+#: src/backend/worksheet/plots/cartesian/QQPlot.cpp:150
+#: src/backend/worksheet/plots/cartesian/RunChart.cpp:147
 #: src/backend/worksheet/WorksheetElement.cpp:163
 #: src/backend/worksheet/WorksheetElement.cpp:801
 #: src/backend/worksheet/WorksheetElementContainer.cpp:68
@@ -1152,8 +1153,8 @@ msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:201
 #: src/backend/gsl/errors.h:20
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2128
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1222
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2137
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1244
 #, kde-format
 msgid "Success"
 msgstr "Úspech"
@@ -1254,7 +1255,7 @@ msgstr "Exportovať do súboru"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
 #, kde-format
-msgid "Serial devices must be initialized before reading data from it"
+msgid "Serial device must be initialized before reading data from it"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
@@ -1305,7 +1306,7 @@ msgid "Number of lines: %1"
 msgstr "Počet riadkov: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:524
-#: src/backend/datasources/filters/AsciiFilter.cpp:1307
+#: src/backend/datasources/filters/AsciiFilter.cpp:1309
 #: src/backend/datasources/filters/JsonFilter.cpp:284
 #, fuzzy, kde-format
 #| msgid "Column"
@@ -1313,14 +1314,14 @@ msgid "Column %1"
 msgstr "Stĺpec"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:594
-#: src/backend/datasources/filters/AsciiFilter.cpp:1330
+#: src/backend/datasources/filters/AsciiFilter.cpp:1332
 #, fuzzy, kde-format
 #| msgid "Time"
 msgid "Timestamp"
 msgstr "Čas"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:598
-#: src/backend/datasources/filters/AsciiFilter.cpp:1334
+#: src/backend/datasources/filters/AsciiFilter.cpp:1336
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1385,7 +1386,7 @@ msgstr "Nepodarilo sa otvoriť"
 #: src/backend/datasources/filters/NetCDFFilter.cpp:758
 #: src/backend/datasources/filters/NetCDFFilter.cpp:869
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1001
-#: src/backend/datasources/filters/OdsFilter.cpp:392
+#: src/backend/datasources/filters/OdsFilter.cpp:400
 #: src/backend/datasources/filters/ReadStatFilter.cpp:528
 #: src/backend/datasources/filters/ROOTFilter.cpp:235
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
@@ -1942,7 +1943,7 @@ msgstr "Počet riadkov: %1"
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:251
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:328
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:348
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:58
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:149
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:185
 #, kde-format
 msgid "Variables:"
@@ -2036,8 +2037,8 @@ msgstr ""
 #: src/backend/datasources/filters/MatioFilter.cpp:402
 #: src/backend/datasources/filters/MatioFilter.cpp:452
 #: src/backend/nsl/nsl_interp.c:26
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:446
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2109
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:442
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2105
 #, fuzzy, kde-format
 #| msgid "Functions"
 msgid "Function"
@@ -2063,7 +2064,7 @@ msgid "Unknown"
 msgstr "neznáme"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:647 src/frontend/MainWin.cpp:1992
+#: src/frontend/MainWin.cpp:650 src/frontend/MainWin.cpp:1996
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -2187,7 +2188,7 @@ msgid "No Statistics found."
 msgstr "Štatistika"
 
 #: src/backend/datasources/filters/McapFilter.cpp:469
-#: src/backend/datasources/filters/McapFilter.cpp:962
+#: src/backend/datasources/filters/McapFilter.cpp:964
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to read the file. Reason: %1"
@@ -2316,45 +2317,45 @@ msgstr "Ešte neimplemetované"
 msgid "%1 dimensional data of type %2 not supported yet"
 msgstr ""
 
-#: src/backend/datasources/filters/OdsFilter.cpp:57
+#: src/backend/datasources/filters/OdsFilter.cpp:63
 #: src/backend/datasources/filters/XLSXFilter.cpp:47
 #, kde-format
 msgid "Sheet count: %1"
 msgstr ""
 
-#: src/backend/datasources/filters/OdsFilter.cpp:219
+#: src/backend/datasources/filters/OdsFilter.cpp:225
 #: src/backend/datasources/filters/XLSXFilter.cpp:626
 #, fuzzy, kde-format
 #| msgid "Clea&r Selection"
 msgid "No sheet selected."
 msgstr "Vyčistiť výber"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:254
+#: src/backend/datasources/filters/OdsFilter.cpp:260
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "File Information"
 msgid "Selected sheet not found."
 msgstr "Informácia o súbore"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:261
+#: src/backend/datasources/filters/OdsFilter.cpp:267
 #, fuzzy, kde-format
 #| msgid "Export to file"
 msgid "Invalid sheet."
 msgstr "Exportovať do súboru"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:322
+#: src/backend/datasources/filters/OdsFilter.cpp:329
 #, fuzzy, kde-format
 msgid "Formulas not supported yet."
 msgstr "Ešte neimplemetované"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:477
+#: src/backend/datasources/filters/OdsFilter.cpp:486
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "File Information"
 msgid "Sheet not found."
 msgstr "Informácia o súbore"
 
-#: src/backend/datasources/filters/OdsFilter.cpp:484
+#: src/backend/datasources/filters/OdsFilter.cpp:493
 #, fuzzy, kde-format
 #| msgid "Add Value"
 msgid "Invalid sheet index."
@@ -2368,15 +2369,15 @@ msgstr "Kľúč"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/datasources/filters/QJsonModel.cpp:133
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1873
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1884
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:145
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #: src/frontend/matrix/MatrixView.cpp:620
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:188
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2505
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2526
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2544
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2561
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2504
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2525
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2543
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2560
 #: src/frontend/ui/dockwidgets/columndock.ui:179
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:65
 #, kde-format
@@ -2474,7 +2475,7 @@ msgstr "Nepodarilo sa otvoriť"
 #: src/backend/datasources/MQTTClient.cpp:1190
 #: src/backend/datasources/MQTTTopic.cpp:207
 #: src/backend/lib/XmlStreamReader.cpp:99
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:486
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:490
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
 msgstr ""
@@ -2909,7 +2910,7 @@ msgid "Stefan-Boltzmann constant"
 msgstr "Stefan-Boltzmannova konštanta"
 
 #: src/backend/gsl/constants.cpp:83
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:479
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:475
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:160
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:534
 #, fuzzy, kde-format
@@ -4022,7 +4023,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:261
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:183
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:217
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:73
@@ -6482,7 +6483,7 @@ msgid "ep"
 msgstr ""
 
 #: src/backend/lib/Range.h:57 src/backend/nsl/nsl_interp.c:14
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:459
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:519
 #, fuzzy, kde-format
 #| msgid "linear"
@@ -6539,14 +6540,14 @@ msgid "unexpected end of document"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3828
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3827
 #, fuzzy, kde-format
 #| msgid "image"
 msgid "FITS image"
 msgstr "obrázok"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3828
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3827
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -6691,19 +6692,19 @@ msgstr "%1: zrkadliť horizontálne"
 msgid "%1: mirror vertically"
 msgstr "%1: zrkadliť vertikálne"
 
-#: src/backend/note/Note.cpp:70
+#: src/backend/note/Note.cpp:74
 #, fuzzy, kde-format
 #| msgid "Print"
 msgctxt "@title:window"
 msgid "Print Note"
 msgstr "Tlačiť"
 
-#: src/backend/note/Note.cpp:95
+#: src/backend/note/Note.cpp:99
 #, kde-format
 msgid "Text file (*.txt)"
 msgstr ""
 
-#: src/backend/note/Note.cpp:97
+#: src/backend/note/Note.cpp:101
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:276
 #, fuzzy, kde-format
@@ -6712,44 +6713,44 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr "Exportovať do súboru"
 
-#: src/backend/note/Note.cpp:111
+#: src/backend/note/Note.cpp:115
 #, fuzzy, kde-format
 #| msgid "Export to file"
 msgid "Export failed"
 msgstr "Exportovať do súboru"
 
-#: src/backend/note/Note.cpp:111
+#: src/backend/note/Note.cpp:115
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Failed to open '%1' for writing."
 msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 
-#: src/backend/note/Note.cpp:134
+#: src/backend/note/Note.cpp:138
 #, fuzzy, kde-format
 #| msgid "%1: set layout"
 msgid "%1: set text"
 msgstr "%1: nastaviť rozloženie"
 
-#: src/backend/note/Note.cpp:141 src/backend/worksheet/TextLabel.cpp:260
-#: src/backend/worksheet/TextLabel.cpp:299
+#: src/backend/note/Note.cpp:145 src/backend/worksheet/TextLabel.cpp:278
+#: src/backend/worksheet/TextLabel.cpp:317
 #, fuzzy, kde-format
 #| msgid "%1: set background image"
 msgid "%1: set background color"
 msgstr "Nastaviť farbu &pozadia..."
 
-#: src/backend/note/Note.cpp:148
+#: src/backend/note/Note.cpp:152
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set text color"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/note/Note.cpp:155
+#: src/backend/note/Note.cpp:159
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set text font"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/note/Note.cpp:197
+#: src/backend/note/Note.cpp:201
 #, kde-format
 msgid "no note element found"
 msgstr ""
@@ -6812,6 +6813,7 @@ msgstr "Kruhovo"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:341
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:382
 #: src/frontend/ui/dockwidgets/histogramdock.ui:214
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:683
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:350
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:223
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:120
@@ -6951,7 +6953,7 @@ msgid "Imaginary Part"
 msgstr "Binárne dáta: %1"
 
 #: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:463
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:459
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:522
 #, kde-format
 msgid "Power"
@@ -7120,13 +7122,13 @@ msgid "Statistics (Distributions)"
 msgstr "Smer"
 
 #: src/backend/nsl/nsl_fit.c:24
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:499
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1859
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:495
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
 #: src/frontend/datasources/ImportFileWidget.cpp:1366
 #: src/frontend/dockwidgets/AxisDock.cpp:237
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:172
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:782
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:806
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:81
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:549
 #, kde-format
@@ -7164,7 +7166,7 @@ msgid "Gaussian (normal)"
 msgstr "Gaussovské"
 
 #: src/backend/nsl/nsl_fit.c:31
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:483
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:479
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:537
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:563
 #, kde-format
@@ -7199,7 +7201,7 @@ msgid "Inverse Tangent"
 msgstr "Inverzný tangens"
 
 #: src/backend/nsl/nsl_fit.c:45
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:491
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:487
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:543
 #, fuzzy, kde-format
 #| msgid "Hyperbolic tangent"
@@ -7278,8 +7280,8 @@ msgstr "radiálny prechod"
 
 #. i18n: ectx: property (text), widget (QLabel, lInterpolation)
 #: src/backend/nsl/nsl_geom_linesim.c:23
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:417
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:413
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2011
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:270
 #, kde-format
 msgid "Interpolation"
@@ -8050,7 +8052,7 @@ msgstr "%1: nastaviť písmo"
 msgid "%1: embed image"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/Image.cpp:152 src/backend/worksheet/TextLabel.cpp:369
+#: src/backend/worksheet/Image.cpp:152
 #, kde-format
 msgid "%1: set border opacity"
 msgstr ""
@@ -8142,13 +8144,13 @@ msgstr ""
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1339
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1341
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr ""
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1365
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1367
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr ""
@@ -8192,8 +8194,8 @@ msgstr "Horizontálne"
 #: src/frontend/dockwidgets/AxisDock.cpp:256
 #: src/frontend/dockwidgets/BarPlotDock.cpp:272
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:284
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:903
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:907
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:905
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:909
 #: src/frontend/dockwidgets/HistogramDock.cpp:268
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:246
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:91
@@ -8220,7 +8222,7 @@ msgstr "Orientácia"
 #. i18n: ectx: property (text), widget (QLabel, lCenter)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:313
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:674
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:670
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:124
 #: src/frontend/dockwidgets/XYCurveDock.cpp:485
 #: src/frontend/ui/dockwidgets/axisdock.ui:488
@@ -8229,7 +8231,7 @@ msgstr "Orientácia"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1436
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:233
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:233
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:232
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:254
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:248
 #: src/frontend/ui/dockwidgets/runchartdock.ui:170
 #: src/frontend/ui/dockwidgets/runchartdock.ui:234
@@ -8450,6 +8452,8 @@ msgstr "%1: nastaviť rozloženie"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:946
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:953
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:590
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:597
 #, kde-format
 msgid "%1: set labels precision"
 msgstr ""
@@ -8524,31 +8528,31 @@ msgstr ""
 msgid "%1: set labels opacity"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:282
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:289
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:280
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:288
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set x column"
 msgstr "Vložiť stĺpec"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:294
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:511
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:301
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:292
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:509
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:300
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set data columns"
 msgstr "Vložiť stĺpec"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:306
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:430
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:304
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:534
 #, fuzzy, kde-format
 #| msgid "%1: set layout"
 msgid "%1: set type"
 msgstr "%1: nastaviť rozloženie"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:313
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:525
-#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:308
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:311
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:523
+#: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:307
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:186
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:214
 #, fuzzy, kde-format
@@ -8556,8 +8560,8 @@ msgstr "%1: nastaviť rozloženie"
 msgid "%1: set orientation"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:320
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:539
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:318
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:537
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgid "%1: width factor changed"
@@ -8618,49 +8622,49 @@ msgstr "Konštanty"
 msgid "far out points count"
 msgstr "Počet bodov"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:518
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:516
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set ordering"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:532
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:530
 #, fuzzy, kde-format
 #| msgid "%1: set background image"
 msgid "%1: variable width changed"
 msgstr "%1: nastaviť obrázok pozadia"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:546
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:544
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: changed notches"
 msgstr "%1: zmeniť komentár"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:554
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:552
 #, fuzzy, kde-format
 #| msgid "Data type:"
 msgid "%1: set whiskers type"
 msgstr "Dátový typ:"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:561
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:559
 #, fuzzy, kde-format
 #| msgid "Data type:"
 msgid "%1: set whiskers range parameter"
 msgstr "Dátový typ:"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:568
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:566
 #, fuzzy, kde-format
 #| msgid "Data type:"
 msgid "%1: set whiskers cap size"
 msgstr "Dátový typ:"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:576
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
 #, fuzzy, kde-format
 #| msgid "%1: set background image"
 msgid "%1: jitterring changed"
 msgstr "%1: nastaviť obrázok pozadia"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:584
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:517
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:705
 #, fuzzy, kde-format
@@ -8668,7 +8672,7 @@ msgstr "%1: nastaviť obrázok pozadia"
 msgid "%1: change rug enabled"
 msgstr "%1: zmeniť komentár"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:591
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:589
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:524
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:719
 #, fuzzy, kde-format
@@ -8676,7 +8680,7 @@ msgstr "%1: zmeniť komentár"
 msgid "%1: change rug width"
 msgstr "%1: zmeniť komentár"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:598
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:596
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:531
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:726
 #, fuzzy, kde-format
@@ -8684,7 +8688,7 @@ msgstr "%1: zmeniť komentár"
 msgid "%1: change rug length"
 msgstr "%1: zmeniť komentár"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:605
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:603
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:538
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:733
 #, fuzzy, kde-format
@@ -8699,8 +8703,8 @@ msgid "no info available"
 msgstr "Vymazať premennú"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:145
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5231
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:141
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5227
 #: src/frontend/ui/dockwidgets/axisdock.ui:483
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:542
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:478
@@ -8709,17 +8713,17 @@ msgstr "Vymazať premennú"
 msgid "Title"
 msgstr "Titulok"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:414
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:451
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1958
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:410
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:447
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1954
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Data Reduction"
 msgstr "Smer"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:415
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1977
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:411
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1973
 #: src/frontend/notebook/NotebookView.cpp:149
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:269
 #, kde-format
@@ -8727,8 +8731,8 @@ msgid "Differentiation"
 msgstr "Derivovanie"
 
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:416
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1996
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:412
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1992
 #: src/frontend/notebook/NotebookView.cpp:155
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:157
 #, kde-format
@@ -8736,18 +8740,18 @@ msgid "Integration"
 msgstr "Integrácia"
 
 #. i18n: ectx: property (text), widget (QLabel, lSmooth)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:418
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2034
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:414
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:451
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2030
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:512
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:73
 #, fuzzy, kde-format
 msgid "Smooth"
 msgstr "Plynulý"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:419
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:611
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2053
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:415
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:607
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2049
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:626
 #, fuzzy, kde-format
 #| msgid "Fit"
@@ -8755,52 +8759,52 @@ msgctxt "Curve fitting"
 msgid "Fit"
 msgstr "Prispôsobiť"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:420
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:503
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2093
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:416
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:499
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2089
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:514
 #, fuzzy, kde-format
 #| msgid "new filter"
 msgid "Fourier Filter"
 msgstr "nový filter"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:421
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:434
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:504
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:522
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:417
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:430
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:500
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:518
 #, fuzzy, kde-format
 #| msgid "new filter"
 msgid "Fourier Transform"
 msgstr "nový filter"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:422
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:437
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:505
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:525
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:418
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:433
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:501
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:521
 #, fuzzy, kde-format
 #| msgid "new filter"
 msgid "Hilbert Transform"
 msgstr "nový filter"
 
 #. i18n: ectx: property (text), widget (QLabel, lConvolution)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:423
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:419
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:311
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "(De-)Convolution"
 msgstr "Pripojenie"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:424
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:443
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:457
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:516
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:420
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:439
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:453
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:512
 #, fuzzy, kde-format
 #| msgid "Correlation"
 msgid "Auto-/Cross-Correlation"
 msgstr "Korelácia"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:440
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:513
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:436
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:509
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:342
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:347
 #, fuzzy, kde-format
@@ -8808,65 +8812,65 @@ msgstr "Korelácia"
 msgid "Convolution"
 msgstr "Pripojenie"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:447
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:443
 #, kde-format
 msgid ""
 "Add a new xy-curve that is defined as a function of other xy-curves (scaled, "
 "shifted, etc.)"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:452
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:448
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:504
 #, kde-format
 msgid "Differentiate"
 msgstr "Diferencovať"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:453
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:449
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:507
 #, kde-format
 msgid "Integrate"
 msgstr "Integrovať"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:454
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:450
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:510
 #, kde-format
 msgid "Interpolate"
 msgstr "Interpolovať"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:456
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:452
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "Convolute/Deconvolute"
 msgstr "Pripojenie"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:467
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:463
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:525
 #, fuzzy, kde-format
 #| msgid "Exponential"
 msgid "Exponential (degree 1)"
 msgstr "Exponenciála"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:471
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:467
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:528
 #, fuzzy, kde-format
 #| msgid "Exponential"
 msgid "Exponential (degree 2)"
 msgstr "Exponenciála"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:475
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:471
 #, fuzzy, kde-format
 #| msgid "Exponential"
 msgid "Inverse exponential"
 msgstr "Exponenciála"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:487
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:483
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:540
 #, fuzzy, kde-format
 #| msgid "magenta"
 msgid "Arc Tangent"
 msgstr "Arkus tangens"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:495
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:491
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:546
 #, fuzzy, kde-format
 #| msgid "Functions"
@@ -8874,14 +8878,14 @@ msgid "Error Function"
 msgstr "Funkcie"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLegendVisible)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:529
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2135
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:525
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2131
 #: src/frontend/ui/dockwidgets/barplotdock.ui:235
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:248
 #: src/frontend/ui/dockwidgets/histogramdock.ui:385
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:202
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:225
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:88
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:156
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:168
 #: src/frontend/ui/dockwidgets/runchartdock.ui:59
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:444
@@ -8903,20 +8907,20 @@ msgstr "Funkcie"
 msgid "Legend"
 msgstr "Vysvetlivky"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:533
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:529
 #, fuzzy, kde-format
 #| msgid "horizontal axis"
 msgid "Horizontal Axis"
 msgstr "horizontálna os"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:534
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:530
 #, fuzzy, kde-format
 #| msgid "vertical axis"
 msgid "Vertical Axis"
 msgstr "vertikálna os"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:536
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2182
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:532
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2178
 #: src/frontend/datasources/ImportFileWidget.cpp:112
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:110
@@ -8928,38 +8932,38 @@ msgstr "vertikálna os"
 msgid "Image"
 msgstr "Obrázok"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:537
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2158
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:533
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2154
 #, fuzzy, kde-format
 #| msgid "Increment"
 msgid "Info Element"
 msgstr "Prírastok"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:538
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2202
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:534
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2198
 #, fuzzy, kde-format
 #| msgid "custom"
 msgid "Custom Point"
 msgstr "vlastné"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabReferenceLine)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:539
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2227
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:535
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2223
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:176
 #, fuzzy, kde-format
 #| msgid "Preferences"
 msgid "Reference Line"
 msgstr "Nastavenia"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:540
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2240
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:536
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2236
 #, fuzzy, kde-format
 #| msgid "Preferences"
 msgid "Reference Range"
 msgstr "Nastavenia"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
-#: src/frontend/MainWin.cpp:895 src/frontend/notebook/NotebookView.cpp:168
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:552
+#: src/frontend/MainWin.cpp:898 src/frontend/notebook/NotebookView.cpp:168
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:295
 #: src/frontend/worksheet/WorksheetView.cpp:434
@@ -8967,30 +8971,30 @@ msgstr "Nastavenia"
 msgid "Add New"
 msgstr "Pridať nový"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:565
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:561
 #, fuzzy, kde-format
 #| msgid "Format:"
 msgid "Formula Plot"
 msgstr "Formát:"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:566
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:562
 #, kde-format
 msgid "Add a new xy-plot that is defined via a mathematical expression."
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:573
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:569
 #, fuzzy, kde-format
 #| msgid "Analysis"
 msgid "Analysis Plots"
 msgstr "Rozbor"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:609
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:605
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:186
 #, kde-format
 msgid "Analysis"
 msgstr "Rozbor"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:650
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:646
 #: src/frontend/ThemeHandler.cpp:49 src/frontend/ThemeHandler.cpp:144
 #: src/frontend/worksheet/WorksheetView.cpp:544
 #, fuzzy, kde-format
@@ -8998,96 +9002,96 @@ msgstr "Rozbor"
 msgid "Theme"
 msgstr "Téma:"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:672
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:668
 #, fuzzy, kde-format
 #| msgid "Plot"
 msgid "Line Plots"
 msgstr "Kresliť"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:678
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:674
 #, fuzzy, kde-format
 #| msgid "Horizontal"
 msgid "Horizontal Step"
 msgstr "Horizontálne"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:682
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:678
 #, fuzzy, kde-format
 #| msgid "vertical axis"
 msgid "Vertical Step"
 msgstr "vertikálna os"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:686
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:682
 #, fuzzy, kde-format
 #| msgid "Interpolate"
 msgid "Spline Interpolated"
 msgstr "Interpolovať"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:693
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:689
 #, fuzzy, kde-format
 #| msgid "Plot"
 msgid "Scatter Plots"
 msgstr "Kresliť"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:695
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:691
 #, fuzzy, kde-format
 #| msgid "Pattern"
 msgid "Scatter"
 msgstr "Vzorka"
 
 #. i18n: ectx: property (text), widget (QLabel, lYError)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:699
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:695
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:221
 #, fuzzy, kde-format
 #| msgid "Error"
 msgid "Y Error"
 msgstr "Chyba"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:703
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:699
 #, fuzzy, kde-format
 #| msgid "Error"
 msgid "XY Error"
 msgstr "Chyba"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:710
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:706
 #, fuzzy, kde-format
 #| msgid "Line width"
 msgid "Line and Symbol Plots"
 msgstr "Šírka čiary"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:712
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:708
 #, fuzzy, kde-format
 #| msgid "Line width"
 msgid "Line + Symbol"
 msgstr "Šírka čiary"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:716
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:712
 #, fuzzy, kde-format
 #| msgid "Segments"
 msgid "2 Point Segment"
 msgstr "Segmenty"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:720
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:716
 #, fuzzy, kde-format
 #| msgid "Segments"
 msgid "3 Point Segment"
 msgstr "Segmenty"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:727
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:723
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "Statistical Plots"
 msgstr "Štatistika"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:729
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1850
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:73
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:725
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1846
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:400
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:143
 #, kde-format
 msgid "Histogram"
 msgstr "Histogram"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:733
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1847
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:729
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1843
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:770
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:146
 #, fuzzy, kde-format
@@ -9095,29 +9099,29 @@ msgstr "Histogram"
 msgid "Box Plot"
 msgstr "Kresliť"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:737
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1853
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:733
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1849
 #, fuzzy, kde-format
 #| msgid "Plot"
 msgid "Q-Q Plot"
 msgstr "Kresliť"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:741
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1856
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:737
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1852
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:144
 #, fuzzy, kde-format
 #| msgid "Plot"
 msgid "KDE Plot"
 msgstr "Kresliť"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:748
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:744
 #, fuzzy, kde-format
 #| msgid "Plot"
 msgid "Bar Plots"
 msgstr "Kresliť"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:750
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1861
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:746
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1857
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:772
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:774
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:149
@@ -9126,256 +9130,256 @@ msgstr "Kresliť"
 msgid "Bar Plot"
 msgstr "Kresliť"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:754
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1864
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:750
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1860
 #, fuzzy, kde-format
 #| msgid "Plot"
 msgid "Lollipop Plot"
 msgstr "Kresliť"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:761
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:757
 #, kde-format
 msgid "Continual Improvement Plots"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:763
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1872
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:759
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1868
 #, fuzzy, kde-format
 #| msgid "Auto Fit"
 msgid "Run Chart"
 msgstr "Automaticky prispôsobiť"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:767
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1869
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:763
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1865
 #, kde-format
 msgid "Process Behavior Chart"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:790
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:786
 #, kde-format
 msgid "No curves inside the plot area."
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1115
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1149
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1111
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1145
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: change geometry rect"
 msgstr "%1: zmeniť komentár"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1184
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1180
 #, fuzzy, kde-format
 #| msgid "%1: set layout"
 msgid "%1: set range type"
 msgstr "%1: nastaviť rozloženie"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1191
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1187
 #, fuzzy, kde-format
 #| msgid "%1: set layout"
 msgid "%1: set nice extend"
 msgstr "%1: nastaviť rozloženie"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1198
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1205
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1194
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1201
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set range"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1216
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1212
 #, fuzzy, kde-format
 #| msgid "%1: set layout"
 msgid "%1: change %2-range %3 format"
 msgstr "%1: nastaviť rozloženie"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1306
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1302
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: change %2-range %3 auto scaling"
 msgstr "%1: zmeniť komentár"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1547
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1543
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: change x-range %2 scale"
 msgstr "%1: zmeniť komentár"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1675
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1671
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set default plot range"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1693
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1689
 #, kde-format
 msgid "%1: x-range breaking enabled"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1702
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1698
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgid "%1: x-range breaks changed"
 msgstr "%1    [zmenené]"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1711
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1707
 #, kde-format
 msgid "%1: y-range breaking enabled"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1720
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1716
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgid "%1: y-range breaks changed"
 msgstr "%1    [zmenené]"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1734
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1730
 #, fuzzy, kde-format
 #| msgid "Values"
 msgid "%1: Cursor0 enable"
 msgstr "Hodnoty"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1746
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1742
 #, fuzzy, kde-format
 #| msgid "Values"
 msgid "%1: Cursor1 enable"
 msgstr "Hodnoty"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1757
-#: src/backend/worksheet/Worksheet.cpp:838
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1753
+#: src/backend/worksheet/Worksheet.cpp:842
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: load theme %2"
 msgstr "%1: pridať %2."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1759
-#: src/backend/worksheet/Worksheet.cpp:840
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1755
+#: src/backend/worksheet/Worksheet.cpp:844
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: load default theme"
 msgstr "%1: pridať %2."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1761
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5557
-#: src/backend/worksheet/Worksheet.cpp:842
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1757
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5553
+#: src/backend/worksheet/Worksheet.cpp:846
 #, fuzzy, kde-format
 #| msgid "%1: set layout"
 msgid "%1: set theme"
 msgstr "%1: nastaviť rozloženie"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1914
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1910
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "%1: distribution fit to '%2'"
 msgstr "Integrovať"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1915
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1911
 #, fuzzy, kde-format
 #| msgid "Distribution"
 msgid "Distribution Fit to '%1'"
 msgstr "Rozdelenie"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1961
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1957
 #, fuzzy, kde-format
 #| msgid "%1: remove %2"
 msgid "%1: reduce '%2'"
 msgstr "Redukovať"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1962
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1958
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:665
 #, fuzzy, kde-format
 #| msgid "Do nothing"
 msgid "Reduction of '%1'"
 msgstr "Vyhladzovanie"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1969
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1965
 #, fuzzy, kde-format
 #| msgid "Project properties"
 msgid "%1: add data reduction curve"
 msgstr "Vlastnosti projektu"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1980
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1976
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "%1: differentiate '%2'"
 msgstr "Diferencovať"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1981
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1977
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:668
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "Derivative of '%1'"
 msgstr "Orientácia"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1988
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1984
 #, fuzzy, kde-format
 #| msgid "Project properties"
 msgid "%1: add differentiation curve"
 msgstr "Vlastnosti projektu"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1999
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1995
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "%1: integrate '%2'"
 msgstr "Integrovať"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2000
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1996
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:671
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "Integral of '%1'"
 msgstr "Orientácia"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2007
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2003
 #, fuzzy, kde-format
 #| msgid "Project properties"
 msgid "%1: add integration curve"
 msgstr "Vlastnosti projektu"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2018
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2014
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "%1: interpolate '%2'"
 msgstr "Interpolovať"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2019
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:674
 #, fuzzy, kde-format
 #| msgid "Interpolation"
 msgid "Interpolation of '%1'"
 msgstr "Interpolácia"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2026
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2022
 #, fuzzy, kde-format
 #| msgid "Project properties"
 msgid "%1: add interpolation curve"
 msgstr "Vlastnosti projektu"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2037
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2033
 #, fuzzy, kde-format
 #| msgid "%1: remove %2"
 msgid "%1: smooth '%2'"
 msgstr "Plynulý"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2038
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2034
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:677
 #, fuzzy, kde-format
 #| msgid "Do nothing"
 msgid "Smoothing of '%1'"
 msgstr "Vyhladzovanie"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2045
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2041
 #, fuzzy, kde-format
 #| msgid "%1: add %2"
 msgid "%1: add smoothing curve"
 msgstr "Pridať stĺpec"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2056
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2052
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "%1: fit to '%2'"
 msgstr "Integrovať"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2057
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2053
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:690
 #, fuzzy, kde-format
 #| msgid "Orientation"
@@ -9383,73 +9387,73 @@ msgctxt "Curve fitting"
 msgid "Fit to '%1'"
 msgstr "Orientácia"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2084
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2080
 #, fuzzy, kde-format
 #| msgid "%1: add %2"
 msgid "%1: add fit curve"
 msgstr "Pridať stĺpec"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2096
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2092
 #, fuzzy, kde-format
 #| msgid "new filter"
 msgid "%1: Fourier filtering of '%2'"
 msgstr "nový filter"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2097
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2093
 #, fuzzy, kde-format
 #| msgid "new filter"
 msgid "Fourier filtering of '%1'"
 msgstr "nový filter"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2101
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2097
 #, fuzzy, kde-format
 #| msgid "%1: add %2"
 msgid "%1: add Fourier filter curve"
 msgstr "Pridať stĺpec"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2112
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2108
 #, fuzzy, kde-format
 #| msgid "Do nothing"
 msgid "%1: add function of '%2'"
 msgstr "Vyhladzovanie"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2113
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2109
 #, fuzzy, kde-format
 #| msgid "Do nothing"
 msgid "Function of '%1'"
 msgstr "Vyhladzovanie"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2116
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2112
 #, fuzzy, kde-format
 #| msgid "%1: add %2"
 msgid "%1: add function curve"
 msgstr "Pridať stĺpec"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2165
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2161
 #: src/frontend/worksheet/WorksheetView.cpp:1339
 #: src/frontend/worksheet/WorksheetView.cpp:1340
 #, kde-format
 msgid "Text Label"
 msgstr "Textové pole"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3933
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3929
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4157
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4178
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4153
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4174
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4165
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4191
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4161
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4187
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4210
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4206
 #, kde-format
 msgid "x=%1"
 msgstr ""
@@ -9466,7 +9470,7 @@ msgid "%1: use plot's color"
 msgstr "%1: nastaviť písmo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:214
-#: src/backend/worksheet/TextLabel.cpp:347
+#: src/backend/worksheet/TextLabel.cpp:365
 #, kde-format
 msgid "%1: set font color"
 msgstr ""
@@ -9487,50 +9491,50 @@ msgid "%1: set border corner radius"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
-#: src/backend/worksheet/Worksheet.cpp:710
-#: src/backend/worksheet/Worksheet.cpp:711
+#: src/backend/worksheet/Worksheet.cpp:714
+#: src/backend/worksheet/Worksheet.cpp:715
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:251
-#: src/backend/worksheet/Worksheet.cpp:720
-#: src/backend/worksheet/Worksheet.cpp:721
+#: src/backend/worksheet/Worksheet.cpp:724
+#: src/backend/worksheet/Worksheet.cpp:725
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:258
-#: src/backend/worksheet/Worksheet.cpp:730
-#: src/backend/worksheet/Worksheet.cpp:731
+#: src/backend/worksheet/Worksheet.cpp:734
+#: src/backend/worksheet/Worksheet.cpp:735
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:265
-#: src/backend/worksheet/Worksheet.cpp:740
-#: src/backend/worksheet/Worksheet.cpp:741
+#: src/backend/worksheet/Worksheet.cpp:744
+#: src/backend/worksheet/Worksheet.cpp:745
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:272
-#: src/backend/worksheet/Worksheet.cpp:750
-#: src/backend/worksheet/Worksheet.cpp:751
+#: src/backend/worksheet/Worksheet.cpp:754
+#: src/backend/worksheet/Worksheet.cpp:755
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:279
-#: src/backend/worksheet/Worksheet.cpp:760
-#: src/backend/worksheet/Worksheet.cpp:761
+#: src/backend/worksheet/Worksheet.cpp:764
+#: src/backend/worksheet/Worksheet.cpp:765
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:286
-#: src/backend/worksheet/Worksheet.cpp:780
-#: src/backend/worksheet/Worksheet.cpp:781
+#: src/backend/worksheet/Worksheet.cpp:784
+#: src/backend/worksheet/Worksheet.cpp:785
 #, kde-format
 msgid "%1: set layout column count"
 msgstr ""
@@ -9617,11 +9621,11 @@ msgid "Fit Binomial Distribution"
 msgstr "Smer"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:399
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:244
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:406
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:418
-#: src/backend/worksheet/plots/cartesian/QQPlot.cpp:260
-#: src/backend/worksheet/plots/cartesian/RunChart.cpp:261
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:248
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:510
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:522
+#: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
+#: src/backend/worksheet/plots/cartesian/RunChart.cpp:265
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set data column"
@@ -9688,19 +9692,19 @@ msgid ""
 "the min value."
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:256
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:260
 #, fuzzy, kde-format
 #| msgid "%1: set layout"
 msgid "%1: set kernel type"
 msgstr "%1: nastaviť rozloženie"
 
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:263
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:267
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set bandwidth type"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:270
+#: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:274
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set bandwidth"
@@ -9712,36 +9716,103 @@ msgstr "%1: nastaviť písmo"
 msgid "%1: legend visibility changed"
 msgstr "%1: nastaviť obrázok pozadia"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:437
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:541
 #, fuzzy, kde-format
 #| msgid "%1: set background image"
 msgid "%1: set limits metric"
 msgstr "%1: nastaviť obrázok pozadia"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:444
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:548
 #, fuzzy, kde-format
 #| msgid "%1: set background image"
 msgid "%1: set sample size"
 msgstr "%1: nastaviť obrázok pozadia"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:451
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:556
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
-msgid "%1: change negative lower limit"
+msgid "%1: enable exact limits"
 msgstr "%1: zmeniť komentár"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:458
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:556
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
-msgid "%1: change exact limits"
+msgid "%1: disable exact limits"
 msgstr "%1: zmeniť komentár"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:616
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:565
+#, fuzzy, kde-format
+#| msgid "%1: set layout"
+msgid "%1: set maximal upper limit"
+msgstr "%1: nastaviť rozloženie"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:572
+#, fuzzy, kde-format
+#| msgid "%1: change comment"
+msgid "%1: set minimal lower limit"
+msgstr "%1: zmeniť komentár"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:581
+#, kde-format
+msgid "%1: enable control labels"
+msgstr ""
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:581
+#, fuzzy, kde-format
+#| msgid "%1: set layout"
+msgid "%1: disable control labels"
+msgstr "%1: nastaviť rozloženie"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:603
+#, fuzzy, kde-format
+#| msgid "%1: set layout"
+msgid "%1: set labels border shape"
+msgstr "%1: nastaviť rozloženie"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:617
+#, fuzzy, kde-format
+#| msgid "%1: set font"
+msgid "%1: set labels font"
+msgstr "%1: nastaviť písmo"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:651
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:679
+#, fuzzy, kde-format
+#| msgid "%1: set background image"
+msgid "%1: set labels background color"
+msgstr "Nastaviť farbu &pozadia..."
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:737
+#, fuzzy, kde-format
+#| msgid "%1: set background image"
+msgid "%1: set labels border style"
+msgstr "%1: nastaviť obrázok pozadia"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:748
+#, fuzzy, kde-format
+#| msgid "%1: set font"
+msgid "%1: set labels border width"
+msgstr "%1: nastaviť písmo"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:759
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:770
+#, fuzzy, kde-format
+#| msgid "%1: set background image"
+msgid "%1: set labels border color"
+msgstr "Nastaviť farbu &pozadia..."
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:858
+#, fuzzy, kde-format
+#| msgid "Number of points"
+msgid "Not enough data provided."
+msgstr "Počet bodov"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:958
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/QQPlot.cpp:272
+#: src/backend/worksheet/plots/cartesian/QQPlot.cpp:276
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "%1: set distribution"
@@ -9765,7 +9836,7 @@ msgstr "%1: nastaviť písmo"
 msgid "%1: set end logical position"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/plots/cartesian/RunChart.cpp:273
+#: src/backend/worksheet/plots/cartesian/RunChart.cpp:277
 #, fuzzy, kde-format
 #| msgid "%1: set background image"
 msgid "%1: set center metric"
@@ -10365,100 +10436,101 @@ msgstr "%1: nastaviť rozloženie"
 msgid "%1: set fit options and perform the fit"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1809
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1820
 #, fuzzy, kde-format
 #| msgid "Results:"
 msgctxt "Curve fitting"
 msgid "Fit Results"
 msgstr "Výsledky:"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1835
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1846
 #, kde-format
 msgid "Nonlinear Fit to X/Y data"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1841
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1852
 #, kde-format
 msgid "MODEL"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1845
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1856
 #, kde-format
 msgid "Degree"
 msgstr "Stupeň"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1850
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1861
 #, kde-format
 msgid "Peaks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1869
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1880
 #, kde-format
 msgid "PARAMETERS"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1874
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:145
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
 msgid "Uncertainty"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1875
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
-msgid "Uncertainty,%"
+msgid "Uncertainty, %"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1876
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1887
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "t Statistic"
 msgstr "Štatistika"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1878
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:146
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1889
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, fuzzy, kde-format
 #| msgid "Power"
 msgid "Lower"
 msgstr "Sila"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1879
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:146
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1890
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, fuzzy, kde-format
 #| msgid "Upper limit"
 msgid "Upper"
 msgstr "Horný limit"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1941
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1952
 #, kde-format
 msgid "GOODNESS OF FIT"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1943
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1954
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:956
 #, kde-format
 msgid "Sum of squared residuals"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1944
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1955
 #, kde-format
 msgid "Residuals mean square"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1945
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1956
 #, fuzzy, kde-format
 msgid "Root mean square deviation"
 msgstr "Smerodajná odchýlka"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1946
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1957
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:986
 #, kde-format
 msgid "Coefficient of determination"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1947
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1958
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:996
 #, kde-format
 msgid "Adj. coefficient of determination"
@@ -10466,66 +10538,66 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, bTest)
 #. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1948
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:177
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1959
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:167
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:263
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:208
 #, fuzzy, kde-format
 msgid "Test"
 msgstr "Test"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1949
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1960
 #, fuzzy, kde-format
 msgid "F-Test"
 msgstr "Test"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1951
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1962
 #, fuzzy, kde-format
 msgid "Mean absolute error"
 msgstr "Smerodajná odchýlka"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1952
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1963
 #, kde-format
 msgid "Akaike information criterion"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1953
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1964
 #, kde-format
 msgid "Bayesian information criterion"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2314
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2323
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Model has no parameters!"
 msgstr "Počet bodov"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2321
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2330
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Not sufficient weight data points provided!"
 msgstr "Počet bodov"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2398
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:370
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2407
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:365
 #, fuzzy, kde-format
 #| msgid "Select all"
 msgid "No X data available!"
 msgstr "Vymazať premennú"
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2405
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2414
 #, kde-format
 msgid ""
 "The number of data points (%1) must be greater than or equal to the number "
 "of parameters (%2)!"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2412
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2421
 #, kde-format
 msgid "Fit model not specified!"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3155
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:3164
 #, fuzzy, kde-format
 #| msgid "Results:"
 msgctxt "Curve Fitting"
@@ -10643,38 +10715,32 @@ msgstr "%1    [zmenené]"
 msgid "%1: set plot area corner radius"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:288
-#: src/backend/worksheet/TextLabel.cpp:298
-#: src/backend/worksheet/TextLabel.cpp:301
-#: src/backend/worksheet/TextLabel.cpp:307
+#: src/backend/worksheet/TextLabel.cpp:306
 #: src/backend/worksheet/TextLabel.cpp:316
+#: src/backend/worksheet/TextLabel.cpp:319
+#: src/backend/worksheet/TextLabel.cpp:325
+#: src/backend/worksheet/TextLabel.cpp:334
 #, kde-format
 msgid "%1: set label text"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:333
+#: src/backend/worksheet/TextLabel.cpp:351
 #, fuzzy, kde-format
 #| msgid "%1: set background image"
 msgid "%1: set label placeholdertext"
 msgstr "%1: nastaviť obrázok pozadia"
 
-#: src/backend/worksheet/TextLabel.cpp:340
+#: src/backend/worksheet/TextLabel.cpp:358
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set TeX main font"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/worksheet/TextLabel.cpp:355
+#: src/backend/worksheet/TextLabel.cpp:373
 #, fuzzy, kde-format
 #| msgid "%1: set layout"
 msgid "%1: set border shape"
 msgstr "%1: nastaviť rozloženie"
-
-#: src/backend/worksheet/TextLabel.cpp:362
-#, fuzzy, kde-format
-#| msgid "%1: set font"
-msgid "%1: set border"
-msgstr "%1: nastaviť písmo"
 
 #: src/backend/worksheet/Worksheet.cpp:242
 #, fuzzy, kde-format
@@ -10683,38 +10749,38 @@ msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "List"
 
-#: src/backend/worksheet/Worksheet.cpp:680
+#: src/backend/worksheet/Worksheet.cpp:684
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: change size type"
 msgstr "%1: zmeniť komentár"
 
-#: src/backend/worksheet/Worksheet.cpp:692
+#: src/backend/worksheet/Worksheet.cpp:696
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: zmeniť komentár"
 
-#: src/backend/worksheet/Worksheet.cpp:700
-#: src/backend/worksheet/Worksheet.cpp:701
+#: src/backend/worksheet/Worksheet.cpp:704
+#: src/backend/worksheet/Worksheet.cpp:705
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: nastaviť rozloženie"
 
-#: src/backend/worksheet/Worksheet.cpp:770
-#: src/backend/worksheet/Worksheet.cpp:771
+#: src/backend/worksheet/Worksheet.cpp:774
+#: src/backend/worksheet/Worksheet.cpp:775
 #, kde-format
 msgid "%1: set layout row count"
 msgstr ""
 
-#: src/backend/worksheet/Worksheet.cpp:811
-#: src/backend/worksheet/Worksheet.cpp:812
+#: src/backend/worksheet/Worksheet.cpp:815
+#: src/backend/worksheet/Worksheet.cpp:816
 #: src/frontend/dockwidgets/WorksheetDock.cpp:376
 #, kde-format
 msgid "%1: set page size"
 msgstr ""
 
-#: src/backend/worksheet/Worksheet.cpp:1563
+#: src/backend/worksheet/Worksheet.cpp:1567
 #, fuzzy, kde-format
 #| msgid "Curve"
 msgid "Curves"
@@ -10744,7 +10810,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/imagedock.ui:113
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:76
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:83
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:192
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:54
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:62
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:213
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:95
@@ -10763,7 +10829,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:43
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:103
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:240
-#: src/frontend/ui/labelwidget.ui:323
+#: src/frontend/ui/labelwidget.ui:376
 #, kde-format
 msgid "Visible"
 msgstr "Viditeľný"
@@ -10815,264 +10881,264 @@ msgstr "%1: nastaviť písmo"
 msgid "%1: set logical position"
 msgstr "%1: nastaviť písmo"
 
-#: src/frontend/AboutDialog.cpp:89
+#: src/frontend/AboutDialog.cpp:82
+#, kde-format
+msgid "What's new"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:88
 #, kde-format
 msgid "Copy Environment"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:94
+#: src/frontend/AboutDialog.cpp:93
 #, fuzzy, kde-format
 #| msgid "Selection"
 msgid "Copy Citation"
 msgstr "Kopírovať označené"
 
-#: src/frontend/AboutDialog.cpp:98
+#: src/frontend/AboutDialog.cpp:97
 #, kde-format
 msgid "Donate"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:117
+#: src/frontend/AboutDialog.cpp:116
 #, kde-format
 msgid "Copy to Clipboard"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:143
+#: src/frontend/AboutDialog.cpp:142
 #, fuzzy, kde-format
 #| msgid "Close Project"
-msgid "Release build "
+msgid "Release build"
 msgstr "Zatvoriť projekt"
 
-#: src/frontend/AboutDialog.cpp:145
+#: src/frontend/AboutDialog.cpp:144
 #, kde-format
-msgid "Debug build "
+msgid "Debug build"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:148 src/frontend/AboutDialog.cpp:151
-#, fuzzy, kde-format
-#| msgid "Decimal"
-msgid "Decimal point "
-msgstr "Dekadický"
-
-#: src/frontend/AboutDialog.cpp:149 src/frontend/AboutDialog.cpp:152
-#, fuzzy, kde-format
-#| msgid "iterations"
-msgid "Group separator "
-msgstr "iterácie"
-
-#: src/frontend/AboutDialog.cpp:153
-#, fuzzy, kde-format
-#| msgid "Exponential"
-msgid "Exponential "
-msgstr "Exponenciála"
-
-#: src/frontend/AboutDialog.cpp:153
-#, kde-format
-msgid "Zero digit "
-msgstr ""
-
-#: src/frontend/AboutDialog.cpp:154
-#, fuzzy, kde-format
-#| msgid "center tiled"
-msgid "Percent "
-msgstr "Percentil:"
-
-#: src/frontend/AboutDialog.cpp:155
-#, kde-format
-msgid "Positive/Negative sign "
-msgstr ""
-
-#: src/frontend/AboutDialog.cpp:175
+#: src/frontend/AboutDialog.cpp:180
 #, kde-format
 msgid "System:"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:176
+#: src/frontend/AboutDialog.cpp:181
 #, fuzzy, kde-format
 #| msgid "Scale:"
 msgid "Locale:"
 msgstr "Mierka:"
 
-#: src/frontend/AboutDialog.cpp:177
+#. i18n("Used Locale:") + QLatin1String(" </td><td>") + usedLanguage + QLatin1String("</td></tr>")
+#. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
+#: src/frontend/AboutDialog.cpp:183 src/frontend/ui/settingsgeneralpage.ui:60
 #, fuzzy, kde-format
-#| msgid "Number of points"
-msgid "Number Settings:"
-msgstr "Počet bodov"
+#| msgid "Data format"
+msgid "Number Format:"
+msgstr "Formát čísel"
 
-#: src/frontend/AboutDialog.cpp:177
+#: src/frontend/AboutDialog.cpp:183
 #, fuzzy, kde-format
 #| msgid "Hide Options"
 msgid "Updated on restart"
 msgstr "Skryť voľby"
 
-#: src/frontend/AboutDialog.cpp:178
+#: src/frontend/AboutDialog.cpp:184
 #, kde-format
 msgid "Architecture:"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:179
+#: src/frontend/AboutDialog.cpp:185
 #, kde-format
 msgid "Kernel: "
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:189 src/frontend/AboutDialog.cpp:350
-#: src/frontend/AboutDialog.cpp:351
+#: src/frontend/AboutDialog.cpp:193
+#, kde-format
+msgid "Visit website:"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:195
+#, kde-format
+msgid "Watch video tutorials:"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:196
+#, kde-format
+msgid "Discuss on Mastodon:"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:197
+#, fuzzy, kde-format
+#| msgctxt "@info:credit"
+#| msgid "Developer"
+msgid "Development:"
+msgstr "Vývojár"
+
+#: src/frontend/AboutDialog.cpp:198
+#, kde-format
+msgid "Please report bugs to:"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:209 src/frontend/AboutDialog.cpp:369
+#: src/frontend/AboutDialog.cpp:370
 #, fuzzy, kde-format
 #| msgid "Values"
 msgid "missing"
 msgstr "Hodnoty"
 
-#: src/frontend/AboutDialog.cpp:195
+#: src/frontend/AboutDialog.cpp:215
 #, fuzzy, kde-format
 msgid "Frontend to Mathematical Applications"
 msgstr "Smerodajná odchýlka"
 
-#: src/frontend/AboutDialog.cpp:201
+#: src/frontend/AboutDialog.cpp:221
 #, kde-format
 msgid ""
 "Support data files in FITS (Flexible Image Transport System) data format"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:207
+#: src/frontend/AboutDialog.cpp:227
 #, kde-format
 msgid "Markdown markup language support"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:213
+#: src/frontend/AboutDialog.cpp:233
 #, kde-format
 msgid "C++ library for linear algebra"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:219
+#: src/frontend/AboutDialog.cpp:239
 #, fuzzy, kde-format
 #| msgid "new filter"
 msgid "Fastest Fourier Transform in the West"
 msgstr "nový filter"
 
-#: src/frontend/AboutDialog.cpp:220
+#: src/frontend/AboutDialog.cpp:240
 #, kde-format
 msgid "GNU Scientific Library"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:226
+#: src/frontend/AboutDialog.cpp:246
 #, kde-format
 msgid "High-performance data management and storage suite"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:232
+#: src/frontend/AboutDialog.cpp:252
 #, fuzzy, kde-format
 #| msgid "Height:"
 msgid "Syntax highlighting engine"
 msgstr "Výška:"
 
-#: src/frontend/AboutDialog.cpp:238
+#: src/frontend/AboutDialog.cpp:258
 #, kde-format
 msgid "Support collecting feedback from users"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:244
+#: src/frontend/AboutDialog.cpp:264
 #, kde-format
 msgid "Complex error and related functions"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:250
+#: src/frontend/AboutDialog.cpp:270
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "importing Origin OPJ project files"
 msgstr "Otvoriť projekt"
 
-#: src/frontend/AboutDialog.cpp:256
+#: src/frontend/AboutDialog.cpp:276
 #, kde-format
 msgid "Import binary MATLAB MAT files"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:262
+#: src/frontend/AboutDialog.cpp:282
 #, kde-format
 msgid "MCAP file support"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:268
+#: src/frontend/AboutDialog.cpp:288
 #, kde-format
 msgid "Network Common Data Form"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:274
+#: src/frontend/AboutDialog.cpp:294
 #, fuzzy, kde-format
 #| msgid "Spreadsheet"
 msgid "Import ODS (Open Document Spreadsheet) files"
 msgstr "Zošit"
 
-#: src/frontend/AboutDialog.cpp:280
+#: src/frontend/AboutDialog.cpp:300
 #, kde-format
 msgid "PDF rendering library"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:286
+#: src/frontend/AboutDialog.cpp:306
 #, kde-format
 msgid "Offers available actions for a specific purpose"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:288
+#: src/frontend/AboutDialog.cpp:307
 #, kde-format
 msgid "Qt Advanced Docking System"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:294
+#: src/frontend/AboutDialog.cpp:313
 #, kde-format
 msgid "Support data from MQTT brokers"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:300
+#: src/frontend/AboutDialog.cpp:319
 #, kde-format
 msgid "Serial port functionality support"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:306
+#: src/frontend/AboutDialog.cpp:325
 #, kde-format
 msgid "SVG export support"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:312
+#: src/frontend/AboutDialog.cpp:331
 #, kde-format
 msgid "Import Excel xlsx files"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:318
+#: src/frontend/AboutDialog.cpp:337
 #, kde-format
 msgid "Read (and write) data sets from SAS, Stata, and SPSS"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:324
+#: src/frontend/AboutDialog.cpp:343
 #, kde-format
 msgid "Binary Log File (BLF) file support"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:327 src/frontend/AboutDialog.cpp:352
+#: src/frontend/AboutDialog.cpp:346 src/frontend/AboutDialog.cpp:371
 #, kde-format
 msgid "C++ Compiler: "
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:332 src/frontend/AboutDialog.cpp:352
+#: src/frontend/AboutDialog.cpp:351 src/frontend/AboutDialog.cpp:371
 #, kde-format
 msgid "C++ Compiler Flags:"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:346
+#: src/frontend/AboutDialog.cpp:365
 #, fuzzy, kde-format
 #| msgid "Comment:"
 msgid "Components:"
 msgstr "Komentár:"
 
-#: src/frontend/AboutDialog.cpp:347
+#: src/frontend/AboutDialog.cpp:366
 #, kde-format
 msgid "Qt"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:348
+#: src/frontend/AboutDialog.cpp:367
 #, kde-format
 msgid "KDE Frameworks"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:362
+#: src/frontend/AboutDialog.cpp:382
 #, kde-format
 msgid ""
 "LabPlot Team (%1), LabPlot: A FREE, open source, cross-platform Data "
@@ -11153,9 +11219,9 @@ msgstr ""
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:314
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1353
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1359
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1365
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1375
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1381
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1387
 #, fuzzy, kde-format
 #| msgid "Selection"
 msgid "Copy Selection"
@@ -11163,9 +11229,9 @@ msgstr "Kopírovať označené"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:315
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1354
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1360
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1366
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1376
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1382
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1388
 #, kde-format
 msgid "Copy All"
 msgstr "Kopírovať všetko"
@@ -11357,18 +11423,18 @@ msgid "Curve"
 msgstr "Krivka"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2202
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4074
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4128
+#: src/frontend/worksheet/WorksheetView.cpp:2203
 #, fuzzy, kde-format
 #| msgid "Failed to Open"
 msgid "Failed to export"
 msgstr "Nepodarilo sa otvoriť"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4075
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4129
-#: src/frontend/worksheet/WorksheetView.cpp:2202
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4074
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4128
+#: src/frontend/worksheet/WorksheetView.cpp:2203
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr ""
@@ -12688,7 +12754,7 @@ msgid "Open LabPlot Project"
 msgstr "Otvoriť projekt"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:1488
+#: src/frontend/MainWin.cpp:1491
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "LabPlot Projects (%1)"
@@ -12716,8 +12782,8 @@ msgstr "Názov priečinku:"
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:71 src/frontend/MainWin.cpp:641
-#: src/frontend/MainWin.cpp:1974 src/frontend/SettingsDialog.cpp:64
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:398 src/frontend/MainWin.cpp:644
+#: src/frontend/MainWin.cpp:1978 src/frontend/SettingsDialog.cpp:64
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12964,7 +13030,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2873
+#: src/frontend/MainWin.cpp:2877
 #, fuzzy, kde-format
 msgid "Warning"
 msgstr "Upozornenie"
@@ -13063,8 +13129,8 @@ msgstr "Smer"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:134
 #: src/frontend/dockwidgets/ImageDock.cpp:185
 #: src/frontend/dockwidgets/ImageDock.cpp:195
-#: src/frontend/widgets/LabelWidget.cpp:503
-#: src/frontend/widgets/LabelWidget.cpp:514
+#: src/frontend/widgets/LabelWidget.cpp:491
+#: src/frontend/widgets/LabelWidget.cpp:502
 #, kde-format
 msgid "Top"
 msgstr "Hore"
@@ -13078,8 +13144,8 @@ msgstr "Hore"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:136
 #: src/frontend/dockwidgets/ImageDock.cpp:187
 #: src/frontend/dockwidgets/ImageDock.cpp:197
-#: src/frontend/widgets/LabelWidget.cpp:505
-#: src/frontend/widgets/LabelWidget.cpp:516
+#: src/frontend/widgets/LabelWidget.cpp:493
+#: src/frontend/widgets/LabelWidget.cpp:504
 #, kde-format
 msgid "Bottom"
 msgstr "Dole"
@@ -13160,8 +13226,8 @@ msgstr ""
 #: src/frontend/dockwidgets/ImageDock.cpp:190
 #: src/frontend/dockwidgets/XYCurveDock.cpp:518
 #: src/frontend/widgets/BackgroundWidget.cpp:118
+#: src/frontend/widgets/LabelWidget.cpp:485
 #: src/frontend/widgets/LabelWidget.cpp:497
-#: src/frontend/widgets/LabelWidget.cpp:509
 #: src/frontend/widgets/ValueWidget.cpp:37
 #, kde-format
 msgid "Left"
@@ -13178,8 +13244,8 @@ msgstr "Vľavo"
 #: src/frontend/dockwidgets/ImageDock.cpp:192
 #: src/frontend/dockwidgets/XYCurveDock.cpp:519
 #: src/frontend/widgets/BackgroundWidget.cpp:119
+#: src/frontend/widgets/LabelWidget.cpp:487
 #: src/frontend/widgets/LabelWidget.cpp:499
-#: src/frontend/widgets/LabelWidget.cpp:511
 #: src/frontend/widgets/ValueWidget.cpp:38
 #, kde-format
 msgid "Right"
@@ -13339,14 +13405,14 @@ msgstr ""
 #: src/frontend/dockwidgets/AxisDock.cpp:2042
 #: src/frontend/dockwidgets/BarPlotDock.cpp:509
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:735
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1840
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1842
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:803
 #: src/frontend/dockwidgets/CustomPointDock.cpp:385
 #: src/frontend/dockwidgets/HistogramDock.cpp:558
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:375
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:452
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:454
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:681
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
@@ -13557,34 +13623,34 @@ msgstr ""
 msgid "Save current plot area definition as template"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:623
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:625
 #, fuzzy, kde-format
 #| msgid "x-Range:"
 msgid "%1-Ranges:"
 msgstr "X rozsah:"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:625
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:627
 #, fuzzy, kde-format
 #| msgid "x-Range:"
 msgid "%1-Range:"
 msgstr "X rozsah:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:649
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:651
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:53
 #, kde-format
 msgid "Numeric"
 msgstr "Číselný"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:795
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:797
 #, fuzzy, kde-format
 #| msgid "center"
 msgid "Plot Ranges:"
 msgstr "stred"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:797
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:799
 #: src/frontend/ui/dockwidgets/axisdock.ui:262
 #: src/frontend/ui/dockwidgets/barplotdock.ui:186
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:90
@@ -13612,37 +13678,37 @@ msgstr "stred"
 msgid "Plot Range:"
 msgstr "stred"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:896
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:898
 #, kde-format
 msgid "Free"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:897
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:899
 #, fuzzy, kde-format
 #| msgid "Points"
 msgid "Last Points"
 msgstr "Body"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:898
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:900
 #, fuzzy, kde-format
 #| msgid "custom"
 msgid "First Points"
 msgstr "vlastné"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:902
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:906
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:904
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:908
 #, fuzzy, kde-format
 #| msgid "simple"
 msgid "Simple"
 msgstr "Jednoduchý"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:904
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:908
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:906
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:910
 #, kde-format
 msgid "Sloped"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:912
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:914
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -13650,30 +13716,30 @@ msgid ""
 "number of first points is plotted</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:921
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:923
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1164
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1166
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1165
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1218
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1167
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1220
 #, kde-format
 msgid "Really remove it?"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1218
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1220
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1311
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1313
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:560
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:769
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:342
@@ -13684,7 +13750,7 @@ msgstr "Horizontálna:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1312
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1314
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:861
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:724
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:428
@@ -13695,7 +13761,7 @@ msgstr "Vertikálna:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1314
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1316
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:796
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:717
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:414
@@ -13706,7 +13772,7 @@ msgstr "Vľavo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1315
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1317
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:803
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:666
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:407
@@ -13714,19 +13780,19 @@ msgstr "Vľavo:"
 msgid "Top:"
 msgstr "Hore:"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1647
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1649
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr ""
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1649
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1651
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "Labplot Plot Templates (*%1)"
 msgstr "Zatvoriť projekt"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1838
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1840
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr ""
@@ -13756,12 +13822,12 @@ msgstr "Stĺpec"
 #: src/frontend/dockwidgets/ImageDock.cpp:186
 #: src/frontend/dockwidgets/ImageDock.cpp:191
 #: src/frontend/dockwidgets/ImageDock.cpp:196
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:296
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:318
+#: src/frontend/widgets/LabelWidget.cpp:486
+#: src/frontend/widgets/LabelWidget.cpp:492
 #: src/frontend/widgets/LabelWidget.cpp:498
-#: src/frontend/widgets/LabelWidget.cpp:504
-#: src/frontend/widgets/LabelWidget.cpp:510
-#: src/frontend/widgets/LabelWidget.cpp:515
-#: src/frontend/widgets/LabelWidget.cpp:570
+#: src/frontend/widgets/LabelWidget.cpp:503
+#: src/frontend/widgets/LabelWidget.cpp:550
 #: src/frontend/widgets/ValueWidget.cpp:94
 #: src/frontend/widgets/ValueWidget.cpp:95
 #, fuzzy, kde-format
@@ -13771,8 +13837,8 @@ msgstr "Vycentrovať"
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:267
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:273
-#: src/frontend/widgets/LabelWidget.cpp:500
-#: src/frontend/widgets/LabelWidget.cpp:506
+#: src/frontend/widgets/LabelWidget.cpp:488
+#: src/frontend/widgets/LabelWidget.cpp:494
 #, fuzzy, kde-format
 #| msgid "Failed to Open"
 msgid "Relative to plot"
@@ -13968,7 +14034,7 @@ msgid "Custom value for the kernel bandwidth"
 msgstr ""
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:373
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:452
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:679
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1041
@@ -14049,20 +14115,96 @@ msgstr ""
 msgid "File Browser"
 msgstr ""
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:182
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:216
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
 #, fuzzy, kde-format
 #| msgid "center"
 msgid "Average"
 msgstr "stred"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:199
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:220
+#: src/frontend/widgets/LabelWidget.cpp:508
+#, kde-format
+msgid "No Border"
+msgstr "Bez okraja"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:221
+#: src/frontend/widgets/LabelWidget.cpp:509
+#, kde-format
+msgid "Rectangle"
+msgstr "Obdĺžnik"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:222
+#: src/frontend/widgets/LabelWidget.cpp:510
+#, kde-format
+msgid "Ellipse"
+msgstr "Elipsa"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:223
+#: src/frontend/widgets/LabelWidget.cpp:511
+#, kde-format
+msgid "Round sided rectangle"
+msgstr ""
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:224
+#: src/frontend/widgets/LabelWidget.cpp:512
+#, kde-format
+msgid "Round corner rectangle"
+msgstr ""
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
+#: src/frontend/widgets/LabelWidget.cpp:513
+#, kde-format
+msgid "Inwards round corner rectangle"
+msgstr ""
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
+#: src/frontend/widgets/LabelWidget.cpp:514
+#, kde-format
+msgid "Dented border rectangle"
+msgstr ""
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
+#: src/frontend/widgets/LabelWidget.cpp:515
+#, kde-format
+msgid "Cuboid"
+msgstr ""
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:228
+#: src/frontend/widgets/LabelWidget.cpp:516
+#, fuzzy, kde-format
+#| msgid "light orange"
+msgid "Up pointing rectangle"
+msgstr "svetlooranžová"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:229
+#: src/frontend/widgets/LabelWidget.cpp:517
+#, fuzzy, kde-format
+#| msgid "light orange"
+msgid "Down pointing rectangle"
+msgstr "svetlooranžová"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
+#: src/frontend/widgets/LabelWidget.cpp:518
+#, fuzzy, kde-format
+#| msgid "light orange"
+msgid "Left pointing rectangle"
+msgstr "svetlooranžová"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
+#: src/frontend/widgets/LabelWidget.cpp:519
+#, fuzzy, kde-format
+#| msgid "light orange"
+msgid "Right pointing rectangle"
+msgstr "svetlooranžová"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:235
 #, kde-format
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
 "and to the metric defining the limits.<br><br>Individual Values and Moving "
 "Ranges, Limits Based on the Average or Median Moving Range:<ul><li>X (XmR) - "
-"plot the <b>individual values</b>.</li><li>mR - plot the <b>moving ranges</"
+"plot the <b>individual labels</b>.</li><li>mR - plot the <b>moving ranges</"
 "b>.</li></ul>Averages and Ranges, Limits based on the Average or Median "
 "Range:<ul><li>X̅  (X̅R) - plot the <b>averages for each sample</b> .</li><li>R "
 "(X̅R) - plot the <b>ranges for each sample</b>.</li></ul>Averages and "
@@ -14074,12 +14216,17 @@ msgid ""
 "</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:261
 #, kde-format
-msgid "Allow negative values for the lower limit."
+msgid "Maximal value for the upper control limit. No constraint, if empty."
 msgstr ""
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:229
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:265
+#, kde-format
+msgid "Minimal value for the lower control limit. No constraint, if empty."
+msgstr ""
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:269
 #, kde-format
 msgid ""
 "If checked, exact limits are calculated for every individual sample (\"stair-"
@@ -14215,7 +14362,7 @@ msgid "calculation time: %1 ms"
 msgstr ""
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:58
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:72
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:399
 #, fuzzy, kde-format
 #| msgid "Curve"
 msgid "XY-Curve"
@@ -14477,43 +14624,38 @@ msgstr "t, min"
 msgid "t, max"
 msgstr "t, max"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:145
-#, kde-format
-msgid "Uncertainty, %"
-msgstr ""
-
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:145
-#, fuzzy, kde-format
-#| msgid "Statistics"
-msgid "t statistic"
-msgstr "Štatistika"
-
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:364
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:359
 #, fuzzy, kde-format
 #| msgid "Select all"
 msgid "No X and Y column specified!"
 msgstr "Vymazať premennú"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:366
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:361
 #, fuzzy, kde-format
 #| msgid "Select all"
 msgid "No X column specified!"
 msgstr "Vymazať premennú"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:368
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:363
 #, fuzzy, kde-format
 #| msgid "Select all"
 msgid "No Y column specified!"
 msgstr "Vymazať premennú"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:372
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:367
 #, fuzzy, kde-format
 #| msgid "Select all"
 msgid "No Y data available!"
 msgstr "Vymazať premennú"
 
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "t statistic"
+msgstr "Štatistika"
+
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:411
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:435
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:217
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:359
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:452
@@ -14528,45 +14670,45 @@ msgstr "Vymazať premennú"
 msgid "Curve:"
 msgstr "Krivka"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:432
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:456
 #, fuzzy, kde-format
 #| msgid "Histogram"
 msgid "Histogram:"
 msgstr "Histogram"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:830
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:854
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:510
 #, fuzzy, kde-format
 #| msgid "Degree"
 msgid "Degree:"
 msgstr "&Stupeň"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:893
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:914
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Number of peaks:"
 msgstr "Počet bodov"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1223
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1245
 #, fuzzy, kde-format
 #| msgid "status"
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "Stav"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1234
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1256
 #, fuzzy, kde-format
 #| msgid "Select all"
 msgid "No data source available!"
 msgstr "Vymazať premennú"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1405
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1427
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1406
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1428
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr ""
@@ -14709,7 +14851,7 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/frontend/GuiObserver.cpp:177 src/frontend/MainWin.cpp:1395
+#: src/frontend/GuiObserver.cpp:177 src/frontend/MainWin.cpp:1398
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -15322,101 +15464,74 @@ msgstr ""
 msgid "Clear History"
 msgstr "Vyčistiť históriu"
 
-#: src/frontend/LabPlot.cpp:71
-#, kde-format
-msgid "Visit website:"
-msgstr ""
-
 #: src/frontend/LabPlot.cpp:73
-#, kde-format
-msgid "Watch video tutorials:"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:74
-#, kde-format
-msgid "Discuss on Mastodon:"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:75
-#, fuzzy, kde-format
-#| msgctxt "@info:credit"
-#| msgid "Developer"
-msgid "Development:"
-msgstr "Vývojár"
-
-#: src/frontend/LabPlot.cpp:76
-#, kde-format
-msgid "Please report bugs to:"
-msgstr ""
-
-#: src/frontend/LabPlot.cpp:80
 #, kde-format
 msgid ""
 "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
 "Analysis software accessible to everyone."
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:82
+#: src/frontend/LabPlot.cpp:75
 #, fuzzy, kde-format
 #| msgid "(c) 2007-2014"
 msgid "(c) 2007-%1 LabPlot Team"
 msgstr "c"
 
-#: src/frontend/LabPlot.cpp:84
+#: src/frontend/LabPlot.cpp:76
 #, kde-format
 msgid "Stefan Gerlach"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:84 src/frontend/LabPlot.cpp:85
-#: src/frontend/LabPlot.cpp:86 src/frontend/LabPlot.cpp:87
+#: src/frontend/LabPlot.cpp:76 src/frontend/LabPlot.cpp:77
+#: src/frontend/LabPlot.cpp:78 src/frontend/LabPlot.cpp:79
 #, kde-format
 msgctxt "@info:credit"
 msgid "Developer"
 msgstr "Vývojár"
 
-#: src/frontend/LabPlot.cpp:85
+#: src/frontend/LabPlot.cpp:77
 #, kde-format
 msgid "Alexander Semke"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:86
+#: src/frontend/LabPlot.cpp:78
 #, kde-format
 msgid "Fábián Kristóf-Szabolcs"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:87
+#: src/frontend/LabPlot.cpp:79
 #, kde-format
 msgid "Martin Marmsoler"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:88
+#: src/frontend/LabPlot.cpp:80
 #, kde-format
 msgid "Dariusz Laska"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:89
+#: src/frontend/LabPlot.cpp:81
 #, kde-format
 msgctxt "@info:credit"
 msgid "Conceptual work, documentation, example projects"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:92
+#: src/frontend/LabPlot.cpp:84
 #, kde-format
 msgid "Andreas Kainz"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:92
+#: src/frontend/LabPlot.cpp:84
 #, kde-format
 msgctxt "@info:credit"
 msgid "Icon designer"
 msgstr "Návrh ikon"
 
-#: src/frontend/LabPlot.cpp:96
+#: src/frontend/LabPlot.cpp:88
 #, kde-format
 msgid "Yuri Chornoivan"
 msgstr "Yuri Chornoivan"
 
-#: src/frontend/LabPlot.cpp:97
+#: src/frontend/LabPlot.cpp:89
 #, kde-format
 msgctxt "@info:credit"
 msgid ""
@@ -15424,54 +15539,54 @@ msgid ""
 "topics"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:100
+#: src/frontend/LabPlot.cpp:92
 #, fuzzy, kde-format
 #| msgid "Matrix"
 msgid "Garvit Khatri"
 msgstr "Matica"
 
-#: src/frontend/LabPlot.cpp:101
+#: src/frontend/LabPlot.cpp:93
 #, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:104
+#: src/frontend/LabPlot.cpp:96
 #, kde-format
 msgid "Christoph Roick"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:105
+#: src/frontend/LabPlot.cpp:97
 #, kde-format
 msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:139
+#: src/frontend/LabPlot.cpp:128
 #, fuzzy, kde-format
 #| msgid "do not show the splash screen"
 msgid "Disable splash screen"
 msgstr "Nezobrazovať uvítaciu obrazovku"
 
-#: src/frontend/LabPlot.cpp:142
+#: src/frontend/LabPlot.cpp:131
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:145
+#: src/frontend/LabPlot.cpp:134
 #, fuzzy, kde-format
 #| msgid "Open Project"
 msgid "Open a project file."
 msgstr "Otvoriť projekt"
 
-#: src/frontend/LabPlot.cpp:164
+#: src/frontend/LabPlot.cpp:155
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
 "to exit the application."
 msgstr ""
 
-#: src/frontend/LabPlot.cpp:165
+#: src/frontend/LabPlot.cpp:156
 #, kde-format
 msgid "Failed to Open"
 msgstr "Nepodarilo sa otvoriť"
@@ -15620,497 +15735,497 @@ msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:610
+#: src/frontend/MainWin.cpp:613
 #, fuzzy, kde-format
 #| msgid "Open file"
 msgid "&Open Example"
 msgstr "Otvoriť súbor"
 
-#: src/frontend/MainWin.cpp:631 src/frontend/MainWin.cpp:1958
+#: src/frontend/MainWin.cpp:634 src/frontend/MainWin.cpp:1962
 #, kde-format
 msgid "Workbook"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:633
+#: src/frontend/MainWin.cpp:636
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:636 src/frontend/MainWin.cpp:1966
+#: src/frontend/MainWin.cpp:639 src/frontend/MainWin.cpp:1970
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Data Extractor"
 msgstr "Dátový formát"
 
-#: src/frontend/MainWin.cpp:637
+#: src/frontend/MainWin.cpp:640
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:643
+#: src/frontend/MainWin.cpp:646
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:649
+#: src/frontend/MainWin.cpp:652
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:653 src/frontend/MainWin.cpp:2010
+#: src/frontend/MainWin.cpp:656 src/frontend/MainWin.cpp:2014
 #: src/frontend/SettingsDialog.cpp:59
 #, kde-format
 msgid "Worksheet"
 msgstr "List"
 
-#: src/frontend/MainWin.cpp:655
+#: src/frontend/MainWin.cpp:658
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:659 src/frontend/MainWin.cpp:2018
+#: src/frontend/MainWin.cpp:662 src/frontend/MainWin.cpp:2022
 #, kde-format
 msgid "Note"
 msgstr "Poznámka"
 
-#: src/frontend/MainWin.cpp:660
+#: src/frontend/MainWin.cpp:663
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:664 src/frontend/MainWin.cpp:1950
+#: src/frontend/MainWin.cpp:667 src/frontend/MainWin.cpp:1954
 #, kde-format
 msgid "Folder"
 msgstr "Priečinok"
 
-#: src/frontend/MainWin.cpp:665
+#: src/frontend/MainWin.cpp:668
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:670
+#: src/frontend/MainWin.cpp:673
 #, fuzzy, kde-format
 #| msgid "Add new variable"
 msgid "Live Data Source..."
 msgstr "Pridať novú premennú"
 
-#: src/frontend/MainWin.cpp:671
+#: src/frontend/MainWin.cpp:674
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:678 src/frontend/MainWin.cpp:687
+#: src/frontend/MainWin.cpp:681 src/frontend/MainWin.cpp:690
 #, kde-format
 msgid "Import data from a regular file"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:692
+#: src/frontend/MainWin.cpp:695
 #, fuzzy, kde-format
 #| msgid "From File"
 msgid "From kaggle.com..."
 msgstr "Zo súboru"
 
-#: src/frontend/MainWin.cpp:693
+#: src/frontend/MainWin.cpp:696
 #, fuzzy, kde-format
 #| msgid "Import"
 msgid "Import data from kaggle.com"
 msgstr "importovať z "
 
-#: src/frontend/MainWin.cpp:698
+#: src/frontend/MainWin.cpp:701
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:702
+#: src/frontend/MainWin.cpp:705
 #, fuzzy, kde-format
 #| msgid "Delete Connection"
 msgid "From Dataset Collection..."
 msgstr "Odstrániť spojenie"
 
-#: src/frontend/MainWin.cpp:703
+#: src/frontend/MainWin.cpp:706
 #, fuzzy, kde-format
 #| msgid "Import Data"
 msgid "Import data from an online dataset"
 msgstr "Importovať dáta"
 
-#: src/frontend/MainWin.cpp:707
+#: src/frontend/MainWin.cpp:710
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "LabPlot Project..."
 msgstr "Zatvoriť projekt"
 
-#: src/frontend/MainWin.cpp:708
+#: src/frontend/MainWin.cpp:711
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:713
+#: src/frontend/MainWin.cpp:716
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Project (OPJ)..."
 msgstr "Otvoriť projekt"
 
-#: src/frontend/MainWin.cpp:714
+#: src/frontend/MainWin.cpp:717
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:719
+#: src/frontend/MainWin.cpp:722
 #, fuzzy, kde-format
 #| msgid "Export"
 msgid "Export..."
 msgstr "Exportovať"
 
-#: src/frontend/MainWin.cpp:720
+#: src/frontend/MainWin.cpp:723
 #, fuzzy, kde-format
 #| msgid "Fit to selection"
 msgid "Export selected element"
 msgstr "Prispôsobiť výberu"
 
-#: src/frontend/MainWin.cpp:726 src/frontend/MainWin.cpp:2496
-#: src/frontend/MainWin.cpp:2504
+#: src/frontend/MainWin.cpp:729 src/frontend/MainWin.cpp:2500
+#: src/frontend/MainWin.cpp:2508
 #, kde-format
 msgid "Share"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:731
+#: src/frontend/MainWin.cpp:734
 #, kde-format
 msgid "Color Maps Browser"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:732
+#: src/frontend/MainWin.cpp:735
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:741
+#: src/frontend/MainWin.cpp:744
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:742
+#: src/frontend/MainWin.cpp:745
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:751
+#: src/frontend/MainWin.cpp:754
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:771
+#: src/frontend/MainWin.cpp:774
 #, kde-format
 msgid "Close the active window"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:774
+#: src/frontend/MainWin.cpp:777
 #, kde-format
 msgid "Close &All"
 msgstr "Zavrieť všetko"
 
-#: src/frontend/MainWin.cpp:775
+#: src/frontend/MainWin.cpp:778
 #, kde-format
 msgid "Close all the windows"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:778
+#: src/frontend/MainWin.cpp:781
 #, kde-format
 msgid "Ne&xt"
 msgstr "Ďalšie"
 
-#: src/frontend/MainWin.cpp:780
+#: src/frontend/MainWin.cpp:783
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:783
+#: src/frontend/MainWin.cpp:786
 #, kde-format
 msgid "Pre&vious"
 msgstr "Predošlé"
 
-#: src/frontend/MainWin.cpp:785
+#: src/frontend/MainWin.cpp:788
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:792
+#: src/frontend/MainWin.cpp:795
 #, kde-format
 msgid "Current &Folder Only"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:797
+#: src/frontend/MainWin.cpp:800
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:801
+#: src/frontend/MainWin.cpp:804
 #, kde-format
 msgid "&All"
 msgstr "&Všetko"
 
-#: src/frontend/MainWin.cpp:823
+#: src/frontend/MainWin.cpp:826
 #, fuzzy, kde-format
 #| msgid "Show file info"
 msgid "Show Memory Usage"
 msgstr "Zobraziť informácie o súbore"
 
-#: src/frontend/MainWin.cpp:831
+#: src/frontend/MainWin.cpp:834
 #, kde-format
 msgid "Project Explorer"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:836
+#: src/frontend/MainWin.cpp:839
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgid "Properties Explorer"
 msgstr "Vlastnosti"
 
-#: src/frontend/MainWin.cpp:841
+#: src/frontend/MainWin.cpp:844
 #, fuzzy, kde-format
 #| msgid "Worksheet"
 msgid "Worksheet Preview"
 msgstr "List"
 
-#: src/frontend/MainWin.cpp:864
+#: src/frontend/MainWin.cpp:867
 #, kde-format
 msgid "Configure CAS..."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:865
+#: src/frontend/MainWin.cpp:868
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
 "systems or to enable new ones"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:925
+#: src/frontend/MainWin.cpp:928
 #, kde-format
 msgid "Window Visibility"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:942
+#: src/frontend/MainWin.cpp:945
 #, fuzzy, kde-format
 #| msgid "Color map"
 msgid "Color Scheme"
 msgstr "Farebná téma"
 
-#: src/frontend/MainWin.cpp:1000
+#: src/frontend/MainWin.cpp:1003
 #, fuzzy, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "Aktuálny projekt bol zmenený. Chcete ho uložiť?"
 
-#: src/frontend/MainWin.cpp:1001
+#: src/frontend/MainWin.cpp:1004
 #, kde-format
 msgid "Save Project"
 msgstr "Uloženie projektu"
 
-#: src/frontend/MainWin.cpp:1356
+#: src/frontend/MainWin.cpp:1359
 #, fuzzy, kde-format
 #| msgid "%1: clear"
 msgid "%1: created"
 msgstr "Vytvorené"
 
-#: src/frontend/MainWin.cpp:1382
+#: src/frontend/MainWin.cpp:1385
 #, fuzzy, kde-format
 #| msgid "Project properties"
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Vlastnosti projektu"
 
-#: src/frontend/MainWin.cpp:1407
+#: src/frontend/MainWin.cpp:1410
 #, fuzzy, kde-format
 #| msgid "Worksheet"
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "List"
 
-#: src/frontend/MainWin.cpp:1416
+#: src/frontend/MainWin.cpp:1419
 #, fuzzy, kde-format
 #| msgid "Content"
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Obsah"
 
-#: src/frontend/MainWin.cpp:1493
+#: src/frontend/MainWin.cpp:1496
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Projects (%1)"
 msgstr "Otvoriť projekt"
 
-#: src/frontend/MainWin.cpp:1499
+#: src/frontend/MainWin.cpp:1502
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "Cantor Projects (*.cws)"
 msgstr "Zatvoriť projekt"
 
-#: src/frontend/MainWin.cpp:1500
+#: src/frontend/MainWin.cpp:1503
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1507
+#: src/frontend/MainWin.cpp:1510
 #, kde-format
 msgid "All supported files (%1)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1511
+#: src/frontend/MainWin.cpp:1514
 #, fuzzy, kde-format
 #| msgid "Open Project"
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Otvoriť projekt"
 
-#: src/frontend/MainWin.cpp:1528
+#: src/frontend/MainWin.cpp:1531
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1528 src/frontend/MainWin.cpp:1536
-#: src/frontend/MainWin.cpp:1541
+#: src/frontend/MainWin.cpp:1531 src/frontend/MainWin.cpp:1539
+#: src/frontend/MainWin.cpp:1544
 #, kde-format
 msgid "Open Project"
 msgstr "Otvoriť projekt"
 
-#: src/frontend/MainWin.cpp:1536
+#: src/frontend/MainWin.cpp:1539
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1541
+#: src/frontend/MainWin.cpp:1544
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't read the project file %1."
 msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 
-#: src/frontend/MainWin.cpp:1549
+#: src/frontend/MainWin.cpp:1552
 #, kde-format
 msgid "Loading %1..."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1603
+#: src/frontend/MainWin.cpp:1607
 #, fuzzy, kde-format
 msgid "%1: opened"
 msgstr "Otvorené"
 
-#: src/frontend/MainWin.cpp:1638
+#: src/frontend/MainWin.cpp:1642
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1730
+#: src/frontend/MainWin.cpp:1734
 #, fuzzy, kde-format
 #| msgid "Save Project As"
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Uložiť projekt ako"
 
-#: src/frontend/MainWin.cpp:1732
+#: src/frontend/MainWin.cpp:1736
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1759
+#: src/frontend/MainWin.cpp:1763
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't open the temporary file for writing."
 msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 
-#: src/frontend/MainWin.cpp:1839
+#: src/frontend/MainWin.cpp:1843
 #, kde-format
 msgid "Project saved"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1855
+#: src/frontend/MainWin.cpp:1859
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1860
+#: src/frontend/MainWin.cpp:1864
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 
-#: src/frontend/MainWin.cpp:1910
+#: src/frontend/MainWin.cpp:1914
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgid "Changed"
 msgstr "%1    [zmenené]"
 
-#: src/frontend/MainWin.cpp:1925 src/frontend/MainWin.cpp:1937
+#: src/frontend/MainWin.cpp:1929 src/frontend/MainWin.cpp:1941
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1927 src/frontend/MainWin.cpp:1939
+#: src/frontend/MainWin.cpp:1931 src/frontend/MainWin.cpp:1943
 #, fuzzy, kde-format
 msgid "%1 printed"
 msgstr "tlačené: %1"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2459
+#: src/frontend/MainWin.cpp:2463
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
 #: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Cursor"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2496
+#: src/frontend/MainWin.cpp:2500
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2500
+#: src/frontend/MainWin.cpp:2504
 #, kde-format
 msgid "Project shared successfully"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2503
+#: src/frontend/MainWin.cpp:2507
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2772
+#: src/frontend/MainWin.cpp:2776
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2773
+#: src/frontend/MainWin.cpp:2777
 #, kde-format
 msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
 "\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2836
+#: src/frontend/MainWin.cpp:2840
 #, kde-format
 msgid "%1 exported"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2843
+#: src/frontend/MainWin.cpp:2847
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2855
+#: src/frontend/MainWin.cpp:2859
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2873
+#: src/frontend/MainWin.cpp:2877
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2877
+#: src/frontend/MainWin.cpp:2881
 #, fuzzy, kde-format
 #| msgid "Add new variable"
 msgid "Live data source%1"
 msgstr "Pridať novú premennú"
 
-#: src/frontend/MainWin.cpp:2922
+#: src/frontend/MainWin.cpp:2932
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr ""
@@ -16442,7 +16557,7 @@ msgid "Command"
 msgstr "Komentár"
 
 #: src/frontend/notebook/NotebookView.cpp:103
-#: src/frontend/widgets/LabelWidget.cpp:492
+#: src/frontend/widgets/LabelWidget.cpp:480
 #, kde-format
 msgid "Markdown"
 msgstr ""
@@ -16450,7 +16565,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/frontend/notebook/NotebookView.cpp:107
 #: src/frontend/ui/settingsworksheetpage.ui:147
-#: src/frontend/widgets/LabelWidget.cpp:490
+#: src/frontend/widgets/LabelWidget.cpp:478
 #, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
@@ -16779,8 +16894,8 @@ msgstr "Dátová sada"
 msgid "Downloaded files successfully deleted."
 msgstr ""
 
-#: src/frontend/SettingsDialog.cpp:45 src/frontend/SettingsDialog.cpp:115
-#: src/frontend/SettingsDialog.cpp:122
+#: src/frontend/SettingsDialog.cpp:45 src/frontend/SettingsDialog.cpp:144
+#: src/frontend/SettingsDialog.cpp:151
 #, fuzzy, kde-format
 #| msgid "Preferences"
 msgctxt "@title:window"
@@ -16839,12 +16954,12 @@ msgstr "Dátová sada"
 msgid "User Feedback"
 msgstr ""
 
-#: src/frontend/SettingsDialog.cpp:119
+#: src/frontend/SettingsDialog.cpp:148
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr ""
 
-#: src/frontend/SettingsDialog.cpp:130
+#: src/frontend/SettingsDialog.cpp:159
 #, fuzzy, kde-format
 #| msgid "Preferences"
 msgctxt "@title:window"
@@ -18052,7 +18167,7 @@ msgstr "Obdobie"
 
 #. i18n: ectx: property (text), widget (QLabel, lSampleSize)
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:105
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:159
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:30
 #, fuzzy, kde-format
 #| msgid "Step size"
 msgid "Sample Size:"
@@ -18714,27 +18829,27 @@ msgstr "Vybrané stĺpce"
 msgid "%1: cut selected cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2055
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2054
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2069
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2068
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2101
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2100
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2259
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2258
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2324
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2323
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
@@ -18742,39 +18857,39 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2368
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2367
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2494
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2493
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2504
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2526
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2544
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2561
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2503
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2525
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2543
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2560
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2641
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2675
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2640
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2674
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "Insert empty columns"
 msgstr "Vložiť stĺpec"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2642
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2676
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2641
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2675
 #, fuzzy, kde-format
 #| msgid "Filter name:"
 msgid "Enter the number of columns to insert"
 msgstr "Názov filtra:"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2694
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2693
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: insert empty column"
@@ -18783,13 +18898,13 @@ msgstr[0] "Vložiť stĺpec"
 msgstr[1] "Vložiť stĺpec"
 msgstr[2] "Vložiť stĺpec"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2764
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2763
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "%1: remove selected columns"
 msgstr "Vybrané stĺpce"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2861
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2860
 #, fuzzy, kde-format
 #| msgid "%1: remove %2"
 msgid "%1: reverse column"
@@ -18798,141 +18913,141 @@ msgstr[0] "Odstrániť stĺpec"
 msgstr[1] "Odstrániť stĺpce"
 msgstr[2] "Odstrániť stĺpce"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2934
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2933
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
 "because of this. "
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2968
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2967
 #, kde-format
 msgid "%1: normalize columns"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2988
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2987
 #, kde-format
 msgid "Sum = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2999
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2998
 #, kde-format
 msgid "Min = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3010
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3009
 #, fuzzy, kde-format
 msgid "Max = 0"
 msgstr "X"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3021
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3020
 #, fuzzy, kde-format
 #| msgid "center"
 msgid "Count = 0"
 msgstr "stred"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3032
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3031
 #, fuzzy, kde-format
 #| msgid "Mean"
 msgid "Mean = 0"
 msgstr "Priemer"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3043
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3042
 #, fuzzy, kde-format
 #| msgid "Median"
 msgid "Median = 0"
 msgstr "Medián"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3055
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3054
 #, fuzzy, kde-format
 #| msgid "Model:"
 msgid "Mode = 0"
 msgstr "Model:"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3057
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3056
 #, kde-format
 msgid "'Mode not defined'"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3068
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3067
 #, fuzzy, kde-format
 #| msgid "x-Range:"
 msgid "Range = 0"
 msgstr "X rozsah:"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3079
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3113
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3078
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3112
 #, kde-format
 msgid "SD = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3090
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3125
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3089
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3124
 #, kde-format
 msgid "MAD = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3101
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3137
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3100
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3136
 #, kde-format
 msgid "IQR = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3149
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3148
 #, kde-format
 msgid "Max - Min = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3168
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3167
 #, kde-format
 msgid "Normalization not possible"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3180
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3179
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: power transform columns"
 msgstr "%1: nastaviť písmo"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3298
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3297
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "%1: column statistics"
 msgstr "Štatistika"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3329
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3328
 #, fuzzy, kde-format
 #| msgid "Selection"
 msgid "Selection in %1"
 msgstr "Výber"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3372
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3371
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "%1: row statistics"
 msgstr "Štatistika"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3382
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3381
 #, kde-format
 msgid "Row %1"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3407
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3446
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3406
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3445
 #, fuzzy, kde-format
 #| msgid "%1: set opacity"
 msgid "Insert multiple rows"
 msgstr "%1: nastaviť nepriehľadnosť"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3408
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3447
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3407
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3446
 #, fuzzy, kde-format
 #| msgid "Filter name:"
 msgid "Enter the number of rows to insert"
 msgstr "Názov filtra:"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3427
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3466
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3426
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3465
 #, fuzzy, kde-format
 #| msgid "%1: set opacity"
 msgid "%1: insert empty row"
@@ -18941,28 +19056,28 @@ msgstr[0] "%1: nastaviť nepriehľadnosť"
 msgstr[1] "%1: nastaviť nepriehľadnosť"
 msgstr[2] "%1: nastaviť nepriehľadnosť"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3482
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3481
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3507
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3506
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3762
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3761
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3772
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3771
 #, fuzzy, kde-format
 #| msgid "Source name"
 msgid "Selected: %1 cells"
 msgstr "Názov zdroja"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3791
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3790
 #, fuzzy, kde-format
 #| msgid "Arrow"
 msgid "row"
@@ -18971,7 +19086,7 @@ msgstr[0] "Šípka"
 msgstr[1] "Šípka"
 msgstr[2] "Šípka"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3792
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3791
 #, fuzzy, kde-format
 #| msgid "Column"
 msgid "column"
@@ -18980,84 +19095,84 @@ msgstr[0] "Stĺpec"
 msgstr[1] "Stĺpec"
 msgstr[2] "Stĺpec"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3793
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3792
 #, kde-format
 msgid "cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3794
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3793
 #, fuzzy, kde-format
 #| msgid "value"
 msgid "masked value"
 msgstr "hodnota"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3794
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3793
 #, fuzzy, kde-format
 #| msgid "value"
 msgid "masked values"
 msgstr "hodnota"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3795
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3794
 #, fuzzy, kde-format
 #| msgid "Values"
 msgid "missing value"
 msgstr "Hodnoty"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3795
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3794
 #, fuzzy, kde-format
 #| msgid "Values"
 msgid "missing values"
 msgstr "Hodnoty"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3796
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3795
 #, fuzzy, kde-format
 #| msgid " ( "
 msgid " , "
 msgstr " ( "
 
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3795
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3796
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3797
 #, fuzzy, kde-format
 #| msgid "1"
 msgid "%1"
 msgstr "1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3797
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3796
 #, fuzzy, kde-format
 #| msgctxt "postfix for XML warning messages"
 #| msgid " "
 msgid ", "
 msgstr " "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3801
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3800
 #, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3811
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3810
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3892
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3891
 #, fuzzy, kde-format
 #| msgid "&Spreadsheet"
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Zošit"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4504
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4503
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4536
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4535
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4589
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4588
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to insert values into the table."
@@ -19343,7 +19458,7 @@ msgstr "Formát:"
 #: src/frontend/ui/dockwidgets/matrixdock.ui:43
 #: src/frontend/ui/dockwidgets/notebookdock.ui:65
 #: src/frontend/ui/dockwidgets/notedock.ui:43
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:149
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:87
 #: src/frontend/ui/dockwidgets/projectdock.ui:243
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:99
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:119
@@ -19366,7 +19481,7 @@ msgstr "Formát:"
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:40
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:524
 #: src/frontend/ui/fitsheadereditnewkeywordwidget.ui:27
-#: src/frontend/ui/labelwidget.ui:24
+#: src/frontend/ui/labelwidget.ui:715
 #, kde-format
 msgid "Comment:"
 msgstr "Komentár:"
@@ -19396,7 +19511,7 @@ msgstr "Komentár:"
 #: src/frontend/ui/dockwidgets/matrixdock.ui:17
 #: src/frontend/ui/dockwidgets/notebookdock.ui:33
 #: src/frontend/ui/dockwidgets/notedock.ui:17
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:132
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:219
 #: src/frontend/ui/dockwidgets/projectdock.ui:107
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:55
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:190
@@ -19418,7 +19533,7 @@ msgstr "Komentár:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:372
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:257
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:554
-#: src/frontend/ui/labelwidget.ui:316
+#: src/frontend/ui/labelwidget.ui:725
 #, kde-format
 msgid "Name:"
 msgstr "Názov:"
@@ -19469,9 +19584,8 @@ msgstr "Chybové tabule"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1005
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1130
 #: src/frontend/ui/dockwidgets/linewidget.ui:78
-#: src/frontend/ui/labelwidget.ui:619 src/frontend/ui/symbolwidget.ui:45
-#: src/frontend/ui/symbolwidget.ui:184 src/frontend/ui/symbolwidget.ui:240
-#: src/frontend/worksheet/GridDialog.cpp:41
+#: src/frontend/ui/symbolwidget.ui:45 src/frontend/ui/symbolwidget.ui:184
+#: src/frontend/ui/symbolwidget.ui:240 src/frontend/worksheet/GridDialog.cpp:41
 #, kde-format
 msgid "Style:"
 msgstr "Štýl:"
@@ -19491,8 +19605,7 @@ msgstr "Štýl:"
 #: src/frontend/ui/dockwidgets/linewidget.ui:92
 #: src/frontend/ui/dockwidgets/valuewidget.ui:320
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:401
-#: src/frontend/ui/labelwidget.ui:104 src/frontend/ui/symbolwidget.ui:194
-#: src/frontend/ui/symbolwidget.ui:250
+#: src/frontend/ui/symbolwidget.ui:194 src/frontend/ui/symbolwidget.ui:250
 #: src/frontend/widgets/BackgroundWidget.cpp:201
 #: src/frontend/widgets/BackgroundWidget.cpp:225
 #: src/frontend/widgets/BackgroundWidget.cpp:253
@@ -19511,7 +19624,7 @@ msgstr "Farba:"
 #: src/frontend/ui/dockwidgets/axisdock.ui:539
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:694
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:181
-#: src/frontend/ui/labelwidget.ui:70 src/frontend/ui/symbolwidget.ui:78
+#: src/frontend/ui/labelwidget.ui:369 src/frontend/ui/symbolwidget.ui:78
 #, fuzzy, kde-format
 #| msgid "Size"
 msgid "Size:"
@@ -19520,12 +19633,12 @@ msgstr "Veľkosť:"
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbSize)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbBorderWidth)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbConfidenceInterval)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionYLogical)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionXLogical)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbOffsetX)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbOffsetY)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionY)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionYLogical)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbOffsetX)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionX)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbOffsetY)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbErrorBarSize)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbTop)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPaddingHorizontal)
@@ -19690,11 +19803,11 @@ msgstr "Veľkosť:"
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:197
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:210
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:437
-#: src/frontend/ui/fitoptionswidget.ui:248 src/frontend/ui/labelwidget.ui:94
-#: src/frontend/ui/labelwidget.ui:131 src/frontend/ui/labelwidget.ui:241
-#: src/frontend/ui/labelwidget.ui:303 src/frontend/ui/labelwidget.ui:504
-#: src/frontend/ui/labelwidget.ui:561 src/frontend/ui/labelwidget.ui:754
-#: src/frontend/ui/symbolwidget.ui:293 src/frontend/ui/symbolwidget.ui:312
+#: src/frontend/ui/fitoptionswidget.ui:248 src/frontend/ui/labelwidget.ui:85
+#: src/frontend/ui/labelwidget.ui:122 src/frontend/ui/labelwidget.ui:167
+#: src/frontend/ui/labelwidget.ui:272 src/frontend/ui/labelwidget.ui:574
+#: src/frontend/ui/labelwidget.ui:589 src/frontend/ui/symbolwidget.ui:293
+#: src/frontend/ui/symbolwidget.ui:312
 #, kde-format
 msgid "Spinbox for numbers."
 msgstr ""
@@ -19735,9 +19848,8 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/linewidget.ui:146
 #: src/frontend/ui/dockwidgets/valuewidget.ui:356
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:552
-#: src/frontend/ui/labelwidget.ui:244 src/frontend/ui/labelwidget.ui:306
-#: src/frontend/ui/labelwidget.ui:507 src/frontend/ui/symbolwidget.ui:296
-#: src/frontend/ui/symbolwidget.ui:315
+#: src/frontend/ui/labelwidget.ui:275 src/frontend/ui/labelwidget.ui:592
+#: src/frontend/ui/symbolwidget.ui:296 src/frontend/ui/symbolwidget.ui:315
 #, kde-format
 msgid " pt"
 msgstr " bd"
@@ -19803,7 +19915,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/imagedock.ui:83
 #: src/frontend/ui/dockwidgets/valuewidget.ui:108
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:421
-#: src/frontend/ui/labelwidget.ui:662 src/frontend/ui/symbolwidget.ui:85
+#: src/frontend/ui/labelwidget.ui:646 src/frontend/ui/symbolwidget.ui:85
 #, fuzzy, kde-format
 #| msgid "Rotation"
 msgid "Rotation:"
@@ -19825,7 +19937,7 @@ msgstr "Segmenty"
 #: src/frontend/ui/dockwidgets/imagedock.ui:387
 #: src/frontend/ui/dockwidgets/valuewidget.ui:121
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:483
-#: src/frontend/ui/labelwidget.ui:205 src/frontend/ui/symbolwidget.ui:101
+#: src/frontend/ui/labelwidget.ui:353 src/frontend/ui/symbolwidget.ui:101
 #, kde-format
 msgid "°"
 msgstr "°"
@@ -19952,7 +20064,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/linewidget.ui:85
 #: src/frontend/ui/dockwidgets/livedatadock.ui:154
 #: src/frontend/ui/dockwidgets/matrixdock.ui:268
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:125
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:182
 #: src/frontend/ui/dockwidgets/valuewidget.ui:48
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:303
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:298
@@ -20010,7 +20122,7 @@ msgstr "Intenzita:"
 #: src/frontend/ui/dockwidgets/custompointdock.ui:290
 #: src/frontend/ui/dockwidgets/imagedock.ui:130
 #: src/frontend/ui/dockwidgets/imagedock.ui:310
-#: src/frontend/ui/labelwidget.ui:545 src/frontend/ui/labelwidget.ui:573
+#: src/frontend/ui/labelwidget.ui:106 src/frontend/ui/labelwidget.ui:230
 #, kde-format
 msgid "Vertical position relative to label's parent"
 msgstr ""
@@ -20659,6 +20771,7 @@ msgstr "Témy:"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1168
 #: src/frontend/ui/dockwidgets/columndock.ui:204
 #: src/frontend/ui/dockwidgets/matrixdock.ui:285
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:639
 #: src/frontend/ui/dockwidgets/valuewidget.ui:211
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:238
 #, kde-format
@@ -21166,7 +21279,6 @@ msgid "Arrow"
 msgstr "Šípka"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbOpacity)
-#. i18n: ectx: property (toolTip), widget (QSpinBox, sbBorderOpacity)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbArrowSize)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbLabelsOpacity)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbValuesOpacity)
@@ -21177,7 +21289,7 @@ msgstr "Šípka"
 #: src/frontend/ui/dockwidgets/linewidget.ui:105
 #: src/frontend/ui/dockwidgets/valuewidget.ui:150
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:340
-#: src/frontend/ui/labelwidget.ui:173 src/frontend/ui/symbolwidget.ui:133
+#: src/frontend/ui/symbolwidget.ui:133
 #, kde-format
 msgid ""
 "The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is "
@@ -21334,12 +21446,15 @@ msgstr "Štítky"
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbLabelsPrecision)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1165
 #: src/frontend/ui/dockwidgets/axisdock.ui:1202
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:636
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:673
 #, kde-format
 msgid "Number of digits after the decimal point"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkLabelsAutoPrecision)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1209
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:680
 #, kde-format
 msgid ""
 "Automatically determine the optimal number of digits after the decimal point"
@@ -21365,9 +21480,10 @@ msgstr "Umiestnenie"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1420
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:126
 #: src/frontend/ui/dockwidgets/notedock.ui:92
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:507
 #: src/frontend/ui/dockwidgets/valuewidget.ui:310
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:301
-#: src/frontend/ui/labelwidget.ui:652
+#: src/frontend/ui/labelwidget.ui:259
 #, kde-format
 msgid "Font:"
 msgstr "Písmo:"
@@ -21394,7 +21510,6 @@ msgid "Offset:"
 msgstr "Posun:"
 
 #. i18n: ectx: property (text), widget (QLabel, lOpacity)
-#. i18n: ectx: property (text), widget (QLabel, lBorderOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lValuesOpacity)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1366
@@ -21403,8 +21518,7 @@ msgstr "Posun:"
 #: src/frontend/ui/dockwidgets/linewidget.ui:127
 #: src/frontend/ui/dockwidgets/valuewidget.ui:137
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:294
-#: src/frontend/ui/labelwidget.ui:17 src/frontend/ui/symbolwidget.ui:120
-#: src/frontend/worksheet/GridDialog.cpp:73
+#: src/frontend/ui/symbolwidget.ui:120 src/frontend/worksheet/GridDialog.cpp:73
 #, fuzzy, kde-format
 #| msgid "Opacity"
 msgid "Opacity:"
@@ -21427,7 +21541,6 @@ msgid "Format:"
 msgstr "Formát:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbOpacity)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbBorderOpacity)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbYBreakPosition)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbXBreakPosition)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbLabelsOpacity)
@@ -21440,8 +21553,7 @@ msgstr "Formát:"
 #: src/frontend/ui/dockwidgets/linewidget.ui:108
 #: src/frontend/ui/dockwidgets/valuewidget.ui:153
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:343
-#: src/frontend/ui/labelwidget.ui:176 src/frontend/ui/symbolwidget.ui:136
-#: src/frontend/worksheet/GridDialog.cpp:81
+#: src/frontend/ui/symbolwidget.ui:136 src/frontend/worksheet/GridDialog.cpp:81
 #, no-c-format, kde-format
 msgid " %"
 msgstr " %"
@@ -21459,8 +21571,10 @@ msgstr "Predpona:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFontColor)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsColor)
+#. i18n: ectx: property (text), widget (QLabel, lLabelsFontColor)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1512
-#: src/frontend/ui/labelwidget.ui:530
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:617
+#: src/frontend/ui/labelwidget.ui:213
 #, fuzzy, kde-format
 #| msgid "First color"
 msgid "Font Color:"
@@ -21493,12 +21607,14 @@ msgstr "bez mriežky"
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, lRugEnabled)
+#. i18n: ectx: property (text), widget (QLabel, lLabelsEnabled)
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:42
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:794
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1034
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1041
 #: src/frontend/ui/dockwidgets/histogramdock.ui:491
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:332
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:597
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:611
 #: src/frontend/ui/mqttwillsettingswidget.ui:346
 #, kde-format
@@ -21529,8 +21645,8 @@ msgstr "druhá farba"
 msgid "visible"
 msgstr "viditeľné"
 
-#. i18n: ectx: property (text), widget (QLabel, lPositionXLogicalDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lPositionX)
+#. i18n: ectx: property (text), widget (QLabel, lPositionXLogicalDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lXData)
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTime)
@@ -21546,7 +21662,7 @@ msgstr "viditeľné"
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:102
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:99
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:220
-#: src/frontend/ui/labelwidget.ui:221 src/frontend/ui/labelwidget.ui:769
+#: src/frontend/ui/labelwidget.ui:65 src/frontend/ui/labelwidget.ui:632
 #, kde-format
 msgid "x:"
 msgstr "x:"
@@ -21578,7 +21694,7 @@ msgstr "Dáta"
 #: src/frontend/ui/dockwidgets/custompointdock.ui:277
 #: src/frontend/ui/dockwidgets/custompointdock.ui:293
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:50
-#: src/frontend/ui/labelwidget.ui:576
+#: src/frontend/ui/labelwidget.ui:233
 #, kde-format
 msgid "y:"
 msgstr "y:"
@@ -21593,13 +21709,15 @@ msgstr "Barov"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorder)
 #. i18n: ectx: attribute (title), widget (QWidget, tabBorder)
+#. i18n: ectx: property (text), widget (QLabel, lLabelsBorder)
 #: src/frontend/ui/dockwidgets/barplotdock.ui:264
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:449
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1328
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:596
 #: src/frontend/ui/dockwidgets/imagedock.ui:557
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:629
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:303
-#: src/frontend/ui/labelwidget.ui:602 src/frontend/ui/symbolwidget.ui:233
+#: src/frontend/ui/labelwidget.ui:296 src/frontend/ui/symbolwidget.ui:233
 #: src/frontend/widgets/SymbolWidget.cpp:133
 #, kde-format
 msgid "Border"
@@ -21765,7 +21883,7 @@ msgstr "Kresliť"
 #: src/frontend/ui/dockwidgets/linewidget.ui:71
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:115
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:648
-#: src/frontend/ui/labelwidget.ui:286 src/frontend/ui/symbolwidget.ui:267
+#: src/frontend/ui/symbolwidget.ui:267
 #, kde-format
 msgid "Width:"
 msgstr "Šírka:"
@@ -21990,7 +22108,7 @@ msgstr "cm"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:594
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:212
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:59
-#: src/frontend/ui/labelwidget.ui:645
+#: src/frontend/ui/labelwidget.ui:343
 #, fuzzy, kde-format
 #| msgid "Geometry:"
 msgid "Geometry"
@@ -22158,7 +22276,7 @@ msgstr "Poradie:"
 #: src/frontend/ui/dockwidgets/imagedock.ui:549
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:240
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:333
-#: src/frontend/ui/labelwidget.ui:293
+#: src/frontend/ui/labelwidget.ui:683
 #, kde-format
 msgid "Locked"
 msgstr ""
@@ -22212,8 +22330,8 @@ msgstr "%1: pridať %2"
 msgid "Cursor 2"
 msgstr "%1: pridať %2"
 
-#. i18n: ectx: property (toolTip), widget (KComboBox, cbPositionX)
 #. i18n: ectx: property (toolTip), widget (QLabel, lPositionX)
+#. i18n: ectx: property (toolTip), widget (KComboBox, cbPositionX)
 #. i18n: ectx: property (toolTip), widget (QLabel, lPosition)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbPositionX)
 #. i18n: ectx: property (toolTip), widget (QLabel, lPositionEnd)
@@ -22224,7 +22342,7 @@ msgstr "%1: pridať %2"
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:96
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:102
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:310
-#: src/frontend/ui/labelwidget.ui:738 src/frontend/ui/labelwidget.ui:766
+#: src/frontend/ui/labelwidget.ui:62 src/frontend/ui/labelwidget.ui:558
 #, kde-format
 msgid "Horizontal position relative to label's parent"
 msgstr ""
@@ -22378,7 +22496,7 @@ msgstr "Pozícia:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionYLogical)
 #: src/frontend/ui/dockwidgets/imagedock.ui:186
-#: src/frontend/ui/labelwidget.ui:198
+#: src/frontend/ui/labelwidget.ui:639
 #, fuzzy, kde-format
 #| msgid "Y"
 msgid "Y:"
@@ -22386,7 +22504,7 @@ msgstr "Y"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionXLogical)
 #: src/frontend/ui/dockwidgets/imagedock.ui:212
-#: src/frontend/ui/labelwidget.ui:517
+#: src/frontend/ui/labelwidget.ui:625
 #, fuzzy, kde-format
 #| msgid "X"
 msgid "X:"
@@ -22394,7 +22512,7 @@ msgstr "X"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbBindLogicalPos)
 #: src/frontend/ui/dockwidgets/imagedock.ui:219
-#: src/frontend/ui/labelwidget.ui:40
+#: src/frontend/ui/labelwidget.ui:618
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "Logical Coordinates"
@@ -22490,7 +22608,7 @@ msgstr "Šírka čiary"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:159
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:102
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:103
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:116
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:135
 #: src/frontend/ui/dockwidgets/runchartdock.ui:89
@@ -22627,34 +22745,41 @@ msgstr "Farba pozadia:"
 msgid "Text color:"
 msgstr "Farba textu:"
 
+#. i18n: ectx: property (text), widget (QLabel, lExactLimits)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:37
+#, kde-format
+msgid "Exact Limits:"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, lData2Column)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:81
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:77
 #, fuzzy, kde-format
 #| msgid "Step size"
 msgid "Sample Sizes:"
 msgstr "Veľkosť vzorky"
 
-#. i18n: ectx: property (text), widget (QLabel, lNegativeLowerLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:95
+#. i18n: ectx: property (text), widget (QLabel, lMinLowerLimit)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:189
 #, fuzzy, kde-format
 #| msgid "Lower limit"
-msgid "Lower Limit < 0:"
+msgid "Min. Lower Limit:"
 msgstr "Dolný limit"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:139
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:212
 #, kde-format
 msgid "Limits based on:"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lExactLimits)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:206
-#, kde-format
-msgid "Exact Limits:"
-msgstr ""
+#. i18n: ectx: property (text), widget (QLabel, lMaxUpperLimit)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:232
+#, fuzzy, kde-format
+#| msgid "Upper limit"
+msgid "Max. Upper Limit:"
+msgstr "Horný limit"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:221
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:243
 #: src/frontend/ui/dockwidgets/runchartdock.ui:159
 #, fuzzy, kde-format
 #| msgid "Dot Line"
@@ -22662,24 +22787,50 @@ msgid "Data Line"
 msgstr "Bodková čiara"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLines)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:285
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:307
 #, kde-format
 msgid "Center/Limits Lines"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:340
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:362
+#: src/frontend/widgets/FitParametersWidget.cpp:192
 #, fuzzy, kde-format
 #| msgid "Upper limit"
 msgid "Upper Limit"
 msgstr "Horný limit"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:384
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:406
+#: src/frontend/widgets/FitParametersWidget.cpp:192
 #, fuzzy, kde-format
 #| msgid "Lower limit"
 msgid "Lower Limit"
 msgstr "Dolný limit"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLabels)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:443
+#, fuzzy, kde-format
+#| msgid "Step size"
+msgid "Center/Limit Values"
+msgstr "Veľkosť vzorky"
+
+#. i18n: ectx: property (text), widget (QLabel, lBorderShape)
+#. i18n: ectx: property (text), widget (QLabel, lLabelsBorderShape)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:465
+#: src/frontend/ui/labelwidget.ui:134
+#, kde-format
+msgid "Shape:"
+msgstr "Tvar:"
+
+#. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
+#. i18n: ectx: property (text), widget (QLabel, lLabelsBackgroundColor)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:514
+#: src/frontend/ui/labelwidget.ui:72
+#, fuzzy, kde-format
+#| msgid "Background Color"
+msgid "Background Color:"
+msgstr "Farba pozadia"
 
 #. i18n: ectx: property (text), widget (QLabel, lVersion_2)
 #: src/frontend/ui/dockwidgets/projectdock.ui:66
@@ -23806,41 +23957,18 @@ msgstr "Otvoriť súbor"
 msgid "Close File"
 msgstr "Zatvoriť súbor"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chbShowPlaceholderText)
-#: src/frontend/ui/labelwidget.ui:47
-#, kde-format
-msgid "Show Placeholder Text (editable)"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lHorizontalAlignment)
-#: src/frontend/ui/labelwidget.ui:77
-#, kde-format
-msgid "Hor. Alignment:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lVerticalAlignment)
-#: src/frontend/ui/labelwidget.ui:84
-#, fuzzy, kde-format
-#| msgid "Vertical spacing"
-msgid "Vert. Alignment:"
-msgstr "Vertikálne medzery"
-
-#. i18n: ectx: property (text), widget (QLabel, lFontTeX)
-#: src/frontend/ui/labelwidget.ui:111
-#, fuzzy, kde-format
-#| msgid "Main Font"
-msgid "Main font:"
-msgstr "Hlavné písmo"
-
 #. i18n: ectx: property (html), widget (ResizableTextEdit, teLabel)
-#: src/frontend/ui/labelwidget.ui:160
+#: src/frontend/ui/labelwidget.ui:55
 #, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
-"\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
+"\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
 "weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
@@ -23848,48 +23976,61 @@ msgid ""
 "\"><br /></p></body></html>"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
-#: src/frontend/ui/labelwidget.ui:231
-#, fuzzy, kde-format
-#| msgid "Background Color"
-msgid "Background Color:"
-msgstr "Farba pozadia"
-
-#. i18n: ectx: property (toolTip), widget (QLabel, lOffsetX)
 #. i18n: ectx: property (toolTip), widget (QLabel, lOffsetY)
-#: src/frontend/ui/labelwidget.ui:484 src/frontend/ui/labelwidget.ui:704
+#. i18n: ectx: property (toolTip), widget (QLabel, lOffsetX)
+#: src/frontend/ui/labelwidget.ui:180 src/frontend/ui/labelwidget.ui:220
 #, kde-format
 msgid "Distance to the axis tick labels"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lOffsetX)
-#: src/frontend/ui/labelwidget.ui:487
-#, kde-format
-msgid "Offset X:"
-msgstr "Posun X:"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/labelwidget.ui:494
-#, fuzzy, kde-format
-#| msgid "Model:"
-msgid "Mode:"
-msgstr "Model:"
-
-#. i18n: ectx: property (text), widget (QLabel, lBorderShape)
-#: src/frontend/ui/labelwidget.ui:586
-#, kde-format
-msgid "Shape:"
-msgstr "Tvar:"
-
 #. i18n: ectx: property (text), widget (QLabel, lOffsetY)
-#: src/frontend/ui/labelwidget.ui:707
+#: src/frontend/ui/labelwidget.ui:183
 #, fuzzy, kde-format
 #| msgid "Offset Y"
 msgid "Offset Y:"
 msgstr "Posun X:"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chbShowPlaceholderText)
+#: src/frontend/ui/labelwidget.ui:193
+#, kde-format
+msgid "Show Placeholder Text (editable)"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lOffsetX)
+#: src/frontend/ui/labelwidget.ui:223
+#, kde-format
+msgid "Offset X:"
+msgstr "Posun X:"
+
+#. i18n: ectx: property (text), widget (QLabel, lFontTeX)
+#: src/frontend/ui/labelwidget.ui:602
+#, fuzzy, kde-format
+#| msgid "Main Font"
+msgid "Main font:"
+msgstr "Hlavné písmo"
+
+#. i18n: ectx: property (text), widget (QLabel, lHorizontalAlignment)
+#: src/frontend/ui/labelwidget.ui:653
+#, kde-format
+msgid "Hor. Alignment:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lVerticalAlignment)
+#: src/frontend/ui/labelwidget.ui:660
+#, fuzzy, kde-format
+#| msgid "Vertical spacing"
+msgid "Vert. Alignment:"
+msgstr "Vertikálne medzery"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/frontend/ui/labelwidget.ui:690
+#, fuzzy, kde-format
+#| msgid "Model:"
+msgid "Mode:"
+msgstr "Model:"
+
 #. i18n: ectx: property (text), widget (QLabel, lText)
-#: src/frontend/ui/labelwidget.ui:785
+#: src/frontend/ui/labelwidget.ui:705
 #, kde-format
 msgid "Text:"
 msgstr "Text:"
@@ -24196,13 +24337,6 @@ msgstr "Automatické ukladanie"
 #| msgid "Plot"
 msgid "Dock Widget Placement:"
 msgstr "Kresliť"
-
-#. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
-#: src/frontend/ui/settingsgeneralpage.ui:60
-#, fuzzy, kde-format
-#| msgid "Data format"
-msgid "Number Format:"
-msgstr "Formát čísel"
 
 #. i18n: ectx: property (text), widget (QLabel, lStartup)
 #: src/frontend/ui/settingsgeneralpage.ui:67
@@ -25278,25 +25412,16 @@ msgstr ""
 msgid "Data, +-:"
 msgstr "Dáta, +-"
 
-#: src/frontend/widgets/FitParametersWidget.cpp:39
-#, kde-format
-msgid "Start value"
+#: src/frontend/widgets/FitParametersWidget.cpp:192
+#, fuzzy, kde-format
+#| msgid "Start value"
+msgid "Start Value"
 msgstr "Počiatočná hodnota"
 
-#: src/frontend/widgets/FitParametersWidget.cpp:43
+#: src/frontend/widgets/FitParametersWidget.cpp:192
 #, fuzzy, kde-format
 msgid "Fixed"
 msgstr "Opravené"
-
-#: src/frontend/widgets/FitParametersWidget.cpp:47
-#, kde-format
-msgid "Lower limit"
-msgstr "Dolný limit"
-
-#: src/frontend/widgets/FitParametersWidget.cpp:51
-#, kde-format
-msgid "Upper limit"
-msgstr "Horný limit"
 
 #: src/frontend/widgets/FITSHeaderEditAddUnitDialog.cpp:30
 #, fuzzy, kde-format
@@ -25469,107 +25594,14 @@ msgstr ""
 msgid "Removing Keyword"
 msgstr "Odstrániť riadky"
 
-#: src/frontend/widgets/LabelWidget.cpp:520
-#, kde-format
-msgid "No Border"
-msgstr "Bez okraja"
-
-#: src/frontend/widgets/LabelWidget.cpp:521
-#, kde-format
-msgid "Rectangle"
-msgstr "Obdĺžnik"
-
 #: src/frontend/widgets/LabelWidget.cpp:522
-#, kde-format
-msgid "Ellipse"
-msgstr "Elipsa"
-
-#: src/frontend/widgets/LabelWidget.cpp:523
-#, kde-format
-msgid "Round sided rectangle"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:524
-#, kde-format
-msgid "Round corner rectangle"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:525
-#, kde-format
-msgid "Inwards round corner rectangle"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:526
-#, kde-format
-msgid "Dented border rectangle"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:527
-#, kde-format
-msgid "Cuboid"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:528
-#, kde-format
-msgid "Up Pointing rectangle"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:529
-#, kde-format
-msgid "Down Pointing rectangle"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:530
-#, kde-format
-msgid "Left Pointing rectangle"
-msgstr ""
-
-#: src/frontend/widgets/LabelWidget.cpp:531
-#, fuzzy, kde-format
-#| msgid "light orange"
-msgid "Right Pointing rectangle"
-msgstr "svetlooranžová"
-
-#: src/frontend/widgets/LabelWidget.cpp:534
-#, fuzzy, kde-format
-#| msgid "dot line"
-msgid "No line"
-msgstr "bodková čiara"
-
-#: src/frontend/widgets/LabelWidget.cpp:535
-#, kde-format
-msgid "Solid line"
-msgstr "Plná čiara"
-
-#: src/frontend/widgets/LabelWidget.cpp:536
-#, kde-format
-msgid "Dash line"
-msgstr "Čiarkovaná čiara"
-
-#: src/frontend/widgets/LabelWidget.cpp:537
-#, kde-format
-msgid "Dot line"
-msgstr "Bodková čiara"
-
-#: src/frontend/widgets/LabelWidget.cpp:538
-#, fuzzy, kde-format
-#| msgid "dash-dot line"
-msgid "Dash dot line"
-msgstr "Bodkočiarkovaná čiara"
-
-#: src/frontend/widgets/LabelWidget.cpp:539
-#, fuzzy, kde-format
-msgid "Dash dot dot line"
-msgstr "Čiarkovano-bodkovano-bodkovaná čiara"
-
-#: src/frontend/widgets/LabelWidget.cpp:542
 #, kde-format
 msgid ""
 "Use logical instead of absolute coordinates to specify the position on the "
 "plot"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:547
+#: src/frontend/widgets/LabelWidget.cpp:527
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -25577,7 +25609,7 @@ msgid ""
 "li><li>Markdown - text setting using Markdown markup language</li></ul>"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:555
+#: src/frontend/widgets/LabelWidget.cpp:535
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -25585,76 +25617,76 @@ msgid ""
 "li></ul>"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:563
+#: src/frontend/widgets/LabelWidget.cpp:543
 #, kde-format
 msgid "Bold"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:564
+#: src/frontend/widgets/LabelWidget.cpp:544
 #, kde-format
 msgid "Italic"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:565
+#: src/frontend/widgets/LabelWidget.cpp:545
 #, fuzzy, kde-format
 #| msgid "line"
 msgid "Underline"
 msgstr "čiara"
 
-#: src/frontend/widgets/LabelWidget.cpp:566
+#: src/frontend/widgets/LabelWidget.cpp:546
 #, kde-format
 msgid "Strike Out"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:567
+#: src/frontend/widgets/LabelWidget.cpp:547
 #, fuzzy, kde-format
 #| msgid "&Script"
 msgid "Super Script"
 msgstr "Skript"
 
-#: src/frontend/widgets/LabelWidget.cpp:568
+#: src/frontend/widgets/LabelWidget.cpp:548
 #, fuzzy, kde-format
 #| msgid "&Script"
 msgid "Sub-Script"
 msgstr "Skript"
 
-#: src/frontend/widgets/LabelWidget.cpp:569
+#: src/frontend/widgets/LabelWidget.cpp:549
 #, fuzzy, kde-format
 #| msgid "Left margin"
 msgid "Left Align"
 msgstr "Ľavý okraj"
 
-#: src/frontend/widgets/LabelWidget.cpp:571
+#: src/frontend/widgets/LabelWidget.cpp:551
 #, fuzzy, kde-format
 #| msgid "Right margin"
 msgid "Right Align"
 msgstr "Pravý okraj"
 
-#: src/frontend/widgets/LabelWidget.cpp:572
+#: src/frontend/widgets/LabelWidget.cpp:552
 #, kde-format
 msgid "Justify"
 msgstr ""
 
-#: src/frontend/widgets/LabelWidget.cpp:573
+#: src/frontend/widgets/LabelWidget.cpp:553
 #, fuzzy, kde-format
 #| msgid "Insert"
 msgid "Insert Symbol"
 msgstr "Vložiť"
 
-#: src/frontend/widgets/LabelWidget.cpp:574
+#: src/frontend/widgets/LabelWidget.cpp:554
 #, fuzzy, kde-format
 #| msgid "Date and Time"
 msgid "Insert Date/Time"
 msgstr "DátumČas"
 
-#: src/frontend/widgets/LabelWidget.cpp:919
-#: src/frontend/widgets/LabelWidget.cpp:945
+#: src/frontend/widgets/LabelWidget.cpp:899
+#: src/frontend/widgets/LabelWidget.cpp:925
 #, kde-format
 msgid "Date"
 msgstr "Dátum"
 
-#: src/frontend/widgets/LabelWidget.cpp:927
-#: src/frontend/widgets/LabelWidget.cpp:953
+#: src/frontend/widgets/LabelWidget.cpp:907
+#: src/frontend/widgets/LabelWidget.cpp:933
 #, kde-format
 msgid "Date and Time"
 msgstr "Dátum a čas"
@@ -26250,6 +26282,78 @@ msgstr ""
 #| msgid "Failed to open"
 msgid "Unable to open file:"
 msgstr "Nepodarilo sa otvoriť"
+
+#, fuzzy
+#~| msgid "%1: change comment"
+#~ msgid "%1: enable negative lower limit"
+#~ msgstr "%1: zmeniť komentár"
+
+#, fuzzy
+#~| msgid "Lower limit"
+#~ msgid "Lower Limit < 0:"
+#~ msgstr "Dolný limit"
+
+#, fuzzy
+#~| msgid "%1: set font"
+#~ msgid "%1: set border"
+#~ msgstr "%1: nastaviť písmo"
+
+#~ msgid "Start value"
+#~ msgstr "Počiatočná hodnota"
+
+#~ msgid "Lower limit"
+#~ msgstr "Dolný limit"
+
+#~ msgid "Upper limit"
+#~ msgstr "Horný limit"
+
+#, fuzzy
+#~| msgid "dot line"
+#~ msgid "No line"
+#~ msgstr "bodková čiara"
+
+#~ msgid "Solid line"
+#~ msgstr "Plná čiara"
+
+#~ msgid "Dash line"
+#~ msgstr "Čiarkovaná čiara"
+
+#~ msgid "Dot line"
+#~ msgstr "Bodková čiara"
+
+#, fuzzy
+#~| msgid "dash-dot line"
+#~ msgid "Dash dot line"
+#~ msgstr "Bodkočiarkovaná čiara"
+
+#, fuzzy
+#~ msgid "Dash dot dot line"
+#~ msgstr "Čiarkovano-bodkovano-bodkovaná čiara"
+
+#, fuzzy
+#~| msgid "Decimal"
+#~ msgid "Decimal point "
+#~ msgstr "Dekadický"
+
+#, fuzzy
+#~| msgid "iterations"
+#~ msgid "Group separator "
+#~ msgstr "iterácie"
+
+#, fuzzy
+#~| msgid "Exponential"
+#~ msgid "Exponential "
+#~ msgstr "Exponenciála"
+
+#, fuzzy
+#~| msgid "center tiled"
+#~ msgid "Percent "
+#~ msgstr "Percentil:"
+
+#, fuzzy
+#~| msgid "Number of points"
+#~ msgid "Number Settings:"
+#~ msgstr "Počet bodov"
 
 #, fuzzy
 #~| msgid "Custom"
@@ -27676,11 +27780,6 @@ msgstr "Nepodarilo sa otvoriť"
 
 #~ msgid "BIC"
 #~ msgstr "BIC"
-
-#, fuzzy
-#~| msgid "%1: set layout"
-#~ msgid "%1: disable theming"
-#~ msgstr "%1: nastaviť rozloženie"
 
 #, fuzzy
 #~| msgid "Break layout"

@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(QtAdvancedDockingSystem LANGUAGES CXX VERSION ${VERSION_SHORT})
+include(GNUInstallDirs)
 if (${QT_VERSION_MAJOR})
   message(STATUS "Forced to use Qt version ${QT_VERSION_MAJOR}")
   find_package(QT NAMES Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
@@ -82,7 +83,7 @@ endif()
 add_library(ads::${library_name} ALIAS ${library_name})
 
 if(NOT MSVC_FOUND)
-    target_compile_options(${library_name} PRIVATE -Wno-switch-enum)
+   target_compile_options(${library_name} PRIVATE -Wno-switch-enum)
 endif()
 
 target_link_libraries(${library_name} PUBLIC Qt${QT_VERSION_MAJOR}::Core 

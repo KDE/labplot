@@ -376,6 +376,10 @@ void Worksheet::handleAspectMoved() {
 	const auto& children = this->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
 	for (auto* child : children)
 		child->graphicsItem()->setZValue(zVal++);
+
+	Q_D(Worksheet);
+	if (d->layout != Worksheet::Layout::NoLayout)
+		d->updateLayout(false);
 }
 
 QGraphicsScene* Worksheet::scene() const {

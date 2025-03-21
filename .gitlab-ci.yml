@@ -94,44 +94,24 @@ windows_qt68_t:
     - triggers
     - web
 
-#craft_appimage_qt515_x86_64:
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == "master"'
-#      when: manual
-#      allow_failure: true
 craft_appimage_qt6_x86_64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
       when: manual
       allow_failure: true
 
-#craft_windows_qt515_x86_64:
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == "master"'
-#      when: manual
-#      allow_failure: true
 craft_windows_qt6_x86_64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
       when: manual
       allow_failure: true
 
-#craft_macos_x86_64:
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == "master"'
-#      when: manual
-#      allow_failure: true
 craft_macos_qt6_x86_64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
       when: manual
       allow_failure: true
 
-#craft_macos_arm64:
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == "master"'
-#      when: manual
-#      allow_failure: true
 craft_macos_qt6_arm64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'

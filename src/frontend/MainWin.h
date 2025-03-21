@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Main window of the application
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -171,7 +171,7 @@ private:
 	KToggleAction* m_statusBarAction;
 	QAction* m_memoryInfoAction;
 	KToggleFullScreenAction* m_fullScreenAction;
-	QAction* m_configureCASAction;
+	QAction* m_configureNotebookAction;
 
 	// window visibility
 	QAction* m_visibilityFolderAction;
@@ -263,6 +263,7 @@ private Q_SLOTS:
 
 #ifdef HAVE_CANTOR_LIBS
 	void newNotebook();
+	void settingsNotebookDialog();
 	void updateNotebookActions();
 #endif
 
