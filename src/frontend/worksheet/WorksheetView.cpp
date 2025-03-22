@@ -2186,7 +2186,13 @@ bool WorksheetView::exportToFile(const QString& path,
 			case Worksheet::ExportFormat::XPM:
 				rc = image.save(path, "XPM");
 				break;
-			default:
+			case Worksheet::ExportFormat::SVG:
+#ifdef HAVE_QTSVG
+				rc = image.save(path, "SVG");
+#endif
+				break;
+			case Worksheet::ExportFormat::PDF:
+				// not supported yet
 				break;
 			}
 		} else {
