@@ -3122,7 +3122,7 @@ void ColumnPrivate::calculateStatistics() {
 		rowData.push_back(val);
 	}
 
-	const size_t notNanCount = rowData.size();
+	const int notNanCount = rowData.size();
 
 	if (notNanCount == 0) {
 		available.statistics = true;
@@ -3206,7 +3206,7 @@ void ColumnPrivate::calculateStatistics() {
 	absoluteMedianList.reserve(notNanCount);
 	absoluteMedianList.resize(notNanCount);
 
-	for (size_t row = 0; row < notNanCount; ++row) {
+	for (int row = 0; row < notNanCount; ++row) {
 		double val = rowData.value(row);
 		statistics.variance += gsl_pow_2(val - statistics.arithmeticMean);
 		statistics.meanDeviation += std::abs(val - statistics.arithmeticMean);

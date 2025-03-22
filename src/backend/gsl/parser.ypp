@@ -329,7 +329,7 @@ namespace Parsing {
         Symbol* put_symbol(const char *symbol_name, int symbol_type) {
                 /*	DEBUG_PARSER("PARSER: put_symbol(): symbol_name = '%s'\n", symbol_name); */
 
-                auto* ptr = new Symbol(symbol_name, strlen(symbol_name), symbol_type);
+                auto* ptr = new Symbol(symbol_name, std::strlen(symbol_name), symbol_type);
                 assert(ptr);
                 switch (symbol_type) {
                 case VAR: ptr->value = 0.; break;
@@ -385,7 +385,7 @@ namespace Parsing {
                 for (int i = 0; i < _number_specialfunctions; i++) {
                         special_function_def sfd;
                         sfd.funsptr = &_special_functions[i];
-                        variable_symbols.push_back(new Symbol(_special_functions[i].name, strlen(_special_functions[i].name), SPECFNCT, sfd));
+                        variable_symbols.push_back(new Symbol(_special_functions[i].name, std::strlen(_special_functions[i].name), SPECFNCT, sfd));
                 }
 
                 DEBUG_PARSER("PARSER: init_table() DONE");
