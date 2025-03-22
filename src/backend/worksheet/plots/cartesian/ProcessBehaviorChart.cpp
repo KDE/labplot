@@ -849,9 +849,13 @@ void ProcessBehaviorChartPrivate::recalc() {
 		yUpperLimitColumn->clear();
 		xLowerLimitColumn->clear();
 		yLowerLimitColumn->clear();
-		centerLabel->setText(QString());
-		upperLimitLabel->setText(QString());
-		lowerLimitLabel->setText(QString());
+
+		// don't clear the labels while we're still loading and initilizing, the labels should keep their texts
+		if (!q->isLoading()) {
+			centerLabel->setText(QString());
+			upperLimitLabel->setText(QString());
+			lowerLimitLabel->setText(QString());
+		}
 		Q_EMIT q->dataChanged();
 		Q_EMIT q->recalculated();
 
@@ -1371,11 +1375,12 @@ void ProcessBehaviorChartPrivate::updateLabels() {
 	upperLimitLabel->setUndoAware(false);
 	lowerLimitLabel->setUndoAware(false);
 
+	const bool uniformLimitLabelsAvailable = !((type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U) && exactLimitsEnabled);
 	const bool lowerLimitAvailable = q->lowerLimitAvailable();
 
 	centerLabel->setVisible(labelsEnabled);
-	upperLimitLabel->setVisible(labelsEnabled);
-	lowerLimitLabel->setVisible(labelsEnabled && lowerLimitAvailable);
+	upperLimitLabel->setVisible(labelsEnabled && uniformLimitLabelsAvailable);
+	lowerLimitLabel->setVisible(labelsEnabled && lowerLimitAvailable && uniformLimitLabelsAvailable);
 
 	if (labelsEnabled) {
 		const auto numberLocale = QLocale();
