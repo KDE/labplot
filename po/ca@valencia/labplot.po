@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-20 00:38+0000\n"
+"POT-Creation-Date: 2025-03-22 00:38+0000\n"
 "PO-Revision-Date: 2025-03-20 16:47+0100\n"
 "Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -9219,34 +9219,34 @@ msgstr "%1: establix la forma de la vora de les etiquetes"
 msgid "%1: set labels font"
 msgstr "%1: establix la lletra de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:651
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:679
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:652
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:681
 #, kde-format
 msgid "%1: set labels background color"
 msgstr "%1: establix el color de fons de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:737
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:739
 #, kde-format
 msgid "%1: set labels border style"
 msgstr "%1: establix l'estil de forma de la vora"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:748
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:750
 #, kde-format
 msgid "%1: set labels border width"
 msgstr "%1: establix l'amplària de la vora de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:759
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:770
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:761
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:772
 #, kde-format
 msgid "%1: set labels border color"
 msgstr "%1: establix el color de la vora de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:858
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:860
 #, kde-format
 msgid "Not enough data provided."
 msgstr "No s'han proporcionat prou dades."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:958
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:960
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "L'última mostra és incompleta i s'ha omés."
@@ -10360,18 +10360,23 @@ msgstr "Desenvolupament:"
 msgid "Please report bugs to:"
 msgstr "Informeu dels errors a:"
 
-#: src/frontend/AboutDialog.cpp:209 src/frontend/AboutDialog.cpp:369
-#: src/frontend/AboutDialog.cpp:370
+#: src/frontend/AboutDialog.cpp:199
+#, kde-format
+msgid "Funded by:"
+msgstr ""
+
+#: src/frontend/AboutDialog.cpp:210 src/frontend/AboutDialog.cpp:370
+#: src/frontend/AboutDialog.cpp:371
 #, kde-format
 msgid "missing"
 msgstr "falta"
 
-#: src/frontend/AboutDialog.cpp:215
+#: src/frontend/AboutDialog.cpp:216
 #, kde-format
 msgid "Frontend to Mathematical Applications"
 msgstr "Frontal a aplicacions matemàtiques"
 
-#: src/frontend/AboutDialog.cpp:221
+#: src/frontend/AboutDialog.cpp:222
 #, kde-format
 msgid ""
 "Support data files in FITS (Flexible Image Transport System) data format"
@@ -10379,17 +10384,17 @@ msgstr ""
 "Implementació de fitxers de dades en el format de fitxer FITS (Flexible "
 "Image Transport System)"
 
-#: src/frontend/AboutDialog.cpp:227
+#: src/frontend/AboutDialog.cpp:228
 #, kde-format
 msgid "Markdown markup language support"
 msgstr "Implementació del llenguatge de marcatge Markdown"
 
-#: src/frontend/AboutDialog.cpp:233
+#: src/frontend/AboutDialog.cpp:234
 #, kde-format
 msgid "C++ library for linear algebra"
 msgstr "Biblioteca C++ per a àlgebra lineal"
 
-#: src/frontend/AboutDialog.cpp:239
+#: src/frontend/AboutDialog.cpp:240
 #, kde-format
 msgid "Fastest Fourier Transform in the West"
 msgstr ""
@@ -10397,127 +10402,127 @@ msgstr ""
 "the West»)"
 
 # skip-rule: t-e_sola
-#: src/frontend/AboutDialog.cpp:240
+#: src/frontend/AboutDialog.cpp:241
 #, kde-format
 msgid "GNU Scientific Library"
 msgstr "Biblioteca científica de GNU («GNU Scientific Library»)"
 
-#: src/frontend/AboutDialog.cpp:246
+#: src/frontend/AboutDialog.cpp:247
 #, kde-format
 msgid "High-performance data management and storage suite"
 msgstr "Paquet de gestió i emmagatzematge de dades d'altes prestacions"
 
-#: src/frontend/AboutDialog.cpp:252
+#: src/frontend/AboutDialog.cpp:253
 #, kde-format
 msgid "Syntax highlighting engine"
 msgstr "Motor de ressaltat de sintaxi"
 
-#: src/frontend/AboutDialog.cpp:258
+#: src/frontend/AboutDialog.cpp:259
 #, kde-format
 msgid "Support collecting feedback from users"
 msgstr "Implementació d'arreplegada de comentaris dels usuaris"
 
-#: src/frontend/AboutDialog.cpp:264
+#: src/frontend/AboutDialog.cpp:265
 #, kde-format
 msgid "Complex error and related functions"
 msgstr "Funcions complexes d'error i relacionades"
 
-#: src/frontend/AboutDialog.cpp:270
+#: src/frontend/AboutDialog.cpp:271
 #, kde-format
 msgid "importing Origin OPJ project files"
 msgstr "Importació de fitxers de projecte OPJ d'Origin"
 
-#: src/frontend/AboutDialog.cpp:276
+#: src/frontend/AboutDialog.cpp:277
 #, kde-format
 msgid "Import binary MATLAB MAT files"
 msgstr "Importa fitxers MAT de MATLAB binaris"
 
-#: src/frontend/AboutDialog.cpp:282
+#: src/frontend/AboutDialog.cpp:283
 #, kde-format
 msgid "MCAP file support"
 msgstr "Implementació de fitxers MCAP"
 
-#: src/frontend/AboutDialog.cpp:288
+#: src/frontend/AboutDialog.cpp:289
 #, kde-format
 msgid "Network Common Data Form"
 msgstr "Format de dades comú a la xarxa («Network Common Data Form»)"
 
-#: src/frontend/AboutDialog.cpp:294
+#: src/frontend/AboutDialog.cpp:295
 #, kde-format
 msgid "Import ODS (Open Document Spreadsheet) files"
 msgstr "Importa fitxers ODS (Open Document Spreadsheet)"
 
-#: src/frontend/AboutDialog.cpp:300
+#: src/frontend/AboutDialog.cpp:301
 #, kde-format
 msgid "PDF rendering library"
 msgstr "Biblioteca de renderització de PDF"
 
-#: src/frontend/AboutDialog.cpp:306
+#: src/frontend/AboutDialog.cpp:307
 #, kde-format
 msgid "Offers available actions for a specific purpose"
 msgstr "Oferix accions disponibles per a un propòsit específic"
 
-#: src/frontend/AboutDialog.cpp:307
+#: src/frontend/AboutDialog.cpp:308
 #, kde-format
 msgid "Qt Advanced Docking System"
 msgstr "Sistema d'acoblament avançat de les Qt («Qt Advanced Docking System»)"
 
-#: src/frontend/AboutDialog.cpp:313
+#: src/frontend/AboutDialog.cpp:314
 #, kde-format
 msgid "Support data from MQTT brokers"
 msgstr "Implementa dades a partir d'agents MQTT"
 
-#: src/frontend/AboutDialog.cpp:319
+#: src/frontend/AboutDialog.cpp:320
 #, kde-format
 msgid "Serial port functionality support"
 msgstr "Implementació de la funcionalitat de port sèrie"
 
-#: src/frontend/AboutDialog.cpp:325
+#: src/frontend/AboutDialog.cpp:326
 #, kde-format
 msgid "SVG export support"
 msgstr "Implementació de l'exportació de SVG"
 
-#: src/frontend/AboutDialog.cpp:331
+#: src/frontend/AboutDialog.cpp:332
 #, kde-format
 msgid "Import Excel xlsx files"
 msgstr "Importa fitxers «xlsx» d'Excel"
 
-#: src/frontend/AboutDialog.cpp:337
+#: src/frontend/AboutDialog.cpp:338
 #, kde-format
 msgid "Read (and write) data sets from SAS, Stata, and SPSS"
 msgstr "Llig (i escriu) conjunts de dades de SAS, Stata i SPSS"
 
-#: src/frontend/AboutDialog.cpp:343
+#: src/frontend/AboutDialog.cpp:344
 #, kde-format
 msgid "Binary Log File (BLF) file support"
 msgstr "Implementació de fitxers Binary Log File (BLF)"
 
-#: src/frontend/AboutDialog.cpp:346 src/frontend/AboutDialog.cpp:371
+#: src/frontend/AboutDialog.cpp:347 src/frontend/AboutDialog.cpp:372
 #, kde-format
 msgid "C++ Compiler: "
 msgstr "Compilador C++: "
 
-#: src/frontend/AboutDialog.cpp:351 src/frontend/AboutDialog.cpp:371
+#: src/frontend/AboutDialog.cpp:352 src/frontend/AboutDialog.cpp:372
 #, kde-format
 msgid "C++ Compiler Flags:"
 msgstr "Indicadors del compilador C++:"
 
-#: src/frontend/AboutDialog.cpp:365
+#: src/frontend/AboutDialog.cpp:366
 #, kde-format
 msgid "Components:"
 msgstr "Components:"
 
-#: src/frontend/AboutDialog.cpp:366
+#: src/frontend/AboutDialog.cpp:367
 #, kde-format
 msgid "Qt"
 msgstr "Qt"
 
-#: src/frontend/AboutDialog.cpp:367
+#: src/frontend/AboutDialog.cpp:368
 #, kde-format
 msgid "KDE Frameworks"
 msgstr "Frameworks de KDE"
 
-#: src/frontend/AboutDialog.cpp:382
+#: src/frontend/AboutDialog.cpp:383
 #, kde-format
 msgid ""
 "LabPlot Team (%1), LabPlot: A FREE, open source, cross-platform Data "
@@ -10793,7 +10798,7 @@ msgstr "Corba"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4074
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4128
-#: src/frontend/worksheet/WorksheetView.cpp:2203
+#: src/frontend/worksheet/WorksheetView.cpp:2209
 #, kde-format
 msgid "Failed to export"
 msgstr "No s'ha pogut exportar"
@@ -10801,7 +10806,7 @@ msgstr "No s'ha pogut exportar"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4074
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4128
-#: src/frontend/worksheet/WorksheetView.cpp:2203
+#: src/frontend/worksheet/WorksheetView.cpp:2209
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "No s'ha pogut escriure a «%1». Comproveu el camí."
