@@ -118,6 +118,8 @@ void SettingsWorksheetPage::loadSettings() {
 
 	ui.cbTexEngine->setCurrentIndex(index);
 	checkTeX(index);
+
+	m_changed = false;
 }
 
 void SettingsWorksheetPage::changed() {

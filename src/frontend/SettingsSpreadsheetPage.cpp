@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : settings page for Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -19,9 +19,11 @@
 SettingsSpreadsheetPage::SettingsSpreadsheetPage(QWidget* parent)
 	: SettingsPage(parent) {
 	ui.setupUi(this);
+
+	loadSettings();
+
 	connect(ui.chkShowColumnType, &QCheckBox::toggled, this, &SettingsSpreadsheetPage::changed);
 	connect(ui.chkShowPlotDesignation, &QCheckBox::toggled, this, &SettingsSpreadsheetPage::changed);
-	loadSettings();
 }
 
 QList<Settings::Type> SettingsSpreadsheetPage::applySettings() {
