@@ -196,7 +196,7 @@ QString AboutDialog::links() {
 		+ QLatin1String("<tr><td>") + i18n("Discuss on Mastodon:") + QLatin1String(" </td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://floss.social/@LabPlot")) + QLatin1String("</td></tr>")
 		+ QLatin1String("<tr><td>") + i18n("Development:") + QLatin1String(" </td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://invent.kde.org/education/labplot")) + QLatin1String("</td></tr>")
 		+ QLatin1String("<tr><td>") + i18n("Please report bugs to:") + QLatin1String(" </td><td>") + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://bugs.kde.org"))
-		+ QLatin1String("<tr><td>") + i18n("Funded by:") + QLatin1String(" </td><td>") + QStringLiteral("<a href=\"%1\">").arg(QStringLiteral("https://nlnet.nl/project/LabPlot")) + QStringLiteral("NGI Zero Core (NLnet)</a>")
+		+ QLatin1String("<tr><td>") + i18n("Partly funded by:") + QLatin1String(" </td><td>") + QStringLiteral("<a href=\"%1\">").arg(QStringLiteral("https://nlnet.nl/project/LabPlot")) + QStringLiteral("NGI Zero Core (NLnet)</a>")
 		+ QLatin1String("</table>");
 
 	return links;
