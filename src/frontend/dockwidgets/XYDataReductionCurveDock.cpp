@@ -489,12 +489,10 @@ void XYDataReductionCurveDock::recalculateClicked() {
 	connect(m_curve, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYDataReductionCurve*>(curve)->setDataReductionData(m_dataReductionData);
 
-	QApplication::restoreOverrideCursor();
 	statusBar->removeWidget(progressBar);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);

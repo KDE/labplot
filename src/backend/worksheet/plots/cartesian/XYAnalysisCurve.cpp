@@ -533,6 +533,10 @@ void XYAnalysisCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDat
 }
 
 void XYAnalysisCurvePrivate::recalculate() {
+	// process all events first to close the context menu, if the new analysis curve is added via the context menu
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
 	// create filter result columns if not available yet, clear them otherwise
 	if (!xColumn) {
 		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
@@ -577,6 +581,7 @@ void XYAnalysisCurvePrivate::recalculate() {
 		}
 	}
 	Q_EMIT q->dataChanged();
+	QApplication::restoreOverrideCursor();
 }
 
 bool XYAnalysisCurvePrivate::preparationValid(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
