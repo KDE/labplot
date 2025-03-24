@@ -427,8 +427,6 @@ void XYAnalysisCurvePrivate::connectCurve(const XYCurve* curve) {
 	// handle the changes when the data inside of the source curve columns
 	m_connections << q->connect(curve, &XYCurve::xDataChanged, q, &XYAnalysisCurve::handleSourceDataChanged);
 	m_connections << q->connect(curve, &XYCurve::yDataChanged, q, &XYAnalysisCurve::handleSourceDataChanged);
-	if (curve->parentAspect())
-		m_connections << q->connect(curve->parentAspect(), &AbstractAspect::childAspectAdded, q, &XYAnalysisCurve::recalculate);
 }
 
 void XYAnalysisCurvePrivate::connectColumn(const AbstractColumn* column, Dimension dim, bool second) {
