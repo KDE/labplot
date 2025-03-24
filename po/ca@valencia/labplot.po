@@ -10,16 +10,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-23 00:38+0000\n"
-"PO-Revision-Date: 2025-03-20 16:47+0100\n"
-"Last-Translator: Antoni Bella Pérez <antonibella5@yahoo.com>\n"
+"POT-Creation-Date: 2025-03-24 00:38+0000\n"
+"PO-Revision-Date: 2025-03-22 22:26+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 22.12.3\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -864,7 +864,7 @@ msgstr "element «%1» desconegut del selector de dades"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:411
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:72
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:61
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:357
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:354
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:311
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:327
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:39
@@ -6500,9 +6500,9 @@ msgstr "Circular"
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:683
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:350
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:223
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:120
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:151
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:408
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:118
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:149
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:405
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:360
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:365
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:317
@@ -8436,7 +8436,7 @@ msgstr "Funció d'error"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:444
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:398
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:147
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:512
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:509
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:418
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:407
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:432
@@ -10208,7 +10208,7 @@ msgstr "%1: desbloqueig"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:275
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:352
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:68
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:83
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:81
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:246
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:172
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:425
@@ -10361,9 +10361,10 @@ msgid "Please report bugs to:"
 msgstr "Informeu dels errors a:"
 
 #: src/frontend/AboutDialog.cpp:199
-#, kde-format
-msgid "Funded by:"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "Funded by:"
+msgid "Partly funded by:"
+msgstr "Finançat per:"
 
 #: src/frontend/AboutDialog.cpp:210 src/frontend/AboutDialog.cpp:370
 #: src/frontend/AboutDialog.cpp:371
@@ -12858,7 +12859,7 @@ msgstr "%1 eixos: s'ha carregat la plantilla «%2»"
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1842
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:803
 #: src/frontend/dockwidgets/CustomPointDock.cpp:385
-#: src/frontend/dockwidgets/HistogramDock.cpp:558
+#: src/frontend/dockwidgets/HistogramDock.cpp:580
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:375
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:452
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
@@ -13128,7 +13129,7 @@ msgstr "Intervals del diagrama:"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:258
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:233
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:114
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:469
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:466
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:33
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:165
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:848
@@ -13451,7 +13452,32 @@ msgstr "Densitat del comptador"
 msgid "Probability Density"
 msgstr "Densitat de probabilitat"
 
-#: src/frontend/dockwidgets/HistogramDock.cpp:556
+#: src/frontend/dockwidgets/HistogramDock.cpp:282
+#, kde-format
+msgid ""
+"Method used to determine the number of bins <i>k</i> and their width <i>h</"
+"i> for <i>n</i> values:<ul><li>By Number - the number of bins is specified "
+"manually</li><li>By Width - the number of bins is calculated based on the "
+"specified bin width via <i>k = (max(x) - min(x) / h</i>)</li><li>Square-root "
+"- <i>k = sqrt(n)</i></li><li>Rice -  <i>k = 2 * pow(n, 3/2)</i>, simpler "
+"alternative to Sturges' method</li><li>Sturges - <i>k = log2(n) + 1</i>, "
+"assumes an approximately normal distribution</li><li>Doane - modified "
+"version of Sturges' method, see the documentation for more details</"
+"li><li>Scott - <i>h = 3.49 * sigma / pow(n, 3/2)</i>, optimal method for "
+"normally distributed data</li></ul>"
+msgstr ""
+
+#: src/frontend/dockwidgets/HistogramDock.cpp:295
+#, kde-format
+msgid ""
+"Use 'Auto' to automatically determine the minimal and maximal values of the "
+"data to be used to calculate the histogram. Specify the values manually, "
+"otherwise.<br><br><b>Note:</b> any samples which fall on the upper end of "
+"the histogram are excluded. If you want to include these values for the last "
+"bin you will need to add an extra bin to your histogram."
+msgstr ""
+
+#: src/frontend/dockwidgets/HistogramDock.cpp:578
 #, kde-format
 msgid "%1 histograms: template \"%2\" loaded"
 msgstr "Histogrames %1: s'ha carregat la plantilla «%2»"
@@ -13971,69 +13997,69 @@ msgstr ""
 "Si està marcada, connectarà els punts de dades únicament per als valors "
 "estrictament creixents de X"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:65
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:61
 #, kde-format
 msgid "This method is much slower than any other"
 msgstr "Este mètode és molt més lent que qualsevol altre"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:357
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:389
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:434
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:354
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:386
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:431
 #, kde-format
 msgid "Tolerance (distance):"
 msgstr "Tolerància (distància):"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:368
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:365
 #, kde-format
 msgid "Number of points:"
 msgstr "Nombre de punts:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:379
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:376
 #, kde-format
 msgid "Step size:"
 msgstr "Mida del pas:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:396
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:393
 #, kde-format
 msgid "Repeats:"
 msgstr "Repeticions:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:406
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:403
 #, kde-format
 msgid "Tolerance (area):"
 msgstr "Tolerància (àrea):"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:417
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:414
 #, kde-format
 msgid "Minimum tolerance:"
 msgstr "Tolerància mínima:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:421
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:418
 #, kde-format
 msgid "Maximum tolerance:"
 msgstr "Tolerància màx.:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:438
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:435
 #, kde-format
 msgid "Search region:"
 msgstr "Regió de busca:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:504
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:501
 #, kde-format
 msgid "Data reduction status: %1"
 msgstr "Estat de la reducció de les dades: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:519
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
 #, kde-format
 msgid "number of points: %1"
 msgstr "nombre de punts: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:520
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:517
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "error quadràtic posicional: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:521
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:518
 #, kde-format
 msgid "area error: %1"
 msgstr "error de l'àrea: %1"
@@ -14121,7 +14147,7 @@ msgstr "Estadística t"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:435
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:217
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:359
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:452
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:449
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:56
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:340
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:479
@@ -16312,42 +16338,42 @@ msgstr "Preferències [modificades]"
 msgid "min."
 msgstr "mín."
 
-#: src/frontend/SettingsGeneralPage.cpp:210
+#: src/frontend/SettingsGeneralPage.cpp:212
 #, kde-format
 msgid "Create New Project"
 msgstr "Crea un projecte nou"
 
-#: src/frontend/SettingsGeneralPage.cpp:211
+#: src/frontend/SettingsGeneralPage.cpp:213
 #, kde-format
 msgid "Load Last Used Project"
 msgstr "Carrega l'últim projecte emprat"
 
-#: src/frontend/SettingsGeneralPage.cpp:215
+#: src/frontend/SettingsGeneralPage.cpp:217
 #, kde-format
 msgid "With Spreadsheet"
 msgstr "Amb full de càlcul"
 
-#: src/frontend/SettingsGeneralPage.cpp:216
+#: src/frontend/SettingsGeneralPage.cpp:218
 #, kde-format
 msgid "With Worksheet"
 msgstr "Amb full de treball"
 
-#: src/frontend/SettingsGeneralPage.cpp:217
+#: src/frontend/SettingsGeneralPage.cpp:219
 #, kde-format
 msgid "With Spreadsheet and Worksheet"
 msgstr "Amb full de càlcul i full de treball"
 
-#: src/frontend/SettingsGeneralPage.cpp:219
+#: src/frontend/SettingsGeneralPage.cpp:221
 #, kde-format
 msgid "With Notebook"
 msgstr "Amb bloc de notes"
 
-#: src/frontend/SettingsGeneralPage.cpp:222
+#: src/frontend/SettingsGeneralPage.cpp:224
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr "Tipus de bloc de notes que s'ha de crear automàticament en iniciar"
 
-#: src/frontend/SettingsGeneralPage.cpp:226
+#: src/frontend/SettingsGeneralPage.cpp:228
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
@@ -16356,42 +16382,42 @@ msgstr ""
 "Controla el comportament d'on se situen els ginys acoblats després que es "
 "tornen a obrir"
 
-#: src/frontend/SettingsGeneralPage.cpp:230
+#: src/frontend/SettingsGeneralPage.cpp:232
 #, kde-format
 msgid "Original Position"
 msgstr "Posició original"
 
-#: src/frontend/SettingsGeneralPage.cpp:231
+#: src/frontend/SettingsGeneralPage.cpp:233
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr "En la part superior de l'últim giny acoblat actiu"
 
-#: src/frontend/SettingsGeneralPage.cpp:234
+#: src/frontend/SettingsGeneralPage.cpp:236
 #, kde-format
 msgid "Show File Path"
 msgstr "Mostra el camí cap al fitxer"
 
-#: src/frontend/SettingsGeneralPage.cpp:235
+#: src/frontend/SettingsGeneralPage.cpp:237
 #, kde-format
 msgid "Show File Name"
 msgstr "Mostra el nom del fitxer"
 
-#: src/frontend/SettingsGeneralPage.cpp:236
+#: src/frontend/SettingsGeneralPage.cpp:238
 #, kde-format
 msgid "Show Project Name"
 msgstr "Mostra el nom del projecte"
 
-#: src/frontend/SettingsGeneralPage.cpp:239
+#: src/frontend/SettingsGeneralPage.cpp:241
 #, kde-format
 msgid "Metric"
 msgstr "Mètric"
 
-#: src/frontend/SettingsGeneralPage.cpp:240
+#: src/frontend/SettingsGeneralPage.cpp:242
 #, kde-format
 msgid "Imperial"
 msgstr "Imperial"
 
-#: src/frontend/SettingsGeneralPage.cpp:242
+#: src/frontend/SettingsGeneralPage.cpp:244
 #, kde-format
 msgid ""
 "Characters for the decimal and group separators defining the number format"
@@ -16399,12 +16425,12 @@ msgstr ""
 "Caràcters per als separadors decimals i de grup que definixen el format "
 "numèric"
 
-#: src/frontend/SettingsGeneralPage.cpp:246
+#: src/frontend/SettingsGeneralPage.cpp:248
 #, kde-format
 msgid "%1 (System, %2)"
 msgstr "%1 (Sistema, %2)"
 
-#: src/frontend/SettingsGeneralPage.cpp:255
+#: src/frontend/SettingsGeneralPage.cpp:257
 #, kde-format
 msgid ""
 "Use the hyphen sign instead of the minus sign for negative numbers shown on "
@@ -16413,7 +16439,7 @@ msgstr ""
 "Utilitza el signe de guionet en lloc del signe menys per als nombres "
 "negatius que es mostren al full de treball"
 
-#: src/frontend/SettingsGeneralPage.cpp:259
+#: src/frontend/SettingsGeneralPage.cpp:261
 #, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
@@ -16425,7 +16451,7 @@ msgstr ""
 "Uncertainty in Measurement (GUM) (Guia per a l'expressió d'incertesa en la "
 "mesura)</a>"
 
-#: src/frontend/SettingsGeneralPage.cpp:264
+#: src/frontend/SettingsGeneralPage.cpp:266
 #, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
@@ -16439,7 +16465,7 @@ msgstr ""
 "La configuració es pot canviar per a cada projecte per separat a les "
 "propietats del projecte."
 
-#: src/frontend/SettingsGeneralPage.cpp:271
+#: src/frontend/SettingsGeneralPage.cpp:273
 #, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
@@ -16458,12 +16484,12 @@ msgstr ""
 "La configuració es pot canviar per a cada projecte per separat a les "
 "propietats del projecte."
 
-#: src/frontend/SettingsGeneralPage.cpp:278
+#: src/frontend/SettingsGeneralPage.cpp:280
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
 msgstr "Activa una eixida de traçat addicional al terminal."
 
-#: src/frontend/SettingsGeneralPage.cpp:279
+#: src/frontend/SettingsGeneralPage.cpp:281
 #, kde-format
 msgid ""
 "Info trace - helpful to get information and warnings when running the "
@@ -16472,7 +16498,7 @@ msgstr ""
 "Traça d'informació: útil per a obtindre informació i avisos quan s'executa "
 "l'aplicació."
 
-#: src/frontend/SettingsGeneralPage.cpp:280
+#: src/frontend/SettingsGeneralPage.cpp:282
 #, kde-format
 msgid ""
 "Debug trace - helpful to diagnose the application, can have a negative "
@@ -16481,7 +16507,7 @@ msgstr ""
 "Traça de depuració: útil per a diagnosticar l'aplicació, pot tindre un "
 "impacte negatiu en el rendiment."
 
-#: src/frontend/SettingsGeneralPage.cpp:281
+#: src/frontend/SettingsGeneralPage.cpp:283
 #, kde-format
 msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
@@ -16536,7 +16562,7 @@ msgstr ""
 "Tema predeterminat per als fulls de treball de nova creació i els objectes "
 "del full de treball"
 
-#: src/frontend/SettingsWorksheetPage.cpp:135
+#: src/frontend/SettingsWorksheetPage.cpp:137
 #, kde-format
 msgid ""
 "No LaTeX installation found or selected. LaTeX typesetting not possible."
@@ -16544,20 +16570,20 @@ msgstr ""
 "No s'ha trobat o seleccionat cap instal·lació de LaTeX. La composició "
 "tipogràfica de LaTeX no és possible."
 
-#: src/frontend/SettingsWorksheetPage.cpp:145
+#: src/frontend/SettingsWorksheetPage.cpp:147
 #, kde-format
 msgid "No 'convert' found. LaTeX typesetting not possible."
 msgstr ""
 "No s'ha trobat «convert». La composició tipogràfica de LaTeX no és possible."
 
-#: src/frontend/SettingsWorksheetPage.cpp:151
+#: src/frontend/SettingsWorksheetPage.cpp:153
 #, kde-format
 msgid "No 'dvips' found. LaTeX typesetting not possible."
 msgstr ""
 "No s'ha trobat «dvips». La composició tipogràfica de LaTeX no és possible."
 
-#: src/frontend/SettingsWorksheetPage.cpp:158
-#: src/frontend/SettingsWorksheetPage.cpp:164
+#: src/frontend/SettingsWorksheetPage.cpp:160
+#: src/frontend/SettingsWorksheetPage.cpp:166
 #, kde-format
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr ""
@@ -18684,7 +18710,7 @@ msgstr "Tipus d'error Y:"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:162
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:275
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:121
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:442
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:439
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:253
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:312
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:262
@@ -18737,7 +18763,7 @@ msgstr "Comentari:"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:181
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:291
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:32
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:43
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:42
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:340
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:101
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:92
@@ -19005,8 +19031,8 @@ msgstr "Mida:"
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:694
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:710
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:726
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:136
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:424
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:134
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:421
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:73
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:240
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:459
@@ -19272,7 +19298,6 @@ msgstr "Camí relatiu"
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:17
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:42
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:539
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:175
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:135
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:430
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:33
@@ -19890,7 +19915,7 @@ msgstr "Mostra la informació del fitxer"
 #: src/frontend/ui/dockwidgets/livedatadock.ui:47
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:188
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:216
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:50
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:49
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:73
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:298
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:61
@@ -21485,8 +21510,8 @@ msgstr "Mida de l'extrem:"
 #: src/frontend/ui/dockwidgets/histogramdock.ui:228
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:393
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:51
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:250
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:269
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:248
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:267
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:171
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:190
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:138
@@ -21513,6 +21538,7 @@ msgstr "Agrupament"
 #. i18n: ectx: property (text), widget (QLabel, lMethod)
 #. i18n: ectx: property (text), widget (QLabel, lBinningMethod)
 #: src/frontend/ui/dockwidgets/histogramdock.ui:174
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:173
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:137
 #: src/frontend/ui/spreadsheet/samplevalueswidget.ui:47
 #, kde-format
@@ -21528,8 +21554,8 @@ msgstr "Mètode:"
 #: src/frontend/ui/dockwidgets/histogramdock.ui:378
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:86
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:142
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:212
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:231
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:210
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:229
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:133
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:152
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:160
@@ -22083,7 +22109,7 @@ msgstr "Ajusta la resposta:"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:131
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:345
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:75
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:161
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:159
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:404
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:858
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:358
@@ -22100,7 +22126,7 @@ msgstr "Dades de X:"
 #. i18n: ectx: property (text), widget (QLabel, lXRange)
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:138
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:298
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:371
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:368
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:370
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:17
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:337
@@ -22146,7 +22172,7 @@ msgstr "Senyal de les dades de Y:"
 #. i18n: ectx: property (text), widget (QToolButton, tbResults)
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:337
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:85
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:63
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:61
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:324
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:469
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:453
@@ -22229,7 +22255,7 @@ msgstr "Monòtona creixent de X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lYColumn)
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:107
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:505
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:502
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:353
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:350
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:304
@@ -22244,15 +22270,15 @@ msgid "Y-Data:"
 msgstr "Dades de Y:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSimplification)
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:30
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:29
 #, kde-format
 msgid "Simplification"
 msgstr "Simplificació"
 
 #. i18n: ectx: property (text), widget (QLabel, lOption2)
 #. i18n: ectx: property (text), widget (QLabel, lOption)
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:168
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:328
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:166
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:326
 #, kde-format
 msgid "Option:"
 msgstr "Opció:"
