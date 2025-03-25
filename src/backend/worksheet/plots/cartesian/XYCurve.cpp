@@ -59,7 +59,7 @@ XYCurve::XYCurve(const QString& name, AspectType type, bool loading)
 
 XYCurve::XYCurve(const QString& name, XYCurvePrivate* dd, AspectType type)
 	: Plot(name, dd, type) {
-	init();
+	init(false);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem

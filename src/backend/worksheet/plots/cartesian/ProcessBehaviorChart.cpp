@@ -50,7 +50,7 @@ ProcessBehaviorChart::ProcessBehaviorChart(const QString& name, bool loading)
 
 ProcessBehaviorChart::ProcessBehaviorChart(const QString& name, ProcessBehaviorChartPrivate* dd)
 	: Plot(name, dd, AspectType::ProcessBehaviorChart) {
-	init();
+	init(false);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem

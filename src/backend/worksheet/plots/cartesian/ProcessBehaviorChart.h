@@ -104,7 +104,7 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(ProcessBehaviorChart)
-	void init(bool loading = false);
+	void init(bool loading);
 	void connectDataColumn(const AbstractColumn*);
 	void connectData2Column(const AbstractColumn*);
 

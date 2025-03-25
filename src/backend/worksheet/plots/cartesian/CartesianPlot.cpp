@@ -109,7 +109,7 @@ CartesianPlot::CartesianPlot(const QString& name, bool loading)
 
 CartesianPlot::CartesianPlot(const QString& name, CartesianPlotPrivate* dd)
 	: AbstractPlot(name, dd, AspectType::CartesianPlot) {
-	init();
+	init(false);
 }
 
 CartesianPlot::~CartesianPlot() {

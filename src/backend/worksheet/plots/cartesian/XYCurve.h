@@ -146,7 +146,7 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(XYCurve)
-	void init(bool loading = false);
+	void init(bool loading);
 	void initActions();
 	void connectXColumn(const AbstractColumn*);
 	void connectYColumn(const AbstractColumn*);

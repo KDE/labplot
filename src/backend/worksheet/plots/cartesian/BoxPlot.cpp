@@ -50,7 +50,7 @@ BoxPlot::BoxPlot(const QString& name, bool loading)
 
 BoxPlot::BoxPlot(const QString& name, BoxPlotPrivate* dd)
 	: Plot(name, dd, AspectType::BoxPlot) {
-	init();
+	init(false);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
