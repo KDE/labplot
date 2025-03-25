@@ -2738,6 +2738,9 @@ bool XYCurvePrivate::pointLiesNearCurve(const QPointF mouseScenePos,
 }
 
 void XYCurvePrivate::updateErrorBars() {
+	if (suppressRetransform)
+		return;
+
 	errorBarsPath = QPainterPath();
 	if (errorBar->xErrorType() == ErrorBar::ErrorType::NoError && errorBar->yErrorType() == ErrorBar::ErrorType::NoError) {
 		recalcShapeAndBoundingRect();
