@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-24 00:38+0000\n"
-"PO-Revision-Date: 2025-03-22 09:31+0200\n"
+"POT-Creation-Date: 2025-03-25 00:38+0000\n"
+"PO-Revision-Date: 2025-03-24 15:13+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1088,7 +1088,7 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:201
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2137
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1244
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1243
 #, kde-format
 msgid "Success"
 msgstr "Успіх"
@@ -10327,10 +10327,9 @@ msgid "Please report bugs to:"
 msgstr "Про вади, будь ласка, повідомляйте тут:"
 
 #: src/frontend/AboutDialog.cpp:199
-#, fuzzy, kde-format
-#| msgid "Funded by:"
+#, kde-format
 msgid "Partly funded by:"
-msgstr "Фінансування:"
+msgstr "Часткове фінансування:"
 
 #: src/frontend/AboutDialog.cpp:210 src/frontend/AboutDialog.cpp:370
 #: src/frontend/AboutDialog.cpp:371
@@ -10568,18 +10567,18 @@ msgstr "Перегляд списком із подробицями"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:314
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1375
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1381
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1387
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1373
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1379
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1385
 #, kde-format
 msgid "Copy Selection"
 msgstr "Копіювати позначене"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:315
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1376
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1382
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1388
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1374
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1380
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1386
 #, kde-format
 msgid "Copy All"
 msgstr "Копіювати все"
@@ -13410,6 +13409,16 @@ msgid ""
 "li><li>Scott - <i>h = 3.49 * sigma / pow(n, 3/2)</i>, optimal method for "
 "normally distributed data</li></ul>"
 msgstr ""
+"Метод, що використовується для визначення кількості пунктів <i>k</i> і "
+"їхньої ширини <i>h</i> для <i>n</i> значень:<ul><li>За кількістю - кількість "
+"пунктів задається вручну</li><li>За шириною - кількість пунктів обчислюється "
+"на основі вказаної ширини пункту за формулою <i>k = (max(x) - min(x) / h</"
+"i>)</li><li>Квадратний корінь - <i>k = sqrt(n)</i></li><li>Райс -  <i>k = 2 "
+"* pow(n, 3/2)</i>, простіша альтернатива методу Стерджеса</li><li>Стерджес - "
+"<i>k = log2(n) + 1</i>, припускає майже нормальний розподіл</li><li>Доан - "
+"змінена версія методу Стерджеса, див. документацію, щоб дізнатися більше</"
+"li><li>Скотт - <i>h = 3.49 * sigma / pow(n, 3/2)</i>, оптимальний метод для "
+"нормально розподілених даних</li></ul>"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:295
 #, kde-format
@@ -13420,6 +13429,12 @@ msgid ""
 "the histogram are excluded. If you want to include these values for the last "
 "bin you will need to add an extra bin to your histogram."
 msgstr ""
+"Скористайтеся варіантом «Авто» для автоматичного визначення мінімального і "
+"максимального значень даних, на основі яких буде побудовано гістограму. Якщо "
+"цей варіант вас не влаштовує, вкажіть значення вручну.<br><br><b>Зауваження:"
+"</b> усі виміри, які потраплять на верхній кінець гістограми буде виключено. "
+"Якщо ви хочете включити ці значення для останнього пункту, вам доведеться "
+"додати зайвий пункт до вашої гістограми."
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:578
 #, kde-format
@@ -13832,17 +13847,17 @@ msgstr "з ядром/розміром:"
 msgid "Deconvolution"
 msgstr "Розгортка"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:383
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:381
 #, kde-format
 msgid "Convolution status: %1"
 msgstr "Стан згортки: %1"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:385
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:383
 #, kde-format
 msgid "Deconvolution status: %1"
 msgstr "Стан розгортки: %1"
 
-#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:280
+#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:278
 #, kde-format
 msgid "Correlation status: %1"
 msgstr "Стан кореляції: %1"
@@ -13978,27 +13993,27 @@ msgstr "Макс. допуск:"
 msgid "Search region:"
 msgstr "Діапазон пошуку:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:501
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:499
 #, kde-format
 msgid "Data reduction status: %1"
 msgstr "Стан зведення даних: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:514
 #, kde-format
 msgid "number of points: %1"
 msgstr "кількість точок: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:517
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:515
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "позиційна квадратична похибка: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:518
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
 #, kde-format
 msgid "area error: %1"
 msgstr "похибка за площею: %1"
 
-#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:391
+#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:389
 #, kde-format
 msgid "Differentiation status: %1"
 msgstr "Стан диференціювання: %1"
@@ -14109,23 +14124,23 @@ msgstr "Порядок:"
 msgid "Number of peaks:"
 msgstr "Кількість піків:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1245
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1244
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "Стан апроксимації: %1"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1256
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1255
 #, kde-format
 msgid "No data source available!"
 msgstr "Немає доступного джерела даних!"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1427
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1425
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "%1 % нижній довірчий рівень"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1428
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1426
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "%1 % верхній довірчий рівень"
@@ -14161,12 +14176,12 @@ msgstr ""
 msgid "band width <= 0"
 msgstr "ширина смуги <= 0"
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:442
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:441
 #, kde-format
 msgid "Fourier-Filter status: %1"
 msgstr "Стан фільтра Фур'є: %1"
 
-#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:236
+#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:235
 #, kde-format
 msgid "Fourier transformation status: %1"
 msgstr "Стан перетворення Фур'є: %1"
@@ -14207,17 +14222,17 @@ msgstr "Вилучити змінну"
 msgid "Variable:"
 msgstr "Змінна:"
 
-#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:184
+#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:183
 #, kde-format
 msgid "Hilbert transformation status: %1"
 msgstr "Стан перетворення Гільберта: %1"
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:321
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:319
 #, kde-format
 msgid "Integration status: %1"
 msgstr "Стан інтегрування: %1"
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:334
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:331
 #, kde-format
 msgid "value: %1"
 msgstr "значення: %1"
@@ -14241,12 +14256,12 @@ msgstr ""
 "Кількість точок інтерполяції має перевищувати загальну кількість точок у "
 "джерелі даних."
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:540
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:538
 #, kde-format
 msgid "Interpolation status: %1"
 msgstr "Стан інтерполяції: %1"
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:412
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:410
 #, kde-format
 msgid "Smoothing status: %1"
 msgstr "Стан згладжування: %1"

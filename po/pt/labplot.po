@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-24 00:38+0000\n"
+"POT-Creation-Date: 2025-03-25 00:38+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -1150,7 +1150,7 @@ msgstr "Não foi possível aceder ao ficheiro '%1' para escrita."
 #: src/backend/datasources/filters/AsciiFilter.cpp:201
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2137
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1244
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1243
 #, kde-format
 msgid "Success"
 msgstr "Sucesso"
@@ -10881,18 +10881,18 @@ msgstr ""
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:314
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1375
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1381
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1387
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1373
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1379
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1385
 #, kde-format
 msgid "Copy Selection"
 msgstr "Copiar a Selecção"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:315
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1376
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1382
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1388
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1374
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1380
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1386
 #, kde-format
 msgid "Copy All"
 msgstr "Copiar Tudo"
@@ -14131,17 +14131,17 @@ msgstr "com o Núcleo/Tamanho:"
 msgid "Deconvolution"
 msgstr "Desconvolução"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:383
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:381
 #, kde-format
 msgid "Convolution status: %1"
 msgstr "Estado da convolução: %1"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:385
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:383
 #, kde-format
 msgid "Deconvolution status: %1"
 msgstr "Estado da desconvolução: %1"
 
-#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:280
+#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:278
 #, kde-format
 msgid "Correlation status: %1"
 msgstr "Estado da correlação: %1"
@@ -14278,27 +14278,27 @@ msgstr "Tolerância máxima:"
 msgid "Search region:"
 msgstr "Região da pesquisa:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:501
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:499
 #, kde-format
 msgid "Data reduction status: %1"
 msgstr "Estado da redução de dados: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:514
 #, kde-format
 msgid "number of points: %1"
 msgstr "número de pontos: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:517
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:515
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "erro ao quadrado da posição: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:518
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
 #, kde-format
 msgid "area error: %1"
 msgstr "erro da área: %1"
 
-#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:391
+#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:389
 #, kde-format
 msgid "Differentiation status: %1"
 msgstr "Estado da derivada: %1"
@@ -14413,25 +14413,25 @@ msgstr "Grau:"
 msgid "Number of peaks:"
 msgstr "Número de picos:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1245
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1244
 #, fuzzy, kde-format
 #| msgid "Fit status: %1"
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "Estado do ajuste: %1"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1256
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1255
 #, fuzzy, kde-format
 #| msgid "No data points available."
 msgid "No data source available!"
 msgstr "Não tem pontos de dados disponíveis."
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1427
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1425
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "Nível de confiança de %1 % inferior"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1428
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1426
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "Nível de confiança de %1 % superior"
@@ -14467,12 +14467,12 @@ msgstr ""
 msgid "band width <= 0"
 msgstr "largura de banda <= 0"
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:442
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:441
 #, kde-format
 msgid "Fourier-Filter status: %1"
 msgstr "Estado do filtro de Fourier: %1"
 
-#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:236
+#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:235
 #, kde-format
 msgid "Fourier transformation status: %1"
 msgstr "Estado da transformada de Fourier: %1"
@@ -14515,17 +14515,17 @@ msgstr "Apagar a variável"
 msgid "Variable:"
 msgstr "Variável:"
 
-#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:184
+#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:183
 #, kde-format
 msgid "Hilbert transformation status: %1"
 msgstr "Estado da transformada de Hilbert: %1"
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:321
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:319
 #, kde-format
 msgid "Integration status: %1"
 msgstr "Estado do integral: %1"
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:334
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:331
 #, kde-format
 msgid "value: %1"
 msgstr "valor: %1"
@@ -14547,12 +14547,12 @@ msgid ""
 "number of points in the data source."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:540
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:538
 #, kde-format
 msgid "Interpolation status: %1"
 msgstr "Estado da interpolação: %1"
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:412
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:410
 #, kde-format
 msgid "Smoothing status: %1"
 msgstr "Estado da suavização: %1"

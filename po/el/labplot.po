@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-24 00:38+0000\n"
+"POT-Creation-Date: 2025-03-25 00:38+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -1115,7 +1115,7 @@ msgstr "Αδυναμία ανοίγματος αρχείου για εγγραφ
 #: src/backend/datasources/filters/AsciiFilter.cpp:201
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2137
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1244
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1243
 #, kde-format
 msgid "Success"
 msgstr ""
@@ -10916,9 +10916,9 @@ msgstr ""
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:314
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1375
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1381
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1387
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1373
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1379
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1385
 #, fuzzy, kde-format
 #| msgid "Export to"
 msgid "Copy Selection"
@@ -10926,9 +10926,9 @@ msgstr "Εξαγωγή σε"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:315
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1376
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1382
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1388
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1374
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1380
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1386
 #, fuzzy, kde-format
 #| msgid "Show"
 msgid "Copy All"
@@ -14085,19 +14085,19 @@ msgstr ""
 msgid "Deconvolution"
 msgstr "Σύνδεση:"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:383
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:381
 #, fuzzy, kde-format
 #| msgid "Interpolation:"
 msgid "Convolution status: %1"
 msgstr "Παρεμβολή:"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:385
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:383
 #, fuzzy, kde-format
 #| msgid "Interpolation:"
 msgid "Deconvolution status: %1"
 msgstr "Παρεμβολή:"
 
-#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:280
+#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:278
 #, fuzzy, kde-format
 #| msgid "Interpolation:"
 msgid "Correlation status: %1"
@@ -14241,28 +14241,28 @@ msgstr "Ανοχή"
 msgid "Search region:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:501
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:499
 #, fuzzy, kde-format
 #| msgid "Data portion to read"
 msgid "Data reduction status: %1"
 msgstr "Τμήμα δεδομένων για ανάγνωση"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:514
 #, kde-format
 msgid "number of points: %1"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:517
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:515
 #, kde-format
 msgid "positional squared error: %1"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:518
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
 #, kde-format
 msgid "area error: %1"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:391
+#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:389
 #, fuzzy, kde-format
 #| msgid "Differentiation:"
 msgid "Differentiation status: %1"
@@ -14382,25 +14382,25 @@ msgstr ""
 msgid "Number of peaks:"
 msgstr "Πλήθος επιπέδων"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1245
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1244
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "Στατιστική"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1256
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1255
 #, fuzzy, kde-format
 #| msgid "Variance"
 msgid "No data source available!"
 msgstr "Διακύμανση"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1427
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1425
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1428
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1426
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr ""
@@ -14435,13 +14435,13 @@ msgstr ""
 msgid "band width <= 0"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:442
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:441
 #, fuzzy, kde-format
 #| msgid "Derivative"
 msgid "Fourier-Filter status: %1"
 msgstr "Παράγωγος"
 
-#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:236
+#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:235
 #, fuzzy, kde-format
 #| msgid "Interpolation:"
 msgid "Fourier transformation status: %1"
@@ -14479,19 +14479,19 @@ msgstr ""
 msgid "Variable:"
 msgstr "Διακύμανση"
 
-#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:184
+#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:183
 #, fuzzy, kde-format
 #| msgid "Interpolation:"
 msgid "Hilbert transformation status: %1"
 msgstr "Παρεμβολή:"
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:321
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:319
 #, fuzzy, kde-format
 #| msgid "Integration:"
 msgid "Integration status: %1"
 msgstr "Ολοκλήρωση:"
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:334
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:331
 #, fuzzy, kde-format
 #| msgid "%1 value"
 #| msgid_plural "%1 values"
@@ -14515,13 +14515,13 @@ msgid ""
 "number of points in the data source."
 msgstr ""
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:540
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:538
 #, fuzzy, kde-format
 #| msgid "Interpolation:"
 msgid "Interpolation status: %1"
 msgstr "Παρεμβολή:"
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:412
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:410
 #, fuzzy, kde-format
 #| msgid "Derivative"
 msgid "Smoothing status: %1"

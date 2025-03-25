@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-24 00:38+0000\n"
-"PO-Revision-Date: 2025-03-22 03:56+0100\n"
+"POT-Creation-Date: 2025-03-25 00:38+0000\n"
+"PO-Revision-Date: 2025-03-24 03:42+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1081,7 +1081,7 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:201
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2137
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1244
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1243
 #, kde-format
 msgid "Success"
 msgstr "წარმატება"
@@ -10500,18 +10500,18 @@ msgstr "სიის ხედი დეტალებით"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:314
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1375
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1381
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1387
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1373
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1379
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1385
 #, kde-format
 msgid "Copy Selection"
 msgstr "მონიშნულის კოპირება"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:315
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1376
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1382
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1388
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1374
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1380
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1386
 #, kde-format
 msgid "Copy All"
 msgstr "ყველას კოპირება"
@@ -13329,6 +13329,17 @@ msgid ""
 "li><li>Scott - <i>h = 3.49 * sigma / pow(n, 3/2)</i>, optimal method for "
 "normally distributed data</li></ul>"
 msgstr ""
+"მეთოდი გამოიყენება ურნების რაოდენობის დასადგენად <i>k</i> და მათი სიგანე "
+"<i>h</i> <i>n</i> მნიშვნელობებისთვის:<ul><li>ნომრით - ურნების რაოდენობა "
+"მითითებულია ხელით</li><li>სიგანე - ურნების რაოდენობა გამოითვლება მითითებული "
+"ურნის სიგანის საფუძველზე <i>k = (max(x) - min(x) / სთ</i>)</"
+"li><li>კვადრატული ფესვი - <i>k = sqrt(n)</i></li><li>ბრინჯი -  <i>k = 2 * "
+"pow(n, 3/2)</i>, Sturges- ის მეთოდის მარტივი ალტერნატივა</li><li>Sturges - "
+"<i>k = log2(n) + 1</i>, ითვალისწინებს დაახლოებით ნორმალურ განაწილებას</"
+"li><li>Doane - Sturges- ის მეთოდის შეცვლილი ვერსია, დამატებითი "
+"ინფორმაციისთვის იხილეთ დოკუმენტაცია</li><li>სკოტი - <i>h = 3.49 * სიგმა / "
+"pow(n, 3/2)</i>, ოპტიმალური მეთოდი ჩვეულებრივ განაწილებული მონაცემებისთვის</"
+"li></ul>"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:295
 #, kde-format
@@ -13339,6 +13350,12 @@ msgid ""
 "the histogram are excluded. If you want to include these values for the last "
 "bin you will need to add an extra bin to your histogram."
 msgstr ""
+"გამოიყენეთ \"ავტო\" ავტომატურად განსაზღვროთ მონაცემების მინიმალური და "
+"მაქსიმალური მნიშვნელობები, რომლებიც გამოყენებული იქნება ჰისტოგრამის "
+"გამოსათვლელად. მიუთითეთ მნიშვნელობები ხელით, წინააღმდეგ შემთხვევაში."
+"<br><br><b>შენიშვნა:</b> ნებისმიერი ნიმუში, რომელიც ჰისტოგრამის ზედა ბოლოში "
+"მოდის, გამორიცხულია. თუ გსურთ ამ მნიშვნელობების შეტანა ბოლო ურნისთვის, თქვენ "
+"უნდა დაამატოთ დამატებითი ურნი თქვენს ჰისტოგრამაში."
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:578
 #, kde-format
@@ -13755,17 +13772,17 @@ msgstr "ბირთვით/ზომით:"
 msgid "Deconvolution"
 msgstr "დეკონვოლუცია"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:383
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:381
 #, kde-format
 msgid "Convolution status: %1"
 msgstr "კონვოლუციის სტატუსი: %1"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:385
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:383
 #, kde-format
 msgid "Deconvolution status: %1"
 msgstr "დეკონვოლუციის სტატუსი: %1"
 
-#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:280
+#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:278
 #, kde-format
 msgid "Correlation status: %1"
 msgstr "კორელაციის სტატუსი: %1"
@@ -13901,27 +13918,27 @@ msgstr "მაქსიმალური დასაშვები გად�
 msgid "Search region:"
 msgstr "ძებნის რეგიონი:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:501
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:499
 #, kde-format
 msgid "Data reduction status: %1"
 msgstr "მონაცემების შემცირების მდგომარეობა: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:514
 #, kde-format
 msgid "number of points: %1"
 msgstr "წერტილების რაოდენობა: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:517
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:515
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "პოზიციური კვადრატის შეცდომა: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:518
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
 #, kde-format
 msgid "area error: %1"
 msgstr "შეცდომის ფართობი: %1"
 
-#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:391
+#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:389
 #, kde-format
 msgid "Differentiation status: %1"
 msgstr "სხვაობის პოვნის სტატუსი: %1"
@@ -14032,23 +14049,23 @@ msgstr "გრადუსი:"
 msgid "Number of peaks:"
 msgstr "პიკების რაოდენობა:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1245
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1244
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "ჩატევის სტატუსი: %1"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1256
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1255
 #, kde-format
 msgid "No data source available!"
 msgstr "მონაცემების წყარო ხელმისაწვდომი არაა!"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1427
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1425
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "%1 % დაბალი ნდობის დონე"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1428
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1426
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "%1 % მაღალი ნდობის დონე"
@@ -14084,12 +14101,12 @@ msgstr ""
 msgid "band width <= 0"
 msgstr "ზოლის სიგანე <= 0"
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:442
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:441
 #, kde-format
 msgid "Fourier-Filter status: %1"
 msgstr "ფურიეს ფილტრის სტატუსი: %1"
 
-#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:236
+#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:235
 #, kde-format
 msgid "Fourier transformation status: %1"
 msgstr "ფურიეს გარდაქმნის სტატუსი: %1"
@@ -14129,17 +14146,17 @@ msgstr "ცვლადის წაშლა"
 msgid "Variable:"
 msgstr "ცვლადი:"
 
-#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:184
+#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:183
 #, kde-format
 msgid "Hilbert transformation status: %1"
 msgstr "ჰილბერტის ტრანსფორმაციის სტატუსი: %1"
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:321
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:319
 #, kde-format
 msgid "Integration status: %1"
 msgstr "ინტეგრალის გამოთვლის სტატუსი: %1"
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:334
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:331
 #, kde-format
 msgid "value: %1"
 msgstr "მნიშვნელობა: %1"
@@ -14163,12 +14180,12 @@ msgstr ""
 "ინტერპოლაციის წერტილების რაოდენობა მონაცემების წყაროში არსებული წერტილების "
 "საერთო რაოდენობას უნდა აღემატებოდეს."
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:540
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:538
 #, kde-format
 msgid "Interpolation status: %1"
 msgstr "ინტერპოლაციის სტატუსი: %1"
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:412
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:410
 #, kde-format
 msgid "Smoothing status: %1"
 msgstr "მოგლუვების სტატუსი: %1"

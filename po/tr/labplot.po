@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-24 00:38+0000\n"
-"PO-Revision-Date: 2025-03-22 15:20+0300\n"
+"POT-Creation-Date: 2025-03-25 00:38+0000\n"
+"PO-Revision-Date: 2025-03-24 22:46+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.07.70\n"
+"X-Generator: Lokalize 25.03.70\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #, kde-format
@@ -1082,7 +1082,7 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:201
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2137
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1244
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1243
 #, kde-format
 msgid "Success"
 msgstr "Başarılı"
@@ -10246,10 +10246,9 @@ msgid "Please report bugs to:"
 msgstr "Hataları raporlayın:"
 
 #: src/frontend/AboutDialog.cpp:199
-#, fuzzy, kde-format
-#| msgid "Funded by:"
+#, kde-format
 msgid "Partly funded by:"
-msgstr "Fonlayanlar:"
+msgstr "Kısmen fonlayanlar:"
 
 #: src/frontend/AboutDialog.cpp:210 src/frontend/AboutDialog.cpp:370
 #: src/frontend/AboutDialog.cpp:371
@@ -10485,18 +10484,18 @@ msgstr "Ayrıntılarla Liste Görünümü"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:314
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1375
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1381
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1387
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1373
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1379
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1385
 #, kde-format
 msgid "Copy Selection"
 msgstr "Seçimi Kopyala"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:315
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1376
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1382
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1388
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1374
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1380
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1386
 #, kde-format
 msgid "Copy All"
 msgstr "Tümünü Kopyala"
@@ -13299,6 +13298,16 @@ msgid ""
 "li><li>Scott - <i>h = 3.49 * sigma / pow(n, 3/2)</i>, optimal method for "
 "normally distributed data</li></ul>"
 msgstr ""
+"<i>n</i> değer için <i>k</i> kovalarının sayısını ve onların <i>h</i> "
+"genişliklerini belirlemek için kullanılan yöntem:<ul><li>Sayıya Göre — "
+"kovaların sayısı elle belirtilir</li><li>Genişliğe Göre — Kovaların sayısı "
+"<i>k = (max(x) − min(x) / h</i>) ile belirtilen genişliğe göre hesaplanır</"
+"li><li>Kare Kök — <i>k = sqrt(n)</i></li><li>Rice — <i>k = 2 * pow(n, 3/2)</"
+"i>, Sturges’in yöntemine göre daha basit bir yöntemdir</li><li>Sturges — "
+"<i>k = log2(n) + 1</i>, ortalama normal bir dağılım varsayar</li><li>Doane — "
+"Sturges’in yönteminin üzerinde değişiklik yapılmış bir sürümüdür; ayrıntılar "
+"için belgelendirmeye bakın</li><li>Scott — <i>h = 3,49 * sigma / pow(n, "
+"3/2)</i>, normal olarak dağıtılan veri için en uygun yöntemdir</li></ul>"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:295
 #, kde-format
@@ -13309,6 +13318,11 @@ msgid ""
 "the histogram are excluded. If you want to include these values for the last "
 "bin you will need to add an extra bin to your histogram."
 msgstr ""
+"Histogramı hesaplamak için kullanılacak verilerin en küçük ve en büyük "
+"değerlerini kendiliğinden belirlemek için “Kendiliğinden” özelliğini "
+"kullanın. Aksi takdirde değerleri elle belirtin. Not: Histogramın üst ucuna "
+"düşen örnekler dışarıda tutulmuştur. Bu değerleri son bölme için içermek "
+"istiyorsanız histogramınıza fazladan bir bölme eklemeniz gerekir."
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:578
 #, kde-format
@@ -13722,17 +13736,17 @@ msgstr "Çekirdek/Boyut ile:"
 msgid "Deconvolution"
 msgstr "Ters Evrişim"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:383
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:381
 #, kde-format
 msgid "Convolution status: %1"
 msgstr "Evrişim durumu: %1"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:385
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:383
 #, kde-format
 msgid "Deconvolution status: %1"
 msgstr "Ters evrişim durumu: %1"
 
-#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:280
+#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:278
 #, kde-format
 msgid "Correlation status: %1"
 msgstr "Korelasyon durumu: %1"
@@ -13868,27 +13882,27 @@ msgstr "En büyük tolerans:"
 msgid "Search region:"
 msgstr "Bölge ara:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:501
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:499
 #, kde-format
 msgid "Data reduction status: %1"
 msgstr "Veri indirgeme durumu: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:514
 #, kde-format
 msgid "number of points: %1"
 msgstr "nokta sayısı: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:517
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:515
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "konumsal karekök hatası: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:518
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
 #, kde-format
 msgid "area error: %1"
 msgstr "alan hatası: %1"
 
-#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:391
+#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:389
 #, kde-format
 msgid "Differentiation status: %1"
 msgstr "Türev durumu: %1"
@@ -13999,23 +14013,23 @@ msgstr "Derece:"
 msgid "Number of peaks:"
 msgstr "Zirveler sayısı:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1245
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1244
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "Uydurma durumu: %1"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1256
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1255
 #, kde-format
 msgid "No data source available!"
 msgstr "Kullanılabilir veri kaynağı yok!"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1427
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1425
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "%​%1 daha düşük özgüven düzeyi"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1428
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1426
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "%​%1 daha yüksek özgüven düzeyi"
@@ -14051,12 +14065,12 @@ msgstr ""
 msgid "band width <= 0"
 msgstr "bant genişliği <= 0"
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:442
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:441
 #, kde-format
 msgid "Fourier-Filter status: %1"
 msgstr "Fourier süzgeci durumu: %1"
 
-#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:236
+#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:235
 #, kde-format
 msgid "Fourier transformation status: %1"
 msgstr "Fourier dönüşüm durumu: %1"
@@ -14096,17 +14110,17 @@ msgstr "Değişkeni sil"
 msgid "Variable:"
 msgstr "Değişken:"
 
-#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:184
+#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:183
 #, kde-format
 msgid "Hilbert transformation status: %1"
 msgstr "Hilbert dönüşüm durumu: %1"
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:321
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:319
 #, kde-format
 msgid "Integration status: %1"
 msgstr "Tümleştirme durumu: %1"
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:334
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:331
 #, kde-format
 msgid "value: %1"
 msgstr "değer: %1"
@@ -14130,12 +14144,12 @@ msgstr ""
 "Aradeğerleme noktalarının sayısı, veri kaynağındaki toplam nokta sayısından "
 "büyük olmalıdır."
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:540
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:538
 #, kde-format
 msgid "Interpolation status: %1"
 msgstr "Aradeğerleme durumu: %1"
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:412
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:410
 #, kde-format
 msgid "Smoothing status: %1"
 msgstr "Yumuşatma durumu: %1"

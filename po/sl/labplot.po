@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the kwave package.
 #
 # Martin Srebotnjak <miles@filmsi.net>, 2021,2022.
-# SPDX-FileCopyrightText: 2021, 2022, 2023, 2024 Matjaž Jeran <matjaz.jeran@amis.net>
+# SPDX-FileCopyrightText: 2021, 2022, 2023, 2024, 2025 Matjaž Jeran <matjaz.jeran@amis.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-24 00:38+0000\n"
-"PO-Revision-Date: 2025-03-22 13:11+0100\n"
+"POT-Creation-Date: 2025-03-25 00:38+0000\n"
+"PO-Revision-Date: 2025-03-24 07:42+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Lokalize 24.12.3\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -1089,7 +1089,7 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:201
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2137
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1244
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1243
 #, kde-format
 msgid "Success"
 msgstr "Uspešno"
@@ -10294,10 +10294,9 @@ msgid "Please report bugs to:"
 msgstr "Poročajte napake na:"
 
 #: src/frontend/AboutDialog.cpp:199
-#, fuzzy, kde-format
-#| msgid "Funded by:"
+#, kde-format
 msgid "Partly funded by:"
-msgstr "Financira:"
+msgstr "Delno financira:"
 
 #: src/frontend/AboutDialog.cpp:210 src/frontend/AboutDialog.cpp:370
 #: src/frontend/AboutDialog.cpp:371
@@ -10533,18 +10532,18 @@ msgstr "Pogled seznama s podrobnostmi"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:314
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1375
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1381
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1387
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1373
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1379
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1385
 #, kde-format
 msgid "Copy Selection"
 msgstr "Kopiraj izbor"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:315
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1376
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1382
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1388
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1374
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1380
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1386
 #, kde-format
 msgid "Copy All"
 msgstr "Kopiraj vse"
@@ -13355,6 +13354,16 @@ msgid ""
 "li><li>Scott - <i>h = 3.49 * sigma / pow(n, 3/2)</i>, optimal method for "
 "normally distributed data</li></ul>"
 msgstr ""
+"Metoda, ki se uporablja za določanje števila razdelkov <i>k</i> in njihove "
+"širine <i>h</i> za <i>n</i> vrednosti:<ul><li>Po številu - določeno je "
+"število razdelkov ročno</li><li>Po širini - število razdelkov se izračuna na "
+"podlagipodane širine razdelka prek <i>k = (max(x) - min(x) / h</i>)</"
+"li><li>Kvadratni koren- <i>k = sqrt(n)</i></li><li>Rice - <i>k = 2 * pow(n, "
+"3/2)</i>, preprostejša alternativa Sturgesovi metodi</li><li>Sturges - <i>k "
+"= log2(n) + 1</i>,predpostavlja približno normalno porazdelitev</"
+"li><li>Doane – spremenjeno različico Sturgesove metode, za več podrobnosti "
+"si oglejte dokumentacijo</li><li>Scott - <i>h = 3,49 * sigma / pow(n, 3/2)</"
+"i>, optimalna metoda za normalno porazdeljene podatke</li></ul>"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:295
 #, kde-format
@@ -13365,6 +13374,11 @@ msgid ""
 "the histogram are excluded. If you want to include these values for the last "
 "bin you will need to add an extra bin to your histogram."
 msgstr ""
+"Uporabite »Samodejno«, da samodejno določite najmanjšo in največjo vrednost "
+"podatkov, ki bodo uporabljeni za izračun histograma. Sicer ročno določite "
+"vrednosti.<br><br><b>Opomba:</b> vsi vzorci, ki padejo na zgornji "
+"delhistogram so izključeni. Če želite te vrednosti vključiti v končni "
+"razdelek boste morali histogramu dodati dodaten razdelek."
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:578
 #, kde-format
@@ -13778,17 +13792,17 @@ msgstr "s jedrom/velikostjo:"
 msgid "Deconvolution"
 msgstr "Dekonvolucija"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:383
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:381
 #, kde-format
 msgid "Convolution status: %1"
 msgstr "Stanje konvolucije: %1"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:385
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:383
 #, kde-format
 msgid "Deconvolution status: %1"
 msgstr "Stanje dekonvolucije: %1"
 
-#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:280
+#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:278
 #, kde-format
 msgid "Correlation status: %1"
 msgstr "Stanje korelacije: %1"
@@ -13925,27 +13939,27 @@ msgstr "Največja toleranca:"
 msgid "Search region:"
 msgstr "Iskalno območje:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:501
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:499
 #, kde-format
 msgid "Data reduction status: %1"
 msgstr "Stanje zmanjšanja podatkov: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:514
 #, kde-format
 msgid "number of points: %1"
 msgstr "število točk: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:517
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:515
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "kvadratna napaka položaja: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:518
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
 #, kde-format
 msgid "area error: %1"
 msgstr "napaka področja: %1"
 
-#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:391
+#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:389
 #, kde-format
 msgid "Differentiation status: %1"
 msgstr "Stanje odvajanja: %1"
@@ -14056,23 +14070,23 @@ msgstr "Stopinja:"
 msgid "Number of peaks:"
 msgstr "Število vrhov:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1245
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1244
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "Stanje prileganja: %1"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1256
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1255
 #, kde-format
 msgid "No data source available!"
 msgstr "Vira podatkov ni na voljo!"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1427
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1425
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "%1 % nižja raven zaupanja"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1428
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1426
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "%1 % višja raven zaupanja"
@@ -14108,12 +14122,12 @@ msgstr ""
 msgid "band width <= 0"
 msgstr "širina pasu <= 0"
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:442
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:441
 #, kde-format
 msgid "Fourier-Filter status: %1"
 msgstr "Stanje Fourier-filtra: %1"
 
-#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:236
+#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:235
 #, kde-format
 msgid "Fourier transformation status: %1"
 msgstr "Stanje Fourierjeve transformacije: %1"
@@ -14153,17 +14167,17 @@ msgstr "Izbriši spremenljivko"
 msgid "Variable:"
 msgstr "Spremenljivka:"
 
-#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:184
+#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:183
 #, kde-format
 msgid "Hilbert transformation status: %1"
 msgstr "Stanje Hilbertove transformacije: %1"
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:321
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:319
 #, kde-format
 msgid "Integration status: %1"
 msgstr "Stanje integriranja: %1"
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:334
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:331
 #, kde-format
 msgid "value: %1"
 msgstr "vrednost: %1"
@@ -14187,12 +14201,12 @@ msgstr ""
 "Število interpolacijskih točk mora biti večje od skupnega števila točk v "
 "viru podatkov."
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:540
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:538
 #, kde-format
 msgid "Interpolation status: %1"
 msgstr "Stanje interpolacije: %1"
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:412
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:410
 #, kde-format
 msgid "Smoothing status: %1"
 msgstr "Stanje glajenja: %1"

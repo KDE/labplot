@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-24 00:38+0000\n"
-"PO-Revision-Date: 2025-03-23 03:35+0100\n"
+"POT-Creation-Date: 2025-03-25 00:38+0000\n"
+"PO-Revision-Date: 2025-03-24 03:21+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -1086,7 +1086,7 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:201
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2137
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1244
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1243
 #, kde-format
 msgid "Success"
 msgstr "Éxito"
@@ -9028,27 +9028,27 @@ msgstr "%1: definir método de selección"
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:439
 #, kde-format
 msgid "%1: set bin count"
-msgstr "%1: definir contador de contenedor"
+msgstr "%1: definir contador de intervalos"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:446
 #, kde-format
 msgid "%1: set bin width"
-msgstr "%1: definir ancho de contenedor"
+msgstr "%1: definir anchura del intervalo"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:454
 #, kde-format
 msgid "%1: change auto bin ranges"
-msgstr "%1: cambiar intervalos autobinarios"
+msgstr "%1: cambiar rango de intervalos automáticos"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:502
 #, kde-format
 msgid "%1: set bin ranges start"
-msgstr "%1: definir inicio de intervalos binarios"
+msgstr "%1: definir inicio de rangos de intervalos"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:509
 #, kde-format
 msgid "%1: set bin ranges end"
-msgstr "%1: definir fin de intervalos binarios"
+msgstr "%1: definir fin de rangos de intervalos"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:843
 #, kde-format
@@ -10266,10 +10266,9 @@ msgid "Please report bugs to:"
 msgstr "Notificar fallos a:"
 
 #: src/frontend/AboutDialog.cpp:199
-#, fuzzy, kde-format
-#| msgid "Funded by:"
+#, kde-format
 msgid "Partly funded by:"
-msgstr "Financiado por:"
+msgstr "Financiado parcialmente por:"
 
 #: src/frontend/AboutDialog.cpp:210 src/frontend/AboutDialog.cpp:370
 #: src/frontend/AboutDialog.cpp:371
@@ -10505,18 +10504,18 @@ msgstr "Vista de lista con detalles"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:314
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1375
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1381
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1387
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1373
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1379
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1385
 #, kde-format
 msgid "Copy Selection"
 msgstr "Copiar selección"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:315
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1376
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1382
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1388
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1374
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1380
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1386
 #, kde-format
 msgid "Copy All"
 msgstr "Copiar todo"
@@ -12456,7 +12455,7 @@ msgstr "Datos del histograma"
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:91
 #, kde-format
 msgid "Bin Center"
-msgstr "Centro bin"
+msgstr "Centro del intervalo"
 
 #: src/frontend/datasources/ROOTOptionsWidget.cpp:95
 #, kde-format
@@ -13304,7 +13303,7 @@ msgstr "Raíz cuadrada"
 #: src/frontend/dockwidgets/HistogramDock.cpp:255
 #, kde-format
 msgid "Rice"
-msgstr "Arroz"
+msgstr "Rice"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:256
 #, kde-format
@@ -13361,6 +13360,17 @@ msgid ""
 "li><li>Scott - <i>h = 3.49 * sigma / pow(n, 3/2)</i>, optimal method for "
 "normally distributed data</li></ul>"
 msgstr ""
+"Método usado para determinar el número de intervalos <i>k</i> y su anchura "
+"<i>h</i> para <i>n</i> valores:<ul><li>Por número: el número de intervalos "
+"se indica de forma manual</li><li>Por anchura: el número de intervalos se "
+"calcula según la anchura de intervalo mediante <i>k = (max(x) - min(x) / h</"
+"i>)</li><li>Raíz cuadrada: <i>k = sqrt(n)</i></li><li>Rice: <i>k = 2 * "
+"pow(n, 3/2)</i>, alternativa más sencilla al método de Sturges</"
+"li><li>Sturges: <i>k = log2(n) + 1</i>, supone una distribución "
+"aproximadamente normal</li><li>Doane: versión modificada del método de "
+"Sturges (consulte la documentación para más detalles)</li><li>Scott: <i>h = "
+"3,49 * sigma / pow(n, 3/2)</i>, método óptimo para datos distribuidos "
+"normalmente</li></ul>"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:295
 #, kde-format
@@ -13371,6 +13381,12 @@ msgid ""
 "the histogram are excluded. If you want to include these values for the last "
 "bin you will need to add an extra bin to your histogram."
 msgstr ""
+"Use «Automático» para determinar automáticamente los valores mínimo y máximo "
+"de los datos que se deben usar para calcular el histograma. En caso "
+"contrario, indique los valores de forma manual.<br><br><b>Nota:</b> se "
+"excluyen las muestras que se encuentran en el extremo superior del "
+"histograma. Si desea incluir estos valores en el último intervalo, deberá "
+"añadir un intervalo adicional al histograma."
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:578
 #, kde-format
@@ -13593,19 +13609,19 @@ msgid ""
 "</li></ul>"
 msgstr ""
 "Los tipos de gráficos permitidos están agrupados según las estadísticas que "
-"dibujan y la métrica que define los límites.<br><br>Valores individuales e "
-"intervalos móviles, límites basados en el promedio o en el intervalo media "
-"móvil:<ul><li>X (XmR): dibuja las <b>etiquetas individuales</b>.</li><li>mR: "
-"dibuja los <b>intervalos móviles</b>.</li></ul>Promedios e intervalos, "
-"límites basados en la media o en el intervalo media:<ul><li>X̅  (X̅R): dibuja "
-"los <b>promedios de cada muestra</b>.</li><li>R (X̅R): dibuja los "
-"<b>intervalos de cada muestra</b>.</li></ul>Promedios y desviaciones "
-"estándares, límites basados en las desviaciones estándares:<ul><li>X̅ (X̅S): "
-"dibuja los <p>promedios de cada muestra</b>.</li><li>S (X̅S): dibuja las "
-"<b>desviaciones estándares de cada muestra</b>.</li></ul>Atributos:"
-"<ul><li>P: dibuja <b>proporciones binomiales</b>.</li><li>NP: dibuja "
-"<b>contadores binomiales</b>.</li><li>C: dibuja <b>contadores de Poisson</b>."
-"</li><li>U: dibuja <b>coeficientes de Poisson</b>.</li></ul>"
+"dibujan y la métrica que define los límites.<br><br>Valores individuales y "
+"rangos móviles, límites basados en el promedio o en el rango medio móvil:"
+"<ul><li>X (XmR): dibuja las <b>etiquetas individuales</b>.</li><li>mR: "
+"dibuja los <b>rangos móviles</b>.</li></ul>Promedios y rangos, límites "
+"basados en la media o en el rango medio:<ul><li>X̅  (X̅R): dibuja los "
+"<b>promedios de cada muestra</b>.</li><li>R (X̅R): dibuja los <b>rangos de "
+"cada muestra</b>.</li></ul>Promedios y desviaciones estándares, límites "
+"basados en las desviaciones estándares:<ul><li>X̅ (X̅S): dibuja los "
+"<p>promedios de cada muestra</b>.</li><li>S (X̅S): dibuja las <b>desviaciones "
+"estándares de cada muestra</b>.</li></ul>Atributos:<ul><li>P: dibuja "
+"<b>proporciones binomiales</b>.</li><li>NP: dibuja <b>contadores binomiales</"
+"b>.</li><li>C: dibuja <b>contadores de Poisson</b>.</li><li>U: dibuja "
+"<b>coeficientes de Poisson</b>.</li></ul>"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:261
 #, kde-format
@@ -13792,17 +13808,17 @@ msgstr "con núcleo/tamaño:"
 msgid "Deconvolution"
 msgstr "Deconvolución"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:383
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:381
 #, kde-format
 msgid "Convolution status: %1"
 msgstr "Estado de la convolución: %1"
 
-#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:385
+#: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:383
 #, kde-format
 msgid "Deconvolution status: %1"
 msgstr "Estado de la deconvolución: %1"
 
-#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:280
+#: src/frontend/dockwidgets/XYCorrelationCurveDock.cpp:278
 #, kde-format
 msgid "Correlation status: %1"
 msgstr "Estado de la correlación: %1"
@@ -13939,27 +13955,27 @@ msgstr "Tolerancia máxima:"
 msgid "Search region:"
 msgstr "Región de búsqueda:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:501
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:499
 #, kde-format
 msgid "Data reduction status: %1"
 msgstr "Estado de reducción de datos: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:514
 #, kde-format
 msgid "number of points: %1"
 msgstr "número de puntos: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:517
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:515
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "error cuadrático posicional: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:518
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
 #, kde-format
 msgid "area error: %1"
 msgstr "error de área: %1"
 
-#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:391
+#: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:389
 #, kde-format
 msgid "Differentiation status: %1"
 msgstr "Estado de diferenciación: %1"
@@ -14070,23 +14086,23 @@ msgstr "Grado:"
 msgid "Number of peaks:"
 msgstr "Número de picos:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1245
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1244
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "Estado de ajuste: %1"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1256
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1255
 #, kde-format
 msgid "No data source available!"
 msgstr "No se dispone de fuentes de datos."
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1427
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1425
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "Nivel de confianza inferior al %1%"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1428
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1426
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "Nivel de confianza superior al %1%"
@@ -14122,12 +14138,12 @@ msgstr ""
 msgid "band width <= 0"
 msgstr "ancho de banda <= 0"
 
-#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:442
+#: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:441
 #, kde-format
 msgid "Fourier-Filter status: %1"
 msgstr "Estado del filtro de Fourier: %1"
 
-#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:236
+#: src/frontend/dockwidgets/XYFourierTransformCurveDock.cpp:235
 #, kde-format
 msgid "Fourier transformation status: %1"
 msgstr "Estado de la transformada de Fourier: %1"
@@ -14168,17 +14184,17 @@ msgstr "Borrar variable"
 msgid "Variable:"
 msgstr "Variable:"
 
-#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:184
+#: src/frontend/dockwidgets/XYHilbertTransformCurveDock.cpp:183
 #, kde-format
 msgid "Hilbert transformation status: %1"
 msgstr "Estado de la transformada de Hilbert: %1"
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:321
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:319
 #, kde-format
 msgid "Integration status: %1"
 msgstr "Estado de la integración: %1"
 
-#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:334
+#: src/frontend/dockwidgets/XYIntegrationCurveDock.cpp:331
 #, kde-format
 msgid "value: %1"
 msgstr "valor %1"
@@ -14202,12 +14218,12 @@ msgstr ""
 "El número de puntos de interpolación debe ser mayor que el número total de "
 "puntos de la fuente de datos."
 
-#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:540
+#: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:538
 #, kde-format
 msgid "Interpolation status: %1"
 msgstr "Estado de la interpolación: %1"
 
-#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:412
+#: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:410
 #, kde-format
 msgid "Smoothing status: %1"
 msgstr "Estado del difuminado: %1"
@@ -21452,7 +21468,7 @@ msgstr "Máximo:"
 #: src/frontend/ui/dockwidgets/histogramdock.ui:221
 #, kde-format
 msgid "Bin Width:"
-msgstr "Ancho de contenedor:"
+msgstr "Anchura del intervalo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNormalization)
 #: src/frontend/ui/dockwidgets/histogramdock.ui:235
@@ -21464,13 +21480,13 @@ msgstr "Normalización:"
 #: src/frontend/ui/dockwidgets/histogramdock.ui:283
 #, kde-format
 msgid "Bin Ranges"
-msgstr "Intervalos binarios:"
+msgstr "Rangos de intervalos:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBinCount)
 #: src/frontend/ui/dockwidgets/histogramdock.ui:348
 #, kde-format
 msgid "Bin Count:"
-msgstr "Contador de contenedor:"
+msgstr "Contador de intervalos:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLine)
 #: src/frontend/ui/dockwidgets/histogramdock.ui:393
