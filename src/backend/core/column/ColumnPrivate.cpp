@@ -29,6 +29,41 @@
 
 namespace {
 template<typename T>
+void determineNewIndices(T value, T reference, int index, int& lowerIndex, int& higherIndex, bool smaller, bool increase) {
+	if (smaller) {
+		if (value >= reference && increase)
+			higherIndex = index;
+		else if (value > reference && !increase)
+			lowerIndex = index;
+		else if (value < reference && increase)
+			lowerIndex = index;
+		else if (value <= reference && !increase)
+			higherIndex = index;
+	} else {
+		if (value > reference && increase)
+			higherIndex = index;
+		else if (value >= reference && !increase)
+			lowerIndex = index;
+		else if (value <= reference && increase)
+			lowerIndex = index;
+		else if (value < reference && !increase)
+			higherIndex = index;
+	}
+}
+
+template<typename T>
+int finalIndex(T valueLowerIndex, T valueHigherIndex, T reference, int lowerIndex, int higherIndex, bool smaller) {
+	if (smaller) {
+		if (std::abs(valueLowerIndex - reference) <= std::abs(valueHigherIndex - reference))
+			return lowerIndex;
+		return higherIndex;
+	}
+	if (std::abs(valueLowerIndex - reference) < std::abs(valueHigherIndex - reference))
+		return lowerIndex;
+	return higherIndex;
+}
+
+template<typename T>
 int indexForValueCommon(const T* obj,
 						double x,
 						const std::function<AbstractColumn::ColumnMode(const T*)> columnMode,
@@ -51,7 +86,7 @@ int indexForValueCommon(const T* obj,
 		int lowerIndex = 0;
 		int higherIndex = rc - 1;
 
-		unsigned int maxSteps = Column::calculateMaxSteps(static_cast<unsigned int>(rc)) + 1;
+		unsigned int maxSteps = ColumnPrivate::calculateMaxSteps(static_cast<unsigned int>(rc)) + 1;
 
 		switch (mode) {
 		case Column::ColumnMode::Double:
@@ -61,41 +96,10 @@ int indexForValueCommon(const T* obj,
 				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
 				double value = valueAt(obj, index);
 
-				if (higherIndex - lowerIndex < 2) {
-					if (smaller) {
-						if (std::abs(valueAt(obj, lowerIndex) - x) <= std::abs(valueAt(obj, higherIndex) - x))
-							index = lowerIndex;
-						else
-							index = higherIndex;
-					} else {
-						if (std::abs(valueAt(obj, lowerIndex) - x) < std::abs(valueAt(obj, higherIndex) - x))
-							index = lowerIndex;
-						else
-							index = higherIndex;
-					}
+				if (higherIndex - lowerIndex < 2)
+					return finalIndex(valueAt(obj, lowerIndex), valueAt(obj, higherIndex), x, lowerIndex, higherIndex, smaller);
 
-					return index;
-				}
-
-				if (smaller) {
-					if (value >= x && increase)
-						higherIndex = index;
-					else if (value > x && !increase)
-						lowerIndex = index;
-					else if (value < x && increase)
-						lowerIndex = index;
-					else if (value <= x && !increase)
-						higherIndex = index;
-				} else {
-					if (value > x && increase)
-						higherIndex = index;
-					else if (value >= x && !increase)
-						lowerIndex = index;
-					else if (value <= x && increase)
-						lowerIndex = index;
-					else if (value < x && !increase)
-						higherIndex = index;
-				}
+				determineNewIndices(value, x, index, lowerIndex, higherIndex, smaller, increase);
 			}
 			break;
 		case Column::ColumnMode::Text:
@@ -108,43 +112,10 @@ int indexForValueCommon(const T* obj,
 				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
 				qint64 value = dateTimeAt(obj, index).toMSecsSinceEpoch();
 
-				if (higherIndex - lowerIndex < 2) {
-					if (smaller) {
-						if (std::abs(dateTimeAt(obj, lowerIndex).toMSecsSinceEpoch() - xInt64)
-							<= std::abs(dateTimeAt(obj, higherIndex).toMSecsSinceEpoch() - xInt64))
-							index = lowerIndex;
-						else
-							index = higherIndex;
-					} else {
-						if (std::abs(dateTimeAt(obj, lowerIndex).toMSecsSinceEpoch() - xInt64)
-							< std::abs(dateTimeAt(obj, higherIndex).toMSecsSinceEpoch() - xInt64))
-							index = lowerIndex;
-						else
-							index = higherIndex;
-					}
+				if (higherIndex - lowerIndex < 2)
+					return finalIndex(dateTimeAt(obj, lowerIndex).toMSecsSinceEpoch(), dateTimeAt(obj, higherIndex).toMSecsSinceEpoch(), xInt64, lowerIndex, higherIndex, smaller);
 
-					return index;
-				}
-
-				if (smaller) {
-					if (value >= xInt64 && increase)
-						higherIndex = index;
-					else if (value > xInt64 && !increase)
-						lowerIndex = index;
-					else if (value < xInt64 && increase)
-						lowerIndex = index;
-					else if (value <= xInt64 && !increase)
-						higherIndex = index;
-				} else {
-					if (value > xInt64 && increase)
-						higherIndex = index;
-					else if (value >= xInt64 && !increase)
-						lowerIndex = index;
-					else if (value <= xInt64 && increase)
-						lowerIndex = index;
-					else if (value < xInt64 && !increase)
-						higherIndex = index;
-				}
+				determineNewIndices(value, xInt64, index, lowerIndex, higherIndex, smaller, increase);
 			}
 		}
 		}
@@ -1914,6 +1885,188 @@ int ColumnPrivate::indexForValue(double x, bool smaller) const {
 									   std::mem_fn<bool(int) const>(&Column::isValid),
 									   std::mem_fn<bool(int) const>(&Column::isMasked),
 									   smaller);
+}
+
+/*!
+ * calculates log2(x)+1 for an integer value.
+ * Used in y(double x) to calculate the maximum steps
+ * source: https://stackoverflow.com/questions/11376288/fast-computing-of-log2-for-64-bit-integers
+ * source: https://graphics.stanford.edu/~seander/bithacks.html#IntegerLogLookup
+ * @param value
+ * @return returns calculated value
+ */
+// TODO: testing if it is faster than calculating log2.
+// TODO: put into NSL when useful
+int ColumnPrivate::calculateMaxSteps(unsigned int value) {
+	const std::array<signed char, 256> LogTable256 = {
+													  -1, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+													  5,	5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+													  6,	6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7,
+													  7,	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+													  7,	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+													  7,	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7};
+
+	unsigned int r; // r will be lg(v)
+	unsigned int t, tt; // temporaries
+	if ((tt = value >> 16))
+		r = (t = tt >> 8) ? 24 + LogTable256[t] : 16 + LogTable256[tt];
+	else
+		r = (t = value >> 8) ? 8 + LogTable256[t] : LogTable256[value];
+
+	return r + 1;
+}
+
+/*!
+ * Find index which corresponds to a @p x . In a vector of values
+ * When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
+ * @param x
+ * @return -1 if index not found, otherwise the index
+ */
+int ColumnPrivate::indexForValue(double x, QVector<double>& column, Column::Properties properties, bool smaller) {
+	int rowCount = column.count();
+	if (rowCount == 0)
+		return -1;
+
+	if (properties == AbstractColumn::Properties::MonotonicIncreasing || properties == AbstractColumn::Properties::MonotonicDecreasing) {
+		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
+		bool increase = true;
+		if (properties == AbstractColumn::Properties::MonotonicDecreasing)
+			increase = false;
+
+		int lowerIndex = 0;
+		int higherIndex = rowCount - 1;
+
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount)) + 1;
+
+		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
+			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
+			double value = column.at(index);
+
+			if (higherIndex - lowerIndex < 2)
+				return finalIndex(column.at(lowerIndex), column.at(higherIndex), x, lowerIndex, higherIndex, smaller);
+
+			determineNewIndices(value, x, index, lowerIndex, higherIndex, smaller, increase);
+		}
+	} else if (properties == AbstractColumn::Properties::Constant) {
+		return 0;
+	} else { // AbstractColumn::Properties::No || AbstractColumn::Properties::NonMonotonic
+		// simple way
+		int index = 0;
+		double prevValue = column.at(0);
+		for (int row = 0; row < rowCount; row++) {
+			double value = column.at(row);
+			if (std::abs(value - x) <= std::abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
+				prevValue = value;
+				index = row;
+			}
+		}
+		return index;
+	}
+	return -1;
+}
+
+/*!
+ * Find index which corresponds to a @p x . In a vector of values
+ * When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
+ * @param x
+ * @return -1 if index not found, otherwise the index
+ */
+int ColumnPrivate::indexForValue(const double x, const QVector<QPointF>& points, Column::Properties properties, bool smaller) {
+	int rowCount = points.count();
+
+	if (rowCount == 0)
+		return -1;
+
+	if (properties == AbstractColumn::Properties::MonotonicIncreasing || properties == AbstractColumn::Properties::MonotonicDecreasing) {
+		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
+		bool increase = true;
+		if (properties == AbstractColumn::Properties::MonotonicDecreasing)
+			increase = false;
+
+		int lowerIndex = 0;
+		int higherIndex = rowCount - 1;
+
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount)) + 1;
+
+		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
+			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
+			double value = points.at(index).x();
+
+			if (higherIndex - lowerIndex < 2)
+				return finalIndex(points.at(lowerIndex).x(), points.at(higherIndex).x(), x, lowerIndex, higherIndex, smaller);
+
+			determineNewIndices(value, x, index, lowerIndex, higherIndex, smaller, increase);
+		}
+
+	} else if (properties == AbstractColumn::Properties::Constant) {
+		return 0;
+	} else {
+		// AbstractColumn::Properties::No || AbstractColumn::Properties::NonMonotonic
+		// naiv way
+		double prevValue = points.at(0).x();
+		int index = 0;
+		for (int row = 0; row < rowCount; row++) {
+			double value = points.at(row).x();
+			if (std::abs(value - x) <= std::abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
+				prevValue = value;
+				index = row;
+			}
+		}
+		return index;
+	}
+	return -1;
+}
+
+/*!
+ * Find index which corresponds to a @p x . In a vector of values
+ * When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
+ * @param x
+ * @return -1 if index not found, otherwise the index
+ */
+int ColumnPrivate::indexForValue(double x, QVector<QLineF>& lines, AbstractColumn::Properties properties, bool smaller) {
+	int rowCount = lines.count();
+	if (rowCount == 0)
+		return -1;
+
+		   // use only p1 to find index
+	if (properties == AbstractColumn::Properties::MonotonicIncreasing || properties == AbstractColumn::Properties::MonotonicDecreasing) {
+		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
+		bool increase = true;
+		if (properties == AbstractColumn::Properties::MonotonicDecreasing)
+			increase = false;
+
+		int lowerIndex = 0;
+		int higherIndex = rowCount - 1;
+
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount)) + 1;
+
+		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
+			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
+			double value = lines.at(index).p1().x();
+
+			if (higherIndex - lowerIndex < 2)
+				return finalIndex(lines.at(lowerIndex).p1().x(), lines.at(higherIndex).p1().x(), x, lowerIndex, higherIndex, smaller);
+
+			determineNewIndices(value, x, index, lowerIndex, higherIndex, smaller, increase);
+		}
+
+	} else if (properties == AbstractColumn::Properties::Constant) {
+		return 0;
+	} else {
+		// AbstractColumn::Properties::No || AbstractColumn::Properties::NonMonotonic
+		// naiv way
+		int index = 0;
+		double prevValue = lines.at(0).p1().x();
+		for (int row = 0; row < rowCount; row++) {
+			double value = lines.at(row).p1().x();
+			if (std::abs(value - x) <= std::abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
+				prevValue = value;
+				index = row;
+			}
+		}
+		return index;
+	}
+	return -1;
 }
 
 //! Return the column name

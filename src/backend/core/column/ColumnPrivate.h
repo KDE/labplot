@@ -40,6 +40,10 @@ public:
 	bool copy(const ColumnPrivate*);
 	bool copy(const ColumnPrivate*, int source_start, int dest_start, int num_rows);
 
+	static int calculateMaxSteps(unsigned int value);
+	static int indexForValue(double x, QVector<double>& column, Column::Properties properties, bool smaller);
+	static int indexForValue(const double x, const QVector<QPointF>& column, Column::Properties properties, bool smaller);
+	static int indexForValue(double x, QVector<QLineF>& lines, Column::Properties properties, bool smaller);
 	int indexForValue(double x, bool smaller) const;
 
 	int rowCount() const;
