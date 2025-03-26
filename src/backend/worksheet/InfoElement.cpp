@@ -84,7 +84,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 			double y = curve->y(logicalPos, xpos, valueFound);
 			if (valueFound) {
 				d->positionLogical = xpos;
-				d->m_index = curve->xColumn()->indexForValue(xpos);
+				d->m_index = curve->xColumn()->indexForValue(xpos, false);
 				custompoint->setPositionLogical(QPointF(xpos, y));
 				DEBUG("Value found")
 			}
@@ -270,7 +270,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	custompoint->setUndoAware(true);
 
 	if (d->m_index < 0 && curve->xColumn())
-		d->m_index = curve->xColumn()->indexForValue(custompoint->positionLogical().x());
+		d->m_index = curve->xColumn()->indexForValue(custompoint->positionLogical().x(), false);
 
 	struct MarkerPoints_T markerpoint = {custompoint, curve, curve->path()};
 	markerpoints.append(markerpoint);
@@ -700,7 +700,7 @@ int InfoElement::currentIndex(double x, double* found_x) const {
 		if (markerpoint.curve->name() == connectionLineCurveName()) {
 			if (!markerpoint.curve->xColumn())
 				return -1;
-			const int index = markerpoint.curve->xColumn()->indexForValue(x);
+			const int index = markerpoint.curve->xColumn()->indexForValue(x, false);
 
 			if (found_x && index >= 0) {
 				auto mode = markerpoint.curve->xColumn()->columnMode();
@@ -1153,7 +1153,7 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	auto xColumn = q->markerpoints[activeIndex].curve->xColumn();
 	if (!xColumn)
 		return;
-	int xindex = xColumn->indexForValue(x);
+	int xindex = xColumn->indexForValue(x, false);
 	double x_new = NAN;
 	if (xColumn->isNumeric())
 		x_new = xColumn->valueAt(xindex);
