@@ -2113,7 +2113,7 @@ bool WorksheetView::exportToFile(const QString& path,
 		rc = painter.begin(&printer);
 		if (!rc)
 			return false;
-		painter.setRenderHint(QPainter::Antialiasing, false);
+		painter.setRenderHint(QPainter::Antialiasing);
 		QRectF targetRect(0, 0, w, h);
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
@@ -2160,7 +2160,7 @@ bool WorksheetView::exportToFile(const QString& path,
 		rc = painter.begin(&image);
 		if (!rc)
 			return false;
-		painter.setRenderHint(QPainter::Antialiasing, false);
+		painter.setRenderHint(QPainter::Antialiasing);
 		painter.save();
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.restore();
