@@ -199,7 +199,6 @@ public:
 	double maximum(int startIndex, int endIndex) const override;
 	double minimum(int count = 0) const override;
 	double minimum(int startIndex, int endIndex) const override;
-	static int calculateMaxSteps(unsigned int value);
 	static int indexForValue(double x, QVector<double>& column, Properties properties, bool smaller);
 	static int indexForValue(const double x, const QVector<QPointF>& column, Properties properties, bool smaller);
 	static int indexForValue(double x, QVector<QLineF>& lines, Properties properties, bool smaller);
