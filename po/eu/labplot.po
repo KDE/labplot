@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-25 00:38+0000\n"
+"POT-Creation-Date: 2025-03-26 00:38+0000\n"
 "PO-Revision-Date: 2025-01-15 16:57+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -795,7 +795,7 @@ msgstr "'%1' fitxategiaren edukia prozesatzea huts egin du."
 msgid "Failed to open project"
 msgstr "Proiektua irekitzea huts egin du"
 
-#: src/backend/core/Project.cpp:1296
+#: src/backend/core/Project.cpp:1299
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Proiektuaren aldatze-ordu baliogabea. Uneko ordua erabiliko da."

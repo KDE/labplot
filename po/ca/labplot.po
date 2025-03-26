@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-25 00:38+0000\n"
-"PO-Revision-Date: 2025-03-24 12:39+0100\n"
+"POT-Creation-Date: 2025-03-26 00:38+0000\n"
+"PO-Revision-Date: 2025-03-25 12:18+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -799,7 +799,7 @@ msgstr "Ha fallat en processar el contingut del fitxer «%1»."
 msgid "Failed to open project"
 msgstr "Ha fallat en obrir el projecte"
 
-#: src/backend/core/Project.cpp:1296
+#: src/backend/core/Project.cpp:1299
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Hora de modificació del projecte no vàlida. S'usarà l'hora actual."
@@ -13470,12 +13470,12 @@ msgstr ""
 "de compartiments s'especifica manualment</li><li>Per amplada: el nombre de "
 "compartiments es calcula en funció de l'amplada de compartiment especificada "
 "mitjançant <i>k = (max(x) - min(x) / h</i>)</li><li>Arrel quadrada: <i>k = "
-"sqrt(n)</i><li>Rice: <i>k = 2 * pow(n, 3/2)</i>, una alternativa més "
-"senzilla al mètode Sturges</li><li>Sturges: <i>k = log2(n) + 1</i>, assumeix "
-"aproximadament una distribució normal</li><li>Doane: versió modificada del "
-"mètode Sturges, vegeu la documentació per a més detall</li><li>Scott: <i>h = "
-"3.49 * sigma / pow(n, 3/2)</i>, mètode òptim per a dades distribuïdes "
-"normalment</li></ul>"
+"sqrt(n)</i></li><li>Rice: <i>k = 2 * pow(n, 3/2)</i>, una alternativa més "
+"senzilla del mètode Sturges</li><li>Sturges: <i>k = log2(n) + 1</i>, "
+"assumeix aproximadament una distribució normal</li><li>Doane: versió "
+"modificada del mètode Sturges, vegeu la documentació per a més detall</"
+"li><li>Scott: <i>h = 3.49 * sigma / pow(n, 3/2)</i>, mètode òptim per a "
+"dades distribuïdes normalment</li></ul>"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:295
 #, kde-format
@@ -25192,15 +25192,3 @@ msgstr "El procés «convert» ha fallat, codi de sortida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Uncertainty,%"
-#~ msgstr "Incertesa,%"
-
-#~ msgid "%1: enable negative lower limit"
-#~ msgstr "%1: activa el límit inferior negatiu"
-
-#~ msgid "Allow negative values for the lower limit."
-#~ msgstr "Permet valors negatius al límit inferior."
-
-#~ msgid "Lower Limit < 0:"
-#~ msgstr "Límit inferior < 0:"
