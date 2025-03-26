@@ -1571,7 +1571,7 @@ void AxisPrivate::retransformTicks() {
 				end = qMax(end, majorTicksColumn->minimum());
 				start = qMax(start, majorTicksColumn->maximum());
 			}
-			firstIndexCustomColumn = majorTicksColumn->indexForValue(start);
+			firstIndexCustomColumn = majorTicksColumn->indexForValue(start, true);
 		} else {
 			retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
 			return;
@@ -1601,7 +1601,7 @@ void AxisPrivate::retransformTicks() {
 				end = qMax(end, c->valueLabelsMinimum());
 				start = qMax(start, c->valueLabelsMaximum());
 			}
-			firstIndexCustomColumn = c->valueLabelsIndexForValue(start);
+			firstIndexCustomColumn = c->valueLabelsIndexForValue(start, true);
 		} else {
 			retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
 			return;
@@ -1775,11 +1775,11 @@ void AxisPrivate::retransformTicks() {
 		if ((majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::CustomValues)) {
 			if (tmpMajorTicksNumberLimited) {
 				// Do not use all values of the column, but just a portion of it
-				columnIndex = majorTicksColumn->indexForValue(majorTickPos);
+				columnIndex = majorTicksColumn->indexForValue(majorTickPos, true);
 				Q_ASSERT(columnIndex >= 0);
 				majorTickPos = majorTicksColumn->valueAt(columnIndex);
 
-				const auto columnIndexNextMajor = majorTicksColumn->indexForValue(nextMajorTickPos);
+				const auto columnIndexNextMajor = majorTicksColumn->indexForValue(nextMajorTickPos, true);
 				Q_ASSERT(columnIndexNextMajor >= 0);
 				nextMajorTickPos = majorTicksColumn->valueAt(columnIndexNextMajor);
 				if (majorTickPos == nextMajorTickPos && iMajor + 1 < tmpMajorTicksNumber)
@@ -1796,7 +1796,7 @@ void AxisPrivate::retransformTicks() {
 			const auto* c = static_cast<const Column*>(majorTicksColumn);
 			Q_ASSERT(tmpMajorTicksNumber > 0);
 			if (tmpMajorTicksNumberLimited) {
-				columnIndex = c->valueLabelsIndexForValue(majorTickPos);
+				columnIndex = c->valueLabelsIndexForValue(majorTickPos, true);
 				Q_ASSERT(columnIndex >= 0);
 				majorTickPos = c->valueLabelsValueAt(columnIndex);
 			} else {

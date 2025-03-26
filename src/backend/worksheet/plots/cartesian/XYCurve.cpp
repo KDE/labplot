@@ -804,7 +804,7 @@ int XYCurve::getNextValue(double xpos, int offset, double& x, double& y, bool& v
 	if (properties == AbstractColumn::Properties::MonotonicDecreasing)
 		offset *= -1;
 
-	int index = xColumn()->indexForValue(xpos);
+	int index = xColumn()->indexForValue(xpos, false);
 	if (index < 0)
 		return -1;
 	if (offset > 0 && index + offset < xColumn()->rowCount())
@@ -942,8 +942,8 @@ void XYCurvePrivate::calculateScenePoints() {
 				double xMax = q->cSystem->mapSceneToLogical(dataRect.bottomRight()).x();
 				DEBUG(Q_FUNC_INFO << ", xMin/xMax = " << xMin << '/' << xMax)
 
-				startIndex = Column::indexForValue(xMin, m_logicalPoints, columnProperties);
-				endIndex = Column::indexForValue(xMax, m_logicalPoints, columnProperties);
+				startIndex = Column::indexForValue(xMin, m_logicalPoints, columnProperties, true);
+				endIndex = Column::indexForValue(xMax, m_logicalPoints, columnProperties, false);
 
 				if (startIndex > endIndex && endIndex >= 0)
 					std::swap(startIndex, endIndex);
@@ -1251,8 +1251,8 @@ void XYCurvePrivate::updateLines(bool performanceOptimization) {
 			const double xMin = q->cSystem->mapSceneToLogical(pageRect.topLeft()).x();
 			const double xMax = q->cSystem->mapSceneToLogical(pageRect.bottomRight()).x();
 
-			startIndex = Column::indexForValue(xMin, m_logicalPoints, columnProperties);
-			endIndex = Column::indexForValue(xMax, m_logicalPoints, columnProperties);
+			startIndex = Column::indexForValue(xMin, m_logicalPoints, columnProperties, true);
+			endIndex = Column::indexForValue(xMax, m_logicalPoints, columnProperties, false);
 
 			if (startIndex > endIndex)
 				std::swap(startIndex, endIndex);
@@ -2290,6 +2290,8 @@ void XYCurvePrivate::updateFilling() {
 	recalcShapeAndBoundingRect();
 }
 
+constexpr auto yUseSmaller = false;
+
 /*!
  * Find y value which corresponds to a @p x . @p valueFound indicates, if value was found.
  * When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
@@ -2303,7 +2305,7 @@ double XYCurve::y(double x, bool& valueFound) const {
 		return std::nan("0");
 	}
 
-	const int index = xColumn()->indexForValue(x);
+	const int index = xColumn()->indexForValue(x, yUseSmaller);
 	if (index < 0) {
 		valueFound = false;
 		return std::nan("0");
@@ -2329,7 +2331,7 @@ double XYCurve::y(double x, double& x_new, bool& valueFound) const {
 		valueFound = false;
 		return std::nan("0");
 	}
-	int index = xColumn()->indexForValue(x);
+	int index = xColumn()->indexForValue(x, yUseSmaller);
 	if (index < 0) {
 		valueFound = false;
 		return std::nan("0");
@@ -2370,7 +2372,7 @@ QDateTime XYCurve::yDateTime(double x, bool& valueFound) const {
 	}
 
 	auto yColumnMode = yColumn()->columnMode();
-	const int index = xColumn()->indexForValue(x);
+	const int index = xColumn()->indexForValue(x, yUseSmaller);
 	if (index < 0) {
 		valueFound = false;
 		return {};
@@ -2591,9 +2593,9 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 		if (noLines) {
 			curvePosScene = m_scenePoints.at(index);
 			curvePosPrevScene = curvePosScene;
-			index = Column::indexForValue(x, m_scenePoints, static_cast<AbstractColumn::Properties>(properties));
+			index = Column::indexForValue(x, m_scenePoints, static_cast<AbstractColumn::Properties>(properties), false);
 		} else
-			index = Column::indexForValue(x, m_lines, static_cast<AbstractColumn::Properties>(properties));
+			index = Column::indexForValue(x, m_lines, static_cast<AbstractColumn::Properties>(properties), false);
 
 		if (index >= 1)
 			index--; // use one before so it is secured that I'm before point.x()

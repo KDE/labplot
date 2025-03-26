@@ -1027,8 +1027,8 @@ int Column::valueLabelsCount(double min, double max) const {
 	return d->valueLabelsCount(min, max);
 }
 
-int Column::valueLabelsIndexForValue(double x) const {
-	return d->valueLabelsIndexForValue(x);
+int Column::valueLabelsIndexForValue(double x, bool smaller) const {
+	return d->valueLabelsIndexForValue(x, smaller);
 }
 
 double Column::valueLabelsValueAt(int index) const {
@@ -2103,7 +2103,7 @@ int Column::calculateMaxSteps(unsigned int value) {
  * @param x
  * @return -1 if index not found, otherwise the index
  */
-int Column::indexForValue(double x, QVector<double>& column, Properties properties) {
+int Column::indexForValue(double x, QVector<double>& column, Properties properties, bool smaller) {
 	int rowCount = column.count();
 	if (rowCount == 0)
 		return -1;
@@ -2124,22 +2124,40 @@ int Column::indexForValue(double x, QVector<double>& column, Properties properti
 			double value = column.at(index);
 
 			if (higherIndex - lowerIndex < 2) {
-				if (std::abs(column.at(lowerIndex) - x) < std::abs(column.at(higherIndex) - x))
-					index = lowerIndex;
-				else
-					index = higherIndex;
+				if (smaller) {
+					if (std::abs(column.at(lowerIndex) - x) <= std::abs(column.at(higherIndex) - x))
+						index = lowerIndex;
+					else
+						index = higherIndex;
+				} else {
+					if (std::abs(column.at(lowerIndex) - x) < std::abs(column.at(higherIndex) - x))
+						index = lowerIndex;
+					else
+						index = higherIndex;
+				}
 
 				return index;
 			}
 
-			if (value > x && increase)
-				higherIndex = index;
-			else if (value >= x && !increase)
-				lowerIndex = index;
-			else if (value <= x && increase)
-				lowerIndex = index;
-			else if (value < x && !increase)
-				higherIndex = index;
+			if (smaller) {
+				if (value >= x && increase)
+					higherIndex = index;
+				else if (value > x && !increase)
+					lowerIndex = index;
+				else if (value < x && increase)
+					lowerIndex = index;
+				else if (value <= x && !increase)
+					higherIndex = index;
+			} else {
+				if (value > x && increase)
+					higherIndex = index;
+				else if (value >= x && !increase)
+					lowerIndex = index;
+				else if (value <= x && increase)
+					lowerIndex = index;
+				else if (value < x && !increase)
+					higherIndex = index;
+			}
 		}
 	} else if (properties == AbstractColumn::Properties::Constant) {
 		return 0;
@@ -2165,7 +2183,7 @@ int Column::indexForValue(double x, QVector<double>& column, Properties properti
  * @param x
  * @return -1 if index not found, otherwise the index
  */
-int Column::indexForValue(const double x, const QVector<QPointF>& points, Properties properties) {
+int Column::indexForValue(const double x, const QVector<QPointF>& points, Properties properties, bool smaller) {
 	int rowCount = points.count();
 
 	if (rowCount == 0)
@@ -2187,22 +2205,40 @@ int Column::indexForValue(const double x, const QVector<QPointF>& points, Proper
 			double value = points.at(index).x();
 
 			if (higherIndex - lowerIndex < 2) {
-				if (std::abs(points.at(lowerIndex).x() - x) < std::abs(points.at(higherIndex).x() - x))
-					index = lowerIndex;
-				else
-					index = higherIndex;
+				if (smaller) {
+					if (std::abs(points.at(lowerIndex).x() - x) <= std::abs(points.at(higherIndex).x() - x))
+						index = lowerIndex;
+					else
+						index = higherIndex;
+				} else {
+					if (std::abs(points.at(lowerIndex).x() - x) < std::abs(points.at(higherIndex).x() - x))
+						index = lowerIndex;
+					else
+						index = higherIndex;
+				}
 
 				return index;
 			}
 
-			if (value > x && increase)
-				higherIndex = index;
-			else if (value >= x && !increase)
-				lowerIndex = index;
-			else if (value <= x && increase)
-				lowerIndex = index;
-			else if (value < x && !increase)
-				higherIndex = index;
+			if (smaller) {
+				if (value >= x && increase)
+					higherIndex = index;
+				else if (value > x && !increase)
+					lowerIndex = index;
+				else if (value < x && increase)
+					lowerIndex = index;
+				else if (value <= x && !increase)
+					higherIndex = index;
+			} else {
+				if (value > x && increase)
+					higherIndex = index;
+				else if (value >= x && !increase)
+					lowerIndex = index;
+				else if (value <= x && increase)
+					lowerIndex = index;
+				else if (value < x && !increase)
+					higherIndex = index;
+			}
 		}
 
 	} else if (properties == AbstractColumn::Properties::Constant) {
@@ -2230,7 +2266,7 @@ int Column::indexForValue(const double x, const QVector<QPointF>& points, Proper
  * @param x
  * @return -1 if index not found, otherwise the index
  */
-int Column::indexForValue(double x, QVector<QLineF>& lines, Properties properties) {
+int Column::indexForValue(double x, QVector<QLineF>& lines, Properties properties, bool smaller) {
 	int rowCount = lines.count();
 	if (rowCount == 0)
 		return -1;
@@ -2252,22 +2288,39 @@ int Column::indexForValue(double x, QVector<QLineF>& lines, Properties propertie
 			double value = lines.at(index).p1().x();
 
 			if (higherIndex - lowerIndex < 2) {
-				if (std::abs(lines.at(lowerIndex).p1().x() - x) < std::abs(lines.at(higherIndex).p1().x() - x))
-					index = lowerIndex;
-				else
-					index = higherIndex;
-
+				if (smaller) {
+					if (std::abs(lines.at(lowerIndex).p1().x() - x) <= std::abs(lines.at(higherIndex).p1().x() - x))
+						index = lowerIndex;
+					else
+						index = higherIndex;
+				} else {
+					if (std::abs(lines.at(lowerIndex).p1().x() - x) < std::abs(lines.at(higherIndex).p1().x() - x))
+						index = lowerIndex;
+					else
+						index = higherIndex;
+				}
 				return index;
 			}
 
-			if (value > x && increase)
-				higherIndex = index;
-			else if (value >= x && !increase)
-				lowerIndex = index;
-			else if (value <= x && increase)
-				lowerIndex = index;
-			else if (value < x && !increase)
-				higherIndex = index;
+			if (smaller) {
+				if (value >= x && increase)
+					higherIndex = index;
+				else if (value > x && !increase)
+					lowerIndex = index;
+				else if (value < x && increase)
+					lowerIndex = index;
+				else if (value <= x && !increase)
+					higherIndex = index;
+			} else {
+				if (value > x && increase)
+					higherIndex = index;
+				else if (value >= x && !increase)
+					lowerIndex = index;
+				else if (value <= x && increase)
+					lowerIndex = index;
+				else if (value < x && !increase)
+					higherIndex = index;
+			}
 		}
 
 	} else if (properties == AbstractColumn::Properties::Constant) {
@@ -2289,8 +2342,8 @@ int Column::indexForValue(double x, QVector<QLineF>& lines, Properties propertie
 	return -1;
 }
 
-int Column::indexForValue(double x) const {
-	return d->indexForValue(x);
+int Column::indexForValue(double x, bool smaller) const {
+	return d->indexForValue(x, smaller);
 }
 
 /*!
@@ -2316,8 +2369,8 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 
 	const auto& property = properties();
 	if (property == Properties::MonotonicIncreasing || property == Properties::MonotonicDecreasing) {
-		start = indexForValue(v1);
-		end = indexForValue(v2);
+		start = indexForValue(v1, true);
+		end = indexForValue(v2, false);
 
 		switch (columnMode()) {
 		case ColumnMode::Integer:

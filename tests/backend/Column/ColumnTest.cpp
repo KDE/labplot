@@ -1025,40 +1025,188 @@ void ColumnTest::loadDateTimeFromProject() {
 	//	}
 }
 
-void ColumnTest::testIndexForValue() {
+void ColumnTest::testIndexForValueStrictlyMonotonouslyRising() {
+	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
+	c.setValues({1.0, 2.0, 3.0, 4.0});
+
+	QCOMPARE(c.indexForValue(0.5, true), 0);
+	QCOMPARE(c.indexForValue(4.5, false), 3);
+}
+
+void ColumnTest::testIndexForValueMonotonouslyRising() {
+	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
+	c.setValues({1.0, 1.0, 2.0, 2.0, 3.0, 4.0, 4.0});
+
+	QCOMPARE(c.indexForValue(0.5, true), 0);
+
+	QCOMPARE(c.indexForValue(2.0, true), 2);
+	QCOMPARE(c.indexForValue(2.0, false), 3);
+
+	QCOMPARE(c.indexForValue(4.5, false), 6);
+}
+
+void ColumnTest::indexForValueDatetimeStrictlyMonotonouslyRising() {
+	Column c(QStringLiteral("column"), Column::ColumnMode::DateTime);
+	c.setDateTimes({
+		QDateTime::fromString(QStringLiteral("2017-07-24T00:00:00Z"), Qt::ISODate),
+		QDateTime::fromString(QStringLiteral("2017-11-24T12:03:00Z"), Qt::ISODate),
+		QDateTime::fromString(QStringLiteral("2019-12-24T00:05:03Z"), Qt::ISODate),
+		QDateTime::fromString(QStringLiteral("2019-12-25T12:03:00Z"), Qt::ISODate),
+		QDateTime::fromString(QStringLiteral("2019-12-26T00:05:03Z"), Qt::ISODate),
+	});
+
+	QCOMPARE(c.indexForValue(QDateTime::fromString(QStringLiteral("2000-07-24T00:00:00Z"), Qt::ISODate).toMSecsSinceEpoch(), true), 0);
+	QCOMPARE(c.indexForValue(QDateTime::fromString(QStringLiteral("2020-07-24T00:00:00Z"), Qt::ISODate).toMSecsSinceEpoch(), false), 4);
+}
+
+void ColumnTest::indexForValueDatetimeMonotonouslyRising() {
+	Column c(QStringLiteral("column"), Column::ColumnMode::DateTime);
+	c.setDateTimes({
+		QDateTime::fromString(QStringLiteral("2017-07-24T00:00:00Z"), Qt::ISODate),
+		QDateTime::fromString(QStringLiteral("2017-07-24T00:00:00Z"), Qt::ISODate),
+		QDateTime::fromString(QStringLiteral("2017-11-24T12:03:00Z"), Qt::ISODate),
+		QDateTime::fromString(QStringLiteral("2019-12-24T00:05:03Z"), Qt::ISODate),
+		QDateTime::fromString(QStringLiteral("2019-12-24T00:05:03Z"), Qt::ISODate),
+		QDateTime::fromString(QStringLiteral("2019-12-25T12:03:00Z"), Qt::ISODate),
+		QDateTime::fromString(QStringLiteral("2019-12-26T00:05:03Z"), Qt::ISODate),
+		QDateTime::fromString(QStringLiteral("2019-12-26T00:05:03Z"), Qt::ISODate),
+	});
+
+	QCOMPARE(c.indexForValue(QDateTime::fromString(QStringLiteral("2000-07-24T00:00:00Z"), Qt::ISODate).toMSecsSinceEpoch(), true), 0);
+	QCOMPARE(c.indexForValue(QDateTime::fromString(QStringLiteral("2000-07-24T00:00:00Z"), Qt::ISODate).toMSecsSinceEpoch(), false), 1);
+
+	QCOMPARE(c.indexForValue(QDateTime::fromString(QStringLiteral("2019-12-24T00:05:03Z"), Qt::ISODate).toMSecsSinceEpoch(), true), 3);
+	QCOMPARE(c.indexForValue(QDateTime::fromString(QStringLiteral("2019-12-24T00:05:03Z"), Qt::ISODate).toMSecsSinceEpoch(), false), 4);
+
+	QCOMPARE(c.indexForValue(QDateTime::fromString(QStringLiteral("2020-07-24T00:00:00Z"), Qt::ISODate).toMSecsSinceEpoch(), false), 7);
+	QCOMPARE(c.indexForValue(QDateTime::fromString(QStringLiteral("2020-07-24T00:00:00Z"), Qt::ISODate).toMSecsSinceEpoch(), true), 6);
+}
+
+/* Testing points and lines algorithm */
+void ColumnTest::testIndexForValuePoints() {
 	{
 		const double value = 5;
 		QVector<QPointF> points{};
 		Column::Properties properties = Column::Properties::MonotonicIncreasing;
-		QCOMPARE(Column::indexForValue(value, points, properties), -1);
+		QCOMPARE(Column::indexForValue(value, points, properties, false), -1);
+	}
+
+	{
+		// Non strictly monotonic increasing
+		QVector<QPointF> points{QPointF(10, 1), QPointF(10, 1), QPointF(20, 1), QPointF(20, 1), QPointF(30, 1), QPointF(40, 1), QPointF(50, 1), QPointF(50, 1)};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(0, points, properties, false), 1);
+		QCOMPARE(Column::indexForValue(0, points, properties, true), 0);
+
+		QCOMPARE(Column::indexForValue(20, points, properties, false), 3);
+		QCOMPARE(Column::indexForValue(20, points, properties, true), 2);
+
+		QCOMPARE(Column::indexForValue(60, points, properties, false), 7);
+		QCOMPARE(Column::indexForValue(60, points, properties, true), 6);
 	}
 
 	{
 		const double value = 5;
 		QVector<QPointF> points{QPointF(10, 1), QPointF(20, 1), QPointF(30, 1), QPointF(40, 1), QPointF(50, 1)};
 		Column::Properties properties = Column::Properties::MonotonicIncreasing;
-		QCOMPARE(Column::indexForValue(value, points, properties), 0);
+		QCOMPARE(Column::indexForValue(value, points, properties, false), 0);
 	}
 
 	{
 		const double value = 60;
 		QVector<QPointF> points{QPointF(10, 1), QPointF(20, 1), QPointF(30, 1), QPointF(40, 1), QPointF(50, 1)};
 		Column::Properties properties = Column::Properties::MonotonicIncreasing;
-		QCOMPARE(Column::indexForValue(value, points, properties), 4);
+		QCOMPARE(Column::indexForValue(value, points, properties, false), 4);
 	}
 
 	{
 		const double value = 16;
 		QVector<QPointF> points{QPointF(10, 1), QPointF(20, 1), QPointF(30, 1), QPointF(40, 1), QPointF(50, 1)};
 		Column::Properties properties = Column::Properties::MonotonicIncreasing;
-		QCOMPARE(Column::indexForValue(value, points, properties), 1);
+		QCOMPARE(Column::indexForValue(value, points, properties, false), 1);
 	}
 
 	{
 		const double value = 20;
 		QVector<QPointF> points{QPointF(10, 1), QPointF(20, 1), QPointF(30, 1), QPointF(40, 1), QPointF(50, 1)};
 		Column::Properties properties = Column::Properties::MonotonicIncreasing;
-		QCOMPARE(Column::indexForValue(value, points, properties), 1);
+		QCOMPARE(Column::indexForValue(value, points, properties, false), 1);
+	}
+}
+
+void ColumnTest::testIndexForValueLines() {
+	{
+		const double value = 5;
+		Lines lines{};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, lines, properties, false), -1);
+	}
+
+	// The second point does not matter, because only the first one is used
+
+	{
+		// Non strictly monotonic increasing
+		QVector<QLineF> lines{QLineF(QPointF(10, 1), QPointF(0, 0)),
+							  QLineF(QPointF(10, 1), QPointF(0, 0)),
+							  QLineF(QPointF(20, 1), QPointF(0, 0)),
+							  QLineF(QPointF(20, 1), QPointF(0, 0)),
+							  QLineF(QPointF(30, 1), QPointF(0, 0)),
+							  QLineF(QPointF(40, 1), QPointF(0, 0)),
+							  QLineF(QPointF(50, 1), QPointF(0, 0)),
+							  QLineF(QPointF(50, 1), QPointF(0, 0))};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(0, lines, properties, false), 1);
+		QCOMPARE(Column::indexForValue(0, lines, properties, true), 0);
+
+		QCOMPARE(Column::indexForValue(20, lines, properties, false), 3);
+		QCOMPARE(Column::indexForValue(20, lines, properties, true), 2);
+
+		QCOMPARE(Column::indexForValue(60, lines, properties, false), 7);
+		QCOMPARE(Column::indexForValue(60, lines, properties, true), 6);
+	}
+
+	{
+		const double value = 5;
+		QVector<QLineF> lines{QLineF(QPointF(10, 1), QPointF(0, 0)),
+							  QLineF(QPointF(20, 1), QPointF(0, 0)),
+							  QLineF(QPointF(30, 1), QPointF(0, 0)),
+							  QLineF(QPointF(40, 1), QPointF(0, 0)),
+							  QLineF(QPointF(50, 1), QPointF(0, 0))};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, lines, properties, false), 0);
+	}
+
+	{
+		const double value = 60;
+		QVector<QLineF> lines{QLineF(QPointF(10, 1), QPointF(0, 0)),
+							  QLineF(QPointF(20, 1), QPointF(0, 0)),
+							  QLineF(QPointF(30, 1), QPointF(0, 0)),
+							  QLineF(QPointF(40, 1), QPointF(0, 0)),
+							  QLineF(QPointF(50, 1), QPointF(0, 0))};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, lines, properties, false), 4);
+	}
+
+	{
+		const double value = 16;
+		QVector<QLineF> lines{QLineF(QPointF(10, 1), QPointF(0, 0)),
+							  QLineF(QPointF(20, 1), QPointF(0, 0)),
+							  QLineF(QPointF(30, 1), QPointF(0, 0)),
+							  QLineF(QPointF(40, 1), QPointF(0, 0)),
+							  QLineF(QPointF(50, 1), QPointF(0, 0))};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, lines, properties, false), 1);
+	}
+
+	{
+		const double value = 20;
+		QVector<QLineF> lines{QLineF(QPointF(10, 1), QPointF(0, 0)),
+							  QLineF(QPointF(20, 1), QPointF(0, 0)),
+							  QLineF(QPointF(30, 1), QPointF(0, 0)),
+							  QLineF(QPointF(40, 1), QPointF(0, 0)),
+							  QLineF(QPointF(50, 1), QPointF(0, 0))};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, lines, properties, false), 1);
 	}
 }
 
@@ -1067,35 +1215,35 @@ void ColumnTest::testIndexForValueDoubleVector() {
 		const double value = 5;
 		QVector<double> points{};
 		Column::Properties properties = Column::Properties::MonotonicIncreasing;
-		QCOMPARE(Column::indexForValue(value, points, properties), -1);
+		QCOMPARE(Column::indexForValue(value, points, properties, false), -1);
 	}
 
 	{
 		const double value = 5;
 		QVector<double> points{10, 20, 30, 40, 50};
 		Column::Properties properties = Column::Properties::MonotonicIncreasing;
-		QCOMPARE(Column::indexForValue(value, points, properties), 0);
+		QCOMPARE(Column::indexForValue(value, points, properties, false), 0);
 	}
 
 	{
 		const double value = 60;
 		QVector<double> points{10, 20, 30, 40, 50};
 		Column::Properties properties = Column::Properties::MonotonicIncreasing;
-		QCOMPARE(Column::indexForValue(value, points, properties), 4);
+		QCOMPARE(Column::indexForValue(value, points, properties, false), 4);
 	}
 
 	{
 		const double value = 16;
 		QVector<double> points{10, 20, 30, 40, 50};
 		Column::Properties properties = Column::Properties::MonotonicIncreasing;
-		QCOMPARE(Column::indexForValue(value, points, properties), 1);
+		QCOMPARE(Column::indexForValue(value, points, properties, false), 1);
 	}
 
 	{
 		const double value = 20;
 		QVector<double> points{10, 20, 30, 40, 50};
 		Column::Properties properties = Column::Properties::MonotonicIncreasing;
-		QCOMPARE(Column::indexForValue(value, points, properties), 1);
+		QCOMPARE(Column::indexForValue(value, points, properties, false), 1);
 	}
 }
 

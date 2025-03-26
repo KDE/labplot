@@ -157,7 +157,7 @@ public:
 	virtual double minimum(int count = 0) const;
 	virtual double minimum(int startIndex, int endIndex) const;
 	virtual bool indicesMinMax(double v1, double v2, int& start, int& end) const;
-	virtual int indexForValue(double x) const;
+	virtual int indexForValue(double x, bool smaller) const;
 
 	bool isValid(int row) const;
 

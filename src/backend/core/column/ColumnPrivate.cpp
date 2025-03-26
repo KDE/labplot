@@ -37,7 +37,8 @@ int indexForValueCommon(const T* obj,
 						const std::function<QDateTime(const T*, int)> dateTimeAt,
 						const std::function<AbstractColumn::Properties(const T*)> properties,
 						const std::function<bool(const T*, int)> isValid,
-						const std::function<bool(const T*, int)> isMasked) {
+						const std::function<bool(const T*, int)> isMasked,
+						bool smaller) {
 	int rc = rowCount(obj);
 	double prevValue = 0;
 	qint64 prevValueDateTime = 0;
@@ -61,22 +62,40 @@ int indexForValueCommon(const T* obj,
 				double value = valueAt(obj, index);
 
 				if (higherIndex - lowerIndex < 2) {
-					if (std::abs(valueAt(obj, lowerIndex) - x) < std::abs(valueAt(obj, higherIndex) - x))
-						index = lowerIndex;
-					else
-						index = higherIndex;
+					if (smaller) {
+						if (std::abs(valueAt(obj, lowerIndex) - x) <= std::abs(valueAt(obj, higherIndex) - x))
+							index = lowerIndex;
+						else
+							index = higherIndex;
+					} else {
+						if (std::abs(valueAt(obj, lowerIndex) - x) < std::abs(valueAt(obj, higherIndex) - x))
+							index = lowerIndex;
+						else
+							index = higherIndex;
+					}
 
 					return index;
 				}
 
-				if (value > x && increase)
-					higherIndex = index;
-				else if (value >= x && !increase)
-					lowerIndex = index;
-				else if (value <= x && increase)
-					lowerIndex = index;
-				else if (value < x && !increase)
-					higherIndex = index;
+				if (smaller) {
+					if (value >= x && increase)
+						higherIndex = index;
+					else if (value > x && !increase)
+						lowerIndex = index;
+					else if (value < x && increase)
+						lowerIndex = index;
+					else if (value <= x && !increase)
+						higherIndex = index;
+				} else {
+					if (value > x && increase)
+						higherIndex = index;
+					else if (value >= x && !increase)
+						lowerIndex = index;
+					else if (value <= x && increase)
+						lowerIndex = index;
+					else if (value < x && !increase)
+						higherIndex = index;
+				}
 			}
 			break;
 		case Column::ColumnMode::Text:
@@ -90,23 +109,42 @@ int indexForValueCommon(const T* obj,
 				qint64 value = dateTimeAt(obj, index).toMSecsSinceEpoch();
 
 				if (higherIndex - lowerIndex < 2) {
-					if (std::abs(dateTimeAt(obj, lowerIndex).toMSecsSinceEpoch() - xInt64)
-						< std::abs(dateTimeAt(obj, higherIndex).toMSecsSinceEpoch() - xInt64))
-						index = lowerIndex;
-					else
-						index = higherIndex;
+					if (smaller) {
+						if (std::abs(dateTimeAt(obj, lowerIndex).toMSecsSinceEpoch() - xInt64)
+							<= std::abs(dateTimeAt(obj, higherIndex).toMSecsSinceEpoch() - xInt64))
+							index = lowerIndex;
+						else
+							index = higherIndex;
+					} else {
+						if (std::abs(dateTimeAt(obj, lowerIndex).toMSecsSinceEpoch() - xInt64)
+							< std::abs(dateTimeAt(obj, higherIndex).toMSecsSinceEpoch() - xInt64))
+							index = lowerIndex;
+						else
+							index = higherIndex;
+					}
 
 					return index;
 				}
 
-				if (value > xInt64 && increase)
-					higherIndex = index;
-				else if (value >= xInt64 && !increase)
-					lowerIndex = index;
-				else if (value <= xInt64 && increase)
-					lowerIndex = index;
-				else if (value < xInt64 && !increase)
-					higherIndex = index;
+				if (smaller) {
+					if (value >= xInt64 && increase)
+						higherIndex = index;
+					else if (value > xInt64 && !increase)
+						lowerIndex = index;
+					else if (value < xInt64 && increase)
+						lowerIndex = index;
+					else if (value <= xInt64 && !increase)
+						higherIndex = index;
+				} else {
+					if (value > xInt64 && increase)
+						higherIndex = index;
+					else if (value >= xInt64 && !increase)
+						lowerIndex = index;
+					else if (value <= xInt64 && increase)
+						lowerIndex = index;
+					else if (value < xInt64 && !increase)
+						higherIndex = index;
+				}
 			}
 		}
 		}
@@ -437,7 +475,7 @@ void ColumnPrivate::ValueLabels::migrateTextTo(AbstractColumn::ColumnMode newMod
 	}
 }
 
-int ColumnPrivate::ValueLabels::indexForValue(double value) const {
+int ColumnPrivate::ValueLabels::indexForValue(double value, bool smaller) const {
 	return indexForValueCommon<ValueLabels>(this,
 											value,
 											std::mem_fn(&ValueLabels::mode),
@@ -446,7 +484,8 @@ int ColumnPrivate::ValueLabels::indexForValue(double value) const {
 											std::mem_fn(&ValueLabels::dateTimeAt),
 											std::mem_fn(&ValueLabels::properties),
 											std::mem_fn<bool(int) const>(&ValueLabels::isValid),
-											std::mem_fn<bool(int) const>(&ValueLabels::isMasked));
+											std::mem_fn<bool(int) const>(&ValueLabels::isMasked),
+											smaller);
 }
 
 bool ColumnPrivate::ValueLabels::isValid(int) const {
@@ -1864,7 +1903,7 @@ void ColumnPrivate::removeRows(int first, int count) {
 	invalidate();
 }
 
-int ColumnPrivate::indexForValue(double x) const {
+int ColumnPrivate::indexForValue(double x, bool smaller) const {
 	return indexForValueCommon<Column>(q,
 									   x,
 									   std::mem_fn(&Column::columnMode),
@@ -1873,7 +1912,8 @@ int ColumnPrivate::indexForValue(double x) const {
 									   std::mem_fn(&Column::dateTimeAt),
 									   std::mem_fn(&Column::properties),
 									   std::mem_fn<bool(int) const>(&Column::isValid),
-									   std::mem_fn<bool(int) const>(&Column::isMasked));
+									   std::mem_fn<bool(int) const>(&Column::isMasked),
+									   smaller);
 }
 
 //! Return the column name
@@ -1987,8 +2027,8 @@ int ColumnPrivate::valueLabelsCount(double min, double max) const {
 	return m_labels.count(min, max);
 }
 
-int ColumnPrivate::valueLabelsIndexForValue(double value) const {
-	return m_labels.indexForValue(value);
+int ColumnPrivate::valueLabelsIndexForValue(double value, bool smaller) const {
+	return m_labels.indexForValue(value, smaller);
 }
 
 double ColumnPrivate::valueLabelsValueAt(int index) const {
