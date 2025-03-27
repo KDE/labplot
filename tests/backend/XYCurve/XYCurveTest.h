@@ -69,6 +69,9 @@ private Q_SLOTS:
 	void scatterMonotonicIncreasing();
 	void scatterMonotonicIncreasingPlotRangeDecreasing();
 	void scatterMonotonicDecreasing();
+
+	void lineMonotonicIncreasing();
+	void lineMonotonicIncreasingPlotRangeDecreasing();
 };
 
 #endif // XYCURVETEST_H
