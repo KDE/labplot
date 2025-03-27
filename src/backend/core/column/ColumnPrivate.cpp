@@ -52,13 +52,25 @@ void determineNewIndices(T value, T reference, int index, int& lowerIndex, int& 
 }
 
 template<typename T>
-int finalIndex(T valueLowerIndex, T valueHigherIndex, T reference, int lowerIndex, int higherIndex, bool smaller) {
+int finalIndex(T valueLowerIndex, T valueHigherIndex, T reference, int lowerIndex, int higherIndex, bool smaller, bool increase) {
 	if (smaller) {
-		if (std::abs(valueLowerIndex - reference) <= std::abs(valueHigherIndex - reference))
+		if (increase) {
+			if (std::abs(valueLowerIndex - reference) <= std::abs(valueHigherIndex - reference))
+				return lowerIndex;
+			return higherIndex;
+		}
+		if (std::abs(valueLowerIndex - reference) < std::abs(valueHigherIndex - reference))
 			return lowerIndex;
 		return higherIndex;
 	}
-	if (std::abs(valueLowerIndex - reference) < std::abs(valueHigherIndex - reference))
+	// larger index
+	if (increase) {
+		if (std::abs(valueLowerIndex - reference) < std::abs(valueHigherIndex - reference))
+			return lowerIndex;
+		return higherIndex;
+	}
+
+	if (std::abs(valueLowerIndex - reference) <= std::abs(valueHigherIndex - reference))
 		return lowerIndex;
 	return higherIndex;
 }
@@ -97,7 +109,7 @@ int indexForValueCommon(const T* obj,
 				double value = valueAt(obj, index);
 
 				if (higherIndex - lowerIndex < 2)
-					return finalIndex(valueAt(obj, lowerIndex), valueAt(obj, higherIndex), x, lowerIndex, higherIndex, smaller);
+					return finalIndex(valueAt(obj, lowerIndex), valueAt(obj, higherIndex), x, lowerIndex, higherIndex, smaller, increase);
 
 				determineNewIndices(value, x, index, lowerIndex, higherIndex, smaller, increase);
 			}
@@ -118,7 +130,8 @@ int indexForValueCommon(const T* obj,
 									  xInt64,
 									  lowerIndex,
 									  higherIndex,
-									  smaller);
+									  smaller,
+									  increase);
 
 				determineNewIndices(value, xInt64, index, lowerIndex, higherIndex, smaller, increase);
 			}
@@ -1948,7 +1961,7 @@ int ColumnPrivate::indexForValue(double x, QVector<double>& column, Column::Prop
 			double value = column.at(index);
 
 			if (higherIndex - lowerIndex < 2)
-				return finalIndex(column.at(lowerIndex), column.at(higherIndex), x, lowerIndex, higherIndex, smaller);
+				return finalIndex(column.at(lowerIndex), column.at(higherIndex), x, lowerIndex, higherIndex, smaller, increase);
 
 			determineNewIndices(value, x, index, lowerIndex, higherIndex, smaller, increase);
 		}
@@ -1998,7 +2011,7 @@ int ColumnPrivate::indexForValue(const double x, const QVector<QPointF>& points,
 			double value = points.at(index).x();
 
 			if (higherIndex - lowerIndex < 2)
-				return finalIndex(points.at(lowerIndex).x(), points.at(higherIndex).x(), x, lowerIndex, higherIndex, smaller);
+				return finalIndex(points.at(lowerIndex).x(), points.at(higherIndex).x(), x, lowerIndex, higherIndex, smaller, increase);
 
 			determineNewIndices(value, x, index, lowerIndex, higherIndex, smaller, increase);
 		}
@@ -2050,7 +2063,7 @@ int ColumnPrivate::indexForValue(double x, QVector<QLineF>& lines, AbstractColum
 			double value = lines.at(index).p1().x();
 
 			if (higherIndex - lowerIndex < 2)
-				return finalIndex(lines.at(lowerIndex).p1().x(), lines.at(higherIndex).p1().x(), x, lowerIndex, higherIndex, smaller);
+				return finalIndex(lines.at(lowerIndex).p1().x(), lines.at(higherIndex).p1().x(), x, lowerIndex, higherIndex, smaller, increase);
 
 			determineNewIndices(value, x, index, lowerIndex, higherIndex, smaller, increase);
 		}
