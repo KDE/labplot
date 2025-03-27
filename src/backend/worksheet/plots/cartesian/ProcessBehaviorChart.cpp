@@ -653,6 +653,7 @@ void ProcessBehaviorChart::setLabelsFontColor(const QColor& color) {
 		te.setTextColor(color);
 		textWrapper.text = te.toHtml();
 		d->centerLabel->setText(textWrapper);
+		d->centerLabel->setFontColor(color);
 
 		textWrapper = d->upperLimitLabel->text();
 		te.setText(textWrapper.text);
@@ -660,6 +661,7 @@ void ProcessBehaviorChart::setLabelsFontColor(const QColor& color) {
 		te.setTextColor(color);
 		textWrapper.text = te.toHtml();
 		d->upperLimitLabel->setText(textWrapper);
+		d->upperLimitLabel->setFontColor(color);
 
 		textWrapper = d->lowerLimitLabel->text();
 		te.setHtml(textWrapper.text);
@@ -667,6 +669,7 @@ void ProcessBehaviorChart::setLabelsFontColor(const QColor& color) {
 		te.setTextColor(color);
 		textWrapper.text = te.toHtml();
 		d->lowerLimitLabel->setText(textWrapper);
+		d->lowerLimitLabel->setFontColor(color);
 		endMacro();
 	}
 }
