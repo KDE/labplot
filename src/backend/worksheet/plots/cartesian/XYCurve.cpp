@@ -942,6 +942,9 @@ void XYCurvePrivate::calculateScenePoints() {
 				double xMax = q->cSystem->mapSceneToLogical(dataRect.bottomRight()).x();
 				DEBUG(Q_FUNC_INFO << ", xMin/xMax = " << xMin << '/' << xMax)
 
+				if (xMin > xMax)
+					qSwap(xMin, xMax);
+
 				startIndex = Column::indexForValue(xMin, m_logicalPoints, columnProperties, true);
 				endIndex = Column::indexForValue(xMax, m_logicalPoints, columnProperties, false);
 

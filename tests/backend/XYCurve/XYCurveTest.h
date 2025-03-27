@@ -67,6 +67,7 @@ private Q_SLOTS:
 
 	void scatterStrictMonotonicIncreasing();
 	void scatterMonotonicIncreasing();
+	void scatterMonotonicIncreasingPlotRangeDecreasing();
 	void scatterMonotonicDecreasing();
 };
 
