@@ -2922,7 +2922,7 @@ void MainWin::updateNotebookActions() {
 	auto* menu = static_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
 	unplugActionList(QLatin1String("backends_list"));
 	QList<QAction*> newBackendActions;
-	menu->clear();
+	m_newNotebookMenu->clear();
 	for (auto* backend : Cantor::Backend::availableBackends()) {
 		if (!backend->isEnabled())
 			continue;
@@ -2933,14 +2933,10 @@ void MainWin::updateNotebookActions() {
 		actionCollection()->addAction(QLatin1String("notebook_") + backend->name(), action);
 		connect(action, &QAction::triggered, this, &MainWin::newNotebook);
 		newBackendActions << action;
-		menu->addAction(action);
 		m_newNotebookMenu->addAction(action);
 	}
 
 	plugActionList(QLatin1String("backends_list"), newBackendActions);
-
-	menu->addSeparator();
-	menu->addAction(m_configureNotebookAction);
 
 	m_newNotebookMenu->addSeparator();
 	m_newNotebookMenu->addAction(m_configureNotebookAction);
