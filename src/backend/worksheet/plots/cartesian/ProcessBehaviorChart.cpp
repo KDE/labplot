@@ -174,22 +174,22 @@ void ProcessBehaviorChart::init(bool loading) {
 	d->centerCurve->background()->setPosition(Background::Position::No);
 
 	d->upperLimitCurve->line()->init(group);
-	d->upperLimitCurve->line()->setStyle(Qt::SolidLine);
+	d->upperLimitCurve->line()->setStyle(Qt::DashLine);
 	d->upperLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->upperLimitCurve->background()->setPosition(Background::Position::No);
 	d->upperLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
 
 	d->lowerLimitCurve->line()->init(group);
-	d->lowerLimitCurve->line()->setStyle(Qt::SolidLine);
+	d->lowerLimitCurve->line()->setStyle(Qt::DashLine);
 	d->lowerLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->lowerLimitCurve->background()->setPosition(Background::Position::No);
 	d->lowerLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
 
 	// text labels for the labels
-	d->labelsEnabled = group.readEntry(QStringLiteral("LabelsEnabled"), false);
-	d->labelsAutoPrecision = group.readEntry(QStringLiteral("LabelsAutoPrecision"), true);
+	d->labelsEnabled = group.readEntry(QStringLiteral("LabelsEnabled"), true);
+	d->labelsAutoPrecision = group.readEntry(QStringLiteral("LabelsAutoPrecision"), false);
 	d->labelsPrecision = group.readEntry(QStringLiteral("LabelsPrecision"), 1);
-	const auto shape = static_cast<TextLabel::BorderShape>(group.readEntry(QStringLiteral("BorderShape"), (int)TextLabel::BorderShape::LeftPointingRectangle));
+	const auto shape = static_cast<TextLabel::BorderShape>(group.readEntry(QStringLiteral("BorderShape"), (int)TextLabel::BorderShape::NoBorder));
 	d->upperLimitLabel->setBorderShape(shape);
 	d->centerLabel->setBorderShape(shape);
 	d->lowerLimitLabel->setBorderShape(shape);
@@ -1650,9 +1650,11 @@ void ProcessBehaviorChart::loadThemeConfig(const KConfig& config) {
 	d->centerCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
 	d->upperLimitCurve->line()->loadThemeConfig(group, themeColor);
+	d->upperLimitCurve->line()->setStyle(Qt::DashLine);
 	d->upperLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
 	d->lowerLimitCurve->line()->loadThemeConfig(group, themeColor);
+	d->lowerLimitCurve->line()->setStyle(Qt::DashLine);
 	d->lowerLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
 	d->centerLabel->loadThemeConfig(config);
