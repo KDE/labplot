@@ -1253,8 +1253,11 @@ void XYCurvePrivate::updateLines(bool performanceOptimization) {
 				DEBUG(Q_FUNC_INFO << ", cSystem invalid")
 				return;
 			}
-			const double xMin = q->cSystem->mapSceneToLogical(pageRect.topLeft()).x();
-			const double xMax = q->cSystem->mapSceneToLogical(pageRect.bottomRight()).x();
+			double xMin = q->cSystem->mapSceneToLogical(pageRect.topLeft()).x();
+			double xMax = q->cSystem->mapSceneToLogical(pageRect.bottomRight()).x();
+
+			if (xMin > xMax)
+				qSwap(xMin, xMax);
 
 			startIndex = Column::indexForValue(xMin, m_logicalPoints, columnProperties, true);
 			endIndex = Column::indexForValue(xMax, m_logicalPoints, columnProperties, false);
