@@ -32,39 +32,27 @@ template<typename T>
 void determineNewIndices(T value, T reference, int index, int& lowerIndex, int& higherIndex, bool smaller, bool increase) {
 	if (increase) {
 		if (smaller) {
-			if (value > reference) {
+			if (value >= reference)
 				higherIndex = index;
-			} else if (value < reference) {
+			else if (value < reference)
 				lowerIndex = index;
-			} else {
-				higherIndex = index;
-			}
 		} else {
-			if (value > reference) {
+			if (value > reference)
 				higherIndex = index;
-			} else if (value < reference) {
+			else if (value <= reference)
 				lowerIndex = index;
-			} else {
-				lowerIndex = index;
-			}
 		}
 	} else {
 		if (smaller) {
-			if (value > reference) {
+			if (value >= reference)
 				lowerIndex = index;
-			} else if (value < reference) {
+			else if (value < reference)
 				higherIndex = index;
-			} else {
-				lowerIndex = index;
-			}
 		} else {
-			if (value > reference) {
+			if (value > reference)
 				lowerIndex = index;
-			} else if (value < reference) {
+			else if (value <= reference)
 				higherIndex = index;
-			} else {
-				higherIndex = index;
-			}
 		}
 	}
 }
