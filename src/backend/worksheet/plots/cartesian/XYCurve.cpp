@@ -960,6 +960,8 @@ void XYCurvePrivate::calculateScenePoints() {
 			}
 			//} // (symbolsStyle != Symbol::NoSymbols || valuesType != XYCurve::NoValues )
 
+			Q_EMIT q->pointsUpdated(q, startIndex, endIndex, m_logicalPoints);
+
 			m_pointVisible.resize(numberOfPoints);
 			q->cSystem->mapLogicalToScene(startIndex, endIndex, m_logicalPoints, m_scenePoints, m_pointVisible);
 			// for (auto p : m_logicalPoints)

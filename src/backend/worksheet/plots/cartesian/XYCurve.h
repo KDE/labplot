@@ -166,6 +166,7 @@ private:
 
 Q_SIGNALS:
 	void linesUpdated(const XYCurve*, const QVector<QLineF>&);
+	void pointsUpdated(const XYCurve*, const int startIndex, const int endIndex, const QVector<QPointF>& logicalPoints);
 
 	// General-Tab
 	void xDataChanged();
