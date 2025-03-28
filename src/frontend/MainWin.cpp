@@ -173,6 +173,11 @@ MainWin::~MainWin() {
 	group.writeEntry(QLatin1String("WindowState"), saveState()); // current state of QMainWindow's toolbars
 	group.writeEntry(QLatin1String("lastOpenFileFilter"), m_lastOpenFileFilter);
 	group.writeEntry(QLatin1String("ShowMemoryInfo"), (m_memoryInfoWidget != nullptr));
+#ifdef HAVE_CANTOR_LIBS
+	if (m_lastUsedNotebookAction)
+		group.writeEntry(QLatin1String("lastUsedNotebook"), m_lastUsedNotebookAction->data().toString());
+#endif
+
 	Settings::sync();
 
 	if (m_project) {
@@ -271,11 +276,25 @@ void MainWin::initGUI(const QString& fileName) {
 	auto* mainToolBar = qobject_cast<QToolBar*>(factory()->container(QLatin1String("main_toolbar"), this));
 
 #ifdef HAVE_CANTOR_LIBS
-	auto* tbNotebook = new QToolButton(mainToolBar);
-	tbNotebook->setPopupMode(QToolButton::MenuButtonPopup);
-	tbNotebook->setMenu(m_newNotebookMenu); // it is possible for m_newNotebookMenu to be null when we have no backends
+	groupMain = Settings::group(QStringLiteral("MainWin"));
+	if (groupMain.exists()) {
+		const QString& lastUsedNotebook = groupMain.readEntry(QLatin1String("lastUsedNotebook"), QString());
+		if (!lastUsedNotebook.isEmpty()) {
+			for (auto* action : m_newNotebookMenu->actions()) {
+				if (lastUsedNotebook.compare(action->data().toString(), Qt::CaseInsensitive) == 0) {
+					m_lastUsedNotebookAction = action;
+					break;
+				}
+			}
+		}
+	}
+
+	m_tbNotebook = new QToolButton(mainToolBar);
+	m_tbNotebook->setPopupMode(QToolButton::MenuButtonPopup);
+	m_tbNotebook->setMenu(m_newNotebookMenu); // m_newNotebookMenu is never nullptr and always contains at least the configure cas action
+	m_tbNotebook->setDefaultAction(!m_lastUsedNotebookAction ? m_newNotebookMenu->actions().first() : m_lastUsedNotebookAction);
 	auto* lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 2);
-	mainToolBar->insertWidget(lastAction, tbNotebook);
+	mainToolBar->insertWidget(lastAction, m_tbNotebook);
 #endif
 
 	auto* tbImport = new QToolButton(mainToolBar);
@@ -2054,6 +2073,9 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 */
 void MainWin::newNotebook() {
 	auto* action = static_cast<QAction*>(QObject::sender());
+	m_lastUsedNotebookAction = action;
+	if (m_tbNotebook)
+		m_tbNotebook->setDefaultAction(m_lastUsedNotebookAction);
 	auto* notebook = new Notebook(action->data().toString());
 	this->addAspectToProject(notebook);
 }
@@ -2940,5 +2962,9 @@ void MainWin::updateNotebookActions() {
 
 	m_newNotebookMenu->addSeparator();
 	m_newNotebookMenu->addAction(m_configureNotebookAction);
+
+	// we just updated the notebook action list. its possible that the defaultAction isn't in the list anymore
+	if (m_tbNotebook && !m_newNotebookMenu->actions().contains(m_tbNotebook->defaultAction()))
+		m_tbNotebook->setDefaultAction(m_newNotebookMenu->actions().first());
 }
 #endif
