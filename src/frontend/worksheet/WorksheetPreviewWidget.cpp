@@ -3,13 +3,14 @@
 	Project              : LabPlot
 	Description          : A widget showing the preview of all worksheets in the project
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "WorksheetPreviewWidget.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Worksheet.h"
 
@@ -43,8 +44,10 @@ WorksheetPreviewWidget::WorksheetPreviewWidget(QWidget* parent)
 	connect(ui.lwPreview, &QListWidget::currentRowChanged, this, &WorksheetPreviewWidget::currentChanged);
 
 	// make the icon 5x5cm big
-	const int iconSize = std::ceil(5.0 / GSL_CONST_CGS_INCH * GuiTools::dpi(this).first);
-	ui.lwPreview->setIconSize(QSize(iconSize, iconSize));
+	const auto& group = Settings::group(QStringLiteral("Settings_Worksheet"));
+	m_iconSize = group.readEntry(QLatin1String("PreviewThumbnailSize"), 3); // size in cm
+	m_iconSize = std::ceil(m_iconSize/ GSL_CONST_CGS_INCH * GuiTools::dpi(this).first); // size in pixel
+	ui.lwPreview->setIconSize(QSize(m_iconSize, m_iconSize));
 }
 
 WorksheetPreviewWidget::~WorksheetPreviewWidget() = default;
@@ -95,8 +98,7 @@ void WorksheetPreviewWidget::addPreview(const Worksheet* w, int row) const {
 	if (!rc) {
 		// the view is not available yet, show the placeholder preview
 		const auto icon = QIcon::fromTheme(QLatin1String("view-preview"));
-		const int iconSize = std::ceil(5.0 / GSL_CONST_CGS_INCH * GuiTools::dpi(this).first);
-		pix = icon.pixmap(iconSize, iconSize);
+		pix = icon.pixmap(m_iconSize, m_iconSize);
 	}
 	ui.lwPreview->insertItem(row, new QListWidgetItem(QIcon(pix), w->name()));
 

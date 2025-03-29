@@ -42,6 +42,7 @@ New features:
 		* fix inverse axis scale for Arrhenius plots
 		* show more plot sub-types (scatter, line, etc.) in the context menu for faster creation of these visualizations
 		* use minus sign instead of hyphen for all numerical values shown on the worksheet and added a new option in the application settings to control this behavior
+		* new application setting to control the size of the thumbnails in the worksheet preview panel
 
 Performance improvements:
 	* Made big spreadsheet (millions of cells) more responsive when selecting columns via the spreadsheet header

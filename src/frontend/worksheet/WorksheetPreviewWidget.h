@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : A widget showing the preview of all worksheets in the project
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -32,6 +32,7 @@ public:
 private:
 	Ui::WorksheetPreviewWidget ui;
 	Project* m_project{nullptr};
+	int m_iconSize{3};
 	bool m_suppressNavigate{false};
 	QSet<const Worksheet*> m_dirtyPreviews;
 
