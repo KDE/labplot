@@ -18,12 +18,11 @@
 
 double nsl_pcm_D3(unsigned int n) {
 	const double d2 = nsl_pcm_d2(n);
-	if (d2 != 0)  {
+	if (d2 != 0) {
 		const double d3 = nsl_pcm_d3(n);
 		return 1 - 3 * d3 / d2;
 	} else
 		return 0.;
-
 }
 
 double nsl_pcm_D4(unsigned int n) {
