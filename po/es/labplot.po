@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-30 00:38+0000\n"
-"PO-Revision-Date: 2025-03-24 03:21+0100\n"
+"PO-Revision-Date: 2025-03-31 01:45+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -16472,17 +16472,17 @@ msgstr ""
 #: src/frontend/SettingsWorksheetPage.cpp:30
 #, kde-format
 msgid "Small (3cm x 3cm)"
-msgstr ""
+msgstr "Pequeño (3×3 cm)"
 
 #: src/frontend/SettingsWorksheetPage.cpp:31
 #, kde-format
 msgid "Medium (5cm x 5cm)"
-msgstr ""
+msgstr "Medio (5×5 cm)"
 
 #: src/frontend/SettingsWorksheetPage.cpp:32
 #, kde-format
 msgid "Big (7cm x 7cm)"
-msgstr ""
+msgstr "Grande (7×7 cm)"
 
 #: src/frontend/SettingsWorksheetPage.cpp:152
 #, kde-format
@@ -23485,14 +23485,13 @@ msgstr "Reiniciar distribución"
 #: src/frontend/ui/settingsworksheetpage.ui:141
 #, kde-format
 msgid "Thumbnail Size:"
-msgstr ""
+msgstr "Tamaño de la miniatura:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoubleBuffering)
 #: src/frontend/ui/settingsworksheetpage.ui:164
-#, fuzzy, kde-format
-#| msgid "Enable double buffering"
+#, kde-format
 msgid "Double buffering"
-msgstr "Activar doble búfer"
+msgstr "Doble búfer"
 
 #. i18n: ectx: property (text), widget (QLabel, lTheme)
 #: src/frontend/ui/settingsworksheetpage.ui:171

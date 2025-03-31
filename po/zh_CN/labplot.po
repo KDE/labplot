@@ -23005,10 +23005,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoubleBuffering)
 #: src/frontend/ui/settingsworksheetpage.ui:164
-#, fuzzy, kde-format
-#| msgid "Enable double buffering"
+#, kde-format
 msgid "Double buffering"
-msgstr "使用双重缓冲"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lTheme)
 #: src/frontend/ui/settingsworksheetpage.ui:171
