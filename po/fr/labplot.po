@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-30 00:38+0000\n"
-"PO-Revision-Date: 2025-03-19 11:02+0100\n"
+"PO-Revision-Date: 2025-03-25 09:12+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -10326,7 +10326,7 @@ msgstr "Veuillez signaler les bogues à :"
 #: src/frontend/AboutDialog.cpp:199
 #, kde-format
 msgid "Partly funded by:"
-msgstr ""
+msgstr "Partiellement financé par :"
 
 #: src/frontend/AboutDialog.cpp:210 src/frontend/AboutDialog.cpp:370
 #: src/frontend/AboutDialog.cpp:371
@@ -13441,6 +13441,17 @@ msgid ""
 "li><li>Scott - <i>h = 3.49 * sigma / pow(n, 3/2)</i>, optimal method for "
 "normally distributed data</li></ul>"
 msgstr ""
+"Méthode utilisée pour déterminer le nombre de cellules <i>k</i> et leur "
+"largeur <i>h</i> pour les valeurs <i>n</i> :<ul><li>Par numéro - le nombre "
+"de cellules est spécifié manuellement</li><li>Par largeur - le nombre de "
+"cellules est calculé en fonction de la largeur spécifiée de cellules grâce à "
+"<i>k = (max(x) - min(x) / h</i>)</li><li>Racine carrée - <i>k = sqrt(n)</i></"
+"li><li>Rice -  <i>k = 2 * pow(n, 3 / 2)</i>, une alternative plus simple à "
+"la méthode de Sturges</li><li>Sturges - <i>k = log2 (n) + 1</i>, suppose une "
+"distribution approximativement normale</li><li>Doane - version modifiée de "
+"la méthode de Sturges, veuillez consulter la documentation pour plus de "
+"détails</li><li>Scott - <i>h = 3,49 * sigma / pow (n, 3 / 2)</i>, méthode "
+"optimale pour les données normalement distribuées</li></ul>"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:295
 #, kde-format
@@ -13451,6 +13462,13 @@ msgid ""
 "the histogram are excluded. If you want to include these values for the last "
 "bin you will need to add an extra bin to your histogram."
 msgstr ""
+"Utilisez « Auto » pour déterminer automatiquement les valeurs minimales et "
+"maximales des données à utiliser pour calculer l'histogramme.  Dans le cas "
+"contraire, veuillez spécifier les valeurs manuellement.<br><br><b>Remarque : "
+"</b> tous les échantillons se trouvant à l'extrémité supérieure de "
+"l'histogramme sont exclus. Si vous souhaitez inclure ces valeurs pour la "
+"dernière cellule, vous devrez ajouter une cellule supplémentaire à votre "
+"histogramme."
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:578
 #, kde-format

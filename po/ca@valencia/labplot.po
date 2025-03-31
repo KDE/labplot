@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-30 00:38+0000\n"
-"PO-Revision-Date: 2025-03-25 12:18+0100\n"
+"PO-Revision-Date: 2025-03-30 10:40+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -16583,17 +16583,17 @@ msgstr ""
 #: src/frontend/SettingsWorksheetPage.cpp:30
 #, kde-format
 msgid "Small (3cm x 3cm)"
-msgstr ""
+msgstr "Xicotet (3cm x 3cm)"
 
 #: src/frontend/SettingsWorksheetPage.cpp:31
 #, kde-format
 msgid "Medium (5cm x 5cm)"
-msgstr ""
+msgstr "Mitjà (5cm x 5cm)"
 
 #: src/frontend/SettingsWorksheetPage.cpp:32
 #, kde-format
 msgid "Big (7cm x 7cm)"
-msgstr ""
+msgstr "Gran (7cm x 7cm)"
 
 #: src/frontend/SettingsWorksheetPage.cpp:152
 #, kde-format
@@ -23615,14 +23615,13 @@ msgstr "Reinicia la disposició"
 #: src/frontend/ui/settingsworksheetpage.ui:141
 #, kde-format
 msgid "Thumbnail Size:"
-msgstr ""
+msgstr "Mida de les miniatures:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoubleBuffering)
 #: src/frontend/ui/settingsworksheetpage.ui:164
-#, fuzzy, kde-format
-#| msgid "Enable double buffering"
+#, kde-format
 msgid "Double buffering"
-msgstr "Activa la memòria intermèdia doble"
+msgstr "Memòria intermèdia doble"
 
 #. i18n: ectx: property (text), widget (QLabel, lTheme)
 #: src/frontend/ui/settingsworksheetpage.ui:171

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-30 00:38+0000\n"
-"PO-Revision-Date: 2025-03-24 11:51+0100\n"
+"PO-Revision-Date: 2025-03-31 00:39+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16430,17 +16430,17 @@ msgstr ""
 #: src/frontend/SettingsWorksheetPage.cpp:30
 #, kde-format
 msgid "Small (3cm x 3cm)"
-msgstr ""
+msgstr "Klein (3cm x 3cm)"
 
 #: src/frontend/SettingsWorksheetPage.cpp:31
 #, kde-format
 msgid "Medium (5cm x 5cm)"
-msgstr ""
+msgstr "Middel (5cm x 5cm)"
 
 #: src/frontend/SettingsWorksheetPage.cpp:32
 #, kde-format
 msgid "Big (7cm x 7cm)"
-msgstr ""
+msgstr "Groot (7cm x 7cm)"
 
 #: src/frontend/SettingsWorksheetPage.cpp:152
 #, kde-format
@@ -23428,12 +23428,11 @@ msgstr "Opmaak herstellen"
 #: src/frontend/ui/settingsworksheetpage.ui:141
 #, kde-format
 msgid "Thumbnail Size:"
-msgstr ""
+msgstr "Miniatuurgrootte:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoubleBuffering)
 #: src/frontend/ui/settingsworksheetpage.ui:164
-#, fuzzy, kde-format
-#| msgid "Double-Buffering"
+#, kde-format
 msgid "Double buffering"
 msgstr "Dubbele buffering"
 
