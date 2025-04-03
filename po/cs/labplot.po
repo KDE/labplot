@@ -23036,14 +23036,13 @@ msgstr "Obnovit rozvržení"
 #: src/frontend/ui/settingsworksheetpage.ui:141
 #, kde-format
 msgid "Thumbnail Size:"
-msgstr ""
+msgstr "Velikost náhledů:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoubleBuffering)
 #: src/frontend/ui/settingsworksheetpage.ui:164
-#, fuzzy, kde-format
-#| msgid "Enable double buffering"
+#, kde-format
 msgid "Double buffering"
-msgstr "Povolit double buffering"
+msgstr "Dvojitý buffering"
 
 #. i18n: ectx: property (text), widget (QLabel, lTheme)
 #: src/frontend/ui/settingsworksheetpage.ui:171
