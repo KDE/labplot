@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-02 00:38+0000\n"
-"PO-Revision-Date: 2025-03-01 18:59+0100\n"
+"PO-Revision-Date: 2025-03-27 17:44+0100\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.12.2\n"
+"X-Generator: Lokalize 24.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -8461,10 +8461,9 @@ msgid "Formula Plot"
 msgstr "Formula:"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:562
-#, fuzzy, kde-format
-#| msgid "Add a new xy-curve that is defined via a mathematical expression."
+#, kde-format
 msgid "Add a new xy-plot that is defined via a mathematical expression."
-msgstr "Aggiungi una nuova curva definita da un'espressione matematica."
+msgstr "Aggiungi un nuovo grafico definito da un'espressione matematica."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:569
 #, kde-format
@@ -9126,83 +9125,71 @@ msgid "%1: set sample size"
 msgstr "%1: imposta la dimensione di campionamento"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:556
-#, fuzzy, kde-format
-#| msgid "%1: change geometry rect"
+#, kde-format
 msgid "%1: enable exact limits"
-msgstr "%1: modifica la geometria del rettangolo"
+msgstr "%1: abilita i limiti esatti"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:556
-#, fuzzy, kde-format
-#| msgid "%1: change geometry rect"
+#, kde-format
 msgid "%1: disable exact limits"
-msgstr "%1: modifica la geometria del rettangolo"
+msgstr "%1: disabilita i limiti esatti"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:565
-#, fuzzy, kde-format
-#| msgid "%1: set axis zero offset"
+#, kde-format
 msgid "%1: set maximal upper limit"
-msgstr "%1: imposta lo scostamento dallo zero dell'asse"
+msgstr "%1: imposta il limite massimo superiore"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:572
-#, fuzzy, kde-format
-#| msgid "%1: change geometry rect"
+#, kde-format
 msgid "%1: set minimal lower limit"
-msgstr "%1: modifica la geometria del rettangolo"
+msgstr "%1: imposta il limite minimo inferiore"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:581
 #, kde-format
 msgid "%1: enable control labels"
-msgstr ""
+msgstr "%1: abilita etichette di controllo"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:581
-#, fuzzy, kde-format
-#| msgid "%1: disable theming"
+#, kde-format
 msgid "%1: disable control labels"
-msgstr "%1: disabilita i temi"
+msgstr "%1: disabilita etichette di controllo"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:603
-#, fuzzy, kde-format
-#| msgid "%1: set border shape"
+#, kde-format
 msgid "%1: set labels border shape"
-msgstr "%1: imposta la forma del bordo"
+msgstr "%1: imposta la forma del bordo delle etichette"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:617
-#, fuzzy, kde-format
-#| msgid "%1: set label font"
+#, kde-format
 msgid "%1: set labels font"
 msgstr "%1: imposta il carattere delle etichette"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:652
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:681
-#, fuzzy, kde-format
-#| msgid "%1: set label background color"
+#, kde-format
 msgid "%1: set labels background color"
-msgstr "%1: imposta l'etichetta del colore di sfondo"
+msgstr "%1: imposta il colore di sfondo delle etichette"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:739
-#, fuzzy, kde-format
-#| msgid "%1: set border style"
+#, kde-format
 msgid "%1: set labels border style"
-msgstr "%1: imposta lo stile del bordo"
+msgstr "%1: imposta lo stile del bordo delle etichette"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:750
-#, fuzzy, kde-format
-#| msgid "%1: set labels format"
+#, kde-format
 msgid "%1: set labels border width"
-msgstr "%1: imposta il formato delle etichette"
+msgstr "%1: imposta lo spessore del bordo delle etichette"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:761
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:772
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: set labels border color"
-msgstr "%1: imposta il colore delle etichette"
+msgstr "%1: imposta il colore del bordo delle etichette"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:864
-#, fuzzy, kde-format
-#| msgid "Not enough data points available."
+#, kde-format
 msgid "Not enough data provided."
-msgstr "Non ci sono abbastanza dati disponibili."
+msgstr "Non sono stati forniti abbastanza dati."
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:964
 #, kde-format
@@ -9985,17 +9972,17 @@ msgstr "Prima curva non valida"
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:320
 #, kde-format
 msgid "xColumn of first curve not valid"
-msgstr ""
+msgstr "La colonna x della prima curva non è valida"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:322
 #, kde-format
 msgid "yColumn of first curve not valid"
-msgstr ""
+msgstr "La colonna y della prima curva non è valida"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:324
 #, kde-format
 msgid "Number of x and y values do not match for the first curve"
-msgstr ""
+msgstr "Il numero dei valori di x e y non corrisponde alla prima curva"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:337
 #, kde-format
@@ -10005,12 +9992,12 @@ msgstr "La curva «%1» non è valida"
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:339
 #, kde-format
 msgid "xColumn of curve '%1' not valid"
-msgstr ""
+msgstr "La colonna x della curva «%1» non è valida"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:341
 #, kde-format
 msgid "yColumn of curve '%1' not valid"
-msgstr ""
+msgstr "La colonna y della curva «%1» non è valida"
 
 #: src/backend/worksheet/plots/cartesian/XYFunctionCurve.cpp:343
 #, kde-format
@@ -10225,7 +10212,7 @@ msgstr "%1: imposta la posizione logica"
 #: src/frontend/AboutDialog.cpp:82
 #, kde-format
 msgid "What's new"
-msgstr ""
+msgstr "Cosa c'è di nuovo"
 
 #: src/frontend/AboutDialog.cpp:88
 #, kde-format
@@ -10253,10 +10240,9 @@ msgid "Release build"
 msgstr "Build di rilascio"
 
 #: src/frontend/AboutDialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Debug build "
+#, kde-format
 msgid "Debug build"
-msgstr "Versione di debug "
+msgstr "Versione per debug"
 
 #: src/frontend/AboutDialog.cpp:180
 #, kde-format
@@ -10318,7 +10304,7 @@ msgstr "Per favore, segnala gli errori a:"
 #: src/frontend/AboutDialog.cpp:199
 #, kde-format
 msgid "Partly funded by:"
-msgstr ""
+msgstr "Fondato parzialmente da:"
 
 #: src/frontend/AboutDialog.cpp:210 src/frontend/AboutDialog.cpp:370
 #: src/frontend/AboutDialog.cpp:371
@@ -10479,17 +10465,15 @@ msgid "KDE Frameworks"
 msgstr "KDE Frameworks"
 
 #: src/frontend/AboutDialog.cpp:383
-#, fuzzy, kde-format
-#| msgid ""
-#| "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
-#| "Analysis software accessible to everyone."
+#, kde-format
 msgid ""
 "LabPlot Team (%1), LabPlot: A FREE, open source, cross-platform Data "
 "Visualization and Analysis software accessible to everyone, (Version %2) "
 "[Computer software]. %3."
 msgstr ""
-"LabPlot è un software GRATUITO, open source e multi piattaforma per la "
-"visualizzazione e per l'analisi dei dati accessibile da chiunque."
+"La squadra di LabPlot (%1). Labplot è un software GRATUITO, open source e "
+"multi piattaforma per la visualizzazione e per l'analisi dei dati "
+"accessibile da chiunque. (Versione %2) [software per computer]. %3."
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -11359,10 +11343,9 @@ msgid "Live data source created in %1 seconds."
 msgstr "Fonte dati attiva creata in %1 secondi."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:176
-#, fuzzy, kde-format
-#| msgid "No data set selected"
+#, kde-format
 msgid "No target data container selected"
-msgstr "Nessun insieme di dati selezionato"
+msgstr "Non è stato selezionato alcun contenitore dei dati di destinazione"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:321
 #, kde-format
@@ -11885,10 +11868,9 @@ msgid "Not a HDF5 file: %1"
 msgstr "Non è un file HDF5: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2264
-#, fuzzy, kde-format
-#| msgid "Reading from file %1 failed."
+#, kde-format
 msgid "Parsing ODS file %1 failed."
-msgstr "Lettura del file %1 non riuscita."
+msgstr "Analisi del file ODS %1 non riuscita."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2672
 #, kde-format
@@ -13431,6 +13413,7 @@ msgstr "Silverman"
 msgid ""
 "The window function (\"kernel\") used to estimate the probability density"
 msgstr ""
+"La funzione finestra («kernel») usata per stimare la densità di probabilità"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:182
 #, kde-format
@@ -13439,11 +13422,15 @@ msgid ""
 "min(sigma, IQR / 1.34) * n^(-0.2)</li><li>Scott -  1.059 * sigma * n^(-0.2)</"
 "li><li>Custom - custom value for the kernel bandwidth</li></ul>"
 msgstr ""
+"Metodo per selezionare la larghezza di banda del kernel:<ul><li>Silverman -  "
+"0.9 * min(sigma, IQR / 1.34) * n^(-0.2)</li><li>Scott -  1.059 * sigma * "
+"n^(-0.2)</li><li>Personalizzato - un valore personalizzato per la larghezza "
+"di banda del kernel</li></ul>"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:191
 #, kde-format
 msgid "Custom value for the kernel bandwidth"
-msgstr ""
+msgstr "Valore personalizzato per la larghezza di banda del kernel"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:373
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:679
@@ -13580,29 +13567,25 @@ msgstr "Cuboide"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:228
 #: src/frontend/widgets/LabelWidget.cpp:516
-#, fuzzy, kde-format
-#| msgid "Up Pointing rectangle"
+#, kde-format
 msgid "Up pointing rectangle"
 msgstr "Rettangolo che punta in su"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:229
 #: src/frontend/widgets/LabelWidget.cpp:517
-#, fuzzy, kde-format
-#| msgid "Down Pointing rectangle"
+#, kde-format
 msgid "Down pointing rectangle"
 msgstr "Rettangolo che punta in giù"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
 #: src/frontend/widgets/LabelWidget.cpp:518
-#, fuzzy, kde-format
-#| msgid "Left Pointing rectangle"
+#, kde-format
 msgid "Left pointing rectangle"
 msgstr "Rettangolo che punta a sinistra"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
 #: src/frontend/widgets/LabelWidget.cpp:519
-#, fuzzy, kde-format
-#| msgid "Right Pointing rectangle"
+#, kde-format
 msgid "Right pointing rectangle"
 msgstr "Rettangolo che punta a destra"
 
@@ -21748,10 +21731,9 @@ msgstr "Dimensione campioni:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:189
-#, fuzzy, kde-format
-#| msgid "Lower Limit"
+#, kde-format
 msgid "Min. Lower Limit:"
-msgstr "Limite inferiore"
+msgstr "Limite inferiore min."
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:212
@@ -21761,10 +21743,9 @@ msgstr "Limiti basati su:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxUpperLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:232
-#, fuzzy, kde-format
-#| msgid "Upper Limit"
+#, kde-format
 msgid "Max. Upper Limit:"
-msgstr "Limite superiore"
+msgstr "Limite superiore max."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:243
@@ -22875,18 +22856,7 @@ msgstr "Chiudi file"
 
 #. i18n: ectx: property (html), widget (ResizableTextEdit, teLabel)
 #: src/frontend/ui/labelwidget.ui:55
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#| "font-weight:400; font-style:normal;\">\n"
-#| "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-#| "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
-#| "\"><br /></p></body></html>"
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -22904,9 +22874,12 @@ msgid ""
 msgstr ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
-"\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
+"\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
 "weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
@@ -24280,10 +24253,9 @@ msgid "Data, +-:"
 msgstr "Dato, +-"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
-#, fuzzy, kde-format
-#| msgid "Start Value:"
+#, kde-format
 msgid "Start Value"
-msgstr "Valore iniziale:"
+msgstr "Valore iniziale"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
