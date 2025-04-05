@@ -28,6 +28,7 @@ public:
 	~WorksheetPreviewWidget() override;
 
 	void setProject(Project*);
+	void updatePreviewSize();
 
 private:
 	Ui::WorksheetPreviewWidget ui;

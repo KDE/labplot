@@ -2717,6 +2717,10 @@ void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
 		}
 	}
 
+	// update the size of the preview thumbnails
+	if (changes.contains(Settings::Type::Worksheet))
+		m_worksheetPreviewWidget->updatePreviewSize();
+
 	if (changes.contains(Settings::Type::Spreadsheet)) {
 		// update spreadsheet header
 		if (m_project) {
