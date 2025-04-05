@@ -71,6 +71,17 @@ void WorksheetPreviewWidget::setProject(Project* project) {
 	connect(m_project, &Project::aboutToClose, this, &WorksheetPreviewWidget::projectAboutToClose);
 }
 
+void WorksheetPreviewWidget::updatePreviewSize() {
+	const auto& group = Settings::group(QStringLiteral("Settings_Worksheet"));
+	int newSize = group.readEntry(QLatin1String("PreviewThumbnailSize"), 3); // size in cm
+	newSize = std::ceil(newSize/ GSL_CONST_CGS_INCH * GuiTools::dpi(this).first); // size in pixel
+
+	if (newSize != m_iconSize) {
+		m_iconSize = newSize;
+		ui.lwPreview->setIconSize(QSize(m_iconSize, m_iconSize));
+	}
+}
+
 void WorksheetPreviewWidget::projectAboutToClose() {
 	m_suppressNavigate = true;
 	ui.lwPreview->clear();
