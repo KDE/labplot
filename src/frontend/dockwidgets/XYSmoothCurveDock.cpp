@@ -403,14 +403,11 @@ void XYSmoothCurveDock::valueChanged() {
 }
 
 void XYSmoothCurveDock::recalculateClicked() {
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYSmoothCurve*>(curve)->setSmoothData(m_smoothData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	Q_EMIT info(i18n("Smoothing status: %1", m_smoothCurve->result().status));
-	QApplication::restoreOverrideCursor();
 }
 
 /*!

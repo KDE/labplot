@@ -50,7 +50,7 @@ ProcessBehaviorChart::ProcessBehaviorChart(const QString& name, bool loading)
 
 ProcessBehaviorChart::ProcessBehaviorChart(const QString& name, ProcessBehaviorChartPrivate* dd)
 	: Plot(name, dd, AspectType::ProcessBehaviorChart) {
-	init();
+	init(false);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -174,22 +174,22 @@ void ProcessBehaviorChart::init(bool loading) {
 	d->centerCurve->background()->setPosition(Background::Position::No);
 
 	d->upperLimitCurve->line()->init(group);
-	d->upperLimitCurve->line()->setStyle(Qt::SolidLine);
+	d->upperLimitCurve->line()->setStyle(Qt::DashLine);
 	d->upperLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->upperLimitCurve->background()->setPosition(Background::Position::No);
 	d->upperLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
 
 	d->lowerLimitCurve->line()->init(group);
-	d->lowerLimitCurve->line()->setStyle(Qt::SolidLine);
+	d->lowerLimitCurve->line()->setStyle(Qt::DashLine);
 	d->lowerLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	d->lowerLimitCurve->background()->setPosition(Background::Position::No);
 	d->lowerLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
 
 	// text labels for the labels
-	d->labelsEnabled = group.readEntry(QStringLiteral("LabelsEnabled"), false);
-	d->labelsAutoPrecision = group.readEntry(QStringLiteral("LabelsAutoPrecision"), true);
+	d->labelsEnabled = group.readEntry(QStringLiteral("LabelsEnabled"), true);
+	d->labelsAutoPrecision = group.readEntry(QStringLiteral("LabelsAutoPrecision"), false);
 	d->labelsPrecision = group.readEntry(QStringLiteral("LabelsPrecision"), 1);
-	const auto shape = static_cast<TextLabel::BorderShape>(group.readEntry(QStringLiteral("BorderShape"), (int)TextLabel::BorderShape::LeftPointingRectangle));
+	const auto shape = static_cast<TextLabel::BorderShape>(group.readEntry(QStringLiteral("BorderShape"), (int)TextLabel::BorderShape::NoBorder));
 	d->upperLimitLabel->setBorderShape(shape);
 	d->centerLabel->setBorderShape(shape);
 	d->lowerLimitLabel->setBorderShape(shape);
@@ -849,9 +849,13 @@ void ProcessBehaviorChartPrivate::recalc() {
 		yUpperLimitColumn->clear();
 		xLowerLimitColumn->clear();
 		yLowerLimitColumn->clear();
-		centerLabel->setText(QString());
-		upperLimitLabel->setText(QString());
-		lowerLimitLabel->setText(QString());
+
+		// don't clear the labels while we're still loading and initilizing, the labels should keep their texts
+		if (!q->isLoading()) {
+			centerLabel->setText(QString());
+			upperLimitLabel->setText(QString());
+			lowerLimitLabel->setText(QString());
+		}
 		Q_EMIT q->dataChanged();
 		Q_EMIT q->recalculated();
 
@@ -1371,11 +1375,12 @@ void ProcessBehaviorChartPrivate::updateLabels() {
 	upperLimitLabel->setUndoAware(false);
 	lowerLimitLabel->setUndoAware(false);
 
+	const bool uniformLimitLabelsAvailable = !((type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U) && exactLimitsEnabled);
 	const bool lowerLimitAvailable = q->lowerLimitAvailable();
 
 	centerLabel->setVisible(labelsEnabled);
-	upperLimitLabel->setVisible(labelsEnabled);
-	lowerLimitLabel->setVisible(labelsEnabled && lowerLimitAvailable);
+	upperLimitLabel->setVisible(labelsEnabled && uniformLimitLabelsAvailable);
+	lowerLimitLabel->setVisible(labelsEnabled && lowerLimitAvailable && uniformLimitLabelsAvailable);
 
 	if (labelsEnabled) {
 		const auto numberLocale = QLocale();
@@ -1645,9 +1650,11 @@ void ProcessBehaviorChart::loadThemeConfig(const KConfig& config) {
 	d->centerCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
 	d->upperLimitCurve->line()->loadThemeConfig(group, themeColor);
+	// d->upperLimitCurve->line()->setStyle(Qt::DashLine); TODO: crash in undo/redo
 	d->upperLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
 	d->lowerLimitCurve->line()->loadThemeConfig(group, themeColor);
+	// d->lowerLimitCurve->line()->setStyle(Qt::DashLine);
 	d->lowerLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
 	d->centerLabel->loadThemeConfig(config);

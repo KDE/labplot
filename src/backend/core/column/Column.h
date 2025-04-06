@@ -199,11 +199,10 @@ public:
 	double maximum(int startIndex, int endIndex) const override;
 	double minimum(int count = 0) const override;
 	double minimum(int startIndex, int endIndex) const override;
-	static int calculateMaxSteps(unsigned int value);
-	static int indexForValue(double x, QVector<double>& column, Properties properties = Properties::No);
-	static int indexForValue(const double x, const QVector<QPointF>& column, Properties properties = Properties::No);
-	static int indexForValue(double x, QVector<QLineF>& lines, Properties properties = Properties::No);
-	int indexForValue(double x) const override;
+	static int indexForValue(double x, QVector<double>& column, Properties properties, bool smaller);
+	static int indexForValue(const double x, const QVector<QPointF>& column, Properties properties, bool smaller);
+	static int indexForValue(double x, QVector<QLineF>& lines, Properties properties, bool smaller);
+	int indexForValue(double x, bool smaller) const override;
 	bool indicesMinMax(double v1, double v2, int& start, int& end) const override;
 
 	void addUsedInPlots(QVector<CartesianPlot*>&);
@@ -217,7 +216,7 @@ public:
 	AbstractColumn::ColumnMode labelsMode() const;
 	int valueLabelsCount() const;
 	int valueLabelsCount(double min, double max) const;
-	int valueLabelsIndexForValue(double x) const;
+	int valueLabelsIndexForValue(double x, bool smaller) const;
 	double valueLabelsValueAt(int index) const;
 	QString valueLabelAt(int index) const;
 	void addValueLabel(qint64, const QString&);

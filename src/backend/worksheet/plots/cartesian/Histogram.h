@@ -106,7 +106,7 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(Histogram)
-	void init(bool loading = false);
+	void init(bool loading);
 	void connectDataColumn(const AbstractColumn*);
 
 Q_SIGNALS:

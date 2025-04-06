@@ -1092,15 +1092,16 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			continue;
 
 		// initialize the array for the column pointers
-		int count = boxPlot->dataColumnPaths().count();
+		const auto& paths = boxPlot->dataColumnPaths();
+		int count = paths.count();
 		QVector<const AbstractColumn*> dataColumns;
 		dataColumns.resize(count);
 
 		// restore the pointers
 		for (int i = 0; i < count; ++i) {
 			dataColumns[i] = nullptr;
-			const auto& path = boxPlot->dataColumnPaths().at(i);
-			for (Column* column : columns) {
+			const auto& path = paths.at(i);
+			for (auto* column : columns) {
 				if (!column)
 					continue;
 				if (column->path() == path) {
@@ -1125,7 +1126,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			continue;
 
 		// initialize the array for the column pointers
-		int count = barPlot->dataColumnPaths().count();
+		const auto& paths = barPlot->dataColumnPaths();
+		int count = paths.count();
 		QVector<const AbstractColumn*> dataColumns;
 		dataColumns.resize(count);
 
@@ -1133,8 +1135,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		for (int i = 0; i < count; ++i) {
 			// data columns
 			dataColumns[i] = nullptr;
-			const auto& path = barPlot->dataColumnPaths().at(i);
-			for (Column* column : columns) {
+			const auto& path = paths.at(i);
+			for (auto* column : columns) {
 				if (!column)
 					continue;
 				if (column->path() == path) {
@@ -1169,14 +1171,15 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			continue;
 
 		// initialize the array for the column pointers
-		int count = lollipopPlot->dataColumnPaths().count();
+		const auto& paths = lollipopPlot->dataColumnPaths();
+		int count = paths.count();
 		QVector<const AbstractColumn*> dataColumns;
 		dataColumns.resize(count);
 
 		// restore the pointers
 		for (int i = 0; i < count; ++i) {
 			dataColumns[i] = nullptr;
-			const auto& path = lollipopPlot->dataColumnPaths().at(i);
+			const auto& path = paths.at(i);
 			for (Column* column : columns) {
 				if (!column)
 					continue;

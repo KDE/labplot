@@ -763,7 +763,7 @@ bool AbstractColumn::indicesMinMax(double /*v1*/, double /*v2*/, int& /*start*/,
 	return false;
 }
 
-int AbstractColumn::indexForValue(double /*x*/) const {
+int AbstractColumn::indexForValue(double /*x*/, bool /* smaller */) const {
 	return 0;
 }
 

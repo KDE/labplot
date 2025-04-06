@@ -123,10 +123,10 @@ bool XYDataReductionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 	const double tol = dataReductionData.tolerance;
 	const double tol2 = dataReductionData.tolerance2;
 
-	DEBUG("n =" << n);
-	DEBUG("type:" << nsl_geom_linesim_type_name[type]);
-	DEBUG("tolerance/step:" << tol);
-	DEBUG("tolerance2/repeat/maxtol/region:" << tol2);
+	DEBUG("n = " << n);
+	DEBUG("type: " << nsl_geom_linesim_type_name[type]);
+	DEBUG("tolerance/step: " << tol);
+	DEBUG("tolerance2/repeat/maxtol/region: " << tol2);
 
 	///////////////////////////////////////////////////////////
 	Q_EMIT q->completed(10);
@@ -164,11 +164,11 @@ bool XYDataReductionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 		npoints = nsl_geom_linesim_opheim(xdata, ydata, n, tol, tol2, index);
 		break;
 	case nsl_geom_linesim_type_lang: // tol2 used as region
-		npoints = nsl_geom_linesim_opheim(xdata, ydata, n, tol, tol2, index);
+		npoints = nsl_geom_linesim_lang(xdata, ydata, n, tol, tol2, index);
 		break;
 	}
 
-	DEBUG("npoints =" << npoints);
+	DEBUG("npoints = " << npoints);
 	if (type == nsl_geom_linesim_type_douglas_peucker_variant) {
 		DEBUG("calculated tolerance =" << calcTolerance)
 	} else

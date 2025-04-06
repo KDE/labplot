@@ -92,11 +92,15 @@ double nsl_stats_anova_oneway_f(double** groups, size_t* sizes, size_t n_groups)
 	}
 	double ms_between = ssb / (n_groups - 1);
 	double ssw = 0.0;
-	for (size_t i = 0; i < n_groups; i++) {
+	for (size_t i = 0; i < n_groups; i++)
 		ssw += gsl_stats_variance(groups[i], 1, sizes[i]) * (sizes[i] - 1);
-	}
-	double ms_within = ssw / (total_samples - n_groups);
-	return ms_between / ms_within;
+
+	const double delta = total_samples - n_groups;
+	if (delta != 0.) {
+		const double ms_within = ssw / delta;
+		return ms_between / ms_within;
+	} else
+		return NAN;
 }
 
 double nsl_stats_anova_oneway_p(double** groups, size_t* sizes, size_t n_groups) {

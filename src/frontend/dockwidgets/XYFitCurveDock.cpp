@@ -1211,7 +1211,6 @@ void XYFitCurveDock::showOptions() {
 
 void XYFitCurveDock::recalculateClicked() {
 	DEBUG(Q_FUNC_INFO);
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	m_fitData.degree = uiGeneralTab.sbDegree->value();
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
 		updateParameterList();
@@ -1262,7 +1261,6 @@ void XYFitCurveDock::recalculateClicked() {
 		}
 	}
 
-	QApplication::restoreOverrideCursor();
 	DEBUG(Q_FUNC_INFO << " DONE");
 }
 

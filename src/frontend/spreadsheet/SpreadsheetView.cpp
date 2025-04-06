@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : View class for Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2020-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -22,7 +22,6 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/StatisticsSpreadsheet.h"
-#include "backend/worksheet/plots/cartesian/BoxPlot.h" //TODO: needed for the icon only, remove later once we have a breeze icon
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "frontend/spreadsheet/SpreadsheetHeaderView.h"
 
@@ -3478,10 +3477,22 @@ void SpreadsheetView::removeSelectedRows() {
 		return;
 
 	WAIT_CURSOR;
+	const auto& columns = m_spreadsheet->children<Column>();
 	m_spreadsheet->beginMacro(i18n("%1: remove selected rows", m_spreadsheet->name()));
-	// TODO setSuppressDataChangedSignal
+	// suppress the dataChanged signal, will be emitted at the end after all rows were removed
+	for (auto* column : columns)
+		column->setSuppressDataChangedSignal(true);
+
+	// remove rows
 	for (const auto& i : selectedRows().intervals())
 		m_spreadsheet->removeRows(i.start(), i.size());
+
+	// emit the dataChanged signal
+	for (auto* column : columns) {
+		column->setSuppressDataChangedSignal(false);
+		column->setChanged();
+	}
+
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }

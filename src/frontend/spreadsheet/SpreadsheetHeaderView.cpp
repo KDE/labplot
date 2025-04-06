@@ -139,7 +139,8 @@ void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, i
 	QRect master_rect = rect;
 	auto* model = m_sparkLineSlave->getModel();
 	QPixmap pixmap = model->headerData(logicalIndex, Qt::Horizontal, static_cast<int>(SpreadsheetModel::CustomDataRole::SparkLineRole)).value<QPixmap>();
-	// initalise header
+
+		   // Handle header painting for different sections
 	if (m_showComments && m_showSparkLines) {
 		int totalHeight = m_commentSlave->sizeHint().height() + m_sparkLineSlave->sizeHint().height();
 		master_rect = rect.adjusted(0, 0, 0, -totalHeight);
@@ -149,33 +150,36 @@ void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, i
 		else
 			master_rect = rect.adjusted(0, 0, 0, -m_sparkLineSlave->sizeHint().height());
 	}
+
 	painter->save();
 	QHeaderView::paintSection(painter, master_rect, logicalIndex);
 	painter->restore();
+
 	if (m_showComments && m_showSparkLines && rect.height() > QHeaderView::sizeHint().height()) {
-		if (m_showSparkLines && rect.height() > QHeaderView::sizeHint().height()) {
+		if (m_showSparkLines) {
 			QRect slave2_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, -m_commentSlave->sizeHint().height());
-			painter->setClipping(false); // Disable clipping
-			if (pixmap.size().isValid())
+			painter->setClipping(false);
+			if (!pixmap.isNull())
 				painter->drawPixmap(slave2_rect, pixmap.scaled(slave2_rect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 		}
-		if (m_showComments && rect.height() > QHeaderView::sizeHint().height()) {
+
+		if (m_showComments) {
 			QRect slave_rect = rect.adjusted(0, m_sparkLineSlave->sizeHint().height() + QHeaderView::sizeHint().height(), 0, 0);
 			m_commentSlave->paintSection(painter, slave_rect, logicalIndex);
 		}
 		return;
-	} else if (m_showComments || m_showSparkLines) {
-		if (m_showComments && rect.height() > QHeaderView::sizeHint().height()) {
+	}
+
+		   // If only one of the headers (sparkline or comment) is shown
+	if (m_showComments || m_showSparkLines) {
+		if (m_showComments) {
 			QRect slave_rect = rect.adjusted(0, QHeaderView::sizeHint().height(), 0, 0);
 			m_commentSlave->paintSection(painter, slave_rect, logicalIndex);
-			return;
-		}
-		if (m_showSparkLines && rect.height() > QHeaderView::sizeHint().height()) {
+		} else if (m_showSparkLines) {
 			QRect slave_rect = rect.adjusted(0, m_sparkLineSlave->sizeHint().height(), 0, 0);
-			painter->setClipping(false); // Disable clipping
-			if (pixmap.size().isValid())
+			painter->setClipping(false);
+			if (!pixmap.isNull())
 				painter->drawPixmap(slave_rect, pixmap.scaled(slave_rect.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-			return;
 		}
 	}
 }
@@ -218,21 +222,35 @@ void SpreadsheetHeaderView::showSparkLines(bool on) {
 }
 
 void SpreadsheetHeaderView::refresh() {
-	// TODO
-	// adjust geometry and repaint header (still looking for a more elegant solution)
 	int width = sectionSize(count() - 1);
-	m_commentSlave->setStretchLastSection(true); // ugly hack (flaw in Qt? Does anyone know a better way?)
+
+	m_commentSlave->setStretchLastSection(true);
 	m_commentSlave->updateGeometry();
-	m_commentSlave->setStretchLastSection(false); // ugly hack part 2
-	m_sparkLineSlave->setStretchLastSection(true); // ugly hack (flaw in Qt? Does anyone know a better way?)
+	m_commentSlave->setStretchLastSection(false);
+
+	m_sparkLineSlave->setStretchLastSection(true);
 	m_sparkLineSlave->updateGeometry();
-	m_sparkLineSlave->setStretchLastSection(false); // ugly hack part 2
-	setStretchLastSection(true); // ugly hack (flaw in Qt? Does anyone know a better way?)
+	m_sparkLineSlave->setStretchLastSection(false);
+	int totalHeight = QHeaderView::sizeHint().height();
+	if (m_showSparkLines)
+		totalHeight += m_sparkLineSlave->sizeHint().height();
+	if (m_showComments)
+		totalHeight += m_commentSlave->sizeHint().height();
+
+	QSize sizeHint = QHeaderView::sizeHint();
+	sizeHint.setHeight(totalHeight);
+
+	setMinimumHeight(sizeHint.height());
+	setMaximumHeight(sizeHint.height());
+	setStretchLastSection(true);
 	updateGeometry();
-	setStretchLastSection(false); // ugly hack part 2
+	setStretchLastSection(false);
+
 	resizeSection(count() - 1, width);
-	update();
+	update(); // Ensure the header view is updated after resizing
+
 }
+
 
 /*!
   Reacts to a header data change.

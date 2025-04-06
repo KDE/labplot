@@ -4,7 +4,7 @@
 	Description          : Tests for data fitting
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2018-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2018-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -15,6 +15,9 @@
 
 class FitTest : public AnalysisTest {
 	Q_OBJECT
+
+private:
+	void printAndCheck(double value, double exact, double tol);
 
 private Q_SLOTS:
 	void addCurve();
@@ -29,10 +32,15 @@ private Q_SLOTS:
 	void testLinearFilip();
 
 	void testLinearWampler1();
+	void testLinearWampler1_custom(); // using custom model
 	void testLinearWampler2();
+	void testLinearWampler2_custom(); // using custom model
 	void testLinearWampler3();
+	void testLinearWampler3_custom(); // using custom model
 	void testLinearWampler4();
+	void testLinearWampler4_custom(); // using custom model
 	void testLinearWampler5();
+	void testLinearWampler5_custom(); // using custom model
 
 	void testLinearWP_OLS();
 	void testLinearR_lm2();

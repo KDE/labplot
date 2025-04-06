@@ -1571,7 +1571,7 @@ void AxisPrivate::retransformTicks() {
 				end = qMax(end, majorTicksColumn->minimum());
 				start = qMax(start, majorTicksColumn->maximum());
 			}
-			firstIndexCustomColumn = majorTicksColumn->indexForValue(start);
+			firstIndexCustomColumn = majorTicksColumn->indexForValue(start, true);
 		} else {
 			retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
 			return;
@@ -1601,7 +1601,7 @@ void AxisPrivate::retransformTicks() {
 				end = qMax(end, c->valueLabelsMinimum());
 				start = qMax(start, c->valueLabelsMaximum());
 			}
-			firstIndexCustomColumn = c->valueLabelsIndexForValue(start);
+			firstIndexCustomColumn = c->valueLabelsIndexForValue(start, true);
 		} else {
 			retransformTickLabelPositions(); // this calls recalcShapeAndBoundingRect()
 			return;
@@ -1775,11 +1775,11 @@ void AxisPrivate::retransformTicks() {
 		if ((majorTicksType == Axis::TicksType::CustomColumn || majorTicksType == Axis::TicksType::CustomValues)) {
 			if (tmpMajorTicksNumberLimited) {
 				// Do not use all values of the column, but just a portion of it
-				columnIndex = majorTicksColumn->indexForValue(majorTickPos);
+				columnIndex = majorTicksColumn->indexForValue(majorTickPos, true);
 				Q_ASSERT(columnIndex >= 0);
 				majorTickPos = majorTicksColumn->valueAt(columnIndex);
 
-				const auto columnIndexNextMajor = majorTicksColumn->indexForValue(nextMajorTickPos);
+				const auto columnIndexNextMajor = majorTicksColumn->indexForValue(nextMajorTickPos, true);
 				Q_ASSERT(columnIndexNextMajor >= 0);
 				nextMajorTickPos = majorTicksColumn->valueAt(columnIndexNextMajor);
 				if (majorTickPos == nextMajorTickPos && iMajor + 1 < tmpMajorTicksNumber)
@@ -1796,7 +1796,7 @@ void AxisPrivate::retransformTicks() {
 			const auto* c = static_cast<const Column*>(majorTicksColumn);
 			Q_ASSERT(tmpMajorTicksNumber > 0);
 			if (tmpMajorTicksNumberLimited) {
-				columnIndex = c->valueLabelsIndexForValue(majorTickPos);
+				columnIndex = c->valueLabelsIndexForValue(majorTickPos, true);
 				Q_ASSERT(columnIndex >= 0);
 				majorTickPos = c->valueLabelsValueAt(columnIndex);
 			} else {
@@ -2734,15 +2734,19 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		if (plot())
 			plot()->prepareGeometryChange();
 		return;
-	} else {
+	} else
 		title->setPositionInvalid(false);
-	}
 
 	const auto& linePen = line->pen();
 	tmpPath = WorksheetElement::shapeFromPath(linePath, linePen);
 	tmpPath.addPath(WorksheetElement::shapeFromPath(arrowPath, linePen));
-	tmpPath.addPath(WorksheetElement::shapeFromPath(majorTicksPath, majorTicksLine->pen()));
-	tmpPath.addPath(WorksheetElement::shapeFromPath(minorTicksPath, minorTicksLine->pen()));
+
+	const bool hasMajorTicks = !majorTicksPath.isEmpty();
+	const bool hasMinorTicks = !minorTicksPath.isEmpty();
+	if (hasMajorTicks)
+		tmpPath.addPath(WorksheetElement::shapeFromPath(majorTicksPath, majorTicksLine->pen()));
+	if (hasMinorTicks)
+		tmpPath.addPath(WorksheetElement::shapeFromPath(minorTicksPath, minorTicksLine->pen()));
 
 	QPainterPath tickLabelsPath = QPainterPath();
 	if (labelsPosition != Axis::LabelsPosition::NoLabels) {
@@ -2773,9 +2777,9 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 
 	const auto margin = (double)hoverSelectionEffectPenWidth / 2;
 	const auto axisRect = tmpPath.boundingRect().marginsRemoved(QMarginsF(margin, margin, margin, margin));
-	tmpPath.addRect(axisRect); // add rect instead of the actual path for ticks - this is done for performance reasons,the calculation for many ticks and long
-							   // tick texts can be very expensive
-
+	// tick texts can be very expensive
+	if (hasMajorTicks || hasMinorTicks || !tickLabelsPath.isEmpty())
+		tmpPath.addRect(axisRect);
 	// add title label, if available
 	QTextDocument doc; // text may be Html, so check if plain text is empty
 	doc.setHtml(title->text().text);
@@ -2785,11 +2789,9 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	if (title->isVisible() && !doc.toPlainText().isEmpty()) {
 		const QRectF& titleRect = title->graphicsItem()->boundingRect();
 		if (titleRect.size() != QSizeF(0, 0)) {
-			// determine the new position of the title label:
-			// we calculate the new position here and not in retransform(),
-			// since it depends on the size and position of the tick labels, tickLabelsPath, available here.
 			QRectF rect = linePath.boundingRect();
-			qreal offsetX = titleOffsetX, offsetY = titleOffsetY; // the distances to the axis line
+			qreal offsetX = titleOffsetX, offsetY = titleOffsetY;
+
 			if (orientation == Axis::Orientation::Horizontal) {
 				offsetY -= titleRect.height() * title->scale() / 2.;
 				if (labelsPosition == Axis::LabelsPosition::Out)
@@ -2801,6 +2803,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 					offsetX -= labelsOffset + tickLabelsPath.boundingRect().width();
 				title->setPosition(QPointF(rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y()) / 2. - titleOffsetY));
 			}
+
 			titlePath = WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen);
 			const auto& axisTopLeft = axisRect.topLeft();
 			const auto& axisTopRight = axisRect.topRight();
@@ -3020,13 +3023,19 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 
 	// shape and label
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
+		painter->save();
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), hoverSelectionEffectPenWidth, Qt::SolidLine));
+		painter->setBrush(Qt::NoBrush);
 		painter->drawPath(m_shape);
+		painter->restore();
 	}
 
 	if (isSelected() && !q->isPrinting()) {
+		painter->save();
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), hoverSelectionEffectPenWidth, Qt::SolidLine));
+		painter->setBrush(Qt::NoBrush);
 		painter->drawPath(m_shape);
+		painter->restore();
 	}
 
 #if DEBUG_AXIS_BOUNDING_RECT
