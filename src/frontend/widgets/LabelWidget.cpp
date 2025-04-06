@@ -4,7 +4,7 @@
 	Description          : label settings widget
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008-2025 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2012-2022 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-FileCopyrightText: 2012-2025 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -441,17 +441,17 @@ void LabelWidget::updateUnits() {
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QLatin1String(" cm");
 		if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
-			ui.sbPositionX->setValue(ui.sbPositionX->value() * GSL_CONST_CGS_INCH);
+			ui.sbPositionX->setValue(roundValue(ui.sbPositionX->value() * GSL_CONST_CGS_INCH));
 		if (yPosition != static_cast<int>(WorksheetElement::VerticalPosition::Relative))
-			ui.sbPositionY->setValue(ui.sbPositionY->value() * GSL_CONST_CGS_INCH);
+			ui.sbPositionY->setValue(roundValue(ui.sbPositionY->value() * GSL_CONST_CGS_INCH));
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QLatin1String(" in");
 		if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
-			ui.sbPositionX->setValue(ui.sbPositionX->value() / GSL_CONST_CGS_INCH);
+			ui.sbPositionX->setValue(roundValue(ui.sbPositionX->value() / GSL_CONST_CGS_INCH));
 		if (yPosition != static_cast<int>(WorksheetElement::VerticalPosition::Relative))
-			ui.sbPositionY->setValue(ui.sbPositionY->value() / GSL_CONST_CGS_INCH);
+			ui.sbPositionY->setValue(roundValue(ui.sbPositionY->value() / GSL_CONST_CGS_INCH));
 	}
 
 	if (xPosition != static_cast<int>(WorksheetElement::HorizontalPosition::Relative))
@@ -979,7 +979,7 @@ void LabelWidget::positionXChanged(int index) {
 	}
 
 	position.point.setX(x);
-	ui.sbPositionX->setValue(100. * x);
+	ui.sbPositionX->setValue(std::round(100. * x));
 
 	for (auto* label : m_labelsList)
 		label->setPosition(position);
@@ -1015,7 +1015,7 @@ void LabelWidget::positionYChanged(int index) {
 	}
 
 	position.point.setY(y);
-	ui.sbPositionY->setValue(100. * y);
+	ui.sbPositionY->setValue(std::round(100. * y));
 
 	for (auto* label : m_labelsList)
 		label->setPosition(position);
@@ -1259,16 +1259,16 @@ void LabelWidget::labelPositionChanged(const TextLabel::PositionWrapper& positio
 	ui.cbPositionX->setCurrentIndex(static_cast<int>(position.horizontalPosition));
 	ui.cbPositionY->setCurrentIndex(static_cast<int>(position.verticalPosition));
 	if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Relative) {
-		ui.sbPositionX->setValue(position.point.x() * 100.);
+		ui.sbPositionX->setValue(std::round(position.point.x() * 100.));
 		ui.sbPositionX->setSuffix(QStringLiteral(" %"));
 	} else
-		ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit));
+		ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(position.point.x(), m_units), m_worksheetUnit));
 
 	if (position.verticalPosition == WorksheetElement::VerticalPosition::Relative) {
-		ui.sbPositionY->setValue(position.point.y() * 100.);
+		ui.sbPositionY->setValue(std::round(position.point.y() * 100.));
 		ui.sbPositionY->setSuffix(QStringLiteral(" %"));
 	} else
-		ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit));
+		ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(position.point.y(), m_units), m_worksheetUnit));
 }
 
 void LabelWidget::labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment index) {
@@ -1311,12 +1311,12 @@ void LabelWidget::labelBackgroundColorChanged(const QColor& color) {
 
 void LabelWidget::labelOffsetXChanged(qreal offset) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbOffsetX->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Unit::Point));
+	ui.sbOffsetX->setValue(std::round(Worksheet::convertFromSceneUnits(offset, Worksheet::Unit::Point)));
 }
 
 void LabelWidget::labelOffsetYChanged(qreal offset) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbOffsetY->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Unit::Point));
+	ui.sbOffsetY->setValue(std::round(Worksheet::convertFromSceneUnits(offset, Worksheet::Unit::Point)));
 }
 
 void LabelWidget::labelRotationAngleChanged(qreal angle) {
@@ -1419,17 +1419,17 @@ void LabelWidget::load() {
 	ui.cbPositionX->setCurrentIndex((int)m_label->position().horizontalPosition);
 	// positionXChanged(ui.cbPositionX->currentIndex());
 	if (m_label->position().horizontalPosition == WorksheetElement::HorizontalPosition::Relative) {
-		ui.sbPositionX->setValue(m_label->position().point.x() * 100);
+		ui.sbPositionX->setValue(std::round(m_label->position().point.x() * 100.));
 		ui.sbPositionX->setSuffix(QStringLiteral(" %"));
 	} else
-		ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(m_label->position().point.x(), m_worksheetUnit));
+		ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_label->position().point.x(), m_units), m_worksheetUnit));
 	ui.cbPositionY->setCurrentIndex((int)m_label->position().verticalPosition);
 	// positionYChanged(ui.cbPositionY->currentIndex());
 	if (m_label->position().verticalPosition == WorksheetElement::VerticalPosition::Relative) {
-		ui.sbPositionY->setValue(m_label->position().point.y() * 100);
+		ui.sbPositionY->setValue(std::round(m_label->position().point.y() * 100.));
 		ui.sbPositionY->setSuffix(QStringLiteral(" %"));
 	} else
-		ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(m_label->position().point.y(), m_worksheetUnit));
+		ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_label->position().point.y(), m_units), m_worksheetUnit));
 
 	ui.cbHorizontalAlignment->setCurrentIndex((int)m_label->horizontalAlignment());
 	ui.cbVerticalAlignment->setCurrentIndex((int)m_label->verticalAlignment());
@@ -1471,8 +1471,8 @@ void LabelWidget::load() {
 
 	// offsets, available for axis label only
 	if (!m_axesList.isEmpty()) {
-		ui.sbOffsetX->setValue(Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetX(), Worksheet::Unit::Point));
-		ui.sbOffsetY->setValue(Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetY(), Worksheet::Unit::Point));
+		ui.sbOffsetX->setValue(std::round(Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetX(), Worksheet::Unit::Point)));
+		ui.sbOffsetY->setValue(std::round(Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetY(), Worksheet::Unit::Point)));
 	}
 	ui.sbRotation->setValue(m_label->rotationAngle());
 
@@ -1577,13 +1577,13 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex(group.readEntry("PositionX", (int)m_label->position().horizontalPosition));
-	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(group.readEntry("PositionXValue", m_label->position().point.x()), m_worksheetUnit));
+	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry("PositionXValue", m_label->position().point.x()), m_units), m_worksheetUnit));
 	ui.cbPositionY->setCurrentIndex(group.readEntry("PositionY", (int)m_label->position().verticalPosition));
-	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_label->position().point.y()), m_worksheetUnit));
+	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(group.readEntry("PositionYValue", m_label->position().point.y()), m_units), m_worksheetUnit));
 
 	if (!m_axesList.isEmpty()) {
-		ui.sbOffsetX->setValue(Worksheet::convertFromSceneUnits(group.readEntry("OffsetX", m_axesList.first()->titleOffsetX()), Worksheet::Unit::Point));
-		ui.sbOffsetY->setValue(Worksheet::convertFromSceneUnits(group.readEntry("OffsetY", m_axesList.first()->titleOffsetY()), Worksheet::Unit::Point));
+		ui.sbOffsetX->setValue(std::round(Worksheet::convertFromSceneUnits(group.readEntry("OffsetX", m_axesList.first()->titleOffsetX()), Worksheet::Unit::Point)));
+		ui.sbOffsetY->setValue(std::round(Worksheet::convertFromSceneUnits(group.readEntry("OffsetY", m_axesList.first()->titleOffsetY()), Worksheet::Unit::Point)));
 	}
 	ui.cbHorizontalAlignment->setCurrentIndex(group.readEntry("HorizontalAlignment", (int)m_label->horizontalAlignment()));
 	ui.cbVerticalAlignment->setCurrentIndex(group.readEntry("VerticalAlignment", (int)m_label->verticalAlignment()));
