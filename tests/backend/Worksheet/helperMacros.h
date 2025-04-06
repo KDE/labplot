@@ -111,8 +111,10 @@
                                                                                                                                                                \
 	dock->dockSetElementsMethodName({element});                                                                                                                \
 	QCOMPARE(dock->ui.chbBindLogicalPos->isChecked(), false);                                                                                                  \
-	QCOMPARE(dock->ui.sbPositionX->value(), BaseDock::roundValue(Worksheet::convertFromSceneUnits(element->position().point.x(), Worksheet::Unit::Centimeter)));                     \
-	QCOMPARE(dock->ui.sbPositionY->value(), BaseDock::roundValue(Worksheet::convertFromSceneUnits(element->position().point.y(), Worksheet::Unit::Centimeter)));                     \
+	QCOMPARE(dock->ui.sbPositionX->value(),                                                                                                                    \
+			 BaseDock::roundValue(Worksheet::convertFromSceneUnits(element->position().point.x(), Worksheet::Unit::Centimeter)));                              \
+	QCOMPARE(dock->ui.sbPositionY->value(),                                                                                                                    \
+			 BaseDock::roundValue(Worksheet::convertFromSceneUnits(element->position().point.y(), Worksheet::Unit::Centimeter)));                              \
 	QCOMPARE(dock->ui.sbPositionXLogical->value(), element->positionLogical().x());                                                                            \
 	QCOMPARE(dock->ui.sbPositionYLogical->value(), element->positionLogical().y());                                                                            \
                                                                                                                                                                \
@@ -124,8 +126,10 @@
 	VALUES_EQUAL(element->positionLogical().x(), xLogical);                                                                                                    \
 	VALUES_EQUAL(element->positionLogical().y(), yLogical);                                                                                                    \
                                                                                                                                                                \
-	QCOMPARE(dock->ui.sbPositionX->value(), BaseDock::roundValue(Worksheet::convertFromSceneUnits(element->position().point.x(), Worksheet::Unit::Centimeter)));                     \
-	QCOMPARE(dock->ui.sbPositionY->value(), BaseDock::roundValue(Worksheet::convertFromSceneUnits(element->position().point.y(), Worksheet::Unit::Centimeter)));                     \
+	QCOMPARE(dock->ui.sbPositionX->value(),                                                                                                                    \
+			 BaseDock::roundValue(Worksheet::convertFromSceneUnits(element->position().point.x(), Worksheet::Unit::Centimeter)));                              \
+	QCOMPARE(dock->ui.sbPositionY->value(),                                                                                                                    \
+			 BaseDock::roundValue(Worksheet::convertFromSceneUnits(element->position().point.y(), Worksheet::Unit::Centimeter)));                              \
 	QCOMPARE(dock->ui.sbPositionXLogical->value(), element->positionLogical().x());                                                                            \
 	QCOMPARE(dock->ui.sbPositionYLogical->value(), element->positionLogical().y());
 
@@ -144,8 +148,10 @@
                                                                                                                                                                \
 	dock->dockSetElementsMethodName({element});                                                                                                                \
 	QCOMPARE(dock->ui.chbBindLogicalPos->isChecked(), true);                                                                                                   \
-	QCOMPARE(dock->ui.sbPositionX->value(), BaseDock::roundValue(Worksheet::convertFromSceneUnits(element->position().point.x(), Worksheet::Unit::Centimeter)));                     \
-	QCOMPARE(dock->ui.sbPositionY->value(), BaseDock::roundValue(Worksheet::convertFromSceneUnits(element->position().point.y(), Worksheet::Unit::Centimeter)));                     \
+	QCOMPARE(dock->ui.sbPositionX->value(),                                                                                                                    \
+			 BaseDock::roundValue(Worksheet::convertFromSceneUnits(element->position().point.x(), Worksheet::Unit::Centimeter)));                              \
+	QCOMPARE(dock->ui.sbPositionY->value(),                                                                                                                    \
+			 BaseDock::roundValue(Worksheet::convertFromSceneUnits(element->position().point.y(), Worksheet::Unit::Centimeter)));                              \
 	QCOMPARE(dock->ui.sbPositionXLogical->value(), element->positionLogical().x());                                                                            \
 	QCOMPARE(dock->ui.sbPositionYLogical->value(), element->positionLogical().y());                                                                            \
                                                                                                                                                                \
@@ -157,8 +163,10 @@
 	VALUES_EQUAL(element->positionLogical().x(), xLogical);                                                                                                    \
 	VALUES_EQUAL(element->positionLogical().y(), yLogical);                                                                                                    \
                                                                                                                                                                \
-	QCOMPARE(dock->ui.sbPositionX->value(), BaseDock::roundValue(Worksheet::convertFromSceneUnits(element->position().point.x(), Worksheet::Unit::Centimeter)));                     \
-	QCOMPARE(dock->ui.sbPositionY->value(), BaseDock::roundValue(Worksheet::convertFromSceneUnits(element->position().point.y(), Worksheet::Unit::Centimeter)));                     \
+	QCOMPARE(dock->ui.sbPositionX->value(),                                                                                                                    \
+			 BaseDock::roundValue(Worksheet::convertFromSceneUnits(element->position().point.x(), Worksheet::Unit::Centimeter)));                              \
+	QCOMPARE(dock->ui.sbPositionY->value(),                                                                                                                    \
+			 BaseDock::roundValue(Worksheet::convertFromSceneUnits(element->position().point.y(), Worksheet::Unit::Centimeter)));                              \
 	QCOMPARE(dock->ui.sbPositionXLogical->value(), element->positionLogical().x());                                                                            \
 	QCOMPARE(dock->ui.sbPositionYLogical->value(), element->positionLogical().y());
 
