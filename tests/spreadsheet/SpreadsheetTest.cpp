@@ -2942,7 +2942,6 @@ void SpreadsheetTest::testLinkSpreadsheetRecalculate() {
 	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), sheetData->path());
 	QCOMPARE(sheetCalculations->rowCount(), 10);
 
-	new SpreadsheetModel(sheetData); // otherwise emitRowCountChanged will not be called
 	sheetData->setRowCount(7);
 	sheetDataColumn0->replaceValues(0, {3, 4, 6, 2, 1, 8, 5});
 	QCOMPARE(sheetDataColumn0->rowCount(), 7);
@@ -3079,7 +3078,6 @@ void SpreadsheetTest::testLinkSpreadsheetSaveLoad() {
 		QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);
 		QCOMPARE(sheetCalculations->rowCount(), 10);
 
-		new SpreadsheetModel(sheetData); // otherwise emitRowCountChanged will not be called
 		sheetData->setRowCount(11); // Changing shall also update sheetCalculations also after loading
 
 		QCOMPARE(sheetCalculations->linking(), true);
