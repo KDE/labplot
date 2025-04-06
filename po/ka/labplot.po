@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-02 00:38+0000\n"
+"POT-Creation-Date: 2025-04-06 00:38+0000\n"
 "PO-Revision-Date: 2025-03-30 04:10+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -12382,7 +12382,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2899
+#: src/frontend/MainWin.cpp:2903
 #, kde-format
 msgid "Warning"
 msgstr "შეტყობინება"
@@ -15458,12 +15458,12 @@ msgstr "პროექტი წარმატებით გაზიარ�
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "გაზიარებული პროექტის პოვნა შეგიძლიათ მისამართზე: <a href=\"%1\">%1</a>"
 
-#: src/frontend/MainWin.cpp:2798
+#: src/frontend/MainWin.cpp:2802
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
 msgstr "პროგრამის Kaggle CLI გაშვება ჩავარდა"
 
-#: src/frontend/MainWin.cpp:2799
+#: src/frontend/MainWin.cpp:2803
 #, kde-format
 msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
@@ -15472,32 +15472,32 @@ msgstr ""
 "Kaggle CLI-ის მოსარგებად გაჰყევით ინსტრუქციებს ბმულზე <a href=\"https://www."
 "kaggle.com/docs/api\">\"როგორ გამოვიყენოთ Kaggle\"</a>."
 
-#: src/frontend/MainWin.cpp:2862
+#: src/frontend/MainWin.cpp:2866
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 გატანილია"
 
-#: src/frontend/MainWin.cpp:2869
+#: src/frontend/MainWin.cpp:2873
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS ფაილები შენახულია"
 
-#: src/frontend/MainWin.cpp:2881
+#: src/frontend/MainWin.cpp:2885
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT კლიენტი%1"
 
-#: src/frontend/MainWin.cpp:2899
+#: src/frontend/MainWin.cpp:2903
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "ამ ჰოსტთან MQTTClient უკვე არსებობს!"
 
-#: src/frontend/MainWin.cpp:2903
+#: src/frontend/MainWin.cpp:2907
 #, kde-format
 msgid "Live data source%1"
 msgstr "ცოცხალი მონაცემების წყარო %1"
 
-#: src/frontend/MainWin.cpp:2954
+#: src/frontend/MainWin.cpp:2958
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "ქმნის ახალ %1 ბლოკნოტს"

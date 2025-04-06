@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-02 00:38+0000\n"
+"POT-Creation-Date: 2025-04-06 00:38+0000\n"
 "PO-Revision-Date: 2025-03-20 08:31+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -12419,7 +12419,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2899
+#: src/frontend/MainWin.cpp:2903
 #, kde-format
 msgid "Warning"
 msgstr "Aviso"
@@ -15497,12 +15497,12 @@ msgstr "Compartiuse o proxecto"
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Pode atopar o proxecto compartido en: <a href=\"%1\">%1</a>"
 
-#: src/frontend/MainWin.cpp:2798
+#: src/frontend/MainWin.cpp:2802
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
 msgstr "A execución da ferramenta da liña de ordes de Kaggle fallou."
 
-#: src/frontend/MainWin.cpp:2799
+#: src/frontend/MainWin.cpp:2803
 #, kde-format
 msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
@@ -15511,32 +15511,32 @@ msgstr ""
 "Siga as instrucións de <a href=\"https://www.kaggle.com/docs/api\">Como usar "
 "Kaggle</a> para configurar a ferramenta da liña de ordes de Kaggle."
 
-#: src/frontend/MainWin.cpp:2862
+#: src/frontend/MainWin.cpp:2866
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exportado"
 
-#: src/frontend/MainWin.cpp:2869
+#: src/frontend/MainWin.cpp:2873
 #, kde-format
 msgid "FITS files saved"
 msgstr "Gardáronse os ficheiros FITS"
 
-#: src/frontend/MainWin.cpp:2881
+#: src/frontend/MainWin.cpp:2885
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Cliente de MQTT%1"
 
-#: src/frontend/MainWin.cpp:2899
+#: src/frontend/MainWin.cpp:2903
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Xa hai un cliente de MQTTClient con este servidor!"
 
-#: src/frontend/MainWin.cpp:2903
+#: src/frontend/MainWin.cpp:2907
 #, kde-format
 msgid "Live data source%1"
 msgstr "Fonte de datos en directo%1"
 
-#: src/frontend/MainWin.cpp:2954
+#: src/frontend/MainWin.cpp:2958
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Crea un novo caderno de %1"
