@@ -131,9 +131,7 @@ QPointF ResizeItem::HandleItem::restrictPosition(const QPointF& pos) {
 void ResizeItem::HandleItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (event->buttons() & Qt::LeftButton) {
 		QPointF mousePos = event->scenePos();
-		QPointF delta = mousePos - m_lastMousePos;  // Calculate delta
-
-			   // Resize the item by the delta
+		QPointF delta = mousePos - m_lastMousePos;
 		if (m_position & Top) {
 			m_parent->setTop(m_parent->boundingRect().top() + delta.y());
 		}
@@ -146,8 +144,6 @@ void ResizeItem::HandleItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 		if (m_position & Right) {
 			m_parent->setRight(m_parent->boundingRect().right() + delta.x());
 		}
-
-			   // Update last mouse position
 		m_lastMousePos = mousePos;
 	}
 }
