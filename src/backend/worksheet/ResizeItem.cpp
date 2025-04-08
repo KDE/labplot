@@ -185,10 +185,10 @@ WorksheetElementContainer* ResizeItem::container() {
 void ResizeItem::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) {
 }
 
-#define IMPL_SET_FN(TYPE, POS)                                                                                                                                \
-	void ResizeItem::set##POS(TYPE v) {                                                                                                                      \
-		m_rect.set##POS(v);                                                                                                                                  \
-		m_container->setRect(mapRectToScene(m_rect));                                                                                                        \
+#define IMPL_SET_FN(TYPE, POS)                                                                                                                                 \
+	void ResizeItem::set##POS(TYPE v) {                                                                                                                        \
+		m_rect.set##POS(v);                                                                                                                                    \
+		m_container->setRect(mapRectToScene(m_rect));                                                                                                          \
 	}
 
 IMPL_SET_FN(qreal, Top)
