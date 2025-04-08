@@ -1,3 +1,12 @@
+/*
+	File                 : ResizeItem.cpp
+	Project              : LabPlot
+	Description          : Item allowing to resize worksheet elements with the mouse
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
 #include "ResizeItem.h"
 #include "backend/worksheet/WorksheetElementContainer.h"
 #include <QBrush>
@@ -60,10 +69,10 @@ QVariant ResizeItem::HandleItem::itemChange(GraphicsItemChange change, const QVa
 void ResizeItem::HandleItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	m_parent->container()->setUndoAware(false);
 	m_oldRect = m_parent->container()->rect();
-	m_lastMousePos = event->scenePos(); // Track initial mouse position
+	m_lastMousePos = event->scenePos();
 }
 
-void ResizeItem::HandleItem::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+void ResizeItem::HandleItem::mouseReleaseEvent(QGraphicsSceneMouseEvent*) {
 	m_parent->container()->setUndoAware(true);
 	m_parent->container()->setPrevRect(m_oldRect);
 }
