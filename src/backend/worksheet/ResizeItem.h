@@ -12,7 +12,7 @@
 
 #include <QGraphicsItem>
 #include <QGraphicsRectItem>
-#include <QGraphicsSceneMouseEvent>  // Include the necessary header for QGraphicsSceneMouseEvent
+#include <QGraphicsSceneMouseEvent>
 
 class WorksheetElementContainer;
 class QGraphicsSceneHoverEvent;
@@ -47,21 +47,20 @@ private:
 		void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 		void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 		void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
-		void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;  // Added mouseMoveEvent
+		void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
 
 	private:
 		QPointF restrictPosition(const QPointF&);
 		int m_position;
 		ResizeItem* m_parent;
 		QRectF m_oldRect;
-		QPointF m_lastMousePos;  // Store the previous mouse position for delta calculation
+		QPointF m_lastMousePos;
 	};
 
 	QRectF boundingRect() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 	WorksheetElementContainer* container();
 
-		   // Setters for the positions
 	void setTopLeft(const QPointF&);
 	void setTop(qreal);
 	void setTopRight(const QPointF&);
