@@ -188,7 +188,7 @@ void ProcessBehaviorChart::init(bool loading) {
 	// text labels for the labels
 	d->labelsEnabled = group.readEntry(QStringLiteral("LabelsEnabled"), true);
 	d->labelsAutoPrecision = group.readEntry(QStringLiteral("LabelsAutoPrecision"), false);
-	d->labelsPrecision = group.readEntry(QStringLiteral("LabelsPrecision"), 1);
+	d->labelsPrecision = group.readEntry(QStringLiteral("LabelsPrecision"), 2);
 	const auto shape = static_cast<TextLabel::BorderShape>(group.readEntry(QStringLiteral("BorderShape"), (int)TextLabel::BorderShape::NoBorder));
 	d->upperLimitLabel->setBorderShape(shape);
 	d->centerLabel->setBorderShape(shape);
