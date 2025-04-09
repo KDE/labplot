@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-02 00:38+0000\n"
-"PO-Revision-Date: 2025-02-28 19:42+0100\n"
+"POT-Creation-Date: 2025-04-07 00:38+0000\n"
+"PO-Revision-Date: 2025-04-06 14:24+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.12.0\n"
+"X-Generator: Lokalize 24.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1170,10 +1170,9 @@ msgid "Invalid separator"
 msgstr "Ogiltig avskiljare"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
-#, fuzzy, kde-format
-#| msgid "Serial devices must be initialized before reading data from it"
+#, kde-format
 msgid "Serial device must be initialized before reading data from it"
-msgstr "Seriella enheter måste initieras innan data läses från dem"
+msgstr "En seriell enhet måste initieras innan data läses från den"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
 #, kde-format
@@ -9081,83 +9080,71 @@ msgid "%1: set sample size"
 msgstr "%1: ställ in samplingsstorlek"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:556
-#, fuzzy, kde-format
-#| msgid "%1: change exact limits"
+#, kde-format
 msgid "%1: enable exact limits"
-msgstr "%1: ändra exakta gränser"
+msgstr "%1: aktivera exakta gränser"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:556
-#, fuzzy, kde-format
-#| msgid "%1: change exact limits"
+#, kde-format
 msgid "%1: disable exact limits"
-msgstr "%1: ändra exakta gränser"
+msgstr "%1: inaktivera exakta gränser"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:565
-#, fuzzy, kde-format
-#| msgid "%1: set axis zero offset"
+#, kde-format
 msgid "%1: set maximal upper limit"
-msgstr "%1: ställ in axelns nollavstånd"
+msgstr "%1: ställ in maximal övre gräns"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:572
-#, fuzzy, kde-format
-#| msgid "%1: change negative lower limit"
+#, kde-format
 msgid "%1: set minimal lower limit"
-msgstr "%1: ändra negativ undre gräns"
+msgstr "%1: ställ in minimal övre gräns"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:581
 #, kde-format
 msgid "%1: enable control labels"
-msgstr ""
+msgstr "%1: aktivera kontrollbeteckningar"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:581
-#, fuzzy, kde-format
-#| msgid "%1: disable theming"
+#, kde-format
 msgid "%1: disable control labels"
-msgstr "%1: inaktivera teman"
+msgstr "%1: inaktivera kontrollbeteckningar"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:603
-#, fuzzy, kde-format
-#| msgid "%1: set border shape"
+#, kde-format
 msgid "%1: set labels border shape"
-msgstr "%1: ställ in kantform"
+msgstr "%1: ställ in beteckningarnas kantform"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:617
-#, fuzzy, kde-format
-#| msgid "%1: set label font"
+#, kde-format
 msgid "%1: set labels font"
 msgstr "%1: ställ in beteckningsteckensnitt"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:652
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:681
-#, fuzzy, kde-format
-#| msgid "%1: set label background color"
+#, kde-format
 msgid "%1: set labels background color"
-msgstr "%1: ställ in bakgrundsfärg för beteckningar"
+msgstr "%1: ställ in beteckningarnas bakgrundsfärg"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:739
-#, fuzzy, kde-format
-#| msgid "%1: set border style"
+#, kde-format
 msgid "%1: set labels border style"
-msgstr "%1: ställ in kantstil"
+msgstr "%1: ställ in beteckningarnas kantstil"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:750
-#, fuzzy, kde-format
-#| msgid "%1: set labels format"
+#, kde-format
 msgid "%1: set labels border width"
-msgstr "%1: ställ in beteckningsformat"
+msgstr "%1: ställ in beteckningarnas kantbredd"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:761
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:772
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: set labels border color"
-msgstr "%1: ställ in beteckningsfärg"
+msgstr "%1: ställ in beteckningarnas kantfärg"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:864
-#, fuzzy, kde-format
-#| msgid "Not enough data points available."
+#, kde-format
 msgid "Not enough data provided."
-msgstr "Otillräckligt antal datapunkter tillgängliga."
+msgstr "Otillräckligt antal tillhandahållna datapunkter."
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:964
 #, kde-format
@@ -9688,22 +9675,22 @@ msgstr "%1: ställ in antal interpolationspunkter"
 msgid "%1: set rug orientation"
 msgstr "%1: ställ in luggorientering"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1565
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1573
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr "Fel: Akima spline-interpolation kräver minst 5 punkter."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1567
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1575
 #, kde-format
 msgid "Error: Could not initialize the spline function."
 msgstr "Fel: Kunde inte initiera spline-funktionen."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1580
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1588
 #, kde-format
 msgid "x values must be monotonically increasing."
 msgstr "X-värden måste vara monotont ökande."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1583
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1591
 #, kde-format
 msgid "Error: %1"
 msgstr "Fel: %1"
@@ -10196,16 +10183,14 @@ msgid "Copy to Clipboard"
 msgstr "Kopiera till klippbordet"
 
 #: src/frontend/AboutDialog.cpp:142
-#, fuzzy, kde-format
-#| msgid "Release build "
+#, kde-format
 msgid "Release build"
-msgstr "Utgivningsbygge"
+msgstr "Utgivningsversion"
 
 #: src/frontend/AboutDialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Debug build "
+#, kde-format
 msgid "Debug build"
-msgstr "Avlusningsbygge"
+msgstr "Avlusningsversion"
 
 #: src/frontend/AboutDialog.cpp:180
 #, kde-format
@@ -10267,7 +10252,7 @@ msgstr "Rapportera fel till:"
 #: src/frontend/AboutDialog.cpp:199
 #, kde-format
 msgid "Partly funded by:"
-msgstr ""
+msgstr "Delvis finansierad av:"
 
 #: src/frontend/AboutDialog.cpp:210 src/frontend/AboutDialog.cpp:370
 #: src/frontend/AboutDialog.cpp:371
@@ -10446,7 +10431,7 @@ msgstr "Byt mellan ikon- och listvy"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:53
 #: src/frontend/datasources/ImportDatasetWidget.cpp:51
-#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:124
+#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:125
 #: src/frontend/examples/ExamplesWidget.cpp:51
 #, kde-format
 msgid "Enter the keyword you want to search for"
@@ -10454,7 +10439,7 @@ msgstr "Ange nyckelordet som du vill söka efter"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:56
 #: src/frontend/datasources/ImportDatasetWidget.cpp:54
-#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:127
+#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:128
 #: src/frontend/examples/ExamplesWidget.cpp:54
 #, kde-format
 msgid "Search..."
@@ -11901,28 +11886,28 @@ msgid "Download the current dataset for preview and import"
 msgstr "Ladda ner nuvarande datamängd för förhandsgranskning och import"
 
 #. i18n: ectx: property (text), widget (QLabel, lCategories)
-#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:130
+#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:131
 #: src/frontend/ui/datasources/importdatasetwidget.ui:86
 #, kde-format
 msgid "Dataset:"
 msgstr "Datamängd:"
 
-#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:241
+#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:242
 #, kde-format
 msgid "Could not read %1"
 msgstr "Kunde inte läsa %1"
 
-#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:249
+#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:250
 #, kde-format
 msgid "Could not open %1"
 msgstr "Kunde inte öppna %1"
 
-#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:266
+#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:267
 #, kde-format
 msgid "Could not create %1"
 msgstr "Kunde inte skapa %1"
 
-#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:295
+#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:296
 #, kde-format
 msgid "Could not find .csv files in %1"
 msgstr "Kunde inte hitta .csv-filer i %1"
@@ -12374,7 +12359,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2899
+#: src/frontend/MainWin.cpp:2903
 #, kde-format
 msgid "Warning"
 msgstr "Varning"
@@ -12464,8 +12449,8 @@ msgstr "Dataområden"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:270
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:281
 #: src/frontend/dockwidgets/CustomPointDock.cpp:134
-#: src/frontend/dockwidgets/ImageDock.cpp:185
-#: src/frontend/dockwidgets/ImageDock.cpp:195
+#: src/frontend/dockwidgets/ImageDock.cpp:186
+#: src/frontend/dockwidgets/ImageDock.cpp:196
 #: src/frontend/widgets/LabelWidget.cpp:491
 #: src/frontend/widgets/LabelWidget.cpp:502
 #, kde-format
@@ -12479,8 +12464,8 @@ msgstr "Överst"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:272
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:283
 #: src/frontend/dockwidgets/CustomPointDock.cpp:136
-#: src/frontend/dockwidgets/ImageDock.cpp:187
-#: src/frontend/dockwidgets/ImageDock.cpp:197
+#: src/frontend/dockwidgets/ImageDock.cpp:188
+#: src/frontend/dockwidgets/ImageDock.cpp:198
 #: src/frontend/widgets/LabelWidget.cpp:493
 #: src/frontend/widgets/LabelWidget.cpp:504
 #, kde-format
@@ -12561,8 +12546,8 @@ msgstr "Halvfylld, stor"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:264
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:276
 #: src/frontend/dockwidgets/CustomPointDock.cpp:129
-#: src/frontend/dockwidgets/ImageDock.cpp:180
-#: src/frontend/dockwidgets/ImageDock.cpp:190
+#: src/frontend/dockwidgets/ImageDock.cpp:181
+#: src/frontend/dockwidgets/ImageDock.cpp:191
 #: src/frontend/dockwidgets/XYCurveDock.cpp:518
 #: src/frontend/widgets/BackgroundWidget.cpp:118
 #: src/frontend/widgets/LabelWidget.cpp:485
@@ -12579,8 +12564,8 @@ msgstr "Till vänster"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:266
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:278
 #: src/frontend/dockwidgets/CustomPointDock.cpp:131
-#: src/frontend/dockwidgets/ImageDock.cpp:182
-#: src/frontend/dockwidgets/ImageDock.cpp:192
+#: src/frontend/dockwidgets/ImageDock.cpp:183
+#: src/frontend/dockwidgets/ImageDock.cpp:193
 #: src/frontend/dockwidgets/XYCurveDock.cpp:519
 #: src/frontend/widgets/BackgroundWidget.cpp:119
 #: src/frontend/widgets/LabelWidget.cpp:487
@@ -13141,10 +13126,10 @@ msgstr "Huvudrad"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:282
 #: src/frontend/dockwidgets/CustomPointDock.cpp:130
 #: src/frontend/dockwidgets/CustomPointDock.cpp:135
-#: src/frontend/dockwidgets/ImageDock.cpp:181
-#: src/frontend/dockwidgets/ImageDock.cpp:186
-#: src/frontend/dockwidgets/ImageDock.cpp:191
-#: src/frontend/dockwidgets/ImageDock.cpp:196
+#: src/frontend/dockwidgets/ImageDock.cpp:182
+#: src/frontend/dockwidgets/ImageDock.cpp:187
+#: src/frontend/dockwidgets/ImageDock.cpp:192
+#: src/frontend/dockwidgets/ImageDock.cpp:197
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:318
 #: src/frontend/widgets/LabelWidget.cpp:486
 #: src/frontend/widgets/LabelWidget.cpp:492
@@ -13322,6 +13307,15 @@ msgid ""
 "li><li>Scott - <i>h = 3.49 * sigma / pow(n, 3/2)</i>, optimal method for "
 "normally distributed data</li></ul>"
 msgstr ""
+"Metod som används för att bestämma antalet delar <i>k</i> och deras bredd "
+"<i>h</i> för <i>n</i>-värden:<ul><li>Enligt nummer: Antalet delar anges "
+"manuellt</li><li>Enligt bredd: Antalet delar beräknas baserat på den angivna "
+"delbredden via <i>k = (x(x) / - h</i>)</li><li>Kvadratrot: <i>k = sqrt(n)</"
+"i></li><li>Rice: <i>k = 2 * pow(n, 3/2)</i>, enklare alternativ till Sturges "
+"metod</li><li>Sturges: <i>k = log2(n) + 1</i>, antar en approximativ "
+"normalfördelning</li><li>Doane: modifierad version av Sturges metod, se "
+"dokumentationen för mer information</li><li>Scott: <i>h = 3.49 * sigma / "
+"pow(n, 3/2)</i>, optimal metod för normalfördelad data</li></ul>"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:295
 #, kde-format
@@ -13332,6 +13326,11 @@ msgid ""
 "the histogram are excluded. If you want to include these values for the last "
 "bin you will need to add an extra bin to your histogram."
 msgstr ""
+"Använd 'Automatisk' för att automatiskt bestämma de minimala och maximala "
+"värdena för data som ska användas för att beräkna histogrammet. Ange värdena "
+"manuellt, annars.<br><br><b>Observera:</b> Alla samplingar som hamnar i den "
+"övre änden av histogrammet exkluderas. Om du vill inkludera värdena för den "
+"sista delen måste en extra del läggas till i histogrammet."
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:578
 #, kde-format
@@ -13511,48 +13510,30 @@ msgstr "Rätblock"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:228
 #: src/frontend/widgets/LabelWidget.cpp:516
-#, fuzzy, kde-format
-#| msgid "Up Pointing rectangle"
+#, kde-format
 msgid "Up pointing rectangle"
 msgstr "Uppåtpekande rektangel"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:229
 #: src/frontend/widgets/LabelWidget.cpp:517
-#, fuzzy, kde-format
-#| msgid "Down Pointing rectangle"
+#, kde-format
 msgid "Down pointing rectangle"
 msgstr "Neråtpekande rektangel"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
 #: src/frontend/widgets/LabelWidget.cpp:518
-#, fuzzy, kde-format
-#| msgid "Left Pointing rectangle"
+#, kde-format
 msgid "Left pointing rectangle"
 msgstr "Vänsterpekande rektangel"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
 #: src/frontend/widgets/LabelWidget.cpp:519
-#, fuzzy, kde-format
-#| msgid "Right Pointing rectangle"
+#, kde-format
 msgid "Right pointing rectangle"
 msgstr "Högerpekande rektangel"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:235
-#, fuzzy, kde-format
-#| msgid ""
-#| "The supported chart types are grouped according to the plotted statistics "
-#| "and to the metric defining the limits.<br><br>Individual Values and "
-#| "Moving Ranges, Limits Based on the Average or Median Moving Range:"
-#| "<ul><li>X (XmR) - plot the <b>individual values</b>.</li><li>mR - plot "
-#| "the <b>moving ranges</b>.</li></ul>Averages and Ranges, Limits based on "
-#| "the Average or Median Range:<ul><li>X̅  (X̅R) - plot the <b>averages for "
-#| "each sample</b> .</li><li>R (X̅R) - plot the <b>ranges for each sample</b>."
-#| "</li></ul>Averages and Standard Deviations, Limits Based on the Standard "
-#| "Deviations:<ul><li>X̅  (X̅S) - plot the <b>averages for each sample</b>.</"
-#| "li><li>S (X̅S) - plot the <b>standard deviations for each sample</b>.</"
-#| "li></ul>Attributes:<ul><li>P - plot <b>binomial proportions</b>.</"
-#| "li><li>NP - plot <b>binomial counts</b>.</li><li>C - plot <b>Poisson "
-#| "counts</b>.</li><li>U - plot <b>Poisson rates</b>.</li></ul>"
+#, kde-format
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
 "and to the metric defining the limits.<br><br>Individual Values and Moving "
@@ -13571,10 +13552,10 @@ msgstr ""
 "De diagramtyper som stöds är grupperade enligt den uppritade statistiken och "
 "det mått som definierar gränserna.<br><br>Individuella värden och rörliga "
 "intervall, gränser baserade på genomsnittligt eller median rörligt intervall:"
-"<ul><li>X (XmR ): rita upp de <b>individuella värdena</b>.</li><li>mR: rita "
-"upp de <b>rörliga intervallen</b>.</li></ul>Genomsnitt och intervall, "
-"gränser baserat på medel- eller medianintervallet:<ul><li>X̅ (X̅R): rita upp "
-"<b>medelvärdena för varje sampling</b> .</li><li>R (X̅R): rita upp "
+"<ul><li>X (XmR ): rita upp de <b>individuella beteckningarna</b>.</"
+"li><li>mR: rita upp de <b>rörliga intervallen</b>.</li></ul>Genomsnitt och "
+"intervall, gränser baserat på medel- eller medianintervallet:<ul><li>X̅ (X̅R): "
+"rita upp <b>medelvärdena för varje sampling</b> .</li><li>R (X̅R): rita upp "
 "<b>intervallen för varje sampling</b>.</li></ul>Genomsnitt och "
 "standardavvikelser, gränser baserade på standardavvikelser:<ul><li>X̅ (X̅S): "
 "rita upp <b>medelvärden för varje sampling</b >.</li><li>S (X̅S): rita upp "
@@ -13587,11 +13568,13 @@ msgstr ""
 #, kde-format
 msgid "Maximal value for the upper control limit. No constraint, if empty."
 msgstr ""
+"Maximalt värde för den övre kontrollgränsen. Ingen begränsning, om tomt."
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:265
 #, kde-format
 msgid "Minimal value for the lower control limit. No constraint, if empty."
 msgstr ""
+"Minimalt värde för den undre kontrollgränsen. Ingen begränsning, om tomt."
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:269
 #, kde-format
@@ -15441,12 +15424,12 @@ msgstr "Projektet delat med lyckat resultat"
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Det delade projektet finns på: <a href=\"%1\">%1</a>"
 
-#: src/frontend/MainWin.cpp:2798
+#: src/frontend/MainWin.cpp:2802
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
 msgstr "Misslyckades köra kommandoradsverktyget i Kaggle"
 
-#: src/frontend/MainWin.cpp:2799
+#: src/frontend/MainWin.cpp:2803
 #, kde-format
 msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
@@ -15455,32 +15438,32 @@ msgstr ""
 "Följ instruktionerna i <a href=\"https://www.kaggle.com/docs/api\">\"How to "
 "Use Kaggle\"</a> för att ställa in kommandoradsverktyget i Kaggle."
 
-#: src/frontend/MainWin.cpp:2862
+#: src/frontend/MainWin.cpp:2866
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exporterad"
 
-#: src/frontend/MainWin.cpp:2869
+#: src/frontend/MainWin.cpp:2873
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS-filer sparade"
 
-#: src/frontend/MainWin.cpp:2881
+#: src/frontend/MainWin.cpp:2885
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT-klient%1"
 
-#: src/frontend/MainWin.cpp:2899
+#: src/frontend/MainWin.cpp:2903
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Det finns redan en MQTT-klient med värddatorn."
 
-#: src/frontend/MainWin.cpp:2903
+#: src/frontend/MainWin.cpp:2907
 #, kde-format
 msgid "Live data source%1"
 msgstr "Direktdatakälla %1"
 
-#: src/frontend/MainWin.cpp:2954
+#: src/frontend/MainWin.cpp:2958
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Skapar ett nytt %1 anteckningsblock"
@@ -16405,17 +16388,17 @@ msgstr "Standardtema för nyskapade arbetsblad och arbetsbladsobjekt"
 #: src/frontend/SettingsWorksheetPage.cpp:30
 #, kde-format
 msgid "Small (3cm x 3cm)"
-msgstr ""
+msgstr "Liten (3 cm x 3 cm)"
 
 #: src/frontend/SettingsWorksheetPage.cpp:31
 #, kde-format
 msgid "Medium (5cm x 5cm)"
-msgstr ""
+msgstr "Medium (5 cm x 5 cm)"
 
 #: src/frontend/SettingsWorksheetPage.cpp:32
 #, kde-format
 msgid "Big (7cm x 7cm)"
-msgstr ""
+msgstr "Stor (7 cm x 7 cm)"
 
 #: src/frontend/SettingsWorksheetPage.cpp:152
 #, kde-format
@@ -21677,10 +21660,9 @@ msgstr "Samplingsstorlekar:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:189
-#, fuzzy, kde-format
-#| msgid "Lower Limit"
+#, kde-format
 msgid "Min. Lower Limit:"
-msgstr "Undre gräns"
+msgstr "Minimal undre gräns:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:212
@@ -21690,10 +21672,9 @@ msgstr "Begränsningar baserade på:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxUpperLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:232
-#, fuzzy, kde-format
-#| msgid "Upper Limit"
+#, kde-format
 msgid "Max. Upper Limit:"
-msgstr "Övre gräns"
+msgstr "Maximal övre gräns:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:243
@@ -21724,10 +21705,9 @@ msgstr "Undre gräns"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLabels)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:443
-#, fuzzy, kde-format
-#| msgid "Center/Limits Lines"
+#, kde-format
 msgid "Center/Limit Values"
-msgstr "Centrera/begränsa linjer"
+msgstr "Centrera/begränsa värden"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBorderShape)
@@ -22799,18 +22779,7 @@ msgstr "Stäng fil"
 
 #. i18n: ectx: property (html), widget (ResizableTextEdit, teLabel)
 #: src/frontend/ui/labelwidget.ui:55
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#| "font-weight:400; font-style:normal;\">\n"
-#| "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-#| "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
-#| "\"><br /></p></body></html>"
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -22828,9 +22797,12 @@ msgid ""
 msgstr ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
-"\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset="
+"\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
 "weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
@@ -23412,12 +23384,11 @@ msgstr "Återställ layout"
 #: src/frontend/ui/settingsworksheetpage.ui:141
 #, kde-format
 msgid "Thumbnail Size:"
-msgstr ""
+msgstr "Miniatyrbildsstorlek:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoubleBuffering)
 #: src/frontend/ui/settingsworksheetpage.ui:164
-#, fuzzy, kde-format
-#| msgid "Double-Buffering"
+#, kde-format
 msgid "Double buffering"
 msgstr "Dubbelbuffring"
 
@@ -24200,10 +24171,9 @@ msgid "Data, +-:"
 msgstr "Data, +-:"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
-#, fuzzy, kde-format
-#| msgid "Start Value:"
+#, kde-format
 msgid "Start Value"
-msgstr "Startvärde:"
+msgstr "Startvärde"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format

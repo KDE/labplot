@@ -79,7 +79,8 @@ ImportKaggleDatasetWidget::ImportKaggleDatasetWidget(QWidget* parent)
 	connect(m_kaggleCli, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), [&](int exitCode, QProcess::ExitStatus exitStatus) {
 		RESET_CURSOR;
 		if (exitStatus == QProcess::NormalExit && exitCode == 0) {
-			const auto& command = m_kaggleCli->arguments().at(1);
+			const auto& arguments = m_kaggleCli->arguments();
+			const auto& command = arguments.at(1);
 			if (command == QLatin1String("list"))
 				listKaggleDatasets();
 			else if (command == QLatin1String("metadata"))

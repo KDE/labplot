@@ -68,7 +68,7 @@ public:
 
 	// labels for control limit values
 	bool labelsEnabled{true};
-	int labelsPrecision{1};
+	int labelsPrecision{2};
 	bool labelsAutoPrecision{true};
 	Line* labelsBorderLine{nullptr};
 	TextLabel* upperLimitLabel{nullptr};
