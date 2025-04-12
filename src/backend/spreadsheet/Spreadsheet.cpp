@@ -74,6 +74,8 @@ Spreadsheet::Spreadsheet(const QString& name, bool loading, AspectType type)
 	, d_ptr(new SpreadsheetPrivate(this)) {
 	if (!loading)
 		init();
+
+	connect(this, &Spreadsheet::columnCountChanged, this, &Spreadsheet::initConnectionsRowCountChanges);
 }
 
 /*!
@@ -102,26 +104,42 @@ void Spreadsheet::init() {
 		addChild(new_col);
 	}
 	setRowCount(rows);
+	initConnectionsRowCountChanges();
+}
 
-	// TODO: move these connects below to a dedicated function which is called every time first/last columns were changed
-	const auto* lastColumn = children<Column>().constLast();
-	connect(lastColumn, &AbstractColumn::rowsAboutToBeInserted, this, [=](const AbstractColumn* sender, int before, int count)  {
+/*!
+* connects to the signals emitted in the first column to react on the row count changes that are 
+* done internally in Column and to emit the corresponding signals in Spreadsheet.
+* called initially and on column count changes (columns inserts/removals).
+*/
+void Spreadsheet::initConnectionsRowCountChanges() {
+	// check first if the first column was changed
+	Q_D( Spreadsheet);
+	auto* firstColumn = children<Column>().first();
+	if (d->firstColumn == firstColumn)
+		return;
+	else {
+		disconnect(d->firstColumn, nullptr, this, nullptr);
+		d->firstColumn = firstColumn;
+	}
+
+	// handle row insertions
+	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeInserted, this, [=](const AbstractColumn*, int before, int count)  {
 		Q_EMIT rowsAboutToBeInserted(before, before + count - 1);
 	});
-	connect(lastColumn, &AbstractColumn::rowsInserted, this, [=](const AbstractColumn* sender, int, int)  {
+	connect(d->firstColumn, &AbstractColumn::rowsInserted, this, [=](const AbstractColumn* sender, int, int)  {
 		Q_EMIT rowsInserted(sender->rowCount());
 		Q_EMIT rowCountChanged(sender->rowCount());
 	});
 
-	const auto* firstColumn = children<Column>().constFirst();
-	connect(firstColumn, &AbstractColumn::rowsAboutToBeRemoved, this, [=](const AbstractColumn*, int first, int count) {
+	// handle row removals
+	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeRemoved, this, [=](const AbstractColumn*, int first, int count) {
 		Q_EMIT rowsAboutToBeRemoved(first, first + count - 1);
 	});
-	connect(firstColumn, &AbstractColumn::rowsRemoved, this, [=](const AbstractColumn* sender, int, int) {
+	connect(d->firstColumn, &AbstractColumn::rowsRemoved, this, [=](const AbstractColumn* sender, int, int) {
 		Q_EMIT rowsRemoved(sender->rowCount());
 		Q_EMIT rowCountChanged(sender->rowCount());
 	});
-
 }
 
 void Spreadsheet::setSuppressSetCommentFinalizeImport(bool suppress) {
@@ -511,7 +529,6 @@ Column* Spreadsheet::column(const QString& name) const {
 int Spreadsheet::columnCount() const {
 	return childCount<Column>();
 }
-
 
 /*!
  * Grows/shrinks the number of columns in the spreadsheet to \c new_size.
@@ -1268,6 +1285,8 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 			}
 		}
 	}
+
+	initConnectionsRowCountChanges();
 
 	return !reader->hasError();
 }
