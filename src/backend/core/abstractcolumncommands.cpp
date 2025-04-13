@@ -233,8 +233,7 @@ void AbstractColumnRemoveRowsCmd::undo() {
  * \class AbstractColumnSetHeatmapFormatCmd
  * \brief Set the heatmap format
  ** ***************************************************************************/
-AbstractColumnSetHeatmapFormatCmd::AbstractColumnSetHeatmapFormatCmd(AbstractColumnPrivate* col,
-																	 const AbstractColumn::HeatmapFormat& format)
+AbstractColumnSetHeatmapFormatCmd::AbstractColumnSetHeatmapFormatCmd(AbstractColumnPrivate* col, const AbstractColumn::HeatmapFormat& format)
 	: m_col(col)
 	, m_format(format) {
 	setText(i18n("%1: set heatmap format", col->name()));

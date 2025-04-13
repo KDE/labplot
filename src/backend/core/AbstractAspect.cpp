@@ -596,7 +596,6 @@ void AbstractAspect::removeChild(AbstractAspect* child) {
 	beginMacro(i18n("%1: remove %2", name(), child->name()));
 	exec(new AspectChildRemoveCmd(d, child));
 	endMacro();
-
 }
 
 void AbstractAspect::moveChild(AbstractAspect* child, int steps) {

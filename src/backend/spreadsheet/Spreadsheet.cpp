@@ -108,13 +108,13 @@ void Spreadsheet::init() {
 }
 
 /*!
-* connects to the signals emitted in the first column to react on the row count changes that are 
-* done internally in Column and to emit the corresponding signals in Spreadsheet.
-* called initially and on column count changes (columns inserts/removals).
+ * connects to the signals emitted in the first column to react on the row count changes that are
+ * done internally in Column and to emit the corresponding signals in Spreadsheet.
+ * called initially and on column count changes (columns inserts/removals).
 */
 void Spreadsheet::initConnectionsRowCountChanges() {
 	// check first if the first column was changed
-	Q_D( Spreadsheet);
+	Q_D(Spreadsheet);
 	auto* firstColumn = children<Column>().first();
 	if (d->firstColumn == firstColumn)
 		return;
@@ -124,10 +124,10 @@ void Spreadsheet::initConnectionsRowCountChanges() {
 	}
 
 	// handle row insertions
-	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeInserted, this, [=](const AbstractColumn*, int before, int count)  {
+	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeInserted, this, [=](const AbstractColumn*, int before, int count) {
 		Q_EMIT rowsAboutToBeInserted(before, before + count - 1);
 	});
-	connect(d->firstColumn, &AbstractColumn::rowsInserted, this, [=](const AbstractColumn* sender, int, int)  {
+	connect(d->firstColumn, &AbstractColumn::rowsInserted, this, [=](const AbstractColumn* sender, int, int) {
 		Q_EMIT rowsInserted(sender->rowCount());
 		Q_EMIT rowCountChanged(sender->rowCount());
 	});
@@ -550,7 +550,7 @@ public:
 	SpreadsheetSetColumnsCountCmd(Spreadsheet* spreadsheet, int oldCount, int newCount)
 		: m_spreadsheet(spreadsheet)
 		, m_oldCount(oldCount)
-		, m_newCount (newCount) {
+		, m_newCount(newCount) {
 	}
 
 	virtual void redo() override {
@@ -614,7 +614,7 @@ void Spreadsheet::insertColumns(int before, int count) {
 	beginMacro(i18np("%1: insert 1 column", "%1: insert %2 columns", name(), count));
 	const int cols = columnCount();
 	const int rows = rowCount();
-	const int last = before + count -1;
+	const int last = before + count - 1;
 	Q_EMIT aspectsAboutToBeInserted(before, last);
 	for (int i = 0; i < count; i++) {
 		auto* new_col = new Column(QString::number(cols + i + 1), AbstractColumn::ColumnMode::Double);
