@@ -81,9 +81,19 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 	ui->cbExportTo->addItem(i18n("File"));
 	ui->cbExportTo->addItem(i18n("Clipboard"));
 
-	ui->cbExportArea->addItem(i18n("Object's Bounding Box"), static_cast<int>(Worksheet::ExportArea::BoundingBox));
-	ui->cbExportArea->addItem(i18n("Current Selection"), static_cast<int>(Worksheet::ExportArea::Selection));
-	ui->cbExportArea->addItem(i18n("Complete Worksheet"), static_cast<int>(Worksheet::ExportArea::Worksheet));
+	ui->cbExportArea->addItem(i18n("Bounding Box"), static_cast<int>(Worksheet::ExportArea::BoundingBox));
+	ui->cbExportArea->addItem(i18n("Selection"), static_cast<int>(Worksheet::ExportArea::Selection));
+	ui->cbExportArea->addItem(i18n("Worksheet"), static_cast<int>(Worksheet::ExportArea::Worksheet));
+
+	QString info = i18n(
+		"Specifies the area to export:"
+		"<ul>"
+		"<li>Bounding Box - the bounding box of all objects on the worksheet is exported</li>"
+		"<li>Selection - the area of the currently selected objects is exported</li>"
+		"<li>Worskheet - the complete worksheet area is exported</li>"
+		"</ul>"
+	);
+	ui->cbExportArea->setToolTip(info);
 
 	ui->cbResolution->addItem(
 		i18nc("%1 is the value of DPI of the current screen", "%1 (desktop)", QString::number(GuiTools::dpi(this).first)));
@@ -108,7 +118,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 	KConfigGroup conf = Settings::group(QStringLiteral("ExportWorksheetDialog"));
 	ui->cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
 	ui->cbExportTo->setCurrentIndex(conf.readEntry("ExportTo", 0));
-	ui->cbExportArea->setCurrentIndex(conf.readEntry("Area", 0));
+	ui->cbExportArea->setCurrentIndex(conf.readEntry("Area", 1));
 	ui->chkExportBackground->setChecked(conf.readEntry("Background", true));
 	ui->cbResolution->setCurrentIndex(conf.readEntry("Resolution", 0));
 	m_showOptions = conf.readEntry("ShowOptions", true);
