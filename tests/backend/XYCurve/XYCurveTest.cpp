@@ -2028,7 +2028,7 @@ void XYCurveTest::scatterStrictMonotonicIncreasing() {
 	int callCounter = 0;
 	connect(curve,
 			&XYCurve::pointsUpdated,
-			[this, &callCounter, xValues, yValues](const XYCurve*, const int startIndex, const int endIndex, const QVector<QPointF>& logicalPoints) {
+			[&callCounter, xValues, yValues](const XYCurve*, const int startIndex, const int endIndex, const QVector<QPointF>& logicalPoints) {
 				QCOMPARE(startIndex, 0);
 				QCOMPARE(endIndex, 4);
 
@@ -2105,7 +2105,7 @@ void XYCurveTest::scatterMonotonicIncreasing() {
 	int callCounter = 0;
 	connect(curve,
 			&XYCurve::pointsUpdated,
-			[this, &callCounter, xValues, yValues](const XYCurve*, const int startIndex, const int endIndex, const QVector<QPointF>& logicalPoints) {
+			[&callCounter, xValues, yValues](const XYCurve*, const int startIndex, const int endIndex, const QVector<QPointF>& logicalPoints) {
 				QCOMPARE(startIndex, 0);
 				QCOMPARE(endIndex, 8);
 
@@ -2189,7 +2189,7 @@ void XYCurveTest::scatterMonotonicIncreasingPlotRangeDecreasing() {
 	int callCounter = 0;
 	connect(curve,
 			&XYCurve::pointsUpdated,
-			[this, &callCounter, xValues, yValues](const XYCurve*, const int startIndex, const int endIndex, const QVector<QPointF>& logicalPoints) {
+			[&callCounter, xValues, yValues](const XYCurve*, const int startIndex, const int endIndex, const QVector<QPointF>& logicalPoints) {
 				QCOMPARE(startIndex, 0);
 				QCOMPARE(endIndex, 8);
 
@@ -2268,7 +2268,7 @@ void XYCurveTest::scatterMonotonicDecreasing() {
 	int callCounter = 0;
 	connect(curve,
 			&XYCurve::pointsUpdated,
-			[this, &callCounter, xValues, yValues](const XYCurve*, const int startIndex, const int endIndex, const QVector<QPointF>& logicalPoints) {
+			[&callCounter, xValues, yValues](const XYCurve*, const int startIndex, const int endIndex, const QVector<QPointF>& logicalPoints) {
 				QCOMPARE(startIndex, 0);
 				QCOMPARE(endIndex, 8);
 
@@ -2342,7 +2342,7 @@ void XYCurveTest::lineMonotonicIncreasing() {
 	curve->setXColumn(xColumn);
 
 	int callCounter = 0;
-	connect(curve, &XYCurve::linesUpdated, [this, &callCounter, xValues, yValues](const XYCurve*, const QVector<QLineF>& lines) {
+	connect(curve, &XYCurve::linesUpdated, [&callCounter, xValues, yValues](const XYCurve*, const QVector<QLineF>& lines) {
 		QCOMPARE(xValues.size(), yValues.size());
 
 		VALUES_EQUAL(lines.first().x1(), 1.);
@@ -2419,7 +2419,7 @@ void XYCurveTest::lineMonotonicIncreasingPlotRangeDecreasing() {
 	curve->setXColumn(xColumn);
 
 	int callCounter = 0;
-	connect(curve, &XYCurve::linesUpdated, [this, &callCounter, xValues, yValues](const XYCurve*, const QVector<QLineF>& lines) {
+	connect(curve, &XYCurve::linesUpdated, [&callCounter, xValues, yValues](const XYCurve*, const QVector<QLineF>& lines) {
 		QCOMPARE(xValues.size(), yValues.size());
 
 		VALUES_EQUAL(lines.first().x1(), 1.);
