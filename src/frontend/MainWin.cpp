@@ -439,12 +439,8 @@ void MainWin::initGUI(const QString& fileName) {
 }
 
 void MainWin::customAboutDialog() {
-	// default dialog
-        // KAboutApplicationDialog aboutDialog(KAboutData::applicationData(), this);
-	// custom about dialog
-        AboutDialog aboutDialog(KAboutData::applicationData(), this);
-
-        aboutDialog.exec();
+	AboutDialog aboutDialog(KAboutData::applicationData(), this);
+	aboutDialog.exec();
 }
 
 /**
@@ -504,11 +500,6 @@ void MainWin::resetWelcomeScreen() {
 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "restoreOriginalLayout");
 }
 */
-
-void MainWin::changeVisibleAllDocks(bool visible) {
-	for (auto dock : m_dockManagerContent->dockWidgetsMap())
-		dock->toggleView(visible);
-}
 
 void MainWin::activateNextDock() {
 	const auto* focusedDock = m_dockManagerContent->focusedDockWidget();
@@ -1636,7 +1627,7 @@ void MainWin::openProject(const QString& fileName) {
 			if (d)
 				d->part()->suppressDeletion(true);
 		}
-		changeVisibleAllDocks(false);
+
 		for (auto dock : m_dockManagerContent->dockWidgetsMap()) {
 			auto* d = dynamic_cast<ContentDockWidget*>(dock);
 			if (d)

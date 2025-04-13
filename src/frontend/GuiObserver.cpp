@@ -10,7 +10,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/worksheet/Image.h"
