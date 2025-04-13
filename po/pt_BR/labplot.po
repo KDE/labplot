@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-07 00:38+0000\n"
+"POT-Creation-Date: 2025-04-13 00:37+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -26536,52 +26536,52 @@ msgstr ""
 msgid "Couldn't find preview.sty."
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:81
+#: src/tools/TeXRenderer.cpp:82
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't open the file"
 msgstr "Não foi possível abrir o arquivo %1 para leitura."
 
-#: src/tools/TeXRenderer.cpp:157
+#: src/tools/TeXRenderer.cpp:165
 #, fuzzy, kde-format
 #| msgid "File info"
 msgid "%1 not found"
 msgstr "Informações do arquivo"
 
-#: src/tools/TeXRenderer.cpp:193
+#: src/tools/TeXRenderer.cpp:201
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Timeout: Unable to generate latex file"
 msgstr "Falha ao abrir"
 
-#: src/tools/TeXRenderer.cpp:196
+#: src/tools/TeXRenderer.cpp:204
 #, kde-format
 msgid "process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:258
+#: src/tools/TeXRenderer.cpp:266
 #, fuzzy, kde-format
 #| msgid "File info"
 msgid "dvips not found"
 msgstr "Informações do arquivo"
 
-#: src/tools/TeXRenderer.cpp:265
+#: src/tools/TeXRenderer.cpp:273
 #, kde-format
 msgid "dvips process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:287
+#: src/tools/TeXRenderer.cpp:295
 #, fuzzy, kde-format
 #| msgid "File info"
 msgid "convert not found"
 msgstr "Informações do arquivo"
 
-#: src/tools/TeXRenderer.cpp:295
+#: src/tools/TeXRenderer.cpp:303
 #, kde-format
 msgid "convert process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:317
+#: src/tools/TeXRenderer.cpp:325
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Unable to open file:"

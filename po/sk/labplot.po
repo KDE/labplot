@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-07 00:38+0000\n"
+"POT-Creation-Date: 2025-04-13 00:37+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -26282,55 +26282,55 @@ msgstr ""
 msgid "Couldn't find preview.sty."
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:81
+#: src/tools/TeXRenderer.cpp:82
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't open the file"
 msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 
-#: src/tools/TeXRenderer.cpp:157
+#: src/tools/TeXRenderer.cpp:165
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "File Information"
 msgid "%1 not found"
 msgstr "Informácia o súbore"
 
-#: src/tools/TeXRenderer.cpp:193
+#: src/tools/TeXRenderer.cpp:201
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Timeout: Unable to generate latex file"
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/tools/TeXRenderer.cpp:196
+#: src/tools/TeXRenderer.cpp:204
 #, kde-format
 msgid "process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:258
+#: src/tools/TeXRenderer.cpp:266
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "File Information"
 msgid "dvips not found"
 msgstr "Informácia o súbore"
 
-#: src/tools/TeXRenderer.cpp:265
+#: src/tools/TeXRenderer.cpp:273
 #, kde-format
 msgid "dvips process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:287
+#: src/tools/TeXRenderer.cpp:295
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "File Information"
 msgid "convert not found"
 msgstr "Informácia o súbore"
 
-#: src/tools/TeXRenderer.cpp:295
+#: src/tools/TeXRenderer.cpp:303
 #, kde-format
 msgid "convert process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:317
+#: src/tools/TeXRenderer.cpp:325
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Unable to open file:"

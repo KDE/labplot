@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-07 00:38+0000\n"
+"POT-Creation-Date: 2025-04-13 00:37+0000\n"
 "PO-Revision-Date: 2022-09-05 22:28+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -25216,52 +25216,52 @@ msgstr ""
 msgid "Couldn't find preview.sty."
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:81
+#: src/tools/TeXRenderer.cpp:82
 #, fuzzy, kde-format
 #| msgid "could not open device"
 msgid "Couldn't open the file"
 msgstr "تعذّر فتح الجهاز"
 
-#: src/tools/TeXRenderer.cpp:157
+#: src/tools/TeXRenderer.cpp:165
 #, fuzzy, kde-format
 #| msgid "File not found"
 msgid "%1 not found"
 msgstr "الملف غير موجود"
 
-#: src/tools/TeXRenderer.cpp:193
+#: src/tools/TeXRenderer.cpp:201
 #, fuzzy, kde-format
 #| msgid "Failed to open the file '%1'."
 msgid "Timeout: Unable to generate latex file"
 msgstr "فشل في فتح الملفّ '%1'."
 
-#: src/tools/TeXRenderer.cpp:196
+#: src/tools/TeXRenderer.cpp:204
 #, kde-format
 msgid "process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:258
+#: src/tools/TeXRenderer.cpp:266
 #, fuzzy, kde-format
 #| msgid "File not found"
 msgid "dvips not found"
 msgstr "الملف غير موجود"
 
-#: src/tools/TeXRenderer.cpp:265
+#: src/tools/TeXRenderer.cpp:273
 #, kde-format
 msgid "dvips process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:287
+#: src/tools/TeXRenderer.cpp:295
 #, fuzzy, kde-format
 #| msgid "File not found"
 msgid "convert not found"
 msgstr "الملف غير موجود"
 
-#: src/tools/TeXRenderer.cpp:295
+#: src/tools/TeXRenderer.cpp:303
 #, kde-format
 msgid "convert process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:317
+#: src/tools/TeXRenderer.cpp:325
 #, kde-format
 msgid "Unable to open file:"
 msgstr "غير قادر على حذف الملف:"
