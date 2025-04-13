@@ -111,7 +111,7 @@ void Spreadsheet::init() {
  * connects to the signals emitted in the first column to react on the row count changes that are
  * done internally in Column and to emit the corresponding signals in Spreadsheet.
  * called initially and on column count changes (columns inserts/removals).
-*/
+ */
 void Spreadsheet::initConnectionsRowCountChanges() {
 	// check first if the first column was changed
 	Q_D(Spreadsheet);
