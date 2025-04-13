@@ -258,26 +258,8 @@ void ExportWorksheetDialog::okClicked() {
 
 	if (exportToFile) {
 		QString filename = ui->leFileName->text();
-		// append ending if not present
-		const auto format = Worksheet::ExportFormat(ui->cbFormat->currentData().toInt());
 
-		bool changed = false;
-		if (format == Worksheet::ExportFormat::JPG) { // can be .jpg (default) or .jpeg
-			if (! (filename.endsWith(formatExtension(format), Qt::CaseInsensitive) || filename.endsWith(QStringLiteral(".jpeg"), Qt::CaseInsensitive))) {
-				filename.append(formatExtension(format));
-				changed = true;
-			}
-		} else { // all other formats have a single ending
-			if (! filename.endsWith(formatExtension(format), Qt::CaseInsensitive)) {
-				filename.append(formatExtension(format));
-				changed = true;
-			}
-		}
-
-		if (changed)
-			ui->leFileName->setText(filename);
-
-		if ((m_askOverwrite || changed) && QFile::exists(filename)) {
+		if (m_askOverwrite && QFile::exists(filename)) {
 			int status = KMessageBox::questionTwoActions(this,
 						 i18n("The file already exists. Do you really want to overwrite it?"),
 						 i18n("Export"),
@@ -384,10 +366,10 @@ void ExportWorksheetDialog::fileNameChanged(const QString& name) {
 		m_okButton->setEnabled(false);
 		return;
 	}
-	QString path = ui->leFileName->text();
-	int pos = path.lastIndexOf(QLatin1String("/"));
+	QString filename = ui->leFileName->text();
+	int pos = filename.lastIndexOf(QLatin1String("/"));
 	if (pos != -1) {
-		QString dir = path.left(pos);
+		QString dir = filename.left(pos);
 		bool invalid = !QDir(dir).exists();
 		GuiTools::highlight(ui->leFileName, invalid);
 		if (invalid) {
@@ -395,6 +377,23 @@ void ExportWorksheetDialog::fileNameChanged(const QString& name) {
 			return;
 		}
 	}
+
+	// append file extension if not present
+	bool changed = false;
+	const auto format = Worksheet::ExportFormat(ui->cbFormat->currentData().toInt());
+	if (format == Worksheet::ExportFormat::JPG) { // can be .jpg (default) or .jpeg
+		if (! (filename.endsWith(formatExtension(format), Qt::CaseInsensitive) || filename.endsWith(QStringLiteral(".jpeg"), Qt::CaseInsensitive))) {
+			filename.append(formatExtension(format));
+			changed = true;
+		}
+	} else { // all other formats have a single ending
+		if (! filename.endsWith(formatExtension(format), Qt::CaseInsensitive)) {
+			filename.append(formatExtension(format));
+			changed = true;
+		}
+	}
+	if (changed)
+		ui->leFileName->setText(filename);
 
 	m_askOverwrite = true;
 	m_okButton->setEnabled(true);
