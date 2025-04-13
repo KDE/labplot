@@ -163,6 +163,10 @@ private:
 	QAction* m_nextWindowAction;
 	QAction* m_prevWindowAction;
 	QAction* m_newDatapickerAction;
+#ifdef HAVE_CANTOR_LIBS
+	QAction* m_lastUsedNotebookAction{nullptr};
+	QToolButton* m_tbNotebook{nullptr};
+#endif
 
 	// toggling dock widgets, status bar and full screen
 	QAction* m_projectExplorerDockAction;
@@ -225,7 +229,6 @@ protected:
 private Q_SLOTS:
 	void initGUI(const QString&);
 	void customAboutDialog();
-	void changeVisibleAllDocks(bool);
 	void activateNextDock();
 	void activatePreviousDock();
 	void dockWidgetRemoved(ads::CDockWidget*);

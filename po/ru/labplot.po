@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-26 00:38+0000\n"
+"POT-Creation-Date: 2025-04-13 00:37+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -380,13 +380,13 @@ msgstr "In%1"
 msgid "Import Data"
 msgstr "Импорт данных"
 
-#: src/backend/core/AbstractPart.cpp:126 src/frontend/MainWin.cpp:679
-#: src/frontend/MainWin.cpp:688
+#: src/backend/core/AbstractPart.cpp:126 src/frontend/MainWin.cpp:698
+#: src/frontend/MainWin.cpp:707
 #, kde-format
 msgid "From File..."
 msgstr "Из файла…"
 
-#: src/backend/core/AbstractPart.cpp:128 src/frontend/MainWin.cpp:700
+#: src/backend/core/AbstractPart.cpp:128 src/frontend/MainWin.cpp:719
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Из базы данных SQL…"
@@ -412,7 +412,7 @@ msgstr "Печать"
 msgid "Print Preview"
 msgstr "Предварительный просмотр"
 
-#: src/backend/core/AbstractPart.cpp:147 src/frontend/MainWin.cpp:772
+#: src/backend/core/AbstractPart.cpp:147 src/frontend/MainWin.cpp:791
 #, kde-format
 msgid "&Close"
 msgstr "&Закрыть"
@@ -1985,7 +1985,7 @@ msgstr "Неизвестен"
 
 # BUGME: please split --aspotashev
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:650 src/frontend/MainWin.cpp:1996
+#: src/frontend/MainWin.cpp:669 src/frontend/MainWin.cpp:2015
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -8732,7 +8732,7 @@ msgstr "Справочный диапазон"
 
 # BUGME: please add ctxt --aspotashev
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:552
-#: src/frontend/MainWin.cpp:898 src/frontend/notebook/NotebookView.cpp:168
+#: src/frontend/MainWin.cpp:917 src/frontend/notebook/NotebookView.cpp:168
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:295
 #: src/frontend/worksheet/WorksheetView.cpp:434
@@ -10059,22 +10059,22 @@ msgstr "%1: задание количества точек интерполяц�
 msgid "%1: set rug orientation"
 msgstr "%1: задание ориентации rug-графика"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1565
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1573
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr "Ошибка: Для интерполяции сплайнами Акима необходимо не менее 5 точек."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1567
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1575
 #, kde-format
 msgid "Error: Could not initialize the spline function."
 msgstr "Ошибка: Не удалось инициализировать сплайн-функцию"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1580
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1588
 #, kde-format
 msgid "x values must be monotonically increasing."
 msgstr "Значения по X должны монотонно увеличиваться."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1583
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1591
 #, kde-format
 msgid "Error: %1"
 msgstr "Ошибка: %1"
@@ -10866,7 +10866,7 @@ msgstr "Переключение между преставлением в вид
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:53
 #: src/frontend/datasources/ImportDatasetWidget.cpp:51
-#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:124
+#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:125
 #: src/frontend/examples/ExamplesWidget.cpp:51
 #, kde-format
 msgid "Enter the keyword you want to search for"
@@ -10874,7 +10874,7 @@ msgstr "Введите ключевое слово для поиска"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:56
 #: src/frontend/datasources/ImportDatasetWidget.cpp:54
-#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:127
+#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:128
 #: src/frontend/examples/ExamplesWidget.cpp:54
 #, kde-format
 msgid "Search..."
@@ -11124,7 +11124,7 @@ msgstr "Кривая"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4085
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4139
-#: src/frontend/worksheet/WorksheetView.cpp:2209
+#: src/frontend/worksheet/WorksheetView.cpp:2204
 #, kde-format
 msgid "Failed to export"
 msgstr "Не удалось выполнить экспортирование"
@@ -11132,7 +11132,7 @@ msgstr "Не удалось выполнить экспортирование"
 #: src/frontend/datapicker/DatapickerImageView.cpp:881
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4085
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4139
-#: src/frontend/worksheet/WorksheetView.cpp:2209
+#: src/frontend/worksheet/WorksheetView.cpp:2204
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
 msgstr "Не удалось выполнить запись в «%1». Проверьте путь."
@@ -12077,10 +12077,12 @@ msgstr ""
 msgid "Data Format"
 msgstr "Формат данных"
 
+#. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
 #: src/frontend/datasources/ImportFileWidget.cpp:1273
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
+#: src/frontend/ui/settingsworksheetpage.ui:134
 #, kde-format
 msgid "Preview"
 msgstr "Предпросмотр"
@@ -12375,31 +12377,31 @@ msgstr ""
 
 # BUGME: please add ctxt --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lCategories)
-#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:130
+#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:131
 #: src/frontend/ui/datasources/importdatasetwidget.ui:86
 #, kde-format
 msgid "Dataset:"
 msgstr "Набор данных:"
 
-#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:241
+#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:242
 #, fuzzy, kde-format
 #| msgid "Last read: %1"
 msgid "Could not read %1"
 msgstr "Время последнего чтения: %1"
 
-#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:249
+#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:250
 #, fuzzy, kde-format
 #| msgid "could not open device"
 msgid "Could not open %1"
 msgstr "не удалось открыть устройство"
 
 # BUGME: please add context --aspotashev
-#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:266
+#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:267
 #, fuzzy, kde-format
 msgid "Could not create %1"
 msgstr "Функции"
 
-#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:295
+#: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:296
 #, fuzzy, kde-format
 #| msgid "Couldn't save the file '%1'."
 msgid "Could not find .csv files in %1"
@@ -12541,7 +12543,7 @@ msgid "Open LabPlot Project"
 msgstr "Открытие проекта LabPlot"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:1491
+#: src/frontend/MainWin.cpp:1510
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "Проекты LabPlot (%1)"
@@ -12572,8 +12574,8 @@ msgstr "Имя папки:"
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:398 src/frontend/MainWin.cpp:644
-#: src/frontend/MainWin.cpp:1978 src/frontend/SettingsDialog.cpp:64
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:398 src/frontend/MainWin.cpp:663
+#: src/frontend/MainWin.cpp:1997 src/frontend/SettingsDialog.cpp:64
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12868,7 +12870,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2877
+#: src/frontend/MainWin.cpp:2903
 #, kde-format
 msgid "Warning"
 msgstr "Предупреждение"
@@ -12960,8 +12962,8 @@ msgstr "Области данных"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:270
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:281
 #: src/frontend/dockwidgets/CustomPointDock.cpp:134
-#: src/frontend/dockwidgets/ImageDock.cpp:185
-#: src/frontend/dockwidgets/ImageDock.cpp:195
+#: src/frontend/dockwidgets/ImageDock.cpp:186
+#: src/frontend/dockwidgets/ImageDock.cpp:196
 #: src/frontend/widgets/LabelWidget.cpp:491
 #: src/frontend/widgets/LabelWidget.cpp:502
 #, kde-format
@@ -12975,8 +12977,8 @@ msgstr "Вверху"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:272
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:283
 #: src/frontend/dockwidgets/CustomPointDock.cpp:136
-#: src/frontend/dockwidgets/ImageDock.cpp:187
-#: src/frontend/dockwidgets/ImageDock.cpp:197
+#: src/frontend/dockwidgets/ImageDock.cpp:188
+#: src/frontend/dockwidgets/ImageDock.cpp:198
 #: src/frontend/widgets/LabelWidget.cpp:493
 #: src/frontend/widgets/LabelWidget.cpp:504
 #, kde-format
@@ -13058,8 +13060,8 @@ msgstr "Полузаполненная, большая"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:264
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:276
 #: src/frontend/dockwidgets/CustomPointDock.cpp:129
-#: src/frontend/dockwidgets/ImageDock.cpp:180
-#: src/frontend/dockwidgets/ImageDock.cpp:190
+#: src/frontend/dockwidgets/ImageDock.cpp:181
+#: src/frontend/dockwidgets/ImageDock.cpp:191
 #: src/frontend/dockwidgets/XYCurveDock.cpp:518
 #: src/frontend/widgets/BackgroundWidget.cpp:118
 #: src/frontend/widgets/LabelWidget.cpp:485
@@ -13076,8 +13078,8 @@ msgstr "Слева"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:266
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:278
 #: src/frontend/dockwidgets/CustomPointDock.cpp:131
-#: src/frontend/dockwidgets/ImageDock.cpp:182
-#: src/frontend/dockwidgets/ImageDock.cpp:192
+#: src/frontend/dockwidgets/ImageDock.cpp:183
+#: src/frontend/dockwidgets/ImageDock.cpp:193
 #: src/frontend/dockwidgets/XYCurveDock.cpp:519
 #: src/frontend/widgets/BackgroundWidget.cpp:119
 #: src/frontend/widgets/LabelWidget.cpp:487
@@ -13638,10 +13640,10 @@ msgstr "По строкам"
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:282
 #: src/frontend/dockwidgets/CustomPointDock.cpp:130
 #: src/frontend/dockwidgets/CustomPointDock.cpp:135
-#: src/frontend/dockwidgets/ImageDock.cpp:181
-#: src/frontend/dockwidgets/ImageDock.cpp:186
-#: src/frontend/dockwidgets/ImageDock.cpp:191
-#: src/frontend/dockwidgets/ImageDock.cpp:196
+#: src/frontend/dockwidgets/ImageDock.cpp:182
+#: src/frontend/dockwidgets/ImageDock.cpp:187
+#: src/frontend/dockwidgets/ImageDock.cpp:192
+#: src/frontend/dockwidgets/ImageDock.cpp:197
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:318
 #: src/frontend/widgets/LabelWidget.cpp:486
 #: src/frontend/widgets/LabelWidget.cpp:492
@@ -14673,7 +14675,7 @@ msgstr ""
 "Не удалось открыть файл коллекций примеров %1. Проверьте правильность "
 "установки."
 
-#: src/frontend/GuiObserver.cpp:177 src/frontend/MainWin.cpp:1398
+#: src/frontend/GuiObserver.cpp:177 src/frontend/MainWin.cpp:1417
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -15496,329 +15498,329 @@ msgid "&Windows"
 msgstr "&Окно"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
-#: src/frontend/MainWin.cpp:205 src/frontend/ui/settingsworksheetpage.ui:75
+#: src/frontend/MainWin.cpp:210 src/frontend/ui/settingsworksheetpage.ui:106
 #: src/frontend/worksheet/WorksheetView.cpp:269
 #, kde-format
 msgid "Presenter Mode"
 msgstr "Режим презентации"
 
-#: src/frontend/MainWin.cpp:205
+#: src/frontend/MainWin.cpp:210
 #, kde-format
 msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
 "started."
 msgstr "В проекте отсутствуют листы. Режим презентации не будет запущен."
 
-#: src/frontend/MainWin.cpp:219
+#: src/frontend/MainWin.cpp:224
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Добро пожаловать в LabPlot %1"
 
-#: src/frontend/MainWin.cpp:613
+#: src/frontend/MainWin.cpp:632
 #, kde-format
 msgid "&Open Example"
 msgstr "&Открыть пример"
 
 # BUGME: please add to Russian glossary --aspotashev
 # BUGME: please split --aspotashev
-#: src/frontend/MainWin.cpp:634 src/frontend/MainWin.cpp:1962
+#: src/frontend/MainWin.cpp:653 src/frontend/MainWin.cpp:1981
 #, kde-format
 msgid "Workbook"
 msgstr "Книга"
 
-#: src/frontend/MainWin.cpp:636
+#: src/frontend/MainWin.cpp:655
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 "Создание новой книги для формирования коллекций таблиц, матриц и графиков"
 
-#: src/frontend/MainWin.cpp:639 src/frontend/MainWin.cpp:1970
+#: src/frontend/MainWin.cpp:658 src/frontend/MainWin.cpp:1989
 #, kde-format
 msgid "Data Extractor"
 msgstr "Средство извлечения данных"
 
-#: src/frontend/MainWin.cpp:640
+#: src/frontend/MainWin.cpp:659
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "Создание средства извлечения данных с изображения"
 
-#: src/frontend/MainWin.cpp:646
+#: src/frontend/MainWin.cpp:665
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "Создание новой таблицы для редактирования данных"
 
-#: src/frontend/MainWin.cpp:652
+#: src/frontend/MainWin.cpp:671
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Создание новой матрицы для редактирования данных"
 
 # BUGME: split strings (e.g. toolbar name) --aspotashev
-#: src/frontend/MainWin.cpp:656 src/frontend/MainWin.cpp:2014
+#: src/frontend/MainWin.cpp:675 src/frontend/MainWin.cpp:2033
 #: src/frontend/SettingsDialog.cpp:59
 #, kde-format
 msgid "Worksheet"
 msgstr "Лист"
 
-#: src/frontend/MainWin.cpp:658
+#: src/frontend/MainWin.cpp:677
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "Создание нового листа для построения данных"
 
 # BUGME: please add colon (:) --aspotashev
-#: src/frontend/MainWin.cpp:662 src/frontend/MainWin.cpp:2022
+#: src/frontend/MainWin.cpp:681 src/frontend/MainWin.cpp:2041
 #, kde-format
 msgid "Note"
 msgstr "Заметка"
 
-#: src/frontend/MainWin.cpp:663
+#: src/frontend/MainWin.cpp:682
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Создание новой заметки для ввода произвольного текста"
 
 # "Создать [...]" --aspotashev
-#: src/frontend/MainWin.cpp:667 src/frontend/MainWin.cpp:1954
+#: src/frontend/MainWin.cpp:686 src/frontend/MainWin.cpp:1973
 #, kde-format
 msgid "Folder"
 msgstr "Папка"
 
-#: src/frontend/MainWin.cpp:668
+#: src/frontend/MainWin.cpp:687
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr ""
 "Создание новой папки для формирования коллекции листов и других элементов"
 
-#: src/frontend/MainWin.cpp:673
+#: src/frontend/MainWin.cpp:692
 #, kde-format
 msgid "Live Data Source..."
 msgstr "Источник передачи данных…"
 
-#: src/frontend/MainWin.cpp:674
+#: src/frontend/MainWin.cpp:693
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 "Создание источника передачи данных для чтения данных с устройства реального "
 "времени"
 
-#: src/frontend/MainWin.cpp:681 src/frontend/MainWin.cpp:690
+#: src/frontend/MainWin.cpp:700 src/frontend/MainWin.cpp:709
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Импорт данных из обычного файла"
 
-#: src/frontend/MainWin.cpp:695
+#: src/frontend/MainWin.cpp:714
 #, fuzzy, kde-format
 #| msgid "From File..."
 msgid "From kaggle.com..."
 msgstr "Из файла…"
 
-#: src/frontend/MainWin.cpp:696
+#: src/frontend/MainWin.cpp:715
 #, fuzzy, kde-format
 #| msgid "Import data from a regular file"
 msgid "Import data from kaggle.com"
 msgstr "Импорт данных из обычного файла"
 
-#: src/frontend/MainWin.cpp:701
+#: src/frontend/MainWin.cpp:720
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Импорт данных из базы данных SQL"
 
 # BUGME: please add context --aspotashev
-#: src/frontend/MainWin.cpp:705
+#: src/frontend/MainWin.cpp:724
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Из коллекции набора данных…"
 
 # BUGME: please add semantic ctxt --aspotashev
-#: src/frontend/MainWin.cpp:706
+#: src/frontend/MainWin.cpp:725
 #, fuzzy, kde-format
 #| msgid "Imports data from an online dataset"
 msgid "Import data from an online dataset"
 msgstr "Импорт данных из набора данных в Интернете"
 
-#: src/frontend/MainWin.cpp:710
+#: src/frontend/MainWin.cpp:729
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "Проект LabPlot…"
 
-#: src/frontend/MainWin.cpp:711
+#: src/frontend/MainWin.cpp:730
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Импорт проекта из файла проекта LabPlot (.lml)"
 
 # BUGME: please add @title:window --aspotashev
-#: src/frontend/MainWin.cpp:716
+#: src/frontend/MainWin.cpp:735
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Проект Origin (OPJ)…"
 
-#: src/frontend/MainWin.cpp:717
+#: src/frontend/MainWin.cpp:736
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr "Импорт проекта из файла проекта Origin приложения OriginLab (.opj)"
 
 # BUGME: please split strings --aspotashev
-#: src/frontend/MainWin.cpp:722
+#: src/frontend/MainWin.cpp:741
 #, kde-format
 msgid "Export..."
 msgstr "Экспорт…"
 
-#: src/frontend/MainWin.cpp:723
+#: src/frontend/MainWin.cpp:742
 #, kde-format
 msgid "Export selected element"
 msgstr "Экспорт выделенного сегмента"
 
-#: src/frontend/MainWin.cpp:729 src/frontend/MainWin.cpp:2500
-#: src/frontend/MainWin.cpp:2508
+#: src/frontend/MainWin.cpp:748 src/frontend/MainWin.cpp:2522
+#: src/frontend/MainWin.cpp:2530
 #, kde-format
 msgid "Share"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:734
+#: src/frontend/MainWin.cpp:753
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Обозреватель карты цветов"
 
-#: src/frontend/MainWin.cpp:735
+#: src/frontend/MainWin.cpp:754
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "Открытие диалогового окна для просмотра доступных карт цветов"
 
-#: src/frontend/MainWin.cpp:744
+#: src/frontend/MainWin.cpp:763
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "Редактор метаданных FITS…"
 
-#: src/frontend/MainWin.cpp:745
+#: src/frontend/MainWin.cpp:764
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Запуск редактора для редактирования метаданных FITS"
 
-#: src/frontend/MainWin.cpp:754
+#: src/frontend/MainWin.cpp:773
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Журнал действий…"
 
-#: src/frontend/MainWin.cpp:774
+#: src/frontend/MainWin.cpp:793
 #, kde-format
 msgid "Close the active window"
 msgstr "Закрыть текущее окно"
 
-#: src/frontend/MainWin.cpp:777
+#: src/frontend/MainWin.cpp:796
 #, kde-format
 msgid "Close &All"
 msgstr "Закрыть &все"
 
-#: src/frontend/MainWin.cpp:778
+#: src/frontend/MainWin.cpp:797
 #, kde-format
 msgid "Close all the windows"
 msgstr "Закрыть все окна"
 
-#: src/frontend/MainWin.cpp:781
+#: src/frontend/MainWin.cpp:800
 #, kde-format
 msgid "Ne&xt"
 msgstr "&Следующее"
 
-#: src/frontend/MainWin.cpp:783
+#: src/frontend/MainWin.cpp:802
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Переместить фокус на следующее окно"
 
-#: src/frontend/MainWin.cpp:786
+#: src/frontend/MainWin.cpp:805
 #, kde-format
 msgid "Pre&vious"
 msgstr "&Предыдущее"
 
-#: src/frontend/MainWin.cpp:788
+#: src/frontend/MainWin.cpp:807
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Переместить фокус на предыдущее окно"
 
-#: src/frontend/MainWin.cpp:795
+#: src/frontend/MainWin.cpp:814
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Только текущая &папка"
 
-#: src/frontend/MainWin.cpp:800
+#: src/frontend/MainWin.cpp:819
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Текущая папка и &подпапка"
 
-#: src/frontend/MainWin.cpp:804
+#: src/frontend/MainWin.cpp:823
 #, kde-format
 msgid "&All"
 msgstr "&Все"
 
-#: src/frontend/MainWin.cpp:826
+#: src/frontend/MainWin.cpp:845
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Показать использование памяти"
 
-#: src/frontend/MainWin.cpp:834
+#: src/frontend/MainWin.cpp:853
 #, kde-format
 msgid "Project Explorer"
 msgstr "Проект"
 
-#: src/frontend/MainWin.cpp:839
+#: src/frontend/MainWin.cpp:858
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Панель свойств"
 
-#: src/frontend/MainWin.cpp:844
+#: src/frontend/MainWin.cpp:863
 #, fuzzy, kde-format
 msgid "Worksheet Preview"
 msgstr "Свойства документа"
 
-#: src/frontend/MainWin.cpp:867
+#: src/frontend/MainWin.cpp:886
 #, kde-format
 msgid "Configure CAS..."
 msgstr "Настройка СКА..."
 
-#: src/frontend/MainWin.cpp:868
+#: src/frontend/MainWin.cpp:887
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
 "systems or to enable new ones"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:928
+#: src/frontend/MainWin.cpp:947
 #, kde-format
 msgid "Window Visibility"
 msgstr "Видимость окон"
 
-#: src/frontend/MainWin.cpp:945
+#: src/frontend/MainWin.cpp:964
 #, kde-format
 msgid "Color Scheme"
 msgstr "Цветовая схема"
 
-#: src/frontend/MainWin.cpp:1003
+#: src/frontend/MainWin.cpp:1022
 #, fuzzy, kde-format
 #| msgid "The current project %1 has been modified. Do you want to save it?"
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "Текущий проект %1 был изменён. Сохранить изменения?"
 
-#: src/frontend/MainWin.cpp:1004
+#: src/frontend/MainWin.cpp:1023
 #, kde-format
 msgid "Save Project"
 msgstr "Сохранение проекта"
 
-#: src/frontend/MainWin.cpp:1359
+#: src/frontend/MainWin.cpp:1378
 #, kde-format
 msgid "%1: created"
 msgstr "%1: создание"
 
-#: src/frontend/MainWin.cpp:1385
+#: src/frontend/MainWin.cpp:1404
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Проект"
 
-#: src/frontend/MainWin.cpp:1410
+#: src/frontend/MainWin.cpp:1429
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Свойства документа"
 
-#: src/frontend/MainWin.cpp:1419
+#: src/frontend/MainWin.cpp:1438
 #, fuzzy, kde-format
 #| msgid "Content"
 msgctxt "@title:window"
@@ -15826,77 +15828,77 @@ msgid "Content"
 msgstr "Содержимое"
 
 # BUGME: please add @title:window --aspotashev
-#: src/frontend/MainWin.cpp:1496
+#: src/frontend/MainWin.cpp:1515
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Проекты Origin (%1)"
 
-#: src/frontend/MainWin.cpp:1502
+#: src/frontend/MainWin.cpp:1521
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "Проект Cantor (*.cws)"
 
-#: src/frontend/MainWin.cpp:1503
+#: src/frontend/MainWin.cpp:1522
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Блокноты Jupyter (*.ipynb)"
 
-#: src/frontend/MainWin.cpp:1510
+#: src/frontend/MainWin.cpp:1529
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Все поддерживаемые файлы (%1)"
 
 # BUGME: please add @title:window --aspotashev
-#: src/frontend/MainWin.cpp:1514
+#: src/frontend/MainWin.cpp:1533
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Открытие проекта"
 
-#: src/frontend/MainWin.cpp:1531
+#: src/frontend/MainWin.cpp:1550
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "Файл проекта %1 уже открыт."
 
 # BUGME: please add @title:window --aspotashev
-#: src/frontend/MainWin.cpp:1531 src/frontend/MainWin.cpp:1539
-#: src/frontend/MainWin.cpp:1544
+#: src/frontend/MainWin.cpp:1550 src/frontend/MainWin.cpp:1558
+#: src/frontend/MainWin.cpp:1563
 #, kde-format
 msgid "Open Project"
 msgstr "Открытие проекта"
 
-#: src/frontend/MainWin.cpp:1539
+#: src/frontend/MainWin.cpp:1558
 #, fuzzy, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "Указанного файла не существует."
 
-#: src/frontend/MainWin.cpp:1544
+#: src/frontend/MainWin.cpp:1563
 #, fuzzy, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "Не удалось сохранить файл «%1»."
 
-#: src/frontend/MainWin.cpp:1552
+#: src/frontend/MainWin.cpp:1571
 #, kde-format
 msgid "Loading %1..."
 msgstr "Загрузка %1…"
 
-#: src/frontend/MainWin.cpp:1607
+#: src/frontend/MainWin.cpp:1626
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: открытие"
 
-#: src/frontend/MainWin.cpp:1642
+#: src/frontend/MainWin.cpp:1661
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Проект успешно открыт (затрачено %1 секунд)."
 
-#: src/frontend/MainWin.cpp:1734
+#: src/frontend/MainWin.cpp:1753
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Сохранение проекта"
 
-#: src/frontend/MainWin.cpp:1736
+#: src/frontend/MainWin.cpp:1755
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15905,102 +15907,102 @@ msgstr ""
 "Проекты LabPlot (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:1763
+#: src/frontend/MainWin.cpp:1782
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Не удалось открыть временный файл для записи."
 
-#: src/frontend/MainWin.cpp:1843
+#: src/frontend/MainWin.cpp:1862
 #, kde-format
 msgid "Project saved"
 msgstr "Проект сохранён"
 
-#: src/frontend/MainWin.cpp:1859
+#: src/frontend/MainWin.cpp:1878
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Не удалось сохранить файл «%1»."
 
-#: src/frontend/MainWin.cpp:1864
+#: src/frontend/MainWin.cpp:1883
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Не удалось открыть файл «%1» для записи."
 
-#: src/frontend/MainWin.cpp:1914
+#: src/frontend/MainWin.cpp:1933
 #, kde-format
 msgid "Changed"
 msgstr "Изменён"
 
-#: src/frontend/MainWin.cpp:1929 src/frontend/MainWin.cpp:1941
+#: src/frontend/MainWin.cpp:1948 src/frontend/MainWin.cpp:1960
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Подготовка печати %1"
 
-#: src/frontend/MainWin.cpp:1931 src/frontend/MainWin.cpp:1943
+#: src/frontend/MainWin.cpp:1950 src/frontend/MainWin.cpp:1962
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 напечатан"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2463
+#: src/frontend/MainWin.cpp:2485
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
 #: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Cursor"
 msgstr "Курсор"
 
-#: src/frontend/MainWin.cpp:2500
+#: src/frontend/MainWin.cpp:2522
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2504
+#: src/frontend/MainWin.cpp:2526
 #, fuzzy, kde-format
 msgid "Project shared successfully"
 msgstr "Проект сохранён"
 
-#: src/frontend/MainWin.cpp:2507
+#: src/frontend/MainWin.cpp:2529
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2776
+#: src/frontend/MainWin.cpp:2802
 #, kde-format
 msgid "Running Kaggle CLI tool failed"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2777
+#: src/frontend/MainWin.cpp:2803
 #, kde-format
 msgid ""
 "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
 "\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2840
+#: src/frontend/MainWin.cpp:2866
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 экспортирован"
 
-#: src/frontend/MainWin.cpp:2847
+#: src/frontend/MainWin.cpp:2873
 #, kde-format
 msgid "FITS files saved"
 msgstr "Сохранены файлы FITS"
 
-#: src/frontend/MainWin.cpp:2859
+#: src/frontend/MainWin.cpp:2885
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Клиент MQTT %1"
 
-#: src/frontend/MainWin.cpp:2877
+#: src/frontend/MainWin.cpp:2903
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Клиент MQTT на этом хосте уже существует!"
 
-#: src/frontend/MainWin.cpp:2881
+#: src/frontend/MainWin.cpp:2907
 #, kde-format
 msgid "Live data source%1"
 msgstr "Источник передачи данных %1"
 
-#: src/frontend/MainWin.cpp:2932
+#: src/frontend/MainWin.cpp:2958
 #, fuzzy, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Создание новой заметки для ввода произвольного текста"
@@ -16336,7 +16338,7 @@ msgstr "Markdown"
 
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/frontend/notebook/NotebookView.cpp:107
-#: src/frontend/ui/settingsworksheetpage.ui:147
+#: src/frontend/ui/settingsworksheetpage.ui:65
 #: src/frontend/widgets/LabelWidget.cpp:478
 #, kde-format
 msgid "LaTeX"
@@ -16436,8 +16438,8 @@ msgstr "Шаблоны графика"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/frontend/PlotTemplateDialog.cpp:44
-#: src/frontend/SettingsWorksheetPage.cpp:61
-#: src/frontend/SettingsWorksheetPage.cpp:74
+#: src/frontend/SettingsWorksheetPage.cpp:66
+#: src/frontend/SettingsWorksheetPage.cpp:82
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:99
 #: src/frontend/widgets/ThemesComboBox.cpp:72
 #: src/frontend/widgets/ThemesWidget.cpp:71
@@ -16964,7 +16966,22 @@ msgstr "Запрашивать подтверждение при перезап�
 msgid "Default theme for newly created worksheets and worksheet objects"
 msgstr "Тема по умолчанию для создаваемых листов и объектов листа"
 
-#: src/frontend/SettingsWorksheetPage.cpp:137
+#: src/frontend/SettingsWorksheetPage.cpp:30
+#, kde-format
+msgid "Small (3cm x 3cm)"
+msgstr ""
+
+#: src/frontend/SettingsWorksheetPage.cpp:31
+#, kde-format
+msgid "Medium (5cm x 5cm)"
+msgstr ""
+
+#: src/frontend/SettingsWorksheetPage.cpp:32
+#, kde-format
+msgid "Big (7cm x 7cm)"
+msgstr ""
+
+#: src/frontend/SettingsWorksheetPage.cpp:152
 #, kde-format
 msgid ""
 "No LaTeX installation found or selected. LaTeX typesetting not possible."
@@ -16972,18 +16989,18 @@ msgstr ""
 "Установка LaTeX не найдена или не выбрана. Использование вёрстки LaTeX "
 "невозможно."
 
-#: src/frontend/SettingsWorksheetPage.cpp:147
+#: src/frontend/SettingsWorksheetPage.cpp:162
 #, kde-format
 msgid "No 'convert' found. LaTeX typesetting not possible."
 msgstr "Не удалось найти «convert». Использование вёрстки LaTeX невозможно."
 
-#: src/frontend/SettingsWorksheetPage.cpp:153
+#: src/frontend/SettingsWorksheetPage.cpp:168
 #, kde-format
 msgid "No 'dvips' found. LaTeX typesetting not possible."
 msgstr "Не удалось найти «dvips». Использование вёрстки LaTeX невозможно."
 
-#: src/frontend/SettingsWorksheetPage.cpp:160
-#: src/frontend/SettingsWorksheetPage.cpp:166
+#: src/frontend/SettingsWorksheetPage.cpp:175
+#: src/frontend/SettingsWorksheetPage.cpp:181
 #, kde-format
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr "Не удалось найти Ghostscript. Использование вёрстки LaTeX невозможно."
@@ -17802,27 +17819,27 @@ msgstr "Теоретические квантили"
 msgid "Sample Quantiles"
 msgstr "Квантили выборки"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1051
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1052
 #, fuzzy, kde-format
 msgid "Sample"
 msgstr "&Выборка"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1110
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1111
 #, kde-format
 msgid "No data selected to plot."
 msgstr "Не выбраны данные для построения графика."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1115
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1116
 #, fuzzy, kde-format
 msgid "An already existing plot area has to be selected."
 msgstr "Необходимо выбрать существующий график."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1120
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1121
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "Необходимо выбрать существующий лист."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1126
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1127
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "Закрыть диалоговое окно и построить график данных."
@@ -24031,7 +24048,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
 #: src/frontend/ui/settingsgeneralpage.ui:281
-#: src/frontend/ui/settingsworksheetpage.ui:111
+#: src/frontend/ui/settingsworksheetpage.ui:50
 #, kde-format
 msgid "Performance"
 msgstr "Производительность"
@@ -24078,7 +24095,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
 #: src/frontend/ui/settingsnotebookpage.ui:26
-#: src/frontend/ui/settingsworksheetpage.ui:23
+#: src/frontend/ui/settingsworksheetpage.ui:38
 #, kde-format
 msgid "Appearance"
 msgstr "Внешний вид"
@@ -24170,26 +24187,33 @@ msgstr "Показывать назначение графика"
 msgid "Reset Layout"
 msgstr "Сброс разметки"
 
+#. i18n: ectx: property (text), widget (QLabel, lPreviewThumbnailSize)
+#: src/frontend/ui/settingsworksheetpage.ui:141
+#, kde-format
+msgid "Thumbnail Size:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkDoubleBuffering)
+#: src/frontend/ui/settingsworksheetpage.ui:164
+#, fuzzy, kde-format
+#| msgid "Enable double buffering"
+msgid "Double buffering"
+msgstr "Включить двойную буферизацию"
+
 #. i18n: ectx: property (text), widget (QLabel, lTheme)
-#: src/frontend/ui/settingsworksheetpage.ui:30
+#: src/frontend/ui/settingsworksheetpage.ui:171
 #, kde-format
 msgid "Theme:"
 msgstr "Тема:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPresenterModeInteractive)
-#: src/frontend/ui/settingsworksheetpage.ui:82
+#: src/frontend/ui/settingsworksheetpage.ui:178
 #, kde-format
 msgid "Interactive"
 msgstr "Интерактивный"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkDoubleBuffering)
-#: src/frontend/ui/settingsworksheetpage.ui:118
-#, kde-format
-msgid "Enable double buffering"
-msgstr "Включить двойную буферизацию"
-
 #. i18n: ectx: property (text), widget (QLabel, lTexEngine)
-#: src/frontend/ui/settingsworksheetpage.ui:154
+#: src/frontend/ui/settingsworksheetpage.ui:185
 #, kde-format
 msgid "Typesetting engine:"
 msgstr "Программа вёрстки:"
@@ -25764,47 +25788,47 @@ msgstr ""
 msgid "Couldn't find preview.sty."
 msgstr "Не удалось найти preview.sty."
 
-#: src/tools/TeXRenderer.cpp:81
+#: src/tools/TeXRenderer.cpp:82
 #, kde-format
 msgid "Couldn't open the file"
 msgstr "Не удалось открыть файл"
 
-#: src/tools/TeXRenderer.cpp:157
+#: src/tools/TeXRenderer.cpp:165
 #, kde-format
 msgid "%1 not found"
 msgstr "Не удалось найти %1"
 
-#: src/tools/TeXRenderer.cpp:193
+#: src/tools/TeXRenderer.cpp:201
 #, kde-format
 msgid "Timeout: Unable to generate latex file"
 msgstr "Время ожидания истекло: Не удалось сгенерировать файл latex"
 
-#: src/tools/TeXRenderer.cpp:196
+#: src/tools/TeXRenderer.cpp:204
 #, kde-format
 msgid "process failed, exit code ="
 msgstr "сбой процесса, код выхода ="
 
-#: src/tools/TeXRenderer.cpp:258
+#: src/tools/TeXRenderer.cpp:266
 #, kde-format
 msgid "dvips not found"
 msgstr "не удалось найти dvips"
 
-#: src/tools/TeXRenderer.cpp:265
+#: src/tools/TeXRenderer.cpp:273
 #, kde-format
 msgid "dvips process failed, exit code ="
 msgstr "сбой процесса dvips, код выхода ="
 
-#: src/tools/TeXRenderer.cpp:287
+#: src/tools/TeXRenderer.cpp:295
 #, kde-format
 msgid "convert not found"
 msgstr "Не удалось найти convert"
 
-#: src/tools/TeXRenderer.cpp:295
+#: src/tools/TeXRenderer.cpp:303
 #, kde-format
 msgid "convert process failed, exit code ="
 msgstr "сбой процесса convert, код выхода ="
 
-#: src/tools/TeXRenderer.cpp:317
+#: src/tools/TeXRenderer.cpp:325
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Не удалось открыть файл:"

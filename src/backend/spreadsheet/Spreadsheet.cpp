@@ -74,6 +74,8 @@ Spreadsheet::Spreadsheet(const QString& name, bool loading, AspectType type)
 	, d_ptr(new SpreadsheetPrivate(this)) {
 	if (!loading)
 		init();
+
+	connect(this, &Spreadsheet::columnCountChanged, this, &Spreadsheet::initConnectionsRowCountChanges);
 }
 
 /*!
@@ -102,6 +104,42 @@ void Spreadsheet::init() {
 		addChild(new_col);
 	}
 	setRowCount(rows);
+	initConnectionsRowCountChanges();
+}
+
+/*!
+ * connects to the signals emitted in the first column to react on the row count changes that are
+ * done internally in Column and to emit the corresponding signals in Spreadsheet.
+ * called initially and on column count changes (columns inserts/removals).
+ */
+void Spreadsheet::initConnectionsRowCountChanges() {
+	// check first if the first column was changed
+	Q_D(Spreadsheet);
+	auto* firstColumn = children<Column>().first();
+	if (d->firstColumn == firstColumn)
+		return;
+	else {
+		disconnect(d->firstColumn, nullptr, this, nullptr);
+		d->firstColumn = firstColumn;
+	}
+
+	// handle row insertions
+	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeInserted, this, [=](const AbstractColumn*, int before, int count) {
+		Q_EMIT rowsAboutToBeInserted(before, before + count - 1);
+	});
+	connect(d->firstColumn, &AbstractColumn::rowsInserted, this, [=](const AbstractColumn* sender, int, int) {
+		Q_EMIT rowsInserted(sender->rowCount());
+		Q_EMIT rowCountChanged(sender->rowCount());
+	});
+
+	// handle row removals
+	connect(d->firstColumn, &AbstractColumn::rowsAboutToBeRemoved, this, [=](const AbstractColumn*, int first, int count) {
+		Q_EMIT rowsAboutToBeRemoved(first, first + count - 1);
+	});
+	connect(d->firstColumn, &AbstractColumn::rowsRemoved, this, [=](const AbstractColumn* sender, int, int) {
+		Q_EMIT rowsRemoved(sender->rowCount());
+		Q_EMIT rowCountChanged(sender->rowCount());
+	});
 }
 
 void Spreadsheet::setSuppressSetCommentFinalizeImport(bool suppress) {
@@ -213,6 +251,18 @@ void Spreadsheet::updateLocale() {
 }
 
 /*!
+ * Grows/shrinks the number of rows in the spreadsheet to \c new_size.
+ * @param new_size The new number of rows in the spreadsheet.
+ */
+void Spreadsheet::setRowCount(int new_size) {
+	int current_size = rowCount();
+	if (new_size > current_size)
+		insertRows(current_size, new_size - current_size);
+	if (new_size < current_size && new_size >= 0)
+		removeRows(new_size, current_size - new_size);
+}
+
+/*!
  * Returns the number of rows in the \c Spreadsheet.
  * @return The number of rows in the \c Spreadsheet.
  */
@@ -226,76 +276,21 @@ int Spreadsheet::rowCount() const {
 	return result;
 }
 
-class SpreadsheetSetRowsCountCmd : public QUndoCommand {
-public:
-	SpreadsheetSetRowsCountCmd(Spreadsheet* spreadsheet, bool insert, int first, int count, QUndoCommand* parent)
-		: QUndoCommand(parent)
-		, m_spreadsheet(spreadsheet)
-		, m_insert(insert)
-		, m_first(first)
-		, m_last(first + count - 1) {
-		if (insert)
-			setText(i18np("%1: insert 1 row", "%1: insert %2 rows", spreadsheet->name(), count));
-		else
-			setText(i18np("%1: remove 1 row", "%1: remove %2 rows", spreadsheet->name(), count));
-	}
-
-	virtual void redo() override {
-		WAIT_CURSOR;
-		if (m_insert)
-			Q_EMIT m_spreadsheet->rowsAboutToBeInserted(m_first, m_last);
-		else
-			Q_EMIT m_spreadsheet->rowsAboutToBeRemoved(m_first, m_last);
-
-		QUndoCommand::redo();
-
-		if (m_insert)
-			Q_EMIT m_spreadsheet->rowsInserted(m_spreadsheet->rowCount());
-		else
-			Q_EMIT m_spreadsheet->rowsRemoved(m_spreadsheet->rowCount());
-		RESET_CURSOR;
-		m_spreadsheet->emitRowCountChanged();
-	}
-
-	virtual void undo() override {
-		WAIT_CURSOR;
-		if (m_insert)
-			Q_EMIT m_spreadsheet->rowsAboutToBeRemoved(m_first, m_last);
-		else
-			Q_EMIT m_spreadsheet->rowsAboutToBeInserted(m_first, m_last);
-		QUndoCommand::undo();
-
-		if (m_insert)
-			Q_EMIT m_spreadsheet->rowsRemoved(m_spreadsheet->rowCount());
-		else
-			Q_EMIT m_spreadsheet->rowsInserted(m_spreadsheet->rowCount());
-		RESET_CURSOR;
-		m_spreadsheet->emitRowCountChanged();
-	}
-
-private:
-	Spreadsheet* m_spreadsheet;
-	bool m_insert;
-	int m_first;
-	int m_last;
-};
-
 /*!
  * Removes \c count rows starting from the \c first row index in the spreadsheet.
  * @param count The number of rows to remove.
  * @param first The row index to start removing rows from.
  */
-void Spreadsheet::removeRows(int first, int count, QUndoCommand* parent) {
+void Spreadsheet::removeRows(int first, int count) {
 	if (count < 1 || first < 0 || first + count > rowCount())
 		return;
 
-	auto* command = new SpreadsheetSetRowsCountCmd(this, false, first, count, parent);
-
+	WAIT_CURSOR;
+	beginMacro(i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count));
 	for (auto* col : children<Column>())
-		col->removeRows(first, count, command);
-
-	if (!parent)
-		exec(command);
+		col->removeRows(first, count);
+	endMacro();
+	RESET_CURSOR;
 }
 
 /*!
@@ -303,17 +298,16 @@ void Spreadsheet::removeRows(int first, int count, QUndoCommand* parent) {
  * @param count The number of rows to insert.
  * @param before The row index before which the rows are inserted.
  */
-void Spreadsheet::insertRows(int before, int count, QUndoCommand* parent) {
+void Spreadsheet::insertRows(int before, int count) {
 	if (count < 1 || before < 0 || before > rowCount())
 		return;
 
-	auto* command = new SpreadsheetSetRowsCountCmd(this, true, before, count, parent);
-
+	WAIT_CURSOR;
+	beginMacro(i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count));
 	for (auto* col : children<Column>())
-		col->insertRows(before, count, command);
-
-	if (!parent)
-		exec(command);
+		col->insertRows(before, count);
+	endMacro();
+	RESET_CURSOR;
 }
 
 /*!
@@ -411,18 +405,6 @@ void Spreadsheet::prependColumns(int count) {
 	insertColumns(0, count);
 }
 
-/*!
- * Grows/shrinks the number of rows in the spreadsheet to \c new_size.
- * @param new_size The new number of rows in the spreadsheet.
- */
-void Spreadsheet::setRowCount(int new_size, QUndoCommand* parent) {
-	int current_size = rowCount();
-	if (new_size > current_size)
-		insertRows(current_size, new_size - current_size, parent);
-	if (new_size < current_size && new_size >= 0)
-		removeRows(new_size, current_size - new_size, parent);
-}
-
 void Spreadsheet::initConnectionsLinking(const Spreadsheet* sender, const Spreadsheet* receiver) {
 	QObject::connect(sender, &Spreadsheet::aspectAboutToBeRemoved, receiver, &Spreadsheet::linkedSpreadsheetDeleted);
 	QObject::connect(sender, &Spreadsheet::rowCountChanged, receiver, &Spreadsheet::linkedSpreadsheetNewRowCount);
@@ -482,10 +464,14 @@ void Spreadsheet::setLinking(bool linking) {
 	if (linking != d->linking.linking) {
 		Linking l = d->linking;
 		l.linking = linking;
-		auto parent = new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: set linking"));
-		if (linking && d->linking.linkedSpreadsheet)
-			setRowCount(d->linking.linkedSpreadsheet->rowCount(), parent);
-		exec(parent);
+
+		if (linking && d->linking.linkedSpreadsheet) {
+			beginMacro(i18n("%1: set linking", name()));
+			exec(new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: set linking")));
+			setRowCount(d->linking.linkedSpreadsheet->rowCount());
+			endMacro();
+		} else
+			exec(new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: set linking")));
 	}
 }
 
@@ -502,10 +488,13 @@ void Spreadsheet::setLinkedSpreadsheet(const Spreadsheet* linkedSpreadsheet, boo
 		} else {
 			Linking l = d->linking;
 			l.linkedSpreadsheet = linkedSpreadsheet;
-			auto* parent = new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: set linked spreadsheet"));
-			if (d->linking.linking && linkedSpreadsheet)
-				setRowCount(linkedSpreadsheet->rowCount(), parent);
-			exec(parent);
+			if (d->linking.linking && linkedSpreadsheet) {
+				beginMacro(i18n("%1: set linked spreadsheet", name()));
+				setRowCount(linkedSpreadsheet->rowCount());
+				exec(new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: set linked spreadsheet")));
+				endMacro();
+			} else
+				exec(new SpreadsheetSetLinkingCmd(d, l, ki18n("%1: set linked spreadsheet")));
 		}
 	}
 }
@@ -542,6 +531,44 @@ int Spreadsheet::columnCount() const {
 }
 
 /*!
+ * Grows/shrinks the number of columns in the spreadsheet to \c new_size.
+ * @param new_size The new number of columns in the spreadsheet.
+ */
+void Spreadsheet::setColumnCount(int new_size) {
+	int old_size = columnCount();
+	if (old_size == new_size || new_size < 0)
+		return;
+
+	if (new_size < old_size)
+		removeColumns(new_size, old_size - new_size);
+	else
+		insertColumns(old_size, new_size - old_size);
+}
+
+class SpreadsheetSetColumnsCountCmd : public QUndoCommand {
+public:
+	SpreadsheetSetColumnsCountCmd(Spreadsheet* spreadsheet, int oldCount, int newCount)
+		: m_spreadsheet(spreadsheet)
+		, m_oldCount(oldCount)
+		, m_newCount(newCount) {
+	}
+
+	virtual void redo() override {
+		Q_EMIT m_spreadsheet->columnCountChanged(m_newCount);
+	}
+
+	virtual void undo() override {
+		qSwap(m_oldCount, m_newCount);
+		redo();
+	}
+
+private:
+	Spreadsheet* m_spreadsheet;
+	int m_oldCount;
+	int m_newCount;
+};
+
+/*!
  * Returns the number of columns in the \c Spreadsheet matching the plot designation.
  * @param pd The plot designation the columns are matched against.
  * @return The number of columns in the \c Spreadsheet matching the passed plot designation.
@@ -554,82 +581,27 @@ int Spreadsheet::columnCount(AbstractColumn::PlotDesignation pd) const {
 	return count;
 }
 
-class SpreadsheetSetColumnsCountCmd : public QUndoCommand {
-public:
-	SpreadsheetSetColumnsCountCmd(Spreadsheet* spreadsheet, bool insert, int first, int count, QUndoCommand* parent)
-		: QUndoCommand(parent)
-		, m_spreadsheet(spreadsheet)
-		, m_insert(insert)
-		, m_first(first)
-		, m_last(first + count - 1) {
-		if (insert)
-			setText(i18np("%1: insert 1 column", "%1: insert %2 columns", spreadsheet->name(), count));
-		else
-			setText(i18np("%1: remove 1 column", "%1: remove %2 columns", spreadsheet->name(), count));
-	}
-
-	virtual void redo() override {
-		WAIT_CURSOR;
-		if (m_insert)
-			Q_EMIT m_spreadsheet->aspectsAboutToBeInserted(m_first, m_last);
-		else
-			Q_EMIT m_spreadsheet->aspectsAboutToBeRemoved(m_first, m_last);
-
-		QUndoCommand::redo();
-
-		if (m_insert)
-			Q_EMIT m_spreadsheet->aspectsInserted(m_first, m_last);
-		else
-			Q_EMIT m_spreadsheet->aspectsRemoved();
-		RESET_CURSOR;
-		m_spreadsheet->emitColumnCountChanged();
-	}
-
-	virtual void undo() override {
-		WAIT_CURSOR;
-		if (m_insert)
-			Q_EMIT m_spreadsheet->aspectsAboutToBeRemoved(m_first, m_last);
-		else
-			Q_EMIT m_spreadsheet->aspectsAboutToBeInserted(m_first, m_last);
-		QUndoCommand::undo();
-
-		if (m_insert)
-			Q_EMIT m_spreadsheet->aspectsRemoved();
-		else
-			Q_EMIT m_spreadsheet->aspectsInserted(m_first, m_last);
-		RESET_CURSOR;
-		m_spreadsheet->emitColumnCountChanged();
-	}
-
-private:
-	Spreadsheet* m_spreadsheet;
-	bool m_insert;
-	int m_first;
-	int m_last;
-};
-
 /*!
  * Removes \c count columns starting from the \c first column index in the spreadsheet.
  * @param count The number of columns to remove.
  * @param first The column index to start removing column from.
  */
-void Spreadsheet::removeColumns(int first, int count, QUndoCommand* parent) {
+void Spreadsheet::removeColumns(int first, int count) {
 	if (count < 1 || first < 0 || first + count > columnCount())
 		return;
 
-	auto* command = new SpreadsheetSetColumnsCountCmd(this, false, first, count, parent);
-	bool execute = false;
-	if (!parent) {
-		execute = true;
-		parent = command;
-	}
+	WAIT_CURSOR;
+	const int oldCount = columnCount();
+	beginMacro(i18np("%1: remove 1 column", "%1: remove %2 columns", name(), count));
 
-	const auto& columns = children<Column>();
-	for (int i = (first + count - 1); i >= first; i--)
-		columns.at(i)->remove(parent);
+	Q_EMIT aspectsAboutToBeRemoved(first, first + count - 1);
+	for (int i = 0; i < count; i++)
+		child<Column>(first)->remove();
+	Q_EMIT aspectsRemoved();
 
-	if (execute)
-		exec(command);
+	exec(new SpreadsheetSetColumnsCountCmd(this, oldCount, columnCount()));
+	endMacro();
+	RESET_CURSOR;
 }
 
 /*!
@@ -637,39 +609,24 @@ void Spreadsheet::removeColumns(int first, int count, QUndoCommand* parent) {
  * @param count The number of columns to insert.
  * @param before The column index before which the columns are inserted.
  */
-void Spreadsheet::insertColumns(int before, int count, QUndoCommand* parent) {
-	auto* command = new SpreadsheetSetColumnsCountCmd(this, true, before, count, parent);
-	bool execute = false;
-	if (!parent) {
-		execute = true;
-		parent = command;
-	}
+void Spreadsheet::insertColumns(int before, int count) {
+	WAIT_CURSOR;
+	beginMacro(i18np("%1: insert 1 column", "%1: insert %2 columns", name(), count));
 	const int cols = columnCount();
 	const int rows = rowCount();
+	const int last = before + count - 1;
+	Q_EMIT aspectsAboutToBeInserted(before, last);
 	for (int i = 0; i < count; i++) {
 		auto* new_col = new Column(QString::number(cols + i + 1), AbstractColumn::ColumnMode::Double);
 		new_col->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 		new_col->insertRows(0, rows);
-		insertChild(new_col, before + i, parent);
+		insertChild(new_col, before + i);
 	}
+	Q_EMIT aspectsInserted(before, last);
 
-	if (execute)
-		exec(command);
-}
-
-/*!
- * Grows/shrinks the number of columns in the spreadsheet to \c new_size.
- * @param new_size The new number of columns in the spreadsheet.
- */
-void Spreadsheet::setColumnCount(int new_size, QUndoCommand* parent) {
-	int old_size = columnCount();
-	if (old_size == new_size || new_size < 0)
-		return;
-
-	if (new_size < old_size)
-		removeColumns(new_size, old_size - new_size, parent);
-	else
-		insertColumns(old_size, new_size - old_size, parent);
+	exec(new SpreadsheetSetColumnsCountCmd(this, cols, columnCount()));
+	endMacro();
+	RESET_CURSOR;
 }
 
 /*!
@@ -689,8 +646,7 @@ void Spreadsheet::clear() {
  * @param columns The columns in the spreadsheet to clear.
  */
 void Spreadsheet::clear(const QVector<Column*>& columns) {
-	auto* parent = new LongExecutionCmd(i18n("%1: clear selected columns", name()));
-
+	// TODO
 	// 	if (formulaModeActive()) {
 	// 		for (auto* col : selectedColumns()) {
 	// 			col->setSuppressDataChangedSignal(true);
@@ -699,13 +655,16 @@ void Spreadsheet::clear(const QVector<Column*>& columns) {
 	// 			col->setChanged();
 	// 		}
 	// 	} else {
+	WAIT_CURSOR;
+	beginMacro(i18n("%1: clear selected columns", name()));
 	for (auto* col : columns) {
 		col->setSuppressDataChangedSignal(true);
-		col->clear(parent);
+		col->clear();
 		col->setSuppressDataChangedSignal(false);
 		col->setChanged();
 	}
-	exec(parent);
+	endMacro();
+	RESET_CURSOR;
 }
 
 /*!
@@ -1326,6 +1285,8 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 			}
 		}
 	}
+
+	initConnectionsRowCountChanges();
 
 	return !reader->hasError();
 }

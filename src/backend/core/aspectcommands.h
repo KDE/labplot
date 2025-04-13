@@ -35,9 +35,8 @@ public:
 
 class AspectChildMoveCmd : public QUndoCommand {
 public:
-	AspectChildMoveCmd(AbstractAspectPrivate* target, AbstractAspect* child, int steps, QUndoCommand* parent = nullptr)
-		: QUndoCommand(parent)
-		, m_target(target)
+	AspectChildMoveCmd(AbstractAspectPrivate* target, AbstractAspect* child, int steps)
+		: m_target(target)
 		, m_child(child) {
 		setText(i18n("%1: move up", m_target->m_name));
 		const int origIndex = m_target->indexOfChild(m_child);
@@ -95,8 +94,8 @@ protected:
 
 class AspectChildRemoveCmd : public AspectCommonCmd {
 public:
-	AspectChildRemoveCmd(AbstractAspectPrivate* target, AbstractAspect* child, QUndoCommand* parent = nullptr)
-		: AspectCommonCmd(parent)
+	AspectChildRemoveCmd(AbstractAspectPrivate* target, AbstractAspect* child)
+		: AspectCommonCmd()
 		, m_target(target)
 		, m_child(child) {
 		Q_ASSERT(!child->isMoved());
@@ -167,8 +166,8 @@ protected:
 
 class AspectChildAddCmd : public AspectChildRemoveCmd {
 public:
-	AspectChildAddCmd(AbstractAspectPrivate* target, AbstractAspect* child, int index, QUndoCommand* parent)
-		: AspectChildRemoveCmd(target, child, parent) {
+	AspectChildAddCmd(AbstractAspectPrivate* target, AbstractAspect* child, int index)
+		: AspectChildRemoveCmd(target, child) {
 		setText(i18n("%1: add %2", m_target->m_name, m_child->name()));
 		m_index = index;
 	}

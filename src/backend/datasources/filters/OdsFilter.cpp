@@ -497,7 +497,7 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 	const auto ranges = sheet->get_data_range();
 	DEBUG(Q_FUNC_INFO << ", data range: col " << ranges.first.column << ".." << ranges.last.column << ", row " << ranges.first.row << ".." << ranges.last.row)
 
-	const int maxCols = 100;
+	const int maxCols = 100; // max. columns to preview
 	DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << " " << endRow)
 	DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " " << endColumn)
 	int actualStartRow = (startRow > (ranges.last.row - ranges.first.row + 1) ? ranges.first.row : ranges.first.row + startRow - 1);

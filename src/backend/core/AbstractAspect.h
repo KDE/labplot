@@ -300,12 +300,12 @@ public:
 	void setParentAspect(AbstractAspect*);
 	Folder* folder();
 	bool isDescendantOf(AbstractAspect* other);
-	void addChild(AbstractAspect*, QUndoCommand* parent = nullptr);
+	void addChild(AbstractAspect*);
 	void addChildFast(AbstractAspect*);
 	virtual void finalizeAdd(){};
 	QVector<AbstractAspect*> children(AspectType, ChildIndexFlags = {}) const;
-	void insertChild(AbstractAspect* child, int index, QUndoCommand* parent = nullptr);
-	void insertChildBefore(AbstractAspect* child, AbstractAspect* before, QUndoCommand* parent = nullptr);
+	void insertChild(AbstractAspect* child, int index);
+	void insertChildBefore(AbstractAspect* child, AbstractAspect* before);
 	void insertChildBeforeFast(AbstractAspect* child, AbstractAspect* before);
 	void reparent(AbstractAspect* newParent, int newIndex = -1);
 	/*!
@@ -314,9 +314,9 @@ public:
 	 * \param parent If parent is not nullptr the command will not be executed, but the parent must be executed
 	 * to indirectly execute the created undocommand
 	 */
-	void removeChild(AbstractAspect*, QUndoCommand* parent = nullptr);
+	void removeChild(AbstractAspect*);
 	void removeAllChildren();
-	void moveChild(AbstractAspect*, int steps, QUndoCommand* parent = nullptr);
+	void moveChild(AbstractAspect*, int steps);
 	virtual QVector<AbstractAspect*> dependsOn() const;
 
 	virtual QVector<AspectType> pasteTypes() const;
@@ -446,7 +446,6 @@ public Q_SLOTS:
 	bool setName(const QString&, NameHandling handling = NameHandling::AutoUnique, QUndoCommand* parent = nullptr);
 	void setComment(const QString&);
 	void remove();
-	void remove(QUndoCommand* parent);
 	void copy();
 	void duplicate();
 	void paste(bool duplicate = false, int index = -1);

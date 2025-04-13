@@ -4,6 +4,7 @@
 	Description          : widget for image properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2019-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -140,18 +141,18 @@ void ImageDock::updateUnits() {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QStringLiteral(" cm");
-		ui.sbWidth->setValue(ui.sbWidth->value() * GSL_CONST_CGS_INCH);
-		ui.sbHeight->setValue(ui.sbHeight->value() * GSL_CONST_CGS_INCH);
-		ui.sbPositionX->setValue(ui.sbPositionX->value() * GSL_CONST_CGS_INCH);
-		ui.sbPositionY->setValue(ui.sbPositionY->value() * GSL_CONST_CGS_INCH);
+		ui.sbWidth->setValue(roundValue(ui.sbWidth->value() * GSL_CONST_CGS_INCH));
+		ui.sbHeight->setValue(roundValue(ui.sbHeight->value() * GSL_CONST_CGS_INCH));
+		ui.sbPositionX->setValue(roundValue(ui.sbPositionX->value() * GSL_CONST_CGS_INCH));
+		ui.sbPositionY->setValue(roundValue(ui.sbPositionY->value() * GSL_CONST_CGS_INCH));
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QStringLiteral(" in");
-		ui.sbWidth->setValue(ui.sbWidth->value() / GSL_CONST_CGS_INCH);
-		ui.sbHeight->setValue(ui.sbHeight->value() / GSL_CONST_CGS_INCH);
-		ui.sbPositionX->setValue(ui.sbPositionX->value() / GSL_CONST_CGS_INCH);
-		ui.sbPositionY->setValue(ui.sbPositionY->value() / GSL_CONST_CGS_INCH);
+		ui.sbWidth->setValue(roundValue(ui.sbWidth->value() / GSL_CONST_CGS_INCH));
+		ui.sbHeight->setValue(roundValue(ui.sbHeight->value() / GSL_CONST_CGS_INCH));
+		ui.sbPositionX->setValue(roundValue(ui.sbPositionX->value() / GSL_CONST_CGS_INCH));
+		ui.sbPositionY->setValue(roundValue(ui.sbPositionY->value() / GSL_CONST_CGS_INCH));
 	}
 
 	ui.sbWidth->setSuffix(suffix);
@@ -464,8 +465,8 @@ void ImageDock::imageKeepRatioChanged(bool keep) {
 // Position
 void ImageDock::imagePositionChanged(const WorksheetElement::PositionWrapper& position) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit));
-	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit));
+	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(position.point.x(), m_units), m_worksheetUnit));
+	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(position.point.y(), m_units), m_worksheetUnit));
 	ui.cbPositionX->setCurrentIndex(static_cast<int>(position.horizontalPosition));
 	ui.cbPositionY->setCurrentIndex(static_cast<int>(position.verticalPosition));
 }
@@ -525,10 +526,10 @@ void ImageDock::load() {
 	// Position
 	ui.cbPositionX->setCurrentIndex((int)m_image->position().horizontalPosition);
 	positionXChanged(ui.cbPositionX->currentIndex());
-	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(m_image->position().point.x(), m_worksheetUnit));
+	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_image->position().point.x(), m_units), m_worksheetUnit));
 	ui.cbPositionY->setCurrentIndex((int)m_image->position().verticalPosition);
 	positionYChanged(ui.cbPositionY->currentIndex());
-	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(m_image->position().point.y(), m_worksheetUnit));
+	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_image->position().point.y(), m_units), m_worksheetUnit));
 
 	ui.cbHorizontalAlignment->setCurrentIndex((int)m_image->horizontalAlignment());
 	ui.cbVerticalAlignment->setCurrentIndex((int)m_image->verticalAlignment());

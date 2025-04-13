@@ -58,10 +58,10 @@ public:
 	Column* column(const QString&) const;
 	int rowCount() const; // TODO: should be size_t?
 
-	void removeRows(int first, int count, QUndoCommand* parent = nullptr);
-	void insertRows(int before, int count, QUndoCommand* parent = nullptr);
-	void removeColumns(int first, int count, QUndoCommand* parent = nullptr);
-	void insertColumns(int before, int count, QUndoCommand* parent = nullptr);
+	void removeRows(int first, int count);
+	void insertRows(int before, int count);
+	void removeColumns(int first, int count);
+	void insertColumns(int before, int count);
 
 	QString text(int row, int col) const;
 
@@ -115,8 +115,8 @@ public Q_SLOTS:
 	void appendColumn();
 	void prependColumns(int);
 
-	void setColumnCount(int, QUndoCommand* parent = nullptr);
-	void setRowCount(int, QUndoCommand* parent = nullptr);
+	void setColumnCount(int);
+	void setRowCount(int);
 
 	BASIC_D_ACCESSOR_DECL(bool, linking, Linking)
 	const Spreadsheet* linkedSpreadsheet() const;
@@ -148,6 +148,7 @@ protected:
 private Q_SLOTS:
 	void childSelected(const AbstractAspect*) override;
 	void childDeselected(const AbstractAspect*) override;
+	void initConnectionsRowCountChanges();
 	void linkedSpreadsheetDeleted();
 	void linkedSpreadsheetNewRowCount(int);
 	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*);

@@ -20,6 +20,7 @@ class AbstractAspectTest : public CommonTest {
 private Q_SLOTS:
 	void name();
 
+	void testAddChildUndoRedo();
 	void testDuplicateChildUndoRedo();
 
 	void copyPaste();
