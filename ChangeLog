@@ -64,6 +64,7 @@ Bug fixes:
 	* Don't crash selecting ODS import filter with invalid files
 	* Fix moving objects by mouse (BUG 496478)
 	* Use the proper local settings when pasting values in Matrix (BUG 500014)
+	* Fix vanishing axes label (Issue #843)
 	* Fix automatic data reduction (Issue #1105)
 
 Internal:
