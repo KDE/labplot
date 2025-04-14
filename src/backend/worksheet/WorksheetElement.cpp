@@ -971,7 +971,7 @@ void WorksheetElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	m_leftButtonPressed = false;
-	if (!m_moveStarted) {
+	if (!m_moveStarted || !(this->flags() & QGraphicsItem::ItemIsMovable)) {
 		QGraphicsItem::mouseReleaseEvent(event);
 		return;
 	}
@@ -1001,8 +1001,9 @@ void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 	QGraphicsItem::mouseReleaseEvent(event);
 }
 
+// called when any property changes (like position)
 QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QVariant& value) {
-	if (suppressItemChangeEvent)
+	if (suppressItemChangeEvent || !(this->flags() & QGraphicsItem::ItemIsMovable))
 		return value;
 
 	if (change == QGraphicsItem::ItemPositionChange) {
