@@ -256,7 +256,7 @@ void XYDataReductionCurveDock::updateTolerance() {
 		uiGeneralTab.cbMethod->setEnabled(false);
 		return;
 	}
-	DEBUG("automatic tolerance:");
+	DEBUG(Q_FUNC_INFO << ", set automatic tolerance:");
 	DEBUG("clip_diag_perpoint =" << nsl_geom_linesim_clip_diag_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size()));
 	DEBUG("clip_area_perpoint =" << nsl_geom_linesim_clip_area_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size()));
 	DEBUG("avg_dist_perpoint =" << nsl_geom_linesim_avg_dist_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size()));
@@ -272,6 +272,10 @@ void XYDataReductionCurveDock::updateTolerance() {
 		m_dataReductionData.tolerance = 2. * nsl_geom_linesim_avg_dist_perpoint(xdataVector.data(), ydataVector.data(), xdataVector.size());
 	// m_dataReductionData.tolerance = nsl_geom_linesim_clip_diag_perpoint(xdataVector.data(), ydataVector.data(), xdataVector.size());
 	uiGeneralTab.sbTolerance->setValue(m_dataReductionData.tolerance);
+	DEBUG(Q_FUNC_INFO << ", tolerance value = " << m_dataReductionData.tolerance)
+	// update data of curves
+	for (auto* curve : m_curvesList)
+		static_cast<XYDataReductionCurve*>(curve)->setDataReductionData(m_dataReductionData);
 }
 
 void XYDataReductionCurveDock::updateTolerance2() {
