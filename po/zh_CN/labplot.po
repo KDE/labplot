@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-14 00:37+0000\n"
+"POT-Creation-Date: 2025-04-15 00:37+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -13597,64 +13597,64 @@ msgstr "如果选中，将按 X 严格递增的顺序连接数据点"
 msgid "This method is much slower than any other"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:354
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:386
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:431
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:358
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:390
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:435
 #, kde-format
 msgid "Tolerance (distance):"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:365
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:369
 #, kde-format
 msgid "Number of points:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:376
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:380
 #, kde-format
 msgid "Step size:"
 msgstr "步长:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:393
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:397
 #, kde-format
 msgid "Repeats:"
 msgstr "重复"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:403
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:407
 #, kde-format
 msgid "Tolerance (area):"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:414
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:418
 #, kde-format
 msgid "Minimum tolerance:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:418
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:422
 #, kde-format
 msgid "Maximum tolerance:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:435
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:439
 #, kde-format
 msgid "Search region:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:499
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:503
 #, kde-format
 msgid "Data reduction status: %1"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:514
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:518
 #, kde-format
 msgid "number of points: %1"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:515
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:519
 #, kde-format
 msgid "positional squared error: %1"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:520
 #, kde-format
 msgid "area error: %1"
 msgstr ""
@@ -24204,10 +24204,9 @@ msgid "Clipboard"
 msgstr "剪贴板"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:84
-#, fuzzy, kde-format
-#| msgid "Object's Bounding Box"
+#, kde-format
 msgid "Bounding Box"
-msgstr "对象的边界框"
+msgstr ""
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:89
 #, kde-format
@@ -24599,9 +24598,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
-
-#~ msgid "Current Selection"
-#~ msgstr "当前选择范围"
-
-#~ msgid "Complete Worksheet"
-#~ msgstr "完整工作表"

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-14 00:37+0000\n"
-"PO-Revision-Date: 2025-03-30 08:45+0200\n"
+"POT-Creation-Date: 2025-04-15 00:37+0000\n"
+"PO-Revision-Date: 2025-04-14 06:58+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Lokalize 24.12.3\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -13265,6 +13265,12 @@ msgid ""
 "the most concise format</li><li>Automatic (E) - selects between 'Decimal' "
 "and 'Scientific (E)' to get the most concise format</li></ul>"
 msgstr ""
+"Določa, kako so številske vrednosti oblikovane v preglednici:"
+"<ul><li>Decimalno - oblika [-]9,9</li><li>Znanstveno (e) - oblika "
+"kot[-]9.9e[+|-]999</li><li>Znanstveno (E) - oblika [-]9.9E[+|-]999</"
+"li><li>Samodejno (e) - izbira med »Decimalno« in »Znanstveno (e)«, da "
+"dobitenajbolj jedrnato obliko</li><li>Samodejno (E) - izbira med "
+"'Decimalno'in 'Znanstveno (E)', da dobite najbolj jedrnato obliko</li></ul>"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:336
 #, kde-format
@@ -13275,6 +13281,10 @@ msgid ""
 "represents the maximum number of significant digits (trailing zeroes are "
 "omitted)."
 msgstr ""
+"Za formate 'Decimal', 'Znanstveno (e)' in 'Znanstveno (E)' natančnost "
+"predstavlja število števk za decimalno vejico.\n"
+"Za formata »Samodejno (e)« in »Samodejno (E)« natančnost predstavlja "
+"največje število pomembnih števk (ničle na koncu so izpuščene)."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:341
 #, kde-format
@@ -13924,64 +13934,64 @@ msgstr ""
 msgid "This method is much slower than any other"
 msgstr "Ta metoda je veliko počasneje kot katera koli druga"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:354
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:386
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:431
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:358
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:390
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:435
 #, kde-format
 msgid "Tolerance (distance):"
 msgstr "Toleranca (razdalja):"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:365
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:369
 #, kde-format
 msgid "Number of points:"
 msgstr "Število točk:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:376
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:380
 #, kde-format
 msgid "Step size:"
 msgstr "Velikost koraka:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:393
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:397
 #, kde-format
 msgid "Repeats:"
 msgstr "Ponovitve:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:403
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:407
 #, kde-format
 msgid "Tolerance (area):"
 msgstr "Toleranca (območje):"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:414
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:418
 #, kde-format
 msgid "Minimum tolerance:"
 msgstr "Najmanjša toleranca:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:418
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:422
 #, kde-format
 msgid "Maximum tolerance:"
 msgstr "Največja toleranca:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:435
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:439
 #, kde-format
 msgid "Search region:"
 msgstr "Iskalno območje:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:499
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:503
 #, kde-format
 msgid "Data reduction status: %1"
 msgstr "Stanje zmanjšanja podatkov: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:514
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:518
 #, kde-format
 msgid "number of points: %1"
 msgstr "število točk: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:515
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:519
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "kvadratna napaka položaja: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:520
 #, kde-format
 msgid "area error: %1"
 msgstr "napaka področja: %1"
@@ -24684,10 +24694,9 @@ msgid "Clipboard"
 msgstr "Odložišče"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:84
-#, fuzzy, kde-format
-#| msgid "Object's Bounding Box"
+#, kde-format
 msgid "Bounding Box"
-msgstr "Polje za omejevanje predmeta"
+msgstr "Omejevalni okvir"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:89
 #, kde-format
@@ -24697,6 +24706,10 @@ msgid ""
 "currently selected objects is exported</li><li>Worskheet - the complete "
 "worksheet area is exported</li></ul>"
 msgstr ""
+"Določa območje za izvoz:<ul><li>Omejevalni okvir – omejevalni okvir vseh "
+"predmeti na delovnem listu se izvozijo</li><li>Izbor - območje trenutno "
+"izbrani predmeti so izvoženi</li><li>Delovni list - popoln območje delovnega "
+"lista je izvoženo</li></ul>"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:99
 #, kde-format

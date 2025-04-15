@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-14 00:37+0000\n"
+"POT-Creation-Date: 2025-04-15 00:37+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -13846,64 +13846,64 @@ msgstr "यदि चेक किया गया हो, तो केवल X
 msgid "This method is much slower than any other"
 msgstr "यह विधि किसी भी अन्य विधि की तुलना में बहुत धीमी है"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:354
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:386
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:431
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:358
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:390
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:435
 #, kde-format
 msgid "Tolerance (distance):"
 msgstr "सहनशीलता (दूरी):"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:365
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:369
 #, kde-format
 msgid "Number of points:"
 msgstr "बिंदुओं की संख्या:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:376
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:380
 #, kde-format
 msgid "Step size:"
 msgstr "चरण आकार:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:393
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:397
 #, kde-format
 msgid "Repeats:"
 msgstr "दोहराता है:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:403
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:407
 #, kde-format
 msgid "Tolerance (area):"
 msgstr "सहनशीलता (क्षेत्र):"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:414
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:418
 #, kde-format
 msgid "Minimum tolerance:"
 msgstr "न्यूनतम सहनशीलता:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:418
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:422
 #, kde-format
 msgid "Maximum tolerance:"
 msgstr "अधिकतम सहनशीलता:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:435
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:439
 #, kde-format
 msgid "Search region:"
 msgstr "खोज क्षेत्र:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:499
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:503
 #, kde-format
 msgid "Data reduction status: %1"
 msgstr "डेटा कमी स्थिति: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:514
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:518
 #, kde-format
 msgid "number of points: %1"
 msgstr "अंकों की संख्या: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:515
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:519
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "स्थितीय वर्ग त्रुटि: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:520
 #, kde-format
 msgid "area error: %1"
 msgstr "क्षेत्र त्रुटि: %1"

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-14 00:37+0000\n"
-"PO-Revision-Date: 2025-03-31 01:45+0100\n"
+"POT-Creation-Date: 2025-04-15 00:37+0000\n"
+"PO-Revision-Date: 2025-04-15 01:37+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -8831,7 +8831,7 @@ msgstr "Etiqueta de texto"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3929
 #, kde-format
 msgid "Not inside of the bounding rect"
-msgstr "No está dentro de la recta límite"
+msgstr "No está dentro de la recta delimitadora"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4153
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4174
@@ -13271,6 +13271,12 @@ msgid ""
 "the most concise format</li><li>Automatic (E) - selects between 'Decimal' "
 "and 'Scientific (E)' to get the most concise format</li></ul>"
 msgstr ""
+"Indica cómo se formatean los valores numéricos en la hoja de cálculo:"
+"<ul><li>Decimal: como [-]9,9</li><li>Científico (e): como [-]9,9e[+|-]999</"
+"li><li>Científico (E): como [-]9,9E[+|-]999</li><li>Automático (e): "
+"selecciona entre «Decimal» y «Científico (e)» para obtener el formato más "
+"conciso</li><li>Automático (E): selecciona entre «Decimal» y «Científico "
+"(E)» para obtener el formato más conciso</li></ul>"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:336
 #, kde-format
@@ -13281,6 +13287,11 @@ msgid ""
 "represents the maximum number of significant digits (trailing zeroes are "
 "omitted)."
 msgstr ""
+"Para los formatos «Decimal», «Científico (e)» y «Científico (E)», la "
+"precisión representa el número de dígitos tras la coma decimal.\n"
+"Para los formatos «Automático (e)» y «Automático (E)», la precisión "
+"representa el número máximo de dígitos significativos (se omiten los ceros "
+"finales)."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:341
 #, kde-format
@@ -13940,64 +13951,64 @@ msgstr ""
 msgid "This method is much slower than any other"
 msgstr "Este método es mucho más lento que cualquier otro"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:354
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:386
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:431
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:358
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:390
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:435
 #, kde-format
 msgid "Tolerance (distance):"
 msgstr "Tolerancia (distancia):"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:365
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:369
 #, kde-format
 msgid "Number of points:"
 msgstr "Número de puntos:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:376
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:380
 #, kde-format
 msgid "Step size:"
 msgstr "Tamaño del paso:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:393
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:397
 #, kde-format
 msgid "Repeats:"
 msgstr "Repeticiones:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:403
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:407
 #, kde-format
 msgid "Tolerance (area):"
 msgstr "Tolerancia (área):"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:414
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:418
 #, kde-format
 msgid "Minimum tolerance:"
 msgstr "Tolerancia mínima:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:418
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:422
 #, kde-format
 msgid "Maximum tolerance:"
 msgstr "Tolerancia máxima:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:435
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:439
 #, kde-format
 msgid "Search region:"
 msgstr "Región de búsqueda:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:499
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:503
 #, kde-format
 msgid "Data reduction status: %1"
 msgstr "Estado de reducción de datos: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:514
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:518
 #, kde-format
 msgid "number of points: %1"
 msgstr "número de puntos: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:515
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:519
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "error cuadrático posicional: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:520
 #, kde-format
 msgid "area error: %1"
 msgstr "error de área: %1"
@@ -24714,10 +24725,9 @@ msgid "Clipboard"
 msgstr "Portapapeles"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:84
-#, fuzzy, kde-format
-#| msgid "Object's Bounding Box"
+#, kde-format
 msgid "Bounding Box"
-msgstr "Caja que rodea al objeto"
+msgstr "Cuadro delimitador"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:89
 #, kde-format
@@ -24727,6 +24737,11 @@ msgid ""
 "currently selected objects is exported</li><li>Worskheet - the complete "
 "worksheet area is exported</li></ul>"
 msgstr ""
+"Indica el área que se exportará:<ul><li>Cuadro delimitador: se exporta el "
+"cuadro que delimita todos los objetos de la hoja de trabajo.</"
+"li><li>Selección: se exporta el área de los objetos seleccionados.</"
+"li><li>Hoja de trabajo: se exporta todo el área de la hoja de trabajo.</li></"
+"ul>"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:99
 #, kde-format
@@ -25114,9 +25129,3 @@ msgstr "el proceso «convert» ha fallado, código de salida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No se puede abrir el archivo:"
-
-#~ msgid "Current Selection"
-#~ msgstr "Selección actual"
-
-#~ msgid "Complete Worksheet"
-#~ msgstr "Hoja de trabajo completa"

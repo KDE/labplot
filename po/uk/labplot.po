@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-14 00:37+0000\n"
-"PO-Revision-Date: 2025-03-30 13:09+0300\n"
+"POT-Creation-Date: 2025-04-15 00:37+0000\n"
+"PO-Revision-Date: 2025-04-14 15:51+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -13320,6 +13320,13 @@ msgid ""
 "the most concise format</li><li>Automatic (E) - selects between 'Decimal' "
 "and 'Scientific (E)' to get the most concise format</li></ul>"
 msgstr ""
+"Визначає спосіб форматування числових значень в електронній таблиці:"
+"<ul><li>Десятковий — форматувати як [-]9.9</li><li>Інженерний запис (e) — "
+"форматувати як [-]9.9e[+|-]999</li><li>Інженерний запис (E) — форматувати як "
+"[-]9.9E[+|-]999</li><li>Автоматично (e) — вибирає між «Десятковий» і "
+"«Інженерний запис (e)» основі найстислішого варіанта</li><li>Автоматично (E) "
+"— вибирає між «Десятковий» і «Інженерний запис (E)» основі найстислішого "
+"варіанта</li></ul>"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:336
 #, kde-format
@@ -13330,6 +13337,10 @@ msgid ""
 "represents the maximum number of significant digits (trailing zeroes are "
 "omitted)."
 msgstr ""
+"Для форматів «Десятковий», «Інженерний запис (e)» і «Інженерний запис (E)» "
+"точність визначає кількість цифр після десяткової крапки.\n"
+"Для форматів «Автоматично (e)» і «Автоматично (E)» точність визначає "
+"максимальну кількість значущих цифр (кінцеві нулі не враховуються)."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:341
 #, kde-format
@@ -13978,64 +13989,64 @@ msgstr ""
 msgid "This method is much slower than any other"
 msgstr "Цей метод є набагато повільнішим за усі інші"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:354
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:386
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:431
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:358
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:390
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:435
 #, kde-format
 msgid "Tolerance (distance):"
 msgstr "Допуск (відстань):"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:365
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:369
 #, kde-format
 msgid "Number of points:"
 msgstr "Кількість точок:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:376
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:380
 #, kde-format
 msgid "Step size:"
 msgstr "Розмір кроку:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:393
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:397
 #, kde-format
 msgid "Repeats:"
 msgstr "Повторення:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:403
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:407
 #, kde-format
 msgid "Tolerance (area):"
 msgstr "Допуск (площа):"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:414
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:418
 #, kde-format
 msgid "Minimum tolerance:"
 msgstr "Мін. допуск:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:418
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:422
 #, kde-format
 msgid "Maximum tolerance:"
 msgstr "Макс. допуск:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:435
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:439
 #, kde-format
 msgid "Search region:"
 msgstr "Діапазон пошуку:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:499
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:503
 #, kde-format
 msgid "Data reduction status: %1"
 msgstr "Стан зведення даних: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:514
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:518
 #, kde-format
 msgid "number of points: %1"
 msgstr "кількість точок: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:515
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:519
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "позиційна квадратична похибка: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:520
 #, kde-format
 msgid "area error: %1"
 msgstr "похибка за площею: %1"
@@ -24764,10 +24775,9 @@ msgid "Clipboard"
 msgstr "Буфер обміну"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:84
-#, fuzzy, kde-format
-#| msgid "Object's Bounding Box"
+#, kde-format
 msgid "Bounding Box"
-msgstr "У межах рамки об'єкта"
+msgstr "Обмежувальна рамка"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:89
 #, kde-format
@@ -24777,6 +24787,10 @@ msgid ""
 "currently selected objects is exported</li><li>Worskheet - the complete "
 "worksheet area is exported</li></ul>"
 msgstr ""
+"Визначає область експортування:<ul><li>Обмежувальна рамка — експортувати усе "
+"у межах обмежувальної рамки усіх об'єктів на робочому аркуші</"
+"li><li>Позначене — експортувати область поточних позначених об'єктів</"
+"li><li>Робочий аркуш — експортувати увесь робочий аркуш</li></ul>"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:99
 #, kde-format

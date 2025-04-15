@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-14 00:37+0000\n"
-"PO-Revision-Date: 2025-03-31 00:39+0200\n"
+"POT-Creation-Date: 2025-04-15 00:37+0000\n"
+"PO-Revision-Date: 2025-04-14 11:45+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -13238,6 +13238,13 @@ msgid ""
 "the most concise format</li><li>Automatic (E) - selects between 'Decimal' "
 "and 'Scientific (E)' to get the most concise format</li></ul>"
 msgstr ""
+"Specificeert hoe numerieke waarden geformatteerd worden in het rekenblad:"
+"<ul><li>Decimaal - formatteer als [-]9.9</li><li>Wetenschappelijk (e) - "
+"formatteer als [-]9.9e[+|-]999</li><li>Wetenschappelijk (E) - formatteer als "
+"[-]9.9E[+|-]999</li><li>Automatisch (e) - selecteer tussen 'Decimaal' en "
+"'Wetenschappelijk (e)' om het meest precieze formaat te krijgen</"
+"li><li>Automatisch (E) - selecteert tussen 'Decimaal' en 'Wetenschappelijk "
+"(E)' om het meest precieze formaat te krijgen</li></ul>"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:336
 #, kde-format
@@ -13248,6 +13255,11 @@ msgid ""
 "represents the maximum number of significant digits (trailing zeroes are "
 "omitted)."
 msgstr ""
+"Voor de formaten 'Decimaal', 'Wetenschappelijk (e)' en 'Wetenschappelijk "
+"(E)', representeert de precisie het aantal cijfers na de decimale punt.\n"
+"Voor de formaten 'Automatisch (e)' en 'Automatisch (E)', representeert de "
+"precisie het maximum aantal significante cijfers (nullen achteraan worden "
+"weggelaten)."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:341
 #, kde-format
@@ -13905,64 +13917,64 @@ msgstr ""
 msgid "This method is much slower than any other"
 msgstr "Deze methode is veel langzamer dan elke andere"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:354
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:386
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:431
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:358
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:390
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:435
 #, kde-format
 msgid "Tolerance (distance):"
 msgstr "Tolerantie (afstand):"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:365
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:369
 #, kde-format
 msgid "Number of points:"
 msgstr "Aantal punten:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:376
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:380
 #, kde-format
 msgid "Step size:"
 msgstr "Stapgrootte:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:393
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:397
 #, kde-format
 msgid "Repeats:"
 msgstr "Herhalingen:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:403
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:407
 #, kde-format
 msgid "Tolerance (area):"
 msgstr "Tolerantie (gebied):"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:414
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:418
 #, kde-format
 msgid "Minimum tolerance:"
 msgstr " Min. tolerantie:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:418
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:422
 #, kde-format
 msgid "Maximum tolerance:"
 msgstr "Max. tolerantie:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:435
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:439
 #, kde-format
 msgid "Search region:"
 msgstr ":Zoekgebied"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:499
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:503
 #, kde-format
 msgid "Data reduction status: %1"
 msgstr "Status gegevens vereenvoudigen: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:514
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:518
 #, kde-format
 msgid "number of points: %1"
 msgstr "aantal punten: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:515
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:519
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "positionele kwadraat van fout: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:520
 #, kde-format
 msgid "area error: %1"
 msgstr "fout in gebied: %1"
@@ -24657,10 +24669,9 @@ msgid "Clipboard"
 msgstr "Klembord"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:84
-#, fuzzy, kde-format
-#| msgid "Object's Bounding Box"
+#, kde-format
 msgid "Bounding Box"
-msgstr "Begrenzend vak van object"
+msgstr "Begrenzingsvak"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:89
 #, kde-format
@@ -24670,6 +24681,11 @@ msgid ""
 "currently selected objects is exported</li><li>Worskheet - the complete "
 "worksheet area is exported</li></ul>"
 msgstr ""
+"Specificeert het te exporteren gebied:<ul><li>Begrenzingsvak - het "
+"begrenzingsvak van alle objecten op het werkvel wordt geëxporteerd</"
+"li><li>Selectie - het gebied van de nu geselecteerde objecten wordt "
+"geëxporteerd</li><li>Werkvel - het volledige werkvelgebied wordt "
+"geëxporteerd</li></ul>"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:99
 #, kde-format

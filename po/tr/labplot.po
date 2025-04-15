@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-14 00:37+0000\n"
+"POT-Creation-Date: 2025-04-15 00:37+0000\n"
 "PO-Revision-Date: 2025-03-31 01:16+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -13209,6 +13209,13 @@ msgid ""
 "the most concise format</li><li>Automatic (E) - selects between 'Decimal' "
 "and 'Scientific (E)' to get the most concise format</li></ul>"
 msgstr ""
+"Çalışma sayfasında sayısal değerlerin nasıl biçimlendirildiğini belirtir:"
+"<ul><li>Ondalık — [-]9,9 olarak biçimlendir</li><li>Bilimsel (e) — "
+"[-]9,9e[+|-]999 olarak biçimlendir</li><li>Bilimsel (E) — "
+"[-]9.9E[+|-]999olarak biçimlendir</li><li>Kendiliğinden (e) — en doğru "
+"biçimi almak için “Ondalık” ve “Bilimsel (e)” arasında seçim yapar</"
+"li><li>Kendiliğinden (E) — en doğru seçimi yapmak için “Ondalık” ve "
+"“Bilimsel (E)” arasında seçim yapar</li></ul>"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:336
 #, kde-format
@@ -13219,6 +13226,10 @@ msgid ""
 "represents the maximum number of significant digits (trailing zeroes are "
 "omitted)."
 msgstr ""
+"“Ondalık”, “Bilimsel (e)” ve “Bilimsel (E)” biçimleri için kesinlik, ondalık "
+"karakterinden sonraki basamak sayısını belirtir.\n"
+"“Kendiliğinden (e)” ve “Kendiliğinden (E)” biçimleri için kesinlik, en büyük "
+"anlamlı basamak sayısını belirtir (sondaki sıfırlar yok sayılır)."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:341
 #, kde-format
@@ -13867,64 +13878,64 @@ msgstr ""
 msgid "This method is much slower than any other"
 msgstr "Bu yöntem diğer herhangi birinden daha yavaş"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:354
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:386
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:431
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:358
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:390
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:435
 #, kde-format
 msgid "Tolerance (distance):"
 msgstr "Tölerans (uzaklık):"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:365
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:369
 #, kde-format
 msgid "Number of points:"
 msgstr "Nokta sayısı:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:376
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:380
 #, kde-format
 msgid "Step size:"
 msgstr "Adım boyutu:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:393
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:397
 #, kde-format
 msgid "Repeats:"
 msgstr "Yinelemeler:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:403
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:407
 #, kde-format
 msgid "Tolerance (area):"
 msgstr "Tölerans (alan):"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:414
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:418
 #, kde-format
 msgid "Minimum tolerance:"
 msgstr "En küçük tolerans:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:418
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:422
 #, kde-format
 msgid "Maximum tolerance:"
 msgstr "En büyük tolerans:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:435
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:439
 #, kde-format
 msgid "Search region:"
 msgstr "Bölge ara:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:499
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:503
 #, kde-format
 msgid "Data reduction status: %1"
 msgstr "Veri indirgeme durumu: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:514
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:518
 #, kde-format
 msgid "number of points: %1"
 msgstr "nokta sayısı: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:515
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:519
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "konumsal karekök hatası: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:520
 #, kde-format
 msgid "area error: %1"
 msgstr "alan hatası: %1"
@@ -24609,10 +24620,9 @@ msgid "Clipboard"
 msgstr "Pano"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:84
-#, fuzzy, kde-format
-#| msgid "Object's Bounding Box"
+#, kde-format
 msgid "Bounding Box"
-msgstr "Nesnenin Çevreleyen Kutusu"
+msgstr "Çevreleyen Kutu"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:89
 #, kde-format
@@ -24622,6 +24632,10 @@ msgid ""
 "currently selected objects is exported</li><li>Worskheet - the complete "
 "worksheet area is exported</li></ul>"
 msgstr ""
+"Dışa aktarılacak alanı belirtir:<ul><li>Çevreleyen Kutu — Çalışma "
+"sayfasındaki tüm nesnelerin çevreleyen kutusu dışa aktarılır</li><li>Seçim — "
+"Şu anda seçili olan nesnelerin alanı dışa aktarılır</li><li>Çalışma Sayfası "
+"— Tüm çalışma sayfası alanı dışa aktarılır</li></ul>"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:99
 #, kde-format
@@ -25009,102 +25023,3 @@ msgstr "dönüştürme süreci başarısız, çıkış kodu ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Dosya açılamadı:"
-
-#~ msgid "Current Selection"
-#~ msgstr "Geçerli seçim"
-
-#~ msgid "Complete Worksheet"
-#~ msgstr "Çalışma Sayfasını Tamamla"
-
-#~ msgid "Uncertainty,%"
-#~ msgstr "Belirsizlik, %"
-
-#~ msgid "%1: enable negative lower limit"
-#~ msgstr "%1: Negatif alt sınırı etkinleştir"
-
-#~ msgid "Allow negative values for the lower limit."
-#~ msgstr "Alt sınır için negatif değerlere izin verin."
-
-#~ msgid "Lower Limit < 0:"
-#~ msgstr "Alt sınır < 0:"
-
-#~ msgid "%1: set border"
-#~ msgstr "%1: Kenarlık ayarla"
-
-#~ msgid "Start value"
-#~ msgstr "Başlangıç değeri"
-
-#~ msgid "Lower limit"
-#~ msgstr "Alt sınır"
-
-#~ msgid "Upper limit"
-#~ msgstr "Üst sınır"
-
-#~ msgid "No line"
-#~ msgstr "Satır yok"
-
-#~ msgid "Solid line"
-#~ msgstr "Düz çizgi"
-
-#~ msgid "Dash line"
-#~ msgstr "Kısa çizgi"
-
-#~ msgid "Dot line"
-#~ msgstr "Nokta çizgi"
-
-#~ msgid "Dash dot line"
-#~ msgstr "Tire nokta çizgisi"
-
-#~ msgid "Dash dot dot line"
-#~ msgstr "Tire nokta nokta çizgisi"
-
-#~ msgid "Decimal point "
-#~ msgstr "Ondalık noktası "
-
-#~ msgid "Group separator "
-#~ msgstr "Grup ayırıcısı "
-
-#~ msgid "Exponential "
-#~ msgstr "Üstel "
-
-#~ msgid "Zero digit "
-#~ msgstr "Sıfır rakamı "
-
-#~ msgid "Percent "
-#~ msgstr "Yüzde "
-
-#~ msgid "Positive/Negative sign "
-#~ msgstr "Pozitif/Negatif işareti "
-
-#~ msgid "Number Settings:"
-#~ msgstr "Sayı ayarları:"
-
-#~ msgid "Copy Info"
-#~ msgstr "Bilgiyi Kopyala"
-
-#~ msgid "Custom Names:"
-#~ msgstr "Özel adlar:"
-
-#~ msgid "Filter not initialized"
-#~ msgstr "Süzgeç ilklendirilmedi"
-
-#~ msgid "Data Type:"
-#~ msgstr "Veri türü:"
-
-#~ msgid "Dot (.)"
-#~ msgstr "Nokta (.)"
-
-#~ msgid "Comma (,)"
-#~ msgstr "Virgül (,)"
-
-#~ msgid "Arabic (٫)"
-#~ msgstr "Arapça (٫)"
-
-#~ msgid "xy-curve"
-#~ msgstr "xy eğrisi"
-
-#~ msgid "xy-curve from a Formula"
-#~ msgstr "Bir Formülten xy Eğrisi"
-
-#~ msgid "Analysis Curve"
-#~ msgstr "Çözümleme Eğrisi"

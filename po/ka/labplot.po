@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-14 00:37+0000\n"
-"PO-Revision-Date: 2025-03-30 04:10+0200\n"
+"POT-Creation-Date: 2025-04-15 00:37+0000\n"
+"PO-Revision-Date: 2025-04-14 03:40+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -13239,6 +13239,12 @@ msgid ""
 "the most concise format</li><li>Automatic (E) - selects between 'Decimal' "
 "and 'Scientific (E)' to get the most concise format</li></ul>"
 msgstr ""
+"მიუთითებს, როგორ ხდება რიცხვითი მნიშვნელობების დაფორმატება ელცხრილში:"
+"<ul><li>ათობითი - ფორმატი [-]9.9</li><li>სამეცნიერო (e) - ფორმატი "
+"[-]9.9e[+|-]9999</li><li>სამეცნიერო (E) - ფორმატი [-]9.9E[+|-]999</"
+"li><li>ავტომატური (e) - აირჩევს 'ათობითსა' და 'სამეცნიეროს (e)' შორის და "
+"აირჩევს უფრო ზუსტს.</li><li>ავტომატური (E) აირჩევს 'ათობითსა' და "
+"'სამეცნიეროს (E)' შორის და აირჩევს უფრო ზუსტს.</li><li>"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:336
 #, kde-format
@@ -13249,6 +13255,10 @@ msgid ""
 "represents the maximum number of significant digits (trailing zeroes are "
 "omitted)."
 msgstr ""
+"\"ათობითი\", \"სამეცნიერო (e)\" და \"სამეცნიერო (E)\" ფორმატებს შორის "
+"სიზუსტე წარმოადგენს ციფრების რაოდენობას მძიმის შემდეგ.\n"
+"\"ავტომატური (e\" და \"ავტომატური (E)\" ფორმატებისთვის სიზუსტე წარმოადგენს "
+"მნიშვნელოვანი ციფრების მაქსიმალურ რიცხვს (ბოლო ნულები ამოღებულია)."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:341
 #, kde-format
@@ -13902,64 +13912,64 @@ msgstr ""
 msgid "This method is much slower than any other"
 msgstr "ეს მეთოდი ბევრად უფრო ნელია, ვიდრე ნებისმიერი სხვა"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:354
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:386
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:431
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:358
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:390
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:435
 #, kde-format
 msgid "Tolerance (distance):"
 msgstr "დასაშვები გადახრა (მანძილი):"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:365
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:369
 #, kde-format
 msgid "Number of points:"
 msgstr "წერტილების რაოდენობა:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:376
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:380
 #, kde-format
 msgid "Step size:"
 msgstr "ბიჯის ზომა:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:393
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:397
 #, kde-format
 msgid "Repeats:"
 msgstr "გამეორება:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:403
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:407
 #, kde-format
 msgid "Tolerance (area):"
 msgstr "დასაშვები გადახრა (ფართობი):"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:414
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:418
 #, kde-format
 msgid "Minimum tolerance:"
 msgstr "მინიმალური დასაშვები გადახრა:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:418
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:422
 #, kde-format
 msgid "Maximum tolerance:"
 msgstr "მაქსიმალური დასაშვები გადახრა:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:435
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:439
 #, kde-format
 msgid "Search region:"
 msgstr "ძებნის რეგიონი:"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:499
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:503
 #, kde-format
 msgid "Data reduction status: %1"
 msgstr "მონაცემების შემცირების მდგომარეობა: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:514
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:518
 #, kde-format
 msgid "number of points: %1"
 msgstr "წერტილების რაოდენობა: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:515
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:519
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "პოზიციური კვადრატის შეცდომა: %1"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:516
+#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:520
 #, kde-format
 msgid "area error: %1"
 msgstr "შეცდომის ფართობი: %1"
@@ -24641,10 +24651,9 @@ msgid "Clipboard"
 msgstr "გაცვლის ბაფერი"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:84
-#, fuzzy, kde-format
-#| msgid "Object's Bounding Box"
+#, kde-format
 msgid "Bounding Box"
-msgstr "ობიექტის შემომსაზღვრელი ჩარჩო"
+msgstr "შემზღუდავი ოთხკუთხედი"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:89
 #, kde-format
@@ -24654,6 +24663,10 @@ msgid ""
 "currently selected objects is exported</li><li>Worskheet - the complete "
 "worksheet area is exported</li></ul>"
 msgstr ""
+"განსაზღვრავს გასატან ალაგს:<ul><li>შემომსაზღვრელი ოთხკუთხედი - გატანილია "
+"ელცხრილზე არსებული ყველა ობიექტის შემომსაზღვრელი ოთხკუთხედი</"
+"li><li>მონიშნული - გატანილია ამჟამად მონიშნული ობიექტები.</li><li>სამუშაო "
+"ფურცელი - გატანილი იქნება სრული სამუშაო ფურცელი</li></ul>"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:99
 #, kde-format
