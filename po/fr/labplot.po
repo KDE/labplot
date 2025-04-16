@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-15 00:37+0000\n"
-"PO-Revision-Date: 2025-03-30 11:48+0200\n"
+"PO-Revision-Date: 2025-04-15 09:11+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -13348,6 +13348,13 @@ msgid ""
 "the most concise format</li><li>Automatic (E) - selects between 'Decimal' "
 "and 'Scientific (E)' to get the most concise format</li></ul>"
 msgstr ""
+"Spécifie comment les valeurs numériques sont formatées dans la feuille de "
+"calcul :<ul><li>Décimal - Format [-] 9,9</li><li>Scientifique (e) - Format "
+"[-] 9.9e [+|-]999</li><li>Scientifique (E) - Format [-] 9.9E [+|-]999</"
+"li><li>Automatique (e) - Sélection entre « Décimal » et « Scientifique (e) » "
+"pour obtenir le format le plus concis</li><li>Automatique (E) - Sélection "
+"entre « Décimal » et « Scientifique (E) » pour obtenir le format le plus "
+"concis.</li></ul>"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:336
 #, kde-format
@@ -13358,6 +13365,11 @@ msgid ""
 "represents the maximum number of significant digits (trailing zeroes are "
 "omitted)."
 msgstr ""
+"Pour les formats « Décimal », « Scientifique (e) » et « Scientifique (E) », "
+"la précision représente le nombre de chiffres après la virgule.\n"
+"Pour les formats « Automatique (e) » et « Automatique (E) », la précision "
+"représente le nombre maximal de chiffres significatifs (Les zéros non "
+"significatifs sont omis)."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:341
 #, kde-format
@@ -24831,10 +24843,9 @@ msgid "Clipboard"
 msgstr "Presse-papier"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:84
-#, fuzzy, kde-format
-#| msgid "Object's Bounding Box"
+#, kde-format
 msgid "Bounding Box"
-msgstr "Boîte délimitant l'objet"
+msgstr "Zone de délimitation"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:89
 #, kde-format
@@ -24844,6 +24855,11 @@ msgid ""
 "currently selected objects is exported</li><li>Worskheet - the complete "
 "worksheet area is exported</li></ul>"
 msgstr ""
+"Spécifie la zone à exporter :<ul><li>Boîte de délimitation - La boîte de "
+"délimitation de tous les objets de la feuille de calcul est exportée,</"
+"li><li>Sélection - La zone des objets actuellement sélectionnés est exportée,"
+"</li><li>Feuille de calcul - La totalité de la feuille de calcul est "
+"exportée.</li></ul>"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:99
 #, kde-format
