@@ -79,8 +79,8 @@
                     "sources": [
                         {
                             "type": "archive",
-                            "url": "https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.bz2",
-                            "sha256": "af57be25cb4c4f4b413ed692fe378affb4352ea50fbe294a11ef548f4d527d89"
+                            "url": "https://archives.boost.io/release/1.88.0/source/boost_1_88_0.tar.bz2",
+                            "sha256": "46d9d2c06637b219270877c9e16155cbd015b6dc84349af064c088e9b5b12f7b"
                         }
                     ]
                 },
@@ -170,8 +170,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v2.4/libcerf-v2.4.tar.gz",
-                    "sha256": "080b30ae564c3dabe3b89264522adaf5647ec754021572bee54929697b276cdc"
+                    "url": "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v2.5/libcerf-v2.5.tar.gz",
+                    "sha256": "d5270e37b01f45b9af2d23de3560a0963b4f1d2b87285e37fa7e1ff3203561f9"
                 }
             ]
         },
