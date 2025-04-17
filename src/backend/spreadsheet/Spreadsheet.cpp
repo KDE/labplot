@@ -1297,7 +1297,6 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 			} else if (reader->name() == QLatin1String("statisticsSpreadsheet")) {
 				d->statisticsSpreadsheet = new StatisticsSpreadsheet(this, true);
 				if (!d->statisticsSpreadsheet->load(reader, preview)) {
-
 					delete d->statisticsSpreadsheet;
 					d->statisticsSpreadsheet = nullptr;
 				} else
