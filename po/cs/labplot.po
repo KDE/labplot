@@ -24242,7 +24242,7 @@ msgstr "Schránka"
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:84
 #, kde-format
 msgid "Bounding Box"
-msgstr ""
+msgstr "Ohraničení"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:89
 #, kde-format
