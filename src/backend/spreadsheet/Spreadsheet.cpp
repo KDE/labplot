@@ -1754,9 +1754,13 @@ QString SpreadsheetPrivate::name() const {
 }
 
 void SpreadsheetPrivate::updateCommentsHeader() {
+#ifndef SDK
 	q->m_view->showComments(q->showComments());
+#endif
 }
 
 void SpreadsheetPrivate::updateSparklinesHeader() {
+#ifndef SDK
 	q->m_view->showSparklines(q->showSparklines());
+#endif
 }
