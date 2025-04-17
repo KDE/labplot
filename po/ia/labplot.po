@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-15 00:37+0000\n"
-"PO-Revision-Date: 2025-03-20 19:10+0100\n"
+"PO-Revision-Date: 2025-04-16 11:52+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -21113,7 +21113,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/imagedock.ui:446
 #, kde-format
 msgid "Keep Ratio:"
-msgstr "Mantene rata de aspecto:"
+msgstr "Mantene proportiones:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCurves)
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:32
