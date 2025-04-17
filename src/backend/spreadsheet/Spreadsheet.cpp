@@ -95,6 +95,10 @@ void Spreadsheet::init() {
 	KConfig config;
 	KConfigGroup group = config.group(QLatin1String("Spreadsheet"));
 
+	Q_D(Spreadsheet);
+	d->showComments = group.readEntry(QLatin1String("ShowComments"), false);
+	d->showSparklines = group.readEntry(QLatin1String("ShowSparklines"), false);
+
 	const int columns = group.readEntry(QLatin1String("ColumnCount"), 2);
 	const int rows = group.readEntry(QLatin1String("RowCount"), 100);
 
@@ -403,6 +407,22 @@ void Spreadsheet::appendColumn() {
  */
 void Spreadsheet::prependColumns(int count) {
 	insertColumns(0, count);
+}
+
+BASIC_SHARED_D_READER_IMPL(Spreadsheet, bool, showComments, showComments)
+STD_SETTER_CMD_IMPL_F_S(Spreadsheet, SetShowComments, bool, showComments, updateCommentsHeader)
+void Spreadsheet::setShowComments(bool showComments) {
+	Q_D(Spreadsheet);
+	if (d->showComments != showComments)
+		exec(new SpreadsheetSetShowCommentsCmd(d, showComments, ki18n("%1: toggle comments header")));
+}
+
+BASIC_SHARED_D_READER_IMPL(Spreadsheet, bool, showSparklines, showSparklines)
+STD_SETTER_CMD_IMPL_F_S(Spreadsheet, SetShowSparklines, bool, showSparklines, updateSparklinesHeader)
+void Spreadsheet::setShowSparklines(bool showSparklines) {
+	Q_D(Spreadsheet);
+	if (d->showSparklines != showSparklines)
+		exec(new SpreadsheetSetShowSparklinesCmd(d, showSparklines, ki18n("%1: toggle sparklines header")));
 }
 
 void Spreadsheet::initConnectionsLinking(const Spreadsheet* sender, const Spreadsheet* receiver) {
@@ -1213,6 +1233,11 @@ void Spreadsheet::save(QXmlStreamWriter* writer) const {
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
+	writer->writeStartElement(QLatin1String("general"));
+	writer->writeAttribute(QStringLiteral("showComments"), QString::number(d->showComments));
+	writer->writeAttribute(QStringLiteral("showSparklines"), QString::number(d->showSparklines));
+	writer->writeEndElement();
+
 	writer->writeStartElement(QLatin1String("linking"));
 	writer->writeAttribute(QStringLiteral("enabled"), QString::number(d->linking.linking));
 	writer->writeAttribute(QStringLiteral("spreadsheet"), d->linking.spreadsheetPath());
@@ -1252,16 +1277,14 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 			if (reader->name() == QLatin1String("comment")) {
 				if (!readCommentElement(reader))
 					return false;
+			} else if (reader->name() == QLatin1String("general")) {
+				attribs = reader->attributes();
+				READ_INT_VALUE("showComments", showComments, bool);
+				READ_INT_VALUE("showSparklines", showSparklines, bool);
 			} else if (reader->name() == QLatin1String("linking")) {
 				attribs = reader->attributes();
-				str = attribs.value(QStringLiteral("enabled")).toString();
-				if (str.isEmpty())
-					reader->raiseMissingAttributeWarning(QStringLiteral("enabled"));
-				else
-					d->linking.linking = static_cast<bool>(str.toInt());
-
-				str = attribs.value(QStringLiteral("spreadsheet")).toString();
-				d->linking.linkedSpreadsheetPath = str;
+				READ_INT_VALUE("enabled", linking.linking, bool);
+				d->linking.linkedSpreadsheetPath = attribs.value(QStringLiteral("spreadsheet")).toString();
 			} else if (reader->name() == QLatin1String("column")) {
 				Column* column = new Column(QString());
 				column->setIsLoading(true);
@@ -1274,6 +1297,7 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 			} else if (reader->name() == QLatin1String("statisticsSpreadsheet")) {
 				d->statisticsSpreadsheet = new StatisticsSpreadsheet(this, true);
 				if (!d->statisticsSpreadsheet->load(reader, preview)) {
+
 					delete d->statisticsSpreadsheet;
 					d->statisticsSpreadsheet = nullptr;
 				} else
@@ -1727,4 +1751,12 @@ SpreadsheetPrivate::SpreadsheetPrivate(Spreadsheet* owner)
 
 QString SpreadsheetPrivate::name() const {
 	return q->name();
+}
+
+void SpreadsheetPrivate::updateCommentsHeader() {
+	q->m_view->showComments(q->showComments());
+}
+
+void SpreadsheetPrivate::updateSparklinesHeader() {
+	q->m_view->showSparklines(q->showSparklines());
 }

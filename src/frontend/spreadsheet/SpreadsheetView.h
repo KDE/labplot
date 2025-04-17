@@ -57,10 +57,7 @@ public:
 	void setSuppressResizeHeader(bool);
 
 	void showComments(bool on = true);
-	bool areCommentsShown() const;
-
-	void showSparkLines(bool on = true);
-	bool areSparkLinesShown() const;
+	void showSparklines(bool on = true);
 
 	int selectedColumnCount(bool full = true) const;
 	int selectedColumnCount(AbstractColumn::PlotDesignation) const;
@@ -260,7 +257,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 	void searchReplace();
 	void toggleComments();
-	void toggleSparkLines();
+	void toggleSparklines();
 	void goToNextColumn();
 	void goToPreviousColumn();
 	void goToCell();
