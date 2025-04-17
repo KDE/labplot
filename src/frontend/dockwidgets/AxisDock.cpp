@@ -2214,7 +2214,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 		group.writeEntry(QStringLiteral("MinorTicksIncrement"), QString::number(ui.sbMinorTicksSpacingNumeric->value()));
 	else
 		group.writeEntry(QStringLiteral("MinorTicksIncrement"), QString::number(dtsbMinorTicksIncrement->value()));
-	group.writeEntry(QStringLiteral("MinorTicksLength"), Worksheet::convertFromSceneUnits(ui.sbMinorTicksLength->value(), Worksheet::Unit::Point));
+	group.writeEntry(QStringLiteral("MinorTicksLength"), Worksheet::convertToSceneUnits(ui.sbMinorTicksLength->value(), Worksheet::Unit::Point));
 	minorTicksLineWidget->saveConfig(group);
 
 	// Extra ticks

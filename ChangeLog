@@ -66,6 +66,7 @@ Bug fixes:
 	* Use the proper local settings when pasting values in Matrix (BUG 500014)
 	* Fix vanishing axes label (Issue #843)
 	* Fix automatic data reduction (Issue #1105)
+	* Correctly calculate the lengh of the minor axis ticks when saving the properties as a temlate (BUG 502704)
 
 Internal:
 	* use name LabPlot/labplot consistenly (renamed LabPlot2/labplot2)
