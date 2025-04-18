@@ -326,8 +326,8 @@ QColor ProcessBehaviorChart::labelsBackgroundColor() const {
 
 QFont ProcessBehaviorChart::labelsFont() const {
 	Q_D(const ProcessBehaviorChart);
-	QTextEdit te(d->centerLabel->text().text);
-	return te.currentCharFormat().font();
+	// currently only using center label font
+	return d->centerLabel->teXFont();
 }
 
 TextLabel::BorderShape ProcessBehaviorChart::labelsBorderShape() const {
@@ -609,6 +609,7 @@ void ProcessBehaviorChart::setLabelsBorderShape(TextLabel::BorderShape shape) {
 }
 
 void ProcessBehaviorChart::setLabelsFont(const QFont& font) {
+	QDEBUG(Q_FUNC_INFO << ", FONT = " << font)
 	Q_D(ProcessBehaviorChart);
 	auto textWrapper = d->centerLabel->text();
 	QTextEdit te(textWrapper.text);
@@ -620,6 +621,7 @@ void ProcessBehaviorChart::setLabelsFont(const QFont& font) {
 		te.setFont(font);
 		textWrapper.text = te.toHtml();
 		d->centerLabel->setText(textWrapper);
+		d->centerLabel->setTeXFont(font);
 
 		textWrapper = d->upperLimitLabel->text();
 		te.setText(textWrapper.text);
@@ -629,6 +631,7 @@ void ProcessBehaviorChart::setLabelsFont(const QFont& font) {
 		te.setFont(font);
 		textWrapper.text = te.toHtml();
 		d->upperLimitLabel->setText(textWrapper);
+		d->upperLimitLabel->setTeXFont(font);
 
 		textWrapper = d->lowerLimitLabel->text();
 		te.setText(textWrapper.text);
@@ -638,6 +641,7 @@ void ProcessBehaviorChart::setLabelsFont(const QFont& font) {
 		te.setFont(font);
 		textWrapper.text = te.toHtml();
 		d->lowerLimitLabel->setText(textWrapper);
+		d->lowerLimitLabel->setTeXFont(font);
 		endMacro();
 	}
 }
