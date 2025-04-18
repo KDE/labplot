@@ -52,13 +52,13 @@ freebsd14_qt68_t:
     - triggers
     - web
 
-suse_tumbleweed_qt68:
+suse_tumbleweed_qt69:
   only: []
 
-suse_tumbleweed_qt68_t:
-  extends: suse_tumbleweed_qt68
+suse_tumbleweed_qt69_t:
+  extends: suse_tumbleweed_qt69
   script:
-    - !reference [suse_tumbleweed_qt68, script]
+    - !reference [suse_tumbleweed_qt69, script]
     - mkdir -p build_examples && cd build_examples
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
     - ninja
