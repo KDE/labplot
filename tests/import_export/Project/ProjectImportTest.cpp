@@ -434,7 +434,7 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	auto* plot = dynamic_cast<CartesianPlot*>(w1->child<CartesianPlot>(0));
 	QVERIFY(plot != nullptr);
 
-	QCOMPARE(plot->name(), i18n("Plot 1"));
+	QCOMPARE(plot->name(), i18n("Plot%1", QString::number(1)));
 
 	auto* xAxis = dynamic_cast<Axis*>(plot->child<Axis>(0));
 	QVERIFY(xAxis != nullptr);
@@ -494,7 +494,7 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	plot = dynamic_cast<CartesianPlot*>(w2->child<CartesianPlot>(0));
 	QVERIFY(plot != nullptr);
 
-	QCOMPARE(plot->name(), i18n("Plot 1"));
+	QCOMPARE(plot->name(), i18n("Plot%1", QString::number(1)));
 
 	xAxis = dynamic_cast<Axis*>(plot->child<Axis>(0));
 	QVERIFY(xAxis != nullptr);
@@ -566,7 +566,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	auto* plot = dynamic_cast<CartesianPlot*>(w2->child<CartesianPlot>(0));
 	QVERIFY(plot != nullptr);
 
-	QCOMPARE(plot->name(), i18n("Plot 1"));
+	QCOMPARE(plot->name(), i18n("Plot%1", QString::number(1)));
 
 	auto* xAxis = dynamic_cast<Axis*>(plot->child<Axis>(0));
 	QVERIFY(xAxis != nullptr);
@@ -617,7 +617,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	plot = dynamic_cast<CartesianPlot*>(w1->child<CartesianPlot>(0));
 	QVERIFY(plot != nullptr);
 
-	QCOMPARE(plot->name(), i18n("Plot 1"));
+	QCOMPARE(plot->name(), i18n("Plot%1", QString::number(1)));
 
 	xAxis = dynamic_cast<Axis*>(plot->child<Axis>(0));
 	QVERIFY(xAxis != nullptr);
@@ -707,7 +707,7 @@ void ProjectImportTest::testOriginHistogram() {
 
 	auto* plot = dynamic_cast<CartesianPlot*>(worksheet->child<CartesianPlot>(0));
 	QVERIFY(plot != nullptr);
-	QCOMPARE(plot->name(), i18n("Plot 1"));
+	QCOMPARE(plot->name(), i18n("Plot%1", QString::number(1)));
 
 	auto* histogram = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
 	QVERIFY(histogram != nullptr);
@@ -723,7 +723,7 @@ void ProjectImportTest::testOriginHistogram() {
 
 	plot = dynamic_cast<CartesianPlot*>(worksheet->child<CartesianPlot>(0));
 	QVERIFY(plot != nullptr);
-	QCOMPARE(plot->name(), i18n("Plot 1"));
+	QCOMPARE(plot->name(), i18n("Plot%1", QString::number(1)));
 
 	histogram = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
 	QVERIFY(histogram != nullptr);
@@ -766,7 +766,7 @@ void ProjectImportTest::testOriginBarPlot() {
 
 	auto* plot = dynamic_cast<CartesianPlot*>(worksheet->child<CartesianPlot>(0));
 	QVERIFY(plot != nullptr);
-	QCOMPARE(plot->name(), i18n("Plot 1"));
+	QCOMPARE(plot->name(), i18n("Plot%1", QString::number(1)));
 
 	auto* barPlot = dynamic_cast<BarPlot*>(plot->child<BarPlot>(0));
 	QVERIFY(barPlot != nullptr);
@@ -782,7 +782,7 @@ void ProjectImportTest::testOriginBarPlot() {
 
 	plot = dynamic_cast<CartesianPlot*>(worksheet->child<CartesianPlot>(0));
 	QVERIFY(plot != nullptr);
-	QCOMPARE(plot->name(), i18n("Plot 1"));
+	QCOMPARE(plot->name(), i18n("Plot%1", QString::number(1)));
 
 	barPlot = dynamic_cast<BarPlot*>(plot->child<BarPlot>(0));
 	QVERIFY(barPlot != nullptr);
