@@ -134,11 +134,15 @@
         },
         {
             "name": "hdf5",
+            "buildsystem": "simple",
+	    "build-commands": [
+		   "cd hdf5* && ./configure --prefix=/app --enable-cxx=yes --enable-tools=no --enable-tests=no && make -j install"
+	    ],
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-1.12.3/src/hdf5-1.12.3.tar.gz",
-                    "sha256": "c15adf34647918dd48150ea1bd9dffd3b32a3aec5298991d56048cc3d39b4f6f"
+                    "url": "https://support.hdfgroup.org/releases/hdf5/v1_14/v1_14_6/downloads/hdf5-1.14.6.tar.gz",
+                    "sha256": "e4defbac30f50d64e1556374aa49e574417c9e72c6b1de7a4ff88c4b1bea6e9b"
                 }
             ]
         },
@@ -239,8 +243,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/Orc/discount/archive/v2.2.7d.tar.gz",
-                    "sha256": "eb9f6629dadddb44c3111267b82e51d5fb8364e228cc3533fe937d8a99e0155b"
+                    "url": "https://github.com/Orc/discount/archive/v3.0.0d.tar.gz",
+                    "sha256": "0ed8cc27ac5d46dc6a8beedd5e5673ac8b466a6474bdb7d35f37c815f670385f"
                 }
             ]
         },
