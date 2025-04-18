@@ -2936,7 +2936,7 @@ void MainWin::settingsNotebookDialog() {
 }
 
 void MainWin::updateNotebookActions() {
-	auto* menu = static_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
+	// auto* menu = static_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
 	unplugActionList(QLatin1String("backends_list"));
 	QList<QAction*> newBackendActions;
 	m_newNotebookMenu->clear();
