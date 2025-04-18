@@ -1529,7 +1529,7 @@ void CartesianPlotTest::columnRemoveSaveLoadRestore() {
 	Project project;
 	project.load(savePath);
 
-	const QString path = QLatin1String("Project/data/data");
+	const QString path = i18n("Project") + QLatin1String("/data/data");
 
 	const auto* curve = project.children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive).first();
 	QCOMPARE(curve->xColumn(), nullptr);

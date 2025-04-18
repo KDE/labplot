@@ -3786,7 +3786,7 @@ void FitTest::testHistogramFit() {
 	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
 	QVERIFY(fit != nullptr);
 
-	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to '2'"));
+	QCOMPARE(fit->name(), i18n("Distribution Fit to '%1'", hist->name()));
 	// get results
 	const XYFitCurve::FitResult& fitResult = fit->fitResult();
 
@@ -3856,7 +3856,7 @@ void FitTest::testHistogramGaussianML() {
 	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
 	QVERIFY(fit != nullptr);
 
-	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	QCOMPARE(fit->name(), i18n("Distribution Fit to '%1'", hist->name()));
 	// get results
 	const XYFitCurve::FitResult& fitResult = fit->fitResult();
 
@@ -3912,7 +3912,7 @@ void FitTest::testHistogramExponentialML() {
 	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
 	QVERIFY(fit != nullptr);
 
-	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	QCOMPARE(fit->name(), i18n("Distribution Fit to '%1'", hist->name()));
 	// get results
 	const XYFitCurve::FitResult& fitResult = fit->fitResult();
 
@@ -3961,7 +3961,7 @@ void FitTest::testHistogramLaplaceML() {
 	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
 	QVERIFY(fit != nullptr);
 
-	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	QCOMPARE(fit->name(), i18n("Distribution Fit to '%1'", hist->name()));
 	// get results
 	const XYFitCurve::FitResult& fitResult = fit->fitResult();
 
@@ -4004,7 +4004,7 @@ void FitTest::testHistogramCauchyML() {
 	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
 	QVERIFY(fit != nullptr);
 
-	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	QCOMPARE(fit->name(), i18n("Distribution Fit to '%1'", hist->name()));
 	// get results
 	const XYFitCurve::FitResult& fitResult = fit->fitResult();
 
@@ -4047,7 +4047,7 @@ void FitTest::testHistogramLognormalML() {
 	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
 	QVERIFY(fit != nullptr);
 
-	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	QCOMPARE(fit->name(), i18n("Distribution Fit to '%1'", hist->name()));
 	// get results
 	const XYFitCurve::FitResult& fitResult = fit->fitResult();
 
@@ -4090,7 +4090,7 @@ void FitTest::testHistogramPoissonML() {
 	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
 	QVERIFY(fit != nullptr);
 
-	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	QCOMPARE(fit->name(), i18n("Distribution Fit to '%1'", hist->name()));
 	// get results
 	const XYFitCurve::FitResult& fitResult = fit->fitResult();
 
@@ -4137,7 +4137,7 @@ void FitTest::testHistogramBinomialML() {
 	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
 	QVERIFY(fit != nullptr);
 
-	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	QCOMPARE(fit->name(), i18n("Distribution Fit to '%1'", hist->name()));
 	// get results
 	const XYFitCurve::FitResult& fitResult = fit->fitResult();
 

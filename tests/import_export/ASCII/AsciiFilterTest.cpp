@@ -278,7 +278,7 @@ void AsciiFilterTest::singleColumn() {
 
 	QCOMPARE(spreadsheet.columnCount(), 1);
 	QCOMPARE(spreadsheet.rowCount(), 3);
-	QCOMPARE(spreadsheet.column(0)->name(), i18n("Column 1"));
+	QCOMPARE(spreadsheet.column(0)->name(), i18n("Column") + QStringLiteral(" 1"));
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
 
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 123);
@@ -308,7 +308,7 @@ void AsciiFilterTest::singleColumnSimplifyWhitespaceEnabled() {
 
 	QCOMPARE(spreadsheet.columnCount(), 1);
 	QCOMPARE(spreadsheet.rowCount(), 3);
-	QCOMPARE(spreadsheet.column(0)->name(), i18n("Column 1"));
+	QCOMPARE(spreadsheet.column(0)->name(), i18n("Column") + QStringLiteral(" 1"));
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
 
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 123);

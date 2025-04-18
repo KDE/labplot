@@ -361,8 +361,8 @@ void AbstractAspectTest::saveLoad() {
 
 		QVERIFY(childrenProject1.at(i)->name() == childrenProject2.at(i)->name());
 
-		if (childrenProject1.at(i)->path().contains(QStringLiteral("Project/Worksheet/plot/f(x)/x"))
-			|| childrenProject1.at(i)->path().contains(QStringLiteral("Project/Worksheet/plot/f(x)/y")))
+		if (childrenProject1.at(i)->path().contains(i18n("Project") + QStringLiteral("/Worksheet/plot/f(x)/x"))
+			|| childrenProject1.at(i)->path().contains(i18n("Project") + QStringLiteral("/Worksheet/plot/f(x)/y")))
 			continue; // The columns of the quation curve are not saved
 		QVERIFY(childrenProject1.at(i)->uuid() == childrenProject2.at(i)->uuid());
 	}

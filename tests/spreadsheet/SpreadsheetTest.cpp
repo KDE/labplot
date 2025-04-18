@@ -2816,7 +2816,7 @@ void SpreadsheetTest::testLinkSpreadsheetDeleteAdd() {
 
 	QCOMPARE(sheetCalculations->linking(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
-	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), QStringLiteral("Project/data"));
+	QCOMPARE(sheetCalculations->linkedSpreadsheetPath(), i18n("Project") + QStringLiteral("/data"));
 	QCOMPARE(sheetCalculations->rowCount(), 10); // does not change
 
 	auto* sheetDataNew = new Spreadsheet(QStringLiteral("data"), false);

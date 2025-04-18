@@ -687,8 +687,9 @@ void RetransformTest::TestAddCurve() {
 	data.type = XYEquationCurve::EquationType::Cartesian;
 	equationCurve->setEquationData(data);
 
-	auto list =
-		QStringList({QStringLiteral("Project/Worksheet/plot/x"), QStringLiteral("Project/Worksheet/plot/y"), QStringLiteral("Project/Worksheet/plot/f(x)")});
+	auto list = QStringList({i18n("Project") + QStringLiteral("/Worksheet/plot/x"),
+							 i18n("Project") + QStringLiteral("/Worksheet/plot/y"),
+							 i18n("Project") + QStringLiteral("/Worksheet/plot/f(x)")});
 	QCOMPARE(c.elementLogCount(false), list.count());
 	QCOMPARE(c.callCount(list.at(0)), 1);
 	QCOMPARE(c.callCount(list.at(1)), 1);
@@ -921,8 +922,9 @@ void RetransformTest::TestImportCSV() {
 	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, p);
 	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
 
-	auto list = QStringList(
-		{QStringLiteral("Project/Worksheet/plot/x"), QStringLiteral("Project/Worksheet/plot/y"), QStringLiteral("Project/Worksheet/plot/xy-curve")});
+	auto list = QStringList({i18n("Project") + QStringLiteral("/Worksheet/plot/x"),
+							 i18n("Project") + QStringLiteral("/Worksheet/plot/y"),
+							 i18n("Project") + QStringLiteral("/Worksheet/plot/xy-curve")});
 	QCOMPARE(c.elementLogCount(false), list.count());
 	for (auto& s : list) {
 		qDebug() << s;
@@ -1011,7 +1013,7 @@ void RetransformTest::TestImportCSVInvalidateCurve() {
 
 	// the curve that lost the column assignemnt should be retransformed
 	QCOMPARE(c.elementLogCount(false), 1);
-	QCOMPARE(c.callCount(QStringLiteral("Project/plot/curve")), 1);
+	QCOMPARE(c.callCount(i18n("Project") + QStringLiteral("/plot/curve")), 1);
 }
 
 void RetransformTest::TestSetScale() {
@@ -1074,11 +1076,11 @@ void RetransformTest::TestSetScale() {
 
 	auto list = QStringList({// data rect of the plot does not change, so retransforming the
 							 // plot is not needed
-							 QStringLiteral("Project/Worksheet/Plot/x"),
-							 QStringLiteral("Project/Worksheet/Plot/x2"),
-							 QStringLiteral("Project/Worksheet/Plot/y"),
-							 QStringLiteral("Project/Worksheet/Plot/y2"),
-							 QStringLiteral("Project/Worksheet/Plot/curve")});
+							 i18n("Project") + QStringLiteral("/Worksheet/Plot/x"),
+							 i18n("Project") + QStringLiteral("/Worksheet/Plot/x2"),
+							 i18n("Project") + QStringLiteral("/Worksheet/Plot/y"),
+							 i18n("Project") + QStringLiteral("/Worksheet/Plot/y2"),
+							 i18n("Project") + QStringLiteral("/Worksheet/Plot/curve")});
 
 	plot->setRangeScale(Dimension::X, 0, RangeT::Scale::Log10);
 

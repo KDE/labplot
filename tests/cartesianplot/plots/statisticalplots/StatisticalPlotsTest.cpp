@@ -186,17 +186,17 @@ void StatisticalPlotsTest::testHistogramColumnRemoved() {
 
 	histogram->setDataColumn(c);
 	c->setName(QStringLiteral("NewName"));
-	QCOMPARE(histogram->dataColumnPath(), QStringLiteral("Project/NewName"));
+	QCOMPARE(histogram->dataColumnPath(), i18n("Project") + QStringLiteral("/NewName"));
 
 	c->remove();
 
 	QCOMPARE(histogram->dataColumn(), nullptr);
-	QCOMPARE(histogram->dataColumnPath(), QStringLiteral("Project/NewName"));
+	QCOMPARE(histogram->dataColumnPath(), i18n("Project") + QStringLiteral("/NewName"));
 
-	c->setName(QStringLiteral("Another new name")); // Shall not lead to a crash
+	c->setName(QStringLiteral("Another new name")); // Should not lead to a crash
 
 	QCOMPARE(histogram->dataColumn(), nullptr);
-	QCOMPARE(histogram->dataColumnPath(), QStringLiteral("Project/NewName"));
+	QCOMPARE(histogram->dataColumnPath(), i18n("Project") + QStringLiteral("/NewName"));
 }
 
 // ##############################################################################
