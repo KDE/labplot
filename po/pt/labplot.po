@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-18 00:38+0000\n"
+"POT-Creation-Date: 2025-04-19 00:38+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -9457,45 +9457,45 @@ msgstr "%1: mudar a posição adicional das legendas"
 msgid "%1: set labels border shape"
 msgstr "%1: mudar a forma do contorno"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:617
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:618
 #, fuzzy, kde-format
 #| msgid "%1: set label font"
 msgid "%1: set labels font"
 msgstr "%1: mudar o tipo de letra das legendas"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:652
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:684
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:656
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:688
 #, fuzzy, kde-format
 #| msgid "%1: set label background color"
 msgid "%1: set labels background color"
 msgstr "%1: mudar a cor de fundo das legendas"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:742
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:746
 #, fuzzy, kde-format
 #| msgid "%1: set labels text type"
 msgid "%1: set labels border style"
 msgstr "%1: mudar o tipo de texto da legenda"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:753
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:757
 #, fuzzy, kde-format
 #| msgid "%1: set labels format"
 msgid "%1: set labels border width"
 msgstr "%1: mudar o formato das legendas"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:764
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:775
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:768
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:779
 #, fuzzy, kde-format
 #| msgid "%1: set label color"
 msgid "%1: set labels border color"
 msgstr "%1: mudar a cor das legendas"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:867
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:871
 #, fuzzy, kde-format
 #| msgid "Not enough data points available."
 msgid "Not enough data provided."
 msgstr "Não tem pontos de dados suficientes."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:967
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:971
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr ""

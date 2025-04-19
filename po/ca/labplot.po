@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-18 00:38+0000\n"
-"PO-Revision-Date: 2025-04-14 12:37+0200\n"
+"POT-Creation-Date: 2025-04-19 00:38+0000\n"
+"PO-Revision-Date: 2025-04-18 10:48+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -7362,16 +7362,14 @@ msgid "%1: mask rows with missing values"
 msgstr "%1: emmascara les files amb valors que manquen"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:417
-#, fuzzy, kde-format
-#| msgid "%1: change comment"
+#, kde-format
 msgid "%1: toggle comments header"
-msgstr "%1: canvi de comentari"
+msgstr "%1: commuta la capçalera de comentaris"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:425
-#, fuzzy, kde-format
-#| msgid "Unable to parse header"
+#, kde-format
 msgid "%1: toggle sparklines header"
-msgstr "No s'ha pogut analitzar la capçalera"
+msgstr "%1: commuta la capçalera de minidiagrames"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:489
 #: src/backend/spreadsheet/Spreadsheet.cpp:490
@@ -9230,39 +9228,39 @@ msgstr "%1: desactiva les etiquetes dels controls"
 msgid "%1: set labels border shape"
 msgstr "%1: estableix la forma de vora de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:617
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:618
 #, kde-format
 msgid "%1: set labels font"
 msgstr "%1: estableix la lletra de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:652
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:684
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:656
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:688
 #, kde-format
 msgid "%1: set labels background color"
 msgstr "%1: estableix el color de fons de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:742
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:746
 #, kde-format
 msgid "%1: set labels border style"
 msgstr "%1: estableix l'estil de forma de la vora"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:753
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:757
 #, kde-format
 msgid "%1: set labels border width"
 msgstr "%1: estableix l'amplada de vora de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:764
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:775
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:768
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:779
 #, kde-format
 msgid "%1: set labels border color"
 msgstr "%1: estableix el color de vora de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:867
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:871
 #, kde-format
 msgid "Not enough data provided."
 msgstr "No s'han proporcionat prou dades."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:967
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:971
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "L'última mostra és incompleta i s'ha omès."

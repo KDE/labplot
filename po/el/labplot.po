@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-18 00:38+0000\n"
+"POT-Creation-Date: 2025-04-19 00:38+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -9503,45 +9503,45 @@ msgstr ""
 msgid "%1: set labels border shape"
 msgstr "%1: αλλαγή τύπου στήλης"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:617
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:618
 #, fuzzy, kde-format
 #| msgid "%1: set text for row %2"
 msgid "%1: set labels font"
 msgstr "%1: ορισμός κειμένου για τη γραμμή %2"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:652
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:684
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:656
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:688
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "%1: set labels background color"
 msgstr "Χρώμα παρασκηνίου"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:742
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:746
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "%1: set labels border style"
 msgstr "Χρώμα παρασκηνίου"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:753
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:757
 #, fuzzy, kde-format
 #| msgid "%1: set formula"
 msgid "%1: set labels border width"
 msgstr "%1: ορισμός τύπου"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:764
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:775
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:768
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:779
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "%1: set labels border color"
 msgstr "Χρώμα παρασκηνίου"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:867
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:871
 #, fuzzy, kde-format
 #| msgid "Number of levels"
 msgid "Not enough data provided."
 msgstr "Πλήθος επιπέδων"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:967
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:971
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr ""

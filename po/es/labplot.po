@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-18 00:38+0000\n"
-"PO-Revision-Date: 2025-04-15 01:37+0100\n"
+"POT-Creation-Date: 2025-04-19 00:38+0000\n"
+"PO-Revision-Date: 2025-04-18 18:00+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -7285,16 +7285,14 @@ msgid "%1: mask rows with missing values"
 msgstr "%1: enmascarar filas con valores ausentes"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:417
-#, fuzzy, kde-format
-#| msgid "%1: change comment"
+#, kde-format
 msgid "%1: toggle comments header"
-msgstr "%1: cambiar comentario"
+msgstr "%1: conmutar cabecera de comentarios"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:425
-#, fuzzy, kde-format
-#| msgid "Unable to parse header"
+#, kde-format
 msgid "%1: toggle sparklines header"
-msgstr "No se puede analizar la cabecera"
+msgstr "%1: conmutar cabecera de minigráficos de pulso"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:489
 #: src/backend/spreadsheet/Spreadsheet.cpp:490
@@ -9140,39 +9138,39 @@ msgstr "%1: desactivar etiquetas de control"
 msgid "%1: set labels border shape"
 msgstr "%1: definir sombra del borde de las etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:617
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:618
 #, kde-format
 msgid "%1: set labels font"
 msgstr "%1: definir tipo de letra de las etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:652
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:684
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:656
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:688
 #, kde-format
 msgid "%1: set labels background color"
 msgstr "%1: definir color de fondo de las etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:742
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:746
 #, kde-format
 msgid "%1: set labels border style"
 msgstr "%1: definir estilo del borde de las etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:753
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:757
 #, kde-format
 msgid "%1: set labels border width"
 msgstr "%1: definir anchura del borde de las etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:764
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:775
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:768
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:779
 #, kde-format
 msgid "%1: set labels border color"
 msgstr "%1: definir color del borde de las etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:867
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:871
 #, kde-format
 msgid "Not enough data provided."
 msgstr "No se han proporcionado datos suficientes."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:967
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:971
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "La última muestra está incompleta y se ha omitido."
@@ -25137,6 +25135,3 @@ msgstr "el proceso «convert» ha fallado, código de salida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No se puede abrir el archivo:"
-
-#~ msgid "Show SparkLines"
-#~ msgstr "Mostrar minigráficos de pulso"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-18 00:38+0000\n"
+"POT-Creation-Date: 2025-04-19 00:38+0000\n"
 "PO-Revision-Date: 2025-04-17 12:42+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -9130,39 +9130,39 @@ msgstr "%1: inaktivera kontrollbeteckningar"
 msgid "%1: set labels border shape"
 msgstr "%1: ställ in beteckningarnas kantform"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:617
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:618
 #, kde-format
 msgid "%1: set labels font"
 msgstr "%1: ställ in beteckningsteckensnitt"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:652
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:684
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:656
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:688
 #, kde-format
 msgid "%1: set labels background color"
 msgstr "%1: ställ in beteckningarnas bakgrundsfärg"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:742
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:746
 #, kde-format
 msgid "%1: set labels border style"
 msgstr "%1: ställ in beteckningarnas kantstil"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:753
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:757
 #, kde-format
 msgid "%1: set labels border width"
 msgstr "%1: ställ in beteckningarnas kantbredd"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:764
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:775
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:768
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:779
 #, kde-format
 msgid "%1: set labels border color"
 msgstr "%1: ställ in beteckningarnas kantfärg"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:867
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:871
 #, kde-format
 msgid "Not enough data provided."
 msgstr "Otillräckligt antal tillhandahållna datapunkter."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:967
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:971
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "Den sista samplingen är ofullständig och utelämnades."

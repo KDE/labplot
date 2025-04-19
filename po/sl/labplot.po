@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-18 00:38+0000\n"
-"PO-Revision-Date: 2025-04-14 06:58+0200\n"
+"POT-Creation-Date: 2025-04-19 00:38+0000\n"
+"PO-Revision-Date: 2025-04-18 06:52+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Poedit 3.6\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -7298,16 +7298,14 @@ msgid "%1: mask rows with missing values"
 msgstr "%1: maskiraj vrstice z manjkajočimi vrednostmi"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:417
-#, fuzzy, kde-format
-#| msgid "%1: change comment"
+#, kde-format
 msgid "%1: toggle comments header"
-msgstr "%1: spremeni komentar"
+msgstr "%1: preklopi glavo komentarjev"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:425
-#, fuzzy, kde-format
-#| msgid "Unable to parse header"
+#, kde-format
 msgid "%1: toggle sparklines header"
-msgstr "Glave ni mogoče razčleniti"
+msgstr "%1: preklopi glavo črt iskrenja"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:489
 #: src/backend/spreadsheet/Spreadsheet.cpp:490
@@ -9171,39 +9169,39 @@ msgstr "%1: onemogoči nadzorne oznake"
 msgid "%1: set labels border shape"
 msgstr "%1: nastavi obliko obrob"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:617
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:618
 #, kde-format
 msgid "%1: set labels font"
 msgstr "%1: nastavi pisavo oznak"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:652
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:684
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:656
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:688
 #, kde-format
 msgid "%1: set labels background color"
 msgstr "%1: nastavi barvo ozadja oznak"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:742
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:746
 #, kde-format
 msgid "%1: set labels border style"
 msgstr "%1: nastavi vrsto besedila oznak"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:753
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:757
 #, kde-format
 msgid "%1: set labels border width"
 msgstr "%1: nastavi širino obrobe oznak"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:764
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:775
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:768
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:779
 #, kde-format
 msgid "%1: set labels border color"
 msgstr "%1: nastavi barvo obrobe oznak"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:867
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:871
 #, kde-format
 msgid "Not enough data provided."
 msgstr "Na voljo ni dovolj podatkov."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:967
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:971
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "Zadnji vzorec je nepopoln in je bil izpuščen."

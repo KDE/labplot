@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-18 00:38+0000\n"
+"POT-Creation-Date: 2025-04-19 00:38+0000\n"
 "PO-Revision-Date: 2024-11-23 12:07+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -9150,45 +9150,45 @@ msgstr "%1: disable theming"
 msgid "%1: set labels border shape"
 msgstr "%1: set border shape"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:617
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:618
 #, fuzzy, kde-format
 #| msgid "%1: set label font"
 msgid "%1: set labels font"
 msgstr "%1: set label font"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:652
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:684
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:656
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:688
 #, fuzzy, kde-format
 #| msgid "%1: set label background color"
 msgid "%1: set labels background color"
 msgstr "%1: set label background colour"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:742
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:746
 #, fuzzy, kde-format
 #| msgid "%1: set border style"
 msgid "%1: set labels border style"
 msgstr "%1: set border style"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:753
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:757
 #, fuzzy, kde-format
 #| msgid "%1: set labels format"
 msgid "%1: set labels border width"
 msgstr "%1: set labels format"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:764
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:775
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:768
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:779
 #, fuzzy, kde-format
 #| msgid "%1: set label color"
 msgid "%1: set labels border color"
 msgstr "%1: set label colour"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:867
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:871
 #, fuzzy, kde-format
 #| msgid "Not enough data points available."
 msgid "Not enough data provided."
 msgstr "Not enough data points available."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:967
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:971
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "The last sample is incomplete and was omitted."
