@@ -2788,12 +2788,15 @@ void MainWin::importKaggleDatasetDialog() {
 	if (ImportKaggleDatasetDialog::checkKaggle()) {
 		auto* dlg = new ImportKaggleDatasetDialog(this);
 		dlg->exec();
-	} else
+	} else {
 		QMessageBox::critical(this,
-							  i18n("Running Kaggle CLI tool failed"),
-							  i18n("Please follow the instructions on "
-								   "<a href=\"https://www.kaggle.com/docs/api\">\"How to Use Kaggle\"</a> "
-								   "to setup the Kaggle CLI tool."));
+							  i18n("Kaggle CLI tool not found"),
+							  i18n("Provide the path to the Kaggle CLI tool in the application settings and try again."));
+		auto* dlg = new SettingsDialog(this, m_defaultSystemLocale);
+		connect(dlg, &SettingsDialog::settingsChanged, this, &MainWin::handleSettingsChanges);
+		dlg->navigateTo(Settings::Type::Datasets);
+		dlg->exec();
+	}
 
 	DEBUG(Q_FUNC_INFO << " DONE");
 }
