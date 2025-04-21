@@ -37,6 +37,7 @@ freebsd14_qt68_t:
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
     - ninja
 
+# can't extend job without running it
 # "only: []" not supported anymore
 
 #suse_tumbleweed_qt69_t:
@@ -47,13 +48,13 @@ freebsd14_qt68_t:
 #    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
 #    - ninja
 
-windows_qt68:
-  only: []
+# can't extend job without running it
+# "only: []" not supported anymore
 
-windows_qt68_t:
-  extends: windows_qt68
-  script:
-    - !reference [windows_qt68, script]
+#windows_qt68_t:
+#  extends: windows_qt68
+#  script:
+#    - !reference [windows_qt68, script]
     # disable the build of the sdk examples on windows since it is flaky. fails with a linker error sometimes
     # - mkdir -p build_examples && cd build_examples
     # - $env:Path = 'C:\Craft\windows-msvc2022_64-cl\bin;C:\Craft\windows-msvc2022_64-cl\lib;C:\Craft\windows-msvc2022_64-cl\dev-utils\bin;' + $env:Path
