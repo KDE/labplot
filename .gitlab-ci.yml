@@ -26,16 +26,16 @@ include:
 # MinGW fails linking tests due to undefined references to GSL functions
 #      - /gitlab-templates/craft-windows-mingw64-qt6.yml
 
-freebsd14_qt68:
-  only: []
+# can't extend job without running it
+# "only: []" not supported anymore
 
-freebsd14_qt68_t:
-  extends: freebsd14_qt68
-  script:
-    - !reference [freebsd14_qt68, script]
-    - mkdir -p build_examples && cd build_examples
-    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
-    - ninja
+#freebsd14_qt68_t:
+#  extends: freebsd14_qt68
+#  script:
+#    - !reference [freebsd14_qt68, script]
+#    - mkdir -p build_examples && cd build_examples
+#    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
+#    - ninja
 
 # can't extend job without running it
 # "only: []" not supported anymore
