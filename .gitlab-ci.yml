@@ -26,11 +26,8 @@ include:
 # MinGW fails linking tests due to undefined references to GSL functions
 #      - /gitlab-templates/craft-windows-mingw64-qt6.yml
 
-freebsd14_qt68:
-  only: []
-
 freebsd14_qt68_t:
-  extends: freebsd14_qt68
+  extends: .freebsd14_qt68
   script:
     - !reference [freebsd14_qt68, script]
     - mkdir -p build_examples && cd build_examples
@@ -46,11 +43,8 @@ freebsd14_qt68_t:
     - triggers
     - web
 
-suse_tumbleweed_qt69:
-  only: []
-
 suse_tumbleweed_qt69_t:
-  extends: suse_tumbleweed_qt69
+  extends: .suse_tumbleweed_qt69
   script:
     - !reference [suse_tumbleweed_qt69, script]
     - mkdir -p build_examples && cd build_examples
@@ -66,11 +60,8 @@ suse_tumbleweed_qt69_t:
     - triggers
     - web
 
-windows_qt68:
-  only: []
-
 windows_qt68_t:
-  extends: windows_qt68
+  extends: .windows_qt68
   script:
     - !reference [windows_qt68, script]
     # disable the build of the sdk examples on windows since it is flaky. fails with a linker error sometimes
