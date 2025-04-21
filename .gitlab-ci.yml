@@ -28,7 +28,7 @@ include:
 
 freebsd14_qt68:
   rules:
-    - if: $CI_JOB_NAME == ""
+    - when: never
 
 freebsd14_qt68_t:
   extends: freebsd14_qt68
@@ -40,7 +40,7 @@ freebsd14_qt68_t:
 
 suse_tumbleweed_qt69:
   rules:
-    - if: $CI_JOB_NAME == ""
+    - when: never
 
 suse_tumbleweed_qt69_t:
   extends: suse_tumbleweed_qt69
@@ -52,7 +52,7 @@ suse_tumbleweed_qt69_t:
 
 windows_qt68:
   rules:
-    - if: $CI_JOB_NAME == ""
+    - when: never
 
 windows_qt68_t:
   extends: windows_qt68
