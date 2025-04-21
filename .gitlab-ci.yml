@@ -27,7 +27,9 @@ include:
 #      - /gitlab-templates/craft-windows-mingw64-qt6.yml
 
 freebsd14_qt68:
-  only: {}
+  rules:
+    - if: $CI_JOB_NAME
+      when: never
 
 freebsd14_qt68_t:
   extends: freebsd14_qt68
@@ -38,7 +40,9 @@ freebsd14_qt68_t:
     - ninja
 
 suse_tumbleweed_qt69:
-  only: {}
+  rules:
+    - if: $CI_JOB_NAME
+      when: never
 
 suse_tumbleweed_qt69_t:
   extends: suse_tumbleweed_qt69
@@ -49,7 +53,9 @@ suse_tumbleweed_qt69_t:
     - ninja
 
 windows_qt68:
-  only: {}
+  rules:
+    - if: $CI_JOB_NAME
+      when: never
 
 windows_qt68_t:
   extends: windows_qt68
