@@ -5,7 +5,7 @@
 						   show their values
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
-	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -18,8 +18,6 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/InfoElementPrivate.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
@@ -27,16 +25,14 @@
 #include <KConfig>
 #include <KConfigGroup>
 
-#include <QAction>
 #include <QDateTime>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
 #include <QMenu>
 #include <QPainter>
 #include <QTextEdit>
-#include <qglobal.h>
 
-InfoElement::MarkerPoints_T::MarkerPoints_T(CustomPoint* custompoint, const XYCurve* curve, QString curvePath)
+InfoElement::MarkerPoints_T::MarkerPoints_T(CustomPoint* custompoint, const XYCurve* curve, const QString& curvePath)
 	: customPoint(custompoint)
 	, curve(curve)
 	, curvePath(curvePath) {

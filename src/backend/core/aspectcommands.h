@@ -232,9 +232,7 @@ public:
 
 	void redo() override {
 		Q_EMIT m_aspect->q->aspectDescriptionAboutToChange(m_aspect->q);
-		const QString name = m_aspect->m_name;
-		m_aspect->m_name = m_name;
-		m_name = name;
+		m_aspect->m_name.swap(m_name);
 		Q_EMIT m_aspect->q->aspectDescriptionChanged(m_aspect->q);
 	}
 

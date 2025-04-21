@@ -10,18 +10,16 @@
 #ifndef ASCIIFILTERPRIVATE_H
 #define ASCIIFILTERPRIVATE_H
 
-#include <QLocale>
 #include <QString>
-
 #include "AsciiFilter.h"
 
 class AsciiFilterPrivate {
 public:
 	AsciiFilterPrivate(AsciiFilter* owner);
-	AsciiFilter::Status initialize(AsciiFilter::Properties p);
-	AsciiFilter::Status initialize(QIODevice& device);
-	void setDataSource(AbstractDataSource* dataSource);
-	AsciiFilter::Status readFromDevice(QIODevice& device,
+	AsciiFilter::Status initialize(AsciiFilter::Properties);
+	AsciiFilter::Status initialize(QIODevice& );
+	void setDataSource(AbstractDataSource*);
+	AsciiFilter::Status readFromDevice(QIODevice&,
 									   AbstractFileFilter::ImportMode columnImportMode,
 									   AbstractFileFilter::ImportMode rowImportMode,
 									   qint64 from,
@@ -29,12 +27,12 @@ public:
 									   qint64 keepNRows,
 									   qint64& bytes_read,
 									   bool skipFirstLine = false);
-	QVector<QStringList> preview(QIODevice& device, int lines, bool reinit = true, bool skipFirstLine = false);
+	QVector<QStringList> preview(QIODevice&, int lines, bool reinit = true, bool skipFirstLine = false);
 	QVector<QStringList> preview(const QString& fileName, int lines, bool reinit = true);
 
 	static QMap<QString, QPair<QString, AbstractColumn::ColumnMode>> modeMap();
-	static bool determineColumnModes(const QStringView& s, QVector<AbstractColumn::ColumnMode>& modes, QString& invalidString);
-	static QString convertTranslatedColumnModesToNative(const QStringView s);
+	static bool determineColumnModes(const QStringView&, QVector<AbstractColumn::ColumnMode>&, QString& invalidString);
+	static QString convertTranslatedColumnModesToNative(const QStringView);
 	AsciiFilter::Status setLastError(AsciiFilter::Status);
 	bool isUTF16(QIODevice&);
 
@@ -43,8 +41,8 @@ public:
 	size_t fileNumberLines{0};
 
 private:
-	static bool ignoringLine(QStringView line, const AsciiFilter::Properties& p);
-	static QStringList determineColumnsSimplifyWhiteSpace(const QStringView& line, const AsciiFilter::Properties& properties);
+	static bool ignoringLine(QStringView line, const AsciiFilter::Properties&);
+	static QStringList determineColumnsSimplifyWhiteSpace(const QStringView& line, const AsciiFilter::Properties&);
 	static QStringList determineColumnsSimplifyWhiteSpace(QStringView line,
 														  const QString& separator,
 														  bool removeQuotes,
@@ -53,24 +51,24 @@ private:
 														  int startColumn,
 														  int endColumn);
 	static size_t determineColumns(const QStringView& line,
-								   const AsciiFilter::Properties& properties,
+								   const AsciiFilter::Properties&,
 								   bool separatorSingleCharacter,
 								   const QChar separatorCharacter,
 								   QVector<QStringView>& columnValues);
 	static AsciiFilter::Status determineSeparator(const QString& line, bool removeQuotes, bool simplifyWhiteSpaces, QString& separator);
 	static QVector<AbstractColumn::ColumnMode>
-	determineColumnModes(const QVector<QStringList>& values, const AsciiFilter::Properties& properties, QString& dateTimeFormat);
-	AsciiFilter::Status getLine(QIODevice& device, QString& line);
+	determineColumnModes(const QVector<QStringList>& values, const AsciiFilter::Properties&, QString& dateTimeFormat);
+	AsciiFilter::Status getLine(QIODevice&, QString& line);
 	static QString statusToString(AsciiFilter::Status);
 
 	template<typename T>
-	void setValues(const QVector<T>& values, int rowIndex, const AsciiFilter::Properties& properties);
+	void setValues(const QVector<T>& values, int rowIndex, const AsciiFilter::Properties&);
 
 	// Copied from CANFilterPrivate
 	// TODO: think about moving it to a common place
 	struct DataContainer {
 		void clear();
-		void appendVector(AbstractColumn::ColumnMode cm);
+		void appendVector(AbstractColumn::ColumnMode);
 		int rowCount(unsigned long index = 0) const;
 
 		template<class T>

@@ -451,7 +451,7 @@ public:
 			m_target->q->initConnectionsLinking(m_linking.linkedSpreadsheet, m_target->q);
 		}
 
-		const Spreadsheet::Linking l = m_target->linking;
+		const auto l = m_target->linking;
 		m_target->linking = m_linking;
 		m_linking = l;
 	}
