@@ -33,15 +33,6 @@ freebsd14_qt68_t:
     - mkdir -p build_examples && cd build_examples
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
     - ninja
-  only:
-    - branches
-    - tags
-    - pushes
-    - merge_requests
-    - pipelines
-    - schedules
-    - triggers
-    - web
 
 suse_tumbleweed_qt69_t:
   extends: suse_tumbleweed_qt69
@@ -50,15 +41,6 @@ suse_tumbleweed_qt69_t:
     - mkdir -p build_examples && cd build_examples
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
     - ninja
-  only:
-    - branches
-    - tags
-    - pushes
-    - merge_requests
-    - pipelines
-    - schedules
-    - triggers
-    - web
 
 windows_qt68_t:
   extends: windows_qt68
@@ -69,15 +51,6 @@ windows_qt68_t:
     # - $env:Path = 'C:\Craft\windows-msvc2022_64-cl\bin;C:\Craft\windows-msvc2022_64-cl\lib;C:\Craft\windows-msvc2022_64-cl\dev-utils\bin;' + $env:Path
     # - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
     # - ninja
-  only:
-    - branches
-    - tags
-    - pushes
-    - merge_requests
-    - pipelines
-    - schedules
-    - triggers
-    - web
 
 craft_appimage_qt6_x86_64:
   rules:
