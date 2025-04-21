@@ -10,14 +10,14 @@
 #ifndef ASCIIFILTERPRIVATE_H
 #define ASCIIFILTERPRIVATE_H
 
-#include <QString>
 #include "AsciiFilter.h"
+#include <QString>
 
 class AsciiFilterPrivate {
 public:
 	AsciiFilterPrivate(AsciiFilter* owner);
 	AsciiFilter::Status initialize(AsciiFilter::Properties);
-	AsciiFilter::Status initialize(QIODevice& );
+	AsciiFilter::Status initialize(QIODevice&);
 	void setDataSource(AbstractDataSource*);
 	AsciiFilter::Status readFromDevice(QIODevice&,
 									   AbstractFileFilter::ImportMode columnImportMode,
