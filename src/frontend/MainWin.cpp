@@ -416,22 +416,21 @@ void MainWin::initGUI(const QString& fileName) {
 		actionCollection()->removeAction(donateAction);
 
 	// custom about dialog
-        auto* aboutAction = actionCollection()->action(QStringLiteral("help_about_app"));
-        if (aboutAction) {
+	auto* aboutAction = actionCollection()->action(QStringLiteral("help_about_app"));
+	if (aboutAction) {
 		// set menu icon
 		aboutAction->setIcon(KAboutData::applicationData().programLogo().value<QIcon>());
 
 		// disconnect default slot
 		disconnect(aboutAction, nullptr, nullptr, nullptr);
 		connect(aboutAction, &QAction::triggered, this, &MainWin::customAboutDialog);
-        }
+	}
 
 	// restore the geometry
 	if (groupMainWin.hasKey(QStringLiteral("geometry")))
 		restoreGeometry(groupMainWin.readEntry("geometry", QByteArray()));
 
 	m_lastOpenFileFilter = groupMainWin.readEntry(QLatin1String("lastOpenFileFilter"), QString());
-
 }
 
 void MainWin::customAboutDialog() {
