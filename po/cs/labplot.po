@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-19 00:38+0000\n"
+"POT-Creation-Date: 2025-04-21 00:38+0000\n"
 "PO-Revision-Date: 2024-10-18 15:55+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -12185,7 +12185,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2894
+#: src/frontend/MainWin.cpp:2897
 #, kde-format
 msgid "Warning"
 msgstr "Varování"
@@ -15173,43 +15173,44 @@ msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
 #: src/frontend/MainWin.cpp:2793
-#, kde-format
-msgid "Running Kaggle CLI tool failed"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "File not found"
+msgid "Kaggle CLI tool not found"
+msgstr "Soubor nenalezen"
 
 #: src/frontend/MainWin.cpp:2794
 #, kde-format
 msgid ""
-"Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
-"\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
+"Provide the path to the Kaggle CLI tool in the application settings and try "
+"again."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2857
+#: src/frontend/MainWin.cpp:2860
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exportováno"
 
-#: src/frontend/MainWin.cpp:2864
+#: src/frontend/MainWin.cpp:2867
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2876
+#: src/frontend/MainWin.cpp:2879
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2894
+#: src/frontend/MainWin.cpp:2897
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2898
+#: src/frontend/MainWin.cpp:2901
 #, kde-format
 msgid "Live data source%1"
 msgstr "Zdroj měnících se dat %1"
 
-#: src/frontend/MainWin.cpp:2949
+#: src/frontend/MainWin.cpp:2952
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr ""
@@ -15812,27 +15813,27 @@ msgstr "Jak použít Kaggle"
 msgid "Files - %1"
 msgstr "Soubory - %1"
 
-#: src/frontend/SettingsDatasetsPage.cpp:100
+#: src/frontend/SettingsDatasetsPage.cpp:99
 #, kde-format
 msgid "Total size - %1"
 msgstr "Celková velikost - %1"
 
-#: src/frontend/SettingsDatasetsPage.cpp:110
+#: src/frontend/SettingsDatasetsPage.cpp:109
 #, kde-format
 msgid "Files - 0"
 msgstr "Soubory - 0"
 
-#: src/frontend/SettingsDatasetsPage.cpp:111
+#: src/frontend/SettingsDatasetsPage.cpp:110
 #, kde-format
 msgid "Total size - 0B"
 msgstr "Celková velikost - 0B"
 
-#: src/frontend/SettingsDatasetsPage.cpp:113
+#: src/frontend/SettingsDatasetsPage.cpp:112
 #, kde-format
 msgid "Datasets cache"
 msgstr ""
 
-#: src/frontend/SettingsDatasetsPage.cpp:113
+#: src/frontend/SettingsDatasetsPage.cpp:112
 #, kde-format
 msgid "Downloaded files successfully deleted."
 msgstr ""

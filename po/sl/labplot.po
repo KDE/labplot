@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-19 00:38+0000\n"
+"POT-Creation-Date: 2025-04-21 00:38+0000\n"
 "PO-Revision-Date: 2025-04-18 06:52+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -12423,7 +12423,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2894
+#: src/frontend/MainWin.cpp:2897
 #, kde-format
 msgid "Warning"
 msgstr "Opozorilo"
@@ -15524,45 +15524,44 @@ msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Skupni projekt najdete na: <a href=\"%1\">%1</a>"
 
 #: src/frontend/MainWin.cpp:2793
-#, kde-format
-msgid "Running Kaggle CLI tool failed"
+#, fuzzy, kde-format
+#| msgid "Running Kaggle CLI tool failed"
+msgid "Kaggle CLI tool not found"
 msgstr "Poganjanje orodja Kaggle CLI ni uspelo"
 
 #: src/frontend/MainWin.cpp:2794
 #, kde-format
 msgid ""
-"Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
-"\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
+"Provide the path to the Kaggle CLI tool in the application settings and try "
+"again."
 msgstr ""
-"Sledite navodilom v <a href=\"https://www.kaggle.com/docs/api\">\"Kako "
-"uporabljati Kaggle - How to Use Kaggle\"</a> za nastavitev orodja Kaggle CLI."
 
-#: src/frontend/MainWin.cpp:2857
+#: src/frontend/MainWin.cpp:2860
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 izvoženo"
 
-#: src/frontend/MainWin.cpp:2864
+#: src/frontend/MainWin.cpp:2867
 #, kde-format
 msgid "FITS files saved"
 msgstr "Datoteke FITS shranjene"
 
-#: src/frontend/MainWin.cpp:2876
+#: src/frontend/MainWin.cpp:2879
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Odjemalec MQTT%1"
 
-#: src/frontend/MainWin.cpp:2894
+#: src/frontend/MainWin.cpp:2897
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "S tem gostiteljem že obstaja MQTTClient!"
 
-#: src/frontend/MainWin.cpp:2898
+#: src/frontend/MainWin.cpp:2901
 #, kde-format
 msgid "Live data source%1"
 msgstr "Vir podatkov v živo%1"
 
-#: src/frontend/MainWin.cpp:2949
+#: src/frontend/MainWin.cpp:2952
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Ustvari novo %1 zvezek"
@@ -16170,27 +16169,27 @@ msgstr "Kako uporabljati Kaggle"
 msgid "Files - %1"
 msgstr "Datoteke - %1"
 
-#: src/frontend/SettingsDatasetsPage.cpp:100
+#: src/frontend/SettingsDatasetsPage.cpp:99
 #, kde-format
 msgid "Total size - %1"
 msgstr "Skupna velikost - %1"
 
-#: src/frontend/SettingsDatasetsPage.cpp:110
+#: src/frontend/SettingsDatasetsPage.cpp:109
 #, kde-format
 msgid "Files - 0"
 msgstr "Datoteke - 0"
 
-#: src/frontend/SettingsDatasetsPage.cpp:111
+#: src/frontend/SettingsDatasetsPage.cpp:110
 #, kde-format
 msgid "Total size - 0B"
 msgstr "Skupna velikost - 0B"
 
-#: src/frontend/SettingsDatasetsPage.cpp:113
+#: src/frontend/SettingsDatasetsPage.cpp:112
 #, kde-format
 msgid "Datasets cache"
 msgstr "Predpomnilnik množic podatkov"
 
-#: src/frontend/SettingsDatasetsPage.cpp:113
+#: src/frontend/SettingsDatasetsPage.cpp:112
 #, kde-format
 msgid "Downloaded files successfully deleted."
 msgstr "Prenesene datoteke so uspešno izbrisane."
@@ -25103,6 +25102,14 @@ msgstr "proces convert je izpadel, izhodna koda ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ni mogoče odpreti datoteke:"
+
+#~ msgid ""
+#~ "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/"
+#~ "api\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
+#~ msgstr ""
+#~ "Sledite navodilom v <a href=\"https://www.kaggle.com/docs/api\">\"Kako "
+#~ "uporabljati Kaggle - How to Use Kaggle\"</a> za nastavitev orodja Kaggle "
+#~ "CLI."
 
 #~ msgid "Show SparkLines"
 #~ msgstr "Prikazuj črte iskrenja"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-19 00:38+0000\n"
+"POT-Creation-Date: 2025-04-21 00:38+0000\n"
 "PO-Revision-Date: 2024-12-29 23:07+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -12344,7 +12344,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2894
+#: src/frontend/MainWin.cpp:2897
 #, kde-format
 msgid "Warning"
 msgstr "चेतवानी"
@@ -15403,45 +15403,44 @@ msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "साझाप्रकल्पं भवान् अत्र द्रष्टुं शक्नोति: <a href=\"%1\">%1</a>"
 
 #: src/frontend/MainWin.cpp:2793
-#, kde-format
-msgid "Running Kaggle CLI tool failed"
+#, fuzzy, kde-format
+#| msgid "Running Kaggle CLI tool failed"
+msgid "Kaggle CLI tool not found"
 msgstr "Kaggle CLI साधनस्य चालनं विफलम् अभवत्"
 
 #: src/frontend/MainWin.cpp:2794
 #, kde-format
 msgid ""
-"Please follow the instructions on <a href=\"https://www.kaggle.com/docs/api"
-"\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
+"Provide the path to the Kaggle CLI tool in the application settings and try "
+"again."
 msgstr ""
-"कृपया Kaggle CLI साधनं सेटअप कर्तुं <a href=\"https://www.kaggle.com/docs/api"
-"\">&quot;How to Use Kaggle&quot;</a> इत्यस्य निर्देशान् अनुसरणं कुर्वन्तु ।"
 
-#: src/frontend/MainWin.cpp:2857
+#: src/frontend/MainWin.cpp:2860
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 निर्यातितम्"
 
-#: src/frontend/MainWin.cpp:2864
+#: src/frontend/MainWin.cpp:2867
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS सञ्चिकाः रक्षिताः"
 
-#: src/frontend/MainWin.cpp:2876
+#: src/frontend/MainWin.cpp:2879
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT Client%1"
 
-#: src/frontend/MainWin.cpp:2894
+#: src/frontend/MainWin.cpp:2897
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "अस्मिन् होस्ट् इत्यनेन सह पूर्वमेव MQTTClient अस्ति!"
 
-#: src/frontend/MainWin.cpp:2898
+#: src/frontend/MainWin.cpp:2901
 #, kde-format
 msgid "Live data source%1"
 msgstr "लाइव दत्तांशस्रोतः%1"
 
-#: src/frontend/MainWin.cpp:2949
+#: src/frontend/MainWin.cpp:2952
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "नूतनं %1 नोटबुकं निर्माति"
@@ -16041,27 +16040,27 @@ msgstr "Kaggle इत्यस्य उपयोगः कथं भवति"
 msgid "Files - %1"
 msgstr "सञ्चिकाः - %1"
 
-#: src/frontend/SettingsDatasetsPage.cpp:100
+#: src/frontend/SettingsDatasetsPage.cpp:99
 #, kde-format
 msgid "Total size - %1"
 msgstr "कुल आकार - %1"
 
-#: src/frontend/SettingsDatasetsPage.cpp:110
+#: src/frontend/SettingsDatasetsPage.cpp:109
 #, kde-format
 msgid "Files - 0"
 msgstr "सञ्चिकाः - 0"
 
-#: src/frontend/SettingsDatasetsPage.cpp:111
+#: src/frontend/SettingsDatasetsPage.cpp:110
 #, kde-format
 msgid "Total size - 0B"
 msgstr "कुल आकार - 0B"
 
-#: src/frontend/SettingsDatasetsPage.cpp:113
+#: src/frontend/SettingsDatasetsPage.cpp:112
 #, kde-format
 msgid "Datasets cache"
 msgstr "दत्तांशसमूहः संग्रहणम्"
 
-#: src/frontend/SettingsDatasetsPage.cpp:113
+#: src/frontend/SettingsDatasetsPage.cpp:112
 #, kde-format
 msgid "Downloaded files successfully deleted."
 msgstr "डाउनलोड् कृताः सञ्चिकाः सफलतया विलोपिताः।"
@@ -24935,6 +24934,13 @@ msgstr "परिवर्तन प्रक्रिया विफल, न�
 #, kde-format
 msgid "Unable to open file:"
 msgstr "सञ्चिकां उद्घाटयितुं असमर्थः :"
+
+#~ msgid ""
+#~ "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/"
+#~ "api\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
+#~ msgstr ""
+#~ "कृपया Kaggle CLI साधनं सेटअप कर्तुं <a href=\"https://www.kaggle.com/docs/api"
+#~ "\">&quot;How to Use Kaggle&quot;</a> इत्यस्य निर्देशान् अनुसरणं कुर्वन्तु ।"
 
 #~ msgid "Show SparkLines"
 #~ msgstr "स्पार्कलाइन्स् दर्शयतु"
