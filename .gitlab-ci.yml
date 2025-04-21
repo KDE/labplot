@@ -27,9 +27,7 @@ include:
 #      - /gitlab-templates/craft-windows-mingw64-qt6.yml
 
 freebsd14_qt68:
-  rules:
-    - if: $CI_JOB_NAME == "freebsd14_qt68"
-      when: never
+  only: []
 
 freebsd14_qt68_t:
   extends: freebsd14_qt68
@@ -39,23 +37,18 @@ freebsd14_qt68_t:
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
     - ninja
 
-suse_tumbleweed_qt69:
-  rules:
-    - if: $CI_JOB_NAME == "suse_tumbleweed_qt69"
-      when: never
+# "only: []" not supported anymore
 
-suse_tumbleweed_qt69_t:
-  extends: suse_tumbleweed_qt69
-  script:
-    - !reference [suse_tumbleweed_qt69, script]
-    - mkdir -p build_examples && cd build_examples
-    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
-    - ninja
+#suse_tumbleweed_qt69_t:
+#  extends: suse_tumbleweed_qt69
+#  script:
+#    - !reference [suse_tumbleweed_qt69, script]
+#    - mkdir -p build_examples && cd build_examples
+#    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
+#    - ninja
 
 windows_qt68:
-  rules:
-    - if: $CI_JOB_NAME == "windows_qt68"
-      when: never
+  only: []
 
 windows_qt68_t:
   extends: windows_qt68
