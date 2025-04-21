@@ -30,8 +30,6 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QPainter>
-#include <QTextDocument>
-#include <QtMath>
 
 namespace {
 constexpr int maxNumberMajorTicks = 100;
@@ -3410,7 +3408,7 @@ void Axis::loadThemeConfig(const KConfig& config) {
 		d->majorGridLine->setStyle(Qt::NoPen);
 
 	d->majorGridLine->setColor(group.readEntry(QStringLiteral("MajorGridColor"), QColor(Qt::gray)));
-	d->majorGridLine->setWidth(group.readEntry(QStringLiteral("MajorGridWidth"), Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
+	d->majorGridLine->setWidth(group.readEntry(QStringLiteral("MajorGridWidth"), 0.0));
 	d->majorGridLine->setOpacity(group.readEntry(QStringLiteral("MajorGridOpacity"), 1.0));
 
 	// Major ticks
@@ -3425,7 +3423,7 @@ void Axis::loadThemeConfig(const KConfig& config) {
 		d->minorGridLine->setStyle(Qt::NoPen);
 
 	d->minorGridLine->setColor(group.readEntry(QStringLiteral("MinorGridColor"), QColor(Qt::gray)));
-	d->minorGridLine->setWidth(group.readEntry(QStringLiteral("MinorGridWidth"), Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
+	d->minorGridLine->setWidth(group.readEntry(QStringLiteral("MinorGridWidth"), 0.0));
 	d->minorGridLine->setOpacity(group.readEntry(QStringLiteral("MinorGridOpacity"), 1.0));
 
 	// Minor ticks

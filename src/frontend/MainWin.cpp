@@ -235,10 +235,6 @@ void MainWin::initGUI(const QString& fileName) {
 #endif
 	setupGUI();
 
-	// Workaround to get a resonable size at first start
-	// TODO: need a better fix
-	resize(800, 600);
-
 	// all toolbars created via the KXMLGUI framework are locked on default:
 	//  * on the very first program start, unlock all toolbars
 	//  * on later program starts, set stored lock status
@@ -420,22 +416,21 @@ void MainWin::initGUI(const QString& fileName) {
 		actionCollection()->removeAction(donateAction);
 
 	// custom about dialog
-        auto* aboutAction = actionCollection()->action(QStringLiteral("help_about_app"));
-        if (aboutAction) {
+	auto* aboutAction = actionCollection()->action(QStringLiteral("help_about_app"));
+	if (aboutAction) {
 		// set menu icon
 		aboutAction->setIcon(KAboutData::applicationData().programLogo().value<QIcon>());
 
 		// disconnect default slot
 		disconnect(aboutAction, nullptr, nullptr, nullptr);
 		connect(aboutAction, &QAction::triggered, this, &MainWin::customAboutDialog);
-        }
+	}
 
 	// restore the geometry
 	if (groupMainWin.hasKey(QStringLiteral("geometry")))
 		restoreGeometry(groupMainWin.readEntry("geometry", QByteArray()));
 
 	m_lastOpenFileFilter = groupMainWin.readEntry(QLatin1String("lastOpenFileFilter"), QString());
-
 }
 
 void MainWin::customAboutDialog() {

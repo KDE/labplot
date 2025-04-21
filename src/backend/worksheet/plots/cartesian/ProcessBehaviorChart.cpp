@@ -1657,11 +1657,11 @@ void ProcessBehaviorChart::loadThemeConfig(const KConfig& config) {
 	d->centerCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
 	d->upperLimitCurve->line()->loadThemeConfig(group, themeColor);
-	// d->upperLimitCurve->line()->setStyle(Qt::DashLine); TODO: crash in undo/redo
+	d->upperLimitCurve->line()->setStyle(Qt::DashLine);
 	d->upperLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
 	d->lowerLimitCurve->line()->loadThemeConfig(group, themeColor);
-	// d->lowerLimitCurve->line()->setStyle(Qt::DashLine);
+	d->lowerLimitCurve->line()->setStyle(Qt::DashLine);
 	d->lowerLimitCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
 
 	d->centerLabel->loadThemeConfig(config);
