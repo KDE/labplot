@@ -72,7 +72,7 @@ public:
 	bool labelsAutoPrecision{true};
 	Line* labelsBorderLine{nullptr};
 	TextLabel* upperLimitLabel{nullptr};
-	TextLabel* centerLabel{nullptr};
+	TextLabel* centerLabel{nullptr}; // using backgroundColor as background color for label
 	TextLabel* lowerLimitLabel{nullptr};
 
 	int sampleSize{5};
