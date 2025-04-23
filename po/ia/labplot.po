@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-22 00:37+0000\n"
-"PO-Revision-Date: 2025-04-18 11:58+0200\n"
+"PO-Revision-Date: 2025-04-22 12:22+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15157,10 +15157,9 @@ msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
 #: src/frontend/MainWin.cpp:2788
-#, fuzzy, kde-format
-#| msgid "File not found"
+#, kde-format
 msgid "Kaggle CLI tool not found"
-msgstr "File non trovate"
+msgstr "Instrumento de CLI de Kaggle non trovate"
 
 #: src/frontend/MainWin.cpp:2789
 #, kde-format
