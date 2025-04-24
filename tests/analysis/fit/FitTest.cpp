@@ -2635,7 +2635,7 @@ void FitTest::testNonLinearHahn1() {
 	AsciiFilter filter;
 
 	// NIST data for Hahn1 dataset
-	const QString& fileName = QFINDTESTDATA(QLatin1String("data/NIST/non-linear/hahn1.dat"));
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/NIST/non-linear/Hahn1_data.dat"));
 
 	auto properties = filter.properties();
 	properties.headerEnabled = false;
@@ -2708,7 +2708,7 @@ void FitTest::testNonLinearHahn1_2() {
 	AsciiFilter filter;
 
 	// NIST data for Hahn1 dataset
-	const QString& fileName = QFINDTESTDATA(QLatin1String("data/NIST/non-linear/hahn1.dat"));
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/NIST/non-linear/Hahn1_data.dat"));
 
 	auto properties = filter.properties();
 	properties.headerEnabled = false;
@@ -2781,7 +2781,7 @@ void FitTest::testNonLinearHahn1_3() {
 	AsciiFilter filter;
 
 	// NIST data for Hahn1 dataset
-	const QString& fileName = QFINDTESTDATA(QLatin1String("data/NIST/non-linear/hahn1.dat"));
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/NIST/non-linear/Hahn1_data.dat"));
 
 	auto properties = filter.properties();
 	properties.headerEnabled = false;
@@ -2855,7 +2855,7 @@ void FitTest::testNonLinearBennett5() {
 	AsciiFilter filter;
 
 	// NIST data for Hahn1 dataset
-	const QString& fileName = QFINDTESTDATA(QLatin1String("data/NIST/non-linear/bennett5.dat"));
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/NIST/non-linear/Bennett5_data.dat"));
 
 	auto properties = filter.properties();
 	properties.headerEnabled = false;
@@ -2916,7 +2916,7 @@ void FitTest::testNonLinearBennett5_2() {
 	AsciiFilter filter;
 
 	// NIST data for Hahn1 dataset
-	const QString& fileName = QFINDTESTDATA(QLatin1String("data/NIST/non-linear/bennett5.dat"));
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/NIST/non-linear/Bennett5_data.dat"));
 
 	auto properties = filter.properties();
 	properties.headerEnabled = false;
@@ -2977,7 +2977,7 @@ void FitTest::testNonLinearBennett5_3() {
 	AsciiFilter filter;
 
 	// NIST data for Hahn1 dataset
-	const QString& fileName = QFINDTESTDATA(QLatin1String("data/NIST/non-linear/bennett5.dat"));
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/NIST/non-linear/Bennett5_data.dat"));
 
 	auto properties = filter.properties();
 	properties.headerEnabled = false;
