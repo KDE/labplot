@@ -78,6 +78,10 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	labelsBorderLineWidget = new LineWidget(this);
 	gridLayout->addWidget(labelsBorderLineWidget, 11, 0, 1, 3);
 
+	// Tab "Center/Limit Values"
+	ui.kcbLabelsFontColor->setAlphaChannelEnabled(true);
+	ui.kcbLabelsBackgroundColor->setAlphaChannelEnabled(true);
+
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
 		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());

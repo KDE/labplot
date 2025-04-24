@@ -1,6 +1,7 @@
 0. Prepare release (im master for .0 release or in release/2.8 else)
 * string freeze (14 days before recommended)
 * Update splash screen src/kdefrontend/splash.png
+* Update the statistics in admin/SLOC.txt, admin/README.git-stats and in data/examples/SLOC History.lml
 * in master (+ cherry-pick to release/2.8)
 	* add release with date in org.kde.labplot.appdata.xml
 	* Set release date in Changelog
