@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-22 00:37+0000\n"
+"POT-Creation-Date: 2025-04-24 00:38+0000\n"
 "PO-Revision-Date: 2024-10-18 15:55+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -922,7 +922,7 @@ msgstr ""
 #: src/backend/datapicker/DatapickerImage.cpp:417
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:276
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:281
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:150
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:147
 #: src/backend/worksheet/WorksheetElement.cpp:163
@@ -936,7 +936,7 @@ msgstr ""
 #: src/backend/datapicker/DatapickerImage.cpp:417
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:276
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:281
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:150
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:147
 #: src/backend/worksheet/WorksheetElement.cpp:163
@@ -7923,8 +7923,8 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:944
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:951
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:590
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:597
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
 #, kde-format
 msgid "%1: set labels precision"
 msgstr ""
@@ -8008,7 +8008,7 @@ msgid "%1: set data columns"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:304
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:534
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:546
 #, kde-format
 msgid "%1: set type"
 msgstr ""
@@ -8965,8 +8965,8 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:399
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:248
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:510
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:522
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:534
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:265
 #, kde-format
@@ -9047,93 +9047,93 @@ msgstr ""
 msgid "%1: legend visibility changed"
 msgstr "%1: změněna viditelnost vysvětlivek"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:541
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:553
 #, kde-format
 msgid "%1: set limits metric"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:548
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:560
 #, kde-format
 msgid "%1: set sample size"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:556
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:568
 #, kde-format
 msgid "%1: enable exact limits"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:556
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:568
 #, kde-format
 msgid "%1: disable exact limits"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:565
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:577
 #, fuzzy, kde-format
 #| msgid "%1: set vertical alignment"
 msgid "%1: set maximal upper limit"
 msgstr "%1: nastavit svislé zarovnání"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:572
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:584
 #, fuzzy, kde-format
 #| msgid "%1: set ordering"
 msgid "%1: set minimal lower limit"
 msgstr "%1: nastavit řazení"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:581
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:593
 #, kde-format
 msgid "%1: enable control labels"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:581
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:593
 #, kde-format
 msgid "%1: disable control labels"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:603
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:615
 #, fuzzy, kde-format
 #| msgid "%1: set arrow type"
 msgid "%1: set labels border shape"
 msgstr "%1: nastavit typ šipky"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:618
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:630
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set labels font"
 msgstr "%1: nastavit písmo"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:656
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:688
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:665
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:697
 #, fuzzy, kde-format
 #| msgid "%1: set background color"
 msgid "%1: set labels background color"
 msgstr "%1: nastavit barvu pozadí"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:746
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:755
 #, fuzzy, kde-format
 #| msgid "%1: set symbol style"
 msgid "%1: set labels border style"
 msgstr "%1: nastavit styl symbolu"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:757
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:766
 #, fuzzy, kde-format
 #| msgid "%1: set ordering"
 msgid "%1: set labels border width"
 msgstr "%1: nastavit řazení"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:768
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:779
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:777
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:788
 #, fuzzy, kde-format
 #| msgid "%1: set background color"
 msgid "%1: set labels border color"
 msgstr "%1: nastavit barvu pozadí"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:871
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:880
 #, fuzzy, kde-format
 #| msgid "Not enough data points available."
 msgid "Not enough data provided."
 msgstr "Není k dispozici dostatek datových bodů."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:971
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:980
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr ""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-22 00:37+0000\n"
+"POT-Creation-Date: 2025-04-24 00:38+0000\n"
 "PO-Revision-Date: 2025-04-21 03:31+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -927,7 +927,7 @@ msgstr "%1: შეცდომის ზოლის მონახაზის
 #: src/backend/datapicker/DatapickerImage.cpp:417
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:276
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:281
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:150
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:147
 #: src/backend/worksheet/WorksheetElement.cpp:163
@@ -941,7 +941,7 @@ msgstr "%1: ხილვადად დაყენება"
 #: src/backend/datapicker/DatapickerImage.cpp:417
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:276
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:281
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:150
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:147
 #: src/backend/worksheet/WorksheetElement.cpp:163
@@ -7966,8 +7966,8 @@ msgstr "%1; უჯრედის ფორმულის დაყენებ
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:944
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:951
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:590
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:597
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: ჭდის სიზუსტის დაყენება"
@@ -8051,7 +8051,7 @@ msgid "%1: set data columns"
 msgstr "%1: მონაცემების სვეტების დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:304
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:534
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:546
 #, kde-format
 msgid "%1: set type"
 msgstr "%1: ტიპის დაყენება"
@@ -9011,8 +9011,8 @@ msgstr "ბინომური განაწილების ჩატე�
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:399
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:248
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:510
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:522
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:534
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:265
 #, kde-format
@@ -9093,84 +9093,84 @@ msgstr "%1: გამტრობის დაყენება"
 msgid "%1: legend visibility changed"
 msgstr "%1: ახსნის ხილვადობა შეიცვალა"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:541
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:553
 #, kde-format
 msgid "%1: set limits metric"
 msgstr "%1: ლიმიტების მეტრიკის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:548
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:560
 #, kde-format
 msgid "%1: set sample size"
 msgstr "%1: სემპლის ზომის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:556
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:568
 #, kde-format
 msgid "%1: enable exact limits"
 msgstr "%1: ზუსტი ლიმიტების ჩართვა"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:556
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:568
 #, kde-format
 msgid "%1: disable exact limits"
 msgstr "%1: ზუსტი ლიმიტების გამორთვა"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:565
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:577
 #, kde-format
 msgid "%1: set maximal upper limit"
 msgstr "%1: მაქსიმალური ზედა ზღვრის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:572
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:584
 #, kde-format
 msgid "%1: set minimal lower limit"
 msgstr "%1: მინიმალური ქვედა ზღვრის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:581
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:593
 #, kde-format
 msgid "%1: enable control labels"
 msgstr "%1: მართვის ჭდეების ჩართვა"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:581
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:593
 #, kde-format
 msgid "%1: disable control labels"
 msgstr "%1: საკონტროლო ჭდეების გათიშვა"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:603
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:615
 #, kde-format
 msgid "%1: set labels border shape"
 msgstr "%1: ჭდის საზღვრის ფორმის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:618
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:630
 #, kde-format
 msgid "%1: set labels font"
 msgstr "%1: ჭდის ფონტის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:656
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:688
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:665
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:697
 #, kde-format
 msgid "%1: set labels background color"
 msgstr "%1: ჭდის ფონის ფერის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:746
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:755
 #, kde-format
 msgid "%1: set labels border style"
 msgstr "%1: ჭდის საზღვრის სტილის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:757
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:766
 #, kde-format
 msgid "%1: set labels border width"
 msgstr "%1: ჭდის საზღვრის სიგანის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:768
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:779
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:777
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:788
 #, kde-format
 msgid "%1: set labels border color"
 msgstr "%1: ჭდის საზღვრის ფერის დაყენება"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:871
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:880
 #, kde-format
 msgid "Not enough data provided."
 msgstr "მიწოდებული მონაცემები საკმარისი არაა."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:971
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:980
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "ბოლო ნიმუში არასრული და გამოტოვებულია."

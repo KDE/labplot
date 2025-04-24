@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-22 00:37+0000\n"
+"POT-Creation-Date: 2025-04-24 00:38+0000\n"
 "PO-Revision-Date: 2024-11-15 10:08+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -1009,7 +1009,7 @@ msgstr "%1: aseta pääruudukon tyyli"
 #: src/backend/datapicker/DatapickerImage.cpp:417
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:276
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:281
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:150
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:147
 #: src/backend/worksheet/WorksheetElement.cpp:163
@@ -1023,7 +1023,7 @@ msgstr "%1: aseta näkyväksi"
 #: src/backend/datapicker/DatapickerImage.cpp:417
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:276
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:281
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:150
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:147
 #: src/backend/worksheet/WorksheetElement.cpp:163
@@ -8487,8 +8487,8 @@ msgstr "%1: aseta päiväyksen ja ajan muodoksi %2"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:944
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:951
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:590
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:597
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
 #, kde-format
 msgid "%1: set labels precision"
 msgstr ""
@@ -8579,7 +8579,7 @@ msgid "%1: set data columns"
 msgstr "%1: lisää tyhjiä sarakkeita"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:304
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:534
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:546
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
 msgid "%1: set type"
@@ -9649,8 +9649,8 @@ msgstr "Binomijakauma"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:399
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:248
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:510
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:522
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:534
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:265
 #, fuzzy, kde-format
@@ -9743,98 +9743,98 @@ msgstr "%1: aseta fontti"
 msgid "%1: legend visibility changed"
 msgstr "%1: taustan tyyppi muuttunut"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:541
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:553
 #, fuzzy, kde-format
 #| msgid "%1: set creation time"
 msgid "%1: set limits metric"
 msgstr "%1: aseta luontiaika"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:548
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:560
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
 msgid "%1: set sample size"
 msgstr "%1: aseta sivukoko"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:556
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:568
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: enable exact limits"
 msgstr "%1: muuta kommenttia"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:556
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:568
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: disable exact limits"
 msgstr "%1: muuta kommenttia"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:565
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:577
 #, fuzzy, kde-format
 #| msgid "%1: set values column"
 msgid "%1: set maximal upper limit"
 msgstr "%1: aseta arvojen sarake"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:572
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:584
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: set minimal lower limit"
 msgstr "%1: muuta kommenttia"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:581
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:593
 #, kde-format
 msgid "%1: enable control labels"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:581
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:593
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
 msgid "%1: disable control labels"
 msgstr "%1: aseta sivukoko"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:603
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:615
 #, fuzzy, kde-format
 #| msgid "%1: set border style"
 msgid "%1: set labels border shape"
 msgstr "%1: aseta reunan tyyli"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:618
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:630
 #, fuzzy, kde-format
 #| msgid "%1: set values font"
 msgid "%1: set labels font"
 msgstr "%1: aseta arvojen fontti"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:656
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:688
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:665
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:697
 #, fuzzy, kde-format
 #| msgid "%1: set background first color"
 msgid "%1: set labels background color"
 msgstr "%1: aseta ensimmäinen taustaväri"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:746
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:755
 #, fuzzy, kde-format
 #| msgid "%1: set border style"
 msgid "%1: set labels border style"
 msgstr "%1: aseta reunan tyyli"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:757
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:766
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set labels border width"
 msgstr "%1: aseta fontti"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:768
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:779
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:777
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:788
 #, fuzzy, kde-format
 #| msgid "%1: set background first color"
 msgid "%1: set labels border color"
 msgstr "%1: aseta ensimmäinen taustaväri"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:871
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:880
 #, fuzzy, kde-format
 #| msgid "How to weight the data points"
 msgid "Not enough data provided."
 msgstr "Miten datapisteitä painotetaan"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:971
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:980
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr ""
