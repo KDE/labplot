@@ -63,25 +63,25 @@ include:
 
 craft_appimage_qt6_x86_64:
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "master"'
+    - if: '$CI_COMMIT_REF_NAME == "release/2.12"'
       when: manual
       allow_failure: true
 
 craft_windows_qt6_x86_64:
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "master"'
+    - if: '$CI_COMMIT_REF_NAME == "release/2.12"'
       when: manual
       allow_failure: true
 
 craft_macos_qt6_x86_64:
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "master"'
+    - if: '$CI_COMMIT_REF_NAME == "release/2.12"'
       when: manual
       allow_failure: true
 
 craft_macos_qt6_arm64:
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "master"'
+    - if: '$CI_COMMIT_REF_NAME == "release/2.12"'
       when: manual
       allow_failure: true
 
