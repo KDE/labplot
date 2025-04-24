@@ -174,8 +174,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v2.5/libcerf-v2.5.tar.gz",
-                    "sha256": "b3a5e68a30bdbd3a58e9e7c038bd0aa2586b90bbb1c809f76665e176b2d42cdc"
+                    "url": "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v3.0/libcerf-v3.0.tar.gz",
+                    "sha256": "c6108fbda89af37f588119c0c542b6c1e824845a36bea2fa31f7ed2cc1a246db"
                 }
             ]
         },
