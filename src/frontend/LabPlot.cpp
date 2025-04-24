@@ -75,20 +75,20 @@ int main(int argc, char* argv[]) {
 						 i18n("(c) 2007-%1 LabPlot Team", QLatin1String(YEAR)));
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18nc("@info:credit", "Developer"), QStringLiteral("stefan.gerlach@uni.kn"), QString());
 	aboutData.addAuthor(i18n("Alexander Semke"), i18nc("@info:credit", "Developer"), QStringLiteral("alexander.semke@web.de"), QString());
-	aboutData.addAuthor(i18n("Fábián Kristóf-Szabolcs"), i18nc("@info:credit", "Developer"), QStringLiteral("f-kristof@hotmail.com"), QString());
 	aboutData.addAuthor(i18n("Martin Marmsoler"), i18nc("@info:credit", "Developer"), QStringLiteral("martin.marmsoler@gmail.com"), QString());
 	aboutData.addAuthor(i18n("Dariusz Laska"),
 						i18nc("@info:credit", "Conceptual work, documentation, example projects"),
 						QStringLiteral("dariuszlaska@gmail.com"),
 						QString());
-	aboutData.addAuthor(i18n("Andreas Kainz"), i18nc("@info:credit", "Icon designer"), QStringLiteral("kainz.a@gmail.com"), QString());
 	// no text (link to bugs.kde.org) before authors list
 	aboutData.setCustomAuthorText(QString(), QString());
 
+	aboutData.addCredit(i18n("Andreas Kainz"), i18nc("@info:credit", "Icon designer"), QStringLiteral("kainz.a@gmail.com"), QString());
 	aboutData.addCredit(i18n("Yuri Chornoivan"),
 						i18nc("@info:credit", "Help on many questions about the KDE-infrastructure and translation related topics"),
 						QStringLiteral("yurchor@ukr.net"),
 						QString());
+	aboutData.addCredit(i18n("Fábián Kristóf-Szabolcs"), i18nc("@info:credit", "FITS Filter"), QStringLiteral("f-kristof@hotmail.com"), QString());
 	aboutData.addCredit(i18n("Garvit Khatri"),
 						i18nc("@info:credit", "Porting LabPlot to KF5 and Integration with Cantor"),
 						QStringLiteral("garvitdelhi@gmail.com"),
