@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-24 00:38+0000\n"
+"POT-Creation-Date: 2025-04-25 00:38+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -3739,7 +3739,7 @@ msgstr "अंकगणित औसत"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:261
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:217
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:221
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:73
@@ -12730,7 +12730,7 @@ msgstr "%1 अक्ष: टेम्पलेट \"%2\" लोड किया 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:375
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:452
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:681
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:685
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
@@ -13381,7 +13381,7 @@ msgid "Custom value for the kernel bandwidth"
 msgstr ""
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:373
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:679
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:683
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1041
@@ -13459,89 +13459,89 @@ msgstr "%1 मैट्रिक्स: टेम्पलेट \"%2\" लो�
 msgid "File Browser"
 msgstr "फ़ाइल ब्राउज़र"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:216
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:220
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
 #, kde-format
 msgid "Average"
 msgstr "औसत"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:220
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:224
 #: src/frontend/widgets/LabelWidget.cpp:508
 #, kde-format
 msgid "No Border"
 msgstr "कोई सीमा नहीं"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:221
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
 #: src/frontend/widgets/LabelWidget.cpp:509
 #, kde-format
 msgid "Rectangle"
 msgstr "आयत"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:222
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
 #: src/frontend/widgets/LabelWidget.cpp:510
 #, kde-format
 msgid "Ellipse"
 msgstr "अंडाकार"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:223
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
 #: src/frontend/widgets/LabelWidget.cpp:511
 #, kde-format
 msgid "Round sided rectangle"
 msgstr "गोल भुजा वाला आयताकार"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:224
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:228
 #: src/frontend/widgets/LabelWidget.cpp:512
 #, kde-format
 msgid "Round corner rectangle"
 msgstr "गोल कोना आयताकार"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:229
 #: src/frontend/widgets/LabelWidget.cpp:513
 #, kde-format
 msgid "Inwards round corner rectangle"
 msgstr "अंदर की ओर गोल कोना वाला आयताकार"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
 #: src/frontend/widgets/LabelWidget.cpp:514
 #, kde-format
 msgid "Dented border rectangle"
 msgstr "डेंटेड बॉर्डर आयत"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
 #: src/frontend/widgets/LabelWidget.cpp:515
 #, kde-format
 msgid "Cuboid"
 msgstr "घनाभ"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:228
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:232
 #: src/frontend/widgets/LabelWidget.cpp:516
 #, fuzzy, kde-format
 #| msgid "Up Pointing rectangle"
 msgid "Up pointing rectangle"
 msgstr "ऊपर की ओर इंगित करने वाला आयत"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:229
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:233
 #: src/frontend/widgets/LabelWidget.cpp:517
 #, fuzzy, kde-format
 #| msgid "Down Pointing rectangle"
 msgid "Down pointing rectangle"
 msgstr "नीचे की ओर इंगित करने वाला आयत"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:234
 #: src/frontend/widgets/LabelWidget.cpp:518
 #, fuzzy, kde-format
 #| msgid "Left Pointing rectangle"
 msgid "Left pointing rectangle"
 msgstr "बायीं ओर इंगित करने वाला आयत"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:235
 #: src/frontend/widgets/LabelWidget.cpp:519
 #, fuzzy, kde-format
 #| msgid "Right Pointing rectangle"
 msgid "Right pointing rectangle"
 msgstr "दांयी ओर इंगित करने वाला आयत"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:235
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:239
 #, fuzzy, kde-format
 #| msgid ""
 #| "The supported chart types are grouped according to the plotted statistics "
@@ -13584,17 +13584,17 @@ msgstr ""
 "- <b>द्विपद गणना</b> प्लॉट.</li><li> सी - प्लॉट <b>पॉइसन गणना</b> .</li><li> यू "
 "- प्लॉट <b>पॉइसन दरें</b> .</li></ul>"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:261
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:265
 #, kde-format
 msgid "Maximal value for the upper control limit. No constraint, if empty."
 msgstr ""
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:265
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:269
 #, kde-format
 msgid "Minimal value for the lower control limit. No constraint, if empty."
 msgstr ""
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:269
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:273
 #, kde-format
 msgid ""
 "If checked, exact limits are calculated for every individual sample (\"stair-"
@@ -14756,7 +14756,7 @@ msgid "Stefan Gerlach"
 msgstr "स्टीफन गेरलाच"
 
 #: src/frontend/LabPlot.cpp:76 src/frontend/LabPlot.cpp:77
-#: src/frontend/LabPlot.cpp:78 src/frontend/LabPlot.cpp:79
+#: src/frontend/LabPlot.cpp:78
 #, kde-format
 msgctxt "@info:credit"
 msgid "Developer"
@@ -14769,48 +14769,56 @@ msgstr "अलेक्जेंडर सेम्के"
 
 #: src/frontend/LabPlot.cpp:78
 #, kde-format
-msgid "Fábián Kristóf-Szabolcs"
-msgstr "फ़ेबियान क्रिस्टोफ़-स्ज़ाबोल्क्स"
-
-#: src/frontend/LabPlot.cpp:79
-#, kde-format
 msgid "Martin Marmsoler"
 msgstr "मार्टिन मार्मसोलर"
 
-#: src/frontend/LabPlot.cpp:80
+#: src/frontend/LabPlot.cpp:79
 #, kde-format
 msgid "Dariusz Laska"
 msgstr "डेरियस लास्का"
 
-#: src/frontend/LabPlot.cpp:81
+#: src/frontend/LabPlot.cpp:80
 #, kde-format
 msgctxt "@info:credit"
 msgid "Conceptual work, documentation, example projects"
 msgstr "संकल्पनात्मक कार्य, दस्तावेज़ीकरण, उदाहरण परियोजनाएं"
 
-#: src/frontend/LabPlot.cpp:84
+#: src/frontend/LabPlot.cpp:86
 #, kde-format
 msgid "Andreas Kainz"
 msgstr "एंड्रियास कैन्ज़"
 
-#: src/frontend/LabPlot.cpp:84
+#: src/frontend/LabPlot.cpp:86
 #, kde-format
 msgctxt "@info:credit"
 msgid "Icon designer"
 msgstr "आइकन डिजाइनर"
 
-#: src/frontend/LabPlot.cpp:88
+#: src/frontend/LabPlot.cpp:87
 #, kde-format
 msgid "Yuri Chornoivan"
 msgstr "यूरी चोर्नोइवान"
 
-#: src/frontend/LabPlot.cpp:89
+#: src/frontend/LabPlot.cpp:88
 #, kde-format
 msgctxt "@info:credit"
 msgid ""
 "Help on many questions about the KDE-infrastructure and translation related "
 "topics"
 msgstr "केडीई-बुनियादी ढांचे और अनुवाद से संबंधित विषयों के बारे में कई प्रश्नों पर सहायता"
+
+#: src/frontend/LabPlot.cpp:91
+#, kde-format
+msgid "Fábián Kristóf-Szabolcs"
+msgstr "फ़ेबियान क्रिस्टोफ़-स्ज़ाबोल्क्स"
+
+#: src/frontend/LabPlot.cpp:91
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Open FITS File"
+msgctxt "@info:credit"
+msgid "FITS Filter"
+msgstr "FITS फ़ाइल खोलें"
 
 #: src/frontend/LabPlot.cpp:92
 #, kde-format
