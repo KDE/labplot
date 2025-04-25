@@ -14,7 +14,12 @@
 
 #include "backend/lib/Range.h"
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT CartesianScale {
+#else
 class CartesianScale {
+#endif
 public:
 	virtual ~CartesianScale();
 

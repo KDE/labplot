@@ -15,7 +15,12 @@
 class SpiceFilterPrivate;
 
 // NgSpice/LtSpice Filter
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT SpiceFilter : public AbstractFileFilter {
+#else
 class SpiceFilter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
 
 public:
@@ -37,6 +42,7 @@ public:
 	void setEndRow(const int);
 	int endRow() const;
 
+// remove condition to fix LTO warnings
 #ifdef SPICEFILTERTEST_EN
 	void setReaderBulkLineCount(int count) {
 		mBulkLineCount = count;

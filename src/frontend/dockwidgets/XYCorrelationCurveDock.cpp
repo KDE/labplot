@@ -102,9 +102,9 @@ void XYCorrelationCurveDock::initGeneralTab() {
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_correlationCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	cbDataSourceCurve->setAspect(m_correlationCurve->dataSourceCurve());
-	cbXDataColumn->setColumn(m_correlationCurve->xDataColumn(), m_correlationCurve->xDataColumnPath());
-	cbYDataColumn->setColumn(m_correlationCurve->yDataColumn(), m_correlationCurve->yDataColumnPath());
-	cbY2DataColumn->setColumn(m_correlationCurve->y2DataColumn(), m_correlationCurve->y2DataColumnPath());
+	cbXDataColumn->setAspect(m_correlationCurve->xDataColumn(), m_correlationCurve->xDataColumnPath());
+	cbYDataColumn->setAspect(m_correlationCurve->yDataColumn(), m_correlationCurve->yDataColumnPath());
+	cbY2DataColumn->setAspect(m_correlationCurve->y2DataColumn(), m_correlationCurve->y2DataColumnPath());
 	uiGeneralTab.sbSamplingInterval->setValue(m_correlationData.samplingInterval);
 	uiGeneralTab.cbAutoRange->setChecked(m_correlationData.autoRange);
 
@@ -271,14 +271,11 @@ void XYCorrelationCurveDock::normChanged() {
 }
 
 void XYCorrelationCurveDock::recalculateClicked() {
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYCorrelationCurve*>(curve)->setCorrelationData(m_correlationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	Q_EMIT info(i18n("Correlation status: %1", m_correlationCurve->correlationResult().status));
-	QApplication::restoreOverrideCursor();
 }
 
 /*!
@@ -310,13 +307,13 @@ void XYCorrelationCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 		uiGeneralTab.sbSamplingInterval->setEnabled(true);
 	}
 	CONDITIONAL_LOCK_RETURN;
-	cbXDataColumn->setColumn(column, m_correlationCurve->xDataColumnPath());
+	cbXDataColumn->setAspect(column, m_correlationCurve->xDataColumnPath());
 	enableRecalculate();
 }
 
 void XYCorrelationCurveDock::curveY2DataColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbY2DataColumn->setColumn(column, m_correlationCurve->y2DataColumnPath());
+	cbY2DataColumn->setAspect(column, m_correlationCurve->y2DataColumnPath());
 	enableRecalculate();
 }
 

@@ -131,7 +131,7 @@
 		QFile file(savePath);                                                                                                                                  \
 		QCOMPARE(file.open(QIODevice::WriteOnly), true);                                                                                                       \
                                                                                                                                                                \
-		for (const auto& d : fileContent) {                                                                                                                    \
+		for (const auto& d : content) {                                                                                                                        \
 			file.write(d.toLatin1() + "\n");                                                                                                                   \
 		}                                                                                                                                                      \
 		file.close();                                                                                                                                          \
@@ -144,7 +144,7 @@ class CommonTest : public QObject {
 	Q_OBJECT
 
 protected Q_SLOTS:
-	void initTestCase();
+	virtual void initTestCase();
 
 protected:
 	// compare floats with given delta
@@ -158,5 +158,7 @@ protected:
 		}
 	}
 	static void listStack(QUndoStack* stack);
+
+	void wait(int milliseconds);
 };
 #endif

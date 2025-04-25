@@ -25,6 +25,8 @@
 #include <QMenu>
 #include <QPainter>
 #include <QScreen>
+#include <QWidget>
+#include <QWindow>
 
 #ifdef HAVE_POPPLER
 #include <poppler-qt6.h>
@@ -139,15 +141,11 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color) {
 	int index = comboBox->currentIndex();
 	comboBox->clear();
 
-	QPainter pa;
 	int offset = 2;
 	int w = 50;
 	int h = 20;
 	QPixmap pm(w, h);
 	comboBox->setIconSize(QSize(w, h));
-
-	QPen pen(Qt::SolidPattern, 1);
-	pa.setPen(pen);
 
 	static std::array<QString, 15> list = {i18n("None"),
 										   i18n("Uniform"),
@@ -165,10 +163,15 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color) {
 										   i18n("Forward Diag. Lines"),
 										   i18n("Crossing Diag. Lines")};
 	const QColor& borderColor = GuiTools::isDarkMode() ? Qt::white : Qt::black;
+	QPen pen(Qt::SolidPattern, 1);
+	pen.setColor(borderColor);
+
 	for (int i = 0; i < 15; i++) {
+		QPainter pa;
+
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
-		pa.setPen(borderColor);
+		pa.setPen(pen);
 		pa.setRenderHint(QPainter::Antialiasing);
 		pa.setBrush(QBrush(color, (Qt::BrushStyle)i));
 		pa.drawRect(offset, offset, w - 2 * offset, h - 2 * offset);
@@ -227,6 +230,29 @@ QColor& GuiTools::colorFromAction(QActionGroup* actionGroup, QAction* action) {
 	return colors[index];
 }
 
+// Returns current screen DPI as { physicalDotsPerInchX, physicalDotsPerInchY }
+QPair<float, float> GuiTools::dpi(const QWidget* widget) {
+	QScreen* screen = nullptr;
+
+	if (widget != nullptr) {
+		if (widget->window() && widget->window()->windowHandle() && widget->window()->windowHandle()->screen())
+			screen = widget->window()->windowHandle()->screen();
+		else
+			WARN("Widget or related window/screen is null, falling back to primary screen");
+
+	} else
+		WARN("Widget is null, falling back to primary screen");
+
+	// Fallback to the primary screen if the widget's screen is not valid
+	if (!screen)
+		screen = QApplication::primaryScreen();
+
+	// Return the DPI values
+	float dpiX = screen->physicalDotsPerInchX();
+	float dpiY = screen->physicalDotsPerInchY();
+	return {dpiX, dpiY};
+}
+
 // ComboBox with colors
 // 	QImage img(16,16,QImage::Format_RGB32);
 // 	QPainter p(&img);
@@ -242,11 +268,9 @@ void GuiTools::highlight(QWidget* widget, bool invalid) {
 }
 
 void GuiTools::addSymbolStyles(QComboBox* cb) {
-	QPainter pa;
 	QPen pen(Qt::SolidPattern, 0);
 	const QColor& color = GuiTools::isDarkMode() ? Qt::white : Qt::black;
 	pen.setColor(color);
-	pa.setPen(pen);
 
 	int iconSize = 20;
 	QPixmap pm(iconSize, iconSize);
@@ -255,8 +279,10 @@ void GuiTools::addSymbolStyles(QComboBox* cb) {
 	trafo.scale(15, 15);
 
 	for (int i = 0; i < Symbol::stylesCount(); ++i) {
+		QPainter pa;
 		// get styles in order
 		const auto style = Symbol::indexToStyle(i);
+
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
 		pa.setPen(pen);

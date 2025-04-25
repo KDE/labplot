@@ -73,7 +73,7 @@ namespace {
 // the project version will be compared with this.
 // if you make any imcompatible changes to the xmlfile
 // or the function in labplot, increase this number.
-int buildXmlVersion = 14;
+int buildXmlVersion = 15;
 }
 
 /**
@@ -490,6 +490,7 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) {
 	writer->writeAttribute(QStringLiteral("xmlVersion"), QString::number(buildXmlVersion));
 	writer->writeAttribute(QStringLiteral("modificationTime"), modificationTime().toString(QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QStringLiteral("author"), author());
+	writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
 
 	// save the state of the content dock widgets
 	writer->writeAttribute(QStringLiteral("dockWidgetState"), d->dockWidgetState);
@@ -498,9 +499,6 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) {
 	writer->writeAttribute(QStringLiteral("saveDefaultDockWidgetState"), QString::number(d->saveDefaultDockWidgetState));
 	if (d->saveDefaultDockWidgetState)
 		writer->writeAttribute(QStringLiteral("defaultDockWidgetState"), d->defaultDockWidgetState);
-
-	if (d->saveCalculations)
-		writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
 
 	QString image;
 	if (!thumbnail.isNull()) {
@@ -728,6 +726,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 	return !reader->hasError();
 }
 
+#ifndef SDK
 bool Project::loadNotebook(const QString& filename) {
 	bool rc = false;
 #ifdef HAVE_CANTOR_LIBS
@@ -837,6 +836,7 @@ bool Project::loadNotebook(const QString& filename) {
 
 	return rc;
 }
+#endif
 
 void Project::retransformElements(AbstractAspect* aspect) {
 	bool hasChildren = aspect->childCount<AbstractAspect>();
@@ -934,9 +934,17 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	// wait until all columns are decoded from base64-encoded data
 	QThreadPool::globalInstance()->waitForDone();
 
-	bool hasChildren = aspect->childCount<AbstractAspect>();
-	const auto& columns = aspect->project()->children<Column>(ChildIndexFlag::Recursive);
-	const auto& histograms = aspect->project()->children<Histogram>(ChildIndexFlag::Recursive); // needed for fit curves only. why a better implementation?
+	// when restoring pointers for an aspect having children, for example a Folder, we need to recursively traverse
+	// all its children and restore the pointers for all of them. Analysis curves, for example XYFitCurve, can also
+	// children (residuals column, note) but there is no need to check the children, the pointers need to be restored
+	// for the analysis curve itself.
+	bool hasChildren = (aspect->childCount<AbstractAspect>() > 0 && !aspect->inherits(AspectType::XYAnalysisCurve));
+
+	// aspects in the project that can be used as sources/references:
+	auto* project = aspect->project();
+	const auto& columns = project->children<Column>(ChildIndexFlag::Recursive);
+	const auto& histogramsAll = project->children<Histogram>(ChildIndexFlag::Recursive); // needed for fit curves only.
+	const auto& curvesAll = project->children<XYCurve>(ChildIndexFlag::Recursive);
 
 #ifndef SDK
 	// LiveDataSource:
@@ -961,7 +969,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		// list of curves to be retransformed
 		curves << static_cast<XYCurve*>(aspect);
 
-	for (auto* curve : qAsConst(curves)) {
+	for (auto* curve : std::as_const(curves)) {
 		if (!curve)
 			continue;
 		curve->setSuppressRetransform(true);
@@ -975,7 +983,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			if (fitCurve) {
 				RESTORE_COLUMN_POINTER(fitCurve, xErrorColumn, XErrorColumn);
 				RESTORE_COLUMN_POINTER(fitCurve, yErrorColumn, YErrorColumn);
-				RESTORE_POINTER(fitCurve, dataSourceHistogram, DataSourceHistogram, Histogram, histograms);
+				RESTORE_POINTER(fitCurve, dataSourceHistogram, DataSourceHistogram, Histogram, histogramsAll);
 			}
 		} else {
 			RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
@@ -988,7 +996,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		}
 
 		if (analysisCurve)
-			RESTORE_POINTER(analysisCurve, dataSourceCurve, DataSourceCurve, XYCurve, curves);
+			RESTORE_POINTER(analysisCurve, dataSourceCurve, DataSourceCurve, XYCurve, curvesAll);
 
 		curve->setSuppressRetransform(false);
 	}
@@ -1010,7 +1018,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		functionCurves = aspect->children<XYFunctionCurve>(ChildIndexFlag::Recursive);
 
 	for (auto* functionCurve : functionCurves) {
-		for (const auto* curve : qAsConst(curves))
+		for (const auto* curve : std::as_const(curves))
 			functionCurve->setFunctionVariableCurve(curve);
 	}
 
@@ -1084,15 +1092,16 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			continue;
 
 		// initialize the array for the column pointers
-		int count = boxPlot->dataColumnPaths().count();
+		const auto& paths = boxPlot->dataColumnPaths();
+		int count = paths.count();
 		QVector<const AbstractColumn*> dataColumns;
 		dataColumns.resize(count);
 
 		// restore the pointers
 		for (int i = 0; i < count; ++i) {
 			dataColumns[i] = nullptr;
-			const auto& path = boxPlot->dataColumnPaths().at(i);
-			for (Column* column : columns) {
+			const auto& path = paths.at(i);
+			for (auto* column : columns) {
 				if (!column)
 					continue;
 				if (column->path() == path) {
@@ -1117,7 +1126,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			continue;
 
 		// initialize the array for the column pointers
-		int count = barPlot->dataColumnPaths().count();
+		const auto& paths = barPlot->dataColumnPaths();
+		int count = paths.count();
 		QVector<const AbstractColumn*> dataColumns;
 		dataColumns.resize(count);
 
@@ -1125,8 +1135,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		for (int i = 0; i < count; ++i) {
 			// data columns
 			dataColumns[i] = nullptr;
-			const auto path = barPlot->dataColumnPaths().at(i);
-			for (Column* column : columns) {
+			const auto& path = paths.at(i);
+			for (auto* column : columns) {
 				if (!column)
 					continue;
 				if (column->path() == path) {
@@ -1161,14 +1171,15 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			continue;
 
 		// initialize the array for the column pointers
-		int count = lollipopPlot->dataColumnPaths().count();
+		const auto& paths = lollipopPlot->dataColumnPaths();
+		int count = paths.count();
 		QVector<const AbstractColumn*> dataColumns;
 		dataColumns.resize(count);
 
 		// restore the pointers
 		for (int i = 0; i < count; ++i) {
 			dataColumns[i] = nullptr;
-			const auto& path = lollipopPlot->dataColumnPaths().at(i);
+			const auto& path = paths.at(i);
 			for (Column* column : columns) {
 				if (!column)
 					continue;

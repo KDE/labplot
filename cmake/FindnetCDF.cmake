@@ -10,7 +10,7 @@
 if(NOT MSVC_FOUND AND NOT APPLE)
     find_package(netCDF ${netCDF_FIND_VERSION} ${netCDF_FIND_REQUIRED} CONFIG QUIET)
     if(netCDF_FOUND)
-        MESSAGE (STATUS "Found netCDF: ${netCDF_INCLUDE_DIR}, ${netCDF_LIBRARIES} (found version \"${netCDF_VERSION}\")")
+        MESSAGE (STATUS "Found netCDF ${netCDF_VERSION}: ${netCDF_INCLUDE_DIR}, ${netCDF_LIBRARIES}")
         return()
     endif()
 endif()

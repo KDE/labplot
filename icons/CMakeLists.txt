@@ -13,3 +13,4 @@ ICONS
 64-apps-labplot.png
 sc-apps-labplot.svgz
 DESTINATION ${KDE_INSTALL_ICONDIR}/)
+install(FILES org.kde.labplot.svg DESTINATION ${KDE_INSTALL_FULL_ICONDIR}/hicolor/scalable/apps/)

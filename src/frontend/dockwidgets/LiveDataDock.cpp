@@ -6,7 +6,7 @@
 	SPDX-FileCopyrightText: 2017 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
 	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2017-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -40,6 +40,9 @@ LiveDataDock::LiveDataDock(QWidget* parent)
 
 	ui.bUpdateNow->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
 
+	retranslateUi();
+
+	//SLOTs
 	connect(ui.bPausePlayReading, &QPushButton::clicked, this, &LiveDataDock::pauseContinueReading);
 	connect(ui.bUpdateNow, &QPushButton::clicked, this, &LiveDataDock::updateNow);
 	connect(ui.sbUpdateInterval, QOverload<int>::of(&QSpinBox::valueChanged), this, &LiveDataDock::updateIntervalChanged);
@@ -57,12 +60,7 @@ LiveDataDock::LiveDataDock(QWidget* parent)
 	ui.swSubscriptions->addWidget(m_subscriptionWidget);
 	ui.swSubscriptions->setCurrentWidget(m_subscriptionWidget);
 
-	ui.bLWT->setToolTip(i18n("Manage MQTT connection's will settings"));
 	ui.bLWT->setIcon(ui.bLWT->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
-
-	QString info = i18n("Specify the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed.");
-	ui.lLWT->setToolTip(info);
-	ui.bLWT->setToolTip(info);
 	ui.bLWT->setEnabled(false);
 	ui.bLWT->setIcon(ui.bLWT->style()->standardIcon(QStyle::SP_FileDialogDetailedView));
 #endif
@@ -78,6 +76,16 @@ LiveDataDock::~LiveDataDock() {
 #else
 LiveDataDock::~LiveDataDock() = default;
 #endif
+
+void LiveDataDock::retranslateUi() {
+#ifdef HAVE_MQTT
+	ui.bLWT->setToolTip(i18n("Manage MQTT connection's will settings"));
+
+	QString info = i18n("Specify the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed.");
+	ui.lLWT->setToolTip(info);
+	ui.bLWT->setToolTip(info);
+#endif
+}
 
 #ifdef HAVE_MQTT
 /*!
@@ -102,13 +110,7 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 	}
 
 	m_paused = client->isPaused();
-	if (m_paused) {
-		ui.bPausePlayReading->setText(i18n("Continue reading"));
-		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-record")));
-	} else {
-		ui.bPausePlayReading->setText(i18n("Pause reading"));
-		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
-	}
+	updatePlayPauseButtonText(m_paused);
 
 	ui.sbKeepNValues->setValue(client->keepNValues());
 	ui.sbKeepNValues->setEnabled(true);
@@ -228,6 +230,20 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 }
 #endif
 
+void LiveDataDock::updatePlayPauseButtonText(bool pause) {
+	if (pause) {
+		ui.bPausePlayReading->setText(i18n("Continue Reading"));
+		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-record")));
+	} else {
+		ui.bPausePlayReading->setText(i18n("Pause Reading"));
+		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
+	}
+}
+
+void LiveDataDock::enableProperties(bool pause) {
+	ui.sbKeepNValues->setEnabled(pause);
+}
+
 /*!
  * \brief Sets the live data source of this dock widget
  * \param source
@@ -276,13 +292,7 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 	}
 
 	m_paused = source->isPaused();
-	if (m_paused) {
-		ui.bPausePlayReading->setText(i18n("Continue Reading"));
-		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-record")));
-	} else {
-		ui.bPausePlayReading->setText(i18n("Pause Reading"));
-		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
-	}
+	updatePlayPauseButtonText(m_paused);
 
 	ui.sbKeepNValues->setValue(source->keepNValues());
 
@@ -508,15 +518,13 @@ void LiveDataDock::continueReading() {
 void LiveDataDock::pauseContinueReading() {
 	m_paused = !m_paused;
 
-	if (m_paused) {
+	updatePlayPauseButtonText(m_paused);
+	enableProperties(m_paused);
+
+	if (m_paused)
 		pauseReading();
-		ui.bPausePlayReading->setText(i18n("Continue Reading"));
-		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-record")));
-	} else {
+	else
 		continueReading();
-		ui.bPausePlayReading->setText(i18n("Pause Reading"));
-		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
-	}
 }
 
 #ifdef HAVE_MQTT

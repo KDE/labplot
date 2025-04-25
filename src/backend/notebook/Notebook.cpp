@@ -53,7 +53,7 @@ bool Notebook::init(QByteArray* content) {
 																				 QVariantList() << m_backendName << QLatin1String("--noprogress"));
 
 	if (!result) {
-		WARN("Could not find cantorpart part");
+		WARN("Could not find cantorpart Part");
 		return false;
 	} else {
 		m_part = result.plugin;
@@ -92,20 +92,20 @@ bool Notebook::init(QByteArray* content) {
 		connect(m_variableModel, &QAbstractItemModel::modelReset, this, &Notebook::modelReset);
 
 		// default settings
-		const KConfigGroup group = Settings::group(QStringLiteral("Settings_Notebook"));
+		const auto group = Settings::group(QStringLiteral("Settings_Notebook"));
 
 		// TODO: right now we don't have the direct accces to Cantor's worksheet and to all its public methods
 		// and we need to go through the actions provided in cantor_part.
 		//-> redesign this! expose Cantor's Worksheet directly and add more settings here.
 		auto* action = m_part->action(QStringLiteral("enable_highlighting"));
 		if (action) {
-			bool value = group.readEntry(QLatin1String("SyntaxHighlighting"), false);
+			bool value = group.readEntry(QLatin1String("SyntaxHighlighting"), true);
 			action->setChecked(value);
 		}
 
 		action = m_part->action(QStringLiteral("enable_completion"));
 		if (action) {
-			bool value = group.readEntry(QLatin1String("SyntaxCompletion"), false);
+			bool value = group.readEntry(QLatin1String("SyntaxCompletion"), true);
 			action->setChecked(value);
 		}
 
@@ -123,7 +123,7 @@ bool Notebook::init(QByteArray* content) {
 
 		action = m_part->action(QStringLiteral("enable_animations"));
 		if (action) {
-			bool value = group.readEntry(QLatin1String("Animations"), false);
+			bool value = group.readEntry(QLatin1String("Animations"), true);
 			action->setChecked(value);
 		}
 
@@ -246,16 +246,29 @@ void Notebook::rowsAboutToBeRemoved(const QModelIndex& /*parent*/, int first, in
 }
 
 QList<Cantor::PanelPlugin*> Notebook::getPlugins() {
+	DEBUG(Q_FUNC_INFO)
 	if (!m_pluginsLoaded) {
 		auto* handler = new Cantor::PanelPluginHandler(this);
 		handler->loadPlugins();
-		m_plugins = handler->activePluginsForSession(m_session, Cantor::PanelPluginHandler::PanelStates());
-		for (auto* plugin : m_plugins)
+
+		if (m_plugins.isEmpty())
+			INFO(Q_FUNC_INFO << ", no plugins yet.")
+
+		auto states = Cantor::PanelPluginHandler::PanelStates();
+		if (!m_session) {
+			WARN(Q_FUNC_INFO << ", WARNING: no session!")
+		} else
+			m_plugins = handler->activePluginsForSession(m_session, states);
+
+		for (auto* plugin : m_plugins) {
+			INFO(Q_FUNC_INFO << ", connecting plugin")
 			plugin->connectToShell(m_part);
+		}
 
 		m_pluginsLoaded = true;
 	}
 
+	DEBUG(Q_FUNC_INFO << ", DONE")
 	return m_plugins;
 }
 

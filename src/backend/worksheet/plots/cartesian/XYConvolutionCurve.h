@@ -18,7 +18,12 @@ extern "C" {
 
 class XYConvolutionCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYConvolutionCurve : public XYAnalysisCurve {
+#else
 class XYConvolutionCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:
@@ -43,7 +48,6 @@ public:
 	explicit XYConvolutionCurve(const QString& name);
 	~XYConvolutionCurve() override;
 
-	void recalculate() override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

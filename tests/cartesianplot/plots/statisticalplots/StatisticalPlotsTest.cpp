@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for statistical plots like Q-Q plot, KDE plot, etc.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -186,17 +186,17 @@ void StatisticalPlotsTest::testHistogramColumnRemoved() {
 
 	histogram->setDataColumn(c);
 	c->setName(QStringLiteral("NewName"));
-	QCOMPARE(histogram->dataColumnPath(), QStringLiteral("Project/NewName"));
+	QCOMPARE(histogram->dataColumnPath(), i18n("Project") + QStringLiteral("/NewName"));
 
 	c->remove();
 
 	QCOMPARE(histogram->dataColumn(), nullptr);
-	QCOMPARE(histogram->dataColumnPath(), QStringLiteral("Project/NewName"));
+	QCOMPARE(histogram->dataColumnPath(), i18n("Project") + QStringLiteral("/NewName"));
 
-	c->setName(QStringLiteral("Another new name")); // Shall not lead to a crash
+	c->setName(QStringLiteral("Another new name")); // Should not lead to a crash
 
 	QCOMPARE(histogram->dataColumn(), nullptr);
-	QCOMPARE(histogram->dataColumnPath(), QStringLiteral("Project/NewName"));
+	QCOMPARE(histogram->dataColumnPath(), i18n("Project") + QStringLiteral("/NewName"));
 }
 
 // ##############################################################################
@@ -225,10 +225,9 @@ void StatisticalPlotsTest::testKDEPlotInit() {
 	children = p->children<KDEPlot>();
 	QCOMPARE(children.size(), 0);
 
-	// TODO: crash!!!
-	// project.undoStack()->redo();
-	// children = p->children<KDEPlot>();
-	// QCOMPARE(children.size(), 1);
+	project.undoStack()->redo();
+	children = p->children<KDEPlot>();
+	QCOMPARE(children.size(), 1);
 }
 
 /*!
@@ -318,10 +317,9 @@ void StatisticalPlotsTest::testQQPlotInit() {
 	children = p->children<QQPlot>();
 	QCOMPARE(children.size(), 0);
 
-	// TODO: crash!!!
-	// project.undoStack()->redo();
-	// children = p->children<QQPlot>();
-	// QCOMPARE(children.size(), 1);
+	project.undoStack()->redo();
+	children = p->children<QQPlot>();
+	QCOMPARE(children.size(), 1);
 }
 
 /*!
@@ -530,10 +528,9 @@ void StatisticalPlotsTest::testPBChartInit() {
 	children = p->children<ProcessBehaviorChart>();
 	QCOMPARE(children.size(), 0);
 
-	// TODO: crash!!!
-	// project.undoStack()->redo();
-	// children = p->children<ProcessBehaviorChart>();
-	// QCOMPARE(children.size(), 1);
+	project.undoStack()->redo();
+	children = p->children<ProcessBehaviorChart>();
+	QCOMPARE(children.size(), 1);
 }
 
 /*!
@@ -572,6 +569,7 @@ void StatisticalPlotsTest::testPBChartXmRAverage() {
 	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
 	pbc->setType(ProcessBehaviorChart::Type::XmR);
 	pbc->setLimitsMetric(ProcessBehaviorChart::LimitsMetric::Average);
+	pbc->setMinLowerLimit(0.); // counts cannot become negative
 	pbc->setDataColumn(column);
 	p->addChild(pbc);
 
@@ -651,6 +649,7 @@ void StatisticalPlotsTest::testPBChartXmRMedian() {
 	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
 	pbc->setType(ProcessBehaviorChart::Type::XmR);
 	pbc->setLimitsMetric(ProcessBehaviorChart::LimitsMetric::Median);
+	pbc->setMinLowerLimit(0.); // counts cannot become negative
 	pbc->setDataColumn(column);
 	p->addChild(pbc);
 
@@ -1087,10 +1086,9 @@ void StatisticalPlotsTest::testRunChartInit() {
 	children = p->children<RunChart>();
 	QCOMPARE(children.size(), 0);
 
-	// TODO: crash!!!
-	// project.undoStack()->redo();
-	// children = p->children<ProcessBehaviorChart>();
-	// QCOMPARE(children.size(), 1);
+	project.undoStack()->redo();
+	children = p->children<RunChart>();
+	QCOMPARE(children.size(), 1);
 }
 
 /*!

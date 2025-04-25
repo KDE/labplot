@@ -10,14 +10,17 @@
 #ifndef RANGE_H
 #define RANGE_H
 
-#include "backend/gsl/parser.h"
+#include "backend/gsl/Parser.h"
 #include "backend/nsl/nsl_math.h"
 #include "macros.h" //const auto numberLocale = QLocale();
 
+#ifndef SDK
 #include <KLocalizedString>
+#endif
 
 #include <QDateTime>
 #include <QStringList>
+#include <QTimeZone>
 
 #include <cmath>
 
@@ -35,7 +38,12 @@ class QString;
  *
  *	Only types supporting comparison are supported
  */
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT RangeT {
+#else
 class RangeT { // access enum without template
+#endif
 	Q_GADGET
 public:
 	enum class Format { Numeric, DateTime };
@@ -44,8 +52,10 @@ public:
 	// TODO: InverseOffset, Prob, Probit, Logit, Weibull
 	enum class Scale { Linear, Log10, Log2, Ln, Sqrt, Square, Inverse };
 	Q_ENUM(Scale)
+#ifndef SDK
 	static inline QList<KLocalizedString>
 		scaleNames{ki18n("Linear"), ki18n("Log10"), ki18n("Log2"), ki18n("Ln"), ki18n("Sqrt"), ki18n("Square"), ki18n("Inverse")};
+#endif
 	static bool isLogScale(Scale scale) {
 		if (scale == Scale::Log10 || scale == Scale::Log2 || scale == Scale::Ln)
 			return true;
@@ -53,8 +63,14 @@ public:
 	}
 };
 
+#ifdef SDK
+#include "labplot_export.h"
+template<class T>
+class LABPLOT_EXPORT Range : RangeT {
+#else
 template<class T>
 class Range : RangeT {
+#endif
 public:
 	Range() {
 	}
@@ -64,18 +80,21 @@ public:
 	// start and end as localized strings like "pi + 1.5" (will be parsed)
 	Range(const QString& start, const QString& end, const Format format = Format::Numeric, const Scale scale = Scale::Linear) {
 		const auto numberLocale = QLocale();
+
+		Parsing::Parser parser;
+
 		// min
-		double min = parse(qPrintable(start.simplified()), qPrintable(numberLocale.name()));
-		if (parse_errors() > 0) // if parsing fails, try default locale
-			min = parse(qPrintable(start.simplified()), "en_US");
-		if (parse_errors() > 0)
+		double min = parser.parse(qPrintable(start.simplified()), qPrintable(numberLocale.name()));
+		if (parser.parseErrors() > 0) // if parsing fails, try default locale
+			min = parser.parse(qPrintable(start.simplified()), "en_US");
+		if (parser.parseErrors() > 0)
 			min = 0;
 
 		// max
-		double max = parse(qPrintable(end.simplified()), qPrintable(numberLocale.name()));
-		if (parse_errors() > 0) // if parsing fails, try default locale
-			max = parse(qPrintable(end.simplified()), "en_US");
-		if (parse_errors() > 0)
+		double max = parser.parse(qPrintable(end.simplified()), qPrintable(numberLocale.name()));
+		if (parser.parseErrors() > 0) // if parsing fails, try default locale
+			max = parser.parse(qPrintable(end.simplified()), "en_US");
+		if (parser.parseErrors() > 0)
 			max = 1.;
 
 		// TODO: check for NAN, INF?
@@ -231,8 +250,8 @@ public:
 		if (m_format == Format::Numeric)
 			return locale.toString(m_start) + QStringLiteral(" .. ") + locale.toString(m_end);
 		else
-			return QDateTime::fromMSecsSinceEpoch(m_start, Qt::UTC).toString(m_dateTimeFormat) + QStringLiteral(" .. ")
-				+ QDateTime::fromMSecsSinceEpoch(m_end, Qt::UTC).toString(m_dateTimeFormat);
+			return QDateTime::fromMSecsSinceEpoch(m_start, QTimeZone::UTC).toString(m_dateTimeFormat) + QStringLiteral(" .. ")
+				+ QDateTime::fromMSecsSinceEpoch(m_end, QTimeZone::UTC).toString(m_dateTimeFormat);
 	}
 	std::string toStdString(bool round = true) const {
 		return STDSTRING(toString(round));
@@ -589,8 +608,8 @@ inline QString Range<double>::toString(bool round, QLocale locale) const {
 		} else
 			return locale.toString(m_start, 'g', 12) + QLatin1String(" .. ") + locale.toString(m_end, 'g', 12);
 	} else
-		return QDateTime::fromMSecsSinceEpoch(m_start, Qt::UTC).toString(m_dateTimeFormat) + QLatin1String(" .. ")
-			+ QDateTime::fromMSecsSinceEpoch(m_end, Qt::UTC).toString(m_dateTimeFormat);
+		return QDateTime::fromMSecsSinceEpoch(m_start, QTimeZone::UTC).toString(m_dateTimeFormat) + QLatin1String(" .. ")
+			+ QDateTime::fromMSecsSinceEpoch(m_end, QTimeZone::UTC).toString(m_dateTimeFormat);
 }
 
 #endif

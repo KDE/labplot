@@ -4,7 +4,7 @@
 	Description          : file I/O-filter related interface
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009-2017 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2017-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -44,14 +44,13 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
  * return the column mode for the given value string and settings \c dateTimeFormat and \c locale.
  * in case \c dateTimeFormat is empty, all possible datetime formats are tried out to determine the valid datetime object.
  */
-AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueString, QString& dateTimeFormat, const QLocale& locale) {
+AbstractColumn::ColumnMode
+AbstractFileFilter::columnMode(const QString& valueString, QString& dateTimeFormat, const QLocale& locale, bool intAsDouble, int baseYear) {
+	if (valueString.isEmpty() || isNan(valueString))
+		return AbstractColumn::ColumnMode::Double;
+
 	// TODO: use BigInt as default integer?
 	auto mode = AbstractColumn::ColumnMode::Integer;
-	if (valueString.size() == 0) // empty string treated as integer (meaning the non-empty strings will determine the data type)
-		return mode;
-
-	if (isNan(valueString))
-		return AbstractColumn::ColumnMode::Double;
 
 	// check if integer first
 	bool ok;
@@ -63,7 +62,7 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 		QDateTime valueDateTime;
 		if (dateTimeFormat.isEmpty()) {
 			for (const auto& format : AbstractColumn::dateTimeFormats()) {
-				valueDateTime = QDateTime::fromString(valueString, format);
+				valueDateTime = QDateTime::fromString(valueString, format, baseYear);
 				if (valueDateTime.isValid()) {
 					DEBUG(Q_FUNC_INFO << ", " << STDSTRING(valueString) << " : valid DateTime format - " << STDSTRING(format));
 					dateTimeFormat = format;
@@ -92,6 +91,8 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 
 			mode = ok ? AbstractColumn::ColumnMode::Double : AbstractColumn::ColumnMode::Text;
 		}
+	} else if (intAsDouble) {
+		mode = AbstractColumn::ColumnMode::Double;
 	}
 
 	return mode;
@@ -129,6 +130,10 @@ void AbstractFileFilter::setLastError(const QString& error) {
 	m_lastError = error;
 }
 
+void AbstractFileFilter::clearLastError() {
+	m_lastError.clear();
+}
+
 /*!
  * Returns the list of warnings that occured during the last parse step.
  */
@@ -142,6 +147,34 @@ void AbstractFileFilter::addWarning(const QString& warning) {
 
 void AbstractFileFilter::clearLastWarnings() {
 	m_lastWarnings.clear();
+}
+
+/*!
+ * which file types are exclusive (filter can only open files of this type)
+ * used to deactivate selection if of other type
+ */
+bool AbstractFileFilter::exclusiveFileType(const AbstractFileFilter::FileType type) {
+	switch (type) {
+	case FileType::Ods:
+	case FileType::HDF5:
+	case FileType::NETCDF:
+	case FileType::XLSX:
+	case FileType::FITS:
+	case FileType::ROOT:
+	case FileType::Spice:
+	case FileType::MATIO:
+	case FileType::VECTOR_BLF:
+	case FileType::MCAP:
+		return true;
+	case FileType::Ascii:
+	case FileType::Binary:
+	case FileType::Image:
+	case FileType::JSON:
+	case FileType::READSTAT:
+		break;
+	}
+
+	return false;
 }
 
 AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileName) {
@@ -276,4 +309,12 @@ QString AbstractFileFilter::convertFromNumberToColumn(int n) {
 	std::reverse(str, str + strlen(str));
 
 	return QLatin1String(str);
+}
+
+int AbstractFileFilter::previewPrecision() const {
+	return m_previewPrecision;
+}
+
+void AbstractFileFilter::setPreviewPrecision(int precision) {
+	m_previewPrecision = precision;
 }

@@ -63,6 +63,9 @@ QQPlotDock::QQPlotDock(QWidget* parent)
 		layout->setVerticalSpacing(2);
 	}
 
+	updateLocale();
+	retranslateUi();
+
 	// Slots
 	// General
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &QQPlotDock::dataColumnChanged);
@@ -80,9 +83,6 @@ QQPlotDock::QQPlotDock(QWidget* parent)
 	connect(templateHandler, &TemplateHandler::info, this, &QQPlotDock::info);
 
 	ui.verticalLayout->addWidget(frame);
-
-	updateLocale();
-	retranslateUi();
 }
 
 QQPlotDock::~QQPlotDock() = default;
@@ -117,7 +117,7 @@ void QQPlotDock::setPlots(QList<QQPlot*> list) {
 	// if there are more then one curve in the list, disable the content in the tab "general"
 	if (m_plots.size() == 1) {
 		cbDataColumn->setEnabled(true);
-		cbDataColumn->setColumn(m_plot->dataColumn(), m_plot->dataColumnPath());
+		cbDataColumn->setAspect(m_plot->dataColumn(), m_plot->dataColumnPath());
 	} else {
 		cbDataColumn->setEnabled(false);
 		cbDataColumn->setCurrentModelIndex(QModelIndex());
@@ -137,7 +137,17 @@ void QQPlotDock::setPlots(QList<QQPlot*> list) {
 	connect(m_plot, &QQPlot::distributionChanged, this, &QQPlotDock::plotDistributionChanged);
 }
 
+/*
+ * updates the locale in the widgets. called when the application settins are changed.
+ */
+void QQPlotDock::updateLocale() {
+	lineWidget->updateLocale();
+	symbolWidget->updateLocale();
+}
+
 void QQPlotDock::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
+
 	ui.cbDistribution->clear();
 
 	QVector<QPair<QString, int>> distros;
@@ -158,14 +168,11 @@ void QQPlotDock::retranslateUi() {
 
 		ui.cbDistribution->addItem(d.first, d.second);
 	}
-}
 
-/*
- * updates the locale in the widgets. called when the application settins are changed.
- */
-void QQPlotDock::updateLocale() {
-	lineWidget->updateLocale();
-	symbolWidget->updateLocale();
+	// tooltip texts
+	QString info = i18n("Distribution used to calculate the percentiles to be compared with the percentiles of the provided data");
+	ui.lDistribution->setToolTip(info);
+	ui.cbDistribution->setToolTip(info);
 }
 
 //*************************************************************
@@ -239,7 +246,7 @@ void QQPlotDock::distributionChanged(int index) {
 // General-Tab
 void QQPlotDock::plotDataColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbDataColumn->setColumn(column, m_plot->dataColumnPath());
+	cbDataColumn->setAspect(column, m_plot->dataColumnPath());
 }
 
 void QQPlotDock::plotDistributionChanged(nsl_sf_stats_distribution distribution) {

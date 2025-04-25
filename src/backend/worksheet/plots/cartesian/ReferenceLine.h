@@ -3,22 +3,25 @@
 	Project              : LabPlot
 	Description          : Reference line on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef REFERENCELINE_H
 #define REFERENCELINE_H
 
-#include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 
-class CartesianPlot;
 class Line;
 class ReferenceLinePrivate;
 class QActionGroup;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT ReferenceLine : public WorksheetElement {
+#else
 class ReferenceLine : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:
@@ -45,7 +48,7 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(ReferenceLine)
-	void init(bool loading = false);
+	void init(bool loading);
 	void initActions();
 	void initMenus();
 

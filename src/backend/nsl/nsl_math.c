@@ -46,7 +46,7 @@ bool nsl_math_definitely_less_than_eps(double a, double b, double epsilon) {
 double nsl_math_frexp10(double x, int* e) {
 	int expo = 0;
 	if (x != 0)
-		expo = floor(log10(fabs(x)));
+		expo = (int)floor(log10(fabs(x)));
 
 	if (e != NULL)
 		*e = expo;

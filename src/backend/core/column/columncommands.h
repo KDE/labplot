@@ -87,7 +87,6 @@ public:
 
 	void redo() override;
 	void undo() override;
-	void finalize() const;
 
 private:
 	ColumnPrivate* m_col;
@@ -101,7 +100,6 @@ public:
 
 	void redo() override;
 	void undo() override;
-	void finalize() const;
 
 private:
 	ColumnPrivate* m_col;

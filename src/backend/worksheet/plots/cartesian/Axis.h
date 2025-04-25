@@ -4,7 +4,7 @@
 	Description          : Axis for cartesian coordinate systems.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -13,20 +13,21 @@
 #ifndef AXISNEW_H
 #define AXISNEW_H
 
-#include "backend/lib/Range.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
-class CartesianPlot;
+class AbstractColumn;
+class AxisPrivate;
 class Line;
 class TextLabel;
-class AxisPrivate;
-class AbstractColumn;
 class QActionGroup;
 
-using Dimension = CartesianCoordinateSystem::Dimension;
-
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Axis : public WorksheetElement {
+#else
 class Axis : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:
@@ -189,6 +190,7 @@ public:
 	void retransform() override;
 	void retransformTickLabelStrings();
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	void updateLocale() override;
 
 protected:
 	Axis(const QString&, Orientation, AxisPrivate*);

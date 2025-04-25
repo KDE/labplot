@@ -12,13 +12,47 @@
 
 #include "tests/CommonTest.h"
 
+class QTcpServer;
+class QUdpSocket;
+
 class LiveDataTest : public CommonTest {
 	Q_OBJECT
 
 private:
-	void waitForSignal(QObject* sender, const char* signal);
+	void initTestCase() override;
+	void cleanupTestCase();
+
+	template<typename T1, typename T2>
+	bool waitForSignal(T1* sender, T2 signal) {
+		QTimer timer(this);
+		timer.setSingleShot(true);
+
+		bool timeout = false;
+
+		QEventLoop loop;
+		QTimer::connect(&timer, &QTimer::timeout, [&loop, &timeout] {
+			timeout = true;
+			loop.quit();
+		});
+
+		connect(sender, signal, [&loop, &timer] {
+			timer.stop();
+			loop.quit();
+		});
+		timer.start(2000);
+		loop.exec();
+
+		return timeout;
+	}
+
+	QUdpSocket* m_udpSocket{nullptr};
+	QTcpServer* m_tcpServer{nullptr};
+	QTcpSocket* m_tcpSocket{nullptr};
+	QTimer* m_tcpSendTimer{nullptr};
 
 private Q_SLOTS:
+	// Reading from files:
+
 	// Continuous fixed - fixed amount of samples is processed starting from the beginning of the newly received data
 	void testReadContinuousFixed00();
 	void testReadContinuousFixed01();
@@ -39,8 +73,15 @@ private Q_SLOTS:
 	// Whole file - on every read the whole file is re-read completely and processed
 	void testReadWholeFile00();
 	void testReadWholeFile01();
-	void testReadWholeFile02();
-	void testReadWholeFile03();
+	void testReadWholeFileSameContentSize();
+
+	void testPlotting();
+
+	// reading from TCP sockets:
+	void testTcpReadContinuousFixed00();
+
+	// reading from UDP sockets:
+	void testUdpReadContinuousFixed00();
 };
 
 #endif // LIVEDATATEST_H

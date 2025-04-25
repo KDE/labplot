@@ -51,8 +51,8 @@ private Q_SLOTS:
 
 private:
 	// variable widgets
-	QGridLayout* m_gridLayoutCurves;
-	QGridLayout* m_gridLayoutVariables;
+	QGridLayout* m_gridLayoutCurves{nullptr};
+	QGridLayout* m_gridLayoutVariables{nullptr};
 	QList<QLineEdit*> m_variableLineEdits;
 	QList<TreeViewComboBox*> m_variableComboBoxes;
 	QList<QToolButton*> m_variableDeleteButtons;

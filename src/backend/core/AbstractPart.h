@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Base class of Aspects with MDI windows as views.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2012-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -11,11 +11,17 @@
 #define ABSTRACT_PART_H
 
 #include "AbstractAspect.h"
-
+#ifndef SDK
 class ContentDockWidget;
+#endif
 class QMenu;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT AbstractPart : public AbstractAspect {
+#else
 class AbstractPart : public AbstractAspect {
+#endif
 	Q_OBJECT
 
 public:
@@ -23,9 +29,11 @@ public:
 	~AbstractPart() override;
 
 	virtual QWidget* view() const = 0;
+	bool viewCreated() const;
 	void deleteView() const;
-
+#ifndef SDK
 	ContentDockWidget* dockWidget() const;
+#endif
 	bool dockWidgetExists() const;
 	bool hasMdiSubWindow() const;
 
@@ -44,7 +52,9 @@ public:
 	void suppressDeletion(bool suppress);
 
 private:
+#ifndef SDK
 	mutable ContentDockWidget* m_dockWidget{nullptr};
+#endif
 	bool m_suppressDeletion{false};
 
 protected:

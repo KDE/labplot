@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Main window of the application
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -69,14 +69,13 @@ class MainWin : public KXmlGuiWindow {
 	Q_OBJECT
 
 public:
-	explicit MainWin(QWidget* parent = nullptr, const QString& filename = QString());
+	explicit MainWin(QWidget* parent = nullptr, const QString& fileName = QString());
 	~MainWin() override;
 
 	void showPresenter();
 	AspectTreeModel* model() const;
 	Project* project() const;
 	void addAspectToProject(AbstractAspect*);
-	static void updateLocale();
 
 	enum class LoadOnStart { NewProject, LastProject, WelcomeScreen };
 	enum class NewProject { WithSpreadsheet, WithWorksheet, WithSpreadsheetWorksheet, WithNotebook };
@@ -164,6 +163,10 @@ private:
 	QAction* m_nextWindowAction;
 	QAction* m_prevWindowAction;
 	QAction* m_newDatapickerAction;
+#ifdef HAVE_CANTOR_LIBS
+	QAction* m_lastUsedNotebookAction{nullptr};
+	QToolButton* m_tbNotebook{nullptr};
+#endif
 
 	// toggling dock widgets, status bar and full screen
 	QAction* m_projectExplorerDockAction;
@@ -172,7 +175,7 @@ private:
 	KToggleAction* m_statusBarAction;
 	QAction* m_memoryInfoAction;
 	KToggleFullScreenAction* m_fullScreenAction;
-	QAction* m_configureCASAction;
+	QAction* m_configureNotebookAction;
 
 	// window visibility
 	QAction* m_visibilityFolderAction;
@@ -209,11 +212,14 @@ private:
 	// 	void resetWelcomeScreen();
 	void initDocks();
 	void restoreDefaultDockState() const;
+	void updateLocale();
+	void migrateSettings();
 
 	Spreadsheet* activeSpreadsheet() const;
 
 	friend class GuiObserver;
 	GuiObserver* m_guiObserver{nullptr};
+	QLocale m_defaultSystemLocale; // default system locale, might be different from the default locale set at runtime
 
 protected:
 	void closeEvent(QCloseEvent*) override;
@@ -222,7 +228,7 @@ protected:
 
 private Q_SLOTS:
 	void initGUI(const QString&);
-	void changeVisibleAllDocks(bool);
+	void customAboutDialog();
 	void activateNextDock();
 	void activatePreviousDock();
 	void dockWidgetRemoved(ads::CDockWidget*);
@@ -260,6 +266,7 @@ private Q_SLOTS:
 
 #ifdef HAVE_CANTOR_LIBS
 	void newNotebook();
+	void settingsNotebookDialog();
 	void updateNotebookActions();
 #endif
 
@@ -281,7 +288,7 @@ private Q_SLOTS:
 	void handleCurrentAspectChanged(AbstractAspect*);
 	void handleShowSubWindowRequested();
 
-	void handleSettingsChanges(QList<SettingsDialog::SettingsType>);
+	void handleSettingsChanges(QList<Settings::Type>);
 
 	void setDockVisibility(QAction*);
 	void updateDockWindowVisibility() const;

@@ -14,6 +14,8 @@
 #include <QString>
 #include <functional>
 
+namespace Parsing {
+
 enum class ConstantGroups;
 
 struct cons {
@@ -28,6 +30,7 @@ extern struct cons _constants[];
 extern const int _number_constants;
 
 enum class ConstantGroups : int {
+	ProgrammingConstants,
 	MathematicalConstants,
 	FundamentalConstants,
 	AstronomyAndAstrophysics,
@@ -50,5 +53,7 @@ enum class ConstantGroups : int {
 };
 
 QString constantGroupsToString(ConstantGroups group);
+
+} // namespace Parsing
 
 #endif /* CONSTANTS_H */

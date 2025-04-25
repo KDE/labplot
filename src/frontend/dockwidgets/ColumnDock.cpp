@@ -33,18 +33,16 @@ ColumnDock::ColumnDock(QWidget* parent)
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
 
-	// add formats for numeric values
-	ui.cbNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
-	ui.cbNumericFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
-	ui.cbNumericFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
-	ui.cbNumericFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
-	ui.cbNumericFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
-
 	// add format for date, time and datetime values
 	for (const auto& s : AbstractColumn::dateTimeFormats())
 		ui.cbDateTimeFormat->addItem(s, QVariant(s));
 
 	ui.cbDateTimeFormat->setEditable(true);
+
+	// plot designations
+	ui.cbPlotDesignation->clear();
+	for (int i = 0; i < ENUM_COUNT(AbstractColumn, PlotDesignation); i++)
+		ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation(i), false));
 
 	ui.twLabels->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
 	ui.twLabels->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
@@ -174,7 +172,12 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 	case AbstractColumn::ColumnMode::DateTime: {
 		auto* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
 		// 			DEBUG("	set column format: " << STDSTRING(filter->format()));
-		ui.cbDateTimeFormat->setCurrentIndex(ui.cbDateTimeFormat->findData(filter->format()));
+		const auto& format = filter->format();
+		const int index = ui.cbDateTimeFormat->findData(format);
+		if (index != -1)
+			ui.cbDateTimeFormat->setCurrentIndex(index);
+		else
+			ui.cbDateTimeFormat->setCurrentText(format); // custom format, not in the list of pre-defined formats
 		break;
 	}
 	case AbstractColumn::ColumnMode::Integer: // nothing to set
@@ -297,19 +300,44 @@ void ColumnDock::showValueLabels() {
 void ColumnDock::retranslateUi() {
 	CONDITIONAL_LOCK_RETURN;
 
+	// data type
 	ui.cbType->clear();
 	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Double), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Double)));
 	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Integer), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Integer)));
 	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::BigInt), QVariant(static_cast<int>(AbstractColumn::ColumnMode::BigInt)));
 	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Text), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Text)));
-	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Month), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Month)));
-	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Day), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Day)));
+	// TODO: activate month and day names once supported
+	// ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Month), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Month)));
+	// ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Day), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Day)));
 	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::DateTime),
 					   QVariant(static_cast<int>(AbstractColumn::ColumnMode::DateTime)));
 
-	ui.cbPlotDesignation->clear();
-	for (int i = 0; i < ENUM_COUNT(AbstractColumn, PlotDesignation); i++)
-		ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation(i), false));
+	// formats for numeric values
+	ui.cbNumericFormat->clear();
+	ui.cbNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
+	ui.cbNumericFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
+	ui.cbNumericFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
+	ui.cbNumericFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
+	ui.cbNumericFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
+
+	// tooltip texts
+	QString info = i18n(
+		"Specifies how numeric values are formatted in the spreadsheet:"
+		"<ul>"
+		"<li>Decimal - format as [-]9.9</li>"
+		"<li>Scientific (e) - format as [-]9.9e[+|-]999</li>"
+		"<li>Scientific (E) - format as [-]9.9E[+|-]999</li>"
+		"<li>Automatic (e) - selects between 'Decimal' and 'Scientific (e)' to get the most concise format</li>"
+		"<li>Automatic (E) - selects between 'Decimal' and 'Scientific (E)' to get the most concise format</li>"
+		"</ul>"
+	);
+	ui.lNumericFormat->setToolTip(info);
+	ui.cbNumericFormat->setToolTip(info);
+
+	info = i18n("For the  'Decimal', 'Scientific (e)', and 'Scientific (E)' formats, the precision represents the number of digits after the decimal point.\n"
+		"For the 'Automatic (e)' and 'Automatic (E)' formats, the precision represents the maximum number of significant digits (trailing zeroes are omitted).");
+	ui.lPrecision->setToolTip(info);
+	ui.sbPrecision->setToolTip(info);
 
 	ui.bAddLabel->setToolTip(i18n("Add a new value label"));
 	ui.bRemoveLabel->setToolTip(i18n("Remove the selected value label"));
@@ -405,7 +433,7 @@ void ColumnDock::numericFormatChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	char format = ui.cbNumericFormat->itemData(index).toChar().toLatin1();
-	for (auto* col : qAsConst(m_columnsList)) {
+	for (auto* col : std::as_const(m_columnsList)) {
 		auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
 		filter->setNumericFormat(format);
 	}
@@ -414,7 +442,7 @@ void ColumnDock::numericFormatChanged(int index) {
 void ColumnDock::precisionChanged(int digits) {
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* col : qAsConst(m_columnsList)) {
+	for (auto* col : std::as_const(m_columnsList)) {
 		auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
 		filter->setNumDigits(digits);
 	}
@@ -423,7 +451,7 @@ void ColumnDock::precisionChanged(int digits) {
 void ColumnDock::dateTimeFormatChanged(const QString& format) {
 	CONDITIONAL_LOCK_RETURN;
 
-	for (auto* col : qAsConst(m_columnsList)) {
+	for (auto* col : std::as_const(m_columnsList)) {
 		auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 		filter->setFormat(format);
 	}
@@ -433,7 +461,7 @@ void ColumnDock::plotDesignationChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto pd = AbstractColumn::PlotDesignation(index);
-	for (auto* col : qAsConst(m_columnsList))
+	for (auto* col : std::as_const(m_columnsList))
 		col->setPlotDesignation(pd);
 }
 
@@ -504,7 +532,7 @@ void ColumnDock::removeLabel() {
 
 	int row = ui.twLabels->currentRow();
 	const auto& value = ui.twLabels->itemAt(row, 0)->text();
-	for (auto* col : qAsConst(m_columnsList))
+	for (auto* col : std::as_const(m_columnsList))
 		col->removeValueLabel(value);
 
 	ui.twLabels->removeRow(ui.twLabels->currentRow());
@@ -540,7 +568,8 @@ void ColumnDock::columnFormatChanged() {
 	switch (columnMode) {
 	case AbstractColumn::ColumnMode::Double: {
 		auto* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
-		ui.cbNumericFormat->setCurrentIndex(ui.cbNumericFormat->findData(filter->numericFormat()));
+		const int index = ui.cbNumericFormat->findData(filter->numericFormat());
+		ui.cbNumericFormat->setCurrentIndex(index);
 		break;
 	}
 	case AbstractColumn::ColumnMode::Integer:

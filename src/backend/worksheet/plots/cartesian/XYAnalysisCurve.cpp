@@ -8,28 +8,22 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYAnalysisCurve
-  \brief Base class for all analysis curves
-
-  \ingroup worksheet
-*/
-
 #include "XYAnalysisCurve.h"
 #include "XYAnalysisCurvePrivate.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 
-#include <KLocalizedString>
-#include <QDateTime>
-
+/*!
+ * \class XYAnalysisCurve
+ * \brief Base class for all analysis curves.
+ * \ingroup CartesianAnalysisPlots
+ */
 XYAnalysisCurve::XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate* dd, AspectType type)
 	: XYCurve(name, dd, type) {
 	init();
@@ -45,17 +39,40 @@ void XYAnalysisCurve::init() {
 	d->symbol->setStyle(Symbol::Style::NoSymbols);
 }
 
+void XYAnalysisCurve::recalculate() {
+	Q_D(XYAnalysisCurve);
+	d->recalculate();
+}
+
 bool XYAnalysisCurve::resultAvailable() const {
 	return result().available;
 }
 
-bool XYAnalysisCurve::usingColumn(const Column* column) const {
+bool XYAnalysisCurve::usingColumn(const AbstractColumn* column, bool indirect) const {
 	Q_D(const XYAnalysisCurve);
 
 	if (d->dataSourceType == DataSourceType::Spreadsheet)
 		return (d->xDataColumn == column || d->yDataColumn == column || d->y2DataColumn == column);
-	else
-		return (d->dataSourceCurve->xColumn() == column || d->dataSourceCurve->yColumn() == column);
+	else if (indirect && d->dataSourceCurve)
+		return (d->dataSourceCurve->usingColumn(column, indirect) || d->dataSourceCurve->usingColumn(column, indirect));
+	return false;
+}
+
+QVector<const Plot*> XYAnalysisCurve::dependingPlots() const {
+	Q_D(const XYAnalysisCurve);
+	switch (d->dataSourceType) {
+	case DataSourceType::Curve: {
+		if (d->dataSourceCurve)
+			return {d->dataSourceCurve};
+		return {};
+	}
+	case DataSourceType::Spreadsheet:
+		return {};
+	case DataSourceType::Histogram:
+		return {}; // TODO: Histograms not yet implemented
+	}
+	assert(false);
+	return {};
 }
 
 // copy valid data from x/y data columns to x/y data vectors
@@ -192,36 +209,32 @@ void XYAnalysisCurve::setDataSourceType(DataSourceType type) {
 STD_SETTER_CMD_IMPL_F_S(XYAnalysisCurve, SetDataSourceCurve, const XYCurve*, dataSourceCurve, sourceChanged)
 void XYAnalysisCurve::setDataSourceCurve(const XYCurve* curve) {
 	Q_D(XYAnalysisCurve);
-	if (curve != d->dataSourceCurve) {
+	if (curve != d->dataSourceCurve)
 		exec(new XYAnalysisCurveSetDataSourceCurveCmd(d, curve, ki18n("%1: data source curve changed")));
-	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYAnalysisCurve, SetXDataColumn, const AbstractColumn*, xDataColumn, sourceChanged)
 void XYAnalysisCurve::setXDataColumn(const AbstractColumn* column) {
 	DEBUG(Q_FUNC_INFO);
 	Q_D(XYAnalysisCurve);
-	if (column != d->xDataColumn) {
+	if (column != d->xDataColumn)
 		exec(new XYAnalysisCurveSetXDataColumnCmd(d, column, ki18n("%1: assign x-data")));
-	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYAnalysisCurve, SetYDataColumn, const AbstractColumn*, yDataColumn, sourceChanged)
 void XYAnalysisCurve::setYDataColumn(const AbstractColumn* column) {
 	DEBUG(Q_FUNC_INFO);
 	Q_D(XYAnalysisCurve);
-	if (column != d->yDataColumn) {
+	if (column != d->yDataColumn)
 		exec(new XYAnalysisCurveSetYDataColumnCmd(d, column, ki18n("%1: assign y-data")));
-	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYAnalysisCurve, SetY2DataColumn, const AbstractColumn*, y2DataColumn, sourceChanged)
 void XYAnalysisCurve::setY2DataColumn(const AbstractColumn* column) {
 	DEBUG(Q_FUNC_INFO);
 	Q_D(XYAnalysisCurve);
-	if (column != d->y2DataColumn) {
+	if (column != d->y2DataColumn)
 		exec(new XYAnalysisCurveSetY2DataColumnCmd(d, column, ki18n("%1: assign second y-data")));
-	}
 }
 
 void XYAnalysisCurve::setDataSourceCurvePath(const QString& path) {
@@ -247,29 +260,14 @@ void XYAnalysisCurve::setY2DataColumnPath(const QString& path) {
 // ##############################################################################
 // #################################  SLOTS  ####################################
 // ##############################################################################
+/*!
+ * called when the data in the data source aspects was changed.
+ */
 void XYAnalysisCurve::handleSourceDataChanged() {
+	if (isLoading())
+		return;
+
 	Q_D(XYAnalysisCurve);
-
-	if (d->xDataColumn)
-		setXDataColumnPath(d->xDataColumn->path());
-	else
-		setXDataColumnPath(QString());
-
-	if (d->yDataColumn)
-		setYDataColumnPath(d->yDataColumn->path());
-	else
-		setYDataColumnPath(QString());
-
-	if (d->y2DataColumn)
-		setY2DataColumnPath(d->y2DataColumn->path());
-	else
-		setY2DataColumnPath(QString());
-
-	if (d->dataSourceCurve)
-		setDataSourceCurvePath(d->dataSourceCurve->path());
-	else
-		setDataSourceCurvePath(QString());
-
 	d->sourceDataChangedSinceLastRecalc = true;
 	Q_EMIT sourceDataChanged();
 }
@@ -421,16 +419,14 @@ void XYAnalysisCurvePrivate::connectCurve(const XYCurve* curve) {
 	m_connections << q->connect(curve, &AbstractAspect::aspectAboutToBeRemoved, q, &XYAnalysisCurve::dataSourceCurveAboutToBeRemoved);
 	m_connections << q->connect(curve, &AbstractAspect::aspectAboutToBeRemoved, q, &XYAnalysisCurve::recalculate);
 
-	// // handle the changes when different columns were provided for the source curve
+	// handle the changes when different columns were provided for the source curve
 	m_connections << q->connect(curve, &XYCurve::xColumnChanged, q, &XYAnalysisCurve::handleSourceDataChanged);
 	m_connections << q->connect(curve, &XYCurve::yColumnChanged, q, &XYAnalysisCurve::handleSourceDataChanged);
 	// // TODO? connect(curve, SIGNAL(y2ColumnChanged(const AbstractColumn*)), this, SLOT(handleSourceDataChanged()));
 
-	// 	   // handle the changes when the data inside of the source curve columns
+	// handle the changes when the data inside of the source curve columns
 	m_connections << q->connect(curve, &XYCurve::xDataChanged, q, &XYAnalysisCurve::handleSourceDataChanged);
 	m_connections << q->connect(curve, &XYCurve::yDataChanged, q, &XYAnalysisCurve::handleSourceDataChanged);
-	if (curve->parentAspect())
-		m_connections << q->connect(curve->parentAspect(), &AbstractAspect::childAspectAdded, q, &XYAnalysisCurve::recalculate);
 }
 
 void XYAnalysisCurvePrivate::connectColumn(const AbstractColumn* column, Dimension dim, bool second) {
@@ -461,6 +457,40 @@ void XYAnalysisCurvePrivate::connectColumn(const AbstractColumn* column, Dimensi
 	}
 }
 
+/*!
+ * called when one of the source objects was changed,
+ * updates the path and triggers the recalculate.
+ */
+void XYAnalysisCurvePrivate::sourceChanged() {
+	updateConnections();
+
+	if (q->isLoading())
+		return;
+
+	if (xDataColumn)
+		q->setXDataColumnPath(xDataColumn->path());
+	else
+		q->setXDataColumnPath(QString());
+
+	if (yDataColumn)
+		q->setYDataColumnPath(yDataColumn->path());
+	else
+		q->setYDataColumnPath(QString());
+
+	if (y2DataColumn)
+		q->setY2DataColumnPath(y2DataColumn->path());
+	else
+		q->setY2DataColumnPath(QString());
+
+	if (dataSourceCurve)
+		q->setDataSourceCurvePath(dataSourceCurve->path());
+	else
+		q->setDataSourceCurvePath(QString());
+
+	if (!q->isLoading())
+		recalculate();
+}
+
 void XYAnalysisCurvePrivate::updateConnections() {
 	for (auto c : m_connections)
 		q->disconnect(c);
@@ -484,19 +514,16 @@ void XYAnalysisCurvePrivate::updateConnections() {
 	}
 }
 
-void XYAnalysisCurvePrivate::sourceChanged() {
-	updateConnections();
-	q->handleSourceDataChanged();
-	if (!q->isLoading())
-		recalculate();
-}
-
-void XYAnalysisCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) {
+void XYAnalysisCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) const {
+	*tmpXDataColumn = nullptr;
+	*tmpYDataColumn = nullptr;
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		// spreadsheet columns as data source
 		*tmpXDataColumn = xDataColumn;
 		*tmpYDataColumn = yDataColumn;
 	} else {
+		if (!dataSourceCurve)
+			return;
 		// curve columns as data source
 		*tmpXDataColumn = dataSourceCurve->xColumn();
 		*tmpYDataColumn = dataSourceCurve->yColumn();
@@ -504,6 +531,10 @@ void XYAnalysisCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDat
 }
 
 void XYAnalysisCurvePrivate::recalculate() {
+	// process all events first to close the context menu, if the new analysis curve is added via the context menu
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
 	// create filter result columns if not available yet, clear them otherwise
 	if (!xColumn) {
 		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
@@ -548,6 +579,7 @@ void XYAnalysisCurvePrivate::recalculate() {
 		}
 	}
 	Q_EMIT q->dataChanged();
+	QApplication::restoreOverrideCursor();
 }
 
 bool XYAnalysisCurvePrivate::preparationValid(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {

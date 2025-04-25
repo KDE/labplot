@@ -73,8 +73,8 @@ void XYHilbertTransformCurveDock::setupGeneral() {
 
 void XYHilbertTransformCurveDock::initGeneralTab() {
 	// show the properties of the first curve
-	cbXDataColumn->setColumn(m_transformCurve->xDataColumn(), m_transformCurve->xDataColumnPath());
-	cbYDataColumn->setColumn(m_transformCurve->yDataColumn(), m_transformCurve->yDataColumnPath());
+	cbXDataColumn->setAspect(m_transformCurve->xDataColumn(), m_transformCurve->xDataColumnPath());
+	cbYDataColumn->setAspect(m_transformCurve->yDataColumn(), m_transformCurve->yDataColumnPath());
 	uiGeneralTab.cbAutoRange->setChecked(m_transformData.autoRange);
 
 	const auto numberLocale = QLocale();
@@ -176,13 +176,11 @@ void XYHilbertTransformCurveDock::typeChanged() {
 }
 
 void XYHilbertTransformCurveDock::recalculateClicked() {
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	for (auto* curve : m_curvesList)
 		static_cast<XYHilbertTransformCurve*>(curve)->setTransformData(m_transformData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	Q_EMIT info(i18n("Hilbert transformation status: %1", m_transformCurve->result().status));
-	QApplication::restoreOverrideCursor();
 }
 
 /*!

@@ -92,8 +92,8 @@ void XYIntegrationCurveDock::initGeneralTab() {
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_integrationCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	cbDataSourceCurve->setAspect(m_integrationCurve->dataSourceCurve());
-	cbXDataColumn->setColumn(m_integrationCurve->xDataColumn(), m_integrationCurve->xDataColumnPath());
-	cbYDataColumn->setColumn(m_integrationCurve->yDataColumn(), m_integrationCurve->yDataColumnPath());
+	cbXDataColumn->setAspect(m_integrationCurve->xDataColumn(), m_integrationCurve->xDataColumnPath());
+	cbYDataColumn->setAspect(m_integrationCurve->yDataColumn(), m_integrationCurve->yDataColumnPath());
 
 	// range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_integrationCurve->parentAspect());
@@ -312,14 +312,11 @@ void XYIntegrationCurveDock::absoluteChanged() {
 }
 
 void XYIntegrationCurveDock::recalculateClicked() {
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYIntegrationCurve*>(curve)->setIntegrationData(m_integrationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	Q_EMIT info(i18n("Integration status: %1", m_integrationCurve->integrationResult().status));
-	QApplication::restoreOverrideCursor();
 }
 
 /*!

@@ -15,7 +15,12 @@
 #include "backend/core/AbstractPart.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT AbstractDataSource : public AbstractPart {
+#else
 class AbstractDataSource : public AbstractPart {
+#endif
 	Q_OBJECT
 
 public:

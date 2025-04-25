@@ -37,6 +37,27 @@ private:
 	bool& variable;
 };
 
+/*
+ * Cleanup class which can be used to automatically cleaning up after desctruction using a lambda
+ * Example:
+ *    CleanupNoArguments cleanup([](){
+ *        // Cleanup code
+ *	  })
+ */
+template<typename T>
+class CleanupNoArguments {
+public:
+	CleanupNoArguments(T cleanupFunction)
+		: m_cleanupFunction(cleanupFunction) {
+	}
+	~CleanupNoArguments() {
+		m_cleanupFunction();
+	}
+
+private:
+	T m_cleanupFunction;
+};
+
 /*!
  * Used for example for connections with NumberSpinbox because those are using
  * a feedback and so breaking the connection dock -> element -> dock is not desired
@@ -53,9 +74,17 @@ private:
 	CONDITIONAL_RETURN_NO_LOCK                                                                                                                                 \
 	const Lock lock(m_initializing);
 
+// Automatically reset cursor when going out of scope
+#define WAIT_CURSOR_AUTO_RESET                                                                                                                                 \
+	WAIT_CURSOR;                                                                                                                                               \
+	CleanupNoArguments cleanup([]() {                                                                                                                          \
+		RESET_CURSOR;                                                                                                                                          \
+	});
+
 #define WAIT_CURSOR QApplication::setOverrideCursor(QCursor(Qt::WaitCursor))
 #define RESET_CURSOR QApplication::restoreOverrideCursor()
 
+#define STRING(x) #x
 #ifdef HAVE_WINDOWS
 #define STDSTRING(qstr) qstr.toUtf8().constData()
 #else
@@ -63,6 +92,7 @@ private:
 #endif
 #define UTF8_QSTRING(str) QString::fromUtf8(str)
 
+#define SPACE QLatin1Char(' ')
 #define TAB QStringLiteral("\t")
 #define NEWLINE QStringLiteral("\n")
 
@@ -496,10 +526,21 @@ private:
 	{                                                                                                                                                          \
 		writer->writeAttribute(QStringLiteral("fontFamily"), font.family());                                                                                   \
 		writer->writeAttribute(QStringLiteral("fontSize"), QString::number(font.pixelSize()));                                                                 \
-		writer->writeAttribute(QStringLiteral("fontPointSize"), QString::number(font.pointSize()));                                                            \
+		writer->writeAttribute(QStringLiteral("fontPointSize"), QString::number(font.pointSizeF()));                                                           \
 		writer->writeAttribute(QStringLiteral("fontWeight"), QString::number(font.weight()));                                                                  \
 		writer->writeAttribute(QStringLiteral("fontItalic"), QString::number(font.italic()));                                                                  \
 	}
+
+#define MAP_LEGACY_FONT_WEIGHT(legacyWeight)                                                                                                                   \
+	((legacyWeight) <= 0		? QFont::Thin                                                                                                                  \
+		 : (legacyWeight) <= 12 ? QFont::ExtraLight                                                                                                            \
+		 : (legacyWeight) <= 25 ? QFont::Light                                                                                                                 \
+		 : (legacyWeight) <= 50 ? QFont::Normal                                                                                                                \
+		 : (legacyWeight) <= 63 ? QFont::Medium                                                                                                                \
+		 : (legacyWeight) <= 75 ? QFont::DemiBold                                                                                                              \
+		 : (legacyWeight) <= 87 ? QFont::Bold                                                                                                                  \
+		 : (legacyWeight) <= 95 ? QFont::ExtraBold                                                                                                             \
+								: QFont::Black)
 
 // uses font.setLegacyWeight(int)
 #define READ_QFONT(font)                                                                                                                                       \
@@ -515,17 +556,22 @@ private:
 			reader->raiseMissingAttributeWarning(QStringLiteral("fontSize"));                                                                                  \
 		else {                                                                                                                                                 \
 			int size = str.toInt();                                                                                                                            \
-			if (size != -1)                                                                                                                                    \
-				font.setPixelSize(size);                                                                                                                       \
+			if (size > 0) {                                                                                                                                    \
+				QFont tempFont;                                                                                                                                \
+				tempFont.setPixelSize(size);                                                                                                                   \
+				font.setPointSizeF(QFontInfo(tempFont).pointSizeF());                                                                                          \
+			} else {                                                                                                                                           \
+				reader->raiseWarning(QStringLiteral("Invalid font size: %1").arg(size));                                                                       \
+			}                                                                                                                                                  \
 		}                                                                                                                                                      \
                                                                                                                                                                \
 		str = attribs.value(QStringLiteral("fontPointSize")).toString();                                                                                       \
 		if (str.isEmpty())                                                                                                                                     \
 			reader->raiseMissingAttributeWarning(QStringLiteral("fontPointSize"));                                                                             \
 		else {                                                                                                                                                 \
-			int size = str.toInt();                                                                                                                            \
+			int size = str.toDouble();                                                                                                                         \
 			if (size != -1)                                                                                                                                    \
-				font.setPointSize(size);                                                                                                                       \
+				font.setPointSizeF(size);                                                                                                                      \
 		}                                                                                                                                                      \
                                                                                                                                                                \
 		str = attribs.value(QStringLiteral("fontWeight")).toString();                                                                                          \
@@ -533,7 +579,7 @@ private:
 			reader->raiseMissingAttributeWarning(QStringLiteral("fontWeight"));                                                                                \
 		else {                                                                                                                                                 \
 			if (Project::xmlVersion() < 13)                                                                                                                    \
-				font.setLegacyWeight(str.toInt());                                                                                                             \
+				font.setWeight(MAP_LEGACY_FONT_WEIGHT(str.toInt()));                                                                                           \
 			else                                                                                                                                               \
 				font.setWeight(static_cast<QFont::Weight>(str.toInt()));                                                                                       \
 		}                                                                                                                                                      \
@@ -584,11 +630,27 @@ private:
 	}
 
 // Column
+
+// if the data columns are valid, write their current paths.
+// if not, write the last used paths so the columns can be restored later
+// when the columns with the same path are added again to the project
 #define WRITE_COLUMN(column, columnName)                                                                                                                       \
 	if (column) {                                                                                                                                              \
 		writer->writeAttribute(QStringLiteral(#columnName), column->path());                                                                                   \
 	} else {                                                                                                                                                   \
-		writer->writeAttribute(QStringLiteral(#columnName), QString());                                                                                        \
+		writer->writeAttribute(QStringLiteral(#columnName), column##Path);                                                                                     \
+	}
+
+#define WRITE_COLUMNS(columns, paths)                                                                                                                          \
+	int index = 0;                                                                                                                                             \
+	for (auto* column : columns) {                                                                                                                             \
+		writer->writeStartElement(QStringLiteral("column"));                                                                                                   \
+		if (column)                                                                                                                                            \
+			writer->writeAttribute(QStringLiteral("path"), column->path());                                                                                    \
+		else                                                                                                                                                   \
+			writer->writeAttribute(QStringLiteral("path"), paths.at(index));                                                                                   \
+		writer->writeEndElement();                                                                                                                             \
+		++index;                                                                                                                                               \
 	}
 
 // column names can be empty in case no columns were used before save

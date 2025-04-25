@@ -11,16 +11,16 @@
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-#include <KLocalizedString>
-
-#include <QTableWidget>
-#include <QTreeWidget>
-
-class QXmlStreamReader;
+class QTableWidget;
+class QTreeWidget;
 class FITSFilterPrivate;
-class FITSHeaderEditWidget;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT FITSFilter : public AbstractFileFilter {
+#else
 class FITSFilter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
 
 public:

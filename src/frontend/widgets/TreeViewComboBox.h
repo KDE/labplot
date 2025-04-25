@@ -28,11 +28,11 @@ public:
 	explicit TreeViewComboBox(QWidget* parent = nullptr);
 
 	void setModel(AspectTreeModel*);
-	// void setModel(AbstractItemModel*) override;
+	void setModel(QAbstractItemModel*) override;
 	void setCurrentModelIndex(const QModelIndex&);
 	void setAspect(const AbstractAspect*);
+	void setAspect(const AbstractAspect* aspect, const QString& path);
 	AbstractAspect* currentAspect() const;
-	void setColumn(const AbstractColumn*, const QString&);
 	QModelIndex currentModelIndex() const;
 
 	void setTopLevelClasses(const QList<AspectType>&);
@@ -41,8 +41,6 @@ public:
 	void showPopup() override;
 	void hidePopup() override;
 	void setInvalid(bool invalid, const QString& tooltip = QString());
-
-	void useCurrentIndexText(const bool set);
 
 	QString currentText() const;
 	void setText(const QString& text);
@@ -54,8 +52,7 @@ private:
 	QTreeView* m_treeView;
 	QGroupBox* m_groupBox;
 	QLineEdit* m_lineEdit;
-	QString m_lineEditText{QLatin1String("")};
-	bool m_useCurrentIndexText{true};
+	QString m_currentText{QLatin1String("")};
 
 	QList<AspectType> m_topLevelClasses;
 	QList<const char*> m_selectableClasses;

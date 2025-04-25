@@ -12,7 +12,6 @@
 
 #include "backend/worksheet/plots/cartesian/Plot.h"
 
-class AbstractColumn;
 class Background;
 class BoxPlotPrivate;
 class Line;
@@ -84,8 +83,9 @@ public:
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
-	bool usingColumn(const Column*) const override;
+	bool usingColumn(const AbstractColumn*, bool indirect) const override;
 	QColor color() const override;
+	QColor colorAt(int) const;
 
 	typedef BoxPlotPrivate Private;
 
@@ -95,9 +95,10 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(BoxPlot)
-	void init(bool loading = false);
+	void init(bool loading);
 	void initActions();
 	void initMenus();
+	void connectDataColumn(const AbstractColumn*);
 
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
@@ -115,6 +116,7 @@ private Q_SLOTS:
 Q_SIGNALS:
 	// General-Tab
 	void dataColumnsChanged(const QVector<const AbstractColumn*>&);
+	void dataDataChanged();
 	void orderingChanged(BoxPlot::Ordering);
 	void orientationChanged(BoxPlot::Orientation);
 	void variableWidthChanged(bool);
@@ -134,6 +136,8 @@ Q_SIGNALS:
 	void rugLengthChanged(double);
 	void rugWidthChanged(double);
 	void rugOffsetChanged(double);
+
+	friend class BoxPlotSetDataColumnsCmd;
 };
 
 #endif

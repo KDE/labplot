@@ -189,20 +189,14 @@ void XYAnalysisCurveDock::enableRecalculate() const {
 		}
 		}
 
-		if (aspectX) {
-			cbXDataColumn->useCurrentIndexText(true);
+		if (aspectX)
 			cbXDataColumn->setInvalid(false);
-		}
 
-		if (aspectY) {
-			cbYDataColumn->useCurrentIndexText(true);
+		if (aspectY)
 			cbYDataColumn->setInvalid(false);
-		}
 
-		if (aspectY2) {
-			cbY2DataColumn->useCurrentIndexText(true);
+		if (aspectY2)
 			cbY2DataColumn->setInvalid(false);
-		}
 	} else
 		hasSourceData = (m_analysisCurve->dataSourceCurve() != nullptr);
 
@@ -226,12 +220,12 @@ void XYAnalysisCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
 
 void XYAnalysisCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbXDataColumn->setColumn(column, m_analysisCurve->xDataColumnPath());
+	cbXDataColumn->setAspect(column, m_analysisCurve->xDataColumnPath());
 	enableRecalculate();
 }
 
 void XYAnalysisCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbYDataColumn->setColumn(column, m_analysisCurve->yDataColumnPath());
+	cbYDataColumn->setAspect(column, m_analysisCurve->yDataColumnPath());
 	enableRecalculate();
 }

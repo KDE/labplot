@@ -8,20 +8,11 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYIntegrationCurve
-  \brief A xy-curve defined by an integration
-
-  \ingroup worksheet
-*/
-
 #include "XYIntegrationCurve.h"
-#include "CartesianCoordinateSystem.h"
 #include "XYIntegrationCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 
 #include <gsl/gsl_errno.h>
 
@@ -30,6 +21,11 @@
 #include <QIcon>
 #include <QThreadPool>
 
+/*!
+ * \class XYIntegrationCurve
+ * \brief A xy-curve defined by an integration.
+ * \ingroup CartesianAnalysisPlots
+ */
 XYIntegrationCurve::XYIntegrationCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYIntegrationCurvePrivate(this), AspectType::XYIntegrationCurve) {
 }
@@ -41,11 +37,6 @@ XYIntegrationCurve::XYIntegrationCurve(const QString& name, XYIntegrationCurvePr
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 XYIntegrationCurve::~XYIntegrationCurve() = default;
-
-void XYIntegrationCurve::recalculate() {
-	Q_D(XYIntegrationCurve);
-	d->recalculate();
-}
 
 const XYAnalysisCurve::Result& XYIntegrationCurve::result() const {
 	Q_D(const XYIntegrationCurve);
@@ -162,7 +153,8 @@ bool XYIntegrationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDa
 	integrationResult.valid = (status == 0);
 	integrationResult.status = QString::number(status);
 	integrationResult.elapsedTime = timer.elapsed();
-	integrationResult.value = ydata[np - 1];
+	if (np > 0)
+		integrationResult.value = ydata[np - 1];
 
 	return true;
 }

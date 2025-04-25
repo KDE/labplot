@@ -14,6 +14,8 @@
 #include "backend/lib/macros.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
+#include <KLocalizedString>
+
 #include <QEvent>
 #include <QGroupBox>
 #include <QHeaderView>
@@ -21,10 +23,6 @@
 #include <QStylePainter>
 #include <QTreeView>
 #include <QVBoxLayout>
-
-#include <KLocalizedString>
-
-#include <cstring> // strcmp()
 
 /*!
 	\class TreeViewComboBox
@@ -59,7 +57,7 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent)
 
 	addItem(QString());
 	setCurrentIndex(0);
-	setEditText(m_lineEditText);
+	setEditText(m_currentText);
 
 	// signal activated() is platform dependent
 	connect(m_treeView, &QTreeView::pressed, this, &TreeViewComboBox::treeViewIndexActivated);
@@ -88,7 +86,17 @@ void TreeViewComboBox::setModel(AspectTreeModel* model) {
 	// Expand the complete tree in order to see everything in the first popup.
 	m_treeView->expandAll();
 
-	setEditText(m_lineEditText);
+	setEditText(m_currentText);
+}
+
+/*!
+	overload to handle base class setModel()
+ */
+void TreeViewComboBox::setModel(QAbstractItemModel* model) {
+    if (auto* aspectModel = qobject_cast<AspectTreeModel*>(model))
+        setModel(aspectModel);
+    else
+        QComboBox::setModel(model);
 }
 
 /*!
@@ -125,7 +133,7 @@ void TreeViewComboBox::showPopup() {
 	m_groupBox->resize(this->width(), 250);
 	m_groupBox->move(mapToGlobal(this->rect().topLeft()));
 
-	setEditText(m_lineEditText);
+	setEditText(m_currentText);
 	m_lineEdit->setText(QString()); // delete the previous search string
 	m_lineEdit->setFocus();
 }
@@ -151,10 +159,6 @@ void TreeViewComboBox::hidePopup() {
 	m_groupBox->hide();
 }
 
-void TreeViewComboBox::useCurrentIndexText(const bool set) {
-	m_useCurrentIndexText = set;
-}
-
 /*!
 	\property QComboBox::currentText
 	\brief the current text
@@ -171,16 +175,13 @@ void TreeViewComboBox::useCurrentIndexText(const bool set) {
 QString TreeViewComboBox::currentText() const {
 	if (lineEdit())
 		return lineEdit()->text();
-	else if (currentModelIndex().isValid() && m_useCurrentIndexText)
+	else if (currentModelIndex().isValid())
 		return itemText(currentIndex());
-	else if (!m_useCurrentIndexText)
-		return m_lineEditText;
-
-	return {};
+	return m_currentText;
 }
 
 void TreeViewComboBox::setText(const QString& text) {
-	m_lineEditText = text;
+	m_currentText = text;
 }
 
 void TreeViewComboBox::setInvalid(bool invalid, const QString& tooltip) {
@@ -212,7 +213,11 @@ QList<AspectType> TreeViewComboBox::plotColumnTopLevelClasses() {
 			AspectType::CartesianPlot,
 			AspectType::XYFitCurve,
 			AspectType::XYSmoothCurve,
-			AspectType::Notebook};
+			AspectType::Notebook,
+			AspectType::MQTTClient, // All three must be listed, because they are parents of the column
+			AspectType::MQTTSubscription,
+			AspectType::MQTTTopic,
+			};
 }
 
 /*!
@@ -344,23 +349,20 @@ AbstractAspect* TreeViewComboBox::currentAspect() const {
 	return static_cast<AbstractAspect*>(currentModelIndex().internalPointer());
 }
 
-void TreeViewComboBox::setColumn(const AbstractColumn* column, const QString& path) {
+void TreeViewComboBox::setAspect(const AbstractAspect* aspect, const QString& path) {
 	DEBUG(Q_FUNC_INFO)
-	setAspect(column);
+	setAspect(aspect);
 
 	// don't make the combobox red for initially created curves
-	if (!column && path.isEmpty()) {
+	if (!aspect && path.isEmpty()) {
 		setText(QString());
 		setInvalid(false);
 		return;
 	}
 
-	if (column) {
-		useCurrentIndexText(true);
+	if (aspect)
 		setInvalid(false);
-	} else {
-		useCurrentIndexText(false);
-		setInvalid(true, i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.", path));
-	}
+	else
+		setInvalid(true, i18n("The aspect \"%1\"\nis not available anymore. It will be automatically used once it is created again.", path));
 	setText(path.split(QLatin1Char('/')).last());
 }

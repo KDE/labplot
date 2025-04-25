@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of CartesianPlot.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -14,13 +14,10 @@
 #include "../AbstractPlotPrivate.h"
 #include "CartesianCoordinateSystem.h"
 #include "CartesianPlot.h"
-#include "backend/worksheet/Worksheet.h"
 
 #include <QGraphicsSceneMouseEvent>
 #include <QPen>
 #include <QStaticText>
-
-using Dimension = CartesianCoordinateSystem::Dimension;
 
 class CartesianPlotPrivate : public AbstractPlotPrivate {
 public:

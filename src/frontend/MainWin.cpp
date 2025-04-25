@@ -3,8 +3,8 @@
 	Project              : LabPlot
 	Description          : Main window of the application
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -33,6 +33,7 @@
 #include "backend/datasources/MQTTClient.h"
 #endif
 
+#include "frontend/AboutDialog.h"
 #include "frontend/GuiObserver.h"
 #include "frontend/HistoryDialog.h"
 #include "frontend/ProjectExplorer.h"
@@ -101,6 +102,7 @@
 // #include <QQmlApplicationEngine>
 // #include <QQmlContext>
 
+#include <KAboutApplicationDialog>
 #include <KActionCollection>
 #include <KActionMenu>
 #include <KColorScheme>
@@ -130,10 +132,15 @@
 
 \ingroup frontend
 */
-MainWin::MainWin(QWidget* parent, const QString& filename)
+MainWin::MainWin(QWidget* parent, const QString& fileName)
 	: KXmlGuiWindow(parent)
 	, m_schemeManager(new KColorSchemeManager(this)) {
-	initGUI(filename);
+	migrateSettings(); // call this at the very beginning to migrate the application settings first
+	updateLocale();
+
+	if (!fileName.isEmpty())
+		DEBUG(Q_FUNC_INFO << ", file name = " << fileName.toStdString())
+	initGUI(fileName);
 	setAcceptDrops(true);
 
 #ifdef HAVE_KUSERFEEDBACK
@@ -166,6 +173,11 @@ MainWin::~MainWin() {
 	group.writeEntry(QLatin1String("WindowState"), saveState()); // current state of QMainWindow's toolbars
 	group.writeEntry(QLatin1String("lastOpenFileFilter"), m_lastOpenFileFilter);
 	group.writeEntry(QLatin1String("ShowMemoryInfo"), (m_memoryInfoWidget != nullptr));
+#ifdef HAVE_CANTOR_LIBS
+	if (m_lastUsedNotebookAction)
+		group.writeEntry(QLatin1String("lastUsedNotebook"), m_lastUsedNotebookAction->data().toString());
+#endif
+
 	Settings::sync();
 
 	if (m_project) {
@@ -223,10 +235,6 @@ void MainWin::initGUI(const QString& fileName) {
 #endif
 	setupGUI();
 
-	// Workaround to get a resonable size at first start
-	// TODO: need a better fix
-	resize(800, 600);
-
 	// all toolbars created via the KXMLGUI framework are locked on default:
 	//  * on the very first program start, unlock all toolbars
 	//  * on later program starts, set stored lock status
@@ -264,11 +272,25 @@ void MainWin::initGUI(const QString& fileName) {
 	auto* mainToolBar = qobject_cast<QToolBar*>(factory()->container(QLatin1String("main_toolbar"), this));
 
 #ifdef HAVE_CANTOR_LIBS
-	auto* tbNotebook = new QToolButton(mainToolBar);
-	tbNotebook->setPopupMode(QToolButton::MenuButtonPopup);
-	tbNotebook->setMenu(m_newNotebookMenu); // it is possible for m_newNotebookMenu to be null when we have no backends
+	groupMain = Settings::group(QStringLiteral("MainWin"));
+	if (groupMain.exists()) {
+		const QString& lastUsedNotebook = groupMain.readEntry(QLatin1String("lastUsedNotebook"), QString());
+		if (!lastUsedNotebook.isEmpty()) {
+			for (auto* action : m_newNotebookMenu->actions()) {
+				if (lastUsedNotebook.compare(action->data().toString(), Qt::CaseInsensitive) == 0) {
+					m_lastUsedNotebookAction = action;
+					break;
+				}
+			}
+		}
+	}
+
+	m_tbNotebook = new QToolButton(mainToolBar);
+	m_tbNotebook->setPopupMode(QToolButton::MenuButtonPopup);
+	m_tbNotebook->setMenu(m_newNotebookMenu); // m_newNotebookMenu is never nullptr and always contains at least the configure cas action
+	m_tbNotebook->setDefaultAction(!m_lastUsedNotebookAction ? m_newNotebookMenu->actions().first() : m_lastUsedNotebookAction);
 	auto* lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 2);
-	mainToolBar->insertWidget(lastAction, tbNotebook);
+	mainToolBar->insertWidget(lastAction, m_tbNotebook);
 #endif
 
 	auto* tbImport = new QToolButton(mainToolBar);
@@ -284,7 +306,7 @@ void MainWin::initGUI(const QString& fileName) {
 	m_hamburgerMenu->hideActionsOf(toolBar());
 	m_hamburgerMenu->setMenuBar(menuBar());
 
-	setWindowIcon(QIcon::fromTheme(QLatin1String("LabPlot"), QGuiApplication::windowIcon()));
+	setWindowIcon(QIcon::fromTheme(QLatin1String("labplot"), QGuiApplication::windowIcon()));
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	// make the status bar of a fixed size in order to avoid height changes when placing a ProgressBar there.
@@ -378,7 +400,7 @@ void MainWin::initGUI(const QString& fileName) {
 	}
 
 	// read the settings of MainWin
-	const KConfigGroup& groupMainWin = Settings::group(QStringLiteral("MainWin"));
+	const auto& groupMainWin = Settings::group(QStringLiteral("MainWin"));
 
 	// show memory info
 	m_memoryInfoAction->setEnabled(statusBar()->isEnabled()); // disable/enable menu with statusbar
@@ -388,11 +410,32 @@ void MainWin::initGUI(const QString& fileName) {
 	if (memoryInfoShown)
 		toggleMemoryInfo();
 
+	// hide "Donate" in the help menu
+        auto* donateAction = actionCollection()->action(QStringLiteral("help_donate"));
+	if (donateAction)
+		actionCollection()->removeAction(donateAction);
+
+	// custom about dialog
+	auto* aboutAction = actionCollection()->action(QStringLiteral("help_about_app"));
+	if (aboutAction) {
+		// set menu icon
+		aboutAction->setIcon(KAboutData::applicationData().programLogo().value<QIcon>());
+
+		// disconnect default slot
+		disconnect(aboutAction, nullptr, nullptr, nullptr);
+		connect(aboutAction, &QAction::triggered, this, &MainWin::customAboutDialog);
+	}
+
 	// restore the geometry
 	if (groupMainWin.hasKey(QStringLiteral("geometry")))
 		restoreGeometry(groupMainWin.readEntry("geometry", QByteArray()));
 
 	m_lastOpenFileFilter = groupMainWin.readEntry(QLatin1String("lastOpenFileFilter"), QString());
+}
+
+void MainWin::customAboutDialog() {
+	AboutDialog aboutDialog(KAboutData::applicationData(), this);
+	aboutDialog.exec();
 }
 
 /**
@@ -452,11 +495,6 @@ void MainWin::resetWelcomeScreen() {
 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "restoreOriginalLayout");
 }
 */
-
-void MainWin::changeVisibleAllDocks(bool visible) {
-	for (auto dock : m_dockManagerContent->dockWidgetsMap())
-		dock->toggleView(visible);
-}
 
 void MainWin::activateNextDock() {
 	const auto* focusedDock = m_dockManagerContent->focusedDockWidget();
@@ -831,18 +869,17 @@ void MainWin::initActions() {
 
 #ifdef HAVE_CANTOR_LIBS
 	// configure CAS backends
-	m_configureCASAction = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS..."), this);
-	m_configureCASAction->setWhatsThis(i18n("Opens the settings for Computer Algebra Systems to modify the available systems or to enable new ones"));
-	m_configureCASAction->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
-	actionCollection()->addAction(QLatin1String("configure_cas"), m_configureCASAction);
-	connect(m_configureCASAction, &QAction::triggered, this, &MainWin::settingsDialog); // TODO: go to the Notebook page in the settings dialog directly
+	m_configureNotebookAction = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS..."), this);
+	m_configureNotebookAction->setWhatsThis(i18n("Opens the settings for Computer Algebra Systems to modify the available systems or to enable new ones"));
+	m_configureNotebookAction->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
+	actionCollection()->addAction(QLatin1String("configure_cas"), m_configureNotebookAction);
+	connect(m_configureNotebookAction, &QAction::triggered, this, &MainWin::settingsNotebookDialog);
 #endif
 }
 
 void MainWin::initMenus() {
 #ifdef HAVE_PURPOSE
 	m_shareMenu = new Purpose::Menu(this);
-	m_shareMenu->model()->setPluginType(QStringLiteral("Export"));
 	connect(m_shareMenu, &Purpose::Menu::finished, this, &MainWin::shareActionFinished);
 	m_shareAction->setMenu(m_shareMenu);
 #endif
@@ -929,9 +966,9 @@ void MainWin::initMenus() {
 #ifdef HAVE_CANTOR_LIBS
 	auto backendNames = Cantor::Backend::listAvailableBackends();
 #if !defined(NDEBUG) || defined(Q_OS_WIN) || defined(Q_OS_MACOS)
-	WARN(Q_FUNC_INFO << ", " << backendNames.count() << " Cantor backends available:")
+	INFO(Q_FUNC_INFO << ", " << backendNames.count() << " Cantor backends available:")
 	for (const auto& b : backendNames)
-		WARN("Backend: " << STDSTRING(b))
+		INFO(Q_FUNC_INFO << ", Backend: " << STDSTRING(b))
 #endif
 
 	// sub-menu shown in the main toolbar
@@ -968,11 +1005,8 @@ void MainWin::colorSchemeChanged(QAction* action) {
  */
 bool MainWin::warnModified() {
 	if (m_project->hasChanged()) {
-		int option = KMessageBox::warningTwoActionsCancel(this,
-														  i18n("The current project %1 has been modified. Do you want to save it?", m_project->name()),
-														  i18n("Save Project"),
-														  KStandardGuiItem::save(),
-														  KStandardGuiItem::dontSave());
+		int option = KMessageBox::warningTwoActionsCancel(this, i18n("The current project \"%1\" has been modified. Do you want to save it?", m_project->name()),
+				i18n("Save Project"), KStandardGuiItem::save(), KStandardGuiItem::dontSave());
 		switch (option) {
 		case KMessageBox::PrimaryAction:
 			return !saveProject();
@@ -1497,22 +1531,22 @@ void MainWin::openProject() {
 	}
 }
 
-void MainWin::openProject(const QString& filename) {
-	if (m_project && filename == m_project->fileName()) {
-		KMessageBox::information(this, i18n("The project file %1 is already opened.", filename), i18n("Open Project"));
+void MainWin::openProject(const QString& fileName) {
+	if (m_project && fileName == m_project->fileName()) {
+		KMessageBox::information(this, i18n("The project file %1 is already opened.", fileName), i18n("Open Project"));
 		return;
 	}
 
 	// check whether the file can be opened for reading at all before closing the current project
 	// and creating a new project and trying to load
-	QFile file(filename);
+	QFile file(fileName);
 	if (!file.exists()) {
-		KMessageBox::error(this, i18n("The project file %1 doesn't exist.", filename), i18n("Open Project"));
+		KMessageBox::error(this, i18n("The project file %1 doesn't exist.", fileName), i18n("Open Project"));
 		return;
 	}
 
 	if (!file.open(QIODevice::ReadOnly)) {
-		KMessageBox::error(this, i18n("Couldn't read the project file %1.", filename), i18n("Open Project"));
+		KMessageBox::error(this, i18n("Couldn't read the project file %1.", fileName), i18n("Open Project"));
 		return;
 	} else
 		file.close();
@@ -1520,21 +1554,21 @@ void MainWin::openProject(const QString& filename) {
 	if (!newProject(false))
 		return;
 
-	statusBar()->showMessage(i18n("Loading %1...", filename));
+	statusBar()->showMessage(i18n("Loading %1...", fileName));
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
-	m_project->setFileName(filename);
+	m_project->setFileName(fileName);
 	QElapsedTimer timer;
 	timer.start();
 	bool rc = false;
-	if (Project::isLabPlotProject(filename)) {
+	if (Project::isLabPlotProject(fileName)) {
 		WAIT_CURSOR;
-		rc = m_project->load(filename);
+		rc = m_project->load(fileName);
 		RESET_CURSOR;
 	}
 #ifdef HAVE_LIBORIGIN
-	else if (OriginProjectParser::isOriginProject(filename)) {
+	else if (OriginProjectParser::isOriginProject(fileName)) {
 		OriginProjectParser parser;
-		parser.setProjectFileName(filename);
+		parser.setProjectFileName(fileName);
 
 		// check if graphs have multiple layer
 		bool hasUnusedObjects, hasMultiLayerGraphs;
@@ -1559,9 +1593,9 @@ void MainWin::openProject(const QString& filename) {
 #endif
 
 #ifdef HAVE_CANTOR_LIBS
-	else if (filename.endsWith(QLatin1String(".cws"), Qt::CaseInsensitive) || filename.endsWith(QLatin1String(".ipynb"), Qt::CaseInsensitive)) {
+	else if (fileName.endsWith(QLatin1String(".cws"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String(".ipynb"), Qt::CaseInsensitive)) {
 		WAIT_CURSOR;
-		rc = m_project->loadNotebook(filename);
+		rc = m_project->loadNotebook(fileName);
 		RESET_CURSOR;
 	}
 #endif
@@ -1570,12 +1604,13 @@ void MainWin::openProject(const QString& filename) {
 
 	if (!rc) {
 		closeProject();
+		newProject();
 		return;
 	}
 
 	m_project->undoStack()->clear();
 	m_undoViewEmptyLabel = i18n("%1: opened", m_project->name());
-	m_recentProjectsAction->addUrl(QUrl(filename));
+	m_recentProjectsAction->addUrl(QUrl(fileName));
 
 	updateGUIOnProjectChanges();
 	updateGUI(); // there are most probably worksheets or spreadsheets in the open project -> update the GUI
@@ -1587,7 +1622,7 @@ void MainWin::openProject(const QString& filename) {
 			if (d)
 				d->part()->suppressDeletion(true);
 		}
-		changeVisibleAllDocks(false);
+
 		for (auto dock : m_dockManagerContent->dockWidgetsMap()) {
 			auto* d = dynamic_cast<ContentDockWidget*>(dock);
 			if (d)
@@ -1612,7 +1647,7 @@ void MainWin::openProject(const QString& filename) {
 	statusBar()->showMessage(i18n("Project successfully opened (in %1 seconds).", (float)timer.elapsed() / 1000));
 
 	KConfigGroup group = Settings::group(QStringLiteral("MainWin"));
-	group.writeEntry("LastOpenProject", filename);
+	group.writeEntry("LastOpenProject", fileName);
 
 	if (m_autoSaveActive)
 		m_autoSaveTimer.start();
@@ -1686,9 +1721,13 @@ bool MainWin::saveProject() {
 	if (fileName.isEmpty())
 		return saveProjectAs();
 	else {
-		// don't overwrite OPJ files
-		if (fileName.endsWith(QLatin1String(".opj"), Qt::CaseInsensitive))
-			fileName.replace(QLatin1String(".opj"), QLatin1String(".lml"));
+		// don't overwrite OPJ files, replace ending
+		if (fileName.endsWith(QLatin1String(".opj"), Qt::CaseInsensitive)) {
+			//fileName.replace(QLatin1String(".opj"), QLatin1String(".lml"), Qt::CaseInsensitive);
+			// better append ending (don't overwrite existing project.lml file)
+			fileName.append(QLatin1String(".lml"));
+			DEBUG(Q_FUNC_INFO << ", renamed file name to " << fileName.toStdString())
+		}
 		return save(fileName);
 	}
 }
@@ -1700,7 +1739,7 @@ bool MainWin::saveProjectAs() {
 												i18nc("@title:window", "Save Project As"),
 												dir + m_project->fileName(),
 												i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
-	// The "Automatically select filename extension (.lml)" option does not change anything
+	// The "Automatically select file name extension (.lml)" option does not change anything
 
 	if (path.isEmpty()) // "Cancel" was clicked
 		return false;
@@ -1723,6 +1762,7 @@ bool MainWin::saveProjectAs() {
  * auxiliary function that does the actual saving of the project
  */
 bool MainWin::save(const QString& fileName) {
+	DEBUG(Q_FUNC_INFO << ", file name = " << fileName.toStdString())
 	QTemporaryFile tempFile(QDir::tempPath() + QLatin1Char('/') + QLatin1String("labplot_save_XXXXXX"));
 	if (!tempFile.open()) {
 		KMessageBox::error(this, i18n("Couldn't open the temporary file for writing."));
@@ -2019,6 +2059,9 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 */
 void MainWin::newNotebook() {
 	auto* action = static_cast<QAction*>(QObject::sender());
+	m_lastUsedNotebookAction = action;
+	if (m_tbNotebook)
+		m_tbNotebook->setDefaultAction(m_lastUsedNotebookAction);
 	auto* notebook = new Notebook(action->data().toString());
 	this->addAspectToProject(notebook);
 }
@@ -2456,6 +2499,7 @@ void MainWin::fillShareMenu() {
 	QMimeType mime;
 	m_shareMenu->model()->setInputData(
 		QJsonObject{{QStringLiteral("mimeType"), mime.name()}, {QStringLiteral("urls"), QJsonArray{QUrl::fromLocalFile(m_project->fileName()).toString()}}});
+	m_shareMenu->model()->setPluginType(QStringLiteral("Export"));
 	m_shareMenu->reload();
 }
 
@@ -2514,80 +2558,161 @@ void MainWin::dropEvent(QDropEvent* event) {
 		event->ignore();
 }
 
+/*!
+ * set the default locale of the application to the locale specified in the application settings for the number format and options.
+ */
 void MainWin::updateLocale() {
-	// Set default locale
-	auto numberLocaleLanguage =
-		static_cast<QLocale::Language>(Settings::group(QStringLiteral("Settings_General"))
-										   .readEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage)));
+	// language used for the number format
+	const auto group = Settings::group(QStringLiteral("Settings_General"));
+	auto language = static_cast<QLocale::Language>(group.readEntry(QLatin1String("NumberFormat"), static_cast<int>(QLocale::Language::AnyLanguage)));
+	QLocale newLocale(language == QLocale::AnyLanguage ? m_defaultSystemLocale : language);
 
-	auto numberOptions = static_cast<QLocale::NumberOptions>(
-		Settings::group(QStringLiteral("Settings_General")).readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)));
-
-	QLocale l(numberLocaleLanguage == QLocale::AnyLanguage ? QLocale() : numberLocaleLanguage);
-	l.setNumberOptions(numberOptions);
-	QLocale::setDefault(l);
+	// number options
+	auto numberOptions = static_cast<QLocale::NumberOptions>(group.readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)));
+	newLocale.setNumberOptions(numberOptions);
+	QLocale::setDefault(newLocale);
 }
 
-void MainWin::handleSettingsChanges(QList<SettingsDialog::SettingsType> changes) {
+/*!
+ * used to migrate application settings if there were changes between the releases.
+ */
+void MainWin::migrateSettings() {
+	// migrate the settings for the number format for versions older than 2.12 that had the decimal separator only:
+	auto group = Settings::group(QStringLiteral("Settings_General"));
+	if (group.hasKey(QLatin1String("DecimalSeparatorLocale"))) {
+		// map from the old enum values for the decimal separator to new values of the used languages for the number format,
+		// use languages that don't use any group separator for this.
+		// old enum class DecimalSeparator { Dot, Comma, Arabic, Automatic };
+		QLocale::Language language(QLocale::AnyLanguage); // AnyLanguage was used for 'Automatic'
+		int decimalSeparator = group.readEntry(QLatin1String("DecimalSeparatorLocale"), 0);
+		if (decimalSeparator == 0) // Dot
+			language = QLocale::English;
+		else if (decimalSeparator == 1) // Comma
+			language = QLocale::German;
+		else if (decimalSeparator == 2) // Arabic
+			language = QLocale::Arabic;
+
+		// delete the old entry and write the new one
+		group.deleteEntry(QLatin1String("DecimalSeparatorLocale"));
+		group.writeEntry(QLatin1String("NumberFormat"), static_cast<int>(language));
+	}
+}
+
+void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
+	WAIT_CURSOR;
 	const auto group = Settings::group(QStringLiteral("Settings_General"));
 
-	// title bar
-	MainWin::TitleBarMode titleBarMode = static_cast<MainWin::TitleBarMode>(group.readEntry("TitleBar", 0));
-	if (titleBarMode != m_titleBarMode) {
-		m_titleBarMode = titleBarMode;
-		updateTitleBar();
+	// handle general settings
+	// TODO: handle only those settings that were really changed, similar to how it's done for the nubmer format, etc. further below
+	if (changes.contains(Settings::Type::General)) {
+		// title bar
+		MainWin::TitleBarMode titleBarMode = static_cast<MainWin::TitleBarMode>(group.readEntry("TitleBar", 0));
+		if (titleBarMode != m_titleBarMode) {
+			m_titleBarMode = titleBarMode;
+			updateTitleBar();
+		}
+
+		// window visibility
+		auto vis = Project::DockVisibility(group.readEntry("DockVisibility", 0));
+		if (m_project && (vis != m_project->dockVisibility())) {
+			if (vis == Project::DockVisibility::folderOnly)
+				m_visibilityFolderAction->setChecked(true);
+			else if (vis == Project::DockVisibility::folderAndSubfolders)
+				m_visibilitySubfolderAction->setChecked(true);
+			else
+				m_visibilityAllAction->setChecked(true);
+			m_project->setDockVisibility(vis);
+		}
+
+		// autosave
+		bool autoSave = group.readEntry("AutoSave", 0);
+		if (m_autoSaveActive != autoSave) {
+			m_autoSaveActive = autoSave;
+			if (autoSave)
+				m_autoSaveTimer.start();
+			else
+				m_autoSaveTimer.stop();
+		}
+
+		int interval = group.readEntry("AutoSaveInterval", 1);
+		interval *= 60 * 1000;
+		if (interval != m_autoSaveTimer.interval())
+			m_autoSaveTimer.setInterval(interval);
 	}
 
-	// window visibility
-	auto vis = Project::DockVisibility(group.readEntry("DockVisibility", 0));
-	if (m_project && (vis != m_project->dockVisibility())) {
-		if (vis == Project::DockVisibility::folderOnly)
-			m_visibilityFolderAction->setChecked(true);
-		else if (vis == Project::DockVisibility::folderAndSubfolders)
-			m_visibilitySubfolderAction->setChecked(true);
-		else
-			m_visibilityAllAction->setChecked(true);
-		m_project->setDockVisibility(vis);
-	}
+	// update the number format in all visible dock widgets, worksheet elements and spreadsheets, if changed
+	if (changes.contains(Settings::Type::General_Number_Format)) {
+		updateLocale(); // set the new default runtime locale
 
-	// autosave
-	bool autoSave = group.readEntry("AutoSave", 0);
-	if (m_autoSaveActive != autoSave) {
-		m_autoSaveActive = autoSave;
-		if (autoSave)
-			m_autoSaveTimer.start();
-		else
-			m_autoSaveTimer.stop();
-	}
+		// dock widgets
+		if (stackedWidget) {
+			for (int i = 0; i < stackedWidget->count(); ++i) {
+				auto* widget = stackedWidget->widget(i);
+				auto* dock = dynamic_cast<BaseDock*>(widget);
+				if (dock)
+					dock->updateLocale();
+				else {
+					auto* labelWidget = dynamic_cast<LabelWidget*>(widget);
+					if (labelWidget)
+						labelWidget->updateLocale();
+				}
+			}
+		}
 
-	int interval = group.readEntry("AutoSaveInterval", 1);
-	interval *= 60 * 1000;
-	if (interval != m_autoSaveTimer.interval())
-		m_autoSaveTimer.setInterval(interval);
+		if (m_project) {
+			// worksheet elements
+			const auto& worksheets = m_project->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (const auto* worksheet : worksheets) {
+				if (worksheet->viewCreated()) {
+					const auto& elements = worksheet->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
+					for (auto* element : elements)
+						element->updateLocale();
+				}
+			}
 
-	// update the locale and the units in the dock widgets
-	updateLocale();
-	if (stackedWidget) {
-		for (int i = 0; i < stackedWidget->count(); ++i) {
-			auto* widget = stackedWidget->widget(i);
-			auto* dock = dynamic_cast<BaseDock*>(widget);
-			if (dock) {
-				dock->updateLocale();
-				dock->updateUnits();
-			} else {
-				auto* labelWidget = dynamic_cast<LabelWidget*>(widget);
-				if (labelWidget)
-					labelWidget->updateUnits();
+			// spreadsheets
+			const auto& spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* spreadsheet : spreadsheets) {
+				if (spreadsheet->viewCreated())
+					spreadsheet->updateLocale();
+			}
+
+			// matrices
+			const auto& matrices = m_project->children<Matrix>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* matrix : matrices) {
+				if (matrix->viewCreated())
+					matrix->updateLocale();
 			}
 		}
 	}
 
-	// update spreadsheet header
-	if (m_project) {
-		const auto& spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
-		for (auto* spreadsheet : spreadsheets) {
-			spreadsheet->updateHorizontalHeader();
-			spreadsheet->updateLocale();
+	// update units in all dock widgets, if changed
+	if (changes.contains(Settings::Type::General_Units)) {
+		if (stackedWidget) {
+			for (int i = 0; i < stackedWidget->count(); ++i) {
+				auto* widget = stackedWidget->widget(i);
+				auto* dock = dynamic_cast<BaseDock*>(widget);
+				if (dock)
+					dock->updateUnits();
+				else {
+					auto* labelWidget = dynamic_cast<LabelWidget*>(widget);
+					if (labelWidget)
+						labelWidget->updateUnits();
+				}
+			}
+		}
+	}
+
+	// update the size of the preview thumbnails
+	if (changes.contains(Settings::Type::Worksheet))
+		m_worksheetPreviewWidget->updatePreviewSize();
+
+	if (changes.contains(Settings::Type::Spreadsheet)) {
+		// update spreadsheet header
+		if (m_project) {
+			const auto& spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* spreadsheet : spreadsheets)
+				spreadsheet->updateHorizontalHeader();
 		}
 	}
 
@@ -2596,11 +2721,13 @@ void MainWin::handleSettingsChanges(QList<SettingsDialog::SettingsType> changes)
 	// 	m_showWelcomeScreen = showWelcomeScreen;
 
 #ifdef HAVE_CANTOR_LIBS
-	if (changes.contains(SettingsDialog::SettingsType::Notebook))
+	if (changes.contains(Settings::Type::Notebook))
 		updateNotebookActions();
 #else
 	Q_UNUSED(changes)
 #endif
+
+	RESET_CURSOR;
 }
 
 void MainWin::openDatasetExample() {
@@ -2634,10 +2761,10 @@ void MainWin::historyDialog() {
 }
 
 /*!
-  Opens the dialog to import data to the selected workbook, spreadsheet or matrix
+  Opens the dialog to import data to the selected container
 */
 void MainWin::importFileDialog(const QString& fileName) {
-	DEBUG(Q_FUNC_INFO);
+	DEBUG(Q_FUNC_INFO << ", file name = " << fileName.toStdString());
 	auto* dlg = new ImportFileDialog(this, false, fileName);
 
 	// select existing container
@@ -2656,12 +2783,15 @@ void MainWin::importKaggleDatasetDialog() {
 	if (ImportKaggleDatasetDialog::checkKaggle()) {
 		auto* dlg = new ImportKaggleDatasetDialog(this);
 		dlg->exec();
-	} else
+	} else {
 		QMessageBox::critical(this,
-							  i18n("Running Kaggle CLI tool failed"),
-							  i18n("Please follow the instructions on "
-								   "<a href=\"https://www.kaggle.com/docs/api\">\"How to Use Kaggle\"</a> "
-								   "to setup the Kaggle CLI tool."));
+							  i18n("Kaggle CLI tool not found"),
+							  i18n("Provide the path to the Kaggle CLI tool in the application settings and try again."));
+		auto* dlg = new SettingsDialog(this, m_defaultSystemLocale);
+		connect(dlg, &SettingsDialog::settingsChanged, this, &MainWin::handleSettingsChanges);
+		dlg->navigateTo(Settings::Type::Datasets);
+		dlg->exec();
+	}
 
 	DEBUG(Q_FUNC_INFO << " DONE");
 }
@@ -2790,18 +2920,24 @@ void MainWin::addAspectToProject(AbstractAspect* aspect) {
 }
 
 void MainWin::settingsDialog() {
-	auto* dlg = new SettingsDialog(this);
+	auto* dlg = new SettingsDialog(this, m_defaultSystemLocale);
 	connect(dlg, &SettingsDialog::settingsChanged, this, &MainWin::handleSettingsChanges);
-	// 	connect (dlg, &SettingsDialog::resetWelcomeScreen, this, &MainWin::resetWelcomeScreen);
 	dlg->exec();
 }
 
 #ifdef HAVE_CANTOR_LIBS
+void MainWin::settingsNotebookDialog() {
+	auto* dlg = new SettingsDialog(this, m_defaultSystemLocale);
+	connect(dlg, &SettingsDialog::settingsChanged, this, &MainWin::handleSettingsChanges);
+	dlg->navigateTo(Settings::Type::Notebook);
+	dlg->exec();
+}
+
 void MainWin::updateNotebookActions() {
-	auto* menu = static_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
+	// auto* menu = static_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
 	unplugActionList(QLatin1String("backends_list"));
 	QList<QAction*> newBackendActions;
-	menu->clear();
+	m_newNotebookMenu->clear();
 	for (auto* backend : Cantor::Backend::availableBackends()) {
 		if (!backend->isEnabled())
 			continue;
@@ -2812,16 +2948,16 @@ void MainWin::updateNotebookActions() {
 		actionCollection()->addAction(QLatin1String("notebook_") + backend->name(), action);
 		connect(action, &QAction::triggered, this, &MainWin::newNotebook);
 		newBackendActions << action;
-		menu->addAction(action);
 		m_newNotebookMenu->addAction(action);
 	}
 
 	plugActionList(QLatin1String("backends_list"), newBackendActions);
 
-	menu->addSeparator();
-	menu->addAction(m_configureCASAction);
-
 	m_newNotebookMenu->addSeparator();
-	m_newNotebookMenu->addAction(m_configureCASAction);
+	m_newNotebookMenu->addAction(m_configureNotebookAction);
+
+	// we just updated the notebook action list. its possible that the defaultAction isn't in the list anymore
+	if (m_tbNotebook && !m_newNotebookMenu->actions().contains(m_tbNotebook->defaultAction()))
+		m_tbNotebook->setDefaultAction(m_newNotebookMenu->actions().first());
 }
 #endif

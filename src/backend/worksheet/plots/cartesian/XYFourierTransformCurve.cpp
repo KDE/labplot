@@ -8,13 +8,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYFourierTransformCurve
-  \brief A xy-curve defined by a Fourier transform
-
-  \ingroup worksheet
-*/
-
 #include "XYFourierTransformCurve.h"
 #include "XYFourierTransformCurvePrivate.h"
 #include "backend/core/AbstractColumn.h"
@@ -34,6 +27,11 @@ extern "C" {
 #include <QIcon>
 #include <QThreadPool>
 
+/*!
+ * \class XYFourierTransformCurve
+ * \brief A xy-curve defined by a Fourier transform.
+ * \ingroup CartesianAnalysisPlots
+ */
 XYFourierTransformCurve::XYFourierTransformCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYFourierTransformCurvePrivate(this), AspectType::XYFourierTransformCurve) {
 }
@@ -45,11 +43,6 @@ XYFourierTransformCurve::XYFourierTransformCurve(const QString& name, XYFourierT
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 XYFourierTransformCurve::~XYFourierTransformCurve() = default;
-
-void XYFourierTransformCurve::recalculate() {
-	Q_D(XYFourierTransformCurve);
-	d->recalculate();
-}
 
 /*!
 	Returns an icon to be used in the project explorer.
@@ -100,8 +93,12 @@ bool XYFourierTransformCurvePrivate::recalculateSpecific(const AbstractColumn* t
 	// copy all valid data point for the transform to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double xmin = transformData.xRange.first();
-	const double xmax = transformData.xRange.last();
+	double xmin = transformData.xRange.first();
+	double xmax = transformData.xRange.last();
+	if (transformData.autoRange) {
+		xmin = q->xDataColumn()->minimum();
+		xmax = q->xDataColumn()->maximum();
+	}
 
 	int rowCount = std::min(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
 	for (int row = 0; row < rowCount; ++row) {

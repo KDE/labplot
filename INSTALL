@@ -17,19 +17,20 @@ optional packages
 	* libcerf version 1.0 or higher to support complex error and related functions (including the devel-package, libcerf-devel or similar)
 	* Cantor version 24.11.70 or higher (including the devel-package, cantor-devel or similar)
 		* To use the backends the corresponding application must be installed
-		* The Python backend needs Python 3.8 installed on Windows
+		* The Python backend needs Python 3.11 installed on Windows
 	* ZLIB and LZ4 to support ROOT (CERN) TH1 histograms (including the devel-package, zlib-devel and liblz4-devel or similar)
 	* ReadStat for importing serveral statistical data formats (will be build if not available)
-	* liborigin version 3 or higher for importing Origin project files (will be build if not available)
+	* liborigin version 3 or higher for importing Origin OPJ project files (will be build if not available)
 	* Matio for importing binary MATLAB MAT files (including the devel-package, libmatio-devel or similar)
 	* QXlsx for importing Excel xlsx files (will be build if not available)
 	* Orcus for importing ODS (Open Document Spreadsheet) files (including the devel-packages, liborcus-devel and libixion-devel or similar)
 	* Qt SerialPort to support serial port functionality
+	* Qt Svg to support SVG export
 	* Qt MQTT module (https://github.com/qt/qtmqtt) to support reading and plotting of data from MQTT brokers
 	* KUserFeedback to support collecting feedback from users
 	* Discount to support Markdown markup language text
 	* Eigen3 to support fast baseline removal
-	* fast_float, dbc_parser_cpp and vector_blf for Vector BLF support (can be fetched from git by setting -DLOCAL_DBC_PARSER=ON and -DLOCAL_VECTOR_BLF=ON)
+	* fast_float, dbc_parser_cpp (can be fetched from git by setting -DLOCAL_DBC_PARSER=ON) and vector_blf (static library from included sources can be built by setting -DLOCAL_VECTOR_BLF=ON) for Vector BLF support
 	* MCAP for MCAP file support (Downloading instead of using local copy can be set by using LOCAL_MCAP_DOWNLOAD=ON)
 
 ===============================================================================
@@ -57,6 +58,7 @@ To compile LabPlot without optional dependencies even if they are present on the
 -DENABLE_MATIO=OFF
 -DENABLE_MQTT=OFF
 -DENABLE_QTSERIALPORT=OFF
+-DENABLE_QTSVG=OFF
 -DENABLE_DISCOUNT=OFF
 -DENABLE_XLSX=OFF
 -DENABLE_ORCUS=OFF
@@ -75,6 +77,8 @@ To disable building tests, use
 
 To disable building the SDK, use
 -DENABLE_SDK=OFF
+To only disable building the SDK examples, use
+-DENABLE_SDK_EXAMPLES=OFF
 
 ================================================================================
 To run the tests execute

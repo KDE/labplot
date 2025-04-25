@@ -3,7 +3,7 @@
 	Project          : LabPlot
 	Description      : widget for editing properties of fit curves
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -68,10 +68,6 @@ void XYFitCurveDock::setupGeneral() {
 	gridLayout->setHorizontalSpacing(2);
 	gridLayout->setVerticalSpacing(2);
 
-	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
-	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
-	uiGeneralTab.cbDataSourceType->addItem(i18n("Histogram"));
-
 	cbDataSourceCurve = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbDataSourceCurve, 5, 2, 1, 2);
 
@@ -122,16 +118,16 @@ void XYFitCurveDock::setupGeneral() {
 	}
 
 	// TODO: setting checked background color to unchecked color
-	//	p = uiGeneralTab.lData->palette();
+	//	p = uiGeneralTab.tbData->palette();
 	// QWidget::palette().color(QWidget::backgroundRole())
 	// not working with 'transparent'
 	//	p.setColor(QPalette::Base, Qt::transparent);
-	//	uiGeneralTab.lData->setPalette(p);
+	//	uiGeneralTab.tbData->setPalette(p);
 	// see https://forum.qt.io/topic/41325/solved-background-of-checked-qpushbutton-with-stylesheet/2
 	// Styles not usable (here: text color not theme dependent). see https://forum.qt.io/topic/60546/qpushbutton-default-windows-style-sheet/9
-	//	uiGeneralTab.lData->setStyleSheet(QStringLiteral("QToolButton:checked{background-color: transparent;border: 3px transparent;padding: 3px;}"));
+	//	uiGeneralTab.tbData->setStyleSheet(QStringLiteral("QToolButton:checked{background-color: transparent;border: 3px transparent;padding: 3px;}"));
 
-	//	uiGeneralTab.lData->setAutoFillBackground(true);
+	//	uiGeneralTab.tbData->setAutoFillBackground(true);
 
 	uiGeneralTab.twLog->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	uiGeneralTab.twParameters->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -139,12 +135,6 @@ void XYFitCurveDock::setupGeneral() {
 
 	// don't allow word wrapping in the log-table for the multi-line iterations string
 	uiGeneralTab.twLog->setWordWrap(false);
-
-	// header labels
-	QStringList headerLabels;
-	headerLabels << QString() << i18n("Value") << i18n("Uncertainty") << i18n("Uncertainty, %") << i18n("t statistic") << QLatin1String("P > |t|")
-				 << i18n("Lower") << i18n("Upper");
-	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
 
 	// show all options per default
 	showDataOptions(true);
@@ -180,9 +170,12 @@ void XYFitCurveDock::setupGeneral() {
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
 
+	updateLocale();
+	retranslateUi();
+
 	// Slots
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::dataSourceTypeChanged);
-	connect(uiGeneralTab.lWeights, &QPushButton::clicked, this, &XYFitCurveDock::showWeightsOptions);
+	connect(uiGeneralTab.tbWeights, &QPushButton::clicked, this, &XYFitCurveDock::showWeightsOptions);
 	connect(uiGeneralTab.cbXWeight, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::xWeightChanged);
 	connect(uiGeneralTab.cbYWeight, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::yWeightChanged);
 	connect(uiGeneralTab.cbCategory, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::categoryChanged);
@@ -194,10 +187,10 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.pbOptions, &QPushButton::clicked, this, &XYFitCurveDock::showOptions);
 	connect(uiGeneralTab.cbAlgorithm, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::algorithmChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYFitCurveDock::recalculateClicked);
-	connect(uiGeneralTab.lData, &QPushButton::clicked, this, &XYFitCurveDock::showDataOptions);
-	connect(uiGeneralTab.lFit, &QPushButton::clicked, this, &XYFitCurveDock::showFitOptions);
-	connect(uiGeneralTab.lParameters, &QPushButton::clicked, this, &XYFitCurveDock::showParameters);
-	connect(uiGeneralTab.lResults, &QPushButton::clicked, this, &XYFitCurveDock::showResults);
+	connect(uiGeneralTab.tbData, &QPushButton::clicked, this, &XYFitCurveDock::showDataOptions);
+	connect(uiGeneralTab.tbFit, &QPushButton::clicked, this, &XYFitCurveDock::showFitOptions);
+	connect(uiGeneralTab.tbParameters, &QPushButton::clicked, this, &XYFitCurveDock::showParameters);
+	connect(uiGeneralTab.tbResults, &QPushButton::clicked, this, &XYFitCurveDock::showResults);
 	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::plotRangeChanged);
 
 	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYFitCurveDock::dataSourceCurveChanged);
@@ -225,10 +218,10 @@ void XYFitCurveDock::initGeneralTab() {
 		cbDataSourceCurve->setAspect(nullptr);
 	}
 
-	cbXDataColumn->setColumn(m_fitCurve->xDataColumn(), m_fitCurve->xDataColumnPath());
-	cbYDataColumn->setColumn(m_fitCurve->yDataColumn(), m_fitCurve->yDataColumnPath());
-	cbXErrorColumn->setColumn(m_fitCurve->xErrorColumn(), m_fitCurve->xErrorColumnPath());
-	cbYErrorColumn->setColumn(m_fitCurve->yErrorColumn(), m_fitCurve->yErrorColumnPath());
+	cbXDataColumn->setAspect(m_fitCurve->xDataColumn(), m_fitCurve->xDataColumnPath());
+	cbYDataColumn->setAspect(m_fitCurve->yDataColumn(), m_fitCurve->yDataColumnPath());
+	cbXErrorColumn->setAspect(m_fitCurve->xErrorColumn(), m_fitCurve->xErrorColumnPath());
+	cbYErrorColumn->setAspect(m_fitCurve->yErrorColumn(), m_fitCurve->yErrorColumnPath());
 
 	int tmpModelType = m_fitData.modelType; // save type because it's reset when category changes
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
@@ -351,7 +344,9 @@ bool XYFitCurveDock::eventFilter(QObject* obj, QEvent* event) {
 }
 
 void XYFitCurveDock::checkDataColumns() {
-	DEBUG(Q_FUNC_INFO)
+	if (m_initializing)
+		return;
+
 	if (!m_messageWidget) {
 		m_messageWidget = new KMessageWidget(this);
 		uiGeneralTab.gridLayout_2->addWidget(m_messageWidget, 23, 2, 1, 2);
@@ -386,42 +381,55 @@ void XYFitCurveDock::checkDataColumns() {
 	}
 }
 
+/*
+ * updates the locale in the widgets. called when the application settings are changed.
+ */
+void XYFitCurveDock::updateLocale() {
+	if (m_fitCurve) {
+		fitParametersWidget->setFitData(&m_fitData);
+		showFitResult();
+	}
+}
+
+void XYFitCurveDock::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
+
+	uiGeneralTab.cbDataSourceType->clear();
+	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
+	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
+	uiGeneralTab.cbDataSourceType->addItem(i18n("Histogram"));
+
+	// header labels
+	QStringList labels{QString(), i18n("Value"), i18n("Uncertainty"), i18n("Uncertainty, %"), i18n("t statistic"), QLatin1String("P > |t|"), i18n("Lower"), i18n("Upper")};
+	uiGeneralTab.twParameters->setHorizontalHeaderLabels(labels);
+
+	fitParametersWidget->retranslateUi();
+
+	// retranslate fit results, if available
+	if (m_fitCurve)
+		showFitResult();
+}
+
 //*************************************************************
-//**** SLOTs for changes triggered in XYFitCurveDock *****
+//******* SLOTs for changes triggered in XYFitCurveDock *******
 //*************************************************************
 void XYFitCurveDock::dataSourceTypeChanged(int index) {
 	DEBUG(Q_FUNC_INFO << ", m_initializing = " << m_initializing)
-	const auto type = (XYAnalysisCurve::DataSourceType)index;
+	const auto type = static_cast<XYAnalysisCurve::DataSourceType>(index);
 	DEBUG(Q_FUNC_INFO << ", source type = " << ENUM_TO_STRING(XYAnalysisCurve, DataSourceType, type))
 	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		uiGeneralTab.cbCategory->setEnabled(true);
-		uiGeneralTab.lDataSourceCurve->hide();
-		cbDataSourceCurve->hide();
-		uiGeneralTab.lXColumn->show();
-		cbXDataColumn->show();
-		uiGeneralTab.lYColumn->show();
-		cbYDataColumn->show();
-
-		QList<AspectType> list{AspectType::Folder, AspectType::Workbook, AspectType::Spreadsheet, AspectType::Datapicker};
-		cbDataSourceCurve->setTopLevelClasses(list);
+		cbDataSourceCurve->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
 
 		// when the dock is initialized, this functions is called before setModel(),
 		// we need this nullptr check
 		if (m_dataSourceModel) {
-			list = {AspectType::Column};
-			m_dataSourceModel->setSelectableAspects(list);
+			m_dataSourceModel->setSelectableAspects({AspectType::Column});
 
 			// TODO: why do we need to reset the model here and below again to get the combobox updated?
 			cbDataSourceCurve->setModel(m_dataSourceModel);
 		}
 	} else { // curve or histogram
-		uiGeneralTab.lDataSourceCurve->show();
-		cbDataSourceCurve->show();
-		uiGeneralTab.lXColumn->hide();
-		cbXDataColumn->hide();
-		uiGeneralTab.lYColumn->hide();
-		cbYDataColumn->hide();
-
 		if (type == XYAnalysisCurve::DataSourceType::Curve) {
 			uiGeneralTab.cbCategory->setEnabled(true);
 			uiGeneralTab.lDataSourceCurve->setText(i18n("Curve:"));
@@ -458,6 +466,8 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 			}
 		}
 	}
+
+	showDataOptions(uiGeneralTab.tbData->isChecked()); // show/hide data source widgets for the current type
 
 	enableRecalculate();
 
@@ -496,7 +506,7 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	// set model dependent start values from new data
 	DEBUG(Q_FUNC_INFO)
-	static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData, m_curve);
+	static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData);
 	// udpate parameter widget
 	fitParametersWidget->setFitData(&m_fitData);
 	enableRecalculate(); // update preview
@@ -505,7 +515,6 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	// update model limits depending on number of points
 	modelTypeChanged(uiGeneralTab.cbModel->currentIndex());
 
-	cbXDataColumn->useCurrentIndexText(true);
 	cbXDataColumn->setInvalid(false);
 }
 
@@ -520,13 +529,12 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	// set model dependent start values from new data
 	DEBUG(Q_FUNC_INFO)
-	static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData, m_curve);
+	static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData);
 	// update parameter widget
 	fitParametersWidget->setFitData(&m_fitData);
 	enableRecalculate(); // update preview
 	showFitResult(); // show result of preview
 
-	cbYDataColumn->useCurrentIndexText(true);
 	cbYDataColumn->setInvalid(false);
 }
 
@@ -539,7 +547,6 @@ void XYFitCurveDock::xErrorColumnChanged(const QModelIndex& index) {
 	for (auto* curve : m_curvesList)
 		static_cast<XYFitCurve*>(curve)->setXErrorColumn(column);
 
-	cbXErrorColumn->useCurrentIndexText(true);
 	cbXErrorColumn->setInvalid(false);
 }
 
@@ -552,7 +559,6 @@ void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
 	for (auto* curve : m_curvesList)
 		static_cast<XYFitCurve*>(curve)->setYErrorColumn(column);
 
-	cbYErrorColumn->useCurrentIndexText(true);
 	cbYErrorColumn->setInvalid(false);
 }
 
@@ -560,13 +566,29 @@ void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
 
 void XYFitCurveDock::showDataOptions(bool checked) {
 	if (checked) {
-		uiGeneralTab.lData->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
+		uiGeneralTab.tbData->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
 		uiGeneralTab.lDataSourceType->show();
 		uiGeneralTab.cbDataSourceType->show();
-		// select options for current source type
-		dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
+
+		// show/hide data source widgets depending on the current type
+		const auto type = static_cast<XYAnalysisCurve::DataSourceType>(uiGeneralTab.cbDataSourceType->currentIndex());
+		if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
+			uiGeneralTab.lDataSourceCurve->hide();
+			cbDataSourceCurve->hide();
+			uiGeneralTab.lXColumn->show();
+			cbXDataColumn->show();
+			uiGeneralTab.lYColumn->show();
+			cbYDataColumn->show();
+		} else { // curve or histogram
+			uiGeneralTab.lDataSourceCurve->show();
+			cbDataSourceCurve->show();
+			uiGeneralTab.lXColumn->hide();
+			cbXDataColumn->hide();
+			uiGeneralTab.lYColumn->hide();
+			cbYDataColumn->hide();
+		}
 	} else {
-		uiGeneralTab.lData->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
+		uiGeneralTab.tbData->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
 		uiGeneralTab.lDataSourceType->hide();
 		uiGeneralTab.cbDataSourceType->hide();
 		uiGeneralTab.lXColumn->hide();
@@ -580,7 +602,7 @@ void XYFitCurveDock::showDataOptions(bool checked) {
 
 void XYFitCurveDock::showWeightsOptions(bool checked) {
 	if (checked) {
-		uiGeneralTab.lWeights->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
+		uiGeneralTab.tbWeights->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
 		uiGeneralTab.lXWeight->show();
 		uiGeneralTab.cbXWeight->show();
 		uiGeneralTab.lXErrorCol->show();
@@ -590,7 +612,7 @@ void XYFitCurveDock::showWeightsOptions(bool checked) {
 		uiGeneralTab.lYErrorCol->show();
 		cbYErrorColumn->show();
 	} else {
-		uiGeneralTab.lWeights->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
+		uiGeneralTab.tbWeights->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
 		uiGeneralTab.lXWeight->hide();
 		uiGeneralTab.cbXWeight->hide();
 		uiGeneralTab.lXErrorCol->hide();
@@ -604,7 +626,7 @@ void XYFitCurveDock::showWeightsOptions(bool checked) {
 
 void XYFitCurveDock::showFitOptions(bool checked) {
 	if (checked) {
-		uiGeneralTab.lFit->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
+		uiGeneralTab.tbFit->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
 		uiGeneralTab.lCategory->show();
 		uiGeneralTab.cbCategory->show();
 		uiGeneralTab.lModel->show();
@@ -614,7 +636,7 @@ void XYFitCurveDock::showFitOptions(bool checked) {
 		CONDITIONAL_LOCK_RETURN; // do not change start parameter
 		modelTypeChanged(uiGeneralTab.cbModel->currentIndex());
 	} else {
-		uiGeneralTab.lFit->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
+		uiGeneralTab.tbFit->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
 		uiGeneralTab.lCategory->hide();
 		uiGeneralTab.cbCategory->hide();
 		uiGeneralTab.lModel->hide();
@@ -631,20 +653,20 @@ void XYFitCurveDock::showFitOptions(bool checked) {
 
 void XYFitCurveDock::showParameters(bool checked) {
 	if (checked) {
-		uiGeneralTab.lParameters->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
+		uiGeneralTab.tbParameters->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
 		uiGeneralTab.frameParameters->show();
 	} else {
-		uiGeneralTab.lParameters->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
+		uiGeneralTab.tbParameters->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
 		uiGeneralTab.frameParameters->hide();
 	}
 }
 
 void XYFitCurveDock::showResults(bool checked) {
 	if (checked) {
-		uiGeneralTab.lResults->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
+		uiGeneralTab.tbResults->setIcon(QIcon::fromTheme(QStringLiteral("arrow-down")));
 		uiGeneralTab.twResults->show();
 	} else {
-		uiGeneralTab.lResults->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
+		uiGeneralTab.tbResults->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
 		uiGeneralTab.twResults->hide();
 	}
 }
@@ -814,7 +836,7 @@ void XYFitCurveDock::categoryChanged(int index) {
  * Updates the model type dependent widgets in the general-tab and calls \c updateModelEquation() to update the preview pixmap.
  */
 void XYFitCurveDock::modelTypeChanged(int index) {
-	DEBUG(Q_FUNC_INFO << ", type = " << (unsigned int)index << ", initializing = " << m_initializing << ", current type = " << m_fitData.modelType);
+	DEBUG(Q_FUNC_INFO << ", type = " << index << ", initializing = " << m_initializing << ", current type = " << m_fitData.modelType);
 	// leave if no selection
 	if (index == -1)
 		return;
@@ -847,9 +869,6 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 	// with no xColumn: show all models (assume 100 data points)
 	const int availableRowCount = xColumn ? xColumn->availableRowCount(100) : 100;
 	DEBUG(Q_FUNC_INFO << ", available row count = " << availableRowCount)
-	auto yColumn = m_fitCurve->yDataColumn();
-	if (availableRowCount == 0 || !xColumn || !yColumn)
-		checkDataColumns();
 
 	bool disableFit = false;
 	switch (m_fitData.modelCategory) {
@@ -949,7 +968,7 @@ void XYFitCurveDock::updateModelEquation() {
 		// set model dependent start values from curve data
 		// invalidate result
 		m_fitCurve->clearFitResult();
-		static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData, m_curve);
+		static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData);
 		// udpate parameter widget
 		fitParametersWidget->setFitData(&m_fitData);
 		if (m_messageWidget && m_messageWidget->isVisible()) {
@@ -957,7 +976,8 @@ void XYFitCurveDock::updateModelEquation() {
 			m_messageWidget->animatedHide();
 		}
 
-		showFitResult(); // show result of preview
+		if (m_fitData.previewEnabled)
+			showFitResult(); // show result of preview
 	}
 
 	// variables/parameter that are known
@@ -1082,6 +1102,14 @@ void XYFitCurveDock::showFunctions() {
 	menu.exec(uiGeneralTab.tbFunctions->mapToGlobal(pos));
 }
 
+void XYFitCurveDock::insertFunction(const QString& functionName) const {
+	uiGeneralTab.teEquation->insertPlainText(functionName + ExpressionParser::functionArgumentString(functionName, XYEquationCurve::EquationType::Cartesian));
+}
+
+void XYFitCurveDock::insertConstant(const QString& constantsName) const {
+	uiGeneralTab.teEquation->insertPlainText(constantsName);
+}
+
 void XYFitCurveDock::algorithmChanged(int index) {
 	m_fitData.algorithm = (nsl_fit_algorithm)index;
 
@@ -1166,14 +1194,6 @@ void XYFitCurveDock::showOptions() {
 	menu.exec(uiGeneralTab.pbOptions->mapToGlobal(pos));
 }
 
-void XYFitCurveDock::insertFunction(const QString& functionName) const {
-	uiGeneralTab.teEquation->insertPlainText(functionName + ExpressionParser::functionArgumentString(functionName, XYEquationCurve::EquationType::Cartesian));
-}
-
-void XYFitCurveDock::insertConstant(const QString& constantsName) const {
-	uiGeneralTab.teEquation->insertPlainText(constantsName);
-}
-
 /*!
  * When a custom evaluate range is specified, set the plot range too.
  */
@@ -1191,7 +1211,6 @@ void XYFitCurveDock::insertConstant(const QString& constantsName) const {
 
 void XYFitCurveDock::recalculateClicked() {
 	DEBUG(Q_FUNC_INFO);
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	m_fitData.degree = uiGeneralTab.sbDegree->value();
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
 		updateParameterList();
@@ -1242,7 +1261,6 @@ void XYFitCurveDock::recalculateClicked() {
 		}
 	}
 
-	QApplication::restoreOverrideCursor();
 	DEBUG(Q_FUNC_INFO << " DONE");
 }
 
@@ -1270,14 +1288,10 @@ void XYFitCurveDock::enableRecalculate() {
 		auto* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		auto* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX && aspectY);
-		if (aspectX) {
-			cbXDataColumn->useCurrentIndexText(true);
+		if (aspectX)
 			cbXDataColumn->setInvalid(false);
-		}
-		if (aspectY) {
-			cbYDataColumn->useCurrentIndexText(true);
+		if (aspectY)
 			cbYDataColumn->setInvalid(false);
-		}
 		break;
 	}
 	case XYAnalysisCurve::DataSourceType::Curve:
@@ -1574,22 +1588,22 @@ void XYFitCurveDock::curveDataSourceHistogramChanged(const Histogram* hist) {
 
 void XYFitCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbXDataColumn->setColumn(column, m_fitCurve->xDataColumnPath());
+	cbXDataColumn->setAspect(column, m_fitCurve->xDataColumnPath());
 }
 
 void XYFitCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbYDataColumn->setColumn(column, m_fitCurve->yDataColumnPath());
+	cbYDataColumn->setAspect(column, m_fitCurve->yDataColumnPath());
 }
 
 void XYFitCurveDock::curveXErrorColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbXErrorColumn->setColumn(column, m_fitCurve->xErrorColumnPath());
+	cbXErrorColumn->setAspect(column, m_fitCurve->xErrorColumnPath());
 }
 
 void XYFitCurveDock::curveYErrorColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbYErrorColumn->setColumn(column, m_fitCurve->yErrorColumnPath());
+	cbYErrorColumn->setAspect(column, m_fitCurve->yErrorColumnPath());
 }
 
 /*!

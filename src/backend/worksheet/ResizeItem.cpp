@@ -11,6 +11,7 @@
 #include "backend/worksheet/WorksheetElementContainer.h"
 #include <QBrush>
 #include <QCursor>
+#include <QGraphicsSceneMouseEvent>
 
 ResizeItem::HandleItem::HandleItem(int position, ResizeItem* parent)
 	: QGraphicsRectItem(-10, -10, 20, 20, parent)
@@ -65,22 +66,18 @@ QVariant ResizeItem::HandleItem::itemChange(GraphicsItemChange change, const QVa
 	return newValue;
 }
 
-void ResizeItem::HandleItem::mousePressEvent(QGraphicsSceneMouseEvent*) {
+void ResizeItem::HandleItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	m_parent->container()->setUndoAware(false);
 	m_oldRect = m_parent->container()->rect();
+	m_lastMousePos = event->scenePos();
 }
 
 void ResizeItem::HandleItem::mouseReleaseEvent(QGraphicsSceneMouseEvent*) {
 	m_parent->container()->setUndoAware(true);
-
-	// the container has already the current rect set, we just need
-	// to pass the previous rect so the undo-step can be done properly
 	m_parent->container()->setPrevRect(m_oldRect);
 }
 
 void ResizeItem::HandleItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event) {
-	// HACK: make the parent container/plot non-movable otherwise
-	// the move event doesn't reach HandleItem. Better solution?
 	m_parent->container()->graphicsItem()->setFlag(ItemIsMovable, false);
 
 	switch (m_position) {
@@ -109,7 +106,8 @@ void ResizeItem::HandleItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event) {
 		setCursor(Qt::SizeHorCursor);
 		break;
 	}
-	QGraphicsItem::hoverLeaveEvent(event);
+
+	QGraphicsItem::hoverEnterEvent(event);
 }
 
 void ResizeItem::HandleItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
@@ -137,6 +135,22 @@ QPointF ResizeItem::HandleItem::restrictPosition(const QPointF& pos) {
 		newPos.setX(m_parent->m_rect.left());
 
 	return newPos;
+}
+
+void ResizeItem::HandleItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+	if (event->buttons() & Qt::LeftButton) {
+		QPointF mousePos = event->scenePos();
+		QPointF delta = mousePos - m_lastMousePos;
+		if (m_position & Top)
+			m_parent->setTop(m_parent->boundingRect().top() + delta.y());
+		if (m_position & Bottom)
+			m_parent->setBottom(m_parent->boundingRect().bottom() + delta.y());
+		if (m_position & Left)
+			m_parent->setLeft(m_parent->boundingRect().left() + delta.x());
+		if (m_position & Right)
+			m_parent->setRight(m_parent->boundingRect().right() + delta.x());
+		m_lastMousePos = mousePos;
+	}
 }
 
 ResizeItem::ResizeItem(WorksheetElementContainer* container)
@@ -207,28 +221,27 @@ void ResizeItem::updateHandleItemPositions() {
 			item->setPos(m_rect.topLeft());
 			break;
 		case Top:
-			item->setPos(m_rect.left() + m_rect.width() / 2 - 1, m_rect.top());
+			item->setPos(m_rect.left() + m_rect.width() / 2, m_rect.top());
 			break;
 		case TopRight:
 			item->setPos(m_rect.topRight());
 			break;
 		case Right:
-			item->setPos(m_rect.right(), m_rect.top() + m_rect.height() / 2 - 1);
+			item->setPos(m_rect.right(), m_rect.top() + m_rect.height() / 2);
 			break;
 		case BottomRight:
 			item->setPos(m_rect.bottomRight());
 			break;
 		case Bottom:
-			item->setPos(m_rect.left() + m_rect.width() / 2 - 1, m_rect.bottom());
+			item->setPos(m_rect.left() + m_rect.width() / 2, m_rect.bottom());
 			break;
 		case BottomLeft:
 			item->setPos(m_rect.bottomLeft());
 			break;
 		case Left:
-			item->setPos(m_rect.left(), m_rect.top() + m_rect.height() / 2 - 1);
+			item->setPos(m_rect.left(), m_rect.top() + m_rect.height() / 2);
 			break;
 		}
-
 		item->setFlag(ItemSendsGeometryChanges, true);
 	}
 }

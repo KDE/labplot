@@ -529,7 +529,7 @@ void AddSubtractValueDialog::initPreview() {
 	axis->setMinorTicksDirection(Axis::noTicks);
 	axis->title()->setText(QString());
 	auto font = axis->labelsFont();
-	font.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
+	font.setPointSizeF(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
 	axis->setLabelsFont(font);
 	axis->setLabelsOffset(0);
 	axis->setSuppressRetransform(false);
@@ -545,7 +545,7 @@ void AddSubtractValueDialog::initPreview() {
 	axis->setMinorTicksDirection(Axis::noTicks);
 	axis->title()->setText(QString());
 	font = axis->labelsFont();
-	font.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
+	font.setPointSizeF(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
 	axis->setLabelsFont(font);
 	axis->setLabelsOffset(0);
 	axis->setSuppressRetransform(false);

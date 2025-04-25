@@ -14,7 +14,6 @@
 #include "backend/nsl/nsl_kde.h"
 #include "backend/nsl/nsl_sf_kernel.h"
 
-class AbstractColumn;
 class KDEPlotPrivate;
 class XYCurve;
 
@@ -61,7 +60,7 @@ public:
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	int gridPointsCount() const;
 	bool hasData() const override;
-	bool usingColumn(const Column*) const override;
+	bool usingColumn(const AbstractColumn*, bool indirect) const override;
 	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
 	QColor color() const override;
 

@@ -17,10 +17,16 @@ class CartesianCoordinateSystemPrivate;
 class CartesianCoordinateSystemSetScalePropertiesCmd;
 class CartesianPlot;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT CartesianCoordinateSystem : public AbstractCoordinateSystem {
+#else
 class CartesianCoordinateSystem : public AbstractCoordinateSystem {
-	Q_ENUMS(Dimension)
+#endif
+	Q_GADGET
 public:
 	enum class Dimension { X, Y };
+	Q_ENUM(Dimension)
 
 	explicit CartesianCoordinateSystem(CartesianPlot*);
 	~CartesianCoordinateSystem() override;
@@ -59,4 +65,5 @@ private:
 	CartesianCoordinateSystemPrivate* d;
 };
 
+using Dimension = CartesianCoordinateSystem::Dimension;
 #endif

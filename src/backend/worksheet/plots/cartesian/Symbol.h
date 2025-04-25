@@ -19,7 +19,12 @@ class SymbolPrivate;
 class KConfigGroup;
 class QPainter;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Symbol : public AbstractAspect {
+#else
 class Symbol : public AbstractAspect {
+#endif
 	Q_OBJECT
 
 public:

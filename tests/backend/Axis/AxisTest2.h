@@ -29,8 +29,10 @@ private Q_SLOTS:
 
 	void columnLabelValues();
 	void columnLabelValuesMaxValues();
+	void columnLabelValuesMoreTicksThanLabels();
 
 	void customTextLabels();
+	void customTextLabelsMoreTicksThanLabels();
 };
 
 #endif // AXISTEST2_H

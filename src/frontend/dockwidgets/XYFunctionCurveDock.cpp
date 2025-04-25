@@ -113,7 +113,6 @@ void XYFunctionCurveDock::initGeneralTab() {
 				else
 					cb->setCurrentModelIndex(QModelIndex());
 
-				cb->useCurrentIndexText(true);
 				cb->setInvalid(false);
 
 				found = true;
@@ -124,7 +123,6 @@ void XYFunctionCurveDock::initGeneralTab() {
 			//->highlight the combobox red
 			if (!found) {
 				cb->setCurrentModelIndex(QModelIndex());
-				cb->useCurrentIndexText(false);
 				cb->setInvalid(
 					true,
 					i18n("The curve \"%1\"\nis not available anymore. It will be automatically used once it is created again.", formulaData.at(i).curvePath()));

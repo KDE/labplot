@@ -1,23 +1,13 @@
 find_package(SharedMimeInfo REQUIRED)
-set(FRONTEND_DIR frontend)
-set(BACKEND_DIR backend)
-set(CANTOR_DIR cantor)
-set(TOOLS_DIR tools)
+set(FRONTEND_DIR "${CMAKE_CURRENT_LIST_DIR}/frontend")
+set(BACKEND_DIR "${CMAKE_CURRENT_LIST_DIR}/backend")
+set(CANTOR_DIR "${CMAKE_CURRENT_LIST_DIR}/cantor")
+set(TOOLS_DIR "${CMAKE_CURRENT_LIST_DIR}/tools")
 set(CMAKE_AUTOMOC ON)
 set(SRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 
-find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG)
-if(NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
-    option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
-    option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)
-    if(TARGET Qt${QT_VERSION_MAJOR}::GuiPrivate)
-        message(STATUS "Building local version of Qt-Advanced-Docking-System.")
-    else ()
-        message(FATAL_ERROR "Missing Qt${QT_VERSION_MAJOR}::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
-    endif()
-endif()
-
 set(GUI_SOURCES
+    ${FRONTEND_DIR}/AboutDialog.cpp
     ${FRONTEND_DIR}/DatasetModel.cpp
     ${FRONTEND_DIR}/GuiObserver.cpp
     ${FRONTEND_DIR}/GuiTools.cpp
@@ -399,6 +389,7 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/gsl/ExpressionParser.cpp
     ${BACKEND_DIR}/gsl/constants.cpp
     ${BACKEND_DIR}/gsl/functions.cpp
+    ${BACKEND_DIR}/gsl/Parser.cpp
     ${BACKEND_DIR}/lib/Range.h
     ${BACKEND_DIR}/lib/Debug.cpp
     ${BACKEND_DIR}/lib/XmlStreamReader.cpp
@@ -420,7 +411,6 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/InfoElement.cpp
     ${BACKEND_DIR}/worksheet/Worksheet.cpp
     ${BACKEND_DIR}/worksheet/WorksheetElementContainer.cpp
-    ${BACKEND_DIR}/worksheet/WorksheetElementGroup.cpp
     ${BACKEND_DIR}/worksheet/TreeModel.cpp
     ${BACKEND_DIR}/worksheet/plots/AbstractPlot.cpp
     ${BACKEND_DIR}/worksheet/plots/AbstractCoordinateSystem.cpp
@@ -503,6 +493,8 @@ set(NSL_SOURCES
     ${BACKEND_DIR}/nsl/nsl_smooth.c
     ${BACKEND_DIR}/nsl/nsl_sort.c
     ${BACKEND_DIR}/nsl/nsl_stats.c
+    ${BACKEND_DIR}/nsl/nsl_statistical_test.c
+
 )
 
 if(NOT MSVC_FOUND)
@@ -545,8 +537,6 @@ set(GENERATED_SOURCES
 INCLUDE_DIRECTORIES(. ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR})
 set(LABPLOT_SRCS ${GUI_SOURCES})
 ki18n_wrap_ui(LABPLOT_SRCS ${UI_SOURCES})
-# see also QT_MIN_VERSION in CMakeLists.txt
-add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50F00)
 
 # static library
 add_library(labplotnsllib STATIC ${NSL_SOURCES})
@@ -560,18 +550,35 @@ target_include_directories(labplotlib PUBLIC ${FRONTEND_DIR}/widgets) # so that 
 if(qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
     get_target_property(QADS_INCLUDES ads::qt${QT_VERSION_MAJOR}advanceddocking INTERFACE_INCLUDE_DIRECTORIES)
     get_target_property(QADS_LIBRARIES ads::qt${QT_VERSION_MAJOR}advanceddocking INTERFACE_LINK_LIBRARIES)
-    message(STATUS "QADS Found LINK_LIBRARIES: ${QADS_LIBRARIES} INCLUDES: ${QADS_INCLUDES}")
-    target_include_directories(labplotbackendlib PRIVATE ${QADS_INCLUDES})
-    target_include_directories(labplotlib PRIVATE ${QADS_INCLUDES})
+    message(STATUS "QADS Found: ${QADS_LIBRARIES}, ${QADS_INCLUDES}")
+    target_include_directories(labplotbackendlib PUBLIC ${QADS_INCLUDES})
+    target_include_directories(labplotlib PUBLIC ${QADS_INCLUDES})
 endif()
 target_compile_definitions(labplotbackendlib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 target_compile_definitions(labplotlib PRIVATE ${LABPLOT_COMPILE_DEFINITIONS})
 
+if(READSTAT_FOUND)   # system readstat needs libiconv
+    find_library(ICONV_LIBRARIES NAMES iconv libiconv libconv-2)
+    if(ICONV_LIBRARIES)
+        message(status "FOUND iconv: ${ICONV_LIBRARIES}. Adding with --no-as-needed")
+    endif()
+endif()
+if(NOT ICONV_LIBRARIES)
+    set(ICONV_LIBRARIES "")
+endif()
+if(NOT APPLE)
+    set(TURN_OFF_AS_NEEDED "-Wl,--no-as-needed")
+    set(TURN_ON_AS_NEEDED "-Wl,--as-needed")
+endif()
 target_link_libraries(labplotnsllib
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Widgets    # QApplication
+    ${TURN_OFF_AS_NEEDED}
     ${GSL_LIBRARIES}
-    ${GSL_CBLAS_LIBRARIES}
+    ${ICONV_LIBRARIES}
+    ${TURN_ON_AS_NEEDED}
+    ${LIBCERF_LIBRARIES}
+    ${FFTW3_LIBRARIES}
 )
 target_link_libraries(labplotbackendlib
     Qt${QT_MAJOR_VERSION}::Core
@@ -588,18 +595,19 @@ target_link_libraries(labplotbackendlib
     KF${KF_MAJOR_VERSION}::CoreAddons    # kcoreaddons_version.h
     ${ZLIB_LIBRARIES}
     ${LZ4_LIBRARIES}
+    ${TURN_OFF_AS_NEEDED}
     ${GSL_LIBRARIES}
-    ${GSL_CBLAS_LIBRARIES}
+    ${TURN_ON_AS_NEEDED}
     ${HDF5_LIBRARIES}
     ${FFTW3_LIBRARIES}
     ${netCDF_LIBRARIES}
     ${CFITSIO_LIBRARIES}
     ${LIBCERF_LIBRARIES}
     ${MATIO_LIBRARIES}
+    ${READSTAT_LIBRARIES}
     ads::qt${QT_VERSION_MAJOR}advanceddocking
 )
 target_link_libraries(labplotlib
-    Qt${QT_MAJOR_VERSION}::Svg
     Qt${QT_MAJOR_VERSION}::Sql
     Qt${QT_MAJOR_VERSION}::PrintSupport    # QPrinter
 #     Qt${QT_MAJOR_VERSION}::Qml
@@ -622,6 +630,9 @@ target_link_libraries(labplotlib
 if(Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
     target_link_libraries(labplotbackendlib Qt${QT_MAJOR_VERSION}::SerialPort)
     target_link_libraries(labplotlib Qt${QT_MAJOR_VERSION}::SerialPort)
+endif()
+if(Qt${QT_MAJOR_VERSION}Svg_FOUND)
+    target_link_libraries(labplotlib Qt${QT_MAJOR_VERSION}::Svg)
 endif()
 if(Qt${QT_MAJOR_VERSION}Mqtt_FOUND)
     target_link_libraries(labplotbackendlib Qt${QT_MAJOR_VERSION}::Mqtt)
@@ -646,7 +657,7 @@ if(KF${KF_MAJOR_VERSION}Purpose_FOUND)
     target_link_libraries(labplotlib KF${KF_MAJOR_VERSION}::PurposeWidgets)
 endif()
 if(ZSTD_FOUND)
-        target_link_libraries(labplotbackendlib ${ZSTD_LIBRARIES})
+    target_link_libraries(labplotbackendlib ${ZSTD_LIBRARIES})
 endif()
 
 if(Cantor_FOUND)
@@ -660,28 +671,23 @@ if(ENABLE_READSTAT)
     if(BUILD_READSTAT)
         add_dependencies(labplotbackendlib 3rdparty_readstat)
     endif()
-    # link system readstat with iconv
     if(READSTAT_FOUND)
-        find_library(ICONV_LIBRARIES NAMES iconv libiconv libconv-2)
-        if(ICONV_LIBRARIES)
-            target_link_libraries (labplotbackendlib ${ICONV_LIBRARIES})
-        endif()
-    endif()
         target_link_libraries(labplotbackendlib ${READSTAT_LIBRARIES} ${ZLIB_LIBRARIES})
+    endif()
 endif()
 
 if(ENABLE_XLSX)
     # build before use
     if(BUILD_QXLSX)
-        target_include_directories(labplotbackendlib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/QXlsx/header")
+        target_include_directories(labplotbackendlib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/QXlsx/header")
         add_dependencies(labplotbackendlib QXlsx)
-        target_include_directories(labplotlib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/QXlsx/header")
+        target_include_directories(labplotlib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/QXlsx/header")
         add_dependencies(labplotlib QXlsx)
     endif()
 
     if(QXLSX_FOUND)
-        target_include_directories(labplotbackendlib PRIVATE ${QXLSX_INCLUDE_DIR})
-        target_include_directories(labplotlib PRIVATE ${QXLSX_INCLUDE_DIR})
+        target_include_directories(labplotbackendlib PUBLIC ${QXLSX_INCLUDE_DIR})
+        target_include_directories(labplotlib PUBLIC ${QXLSX_INCLUDE_DIR})
     endif()
 
     if(QXLSX_FOUND OR BUILD_QXLSX)
@@ -692,17 +698,17 @@ endif()
 if(ENABLE_LIBORIGIN)
     if(LIBORIGIN_FOUND)
         # ifsystem headers are missing: use the provided
-        target_include_directories(labplotbackendlib PRIVATE ${LIBORIGIN_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
+        target_include_directories(labplotbackendlib PUBLIC ${LIBORIGIN_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
         target_link_libraries(labplotbackendlib ${LIBORIGIN_LIBRARIES})
-        target_include_directories(labplotlib PRIVATE ${LIBORIGIN_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
+        target_include_directories(labplotlib PUBLIC ${LIBORIGIN_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
     else() # own version
-        target_include_directories(labplotbackendlib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
+        target_include_directories(labplotbackendlib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
         target_link_libraries(labplotbackendlib liborigin-static)
-        target_include_directories(labplotlib PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
+        target_include_directories(labplotlib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/liborigin")
     endif()
 endif()
 
-IF(LZ4_FOUND)
+if(LZ4_FOUND)
     target_include_directories(labplotbackendlib PUBLIC ${LZ4_INCLUDE_DIR})
 endif()
 
@@ -776,8 +782,6 @@ endif()
 install(TARGETS labplot ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES ${FRONTEND_DIR}/splash.png ${FRONTEND_DIR}/labplot.ico ${CMAKE_CURRENT_SOURCE_DIR}/../icons/application-x-labplot.ico DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME})
 install(FILES org.kde.labplot.desktop DESTINATION ${KDE_INSTALL_APPDIR})
-# Flatpak still uses this one
-install(FILES org.kde.labplot2.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 install(FILES labplot.xml DESTINATION ${KDE_INSTALL_MIMEDIR})
 # if(${ECM_VERSION} VERSION_GREATER "5.58.0")
 #     install(FILES labplot2_themes.knsrc DESTINATION ${KDE_INSTALL_KNSRCDIR})

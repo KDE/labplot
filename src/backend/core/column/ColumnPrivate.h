@@ -4,7 +4,7 @@
 	Description          : Private data class of Column
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -12,7 +12,7 @@
 #ifndef COLUMNPRIVATE_H
 #define COLUMNPRIVATE_H
 
-#include "backend/core/AbstractColumn.h"
+#include "backend/core/AbstractColumnPrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/IntervalAttribute.h"
 
@@ -21,7 +21,7 @@
 class Column;
 class ColumnSetGlobalFormulaCmd;
 
-class ColumnPrivate : public QObject {
+class ColumnPrivate : public AbstractColumnPrivate {
 	Q_OBJECT
 
 public:
@@ -40,7 +40,11 @@ public:
 	bool copy(const ColumnPrivate*);
 	bool copy(const ColumnPrivate*, int source_start, int dest_start, int num_rows);
 
-	int indexForValue(double x) const;
+	static int calculateMaxSteps(unsigned int value);
+	static int indexForValue(double x, QVector<double>& column, Column::Properties properties, bool smaller);
+	static int indexForValue(const double x, const QVector<QPointF>& column, Column::Properties properties, bool smaller);
+	static int indexForValue(double x, QVector<QLineF>& lines, Column::Properties properties, bool smaller);
+	int indexForValue(double x, bool smaller) const;
 
 	int rowCount() const;
 	int rowCount(double min, double max) const;
@@ -142,12 +146,7 @@ public:
 
 	struct CachedValuesAvailable {
 		void setUnavailable() {
-			statistics = false;
-			min = false;
-			max = false;
-			hasValues = false;
-			dictionary = false;
-			properties = false;
+			*this = CachedValuesAvailable();
 		}
 		bool statistics{false}; // is 'statistics' already available or needs to be (re-)calculated?
 		// are minMax already calculated or needs to be (re-)calculated?
@@ -204,7 +203,7 @@ public:
 		const QVector<Column::ValueLabel<double>>* valueLabels() const;
 		const QVector<Column::ValueLabel<int>>* intValueLabels() const;
 		const QVector<Column::ValueLabel<qint64>>* bigIntValueLabels() const;
-		int indexForValue(double value) const;
+		int indexForValue(double value, bool smaller) const;
 		double valueAt(int index) const;
 		QDateTime dateTimeAt(int index) const;
 		bool isValid(int index) const;
@@ -240,7 +239,7 @@ public:
 	ValueLabels m_labels;
 	int valueLabelsCount() const;
 	int valueLabelsCount(double min, double max) const;
-	int valueLabelsIndexForValue(double value) const;
+	int valueLabelsIndexForValue(double value, bool smaller) const;
 	double valueLabelsValueAt(int index) const;
 	QString valueLabelAt(int index) const;
 	void addValueLabel(qint64, const QString&);
@@ -267,7 +266,7 @@ private:
 	AbstractSimpleFilter* m_outputFilter{nullptr}; // output filter for data type -> string conversion
 	QString m_formula;
 	QVector<Column::FormulaData> m_formulaData;
-	bool m_formulaAutoUpdate{false};
+	bool m_formulaAutoUpdate{true};
 	bool m_formulaAutoResize{true};
 	IntervalAttribute<QString> m_formulas;
 	AbstractColumn::PlotDesignation m_plotDesignation{AbstractColumn::PlotDesignation::NoDesignation};
@@ -295,7 +294,7 @@ private:
 			resizeTo(row + 1);
 
 		static_cast<QVector<T>*>(m_data)->replace(row, new_value);
-		if (!q->m_suppressDataChangedSignal)
+		if (!m_suppressDataChangedSignal)
 			Q_EMIT q->dataChanged(q);
 	}
 
@@ -324,7 +323,7 @@ private:
 				ptr[first + i] = new_values.at(i);
 		}
 
-		if (!q->m_suppressDataChangedSignal)
+		if (!m_suppressDataChangedSignal)
 			Q_EMIT q->dataChanged(q);
 	}
 

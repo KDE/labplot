@@ -102,9 +102,14 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 	ui.teEquation->setPlainText(firstColumn->formula());
 	// variables
 	const auto& formulaData = firstColumn->formulaData();
-	if (formulaData.isEmpty()) { // no formula was used for this column -> add the first variable "x"
-		addVariable();
-		m_variableLineEdits[0]->setText(QStringLiteral("x"));
+	if (formulaData.isEmpty()) {
+		// A formula without any column variable is also possible, for example when just using the rownumber: "i / 1000"
+		// This is a workaround, because right now there is no way to determine which variable is used in the formula and which not
+		// it makes no sense to add variables if they are not used (preventing cyclic dependency) Gitlab #1037
+
+		// no formula was used for this column -> add the first variable "x"
+		// addVariable();
+		// m_variableLineEdits[0]->setText(QStringLiteral("x"));
 	} else { // formula and variables are available
 		// add all available variables and select the corresponding columns
 		const auto& cols = m_spreadsheet->project()->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
@@ -123,7 +128,6 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 				else
 					m_variableDataColumns[i]->setCurrentModelIndex(QModelIndex());
 
-				m_variableDataColumns[i]->useCurrentIndexText(true);
 				m_variableDataColumns[i]->setInvalid(false);
 
 				found = true;
@@ -134,7 +138,6 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 			//->highlight the combobox red
 			if (!found) {
 				m_variableDataColumns[i]->setCurrentModelIndex(QModelIndex());
-				m_variableDataColumns[i]->useCurrentIndexText(false);
 				m_variableDataColumns[i]->setInvalid(
 					true,
 					i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.",

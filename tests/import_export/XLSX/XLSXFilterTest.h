@@ -22,5 +22,6 @@ private Q_SLOTS:
 	void importFile3ColsStartEndColumn();
 	void importFileEmptyCells();
 	void importFileDatetime();
+	void importFormula();
 };
 #endif

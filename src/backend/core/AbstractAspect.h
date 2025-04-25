@@ -279,7 +279,7 @@ public:
 	virtual Project* project();
 	virtual QString path() const;
 	void setHidden(bool);
-	bool hidden() const;
+	bool isHidden() const;
 	void setFixed(bool);
 	bool isFixed() const;
 	void setSelected(bool);
@@ -296,16 +296,16 @@ public:
 
 	// functions related to the handling of the tree-like project structure
 	AbstractAspect* parentAspect() const;
-	AbstractAspect* parent(AspectType type) const;
+	AbstractAspect* parent(AspectType) const;
 	void setParentAspect(AbstractAspect*);
 	Folder* folder();
 	bool isDescendantOf(AbstractAspect* other);
-	void addChild(AbstractAspect*, QUndoCommand* parent = nullptr);
+	void addChild(AbstractAspect*);
 	void addChildFast(AbstractAspect*);
 	virtual void finalizeAdd(){};
-	QVector<AbstractAspect*> children(AspectType type, ChildIndexFlags flags = {}) const;
-	void insertChild(AbstractAspect* child, int index, QUndoCommand* parent = nullptr);
-	void insertChildBefore(AbstractAspect* child, AbstractAspect* before, QUndoCommand* parent = nullptr);
+	QVector<AbstractAspect*> children(AspectType, ChildIndexFlags = {}) const;
+	void insertChild(AbstractAspect* child, int index);
+	void insertChildBefore(AbstractAspect* child, AbstractAspect* before);
 	void insertChildBeforeFast(AbstractAspect* child, AbstractAspect* before);
 	void reparent(AbstractAspect* newParent, int newIndex = -1);
 	/*!
@@ -314,9 +314,9 @@ public:
 	 * \param parent If parent is not nullptr the command will not be executed, but the parent must be executed
 	 * to indirectly execute the created undocommand
 	 */
-	void removeChild(AbstractAspect*, QUndoCommand* parent = nullptr);
+	void removeChild(AbstractAspect*);
 	void removeAllChildren();
-	void moveChild(AbstractAspect*, int steps, QUndoCommand* parent = nullptr);
+	void moveChild(AbstractAspect*, int steps);
 	virtual QVector<AbstractAspect*> dependsOn() const;
 
 	virtual QVector<AspectType> pasteTypes() const;
@@ -340,7 +340,7 @@ public:
 	QVector<T*> children(ChildIndexFlags flags = {}) const {
 		QVector<T*> result;
 		for (auto* child : children()) {
-			if (flags & ChildIndexFlag::IncludeHidden || !child->hidden()) {
+			if (flags & ChildIndexFlag::IncludeHidden || !child->isHidden()) {
 				T* i = dynamic_cast<T*>(child);
 				if (i)
 					result << i;
@@ -357,7 +357,7 @@ public:
 		int i = 0;
 		for (auto* child : children()) {
 			T* c = dynamic_cast<T*>(child);
-			if (c && (flags & ChildIndexFlag::IncludeHidden || !child->hidden()) && index == i++)
+			if (c && (flags & ChildIndexFlag::IncludeHidden || !child->isHidden()) && index == i++)
 				return c;
 		}
 		return nullptr;
@@ -378,7 +378,7 @@ public:
 		int result = 0;
 		for (auto* child : children()) {
 			T* i = dynamic_cast<T*>(child);
-			if (i && (flags & ChildIndexFlag::IncludeHidden || !child->hidden()))
+			if (i && (flags & ChildIndexFlag::IncludeHidden || !child->isHidden()))
 				result++;
 		}
 		return result;
@@ -391,7 +391,7 @@ public:
 			if (child == c)
 				return index;
 			T* i = dynamic_cast<T*>(c);
-			if (i && (flags & ChildIndexFlag::IncludeHidden || !c->hidden()))
+			if (i && (flags & ChildIndexFlag::IncludeHidden || !c->isHidden()))
 				index++;
 		}
 		return -1;
@@ -415,10 +415,12 @@ public:
 	virtual void save(QXmlStreamWriter*) const = 0;
 	virtual bool load(XmlStreamReader*, bool preview) = 0;
 	void setPasted(bool);
-	bool pasted() const;
+	bool isPasted() const;
 
 	static AspectType clipboardAspectType(QString&);
 	static QString uniqueNameFor(const QString& name, const QStringList& names);
+
+	typedef AbstractAspectPrivate Private;
 
 protected:
 	void info(const QString& text) {
@@ -444,10 +446,9 @@ public Q_SLOTS:
 	bool setName(const QString&, NameHandling handling = NameHandling::AutoUnique, QUndoCommand* parent = nullptr);
 	void setComment(const QString&);
 	void remove();
-	void remove(QUndoCommand* parent);
 	void copy();
 	void duplicate();
-	void paste(bool duplicate = false);
+	void paste(bool duplicate = false, int index = -1);
 
 private Q_SLOTS:
 	void moveUp();

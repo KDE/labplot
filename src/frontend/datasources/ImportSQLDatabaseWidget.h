@@ -62,7 +62,7 @@ private:
 	bool m_valid{false};
 	bool m_numeric{false};
 #ifdef HAVE_KF_SYNTAX_HIGHLIGHTING
-	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter;
+	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter{nullptr};
 	KSyntaxHighlighting::Repository m_repository;
 #endif
 

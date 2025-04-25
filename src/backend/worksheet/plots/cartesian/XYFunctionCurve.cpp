@@ -7,13 +7,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYFunctionCurve
-  \brief A xy-curve that is calculated as a function of other curves
-
-  \ingroup worksheet
-*/
-
 #include "XYFunctionCurve.h"
 #include "XYFunctionCurvePrivate.h"
 #include "backend/core/column/Column.h"
@@ -26,6 +19,11 @@
 #include <QElapsedTimer>
 #include <QIcon>
 
+/*!
+ * \class XYFunctionCurve
+ * \brief A xy-curve that is calculated as a function of other curves
+ * \ingroup CartesianPlots
+ */
 XYFunctionCurve::XYFunctionCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYFunctionCurvePrivate(this), AspectType::XYFunctionCurve) {
 	init();
@@ -61,16 +59,25 @@ void XYFunctionCurve::handleAspectUpdated(const QString& aspectPath, const Abstr
 	d->handleAspectUpdated(aspectPath, element);
 }
 
-bool XYFunctionCurve::usingColumn(const Column* column) const {
-	for (const auto& d : functionData()) {
-		const auto* curve = d.curve();
-		if (curve) {
-			if (curve->xColumn() == column || curve->yColumn() == column)
+bool XYFunctionCurve::usingColumn(const AbstractColumn* column, bool indirect) const {
+	if (indirect) {
+		for (const auto& d : functionData()) {
+			const auto* curve = d.curve();
+			if (curve && curve->usingColumn(column, indirect))
 				return true;
 		}
 	}
+	return false; // Does not directly use the curves
+}
 
-	return false;
+QVector<const Plot*> XYFunctionCurve::dependingPlots() const {
+	QVector<const Plot*> plots;
+	for (const auto& d : functionData()) {
+		const auto* curve = d.curve();
+		if (curve)
+			plots.append(curve);
+	}
+	return plots;
 }
 
 // ##############################################################################
@@ -167,11 +174,6 @@ void XYFunctionCurve::functionVariableCurveRemoved(const AbstractAspect* aspect)
 void XYFunctionCurve::functionVariableCurveAdded(const AbstractAspect* aspect) {
 	Q_D(XYFunctionCurve);
 	d->functionVariableCurveAdded(aspect);
-}
-
-void XYFunctionCurve::recalculate() {
-	Q_D(XYFunctionCurve);
-	d->recalculate();
 }
 
 // ##############################################################################
@@ -285,7 +287,7 @@ void XYFunctionCurvePrivate::setFunction(const QString& function, const QVector<
 		if (static_cast<bool>(connection))
 			q->disconnect(connection);
 
-	for (const auto& data : qAsConst(m_functionData)) {
+	for (const auto& data : std::as_const(m_functionData)) {
 		const auto* curve = data.curve();
 		if (curve)
 			connectCurve(curve);
@@ -326,7 +328,7 @@ bool XYFunctionCurvePrivate::recalculateSpecific(const AbstractColumn*, const Ab
 	}
 
 	if (valid) {
-		for (const auto& ed : qAsConst(m_functionData)) {
+		for (const auto& ed : std::as_const(m_functionData)) {
 			const auto* curve = ed.curve();
 			if (!curve || !curve->xColumn() || !curve->yColumn() || curve->xColumn()->rowCount() != numberElements
 				|| curve->yColumn()->rowCount() != numberElements) {
@@ -356,7 +358,7 @@ bool XYFunctionCurvePrivate::recalculateSpecific(const AbstractColumn*, const Ab
 
 		QVector<QVector<double>*> xVectors;
 		QStringList functionVariableNames;
-		for (const auto& functionData : qAsConst(m_functionData)) {
+		for (const auto& functionData : std::as_const(m_functionData)) {
 			const auto* curve = functionData.curve();
 			const auto& varName = functionData.variableName();
 			const auto* column = dynamic_cast<const Column*>(curve->yColumn());
@@ -378,7 +380,9 @@ bool XYFunctionCurvePrivate::recalculateSpecific(const AbstractColumn*, const Ab
 
 		// evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 		auto* parser = ExpressionParser::getInstance();
-		parser->evaluateCartesian(m_function, functionVariableNames, xVectors, yVector);
+		bool valid = parser->tryEvaluateCartesian(m_function, functionVariableNames, xVectors, yVector);
+		if (!valid)
+			DEBUG(Q_FUNC_INFO << ", WARNING: failed parsing function!")
 	}
 	m_result.available = true;
 	m_result.valid = valid;
@@ -391,8 +395,8 @@ bool XYFunctionCurvePrivate::preparationValid(const AbstractColumn*, const Abstr
 	return true;
 }
 
-void XYFunctionCurvePrivate::prepareTmpDataColumn(const AbstractColumn**, const AbstractColumn**) {
-	// Nothing to do
+void XYFunctionCurvePrivate::prepareTmpDataColumn(const AbstractColumn**, const AbstractColumn**) const {
+	// Nothing to do, because we have more than two columns
 }
 
 void XYFunctionCurvePrivate::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) {

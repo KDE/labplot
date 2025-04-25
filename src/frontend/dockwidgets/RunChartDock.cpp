@@ -120,7 +120,7 @@ void RunChartDock::setPlots(QList<RunChart*> list) {
 	// if there are more then one curve in the list, disable the content in the tab "general"
 	if (m_plots.size() == 1) {
 		cbDataColumn->setEnabled(true);
-		cbDataColumn->setColumn(m_plot->dataColumn(), m_plot->dataColumnPath());
+		cbDataColumn->setAspect(m_plot->dataColumn(), m_plot->dataColumnPath());
 	} else {
 		cbDataColumn->setEnabled(false);
 		cbDataColumn->setCurrentModelIndex(QModelIndex());
@@ -145,6 +145,11 @@ void RunChartDock::retranslateUi() {
 	ui.cbCenterMetric->clear();
 	ui.cbCenterMetric->addItem(i18n("Average"), static_cast<int>(RunChart::CenterMetric::Average));
 	ui.cbCenterMetric->addItem(i18n("Median"), static_cast<int>(RunChart::CenterMetric::Median));
+
+	// tooltip texts
+	QString info = i18n("Metric of the dataset used to determine where the center line should be placed at");
+	ui.lCenterMetric->setToolTip(info);
+	ui.cbCenterMetric->setToolTip(info);
 }
 
 /*
@@ -189,7 +194,7 @@ void RunChartDock::centerMetricChanged(int index) {
 // General-Tab
 void RunChartDock::plotDataColumnChanged(const AbstractColumn* column) {
 	CONDITIONAL_LOCK_RETURN;
-	cbDataColumn->setColumn(column, m_plot->dataColumnPath());
+	cbDataColumn->setAspect(column, m_plot->dataColumnPath());
 }
 
 void RunChartDock::plotCenterMetricChanged(RunChart::CenterMetric metric) {

@@ -27,6 +27,8 @@
 
 #include <gsl/gsl_const_cgs.h>
 
+#include <frontend/GuiTools.h>
+
 /*!
 	\class ThemesWidget
 	\brief Widget for showing theme previews and for selecting a theme.
@@ -42,7 +44,7 @@ ThemesWidget::ThemesWidget(QWidget* parent)
 	setDragDropMode(QListView::NoDragDrop);
 
 	// make the icon 3x3cm big and show two of them in the height
-	static const int themeIconSize = std::ceil(3.0 / GSL_CONST_CGS_INCH * QApplication::primaryScreen()->physicalDotsPerInchX());
+	static const int themeIconSize = std::ceil(3.0 / GSL_CONST_CGS_INCH * GuiTools::dpi(this).first);
 	setIconSize(QSize(themeIconSize, themeIconSize));
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 

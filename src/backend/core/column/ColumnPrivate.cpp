@@ -29,6 +29,59 @@
 
 namespace {
 template<typename T>
+void determineNewIndices(T value, T reference, int index, int& lowerIndex, int& higherIndex, bool smaller, bool increase) {
+	if (increase) {
+		if (smaller) {
+			if (value >= reference)
+				higherIndex = index;
+			else if (value < reference)
+				lowerIndex = index;
+		} else {
+			if (value > reference)
+				higherIndex = index;
+			else if (value <= reference)
+				lowerIndex = index;
+		}
+	} else {
+		if (smaller) {
+			if (value >= reference)
+				lowerIndex = index;
+			else if (value < reference)
+				higherIndex = index;
+		} else {
+			if (value > reference)
+				lowerIndex = index;
+			else if (value <= reference)
+				higherIndex = index;
+		}
+	}
+}
+
+template<typename T>
+int finalIndex(T valueLowerIndex, T valueHigherIndex, T reference, int lowerIndex, int higherIndex, bool smaller, bool increase) {
+	if (smaller) {
+		if (increase) {
+			if (std::abs(valueLowerIndex - reference) <= std::abs(valueHigherIndex - reference))
+				return lowerIndex;
+			return higherIndex;
+		}
+		if (std::abs(valueLowerIndex - reference) < std::abs(valueHigherIndex - reference))
+			return lowerIndex;
+		return higherIndex;
+	}
+	// larger index
+	if (increase) {
+		if (std::abs(valueLowerIndex - reference) < std::abs(valueHigherIndex - reference))
+			return lowerIndex;
+		return higherIndex;
+	}
+
+	if (std::abs(valueLowerIndex - reference) <= std::abs(valueHigherIndex - reference))
+		return lowerIndex;
+	return higherIndex;
+}
+
+template<typename T>
 int indexForValueCommon(const T* obj,
 						double x,
 						const std::function<AbstractColumn::ColumnMode(const T*)> columnMode,
@@ -37,7 +90,8 @@ int indexForValueCommon(const T* obj,
 						const std::function<QDateTime(const T*, int)> dateTimeAt,
 						const std::function<AbstractColumn::Properties(const T*)> properties,
 						const std::function<bool(const T*, int)> isValid,
-						const std::function<bool(const T*, int)> isMasked) {
+						const std::function<bool(const T*, int)> isMasked,
+						bool smaller) {
 	int rc = rowCount(obj);
 	double prevValue = 0;
 	qint64 prevValueDateTime = 0;
@@ -50,7 +104,7 @@ int indexForValueCommon(const T* obj,
 		int lowerIndex = 0;
 		int higherIndex = rc - 1;
 
-		unsigned int maxSteps = Column::calculateMaxSteps(static_cast<unsigned int>(rc)) + 1;
+		unsigned int maxSteps = ColumnPrivate::calculateMaxSteps(static_cast<unsigned int>(rc)) + 1;
 
 		switch (mode) {
 		case Column::ColumnMode::Double:
@@ -60,23 +114,10 @@ int indexForValueCommon(const T* obj,
 				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
 				double value = valueAt(obj, index);
 
-				if (higherIndex - lowerIndex < 2) {
-					if (std::abs(valueAt(obj, lowerIndex) - x) < std::abs(valueAt(obj, higherIndex) - x))
-						index = lowerIndex;
-					else
-						index = higherIndex;
+				if (higherIndex - lowerIndex < 2)
+					return finalIndex(valueAt(obj, lowerIndex), valueAt(obj, higherIndex), x, lowerIndex, higherIndex, smaller, increase);
 
-					return index;
-				}
-
-				if (value > x && increase)
-					higherIndex = index;
-				else if (value >= x && !increase)
-					lowerIndex = index;
-				else if (value <= x && increase)
-					lowerIndex = index;
-				else if (value < x && !increase)
-					higherIndex = index;
+				determineNewIndices(value, x, index, lowerIndex, higherIndex, smaller, increase);
 			}
 			break;
 		case Column::ColumnMode::Text:
@@ -89,24 +130,16 @@ int indexForValueCommon(const T* obj,
 				int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
 				qint64 value = dateTimeAt(obj, index).toMSecsSinceEpoch();
 
-				if (higherIndex - lowerIndex < 2) {
-					if (std::abs(dateTimeAt(obj, lowerIndex).toMSecsSinceEpoch() - xInt64)
-						< std::abs(dateTimeAt(obj, higherIndex).toMSecsSinceEpoch() - xInt64))
-						index = lowerIndex;
-					else
-						index = higherIndex;
+				if (higherIndex - lowerIndex < 2)
+					return finalIndex(dateTimeAt(obj, lowerIndex).toMSecsSinceEpoch(),
+									  dateTimeAt(obj, higherIndex).toMSecsSinceEpoch(),
+									  xInt64,
+									  lowerIndex,
+									  higherIndex,
+									  smaller,
+									  increase);
 
-					return index;
-				}
-
-				if (value > xInt64 && increase)
-					higherIndex = index;
-				else if (value >= xInt64 && !increase)
-					lowerIndex = index;
-				else if (value <= xInt64 && increase)
-					lowerIndex = index;
-				else if (value < xInt64 && !increase)
-					higherIndex = index;
+				determineNewIndices(value, xInt64, index, lowerIndex, higherIndex, smaller, increase);
 			}
 		}
 		}
@@ -437,7 +470,7 @@ void ColumnPrivate::ValueLabels::migrateTextTo(AbstractColumn::ColumnMode newMod
 	}
 }
 
-int ColumnPrivate::ValueLabels::indexForValue(double value) const {
+int ColumnPrivate::ValueLabels::indexForValue(double value, bool smaller) const {
 	return indexForValueCommon<ValueLabels>(this,
 											value,
 											std::mem_fn(&ValueLabels::mode),
@@ -446,7 +479,8 @@ int ColumnPrivate::ValueLabels::indexForValue(double value) const {
 											std::mem_fn(&ValueLabels::dateTimeAt),
 											std::mem_fn(&ValueLabels::properties),
 											std::mem_fn<bool(int) const>(&ValueLabels::isValid),
-											std::mem_fn<bool(int) const>(&ValueLabels::isMasked));
+											std::mem_fn<bool(int) const>(&ValueLabels::isMasked),
+											smaller);
 }
 
 bool ColumnPrivate::ValueLabels::isValid(int) const {
@@ -752,7 +786,8 @@ const QVector<Column::ValueLabel<qint64>>* ColumnPrivate::ValueLabels::bigIntVal
 // ######################################################################################################
 
 ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
-	: q(owner)
+	: AbstractColumnPrivate(owner)
+	, q(owner)
 	, m_columnMode(mode) {
 	initIOFilters();
 }
@@ -761,7 +796,8 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
  * \brief Special ctor (to be called from Column only!)
  */
 ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode, void* data)
-	: q(owner)
+	: AbstractColumnPrivate(owner)
+	, q(owner)
 	, m_columnMode(mode)
 	, m_data(data) {
 	initIOFilters();
@@ -1362,9 +1398,7 @@ void ColumnPrivate::replaceData(void* data) {
 	Q_EMIT q->dataAboutToChange(q);
 
 	m_data = data;
-	invalidate();
-	if (!q->m_suppressDataChangedSignal)
-		Q_EMIT q->dataChanged(q);
+	q->setChanged();
 }
 
 /**
@@ -1426,10 +1460,7 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
 	}
 	}
 
-	invalidate();
-
-	if (!q->m_suppressDataChangedSignal)
-		Q_EMIT q->dataChanged(q);
+	q->setChanged();
 
 	DEBUG(Q_FUNC_INFO << ", done")
 	return true;
@@ -1492,10 +1523,7 @@ bool ColumnPrivate::copy(const AbstractColumn* source, int source_start, int des
 		break;
 	}
 
-	invalidate();
-
-	if (!q->m_suppressDataChangedSignal)
-		Q_EMIT q->dataChanged(q);
+	q->setChanged();
 
 	return true;
 }
@@ -1552,10 +1580,7 @@ bool ColumnPrivate::copy(const ColumnPrivate* other) {
 		break;
 	}
 
-	invalidate();
-
-	if (!q->m_suppressDataChangedSignal)
-		Q_EMIT q->dataChanged(q);
+	q->setChanged();
 
 	return true;
 }
@@ -1617,10 +1642,7 @@ bool ColumnPrivate::copy(const ColumnPrivate* source, int source_start, int dest
 		break;
 	}
 
-	invalidate();
-
-	if (!q->m_suppressDataChangedSignal)
-		Q_EMIT q->dataChanged(q);
+	q->setChanged();
 
 	return true;
 }
@@ -1876,7 +1898,7 @@ void ColumnPrivate::removeRows(int first, int count) {
 	invalidate();
 }
 
-int ColumnPrivate::indexForValue(double x) const {
+int ColumnPrivate::indexForValue(double x, bool smaller) const {
 	return indexForValueCommon<Column>(q,
 									   x,
 									   std::mem_fn(&Column::columnMode),
@@ -1885,7 +1907,190 @@ int ColumnPrivate::indexForValue(double x) const {
 									   std::mem_fn(&Column::dateTimeAt),
 									   std::mem_fn(&Column::properties),
 									   std::mem_fn<bool(int) const>(&Column::isValid),
-									   std::mem_fn<bool(int) const>(&Column::isMasked));
+									   std::mem_fn<bool(int) const>(&Column::isMasked),
+									   smaller);
+}
+
+/*!
+ * calculates log2(x)+1 for an integer value.
+ * Used in y(double x) to calculate the maximum steps
+ * source: https://stackoverflow.com/questions/11376288/fast-computing-of-log2-for-64-bit-integers
+ * source: https://graphics.stanford.edu/~seander/bithacks.html#IntegerLogLookup
+ * @param value
+ * @return returns calculated value
+ */
+// TODO: testing if it is faster than calculating log2.
+// TODO: put into NSL when useful
+int ColumnPrivate::calculateMaxSteps(unsigned int value) {
+	const std::array<signed char, 256> LogTable256 = {
+		-1, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+		5,	5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+		6,	6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7,
+		7,	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+		7,	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+		7,	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7};
+
+	unsigned int r; // r will be lg(v)
+	unsigned int t, tt; // temporaries
+	if ((tt = value >> 16))
+		r = (t = tt >> 8) ? 24 + LogTable256[t] : 16 + LogTable256[tt];
+	else
+		r = (t = value >> 8) ? 8 + LogTable256[t] : LogTable256[value];
+
+	return r + 1;
+}
+
+/*!
+ * Find index which corresponds to a @p x . In a vector of values
+ * When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
+ * @param x
+ * @return -1 if index not found, otherwise the index
+ */
+int ColumnPrivate::indexForValue(double x, QVector<double>& column, Column::Properties properties, bool smaller) {
+	int rowCount = column.count();
+	if (rowCount == 0)
+		return -1;
+
+	if (properties == AbstractColumn::Properties::MonotonicIncreasing || properties == AbstractColumn::Properties::MonotonicDecreasing) {
+		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
+		bool increase = true;
+		if (properties == AbstractColumn::Properties::MonotonicDecreasing)
+			increase = false;
+
+		int lowerIndex = 0;
+		int higherIndex = rowCount - 1;
+
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount)) + 1;
+
+		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
+			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
+			double value = column.at(index);
+
+			if (higherIndex - lowerIndex < 2)
+				return finalIndex(column.at(lowerIndex), column.at(higherIndex), x, lowerIndex, higherIndex, smaller, increase);
+
+			determineNewIndices(value, x, index, lowerIndex, higherIndex, smaller, increase);
+		}
+	} else if (properties == AbstractColumn::Properties::Constant) {
+		return 0;
+	} else { // AbstractColumn::Properties::No || AbstractColumn::Properties::NonMonotonic
+		// simple way
+		int index = 0;
+		double prevValue = column.at(0);
+		for (int row = 0; row < rowCount; row++) {
+			double value = column.at(row);
+			if (std::abs(value - x) <= std::abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
+				prevValue = value;
+				index = row;
+			}
+		}
+		return index;
+	}
+	return -1;
+}
+
+/*!
+ * Find index which corresponds to a @p x . In a vector of values
+ * When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
+ * @param x
+ * @return -1 if index not found, otherwise the index
+ */
+int ColumnPrivate::indexForValue(const double x, const QVector<QPointF>& points, Column::Properties properties, bool smaller) {
+	int rowCount = points.count();
+
+	if (rowCount == 0)
+		return -1;
+
+	if (properties == AbstractColumn::Properties::MonotonicIncreasing || properties == AbstractColumn::Properties::MonotonicDecreasing) {
+		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
+		bool increase = true;
+		if (properties == AbstractColumn::Properties::MonotonicDecreasing)
+			increase = false;
+
+		int lowerIndex = 0;
+		int higherIndex = rowCount - 1;
+
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount)) + 1;
+
+		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
+			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
+			double value = points.at(index).x();
+
+			if (higherIndex - lowerIndex < 2)
+				return finalIndex(points.at(lowerIndex).x(), points.at(higherIndex).x(), x, lowerIndex, higherIndex, smaller, increase);
+
+			determineNewIndices(value, x, index, lowerIndex, higherIndex, smaller, increase);
+		}
+
+	} else if (properties == AbstractColumn::Properties::Constant) {
+		return 0;
+	} else {
+		// AbstractColumn::Properties::No || AbstractColumn::Properties::NonMonotonic
+		// naiv way
+		double prevValue = points.at(0).x();
+		int index = 0;
+		for (int row = 0; row < rowCount; row++) {
+			double value = points.at(row).x();
+			if (std::abs(value - x) <= std::abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
+				prevValue = value;
+				index = row;
+			}
+		}
+		return index;
+	}
+	return -1;
+}
+
+/*!
+ * Find index which corresponds to a @p x . In a vector of values
+ * When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
+ * @param x
+ * @return -1 if index not found, otherwise the index
+ */
+int ColumnPrivate::indexForValue(double x, QVector<QLineF>& lines, AbstractColumn::Properties properties, bool smaller) {
+	int rowCount = lines.count();
+	if (rowCount == 0)
+		return -1;
+
+	// use only p1 to find index
+	if (properties == AbstractColumn::Properties::MonotonicIncreasing || properties == AbstractColumn::Properties::MonotonicDecreasing) {
+		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
+		bool increase = true;
+		if (properties == AbstractColumn::Properties::MonotonicDecreasing)
+			increase = false;
+
+		int lowerIndex = 0;
+		int higherIndex = rowCount - 1;
+
+		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount)) + 1;
+
+		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
+			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex) / 2);
+			double value = lines.at(index).p1().x();
+
+			if (higherIndex - lowerIndex < 2)
+				return finalIndex(lines.at(lowerIndex).p1().x(), lines.at(higherIndex).p1().x(), x, lowerIndex, higherIndex, smaller, increase);
+
+			determineNewIndices(value, x, index, lowerIndex, higherIndex, smaller, increase);
+		}
+
+	} else if (properties == AbstractColumn::Properties::Constant) {
+		return 0;
+	} else {
+		// AbstractColumn::Properties::No || AbstractColumn::Properties::NonMonotonic
+		// naiv way
+		int index = 0;
+		double prevValue = lines.at(0).p1().x();
+		for (int row = 0; row < rowCount; row++) {
+			double value = lines.at(row).p1().x();
+			if (std::abs(value - x) <= std::abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
+				prevValue = value;
+				index = row;
+			}
+		}
+		return index;
+	}
+	return -1;
 }
 
 //! Return the column name
@@ -1999,8 +2204,8 @@ int ColumnPrivate::valueLabelsCount(double min, double max) const {
 	return m_labels.count(min, max);
 }
 
-int ColumnPrivate::valueLabelsIndexForValue(double value) const {
-	return m_labels.indexForValue(value);
+int ColumnPrivate::valueLabelsIndexForValue(double value, bool smaller) const {
+	return m_labels.indexForValue(value, smaller);
 }
 
 double ColumnPrivate::valueLabelsValueAt(int index) const {
@@ -2148,16 +2353,18 @@ void ColumnPrivate::setFormulVariableColumn(Column* c) {
 	}
 }
 
-struct PayloadColumn : public Payload {
-	PayloadColumn(const QVector<Column::FormulaData>& data)
-		: Payload(true)
-		, formulaData(data) {
+struct PayloadColumn : public Parsing::Payload {
+	PayloadColumn(const QVector<Column::FormulaData>& data, const QVector<double>& y)
+		: Parsing::Payload(true)
+		, formulaData(data)
+		, y(y) {
 	}
 	const QVector<Column::FormulaData>& formulaData;
+	const QVector<double>& y; // current values
 };
 
 #define COLUMN_FUNCTION(function_name, evaluation_function)                                                                                                    \
-	double column##function_name(const char* variable, const std::weak_ptr<Payload> payload) {                                                                 \
+	double column##function_name(const std::string_view& variable, const std::weak_ptr<Parsing::Payload> payload) {                                            \
 		const auto p = std::dynamic_pointer_cast<PayloadColumn>(payload.lock());                                                                               \
 		if (!p) {                                                                                                                                              \
 			assert(p); /* Debug build */                                                                                                                       \
@@ -2199,7 +2406,31 @@ COLUMN_FUNCTION(Skew, statistics().skewness)
 COLUMN_FUNCTION(Kurt, statistics().kurtosis)
 COLUMN_FUNCTION(Entropy, statistics().entropy)
 
-double columnQuantile(double p, const char* variable, const std::weak_ptr<Payload> payload) {
+double cell_curr_column(double row, const std::weak_ptr<Parsing::Payload> payload) {
+	const auto pd = std::dynamic_pointer_cast<PayloadColumn>(payload.lock());
+	if (!pd) {
+		assert(pd); // Debug build
+		return NAN;
+	}
+	int index = (int)row - 1;
+	if (index >= 0 && pd->y.length() > index)
+		return pd->y.at(index);
+	return NAN;
+}
+
+double cell_curr_column_defaultvalue(double row, double defaultValue, const std::weak_ptr<Parsing::Payload> payload) {
+	const auto pd = std::dynamic_pointer_cast<PayloadColumn>(payload.lock());
+	if (!pd) {
+		assert(pd); // Debug build
+		return NAN;
+	}
+	int index = (int)row - 1;
+	if (index >= 0 && pd->y.length() > index)
+		return pd->y.at(index);
+	return defaultValue;
+}
+
+double columnQuantile(double p, const std::string_view& variable, const std::weak_ptr<Parsing::Payload> payload) {
 	const auto pd = std::dynamic_pointer_cast<PayloadColumn>(payload.lock());
 	if (!pd) {
 		assert(pd); // Debug build
@@ -2255,7 +2486,7 @@ double columnQuantile(double p, const char* variable, const std::weak_ptr<Payloa
 	return value;
 }
 
-double columnPercentile(double p, const char* variable, const std::weak_ptr<Payload> payload) {
+double columnPercentile(double p, const std::string_view& variable, const std::weak_ptr<Parsing::Payload> payload) {
 	return columnQuantile(p / 100., variable, payload);
 }
 
@@ -2283,8 +2514,7 @@ void ColumnPrivate::updateFormula() {
 			valid = false;
 			break;
 		}
-		auto varName = formulaData.variableName();
-		formulaVariableNames << varName;
+		formulaVariableNames << formulaData.variableName();
 
 		if (column->columnMode() == AbstractColumn::ColumnMode::Double)
 			xVectors << static_cast<QVector<double>*>(column->data());
@@ -2317,42 +2547,46 @@ void ColumnPrivate::updateFormula() {
 		//->"clean" the result vector first
 		QVector<double> new_data(rowCount(), NAN);
 
-		const auto payload = std::make_shared<PayloadColumn>(m_formulaData);
+		const auto payload = std::make_shared<PayloadColumn>(m_formulaData, new_data);
 
 		// evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 		auto* parser = ExpressionParser::getInstance();
-		parser->setSpecialFunction1(colfun_size, columnSize, payload);
-		parser->setSpecialFunction1(colfun_min, columnMin, payload);
-		parser->setSpecialFunction1(colfun_max, columnMax, payload);
-		parser->setSpecialFunction1(colfun_mean, columnMean, payload);
-		parser->setSpecialFunction1(colfun_median, columnMedian, payload);
-		parser->setSpecialFunction1(colfun_stdev, columnStdev, payload);
-		parser->setSpecialFunction1(colfun_var, columnVar, payload);
-		parser->setSpecialFunction1(colfun_gm, columnGm, payload);
-		parser->setSpecialFunction1(colfun_hm, columnHm, payload);
-		parser->setSpecialFunction1(colfun_chm, columnChm, payload);
-		parser->setSpecialFunction1(colfun_mode, columnStatisticsMode, payload);
-		parser->setSpecialFunction1(colfun_quartile1, columnQuartile1, payload);
-		parser->setSpecialFunction1(colfun_quartile3, columnQuartile3, payload);
-		parser->setSpecialFunction1(colfun_iqr, columnIqr, payload);
-		parser->setSpecialFunction1(colfun_percentile1, columnPercentile1, payload);
-		parser->setSpecialFunction1(colfun_percentile5, columnPercentile5, payload);
-		parser->setSpecialFunction1(colfun_percentile10, columnPercentile10, payload);
-		parser->setSpecialFunction1(colfun_percentile90, columnPercentile90, payload);
-		parser->setSpecialFunction1(colfun_percentile95, columnPercentile95, payload);
-		parser->setSpecialFunction1(colfun_percentile99, columnPercentile99, payload);
-		parser->setSpecialFunction1(colfun_trimean, columnTrimean, payload);
-		parser->setSpecialFunction1(colfun_meandev, columnMeandev, payload);
-		parser->setSpecialFunction1(colfun_meandevmedian, columnMeandevmedian, payload);
-		parser->setSpecialFunction1(colfun_mediandev, columnMediandev, payload);
-		parser->setSpecialFunction1(colfun_skew, columnSkew, payload);
-		parser->setSpecialFunction1(colfun_kurt, columnKurt, payload);
-		parser->setSpecialFunction1(colfun_entropy, columnEntropy, payload);
-		parser->setSpecialFunction2(colfun_percentile, columnPercentile, payload);
-		parser->setSpecialFunction2(colfun_quantile, columnQuantile, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_size, columnSize, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_min, columnMin, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_max, columnMax, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_mean, columnMean, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_median, columnMedian, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_stdev, columnStdev, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_var, columnVar, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_gm, columnGm, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_hm, columnHm, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_chm, columnChm, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_mode, columnStatisticsMode, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_quartile1, columnQuartile1, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_quartile3, columnQuartile3, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_iqr, columnIqr, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_percentile1, columnPercentile1, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_percentile5, columnPercentile5, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_percentile10, columnPercentile10, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_percentile90, columnPercentile90, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_percentile95, columnPercentile95, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_percentile99, columnPercentile99, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_trimean, columnTrimean, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_meandev, columnMeandev, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_meandevmedian, columnMeandevmedian, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_mediandev, columnMediandev, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_skew, columnSkew, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_kurt, columnKurt, payload);
+		parser->setSpecialFunctionVariablePayload(Parsing::colfun_entropy, columnEntropy, payload);
+		parser->setSpecialFunctionValueVariablePayload(Parsing::colfun_percentile, columnPercentile, payload);
+		parser->setSpecialFunctionValueVariablePayload(Parsing::colfun_quantile, columnQuantile, payload);
+		parser->setSpecialFunctionValuePayload(Parsing::cell_curr_column, cell_curr_column, payload);
+		parser->setSpecialFunction2ValuePayload(Parsing::cell_curr_column_default, cell_curr_column_defaultvalue, payload);
 
 		QDEBUG(Q_FUNC_INFO << ", Calling evaluateCartesian(). formula: " << m_formula << ", var names: " << formulaVariableNames)
-		parser->evaluateCartesian(m_formula, formulaVariableNames, xVectors, &new_data);
+		bool valid = parser->tryEvaluateCartesian(m_formula, formulaVariableNames, xVectors, &new_data);
+		if (!valid)
+			DEBUG(Q_FUNC_INFO << ", Failed parsing formula!")
 		DEBUG(Q_FUNC_INFO << ", Calling replaceValues()")
 		replaceValues(-1, new_data);
 
@@ -2762,9 +2996,8 @@ void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) 
 			return; // failed to allocate memory
 	}
 
-	invalidate();
-
 	Q_EMIT q->dataAboutToChange(q);
+
 	if (first < 0)
 		*static_cast<QVector<double>*>(m_data) = new_values;
 	else {
@@ -2776,8 +3009,7 @@ void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) 
 			ptr[first + i] = new_values.at(i);
 	}
 
-	if (!q->m_suppressDataChangedSignal)
-		Q_EMIT q->dataChanged(q);
+	q->setChanged();
 }
 
 void ColumnPrivate::addValueLabel(const QString& value, const QString& label) {
@@ -3107,7 +3339,7 @@ void ColumnPrivate::calculateStatistics() {
 		rowData.push_back(val);
 	}
 
-	const size_t notNanCount = rowData.size();
+	const int notNanCount = rowData.size();
 
 	if (notNanCount == 0) {
 		available.statistics = true;
@@ -3139,8 +3371,10 @@ void ColumnPrivate::calculateStatistics() {
 	} else
 		statistics.geometricMean = std::pow(columnProduct, 1.0 / notNanCount);
 
-	statistics.harmonicMean = notNanCount / columnSumNeg;
-	statistics.contraharmonicMean = columnSumSquare / columnSum;
+	if (columnSumNeg != 0.)
+		statistics.harmonicMean = notNanCount / columnSumNeg;
+	if (columnSum != 0.)
+		statistics.contraharmonicMean = columnSumSquare / columnSum;
 
 	// calculate the mode, the most frequent value in the data set
 	int maxFreq = 0;
@@ -3189,7 +3423,7 @@ void ColumnPrivate::calculateStatistics() {
 	absoluteMedianList.reserve(notNanCount);
 	absoluteMedianList.resize(notNanCount);
 
-	for (size_t row = 0; row < notNanCount; ++row) {
+	for (int row = 0; row < notNanCount; ++row) {
 		double val = rowData.value(row);
 		statistics.variance += gsl_pow_2(val - statistics.arithmeticMean);
 		statistics.meanDeviation += std::abs(val - statistics.arithmeticMean);

@@ -4,26 +4,31 @@
 	Description          : Text label supporting reach text and latex formatting
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef TEXTLABEL_H
 #define TEXTLABEL_H
 
-#include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "tools/TeXRenderer.h"
 
 #include <QTextEdit>
 
+class Line;
 class QBrush;
 class QFont;
 class TextLabelPrivate;
 class CartesianPlot;
 class QPen;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT TextLabel : public WorksheetElement {
+#else
 class TextLabel : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:
@@ -119,8 +124,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont)
 
 	BASIC_D_ACCESSOR_DECL(BorderShape, borderShape, BorderShape)
-	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
-	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
+	Line* borderLine() const;
 
 	void setZoomFactor(double);
 	QRectF size();
@@ -160,11 +164,7 @@ Q_SIGNALS:
 	void teXFontChanged(const QFont);
 	void fontColorChanged(const QColor);
 	void backgroundColorChanged(const QColor);
-
 	void borderShapeChanged(TextLabel::BorderShape);
-	void borderPenChanged(QPen&);
-	void borderOpacityChanged(float);
-
 	void teXImageUpdated(const TeXRenderer::Result&);
 };
 

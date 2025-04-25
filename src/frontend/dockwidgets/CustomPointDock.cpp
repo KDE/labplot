@@ -3,8 +3,8 @@
 	Project              : LabPlot
 	Description          : widget for CustomPoint properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2015-2023 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -41,16 +41,8 @@ CustomPointDock::CustomPointDock(QWidget* parent)
 		layout->setVerticalSpacing(2);
 	}
 
-	CustomPointDock::updateLocale();
-
-	// Positioning and alignment
-	ui.cbPositionX->addItem(i18n("Left"));
-	ui.cbPositionX->addItem(i18n("Center"));
-	ui.cbPositionX->addItem(i18n("Right"));
-
-	ui.cbPositionY->addItem(i18n("Top"));
-	ui.cbPositionY->addItem(i18n("Center"));
-	ui.cbPositionY->addItem(i18n("Bottom"));
+	updateLocale();
+	retranslateUi();
 
 	// SLOTS
 	// General
@@ -127,6 +119,21 @@ void CustomPointDock::updateLocale() {
 	ui.sbPositionXLogical->setLocale(numberLocale);
 	ui.sbPositionYLogical->setLocale(numberLocale);
 	symbolWidget->updateLocale();
+}
+
+void CustomPointDock::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
+
+	// Positioning and alignment
+	ui.cbPositionX->clear();
+	ui.cbPositionX->addItem(i18n("Left"));
+	ui.cbPositionX->addItem(i18n("Center"));
+	ui.cbPositionX->addItem(i18n("Right"));
+
+	ui.cbPositionY->clear();
+	ui.cbPositionY->addItem(i18n("Top"));
+	ui.cbPositionY->addItem(i18n("Center"));
+	ui.cbPositionY->addItem(i18n("Bottom"));
 }
 
 //**********************************************************
@@ -279,8 +286,8 @@ void CustomPointDock::bindingChanged(bool checked) {
 //"General"-tab
 void CustomPointDock::pointPositionChanged(const WorksheetElement::PositionWrapper& position) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit));
-	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit));
+	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(position.point.x(), m_units), m_worksheetUnit));
+	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(position.point.y(), m_units), m_worksheetUnit));
 	ui.cbPositionX->setCurrentIndex(static_cast<int>(position.horizontalPosition));
 	ui.cbPositionY->setCurrentIndex(static_cast<int>(position.verticalPosition));
 }
@@ -314,10 +321,10 @@ void CustomPointDock::load() {
 	// widgets for positioning using absolute plot distances
 	ui.cbPositionX->setCurrentIndex((int)m_point->position().horizontalPosition);
 	positionXChanged(ui.cbPositionX->currentIndex());
-	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(m_point->position().point.x(), m_worksheetUnit));
+	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_point->position().point.x(), m_units), m_worksheetUnit));
 	ui.cbPositionY->setCurrentIndex((int)m_point->position().verticalPosition);
 	positionYChanged(ui.cbPositionY->currentIndex());
-	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(m_point->position().point.y(), m_worksheetUnit));
+	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(roundSceneValue(m_point->position().point.y(), m_units), m_worksheetUnit));
 
 	// widgets for positioning using logical plot coordinates
 	bool allowLogicalCoordinates = (m_point->plot() != nullptr);

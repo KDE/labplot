@@ -1,6 +1,7 @@
 # see https://community.kde.org/Policies/CMake_Coding_Style
 cmake_minimum_required(VERSION 3.17.0 FATAL_ERROR)
-project(labplot VERSION 2.11.80 LANGUAGES CXX C)
+project(labplot VERSION 2.12.80 LANGUAGES CXX C)
+set(YEAR 2025)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -9,13 +10,13 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core)
-message(STATUS "Found Qt version ${QT_VERSION}")
-set(QT_MAJOR_VERSION ${QT_VERSION_MAJOR})
-# see also -DQT_DISABLE_DEPRECATED_BEFORE in src/CMakeLists.txt
+set(QT_MAJOR_VERSION 6)
 set(QT_MIN_VERSION "6.5.0")
+set(QT_VERSION_MAJOR ${QT_MAJOR_VERSION}) # used by QADS
+add_definitions(-DQT_DISABLE_DEPRECATED_UP_TO=0x60000)
+
 set(KF_MAJOR_VERSION "6")
-set(KF_MIN_VERSION "5.240.0")
+set(KF_MIN_VERSION "6.3.0")
 
 set(APPLE_SUPPRESS_X11_WARNING ON)
 
@@ -37,6 +38,7 @@ include(FeatureSummary)
 string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 
 find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
+    Core
     Concurrent
     Gui
 #     Qml
@@ -44,7 +46,6 @@ find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONEN
 #     QuickWidgets
     PrintSupport
     Sql
-    Svg
     Widgets
     Test
 )
@@ -59,7 +60,6 @@ find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     ConfigWidgets
     CoreAddons
     Crash
-    DocTools
     I18n
     IconThemes
     KIO
@@ -69,6 +69,7 @@ find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     NewStuffCore
     NewStuff
 OPTIONAL_COMPONENTS
+    DocTools
     Service
     Parts
     Purpose
@@ -100,7 +101,7 @@ else()
     message(STATUS "KF SyntaxHighlighting not found")
 endif()
 
-find_package(KF${KF_MAJOR_VERSION}UserFeedback)
+find_package(KF${KF_MAJOR_VERSION}UserFeedback QUIET)
 if(KF${KF_MAJOR_VERSION}UserFeedback_FOUND)
     message(STATUS "Found KF${KF_MAJOR_VERSION}UserFeedback")
     add_definitions(-DHAVE_KUSERFEEDBACK)
@@ -117,22 +118,36 @@ if(${ENABLE_COMPILER_OPTIMIZATION})
 else()
     set(COMPILER_OPTIMIZATION_FLAG "-O0")
 endif()
-set (GENERIC_FLAGS "-Wall -Wextra -Wundef -Wpointer-arith -Wunreachable-code -Wunused -Wdeprecated-declarations -fno-omit-frame-pointer -fstack-protector")
-set (GENERIC_GNU_FLAGS "${COMPILER_OPTIMIZATION_FLAG} -Wcast-align -Wswitch-enum -fvisibility=default -pedantic")
+set (GENERIC_FLAGS "-Wall -Wextra -Wundef -Wpointer-arith -Wunreachable-code -Wunused -Wdeprecated-declarations -fno-omit-frame-pointer -fstack-protector-strong")
+#set (GENERIC_GNU_FLAGS "${COMPILER_OPTIMIZATION_FLAG} -Wcast-align -Wswitch-enum -fvisibility=default -pedantic")
+set (GENERIC_GNU_FLAGS "${COMPILER_OPTIMIZATION_FLAG} -Wcast-align -Wswitch-enum -fvisibility=default -pedantic -ffunction-sections -fdata-sections -pipe")
+if(NOT APPLE)
+    set (GENERIC_GNU_LINK_FLAGS "-Wl,--gc-sections -Wl,--as-needed -Wl,--no-undefined")
+endif()
 set (GENERIC_C_FLAGS "${GENERIC_FLAGS} -fno-exceptions")
 # liborigin needs exceptions
 set (GENERIC_CXX_FLAGS "${GENERIC_FLAGS} -fexceptions -std=c++17")
 
 if("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
     message(STATUS "GNU C compiler ${CMAKE_C_COMPILER_VERSION} detected, adding compile flags")
+    # -flto is too heavy even with TMPDIR=/dev/shm
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GENERIC_C_FLAGS} ${GENERIC_GNU_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GENERIC_GNU_LINK_FLAGS}")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${GENERIC_GNU_LINK_FLAGS}")
     if(CMAKE_C_COMPILER_VERSION VERSION_GREATER 10.99 AND CMAKE_C_COMPILER_VERSION VERSION_LESS 12)	# GCC 11 fails building readstat 1.1.8
         message(STATUS "Building ReadStat disabled due to GNU C compiler version 11")
         set(DONT_BUILD_READSTAT TRUE)
     endif()
+    if(CMAKE_C_COMPILER_VERSION VERSION_GREATER_EQUAL 14) # overwrite -Werror=hardened to not fail
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error=hardened")
+    endif()
 elseif("${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
     message(STATUS "Clang C compiler ${CMAKE_C_COMPILER_VERSION} detected, adding compile flags")
+    # even -flto=thin takes too long
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE ${GENERIC_C_FLAGS} ${GENERIC_GNU_FLAGS}")
+    # TRY: -flto=thin -flto-jobs=2
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GENERIC_GNU_LINK_FLAGS}")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${GENERIC_GNU_LINK_FLAGS}")
 elseif("${CMAKE_C_COMPILER_ID}" MATCHES "Intel")
     message(STATUS "Intel C compiler detected, adding compile flags")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE -O3 ${GENERIC_C_FLAGS}")
@@ -153,18 +168,24 @@ else()
     message(STATUS "UNKNOWN C compiler, adding compile flags")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GENERIC_C_FLAGS}")
 endif()
+message(STATUS "CFLAGS =${CMAKE_C_FLAGS}")
 
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
-    if(QT_VERSION VERSION_GREATER_EQUAL 5.7.0 AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "9")
+    if(QT_VERSION VERSION_GREATER_EQUAL 6.7.0 AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "9")
 	# see Qt supported compiler
         message(FATAL_ERROR "Insufficient GNU C++ version ${CMAKE_CXX_COMPILER_VERSION} (Qt 6.7+ requires at least GNU g++ 9)")
     else()
         message(STATUS "GNU C++ compiler ${CMAKE_CXX_COMPILER_VERSION} detected, adding compile flags")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant") # -Wzero-as-null-pointer-constant since version 5
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant")
+	# see linker flags of gcc
+    endif()
+    if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 14) # overwrite -Werror=hardened to not fail
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=hardened")
     endif()
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     message(STATUS "Clang C++ compiler ${CMAKE_CXX_COMPILER_VERSION} detected, adding compile flags")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant") # -Wzero-as-null-pointer-constant since version 5
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant")
+    # see linker flags of clang
 elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Intel")
     message(STATUS "Intel C++ compiler detected, adding compile flags")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE ${GENERIC_CXX_FLAGS}")
@@ -188,6 +209,7 @@ else()
     message(STATUS "UNKNOWN C++ compiler, adding compile flags")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS}")
 endif()
+message(STATUS "CXXFLAGS =${CMAKE_CXX_FLAGS}")
 
 ##########################################################
 
@@ -213,10 +235,12 @@ if(NOT WIN32)
     add_definitions(-DQT_STRICT_ITERATORS)
 endif()
 
-include_directories(${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 add_definitions(-DLVERSION=\"${labplot_VERSION}\")
-add_definitions(-DCXX_COMPILER=\"${CMAKE_CXX_COMPILER_ID}\ ${CMAKE_CXX_COMPILER_VERSION}\")
+add_definitions(-DYEAR=\"${YEAR}\")
+add_definitions(-DCXX_COMPILER_ID=\"${CMAKE_CXX_COMPILER_ID}\")
+add_definitions(-DCXX_COMPILER_VERSION=\"${CMAKE_CXX_COMPILER_VERSION}\")
 add_definitions(-DCXX_COMPILER_FLAGS=\"${CMAKE_CXX_FLAGS}\")
 set(BUILD_SHARED_LIBS true)
 
@@ -273,15 +297,11 @@ endif()
 option(ENABLE_MATIO "Build with Matio support" ON)
 option(ENABLE_MQTT "Build with MQTT support" ON)
 option(ENABLE_QTSERIALPORT "Build with QtSerialPort support" ON)
+option(ENABLE_QTSVG "Build with QtSvg support" ON)
 option(ENABLE_DISCOUNT "Build with Discount support" ON)
 option(ENABLE_XLSX "Build with XLSX (Excel) support" ON)
 option(ENABLE_MCAP "Build with MCAP support" ON)
-
-if(WIN32 AND QT_MAJOR_VERSION LESS 6)    # C++17 needed by Orcus not working with MSVC2019 (Craft QT5-LTS)
-    option(ENABLE_ORCUS "Build with Orcus support" OFF)
-else()
-    option(ENABLE_ORCUS "Build with Orcus support" ON)
-endif()
+option(ENABLE_ORCUS "Build with Orcus support" ON)
 option(ENABLE_VECTOR_BLF "Build with Vector BLF file format support" ON)
 option(ENABLE_EIGEN3 "Build with Eigen3 support" ON)
 if(APPLE)
@@ -295,7 +315,9 @@ endif()
 option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
 option(ENABLE_TESTS "Build with tests" ON)
 option(ENABLE_SDK "Build with SDK support" ON)
-
+if(ENABLE_SDK)
+    option(ENABLE_SDK_EXAMPLES "Build SDK examples" OFF)
+endif()
 
 ### OS macros ####################################
 if(WIN32)
@@ -310,17 +332,19 @@ endif()
 
 ### GSL (required) ###############################
 find_package(GSL REQUIRED)
+message(STATUS "GSL libraries: ${GSL_LIBRARIES}, GSL library: ${GSL_LIBRARY}, GSL CBLAS library: ${GSL_CBLAS_LIBRARY}")
 
-find_package(Poppler "0.62.0" COMPONENTS Qt${QT_MAJOR_VERSION})
+### Poppler (optional) ###############################
+find_package(Poppler "0.62.0" COMPONENTS Qt${QT_MAJOR_VERSION} QUIET)
 if(Poppler_FOUND)
     include_directories(${Poppler_INCLUDE_DIRS})
-    message(STATUS "Poppler libraries: ${Poppler_LIBRARIES}")
+    message(STATUS "Poppler libraries: ${Poppler_LIBRARIES} (version \"${Poppler_VERSION}\")")
     add_definitions(-DHAVE_POPPLER)
 endif()
 
 ### liborigin (included) ###############################
 if(ENABLE_LIBORIGIN)
-    find_package(LibOrigin)
+    find_package(LibOrigin QUIET)
     if(NOT LIBORIGIN_FOUND)    # use own version
         if(CMAKE_BUILD_TYPE STREQUAL "debug" OR CMAKE_BUILD_TYPE STREQUAL "debugfull")
             message(STATUS "Origin project import (through internal liborigin) enabled (parser logging enabled)")
@@ -337,10 +361,11 @@ endif()
 
 ### Cantorlibs (optional) ###############################
 if(ENABLE_CANTOR)
-    find_package(Cantor "24.11.70")
+    find_package(Cantor "24.11.70" QUIET)
     if(Cantor_FOUND)
-        message(STATUS "Found Cantor Library ${Cantor_VERSION}")
-         add_definitions(-DHAVE_CANTOR_LIBS)
+        message(STATUS "Found Cantor: ${Cantor_LIBRARIES}, ${Cantor_INCLUDE_DIR} (version \"${Cantor_VERSION}\")")
+        add_definitions(-DHAVE_CANTOR_LIBS)
+	add_definitions(-DCANTOR_VERSION_STRING=\"${Cantor_VERSION}\")
     else()
         message(STATUS "Cantor Library NOT FOUND")
     endif()
@@ -351,9 +376,10 @@ endif()
 
 ### FFTW (optional) #####################################
 if(ENABLE_FFTW)
-    find_package(FFTW3)
+    find_package(FFTW3 QUIET)
     if(FFTW3_FOUND)
         add_definitions(-DHAVE_FFTW3)
+	add_definitions(-DFFTW3_VERSION_STRING=\"${FFTW3_VERSION}\")
     else()
         message(STATUS "FFTW 3 Library NOT FOUND")
     endif()
@@ -363,7 +389,7 @@ endif()
 
 ### HDF5 (optional) ##############################
 if(ENABLE_HDF5)
-    find_package(HDF5 COMPONENTS C)
+    find_package(HDF5 COMPONENTS C QUIET)
     set_package_properties(HDF5 PROPERTIES
         DESCRIPTION "Reading and writing self describing array data"
         URL "https://www.hdfgroup.org/solutions/hdf5/"
@@ -392,7 +418,7 @@ endif()
 
 ### NETCDF (optional) #############################
 if(ENABLE_NETCDF)
-    find_package(netCDF)
+    find_package(netCDF QUIET)
     SET_PACKAGE_PROPERTIES(netCDF PROPERTIES
         DESCRIPTION "Interfaces for array-oriented data access"
         URL "https://www.unidata.ucar.edu/software/netcdf/"
@@ -402,7 +428,7 @@ if(ENABLE_NETCDF)
         # netCDF on Windows may link to zip.dll
         find_library(Zip_LIBRARIES NAMES zip)
         if(Zip_LIBRARIES)
-            message(STATUS "Found Zip Library ${Zip_LIBRARIES}")
+            message(STATUS "Found Zip Library: ${Zip_LIBRARIES}")
         endif()
     else()
         message(STATUS "Network Common Data Format (NetCDF) Library NOT FOUND")
@@ -414,7 +440,7 @@ endif()
 
 ### MQTT (optional) ###############################
 if(ENABLE_MQTT)
-    find_package(Qt${QT_VERSION_MAJOR}Mqtt ${QT_MIN_VERSION} NO_MODULE)
+    find_package(Qt${QT_VERSION_MAJOR}Mqtt ${QT_MIN_VERSION} NO_MODULE QUIET)
     set_package_properties(Qt${QT_VERSION_MAJOR}Mqtt PROPERTIES
         DESCRIPTION "Qt Module to implement MQTT protocol version 3.1 and 3.1.1"
         URL "https://github.com/qt/qtmqtt")
@@ -430,10 +456,10 @@ endif()
 
 ### QtSerialPort (optional) ###############################
 if(ENABLE_QTSERIALPORT)
-    find_package(Qt${QT_MAJOR_VERSION}SerialPort ${QT_MIN_VERSION} NO_MODULE)
+    find_package(Qt${QT_MAJOR_VERSION}SerialPort ${QT_MIN_VERSION} NO_MODULE QUIET)
     set_package_properties(Qt{QT_MAJOR_VERSION}SerialPort PROPERTIES
         DESCRIPTION "Qt Serial Port library"
-        URL "https://doc.qt.io/qt-5/qtserialport-index.html"
+        URL "https://doc.qt.io/qt-6/qtserialport-index.html"
         PURPOSE "Support basic functionality of serial ports.")
     if(Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
         message(STATUS "Found Qt${QT_MAJOR_VERSION}SerialPort Library")
@@ -445,15 +471,33 @@ else()
     message(STATUS "Qt${QT_MAJOR_VERSION}SerialPort Library DISABLED")
 endif()
 
+### QtSvg (optional) ###############################
+if(ENABLE_QTSVG)
+    find_package(Qt${QT_MAJOR_VERSION}Svg ${QT_MIN_VERSION} NO_MODULE QUIET)
+    set_package_properties(Qt{QT_MAJOR_VERSION}Svg PROPERTIES
+        DESCRIPTION "Qt SVG library"
+        URL "https://doc.qt.io/qt-6/qtsvg-index.html"
+        PURPOSE "Scalable Vector Graphics support.")
+    if(Qt${QT_MAJOR_VERSION}Svg_FOUND)
+        message(STATUS "Found Qt${QT_MAJOR_VERSION}Svg Library")
+        add_definitions(-DHAVE_QTSVG)
+    else()
+        message(STATUS "Qt${QT_MAJOR_VERSION}Svg Library NOT FOUND")
+    endif()
+else()
+    message(STATUS "Qt${QT_MAJOR_VERSION}Svg Library DISABLED")
+endif()
+
 ### FITS (optional) ###############################
 if(ENABLE_FITS)
-    find_package(CFitsio)
+    find_package(CFitsio QUIET)
     set_package_properties(CFitsio PROPERTIES
         DESCRIPTION "FITS IO Library"
         URL "https://heasarc.gsfc.nasa.gov/fitsio/fitsio.html"
         PURPOSE "Support for the FITS (Flexible Image Transport System) data format.")
     if(CFITSIO_FOUND)
         add_definitions(-DHAVE_FITS)
+	add_definitions(-DCFITSIO_VERSION_STRING=\"${CFITSIO_VERSION}\")
         include_directories(${CFITSIO_INCLUDE_DIR})
     else()
         message(STATUS "Flexible Image Transport System Data Format (FITS) Library NOT FOUND")
@@ -465,9 +509,10 @@ endif()
 
 ### LIBCERF (optional) #############################
 if(ENABLE_LIBCERF)
-    find_package(LIBCERF)
+    find_package(LIBCERF QUIET)
     if(LIBCERF_FOUND)
         add_definitions(-DHAVE_LIBCERF)
+	add_definitions(-DLIBCERF_VERSION_STRING=\"${LIBCERF_VERSION}\")
         include_directories(${LIBCERF_INCLUDE_DIR})
     else()
         message(STATUS "libcerf library NOT FOUND")
@@ -477,7 +522,7 @@ else()
 endif()
 
 ### ZLIB for ROOT and READSTAT #################
-find_package(ZLIB)
+find_package(ZLIB QUIET)
 set_package_properties(ZLIB PROPERTIES
     DESCRIPTION "General purpose compression library"
     URL "https://www.zlib.net/"
@@ -488,9 +533,9 @@ endif()
 
 ### LZ4 for ROOT and MCAP #################
 if(ENABLE_ROOT OR ENABLE_MCAP)
-    find_package(LZ4)
+    find_package(LZ4 QUIET)
     IF(LZ4_FOUND)
-        message(STATUS "Found LZ4 version ${LZ4_VERSION} (${LZ4_LIBRARIES}; ${LZ4_INCLUDE_DIR})")
+	#message(STATUS "Found LZ4: ${LZ4_LIBRARIES}, ${LZ4_INCLUDE_DIR} (found version \"${LZ4_VERSION}\")")
         add_definitions(-DHAVE_LZ4)
     endif()
 endif()
@@ -505,7 +550,8 @@ IF(ENABLE_MCAP)
     endif()
 
     add_definitions(-DHAVE_MCAP)
-    find_package(ZSTD)
+    include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/mcap/include)
+    find_package(ZSTD QUIET)
     if(ZSTD_FOUND)
         message(STATUS "Found ZSTD (used for MCAP ZSTD support)")
         add_definitions(-DHAVE_ZSTD)
@@ -531,7 +577,7 @@ endif()
 
 ### ReadStat (optional) #############################
 if(ENABLE_READSTAT)
-    find_package(ReadStat)
+    find_package(ReadStat QUIET)
     if(NOT READSTAT_FOUND AND NOT WIN32 AND NOT DONT_BUILD_READSTAT)    # own version not on Windows and not when forbidden
         message(STATUS "ReadStat library NOT FOUND. Building own version")
         set(BUILD_READSTAT TRUE)
@@ -539,8 +585,8 @@ if(ENABLE_READSTAT)
         # link own readstat with iconv
         find_library(ICONV_LIBRARIES NAMES iconv libiconv libiconv-2)
         if(ICONV_LIBRARIES) # non-glibc
-            message(STATUS "Iconv library FOUND (${ICONV_LIBRARIES})")
-            set(READSTAT_LIBRARIES ${CMAKE_BINARY_DIR}/src/3rdparty/install/lib/libreadstat.a ${ICONV_LIBRARIES})
+            message(STATUS "Iconv library FOUND: ${ICONV_LIBRARIES}")
+            set(READSTAT_LIBRARIES ${ICONV_LIBRARIES} ${CMAKE_BINARY_DIR}/src/3rdparty/install/lib/libreadstat.a)
         else()
             message(STATUS "Iconv library NOT FOUND")
             set(READSTAT_LIBRARIES ${CMAKE_BINARY_DIR}/src/3rdparty/install/lib/libreadstat.a)
@@ -563,11 +609,11 @@ endif()
 
 ### XLSX (Excel) (optional) #############################
 if(ENABLE_XLSX)
-        find_package(QXlsx)
-        if(QXLSX_FOUND)
+    find_package(QXlsx QUIET)
+    if(QXLSX_FOUND)
         message(STATUS "QXlsx library FOUND.")
         add_definitions(-DHAVE_QXLSX)
-        else()
+    else()
         if(TARGET Qt${QT_VERSION_MAJOR}::GuiPrivate)
             set(BUILD_QXLSX TRUE)
 
@@ -576,7 +622,7 @@ if(ENABLE_XLSX)
         else()
             message(STATUS "Missing Qt${QT_VERSION_MAJOR}::GuiPrivate to build own QXlsx.")
         endif()
-        endif()
+    endif()
 else()
     add_definitions(-DXLSX_DISABLED)
     message(STATUS "XLSX support DISABLED")
@@ -584,7 +630,7 @@ endif()
 
 ###  Matio (optional) ##############################################
 if(ENABLE_MATIO)
-    find_package(Matio)
+    find_package(Matio QUIET)
     if(MATIO_FOUND)
         add_definitions(-DHAVE_MATIO)
     else()
@@ -597,14 +643,15 @@ endif()
 
 ### Discount (optional) #############################
 if(ENABLE_DISCOUNT)
-    find_package(Discount)
+    find_package(Discount QUIET)
     set_package_properties(Discount PROPERTIES
         DESCRIPTION "A C implementation of the Markdown markup language"
         URL "https://www.pell.portland.or.us/~orc/Code/discount/"
         TYPE OPTIONAL)
     if(Discount_FOUND)
         add_definitions(-DHAVE_DISCOUNT)
-        message(STATUS "Found Markdown Library Discount ${Discount_VERSION}")
+	message(STATUS "Found Markdown Library Discount (version \"${Discount_VERSION}\")")
+	add_definitions(-DDISCOUNT_VERSION_STRING=\"${Discount_VERSION}\")
         if(DEFINED Discount_VERSION AND Discount_VERSION VERSION_GREATER_EQUAL 3)
             add_definitions(-DHAVE_DISCOUNT3)
         endif()
@@ -617,15 +664,24 @@ endif()
 
 ### Orcus (optional) #############################
 if(ENABLE_ORCUS)
-    find_package(Orcus)
+    find_package(Orcus QUIET)
     set_package_properties(Orcus PROPERTIES
         DESCRIPTION "a library that provides a collection of standalone file processing filters"
         URL "https://gitlab.com/orcus/orcus"
         TYPE OPTIONAL)
     if(Orcus_FOUND)
         add_definitions(-DHAVE_ORCUS)
+	add_definitions(-DORCUS_VERSION_STRING=\"${LIBORCUS_VERSION}\")
         include_directories(${Orcus_INCLUDE_DIR} ${Ixion_INCLUDE_DIR})
-        message(STATUS "Found Orcus and Ixion: ${Orcus_INCLUDE_DIR} ${Ixion_INCLUDE_DIR}, ${Orcus_LIBRARIES} ${Ixion_LIBRARY}")
+	message(STATUS "Found Orcus version ${LIBORCUS_VERSION} and Ixion ${LIBIXION_VERSION}: ${Orcus_INCLUDE_DIR} ${Ixion_INCLUDE_DIR}, ${Orcus_LIBRARIES} ${Ixion_LIBRARY}")
+        if (LIBIXION_VERSION VERSION_GREATER_EQUAL "0.18.0")
+	    message(STATUS "Have Ixion version 0.18.0 or greater")
+	    add_definitions(-DHAVE_AT_LEAST_IXION_0_18_0)
+        endif()
+        if (LIBIXION_VERSION VERSION_GREATER_EQUAL "0.20.0")
+	    message(STATUS "Have Ixion version 0.20.0 or greater")
+	    add_definitions(-DHAVE_AT_LEAST_IXION_0_20_0)
+        endif()
     else()
         message(STATUS "Orcus library or Ixion NOT FOUND.")
     endif()
@@ -635,16 +691,29 @@ endif()
 
 ### Eigen (optional) #############################
 if(ENABLE_EIGEN3)
-    find_package(Eigen3)
+    find_package(Eigen3 QUIET)
     if(EIGEN3_FOUND)
-        message(STATUS "Found Eigen3 library version ${EIGEN3_VERSION_STRING}")
+	    message(STATUS "Found Eigen3 library: ${EIGEN3_INCLUDE_DIR} (version \"${EIGEN3_VERSION_STRING}\")")
         add_definitions(-DHAVE_EIGEN3)
+	add_definitions(-DEIGEN3_VERSION_STRING=\"${EIGEN3_VERSION_STRING}\")
         include_directories(${EIGEN3_INCLUDE_DIR})
     else()
         message(STATUS "Eigen3 library NOT FOUND.")
     endif()
 else()
     message(STATUS "Eigen3 support DISABLED")
+endif()
+
+# Qt Advanced Docking System (required) #####################
+find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG QUIET)
+if(NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
+    option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
+    option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)
+    if(TARGET Qt${QT_VERSION_MAJOR}::GuiPrivate)
+        message(STATUS "Building local version of Qt-Advanced-Docking-System.")
+    else ()
+        message(FATAL_ERROR "Missing Qt${QT_VERSION_MAJOR}::GuiPrivate to build local version of Qt-Advanced-Docking-System.")
+    endif()
 endif()
 
 ### Touch bar on macOS (optional) #############################
@@ -677,7 +746,10 @@ endif()
 add_subdirectory(data)
 add_subdirectory(icons)
 add_subdirectory(src)
-add_subdirectory(doc)
+
+if(KF${KF_MAJOR_VERSION}DocTools_FOUND)
+    add_subdirectory(doc)
+endif()
 
 if(ENABLE_TESTS)
     enable_testing(true)
@@ -696,6 +768,11 @@ install(FILES org.kde.labplot.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR}
 #file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h *.c)
 #kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
 
+get_target_property(COMPILE_DEFINITIONS labplot COMPILE_DEFINITIONS)
+message(STATUS "COMPILE_DEFINITIONS = ${COMPILE_DEFINITIONS}")
+get_directory_property(DIRECTORY_DEFINITIONS COMPILE_DEFINITIONS)
+message(STATUS "DIRECTORY DEFINITIONS = ${DIRECTORY_DEFINITIONS}\n")
+
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 find_package(KF${KF_MAJOR_VERSION}I18n CONFIG REQUIRED)
@@ -704,6 +781,5 @@ if(KF${KF_MAJOR_VERSION}I18n_FOUND)
     ki18n_install(po)
 endif()
 if(KF${KF_MAJOR_VERSION}DocTools_FOUND)
-# TODO: disabled until labplot2.1 is created as labplot.1
-	#    kdoctools_install(po)
+    kdoctools_install(po)
 endif()

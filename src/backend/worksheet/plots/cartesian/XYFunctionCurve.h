@@ -34,8 +34,6 @@ public:
 	// and is deleted during the cleanup in QGraphicsScene
 	virtual ~XYFunctionCurve() override = default;
 
-	void recalculate() override;
-
 	QIcon icon() const override;
 	inline static constexpr ConstLatin1String saveName = "xyFunctionCurve";
 	void save(QXmlStreamWriter*) const override;
@@ -100,7 +98,8 @@ private:
 	void init();
 	void setFunctionVariableCurve(const XYCurve*);
 	bool XmlReadFunction(XmlStreamReader*, bool preview);
-	bool usingColumn(const Column*) const override;
+	bool usingColumn(const AbstractColumn*, bool indirect) const override;
+	QVector<const Plot*> dependingPlots() const override;
 
 private Q_SLOTS:
 	void functionVariableCurveRemoved(const AbstractAspect*);

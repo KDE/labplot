@@ -110,9 +110,9 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_convolutionCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	cbDataSourceCurve->setAspect(m_convolutionCurve->dataSourceCurve());
-	cbXDataColumn->setColumn(m_convolutionCurve->xDataColumn(), m_convolutionCurve->xDataColumnPath());
-	cbYDataColumn->setColumn(m_convolutionCurve->yDataColumn(), m_convolutionCurve->yDataColumnPath());
-	cbY2DataColumn->setColumn(m_convolutionCurve->y2DataColumn(), m_convolutionCurve->y2DataColumnPath());
+	cbXDataColumn->setAspect(m_convolutionCurve->xDataColumn(), m_convolutionCurve->xDataColumnPath());
+	cbYDataColumn->setAspect(m_convolutionCurve->yDataColumn(), m_convolutionCurve->yDataColumnPath());
+	cbY2DataColumn->setAspect(m_convolutionCurve->y2DataColumn(), m_convolutionCurve->y2DataColumnPath());
 	uiGeneralTab.sbSamplingInterval->setValue(m_convolutionData.samplingInterval);
 	uiGeneralTab.cbKernel->setCurrentIndex(m_convolutionData.kernel);
 	uiGeneralTab.sbKernelSize->setValue((int)m_convolutionData.kernelSize);
@@ -373,8 +373,6 @@ void XYConvolutionCurveDock::wrapChanged() {
 }
 
 void XYConvolutionCurveDock::recalculateClicked() {
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYConvolutionCurve*>(curve)->setConvolutionData(m_convolutionData);
 
@@ -383,7 +381,6 @@ void XYConvolutionCurveDock::recalculateClicked() {
 		Q_EMIT info(i18n("Convolution status: %1", m_convolutionCurve->convolutionResult().status));
 	else
 		Q_EMIT info(i18n("Deconvolution status: %1", m_convolutionCurve->convolutionResult().status));
-	QApplication::restoreOverrideCursor();
 }
 
 /*!
@@ -415,7 +412,7 @@ void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 	}
 
 	CONDITIONAL_LOCK_RETURN;
-	cbXDataColumn->setColumn(column, m_convolutionCurve->xDataColumnPath());
+	cbXDataColumn->setAspect(column, m_convolutionCurve->xDataColumnPath());
 	enableRecalculate();
 }
 
@@ -433,7 +430,7 @@ void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* colu
 	}
 
 	CONDITIONAL_LOCK_RETURN;
-	cbY2DataColumn->setColumn(column, m_convolutionCurve->y2DataColumnPath());
+	cbY2DataColumn->setAspect(column, m_convolutionCurve->y2DataColumnPath());
 	enableRecalculate();
 }
 

@@ -9,8 +9,8 @@
 */
 
 #include "XLSXOptionsWidget.h"
-#include "backend/lib/macros.h"
 #include "backend/datasources/filters/XLSXFilter.h"
+#include "backend/lib/macros.h"
 #include "frontend/datasources/ImportFileWidget.h"
 
 #ifdef HAVE_QXLSX
@@ -101,7 +101,7 @@ void XLSXOptionsWidget::dataRegionSelectionChanged() {
 			selectedRegion.setLastColumn(lastCol);
 		}
 
-		const auto importedStrings = filter->previewForDataRegion(sheetName, selectedRegion, &regionCanBeImportedToMatrix, ui.sbPreviewLines->value());
+		const auto importedStrings = filter->previewForDataRegion(sheetName, selectedRegionText, &regionCanBeImportedToMatrix, ui.sbPreviewLines->value());
 		m_previewString = importedStrings;
 		// QDEBUG("PREVIEW:" << importedStrings)
 
@@ -127,7 +127,7 @@ void XLSXOptionsWidget::dataRegionSelectionChanged() {
 		int colCount = 0;
 		const int maxColumns = 100;
 		for (int row = 0; row < rowCount; ++row) {
-			auto lineString = importedStrings.at(row);
+			const auto& lineString = importedStrings.at(row);
 			colCount = std::min(static_cast<qsizetype>(maxColumns), lineString.size());
 
 			if (row == 0) {

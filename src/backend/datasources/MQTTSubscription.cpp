@@ -58,14 +58,14 @@ MQTTClient* MQTTSubscription::mqttClient() const {
  * \param message the message to pass
  * \param topicName the name of the topic the message was sent to
  */
-void MQTTSubscription::messageArrived(const QString& message, const QString& topicName) {
+void MQTTSubscription::messageArrived(const QMqttMessage& msg) {
 	bool found = false;
 	QVector<MQTTTopic*> topics = children<MQTTTopic>();
 	// search for the topic among the MQTTTopic children
 	for (auto* topic : topics) {
-		if (topicName == topic->topicName()) {
+		if (msg.topic().name() == topic->topicName()) {
 			// pass the message to the topic
-			topic->newMessage(message);
+			topic->newMessage(msg);
 
 			// read the message if needed
 			if ((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) && !m_MQTTClient->isPaused())
@@ -78,9 +78,9 @@ void MQTTSubscription::messageArrived(const QString& message, const QString& top
 
 	// if the topic can't be found, we add it as a new MQTTTopic, and read from it if needed
 	if (!found) {
-		auto* newTopic = new MQTTTopic(topicName, this, false);
+		auto* newTopic = new MQTTTopic(msg.topic().name(), this, false);
 		addChildFast(newTopic); // no need for undo/redo here
-		newTopic->newMessage(message);
+		newTopic->newMessage(msg);
 		if ((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) && !m_MQTTClient->isPaused())
 			newTopic->read();
 	}

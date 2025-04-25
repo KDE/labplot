@@ -6,7 +6,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -35,9 +35,8 @@ public:
 
 class AspectChildMoveCmd : public QUndoCommand {
 public:
-	AspectChildMoveCmd(AbstractAspectPrivate* target, AbstractAspect* child, int steps, QUndoCommand* parent = nullptr)
-		: QUndoCommand(parent)
-		, m_target(target)
+	AspectChildMoveCmd(AbstractAspectPrivate* target, AbstractAspect* child, int steps)
+		: m_target(target)
 		, m_child(child) {
 		setText(i18n("%1: move up", m_target->m_name));
 		const int origIndex = m_target->indexOfChild(m_child);
@@ -67,7 +66,7 @@ public:
 		if (newIndex != origIndex) {
 			int nonHiddenIndex = 0;
 			for (int i = 0; i < newIndex; i++) {
-				if (!m_target->m_children.at(i)->hidden())
+				if (!m_target->m_children.at(i)->isHidden())
 					nonHiddenIndex++;
 			}
 
@@ -95,8 +94,8 @@ protected:
 
 class AspectChildRemoveCmd : public AspectCommonCmd {
 public:
-	AspectChildRemoveCmd(AbstractAspectPrivate* target, AbstractAspect* child, QUndoCommand* parent = nullptr)
-		: AspectCommonCmd(parent)
+	AspectChildRemoveCmd(AbstractAspectPrivate* target, AbstractAspect* child)
+		: AspectCommonCmd()
 		, m_target(target)
 		, m_child(child) {
 		Q_ASSERT(!child->isMoved());
@@ -133,13 +132,13 @@ public:
 		// will most probably trigger again crashes in the debug build of Qt if the datapicker is involved but we
 		// rather accept this "edge case" than having no undo/redo for position changes for datapicker points until
 		// we have a better solution.
-		if (!m_child->hidden() || m_child->type() == AspectType::DatapickerPoint)
+		if (!m_child->isHidden() || m_child->type() == AspectType::DatapickerPoint)
 			Q_EMIT m_target->q->childAspectAboutToBeRemoved(m_child);
 		Q_EMIT m_child->aspectAboutToBeRemoved(m_child);
 
 		m_index = removeChild(m_target, m_child);
 
-		if (!m_child->hidden() || m_child->type() == AspectType::DatapickerPoint)
+		if (!m_child->isHidden() || m_child->type() == AspectType::DatapickerPoint)
 			Q_EMIT m_target->q->childAspectRemoved(m_target->q, nextSibling, m_child);
 	}
 
@@ -150,7 +149,11 @@ public:
 		Q_EMIT m_target->q->childAspectAboutToBeAdded(m_target->q, nullptr, m_child);
 		Q_EMIT m_target->q->childAspectAboutToBeAdded(m_target->q, m_index, m_child);
 		m_target->insertChild(m_index, m_child);
-		m_child->finalizeAdd();
+		if (!m_addChildFinalized) {
+			// finalizAdd() is used to finalize the initialization of objects internally, no need to call it again during the undo/redo steps
+			m_child->finalizeAdd();
+			m_addChildFinalized = true;
+		}
 		Q_EMIT m_target->q->childAspectAdded(m_child);
 	}
 
@@ -158,12 +161,13 @@ protected:
 	AbstractAspectPrivate* m_target{nullptr};
 	AbstractAspect* m_child{nullptr};
 	int m_index{-1};
+	bool m_addChildFinalized{false};
 };
 
 class AspectChildAddCmd : public AspectChildRemoveCmd {
 public:
-	AspectChildAddCmd(AbstractAspectPrivate* target, AbstractAspect* child, int index, QUndoCommand* parent)
-		: AspectChildRemoveCmd(target, child, parent) {
+	AspectChildAddCmd(AbstractAspectPrivate* target, AbstractAspect* child, int index)
+		: AspectChildRemoveCmd(target, child) {
 		setText(i18n("%1: add %2", m_target->m_name, m_child->name()));
 		m_index = index;
 	}
@@ -228,9 +232,7 @@ public:
 
 	void redo() override {
 		Q_EMIT m_aspect->q->aspectDescriptionAboutToChange(m_aspect->q);
-		const QString name = m_aspect->m_name;
-		m_aspect->m_name = m_name;
-		m_name = name;
+		m_aspect->m_name.swap(m_name);
 		Q_EMIT m_aspect->q->aspectDescriptionChanged(m_aspect->q);
 	}
 
