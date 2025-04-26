@@ -5,13 +5,13 @@
 #
 # SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Antoni Bella Pérez <antonibella5@yahoo.com>
 # Orestes Mas <orestes@tsc.upc.edu>, 2018.
-# Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025.
+# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-25 00:38+0000\n"
-"PO-Revision-Date: 2025-04-21 10:43+0200\n"
+"PO-Revision-Date: 2025-04-25 10:28+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 25.04.0\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -15031,12 +15031,10 @@ msgid "Fábián Kristóf-Szabolcs"
 msgstr "Fábián Kristóf-Szabolcs"
 
 #: src/frontend/LabPlot.cpp:91
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Open FITS File"
+#, kde-format
 msgctxt "@info:credit"
 msgid "FITS Filter"
-msgstr "Obri un fitxer FITS"
+msgstr "Filtre FITS"
 
 #: src/frontend/LabPlot.cpp:92
 #, kde-format
@@ -15672,7 +15670,7 @@ msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
 "again."
 msgstr ""
-"Proporcioneu el camí cap a l'eina Kaggle CLI a la configuració de "
+"Proporcioneu el camí cap a l'eina CLI de Kaggle en la configuració de "
 "l'aplicació i torneu-ho a provar."
 
 #: src/frontend/MainWin.cpp:2855

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-25 00:38+0000\n"
-"PO-Revision-Date: 2025-04-21 09:19+0300\n"
+"PO-Revision-Date: 2025-04-25 09:21+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -14961,12 +14961,10 @@ msgid "Fábián Kristóf-Szabolcs"
 msgstr "Fábián Kristóf-Szabolcs"
 
 #: src/frontend/LabPlot.cpp:91
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Open FITS File"
+#, kde-format
 msgctxt "@info:credit"
 msgid "FITS Filter"
-msgstr "Відкриття файла FITS"
+msgstr "Фільтрування FITS"
 
 #: src/frontend/LabPlot.cpp:92
 #, kde-format
