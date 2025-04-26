@@ -1,3 +1,9 @@
+-----3.0.0 (XX) -----
+
+Bug fixes:
+	* Fix build with system QXlsx (!693)
+
+
 -----2.12.0 (25.04.2025) -----
 New features:
 	* [general]
