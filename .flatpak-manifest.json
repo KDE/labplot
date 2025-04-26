@@ -106,8 +106,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://github.com/KDE/analitza/archive/v24.08.3.tar.gz",
-			    "sha256": "e40c563c6387200321e7b903bff2d66ed0454f322d58126761411fccbdaf1467"
+			    "url": "https://download.kde.org/stable/release-service/25.04.0/src/analitza-25.04.0.tar.xz",
+			    "sha256": "67390eec5438d69390f2d1ba589604cb8a7817f86bc931acc24f029ab2db3f2c"
 		    }
 	    ]
         },
@@ -117,8 +117,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/24.12.1/src/cantor-24.12.1.tar.xz",
-			    "sha256": "06b2d67e37046c832de741ed00557c4ab13c873223f6df3818a5af4721e79065"
+			    "url": "https://download.kde.org/stable/release-service/25.04.0/src/cantor-25.04.0.tar.xz",
+			    "sha256": "98f96661f20ad4c91fa5fe64bc0ecbef03d85969b64851c660d2d369682c3f00"
 		    }
 	    ]
         },
@@ -136,8 +136,11 @@
             "name": "hdf5",
             "buildsystem": "simple",
 	    "build-commands": [
-		   "cd hdf5* && ./configure --prefix=/app --enable-cxx=yes --enable-tools=no --enable-tests=no && make -j install"
+                "cd hdf5* && ./configure --prefix=/app --enable-cxx=yes --enable-tools=no --enable-tests=no && make -j install"
 	    ],
+            "cleanup": [
+                "/share/hdf5_examples"
+            ],
             "sources": [
                 {
                     "type": "archive",
@@ -187,7 +190,7 @@
 		{
                     "type": "git",
 		    "url": "https://github.com/qt/qtmqtt.git",
-		    "tag": "v6.7.3"
+		    "tag": "v6.8.3"
 		}
 	    ]
 	},
@@ -199,7 +202,7 @@
                 {
                     "type": "git",
                     "url": "https://github.com/KDE/kuserfeedback.git",
-                    "tag": "v6.7.0"
+                    "tag": "v6.13.0"
                 }
             ]
         },
