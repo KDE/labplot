@@ -2,6 +2,7 @@
 
 Bug fixes:
 	* Fix build with system QXlsx (!693)
+	* Fix build with system qads 4.4 (!694)
 
 
 -----2.12.0 (25.04.2025) -----
