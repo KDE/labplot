@@ -7,7 +7,11 @@
     <comment xml:lang="ca@valencia">Fitxer de projecte LabPlot</comment>
     <comment xml:lang="es">Archivo de proyecto de LabPlot</comment>
     <comment xml:lang="fr">Fichier de projet pour LabPlot</comment>
+    <comment xml:lang="it">File di progetto di LabPlot</comment>
     <comment xml:lang="nl">Projectbestand van LabPlot</comment>
+    <comment xml:lang="sl">Datoteka projekta LabPlot</comment>
+    <comment xml:lang="uk">файл проекту LabPlot</comment>
+    <comment xml:lang="zh_CN">LabPlot 工程文件</comment>
     <glob pattern="*.lml"/>
   </mime-type>
 </mime-info>
