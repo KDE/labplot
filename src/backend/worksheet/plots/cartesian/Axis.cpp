@@ -221,15 +221,6 @@ void Axis::init(Orientation orientation, bool loading) {
 	d->arrowPosition = (Axis::ArrowPosition)group.readEntry(QStringLiteral("ArrowPosition"), static_cast<int>(ArrowPosition::Right));
 	d->arrowSize = group.readEntry(QStringLiteral("ArrowSize"), Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
 
-	if (d->orientation == Orientation::Vertical) {
-		d->title->setRotationAngle(90);
-		d->titleOffsetX = 0; // distance to the axis tick labels
-		d->titleOffsetY = 0; // centering the title
-	} else {
-		d->titleOffsetX = 0; // centering the title
-		d->titleOffsetY = 0; // distance to the axis tick labels
-	}
-
 	d->majorTicksLine->init(group);
 	d->majorTicksDirection = (Axis::TicksDirection)group.readEntry(QStringLiteral("MajorTicksDirection"), (int)Axis::ticksOut);
 	d->majorTicksType = (TicksType)group.readEntry(QStringLiteral("MajorTicksType"), static_cast<int>(TicksType::TotalNumber));
@@ -267,6 +258,20 @@ void Axis::init(Orientation orientation, bool loading) {
 	// grid lines
 	d->majorGridLine->init(group);
 	d->minorGridLine->init(group);
+
+	// title label
+	// swap the offsets (distance to the axis line in one direction and to the center of it in other direction),
+	// and add 90° for the rotation angle to for y-axis
+	KConfigGroup axisLabelGroup = config.group(QStringLiteral("AxisTitle"));
+	if (d->orientation == Orientation::Horizontal) {
+		d->title->setRotationAngle(axisLabelGroup.readEntry(QStringLiteral("Rotation"), 0));
+		d->titleOffsetX = axisLabelGroup.readEntry(QStringLiteral("OffsetX"), 0.0);
+		d->titleOffsetY = axisLabelGroup.readEntry(QStringLiteral("OffsetY"), 0.0);
+	} else {
+		d->title->setRotationAngle(axisLabelGroup.readEntry(QStringLiteral("Rotation"), 0) + 90);
+		d->titleOffsetX = axisLabelGroup.readEntry(QStringLiteral("OffsetY"), 0.0);
+		d->titleOffsetY = axisLabelGroup.readEntry(QStringLiteral("OffsetX"), 0.0);
+	}
 }
 
 /*!
