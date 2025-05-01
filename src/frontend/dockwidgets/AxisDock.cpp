@@ -2071,7 +2071,7 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.chkShowScaleOffset->setChecked(group.readEntry(QStringLiteral("ShowScaleOffset"), static_cast<int>(m_axis->showScaleOffset())));
 
 	// Title
-	KConfigGroup axisLabelGroup = config.group(QStringLiteral("AxisLabel"));
+	KConfigGroup axisLabelGroup = config.group(QStringLiteral("AxisTitle"));
 	labelWidget->loadConfig(axisLabelGroup);
 
 	// Line
@@ -2180,7 +2180,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry(QStringLiteral("ShowScaleOffset"), ui.chkShowScaleOffset->isChecked());
 
 	// Title
-	KConfigGroup axisLabelGroup = config.group(QStringLiteral("AxisLabel"));
+	KConfigGroup axisLabelGroup = config.group(QStringLiteral("AxisTitle"));
 	labelWidget->saveConfig(axisLabelGroup);
 
 	// Line
@@ -2190,7 +2190,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry(QStringLiteral("MajorTicksDirection"), ui.cbMajorTicksDirection->currentIndex());
 	group.writeEntry(QStringLiteral("MajorTicksType"), ui.cbMajorTicksType->itemData(ui.cbMajorTicksType->currentIndex()));
 	group.writeEntry(QStringLiteral("MajorTicksNumber"), ui.sbMajorTicksNumber->value());
-	bool numeric = m_axis->isNumeric();
+	const bool numeric = m_axis->isNumeric();
 	if (numeric)
 		group.writeEntry(QStringLiteral("MajorTicksIncrement"), QString::number(ui.sbMajorTicksSpacingNumeric->value()));
 	else

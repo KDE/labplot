@@ -174,7 +174,9 @@ void TextLabel::init() {
 		d->teXFont.setPointSize(group.readEntry(QStringLiteral("TeXFontSize"), d->teXFont.pointSize()));
 		d->fontColor = group.readEntry(QStringLiteral("FontColor"), d->fontColor);
 		d->backgroundColor = group.readEntry(QStringLiteral("BackgroundColor"), d->backgroundColor);
-		d->setRotation(group.readEntry(QStringLiteral("Rotation"), d->rotation()));
+
+		// different convention in QGraphicsItem - use negative value to rotate counter-clockwise
+		d->setRotation(-group.readEntry(QStringLiteral("Rotation"), d->rotation()));
 
 		// border
 		d->borderShape = (TextLabel::BorderShape)group.readEntry(QStringLiteral("BorderShape"), (int)d->borderShape);

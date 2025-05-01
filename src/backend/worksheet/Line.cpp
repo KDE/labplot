@@ -61,7 +61,7 @@ void Line::init(const KConfigGroup& group) {
 	if (d->prefix == QLatin1String("DropLine"))
 		d->dropLineType = (XYCurve::DropLineType)group.readEntry(d->prefix + QStringLiteral("Type"), (int)XYCurve::DropLineType::NoDropLine);
 
-	d->style = static_cast<Qt::PenStyle>(group.readEntry("BorderStyle", (int)Qt::SolidLine));
+	d->style = static_cast<Qt::PenStyle>(group.readEntry(d->prefix + QStringLiteral("Style"), (int)Qt::SolidLine));
 	d->width = group.readEntry(d->prefix + QStringLiteral("Width"), Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point));
 	d->color = group.readEntry(d->prefix + QStringLiteral("Color"), QColor(Qt::black));
 	d->pen.setStyle(d->style);
