@@ -3466,6 +3466,6 @@ void Axis::saveThemeConfig(const KConfig& config) {
 	d->majorGridLine->saveThemeConfig(group);
 	d->minorGridLine->saveThemeConfig(group);
 
-	// title labe
+	// title label
 	d->title->saveThemeConfig(config);
 }

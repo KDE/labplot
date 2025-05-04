@@ -1570,10 +1570,12 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 	// Text
 	ui.cbMode->setCurrentIndex(group.readEntry("Mode", static_cast<int>(m_label->text().mode)));
 	this->modeChanged(ui.cbMode->currentIndex());
-	ui.sbFontSize->setValue(group.readEntry("TeXFontSize", m_label->teXFont().pointSize()));
+	// load font (only included in label text)
+	ui.kfontRequester->setFont(group.readEntry("Font", ui.teLabel->currentFont()));
 	ui.kcbFontColor->setColor(group.readEntry("FontColor", m_label->fontColor()));
 	ui.kcbBackgroundColor->setColor(group.readEntry("BackgroundColor", m_label->backgroundColor()));
 	ui.kfontRequesterTeX->setFont(group.readEntry("TeXFont", m_label->teXFont()));
+	ui.sbFontSize->setValue(group.readEntry("TeXFontSize", m_label->teXFont().pointSize()));
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex(group.readEntry("PositionX", (int)m_label->position().horizontalPosition));
@@ -1596,6 +1598,8 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 void LabelWidget::saveConfig(KConfigGroup& group) {
 	// Text
 	group.writeEntry("Mode", ui.cbMode->currentIndex());
+	// save font (only included in label text)
+	group.writeEntry("Font", ui.kfontRequester->font());
 	group.writeEntry("FontColor", ui.kcbFontColor->color());
 	group.writeEntry("BackgroundColor", ui.kcbBackgroundColor->color());
 	group.writeEntry("TeXFont", ui.kfontRequesterTeX->font());

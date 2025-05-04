@@ -2047,7 +2047,7 @@ void AxisDock::loadConfigFromTemplate(KConfig& config) {
 }
 
 void AxisDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group(QStringLiteral("Axis"));
+	auto group = config.group(QStringLiteral("Axis"));
 
 	// General
 	ui.cbOrientation->setCurrentIndex(group.readEntry(QStringLiteral("Orientation"), (int)m_axis->orientation()));
@@ -2071,8 +2071,8 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.chkShowScaleOffset->setChecked(group.readEntry(QStringLiteral("ShowScaleOffset"), static_cast<int>(m_axis->showScaleOffset())));
 
 	// Title
-	KConfigGroup axisLabelGroup = config.group(QStringLiteral("AxisTitle"));
-	labelWidget->loadConfig(axisLabelGroup);
+	auto axisTitleGroup = config.group(QStringLiteral("AxisTitle"));
+	labelWidget->loadConfig(axisTitleGroup);
 
 	// Line
 	lineWidget->loadConfig(group);
@@ -2153,7 +2153,7 @@ void AxisDock::loadConfig(KConfig& config) {
 }
 
 void AxisDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group(QStringLiteral("Axis"));
+	auto group = config.group(QStringLiteral("Axis"));
 
 	// General
 	group.writeEntry(QStringLiteral("Orientation"), ui.cbOrientation->currentIndex());
@@ -2180,8 +2180,8 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry(QStringLiteral("ShowScaleOffset"), ui.chkShowScaleOffset->isChecked());
 
 	// Title
-	KConfigGroup axisLabelGroup = config.group(QStringLiteral("AxisTitle"));
-	labelWidget->saveConfig(axisLabelGroup);
+	auto axisTitleGroup = config.group(QStringLiteral("AxisTitle"));
+	labelWidget->saveConfig(axisTitleGroup);
 
 	// Line
 	lineWidget->saveConfig(group);
