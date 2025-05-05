@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-25 00:38+0000\n"
+"POT-Creation-Date: 2025-05-05 00:38+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -6723,8 +6723,8 @@ msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 msgid "%1: set text"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/note/Note.cpp:145 src/backend/worksheet/TextLabel.cpp:278
-#: src/backend/worksheet/TextLabel.cpp:317
+#: src/backend/note/Note.cpp:145 src/backend/worksheet/TextLabel.cpp:280
+#: src/backend/worksheet/TextLabel.cpp:319
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set background color"
@@ -8161,7 +8161,7 @@ msgstr "&Indsæt tomme rækker"
 msgid "%1: set bottom padding"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:282
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:287
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:232
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:106
@@ -8179,7 +8179,7 @@ msgstr "&Indsæt tomme rækker"
 msgid "Horizontal"
 msgstr "Vandret"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:285
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:290
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:92
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:235
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:109
@@ -8199,7 +8199,7 @@ msgstr "Vandret"
 msgid "Vertical"
 msgstr "Lodret"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:305
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:310
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:100
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:243
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:117
@@ -8215,7 +8215,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lLine)
 #. i18n: ectx: property (text), widget (QLabel, lCenter)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:311
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:316
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:670
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:124
 #: src/frontend/dockwidgets/XYCurveDock.cpp:485
@@ -8235,14 +8235,14 @@ msgstr ""
 msgid "Line"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:313
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:318
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:126
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:147
 #, kde-format
 msgid "Style"
 msgstr "Stil"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:318
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:323
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:131
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:152
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
@@ -8252,272 +8252,272 @@ msgstr "Stil"
 msgid "Color"
 msgstr "Farve"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:548
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:553
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set axis range type"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:573
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:578
 #: src/frontend/dockwidgets/AxisDock.cpp:622
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:580
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:585
 #, kde-format
 msgid "%1: set axis position"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:588
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:593
 #, kde-format
 msgid "%1: set axis offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:603
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:608
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set axis range"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:642
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:647
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set range scale"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:649
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:654
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set scale"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:656
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:661
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set major tick start type"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:663
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:668
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set major tick start offset"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:671
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:676
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set major tick start value"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:683
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:688
 #, kde-format
 msgid "%1: set axis scaling factor"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:692
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:697
 #, kde-format
 msgid "%1: set axis zero offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:698
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:703
 #, kde-format
 msgid "%1: show scale and offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:705
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:710
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set axis logical position"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:713
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:720
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:718
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:725
 #, kde-format
 msgid "%1: set title offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:728
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:733
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set arrow type"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:735
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:740
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set arrow position"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:742
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:747
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set arrow size"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:750
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:755
 #, kde-format
 msgid "%1: set major ticks direction"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:757
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:762
 #, kde-format
 msgid "%1: set major ticks type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:765
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:770
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:767
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:782
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:772
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:787
 #, kde-format
 msgid "%1: set the total number of the major ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:784
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:868
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:789
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:873
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:809
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:814
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:816
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:821
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:830
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:835
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:838
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:843
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:845
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:850
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:853
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:858
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:856
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:867
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:861
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:872
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:900
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:905
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:907
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:912
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:921
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:926
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:930
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:935
 #, kde-format
 msgid "%1: set labels format"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:937
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:942
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set labels format automatic"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:944
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:951
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:949
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:956
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
 #, kde-format
 msgid "%1: set labels precision"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:958
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:963
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set labels datetime format"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:965
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:970
 #, kde-format
 msgid "%1: set labels position"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:972
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:977
 #, kde-format
 msgid "%1: set label offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:979
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:984
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:986
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:991
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set labels text type"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:993
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:998
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set labels text column"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1007
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1012
 #, kde-format
 msgid "%1: set label color"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1014
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1019
 #, kde-format
 msgid "%1: set label font"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1021
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1026
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set labels background type"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1028
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1033
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set label background color"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1035
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1040
 #, kde-format
 msgid "%1: set label prefix"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1042
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1047
 #, kde-format
 msgid "%1: set label suffix"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1049
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1054
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr ""
@@ -9460,7 +9460,7 @@ msgid "%1: use plot's color"
 msgstr "&Indsæt tomme rækker"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:214
-#: src/backend/worksheet/TextLabel.cpp:365
+#: src/backend/worksheet/TextLabel.cpp:367
 #, kde-format
 msgid "%1: set font color"
 msgstr ""
@@ -10701,28 +10701,28 @@ msgstr "Ændret"
 msgid "%1: set plot area corner radius"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:306
-#: src/backend/worksheet/TextLabel.cpp:316
-#: src/backend/worksheet/TextLabel.cpp:319
-#: src/backend/worksheet/TextLabel.cpp:325
-#: src/backend/worksheet/TextLabel.cpp:334
+#: src/backend/worksheet/TextLabel.cpp:308
+#: src/backend/worksheet/TextLabel.cpp:318
+#: src/backend/worksheet/TextLabel.cpp:321
+#: src/backend/worksheet/TextLabel.cpp:327
+#: src/backend/worksheet/TextLabel.cpp:336
 #, kde-format
 msgid "%1: set label text"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:351
+#: src/backend/worksheet/TextLabel.cpp:353
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set label placeholdertext"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/TextLabel.cpp:358
+#: src/backend/worksheet/TextLabel.cpp:360
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set TeX main font"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/TextLabel.cpp:373
+#: src/backend/worksheet/TextLabel.cpp:375
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set border shape"
