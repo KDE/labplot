@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-16 03:05+0000\n"
-"PO-Revision-Date: 2025-02-11 10:40+0100\n"
+"PO-Revision-Date: 2025-03-18 15:33+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -9342,7 +9342,7 @@ msgstr "Unsicherheit"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #, kde-format
 msgid "Uncertainty,%"
-msgstr "Unischerheit,%"
+msgstr "Unsicherheit,%"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
 #, kde-format
@@ -14249,7 +14249,7 @@ msgstr "t, max"
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
 msgid "Uncertainty, %"
-msgstr "Unischerheit, %"
+msgstr "Unsicherheit, %"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:149
 #, kde-format
@@ -14990,7 +14990,7 @@ msgstr "Veröffentlichungsversion "
 #: src/kdefrontend/LabPlot.cpp:46
 #, kde-format
 msgid "Debug build "
-msgstr "Fehlersuchversion "
+msgstr "Entwicklerversion "
 
 #: src/kdefrontend/LabPlot.cpp:49 src/kdefrontend/LabPlot.cpp:52
 #, kde-format
