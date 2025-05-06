@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-05 00:38+0000\n"
-"PO-Revision-Date: 2025-02-11 10:40+0100\n"
+"PO-Revision-Date: 2025-03-18 15:33+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -1109,10 +1109,9 @@ msgid "Unable to open device"
 msgstr "Öffnen des Gerätes nicht möglich"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:209
-#, fuzzy, kde-format
-#| msgid "No sheet selected."
+#, kde-format
 msgid "No new line detected"
-msgstr "Kein Blatt ausgewählt."
+msgstr "Kein Zeilenumbruch erkannt"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, kde-format
@@ -9821,7 +9820,7 @@ msgstr "Unsicherheit"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
 msgid "Uncertainty, %"
-msgstr "Unischerheit, %"
+msgstr "Unsicherheit, %"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1887
 #, kde-format
@@ -10210,18 +10209,17 @@ msgstr "%1: Logische Position festlegen"
 #: src/frontend/AboutDialog.cpp:82
 #, kde-format
 msgid "What's new"
-msgstr ""
+msgstr "Was gibt es Neues"
 
 #: src/frontend/AboutDialog.cpp:88
 #, kde-format
 msgid "Copy Environment"
-msgstr ""
+msgstr "Umgebung kopieren"
 
 #: src/frontend/AboutDialog.cpp:93
-#, fuzzy, kde-format
-#| msgid "Copy Selection"
+#, kde-format
 msgid "Copy Citation"
-msgstr "Auswahl kopieren"
+msgstr "Zitierung kopieren"
 
 #: src/frontend/AboutDialog.cpp:97
 #, kde-format
@@ -10229,16 +10227,14 @@ msgid "Donate"
 msgstr "Spenden"
 
 #: src/frontend/AboutDialog.cpp:116
-#, fuzzy, kde-format
-#| msgid "Clipboard"
+#, kde-format
 msgid "Copy to Clipboard"
-msgstr "Zwischenablage"
+msgstr "In Zwischenablage kopieren"
 
 #: src/frontend/AboutDialog.cpp:142
-#, fuzzy, kde-format
-#| msgid "Release build "
+#, kde-format
 msgid "Release build"
-msgstr "Veröffentlichungsversion "
+msgstr "Veröffentlichungsversion"
 
 #: src/frontend/AboutDialog.cpp:144
 #, fuzzy, kde-format
@@ -10453,25 +10449,23 @@ msgstr "Komponenten:"
 #: src/frontend/AboutDialog.cpp:367
 #, kde-format
 msgid "Qt"
-msgstr ""
+msgstr "Qt"
 
 #: src/frontend/AboutDialog.cpp:368
 #, kde-format
 msgid "KDE Frameworks"
-msgstr ""
+msgstr "KDE Frameworks"
 
 #: src/frontend/AboutDialog.cpp:383
-#, fuzzy, kde-format
-#| msgid ""
-#| "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
-#| "Analysis software accessible to everyone."
+#, kde-format
 msgid ""
 "LabPlot Team (%1), LabPlot: A FREE, open source, cross-platform Data "
 "Visualization and Analysis software accessible to everyone, (Version %2) "
 "[Computer software]. %3."
 msgstr ""
-"LabPlot ist ein FREIE, Open Source und plattformübergreifende Software zur "
-"Datenvisualisierung und -analyse, die für jeden verfügbar ist."
+"LabPlot Team (%1), LabPlot: eine FREIE, Open Source und "
+"plattformübergreifende Software zur Datenvisualisierung und -analyse, die "
+"für jeden verfügbar ist, (Version %2) [Computersoftware]. %3."
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -10879,24 +10873,12 @@ msgid "Custom column names, comma separated. E.g. \"x, y\""
 msgstr "Eigene Spaltennamen durch Komma getrennt. Zum Beispiel \"x, y\""
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:115
-#, fuzzy, kde-format
-#| msgid "Custom column modes, comma separated"
+#, kde-format
 msgid "Custom column data types, comma separated"
-msgstr "Eigene Spaltennamen durch Komma getrennt."
+msgstr "Eigene Spaltendatentypen durch Komma getrennt."
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
-#, fuzzy, kde-format
-#| msgid ""
-#| "If not empty, the number of columns must match the number of column names "
-#| "if provided and it must match the number of columns in the imported file."
-#| "<br>Datatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
-#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
-#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
-#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
-#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
-#| "td><td>Datetime with the format from the datetime text box if not empty, "
-#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-#| "td></tr></table>"
+#, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
@@ -10910,14 +10892,14 @@ msgid ""
 "td></tr></table>"
 msgstr ""
 "Wenn nicht leer, muss die Anzahl der Spalten und Spaltennamen übereinstimmen "
-"und der Anzahl der Spalten in der Datei entsprechen.<br> Datentypen:"
-"<table><tr><td>%1</td><td>Integerzahl mit 32bit Größe (−2.147.483.648 .. "
-"2.147.483.647).</td></tr><tr><td>%2</td><td>Integerzahl mit 64bit Größe "
-"(−9.223.372.036.854.775.808 .. 9.223.372.036.854.775.807).</td></tr><tr><td>"
-"%3</td><td>Gleitkommazahl mit 64bit Größe. Genauigkkeit ca. 16 Ziffern.</"
-"td></tr><tr><td>%4</td><td>Datm und Zeit mit dem Format der Datums- und Zeit-"
-"Textbox (falls nicht leer), sonst automatisch festgelegt.</td></tr><tr><td>"
-"%5</td><td>Ein Text.</td></tr></table>"
+"und der Anzahl der Spalten in der importierten Datei entsprechen.<br> "
+"Datentypen:<table><tr><td>%1</td><td>Integerzahl mit 32bit Größe "
+"(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integerzahl "
+"mit 64bit Größe (−9.223.372.036.854.775.808 .. 9.223.372.036.854.775.807).</"
+"td></tr><tr><td>%3</td><td>Gleitkommazahl mit 64bit Größe. Genauigkkeit ca. "
+"16 Ziffern.</td></tr><tr><td>%4</td><td>Datm und Zeit mit dem Format der "
+"Datums- und Zeit-Textbox (falls nicht leer), sonst automatisch festgelegt.</"
+"td></tr><tr><td>%5</td><td>Ein Text.</td></tr></table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:138
 #, kde-format
@@ -11797,41 +11779,35 @@ msgstr ""
 "Endreihe muss größer als Startreihe sein, oder -1."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1817
-#, fuzzy, kde-format
-#| msgid "Preview: Initialization failed: %1"
+#, kde-format
 msgid "Initialization failed: %1"
-msgstr "Vorschau: Initialisierung fehlgeschlagen: %1"
+msgstr "Initialisierung fehlgeschlagen: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1842
-#, fuzzy, kde-format
-#| msgid "Preview: Failed to connect to local socket %1 - %2"
+#, kde-format
 msgid "Failed to connect to the local socket: %1"
-msgstr "Vorschau: Keine Verbindung zum lokalen Socket %1 - %2"
+msgstr "Keine Verbindung zum lokalen Socket: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1859
-#, fuzzy, kde-format
-#| msgid "Preview: Failed to connect to TCP socket - %1"
+#, kde-format
 msgid "Failed to connect to the TCP socket. %1"
-msgstr "Vorschau: Verbindung zum TCP Socket fehlgeschlagen - %1"
+msgstr "Verbindung zum TCP Socket fehlgeschlagen. %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1865
 #: src/frontend/datasources/ImportFileWidget.cpp:1894
-#, fuzzy, kde-format
-#| msgid "The device timed out."
+#, kde-format
 msgid "Socket operation timed out."
-msgstr "Das Gerät hatte eine Zeitüberschreitung."
+msgstr "Die Socketoperation hatte eine Zeitüberschreitung."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1879
-#, fuzzy, kde-format
-#| msgid "ERROR: not ready for read after 2 sec"
+#, kde-format
 msgid "Not ready for read after 2s:"
-msgstr "FEHLER: Nicht bereit fürs Lesen nach 2 Sekunden"
+msgstr "Nicht bereit fürs Lesen nach 2 Sekunden:"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1898
-#, fuzzy, kde-format
-#| msgid "Unable to open file:"
+#, kde-format
 msgid "Unable to bind: "
-msgstr "Fehler beim Öffnen der Datei:"
+msgstr "Fehler beim Zugriff: "
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1915
 #, kde-format
@@ -11839,16 +11815,14 @@ msgid "Parse Error: %1"
 msgstr "Parserfehler: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1917
-#, fuzzy, kde-format
-#| msgid "ERROR: not ready for read after 2 sec"
+#, kde-format
 msgid "Not ready for read after 2 sec"
-msgstr "FEHLER: Nicht bereit fürs Lesen nach 2 Sekunden"
+msgstr "Nicht bereit fürs Lesen nach 2 Sekunden"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1921
-#, fuzzy, kde-format
-#| msgid "ERROR: failed to open serial port. error: %1"
+#, kde-format
 msgid "Failed to open serial port. error: %1"
-msgstr "FEHLER: Öffnen des Seriellen Ports fehlgeschlagen. Fehler: %1"
+msgstr "Öffnen des Seriellen Ports fehlgeschlagen. Fehler: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1940
 #, kde-format
@@ -14814,10 +14788,9 @@ msgstr ""
 "Datenvisualisierung und -analyse, die für jeden verfügbar ist."
 
 #: src/frontend/LabPlot.cpp:75
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2025 LabPlot authors"
+#, kde-format
 msgid "(c) 2007-%1 LabPlot Team"
-msgstr "(c) 2007-2025 LabPlot Autoren"
+msgstr "(c) 2007-%1 LabPlot Team"
 
 #: src/frontend/LabPlot.cpp:76
 #, kde-format
@@ -19280,8 +19253,7 @@ msgstr "Leere Teile überspringen"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnMode)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:33
-#, fuzzy, kde-format
-#| msgid "Column Datatypes:"
+#, kde-format
 msgid "Column Data Types:"
 msgstr "Spaltendatentypen:"
 
@@ -19334,10 +19306,9 @@ msgstr "Basisjahr, falls nur 2 Ziffern für Jahre angegeben wird"
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:116
-#, fuzzy, kde-format
-#| msgid "Column labels"
+#, kde-format
 msgid "Column Names:"
-msgstr "Spaltenbeschriftung"
+msgstr "Spaltennamen:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:123
@@ -22865,18 +22836,7 @@ msgstr "Datei schließen"
 
 #. i18n: ectx: property (html), widget (ResizableTextEdit, teLabel)
 #: src/frontend/ui/labelwidget.ui:55
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#| "font-weight:400; font-style:normal;\">\n"
-#| "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-#| "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
-#| "\"><br /></p></body></html>"
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -22897,6 +22857,9 @@ msgstr ""
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
 "\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
 "weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
@@ -24269,10 +24232,9 @@ msgid "Data, +-:"
 msgstr "Daten, +-:"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
-#, fuzzy, kde-format
-#| msgid "Start Value:"
+#, kde-format
 msgid "Start Value"
-msgstr "Startwert:"
+msgstr "Startwert"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
