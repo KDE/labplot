@@ -983,7 +983,7 @@ void HistogramPrivate::updateLines() {
 	// map the lines and the symbol positions to the scene coordinates
 	linesUnclipped = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	lines = q->cSystem->mapLogicalToScene(lines);
-	visiblePoints = std::vector<bool>(pointsLogical.count(), false);
+	visiblePoints = QVector<bool>(pointsLogical.count(), false);
 	q->cSystem->mapLogicalToScene(pointsLogical, pointsScene, visiblePoints);
 
 	// new line path

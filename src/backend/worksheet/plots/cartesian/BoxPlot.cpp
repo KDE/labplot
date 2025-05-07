@@ -1403,7 +1403,7 @@ void BoxPlotPrivate::mapSymbolsToScene(int index) {
 	if (size > 0) {
 		const int startIndex = 0;
 		const int endIndex = m_outlierPointsLogical[index].size() - 1;
-		std::vector<bool> m_pointVisible;
+		QVector<bool> m_pointVisible;
 		m_pointVisible.resize(size);
 
 		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_outlierPointsLogical[index], m_outlierPoints[index], m_pointVisible);
@@ -1414,7 +1414,7 @@ void BoxPlotPrivate::mapSymbolsToScene(int index) {
 	if (size > 0) {
 		const int startIndex = 0;
 		const int endIndex = m_dataPointsLogical[index].size() - 1;
-		std::vector<bool> pointVisible;
+		QVector<bool> pointVisible;
 		pointVisible.resize(size);
 
 		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_dataPointsLogical[index], m_dataPoints[index], pointVisible);
@@ -1425,7 +1425,7 @@ void BoxPlotPrivate::mapSymbolsToScene(int index) {
 	if (size > 0) {
 		const int startIndex = 0;
 		const int endIndex = m_farOutPointsLogical[index].size() - 1;
-		std::vector<bool> pointVisible;
+		QVector<bool> pointVisible;
 		pointVisible.resize(size);
 
 		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_farOutPointsLogical[index], m_farOutPoints[index], pointVisible);
@@ -1436,7 +1436,7 @@ void BoxPlotPrivate::mapSymbolsToScene(int index) {
 	if (size > 0) {
 		const int startIndex = 0;
 		const int endIndex = m_whiskerEndPointsLogical[index].size() - 1;
-		std::vector<bool> pointVisible;
+		QVector<bool> pointVisible;
 		pointVisible.resize(size);
 
 		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_whiskerEndPointsLogical[index], m_whiskerEndPoints[index], pointVisible);

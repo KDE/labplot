@@ -35,15 +35,13 @@ public:
 
 	// TODO: document the 5 versions
 	Points mapLogicalToScene(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
-	void mapLogicalToScene(const Points& logicalPoints,
-						   Points& scenePoints,
-						   std::vector<bool>& visiblePoints,
-						   MappingFlags flags = MappingFlag::DefaultMapping) const;
+	void
+	mapLogicalToScene(const Points& logicalPoints, Points& scenePoints, QVector<bool>& visiblePoints, MappingFlags flags = MappingFlag::DefaultMapping) const;
 	void mapLogicalToScene(int startIndex,
 						   int endIndex,
 						   const Points& logicalPoints,
 						   Points& scenePoints,
-						   std::vector<bool>& visiblePoints,
+						   QVector<bool>& visiblePoints,
 						   MappingFlags flags = MappingFlag::DefaultMapping) const;
 	QPointF mapLogicalToScene(QPointF, bool& visible, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	Lines mapLogicalToScene(const Lines&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
