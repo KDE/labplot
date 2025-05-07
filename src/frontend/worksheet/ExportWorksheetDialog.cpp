@@ -90,7 +90,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 		"<ul>"
 		"<li>Bounding Box - the bounding box of all objects on the worksheet is exported</li>"
 		"<li>Selection - the area of the currently selected objects is exported</li>"
-		"<li>Worskheet - the complete worksheet area is exported</li>"
+		"<li>Worksheet - the complete worksheet area is exported</li>"
 		"</ul>"
 	);
 	ui->cbExportArea->setToolTip(info);
