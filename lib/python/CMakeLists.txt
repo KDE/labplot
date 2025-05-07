@@ -1,10 +1,18 @@
+# SPDX-FileCopyrightText: 2024 Manuel Alcaraz Zambrano <manuelalcarazzam@gmail.com>
+# SPDX-License-Identifier: BSD-2-Clause
+
 find_package(Python3 COMPONENTS Development Development.Embed Interpreter REQUIRED)
 find_package(PySide6 REQUIRED)
 find_package(Shiboken6 REQUIRED)
 
-include(KDPySide6ModuleBuild REQUIRED)
+include(ECMGeneratePythonBindings)
 
-set(PyLabPlot_sources
+set(bindings_library "PyLabPlot")
+
+set(wrapped_header ${CMAKE_CURRENT_SOURCE_DIR}/bindings.h)
+set(typesystem_file ${CMAKE_CURRENT_SOURCE_DIR}/bindings.xml)
+
+set(generated_sources
     # abstract classes
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/abstractaspect_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/abstractaspect_wrapper.h
@@ -210,148 +218,35 @@ set(PyLabPlot_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/pylabplot_python.h
 )
 
-set(PyLabPlot_depends
-    # abstract classes
-    ${CMAKE_SOURCE_DIR}/src/backend/core/AbstractAspect.h
-    ${CMAKE_SOURCE_DIR}/src/backend/core/AbstractColumn.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/AbstractCoordinateSystem.h
-    ${CMAKE_SOURCE_DIR}/src/backend/datasources/AbstractDataSource.h
-    ${CMAKE_SOURCE_DIR}/src/backend/datasources/filters/AbstractFileFilter.h
-    ${CMAKE_SOURCE_DIR}/src/backend/core/AbstractPart.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/AbstractPlot.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/Plot.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/WorksheetElement.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/WorksheetElementContainer.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/XYAnalysisCurve.h
-    
-    # aspect containers
-    ${CMAKE_SOURCE_DIR}/src/backend/core/Folder.h
-    ${CMAKE_SOURCE_DIR}/src/backend/core/Project.h
-    
-    # column
-    ${CMAKE_SOURCE_DIR}/src/backend/core/column/Column.h
-    
-    # data containers
-    ${CMAKE_SOURCE_DIR}/src/backend/spreadsheet/Spreadsheet.h
-    ${CMAKE_SOURCE_DIR}/src/backend/matrix/Matrix.h
-    
-    # filters
-    ${CMAKE_SOURCE_DIR}/src/backend/datasources/filters/AsciiFilter.h
-    ${CMAKE_SOURCE_DIR}/src/backend/datasources/filters/BinaryFilter.h
-    ${CMAKE_SOURCE_DIR}/src/backend/datasources/filters/CANFilter.h
-    ${CMAKE_SOURCE_DIR}/src/backend/datasources/filters/FITSFilter.h
-    ${CMAKE_SOURCE_DIR}/src/backend/datasources/filters/HDF5Filter.h
-    ${CMAKE_SOURCE_DIR}/src/backend/datasources/filters/ImageFilter.h
-    ${CMAKE_SOURCE_DIR}/src/backend/datasources/filters/JsonFilter.h
-    ${CMAKE_SOURCE_DIR}/src/backend/datasources/filters/MatioFilter.h
-    ${CMAKE_SOURCE_DIR}/src/backend/datasources/filters/McapFilter.h
-    ${CMAKE_SOURCE_DIR}/src/backend/datasources/filters/NetCDFFilter.h
-    ${CMAKE_SOURCE_DIR}/src/backend/datasources/filters/OdsFilter.h
-    ${CMAKE_SOURCE_DIR}/src/backend/datasources/filters/ReadStatFilter.h
-    ${CMAKE_SOURCE_DIR}/src/backend/datasources/filters/ROOTFilter.h
-    ${CMAKE_SOURCE_DIR}/src/backend/datasources/filters/SpiceFilter.h
-    ${CMAKE_SOURCE_DIR}/src/backend/datasources/filters/VectorBLFFilter.h
-    ${CMAKE_SOURCE_DIR}/src/backend/datasources/filters/XLSXFilter.h
-    
-    # helper classes
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/Background.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/CartesianScale.h
-    ${CMAKE_SOURCE_DIR}/src/backend/core/column/ColumnStringIO.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/ErrorBar.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/Line.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/PlotArea.h
-    
-    ${CMAKE_SOURCE_DIR}/src/backend/spreadsheet/StatisticsSpreadsheet.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/Symbol.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/Value.h
-    
-    # plot area elements
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/Axis.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/CartesianPlotLegend.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/CustomPoint.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/ReferenceLine.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/ReferenceRange.h
-    
-    # plots
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/BarPlot.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/BoxPlot.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/Histogram.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/KDEPlot.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/LollipopPlot.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/QQPlot.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/RunChart.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/XYCurve.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/XYEquationCurve.h
-    
-    # analysis plots
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/XYConvolutionCurve.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/XYCorrelationCurve.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/XYDataReductionCurve.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/XYFitCurve.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/XYFunctionCurve.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/XYIntegrationCurve.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/XYInterpolationCurve.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/XYSmoothCurve.h
-    
-    # worksheet
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/Worksheet.h
-    
-    # worksheet element containers
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/plots/cartesian/CartesianPlot.h
-    
-    # worksheet elements
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/Image.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/InfoElement.h
-    ${CMAKE_SOURCE_DIR}/src/backend/worksheet/TextLabel.h
+get_property(_defs DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS)
+list(FILTER _defs EXCLUDE REGEX [[^QT_DISABLE_DEPRECATED_UP_TO=]])
+set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS ${_defs})
+get_property(_defs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS)
+list(FILTER _defs EXCLUDE REGEX [[^QT_DISABLE_DEPRECATED_UP_TO=]])
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS ${_defs})
+
+ecm_generate_python_bindings(
+    PACKAGE_NAME ${bindings_library}
+    VERSION ${PROJECT_VERSION}
+    WRAPPED_HEADER ${wrapped_header}
+    TYPESYSTEM ${typesystem_file}
+    GENERATED_SOURCES ${generated_sources}
+    DEPENDENCIES liblabplot
+    QT_VERSION ${QT_MIN_VERSION}
+    HOMEPAGE_URL "https://invent.kde.org/education/labplot"
+    ISSUES_URL "https://bugs.kde.org/describecomponents.cgi?product=labplot2"
+    AUTHOR "The LabPlot Team"
+    README ../../README.md
 )
 
-get_target_property(liblabplot_INCLUDE_DIRECTORIES liblabplot INCLUDE_DIRECTORIES)
+target_link_libraries(${bindings_library} PRIVATE liblabplot)
+target_compile_definitions(${bindings_library} PRIVATE -DSDK)
 
-set(PyLabPlot_include_paths
-    ${PYSIDE_INCLUDE_DIR}
-    ${PYSIDE_INCLUDE_DIR}/QtCore
-    ${PYSIDE_INCLUDE_DIR}/QtGui
-    ${PYSIDE_INCLUDE_DIR}/QtWidgets
-    ${SHIBOKEN_INCLUDE_DIR}
-    ${Python3_INCLUDE_DIRS}
-    ${Qt6Core_INCLUDE_DIRS}
-    ${Qt6Gui_INCLUDE_DIRS}
-    ${Qt6Widgets_INCLUDE_DIRS}
-    ${CMAKE_CURRENT_BINARY_DIR}/../
-    ${liblabplot_INCLUDE_DIRECTORIES}
+execute_process(
+    COMMAND ${Python_EXECUTABLE} -Esc "import sysconfig; print(sysconfig.get_path('platlib', vars={'platbase': '${CMAKE_INSTALL_PREFIX}', 'base': '${CMAKE_INSTALL_PREFIX}'}))"
+    OUTPUT_VARIABLE PYTHON_INSTALL_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_STRIP_TRAILING_WHITESPACE
 )
 
-get_target_property(liblabplot_LINK_LIBRARIES liblabplot LINK_LIBRARIES)
-
-set(PyLabPlot_link_libraries
-    ${SHIBOKEN_LIBRARY}
-    ${PYSIDE_LIBRARY}
-    ${Python3_LIBRARIES}
-    ${liblabplot_LINK_LIBRARIES}
-    liblabplot
-)
-
-set(PyLabPlot_typesystem_paths
-    ${PYSIDE_TYPESYSTEMS}
-)
-
-set(ENV{CLANG_INSTALL_DIR} /usr/lib64/clang/19)
-
-CREATE_PYTHON_BINDINGS(
-    "pylabplot"
-    "${PyLabPlot_typesystem_paths}"
-    "${PyLabPlot_include_paths}"
-    "${PyLabPlot_sources}"
-    "${PyLabPlot_include_paths}"
-    "${PyLabPlot_link_libraries}"
-    ${CMAKE_CURRENT_SOURCE_DIR}/bindings.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/bindings.xml
-    "${PyLabPlot_depends}"
-    ${CMAKE_CURRENT_BINARY_DIR}
-)
+install(TARGETS ${bindings_library} LIBRARY DESTINATION "${PYTHON_INSTALL_DIR}")
