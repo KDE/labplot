@@ -4,6 +4,7 @@ Bug fixes:
 	* Fix using default font for axis title
 	* Fix build with system QXlsx (!693)
 	* Fix build with system qads 4.4 (!694)
+	* Crash on import when no projects opened (BUG 503800)
 
 -----2.12.0 (25.04.2025) -----
 New features:
