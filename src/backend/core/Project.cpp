@@ -257,15 +257,8 @@ QUndoStack* Project::undoStack() const {
 }
 
 QMenu* Project::createContextMenu() {
-	QMenu* menu = AbstractAspect::createContextMenu();
-
-	// add close action
-	menu->addSeparator();
-	menu->addAction(QIcon::fromTheme(QLatin1String("document-close")), i18n("Close"), this, SIGNAL(closeRequested()));
-
-	// add the actions from MainWin
-	Q_EMIT requestProjectContextMenu(menu);
-
+	QMenu* menu = AbstractAspect::createContextMenu(); // add default actions from Aspect
+	Q_EMIT requestProjectContextMenu(menu); // add the actions from MainWin
 	return menu;
 }
 

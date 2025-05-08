@@ -150,7 +150,6 @@ private:
 	QAction* m_importLabPlotAction;
 	QAction* m_importOpjAction;
 	QAction* m_exportAction;
-	// QAction* m_closeAction;
 	QAction* m_newFolderAction;
 	QAction* m_newWorkbookAction;
 	QAction* m_newSpreadsheetAction;
