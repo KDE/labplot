@@ -7,7 +7,7 @@ find_package(Shiboken6 REQUIRED)
 
 include(ECMGeneratePythonBindings)
 
-set(bindings_library "PyLabPlot")
+set(bindings_library "pylabplot")
 
 set(wrapped_header ${CMAKE_CURRENT_SOURCE_DIR}/bindings.h)
 set(typesystem_file ${CMAKE_CURRENT_SOURCE_DIR}/bindings.xml)
@@ -231,7 +231,7 @@ ecm_generate_python_bindings(
     WRAPPED_HEADER ${wrapped_header}
     TYPESYSTEM ${typesystem_file}
     GENERATED_SOURCES ${generated_sources}
-    DEPENDENCIES liblabplot
+    DEPENDENCIES LabPlot::SDK
     QT_VERSION ${QT_MIN_VERSION}
     HOMEPAGE_URL "https://invent.kde.org/education/labplot"
     ISSUES_URL "https://bugs.kde.org/describecomponents.cgi?product=labplot2"
@@ -239,7 +239,7 @@ ecm_generate_python_bindings(
     README ../../README.md
 )
 
-target_link_libraries(${bindings_library} PRIVATE liblabplot)
+target_link_libraries(${bindings_library} PRIVATE LabPlot::SDK)
 target_compile_definitions(${bindings_library} PRIVATE -DSDK)
 
 execute_process(

@@ -1,3 +1,0 @@
-add_executable(csv_import_hist_xy_fit_pdf_export main.cpp)
-
-target_link_libraries(csv_import_hist_xy_fit_pdf_export LabPlot::SDK)

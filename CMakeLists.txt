@@ -316,7 +316,12 @@ option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
 option(ENABLE_TESTS "Build with tests" ON)
 option(ENABLE_SDK "Build with SDK support" ON)
 if(ENABLE_SDK)
+if(WIN32)
+    option(ENABLE_PYTHON_SDK "Build with Python SDK support" OFF)
+else()
     option(ENABLE_PYTHON_SDK "Build with Python SDK support" ON)
+endif()
+
     option(ENABLE_SDK_EXAMPLES "Build SDK examples" OFF)
 endif()
 
