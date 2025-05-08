@@ -2785,8 +2785,8 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		tmpPath.addRect(axisRect);
 	// add title label, if available
 	QTextDocument doc; // text may be Html, so check if plain text is empty
+	// DEBUG(Q_FUNC_INFO << ", AXIS TITLE = " << title->text().text.toStdString())
 	doc.setHtml(title->text().text);
-	// QDEBUG(Q_FUNC_INFO << ", title text plain: " << doc.toPlainText())
 	QPainterPath titlePath;
 	QPolygonF polygon;
 	if (title->isVisible() && !doc.toPlainText().isEmpty()) {
