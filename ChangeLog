@@ -1,6 +1,7 @@
 -----3.0.0 (XX) -----
 
 Bug fixes:
+	* Fix using default font for axis title
 	* Fix build with system QXlsx (!693)
 	* Fix build with system qads 4.4 (!694)
 
