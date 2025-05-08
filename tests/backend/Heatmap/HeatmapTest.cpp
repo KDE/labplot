@@ -1417,6 +1417,9 @@ void HeatmapTest::testColorAutomatic() {
 void HeatmapTest::testColorManual() {
 	Project project;
 
+	constexpr auto manualFormatMin = -10.;
+	constexpr auto manualFormatMax = 11.;
+
 	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
 	project.addChild(ws);
 
@@ -1436,21 +1439,21 @@ void HeatmapTest::testColorManual() {
 	QCOMPARE(hm->automaticLimits(), false);
 	double defaultFormatMin = hm->formatMin();
 	double defaultFormatMax = hm->formatMax();
-	QVERIFY(defaultFormatMin != -10.);
-	QVERIFY(defaultFormatMax != 11.);
-	hm->setFormatMin(-10.);
-	QCOMPARE(hm->formatMin(), -10.);
-	hm->setFormatMax(11.);
-	QCOMPARE(hm->formatMax(), 11.);
+	QVERIFY(defaultFormatMin != manualFormatMin);
+	QVERIFY(defaultFormatMax != manualFormatMax);
+	hm->setFormatMin(manualFormatMin);
+	QCOMPARE(hm->formatMin(), manualFormatMin);
+	hm->setFormatMax(manualFormatMax);
+	QCOMPARE(hm->formatMax(), manualFormatMax);
 
-	hm->undoStack()->undo(); // hm->setFormatMax(11.);
+	hm->undoStack()->undo(); // hm->setFormatMax(manualFormatMax);
 	QCOMPARE(hm->formatMax(), defaultFormatMax);
-	hm->undoStack()->undo(); // hm->setFormatMin(-10.);
+	hm->undoStack()->undo(); // hm->setFormatMin(manualFormatMin);
 	QCOMPARE(hm->formatMin(), defaultFormatMin);
-	hm->undoStack()->redo(); // hm->setFormatMin(-10.);
-	QCOMPARE(hm->formatMin(), -10.);
-	hm->undoStack()->redo(); // hm->setFormatMax(11.);
-	QCOMPARE(hm->formatMax(), 11.);
+	hm->undoStack()->redo(); // hm->setFormatMin(manualFormatMin);
+	QCOMPARE(hm->formatMin(), manualFormatMin);
+	hm->undoStack()->redo(); // hm->setFormatMax(manualFormatMax);
+	QCOMPARE(hm->formatMax(), manualFormatMax);
 
 	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
 	auto columns = spreadsheet->children<Column>();
@@ -1502,8 +1505,8 @@ void HeatmapTest::testColorManual() {
 	xColumn->setValueAt(11, 6.5); // Testing Duplicates
 	yColumn->setValueAt(11, 65.0); // Testing Duplicates
 
-	QCOMPARE(hm->format().min, -10.);
-	QCOMPARE(hm->format().max, 11.);
+	QCOMPARE(hm->format().min, manualFormatMin);
+	QCOMPARE(hm->format().max, manualFormatMax);
 
 	// 5 Bins X
 	// 0     2     4     6     8     10
@@ -1517,10 +1520,10 @@ void HeatmapTest::testColorManual() {
 	// 3 Bins X
 	// 0        3.3       6.6        10
 	// |---------|---------|---------|   0
-	// |   XX    |   XXX   |   XX    |   50  2 Bins
-	// |   X     |   XX    |   XX    |   100 Y
+	// |   XX    |   XXX   |   X     |   50  2 Bins
+	// |   XX    |   XX    |   XX    |   100 Y
 
-	// QCOMPARE(valueDrawnCounter, 9); // TODO:
+	QCOMPARE(valueDrawnCounter, 9);
 
 	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).start(), 0);
 	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).end(), 10);
@@ -1540,7 +1543,7 @@ void HeatmapTest::testColorManual() {
 			COMPARE_VALUES(10. / 3., 0., 20. / 3., 50., 3.);
 			break;
 		case 2:
-			COMPARE_VALUES(20. / 3., 0., 10., 50., 2.);
+			COMPARE_VALUES(20. / 3., 0., 10., 50., 1.);
 			break;
 
 		// Row 1
@@ -1558,8 +1561,8 @@ void HeatmapTest::testColorManual() {
 	});
 	hm->setYNumBins(2);
 	QCOMPARE(valueDrawnCounter, 6);
-	QCOMPARE(hm->format().min, -10.);
-	QCOMPARE(hm->format().max, 11.);
+	QCOMPARE(hm->format().min, manualFormatMin); // Min did not change
+	QCOMPARE(hm->format().max, manualFormatMax); // Max did not change
 }
 
 void HeatmapTest::testClippingBottomLeft() {
