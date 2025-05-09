@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2024 Manuel Alcaraz Zambrano <manuelalcarazzam@gmail.com>
 # SPDX-License-Identifier: BSD-2-Clause
 
-find_package(Python3 COMPONENTS Development Development.Embed Interpreter REQUIRED)
+find_package(Python3 COMPONENTS Development Interpreter REQUIRED)
 find_package(PySide6 REQUIRED)
 find_package(Shiboken6 REQUIRED)
 
@@ -32,10 +32,14 @@ set(generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/plot_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelementcontainer_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelementcontainer_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyanalysiscurve_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyanalysiscurve_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyanalysiscurve_result_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyanalysiscurve_result_wrapper.h
     
     # aspect containers
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/folder_wrapper.cpp
@@ -104,6 +108,10 @@ set(generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/line_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/plotarea_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/plotarea_wrapper.h
+    # ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/range_wrapper.cpp
+    # ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/range_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/ranget_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/ranget_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/statisticsspreadsheet_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/statisticsspreadsheet_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/symbol_wrapper.cpp
@@ -160,6 +168,8 @@ set(generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductiondata_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductiondata_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductionresult_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydatareductioncurve_datareductionresult_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xydifferentiationcurve_differentiationdata_wrapper.cpp
@@ -168,10 +178,14 @@ set(generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfitcurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfitcurve_fitdata_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfitcurve_fitdata_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfitcurve_fitresult_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfitcurve_fitresult_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfourierfiltercurve_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfourierfiltercurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfourierfiltercurve_filterdata_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfourierfiltercurve_filterdata_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfourierfiltercurve_filterresult_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfourierfiltercurve_filterresult_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfouriertransformcurve_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfouriertransformcurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyfouriertransformcurve_transformdata_wrapper.cpp
@@ -188,6 +202,8 @@ set(generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyintegrationcurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyintegrationcurve_integrationdata_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyintegrationcurve_integrationdata_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyintegrationcurve_integrationresult_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyintegrationcurve_integrationresult_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyinterpolationcurve_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyinterpolationcurve_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyinterpolationcurve_interpolationdata_wrapper.cpp
@@ -212,6 +228,8 @@ set(generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/infoelement_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/textlabel_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/textlabel_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/textlabel_textwrapper_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/textlabel_textwrapper_wrapper.h
 
     # global module wrapper
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/pylabplot_module_wrapper.cpp
