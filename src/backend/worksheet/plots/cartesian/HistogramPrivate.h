@@ -88,7 +88,7 @@ public:
 	QVector<QLineF> linesUnclipped;
 	QVector<QPointF> pointsLogical; // points in logical coordinates
 	QVector<QPointF> pointsScene; // points in scene coordinates
-	QVector<bool> visiblePoints; // vector of the size of symbolPointsLogical with true of false for the points currently visible or not in the plot
+	std::vector<bool> visiblePoints; // vector of the size of symbolPointsLogical with true of false for the points currently visible or not in the plot
 	QVector<QPointF> valuesPoints;
 	QVector<QString> valuesStrings;
 	QPolygonF fillPolygon;

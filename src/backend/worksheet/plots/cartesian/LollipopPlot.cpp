@@ -690,7 +690,7 @@ void LollipopPlotPrivate::updateValues() {
 	}
 
 	// determine the value string for all points that are currently visible in the plot
-	auto visiblePoints = QVector<bool>(m_valuesPointsLogical.count(), false);
+	auto visiblePoints = std::vector<bool>(m_valuesPointsLogical.count(), false);
 	Points pointsScene;
 	q->cSystem->mapLogicalToScene(m_valuesPointsLogical, pointsScene, visiblePoints);
 	const auto& prefix = value->prefix();

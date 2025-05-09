@@ -1077,7 +1077,7 @@ void BarPlotPrivate::updateValues() {
 		valuesPointsLogical << points;
 
 	// determine the value string for all points that are currently visible in the plot
-	auto visiblePoints = QVector<bool>(valuesPointsLogical.count(), false);
+	auto visiblePoints = std::vector<bool>(valuesPointsLogical.count(), false);
 	Points pointsScene;
 	q->cSystem->mapLogicalToScene(valuesPointsLogical, pointsScene, visiblePoints);
 	const auto& prefix = value->prefix();
