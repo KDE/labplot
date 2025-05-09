@@ -182,6 +182,10 @@ int ProjectPrivate::mXmlVersion = buildXmlVersion;
 Project::Project()
 	: Folder(i18n("Project"), AspectType::Project)
 	, d_ptr(new ProjectPrivate(this)) {
+#ifdef SDK
+	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
+	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
+#endif
 	Q_D(Project);
 
 	QString user = qEnvironmentVariable("USER"); // !Windows
