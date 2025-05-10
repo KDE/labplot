@@ -116,9 +116,9 @@ d64a4dc60902ee3176936e75d3be8339675fd200  labplot-2.12.0-x86_64.AppImage
 
 9. Distribute packages:
 * Update package in MS Partner Center (appxupload) for Windows App Store https://partner.microsoft.com/en-us/dashboard
-* Upload tarball and packages to https://sourceforge.net/projects/labplot/ [scp] + Update default downloads
-* Ping Jonathan Riddell/Scarlett to update Snap and chtof to update Chocolatey package
 * Update Flatpak @ https://github.com/flathub/org.kde.labplot2/blob/master/org.kde.labplot2.json
+* Upload tarball and packages to https://sourceforge.net/projects/labplot/ and update default downloads
+* Ping Jonathan Riddell/Scarlett to update Snap and chtof to update Chocolatey package
 
 
 10. Update websites (when packages are available):

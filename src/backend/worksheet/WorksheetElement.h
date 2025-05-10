@@ -135,7 +135,6 @@ protected:
 	int m_cSystemIndex{0}; // index of the coordinate system used from plot
 	const CartesianCoordinateSystem* cSystem{nullptr}; // current cSystem
 
-	virtual void handleAspectUpdated(const QString& path, const AbstractAspect*);
 	friend class Project;
 
 public Q_SLOTS:
@@ -154,6 +153,7 @@ private:
 protected Q_SLOTS:
 	void changeVisibility();
 	void changeLocking();
+	virtual void handleAspectUpdated(const QString& path, const AbstractAspect*);
 
 private Q_SLOTS:
 	void prepareDrawingOrderMenu();

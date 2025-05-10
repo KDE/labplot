@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-25 00:38+0000\n"
-"PO-Revision-Date: 2025-02-11 10:40+0100\n"
+"POT-Creation-Date: 2025-05-09 00:38+0000\n"
+"PO-Revision-Date: 2025-05-07 18:56+0200\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.08.3\n"
+"X-Generator: Lokalize 24.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -376,13 +376,13 @@ msgstr "Ein%1"
 msgid "Import Data"
 msgstr "Daten importieren"
 
-#: src/backend/core/AbstractPart.cpp:126 src/frontend/MainWin.cpp:684
-#: src/frontend/MainWin.cpp:693
+#: src/backend/core/AbstractPart.cpp:126 src/frontend/MainWin.cpp:682
+#: src/frontend/MainWin.cpp:691
 #, kde-format
 msgid "From File..."
 msgstr "Aus Datei..."
 
-#: src/backend/core/AbstractPart.cpp:128 src/frontend/MainWin.cpp:705
+#: src/backend/core/AbstractPart.cpp:128 src/frontend/MainWin.cpp:703
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Aus SQL-Datenbank..."
@@ -407,7 +407,7 @@ msgstr "Drucken"
 msgid "Print Preview"
 msgstr "Druckvorschau"
 
-#: src/backend/core/AbstractPart.cpp:147 src/frontend/MainWin.cpp:777
+#: src/backend/core/AbstractPart.cpp:147 src/frontend/MainWin.cpp:775
 #, kde-format
 msgid "&Close"
 msgstr "S&chließen"
@@ -423,7 +423,7 @@ msgid "incompatible filter type"
 msgstr "Inkompatibler Filtertyp"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:706
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:699
 #: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
@@ -696,52 +696,47 @@ msgstr "Noch nicht geladen."
 msgid "Project"
 msgstr "Projekt"
 
-#: src/backend/core/Project.cpp:264
-#, kde-format
-msgid "Close"
-msgstr "Schließen"
-
-#: src/backend/core/Project.cpp:301
+#: src/backend/core/Project.cpp:294
 #, kde-format
 msgid "%1: set author"
 msgstr "%1: Autor festlegen"
 
-#: src/backend/core/Project.cpp:308
+#: src/backend/core/Project.cpp:301
 #, kde-format
 msgid "%1: save dock state changed"
 msgstr "%1: Dockzustand speichern geändert"
 
-#: src/backend/core/Project.cpp:315
+#: src/backend/core/Project.cpp:308
 #, kde-format
 msgid "%1: save calculation changed"
 msgstr "%1: Berechnungen speichern geändert"
 
-#: src/backend/core/Project.cpp:550 src/backend/core/Project.cpp:580
+#: src/backend/core/Project.cpp:543 src/backend/core/Project.cpp:573
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Die Datei kann leider nicht zum Lesen geöffnet werden."
 
-#: src/backend/core/Project.cpp:561 src/backend/core/Project.cpp:587
+#: src/backend/core/Project.cpp:554 src/backend/core/Project.cpp:580
 #, kde-format
 msgid "The project file is empty."
 msgstr "Die Projektdatei ist leer."
 
-#: src/backend/core/Project.cpp:561 src/backend/core/Project.cpp:587
+#: src/backend/core/Project.cpp:554 src/backend/core/Project.cpp:580
 #, kde-format
 msgid "Error opening project"
 msgstr "Fehler beim Öffnen des Projekts"
 
-#: src/backend/core/Project.cpp:606
+#: src/backend/core/Project.cpp:599
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Unbekannter Fehler beim Öffnen des Projekts %1."
 
-#: src/backend/core/Project.cpp:607
+#: src/backend/core/Project.cpp:600
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Fehler beim Öffnen des Projekts"
 
-#: src/backend/core/Project.cpp:627
+#: src/backend/core/Project.cpp:620
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -760,43 +755,43 @@ msgstr ""
 "\n"
 "Möchten Sie fortfahren?"
 
-#: src/backend/core/Project.cpp:633
+#: src/backend/core/Project.cpp:626
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "Fehlende Unterstützung für CAS"
 
-#: src/backend/core/Project.cpp:663
+#: src/backend/core/Project.cpp:656
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "Das Attribut „version“ fehlt."
 
-#: src/backend/core/Project.cpp:713
+#: src/backend/core/Project.cpp:706
 #, kde-format
 msgid "no project element found"
 msgstr "Kein Projektelement gefunden"
 
-#: src/backend/core/Project.cpp:715
+#: src/backend/core/Project.cpp:708
 #, kde-format
 msgid "no valid XML document found"
 msgstr "Kein gültiges XML-Dokument gefunden"
 
-#: src/backend/core/Project.cpp:765 src/backend/core/Project.cpp:771
-#: src/backend/core/Project.cpp:822
+#: src/backend/core/Project.cpp:758 src/backend/core/Project.cpp:764
+#: src/backend/core/Project.cpp:815
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "Fehler beim Öffnen der Datei '%1'."
 
-#: src/backend/core/Project.cpp:828
+#: src/backend/core/Project.cpp:821
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "Fehler beim Verarbeiten des Inhalts von Datei '%1'."
 
-#: src/backend/core/Project.cpp:831
+#: src/backend/core/Project.cpp:824
 #, kde-format
 msgid "Failed to open project"
 msgstr "Fehler beim Öffnen vom Projekt"
 
-#: src/backend/core/Project.cpp:1299
+#: src/backend/core/Project.cpp:1292
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr ""
@@ -1109,10 +1104,9 @@ msgid "Unable to open device"
 msgstr "Öffnen des Gerätes nicht möglich"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:209
-#, fuzzy, kde-format
-#| msgid "No sheet selected."
+#, kde-format
 msgid "No new line detected"
-msgstr "Kein Blatt ausgewählt."
+msgstr "Kein Zeilenumbruch erkannt"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, kde-format
@@ -1182,7 +1176,7 @@ msgstr "Ungültiges Trennzeichen"
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
 #, kde-format
 msgid "Serial device must be initialized before reading data from it"
-msgstr ""
+msgstr "Serielle Geräte müssen vor dem Lesen von Daten initialisiert werden"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
 #, kde-format
@@ -1940,7 +1934,7 @@ msgid "Unknown"
 msgstr "Unbekannt"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:655 src/frontend/MainWin.cpp:2001
+#: src/frontend/MainWin.cpp:653 src/frontend/MainWin.cpp:1999
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -6356,8 +6350,8 @@ msgstr "'%1' kann nicht zum Schreiben geöffnet werden."
 msgid "%1: set text"
 msgstr "%1: Text festlegen"
 
-#: src/backend/note/Note.cpp:145 src/backend/worksheet/TextLabel.cpp:278
-#: src/backend/worksheet/TextLabel.cpp:317
+#: src/backend/note/Note.cpp:145 src/backend/worksheet/TextLabel.cpp:282
+#: src/backend/worksheet/TextLabel.cpp:334
 #, kde-format
 msgid "%1: set background color"
 msgstr "%1: Hintergrundfarbe festlegen"
@@ -7295,16 +7289,14 @@ msgid "%1: mask rows with missing values"
 msgstr " %1: Reihen mit fehlenden Werten maskieren"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:417
-#, fuzzy, kde-format
-#| msgid "%1: change comment"
+#, kde-format
 msgid "%1: toggle comments header"
-msgstr "%1: Kommentar ändern"
+msgstr "%1: Kommentarkopf umschalten"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:425
-#, fuzzy, kde-format
-#| msgid "Unable to parse header"
+#, kde-format
 msgid "%1: toggle sparklines header"
-msgstr "Fehler beim Lesen der Kopfzeilen"
+msgstr "%1: Wortgrafikkopf umschalten"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:489
 #: src/backend/spreadsheet/Spreadsheet.cpp:490
@@ -7706,7 +7698,7 @@ msgstr "%1: Rechte Auffüllung festlegen"
 msgid "%1: set bottom padding"
 msgstr "%1: Untere Auffüllung festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:282
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:287
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:232
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:106
@@ -7724,7 +7716,7 @@ msgstr "%1: Untere Auffüllung festlegen"
 msgid "Horizontal"
 msgstr "Waagerecht"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:285
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:290
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:92
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:235
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:109
@@ -7744,7 +7736,7 @@ msgstr "Waagerecht"
 msgid "Vertical"
 msgstr "Senkrecht"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:305
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:310
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:100
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:243
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:117
@@ -7760,7 +7752,7 @@ msgstr "Ausrichtung"
 #. i18n: ectx: property (text), widget (QLabel, lLine)
 #. i18n: ectx: property (text), widget (QLabel, lCenter)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:311
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:316
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:670
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:124
 #: src/frontend/dockwidgets/XYCurveDock.cpp:485
@@ -7780,14 +7772,14 @@ msgstr "Ausrichtung"
 msgid "Line"
 msgstr "Linie"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:313
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:318
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:126
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:147
 #, kde-format
 msgid "Style"
 msgstr "Stil"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:318
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:323
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:131
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:152
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
@@ -7797,255 +7789,255 @@ msgstr "Stil"
 msgid "Color"
 msgstr "Farbe"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:548
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:553
 #, kde-format
 msgid "%1: set axis range type"
 msgstr "%1: Achsenbereichstyp festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:573
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:578
 #: src/frontend/dockwidgets/AxisDock.cpp:622
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr "%1: Achsenausrichtung festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:580
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:585
 #, kde-format
 msgid "%1: set axis position"
 msgstr "%1: Achsenposition festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:588
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:593
 #, kde-format
 msgid "%1: set axis offset"
 msgstr "%1: Achsenversatz festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:603
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:608
 #, kde-format
 msgid "%1: set axis range"
 msgstr "%1: Achsenbereich festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:642
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:647
 #, kde-format
 msgid "%1: set range scale"
 msgstr "%1: Bereichsskalierung festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:649
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:654
 #, kde-format
 msgid "%1: set scale"
 msgstr "%1: Skalierung festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:656
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:661
 #, kde-format
 msgid "%1: set major tick start type"
 msgstr "%1: Anfangstyp der Hauptstriche festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:663
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:668
 #, kde-format
 msgid "%1: set major tick start offset"
 msgstr "%1: Startversatz der Hauptstriche festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:671
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:676
 #, kde-format
 msgid "%1: set major tick start value"
 msgstr "%1: Startwert der Hauptstriche festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:683
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:688
 #, kde-format
 msgid "%1: set axis scaling factor"
 msgstr "%1: Skalierungsfaktor der Achsen festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:692
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:697
 #, kde-format
 msgid "%1: set axis zero offset"
 msgstr "%1: Nullpunkt-Versatz der Achsen festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:698
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:703
 #, kde-format
 msgid "%1: show scale and offset"
 msgstr "%1: Skala und Versatz anzeigen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:705
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:710
 #, kde-format
 msgid "%1: set axis logical position"
 msgstr "%1: Logische Achsenposition festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:713
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:720
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:718
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:725
 #, kde-format
 msgid "%1: set title offset"
 msgstr "%1: Versatz des Titels festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:728
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:733
 #, kde-format
 msgid "%1: set arrow type"
 msgstr "%1: Pfeiltyp festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:735
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:740
 #, kde-format
 msgid "%1: set arrow position"
 msgstr "%1: Pfeilposition festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:742
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:747
 #, kde-format
 msgid "%1: set arrow size"
 msgstr "%1: Pfeilgröße festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:750
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:755
 #, kde-format
 msgid "%1: set major ticks direction"
 msgstr "%1: Richtung der Hauptstriche festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:757
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:762
 #, kde-format
 msgid "%1: set major ticks type"
 msgstr "%1: Typ der Hauptstriche festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:765
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:770
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
 msgstr "%1: automatische Haupttickzahl aktivieren/deaktivieren"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:767
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:782
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:772
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:787
 #, kde-format
 msgid "%1: set the total number of the major ticks"
 msgstr "%1: Gesamtzahl der Hauptstriche festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:784
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:868
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:789
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:873
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
 msgstr "%1: automatische Haupttickzahl deaktivieren"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:809
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:814
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
 msgstr "%1: Abstand der Hauptstriche festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:816
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:821
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr "%1: Werte für Hauptstriche zuweisen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:830
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:835
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr "%1: Länge der Hauptstriche festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:838
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:843
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr "%1: Richtung der Nebenstriche festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:845
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:850
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr "%1: Typ der Nebenstriche festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:853
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:858
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr "%1: automatische Nebentickzahl aktivieren/deaktivieren"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:856
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:867
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:861
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:872
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr "%1: Gesamtzahl der Nebenstriche festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:900
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:905
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
 msgstr "%1: Abstand der Nebenstriche festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:907
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:912
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr "%1: Werte für Nebenstriche zuweisen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:921
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:926
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr "%1: Länge der Nebenstriche festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:930
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:935
 #, kde-format
 msgid "%1: set labels format"
 msgstr "%1: Format der Beschriftung festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:937
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:942
 #, kde-format
 msgid "%1: set labels format automatic"
 msgstr "%1: Format der Beschriftung automatisch festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:944
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:951
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:949
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:956
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: Genauigkeit der Beschriftung festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:958
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:963
 #, kde-format
 msgid "%1: set labels datetime format"
 msgstr "%1: Datumsformat der Beschriftung festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:965
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:970
 #, kde-format
 msgid "%1: set labels position"
 msgstr "%1: Position der Beschriftung festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:972
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:977
 #, kde-format
 msgid "%1: set label offset"
 msgstr "%1: Versatz der Beschriftung festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:979
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:984
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr "%1: Drehwinkel der Beschriftung festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:986
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:991
 #, kde-format
 msgid "%1: set labels text type"
 msgstr "%1: Textstil der Beschriftung festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:993
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:998
 #, kde-format
 msgid "%1: set labels text column"
 msgstr "%1: Textspalte der Beschriftung festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1007
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1012
 #, kde-format
 msgid "%1: set label color"
 msgstr "%1: Schriftfarbe der Beschriftung festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1014
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1019
 #, kde-format
 msgid "%1: set label font"
 msgstr "%1: Schriftart der Beschriftung festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1021
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1026
 #, kde-format
 msgid "%1: set labels background type"
 msgstr "%1: Hintergrundart der Beschriftung festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1028
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1033
 #, kde-format
 msgid "%1: set label background color"
 msgstr "%1: Hintergrundfarbe der Beschriftung festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1035
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1040
 #, kde-format
 msgid "%1: set label prefix"
 msgstr "%1: Präfix der Beschriftung festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1042
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1047
 #, kde-format
 msgid "%1: set label suffix"
 msgstr "%1: Suffix der Beschriftung festlegen"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1049
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1054
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr "%1: Deckkraft der Beschriftung festlegen"
@@ -8441,7 +8433,7 @@ msgid "Reference Range"
 msgstr "Referenzbereich"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:552
-#: src/frontend/MainWin.cpp:903 src/frontend/notebook/NotebookView.cpp:168
+#: src/frontend/MainWin.cpp:901 src/frontend/notebook/NotebookView.cpp:168
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:295
 #: src/frontend/worksheet/WorksheetView.cpp:434
@@ -8885,7 +8877,7 @@ msgid "%1: use plot's color"
 msgstr "%1: Plotfarbe nutzen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:214
-#: src/backend/worksheet/TextLabel.cpp:365
+#: src/backend/worksheet/TextLabel.cpp:408
 #, kde-format
 msgid "%1: set font color"
 msgstr "%1: Schriftfarbe festlegen"
@@ -9118,83 +9110,71 @@ msgid "%1: set sample size"
 msgstr "%1: Samplegröße festlegen"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:568
-#, fuzzy, kde-format
-#| msgid "%1: change exact limits"
+#, kde-format
 msgid "%1: enable exact limits"
-msgstr "%1: exakte Grenzen ändern"
+msgstr "%1: exakte Grenzen aktivieren"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:568
-#, fuzzy, kde-format
-#| msgid "%1: change exact limits"
+#, kde-format
 msgid "%1: disable exact limits"
-msgstr "%1: exakte Grenzen ändern"
+msgstr "%1: exakte Grenzen deaktivieren"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:577
-#, fuzzy, kde-format
-#| msgid "%1: set axis zero offset"
+#, kde-format
 msgid "%1: set maximal upper limit"
-msgstr "%1: Nullpunkt-Versatz der Achsen festlegen"
+msgstr "%1: Maximale Obergrenze festlegen"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:584
-#, fuzzy, kde-format
-#| msgid "%1: change negative lower limit"
+#, kde-format
 msgid "%1: set minimal lower limit"
-msgstr "%1: negative untere Grenze ändern"
+msgstr "%1: minimale Untergrenze festlegen"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:593
 #, kde-format
 msgid "%1: enable control labels"
-msgstr ""
+msgstr "%1: Kontrollbeschriftung aktivieren"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:593
-#, fuzzy, kde-format
-#| msgid "%1: disable theming"
+#, kde-format
 msgid "%1: disable control labels"
-msgstr "%1: Designauswahl deaktivieren"
+msgstr "%1: Kontrollbeschriftung deaktivieren"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:615
-#, fuzzy, kde-format
-#| msgid "%1: set border shape"
+#, kde-format
 msgid "%1: set labels border shape"
-msgstr "%1: Rahmenform festlegen"
+msgstr "%1: Beschriftungsrandform festlegen"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:630
-#, fuzzy, kde-format
-#| msgid "%1: set label font"
+#, kde-format
 msgid "%1: set labels font"
 msgstr "%1: Schriftart der Beschriftung festlegen"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:665
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:697
-#, fuzzy, kde-format
-#| msgid "%1: set label background color"
+#, kde-format
 msgid "%1: set labels background color"
-msgstr "%1: Hintergrundfarbe der Beschriftung festlegen"
+msgstr "%1: Beschriftungshintergrundfarbe festlegen"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:755
-#, fuzzy, kde-format
-#| msgid "%1: set border style"
+#, kde-format
 msgid "%1: set labels border style"
-msgstr "%1: Rahmenstil festlegen"
+msgstr "%1: Beschriftungsrahmenstil festlegen"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:766
-#, fuzzy, kde-format
-#| msgid "%1: set labels format"
+#, kde-format
 msgid "%1: set labels border width"
-msgstr "%1: Format der Beschriftung festlegen"
+msgstr "%1: Beschriftungsrandbreite festlegen"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:777
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:788
-#, fuzzy, kde-format
-#| msgid "%1: set label color"
+#, kde-format
 msgid "%1: set labels border color"
-msgstr "%1: Schriftfarbe der Beschriftung festlegen"
+msgstr "%1: Beschriftungsrandfarbe festlegen"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:880
-#, fuzzy, kde-format
-#| msgid "Not enough data points available."
+#, kde-format
 msgid "Not enough data provided."
-msgstr "Nicht genug Datenpunkte verfügbar."
+msgstr "Nicht genug Daten verfügbar."
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:980
 #, kde-format
@@ -9821,7 +9801,7 @@ msgstr "Unsicherheit"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
 #, kde-format
 msgid "Uncertainty, %"
-msgstr "Unischerheit, %"
+msgstr "Unsicherheit, %"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1887
 #, kde-format
@@ -10051,26 +10031,26 @@ msgstr "%1: Randtyp geändert"
 msgid "%1: set plot area corner radius"
 msgstr "%1: Eckenradius des Plotbereichs festlegen"
 
-#: src/backend/worksheet/TextLabel.cpp:306
-#: src/backend/worksheet/TextLabel.cpp:316
-#: src/backend/worksheet/TextLabel.cpp:319
-#: src/backend/worksheet/TextLabel.cpp:325
-#: src/backend/worksheet/TextLabel.cpp:334
+#: src/backend/worksheet/TextLabel.cpp:318
+#: src/backend/worksheet/TextLabel.cpp:333
+#: src/backend/worksheet/TextLabel.cpp:336
+#: src/backend/worksheet/TextLabel.cpp:342
+#: src/backend/worksheet/TextLabel.cpp:351
 #, kde-format
 msgid "%1: set label text"
 msgstr "%1: Beschriftungstext festlegen"
 
-#: src/backend/worksheet/TextLabel.cpp:351
+#: src/backend/worksheet/TextLabel.cpp:394
 #, kde-format
 msgid "%1: set label placeholdertext"
 msgstr "%1: Beschriftungsplatzhalter festlegen"
 
-#: src/backend/worksheet/TextLabel.cpp:358
+#: src/backend/worksheet/TextLabel.cpp:401
 #, kde-format
 msgid "%1: set TeX main font"
 msgstr "%1: TeX-Schriftart festlegen"
 
-#: src/backend/worksheet/TextLabel.cpp:373
+#: src/backend/worksheet/TextLabel.cpp:416
 #, kde-format
 msgid "%1: set border shape"
 msgstr "%1: Rahmenform festlegen"
@@ -10210,18 +10190,17 @@ msgstr "%1: Logische Position festlegen"
 #: src/frontend/AboutDialog.cpp:82
 #, kde-format
 msgid "What's new"
-msgstr ""
+msgstr "Was gibt es Neues"
 
 #: src/frontend/AboutDialog.cpp:88
 #, kde-format
 msgid "Copy Environment"
-msgstr ""
+msgstr "Umgebung kopieren"
 
 #: src/frontend/AboutDialog.cpp:93
-#, fuzzy, kde-format
-#| msgid "Copy Selection"
+#, kde-format
 msgid "Copy Citation"
-msgstr "Auswahl kopieren"
+msgstr "Zitierung kopieren"
 
 #: src/frontend/AboutDialog.cpp:97
 #, kde-format
@@ -10229,22 +10208,19 @@ msgid "Donate"
 msgstr "Spenden"
 
 #: src/frontend/AboutDialog.cpp:116
-#, fuzzy, kde-format
-#| msgid "Clipboard"
+#, kde-format
 msgid "Copy to Clipboard"
-msgstr "Zwischenablage"
+msgstr "In Zwischenablage kopieren"
 
 #: src/frontend/AboutDialog.cpp:142
-#, fuzzy, kde-format
-#| msgid "Release build "
+#, kde-format
 msgid "Release build"
-msgstr "Veröffentlichungsversion "
+msgstr "Veröffentlichungsversion"
 
 #: src/frontend/AboutDialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Debug build "
+#, kde-format
 msgid "Debug build"
-msgstr "Fehlersuchversion "
+msgstr "Entwicklerversion"
 
 #: src/frontend/AboutDialog.cpp:180
 #, kde-format
@@ -10306,7 +10282,7 @@ msgstr "Bitte Fehler melden an:"
 #: src/frontend/AboutDialog.cpp:199
 #, kde-format
 msgid "Partly funded by:"
-msgstr ""
+msgstr "Teilweise finanziert durch:"
 
 #: src/frontend/AboutDialog.cpp:210 src/frontend/AboutDialog.cpp:370
 #: src/frontend/AboutDialog.cpp:371
@@ -10453,25 +10429,23 @@ msgstr "Komponenten:"
 #: src/frontend/AboutDialog.cpp:367
 #, kde-format
 msgid "Qt"
-msgstr ""
+msgstr "Qt"
 
 #: src/frontend/AboutDialog.cpp:368
 #, kde-format
 msgid "KDE Frameworks"
-msgstr ""
+msgstr "KDE Frameworks"
 
 #: src/frontend/AboutDialog.cpp:383
-#, fuzzy, kde-format
-#| msgid ""
-#| "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
-#| "Analysis software accessible to everyone."
+#, kde-format
 msgid ""
 "LabPlot Team (%1), LabPlot: A FREE, open source, cross-platform Data "
 "Visualization and Analysis software accessible to everyone, (Version %2) "
 "[Computer software]. %3."
 msgstr ""
-"LabPlot ist ein FREIE, Open Source und plattformübergreifende Software zur "
-"Datenvisualisierung und -analyse, die für jeden verfügbar ist."
+"LabPlot Team (%1), LabPlot: eine FREIE, Open Source und "
+"plattformübergreifende Software zur Datenvisualisierung und -analyse, die "
+"für jeden verfügbar ist, (Version %2) [Computersoftware]. %3."
 
 #: src/frontend/colormaps/ColorMapsDialog.cpp:39
 #, kde-format
@@ -10879,24 +10853,12 @@ msgid "Custom column names, comma separated. E.g. \"x, y\""
 msgstr "Eigene Spaltennamen durch Komma getrennt. Zum Beispiel \"x, y\""
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:115
-#, fuzzy, kde-format
-#| msgid "Custom column modes, comma separated"
+#, kde-format
 msgid "Custom column data types, comma separated"
-msgstr "Eigene Spaltennamen durch Komma getrennt."
+msgstr "Eigene Spaltendatentypen durch Komma getrennt."
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
-#, fuzzy, kde-format
-#| msgid ""
-#| "If not empty, the number of columns must match the number of column names "
-#| "if provided and it must match the number of columns in the imported file."
-#| "<br>Datatypes:<table><tr><td>%1</td><td>Integer number with 32bit size "
-#| "(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integer "
-#| "number with 64bit size (−9.223.372.036.854.775.808 .. "
-#| "9.223.372.036.854.775.807).</td></tr><tr><td>%3</td><td>Floating point "
-#| "number 64bit size. Resolution of around 16 digits.</td></tr><tr><td>%4</"
-#| "td><td>Datetime with the format from the datetime text box if not empty, "
-#| "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
-#| "td></tr></table>"
+#, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
 "provided and it must match the number of columns in the imported file."
@@ -10910,14 +10872,14 @@ msgid ""
 "td></tr></table>"
 msgstr ""
 "Wenn nicht leer, muss die Anzahl der Spalten und Spaltennamen übereinstimmen "
-"und der Anzahl der Spalten in der Datei entsprechen.<br> Datentypen:"
-"<table><tr><td>%1</td><td>Integerzahl mit 32bit Größe (−2.147.483.648 .. "
-"2.147.483.647).</td></tr><tr><td>%2</td><td>Integerzahl mit 64bit Größe "
-"(−9.223.372.036.854.775.808 .. 9.223.372.036.854.775.807).</td></tr><tr><td>"
-"%3</td><td>Gleitkommazahl mit 64bit Größe. Genauigkkeit ca. 16 Ziffern.</"
-"td></tr><tr><td>%4</td><td>Datm und Zeit mit dem Format der Datums- und Zeit-"
-"Textbox (falls nicht leer), sonst automatisch festgelegt.</td></tr><tr><td>"
-"%5</td><td>Ein Text.</td></tr></table>"
+"und der Anzahl der Spalten in der importierten Datei entsprechen.<br> "
+"Datentypen:<table><tr><td>%1</td><td>Integerzahl mit 32bit Größe "
+"(−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Integerzahl "
+"mit 64bit Größe (−9.223.372.036.854.775.808 .. 9.223.372.036.854.775.807).</"
+"td></tr><tr><td>%3</td><td>Gleitkommazahl mit 64bit Größe. Genauigkkeit ca. "
+"16 Ziffern.</td></tr><tr><td>%4</td><td>Datm und Zeit mit dem Format der "
+"Datums- und Zeit-Textbox (falls nicht leer), sonst automatisch festgelegt.</"
+"td></tr><tr><td>%5</td><td>Ein Text.</td></tr></table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:138
 #, kde-format
@@ -11797,41 +11759,35 @@ msgstr ""
 "Endreihe muss größer als Startreihe sein, oder -1."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1817
-#, fuzzy, kde-format
-#| msgid "Preview: Initialization failed: %1"
+#, kde-format
 msgid "Initialization failed: %1"
-msgstr "Vorschau: Initialisierung fehlgeschlagen: %1"
+msgstr "Initialisierung fehlgeschlagen: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1842
-#, fuzzy, kde-format
-#| msgid "Preview: Failed to connect to local socket %1 - %2"
+#, kde-format
 msgid "Failed to connect to the local socket: %1"
-msgstr "Vorschau: Keine Verbindung zum lokalen Socket %1 - %2"
+msgstr "Keine Verbindung zum lokalen Socket: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1859
-#, fuzzy, kde-format
-#| msgid "Preview: Failed to connect to TCP socket - %1"
+#, kde-format
 msgid "Failed to connect to the TCP socket. %1"
-msgstr "Vorschau: Verbindung zum TCP Socket fehlgeschlagen - %1"
+msgstr "Verbindung zum TCP Socket fehlgeschlagen. %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1865
 #: src/frontend/datasources/ImportFileWidget.cpp:1894
-#, fuzzy, kde-format
-#| msgid "The device timed out."
+#, kde-format
 msgid "Socket operation timed out."
-msgstr "Das Gerät hatte eine Zeitüberschreitung."
+msgstr "Die Socketoperation hatte eine Zeitüberschreitung."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1879
-#, fuzzy, kde-format
-#| msgid "ERROR: not ready for read after 2 sec"
+#, kde-format
 msgid "Not ready for read after 2s:"
-msgstr "FEHLER: Nicht bereit fürs Lesen nach 2 Sekunden"
+msgstr "Nicht bereit fürs Lesen nach 2 Sekunden:"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1898
-#, fuzzy, kde-format
-#| msgid "Unable to open file:"
+#, kde-format
 msgid "Unable to bind: "
-msgstr "Fehler beim Öffnen der Datei:"
+msgstr "Fehler beim Zugriff: "
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1915
 #, kde-format
@@ -11839,16 +11795,14 @@ msgid "Parse Error: %1"
 msgstr "Parserfehler: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1917
-#, fuzzy, kde-format
-#| msgid "ERROR: not ready for read after 2 sec"
+#, kde-format
 msgid "Not ready for read after 2 sec"
-msgstr "FEHLER: Nicht bereit fürs Lesen nach 2 Sekunden"
+msgstr "Nicht bereit fürs Lesen nach 2 Sekunden"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1921
-#, fuzzy, kde-format
-#| msgid "ERROR: failed to open serial port. error: %1"
+#, kde-format
 msgid "Failed to open serial port. error: %1"
-msgstr "FEHLER: Öffnen des Seriellen Ports fehlgeschlagen. Fehler: %1"
+msgstr "Öffnen des Seriellen Ports fehlgeschlagen. Fehler: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1940
 #, kde-format
@@ -12112,7 +12066,7 @@ msgid "Open LabPlot Project"
 msgstr "LabPlot-Projekt öffnen"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:1496
+#: src/frontend/MainWin.cpp:1494
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "LabPlot-Projekte (%1)"
@@ -12136,8 +12090,8 @@ msgstr "Ordnername:"
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:398 src/frontend/MainWin.cpp:649
-#: src/frontend/MainWin.cpp:1983 src/frontend/SettingsDialog.cpp:64
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:398 src/frontend/MainWin.cpp:647
+#: src/frontend/MainWin.cpp:1981 src/frontend/SettingsDialog.cpp:64
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12402,7 +12356,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2892
+#: src/frontend/MainWin.cpp:2890
 #, kde-format
 msgid "Warning"
 msgstr "Warnung"
@@ -13255,6 +13209,13 @@ msgid ""
 "the most concise format</li><li>Automatic (E) - selects between 'Decimal' "
 "and 'Scientific (E)' to get the most concise format</li></ul>"
 msgstr ""
+"Gibt an, wie numerische Werte in der Tabelle angegeben werden:"
+"<ul><li>Dezimal - formatiert wie [-]9.9</li><li>Wissenschaftlich (e) - "
+"formatiert wie [-]9.9e[+|-]999</li><li>Wissenschaftlich (E) - formatiert wie "
+"[-]9.9E[+|-]999</li><li>Automatisch (e) - nutzt 'Dezimal' und "
+"'Wissenschaftlich (e)' für die optimale Formatierung</li><li>Automatisch (E) "
+"- nutzt 'Dezimal' und 'Wissenschafltich (E)' für die optimale Formatierung</"
+"li></ul>"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:337
 #, kde-format
@@ -13265,6 +13226,11 @@ msgid ""
 "represents the maximum number of significant digits (trailing zeroes are "
 "omitted)."
 msgstr ""
+"Für die 'Dezimal', 'Wissenschaftlich (e)', and 'Wissenschaftlich (E)' "
+"Formatierung, gibt die Genauigkeit die Nachkommastellen an.\n"
+"Für die 'Automatisch (e)' and 'Automatisch (E)' Formatierung, gibt die "
+"maximale Anzahl an signifikanten Stellen an (nachfolgende Nullen werden "
+"weggelassen)."
 
 # kde-format
 #: src/frontend/dockwidgets/ColumnDock.cpp:342
@@ -13372,6 +13338,15 @@ msgid ""
 "li><li>Scott - <i>h = 3.49 * sigma / pow(n, 3/2)</i>, optimal method for "
 "normally distributed data</li></ul>"
 msgstr ""
+"Methode zur Bestimmung der Anzahl <i>k</i> an Bins und deren Breite <i>h</i> "
+"für <i>n</i> Werte:<ul><li>Anzahl - die Anzahl der Bins</li><li>Breite - die "
+"Anzahl der Bins bestimmt sich anhand der Breite durch <i>k = (max(x) - "
+"min(x) / h</i>)</li><li>Wurzel - <i>k = sqrt(n)</i></li><li>Rice -  <i>k = 2 "
+"* pow(n, 3/2)</i>, einfache Alternative zur Sturges-Methode</li><li>Sturges "
+"- <i>k = log2(n) + 1</i>, nimmt eine Normalverteilung an</li><li>Doane - "
+"modifizierte Version der Sturges-Methode, siehe Dokumentation für Details</"
+"li><li>Scott - <i>h = 3.49 * sigma / pow(n, 3/2)</i>, optimale Methode für "
+"normalverteilte Daten</li></ul>"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:295
 #, kde-format
@@ -13382,6 +13357,11 @@ msgid ""
 "the histogram are excluded. If you want to include these values for the last "
 "bin you will need to add an extra bin to your histogram."
 msgstr ""
+"Verwende 'Auto' um die minimalen und maximalen Werte der Daten zur "
+"Berechnung des Histogramms zu bestimmen. Ansonsten müssen die Werte "
+"angegeben werden.<br><br><b>Hinweis:</b> Alle Werte am Maximalwert des "
+"Histogramms werden ausgeschlossen. Um diese Werte zu verwenden, muss ein "
+"zusätzlicher Bin hinzugefügt werden."
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:578
 #, kde-format
@@ -13564,48 +13544,30 @@ msgstr "Quader"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:232
 #: src/frontend/widgets/LabelWidget.cpp:516
-#, fuzzy, kde-format
-#| msgid "Up Pointing rectangle"
+#, kde-format
 msgid "Up pointing rectangle"
 msgstr "Nach oben zeigendes Rechteck"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:233
 #: src/frontend/widgets/LabelWidget.cpp:517
-#, fuzzy, kde-format
-#| msgid "Down Pointing rectangle"
+#, kde-format
 msgid "Down pointing rectangle"
 msgstr "nach unten zeigendes Rechteck"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:234
 #: src/frontend/widgets/LabelWidget.cpp:518
-#, fuzzy, kde-format
-#| msgid "Left Pointing rectangle"
+#, kde-format
 msgid "Left pointing rectangle"
 msgstr "Nach links zeigendes Rechteck"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:235
 #: src/frontend/widgets/LabelWidget.cpp:519
-#, fuzzy, kde-format
-#| msgid "Right Pointing rectangle"
+#, kde-format
 msgid "Right pointing rectangle"
 msgstr "nach rechts zeigendes Rechteck"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:239
-#, fuzzy, kde-format
-#| msgid ""
-#| "The supported chart types are grouped according to the plotted statistics "
-#| "and to the metric defining the limits.<br><br>Individual Values and "
-#| "Moving Ranges, Limits Based on the Average or Median Moving Range:"
-#| "<ul><li>X (XmR) - plot the <b>individual values</b>.</li><li>mR - plot "
-#| "the <b>moving ranges</b>.</li></ul>Averages and Ranges, Limits based on "
-#| "the Average or Median Range:<ul><li>X̅  (X̅R) - plot the <b>averages for "
-#| "each sample</b> .</li><li>R (X̅R) - plot the <b>ranges for each sample</b>."
-#| "</li></ul>Averages and Standard Deviations, Limits Based on the Standard "
-#| "Deviations:<ul><li>X̅  (X̅S) - plot the <b>averages for each sample</b>.</"
-#| "li><li>S (X̅S) - plot the <b>standard deviations for each sample</b>.</"
-#| "li></ul>Attributes:<ul><li>P - plot <b>binomial proportions</b>.</"
-#| "li><li>NP - plot <b>binomial counts</b>.</li><li>C - plot <b>Poisson "
-#| "counts</b>.</li><li>U - plot <b>Poisson rates</b>.</li></ul>"
+#, kde-format
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
 "and to the metric defining the limits.<br><br>Individual Values and Moving "
@@ -13639,12 +13601,12 @@ msgstr ""
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:265
 #, kde-format
 msgid "Maximal value for the upper control limit. No constraint, if empty."
-msgstr ""
+msgstr "Maximalwert für die obere Kontrollgrenze. Keine Grenze, wenn leer."
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:269
 #, kde-format
 msgid "Minimal value for the lower control limit. No constraint, if empty."
-msgstr ""
+msgstr "Minimalwert für die untere Kontrollgrenze. Keine Grenze, wenn leer."
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:273
 #, kde-format
@@ -14247,7 +14209,7 @@ msgstr ""
 "Beispielsammlung %1 konnte nicht geöffnet werden. Bitte die Installation "
 "überprüfen."
 
-#: src/frontend/GuiObserver.cpp:176 src/frontend/MainWin.cpp:1403
+#: src/frontend/GuiObserver.cpp:176 src/frontend/MainWin.cpp:1401
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -14814,10 +14776,9 @@ msgstr ""
 "Datenvisualisierung und -analyse, die für jeden verfügbar ist."
 
 #: src/frontend/LabPlot.cpp:75
-#, fuzzy, kde-format
-#| msgid "(c) 2007-2025 LabPlot authors"
+#, kde-format
 msgid "(c) 2007-%1 LabPlot Team"
-msgstr "(c) 2007-2025 LabPlot Autoren"
+msgstr "(c) 2007-%1 LabPlot Team"
 
 #: src/frontend/LabPlot.cpp:76
 #, kde-format
@@ -14883,12 +14844,10 @@ msgid "Fábián Kristóf-Szabolcs"
 msgstr "Fábián Kristóf-Szabolcs"
 
 #: src/frontend/LabPlot.cpp:91
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Open FITS File"
+#, kde-format
 msgctxt "@info:credit"
 msgid "FITS Filter"
-msgstr "FITS-Datei öffnen"
+msgstr "FITS Filter"
 
 #: src/frontend/LabPlot.cpp:92
 #, kde-format
@@ -15078,252 +15037,252 @@ msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Willkommen zu LabPlot %1"
 
-#: src/frontend/MainWin.cpp:618
+#: src/frontend/MainWin.cpp:616
 #, kde-format
 msgid "&Open Example"
 msgstr "&Beispiel öffnen"
 
-#: src/frontend/MainWin.cpp:639 src/frontend/MainWin.cpp:1967
+#: src/frontend/MainWin.cpp:637 src/frontend/MainWin.cpp:1965
 #, kde-format
 msgid "Workbook"
 msgstr "Arbeitsbuch"
 
-#: src/frontend/MainWin.cpp:641
+#: src/frontend/MainWin.cpp:639
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 "Erzeugt ein neues Arbeitsbuch zum Sammeln von Tabellen, Matrizen und Plots"
 
-#: src/frontend/MainWin.cpp:644 src/frontend/MainWin.cpp:1975
+#: src/frontend/MainWin.cpp:642 src/frontend/MainWin.cpp:1973
 #, kde-format
 msgid "Data Extractor"
 msgstr "Datenextraktor"
 
-#: src/frontend/MainWin.cpp:645
+#: src/frontend/MainWin.cpp:643
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "Erzeugt einen Datenextraktor um Daten aus einem Bild zu extrahieren"
 
-#: src/frontend/MainWin.cpp:651
+#: src/frontend/MainWin.cpp:649
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "Erzeugt eine neue Datentabelle zum Editieren von Daten"
 
-#: src/frontend/MainWin.cpp:657
+#: src/frontend/MainWin.cpp:655
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Erzeugt eine neue Matrix zum Editieren von Daten"
 
-#: src/frontend/MainWin.cpp:661 src/frontend/MainWin.cpp:2019
+#: src/frontend/MainWin.cpp:659 src/frontend/MainWin.cpp:2017
 #: src/frontend/SettingsDialog.cpp:59
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:86
 #, kde-format
 msgid "Worksheet"
 msgstr "Arbeitsblatt"
 
-#: src/frontend/MainWin.cpp:663
+#: src/frontend/MainWin.cpp:661
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "Erzeugt ein neues Arbeitsblatt zur grafischen Anzeige von Daten"
 
-#: src/frontend/MainWin.cpp:667 src/frontend/MainWin.cpp:2027
+#: src/frontend/MainWin.cpp:665 src/frontend/MainWin.cpp:2025
 #, kde-format
 msgid "Note"
 msgstr "Notiz"
 
-#: src/frontend/MainWin.cpp:668
+#: src/frontend/MainWin.cpp:666
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Erzeugt eine neue Notiz für beliebigen Text"
 
-#: src/frontend/MainWin.cpp:672 src/frontend/MainWin.cpp:1959
+#: src/frontend/MainWin.cpp:670 src/frontend/MainWin.cpp:1957
 #, kde-format
 msgid "Folder"
 msgstr "Ordner"
 
-#: src/frontend/MainWin.cpp:673
+#: src/frontend/MainWin.cpp:671
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr ""
 "Erzeugt einen neuen Ordner zum Sammeln von Seiten und anderen Elementen"
 
-#: src/frontend/MainWin.cpp:678
+#: src/frontend/MainWin.cpp:676
 #, kde-format
 msgid "Live Data Source..."
 msgstr "Live-Datenquelle..."
 
-#: src/frontend/MainWin.cpp:679
+#: src/frontend/MainWin.cpp:677
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr "Erzeugt eine Livedatenquelle um Daten in Echtzeit zu lesen"
 
-#: src/frontend/MainWin.cpp:686 src/frontend/MainWin.cpp:695
+#: src/frontend/MainWin.cpp:684 src/frontend/MainWin.cpp:693
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Daten aus einer Datei importieren"
 
-#: src/frontend/MainWin.cpp:700
+#: src/frontend/MainWin.cpp:698
 #, kde-format
 msgid "From kaggle.com..."
 msgstr "Von kaggle.com..."
 
-#: src/frontend/MainWin.cpp:701
+#: src/frontend/MainWin.cpp:699
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr "Daten von kaggle.com importieren"
 
-#: src/frontend/MainWin.cpp:706
+#: src/frontend/MainWin.cpp:704
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Daten aus einer SQL-Datenbank importieren"
 
-#: src/frontend/MainWin.cpp:710
+#: src/frontend/MainWin.cpp:708
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Aus Datensatzsammlung..."
 
-#: src/frontend/MainWin.cpp:711
+#: src/frontend/MainWin.cpp:709
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr "Daten aus einem Online-Datensatz importieren"
 
-#: src/frontend/MainWin.cpp:715
+#: src/frontend/MainWin.cpp:713
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "LabPlot-Projekt..."
 
-#: src/frontend/MainWin.cpp:716
+#: src/frontend/MainWin.cpp:714
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Ein Projekt aus einer LabPlot-Projektdatei (.lml) importieren"
 
-#: src/frontend/MainWin.cpp:721
+#: src/frontend/MainWin.cpp:719
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Origin-Projekt (OPJ)..."
 
-#: src/frontend/MainWin.cpp:722
+#: src/frontend/MainWin.cpp:720
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr "Ein Projekt aus einer Origin-Projektdatei (.opj) importieren"
 
-#: src/frontend/MainWin.cpp:727
+#: src/frontend/MainWin.cpp:725
 #, kde-format
 msgid "Export..."
 msgstr "Exportieren..."
 
-#: src/frontend/MainWin.cpp:728
+#: src/frontend/MainWin.cpp:726
 #, kde-format
 msgid "Export selected element"
 msgstr "Ausgewähltes Element exportieren"
 
-#: src/frontend/MainWin.cpp:734 src/frontend/MainWin.cpp:2508
-#: src/frontend/MainWin.cpp:2516
+#: src/frontend/MainWin.cpp:732 src/frontend/MainWin.cpp:2506
+#: src/frontend/MainWin.cpp:2514
 #, kde-format
 msgid "Share"
 msgstr "Teilen"
 
-#: src/frontend/MainWin.cpp:739
+#: src/frontend/MainWin.cpp:737
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Farbkartenbrowser"
 
-#: src/frontend/MainWin.cpp:740
+#: src/frontend/MainWin.cpp:738
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "Dialog öffnen um die Farbkarten zu durchsuchen."
 
-#: src/frontend/MainWin.cpp:749
+#: src/frontend/MainWin.cpp:747
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "FITS-Metadaten-Editor..."
 
-#: src/frontend/MainWin.cpp:750
+#: src/frontend/MainWin.cpp:748
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Editor Öffnen um FITS Metadaten zu editieren"
 
-#: src/frontend/MainWin.cpp:759
+#: src/frontend/MainWin.cpp:757
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Verlauf Rückgängig/Wiederherstellen..."
 
-#: src/frontend/MainWin.cpp:779
+#: src/frontend/MainWin.cpp:777
 #, kde-format
 msgid "Close the active window"
 msgstr "Das aktuelle Fenster schließen"
 
-#: src/frontend/MainWin.cpp:782
+#: src/frontend/MainWin.cpp:780
 #, kde-format
 msgid "Close &All"
 msgstr "&Alle schließen"
 
-#: src/frontend/MainWin.cpp:783
+#: src/frontend/MainWin.cpp:781
 #, kde-format
 msgid "Close all the windows"
 msgstr "Alle Fenster schließen"
 
-#: src/frontend/MainWin.cpp:786
+#: src/frontend/MainWin.cpp:784
 #, kde-format
 msgid "Ne&xt"
 msgstr "Nächstes"
 
-#: src/frontend/MainWin.cpp:788
+#: src/frontend/MainWin.cpp:786
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Aktiviert das nächste Fenster"
 
-#: src/frontend/MainWin.cpp:791
+#: src/frontend/MainWin.cpp:789
 #, kde-format
 msgid "Pre&vious"
 msgstr "&Vorheriges"
 
-#: src/frontend/MainWin.cpp:793
+#: src/frontend/MainWin.cpp:791
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Aktiviert das vorherige Fenster"
 
-#: src/frontend/MainWin.cpp:800
+#: src/frontend/MainWin.cpp:798
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Nur &aktuellen Ordner"
 
-#: src/frontend/MainWin.cpp:805
+#: src/frontend/MainWin.cpp:803
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Aktuellen Ordner &und Unterordner"
 
-#: src/frontend/MainWin.cpp:809
+#: src/frontend/MainWin.cpp:807
 #, kde-format
 msgid "&All"
 msgstr "&Alle"
 
-#: src/frontend/MainWin.cpp:831
+#: src/frontend/MainWin.cpp:829
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Speicherbelegung anzeigen"
 
-#: src/frontend/MainWin.cpp:839
+#: src/frontend/MainWin.cpp:837
 #, kde-format
 msgid "Project Explorer"
 msgstr "Projekt-Explorer"
 
-#: src/frontend/MainWin.cpp:844
+#: src/frontend/MainWin.cpp:842
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Eigenschaften-Explorer"
 
-#: src/frontend/MainWin.cpp:849
+#: src/frontend/MainWin.cpp:847
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "Arbeitsblatt-Vorschau"
 
-#: src/frontend/MainWin.cpp:872
+#: src/frontend/MainWin.cpp:870
 #, kde-format
 msgid "Configure CAS..."
 msgstr "CAS Konfigurieren..."
 
-#: src/frontend/MainWin.cpp:873
+#: src/frontend/MainWin.cpp:871
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
@@ -15332,118 +15291,118 @@ msgstr ""
 "Öffnet die Einstellungen für Computer Algebra Systeme um die verfügbaren "
 "Systeme zu verändern oder neue zu aktivieren"
 
-#: src/frontend/MainWin.cpp:933
+#: src/frontend/MainWin.cpp:931
 #, kde-format
 msgid "Window Visibility"
 msgstr "Sichtbarkeit der Fenster"
 
-#: src/frontend/MainWin.cpp:950
+#: src/frontend/MainWin.cpp:948
 #, kde-format
 msgid "Color Scheme"
 msgstr "Farbschema"
 
-#: src/frontend/MainWin.cpp:1008
+#: src/frontend/MainWin.cpp:1006
 #, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "Das aktuelle Projekt \"%1\" wurde geändert. Möchten Sie es speichern?"
 
-#: src/frontend/MainWin.cpp:1009
+#: src/frontend/MainWin.cpp:1007
 #, kde-format
 msgid "Save Project"
 msgstr "Projekt speichern"
 
-#: src/frontend/MainWin.cpp:1364
+#: src/frontend/MainWin.cpp:1362
 #, kde-format
 msgid "%1: created"
 msgstr "%1: Erzeugt"
 
-#: src/frontend/MainWin.cpp:1390
+#: src/frontend/MainWin.cpp:1388
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Projekt-Explorer"
 
-#: src/frontend/MainWin.cpp:1415
+#: src/frontend/MainWin.cpp:1413
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Arbeitsblatt-Vorschau"
 
-#: src/frontend/MainWin.cpp:1424
+#: src/frontend/MainWin.cpp:1422
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Inhalt"
 
-#: src/frontend/MainWin.cpp:1501
+#: src/frontend/MainWin.cpp:1499
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Origin-Projekte (%1)"
 
-#: src/frontend/MainWin.cpp:1507
+#: src/frontend/MainWin.cpp:1505
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "Cantor-Projekte (*.cws)"
 
-#: src/frontend/MainWin.cpp:1508
+#: src/frontend/MainWin.cpp:1506
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Jupyter Notebooks (.ipynb)"
 
-#: src/frontend/MainWin.cpp:1515
+#: src/frontend/MainWin.cpp:1513
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Alle unterstützten Dateien (%1)"
 
-#: src/frontend/MainWin.cpp:1519
+#: src/frontend/MainWin.cpp:1517
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Projekt öffnen"
 
-#: src/frontend/MainWin.cpp:1536
+#: src/frontend/MainWin.cpp:1534
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "Die Projektdatei %1 ist bereits geöffnet."
 
-#: src/frontend/MainWin.cpp:1536 src/frontend/MainWin.cpp:1544
-#: src/frontend/MainWin.cpp:1549
+#: src/frontend/MainWin.cpp:1534 src/frontend/MainWin.cpp:1542
+#: src/frontend/MainWin.cpp:1547
 #, kde-format
 msgid "Open Project"
 msgstr "Projekt öffnen"
 
-#: src/frontend/MainWin.cpp:1544
+#: src/frontend/MainWin.cpp:1542
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "Die Projektdatei %1 existiert nicht."
 
-#: src/frontend/MainWin.cpp:1549
+#: src/frontend/MainWin.cpp:1547
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "Die Projektdatei '%1' konnte nicht gelesen werden."
 
-#: src/frontend/MainWin.cpp:1557
+#: src/frontend/MainWin.cpp:1555
 #, kde-format
 msgid "Loading %1..."
 msgstr "Lade %1..."
 
-#: src/frontend/MainWin.cpp:1612
+#: src/frontend/MainWin.cpp:1610
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: geöffnet"
 
-#: src/frontend/MainWin.cpp:1647
+#: src/frontend/MainWin.cpp:1645
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Das Projekt wurde erfolgreich in %1 Sekunden geöffnet."
 
-#: src/frontend/MainWin.cpp:1739
+#: src/frontend/MainWin.cpp:1737
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Projekt speichern unter"
 
-#: src/frontend/MainWin.cpp:1741
+#: src/frontend/MainWin.cpp:1739
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15452,103 +15411,104 @@ msgstr ""
 "LabPlot-Projekte (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:1768
+#: src/frontend/MainWin.cpp:1766
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Die temporäre Datei konnte nicht zum Schreiben geöffnet werden."
 
-#: src/frontend/MainWin.cpp:1848
+#: src/frontend/MainWin.cpp:1846
 #, kde-format
 msgid "Project saved"
 msgstr "Das Projekt wurde gespeichert"
 
-#: src/frontend/MainWin.cpp:1864
+#: src/frontend/MainWin.cpp:1862
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Die Datei '%1' konnte nicht gespeichert werden."
 
-#: src/frontend/MainWin.cpp:1869
+#: src/frontend/MainWin.cpp:1867
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Die Datei '%1' kann nicht zum Schreiben geöffnet werden."
 
-#: src/frontend/MainWin.cpp:1919
+#: src/frontend/MainWin.cpp:1917
 #, kde-format
 msgid "Changed"
 msgstr "Geändert"
 
-#: src/frontend/MainWin.cpp:1934 src/frontend/MainWin.cpp:1946
+#: src/frontend/MainWin.cpp:1932 src/frontend/MainWin.cpp:1944
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Drucken von %1 wird vorbereitet"
 
-#: src/frontend/MainWin.cpp:1936 src/frontend/MainWin.cpp:1948
+#: src/frontend/MainWin.cpp:1934 src/frontend/MainWin.cpp:1946
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 gedruckt"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2471
+#: src/frontend/MainWin.cpp:2469
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
 #: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Cursor"
 msgstr "Cursor"
 
-#: src/frontend/MainWin.cpp:2508
+#: src/frontend/MainWin.cpp:2506
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "Es gab ein Problem beim Teilen des Projektes: %1"
 
-#: src/frontend/MainWin.cpp:2512
+#: src/frontend/MainWin.cpp:2510
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Projekt erfolgreich geteilt"
 
-#: src/frontend/MainWin.cpp:2515
+#: src/frontend/MainWin.cpp:2513
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Das geteilte Projekt findet sich unter: <a href=\"%1\">%1</a>"
 
-#: src/frontend/MainWin.cpp:2788
-#, fuzzy, kde-format
-#| msgid "Running Kaggle CLI tool failed"
+#: src/frontend/MainWin.cpp:2786
+#, kde-format
 msgid "Kaggle CLI tool not found"
-msgstr "Kaggle CLI fehlgeschlagen"
+msgstr "Kaggle CLI Werkzeug nicht gefunden"
 
-#: src/frontend/MainWin.cpp:2789
+#: src/frontend/MainWin.cpp:2787
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
 "again."
 msgstr ""
+"Geben Sie den Pfad für das Kagle CLI Werkzeug in den Einstellungen an und "
+"versuchen Sie es erneut."
 
-#: src/frontend/MainWin.cpp:2855
+#: src/frontend/MainWin.cpp:2853
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exportiert"
 
-#: src/frontend/MainWin.cpp:2862
+#: src/frontend/MainWin.cpp:2860
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS-Datei gespeichert"
 
-#: src/frontend/MainWin.cpp:2874
+#: src/frontend/MainWin.cpp:2872
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT-Client%1"
 
-#: src/frontend/MainWin.cpp:2892
+#: src/frontend/MainWin.cpp:2890
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Es gibt bereits einen MQTT Client mit dem Host!"
 
-#: src/frontend/MainWin.cpp:2896
+#: src/frontend/MainWin.cpp:2894
 #, kde-format
 msgid "Live data source%1"
 msgstr "Live-Datenquelle%1"
 
-#: src/frontend/MainWin.cpp:2947
+#: src/frontend/MainWin.cpp:2945
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Erzeugt ein neues %1 Notebook"
@@ -16477,17 +16437,17 @@ msgstr "Standardmotiv für neu erzeugte Arbeitsblätter und -objekte"
 #: src/frontend/SettingsWorksheetPage.cpp:30
 #, kde-format
 msgid "Small (3cm x 3cm)"
-msgstr ""
+msgstr "Klein (3cm x 3 cm)"
 
 #: src/frontend/SettingsWorksheetPage.cpp:31
 #, kde-format
 msgid "Medium (5cm x 5cm)"
-msgstr ""
+msgstr "Mittel (5cm x 5cm)"
 
 #: src/frontend/SettingsWorksheetPage.cpp:32
 #, kde-format
 msgid "Big (7cm x 7cm)"
-msgstr ""
+msgstr "Groß (7cm x 7cm)"
 
 #: src/frontend/SettingsWorksheetPage.cpp:152
 #, kde-format
@@ -19280,8 +19240,7 @@ msgstr "Leere Teile überspringen"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnMode)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:33
-#, fuzzy, kde-format
-#| msgid "Column Datatypes:"
+#, kde-format
 msgid "Column Data Types:"
 msgstr "Spaltendatentypen:"
 
@@ -19334,10 +19293,9 @@ msgstr "Basisjahr, falls nur 2 Ziffern für Jahre angegeben wird"
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:116
-#, fuzzy, kde-format
-#| msgid "Column labels"
+#, kde-format
 msgid "Column Names:"
-msgstr "Spaltenbeschriftung"
+msgstr "Spaltennamen:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:123
@@ -21746,10 +21704,9 @@ msgstr "Abtastgrößen:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:189
-#, fuzzy, kde-format
-#| msgid "Lower Limit"
+#, kde-format
 msgid "Min. Lower Limit:"
-msgstr "Untere Grenze"
+msgstr "Min. Untere Grenze:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:212
@@ -21759,10 +21716,9 @@ msgstr "Grenzen basiert auf:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxUpperLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:232
-#, fuzzy, kde-format
-#| msgid "Upper Limit"
+#, kde-format
 msgid "Max. Upper Limit:"
-msgstr "Obere Grenze"
+msgstr "Max. Obere Grenze:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:243
@@ -21793,10 +21749,9 @@ msgstr "Untere Grenze"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLabels)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:443
-#, fuzzy, kde-format
-#| msgid "Center/Limits Lines"
+#, kde-format
 msgid "Center/Limit Values"
-msgstr "Mittel-/Grenzlinien"
+msgstr "Mittel-/Grenzwerte"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBorderShape)
@@ -22865,18 +22820,7 @@ msgstr "Datei schließen"
 
 #. i18n: ectx: property (html), widget (ResizableTextEdit, teLabel)
 #: src/frontend/ui/labelwidget.ui:55
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#| "font-weight:400; font-style:normal;\">\n"
-#| "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-#| "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
-#| "\"><br /></p></body></html>"
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -22897,6 +22841,9 @@ msgstr ""
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
 "\">\n"
 "p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
 "weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
@@ -23478,14 +23425,13 @@ msgstr "Layout zurücksetzen"
 #: src/frontend/ui/settingsworksheetpage.ui:141
 #, kde-format
 msgid "Thumbnail Size:"
-msgstr ""
+msgstr "Miniaturbildgröße:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDoubleBuffering)
 #: src/frontend/ui/settingsworksheetpage.ui:164
-#, fuzzy, kde-format
-#| msgid "Double-Buffering"
+#, kde-format
 msgid "Double buffering"
-msgstr "Wechelpuffer"
+msgstr "Doppelpufferung"
 
 #. i18n: ectx: property (text), widget (QLabel, lTheme)
 #: src/frontend/ui/settingsworksheetpage.ui:171
@@ -24269,10 +24215,9 @@ msgid "Data, +-:"
 msgstr "Daten, +-:"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
-#, fuzzy, kde-format
-#| msgid "Start Value:"
+#, kde-format
 msgid "Start Value"
-msgstr "Startwert:"
+msgstr "Startwert"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
@@ -24682,19 +24627,27 @@ msgid "Clipboard"
 msgstr "Zwischenablage"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:84
-#, fuzzy, kde-format
-#| msgid "Object's Bounding Box"
+#, kde-format
 msgid "Bounding Box"
-msgstr "Umfluss-Rahmen des Objekts"
+msgstr "Umfluss-Rahmen"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:89
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Specifies the area to export:<ul><li>Bounding Box - the bounding box of "
+#| "all objects on the worksheet is exported</li><li>Selection - the area of "
+#| "the currently selected objects is exported</li><li>Worskheet - the "
+#| "complete worksheet area is exported</li></ul>"
 msgid ""
 "Specifies the area to export:<ul><li>Bounding Box - the bounding box of all "
 "objects on the worksheet is exported</li><li>Selection - the area of the "
-"currently selected objects is exported</li><li>Worskheet - the complete "
+"currently selected objects is exported</li><li>Worksheet - the complete "
 "worksheet area is exported</li></ul>"
 msgstr ""
+"Gibt den Exportbereich an:<ul><li>Zeichen-Box - die Zeichen-Box aller "
+"Objekte des Arbeitsblattes werden exportiert</li><li>Auswahl - die Fläche "
+"des ausgewählen Objektes wird exportiert</li><li>Arbeitsblatt - das gesamte "
+"Arbeitsblatt wird exportiert</li></ul>"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:99
 #, kde-format
@@ -25082,6 +25035,9 @@ msgstr "convert-Prozess fehlgeschlagen, Fehlercode ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Fehler beim Öffnen der Datei:"
+
+#~ msgid "Close"
+#~ msgstr "Schließen"
 
 #~ msgid ""
 #~ "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/"

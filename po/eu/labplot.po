@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-25 00:38+0000\n"
+"POT-Creation-Date: 2025-05-09 00:38+0000\n"
 "PO-Revision-Date: 2025-01-15 16:57+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -375,13 +375,13 @@ msgstr "Sa%1"
 msgid "Import Data"
 msgstr "Inportatu datuak"
 
-#: src/backend/core/AbstractPart.cpp:126 src/frontend/MainWin.cpp:684
-#: src/frontend/MainWin.cpp:693
+#: src/backend/core/AbstractPart.cpp:126 src/frontend/MainWin.cpp:682
+#: src/frontend/MainWin.cpp:691
 #, kde-format
 msgid "From File..."
 msgstr "Fitxategitik..."
 
-#: src/backend/core/AbstractPart.cpp:128 src/frontend/MainWin.cpp:705
+#: src/backend/core/AbstractPart.cpp:128 src/frontend/MainWin.cpp:703
 #, kde-format
 msgid "From SQL Database..."
 msgstr "SQL datu-basetik..."
@@ -406,7 +406,7 @@ msgstr "Inprimatu"
 msgid "Print Preview"
 msgstr "Inprimatze aurre-ikuspegia"
 
-#: src/backend/core/AbstractPart.cpp:147 src/frontend/MainWin.cpp:777
+#: src/backend/core/AbstractPart.cpp:147 src/frontend/MainWin.cpp:775
 #, kde-format
 msgid "&Close"
 msgstr "It&xi"
@@ -422,7 +422,7 @@ msgid "incompatible filter type"
 msgstr "Iragazki mota bateraezina"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:706
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:699
 #: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
@@ -695,52 +695,47 @@ msgstr "Ez da oraindik zamatu."
 msgid "Project"
 msgstr "Proiektua"
 
-#: src/backend/core/Project.cpp:264
-#, kde-format
-msgid "Close"
-msgstr "Itxi"
-
-#: src/backend/core/Project.cpp:301
+#: src/backend/core/Project.cpp:294
 #, kde-format
 msgid "%1: set author"
 msgstr "%1: ezarri egilea"
 
-#: src/backend/core/Project.cpp:308
+#: src/backend/core/Project.cpp:301
 #, kde-format
 msgid "%1: save dock state changed"
 msgstr "%1: gorde nasa egoera aldatu da"
 
-#: src/backend/core/Project.cpp:315
+#: src/backend/core/Project.cpp:308
 #, kde-format
 msgid "%1: save calculation changed"
 msgstr "%1: gorde kalkulua aldatu egin da"
 
-#: src/backend/core/Project.cpp:550 src/backend/core/Project.cpp:580
+#: src/backend/core/Project.cpp:543 src/backend/core/Project.cpp:573
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Barkatu. Ezin izan du fitxategia irakurtzeko ireki."
 
-#: src/backend/core/Project.cpp:561 src/backend/core/Project.cpp:587
+#: src/backend/core/Project.cpp:554 src/backend/core/Project.cpp:580
 #, kde-format
 msgid "The project file is empty."
 msgstr "Proiektuaren fitxategia hutsik dago."
 
-#: src/backend/core/Project.cpp:561 src/backend/core/Project.cpp:587
+#: src/backend/core/Project.cpp:554 src/backend/core/Project.cpp:580
 #, kde-format
 msgid "Error opening project"
 msgstr "Errorea proiektua irekitzean"
 
-#: src/backend/core/Project.cpp:606
+#: src/backend/core/Project.cpp:599
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Errore ezezaguna %1 proiektua irekitzean."
 
-#: src/backend/core/Project.cpp:607
+#: src/backend/core/Project.cpp:600
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Errorea proiektua irekitzean"
 
-#: src/backend/core/Project.cpp:627
+#: src/backend/core/Project.cpp:620
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -759,43 +754,43 @@ msgstr ""
 "\n"
 "Jarraitu nahi duzu?"
 
-#: src/backend/core/Project.cpp:633
+#: src/backend/core/Project.cpp:626
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "CASen euskarria falta da"
 
-#: src/backend/core/Project.cpp:663
+#: src/backend/core/Project.cpp:656
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "'bertsioa' atributua falta da."
 
-#: src/backend/core/Project.cpp:713
+#: src/backend/core/Project.cpp:706
 #, kde-format
 msgid "no project element found"
 msgstr "ez da proiektu-elementurik aurkitu"
 
-#: src/backend/core/Project.cpp:715
+#: src/backend/core/Project.cpp:708
 #, kde-format
 msgid "no valid XML document found"
 msgstr "ez da XML dokumentu baliodunik aurkitu"
 
-#: src/backend/core/Project.cpp:765 src/backend/core/Project.cpp:771
-#: src/backend/core/Project.cpp:822
+#: src/backend/core/Project.cpp:758 src/backend/core/Project.cpp:764
+#: src/backend/core/Project.cpp:815
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "'%1' fitxategia irekitzea huts egin du."
 
-#: src/backend/core/Project.cpp:828
+#: src/backend/core/Project.cpp:821
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "'%1' fitxategiaren edukia prozesatzea huts egin du."
 
-#: src/backend/core/Project.cpp:831
+#: src/backend/core/Project.cpp:824
 #, kde-format
 msgid "Failed to open project"
 msgstr "Proiektua irekitzea huts egin du"
 
-#: src/backend/core/Project.cpp:1299
+#: src/backend/core/Project.cpp:1292
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Proiektuaren aldatze-ordu baliogabea. Uneko ordua erabiliko da."
@@ -1938,7 +1933,7 @@ msgid "Unknown"
 msgstr "Ezezaguna"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:655 src/frontend/MainWin.cpp:2001
+#: src/frontend/MainWin.cpp:653 src/frontend/MainWin.cpp:1999
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -6335,8 +6330,8 @@ msgstr "'%1' irakurtzeko irekitzea huts egin du."
 msgid "%1: set text"
 msgstr "%1: ezarri testua"
 
-#: src/backend/note/Note.cpp:145 src/backend/worksheet/TextLabel.cpp:278
-#: src/backend/worksheet/TextLabel.cpp:317
+#: src/backend/note/Note.cpp:145 src/backend/worksheet/TextLabel.cpp:282
+#: src/backend/worksheet/TextLabel.cpp:334
 #, kde-format
 msgid "%1: set background color"
 msgstr "%1: ezarri atzeko planoaren kolorea"
@@ -7713,7 +7708,7 @@ msgstr "Ezarri opakutasuna"
 msgid "%1: set bottom padding"
 msgstr "Ezarri opakutasuna"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:282
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:287
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:232
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:106
@@ -7731,7 +7726,7 @@ msgstr "Ezarri opakutasuna"
 msgid "Horizontal"
 msgstr "Horizontala"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:285
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:290
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:92
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:235
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:109
@@ -7751,7 +7746,7 @@ msgstr "Horizontala"
 msgid "Vertical"
 msgstr "Bertikala"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:305
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:310
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:100
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:243
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:117
@@ -7767,7 +7762,7 @@ msgstr "Orientazioa"
 #. i18n: ectx: property (text), widget (QLabel, lLine)
 #. i18n: ectx: property (text), widget (QLabel, lCenter)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:311
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:316
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:670
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:124
 #: src/frontend/dockwidgets/XYCurveDock.cpp:485
@@ -7787,14 +7782,14 @@ msgstr "Orientazioa"
 msgid "Line"
 msgstr "Lerroa"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:313
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:318
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:126
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:147
 #, kde-format
 msgid "Style"
 msgstr "Estiloa"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:318
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:323
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:131
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:152
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
@@ -7804,258 +7799,258 @@ msgstr "Estiloa"
 msgid "Color"
 msgstr "Kolorea"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:548
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:553
 #, kde-format
 msgid "%1: set axis range type"
 msgstr "%1: ardatzaren bitarte mota ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:573
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:578
 #: src/frontend/dockwidgets/AxisDock.cpp:622
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr "%1: ardatzaren orientazioa ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:580
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:585
 #, kde-format
 msgid "%1: set axis position"
 msgstr "%1: ardatzaren kokalekua ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:588
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:593
 #, kde-format
 msgid "%1: set axis offset"
 msgstr "%1: ardatzaren desplazamendua ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:603
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:608
 #, kde-format
 msgid "%1: set axis range"
 msgstr "%1: ardatzaren bitartea ezarri "
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:642
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:647
 #, kde-format
 msgid "%1: set range scale"
 msgstr "%1: bitartearen eskala ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:649
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:654
 #, kde-format
 msgid "%1: set scale"
 msgstr "%1: eskala ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:656
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:661
 #, fuzzy, kde-format
 #| msgid "%1: set plot designation"
 msgid "%1: set major tick start type"
 msgstr "%1: ezarri diagramaren izendapena"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:663
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:668
 #, fuzzy, kde-format
 #| msgid "%1: set plot designation"
 msgid "%1: set major tick start offset"
 msgstr "%1: ezarri diagramaren izendapena"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:671
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:676
 #, fuzzy, kde-format
 #| msgid "%1: set plot designation"
 msgid "%1: set major tick start value"
 msgstr "%1: ezarri diagramaren izendapena"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:683
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:688
 #, kde-format
 msgid "%1: set axis scaling factor"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:692
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:697
 #, kde-format
 msgid "%1: set axis zero offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:698
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:703
 #, kde-format
 msgid "%1: show scale and offset"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:705
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:710
 #, kde-format
 msgid "%1: set axis logical position"
 msgstr "%1: ardatzaren kokapen logikoa ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:713
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:720
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:718
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:725
 #, kde-format
 msgid "%1: set title offset"
 msgstr "%1: tituluaren desplazamendua ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:728
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:733
 #, kde-format
 msgid "%1: set arrow type"
 msgstr "%1: gezi-mota ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:735
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:740
 #, kde-format
 msgid "%1: set arrow position"
 msgstr "%1: geziaren kokapena ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:742
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:747
 #, kde-format
 msgid "%1: set arrow size"
 msgstr "%1: geziaren neurria ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:750
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:755
 #, kde-format
 msgid "%1: set major ticks direction"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:757
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:762
 #, kde-format
 msgid "%1: set major ticks type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:765
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:770
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:767
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:782
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:772
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:787
 #, kde-format
 msgid "%1: set the total number of the major ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:784
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:868
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:789
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:873
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:809
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:814
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:816
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:821
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:830
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:835
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:838
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:843
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:845
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:850
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:853
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:858
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:856
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:867
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:861
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:872
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:900
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:905
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:907
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:912
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:921
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:926
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:930
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:935
 #, kde-format
 msgid "%1: set labels format"
 msgstr "%1: etiketen formatua ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:937
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:942
 #, kde-format
 msgid "%1: set labels format automatic"
 msgstr "%1: etiketen formatu automatikoa ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:944
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:951
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:949
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:956
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: etiketen zehaztasuna ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:958
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:963
 #, kde-format
 msgid "%1: set labels datetime format"
 msgstr "%1: etiketen data-ordu formatua ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:965
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:970
 #, kde-format
 msgid "%1: set labels position"
 msgstr "%1: etiketen kokapena ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:972
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:977
 #, kde-format
 msgid "%1: set label offset"
 msgstr "%1: etiketaren desplazamendua ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:979
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:984
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr "%1: etiketaren biraketa angelua ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:986
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:991
 #, kde-format
 msgid "%1: set labels text type"
 msgstr "%1: etiketen testu mota ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:993
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:998
 #, kde-format
 msgid "%1: set labels text column"
 msgstr "%1: etiketen testu zutabea ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1007
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1012
 #, kde-format
 msgid "%1: set label color"
 msgstr "%1: etiketaren kolorea ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1014
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1019
 #, kde-format
 msgid "%1: set label font"
 msgstr "%1: etiketaren letra-tipoa ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1021
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1026
 #, kde-format
 msgid "%1: set labels background type"
 msgstr "%1: etiketen atzeko plano mota ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1028
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1033
 #, kde-format
 msgid "%1: set label background color"
 msgstr "%1: etiketaren atzeko planoaren kolorea ezarri"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1035
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1040
 #, kde-format
 msgid "%1: set label prefix"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1042
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1047
 #, kde-format
 msgid "%1: set label suffix"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1049
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1054
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr "%1: etiketen opakutasuna ezarri"
@@ -8460,7 +8455,7 @@ msgid "Reference Range"
 msgstr "Erreferentziaren lerroa"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:552
-#: src/frontend/MainWin.cpp:903 src/frontend/notebook/NotebookView.cpp:168
+#: src/frontend/MainWin.cpp:901 src/frontend/notebook/NotebookView.cpp:168
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:295
 #: src/frontend/worksheet/WorksheetView.cpp:434
@@ -8920,7 +8915,7 @@ msgid "%1: use plot's color"
 msgstr "%1: diagramaren kolorea erabili"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:214
-#: src/backend/worksheet/TextLabel.cpp:365
+#: src/backend/worksheet/TextLabel.cpp:408
 #, kde-format
 msgid "%1: set font color"
 msgstr "%1: letra-tipoaren kolorea ezarri"
@@ -10107,26 +10102,26 @@ msgstr "%1: txertatu %2 bukaera baino lehen"
 msgid "%1: set plot area corner radius"
 msgstr ""
 
-#: src/backend/worksheet/TextLabel.cpp:306
-#: src/backend/worksheet/TextLabel.cpp:316
-#: src/backend/worksheet/TextLabel.cpp:319
-#: src/backend/worksheet/TextLabel.cpp:325
-#: src/backend/worksheet/TextLabel.cpp:334
+#: src/backend/worksheet/TextLabel.cpp:318
+#: src/backend/worksheet/TextLabel.cpp:333
+#: src/backend/worksheet/TextLabel.cpp:336
+#: src/backend/worksheet/TextLabel.cpp:342
+#: src/backend/worksheet/TextLabel.cpp:351
 #, kde-format
 msgid "%1: set label text"
 msgstr "%1: etiketaren testua ezarri"
 
-#: src/backend/worksheet/TextLabel.cpp:351
+#: src/backend/worksheet/TextLabel.cpp:394
 #, kde-format
 msgid "%1: set label placeholdertext"
 msgstr "%1: etiketaren leku-marka-testua ezarri"
 
-#: src/backend/worksheet/TextLabel.cpp:358
+#: src/backend/worksheet/TextLabel.cpp:401
 #, kde-format
 msgid "%1: set TeX main font"
 msgstr "%1: TeX-en letra-tipo nagusia ezarri"
 
-#: src/backend/worksheet/TextLabel.cpp:373
+#: src/backend/worksheet/TextLabel.cpp:416
 #, kde-format
 msgid "%1: set border shape"
 msgstr ""
@@ -12084,7 +12079,7 @@ msgid "Open LabPlot Project"
 msgstr ""
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:1496
+#: src/frontend/MainWin.cpp:1494
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr ""
@@ -12111,8 +12106,8 @@ msgstr "Karpetaren izena:"
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:398 src/frontend/MainWin.cpp:649
-#: src/frontend/MainWin.cpp:1983 src/frontend/SettingsDialog.cpp:64
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:398 src/frontend/MainWin.cpp:647
+#: src/frontend/MainWin.cpp:1981 src/frontend/SettingsDialog.cpp:64
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12351,7 +12346,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2892
+#: src/frontend/MainWin.cpp:2890
 #, fuzzy, kde-format
 msgid "Warning"
 msgstr "Abisua"
@@ -14119,7 +14114,7 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/frontend/GuiObserver.cpp:176 src/frontend/MainWin.cpp:1403
+#: src/frontend/GuiObserver.cpp:176 src/frontend/MainWin.cpp:1401
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -14960,378 +14955,378 @@ msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Ongietorri LabPlot %1(e)ra"
 
-#: src/frontend/MainWin.cpp:618
+#: src/frontend/MainWin.cpp:616
 #, kde-format
 msgid "&Open Example"
 msgstr "&Ireki adibidea"
 
-#: src/frontend/MainWin.cpp:639 src/frontend/MainWin.cpp:1967
+#: src/frontend/MainWin.cpp:637 src/frontend/MainWin.cpp:1965
 #, kde-format
 msgid "Workbook"
 msgstr "Ariketa-liburua"
 
-#: src/frontend/MainWin.cpp:641
+#: src/frontend/MainWin.cpp:639
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 "Kalkulu-orriak, matrizeak eta diagramak biltzeko ariketa-liburu berri bat "
 "sortzen du"
 
-#: src/frontend/MainWin.cpp:644 src/frontend/MainWin.cpp:1975
+#: src/frontend/MainWin.cpp:642 src/frontend/MainWin.cpp:1973
 #, kde-format
 msgid "Data Extractor"
 msgstr "Datu-erauzlea"
 
-#: src/frontend/MainWin.cpp:645
+#: src/frontend/MainWin.cpp:643
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "Datu-erauzle bat sortzen du, irudi batetik datuak lortzeko"
 
-#: src/frontend/MainWin.cpp:651
+#: src/frontend/MainWin.cpp:649
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "Kalkulu-orri berri bat sortzen du, datuak editatzeko"
 
-#: src/frontend/MainWin.cpp:657
+#: src/frontend/MainWin.cpp:655
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Matrize berri bat sortzen du, datuak editatzeko"
 
-#: src/frontend/MainWin.cpp:661 src/frontend/MainWin.cpp:2019
+#: src/frontend/MainWin.cpp:659 src/frontend/MainWin.cpp:2017
 #: src/frontend/SettingsDialog.cpp:59
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:86
 #, kde-format
 msgid "Worksheet"
 msgstr "Lan-orria"
 
-#: src/frontend/MainWin.cpp:663
+#: src/frontend/MainWin.cpp:661
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "Lan-orri berri bat sortzen du, datuak trazatzeko"
 
-#: src/frontend/MainWin.cpp:667 src/frontend/MainWin.cpp:2027
+#: src/frontend/MainWin.cpp:665 src/frontend/MainWin.cpp:2025
 #, kde-format
 msgid "Note"
 msgstr "Oharra"
 
-#: src/frontend/MainWin.cpp:668
+#: src/frontend/MainWin.cpp:666
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Testu arbitrariorako ohar berri bat sortzen du"
 
-#: src/frontend/MainWin.cpp:672 src/frontend/MainWin.cpp:1959
+#: src/frontend/MainWin.cpp:670 src/frontend/MainWin.cpp:1957
 #, kde-format
 msgid "Folder"
 msgstr "Karpeta"
 
-#: src/frontend/MainWin.cpp:673
+#: src/frontend/MainWin.cpp:671
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "Sortu karpeta berri bat orriak eta beste elementu batzuk biltzeko"
 
-#: src/frontend/MainWin.cpp:678
+#: src/frontend/MainWin.cpp:676
 #, kde-format
 msgid "Live Data Source..."
 msgstr "Zuzeneko datu-sorburua..."
 
-#: src/frontend/MainWin.cpp:679
+#: src/frontend/MainWin.cpp:677
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 "Zuzeneko datu-sorburu bat sortzen du, denbora errealeko gailu batetik datuak "
 "irakurtzeko"
 
-#: src/frontend/MainWin.cpp:686 src/frontend/MainWin.cpp:695
+#: src/frontend/MainWin.cpp:684 src/frontend/MainWin.cpp:693
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Inportatu datuak fitxategi arrunt batetik"
 
-#: src/frontend/MainWin.cpp:700
+#: src/frontend/MainWin.cpp:698
 #, fuzzy, kde-format
 #| msgid "From File..."
 msgid "From kaggle.com..."
 msgstr "Fitxategitik..."
 
-#: src/frontend/MainWin.cpp:701
+#: src/frontend/MainWin.cpp:699
 #, fuzzy, kde-format
 #| msgid "Import data from a regular file"
 msgid "Import data from kaggle.com"
 msgstr "Inportatu datuak fitxategi arrunt batetik"
 
-#: src/frontend/MainWin.cpp:706
+#: src/frontend/MainWin.cpp:704
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Inportatu datuak SQL datu-base batetik"
 
-#: src/frontend/MainWin.cpp:710
+#: src/frontend/MainWin.cpp:708
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Datu-multzo bildumatik..."
 
-#: src/frontend/MainWin.cpp:711
+#: src/frontend/MainWin.cpp:709
 #, fuzzy, kde-format
 #| msgid "Imports data from an online dataset"
 msgid "Import data from an online dataset"
 msgstr "Datuak inportatzen ditu lerroko datu-multzo batetik"
 
-#: src/frontend/MainWin.cpp:715
+#: src/frontend/MainWin.cpp:713
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "LabPlot proiektua..."
 
-#: src/frontend/MainWin.cpp:716
+#: src/frontend/MainWin.cpp:714
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Inportatu proiektu bat LabPlot proiektu-fitxategi batetik (.lml)"
 
-#: src/frontend/MainWin.cpp:721
+#: src/frontend/MainWin.cpp:719
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "«Origin» proiektua (OPJ)..."
 
-#: src/frontend/MainWin.cpp:722
+#: src/frontend/MainWin.cpp:720
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr ""
 "Inportatu proiektu bat «OriginLab» «Origin» proiektu-fitxategi batetik (.opj)"
 
-#: src/frontend/MainWin.cpp:727
+#: src/frontend/MainWin.cpp:725
 #, kde-format
 msgid "Export..."
 msgstr "Esportatu..."
 
-#: src/frontend/MainWin.cpp:728
+#: src/frontend/MainWin.cpp:726
 #, kde-format
 msgid "Export selected element"
 msgstr "Esportatu hautatutako elementuak"
 
-#: src/frontend/MainWin.cpp:734 src/frontend/MainWin.cpp:2508
-#: src/frontend/MainWin.cpp:2516
+#: src/frontend/MainWin.cpp:732 src/frontend/MainWin.cpp:2506
+#: src/frontend/MainWin.cpp:2514
 #, kde-format
 msgid "Share"
 msgstr "Partekatu"
 
-#: src/frontend/MainWin.cpp:739
+#: src/frontend/MainWin.cpp:737
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Kolore-mapa arakatzailea"
 
-#: src/frontend/MainWin.cpp:740
+#: src/frontend/MainWin.cpp:738
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr ""
 "Ireki elkarrizketa-koadroa erabilgarri dauden kolore-mapen artean arakatzeko."
 
-#: src/frontend/MainWin.cpp:749
+#: src/frontend/MainWin.cpp:747
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "FITS meta-datu editorea..."
 
-#: src/frontend/MainWin.cpp:750
+#: src/frontend/MainWin.cpp:748
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Ireki editorea FITS meta-datuak editatzeko"
 
-#: src/frontend/MainWin.cpp:759
+#: src/frontend/MainWin.cpp:757
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Desegin/berregin historia..."
 
-#: src/frontend/MainWin.cpp:779
+#: src/frontend/MainWin.cpp:777
 #, kde-format
 msgid "Close the active window"
 msgstr "Itxi leiho aktiboa"
 
-#: src/frontend/MainWin.cpp:782
+#: src/frontend/MainWin.cpp:780
 #, kde-format
 msgid "Close &All"
 msgstr "Itxi guzti&ak"
 
-#: src/frontend/MainWin.cpp:783
+#: src/frontend/MainWin.cpp:781
 #, kde-format
 msgid "Close all the windows"
 msgstr "Itxi leiho guztiak"
 
-#: src/frontend/MainWin.cpp:786
+#: src/frontend/MainWin.cpp:784
 #, kde-format
 msgid "Ne&xt"
 msgstr "&Hurrengoa"
 
-#: src/frontend/MainWin.cpp:788
+#: src/frontend/MainWin.cpp:786
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Eraman fokua hurrengo leihora"
 
-#: src/frontend/MainWin.cpp:791
+#: src/frontend/MainWin.cpp:789
 #, kde-format
 msgid "Pre&vious"
 msgstr "Aurre&koa"
 
-#: src/frontend/MainWin.cpp:793
+#: src/frontend/MainWin.cpp:791
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Eraman fokua aurreko leihora"
 
-#: src/frontend/MainWin.cpp:800
+#: src/frontend/MainWin.cpp:798
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Uneko &karpeta bakarrik"
 
-#: src/frontend/MainWin.cpp:805
+#: src/frontend/MainWin.cpp:803
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Uneko karpeta eta a&zpikarpetak"
 
-#: src/frontend/MainWin.cpp:809
+#: src/frontend/MainWin.cpp:807
 #, kde-format
 msgid "&All"
 msgstr "Guzti&ak"
 
-#: src/frontend/MainWin.cpp:831
+#: src/frontend/MainWin.cpp:829
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Erakutsi memoria-erabilera"
 
-#: src/frontend/MainWin.cpp:839
+#: src/frontend/MainWin.cpp:837
 #, kde-format
 msgid "Project Explorer"
 msgstr "Proiektu esploratzailea"
 
-#: src/frontend/MainWin.cpp:844
+#: src/frontend/MainWin.cpp:842
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Propietateen esploratzailea"
 
-#: src/frontend/MainWin.cpp:849
+#: src/frontend/MainWin.cpp:847
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "Lan-orriaren aurreikuspegia"
 
-#: src/frontend/MainWin.cpp:872
+#: src/frontend/MainWin.cpp:870
 #, kde-format
 msgid "Configure CAS..."
 msgstr "Konfiguratu CAS..."
 
-#: src/frontend/MainWin.cpp:873
+#: src/frontend/MainWin.cpp:871
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
 "systems or to enable new ones"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:933
+#: src/frontend/MainWin.cpp:931
 #, kde-format
 msgid "Window Visibility"
 msgstr "Leihoaren ikusgaitasuna"
 
-#: src/frontend/MainWin.cpp:950
+#: src/frontend/MainWin.cpp:948
 #, kde-format
 msgid "Color Scheme"
 msgstr "Kolore-antolaera"
 
-#: src/frontend/MainWin.cpp:1008
+#: src/frontend/MainWin.cpp:1006
 #, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "Uneko \"%1\" proiektua aldatu egin da. Gorde nahi duzu?"
 
-#: src/frontend/MainWin.cpp:1009
+#: src/frontend/MainWin.cpp:1007
 #, kde-format
 msgid "Save Project"
 msgstr "Gorde proiektua"
 
-#: src/frontend/MainWin.cpp:1364
+#: src/frontend/MainWin.cpp:1362
 #, kde-format
 msgid "%1: created"
 msgstr "%1: sortuta"
 
-#: src/frontend/MainWin.cpp:1390
+#: src/frontend/MainWin.cpp:1388
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Proiektu esploratzailea"
 
-#: src/frontend/MainWin.cpp:1415
+#: src/frontend/MainWin.cpp:1413
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Lan-orriaren aurreikuspegia"
 
-#: src/frontend/MainWin.cpp:1424
+#: src/frontend/MainWin.cpp:1422
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Edukia"
 
-#: src/frontend/MainWin.cpp:1501
+#: src/frontend/MainWin.cpp:1499
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1507
+#: src/frontend/MainWin.cpp:1505
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "«Cantor» proiektuak (*.cws)"
 
-#: src/frontend/MainWin.cpp:1508
+#: src/frontend/MainWin.cpp:1506
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "«Jupyter» koadernoak (*.ipynb)"
 
-#: src/frontend/MainWin.cpp:1515
+#: src/frontend/MainWin.cpp:1513
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Onartutako fitxategi guztiak (%1)"
 
-#: src/frontend/MainWin.cpp:1519
+#: src/frontend/MainWin.cpp:1517
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Ireki proiektua"
 
-#: src/frontend/MainWin.cpp:1536
+#: src/frontend/MainWin.cpp:1534
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "%1 proiektu-fitxategia dagoeneko irekita dago."
 
-#: src/frontend/MainWin.cpp:1536 src/frontend/MainWin.cpp:1544
-#: src/frontend/MainWin.cpp:1549
+#: src/frontend/MainWin.cpp:1534 src/frontend/MainWin.cpp:1542
+#: src/frontend/MainWin.cpp:1547
 #, kde-format
 msgid "Open Project"
 msgstr "Ireki proiektua"
 
-#: src/frontend/MainWin.cpp:1544
+#: src/frontend/MainWin.cpp:1542
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "%1 proiektu-fitxategia ez da existitzen."
 
-#: src/frontend/MainWin.cpp:1549
+#: src/frontend/MainWin.cpp:1547
 #, fuzzy, kde-format
 #| msgid "Couldn't save the file '%1'."
 msgid "Couldn't read the project file %1."
 msgstr "Ezin izan du '%1' fitxategia gorde."
 
-#: src/frontend/MainWin.cpp:1557
+#: src/frontend/MainWin.cpp:1555
 #, kde-format
 msgid "Loading %1..."
 msgstr "%1 zamatzen..."
 
-#: src/frontend/MainWin.cpp:1612
+#: src/frontend/MainWin.cpp:1610
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: irekita"
 
-#: src/frontend/MainWin.cpp:1647
+#: src/frontend/MainWin.cpp:1645
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Proiektua ondo ireki da (%1 segundotan)."
 
-#: src/frontend/MainWin.cpp:1739
+#: src/frontend/MainWin.cpp:1737
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Gorde proiektua honela"
 
-#: src/frontend/MainWin.cpp:1741
+#: src/frontend/MainWin.cpp:1739
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15340,104 +15335,104 @@ msgstr ""
 "LabPlot proiektuak (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML."
 "BZ2 *.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:1768
+#: src/frontend/MainWin.cpp:1766
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Ezin izan du aldi baterako fitxategia idazteko ireki."
 
-#: src/frontend/MainWin.cpp:1848
+#: src/frontend/MainWin.cpp:1846
 #, kde-format
 msgid "Project saved"
 msgstr "Proiektua gorde da"
 
-#: src/frontend/MainWin.cpp:1864
+#: src/frontend/MainWin.cpp:1862
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Ezin izan du '%1' fitxategia gorde."
 
-#: src/frontend/MainWin.cpp:1869
+#: src/frontend/MainWin.cpp:1867
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Ezin izan du '%1' fitxategia irakurtzeko ireki."
 
-#: src/frontend/MainWin.cpp:1919
+#: src/frontend/MainWin.cpp:1917
 #, kde-format
 msgid "Changed"
 msgstr "Aldatuta"
 
-#: src/frontend/MainWin.cpp:1934 src/frontend/MainWin.cpp:1946
+#: src/frontend/MainWin.cpp:1932 src/frontend/MainWin.cpp:1944
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "%1(r)en inprimaketa prestatzea"
 
-#: src/frontend/MainWin.cpp:1936 src/frontend/MainWin.cpp:1948
+#: src/frontend/MainWin.cpp:1934 src/frontend/MainWin.cpp:1946
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 inprimatu da"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2471
+#: src/frontend/MainWin.cpp:2469
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
 #: src/frontend/worksheet/WorksheetView.cpp:363
 #, fuzzy, kde-format
 msgid "Cursor"
 msgstr "Kurtsorea"
 
-#: src/frontend/MainWin.cpp:2508
+#: src/frontend/MainWin.cpp:2506
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2512
+#: src/frontend/MainWin.cpp:2510
 #, fuzzy, kde-format
 #| msgid "Project saved"
 msgid "Project shared successfully"
 msgstr "Proiektua gorde da"
 
-#: src/frontend/MainWin.cpp:2515
+#: src/frontend/MainWin.cpp:2513
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2788
+#: src/frontend/MainWin.cpp:2786
 #, fuzzy, kde-format
 #| msgid "File not found"
 msgid "Kaggle CLI tool not found"
 msgstr "Fitxategia ez du aurkitu"
 
-#: src/frontend/MainWin.cpp:2789
+#: src/frontend/MainWin.cpp:2787
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
 "again."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2855
+#: src/frontend/MainWin.cpp:2853
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 esportatu da"
 
-#: src/frontend/MainWin.cpp:2862
+#: src/frontend/MainWin.cpp:2860
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS fitxategiak gorde dira"
 
-#: src/frontend/MainWin.cpp:2874
+#: src/frontend/MainWin.cpp:2872
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT bezeroa%1"
 
-#: src/frontend/MainWin.cpp:2892
+#: src/frontend/MainWin.cpp:2890
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2896
+#: src/frontend/MainWin.cpp:2894
 #, kde-format
 msgid "Live data source%1"
 msgstr "Zuzeneko datuen sorburua%1"
 
-#: src/frontend/MainWin.cpp:2947
+#: src/frontend/MainWin.cpp:2945
 #, fuzzy, kde-format
 #| msgid "Creates a new note for arbitrary text"
 msgid "Creates a new %1 notebook"
@@ -24624,7 +24619,7 @@ msgstr "Objektuak mugatzeko kaxa"
 msgid ""
 "Specifies the area to export:<ul><li>Bounding Box - the bounding box of all "
 "objects on the worksheet is exported</li><li>Selection - the area of the "
-"currently selected objects is exported</li><li>Worskheet - the complete "
+"currently selected objects is exported</li><li>Worksheet - the complete "
 "worksheet area is exported</li></ul>"
 msgstr ""
 
@@ -25019,6 +25014,9 @@ msgstr "«convert» prozesuak huts egin du, irteera kodea ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ez da fitxategia irekitzeko gai:"
+
+#~ msgid "Close"
+#~ msgstr "Itxi"
 
 #, fuzzy
 #~ msgid "Show SparkLines"

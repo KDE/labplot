@@ -2047,7 +2047,7 @@ void AxisDock::loadConfigFromTemplate(KConfig& config) {
 }
 
 void AxisDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group(QStringLiteral("Axis"));
+	auto group = config.group(QStringLiteral("Axis"));
 
 	// General
 	ui.cbOrientation->setCurrentIndex(group.readEntry(QStringLiteral("Orientation"), (int)m_axis->orientation()));
@@ -2071,8 +2071,8 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.chkShowScaleOffset->setChecked(group.readEntry(QStringLiteral("ShowScaleOffset"), static_cast<int>(m_axis->showScaleOffset())));
 
 	// Title
-	KConfigGroup axisLabelGroup = config.group(QStringLiteral("AxisLabel"));
-	labelWidget->loadConfig(axisLabelGroup);
+	auto axisTitleGroup = config.group(QStringLiteral("AxisTitle"));
+	labelWidget->loadConfig(axisTitleGroup);
 
 	// Line
 	lineWidget->loadConfig(group);
@@ -2153,7 +2153,7 @@ void AxisDock::loadConfig(KConfig& config) {
 }
 
 void AxisDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group(QStringLiteral("Axis"));
+	auto group = config.group(QStringLiteral("Axis"));
 
 	// General
 	group.writeEntry(QStringLiteral("Orientation"), ui.cbOrientation->currentIndex());
@@ -2180,8 +2180,8 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry(QStringLiteral("ShowScaleOffset"), ui.chkShowScaleOffset->isChecked());
 
 	// Title
-	KConfigGroup axisLabelGroup = config.group(QStringLiteral("AxisLabel"));
-	labelWidget->saveConfig(axisLabelGroup);
+	auto axisTitleGroup = config.group(QStringLiteral("AxisTitle"));
+	labelWidget->saveConfig(axisTitleGroup);
 
 	// Line
 	lineWidget->saveConfig(group);
@@ -2190,7 +2190,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry(QStringLiteral("MajorTicksDirection"), ui.cbMajorTicksDirection->currentIndex());
 	group.writeEntry(QStringLiteral("MajorTicksType"), ui.cbMajorTicksType->itemData(ui.cbMajorTicksType->currentIndex()));
 	group.writeEntry(QStringLiteral("MajorTicksNumber"), ui.sbMajorTicksNumber->value());
-	bool numeric = m_axis->isNumeric();
+	const bool numeric = m_axis->isNumeric();
 	if (numeric)
 		group.writeEntry(QStringLiteral("MajorTicksIncrement"), QString::number(ui.sbMajorTicksSpacingNumeric->value()));
 	else

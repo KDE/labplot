@@ -232,7 +232,7 @@ if(NOT WIN32)
     # when application code iterates over a QVector<QPoint> for instance, unless
     # Qt itself was also built with strict iterators.
     # See example at https://bugreports.qt.io/browse/AUTOSUITE-946
-    add_definitions(-DQT_STRICT_ITERATORS)
+    # add_definitions(-DQT_STRICT_ITERATORS)
 endif()
 
 include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
@@ -316,6 +316,12 @@ option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
 option(ENABLE_TESTS "Build with tests" ON)
 option(ENABLE_SDK "Build with SDK support" ON)
 if(ENABLE_SDK)
+if(WIN32)
+    option(ENABLE_PYTHON_SDK "Build with Python SDK support" OFF)
+else()
+    option(ENABLE_PYTHON_SDK "Build with Python SDK support" ON)
+endif()
+
     option(ENABLE_SDK_EXAMPLES "Build SDK examples" OFF)
 endif()
 
@@ -705,7 +711,10 @@ else()
 endif()
 
 # Qt Advanced Docking System (required) #####################
-find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG QUIET)
+find_package(qt${QT_VERSION_MAJOR}advanceddocking CONFIG QUIET NAMES qt${QT_VERSION_MAJOR}advanceddocking qtadvanceddocking-qt${QT_VERSION_MAJOR})
+if(qt${QT_VERSION_MAJOR}advanceddocking_FOUND AND NOT TARGET ads::qt${QT_VERSION_MAJOR}advanceddocking)
+    add_library(ads::qt${QT_VERSION_MAJOR}advanceddocking ALIAS ads::qtadvanceddocking-qt${QT_VERSION_MAJOR})
+endif()
 if(NOT qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
     option(LOCAL_QT_ADVANCED_DOCK_DOWNLOAD "Use local build of qt advanced dock downloaded directly from the git repository" OFF)
     option(LOCAL_QT_ADVANCED_DOCK_COPY "Use local build of qt advanced dock copied into the Qt-Advanced-Docking-System subfolder" ON)

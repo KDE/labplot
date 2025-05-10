@@ -147,7 +147,7 @@ void TextLabel::init() {
 		d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
 	}
 
-	KConfigGroup conf = Settings::group(QStringLiteral("Settings_Worksheet"));
+	auto conf = Settings::group(QStringLiteral("Settings_Worksheet"));
 	const auto& engine = conf.readEntry(QStringLiteral("LaTeXEngine"), "");
 	if (engine == QLatin1String("lualatex"))
 		d->teXFont.setFamily(QStringLiteral("Latin Modern Roman"));
@@ -170,11 +170,15 @@ void TextLabel::init() {
 	if (group.isValid()) {
 		// properties common to all types
 		d->textWrapper.mode = static_cast<TextLabel::Mode>(group.readEntry(QStringLiteral("Mode"), static_cast<int>(d->textWrapper.mode)));
+		QDEBUG(Q_FUNC_INFO << ", default font =" << QApplication::font())
+		setFont(group.readEntry("Font", QApplication::font()));
 		d->teXFont.setFamily(group.readEntry(QStringLiteral("TeXFontFamily"), d->teXFont.family()));
 		d->teXFont.setPointSize(group.readEntry(QStringLiteral("TeXFontSize"), d->teXFont.pointSize()));
 		d->fontColor = group.readEntry(QStringLiteral("FontColor"), d->fontColor);
 		d->backgroundColor = group.readEntry(QStringLiteral("BackgroundColor"), d->backgroundColor);
-		d->setRotation(group.readEntry(QStringLiteral("Rotation"), d->rotation()));
+
+		// different convention in QGraphicsItem - use negative value to rotate counter-clockwise
+		d->setRotation(-group.readEntry(QStringLiteral("Rotation"), d->rotation()));
 
 		// border
 		d->borderShape = (TextLabel::BorderShape)group.readEntry(QStringLiteral("BorderShape"), (int)d->borderShape);
@@ -281,67 +285,106 @@ void TextLabel::setBackgroundColor(const QColor color) {
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText)
 void TextLabel::setText(const TextWrapper& textWrapper) {
 	Q_D(TextLabel);
+
+	if (d->textWrapper == textWrapper)
+		return;
+
 	// DEBUG("********************\n" << Q_FUNC_INFO << ", old/new mode = " << (int)d->textWrapper.mode << " " << (int)textWrapper.mode)
 	// DEBUG("\nOLD TEXT = " << STDSTRING(d->textWrapper.text) << '\n')
 	// DEBUG("NEW TEXT = " << STDSTRING(textWrapper.text) << '\n')
 	// QDEBUG("COLORS: color =" << d->fontColor << ", background color =" << d->backgroundColor)
 
-	if (d->textWrapper != textWrapper) {
-		bool oldEmpty = d->textWrapper.text.isEmpty();
-		if (textWrapper.mode == TextLabel::Mode::Text && !textWrapper.text.isEmpty()) {
-			QTextEdit pte(d->textWrapper.text); // te with previous text
-			// restore formatting when text changes or switching back to text mode
-			if (d->textWrapper.mode != TextLabel::Mode::Text || oldEmpty || pte.toPlainText().isEmpty()) {
-				// DEBUG("RESTORE FORMATTING")
-				QTextEdit te(d->textWrapper.text);
-				te.selectAll();
-				te.setText(textWrapper.text);
-				te.selectAll();
-				te.setTextColor(d->fontColor);
-				te.setTextBackgroundColor(d->backgroundColor);
+	bool oldEmpty = d->textWrapper.text.isEmpty();
+	if (textWrapper.mode == TextLabel::Mode::Text && !textWrapper.text.isEmpty()) {
+		QTextEdit pte(d->textWrapper.text); // te with previous text
+		// pte.selectAll();
+		//  restore formatting when text changes or switching back to text mode
+		if (d->textWrapper.mode != TextLabel::Mode::Text || oldEmpty || pte.toPlainText().isEmpty()) {
+			// DEBUG("RESTORE FORMATTING")
+			QTextEdit te(d->textWrapper.text);
+			te.selectAll();
+			auto font = te.currentFont();
+			// QDEBUG("CURRENT FONT =" << font)
+			te.setText(textWrapper.text);
+			te.selectAll();
+			te.setTextColor(d->fontColor);
+			te.setTextBackgroundColor(d->backgroundColor);
+			te.setCurrentFont(font); // needed to keep font
+			te.setFont(font); // body style
 
-				TextWrapper tw = textWrapper;
-				tw.text = te.toHtml();
-				// DEBUG("\nTW TEXT = " << STDSTRING(tw.text) << std::endl)
-				exec(new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text")));
-			} else { // the existing text is being modified
-				QUndoCommand* parent = nullptr;
-				TextLabelSetTextCmd* command = nullptr;
-				QTextEdit te;
-				te.setHtml(textWrapper.text);
-				te.selectAll();
-				if (textWrapper.text.indexOf(QStringLiteral("background-color:")) != -1) {
-					const auto& bgColor = te.textBackgroundColor();
-					if (bgColor != d->backgroundColor) {
-						parent = new QUndoCommand(ki18n("%1: set label text").subs(name()).toString());
-						new TextLabelSetTeXBackgroundColorCmd(d, bgColor, ki18n("%1: set background color"), parent);
-					}
-					command = new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text"), parent);
-				} else {
-					// no color available yet, plain text is being provided -> set the color from member variable
-					te.setTextBackgroundColor(d->backgroundColor);
-					TextWrapper tw = textWrapper;
-					tw.text = te.toHtml();
-					command = new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text"), parent);
+			auto tw = textWrapper;
+			tw.text = te.toHtml();
+			// DEBUG("\nTW TEXT = " << STDSTRING(tw.text) << std::endl)
+			exec(new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text")));
+		} else { // the existing text (mode Text) is being modified
+			// DEBUG("MODIFY TEXT")
+			pte.selectAll();
+			auto font = pte.currentFont();
+			// QDEBUG("CURRENT FONT =" << font)
+			pte.setHtml(textWrapper.text);
+			pte.selectAll();
+			pte.setCurrentFont(font);
+
+			QUndoCommand* parent = nullptr;
+			TextLabelSetTextCmd* command = nullptr;
+			if (textWrapper.text.indexOf(QStringLiteral("background-color:")) != -1) {
+				const auto& bgColor = pte.textBackgroundColor();
+				if (bgColor != d->backgroundColor) {
+					parent = new QUndoCommand(ki18n("%1: set label text").subs(name()).toString());
+					new TextLabelSetTeXBackgroundColorCmd(d, bgColor, ki18n("%1: set background color"), parent);
 				}
-
-				if (!parent)
-					exec(command);
-				else
-					exec(parent);
+				command = new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text"), parent);
+			} else {
+				// no color available yet, plain text is being provided -> set the color from member variable
+				pte.setTextBackgroundColor(d->backgroundColor);
+				TextWrapper tw = textWrapper;
+				tw.text = pte.toHtml();
+				command = new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text"), parent);
 			}
-		} else
-			exec(new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text")));
 
-		// If previously the text was empty, the bounding rect is zero
-		// therefore the alignment did not work properly.
-		// If text is added, the bounding rectangle is updated
-		// and then the position must be changed to consider alignment
-		if (oldEmpty)
-			d->updatePosition();
-	}
+			if (!parent)
+				exec(command);
+			else
+				exec(parent);
+		}
+	} else
+		exec(new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text")));
 
+	// If previously the text was empty, the bounding rect is zero
+	// therefore the alignment did not work properly.
+	// If text is added, the bounding rectangle is updated
+	// and then the position must be changed to consider alignment
+	if (oldEmpty)
+		d->updatePosition();
+
+	// DEBUG(" TEXT NOW = " << d->textWrapper.text.toStdString())
 	// DEBUG(Q_FUNC_INFO << " DONE\n***********************")
+}
+
+void TextLabel::setFont(const QFont& font) {
+	QDEBUG(Q_FUNC_INFO << ", font =" << font)
+	Q_D(TextLabel);
+	auto text = d->textWrapper.text;
+	// DEBUG("TEXT = \"" << text.toStdString() << "\"")
+
+	switch (d->textWrapper.mode) {
+	case TextLabel::Mode::Text: {
+		QTextEdit te(text);
+		te.selectAll();
+		te.setFont(font);
+		d->textWrapper.text = te.toHtml();
+		// QDEBUG("NEW TEXT =" << d->textWrapper.text)
+		//	if (font != d->teXFont)
+		//		exec(new TextLabelSetTeXFontCmd(d, font, ki18n("%1: set TeX main font")));
+		break;
+	}
+	case TextLabel::Mode::LaTeX:
+		setTeXFont(font);
+		break;
+	case TextLabel::Mode::Markdown:
+		// nothing to be done
+		break;
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetPlaceholderText, TextLabel::TextWrapper, textWrapper, updateText)
@@ -1212,8 +1255,7 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 		wrapper.textPlaceholder = te.toHtml();
 		wrapper.allowPlaceholder = d->textWrapper.allowPlaceholder;
 
-		// update the text. also in the Widget to which is connected
-
+		// update the text also in the widget to which it is connected
 		setText(wrapper);
 	} else if (d->textWrapper.mode == TextLabel::Mode::LaTeX) {
 		// call updateText() to re-render the LaTeX-image with the new text colors

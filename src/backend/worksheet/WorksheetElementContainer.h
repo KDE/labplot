@@ -52,9 +52,9 @@ private Q_SLOTS:
 protected:
 	WorksheetElementContainer(const QString&, WorksheetElementContainerPrivate*, AspectType);
 	ResizeItem* m_resizeItem{nullptr};
+	virtual void handleAspectAdded(const AbstractAspect*);
 
 protected Q_SLOTS:
-	virtual void handleAspectAdded(const AbstractAspect*);
 	virtual void handleAspectMoved();
 
 private:

@@ -182,6 +182,10 @@ int ProjectPrivate::mXmlVersion = buildXmlVersion;
 Project::Project()
 	: Folder(i18n("Project"), AspectType::Project)
 	, d_ptr(new ProjectPrivate(this)) {
+#ifdef SDK
+	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
+	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
+#endif
 	Q_D(Project);
 
 	QString user = qEnvironmentVariable("USER"); // !Windows
@@ -257,15 +261,8 @@ QUndoStack* Project::undoStack() const {
 }
 
 QMenu* Project::createContextMenu() {
-	QMenu* menu = AbstractAspect::createContextMenu();
-
-	// add close action
-	menu->addSeparator();
-	menu->addAction(QIcon::fromTheme(QLatin1String("document-close")), i18n("Close"), this, SIGNAL(closeRequested()));
-
-	// add the actions from MainWin
-	Q_EMIT requestProjectContextMenu(menu);
-
+	QMenu* menu = AbstractAspect::createContextMenu(); // add default actions from Aspect
+	Q_EMIT requestProjectContextMenu(menu); // add the actions from MainWin
 	return menu;
 }
 

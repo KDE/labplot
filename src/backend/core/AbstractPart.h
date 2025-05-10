@@ -33,9 +33,9 @@ public:
 	void deleteView() const;
 #ifndef SDK
 	ContentDockWidget* dockWidget() const;
-#endif
 	bool dockWidgetExists() const;
 	bool hasMdiSubWindow() const;
+#endif
 
 	QMenu* createContextMenu() override;
 	virtual bool exportView() const = 0;

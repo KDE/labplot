@@ -261,22 +261,30 @@ set_target_properties(liblabplot PROPERTIES
 
 target_compile_definitions(liblabplot PRIVATE -DSDK ${LABPLOT_COMPILE_DEFINITIONS})
 
+get_target_property(labplotlib_INCLUDE_DIRECTORIES labplotlib INCLUDE_DIRECTORIES)
+get_target_property(labplotbackendlib_INCLUDE_DIRECTORIES labplotbackendlib INCLUDE_DIRECTORIES)
+get_target_property(labplotnsllib_INCLUDE_DIRECTORIES labplotnsllib INCLUDE_DIRECTORIES)
+
 target_include_directories(liblabplot
     PRIVATE
-    $<TARGET_PROPERTY:labplotlib,INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:labplotbackendlib,INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:labplotnsllib,INCLUDE_DIRECTORIES>
+    ${labplotlib_INCLUDE_DIRECTORIES}
+    ${labplotbackendlib_INCLUDE_DIRECTORIES}
+    ${labplotnsllib_INCLUDE_DIRECTORIES}
     # any dependent building me directly
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../src>
     # any dependent not building me directly
     INTERFACE $<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/labplot>
 )
 
+get_target_property(labplotlib_LINK_LIBRARIES labplotlib LINK_LIBRARIES)
+get_target_property(labplotbackendlib_LINK_LIBRARIES labplotbackendlib LINK_LIBRARIES)
+get_target_property(labplotnsllib_LINK_LIBRARIES labplotnsllib LINK_LIBRARIES)
+
 target_link_libraries(liblabplot
     PRIVATE
-    $<TARGET_PROPERTY:labplotlib,LINK_LIBRARIES>
-    $<TARGET_PROPERTY:labplotbackendlib,LINK_LIBRARIES>
-    $<TARGET_PROPERTY:labplotnsllib,LINK_LIBRARIES>
+    ${labplotlib_LINK_LIBRARIES}
+    ${labplotbackendlib_LINK_LIBRARIES}
+    ${labplotnsllib_LINK_LIBRARIES}
     PUBLIC
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Gui
@@ -360,3 +368,8 @@ install(
     DESTINATION ${KDE_INSTALL_CMAKEPACKAGEDIR}/labplot
     COMPONENT Devel
 )
+
+if(ENABLE_PYTHON_SDK)
+    message(STATUS "Python SDK build ENABLED")
+    add_subdirectory(python)
+endif()
