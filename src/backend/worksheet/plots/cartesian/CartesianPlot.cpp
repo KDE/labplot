@@ -620,8 +620,10 @@ void CartesianPlot::initMenus() {
 	m_addNewMenu->addAction(addCustomPointAction);
 	m_addNewMenu->addAction(addReferenceLineAction);
 	m_addNewMenu->addAction(addReferenceRangeAction);
-	m_addNewMenu->addSeparator();
-	m_addNewMenu->addAction(addInsetPlotAction);
+	if (parentAspect()->type() != AspectType::CartesianPlot) { // don't allow to add an inset plot if it's already an inset plot
+		m_addNewMenu->addSeparator();
+		m_addNewMenu->addAction(addInsetPlotAction);
+	}
 
 	// analysis menu, used in the context menu of XYCurve to allow direct application of analysis functions on the curves
 	dataAnalysisMenu = new QMenu(i18n("Analysis"));
