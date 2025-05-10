@@ -553,6 +553,7 @@ void CartesianPlot::initActions() {
 			break;
 	}
 	addInsetPlotAction = new QAction(icon, i18n("Inset Plot Area"), this);
+	addInsetPlotWithDataAction = new QAction(icon, i18n("Inset Plot Area with Data"), this);
 
 	connect(addLegendAction, &QAction::triggered, this, static_cast<void (CartesianPlot::*)()>(&CartesianPlot::addLegend));
 	connect(addHorizontalAxisAction, &QAction::triggered, this, &CartesianPlot::addHorizontalAxis);
@@ -564,6 +565,7 @@ void CartesianPlot::initActions() {
 	connect(addReferenceLineAction, &QAction::triggered, this, &CartesianPlot::addReferenceLine);
 	connect(addReferenceRangeAction, &QAction::triggered, this, &CartesianPlot::addReferenceRange);
 	connect(addInsetPlotAction, &QAction::triggered, this, &CartesianPlot::addInsetPlot);
+	connect(addInsetPlotWithDataAction, &QAction::triggered, this, &CartesianPlot::addInsetPlotWithData);
 }
 
 void CartesianPlot::initMenus() {
@@ -623,6 +625,7 @@ void CartesianPlot::initMenus() {
 	if (parentAspect()->type() != AspectType::CartesianPlot) { // don't allow to add an inset plot if it's already an inset plot
 		m_addNewMenu->addSeparator();
 		m_addNewMenu->addAction(addInsetPlotAction);
+		m_addNewMenu->addAction(addInsetPlotWithDataAction);
 	}
 
 	// analysis menu, used in the context menu of XYCurve to allow direct application of analysis functions on the curves
@@ -2257,14 +2260,33 @@ void CartesianPlot::addReferenceLine() {
 	line->retransform();
 }
 
+/*!
+ * adds an empty default plot area as a child ("inset plot"),
+ * the child only inherits the type (four axes, etc.)
+ * and the theme of the parent plot area.
+ */
 void CartesianPlot::addInsetPlot() {
 	beginMacro(i18n("%1: add inset plot", name()));
+	auto* insetPlot = new CartesianPlot(i18n("Inset Plot Area"));
+	Q_D(const CartesianPlot);
+	insetPlot->setType(d->type);
+	resizeInsetPlot(insetPlot);
+	addChild(insetPlot);
+	endMacro();
+}
+
+/*!
+ * adds a copy of the plot area as a child to it, the child inherits all properties
+ * of the parent plot area including the visualization of the data
+ */
+void CartesianPlot::addInsetPlotWithData() {
+	beginMacro(i18n("%1: add inset plot with data", name()));
 
 	// add a copy of the current plot as a child
 	copy();
 	paste(true);
 
-	// rename and resize the new child plot 
+	// rename and resize the new child plot
 	const auto& plots = children<CartesianPlot>();
 	auto* insetPlot = plots.last();
 	insetPlot->setName(i18n("Inset Plot Area"));
@@ -5546,6 +5568,14 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				addChildFast(plot);
 			else
 				return false;
+		} else if (reader->name() == QLatin1String("cartesianPlot")) {
+			auto* plot = new CartesianPlot(QString(), true);
+			plot->setIsLoading(true);
+			if (!plot->load(reader, preview)) {
+				delete plot;
+				return false;
+			} else
+				addChildFast(plot);
 		} else { // unknown element
 			if (!preview)
 				reader->raiseUnknownElementWarning();
