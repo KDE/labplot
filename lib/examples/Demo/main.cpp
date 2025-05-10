@@ -3,13 +3,13 @@
 #include <labplot.h>
 
 int main(int argc, char** argv) {
-	// create qt application
-	QApplication app(argc, argv);
+    // create qt application
+    QApplication app(argc, argv);
 
 	// create a spreadsheet and import the data into it
 	auto* spreadsheet = new Spreadsheet(QStringLiteral("data"));
 	AsciiFilter filter;
-	auto p = filter.properties();
+    auto p = filter.properties();
 	p.headerEnabled = false;
 	filter.setProperties(p);
 	filter.readDataFromFile(QStringLiteral("Demo/data.txt"), spreadsheet);

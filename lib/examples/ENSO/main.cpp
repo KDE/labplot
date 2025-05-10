@@ -13,48 +13,48 @@ int main(int argc, char* argv[]) {
 	p.headerEnabled = false;
 	filter.setProperties(p);
 
-	Spreadsheet spreadsheet("ENSO-data");
-    project.addChild(&spreadsheet);
+	auto* spreadsheet = new Spreadsheet("ENSO-data");
+    project.addChild(spreadsheet);
 
-    filter.readDataFromFile(QStringLiteral("ENSO/data.txt"), &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+    filter.readDataFromFile(QStringLiteral("ENSO/data.txt"), spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
     if (!filter.lastError().isEmpty()) {
 		std::cout << "Import error: " << filter.lastError().toStdString() << std::endl;
 		return -1;
 	}
 
-    Worksheet worksheet("Worksheet");
-    project.addChild(&worksheet);
+    auto* worksheet = new Worksheet("Worksheet");
+    project.addChild(worksheet);
 
-    worksheet.setUseViewSize(false);
+    worksheet->setUseViewSize(false);
     double w = Worksheet::convertToSceneUnits(15, Worksheet::Unit::Centimeter);
 	double h = Worksheet::convertToSceneUnits(15, Worksheet::Unit::Centimeter);
-	worksheet.setPageRect(QRectF(0, 0, w, h));
+	worksheet->setPageRect(QRectF(0, 0, w, h));
 
-    worksheet.setTheme(QStringLiteral("Solarized Light"));
+    worksheet->setTheme(QStringLiteral("Solarized Light"));
 
     double ms = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
-    worksheet.setLayout(Worksheet::Layout::VerticalLayout);
-    worksheet.setLayoutTopMargin(ms);
-	worksheet.setLayoutBottomMargin(ms);
-	worksheet.setLayoutLeftMargin(ms);
-	worksheet.setLayoutRightMargin(ms);
+    worksheet->setLayout(Worksheet::Layout::VerticalLayout);
+    worksheet->setLayoutTopMargin(ms);
+	worksheet->setLayoutBottomMargin(ms);
+	worksheet->setLayoutLeftMargin(ms);
+	worksheet->setLayoutRightMargin(ms);
 
-    worksheet.setLayoutHorizontalSpacing(ms);
-    worksheet.setLayoutVerticalSpacing(ms);
+    worksheet->setLayoutHorizontalSpacing(ms);
+    worksheet->setLayoutVerticalSpacing(ms);
 
-    CartesianPlot plotArea("xy-plot");
-	plotArea.setType(CartesianPlot::Type::FourAxes);
-    plotArea.title()->setText(QStringLiteral("El Niño-Southern Oscillation"));
-    PlotArea::BorderType border = plotArea.plotArea()->borderType();
+    auto* plotArea = new CartesianPlot("xy-plot");
+	plotArea->setType(CartesianPlot::Type::FourAxes);
+    plotArea->title()->setText(QStringLiteral("El Niño-Southern Oscillation"));
+    PlotArea::BorderType border = plotArea->plotArea()->borderType();
     border.setFlag(PlotArea::BorderTypeFlags::BorderLeft, true);
 	border.setFlag(PlotArea::BorderTypeFlags::BorderTop, true);
 	border.setFlag(PlotArea::BorderTypeFlags::BorderRight, true);
 	border.setFlag(PlotArea::BorderTypeFlags::BorderBottom, true);
-    plotArea.plotArea()->setBorderType(border);
-    worksheet.addChild(&plotArea);
+    plotArea->plotArea()->setBorderType(border);
+    worksheet->addChild(plotArea);
 
-    for (Axis* axis : plotArea.children<Axis>()) {
+    for (Axis* axis : plotArea->children<Axis>()) {
         if (axis->orientation() == WorksheetElement::Orientation::Horizontal && axis->position() == Axis::Position::Bottom) {
             axis->title()->setText(QStringLiteral("Month"));
         } else if (axis->orientation() == WorksheetElement::Orientation::Vertical && axis->position() == Axis::Position::Left) {
@@ -62,16 +62,16 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    XYCurve data("data");
-    data.setPlotType(Plot::PlotType::Scatter);
-    data.setYColumn(spreadsheet.column(0));
-    data.setXColumn(spreadsheet.column(1));
-    plotArea.addChild(&data);
+    auto* data = new XYCurve("data");
+    data->setPlotType(Plot::PlotType::Scatter);
+    data->setYColumn(spreadsheet->column(0));
+    data->setXColumn(spreadsheet->column(1));
+    plotArea->addChild(data);
 
-    XYFitCurve fit("fit");
+    auto* fit = new XYFitCurve("fit");
 
-    fit.initFitData(XYAnalysisCurve::AnalysisAction::FitCustom);
-    XYFitCurve::FitData fitData = fit.fitData();
+    fit->initFitData(XYAnalysisCurve::AnalysisAction::FitCustom);
+    XYFitCurve::FitData fitData = fit->fitData();
 
     fitData.modelCategory = nsl_fit_model_custom;
     fitData.modelType = 0;
@@ -85,20 +85,20 @@ int main(int argc, char* argv[]) {
 
     XYFitCurve::initFitData(fitData);
 
-    fit.setYDataColumn(spreadsheet.column(0));
-    fit.setXDataColumn(spreadsheet.column(1));
+    fit->setYDataColumn(spreadsheet->column(0));
+    fit->setXDataColumn(spreadsheet->column(1));
 
-    fit.initStartValues(fitData);
-    fit.setFitData(fitData);
-    fit.recalculate();
+    fit->initStartValues(fitData);
+    fit->setFitData(fitData);
+    fit->recalculate();
 
-    plotArea.addChild(&fit);
+    plotArea->addChild(fit);
 
-    fit.recalculate();
+    fit->recalculate();
 
-    plotArea.addLegend();
+    plotArea->addLegend();
 
-    worksheet.view()->show();
+    worksheet->view()->show();
 
     app.exec();
 }
