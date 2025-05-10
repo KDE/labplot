@@ -3827,7 +3827,10 @@ void CartesianPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* even
 	logicalPos = cSystem->mapSceneToLogical(scenePos, AbstractCoordinateSystem::MappingFlag::Limit);
 	calledFromContextMenu = true;
 	auto* menu = q->createContextMenu();
-	Q_EMIT q->contextMenuRequested(q->AbstractAspect::type(), menu);
+	if (q->parentAspect()->type() == AspectType::CartesianPlot)
+		Q_EMIT q->parentAspect()->contextMenuRequested(q->AbstractAspect::type(), menu); // for inset plots emit the signal for the parent to handle it in Worksheet
+	else
+		Q_EMIT q->contextMenuRequested(q->AbstractAspect::type(), menu);
 }
 
 /*!
