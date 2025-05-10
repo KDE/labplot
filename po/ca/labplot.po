@@ -4,14 +4,15 @@
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Antoni Bella Pérez <antonibella5@yahoo.com>
-# Orestes Mas <orestes@tsc.upc.edu>, 2018.
 # SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Josep M. Ferrer <txemaq@gmail.com>
+# Orestes Mas <orestes@tsc.upc.edu>, 2018.
+# Josep M. Ferrer <txemaq@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-09 00:38+0000\n"
-"PO-Revision-Date: 2025-04-25 10:28+0200\n"
+"PO-Revision-Date: 2025-05-09 09:05+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 22.12.3\n"
 "X-Accelerator-Marker: &\n"
 
 #, kde-format
@@ -24865,12 +24866,7 @@ msgid "Bounding Box"
 msgstr "Quadre contenidor"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:89
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specifies the area to export:<ul><li>Bounding Box - the bounding box of "
-#| "all objects on the worksheet is exported</li><li>Selection - the area of "
-#| "the currently selected objects is exported</li><li>Worskheet - the "
-#| "complete worksheet area is exported</li></ul>"
+#, kde-format
 msgid ""
 "Specifies the area to export:<ul><li>Bounding Box - the bounding box of all "
 "objects on the worksheet is exported</li><li>Selection - the area of the "

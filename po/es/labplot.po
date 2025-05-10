@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-09 00:38+0000\n"
-"PO-Revision-Date: 2025-04-25 12:08+0100\n"
+"PO-Revision-Date: 2025-05-10 00:18+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -24737,12 +24737,7 @@ msgid "Bounding Box"
 msgstr "Cuadro delimitador"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:89
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specifies the area to export:<ul><li>Bounding Box - the bounding box of "
-#| "all objects on the worksheet is exported</li><li>Selection - the area of "
-#| "the currently selected objects is exported</li><li>Worskheet - the "
-#| "complete worksheet area is exported</li></ul>"
+#, kde-format
 msgid ""
 "Specifies the area to export:<ul><li>Bounding Box - the bounding box of all "
 "objects on the worksheet is exported</li><li>Selection - the area of the "
@@ -25141,6 +25136,3 @@ msgstr "el proceso «convert» ha fallado, código de salida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No se puede abrir el archivo:"
-
-#~ msgid "Close"
-#~ msgstr "Cerrar"

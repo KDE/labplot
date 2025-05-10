@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-09 00:38+0000\n"
-"PO-Revision-Date: 2025-04-25 07:06+0200\n"
+"PO-Revision-Date: 2025-05-09 07:31+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -24705,12 +24705,7 @@ msgid "Bounding Box"
 msgstr "Omejevalni okvir"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:89
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specifies the area to export:<ul><li>Bounding Box - the bounding box of "
-#| "all objects on the worksheet is exported</li><li>Selection - the area of "
-#| "the currently selected objects is exported</li><li>Worskheet - the "
-#| "complete worksheet area is exported</li></ul>"
+#, kde-format
 msgid ""
 "Specifies the area to export:<ul><li>Bounding Box - the bounding box of all "
 "objects on the worksheet is exported</li><li>Selection - the area of the "
@@ -24718,9 +24713,9 @@ msgid ""
 "worksheet area is exported</li></ul>"
 msgstr ""
 "Določa območje za izvoz:<ul><li>Omejevalni okvir – omejevalni okvir vseh "
-"predmeti na delovnem listu se izvozijo</li><li>Izbor - območje trenutno "
-"izbrani predmeti so izvoženi</li><li>Delovni list - popoln območje delovnega "
-"lista je izvoženo</li></ul>"
+"predmetov na delovnem listu je izvožen</li><li>Izbor - območje trenutno "
+"izbranih predmetov je izvožen</li><li>Delovni list - celotno območje "
+"delovnega lista je izvoženo</li></ul>"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:99
 #, kde-format
