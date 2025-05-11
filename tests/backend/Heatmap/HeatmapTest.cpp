@@ -1309,10 +1309,6 @@ void HeatmapTest::testRepresentationSpreadsheetDrawEmpty() {
 	QCOMPARE(valueDrawnCounter, 9);
 }
 
-void HeatmapTest::testRepresentationSpreadsheetDrawZeroes() {
-	QVERIFY(false);
-}
-
 /*!
  * \brief HeatmapTest::testRepresentationSpreadsheetCompletelyOutOfRange
  * Completly outside of the plot so nothing will be drawn
