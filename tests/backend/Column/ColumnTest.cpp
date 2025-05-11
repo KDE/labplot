@@ -18,7 +18,7 @@
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
-#include <QUndoStack>
+#include "backend/lib/UndoStack.h"
 
 #define SETUP_C1_C2_COLUMNS(c1Vector, c2Vector)                                                                                                                \
 	auto c1 = Column(QStringLiteral("DataColumn"), Column::ColumnMode::Double);                                                                                \
