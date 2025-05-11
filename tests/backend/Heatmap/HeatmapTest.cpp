@@ -408,17 +408,17 @@ void HeatmapTest::testNumberBins() {
 	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
 		switch (valueDrawnCounter) {
 		case 0:
-			COMPARE_VALUES(0., 0., 10. / 3., 50, 2.);
+			COMPARE_VALUES(0., 0., 10. / 3., 50., 2.);
 			break;
 		case 1:
-			COMPARE_VALUES(10. / 3., 0., 20. / 3., 50, 3.);
+			COMPARE_VALUES(10. / 3., 0., 20. / 3., 50., 3.);
 			break;
 		case 2:
 			COMPARE_VALUES(20. / 3., 0., 10, 50., 1.);
 			break;
 
 		case 3:
-			COMPARE_VALUES(0., 50.0, 10. / 3., 100., 2.);
+			COMPARE_VALUES(0., 50., 10. / 3., 100., 2.);
 			break;
 		case 4:
 			COMPARE_VALUES(10. / 3., 50.0, 20. / 3., 100., 2.);
@@ -448,6 +448,10 @@ void HeatmapTest::indicesMinMaxMatrix() {
 		int end = -1;
 		QCOMPARE(hm.indicesMinMaxMatrix(Dimension::X, 16, 19, start, end), true);
 		QCOMPARE(start, 4);
+		// 7  9.22  11.44  13.66  15.88  18.11 20.33 22.55 24.77 27
+		//                          ^            ^
+		//                          |            |
+		//                        start         end
 		QCOMPARE(end, 6);
 	}
 
@@ -1517,13 +1521,6 @@ void HeatmapTest::testColorManual() {
 	// |     |  X  |     | XX  |     |   80
 	// |  X  |     |     |     | XX  |   100
 
-	// 3 Bins X
-	// 0        3.3       6.6        10
-	// |---------|---------|---------|   0
-	// |   XX    |   XXX   |   X     |   50  2 Bins
-	// |   XX    |   XX    |   XX    |   100 Y
-
-	QCOMPARE(valueDrawnCounter, 9);
 
 	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).start(), 0);
 	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).end(), 10);
@@ -1532,6 +1529,11 @@ void HeatmapTest::testColorManual() {
 
 	hm->setXNumBins(3);
 
+	// 3 Bins X
+	// 0        3.3       6.6        10
+	// |---------|---------|---------|   0
+	// |   XX    |   XXX   |   X     |   50  2 Bins
+	// |   XX    |   XX    |   XX    |   100 Y
 	int valueDrawnCounter = 0;
 	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
 		switch (valueDrawnCounter) {
@@ -1540,7 +1542,7 @@ void HeatmapTest::testColorManual() {
 			COMPARE_VALUES(0., 0., 10. / 3., 50., 2.);
 			break;
 		case 1:
-			COMPARE_VALUES(10. / 3., 0., 20. / 3., 50., 3.);
+			COMPARE_VALUES(10. / 3., 0., 20. / 3., 50, 3.);
 			break;
 		case 2:
 			COMPARE_VALUES(20. / 3., 0., 10., 50., 1.);
@@ -1548,7 +1550,7 @@ void HeatmapTest::testColorManual() {
 
 		// Row 1
 		case 3:
-			COMPARE_VALUES(0., 50., 10. / 3., 100., 1.);
+			COMPARE_VALUES(0., 50.0, 10. / 3., 100., 2.);
 			break;
 		case 4:
 			COMPARE_VALUES(10. / 3., 50., 20. / 3., 100., 2.);
