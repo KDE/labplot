@@ -392,16 +392,18 @@ bool Heatmap::indicesMinMax(const Dimension dim, double v1, double v2, int& star
 bool Heatmap::indicesMinMaxMatrix(const Dimension dim, double v1, double v2, int& start, int& end) const {
 	Q_D(const Heatmap);
 	double numberElements = 0;
+	double startValue = 0;
+	double endValue = 0;
 	switch (dim) {
 	case Dimension::X: {
-		start = d->matrix->xStart();
-		end = d->matrix->xEnd();
+		startValue = d->matrix->xStart();
+		endValue = d->matrix->xEnd();
 		numberElements = d->matrix->columnCount();
 		break;
 	}
 	case Dimension::Y:
-		start = d->matrix->yStart();
-		end = d->matrix->yEnd();
+		startValue = d->matrix->yStart();
+		endValue = d->matrix->yEnd();
 		numberElements = d->matrix->rowCount();
 		break;
 	}
@@ -409,23 +411,23 @@ bool Heatmap::indicesMinMaxMatrix(const Dimension dim, double v1, double v2, int
 	if (numberElements == 0)
 		return false;
 
-	const double diff = end - start;
+	const double diff = endValue - startValue;
 	const bool increasing = diff > 0;
 
-	if ((increasing && v1 >= end) || (!increasing && v1 <= end)) {
+	if ((increasing && v1 >= endValue) || (!increasing && v1 <= endValue)) {
 		start = numberElements - 1; // last index
-	} else if ((increasing && v1 <= start) || (!increasing && v1 >= start))
+	} else if ((increasing && v1 <= startValue) || (!increasing && v1 >= startValue))
 		start = 0;
 	else {
-		start = static_cast<int>((v1 - start) * numberElements / diff);
+		start = static_cast<int>((v1 - startValue) / diff * (numberElements - 1));
 	}
 
-	if ((increasing && v2 >= end) || (!increasing && v2 <= end))
+	if ((increasing && v2 >= endValue) || (!increasing && v2 <= endValue))
 		end = numberElements - 1; // last index
-	else if ((increasing && v2 <= start) || (!increasing && v2 >= start))
+	else if ((increasing && v2 <= startValue) || (!increasing && v2 >= startValue))
 		end = 0;
 	else {
-		end = static_cast<int>((v2 - start) * numberElements / diff);
+		end = ceil((v2 - startValue) / diff * (numberElements - 1));
 	}
 	return true;
 }
