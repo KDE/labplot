@@ -1,4 +1,7 @@
 -----3.0.0 (XX) -----
+New features:
+	* [worksheet]
+		* Inset plot areas - plot areas added as child of another plot area
 
 Bug fixes:
 	* Fix using default font for axis title

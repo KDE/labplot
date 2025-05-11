@@ -424,7 +424,7 @@ void Worksheet::childDeselected(const AbstractAspect* aspect) {
  *  The signal is handled in \c AspectTreeModel and forwarded to the tree view in \c ProjectExplorer.
  * This function is called in \c WorksheetView upon selection changes.
  */
-void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b) {
+void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool selected) {
 	// determine the corresponding aspect
 	AbstractAspect* aspect(nullptr);
 	for (const auto* child : children<WorksheetElement>(ChildIndexFlag::IncludeHidden)) {
@@ -437,41 +437,43 @@ void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b) {
 		return;
 
 	// forward selection/deselection to AbstractTreeModel
-	if (b)
+	if (selected)
 		Q_EMIT childAspectSelectedInView(aspect);
 	else
 		Q_EMIT childAspectDeselectedInView(aspect);
 
 	// handle the resize items on selection changes
-	if (layout() == Worksheet::Layout::NoLayout) {
-		// only one selected plot can be made resizable
-		if (b) {
-			const auto& items = m_view->selectedItems();
-			if (items.size() == 1) {
-				// only one object is selected.
-				// make it resiable if its a container
-				auto* container = dynamic_cast<WorksheetElementContainer*>(aspect);
-				if (container)
-					container->setResizeEnabled(true);
-			} else if (items.size() > 1) {
-				// multiple objects are selected, make all containers non-resizable
-				const auto& elements = children<WorksheetElement>();
-				for (auto* element : elements) {
-					auto* container = dynamic_cast<WorksheetElementContainer*>(element);
-					if (container)
-						container->setResizeEnabled(false);
-				}
-			}
-		} else {
+	if (selected) {
+		const auto& items = m_view->selectedItems();
+		if (items.size() == 1) {
+			// only one object is selected, make it resiable if it's a container and
+			// 1. a child of a worksheet without any active layout
+			// 2. a child of another container ("inset plot")
 			auto* container = dynamic_cast<WorksheetElementContainer*>(aspect);
-			if (container)
-				container->setResizeEnabled(false);
+			if (container) {
+				if (container->parentAspect() == this && layout() != Worksheet::Layout::NoLayout)
+					container->setResizeEnabled(false);
+				else
+					container->setResizeEnabled(true);
+			}
+		} else if (items.size() > 1) {
+			// multiple objects are selected, make all containers non-resizable
+			const auto& elements = children<WorksheetElement>();
+			for (auto* element : elements) {
+				auto* container = dynamic_cast<WorksheetElementContainer*>(element);
+				if (container)
+					container->setResizeEnabled(false);
+			}
 		}
+	} else {
+		auto* container = dynamic_cast<WorksheetElementContainer*>(aspect);
+		if (container)
+			container->setResizeEnabled(false);
 	}
 }
 
 /*!
- * helper function:  checks whether \c aspect or one of its children has the \c GraphicsItem \c item
+ * helper function: checks whether \c aspect or one of its children has the \c GraphicsItem \c item
  * Returns a pointer to \c WorksheetElement having this item.
  */
 WorksheetElement* Worksheet::aspectFromGraphicsItem(const WorksheetElement* parent, const QGraphicsItem* item) const {
