@@ -24,7 +24,7 @@
 #include "frontend/worksheet/WorksheetView.h"
 
 #include <QAction>
-#include <QUndoStack>
+#include "backend/lib/UndoStack.h"
 
 // ##############################################################################
 // #####################  import of LabPlot projects ############################

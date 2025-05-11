@@ -94,7 +94,7 @@
 #include <QStackedWidget>
 #include <QStatusBar>
 #include <QTemporaryFile>
-#include <QUndoStack>
+#include "backend/lib/UndoStack.h"
 // #include <QtWidgets>
 // #include <QtQuickWidgets/QQuickWidget>
 // #include <QQuickItem>
