@@ -31,6 +31,8 @@ public:
 	void setPlots(QList<Heatmap*>);
 	//	void updateLocale() override;
 
+	void retranslateUi() override;
+
 private:
 	Ui::HeatmapDock ui;
 	Heatmap* m_plot{nullptr};
