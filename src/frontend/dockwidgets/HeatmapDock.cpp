@@ -118,12 +118,14 @@ void HeatmapDock::setPlots(QList<Heatmap*> list) {
 	cbMatrix->setAspect(m_plot->matrix(), m_plot->matrixPath());
 	// loadDataColumns();
 
-	ui.cbAutomaticLimits->setChecked(m_plot->automaticLimits());
 	ui.sbxNumberBins->setValue(m_plot->xNumBins());
 	ui.sbyNumberBins->setValue(m_plot->yNumBins());
 
-	ui.sbLimitsMax->setValue(m_plot->formatMax());
+	ui.cbAutomaticLimits->setChecked(m_plot->automaticLimits());
+	ui.sbLimitsMin->setEnabled(!m_plot->automaticLimits());
+	ui.sbLimitsMax->setEnabled(!m_plot->automaticLimits());
 	ui.sbLimitsMin->setValue(m_plot->formatMin());
+	ui.sbLimitsMax->setValue(m_plot->formatMax());
 
 	QPixmap pixmap;
 	ColorMapsManager::render(pixmap, m_plot->format().colors, 80, 200);
@@ -340,6 +342,9 @@ void HeatmapDock::matrixChanged(const QModelIndex& index) {
 
 void HeatmapDock::automaticLimitsChanged(bool automatic) {
 	CONDITIONAL_LOCK_RETURN;
+
+	ui.sbLimitsMin->setEnabled(!automatic);
+	ui.sbLimitsMax->setEnabled(!automatic);
 
 	for (auto* plot : m_plots)
 		plot->setAutomaticLimits(automatic);
