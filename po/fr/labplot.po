@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-09 02:29+0000\n"
-"PO-Revision-Date: 2025-04-28 12:32+0200\n"
+"PO-Revision-Date: 2025-05-10 08:47+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Lokalize 25.04.1\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
@@ -24859,12 +24859,7 @@ msgid "Bounding Box"
 msgstr "Zone de délimitation"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:89
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specifies the area to export:<ul><li>Bounding Box - the bounding box of "
-#| "all objects on the worksheet is exported</li><li>Selection - the area of "
-#| "the currently selected objects is exported</li><li>Worskheet - the "
-#| "complete worksheet area is exported</li></ul>"
+#, kde-format
 msgid ""
 "Specifies the area to export:<ul><li>Bounding Box - the bounding box of all "
 "objects on the worksheet is exported</li><li>Selection - the area of the "
