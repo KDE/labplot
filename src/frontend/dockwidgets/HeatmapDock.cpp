@@ -73,6 +73,9 @@ HeatmapDock::HeatmapDock(QWidget* parent)
 	connect(ui.bColorMap, &QPushButton::clicked, this, &HeatmapDock::selectColorMap);
 }
 
+void HeatmapDock::retranslateUi() {
+}
+
 void HeatmapDock::setPlots(QList<Heatmap*> list) {
 	CONDITIONAL_LOCK_RETURN;
 	if (m_plot)
