@@ -57,7 +57,9 @@ public:
 
 		// continuous improvement plots
 		ProcessBehaviorChart,
-		RunChart
+		RunChart,
+
+		Heatmap,
 	};
 
 	BASIC_D_ACCESSOR_DECL(bool, legendVisible, LegendVisible)

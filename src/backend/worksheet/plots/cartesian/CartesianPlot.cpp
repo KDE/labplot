@@ -419,11 +419,7 @@ void CartesianPlot::initActions() {
 	addHilbertTransformCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Hilbert Transform"), this);
 	addConvolutionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("(De-)Convolution"), this);
 	addCorrelationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto-/Cross-Correlation"), this);
-
 	addHeatmapAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-heatmap")), i18n("Heatmap"), this);
-	connect(addHeatmapAction, &QAction::triggered, this, [=]() {
-		addChild(new Heatmap(i18n("Heatmap")));
-	});
 
 	connect(addDataReductionCurveAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
 	connect(addDifferentiationCurveAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
@@ -799,6 +795,10 @@ void CartesianPlot::fillAddNewPlotMenu(QMenu* addNewPlotMenu, QActionGroup* acti
 	addNewCIPlotsMenu->addAction(action);
 
 	addNewPlotMenu->addMenu(addNewCIPlotsMenu);
+
+    action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-heatmap")), i18n("Heatmap"), actionGroup);
+    action->setData(static_cast<int>(Plot::PlotType::Heatmap));
+    addNewPlotMenu->addAction(action);
 }
 
 QMenu* CartesianPlot::createContextMenu() {
@@ -1910,6 +1910,10 @@ void CartesianPlot::addPlot(QAction* action) {
 	case Plot::PlotType::RunChart:
 		addChild(new RunChart(i18n("Run Chart")));
 		break;
+
+    case Plot::PlotType::Heatmap:
+        addChild(new Heatmap(i18n("Heatmap")));
+        break;
 	}
 }
 
