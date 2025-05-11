@@ -18,7 +18,7 @@
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 
-#include <QUndoStack>
+#include "backend/lib/UndoStack.h"
 
 void InfoElementTest::addPlot() {
 	Project project;

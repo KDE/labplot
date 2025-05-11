@@ -23,7 +23,7 @@
 #include "src/frontend/widgets/LabelWidget.h"
 #include "src/frontend/widgets/LineWidget.h"
 
-#include <QUndoStack>
+#include "backend/lib/UndoStack.h"
 
 void AxisTest3::dateTime() {
 	QLocale::setDefault(QLocale::C); // . as decimal separator
