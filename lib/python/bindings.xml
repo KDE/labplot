@@ -5,11 +5,21 @@
     <enum-type name="AspectType"/>
 
     <!-- Abstract Classes -->
-    <object-type name="AbstractAspect" force-abstract="yes" disable-wrapper="yes" polymorphic-base="yes">
+    <object-type name="AbstractAspect" force-abstract="yes" disable-wrapper="yes" parent-management="yes">
         <enum-type name="ChildIndexFlag" flags="yes"/>
         <enum-type name="NameHandling"/>
+        <modify-function signature="addChild(AbstractAspect*)">
+            <modify-argument index="this">
+                <parent index="1" action="add"/>
+            </modify-argument>
+        </modify-function>
+        <modify-function signature="removeChild(AbstractAspect*)">
+            <modify-argument index="this">
+                <parent index="1" action="remove"/>
+            </modify-argument>
+        </modify-function>
     </object-type>
-    <object-type name="AbstractColumn" force-abstract="yes" disable-wrapper="yes" polymorphic-id-expression="%1-&gt;m_type == AspectType::AbstractColumn">
+    <object-type name="AbstractColumn" force-abstract="yes" disable-wrapper="yes">
         <enum-type name="PlotDesignation"/>
         <enum-type name="TimeUnit"/>
         <enum-type name="ColumnMode"/>
@@ -19,118 +29,117 @@
     <object-type name="AbstractCoordinateSystem" force-abstract="yes" disable-wrapper="yes">
         <enum-type name="MappingFlag" flags="yes"/>
     </object-type>
-    <object-type name="AbstractDataSource" force-abstract="yes" disable-wrapper="yes" polymorphic-id-expression="%1-&gt;m_type == AspectType::AbstractDataSource"/>
+    <object-type name="AbstractDataSource" force-abstract="yes" disable-wrapper="yes"/>
     <object-type name="AbstractFileFilter" force-abstract="yes" disable-wrapper="yes">
         <enum-type name="FileType"/>
         <enum-type name="ImportMode"/>
     </object-type>
-    <object-type name="AbstractPart" force-abstract="yes" disable-wrapper="yes" polymorphic-id-expression="%1-&gt;m_type == AspectType::AbstractPart"/>
-    <object-type name="AbstractPlot" force-abstract="yes" disable-wrapper="yes" polymorphic-id-expression="%1-&gt;m_type == AspectType::AbstractPlot"/>
+    <object-type name="AbstractPart" force-abstract="yes" disable-wrapper="yes"/>
+    <object-type name="AbstractPlot" force-abstract="yes" disable-wrapper="yes"/>
     <object-type name="Plot" force-abstract="yes" disable-wrapper="yes">
         <enum-type name="PlotType"/>
     </object-type>
-    <object-type name="WorksheetElement" force-abstract="yes" disable-wrapper="yes" polymorphic-id-expression="%1-&gt;m_type == AspectType::WorksheetElement">
+    <object-type name="WorksheetElement" force-abstract="yes" disable-wrapper="yes">
         <enum-type name="Orientation"/>
         <enum-type name="HorizontalPosition"/>
         <enum-type name="VerticalPosition"/>
         <enum-type name="HorizontalAlignment"/>
         <enum-type name="VerticalAlignment"/>
         <enum-type name="PositionLimit"/>
-        <value-type name="PositionWrapper"/>
+        <value-type name="PositionWrapper" disable-wrapper="yes"/>
     </object-type>
-    <object-type name="WorksheetElementContainer" force-abstract="yes" disable-wrapper="yes" polymorphic-id-expression="%1-&gt;m_type == AspectType::WorksheetElementContainer"/>
-    <object-type name="XYAnalysisCurve" force-abstract="yes" disable-wrapper="yes" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYAnalysisCurve">
+    <object-type name="WorksheetElementContainer" force-abstract="yes" disable-wrapper="yes"/>
+    <object-type name="XYAnalysisCurve" force-abstract="yes" disable-wrapper="yes">
         <enum-type name="DataSourceType"/>
         <enum-type name="AnalysisAction"/>
-        <value-type name="Result"/>
+        <value-type name="Result" disable-wrapper="yes"/>
     </object-type>
 
     <!-- Aspect Containers -->
-    <object-type name="Folder" polymorphic-id-expression="%1-&gt;m_type == AspectType::Folder"/>
-    <object-type name="Project" polymorphic-id-expression="%1-&gt;m_type == AspectType::Project">
+    <object-type name="Folder" disable-wrapper="yes"/>
+    <object-type name="Project" disable-wrapper="yes">
         <enum-type name="DockVisibility"/>
     </object-type>
 
     <!-- Column -->
-    <object-type name="Column" polymorphic-id-expression="%1-&gt;m_type == AspectType::Column"/>
+    <object-type name="Column" disable-wrapper="yes"/>
 
     <!-- Data Containers -->
-    <object-type name="Spreadsheet" polymorphic-id-expression="%1-&gt;m_type == AspectType::Spreadsheet"/>
-    <object-type name="Matrix" polymorphic-id-expression="%1-&gt;m_type == AspectType::Matrix">
+    <object-type name="Spreadsheet" disable-wrapper="yes"/>
+    <object-type name="Matrix" disable-wrapper="yes">
         <enum-type name="HeaderFormat"/>
     </object-type>
 
     <!-- Filters -->
-    <object-type name="AsciiFilter">
-        <value-type name="Properties"/>
+    <object-type name="AsciiFilter" disable-wrapper="yes">
+        <value-type name="Properties" disable-wrapper="yes"/>
         <enum-type name="Status"/>
     </object-type>
-    <object-type name="BinaryFilter">
+    <object-type name="BinaryFilter" disable-wrapper="yes">
         <enum-type name="DataType"/>
     </object-type>
-    <object-type name="CANFilter">
+    <object-type name="CANFilter" disable-wrapper="yes">
         <enum-type name="TimeHandling"/>
     </object-type>
-    <object-type name="FITSFilter"/>
-    <object-type name="HDF5Filter"/>
-    <object-type name="ImageFilter">
+    <object-type name="FITSFilter" disable-wrapper="yes"/>
+    <object-type name="HDF5Filter" disable-wrapper="yes"/>
+    <object-type name="ImageFilter" disable-wrapper="yes">
         <enum-type name="ImportFormat"/>
     </object-type>
-    <object-type name="JsonFilter">
+    <object-type name="JsonFilter" disable-wrapper="yes">
         <enum-type name="DataContainerType"/>
     </object-type>
-    <object-type name="MatioFilter"/>
-    <object-type name="McapFilter">
+    <object-type name="MatioFilter" disable-wrapper="yes"/>
+    <object-type name="McapFilter" disable-wrapper="yes">
         <enum-type name="DataContainerType"/>
     </object-type>
-    <object-type name="NetCDFFilter"/>
-    <object-type name="OdsFilter"/>
-    <object-type name="ReadStatFilter"/>
-    <object-type name="ROOTFilter"/>
-    <object-type name="SpiceFilter"/>
-    <object-type name="VectorBLFFilter"/>
-    <object-type name="XLSXFilter"/>
+    <object-type name="NetCDFFilter" disable-wrapper="yes"/>
+    <object-type name="OdsFilter" disable-wrapper="yes"/>
+    <object-type name="ReadStatFilter" disable-wrapper="yes"/>
+    <object-type name="ROOTFilter" disable-wrapper="yes"/>
+    <object-type name="SpiceFilter" disable-wrapper="yes"/>
+    <object-type name="VectorBLFFilter" disable-wrapper="yes"/>
+    <object-type name="XLSXFilter" disable-wrapper="yes"/>
 
     <!-- Helper Classes -->
-    <object-type name="Background">
+    <object-type name="Background" disable-wrapper="yes">
         <enum-type name="Position"/>
         <enum-type name="Type"/>
         <enum-type name="ColorStyle"/>
         <enum-type name="ImageStyle"/>
     </object-type>
-    <object-type name="CartesianCoordinateSystem">
+    <object-type name="CartesianCoordinateSystem" disable-wrapper="yes">
         <enum-type name="Dimension"/>
     </object-type>
-    <rejection class="CartesianCoordinateSystem" function-name="mapLogicalToScene"/>
-    <object-type name="CartesianScale"/>
-    <object-type name="ColumnStringIO" polymorphic-id-expression="%1-&gt;m_type == AspectType::ColumnStringIO"/>
-    <object-type name="ErrorBar">
+    <object-type name="CartesianScale" disable-wrapper="yes"/>
+    <object-type name="ColumnStringIO" disable-wrapper="yes"/>
+    <object-type name="ErrorBar" disable-wrapper="yes">
         <enum-type name="ErrorType"/>
         <enum-type name="Type"/>
         <enum-type name="Dimension"/>
     </object-type>
-    <object-type name="Line"/>
-    <object-type name="PlotArea" polymorphic-id-expression="%1-&gt;m_type == AspectType::PlotArea">
+    <object-type name="Line" disable-wrapper="yes"/>
+    <object-type name="PlotArea" disable-wrapper="yes">
         <enum-type name="BorderTypeFlags" flags="yes"/>
     </object-type>
-    <!-- <object-type name="Range"/> -->
-    <object-type name="RangeT">
+    <!-- <object-type name="Range" disable-wrapper="yes"/> -->
+    <object-type name="RangeT" disable-wrapper="yes">
         <enum-type name="Format"/>
         <enum-type name="Scale"/>
     </object-type>
-    <object-type name="StatisticsSpreadsheet" polymorphic-id-expression="%1-&gt;m_type == AspectType::StatisticsSpreadsheet">
+    <object-type name="StatisticsSpreadsheet" disable-wrapper="yes">
         <enum-type name="Metric" flags="yes"/>
     </object-type>
-    <object-type name="Symbol">
+    <object-type name="Symbol" disable-wrapper="yes">
         <enum-type name="Style"/>
     </object-type>
-    <object-type name="Value">
+    <object-type name="Value" disable-wrapper="yes">
         <enum-type name="Type"/>
         <enum-type name="Position"/>
     </object-type>
 
     <!-- Plot Area Elements -->
-    <object-type name="Axis" polymorphic-id-expression="%1-&gt;m_type == AspectType::Axis">
+    <object-type name="Axis" disable-wrapper="yes">
         <enum-type name="RangeType"/>
         <enum-type name="Position"/>
         <enum-type name="LabelsFormat"/>
@@ -143,20 +152,20 @@
         <enum-type name="TicksStartType"/>
         <enum-type name="TicksFlags" flags="yes"/>
     </object-type>
-    <object-type name="CartesianPlotLegend" polymorphic-id-expression="%1-&gt;m_type == AspectType::CartesianPlotLegend"/>
-    <object-type name="CustomPoint" polymorphic-id-expression="%1-&gt;m_type == AspectType::CustomPoint"/>
-    <object-type name="ReferenceLine" polymorphic-id-expression="%1-&gt;m_type == AspectType::ReferenceLine"/>
-    <object-type name="ReferenceRange" polymorphic-id-expression="%1-&gt;m_type == AspectType::ReferenceRange"/>
+    <object-type name="CartesianPlotLegend" disable-wrapper="yes"/>
+    <object-type name="CustomPoint" disable-wrapper="yes"/>
+    <object-type name="ReferenceLine" disable-wrapper="yes"/>
+    <object-type name="ReferenceRange" disable-wrapper="yes"/>
     
     <!-- Plots -->
-    <object-type name="BarPlot" polymorphic-id-expression="%1-&gt;m_type == AspectType::BarPlot">
+    <object-type name="BarPlot" disable-wrapper="yes">
         <enum-type name="Type"/>
     </object-type>
-    <object-type name="BoxPlot" polymorphic-id-expression="%1-&gt;m_type == AspectType::BoxPlot">
+    <object-type name="BoxPlot" disable-wrapper="yes">
         <enum-type name="Ordering"/>
         <enum-type name="WhiskersType"/>
     </object-type>
-    <object-type name="Histogram" polymorphic-id-expression="%1-&gt;m_type == AspectType::Histogram">
+    <object-type name="Histogram" disable-wrapper="yes">
         <enum-type name="Type"/>
         <enum-type name="Normalization"/>
         <enum-type name="BinningMethod"/>
@@ -164,72 +173,72 @@
         <enum-type name="ValuesType"/>
         <enum-type name="ValuesPosition"/>
     </object-type>
-    <object-type name="KDEPlot" polymorphic-id-expression="%1-&gt;m_type == AspectType::KDEPlot"/>
-    <object-type name="LollipopPlot" polymorphic-id-expression="%1-&gt;m_type == AspectType::LollipopPlot"/>
-    <object-type name="ProcessBehaviorChart" polymorphic-id-expression="%1-&gt;m_type == AspectType::ProcessBehaviorChart">
+    <object-type name="KDEPlot" disable-wrapper="yes"/>
+    <object-type name="LollipopPlot" disable-wrapper="yes"/>
+    <object-type name="ProcessBehaviorChart" disable-wrapper="yes">
         <enum-type name="Type"/>
         <enum-type name="LimitsMetric"/>
     </object-type>
-    <object-type name="QQPlot" polymorphic-id-expression="%1-&gt;m_type == AspectType::QQPlot"/>
-    <object-type name="RunChart" polymorphic-id-expression="%1-&gt;m_type == AspectType::RunChart">
+    <object-type name="QQPlot" disable-wrapper="yes"/>
+    <object-type name="RunChart" disable-wrapper="yes">
         <enum-type name="CenterMetric"/>
     </object-type>
-    <object-type name="XYCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYCurve">
+    <object-type name="XYCurve" disable-wrapper="yes">
         <enum-type name="LineType"/>
         <enum-type name="DropLineType"/>
         <enum-type name="ValuesType"/>
         <enum-type name="ValuesPosition"/>
     </object-type>
-    <object-type name="XYEquationCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYEquationCurve">
-        <value-type name="EquationData"/>
+    <object-type name="XYEquationCurve" disable-wrapper="yes">
+        <value-type name="EquationData" disable-wrapper="yes"/>
         <enum-type name="EquationType"/>
     </object-type>
     
     <!-- Analysis Plots -->
-    <object-type name="XYConvolutionCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYConvolutionCurve">
-        <value-type name="ConvolutionData"/>
+    <object-type name="XYConvolutionCurve" disable-wrapper="yes">
+        <value-type name="ConvolutionData" disable-wrapper="yes"/>
     </object-type>
-    <object-type name="XYCorrelationCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYCorrelationCurve">
-        <value-type name="CorrelationData"/>
+    <object-type name="XYCorrelationCurve" disable-wrapper="yes">
+        <value-type name="CorrelationData" disable-wrapper="yes"/>
     </object-type>
-    <object-type name="XYDataReductionCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYDataReductionCurve">
-        <value-type name="DataReductionData"/>
-        <value-type name="DataReductionResult"/>
+    <object-type name="XYDataReductionCurve" disable-wrapper="yes">
+        <value-type name="DataReductionData" disable-wrapper="yes"/>
+        <value-type name="DataReductionResult" disable-wrapper="yes"/>
     </object-type>
-    <object-type name="XYDifferentiationCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYDifferentiationCurve">
-        <value-type name="DifferentiationData"/>
+    <object-type name="XYDifferentiationCurve" disable-wrapper="yes">
+        <value-type name="DifferentiationData" disable-wrapper="yes"/>
     </object-type>
-    <object-type name="XYFitCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYFitCurve">
-        <value-type name="FitData"/>
-        <value-type name="FitResult"/>
+    <object-type name="XYFitCurve" disable-wrapper="yes">
+        <value-type name="FitData" disable-wrapper="yes"/>
+        <value-type name="FitResult" disable-wrapper="yes"/>
     </object-type>
-    <object-type name="XYFourierFilterCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYFourierFilterCurve">
-        <value-type name="FilterData"/>
-        <value-type name="FilterResult"/>
+    <object-type name="XYFourierFilterCurve" disable-wrapper="yes">
+        <value-type name="FilterData" disable-wrapper="yes"/>
+        <value-type name="FilterResult" disable-wrapper="yes"/>
     </object-type>
-    <object-type name="XYFourierTransformCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYFourierTransformCurve">
-        <value-type name="TransformData"/>
+    <object-type name="XYFourierTransformCurve" disable-wrapper="yes">
+        <value-type name="TransformData" disable-wrapper="yes"/>
     </object-type>
-    <object-type name="XYFunctionCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYFunctionCurve">
-        <value-type name="FunctionData"/>
+    <object-type name="XYFunctionCurve" disable-wrapper="yes">
+        <value-type name="FunctionData" disable-wrapper="yes"/>
     </object-type>
-    <object-type name="XYHilbertTransformCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYHilbertTransformCurve">
-        <value-type name="TransformData"/>
+    <object-type name="XYHilbertTransformCurve" disable-wrapper="yes">
+        <value-type name="TransformData" disable-wrapper="yes"/>
     </object-type>
-    <object-type name="XYIntegrationCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYIntegrationCurve">
-        <value-type name="IntegrationData"/>
-        <value-type name="IntegrationResult"/>
+    <object-type name="XYIntegrationCurve" disable-wrapper="yes">
+        <value-type name="IntegrationData" disable-wrapper="yes"/>
+        <value-type name="IntegrationResult" disable-wrapper="yes"/>
     </object-type>
-    <object-type name="XYInterpolationCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYInterpolationCurve">
+    <object-type name="XYInterpolationCurve" disable-wrapper="yes">
         <enum-type name="PointsMode"/>
-        <value-type name="InterpolationData"/>
+        <value-type name="InterpolationData" disable-wrapper="yes"/>
     </object-type>
-    <object-type name="XYSmoothCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYSmoothCurve">
-        <value-type name="SmoothData"/>
+    <object-type name="XYSmoothCurve" disable-wrapper="yes">
+        <value-type name="SmoothData" disable-wrapper="yes"/>
     </object-type>
 
     <!-- Worksheet -->
-    <object-type name="Worksheet" polymorphic-id-expression="%1-&gt;m_type == AspectType::Worksheet">
+    <object-type name="Worksheet" disable-wrapper="yes">
         <enum-type name="Unit"/>
         <enum-type name="Layout"/>
         <enum-type name="CartesianPlotActionMode"/>
@@ -239,7 +248,7 @@
     </object-type>
 
     <!-- Worksheet Element Containers -->
-    <object-type name="CartesianPlot" polymorphic-id-expression="%1-&gt;m_type == AspectType::CartesianPlot">
+    <object-type name="CartesianPlot" disable-wrapper="yes">
         <enum-type name="Type"/>
         <enum-type name="MouseMode"/>
         <enum-type name="NavigationOperation"/>
@@ -248,13 +257,13 @@
     </object-type>
 
     <!-- Worksheet Elements -->
-    <object-type name="Image" polymorphic-id-expression="%1-&gt;m_type == AspectType::Image"/>
-    <object-type name="InfoElement" polymorphic-id-expression="%1-&gt;m_type == AspectType::InfoElement"/>
-    <object-type name="TextLabel" polymorphic-id-expression="%1-&gt;type() == AspectType::TextLabel">
+    <object-type name="Image" disable-wrapper="yes"/>
+    <object-type name="InfoElement" disable-wrapper="yes"/>
+    <object-type name="TextLabel" disable-wrapper="yes">
         <enum-type name="Type"/>
         <enum-type name="Mode"/>
         <enum-type name="BorderShape"/>
-        <value-type name="TextWrapper"/>
+        <value-type name="TextWrapper" disable-wrapper="yes"/>
     </object-type>
 
     <!-- NSL -->
