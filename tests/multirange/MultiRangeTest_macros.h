@@ -30,7 +30,7 @@
 #include <QAction>
 #include <QComboBox>
 #include <QGraphicsSceneWheelEvent>
-#include <QUndoStack>
+#include "backend/lib/UndoStack.h"
 
 // ##############################################################################
 // #####################  import of LabPlot projects ############################
