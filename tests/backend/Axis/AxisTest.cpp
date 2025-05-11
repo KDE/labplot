@@ -24,7 +24,7 @@
 #include "src/frontend/widgets/LabelWidget.h"
 #include "src/frontend/widgets/LineWidget.h"
 
-#include <QUndoStack>
+#include "backend/lib/UndoStack.h"
 
 #define CHECK_AXIS_LABELS(currentTickValues, expectedTickValues)                                                                                               \
 	{                                                                                                                                                          \
