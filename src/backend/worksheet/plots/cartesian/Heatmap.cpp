@@ -92,10 +92,12 @@ Heatmap::~Heatmap() {
 // ##############################################################################
 //  general
 BASIC_SHARED_D_READER_IMPL(Heatmap, Heatmap::DataSource, dataSource, dataSource)
-BASIC_SHARED_D_READER_IMPL(Heatmap, unsigned int, xNumBins, xNumBins)
-BASIC_SHARED_D_READER_IMPL(Heatmap, unsigned int, yNumBins, yNumBins)
-BASIC_SHARED_D_READER_IMPL(Heatmap, bool, matrixNumBins, matrixNumBins)
+BASIC_SHARED_D_READER_IMPL(Heatmap, bool, equalNumberBins, equalNumberBins)
+BASIC_SHARED_D_READER_IMPL(Heatmap, unsigned int, xNumberBins, xNumberBins)
+BASIC_SHARED_D_READER_IMPL(Heatmap, unsigned int, yNumberBins, yNumberBins)
+BASIC_SHARED_D_READER_IMPL(Heatmap, bool, matrixNumberBins, matrixNumberBins)
 BASIC_SHARED_D_READER_IMPL(Heatmap, bool, drawEmpty, drawEmpty)
+BASIC_SHARED_D_READER_IMPL(Heatmap, bool, automaticLimits, automaticLimits)
 BASIC_SHARED_D_READER_IMPL(Heatmap, Heatmap::Format, format, format)
 BASIC_SHARED_D_READER_IMPL(Heatmap, double, formatMin, format.min)
 BASIC_SHARED_D_READER_IMPL(Heatmap, double, formatMax, format.max)
@@ -107,7 +109,6 @@ BASIC_SHARED_D_READER_IMPL(Heatmap, const Matrix*, matrix, matrix)
 BASIC_SHARED_D_READER_IMPL(Heatmap, QString, xColumnPath, xColumnPath)
 BASIC_SHARED_D_READER_IMPL(Heatmap, QString, yColumnPath, yColumnPath)
 BASIC_SHARED_D_READER_IMPL(Heatmap, QString, matrixPath, matrixPath)
-BASIC_SHARED_D_READER_IMPL(Heatmap, bool, automaticLimits, automaticLimits)
 
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
@@ -295,17 +296,31 @@ void Heatmap::setMatrix(const Matrix* matrix) {
 		exec(new HeatmapSetMatrixCmd(d, matrix, ki18n("%1: matrix changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Heatmap, SetXNumberBins, unsigned int, xNumBins, retransform)
-void Heatmap::setXNumBins(unsigned int numBins) {
+STD_SETTER_CMD_IMPL_F_S(Heatmap, SetMatrixNumberBins, bool, matrixNumberBins, retransform)
+void Heatmap::setMatrixNumberBins(bool matrixNumberBins) {
 	Q_D(Heatmap);
-	if (numBins != d->xNumBins)
+	if (matrixNumberBins != d->matrixNumberBins)
+		exec(new HeatmapSetMatrixNumberBinsCmd(d, matrixNumberBins, ki18n("%1: Set matrix number bins")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Heatmap, SetEqualNumberBins, bool, equalNumberBins, retransform)
+void Heatmap::setEqualNumberBins(bool equal) {
+	Q_D(Heatmap);
+	if (equal != d->equalNumberBins)
+		exec(new HeatmapSetEqualNumberBinsCmd(d, equal, ki18n("%1: Set number bins equal")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Heatmap, SetXNumberBins, unsigned int, xNumberBins, retransform)
+void Heatmap::setXNumberBins(unsigned int numBins) {
+	Q_D(Heatmap);
+	if (numBins != d->xNumberBins)
 		exec(new HeatmapSetXNumberBinsCmd(d, numBins, ki18n("%1: number bins for x changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Heatmap, SetYNumberBins, unsigned int, yNumBins, retransform)
-void Heatmap::setYNumBins(unsigned int numBins) {
+STD_SETTER_CMD_IMPL_F_S(Heatmap, SetYNumberBins, unsigned int, yNumberBins, retransform)
+void Heatmap::setYNumberBins(unsigned int numBins) {
 	Q_D(Heatmap);
-	if (numBins != d->yNumBins)
+	if (numBins != d->yNumberBins)
 		exec(new HeatmapSetYNumberBinsCmd(d, numBins, ki18n("%1: number bins for y changed")));
 }
 
@@ -713,12 +728,15 @@ QRectF HeatmapPrivate::update() {
 
 	auto xBinSize = xMax - xMin;
 	auto yBinSize = yMax - yMin;
-	if (matrixNumBins && dataSource == Heatmap::DataSource::Matrix) {
+	if (matrixNumberBins && dataSource == Heatmap::DataSource::Matrix) {
 		xBinSize /= xNumValues;
 		yBinSize /= yNumValues;
+	} else if (equalNumberBins) {
+		xBinSize /= xNumberBins;
+		yBinSize /= xNumberBins;
 	} else {
-		xBinSize /= xNumBins;
-		yBinSize /= yNumBins;
+		xBinSize /= xNumberBins;
+		yBinSize /= yNumberBins;
 	}
 
 	if (xBinSize <= 0 || yBinSize <= 0)
@@ -1016,10 +1034,11 @@ const QLatin1String dataSource("dataSource");
 const QLatin1String xColumn("xColumn");
 const QLatin1String yColumn("yColumn");
 const QLatin1String matrix("matrix");
-const QLatin1String xNumBins("xNumBins");
-const QLatin1String yNumBins("yNumBins");
+const QLatin1String equalNumberBins("equalNumberBins");
+const QLatin1String xNumberBins("xNumberBins");
+const QLatin1String yNumberBins("yNumberBins");
+const QLatin1String matrixNumberBins("matrixNumberBins");
 const QLatin1String drawEmpty("drawEmpty");
-const QLatin1String numBinsEqual("numBinsEqual");
 const QLatin1String automaticLimits("automaticLimits");
 
 const QLatin1String format("Format");
@@ -1070,10 +1089,11 @@ void Heatmap::save(QXmlStreamWriter* writer) const {
 		writer->writeAttribute(XML::matrix, d->matrixPath);
 
 	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
-	writer->writeAttribute(XML::numBinsEqual, QString::number(d->numBinsEqual));
+	writer->writeAttribute(XML::equalNumberBins, QString::number(d->equalNumberBins));
+	writer->writeAttribute(XML::matrixNumberBins, QString::number(d->matrixNumberBins));
 	writer->writeAttribute(XML::automaticLimits, QString::number(d->automaticLimits));
-	writer->writeAttribute(XML::xNumBins, QString::number(d->xNumBins));
-	writer->writeAttribute(XML::yNumBins, QString::number(d->yNumBins));
+	writer->writeAttribute(XML::xNumberBins, QString::number(d->xNumberBins));
+	writer->writeAttribute(XML::yNumberBins, QString::number(d->yNumberBins));
 	writer->writeAttribute(XML::drawEmpty, QString::number(d->drawEmpty));
 
 	writer->writeStartElement(XML::format);
@@ -1130,9 +1150,10 @@ bool Heatmap::load(XmlStreamReader* reader, bool preview) {
 				d->dataSource = static_cast<DataSource>(str.toInt());
 
 			READ_INT_VALUE(XML::automaticLimits, automaticLimits, bool)
-			READ_INT_VALUE(XML::numBinsEqual, numBinsEqual, bool)
-			READ_INT_VALUE(XML::xNumBins, xNumBins, unsigned int)
-			READ_INT_VALUE(XML::yNumBins, yNumBins, unsigned int)
+			READ_INT_VALUE(XML::equalNumberBins, equalNumberBins, bool)
+			READ_INT_VALUE(XML::matrixNumberBins, matrixNumberBins, bool)
+			READ_INT_VALUE(XML::xNumberBins, xNumberBins, unsigned int)
+			READ_INT_VALUE(XML::yNumberBins, yNumberBins, unsigned int)
 			READ_INT_VALUE(XML::drawEmpty, drawEmpty, bool)
 
 			READ_COLUMN(xColumn);

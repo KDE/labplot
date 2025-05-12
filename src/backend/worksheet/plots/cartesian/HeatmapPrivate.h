@@ -24,10 +24,10 @@ public:
 	// Members
 	Heatmap::DataSource dataSource{Heatmap::DataSource::Matrix};
 	bool drawEmpty{false};
-	bool numBinsEqual{true};
-	bool matrixNumBins{true}; // Use number of cells of the matrix as bins
-	unsigned int xNumBins{10};
-	unsigned int yNumBins{10};
+	bool equalNumberBins{true};
+	bool matrixNumberBins{true}; // Use number of cells of the matrix as bins
+	unsigned int xNumberBins{10};
+	unsigned int yNumberBins{10};
 	const AbstractColumn* xColumn{nullptr};
 	const AbstractColumn* yColumn{nullptr};
 	QString xColumnPath;

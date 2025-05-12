@@ -67,6 +67,7 @@ HeatmapDock::HeatmapDock(QWidget* parent)
 	connect(ui.cbAutomaticLimits, &QCheckBox::clicked, this, &HeatmapDock::automaticLimitsChanged);
 	connect(ui.sbLimitsMin, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &HeatmapDock::limitsMinChanged);
 	connect(ui.sbLimitsMax, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &HeatmapDock::limitsMaxChanged);
+	connect(ui.cbEqualNumberBins, &QCheckBox::clicked, this, &HeatmapDock::equalNumberBinsChanged);
 	connect(ui.sbxNumberBins, &QSpinBox::valueChanged, this, &HeatmapDock::xNumBinsChanged);
 	connect(ui.sbyNumberBins, &QSpinBox::valueChanged, this, &HeatmapDock::yNumBinsChanged);
 
@@ -118,8 +119,11 @@ void HeatmapDock::setPlots(QList<Heatmap*> list) {
 	cbMatrix->setAspect(m_plot->matrix(), m_plot->matrixPath());
 	// loadDataColumns();
 
-	ui.sbxNumberBins->setValue(m_plot->xNumBins());
-	ui.sbyNumberBins->setValue(m_plot->yNumBins());
+	dataSourceWidgetAppearance(m_plot->dataSource());
+	ui.cbEqualNumberBins->setChecked(m_plot->equalNumberBins());
+	ui.cbMatrixNumberBins->setChecked(m_plot->matrixNumberBins());
+	ui.sbxNumberBins->setValue(m_plot->xNumberBins());
+	ui.sbyNumberBins->setValue(m_plot->yNumberBins());
 
 	ui.cbAutomaticLimits->setChecked(m_plot->automaticLimits());
 	ui.sbLimitsMin->setEnabled(!m_plot->automaticLimits());
@@ -139,11 +143,13 @@ void HeatmapDock::setPlots(QList<Heatmap*> list) {
 	// SIGNALs/SLOTs
 	// general
 
+	connect(m_plot, &Heatmap::equalNumberBinsChanged, this, &HeatmapDock::plotEqualNumberBinsChanged);
+	connect(m_plot, &Heatmap::matrixNumberBinsChanged, this, &HeatmapDock::plotMatrixNumberBinsChanged);
 	connect(m_plot, &Heatmap::xColumnChanged, this, &HeatmapDock::plotXColumnChanged);
 	connect(m_plot, &Heatmap::yColumnChanged, this, &HeatmapDock::plotYColumnChanged);
 	connect(m_plot, &Heatmap::matrixChanged, this, &HeatmapDock::plotMatrixChanged);
-	connect(m_plot, &Heatmap::xNumBinsChanged, this, &HeatmapDock::plotXNumBinsChanged);
-	connect(m_plot, &Heatmap::yNumBinsChanged, this, &HeatmapDock::plotYNumBinsChanged);
+	connect(m_plot, &Heatmap::xNumberBinsChanged, this, &HeatmapDock::plotXNumBinsChanged);
+	connect(m_plot, &Heatmap::yNumberBinsChanged, this, &HeatmapDock::plotYNumBinsChanged);
 	connect(m_plot, &Heatmap::automaticLimitsChanged, this, &HeatmapDock::plotAutomaticLimitsChanged);
 }
 
@@ -274,19 +280,27 @@ void HeatmapDock::selectColorMap() {
 ////**********************************************************
 ////"General"-tab
 
-void HeatmapDock::dataSourceChanged() {
-	CONDITIONAL_LOCK_RETURN;
 
-	const auto datasource = Heatmap::DataSource(ui.cbDataSource->currentData().toInt());
+void HeatmapDock::dataSourceWidgetAppearance(Heatmap::DataSource datasource) {
 	bool matrix = datasource == Heatmap::DataSource::Matrix;
 
 	ui.lMatrix->setVisible(matrix);
 	cbMatrix->setVisible(matrix);
 
+	ui.lMatrixNumberBins->setVisible(matrix);
+	ui.cbMatrixNumberBins->setVisible(matrix);
+
 	ui.lXColumn->setVisible(!matrix);
 	cbXColumn->setVisible(!matrix);
 	ui.lYColumn->setVisible(!matrix);
 	cbYColumn->setVisible(!matrix);
+}
+
+void HeatmapDock::dataSourceChanged() {
+	CONDITIONAL_LOCK_RETURN;
+
+	const auto datasource = Heatmap::DataSource(ui.cbDataSource->currentData().toInt());
+	dataSourceWidgetAppearance(datasource);
 
 	for (auto* plot : m_plots)
 		plot->setDataSource(datasource);
@@ -370,16 +384,28 @@ void HeatmapDock::limitsMaxChanged(double value) {
 	}
 }
 
+void HeatmapDock::equalNumberBinsChanged(bool equal) {
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plots)
+		plot->setEqualNumberBins(equal);
+}
+
+void HeatmapDock::matrixNumberBinsChanged(bool useMatrixBins) {
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plots)
+		plot->setMatrixNumberBins(useMatrixBins);
+}
+
 void HeatmapDock::xNumBinsChanged(int v) {
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* plot : m_plots)
-		plot->setXNumBins(v);
+		plot->setXNumberBins(v);
 }
 
 void HeatmapDock::yNumBinsChanged(int v) {
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* plot : m_plots)
-		plot->setYNumBins(v);
+		plot->setYNumberBins(v);
 }
 
 void HeatmapDock::visibilityChanged(bool visible) {
@@ -551,7 +577,17 @@ void HeatmapDock::visibilityChanged(bool visible) {
 ////******* SLOTs for changes triggered in Lollipop ********
 ////*************************************************************
 //// general
-///
+
+void HeatmapDock::plotEqualNumberBinsChanged(bool equal) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.cbEqualNumberBins->setChecked(equal);
+}
+
+void HeatmapDock::plotMatrixNumberBinsChanged(bool useMatrixBins) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.cbMatrixNumberBins->setChecked(useMatrixBins);
+}
+
 void HeatmapDock::plotXColumnChanged(const AbstractColumn* column) {
 	// updateValuesWidgets();
 	CONDITIONAL_LOCK_RETURN;
