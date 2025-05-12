@@ -270,10 +270,10 @@ void HeatmapTest::testNumberBins() {
 
 	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
 	QCOMPARE(hm->drawEmpty(), false);
-	hm->setXNumBins(5);
-	hm->setYNumBins(5);
-	QCOMPARE(hm->xNumBins(), 5);
-	QCOMPARE(hm->yNumBins(), 5);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
 
 	int dataChangedCounter = 0;
 	CONNECT_DATA_CHANGED;
@@ -402,7 +402,7 @@ void HeatmapTest::testNumberBins() {
 	// |---------|---------|---------|   0
 	// |   XX    |   XXX   |   X     |   50  2 Bins
 	// |   XX    |   XX    |   XX    |   100 Y
-	hm->setXNumBins(3);
+	hm->setXNumberBins(3);
 
 	valueDrawnCounter = 0;
 	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
@@ -429,7 +429,7 @@ void HeatmapTest::testNumberBins() {
 		}
 		valueDrawnCounter++;
 	});
-	hm->setYNumBins(2);
+	hm->setYNumberBins(2);
 	QCOMPARE(valueDrawnCounter, 6);
 }
 
@@ -530,10 +530,10 @@ void HeatmapTest::testRepresentationMatrix() {
 
 	Heatmap* hm = new Heatmap(QStringLiteral("HM"));
 	plot->addChild(hm);
-	hm->setXNumBins(5);
-	hm->setYNumBins(5);
-	QCOMPARE(hm->xNumBins(), 5);
-	QCOMPARE(hm->yNumBins(), 5);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
 
 	hm->setDataSource(Heatmap::DataSource::Matrix);
 
@@ -830,10 +830,10 @@ void HeatmapTest::testRepresentationMatrixMinMax() {
 
 	Heatmap* hm = new Heatmap(QStringLiteral("HM"));
 	plot->addChild(hm);
-	hm->setXNumBins(5);
-	hm->setYNumBins(5);
-	QCOMPARE(hm->xNumBins(), 5);
-	QCOMPARE(hm->yNumBins(), 5);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
 
 	hm->setDataSource(Heatmap::DataSource::Matrix);
 
@@ -935,10 +935,10 @@ void HeatmapTest::testRepresentationSpreadsheet() {
 
 	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
 	QCOMPARE(hm->drawEmpty(), false);
-	hm->setXNumBins(5);
-	hm->setYNumBins(5);
-	QCOMPARE(hm->xNumBins(), 5);
-	QCOMPARE(hm->yNumBins(), 5);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
 
 	int dataChangedCounter = 0;
 	CONNECT_DATA_CHANGED;
@@ -1100,10 +1100,10 @@ void HeatmapTest::testRepresentationSpreadsheetDrawEmpty() {
 	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
 	hm->setDrawEmpty(true);
 	QCOMPARE(hm->drawEmpty(), true); // difference to testRepresentationSpreadsheet()
-	hm->setXNumBins(5);
-	hm->setYNumBins(5);
-	QCOMPARE(hm->xNumBins(), 5);
-	QCOMPARE(hm->yNumBins(), 5);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
 
 	int dataChangedCounter = 0;
 	CONNECT_DATA_CHANGED;
@@ -1335,10 +1335,10 @@ void HeatmapTest::testColorAutomatic() {
 
 	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
 	QCOMPARE(hm->drawEmpty(), false);
-	hm->setXNumBins(5);
-	hm->setYNumBins(5);
-	QCOMPARE(hm->xNumBins(), 5);
-	QCOMPARE(hm->yNumBins(), 5);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
 	QCOMPARE(hm->automaticLimits(), true);
 	// TODO
 	//	hm->setFormatMin();
@@ -1403,8 +1403,8 @@ void HeatmapTest::testColorAutomatic() {
 	// |---------|---------|---------|   0
 	// |   XX    |   XXX   |   XX    |   50  2 Bins
 	// |   X     |   XX    |   XX    |   100 Y
-	hm->setXNumBins(3);
-	hm->setYNumBins(2);
+	hm->setXNumberBins(3);
+	hm->setYNumberBins(2);
 	QCOMPARE(hm->format().min, 1.);
 	QCOMPARE(hm->format().max, 3.);
 
@@ -1431,10 +1431,10 @@ void HeatmapTest::testColorManual() {
 
 	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
 	QCOMPARE(hm->drawEmpty(), false);
-	hm->setXNumBins(5);
-	hm->setYNumBins(5);
-	QCOMPARE(hm->xNumBins(), 5);
-	QCOMPARE(hm->yNumBins(), 5);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
 	hm->setAutomaticLimits(false);
 	QCOMPARE(hm->automaticLimits(), false);
 	double defaultFormatMin = hm->formatMin();
@@ -1523,7 +1523,7 @@ void HeatmapTest::testColorManual() {
 	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).start(), 0);
 	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).end(), 100);
 
-	hm->setXNumBins(3);
+	hm->setXNumberBins(3);
 
 	// 3 Bins X
 	// 0        3.3       6.6        10
@@ -1557,7 +1557,7 @@ void HeatmapTest::testColorManual() {
 		}
 		valueDrawnCounter++;
 	});
-	hm->setYNumBins(2);
+	hm->setYNumberBins(2);
 	QCOMPARE(valueDrawnCounter, 6);
 	QCOMPARE(hm->format().min, manualFormatMin); // Min did not change
 	QCOMPARE(hm->format().max, manualFormatMax); // Max did not change
@@ -1577,10 +1577,10 @@ void HeatmapTest::testClippingBottomLeft() {
 
 	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
 	QCOMPARE(hm->drawEmpty(), false);
-	hm->setXNumBins(5);
-	hm->setYNumBins(5);
-	QCOMPARE(hm->xNumBins(), 5);
-	QCOMPARE(hm->yNumBins(), 5);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
 	hm->setAutomaticLimits(false);
 	QCOMPARE(hm->automaticLimits(), false);
 	hm->setFormatMin(0.);
@@ -1651,8 +1651,8 @@ void HeatmapTest::testClippingBottomLeft() {
 	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).start(), 0.);
 	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).end(), 10.);
 
-	hm->setXNumBins(4);
-	hm->setYNumBins(3);
+	hm->setXNumberBins(4);
+	hm->setYNumberBins(3);
 
 	{
 		auto range = plot->range(Dimension::Y, 0);
@@ -1707,10 +1707,10 @@ void HeatmapTest::testClippingBottomRight() {
 
 	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
 	QCOMPARE(hm->drawEmpty(), false);
-	hm->setXNumBins(5);
-	hm->setYNumBins(5);
-	QCOMPARE(hm->xNumBins(), 5);
-	QCOMPARE(hm->yNumBins(), 5);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
 	hm->setAutomaticLimits(false);
 	QCOMPARE(hm->automaticLimits(), false);
 	hm->setFormatMin(0.);
@@ -1781,8 +1781,8 @@ void HeatmapTest::testClippingBottomRight() {
 	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).start(), 0.);
 	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).end(), 10.);
 
-	hm->setXNumBins(4);
-	hm->setYNumBins(3);
+	hm->setXNumberBins(4);
+	hm->setYNumberBins(3);
 
 	{
 		auto range = plot->range(Dimension::Y, 0);
@@ -1834,10 +1834,10 @@ void HeatmapTest::testClippingBottomRight2() {
 
 	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
 	QCOMPARE(hm->drawEmpty(), false);
-	hm->setXNumBins(5);
-	hm->setYNumBins(5);
-	QCOMPARE(hm->xNumBins(), 5);
-	QCOMPARE(hm->yNumBins(), 5);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
 	hm->setAutomaticLimits(false);
 	QCOMPARE(hm->automaticLimits(), false);
 	hm->setFormatMin(0.);
@@ -1908,8 +1908,8 @@ void HeatmapTest::testClippingBottomRight2() {
 	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).start(), 0.);
 	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).end(), 10.);
 
-	hm->setXNumBins(4);
-	hm->setYNumBins(3);
+	hm->setXNumberBins(4);
+	hm->setYNumberBins(3);
 
 	{
 		auto range = plot->range(Dimension::Y, 0);
@@ -1956,10 +1956,10 @@ void HeatmapTest::saveLoad() {
 
 		hm->setDataSource(Heatmap::DataSource::Spreadsheet);
 		QCOMPARE(hm->drawEmpty(), false);
-		hm->setXNumBins(5);
-		hm->setYNumBins(5);
-		QCOMPARE(hm->xNumBins(), 5);
-		QCOMPARE(hm->yNumBins(), 5);
+		hm->setXNumberBins(5);
+		hm->setYNumberBins(5);
+		QCOMPARE(hm->xNumberBins(), 5);
+		QCOMPARE(hm->yNumberBins(), 5);
 		hm->setAutomaticLimits(false);
 		QCOMPARE(hm->automaticLimits(), false);
 
@@ -2014,8 +2014,8 @@ void HeatmapTest::saveLoad() {
 		xColumn->setValueAt(11, 6.5); // Testing Duplicates
 		yColumn->setValueAt(11, 65.0); // Testing Duplicates
 
-		hm->setXNumBins(3);
-		hm->setYNumBins(2);
+		hm->setXNumberBins(3);
+		hm->setYNumberBins(2);
 		hm->setAutomaticLimits(false);
 		hm->setFormatMin(-2.);
 		hm->setFormatMax(2.67);
@@ -2048,8 +2048,8 @@ void HeatmapTest::saveLoad() {
 
 		const auto* sh = p->child<Spreadsheet>(0);
 
-		QCOMPARE(hm->xNumBins(), 3);
-		QCOMPARE(hm->yNumBins(), 2);
+		QCOMPARE(hm->xNumberBins(), 3);
+		QCOMPARE(hm->yNumberBins(), 2);
 		QCOMPARE(hm->automaticLimits(), false);
 		QCOMPARE(hm->formatMin(), -2.);
 		QCOMPARE(hm->formatMax(), 2.67);
