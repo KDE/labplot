@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-09 00:38+0000\n"
+"POT-Creation-Date: 2025-05-12 00:38+0000\n"
 "PO-Revision-Date: 2024-11-23 12:07+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -16,16 +16,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 24.08.3\n"
-
-#, kde-format
-msgctxt "NAME OF TRANSLATORS"
-msgid "Your names"
-msgstr "Steve Allewell"
-
-#, kde-format
-msgctxt "EMAIL OF TRANSLATORS"
-msgid "Your emails"
-msgstr "steve.allewell@gmail.com"
 
 #: src/backend/core/AbstractAspect.cpp:234
 #, kde-format
@@ -418,7 +408,7 @@ msgid "incompatible filter type"
 msgstr "incompatible filter type"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:699
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:703
 #: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
@@ -691,47 +681,47 @@ msgstr "Not yet loaded."
 msgid "Project"
 msgstr "Project"
 
-#: src/backend/core/Project.cpp:294
+#: src/backend/core/Project.cpp:298
 #, kde-format
 msgid "%1: set author"
 msgstr "%1: set author"
 
-#: src/backend/core/Project.cpp:301
+#: src/backend/core/Project.cpp:305
 #, kde-format
 msgid "%1: save dock state changed"
 msgstr "%1: save dock state changed"
 
-#: src/backend/core/Project.cpp:308
+#: src/backend/core/Project.cpp:312
 #, kde-format
 msgid "%1: save calculation changed"
 msgstr "%1: save calculation changed"
 
-#: src/backend/core/Project.cpp:543 src/backend/core/Project.cpp:573
+#: src/backend/core/Project.cpp:547 src/backend/core/Project.cpp:577
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Sorry. Could not open file for reading."
 
-#: src/backend/core/Project.cpp:554 src/backend/core/Project.cpp:580
+#: src/backend/core/Project.cpp:558 src/backend/core/Project.cpp:584
 #, kde-format
 msgid "The project file is empty."
 msgstr "The project file is empty."
 
-#: src/backend/core/Project.cpp:554 src/backend/core/Project.cpp:580
+#: src/backend/core/Project.cpp:558 src/backend/core/Project.cpp:584
 #, kde-format
 msgid "Error opening project"
 msgstr "Error opening project"
 
-#: src/backend/core/Project.cpp:599
+#: src/backend/core/Project.cpp:603
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Unknown error when opening the project %1."
 
-#: src/backend/core/Project.cpp:600
+#: src/backend/core/Project.cpp:604
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Error when opening the project"
 
-#: src/backend/core/Project.cpp:620
+#: src/backend/core/Project.cpp:624
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -750,43 +740,43 @@ msgstr ""
 "\n"
 "Do you want to continue?"
 
-#: src/backend/core/Project.cpp:626
+#: src/backend/core/Project.cpp:630
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "Missing Support for CAS"
 
-#: src/backend/core/Project.cpp:656
+#: src/backend/core/Project.cpp:660
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "Attribute 'version' is missing."
 
-#: src/backend/core/Project.cpp:706
+#: src/backend/core/Project.cpp:710
 #, kde-format
 msgid "no project element found"
 msgstr "no project element found"
 
-#: src/backend/core/Project.cpp:708
+#: src/backend/core/Project.cpp:712
 #, kde-format
 msgid "no valid XML document found"
 msgstr "no valid XML document found"
 
-#: src/backend/core/Project.cpp:758 src/backend/core/Project.cpp:764
-#: src/backend/core/Project.cpp:815
+#: src/backend/core/Project.cpp:762 src/backend/core/Project.cpp:768
+#: src/backend/core/Project.cpp:819
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "Failed to open the file '%1'."
 
-#: src/backend/core/Project.cpp:821
+#: src/backend/core/Project.cpp:825
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "Failed to process the content of the file '%1'."
 
-#: src/backend/core/Project.cpp:824
+#: src/backend/core/Project.cpp:828
 #, kde-format
 msgid "Failed to open project"
 msgstr "Failed to open project"
 
-#: src/backend/core/Project.cpp:1292
+#: src/backend/core/Project.cpp:1296
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Invalid project modification time. Using current time."
@@ -25111,6 +25101,14 @@ msgstr "convert process failed, exit code ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Unable to open file:"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Steve Allewell"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "steve.allewell@gmail.com"
 
 #~ msgid "Close"
 #~ msgstr "Close"

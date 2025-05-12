@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-09 00:38+0000\n"
+"POT-Creation-Date: 2025-05-12 00:38+0000\n"
 "PO-Revision-Date: 2025-05-09 23:51+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -19,16 +19,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Lokalize 25.04.0\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
-
-#, kde-format
-msgctxt "NAME OF TRANSLATORS"
-msgid "Your names"
-msgstr "Kaan Özdinçer, Emir SARI"
-
-#, kde-format
-msgctxt "EMAIL OF TRANSLATORS"
-msgid "Your emails"
-msgstr "kaanozdincer@gmail.com, emir_sari@icloud.com"
 
 #: src/backend/core/AbstractAspect.cpp:234
 #, kde-format
@@ -419,7 +409,7 @@ msgid "incompatible filter type"
 msgstr "uyumsuz süzgeç türü"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:699
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:703
 #: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
@@ -692,47 +682,47 @@ msgstr "Henüz yüklenmedi."
 msgid "Project"
 msgstr "Proje"
 
-#: src/backend/core/Project.cpp:294
+#: src/backend/core/Project.cpp:298
 #, kde-format
 msgid "%1: set author"
 msgstr "%1: Yazarı ayarla"
 
-#: src/backend/core/Project.cpp:301
+#: src/backend/core/Project.cpp:305
 #, kde-format
 msgid "%1: save dock state changed"
 msgstr "%1: Rıhtım durumunu kaydetme ayarı değişti"
 
-#: src/backend/core/Project.cpp:308
+#: src/backend/core/Project.cpp:312
 #, kde-format
 msgid "%1: save calculation changed"
 msgstr "%1: Kaydetme hesaplaması değişti"
 
-#: src/backend/core/Project.cpp:543 src/backend/core/Project.cpp:573
+#: src/backend/core/Project.cpp:547 src/backend/core/Project.cpp:577
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Üzgünüm. Dosyayı okuma için açamadık."
 
-#: src/backend/core/Project.cpp:554 src/backend/core/Project.cpp:580
+#: src/backend/core/Project.cpp:558 src/backend/core/Project.cpp:584
 #, kde-format
 msgid "The project file is empty."
 msgstr "Proje dosyası boş."
 
-#: src/backend/core/Project.cpp:554 src/backend/core/Project.cpp:580
+#: src/backend/core/Project.cpp:558 src/backend/core/Project.cpp:584
 #, kde-format
 msgid "Error opening project"
 msgstr "Proje açılırken hata oluştu"
 
-#: src/backend/core/Project.cpp:599
+#: src/backend/core/Project.cpp:603
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "%1 projesini açarken bilinmeyen hata oluştu."
 
-#: src/backend/core/Project.cpp:600
+#: src/backend/core/Project.cpp:604
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Proje açılırken hata oluştu"
 
-#: src/backend/core/Project.cpp:620
+#: src/backend/core/Project.cpp:624
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -751,43 +741,43 @@ msgstr ""
 "\n"
 "Sürdürmek istiyor musunuz?"
 
-#: src/backend/core/Project.cpp:626
+#: src/backend/core/Project.cpp:630
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "CAS Desteği Eksik"
 
-#: src/backend/core/Project.cpp:656
+#: src/backend/core/Project.cpp:660
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "“version” özniteliği bulunamadı."
 
-#: src/backend/core/Project.cpp:706
+#: src/backend/core/Project.cpp:710
 #, kde-format
 msgid "no project element found"
 msgstr "proje ögesi bulunamadı"
 
-#: src/backend/core/Project.cpp:708
+#: src/backend/core/Project.cpp:712
 #, kde-format
 msgid "no valid XML document found"
 msgstr "geçerli XML belgesi bulunamadı"
 
-#: src/backend/core/Project.cpp:758 src/backend/core/Project.cpp:764
-#: src/backend/core/Project.cpp:815
+#: src/backend/core/Project.cpp:762 src/backend/core/Project.cpp:768
+#: src/backend/core/Project.cpp:819
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "“%1” dosyası açılamadı."
 
-#: src/backend/core/Project.cpp:821
+#: src/backend/core/Project.cpp:825
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "“%1” dosyasının içeriği işlenemedi."
 
-#: src/backend/core/Project.cpp:824
+#: src/backend/core/Project.cpp:828
 #, kde-format
 msgid "Failed to open project"
 msgstr "Proje açılamadı"
 
-#: src/backend/core/Project.cpp:1292
+#: src/backend/core/Project.cpp:1296
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Geçersiz proje değiştirme zamanı. Geçerli zaman kullanılıyor."
@@ -25029,6 +25019,14 @@ msgstr "dönüştürme süreci başarısız, çıkış kodu ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Dosya açılamadı:"
+
+#~ msgctxt "NAME OF TRANSLATORS"
+#~ msgid "Your names"
+#~ msgstr "Kaan Özdinçer, Emir SARI"
+
+#~ msgctxt "EMAIL OF TRANSLATORS"
+#~ msgid "Your emails"
+#~ msgstr "kaanozdincer@gmail.com, emir_sari@icloud.com"
 
 #~ msgid "Close"
 #~ msgstr "Kapat"
