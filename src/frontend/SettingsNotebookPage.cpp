@@ -36,6 +36,8 @@ SettingsNotebookPage::SettingsNotebookPage(QWidget* parent)
 	ui.chkReevaluateEntries->setToolTip(i18n("Automatically re-evaluate all entries below the current one."));
 	ui.chkAskConfirmation->setToolTip(i18n("Ask for confirmation when restarting the backend system."));
 
+	loadSettings();
+
 	connect(ui.chkSyntaxHighlighting, &QCheckBox::toggled, this, &SettingsNotebookPage::changed);
 	connect(ui.chkSyntaxCompletion, &QCheckBox::toggled, this, &SettingsNotebookPage::changed);
 	connect(ui.chkLineNumbers, &QCheckBox::toggled, this, &SettingsNotebookPage::changed);
@@ -43,8 +45,6 @@ SettingsNotebookPage::SettingsNotebookPage(QWidget* parent)
 	connect(ui.chkAnimations, &QCheckBox::toggled, this, &SettingsNotebookPage::changed);
 	connect(ui.chkReevaluateEntries, &QCheckBox::toggled, this, &SettingsNotebookPage::changed);
 	connect(ui.chkAskConfirmation, &QCheckBox::toggled, this, &SettingsNotebookPage::changed);
-
-	loadSettings();
 }
 
 QList<Settings::Type> SettingsNotebookPage::applySettings() {
@@ -71,6 +71,7 @@ QList<Settings::Type> SettingsNotebookPage::applySettings() {
 #ifdef HAVE_CANTOR_LIBS
 	changes << Settings::Type::Notebook;
 #endif
+
 	return changes;
 }
 

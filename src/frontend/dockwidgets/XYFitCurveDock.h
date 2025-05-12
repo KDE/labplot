@@ -3,7 +3,7 @@
 	Project          : LabPlot
 	Description      : widget for editing properties of equation curves
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -30,6 +30,9 @@ public:
 
 	void setCurves(QList<XYCurve*>);
 	void setupGeneral() override;
+
+	void updateLocale() override;
+	void retranslateUi() override;
 
 private:
 	void initGeneralTab() override;

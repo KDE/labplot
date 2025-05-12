@@ -3,12 +3,13 @@
 	Project              : LabPlot
 	Description          : widget for properties of the process behavior chart
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ProcessBehaviorChartDock.h"
 #include "backend/core/column/Column.h"
+#include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/plots/cartesian/ProcessBehaviorChart.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "frontend/TemplateHandler.h"
@@ -42,6 +43,20 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	gridLayout->addWidget(cbDataColumn, 4, 2, 1, 1);
 	gridLayout->addWidget(cbData2Column, 5, 2, 1, 1);
 
+	ui.cbType->addItem(QStringLiteral("X (XmR)"), static_cast<int>(ProcessBehaviorChart::Type::XmR));
+	ui.cbType->addItem(QStringLiteral("mR"), static_cast<int>(ProcessBehaviorChart::Type::mR));
+	ui.cbType->addItem(QStringLiteral("X̅  (X̅R)"), static_cast<int>(ProcessBehaviorChart::Type::XbarR));
+	ui.cbType->addItem(QStringLiteral("R"), static_cast<int>(ProcessBehaviorChart::Type::R));
+	ui.cbType->addItem(QStringLiteral("X̅  (X̅S)"), static_cast<int>(ProcessBehaviorChart::Type::XbarS));
+	ui.cbType->addItem(QStringLiteral("S"), static_cast<int>(ProcessBehaviorChart::Type::S));
+	ui.cbType->addItem(QStringLiteral("P"), static_cast<int>(ProcessBehaviorChart::Type::P));
+	ui.cbType->addItem(QStringLiteral("NP"), static_cast<int>(ProcessBehaviorChart::Type::NP));
+	ui.cbType->addItem(QStringLiteral("C"), static_cast<int>(ProcessBehaviorChart::Type::C));
+	ui.cbType->addItem(QStringLiteral("U"), static_cast<int>(ProcessBehaviorChart::Type::U));
+
+	ui.leMinLowerLimit->setValidator(new QDoubleValidator(ui.leMinLowerLimit));
+	ui.leMaxUpperLimit->setValidator(new QDoubleValidator(ui.leMaxUpperLimit));
+
 	// Tab "Data Line"
 	auto* hBoxLayout = static_cast<QHBoxLayout*>(ui.tabDataLine->layout());
 	dataLineWidget = new LineWidget(ui.tabDataLine);
@@ -59,6 +74,14 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	lowerLimitLineWidget = new LineWidget(ui.tabControlLimitLines);
 	hBoxLayout->insertWidget(9, lowerLimitLineWidget);
 
+	gridLayout = qobject_cast<QGridLayout*>(ui.tabControlLimitLabels->layout());
+	labelsBorderLineWidget = new LineWidget(this);
+	gridLayout->addWidget(labelsBorderLineWidget, 11, 0, 1, 3);
+
+	// Tab "Center/Limit Values"
+	ui.kcbLabelsFontColor->setAlphaChannelEnabled(true);
+	ui.kcbLabelsBackgroundColor->setAlphaChannelEnabled(true);
+
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
 		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
@@ -70,6 +93,9 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 		layout->setVerticalSpacing(2);
 	}
 
+	updateLocale();
+	retranslateUi();
+
 	// Slots
 	// General
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &ProcessBehaviorChartDock::dataColumnChanged);
@@ -77,8 +103,18 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::typeChanged);
 	connect(ui.cbLimitsMetric, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::limitsMetricChanged);
 	connect(ui.sbSampleSize, &QSpinBox::valueChanged, this, &ProcessBehaviorChartDock::sampleSizeChanged);
-	connect(ui.chbNegativeLowerLimit, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::negativeLowerLimitEnabledChanged);
 	connect(ui.chbExactLimits, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::exactLimitsEnabledChanged);
+	connect(ui.leMaxUpperLimit, &QLineEdit::textChanged, this, &ProcessBehaviorChartDock::maxUpperLimitChanged);
+	connect(ui.leMinLowerLimit, &QLineEdit::textChanged, this, &ProcessBehaviorChartDock::minLowerLimitChanged);
+
+	// labels
+	connect(ui.chbLabelsEnabled, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::labelsEnabledChanged);
+	connect(ui.sbLabelsPrecision, QOverload<int>::of(&QSpinBox::valueChanged), this, &ProcessBehaviorChartDock::labelsPrecisionChanged);
+	connect(ui.chkLabelsAutoPrecision, &QCheckBox::toggled, this, &ProcessBehaviorChartDock::labelsAutoPrecisionChanged);
+	connect(ui.kfrLabelsFont, &KFontRequester::fontSelected, this, &ProcessBehaviorChartDock::labelsFontChanged);
+	connect(ui.kcbLabelsFontColor, &KColorButton::changed, this, &ProcessBehaviorChartDock::labelsFontColorChanged);
+	connect(ui.kcbLabelsBackgroundColor, &KColorButton::changed, this, &ProcessBehaviorChartDock::labelsBackgroundColorChanged);
+	connect(ui.cbLabelsBorderShape, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::labelsBorderShapeChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -92,9 +128,6 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	connect(templateHandler, &TemplateHandler::info, this, &ProcessBehaviorChartDock::info);
 
 	ui.verticalLayout->addWidget(frame);
-
-	updateLocale();
-	retranslateUi();
 }
 
 ProcessBehaviorChartDock::~ProcessBehaviorChartDock() = default;
@@ -155,14 +188,10 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 	ui.chkLegendVisible->setChecked(m_plot->legendVisible());
 	ui.chkVisible->setChecked(m_plot->isVisible());
 
-	// hide the properties for the lower limit line if the lower limit is not available for the current plot
-	bool visible = m_plot->lowerLimitAvailable();
-	ui.lLowerLimit->setVisible(visible);
-	lowerLimitLineWidget->setVisible(visible);
-
 	// load the remaining properties
 	load();
 
+	showStatusInfo(QString()); // remove the message from the previous chart, if available
 	updatePlotRangeList();
 
 	// Slots
@@ -172,9 +201,18 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 	connect(m_plot, &ProcessBehaviorChart::typeChanged, this, &ProcessBehaviorChartDock::plotTypeChanged);
 	connect(m_plot, &ProcessBehaviorChart::limitsMetricChanged, this, &ProcessBehaviorChartDock::plotLimitsMetricChanged);
 	connect(m_plot, &ProcessBehaviorChart::sampleSizeChanged, this, &ProcessBehaviorChartDock::plotSampleSizeChanged);
-	connect(m_plot, &ProcessBehaviorChart::negativeLowerLimitEnabledChanged, this, &ProcessBehaviorChartDock::plotNegativeLowerLimitEnabledChanged);
+	connect(m_plot, &ProcessBehaviorChart::maxUpperLimitChanged, this, &ProcessBehaviorChartDock::plotMaxUpperLimitChanged);
+	connect(m_plot, &ProcessBehaviorChart::minLowerLimitChanged, this, &ProcessBehaviorChartDock::plotMinLowerLimitChanged);
 	connect(m_plot, &ProcessBehaviorChart::exactLimitsEnabledChanged, this, &ProcessBehaviorChartDock::plotExactLimitsEnabledChanged);
 	connect(m_plot, &ProcessBehaviorChart::statusInfo, this, &ProcessBehaviorChartDock::showStatusInfo);
+	connect(m_plot, &ProcessBehaviorChart::recalculated, this, &ProcessBehaviorChartDock::updateLowerLimitWidgets);
+
+	// Labels-tab
+	connect(m_plot, &ProcessBehaviorChart::labelsEnabledChanged, this, &ProcessBehaviorChartDock::plotLabelsEnabledChanged);
+	connect(m_plot, &ProcessBehaviorChart::labelsFontChanged, this, &ProcessBehaviorChartDock::plotLabelsFontChanged);
+	connect(m_plot, &ProcessBehaviorChart::labelsFontColorChanged, this, &ProcessBehaviorChartDock::plotLabelsFontColorChanged);
+	connect(m_plot, &ProcessBehaviorChart::labelsBackgroundColorChanged, this, &ProcessBehaviorChartDock::plotLabelsBackgroundColorChanged);
+	connect(m_plot, &ProcessBehaviorChart::labelsBorderShapeChanged, this, &ProcessBehaviorChartDock::plotLabelsBorderShapeChanged);
 }
 
 void ProcessBehaviorChartDock::retranslateUi() {
@@ -182,24 +220,26 @@ void ProcessBehaviorChartDock::retranslateUi() {
 	ui.cbLimitsMetric->addItem(i18n("Average"), static_cast<int>(ProcessBehaviorChart::LimitsMetric::Average));
 	ui.cbLimitsMetric->addItem(i18n("Median"), static_cast<int>(ProcessBehaviorChart::LimitsMetric::Median));
 
-	ui.cbType->clear();
-	ui.cbType->addItem(QStringLiteral("X (XmR)"), static_cast<int>(ProcessBehaviorChart::Type::XmR));
-	ui.cbType->addItem(QStringLiteral("mR"), static_cast<int>(ProcessBehaviorChart::Type::mR));
-	ui.cbType->addItem(QStringLiteral("X̅  (X̅R)"), static_cast<int>(ProcessBehaviorChart::Type::XbarR));
-	ui.cbType->addItem(QStringLiteral("R"), static_cast<int>(ProcessBehaviorChart::Type::R));
-	ui.cbType->addItem(QStringLiteral("X̅  (X̅S)"), static_cast<int>(ProcessBehaviorChart::Type::XbarS));
-	ui.cbType->addItem(QStringLiteral("S"), static_cast<int>(ProcessBehaviorChart::Type::S));
-	ui.cbType->addItem(QStringLiteral("P"), static_cast<int>(ProcessBehaviorChart::Type::P));
-	ui.cbType->addItem(QStringLiteral("NP"), static_cast<int>(ProcessBehaviorChart::Type::NP));
-	ui.cbType->addItem(QStringLiteral("C"), static_cast<int>(ProcessBehaviorChart::Type::C));
-	ui.cbType->addItem(QStringLiteral("U"), static_cast<int>(ProcessBehaviorChart::Type::U));
+	ui.cbLabelsBorderShape->clear();
+	ui.cbLabelsBorderShape->addItem(i18n("No Border"), static_cast<int>(TextLabel::BorderShape::NoBorder));
+	ui.cbLabelsBorderShape->addItem(i18n("Rectangle"), static_cast<int>(TextLabel::BorderShape::Rect));
+	ui.cbLabelsBorderShape->addItem(i18n("Ellipse"), static_cast<int>(TextLabel::BorderShape::Ellipse));
+	ui.cbLabelsBorderShape->addItem(i18n("Round sided rectangle"), static_cast<int>(TextLabel::BorderShape::RoundSideRect));
+	ui.cbLabelsBorderShape->addItem(i18n("Round corner rectangle"), static_cast<int>(TextLabel::BorderShape::RoundCornerRect));
+	ui.cbLabelsBorderShape->addItem(i18n("Inwards round corner rectangle"), static_cast<int>(TextLabel::BorderShape::InwardsRoundCornerRect));
+	ui.cbLabelsBorderShape->addItem(i18n("Dented border rectangle"), static_cast<int>(TextLabel::BorderShape::DentedBorderRect));
+	ui.cbLabelsBorderShape->addItem(i18n("Cuboid"), static_cast<int>(TextLabel::BorderShape::Cuboid));
+	ui.cbLabelsBorderShape->addItem(i18n("Up pointing rectangle"), static_cast<int>(TextLabel::BorderShape::UpPointingRectangle));
+	ui.cbLabelsBorderShape->addItem(i18n("Down pointing rectangle"), static_cast<int>(TextLabel::BorderShape::DownPointingRectangle));
+	ui.cbLabelsBorderShape->addItem(i18n("Left pointing rectangle"), static_cast<int>(TextLabel::BorderShape::LeftPointingRectangle));
+	ui.cbLabelsBorderShape->addItem(i18n("Right pointing rectangle"), static_cast<int>(TextLabel::BorderShape::RightPointingRectangle));
 
 	// tooltips
 	QString info = i18n(
 		"The supported chart types are grouped according to the plotted statistics and to the metric defining the limits.<br><br>"
 		"Individual Values and Moving Ranges, Limits Based on the Average or Median Moving Range:"
 		"<ul>"
-		"<li>X (XmR) - plot the <b>individual values</b>.</li>"
+		"<li>X (XmR) - plot the <b>individual labels</b>.</li>"
 		"<li>mR - plot the <b>moving ranges</b>.</li>"
 		"</ul>"
 		"Averages and Ranges, Limits based on the Average or Median Range:"
@@ -222,9 +262,13 @@ void ProcessBehaviorChartDock::retranslateUi() {
 	ui.lType->setToolTip(info);
 	ui.cbType->setToolTip(info);
 
-	info = i18n("Allow negative values for the lower limit.");
-	ui.lNegativeLowerLimit->setToolTip(info);
-	ui.chbNegativeLowerLimit->setToolTip(info);
+	info = i18n("Maximal value for the upper control limit. No constraint, if empty.");
+	ui.lMaxUpperLimit->setToolTip(info);
+	ui.leMaxUpperLimit->setToolTip(info);
+
+	info = i18n("Minimal value for the lower control limit. No constraint, if empty.");
+	ui.lMinLowerLimit->setToolTip(info);
+	ui.leMinLowerLimit->setToolTip(info);
 
 	info = i18n("If checked, exact limits are calculated for every individual sample (\"stair-step limits\"), straight lines are drawn for the limits otherwise.");
 	ui.lExactLimits->setToolTip(info);
@@ -235,11 +279,15 @@ void ProcessBehaviorChartDock::retranslateUi() {
  * updates the locale in the widgets. called when the application settins are changed.
  */
 void ProcessBehaviorChartDock::updateLocale() {
+	const auto numberLocale = QLocale();
+	ui.leMaxUpperLimit->setLocale(numberLocale);
+	ui.leMinLowerLimit->setLocale(numberLocale);
 	dataLineWidget->updateLocale();
 	dataSymbolWidget->updateLocale();
 	centerLineWidget->updateLocale();
 	upperLimitLineWidget->updateLocale();
 	lowerLimitLineWidget->updateLocale();
+	labelsBorderLineWidget->updateLocale();
 }
 
 //*************************************************************
@@ -292,10 +340,8 @@ void ProcessBehaviorChartDock::typeChanged(int index) {
 	ui.lLimitsMetric->setVisible(visible);
 	ui.cbLimitsMetric->setVisible(visible);
 
-	// allow negative value
-	visible = (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::XbarS);
-	ui.lNegativeLowerLimit->setVisible(visible);
-	ui.chbNegativeLowerLimit->setVisible(visible);
+	// constraints for the limits are updated in ProcessBehaviorChart
+	// and signals are emitted on changes to update the dock
 
 	// second data column
 	visible = (type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U);
@@ -322,16 +368,116 @@ void ProcessBehaviorChartDock::sampleSizeChanged(int value) {
 		plot->setSampleSize(value);
 }
 
-void ProcessBehaviorChartDock::negativeLowerLimitEnabledChanged(bool enabled) {
+void ProcessBehaviorChartDock::maxUpperLimitChanged(const QString& value) {
+	double max = INFINITY;
+	if (!value.isEmpty()) {
+		bool ok;
+		max = QLocale().toDouble(value, &ok);
+		if (!ok)
+			return;
+	}
+
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* plot : m_plots)
-		plot->setNegativeLowerLimitEnabled(enabled);
+		plot->setMaxUpperLimit(max);;
+}
+
+void ProcessBehaviorChartDock::minLowerLimitChanged(const QString& value) {
+	double min = -INFINITY;
+	if (!value.isEmpty()) {
+		bool ok;
+		min = QLocale().toDouble(value, &ok);
+		if (!ok)
+			return;
+	}
+
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plots)
+		plot->setMinLowerLimit(min);;
 }
 
 void ProcessBehaviorChartDock::exactLimitsEnabledChanged(bool enabled) {
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* plot : m_plots)
 		plot->setExactLimitsEnabled(enabled);
+}
+
+/*!
+ * toggle the properties for the lower limit line if the lower limit is not available,
+ * called every time the chart is re-calculated since the precense of the lower limit
+ * is depending on multiple factors and on the current result for the control limits.
+ */
+void ProcessBehaviorChartDock::updateLowerLimitWidgets() {
+	const bool visible = m_plot->lowerLimitAvailable();
+	ui.lLowerLimit->setVisible(visible);
+	lowerLimitLineWidget->setVisible(visible);
+}
+
+// Labels-tab
+void ProcessBehaviorChartDock::labelsEnabledChanged(bool enabled) {
+	ui.lLabelsText->setVisible(enabled);
+	ui.lLabelsPrecision->setVisible(enabled);
+	ui.frameLabelsPrecision->setVisible(enabled);
+	ui.lLabelsFont->setVisible(enabled);
+	ui.kfrLabelsFont->setVisible(enabled);
+	ui.lLabelsFontColor->setVisible(enabled);
+	ui.kcbLabelsFontColor->setVisible(enabled);
+	ui.lLabelsBackgroundColor->setVisible(enabled);
+	ui.kcbLabelsBackgroundColor->setVisible(enabled);
+	ui.lLabelsBorder->setVisible(enabled);
+	ui.lLabelsBorderShape->setVisible(enabled);
+	ui.cbLabelsBorderShape->setVisible(enabled);
+
+	const auto shape = static_cast<TextLabel::BorderShape>(ui.cbLabelsBorderShape->currentData().toInt());
+	const bool visible = (shape != TextLabel::BorderShape::NoBorder);
+	labelsBorderLineWidget->setVisible(enabled && visible);
+
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plots)
+		plot->setLabelsEnabled(enabled);
+}
+
+void ProcessBehaviorChartDock::labelsPrecisionChanged(int value) {
+	CONDITIONAL_LOCK_RETURN;
+
+	for (auto* plot : m_plots)
+		plot->setLabelsPrecision(value);
+}
+
+void ProcessBehaviorChartDock::labelsAutoPrecisionChanged(bool state) {
+	ui.sbLabelsPrecision->setEnabled(!state);
+
+	CONDITIONAL_LOCK_RETURN;
+
+	for (auto* plot : m_plots)
+		plot->setLabelsAutoPrecision(state);
+}
+
+void ProcessBehaviorChartDock::labelsFontChanged(const QFont& font) {
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plots)
+		plot->setLabelsFont(font);
+}
+void ProcessBehaviorChartDock::labelsFontColorChanged(const QColor& color) {
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plots)
+		plot->setLabelsFontColor(color);
+}
+
+void ProcessBehaviorChartDock::labelsBackgroundColorChanged(const QColor& color) {
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plots)
+		plot->setLabelsBackgroundColor(color);
+}
+
+void ProcessBehaviorChartDock::labelsBorderShapeChanged(int) {
+	const auto shape = static_cast<TextLabel::BorderShape>(ui.cbLabelsBorderShape->currentData().toInt());
+	const bool visible = (shape != TextLabel::BorderShape::NoBorder);
+	labelsBorderLineWidget->setVisible(visible);
+
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plots)
+		plot->setLabelsBorderShape(shape);
 }
 
 //*************************************************************
@@ -365,14 +511,61 @@ void ProcessBehaviorChartDock::plotSampleSizeChanged(int value) {
 	ui.sbSampleSize->setValue(value);
 }
 
-void ProcessBehaviorChartDock::plotNegativeLowerLimitEnabledChanged(bool enabled) {
+void ProcessBehaviorChartDock::plotMinLowerLimitChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.chbNegativeLowerLimit->setChecked(enabled);
+	if (value != -INFINITY)
+		ui.leMinLowerLimit->setText(QLocale().toString(value));
+	else
+		ui.leMinLowerLimit->setText(QString());
+}
+
+void ProcessBehaviorChartDock::plotMaxUpperLimitChanged(double value) {
+	CONDITIONAL_LOCK_RETURN;
+	if (value != INFINITY)
+		ui.leMaxUpperLimit->setText(QLocale().toString(value));
+	else
+		ui.leMaxUpperLimit->setText(QString());
 }
 
 void ProcessBehaviorChartDock::plotExactLimitsEnabledChanged(bool enabled) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.chbExactLimits->setChecked(enabled);
+}
+
+// Labels-tab
+void ProcessBehaviorChartDock::plotLabelsEnabledChanged(bool enabled) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.chbLabelsEnabled->setChecked(enabled);
+}
+
+void ProcessBehaviorChartDock::plotLabelsAutoPrecisionChanged(bool on) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.chkLabelsAutoPrecision->setChecked(on);
+}
+
+void ProcessBehaviorChartDock::plotLabelsPrecisionChanged(int precision) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.sbLabelsPrecision->setValue(precision);
+}
+
+void ProcessBehaviorChartDock::plotLabelsFontChanged(const QFont& font) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.kfrLabelsFont->setFont(font);
+}
+
+void ProcessBehaviorChartDock::plotLabelsFontColorChanged(const QColor& color) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.kcbLabelsFontColor->setColor(color);
+}
+
+void ProcessBehaviorChartDock::plotLabelsBackgroundColorChanged(const QColor& color) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.kcbLabelsBackgroundColor->setColor(color);
+}
+
+void ProcessBehaviorChartDock::plotLabelsBorderShapeChanged(TextLabel::BorderShape shape) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.cbLabelsBorderShape->setCurrentIndex(static_cast<int>(shape));
 }
 
 void ProcessBehaviorChartDock::showStatusInfo(const QString& info) {
@@ -383,7 +576,7 @@ void ProcessBehaviorChartDock::showStatusInfo(const QString& info) {
 		if (!m_messageWidget) {
 			m_messageWidget = new KMessageWidget(this);
 			m_messageWidget->setMessageType(KMessageWidget::Warning);
-			static_cast<QGridLayout*>(ui.tabGeneral->layout())->addWidget(m_messageWidget, 13, 0, 1, 3);
+			static_cast<QGridLayout*>(ui.tabGeneral->layout())->addWidget(m_messageWidget, 11, 0, 1, 3);
 		}
 		m_messageWidget->setText(info);
 		m_messageWidget->animatedShow();
@@ -398,6 +591,7 @@ void ProcessBehaviorChartDock::load() {
 	// type
 	int index = ui.cbType->findData(static_cast<int>(m_plot->type()));
 	ui.cbType->setCurrentIndex(index);
+	typeChanged(index);
 
 	// limits metric
 	index = ui.cbLimitsMetric->findData(static_cast<int>(m_plot->limitsMetric()));
@@ -406,11 +600,43 @@ void ProcessBehaviorChartDock::load() {
 	// sample size
 	ui.sbSampleSize->setValue(static_cast<int>(m_plot->sampleSize()));
 
-	// allow negative values for the lower limit
-	ui.chbNegativeLowerLimit->setChecked(m_plot->negativeLowerLimitEnabled());
+	// constraints for the limits
+	const auto numberLocale = QLocale();
+	double value = m_plot->minLowerLimit();
+	if (value != -INFINITY)
+		ui.leMinLowerLimit->setText(QLocale().toString(value));
+	else
+		ui.leMinLowerLimit->setText(QString());
+
+	value = m_plot->maxUpperLimit();
+	if (value != INFINITY)
+		ui.leMaxUpperLimit->setText(QLocale().toString(value));
+	else
+		ui.leMaxUpperLimit->setText(QString());
 
 	// user exact/individual limits, relevant for P and U charts only
 	ui.chbExactLimits->setChecked(m_plot->exactLimitsEnabled());
+
+	updateLowerLimitWidgets();
+
+	// labels
+	ui.chbLabelsEnabled->setChecked(m_plot->labelsEnabled());
+	ui.chkLabelsAutoPrecision->setChecked((int)m_plot->labelsAutoPrecision());
+	ui.sbLabelsPrecision->setValue((int)m_plot->labelsPrecision());
+	ui.kfrLabelsFont->setFont(m_plot->labelsFont());
+	ui.kcbLabelsFontColor->setColor(m_plot->labelsFontColor());
+	ui.kcbLabelsBackgroundColor->setColor(m_plot->labelsBackgroundColor());
+
+	// Border
+	index = ui.cbLabelsBorderShape->findData(static_cast<int>(m_plot->labelsBorderShape()));
+	ui.cbLabelsBorderShape->setCurrentIndex(index);
+
+	QList<Line*> borderLines;
+	for (auto* plot : m_plots)
+		borderLines << plot->labelsBorderLine();
+	labelsBorderLineWidget->setLines(borderLines);
+
+	labelsEnabledChanged(ui.chbLabelsEnabled->isChecked());
 }
 
 void ProcessBehaviorChartDock::loadConfig(KConfig& config) {
@@ -420,6 +646,7 @@ void ProcessBehaviorChartDock::loadConfig(KConfig& config) {
 	const auto type = group.readEntry(QStringLiteral("Type"), static_cast<int>(m_plot->type()));
 	int index = ui.cbType->findData(static_cast<int>(type));
 	ui.cbType->setCurrentIndex(index);
+	typeChanged(index);
 
 	// limits metric
 	const auto limitsMetric = group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(m_plot->limitsMetric()));
@@ -430,11 +657,15 @@ void ProcessBehaviorChartDock::loadConfig(KConfig& config) {
 	const int size = group.readEntry(QStringLiteral("SampleSize"), static_cast<int>(m_plot->sampleSize()));
 	ui.sbSampleSize->setValue(size);
 
-	// allow negative values for the lower limit
-	ui.chbNegativeLowerLimit->setChecked(group.readEntry(QStringLiteral("NegativeLowerLimitEnabled"), false));
+	// TODO: limit constraints?
 
 	// user exact/individual limits, relevant for P and U charts only
 	ui.chbExactLimits->setChecked(group.readEntry(QStringLiteral("ExactLimitsEnabled"), false));
+
+	ui.chbLabelsEnabled->setChecked(group.readEntry(QStringLiteral("LabelsEnabled"), false));
+	labelsEnabledChanged(ui.chbLabelsEnabled->isChecked());
+	ui.chkLabelsAutoPrecision->setChecked(group.readEntry(QStringLiteral("LabelsAutoPrecision"), (int)m_plot->labelsAutoPrecision()));
+	ui.sbLabelsPrecision->setValue(group.readEntry(QStringLiteral("LabelsPrecision"), (int)m_plot->labelsPrecision()));
 
 	// properties of the data and limit curves
 	dataLineWidget->loadConfig(group);
@@ -465,7 +696,7 @@ void ProcessBehaviorChartDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry(QStringLiteral("Type"), static_cast<int>(m_plot->type()));
 	group.writeEntry(QStringLiteral("LimitsMetric"), static_cast<int>(m_plot->limitsMetric()));
 	group.writeEntry(QStringLiteral("SampleSize"), m_plot->sampleSize());
-	group.writeEntry(QStringLiteral("NegativeLowerLimitEnabled"), m_plot->negativeLowerLimitEnabled());
+	// TODO: limit constraints?
 	group.writeEntry(QStringLiteral("ExactLimitsEnabled"), m_plot->exactLimitsEnabled());
 
 	// properties of the data and limit curves

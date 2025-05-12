@@ -4,7 +4,7 @@
 	Description          : widget providing options for the import of ascii data
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2009-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -21,7 +21,7 @@ class AsciiOptionsWidget : public QWidget {
 
 public:
 	explicit AsciiOptionsWidget(QWidget*, bool liveData = false);
-	void showAsciiHeaderOptions(bool);
+	void showAsciiHeaderOptions(bool headerLinevisible, bool columnNamesVisible);
 	void showTimestampOptions(bool);
 	void applyFilterSettings(AsciiFilter::Properties &properties) const;
 	void updateWidgets(const AsciiFilter::Properties& properties);

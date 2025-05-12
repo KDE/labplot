@@ -1,0 +1,3 @@
+add_executable(Timeresponseofasuperregenerativereceiver main.cpp)
+
+target_link_libraries(Timeresponseofasuperregenerativereceiver LabPlot::SDK)

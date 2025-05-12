@@ -122,8 +122,12 @@ void RunChart::finalizeAdd() {
 
 void RunChart::renameInternalCurves() {
 	Q_D(RunChart);
+	d->dataCurve->setUndoAware(false);
+	d->centerCurve->setUndoAware(false);
 	d->dataCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->centerCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
+	d->dataCurve->setUndoAware(true);
+	d->centerCurve->setUndoAware(true);
 }
 
 /*!
@@ -145,6 +149,16 @@ void RunChart::setVisible(bool on) {
 	d->centerCurve->setVisible(on);
 	WorksheetElement::setVisible(on);
 	endMacro();
+}
+
+/*!
+ * override the default implementation to handle the visibility of the internal curves
+ * and to set the z-value of the data curve to 1 higher than the z-value of the center curve.
+ */
+void RunChart::setZValue(qreal value) {
+	Q_D(RunChart);
+	d->centerCurve->setZValue(value);
+	d->dataCurve->setZValue(value + 1);
 }
 
 // ##############################################################################

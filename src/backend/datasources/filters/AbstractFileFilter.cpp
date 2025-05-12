@@ -46,13 +46,11 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
  */
 AbstractColumn::ColumnMode
 AbstractFileFilter::columnMode(const QString& valueString, QString& dateTimeFormat, const QLocale& locale, bool intAsDouble, int baseYear) {
+	if (valueString.isEmpty() || isNan(valueString))
+		return AbstractColumn::ColumnMode::Double;
+
 	// TODO: use BigInt as default integer?
 	auto mode = AbstractColumn::ColumnMode::Integer;
-	if (valueString.size() == 0) // empty string treated as integer (meaning the non-empty strings will determine the data type)
-		return mode;
-
-	if (isNan(valueString))
-		return AbstractColumn::ColumnMode::Double;
 
 	// check if integer first
 	bool ok;

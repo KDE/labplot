@@ -237,17 +237,17 @@ QVector<QStringList> CANFilterPrivate::preview(const QString& fileName, int line
 
 			switch (m_DataContainer.columnMode(c)) {
 			case AbstractColumn::ColumnMode::BigInt: {
-				const auto v = *static_cast<const QVector<qint64>*>(data_ptr);
+				const auto& v = *static_cast<const QVector<qint64>*>(data_ptr);
 				l.append(QString::number(v.at(i)));
 				break;
 			}
 			case AbstractColumn::ColumnMode::Integer: {
-				const auto v = *static_cast<const QVector<qint32>*>(data_ptr);
+				const auto& v = *static_cast<const QVector<qint32>*>(data_ptr);
 				l.append(QString::number(v.at(i)));
 				break;
 			}
 			case AbstractColumn::ColumnMode::Double: {
-				const auto v = *static_cast<const QVector<double>*>(data_ptr);
+				const auto& v = *static_cast<const QVector<double>*>(data_ptr);
 				l.append(QString::number(v.at(i)));
 				break;
 			}

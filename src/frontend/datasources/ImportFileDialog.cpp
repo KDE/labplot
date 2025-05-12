@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : import file data dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2008-2015 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -96,7 +96,6 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	connect(m_importFileWidget, &ImportFileWidget::hostChanged, this, &ImportFileDialog::checkOkButton);
 	connect(m_importFileWidget, &ImportFileWidget::portChanged, this, &ImportFileDialog::checkOkButton);
 	connect(m_importFileWidget, &ImportFileWidget::error, this, &ImportFileDialog::showErrorMessage);
-	connect(m_importFileWidget, &ImportFileWidget::error, this, &ImportFileDialog::disableOkButton);
 	connect(m_importFileWidget, &ImportFileWidget::previewReady, this, &ImportFileDialog::checkOkButton);
 	connect(this, &ImportDialog::dataContainerChanged, m_importFileWidget, &ImportFileWidget::dataContainerChanged);
 #ifdef HAVE_MQTT
@@ -110,8 +109,6 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	// Must be after connect, to send an error message if loading failed
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	m_importFileWidget->loadSettings();
-
-	ImportFileDialog::checkOkButton();
 }
 
 ImportFileDialog::~ImportFileDialog() {
@@ -372,10 +369,6 @@ void ImportFileDialog::enableImportToMatrix(const bool enable) {
 	}
 }
 
-void ImportFileDialog::disableOkButton() {
-	okButton->setEnabled(false);
-}
-
 void ImportFileDialog::checkOkButton() {
 	DEBUG(Q_FUNC_INFO);
 	if (cbAddTo) { // only check for the target container when no file data source is being added
@@ -393,8 +386,6 @@ void ImportFileDialog::checkOkButton() {
 			cbPosition->setEnabled(true);
 		}
 	}
-
-	//m_importFileWidget->isValid()
 
 	QString fileName = ImportFileWidget::absolutePath(m_importFileWidget->fileName());
 	const auto sourceType = m_importFileWidget->currentSourceType();
@@ -415,22 +406,20 @@ void ImportFileDialog::checkOkButton() {
 			break;
 	}
 
+	// process all events first so the dialog is completely drawn before we wait for the socket connect below
+	QApplication::processEvents(QEventLoop::AllEvents, 100);
+
 	DEBUG(Q_FUNC_INFO << ", Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, sourceType));
 	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe: {
 		DEBUG(Q_FUNC_INFO << ", fileName = " << qPrintable(fileName));
 		const bool enable = QFile::exists(fileName);
-		okButton->setEnabled(enable);
-		if (enable) {
-			okButton->setToolTip(i18n("Close the dialog and import the data."));
+		if (enable)
 			showErrorMessage(QString());
-		} else {
-			QString msg = i18n("The provided file doesn't exist.");
-			okButton->setToolTip(msg);
-
+		else {
 			// suppress the error widget when the dialog is opened the first time.
 			// show only the error widget if the file was really a non-existing file.
-			showErrorMessage(msg);
+			showErrorMessage(i18n("The provided file doesn't exist."));
 		}
 
 		break;
@@ -448,19 +437,13 @@ void ImportFileDialog::checkOkButton() {
 				DEBUG("DISCONNECT");
 				lsocket.disconnectFromServer();
 				// read-only socket is disconnected immediately (no waitForDisconnected())
-				okButton->setEnabled(true);
-				okButton->setToolTip(i18n("Close the dialog and import the data."));
 				showErrorMessage(QString());
 			} else {
-				okButton->setEnabled(false);
 				QString msg = i18n("Could not connect to the provided local socket. Error: %1.", lsocket.errorString());
-				okButton->setToolTip(msg);
 				showErrorMessage(msg);
 			}
 		} else {
-			okButton->setEnabled(false);
 			QString msg = i18n("Could not connect to the provided local socket. The socket does not exist.");
-			okButton->setToolTip(msg);
 			showErrorMessage(msg);
 		}
 
@@ -472,20 +455,14 @@ void ImportFileDialog::checkOkButton() {
 			QTcpSocket socket(this);
 			socket.connectToHost(m_importFileWidget->host(), m_importFileWidget->port().toUShort(), QTcpSocket::ReadOnly);
 			if (socket.waitForConnected()) {
-				okButton->setEnabled(true);
-				okButton->setToolTip(i18n("Close the dialog and import the data."));
 				showErrorMessage(QString());
 				socket.disconnectFromHost();
 			} else {
-				okButton->setEnabled(false);
 				QString msg = i18n("Could not connect to the provided TCP socket. Error: %1.", socket.errorString());
-				okButton->setToolTip(msg);
 				showErrorMessage(msg);
 			}
 		} else {
-			okButton->setEnabled(false);
 			QString msg = i18n("Either the host name or the port number is missing.");
-			okButton->setToolTip(msg);
 			showErrorMessage(msg);
 		}
 		break;
@@ -497,20 +474,16 @@ void ImportFileDialog::checkOkButton() {
 			socket.bind(QHostAddress(m_importFileWidget->host()), m_importFileWidget->port().toUShort());
 			socket.connectToHost(m_importFileWidget->host(), 0, QUdpSocket::ReadOnly);
 			if (socket.waitForConnected()) {
-				okButton->setEnabled(true);
-				okButton->setToolTip(i18n("Close the dialog and import the data."));
 				showErrorMessage(QString());
 				socket.disconnectFromHost();
 				// read-only socket is disconnected immediately (no waitForDisconnected())
 			} else {
-				okButton->setEnabled(false);
 				QString msg = i18n("Could not connect to the provided UDP socket. Error: %1.", socket.errorString());
-				okButton->setToolTip(msg);
 				showErrorMessage(msg);
 			}
 		} else {
-			okButton->setEnabled(false);
-			okButton->setToolTip(i18n("Either the host name or the port number is missing."));
+			QString msg = i18n("Either the host name or the port number is missing.");
+			showErrorMessage(msg);
 		}
 
 		break;
@@ -529,20 +502,15 @@ void ImportFileDialog::checkOkButton() {
 			serialPort.setBaudRate(baudRate);
 
 			const bool serialPortOpened = serialPort.open(QIODevice::ReadOnly);
-			okButton->setEnabled(serialPortOpened);
 			if (serialPortOpened) {
-				okButton->setToolTip(i18n("Close the dialog and import the data."));
 				showErrorMessage(QString());
 				serialPort.close();
 			} else {
 				QString msg = LiveDataSource::serialPortErrorEnumToString(serialPort.error(), serialPort.errorString());
-				okButton->setToolTip(msg);
 				showErrorMessage(msg);
 			}
 		} else {
-			okButton->setEnabled(false);
 			QString msg = i18n("Serial port number is missing.");
-			okButton->setToolTip(msg);
 			showErrorMessage(msg);
 		}
 #endif
@@ -551,13 +519,11 @@ void ImportFileDialog::checkOkButton() {
 	case LiveDataSource::SourceType::MQTT: {
 #ifdef HAVE_MQTT
 		const bool enable = m_importFileWidget->isMqttValid();
-		showErrorMessage(QString());
-		if (enable) {
-			okButton->setEnabled(true);
-			okButton->setToolTip(i18n("Close the dialog and import the data."));
-		} else {
-			okButton->setEnabled(false);
-			okButton->setToolTip(i18n("Either there is no connection, or no subscriptions were made, or the file filter is not ASCII."));
+		if (enable)
+			showErrorMessage(QString());
+		else {
+			QString msg = i18n("Either there is no connection, or no subscriptions were made, or the file filter is not ASCII.");
+			showErrorMessage(msg);
 		}
 #endif
 		break;

@@ -117,7 +117,7 @@ void WorksheetElementContainer::retransform() {
 	if (isLoading())
 		return;
 
-	PERFTRACE(QStringLiteral("WorksheetElementContainer::retransform()"));
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	Q_D(WorksheetElementContainer);
 
 	// when retransforming every child here, don't emit the changed signal for every child,

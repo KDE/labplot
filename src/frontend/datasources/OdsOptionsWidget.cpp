@@ -105,7 +105,7 @@ void OdsOptionsWidget::sheetSelectionChanged() {
 		int colCount = 0;
 		const int maxColumns = 100;
 		for (int row = 0; row < rowCount; ++row) {
-			auto lineString = importedStrings.at(row);
+			const auto& lineString = importedStrings.at(row);
 			const int size = lineString.size();
 			colCount = std::min(maxColumns, size);
 			if (row == 0) {

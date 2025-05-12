@@ -3,5 +3,5 @@
 	cd build
 	make clean
 	cov-build --dir cov-int make -j 4
-	tar czvf labplot.tgz cov-int
+	tar czvf labplot.tgz cov-int (or tar caf labplot.xz cov-int/, smaller files but significantly slower)
 3. upload labplot.tgz to https://scan.coverity.com/projects/labplot/builds/new

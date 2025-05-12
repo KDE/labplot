@@ -17,7 +17,7 @@ class NotebookTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
+	void initTestCase() override;
 
 	// Maxima
 	void testParserMaxima01();

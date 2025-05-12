@@ -141,6 +141,7 @@ private:
 
 	friend class RetransformTest;
 	friend class MultiRangeTest3;
+	friend class WorksheetElementTest;
 };
 
 #endif

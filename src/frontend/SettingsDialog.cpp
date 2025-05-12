@@ -56,26 +56,26 @@ SettingsDialog::SettingsDialog(QWidget* parent, const QLocale& locale)
 	connect(m_generalPage, &SettingsGeneralPage::settingsChanged, this, &SettingsDialog::changed);
 
 	m_worksheetPage = new SettingsWorksheetPage(this);
-	KPageWidgetItem* worksheetFrame = addPage(m_worksheetPage, i18n("Worksheet"));
-	worksheetFrame->setIcon(QIcon::fromTheme(QLatin1String("labplot-worksheet")));
+	m_worksheetPageItem = addPage(m_worksheetPage, i18n("Worksheet"));
+	m_worksheetPageItem->setIcon(QIcon::fromTheme(QLatin1String("labplot-worksheet")));
 	connect(m_worksheetPage, &SettingsWorksheetPage::settingsChanged, this, &SettingsDialog::changed);
 
 	m_spreadsheetPage = new SettingsSpreadsheetPage(this);
-	KPageWidgetItem* spreadsheetFrame = addPage(m_spreadsheetPage, i18n("Spreadsheet"));
-	spreadsheetFrame->setIcon(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")));
+	m_spreadsheetPageItem = addPage(m_spreadsheetPage, i18n("Spreadsheet"));
+	m_spreadsheetPageItem->setIcon(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")));
 	connect(m_spreadsheetPage, &SettingsSpreadsheetPage::settingsChanged, this, &SettingsDialog::changed);
 
 #ifdef HAVE_CANTOR_LIBS
 	m_notebookPage = new SettingsNotebookPage(this);
-	KPageWidgetItem* notebookFrame = addPage(m_notebookPage, i18n("Notebook"));
-	m_notebookPage->addSubPages(notebookFrame, this);
-	notebookFrame->setIcon(QIcon::fromTheme(QLatin1String("cantor")));
+	m_notebookPageItem = addPage(m_notebookPage, i18n("Notebook"));
+	m_notebookPage->addSubPages(m_notebookPageItem, this);
+	m_notebookPageItem->setIcon(QIcon::fromTheme(QLatin1String("cantor")));
 	connect(m_notebookPage, &SettingsNotebookPage::settingsChanged, this, &SettingsDialog::changed);
 #endif
 
 	m_datasetsPage = new SettingsDatasetsPage(this);
-	KPageWidgetItem* datasetsFrame = addPage(m_datasetsPage, i18n("Datasets"));
-	datasetsFrame->setIcon(QIcon::fromTheme(QLatin1String("database-index")));
+	m_datasetsPageItem = addPage(m_datasetsPage, i18n("Datasets"));
+	m_datasetsPageItem->setIcon(QIcon::fromTheme(QLatin1String("database-index")));
 	connect(m_datasetsPage, &SettingsDatasetsPage::settingsChanged, this, &SettingsDialog::changed);
 
 	// 	m_welcomePage = new SettingsWelcomePage(this);
@@ -89,8 +89,8 @@ SettingsDialog::SettingsDialog(QWidget* parent, const QLocale& locale)
 	m_userFeedbackWidget->setFeedbackProvider(&mainWin->userFeedbackProvider());
 	connect(m_userFeedbackWidget, &KUserFeedback::FeedbackConfigWidget::configurationChanged, this, &SettingsDialog::changed);
 
-	KPageWidgetItem* userFeedBackFrame = addPage(m_userFeedbackWidget, i18n("User Feedback"));
-	userFeedBackFrame->setIcon(QIcon::fromTheme(QLatin1String("preferences-desktop-locale")));
+	m_userFeedbackPageItem = addPage(m_userFeedbackWidget, i18n("User Feedback"));
+	m_userFeedbackPageItem->setIcon(QIcon::fromTheme(QLatin1String("preferences-desktop-locale")));
 #endif
 
 	// restore saved settings if available
@@ -106,6 +106,35 @@ SettingsDialog::SettingsDialog(QWidget* parent, const QLocale& locale)
 SettingsDialog::~SettingsDialog() {
 	KConfigGroup dialogConfig = Settings::group(QStringLiteral("SettingsDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), dialogConfig);
+}
+
+void SettingsDialog::navigateTo(Settings::Type type) {
+	switch (type) {
+	case Settings::Type::General:
+	case Settings::Type::General_Number_Format:
+	case Settings::Type::General_Units:
+		// "general" is selected initially
+		break;
+	case Settings::Type::Worksheet:
+		setCurrentPage(m_worksheetPageItem);
+		break;
+	case Settings::Type::Spreadsheet:
+		setCurrentPage(m_spreadsheetPageItem);
+		break;
+#ifdef HAVE_CANTOR_LIBS
+	case Settings::Type::Notebook:
+		setCurrentPage(m_notebookPageItem);
+		break;
+#endif
+	case Settings::Type::Datasets:
+		setCurrentPage(m_datasetsPageItem);
+		break;
+#ifdef HAVE_KUSERFEEDBACK
+	case Settings::Type::Feedback:
+		setCurrentPage(m_userFeedbackPageItem);
+		break;
+#endif
+	}
 }
 
 void SettingsDialog::slotButtonClicked(QAbstractButton* button) {

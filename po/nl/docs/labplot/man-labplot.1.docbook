@@ -48,7 +48,7 @@
 >labplot</command
 > <arg choice="opt"
 ><replaceable
->Opties voor LabPlot </replaceable
+>LabPlot-opties</replaceable
 ></arg
 > <arg choice="opt"
 ><replaceable
@@ -141,7 +141,7 @@
 >Zie ook</title>
 <simplelist>
 <member
->Een volledige gebruikersdocumentatie vindt u in de KDE Help Centre. U kunt ookde URL <ulink url="help:/labplot"
+>Een volledige gebruikersdocumentatie vindt u in de KDE Help Centre. U kunt ook de URL <ulink url="help:/labplot"
 >help:/labplot</ulink
 > invoeren (of ook <acronym
 >URL</acronym

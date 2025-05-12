@@ -556,8 +556,11 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 	if (aspect->isHidden())
 		return;
 
-	// don't do anything for newly added data spreadsheets of data picker curves
-	if (aspect->type() == AspectType::Spreadsheet && aspect->parentAspect()->type() == AspectType::DatapickerCurve)
+	// don't do anything for newly added:
+	// * data spreadsheets of data picker curves
+	// * notes with fit results
+	if ((aspect->type() == AspectType::Spreadsheet && aspect->parentAspect()->type() == AspectType::DatapickerCurve)
+		|| (aspect->type() == AspectType::Note && aspect->parentAspect()->type() == AspectType::XYFitCurve))
 		return;
 
 	const auto* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());

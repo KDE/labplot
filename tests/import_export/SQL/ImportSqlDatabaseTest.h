@@ -16,7 +16,7 @@ class ImportSqlDatabaseTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
+	void initTestCase() override;
 
 	// import full table
 	void testFullTableReplace();

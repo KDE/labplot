@@ -79,16 +79,7 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
  * updates the locale in the widgets. called when the application settings are changed.
  */
 void ReferenceLineDock::updateLocale() {
-	CONDITIONAL_LOCK_RETURN;
-	const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
-	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal) {
-		if (plot->yRangeFormatDefault() == RangeT::Format::Numeric)
-			ui.sbPosition->setValue(m_line->positionLogical().y());
-	} else {
-		if (plot->xRangeFormatDefault() == RangeT::Format::Numeric)
-			ui.sbPosition->setValue(m_line->positionLogical().x());
-	}
-
+	ui.sbPosition->setLocale(QLocale());
 	lineWidget->updateLocale();
 }
 

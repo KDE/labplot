@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Main window of the application
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -145,7 +145,6 @@ private:
 	QAction* m_importLabPlotAction;
 	QAction* m_importOpjAction;
 	QAction* m_exportAction;
-	// QAction* m_closeAction;
 	QAction* m_newFolderAction;
 	QAction* m_newWorkbookAction;
 	QAction* m_newSpreadsheetAction;
@@ -163,6 +162,10 @@ private:
 	QAction* m_nextWindowAction;
 	QAction* m_prevWindowAction;
 	QAction* m_newDatapickerAction;
+#ifdef HAVE_CANTOR_LIBS
+	QAction* m_lastUsedNotebookAction{nullptr};
+	QToolButton* m_tbNotebook{nullptr};
+#endif
 
 	// toggling dock widgets, status bar and full screen
 	QAction* m_projectExplorerDockAction;
@@ -171,7 +174,7 @@ private:
 	KToggleAction* m_statusBarAction;
 	QAction* m_memoryInfoAction;
 	KToggleFullScreenAction* m_fullScreenAction;
-	QAction* m_configureCASAction;
+	QAction* m_configureNotebookAction;
 
 	// window visibility
 	QAction* m_visibilityFolderAction;
@@ -225,7 +228,6 @@ protected:
 private Q_SLOTS:
 	void initGUI(const QString&);
 	void customAboutDialog();
-	void changeVisibleAllDocks(bool);
 	void activateNextDock();
 	void activatePreviousDock();
 	void dockWidgetRemoved(ads::CDockWidget*);
@@ -263,6 +265,7 @@ private Q_SLOTS:
 
 #ifdef HAVE_CANTOR_LIBS
 	void newNotebook();
+	void settingsNotebookDialog();
 	void updateNotebookActions();
 #endif
 

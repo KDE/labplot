@@ -153,7 +153,8 @@ bool XYIntegrationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDa
 	integrationResult.valid = (status == 0);
 	integrationResult.status = QString::number(status);
 	integrationResult.elapsedTime = timer.elapsed();
-	integrationResult.value = ydata[np - 1];
+	if (np > 0)
+		integrationResult.value = ydata[np - 1];
 
 	return true;
 }

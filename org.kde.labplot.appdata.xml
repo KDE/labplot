@@ -53,7 +53,7 @@
   <summary xml:lang="eu">Datuen irudikatze eta analisi elkarreragilea</summary>
   <summary xml:lang="fi">Vuorovaikutteinen tiedon visualisointi ja analyysi</summary>
   <summary xml:lang="fr">Analyse et affichage interactif de données</summary>
-  <summary xml:lang="gl">Visualización e análise interactiva de datos.</summary>
+  <summary xml:lang="gl">Visualización e análise interactiva de datos</summary>
   <summary xml:lang="hi">इंटरैक्टिव डेटा विज़ुअलाइज़ेशन और विश्लेषण</summary>
   <summary xml:lang="ia">Visualisation e Analyse de Datos Interactive</summary>
   <summary xml:lang="id">Visualisasi dan Analisis Data Interaktif</summary>
@@ -489,6 +489,7 @@
   </provides>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="2.12.0" date="2025-04-25"/>
     <release version="2.11.1" date="2024-07-16"/>
     <release version="2.11.0" date="2024-07-09"/>
     <release version="2.10.1" date="2023-07-11"/>

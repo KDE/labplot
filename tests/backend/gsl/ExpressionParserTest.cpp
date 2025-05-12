@@ -84,7 +84,7 @@ void ExpressionParserTest::testFunctionArguments2() {
 			QVERIFY(_functions[i].parameterFunction != nullptr);
 	}
 
-	QCOMPARE(ExpressionParser::parameters(functionName), QStringLiteral("(condition; trueValue; falseValue)"));
+	QCOMPARE(ExpressionParser::parameters(functionName), i18n("(%1; %2; %3)", i18n("condition"), i18n("trueValue"), i18n("falseValue")));
 }
 
 void ExpressionParserTest::testUniques() {

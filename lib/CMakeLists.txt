@@ -141,7 +141,6 @@ set(GSL_SOURCES
     ${BACKEND_DIR}/gsl/ExpressionParser.cpp
 )
 
-# need to separate into internal classes and public classes
 set(SDK_DEPENDENCY_SOURCES
     ${BACKEND_DIR}/core/AbstractAspect.cpp
     ${BACKEND_DIR}/core/AbstractColumn.cpp
@@ -164,7 +163,6 @@ set(SDK_DEPENDENCY_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
     ${BACKEND_DIR}/core/column/ColumnStringIO.cpp
     ${BACKEND_DIR}/lib/Range.h
-    ${BACKEND_DIR}/lib/XmlStreamReader.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/CartesianScale.cpp
 )
 
@@ -234,6 +232,7 @@ set(SDK_INTERNAL_SOURCES
     ${BACKEND_DIR}/note/Note.cpp
     ${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
     ${BACKEND_DIR}/worksheet/ResizeItem.cpp
+    ${BACKEND_DIR}/lib/XmlStreamReader.cpp
 )
 
 if(ENABLE_LIBORIGIN)
@@ -247,150 +246,50 @@ if(NOT LIBCERF_FOUND)
 endif()
 endif()
 
-# dynamic library
-add_library(liblabplot SHARED ${SDK_SOURCES} ${NSL_SOURCES} ${GSL_SOURCES} ${QTMOC_HDRS} ${SDK_DEPENDENCY_SOURCES} ${SDK_INTERNAL_SOURCES})
+add_library(liblabplot SHARED ${SDK_SOURCES} ${SDK_DEPENDENCY_SOURCES} ${SDK_INTERNAL_SOURCES} ${NSL_SOURCES} ${GSL_SOURCES} ${QTMOC_HDRS})
 add_library(LabPlot::SDK ALIAS liblabplot)
-target_compile_definitions(liblabplot PRIVATE -DSDK ${LABPLOT_COMPILE_DEFINITIONS})
+add_dependencies(liblabplot labplotlib labplotbackendlib labplotnsllib)
 
 set_target_properties(liblabplot PROPERTIES
     VERSION ${PROJECT_VERSION}
     SOVERSION ${PROJECT_VERSION}
-    EXPORT_NAME SDK # the name that consumers will refer to this target (on namespace LabPlot)
+    EXPORT_NAME SDK
     CXX_VISIBILITY_PRESET hidden
     VISIBILITY_INLINES_HIDDEN 1
-    OUTPUT_NAME labplot # name it liblabplot, not libliblabplot
+    OUTPUT_NAME labplot
 )
 
+target_compile_definitions(liblabplot PRIVATE -DSDK ${LABPLOT_COMPILE_DEFINITIONS})
+
+get_target_property(labplotlib_INCLUDE_DIRECTORIES labplotlib INCLUDE_DIRECTORIES)
+get_target_property(labplotbackendlib_INCLUDE_DIRECTORIES labplotbackendlib INCLUDE_DIRECTORIES)
+get_target_property(labplotnsllib_INCLUDE_DIRECTORIES labplotnsllib INCLUDE_DIRECTORIES)
+
 target_include_directories(liblabplot
-    PRIVATE ${BACKEND_DIR}/gsl/ ${GSL_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../src/3rdparty/liborigin
+    PRIVATE
+    ${labplotlib_INCLUDE_DIRECTORIES}
+    ${labplotbackendlib_INCLUDE_DIRECTORIES}
+    ${labplotnsllib_INCLUDE_DIRECTORIES}
     # any dependent building me directly
-    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../src/>
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../src>
     # any dependent not building me directly
     INTERFACE $<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/labplot>
 )
 
-if(ENABLE_XLSX)
-if(BUILD_QXLSX)
-    target_include_directories(liblabplot PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../src/3rdparty/QXlsx/header")
-endif()
+get_target_property(labplotlib_LINK_LIBRARIES labplotlib LINK_LIBRARIES)
+get_target_property(labplotbackendlib_LINK_LIBRARIES labplotbackendlib LINK_LIBRARIES)
+get_target_property(labplotnsllib_LINK_LIBRARIES labplotnsllib LINK_LIBRARIES)
 
-if(QXLSX_FOUND)
-    target_include_directories(liblabplot PRIVATE ${QXLSX_INCLUDE_DIR})
-endif()
-endif()
-
-if(ENABLE_MCAP)
-target_include_directories(liblabplot PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../src/3rdparty/mcap/include")
-IF(LZ4_FOUND)
-    target_include_directories(liblabplot PRIVATE ${LZ4_INCLUDE_DIR})
-endif()
-
-IF(ZSTD_FOUND)
-    target_include_directories(liblabplot PRIVATE ${ZSTD_INCLUDE_DIR})
-endif()
-endif()
-
-if(ENABLE_HDF5)
-if(HDF5_FOUND)
-    target_include_directories(liblabplot PRIVATE ${HDF5_INCLUDE_DIRS})
-endif()
-endif()
-
-if(ENABLE_READSTAT)
-if(READSTAT_FOUND OR BUILD_READSTAT)
-    target_include_directories(liblabplot PRIVATE ${CMAKE_BINARY_DIR}/src/3rdparty/install/include)
-    if(EXISTS ${CMAKE_BINARY_DIR}/src/3rdparty/readstat/src/readstat/src)
-    target_include_directories(liblabplot PRIVATE ${CMAKE_BINARY_DIR}/src/3rdparty/readstat/src/readstat/src)
-    endif()
-endif()
-endif()
-
-# trim linked libraries later
-# how can we declare the shared libs needed by dependents with cmake?
 target_link_libraries(liblabplot
     PRIVATE
-    KF${KF_MAJOR_VERSION}::Archive
-    KF${KF_MAJOR_VERSION}::ConfigCore
-    KF${KF_MAJOR_VERSION}::ConfigWidgets
-    KF${KF_MAJOR_VERSION}::I18n
-    KF${KF_MAJOR_VERSION}::KIOCore
-    KF${KF_MAJOR_VERSION}::XmlGui
-    Qt${QT_MAJOR_VERSION}::PrintSupport
-    Qt${QT_MAJOR_VERSION}::Sql
-    ${GSL_LIBRARIES}
-    ${GSL_CBLAS_LIBRARIES}
-    ${FFTW3_LIBRARIES}
-    ${Poppler_LIBRARIES}
-    ${LIBCERF_LIBRARIES}
-    ${ZLIB_LIBRARIES}
-    ${LZ4_LIBRARIES}
-    ${HDF5_LIBRARIES}
-    ${netCDF_LIBRARIES}
-    ${CFITSIO_LIBRARIES}
-    ${MATIO_LIBRARIES}
+    ${labplotlib_LINK_LIBRARIES}
+    ${labplotbackendlib_LINK_LIBRARIES}
+    ${labplotnsllib_LINK_LIBRARIES}
     PUBLIC
-    # ideally any project depending on us should link these qt libs, not because we rely on qt in our public api
-    # but for cohesion and proper functioning of the library 
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Gui
     Qt${QT_MAJOR_VERSION}::Widgets
 )
-
-if(ENABLE_XLSX)
-if(QXLSX_FOUND OR BUILD_QXLSX)
-    target_link_libraries(liblabplot PRIVATE QXlsx)
-endif()
-endif()
-
-if(ENABLE_MCAP)
-IF(LZ4_FOUND)
-    target_link_libraries(liblabplot PRIVATE ${LZ4_LIBRARIES})
-endif()
-
-if(ZSTD_FOUND)
-    target_link_libraries(liblabplot PRIVATE ${ZSTD_LIBRARIES})
-endif()
-endif()
-
-if(ENABLE_HDF5)
-if(HDF5_FOUND)
-    target_link_libraries(liblabplot PRIVATE ${HDF5_LIBRARIES})
-endif()
-endif()
-
-if(ENABLE_READSTAT)
-if(READSTAT_FOUND OR BUILD_READSTAT)
-    if(READSTAT_FOUND AND ICONV_LIBRARIES)
-        target_link_libraries (liblabplot PRIVATE ${ICONV_LIBRARIES})
-    endif()
-    target_link_libraries(liblabplot PRIVATE ${READSTAT_LIBRARIES} ${ZLIB_LIBRARIES})
-endif()
-endif()
-
-if(Discount_FOUND)
-    target_link_libraries(liblabplot PRIVATE Discount::Lib)
-endif()
-
-if(ENABLE_LIBORIGIN)
-    target_include_directories(liblabplot PRIVATE ../src/3rdparty/liborigin)
-    if(LIBORIGIN_FOUND)
-        target_link_libraries(liblabplot PRIVATE ${LIBORIGIN_LIBRARIES})
-    else()
-        target_link_libraries(liblabplot PRIVATE liborigin-static)
-    endif()
-endif()
-
-if(Cantor_FOUND)
-    # KFX::Service, KFX::Parts is optional but probably required by Cantor
-    target_link_libraries(liblabplot PRIVATE Cantor::cantorlibs KF${KF_MAJOR_VERSION}::Service KF${KF_MAJOR_VERSION}::Parts)
-endif()
-
-# required by worksheetview
-if(ENABLE_QTSVG)
-if(Qt${QT_MAJOR_VERSION}Svg_FOUND)
-    target_link_libraries(liblabplot PRIVATE Qt${QT_MAJOR_VERSION}::Svg)
-endif()
-endif()
 
 if(WIN32)
 if(PSAPI)
@@ -401,14 +300,15 @@ endif()
 ############## installation ################################
 install(TARGETS liblabplot EXPORT LabPlotTargets DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} COMPONENT Devel)
 
-# generate labplot_export.h + LABPLOT_EXPORT
+# generate labplot_export.h + LABPLOT_EXPORT macro
 generate_export_header(liblabplot BASE_NAME labplot)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/labplot_export.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot COMPONENT Devel)
 
 install(FILES labplot.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/ COMPONENT Devel)
 
-# top-level includes
-foreach(SDK_SOURCE IN LISTS SDK_SOURCES)
+# top-level and dependency includes
+set(SDK_AND_DEPENDENCY_SOURCES ${SDK_SOURCES} ${SDK_DEPENDENCY_SOURCES})
+foreach(SDK_SOURCE IN LISTS SDK_AND_DEPENDENCY_SOURCES)
     string(REPLACE .cpp .h SDK_SOURCE_HEADER ${SDK_SOURCE})
     if(EXISTS ${SDK_SOURCE_HEADER})
         string(REGEX REPLACE "^\.\./src/|/[^/]+$" "" SDK_SOURCE_HEADER_DIR ${SDK_SOURCE_HEADER})
@@ -417,31 +317,18 @@ foreach(SDK_SOURCE IN LISTS SDK_SOURCES)
 endforeach(SDK_SOURCE)
 
 # included from the top-level includes
-install(FILES ../src/backend/datasources/filters/AbstractFileFilter.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/datasources/filters/ COMPONENT Devel)
-install(FILES ../src/backend/core/AbstractColumn.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/core/ COMPONENT Devel)
-install(FILES ../src/backend/core/AbstractAspect.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/core/ COMPONENT Devel)
-install(FILES ../src/backend/datasources/AbstractDataSource.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/datasources/ COMPONENT Devel)
-install(FILES ../src/backend/core/AbstractPart.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/core/ COMPONENT Devel)
 install(FILES ../src/backend/lib/macros.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel)
 install(FILES ../src/backend/lib/macrosWarningStyle.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel)
 install(FILES ../src/backend/lib/Debug.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel)
-install(FILES ../src/backend/core/column/ColumnStringIO.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/core/column/ COMPONENT Devel)
-install(FILES ../src/backend/worksheet/WorksheetElement.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/ COMPONENT Devel)
-install(FILES ../src/tools/TeXRenderer.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/tools/ COMPONENT Devel)
-install(FILES ../src/backend/lib/Range.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel)
 install(FILES ../src/backend/gsl/Parser.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/gsl/ COMPONENT Devel)
 install(FILES ../src/backend/gsl/ParserDeclarations.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/gsl/ COMPONENT Devel)
 install(FILES ../src/backend/gsl/constants.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/gsl/ COMPONENT Devel)
 install(FILES ../src/backend/gsl/functions.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/gsl/ COMPONENT Devel)
 install(FILES ../src/backend/gsl/parserFunctionTypes.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/gsl/ COMPONENT Devel)
-install(FILES ../src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel)
-install(FILES ../src/backend/worksheet/plots/cartesian/CartesianScale.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel)
-install(FILES ../src/backend/worksheet/plots/AbstractCoordinateSystem.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/ COMPONENT Devel)
-install(FILES ../src/backend/worksheet/plots/AbstractPlot.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/ COMPONENT Devel)
-install(FILES ../src/backend/worksheet/WorksheetElementContainer.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/ COMPONENT Devel)
-install(FILES ../src/backend/worksheet/plots/cartesian/Plot.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel)
-install(FILES ../src/backend/worksheet/plots/cartesian/XYAnalysisCurve.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel)
-install(FILES ../src/backend/worksheet/plots/cartesian/ErrorBar.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel)
+install(FILES ../src/backend/datasources/filters/filters.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/datasources/filters/ COMPONENT Devel)
+install(FILES ../src/backend/worksheet/plots/cartesian/plots.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel)
+install(FILES ../src/tools/TeXRenderer.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/tools/ COMPONENT Devel)
+
 install(FILES ../src/backend/nsl/nsl_fit.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel)
 install(FILES ../src/backend/nsl/nsl_math.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel)
 install(FILES ../src/backend/nsl/nsl_sf_stats.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel)
@@ -458,13 +345,11 @@ install(FILES ../src/backend/nsl/nsl_kde.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}
 install(FILES ../src/backend/nsl/nsl_sf_kernel.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel)
 install(FILES ../src/backend/nsl/nsl_dft.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel)
 install(FILES ../src/backend/nsl/nsl_sf_window.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel)
-install(FILES ../src/backend/datasources/filters/filters.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/datasources/filters/ COMPONENT Devel)
-install(FILES ../src/backend/worksheet/plots/cartesian/plots.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel)
 
 install(EXPORT LabPlotTargets
     DESTINATION ${KDE_INSTALL_CMAKEPACKAGEDIR}/labplot
     FILE LabPlotTargets.cmake
-    NAMESPACE LabPlot:: # namespace all targets in this export
+    NAMESPACE LabPlot::
     COMPONENT Devel
 )
 
@@ -483,3 +368,8 @@ install(
     DESTINATION ${KDE_INSTALL_CMAKEPACKAGEDIR}/labplot
     COMPONENT Devel
 )
+
+if(ENABLE_PYTHON_SDK)
+    message(STATUS "Python SDK build ENABLED")
+    add_subdirectory(python)
+endif()

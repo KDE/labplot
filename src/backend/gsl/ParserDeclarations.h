@@ -43,8 +43,8 @@ typedef struct param {
 	const char* locale{nullptr}; /* name of locale to convert numbers */
 	Parser* parser{nullptr};
 	double result{std::nan("0")};
-	size_t variablesCounter{0};
-	size_t errorCount{0};
+	int variablesCounter{0};
+	int errorCount{0};
 } param;
 
 struct Payload {
@@ -73,11 +73,11 @@ struct BaseSymbol {
 
 // structure for list of symbols
 struct Symbol : public BaseSymbol {
-	Symbol(const char* symbol_name, int len, int _type) {
+	Symbol(const char* symbol_name, size_t len, int _type) {
 		type = _type;
 		init(symbol_name, len);
 	}
-	Symbol(const char* symbol_name, int len, int _type, special_function_def fn) {
+	Symbol(const char* symbol_name, size_t len, int _type, special_function_def fn) {
 		type = _type;
 		init(symbol_name, len);
 		value = fn;
@@ -87,7 +87,7 @@ struct Symbol : public BaseSymbol {
 	}
 
 private:
-	inline void init(const char* symbol_name, int len) {
+	inline void init(const char* symbol_name, size_t len) {
 		nameAlloc = (char*)malloc(len + 1);
 		strcpy(nameAlloc, symbol_name);
 		name = std::string_view(nameAlloc);

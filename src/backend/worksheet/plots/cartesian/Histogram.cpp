@@ -29,8 +29,6 @@
 #include <QMenu>
 #include <QPainter>
 
-#include <KConfig>
-#include <KConfigGroup>
 #include <KLocalizedString>
 
 CURVE_COLUMN_CONNECT(Histogram, Data, data, recalc)
@@ -51,7 +49,7 @@ Histogram::Histogram(const QString& name, bool loading)
 
 Histogram::Histogram(const QString& name, HistogramPrivate* dd)
 	: Plot(name, dd, AspectType::Histogram) {
-	init();
+	init(false);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -1238,11 +1236,12 @@ void HistogramPrivate::updateValues() {
 
 			switch (xColMode) {
 			case AbstractColumn::ColumnMode::Double:
-				valuesStrings << valuesPrefix + numberLocale.toString(valuesColumn->valueAt(i), value->numericFormat(), value->precision()) + valuesSuffix;
+				valuesStrings << valuesPrefix + numberToString(valuesColumn->valueAt(i), numberLocale, value->numericFormat(), value->precision())
+						+ valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
-				valuesStrings << valuesPrefix + numberLocale.toString(valuesColumn->valueAt(i)) + valuesSuffix;
+				valuesStrings << valuesPrefix + numberToString(valuesColumn->valueAt(i), numberLocale) + valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Text:
 				valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;

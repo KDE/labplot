@@ -387,17 +387,21 @@ ColumnInsertRowsCmd::ColumnInsertRowsCmd(ColumnPrivate* col, int before, int cou
  * \brief Execute the command
  */
 void ColumnInsertRowsCmd::redo() {
+	Q_EMIT m_col->q->rowsAboutToBeInserted(m_col->q, m_before, m_count);
 	m_col->insertRows(m_before, m_count);
 	m_col->q->updateFormula(); // only needed in redo
 	m_col->owner()->setChanged();
+	Q_EMIT m_col->q->rowsInserted(m_col->q, m_before, m_count);
 }
 
 /**
  * \brief Undo the command
  */
 void ColumnInsertRowsCmd::undo() {
+	Q_EMIT m_col->q->rowsAboutToBeRemoved(m_col->q, m_before, m_count);
 	m_col->removeRows(m_before, m_count);
 	m_col->owner()->setChanged();
+	Q_EMIT m_col->q->rowsRemoved(m_col->q, m_before, m_count);
 }
 
 /** ***************************************************************************
@@ -476,19 +480,23 @@ void ColumnRemoveRowsCmd::redo() {
 		m_backup->copy(m_col, m_first, 0, m_data_row_count);
 		m_formulas = m_col->formulaAttribute();
 	}
+	Q_EMIT m_col->q->rowsAboutToBeRemoved(m_col->q, m_first, m_count);
 	m_col->removeRows(m_first, m_count);
 	m_col->owner()->setChanged();
+	Q_EMIT m_col->q->rowsRemoved(m_col->q, m_first, m_count);
 }
 
 /**
  * \brief Undo the command
  */
 void ColumnRemoveRowsCmd::undo() {
+	Q_EMIT m_col->q->rowsAboutToBeInserted(m_col->q, m_first, m_count);
 	m_col->insertRows(m_first, m_count);
 	m_col->copy(m_backup, 0, m_first, m_data_row_count);
 	m_col->resizeTo(m_old_size);
 	m_col->replaceFormulas(m_formulas);
 	m_col->owner()->setChanged();
+	Q_EMIT m_col->q->rowsInserted(m_col->q, m_first, m_count);
 }
 
 /** ***************************************************************************

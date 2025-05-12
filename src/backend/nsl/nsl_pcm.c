@@ -18,28 +18,40 @@
 
 double nsl_pcm_D3(unsigned int n) {
 	const double d2 = nsl_pcm_d2(n);
-	const double d3 = nsl_pcm_d3(n);
-	return 1 - 3 * d3 / d2;
+	if (d2 != 0) {
+		const double d3 = nsl_pcm_d3(n);
+		return 1 - 3 * d3 / d2;
+	} else
+		return 0.;
 }
 
 double nsl_pcm_D4(unsigned int n) {
 	const double d2 = nsl_pcm_d2(n);
-	const double d3 = nsl_pcm_d3(n);
-	return 1 + 3 * d3 / d2;
+	if (d2 != 0.) {
+		const double d3 = nsl_pcm_d3(n);
+		return 1 + 3 * d3 / d2;
+	} else
+		return 0.;
 }
 
 double nsl_pcm_D5(unsigned int n) {
-	const double d2 = nsl_pcm_d2(n);
-	const double d3 = nsl_pcm_d3(n);
 	const double d4 = nsl_pcm_d4(n);
-	return (d2 - 3 * d3) / d4;
+	if (d4 != 0.) {
+		const double d2 = nsl_pcm_d2(n);
+		const double d3 = nsl_pcm_d3(n);
+		return (d2 - 3 * d3) / d4;
+	} else
+		return 0.;
 }
 
 double nsl_pcm_D6(unsigned int n) {
-	const double d2 = nsl_pcm_d2(n);
-	const double d3 = nsl_pcm_d3(n);
 	const double d4 = nsl_pcm_d4(n);
-	return (d2 + 3 * d3) / d4;
+	if (d4 != 0.) {
+		const double d2 = nsl_pcm_d2(n);
+		const double d3 = nsl_pcm_d3(n);
+		return (d2 + 3 * d3) / d4;
+	} else
+		return 0.;
 }
 
 //*************************************************************
@@ -47,17 +59,26 @@ double nsl_pcm_D6(unsigned int n) {
 //*************************************************************
 double nsl_pcm_A2(unsigned int n) {
 	const double d2 = nsl_pcm_d2(n);
-	return 3 / d2 / sqrt(n);
+	if (d2 != 0. && n != 0)
+		return 3 / d2 / sqrt(n);
+	else
+		return 0.;
 }
 
 double nsl_pcm_A3(unsigned int n) {
 	const double c4 = nsl_pcm_c4(n);
-	return 3. / c4 / sqrt(n);
+	if (c4 != 0. && n != 0)
+		return 3. / c4 / sqrt(n);
+	else
+		return 0.;
 }
 
 double nsl_pcm_A4(unsigned int n) {
 	const double d4 = nsl_pcm_d4(n);
-	return 3. / d4 / sqrt(n);
+	if (d4 != 0 && n != 0)
+		return 3. / d4 / sqrt(n);
+	else
+		return 0.;
 }
 
 //*************************************************************
@@ -65,12 +86,18 @@ double nsl_pcm_A4(unsigned int n) {
 //*************************************************************
 double nsl_pcm_B3(unsigned int n) {
 	const double c4 = nsl_pcm_c4(n);
-	return 1 - 3 / c4 * sqrt(1 - pow(c4, 2));
+	if (c4 != 0.)
+		return 1 - 3 / c4 * sqrt(1 - pow(c4, 2));
+	else
+		return 0.;
 }
 
 double nsl_pcm_B4(unsigned int n) {
 	const double c4 = nsl_pcm_c4(n);
-	return 1 + 3 / c4 * sqrt(1 - pow(c4, 2));
+	if (c4 != 0.)
+		return 1 + 3 / c4 * sqrt(1 - pow(c4, 2));
+	else
+		return 0.;
 }
 
 double nsl_pcm_B5(unsigned int n) {

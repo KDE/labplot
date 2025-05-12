@@ -169,6 +169,7 @@ void FormattingHeatmapDialog::selectColorMap() {
 		m_colors = dlg->colors(); // fetch the colors _after_ the preview pixmap was fetched to get the proper colors from the color manager
 		ui.lColorMapPreview->setFocus();
 	}
+	delete dlg;
 }
 
 void FormattingHeatmapDialog::checkValues() {

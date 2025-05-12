@@ -41,6 +41,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent, const QLocale& locale)
 	connect(ui.chkOmitGroupSeparator, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkOmitLeadingZeroInExponent, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkIncludeTrailingZeroesAfterDot, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
+	connect(ui.chkUseHyphen, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkAutoSave, &QCheckBox::toggled, this, &SettingsGeneralPage::autoSaveChanged);
 	connect(ui.chkSaveDockStates, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkSaveCalculations, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
@@ -102,6 +103,12 @@ QList<Settings::Type> SettingsGeneralPage::applySettings() {
 			changes << Settings::Type::General_Number_Format;
 	}
 
+	// minus/hyphen sign
+	if (ui.chkUseHyphen->isChecked() != group.readEntry(QLatin1String("UseHyphen"), false)) {
+		group.writeEntry(QLatin1String("UseHyphen"), ui.chkUseHyphen->isChecked());
+		changes << Settings::Type::General_Number_Format;
+	}
+
 	group.writeEntry(QLatin1String("GUMTerms"), ui.chkGUMTerms->isChecked());
 	group.writeEntry(QLatin1String("AutoSave"), ui.chkAutoSave->isChecked());
 	group.writeEntry(QLatin1String("AutoSaveInterval"), ui.sbAutoSaveInterval->value());
@@ -134,6 +141,7 @@ void SettingsGeneralPage::restoreDefaults() {
 	ui.chkOmitGroupSeparator->setChecked(true);
 	ui.chkOmitLeadingZeroInExponent->setChecked(true);
 	ui.chkIncludeTrailingZeroesAfterDot->setChecked(false);
+	ui.chkUseHyphen->setChecked(false);
 	ui.chkAutoSave->setChecked(false);
 	ui.sbAutoSaveInterval->setValue(5);
 	ui.chkSaveDockStates->setChecked(false);
@@ -185,6 +193,8 @@ void SettingsGeneralPage::loadSettings() {
 	if (numberOptions & QLocale::IncludeTrailingZeroesAfterDot)
 		ui.chkIncludeTrailingZeroesAfterDot->setChecked(true);
 
+	ui.chkUseHyphen->setChecked(group.readEntry<bool>(QLatin1String("UseHyphen"), false));
+
 	ui.chkAutoSave->setChecked(group.readEntry<bool>(QLatin1String("AutoSave"), false));
 	ui.sbAutoSaveInterval->setValue(group.readEntry(QLatin1String("AutoSaveInterval"), 0));
 	ui.chkSaveDockStates->setChecked(group.readEntry<bool>(QLatin1String("SaveDockStates"), false));
@@ -193,6 +203,8 @@ void SettingsGeneralPage::loadSettings() {
 	ui.chkInfoTrace->setChecked(group.readEntry<bool>(QLatin1String("InfoTrace"), false));
 	ui.chkDebugTrace->setChecked(group.readEntry<bool>(QLatin1String("DebugTrace"), false));
 	ui.chkPerfTrace->setChecked(group.readEntry<bool>(QLatin1String("PerfTrace"), false));
+
+	m_changed = false;
 }
 
 void SettingsGeneralPage::retranslateUi() {
@@ -241,6 +253,9 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbNumberFormat->addItem(QLatin1String("1 000,01"), static_cast<int>(QLocale::Language::Ukrainian));
 	ui.cbNumberFormat->addItem(QString::fromUtf8("1’000,01"), static_cast<int>(QLocale::Language::SwissGerman));
 	ui.cbNumberFormat->addItem(QString::fromUtf8("١٬٠٠٠٫٠١"), static_cast<int>(QLocale::Language::Arabic));
+
+	msg = i18n("Use the hyphen sign instead of the minus sign for negative numbers shown on the worksheet");
+	ui.chkUseHyphen->setToolTip(msg);
 
 	msg = i18n(
 		"Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\">Guide to the Expression of Uncertainty "

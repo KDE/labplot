@@ -69,6 +69,14 @@ private Q_SLOTS:
 	void prepareDrawingMenu();
 
 	void moveTreeModelInteraction();
+
+	// relative positioning
+	void mouseMoveRelative();
+	void mouseMoveRelativeWithBinding();
+	void positionRelative();
+	void positionRelativeWithBinding();
+	void positionRelativeDock();
+	void positionRelativeDockWithBinding();
 };
 
 #endif // WORKSHEETELEMENTTEST_H

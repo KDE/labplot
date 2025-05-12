@@ -32,8 +32,6 @@ SettingsDatasetsPage::SettingsDatasetsPage(QWidget* parent)
 	ui.lKaggleUrl->setTextInteractionFlags(Qt::TextBrowserInteraction);
 	ui.lKaggleUrl->setOpenExternalLinks(true);
 
-	loadSettings();
-
 	connect(ui.bClearCache, &QPushButton::clicked, this, &SettingsDatasetsPage::clearCache);
 	connect(ui.leKagglePath, &QLineEdit::textChanged, [&] {
 		m_changed = true;
@@ -42,6 +40,8 @@ SettingsDatasetsPage::SettingsDatasetsPage(QWidget* parent)
 		GuiTools::highlight(ui.leKagglePath, invalid);
 		Q_EMIT settingsChanged();
 	});
+
+	loadSettings();
 }
 
 QList<Settings::Type> SettingsDatasetsPage::applySettings() {
@@ -84,9 +84,8 @@ void SettingsDatasetsPage::loadSettings() {
 		}
 		ui.lFiles->setText(i18n("Files - %1", count));
 
-		if (count > 0) {
+		if (count > 0)
 			ui.bClearCache->setEnabled(true);
-		}
 
 		const auto numberLocale = QLocale();
 		QString sizeStr;

@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -19,6 +19,8 @@
 #include "backend/lib/PropertyChangeCommand.h"
 #include "backend/lib/SignallingUndoCommand.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/lib/UndoStack.h"
 
@@ -517,24 +519,18 @@ QString AbstractAspect::path() const {
 /**
  * \brief Add the given Aspect to my list of children.
  */
-void AbstractAspect::addChild(AbstractAspect* child, QUndoCommand* parent) {
+void AbstractAspect::addChild(AbstractAspect* child) {
 	Q_CHECK_PTR(child);
 
 	const QString new_name = uniqueNameFor(child->name());
-	bool execute = false;
-	if (!parent) {
-		execute = true;
-		parent = new QUndoCommand(i18n("%1: add %2", name(), new_name));
-	}
+	beginMacro(i18n("%1: add %2", name(), new_name));
 	if (new_name != child->name()) {
 		info(i18n(R"(Renaming "%1" to "%2" in order to avoid name collision.)", child->name(), new_name));
-		child->setName(new_name, NameHandling::AutoUnique, parent);
+		child->setName(new_name);
 	}
 
-	new AspectChildAddCmd(d, child, d->m_children.count(), parent);
-
-	if (execute)
-		exec(parent);
+	exec(new AspectChildAddCmd(d, child, d->m_children.count()));
+	endMacro();
 }
 
 /**
@@ -552,34 +548,25 @@ void AbstractAspect::addChildFast(AbstractAspect* child) {
 /**
  * \brief Insert the given Aspect at a specific position in my list of children.
  */
-void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* before, QUndoCommand* parent) {
-	insertChild(child, d->indexOfChild(before), parent);
+void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* before) {
+	insertChild(child, d->indexOfChild(before));
 }
 
-void AbstractAspect::insertChild(AbstractAspect* child, int index, QUndoCommand* parent) {
+void AbstractAspect::insertChild(AbstractAspect* child, int index) {
 	Q_CHECK_PTR(child);
-
 	if (index == -1)
 		index = d->m_children.count();
 
+	const auto* before = this->child<AbstractAspect>(index);
 	QString new_name = uniqueNameFor(child->name());
-	bool execute = false;
-	if (!parent) {
-		execute = true;
-		const auto* before = this->child<AbstractAspect>(index);
-		parent =
-			new QUndoCommand(before ? i18n("%1: insert %2 before %3", name(), new_name, before->name()) : i18n("%1: insert %2 before end", name(), new_name));
-	}
-
+	beginMacro(before ? i18n("%1: insert %2 before %3", name(), new_name, before->name()) : i18n("%1: insert %2 before end", name(), new_name));
 	if (new_name != child->name()) {
 		info(i18n(R"(Renaming "%1" to "%2" in order to avoid name collision.)", child->name(), new_name));
-		child->setName(new_name, NameHandling::AutoUnique, parent);
+		child->setName(new_name);
 	}
 
-	new AspectChildAddCmd(d, child, index, parent);
-
-	if (execute)
-		exec(parent);
+	exec(new AspectChildAddCmd(d, child, index));
+	endMacro();
 }
 
 /**
@@ -606,26 +593,14 @@ void AbstractAspect::insertChildBeforeFast(AbstractAspect* child, AbstractAspect
  * i.e., the aspect is deleted by the undo command.
  * \sa reparent()
  */
-void AbstractAspect::removeChild(AbstractAspect* child, QUndoCommand* parent) {
-	// QDEBUG(Q_FUNC_INFO << ", CHILD =" << child << ", PARENT =" << child->parentAspect())
-
-	bool execute = false;
-	if (!parent) {
-		execute = true;
-		parent = new QUndoCommand(i18n("%1: remove %2", name(), child->name()));
-	}
-
-	new AspectChildRemoveCmd(d, child, parent);
-
-	if (execute)
-		exec(parent);
+void AbstractAspect::removeChild(AbstractAspect* child) {
+	beginMacro(i18n("%1: remove %2", name(), child->name()));
+	exec(new AspectChildRemoveCmd(d, child));
+	endMacro();
 }
 
-void AbstractAspect::moveChild(AbstractAspect* child, int steps, QUndoCommand* parent) {
-	auto* command = new AspectChildMoveCmd(d, child, steps, parent);
-	if (!parent)
-		exec(command);
-	// otherwise handled by parent
+void AbstractAspect::moveChild(AbstractAspect* child, int steps) {
+	exec(new AspectChildMoveCmd(d, child, steps));
 }
 
 /**
@@ -702,13 +677,9 @@ const QVector<AbstractAspect*>& AbstractAspect::children() const {
 /**
  * \brief Remove me from my parent's list of children.
  */
-void AbstractAspect::remove(QUndoCommand* parent) {
-	if (parentAspect())
-		parentAspect()->removeChild(this, parent);
-}
-
 void AbstractAspect::remove() {
-	remove(nullptr);
+	if (parentAspect())
+		parentAspect()->removeChild(this);
 }
 
 void AbstractAspect::moveUp() {
@@ -743,8 +714,12 @@ QVector<AspectType> AbstractAspect::pasteTypes() const {
 	return {};
 }
 
+STD_SETTER_CMD_IMPL(AbstractAspect, SetPasted, bool, m_pasted)
 void AbstractAspect::setPasted(bool pasted) {
-	d->m_pasted = pasted;
+	// this property is part of the aspect state which is evaluated during the duplicate/paste steps,
+	// its modification needs to be put onto the undo stack.
+	if (pasted != d->m_pasted)
+		exec(new AbstractAspectSetPastedCmd(d, pasted, ki18n("%1: pasted")));
 }
 
 bool AbstractAspect::isPasted() const {
@@ -844,9 +819,11 @@ void AbstractAspect::paste(bool duplicate, int index) {
 			aspect->setName(i18n("Copy of '%1'", aspect->name()));
 		}
 
-		if (aspect->type() != AspectType::CartesianPlotLegend)
+		if (aspect->type() != AspectType::CartesianPlotLegend) {
+			setPasted(true);
 			insertChild(aspect, index);
-		else {
+			setPasted(false);
+		} else {
 			// special handling for the legend since only one single
 			// legend object is allowed per plot
 			auto* plot = static_cast<CartesianPlot*>(this);
@@ -855,7 +832,7 @@ void AbstractAspect::paste(bool duplicate, int index) {
 		}
 
 		project()->restorePointers(aspect);
-		aspect->setIsLoading(false);
+		aspect->setIsLoading(false); // set back to false before calling retransformElements()
 		project()->retransformElements(aspect);
 		aspect->setPasted(false);
 		endMacro();
@@ -864,7 +841,7 @@ void AbstractAspect::paste(bool duplicate, int index) {
 }
 
 /*!
- * helper function determening whether the current content of the clipboard
+ * helper function determining whether the current content of the clipboard
  * contants the labplot specific copy&paste XML content. In case a valid content
  * is available, the aspect type of the object to be pasted is returned.
  * AspectType::AbstractAspect is returned otherwise.
@@ -1226,6 +1203,10 @@ AbstractAspectPrivate::AbstractAspectPrivate(AbstractAspect* owner, const QStrin
 AbstractAspectPrivate::~AbstractAspectPrivate() {
 	for (auto* child : std::as_const(m_children))
 		delete child;
+}
+
+QString AbstractAspectPrivate::name() const {
+	return q->name();
 }
 
 /*!

@@ -17,3 +17,4 @@ CMakeLists.txt.user*
 LabplotRepo
 
 /src/api
+src/3rdparty/vector_blf/src/Vector/BLF/tests

@@ -17,7 +17,7 @@ class SpreadsheetGenerateDataTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
+	void initTestCase() override;
 
 	// generation of equidistant values
 

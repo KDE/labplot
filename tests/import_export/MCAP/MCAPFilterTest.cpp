@@ -147,7 +147,7 @@ void MCAPFilterTest::testImportWrongFile() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/empty_file.mcap"));
 	QCOMPARE(filter.getValidTopics(fileName).size(), 0);
-	QCOMPARE(filter.lastError(), i18n("Failed to read the file. Reason: file too small"));
+	QCOMPARE(filter.lastError(), i18n("Failed to read the file. Reason: %1", QLatin1String("file too small")));
 }
 
 QTEST_MAIN(MCAPFilterTest)

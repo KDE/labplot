@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : import file data dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2008-2015 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -25,6 +25,7 @@
 #include <QLabel>
 #include <QMenu>
 #include <QProgressBar>
+#include <QPushButton>
 #include <QStatusBar>
 #include <QToolButton>
 #include <QVBoxLayout>
@@ -194,6 +195,14 @@ void ImportDialog::showErrorMessage(const QString& message) {
 		m_messageWidget->setText(message);
 		m_messageWidget->animatedShow();
 		QDEBUG(message);
+	}
+
+	if (message.isEmpty()) {
+		okButton->setEnabled(true);
+		okButton->setToolTip(i18n("Close the dialog and import the data."));
+	} else {
+		okButton->setEnabled(false);
+		okButton->setToolTip(message);
 	}
 }
 

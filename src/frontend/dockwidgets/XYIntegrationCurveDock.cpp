@@ -312,14 +312,11 @@ void XYIntegrationCurveDock::absoluteChanged() {
 }
 
 void XYIntegrationCurveDock::recalculateClicked() {
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYIntegrationCurve*>(curve)->setIntegrationData(m_integrationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	Q_EMIT info(i18n("Integration status: %1", m_integrationCurve->integrationResult().status));
-	QApplication::restoreOverrideCursor();
 }
 
 /*!

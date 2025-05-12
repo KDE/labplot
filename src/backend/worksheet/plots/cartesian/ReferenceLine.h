@@ -48,7 +48,7 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(ReferenceLine)
-	void init(bool loading = false);
+	void init(bool loading);
 	void initActions();
 	void initMenus();
 

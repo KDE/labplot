@@ -283,7 +283,7 @@ QString detectWindowManagerX11()
 	}
 	if(sup_windows.length() == 0)
 	{
-		ADS_PRINT("Failed to get the supporting window on non EWMH comform WM.");
+		ADS_PRINT("Failed to get the supporting window on non EWMH conform WM.");
 		return QStringLiteral("UNKNOWN");
 	}
 	support_win = sup_windows[0];
@@ -417,7 +417,7 @@ void setButtonIcon(QAbstractButton* Button, QStyle::StandardPixmap StandarPixmap
 #else
 	// The standard icons does not look good on high DPI screens so we create
 	// our own "standard" icon here.
-	QPixmap normalPixmap = Button->style()->standardPixmap(StandarPixmap, 0, Button);
+	QPixmap normalPixmap = Button->style()->standardPixmap(StandarPixmap, nullptr, Button);
 	Icon.addPixmap(internal::createTransparentPixmap(normalPixmap, 0.25), QIcon::Disabled);
 	Icon.addPixmap(normalPixmap, QIcon::Normal);
 	Button->setIcon(Icon);

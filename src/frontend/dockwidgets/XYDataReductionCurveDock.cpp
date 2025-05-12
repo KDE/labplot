@@ -4,20 +4,16 @@
 	Description      : widget for editing properties of data reduction curves
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "XYDataReductionCurveDock.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
-#include <QMenu>
 #include <QProgressBar>
 #include <QStatusBar>
-#include <QWidgetAction>
 
 /*!
   \class XYDataReductionCurveDock
@@ -61,8 +57,8 @@ void XYDataReductionCurveDock::setupGeneral() {
 	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 3);
 
 	for (int i = 0; i < NSL_GEOM_LINESIM_TYPE_COUNT; ++i)
-		uiGeneralTab.cbType->addItem(i18n(nsl_geom_linesim_type_name[i]));
-	uiGeneralTab.cbType->setItemData(nsl_geom_linesim_type_visvalingam_whyatt, i18n("This method is much slower than any other"), Qt::ToolTipRole);
+		uiGeneralTab.cbMethod->addItem(i18n(nsl_geom_linesim_type_name[i]));
+	uiGeneralTab.cbMethod->setItemData(nsl_geom_linesim_type_visvalingam_whyatt, i18n("This method is much slower than any other"), Qt::ToolTipRole);
 
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
@@ -75,6 +71,7 @@ void XYDataReductionCurveDock::setupGeneral() {
 
 	// Slots
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYDataReductionCurveDock::dataSourceTypeChanged);
+	connect(uiGeneralTab.cbMethod, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYDataReductionCurveDock::methodChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYDataReductionCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYDataReductionCurveDock::xRangeMinChanged);
 	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYDataReductionCurveDock::xRangeMaxChanged);
@@ -129,8 +126,8 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
-	uiGeneralTab.cbType->setCurrentIndex(m_dataReductionData.type);
-	this->typeChanged(m_dataReductionData.type);
+	uiGeneralTab.cbMethod->setCurrentIndex(m_dataReductionData.type);
+	this->methodChanged(m_dataReductionData.type);
 	uiGeneralTab.chkAuto->setChecked(m_dataReductionData.autoTolerance);
 	this->autoToleranceChanged();
 	uiGeneralTab.sbTolerance->setValue(m_dataReductionData.tolerance);
@@ -254,17 +251,17 @@ void XYDataReductionCurveDock::updateTolerance() {
 	XYAnalysisCurve::copyData(xdataVector, ydataVector, xDataColumn, yDataColumn, xmin, xmax);
 
 	if (xdataVector.size() > 1)
-		uiGeneralTab.cbType->setEnabled(true);
+		uiGeneralTab.cbMethod->setEnabled(true);
 	else {
-		uiGeneralTab.cbType->setEnabled(false);
+		uiGeneralTab.cbMethod->setEnabled(false);
 		return;
 	}
-	DEBUG("automatic tolerance:");
+	DEBUG(Q_FUNC_INFO << ", set automatic tolerance:");
 	DEBUG("clip_diag_perpoint =" << nsl_geom_linesim_clip_diag_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size()));
 	DEBUG("clip_area_perpoint =" << nsl_geom_linesim_clip_area_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size()));
 	DEBUG("avg_dist_perpoint =" << nsl_geom_linesim_avg_dist_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size()));
 
-	const auto type = (nsl_geom_linesim_type)uiGeneralTab.cbType->currentIndex();
+	const auto type = (nsl_geom_linesim_type)uiGeneralTab.cbMethod->currentIndex();
 	if (type == nsl_geom_linesim_type_raddist || type == nsl_geom_linesim_type_opheim)
 		m_dataReductionData.tolerance = 10. * nsl_geom_linesim_clip_diag_perpoint(xdataVector.data(), ydataVector.data(), (size_t)xdataVector.size());
 	else if (type == nsl_geom_linesim_type_visvalingam_whyatt)
@@ -275,10 +272,14 @@ void XYDataReductionCurveDock::updateTolerance() {
 		m_dataReductionData.tolerance = 2. * nsl_geom_linesim_avg_dist_perpoint(xdataVector.data(), ydataVector.data(), xdataVector.size());
 	// m_dataReductionData.tolerance = nsl_geom_linesim_clip_diag_perpoint(xdataVector.data(), ydataVector.data(), xdataVector.size());
 	uiGeneralTab.sbTolerance->setValue(m_dataReductionData.tolerance);
+	DEBUG(Q_FUNC_INFO << ", tolerance value = " << m_dataReductionData.tolerance)
+	// update data of curves
+	for (auto* curve : m_curvesList)
+		static_cast<XYDataReductionCurve*>(curve)->setDataReductionData(m_dataReductionData);
 }
 
 void XYDataReductionCurveDock::updateTolerance2() {
-	const auto type = (nsl_geom_linesim_type)uiGeneralTab.cbType->currentIndex();
+	const auto type = (nsl_geom_linesim_type)uiGeneralTab.cbMethod->currentIndex();
 
 	if (type == nsl_geom_linesim_type_perpdist)
 		uiGeneralTab.sbTolerance2->setValue(10);
@@ -345,7 +346,7 @@ void XYDataReductionCurveDock::xRangeMaxDateTimeChanged(qint64 value) {
 	enableRecalculate();
 }
 
-void XYDataReductionCurveDock::typeChanged(int index) {
+void XYDataReductionCurveDock::methodChanged(int index) {
 	const auto type = (nsl_geom_linesim_type)index;
 	m_dataReductionData.type = type;
 
@@ -492,12 +493,10 @@ void XYDataReductionCurveDock::recalculateClicked() {
 	connect(m_curve, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYDataReductionCurve*>(curve)->setDataReductionData(m_dataReductionData);
 
-	QApplication::restoreOverrideCursor();
 	statusBar->removeWidget(progressBar);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
@@ -530,7 +529,7 @@ QString XYDataReductionCurveDock::customText() const {
 void XYDataReductionCurveDock::curveDataReductionDataChanged(const XYDataReductionCurve::DataReductionData& dataReductionData) {
 	CONDITIONAL_LOCK_RETURN;
 	m_dataReductionData = dataReductionData;
-	// uiGeneralTab.cbType->setCurrentIndex(m_dataReductionData.type);
+	// uiGeneralTab.cbMethod->setCurrentIndex(m_dataReductionData.type);
 	// this->typeChanged();
 
 	this->showDataReductionResult();

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Horizontal header for SpreadsheetView displaying comments in a second header
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -12,25 +12,12 @@
 #define SPREADSHEETHEADERVIEW_H
 
 #include "SpreadsheetSparkLineHeaderModel.h"
-
 #include <QHeaderView>
 
 class SpreadsheetCommentsHeaderView : public QHeaderView {
 	Q_OBJECT
 
 public:
-	/*!
-	 \class SpreadsheetCommentsHeaderView
-	 \brief Slave header for SpreadsheetDoubleHeaderView
-		 This class is only to be used by SpreadsheetDoubleHeaderView.
-	 It allows for displaying two horizontal headers in a SpreadsheetView.
-	 A SpreadsheetCommentsHeaderView displays the column comments
-	 in a second header below the normal header. It is completely
-	 controlled by a SpreadsheetDoubleHeaderView object and thus has
-	 a master-slave relationship to it. This would be an inner class
-	 of SpreadsheetDoubleHeaderView if Qt allowed this.
-		 \ingroup frontend
-	*/
 	explicit SpreadsheetCommentsHeaderView(QWidget* parent = nullptr);
 	~SpreadsheetCommentsHeaderView() override;
 
@@ -57,7 +44,7 @@ class SpreadsheetHeaderView : public QHeaderView {
 
 public:
 	SpreadsheetCommentsHeaderView* m_commentSlave;
-	SpreadsheetSparkLineHeaderView* m_sparkLineSlave;
+	SpreadsheetSparkLineHeaderView* m_sparklineSlave;
 	explicit SpreadsheetHeaderView(QWidget* parent = nullptr);
 	~SpreadsheetHeaderView() override;
 
@@ -67,10 +54,7 @@ public:
 	void addSlaveHeader(QHeaderView* slaveHeader);
 
 	void showComments(bool on = true);
-	bool areCommentsShown() const;
-
-	void showSparkLines(bool on = true);
-	bool areSparkLinesShown() const;
+	void showSparklines(bool on = true);
 
 Q_SIGNALS:
 	void sparklineToggled();
@@ -80,8 +64,8 @@ public Q_SLOTS:
 
 private:
 	bool m_showComments{false};
-	bool m_showSparkLines{false};
-	bool m_sparklineCalled{0};
+	bool m_showSparklines{false};
+	bool m_sparklineCalled{false};
 
 private Q_SLOTS:
 	void headerDataChanged(Qt::Orientation, int logicalFirst, int logicalLast);

@@ -4,6 +4,7 @@
 	Description          : Tests for formula in spreadsheets
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -532,6 +533,29 @@ void SpreadsheetFormulaTest::formulaUpdateAfterPaste() {
 		QCOMPARE(col1->valueAt(i), i + 1);
 		QCOMPARE(col2->valueAt(i), i + 1);
 	}
+}
+
+void SpreadsheetFormulaTest::formulaUpdateAfterRowRemoval() {
+	INIT_SPREADSHEET2
+
+	sheet.column(2)->setFormula(QLatin1String("x + y"), variableNames, variableColumns, true);
+	sheet.column(2)->updateFormula();
+
+	// check the initial values
+	for (int i = 0; i < sheet.rowCount(); i++) {
+		QCOMPARE(sheet.column(0)->valueAt(i), i + 1);
+		QCOMPARE(sheet.column(1)->valueAt(i), 1);
+		QCOMPARE(sheet.column(2)->valueAt(i), i + 2);
+	}
+
+	// select the rows from 10 to 15 and delete them
+	view.setCellsSelected(9, 0, 14, 2, true);
+	view.removeSelectedRows();
+
+	// re-check the values in the calculated column
+	QCOMPARE(sheet.rowCount(), 94);
+	for (int i = 0; i < sheet.rowCount(); i++)
+		QCOMPARE(sheet.column(2)->valueAt(i), sheet.column(0)->valueAt(i) + 1);
 }
 
 QTEST_MAIN(SpreadsheetFormulaTest)

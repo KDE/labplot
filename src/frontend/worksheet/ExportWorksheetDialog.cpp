@@ -3,15 +3,14 @@
 	Project              : LabPlot
 	Description          : export worksheet dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ExportWorksheetDialog.h"
 #include "backend/core/Settings.h"
 #include "frontend/GuiTools.h"
-#include "frontend/worksheet/WorksheetView.h"
 #include "ui_exportworksheetwidget.h"
 
 #include <KLocalizedString>
@@ -82,9 +81,19 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 	ui->cbExportTo->addItem(i18n("File"));
 	ui->cbExportTo->addItem(i18n("Clipboard"));
 
-	ui->cbExportArea->addItem(i18n("Object's Bounding Box"), static_cast<int>(Worksheet::ExportArea::BoundingBox));
-	ui->cbExportArea->addItem(i18n("Current Selection"), static_cast<int>(Worksheet::ExportArea::Selection));
-	ui->cbExportArea->addItem(i18n("Complete Worksheet"), static_cast<int>(Worksheet::ExportArea::Worksheet));
+	ui->cbExportArea->addItem(i18n("Bounding Box"), static_cast<int>(Worksheet::ExportArea::BoundingBox));
+	ui->cbExportArea->addItem(i18n("Selection"), static_cast<int>(Worksheet::ExportArea::Selection));
+	ui->cbExportArea->addItem(i18n("Worksheet"), static_cast<int>(Worksheet::ExportArea::Worksheet));
+
+	QString info = i18n(
+		"Specifies the area to export:"
+		"<ul>"
+		"<li>Bounding Box - the bounding box of all objects on the worksheet is exported</li>"
+		"<li>Selection - the area of the currently selected objects is exported</li>"
+		"<li>Worksheet - the complete worksheet area is exported</li>"
+		"</ul>"
+	);
+	ui->cbExportArea->setToolTip(info);
 
 	ui->cbResolution->addItem(
 		i18nc("%1 is the value of DPI of the current screen", "%1 (desktop)", QString::number(GuiTools::dpi(this).first)));
@@ -109,7 +118,7 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 	KConfigGroup conf = Settings::group(QStringLiteral("ExportWorksheetDialog"));
 	ui->cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
 	ui->cbExportTo->setCurrentIndex(conf.readEntry("ExportTo", 0));
-	ui->cbExportArea->setCurrentIndex(conf.readEntry("Area", 0));
+	ui->cbExportArea->setCurrentIndex(conf.readEntry("Area", 1));
 	ui->chkExportBackground->setChecked(conf.readEntry("Background", true));
 	ui->cbResolution->setCurrentIndex(conf.readEntry("Resolution", 0));
 	m_showOptions = conf.readEntry("ShowOptions", true);
@@ -171,13 +180,7 @@ QString ExportWorksheetDialog::path() const {
 }
 
 Worksheet::ExportFormat ExportWorksheetDialog::exportFormat() const {
-	int index = ui->cbFormat->currentIndex();
-
-	// we have a separator in the format combobox at the 3th position -> skip it
-	if (index > 2)
-		index--;
-
-	return Worksheet::ExportFormat(index);
+	return static_cast<Worksheet::ExportFormat>(ui->cbFormat->currentData().toInt());
 }
 
 Worksheet::ExportArea ExportWorksheetDialog::exportArea() const {
@@ -202,28 +205,79 @@ void ExportWorksheetDialog::slotButtonClicked(QAbstractButton* button) {
 		reject();
 }
 
-// SLOTS
-void ExportWorksheetDialog::okClicked() {
-	if (ui->cbExportTo->currentIndex() == 0 /*export to file*/
-		&& m_askOverwrite && QFile::exists(ui->leFileName->text())) {
-		int status = KMessageBox::questionTwoActions(this,
-													 i18n("The file already exists. Do you really want to overwrite it?"),
-													 i18n("Export"),
-													 KStandardGuiItem::overwrite(),
-													 KStandardGuiItem::cancel());
-		if (status == KMessageBox::SecondaryAction)
-			return;
+//////////////////////
+QString ExportWorksheetDialog::formatExtension(Worksheet::ExportFormat format) {
+	switch (format) {
+	case Worksheet::ExportFormat::PDF:
+		return QStringLiteral(".pdf");
+	case Worksheet::ExportFormat::SVG:
+		return QStringLiteral(".svg");
+	case Worksheet::ExportFormat::PNG:
+		return QStringLiteral(".png");
+	case Worksheet::ExportFormat::JPG:
+		return QStringLiteral(".jpg");
+	case Worksheet::ExportFormat::BMP:
+		return QStringLiteral(".bmp");
+	case Worksheet::ExportFormat::PPM:
+		return QStringLiteral(".ppm");
+	case Worksheet::ExportFormat::XBM:
+		return QStringLiteral(".xbm");
+	case Worksheet::ExportFormat::XPM:
+		return QStringLiteral(".xpm");
 	}
 
-	KConfigGroup conf = Settings::group(QStringLiteral("ExportWorksheetDialog"));
-	const auto& path = ui->leFileName->text();
-	if (!path.isEmpty()) {
-		QString dir = conf.readEntry("LastDir", "");
-		int pos = path.lastIndexOf(QLatin1String("/"));
-		if (pos != -1) {
-			QString newDir = path.left(pos);
-			if (newDir != dir)
-				conf.writeEntry("LastDir", newDir);
+	return {};
+}
+
+QString ExportWorksheetDialog::formatCaption(Worksheet::ExportFormat format) {
+	switch (format) {
+	case Worksheet::ExportFormat::PDF:
+		return i18n("Portable Data Format (*.pdf *.PDF)");
+	case Worksheet::ExportFormat::SVG:
+		return i18n("Scalable Vector Graphics (*.svg *.SVG)");
+	case Worksheet::ExportFormat::PNG:
+		return i18n("Portable Network Graphics (*.png *.PNG)");
+	case Worksheet::ExportFormat::JPG:
+		return i18n("Joint Photographic Experts Group (*.jpg *.jpeg *.JPG *.JPEG)");
+	case Worksheet::ExportFormat::BMP:
+		return i18n("Windows Bitmap (*.bmp *.BMP)");
+	case Worksheet::ExportFormat::PPM:
+		return i18n("Portable Pixmap (*.ppm *.PPM)");
+	case Worksheet::ExportFormat::XBM:
+		return i18n("X11 Bitmap (*.xbm *.XBM)");
+	case Worksheet::ExportFormat::XPM:
+		return i18n("X11 Bitmap (*.xpm *.XPM)");
+	}
+
+	return {};
+}
+
+// SLOTS
+void ExportWorksheetDialog::okClicked() {
+	const bool exportToFile = (ui->cbExportTo->currentIndex() == 0);
+
+	if (exportToFile) {
+		QString filename = ui->leFileName->text();
+
+		if (m_askOverwrite && QFile::exists(filename)) {
+			int status = KMessageBox::questionTwoActions(this,
+						 i18n("The file already exists. Do you really want to overwrite it?"),
+						 i18n("Export"),
+						 KStandardGuiItem::overwrite(),
+						 KStandardGuiItem::cancel());
+			if (status == KMessageBox::SecondaryAction)
+				return;
+		}
+
+		if (!filename.isEmpty()) {
+			auto conf = Settings::group(QStringLiteral("ExportWorksheetDialog"));
+			QString dir = conf.readEntry("LastDir", "");
+			int pos = filename.lastIndexOf(QLatin1String("/"));
+			if (pos != -1) {
+				QString newDir = filename.left(pos);
+				if (newDir != dir)
+					conf.writeEntry("LastDir", newDir);
+			}
 		}
 	}
 
@@ -247,43 +301,14 @@ void ExportWorksheetDialog::toggleOptions() {
 	opens a file dialog and lets the user select the file.
 */
 void ExportWorksheetDialog::selectFile() {
-	KConfigGroup conf = Settings::group(QStringLiteral("ExportWorksheetDialog"));
+	auto conf = Settings::group(QStringLiteral("ExportWorksheetDialog"));
 	const QString dir = conf.readEntry("LastDir", "");
 
 	const auto format = Worksheet::ExportFormat(ui->cbFormat->currentData().toInt());
-	QString caption;
-	switch (format) {
-	case Worksheet::ExportFormat::PDF:
-		caption = i18n("Portable Data Format (*.pdf *.PDF)");
-		break;
-	case Worksheet::ExportFormat::SVG:
-		caption = i18n("Scalable Vector Graphics (*.svg *.SVG)");
-		break;
-	case Worksheet::ExportFormat::PNG:
-		caption = i18n("Portable Network Graphics (*.png *.PNG)");
-		break;
-	case Worksheet::ExportFormat::JPG:
-		caption = i18n("Joint Photographic Experts Group (*.jpg *.jpeg *.JPG *.JPEG)");
-		break;
-	case Worksheet::ExportFormat::BMP:
-		caption = i18n("Windows Bitmap (*.bmp *.BMP)");
-		break;
-	case Worksheet::ExportFormat::PPM:
-		caption = i18n("Portable Pixmap (*.ppm *.PPM)");
-		break;
-	case Worksheet::ExportFormat::XBM:
-		caption = i18n("X11 Bitmap (*.xbm *.XBM)");
-		break;
-	case Worksheet::ExportFormat::XPM:
-		caption = i18n("X11 Bitmap (*.xpm *.XPM)");
-		break;
-	}
-
-	const QString path = QFileDialog::getSaveFileName(this, i18nc("@title:window", "Export to File"), dir, caption);
+	QString path = QFileDialog::getSaveFileName(this, i18nc("@title:window", "Export to File"), dir, formatCaption(format));
 	if (!path.isEmpty()) {
-		// if the file is already existing, the user was already asked
+		// if the file already exists, the user was already asked
 		// in QFileDialog whether to overwrite or not.
-		// Don't ask again when the user click on Ok-button.
 		m_askOverwrite = false;
 
 		m_initializing = true;
@@ -311,37 +336,9 @@ void ExportWorksheetDialog::formatChanged(int) {
 	ui->cbResolution->setVisible(visible);
 
 	// add/replace the file extension for the current file format
-	QString extension;
-	switch (format) {
-	case Worksheet::ExportFormat::PDF:
-		extension = QStringLiteral(".pdf");
-		break;
-	case Worksheet::ExportFormat::SVG:
-		extension = QStringLiteral(".svg");
-		break;
-	case Worksheet::ExportFormat::PNG:
-		extension = QStringLiteral(".png");
-		break;
-	case Worksheet::ExportFormat::JPG:
-		extension = QStringLiteral(".jpg");
-		break;
-	case Worksheet::ExportFormat::BMP:
-		extension = QStringLiteral(".bmp");
-		break;
-	case Worksheet::ExportFormat::PPM:
-		extension = QStringLiteral(".ppm");
-		break;
-	case Worksheet::ExportFormat::XBM:
-		extension = QStringLiteral(".xbm");
-		break;
-	case Worksheet::ExportFormat::XPM:
-		extension = QStringLiteral(".xpm");
-		break;
-	}
-
 	const auto& path = ui->leFileName->text();
 	if (!path.isEmpty())
-		ui->leFileName->setText(GuiTools::replaceExtension(path, extension));
+		ui->leFileName->setText(GuiTools::replaceExtension(path, formatExtension(format)));
 }
 
 /*!
@@ -369,10 +366,10 @@ void ExportWorksheetDialog::fileNameChanged(const QString& name) {
 		m_okButton->setEnabled(false);
 		return;
 	}
-	QString path = ui->leFileName->text();
-	int pos = path.lastIndexOf(QLatin1String("/"));
+	QString filename = ui->leFileName->text();
+	int pos = filename.lastIndexOf(QLatin1String("/"));
 	if (pos != -1) {
-		QString dir = path.left(pos);
+		QString dir = filename.left(pos);
 		bool invalid = !QDir(dir).exists();
 		GuiTools::highlight(ui->leFileName, invalid);
 		if (invalid) {
@@ -380,6 +377,23 @@ void ExportWorksheetDialog::fileNameChanged(const QString& name) {
 			return;
 		}
 	}
+
+	// append file extension if not present
+	bool changed = false;
+	const auto format = Worksheet::ExportFormat(ui->cbFormat->currentData().toInt());
+	if (format == Worksheet::ExportFormat::JPG) { // can be .jpg (default) or .jpeg
+		if (! (filename.endsWith(formatExtension(format), Qt::CaseInsensitive) || filename.endsWith(QStringLiteral(".jpeg"), Qt::CaseInsensitive))) {
+			filename.append(formatExtension(format));
+			changed = true;
+		}
+	} else { // all other formats have a single ending
+		if (! filename.endsWith(formatExtension(format), Qt::CaseInsensitive)) {
+			filename.append(formatExtension(format));
+			changed = true;
+		}
+	}
+	if (changed)
+		ui->leFileName->setText(filename);
 
 	m_askOverwrite = true;
 	m_okButton->setEnabled(true);

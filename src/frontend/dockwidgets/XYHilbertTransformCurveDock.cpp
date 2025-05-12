@@ -176,13 +176,11 @@ void XYHilbertTransformCurveDock::typeChanged() {
 }
 
 void XYHilbertTransformCurveDock::recalculateClicked() {
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	for (auto* curve : m_curvesList)
 		static_cast<XYHilbertTransformCurve*>(curve)->setTransformData(m_transformData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	Q_EMIT info(i18n("Hilbert transformation status: %1", m_transformCurve->result().status));
-	QApplication::restoreOverrideCursor();
 }
 
 /*!

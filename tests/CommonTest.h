@@ -146,7 +146,7 @@ class CommonTest : public QObject {
 	Q_OBJECT
 
 protected Q_SLOTS:
-	void initTestCase();
+	virtual void initTestCase();
 
 protected:
 	// compare floats with given delta
@@ -160,5 +160,7 @@ protected:
 		}
 	}
 	static void listStack(UndoStack* stack);
+
+	void wait(int milliseconds);
 };
 #endif

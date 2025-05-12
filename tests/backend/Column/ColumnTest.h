@@ -62,7 +62,12 @@ private Q_SLOTS:
 	void loadDateTimeFromProject();
 	void saveLoadDateTime();
 
-	void testIndexForValue();
+	void testIndexForValueStrictlyMonotonouslyRising();
+	void testIndexForValueMonotonouslyRising();
+	void indexForValueDatetimeStrictlyMonotonouslyRising();
+	void indexForValueDatetimeMonotonouslyRising();
+	void testIndexForValuePoints();
+	void testIndexForValueLines();
 	void testIndexForValueDoubleVector();
 
 	void testInsertRow();

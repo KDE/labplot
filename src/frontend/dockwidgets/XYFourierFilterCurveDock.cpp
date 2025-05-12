@@ -434,13 +434,11 @@ void XYFourierFilterCurveDock::recalculateClicked() {
 		return;
 	}
 
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	for (auto* curve : m_curvesList)
 		static_cast<XYFourierFilterCurve*>(curve)->setFilterData(m_filterData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	Q_EMIT info(i18n("Fourier-Filter status: %1", m_filterCurve->filterResult().status));
-	QApplication::restoreOverrideCursor();
 }
 
 /*!

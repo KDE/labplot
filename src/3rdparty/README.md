@@ -49,10 +49,11 @@ QStringTokenizer is a universal, safe, zero-allocation string splitter and is pa
 
 ReadStat is a command-line tool and MIT-licensed C library for reading files from popular stats packages ([link](https://github.com/WizardMac/ReadStat))
 
-## Vector BLF (not included)
+## Vector BLF
 
 A library to access Binary Log File (BLF) files from Vector Informatik ([link](https://github.com/Murmele/vector_blf)).
 Depends on fast_float ([link](https://github.com/fastfloat/fast_float.git)) and C++ DBC Parser ([link](https://github.com/Murmele/dbc_parser_cpp))
+Included Vector BLF commit SHA 5fe16eb200a476a38fbe3f1d4281432ea5e6b976
 
 ## preview.sty
 

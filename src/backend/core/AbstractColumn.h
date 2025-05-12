@@ -4,7 +4,7 @@
 	Description          : Interface definition for data with column logic
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -148,16 +148,16 @@ public:
 	virtual int rowCount() const = 0;
 	virtual int rowCount(double min, double max) const = 0;
 	virtual int availableRowCount(int max = -1) const = 0;
-	void insertRows(int before, int count, QUndoCommand* parent = nullptr);
-	void removeRows(int first, int count, QUndoCommand* parent = nullptr);
-	virtual void clear(QUndoCommand*);
+	void insertRows(int before, int count);
+	void removeRows(int first, int count);
+	virtual void clear();
 
 	virtual double maximum(int count = 0) const;
 	virtual double maximum(int startIndex, int endIndex) const;
 	virtual double minimum(int count = 0) const;
 	virtual double minimum(int startIndex, int endIndex) const;
 	virtual bool indicesMinMax(double v1, double v2, int& start, int& end) const;
-	virtual int indexForValue(double x) const;
+	virtual int indexForValue(double x, bool smaller) const;
 
 	bool isValid(int row) const;
 
@@ -268,8 +268,8 @@ protected:
 	bool XmlReadMask(XmlStreamReader*);
 	void XmlWriteMask(QXmlStreamWriter*) const;
 
-	virtual void handleRowInsertion(int before, int count, QUndoCommand* parent);
-	virtual void handleRowRemoval(int first, int count, QUndoCommand* parent);
+	virtual void handleRowInsertion(int before, int count);
+	virtual void handleRowRemoval(int first, int count);
 
 private:
 	AbstractColumnPrivate* d;

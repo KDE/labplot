@@ -209,7 +209,7 @@ public Q_SLOTS:
 	virtual void retransform() override;
 
 private:
-	void init(bool loading = false);
+	void init(bool loading);
 	void initActions();
 	void initMenus();
 	void setColorPalette(const KConfig&);

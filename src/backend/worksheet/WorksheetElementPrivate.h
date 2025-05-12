@@ -3,7 +3,8 @@
 	Project              : LabPlot
 	Description          : Private member of WorksheetElement
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2012-2021 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2021-2023 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -29,7 +30,7 @@ public:
 	WorksheetElement::HorizontalAlignment horizontalAlignment{WorksheetElement::HorizontalAlignment::Center};
 	WorksheetElement::VerticalAlignment verticalAlignment{WorksheetElement::VerticalAlignment::Center};
 	bool positionInvalid{false};
-	bool coordinateBindingEnabled{false};
+	bool coordinateBindingEnabled{false}; // bind position to scene coordinates
 	QPointF positionLogical;
 	bool suppressItemChangeEvent{false};
 	bool suppressRetransform{false};
@@ -59,10 +60,15 @@ public:
 	void setHover(bool);
 	bool isHovered() const;
 
+	static QString numberToString(int, const QLocale&);
+	static QString numberToString(double value, const QLocale& locale, char format, int precision);
+
 private:
 	virtual void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+
+	static void handleNegativeNumber(QString&);
 
 protected:
 	bool m_hovered{false};

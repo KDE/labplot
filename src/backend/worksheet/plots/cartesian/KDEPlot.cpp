@@ -103,8 +103,12 @@ void KDEPlot::init() {
 	// so we have the same name shown on the undo stack
 	connect(this, &AbstractAspect::aspectDescriptionChanged, [this] {
 		Q_D(KDEPlot);
+		d->estimationCurve->setUndoAware(false);
+		d->rugCurve->setUndoAware(false);
 		d->estimationCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 		d->rugCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
+		d->estimationCurve->setUndoAware(true);
+		d->rugCurve->setUndoAware(true);
 	});
 
 	// propage the visual changes to the parent

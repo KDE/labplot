@@ -1,0 +1,297 @@
+<typesystem package="pylabplot">
+    <load-typesystem name="typesystem_widgets.xml" generate="no"/>
+
+    <!-- Global -->
+    <enum-type name="AspectType"/>
+
+    <!-- Abstract Classes -->
+    <object-type name="AbstractAspect" force-abstract="yes" disable-wrapper="yes" polymorphic-base="yes">
+        <enum-type name="ChildIndexFlag" flags="yes"/>
+        <enum-type name="NameHandling"/>
+    </object-type>
+    <object-type name="AbstractColumn" force-abstract="yes" disable-wrapper="yes" polymorphic-id-expression="%1-&gt;m_type == AspectType::AbstractColumn">
+        <enum-type name="PlotDesignation"/>
+        <enum-type name="TimeUnit"/>
+        <enum-type name="ColumnMode"/>
+        <enum-type name="Properties"/>
+        <enum-type name="Formatting"/>
+    </object-type>
+    <object-type name="AbstractCoordinateSystem" force-abstract="yes" disable-wrapper="yes">
+        <enum-type name="MappingFlag" flags="yes"/>
+    </object-type>
+    <object-type name="AbstractDataSource" force-abstract="yes" disable-wrapper="yes" polymorphic-id-expression="%1-&gt;m_type == AspectType::AbstractDataSource"/>
+    <object-type name="AbstractFileFilter" force-abstract="yes" disable-wrapper="yes">
+        <enum-type name="FileType"/>
+        <enum-type name="ImportMode"/>
+    </object-type>
+    <object-type name="AbstractPart" force-abstract="yes" disable-wrapper="yes" polymorphic-id-expression="%1-&gt;m_type == AspectType::AbstractPart"/>
+    <object-type name="AbstractPlot" force-abstract="yes" disable-wrapper="yes" polymorphic-id-expression="%1-&gt;m_type == AspectType::AbstractPlot"/>
+    <object-type name="Plot" force-abstract="yes" disable-wrapper="yes">
+        <enum-type name="PlotType"/>
+    </object-type>
+    <object-type name="WorksheetElement" force-abstract="yes" disable-wrapper="yes" polymorphic-id-expression="%1-&gt;m_type == AspectType::WorksheetElement">
+        <enum-type name="Orientation"/>
+        <enum-type name="HorizontalPosition"/>
+        <enum-type name="VerticalPosition"/>
+        <enum-type name="HorizontalAlignment"/>
+        <enum-type name="VerticalAlignment"/>
+        <enum-type name="PositionLimit"/>
+        <value-type name="PositionWrapper"/>
+    </object-type>
+    <object-type name="WorksheetElementContainer" force-abstract="yes" disable-wrapper="yes" polymorphic-id-expression="%1-&gt;m_type == AspectType::WorksheetElementContainer"/>
+    <object-type name="XYAnalysisCurve" force-abstract="yes" disable-wrapper="yes" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYAnalysisCurve">
+        <enum-type name="DataSourceType"/>
+        <enum-type name="AnalysisAction"/>
+        <value-type name="Result"/>
+    </object-type>
+
+    <!-- Aspect Containers -->
+    <object-type name="Folder" polymorphic-id-expression="%1-&gt;m_type == AspectType::Folder"/>
+    <object-type name="Project" polymorphic-id-expression="%1-&gt;m_type == AspectType::Project">
+        <enum-type name="DockVisibility"/>
+    </object-type>
+
+    <!-- Column -->
+    <object-type name="Column" polymorphic-id-expression="%1-&gt;m_type == AspectType::Column"/>
+
+    <!-- Data Containers -->
+    <object-type name="Spreadsheet" polymorphic-id-expression="%1-&gt;m_type == AspectType::Spreadsheet"/>
+    <object-type name="Matrix" polymorphic-id-expression="%1-&gt;m_type == AspectType::Matrix">
+        <enum-type name="HeaderFormat"/>
+    </object-type>
+
+    <!-- Filters -->
+    <object-type name="AsciiFilter">
+        <value-type name="Properties"/>
+        <enum-type name="Status"/>
+    </object-type>
+    <object-type name="BinaryFilter">
+        <enum-type name="DataType"/>
+    </object-type>
+    <object-type name="CANFilter">
+        <enum-type name="TimeHandling"/>
+    </object-type>
+    <object-type name="FITSFilter"/>
+    <object-type name="HDF5Filter"/>
+    <object-type name="ImageFilter">
+        <enum-type name="ImportFormat"/>
+    </object-type>
+    <object-type name="JsonFilter">
+        <enum-type name="DataContainerType"/>
+    </object-type>
+    <object-type name="MatioFilter"/>
+    <object-type name="McapFilter">
+        <enum-type name="DataContainerType"/>
+    </object-type>
+    <object-type name="NetCDFFilter"/>
+    <object-type name="OdsFilter"/>
+    <object-type name="ReadStatFilter"/>
+    <object-type name="ROOTFilter"/>
+    <object-type name="SpiceFilter"/>
+    <object-type name="VectorBLFFilter"/>
+    <object-type name="XLSXFilter"/>
+
+    <!-- Helper Classes -->
+    <object-type name="Background">
+        <enum-type name="Position"/>
+        <enum-type name="Type"/>
+        <enum-type name="ColorStyle"/>
+        <enum-type name="ImageStyle"/>
+    </object-type>
+    <object-type name="CartesianCoordinateSystem">
+        <enum-type name="Dimension"/>
+    </object-type>
+    <rejection class="CartesianCoordinateSystem" function-name="mapLogicalToScene"/>
+    <object-type name="CartesianScale"/>
+    <object-type name="ColumnStringIO" polymorphic-id-expression="%1-&gt;m_type == AspectType::ColumnStringIO"/>
+    <object-type name="ErrorBar">
+        <enum-type name="ErrorType"/>
+        <enum-type name="Type"/>
+        <enum-type name="Dimension"/>
+    </object-type>
+    <object-type name="Line"/>
+    <object-type name="PlotArea" polymorphic-id-expression="%1-&gt;m_type == AspectType::PlotArea">
+        <enum-type name="BorderTypeFlags" flags="yes"/>
+    </object-type>
+    <!-- <object-type name="Range"/> -->
+    <object-type name="RangeT">
+        <enum-type name="Format"/>
+        <enum-type name="Scale"/>
+    </object-type>
+    <object-type name="StatisticsSpreadsheet" polymorphic-id-expression="%1-&gt;m_type == AspectType::StatisticsSpreadsheet">
+        <enum-type name="Metric" flags="yes"/>
+    </object-type>
+    <object-type name="Symbol">
+        <enum-type name="Style"/>
+    </object-type>
+    <object-type name="Value">
+        <enum-type name="Type"/>
+        <enum-type name="Position"/>
+    </object-type>
+
+    <!-- Plot Area Elements -->
+    <object-type name="Axis" polymorphic-id-expression="%1-&gt;m_type == AspectType::Axis">
+        <enum-type name="RangeType"/>
+        <enum-type name="Position"/>
+        <enum-type name="LabelsFormat"/>
+        <enum-type name="TicksType"/>
+        <enum-type name="ArrowType"/>
+        <enum-type name="ArrowPosition"/>
+        <enum-type name="LabelsPosition"/>
+        <enum-type name="LabelsTextType"/>
+        <enum-type name="LabelsBackgroundType"/>
+        <enum-type name="TicksStartType"/>
+        <enum-type name="TicksFlags" flags="yes"/>
+    </object-type>
+    <object-type name="CartesianPlotLegend" polymorphic-id-expression="%1-&gt;m_type == AspectType::CartesianPlotLegend"/>
+    <object-type name="CustomPoint" polymorphic-id-expression="%1-&gt;m_type == AspectType::CustomPoint"/>
+    <object-type name="ReferenceLine" polymorphic-id-expression="%1-&gt;m_type == AspectType::ReferenceLine"/>
+    <object-type name="ReferenceRange" polymorphic-id-expression="%1-&gt;m_type == AspectType::ReferenceRange"/>
+    
+    <!-- Plots -->
+    <object-type name="BarPlot" polymorphic-id-expression="%1-&gt;m_type == AspectType::BarPlot">
+        <enum-type name="Type"/>
+    </object-type>
+    <object-type name="BoxPlot" polymorphic-id-expression="%1-&gt;m_type == AspectType::BoxPlot">
+        <enum-type name="Ordering"/>
+        <enum-type name="WhiskersType"/>
+    </object-type>
+    <object-type name="Histogram" polymorphic-id-expression="%1-&gt;m_type == AspectType::Histogram">
+        <enum-type name="Type"/>
+        <enum-type name="Normalization"/>
+        <enum-type name="BinningMethod"/>
+        <enum-type name="LineType"/>
+        <enum-type name="ValuesType"/>
+        <enum-type name="ValuesPosition"/>
+    </object-type>
+    <object-type name="KDEPlot" polymorphic-id-expression="%1-&gt;m_type == AspectType::KDEPlot"/>
+    <object-type name="LollipopPlot" polymorphic-id-expression="%1-&gt;m_type == AspectType::LollipopPlot"/>
+    <object-type name="ProcessBehaviorChart" polymorphic-id-expression="%1-&gt;m_type == AspectType::ProcessBehaviorChart">
+        <enum-type name="Type"/>
+        <enum-type name="LimitsMetric"/>
+    </object-type>
+    <object-type name="QQPlot" polymorphic-id-expression="%1-&gt;m_type == AspectType::QQPlot"/>
+    <object-type name="RunChart" polymorphic-id-expression="%1-&gt;m_type == AspectType::RunChart">
+        <enum-type name="CenterMetric"/>
+    </object-type>
+    <object-type name="XYCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYCurve">
+        <enum-type name="LineType"/>
+        <enum-type name="DropLineType"/>
+        <enum-type name="ValuesType"/>
+        <enum-type name="ValuesPosition"/>
+    </object-type>
+    <object-type name="XYEquationCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYEquationCurve">
+        <value-type name="EquationData"/>
+        <enum-type name="EquationType"/>
+    </object-type>
+    
+    <!-- Analysis Plots -->
+    <object-type name="XYConvolutionCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYConvolutionCurve">
+        <value-type name="ConvolutionData"/>
+    </object-type>
+    <object-type name="XYCorrelationCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYCorrelationCurve">
+        <value-type name="CorrelationData"/>
+    </object-type>
+    <object-type name="XYDataReductionCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYDataReductionCurve">
+        <value-type name="DataReductionData"/>
+        <value-type name="DataReductionResult"/>
+    </object-type>
+    <object-type name="XYDifferentiationCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYDifferentiationCurve">
+        <value-type name="DifferentiationData"/>
+    </object-type>
+    <object-type name="XYFitCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYFitCurve">
+        <value-type name="FitData"/>
+        <value-type name="FitResult"/>
+    </object-type>
+    <object-type name="XYFourierFilterCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYFourierFilterCurve">
+        <value-type name="FilterData"/>
+        <value-type name="FilterResult"/>
+    </object-type>
+    <object-type name="XYFourierTransformCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYFourierTransformCurve">
+        <value-type name="TransformData"/>
+    </object-type>
+    <object-type name="XYFunctionCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYFunctionCurve">
+        <value-type name="FunctionData"/>
+    </object-type>
+    <object-type name="XYHilbertTransformCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYHilbertTransformCurve">
+        <value-type name="TransformData"/>
+    </object-type>
+    <object-type name="XYIntegrationCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYIntegrationCurve">
+        <value-type name="IntegrationData"/>
+        <value-type name="IntegrationResult"/>
+    </object-type>
+    <object-type name="XYInterpolationCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYInterpolationCurve">
+        <enum-type name="PointsMode"/>
+        <value-type name="InterpolationData"/>
+    </object-type>
+    <object-type name="XYSmoothCurve" polymorphic-id-expression="%1-&gt;m_type == AspectType::XYSmoothCurve">
+        <value-type name="SmoothData"/>
+    </object-type>
+
+    <!-- Worksheet -->
+    <object-type name="Worksheet" polymorphic-id-expression="%1-&gt;m_type == AspectType::Worksheet">
+        <enum-type name="Unit"/>
+        <enum-type name="Layout"/>
+        <enum-type name="CartesianPlotActionMode"/>
+        <enum-type name="ZoomFit"/>
+        <enum-type name="ExportFormat"/>
+        <enum-type name="ExportArea"/>
+    </object-type>
+
+    <!-- Worksheet Element Containers -->
+    <object-type name="CartesianPlot" polymorphic-id-expression="%1-&gt;m_type == AspectType::CartesianPlot">
+        <enum-type name="Type"/>
+        <enum-type name="MouseMode"/>
+        <enum-type name="NavigationOperation"/>
+        <enum-type name="RangeType"/>
+        <enum-type name="RangeBreakStyle"/>
+    </object-type>
+
+    <!-- Worksheet Elements -->
+    <object-type name="Image" polymorphic-id-expression="%1-&gt;m_type == AspectType::Image"/>
+    <object-type name="InfoElement" polymorphic-id-expression="%1-&gt;m_type == AspectType::InfoElement"/>
+    <object-type name="TextLabel" polymorphic-id-expression="%1-&gt;type() == AspectType::TextLabel">
+        <enum-type name="Type"/>
+        <enum-type name="Mode"/>
+        <enum-type name="BorderShape"/>
+        <value-type name="TextWrapper"/>
+    </object-type>
+
+    <!-- NSL -->
+    <enum-type name="nsl_fit_model_category"/>
+    <enum-type name="nsl_sf_stats_distribution"/>
+    <enum-type name="nsl_fit_algorithm"/>
+    <enum-type name="round_method"/>
+    <enum-type name="nsl_kernel_type"/>
+    <enum-type name="nsl_kde_bandwidth_type"/>
+    <enum-type name="nsl_conv_direction_type"/>
+    <enum-type name="nsl_conv_type_type"/>
+    <enum-type name="nsl_conv_method_type"/>
+    <enum-type name="nsl_conv_norm_type"/>
+    <enum-type name="nsl_conv_wrap_type"/>
+    <enum-type name="nsl_conv_kernel_type"/>
+    <enum-type name="nsl_corr_type_type"/>
+    <enum-type name="nsl_corr_norm_type"/>
+    <enum-type name="nsl_geom_linesim_type"/>
+    <enum-type name="nsl_diff_deriv_order_type"/>
+    <enum-type name="nsl_fit_model_type_basic"/>
+    <enum-type name="nsl_fit_model_type_peak"/>
+    <enum-type name="nsl_fit_model_type_growth"/>
+    <enum-type name="nsl_fit_weight_type"/>
+    <enum-type name="nsl_filter_type"/>
+    <enum-type name="nsl_filter_form"/>
+    <enum-type name="nsl_filter_cutoff_unit"/>
+    <enum-type name="nsl_sf_window_type"/>
+    <enum-type name="nsl_dft_result_type"/>
+    <enum-type name="nsl_dft_xscale"/>
+    <enum-type name="nsl_hilbert_result_type"/>
+    <enum-type name="nsl_int_method_type"/>
+    <enum-type name="nsl_interp_type"/>
+    <enum-type name="nsl_interp_pch_variant"/>
+    <enum-type name="nsl_interp_evaluate"/>
+    <enum-type name="nsl_smooth_type"/>
+    <enum-type name="nsl_smooth_pad_mode"/>
+    <enum-type name="nsl_smooth_weight_type"/>
+
+    <rejection class="*" argument-type="std::vector&lt;bool&gt;&amp;"/>
+</typesystem>

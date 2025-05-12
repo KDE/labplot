@@ -75,10 +75,6 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent)
 
 	// select the last used collection
 	KConfigGroup conf = Settings::group(QStringLiteral("ColorMapsWidget"));
-	m_viewMode = static_cast<ViewMode>(conf.readEntry("ViewMode", static_cast<int>(ViewMode::IconView)));
-	switchViewMode();
-
-	// available collections
 	const QString& collection = conf.readEntry("Collection", QString());
 	if (collection.isEmpty())
 		ui.cbCollections->setCurrentIndex(0);
@@ -106,6 +102,10 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent)
 			break;
 		}
 	}
+
+	// switch to the last used view mode
+	m_viewMode = static_cast<ViewMode>(conf.readEntry("ViewMode", static_cast<int>(ViewMode::IconView)));
+	switchViewMode();
 }
 
 ColorMapsWidget::~ColorMapsWidget() {

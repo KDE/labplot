@@ -18,6 +18,6 @@ class CommonMetaTest : public CommonTest {
 	Q_OBJECT
 
 protected Q_SLOTS:
-	void initTestCase();
+	void initTestCase() override;
 };
 #endif

@@ -745,6 +745,8 @@ void McapFilterPrivate::writeWithOptions(const QString& fileName, AbstractDataSo
 	DEBUG(Q_FUNC_INFO);
 
 	auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	if (!spreadsheet)
+		return;
 
 	auto opts = mcap::McapWriterOptions("json");
 	opts.compressionLevel = static_cast<mcap::CompressionLevel>(compression_level);

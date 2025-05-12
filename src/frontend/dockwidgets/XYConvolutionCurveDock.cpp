@@ -373,8 +373,6 @@ void XYConvolutionCurveDock::wrapChanged() {
 }
 
 void XYConvolutionCurveDock::recalculateClicked() {
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYConvolutionCurve*>(curve)->setConvolutionData(m_convolutionData);
 
@@ -383,7 +381,6 @@ void XYConvolutionCurveDock::recalculateClicked() {
 		Q_EMIT info(i18n("Convolution status: %1", m_convolutionCurve->convolutionResult().status));
 	else
 		Q_EMIT info(i18n("Deconvolution status: %1", m_convolutionCurve->convolutionResult().status));
-	QApplication::restoreOverrideCursor();
 }
 
 /*!

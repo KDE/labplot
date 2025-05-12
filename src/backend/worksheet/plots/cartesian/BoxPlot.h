@@ -95,7 +95,7 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(BoxPlot)
-	void init(bool loading = false);
+	void init(bool loading);
 	void initActions();
 	void initMenus();
 	void connectDataColumn(const AbstractColumn*);
