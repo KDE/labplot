@@ -9,6 +9,7 @@
   <name xml:lang="ar">معمل الرسم</name>
   <name xml:lang="ca">LabPlot</name>
   <name xml:lang="ca-valencia">LabPlot</name>
+  <name xml:lang="cs">LabPlot</name>
   <name xml:lang="de">LabPlot</name>
   <name xml:lang="es">LabPlot</name>
   <name xml:lang="fr">LabPlot</name>
@@ -18,6 +19,7 @@
   <name xml:lang="ka">LabPlot</name>
   <name xml:lang="nl">LabPlot</name>
   <name xml:lang="nn">LabPlot</name>
+  <name xml:lang="pl">LabPlot</name>
   <name xml:lang="sl">LabPlot</name>
   <name xml:lang="uk">LabPlot</name>
   <name xml:lang="zh-CN">LabPlot</name>
@@ -33,6 +35,7 @@
   <summary xml:lang="it">Analisi e visualizzazione dei dati interattiva</summary>
   <summary xml:lang="ka">მონაცემების ვიზუალიზაცია და ანალიზი</summary>
   <summary xml:lang="nl">Interactieve Datavisualisatie en analyse</summary>
+  <summary xml:lang="pl">Interaktywne obrazowanie i analiza danych</summary>
   <summary xml:lang="sl">Interaktivna vizualizacija in analiza podatkov</summary>
   <summary xml:lang="uk">Інтерактивна візуалізація та аналіз даних</summary>
   <description>
@@ -50,6 +53,7 @@
     <p xml:lang="it">LabPlot è un software GRATUITO, open source e multi piattaforma per la visualizzazione e per l'analisi dei dati accessibile da chiunque.</p>
     <p xml:lang="ka">Labplot-ი ყველასთვის ხელმისაწვდომი, უფასო, ღია კოდის და პლატფორმათაშორისი, მონაცემების ვიზუალიზაციისა და ანალიზის პროგრამაა.</p>
     <p xml:lang="nl">LabPlot is VRIJE open source software voor Datavisualisatie en Analyse, voor meerdere soorten computers, die iedereen kan gebruiken.</p>
+    <p xml:lang="pl">LabPlot jest oprogramowaniem darmowym, o otwartym kodzie, wieloplatformowym do obrazowania i analizy danych, który jest dostępny dla każdego.</p>
     <p xml:lang="sl">LabPlot je PROSTA, odprtokodna in večplatformska vizualizacija podatkov in programska oprema za analizo dostopna vsem.</p>
     <p xml:lang="uk">LabPlot є вільним, доступним для будь-кого програмним забезпеченням з відкритим кодом, яке працює на багатьох платформах і виконує візуалізацію та аналіз даних.</p>
     <p>
@@ -67,6 +71,7 @@
     <p xml:lang="ka">LabPlot გთავაზობთ მარტივ გზას ნახაზების შესაქმნელად, მართვისა და რედაქტირებისთვის. ის საშუალებას გაძლევთ შექმნათ ნახაზები ელცხრილიდან ან გარე ფაილებიდან იმპორტირებულ მონაცემებზე დაყრდნობით. ნაკვეთების ექსპორტი შესაძლებელია რამდენიმე pixmap და ვექტორული გრაფიკის ფორმატში.</p>
     <p xml:lang="nl">Met LabPlot is het eenvoudig plots te maken, te beheren en te bewerken. U kunt er plots mee maken op basis van gegevens in een werkblad (spreadsheet), of van gegevens die uit externe bestanden zijn geïmporteerd. Plots kunnen worden geëxporteerd in diverse pixmap- of vector-grafische bestanden.</p>
     <p xml:lang="nn">LabPlot gjer det lett å laga, administrera og redigera plott. Du kan laga plott frå rekneark­data og data importert frå eksterne filer, og du kan eksportera plotta til fleire punkt- og vektorgrafikkformat.</p>
+    <p xml:lang="pl">LabPlot zapewnia łatwy sposób do tworzenia, zarządzania i edytowania wykresów. Umożliwia tworzenie wykresów na podstawie danych z arkusza kalkulacyjnego lub danych zaimportowanych z plików zewnętrznych. Wykresy można eksportować do kilku formatów graficznych map pikselowych i wektorowych.</p>
     <p xml:lang="sl">LabPlot omogoča preprost način ustvarjanja, upravljanja in urejanja grafikonov. Omogoča vamza izdelavo grafikonov na podlagi podatkov iz preglednice ali podatkov uvoženih izzunanje datoteke. Grafikone je mogoče izvoziti v več rastrskih in vektorskih formatov.</p>
     <p xml:lang="uk">За допомогою LabPlot просто створювати креслення, керувати ними та редагувати креслення. За допомогою програми можна створювати креслення на основі електронної таблиці або даних, імпортованих із зовнішнього файла. Креслення можна експортувати у форматі растрового або векторного зображення.</p>
     <p xml:lang="zh-CN">LabPlot 提供了一种方便地创建、 管理和编辑图表的方式。它允许您基于电子表格的数据或从外部文件导入的数据来绘制图表。图表可以导出到多种格式的位图或矢量图形。</p>
@@ -79,6 +84,7 @@
       <caption xml:lang="ar">تصوير البيانات</caption>
       <caption xml:lang="ca">Visualització bàsica de dades</caption>
       <caption xml:lang="ca-valencia">Visualització bàsica de dades</caption>
+      <caption xml:lang="cs">Základní vizualizace dat</caption>
       <caption xml:lang="de">Einfache Visualisierung von Daten</caption>
       <caption xml:lang="es">Visualización básica de datos</caption>
       <caption xml:lang="fr">Affichage basique de données</caption>
@@ -87,6 +93,7 @@
       <caption xml:lang="it">Visualizzazione di base dei dati</caption>
       <caption xml:lang="ka">მონაცემების საბაზისო ვიზუალიზაცია</caption>
       <caption xml:lang="nl">Grondbeginselen visualisatie van gegevens</caption>
+      <caption xml:lang="pl">Podstawowe obrazowanie danych</caption>
       <caption xml:lang="sl">Osnovne vizualizacije podatkov</caption>
       <caption xml:lang="uk">Базова візуалізація даних</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/01_basic_plots_linux.png</image>
@@ -96,6 +103,7 @@
       <caption xml:lang="ar">تصوير البيانات</caption>
       <caption xml:lang="ca">Visualització bàsica de dades</caption>
       <caption xml:lang="ca-valencia">Visualització bàsica de dades</caption>
+      <caption xml:lang="cs">Základní vizualizace dat</caption>
       <caption xml:lang="de">Einfache Visualisierung von Daten</caption>
       <caption xml:lang="es">Visualización básica de datos</caption>
       <caption xml:lang="fr">Affichage basique de données</caption>
@@ -104,6 +112,7 @@
       <caption xml:lang="it">Visualizzazione di base dei dati</caption>
       <caption xml:lang="ka">მონაცემების საბაზისო ვიზუალიზაცია</caption>
       <caption xml:lang="nl">Grondbeginselen visualisatie van gegevens</caption>
+      <caption xml:lang="pl">Podstawowe obrazowanie danych</caption>
       <caption xml:lang="sl">Osnovne vizualizacije podatkov</caption>
       <caption xml:lang="uk">Базова візуалізація даних</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/02_overview_linux.png</image>
@@ -121,6 +130,7 @@
       <caption xml:lang="it">Tracciamento avanzato di grafici e immagini</caption>
       <caption xml:lang="ka">ნახაზებისა და გამოსახულებების დამატებითი დალაგება</caption>
       <caption xml:lang="nl">Gevorderde indeling van plots en afbeeldingen</caption>
+      <caption xml:lang="pl">Rozbudowane układy wykresów i obrazów</caption>
       <caption xml:lang="sl">Napredna postavitev grafikonov in slik</caption>
       <caption xml:lang="uk">Розширені можливості з компонування креслень та зображень</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/03_space_debris_linux.png</image>
@@ -130,6 +140,7 @@
       <caption xml:lang="ar">سمات</caption>
       <caption xml:lang="ca">Permet temes</caption>
       <caption xml:lang="ca-valencia">Permet temes</caption>
+      <caption xml:lang="cs">Motivy</caption>
       <caption xml:lang="de">Farbmotive</caption>
       <caption xml:lang="es">Temas</caption>
       <caption xml:lang="fr">Application de thèmes</caption>
@@ -138,6 +149,7 @@
       <caption xml:lang="it">Temi</caption>
       <caption xml:lang="ka">თემები</caption>
       <caption xml:lang="nl">Thema's</caption>
+      <caption xml:lang="pl">Dostosowywanie wyglądu</caption>
       <caption xml:lang="sl">Teme</caption>
       <caption xml:lang="uk">Теми</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/04_theming_linux.png</image>
@@ -155,6 +167,7 @@
       <caption xml:lang="it">Visualizzazione di funzioni matematiche</caption>
       <caption xml:lang="ka">მათემატიკური ფუნქციების ვიზუალიზაცია</caption>
       <caption xml:lang="nl">Wiskundige functies visualiseren</caption>
+      <caption xml:lang="pl">Obrazowanie funkcji matematycznych</caption>
       <caption xml:lang="sl">Vizualizacija matematičnih funkcij</caption>
       <caption xml:lang="uk">Візуалізація математичних функцій</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/05_math_expression_linux.png</image>
@@ -172,6 +185,7 @@
       <caption xml:lang="it">Adatta modelli predefiniti o personalizzati ai dati</caption>
       <caption xml:lang="ka">წინასწარ განსაზღვრული და ხელით მითითებული მოდელების მონაცემებში ჩატევა</caption>
       <caption xml:lang="nl">Voorgedefinieerde of aangepaste modellen aan gegevens aanpassen</caption>
+      <caption xml:lang="pl">Wpasuj uprzednio określone lub własne modele do danych</caption>
       <caption xml:lang="sl">Prilagajanje vnaprej določenih modelov ali modelov po meri podatkom</caption>
       <caption xml:lang="uk">Апроксимація попередньо визначеними або нетиповими моделями даних</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/06_fit_linux.png</image>
@@ -189,6 +203,7 @@
       <caption xml:lang="it">Smussa i dati per mezzo di diversi metodi di smussatura</caption>
       <caption xml:lang="ka">მონაცემების მოგლუვება სხვადასხვა მეთოდებით</caption>
       <caption xml:lang="nl">Gladstrijken van de gegevens met diverse methodes</caption>
+      <caption xml:lang="pl">Wygładzanie danych przy pomocy różnych sposobów</caption>
       <caption xml:lang="sl">Zgladite podatke s pomočjo različnih metod glajenja</caption>
       <caption xml:lang="uk">Згладжування даних за допомогою різноманітних способів згладжування</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/07_smooth_linux.png</image>
@@ -206,6 +221,7 @@
       <caption xml:lang="it">Interfaccia a taccuino per sessioni integrate in Maxima, Octave, R, Sage, Scilab, Python, Julia, eccetera</caption>
       <caption xml:lang="ka">წიგნაკის ინტერფეისი Maxima, Octave, R, Sage, Scilab, Python, Julia-ის და სხვების ინტერაქტიური სესიებისთვის</caption>
       <caption xml:lang="nl">Notebook-interface voor interactieve sessies  in Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
+      <caption xml:lang="pl">Interfejs zeszytu dla interaktywnych posiedzeń w programach takich jak: Maxima, Octave, R, Sage, Scilab, Python, Julia, itp.</caption>
       <caption xml:lang="sl">Prenosni vmesnik za interaktivne seje v Maxima, Octave, R, Sage, Scilab, Python, Julia itd.</caption>
       <caption xml:lang="uk">Інтерфейс нотатника для інтерактивних сеансів Maxima, Octave, R, Sage, Scilab, Python, Julia тощо</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/08_maxima_tutorial_linux.png</image>
@@ -215,6 +231,7 @@
       <caption xml:lang="ar">تحليل الإشارات</caption>
       <caption xml:lang="ca">Anàlisi de senyals</caption>
       <caption xml:lang="ca-valencia">Anàlisi de senyals</caption>
+      <caption xml:lang="cs">Analýza signálu</caption>
       <caption xml:lang="de">Signalanalyse</caption>
       <caption xml:lang="es">Análisis de señales</caption>
       <caption xml:lang="fr">Analyse de signaux</caption>
@@ -223,6 +240,7 @@
       <caption xml:lang="it">Analisi del segnale</caption>
       <caption xml:lang="ka">სიგნალის ანალიზი</caption>
       <caption xml:lang="nl">Signaalanalyse</caption>
+      <caption xml:lang="pl">Analiza sygnałów</caption>
       <caption xml:lang="sl">Analiza signalov</caption>
       <caption xml:lang="uk">Аналіз сигналів</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/09_morse_signal_linux.png</image>
@@ -240,6 +258,7 @@
       <caption xml:lang="it">Diagramma Hertzsprung-Russell in LabPlot</caption>
       <caption xml:lang="ka">ჰერცშპრუნგ-რასელის დიაგრამა LabPlot-ში</caption>
       <caption xml:lang="nl">Herzsprung-Russel-diagram in LabPlot</caption>
+      <caption xml:lang="pl">Diagram Herzsprung-Russel w LabPlocie</caption>
       <caption xml:lang="sl">Herzsprung-Russelovi diagrami v LabPlotu</caption>
       <caption xml:lang="uk">Діаграма Герцшпрунга-Рассела у LabPlot</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/10_hrd_linux.png</image>
@@ -257,6 +276,7 @@
       <caption xml:lang="it">Visualizzazione dei dati calcolati in una sessione interattiva di Maxima</caption>
       <caption xml:lang="ka">Maxima-ის ინტერაქტიურ სესიაში გამოთვლილი მონაცემების ვიზუალიზაცია</caption>
       <caption xml:lang="nl">Visualiseren van gegevens, berekend in een interactieve sessie in Maxima</caption>
+      <caption xml:lang="pl">Obrazowanie danych obliczonych w interaktywnym posiedzeniu Maximy</caption>
       <caption xml:lang="sl">Vizualizacija podatkov izračunanih v interaktivni seji Maxima</caption>
       <caption xml:lang="uk">Візуалізація даних, які обчислено у інтерактивному сеансі Maxima</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/11_maxima_Duffing_Oscillator_linux.png</image>
