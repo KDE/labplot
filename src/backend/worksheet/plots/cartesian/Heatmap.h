@@ -64,10 +64,10 @@ public:
 	 * Number of bins when using Spreadsheet as datasource. This is required to define
 	 * the size of the Bins. The size of the bin is defined as (maxVal - minVal) / numBins
 	 */
-	BASIC_D_ACCESSOR_DECL(bool, numBinsEqual, NumBinsEqual)
-	BASIC_D_ACCESSOR_DECL(bool, matrixNumBins, matrixNumBins)
-	BASIC_D_ACCESSOR_DECL(unsigned int, xNumBins, XNumBins)
-	BASIC_D_ACCESSOR_DECL(unsigned int, yNumBins, YNumBins)
+	BASIC_D_ACCESSOR_DECL(bool, equalNumberBins, EqualNumberBins)
+	BASIC_D_ACCESSOR_DECL(bool, matrixNumberBins, MatrixNumberBins)
+	BASIC_D_ACCESSOR_DECL(unsigned int, xNumberBins, XNumberBins)
+	BASIC_D_ACCESSOR_DECL(unsigned int, yNumberBins, YNumberBins)
 	/*!
 	 * Only for spreadsheet! Drawing not handled positions
 	 * and including into the value range or ignoring those values
@@ -118,8 +118,11 @@ Q_SIGNALS:
 	void drawEmptyChanged(bool);
 
 	void automaticLimitsChanged(bool);
-	void xNumBinsChanged(unsigned int);
-	void yNumBinsChanged(unsigned int);
+
+	void equalNumberBinsChanged(bool);
+	void xNumberBinsChanged(unsigned int);
+	void yNumberBinsChanged(unsigned int);
+	void matrixNumberBinsChanged(bool);
 
 	void formatChanged(const Format&);
 

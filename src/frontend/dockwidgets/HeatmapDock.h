@@ -48,6 +48,7 @@ private:
 	//	void loadConfig(KConfig&);
 	//	void setDataColumns() const;
 	//	void loadDataColumns();
+	void dataSourceWidgetAppearance(Heatmap::DataSource datasource);
 
 private Q_SLOTS:
 	void selectColorMap();
@@ -65,6 +66,8 @@ private Q_SLOTS:
 	void visibilityChanged(bool);
 	void xNumBinsChanged(int);
 	void yNumBinsChanged(int);
+	void equalNumberBinsChanged(bool);
+	void matrixNumberBinsChanged(bool);
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in the Heatmap
@@ -75,6 +78,8 @@ private Q_SLOTS:
 	void plotVisibilityChanged(bool);
 	void plotXNumBinsChanged(unsigned int);
 	void plotYNumBinsChanged(unsigned int);
+	void plotEqualNumberBinsChanged(bool);
+	void plotMatrixNumberBinsChanged(bool);
 
 	void plotAutomaticLimitsChanged(bool);
 	void plotLimitsMinChanged(double);
