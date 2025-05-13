@@ -7216,10 +7216,9 @@ msgid "%1: mask rows with missing values"
 msgstr ""
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:417
-#, fuzzy, kde-format
-#| msgid "%1: change comment"
+#, kde-format
 msgid "%1: toggle comments header"
-msgstr "%1: změnit komentář"
+msgstr ""
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:425
 #, kde-format
@@ -9053,16 +9052,14 @@ msgid "%1: disable exact limits"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:577
-#, fuzzy, kde-format
-#| msgid "%1: set vertical alignment"
+#, kde-format
 msgid "%1: set maximal upper limit"
-msgstr "%1: nastavit svislé zarovnání"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:584
-#, fuzzy, kde-format
-#| msgid "%1: set ordering"
+#, kde-format
 msgid "%1: set minimal lower limit"
-msgstr "%1: nastavit řazení"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:593
 #, kde-format
@@ -9075,48 +9072,41 @@ msgid "%1: disable control labels"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:615
-#, fuzzy, kde-format
-#| msgid "%1: set arrow type"
+#, kde-format
 msgid "%1: set labels border shape"
-msgstr "%1: nastavit typ šipky"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:630
-#, fuzzy, kde-format
-#| msgid "%1: set font"
+#, kde-format
 msgid "%1: set labels font"
-msgstr "%1: nastavit písmo"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:665
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:697
-#, fuzzy, kde-format
-#| msgid "%1: set background color"
+#, kde-format
 msgid "%1: set labels background color"
-msgstr "%1: nastavit barvu pozadí"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:755
-#, fuzzy, kde-format
-#| msgid "%1: set symbol style"
+#, kde-format
 msgid "%1: set labels border style"
-msgstr "%1: nastavit styl symbolu"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:766
-#, fuzzy, kde-format
-#| msgid "%1: set ordering"
+#, kde-format
 msgid "%1: set labels border width"
-msgstr "%1: nastavit řazení"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:777
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:788
-#, fuzzy, kde-format
-#| msgid "%1: set background color"
+#, kde-format
 msgid "%1: set labels border color"
-msgstr "%1: nastavit barvu pozadí"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:880
-#, fuzzy, kde-format
-#| msgid "Not enough data points available."
+#, kde-format
 msgid "Not enough data provided."
-msgstr "Není k dispozici dostatek datových bodů."
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:980
 #, kde-format
@@ -10137,10 +10127,9 @@ msgid "Copy Environment"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:93
-#, fuzzy, kde-format
-#| msgid "Copy Selection"
+#, kde-format
 msgid "Copy Citation"
-msgstr "Zkopírovat výběr"
+msgstr ""
 
 #: src/frontend/AboutDialog.cpp:97
 #, kde-format
@@ -11616,22 +11605,19 @@ msgid ""
 msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1817
-#, fuzzy, kde-format
-#| msgid "Modification time: %1"
+#, kde-format
 msgid "Initialization failed: %1"
-msgstr "Čas poslední změny: %1"
+msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1842
-#, fuzzy, kde-format
-#| msgid "Failed to read the file. Reason: %1"
+#, kde-format
 msgid "Failed to connect to the local socket: %1"
-msgstr "Soubor se nepodařilo otevřít. Důvod: %1"
+msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1859
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to connect to the TCP socket. %1"
-msgstr "Nepodařilo se otevřít soubor '%1'."
+msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1865
 #: src/frontend/datasources/ImportFileWidget.cpp:1894
@@ -11645,10 +11631,9 @@ msgid "Not ready for read after 2s:"
 msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1898
-#, fuzzy, kde-format
-#| msgid "Unable to open file:"
+#, kde-format
 msgid "Unable to bind: "
-msgstr "Nelze otevřít soubor:"
+msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1915
 #, kde-format
@@ -11661,10 +11646,9 @@ msgid "Not ready for read after 2 sec"
 msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1921
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Failed to open serial port. error: %1"
-msgstr "Nepodařilo se otevřít soubor '%1'."
+msgstr ""
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1940
 #, kde-format
@@ -13316,10 +13300,9 @@ msgstr ""
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:235
 #: src/frontend/widgets/LabelWidget.cpp:519
-#, fuzzy, kde-format
-#| msgid "right triangle"
+#, kde-format
 msgid "Right pointing rectangle"
-msgstr "Pravý trojúhelník"
+msgstr ""
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:239
 #, kde-format
@@ -14548,12 +14531,10 @@ msgid "Fábián Kristóf-Szabolcs"
 msgstr ""
 
 #: src/frontend/LabPlot.cpp:91
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Open FITS File"
+#, kde-format
 msgctxt "@info:credit"
 msgid "FITS Filter"
-msgstr "Otevřít soubor FITS"
+msgstr ""
 
 #: src/frontend/LabPlot.cpp:92
 #, kde-format
@@ -15166,10 +15147,9 @@ msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
 #: src/frontend/MainWin.cpp:2786
-#, fuzzy, kde-format
-#| msgid "File not found"
+#, kde-format
 msgid "Kaggle CLI tool not found"
-msgstr "Soubor nenalezen"
+msgstr ""
 
 #: src/frontend/MainWin.cpp:2787
 #, kde-format
@@ -18889,10 +18869,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnMode)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:33
-#, fuzzy, kde-format
-#| msgid "Column labels"
+#, kde-format
 msgid "Column Data Types:"
-msgstr "Popisky sloupců"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chbSimplifyWhitespaces)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:43
@@ -18941,10 +18920,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:116
-#, fuzzy, kde-format
-#| msgid "Column labels"
+#, kde-format
 msgid "Column Names:"
-msgstr "Popisky sloupců"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:123
@@ -21340,10 +21318,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMinLowerLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:189
-#, fuzzy, kde-format
-#| msgid "Lower Limit"
+#, kde-format
 msgid "Min. Lower Limit:"
-msgstr "Dolní limit"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:212
@@ -21353,10 +21330,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxUpperLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:232
-#, fuzzy, kde-format
-#| msgid "Upper Limit"
+#, kde-format
 msgid "Max. Upper Limit:"
-msgstr "Horní limit"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:243
@@ -21387,10 +21363,9 @@ msgstr "Dolní limit"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLabels)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:443
-#, fuzzy, kde-format
-#| msgid "Const Values"
+#, kde-format
 msgid "Center/Limit Values"
-msgstr "Hodnoty konstant"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBorderShape)
@@ -22457,18 +22432,7 @@ msgstr "Zavřít soubor"
 
 #. i18n: ectx: property (html), widget (ResizableTextEdit, teLabel)
 #: src/frontend/ui/labelwidget.ui:55
-#, fuzzy, kde-format
-#| msgid ""
-#| "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-#| "REC-html40/strict.dtd\">\n"
-#| "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/"
-#| "css\">\n"
-#| "p, li { white-space: pre-wrap; }\n"
-#| "</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; "
-#| "font-weight:400; font-style:normal;\">\n"
-#| "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-#| "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
-#| "\"><br /></p></body></html>"
+#, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
 "REC-html40/strict.dtd\">\n"
@@ -22484,16 +22448,6 @@ msgid ""
 "margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
 "\"><br /></p></body></html>"
 msgstr ""
-"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
-"REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css"
-"\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Noto Sans'; font-size:10pt; font-"
-"weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; "
-"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
-"\"><br /></p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lOffsetY)
 #. i18n: ectx: property (toolTip), widget (QLabel, lOffsetX)
@@ -23838,10 +23792,9 @@ msgid "Data, +-:"
 msgstr ""
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
-#, fuzzy, kde-format
-#| msgid "Start Value:"
+#, kde-format
 msgid "Start Value"
-msgstr "Počáteční hodnota:"
+msgstr ""
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
@@ -24637,56 +24590,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Nelze otevřít soubor:"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Vít Pelčák"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "vit@pelcak.org"
-
-#~ msgid "Close"
-#~ msgstr "Zavřít"
-
-#~ msgid "Current Selection"
-#~ msgstr "Stávající výběr"
-
-#~ msgid "Complete Worksheet"
-#~ msgstr "Exportovat pracovní list"
-
-#~ msgid "Uncertainty,%"
-#~ msgstr "Nepřesnost,%"
-
-#~ msgid "Start value"
-#~ msgstr "Počáteční hodnota"
-
-#~ msgid "Lower limit"
-#~ msgstr "Spodní limit"
-
-#~ msgid "Upper limit"
-#~ msgstr "Horní limit"
-
-#~ msgid "Solid line"
-#~ msgstr "Plná čára"
-
-#~ msgid "Dash line"
-#~ msgstr "Čárkovaná čára"
-
-#~ msgid "Dot line"
-#~ msgstr "Tečkovaná čára"
-
-#~ msgid "Dash dot line"
-#~ msgstr "Tečko čárkovaná čára"
-
-#~ msgid "Decimal point "
-#~ msgstr "Desetinné místo "
-
-#~ msgid "Group separator "
-#~ msgstr "Oddělovač skupin "
-
-#~ msgid "Exponential "
-#~ msgstr "Exponenciální "
-
-#~ msgid "Percent "
-#~ msgstr "Procent "
