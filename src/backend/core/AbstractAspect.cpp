@@ -18,11 +18,11 @@
 #include "backend/core/aspectcommands.h"
 #include "backend/lib/PropertyChangeCommand.h"
 #include "backend/lib/SignallingUndoCommand.h"
+#include "backend/lib/UndoStack.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
-#include "backend/lib/UndoStack.h"
 
 #include <KStandardAction>
 #include <QClipboard>
