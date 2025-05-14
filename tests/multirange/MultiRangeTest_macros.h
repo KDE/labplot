@@ -13,6 +13,7 @@
 
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
+#include "backend/lib/UndoStack.h"
 #include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -30,7 +31,6 @@
 #include <QAction>
 #include <QComboBox>
 #include <QGraphicsSceneWheelEvent>
-#include "backend/lib/UndoStack.h"
 
 // ##############################################################################
 // #####################  import of LabPlot projects ############################

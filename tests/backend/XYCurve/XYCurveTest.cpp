@@ -13,6 +13,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/Range.h"
+#include "backend/lib/UndoStack.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
@@ -22,7 +23,6 @@
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 
 #include <QFile>
-#include "backend/lib/UndoStack.h"
 
 #define GET_CURVE_PRIVATE(plot, child_index, column_name, curve_variable_name)                                                                                 \
 	auto* curve_variable_name = plot->child<XYCurve>(child_index);                                                                                             \

@@ -14,6 +14,7 @@
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/UndoStack.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #ifndef SDK
@@ -60,7 +61,6 @@
 #include <QMenu>
 #include <QMimeData>
 #include <QThreadPool>
-#include "backend/lib/UndoStack.h"
 
 // required to parse Cantor and Jupyter files
 #ifdef HAVE_CANTOR_LIBS
