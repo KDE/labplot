@@ -13,6 +13,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/datasources/filters/VectorBLFFilter.h"
+#include "backend/lib/UndoStack.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
 #include "backend/spreadsheet/StatisticsSpreadsheet.h"
@@ -29,7 +30,6 @@
 #include <QClipboard>
 #include <QModelIndex>
 #include <QRandomGenerator>
-#include "backend/lib/UndoStack.h"
 
 //**********************************************************
 //****************** Copy&Paste tests **********************

@@ -18,11 +18,11 @@
 #include "backend/core/aspectcommands.h"
 #include "backend/lib/PropertyChangeCommand.h"
 #include "backend/lib/SignallingUndoCommand.h"
+#include "backend/lib/UndoStack.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
-#include "backend/lib/UndoStack.h"
 
 #include <KStandardAction>
 #include <QClipboard>
@@ -985,6 +985,11 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void AbstractAspect::setUndoAware(bool b) {
 	d->m_undoAware = b;
+
+	// propagate the value to the internal and hidden aspects, if available (Line, Background, etc.)
+	const auto& children = this->children<AbstractAspect>(ChildIndexFlag::IncludeHidden);
+	for (auto* child : children)
+		child->setUndoAware(b);
 }
 
 /**

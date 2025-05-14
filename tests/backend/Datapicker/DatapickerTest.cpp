@@ -19,11 +19,11 @@
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/DatapickerPointPrivate.h"
 #include "backend/datapicker/Transform.h"
+#include "backend/lib/UndoStack.h"
 #include "frontend/datapicker/DatapickerImageView.h"
 #include "frontend/widgets/DatapickerImageWidget.h"
 
 #include <QAction>
-#include "backend/lib/UndoStack.h"
 
 #define VECTOR3D_EQUAL(vec, ref)                                                                                                                               \
 	VALUES_EQUAL(vec.x(), ref.x());                                                                                                                            \
