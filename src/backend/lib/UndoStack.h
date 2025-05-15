@@ -8,7 +8,6 @@ public:
 			Lock l(m_executing);
             QUndoStack::push(cmd);
         } else {
-   assert(false); // This case should never happen. So let it crash for the debug build and proceed in the release build
 			// Ignore the undo capability here,
 			// because it is not allowed to push on the undostack
 			// while the undostack is in a undo/redo operation
