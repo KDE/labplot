@@ -183,8 +183,8 @@ bool PlotAreaPrivate::toggleClipping(bool on) {
 }
 
 /*!
-* sets the rect which is in parent's coordinates or in scene coordinates if there is no parent.
-*/
+ * sets the rect which is in parent's coordinates or in scene coordinates if there is no parent.
+ */
 void PlotAreaPrivate::setRect(const QRectF& r) {
 	prepareGeometryChange();
 	rect = r;
