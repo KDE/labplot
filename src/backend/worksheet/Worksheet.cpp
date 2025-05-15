@@ -446,7 +446,7 @@ void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool sele
 		Q_EMIT childAspectDeselectedInView(aspect);
 
 	// handle the resize items on selection changes
-	if (selected) {
+	if (selected && m_view) {
 		const auto& items = m_view->selectedItems();
 		if (items.size() == 1) {
 			// only one object is selected, make it resiable if it's a container and
