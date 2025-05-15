@@ -129,7 +129,6 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.cbRangeScale, &QCheckBox::toggled, this, &AxisDock::rangeScaleChanged);
 
 	connect(ui.cbRangeType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::rangeTypeChanged);
-	connect(ui.sbRangeBase, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::rangeBaseChanged);
 	connect(ui.sbStart, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::startChanged);
 	connect(ui.sbEnd, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::endChanged);
 	connect(ui.dateTimeEditStart, &UTCDateTimeEdit::mSecsSinceEpochUTCChanged, this, &AxisDock::startDateTimeChanged);
@@ -236,7 +235,6 @@ void AxisDock::retranslateUi() {
 	ui.cbRangeType->addItem(i18n("Auto"));
 	ui.cbRangeType->addItem(i18n("Auto Data"));
 	ui.cbRangeType->addItem(i18n("Custom"));
-	ui.cbRangeType->addItem(i18n("Custom Base"));
 
 	QString msg = i18n(
 		"Axis range:"
@@ -469,7 +467,6 @@ void AxisDock::updateLocale() {
 	// update the QLineEdits, avoid the change events
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbPosition->setLocale(numberLocale);
-	ui.sbRangeBase->setLocale(numberLocale);
 	ui.sbStart->setLocale(numberLocale);
 	ui.sbEnd->setLocale(numberLocale);
 
@@ -720,7 +717,6 @@ void AxisDock::rangeTypeChanged(int index) {
 	auto rangeType = static_cast<Axis::RangeType>(index);
 	bool autoScale = (rangeType != Axis::RangeType::Custom);
 	ui.sbStart->setEnabled(!autoScale);
-	ui.sbRangeBase->setEnabled(rangeType == Axis::RangeType::CustomBase);
 	ui.sbEnd->setEnabled(!autoScale);
 	ui.dateTimeEditStart->setEnabled(!autoScale);
 	ui.dateTimeEditEnd->setEnabled(!autoScale);
@@ -729,13 +725,6 @@ void AxisDock::rangeTypeChanged(int index) {
 
 	for (auto* axis : m_axesList)
 		axis->setRangeType(rangeType);
-}
-
-void AxisDock::rangeBaseChanged(double value) {
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	for (auto* axis : m_axesList)
-		axis->setRangeBase(value);
 }
 
 void AxisDock::startChanged(double value) {
@@ -1611,11 +1600,6 @@ void AxisDock::axisRangeTypeChanged(Axis::RangeType type) {
 	ui.cbRangeType->setCurrentIndex(static_cast<int>(type));
 }
 
-void AxisDock::axisRangeBaseChanged(double value) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.sbRangeBase->setValue(value);
-}
-
 void AxisDock::axisStartChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
 
@@ -1915,7 +1899,6 @@ void AxisDock::load() {
 	ui.cbRangeType->setCurrentIndex(index);
 	rangeTypeChanged(index);
 	ui.sbStart->setValue(m_axis->range().start());
-	ui.sbRangeBase->setValue(m_axis->rangeBase());
 	ui.sbEnd->setValue(m_axis->range().end());
 
 	// depending on the range format of the axis (numeric vs. datetime), show/hide the corresponding widgets
@@ -1927,8 +1910,6 @@ void AxisDock::load() {
 	ui.lStart->setVisible(numeric);
 	ui.lEnd->setVisible(numeric);
 	ui.sbStart->setVisible(numeric);
-	ui.lRangeBase->setVisible(numeric);
-	ui.sbRangeBase->setVisible(numeric);
 	ui.sbEnd->setVisible(numeric);
 	ui.lStartDateTime->setVisible(!numeric);
 	ui.dateTimeEditStart->setVisible(!numeric);
@@ -2083,7 +2064,6 @@ void AxisDock::loadConfig(KConfig& config) {
 	index = static_cast<int>(m_axis->rangeType());
 	ui.cbRangeType->setCurrentIndex(group.readEntry(QStringLiteral("RangeType"), index));
 	rangeTypeChanged(index);
-	ui.sbRangeBase->setValue(group.readEntry(QStringLiteral("RangeBase"), m_axis->rangeBase()));
 	ui.sbStart->setValue(group.readEntry(QStringLiteral("Start"), m_axis->range().start()));
 	ui.sbEnd->setValue(group.readEntry(QStringLiteral("End"), m_axis->range().end()));
 	ui.sbZeroOffset->setValue(group.readEntry(QStringLiteral("ZeroOffset"), m_axis->zeroOffset()));
@@ -2194,7 +2174,6 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry(QStringLiteral("Scale"), ui.cbScale->currentIndex());
 	group.writeEntry(QStringLiteral("RangeType"), ui.cbRangeType->currentIndex());
 	group.writeEntry(QStringLiteral("Start"), ui.sbStart->value());
-	group.writeEntry(QStringLiteral("RangeBase"), ui.sbRangeBase->value());
 	group.writeEntry(QStringLiteral("End"), ui.sbEnd->value());
 	group.writeEntry(QStringLiteral("ZeroOffset"), ui.sbZeroOffset->value());
 	group.writeEntry(QStringLiteral("ScalingFactor"), ui.sbScalingFactor->value());

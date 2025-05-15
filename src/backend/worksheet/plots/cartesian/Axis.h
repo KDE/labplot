@@ -31,7 +31,7 @@ class Axis : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	enum class RangeType { Auto, AutoData, Custom, CustomBase };
+	enum class RangeType { Auto, AutoData, Custom };
 	enum class Position { Top, Bottom, Left, Right, Centered, Custom, Logical };
 	enum class LabelsFormat { Decimal, ScientificE, Powers10, Powers2, PowersE, MultipliesPi, Scientific };
 	Q_ENUM(LabelsFormat)
@@ -108,7 +108,6 @@ public:
 	void saveThemeConfig(const KConfig&) override;
 
 	BASIC_D_ACCESSOR_DECL(RangeType, rangeType, RangeType)
-	BASIC_D_ACCESSOR_DECL(double, rangeBase, RangeBase)
 	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(Position, position, Position)
 	BASIC_D_ACCESSOR_DECL(Range<double>, range, Range)
@@ -232,7 +231,6 @@ Q_SIGNALS:
 	void positionChanged(double);
 	void scaleChanged(RangeT::Scale);
 	void rangeScaleChanged(bool);
-	void rangeBaseChanged(double);
 	void startChanged(double);
 	void rangeTypeChanged(RangeType);
 	void endChanged(double);

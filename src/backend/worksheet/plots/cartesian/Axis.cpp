@@ -432,7 +432,6 @@ void Axis::updateLocale() {
 
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::RangeType, rangeType, rangeType)
-BASIC_SHARED_D_READER_IMPL(Axis, double, rangeBase, rangeBase)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::Position, position, position)
 BASIC_SHARED_D_READER_IMPL(Axis, double, offset, offset)
@@ -599,13 +598,6 @@ void Axis::setOffset(double offset, bool undo) {
 		}
 		Q_EMIT positionChanged(offset);
 	}
-}
-
-STD_SETTER_CMD_IMPL_F_S(Axis, SetRangeBase, double, rangeBase, retransform)
-void Axis::setRangeBase(double value) {
-	Q_D(Axis);
-	if (value != d->rangeBase)
-		exec(new AxisSetRangeBaseCmd(d, value, ki18n("%1: set range base")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetRange, Range<double>, range, retransform)
