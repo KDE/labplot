@@ -56,7 +56,7 @@
 #include <QMenu>
 #include <QMimeData>
 #include <QThreadPool>
-#include "backend/lib/UndoStack.h"
+#include <QUndoStack>
 
 // required to parse Cantor and Jupyter files
 #ifdef HAVE_CANTOR_LIBS
@@ -172,7 +172,7 @@ public:
 	bool saveDefaultDockWidgetState{false};
 	QString defaultDockWidgetState;
 	bool saveCalculations{true};
-	UndoStack undo_stack;
+	QUndoStack undo_stack;
 };
 
 int ProjectPrivate::m_versionNumber = 0;
@@ -255,7 +255,7 @@ int Project::currentBuildXmlVersion() {
 	return buildXmlVersion;
 }
 
-UndoStack* Project::undoStack() const {
+QUndoStack* Project::undoStack() const {
 	// Q_D(const Project);
 	return &d_ptr->undo_stack;
 }

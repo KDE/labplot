@@ -22,7 +22,6 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
-#include "backend/lib/UndoStack.h"
 
 #include <KStandardAction>
 #include <QClipboard>
@@ -1001,7 +1000,7 @@ void AbstractAspect::setUndoAware(bool b) {
  * The only requirement is that the root Aspect reimplements undoStack() to get the
  * undo stack from somewhere (the default implementation just delegates to parentAspect()).
  */
-UndoStack* AbstractAspect::undoStack() const {
+QUndoStack* AbstractAspect::undoStack() const {
 	return parentAspect() ? parentAspect()->undoStack() : nullptr;
 }
 
@@ -1011,7 +1010,7 @@ UndoStack* AbstractAspect::undoStack() const {
 void AbstractAspect::exec(QUndoCommand* cmd) {
 	Q_CHECK_PTR(cmd);
 	if (d->m_undoAware) {
-		UndoStack* stack = undoStack();
+		QUndoStack* stack = undoStack();
 		if (stack)
 			stack->push(cmd);
 		else {
@@ -1064,7 +1063,7 @@ void AbstractAspect::beginMacro(const QString& text) {
 	if (!d->m_undoAware)
 		return;
 
-	UndoStack* stack = undoStack();
+	QUndoStack* stack = undoStack();
 	if (stack)
 		stack->beginMacro(text);
 }
@@ -1076,7 +1075,7 @@ void AbstractAspect::endMacro() {
 	if (!d->m_undoAware)
 		return;
 
-	UndoStack* stack = undoStack();
+	QUndoStack* stack = undoStack();
 	if (stack)
 		stack->endMacro();
 }

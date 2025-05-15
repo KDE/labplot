@@ -18,7 +18,7 @@
 
 #include <QDialogButtonBox>
 #include <QPushButton>
-#include "backend/lib/UndoStack.h"
+#include <QUndoStack>
 #include <QUndoView>
 #include <QVBoxLayout>
 #include <QWindow>
@@ -29,7 +29,7 @@
 
 	\ingroup frontend
  */
-HistoryDialog::HistoryDialog(QWidget* parent, UndoStack* stack, const QString& emptyLabel)
+HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& emptyLabel)
 	: QDialog(parent)
 	, m_undoStack(stack) {
 	auto* undoView = new QUndoView(stack, this);

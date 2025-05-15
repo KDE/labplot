@@ -11,7 +11,7 @@
 #include "CommonTest.h"
 #include "src/backend/core/AbstractColumn.h"
 
-#include "backend/lib/UndoStack.h"
+#include <QUndoStack>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -30,7 +30,7 @@ void CommonTest::initTestCase() {
 #endif
 }
 
-void CommonTest::listStack(UndoStack* stack) {
+void CommonTest::listStack(QUndoStack* stack) {
 	qDebug() << "--------------------------";
 	qDebug() << "Begin list Undostack History";
 	if (stack) {

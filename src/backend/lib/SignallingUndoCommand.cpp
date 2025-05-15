@@ -52,7 +52,7 @@
  *
  * Simple example:
  * \code
- * UndoStack stack;
+ * QUndoStack stack;
  * QAction action;
  * stack.push(new SignallingUndoCommand(i18n("enable action"), &action, "setEnabled", "setDisabled", Q_ARG(bool, true)));
  * \endcode
