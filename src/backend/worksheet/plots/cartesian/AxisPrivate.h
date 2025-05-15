@@ -166,6 +166,7 @@ private:
 							   QPointF& startPointOut,
 							   QPointF& endPointOut);
 	int determineMinorTicksNumber() const;
+	static double computeStart(int& majorTickCount, const Range<double>& r);
 
 	QPainterPath arrowPath;
 	QPainterPath majorTicksPath;
