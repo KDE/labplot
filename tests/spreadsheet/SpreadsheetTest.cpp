@@ -29,7 +29,7 @@
 #include <QClipboard>
 #include <QModelIndex>
 #include <QRandomGenerator>
-#include "backend/lib/UndoStack.h"
+#include <QUndoStack>
 
 //**********************************************************
 //****************** Copy&Paste tests **********************

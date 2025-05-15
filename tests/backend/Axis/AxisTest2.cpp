@@ -23,7 +23,7 @@
 #include "src/frontend/widgets/LabelWidget.h"
 #include "src/frontend/widgets/LineWidget.h"
 
-#include "backend/lib/UndoStack.h"
+#include <QUndoStack>
 
 // TODO: write test switching between numeric and datetime
 

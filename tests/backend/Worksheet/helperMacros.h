@@ -1,7 +1,7 @@
 #ifndef HELPERMACROS_H
 #define HELPERMACROS_H
 
-#include "backend/lib/UndoStack.h"
+#include <QUndoStack>
 
 #define SETUP_PROJECT                                                                                                                                          \
 	Project project;                                                                                                                                           \

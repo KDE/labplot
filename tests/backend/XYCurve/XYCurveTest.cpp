@@ -22,7 +22,7 @@
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 
 #include <QFile>
-#include "backend/lib/UndoStack.h"
+#include <QUndoStack>
 
 #define GET_CURVE_PRIVATE(plot, child_index, column_name, curve_variable_name)                                                                                 \
 	auto* curve_variable_name = plot->child<XYCurve>(child_index);                                                                                             \

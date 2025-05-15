@@ -21,7 +21,7 @@
 #include "backend/worksheet/plots/cartesian/XYFunctionCurvePrivate.h"
 #include "frontend/dockwidgets/XYFunctionCurveDock.h"
 
-#include "backend/lib/UndoStack.h"
+#include <QUndoStack>
 
 void XYFunctionCurveTest::setCurves() {
 	Project project;
