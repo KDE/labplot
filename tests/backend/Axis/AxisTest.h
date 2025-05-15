@@ -38,6 +38,8 @@ private Q_SLOTS:
 	void automaticTicNumberUpdateDockMajorTicks();
 	void automaticTicNumberUpdateDockMinorTicks();
 	void tickSpacingUpdateDockMajorTicks();
+
+	void testComputeMajorTickStart();
 };
 
 #endif // AXISTEST_H

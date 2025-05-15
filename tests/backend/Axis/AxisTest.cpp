@@ -935,4 +935,9 @@ void AxisTest::tickSpacingUpdateDockMajorTicks() {
 	QCOMPARE(xAxis->minorTicksSpacing(), 0.1);
 }
 
+void AxisTest::testComputeMajorTickStart() {
+	int majorTickCount = 5;
+	AxisPrivate::computeStart(majorTickCount, Range<double>(-0.7, 0.8, RangeT::Format::Numeric, RangeT::Scale::Linear));
+}
+
 QTEST_MAIN(AxisTest)
