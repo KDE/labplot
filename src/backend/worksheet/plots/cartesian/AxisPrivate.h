@@ -45,6 +45,7 @@ public:
 
 	// general
 	Axis::RangeType rangeType{Axis::RangeType::Auto};
+	double rangeBase{0};
 	Axis::Orientation orientation{Axis::Orientation::Horizontal}; //!< horizontal or vertical
 	Axis::Position position{Axis::Position::Centered}; //!< left, right, bottom, top or custom (usually not changed after creation)
 	double offset{0}; //!< offset from zero in the direction perpendicular to the axis

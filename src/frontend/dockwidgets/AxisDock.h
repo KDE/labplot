@@ -82,6 +82,7 @@ private Q_SLOTS:
 	void scaleChanged(int);
 	void rangeScaleChanged(bool);
 	void rangeTypeChanged(int);
+	void rangeBaseChanged(double value);
 	void startChanged(double);
 	void endChanged(double);
 	void startDateTimeChanged(qint64);
@@ -159,6 +160,7 @@ private Q_SLOTS:
 	void axisScaleChanged(RangeT::Scale);
 	void axisRangeScaleChanged(bool);
 	void axisRangeTypeChanged(Axis::RangeType);
+	void axisRangeBaseChanged(double);
 	void axisStartChanged(double);
 	void axisEndChanged(double);
 	void axisScalingFactorChanged(qreal);
