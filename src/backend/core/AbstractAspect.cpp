@@ -991,6 +991,11 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void AbstractAspect::setUndoAware(bool b) {
 	d->m_undoAware = b;
+
+	// propagate the value to the internal and hidden aspects, if available (Line, Background, etc.)
+	const auto& children = this->children<AbstractAspect>(ChildIndexFlag::IncludeHidden);
+	for (auto* child : children)
+		child->setUndoAware(b);
 }
 
 /**
