@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-09 02:29+0000\n"
-"PO-Revision-Date: 2025-05-07 18:56+0200\n"
+"PO-Revision-Date: 2025-05-13 18:44+0200\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -24637,12 +24637,7 @@ msgid "Bounding Box"
 msgstr "Umfluss-Rahmen"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:89
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specifies the area to export:<ul><li>Bounding Box - the bounding box of "
-#| "all objects on the worksheet is exported</li><li>Selection - the area of "
-#| "the currently selected objects is exported</li><li>Worskheet - the "
-#| "complete worksheet area is exported</li></ul>"
+#, kde-format
 msgid ""
 "Specifies the area to export:<ul><li>Bounding Box - the bounding box of all "
 "objects on the worksheet is exported</li><li>Selection - the area of the "
