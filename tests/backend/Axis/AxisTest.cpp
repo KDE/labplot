@@ -939,6 +939,9 @@ void AxisTest::testComputeMajorTickStart() {
 	int majorTickCount = 5;
 	double spacing = 0;
 	AxisPrivate::calculateAutoParameters(majorTickCount, Range<double>(-0.7, 0.8, RangeT::Format::Numeric, RangeT::Scale::Linear), spacing);
+
+	majorTickCount = 5;
+	AxisPrivate::calculateAutoParameters(majorTickCount, Range<double>(0.3, 1.0, RangeT::Format::Numeric, RangeT::Scale::Linear), spacing);
 }
 
 QTEST_MAIN(AxisTest)
