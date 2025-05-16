@@ -1395,44 +1395,19 @@ void AxisPrivate::addArrow(QPointF startPoint, int direction) {
 	}
 }
 
-//! helper function for retransformTicks()
-/*!
- * \brief AxisPrivate::transformAnchor
- * Transform a position in logical coordinates into scene corrdinates
- * \param anchorPoint point which should be converted. Contains the result of the conversion
- * if the transformation was valid
- * \return true if transformation was successful else false
- * Successful means, that the point is inside the coordinate system
- */
-bool AxisPrivate::transformAnchor(QPointF& anchorPoint) {
-	QVector<QPointF> points;
-	points.append(anchorPoint);
-	points = q->cSystem->mapLogicalToScene(points);
-
-	if (points.count() != 1) { // point is not mappable or in a coordinate gap
-		return false;
-	} else {
-		anchorPoint = points.at(0);
-		return true;
-	}
-}
-
 bool AxisPrivate::calculateTickHorizontal(Axis::TicksDirection tickDirection,
 										  double ticksLength,
-										  double tickStartPos,
-										  double dummyOtherDirPos,
-										  double otherDirAnchorPoint,
+										  double xTickPos,
+										  double yAnchorPos,
 										  double centerValue,
 										  int rangeDirection,
 										  QPointF& anchorPointOut,
 										  QPointF& startPointOut,
 										  QPointF& endPointOut) {
-	bool valid = false;
-	anchorPointOut.setX(tickStartPos);
-	anchorPointOut.setY(dummyOtherDirPos); // set dummy logical point, but it must be within the datarect, otherwise valid will be always false
-	valid = transformAnchor(anchorPointOut);
-	anchorPointOut.setY(otherDirAnchorPoint);
+	const bool valid = q->cSystem->mapXLogicalToScene(xTickPos);
 	if (valid) {
+		anchorPointOut.setX(xTickPos);
+		anchorPointOut.setY(yAnchorPos);
 		// for yDirection == -1 start is above end
 		if (anchorPointOut.y() >= centerValue) { // below
 			startPointOut = anchorPointOut + QPointF(0, (tickDirection & Axis::ticksIn) ? rangeDirection * ticksLength : 0);
@@ -1447,20 +1422,17 @@ bool AxisPrivate::calculateTickHorizontal(Axis::TicksDirection tickDirection,
 
 bool AxisPrivate::calculateTickVertical(Axis::TicksDirection tickDirection,
 										double ticksLength,
-										double tickStartPos,
-										double dummyOtherDirPos,
-										double otherDirAnchorPoint,
+										double yTickPos,
+										double xAnchorPos,
 										double centerValue,
 										int rangeDirection,
 										QPointF& anchorPointOut,
 										QPointF& startPointOut,
 										QPointF& endPointOut) {
-	bool valid = false;
-	anchorPointOut.setY(tickStartPos);
-	anchorPointOut.setX(dummyOtherDirPos); // set dummy logical point, but it must be within the datarect, otherwise valid will be always false
-	valid = transformAnchor(anchorPointOut);
-	anchorPointOut.setX(otherDirAnchorPoint);
+	const bool valid = q->cSystem->mapYLogicalToScene(yTickPos);
 	if (valid) {
+		anchorPointOut.setX(xAnchorPos);
+		anchorPointOut.setY(yTickPos);
 		// for xDirection == 1 start is right of end
 		if (anchorPointOut.x() < centerValue) { // left
 			startPointOut = anchorPointOut + QPointF((tickDirection & Axis::ticksIn) ? rangeDirection * ticksLength : 0, 0);
@@ -1852,11 +1824,9 @@ void AxisPrivate::retransformTicks() {
 		// calculate start and end points for major tick's line
 		if (majorTicksDirection != Axis::noTicks) {
 			if (orientation == Axis::Orientation::Horizontal) {
-				auto startY = q->plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
 				valid = calculateTickHorizontal(majorTicksDirection,
 												majorTicksLength,
 												majorTickPos,
-												startY,
 												otherDirAnchorPoint,
 												center.y(),
 												yDirection,
@@ -1864,11 +1834,9 @@ void AxisPrivate::retransformTicks() {
 												startPoint,
 												endPoint);
 			} else { // vertical
-				auto startX = q->plot()->range(Dimension::X, cs->index(Dimension::X)).start();
 				valid = calculateTickVertical(majorTicksDirection,
 											  majorTicksLength,
 											  majorTickPos,
-											  startX,
 											  otherDirAnchorPoint,
 											  center.x(),
 											  xDirection,
@@ -1956,11 +1924,9 @@ void AxisPrivate::retransformTicks() {
 
 				// calculate start and end points for minor tick's line (same as major ticks)
 				if (orientation == Axis::Orientation::Horizontal) {
-					auto startY = q->plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
 					valid = calculateTickHorizontal(minorTicksDirection,
 													minorTicksLength,
 													minorTickPos,
-													startY,
 													otherDirAnchorPoint,
 													center.y(),
 													yDirection,
@@ -1968,11 +1934,9 @@ void AxisPrivate::retransformTicks() {
 													startPoint,
 													endPoint);
 				} else { // vertical
-					auto startX = q->plot()->range(Dimension::X, cs->index(Dimension::X)).start();
 					valid = calculateTickVertical(minorTicksDirection,
 												  minorTicksLength,
 												  minorTickPos,
-												  startX,
 												  otherDirAnchorPoint,
 												  center.x(),
 												  xDirection,
