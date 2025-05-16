@@ -1489,24 +1489,44 @@ double AxisPrivate::calculateAutoParameters(int& majorTickCount, const Range<dou
 	const auto r2 = d2 * majorTickCount;
 	const auto r5 = d5 * majorTickCount;
 
-	const auto s1 = qAbs(r1 - diff);
-	const auto s2 = qAbs(r2 - diff);
-	const auto s5 = qAbs(r5 - diff);
+	constexpr bool minimizeRangeDiff = true;
+	if (minimizeRangeDiff) {
+		const auto s1 = qAbs(r1 - diff);
+		const auto s2 = qAbs(r2 - diff);
+		const auto s5 = qAbs(r5 - diff);
 
-	double b_new = 0;
-	if (s1 <= s2 && s1 <= s5) {
-		spacing = d1;
-	} else if (s2 <= s5) {
-		if ((majorTickCount == 2) && (r2 > diff)) {
-			spacing = d1; // Minimum ticks not met using d2 using d1 instead
+		if (s1 <= s2 && s1 <= s5)
+			spacing = d1;
+		else if (s2 <= s5) {
+			if ((majorTickCount == 2) && (r2 > diff))
+				spacing = d1; // Minimum ticks not met using d2 using d1 instead
+			else
+				spacing = d2;
 		} else {
-			spacing = d2;
+			if ((majorTickCount == 2) && (r5 > diff))
+				spacing = d2; // Minimum ticks not met using d5 using d2 instead
+			else
+				spacing = d5;
 		}
 	} else {
-		if ((majorTickCount == 2) && (r5 > diff)) {
-			spacing = d2; // Minimum ticks not met using d5 using d2 instead
+		// Does not look good
+		// Minimize to start value
+		const auto diff_d1 = r.start() - ceil(r.start() / d1) * d1;
+		const auto diff_d2 = r.start() - ceil(r.start() / d2) * d2;
+		const auto diff_d5 = r.start() - ceil(r.start() / d5) * d5;
+
+		if (diff_d1 <= diff_d2 && diff_d1 <= diff_d5)
+			spacing = d1;
+		else if (diff_d2 <= diff_d5) {
+			if ((majorTickCount == 2) && (r2 > diff))
+				spacing = d1; // Minimum ticks not met using d2 using d1 instead
+			else
+				spacing = d2;
 		} else {
-			spacing = d5;
+			if ((majorTickCount == 2) && (r5 > diff))
+				spacing = d2; // Minimum ticks not met using d5 using d2 instead
+			else
+				spacing = d5;
 		}
 	}
 
@@ -1564,9 +1584,10 @@ void AxisPrivate::retransformTicks() {
 		auto r = range;
 		r.setStart(start);
 		r.setEnd(end);
-		majorTicksNumber = 5; // Just temporary
+		majorTicksNumber = 5; // Initial value
 		majorTicksIncrement = 1.;
 		start = calculateAutoParameters(majorTicksNumber, r, majorTicksIncrement);
+		Q_EMIT q->majorTicksNumberChanged(majorTicksNumber);
 	}
 
 	if (majorTicksNumber < 1 || (majorTicksDirection == Axis::noTicks && minorTicksDirection == Axis::noTicks)) {
