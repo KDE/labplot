@@ -1122,6 +1122,7 @@ void RetransformTest::TestChangePlotRange() {
 	project.addChild(worksheet);
 
 	auto* p = new CartesianPlot(QStringLiteral("Plot"));
+	p->setNiceExtend(true); // Extend from 0..99 (spreadsheet data) to 0..100
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	worksheet->addChild(p);
 
@@ -1166,8 +1167,8 @@ void RetransformTest::TestChangePlotRange() {
 	dock.autoScaleChanged(Dimension::X, 1, false);
 	QCOMPARE(plot->autoScale(Dimension::X, 1), false);
 
-	dock.minChanged(Dimension::X, 1, 10);
-	dock.maxChanged(Dimension::X, 1, 20);
+	dock.minChanged(Dimension::X, 1, 10); // Does not have any impact because nothing is using range 1 yet
+	dock.maxChanged(Dimension::X, 1, 20); // Does not have any impact because nothing is using range 1 yet
 
 	// check axis ranges
 	auto axes = project.children(AspectType::Axis, AbstractAspect::ChildIndexFlag::Recursive);
@@ -1244,6 +1245,7 @@ void RetransformTest::TestChangePlotRangeElement() {
 	project.addChild(worksheet);
 
 	auto* p = new CartesianPlot(QStringLiteral("Plot"));
+	p->setNiceExtend(true); // extend from 0..99 (spreadsheet data) to 0..100
 	p->setType(CartesianPlot::Type::FourAxes); // Otherwise no axis are created
 	worksheet->addChild(p);
 
@@ -1970,6 +1972,7 @@ void RetransformTest::xyFunctionCurve() {
 	RetransformCallCounter c;
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setNiceExtend(true);
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
