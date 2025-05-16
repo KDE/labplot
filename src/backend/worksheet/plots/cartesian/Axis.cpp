@@ -1539,7 +1539,7 @@ double AxisPrivate::calculateAutoParameters(int& majorTickCount, const Range<dou
 	}
 
 	const auto start = ceil(r.start() / spacing) * spacing;
-	majorTickCount = std::floor(Range<double>::diff(r.scale(), start, r.end()) / spacing + 1);
+	majorTickCount = std::round(Range<double>::diff(r.scale(), start, r.end()) / spacing + 1);
 	return start;
 }
 
