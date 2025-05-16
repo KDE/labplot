@@ -1505,7 +1505,7 @@ int AxisPrivate::determineMinorTicksNumber() const {
  * on the axis (but at least 2). The value of M is set by the requested
  * MajorTickMode.
  */
-double AxisPrivate::computeStart(int& majorTickCount, const Range<double>& r) {
+double AxisPrivate::calculateAutoParameters(int& majorTickCount, const Range<double>& r, double& spacing) {
 	const auto diff = r.diff();
 	const auto b = floor(log10(diff / majorTickCount));
 
@@ -1521,26 +1521,25 @@ double AxisPrivate::computeStart(int& majorTickCount, const Range<double>& r) {
 	const auto s2 = qAbs(r2 - diff);
 	const auto s5 = qAbs(r5 - diff);
 
-	double majorTicksSpacing = 0;
 	double b_new = 0;
 	if (s1 <= s2 && s1 <= s5) {
-		majorTicksSpacing = d1;
+		spacing = d1;
 	} else if (s2 <= s5) {
 		if ((majorTickCount == 2) && (r2 > diff)) {
-			majorTicksSpacing = d1; // Minimum ticks not met using d2 using d1 instead
+			spacing = d1; // Minimum ticks not met using d2 using d1 instead
 		} else {
-			majorTicksSpacing = d2;
+			spacing = d2;
 		}
 	} else {
 		if ((majorTickCount == 2) && (r5 > diff)) {
-			majorTicksSpacing = d2; // Minimum ticks not met using d5 using d2 instead
+			spacing = d2; // Minimum ticks not met using d5 using d2 instead
 		} else {
-			majorTicksSpacing = d5;
+			spacing = d5;
 		}
 	}
 
-	const auto start = ceil(r.start() / majorTicksSpacing) * majorTicksSpacing;
-	majorTickCount = std::floor(Range<double>::diff(r.scale(), start, r.end()) / majorTicksSpacing + 1);
+	const auto start = ceil(r.start() / spacing) * spacing;
+	majorTickCount = std::floor(Range<double>::diff(r.scale(), start, r.end()) / spacing + 1);
 	return start;
 }
 
@@ -1594,7 +1593,8 @@ void AxisPrivate::retransformTicks() {
 		r.setStart(start);
 		r.setEnd(end);
 		majorTicksNumber = 5; // Just temporary
-		start = computeStart(majorTicksNumber, r);
+		majorTicksIncrement = 1.;
+		start = calculateAutoParameters(majorTicksNumber, r, majorTicksIncrement);
 	}
 
 	if (majorTicksNumber < 1 || (majorTicksDirection == Axis::noTicks && minorTicksDirection == Axis::noTicks)) {
@@ -1666,6 +1666,8 @@ void AxisPrivate::retransformTicks() {
 	switch (majorTicksType) {
 	case Axis::TicksType::TotalNumber: // total number of major ticks is given - > determine the increment
 		tmpMajorTicksNumber = majorTicksNumber;
+		if (majorTicksAutoNumber)
+			break; // tmpMajorTicksIncrement is calculated already above
 		// fall through
 	case Axis::TicksType::ColumnLabels: // fall through
 	case Axis::TicksType::CustomColumn: // fall through

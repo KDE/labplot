@@ -76,7 +76,7 @@ public:
 	Axis::TicksType majorTicksType{
 		Axis::TicksType::TotalNumber}; //!< the way how the number of major ticks is specified  - either as a total number or an increment
 	bool majorTicksAutoNumber{true}; //!< If the number of ticks should be adjusted automatically or not
-	int majorTicksNumber{11}; //!< number of major ticks
+	int majorTicksNumber{5}; //!< number of major ticks
 	qreal majorTicksSpacing{0.0}; //!< spacing (step) for the major ticks
 	const AbstractColumn* majorTicksColumn{nullptr}; //!< column containing values for major ticks' positions
 	QString majorTicksColumnPath;
@@ -166,7 +166,7 @@ private:
 							   QPointF& startPointOut,
 							   QPointF& endPointOut);
 	int determineMinorTicksNumber() const;
-	static double computeStart(int& majorTickCount, const Range<double>& r);
+	static double calculateAutoParameters(int& majorTickCount, const Range<double>& r);
 
 	QPainterPath arrowPath;
 	QPainterPath majorTicksPath;
