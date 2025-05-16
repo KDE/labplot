@@ -4,7 +4,7 @@
 	Description          : Base class for all Worksheet children.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -13,6 +13,7 @@
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Worksheet.h"
@@ -358,7 +359,9 @@ void WorksheetElement::execMoveBehind(QAction* action) {
 	parent->moveChild(this, newIndex - currIndex);
 }
 
+// align rect at position pos using horAlign and vertAlign
 QPointF WorksheetElement::align(QPointF pos, QRectF rect, HorizontalAlignment horAlign, VerticalAlignment vertAlign, bool positive) const {
+	// QDEBUG(Q_FUNC_INFO << ", point " << pos << " to rect " << rect << " with alignment " << horAlign << "/" << vertAlign)
 	// positive is right
 	double xAlign = 0.;
 	switch (horAlign) {
@@ -375,21 +378,20 @@ QPointF WorksheetElement::align(QPointF pos, QRectF rect, HorizontalAlignment ho
 	// positive is to top
 	double yAlign = 0.;
 	switch (vertAlign) {
-	case VerticalAlignment::Bottom:
-		yAlign = -rect.height() / 2.;
-		break;
 	case VerticalAlignment::Top:
 		yAlign = rect.height() / 2.;
+		break;
+	case VerticalAlignment::Bottom:
+		yAlign = -rect.height() / 2.;
 		break;
 	case VerticalAlignment::Center:
 		break;
 	}
 
-	// For yAlign it must be two times plus.
 	if (positive)
 		return {pos.x() + xAlign, pos.y() + yAlign};
 	else
-		return {pos.x() - xAlign, pos.y() + yAlign};
+		return {pos.x() - xAlign, pos.y() - yAlign};
 }
 
 QRectF WorksheetElement::parentRect() const {
@@ -475,6 +477,7 @@ QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, PositionWrap
  * \return parent position
  */
 QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const {
+	// QDEBUG(Q_FUNC_INFO << ", pos point = " << position.point)
 	// increasing relative pos hor --> right
 	// increasing relative pos vert --> top
 	// increasing parent pos hor --> right
@@ -496,6 +499,7 @@ QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const
 		break;
 	}
 
+	// DEBUG("parent x = " << parentRect.x() << ", width = " << parentRect.width() << ", pos x = " << position.point.x())
 	if (position.horizontalPosition == HorizontalPosition::Relative)
 		parentPos.setX(parentRect.x() + parentRect.width() * position.point.x());
 	else
@@ -515,6 +519,7 @@ QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const
 		break;
 	}
 
+	// DEBUG("parent y = " << parentRect.y() << ", height = " << parentRect.height() << ", pos y = " << position.point.y())
 	if (position.verticalPosition == VerticalPosition::Relative)
 		parentPos.setY(parentRect.y() + parentRect.height() * position.point.y());
 	else
@@ -743,7 +748,7 @@ BASIC_SHARED_D_READER_IMPL(WorksheetElement, QPointF, positionLogical, positionL
 BASIC_SHARED_D_READER_IMPL(WorksheetElement,
 						   qreal,
 						   rotationAngle,
-						   rotation() * -1) // the rotation is in qgraphicsitem different to the convention used in labplot
+						   rotation() * -1) // the convention for rotation is different in QGraphicsItem than used in labplot
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, coordinateBindingEnabled, coordinateBindingEnabled)
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, qreal, scale, scale())
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, isLocked, lock)
@@ -783,9 +788,10 @@ void WorksheetElement::setVerticalAlignment(const WorksheetElement::VerticalAlig
 
 STD_SETTER_CMD_IMPL_S(WorksheetElement, SetCoordinateBindingEnabled, bool, coordinateBindingEnabled) // do I need a final method?
 bool WorksheetElement::setCoordinateBindingEnabled(bool on) {
-	Q_D(WorksheetElement);
 	if (on && !cSystem)
 		return false;
+
+	Q_D(WorksheetElement);
 	if (on != d->coordinateBindingEnabled) {
 		// Must not be in the Undo Command,
 		// because if done once, logical and
@@ -859,6 +865,7 @@ void WorksheetElementPrivate::paint(QPainter*, const QStyleOptionGraphicsItem*, 
 }
 
 void WorksheetElementPrivate::updatePosition() {
+	DEBUG(Q_FUNC_INFO)
 	QPointF p;
 	if (coordinateBindingEnabled && q->cSystem) {
 		// the position in logical coordinates was changed, calculate the position in scene coordinates
@@ -964,19 +971,27 @@ void WorksheetElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	m_leftButtonPressed = false;
-	if (!m_moveStarted) {
+	if (!m_moveStarted || !(this->flags() & QGraphicsItem::ItemIsMovable)) {
 		QGraphicsItem::mouseReleaseEvent(event);
 		return;
 	}
 
-	// convert position of the item in parent coordinates to label's position
-	QPointF point = q->parentPosToRelativePos(pos(), position);
-	point = q->align(point, boundingRect(), horizontalAlignment, verticalAlignment, false);
-	if (point != position.point) {
-		// position was changed -> set the position related member variables
+	QDEBUG(Q_FUNC_INFO << ", new position =" << pos() << ", old position (relative) =" << position.point)
+	// convert new position
+	auto point = q->align(pos(), boundingRect(), horizontalAlignment, verticalAlignment, false);
+	// in percentage
+	auto parentRect = q->parentRect();
+	point.setX((point.x() - parentRect.x()) / parentRect.width());
+	point.setY((point.y() - parentRect.y()) / parentRect.height());
+	QDEBUG(Q_FUNC_INFO << ", new position (relative) =" << point)
+
+	if (point != position.point) { // position was changed
 		suppressRetransform = true;
 		auto tempPosition = position;
 		tempPosition.point = point;
+		// switch to relative
+		tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Relative;
+		tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Relative;
 		q->setPosition(tempPosition);
 		updatePosition(); // to update the logical position if available
 		suppressRetransform = false;
@@ -986,8 +1001,9 @@ void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 	QGraphicsItem::mouseReleaseEvent(event);
 }
 
+// called when any property changes (like position)
 QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QVariant& value) {
-	if (suppressItemChangeEvent)
+	if (suppressItemChangeEvent || !(this->flags() & QGraphicsItem::ItemIsMovable))
 		return value;
 
 	if (change == QGraphicsItem::ItemPositionChange) {
@@ -1008,18 +1024,22 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 		// don't use setPosition here, because then all small changes are on the undo stack
 		// setPosition is used then in mouseReleaseEvent
 		if (coordinateBindingEnabled) {
+			DEBUG(Q_FUNC_INFO << ", coordinate binding enabled")
 			if (!q->cSystem->isValid())
 				return QGraphicsItem::itemChange(change, value);
-			QPointF pos = q->align(newPos, m_boundingRectangle, horizontalAlignment, verticalAlignment, false);
+			auto pos = q->align(newPos, m_boundingRectangle, horizontalAlignment, verticalAlignment, false);
 
 			positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(pos), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			Q_EMIT q->positionLogicalChanged(positionLogical);
 			Q_EMIT q->objectPositionChanged();
 		} else {
-			// convert item's center point in parent's coordinates
+			DEBUG(Q_FUNC_INFO << ", coordinate binding disabled")
 			auto tempPosition = position;
-			tempPosition.point = q->parentPosToRelativePos(newPos, position);
-			tempPosition.point = q->align(tempPosition.point, boundingRect(), horizontalAlignment, verticalAlignment, false);
+			tempPosition.point = q->align(newPos, boundingRect(), horizontalAlignment, verticalAlignment, false);
+			// in percentage
+			auto parentRect = q->parentRect();
+			tempPosition.point.setX((tempPosition.point.x() - parentRect.x()) / parentRect.width());
+			tempPosition.point.setY((tempPosition.point.y() - parentRect.y()) / parentRect.height());
 
 			// Q_EMIT the signals in order to notify the UI.
 			Q_EMIT q->positionChanged(tempPosition);
@@ -1108,4 +1128,40 @@ void WorksheetElementPrivate::setHover(bool on) {
 CartesianPlot* WorksheetElement::plot() const {
 	Q_D(const WorksheetElement);
 	return d->m_plot;
+}
+
+/*
+ * Returns a localized representation of the integer \c value according
+ * to \locale and to the current settings for the minus sign for negative values.
+ * if it's clear the value is always strictly positive, QLocale::toNumber() can be used directly.
+ */
+QString WorksheetElementPrivate::numberToString(int value, const QLocale& locale) {
+	QString result = locale.toString(value);
+	if (value < 0)
+		handleNegativeNumber(result);
+	return result;
+}
+
+/*
+ * Returns a localized representation of the double \c value according
+ * to \locale and to the current settings for the minus sign for negative values.
+ * if it's clear the value is always strictly positive, QLocale::toNumber() can be used directly.
+ */
+QString WorksheetElementPrivate::numberToString(double value, const QLocale& locale, char format, int precision) {
+	QString result = locale.toString(value, format, precision);
+	if (value < 0)
+		handleNegativeNumber(result);
+
+	return result;
+}
+
+/*!
+ * helper function replacing the hyphen with the minus sign in the localized string of the numerical value,
+ * if this setting is active
+ */
+void WorksheetElementPrivate::handleNegativeNumber(QString& value) {
+	const auto group = Settings::settingsGeneral();
+	const bool useHyphen = group.readEntry<bool>(QLatin1String("UseHyphen"), false);
+	if (!useHyphen)
+		value.replace(0, 1, QString::fromUtf8("−"));
 }

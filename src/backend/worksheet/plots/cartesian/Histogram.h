@@ -4,7 +4,7 @@
 	Description          : Histogram
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2018-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -13,7 +13,6 @@
 
 #include "backend/worksheet/plots/cartesian/Plot.h"
 
-class AbstractColumn;
 class HistogramPrivate;
 class Background;
 class ErrorBar;
@@ -52,6 +51,7 @@ public:
 	void retransform() override;
 	void recalc() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	void updateLocale() override;
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
 	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
@@ -106,8 +106,7 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(Histogram)
-	void init(bool loading = false);
-	void initActions();
+	void init(bool loading);
 	void connectDataColumn(const AbstractColumn*);
 
 Q_SIGNALS:

@@ -531,14 +531,11 @@ void XYInterpolationCurveDock::numberOfPointsChanged() {
 }
 
 void XYInterpolationCurveDock::recalculateClicked() {
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYInterpolationCurve*>(curve)->setInterpolationData(m_interpolationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	Q_EMIT info(i18n("Interpolation status: %1", m_interpolationCurve->result().status));
-	QApplication::restoreOverrideCursor();
 }
 
 /*!

@@ -15,7 +15,7 @@
 
 #include "backend/datasources/filters/HDF5Filter.h"
 #include "backend/core/column/Column.h"
-#include "backend/datasources/LiveDataSource.h"
+#include "backend/datasources/AbstractDataSource.h"
 #include "backend/datasources/filters/HDF5FilterPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/hostprocess.h"
@@ -501,15 +501,26 @@ QString HDF5FilterPrivate::translateHDF5Class(H5T_class_t c) {
 }
 
 AbstractColumn::ColumnMode HDF5FilterPrivate::translateHDF5TypeToMode(hid_t t) {
+	DEBUG(Q_FUNC_INFO << ", mode = " << STDSTRING(HDF5FilterPrivate::translateHDF5Type(t)))
+	if (H5Tequal(t, H5T_STD_I8LE) || H5Tequal(t, H5T_STD_I8BE) || H5Tequal(t, H5T_STD_U8LE) || H5Tequal(t, H5T_STD_U8BE) || H5Tequal(t, H5T_STD_I16LE)
+		|| H5Tequal(t, H5T_STD_I16BE) || H5Tequal(t, H5T_STD_U16LE) || H5Tequal(t, H5T_STD_U16BE) || H5Tequal(t, H5T_STD_I32LE) || H5Tequal(t, H5T_STD_I32BE)) {
+		DEBUG(Q_FUNC_INFO << ", Integer")
+		return AbstractColumn::ColumnMode::Integer;
+	}
+
 	if (H5Tequal(t, H5T_STD_U32LE) || H5Tequal(t, H5T_STD_U32BE) || H5Tequal(t, H5T_NATIVE_LONG) || H5Tequal(t, H5T_NATIVE_ULONG) || H5Tequal(t, H5T_STD_I64LE)
-		|| H5Tequal(t, H5T_STD_I64BE) || H5Tequal(t, H5T_STD_U64LE) || H5Tequal(t, H5T_STD_U64BE))
+		|| H5Tequal(t, H5T_STD_I64BE) || H5Tequal(t, H5T_STD_U64LE) || H5Tequal(t, H5T_STD_U64BE)) {
+		DEBUG(Q_FUNC_INFO << ", BigInt")
 		return AbstractColumn::ColumnMode::BigInt;
+	}
 
 	if (H5Tequal(t, H5T_IEEE_F32LE) || H5Tequal(t, H5T_IEEE_F32BE) || H5Tequal(t, H5T_IEEE_F64LE) || H5Tequal(t, H5T_IEEE_F64BE)
-		|| H5Tequal(t, H5T_NATIVE_LDOUBLE))
+		|| H5Tequal(t, H5T_NATIVE_LDOUBLE)) {
+		DEBUG(Q_FUNC_INFO << ", Double")
 		return AbstractColumn::ColumnMode::Double;
+	}
 
-	// everything else
+	DEBUG(Q_FUNC_INFO << ", Unknown type")
 	return AbstractColumn::ColumnMode::Integer;
 }
 

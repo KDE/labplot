@@ -4,7 +4,7 @@
 	Description      : widget for editing properties of data reduction curves
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -53,7 +53,7 @@ private Q_SLOTS:
 	void xRangeMaxChanged();
 	void xRangeMinDateTimeChanged(qint64);
 	void xRangeMaxDateTimeChanged(qint64);
-	void typeChanged(int);
+	void methodChanged(int);
 	void autoToleranceChanged();
 	void toleranceChanged(double);
 	void autoTolerance2Changed();

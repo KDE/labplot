@@ -15,7 +15,9 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/IntervalAttribute.h"
 
-class AbstractColumnPrivate {
+class AbstractColumnPrivate : public QObject {
+	Q_OBJECT
+
 public:
 	explicit AbstractColumnPrivate(AbstractColumn* owner);
 	AbstractColumn* owner() {
@@ -26,6 +28,7 @@ public:
 		return m_owner->name();
 	}
 
+	bool m_suppressDataChangedSignal{false};
 	IntervalAttribute<bool> m_masking;
 	AbstractColumn::HeatmapFormat* m_heatmapFormat{nullptr};
 

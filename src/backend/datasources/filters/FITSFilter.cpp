@@ -18,11 +18,16 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/matrix/MatrixModel.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#ifndef SDK
 #include "frontend/matrix/MatrixView.h"
+#endif
 
-#include <QDebug>
+#include <KLocalizedString>
+
 #include <QFile>
 #include <QMultiMap>
+#include <QTableWidget>
+#include <QTreeWidget>
 
 /*! \class FITSFilter
  * \brief Manages the import/export of data from/to a FITS file.
@@ -685,10 +690,16 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 			tform.squeeze();
 			// TODO: mode
 			const QVector<QVector<double>>* const matrixData = static_cast<QVector<QVector<double>>*>(matrix->data());
+#ifndef SDK
 			const MatrixModel* matrixModel = static_cast<MatrixView*>(matrix->view())->model();
+#endif
 			const int precision = matrix->precision();
 			for (int i = 0; i < tfields; ++i) {
+#ifndef SDK
 				const QString& columnName = matrixModel->headerData(i, Qt::Horizontal).toString();
+#else
+				const QString columnName;
+#endif
 				columnNames[i] = new char[columnName.size() + 1];
 				strcpy(columnNames[i], columnName.toLatin1().constData());
 				int maxSize = -1;

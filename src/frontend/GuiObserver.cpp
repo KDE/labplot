@@ -10,28 +10,13 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectTreeModel.h"
-#include "backend/datasources/LiveDataSource.h"
-#include "backend/matrix/Matrix.h"
-#include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/spreadsheet/StatisticsSpreadsheet.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
-#include "backend/worksheet/TextLabel.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
-#include "backend/worksheet/plots/cartesian/BarPlot.h"
-#include "backend/worksheet/plots/cartesian/BoxPlot.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
-#include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
 #include "backend/worksheet/plots/cartesian/QQPlot.h"
-#include "backend/worksheet/plots/cartesian/ReferenceLine.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/notebook/Notebook.h"
 #endif
@@ -40,10 +25,7 @@
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
 #endif
-#include "backend/core/Project.h"
 #include "backend/datapicker/Datapicker.h"
-#include "backend/datapicker/DatapickerCurve.h"
-#include "backend/datapicker/DatapickerImage.h"
 
 #include "frontend/GuiObserver.h"
 #include "frontend/ProjectExplorer.h"
@@ -99,7 +81,6 @@
 #include <KLocalizedString>
 #include <QStackedWidget>
 #include <QStatusBar>
-#include <QToolBar>
 
 /*!
   \class GuiObserver
@@ -442,7 +423,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 			QList<DatapickerImage*> list;
 			for (auto* aspect : selectedAspects)
 				list << static_cast<Datapicker*>(aspect)->image();
-			m_datapickerImageDock->setImages(list);
+			m_datapickerImageDock->setImages(std::move(list));
 		}
 		break;
 	case AspectType::Project:
@@ -459,7 +440,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window %1 is a Cantor backend", "%1 Notebook", list.first()->backendName()));
 			else
 				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Notebook"));
-			m_notebookDock->setNotebooks(list);
+			m_notebookDock->setNotebooks(std::move(list));
 		}
 #endif
 		break;

@@ -17,7 +17,12 @@
 typedef QVector<QPointF> Points;
 typedef QVector<QLineF> Lines;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT AbstractCoordinateSystem {
+#else
 class AbstractCoordinateSystem {
+#endif
 public:
 	enum class MappingFlag {
 		DefaultMapping = 0x00,

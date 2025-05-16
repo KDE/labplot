@@ -7,13 +7,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYFunctionCurve
-  \brief A xy-curve that is calculated as a function of other curves
-
-  \ingroup worksheet
-*/
-
 #include "XYFunctionCurve.h"
 #include "XYFunctionCurvePrivate.h"
 #include "backend/core/column/Column.h"
@@ -26,6 +19,11 @@
 #include <QElapsedTimer>
 #include <QIcon>
 
+/*!
+ * \class XYFunctionCurve
+ * \brief A xy-curve that is calculated as a function of other curves
+ * \ingroup CartesianPlots
+ */
 XYFunctionCurve::XYFunctionCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYFunctionCurvePrivate(this), AspectType::XYFunctionCurve) {
 	init();
@@ -176,11 +174,6 @@ void XYFunctionCurve::functionVariableCurveRemoved(const AbstractAspect* aspect)
 void XYFunctionCurve::functionVariableCurveAdded(const AbstractAspect* aspect) {
 	Q_D(XYFunctionCurve);
 	d->functionVariableCurveAdded(aspect);
-}
-
-void XYFunctionCurve::recalculate() {
-	Q_D(XYFunctionCurve);
-	d->recalculate();
 }
 
 // ##############################################################################

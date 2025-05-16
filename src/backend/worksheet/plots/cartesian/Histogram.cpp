@@ -4,24 +4,15 @@
 	Description          : Histogram
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2016-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2018 Garvit Khatri <garvitdelhi@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class Histogram
-  \brief A 2D-curve, provides an interface for editing many properties of the curve.
-
-  \ingroup worksheet
-  */
 #include "Histogram.h"
 #include "HistogramPrivate.h"
-#include "backend/core/AbstractColumn.h"
-#include "backend/core/Folder.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
-#include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macrosCurve.h"
@@ -29,25 +20,28 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "tools/ImageTools.h"
 
+#include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QPainter>
 
-#include <KConfig>
-#include <KConfigGroup>
 #include <KLocalizedString>
-#include <QGraphicsSceneMouseEvent>
-
-#include <backend/worksheet/WorksheetElement.h>
 
 CURVE_COLUMN_CONNECT(Histogram, Data, data, recalc)
 static constexpr double zero = std::numeric_limits<double>::epsilon(); // zero baseline, don't use the exact 0.0 since it breaks the histrogram with log-scaling
 
+/*!
+ * \class Histogram
+ * \brief This class implements the histogram - a visualization of the distribution of numerical data.
+ *
+ * Ordinary, cumulative and average shifted histograms are supported as well as
+ * different normalization and binning methods.
+ * \ingroup CartesianPlots
+ */
 Histogram::Histogram(const QString& name, bool loading)
 	: Plot(name, new HistogramPrivate(this), AspectType::Histogram) {
 	init(loading);
@@ -55,7 +49,7 @@ Histogram::Histogram(const QString& name, bool loading)
 
 Histogram::Histogram(const QString& name, HistogramPrivate* dd)
 	: Plot(name, dd, AspectType::Histogram) {
-	init();
+	init(false);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -153,10 +147,6 @@ void Histogram::init(bool loading) {
 	d->rugLength = group.readEntry(QStringLiteral("RugLength"), Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
 	d->rugWidth = group.readEntry(QStringLiteral("RugWidth"), 0.0);
 	d->rugOffset = group.readEntry(QStringLiteral("RugOffset"), 0.0);
-	this->initActions();
-}
-
-void Histogram::initActions() {
 }
 
 /*!
@@ -249,6 +239,11 @@ QMenu* Histogram::createContextMenu() {
   */
 QIcon Histogram::icon() const {
 	return QIcon::fromTheme(QStringLiteral("view-object-histogram-linear"));
+}
+
+void Histogram::updateLocale() {
+	Q_D(Histogram);
+	d->updateValues();
 }
 
 // ##############################################################################
@@ -1200,13 +1195,14 @@ void HistogramPrivate::updateValues() {
 	// determine the value string for all points that are currently visible in the plot
 	const auto& valuesPrefix = value->prefix();
 	const auto& valuesSuffix = value->suffix();
+	const auto numberLocale = QLocale();
 	if (value->type() == Value::BinEntries) {
 		switch (type) {
 		case Histogram::Ordinary:
 			for (size_t i = 0; i < m_bins; ++i) {
 				if (!visiblePoints[i])
 					continue;
-				valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(m_histogram, i)) + valuesSuffix;
+				valuesStrings << valuesPrefix + numberLocale.toString(gsl_histogram_get(m_histogram, i)) + valuesSuffix;
 			}
 			break;
 		case Histogram::Cumulative: {
@@ -1215,7 +1211,7 @@ void HistogramPrivate::updateValues() {
 				if (!visiblePoints[i])
 					continue;
 				value += gsl_histogram_get(m_histogram, i);
-				valuesStrings << valuesPrefix + QString::number(value) + valuesSuffix;
+				valuesStrings << valuesPrefix + numberLocale.toString(value) + valuesSuffix;
 			}
 			break;
 		}
@@ -1240,11 +1236,12 @@ void HistogramPrivate::updateValues() {
 
 			switch (xColMode) {
 			case AbstractColumn::ColumnMode::Double:
-				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i), value->numericFormat(), value->precision()) + valuesSuffix;
+				valuesStrings << valuesPrefix + numberToString(valuesColumn->valueAt(i), numberLocale, value->numericFormat(), value->precision())
+						+ valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
-				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
+				valuesStrings << valuesPrefix + numberToString(valuesColumn->valueAt(i), numberLocale) + valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Text:
 				valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
@@ -1536,7 +1533,7 @@ void HistogramPrivate::updatePixmap() {
 	}
 	m_pixmap.fill(Qt::transparent);
 	QPainter painter(&m_pixmap);
-	painter.setRenderHint(QPainter::Antialiasing, true);
+	painter.setRenderHint(QPainter::Antialiasing);
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
@@ -1558,12 +1555,16 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
 	painter->setPen(Qt::NoPen);
 	painter->setBrush(Qt::NoBrush);
-	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+	painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
 	if (!q->isPrinting() && Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
 		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
+
+	// no need to handle the selection/hover effect if the cached pixmap is empty
+	if (m_pixmap.isNull())
+		return;
 
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		if (m_hoverEffectImageIsDirty) {

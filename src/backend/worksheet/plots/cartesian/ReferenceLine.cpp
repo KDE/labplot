@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Custom user-defined point on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -14,9 +14,6 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "frontend/GuiTools.h"
 
 #include <QActionGroup>
@@ -28,16 +25,15 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-using Dimension = CartesianCoordinateSystem::Dimension;
-
 /**
  * \class ReferenceLine
- * \brief A customizable point.
+ * \brief This class implements line that can be placed at a custom reference position on the plot
+ * to highlight certain aspects of the visualized data.
  *
- * The position can be either specified by mouse events or by providing the
- * x- and y- coordinates in parent's coordinate system
+ * The custom position can be either specified by moving the line with the mouse or by manually providing
+ * the x- or y- coordinate for the vertical or horizontal orientations, respectively.
+ * The coordinates are provided relatively to plot's coordinate system.
  */
-
 ReferenceLine::ReferenceLine(CartesianPlot* plot, const QString& name, bool loading)
 	: WorksheetElement(name, new ReferenceLinePrivate(this), AspectType::ReferenceLine) {
 	Q_D(ReferenceLine);
@@ -142,8 +138,8 @@ QMenu* ReferenceLine::createContextMenu() {
 	if (!orientationMenu)
 		initMenus();
 
-	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* visibilityAction = this->visibilityAction();
+	auto* menu = WorksheetElement::createContextMenu();
+	auto* visibilityAction = this->visibilityAction();
 
 	Q_D(const ReferenceLine);
 
@@ -230,9 +226,8 @@ void ReferenceLinePrivate::retransform() {
 	if (suppressRetransform || !q->cSystem || q->isLoading())
 		return;
 
-	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
-	const auto& xRange = m_plot->range(Dimension::X, cs->index(Dimension::X));
-	const auto& yRange = m_plot->range(Dimension::Y, cs->index(Dimension::Y));
+	const auto& xRange = m_plot->range(Dimension::X, q->cSystem->index(Dimension::X));
+	const auto& yRange = m_plot->range(Dimension::Y, q->cSystem->index(Dimension::Y));
 
 	// calculate the position in the scene coordinates
 	if (orientation == ReferenceLine::Orientation::Vertical)

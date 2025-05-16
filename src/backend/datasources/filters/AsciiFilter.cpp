@@ -21,6 +21,13 @@
 #include <QFile>
 
 #include <QDateTime>
+#ifdef HAVE_QTSERIALPORT
+#include <QSerialPort>
+#endif
+#include <QNetworkDatagram>
+#include <QTcpSocket>
+#include <QTimer>
+#include <QUdpSocket>
 
 #include <fstream>
 
@@ -34,10 +41,12 @@ struct IODeviceHandler {
 	}
 
 	~IODeviceHandler() {
-		if (reset && !device.isSequential())
-			device.reset(); // Seek to the start
-		if (device.isOpen())
-			device.close();
+		if (!device.isSequential()) {
+			if (reset)
+				device.reset(); // Seek to the start
+			if (device.isOpen())
+				device.close();
+		}
 	}
 
 private:
@@ -197,7 +206,7 @@ QString AsciiFilter::statusToString(Status e) {
 	case Status::UnableToOpenDevice:
 		return i18n("Unable to open device");
 	case Status::NoNewLine:
-		return QString();
+		return i18n("No new line detected");
 	case Status::SeparatorDeterminationFailed:
 		return i18n("Unable to determine the separator");
 	case Status::InvalidNumberDataColumns:
@@ -226,8 +235,8 @@ QString AsciiFilter::statusToString(Status e) {
 		return i18n("Separator detection not allowed");
 	case Status::InvalidSeparator:
 		return i18n("Invalid separator");
-	case Status::SequentialDeviceUninitialized:
-		return i18n("Filter not initialized");
+	case Status::SerialDeviceUninitialized:
+		return i18n("Serial device must be initialized before reading data from it");
 	case Status::WrongEndColumn:
 		return i18n("Wrong end column. Is it smaller than start column?");
 	case Status::WrongEndRow:
@@ -259,8 +268,8 @@ QStringList AsciiFilter::separatorCharacters() {
 }
 
 /*!
-returns the list of all predefined comment characters.
-*/
+ * returns the list of all predefined comment characters.
+ */
 QStringList AsciiFilter::commentCharacters() {
 	return (QStringList() << QStringLiteral("#") << QStringLiteral("!") << QStringLiteral("//") << QStringLiteral("+") << QStringLiteral("c")
 						  << QStringLiteral(":") << QStringLiteral(";"));
@@ -420,7 +429,7 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner)
 AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	using Status = AsciiFilter::Status;
 
-	IODeviceHandler d(device, true); // closes device automatically. TODO: check that it gets not optimized out
+	IODeviceHandler d(device, true); // closes device automatically.
 
 	if (!properties.automaticSeparatorDetection && properties.endColumn > 0
 		&& properties.columnModes.size() == properties.endColumn - properties.startColumn + 1)
@@ -430,18 +439,19 @@ AsciiFilter::Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	const bool simplifyWhiteSpace = properties.simplifyWhitespaces;
 	const bool skipEmptyParts = properties.skipEmptyParts;
 
-	if (device.isSequential()) {
+#ifdef HAVE_QTSERIALPORT
+	if (dynamic_cast<QSerialPort*>(&device)) {
 		// Initialization not required. Assuming that all parameters are set,
-		// makes no sense for sequential devices, because you never know if
-		// the line is really the first line
-		return Status::SequentialDeviceUninitialized;
+		// makes no sense for serial port, because you never know if
+		// the line is really the first line and if it is a complete line
+		return Status::SerialDeviceUninitialized;
 	}
+#endif
 
-	if (!device.open(QIODevice::ReadOnly))
-		return Status::UnableToOpenDevice;
-
-	if (device.atEnd())
-		return Status::DeviceAtEnd;
+	if (!device.isOpen()) {
+		if (!device.open(QIODevice::ReadOnly))
+			return Status::UnableToOpenDevice;
+	}
 
 	if (properties.endColumn > 0 && properties.endColumn < properties.startColumn)
 		return Status::WrongEndColumn;
@@ -763,7 +773,7 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 	int counter = 0;
 	int startDataRow = 1;
 	int rowIndex = dataContainerStartIndex;
-	const auto columnCountExpected = m_DataContainer.size() - properties.createIndex - properties.createTimestamp;
+	const size_t columnCountExpected = m_DataContainer.size() - properties.createIndex - properties.createTimestamp;
 	QVector<QStringView> columnValues(columnCountExpected);
 	const auto separatorLength = properties.separator.size();
 	bool separatorSingleCharacter = separatorLength == 1;
@@ -806,7 +816,7 @@ AsciiFilter::Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 		// Now we get to the data rows
 		if (properties.simplifyWhitespaces) {
 			const auto& values = determineColumnsSimplifyWhiteSpace(line, properties);
-			if (values.size() < columnCountExpected)
+			if ((size_t)values.size() < columnCountExpected)
 				continue; // return Status::InvalidNumberDataColumns;
 			setValues(values, rowIndex, properties);
 		} else {
@@ -946,18 +956,20 @@ AsciiFilterPrivate::determineColumnModes(const QVector<QStringList>& rows, const
 
 			if (first)
 				modes[columnIndex] = mode;
-			else if (mode == Mode::Double && modes[columnIndex] == Mode::Integer) {
-				// numeric: integer -> numeric
-				modes[columnIndex] = mode;
-			} else if (mode == Mode::Text && modes[columnIndex] != Mode::Text) {
-				// text: non text -> text
-				modes[columnIndex] = mode;
-			} else if (mode == Mode::BigInt && modes[columnIndex] == Mode::Integer)
-				modes[columnIndex] = mode;
-			/* else if (mode != Mode::Text && modes[columnIndex] == Mode::Text) {
-				// numeric: text -> numeric/integer
-				modes[columnIndex] = mode;
-			}*/
+			else if (!column.isEmpty()) {
+				if (mode == Mode::Double && modes[columnIndex] == Mode::Integer) {
+					// numeric: integer -> numeric
+					modes[columnIndex] = mode;
+				} else if (mode == Mode::Text && modes[columnIndex] != Mode::Text) {
+					// text: non text -> text
+					modes[columnIndex] = mode;
+				} else if (mode == Mode::BigInt && modes[columnIndex] == Mode::Integer)
+					modes[columnIndex] = mode;
+				/* else if (mode != Mode::Text && modes[columnIndex] == Mode::Text) {
+					// numeric: text -> numeric/integer
+					modes[columnIndex] = mode;
+				}*/
+			}
 			columnIndex++;
 		}
 		first = false;
@@ -1228,8 +1240,20 @@ AsciiFilter::Status AsciiFilterPrivate::determineSeparator(const QString& line, 
 AsciiFilter::Status AsciiFilterPrivate::getLine(QIODevice& device, QString& line) {
 	using Status = AsciiFilter::Status;
 
-	if (device.atEnd())
+	auto* udpSocket = dynamic_cast<QUdpSocket*>(&device);
+	if (udpSocket) {
+		if (udpSocket->hasPendingDatagrams()) {
+			// TODO: Maybe using readDatagram and a const size array?
+			const auto& datagram = udpSocket->receiveDatagram();
+			line = QString::fromUtf8(datagram.data());
+			return Status::Success;
+		} else
+			return Status::DeviceAtEnd;
+	}
+
+	if (device.atEnd()) {
 		return Status::DeviceAtEnd;
+	}
 
 	// This is important especially for serial port because readLine reads everything from the buffer
 	// even if it is not a complete line. So without we would get partly lines which get parsed wrongly
@@ -1344,13 +1368,37 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device, int lines, b
 	q->clearLastError();
 	qint64 bytes_read;
 	setDataSource(&spreadsheet);
+	CleanupNoArguments cleanup([this]() {
+		this->setDataSource(nullptr);
+	});
 	const auto status =
 		readFromDevice(device, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Replace, 0, lines, 0, bytes_read, skipFirstLine);
-	setDataSource(nullptr);
 	QVector<QStringList> p;
 	if (status != AsciiFilter::Status::Success) {
 		setLastError(status);
 		return p;
+	}
+
+	// If data are coming slowly, wait until filled
+	constexpr int sleep_ms = 500;
+	constexpr int timeout_ms = 3000;
+	int counter = 0;
+	while (device.isSequential() && spreadsheet.rowCount() < 10 && spreadsheet.rowCount() < lines) {
+		QEventLoop loop;
+		QTimer t;
+		t.connect(&t, &QTimer::timeout, &loop, &QEventLoop::quit);
+		t.start(sleep_ms);
+		loop.exec();
+
+		const auto status =
+			readFromDevice(device, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, lines, 0, bytes_read, skipFirstLine);
+		if (status != AsciiFilter::Status::Success) {
+			setLastError(status);
+			return p;
+		}
+		counter++;
+		if (counter * sleep_ms >= timeout_ms)
+			break;
 	}
 
 	for (int row = 0; row < spreadsheet.rowCount(); row++) {
@@ -1397,8 +1445,10 @@ AsciiFilter::Status AsciiFilterPrivate::setLastError(AsciiFilter::Status status)
  * \c false is returned and the caller needs to hanlde these error cases properly.
  */
 bool AsciiFilterPrivate::isUTF16(QIODevice& device) {
-	if (!device.open(QIODevice::ReadOnly))
-		return false;
+	if (!device.isOpen()) {
+		if (!device.open(QIODevice::ReadOnly))
+			return false;
+	}
 
 	// read the first two bytes to check the "byte order mark" (BOM),
 	// UTF-16 encoded files typically start with a BOM to indicate the endianness of the encoding.
@@ -1409,7 +1459,8 @@ bool AsciiFilterPrivate::isUTF16(QIODevice& device) {
 	const auto byte1 = static_cast<unsigned char>(buffer[0]);
 	const auto byte2 = static_cast<unsigned char>(buffer[1]);
 
-	device.reset(); // seek to the start
+	if (!device.isSequential())
+		device.reset(); // seek to the start
 
 	// Check for UTF-16 BOM (0xFEFF for UTF-16 Big Endian, 0xFFFE for UTF-16 Little Endian)
 	if ((byte1 == 0xFE && byte2 == 0xFF) || (byte1 == 0xFF && byte2 == 0xFE))

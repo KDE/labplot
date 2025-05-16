@@ -19,7 +19,12 @@ extern "C" {
 
 class XYDataReductionCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYDataReductionCurve : public XYAnalysisCurve {
+#else
 class XYDataReductionCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:
@@ -46,7 +51,6 @@ public:
 	explicit XYDataReductionCurve(const QString& name);
 	~XYDataReductionCurve() override;
 
-	void recalculate() override;
 	const XYAnalysisCurve::Result& result() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;

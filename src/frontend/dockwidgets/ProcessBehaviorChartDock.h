@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for properties of the process behavior chart
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -30,6 +30,7 @@ public:
 
 	void setPlots(QList<ProcessBehaviorChart*>);
 	void updateLocale() override;
+	void retranslateUi() override;
 
 private:
 	TreeViewComboBox* cbDataColumn{nullptr};
@@ -45,6 +46,7 @@ protected:
 	LineWidget* centerLineWidget{nullptr};
 	LineWidget* upperLimitLineWidget{nullptr};
 	LineWidget* lowerLimitLineWidget{nullptr};
+	LineWidget* labelsBorderLineWidget{nullptr};
 	KMessageWidget* m_messageWidget{nullptr};
 
 	QList<ProcessBehaviorChart*> m_plots;
@@ -53,8 +55,6 @@ protected:
 	virtual void setModel();
 
 private Q_SLOTS:
-	void retranslateUi();
-
 	// SLOTs for changes triggered in ProcessBehaviorChartDock
 	// General-Tab
 	void dataColumnChanged(const QModelIndex&);
@@ -62,8 +62,19 @@ private Q_SLOTS:
 	void typeChanged(int);
 	void limitsMetricChanged(int);
 	void sampleSizeChanged(int);
-	void negativeLowerLimitEnabledChanged(bool);
+	void maxUpperLimitChanged(const QString&);
+	void minLowerLimitChanged(const QString&);
 	void exactLimitsEnabledChanged(bool);
+	void updateLowerLimitWidgets();
+
+	// Labels-tab
+	void labelsEnabledChanged(bool);
+	void labelsPrecisionChanged(int);
+	void labelsAutoPrecisionChanged(bool);
+	void labelsFontChanged(const QFont&);
+	void labelsFontColorChanged(const QColor&);
+	void labelsBackgroundColorChanged(const QColor&);
+	void labelsBorderShapeChanged(int);
 
 	// SLOTs for changes triggered in ProcessBehaviorChart
 	// General-Tab
@@ -72,8 +83,18 @@ private Q_SLOTS:
 	void plotTypeChanged(ProcessBehaviorChart::Type);
 	void plotLimitsMetricChanged(ProcessBehaviorChart::LimitsMetric);
 	void plotSampleSizeChanged(int);
-	void plotNegativeLowerLimitEnabledChanged(bool);
+	void plotMaxUpperLimitChanged(double);
+	void plotMinLowerLimitChanged(double);
 	void plotExactLimitsEnabledChanged(bool);
+
+	// Labels-tab
+	void plotLabelsEnabledChanged(bool);
+	void plotLabelsAutoPrecisionChanged(bool);
+	void plotLabelsPrecisionChanged(int);
+	void plotLabelsFontChanged(const QFont&);
+	void plotLabelsFontColorChanged(const QColor&);
+	void plotLabelsBackgroundColorChanged(const QColor&);
+	void plotLabelsBorderShapeChanged(TextLabel::BorderShape);
 
 	void showStatusInfo(const QString&);
 

@@ -7,19 +7,11 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYCorrelationCurve
-  \brief A xy-curve defined by a correlation
-
-  \ingroup worksheet
-*/
-
 #include "XYCorrelationCurve.h"
 #include "XYCorrelationCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 
 #include <KLocalizedString>
 #include <QElapsedTimer>
@@ -28,6 +20,11 @@
 
 #include <gsl/gsl_math.h>
 
+/*!
+ * \class XYCorrelationCurve
+ * \brief A xy-curve defined by a correlation.
+ * \ingroup CartesianAnalysisPlots
+ */
 XYCorrelationCurve::XYCorrelationCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYCorrelationCurvePrivate(this), AspectType::XYCorrelationCurve) {
 }
@@ -39,11 +36,6 @@ XYCorrelationCurve::XYCorrelationCurve(const QString& name, XYCorrelationCurvePr
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 XYCorrelationCurve::~XYCorrelationCurve() = default;
-
-void XYCorrelationCurve::recalculate() {
-	Q_D(XYCorrelationCurve);
-	d->recalculate();
-}
 
 const XYAnalysisCurve::Result& XYCorrelationCurve::result() const {
 	Q_D(const XYCorrelationCurve);

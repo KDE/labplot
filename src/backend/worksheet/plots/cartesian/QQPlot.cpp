@@ -3,16 +3,10 @@
 	Project              : LabPlot
 	Description          : QQPlot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-204 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class QQPlot
-  \brief
-
-  \ingroup worksheet
-  */
 #include "QQPlot.h"
 #include "QQPlotPrivate.h"
 #include "backend/core/column/Column.h"
@@ -37,6 +31,16 @@
 
 CURVE_COLUMN_CONNECT(QQPlot, Data, data, recalc)
 
+/*!
+ * \class QQPlot
+ * \brief This class implements the Q-Q plot - a visualization of that is used to compare
+ * two probability distributions by plotting their quantiles against each other.
+ *
+ * The provided data set can be compared with one of the distributions implemented in \c NSL.
+ * The visual properties of the plotted reference line and the percentile values can be modified
+ * independently of each other.
+ * \ingroup CartesianPlots
+ */
 QQPlot::QQPlot(const QString& name)
 	: Plot(name, new QQPlotPrivate(this), AspectType::QQPlot) {
 	init();
@@ -110,9 +114,17 @@ void QQPlot::init() {
 	// so we have the same name shown on the undo stack
 	connect(this, &AbstractAspect::aspectDescriptionChanged, [this] {
 		Q_D(QQPlot);
+		d->referenceCurve->setUndoAware(false);
+		d->percentilesCurve->setUndoAware(false);
 		d->referenceCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 		d->percentilesCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
+		d->referenceCurve->setUndoAware(true);
+		d->percentilesCurve->setUndoAware(true);
 	});
+
+	// propage the visual changes to the parent
+	connect(d->referenceCurve, &XYCurve::changed, this, &QQPlot::changed);
+	connect(d->percentilesCurve, &XYCurve::changed, this, &QQPlot::changed);
 }
 
 void QQPlot::finalizeAdd() {
@@ -281,7 +293,7 @@ void QQPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(QQPlot);
 	if (aspect == d->dataColumn) {
 		d->dataColumn = nullptr;
-		d->retransform();
+		d->recalc();
 		Q_EMIT dataChanged();
 		Q_EMIT changed();
 	}
@@ -326,6 +338,7 @@ void QQPlotPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	if (!dataColumn) {
+		yReferenceColumn->clear();
 		yPercentilesColumn->clear();
 		Q_EMIT q->dataChanged();
 		return;

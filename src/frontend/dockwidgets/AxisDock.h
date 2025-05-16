@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : axes widget class
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -31,13 +31,14 @@ public:
 	void setAxes(QList<Axis*>);
 	void activateTitleTab();
 	void updateLocale() override;
+	void retranslateUi() override;
 	void updateAutoScale();
 
 private:
 	Ui::AxisDock ui;
 	QList<Axis*> m_axesList;
 	Axis* m_axis{nullptr};
-	LabelWidget* labelWidget; // Title
+	LabelWidget* labelWidget; // for title
 	TreeViewComboBox* cbMajorTicksColumn;
 	TreeViewComboBox* cbMinorTicksColumn;
 	TreeViewComboBox* cbLabelsTextColumn;
@@ -71,8 +72,6 @@ private:
 	friend class AxisTest;
 
 private Q_SLOTS:
-	void init();
-
 	// SLOTs for changes triggered in AxisDock
 	//"General"-tab
 	void colorChanged(const QColor&);

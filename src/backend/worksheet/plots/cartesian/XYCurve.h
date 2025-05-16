@@ -11,11 +11,11 @@
 #ifndef XYCURVE_H
 #define XYCURVE_H
 
-#include "Plot.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
+#include "backend/worksheet/plots/cartesian/Plot.h"
+
 #include <QFont>
 
-class AbstractColumn;
 class Background;
 class Line;
 class Symbol;
@@ -37,6 +37,7 @@ public:
 	friend class XYCurveSetYErrorPlusColumnCmd;
 	friend class XYCurveSetYErrorMinusColumnCmd;
 	friend class XYCurveSetValuesColumnCmd;
+
 	enum class LineType {
 		NoLine,
 		Line,
@@ -58,7 +59,10 @@ public:
 	explicit XYCurve(const QString& name, AspectType type = AspectType::XYCurve, bool loading = false);
 	~XYCurve() override;
 
+	void setPlotType(Plot::PlotType);
+
 	QIcon icon() const override;
+	static QIcon staticIcon(XYCurve::PlotType type);
 	QMenu* createContextMenu() override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -120,7 +124,9 @@ public:
 
 	void retransform() override;
 	void recalc() override;
+	void enableLineOptimization(bool);
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	void updateLocale() override;
 	double y(double x, double& x_new, bool& valueFound) const;
 	int getNextValue(double xpos, int index, double& x, double& y, bool& valueFound) const;
 
@@ -140,7 +146,7 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(XYCurve)
-	void init(bool loading = false);
+	void init(bool loading);
 	void initActions();
 	void connectXColumn(const AbstractColumn*);
 	void connectYColumn(const AbstractColumn*);
@@ -160,6 +166,7 @@ private:
 
 Q_SIGNALS:
 	void linesUpdated(const XYCurve*, const QVector<QLineF>&);
+	void pointsUpdated(const XYCurve*, const int startIndex, const int endIndex, const QVector<QPointF>& logicalPoints);
 
 	// General-Tab
 	void xDataChanged();
@@ -201,6 +208,8 @@ Q_SIGNALS:
 
 	friend class RetransformTest;
 	friend class XYCurveTest;
+	friend class FourierTest;
+	friend class FitTest;
 };
 
 #endif

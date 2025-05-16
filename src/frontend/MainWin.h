@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Main window of the application
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -63,7 +63,6 @@ public:
 	AspectTreeModel* model() const;
 	Project* project() const;
 	void addAspectToProject(AbstractAspect*);
-	static void updateLocale();
 
 	enum class LoadOnStart { NewProject, LastProject, WelcomeScreen };
 	enum class NewProject { WithSpreadsheet, WithWorksheet, WithSpreadsheetWorksheet, WithNotebook };
@@ -124,6 +123,8 @@ private:
 	// 	void resetWelcomeScreen();
 	void initDocks();
 	void restoreDefaultDockState() const;
+	void updateLocale();
+	void migrateSettings();
 
 	Spreadsheet* activeSpreadsheet() const;
 
@@ -132,6 +133,7 @@ private:
 
 	friend class GuiObserver;
 	GuiObserver* m_guiObserver{nullptr};
+	QLocale m_defaultSystemLocale; // default system locale, might be different from the default locale set at runtime
 
 protected:
 	void closeEvent(QCloseEvent*) override;
@@ -140,7 +142,6 @@ protected:
 
 private Q_SLOTS:
 	void initGUI(const QString&);
-	void changeVisibleAllDocks(bool);
 	void activateNextDock();
 	void activatePreviousDock();
 	void dockWidgetRemoved(ads::CDockWidget*);
@@ -177,6 +178,7 @@ private Q_SLOTS:
 
 #ifdef HAVE_CANTOR_LIBS
 	void newNotebook();
+	void settingsNotebookDialog();
 #endif
 
 	void newFolder();
@@ -197,7 +199,7 @@ private Q_SLOTS:
 	void handleCurrentAspectChanged(AbstractAspect*);
 	void handleShowSubWindowRequested();
 
-	void handleSettingsChanges(QList<SettingsDialog::SettingsType>);
+	void handleSettingsChanges(QList<Settings::Type>);
 
 	void setDockVisibility(QAction*);
 	void updateDockWindowVisibility() const;

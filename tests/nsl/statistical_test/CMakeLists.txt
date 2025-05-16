@@ -1,0 +1,5 @@
+add_executable(NSLStatisticalTestTest NSLStatisticalTestTest.cpp)
+
+target_link_libraries(NSLStatisticalTestTest labplottest)
+
+add_test(NAME NSLStatisticalTestTest COMMAND NSLStatisticalTestTest)

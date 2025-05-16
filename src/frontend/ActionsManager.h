@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Class managing all actions and their containers (menus and toolbars) in MainWin
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -21,6 +21,8 @@ class WorksheetView;
 
 class QAction;
 class QMenu;
+class QToolButton;
+
 class KActionMenu;
 class KHamburgerMenu;
 class KRecentFilesAction;
@@ -108,6 +110,10 @@ private:
 	QAction* m_nextWindowAction;
 	QAction* m_prevWindowAction;
 	QAction* m_newDatapickerAction;
+#ifdef HAVE_CANTOR_LIBS
+	QAction* m_lastUsedNotebookAction{nullptr};
+	QToolButton* m_tbNotebook{nullptr};
+#endif
 
 	// toggling dock widgets, status bar and full screen
 	QAction* m_projectExplorerDockAction;
@@ -116,7 +122,7 @@ private:
 	KToggleAction* m_statusBarAction;
 	QAction* m_memoryInfoAction;
 	KToggleFullScreenAction* m_fullScreenAction;
-	QAction* m_configureCASAction;
+	QAction* m_configureNotebookAction;
 
 	// window visibility
 	QAction* m_visibilityFolderAction;

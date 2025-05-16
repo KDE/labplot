@@ -146,8 +146,6 @@ void ActionsManager::init() {
 	// load recently used projects
 	m_recentProjectsAction->loadEntries(Settings::group(QStringLiteral("Recent Files")));
 
-	// read the settings of MainWin
-
 	// show memory info
 	m_memoryInfoAction->setEnabled(m_mainWindow->statusBar()->isEnabled()); // disable/enable menu with statusbar
 	const auto& groupMainWin = Settings::group(QStringLiteral("MainWin"));
@@ -157,8 +155,6 @@ void ActionsManager::init() {
 	if (memoryInfoShown)
 		toggleMemoryInfo();
 
-	// connect(mainWin->m_projectExplorer, &ProjectExplorer::selectedAspectsChanged, this, &ActionsManager::selectedAspectsChanged);
-	// connect(mainWin->m_projectExplorer, &ProjectExplorer::hiddenAspectSelected, this, &ActionsManager::hiddenAspectSelected);
 }
 
 ActionsManager::~ActionsManager() {
@@ -431,11 +427,11 @@ void ActionsManager::initActions() {
 
 #ifdef HAVE_CANTOR_LIBS
 	// configure CAS backends
-	m_configureCASAction = new QAction(QIcon::fromTheme(QStringLiteral("cantor")), i18n("Configure CAS..."), this);
-	m_configureCASAction->setWhatsThis(i18n("Opens the settings for Computer Algebra Systems to modify the available systems or to enable new ones"));
-	m_configureCASAction->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
-	collection->addAction(QStringLiteral("configure_cas"), m_configureCASAction);
-	connect(m_configureCASAction, &QAction::triggered, m_mainWindow, &MainWin::settingsDialog); // TODO: go to the Notebook page in the settings dialog directly
+	m_configureNotebookAction = new QAction(QIcon::fromTheme(QStringLiteral("cantor")), i18n("Configure CAS..."), this);
+	m_configureNotebookAction->setWhatsThis(i18n("Opens the settings for Computer Algebra Systems to modify the available systems or to enable new ones"));
+	m_configureNotebookAction->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
+	collection->addAction(QStringLiteral("configure_cas"), m_configureNotebookAction);
+	connect(m_configureNotebookAction, &QAction::triggered, m_mainWindow, &MainWin::settingsDialog); // TODO: go to the Notebook page in the settings dialog directly
 #endif
 
 	// hide "Donate" in the help menu
@@ -446,6 +442,9 @@ void ActionsManager::initActions() {
 	// custom about dialog
 	auto* aboutAction = m_mainWindow->actionCollection()->action(QStringLiteral("help_about_app"));
 	if (aboutAction) {
+		// set menu icon
+		aboutAction->setIcon(KAboutData::applicationData().programLogo().value<QIcon>());
+
 		// disconnect default slot
 		disconnect(aboutAction, nullptr, nullptr, nullptr);
 		connect(aboutAction, &QAction::triggered, this,
@@ -1153,31 +1152,31 @@ void ActionsManager::updateGUI() {
 
 #ifdef HAVE_CANTOR_LIBS
 void ActionsManager::updateNotebookActions() {
-	auto* menu = static_cast<QMenu*>(m_mainWindow->factory()->container(QStringLiteral("new_notebook"), m_mainWindow));
-	m_mainWindow->unplugActionList(QStringLiteral("backends_list"));
+	// auto* menu = static_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
+	m_mainWindow->unplugActionList(QLatin1String("backends_list"));
 	QList<QAction*> newBackendActions;
-	menu->clear();
+	m_newNotebookMenu->clear();
 	for (auto* backend : Cantor::Backend::availableBackends()) {
 		if (!backend->isEnabled())
 			continue;
 
-		auto* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(), m_mainWindow);
+		auto* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(), this);
 		action->setData(backend->name());
 		action->setWhatsThis(i18n("Creates a new %1 notebook", backend->name()));
-		m_mainWindow->actionCollection()->addAction(QStringLiteral("notebook_") + backend->name(), action);
+		m_mainWindow->actionCollection()->addAction(QLatin1String("notebook_") + backend->name(), action);
 		connect(action, &QAction::triggered, m_mainWindow, &MainWin::newNotebook);
 		newBackendActions << action;
-		menu->addAction(action);
 		m_newNotebookMenu->addAction(action);
 	}
 
-	m_mainWindow->plugActionList(QStringLiteral("backends_list"), newBackendActions);
-
-	menu->addSeparator();
-	menu->addAction(m_configureCASAction);
+	m_mainWindow->plugActionList(QLatin1String("backends_list"), newBackendActions);
 
 	m_newNotebookMenu->addSeparator();
-	m_newNotebookMenu->addAction(m_configureCASAction);
+	m_newNotebookMenu->addAction(m_configureNotebookAction);
+
+	// we just updated the notebook action list. its possible that the defaultAction isn't in the list anymore
+	if (m_tbNotebook && !m_newNotebookMenu->actions().contains(m_tbNotebook->defaultAction()))
+		m_tbNotebook->setDefaultAction(m_newNotebookMenu->actions().first());
 }
 #endif
 
@@ -1190,6 +1189,7 @@ void ActionsManager::fillShareMenu() {
 	QMimeType mime;
 	m_shareMenu->model()->setInputData(
 		QJsonObject{{QStringLiteral("mimeType"), mime.name()}, {QStringLiteral("urls"), QJsonArray{QUrl::fromLocalFile(m_mainWindow->m_project->fileName()).toString()}}});
+	m_shareMenu->model()->setPluginType(QStringLiteral("Export"));
 	m_shareMenu->reload();
 }
 

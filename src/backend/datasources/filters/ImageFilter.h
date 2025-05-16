@@ -13,7 +13,12 @@
 
 class ImageFilterPrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT ImageFilter : public AbstractFileFilter {
+#else
 class ImageFilter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
 
 public:

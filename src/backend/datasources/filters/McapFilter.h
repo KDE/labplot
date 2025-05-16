@@ -21,7 +21,13 @@ class McapFilterPrivate;
 namespace mcap {
 struct McapWriterOptions;
 }
+
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT McapFilter : public AbstractFileFilter {
+#else
 class McapFilter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
 
 public:

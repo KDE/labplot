@@ -242,8 +242,8 @@ void StatisticsColumnWidget::showOverview() {
 	} else { // datetime
 		auto* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
 		m_teOverview->setHtml(m_htmlOverview.arg(QString::number(statistics.size),
-												 QDateTime::fromMSecsSinceEpoch(statistics.minimum, Qt::UTC).toString(filter->format()),
-												 QDateTime::fromMSecsSinceEpoch(statistics.maximum, Qt::UTC).toString(filter->format())));
+												 QDateTime::fromMSecsSinceEpoch(statistics.minimum).toString(filter->format()),
+												 QDateTime::fromMSecsSinceEpoch(statistics.maximum).toString(filter->format())));
 	}
 
 	showOverviewPlot();
@@ -333,7 +333,6 @@ void StatisticsColumnWidget::showHistogram() {
 	plot->addChild(histogram);
 	histogram->setDataColumn(m_column);
 
-	plot->retransform();
 	m_histogramInitialized = true;
 }
 
@@ -367,7 +366,6 @@ void StatisticsColumnWidget::showKDEPlot() {
 	kdePlot->setBandwidthType(nsl_kde_bandwidth_silverman);
 	kdePlot->setDataColumn(m_column);
 
-	plot->retransform();
 	m_kdePlotInitialized = true;
 }
 
@@ -390,7 +388,6 @@ void StatisticsColumnWidget::showQQPlot() {
 	plot->addChild(qqPlot);
 	qqPlot->setDataColumn(m_column);
 
-	plot->retransform();
 	m_qqPlotInitialized = true;
 }
 
@@ -416,13 +413,11 @@ void StatisticsColumnWidget::showBoxPlot() {
 	auto* boxPlot = new BoxPlot(QString());
 	boxPlot->setOrientation(BoxPlot::Orientation::Vertical);
 	boxPlot->setWhiskersType(BoxPlot::WhiskersType::IQR);
+	boxPlot->setDataColumns({m_column});
+
+	// add the child to the parent _after_ the data column was set so the theme settings are properly applied in loadThemeConfig().
 	plot->addChild(boxPlot);
 
-	QVector<const AbstractColumn*> columns;
-	columns << const_cast<Column*>(m_column);
-	boxPlot->setDataColumns(columns);
-
-	plot->retransform();
 	m_boxPlotInitialized = true;
 }
 
@@ -431,12 +426,6 @@ void StatisticsColumnWidget::showBarPlot() {
 	auto* plot = addPlot(&m_barPlotWidget);
 	plot->title()->setText(m_column->name());
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
-
-	auto* barPlot = new BarPlot(QString());
-	plot->addChild(barPlot);
-	barPlot->setOrientation(BoxPlot::Orientation::Vertical);
-	barPlot->value()->setType(Value::Type::BinEntries);
-	barPlot->value()->setPosition(Value::Position::Above);
 
 	// generate columns holding the data and the labels
 	auto* dataColumn = new Column(QStringLiteral("data"));
@@ -469,9 +458,16 @@ void StatisticsColumnWidget::showBarPlot() {
 	dataColumn->replaceInteger(0, data);
 	labelsColumn->replaceTexts(0, labels);
 
-	QVector<const AbstractColumn*> columns;
-	columns << dataColumn;
-	barPlot->setDataColumns(columns);
+	// bar plot
+	auto* barPlot = new BarPlot(QString());
+	barPlot->setDataColumns({dataColumn});
+
+	// add the child to the parent _after_ the data column was set so the theme settings are properly applied in loadThemeConfig().
+	plot->addChild(barPlot);
+
+	barPlot->setOrientation(BoxPlot::Orientation::Vertical);
+	barPlot->value()->setType(Value::Type::BinEntries);
+	barPlot->value()->setPosition(Value::Position::Above);
 
 	// axes properties
 	auto axes = plot->children<Axis>();
@@ -494,7 +490,6 @@ void StatisticsColumnWidget::showBarPlot() {
 		axis->setArrowType(Axis::ArrowType::NoArrow);
 	}
 
-	plot->retransform();
 	m_barPlotInitialized = true;
 }
 
@@ -523,10 +518,6 @@ void StatisticsColumnWidget::showParetoPlot() {
 	axis->setCoordinateSystemIndex(1);
 
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
-
-	auto* barPlot = new BarPlot(QString());
-	barPlot->setOrientation(BoxPlot::Orientation::Vertical);
-	plot->addChild(barPlot);
 
 	// generate columns holding the data and the labels
 	int count = m_column->statistics().unique;
@@ -587,18 +578,22 @@ void StatisticsColumnWidget::showParetoPlot() {
 	xColumn->setValues(xData);
 	yColumn->setValues(yData);
 
-	QVector<const AbstractColumn*> columns;
-	columns << dataColumn;
-	barPlot->setDataColumns(columns);
+	// add bar plot
+	auto* barPlot = new BarPlot(QString());
+	barPlot->setOrientation(BoxPlot::Orientation::Vertical);
+	barPlot->setDataColumns({dataColumn});
+
+	// add the child to the parent _after_ the data column was set so the theme settings are properly applied in loadThemeConfig().
+	plot->addChild(barPlot);
 
 	// add cumulated percentage curve
 	auto* curve = new XYCurve(QStringLiteral("curve"));
+	plot->addChild(curve);
 	curve->setCoordinateSystemIndex(1); // asign to the second y-range going from 0 to 100%
 	curve->setXColumn(xColumn);
 	curve->setYColumn(yColumn);
 	curve->line()->setStyle(Qt::SolidLine);
 	curve->symbol()->setStyle(Symbol::Style::Circle);
-	plot->addChild(curve);
 	curve->setValuesType(XYCurve::ValuesType::Y);
 	curve->setValuesPosition(XYCurve::ValuesPosition::Right);
 	curve->setValuesDistance(Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
@@ -640,7 +635,6 @@ void StatisticsColumnWidget::showParetoPlot() {
 		axis->setArrowType(Axis::ArrowType::NoArrow);
 	}
 
-	plot->retransform();
 	m_paretoPlotInitialized = true;
 }
 

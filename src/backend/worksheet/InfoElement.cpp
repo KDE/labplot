@@ -5,7 +5,7 @@
 						   show their values
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
-	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -18,8 +18,6 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/InfoElementPrivate.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
@@ -27,16 +25,14 @@
 #include <KConfig>
 #include <KConfigGroup>
 
-#include <QAction>
 #include <QDateTime>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
 #include <QMenu>
 #include <QPainter>
 #include <QTextEdit>
-#include <qglobal.h>
 
-InfoElement::MarkerPoints_T::MarkerPoints_T(CustomPoint* custompoint, const XYCurve* curve, QString curvePath)
+InfoElement::MarkerPoints_T::MarkerPoints_T(CustomPoint* custompoint, const XYCurve* curve, const QString& curvePath)
 	: customPoint(custompoint)
 	, curve(curve)
 	, curvePath(curvePath) {
@@ -44,6 +40,11 @@ InfoElement::MarkerPoints_T::MarkerPoints_T(CustomPoint* custompoint, const XYCu
 		visible = custompoint->isVisible();
 }
 
+/**
+ * \class InfoElement
+ * \brief Marker which can highlight points of curves and show their values.
+ * \ingroup CartesianPlotArea
+ */
 InfoElement::InfoElement(const QString& name, CartesianPlot* plot)
 	: WorksheetElement(name, new InfoElementPrivate(this), AspectType::InfoElement) {
 	Q_D(InfoElement);
@@ -79,7 +80,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 			double y = curve->y(logicalPos, xpos, valueFound);
 			if (valueFound) {
 				d->positionLogical = xpos;
-				d->m_index = curve->xColumn()->indexForValue(xpos);
+				d->m_index = curve->xColumn()->indexForValue(xpos, false);
 				custompoint->setPositionLogical(QPointF(xpos, y));
 				DEBUG("Value found")
 			}
@@ -195,12 +196,8 @@ void InfoElement::initCurveConnections(const XYCurve* curve) {
 	connect(curve, &XYCurve::visibleChanged, this, &InfoElement::curveVisibilityChanged);
 	connect(curve, &XYCurve::coordinateSystemIndexChanged, this, &InfoElement::curveCoordinateSystemIndexChanged);
 	connect(curve, &XYCurve::dataChanged, this, &InfoElement::curveDataChanged);
-	connect(curve, &XYCurve::xColumnChanged, [this](const AbstractColumn*) {
-		retransform();
-	});
-	connect(curve, &XYCurve::yColumnChanged, [this](const AbstractColumn*) {
-		retransform();
-	});
+	connect(curve, &XYCurve::xDataChanged, this, &InfoElement::curveDataChanged);
+	connect(curve, &XYCurve::yDataChanged, this, &InfoElement::curveDataChanged);
 	connect(curve, &XYCurve::aspectAboutToBeRemoved, this, &InfoElement::curveDeleted);
 }
 
@@ -269,7 +266,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	custompoint->setUndoAware(true);
 
 	if (d->m_index < 0 && curve->xColumn())
-		d->m_index = curve->xColumn()->indexForValue(custompoint->positionLogical().x());
+		d->m_index = curve->xColumn()->indexForValue(custompoint->positionLogical().x(), false);
 
 	struct MarkerPoints_T markerpoint = {custompoint, curve, curve->path()};
 	markerpoints.append(markerpoint);
@@ -699,7 +696,7 @@ int InfoElement::currentIndex(double x, double* found_x) const {
 		if (markerpoint.curve->name() == connectionLineCurveName()) {
 			if (!markerpoint.curve->xColumn())
 				return -1;
-			const int index = markerpoint.curve->xColumn()->indexForValue(x);
+			const int index = markerpoint.curve->xColumn()->indexForValue(x, false);
 
 			if (found_x && index >= 0) {
 				auto mode = markerpoint.curve->xColumn()->columnMode();
@@ -1152,7 +1149,7 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	auto xColumn = q->markerpoints[activeIndex].curve->xColumn();
 	if (!xColumn)
 		return;
-	int xindex = xColumn->indexForValue(x);
+	int xindex = xColumn->indexForValue(x, false);
 	double x_new = NAN;
 	if (xColumn->isNumeric())
 		x_new = xColumn->valueAt(xindex);

@@ -10,25 +10,20 @@
 
 #include "BoxPlot.h"
 #include "BoxPlotPrivate.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/Folder.h"
 #include "backend/core/Settings.h"
-#include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macrosCurve.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "frontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
 #include <QActionGroup>
-#include <QApplication>
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QPainter>
@@ -39,9 +34,15 @@
 
 /**
  * \class BoxPlot
- * \brief Box Plot
+ * \brief This class implements the box plot that is used to visualize the spread of numerical data
+ * with the help of their quartiles.
+ *
+ * The implementation supports the visualization of multiple data sets (column) at the same time with different ways to order them
+ * and to modify their properties separately. Notches, jittering of the data as well as the rug plot are possible to get more insights
+ * into the structure of the visualized data.
+ *
+ * \ingroup CartesianPlots
  */
-
 BoxPlot::BoxPlot(const QString& name, bool loading)
 	: Plot(name, new BoxPlotPrivate(this), AspectType::BoxPlot) {
 	init(loading);
@@ -49,7 +50,7 @@ BoxPlot::BoxPlot(const QString& name, bool loading)
 
 BoxPlot::BoxPlot(const QString& name, BoxPlotPrivate* dd)
 	: Plot(name, dd, AspectType::BoxPlot) {
-	init();
+	init(false);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -202,17 +203,17 @@ QIcon BoxPlot::icon() const {
 }
 
 QIcon BoxPlot::staticIcon() {
-	QPainter pa;
-	pa.setRenderHint(QPainter::Antialiasing);
 	int iconSize = 20;
 	QPixmap pm(iconSize, iconSize);
+	pm.fill(Qt::transparent);
 
 	QPen pen(Qt::SolidLine);
 	pen.setColor(GuiTools::isDarkMode() ? Qt::white : Qt::black);
 	pen.setWidthF(0.0);
 
-	pm.fill(Qt::transparent);
+	QPainter pa;
 	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
 	pa.setPen(pen);
 	pa.drawRect(6, 6, 8, 8); // box
 	pa.drawLine(10, 6, 10, 0); // upper whisker
@@ -457,13 +458,11 @@ void BoxPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspec
 	if (!column)
 		return;
 
-	const auto dataColumnPaths = d->dataColumnPaths;
 	auto dataColumns = d->dataColumns;
 	bool changed = false;
 
-	for (int i = 0; i < dataColumnPaths.count(); ++i) {
-		const auto& path = dataColumnPaths.at(i);
-
+	for (int i = 0; i < d->dataColumnPaths.count(); ++i) {
+		const auto& path = d->dataColumnPaths.at(i);
 		if (path == aspectPath) {
 			dataColumns[i] = column;
 			changed = true;
@@ -500,26 +499,14 @@ QColor BoxPlot::colorAt(int index) const {
 
 /* ============================ setter methods and undo commands ================= */
 
+CURVE_COLUMN_CONNECT(BoxPlot, Data, data, recalc)
+
 // General
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetDataColumns, QVector<const AbstractColumn*>, dataColumns, recalc)
+CURVE_COLUMN_LIST_SETTER_CMD_IMPL_F_S(BoxPlot, Data, data, recalc)
 void BoxPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 	Q_D(BoxPlot);
-	if (columns != d->dataColumns) {
+	if (columns != d->dataColumns)
 		exec(new BoxPlotSetDataColumnsCmd(d, columns, ki18n("%1: set data columns")));
-
-		for (auto* column : columns) {
-			if (!column)
-				continue;
-
-			connect(column, &AbstractColumn::dataChanged, this, &BoxPlot::dataChanged);
-
-			// update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, &BoxPlot::recalc);
-			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::appearanceChanged);
-			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BoxPlot::dataColumnAboutToBeRemoved);
-			// TODO: add disconnect in the undo-function
-		}
-	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetOrdering, BoxPlot::Ordering, ordering, recalc)
@@ -891,6 +878,8 @@ void BoxPlotPrivate::recalc() {
 	if (variableWidth) {
 		m_widthScaleFactor = -INFINITY;
 		for (const auto* col : dataColumns) {
+			if (!col)
+				continue;
 			auto* column = static_cast<const Column*>(col);
 			if (column->statistics().size > m_widthScaleFactor)
 				m_widthScaleFactor = column->statistics().size;
@@ -906,12 +895,14 @@ void BoxPlotPrivate::recalc() {
 		if (ordering == BoxPlot::Ordering::MedianAscending || ordering == BoxPlot::Ordering::MedianDescending) {
 			for (int i = 0; i < count; ++i) {
 				auto* column = static_cast<const Column*>(dataColumns.at(i));
-				newOrdering.push_back(std::make_pair(column->statistics().median, i));
+				if (column)
+					newOrdering.push_back(std::make_pair(column->statistics().median, i));
 			}
 		} else {
 			for (int i = 0; i < count; ++i) {
 				auto* column = static_cast<const Column*>(dataColumns.at(i));
-				newOrdering.push_back(std::make_pair(column->statistics().arithmeticMean, i));
+				if (column)
+					newOrdering.push_back(std::make_pair(column->statistics().arithmeticMean, i));
 			}
 		}
 
@@ -1584,7 +1575,7 @@ void BoxPlotPrivate::updatePixmap() {
 	}
 	m_pixmap.fill(Qt::transparent);
 	QPainter painter(&m_pixmap);
-	painter.setRenderHint(QPainter::Antialiasing, true);
+	painter.setRenderHint(QPainter::Antialiasing);
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
@@ -1692,12 +1683,16 @@ void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 
 	painter->setPen(Qt::NoPen);
 	painter->setBrush(Qt::NoBrush);
-	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+	painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
 	if (!q->isPrinting() && Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
 		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
+
+	// no need to handle the selection/hover effect if the cached pixmap is empty
+	if (m_pixmap.isNull())
+		return;
 
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		if (m_hoverEffectImageIsDirty) {
@@ -1758,11 +1753,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
-	for (auto* column : d->dataColumns) {
-		writer->writeStartElement(QStringLiteral("column"));
-		writer->writeAttribute(QStringLiteral("path"), column->path());
-		writer->writeEndElement();
-	}
+	WRITE_COLUMNS(d->dataColumns, d->dataColumnPaths);
 	writer->writeEndElement();
 
 	// box
@@ -1858,7 +1849,6 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			str = attribs.value(QStringLiteral("path")).toString();
 			if (!str.isEmpty())
 				d->dataColumnPaths << str;
-			// 			READ_COLUMN(dataColumn);
 		} else if (!preview && reader->name() == QLatin1String("filling"))
 			if (!firstBackgroundRead) {
 				auto* background = d->backgrounds.at(0);

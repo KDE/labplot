@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Cartesian plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -19,10 +19,8 @@
 
 #include "backend/nsl/nsl_sf_stats.h"
 
-class AbstractColumn;
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
-class CartesianCoordinateSystem;
 class CartesianPlotDock;
 class Histogram;
 class InfoElementDialog;
@@ -30,8 +28,6 @@ class Line;
 class XYCurve;
 class KConfig;
 class Plot;
-
-using Dimension = CartesianCoordinateSystem::Dimension;
 
 #ifdef SDK
 #include "labplot_export.h"
@@ -99,6 +95,7 @@ public:
 
 	QIcon icon() const override;
 	virtual QMenu* createContextMenu() override;
+	static void fillAddNewPlotMenu(QMenu*, QActionGroup*);
 	QMenu* addNewMenu();
 	QMenu* analysisMenu();
 	QVector<AbstractAspect*> dependsOn() const override;
@@ -212,7 +209,7 @@ public Q_SLOTS:
 	virtual void retransform() override;
 
 private:
-	void init(bool loading = false);
+	void init(bool loading);
 	void initActions();
 	void initMenus();
 	void setColorPalette(const KConfig&);
@@ -227,26 +224,7 @@ private:
 	QList<QColor> m_themeColorPalette;
 	bool m_menusInitialized{false};
 
-	//"add new" actions
-	QAction* addCurveAction{nullptr};
-	QAction* addEquationCurveAction{nullptr};
-	QAction* addFunctionCurveAction{nullptr};
-
-	// statistical plots
-	QAction* addHistogramAction{nullptr};
-	QAction* addBoxPlotAction{nullptr};
-	QAction* addQQPlotAction{nullptr};
-	QAction* addKDEPlotAction{nullptr};
-
-	// bar plots
-	QAction* addBarPlotAction{nullptr};
-	QAction* addLollipopPlotAction{nullptr};
-
-	// continious improvement
-	QAction* addProcessBehaviorChartAction{nullptr};
-	QAction* addRunChartAction{nullptr};
-
-	// analysis curves
+	// analysis curves actions
 	QAction* addDataReductionCurveAction{nullptr};
 	QAction* addDifferentiationCurveAction{nullptr};
 	QAction* addIntegrationCurveAction{nullptr};
@@ -258,6 +236,7 @@ private:
 	QAction* addHilbertTransformCurveAction{nullptr};
 	QAction* addConvolutionCurveAction{nullptr};
 	QAction* addCorrelationCurveAction{nullptr};
+	QAction* addFunctionCurveAction{nullptr};
 
 	QAction* addHorizontalAxisAction{nullptr};
 	QAction* addVerticalAxisAction{nullptr};
@@ -296,30 +275,13 @@ private:
 	Q_DECLARE_PRIVATE(CartesianPlot)
 
 	friend CartesianPlotDock;
+	friend class AxisTest;
 	friend class CartesianPlotTest;
 	friend class MultiRangeTest2;
 
 public Q_SLOTS:
-	void addHorizontalAxis();
-	void addVerticalAxis();
 	void addHistogramFit(Histogram*, nsl_sf_stats_distribution);
-
-	void addDataReductionCurve();
-	void addDifferentiationCurve();
-	void addIntegrationCurve();
-	void addInterpolationCurve();
-	void addSmoothCurve();
-	void addFitCurve();
-	void addFourierFilterCurve();
-	void addFunctionCurve();
-
 	void addLegend();
-	void addTextLabel();
-	void addImage();
-	void addCustomPoint();
-	void addReferenceLine();
-	void addReferenceRange();
-	void addInfoElement();
 
 	bool scaleAuto(int xIndex = -1, int yIndex = -1, bool fullRange = true, bool suppressRetransformScale = false);
 	bool scaleAuto(const Dimension, int index = -1, bool fullRange = true, bool suppressRetransformScale = false);
@@ -343,6 +305,26 @@ public Q_SLOTS:
 	void dataChanged(int xIndex = -1, int yIndex = -1, WorksheetElement* sender = nullptr);
 
 private Q_SLOTS:
+	void addPlot(QAction*);
+
+	void addDataReductionCurve();
+	void addDifferentiationCurve();
+	void addIntegrationCurve();
+	void addInterpolationCurve();
+	void addSmoothCurve();
+	void addFitCurve();
+	void addFourierFilterCurve();
+	void addFunctionCurve();
+
+	void addHorizontalAxis();
+	void addVerticalAxis();
+	void addTextLabel();
+	void addImage();
+	void addCustomPoint();
+	void addReferenceLine();
+	void addReferenceRange();
+	void addInfoElement();
+
 	void updateLegend();
 	void childAdded(const AbstractAspect*);
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
@@ -401,7 +383,10 @@ Q_SIGNALS:
 	void cursor0EnableChanged(bool enable);
 	void cursor1EnableChanged(bool enable);
 
-	void scaleRetransformed(const CartesianPlot* plot, const Dimension dim, int index);
+	void scaleRetransformed(const CartesianPlot*, const Dimension, int index);
+
+	friend class FitTest;
+	friend class FourierTest;
 };
 
 #endif

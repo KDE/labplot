@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for properties of the run chart
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -29,6 +29,7 @@ public:
 
 	void setPlots(QList<RunChart*>);
 	void updateLocale() override;
+	void retranslateUi() override;
 
 private:
 	TreeViewComboBox* cbDataColumn;
@@ -46,8 +47,6 @@ protected:
 	virtual void setModel();
 
 private Q_SLOTS:
-	void retranslateUi();
-
 	// SLOTs for changes triggered in RunChartDock
 	void dataColumnChanged(const QModelIndex&);
 	void centerMetricChanged(int);

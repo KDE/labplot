@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for column properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -24,6 +24,7 @@ class ColumnDock : public BaseDock {
 public:
 	explicit ColumnDock(QWidget*);
 	void setColumns(QList<Column*>);
+	void retranslateUi() override;
 
 private:
 	Ui::ColumnDock ui;
@@ -34,8 +35,6 @@ private:
 	void showValueLabels();
 
 private Q_SLOTS:
-	void retranslateUi();
-
 	void typeChanged(int);
 	void numericFormatChanged(int);
 	void precisionChanged(int);

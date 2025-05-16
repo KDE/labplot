@@ -8,16 +8,8 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYEquationCurve
-  \brief A xy-curve defined by a mathematical equation
-
-  \ingroup worksheet
-*/
-
 #include "XYEquationCurve.h"
 #include "XYEquationCurvePrivate.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/Folder.h"
 #include "backend/core/column/Column.h"
 #include "backend/gsl/ExpressionParser.h"
@@ -29,6 +21,11 @@
 #include <KLocalizedString>
 #include <QIcon>
 
+/*!
+ * \class XYEquationCurve
+ * \brief A xy-curve defined by a mathematical equation.
+ * \ingroup CartesianAnalysisPlots
+ */
 XYEquationCurve::XYEquationCurve(const QString& name)
 	: XYCurve(name, new XYEquationCurvePrivate(this), AspectType::XYEquationCurve) {
 	init();

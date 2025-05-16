@@ -12,7 +12,8 @@
 #ifndef DATAPICKERIMAGEVIEW_H
 #define DATAPICKERIMAGEVIEW_H
 
-#include "frontend/worksheet/WorksheetView.h"
+#include "backend/worksheet/Worksheet.h"
+#include <QGraphicsView>
 
 class DatapickerImage;
 class Datapicker;
@@ -36,7 +37,7 @@ public:
 	enum class ShiftOperation { ShiftLeft, ShiftRight, ShiftUp, ShiftDown };
 
 	void setScene(QGraphicsScene*);
-	void exportToFile(const QString&, const WorksheetView::ExportFormat, const int);
+	bool exportToFile(const QString&, const Worksheet::ExportFormat, const int);
 
 	MouseMode mouseMode() const;
 	ZoomMode zoomMode() const;

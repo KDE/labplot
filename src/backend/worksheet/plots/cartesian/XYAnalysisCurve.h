@@ -15,7 +15,12 @@
 
 class XYAnalysisCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYAnalysisCurve : public XYCurve {
+#else
 class XYAnalysisCurve : public XYCurve {
+#endif
 	Q_OBJECT
 
 public:
@@ -62,7 +67,7 @@ public:
 						 double xMax,
 						 bool avgUniqueX = false);
 
-	virtual void recalculate() = 0;
+	void recalculate();
 	bool resultAvailable() const;
 	virtual const Result& result() const = 0;
 	bool usingColumn(const AbstractColumn*, bool indirect = true) const override;
@@ -116,6 +121,10 @@ Q_SIGNALS:
 	void xDataColumnChanged(const AbstractColumn*);
 	void yDataColumnChanged(const AbstractColumn*);
 	void y2DataColumnChanged(const AbstractColumn*);
+
+	friend class CommonAnalysisTest;
+	friend class FourierTest;
+	friend class FitTest;
 };
 
 #endif

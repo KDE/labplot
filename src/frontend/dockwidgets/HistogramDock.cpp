@@ -97,6 +97,9 @@ HistogramDock::HistogramDock(QWidget* parent)
 		layout->setVerticalSpacing(2);
 	}
 
+	updateLocale();
+	retranslateUi();
+
 	// Slots
 	// General
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HistogramDock::dataColumnChanged);
@@ -130,40 +133,9 @@ HistogramDock::HistogramDock(QWidget* parent)
 	connect(templateHandler, &TemplateHandler::info, this, &HistogramDock::info);
 
 	ui.verticalLayout->addWidget(frame);
-
-	updateLocale();
-	retranslateUi();
-	init();
 }
 
 HistogramDock::~HistogramDock() = default;
-
-void HistogramDock::init() {
-	// General
-	// bins option
-	ui.cbBinningMethod->addItem(i18n("By Number"));
-	ui.cbBinningMethod->addItem(i18n("By Width"));
-	ui.cbBinningMethod->addItem(i18n("Square-root"));
-	ui.cbBinningMethod->addItem(i18n("Rice"));
-	ui.cbBinningMethod->addItem(i18n("Sturges"));
-	ui.cbBinningMethod->addItem(i18n("Doane"));
-	ui.cbBinningMethod->addItem(i18n("Scott"));
-
-	// histogram type
-	ui.cbType->addItem(i18n("Ordinary Histogram"));
-	ui.cbType->addItem(i18n("Cumulative Histogram"));
-	// 	ui.cbType->addItem(i18n("AvgShifted Histogram"));
-
-	// Orientation
-	ui.cbOrientation->addItem(i18n("Vertical"));
-	ui.cbOrientation->addItem(i18n("Horizontal"));
-
-	// Normalization
-	ui.cbNormalization->addItem(i18n("Count"));
-	ui.cbNormalization->addItem(i18n("Probability"));
-	ui.cbNormalization->addItem(i18n("Count Density"));
-	ui.cbNormalization->addItem(i18n("Probability Density"));
-}
 
 void HistogramDock::setModel() {
 	auto* model = aspectModel();
@@ -272,14 +244,60 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 }
 
 void HistogramDock::retranslateUi() {
-	// TODO:
-	// 	ui.lName->setText(i18n("Name"));
-	// 	ui.lComment->setText(i18n("Comment"));
-	// 	ui.chkVisible->setText(i18n("Visible"));
-	// 	ui.lXColumn->setText(i18n("x-data"));
-	// 	ui.lYColumn->setText(i18n("y-data"));
+	CONDITIONAL_LOCK_RETURN;
 
-	// TODO updatePenStyles, updateBrushStyles for all comboboxes
+	// General
+	// bins option
+	ui.cbBinningMethod->clear();
+	ui.cbBinningMethod->addItem(i18n("By Number"));
+	ui.cbBinningMethod->addItem(i18n("By Width"));
+	ui.cbBinningMethod->addItem(i18n("Square-root"));
+	ui.cbBinningMethod->addItem(i18n("Rice")); // here and for the next three items, this is the name of the author, not sure it should be translated
+	ui.cbBinningMethod->addItem(i18n("Sturges"));
+	ui.cbBinningMethod->addItem(i18n("Doane"));
+	ui.cbBinningMethod->addItem(i18n("Scott"));
+
+	// histogram type
+	ui.cbType->clear();
+	ui.cbType->addItem(i18n("Ordinary Histogram"));
+	ui.cbType->addItem(i18n("Cumulative Histogram"));
+	// 	ui.cbType->addItem(i18n("AvgShifted Histogram"));
+
+	// Orientation
+	ui.cbOrientation->clear();
+	ui.cbOrientation->addItem(i18n("Vertical"));
+	ui.cbOrientation->addItem(i18n("Horizontal"));
+
+	// Normalization
+	ui.cbNormalization->clear();
+	ui.cbNormalization->addItem(i18n("Count"));
+	ui.cbNormalization->addItem(i18n("Probability"));
+	ui.cbNormalization->addItem(i18n("Count Density"));
+	ui.cbNormalization->addItem(i18n("Probability Density"));
+
+	// TODO lineWidget->retranslateUi();
+
+	// tooltip texts
+	QString info = i18n(
+		"Method used to determine the number of bins <i>k</i> and their width <i>h</i> for <i>n</i> values:"
+		"<ul>"
+		"<li>By Number - the number of bins is specified manually</li>"
+		"<li>By Width - the number of bins is calculated based on the specified bin width via <i>k = (max(x) - min(x) / h</i>)</li>"
+		"<li>Square-root - <i>k = sqrt(n)</i></li>"
+		"<li>Rice -  <i>k = 2 * pow(n, 3/2)</i>, simpler alternative to Sturges' method</li>"
+		"<li>Sturges - <i>k = log2(n) + 1</i>, assumes an approximately normal distribution</li>"
+		"<li>Doane - modified version of Sturges' method, see the documentation for more details</li>"
+		"<li>Scott - <i>h = 3.49 * sigma / pow(n, 3/2)</i>, optimal method for normally distributed data</li>"
+		"</ul>");
+	ui.lBinningMethod->setToolTip(info);
+	ui.cbBinningMethod->setToolTip(info);
+
+	info = i18n("Use 'Auto' to automatically determine the minimal and maximal values of the data to be used to calculate the histogram. Specify the values manually, otherwise."
+		"<br><br>"
+		"<b>Note:</b> any samples which fall on the upper end of the histogram are excluded. If you want to include these values for the last bin you will need to add an extra bin to your histogram."
+	);
+	ui.lBinRanges->setToolTip(info);
+	ui.chkAutoBinRanges->setToolTip(info);
 }
 
 void HistogramDock::updateLocale() {

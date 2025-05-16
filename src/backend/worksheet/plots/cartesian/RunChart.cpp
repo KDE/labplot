@@ -7,12 +7,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class RunChart
-  \brief
-
-  \ingroup worksheet
-  */
 #include "RunChart.h"
 #include "RunChartPrivate.h"
 #include "backend/core/column/Column.h"
@@ -39,6 +33,18 @@ extern "C" {
 
 CURVE_COLUMN_CONNECT(RunChart, Data, data, recalc)
 
+/*!
+ * \class RunChart
+ * \brief This class implements the run chart (or run sequency plot) - a visualization showing
+ * the provided data points together with the median/average of the data, commonly used to identify trends
+ * or changes in the observation.
+ *
+ * To define the reference and to compare with, either median or the average values can be used.
+ * The visual properties of the plotted line for the reference value and for the actual data can be modified
+ * independently of each other.
+ *
+ * \ingroup CartesianPlots
+ */
 RunChart::RunChart(const QString& name)
 	: Plot(name, new RunChartPrivate(this), AspectType::RunChart) {
 	init();
@@ -101,6 +107,10 @@ void RunChart::init() {
 	// synchronize the names of the internal XYCurves with the name of the current plot
 	// so we have the same name shown on the undo stack
 	connect(this, &AbstractAspect::aspectDescriptionChanged, this, &RunChart::renameInternalCurves);
+
+	// propage the visual changes to the parent
+	connect(d->centerCurve, &XYCurve::changed, this, &RunChart::changed);
+	connect(d->dataCurve, &XYCurve::changed, this, &RunChart::changed);
 }
 
 void RunChart::finalizeAdd() {
@@ -112,8 +122,12 @@ void RunChart::finalizeAdd() {
 
 void RunChart::renameInternalCurves() {
 	Q_D(RunChart);
+	d->dataCurve->setUndoAware(false);
+	d->centerCurve->setUndoAware(false);
 	d->dataCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->centerCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
+	d->dataCurve->setUndoAware(true);
+	d->centerCurve->setUndoAware(true);
 }
 
 /*!
@@ -135,6 +149,16 @@ void RunChart::setVisible(bool on) {
 	d->centerCurve->setVisible(on);
 	WorksheetElement::setVisible(on);
 	endMacro();
+}
+
+/*!
+ * override the default implementation to handle the visibility of the internal curves
+ * and to set the z-value of the data curve to 1 higher than the z-value of the center curve.
+ */
+void RunChart::setZValue(qreal value) {
+	Q_D(RunChart);
+	d->centerCurve->setZValue(value);
+	d->dataCurve->setZValue(value + 1);
 }
 
 // ##############################################################################
@@ -270,7 +294,9 @@ void RunChart::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(RunChart);
 	if (aspect == d->dataColumn) {
 		d->dataColumn = nullptr;
-		CURVE_COLUMN_REMOVED(data);
+		d->recalc();
+		Q_EMIT dataChanged();
+		Q_EMIT changed();
 	}
 }
 
@@ -313,6 +339,7 @@ void RunChartPrivate::recalc() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 	if (!dataColumn) {
 		center = 0.;
+		xColumn->clear();
 		xCenterColumn->clear();
 		yCenterColumn->clear();
 		Q_EMIT q->dataChanged();

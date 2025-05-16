@@ -4,6 +4,7 @@
 	Description          : line settings widget
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -12,8 +13,6 @@
 #include "frontend/dockwidgets/BaseDock.h"
 
 #include <KConfigGroup>
-#include <QPainter>
-#include <QTimer>
 
 /*!
 	\class LineWidget
@@ -123,8 +122,7 @@ void LineWidget::setEnabled(bool enabled) {
 }
 
 void LineWidget::updateLocale() {
-	const auto numberLocale = QLocale();
-	ui.sbWidth->setLocale(numberLocale);
+	ui.sbWidth->setLocale(QLocale());
 }
 
 //*************************************************************
@@ -213,12 +211,12 @@ void LineWidget::lineColorChanged(const QColor& color) {
 
 void LineWidget::lineWidthChanged(double width) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(width, Worksheet::Unit::Point));
+	ui.sbWidth->setValue(std::round(Worksheet::convertFromSceneUnits(width, Worksheet::Unit::Point)));
 }
 
 void LineWidget::lineOpacityChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbOpacity->setValue(round(value * 100));
+	ui.sbOpacity->setValue(std::round(value * 100));
 }
 
 //**********************************************************
@@ -231,8 +229,8 @@ void LineWidget::load() {
 		ui.cbType->setCurrentIndex(static_cast<int>(m_line->dropLineType()));
 
 	setColor(m_line->color());
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_line->width(), Worksheet::Unit::Point));
-	ui.sbOpacity->setValue(round(m_line->opacity() * 100));
+	ui.sbWidth->setValue(std::round(Worksheet::convertFromSceneUnits(m_line->width(), Worksheet::Unit::Point)));
+	ui.sbOpacity->setValue(std::round(m_line->opacity() * 100));
 	GuiTools::updatePenStyles(ui.cbStyle, ui.kcbColor->color());
 	ui.cbStyle->setCurrentIndex(static_cast<int>(m_line->style()));
 }
@@ -245,7 +243,7 @@ void LineWidget::loadConfig(const KConfigGroup& group) {
 
 	ui.cbStyle->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("Style"), static_cast<int>(m_line->style())));
 	setColor(group.readEntry(m_prefix + QStringLiteral("Color"), m_line->color()));
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry(m_prefix + QStringLiteral("Width"), m_line->width()), Worksheet::Unit::Point));
+	ui.sbWidth->setValue(std::round(Worksheet::convertFromSceneUnits(group.readEntry(m_prefix + QStringLiteral("Width"), m_line->width()), Worksheet::Unit::Point)));
 	ui.sbOpacity->setValue(group.readEntry(m_prefix + QStringLiteral("Opacity"), m_line->opacity()) * 100);
 	GuiTools::updatePenStyles(ui.cbStyle, ui.kcbColor->color());
 }

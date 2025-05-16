@@ -29,12 +29,13 @@
 
 /**
  * \class Image
- * \brief A label supporting rendering of html- and tex-formatted texts.
+ * \brief Worksheet element to draw images.
  *
- * The label is aligned relative to the specified position.
+ * The image can be added to \c Worksheet or to \c CartesianPlot and is aligned relative to the specified position.
  * The position can be either specified by providing the x- and y- coordinates
  * in parent's coordinate system, or by specifying one of the predefined position
  * flags (\c HorizontalPosition, \c VerticalPosition).
+ * \ingroup worksheet
  */
 
 Image::Image(const QString& name)

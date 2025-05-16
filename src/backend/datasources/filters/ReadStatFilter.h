@@ -11,22 +11,19 @@
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-#ifdef HAVE_READSTAT
-#include <readstat.h>
-#endif
-
 class ReadStatFilterPrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT ReadStatFilter : public AbstractFileFilter {
+#else
 class ReadStatFilter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
 
 public:
 	ReadStatFilter();
 	~ReadStatFilter() override;
-
-#ifdef HAVE_READSTAT
-	static int getMetaData(readstat_metadata_t*, void*);
-#endif
 
 	static QString fileInfoString(const QString&);
 

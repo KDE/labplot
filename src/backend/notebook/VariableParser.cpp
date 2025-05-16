@@ -12,6 +12,7 @@
 #include "backend/lib/trace.h"
 #include <QRegularExpressionMatch>
 #include <QStringList>
+#include <QTimeZone>
 #include <cmath> // NAN
 
 VariableParser::VariableParser(QString name, QString value)
@@ -343,7 +344,7 @@ void VariableParser::parseValues(const QStringList& values, VariableParser::Data
 	// https://forum.qt.io/topic/133181/qdatetime-fromstring-returns-invalid-datetime
 	case Datatype::datetime64_D:
 		for (const auto& v : values) {
-			dateTime()[i] = QDate::fromString(v.trimmed().remove(QLatin1Char('\'')) + QStringLiteral("Z"), Qt::ISODate).startOfDay(Qt::UTC);
+			dateTime()[i] = QDate::fromString(v.trimmed().remove(QLatin1Char('\'')) + QStringLiteral("Z"), Qt::ISODate).startOfDay(QTimeZone::utc());
 			i++;
 		}
 		m_parsed = true;

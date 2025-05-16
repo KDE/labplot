@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Bar Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -14,30 +14,32 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macrosCurve.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
 #include "frontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
 #include <QActionGroup>
-#include <QApplication>
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QPainter>
 
-#include <KConfig>
-#include <KConfigGroup>
 #include <KLocalizedString>
 
 /**
  * \class BarPlot
- * \brief Box Plot
+ * \brief This class implements the bar plot that is used to visualize categorical data.
+
+ * The implementation supports the visualization of multiple data sets (column) at the same time with different ways to order them
+ * and to modify their properties separately.
+ *
+ * \ingroup CartesianPlots
  */
+CURVE_COLUMN_CONNECT(BarPlot, X, x, recalc)
 
 BarPlot::BarPlot(const QString& name)
 	: Plot(name, new BarPlotPrivate(this), AspectType::BarPlot) {
@@ -133,6 +135,11 @@ void BarPlot::recalc() {
 void BarPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
 }
 
+void BarPlot::updateLocale() {
+	Q_D(BarPlot);
+	d->updateValues();
+}
+
 /* ============================ getter methods ================= */
 // general
 BASIC_SHARED_D_READER_IMPL(BarPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
@@ -141,11 +148,7 @@ BASIC_SHARED_D_READER_IMPL(BarPlot, BarPlot::Type, type, type)
 BASIC_SHARED_D_READER_IMPL(BarPlot, BarPlot::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(BarPlot, double, widthFactor, widthFactor)
 BASIC_SHARED_D_READER_IMPL(BarPlot, const AbstractColumn*, xColumn, xColumn)
-
-QString& BarPlot::xColumnPath() const {
-	D(BarPlot);
-	return d->xColumnPath;
-}
+BASIC_SHARED_D_READER_IMPL(BarPlot, QString, xColumnPath, xColumnPath)
 
 // box filling
 Background* BarPlot::backgroundAt(int index) const {
@@ -221,13 +224,11 @@ void BarPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspec
 	if (!column)
 		return;
 
-	const auto dataColumnPaths = d->dataColumnPaths;
 	auto dataColumns = d->dataColumns;
 	bool changed = false;
 
-	for (int i = 0; i < dataColumnPaths.count(); ++i) {
-		const auto& path = dataColumnPaths.at(i);
-
+	for (int i = 0; i < d->dataColumnPaths.count(); ++i) {
+		const auto& path = d->dataColumnPaths.at(i);
 		if (path == aspectPath) {
 			dataColumns[i] = column;
 			changed = true;
@@ -269,46 +270,26 @@ Value* BarPlot::value() const {
 }
 
 /* ============================ setter methods and undo commands ================= */
+CURVE_COLUMN_CONNECT(BarPlot, Data, data, recalc)
 
 // General
-STD_SETTER_CMD_IMPL_F_S(BarPlot, SetXColumn, const AbstractColumn*, xColumn, recalc)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(BarPlot, X, x, recalc)
 void BarPlot::setXColumn(const AbstractColumn* column) {
 	Q_D(BarPlot);
-	if (column != d->xColumn) {
+	if (column != d->xColumn)
 		exec(new BarPlotSetXColumnCmd(d, column, ki18n("%1: set x column")));
-
-		if (column) {
-			// update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::recalc);
-			if (column->parentAspect())
-				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BarPlot::dataColumnAboutToBeRemoved);
-
-			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::dataChanged);
-			// TODO: add disconnect in the undo-function
-		}
-	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(BarPlot, SetDataColumns, QVector<const AbstractColumn*>, dataColumns, recalc)
+void BarPlot::setXColumnPath(const QString& path) {
+	Q_D(BarPlot);
+	d->xColumnPath = path;
+}
+
+CURVE_COLUMN_LIST_SETTER_CMD_IMPL_F_S(BarPlot, Data, data, recalc)
 void BarPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 	Q_D(BarPlot);
-	if (columns != d->dataColumns) {
+	if (columns != d->dataColumns)
 		exec(new BarPlotSetDataColumnsCmd(d, columns, ki18n("%1: set data columns")));
-
-		for (auto* column : columns) {
-			if (!column)
-				continue;
-
-			// update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::recalc);
-			if (column->parentAspect())
-				connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &BarPlot::dataColumnAboutToBeRemoved);
-			// TODO: add disconnect in the undo-function
-
-			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::dataChanged);
-			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &Plot::appearanceChanged);
-		}
-	}
 }
 
 void BarPlot::setDataColumnPaths(const QVector<QString>& paths) {
@@ -340,13 +321,22 @@ void BarPlot::setWidthFactor(double widthFactor) {
 // ##############################################################################
 // #################################  SLOTS  ####################################
 // ##############################################################################
+void BarPlot::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
+	Q_D(BarPlot);
+	if (aspect == d->xColumn) {
+		d->xColumn = nullptr;
+		d->recalc();
+		Q_EMIT dataChanged();
+		Q_EMIT changed();
+	}
+}
 
 void BarPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(BarPlot);
 	for (int i = 0; i < d->dataColumns.size(); ++i) {
 		if (aspect == d->dataColumns.at(i)) {
 			d->dataColumns[i] = nullptr;
-			d->retransform();
+			d->recalc();
 			Q_EMIT dataChanged();
 			Q_EMIT changed();
 			break;
@@ -590,6 +580,9 @@ void BarPlotPrivate::recalc() {
 	QVector<double> barMaxs(barGroupsCount);
 	if (type == BarPlot::Type::Stacked) {
 		for (auto* column : dataColumns) {
+			if (!column)
+				continue;
+
 			int valueIndex = 0;
 			for (int i = 0; i < column->rowCount(); ++i) {
 				if (!column->isValid(i) || column->isMasked(i))
@@ -606,6 +599,9 @@ void BarPlotPrivate::recalc() {
 		}
 	} else if (type == BarPlot::Type::Stacked_100_Percent) {
 		for (auto* column : dataColumns) {
+			if (!column)
+				continue;
+
 			int valueIndex = 0;
 			for (int i = 0; i < column->rowCount(); ++i) {
 				if (!column->isValid(i) || column->isMasked(i))
@@ -670,6 +666,8 @@ void BarPlotPrivate::recalc() {
 		switch (type) {
 		case BarPlot::Type::Grouped: {
 			for (auto* column : dataColumns) {
+				if (!column)
+					continue;
 				double max = column->maximum();
 				if (max > xMax)
 					xMax = max;
@@ -720,6 +718,9 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	const auto* column = static_cast<const Column*>(dataColumns.at(columnIndex));
+	if (!column)
+		return;
+
 	QVector<QLineF> lines; // four lines for one bar in logical coordinates
 	QVector<QVector<QLineF>> barLines; // lines for all bars for one colum in scene coordinates
 	QVector<QPointF> valuesPointsLogical;
@@ -865,6 +866,9 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	const auto* column = static_cast<const Column*>(dataColumns.at(columnIndex));
+	if (!column)
+		return;
+
 	QVector<QLineF> lines; // four lines for one bar in logical coordinates
 	QVector<QVector<QLineF>> barLines; // lines for all bars for one colum in scene coordinates
 	QVector<QPointF> valuesPointsLogical;
@@ -1078,6 +1082,7 @@ void BarPlotPrivate::updateValues() {
 	q->cSystem->mapLogicalToScene(valuesPointsLogical, pointsScene, visiblePoints);
 	const auto& prefix = value->prefix();
 	const auto& suffix = value->suffix();
+	const auto numberLocale = QLocale();
 	if (value->type() == Value::BinEntries) {
 		for (int i = 0; i < valuesPointsLogical.count(); ++i) {
 			if (!visiblePoints[i])
@@ -1086,14 +1091,14 @@ void BarPlotPrivate::updateValues() {
 			auto& point = valuesPointsLogical.at(i);
 			if (orientation == BarPlot::Orientation::Vertical) {
 				if (type == BarPlot::Type::Stacked_100_Percent)
-					m_valuesStrings << prefix + QString::number(point.y(), value->numericFormat(), 1) + QLatin1String("%") + suffix;
+					m_valuesStrings << prefix + numberToString(point.y(), numberLocale, value->numericFormat(), 1) + QLatin1String("%") + suffix;
 				else
-					m_valuesStrings << prefix + QString::number(point.y()) + suffix;
+					m_valuesStrings << prefix + numberToString(point.y(), numberLocale) + suffix;
 			} else {
 				if (type == BarPlot::Type::Stacked_100_Percent)
-					m_valuesStrings << prefix + QString::number(point.x(), value->numericFormat(), 1) + QLatin1String("%") + suffix;
+					m_valuesStrings << prefix + numberToString(point.x(), numberLocale, value->numericFormat(), 1) + QLatin1String("%") + suffix;
 				else
-					m_valuesStrings << prefix + QString::number(point.x()) + suffix;
+					m_valuesStrings << prefix + numberToString(point.x(), numberLocale) + suffix;
 			}
 		}
 	} else if (value->type() == Value::CustomColumn) {
@@ -1112,13 +1117,13 @@ void BarPlotPrivate::updateValues() {
 			switch (xColMode) {
 			case AbstractColumn::ColumnMode::Double:
 				if (type == BarPlot::Type::Stacked_100_Percent)
-					m_valuesStrings << prefix + QString::number(valuesColumn->valueAt(i), value->numericFormat(), 1) + QString::fromStdString("%");
+					m_valuesStrings << prefix + numberToString(valuesColumn->valueAt(i), numberLocale, value->numericFormat(), 1) + QString::fromStdString("%");
 				else
-					m_valuesStrings << prefix + QString::number(valuesColumn->valueAt(i), value->numericFormat(), value->precision()) + suffix;
+					m_valuesStrings << prefix + numberToString(valuesColumn->valueAt(i), numberLocale, value->numericFormat(), value->precision()) + suffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
-				m_valuesStrings << prefix + QString::number(valuesColumn->valueAt(i)) + suffix;
+				m_valuesStrings << prefix + numberToString(valuesColumn->valueAt(i), numberLocale) + suffix;
 				break;
 			case AbstractColumn::ColumnMode::Text:
 				m_valuesStrings << prefix + valuesColumn->textAt(i) + suffix;
@@ -1345,6 +1350,10 @@ void BarPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 	else
 		draw(painter); // draw directly again (slow)
 
+	// no need to handle the selection/hover effect if the cached pixmap is empty
+	if (m_pixmap.isNull())
+		return;
+
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		if (m_hoverEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
@@ -1401,15 +1410,8 @@ void BarPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
-
-	if (d->xColumn)
-		writer->writeAttribute(QStringLiteral("xColumn"), d->xColumn->path());
-
-	for (auto* column : d->dataColumns) {
-		writer->writeStartElement(QStringLiteral("column"));
-		writer->writeAttribute(QStringLiteral("path"), column->path());
-		writer->writeEndElement();
-	}
+	WRITE_COLUMN(d->xColumn, xColumn);
+	WRITE_COLUMNS(d->dataColumns, d->dataColumnPaths);
 	writer->writeEndElement();
 
 	// box filling

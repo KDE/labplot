@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for image properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -25,6 +25,7 @@ public:
 	explicit ImageDock(QWidget*);
 	void setImages(QList<Image*>);
 	void updateLocale() override;
+	void retranslateUi() override;
 	void updateUnits() override;
 
 private:

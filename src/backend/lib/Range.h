@@ -14,7 +14,9 @@
 #include "backend/nsl/nsl_math.h"
 #include "macros.h" //const auto numberLocale = QLocale();
 
+#ifndef SDK
 #include <KLocalizedString>
+#endif
 
 #include <QDateTime>
 #include <QStringList>
@@ -36,7 +38,12 @@ class QString;
  *
  *	Only types supporting comparison are supported
  */
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT RangeT {
+#else
 class RangeT { // access enum without template
+#endif
 	Q_GADGET
 public:
 	enum class Format { Numeric, DateTime };
@@ -45,8 +52,10 @@ public:
 	// TODO: InverseOffset, Prob, Probit, Logit, Weibull
 	enum class Scale { Linear, Log10, Log2, Ln, Sqrt, Square, Inverse };
 	Q_ENUM(Scale)
+#ifndef SDK
 	static inline QList<KLocalizedString>
 		scaleNames{ki18n("Linear"), ki18n("Log10"), ki18n("Log2"), ki18n("Ln"), ki18n("Sqrt"), ki18n("Square"), ki18n("Inverse")};
+#endif
 	static bool isLogScale(Scale scale) {
 		if (scale == Scale::Log10 || scale == Scale::Log2 || scale == Scale::Ln)
 			return true;
@@ -54,8 +63,14 @@ public:
 	}
 };
 
+#ifdef SDK
+#include "labplot_export.h"
+template<class T>
+class LABPLOT_EXPORT Range : RangeT {
+#else
 template<class T>
 class Range : RangeT {
+#endif
 public:
 	Range() {
 	}

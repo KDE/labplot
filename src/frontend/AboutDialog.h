@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Custom about dialog
     --------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2020-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -23,12 +23,15 @@
 class AboutDialog: public KAboutApplicationDialog {
 	Q_OBJECT
 public:
+	~AboutDialog() override;
 	static QString systemInfo();
+	static QString links();
 	static QVector<QStringList> components();	// list of additional components
 	explicit AboutDialog(const KAboutData&, QWidget*);
 
 private Q_SLOTS:
-	void copyConfig();
+	void copyEnvironment();
+	void copyCitation();
 	void openDonateLink();
 
 // used only when deriving from QDialog

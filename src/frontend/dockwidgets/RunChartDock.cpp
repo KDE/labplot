@@ -145,6 +145,11 @@ void RunChartDock::retranslateUi() {
 	ui.cbCenterMetric->clear();
 	ui.cbCenterMetric->addItem(i18n("Average"), static_cast<int>(RunChart::CenterMetric::Average));
 	ui.cbCenterMetric->addItem(i18n("Median"), static_cast<int>(RunChart::CenterMetric::Median));
+
+	// tooltip texts
+	QString info = i18n("Metric of the dataset used to determine where the center line should be placed at");
+	ui.lCenterMetric->setToolTip(info);
+	ui.cbCenterMetric->setToolTip(info);
 }
 
 /*

@@ -45,6 +45,18 @@ private Q_SLOTS:
 	 */
 	void removeColumn();
 	/*!
+	 * \brief changeColumn
+	 * Changing the column of the curve
+	 */
+	void changeColumn();
+
+	/*!
+	 * \brief columnValueChanged
+	 * Changing the column data after adding the curve
+	 */
+	void columnValueChanged();
+
+	/*!
 	 * \brief addRemoveRenameColumn
 	 * First part same as in removeColumn().
 	 * The column will be renamed after removed from the spreadsheet

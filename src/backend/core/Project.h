@@ -22,7 +22,12 @@ class ProjectPrivate;
 class QMimeData;
 class QString;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Project : public Folder {
+#else
 class Project : public Folder {
+#endif
 	Q_OBJECT
 
 public:
@@ -64,7 +69,9 @@ public:
 	void save(const QPixmap&, QXmlStreamWriter*);
 	bool load(XmlStreamReader*, bool preview) override;
 	bool load(const QString&, bool preview = false);
+#ifndef SDK
 	bool loadNotebook(const QString&);
+#endif
 	static void restorePointers(AbstractAspect*);
 	static void retransformElements(AbstractAspect*);
 

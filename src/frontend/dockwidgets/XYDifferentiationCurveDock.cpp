@@ -382,14 +382,11 @@ void XYDifferentiationCurveDock::accOrderChanged(int value) {
 }
 
 void XYDifferentiationCurveDock::recalculateClicked() {
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYDifferentiationCurve*>(curve)->setDifferentiationData(m_differentiationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	Q_EMIT info(i18n("Differentiation status: %1", m_differentiationCurve->differentiationResult().status));
-	QApplication::restoreOverrideCursor();
 }
 
 /*!

@@ -21,7 +21,12 @@ class QJsonDocument;
 class QJsonModel;
 class JsonFilterPrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT JsonFilter : public AbstractFileFilter {
+#else
 class JsonFilter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
 
 public:

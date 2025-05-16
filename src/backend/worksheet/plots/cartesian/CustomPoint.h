@@ -21,7 +21,12 @@ class CustomPointPrivate;
 class Symbol;
 class QBrush;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT CustomPoint : public WorksheetElement {
+#else
 class CustomPoint : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:
@@ -48,7 +53,6 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(CustomPoint)
 	void init(bool loading);
-	void initActions();
 
 Q_SIGNALS:
 	friend class CustomPointSetPositionCmd;

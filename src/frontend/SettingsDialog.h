@@ -3,13 +3,15 @@
 	Project              : LabPlot
 	Description          : application settings dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef SETTINGSDIALOG_H
 #define SETTINGSDIALOG_H
 
+#include "backend/core/Settings.h"
+#include <QLocale>
 #include <KPageDialog>
 
 class QAbstractButton;
@@ -30,21 +32,9 @@ class SettingsDialog : public KPageDialog {
 	Q_OBJECT
 
 public:
-	explicit SettingsDialog(QWidget*);
+	explicit SettingsDialog(QWidget*, const QLocale&);
+	void navigateTo(Settings::Type);
 	~SettingsDialog() override;
-
-	enum class SettingsType {
-		General,
-		Worksheet,
-		Spreadsheet,
-#ifdef HAVE_CANTOR_LIBS
-		Notebook,
-#endif
-		Datasets,
-#ifdef HAVE_KUSERFEEDBACK
-		Feedback
-#endif
-	};
 
 private Q_SLOTS:
 	void changed();
@@ -52,24 +42,29 @@ private Q_SLOTS:
 
 private:
 	bool m_changed{false};
-	SettingsGeneralPage* m_generalPage;
-	SettingsWorksheetPage* m_worksheetPage;
-	SettingsSpreadsheetPage* m_spreadsheetPage;
+
+	SettingsGeneralPage* m_generalPage{nullptr};
+	SettingsWorksheetPage* m_worksheetPage{nullptr};
+	KPageWidgetItem* m_worksheetPageItem{nullptr};
+	SettingsSpreadsheetPage* m_spreadsheetPage{nullptr};
+	KPageWidgetItem* m_spreadsheetPageItem{nullptr};
 #ifdef HAVE_CANTOR_LIBS
-	SettingsNotebookPage* m_notebookPage;
+	SettingsNotebookPage* m_notebookPage{nullptr};
+	KPageWidgetItem* m_notebookPageItem{nullptr};
 #endif
-	// 	SettingsWelcomePage* m_welcomePage;
-	SettingsDatasetsPage* m_datasetsPage;
+	SettingsDatasetsPage* m_datasetsPage{nullptr};
+	KPageWidgetItem* m_datasetsPageItem{nullptr};
 
 #ifdef HAVE_KUSERFEEDBACK
-	KUserFeedback::FeedbackConfigWidget* m_userFeedbackWidget;
+	KUserFeedback::FeedbackConfigWidget* m_userFeedbackWidget{nullptr};
+	KPageWidgetItem* m_userFeedbackPageItem{nullptr};
 #endif
 
 	void applySettings();
 	void restoreDefaults();
 
 Q_SIGNALS:
-	void settingsChanged(QList<SettingsType>);
+	void settingsChanged(QList<Settings::Type>);
 	void resetWelcomeScreen();
 };
 

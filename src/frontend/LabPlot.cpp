@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : main function
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2008-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2008-2016 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -19,9 +19,15 @@
 #include <KColorSchemeManager>
 #include <KConfigGroup>
 #include <KCrash>
+#include <KIconTheme>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <kcoreaddons_version.h>
+
+#define HAVE_STYLE_MANAGER __has_include(<KStyleManager>)
+#if HAVE_STYLE_MANAGER
+#include <KStyleManager>
+#endif
 
 #include <QApplication>
 #include <QCommandLineParser>
@@ -36,40 +42,53 @@
 #endif
 
 int main(int argc, char* argv[]) {
-	QApplication app(argc, argv);
-	KLocalizedString::setApplicationDomain("labplot");
-	MainWin::updateLocale();
+#if defined(Q_OS_UNIX) && !defined(Q_OS_DARWIN)
+	// the qads library has issues on wayland so we force qt to use x11 instead
+	// see https://invent.kde.org/education/labplot/-/issues/1067
+	QByteArray xcbQtQpaEnvVar("xcb");
+	qputenv("QT_QPA_PLATFORM", xcbQtQpaEnvVar);
+#endif
 
-	QString systemInfo{AboutDialog::systemInfo()};
-	QString links = i18n("Visit website:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://labplot.kde.org")) + QLatin1Char('\n')
-		// Release notes: LINK ?
-		+ i18n("Watch video tutorials:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://tube.kockatoo.org/c/labplot")) + QLatin1Char('\n')
-		+ i18n("Discuss on Mastodon:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://floss.social/@LabPlot")) + QLatin1Char('\n')
-		+ i18n("Development:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://invent.kde.org/education/labplot")) + QLatin1Char('\n')
-		+ i18n("Please report bugs to:") + QLatin1Char(' ') + QStringLiteral("<a href=\"%1\">%1</a>").arg(QStringLiteral("https://bugs.kde.org"));
+	// trigger initialisation of proper icon theme
+	KIconTheme::initTheme();
+
+	QApplication app(argc, argv);
+
+#if HAVE_STYLE_MANAGER
+	//trigger initialisation of proper application style
+	KStyleManager::initStyle();
+#else
+	// For Windows and macOS: use Breeze if available
+	// Of all tested styles that works the best for us
+#if defined(Q_OS_MACOS) || defined(Q_OS_WIN)
+	QApplication::setStyle(QStringLiteral("breeze"));
+#endif
+#endif
+
+	KLocalizedString::setApplicationDomain("labplot");
+
 	KAboutData aboutData(QStringLiteral("labplot"),
 						 QStringLiteral("LabPlot"),
 						 QLatin1String(LVERSION),
 						 i18n("LabPlot is a FREE, open-source and cross-platform Data Visualization and Analysis software accessible to everyone."),
 						 KAboutLicense::GPL,
-						 i18n("(c) 2007-2024 LabPlot authors"),
-						 systemInfo + QLatin1Char('\n') + links);
+						 i18n("(c) 2007-%1 LabPlot Team", QLatin1String(YEAR)));
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18nc("@info:credit", "Developer"), QStringLiteral("stefan.gerlach@uni.kn"), QString());
 	aboutData.addAuthor(i18n("Alexander Semke"), i18nc("@info:credit", "Developer"), QStringLiteral("alexander.semke@web.de"), QString());
-	aboutData.addAuthor(i18n("Fábián Kristóf-Szabolcs"), i18nc("@info:credit", "Developer"), QStringLiteral("f-kristof@hotmail.com"), QString());
 	aboutData.addAuthor(i18n("Martin Marmsoler"), i18nc("@info:credit", "Developer"), QStringLiteral("martin.marmsoler@gmail.com"), QString());
 	aboutData.addAuthor(i18n("Dariusz Laska"),
 						i18nc("@info:credit", "Conceptual work, documentation, example projects"),
 						QStringLiteral("dariuszlaska@gmail.com"),
 						QString());
-	aboutData.addAuthor(i18n("Andreas Kainz"), i18nc("@info:credit", "Icon designer"), QStringLiteral("kainz.a@gmail.com"), QString());
 	// no text (link to bugs.kde.org) before authors list
 	aboutData.setCustomAuthorText(QString(), QString());
 
+	aboutData.addCredit(i18n("Andreas Kainz"), i18nc("@info:credit", "Icon designer"), QStringLiteral("kainz.a@gmail.com"), QString());
 	aboutData.addCredit(i18n("Yuri Chornoivan"),
 						i18nc("@info:credit", "Help on many questions about the KDE-infrastructure and translation related topics"),
 						QStringLiteral("yurchor@ukr.net"),
 						QString());
+	aboutData.addCredit(i18n("Fábián Kristóf-Szabolcs"), i18nc("@info:credit", "FITS Filter"), QStringLiteral("f-kristof@hotmail.com"), QString());
 	aboutData.addCredit(i18n("Garvit Khatri"),
 						i18nc("@info:credit", "Porting LabPlot to KF5 and Integration with Cantor"),
 						QStringLiteral("garvitdelhi@gmail.com"),
@@ -83,18 +102,26 @@ int main(int argc, char* argv[]) {
 	aboutData.setProgramLogo(QIcon::fromTheme(QStringLiteral("labplot")));
 
 	// components
-	for (auto c: AboutDialog::components())
+	for (const auto& c : AboutDialog::components())
 		aboutData.addComponent(c.at(0), c.at(1), c.at(2), c.at(3));
-
-	// no translators set (too many to mention)
-	KAboutData::setApplicationData(aboutData);
-
-	KCrash::initialize();
 
 	const auto& group = Settings::settingsGeneral();
 	enableInfoTrace(group.readEntry<bool>(QLatin1String("InfoTrace"), false));
 	enableDebugTrace(group.readEntry<bool>(QLatin1String("DebugTrace"), false));
 	enablePerfTrace(group.readEntry<bool>(QLatin1String("PerfTrace"), false));
+
+#ifdef _WIN32
+	// enable debugging on console
+	if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+		freopen("CONOUT$", "w", stdout);
+		freopen("CONOUT$", "w", stderr);
+	}
+#endif
+	INFO("INFO messages enabled")
+	DEBUG("DEBUG debugging enabled")
+	QDEBUG("QDEBUG debugging enabled")
+
+	KCrash::initialize();
 
 	QCommandLineParser parser;
 
@@ -106,9 +133,11 @@ int main(int argc, char* argv[]) {
 
 	parser.addPositionalArgument(QStringLiteral("+[file]"), i18n("Open a project file."));
 
+
 	aboutData.setupCommandLine(&parser);
 	parser.process(app);
 	aboutData.processCommandLine(&parser);
+
 
 	const auto args = parser.positionalArguments();
 	QString fileName;
@@ -145,26 +174,19 @@ int main(int argc, char* argv[]) {
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
 	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 
-#ifdef _WIN32
-	// enable debugging on console
-	if (AttachConsole(ATTACH_PARENT_PROCESS)) {
-		freopen("CONOUT$", "w", stdout);
-		freopen("CONOUT$", "w", stderr);
-	}
-#endif
-	INFO("INFO messages enabled")
-	DEBUG("DEBUG debugging enabled")
-	QDEBUG("QDEBUG debugging enabled")
-
 	INFO("Current path: " << STDSTRING(QDir::currentPath()))
 	const QString applicationPath = QCoreApplication::applicationDirPath();
 	INFO("Application dir: " << STDSTRING(applicationPath))
 
-#ifdef _WIN32
+#if defined(Q_OS_WIN) ||  defined(Q_OS_MACOS)
 	// append application path to PATH to find Cantor backends
 	QString path = qEnvironmentVariable("PATH");
 	INFO("Old PATH = " << STDSTRING(path))
+#if defined(Q_OS_WIN)
 	path.append(QLatin1String(";") + applicationPath);
+#else
+	path.append(QLatin1String(":") + applicationPath);
+#endif
 	qputenv("PATH", qPrintable(path));
 	INFO("New PATH = " << STDSTRING(qEnvironmentVariable("PATH")))
 #endif
@@ -191,8 +213,18 @@ int main(int argc, char* argv[]) {
 	QApplication::setStyle(QStringLiteral("breeze"));
 #endif
 
+	// always show menu icons
+	QApplication::setAttribute(Qt::AA_DontShowIconsInMenus, false);
+
+	// before MainWin to have settings (displayName, etc.)
+	KAboutData::setApplicationData(aboutData);
+
 	auto* window = new MainWin(nullptr, fileName);
 	window->show();
+
+	// now that the locale settings are available
+	aboutData.setOtherText(AboutDialog::systemInfo() + AboutDialog::links());
+	KAboutData::setApplicationData(aboutData);
 
 	if (splash) {
 		splash->finish(window);

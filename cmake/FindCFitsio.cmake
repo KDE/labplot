@@ -10,20 +10,19 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-if (CFITSIO_INCLUDE_DIR AND CFITSIO_LIBRARIES)
+if (NOT WIN32)
+    find_package(PkgConfig QUIET)
+    if (PKG_CONFIG_FOUND)
+        pkg_check_modules(PC_CFITSIO cfitsio QUIET)
+        set(CFITSIO_VERSION ${PC_CFITSIO_VERSION})
+    endif ()
+endif ()
 
-    # in cache already
+if (CFITSIO_INCLUDE_DIR AND CFITSIO_LIBRARIES)
+    # Already in cache
     set(CFITSIO_FOUND TRUE)
     message(STATUS "Found CFITSIO: ${CFITSIO_LIBRARIES}, ${CFITSIO_INCLUDE_DIR} (found version \"${CFITSIO_VERSION}\")")
-
 else ()
-    if (NOT WIN32)
-	    find_package(PkgConfig QUIET)
-        if (PKG_CONFIG_FOUND)
-		pkg_check_modules(PC_CFITSIO cfitsio QUIET)
-        endif ()
-    endif ()
-
     find_path(CFITSIO_INCLUDE_DIR fitsio.h
             ${PC_CFITSIO_INCLUDE_DIRS}
             ${_obIncDir}
@@ -42,8 +41,6 @@ else ()
     else ()
         set(CFITSIO_FOUND FALSE)
     endif()
-
-    set(CFITSIO_VERSION ${PC_CFITSIO_VERSION})
 
     if (CFITSIO_FOUND)
         if (NOT CFitsio_FIND_QUIETLY)

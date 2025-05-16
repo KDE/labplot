@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : settings page for Datasets
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -19,7 +19,7 @@ class SettingsDatasetsPage : public SettingsPage {
 public:
 	explicit SettingsDatasetsPage(QWidget*);
 
-	bool applySettings() override;
+	QList<Settings::Type> applySettings() override;
 	void restoreDefaults() override;
 
 private:

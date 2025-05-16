@@ -38,7 +38,7 @@ QString BrownianMotionMqttClient::subscribeBrownianTopic() {
 			if (!subscription) {
 				return QLatin1String("Could not subscribe. Is there a valid connection?");
 			}
-			m_brownian_yTopics.push_back(std::move(std::make_unique<QMqttTopicName>(subscription->topic().filter())));
+			m_brownian_yTopics.push_back(std::make_unique<QMqttTopicName>(subscription->topic().filter()));
 		}
 	} else {
 		return QLatin1String("Not connected");

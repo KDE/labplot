@@ -92,6 +92,7 @@ private:
 #endif
 #define UTF8_QSTRING(str) QString::fromUtf8(str)
 
+#define SPACE QLatin1Char(' ')
 #define TAB QStringLiteral("\t")
 #define NEWLINE QStringLiteral("\n")
 
@@ -555,10 +556,13 @@ private:
 			reader->raiseMissingAttributeWarning(QStringLiteral("fontSize"));                                                                                  \
 		else {                                                                                                                                                 \
 			int size = str.toInt();                                                                                                                            \
-			QFont tempFont;                                                                                                                                    \
-			tempFont.setPixelSize(size);                                                                                                                       \
-			if (size != -1)                                                                                                                                    \
+			if (size > 0) {                                                                                                                                    \
+				QFont tempFont;                                                                                                                                \
+				tempFont.setPixelSize(size);                                                                                                                   \
 				font.setPointSizeF(QFontInfo(tempFont).pointSizeF());                                                                                          \
+			} else {                                                                                                                                           \
+				reader->raiseWarning(QStringLiteral("Invalid font size: %1").arg(size));                                                                       \
+			}                                                                                                                                                  \
 		}                                                                                                                                                      \
                                                                                                                                                                \
 		str = attribs.value(QStringLiteral("fontPointSize")).toString();                                                                                       \
@@ -626,11 +630,27 @@ private:
 	}
 
 // Column
+
+// if the data columns are valid, write their current paths.
+// if not, write the last used paths so the columns can be restored later
+// when the columns with the same path are added again to the project
 #define WRITE_COLUMN(column, columnName)                                                                                                                       \
 	if (column) {                                                                                                                                              \
 		writer->writeAttribute(QStringLiteral(#columnName), column->path());                                                                                   \
 	} else {                                                                                                                                                   \
-		writer->writeAttribute(QStringLiteral(#columnName), QString());                                                                                        \
+		writer->writeAttribute(QStringLiteral(#columnName), column##Path);                                                                                     \
+	}
+
+#define WRITE_COLUMNS(columns, paths)                                                                                                                          \
+	int index = 0;                                                                                                                                             \
+	for (auto* column : columns) {                                                                                                                             \
+		writer->writeStartElement(QStringLiteral("column"));                                                                                                   \
+		if (column)                                                                                                                                            \
+			writer->writeAttribute(QStringLiteral("path"), column->path());                                                                                    \
+		else                                                                                                                                                   \
+			writer->writeAttribute(QStringLiteral("path"), paths.at(index));                                                                                   \
+		writer->writeEndElement();                                                                                                                             \
+		++index;                                                                                                                                               \
 	}
 
 // column names can be empty in case no columns were used before save

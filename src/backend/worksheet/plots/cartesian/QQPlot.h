@@ -13,7 +13,6 @@
 #include "Plot.h"
 #include "backend/nsl/nsl_sf_stats.h"
 
-class AbstractColumn;
 class Background;
 class Line;
 class Symbol;

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the reference line on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -41,44 +41,6 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	m_gridLayout->setVerticalSpacing(2);
 	ui.frameDataColumns->setLayout(m_gridLayout);
 
-	ui.cbWhiskersType->addItem(QStringLiteral("min/max"));
-	ui.cbWhiskersType->addItem(QStringLiteral("Tukey"));
-	ui.cbWhiskersType->addItem(QStringLiteral("mean ∓ k*SD"));
-	ui.cbWhiskersType->addItem(QStringLiteral("median ∓ k*MAD"));
-	ui.cbWhiskersType->addItem(i18n("10/90 percentiles"));
-	ui.cbWhiskersType->addItem(i18n("5/95 percentiles"));
-	ui.cbWhiskersType->addItem(i18n("1/99 percentiles"));
-
-	ui.cbOrientation->addItem(i18n("Horizontal"));
-	ui.cbOrientation->addItem(i18n("Vertical"));
-
-	ui.cbOrdering->addItem(i18n("None"));
-	ui.cbOrdering->addItem(i18n("By Median, Ascending"));
-	ui.cbOrdering->addItem(i18n("By Median, Descending"));
-	ui.cbOrdering->addItem(i18n("By Mean, Ascending"));
-	ui.cbOrdering->addItem(i18n("By Mean, Descending"));
-
-	QString msg = i18n("If multiple data sets are provided, define how they should be ordered or use 'None' to keep the original order.");
-	ui.lOrdering->setToolTip(msg);
-	ui.cbOrdering->setToolTip(msg);
-
-	msg = i18n("If checked, the box width is made proportional to the square root of the number of data points.");
-	ui.lVariableWidth->setToolTip(msg);
-	ui.chkVariableWidth->setToolTip(msg);
-
-	msg = i18n("Parameter controlling the range of the inner fences of the box plot.");
-	ui.lWhiskersRangeParameter->setToolTip(msg);
-	ui.leWhiskersRangeParameter->setToolTip(msg);
-
-	// Tab "Box"
-	msg = i18n("Select the data column for which the properties should be shown and edited");
-	ui.lNumber->setToolTip(msg);
-	ui.cbNumber->setToolTip(msg);
-
-	msg = i18n("Specify the factor in percent to control the width of the box relative to its default value.");
-	ui.lWidthFactor->setToolTip(msg);
-	ui.sbWidthFactor->setToolTip(msg);
-
 	// Tab "Box"
 	auto* gridLayout = static_cast<QGridLayout*>(ui.tabBox->layout());
 	backgroundWidget = new BackgroundWidget(ui.tabBox);
@@ -95,27 +57,6 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	gridLayout = static_cast<QGridLayout*>(ui.tabSymbol->layout());
 	symbolWidget = new SymbolWidget(ui.tabSymbol);
 	gridLayout->addWidget(symbolWidget, 2, 0, 1, 3);
-
-	msg = i18n("Select to modify the properties of the symbol for the mean value.");
-	ui.rbMean->setToolTip(msg);
-
-	msg = i18n("Select to modify the properties of the symbol for the median value.");
-	ui.rbMedian->setToolTip(msg);
-
-	msg = i18n("Select to modify the properties of the symbol for the outlier values.");
-	ui.rbOutlier->setToolTip(msg);
-
-	msg = i18n("Select to modify the properties of the symbol for the \"far out\" values.");
-	ui.rbFarOut->setToolTip(msg);
-
-	msg = i18n("Select to modify the properties of the symbol for all data values excluding the outlier and \"far out\" values.");
-	ui.rbData->setToolTip(msg);
-
-	msg = i18n("Select to modify the properties of the symbol for the ends of the whiskers.");
-	ui.rbWhiskerEnd->setToolTip(msg);
-
-	msg = i18n("Activate to randomize the positions of the symbols (\"jittering\"), helpful for dense and overlapping data points.");
-	ui.chkJitteringEnabled->setToolTip(msg);
 
 	// Tab "Whiskers"
 	gridLayout = static_cast<QGridLayout*>(ui.tabWhiskers->layout());
@@ -138,6 +79,9 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 
 	// Validators
 	ui.leWhiskersRangeParameter->setValidator(new QDoubleValidator(ui.leWhiskersRangeParameter));
+
+	updateLocale();
+	retranslateUi();
 
 	// SLOTS
 	// Tab "General"
@@ -218,9 +162,6 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 
 	updatePlotRangeList();
 
-	// set the current locale
-	updateLocale();
-
 	// SIGNALs/SLOTs
 	// general
 	connect(m_boxPlot, &BoxPlot::orientationChanged, this, &BoxPlotDock::plotOrientationChanged);
@@ -253,17 +194,6 @@ void BoxPlotDock::setModel() {
 	model->setSelectableAspects(list);
 }
 
-/*
- * updates the locale in the widgets. called when the application settins are changed.
- */
-void BoxPlotDock::updateLocale() {
-	ui.leWhiskersRangeParameter->setLocale(QLocale());
-	borderLineWidget->updateLocale();
-	medianLineWidget->updateLocale();
-	whiskersLineWidget->updateLocale();
-	whiskersCapLineWidget->updateLocale();
-}
-
 void BoxPlotDock::loadDataColumns() {
 	// add the combobox for the first column, is always present
 	if (m_dataComboBoxes.count() == 0)
@@ -287,7 +217,7 @@ void BoxPlotDock::loadDataColumns() {
 		// show the columns in the comboboxes
 		for (int i = 0; i < count; ++i) {
 			m_dataComboBoxes.at(i)->setModel(model); // the model might have changed in-between, reset the current model
-			m_dataComboBoxes.at(i)->setAspect(m_boxPlot->dataColumns().at(i));
+			m_dataComboBoxes.at(i)->setAspect(m_boxPlot->dataColumns().at(i), m_boxPlot->dataColumnPaths().at(i));
 		}
 
 		// show columns names in the combobox for the selection of the box to be modified
@@ -324,6 +254,84 @@ void BoxPlotDock::setDataColumns() const {
 	}
 
 	m_boxPlot->setDataColumns(columns);
+}
+
+/*
+ * updates the locale in the widgets. called when the application settins are changed.
+ */
+void BoxPlotDock::updateLocale() {
+	ui.leWhiskersRangeParameter->setLocale(QLocale());
+	borderLineWidget->updateLocale();
+	medianLineWidget->updateLocale();
+	whiskersLineWidget->updateLocale();
+	whiskersCapLineWidget->updateLocale();
+}
+
+void BoxPlotDock::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
+
+	ui.cbWhiskersType->clear();
+	ui.cbWhiskersType->addItem(QStringLiteral("min/max"));
+	ui.cbWhiskersType->addItem(QStringLiteral("Tukey"));
+	ui.cbWhiskersType->addItem(QStringLiteral("mean ∓ k*SD"));
+	ui.cbWhiskersType->addItem(QStringLiteral("median ∓ k*MAD"));
+	ui.cbWhiskersType->addItem(i18n("10/90 percentiles"));
+	ui.cbWhiskersType->addItem(i18n("5/95 percentiles"));
+	ui.cbWhiskersType->addItem(i18n("1/99 percentiles"));
+
+	ui.cbOrientation->clear();
+	ui.cbOrientation->addItem(i18n("Horizontal"));
+	ui.cbOrientation->addItem(i18n("Vertical"));
+
+	ui.cbOrdering->clear();
+	ui.cbOrdering->addItem(i18n("None"));
+	ui.cbOrdering->addItem(i18n("By Median, Ascending"));
+	ui.cbOrdering->addItem(i18n("By Median, Descending"));
+	ui.cbOrdering->addItem(i18n("By Mean, Ascending"));
+	ui.cbOrdering->addItem(i18n("By Mean, Descending"));
+
+	// tooltip texts
+	QString msg = i18n("If multiple data sets are provided, define how they should be ordered or use 'None' to keep the original order.");
+	ui.lOrdering->setToolTip(msg);
+	ui.cbOrdering->setToolTip(msg);
+
+	msg = i18n("If checked, the box width is made proportional to the square root of the number of data points.");
+	ui.lVariableWidth->setToolTip(msg);
+	ui.chkVariableWidth->setToolTip(msg);
+
+	msg = i18n("Parameter controlling the range of the inner fences of the box plot.");
+	ui.lWhiskersRangeParameter->setToolTip(msg);
+	ui.leWhiskersRangeParameter->setToolTip(msg);
+
+	// Tab "Box"
+	msg = i18n("Select the data column for which the properties should be shown and edited");
+	ui.lNumber->setToolTip(msg);
+	ui.cbNumber->setToolTip(msg);
+
+	msg = i18n("Specify the factor in percent to control the width of the box relative to its default value.");
+	ui.lWidthFactor->setToolTip(msg);
+	ui.sbWidthFactor->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the mean value.");
+	ui.rbMean->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the median value.");
+	ui.rbMedian->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the outlier values.");
+	ui.rbOutlier->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the \"far out\" values.");
+	ui.rbFarOut->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for all data values excluding the outlier and \"far out\" values.");
+	ui.rbData->setToolTip(msg);
+
+	msg = i18n("Select to modify the properties of the symbol for the ends of the whiskers.");
+	ui.rbWhiskerEnd->setToolTip(msg);
+
+	msg = i18n("Activate to randomize the positions of the symbols (\"jittering\"), helpful for dense and overlapping data points.");
+	ui.chkJitteringEnabled->setToolTip(msg);
 }
 
 //**********************************************************
@@ -398,7 +406,6 @@ void BoxPlotDock::removeDataColumn() {
 
 void BoxPlotDock::dataColumnChanged(const QModelIndex&) {
 	CONDITIONAL_LOCK_RETURN;
-
 	setDataColumns();
 }
 

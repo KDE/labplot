@@ -21,8 +21,6 @@
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/TreeModel.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "frontend/ThemeHandler.h"
 #include "frontend/worksheet/ExportWorksheetDialog.h"
 #include "frontend/worksheet/WorksheetView.h"
@@ -49,7 +47,7 @@
  * The worksheet is, besides the data containers \c Spreadsheet and \c Matrix, another central part of the application
  * and provides an area for showing and grouping together different kinds of worksheet objects - plots, labels &etc;
  *
- * * \ingroup worksheet
+ * \ingroup worksheet
  */
 Worksheet::Worksheet(const QString& name, bool loading)
 	: AbstractPart(name, AspectType::Worksheet)
@@ -200,20 +198,20 @@ QVector<AspectType> Worksheet::pasteTypes() const {
 	return QVector<AspectType>{AspectType::CartesianPlot, AspectType::TextLabel, AspectType::Image};
 }
 
+bool Worksheet::exportToFile(const QString& path, const ExportFormat format, const ExportArea area, const bool background, int resolution) const {
+	return static_cast<WorksheetView*>(view())->exportToFile(path, format, area, background, resolution);
+}
+
 bool Worksheet::exportView() const {
 #ifndef SDK
-	setPrinting(true);
-	// Retransform all elements with print enabled
-	for (auto* child : children<WorksheetElement>())
-		child->retransform();
 	auto* dlg = new ExportWorksheetDialog(m_view);
 	dlg->setProjectFileName(const_cast<Worksheet*>(this)->project()->fileName());
 	dlg->setFileName(name());
 	bool ret;
 	if ((ret = (dlg->exec() == QDialog::Accepted))) {
 		QString path = dlg->path();
-		const WorksheetView::ExportFormat format = dlg->exportFormat();
-		const WorksheetView::ExportArea area = dlg->exportArea();
+		const auto format = dlg->exportFormat();
+		const auto area = dlg->exportArea();
 		const bool background = dlg->exportBackground();
 		const int resolution = dlg->exportResolution();
 
@@ -222,7 +220,6 @@ bool Worksheet::exportView() const {
 		RESET_CURSOR;
 	}
 	delete dlg;
-	setPrinting(false);
 	return ret;
 #else
 	return true;
@@ -240,10 +237,6 @@ bool Worksheet::exportView(QPixmap& pixmap) const {
 bool Worksheet::printView() {
 #ifndef SDK
 	setPrinting(true);
-	// for print/export, retransform all XYCurves to get better quality with the disabled line optimization
-	for (auto* curve : children<XYCurve>())
-		curve->retransform();
-
 	QPrinter printer;
 	auto* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18nc("@title:window", "Print Worksheet"));
@@ -262,10 +255,6 @@ bool Worksheet::printView() {
 bool Worksheet::printPreview() const {
 #ifndef SDK
 	setPrinting(true);
-	// for print/export, retransform all XYCurves to get better quality with the disabled line optimization
-	for (auto* curve : children<XYCurve>())
-		curve->retransform();
-
 	auto* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &WorksheetView::print);
 	const auto r = dlg->exec();
@@ -387,6 +376,10 @@ void Worksheet::handleAspectMoved() {
 	const auto& children = this->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
 	for (auto* child : children)
 		child->graphicsItem()->setZValue(zVal++);
+
+	Q_D(Worksheet);
+	if (d->layout != Worksheet::Layout::NoLayout)
+		d->updateLayout(false);
 }
 
 QGraphicsScene* Worksheet::scene() const {
@@ -834,6 +827,11 @@ void Worksheet::setPrinting(bool on) const {
 	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* elem : elements)
 		elem->setPrinting(on);
+
+	// disable the line optimization in XYCurve to get a better result, re-enable it after printing
+	const auto& curves = children<XYCurve>((AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden));
+	for (auto* child : curves)
+		child->enableLineOptimization(!on);
 }
 
 STD_SETTER_CMD_IMPL_S(Worksheet, SetTheme, QString, theme)

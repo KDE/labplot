@@ -638,8 +638,8 @@ void DatapickerImageView::changeZoom(QAction* action) {
 		zoom(-1);
 		break;
 	case ZoomMode::ZoomOrigin:
-		static const float hscale = GuiTools::dpi(this).first / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
-		static const float vscale = GuiTools::dpi(this).second / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
+		static const float hscale = GuiTools::dpi(this).first / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter));
+		static const float vscale = GuiTools::dpi(this).second / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter));
 		setTransform(QTransform::fromScale(hscale, vscale));
 		m_rotationAngle = 0;
 		break;
@@ -786,11 +786,12 @@ void DatapickerImageView::handleImageActions() {
 	}
 }
 
-void DatapickerImageView::exportToFile(const QString& path, const WorksheetView::ExportFormat format, const int resolution) {
+bool DatapickerImageView::exportToFile(const QString& path, const Worksheet::ExportFormat format, const int resolution) {
 	QRectF sourceRect = scene()->sceneRect();
+	bool rc = false;
 
 	// print
-	if (format == WorksheetView::ExportFormat::PDF) {
+	if (format == Worksheet::ExportFormat::PDF) {
 		QPrinter printer(QPrinter::HighResolution);
 		printer.setOutputFormat(QPrinter::PdfFormat);
 		printer.setOutputFileName(path);
@@ -804,24 +805,28 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 		QPainter painter(&printer);
 		painter.setRenderHint(QPainter::Antialiasing);
 		QRectF targetRect(0, 0, painter.device()->width(), painter.device()->height());
-		painter.begin(&printer);
+		rc = painter.begin(&printer);
+		if (!rc)
+			return false;
 		exportPaint(&painter, targetRect, sourceRect);
 		painter.end();
-	} else if (format == WorksheetView::ExportFormat::SVG) {
+	} else if (format == Worksheet::ExportFormat::SVG) {
 #ifdef HAVE_QTSVG
 		QSvgGenerator generator;
 		generator.setFileName(path);
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
-		w = w * GuiTools::dpi(this).first / GSL_CONST_CGS_INCH;
-		h = h * GuiTools::dpi(this).second / GSL_CONST_CGS_INCH;
+		w = w * GuiTools::dpi(this).first / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
+		h = h * GuiTools::dpi(this).second / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
 
 		generator.setSize(QSize(w, h));
 		QRectF targetRect(0, 0, w, h);
 		generator.setViewBox(targetRect);
 
 		QPainter painter;
-		painter.begin(&generator);
+		rc = painter.begin(&generator);
+		if (!rc)
+			return false;
 		exportPaint(&painter, targetRect, sourceRect);
 		painter.end();
 #endif
@@ -830,8 +835,8 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 		// TODO add all formats supported by Qt in QImage
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
-		w = w * resolution / GSL_CONST_CGS_INCH;
-		h = h * resolution / GSL_CONST_CGS_INCH;
+		w = w * resolution / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
+		h = h * resolution / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
 		QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
 		image.fill(Qt::transparent);
 		QRectF targetRect(0, 0, w, h);
@@ -843,37 +848,38 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 		painter.end();
 
 		if (!path.isEmpty()) {
-			bool rc{false};
 			switch (format) {
-			case WorksheetView::ExportFormat::PNG:
+			case Worksheet::ExportFormat::PNG:
 				rc = image.save(path, "PNG");
 				break;
-			case WorksheetView::ExportFormat::JPG:
+			case Worksheet::ExportFormat::JPG:
 				rc = image.save(path, "JPG");
 				break;
-			case WorksheetView::ExportFormat::BMP:
+			case Worksheet::ExportFormat::BMP:
 				rc = image.save(path, "BMP");
 				break;
-			case WorksheetView::ExportFormat::PPM:
+			case Worksheet::ExportFormat::PPM:
 				rc = image.save(path, "PPM");
 				break;
-			case WorksheetView::ExportFormat::XBM:
+			case Worksheet::ExportFormat::XBM:
 				rc = image.save(path, "XBM");
 				break;
-			case WorksheetView::ExportFormat::XPM:
+			case Worksheet::ExportFormat::XPM:
 				rc = image.save(path, "XPM");
 				break;
-			case WorksheetView::ExportFormat::PDF:
-			case WorksheetView::ExportFormat::SVG:
+			case Worksheet::ExportFormat::PDF:
+			case Worksheet::ExportFormat::SVG:
 				break;
-			}
-
-			if (!rc) {
-				RESET_CURSOR;
-				QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
 			}
 		}
 	}
+
+	if (!rc) {
+		RESET_CURSOR;
+		QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
+	}
+
+	return rc;
 }
 
 void DatapickerImageView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect) {
