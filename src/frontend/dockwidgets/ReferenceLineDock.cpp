@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the reference line on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -24,12 +24,12 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 	setBaseWidgets(ui.leName, ui.teComment);
 	setVisibilityWidgets(ui.chkVisible);
 
-	ui.cbOrientation->addItem(i18n("Horizontal"));
-	ui.cbOrientation->addItem(i18n("Vertical"));
-
 	auto* layout = static_cast<QHBoxLayout*>(ui.tabLine->layout());
 	lineWidget = new LineWidget(ui.tabLine);
 	layout->insertWidget(0, lineWidget);
+
+	updateLocale();
+	retranslateUi();
 
 	// SLOTS
 	// General
@@ -79,17 +79,16 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
  * updates the locale in the widgets. called when the application settings are changed.
  */
 void ReferenceLineDock::updateLocale() {
-	CONDITIONAL_LOCK_RETURN;
-	const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
-	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal) {
-		if (plot->yRangeFormatDefault() == RangeT::Format::Numeric)
-			ui.sbPosition->setValue(m_line->positionLogical().y());
-	} else {
-		if (plot->xRangeFormatDefault() == RangeT::Format::Numeric)
-			ui.sbPosition->setValue(m_line->positionLogical().x());
-	}
-
+	ui.sbPosition->setLocale(QLocale());
 	lineWidget->updateLocale();
+}
+
+void ReferenceLineDock::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
+
+	ui.cbOrientation->clear();
+	ui.cbOrientation->addItem(i18n("Horizontal"));
+	ui.cbOrientation->addItem(i18n("Vertical"));
 }
 
 void ReferenceLineDock::updateWidgetsOrientation(ReferenceLine::Orientation orientation) {

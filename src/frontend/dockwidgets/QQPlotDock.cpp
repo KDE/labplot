@@ -63,6 +63,9 @@ QQPlotDock::QQPlotDock(QWidget* parent)
 		layout->setVerticalSpacing(2);
 	}
 
+	updateLocale();
+	retranslateUi();
+
 	// Slots
 	// General
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &QQPlotDock::dataColumnChanged);
@@ -80,9 +83,6 @@ QQPlotDock::QQPlotDock(QWidget* parent)
 	connect(templateHandler, &TemplateHandler::info, this, &QQPlotDock::info);
 
 	ui.verticalLayout->addWidget(frame);
-
-	updateLocale();
-	retranslateUi();
 }
 
 QQPlotDock::~QQPlotDock() = default;
@@ -137,7 +137,17 @@ void QQPlotDock::setPlots(QList<QQPlot*> list) {
 	connect(m_plot, &QQPlot::distributionChanged, this, &QQPlotDock::plotDistributionChanged);
 }
 
+/*
+ * updates the locale in the widgets. called when the application settins are changed.
+ */
+void QQPlotDock::updateLocale() {
+	lineWidget->updateLocale();
+	symbolWidget->updateLocale();
+}
+
 void QQPlotDock::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
+
 	ui.cbDistribution->clear();
 
 	QVector<QPair<QString, int>> distros;
@@ -163,14 +173,6 @@ void QQPlotDock::retranslateUi() {
 	QString info = i18n("Distribution used to calculate the percentiles to be compared with the percentiles of the provided data");
 	ui.lDistribution->setToolTip(info);
 	ui.cbDistribution->setToolTip(info);
-}
-
-/*
- * updates the locale in the widgets. called when the application settins are changed.
- */
-void QQPlotDock::updateLocale() {
-	lineWidget->updateLocale();
-	symbolWidget->updateLocale();
 }
 
 //*************************************************************

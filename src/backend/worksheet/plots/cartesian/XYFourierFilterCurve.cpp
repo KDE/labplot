@@ -45,11 +45,6 @@ XYFourierFilterCurve::XYFourierFilterCurve(const QString& name, XYFourierFilterC
 // and is deleted during the cleanup in QGraphicsScene
 XYFourierFilterCurve::~XYFourierFilterCurve() = default;
 
-void XYFourierFilterCurve::recalculate() {
-	Q_D(XYFourierFilterCurve);
-	d->recalculate();
-}
-
 const XYAnalysisCurve::Result& XYFourierFilterCurve::result() const {
 	Q_D(const XYFourierFilterCurve);
 	return d->filterResult;

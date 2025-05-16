@@ -13,7 +13,12 @@
 
 class ReadStatFilterPrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT ReadStatFilter : public AbstractFileFilter {
+#else
 class ReadStatFilter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
 
 public:

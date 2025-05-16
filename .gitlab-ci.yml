@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2020 Volker Krause <vkrause@kde.org>
-# SPDX-FileCopyrightText: 2022-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+# SPDX-FileCopyrightText: 2022-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 # SPDX-License-Identifier: CC0-1.0
 
 # full path: https://invent.kde.org/sysadmin/ci-utilities/-/tree/master/gitlab-templates
@@ -9,69 +9,76 @@ include:
 # reuse-lint fails
 #      - /gitlab-templates/reuse-lint.yml
       - /gitlab-templates/clang-format.yml
-#      - /gitlab-templates/linux.yml
-#      - /gitlab-templates/windows.yml
-# currently fails linking
       - /gitlab-templates/linux-qt6.yml
+# Fails finding ECM (2025-02-13)
+#      - /gitlab-templates/linux-qt6-next.yml
       - /gitlab-templates/windows-qt6.yml
-#      - /gitlab-templates/freebsd.yml
       - /gitlab-templates/freebsd-qt6.yml
 ### DEPLOY
-#      - /gitlab-templates/craft-appimage.yml
       - /gitlab-templates/craft-appimage-qt6.yml
 # see below for flatpak variables
       - /gitlab-templates/flatpak.yml
-#      - /gitlab-templates/craft-windows-x86-64.yml
       - /gitlab-templates/craft-windows-x86-64-qt6.yml
-#      - /gitlab-templates/craft-macos-x86-64.yml
-#      - /gitlab-templates/craft-macos-arm64.yml
       - /gitlab-templates/craft-macos-x86-64-qt6.yml
       - /gitlab-templates/craft-macos-arm64-qt6.yml
 # only for publishing in the MS Store
-#      - /gitlab-templates/craft-windows-appx-qt5.yml
 #      - /gitlab-templates/craft-windows-appx-qt6.yml
 # MinGW fails linking tests due to undefined references to GSL functions
-#      - /gitlab-templates/craft-windows-mingw64.yml
 #      - /gitlab-templates/craft-windows-mingw64-qt6.yml
 
-#craft_appimage_qt515_x86_64:
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == "master"'
-#      when: manual
-#      allow_failure: true
+# can't extend job without running it
+# "only: []" not supported anymore
+
+#freebsd14_qt68_t:
+#  extends: freebsd14_qt68
+#  script:
+#    - !reference [freebsd14_qt68, script]
+#    - mkdir -p build_examples && cd build_examples
+#    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
+#    - ninja
+
+# can't extend job without running it
+# "only: []" not supported anymore
+
+#suse_tumbleweed_qt69_t:
+#  extends: suse_tumbleweed_qt69
+#  script:
+#    - !reference [suse_tumbleweed_qt69, script]
+#    - mkdir -p build_examples && cd build_examples
+#    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
+#    - ninja
+
+# can't extend job without running it
+# "only: []" not supported anymore
+
+#windows_qt68_t:
+#  extends: windows_qt68
+#  script:
+#    - !reference [windows_qt68, script]
+    # disable the build of the sdk examples on windows since it is flaky. fails with a linker error sometimes
+    # - mkdir -p build_examples && cd build_examples
+    # - $env:Path = 'C:\Craft\windows-msvc2022_64-cl\bin;C:\Craft\windows-msvc2022_64-cl\lib;C:\Craft\windows-msvc2022_64-cl\dev-utils\bin;' + $env:Path
+    # - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ../lib/examples
+    # - ninja
+
 craft_appimage_qt6_x86_64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
       when: manual
       allow_failure: true
 
-#craft_windows_qt515_x86_64:
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == "master"'
-#      when: manual
-#      allow_failure: true
 craft_windows_qt6_x86_64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
       when: manual
       allow_failure: true
 
-#craft_macos_x86_64:
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == "master"'
-#      when: manual
-#      allow_failure: true
 craft_macos_qt6_x86_64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
       when: manual
       allow_failure: true
 
-#craft_macos_arm64:
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME == "master"'
-#      when: manual
-#      allow_failure: true
 craft_macos_qt6_arm64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'

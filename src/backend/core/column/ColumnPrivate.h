@@ -40,7 +40,11 @@ public:
 	bool copy(const ColumnPrivate*);
 	bool copy(const ColumnPrivate*, int source_start, int dest_start, int num_rows);
 
-	int indexForValue(double x) const;
+	static int calculateMaxSteps(unsigned int value);
+	static int indexForValue(double x, QVector<double>& column, Column::Properties properties, bool smaller);
+	static int indexForValue(const double x, const QVector<QPointF>& column, Column::Properties properties, bool smaller);
+	static int indexForValue(double x, QVector<QLineF>& lines, Column::Properties properties, bool smaller);
+	int indexForValue(double x, bool smaller) const;
 
 	int rowCount() const;
 	int rowCount(double min, double max) const;
@@ -199,7 +203,7 @@ public:
 		const QVector<Column::ValueLabel<double>>* valueLabels() const;
 		const QVector<Column::ValueLabel<int>>* intValueLabels() const;
 		const QVector<Column::ValueLabel<qint64>>* bigIntValueLabels() const;
-		int indexForValue(double value) const;
+		int indexForValue(double value, bool smaller) const;
 		double valueAt(int index) const;
 		QDateTime dateTimeAt(int index) const;
 		bool isValid(int index) const;
@@ -235,7 +239,7 @@ public:
 	ValueLabels m_labels;
 	int valueLabelsCount() const;
 	int valueLabelsCount(double min, double max) const;
-	int valueLabelsIndexForValue(double value) const;
+	int valueLabelsIndexForValue(double value, bool smaller) const;
 	double valueLabelsValueAt(int index) const;
 	QString valueLabelAt(int index) const;
 	void addValueLabel(qint64, const QString&);

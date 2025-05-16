@@ -18,7 +18,12 @@ extern "C" {
 
 class XYFourierFilterCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYFourierFilterCurve : public XYAnalysisCurve {
+#else
 class XYFourierFilterCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:
@@ -43,7 +48,6 @@ public:
 	explicit XYFourierFilterCurve(const QString& name);
 	~XYFourierFilterCurve() override;
 
-	void recalculate() override;
 	virtual const XYAnalysisCurve::Result& result() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;

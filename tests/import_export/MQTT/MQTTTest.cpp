@@ -141,9 +141,8 @@ void MQTTTest::testCommonFalse() {
 // #################  test handling of data received by messages  ###############
 // ##############################################################################
 void MQTTTest::testIntegerMessage() {
-#ifdef __gnu_linux__
-	QSKIP("Unstable");
-#endif
+	QSKIP("Unstable", QTest::SkipSingle);
+
 	auto* filter = new AsciiFilter();
 
 	auto properties = filter->properties();
@@ -261,9 +260,8 @@ void MQTTTest::testIntegerMessage() {
 }
 
 void MQTTTest::testNumericMessage() {
-#ifdef __gnu_linux__
-	QSKIP("Unstable");
-#endif
+	QSKIP("Unstable", QTest::SkipSingle);
+
 	auto* filter = new AsciiFilter();
 
 	auto properties = filter->properties();
@@ -393,9 +391,8 @@ void MQTTTest::testNumericMessage() {
 }
 
 void MQTTTest::testTextMessage() {
-#ifdef __gnu_linux__
-	QSKIP("Unstable");
-#endif
+	QSKIP("Unstable", QTest::SkipSingle);
+
 	auto* filter = new AsciiFilter();
 
 	auto properties = filter->properties();

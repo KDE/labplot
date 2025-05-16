@@ -124,7 +124,9 @@ public:
 
 	void retransform() override;
 	void recalc() override;
+	void enableLineOptimization(bool);
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	void updateLocale() override;
 	double y(double x, double& x_new, bool& valueFound) const;
 	int getNextValue(double xpos, int index, double& x, double& y, bool& valueFound) const;
 
@@ -144,7 +146,7 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(XYCurve)
-	void init(bool loading = false);
+	void init(bool loading);
 	void initActions();
 	void connectXColumn(const AbstractColumn*);
 	void connectYColumn(const AbstractColumn*);
@@ -164,6 +166,7 @@ private:
 
 Q_SIGNALS:
 	void linesUpdated(const XYCurve*, const QVector<QLineF>&);
+	void pointsUpdated(const XYCurve*, const int startIndex, const int endIndex, const QVector<QPointF>& logicalPoints);
 
 	// General-Tab
 	void xDataChanged();

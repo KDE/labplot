@@ -12,6 +12,7 @@
 
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/filters/BinaryFilter.h"
+#include "backend/datasources/filters/CANFilter.h"
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/datasources/filters/HDF5Filter.h"
 #include "backend/datasources/filters/ImageFilter.h"

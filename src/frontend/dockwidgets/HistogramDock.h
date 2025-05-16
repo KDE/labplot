@@ -4,7 +4,7 @@
 	Description          : widget for histogram plot properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2016-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -30,13 +30,14 @@ public:
 	explicit HistogramDock(QWidget*);
 	~HistogramDock() override;
 
+	void updateLocale() override;
+	void retranslateUi() override;
 	void setCurves(QList<Histogram*>);
 
 private:
 	TreeViewComboBox* cbDataColumn{nullptr};
 
 	void updateValuesWidgets();
-	void updateLocale() override;
 	void load();
 	void loadConfig(KConfig&);
 
@@ -53,11 +54,7 @@ protected:
 	virtual void setModel();
 
 private Q_SLOTS:
-	void init();
-	void retranslateUi();
-
 	// SLOTs for changes triggered in HistogramDock
-
 	// General-Tab
 	void dataColumnChanged(const QModelIndex&);
 	void typeChanged(int);

@@ -4,7 +4,7 @@
 	Description          : Histogram
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2016-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2018 Garvit Khatri <garvitdelhi@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -29,8 +29,6 @@
 #include <QMenu>
 #include <QPainter>
 
-#include <KConfig>
-#include <KConfigGroup>
 #include <KLocalizedString>
 
 CURVE_COLUMN_CONNECT(Histogram, Data, data, recalc)
@@ -51,7 +49,7 @@ Histogram::Histogram(const QString& name, bool loading)
 
 Histogram::Histogram(const QString& name, HistogramPrivate* dd)
 	: Plot(name, dd, AspectType::Histogram) {
-	init();
+	init(false);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -241,6 +239,11 @@ QMenu* Histogram::createContextMenu() {
   */
 QIcon Histogram::icon() const {
 	return QIcon::fromTheme(QStringLiteral("view-object-histogram-linear"));
+}
+
+void Histogram::updateLocale() {
+	Q_D(Histogram);
+	d->updateValues();
 }
 
 // ##############################################################################
@@ -1192,13 +1195,14 @@ void HistogramPrivate::updateValues() {
 	// determine the value string for all points that are currently visible in the plot
 	const auto& valuesPrefix = value->prefix();
 	const auto& valuesSuffix = value->suffix();
+	const auto numberLocale = QLocale();
 	if (value->type() == Value::BinEntries) {
 		switch (type) {
 		case Histogram::Ordinary:
 			for (size_t i = 0; i < m_bins; ++i) {
 				if (!visiblePoints[i])
 					continue;
-				valuesStrings << valuesPrefix + QString::number(gsl_histogram_get(m_histogram, i)) + valuesSuffix;
+				valuesStrings << valuesPrefix + numberLocale.toString(gsl_histogram_get(m_histogram, i)) + valuesSuffix;
 			}
 			break;
 		case Histogram::Cumulative: {
@@ -1207,7 +1211,7 @@ void HistogramPrivate::updateValues() {
 				if (!visiblePoints[i])
 					continue;
 				value += gsl_histogram_get(m_histogram, i);
-				valuesStrings << valuesPrefix + QString::number(value) + valuesSuffix;
+				valuesStrings << valuesPrefix + numberLocale.toString(value) + valuesSuffix;
 			}
 			break;
 		}
@@ -1232,11 +1236,12 @@ void HistogramPrivate::updateValues() {
 
 			switch (xColMode) {
 			case AbstractColumn::ColumnMode::Double:
-				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i), value->numericFormat(), value->precision()) + valuesSuffix;
+				valuesStrings << valuesPrefix + numberToString(valuesColumn->valueAt(i), numberLocale, value->numericFormat(), value->precision())
+						+ valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
-				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
+				valuesStrings << valuesPrefix + numberToString(valuesColumn->valueAt(i), numberLocale) + valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Text:
 				valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;

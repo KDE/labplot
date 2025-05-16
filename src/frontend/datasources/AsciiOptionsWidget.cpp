@@ -4,7 +4,7 @@
 	Description          : widget providing options for the import of ascii data
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2009-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -112,7 +112,7 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent, bool liveData)
 	ui.lVectorNames->setToolTip(info);
 	ui.kleVectorNames->setToolTip(info);
 
-	info = i18n("Custom column modes, comma separated");
+	info = i18n("Custom column data types, comma separated");
 	ui.lColumnMode->setToolTip(info);
 	ui.kleColumnMode->setToolTip(info);
 
@@ -120,7 +120,7 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent, bool liveData)
 	// 15.955 digits
 	info = i18n(
 			   "If not empty, the number of columns must match the number of column names if provided and it must match the number of columns in the imported file.<br>"
-			   "Datatypes:"
+			   "Data Types:"
 			   "<table>"
 			   "<tr><td>%1</td><td>Integer number with 32bit size (−2.147.483.648 .. 2.147.483.647).</td></tr>"
 			   "<tr><td>%2</td><td>Integer number with 64bit size (−9.223.372.036.854.775.808 .. 9.223.372.036.854.775.807).</td></tr>"
@@ -153,17 +153,14 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent, bool liveData)
 	connect(ui.kleColumnMode, &QLineEdit::textChanged, this, &AsciiOptionsWidget::columnModesChanged);
 }
 
-void AsciiOptionsWidget::showAsciiHeaderOptions(bool visible) {
-	DEBUG(Q_FUNC_INFO);
+void AsciiOptionsWidget::showAsciiHeaderOptions(bool headerLinevisible, bool columnNamesVisible) {
+	ui.chbHeader->setVisible(headerLinevisible);
+	ui.sbHeaderLine->setVisible(headerLinevisible);
 
-	ui.chbHeader->setVisible(visible);
-	ui.sbHeaderLine->setVisible(visible);
-	if (visible) {
+	// if the columns names are visible in general, show/hide them depending on the current setting for the option "Names at Line"
+	if (columnNamesVisible) {
 		ui.lVectorNames->setVisible(!ui.chbHeader->isChecked());
 		ui.kleVectorNames->setVisible(!ui.chbHeader->isChecked());
-	} else {
-		ui.lVectorNames->setVisible(false);
-		ui.kleVectorNames->setVisible(false);
 	}
 }
 

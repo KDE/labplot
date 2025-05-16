@@ -1,0 +1,39 @@
+# SPDX-FileCopyrightText: 2013-2021 Tobias Lorenz <tobias.lorenz@gmx.net>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+FROM microsoft/windowsservercore:1709
+
+# Chocolatey
+RUN powershell -Command iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
+
+# Zlib
+RUN Invoke-WebRequest "https://sourceforge.net/projects/gnuwin32/files/zlib/1.2.3/zlib-1.2.3.exe/download" -OutFile "$env:TEMP\zlib-1.2.3.exe" -UseBasicParsing
+RUN & "$env:TEMP\zlib-1.2.3.exe"
+
+# CMake
+RUN powershell -Command choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
+
+# Visual Studio 2017 (15)
+#RUN Invoke-WebRequest "https://aka.ms/vs/15/release/vs_community.exe" -OutFile "$env:TEMP\vs_community.exe" -UseBasicParsing
+#RUN & "$env:TEMP\vs_community.exe" --add Microsoft.VisualStudio.Workload.NetWeb --quiet --wait --norestart --noUpdateInstaller | Out-Default
+#RUN & 'C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/MSBuild/15.0/Bin/MSBuild.exe' /version
+
+# Visual Studio 2017 Build Tools
+RUN powershell -Command choco install visualstudio2017buildtools "--includeRecommended --includeOptional"
+
+# CCCC
+# tbd
+
+# Cppcheck
+# tbd
+
+# Doxygen
+# tbd
+
+# Graphviz
+# tbd
+
+# Boost C++ Libraries (System, Filesystem, Test)
+RUN Invoke-WebRequest "https://sourceforge.net/projects/boost/files/boost-binaries/1.68.0/boost_1_68_0-msvc-14.1-64.exe/download" -OutFile "$env:TEMP\boost_1_68_0-msvc-14.1-64.exe" -UseBasicParsing
+RUN & "$env:TEMP\boost_1_68_0-msvc-14.1-64.exe"

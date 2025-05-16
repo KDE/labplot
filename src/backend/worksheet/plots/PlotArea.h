@@ -20,7 +20,12 @@ class CartesianPlot;
 class Line;
 class PlotAreaPrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT PlotArea : public WorksheetElement {
+#else
 class PlotArea : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:
@@ -31,8 +36,8 @@ public:
 	Q_DECLARE_FLAGS(BorderType, BorderTypeFlags)
 
 	QGraphicsItem* graphicsItem() const override;
-	void loadThemeConfig(const KConfig& config) override;
-	void saveThemeConfig(const KConfig& config) override;
+	void loadThemeConfig(const KConfig&) override;
+	void saveThemeConfig(const KConfig&) override;
 	bool isHovered() const;
 	bool isSelected() const;
 
@@ -62,7 +67,6 @@ private:
 Q_SIGNALS:
 	void borderTypeChanged(PlotArea::BorderType);
 	void borderCornerRadiusChanged(qreal);
-	void borderOpacityChanged(qreal);
 
 private:
 	CartesianPlot* m_parent;

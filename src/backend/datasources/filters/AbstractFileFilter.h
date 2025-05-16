@@ -4,7 +4,7 @@
 	Description          : file I/O-filter related interface
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2017-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -22,7 +22,12 @@ class XmlStreamReader;
 class QXmlStreamWriter;
 class KConfig;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT AbstractFileFilter : public QObject {
+#else
 class AbstractFileFilter : public QObject {
+#endif
 	Q_OBJECT
 
 public:
@@ -45,6 +50,7 @@ public:
 												 int baseYear = QLocale::DefaultTwoDigitBaseYear);
 	static QString dateTimeFormat(const QString& valueString);
 	static QStringList numberFormats();
+	static bool exclusiveFileType(FileType);
 	static FileType fileType(const QString&);
 	// static QStringList fileTypes();
 	static QString convertFromNumberToColumn(int n);

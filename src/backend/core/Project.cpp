@@ -182,6 +182,10 @@ int ProjectPrivate::mXmlVersion = buildXmlVersion;
 Project::Project()
 	: Folder(i18n("Project"), AspectType::Project)
 	, d_ptr(new ProjectPrivate(this)) {
+#ifdef SDK
+	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
+	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
+#endif
 	Q_D(Project);
 
 	QString user = qEnvironmentVariable("USER"); // !Windows
@@ -257,15 +261,8 @@ QUndoStack* Project::undoStack() const {
 }
 
 QMenu* Project::createContextMenu() {
-	QMenu* menu = AbstractAspect::createContextMenu();
-
-	// add close action
-	menu->addSeparator();
-	menu->addAction(QIcon::fromTheme(QLatin1String("document-close")), i18n("Close"), this, SIGNAL(closeRequested()));
-
-	// add the actions from MainWin
-	Q_EMIT requestProjectContextMenu(menu);
-
+	QMenu* menu = AbstractAspect::createContextMenu(); // add default actions from Aspect
+	Q_EMIT requestProjectContextMenu(menu); // add the actions from MainWin
 	return menu;
 }
 
@@ -490,6 +487,7 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) {
 	writer->writeAttribute(QStringLiteral("xmlVersion"), QString::number(buildXmlVersion));
 	writer->writeAttribute(QStringLiteral("modificationTime"), modificationTime().toString(QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QStringLiteral("author"), author());
+	writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
 
 	// save the state of the content dock widgets
 	writer->writeAttribute(QStringLiteral("dockWidgetState"), d->dockWidgetState);
@@ -498,9 +496,6 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) {
 	writer->writeAttribute(QStringLiteral("saveDefaultDockWidgetState"), QString::number(d->saveDefaultDockWidgetState));
 	if (d->saveDefaultDockWidgetState)
 		writer->writeAttribute(QStringLiteral("defaultDockWidgetState"), d->defaultDockWidgetState);
-
-	if (d->saveCalculations)
-		writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
 
 	QString image;
 	if (!thumbnail.isNull()) {
@@ -728,6 +723,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 	return !reader->hasError();
 }
 
+#ifndef SDK
 bool Project::loadNotebook(const QString& filename) {
 	bool rc = false;
 #ifdef HAVE_CANTOR_LIBS
@@ -837,6 +833,7 @@ bool Project::loadNotebook(const QString& filename) {
 
 	return rc;
 }
+#endif
 
 void Project::retransformElements(AbstractAspect* aspect) {
 	bool hasChildren = aspect->childCount<AbstractAspect>();
@@ -1092,15 +1089,16 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			continue;
 
 		// initialize the array for the column pointers
-		int count = boxPlot->dataColumnPaths().count();
+		const auto& paths = boxPlot->dataColumnPaths();
+		int count = paths.count();
 		QVector<const AbstractColumn*> dataColumns;
 		dataColumns.resize(count);
 
 		// restore the pointers
 		for (int i = 0; i < count; ++i) {
 			dataColumns[i] = nullptr;
-			const auto& path = boxPlot->dataColumnPaths().at(i);
-			for (Column* column : columns) {
+			const auto& path = paths.at(i);
+			for (auto* column : columns) {
 				if (!column)
 					continue;
 				if (column->path() == path) {
@@ -1125,7 +1123,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			continue;
 
 		// initialize the array for the column pointers
-		int count = barPlot->dataColumnPaths().count();
+		const auto& paths = barPlot->dataColumnPaths();
+		int count = paths.count();
 		QVector<const AbstractColumn*> dataColumns;
 		dataColumns.resize(count);
 
@@ -1133,8 +1132,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		for (int i = 0; i < count; ++i) {
 			// data columns
 			dataColumns[i] = nullptr;
-			const auto path = barPlot->dataColumnPaths().at(i);
-			for (Column* column : columns) {
+			const auto& path = paths.at(i);
+			for (auto* column : columns) {
 				if (!column)
 					continue;
 				if (column->path() == path) {
@@ -1169,14 +1168,15 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			continue;
 
 		// initialize the array for the column pointers
-		int count = lollipopPlot->dataColumnPaths().count();
+		const auto& paths = lollipopPlot->dataColumnPaths();
+		int count = paths.count();
 		QVector<const AbstractColumn*> dataColumns;
 		dataColumns.resize(count);
 
 		// restore the pointers
 		for (int i = 0; i < count; ++i) {
 			dataColumns[i] = nullptr;
-			const auto& path = lollipopPlot->dataColumnPaths().at(i);
+			const auto& path = paths.at(i);
 			for (Column* column : columns) {
 				if (!column)
 					continue;

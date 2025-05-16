@@ -5,7 +5,7 @@
 						   show their values
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
-	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -20,23 +20,27 @@ class CartesianPlot;
 class CustomPoint;
 class InfoElementPrivate;
 class Line;
-class QAction;
 class QGraphicsItem;
 class QMenu;
 class XYCurve;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT InfoElement : public WorksheetElement {
+#else
 class InfoElement : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:
 	InfoElement(const QString& name, CartesianPlot*);
 	InfoElement(const QString& name, CartesianPlot*, const XYCurve*, double logicalPos);
-	virtual void setParentGraphicsItem(QGraphicsItem* item) override;
+	virtual void setParentGraphicsItem(QGraphicsItem*) override;
 	~InfoElement();
 
 	struct MarkerPoints_T {
 		MarkerPoints_T() = default;
-		MarkerPoints_T(CustomPoint* custompoint, const XYCurve* curve, QString curvePath);
+		MarkerPoints_T(CustomPoint*, const XYCurve*, const QString& curvePath);
 		CustomPoint* customPoint{nullptr};
 		const XYCurve* curve{nullptr};
 		QString curvePath;

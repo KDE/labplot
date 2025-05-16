@@ -62,8 +62,6 @@ protected:
 };
 }
 
-using Dimension = CartesianCoordinateSystem::Dimension;
-
 #define CELLWIDGET(dim, rangeIndex, Column, castObject, function)                                                                                              \
 	{                                                                                                                                                          \
 		QTableWidget* treewidget = nullptr;                                                                                                                    \
@@ -137,6 +135,23 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	hboxLayout->setContentsMargins(0, 0, 0, 0);
 	hboxLayout->setSpacing(0);
 
+	// Layout-tab
+	QString suffix;
+	if (m_units == Units::Metric)
+		suffix = QStringLiteral(" cm");
+	else
+		suffix = QStringLiteral(" in");
+
+	ui.sbLeft->setSuffix(suffix);
+	ui.sbTop->setSuffix(suffix);
+	ui.sbWidth->setSuffix(suffix);
+	ui.sbHeight->setSuffix(suffix);
+	ui.sbBorderCornerRadius->setSuffix(suffix);
+	ui.sbPaddingHorizontal->setSuffix(suffix);
+	ui.sbPaddingVertical->setSuffix(suffix);
+	ui.sbPaddingRight->setSuffix(suffix);
+	ui.sbPaddingBottom->setSuffix(suffix);
+
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
 		auto* layout = qobject_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
@@ -159,6 +174,10 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	ui.leXBreakEnd->setValidator(new QDoubleValidator(ui.leXBreakEnd));
 	ui.leYBreakStart->setValidator(new QDoubleValidator(ui.leYBreakStart));
 	ui.leYBreakEnd->setValidator(new QDoubleValidator(ui.leYBreakEnd));
+
+	updateLocale();
+	retranslateUi();
+	init();
 
 	// SIGNAL/SLOT
 	// General
@@ -234,13 +253,9 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 
 	// TODO: activate the tab again once the functionality is implemented
 	ui.tabWidget->removeTab(3);
-
-	init();
 }
 
 void CartesianPlotDock::init() {
-	this->retranslateUi();
-
 	// draw the icons for the border sides
 	QPainter pa;
 	int iconSize = 20;
@@ -387,16 +402,11 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	// show the properties of the first plot
 	this->load();
 
-	// set the current locale:
-	// no need to call updateLocale() and updatePlotRangeList() here explicitely,
-	// it's being done in updateRangeList() that is called in load().
-
 	// update active widgets
 	m_themeHandler->setCurrentTheme(m_plot->theme());
 
 	// Deactivate the geometry related widgets, if the worksheet layout is active.
-	// Currently, a plot can only be a child of the worksheet itself, so we only need to ask the parent aspect (=worksheet).
-	// TODO redesign this, if the hierarchy will be changend in future (a plot is a child of a new object group/container or so)
+	// activate otherwise and if the plot is a child of another plot
 	auto* w = dynamic_cast<Worksheet*>(m_plot->parentAspect());
 	if (w) {
 		bool b = (w->layout() == Worksheet::Layout::NoLayout);
@@ -405,6 +415,11 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 		ui.sbWidth->setEnabled(b);
 		ui.sbHeight->setEnabled(b);
 		connect(w, &Worksheet::layoutChanged, this, &CartesianPlotDock::layoutChanged);
+	} else {
+		ui.sbTop->setEnabled(true);
+		ui.sbLeft->setEnabled(true);
+		ui.sbWidth->setEnabled(true);
+		ui.sbHeight->setEnabled(true);
 	}
 
 	// SIGNALs/SLOTs
@@ -522,7 +537,9 @@ void CartesianPlotDock::updateLocale() {
 	// update the title label
 	labelWidget->updateLocale();
 
-	// update locale plot range list
+	borderLineWidget->updateLocale();
+
+	// update plot range list locale
 	updatePlotRangeList();
 }
 
@@ -877,9 +894,6 @@ void CartesianPlotDock::updatePlotRangeList() {
 	ui.tbRemovePlotRange->setEnabled(cSystemCount > 1 ? true : false);
 }
 
-//************************************************************
-//**** SLOTs for changes triggered in CartesianPlotDock ******
-//************************************************************
 void CartesianPlotDock::retranslateUi() {
 	CONDITIONAL_LOCK_RETURN;
 
@@ -889,6 +903,17 @@ void CartesianPlotDock::retranslateUi() {
 	ui.cbRangeType->addItem(i18n("Last Points"));
 	ui.cbRangeType->addItem(i18n("First Points"));
 
+	// TODO: activa later once scale breaking is supported
+	// scale breakings
+	ui.cbXBreakStyle->addItem(i18n("Simple"));
+	ui.cbXBreakStyle->addItem(i18n("Vertical"));
+	ui.cbXBreakStyle->addItem(i18n("Sloped"));
+
+	ui.cbYBreakStyle->addItem(i18n("Simple"));
+	ui.cbYBreakStyle->addItem(i18n("Vertical"));
+	ui.cbYBreakStyle->addItem(i18n("Sloped"));
+
+	// tooltip texts
 	QString msg = i18n(
 		"Data Range:"
 		"<ul>"
@@ -902,33 +927,11 @@ void CartesianPlotDock::retranslateUi() {
 	msg = i18n("If checked, automatically extend the plot range to nice values");
 	ui.lNiceExtend->setToolTip(msg);
 	ui.cbNiceExtend->setToolTip(msg);
-
-	// scale breakings
-	ui.cbXBreakStyle->addItem(i18n("Simple"));
-	ui.cbXBreakStyle->addItem(i18n("Vertical"));
-	ui.cbXBreakStyle->addItem(i18n("Sloped"));
-
-	ui.cbYBreakStyle->addItem(i18n("Simple"));
-	ui.cbYBreakStyle->addItem(i18n("Vertical"));
-	ui.cbYBreakStyle->addItem(i18n("Sloped"));
-
-	QString suffix;
-	if (m_units == Units::Metric)
-		suffix = QStringLiteral(" cm");
-	else
-		suffix = QStringLiteral(" in");
-
-	ui.sbLeft->setSuffix(suffix);
-	ui.sbTop->setSuffix(suffix);
-	ui.sbWidth->setSuffix(suffix);
-	ui.sbHeight->setSuffix(suffix);
-	ui.sbBorderCornerRadius->setSuffix(suffix);
-	ui.sbPaddingHorizontal->setSuffix(suffix);
-	ui.sbPaddingVertical->setSuffix(suffix);
-	ui.sbPaddingRight->setSuffix(suffix);
-	ui.sbPaddingBottom->setSuffix(suffix);
 }
 
+//************************************************************
+//**** SLOTs for changes triggered in CartesianPlotDock ******
+//************************************************************
 // "General"-tab
 void CartesianPlotDock::rangeTypeChanged(int index) {
 	auto type = static_cast<CartesianPlot::RangeType>(index);

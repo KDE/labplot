@@ -30,8 +30,9 @@ optional packages
 	* KUserFeedback to support collecting feedback from users
 	* Discount to support Markdown markup language text
 	* Eigen3 to support fast baseline removal
-	* fast_float, dbc_parser_cpp and vector_blf for Vector BLF support (can be fetched from git by setting -DLOCAL_DBC_PARSER=ON and -DLOCAL_VECTOR_BLF=ON)
+	* fast_float, dbc_parser_cpp (can be fetched from git by setting -DLOCAL_DBC_PARSER=ON) and vector_blf (static library from included sources can be built by setting -DLOCAL_VECTOR_BLF=ON) for Vector BLF support
 	* MCAP for MCAP file support (Downloading instead of using local copy can be set by using LOCAL_MCAP_DOWNLOAD=ON)
+	* python3, pyside6 and shiboken6 for creating the Python SDK
 
 ===============================================================================
 To build LabPlot execute
@@ -75,10 +76,12 @@ To enable reproducable builds, use
 To disable building tests, use
 -DENABLE_TESTS=OFF
 
-To disable building the SDK, use
+To disable building the SDK (C++ and Python), use
 -DENABLE_SDK=OFF
 To only disable building the SDK examples, use
 -DENABLE_SDK_EXAMPLES=OFF
+To only disable building the Python SDK, use
+-DENABLE_PYTHON_SDK=OFF
 
 ================================================================================
 To run the tests execute

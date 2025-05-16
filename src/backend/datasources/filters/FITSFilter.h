@@ -15,7 +15,12 @@ class QTableWidget;
 class QTreeWidget;
 class FITSFilterPrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT FITSFilter : public AbstractFileFilter {
+#else
 class FITSFilter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
 
 public:

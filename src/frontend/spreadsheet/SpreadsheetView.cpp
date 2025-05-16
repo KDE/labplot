@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : View class for Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2020-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -22,7 +22,6 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/StatisticsSpreadsheet.h"
-#include "backend/worksheet/plots/cartesian/BoxPlot.h" //TODO: needed for the icon only, remove later once we have a breeze icon
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "frontend/spreadsheet/SpreadsheetHeaderView.h"
 
@@ -103,8 +102,7 @@ enum TukeyLadderPower { InverseSquared, Inverse, InverseSquareRoot, Log, SquareR
 /*!
 	\class SpreadsheetView
 	\brief View class for Spreadsheet
-
- \ingroup frontend
+	\ingroup frontend
 */
 SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly)
 	: QWidget()
@@ -120,7 +118,7 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly)
 
 	init();
 
-	// resize the view to show alls columns and the first 10 rows.
+	// resize the view to show all columns and the first 10 rows.
 	// no need to resize the view when the project is being opened,
 	// all views will be resized to the stored values at the end
 	if (!m_spreadsheet->isLoading()) {
@@ -192,11 +190,6 @@ void SpreadsheetView::init() {
 	setFocus();
 	installEventFilter(this);
 
-	// save and load the values from Spreadsheet
-	KConfigGroup group = Settings::group(QStringLiteral("Spreadsheet"));
-	showComments(group.readEntry(QLatin1String("ShowComments"), false));
-	showSparkLines(group.readEntry(QLatin1String("ShowSparkLines"), false));
-
 	connect(m_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetView::updateHeaderGeometry);
 	connect(m_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetView::handleHeaderDataChanged);
 	connect(m_spreadsheet, &Spreadsheet::aspectsInserted, this, &SpreadsheetView::handleAspectsAdded);
@@ -212,7 +205,7 @@ void SpreadsheetView::init() {
 			SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 			m_horizontalHeader->refresh();
 			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
-				if (m_spreadsheet->isSparklineShown)
+				if (m_spreadsheet->showSparklines())
 					SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 				m_horizontalHeader->refresh();
 			});
@@ -227,12 +220,16 @@ void SpreadsheetView::init() {
 		// Establish new connections
 		for (int colIndex = 0; colIndex < m_spreadsheet->columnCount(); ++colIndex) {
 			connect(m_spreadsheet->column(colIndex), &AbstractColumn::dataChanged, this, [=] {
-				if (m_spreadsheet->isSparklineShown)
+				if (m_spreadsheet->showSparklines())
 					SpreadsheetSparkLinesHeaderModel::sparkLine(m_spreadsheet->column(colIndex));
 				m_horizontalHeader->refresh();
 			});
 		}
 	});
+
+	// save and load the settings for comments and sparklines after the connects above
+	showComments(m_spreadsheet->showComments());
+	showSparklines(m_spreadsheet->showSparklines());
 
 	// selection related connections
 	connect(m_tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &SpreadsheetView::selectionChanged);
@@ -325,7 +322,7 @@ void SpreadsheetView::initActions() {
 
 	// spreadsheet related actions
 	action_toggle_comments = new QAction(QIcon::fromTheme(QStringLiteral("document-properties")), i18n("Show Comments"), this);
-	action_toggle_sparklines = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-line")), i18n("Show SparkLines"), this);
+	action_toggle_sparklines = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-line")), i18n("Show Sparklines"), this);
 
 	action_clear_spreadsheet = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clear Spreadsheet"), this);
 	action_clear_masks = new QAction(QIcon::fromTheme(QStringLiteral("format-remove-node")), i18n("Clear Masks"), this);
@@ -929,7 +926,7 @@ void SpreadsheetView::connectActions() {
 	connect(action_statistics_rows, &QAction::triggered, this, &SpreadsheetView::showRowStatistics);
 	connect(action_toggle_comments, &QAction::triggered, this, &SpreadsheetView::toggleComments);
 
-	connect(action_toggle_sparklines, &QAction::triggered, this, &SpreadsheetView::toggleSparkLines);
+	connect(action_toggle_sparklines, &QAction::triggered, this, &SpreadsheetView::toggleSparklines);
 
 	// analysis
 	connect(addAnalysisActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotAnalysisData);
@@ -1142,29 +1139,20 @@ void SpreadsheetView::handleHorizontalHeaderDoubleClicked(int /*index*/) {
 }
 
 /*!
-  Returns whether comments are shown currently or not
-*/
-bool SpreadsheetView::areCommentsShown() const {
-	return m_horizontalHeader->areCommentsShown();
-}
-
-/*!
-  Returns whether spark lines are shown currently or not
-*/
-bool SpreadsheetView::areSparkLinesShown() const {
-	return m_horizontalHeader->areSparkLinesShown();
-}
-/*!
   toggles the column comment in the horizontal header
 */
 void SpreadsheetView::toggleComments() {
-	showComments(!areCommentsShown());
+	bool state = !m_spreadsheet->showComments();
+	m_spreadsheet->setShowComments(state);
+	showComments(state);
 }
 /*!
   toggles the column spark line in the horizontal header
 */
-void SpreadsheetView::toggleSparkLines() {
-	showSparkLines(!areSparkLinesShown());
+void SpreadsheetView::toggleSparklines() {
+	bool state = !m_spreadsheet->showSparklines();
+	m_spreadsheet->setShowSparklines(state);
+	showSparklines(state);
 }
 
 //! Shows (\c on=true) or hides (\c on=false) the column comments in the horizontal header
@@ -1179,8 +1167,8 @@ void SpreadsheetView::showComments(bool on) {
 }
 
 //! Shows (\c on=true) or hides (\c on=false) the column sparkline in the horizontal header
-void SpreadsheetView::showSparkLines(bool on) {
-	m_horizontalHeader->showSparkLines(on);
+void SpreadsheetView::showSparklines(bool on) {
+	m_horizontalHeader->showSparklines(on);
 	if (action_toggle_sparklines) {
 		if (on)
 			action_toggle_sparklines->setText(i18n("Hide Sparklines"));
@@ -1556,12 +1544,12 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	bool hasStatisticsSpreadsheet = (m_spreadsheet->children<StatisticsSpreadsheet>().size() == 1);
 	action_statistics_spreadsheet->setChecked(hasStatisticsSpreadsheet);
 
-	if (areCommentsShown())
+	if (m_spreadsheet->showComments())
 		action_toggle_comments->setText(i18n("Hide Comments"));
 	else
 		action_toggle_comments->setText(i18n("Show Comments"));
 
-	if (areSparkLinesShown())
+	if (m_spreadsheet->showSparklines())
 		action_toggle_sparklines->setText(i18n("Hide Sparklines"));
 	else
 		action_toggle_sparklines->setText(i18n("Show Sparklines"));
@@ -1845,16 +1833,15 @@ void SpreadsheetView::pasteIntoSelection() {
 
 		const auto numberLocale = QLocale();
 		// TEST ' ' as group separator:
-		// numberLocale = QLocale(QLocale::French, QLocale::France);
-		const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 		for (int i = 0; i < input_row_count; i++) {
+			const auto& rowText = input_rows.at(i).trimmed();
 			if (hasTabs)
-				cellTexts.append(input_rows.at(i).split(QLatin1Char('\t')));
+				cellTexts.append(rowText.split(QLatin1Char('\t')));
 			else if (numberLocale.groupSeparator().trimmed().isEmpty()
 					 && !(numberLocale.numberOptions() & QLocale::OmitGroupSeparator)) // locale with ' ' as group separator && omit group separator not set
-				cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s\\s")), (Qt::SplitBehavior)0x1)); // split with two spaces
+				cellTexts.append(rowText.split(QRegularExpression(QStringLiteral("\\s\\s")), (Qt::SplitBehavior)0x1)); // split with two spaces
 			else
-				cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s+"))));
+				cellTexts.append(rowText.split(QRegularExpression(QStringLiteral("\\s+"))));
 
 			if (cellTexts.at(i).count() > input_col_count)
 				input_col_count = cellTexts.at(i).count();
@@ -3479,10 +3466,22 @@ void SpreadsheetView::removeSelectedRows() {
 		return;
 
 	WAIT_CURSOR;
+	const auto& columns = m_spreadsheet->children<Column>();
 	m_spreadsheet->beginMacro(i18n("%1: remove selected rows", m_spreadsheet->name()));
-	// TODO setSuppressDataChangedSignal
+	// suppress the dataChanged signal, will be emitted at the end after all rows were removed
+	for (auto* column : columns)
+		column->setSuppressDataChangedSignal(true);
+
+	// remove rows
 	for (const auto& i : selectedRows().intervals())
 		m_spreadsheet->removeRows(i.start(), i.size());
+
+	// emit the dataChanged signal
+	for (auto* column : columns) {
+		column->setSuppressDataChangedSignal(false);
+		column->setChanged();
+	}
+
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
 }
@@ -3683,9 +3682,9 @@ void SpreadsheetView::updateHeaderGeometry(Qt::Orientation o, int first, int las
 	m_tableView->horizontalHeader()->updateGeometry();
 	m_tableView->horizontalHeader()->setStretchLastSection(false); // ugly hack part 2
 	// Update the geometry for the sparkline header
-	m_horizontalHeader->m_sparkLineSlave->setStretchLastSection(true);
-	m_horizontalHeader->m_sparkLineSlave->updateGeometry();
-	m_horizontalHeader->m_sparkLineSlave->setStretchLastSection(false);
+	m_horizontalHeader->m_sparklineSlave->setStretchLastSection(true);
+	m_horizontalHeader->m_sparklineSlave->updateGeometry();
+	m_horizontalHeader->m_sparklineSlave->setStretchLastSection(false);
 	// Update the geometry for the comment header
 	m_horizontalHeader->m_commentSlave->setStretchLastSection(true);
 	m_horizontalHeader->m_commentSlave->updateGeometry();

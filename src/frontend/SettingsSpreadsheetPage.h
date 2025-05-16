@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : settings page for Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -13,15 +13,13 @@
 #include "SettingsPage.h"
 #include "ui_settingsspreadsheetpage.h"
 
-class ThemesComboBox;
-
 class SettingsSpreadsheetPage : public SettingsPage {
 	Q_OBJECT
 
 public:
 	explicit SettingsSpreadsheetPage(QWidget*);
 
-	bool applySettings() override;
+	QList<Settings::Type> applySettings() override;
 	void restoreDefaults() override;
 
 private:

@@ -182,9 +182,12 @@ bool PlotAreaPrivate::toggleClipping(bool on) {
 	return oldValue;
 }
 
+/*!
+ * sets the rect which is in parent's coordinates or in scene coordinates if there is no parent.
+ */
 void PlotAreaPrivate::setRect(const QRectF& r) {
 	prepareGeometryChange();
-	rect = mapRectFromScene(r);
+	rect = r;
 }
 
 QRectF PlotAreaPrivate::boundingRect() const {
@@ -244,20 +247,20 @@ void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /
 			painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 	}
 
-	if (q->isHovered() || q->isSelected()) {
-		const double penWidth = 6.;
-		QRectF rect = boundingRect();
-		rect = QRectF(-rect.width() / 2 + penWidth / 2, -rect.height() / 2 + penWidth / 2, rect.width() - penWidth, rect.height() - penWidth);
+	const bool selected = q->isSelected();
+	const bool hovered = (q->isHovered() && !selected);
+	if ((hovered || selected) && !q->isPrinting()) {
+		static double penWidth = 6.;
+		const qreal width = rect.width();
+		const qreal height = rect.height();
+		const QRectF newRect = QRectF(-width / 2 + penWidth / 2, -height / 2 + penWidth / 2, width - penWidth, height - penWidth);
 
-		if (q->isHovered() && !q->isSelected() && !q->isPrinting()) {
-			painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth, Qt::SolidLine));
-			painter->drawRect(rect);
-		}
+		if (hovered)
+			painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth));
+		else
+			painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth));
 
-		if (q->isSelected() && !q->isPrinting()) {
-			painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth, Qt::SolidLine));
-			painter->drawRect(rect);
-		}
+		painter->drawRect(newRect);
 	}
 }
 

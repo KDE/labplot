@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : A xy-curve
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -23,8 +23,6 @@
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "tools/ImageTools.h"
 
-#include <KConfig>
-#include <KConfigGroup>
 #include <KLocalizedString>
 
 #include <QGraphicsSceneMouseEvent>
@@ -39,8 +37,6 @@
 #include <gsl/gsl_spline.h>
 
 #include <frontend/GuiTools.h>
-
-using Dimension = CartesianCoordinateSystem::Dimension;
 
 CURVE_COLUMN_CONNECT(XYCurve, X, x, recalc)
 CURVE_COLUMN_CONNECT(XYCurve, Y, y, recalc)
@@ -63,7 +59,7 @@ XYCurve::XYCurve(const QString& name, AspectType type, bool loading)
 
 XYCurve::XYCurve(const QString& name, XYCurvePrivate* dd, AspectType type)
 	: Plot(name, dd, type) {
-	init();
+	init(false);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -361,6 +357,11 @@ QIcon XYCurve::staticIcon(Plot::PlotType type) {
 
 	pa.end();
 	return {pm};
+}
+
+void XYCurve::updateLocale() {
+	Q_D(XYCurve);
+	d->updateValues();
 }
 
 // ##############################################################################
@@ -745,6 +746,20 @@ void XYCurve::recalc() {
 	d->recalc();
 }
 
+/*!
+ * if \c enable is set to true, enables the line optimization to reduce the total number of lines to be drawn,
+ * disables it otherwise. On default, the line optimization is activated.
+ * Used when exporting/printing the parent worksheet to disable the line optimization to get better result.
+ */
+void XYCurve::enableLineOptimization(bool enable) {
+	Q_D(XYCurve);
+	if (d->line->style() != Qt::NoPen) {
+		d->suppressRecalc = true;
+		d->updateLines(enable);
+		d->suppressRecalc = false;
+	}
+}
+
 void XYCurve::updateValues() {
 	Q_D(XYCurve);
 	d->updateValues();
@@ -789,7 +804,7 @@ int XYCurve::getNextValue(double xpos, int offset, double& x, double& y, bool& v
 	if (properties == AbstractColumn::Properties::MonotonicDecreasing)
 		offset *= -1;
 
-	int index = xColumn()->indexForValue(xpos);
+	int index = xColumn()->indexForValue(xpos, false);
 	if (index < 0)
 		return -1;
 	if (offset > 0 && index + offset < xColumn()->rowCount())
@@ -927,8 +942,11 @@ void XYCurvePrivate::calculateScenePoints() {
 				double xMax = q->cSystem->mapSceneToLogical(dataRect.bottomRight()).x();
 				DEBUG(Q_FUNC_INFO << ", xMin/xMax = " << xMin << '/' << xMax)
 
-				startIndex = Column::indexForValue(xMin, m_logicalPoints, columnProperties);
-				endIndex = Column::indexForValue(xMax, m_logicalPoints, columnProperties);
+				if (xMin > xMax)
+					qSwap(xMin, xMax);
+
+				startIndex = Column::indexForValue(xMin, m_logicalPoints, columnProperties, true);
+				endIndex = Column::indexForValue(xMax, m_logicalPoints, columnProperties, false);
 
 				if (startIndex > endIndex && endIndex >= 0)
 					std::swap(startIndex, endIndex);
@@ -944,6 +962,8 @@ void XYCurvePrivate::calculateScenePoints() {
 				endIndex = numberOfPoints - 1;
 			}
 			//} // (symbolsStyle != Symbol::NoSymbols || valuesType != XYCurve::NoValues )
+
+			Q_EMIT q->pointsUpdated(q, startIndex, endIndex, m_logicalPoints);
 
 			m_pointVisible.resize(numberOfPoints);
 			q->cSystem->mapLogicalToScene(startIndex, endIndex, m_logicalPoints, m_scenePoints, m_pointVisible);
@@ -961,7 +981,6 @@ void XYCurvePrivate::calculateScenePoints() {
   triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
-	const bool performanceOptimization = !q->isPrinting();
 	const bool suppressed = !isVisible() || q->isLoading() || suppressRetransform || !plot();
 	DEBUG("\n" << Q_FUNC_INFO << ", name = " << STDSTRING(name()) << ", suppressRetransform = " << suppressRetransform);
 	trackRetransformCalled(suppressed);
@@ -991,7 +1010,7 @@ void XYCurvePrivate::retransform() {
 	}
 
 	suppressRecalc = true;
-	updateLines(performanceOptimization);
+	updateLines();
 	updateDropLines();
 	updateSymbols();
 	updateRug();
@@ -1234,11 +1253,14 @@ void XYCurvePrivate::updateLines(bool performanceOptimization) {
 				DEBUG(Q_FUNC_INFO << ", cSystem invalid")
 				return;
 			}
-			const double xMin = q->cSystem->mapSceneToLogical(pageRect.topLeft()).x();
-			const double xMax = q->cSystem->mapSceneToLogical(pageRect.bottomRight()).x();
+			double xMin = q->cSystem->mapSceneToLogical(pageRect.topLeft()).x();
+			double xMax = q->cSystem->mapSceneToLogical(pageRect.bottomRight()).x();
 
-			startIndex = Column::indexForValue(xMin, m_logicalPoints, columnProperties);
-			endIndex = Column::indexForValue(xMax, m_logicalPoints, columnProperties);
+			if (xMin > xMax)
+				qSwap(xMin, xMax);
+
+			startIndex = Column::indexForValue(xMin, m_logicalPoints, columnProperties, true);
+			endIndex = Column::indexForValue(xMax, m_logicalPoints, columnProperties, false);
 
 			if (startIndex > endIndex)
 				std::swap(startIndex, endIndex);
@@ -1839,7 +1861,7 @@ void XYCurvePrivate::updateValues() {
 				continue;
 			QString value;
 			if (xRangeFormat == RangeT::Format::Numeric)
-				value = numberLocale.toString(point.x(), valuesNumericFormat, precision);
+				value = numberToString(point.x(), numberLocale, valuesNumericFormat, precision);
 			else
 				value = QDateTime::fromMSecsSinceEpoch(point.x(), QTimeZone::UTC).toString(valuesDateTimeFormat);
 			m_valueStrings << valuesPrefix + value + valuesSuffix;
@@ -1856,7 +1878,7 @@ void XYCurvePrivate::updateValues() {
 				continue;
 			QString value;
 			if (rangeFormat == RangeT::Format::Numeric)
-				value = numberLocale.toString(point.y(), valuesNumericFormat, precision);
+				value = numberToString(point.y(), numberLocale, valuesNumericFormat, precision);
 			else
 				value = QDateTime::fromMSecsSinceEpoch(point.y(), QTimeZone::UTC).toString(valuesDateTimeFormat);
 			m_valueStrings << valuesPrefix + value + valuesSuffix;
@@ -1883,12 +1905,12 @@ void XYCurvePrivate::updateValues() {
 			if (valuesType == XYCurve::ValuesType::XYBracketed)
 				value = QLatin1Char('(');
 			if (xRangeFormat == RangeT::Format::Numeric)
-				value += numberLocale.toString(point.x(), valuesNumericFormat, xPrecision);
+				value += numberToString(point.x(), numberLocale, valuesNumericFormat, xPrecision);
 			else
 				value += QDateTime::fromMSecsSinceEpoch(point.x(), QTimeZone::UTC).toString(valuesDateTimeFormat);
 
 			if (yRangeFormat == RangeT::Format::Numeric)
-				value += QLatin1Char(',') + numberLocale.toString(point.y(), valuesNumericFormat, yPrecision);
+				value += QLatin1Char(',') + numberToString(point.y(), numberLocale, valuesNumericFormat, yPrecision);
 			else
 				value += QLatin1Char(',') + QDateTime::fromMSecsSinceEpoch(point.y(), QTimeZone::UTC).toString(valuesDateTimeFormat);
 
@@ -1946,11 +1968,11 @@ void XYCurvePrivate::updateValues() {
 
 			switch (vColMode) {
 			case AbstractColumn::ColumnMode::Double:
-				m_valueStrings << valuesPrefix + numberLocale.toString(valuesColumn->valueAt(i), valuesNumericFormat, valuesPrecision) + valuesSuffix;
+				m_valueStrings << valuesPrefix + numberToString(valuesColumn->valueAt(i), numberLocale, valuesNumericFormat, valuesPrecision) + valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
-				m_valueStrings << valuesPrefix + numberLocale.toString(valuesColumn->valueAt(i)) + valuesSuffix;
+				m_valueStrings << valuesPrefix + numberToString(valuesColumn->valueAt(i), numberLocale) + valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Text:
 				m_valueStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
@@ -2276,6 +2298,8 @@ void XYCurvePrivate::updateFilling() {
 	recalcShapeAndBoundingRect();
 }
 
+constexpr auto yUseSmaller = false;
+
 /*!
  * Find y value which corresponds to a @p x . @p valueFound indicates, if value was found.
  * When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
@@ -2289,7 +2313,7 @@ double XYCurve::y(double x, bool& valueFound) const {
 		return std::nan("0");
 	}
 
-	const int index = xColumn()->indexForValue(x);
+	const int index = xColumn()->indexForValue(x, yUseSmaller);
 	if (index < 0) {
 		valueFound = false;
 		return std::nan("0");
@@ -2315,7 +2339,7 @@ double XYCurve::y(double x, double& x_new, bool& valueFound) const {
 		valueFound = false;
 		return std::nan("0");
 	}
-	int index = xColumn()->indexForValue(x);
+	int index = xColumn()->indexForValue(x, yUseSmaller);
 	if (index < 0) {
 		valueFound = false;
 		return std::nan("0");
@@ -2356,7 +2380,7 @@ QDateTime XYCurve::yDateTime(double x, bool& valueFound) const {
 	}
 
 	auto yColumnMode = yColumn()->columnMode();
-	const int index = xColumn()->indexForValue(x);
+	const int index = xColumn()->indexForValue(x, yUseSmaller);
 	if (index < 0) {
 		valueFound = false;
 		return {};
@@ -2577,9 +2601,9 @@ bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 		if (noLines) {
 			curvePosScene = m_scenePoints.at(index);
 			curvePosPrevScene = curvePosScene;
-			index = Column::indexForValue(x, m_scenePoints, static_cast<AbstractColumn::Properties>(properties));
+			index = Column::indexForValue(x, m_scenePoints, static_cast<AbstractColumn::Properties>(properties), false);
 		} else
-			index = Column::indexForValue(x, m_lines, static_cast<AbstractColumn::Properties>(properties));
+			index = Column::indexForValue(x, m_lines, static_cast<AbstractColumn::Properties>(properties), false);
 
 		if (index >= 1)
 			index--; // use one before so it is secured that I'm before point.x()
@@ -2724,6 +2748,9 @@ bool XYCurvePrivate::pointLiesNearCurve(const QPointF mouseScenePos,
 }
 
 void XYCurvePrivate::updateErrorBars() {
+	if (suppressRetransform)
+		return;
+
 	errorBarsPath = QPainterPath();
 	if (errorBar->xErrorType() == ErrorBar::ErrorType::NoError && errorBar->yErrorType() == ErrorBar::ErrorType::NoError) {
 		recalcShapeAndBoundingRect();
@@ -2803,9 +2830,8 @@ void XYCurvePrivate::draw(QPainter* painter) {
 			// would like to have one complete path for a curve not many paths
 			for (auto& line : m_lines)
 				painter->drawLine(line);
-		} else {
+		} else
 			painter->drawPath(linePath);
-		}
 	}
 
 	// draw drop lines
@@ -2968,7 +2994,6 @@ void XYCurvePrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 
 	event->ignore();
 	setSelected(false);
-	QGraphicsItem::mousePressEvent(event);
 }
 
 // ##############################################################################

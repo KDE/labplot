@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Bar Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -28,8 +28,6 @@
 #include <QMenu>
 #include <QPainter>
 
-#include <KConfig>
-#include <KConfigGroup>
 #include <KLocalizedString>
 
 /**
@@ -137,6 +135,11 @@ void BarPlot::recalc() {
 void BarPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
 }
 
+void BarPlot::updateLocale() {
+	Q_D(BarPlot);
+	d->updateValues();
+}
+
 /* ============================ getter methods ================= */
 // general
 BASIC_SHARED_D_READER_IMPL(BarPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
@@ -221,13 +224,11 @@ void BarPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspec
 	if (!column)
 		return;
 
-	const auto dataColumnPaths = d->dataColumnPaths;
 	auto dataColumns = d->dataColumns;
 	bool changed = false;
 
-	for (int i = 0; i < dataColumnPaths.count(); ++i) {
-		const auto& path = dataColumnPaths.at(i);
-
+	for (int i = 0; i < d->dataColumnPaths.count(); ++i) {
+		const auto& path = d->dataColumnPaths.at(i);
 		if (path == aspectPath) {
 			dataColumns[i] = column;
 			changed = true;
@@ -1081,6 +1082,7 @@ void BarPlotPrivate::updateValues() {
 	q->cSystem->mapLogicalToScene(valuesPointsLogical, pointsScene, visiblePoints);
 	const auto& prefix = value->prefix();
 	const auto& suffix = value->suffix();
+	const auto numberLocale = QLocale();
 	if (value->type() == Value::BinEntries) {
 		for (int i = 0; i < valuesPointsLogical.count(); ++i) {
 			if (!visiblePoints[i])
@@ -1089,14 +1091,14 @@ void BarPlotPrivate::updateValues() {
 			auto& point = valuesPointsLogical.at(i);
 			if (orientation == BarPlot::Orientation::Vertical) {
 				if (type == BarPlot::Type::Stacked_100_Percent)
-					m_valuesStrings << prefix + QString::number(point.y(), value->numericFormat(), 1) + QLatin1String("%") + suffix;
+					m_valuesStrings << prefix + numberToString(point.y(), numberLocale, value->numericFormat(), 1) + QLatin1String("%") + suffix;
 				else
-					m_valuesStrings << prefix + QString::number(point.y()) + suffix;
+					m_valuesStrings << prefix + numberToString(point.y(), numberLocale) + suffix;
 			} else {
 				if (type == BarPlot::Type::Stacked_100_Percent)
-					m_valuesStrings << prefix + QString::number(point.x(), value->numericFormat(), 1) + QLatin1String("%") + suffix;
+					m_valuesStrings << prefix + numberToString(point.x(), numberLocale, value->numericFormat(), 1) + QLatin1String("%") + suffix;
 				else
-					m_valuesStrings << prefix + QString::number(point.x()) + suffix;
+					m_valuesStrings << prefix + numberToString(point.x(), numberLocale) + suffix;
 			}
 		}
 	} else if (value->type() == Value::CustomColumn) {
@@ -1115,13 +1117,13 @@ void BarPlotPrivate::updateValues() {
 			switch (xColMode) {
 			case AbstractColumn::ColumnMode::Double:
 				if (type == BarPlot::Type::Stacked_100_Percent)
-					m_valuesStrings << prefix + QString::number(valuesColumn->valueAt(i), value->numericFormat(), 1) + QString::fromStdString("%");
+					m_valuesStrings << prefix + numberToString(valuesColumn->valueAt(i), numberLocale, value->numericFormat(), 1) + QString::fromStdString("%");
 				else
-					m_valuesStrings << prefix + QString::number(valuesColumn->valueAt(i), value->numericFormat(), value->precision()) + suffix;
+					m_valuesStrings << prefix + numberToString(valuesColumn->valueAt(i), numberLocale, value->numericFormat(), value->precision()) + suffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
-				m_valuesStrings << prefix + QString::number(valuesColumn->valueAt(i)) + suffix;
+				m_valuesStrings << prefix + numberToString(valuesColumn->valueAt(i), numberLocale) + suffix;
 				break;
 			case AbstractColumn::ColumnMode::Text:
 				m_valuesStrings << prefix + valuesColumn->textAt(i) + suffix;

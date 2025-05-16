@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : View class for Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -46,6 +46,7 @@ class SpreadsheetView : public QWidget {
 	Q_OBJECT
 
 	friend class SpreadsheetTest;
+	friend class SpreadsheetFormulaTest;
 
 public:
 	explicit SpreadsheetView(Spreadsheet*, bool readOnly = false);
@@ -56,10 +57,7 @@ public:
 	void setSuppressResizeHeader(bool);
 
 	void showComments(bool on = true);
-	bool areCommentsShown() const;
-
-	void showSparkLines(bool on = true);
-	bool areSparkLinesShown() const;
+	void showSparklines(bool on = true);
 
 	int selectedColumnCount(bool full = true) const;
 	int selectedColumnCount(AbstractColumn::PlotDesignation) const;
@@ -259,7 +257,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 	void searchReplace();
 	void toggleComments();
-	void toggleSparkLines();
+	void toggleSparklines();
 	void goToNextColumn();
 	void goToPreviousColumn();
 	void goToCell();

@@ -16,7 +16,12 @@ class Line;
 class ReferenceLinePrivate;
 class QActionGroup;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT ReferenceLine : public WorksheetElement {
+#else
 class ReferenceLine : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:
@@ -43,7 +48,7 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(ReferenceLine)
-	void init(bool loading = false);
+	void init(bool loading);
 	void initActions();
 	void initMenus();
 

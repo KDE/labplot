@@ -4,6 +4,7 @@
 	Description          : export worksheet dialog
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2011-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -36,6 +37,8 @@ public:
 	int exportResolution() const;
 
 private:
+	QString formatExtension(Worksheet::ExportFormat);
+	QString formatCaption(Worksheet::ExportFormat);
 	Ui::ExportWorksheetWidget* ui;
 	bool m_showOptions{true};
 	bool m_askOverwrite{true};

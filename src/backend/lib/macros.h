@@ -92,6 +92,7 @@ private:
 #endif
 #define UTF8_QSTRING(str) QString::fromUtf8(str)
 
+#define SPACE QLatin1Char(' ')
 #define TAB QStringLiteral("\t")
 #define NEWLINE QStringLiteral("\n")
 

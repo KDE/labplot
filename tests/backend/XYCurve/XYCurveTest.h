@@ -64,6 +64,14 @@ private Q_SLOTS:
 
 	// Hover XYCurve
 	void hooverCurveIntegerEndingZeros();
+
+	void scatterStrictMonotonicIncreasing();
+	void scatterMonotonicIncreasing();
+	void scatterMonotonicIncreasingPlotRangeDecreasing();
+	void scatterMonotonicDecreasing();
+
+	void lineMonotonicIncreasing();
+	void lineMonotonicIncreasingPlotRangeDecreasing();
 };
 
 #endif // XYCURVETEST_H

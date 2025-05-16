@@ -21,7 +21,12 @@ class CustomPointPrivate;
 class Symbol;
 class QBrush;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT CustomPoint : public WorksheetElement {
+#else
 class CustomPoint : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:

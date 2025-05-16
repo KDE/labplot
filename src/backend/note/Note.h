@@ -4,7 +4,7 @@
 	Description          : Widget for taking notes
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -18,13 +18,16 @@
 #include <QIcon>
 
 class NotePrivate;
+#ifndef SDK
 class NoteView;
+#endif
 
 class Note : public AbstractPart {
 	Q_OBJECT
 
 public:
 	explicit Note(const QString& name);
+	~Note() override;
 
 	QWidget* view() const override;
 	QIcon icon() const override;
@@ -52,7 +55,9 @@ Q_SIGNALS:
 private:
 	Q_DECLARE_PRIVATE(Note)
 	NotePrivate* const d_ptr;
+#ifndef SDK
 	mutable NoteView* m_view{nullptr};
+#endif
 };
 
 #endif // NOTE_H

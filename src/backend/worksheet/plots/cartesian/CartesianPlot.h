@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Cartesian plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -28,8 +28,6 @@ class Line;
 class XYCurve;
 class KConfig;
 class Plot;
-
-using Dimension = CartesianCoordinateSystem::Dimension;
 
 #ifdef SDK
 #include "labplot_export.h"
@@ -202,6 +200,8 @@ public:
 	void retransformScales();
 	void retransformScale(Dimension, int index);
 
+	void resizeInsetPlot(CartesianPlot*);
+
 	QString theme() const;
 
 	typedef CartesianPlotPrivate Private;
@@ -211,7 +211,7 @@ public Q_SLOTS:
 	virtual void retransform() override;
 
 private:
-	void init(bool loading = false);
+	void init(bool loading);
 	void initActions();
 	void initMenus();
 	void setColorPalette(const KConfig&);
@@ -249,6 +249,8 @@ private:
 	QAction* addCustomPointAction{nullptr};
 	QAction* addReferenceLineAction{nullptr};
 	QAction* addReferenceRangeAction{nullptr};
+	QAction* addInsetPlotAction{nullptr};
+	QAction* addInsetPlotWithDataAction{nullptr};
 
 	// analysis menu actions
 	QAction* addDataOperationAction{nullptr};
@@ -326,6 +328,8 @@ private Q_SLOTS:
 	void addReferenceLine();
 	void addReferenceRange();
 	void addInfoElement();
+	void addInsetPlot();
+	void addInsetPlotWithData();
 
 	void updateLegend();
 	void childAdded(const AbstractAspect*);

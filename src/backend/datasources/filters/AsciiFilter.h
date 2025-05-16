@@ -25,7 +25,7 @@ public:
 	BufferReader(const QByteArray& buffer);
 
 	bool isSequential() const override;
-	bool open(OpenMode mode) override;
+	bool open(OpenMode) override;
 	qint64 readData(char*, qint64) override;
 	qint64 writeData(const char*, qint64) override;
 	bool atEnd() const override;
@@ -35,7 +35,12 @@ private:
 	int m_index{0};
 };
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT AsciiFilter : public AbstractFileFilter {
+#else
 class AsciiFilter : public AbstractFileFilter {
+#endif
 public:
 	AsciiFilter();
 	~AsciiFilter();
@@ -60,7 +65,7 @@ public:
 		HeaderDetectionNotAllowed,
 		SeparatorDetectionNotAllowed,
 		InvalidSeparator,
-		SequentialDeviceUninitialized,
+		SerialDeviceUninitialized,
 		NoColumns,
 		ColumnModeDeterminationFailed,
 		WrongEndColumn,
@@ -69,7 +74,7 @@ public:
 		NoDataSource
 	};
 
-	void setDataSource(AbstractDataSource* dataSource);
+	void setDataSource(AbstractDataSource*);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode columnImportMode = ImportMode::Replace) override;
 	qint64 readFromDevice(QIODevice& device,
 						  ImportMode columnImportMode,
@@ -81,7 +86,7 @@ public:
 	void write(const QString& fileName, AbstractDataSource*) override;
 	QVector<QStringList> preview(QIODevice& device, int lines, bool reinit = true, bool skipFirstLine = false);
 	QVector<QStringList> preview(const QString& fileName, int lines, bool reinit = true);
-	static QString statusToString(Status e);
+	static QString statusToString(Status);
 
 	static QString autoSeparatorDetectionString();
 	static QStringList separatorCharacters();
@@ -92,18 +97,12 @@ public:
 	static size_t lineCount(const QString& fileName, size_t maxLines = std::numeric_limits<std::size_t>::max());
 
 	static QStringList dataTypesString();
-	static QPair<QString, QString> dataTypeString(const AbstractColumn::ColumnMode mode);
+	static QPair<QString, QString> dataTypeString(const AbstractColumn::ColumnMode);
 	static bool determineColumnModes(const QStringView& s, QVector<AbstractColumn::ColumnMode>& modes, QString& invalidString);
 
 	// save/load in the project XML
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*) override;
-
-	// static QString fileInfoString(const QString&);
-	// static int columnNumber(const QString& fileName, const QString& separator = QString());
-	// static size_t lineNumber(const QString& fileName, size_t maxLines = std::numeric_limits<std::size_t>::max());
-
-	// void readFromLiveDevice();
 
 	struct Properties {
 		QString commentCharacter{QStringLiteral("#")};
@@ -142,13 +141,14 @@ public:
 			m_dirty = true;
 		}
 
-		bool isDirty() {
+		bool isDirty() const {
 			return m_dirty;
 		}
 
 	private:
 		bool m_dirty{true};
 	};
+
 	Status initialize(Properties p);
 	bool initialized() const;
 	Properties properties() const;

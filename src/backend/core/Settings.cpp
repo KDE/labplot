@@ -1,7 +1,5 @@
 #include "Settings.h"
 
-#include <KConfigGroup>
-
 #include <QLatin1String>
 
 /*!

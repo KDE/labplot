@@ -1,25 +1,42 @@
------2.12.0 (XX) -----
+-----3.0.0 (XX) -----
+New features:
+	* [worksheet]
+		* Inset plot areas - plot areas added as child of another plot area
+
+Bug fixes:
+	* Fix using default font for axis title
+	* Fix build with system QXlsx (!693)
+	* Fix build with system qads 4.4 (!694)
+	* Crash on import when no projects opened (BUG 503800)
+
+-----2.12.0 (25.04.2025) -----
 New features:
 	* [general]
 		* Detail info view mode in the Color Maps Browser
-		* Add links and button to copy configuration and show external libraries in the About Dialog
+		* Extend About dialog: Add links and buttons to copy environment and citation, show external depenencies
 		* Make the changes in Note undo/redo-able
+		* For the number format, allow to specify in the application settings both - the decimal and the group - separators
+		* Automatically update the visualizations on number format changes without restart
 	* [import]
 		* Download datasets from kaggle.com
+		* Only allow selecting matching import filter
 		* Support MCAP file import
-		* show error messages for the serial port in when creating a live data source to notify directly about missing device permissions, etc.
-		* add warning when importing projects in file import dialog
-		* improve error messages for data import
-		* fix preview of data with header
+		* Show error messages for the serial port in when creating a live data source to notify directly about missing device permissions, etc.
+		* Add warning when importing projects in file import dialog
+		* Improve error messages for data import
+		* Fix preview of data with header
 		* Ask how to treat multilayer graphs when opening OPJ project
 		* Improve error message handling
 		* Improve livedata import
 		* Add possibility to specify custom column datatypes (mandatory for livedata)
 		* Notify about the unsupported UTF16 encoding (BUG 496215)
+		* Read live data with multiple columns also for UDP and local sockets and for Serial Port
 		* Faster import of big ASCII files on Windows
+		* Read calculated value instead of formula text from excel sheets
 	* [analysis]
 		* Add possibility to do calculations on curves (define a new curve as a function of another curve)
-	[live data]
+		* improve fit results note (color and alignment)
+	* [live data]
 		* Automatically recalculate analysis curves on data changes
 		* Enabled conditional formatting, statistics spreadsheet, sparklines, plot data dialog, etc. also for live data source spreadsheets
 	* [spreadsheet]
@@ -35,10 +52,14 @@ New features:
 		* new option to use plot's main color (line, symbol, etc.) for the color of the name text shown in the legend
 		* fix inverse axis scale for Arrhenius plots
 		* show more plot sub-types (scatter, line, etc.) in the context menu for faster creation of these visualizations
+		* use minus sign instead of hyphen for all numerical values shown on the worksheet and added a new option in the application settings to control this behavior
+		* new application setting to control the size of the thumbnails in the worksheet preview panel
+		* append file extension on export when not present
 
 Performance improvements:
 	* Made big spreadsheet (millions of cells) more responsive when selecting columns via the spreadsheet header
 	* Faster redraw of plots and recalculation of analysis curves when masking/unmasking multiple cells in the spreadsheet
+	* Faster redraw of plots and recalculation of analysis curves and calculated columns when removing multiple rows in the spreadsheet
 
 Bug fixes:
 	* Fix crash selecting "cell" from function list in function dialog
@@ -46,10 +67,17 @@ Bug fixes:
 	* Show Ticks on inverted axes (BUG 491502 & 492475)
 	* Fix add/subtract value functionality in Matrix (BUG 493523)
 	* Fix wrong font size in the plot legend (BUG 493017) and in the axis title (BUG 472982)
+	* Fix dark icon theme on non-Plasma platforms
 	* Don't overwrite OPJ files when saving (BUG 496480)
 	* Fixed the text cursor jumping to the beginning of the line when typing in text in the note (BUG 497029)
 	* Fix accuracy of spin boxes(BUG 496804)
 	* Don't crash when saving plots having multiple data source columns (box plot, etc.) after one of the columns was deleted (BUG 497712)
+	* Don't crash selecting ODS import filter with invalid files
+	* Fix moving objects by mouse (BUG 496478)
+	* Use the proper local settings when pasting values in Matrix (BUG 500014)
+	* Fix vanishing axes label (Issue #843)
+	* Fix automatic data reduction (Issue #1105)
+	* Correctly calculate the lengh of the minor axis ticks when saving the properties as a temlate (BUG 502704)
 
 Internal:
 	* use name LabPlot/labplot consistenly (renamed LabPlot2/labplot2)

@@ -37,11 +37,6 @@ XYHilbertTransformCurve::XYHilbertTransformCurve(const QString& name, XYHilbertT
 // and is deleted during the cleanup in QGraphicsScene
 XYHilbertTransformCurve::~XYHilbertTransformCurve() = default;
 
-void XYHilbertTransformCurve::recalculate() {
-	Q_D(XYHilbertTransformCurve);
-	d->recalculate();
-}
-
 const XYAnalysisCurve::Result& XYHilbertTransformCurve::result() const {
 	Q_D(const XYHilbertTransformCurve);
 	return d->transformResult;

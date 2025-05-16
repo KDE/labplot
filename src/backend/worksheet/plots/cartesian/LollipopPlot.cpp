@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Lollipop Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -21,8 +21,6 @@
 #include "frontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
-#include <KConfig>
-#include <KConfigGroup>
 #include <KLocalizedString>
 
 #include <QActionGroup>
@@ -154,6 +152,11 @@ void LollipopPlot::recalc() {
 void LollipopPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
 }
 
+void LollipopPlot::updateLocale() {
+	Q_D(LollipopPlot);
+	d->updateValues();
+}
+
 /* ============================ getter methods ================= */
 // general
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
@@ -228,13 +231,12 @@ void LollipopPlot::handleAspectUpdated(const QString& aspectPath, const Abstract
 	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
 	if (!column)
 		return;
-	const auto dataColumnPaths = d->dataColumnPaths;
+
 	auto dataColumns = d->dataColumns;
 	bool changed = false;
 
-	for (int i = 0; i < dataColumnPaths.count(); ++i) {
-		const auto& path = dataColumnPaths.at(i);
-
+	for (int i = 0; i < d->dataColumnPaths.count(); ++i) {
+		const auto& path = d->dataColumnPaths.at(i);
 		if (path == aspectPath) {
 			dataColumns[i] = column;
 			changed = true;
@@ -621,13 +623,13 @@ void LollipopPlotPrivate::verticalPlot(int columnIndex) {
 		const double value = column->valueAt(i);
 		double x;
 
+		// translate to the beginning of the group
 		if (xColumn)
-			x = xColumn->valueAt(i);
+			x = xColumn->valueAt(i) - m_groupWidth / 2;
 		else
-			x = m_groupGap
-				+ valueIndex * m_groupWidth; // translate to the beginning of the group - 1st group is placed between 0 and 1, 2nd between 1 and 2, etc.
+			x = valueIndex * m_groupWidth; // for m_groupWidth = 1, 1st group is placed between 0 and 1, 2nd between 1 and 2, etc.
 
-		x += (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
+		x += m_groupGap + (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
 
 		symbolPoints << QPointF(x + width / 2, value);
 		m_valuesPointsLogical << QPointF(x + width / 2, value);
@@ -693,6 +695,7 @@ void LollipopPlotPrivate::updateValues() {
 	q->cSystem->mapLogicalToScene(m_valuesPointsLogical, pointsScene, visiblePoints);
 	const auto& prefix = value->prefix();
 	const auto& suffix = value->suffix();
+	const auto numberLocale = QLocale();
 	if (value->type() == Value::BinEntries) {
 		for (int i = 0; i < m_valuesPointsLogical.count(); ++i) {
 			if (!visiblePoints[i])
@@ -700,9 +703,9 @@ void LollipopPlotPrivate::updateValues() {
 
 			auto& point = m_valuesPointsLogical.at(i);
 			if (orientation == LollipopPlot::Orientation::Vertical)
-				m_valuesStrings << prefix + QString::number(point.y()) + suffix;
+				m_valuesStrings << prefix + numberToString(point.y(), numberLocale) + suffix;
 			else
-				m_valuesStrings << prefix + QString::number(point.x()) + suffix;
+				m_valuesStrings << prefix + numberToString(point.x(), numberLocale) + suffix;
 		}
 	} else if (value->type() == Value::CustomColumn) {
 		const auto* valuesColumn = value->column();
@@ -719,11 +722,11 @@ void LollipopPlotPrivate::updateValues() {
 
 			switch (xColMode) {
 			case AbstractColumn::ColumnMode::Double:
-				m_valuesStrings << prefix + QString::number(valuesColumn->valueAt(i), value->numericFormat(), value->precision()) + suffix;
+				m_valuesStrings << prefix + numberToString(valuesColumn->valueAt(i), numberLocale, value->numericFormat(), value->precision()) + suffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
-				m_valuesStrings << prefix + QString::number(valuesColumn->valueAt(i)) + suffix;
+				m_valuesStrings << prefix + numberToString(valuesColumn->valueAt(i), numberLocale) + suffix;
 				break;
 			case AbstractColumn::ColumnMode::Text:
 				m_valuesStrings << prefix + valuesColumn->textAt(i) + suffix;

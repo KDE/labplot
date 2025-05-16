@@ -39,6 +39,11 @@ void XYAnalysisCurve::init() {
 	d->symbol->setStyle(Symbol::Style::NoSymbols);
 }
 
+void XYAnalysisCurve::recalculate() {
+	Q_D(XYAnalysisCurve);
+	d->recalculate();
+}
+
 bool XYAnalysisCurve::resultAvailable() const {
 	return result().available;
 }
@@ -422,8 +427,6 @@ void XYAnalysisCurvePrivate::connectCurve(const XYCurve* curve) {
 	// handle the changes when the data inside of the source curve columns
 	m_connections << q->connect(curve, &XYCurve::xDataChanged, q, &XYAnalysisCurve::handleSourceDataChanged);
 	m_connections << q->connect(curve, &XYCurve::yDataChanged, q, &XYAnalysisCurve::handleSourceDataChanged);
-	if (curve->parentAspect())
-		m_connections << q->connect(curve->parentAspect(), &AbstractAspect::childAspectAdded, q, &XYAnalysisCurve::recalculate);
 }
 
 void XYAnalysisCurvePrivate::connectColumn(const AbstractColumn* column, Dimension dim, bool second) {
@@ -528,6 +531,10 @@ void XYAnalysisCurvePrivate::prepareTmpDataColumn(const AbstractColumn** tmpXDat
 }
 
 void XYAnalysisCurvePrivate::recalculate() {
+	// process all events first to close the context menu, if the new analysis curve is added via the context menu
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
 	// create filter result columns if not available yet, clear them otherwise
 	if (!xColumn) {
 		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
@@ -572,6 +579,7 @@ void XYAnalysisCurvePrivate::recalculate() {
 		}
 	}
 	Q_EMIT q->dataChanged();
+	QApplication::restoreOverrideCursor();
 }
 
 bool XYAnalysisCurvePrivate::preparationValid(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {

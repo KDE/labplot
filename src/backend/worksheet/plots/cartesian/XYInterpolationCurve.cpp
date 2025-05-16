@@ -43,11 +43,6 @@ XYInterpolationCurve::XYInterpolationCurve(const QString& name, XYInterpolationC
 // and is deleted during the cleanup in QGraphicsScene
 XYInterpolationCurve::~XYInterpolationCurve() = default;
 
-void XYInterpolationCurve::recalculate() {
-	Q_D(XYInterpolationCurve);
-	d->recalculate();
-}
-
 /*!
 	Returns an icon to be used in the project explorer.
 */

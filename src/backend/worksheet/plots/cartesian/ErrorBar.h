@@ -21,7 +21,12 @@ class ErrorBarStyle;
 class Line;
 class KConfigGroup;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT ErrorBar : public AbstractAspect {
+#else
 class ErrorBar : public AbstractAspect {
+#endif
 	Q_OBJECT
 
 public:

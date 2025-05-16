@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Factory to create an object instance from its type
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -41,20 +41,20 @@ public:
 		else if (type == AspectType::Worksheet)
 			return new Worksheet(QString());
 		else if (type == AspectType::CartesianPlot)
-			return new CartesianPlot(QString());
+			return new CartesianPlot(QString(), true /*loading*/);
 		else if (type == AspectType::TextLabel)
 			return new TextLabel(QString());
 		else if (type == AspectType::Image)
 			return new Image(QString());
 		else if (type == AspectType::CustomPoint) {
 			auto* plot = static_cast<CartesianPlot*>(parent);
-			return new CustomPoint(plot, QString());
+			return new CustomPoint(plot, QString(), true /*loading*/);
 		} else if (type == AspectType::ReferenceLine) {
 			auto* plot = static_cast<CartesianPlot*>(parent);
-			return new ReferenceLine(plot, QString());
+			return new ReferenceLine(plot, QString(), true /*loading*/);
 		} else if (type == AspectType::ReferenceRange) {
 			auto* plot = static_cast<CartesianPlot*>(parent);
-			return new ReferenceRange(plot, QString());
+			return new ReferenceRange(plot, QString(), true /*loading*/);
 		} else if (type == AspectType::InfoElement) {
 			auto* plot = static_cast<CartesianPlot*>(parent);
 			return new InfoElement(QString(), plot);
@@ -92,9 +92,9 @@ public:
 
 		/* statistical plots */
 		else if (type == AspectType::BoxPlot)
-			return new BoxPlot(QString());
+			return new BoxPlot(QString(), true /*loading*/);
 		else if (type == AspectType::Histogram)
-			return new Histogram(QString());
+			return new Histogram(QString(), true /*loading*/);
 		else if (type == AspectType::KDEPlot)
 			return new KDEPlot(QString());
 		else if (type == AspectType::QQPlot)
@@ -108,7 +108,7 @@ public:
 
 		/* continuous improvement plots */
 		else if (type == AspectType::ProcessBehaviorChart)
-			return new ProcessBehaviorChart(QString());
+			return new ProcessBehaviorChart(QString(), true /*loading*/);
 		else if (type == AspectType::RunChart)
 			return new RunChart(QString());
 

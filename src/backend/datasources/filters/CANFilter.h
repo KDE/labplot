@@ -19,7 +19,12 @@ class CANFilterPrivate;
 
 	\ingroup datasources
 */
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT CANFilter : public AbstractFileFilter {
+#else
 class CANFilter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
 
 public:
