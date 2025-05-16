@@ -35,8 +35,6 @@ public:
 
 	// TODO: document the 5 versions
 	Points mapLogicalToScene(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
-	bool mapXLogicalToScene(double& x, MappingFlags flags = MappingFlag::DefaultMapping) const;
-	bool mapYLogicalToScene(double& y, MappingFlags flags = MappingFlag::DefaultMapping) const;
 	void mapLogicalToScene(const Points& logicalPoints,
 						   Points& scenePoints,
 						   std::vector<bool>& visiblePoints,
