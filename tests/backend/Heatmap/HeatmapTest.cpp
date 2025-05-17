@@ -1315,7 +1315,147 @@ void HeatmapTest::testRepresentationSpreadsheetDrawEmpty() {
  * Completly outside of the plot so nothing will be drawn
  */
 void HeatmapTest::testRepresentationSpreadsheetCompletelyOutOfRange() {
-	QVERIFY(false);
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	Heatmap* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+
+	hm->setDataSource(Heatmap::DataSource::Spreadsheet);
+	QCOMPARE(hm->drawEmpty(), false);
+	hm->setXNumberBins(5);
+	hm->setYNumberBins(5);
+	QCOMPARE(hm->xNumberBins(), 5);
+	QCOMPARE(hm->yNumberBins(), 5);
+
+	int dataChangedCounter = 0;
+	CONNECT_DATA_CHANGED;
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Spreadsheet"));
+	auto columns = spreadsheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+
+	auto* xColumn = columns.at(0);
+	auto* yColumn = columns.at(1);
+
+	QCOMPARE(dataChangedCounter, 0);
+	hm->setXColumn(xColumn);
+	QCOMPARE(hm->xColumn(), xColumn);
+	QCOMPARE(dataChangedCounter, 1);
+	hm->setYColumn(yColumn);
+	QCOMPARE(hm->yColumn(), yColumn);
+	QCOMPARE(dataChangedCounter, 2);
+
+	spreadsheet->setRowCount(7);
+
+	xColumn->setValueAt(0, 0.);
+	yColumn->setValueAt(0, 0.);
+	xColumn->setValueAt(1, 10.);
+	yColumn->setValueAt(1, 0.);
+	xColumn->setValueAt(2, 0.0);
+	yColumn->setValueAt(2, 100.0);
+	xColumn->setValueAt(3, 2.0);
+	yColumn->setValueAt(3, 20.0);
+	xColumn->setValueAt(4, 6.0);
+	yColumn->setValueAt(4, 20.0);
+	xColumn->setValueAt(5, 2.0);
+	yColumn->setValueAt(5, 60.0);
+	xColumn->setValueAt(6, 6.0);
+	yColumn->setValueAt(6, 60.0);
+	xColumn->setValueAt(7, 4.0); // center
+	yColumn->setValueAt(7, 40.0); // center
+	xColumn->setValueAt(8, 10.0);
+	yColumn->setValueAt(8, 100.0);
+	xColumn->setValueAt(9, 4.5); // Testing Duplicates
+	yColumn->setValueAt(9, 45.0); // Testing Duplicates
+	xColumn->setValueAt(10, 9.0); // Testing Duplicates
+	yColumn->setValueAt(10, 90.0); // Testing Duplicates
+	xColumn->setValueAt(11, 6.5); // Testing Duplicates
+
+		   // |-----|-----|-----|-----|-----|
+		   // |  X  |     |     |     |  X  |
+		   // |     |  X  |     |  X  |     |
+		   // |     |     | XX  |     |     |
+		   // |     |  X  |     | XX  |     |
+		   // |  X  |     |     |     | XX  |
+
+	int valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		switch (valueDrawnCounter) {
+		// Row 0
+		case 0:
+			COMPARE_VALUES(0.0, 0.0, 2.0, 20.0, 1.0);
+			break;
+		case 1:
+			COMPARE_VALUES(8.0, 0.0, 10.0, 20.0, 1.0);
+			break;
+
+				   // Row 1
+		case 2:
+			COMPARE_VALUES(2.0, 20.0, 4.0, 40.0, 1.0);
+			break;
+		case 3:
+			COMPARE_VALUES(6.0, 20.0, 8.0, 40.0, 1.0);
+			break;
+
+				   // Row 2
+		case 4:
+			COMPARE_VALUES(4.0, 40.0, 6.0, 60.0, 2.0);
+			break;
+
+				   // Row 3
+		case 5:
+			COMPARE_VALUES(2.0, 60.0, 4.0, 80.0, 1.0);
+			break;
+		case 6:
+			COMPARE_VALUES(6.0, 60.0, 8.0, 80.0, 2.0);
+			break;
+
+				   // Row 4
+		case 7:
+			COMPARE_VALUES(0.0, 80.0, 2.0, 100.0, 1.0);
+			break;
+		case 8:
+			COMPARE_VALUES(8.0, 80.0, 10.0, 100.0, 2.0);
+			break;
+		}
+		valueDrawnCounter++;
+	});
+	yColumn->setValueAt(11, 65.0); // Testing Duplicates
+	QCOMPARE(valueDrawnCounter, 9);
+	disconnect(hm, &Heatmap::valueDrawn, nullptr, nullptr);
+
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).start(), 0.);
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).end(), 10.);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).start(), 0.);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).end(), 100.);
+
+	{
+		auto range = plot->range(Dimension::X, 0);
+		range.setAutoScale(false);
+		range.setStart(-3.);
+		range.setEnd(-2.);
+		plot->setXRange(0, range);  // Heatmap is not in this range
+	}
+
+		   // first are cut away completely, second row/column is half
+	valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		valueDrawnCounter++;
+	});
+	{
+		auto range = plot->range(Dimension::Y, 0);
+		range.setAutoScale(false);
+		range.setStart(200.);
+		range.setEnd(2000.);
+		plot->setYRange(0, range);  // Heatmap is not in this range
+	}
+	QCOMPARE(valueDrawnCounter, 0);
 }
 
 /*!
