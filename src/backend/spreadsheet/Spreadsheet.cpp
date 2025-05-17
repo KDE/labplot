@@ -1603,7 +1603,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 	if (columnImportMode == AbstractFileFilter::ImportMode::Replace) {
 		QVector<AbstractColumn*> children;
 		if (project())
-			children = project()->children<AbstractColumn>();
+			children = project()->children<AbstractColumn>(ChildIndexFlag::Recursive);
 		else
 			children = this->children<AbstractColumn>();
 

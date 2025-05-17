@@ -2603,6 +2603,7 @@ void ColumnPrivate::updateFormula() {
 	}
 
 	DEBUG(Q_FUNC_INFO << " DONE")
+	Q_EMIT q->formulaChanged(q);
 }
 
 void ColumnPrivate::formulaVariableColumnRemoved(const AbstractAspect* aspect) {
