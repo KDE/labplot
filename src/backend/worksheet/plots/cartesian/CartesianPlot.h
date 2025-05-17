@@ -227,7 +227,6 @@ private:
 	bool m_menusInitialized{false};
 
 	// analysis curves actions
-	QAction* addHeatmapAction{nullptr};
 	QAction* addDataReductionCurveAction{nullptr};
 	QAction* addDifferentiationCurveAction{nullptr};
 	QAction* addIntegrationCurveAction{nullptr};
