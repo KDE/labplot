@@ -1629,7 +1629,7 @@ void CartesianPlot::setRangeScale(const Dimension dim, const int index, const Ra
 		return;
 	}
 
-	auto newRange = range(dim, index);
+	auto newRange = range(Dimension::X, index);
 	newRange.setScale(scale);
 	auto r = d->checkRange(newRange);
 	if (index >= 0 && index < rangeCount(dim) && r.finite() && r != d->rangeConst(dim, index)) {
