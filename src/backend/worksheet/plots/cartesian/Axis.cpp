@@ -1759,7 +1759,7 @@ void AxisPrivate::retransformTicks() {
 	QDEBUG(Q_FUNC_INFO << ", ticks type = " << majorTicksType)
 	switch (majorTicksType) {
 	case Axis::TicksType::TotalNumber:
-			break; // tmpMajorTicksIncrement is calculated already above
+		break; // tmpMajorTicksIncrement is calculated already above
 	case Axis::TicksType::ColumnLabels: // fall through
 	case Axis::TicksType::CustomColumn: // fall through
 	case Axis::TicksType::CustomValues:
