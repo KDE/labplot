@@ -457,6 +457,7 @@ void HeatmapTest::indicesMinMaxMatrix() {
 	}
 
 	{
+		// Start and end are inverted
 		Heatmap hm(QStringLiteral("Heatmap"));
 		auto* matrix1 = new Matrix(10, 10, QStringLiteral("Matrix1"), AbstractColumn::ColumnMode::Double);
 		hm.setMatrix(matrix1);
@@ -467,7 +468,7 @@ void HeatmapTest::indicesMinMaxMatrix() {
 		int end = -1;
 		QCOMPARE(hm.indicesMinMaxMatrix(Dimension::X, 19, 16, start, end), true);
 		QCOMPARE(start, 4);
-		QCOMPARE(end, 5);
+		QCOMPARE(end, 6);
 	}
 
 	{
@@ -2219,9 +2220,209 @@ void HeatmapTest::saveLoad() {
 	}
 }
 
+// Test if the matrixNumBins works as expected
 void HeatmapTest::testMatrixNumBins() {
-	QVERIFY(false);
-	// Test if the matrixNumBins works as expected
+	Project project;
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("Plot"));
+	ws->addChild(plot);
+
+	Heatmap* hm = new Heatmap(QStringLiteral("HM"));
+	plot->addChild(hm);
+	hm->setXNumberBins(1);
+	hm->setYNumberBins(1);
+	hm->setMatrixNumberBins(false);
+	QCOMPARE(hm->xNumberBins(), 1);
+	QCOMPARE(hm->yNumberBins(), 1);
+
+	hm->setDataSource(Heatmap::DataSource::Matrix);
+
+	int dataChangedCounter = 0;
+	CONNECT_DATA_CHANGED;
+
+	auto* matrix = new Matrix(5, 5, QStringLiteral("Matrix1"));
+	project.addChild(matrix);
+	hm->setMatrix(matrix);
+	QCOMPARE(dataChangedCounter, 1);
+	matrix->setXStart(1.);
+	QCOMPARE(dataChangedCounter, 2);
+	matrix->setXEnd(11.);
+	QCOMPARE(dataChangedCounter, 3);
+	matrix->setYStart(1.);
+	QCOMPARE(dataChangedCounter, 4);
+	matrix->setYEnd(101.);
+	QCOMPARE(dataChangedCounter, 5);
+
+	matrix->setXStart(0);
+	matrix->setXEnd(10);
+	matrix->setYStart(0);
+	matrix->setYEnd(100);
+	dataChangedCounter = 0; // reset
+
+	{
+		auto range = plot->range(Dimension::X, 0);
+		range.setAutoScale(false);
+		range.setStart(0.);
+		range.setEnd(10.);
+		plot->setXRange(0, range);
+	}
+
+	{
+		auto range = plot->range(Dimension::Y, 0);
+		range.setAutoScale(false);
+		range.setStart(0.);
+		range.setEnd(100.);
+		plot->setYRange(0, range);
+	}
+	CHECK_RANGE(plot, hm, Dimension::X, 0., 10.);
+	CHECK_RANGE(plot, hm, Dimension::Y, 0., 100.);
+
+	QCOMPARE(matrix->rowCount(), 5);
+	QCOMPARE(matrix->columnCount(), 5);
+
+	matrix->setCell(0, 0, 1.0);
+	QCOMPARE(dataChangedCounter, 1);
+	matrix->setCell(0, 1, 2.0);
+	QCOMPARE(dataChangedCounter, 2);
+	matrix->setCell(0, 2, 3.0);
+	matrix->setCell(0, 3, 4.0);
+	matrix->setCell(0, 4, 5.0);
+
+	matrix->setCell(1, 0, 6.0);
+	matrix->setCell(1, 1, 7.0);
+	matrix->setCell(1, 2, 8.0);
+	matrix->setCell(1, 3, 9.0);
+	matrix->setCell(1, 4, 10.0);
+
+	matrix->setCell(2, 0, 11.0);
+	matrix->setCell(2, 1, 12.0);
+	matrix->setCell(2, 2, 13.0);
+	matrix->setCell(2, 3, 14.0);
+	matrix->setCell(2, 4, 15.0);
+
+	matrix->setCell(3, 0, 16.0);
+	matrix->setCell(3, 1, 17.0);
+	matrix->setCell(3, 2, 18.0);
+	matrix->setCell(3, 3, 19.0);
+	matrix->setCell(3, 4, 20.0);
+
+	matrix->setCell(4, 0, 21.0);
+	matrix->setCell(4, 1, 22.0);
+	matrix->setCell(4, 2, 23.0);
+	matrix->setCell(4, 3, 24.0);
+
+	int valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		QCOMPARE(xPosStart, 0.);
+		QCOMPARE(yPosStart, 0.);
+		QCOMPARE(xPosEnd, 10.);
+		QCOMPARE(yPosEnd, 100.);
+		QCOMPARE(value, 25.); // Last value is used currently
+		valueDrawnCounter ++;
+	});
+	matrix->setCell(4, 4, 25.0); // Set last cell to trigger a redraw of the heatmap
+	QCOMPARE(valueDrawnCounter, 1);
+	disconnect(hm, &Heatmap::valueDrawn, nullptr, nullptr);
+
+	hm->setMatrixNumberBins(true);
+
+	valueDrawnCounter = 0;
+	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
+		switch (valueDrawnCounter) {
+		case 0:
+			COMPARE_VALUES(0.0, 0.0, 2.0, 20.0, 1.0); // (0, 0)
+			break;
+		case 1:
+			COMPARE_VALUES(2.0, 0.0, 4.0, 20.0, 2.0); // (0, 1)
+			break;
+		case 2:
+			COMPARE_VALUES(4.0, 0.0, 6.0, 20.0, 3.0); // (0, 2)
+			break;
+		case 3:
+			COMPARE_VALUES(6.0, 0.0, 8.0, 20.0, 4.0); // (0, 3)
+			break;
+		case 4:
+			COMPARE_VALUES(8.0, 0.0, 10.0, 20.0, 5.0); // (0, 4)
+			break;
+
+		case 5:
+			COMPARE_VALUES(0.0, 20.0, 2.0, 40.0, 6.0); // (1, 0)
+			break;
+		case 6:
+			COMPARE_VALUES(2.0, 20.0, 4.0, 40.0, 7.0); // (1, 1)
+			break;
+		case 7:
+			COMPARE_VALUES(4.0, 20.0, 6.0, 40.0, 8.0); // (1, 2)
+			break;
+		case 8:
+			COMPARE_VALUES(6.0, 20.0, 8.0, 40.0, 9.0); // (1, 3)
+			break;
+		case 9:
+			COMPARE_VALUES(8.0, 20.0, 10.0, 40.0, 10.0); // (1, 4)
+			break;
+
+		case 10:
+			COMPARE_VALUES(0.0, 40.0, 2.0, 60.0, 11.0); // (2, 0)
+			break;
+		case 11:
+			COMPARE_VALUES(2.0, 40.0, 4.0, 60.0, 12.0); // (2, 1)
+			break;
+		case 12:
+			COMPARE_VALUES(4.0, 40.0, 6.0, 60.0, 13.0); // (2, 2)
+			break;
+		case 13:
+			COMPARE_VALUES(6.0, 40.0, 8.0, 60.0, 14.0); // (2, 3)
+			break;
+		case 14:
+			COMPARE_VALUES(8.0, 40.0, 10.0, 60.0, 15.0); // (2, 4)
+			break;
+
+		case 15:
+			COMPARE_VALUES(0.0, 60.0, 2.0, 80.0, 16.0); // (3, 0)
+			break;
+		case 16:
+			COMPARE_VALUES(2.0, 60.0, 4.0, 80.0, 17.0); // (3, 1)
+			break;
+		case 17:
+			COMPARE_VALUES(4.0, 60.0, 6.0, 80.0, 18.0); // (3, 2)
+			break;
+		case 18:
+			COMPARE_VALUES(6.0, 60.0, 8.0, 80.0, 19.0); // (3, 3)
+			break;
+		case 19:
+			COMPARE_VALUES(8.0, 60.0, 10.0, 80.0, 20.0); // (3, 4)
+			break;
+
+		case 20:
+			COMPARE_VALUES(0.0, 80.0, 2.0, 100.0, 21.0); // (4, 0)
+			break;
+		case 21:
+			COMPARE_VALUES(2.0, 80.0, 4.0, 100.0, 22.0); // (4, 1)
+			break;
+		case 22:
+			COMPARE_VALUES(4.0, 80.0, 6.0, 100.0, 23.0); // (4, 2)
+			break;
+		case 23:
+			COMPARE_VALUES(6.0, 80.0, 8.0, 100.0, 24.0); // (4, 3)
+			break;
+		case 24:
+			COMPARE_VALUES(8.0, 80.0, 10.0, 100.0, 25.0); // (4, 4)
+			break;
+		}
+		valueDrawnCounter++;
+	});
+
+	matrix->setCell(4, 4, 25.0); // Set last cell to trigger a redraw of the heatmap
+	QCOMPARE(valueDrawnCounter, 25);
+	disconnect(hm, &Heatmap::valueDrawn, nullptr, nullptr);
+
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).start(), 0);
+	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).end(), 10);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).start(), 0);
+	QCOMPARE(plot->range(Dimension::Y, hm->coordinateSystemIndex()).end(), 100);
 }
 
 void HeatmapTest::rangeInverted() {
