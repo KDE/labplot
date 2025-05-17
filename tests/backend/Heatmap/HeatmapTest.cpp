@@ -272,6 +272,7 @@ void HeatmapTest::testNumberBins() {
 	QCOMPARE(hm->drawEmpty(), false);
 	hm->setXNumberBins(5);
 	hm->setYNumberBins(5);
+	hm->setEqualNumberBins(false);
 	QCOMPARE(hm->xNumberBins(), 5);
 	QCOMPARE(hm->yNumberBins(), 5);
 
@@ -1339,6 +1340,7 @@ void HeatmapTest::testColorAutomatic() {
 	hm->setYNumberBins(5);
 	QCOMPARE(hm->xNumberBins(), 5);
 	QCOMPARE(hm->yNumberBins(), 5);
+	hm->setEqualNumberBins(false);
 	QCOMPARE(hm->automaticLimits(), true);
 	// TODO
 	//	hm->setFormatMin();
@@ -1435,6 +1437,7 @@ void HeatmapTest::testColorManual() {
 	hm->setYNumberBins(5);
 	QCOMPARE(hm->xNumberBins(), 5);
 	QCOMPARE(hm->yNumberBins(), 5);
+	hm->setEqualNumberBins(false);
 	hm->setAutomaticLimits(false);
 	QCOMPARE(hm->automaticLimits(), false);
 	double defaultFormatMin = hm->formatMin();
@@ -1581,6 +1584,7 @@ void HeatmapTest::testClippingBottomLeft() {
 	hm->setYNumberBins(5);
 	QCOMPARE(hm->xNumberBins(), 5);
 	QCOMPARE(hm->yNumberBins(), 5);
+	hm->setEqualNumberBins(false);
 	hm->setAutomaticLimits(false);
 	QCOMPARE(hm->automaticLimits(), false);
 	hm->setFormatMin(0.);
@@ -1711,6 +1715,7 @@ void HeatmapTest::testClippingBottomRight() {
 	hm->setYNumberBins(5);
 	QCOMPARE(hm->xNumberBins(), 5);
 	QCOMPARE(hm->yNumberBins(), 5);
+	hm->setEqualNumberBins(false);
 	hm->setAutomaticLimits(false);
 	QCOMPARE(hm->automaticLimits(), false);
 	hm->setFormatMin(0.);
@@ -1838,6 +1843,7 @@ void HeatmapTest::testClippingBottomRight2() {
 	hm->setYNumberBins(5);
 	QCOMPARE(hm->xNumberBins(), 5);
 	QCOMPARE(hm->yNumberBins(), 5);
+	hm->setEqualNumberBins(false);
 	hm->setAutomaticLimits(false);
 	QCOMPARE(hm->automaticLimits(), false);
 	hm->setFormatMin(0.);
