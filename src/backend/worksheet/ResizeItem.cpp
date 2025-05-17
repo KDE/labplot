@@ -66,10 +66,9 @@ QVariant ResizeItem::HandleItem::itemChange(GraphicsItemChange change, const QVa
 	return newValue;
 }
 
-void ResizeItem::HandleItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+void ResizeItem::HandleItem::mousePressEvent(QGraphicsSceneMouseEvent*) {
 	m_parent->container()->setUndoAware(false);
 	m_oldRect = m_parent->container()->rect();
-	m_lastMousePos = event->scenePos();
 }
 
 void ResizeItem::HandleItem::mouseReleaseEvent(QGraphicsSceneMouseEvent*) {
@@ -138,20 +137,23 @@ QPointF ResizeItem::HandleItem::restrictPosition(const QPointF& pos) {
 }
 
 void ResizeItem::HandleItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
-	if (event->buttons() & Qt::LeftButton) {
-		QPointF mousePos = event->scenePos();
-		QPointF delta = mousePos - m_lastMousePos;
-		if (m_position & Top)
-			m_parent->setTop(m_parent->boundingRect().top() + delta.y());
-		if (m_position & Bottom)
-			m_parent->setBottom(m_parent->boundingRect().bottom() + delta.y());
-		if (m_position & Left)
-			m_parent->setLeft(m_parent->boundingRect().left() + delta.x());
-		if (m_position & Right)
-			m_parent->setRight(m_parent->boundingRect().right() + delta.x());
-		m_lastMousePos = mousePos;
+	if (!(event->buttons() & Qt::LeftButton))
+		return;
+	const QPointF mouseLocal = m_parent->mapFromScene(event->scenePos());
+	const QPointF clamped   = restrictPosition(mouseLocal);
+	switch (m_position) {
+	case TopLeft:     m_parent->setTopLeft    (clamped);           break;
+	case Top:         m_parent->setTop        (clamped.y());       break;
+	case TopRight:    m_parent->setTopRight   (clamped);           break;
+	case Right:       m_parent->setRight      (clamped.x());       break;
+	case BottomRight: m_parent->setBottomRight(clamped);           break;
+	case Bottom:      m_parent->setBottom     (clamped.y());       break;
+	case BottomLeft:  m_parent->setBottomLeft (clamped);           break;
+	case Left:        m_parent->setLeft       (clamped.x());       break;
 	}
+	event->accept();
 }
+
 
 ResizeItem::ResizeItem(WorksheetElementContainer* container)
 	: QGraphicsItem(container->graphicsItem())
@@ -194,14 +196,14 @@ WorksheetElementContainer* ResizeItem::container() {
 void ResizeItem::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) {
 }
 
-#define IMPL_SET_FN(TYPE, POS)                                                                    \
-	void ResizeItem::set##POS(TYPE v) {                                                           \
-		m_rect.set##POS(v);                                                                       \
-		if (m_container->parentAspect()->type() == AspectType::CartesianPlot)                     \
-			m_container->setRect(m_rect);                                                         \
-		else                                                                                      \
-			m_container->setRect(mapRectToScene(m_rect));                                         \
-	}
+#define IMPL_SET_FN(TYPE, POS)                                                                                                                                 \
+void ResizeItem::set##POS(TYPE v) {                                                                                                                        \
+		m_rect.set##POS(v);                                                                                                                                    \
+		if (m_container->parentAspect()->type() == AspectType::CartesianPlot)                                                                                  \
+			m_container->setRect(m_rect);                                                                                                                      \
+		else                                                                                                                                                   \
+			m_container->setRect(mapRectToScene(m_rect));                                                                                                      \
+}
 
 IMPL_SET_FN(qreal, Top)
 IMPL_SET_FN(qreal, Right)
