@@ -59,9 +59,13 @@ void MultiRangeTest2::autoScaleXAfterZoomInY() {
 	// Revert the zoom
 	p1->navigate(tanCurve->coordinateSystemIndex(), CartesianPlot::NavigationOperation::ScaleAutoY);
 
-	// retransform of vertAxisP1 is done, so the tickLabelValues change back
-	const auto ref = QVector<double>({-200., -100., 0., 100., 200.});
-	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), ref);
+	// All x ranges are zoomed, for plot 1 and plot 2
+	CHECK_RANGE(p1, sinCurve, Dimension::X, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, Dimension::X, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250., 250.); // autoscaled
+	CHECK_RANGE(p1, logCurve, Dimension::X, 0., 100.);
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10., 6.);
 }
 
 /*!
