@@ -50,7 +50,6 @@
 #include "frontend/examples/ExamplesDialog.h"
 #include "frontend/widgets/FITSHeaderEditDialog.h"
 #include "frontend/widgets/LabelWidget.h"
-#include "frontend/widgets/MemoryWidget.h"
 #include "frontend/worksheet/WorksheetPreviewWidget.h"
 #include "frontend/worksheet/WorksheetView.h"
 

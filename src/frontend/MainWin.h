@@ -12,8 +12,8 @@
 #ifndef MAINWIN_H
 #define MAINWIN_H
 
-#include "SettingsDialog.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "SettingsDialog.h" // for Settings::Type enum
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h" // for CartesianPlot::MouseMode enum
 
 #include <KXmlGuiWindow>
 #include <QStringLiteral>

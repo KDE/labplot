@@ -3,7 +3,7 @@
  *	Project              : LabPlot
  *	Description 	     : Class managing all actions and their containers (menus and toolbars) in MainWin
  *	--------------------------------------------------------------------
- *	SPDX-FileCopyrightText: 2024 Alexander Semke <alexander.semke@web.de>
+ *	SPDX-FileCopyrightText: 2024-2025 Alexander Semke <alexander.semke@web.de>
  *	SPDX-License-Identifier: GPL-2.0-or-later
  */
 
@@ -45,7 +45,6 @@
 #include <KMessageBox>
 #include <KRecentFilesAction>
 #include <KStandardAction>
-#include <KToggleAction>
 #include <KToggleFullScreenAction>
 #include <KToolBar>
 #include <kxmlguifactory.h>
@@ -62,7 +61,6 @@
 #endif
 
 #include <DockWidget.h>
-#include <DockAreaWidget.h>
 #include <DockManager.h>
 
 /*!
@@ -123,11 +121,24 @@ void ActionsManager::init() {
 	auto* mainToolBar = qobject_cast<QToolBar*>(factory->container(QStringLiteral("main_toolbar"), m_mainWindow));
 
 #ifdef HAVE_CANTOR_LIBS
-	auto* tbNotebook = new QToolButton(mainToolBar);
-	tbNotebook->setPopupMode(QToolButton::MenuButtonPopup);
-	tbNotebook->setMenu(m_newNotebookMenu); // it is possible for m_newNotebookMenu to be null when we have no backends
+	if (groupMain.exists()) {
+		const QString& lastUsedNotebook = groupMain.readEntry(QLatin1String("lastUsedNotebook"), QString());
+		if (!lastUsedNotebook.isEmpty()) {
+			for (auto* action : m_newNotebookMenu->actions()) {
+				if (lastUsedNotebook.compare(action->data().toString(), Qt::CaseInsensitive) == 0) {
+					m_lastUsedNotebookAction = action;
+					break;
+				}
+			}
+		}
+	}
+
+	m_tbNotebook = new QToolButton(mainToolBar);
+	m_tbNotebook->setPopupMode(QToolButton::MenuButtonPopup);
+	m_tbNotebook->setMenu(m_newNotebookMenu); // m_newNotebookMenu is never nullptr and always contains at least the configure cas action
+	m_tbNotebook->setDefaultAction(!m_lastUsedNotebookAction ? m_newNotebookMenu->actions().first() : m_lastUsedNotebookAction);
 	auto* lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 2);
-	mainToolBar->insertWidget(lastAction, tbNotebook);
+	mainToolBar->insertWidget(lastAction, m_tbNotebook);
 #endif
 
 	auto* tbImport = new QToolButton(mainToolBar);
@@ -431,7 +442,7 @@ void ActionsManager::initActions() {
 	m_configureNotebookAction->setWhatsThis(i18n("Opens the settings for Computer Algebra Systems to modify the available systems or to enable new ones"));
 	m_configureNotebookAction->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
 	collection->addAction(QStringLiteral("configure_cas"), m_configureNotebookAction);
-	connect(m_configureNotebookAction, &QAction::triggered, m_mainWindow, &MainWin::settingsDialog); // TODO: go to the Notebook page in the settings dialog directly
+	connect(m_configureNotebookAction, &QAction::triggered, m_mainWindow, &MainWin::settingsNotebookDialog);
 #endif
 
 	// hide "Donate" in the help menu
