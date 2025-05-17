@@ -520,6 +520,7 @@ void CartesianPlotTest::shiftLeftAutoScale() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setNiceExtend(true);
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
@@ -553,6 +554,7 @@ void CartesianPlotTest::shiftRightAutoScale() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setNiceExtend(true);
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
@@ -586,6 +588,7 @@ void CartesianPlotTest::shiftUpAutoScale() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setNiceExtend(true);
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
@@ -619,6 +622,7 @@ void CartesianPlotTest::shiftDownAutoScale() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setNiceExtend(true);
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);

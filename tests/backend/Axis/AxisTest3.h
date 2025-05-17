@@ -34,8 +34,8 @@ private Q_SLOTS:
 	void customColumnNonMonotonicColumnValues();
 	void customColumnDateTime();
 
-	void autoScale();
-	void autoScale2();
+	void autoScaleLog10();
+	void autoScaleLog102();
 };
 
 #endif // AXISTEST3_H

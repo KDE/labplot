@@ -874,12 +874,14 @@ void RetransformTest::TestImportCSV() {
 	// check axis ranges
 	auto axes = p->children(AspectType::Axis, AbstractAspect::ChildIndexFlag::Recursive);
 	QCOMPARE(axes.length(), 2);
-	auto* xAxis = axes.at(0);
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	xAxis->setMajorTicksNumber(5);
 	QVector<double> ref = {1, 1.5, 2, 2.5, 3};
-	COMPARE_DOUBLE_VECTORS(static_cast<Axis*>(xAxis)->tickLabelValues(), ref);
-	auto* yAxis = axes.at(1);
+	COMPARE_DOUBLE_VECTORS(xAxis->tickLabelValues(), ref);
+	auto* yAxis = static_cast<Axis*>(axes.at(1));
+	yAxis->setMajorTicksNumber(5);
 	ref = {2, 2.5, 3, 3.5, 4};
-	COMPARE_DOUBLE_VECTORS(static_cast<Axis*>(yAxis)->tickLabelValues(), ref);
+	COMPARE_DOUBLE_VECTORS(yAxis->tickLabelValues(), ref);
 
 	QTemporaryFile file;
 	QCOMPARE(file.open(), true);
@@ -1174,7 +1176,9 @@ void RetransformTest::TestChangePlotRange() {
 	auto axes = project.children(AspectType::Axis, AbstractAspect::ChildIndexFlag::Recursive);
 	QCOMPARE(axes.length(), 2);
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	xAxis->setMajorTicksNumber(5);
 	auto* yAxis = static_cast<Axis*>(axes.at(1));
+	yAxis->setMajorTicksNumber(5);
 
 	QCOMPARE(xAxis->name(), QStringLiteral("x"));
 	QCOMPARE(yAxis->name(), QStringLiteral("y"));

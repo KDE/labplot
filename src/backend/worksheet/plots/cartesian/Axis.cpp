@@ -224,7 +224,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	d->majorTicksLine->init(group);
 	d->majorTicksDirection = (Axis::TicksDirection)group.readEntry(QStringLiteral("MajorTicksDirection"), (int)Axis::ticksOut);
 	d->majorTicksType = (TicksType)group.readEntry(QStringLiteral("MajorTicksType"), static_cast<int>(TicksType::TotalNumber));
-	d->majorTicksNumber = group.readEntry(QStringLiteral("MajorTicksNumber"), 11);
+	d->majorTicksNumber = group.readEntry(QStringLiteral("MajorTicksNumber"), 6);
 	d->majorTicksSpacing = group.readEntry(QStringLiteral("MajorTicksIncrement"),
 										   0.0); // set to 0, so axisdock determines the value to not have to many labels the first time switched to Spacing
 	d->majorTicksLength = group.readEntry(QStringLiteral("MajorTicksLength"), Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point));
@@ -604,12 +604,8 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetRange, Range<double>, range, retransform)
 void Axis::setRange(Range<double> range) {
 	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString())
 	Q_D(Axis);
-	if (range != d->range) {
+	if (range != d->range)
 		exec(new AxisSetRangeCmd(d, range, ki18n("%1: set axis range")));
-		// auto set tick count when changing range (only changed here)
-		if (d->majorTicksAutoNumber)
-			setMajorTicksNumber(d->range.autoTickCount(), true);
-	}
 }
 void Axis::setStart(double min) {
 	Q_D(Axis);
@@ -768,27 +764,24 @@ void Axis::setMajorTicksAutoNumber(bool automatic) {
 	Q_D(Axis);
 	if (automatic != d->majorTicksAutoNumber) {
 		auto* parent = new AxisSetMajorTicksAutoNumberCmd(d, automatic, ki18n("%1: enable/disable major automatic tick numbers"));
-		if (automatic && d->range.autoTickCount() != d->majorTicksNumber)
-			new AxisSetMajorTicksNumberNoFinalizeCmd(d, d->range.autoTickCount(), ki18n("%1: set the total number of the major ticks"), parent);
+		// 6 looks pretty nice
+		if (automatic && 6 != d->majorTicksNumber)
+			new AxisSetMajorTicksNumberNoFinalizeCmd(d, 6, ki18n("%1: set the total number of the major ticks"), parent);
 		exec(parent);
 	}
 }
 
 STD_SETTER_CMD_IMPL_S(Axis, SetMajorTicksAutoNumberNoFinalize, bool, majorTicksAutoNumber) // no retransformTicks called
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksNumber, int, majorTicksNumber, retransformTicks)
-void Axis::setMajorTicksNumber(int number, bool automatic) {
+void Axis::setMajorTicksNumber(int number) {
 	DEBUG(Q_FUNC_INFO << ", number = " << number)
 	Q_D(Axis);
 	if (number > maxNumberMajorTicks) {
 		// Notifiy the user that the number was invalid
 		Q_EMIT majorTicksNumberChanged(maxNumberMajorTicks);
 		return;
-	} else if (number != d->majorTicksNumber) {
-		auto* parent = new AxisSetMajorTicksNumberCmd(d, number, ki18n("%1: set the total number of the major ticks"));
-		if (!automatic)
-			new AxisSetMajorTicksAutoNumberNoFinalizeCmd(d, false, ki18n("%1: disable major automatic tick numbers"), parent);
-		exec(parent);
-	}
+	} else if (number != d->majorTicksNumber)
+		exec(new AxisSetMajorTicksNumberCmd(d, number, ki18n("%1: set the total number of the major ticks")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksSpacing, qreal, majorTicksSpacing, retransformTicks)
@@ -1494,6 +1487,79 @@ int AxisPrivate::determineMinorTicksNumber() const {
 	return tmpMinorTicksNumber;
 }
 
+double AxisPrivate::calculateStartFromIncrement(double start, RangeT::Scale scale, double increment, bool* ok) {
+	if (ok)
+		*ok = true;
+	switch (scale) {
+	case RangeT::Scale::Linear:
+	case RangeT::Scale::Inverse:
+		return ceil(start / increment) * increment;
+	case RangeT::Scale::Log10:
+		if (start <= 0) {
+			if (ok)
+				*ok = false;
+			return 0;
+		}
+		return pow(10, ceil(log10(start) / increment) * increment);
+	case RangeT::Scale::Log2:
+		if (start <= 0) {
+			if (ok)
+				*ok = false;
+			return false;
+		}
+		return pow(2, ceil(log2(start) / increment) * increment);
+	case RangeT::Scale::Ln:
+		if (start <= 0) {
+			if (ok)
+				*ok = false;
+			return false;
+		}
+		return pow(M_E, ceil(log(start) / increment) * increment);
+	case RangeT::Scale::Sqrt:
+		if (start < 0) {
+			if (ok)
+				*ok = false;
+			return false;
+		}
+		return pow(ceil(sqrt(start) / increment) * increment, 2);
+	case RangeT::Scale::Square:
+		return sqrt(ceil(pow(start, 2) / increment) * increment);
+	}
+	if (ok)
+		*ok = false;
+	return 0;
+}
+
+int AxisPrivate::calculateTicksNumberFromIncrement(double start, double end, RangeT::Scale scale, double increment) {
+	int number = 0;
+	switch (scale) {
+	case RangeT::Scale::Linear:
+	case RangeT::Scale::Inverse:
+		number = std::round((end - start) / increment + 1);
+		break;
+	case RangeT::Scale::Log10:
+		if (start != 0. && end / start > 0.)
+			number = std::round(log10(end / start) / increment + 1);
+		break;
+	case RangeT::Scale::Log2:
+		if (start != 0. && end / start > 0.)
+			number = std::round(log2(end / start) / increment + 1);
+		break;
+	case RangeT::Scale::Ln:
+		if (start != 0. && end / start > 0.)
+			number = std::round(std::log(end / start) / increment + 1);
+		break;
+	case RangeT::Scale::Sqrt:
+		if (start >= 0. && end >= 0.)
+			number = std::round((std::sqrt(end) - std::sqrt(start)) / increment + 1);
+		break;
+	case RangeT::Scale::Square:
+		number = std::round((end * end - start * start) / increment + 1);
+		break;
+	}
+	return number;
+}
+
 /*
  * Copied from kst plottickcalculator.cpp (computeMajorTickSpacing())
  *
@@ -1558,8 +1624,12 @@ double AxisPrivate::calculateAutoParameters(int& majorTickCount, const Range<dou
 		}
 	}
 
-	const auto start = ceil(r.start() / spacing) * spacing;
-	majorTickCount = std::round(Range<double>::diff(r.scale(), start, r.end()) / spacing + 1);
+	bool ok = false;
+	const auto start = calculateStartFromIncrement(r.start(), r.scale(), spacing, &ok);
+	if (ok)
+		majorTickCount = calculateTicksNumberFromIncrement(start, r.end(), r.scale(), spacing);
+	else
+		majorTickCount = 0;
 	return start;
 }
 
@@ -1608,14 +1678,18 @@ void AxisPrivate::retransformTicks() {
 	}
 
 	// if type is tick number and tick number is auto: recalculate in case scale has changed
-	if (majorTicksType == Axis::TicksType::TotalNumber && majorTicksAutoNumber) {
-		auto r = range;
-		r.setStart(start);
-		r.setEnd(end);
-		majorTicksNumber = 5; // Initial value
-		majorTicksIncrement = 1.;
-		start = calculateAutoParameters(majorTicksNumber, r, majorTicksIncrement);
-		Q_EMIT q->majorTicksNumberChanged(majorTicksNumber);
+	if (majorTicksType == Axis::TicksType::TotalNumber) {
+		tmpMajorTicksNumber = majorTicksNumber;
+		if (majorTicksAutoNumber) {
+			auto r = range;
+			r.setStart(start);
+			r.setEnd(end);
+			start = calculateAutoParameters(tmpMajorTicksNumber, r, majorTicksIncrement);
+		} else {
+			majorTicksIncrement = Range<double>::diff(q->scale(), start, end);
+			if (tmpMajorTicksNumber > 1)
+				majorTicksIncrement /= tmpMajorTicksNumber - 1;
+		}
 	}
 
 	if (majorTicksNumber < 1 || (majorTicksDirection == Axis::noTicks && minorTicksDirection == Axis::noTicks)) {
@@ -1654,8 +1728,8 @@ void AxisPrivate::retransformTicks() {
 	} else if (majorTicksType == Axis::TicksType::ColumnLabels) {
 		const Column* c = dynamic_cast<const Column*>(majorTicksColumn);
 		if (c && c->valueLabelsInitialized()) {
+			tmpMajorTicksNumber = c->valueLabelsCount(start, end);
 			if (majorTicksAutoNumber) {
-				tmpMajorTicksNumber = c->valueLabelsCount(start, end);
 				if (tmpMajorTicksNumber > _maxNumberMajorTicksCustomColumn) {
 					tmpMajorTicksNumber = _maxNumberMajorTicksCustomColumn;
 					tmpMajorTicksNumberLimited = true;
@@ -1663,7 +1737,6 @@ void AxisPrivate::retransformTicks() {
 				majorTicksNumber = tmpMajorTicksNumber;
 				Q_EMIT q->majorTicksNumberChanged(tmpMajorTicksNumber);
 			} else {
-				tmpMajorTicksNumber = c->valueLabelsCount(start, end);
 				if (tmpMajorTicksNumber > majorTicksNumber) {
 					tmpMajorTicksNumber = majorTicksNumber;
 					tmpMajorTicksNumberLimited = true;
@@ -1685,11 +1758,8 @@ void AxisPrivate::retransformTicks() {
 
 	QDEBUG(Q_FUNC_INFO << ", ticks type = " << majorTicksType)
 	switch (majorTicksType) {
-	case Axis::TicksType::TotalNumber: // total number of major ticks is given - > determine the increment
-		tmpMajorTicksNumber = majorTicksNumber;
-		if (majorTicksAutoNumber)
+	case Axis::TicksType::TotalNumber:
 			break; // tmpMajorTicksIncrement is calculated already above
-		// fall through
 	case Axis::TicksType::ColumnLabels: // fall through
 	case Axis::TicksType::CustomColumn: // fall through
 	case Axis::TicksType::CustomValues:
@@ -1703,31 +1773,7 @@ void AxisPrivate::retransformTicks() {
 		// TODO: majorTicksSpacing == 0?
 		majorTicksIncrement = majorTicksSpacing * GSL_SIGN(end - start);
 		if (q->isNumeric() || (!q->isNumeric() && q->scale() != RangeT::Scale::Linear)) {
-			switch (q->scale()) {
-			case RangeT::Scale::Linear:
-			case RangeT::Scale::Inverse:
-				tmpMajorTicksNumber = std::round((end - start) / majorTicksIncrement + 1);
-				break;
-			case RangeT::Scale::Log10:
-				if (start != 0. && end / start > 0.)
-					tmpMajorTicksNumber = std::round(log10(end / start) / majorTicksIncrement + 1);
-				break;
-			case RangeT::Scale::Log2:
-				if (start != 0. && end / start > 0.)
-					tmpMajorTicksNumber = std::round(log2(end / start) / majorTicksIncrement + 1);
-				break;
-			case RangeT::Scale::Ln:
-				if (start != 0. && end / start > 0.)
-					tmpMajorTicksNumber = std::round(std::log(end / start) / majorTicksIncrement + 1);
-				break;
-			case RangeT::Scale::Sqrt:
-				if (start >= 0. && end >= 0.)
-					tmpMajorTicksNumber = std::round((std::sqrt(end) - std::sqrt(start)) / majorTicksIncrement + 1);
-				break;
-			case RangeT::Scale::Square:
-				tmpMajorTicksNumber = std::round((end * end - start * start) / majorTicksIncrement + 1);
-				break;
-			}
+			tmpMajorTicksNumber = calculateTicksNumberFromIncrement(start, end, q->scale(), majorTicksIncrement);
 		} else {
 			// Datetime with linear spacing: Calculation will be done directly where the majorTickPos will be calculated
 		}

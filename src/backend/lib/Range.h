@@ -202,15 +202,19 @@ public:
 		case RangeT::Scale::Log10:
 			if (start != 0. && end / start > 0.)
 				return log10(end / start);
+			break;
 		case RangeT::Scale::Log2:
 			if (start != 0. && end / start > 0.)
 				return log2(end / start);
+			break;
 		case RangeT::Scale::Ln:
 			if (start != 0. && end / start > 0.)
 				return log(end / start);
+			break;
 		case RangeT::Scale::Sqrt:
 			if (start >= 0. && end >= 0.)
 				return std::sqrt(end) - std::sqrt(start);
+			break;
 		case RangeT::Scale::Square:
 			return end * end - start * start;
 		}
