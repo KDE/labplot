@@ -419,7 +419,6 @@ void CartesianPlot::initActions() {
 	addHilbertTransformCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Hilbert Transform"), this);
 	addConvolutionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("(De-)Convolution"), this);
 	addCorrelationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto-/Cross-Correlation"), this);
-	addHeatmapAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-heatmap")), i18n("Heatmap"), this);
 
 	connect(addDataReductionCurveAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
 	connect(addDifferentiationCurveAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
@@ -580,7 +579,6 @@ void CartesianPlot::initMenus() {
 
 	// add all available plot types
 	CartesianPlot::fillAddNewPlotMenu(m_addNewMenu, actionGroup);
-	m_addNewMenu->addAction(addHeatmapAction);
 
 	// formula plot
 	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("Formula Plot"), actionGroup);
