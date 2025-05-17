@@ -544,7 +544,6 @@ void Column::clearFormula() {
 void Column::updateFormula() {
 	invalidateProperties();
 	d->updateFormula();
-	Q_EMIT formulaChanged(this);
 }
 
 /**
