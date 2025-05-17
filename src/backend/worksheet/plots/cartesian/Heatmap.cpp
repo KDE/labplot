@@ -423,6 +423,12 @@ bool Heatmap::indicesMinMaxMatrix(const Dimension dim, double v1, double v2, int
 		break;
 	}
 
+	if (v1 > v2)
+		qSwap(v1, v2);
+
+	if (startValue > endValue)
+		qSwap(startValue, endValue);
+
 	if (numberElements == 0)
 		return false;
 
