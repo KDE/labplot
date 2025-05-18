@@ -225,7 +225,8 @@ void Axis::init(Orientation orientation, bool loading) {
 	d->majorTicksDirection = (Axis::TicksDirection)group.readEntry(QStringLiteral("MajorTicksDirection"), (int)Axis::ticksOut);
 	d->majorTicksType = (TicksType)group.readEntry(QStringLiteral("MajorTicksType"), static_cast<int>(TicksType::TotalNumber));
 	d->majorTicksNumber = group.readEntry(QStringLiteral("MajorTicksNumber"), 6);
-	d->majorTicksSpacing = group.readEntry(QStringLiteral("MajorTicksIncrement"), 0.0); // set to 0, so AxisDock determines the value to not have too many labels the first time switching to Spacing
+	d->majorTicksSpacing = group.readEntry(QStringLiteral("MajorTicksIncrement"),
+										   0.0); // set to 0, so AxisDock determines the value to not have too many labels the first time switching to Spacing
 	d->majorTicksLength = group.readEntry(QStringLiteral("MajorTicksLength"), Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point));
 
 	d->minorTicksLine->init(group);
