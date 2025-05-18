@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Worksheet view
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -145,20 +145,21 @@ private:
 
 	// Menus
 	QMenu* m_addNewMenu{nullptr};
-	QMenu* m_addNewCartesianPlotMenu{nullptr};
 	QMenu* m_zoomMenu{nullptr};
 	QMenu* m_magnificationMenu{nullptr};
 	QMenu* m_layoutMenu{nullptr};
 	QMenu* m_gridMenu{nullptr};
 	QMenu* m_themeMenu{nullptr};
 	QMenu* m_viewMouseModeMenu{nullptr};
-	QMenu* m_cartesianPlotMenu{nullptr};
-	QMenu* m_cartesianPlotMouseModeMenu{nullptr};
-	QMenu* m_cartesianPlotZoomMenu{nullptr};
-	QMenu* m_cartesianPlotActionModeMenu{nullptr};
-	QMenu* m_cartesianPlotCursorModeMenu{nullptr};
 
-	QToolButton* tbNewCartesianPlot{nullptr};
+	// Menus for cartesan plot
+	QMenu* m_addNewPlotMenu{nullptr};
+	QMenu* m_plotMenu{nullptr};
+	QMenu* m_plotMouseModeMenu{nullptr};
+	QMenu* m_plotZoomMenu{nullptr};
+	QMenu* m_plotActionModeMenu{nullptr};
+	QMenu* m_plotCursorModeMenu{nullptr};
+	QToolButton* tbNewPlot{nullptr};
 
 	// Actions
 	QAction* selectAllAction{nullptr};
@@ -206,33 +207,33 @@ private:
 	QAction* showPresenterMode{nullptr};
 
 	// Actions for cartesian plots
-	QAction* cartesianPlotApplyToSelectionAction{nullptr};
-	QAction* cartesianPlotApplyToAllAction{nullptr};
-	QAction* cartesianPlotApplyToAllXAction{nullptr};
-	QAction* cartesianPlotApplyToAllYAction{nullptr};
-	QAction* cartesianPlotApplyToAllCursor{nullptr};
-	QAction* cartesianPlotApplyToSelectionCursor{nullptr};
+	QAction* plotApplyToSelectionAction{nullptr};
+	QAction* plotApplyToAllAction{nullptr};
+	QAction* plotApplyToAllXAction{nullptr};
+	QAction* plotApplyToAllYAction{nullptr};
+	QAction* plotApplyToAllCursor{nullptr};
+	QAction* plotApplyToSelectionCursor{nullptr};
 
-	QAction* cartesianPlotSelectionModeAction{nullptr};
-	QAction* cartesianPlotCrosshairModeAction{nullptr};
-	QAction* cartesianPlotZoomSelectionModeAction{nullptr};
-	QAction* cartesianPlotZoomXSelectionModeAction{nullptr};
-	QAction* cartesianPlotZoomYSelectionModeAction{nullptr};
-	QAction* cartesianPlotCursorModeAction{nullptr};
+	QAction* plotSelectionModeAction{nullptr};
+	QAction* plotCrosshairModeAction{nullptr};
+	QAction* plotZoomSelectionModeAction{nullptr};
+	QAction* plotZoomXSelectionModeAction{nullptr};
+	QAction* plotZoomYSelectionModeAction{nullptr};
+	QAction* plotCursorModeAction{nullptr};
 
-	QAction* scaleAutoXAction{nullptr};
-	QAction* scaleAutoYAction{nullptr};
-	QAction* scaleAutoAction{nullptr};
-	QAction* zoomInAction{nullptr};
-	QAction* zoomOutAction{nullptr};
-	QAction* zoomInXAction{nullptr};
-	QAction* zoomOutXAction{nullptr};
-	QAction* zoomInYAction{nullptr};
-	QAction* zoomOutYAction{nullptr};
-	QAction* shiftLeftXAction{nullptr};
-	QAction* shiftRightXAction{nullptr};
-	QAction* shiftUpYAction{nullptr};
-	QAction* shiftDownYAction{nullptr};
+	QAction* plotScaleAutoXAction{nullptr};
+	QAction* plotScaleAutoYAction{nullptr};
+	QAction* plotScaleAutoAction{nullptr};
+	QAction* plotZoomInAction{nullptr};
+	QAction* plotZoomOutAction{nullptr};
+	QAction* plotZoomInXAction{nullptr};
+	QAction* plotZoomOutXAction{nullptr};
+	QAction* plotZoomInYAction{nullptr};
+	QAction* plotZoomOutYAction{nullptr};
+	QAction* plotShiftLeftXAction{nullptr};
+	QAction* plotShiftRightXAction{nullptr};
+	QAction* plotShiftUpYAction{nullptr};
+	QAction* plotShiftDownYAction{nullptr};
 
 public Q_SLOTS:
 	void createContextMenu(QMenu*);
