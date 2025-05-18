@@ -246,7 +246,7 @@ void AxisDock::retranslateUi() {
 	ui.lRangeType->setToolTip(msg);
 	ui.cbRangeType->setToolTip(msg);
 
-	ui.cbMajorTicksAutoNumber->setToolTip(i18n("If enabled: Use the major tick number as base to determine the new number of ticks for nice looking values. The number of ticks might be different than the set one"));
+	ui.cbMajorTicksAutoNumber->setToolTip(i18n("If enabled: Use the major tick number as base to determine the new number of ticks for nice looking values. The number of ticks might be different than the number previously set."));
 
 	// scales
 	ui.cbScale->clear();

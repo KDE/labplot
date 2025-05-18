@@ -225,8 +225,7 @@ void Axis::init(Orientation orientation, bool loading) {
 	d->majorTicksDirection = (Axis::TicksDirection)group.readEntry(QStringLiteral("MajorTicksDirection"), (int)Axis::ticksOut);
 	d->majorTicksType = (TicksType)group.readEntry(QStringLiteral("MajorTicksType"), static_cast<int>(TicksType::TotalNumber));
 	d->majorTicksNumber = group.readEntry(QStringLiteral("MajorTicksNumber"), 6);
-	d->majorTicksSpacing = group.readEntry(QStringLiteral("MajorTicksIncrement"),
-										   0.0); // set to 0, so axisdock determines the value to not have to many labels the first time switched to Spacing
+	d->majorTicksSpacing = group.readEntry(QStringLiteral("MajorTicksIncrement"), 0.0); // set to 0, so AxisDock determines the value to not have too many labels the first time switching to Spacing
 	d->majorTicksLength = group.readEntry(QStringLiteral("MajorTicksLength"), Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point));
 
 	d->minorTicksLine->init(group);
@@ -764,9 +763,9 @@ void Axis::setMajorTicksAutoNumber(bool automatic) {
 	Q_D(Axis);
 	if (automatic != d->majorTicksAutoNumber) {
 		auto* parent = new AxisSetMajorTicksAutoNumberCmd(d, automatic, ki18n("%1: enable/disable major automatic tick numbers"));
-		// 6 looks pretty nice
-		if (automatic && 6 != d->majorTicksNumber)
-			new AxisSetMajorTicksNumberNoFinalizeCmd(d, 6, ki18n("%1: set the total number of the major ticks"), parent);
+		const int ticksNumber = 6; // this looks pretty nice
+		if (automatic && ticksNumber != d->majorTicksNumber)
+			new AxisSetMajorTicksNumberNoFinalizeCmd(d, ticksNumber, ki18n("%1: set the total number of the major ticks"), parent);
 		exec(parent);
 	}
 }
