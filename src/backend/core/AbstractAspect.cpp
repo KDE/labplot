@@ -246,8 +246,8 @@ void AbstractAspect::setComment(const QString& value) {
 	if (value == d->m_comment)
 		return;
 	exec(new PropertyChangeCommand<QString>(i18n("%1: change comment", d->m_name), &d->m_comment, value),
-		 "aspectDescriptionAboutToChange",
-		 "aspectDescriptionChanged",
+		 "aspectCommentAboutToChange",
+		 "aspectCommentChanged",
 		 QArgument<const AbstractAspect*>("const AbstractAspect*", this));
 }
 
