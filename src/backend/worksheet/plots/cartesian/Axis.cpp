@@ -259,18 +259,19 @@ void Axis::init(Orientation orientation, bool loading) {
 	d->majorGridLine->init(group);
 	d->minorGridLine->init(group);
 
-	// title label
+	// BOOKMARK(axis title): axis title text label
 	// swap the offsets (distance to the axis line in one direction and to the center of it in other direction),
-	// and add 90° for the rotation angle to for y-axis
-	KConfigGroup axisLabelGroup = config.group(QStringLiteral("AxisTitle"));
+	// rotation is saved for the other axis: add 90° to the rotation angle for the y-axis when x-axis was saved
+	// see AxisDock.cpp:BOOKMARK(axis title)
+	KConfigGroup axisTitleGroup = config.group(QStringLiteral("AxisTitle"));
 	if (d->orientation == Orientation::Horizontal) {
-		d->title->setRotationAngle(axisLabelGroup.readEntry(QStringLiteral("Rotation"), 0));
-		d->titleOffsetX = axisLabelGroup.readEntry(QStringLiteral("OffsetX"), 0.0);
-		d->titleOffsetY = axisLabelGroup.readEntry(QStringLiteral("OffsetY"), 0.0);
+		d->title->setRotationAngle(axisTitleGroup.readEntry(QStringLiteral("RotationX"), axisTitleGroup.readEntry(QStringLiteral("Rotation"), 0)));
+		d->titleOffsetX = axisTitleGroup.readEntry(QStringLiteral("OffsetX"), 0.0);
+		d->titleOffsetY = axisTitleGroup.readEntry(QStringLiteral("OffsetY"), 0.0);
 	} else {
-		d->title->setRotationAngle(axisLabelGroup.readEntry(QStringLiteral("Rotation"), 0) + 90);
-		d->titleOffsetX = axisLabelGroup.readEntry(QStringLiteral("OffsetY"), 0.0);
-		d->titleOffsetY = axisLabelGroup.readEntry(QStringLiteral("OffsetX"), 0.0);
+		d->title->setRotationAngle(axisTitleGroup.readEntry(QStringLiteral("RotationY"), axisTitleGroup.readEntry(QStringLiteral("Rotation"), 0) + 90));
+		d->titleOffsetX = axisTitleGroup.readEntry(QStringLiteral("OffsetY"), 0.0);
+		d->titleOffsetY = axisTitleGroup.readEntry(QStringLiteral("OffsetX"), 0.0);
 	}
 }
 
