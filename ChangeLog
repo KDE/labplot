@@ -2,13 +2,13 @@
 New features:
 	* [worksheet]
 		* Inset plot areas - plot areas added as child of another plot area
+		* Improve axis ticks locations. The don't need to be always from the bottom to top if it does not look nice (!700)
 
 Bug fixes:
 	* Fix using default font for axis title
 	* Fix build with system QXlsx (!693)
-	* Fix build with system qads 4.4 (!694)
+	* Fix build with system QADS 4.4 (!694)
 	* Crash on import when no projects opened (BUG 503800)
-	* Improve axis ticks locations. The don't need to be always from the bottom to top if it does not look nice (!700)
 	* Save rotation of axis title seperately for x and y axis
 
 
