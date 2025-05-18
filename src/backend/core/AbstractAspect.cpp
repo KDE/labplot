@@ -246,8 +246,8 @@ void AbstractAspect::setComment(const QString& value) {
 	if (value == d->m_comment)
 		return;
 	exec(new PropertyChangeCommand<QString>(i18n("%1: change comment", d->m_name), &d->m_comment, value),
-		 "aspectDescriptionAboutToChange",
-		 "aspectDescriptionChanged",
+		 "aspectCommentAboutToChange",
+		 "aspectCommentChanged",
 		 QArgument<const AbstractAspect*>("const AbstractAspect*", this));
 }
 
@@ -830,6 +830,13 @@ void AbstractAspect::paste(bool duplicate, int index) {
 			plot->addLegend(legend);
 		}
 
+		// special handling for inset plots to resize them to make sure they are not bigger than the plot they are being pasted into
+		if (type() == AspectType::CartesianPlot && aspect->type() == AspectType::CartesianPlot) {
+			auto* plot = static_cast<CartesianPlot*>(this);
+			auto* insetPlot = static_cast<CartesianPlot*>(aspect);
+			plot->resizeInsetPlot(insetPlot);
+		}
+
 		project()->restorePointers(aspect);
 		aspect->setIsLoading(false); // set back to false before calling retransformElements()
 		project()->retransformElements(aspect);
@@ -984,6 +991,11 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void AbstractAspect::setUndoAware(bool b) {
 	d->m_undoAware = b;
+
+	// propagate the value to the internal and hidden aspects, if available (Line, Background, etc.)
+	const auto& children = this->children<AbstractAspect>(ChildIndexFlag::IncludeHidden);
+	for (auto* child : children)
+		child->setUndoAware(b);
 }
 
 /**

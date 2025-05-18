@@ -171,6 +171,15 @@ ResizeItem::~ResizeItem() = default;
 void ResizeItem::setRect(QRectF rect) {
 	prepareGeometryChange();
 	m_rect = mapRectFromScene(rect);
+
+	// for a container in a container, the rect is in the parent's coordinates, transfer x and y coordinates
+	if (dynamic_cast<WorksheetElementContainer*>(m_container->parentAspect())) {
+		m_rect.setX(-rect.width() / 2);
+		m_rect.setY(-rect.height() / 2);
+		m_rect.setWidth(rect.width());
+		m_rect.setHeight(rect.height());
+	}
+
 	updateHandleItemPositions();
 }
 
@@ -188,7 +197,10 @@ void ResizeItem::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) {
 #define IMPL_SET_FN(TYPE, POS)                                                                                                                                 \
 	void ResizeItem::set##POS(TYPE v) {                                                                                                                        \
 		m_rect.set##POS(v);                                                                                                                                    \
-		m_container->setRect(mapRectToScene(m_rect));                                                                                                          \
+		if (m_container->parentAspect()->type() == AspectType::CartesianPlot)                                                                                  \
+			m_container->setRect(m_rect);                                                                                                                      \
+		else                                                                                                                                                   \
+			m_container->setRect(mapRectToScene(m_rect));                                                                                                      \
 	}
 
 IMPL_SET_FN(qreal, Top)

@@ -200,6 +200,8 @@ public:
 	void retransformScales();
 	void retransformScale(Dimension, int index);
 
+	void resizeInsetPlot(CartesianPlot*);
+
 	QString theme() const;
 
 	typedef CartesianPlotPrivate Private;
@@ -247,6 +249,8 @@ private:
 	QAction* addCustomPointAction{nullptr};
 	QAction* addReferenceLineAction{nullptr};
 	QAction* addReferenceRangeAction{nullptr};
+	QAction* addInsetPlotAction{nullptr};
+	QAction* addInsetPlotWithDataAction{nullptr};
 
 	// analysis menu actions
 	QAction* addDataOperationAction{nullptr};
@@ -324,6 +328,8 @@ private Q_SLOTS:
 	void addReferenceLine();
 	void addReferenceRange();
 	void addInfoElement();
+	void addInsetPlot();
+	void addInsetPlotWithData();
 
 	void updateLegend();
 	void childAdded(const AbstractAspect*);

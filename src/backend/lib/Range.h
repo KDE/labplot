@@ -189,6 +189,37 @@ public:
 		}
 		return T();
 	}
+
+	T diff() const {
+		return diff(m_scale, m_start, m_end);
+	}
+
+	static T diff(Scale scale, T start, T end) {
+		switch (scale) {
+		case RangeT::Scale::Linear:
+		case RangeT::Scale::Inverse:
+			return end - start;
+		case RangeT::Scale::Log10:
+			if (start != 0. && end / start > 0.)
+				return log10(end / start);
+			break;
+		case RangeT::Scale::Log2:
+			if (start != 0. && end / start > 0.)
+				return log2(end / start);
+			break;
+		case RangeT::Scale::Ln:
+			if (start != 0. && end / start > 0.)
+				return log(end / start);
+			break;
+		case RangeT::Scale::Sqrt:
+			if (start >= 0. && end >= 0.)
+				return std::sqrt(end) - std::sqrt(start);
+			break;
+		case RangeT::Scale::Square:
+			return end * end - start * start;
+		}
+		return T();
+	}
 	// calculate step size from number of steps
 	T stepSize(const int steps) const {
 		return (steps > 1) ? size() / static_cast<T>(steps - 1) : 0;

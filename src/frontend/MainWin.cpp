@@ -64,6 +64,7 @@
 
 #include <DockAreaWidget.h>
 #include <DockManager.h>
+#include <AutoHideSideBar.h>
 
 #include <QCloseEvent>
 #include <QElapsedTimer>
@@ -1573,7 +1574,10 @@ void MainWin::cartesianPlotMouseModeChanged(CartesianPlot::MouseMode mode) {
 			cursorWidget = new CursorDock(cursorDock);
 			cursorDock->setWidget(cursorWidget);
 			connect(cursorDock, &ads::CDockWidget::viewToggled, this, &MainWin::cursorDockVisibilityChanged);
-			m_dockManagerMain->addDockWidget(ads::CenterDockWidgetArea, cursorDock, m_propertiesDock->dockAreaWidget());
+			if (m_propertiesDock->sideTabWidget())
+				m_dockManagerMain->addAutoHideDockWidget(m_propertiesDock->sideTabWidget()->sideBarLocation(), cursorDock);
+			else
+				m_dockManagerMain->addDockWidget(ads::CenterDockWidgetArea, cursorDock, m_propertiesDock->dockAreaWidget());
 		} else
 			focusCursorDock();
 

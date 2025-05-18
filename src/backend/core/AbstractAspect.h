@@ -461,6 +461,10 @@ protected Q_SLOTS:
 Q_SIGNALS:
 	void aspectDescriptionAboutToChange(const AbstractAspect*);
 	void aspectDescriptionChanged(const AbstractAspect*);
+
+	void aspectCommentAboutToChange(const AbstractAspect*);
+	void aspectCommentChanged(const AbstractAspect*);
+
 	/*!
 	 * \brief aspectAboutToBeAdded
 	 * Signal indicating a new child was added at position \p index. Do not connect to both variants of aspectAboutToBeAdded!

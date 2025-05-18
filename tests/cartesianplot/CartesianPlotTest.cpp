@@ -4,6 +4,7 @@
 	Description          : Tests for cartesian plot
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -333,7 +334,11 @@ void CartesianPlotTest::equationCurveEquationChangedNoAutoScale() {
 	QCOMPARE(plot->autoScale(Dimension::Y, cs->index(Dimension::Y)), false);
 }
 
-void CartesianPlotTest::undoInfoElement() {
+// ##############################################################################
+// ################  initialize and add a child, undo and redo ##################
+// ##############################################################################
+
+void CartesianPlotTest::infoElementInit() {
 	auto* project = new Project();
 	auto* worksheet = new Worksheet(QStringLiteral("ws"));
 	project->addChild(worksheet);
@@ -356,6 +361,76 @@ void CartesianPlotTest::undoInfoElement() {
 	// redo
 	project->undoStack()->redo();
 	QCOMPARE(plot->childCount<InfoElement>(), 1);
+}
+
+void CartesianPlotTest::insetPlotInit() {
+	auto* project = new Project();
+	auto* worksheet = new Worksheet(QStringLiteral("ws"));
+	project->addChild(worksheet);
+
+	// parent plot area
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+
+	// inset plot area
+	auto* insetPlot = new CartesianPlot(QStringLiteral("insetPlot"));
+	plot->addChild(insetPlot);
+
+	QCOMPARE(plot->childCount<CartesianPlot>(), 1);
+
+	// undo the last step
+	project->undoStack()->undo();
+	QCOMPARE(plot->childCount<CartesianPlot>(), 0);
+
+	// redo
+	project->undoStack()->redo();
+	QCOMPARE(plot->childCount<CartesianPlot>(), 1);
+}
+
+void CartesianPlotTest::insetPlotSaveLoad() {
+	QString savePath;
+	{
+		Project project;
+
+		// worksheet
+		auto* worksheet = new Worksheet(QStringLiteral("ws"));
+		project.addChild(worksheet);
+
+		// parent plot area
+		auto* plot = new CartesianPlot(QStringLiteral("plot"));
+		worksheet->addChild(plot);
+
+		// inset plot area
+		auto* insetPlot = new CartesianPlot(QStringLiteral("insetPlot"));
+		plot->addChild(insetPlot);
+
+		SAVE_PROJECT("insetPlotSaveLoad.lml");
+	}
+
+	// load the project and check its structure
+	{
+		Project project;
+		project.load(savePath);
+
+		// worksheet
+		QCOMPARE(project.childCount<Worksheet>(), 1);
+		auto* ws = project.child<Worksheet>(0);
+		QVERIFY(ws);
+		QCOMPARE(ws->name(), QLatin1String("ws"));
+		QVERIFY(ws->type() == AspectType::Worksheet);
+
+		// parent plot area
+		QCOMPARE(ws->childCount<CartesianPlot>(), 1);
+		auto* plot = ws->child<CartesianPlot>(0);
+		QVERIFY(plot);
+		QCOMPARE(plot->name(), QLatin1String("plot"));
+
+		// inset plot area
+		QCOMPARE(plot->childCount<CartesianPlot>(), 1);
+		auto* insetPlot = plot->child<CartesianPlot>(0);
+		QVERIFY(insetPlot);
+		QCOMPARE(insetPlot->name(), QLatin1String("insetPlot"));
+	}
 }
 
 void CartesianPlotTest::axisFormat() {
@@ -445,6 +520,7 @@ void CartesianPlotTest::shiftLeftAutoScale() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setNiceExtend(true);
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
@@ -478,6 +554,7 @@ void CartesianPlotTest::shiftRightAutoScale() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setNiceExtend(true);
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
@@ -511,6 +588,7 @@ void CartesianPlotTest::shiftUpAutoScale() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setNiceExtend(true);
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
@@ -544,6 +622,7 @@ void CartesianPlotTest::shiftDownAutoScale() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setNiceExtend(true);
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);

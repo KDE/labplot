@@ -332,11 +332,11 @@ void AxisTest2::columnLabelValues() {
 	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
 	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
 	auto* yAxis = static_cast<Axis*>(axes.at(1));
+	yAxis->setMajorTicksNumber(5);
 	// auto* xAxis = static_cast<Axis*>(axes.at(0));
 
 	{
 		QCOMPARE(yAxis->labelsFormat(), Axis::LabelsFormat::Decimal);
-		const auto v = yAxis->tickLabelStrings();
 		QStringList expectedStrings{
 			QStringLiteral("2.0"),
 			QStringLiteral("2.5"),
@@ -393,6 +393,7 @@ void AxisTest2::columnLabelValuesMaxValues() {
 	}
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setNiceExtend(true);
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
@@ -538,7 +539,8 @@ void AxisTest2::customTextLabels() {
 	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
 
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
-	xAxis->setMajorTicksNumber(3, false);
+	xAxis->setMajorTicksAutoNumber(false);
+	xAxis->setMajorTicksNumber(3);
 	xAxis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
 	xAxis->setLabelsTextColumn(labelsCol);
 
@@ -615,7 +617,8 @@ void AxisTest2::customTextLabelsMoreTicksThanLabels() {
 	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
 
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
-	xAxis->setMajorTicksNumber(100, false);
+	xAxis->setMajorTicksAutoNumber(false);
+	xAxis->setMajorTicksNumber(100);
 	xAxis->setMajorTicksType(Axis::TicksType::CustomColumn);
 	xAxis->setMajorTicksColumn(valuesCol);
 	xAxis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
