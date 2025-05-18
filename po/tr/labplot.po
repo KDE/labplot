@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-17 00:38+0000\n"
-"PO-Revision-Date: 2025-05-09 23:51+0300\n"
+"POT-Creation-Date: 2025-05-18 00:38+0000\n"
+"PO-Revision-Date: 2025-05-17 22:54+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 25.04.1\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #: src/backend/core/AbstractAspect.cpp:234
@@ -362,13 +362,13 @@ msgstr "İçinde:%1"
 msgid "Import Data"
 msgstr "Veri İçe Aktar"
 
-#: src/backend/core/AbstractPart.cpp:126 src/frontend/MainWin.cpp:682
-#: src/frontend/MainWin.cpp:691
+#: src/backend/core/AbstractPart.cpp:126 src/frontend/MainWin.cpp:683
+#: src/frontend/MainWin.cpp:692
 #, kde-format
 msgid "From File..."
 msgstr "Dosyadan…"
 
-#: src/backend/core/AbstractPart.cpp:128 src/frontend/MainWin.cpp:703
+#: src/backend/core/AbstractPart.cpp:128 src/frontend/MainWin.cpp:704
 #, kde-format
 msgid "From SQL Database..."
 msgstr "SQL Veritabanından…"
@@ -393,7 +393,7 @@ msgstr "Yazdır"
 msgid "Print Preview"
 msgstr "Yazdırma Önizlemesi"
 
-#: src/backend/core/AbstractPart.cpp:147 src/frontend/MainWin.cpp:775
+#: src/backend/core/AbstractPart.cpp:147 src/frontend/MainWin.cpp:776
 #, kde-format
 msgid "&Close"
 msgstr "&Kapat"
@@ -570,19 +570,19 @@ msgstr "%1: Sütun türünü değiştir"
 msgid "%1: clear column"
 msgstr "%1: Sütunu temizle"
 
-#: src/backend/core/column/Column.cpp:573
+#: src/backend/core/column/Column.cpp:572
 #, kde-format
 msgid "%1: set random values"
 msgstr "%1: Rastgele değerler ayarla"
 
-#: src/backend/core/column/Column.cpp:1594
+#: src/backend/core/column/Column.cpp:1593
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "eksik veya geçersiz satır indeksi"
 
-#: src/backend/core/column/Column.cpp:1603
-#: src/backend/core/column/Column.cpp:1612
-#: src/backend/core/column/Column.cpp:1621
+#: src/backend/core/column/Column.cpp:1602
+#: src/backend/core/column/Column.cpp:1611
+#: src/backend/core/column/Column.cpp:1620
 #, kde-format
 msgid "invalid row value"
 msgstr "geçersiz satır değeri"
@@ -1920,7 +1920,7 @@ msgid "Unknown"
 msgstr "Bilinmeyen"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:653 src/frontend/MainWin.cpp:1999
+#: src/frontend/MainWin.cpp:654 src/frontend/MainWin.cpp:2000
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -8401,19 +8401,17 @@ msgstr "Başvuru Erimi"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:555
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2270
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2292
-#, fuzzy, kde-format
-#| msgid "As Plot Area"
+#, kde-format
 msgid "Inset Plot Area"
-msgstr "Çizim alanı olarak"
+msgstr "Ek Çizim Alanı"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
-#, fuzzy, kde-format
-#| msgid "One Plot Area per Plot"
+#, kde-format
 msgid "Inset Plot Area with Data"
-msgstr "Çizim Başına Bir Çizim Alanı"
+msgstr "Veri İçeren Ek Çizim Alanı"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:574
-#: src/frontend/MainWin.cpp:901 src/frontend/notebook/NotebookView.cpp:168
+#: src/frontend/MainWin.cpp:902 src/frontend/notebook/NotebookView.cpp:168
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:295
 #: src/frontend/worksheet/WorksheetView.cpp:434
@@ -8823,16 +8821,14 @@ msgid "Text Label"
 msgstr "Metin Etiketi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2269
-#, fuzzy, kde-format
-#| msgid "%1: set layout"
+#, kde-format
 msgid "%1: add inset plot"
-msgstr "%1: Yerleşimi ayarla"
+msgstr "%1: Ek çizim ekle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2283
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#, kde-format
 msgid "%1: add inset plot with data"
-msgstr "%1: Çizim gösterimini ayarla"
+msgstr "%1: Veri içeren ek çizim ekle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4021
 #, kde-format
@@ -12075,7 +12071,7 @@ msgid "Open LabPlot Project"
 msgstr "LabPlot Projesi Aç"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:1494
+#: src/frontend/MainWin.cpp:1495
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "LabPlot Projeleri (%1)"
@@ -12099,8 +12095,8 @@ msgstr "Klasör adı:"
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:398 src/frontend/MainWin.cpp:647
-#: src/frontend/MainWin.cpp:1981 src/frontend/SettingsDialog.cpp:64
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:398 src/frontend/MainWin.cpp:648
+#: src/frontend/MainWin.cpp:1982 src/frontend/SettingsDialog.cpp:64
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12381,7 +12377,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2890
+#: src/frontend/MainWin.cpp:2894
 #, kde-format
 msgid "Warning"
 msgstr "Uyarı"
@@ -14226,7 +14222,7 @@ msgid ""
 "installation."
 msgstr "Örnek koleksiyon dosyası %1 açılamadı. Lütfen kurulumunuzu denetleyin."
 
-#: src/frontend/GuiObserver.cpp:176 src/frontend/MainWin.cpp:1401
+#: src/frontend/GuiObserver.cpp:176 src/frontend/MainWin.cpp:1402
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -15029,13 +15025,13 @@ msgid "&Windows"
 msgstr "&Pencereler"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
-#: src/frontend/MainWin.cpp:210 src/frontend/ui/settingsworksheetpage.ui:106
+#: src/frontend/MainWin.cpp:211 src/frontend/ui/settingsworksheetpage.ui:106
 #: src/frontend/worksheet/WorksheetView.cpp:269
 #, kde-format
 msgid "Presenter Mode"
 msgstr "Sunum Kipi"
 
-#: src/frontend/MainWin.cpp:210
+#: src/frontend/MainWin.cpp:211
 #, kde-format
 msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
@@ -15043,260 +15039,260 @@ msgid ""
 msgstr ""
 "Projede kullanılabilir çalışma sayfası yok. Sunum kipi başlatılmayacak."
 
-#: src/frontend/MainWin.cpp:224
+#: src/frontend/MainWin.cpp:225
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "LabPlot %1 sürümüne hoş geldiniz"
 
-#: src/frontend/MainWin.cpp:616
+#: src/frontend/MainWin.cpp:617
 #, kde-format
 msgid "&Open Example"
 msgstr "Örnek &Aç"
 
-#: src/frontend/MainWin.cpp:637 src/frontend/MainWin.cpp:1965
+#: src/frontend/MainWin.cpp:638 src/frontend/MainWin.cpp:1966
 #, kde-format
 msgid "Workbook"
 msgstr "Çalışma Kitabı"
 
-#: src/frontend/MainWin.cpp:639
+#: src/frontend/MainWin.cpp:640
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 "Hesap tablolarını, matrisleri ve çizimleri toplamak için yeni bir çalışma "
 "kitabı oluşturur"
 
-#: src/frontend/MainWin.cpp:642 src/frontend/MainWin.cpp:1973
+#: src/frontend/MainWin.cpp:643 src/frontend/MainWin.cpp:1974
 #, kde-format
 msgid "Data Extractor"
 msgstr "Veri Çıkarıcısı"
 
-#: src/frontend/MainWin.cpp:643
+#: src/frontend/MainWin.cpp:644
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "Bir resimden veri almak için bir veri çıkarıcısı oluşturur"
 
-#: src/frontend/MainWin.cpp:649
+#: src/frontend/MainWin.cpp:650
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "Veri düzenleme için yeni bir hesap tablosu oluşturur"
 
-#: src/frontend/MainWin.cpp:655
+#: src/frontend/MainWin.cpp:656
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Veri düzenleme için yeni bir matris oluşturur"
 
-#: src/frontend/MainWin.cpp:659 src/frontend/MainWin.cpp:2017
+#: src/frontend/MainWin.cpp:660 src/frontend/MainWin.cpp:2018
 #: src/frontend/SettingsDialog.cpp:59
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:86
 #, kde-format
 msgid "Worksheet"
 msgstr "Çalışma Sayfası"
 
-#: src/frontend/MainWin.cpp:661
+#: src/frontend/MainWin.cpp:662
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "Veri çizimi için yeni bir çalışma sayfası oluşturur"
 
-#: src/frontend/MainWin.cpp:665 src/frontend/MainWin.cpp:2025
+#: src/frontend/MainWin.cpp:666 src/frontend/MainWin.cpp:2026
 #, kde-format
 msgid "Note"
 msgstr "Not"
 
-#: src/frontend/MainWin.cpp:666
+#: src/frontend/MainWin.cpp:667
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Gelişigüzel metinler için yeni bir not oluşturur"
 
-#: src/frontend/MainWin.cpp:670 src/frontend/MainWin.cpp:1957
+#: src/frontend/MainWin.cpp:671 src/frontend/MainWin.cpp:1958
 #, kde-format
 msgid "Folder"
 msgstr "Klasör"
 
-#: src/frontend/MainWin.cpp:671
+#: src/frontend/MainWin.cpp:672
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "Sayfaları ve diğer ögeleri toplamak için yeni bir klasör oluşturur"
 
-#: src/frontend/MainWin.cpp:676
+#: src/frontend/MainWin.cpp:677
 #, kde-format
 msgid "Live Data Source..."
 msgstr "Canlı Veri Kaynağı…"
 
-#: src/frontend/MainWin.cpp:677
+#: src/frontend/MainWin.cpp:678
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 "Gerçek zamanlı bir aygıttan veri okumak için yeni bir canlı veri kaynağı "
 "oluşturur"
 
-#: src/frontend/MainWin.cpp:684 src/frontend/MainWin.cpp:693
+#: src/frontend/MainWin.cpp:685 src/frontend/MainWin.cpp:694
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Normal bir dosyadan veri içe aktar"
 
-#: src/frontend/MainWin.cpp:698
+#: src/frontend/MainWin.cpp:699
 #, kde-format
 msgid "From kaggle.com..."
 msgstr "kaggle.com’dan…"
 
-#: src/frontend/MainWin.cpp:699
+#: src/frontend/MainWin.cpp:700
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr "kaggle.com’dan Veri İçe Aktar"
 
-#: src/frontend/MainWin.cpp:704
+#: src/frontend/MainWin.cpp:705
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Bir SQL veritabanından veri içe aktar"
 
-#: src/frontend/MainWin.cpp:708
+#: src/frontend/MainWin.cpp:709
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Veri Kümesi Koleksiyonundan…"
 
-#: src/frontend/MainWin.cpp:709
+#: src/frontend/MainWin.cpp:710
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr "Çevrimiçi Veri Kümesinden Veri İçe Akta"
 
-#: src/frontend/MainWin.cpp:713
+#: src/frontend/MainWin.cpp:714
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "LabPlot Projesi…"
 
-#: src/frontend/MainWin.cpp:714
+#: src/frontend/MainWin.cpp:715
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Bir LabPlot proje dosyasından (.lml) bir proje içe aktar"
 
-#: src/frontend/MainWin.cpp:719
+#: src/frontend/MainWin.cpp:720
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Origin Projesi (OPJ)…"
 
-#: src/frontend/MainWin.cpp:720
+#: src/frontend/MainWin.cpp:721
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr "Bir OriginLab Origin proje dosyasından bir proje içe aktar (.opj)"
 
-#: src/frontend/MainWin.cpp:725
+#: src/frontend/MainWin.cpp:726
 #, kde-format
 msgid "Export..."
 msgstr "Dışa Aktar…"
 
-#: src/frontend/MainWin.cpp:726
+#: src/frontend/MainWin.cpp:727
 #, kde-format
 msgid "Export selected element"
 msgstr "Seçili ögeyi dışa aktar"
 
-#: src/frontend/MainWin.cpp:732 src/frontend/MainWin.cpp:2506
-#: src/frontend/MainWin.cpp:2514
+#: src/frontend/MainWin.cpp:733 src/frontend/MainWin.cpp:2510
+#: src/frontend/MainWin.cpp:2518
 #, kde-format
 msgid "Share"
 msgstr "Paylaş"
 
-#: src/frontend/MainWin.cpp:737
+#: src/frontend/MainWin.cpp:738
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Renk Haritası Tarayıcısı"
 
-#: src/frontend/MainWin.cpp:738
+#: src/frontend/MainWin.cpp:739
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "Kullanılabilir renk haritaları içinde dolaşmak için bir pencere açın."
 
-#: src/frontend/MainWin.cpp:747
+#: src/frontend/MainWin.cpp:748
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "FITS Üst Veri Düzenleyicisi…"
 
-#: src/frontend/MainWin.cpp:748
+#: src/frontend/MainWin.cpp:749
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "FITS üst verisi düzenlemek için düzenleyici aç"
 
-#: src/frontend/MainWin.cpp:757
+#: src/frontend/MainWin.cpp:758
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Geri Al/Yinele Geçmişi…"
 
-#: src/frontend/MainWin.cpp:777
+#: src/frontend/MainWin.cpp:778
 #, kde-format
 msgid "Close the active window"
 msgstr "Etkin pencereyi kapat"
 
-#: src/frontend/MainWin.cpp:780
+#: src/frontend/MainWin.cpp:781
 #, kde-format
 msgid "Close &All"
 msgstr "&Tümünü Kapat"
 
-#: src/frontend/MainWin.cpp:781
+#: src/frontend/MainWin.cpp:782
 #, kde-format
 msgid "Close all the windows"
 msgstr "Tüm pencereleri kapat"
 
-#: src/frontend/MainWin.cpp:784
+#: src/frontend/MainWin.cpp:785
 #, kde-format
 msgid "Ne&xt"
 msgstr "Sonra&ki"
 
-#: src/frontend/MainWin.cpp:786
+#: src/frontend/MainWin.cpp:787
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Odağı sonraki pencereye taşı"
 
-#: src/frontend/MainWin.cpp:789
+#: src/frontend/MainWin.cpp:790
 #, kde-format
 msgid "Pre&vious"
 msgstr "Ön&ceki"
 
-#: src/frontend/MainWin.cpp:791
+#: src/frontend/MainWin.cpp:792
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Odağu önceki pencereye taşı"
 
-#: src/frontend/MainWin.cpp:798
+#: src/frontend/MainWin.cpp:799
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Yalnızca Geçerli &Klasör"
 
-#: src/frontend/MainWin.cpp:803
+#: src/frontend/MainWin.cpp:804
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Geçerli Klasör ve &Alt Klasörler"
 
-#: src/frontend/MainWin.cpp:807
+#: src/frontend/MainWin.cpp:808
 #, kde-format
 msgid "&All"
 msgstr "&Tümü"
 
-#: src/frontend/MainWin.cpp:829
+#: src/frontend/MainWin.cpp:830
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Bellek Kullanımını Göster"
 
-#: src/frontend/MainWin.cpp:837
+#: src/frontend/MainWin.cpp:838
 #, kde-format
 msgid "Project Explorer"
 msgstr "Proje Tarayıcısı"
 
-#: src/frontend/MainWin.cpp:842
+#: src/frontend/MainWin.cpp:843
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Özellikler Tarayıcısı"
 
-#: src/frontend/MainWin.cpp:847
+#: src/frontend/MainWin.cpp:848
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "Çalışma Sayfası Önizlemesi"
 
-#: src/frontend/MainWin.cpp:870
+#: src/frontend/MainWin.cpp:871
 #, kde-format
 msgid "Configure CAS..."
 msgstr "CAS’ı Yapılandır…"
 
-#: src/frontend/MainWin.cpp:871
+#: src/frontend/MainWin.cpp:872
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
@@ -15305,118 +15301,118 @@ msgstr ""
 "Kullanılabilir sistemleri değiştirmek veya yenilerini etkinleştirmek için "
 "Bilgisayar Cebir Sistemlerinin ayarlarını açar"
 
-#: src/frontend/MainWin.cpp:931
+#: src/frontend/MainWin.cpp:932
 #, kde-format
 msgid "Window Visibility"
 msgstr "Pencere Görünürlüğü"
 
-#: src/frontend/MainWin.cpp:948
+#: src/frontend/MainWin.cpp:949
 #, kde-format
 msgid "Color Scheme"
 msgstr "Renk Şeması"
 
-#: src/frontend/MainWin.cpp:1006
+#: src/frontend/MainWin.cpp:1007
 #, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "Geçerli “%1” projesi değiştirildi. Kaydetmek istiyor musunuz?"
 
-#: src/frontend/MainWin.cpp:1007
+#: src/frontend/MainWin.cpp:1008
 #, kde-format
 msgid "Save Project"
 msgstr "Projeyi Kaydet"
 
-#: src/frontend/MainWin.cpp:1362
+#: src/frontend/MainWin.cpp:1363
 #, kde-format
 msgid "%1: created"
 msgstr "%1: Oluşturuldu"
 
-#: src/frontend/MainWin.cpp:1388
+#: src/frontend/MainWin.cpp:1389
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Proje Tarayıcısı"
 
-#: src/frontend/MainWin.cpp:1413
+#: src/frontend/MainWin.cpp:1414
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Çalışma Sayfası Önizlemesi"
 
-#: src/frontend/MainWin.cpp:1422
+#: src/frontend/MainWin.cpp:1423
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "İçerik"
 
-#: src/frontend/MainWin.cpp:1499
+#: src/frontend/MainWin.cpp:1500
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Origin Projeleri (%1)"
 
-#: src/frontend/MainWin.cpp:1505
+#: src/frontend/MainWin.cpp:1506
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "Cantor Projeleri (*.cws)"
 
-#: src/frontend/MainWin.cpp:1506
+#: src/frontend/MainWin.cpp:1507
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Jupyter Defterleri (*.ipynb)"
 
-#: src/frontend/MainWin.cpp:1513
+#: src/frontend/MainWin.cpp:1514
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Tüm desteklenen dosyalar (%1)"
 
-#: src/frontend/MainWin.cpp:1517
+#: src/frontend/MainWin.cpp:1518
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Proje Aç"
 
-#: src/frontend/MainWin.cpp:1534
+#: src/frontend/MainWin.cpp:1535
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "%1 proje dosyası halihazırda açık."
 
-#: src/frontend/MainWin.cpp:1534 src/frontend/MainWin.cpp:1542
-#: src/frontend/MainWin.cpp:1547
+#: src/frontend/MainWin.cpp:1535 src/frontend/MainWin.cpp:1543
+#: src/frontend/MainWin.cpp:1548
 #, kde-format
 msgid "Open Project"
 msgstr "Proje Aç"
 
-#: src/frontend/MainWin.cpp:1542
+#: src/frontend/MainWin.cpp:1543
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "Proje dosyası %1 yok."
 
-#: src/frontend/MainWin.cpp:1547
+#: src/frontend/MainWin.cpp:1548
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "Proje dosyası %1 okunamadı."
 
-#: src/frontend/MainWin.cpp:1555
+#: src/frontend/MainWin.cpp:1556
 #, kde-format
 msgid "Loading %1..."
 msgstr "%1 yükleniyor…"
 
-#: src/frontend/MainWin.cpp:1610
+#: src/frontend/MainWin.cpp:1611
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: Açıldı"
 
-#: src/frontend/MainWin.cpp:1645
+#: src/frontend/MainWin.cpp:1646
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Proje başarılı bir biçimde açıldı (%1 saniyede)."
 
-#: src/frontend/MainWin.cpp:1737
+#: src/frontend/MainWin.cpp:1738
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Projeyi Farklı Kaydet"
 
-#: src/frontend/MainWin.cpp:1739
+#: src/frontend/MainWin.cpp:1740
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15425,70 +15421,70 @@ msgstr ""
 "LabPlot Projeleri (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML."
 "BZ2 *.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:1766
+#: src/frontend/MainWin.cpp:1767
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Geçici dosya yazma için açılamadı."
 
-#: src/frontend/MainWin.cpp:1846
+#: src/frontend/MainWin.cpp:1847
 #, kde-format
 msgid "Project saved"
 msgstr "Proje kaydedildi"
 
-#: src/frontend/MainWin.cpp:1862
+#: src/frontend/MainWin.cpp:1863
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "“%1” dosyası kaydedilemedi."
 
-#: src/frontend/MainWin.cpp:1867
+#: src/frontend/MainWin.cpp:1868
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "“%1” dosyası yazma için açılamadı."
 
-#: src/frontend/MainWin.cpp:1917
+#: src/frontend/MainWin.cpp:1918
 #, kde-format
 msgid "Changed"
 msgstr "Değiştirildi"
 
-#: src/frontend/MainWin.cpp:1932 src/frontend/MainWin.cpp:1944
+#: src/frontend/MainWin.cpp:1933 src/frontend/MainWin.cpp:1945
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "%1, yazdırma için hazırlanıyor"
 
-#: src/frontend/MainWin.cpp:1934 src/frontend/MainWin.cpp:1946
+#: src/frontend/MainWin.cpp:1935 src/frontend/MainWin.cpp:1947
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 yazdırıldı"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2469
+#: src/frontend/MainWin.cpp:2470
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
 #: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Cursor"
 msgstr "İmleç"
 
-#: src/frontend/MainWin.cpp:2506
+#: src/frontend/MainWin.cpp:2510
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "Projeyi paylaşırken bir sorun oluştu: %1"
 
-#: src/frontend/MainWin.cpp:2510
+#: src/frontend/MainWin.cpp:2514
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Proje başarıyla paylaşıldı"
 
-#: src/frontend/MainWin.cpp:2513
+#: src/frontend/MainWin.cpp:2517
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Paylaşılan projeyi şurada bulabilirsiniz: <a href=\"%1\">%1</a>"
 
-#: src/frontend/MainWin.cpp:2786
+#: src/frontend/MainWin.cpp:2790
 #, kde-format
 msgid "Kaggle CLI tool not found"
 msgstr "Kaggle komut satırı aracı bulunamadı"
 
-#: src/frontend/MainWin.cpp:2787
+#: src/frontend/MainWin.cpp:2791
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
@@ -15497,32 +15493,32 @@ msgstr ""
 "Uygulama ayarlarında Kaggle komut satırı aracına olan yolu sağlayın ve "
 "yeniden deneyin."
 
-#: src/frontend/MainWin.cpp:2853
+#: src/frontend/MainWin.cpp:2857
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 dışa aktarıldı"
 
-#: src/frontend/MainWin.cpp:2860
+#: src/frontend/MainWin.cpp:2864
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS dosyaları kaydedildi"
 
-#: src/frontend/MainWin.cpp:2872
+#: src/frontend/MainWin.cpp:2876
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT İstemcisi%1"
 
-#: src/frontend/MainWin.cpp:2890
+#: src/frontend/MainWin.cpp:2894
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Bu makineyle halihazırda bir MQTT istemcisi var!"
 
-#: src/frontend/MainWin.cpp:2894
+#: src/frontend/MainWin.cpp:2898
 #, kde-format
 msgid "Live data source%1"
 msgstr "Canlı veri kaynağı%1"
 
-#: src/frontend/MainWin.cpp:2945
+#: src/frontend/MainWin.cpp:2949
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Yeni bir %1 defteri oluşturur"
