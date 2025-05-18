@@ -1743,19 +1743,7 @@ void WorksheetView::handleCartesianPlotSelected(CartesianPlot* plot) {
 		plotCursorModeAction->setEnabled(true);
 }
 
-void WorksheetView::handleReferenceRangeSelected() {
-	auto l = static_cast<ReferenceRange*>(m_selectedElement);
-	bool vert = (l->orientation() == ReferenceRange::Orientation::Vertical);
-	handleReferences(vert);
-}
-
-void WorksheetView::handleReferenceLineSelected() {
-	auto l = static_cast<ReferenceLine*>(m_selectedElement);
-	bool vert = (l->orientation() == ReferenceLine::Orientation::Vertical);
-	handleReferences(vert);
-}
-
-void WorksheetView::handleReferences(bool vertical) {
+void WorksheetView::handleReferences(WorksheetElement::Orientation orientation) {
 	/* Action to All: action is applied to all ranges
 	 *	- Disable
 	 * Action to X: action is applied to all x ranges
@@ -1774,6 +1762,7 @@ void WorksheetView::handleReferences(bool vertical) {
 	plotZoomSelectionModeAction->setEnabled(false);
 	plotScaleAutoAction->setEnabled(false);
 
+	const bool vertical = (orientation == WorksheetElement::Orientation::Vertical);
 	switch (m_worksheet->cartesianPlotActionMode()) {
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAll:
 		plotZoomXSelectionModeAction->setEnabled(false);
@@ -2020,11 +2009,13 @@ void WorksheetView::handleCartesianPlotActions() {
 		} else if (w->type() == AspectType::ReferenceLine) {
 			handled = true;
 			m_selectedElement = w;
-			handleReferenceLineSelected();
+			const auto orientation = static_cast<ReferenceLine*>(w)->orientation();
+			handleReferences(orientation);
 		} else if (w->type() == AspectType::ReferenceRange) {
 			handled = true;
 			m_selectedElement = w;
-			handleReferenceRangeSelected();
+			const auto orientation = static_cast<ReferenceRange*>(w)->orientation();
+			handleReferences(orientation);
 		} else if (w->type() == AspectType::Axis) {
 			handled = true;
 			m_selectedElement = w;

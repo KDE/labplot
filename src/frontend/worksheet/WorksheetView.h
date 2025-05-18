@@ -93,9 +93,7 @@ private:
 	void handleAxisSelected(const Axis*);
 	void handleCartesianPlotSelected(CartesianPlot*);
 	void handlePlotSelected();
-	void handleReferenceLineSelected();
-	void handleReferenceRangeSelected();
-	void handleReferences(bool vertical);
+	void handleReferences(WorksheetElement::Orientation);
 	bool eventFilter(QObject* watched, QEvent*) override;
 	void updateLabelsZoom() const;
 	void updateScrollBarPolicy();
