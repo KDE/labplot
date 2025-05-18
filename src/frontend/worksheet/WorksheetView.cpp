@@ -346,91 +346,91 @@ void WorksheetView::initActions() {
  */
 void WorksheetView::initPlotNavigationActions() {
 	// mouse mode actions
-	auto* plotMouseModeActionGroup = new QActionGroup(this);
-	plotMouseModeActionGroup->setExclusive(true);
-	plotSelectionModeAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-cursor-arrow")), i18n("Select and Edit"), plotMouseModeActionGroup);
+	m_plotMouseModeActionGroup = new QActionGroup(this);
+	m_plotMouseModeActionGroup->setExclusive(true);
+	plotSelectionModeAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-cursor-arrow")), i18n("Select and Edit"), m_plotMouseModeActionGroup);
 	plotSelectionModeAction->setData(static_cast<int>(CartesianPlot::MouseMode::Selection));
 	plotSelectionModeAction->setCheckable(true);
 	plotSelectionModeAction->setChecked(true);
 
-	plotCrosshairModeAction = new QAction(QIcon::fromTheme(QStringLiteral("crosshairs")), i18n("Crosshair"), plotMouseModeActionGroup);
+	plotCrosshairModeAction = new QAction(QIcon::fromTheme(QStringLiteral("crosshairs")), i18n("Crosshair"), m_plotMouseModeActionGroup);
 	plotCrosshairModeAction->setData(static_cast<int>(CartesianPlot::MouseMode::Crosshair));
 	plotCrosshairModeAction->setCheckable(true);
 
 	plotZoomSelectionModeAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-select")), i18n("Select Region and Zoom In"), plotMouseModeActionGroup);
+		new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-select")), i18n("Select Region and Zoom In"), m_plotMouseModeActionGroup);
 	plotZoomSelectionModeAction->setData(static_cast<int>(CartesianPlot::MouseMode::ZoomSelection));
 	plotZoomSelectionModeAction->setCheckable(true);
 
 	plotZoomXSelectionModeAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-select-x")), i18n("Select X-Region and Zoom In"), plotMouseModeActionGroup);
+		new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-select-x")), i18n("Select X-Region and Zoom In"), m_plotMouseModeActionGroup);
 	plotZoomXSelectionModeAction->setData(static_cast<int>(CartesianPlot::MouseMode::ZoomXSelection));
 	plotZoomXSelectionModeAction->setCheckable(true);
 
 	plotZoomYSelectionModeAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-select-y")), i18n("Select Y-Region and Zoom In"), plotMouseModeActionGroup);
+		new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-select-y")), i18n("Select Y-Region and Zoom In"), m_plotMouseModeActionGroup);
 	plotZoomYSelectionModeAction->setData(static_cast<int>(CartesianPlot::MouseMode::ZoomYSelection));
 	plotZoomYSelectionModeAction->setCheckable(true);
 
 	// TODO: change ICON
-	plotCursorModeAction = new QAction(QIcon::fromTheme(QStringLiteral("debug-execute-from-cursor")), i18n("Cursor"), plotMouseModeActionGroup);
+	plotCursorModeAction = new QAction(QIcon::fromTheme(QStringLiteral("debug-execute-from-cursor")), i18n("Cursor"), m_plotMouseModeActionGroup);
 	plotCursorModeAction->setData(static_cast<int>(CartesianPlot::MouseMode::Cursor));
 	plotCursorModeAction->setCheckable(true);
 
-	connect(plotMouseModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::changePlotMouseMode);
+	connect(m_plotMouseModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::changePlotMouseMode);
 
 	// navigation actions
-	auto* plotNavigationActionGroup = new QActionGroup(this);
-	plotScaleAutoAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-auto-scale-all")), i18n("Auto Scale"), plotNavigationActionGroup);
+	m_plotNavigationActionGroup = new QActionGroup(this);
+	plotScaleAutoAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-auto-scale-all")), i18n("Auto Scale"), m_plotNavigationActionGroup);
 	plotScaleAutoAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAuto));
 	plotScaleAutoAction->setShortcut(Qt::Key_1);
 
-	plotScaleAutoXAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-auto-scale-x")), i18n("Auto Scale X"), plotNavigationActionGroup);
+	plotScaleAutoXAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-auto-scale-x")), i18n("Auto Scale X"), m_plotNavigationActionGroup);
 	plotScaleAutoXAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAutoX));
 	plotScaleAutoXAction->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_X);
 
-	plotScaleAutoYAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-auto-scale-y")), i18n("Auto Scale Y"), plotNavigationActionGroup);
+	plotScaleAutoYAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-auto-scale-y")), i18n("Auto Scale Y"), m_plotNavigationActionGroup);
 	plotScaleAutoYAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAutoY));
 	plotScaleAutoYAction->setShortcut(Qt::CTRL | Qt::SHIFT | Qt::Key_Y);
 
-	plotZoomInAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-in")), i18n("Zoom In"), plotNavigationActionGroup);
+	plotZoomInAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-in")), i18n("Zoom In"), m_plotNavigationActionGroup);
 	plotZoomInAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomIn));
 	plotZoomInAction->setShortcut(Qt::Key_Plus);
 
-	plotZoomOutAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-out")), i18n("Zoom Out"), plotNavigationActionGroup);
+	plotZoomOutAction = new QAction(QIcon::fromTheme(QStringLiteral("zoom-out")), i18n("Zoom Out"), m_plotNavigationActionGroup);
 	plotZoomOutAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomOut));
 	plotZoomOutAction->setShortcut(Qt::Key_Minus);
 
-	plotZoomInXAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-in-x")), i18n("Zoom In X"), plotNavigationActionGroup);
+	plotZoomInXAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-in-x")), i18n("Zoom In X"), m_plotNavigationActionGroup);
 	plotZoomInXAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomInX));
 	plotZoomInXAction->setShortcut(Qt::Key_X);
 
-	plotZoomOutXAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-out-x")), i18n("Zoom Out X"), plotNavigationActionGroup);
+	plotZoomOutXAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-out-x")), i18n("Zoom Out X"), m_plotNavigationActionGroup);
 	plotZoomOutXAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomOutX));
 	plotZoomOutXAction->setShortcut(Qt::SHIFT | Qt::Key_X);
 
-	plotZoomInYAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-in-y")), i18n("Zoom In Y"), plotNavigationActionGroup);
+	plotZoomInYAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-in-y")), i18n("Zoom In Y"), m_plotNavigationActionGroup);
 	plotZoomInYAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomInY));
 	plotZoomInYAction->setShortcut(Qt::Key_Y);
 
-	plotZoomOutYAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-out-y")), i18n("Zoom Out Y"), plotNavigationActionGroup);
+	plotZoomOutYAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-out-y")), i18n("Zoom Out Y"), m_plotNavigationActionGroup);
 	plotZoomOutYAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomOutY));
 	plotZoomOutYAction->setShortcut(Qt::SHIFT | Qt::Key_Y);
 
-	plotShiftLeftXAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-left-x")), i18n("Shift Left X"), plotNavigationActionGroup);
+	plotShiftLeftXAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-left-x")), i18n("Shift Left X"), m_plotNavigationActionGroup);
 	plotShiftLeftXAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ShiftLeftX));
-	plotShiftRightXAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-right-x")), i18n("Shift Right X"), plotNavigationActionGroup);
+	plotShiftRightXAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-right-x")), i18n("Shift Right X"), m_plotNavigationActionGroup);
 	plotShiftRightXAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ShiftRightX));
-	plotShiftUpYAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-up-y")), i18n("Shift Up Y"), plotNavigationActionGroup);
+	plotShiftUpYAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-up-y")), i18n("Shift Up Y"), m_plotNavigationActionGroup);
 	plotShiftUpYAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ShiftUpY));
-	plotShiftDownYAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-down-y")), i18n("Shift Down Y"), plotNavigationActionGroup);
+	plotShiftDownYAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-down-y")), i18n("Shift Down Y"), m_plotNavigationActionGroup);
 	plotShiftDownYAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ShiftDownY));
 
-	connect(plotNavigationActionGroup, &QActionGroup::triggered, this, &WorksheetView::changePlotNavigation);
+	connect(m_plotNavigationActionGroup, &QActionGroup::triggered, this, &WorksheetView::changePlotNavigation);
 
 	m_plotActionsInitialized = true;
 
-	handleCartesianPlotActions();
+	updateCartesianPlotActions();
 }
 
 void WorksheetView::initMenus() {
@@ -1392,7 +1392,7 @@ void WorksheetView::addNew(QAction* action) {
 	} else if (aspect->type() == AspectType::CartesianPlot)
 		static_cast<CartesianPlot*>(aspect)->retransform();
 
-	handleCartesianPlotActions();
+	updateCartesianPlotActions();
 
 	// fade-in the newly added element.
 	// TODO: don't do any fade-in for text labels - when a text label is added
@@ -1579,7 +1579,7 @@ void WorksheetView::selectItem(QGraphicsItem* item) {
 	m_suppressSelectionChangedEvent = true;
 	item->setSelected(true);
 	m_selectedItems << item;
-	handleCartesianPlotActions();
+	updateCartesianPlotActions();
 	m_suppressSelectionChangedEvent = false;
 }
 
@@ -1592,7 +1592,7 @@ void WorksheetView::deselectItem(QGraphicsItem* item) {
 	m_suppressSelectionChangedEvent = true;
 	item->setSelected(false);
 	m_selectedItems.removeOne(item);
-	handleCartesianPlotActions();
+	updateCartesianPlotActions();
 	m_suppressSelectionChangedEvent = false;
 }
 
@@ -1641,10 +1641,10 @@ void WorksheetView::selectionChanged() {
 	}
 
 	m_selectedItems = std::move(items);
-	handleCartesianPlotActions();
+	updateCartesianPlotActions();
 }
 
-void WorksheetView::handleCartesianPlotSelected(CartesianPlot* plot) {
+void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot, const QActionGroup* mouseModeActionGroup, const QActionGroup* navigationActionGroup) {
 	/* Action to All: action is applied to all ranges
 	 *	- Applied to all plots and all ranges
 	 * Action to X: action is applied to all x ranges
@@ -1664,19 +1664,10 @@ void WorksheetView::handleCartesianPlotSelected(CartesianPlot* plot) {
 		plotZoomSelectionModeAction->setEnabled(true);
 		plotZoomXSelectionModeAction->setEnabled(true);
 		plotZoomYSelectionModeAction->setEnabled(true);
-		plotZoomInAction->setEnabled(true);
-		plotZoomOutAction->setEnabled(true);
-		plotZoomInXAction->setEnabled(true);
-		plotZoomOutXAction->setEnabled(true);
-		plotZoomInYAction->setEnabled(true);
-		plotZoomOutYAction->setEnabled(true);
-		plotShiftLeftXAction->setEnabled(true);
-		plotShiftRightXAction->setEnabled(true);
-		plotShiftUpYAction->setEnabled(true);
-		plotShiftDownYAction->setEnabled(true);
-		plotScaleAutoAction->setEnabled(true);
-		plotScaleAutoXAction->setEnabled(true);
-		plotScaleAutoYAction->setEnabled(true);
+
+		// navigation actions
+		for (auto* action : navigationActionGroup->actions())
+			action->setEnabled(true);
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToSelection: {
 		bool enableX = plot->rangeCount(Dimension::X) == 1;
@@ -1685,56 +1676,39 @@ void WorksheetView::handleCartesianPlotSelected(CartesianPlot* plot) {
 		plotZoomSelectionModeAction->setEnabled(enableX && enableY);
 		plotZoomXSelectionModeAction->setEnabled(enableX);
 		plotZoomYSelectionModeAction->setEnabled(enableY);
-		plotZoomInAction->setEnabled(true);
-		plotZoomOutAction->setEnabled(true);
-		plotZoomInXAction->setEnabled(true);
-		plotZoomOutXAction->setEnabled(true);
-		plotZoomInYAction->setEnabled(true);
-		plotZoomOutYAction->setEnabled(true);
-		plotShiftLeftXAction->setEnabled(true);
-		plotShiftRightXAction->setEnabled(true);
-		plotShiftUpYAction->setEnabled(true);
-		plotShiftDownYAction->setEnabled(true);
-		plotScaleAutoAction->setEnabled(true);
-		plotScaleAutoXAction->setEnabled(true);
-		plotScaleAutoYAction->setEnabled(true);
+
+		// navigation actions
+		for (auto* action : navigationActionGroup->actions())
+			action->setEnabled(true);
 		break;
 	}
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllX:
 		plotZoomSelectionModeAction->setEnabled(false);
 		plotZoomXSelectionModeAction->setEnabled(true);
 		plotZoomYSelectionModeAction->setEnabled(true);
-		plotZoomInAction->setEnabled(false);
-		plotZoomOutAction->setEnabled(false);
-		plotZoomInXAction->setEnabled(true);
-		plotZoomOutXAction->setEnabled(true);
-		plotZoomInYAction->setEnabled(false);
-		plotZoomOutYAction->setEnabled(false);
-		plotShiftLeftXAction->setEnabled(true);
-		plotShiftRightXAction->setEnabled(true);
-		plotShiftUpYAction->setEnabled(false);
-		plotShiftDownYAction->setEnabled(false);
-		plotScaleAutoAction->setEnabled(false);
-		plotScaleAutoXAction->setEnabled(true);
-		plotScaleAutoYAction->setEnabled(true);
+
+		// navigation actions
+		for (auto* action : navigationActionGroup->actions()) {
+			const auto op = static_cast<CartesianPlot::NavigationOperation>(action->data().toInt());
+			const bool x = (op == CartesianPlot::NavigationOperation::ZoomInX ||op == CartesianPlot::NavigationOperation::ZoomOutX
+				||  op == CartesianPlot::NavigationOperation::ShiftLeftX ||  op == CartesianPlot::NavigationOperation::ShiftRightX
+				||  op == CartesianPlot::NavigationOperation::ScaleAutoX);
+			action->setEnabled(x);
+		}
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllY:
 		plotZoomSelectionModeAction->setEnabled(false);
 		plotZoomXSelectionModeAction->setEnabled(true);
 		plotZoomYSelectionModeAction->setEnabled(true);
-		plotZoomInAction->setEnabled(false);
-		plotZoomOutAction->setEnabled(false);
-		plotZoomInXAction->setEnabled(false);
-		plotZoomOutXAction->setEnabled(false);
-		plotZoomInYAction->setEnabled(true);
-		plotZoomOutYAction->setEnabled(true);
-		plotShiftLeftXAction->setEnabled(false);
-		plotShiftRightXAction->setEnabled(false);
-		plotShiftUpYAction->setEnabled(true);
-		plotShiftDownYAction->setEnabled(true);
-		plotScaleAutoAction->setEnabled(false);
-		plotScaleAutoXAction->setEnabled(false);
-		plotScaleAutoYAction->setEnabled(true);
+
+		// navigation actions
+		for (auto* action : navigationActionGroup->actions()) {
+			const auto op = static_cast<CartesianPlot::NavigationOperation>(action->data().toInt());
+			const bool y = (op == CartesianPlot::NavigationOperation::ZoomInY ||op == CartesianPlot::NavigationOperation::ZoomOutY
+				||  op == CartesianPlot::NavigationOperation::ShiftUpY ||  op == CartesianPlot::NavigationOperation::ShiftDownY
+				||  op == CartesianPlot::NavigationOperation::ScaleAutoY);
+			action->setEnabled(y);
+		}
 		break;
 	}
 
@@ -1743,7 +1717,7 @@ void WorksheetView::handleCartesianPlotSelected(CartesianPlot* plot) {
 		plotCursorModeAction->setEnabled(true);
 }
 
-void WorksheetView::handleReferences(WorksheetElement::Orientation orientation) {
+void WorksheetView::handleReferences(WorksheetElement::Orientation orientation, const QActionGroup* mouseModeActionGroup, const QActionGroup* navigationActionGroup) {
 	/* Action to All: action is applied to all ranges
 	 *	- Disable
 	 * Action to X: action is applied to all x ranges
@@ -1767,65 +1741,53 @@ void WorksheetView::handleReferences(WorksheetElement::Orientation orientation) 
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAll:
 		plotZoomXSelectionModeAction->setEnabled(false);
 		plotZoomYSelectionModeAction->setEnabled(false);
-		plotZoomInXAction->setEnabled(false);
-		plotZoomOutXAction->setEnabled(false);
-		plotZoomInYAction->setEnabled(false);
-		plotZoomOutYAction->setEnabled(false);
-		plotShiftLeftXAction->setEnabled(false);
-		plotShiftRightXAction->setEnabled(false);
-		plotShiftUpYAction->setEnabled(false);
-		plotShiftDownYAction->setEnabled(false);
-		plotScaleAutoXAction->setEnabled(vertical);
-		plotScaleAutoYAction->setEnabled(!vertical);
+
+		// navigation actions
+		for (auto* action : navigationActionGroup->actions()) {
+			const auto op = static_cast<CartesianPlot::NavigationOperation>(action->data().toInt());
+			if (op == CartesianPlot::NavigationOperation::ScaleAutoX)
+				action->setEnabled(vertical);
+			else if (op == CartesianPlot::NavigationOperation::ScaleAutoY)
+				action->setEnabled(!vertical);
+			else
+				action->setEnabled(false);
+		}
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToSelection:
 		plotZoomXSelectionModeAction->setEnabled(vertical);
 		plotZoomYSelectionModeAction->setEnabled(!vertical);
-		plotZoomInXAction->setEnabled(vertical);
-		plotZoomOutXAction->setEnabled(vertical);
-		plotZoomInYAction->setEnabled(!vertical);
-		plotZoomOutYAction->setEnabled(!vertical);
-		plotShiftLeftXAction->setEnabled(vertical);
-		plotShiftRightXAction->setEnabled(vertical);
-		plotShiftUpYAction->setEnabled(!vertical);
-		plotShiftDownYAction->setEnabled(!vertical);
-		plotScaleAutoXAction->setEnabled(vertical);
-		plotScaleAutoYAction->setEnabled(!vertical);
+
+		// navigation actions
+		for (auto* action : navigationActionGroup->actions()) {
+			const auto op = static_cast<CartesianPlot::NavigationOperation>(action->data().toInt());
+			const bool x = (op == CartesianPlot::NavigationOperation::ZoomInX ||op == CartesianPlot::NavigationOperation::ZoomOutX
+				||  op == CartesianPlot::NavigationOperation::ShiftLeftX ||  op == CartesianPlot::NavigationOperation::ShiftRightX
+				||  op == CartesianPlot::NavigationOperation::ScaleAutoX);
+			if (x)
+				action->setEnabled(vertical);
+			else
+				action->setEnabled(!vertical);
+		}
+
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllX:
 		plotZoomXSelectionModeAction->setEnabled(vertical);
 		plotZoomYSelectionModeAction->setEnabled(!vertical);
-		plotZoomInXAction->setEnabled(vertical);
-		plotZoomOutXAction->setEnabled(vertical);
-		plotZoomInYAction->setEnabled(!vertical);
-		plotZoomOutYAction->setEnabled(!vertical);
-		plotShiftLeftXAction->setEnabled(vertical);
-		plotShiftRightXAction->setEnabled(vertical);
-		plotShiftUpYAction->setEnabled(!vertical);
-		plotShiftDownYAction->setEnabled(!vertical);
-		plotScaleAutoXAction->setEnabled(vertical);
-		plotScaleAutoYAction->setEnabled(!vertical);
+
+		// TODO
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllY:
 		plotZoomXSelectionModeAction->setEnabled(vertical);
 		plotZoomYSelectionModeAction->setEnabled(!vertical);
-		plotZoomInXAction->setEnabled(vertical);
-		plotZoomOutXAction->setEnabled(vertical);
-		plotZoomInYAction->setEnabled(!vertical);
-		plotZoomOutYAction->setEnabled(!vertical);
-		plotShiftLeftXAction->setEnabled(vertical);
-		plotShiftRightXAction->setEnabled(vertical);
-		plotShiftUpYAction->setEnabled(!vertical);
-		plotShiftDownYAction->setEnabled(!vertical);
-		plotScaleAutoXAction->setEnabled(vertical);
-		plotScaleAutoYAction->setEnabled(!vertical);
+
+		// TODO
 		break;
 	}
 	plotSelectionModeAction->setEnabled(true);
 	plotCursorModeAction->setEnabled(false);
 }
 
-void WorksheetView::handlePlotSelected() {
+void WorksheetView::handlePlotSelected(const QActionGroup* mouseModeActionGroup, const QActionGroup* navigationActionGroup) {
 	/* Action to All: action is applied to all ranges
 	 *	- Disable
 	 * Action to X: action is applied to all x ranges
@@ -1844,80 +1806,55 @@ void WorksheetView::handlePlotSelected() {
 		plotZoomSelectionModeAction->setEnabled(false);
 		plotZoomXSelectionModeAction->setEnabled(false);
 		plotZoomYSelectionModeAction->setEnabled(false);
-		plotZoomInAction->setEnabled(false);
-		plotZoomOutAction->setEnabled(false);
-		plotZoomInXAction->setEnabled(false);
-		plotZoomOutXAction->setEnabled(false);
-		plotZoomInYAction->setEnabled(false);
-		plotZoomOutYAction->setEnabled(false);
-		plotShiftLeftXAction->setEnabled(false);
-		plotShiftRightXAction->setEnabled(false);
-		plotShiftUpYAction->setEnabled(false);
-		plotShiftDownYAction->setEnabled(false);
-		plotScaleAutoAction->setEnabled(true);
-		plotScaleAutoXAction->setEnabled(true);
-		plotScaleAutoYAction->setEnabled(true);
+
+		// navigation actions
+		for (auto* action : navigationActionGroup->actions()) {
+			const auto op = static_cast<CartesianPlot::NavigationOperation>(action->data().toInt());
+			const bool scaleAuto = (op == CartesianPlot::NavigationOperation::ScaleAuto || op == CartesianPlot::NavigationOperation::ScaleAutoX
+									|| op == CartesianPlot::NavigationOperation::ScaleAutoY);
+			action->setEnabled(scaleAuto);
+		}
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToSelection:
 		plotZoomSelectionModeAction->setEnabled(true);
 		plotZoomXSelectionModeAction->setEnabled(true);
 		plotZoomYSelectionModeAction->setEnabled(true);
-		plotZoomInAction->setEnabled(true);
-		plotZoomOutAction->setEnabled(true);
-		plotZoomInXAction->setEnabled(true);
-		plotZoomOutXAction->setEnabled(true);
-		plotZoomInYAction->setEnabled(true);
-		plotZoomOutYAction->setEnabled(true);
-		plotShiftLeftXAction->setEnabled(true);
-		plotShiftRightXAction->setEnabled(true);
-		plotShiftUpYAction->setEnabled(true);
-		plotShiftDownYAction->setEnabled(true);
-		plotScaleAutoAction->setEnabled(true);
-		plotScaleAutoXAction->setEnabled(true);
-		plotScaleAutoYAction->setEnabled(true);
+
+		// navigation actions
+		for (auto* action : navigationActionGroup->actions())
+			action->setEnabled(true);
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllX:
 		plotZoomSelectionModeAction->setEnabled(false);
 		plotZoomXSelectionModeAction->setEnabled(true);
 		plotZoomYSelectionModeAction->setEnabled(true);
-		plotZoomInAction->setEnabled(false);
-		plotZoomOutAction->setEnabled(false);
-		plotZoomInXAction->setEnabled(true);
-		plotZoomOutXAction->setEnabled(true);
-		plotZoomInYAction->setEnabled(true);
-		plotZoomOutYAction->setEnabled(true);
-		plotShiftLeftXAction->setEnabled(true);
-		plotShiftRightXAction->setEnabled(true);
-		plotShiftUpYAction->setEnabled(true);
-		plotShiftDownYAction->setEnabled(true);
-		plotScaleAutoAction->setEnabled(true);
-		plotScaleAutoXAction->setEnabled(true);
-		plotScaleAutoYAction->setEnabled(true);
+
+		// navigation actions
+		for (auto* action : navigationActionGroup->actions()) {
+			const auto op = static_cast<CartesianPlot::NavigationOperation>(action->data().toInt());
+			const bool zoomInOut = (op == CartesianPlot::NavigationOperation::ZoomIn || op == CartesianPlot::NavigationOperation::ZoomOut);
+			action->setEnabled(!zoomInOut);
+		}
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllY:
 		plotZoomSelectionModeAction->setEnabled(false);
 		plotZoomXSelectionModeAction->setEnabled(true);
 		plotZoomYSelectionModeAction->setEnabled(true);
-		plotZoomInAction->setEnabled(false);
-		plotZoomOutAction->setEnabled(false);
-		plotZoomInXAction->setEnabled(true);
-		plotZoomOutXAction->setEnabled(true);
-		plotZoomInYAction->setEnabled(true);
-		plotZoomOutYAction->setEnabled(true);
-		plotShiftLeftXAction->setEnabled(true);
-		plotShiftRightXAction->setEnabled(true);
-		plotShiftUpYAction->setEnabled(true);
-		plotShiftDownYAction->setEnabled(true);
-		plotScaleAutoAction->setEnabled(true);
-		plotScaleAutoXAction->setEnabled(true);
-		plotScaleAutoYAction->setEnabled(true);
+
+		// navigation actions
+		// TODO: same as for ApplyActionToAllX above?
+		for (auto* action : navigationActionGroup->actions()) {
+			const auto op = static_cast<CartesianPlot::NavigationOperation>(action->data().toInt());
+			const bool zoomInOut = (op == CartesianPlot::NavigationOperation::ZoomIn || op == CartesianPlot::NavigationOperation::ZoomOut);
+			action->setEnabled(!zoomInOut);
+		}
 		break;
 	}
 	plotSelectionModeAction->setEnabled(true);
 	plotCursorModeAction->setEnabled(false);
 }
 
-void WorksheetView::handleAxisSelected(const Axis* a) {
+void WorksheetView::handleAxisSelected(const Axis* a, const QActionGroup* mouseModeActionGroup, const QActionGroup* navigationActionGroup) {
 	if (a->orientation() == Axis::Orientation::Horizontal) {
 		/* HORIZONTAL:
 		 * Action to All: action is applied to all ranges
@@ -1935,19 +1872,15 @@ void WorksheetView::handleAxisSelected(const Axis* a) {
 		plotZoomYSelectionModeAction->setEnabled(false);
 		plotZoomSelectionModeAction->setEnabled(false);
 		plotZoomXSelectionModeAction->setEnabled(true);
-		plotZoomInAction->setEnabled(false);
-		plotZoomOutAction->setEnabled(false);
-		plotZoomInXAction->setEnabled(true);
-		plotZoomOutXAction->setEnabled(true);
-		plotZoomInYAction->setEnabled(false);
-		plotZoomOutYAction->setEnabled(false);
-		plotShiftLeftXAction->setEnabled(true);
-		plotShiftRightXAction->setEnabled(true);
-		plotShiftUpYAction->setEnabled(false);
-		plotShiftDownYAction->setEnabled(false);
-		plotScaleAutoAction->setEnabled(false);
-		plotScaleAutoXAction->setEnabled(true);
-		plotScaleAutoYAction->setEnabled(false);
+
+		// navigation actions
+		for (auto* action : navigationActionGroup->actions()) {
+			const auto op = static_cast<CartesianPlot::NavigationOperation>(action->data().toInt());
+			const bool x = (op == CartesianPlot::NavigationOperation::ZoomInX ||op == CartesianPlot::NavigationOperation::ZoomOutX
+				||  op == CartesianPlot::NavigationOperation::ShiftLeftX ||  op == CartesianPlot::NavigationOperation::ShiftRightX
+				||  op == CartesianPlot::NavigationOperation::ScaleAutoX);
+			action->setEnabled(x);
+		}
 	} else {
 		/* VERTICAL:
 		 * Action to All: action is applied to all ranges
@@ -1965,19 +1898,15 @@ void WorksheetView::handleAxisSelected(const Axis* a) {
 		plotZoomYSelectionModeAction->setEnabled(true);
 		plotZoomSelectionModeAction->setEnabled(false);
 		plotZoomXSelectionModeAction->setEnabled(false);
-		plotZoomInAction->setEnabled(false);
-		plotZoomOutAction->setEnabled(false);
-		plotZoomInXAction->setEnabled(false);
-		plotZoomOutXAction->setEnabled(false);
-		plotZoomInYAction->setEnabled(true);
-		plotZoomOutYAction->setEnabled(true);
-		plotShiftLeftXAction->setEnabled(false);
-		plotShiftRightXAction->setEnabled(false);
-		plotShiftUpYAction->setEnabled(true);
-		plotShiftDownYAction->setEnabled(true);
-		plotScaleAutoAction->setEnabled(false);
-		plotScaleAutoXAction->setEnabled(false);
-		plotScaleAutoYAction->setEnabled(true);
+
+		// navigation actions
+		for (auto* action : navigationActionGroup->actions()) {
+			const auto op = static_cast<CartesianPlot::NavigationOperation>(action->data().toInt());
+			const bool y = (op == CartesianPlot::NavigationOperation::ZoomInY ||op == CartesianPlot::NavigationOperation::ZoomOutY
+				||  op == CartesianPlot::NavigationOperation::ShiftUpY ||  op == CartesianPlot::NavigationOperation::ShiftDownY
+				||  op == CartesianPlot::NavigationOperation::ScaleAutoY);
+			action->setEnabled(y);
+		}
 	}
 
 	plotSelectionModeAction->setEnabled(true);
@@ -1985,13 +1914,29 @@ void WorksheetView::handleAxisSelected(const Axis* a) {
 }
 
 /*!
-* handles plot navigation related actions, called on selection changes in the view and when the mouse mode is changed.
+ * register external action groups for plot related mouse mode and navigation actions to update them
+ * on selection changes in the view, used for the actions shown in the main window and managed by \c ActionManager.
+ */
+void WorksheetView::registerCartesianPlotActions(QActionGroup* mouseModeActionGroup, QActionGroup* navigationActionGroup) {
+	m_plotMouseModeActionGroupExternal = mouseModeActionGroup;
+	m_plotNavigationActionGroupExternal = navigationActionGroup;
+	updateCartesianPlotActions(m_plotMouseModeActionGroupExternal, m_plotNavigationActionGroupExternal);
+}
+
+/*!
+* updates the state of the plot related actions, called on selection changes in the view and when the mouse mode is changed.
 * The actions are enabled/disabled depending on the selected items (plots, axes, reference lines/ranges).
 */
-void WorksheetView::handleCartesianPlotActions() {
-	if (!m_plotActionsInitialized)
-		return;
+void WorksheetView::updateCartesianPlotActions() {
+	// update the internal actions shown in the context menu
+	updateCartesianPlotActions(m_plotMouseModeActionGroup, m_plotNavigationActionGroup);
 
+	// update the external actions, if available, shown in the main window toolbar and managed by ActionManager
+	if (m_plotMouseModeActionGroupExternal && m_plotNavigationActionGroupExternal)
+		updateCartesianPlotActions(m_plotMouseModeActionGroupExternal, m_plotNavigationActionGroupExternal);
+}
+
+void WorksheetView::updateCartesianPlotActions(const QActionGroup* mouseModeActionGroup, const QActionGroup* navigationActionGroup) {
 	if (m_mouseMode != MouseMode::Selection)
 		return; // Do not change selection when the mousemode is not selection!
 
@@ -2004,28 +1949,28 @@ void WorksheetView::handleCartesianPlotActions() {
 		if (w->type() == AspectType::CartesianPlot) {
 			handled = true;
 			m_selectedElement = w;
-			handleCartesianPlotSelected(static_cast<CartesianPlot*>(m_selectedElement));
+			handleCartesianPlotSelected(static_cast<CartesianPlot*>(m_selectedElement), mouseModeActionGroup, navigationActionGroup);
 			break;
 		} else if (w->type() == AspectType::ReferenceLine) {
 			handled = true;
 			m_selectedElement = w;
 			const auto orientation = static_cast<ReferenceLine*>(w)->orientation();
-			handleReferences(orientation);
+			handleReferences(orientation, mouseModeActionGroup, navigationActionGroup);
 		} else if (w->type() == AspectType::ReferenceRange) {
 			handled = true;
 			m_selectedElement = w;
 			const auto orientation = static_cast<ReferenceRange*>(w)->orientation();
-			handleReferences(orientation);
+			handleReferences(orientation, mouseModeActionGroup, navigationActionGroup);
 		} else if (w->type() == AspectType::Axis) {
 			handled = true;
 			m_selectedElement = w;
-			handleAxisSelected(static_cast<Axis*>(m_selectedElement));
+			handleAxisSelected(static_cast<Axis*>(m_selectedElement), mouseModeActionGroup, navigationActionGroup);
 			break;
 		} else if (dynamic_cast<Plot*>(w) || w->coordinateBindingEnabled()) {
 			// Plot and other WorksheetElements like custompoint, infoelement, textlabel
 			handled = true;
 			m_selectedElement = w;
-			handlePlotSelected();
+			handlePlotSelected(mouseModeActionGroup, navigationActionGroup);
 			break;
 		}
 	}
@@ -2033,27 +1978,17 @@ void WorksheetView::handleCartesianPlotActions() {
 	// if no elements are selected where navigation makes sense and that were handled above,
 	// disable all navigation actions
 	if (!handled) {
-		plotZoomSelectionModeAction->setEnabled(false);
-		plotZoomSelectionModeAction->setChecked(false);
-		plotZoomXSelectionModeAction->setEnabled(false);
-		plotZoomXSelectionModeAction->setChecked(false);
-		plotZoomYSelectionModeAction->setEnabled(false);
-		plotZoomYSelectionModeAction->setChecked(false);
+		// mouse mode actions
+		for (auto* action : mouseModeActionGroup->actions()) {
+			action->setEnabled(false);
+			action->setChecked(false);
+		}
 		for (auto* p : m_worksheet->children<CartesianPlot>())
 			p->setMouseMode(CartesianPlot::MouseMode::Selection);
-		plotZoomInAction->setEnabled(false);
-		plotZoomOutAction->setEnabled(false);
-		plotZoomInXAction->setEnabled(false);
-		plotZoomOutXAction->setEnabled(false);
-		plotZoomInYAction->setEnabled(false);
-		plotZoomOutYAction->setEnabled(false);
-		plotShiftLeftXAction->setEnabled(false);
-		plotShiftRightXAction->setEnabled(false);
-		plotShiftUpYAction->setEnabled(false);
-		plotShiftDownYAction->setEnabled(false);
-		plotScaleAutoAction->setEnabled(false);
-		plotScaleAutoXAction->setEnabled(false);
-		plotScaleAutoYAction->setEnabled(false);
+
+		// navigation actions
+		for (auto* action : navigationActionGroup->actions())
+			action->setEnabled(false);
 	}
 }
 
@@ -2403,7 +2338,7 @@ void WorksheetView::cartesianPlotActionModeChanged(QAction* action) {
 	else
 		m_worksheet->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToAll);
 
-	handleCartesianPlotActions();
+	updateCartesianPlotActions();
 }
 
 void WorksheetView::cartesianPlotCursorModeChanged(QAction* action) {
@@ -2412,7 +2347,7 @@ void WorksheetView::cartesianPlotCursorModeChanged(QAction* action) {
 	else
 		m_worksheet->setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode::ApplyActionToAll);
 
-	handleCartesianPlotActions();
+	updateCartesianPlotActions();
 }
 
 void WorksheetView::plotsInteractiveActionChanged(bool checked) {
@@ -2475,7 +2410,7 @@ void WorksheetView::changePlotNavigation(QAction* action) {
 			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
 				plot->navigate(cSystemIndex, op);
 			else {
-				// check if one of the plots childrend is selected. Do the operation there too.
+				// check if one of the plots children is selected. Do the operation there, too.
 				for (auto* child : plot->children<WorksheetElement>()) {
 					if (m_selectedItems.indexOf(child->graphicsItem()) != -1) {
 						plot->navigate(cSystemIndex, op);

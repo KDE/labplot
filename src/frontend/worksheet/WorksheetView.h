@@ -54,8 +54,9 @@ public:
 	void exportToClipboard();
 	void exportToPixmap(QPixmap&);
 	void setIsClosing();
-	void setIsBeingPresented(bool presenting);
+	void setIsBeingPresented(bool);
 	void setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode);
+	Worksheet::CartesianPlotActionMode getCartesianPlotActionMode() const;
 	void setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode);
 	void setPlotInteractive(bool);
 	void suppressSelectionChangedEvent(bool);
@@ -64,11 +65,12 @@ public:
 	double zoomFactor() const;
 	void processResize();
 
-	Worksheet::CartesianPlotActionMode getCartesianPlotActionMode() const;
 	void registerShortcuts();
 	void unregisterShortcuts();
+
 	void initActions();
 	void initPlotNavigationActions();
+	void registerCartesianPlotActions(QActionGroup* mouseModeActionGroup, QActionGroup* navigationActionGroup);
 
 	Worksheet::Layout layout() const;
 	MouseMode mouseMode() const;
@@ -90,10 +92,14 @@ private:
 	CartesianPlot* plotAt(QPoint) const;
 	void exportPaint(QPainter*, const QRectF& targetRect, const QRectF& sourceRect, const bool background, const bool selection = false);
 	void cartesianPlotAdd(CartesianPlot*, QAction*);
-	void handleAxisSelected(const Axis*);
-	void handleCartesianPlotSelected(CartesianPlot*);
-	void handlePlotSelected();
-	void handleReferences(WorksheetElement::Orientation);
+
+	void updateCartesianPlotActions();
+	void updateCartesianPlotActions(const QActionGroup* mouseModeActionGroup, const QActionGroup* navigationActionGroup);
+	void handleAxisSelected(const Axis*, const QActionGroup* mouseModeActionGroup, const QActionGroup* navigationActionGroup);
+	void handleCartesianPlotSelected(const CartesianPlot*, const QActionGroup* mouseModeActionGroup, const QActionGroup* navigationActionGroup);
+	void handlePlotSelected(const QActionGroup* mouseModeActionGroup, const QActionGroup* navigationActionGroup);
+	void handleReferences(WorksheetElement::Orientation, const QActionGroup* mouseModeActionGroup, const QActionGroup* navigationActionGroup);
+
 	bool eventFilter(QObject* watched, QEvent*) override;
 	void updateLabelsZoom() const;
 	void updateScrollBarPolicy();
@@ -212,6 +218,8 @@ private:
 	QAction* plotApplyToAllCursor{nullptr};
 	QAction* plotApplyToSelectionCursor{nullptr};
 
+	QActionGroup* m_plotMouseModeActionGroup{nullptr};
+	QActionGroup* m_plotMouseModeActionGroupExternal{nullptr};
 	QAction* plotSelectionModeAction{nullptr};
 	QAction* plotCrosshairModeAction{nullptr};
 	QAction* plotZoomSelectionModeAction{nullptr};
@@ -219,6 +227,8 @@ private:
 	QAction* plotZoomYSelectionModeAction{nullptr};
 	QAction* plotCursorModeAction{nullptr};
 
+	QActionGroup* m_plotNavigationActionGroup{nullptr};
+	QActionGroup* m_plotNavigationActionGroupExternal{nullptr};
 	QAction* plotScaleAutoXAction{nullptr};
 	QAction* plotScaleAutoYAction{nullptr};
 	QAction* plotScaleAutoAction{nullptr};
@@ -280,7 +290,6 @@ private Q_SLOTS:
 	// SLOTs for cartesian plots
 	void cartesianPlotActionModeChanged(QAction*);
 	void cartesianPlotCursorModeChanged(QAction*);
-	void handleCartesianPlotActions();
 
 Q_SIGNALS:
 	void statusInfo(const QString&);

@@ -595,59 +595,59 @@ void ActionsManager::initPlotAreaToolbarActions() {
 	collection->addAction(QStringLiteral("plot_area_cursor_mode"), action);
 
 	// scale
-	m_plotNavigationGroup = new QActionGroup(this);
+	m_plotNavigationActionGroup = new QActionGroup(this);
 
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-auto-scale-all")), i18n("Auto Scale"), m_plotNavigationGroup);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-auto-scale-all")), i18n("Auto Scale"), m_plotNavigationActionGroup);
 	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAuto));
 	collection->addAction(QStringLiteral("plot_area_scale_auto"), action);
 
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-auto-scale-x")), i18n("Auto Scale X"), m_plotNavigationGroup);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-auto-scale-x")), i18n("Auto Scale X"), m_plotNavigationActionGroup);
 	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAutoX));
 	collection->addAction(QStringLiteral("plot_area_scale_auto_x"), action);
 
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-auto-scale-y")), i18n("Auto Scale Y"), m_plotNavigationGroup);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-auto-scale-y")), i18n("Auto Scale Y"), m_plotNavigationActionGroup);
 	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAutoY));
 	collection->addAction(QStringLiteral("plot_area_scale_auto_y"), action);
 
 	// zoom
-	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-in")), i18n("Zoom In"), m_plotNavigationGroup);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-in")), i18n("Zoom In"), m_plotNavigationActionGroup);
 	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomIn));
 	collection->addAction(QStringLiteral("plot_area_zoom_in"), action);
 
-	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-out")), i18n("Zoom Out"), m_plotNavigationGroup);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("zoom-out")), i18n("Zoom Out"), m_plotNavigationActionGroup);
 	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomOut));
 	collection->addAction(QStringLiteral("plot_area_zoom_out"), action);
 
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-in-x")), i18n("Zoom In X"), m_plotNavigationGroup);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-in-x")), i18n("Zoom In X"), m_plotNavigationActionGroup);
 	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomInX));
 	collection->addAction(QStringLiteral("plot_area_zoom_in_x"), action);
 
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-out-x")), i18n("Zoom Out X"), m_plotNavigationGroup);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-out-x")), i18n("Zoom Out X"), m_plotNavigationActionGroup);
 	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomOutX));
 	collection->addAction(QStringLiteral("plot_area_zoom_out_x"), action);
 
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-in-y")), i18n("Zoom In Y"), m_plotNavigationGroup);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-in-y")), i18n("Zoom In Y"), m_plotNavigationActionGroup);
 	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomInY));
 	collection->addAction(QStringLiteral("plot_area_zoom_in_y"), action);
 
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-out-y")), i18n("Zoom Out Y"), m_plotNavigationGroup);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-out-y")), i18n("Zoom Out Y"), m_plotNavigationActionGroup);
 	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomOutY));
 	collection->addAction(QStringLiteral("plot_area_zoom_out_y"), action);
 
 	// shift
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-left-x")), i18n("Shift Left X"), m_plotNavigationGroup);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-left-x")), i18n("Shift Left X"), m_plotNavigationActionGroup);
 	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ShiftLeftX));
 	collection->addAction(QStringLiteral("plot_area_shift_left"), action);
 
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-right-x")), i18n("Shift Right X"), m_plotNavigationGroup);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-right-x")), i18n("Shift Right X"), m_plotNavigationActionGroup);
 	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ShiftRightX));
 	collection->addAction(QStringLiteral("plot_area_shift_right"), action);
 
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-up-y")), i18n("Shift Up Y"), m_plotNavigationGroup);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-up-y")), i18n("Shift Up Y"), m_plotNavigationActionGroup);
 	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ShiftUpY));
 	collection->addAction(QStringLiteral("plot_area_shift_up"), action);
 
-	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-down-y")), i18n("Shift Down Y"), m_plotNavigationGroup);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-shift-down-y")), i18n("Shift Down Y"), m_plotNavigationActionGroup);
 	action->setData(static_cast<int>(CartesianPlot::NavigationOperation::ShiftDownY));
 	collection->addAction(QStringLiteral("plot_area_shift_down"), action);
 }
@@ -1316,10 +1316,11 @@ void ActionsManager::connectPlotAreaToolbarActions(const WorksheetView* view) {
 	connect(m_plotMouseModeActionGroup, &QActionGroup::triggered, view, &WorksheetView::changePlotMouseMode);
 
 	// zoom/navigation actions
-	disconnect(m_plotNavigationGroup, &QActionGroup::triggered, nullptr, nullptr);
-	connect(m_plotNavigationGroup, &QActionGroup::triggered, view, &WorksheetView::changePlotNavigation);
+	disconnect(m_plotNavigationActionGroup, &QActionGroup::triggered, nullptr, nullptr);
+	connect(m_plotNavigationActionGroup, &QActionGroup::triggered, view, &WorksheetView::changePlotNavigation);
 
-	// TODO: we need to call WorksheetView::handleCartesianPlotActions() here somehow!!!
+	// register action groups in the view so their state is properly updated on selection changes in the view
+	const_cast<WorksheetView*>(view)->registerCartesianPlotActions(m_plotMouseModeActionGroup, m_plotNavigationActionGroup);
 }
 
 void ActionsManager::connectSpreadsheetToolbarActions(const SpreadsheetView* view) {

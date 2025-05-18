@@ -152,7 +152,7 @@ private:
 	QActionGroup* m_worksheeMouseModeActionGroup{nullptr};
 
 	QActionGroup* m_plotMouseModeActionGroup{nullptr};
-	QActionGroup* m_plotNavigationGroup{nullptr};
+	QActionGroup* m_plotNavigationActionGroup{nullptr};
 
 	// data extractor
 	QActionGroup* m_dataExtractorMouseModeActionGroup{nullptr};
