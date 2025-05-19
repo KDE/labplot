@@ -144,12 +144,10 @@ private:
 	void addArrow(QPointF point, int direction);
 	int upperLabelsPrecision(int precision, Axis::LabelsFormat);
 	int lowerLabelsPrecision(int precision, Axis::LabelsFormat);
-	bool transformAnchor(QPointF&);
 	bool calculateTickHorizontal(Axis::TicksDirection tickDirection,
 								 double ticksLength,
-								 double tickStartPos,
-								 double dummyOtherDirPos,
-								 double otherDirAnchorPoint,
+								 double xTickPos,
+								 double yAnchorPos,
 								 double centerValue,
 								 int rangeDirection,
 								 QPointF& anchorPointOut,
@@ -157,9 +155,8 @@ private:
 								 QPointF& endPointOut);
 	bool calculateTickVertical(Axis::TicksDirection tickDirection,
 							   double ticksLength,
-							   double tickStartPos,
-							   double dummyOtherDirPos,
-							   double otherDirAnchorPoint,
+							   double yTickPos,
+							   double xAnchorPos,
 							   double centerValue,
 							   int rangeDirection,
 							   QPointF& anchorPointOut,
