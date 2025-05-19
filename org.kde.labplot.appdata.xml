@@ -50,7 +50,7 @@
   <summary xml:lang="en-GB">Interactive Data Visualisation and Analysis</summary>
   <summary xml:lang="eo">Interaga Datuma Bildigo kaj Analizo</summary>
   <summary xml:lang="es">Visualización y análisis de datos interactivo</summary>
-  <summary xml:lang="eu">Datuen irudikatze eta analisi elkarreragilea</summary>
+  <summary xml:lang="eu">Datuen irudikatze eta azterketa elkarreragilea</summary>
   <summary xml:lang="fi">Vuorovaikutteinen tiedon visualisointi ja analyysi</summary>
   <summary xml:lang="fr">Analyse et affichage interactif de données</summary>
   <summary xml:lang="gl">Visualización e análise interactiva de datos</summary>
@@ -81,7 +81,7 @@
     <p xml:lang="en-GB">LabPlot is a FREE, open source and cross-platform Data Visualisation and Analysis software accessible to everyone.</p>
     <p xml:lang="eo">LabPlot estas SENPAGA, malfermfonta kaj plurplatforma programaro pri Vidigo kaj Analizo de Datumoj alirebla por ĉiuj.</p>
     <p xml:lang="es">LabPlot es un software de visualización y análisis de datos LIBRE, de código abierto y multiplataforma, al que todo el mundo puede acceder.</p>
-    <p xml:lang="eu">LabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.</p>
+    <p xml:lang="eu">LabPlot, guztiontzako erabilgarri dagoen datuak irudikatzeko eta aztertzeko software ASKE, sorburu irekiko eta plataforma-anitzeko bat da.</p>
     <p xml:lang="fi">LabPlot on VAPAA, kaikkien käytettävissä oleva, avointa lähdekoodia ja monialustainen tiedon visualisointi- ja analyysiohjelma.</p>
     <p xml:lang="fr">LabPlot est un logiciel d'affichage et d'analyse de données, libre, « Open-source » et multi-plate-forme, accessible à tous.</p>
     <p xml:lang="gl">LabPlot é un programa libre, de código aberto e multiplataforma de visualización e análise de datos, a disposición de calquera.</p>
@@ -114,7 +114,7 @@
     <p xml:lang="eo">LabPlot provizas facilan manieron krei, administri kaj redakti diagramojn. Ĝi permesas vin produkti diagramojn bazitajn sur datumoj de kalkultabelo aŭ sur datumoj importitaj de eksteraj dosieroj. Diagramoj povas esti eksportitaj al pluraj pixmap kaj vektoraj grafikaj formatoj.</p>
     <p xml:lang="es">LabPlot proporciona un modo fácil de crear, gestionar y editar gráficos. Le permite generar gráficos basados en datos de una hoja de cálculo o en datos importados de archivos externos. Los gráficos se pueden exportar a varios formatos de mapas de bits y de gráficos vectoriales.</p>
     <p xml:lang="et">LabPlot võimaldab vähese vaevaga jooniseid luua, hallata ja muuta. Graafikuid saab koostada andmetabelist pärit või võrgufailidest imporditud andmete põhjal. Jooniseid saab eksportida mitmes pikselraster- ja vektorgraafika vormingus.</p>
-    <p xml:lang="eu">LabPlot-ek grafikoak sortu, kudeatu eta editatzeko era erraz bat eskaintzen du. Grafikoak sortzen uzten dizu kalkulu-orrietako datuekin edo kanpoko fitxategietatik inportatutako datuekin. Grafikoak hainbat pixel-mapa eta bektore grafiko formatutara esportatu daitezke.</p>
+    <p xml:lang="eu">LabPlot-ek grafikoak sortu, kudeatu eta editatzeko era erraz bat eskaintzen du. Grafikoak kalkulu-orrietako datuekin edo kanpoko fitxategietatik inportatutako datuekin sortzeko aukera ematen dizu. Grafikoak hainbat pixel-mapa eta bektore-grafiko formatutara esportatu daitezke.</p>
     <p xml:lang="fi">LabPlot tarjoaa helpon tavan luoda, hallita ja muokata kaavioita. Voit tuottaa kaavioita laskentataulukon tai muiden ulkoisten tiedostojen datasta. Kaavioita voi viedä eri bittikartta- ja vektorigrafiikkamuotoihin.</p>
     <p xml:lang="fr">LabPlot fournit une moyen facile de créer, gérer et éditer des courbes. Il vous permet de produire des courbes produites à partir de données issues d'un tableur ou d'un fichier externe. Les courbes peuvent être exportées vers plusieurs format d'image matriciels ou vectoriels.</p>
     <p xml:lang="gl">LabPlot fornece unha forma doada de crear, xestionar e editar gráficos. Permítelle producir gráficos baseados en datos dunha folla de cálculo ou datos importados de ficheiros externos. Pode exportar os gráficos en distintos formatos de imaxe, de mapas de píxeles ou vectoriais.</p>
@@ -214,7 +214,7 @@
       <caption xml:lang="en-GB">Advanced layouts of plots and images</caption>
       <caption xml:lang="eo">Altnivela aranĝo de diagramoj kaj bildoj</caption>
       <caption xml:lang="es">Diseño avanzado de gráficos e imágenes</caption>
-      <caption xml:lang="eu">Irudien eta trazuen antolamendu aurreratua</caption>
+      <caption xml:lang="eu">Grafikoen eta irudien antolamendu aurreratua</caption>
       <caption xml:lang="fi">Kaavioiden ja kuvioiden edistynyt asettelu</caption>
       <caption xml:lang="fr">Mise en forme avancée de tracés et d'images</caption>
       <caption xml:lang="gl">Disposicións avanzadas de gráficos e imaxes.</caption>
@@ -461,7 +461,7 @@
       <caption xml:lang="en-GB">Visualisation of data calculated in an interactive Maxima session</caption>
       <caption xml:lang="eo">Bildigo de datumoj kalkulitaj en interaga sesio de Maxima</caption>
       <caption xml:lang="es">Visualización de datos calculados en una sesión interactiva de Maxima</caption>
-      <caption xml:lang="eu">Maxima saio elkarreragile batean kalkulatuta datuen irudikapena</caption>
+      <caption xml:lang="eu">Maxima saio elkarreragile batean kalkulatutako datuen irudikapena</caption>
       <caption xml:lang="fi">Vuorovaikutteisessa Maxima-istunnossa lasketun tiedon visualisointi</caption>
       <caption xml:lang="fr">Affichage de données calculées dans une session interactive de Maxima</caption>
       <caption xml:lang="gl">Visualización de datos calculados nunha sesión interactiva de Maxima.</caption>
