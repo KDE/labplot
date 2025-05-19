@@ -1304,6 +1304,65 @@ void AxisTest3::autoScale2() {
 		std::cout << std::end;
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
 	}
+	VALUES_EQUAL(xAxis->range().start(), 0.01);
+	QCOMPARE(xAxis->range().end(), 1.0);
+
+	QStringList expectedStrings{
+		QStringLiteral("0.01"),
+		QStringLiteral("0.03"),
+		QStringLiteral("0.10"),
+		QStringLiteral("0.32"),
+		QStringLiteral("1.00"),
+	};
+	COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+}
+
+void AxisTest3::autoScaleLog102Vertical() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* yAxis = static_cast<Axis*>(axes.at(1));
+	yAxis->setMajorTicksNumber(4);
+	QCOMPARE(yAxis->scale(), RangeT::Scale::Linear);
+	QCOMPARE(yAxis->rangeScale(), true);
+	yAxis->setLabelsAutoPrecision(false);
+	yAxis->setLabelsPrecision(2);
+
+	auto range = p->range(Dimension::Y, 0);
+	range.setStart(0);
+	range.setEnd(1);
+	p->setRange(Dimension::Y, 0, range);
+	p->setNiceExtend(false);
+	p->enableAutoScale(Dimension::Y, 0, false, true);
+	p->setRangeScale(Dimension::Y, 0, RangeT::Scale::Log10); // use different method
+
+	QCOMPARE(yAxis->range(), p->range(Dimension::Y, 0));
+	QCOMPARE(yAxis->scale(), RangeT::Scale::Log10);
+
+	VALUES_EQUAL(yAxis->range().start(), 0.01);
+	QCOMPARE(yAxis->range().end(), 1.0);
+
+	QStringList expectedStrings{
+		QStringLiteral("0.01"),
+		QStringLiteral("0.03"),
+		QStringLiteral("0.10"),
+		QStringLiteral("0.32"),
+		QStringLiteral("1.00"),
+	};
+	COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
+>>>>>>> 774998c67 (fix tests)
 }
 
 QTEST_MAIN(AxisTest3)
