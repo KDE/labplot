@@ -36,6 +36,7 @@ private Q_SLOTS:
 
 	void autoScaleLog10();
 	void autoScaleLog102();
+	void autoScaleLog102Vertical();
 };
 
 #endif // AXISTEST3_H

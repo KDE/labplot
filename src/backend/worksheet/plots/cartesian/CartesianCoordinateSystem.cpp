@@ -79,7 +79,7 @@ bool CartesianCoordinateSystem::mapXLogicalToScene(double& x, MappingFlags flags
 			x = qBound(xPage, x, xPage + w);
 		}
 
-		if (noPageClipping || limit || (x >= xPage && x <= xPage + w))
+		if (noPageClipping || limit || !(nsl_math_definitely_less_than(x, xPage) || nsl_math_definitely_greater_than(x, xPage + w)))
 			return true;
 	}
 	return false;
@@ -110,7 +110,7 @@ bool CartesianCoordinateSystem::mapYLogicalToScene(double& y, MappingFlags flags
 		if (noPageClippingY)
 			y = yPage + h / 2.;
 
-		if (noPageClipping || limit || (y >= yPage &&  y <= yPage + h))
+		if (noPageClipping || limit || !(nsl_math_definitely_less_than(y, yPage) || nsl_math_definitely_greater_than(y, yPage + h)))
 			return true;
 	}
 	return false;
