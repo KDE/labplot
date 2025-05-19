@@ -1248,7 +1248,7 @@ void AxisTest3::autoScaleLog102() {
 		for (const auto& label: xAxis->tickLabelStrings()) {
 			std::cout << label.toStdString() << ",";
 		}
-		std::cout << std::end
+		std::cout << std::end;
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
 	}
 }
