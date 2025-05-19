@@ -1318,3 +1318,9 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 
 	return true;
 }
+
+Project* Project::currentProject = nullptr;
+
+Project* project() {
+    return Project::currentProject;
+}

@@ -100,6 +100,7 @@ enum class AspectType : quint64 {
 	Note = 0x0420008,
 	Workbook = 0x0420010,
 	Worksheet = 0x0420020,
+	Script = 0x0420030,
 
 	AbstractColumn = 0x1000000,
 	Column = 0x1000001,
@@ -249,6 +250,8 @@ public:
 			return QStringLiteral("Workbook");
 		case AspectType::Worksheet:
 			return QStringLiteral("Worksheet");
+		case AspectType::Script:
+			return QStringLiteral("Script");
 		case AspectType::AbstractColumn:
 			return QStringLiteral("AbstractColumn");
 		case AspectType::Column:
@@ -369,6 +372,14 @@ public:
 			T* c = dynamic_cast<T*>(child);
 			if (c && child->name() == name)
 				return c;
+		}
+		return nullptr;
+	}
+
+	AbstractAspect* child(const QString& name, AspectType type) const {
+		for (auto* child : children()) {
+			if (child->type() == type && child->name() == name)
+				return child;
 		}
 		return nullptr;
 	}

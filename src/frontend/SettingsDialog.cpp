@@ -15,6 +15,7 @@
 // #include "SettingsWelcomePage.h"
 #include "SettingsSpreadsheetPage.h"
 #include "SettingsWorksheetPage.h"
+#include "SettingsEditorPage.h"
 
 #ifdef HAVE_CANTOR_LIBS
 #include "SettingsNotebookPage.h"
@@ -93,6 +94,12 @@ SettingsDialog::SettingsDialog(QWidget* parent, const QLocale& locale)
 	m_userFeedbackPageItem->setIcon(QIcon::fromTheme(QLatin1String("preferences-desktop-locale")));
 #endif
 
+	m_editorRootPage = new SettingsEditorPage(this);
+	KPageWidgetItem* editorRootFrame = addPage(m_editorRootPage, i18n("Text Editor"));
+	m_editorRootPage->addSubPages(editorRootFrame, this);
+	editorRootFrame->setIcon(QIcon::fromTheme(QLatin1String("accessories-text-editor")));
+	connect(m_editorRootPage, &SettingsEditorPage::settingsChanged, this, &SettingsDialog::changed);
+
 	// restore saved settings if available
 	create(); // ensure there's a window created
 	KConfigGroup conf = Settings::group(QStringLiteral("SettingsDialog"));
@@ -170,6 +177,7 @@ void SettingsDialog::applySettings() {
 	changes << m_notebookPage->applySettings();
 #endif
 	changes << m_datasetsPage->applySettings();
+	changes << m_editorRootPage->applySettings();
 
 	Settings::sync();
 
@@ -192,4 +200,5 @@ void SettingsDialog::restoreDefaults() {
 	m_notebookPage->restoreDefaults();
 #endif
 	m_datasetsPage->restoreDefaults();
+	m_editorRootPage->restoreDefaults();
 }

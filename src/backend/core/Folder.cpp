@@ -29,6 +29,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/script/Script.h"
 
 #include <KLocalizedString>
 #include <QDropEvent>
@@ -353,6 +354,19 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 			return false;
 		}
 		addChildFast(note);
+#endif
+	} else if (element_name == QLatin1String("script")) {
+#ifndef SDK
+		QString runtime = Script::readRuntime(reader);
+		if (runtime.isEmpty())
+			return false;
+
+		Script* script = new Script(QString(), runtime);
+		if (!script->load(reader, preview)) {
+			delete script;
+			return false;
+		}
+		addChildFast(script);
 #endif
 	} else {
 		reader->raiseWarning(i18n("unknown element '%1' found", element_name));

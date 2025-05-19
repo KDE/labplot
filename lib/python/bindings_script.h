@@ -3,8 +3,6 @@
 
 #include <QXmlStreamWriter>
 
-#define SDK
-
 // abstract classes
 #include "src/backend/core/AbstractAspect.h"
 #include "src/backend/core/AbstractColumn.h"
@@ -103,5 +101,8 @@
 #include "src/backend/worksheet/Image.h"
 #include "src/backend/worksheet/InfoElement.h"
 #include "src/backend/worksheet/TextLabel.h"
+
+// proxy for stdout/stderr
+#include "src/backend/script/python/PythonLogger.h"
 
 #endif // WRAPPEDCLASSES_H

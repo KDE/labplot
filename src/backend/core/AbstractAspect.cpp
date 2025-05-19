@@ -321,7 +321,7 @@ QMenu* AbstractAspect::createContextMenu() {
 	// 	menu->addAction( KStandardAction::cut(this) );
 
 	QAction* actionDuplicate = nullptr;
-	if (!isFixed() && m_type != AspectType::Project && m_type != AspectType::Notebook) {
+	if (!isFixed() && m_type != AspectType::Project && m_type != AspectType::Notebook && m_type != AspectType::Script) {
 		// copy action:
 		// don't allow to copy fixed aspects
 		auto* action = KStandardAction::copy(this);
