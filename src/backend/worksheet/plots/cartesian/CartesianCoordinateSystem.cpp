@@ -58,7 +58,7 @@ QString CartesianCoordinateSystem::info() const {
 // ##############################################################################
 // ######################### logical to scene mappers ###########################
 // ##############################################################################
-bool CartesianCoordinateSystem::mapXLogicalToScene(double& x, MappingFlags flags) const  {
+bool CartesianCoordinateSystem::mapXLogicalToScene(double& x, MappingFlags flags) const {
 	const QRectF pageRect = d->plot->dataRect();
 	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
 	const bool limit = flags & MappingFlag::Limit;
@@ -85,7 +85,7 @@ bool CartesianCoordinateSystem::mapXLogicalToScene(double& x, MappingFlags flags
 	return false;
 }
 
-bool CartesianCoordinateSystem::mapYLogicalToScene(double& y, MappingFlags flags) const  {
+bool CartesianCoordinateSystem::mapYLogicalToScene(double& y, MappingFlags flags) const {
 	const QRectF pageRect = d->plot->dataRect();
 	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
 	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
