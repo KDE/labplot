@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-19 00:38+0000\n"
-"PO-Revision-Date: 2025-05-17 11:42+0100\n"
+"PO-Revision-Date: 2025-05-20 01:40+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -12576,6 +12576,9 @@ msgid ""
 "ticks for nice looking values. The number of ticks might be different than "
 "the number previously set."
 msgstr ""
+"Si se activa: Usar el número de la marca mayor como base para determinar el "
+"nuevo número de marcas para valores que luzcan bien. El número de marcas "
+"puede ser diferente que el número definido anteriormente."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:262
 #, kde-format

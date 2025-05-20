@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-19 00:38+0000\n"
-"PO-Revision-Date: 2025-05-17 07:16+0200\n"
+"PO-Revision-Date: 2025-05-19 06:57+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -12582,6 +12582,9 @@ msgid ""
 "ticks for nice looking values. The number of ticks might be different than "
 "the number previously set."
 msgstr ""
+"Če je omogočeno: Za lepe vrednosti uporabite glavno število črtic kot osnovo "
+"za določitev novega števila črtic. Število črtic se lahko razlikuje od prej "
+"nastavljenega števila."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:262
 #, kde-format

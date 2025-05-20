@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-19 00:38+0000\n"
-"PO-Revision-Date: 2025-05-17 17:32+0200\n"
+"PO-Revision-Date: 2025-05-19 16:31+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -12544,6 +12544,9 @@ msgid ""
 "ticks for nice looking values. The number of ticks might be different than "
 "the number previously set."
 msgstr ""
+"Indien ingeschakeld: gebruik het nummer van het hoofdstreepje als basis om "
+"het nieuwe aantal streepjes te bepalen voor mooi uitziende waarden. Het "
+"aantal streepjes kan verschillen van het aantal eerder gezette aantal."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:262
 #, kde-format

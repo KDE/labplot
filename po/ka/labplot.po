@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-19 00:38+0000\n"
-"PO-Revision-Date: 2025-05-17 04:21+0200\n"
+"PO-Revision-Date: 2025-05-19 03:34+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -12555,6 +12555,9 @@ msgid ""
 "ticks for nice looking values. The number of ticks might be different than "
 "the number previously set."
 msgstr ""
+"თუ ჩართულია: ძირითადი გაყოფის ნომრის გამოყენება ახალი დაყოფის რიცხვის "
+"დასადგენად, რომელიც ლამაზი გარეგნობის მნიშვნელობებს გამოიმუშავებს. გაყოფების "
+"რაოდენობა, შეიძლება, ადრე დაყენებული რიცხვისგან განსხვავდებოდეს."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:262
 #, kde-format

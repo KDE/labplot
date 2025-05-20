@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-19 00:38+0000\n"
-"PO-Revision-Date: 2025-05-10 08:47+0200\n"
+"PO-Revision-Date: 2025-05-18 15:04+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -8466,16 +8466,14 @@ msgstr "Intervalle de référence"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:555
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2270
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2292
-#, fuzzy, kde-format
-#| msgid "As Plot Area"
+#, kde-format
 msgid "Inset Plot Area"
-msgstr "Comme zone de tracé"
+msgstr "Zone de tracé encadrée"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
-#, fuzzy, kde-format
-#| msgid "One Plot Area per Plot"
+#, kde-format
 msgid "Inset Plot Area with Data"
-msgstr "Une zone de tracé par tracé"
+msgstr "Zone de tracé encadrée avec des données"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:574
 #: src/frontend/MainWin.cpp:902 src/frontend/notebook/NotebookView.cpp:168
@@ -8890,16 +8888,14 @@ msgid "Text Label"
 msgstr "Étiquette de texte"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2269
-#, fuzzy, kde-format
-#| msgid "%1: add new point"
+#, kde-format
 msgid "%1: add inset plot"
-msgstr "%1 : ajouter un nouveau point"
+msgstr "%1 : ajouter un tracé encadré"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2283
-#, fuzzy, kde-format
-#| msgid "%1: add new point"
+#, kde-format
 msgid "%1: add inset plot with data"
-msgstr "%1 : ajouter un nouveau point"
+msgstr "%1 : ajouter un tracé encadré avec des données"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4021
 #, kde-format

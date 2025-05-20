@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-19 00:38+0000\n"
-"PO-Revision-Date: 2025-05-17 09:02+0300\n"
+"PO-Revision-Date: 2025-05-19 09:06+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -12632,6 +12632,9 @@ msgid ""
 "ticks for nice looking values. The number of ticks might be different than "
 "the number previously set."
 msgstr ""
+"Якщо увімкнено, використати кількість основних поділок як основу для "
+"визначення нової кількості поділок для кращого вигляду значень. Кількість "
+"поділок може бути відмінною від попередньо встановленої."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:262
 #, kde-format
