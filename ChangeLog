@@ -10,6 +10,7 @@ Bug fixes:
 	* Fix build with system QADS 4.4 (!694)
 	* Crash on import when no projects opened (BUG 503800)
 	* Save rotation of axis title seperately for x and y axis
+	* Fix disappearing axis ticks (#1146)
 
 
 -----2.12.0 (2025-04-25) -----
