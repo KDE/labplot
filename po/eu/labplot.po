@@ -10,14 +10,14 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-19 02:37+0000\n"
-"PO-Revision-Date: 2025-05-18 21:42+0200\n"
+"PO-Revision-Date: 2025-05-19 23:22+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 25.04.1\n"
 
 #, kde-format
@@ -1321,7 +1321,7 @@ msgstr "Fitxategi baliogabea."
 #: src/backend/datasources/filters/CANFilter.cpp:226
 #, kde-format
 msgid "No messages read."
-msgstr "Mezuak ez dira irakurri."
+msgstr "Ez da mezurik irakurri."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:229
 #, kde-format
@@ -1362,17 +1362,17 @@ msgstr "Goiburu nagusia"
 #: src/backend/datasources/filters/FITSFilter.cpp:1039
 #, kde-format
 msgid "IMAGE #%1"
-msgstr "IRUDIA #%1"
+msgstr "IRUDIA %1 zk."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:1042
 #, kde-format
 msgid "ASCII_TBL #%1"
-msgstr "ASCII_TBL #%1"
+msgstr "ASCII_TBL %1 zk."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:1045
 #, kde-format
 msgid "BINARY_TBL #%1"
-msgstr "BINARY_TBL #%1"
+msgstr "BINARY_TBL %1 zk."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:1550
 #, kde-format
@@ -1453,7 +1453,7 @@ msgstr "Super-blokearen neurria: %1 byte"
 #: src/backend/datasources/filters/HDF5Filter.cpp:247
 #, kde-format
 msgid "Size of superblock extension: %1 bytes"
-msgstr "Super-bloke hedapenen neurria: %1 byte"
+msgstr "Super-bloke hedapenaren neurria: %1 byte"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:228
 #, kde-format
@@ -1549,7 +1549,7 @@ msgstr "Cachearen uneko gehienezko neurria: %1 byte"
 #: src/backend/datasources/filters/HDF5Filter.cpp:288
 #, kde-format
 msgid "Current cache minimum clean size: %1 bytes"
-msgstr "Cachearen uneko gutxieneko neurria garbia: %1 byte"
+msgstr "Cachearen uneko gutxieneko neurri garbia: %1 byte"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:290
 #, kde-format
@@ -1569,7 +1569,7 @@ msgstr "Erregistratzea gaituta: %1"
 #: src/backend/datasources/filters/HDF5Filter.cpp:309
 #, kde-format
 msgid "Events are currently logged: %1"
-msgstr "Orain gertaera hauek erregistratzen dira: %1"
+msgstr "Gertaerak une honetan erregistratzen dira: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:317
 #, kde-format
@@ -1604,7 +1604,7 @@ msgstr "Orriaren tarteko memoria ezgaituta"
 #: src/backend/datasources/filters/HDF5Filter.cpp:350
 #, kde-format
 msgid "h5dump not found."
-msgstr "«h5dump» ez du aurkitu."
+msgstr "h5dump ez du aurkitu."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
@@ -1736,7 +1736,7 @@ msgstr "Fitxategi hutsa"
 #: src/backend/datasources/filters/JsonFilter.cpp:198
 #, kde-format
 msgid "Parse error: %1 at offset %2"
-msgstr "Sintaxi analisiaren errorea: %1, %2 jatorri-aldaketan"
+msgstr "Prozesatzeko errorea: %1, %2 kokalekuan"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:201
 #, kde-format
@@ -1783,7 +1783,7 @@ msgstr "JSON formatuaren errorea edo dokumentua hutsik dago."
 #: src/backend/datasources/filters/JsonFilter.cpp:522
 #, kde-format
 msgid "Empty file or invalid JSON document."
-msgstr "Fitxategia hutsik edo JSON dokumentu baliogabea."
+msgstr "Fitxategia hutsik dago edo JSON dokumentu baliogabea."
 
 #: src/backend/datasources/filters/MatioFilter.cpp:308
 #: src/backend/datasources/filters/NetCDFFilter.cpp:237
@@ -1827,7 +1827,7 @@ msgstr "Aldagai kopurua: "
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:185
 #, kde-format
 msgid "Variables:"
-msgstr "Aldagaiak: "
+msgstr "Aldagaiak:"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:370
 #: src/backend/datasources/filters/MatioFilter.cpp:740
@@ -1970,9 +1970,9 @@ msgid "String"
 msgstr "Katea"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:450
-#, fuzzy, kde-format
+#, kde-format
 msgid "Array"
-msgstr "Taula"
+msgstr "Array"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:602
 #: src/backend/datasources/filters/MatioFilter.cpp:634
@@ -1999,7 +1999,7 @@ msgstr "Aldagai mota honetarako euskarria ez da oraindik inplementatu."
 #: src/backend/datasources/filters/MatioFilter.cpp:1228
 #, kde-format
 msgid "Variables with rank greater than 2 not supported yet."
-msgstr ""
+msgstr "Heina 2 baino handiagoa duten aldagaiak ez dira oraindik onartzen."
 
 #: src/backend/datasources/filters/McapFilter.cpp:196
 #, kde-format
@@ -2055,7 +2055,7 @@ msgstr "Fitxategia irakurtzea huts egin du. Arrazoia: %1"
 #: src/backend/datasources/filters/McapFilter.cpp:477
 #, kde-format
 msgid "No JSON encoded topics found."
-msgstr ""
+msgstr "Ez da JSON bidez kodetutako gairik aurkitu."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:213
 #, kde-format
@@ -2092,7 +2092,7 @@ msgstr "%1 bertsioko liburutegia erabiliz"
 #: src/backend/datasources/filters/NetCDFFilter.cpp:260
 #, kde-format
 msgid "ncdump not found."
-msgstr "«ncdump» ez du aurkitu."
+msgstr "ncdump ez du aurkitu."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:454
 #, kde-format
@@ -2163,7 +2163,7 @@ msgstr "Datu mota oraindik ez da onartzen."
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1083
 #, kde-format
 msgid "%1 dimensional data of type %2 not supported yet"
-msgstr "%2 motako %1 dimentsio-datuak oraindik ez dira onartzen"
+msgstr "%2 motako %1 dimentsio-datuak ez dira oraindik onartzen"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:63
 #: src/backend/datasources/filters/XLSXFilter.cpp:47
@@ -2180,7 +2180,7 @@ msgstr "Ez da orririk hautatu."
 #: src/backend/datasources/filters/OdsFilter.cpp:260
 #, kde-format
 msgid "Selected sheet not found."
-msgstr "Hautatutako orriak ez ditu aurkitu."
+msgstr "Hautatutako orria ez du aurkitu."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:267
 #, kde-format
@@ -2190,7 +2190,7 @@ msgstr "Orri baliogabeak."
 #: src/backend/datasources/filters/OdsFilter.cpp:329
 #, kde-format
 msgid "Formulas not supported yet."
-msgstr "Formulak oraindik ez dira onartzen."
+msgstr "Formulak ez dira oraindik onartzen."
 
 #: src/backend/datasources/filters/OdsFilter.cpp:486
 #, kde-format
@@ -2200,7 +2200,7 @@ msgstr "Orria ez du aurkitu."
 #: src/backend/datasources/filters/OdsFilter.cpp:493
 #, kde-format
 msgid "Invalid sheet index."
-msgstr "Orri indize baliogabea."
+msgstr "Orri-indize baliogabea."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:132
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:64
@@ -2313,7 +2313,7 @@ msgstr "'%1' atributua falta da edo hutsik dago, balio lehenetsia erabiliko da"
 #: src/backend/datasources/filters/ROOTFilter.cpp:149
 #, kde-format
 msgid "No column available"
-msgstr "Ez dago zutaberik erabilgarri"
+msgstr "Ez dago zutabe erabilgarririk"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:163
 #, kde-format
@@ -2334,7 +2334,7 @@ msgstr "Fitxategi formatuaren bertsioa: %1"
 #: src/backend/datasources/filters/ROOTFilter.cpp:1519
 #, kde-format
 msgid "FREE data record size: %1 bytes"
-msgstr "Datu-erregistro ASKEaren neurria: %1 byte"
+msgstr "Datu-erregistro ASKEen neurria: %1 byte"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1521
 #, kde-format
@@ -2344,7 +2344,7 @@ msgstr "datu-erregistro aske kopurua: %1"
 #: src/backend/datasources/filters/ROOTFilter.cpp:1523
 #, kde-format
 msgid "TNamed size: %1 bytes"
-msgstr "«TNamed»en neurria: %1 byte"
+msgstr "TNamed-en neurria: %1 byte"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1525
 #, kde-format
@@ -2359,7 +2359,7 @@ msgstr "Konpresio maila eta algoritmoa: %1"
 #: src/backend/datasources/filters/ROOTFilter.cpp:1535
 #, kde-format
 msgid "Size of TStreamerInfo record: %1 bytes"
-msgstr "«TStreamerInfo» erregistroaren neurria: %1 byte"
+msgstr "TStreamerInfo erregistroaren neurria: %1 byte"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:103
 #, kde-format
@@ -2394,7 +2394,7 @@ msgstr "Konpresioa maila: %1"
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:129
 #, kde-format
 msgid "Uncompressed File Size: %1 Bytes"
-msgstr "Konprimatu gabeko fitxategiaren neurria: %1 Byte"
+msgstr "Fitxategiaren konprimatu gabeko neurria: %1 Byte"
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:180
 #, kde-format
@@ -21361,7 +21361,7 @@ msgstr "Testuaren kolorea:"
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:37
 #, kde-format
 msgid "Exact Limits:"
-msgstr ""
+msgstr "Muga zehatzak:"
 
 #. i18n: ectx: property (text), widget (QLabel, lData2Column)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:77
@@ -22283,7 +22283,7 @@ msgstr "Jarraitasuna:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBias)
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:498
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bias:"
 msgstr "Alborapena:"
 
@@ -22991,7 +22991,7 @@ msgstr "Baldintzak:"
 #: src/frontend/ui/settingsgeneralpage.ui:439
 #, kde-format
 msgid "Use Hyphen '-' instead of Minus '–'"
-msgstr ""
+msgstr "Erabili marratxoa '-' minusen ordea '–'"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -23843,11 +23843,11 @@ msgstr ""
 #: src/frontend/widgets/ErrorBarWidget.cpp:54
 #, kde-format
 msgid "Y Uncertainty"
-msgstr ""
+msgstr "Y Ziurgabetasuna"
 
 #: src/frontend/widgets/ErrorBarWidget.cpp:62
 #: src/frontend/widgets/ErrorBarWidget.cpp:69
-#, fuzzy, kde-format
+#, kde-format
 msgid "No Errors"
 msgstr "Errorerik ez"
 
@@ -23875,9 +23875,9 @@ msgid "Data, +-:"
 msgstr "Datuak, +-:"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
-#, fuzzy, kde-format
+#, kde-format
 msgid "Start Value"
-msgstr "Hasierako balioa:"
+msgstr "Hasierako balioa"
 
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
@@ -24102,19 +24102,19 @@ msgid "Sub-Script"
 msgstr "Azpi-indizea"
 
 #: src/frontend/widgets/LabelWidget.cpp:549
-#, fuzzy, kde-format
+#, kde-format
 msgid "Left Align"
-msgstr "Ezkerreko marjina"
+msgstr "Ezkerrean lerrokatu"
 
 #: src/frontend/widgets/LabelWidget.cpp:551
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right Align"
-msgstr "Eskuineko marjina"
+msgstr "Eskuinera lerrokatu"
 
 #: src/frontend/widgets/LabelWidget.cpp:552
 #, kde-format
 msgid "Justify"
-msgstr ""
+msgstr "Justifikatu"
 
 #: src/frontend/widgets/LabelWidget.cpp:553
 #, kde-format
@@ -24186,22 +24186,22 @@ msgstr "Proiekzio lerroak, X, oinarri-lerro max."
 #: src/frontend/widgets/MemoryWidget.cpp:26
 #, kde-format
 msgid "Memory used %1 MB, peak %2 MB"
-msgstr ""
+msgstr "Erabilitako memoria %1 MB, gailurra %2 MB"
 
 #: src/frontend/widgets/NumberSpinBox.cpp:53
 #, kde-format
 msgid "Minimum allowed value: %1"
-msgstr ""
+msgstr "Baimendutako balio minimoa: %1"
 
 #: src/frontend/widgets/NumberSpinBox.cpp:55
 #, kde-format
 msgid "Maximum allowed value: %1"
-msgstr ""
+msgstr "Baimendutako balio maximoa: %1"
 
 #: src/frontend/widgets/NumberSpinBox.cpp:57
 #, kde-format
 msgid "The value does not represent a valid number"
-msgstr ""
+msgstr "Balioak ez du zenbaki baliodunik adierazten"
 
 #: src/frontend/widgets/NumberSpinBox.cpp:59
 #, fuzzy, kde-format
@@ -24214,14 +24214,14 @@ msgid "Unhandled error"
 msgstr ""
 
 #: src/frontend/widgets/NumberSpinBox.cpp:440
-#, fuzzy, kde-format
+#, kde-format
 msgid "Invalid value entered. Valid value: %1"
-msgstr "Zenbakizko balio baliogabea."
+msgstr "Balio baliogabea sartu da. Baliodun balioa: %1"
 
 #: src/frontend/widgets/TreeViewComboBox.cpp:54
 #, kde-format
 msgid "Search/Filter text"
-msgstr ""
+msgstr "Bilatu/Iragazi testua"
 
 #: src/frontend/widgets/TreeViewComboBox.cpp:366
 #, kde-format
@@ -24341,7 +24341,7 @@ msgstr ""
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:243
 #, kde-format
 msgid "Windows Bitmap (*.bmp *.BMP)"
-msgstr "«Windows»en bit-mapa (*.bmp *.BMP)"
+msgstr "Windows bit-mapa (*.bmp *.BMP)"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:245
 #, kde-format
@@ -24372,7 +24372,7 @@ msgstr "Esportatu arbelera eta itxi elkarrizketa-koadroa."
 #, kde-format
 msgctxt "@title:window"
 msgid "Custom Grid"
-msgstr "Neurrira egokitutako sareta"
+msgstr "Neurriko sareta"
 
 #: src/frontend/worksheet/GridDialog.cpp:46
 #, kde-format
@@ -24382,12 +24382,12 @@ msgstr "Puntuak"
 #: src/frontend/worksheet/GridDialog.cpp:50
 #, kde-format
 msgid "Horizontal spacing:"
-msgstr "Bereizketa horizontala:"
+msgstr "Tarte horizontala:"
 
 #: src/frontend/worksheet/GridDialog.cpp:58
 #, kde-format
 msgid "Vertical spacing:"
-msgstr "Bereizketa bertikala:"
+msgstr "Tarte bertikala:"
 
 #: src/frontend/worksheet/SlidingPanel.cpp:86
 #, kde-format
@@ -24397,64 +24397,64 @@ msgstr "Irten aurkezpenetik"
 #: src/frontend/worksheet/SlidingPanel.cpp:131
 #, kde-format
 msgid "Pin the navigation panel"
-msgstr ""
+msgstr "Iltzatu nabigazio panela"
 
 #: src/frontend/worksheet/WorksheetView.cpp:169
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Zoom"
 msgid "No fit"
-msgstr "Doitu automatikoki"
+msgstr "Ez egokitu"
 
 #: src/frontend/worksheet/WorksheetView.cpp:179
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit to Selection"
-msgstr "Doitu &hautapenera"
+msgstr "Egokitu hautapenera"
 
 #: src/frontend/worksheet/WorksheetView.cpp:182
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Zoom"
 msgid "Fit"
-msgstr "Doitu"
+msgstr "Egokitu"
 
 #: src/frontend/worksheet/WorksheetView.cpp:187
 #: src/frontend/worksheet/WorksheetView.cpp:338
 #, kde-format
 msgid "Select and Edit"
-msgstr ""
+msgstr "Hautatu eta editatu"
 
 #. i18n("Selection"), mouseModeActionGroup);
 #. selectionModeAction->setCheckable(true);
 #. "Add new" related actions
 #: src/frontend/worksheet/WorksheetView.cpp:218
-#, fuzzy, kde-format
+#, kde-format
 msgid "Four Axes"
-msgstr "Iñigo Salvador Azurmendi"
+msgstr "Lau ardatz"
 
 #: src/frontend/worksheet/WorksheetView.cpp:219
 #, kde-format
 msgid "Two Axes"
-msgstr ""
+msgstr "Bi ardatz"
 
 #: src/frontend/worksheet/WorksheetView.cpp:220
 #, kde-format
 msgid "Two Axes, Centered"
-msgstr ""
+msgstr "Bi ardatz, erdiratuta"
 
 #: src/frontend/worksheet/WorksheetView.cpp:222
 #, kde-format
 msgid "Two Axes, Crossing at Origin"
-msgstr ""
+msgstr "Bi ardatz, jatorrian gurutzatzen direnak"
 
 #: src/frontend/worksheet/WorksheetView.cpp:223
-#, fuzzy, kde-format
+#, kde-format
 msgid "Load from Template"
-msgstr "Gorde honela"
+msgstr "Zamatu txantiloitik"
 
 #: src/frontend/worksheet/WorksheetView.cpp:246
 #, kde-format
 msgid "No Grid"
-msgstr ""
+msgstr "Saretarik ez"
 
 #: src/frontend/worksheet/WorksheetView.cpp:251
 #, kde-format
@@ -24474,22 +24474,22 @@ msgstr ""
 #: src/frontend/worksheet/WorksheetView.cpp:260
 #, kde-format
 msgid "Sparse Dot Grid"
-msgstr ""
+msgstr "Sakabanatutako puntuen sareta"
 
 #: src/frontend/worksheet/WorksheetView.cpp:263
-#, fuzzy, kde-format
+#, kde-format
 msgid "Custom Grid"
-msgstr "Norberak finkatutako sareta"
+msgstr "Neurriko sareta"
 
 #: src/frontend/worksheet/WorksheetView.cpp:266
-#, fuzzy, kde-format
+#, kde-format
 msgid "Snap to Grid"
-msgstr "Atxiki saretari"
+msgstr "Atxiki saretara"
 
 #: src/frontend/worksheet/WorksheetView.cpp:286
-#, fuzzy, kde-format
+#, kde-format
 msgid "Interactive Plots"
-msgstr "Elkarreragilea"
+msgstr "Grafiko elkarreragileak"
 
 #: src/frontend/worksheet/WorksheetView.cpp:287
 #, kde-format
@@ -24497,6 +24497,8 @@ msgid ""
 "If not activated, plots on the worksheet don't react on drag and mouse wheel "
 "events."
 msgstr ""
+"Aktibatuta ez badago, lan-orriko grafikoek ez dute erreakziorik arrastatzean "
+"eta saguaren gurpilaren gertakarien aurrean."
 
 #: src/frontend/worksheet/WorksheetView.cpp:304
 #: src/frontend/worksheet/WorksheetView.cpp:318
