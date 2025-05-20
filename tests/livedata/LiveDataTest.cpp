@@ -1497,6 +1497,60 @@ void LiveDataTest::testUdpReadContinuousFixed00() {
 	QCOMPARE(dataSource.column(1)->valueAt(dataSource.rowCount() - 1), 2.);
 }
 
+#define CREATE_DUMMY_LIVEDATA_PROJECT(project, importFileName)                                                                                                 \
+	/* initialize the live data source */                                                                                                                      \
+	auto dataSource = new LiveDataSource(QStringLiteral("test"), false);                                                                                       \
+	dataSource->setSourceType(LiveDataSource::SourceType::FileOrPipe);                                                                                         \
+	dataSource->setFileType(AbstractFileFilter::FileType::Ascii);                                                                                              \
+	dataSource->setFileName(importFileName);                                                                                                                   \
+	dataSource->setReadingType(LiveDataSource::ReadingType::ContinuousFixed);                                                                                  \
+	dataSource->setSampleSize(100); /* big number of samples, more then the new data has, meaning we read all new data */                                      \
+	dataSource->setUpdateType(LiveDataSource::UpdateType::NewData);                                                                                            \
+                                                                                                                                                               \
+	project.addChild(dataSource);                                                                                                                              \
+                                                                                                                                                               \
+	/* initialize the ASCII filter*/                                                                                                                           \
+	auto* filter = new AsciiFilter();                                                                                                                          \
+	auto properties = filter->defaultProperties();                                                                                                             \
+	properties.headerEnabled = false;                                                                                                                          \
+	properties.intAsDouble = false;                                                                                                                            \
+	properties.columnNamesRaw = QStringLiteral("x, y");                                                                                                        \
+	properties.columnModesString = QStringLiteral("Int, Int");                                                                                                 \
+	properties.automaticSeparatorDetection = false;                                                                                                            \
+	properties.separator = QStringLiteral(",");                                                                                                                \
+	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);                                                                                    \
+                                                                                                                                                               \
+	dataSource->setFilter(filter);                                                                                                                             \
+                                                                                                                                                               \
+	/* read the data and perform checks, after the initial read all data is read */                                                                            \
+	dataSource->read();                                                                                                                                        \
+                                                                                                                                                               \
+	QCOMPARE(dataSource->columnCount(), 2);                                                                                                                    \
+	QCOMPARE(dataSource->rowCount(), 2);                                                                                                                       \
+                                                                                                                                                               \
+	QCOMPARE(dataSource->column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);                                                                        \
+	QCOMPARE(dataSource->column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);                                                                        \
+                                                                                                                                                               \
+	QCOMPARE(dataSource->column(0)->integerAt(0), 1);                                                                                                          \
+	QCOMPARE(dataSource->column(1)->integerAt(0), 2);                                                                                                          \
+                                                                                                                                                               \
+	QCOMPARE(dataSource->column(0)->integerAt(1), 3);                                                                                                          \
+	QCOMPARE(dataSource->column(1)->integerAt(1), 4);                                                                                                          \
+                                                                                                                                                               \
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));                                                                                                     \
+	QVERIFY(ws != nullptr);                                                                                                                                    \
+	project.addChild(ws);                                                                                                                                      \
+                                                                                                                                                               \
+	auto* p = new CartesianPlot(QStringLiteral("plot"));                                                                                                       \
+	p->setType(CartesianPlot::Type::TwoAxes); /* Otherwise no axis are created */                                                                              \
+	ws->addChild(p);                                                                                                                                           \
+                                                                                                                                                               \
+	auto* curve = new XYCurve(QStringLiteral("curve"));                                                                                                        \
+	p->addChild(curve);                                                                                                                                        \
+                                                                                                                                                               \
+	curve->setXColumn(dataSource->column(0));                                                                                                                  \
+	curve->setYColumn(dataSource->column(1));
+
 void LiveDataTest::testLoadSaveLiveDataLinkedFile_FileExists() {
 	// create a temp file and write some data into it
 	QTemporaryFile tempFile;
@@ -1514,60 +1568,8 @@ void LiveDataTest::testLoadSaveLiveDataLinkedFile_FileExists() {
 	{
 		Project project;
 
-			   // initialize the live data source
-		auto dataSource = new LiveDataSource(QStringLiteral("test"), false);
-		dataSource->setSourceType(LiveDataSource::SourceType::FileOrPipe);
-		dataSource->setFileType(AbstractFileFilter::FileType::Ascii);
-		dataSource->setFileName(file.fileName());
-		dataSource->setReadingType(LiveDataSource::ReadingType::ContinuousFixed);
-		dataSource->setSampleSize(100); // big number of samples, more then the new data has, meaning we read all new data
-		dataSource->setUpdateType(LiveDataSource::UpdateType::NewData);
-		dataSource->setFileLinked(true);
-
-		project.addChild(dataSource);
-
-			   // initialize the ASCII filter
-		auto* filter = new AsciiFilter();
-		auto properties = filter->defaultProperties();
-		properties.headerEnabled = false;
-		properties.intAsDouble = false;
-		properties.columnNamesRaw = QStringLiteral("x, y");
-		properties.columnModesString = QStringLiteral("Int, Int");
-		properties.automaticSeparatorDetection = false;
-		properties.separator = QStringLiteral(",");
-		QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
-
-			   // QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
-		dataSource->setFilter(filter);
-
-			   // read the data and perform checks, after the initial read all data is read
-		dataSource->read();
-
-		QCOMPARE(dataSource->columnCount(), 2);
-		QCOMPARE(dataSource->rowCount(), 2);
-
-		QCOMPARE(dataSource->column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
-		QCOMPARE(dataSource->column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
-
-		QCOMPARE(dataSource->column(0)->integerAt(0), 1);
-		QCOMPARE(dataSource->column(1)->integerAt(0), 2);
-
-		QCOMPARE(dataSource->column(0)->integerAt(1), 3);
-		QCOMPARE(dataSource->column(1)->integerAt(1), 4);
-
-		auto* ws = new Worksheet(QStringLiteral("Worksheet"));
-		QVERIFY(ws != nullptr);
-		project.addChild(ws);
-
-		auto* p = new CartesianPlot(QStringLiteral("plot"));
-		p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
-		ws->addChild(p);
-
-		auto* curve = new XYCurve(QStringLiteral("curve"));
-		p->addChild(curve);
-
-		curve->setXColumn(dataSource->column(0));
-		curve->setYColumn(dataSource->column(1));
+		CREATE_DUMMY_LIVEDATA_PROJECT(project, file.fileName());
+		dataSource->setFileLinked(true); // Linked file, no column data stored
 
 		SAVE_PROJECT("testLoadSaveLiveDataSource");
 	}
@@ -1616,59 +1618,8 @@ void LiveDataTest::testLoadSaveLiveDataLinkedFile_FileNotExists() {
 		file.flush();
 
 		Project project;
-
-			   // initialize the live data source
-		auto dataSource = new LiveDataSource(QStringLiteral("test"), false);
-		dataSource->setSourceType(LiveDataSource::SourceType::FileOrPipe);
-		dataSource->setFileType(AbstractFileFilter::FileType::Ascii);
-		dataSource->setFileName(file.fileName());
-		dataSource->setReadingType(LiveDataSource::ReadingType::ContinuousFixed);
-		dataSource->setSampleSize(100); // big number of samples, more then the new data has, meaning we read all new data
-		dataSource->setUpdateType(LiveDataSource::UpdateType::NewData);
-		dataSource->setFileLinked(true); // Column data gets not stored in the file, only a link
-
-		project.addChild(dataSource);
-
-			   // initialize the ASCII filter
-		auto* filter = new AsciiFilter();
-		auto properties = filter->defaultProperties();
-		properties.headerEnabled = false;
-		properties.intAsDouble = false;
-		properties.columnNamesRaw = QStringLiteral("x, y");
-		properties.columnModesString = QStringLiteral("Int, Int");
-		properties.automaticSeparatorDetection = false;
-		properties.separator = QStringLiteral(",");
-		QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
-		dataSource->setFilter(filter);
-
-			   // read the data and perform checks, after the initial read all data is read
-		dataSource->read();
-
-		QCOMPARE(dataSource->columnCount(), 2);
-		QCOMPARE(dataSource->rowCount(), 2);
-
-		QCOMPARE(dataSource->column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
-		QCOMPARE(dataSource->column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
-
-		QCOMPARE(dataSource->column(0)->integerAt(0), 1);
-		QCOMPARE(dataSource->column(1)->integerAt(0), 2);
-
-		QCOMPARE(dataSource->column(0)->integerAt(1), 3);
-		QCOMPARE(dataSource->column(1)->integerAt(1), 4);
-
-		auto* ws = new Worksheet(QStringLiteral("Worksheet"));
-		QVERIFY(ws != nullptr);
-		project.addChild(ws);
-
-		auto* p = new CartesianPlot(QStringLiteral("plot"));
-		p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
-		ws->addChild(p);
-
-		auto* curve = new XYCurve(QStringLiteral("curve"));
-		p->addChild(curve);
-
-		curve->setXColumn(dataSource->column(0));
-		curve->setYColumn(dataSource->column(1));
+		CREATE_DUMMY_LIVEDATA_PROJECT(project, importFilename);
+		dataSource->setFileLinked(true); // Not linked, the column data is stored in the file
 
 		SAVE_PROJECT("testLoadSaveLiveDataSource");
 	}
@@ -1725,60 +1676,8 @@ void LiveDataTest::testLoadSaveLiveDataNoLinkedFile() {
 
 		Project project;
 
-			   // initialize the live data source
-		auto dataSource = new LiveDataSource(QStringLiteral("test"), false);
-		dataSource->setSourceType(LiveDataSource::SourceType::FileOrPipe);
-		dataSource->setFileType(AbstractFileFilter::FileType::Ascii);
-		dataSource->setFileName(file.fileName());
-		dataSource->setReadingType(LiveDataSource::ReadingType::ContinuousFixed);
-		dataSource->setSampleSize(100); // big number of samples, more then the new data has, meaning we read all new data
-		dataSource->setUpdateType(LiveDataSource::UpdateType::NewData);
+		CREATE_DUMMY_LIVEDATA_PROJECT(project, file.fileName());
 		dataSource->setFileLinked(false); // Not linked, the column data is stored in the file
-
-		project.addChild(dataSource);
-
-			   // initialize the ASCII filter
-		auto* filter = new AsciiFilter();
-		auto properties = filter->defaultProperties();
-		properties.headerEnabled = false;
-		properties.intAsDouble = false;
-		properties.columnNamesRaw = QStringLiteral("x, y");
-		properties.columnModesString = QStringLiteral("Int, Int");
-		properties.automaticSeparatorDetection = false;
-		properties.separator = QStringLiteral(",");
-		QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
-
-			   // QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);
-		dataSource->setFilter(filter);
-
-			   // read the data and perform checks, after the initial read all data is read
-		dataSource->read();
-
-		QCOMPARE(dataSource->columnCount(), 2);
-		QCOMPARE(dataSource->rowCount(), 2);
-
-		QCOMPARE(dataSource->column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
-		QCOMPARE(dataSource->column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
-
-		QCOMPARE(dataSource->column(0)->integerAt(0), 1);
-		QCOMPARE(dataSource->column(1)->integerAt(0), 2);
-
-		QCOMPARE(dataSource->column(0)->integerAt(1), 3);
-		QCOMPARE(dataSource->column(1)->integerAt(1), 4);
-
-		auto* ws = new Worksheet(QStringLiteral("Worksheet"));
-		QVERIFY(ws != nullptr);
-		project.addChild(ws);
-
-		auto* p = new CartesianPlot(QStringLiteral("plot"));
-		p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
-		ws->addChild(p);
-
-		auto* curve = new XYCurve(QStringLiteral("curve"));
-		p->addChild(curve);
-
-		curve->setXColumn(dataSource->column(0));
-		curve->setYColumn(dataSource->column(1));
 
 		SAVE_PROJECT("testLoadSaveLiveDataSource");
 	}
