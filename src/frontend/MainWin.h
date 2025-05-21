@@ -167,6 +167,7 @@ private:
 	QAction* m_lastUsedNotebookAction{nullptr};
 	QToolButton* m_tbNotebook{nullptr};
 #endif
+	QToolButton* m_tbScript{nullptr};
 
 	// toggling dock widgets, status bar and full screen
 	QAction* m_projectExplorerDockAction;

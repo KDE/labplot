@@ -172,8 +172,8 @@ MainWin::MainWin(QWidget* parent, const QString& fileName)
 	// ktexteditor minor setup
 	KTextEditor::Editor* kTextEditor = KTextEditor::Editor::instance();
 	connect(kTextEditor, &KTextEditor::Editor::configChanged, [kTextEditor] {
-		for (KTextEditor::Document* document : kTextEditor->documents()) {
-			for (KTextEditor::View* view : document->views()) {
+		for (auto* document : kTextEditor->documents()) {
+			for (auto* view : document->views()) {
 				QFont editorFont = kTextEditor->font();
 				QString editorThemeName = kTextEditor->theme().name();
 
@@ -325,16 +325,17 @@ void MainWin::initGUI(const QString& fileName) {
 	auto* lastAction_ = mainToolBar->actions().at(mainToolBar->actions().count() - 1);
 	mainToolBar->insertWidget(lastAction_, tbImport);
 
-	auto* tbScript = new QToolButton(mainToolBar);
-	tbScript->setPopupMode(QToolButton::MenuButtonPopup);
-	tbScript->setMenu(m_newScriptMenu);
+	m_tbScript = new QToolButton(mainToolBar);
+	m_tbScript->setPopupMode(QToolButton::MenuButtonPopup);
+	m_tbScript->setMenu(m_newScriptMenu);
 	if (m_newScriptActions.isEmpty()) {
-		tbScript->setIcon(QIcon::fromTheme(QStringLiteral("quickopen"))); // a dummy icon
-		tbScript->setEnabled(false);
-	} else
-		tbScript->setDefaultAction(m_newScriptActions.first()); // requires more complex logic, like done for the notebooks, but can be ignored for now
+		m_tbScript->setIcon(QIcon::fromTheme(QStringLiteral("quickopen"))); // a placeholder icon since we have no runtimes
+		m_tbScript->setEnabled(false);
+	} else {
+		m_tbScript->setDefaultAction(m_newScriptActions.first());
+	}
 	auto* _lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 4);
-	mainToolBar->insertWidget(_lastAction, tbScript);
+	mainToolBar->insertWidget(_lastAction, m_tbScript);
 
 	// hamburger menu
 	m_hamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, actionCollection());
@@ -2087,6 +2088,7 @@ void MainWin::newSpreadsheet() {
 */
 void MainWin::newScript() {
 	auto* action = static_cast<QAction*>(QObject::sender());
+	m_tbScript->setDefaultAction(action);
 	auto* script = new Script(i18n("%1", action->data().toString()), action->data().toString());
 	this->addAspectToProject(script);
 }

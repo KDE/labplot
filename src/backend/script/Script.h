@@ -63,13 +63,11 @@ Q_SIGNALS:
 	void outputFontChanged(const QFont&);
 	void editorThemeChanged(const QString&);
 
-// previously from ScriptManager 
 public:
     static QStringList languages;
 
 	static QString readRuntime(XmlStreamReader*);
 
-// previously from ScriptManager 
 private:
     static bool m_isRunning;
     static Script* m_lastRunScript;

@@ -21,6 +21,20 @@
 #include "backend/script/python/PythonScriptRuntime.h"
 #endif
 
+/*!
+  \class Script
+  \brief Aspect providing an application scripting interface
+
+  Script holds a pointer to a ScriptEditor, which manages the display of its contents.
+  Script holds a pointer to a KTextDocument, which is the actual owner of its scripting
+  contents.
+  Script holds a pointer to a scripting runtime which actually implements the scripting
+  functionality for that particular language.
+
+  A script is left in an uninitialized state if it is initialized with an unknown language.
+
+  \ingroup backend
+*/
 Script::Script(const QString& name, const QString& lang)
 	: AbstractPart(name, AspectType::Script)
 	, m_kTextEditorDocument(KTextEditor::Editor::instance()->createDocument(this)) {
@@ -163,15 +177,18 @@ void Script::runScript() {
 	if (!m_initialized)
 		return;
 
+	// connect to the writeOutput signal from the script runtime
 	auto conn = connect(m_scriptRuntime, &ScriptRuntime::writeOutput, [&] (bool isErr, const QString& msg) {
 		ScriptEditor* p_view = dynamic_cast<ScriptEditor*>(view());
-		p_view->writeOutput(isErr, msg);
+		p_view->writeOutput(isErr, msg); // write the output to the scripteditor output
 	});
 
+	// push all changes at once to undo stack
 	beginMacro(i18n("%1: run %2 script", name(), m_language));
-	Script::runScript(this, m_kTextEditorDocument->text());
+	Script::runScript(this, m_kTextEditorDocument->text()); // run the script
 	endMacro();
 
+	// disconnect from writeOutput signal
 	disconnect(conn);
 }
 
@@ -200,9 +217,8 @@ void Script::prepareDocument() const {
 	if (!m_kTextEditorDocument->isEmpty())
 		return;
 #ifdef HAVE_PYTHON_SCRIPTING
-    if (m_language.compare(QStringLiteral("python"), Qt::CaseInsensitive) == 0) {
+    if (m_language.compare(QStringLiteral("python"), Qt::CaseInsensitive) == 0)
         m_kTextEditorDocument->setText(QStringLiteral("from pylabplot import *"));
-    }
 #endif
 }
 
@@ -265,9 +281,8 @@ ScriptRuntime* Script::newScriptRuntime(const QString& language, Script* script)
     ScriptRuntime* scriptRuntime {nullptr};
 
 #ifdef HAVE_PYTHON_SCRIPTING
-    if (language.compare(QStringLiteral("python"), Qt::CaseInsensitive) == 0) {
+    if (language.compare(QStringLiteral("python"), Qt::CaseInsensitive) == 0)
         scriptRuntime = new PythonScriptRuntime(script);
-    }
 #endif
 
 	if (!scriptRuntime)
@@ -288,16 +303,12 @@ void Script::runScript(Script* script, const QString& code) {
 
         if (!script->scriptRuntime()->exec(code)) {
             m_isRunning = false;
-            QMessageBox::critical(script->view(),
-                i18n("Script"),
-                i18n("Failed to run the script."));
+            QMessageBox::critical(script->view(), i18n("Script"), i18n("Failed to run the script."));
         }
 
         m_isRunning = false;
     } else {
-        QMessageBox::critical(script->view(),
-            i18n("Script"),
-            i18n("A script is already running."));
+        QMessageBox::critical(script->view(), i18n("Script"), i18n("A script is already running."));
     }
 }
 
