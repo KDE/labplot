@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-19 00:38+0000\n"
+"POT-Creation-Date: 2025-05-21 00:39+0000\n"
 "PO-Revision-Date: 2025-02-09 08:30+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -1211,20 +1211,20 @@ msgid "Number of lines: %1"
 msgstr "Liczba wierszy: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:524
-#: src/backend/datasources/filters/AsciiFilter.cpp:1309
+#: src/backend/datasources/filters/AsciiFilter.cpp:1311
 #: src/backend/datasources/filters/JsonFilter.cpp:284
 #, kde-format
 msgid "Column %1"
 msgstr "Kolumna %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:594
-#: src/backend/datasources/filters/AsciiFilter.cpp:1332
+#: src/backend/datasources/filters/AsciiFilter.cpp:1334
 #, kde-format
 msgid "Timestamp"
 msgstr "Znacznik czasu"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:598
-#: src/backend/datasources/filters/AsciiFilter.cpp:1336
+#: src/backend/datasources/filters/AsciiFilter.cpp:1338
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1288,7 +1288,7 @@ msgstr "Nie udało się otworzyć urządzenia/pliku lub jest on pusty."
 #: src/backend/datasources/filters/ROOTFilter.cpp:235
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:332
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:334
 #: src/backend/datasources/filters/XLSXFilter.cpp:509
 #, kde-format
 msgid "Not enough memory."
@@ -2037,7 +2037,7 @@ msgid "No Statistics found."
 msgstr "Nie znaleziono żadnych statystyk."
 
 #: src/backend/datasources/filters/McapFilter.cpp:469
-#: src/backend/datasources/filters/McapFilter.cpp:964
+#: src/backend/datasources/filters/McapFilter.cpp:966
 #, kde-format
 msgid "Failed to read the file. Reason: %1"
 msgstr "Nie udało się odczytać pliku. Powód: %1"
@@ -2310,42 +2310,42 @@ msgstr "Brak kolumn"
 msgid "Unsupported file type, neither histogram no tree."
 msgstr "Nieobsługiwany rodzaj pliku, bo ani to histogram, ani drzewo."
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1506
+#: src/backend/datasources/filters/ROOTFilter.cpp:1505
 #, kde-format
 msgid "Not a ROOT file"
 msgstr "To nie jest plik ROOT"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1511
+#: src/backend/datasources/filters/ROOTFilter.cpp:1510
 #, kde-format
 msgid "File format version: %1"
 msgstr "Wersja formatu pliku: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1519
+#: src/backend/datasources/filters/ROOTFilter.cpp:1518
 #, kde-format
 msgid "FREE data record size: %1 bytes"
 msgstr "Rozmiar wolnych rekordów danych: %1 bajtów"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1521
+#: src/backend/datasources/filters/ROOTFilter.cpp:1520
 #, kde-format
 msgid "Number of free data records: %1"
 msgstr "Liczba wolnych rekordów danych: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1523
+#: src/backend/datasources/filters/ROOTFilter.cpp:1522
 #, kde-format
 msgid "TNamed size: %1 bytes"
 msgstr "Rozmiar TNamed: %1 bajtów"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1525
+#: src/backend/datasources/filters/ROOTFilter.cpp:1524
 #, kde-format
 msgid "Size of file pointers: %1 bytes"
 msgstr "Rozmiar wskaźników plików: %1 bajtów"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1530
+#: src/backend/datasources/filters/ROOTFilter.cpp:1529
 #, kde-format
 msgid "Compression level and algorithm: %1"
 msgstr "Poziom kompresji i algorytm: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1535
+#: src/backend/datasources/filters/ROOTFilter.cpp:1534
 #, kde-format
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "Rozmiar rekordu TStreamerInfo: %1 bajtów"
@@ -2425,17 +2425,17 @@ msgstr "Nieprawidłowy plik DBC."
 msgid "Unknown error,"
 msgstr "Nieznany błąd,"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:443
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:445
 #, kde-format
 msgid "Time_s"
 msgstr "Czas s"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:445
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:447
 #, kde-format
 msgid "Time_ns"
 msgstr "Czas ns"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:447
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:449
 #, kde-format
 msgid "Time_10µs"
 msgstr "Czas_10µs"
