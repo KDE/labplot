@@ -31,8 +31,6 @@ private:
 
     // singleton methods (called once for all PythonScripts)
     static bool initPython();
-    // static bool bindProject(Project*);
-    // static bool unBindProject();
 
     // utilities
     static PyObject* getModuleDict(const QString&);
