@@ -1,11 +1,11 @@
 #include <QIcon>
-#include <QWidget>
 #include <QMessageBox>
+#include <QWidget>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KTextEditor/Editor>
 #include <KTextEditor/Document>
+#include <KTextEditor/Editor>
 #include <KTextEditor/View>
 
 #include "backend/core/Project.h"
@@ -38,7 +38,6 @@
 Script::Script(const QString& name, const QString& lang)
 	: AbstractPart(name, AspectType::Script)
 	, m_kTextEditorDocument(KTextEditor::Editor::instance()->createDocument(this)) {
-	
 	if (!Script::languages.contains(lang, Qt::CaseInsensitive)) {
 		m_initialized = false;
 		return;
@@ -72,7 +71,7 @@ bool Script::printPreview() const {
 }
 
 bool Script::exportView() const {
-    return false;
+	return false;
 }
 
 QWidget* Script::view() const {
@@ -80,7 +79,7 @@ QWidget* Script::view() const {
 		m_view = new ScriptEditor(const_cast<Script*>(this));
 		m_partView = m_view;
 	}
-	
+
 	return m_partView;
 }
 
@@ -178,7 +177,7 @@ void Script::runScript() {
 		return;
 
 	// connect to the writeOutput signal from the script runtime
-	auto conn = connect(m_scriptRuntime, &ScriptRuntime::writeOutput, [&] (bool isErr, const QString& msg) {
+	auto conn = connect(m_scriptRuntime, &ScriptRuntime::writeOutput, [&](bool isErr, const QString& msg) {
 		ScriptEditor* p_view = dynamic_cast<ScriptEditor*>(view());
 		p_view->writeOutput(isErr, msg); // write the output to the scripteditor output
 	});
@@ -217,8 +216,8 @@ void Script::prepareDocument() const {
 	if (!m_kTextEditorDocument->isEmpty())
 		return;
 #ifdef HAVE_PYTHON_SCRIPTING
-    if (m_language.compare(QStringLiteral("python"), Qt::CaseInsensitive) == 0)
-        m_kTextEditorDocument->setText(QStringLiteral("from pylabplot import *"));
+	if (m_language.compare(QStringLiteral("python"), Qt::CaseInsensitive) == 0)
+		m_kTextEditorDocument->setText(QStringLiteral("from pylabplot import *"));
 #endif
 }
 
@@ -278,47 +277,47 @@ Script* Script::m_lastRunScript = nullptr;
 
 // static member functions
 ScriptRuntime* Script::newScriptRuntime(const QString& language, Script* script) {
-    ScriptRuntime* scriptRuntime {nullptr};
+	ScriptRuntime* scriptRuntime{nullptr};
 
 #ifdef HAVE_PYTHON_SCRIPTING
-    if (language.compare(QStringLiteral("python"), Qt::CaseInsensitive) == 0)
-        scriptRuntime = new PythonScriptRuntime(script);
+	if (language.compare(QStringLiteral("python"), Qt::CaseInsensitive) == 0)
+		scriptRuntime = new PythonScriptRuntime(script);
 #endif
 
 	if (!scriptRuntime)
 		return nullptr;
 
-    if (scriptRuntime->init()) {
-        return scriptRuntime;
-    } else {
-        delete scriptRuntime;
-        return nullptr;
-    }
+	if (scriptRuntime->init()) {
+		return scriptRuntime;
+	} else {
+		delete scriptRuntime;
+		return nullptr;
+	}
 }
 
 void Script::runScript(Script* script, const QString& code) {
-    if (!m_isRunning) {
-        m_isRunning = true;
-        m_lastRunScript = script;
+	if (!m_isRunning) {
+		m_isRunning = true;
+		m_lastRunScript = script;
 
-        if (!script->scriptRuntime()->exec(code)) {
-            m_isRunning = false;
-            QMessageBox::critical(script->view(), i18n("Script"), i18n("Failed to run the script."));
-        }
+		if (!script->scriptRuntime()->exec(code)) {
+			m_isRunning = false;
+			QMessageBox::critical(script->view(), i18n("Script"), i18n("Failed to run the script."));
+		}
 
-        m_isRunning = false;
-    } else {
-        QMessageBox::critical(script->view(), i18n("Script"), i18n("A script is already running."));
-    }
+		m_isRunning = false;
+	} else {
+		QMessageBox::critical(script->view(), i18n("Script"), i18n("A script is already running."));
+	}
 }
 
 bool Script::cancelScript(Script* script) {
-    if (m_lastRunScript != script)
-        return false;
+	if (m_lastRunScript != script)
+		return false;
 
-    // return script->scriptRuntime()->cancel();
+	// return script->scriptRuntime()->cancel();
 
-    return false; // cannot have cancel functionality until scripts are run on separate thread from gui thread
+	return false; // cannot have cancel functionality until scripts are run on separate thread from gui thread
 }
 
 QString Script::readRuntime(XmlStreamReader* reader) {
@@ -327,9 +326,9 @@ QString Script::readRuntime(XmlStreamReader* reader) {
 		return {};
 	}
 
-	QXmlStreamAttributes attribs =reader->attributes();
+	QXmlStreamAttributes attribs = reader->attributes();
 	QString str = attribs.value(QStringLiteral("runtime")).toString();
-	
+
 	if (str.isEmpty()) {
 		reader->raiseError(QStringLiteral("runtime"));
 		return {};

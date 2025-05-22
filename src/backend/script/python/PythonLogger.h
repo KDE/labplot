@@ -6,14 +6,13 @@
 class PythonScriptRuntime;
 
 class PythonLogger {
-
 public:
-    explicit PythonLogger(PythonScriptRuntime*, bool);
-    void write(const QString&);
+	explicit PythonLogger(PythonScriptRuntime*, bool);
+	void write(const QString&);
 
 private:
-    PythonScriptRuntime* m_pythonScript{nullptr};
-    bool m_isStdErr{false};
+	PythonScriptRuntime* m_pythonScript{nullptr};
+	bool m_isStdErr{false};
 };
 
 #endif

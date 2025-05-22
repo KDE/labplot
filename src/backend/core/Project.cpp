@@ -1334,5 +1334,5 @@ Project* Project::currentProject = nullptr;
  * injecting the project variable into the scripting runtime.
  */
 Project* project() {
-    return Project::currentProject;
+	return Project::currentProject;
 }

@@ -19,11 +19,10 @@
  * \param script - The Script instance that owns this script runtime
  * \return returns a ScriptRuntime instance
  */
-ScriptRuntime::ScriptRuntime(const QString& lang, Script* script) 
-    : QObject()
-    , m_name(script->name())
-    , lang(lang) {
-
+ScriptRuntime::ScriptRuntime(const QString& lang, Script* script)
+	: QObject()
+	, m_name(script->name())
+	, lang(lang) {
 }
 
 /*!
@@ -31,7 +30,7 @@ ScriptRuntime::ScriptRuntime(const QString& lang, Script* script)
  * \return returns the line where the error occurred or -1 if no error occurred or the line is unknown
  */
 int ScriptRuntime::errorLine() const {
-    return m_errorLine;
+	return m_errorLine;
 }
 
 /*!

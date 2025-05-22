@@ -4,11 +4,11 @@
 #include <sbkconverter.h>
 #include <sbkmodule.h>
 
-#include "pyerrors.h"
-#include "pylabplot/pylabplot_python.h"
+#include "backend/core/Project.h"
 #include "backend/script/Script.h"
 #include "backend/script/ScriptRuntime.h"
-#include "backend/core/Project.h"
+#include "pyerrors.h"
+#include "pylabplot/pylabplot_python.h"
 
 // The name of our python extension module: pylabplot
 static const char moduleName[] = "pylabplot";
@@ -30,354 +30,353 @@ PyObject* PythonScriptRuntime::sysStdOut{nullptr};
 PyObject* PythonScriptRuntime::sysStdErr{nullptr};
 
 PythonScriptRuntime::PythonScriptRuntime(Script* script)
-    : ScriptRuntime(QStringLiteral("Python"), script)
-    // PythonLogger instance to replace sys.stdout in the python interpreter
-    , m_loggerStdOut(new PythonLogger(this, false))
-    // PythonLogger instance to replace sys.stderr in the python interpreter
-    , m_loggerStdErr(new PythonLogger(this, true)) {
+	: ScriptRuntime(QStringLiteral("Python"), script)
+	// PythonLogger instance to replace sys.stdout in the python interpreter
+	, m_loggerStdOut(new PythonLogger(this, false))
+	// PythonLogger instance to replace sys.stderr in the python interpreter
+	, m_loggerStdErr(new PythonLogger(this, true)) {
 }
 
 PythonScriptRuntime::~PythonScriptRuntime() {
-    // decrease refcount for local context dict to allow python garbage collection
-    Py_XDECREF(m_localDict);
+	// decrease refcount for local context dict to allow python garbage collection
+	Py_XDECREF(m_localDict);
 
-    delete m_loggerStdOut;
-    delete m_loggerStdErr;
+	delete m_loggerStdOut;
+	delete m_loggerStdErr;
 }
 
 bool PythonScriptRuntime::init() {
-    // initialize python interpreter and pylabplot module
-    bool init = PythonScriptRuntime::initPython();
+	// initialize python interpreter and pylabplot module
+	bool init = PythonScriptRuntime::initPython();
 
-    // create a fresh local context where we can execute our scripts
-    // to remove variables from previous runs
-    m_localDict = PythonScriptRuntime::createLocalDict();
+	// create a fresh local context where we can execute our scripts
+	// to remove variables from previous runs
+	m_localDict = PythonScriptRuntime::createLocalDict();
 
-    return init && m_localDict != nullptr;
+	return init && m_localDict != nullptr;
 }
 
-
 bool PythonScriptRuntime::initPython() {
-    // Python interpreter and pylabplot module is already initialized
-    if (Py_IsInitialized() && ready)
-        return true;
+	// Python interpreter and pylabplot module is already initialized
+	if (Py_IsInitialized() && ready)
+		return true;
 
-    if (PyImport_AppendInittab(moduleName, PyInit_pylabplot) == -1)
-        return false; // Failed to add the pylabplot module to the table of built-in modules
+	if (PyImport_AppendInittab(moduleName, PyInit_pylabplot) == -1)
+		return false; // Failed to add the pylabplot module to the table of built-in modules
 
-    Py_Initialize();
+	Py_Initialize();
 
-    const bool pythonInitialized = PyInit_pylabplot() != nullptr;
-    const bool pyErrorOccurred = PyErr_Occurred() != nullptr;
-    if (!pythonInitialized || pyErrorOccurred)
-        return false; // Failed to initialize the pylabplot module
+	const bool pythonInitialized = PyInit_pylabplot() != nullptr;
+	const bool pyErrorOccurred = PyErr_Occurred() != nullptr;
+	if (!pythonInitialized || pyErrorOccurred)
+		return false; // Failed to initialize the pylabplot module
 
-    ready = true;
-    return true;
+	ready = true;
+	return true;
 }
 
 bool PythonScriptRuntime::reset() {
-    // Python interpreter and pylabplot module is not initialized
-    if (!Py_IsInitialized() || !ready)
-        return false;
+	// Python interpreter and pylabplot module is not initialized
+	if (!Py_IsInitialized() || !ready)
+		return false;
 
-    // decrease refcount for local context dict to allow python garbage collection
-    Py_XDECREF(m_localDict);
-    // Create a fresh local context for script execution
-    m_localDict = PythonScriptRuntime::createLocalDict();
+	// decrease refcount for local context dict to allow python garbage collection
+	Py_XDECREF(m_localDict);
+	// Create a fresh local context for script execution
+	m_localDict = PythonScriptRuntime::createLocalDict();
 
-    return m_localDict != nullptr;
+	return m_localDict != nullptr;
 }
 
 bool PythonScriptRuntime::cancel() {
-    // Python interpreter and pylabplot module is not initialized
-    if (!Py_IsInitialized() || !ready)
-        return false;
+	// Python interpreter and pylabplot module is not initialized
+	if (!Py_IsInitialized() || !ready)
+		return false;
 
-    // not yet implemented
-    return false;
+	// not yet implemented
+	return false;
 }
 
 bool PythonScriptRuntime::redirectOutput() {
-    // Python interpreter and pylabplot module is not initialized
-    if (!Py_IsInitialized() || !ready)
-        return false;
+	// Python interpreter and pylabplot module is not initialized
+	if (!Py_IsInitialized() || !ready)
+		return false;
 
-    // Save the original sys.stdout
-    PythonScriptRuntime::sysStdOut = PySys_GetObject("stdout");
-    if (!PythonScriptRuntime::sysStdOut)
-        return false; // Failed to get stdout from sys module
+	// Save the original sys.stdout
+	PythonScriptRuntime::sysStdOut = PySys_GetObject("stdout");
+	if (!PythonScriptRuntime::sysStdOut)
+		return false; // Failed to get stdout from sys module
 
-    // Replace sys.stdout with our PythonLogger instance
-    if (!PythonScriptRuntime::setObjectInModule(QStringLiteral("stdout"), QStringLiteral("sys"), SBK_PYTHONLOGGER_IDX, m_loggerStdOut))
-        return false; // Failed to replace sys.stdout
+	// Replace sys.stdout with our PythonLogger instance
+	if (!PythonScriptRuntime::setObjectInModule(QStringLiteral("stdout"), QStringLiteral("sys"), SBK_PYTHONLOGGER_IDX, m_loggerStdOut))
+		return false; // Failed to replace sys.stdout
 
-    // Save the original sys.stderr
-    PythonScriptRuntime::sysStdErr = PySys_GetObject("stderr");
-    if (!PythonScriptRuntime::sysStdErr)
-        return false; // Failed to get stderr from sys module
+	// Save the original sys.stderr
+	PythonScriptRuntime::sysStdErr = PySys_GetObject("stderr");
+	if (!PythonScriptRuntime::sysStdErr)
+		return false; // Failed to get stderr from sys module
 
-    // Replace sys.stderr with our PythonLogger instance
-    if (!PythonScriptRuntime::setObjectInModule(QStringLiteral("stderr"), QStringLiteral("sys"), SBK_PYTHONLOGGER_IDX, m_loggerStdErr))
-        return false; // Failed to replace sys.stderr
+	// Replace sys.stderr with our PythonLogger instance
+	if (!PythonScriptRuntime::setObjectInModule(QStringLiteral("stderr"), QStringLiteral("sys"), SBK_PYTHONLOGGER_IDX, m_loggerStdErr))
+		return false; // Failed to replace sys.stderr
 
-    return true;
+	return true;
 }
 
 bool PythonScriptRuntime::unRedirectOutput() {
-    // Python interpreter and pylabplt module is not initialized
-    if (!Py_IsInitialized() || !ready)
-        return false;
+	// Python interpreter and pylabplt module is not initialized
+	if (!Py_IsInitialized() || !ready)
+		return false;
 
-    // replace sys.stdout with original
-    if (PySys_SetObject("stdout", PythonScriptRuntime::sysStdOut) < 0)
-        return false; // Failed to replace sys.stdout with original
+	// replace sys.stdout with original
+	if (PySys_SetObject("stdout", PythonScriptRuntime::sysStdOut) < 0)
+		return false; // Failed to replace sys.stdout with original
 
-    // replace sys.stderr with original
-    if (PySys_SetObject("stderr", PythonScriptRuntime::sysStdErr) < 0)
-        return false; // Failed to replace sys.stderr with original
+	// replace sys.stderr with original
+	if (PySys_SetObject("stderr", PythonScriptRuntime::sysStdErr) < 0)
+		return false; // Failed to replace sys.stderr with original
 
-    return true;
+	return true;
 }
 
 bool PythonScriptRuntime::exec(const QString& code) {
-    // Python interpreter or pylabplot module is not initialized
-    if (!Py_IsInitialized() || !ready)
-        return false;
+	// Python interpreter or pylabplot module is not initialized
+	if (!Py_IsInitialized() || !ready)
+		return false;
 
-    // Failed to create new local context for script execution
-    if (!reset())
-        return false;
+	// Failed to create new local context for script execution
+	if (!reset())
+		return false;
 
-    // Failed to create new local context for script execution
-    if (m_localDict == nullptr)
-        return false;
+	// Failed to create new local context for script execution
+	if (m_localDict == nullptr)
+		return false;
 
-    // Redirect python output to output in our ScriptEditor
-    if (!redirectOutput())
-        return false;
+	// Redirect python output to output in our ScriptEditor
+	if (!redirectOutput())
+		return false;
 
-    // Clear any previous errors in the python interpreter
-    PyErr_Clear();
+	// Clear any previous errors in the python interpreter
+	PyErr_Clear();
 
-    // Compile script to python bytecode
-    PyObject* compiled = Py_CompileString(code.toLocal8Bit().constData(), m_name.toLocal8Bit().constData(), Py_file_input);
-    if (!compiled) {
-        if (PyErr_Occurred()) {
-            m_errorLine = PythonScriptRuntime::getPyErrorLine(); // Get the line where the error occurred
-            PyErr_Print(); // Print the error to our output in ScriptEditor
-            return true; // This is ok
-        }
-        return false;
-    }
+	// Compile script to python bytecode
+	PyObject* compiled = Py_CompileString(code.toLocal8Bit().constData(), m_name.toLocal8Bit().constData(), Py_file_input);
+	if (!compiled) {
+		if (PyErr_Occurred()) {
+			m_errorLine = PythonScriptRuntime::getPyErrorLine(); // Get the line where the error occurred
+			PyErr_Print(); // Print the error to our output in ScriptEditor
+			return true; // This is ok
+		}
+		return false;
+	}
 
-    // Clear any previous errors in the python interpreter
-    PyErr_Clear();
+	// Clear any previous errors in the python interpreter
+	PyErr_Clear();
 
-    // Evaluate the python bytecode
-    auto* res = PyEval_EvalCode(compiled, m_localDict, m_localDict);
-    if (!res) {
-        Py_DECREF(compiled);
-        if (PyErr_Occurred()) {
-            m_errorLine = PythonScriptRuntime::getPyErrorLine(); // Get the line where the error occurred
-            PyErr_Print(); // Print the error to our output in ScriptEditor
-            return true; // this is ok
-        }
-        return false;
-    }
+	// Evaluate the python bytecode
+	auto* res = PyEval_EvalCode(compiled, m_localDict, m_localDict);
+	if (!res) {
+		Py_DECREF(compiled);
+		if (PyErr_Occurred()) {
+			m_errorLine = PythonScriptRuntime::getPyErrorLine(); // Get the line where the error occurred
+			PyErr_Print(); // Print the error to our output in ScriptEditor
+			return true; // this is ok
+		}
+		return false;
+	}
 
-    Py_DECREF(compiled);
-    Py_DECREF(res);
+	Py_DECREF(compiled);
+	Py_DECREF(res);
 
-    // Unredirect python output to output in our ScriptEditor
-    if (!unRedirectOutput())
-        return false;
+	// Unredirect python output to output in our ScriptEditor
+	if (!unRedirectOutput())
+		return false;
 
-    return true;
+	return true;
 }
 
 // Inject a C++ object into moduleName in the python interpreter
 bool PythonScriptRuntime::setObjectInModule(const QString& name, const QString& moduleName, int index, void* o) {
-    // Python interpreter or pylabplot module is not initialized
-    if (!Py_IsInitialized() || !ready)
-        return false;
+	// Python interpreter or pylabplot module is not initialized
+	if (!Py_IsInitialized() || !ready)
+		return false;
 
-    auto* po = shibokenConvertToPyObject(index, o);
-    if (!po)
-        return false;
+	auto* po = shibokenConvertToPyObject(index, o);
+	if (!po)
+		return false;
 
-    return setPyObjectInModule(name, moduleName, po);
+	return setPyObjectInModule(name, moduleName, po);
 }
 
 // Converts a c++ object to a pyobject
 // returns an owned reference
 PyObject* PythonScriptRuntime::shibokenConvertToPyObject(int index, void* o) {
-    // Python interpreter or pylabplot module is not initialized
-    if (!Py_IsInitialized() || !ready)
-        return nullptr;
+	// Python interpreter or pylabplot module is not initialized
+	if (!Py_IsInitialized() || !ready)
+		return nullptr;
 
-    PyTypeObject* typeObject = SbkpylabplotTypes[index];
-    
-    // returns a borrowed reference
-    PyObject* po = Shiboken::Conversions::pointerToPython(reinterpret_cast<SbkObjectType*>(typeObject), o);
-    if (!po)
-        return nullptr;
+	PyTypeObject* typeObject = SbkpylabplotTypes[index];
 
-    Py_INCREF(po);
-    return po;
+	// returns a borrowed reference
+	PyObject* po = Shiboken::Conversions::pointerToPython(reinterpret_cast<SbkObjectType*>(typeObject), o);
+	if (!po)
+		return nullptr;
+
+	Py_INCREF(po);
+	return po;
 }
 
 // Returns the dictionary which contains the variables in module
 // returns an owned reference
 PyObject* PythonScriptRuntime::getModuleDict(const QString& moduleName) {
-    // Python interpreter or pylabplot module is not initialized
-    if (!Py_IsInitialized() || !ready)
-        return nullptr;
+	// Python interpreter or pylabplot module is not initialized
+	if (!Py_IsInitialized() || !ready)
+		return nullptr;
 
-    // PyImport_AddModule returns a borrowed reference so we create own reference Py_INCREF(o); and Py_DECREF(o); when done
-    PyObject *module = PyImport_AddModule(moduleName.toLocal8Bit().constData());
-    if (!module) // Failed to locate module
-        return nullptr;
+	// PyImport_AddModule returns a borrowed reference so we create own reference Py_INCREF(o); and Py_DECREF(o); when done
+	PyObject* module = PyImport_AddModule(moduleName.toLocal8Bit().constData());
+	if (!module) // Failed to locate module
+		return nullptr;
 
-    Py_INCREF(module);
+	Py_INCREF(module);
 
-    // returns borrowed reference so we create own reference Py_INCREF(o); and Py_DECREF(o); when done
-    PyObject* moduleDict = PyModule_GetDict(module);
-    if(!moduleDict) {
-        Py_DECREF(module);
-        // Failed to get module __dict__
-        return nullptr;
-    }
+	// returns borrowed reference so we create own reference Py_INCREF(o); and Py_DECREF(o); when done
+	PyObject* moduleDict = PyModule_GetDict(module);
+	if (!moduleDict) {
+		Py_DECREF(module);
+		// Failed to get module __dict__
+		return nullptr;
+	}
 
-    Py_DECREF(module);
-    Py_INCREF(moduleDict);
+	Py_DECREF(module);
+	Py_INCREF(moduleDict);
 
-    return moduleDict;
+	return moduleDict;
 }
 
 // Returns the pyobject named name in the module
 // returns an owned reference
 PyObject* PythonScriptRuntime::getPyObjectFromModule(const QString& name, const QString& moduleName) {
-    // Python interpreter or pylabplot module is not initialized
-    if (!Py_IsInitialized() || !ready)
-        return nullptr;
+	// Python interpreter or pylabplot module is not initialized
+	if (!Py_IsInitialized() || !ready)
+		return nullptr;
 
-    auto* moduleDict = getModuleDict(moduleName);
-    if(!moduleDict)
-        return nullptr;
+	auto* moduleDict = getModuleDict(moduleName);
+	if (!moduleDict)
+		return nullptr;
 
-    // returns a borrowed reference, call Py_INCCREF(module); and return owned reference
-    PyObject* o = PyDict_GetItemString(moduleDict, name.toLocal8Bit().constData());
-    if (!o) {
-        Py_DECREF(moduleDict);
-        // Failed to get object from module dict
-        return nullptr;
-    }
+	// returns a borrowed reference, call Py_INCCREF(module); and return owned reference
+	PyObject* o = PyDict_GetItemString(moduleDict, name.toLocal8Bit().constData());
+	if (!o) {
+		Py_DECREF(moduleDict);
+		// Failed to get object from module dict
+		return nullptr;
+	}
 
-    Py_DECREF(moduleDict);
-    Py_INCREF(o);
+	Py_DECREF(moduleDict);
+	Py_INCREF(o);
 
-    return o;
+	return o;
 }
 
 // Sets the pyobject named name in the module
 // steals reference to o, calls DECREF for us on success and failure
 bool PythonScriptRuntime::setPyObjectInModule(const QString& name, const QString& moduleName, PyObject* o) {
-    // Python interpreter or pylabplot module is not initialized
-    if (!Py_IsInitialized() || !ready)
-        return false;
+	// Python interpreter or pylabplot module is not initialized
+	if (!Py_IsInitialized() || !ready)
+		return false;
 
-    // PyImport_AddModule returns a borrowed reference so we create own reference Py_INCREF(o); and Py_DECREF(o); when done
-    PyObject *module = PyImport_AddModule(moduleName.toLocal8Bit().constData());
-    if (!module) // Failed to locate module
-        return false;
+	// PyImport_AddModule returns a borrowed reference so we create own reference Py_INCREF(o); and Py_DECREF(o); when done
+	PyObject* module = PyImport_AddModule(moduleName.toLocal8Bit().constData());
+	if (!module) // Failed to locate module
+		return false;
 
-    Py_INCREF(module);
+	Py_INCREF(module);
 
-    // PyModule_AddObject steals our refernce on success, calls Py_DECREF(o);
-    if (PyModule_AddObject(module, name.toLocal8Bit().constData(), o) < 0) {
-        Py_DECREF(module);
-        Py_DECREF(o);
-        // Failed to add object to module
-        return false;
-    }
+	// PyModule_AddObject steals our refernce on success, calls Py_DECREF(o);
+	if (PyModule_AddObject(module, name.toLocal8Bit().constData(), o) < 0) {
+		Py_DECREF(module);
+		Py_DECREF(o);
+		// Failed to add object to module
+		return false;
+	}
 
-    Py_DECREF(module);
+	Py_DECREF(module);
 
-    return true;
+	return true;
 }
 
 // Creates a new local context for the execution of our script
 // The process is create a dictionary and copy over the python builtins from the main module
 // returns owned reference
 PyObject* PythonScriptRuntime::createLocalDict() {
-    // Python interpreter or pylabplot module is not initialized
-    if (!Py_IsInitialized() || !ready)
-        return nullptr;
+	// Python interpreter or pylabplot module is not initialized
+	if (!Py_IsInitialized() || !ready)
+		return nullptr;
 
-    auto* mainDict = PythonScriptRuntime::getModuleDict(QStringLiteral("__main__"));
-    if (!mainDict)
-        return nullptr;
+	auto* mainDict = PythonScriptRuntime::getModuleDict(QStringLiteral("__main__"));
+	if (!mainDict)
+		return nullptr;
 
-    // create a dictionary
-    auto* localDict = PyDict_New();
-    if (!localDict) {
-        Py_DECREF(mainDict);
-        return nullptr;
-    }
+	// create a dictionary
+	auto* localDict = PyDict_New();
+	if (!localDict) {
+		Py_DECREF(mainDict);
+		return nullptr;
+	}
 
-    // copy python builtins to the dictionary
-    if (PyDict_SetItemString(localDict, "__builtins__", PyDict_GetItemString(mainDict, "__builtins__")) < 0) {
-        Py_DECREF(localDict);
-        Py_DECREF(mainDict);
-        return nullptr;
-    }
+	// copy python builtins to the dictionary
+	if (PyDict_SetItemString(localDict, "__builtins__", PyDict_GetItemString(mainDict, "__builtins__")) < 0) {
+		Py_DECREF(localDict);
+		Py_DECREF(mainDict);
+		return nullptr;
+	}
 
-    Py_DECREF(mainDict);
+	Py_DECREF(mainDict);
 
-    return localDict;
+	return localDict;
 }
 
 // Get the line where the python error occurred
 int PythonScriptRuntime::getPyErrorLine() {
-    // Python interpreter or pylabplot module is not initialized
-    if (!Py_IsInitialized() || !ready)
-        return -1;
+	// Python interpreter or pylabplot module is not initialized
+	if (!Py_IsInitialized() || !ready)
+		return -1;
 
-    int errorLine = -1;
+	int errorLine = -1;
 
-    PyObject *type, *value, *traceback;
+	PyObject *type, *value, *traceback;
 
-    PyErr_Fetch(&type, &value, &traceback);
-    PyErr_NormalizeException(&type, &value, &traceback);
+	PyErr_Fetch(&type, &value, &traceback);
+	PyErr_NormalizeException(&type, &value, &traceback);
 
-    if (traceback) {
-        PyObject* p = PyObject_GetAttrString(traceback, "tb_lineno");
-        if (p) {
-            long line = PyLong_AsLong(p);
-            if (line >= INT_MIN && line <= INT_MAX)
-                errorLine = static_cast<int>(line);
+	if (traceback) {
+		PyObject* p = PyObject_GetAttrString(traceback, "tb_lineno");
+		if (p) {
+			long line = PyLong_AsLong(p);
+			if (line >= INT_MIN && line <= INT_MAX)
+				errorLine = static_cast<int>(line);
 
-            Py_DECREF(p);
-        }
-    }
+			Py_DECREF(p);
+		}
+	}
 
-    if (errorLine == -1 && type && value && PyErr_GivenExceptionMatches(type, PyExc_SyntaxError) != -1) {
-        PyObject* q = PyObject_GetAttrString(value, "lineno");
-        if (q) {
-            long line = PyLong_AsLong(q);
-            if (line >= INT_MIN && line <= INT_MAX)
-                errorLine = static_cast<int>(line);
+	if (errorLine == -1 && type && value && PyErr_GivenExceptionMatches(type, PyExc_SyntaxError) != -1) {
+		PyObject* q = PyObject_GetAttrString(value, "lineno");
+		if (q) {
+			long line = PyLong_AsLong(q);
+			if (line >= INT_MIN && line <= INT_MAX)
+				errorLine = static_cast<int>(line);
 
-            Py_DECREF(q);
-        }
-    }
+			Py_DECREF(q);
+		}
+	}
 
-    PyErr_Restore(type, value, traceback);
+	PyErr_Restore(type, value, traceback);
 
-    return errorLine;
+	return errorLine;
 }
 
 QIcon PythonScriptRuntime::icon() {
-    return QIcon::fromTheme(QStringLiteral("pythonbackend"));
+	return QIcon::fromTheme(QStringLiteral("pythonbackend"));
 }

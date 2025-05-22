@@ -27,9 +27,9 @@
 #endif
 
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/script/Script.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/script/Script.h"
 
 #include <KLocalizedString>
 #include <QDropEvent>
