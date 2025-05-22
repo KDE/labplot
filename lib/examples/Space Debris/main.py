@@ -98,10 +98,10 @@ plotArea1.title().setText(te.toHtml())
 
 plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, True)
 
-# rangeY1 = plotArea1.range(CartesianCoordinateSystem.Dimension.Y, 0)
-# rangeY1.setRange(0, 10)
-# plotArea1.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY1)
-# plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
+rangeY1 = plotArea1.range(CartesianCoordinateSystem.Dimension.Y, 0)
+rangeY1.setRange(0, 10)
+plotArea1.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY1)
+plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
 
 for axis in plotArea1.children(AspectType.Axis):
     if axis.orientation() == WorksheetElement.Orientation.Horizontal and axis.position() == Axis.Position.Bottom:
@@ -163,15 +163,15 @@ te.setFontPointSize(10)
 te.append("Near Earth Altitude Population")
 plotArea2.title().setText(te.toHtml())
 
-# rangeX2 = plotArea2.range(CartesianCoordinateSystem.Dimension.X, 0)
-# rangeX2.setRange(0, 2000)
-# plotArea2.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX2)
-# plotArea2.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
+rangeX2 = plotArea2.range(CartesianCoordinateSystem.Dimension.X, 0)
+rangeX2.setRange(0, 2000)
+plotArea2.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX2)
+plotArea2.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
 
-# rangeY2 = plotArea2.range(CartesianCoordinateSystem.Dimension.Y, 0)
-# rangeY2.setRange(0, 7)
-# plotArea2.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY2)
-# plotArea2.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
+rangeY2 = plotArea2.range(CartesianCoordinateSystem.Dimension.Y, 0)
+rangeY2.setRange(0, 7)
+plotArea2.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY2)
+plotArea2.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
 
 for axis in plotArea2.children(AspectType.Axis):
     if axis.orientation() == WorksheetElement.Orientation.Horizontal and axis.position() == Axis.Position.Bottom:
@@ -250,16 +250,16 @@ te.setFontPointSize(10)
 te.append("Geosynchronous Altitude Population")
 plotArea3.title().setText(te.toHtml())
 
-# rangeX3 = plotArea3.range(CartesianCoordinateSystem.Dimension.X, 0)
-# rangeX3.setRange(34, 37)
-# plotArea3.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX3)
-# plotArea3.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
+rangeX3 = plotArea3.range(CartesianCoordinateSystem.Dimension.X, 0)
+rangeX3.setRange(34, 37)
+plotArea3.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX3)
+plotArea3.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
 
-# rangeY3 = plotArea3.range(CartesianCoordinateSystem.Dimension.Y, 0)
-# rangeY3.setScale(RangeT.Scale.Log10)
-# rangeY3.setRange(1, 10000)
-# plotArea3.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY3)
-# plotArea3.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
+rangeY3 = plotArea3.range(CartesianCoordinateSystem.Dimension.Y, 0)
+rangeY3.setScale(RangeT.Scale.Log10)
+rangeY3.setRange(1, 10000)
+plotArea3.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY3)
+plotArea3.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
 
 for axis in plotArea3.children(AspectType.Axis):
     if axis.orientation() == WorksheetElement.Orientation.Horizontal and axis.position() == Axis.Position.Bottom:

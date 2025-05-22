@@ -92,15 +92,15 @@ eqData13.expression1 = "log(x)"
 config13.setEquationData(eqData13)
 config13.recalculate()
 
-# plotArea.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
-# rangeX = plotArea.range(CartesianCoordinateSystem.Dimension.X, 0)
-# rangeX.setRange(0, 10)
-# plotArea.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX)
+plotArea.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
+rangeX = plotArea.range(CartesianCoordinateSystem.Dimension.X, 0)
+rangeX.setRange(0, 10)
+plotArea.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX)
 
-# plotArea.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
-# rangeY = plotArea.range(CartesianCoordinateSystem.Dimension.Y, 0)
-# rangeY.setRange(0, 10)
-# plotArea.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY)
+plotArea.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
+rangeY = plotArea.range(CartesianCoordinateSystem.Dimension.Y, 0)
+rangeY.setRange(0, 10)
+plotArea.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY)
 
 ###################################################################################################################################################################
 ###################################################################################################################################################################
@@ -165,16 +165,16 @@ eqData23.expression1 = "log(x)"
 config23.setEquationData(eqData23)
 config23.recalculate()
 
-# plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
-# rangeX1 = plotArea1.range(CartesianCoordinateSystem.Dimension.X, 0)
-# rangeX1.setScale(RangeT.Scale.Log10)
-# rangeX1.setRange(0.1, 1000)
-# plotArea1.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX1)
+plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
+rangeX1 = plotArea1.range(CartesianCoordinateSystem.Dimension.X, 0)
+rangeX1.setScale(RangeT.Scale.Log10)
+rangeX1.setRange(0.1, 1000)
+plotArea1.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX1)
 
-# plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
-# rangeY1 = plotArea1.range(CartesianCoordinateSystem.Dimension.Y, 0)
-# rangeY1.setRange(0, 10)
-# plotArea1.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY1)
+plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
+rangeY1 = plotArea1.range(CartesianCoordinateSystem.Dimension.Y, 0)
+rangeY1.setRange(0, 10)
+plotArea1.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY1)
 
 ###################################################################################################################################################################
 ###################################################################################################################################################################
@@ -239,16 +239,16 @@ eqData33.expression1 = "log(x)"
 config33.setEquationData(eqData33)
 config33.recalculate()
 
-# plotArea2.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
-# rangeX2 = plotArea2.range(CartesianCoordinateSystem.Dimension.X, 0)
-# rangeX2.setRange(0, 10)
-# plotArea2.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX2)
+plotArea2.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
+rangeX2 = plotArea2.range(CartesianCoordinateSystem.Dimension.X, 0)
+rangeX2.setRange(0, 10)
+plotArea2.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX2)
 
-# plotArea2.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
-# rangeY2 = plotArea2.range(CartesianCoordinateSystem.Dimension.Y, 0)
-# rangeY2.setRange(0.1, 1000)
-# rangeY2.setScale(RangeT.Scale.Log10)
-# plotArea2.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY2)
+plotArea2.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
+rangeY2 = plotArea2.range(CartesianCoordinateSystem.Dimension.Y, 0)
+rangeY2.setRange(0.1, 1000)
+rangeY2.setScale(RangeT.Scale.Log10)
+plotArea2.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY2)
 
 ###################################################################################################################################################################
 ###################################################################################################################################################################
@@ -314,17 +314,17 @@ eqData43.expression1 = "log(x)"
 config43.setEquationData(eqData43)
 config43.recalculate()
 
-# plotArea3.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
-# rangeX3 = plotArea3.range(CartesianCoordinateSystem.Dimension.X, 0)
-# rangeX3.setScale(RangeT.Scale.Log10)
-# rangeX3.setRange(0.1, 1000)
-# plotArea3.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX3)
+plotArea3.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
+rangeX3 = plotArea3.range(CartesianCoordinateSystem.Dimension.X, 0)
+rangeX3.setScale(RangeT.Scale.Log10)
+rangeX3.setRange(0.1, 1000)
+plotArea3.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX3)
 
-# plotArea3.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
-# rangeY3 = plotArea3.range(CartesianCoordinateSystem.Dimension.Y, 0)
-# rangeY3.setScale(RangeT.Scale.Log10)
-# rangeY3.setRange(0.1, 1000)
-# plotArea3.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY3)
+plotArea3.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
+rangeY3 = plotArea3.range(CartesianCoordinateSystem.Dimension.Y, 0)
+rangeY3.setScale(RangeT.Scale.Log10)
+rangeY3.setRange(0.1, 1000)
+plotArea3.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY3)
 
 worksheet.view().show()
 

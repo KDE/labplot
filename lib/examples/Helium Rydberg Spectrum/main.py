@@ -112,15 +112,15 @@ config3.background().setSecondColor(QColor(255, 255, 255))
 config3.background().setOpacity(0.4)
 config3.setVisible(True)
 
-# plotArea.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
-# rangeX = plotArea.range(CartesianCoordinateSystem.Dimension.X, 0)
-# rangeX.setRange(343, 343.7)
-# plotArea.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX)
+plotArea.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
+rangeX = plotArea.range(CartesianCoordinateSystem.Dimension.X, 0)
+rangeX.setRange(343, 343.7)
+plotArea.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX)
 
-# plotArea.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
-# rangeY = plotArea.range(CartesianCoordinateSystem.Dimension.Y, 0)
-# rangeY.setRange(0, 10000)
-# plotArea.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY)
+plotArea.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
+rangeY = plotArea.range(CartesianCoordinateSystem.Dimension.Y, 0)
+rangeY.setRange(0, 10000)
+plotArea.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY)
 
 firstCurve = plotArea.children(AspectType.XYCurve)[0]
 assert firstCurve

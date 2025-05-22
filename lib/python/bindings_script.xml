@@ -130,7 +130,9 @@
     <object-type name="PlotArea" disable-wrapper="yes">
         <enum-type name="BorderTypeFlags" flags="yes"/>
     </object-type>
-    <!-- <object-type name="Range" disable-wrapper="yes"/> -->
+    <object-type name="Range" disable-wrapper="yes" generate="no"/>
+    <typedef-type name="DoubleRange" source="Range&lt;double&gt;"/>
+    <typedef-type name="IntRange" source="Range&lt;int&gt;"/>
     <object-type name="RangeT" disable-wrapper="yes">
         <enum-type name="Format"/>
         <enum-type name="Scale"/>

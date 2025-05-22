@@ -213,15 +213,15 @@ rl4.line().setOpacity(0.8)
 ###################################################################################################################################################################
 ###################################################################################################################################################################
 
-# plotArea.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
-# rangeX = plotArea.range(CartesianCoordinateSystem.Dimension.X, 0)
-# rangeX.setRange(0.5, 1.5)
-# plotArea.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX)
+plotArea.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
+rangeX = plotArea.range(CartesianCoordinateSystem.Dimension.X, 0)
+rangeX.setRange(0.5, 1.5)
+plotArea.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX)
 
-# plotArea.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
-# rangeY = plotArea.range(CartesianCoordinateSystem.Dimension.Y, 0)
-# rangeY.setRange(-20, 30)
-# plotArea.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY)
+plotArea.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
+rangeY = plotArea.range(CartesianCoordinateSystem.Dimension.Y, 0)
+rangeY.setRange(-20, 30)
+plotArea.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY)
 
 ###################################################################################################################################################################
 ###################################################################################################################################################################
