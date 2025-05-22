@@ -4,15 +4,14 @@
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Antoni Bella Pérez <antonibella5@yahoo.com>
-# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Josep M. Ferrer <txemaq@gmail.com>
 # Orestes Mas <orestes@tsc.upc.edu>, 2018.
-# Josep M. Ferrer <txemaq@gmail.com>, 2025.
+# Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-21 00:39+0000\n"
-"PO-Revision-Date: 2025-05-09 09:05+0200\n"
+"PO-Revision-Date: 2025-05-19 13:23+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -8501,16 +8500,14 @@ msgstr "Interval de referència"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:555
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2270
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2292
-#, fuzzy, kde-format
-#| msgid "As Plot Area"
+#, kde-format
 msgid "Inset Plot Area"
-msgstr "Com a àrea del diagrama"
+msgstr "Àrea de diagrama intercalat"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
-#, fuzzy, kde-format
-#| msgid "One Plot Area per Plot"
+#, kde-format
 msgid "Inset Plot Area with Data"
-msgstr "Una àrea de diagrama per diagrama"
+msgstr "Àrea de diagrama intercalat amb dades"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:574
 #: src/frontend/MainWin.cpp:902 src/frontend/notebook/NotebookView.cpp:168
@@ -8928,16 +8925,14 @@ msgid "Text Label"
 msgstr "Etiqueta de text"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2269
-#, fuzzy, kde-format
-#| msgid "%1: set layout"
+#, kde-format
 msgid "%1: add inset plot"
-msgstr "%1: establix la disposició"
+msgstr "%1: afig un diagrama intercalat"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2283
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#, kde-format
 msgid "%1: add inset plot with data"
-msgstr "%1: establix la designació del diagrama"
+msgstr "%1: afig un diagrama intercalat amb dades"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4021
 #, kde-format
@@ -12678,6 +12673,9 @@ msgid ""
 "ticks for nice looking values. The number of ticks might be different than "
 "the number previously set."
 msgstr ""
+"Si està activada: utilitza el número de marca principal com a base per a "
+"determinar el nombre nou de marques per a un aspecte agradable dels valors. "
+"El nombre de marques pot ser diferent del nombre establit anteriorment."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:262
 #, kde-format
@@ -15098,8 +15096,8 @@ msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
 "to exit the application."
 msgstr ""
-"No s'ha pogut obrir el fitxer «%1». Feu clic en «Continua» per a seguir amb "
-"l'inici o «Cancel·la» per a eixir de l'aplicació."
+"No s'ha pogut obrir el fitxer «%1». Cliqueu damunt «Continua» per a seguir "
+"amb l'inici o «Cancel·la» per a eixir de l'aplicació."
 
 #: src/frontend/LabPlot.cpp:156
 #, kde-format
@@ -18714,13 +18712,13 @@ msgstr "Tema «%1»"
 #, kde-format
 msgid "Theme '%1' is active. Click on the button to change the theme."
 msgstr ""
-"El tema «%1» es troba actiu. Feu clic damunt del botó per a canviar el tema."
+"El tema «%1» es troba actiu. Cliqueu damunt del botó per a canviar el tema."
 
 #: src/frontend/ThemeHandler.cpp:145
 #, kde-format
 msgid "No theme is active. Click on the button to select a theme."
 msgstr ""
-"Ni hi ha cap tema actiu. Feu clic damunt del botó per a seleccionar un tema."
+"Ni hi ha cap tema actiu. Cliqueu damunt del botó per a seleccionar un tema."
 
 #: src/frontend/ThemeHandler.cpp:156
 #, kde-format
@@ -20671,7 +20669,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:634
 #, kde-format
 msgid "Length:"
-msgstr "Longitud:"
+msgstr "Llargària:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicks)
 #: src/frontend/ui/dockwidgets/axisdock.ui:993
@@ -25292,11 +25290,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Antoni Bella,Orestes Mas"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "antonibella5@yahoo.com,orestes@tsc.upc.edu"
