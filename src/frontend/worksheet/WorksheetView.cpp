@@ -1661,21 +1661,31 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot, const
 
 	switch (m_worksheet->cartesianPlotActionMode()) {
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAll: // Is there a usecase for this?
-		plotZoomSelectionModeAction->setEnabled(true);
-		plotZoomXSelectionModeAction->setEnabled(true);
-		plotZoomYSelectionModeAction->setEnabled(true);
+		// mouse mode actions
+		for (auto* action : mouseModeActionGroup->actions()) {
+			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
+			if (mode == CartesianPlot::MouseMode::ZoomSelection || mode == CartesianPlot::MouseMode::ZoomXSelection
+				|| mode == CartesianPlot::MouseMode::ZoomYSelection)
+				action->setEnabled(true);
+		}
 
 		// navigation actions
 		for (auto* action : navigationActionGroup->actions())
 			action->setEnabled(true);
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToSelection: {
+		// mouse mode actions, enable only when only one range available
 		bool enableX = plot->rangeCount(Dimension::X) == 1;
 		bool enableY = plot->rangeCount(Dimension::Y) == 1;
-		// only when only one range available
-		plotZoomSelectionModeAction->setEnabled(enableX && enableY);
-		plotZoomXSelectionModeAction->setEnabled(enableX);
-		plotZoomYSelectionModeAction->setEnabled(enableY);
+		for (auto* action : mouseModeActionGroup->actions()) {
+			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
+			if (mode == CartesianPlot::MouseMode::ZoomSelection)
+				action->setEnabled(enableX && enableY);
+			else if (mode == CartesianPlot::MouseMode::ZoomXSelection)
+				action->setEnabled(enableX);
+			else if (mode == CartesianPlot::MouseMode::ZoomYSelection)
+				action->setEnabled(enableY);
+		}
 
 		// navigation actions
 		for (auto* action : navigationActionGroup->actions())
@@ -1683,9 +1693,14 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot, const
 		break;
 	}
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllX:
-		plotZoomSelectionModeAction->setEnabled(false);
-		plotZoomXSelectionModeAction->setEnabled(true);
-		plotZoomYSelectionModeAction->setEnabled(true);
+		// mouse mode actions
+		for (auto* action : mouseModeActionGroup->actions()) {
+			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
+			if (mode == CartesianPlot::MouseMode::ZoomSelection)
+				action->setEnabled(false);
+			else if (mode == CartesianPlot::MouseMode::ZoomXSelection || mode == CartesianPlot::MouseMode::ZoomYSelection)
+				action->setEnabled(true);
+		}
 
 		// navigation actions
 		for (auto* action : navigationActionGroup->actions()) {
@@ -1697,9 +1712,14 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot, const
 		}
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllY:
-		plotZoomSelectionModeAction->setEnabled(false);
-		plotZoomXSelectionModeAction->setEnabled(true);
-		plotZoomYSelectionModeAction->setEnabled(true);
+		// mouse mode actions
+		for (auto* action : mouseModeActionGroup->actions()) {
+			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
+			if (mode == CartesianPlot::MouseMode::ZoomSelection)
+				action->setEnabled(false);
+			else if (mode == CartesianPlot::MouseMode::ZoomXSelection || mode == CartesianPlot::MouseMode::ZoomYSelection)
+				action->setEnabled(true);
+		}
 
 		// navigation actions
 		for (auto* action : navigationActionGroup->actions()) {
@@ -1739,8 +1759,12 @@ void WorksheetView::handleReferences(WorksheetElement::Orientation orientation, 
 	const bool vertical = (orientation == WorksheetElement::Orientation::Vertical);
 	switch (m_worksheet->cartesianPlotActionMode()) {
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAll:
-		plotZoomXSelectionModeAction->setEnabled(false);
-		plotZoomYSelectionModeAction->setEnabled(false);
+		// mouse mode actions
+		for (auto* action : mouseModeActionGroup->actions()) {
+			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
+			if (mode == CartesianPlot::MouseMode::ZoomXSelection || mode == CartesianPlot::MouseMode::ZoomYSelection)
+				action->setEnabled(false);
+		}
 
 		// navigation actions
 		for (auto* action : navigationActionGroup->actions()) {
@@ -1754,8 +1778,14 @@ void WorksheetView::handleReferences(WorksheetElement::Orientation orientation, 
 		}
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToSelection:
-		plotZoomXSelectionModeAction->setEnabled(vertical);
-		plotZoomYSelectionModeAction->setEnabled(!vertical);
+		// mouse mode actions
+		for (auto* action : mouseModeActionGroup->actions()) {
+			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
+			if (mode == CartesianPlot::MouseMode::ZoomXSelection)
+				action->setEnabled(vertical);
+			else if (mode == CartesianPlot::MouseMode::ZoomYSelection)
+				action->setEnabled(!vertical);
+		}
 
 		// navigation actions
 		for (auto* action : navigationActionGroup->actions()) {
@@ -1771,16 +1801,28 @@ void WorksheetView::handleReferences(WorksheetElement::Orientation orientation, 
 
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllX:
-		plotZoomXSelectionModeAction->setEnabled(vertical);
-		plotZoomYSelectionModeAction->setEnabled(!vertical);
-
 		// TODO
+		// mouse mode actions
+		for (auto* action : mouseModeActionGroup->actions()) {
+			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
+			if (mode == CartesianPlot::MouseMode::ZoomXSelection)
+				action->setEnabled(vertical);
+			else if (mode == CartesianPlot::MouseMode::ZoomYSelection)
+				action->setEnabled(!vertical);
+		}
+
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllY:
-		plotZoomXSelectionModeAction->setEnabled(vertical);
-		plotZoomYSelectionModeAction->setEnabled(!vertical);
-
 		// TODO
+		// mouse mode actions
+		for (auto* action : mouseModeActionGroup->actions()) {
+			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
+			if (mode == CartesianPlot::MouseMode::ZoomXSelection)
+				action->setEnabled(vertical);
+			else if (mode == CartesianPlot::MouseMode::ZoomYSelection)
+				action->setEnabled(!vertical);
+		}
+
 		break;
 	}
 	plotSelectionModeAction->setEnabled(true);
@@ -1803,9 +1845,13 @@ void WorksheetView::handlePlotSelected(const QActionGroup* mouseModeActionGroup,
 
 	switch (m_worksheet->cartesianPlotActionMode()) {
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAll:
-		plotZoomSelectionModeAction->setEnabled(false);
-		plotZoomXSelectionModeAction->setEnabled(false);
-		plotZoomYSelectionModeAction->setEnabled(false);
+		// mouse mode actions
+		for (auto* action : mouseModeActionGroup->actions()) {
+			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
+			if (mode == CartesianPlot::MouseMode::ZoomSelection || mode == CartesianPlot::MouseMode::ZoomXSelection
+				|| mode == CartesianPlot::MouseMode::ZoomYSelection)
+				action->setEnabled(false);
+		}
 
 		// navigation actions
 		for (auto* action : navigationActionGroup->actions()) {
@@ -1816,18 +1862,27 @@ void WorksheetView::handlePlotSelected(const QActionGroup* mouseModeActionGroup,
 		}
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToSelection:
-		plotZoomSelectionModeAction->setEnabled(true);
-		plotZoomXSelectionModeAction->setEnabled(true);
-		plotZoomYSelectionModeAction->setEnabled(true);
+		// mouse mode actions
+		for (auto* action : mouseModeActionGroup->actions()) {
+			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
+			if (mode == CartesianPlot::MouseMode::ZoomSelection || mode == CartesianPlot::MouseMode::ZoomXSelection
+				|| mode == CartesianPlot::MouseMode::ZoomYSelection)
+				action->setEnabled(true);
+		}
 
 		// navigation actions
 		for (auto* action : navigationActionGroup->actions())
 			action->setEnabled(true);
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllX:
-		plotZoomSelectionModeAction->setEnabled(false);
-		plotZoomXSelectionModeAction->setEnabled(true);
-		plotZoomYSelectionModeAction->setEnabled(true);
+		// mouse mode actions
+		for (auto* action : mouseModeActionGroup->actions()) {
+			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
+			if (mode == CartesianPlot::MouseMode::ZoomSelection)
+				action->setEnabled(false);
+			else if (mode == CartesianPlot::MouseMode::ZoomXSelection || mode == CartesianPlot::MouseMode::ZoomYSelection)
+				action->setEnabled(true);
+		}
 
 		// navigation actions
 		for (auto* action : navigationActionGroup->actions()) {
@@ -1837,9 +1892,14 @@ void WorksheetView::handlePlotSelected(const QActionGroup* mouseModeActionGroup,
 		}
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllY:
-		plotZoomSelectionModeAction->setEnabled(false);
-		plotZoomXSelectionModeAction->setEnabled(true);
-		plotZoomYSelectionModeAction->setEnabled(true);
+		// mouse mode actions
+		for (auto* action : mouseModeActionGroup->actions()) {
+			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
+			if (mode == CartesianPlot::MouseMode::ZoomSelection)
+				action->setEnabled(false);
+			else if (mode == CartesianPlot::MouseMode::ZoomXSelection || mode == CartesianPlot::MouseMode::ZoomYSelection)
+				action->setEnabled(true);
+		}
 
 		// navigation actions
 		// TODO: same as for ApplyActionToAllX above?
@@ -1869,9 +1929,15 @@ void WorksheetView::handleAxisSelected(const Axis* a, const QActionGroup* mouseM
 		 * - x zoom selection: apply to range assigned to the axis, but only for the plot where the axis is child
 		 * - y zoom selection: makes no sense. disable
 		 */
-		plotZoomYSelectionModeAction->setEnabled(false);
-		plotZoomSelectionModeAction->setEnabled(false);
-		plotZoomXSelectionModeAction->setEnabled(true);
+
+		// mouse mode actions
+		for (auto* action : mouseModeActionGroup->actions()) {
+			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
+			if (mode == CartesianPlot::MouseMode::ZoomXSelection)
+				action->setEnabled(true);
+			else if (mode == CartesianPlot::MouseMode::ZoomSelection || mode == CartesianPlot::MouseMode::ZoomYSelection)
+				action->setEnabled(false);
+		}
 
 		// navigation actions
 		for (auto* action : navigationActionGroup->actions()) {
@@ -1895,9 +1961,15 @@ void WorksheetView::handleAxisSelected(const Axis* a, const QActionGroup* mouseM
 		 * - x zoom selection: apply to range assigned to the axis, but only for the plot where the axis is child
 		 * - y zoom selection: makes no sense. disable
 		 */
-		plotZoomYSelectionModeAction->setEnabled(true);
-		plotZoomSelectionModeAction->setEnabled(false);
-		plotZoomXSelectionModeAction->setEnabled(false);
+
+		// mouse mode actions
+		for (auto* action : mouseModeActionGroup->actions()) {
+			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
+			if (mode == CartesianPlot::MouseMode::ZoomYSelection)
+				action->setEnabled(true);
+			else if (mode == CartesianPlot::MouseMode::ZoomSelection || mode == CartesianPlot::MouseMode::ZoomXSelection)
+				action->setEnabled(false);
+		}
 
 		// navigation actions
 		for (auto* action : navigationActionGroup->actions()) {
