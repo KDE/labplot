@@ -67,6 +67,7 @@ public:
 	static QStringList languages;
 
 	static QString readRuntime(XmlStreamReader*);
+	static QIcon icon(const QString&);
 
 private:
 	static bool m_isRunning;

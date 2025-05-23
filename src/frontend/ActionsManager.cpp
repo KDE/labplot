@@ -212,7 +212,7 @@ void ActionsManager::initActions() {
 
 #ifdef HAVE_SCRIPTING
 	for (auto& language : Script::languages) {
-		auto* action = new QAction(QIcon::fromTheme(QStringLiteral("quickopen")), language, this);
+		auto* action = new QAction(Script::icon(language), language, this);
 		action->setData(language);
 		action->setWhatsThis(i18n("Creates a new %1 script", language));
 		collection->addAction(QLatin1String("new_script_") + language, action);

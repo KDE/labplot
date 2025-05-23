@@ -376,7 +376,3 @@ int PythonScriptRuntime::getPyErrorLine() {
 
 	return errorLine;
 }
-
-QIcon PythonScriptRuntime::icon() {
-	return QIcon::fromTheme(QStringLiteral("pythonbackend"));
-}
