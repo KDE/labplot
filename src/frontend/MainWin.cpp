@@ -54,7 +54,6 @@
 #include "frontend/widgets/LabelWidget.h"
 #include "frontend/worksheet/WorksheetPreviewWidget.h"
 #include "frontend/worksheet/WorksheetView.h"
-#include "frontend/script/ScriptEditor.h"
 
 #ifdef HAVE_KUSERFEEDBACK
 #include <KUserFeedback/ApplicationVersionSource>
@@ -1227,7 +1226,7 @@ void MainWin::newSpreadsheet() {
 */
 void MainWin::newScript() {
 	auto* action = static_cast<QAction*>(QObject::sender());
-	m_tbScript->setDefaultAction(action);
+	m_actionsManager->m_tbScript->setDefaultAction(action);
 	auto* script = new Script(i18n("%1", action->data().toString()), action->data().toString());
 	this->addAspectToProject(script);
 }

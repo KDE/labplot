@@ -13,12 +13,14 @@
 #include "backend/core/Settings.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/matrix/Matrix.h"
+#include "backend/script/Script.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/ActionsManager.h"
 #include "frontend/MainWin.h"
 #include "frontend/datapicker/DatapickerView.h"
 #include "frontend/datapicker/DatapickerImageView.h"
 #include "frontend/matrix/MatrixView.h"
+#include "frontend/script/ScriptEditor.h"
 #include "frontend/spreadsheet/SpreadsheetView.h"
 #include "frontend/widgets/toggleactionmenu.h"
 #include "frontend/widgets/MemoryWidget.h"
@@ -148,6 +150,18 @@ void ActionsManager::init() {
 	auto* lastAction_ = mainToolBar->actions().at(mainToolBar->actions().count() - 1);
 	mainToolBar->insertWidget(lastAction_, tbImport);
 
+	m_tbScript = new QToolButton(mainToolBar);
+	m_tbScript->setPopupMode(QToolButton::MenuButtonPopup);
+	m_tbScript->setMenu(m_newScriptMenu);
+	if (m_newScriptActions.isEmpty()) {
+		m_tbScript->setIcon(QIcon::fromTheme(QStringLiteral("quickopen"))); // a placeholder icon since we have no runtimes
+		m_tbScript->setEnabled(false);
+	} else {
+		m_tbScript->setDefaultAction(m_newScriptActions.first());
+	}
+	auto* _lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 4);
+	mainToolBar->insertWidget(_lastAction, m_tbScript);
+
 	// hamburger menu
 	m_hamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, m_mainWindow->actionCollection());
 	m_mainWindow->toolBar()->addAction(m_hamburgerMenu);
@@ -232,6 +246,15 @@ void ActionsManager::initActions() {
 	m_newWorksheetAction->setWhatsThis(i18n("Creates a new worksheet for data plotting"));
 	collection->addAction(QStringLiteral("new_worksheet"), m_newWorksheetAction);
 	connect(m_newWorksheetAction, &QAction::triggered, m_mainWindow, &MainWin::newWorksheet);
+
+	for (auto& language : Script::languages) {
+		auto* action = new QAction(QIcon::fromTheme(QStringLiteral("quickopen")), language, this);
+		action->setData(language);
+		action->setWhatsThis(i18n("Creates a new %1 script", language));
+		collection->addAction(QLatin1String("new_script_") + language, action);
+		connect(action, &QAction::triggered, m_mainWindow, &MainWin::newScript);
+		m_newScriptActions << action;
+	}
 
 	m_newNotesAction = new QAction(QIcon::fromTheme(QStringLiteral("document-new")), i18n("Note"), this);
 	m_newNotesAction->setWhatsThis(i18n("Creates a new note for arbitrary text"));
@@ -901,6 +924,26 @@ void ActionsManager::initMenus() {
 	delete factory->container(QStringLiteral("new_notebook"), m_mainWindow);
 	delete factory->container(QStringLiteral("notebook_toolbar"), m_mainWindow);
 #endif
+
+	// This menu is at File > Add New > Script
+	auto* newScriptMenu = dynamic_cast<QMenu*>(factory->container(QLatin1String("new_script"), m_mainWindow));
+	if (newScriptMenu) {
+		newScriptMenu->setIcon(QIcon::fromTheme(QLatin1String("quickopen")));
+		m_newMenu->addSeparator();
+		m_newMenu->addMenu(newScriptMenu);
+		m_mainWindow->unplugActionList(QLatin1String("scripts_list"));
+		m_mainWindow->plugActionList(QLatin1String("scripts_list"), m_newScriptActions);
+	}
+
+	// This menu is the menu of the script QToolButton in the toolbar
+	m_newScriptMenu = new QMenu(m_mainWindow);
+	m_newScriptMenu->setIcon(QIcon::fromTheme(QLatin1String("quickopen")));
+	m_newScriptMenu->addActions(m_newScriptActions);
+
+	if (m_newScriptActions.isEmpty()) {
+		newScriptMenu->setEnabled(false);
+		m_newScriptMenu->setEnabled(false);
+	}
 }
 
 void MainWin::colorSchemeChanged(QAction* action) {
@@ -933,6 +976,8 @@ void ActionsManager::updateGUIOnProjectChanges() {
 		factory->container(QStringLiteral("notebook"), m_mainWindow)->setEnabled(false);
 		factory->container(QStringLiteral("notebook_toolbar"), m_mainWindow)->hide();
 #endif
+		factory->container(QLatin1String("script"), m_mainWindow)->setEnabled(false);
+		factory->container(QLatin1String("script_toolbar"), m_mainWindow)->hide();
 	}
 
 	m_mainWindow->updateTitleBar();
@@ -983,6 +1028,8 @@ void ActionsManager::updateGUI() {
 		factory->container(QStringLiteral("notebook"), m_mainWindow)->setEnabled(false);
 		factory->container(QStringLiteral("notebook_toolbar"), m_mainWindow)->hide();
 #endif
+		factory->container(QLatin1String("script"), m_mainWindow)->setEnabled(false);
+		factory->container(QLatin1String("script_toolbar"), m_mainWindow)->hide();
 		m_printAction->setEnabled(false);
 		m_printPreviewAction->setEnabled(false);
 		m_exportAction->setEnabled(false);
@@ -1135,6 +1182,25 @@ void ActionsManager::updateGUI() {
 		factory->container(QStringLiteral("notebook_toolbar"), m_mainWindow)->setVisible(false);
 	}
 #endif
+
+	const auto* script = dynamic_cast<Script*>(m_mainWindow->m_currentAspect);
+	if (!script)
+		script = dynamic_cast<Script*>(m_mainWindow->m_currentAspect->parent(AspectType::Script));
+	if (script) {
+		auto* view = qobject_cast<ScriptEditor*>(script->view());
+		auto* menu = qobject_cast<QMenu*>(factory->container(QLatin1String("script"), m_mainWindow));
+		menu->clear();
+		view->createContextMenu(menu);
+		menu->setEnabled(true);
+
+		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("script_toolbar"), m_mainWindow));
+		toolbar->setVisible(true);
+		toolbar->clear();
+		view->fillToolBar(toolbar);
+	} else {
+		factory->container(QLatin1String("script"), m_mainWindow)->setEnabled(false);
+		factory->container(QLatin1String("script_toolbar"), m_mainWindow)->setVisible(false);
+	}
 
 	const auto* datapicker = dynamic_cast<Datapicker*>(m_mainWindow->m_currentAspect);
 	if (!datapicker)
