@@ -58,6 +58,7 @@ class ImageDock;
 class LabelWidget;
 class DatapickerImageWidget;
 class DatapickerCurveWidget;
+class ScriptDock;
 
 #ifdef HAVE_CANTOR_LIBS
 class NotebookDock;
@@ -129,6 +130,8 @@ private:
 	XYHilbertTransformCurveDock* m_xyHilbertTransformCurveDock{nullptr};
 	XYConvolutionCurveDock* m_xyConvolutionCurveDock{nullptr};
 	XYCorrelationCurveDock* m_xyCorrelationCurveDock{nullptr};
+
+	ScriptDock* m_scriptDock{nullptr};
 
 #ifdef HAVE_CANTOR_LIBS
 	NotebookDock* m_notebookDock{nullptr};

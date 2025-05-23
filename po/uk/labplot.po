@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-12 00:38+0000\n"
-"PO-Revision-Date: 2025-05-09 13:26+0300\n"
+"POT-Creation-Date: 2025-05-23 00:38+0000\n"
+"PO-Revision-Date: 2025-05-19 09:06+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -79,7 +79,7 @@ msgstr "Нижче"
 #: src/backend/core/AbstractAspect.cpp:525
 #: src/backend/core/aspectcommands.h:171
 #: src/backend/datapicker/Datapicker.cpp:220
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2201
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2229
 #, kde-format
 msgid "%1: add %2"
 msgstr "%1: додати %2"
@@ -131,12 +131,12 @@ msgstr "%1: дубльовано «%2»"
 msgid "Copy of '%1'"
 msgstr "Копія «%1»"
 
-#: src/backend/core/AbstractAspect.cpp:953
+#: src/backend/core/AbstractAspect.cpp:960
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr "Пропущено атрибут «name» або вказано порожнє значення атрибута."
 
-#: src/backend/core/AbstractAspect.cpp:960
+#: src/backend/core/AbstractAspect.cpp:967
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr ""
@@ -175,8 +175,8 @@ msgstr "Дні"
 #. i18n: ectx: property (text), widget (QRadioButton, rbNone)
 #: src/backend/core/AbstractColumn.cpp:163 src/backend/nsl/nsl_conv.c:22
 #: src/backend/nsl/nsl_conv.c:23 src/backend/nsl/nsl_corr.c:19
-#: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:276
-#: src/frontend/dockwidgets/AxisDock.cpp:292
+#: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:278
+#: src/frontend/dockwidgets/AxisDock.cpp:294
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:287
 #: src/frontend/dockwidgets/XYCurveDock.cpp:484 src/frontend/GuiTools.cpp:150
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
@@ -368,13 +368,13 @@ msgstr "Вх%1"
 msgid "Import Data"
 msgstr "Імпортувати дані"
 
-#: src/backend/core/AbstractPart.cpp:126 src/frontend/MainWin.cpp:682
-#: src/frontend/MainWin.cpp:691
+#: src/backend/core/AbstractPart.cpp:126 src/frontend/MainWin.cpp:728
+#: src/frontend/MainWin.cpp:737
 #, kde-format
 msgid "From File..."
 msgstr "З файла…"
 
-#: src/backend/core/AbstractPart.cpp:128 src/frontend/MainWin.cpp:703
+#: src/backend/core/AbstractPart.cpp:128 src/frontend/MainWin.cpp:749
 #, kde-format
 msgid "From SQL Database..."
 msgstr "З бази даних SQL…"
@@ -399,7 +399,7 @@ msgstr "Надрукувати"
 msgid "Print Preview"
 msgstr "Перегляд друку"
 
-#: src/backend/core/AbstractPart.cpp:147 src/frontend/MainWin.cpp:775
+#: src/backend/core/AbstractPart.cpp:147 src/frontend/MainWin.cpp:821
 #, kde-format
 msgid "&Close"
 msgstr "За&крити"
@@ -415,7 +415,7 @@ msgid "incompatible filter type"
 msgstr "несумісний тип фільтрування"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:703
+#: src/backend/core/Folder.cpp:152 src/backend/core/Project.cpp:703
 #: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
@@ -576,19 +576,19 @@ msgstr "%1: змінити тип стовпчика"
 msgid "%1: clear column"
 msgstr "%1: спорожнити стовпчик"
 
-#: src/backend/core/column/Column.cpp:573
+#: src/backend/core/column/Column.cpp:572
 #, kde-format
 msgid "%1: set random values"
 msgstr "%1: встановити випадкові значення"
 
-#: src/backend/core/column/Column.cpp:1594
+#: src/backend/core/column/Column.cpp:1593
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "номер рядка є некоректним або номер рядка пропущено"
 
-#: src/backend/core/column/Column.cpp:1603
-#: src/backend/core/column/Column.cpp:1612
-#: src/backend/core/column/Column.cpp:1621
+#: src/backend/core/column/Column.cpp:1602
+#: src/backend/core/column/Column.cpp:1611
+#: src/backend/core/column/Column.cpp:1620
 #, kde-format
 msgid "invalid row value"
 msgstr "некоректне значення рядка"
@@ -670,7 +670,7 @@ msgstr "%1: встановити кількість десяткових циф�
 msgid "set decimal digits to %1"
 msgstr "встановити кількість десяткових цифр %1"
 
-#: src/backend/core/Folder.cpp:358
+#: src/backend/core/Folder.cpp:372
 #, kde-format
 msgid "unknown element '%1' found"
 msgstr "виявлено невідомий елемент «%1»"
@@ -801,16 +801,16 @@ msgstr "невідомий елемент робочої книги «%1»"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/Datapicker.cpp:45
 #: src/backend/datapicker/Datapicker.cpp:356
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1776
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1782
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1788
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1794
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1800
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1806
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1812
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1818
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1824
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1830
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1804
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1810
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1816
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1822
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1828
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1834
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1840
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1846
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1852
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1858
 #: src/frontend/ui/datapickerimagewidget.ui:260
 #, kde-format
 msgid "Plot"
@@ -1220,20 +1220,20 @@ msgid "Number of lines: %1"
 msgstr "Кількість рядків: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:524
-#: src/backend/datasources/filters/AsciiFilter.cpp:1309
+#: src/backend/datasources/filters/AsciiFilter.cpp:1311
 #: src/backend/datasources/filters/JsonFilter.cpp:284
 #, kde-format
 msgid "Column %1"
 msgstr "Стовпчик %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:594
-#: src/backend/datasources/filters/AsciiFilter.cpp:1332
+#: src/backend/datasources/filters/AsciiFilter.cpp:1334
 #, kde-format
 msgid "Timestamp"
 msgstr "Часова позначка"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:598
-#: src/backend/datasources/filters/AsciiFilter.cpp:1336
+#: src/backend/datasources/filters/AsciiFilter.cpp:1338
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1297,7 +1297,7 @@ msgstr "Не вдалося відкрити пристрій або файл а
 #: src/backend/datasources/filters/ROOTFilter.cpp:235
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:332
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:334
 #: src/backend/datasources/filters/XLSXFilter.cpp:509
 #, kde-format
 msgid "Not enough memory."
@@ -1915,7 +1915,7 @@ msgstr "UInt64"
 #: src/backend/datasources/filters/MatioFilter.cpp:452
 #: src/backend/nsl/nsl_interp.c:26
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:442
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2105
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2133
 #, kde-format
 msgid "Function"
 msgstr "Функція"
@@ -1938,7 +1938,7 @@ msgid "Unknown"
 msgstr "Невідомий"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:653 src/frontend/MainWin.cpp:1999
+#: src/frontend/MainWin.cpp:690 src/frontend/MainWin.cpp:2100
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -2048,7 +2048,7 @@ msgid "No Statistics found."
 msgstr "Статистики не знайдено."
 
 #: src/backend/datasources/filters/McapFilter.cpp:469
-#: src/backend/datasources/filters/McapFilter.cpp:964
+#: src/backend/datasources/filters/McapFilter.cpp:966
 #, kde-format
 msgid "Failed to read the file. Reason: %1"
 msgstr "Не вдалося прочитати файл. Причина: %1"
@@ -2323,42 +2323,42 @@ msgstr "Немає доступних стовпчиків"
 msgid "Unsupported file type, neither histogram no tree."
 msgstr "Непідтримуваний тип файлів, гістограми або ієрархії."
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1506
+#: src/backend/datasources/filters/ROOTFilter.cpp:1505
 #, kde-format
 msgid "Not a ROOT file"
 msgstr "Не є файлом ROOT"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1511
+#: src/backend/datasources/filters/ROOTFilter.cpp:1510
 #, kde-format
 msgid "File format version: %1"
 msgstr "Версія формату файла: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1519
+#: src/backend/datasources/filters/ROOTFilter.cpp:1518
 #, kde-format
 msgid "FREE data record size: %1 bytes"
 msgstr "Розмір вільного запису даних: %1 байтів"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1521
+#: src/backend/datasources/filters/ROOTFilter.cpp:1520
 #, kde-format
 msgid "Number of free data records: %1"
 msgstr "Кількість вільних записів даних: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1523
+#: src/backend/datasources/filters/ROOTFilter.cpp:1522
 #, kde-format
 msgid "TNamed size: %1 bytes"
 msgstr "Розмір TNamed: %1 байтів"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1525
+#: src/backend/datasources/filters/ROOTFilter.cpp:1524
 #, kde-format
 msgid "Size of file pointers: %1 bytes"
 msgstr "Розмір вказівників на файл: %1 байтів"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1530
+#: src/backend/datasources/filters/ROOTFilter.cpp:1529
 #, kde-format
 msgid "Compression level and algorithm: %1"
 msgstr "Рівень стискання і алгоритм: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1535
+#: src/backend/datasources/filters/ROOTFilter.cpp:1534
 #, kde-format
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "Розмір запису TStreamerInfo: %1 байтів"
@@ -2439,17 +2439,17 @@ msgstr "Некоректний файл DBC."
 msgid "Unknown error,"
 msgstr "Невідома помилка,"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:443
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:445
 #, kde-format
 msgid "Time_s"
 msgstr "Час_с"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:445
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:447
 #, kde-format
 msgid "Time_ns"
 msgstr "Час_нс"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:447
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:449
 #, kde-format
 msgid "Time_10µs"
 msgstr "Час_10мкс"
@@ -6894,7 +6894,7 @@ msgstr "Радіальна відстань"
 #. i18n: ectx: property (text), widget (QLabel, lInterpolation)
 #: src/backend/nsl/nsl_geom_linesim.c:23
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:413
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2011
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2039
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:270
 #, kde-format
 msgid "Interpolation"
@@ -7305,6 +7305,34 @@ msgstr "Тривага"
 #, kde-format
 msgid "Tricube"
 msgstr "Трикубічна"
+
+#: src/backend/script/Script.cpp:117 src/backend/script/Script.cpp:325
+#, fuzzy, kde-format
+#| msgid "no note element found"
+msgid "no script element found"
+msgstr "не знайдено елемента нотатки"
+
+#: src/backend/script/Script.cpp:186
+#, kde-format
+msgid "%1: run %2 script"
+msgstr ""
+
+#: src/backend/script/Script.cpp:305 src/backend/script/Script.cpp:310
+#, fuzzy, kde-format
+#| msgid "&Script"
+msgid "Script"
+msgstr "С&крипт"
+
+#: src/backend/script/Script.cpp:305
+#, fuzzy, kde-format
+#| msgid "Failed to open the file."
+msgid "Failed to run the script."
+msgstr "Не вдалося відкрити файл."
+
+#: src/backend/script/Script.cpp:310
+#, kde-format
+msgid "A script is already running."
+msgstr ""
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:341
 #, kde-format
@@ -7723,13 +7751,13 @@ msgstr "%1: встановити рівень непрозорості ліні�
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1341
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1345
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1: встановити горизонтальну фаску"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1367
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1371
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1: встановити вертикальну фаску"
@@ -7744,13 +7772,13 @@ msgstr "%1: встановити праву фаску"
 msgid "%1: set bottom padding"
 msgstr "%1: встановити нижню фаску"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:287
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:288
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:232
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:106
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:98
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:119
-#: src/frontend/dockwidgets/AxisDock.cpp:255
+#: src/frontend/dockwidgets/AxisDock.cpp:257
 #: src/frontend/dockwidgets/BarPlotDock.cpp:271
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:283
 #: src/frontend/dockwidgets/HistogramDock.cpp:269
@@ -7762,17 +7790,17 @@ msgstr "%1: встановити нижню фаску"
 msgid "Horizontal"
 msgstr "Горизонтальне"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:290
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:291
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:92
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:235
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:109
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:101
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:122
-#: src/frontend/dockwidgets/AxisDock.cpp:256
+#: src/frontend/dockwidgets/AxisDock.cpp:258
 #: src/frontend/dockwidgets/BarPlotDock.cpp:272
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:284
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:905
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:909
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:913
 #: src/frontend/dockwidgets/HistogramDock.cpp:268
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:246
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:91
@@ -7782,7 +7810,7 @@ msgstr "Горизонтальне"
 msgid "Vertical"
 msgstr "Вертикальне"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:310
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:311
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:100
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:243
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:117
@@ -7798,8 +7826,8 @@ msgstr "Орієнтація"
 #. i18n: ectx: property (text), widget (QLabel, lLine)
 #. i18n: ectx: property (text), widget (QLabel, lCenter)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:316
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:670
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:317
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:697
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:124
 #: src/frontend/dockwidgets/XYCurveDock.cpp:485
 #: src/frontend/ui/dockwidgets/axisdock.ui:488
@@ -7818,272 +7846,271 @@ msgstr "Орієнтація"
 msgid "Line"
 msgstr "Лінія"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:318
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:319
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:126
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:147
 #, kde-format
 msgid "Style"
 msgstr "Стиль"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:323
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:324
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:131
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:152
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
-#: src/frontend/dockwidgets/AxisDock.cpp:325
+#: src/frontend/dockwidgets/AxisDock.cpp:327
 #: src/frontend/widgets/BackgroundWidget.cpp:122
 #, kde-format
 msgid "Color"
 msgstr "Колір"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:553
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:554
 #, kde-format
 msgid "%1: set axis range type"
 msgstr "%1: встановити тип діапазону вісі"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:578
-#: src/frontend/dockwidgets/AxisDock.cpp:622
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:579
+#: src/frontend/dockwidgets/AxisDock.cpp:624
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr "%1: встановити орієнтацію вісі"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:585
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:586
 #, kde-format
 msgid "%1: set axis position"
 msgstr "%1: встановити розташування вісі"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:593
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:594
 #, kde-format
 msgid "%1: set axis offset"
 msgstr "%1: встановити відступ вісі"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:608
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:609
 #, kde-format
 msgid "%1: set axis range"
 msgstr "%1: встановити діапазон вісі"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:647
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:644
 #, kde-format
 msgid "%1: set range scale"
 msgstr "%1: встановити масштаб діапазону"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:654
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:651
 #, kde-format
 msgid "%1: set scale"
 msgstr "%1: встановити масштаб"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:661
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:658
 #, kde-format
 msgid "%1: set major tick start type"
 msgstr "%1: встановити тип початку основних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:668
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:665
 #, kde-format
 msgid "%1: set major tick start offset"
 msgstr "%1: встановити початковий відступ основної поділки"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:676
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:673
 #, kde-format
 msgid "%1: set major tick start value"
 msgstr "%1: встановити початкове значення основної поділки"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:688
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:685
 #, kde-format
 msgid "%1: set axis scaling factor"
 msgstr "%1: встановити коефіцієнт масштабування вісі"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:697
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:694
 #, kde-format
 msgid "%1: set axis zero offset"
 msgstr "%1: встановити відступ від нуля для вісі"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:703
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:700
 #, kde-format
 msgid "%1: show scale and offset"
 msgstr "%1: показати шкалу і відступ"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:710
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:707
 #, kde-format
 msgid "%1: set axis logical position"
 msgstr "%1: встановити логічну позицію вісі"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:718
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:725
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:715
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:722
 #, kde-format
 msgid "%1: set title offset"
 msgstr "%1: встановити відступ заголовка"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:733
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:730
 #, kde-format
 msgid "%1: set arrow type"
 msgstr "%1: встановити тип стрілки"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:740
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:737
 #, kde-format
 msgid "%1: set arrow position"
 msgstr "%1: встановити розташування стрілки"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:747
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:744
 #, kde-format
 msgid "%1: set arrow size"
 msgstr "%1: встановити розмір стрілки"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:755
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:752
 #, kde-format
 msgid "%1: set major ticks direction"
 msgstr "%1: встановити напрям основних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:762
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:759
 #, kde-format
 msgid "%1: set major ticks type"
 msgstr "%1: встановити тип основних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:770
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:767
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
 msgstr "%1: увімкнути/вимкнути автоматичні числові мітки основних поділок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:772
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:787
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:770
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:785
 #, kde-format
 msgid "%1: set the total number of the major ticks"
 msgstr "%1: встановити загальну кількість основних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:789
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:873
-#, kde-format
-msgid "%1: disable major automatic tick numbers"
-msgstr "%1: вимкнути автоматичні числові мітки основних поділок"
-
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:814
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:808
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
 msgstr "%1: встановити інтервал між основними позначками"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:821
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:815
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr "%1: встановити значення для основних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:835
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:829
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr "%1: встановити довжину основних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:843
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:837
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr "%1: встановити напрям основних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:850
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:844
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr "%1: встановити тип допоміжних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:858
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:852
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr "%1: увімкнути/вимкнути автоматичні числові мітки додаткових поділок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:861
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:872
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:855
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:866
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr "%1: встановити загальну кількість допоміжних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:905
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:867
+#, kde-format
+msgid "%1: disable major automatic tick numbers"
+msgstr "%1: вимкнути автоматичні числові мітки основних поділок"
+
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:899
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
 msgstr "%1: встановити інтервал між допоміжними позначками"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:912
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:906
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr "%1: встановити значення для допоміжних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:926
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:920
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr "%1: встановити довжину допоміжних позначок"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:935
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:929
 #, kde-format
 msgid "%1: set labels format"
 msgstr "%1: встановити формат міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:942
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:936
 #, kde-format
 msgid "%1: set labels format automatic"
 msgstr "%1: встановити автоматичний формат міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:949
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:956
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:943
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:950
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: встановити точність міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:963
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:957
 #, kde-format
 msgid "%1: set labels datetime format"
 msgstr "%1: встановити формат дати і часу для міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:970
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:964
 #, kde-format
 msgid "%1: set labels position"
 msgstr "%1: встановити розташування міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:977
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:971
 #, kde-format
 msgid "%1: set label offset"
 msgstr "%1: встановити відступ міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:984
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:978
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr "%1: встановити кут обертання міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:991
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:985
 #, kde-format
 msgid "%1: set labels text type"
 msgstr "%1: встановити тип тексту мітки"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:998
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:992
 #, kde-format
 msgid "%1: set labels text column"
 msgstr "%1: встановити стовпчик тексту міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1012
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1006
 #, kde-format
 msgid "%1: set label color"
 msgstr "%1: встановити колір міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1019
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1013
 #, kde-format
 msgid "%1: set label font"
 msgstr "%1: встановити шрифт міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1026
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1020
 #, kde-format
 msgid "%1: set labels background type"
 msgstr "%1: встановити тип тла міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1033
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1027
 #, kde-format
 msgid "%1: set label background color"
 msgstr "%1: встановити колір тла міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1040
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1034
 #, kde-format
 msgid "%1: set label prefix"
 msgstr "%1: встановити префікс мітки"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1047
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1041
 #, kde-format
 msgid "%1: set label suffix"
 msgstr "%1: встановити суфікс міток"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1054
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1048
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr "%1: встановити рівень непрозорості міток"
@@ -8240,7 +8267,7 @@ msgstr "немає доступних відомостей"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:141
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5227
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5302
 #: src/frontend/ui/dockwidgets/axisdock.ui:483
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:542
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:478
@@ -8251,14 +8278,14 @@ msgstr "Заголовок"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:410
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:447
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1954
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1982
 #, kde-format
 msgid "Data Reduction"
 msgstr "Зведення даних"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:411
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1973
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2001
 #: src/frontend/notebook/NotebookView.cpp:149
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:269
 #, kde-format
@@ -8267,7 +8294,7 @@ msgstr "Диференціювання"
 
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:412
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1992
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2020
 #: src/frontend/notebook/NotebookView.cpp:155
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:157
 #, kde-format
@@ -8277,7 +8304,7 @@ msgstr "Інтегрування"
 #. i18n: ectx: property (text), widget (QLabel, lSmooth)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:414
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:451
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2030
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2058
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:509
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:73
 #, kde-format
@@ -8285,8 +8312,8 @@ msgid "Smooth"
 msgstr "Згладжування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:415
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:607
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2049
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:634
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2077
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:623
 #, kde-format
 msgctxt "Curve fitting"
@@ -8295,7 +8322,7 @@ msgstr "Наближення"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:416
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:499
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2089
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2117
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:511
 #, kde-format
 msgid "Fourier Filter"
@@ -8403,7 +8430,7 @@ msgstr "функція помилки"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLegendVisible)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:525
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2131
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2159
 #: src/frontend/ui/dockwidgets/barplotdock.ui:235
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:248
 #: src/frontend/ui/dockwidgets/histogramdock.ui:385
@@ -8441,7 +8468,7 @@ msgid "Vertical Axis"
 msgstr "Вертикальної вісі"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:532
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2178
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2206
 #: src/frontend/datasources/ImportFileWidget.cpp:112
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:110
@@ -8453,33 +8480,45 @@ msgid "Image"
 msgstr "Зображення"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:533
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2154
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2182
 #, kde-format
 msgid "Info Element"
 msgstr "Інформаційний елемент"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:534
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2198
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2226
 #, kde-format
 msgid "Custom Point"
 msgstr "Нетипова точка"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabReferenceLine)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:535
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2223
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2251
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:176
 #, kde-format
 msgid "Reference Line"
 msgstr "Лінія відліку"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:536
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2236
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2310
 #, kde-format
 msgid "Reference Range"
 msgstr "Еталонний діапазон"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:552
-#: src/frontend/MainWin.cpp:901 src/frontend/notebook/NotebookView.cpp:168
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:555
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2270
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2292
+#, kde-format
+msgid "Inset Plot Area"
+msgstr "Вбудована область креслення"
+
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
+#, kde-format
+msgid "Inset Plot Area with Data"
+msgstr "Вбудована область креслення з даними"
+
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:574
+#: src/frontend/MainWin.cpp:947 src/frontend/notebook/NotebookView.cpp:168
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:295
 #: src/frontend/worksheet/WorksheetView.cpp:434
@@ -8487,137 +8526,137 @@ msgstr "Еталонний діапазон"
 msgid "Add New"
 msgstr "Додати"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:561
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:583
 #, kde-format
 msgid "Formula Plot"
 msgstr "Креслення за формулою"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:562
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:584
 #, kde-format
 msgid "Add a new xy-plot that is defined via a mathematical expression."
 msgstr "Додати нове креслення xy, яке визначається математичним виразом."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:569
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:591
 #, kde-format
 msgid "Analysis Plots"
 msgstr "Аналітичні креслення"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:605
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:632
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:186
 #, kde-format
 msgid "Analysis"
 msgstr "Аналіз"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:646
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:673
 #: src/frontend/ThemeHandler.cpp:49 src/frontend/ThemeHandler.cpp:144
 #: src/frontend/worksheet/WorksheetView.cpp:544
 #, kde-format
 msgid "Theme"
 msgstr "Тема"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:668
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:695
 #, kde-format
 msgid "Line Plots"
 msgstr "Лінійні креслення"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:674
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:701
 #, kde-format
 msgid "Horizontal Step"
 msgstr "Горизонтальний крок"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:678
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:705
 #, kde-format
 msgid "Vertical Step"
 msgstr "Вертикальний крок"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:682
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:709
 #, kde-format
 msgid "Spline Interpolated"
 msgstr "Інтерполювати сплайнами"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:689
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:716
 #, kde-format
 msgid "Scatter Plots"
 msgstr "Точкова діаграма"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:691
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:718
 #, kde-format
 msgid "Scatter"
 msgstr "Точкове"
 
 #. i18n: ectx: property (text), widget (QLabel, lYError)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:695
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:722
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:221
 #, kde-format
 msgid "Y Error"
 msgstr "Похибка за Y"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:699
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:726
 #, kde-format
 msgid "XY Error"
 msgstr "Похибка за XY"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:706
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:733
 #, kde-format
 msgid "Line and Symbol Plots"
 msgstr "Креслення з лініями і позначками"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:708
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:735
 #, kde-format
 msgid "Line + Symbol"
 msgstr "Лінія+позначка"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:712
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:739
 #, kde-format
 msgid "2 Point Segment"
 msgstr "2-точковий сегмент"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:716
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:743
 #, kde-format
 msgid "3 Point Segment"
 msgstr "3-точковий сегмент"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:723
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:750
 #, kde-format
 msgid "Statistical Plots"
 msgstr "Статистичні креслення"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:725
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1846
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:752
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1874
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:400
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:143
 #, kde-format
 msgid "Histogram"
 msgstr "Гістограма"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:729
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1843
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:756
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1871
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:770
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:146
 #, kde-format
 msgid "Box Plot"
 msgstr "Коробковий графік"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:733
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1849
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:760
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1877
 #, kde-format
 msgid "Q-Q Plot"
 msgstr "Діаграма Q-Q"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:737
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1852
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:764
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1880
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:144
 #, kde-format
 msgid "KDE Plot"
 msgstr "Креслення KDE"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:744
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:771
 #, kde-format
 msgid "Bar Plots"
 msgstr "Блокові графіки"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:746
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1857
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:773
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1885
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:772
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:774
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:149
@@ -8625,287 +8664,297 @@ msgstr "Блокові графіки"
 msgid "Bar Plot"
 msgstr "Блоковий графік"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:750
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1860
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:777
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1888
 #, kde-format
 msgid "Lollipop Plot"
 msgstr "Льодяникове креслення"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:757
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:784
 #, kde-format
 msgid "Continual Improvement Plots"
 msgstr "Графіки неперервного удосконалення"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:759
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1868
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:786
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1896
 #, kde-format
 msgid "Run Chart"
 msgstr "Рухома діаграма"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:763
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1865
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:790
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1893
 #, kde-format
 msgid "Process Behavior Chart"
 msgstr "Діаграма поведінки процесу"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:786
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:813
 #, kde-format
 msgid "No curves inside the plot area."
 msgstr "Немає кривих в області креслення."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1111
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1145
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1139
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1173
 #, kde-format
 msgid "%1: change geometry rect"
 msgstr "%1: змінити прямокутник геометрії"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1180
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1208
 #, kde-format
 msgid "%1: set range type"
 msgstr "%1: встановити тип діапазону"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1187
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1215
 #, kde-format
 msgid "%1: set nice extend"
 msgstr "%1: встановити оптимальне розширення"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1194
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1201
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1222
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1229
 #, kde-format
 msgid "%1: set range"
 msgstr "%1: встановити діапазон"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1212
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1240
 #, kde-format
 msgid "%1: change %2-range %3 format"
 msgstr "%1: змінити формат %2-діапазону %3"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1302
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1330
 #, kde-format
 msgid "%1: change %2-range %3 auto scaling"
 msgstr "%1: змінити автоматичне масштабування %2-діапазону %3"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1543
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1571
 #, kde-format
 msgid "%1: change x-range %2 scale"
 msgstr "%1: змінити масштаб %2 діапазону за віссю x"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1671
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1699
 #, kde-format
 msgid "%1: set default plot range"
 msgstr "%1: встановити типовий діапазон значень на графіку"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1689
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1717
 #, kde-format
 msgid "%1: x-range breaking enabled"
 msgstr "%1: розриви діапазонів за x увімкнено"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1698
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1726
 #, kde-format
 msgid "%1: x-range breaks changed"
 msgstr "%1: змінено розриви діапазонів за x"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1707
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1735
 #, kde-format
 msgid "%1: y-range breaking enabled"
 msgstr "%1: розриви діапазонів за y увімкнено"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1716
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1744
 #, kde-format
 msgid "%1: y-range breaks changed"
 msgstr "%1: змінено розриви діапазонів за y"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1730
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1758
 #, kde-format
 msgid "%1: Cursor0 enable"
 msgstr "%1: увімкнено Курсор0"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1742
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1770
 #, kde-format
 msgid "%1: Cursor1 enable"
 msgstr "%1: увімкнено Курсор1"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1753
-#: src/backend/worksheet/Worksheet.cpp:842
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1781
+#: src/backend/worksheet/Worksheet.cpp:847
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: завантажити тему %2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1755
-#: src/backend/worksheet/Worksheet.cpp:844
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1783
+#: src/backend/worksheet/Worksheet.cpp:849
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: завантажити типову тему"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1757
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5553
-#: src/backend/worksheet/Worksheet.cpp:846
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1785
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5636
+#: src/backend/worksheet/Worksheet.cpp:851
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: встановити тему"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1910
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1938
 #, kde-format
 msgid "%1: distribution fit to '%2'"
 msgstr "%1: відповідність розподілу «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1911
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1939
 #, kde-format
 msgid "Distribution Fit to '%1'"
 msgstr "Відповідність розподілу «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1957
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1985
 #, kde-format
 msgid "%1: reduce '%2'"
 msgstr "%1: зведено «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1958
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1986
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:665
 #, kde-format
 msgid "Reduction of '%1'"
 msgstr "Зведення «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1965
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1993
 #, kde-format
 msgid "%1: add data reduction curve"
 msgstr "%1: додано криву зведення даних"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1976
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2004
 #, kde-format
 msgid "%1: differentiate '%2'"
 msgstr "%1: диференціювати «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1977
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2005
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:668
 #, kde-format
 msgid "Derivative of '%1'"
 msgstr "Похідна «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1984
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2012
 #, kde-format
 msgid "%1: add differentiation curve"
 msgstr "%1: додано криву похідної"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1995
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2023
 #, kde-format
 msgid "%1: integrate '%2'"
 msgstr "%1: інтегрувати «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1996
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2024
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:671
 #, kde-format
 msgid "Integral of '%1'"
 msgstr "Інтеграл «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2003
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2031
 #, kde-format
 msgid "%1: add integration curve"
 msgstr "%1: додати криву інтегрування"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2014
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2042
 #, kde-format
 msgid "%1: interpolate '%2'"
 msgstr "%1: наблизити «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2043
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:674
 #, kde-format
 msgid "Interpolation of '%1'"
 msgstr "Інтерполяція «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2022
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2050
 #, kde-format
 msgid "%1: add interpolation curve"
 msgstr "%1: додати криву наближення"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2033
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2061
 #, kde-format
 msgid "%1: smooth '%2'"
 msgstr "%1: згладити «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2034
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2062
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:677
 #, kde-format
 msgid "Smoothing of '%1'"
 msgstr "Згладжування «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2041
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2069
 #, kde-format
 msgid "%1: add smoothing curve"
 msgstr "%1: додати криву згладжування"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2052
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2080
 #, kde-format
 msgid "%1: fit to '%2'"
 msgstr "%1: апроксимація «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2053
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2081
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:690
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
 msgstr "Апроксимація «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2080
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2108
 #, kde-format
 msgid "%1: add fit curve"
 msgstr "%1: додати криву апроксимації"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2092
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2120
 #, kde-format
 msgid "%1: Fourier filtering of '%2'"
 msgstr "%1: фільтрування Фур'є «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2093
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2121
 #, kde-format
 msgid "Fourier filtering of '%1'"
 msgstr "Фільтрування Фур'є «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2097
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2125
 #, kde-format
 msgid "%1: add Fourier filter curve"
 msgstr "%1: додати криву фільтрування Фур'є"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2108
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2136
 #, kde-format
 msgid "%1: add function of '%2'"
 msgstr "%1: додати функцію «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2109
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2137
 #, kde-format
 msgid "Function of '%1'"
 msgstr "Функція «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2112
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2140
 #, kde-format
 msgid "%1: add function curve"
 msgstr "%1: додати криву функції"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2161
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2189
 #: src/frontend/worksheet/WorksheetView.cpp:1339
 #: src/frontend/worksheet/WorksheetView.cpp:1340
 #, kde-format
 msgid "Text Label"
 msgstr "Текстова мітка"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3929
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2269
+#, kde-format
+msgid "%1: add inset plot"
+msgstr "%1: додати вбудоване креслення"
+
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2283
+#, kde-format
+msgid "%1: add inset plot with data"
+msgstr "%1: додати вбудоване креслення з даними"
+
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4021
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "Поза межами обмежувального прямокутника"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4153
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4174
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4245
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4266
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "від x=%1 до x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4161
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4187
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4253
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4279
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "від y=%1 до y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4206
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4298
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -8942,50 +8991,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: встановити радіус заокруглення кутів рамки"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
-#: src/backend/worksheet/Worksheet.cpp:714
-#: src/backend/worksheet/Worksheet.cpp:715
+#: src/backend/worksheet/Worksheet.cpp:719
+#: src/backend/worksheet/Worksheet.cpp:720
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: встановити верхнє поле компонування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:251
-#: src/backend/worksheet/Worksheet.cpp:724
-#: src/backend/worksheet/Worksheet.cpp:725
+#: src/backend/worksheet/Worksheet.cpp:729
+#: src/backend/worksheet/Worksheet.cpp:730
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: встановити нижнє поле компонування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:258
-#: src/backend/worksheet/Worksheet.cpp:734
-#: src/backend/worksheet/Worksheet.cpp:735
+#: src/backend/worksheet/Worksheet.cpp:739
+#: src/backend/worksheet/Worksheet.cpp:740
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: встановити ліве поле компонування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:265
-#: src/backend/worksheet/Worksheet.cpp:744
-#: src/backend/worksheet/Worksheet.cpp:745
+#: src/backend/worksheet/Worksheet.cpp:749
+#: src/backend/worksheet/Worksheet.cpp:750
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: встановити праве поле компонування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:272
-#: src/backend/worksheet/Worksheet.cpp:754
-#: src/backend/worksheet/Worksheet.cpp:755
+#: src/backend/worksheet/Worksheet.cpp:759
+#: src/backend/worksheet/Worksheet.cpp:760
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: встановити вертикальний інтервал компонування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:279
-#: src/backend/worksheet/Worksheet.cpp:764
-#: src/backend/worksheet/Worksheet.cpp:765
+#: src/backend/worksheet/Worksheet.cpp:769
+#: src/backend/worksheet/Worksheet.cpp:770
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: встановити горизонтальний інтервал компонування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:286
-#: src/backend/worksheet/Worksheet.cpp:784
-#: src/backend/worksheet/Worksheet.cpp:785
+#: src/backend/worksheet/Worksheet.cpp:789
+#: src/backend/worksheet/Worksheet.cpp:790
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: встановити кількість стовпчиків у компонуванні"
@@ -10107,36 +10156,36 @@ msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Друк робочого аркуша"
 
-#: src/backend/worksheet/Worksheet.cpp:684
+#: src/backend/worksheet/Worksheet.cpp:689
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: зміна типу розміру"
 
-#: src/backend/worksheet/Worksheet.cpp:696
+#: src/backend/worksheet/Worksheet.cpp:701
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: змінити властивість «масштабувати за вмістом»"
 
-#: src/backend/worksheet/Worksheet.cpp:704
-#: src/backend/worksheet/Worksheet.cpp:705
+#: src/backend/worksheet/Worksheet.cpp:709
+#: src/backend/worksheet/Worksheet.cpp:710
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: встановити компонування"
 
-#: src/backend/worksheet/Worksheet.cpp:774
-#: src/backend/worksheet/Worksheet.cpp:775
+#: src/backend/worksheet/Worksheet.cpp:779
+#: src/backend/worksheet/Worksheet.cpp:780
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: встановити кількість рядків у компонуванні"
 
-#: src/backend/worksheet/Worksheet.cpp:815
-#: src/backend/worksheet/Worksheet.cpp:816
+#: src/backend/worksheet/Worksheet.cpp:820
+#: src/backend/worksheet/Worksheet.cpp:821
 #: src/frontend/dockwidgets/WorksheetDock.cpp:376
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: встановити розмір сторінки"
 
-#: src/backend/worksheet/Worksheet.cpp:1567
+#: src/backend/worksheet/Worksheet.cpp:1572
 #, kde-format
 msgid "Curves"
 msgstr "Криві"
@@ -12148,7 +12197,7 @@ msgid "Open LabPlot Project"
 msgstr "Відкрити проєкт LabPlot"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:1494
+#: src/frontend/MainWin.cpp:1584
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "проєкти LabPlot (%1)"
@@ -12172,8 +12221,8 @@ msgstr "Назва теки:"
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:398 src/frontend/MainWin.cpp:647
-#: src/frontend/MainWin.cpp:1981 src/frontend/SettingsDialog.cpp:64
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:398 src/frontend/MainWin.cpp:684
+#: src/frontend/MainWin.cpp:2072 src/frontend/SettingsDialog.cpp:65
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12458,7 +12507,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2890
+#: src/frontend/MainWin.cpp:2994
 #, kde-format
 msgid "Warning"
 msgstr "Попередження"
@@ -12542,9 +12591,9 @@ msgstr "Області даних"
 
 #. i18n("Center") ); // must not updated
 #: src/frontend/dockwidgets/AxisDock.cpp:228
-#: src/frontend/dockwidgets/AxisDock.cpp:306
-#: src/frontend/dockwidgets/AxisDock.cpp:489
-#: src/frontend/dockwidgets/AxisDock.cpp:492
+#: src/frontend/dockwidgets/AxisDock.cpp:308
+#: src/frontend/dockwidgets/AxisDock.cpp:491
+#: src/frontend/dockwidgets/AxisDock.cpp:494
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:270
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:281
 #: src/frontend/dockwidgets/CustomPointDock.cpp:134
@@ -12557,9 +12606,9 @@ msgid "Top"
 msgstr "Згори"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:229
-#: src/frontend/dockwidgets/AxisDock.cpp:307
-#: src/frontend/dockwidgets/AxisDock.cpp:490
-#: src/frontend/dockwidgets/AxisDock.cpp:493
+#: src/frontend/dockwidgets/AxisDock.cpp:309
+#: src/frontend/dockwidgets/AxisDock.cpp:492
+#: src/frontend/dockwidgets/AxisDock.cpp:495
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:272
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:283
 #: src/frontend/dockwidgets/CustomPointDock.cpp:136
@@ -12604,44 +12653,55 @@ msgstr ""
 "накресленими точками даних, відповідно</li><li>Нетиповий — вручну встановити "
 "початкову і кінцеву точки вісі</li></ul>"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:260
+#: src/frontend/dockwidgets/AxisDock.cpp:249
+#, kde-format
+msgid ""
+"If enabled: Use the major tick number as base to determine the new number of "
+"ticks for nice looking values. The number of ticks might be different than "
+"the number previously set."
+msgstr ""
+"Якщо увімкнено, використати кількість основних поділок як основу для "
+"визначення нової кількості поділок для кращого вигляду значень. Кількість "
+"поділок може бути відмінною від попередньо встановленої."
+
+#: src/frontend/dockwidgets/AxisDock.cpp:262
 #, kde-format
 msgid "No arrow"
 msgstr "без стрілки"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:261
+#: src/frontend/dockwidgets/AxisDock.cpp:263
 #, kde-format
 msgid "Simple, Small"
 msgstr "проста, мала"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:262
+#: src/frontend/dockwidgets/AxisDock.cpp:264
 #, kde-format
 msgid "Simple, Big"
 msgstr "проста, велика"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:263
+#: src/frontend/dockwidgets/AxisDock.cpp:265
 #, kde-format
 msgid "Filled, Small"
 msgstr "заповнена, мала"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:264
+#: src/frontend/dockwidgets/AxisDock.cpp:266
 #, kde-format
 msgid "Filled, Big"
 msgstr "заповнена, велика"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:265
+#: src/frontend/dockwidgets/AxisDock.cpp:267
 #, kde-format
 msgid "Semi-filled, Small"
 msgstr "напівзаповнена, мала"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:266
+#: src/frontend/dockwidgets/AxisDock.cpp:268
 #, kde-format
 msgid "Semi-filled, Big"
 msgstr "напівзаповнена, велика"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:271
-#: src/frontend/dockwidgets/AxisDock.cpp:497
-#: src/frontend/dockwidgets/AxisDock.cpp:501
+#: src/frontend/dockwidgets/AxisDock.cpp:273
+#: src/frontend/dockwidgets/AxisDock.cpp:499
+#: src/frontend/dockwidgets/AxisDock.cpp:503
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:264
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:276
 #: src/frontend/dockwidgets/CustomPointDock.cpp:129
@@ -12657,9 +12717,9 @@ msgid "Left"
 msgstr "Ліворуч"
 
 #. i18n("Center") ); // must not updated
-#: src/frontend/dockwidgets/AxisDock.cpp:272
-#: src/frontend/dockwidgets/AxisDock.cpp:498
+#: src/frontend/dockwidgets/AxisDock.cpp:274
 #: src/frontend/dockwidgets/AxisDock.cpp:500
+#: src/frontend/dockwidgets/AxisDock.cpp:502
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:266
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:278
 #: src/frontend/dockwidgets/CustomPointDock.cpp:131
@@ -12674,147 +12734,147 @@ msgstr "Ліворуч"
 msgid "Right"
 msgstr "Праворуч"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:273
+#: src/frontend/dockwidgets/AxisDock.cpp:275
 #: src/frontend/dockwidgets/XYCurveDock.cpp:525
 #, kde-format
 msgid "Both"
 msgstr "Обидва"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:277
-#: src/frontend/dockwidgets/AxisDock.cpp:293
+#: src/frontend/dockwidgets/AxisDock.cpp:279
+#: src/frontend/dockwidgets/AxisDock.cpp:295
 #, kde-format
 msgid "In"
 msgstr "Всередині"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:278
-#: src/frontend/dockwidgets/AxisDock.cpp:294
+#: src/frontend/dockwidgets/AxisDock.cpp:280
+#: src/frontend/dockwidgets/AxisDock.cpp:296
 #, kde-format
 msgid "Out"
 msgstr "Ззовні"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:279
-#: src/frontend/dockwidgets/AxisDock.cpp:295
+#: src/frontend/dockwidgets/AxisDock.cpp:281
+#: src/frontend/dockwidgets/AxisDock.cpp:297
 #, kde-format
 msgid "In and Out"
 msgstr "Всередині і ззовні"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:282
-#: src/frontend/dockwidgets/AxisDock.cpp:298
+#: src/frontend/dockwidgets/AxisDock.cpp:284
+#: src/frontend/dockwidgets/AxisDock.cpp:300
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:58
 #, kde-format
 msgid "Number"
 msgstr "Кількість"
 
 #. i18n: ectx: property (text), widget (QLabel, lSpacing)
-#: src/frontend/dockwidgets/AxisDock.cpp:283
-#: src/frontend/dockwidgets/AxisDock.cpp:299
+#: src/frontend/dockwidgets/AxisDock.cpp:285
+#: src/frontend/dockwidgets/AxisDock.cpp:301
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:659
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:454
 #, kde-format
 msgid "Spacing"
 msgstr "Інтервал"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:284
-#: src/frontend/dockwidgets/AxisDock.cpp:300
-#: src/frontend/dockwidgets/AxisDock.cpp:311
+#: src/frontend/dockwidgets/AxisDock.cpp:286
+#: src/frontend/dockwidgets/AxisDock.cpp:302
+#: src/frontend/dockwidgets/AxisDock.cpp:313
 #, kde-format
 msgid "Custom column"
 msgstr "Нетиповий стовпчик"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:285
+#: src/frontend/dockwidgets/AxisDock.cpp:287
 #, kde-format
 msgid "Column labels"
 msgstr "Мітки стовпчиків"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:288
+#: src/frontend/dockwidgets/AxisDock.cpp:290
 #, kde-format
 msgid "Absolute Value"
 msgstr "Модуль"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:289
+#: src/frontend/dockwidgets/AxisDock.cpp:291
 #, kde-format
 msgid "Offset"
 msgstr "Відступ"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:305
+#: src/frontend/dockwidgets/AxisDock.cpp:307
 #, kde-format
 msgid "No labels"
 msgstr "без міток"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:310
+#: src/frontend/dockwidgets/AxisDock.cpp:312
 #, kde-format
 msgid "Position values"
 msgstr "Значення позицій"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:315
+#: src/frontend/dockwidgets/AxisDock.cpp:317
 #, kde-format
 msgid "Decimal notation"
 msgstr "Десятковий запис"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:316
+#: src/frontend/dockwidgets/AxisDock.cpp:318
 #, kde-format
 msgid "Scientific notation"
 msgstr "Інженерний запис"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:317
+#: src/frontend/dockwidgets/AxisDock.cpp:319
 #, kde-format
 msgid "Scientific E notation"
 msgstr "Інженерний запис з E"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:318
+#: src/frontend/dockwidgets/AxisDock.cpp:320
 #, kde-format
 msgid "Powers of 10"
 msgstr "Степені 10"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:319
+#: src/frontend/dockwidgets/AxisDock.cpp:321
 #, kde-format
 msgid "Powers of 2"
 msgstr "Степені 2"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:320
+#: src/frontend/dockwidgets/AxisDock.cpp:322
 #, kde-format
 msgid "Powers of e"
 msgstr "Степені e"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:321
+#: src/frontend/dockwidgets/AxisDock.cpp:323
 #, kde-format
 msgid "Multiples of π"
 msgstr "Кратні до π"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:324
+#: src/frontend/dockwidgets/AxisDock.cpp:326
 #, kde-format
 msgid "Transparent"
 msgstr "Прозорий"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:577
+#: src/frontend/dockwidgets/AxisDock.cpp:579
 #, kde-format
 msgid "%1: set axis color"
 msgstr "%1: встановлення кольору вісі"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:579
+#: src/frontend/dockwidgets/AxisDock.cpp:581
 #, kde-format
 msgid "%1 axes: set color"
 msgstr "%1, вісі: встановлення кольору"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:1584
+#: src/frontend/dockwidgets/AxisDock.cpp:1582
 #, kde-format
 msgid "Scale is in sync with the plot scale"
 msgstr "Масштаб синхронізовано із масштабом графіка"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:1587
+#: src/frontend/dockwidgets/AxisDock.cpp:1585
 #, kde-format
 msgid "Scale is async with the plot"
 msgstr "Масштаб не синхронізовано з графіком"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:2040
+#: src/frontend/dockwidgets/AxisDock.cpp:2037
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "Вісі %1: завантажено шаблон «%2»"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:2042
+#: src/frontend/dockwidgets/AxisDock.cpp:2039
 #: src/frontend/dockwidgets/BarPlotDock.cpp:509
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:735
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1842
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1846
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:803
 #: src/frontend/dockwidgets/CustomPointDock.cpp:385
 #: src/frontend/dockwidgets/HistogramDock.cpp:580
@@ -13041,31 +13101,31 @@ msgstr "Коробкові креслення %1: завантажено шаб�
 msgid "Save current plot area definition as template"
 msgstr "Зберегти поточне визначення області креслення як шаблон"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:625
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:629
 #, kde-format
 msgid "%1-Ranges:"
 msgstr "%1-діапазони:"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:627
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:631
 #, kde-format
 msgid "%1-Range:"
 msgstr "%1-діапазон:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:651
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:655
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:53
 #, kde-format
 msgid "Numeric"
 msgstr "Число"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:797
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:801
 #, kde-format
 msgid "Plot Ranges:"
 msgstr "Діапазони графіка:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:799
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:803
 #: src/frontend/ui/dockwidgets/axisdock.ui:262
 #: src/frontend/ui/dockwidgets/barplotdock.ui:186
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:90
@@ -13092,34 +13152,34 @@ msgstr "Діапазони графіка:"
 msgid "Plot Range:"
 msgstr "Діапазон графіка:"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:898
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:902
 #, kde-format
 msgid "Free"
 msgstr "Довільний"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:899
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:903
 #, kde-format
 msgid "Last Points"
 msgstr "Останні точки"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:900
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:904
 #, kde-format
 msgid "First Points"
 msgstr "Перші точки"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:904
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:908
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:912
 #, kde-format
 msgid "Simple"
 msgstr "простий"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:906
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:910
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:914
 #, kde-format
 msgid "Sloped"
 msgstr "нахилений"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:914
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:918
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -13131,32 +13191,32 @@ msgstr ""
 "кількості останніх точок</li><li>Перші точки — буде побудовано графік для "
 "вказаної кількості перших точок</li></ul>"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:923
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:927
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
 "Якщо позначено, автоматично розширювати діапазон графіка до оптимальних "
 "значень"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1166
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1170
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr "%1-діапазон %2 використано на діапазоні %3 креслення. "
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1167
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1220
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1171
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1224
 #, kde-format
 msgid "Really remove it?"
 msgstr "Справді вилучити?"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1220
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1224
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr "Діапазон креслення %1 використано елементом «%2». "
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1313
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1317
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:560
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:769
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:342
@@ -13166,7 +13226,7 @@ msgstr "Горизонтальне:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1314
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1318
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:861
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:724
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:428
@@ -13176,7 +13236,7 @@ msgstr "Вертикальне:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1316
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1320
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:796
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:717
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:414
@@ -13186,7 +13246,7 @@ msgstr "Ліворуч:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1317
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1321
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:803
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:666
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:407
@@ -13194,18 +13254,18 @@ msgstr "Ліворуч:"
 msgid "Top:"
 msgstr "Верх:"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1649
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1653
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr "Виберіть шаблон для збереження файла"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1651
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1655
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr "шаблони креслень Labplot (*%1)"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1840
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1844
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "Креслення у декартовій системі %1: завантажено шаблон «%2»"
@@ -14314,294 +14374,302 @@ msgstr ""
 "Не вдалося відкрити файл збірки прикладів %1. Будь ласка, перевірте, чи "
 "правильно встановлено програму."
 
-#: src/frontend/GuiObserver.cpp:176 src/frontend/MainWin.cpp:1401
+#: src/frontend/GuiObserver.cpp:178 src/frontend/MainWin.cpp:1491
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
 msgstr "Властивості"
 
-#: src/frontend/GuiObserver.cpp:212
+#: src/frontend/GuiObserver.cpp:214
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Spreadsheet"
 msgstr "Властивості: Електронна таблиця"
 
-#: src/frontend/GuiObserver.cpp:217
+#: src/frontend/GuiObserver.cpp:219
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
 msgstr "Властивості: статистика стовпчиків"
 
-#: src/frontend/GuiObserver.cpp:227
+#: src/frontend/GuiObserver.cpp:229
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Worksheet"
 msgstr "Робочий аркуш %1"
 
-#: src/frontend/GuiObserver.cpp:232
+#: src/frontend/GuiObserver.cpp:234
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column"
 msgstr "Властивості: Стовпчик"
 
-#: src/frontend/GuiObserver.cpp:239
+#: src/frontend/GuiObserver.cpp:241
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Matrix"
 msgstr "Властивості: Матриця"
 
-#: src/frontend/GuiObserver.cpp:244
+#: src/frontend/GuiObserver.cpp:246
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
 msgstr "Властивості: Робочий аркуш"
 
-#: src/frontend/GuiObserver.cpp:250
+#: src/frontend/GuiObserver.cpp:252
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Plot Area"
 msgstr "Властивості: Область креслення"
 
-#: src/frontend/GuiObserver.cpp:256
+#: src/frontend/GuiObserver.cpp:258
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Legend"
 msgstr "Властивості: Умовні позначення"
 
-#: src/frontend/GuiObserver.cpp:261
+#: src/frontend/GuiObserver.cpp:263
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Axis"
 msgstr "Властивості: Вісь"
 
-#: src/frontend/GuiObserver.cpp:266
+#: src/frontend/GuiObserver.cpp:268
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Curve"
 msgstr "Властивості: XY-крива"
 
-#: src/frontend/GuiObserver.cpp:271
+#: src/frontend/GuiObserver.cpp:273
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Equation"
 msgstr "Властивості: XY-рівняння"
 
-#: src/frontend/GuiObserver.cpp:276
+#: src/frontend/GuiObserver.cpp:278
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Function Curve"
 msgstr "Властивості: Крива функції"
 
-#: src/frontend/GuiObserver.cpp:281
+#: src/frontend/GuiObserver.cpp:283
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Reduction"
 msgstr "Властивості: Зведення даних"
 
-#: src/frontend/GuiObserver.cpp:297
+#: src/frontend/GuiObserver.cpp:299
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Differentiation"
 msgstr "Властивості: Диференціювання"
 
-#: src/frontend/GuiObserver.cpp:302
+#: src/frontend/GuiObserver.cpp:304
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Integration"
 msgstr "Властивості: Інтегрування"
 
-#: src/frontend/GuiObserver.cpp:307
+#: src/frontend/GuiObserver.cpp:309
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Interpolation"
 msgstr "Властивості: Інтерполяція"
 
-#: src/frontend/GuiObserver.cpp:312
+#: src/frontend/GuiObserver.cpp:314
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
 msgstr "Властивості: Згладжування"
 
-#: src/frontend/GuiObserver.cpp:317
+#: src/frontend/GuiObserver.cpp:319
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fit"
 msgstr "Властивості: Наближення"
 
-#: src/frontend/GuiObserver.cpp:322
+#: src/frontend/GuiObserver.cpp:324
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Transform"
 msgstr "Властивості: Перетворення Фур'є"
 
-#: src/frontend/GuiObserver.cpp:327
+#: src/frontend/GuiObserver.cpp:329
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hilbert Transform"
 msgstr "Властивості: Перетворення Гільберта"
 
-#: src/frontend/GuiObserver.cpp:332
+#: src/frontend/GuiObserver.cpp:334
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
 msgstr "Властивості: Фільтр Фур'є"
 
-#: src/frontend/GuiObserver.cpp:337
+#: src/frontend/GuiObserver.cpp:339
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Convolution/Deconvolution"
 msgstr "Властивості: Згортка/Розгортка"
 
-#: src/frontend/GuiObserver.cpp:342
+#: src/frontend/GuiObserver.cpp:344
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
 msgstr "Властивості: Авто-/Перехресна кореляція"
 
-#: src/frontend/GuiObserver.cpp:347
+#: src/frontend/GuiObserver.cpp:349
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Histogram"
 msgstr "Властивості: Гістограма"
 
-#: src/frontend/GuiObserver.cpp:353
+#: src/frontend/GuiObserver.cpp:355
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
 msgstr "Властивості: Блоковий графік"
 
-#: src/frontend/GuiObserver.cpp:358
+#: src/frontend/GuiObserver.cpp:360
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Lollipop Plot"
 msgstr "Властивості: Льодяникове креслення"
 
-#: src/frontend/GuiObserver.cpp:364
+#: src/frontend/GuiObserver.cpp:366
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
 msgstr "Властивості: Коробковий графік"
 
-#: src/frontend/GuiObserver.cpp:369
+#: src/frontend/GuiObserver.cpp:371
 #, kde-format
 msgctxt "@title:window"
 msgid "KDE Plot"
 msgstr "Креслення KDE"
 
-#: src/frontend/GuiObserver.cpp:374
+#: src/frontend/GuiObserver.cpp:376
 #, kde-format
 msgctxt "@title:window"
 msgid "Q-Q Plot"
 msgstr "Діаграма Q-Q"
 
-#: src/frontend/GuiObserver.cpp:380
+#: src/frontend/GuiObserver.cpp:382
 #, kde-format
 msgctxt "@title:window"
 msgid "Process Behavior Chart"
 msgstr "Діаграма поведінки процесу"
 
-#: src/frontend/GuiObserver.cpp:385
+#: src/frontend/GuiObserver.cpp:387
 #, kde-format
 msgctxt "@title:window"
 msgid "Run Chart"
 msgstr "Рухома діаграма"
 
-#: src/frontend/GuiObserver.cpp:390
+#: src/frontend/GuiObserver.cpp:392
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Text Label"
 msgstr "Властивості: Текстова мітка"
 
-#: src/frontend/GuiObserver.cpp:395
+#: src/frontend/GuiObserver.cpp:397
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Image"
 msgstr "Властивості: Зображення"
 
-#: src/frontend/GuiObserver.cpp:400
+#: src/frontend/GuiObserver.cpp:402
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Custom Point"
 msgstr "Властивості: Нетипова точка"
 
-#: src/frontend/GuiObserver.cpp:405
+#: src/frontend/GuiObserver.cpp:407
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Reference Line"
 msgstr "Властивості: Лінія відліку"
 
-#: src/frontend/GuiObserver.cpp:410
+#: src/frontend/GuiObserver.cpp:412
 #, kde-format
 msgctxt "@title:window"
 msgid "Reference Range"
 msgstr "Еталонний діапазон"
 
-#: src/frontend/GuiObserver.cpp:415
+#: src/frontend/GuiObserver.cpp:417
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Datapicker Curve"
 msgstr "Властивості: Крива вибору даних"
 
-#: src/frontend/GuiObserver.cpp:420
+#: src/frontend/GuiObserver.cpp:422
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Extractor"
 msgstr "Властивості: Засіб видобування даних"
 
-#: src/frontend/GuiObserver.cpp:430
+#: src/frontend/GuiObserver.cpp:432
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Project"
 msgstr "Властивості: Проєкт"
 
-#: src/frontend/GuiObserver.cpp:440
+#: src/frontend/GuiObserver.cpp:442
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Notebook"
 msgstr "Нотатник %1"
 
-#: src/frontend/GuiObserver.cpp:442
+#: src/frontend/GuiObserver.cpp:444
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notebook"
 msgstr "Властивості: Нотатник"
 
-#: src/frontend/GuiObserver.cpp:448
+#: src/frontend/GuiObserver.cpp:450
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notes"
 msgstr "Властивості: Нотатки"
 
-#: src/frontend/GuiObserver.cpp:453
+#: src/frontend/GuiObserver.cpp:455
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Info Element"
 msgstr "Властивості: Інформаційний елемент"
 
-#: src/frontend/GuiObserver.cpp:460 src/frontend/GuiObserver.cpp:467
-#: src/frontend/GuiObserver.cpp:474
+#: src/frontend/GuiObserver.cpp:462 src/frontend/GuiObserver.cpp:469
+#: src/frontend/GuiObserver.cpp:476
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
 msgstr "Властивості: Джерело даних MQTT"
 
-#: src/frontend/GuiObserver.cpp:480
+#: src/frontend/GuiObserver.cpp:482
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
 msgstr "Властивості: Інтерактивне джерело даних"
 
-#: src/frontend/GuiObserver.cpp:494
+#: src/frontend/GuiObserver.cpp:496
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Folder"
 msgstr "Властивості: Тека"
 
-#: src/frontend/GuiObserver.cpp:501
+#: src/frontend/GuiObserver.cpp:503
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Workbook"
 msgstr "Властивості: Робоча книга"
+
+#: src/frontend/GuiObserver.cpp:508
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Properties: Fit"
+msgctxt "@title:window"
+msgid "Properties: Script"
+msgstr "Властивості: Наближення"
 
 #: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
@@ -15032,99 +15100,107 @@ msgstr "Панель інструментів електронної табли�
 msgid "Notebook Toolbar"
 msgstr "Панель інструментів нотатника"
 
-#. i18n: ectx: ToolBar (cartesian_plot_toolbar)
+#. i18n: ectx: ToolBar (script_toolbar)
 #: src/frontend/labplotui.rc:40
+#, fuzzy, kde-format
+#| msgid "Project Toolbar"
+msgid "Script Toolbar"
+msgstr "Панель інструментів проєкту"
+
+#. i18n: ectx: ToolBar (cartesian_plot_toolbar)
+#: src/frontend/labplotui.rc:44
 #, kde-format
 msgid "Plot Area Toolbar"
 msgstr "Панель інструментів області креслень"
 
 #. i18n: ectx: Menu (file)
-#: src/frontend/labplotui.rc:44
+#: src/frontend/labplotui.rc:48
 #, kde-format
 msgid "&File"
 msgstr "&Файл"
 
 #. i18n: ectx: Menu (new)
-#: src/frontend/labplotui.rc:46
+#: src/frontend/labplotui.rc:50
 #, kde-format
 msgid "&Add New"
 msgstr "&Додати новий"
 
 #. i18n: ectx: Menu (new_notebook)
 #. i18n: ectx: Menu (notebook)
-#: src/frontend/labplotui.rc:56 src/frontend/labplotui.rc:84
+#: src/frontend/labplotui.rc:60 src/frontend/labplotui.rc:92
 #, kde-format
 msgid "&Notebook"
 msgstr "&Нотатник"
 
+#. i18n: ectx: Menu (new_script)
+#. i18n: ectx: Menu (script)
+#: src/frontend/labplotui.rc:66 src/frontend/labplotui.rc:95
+#, kde-format
+msgid "&Script"
+msgstr "С&крипт"
+
 #. i18n: ectx: Menu (import)
-#: src/frontend/labplotui.rc:63
+#: src/frontend/labplotui.rc:71
 #, kde-format
 msgid "Import"
 msgstr "Імпортувати"
 
 #. i18n: ectx: Menu (edit)
-#: src/frontend/labplotui.rc:76
+#: src/frontend/labplotui.rc:84
 #, kde-format
 msgid "&Edit"
 msgstr "З&міни"
 
 #. i18n: ectx: Menu (spreadsheet)
-#: src/frontend/labplotui.rc:81
+#: src/frontend/labplotui.rc:89
 #, kde-format
 msgid "&Spreadsheet"
 msgstr "&Електронна таблиця"
 
 #. i18n: ectx: Menu (matrix)
-#: src/frontend/labplotui.rc:82
+#: src/frontend/labplotui.rc:90
 #, kde-format
 msgid "&Matrix"
 msgstr "&Матриця"
 
 #. i18n: ectx: Menu (worksheet)
-#: src/frontend/labplotui.rc:83
+#: src/frontend/labplotui.rc:91
 #, kde-format
 msgid "&Worksheet"
 msgstr "Р&обочий аркуш"
 
 #. i18n: ectx: Menu (datapicker)
-#: src/frontend/labplotui.rc:85
+#: src/frontend/labplotui.rc:93
 #, kde-format
 msgid "&Data Extractor"
 msgstr "&Засіб видобування даних"
 
 #. i18n: ectx: Menu (drawing)
-#: src/frontend/labplotui.rc:86
+#: src/frontend/labplotui.rc:94
 #, kde-format
 msgid "&Drawing"
 msgstr "&Малюнок"
 
-#. i18n: ectx: Menu (script)
-#: src/frontend/labplotui.rc:87
-#, kde-format
-msgid "&Script"
-msgstr "С&крипт"
-
 #. i18n: ectx: Menu (tools)
-#: src/frontend/labplotui.rc:88
+#: src/frontend/labplotui.rc:96
 #, kde-format
 msgid "&Tools"
 msgstr "&Інструменти"
 
 #. i18n: ectx: Menu (windows)
-#: src/frontend/labplotui.rc:92
+#: src/frontend/labplotui.rc:100
 #, kde-format
 msgid "&Windows"
 msgstr "&Вікна"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
-#: src/frontend/MainWin.cpp:210 src/frontend/ui/settingsworksheetpage.ui:106
+#: src/frontend/MainWin.cpp:235 src/frontend/ui/settingsworksheetpage.ui:106
 #: src/frontend/worksheet/WorksheetView.cpp:269
 #, kde-format
 msgid "Presenter Mode"
 msgstr "Режим презентації"
 
-#: src/frontend/MainWin.cpp:210
+#: src/frontend/MainWin.cpp:235
 #, kde-format
 msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
@@ -15133,257 +15209,263 @@ msgstr ""
 "У проєкті немає доступних робочих аркушів. Режим презентації не буде "
 "запущено."
 
-#: src/frontend/MainWin.cpp:224
+#: src/frontend/MainWin.cpp:249
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Вітаємо у LabPlot %1"
 
-#: src/frontend/MainWin.cpp:616
+#: src/frontend/MainWin.cpp:653
 #, kde-format
 msgid "&Open Example"
 msgstr "Від&крити приклад"
 
-#: src/frontend/MainWin.cpp:637 src/frontend/MainWin.cpp:1965
+#: src/frontend/MainWin.cpp:674 src/frontend/MainWin.cpp:2056
 #, kde-format
 msgid "Workbook"
 msgstr "Робоча книга"
 
-#: src/frontend/MainWin.cpp:639
+#: src/frontend/MainWin.cpp:676
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 "Створює робочу книгу для збирання електронних таблиць, матриць та креслень"
 
-#: src/frontend/MainWin.cpp:642 src/frontend/MainWin.cpp:1973
+#: src/frontend/MainWin.cpp:679 src/frontend/MainWin.cpp:2064
 #, kde-format
 msgid "Data Extractor"
 msgstr "Засіб видобування даних"
 
-#: src/frontend/MainWin.cpp:643
+#: src/frontend/MainWin.cpp:680
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "Створює інструмент для видобування даних із зображення"
 
-#: src/frontend/MainWin.cpp:649
+#: src/frontend/MainWin.cpp:686
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "Створює електронну таблицю для редагування даних"
 
-#: src/frontend/MainWin.cpp:655
+#: src/frontend/MainWin.cpp:692
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Створює матрицю для редагування даних"
 
-#: src/frontend/MainWin.cpp:659 src/frontend/MainWin.cpp:2017
-#: src/frontend/SettingsDialog.cpp:59
+#: src/frontend/MainWin.cpp:696 src/frontend/MainWin.cpp:2118
+#: src/frontend/SettingsDialog.cpp:60
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:86
 #, kde-format
 msgid "Worksheet"
 msgstr "Робочий аркуш"
 
-#: src/frontend/MainWin.cpp:661
+#: src/frontend/MainWin.cpp:698
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "Створює робочий аркуш для креслення графіків даних"
 
-#: src/frontend/MainWin.cpp:665 src/frontend/MainWin.cpp:2025
+#: src/frontend/MainWin.cpp:705
+#, fuzzy, kde-format
+#| msgid "Creates a new %1 notebook"
+msgid "Creates a new %1 script"
+msgstr "Створює нотатник %1"
+
+#: src/frontend/MainWin.cpp:711 src/frontend/MainWin.cpp:2126
 #, kde-format
 msgid "Note"
 msgstr "Нотатка"
 
-#: src/frontend/MainWin.cpp:666
+#: src/frontend/MainWin.cpp:712
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Створює нотатку для довільного тексту"
 
-#: src/frontend/MainWin.cpp:670 src/frontend/MainWin.cpp:1957
+#: src/frontend/MainWin.cpp:716 src/frontend/MainWin.cpp:2048
 #, kde-format
 msgid "Folder"
 msgstr "Тека"
 
-#: src/frontend/MainWin.cpp:671
+#: src/frontend/MainWin.cpp:717
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "Створює теку для збирання аркушів та інших елементів"
 
-#: src/frontend/MainWin.cpp:676
+#: src/frontend/MainWin.cpp:722
 #, kde-format
 msgid "Live Data Source..."
 msgstr "Інтерактивне джерело даних…"
 
-#: src/frontend/MainWin.cpp:677
+#: src/frontend/MainWin.cpp:723
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr "Створити інтерактивне джерело даних для читання даних із пристрою"
 
-#: src/frontend/MainWin.cpp:684 src/frontend/MainWin.cpp:693
+#: src/frontend/MainWin.cpp:730 src/frontend/MainWin.cpp:739
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Імпортувати дані зі звичайного файла"
 
-#: src/frontend/MainWin.cpp:698
+#: src/frontend/MainWin.cpp:744
 #, kde-format
 msgid "From kaggle.com..."
 msgstr "З kaggle.com…"
 
-#: src/frontend/MainWin.cpp:699
+#: src/frontend/MainWin.cpp:745
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr "Імпортувати дані з kaggle.com"
 
-#: src/frontend/MainWin.cpp:704
+#: src/frontend/MainWin.cpp:750
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Імпортувати дані з бази даних SQL"
 
-#: src/frontend/MainWin.cpp:708
+#: src/frontend/MainWin.cpp:754
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Зі збірки наборів даних…"
 
-#: src/frontend/MainWin.cpp:709
+#: src/frontend/MainWin.cpp:755
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr "Імпортувати дані із набору даних у мережі"
 
-#: src/frontend/MainWin.cpp:713
+#: src/frontend/MainWin.cpp:759
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "Проєкт LabPlot…"
 
-#: src/frontend/MainWin.cpp:714
+#: src/frontend/MainWin.cpp:760
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Імпортувати проєкт з файла проєкту LabPlot (.lml)"
 
-#: src/frontend/MainWin.cpp:719
+#: src/frontend/MainWin.cpp:765
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Проєкт Origin (OPJ)…"
 
-#: src/frontend/MainWin.cpp:720
+#: src/frontend/MainWin.cpp:766
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr "Імпортувати проєкт з файла проєкту Origin OriginLab (.opj)"
 
-#: src/frontend/MainWin.cpp:725
+#: src/frontend/MainWin.cpp:771
 #, kde-format
 msgid "Export..."
 msgstr "Експортувати…"
 
-#: src/frontend/MainWin.cpp:726
+#: src/frontend/MainWin.cpp:772
 #, kde-format
 msgid "Export selected element"
 msgstr "Експортувати позначений елемент"
 
-#: src/frontend/MainWin.cpp:732 src/frontend/MainWin.cpp:2506
-#: src/frontend/MainWin.cpp:2514
+#: src/frontend/MainWin.cpp:778 src/frontend/MainWin.cpp:2610
+#: src/frontend/MainWin.cpp:2618
 #, kde-format
 msgid "Share"
 msgstr "Оприлюднити"
 
-#: src/frontend/MainWin.cpp:737
+#: src/frontend/MainWin.cpp:783
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Навігатор картами кольорів"
 
-#: src/frontend/MainWin.cpp:738
+#: src/frontend/MainWin.cpp:784
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "Відкрити вікно для навігації доступними картами кольорів."
 
-#: src/frontend/MainWin.cpp:747
+#: src/frontend/MainWin.cpp:793
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "Редактор метаданих FITS…"
 
-#: src/frontend/MainWin.cpp:748
+#: src/frontend/MainWin.cpp:794
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Відкрити редактор для редагування метаданих FITS"
 
-#: src/frontend/MainWin.cpp:757
+#: src/frontend/MainWin.cpp:803
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Журнал скасування-поновлення дій…"
 
-#: src/frontend/MainWin.cpp:777
+#: src/frontend/MainWin.cpp:823
 #, kde-format
 msgid "Close the active window"
 msgstr "Закрити активне вікно"
 
-#: src/frontend/MainWin.cpp:780
+#: src/frontend/MainWin.cpp:826
 #, kde-format
 msgid "Close &All"
 msgstr "Закрити &всі"
 
-#: src/frontend/MainWin.cpp:781
+#: src/frontend/MainWin.cpp:827
 #, kde-format
 msgid "Close all the windows"
 msgstr "Закрити усі вікна"
 
-#: src/frontend/MainWin.cpp:784
+#: src/frontend/MainWin.cpp:830
 #, kde-format
 msgid "Ne&xt"
 msgstr "&Далі"
 
-#: src/frontend/MainWin.cpp:786
+#: src/frontend/MainWin.cpp:832
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Пересунути фокус до наступного вікна"
 
-#: src/frontend/MainWin.cpp:789
+#: src/frontend/MainWin.cpp:835
 #, kde-format
 msgid "Pre&vious"
 msgstr "&Назад"
 
-#: src/frontend/MainWin.cpp:791
+#: src/frontend/MainWin.cpp:837
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Пересунути фокус до попереднього вікна"
 
-#: src/frontend/MainWin.cpp:798
+#: src/frontend/MainWin.cpp:844
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Лише поточна &тека"
 
-#: src/frontend/MainWin.cpp:803
+#: src/frontend/MainWin.cpp:849
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Поточна тека і &підтеки"
 
-#: src/frontend/MainWin.cpp:807
+#: src/frontend/MainWin.cpp:853
 #, kde-format
 msgid "&All"
 msgstr "&Всі"
 
-#: src/frontend/MainWin.cpp:829
+#: src/frontend/MainWin.cpp:875
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Показати використання пам'яті"
 
-#: src/frontend/MainWin.cpp:837
+#: src/frontend/MainWin.cpp:883
 #, kde-format
 msgid "Project Explorer"
 msgstr "Навігатор проєктом"
 
-#: src/frontend/MainWin.cpp:842
+#: src/frontend/MainWin.cpp:888
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Навігатор властивостями"
 
-#: src/frontend/MainWin.cpp:847
+#: src/frontend/MainWin.cpp:893
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "Перегляд робочого аркуша"
 
-#: src/frontend/MainWin.cpp:870
+#: src/frontend/MainWin.cpp:916
 #, kde-format
 msgid "Configure CAS..."
 msgstr "Налаштувати КА…"
 
-#: src/frontend/MainWin.cpp:871
+#: src/frontend/MainWin.cpp:917
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
@@ -15392,118 +15474,118 @@ msgstr ""
 "Відкриває параметри системи комп'ютерної алгебри для внесення змін до "
 "доступних систем або вмикання нових"
 
-#: src/frontend/MainWin.cpp:931
+#: src/frontend/MainWin.cpp:977
 #, kde-format
 msgid "Window Visibility"
 msgstr "Видимість вікна"
 
-#: src/frontend/MainWin.cpp:948
+#: src/frontend/MainWin.cpp:994
 #, kde-format
 msgid "Color Scheme"
 msgstr "Схема кольорів"
 
-#: src/frontend/MainWin.cpp:1006
+#: src/frontend/MainWin.cpp:1072
 #, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "До поточного проєкту, «%1», внесено зміни. Хочете зберегти ці зміни?"
 
-#: src/frontend/MainWin.cpp:1007
+#: src/frontend/MainWin.cpp:1073
 #, kde-format
 msgid "Save Project"
 msgstr "Зберегти проєкт"
 
-#: src/frontend/MainWin.cpp:1362
+#: src/frontend/MainWin.cpp:1452
 #, kde-format
 msgid "%1: created"
 msgstr "%1: створено"
 
-#: src/frontend/MainWin.cpp:1388
+#: src/frontend/MainWin.cpp:1478
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Навігатор проєктом"
 
-#: src/frontend/MainWin.cpp:1413
+#: src/frontend/MainWin.cpp:1503
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Перегляд робочого аркуша"
 
-#: src/frontend/MainWin.cpp:1422
+#: src/frontend/MainWin.cpp:1512
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Вміст"
 
-#: src/frontend/MainWin.cpp:1499
+#: src/frontend/MainWin.cpp:1589
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "проєкти Origin (%1)"
 
-#: src/frontend/MainWin.cpp:1505
+#: src/frontend/MainWin.cpp:1595
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "проєкти Cantor (.cws)"
 
-#: src/frontend/MainWin.cpp:1506
+#: src/frontend/MainWin.cpp:1596
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "нотатники Jupyter (*.ipynb)"
 
-#: src/frontend/MainWin.cpp:1513
+#: src/frontend/MainWin.cpp:1603
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "усі файли, що підтримуються (%1)"
 
-#: src/frontend/MainWin.cpp:1517
+#: src/frontend/MainWin.cpp:1607
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Відкриття проєкту"
 
-#: src/frontend/MainWin.cpp:1534
+#: src/frontend/MainWin.cpp:1624
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "Файл проєкту %1 вже відкрито."
 
-#: src/frontend/MainWin.cpp:1534 src/frontend/MainWin.cpp:1542
-#: src/frontend/MainWin.cpp:1547
+#: src/frontend/MainWin.cpp:1624 src/frontend/MainWin.cpp:1632
+#: src/frontend/MainWin.cpp:1637
 #, kde-format
 msgid "Open Project"
 msgstr "Відкриття проєкту"
 
-#: src/frontend/MainWin.cpp:1542
+#: src/frontend/MainWin.cpp:1632
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "Файла проєкту %1 не існєу."
 
-#: src/frontend/MainWin.cpp:1547
+#: src/frontend/MainWin.cpp:1637
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "Не вдалося прочитати файл проєкту %1."
 
-#: src/frontend/MainWin.cpp:1555
+#: src/frontend/MainWin.cpp:1645
 #, kde-format
 msgid "Loading %1..."
 msgstr "Завантажуємо %1…"
 
-#: src/frontend/MainWin.cpp:1610
+#: src/frontend/MainWin.cpp:1700
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: відкрито"
 
-#: src/frontend/MainWin.cpp:1645
+#: src/frontend/MainWin.cpp:1735
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Проєкт успішно відкрито (за %1 секунд)."
 
-#: src/frontend/MainWin.cpp:1737
+#: src/frontend/MainWin.cpp:1828
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Збереження проєкту із новою назвою"
 
-#: src/frontend/MainWin.cpp:1739
+#: src/frontend/MainWin.cpp:1830
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15512,70 +15594,77 @@ msgstr ""
 "проєкти LabPlot (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:1766
+#: src/frontend/MainWin.cpp:1857
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Не вдалося відкрити тимчасовий файл для запису."
 
-#: src/frontend/MainWin.cpp:1846
+#: src/frontend/MainWin.cpp:1937
 #, kde-format
 msgid "Project saved"
 msgstr "Проєкт збережено"
 
-#: src/frontend/MainWin.cpp:1862
+#: src/frontend/MainWin.cpp:1953
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Не вдалося зберегти файл «%1»."
 
-#: src/frontend/MainWin.cpp:1867
+#: src/frontend/MainWin.cpp:1958
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Не вдалося відкрити файл «%1» для запису."
 
-#: src/frontend/MainWin.cpp:1917
+#: src/frontend/MainWin.cpp:2008
 #, kde-format
 msgid "Changed"
 msgstr "Змінено"
 
-#: src/frontend/MainWin.cpp:1932 src/frontend/MainWin.cpp:1944
+#: src/frontend/MainWin.cpp:2023 src/frontend/MainWin.cpp:2035
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Готуємося до друку %1"
 
-#: src/frontend/MainWin.cpp:1934 src/frontend/MainWin.cpp:1946
+#: src/frontend/MainWin.cpp:2025 src/frontend/MainWin.cpp:2037
 #, kde-format
 msgid "%1 printed"
 msgstr "Надруковано %1"
 
+#: src/frontend/MainWin.cpp:2092
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3795
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3796
+#, kde-format
+msgid "%1"
+msgstr "%1"
+
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2469
+#: src/frontend/MainWin.cpp:2570
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
 #: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Cursor"
 msgstr "Курсор"
 
-#: src/frontend/MainWin.cpp:2506
+#: src/frontend/MainWin.cpp:2610
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "Під час спроби оприлюднити проєкт виникли проблеми: %1"
 
-#: src/frontend/MainWin.cpp:2510
+#: src/frontend/MainWin.cpp:2614
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Проєкт успішно оприлюднено"
 
-#: src/frontend/MainWin.cpp:2513
+#: src/frontend/MainWin.cpp:2617
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Оприлюднений проєкт можна знайти тут: <a href=\"%1\">%1</a>"
 
-#: src/frontend/MainWin.cpp:2786
+#: src/frontend/MainWin.cpp:2890
 #, kde-format
 msgid "Kaggle CLI tool not found"
 msgstr "Не знайдено інструмент командного рядка Kaggle"
 
-#: src/frontend/MainWin.cpp:2787
+#: src/frontend/MainWin.cpp:2891
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
@@ -15584,32 +15673,32 @@ msgstr ""
 "Вкажіть шлях до інструменту командного рядка Kaggle у параметрах програми і "
 "повторіть спробу."
 
-#: src/frontend/MainWin.cpp:2853
+#: src/frontend/MainWin.cpp:2957
 #, kde-format
 msgid "%1 exported"
 msgstr "Експортовано %1"
 
-#: src/frontend/MainWin.cpp:2860
+#: src/frontend/MainWin.cpp:2964
 #, kde-format
 msgid "FITS files saved"
 msgstr "Файли FITS збережено"
 
-#: src/frontend/MainWin.cpp:2872
+#: src/frontend/MainWin.cpp:2976
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Клієнт MQTT%1"
 
-#: src/frontend/MainWin.cpp:2890
+#: src/frontend/MainWin.cpp:2994
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "На цьому вузлі вже є MQTTClient!"
 
-#: src/frontend/MainWin.cpp:2894
+#: src/frontend/MainWin.cpp:2998
 #, kde-format
 msgid "Live data source%1"
 msgstr "Інтерактивне джерело даних%1"
 
-#: src/frontend/MainWin.cpp:2945
+#: src/frontend/MainWin.cpp:3049
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Створює нотатник %1"
@@ -16242,8 +16331,8 @@ msgstr "Кеш наборів даних"
 msgid "Downloaded files successfully deleted."
 msgstr "Отримані файли успішно вилучено."
 
-#: src/frontend/SettingsDialog.cpp:45 src/frontend/SettingsDialog.cpp:144
-#: src/frontend/SettingsDialog.cpp:151
+#: src/frontend/SettingsDialog.cpp:46 src/frontend/SettingsDialog.cpp:151
+#: src/frontend/SettingsDialog.cpp:158
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
@@ -16254,7 +16343,7 @@ msgstr "Налаштування"
 #. i18n: ectx: property (text), widget (QLabel, lGeneral)
 #. i18n: ectx: property (text), widget (QLabel, lValuesGeneral)
 #. i18n: ectx: attribute (title), widget (QWidget, tGeneral)
-#: src/frontend/SettingsDialog.cpp:54
+#: src/frontend/SettingsDialog.cpp:55
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:95
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:101
 #: src/frontend/ui/datapickercurvewidget.ui:27
@@ -16284,28 +16373,34 @@ msgstr "Налаштування"
 msgid "General"
 msgstr "Загальні"
 
-#: src/frontend/SettingsDialog.cpp:70
+#: src/frontend/SettingsDialog.cpp:71
 #, kde-format
 msgid "Notebook"
 msgstr "Нотатник"
 
-#: src/frontend/SettingsDialog.cpp:77
+#: src/frontend/SettingsDialog.cpp:78
 #, kde-format
 msgid "Datasets"
 msgstr "Бази даних"
 
-#: src/frontend/SettingsDialog.cpp:92
+#: src/frontend/SettingsDialog.cpp:93
 #, kde-format
 msgid "User Feedback"
 msgstr "Відгуки користувача"
 
-#: src/frontend/SettingsDialog.cpp:148
+#: src/frontend/SettingsDialog.cpp:98
+#, fuzzy, kde-format
+#| msgid "Text position"
+msgid "Text Editor"
+msgstr "Розташування тексту"
+
+#: src/frontend/SettingsDialog.cpp:155
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr ""
 "Буде повернуто типові значення усіх параметрів. Хочете виконати цю дію?"
 
-#: src/frontend/SettingsDialog.cpp:159
+#: src/frontend/SettingsDialog.cpp:166
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences    [Changed]"
@@ -18393,12 +18488,6 @@ msgstr "не вистачає значень"
 msgid " , "
 msgstr " , "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3795
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3796
-#, kde-format
-msgid "%1"
-msgstr "%1"
-
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3796
 #, kde-format
 msgid ", "
@@ -18703,6 +18792,7 @@ msgstr "Тип похибки за Y:"
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:119
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:56
 #: src/frontend/ui/dockwidgets/runchartdock.ui:138
+#: src/frontend/ui/dockwidgets/scriptdock.ui:73
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:182
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:151
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:162
@@ -18756,6 +18846,7 @@ msgstr "Коментар:"
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:190
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:112
 #: src/frontend/ui/dockwidgets/runchartdock.ui:112
+#: src/frontend/ui/dockwidgets/scriptdock.ui:63
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:93
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:46
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:181
@@ -19540,6 +19631,7 @@ msgstr "Створити стовпчик індексів"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WorksheetPreviewWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SettingsNotebookPage)
+#. i18n: ectx: property (windowTitle), widget (QWidget, ScriptEditorWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SampleValuesWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, FlattenColumnsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SearchReplaceWidget)
@@ -19567,6 +19659,7 @@ msgstr "Створити стовпчик індексів"
 #: src/frontend/ui/dockwidgets/runchartdock.ui:14
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:14
 #: src/frontend/ui/dockwidgets/valuewidget.ui:14
+#: src/frontend/ui/script/scripteditorwidget.ui:14
 #: src/frontend/ui/settingsnotebookpage.ui:14
 #: src/frontend/ui/spreadsheet/flattencolumnswidget.ui:14
 #: src/frontend/ui/spreadsheet/samplevalueswidget.ui:14
@@ -22005,6 +22098,32 @@ msgstr "Центр:"
 #, kde-format
 msgid "Center Line"
 msgstr "Центрувати лінію"
+
+#. i18n: ectx: property (text), widget (QLabel, lOutputFont)
+#: src/frontend/ui/dockwidgets/scriptdock.ui:33
+#, fuzzy, kde-format
+#| msgid "Output:"
+msgid "Output Font:"
+msgstr "Виведення:"
+
+#. i18n: ectx: property (text), widget (QLabel, lEditorFont)
+#: src/frontend/ui/dockwidgets/scriptdock.ui:40
+#, kde-format
+msgid "Editor Font:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lRuntime)
+#: src/frontend/ui/dockwidgets/scriptdock.ui:99
+#, kde-format
+msgid "Runtime:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lTheme)
+#: src/frontend/ui/dockwidgets/scriptdock.ui:141
+#, fuzzy, kde-format
+#| msgid "Theme:"
+msgid "Editor Theme:"
+msgstr "Тема:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)

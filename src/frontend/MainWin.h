@@ -150,6 +150,7 @@ private:
 	QAction* m_newSpreadsheetAction;
 	QAction* m_newMatrixAction;
 	QAction* m_newWorksheetAction;
+	QList<QAction*> m_newScriptActions;
 	QAction* m_newNotesAction;
 	QAction* m_newLiveDataSourceAction;
 	QAction* m_newProjectAction;
@@ -166,6 +167,7 @@ private:
 	QAction* m_lastUsedNotebookAction{nullptr};
 	QToolButton* m_tbNotebook{nullptr};
 #endif
+	QToolButton* m_tbScript{nullptr};
 
 	// toggling dock widgets, status bar and full screen
 	QAction* m_projectExplorerDockAction;
@@ -186,6 +188,7 @@ private:
 	QMenu* m_newMenu{nullptr};
 	QMenu* m_importMenu{nullptr};
 	QMenu* m_newNotebookMenu{nullptr};
+	QMenu* m_newScriptMenu{nullptr};
 	KHamburgerMenu* m_hamburgerMenu{nullptr};
 
 #ifdef HAVE_PURPOSE
@@ -274,6 +277,7 @@ private Q_SLOTS:
 	void newSpreadsheet();
 	void newMatrix();
 	void newWorksheet();
+	void newScript();
 	void newNotes();
 	void newDatapicker();
 	void newLiveDataSource();

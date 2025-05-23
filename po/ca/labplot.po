@@ -4,15 +4,14 @@
 # version 3 or later versions approved by the membership of KDE e.V.
 #
 # SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Antoni Bella Pérez <antonibella5@yahoo.com>
-# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Josep M. Ferrer <txemaq@gmail.com>
 # Orestes Mas <orestes@tsc.upc.edu>, 2018.
-# Josep M. Ferrer <txemaq@gmail.com>, 2025.
+# Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-12 00:38+0000\n"
-"PO-Revision-Date: 2025-05-09 09:05+0200\n"
+"POT-Creation-Date: 2025-05-23 00:38+0000\n"
+"PO-Revision-Date: 2025-05-19 13:23+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -82,7 +81,7 @@ msgstr "Avall"
 #: src/backend/core/AbstractAspect.cpp:525
 #: src/backend/core/aspectcommands.h:171
 #: src/backend/datapicker/Datapicker.cpp:220
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2201
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2229
 #, kde-format
 msgid "%1: add %2"
 msgstr "%1: afegeix %2"
@@ -135,12 +134,12 @@ msgstr "%1: s'ha duplicat «%2»"
 msgid "Copy of '%1'"
 msgstr "Còpia de «%1»"
 
-#: src/backend/core/AbstractAspect.cpp:953
+#: src/backend/core/AbstractAspect.cpp:960
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr "Manca l'atribut «nom» o està buit."
 
-#: src/backend/core/AbstractAspect.cpp:960
+#: src/backend/core/AbstractAspect.cpp:967
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr "Hora de creació no vàlida per a «%1». S'usarà l'hora actual."
@@ -178,8 +177,8 @@ msgstr "Dies"
 #. i18n: ectx: property (text), widget (QRadioButton, rbNone)
 #: src/backend/core/AbstractColumn.cpp:163 src/backend/nsl/nsl_conv.c:22
 #: src/backend/nsl/nsl_conv.c:23 src/backend/nsl/nsl_corr.c:19
-#: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:276
-#: src/frontend/dockwidgets/AxisDock.cpp:292
+#: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:278
+#: src/frontend/dockwidgets/AxisDock.cpp:294
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:287
 #: src/frontend/dockwidgets/XYCurveDock.cpp:484 src/frontend/GuiTools.cpp:150
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
@@ -369,13 +368,13 @@ msgstr "En%1"
 msgid "Import Data"
 msgstr "Importa dades"
 
-#: src/backend/core/AbstractPart.cpp:126 src/frontend/MainWin.cpp:682
-#: src/frontend/MainWin.cpp:691
+#: src/backend/core/AbstractPart.cpp:126 src/frontend/MainWin.cpp:728
+#: src/frontend/MainWin.cpp:737
 #, kde-format
 msgid "From File..."
 msgstr "Des del fitxer..."
 
-#: src/backend/core/AbstractPart.cpp:128 src/frontend/MainWin.cpp:703
+#: src/backend/core/AbstractPart.cpp:128 src/frontend/MainWin.cpp:749
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Des de la base de dades SQL..."
@@ -400,7 +399,7 @@ msgstr "Imprimeix"
 msgid "Print Preview"
 msgstr "Vista prèvia d'impressió"
 
-#: src/backend/core/AbstractPart.cpp:147 src/frontend/MainWin.cpp:775
+#: src/backend/core/AbstractPart.cpp:147 src/frontend/MainWin.cpp:821
 #, kde-format
 msgid "&Close"
 msgstr "&Tanca"
@@ -416,7 +415,7 @@ msgid "incompatible filter type"
 msgstr "tipus de filtre incompatible"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:703
+#: src/backend/core/Folder.cpp:152 src/backend/core/Project.cpp:703
 #: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
@@ -578,19 +577,19 @@ msgstr "%1: canvia el tipus de la columna"
 msgid "%1: clear column"
 msgstr "%1: neteja la columna"
 
-#: src/backend/core/column/Column.cpp:573
+#: src/backend/core/column/Column.cpp:572
 #, kde-format
 msgid "%1: set random values"
 msgstr "%1: estableix valors aleatoris"
 
-#: src/backend/core/column/Column.cpp:1594
+#: src/backend/core/column/Column.cpp:1593
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "manca l'índex de la fila, o no és vàlid"
 
-#: src/backend/core/column/Column.cpp:1603
-#: src/backend/core/column/Column.cpp:1612
-#: src/backend/core/column/Column.cpp:1621
+#: src/backend/core/column/Column.cpp:1602
+#: src/backend/core/column/Column.cpp:1611
+#: src/backend/core/column/Column.cpp:1620
 #, kde-format
 msgid "invalid row value"
 msgstr "valor de la fila no vàlid"
@@ -672,7 +671,7 @@ msgstr "%1: estableix els dígits decimals a %2"
 msgid "set decimal digits to %1"
 msgstr "estableix els dígits decimals a %1"
 
-#: src/backend/core/Folder.cpp:358
+#: src/backend/core/Folder.cpp:372
 #, kde-format
 msgid "unknown element '%1' found"
 msgstr "s'ha trobat l'element desconegut «%1»"
@@ -803,16 +802,16 @@ msgstr "element «%1» desconegut del llibre de treball"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/Datapicker.cpp:45
 #: src/backend/datapicker/Datapicker.cpp:356
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1776
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1782
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1788
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1794
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1800
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1806
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1812
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1818
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1824
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1830
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1804
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1810
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1816
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1822
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1828
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1834
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1840
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1846
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1852
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1858
 #: src/frontend/ui/datapickerimagewidget.ui:260
 #, kde-format
 msgid "Plot"
@@ -1223,20 +1222,20 @@ msgid "Number of lines: %1"
 msgstr "Nombre de línies: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:524
-#: src/backend/datasources/filters/AsciiFilter.cpp:1309
+#: src/backend/datasources/filters/AsciiFilter.cpp:1311
 #: src/backend/datasources/filters/JsonFilter.cpp:284
 #, kde-format
 msgid "Column %1"
 msgstr "Columna %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:594
-#: src/backend/datasources/filters/AsciiFilter.cpp:1332
+#: src/backend/datasources/filters/AsciiFilter.cpp:1334
 #, kde-format
 msgid "Timestamp"
 msgstr "Marca horària"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:598
-#: src/backend/datasources/filters/AsciiFilter.cpp:1336
+#: src/backend/datasources/filters/AsciiFilter.cpp:1338
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1300,7 +1299,7 @@ msgstr "Ha fallat en obrir el dispositiu/fitxer o està buit."
 #: src/backend/datasources/filters/ROOTFilter.cpp:235
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:332
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:334
 #: src/backend/datasources/filters/XLSXFilter.cpp:509
 #, kde-format
 msgid "Not enough memory."
@@ -1923,7 +1922,7 @@ msgstr "UInt64"
 #: src/backend/datasources/filters/MatioFilter.cpp:452
 #: src/backend/nsl/nsl_interp.c:26
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:442
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2105
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2133
 #, kde-format
 msgid "Function"
 msgstr "Funció"
@@ -1946,7 +1945,7 @@ msgid "Unknown"
 msgstr "Desconegut"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:653 src/frontend/MainWin.cpp:1999
+#: src/frontend/MainWin.cpp:690 src/frontend/MainWin.cpp:2100
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -2056,7 +2055,7 @@ msgid "No Statistics found."
 msgstr "No s'ha trobat cap estadística."
 
 #: src/backend/datasources/filters/McapFilter.cpp:469
-#: src/backend/datasources/filters/McapFilter.cpp:964
+#: src/backend/datasources/filters/McapFilter.cpp:966
 #, kde-format
 msgid "Failed to read the file. Reason: %1"
 msgstr "Ha fallat en llegir el fitxer. Motiu: %1"
@@ -2329,42 +2328,42 @@ msgstr "No hi ha cap columna disponible"
 msgid "Unsupported file type, neither histogram no tree."
 msgstr "Tipus de fitxer no admès, ni l'histograma ni l'arbre."
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1506
+#: src/backend/datasources/filters/ROOTFilter.cpp:1505
 #, kde-format
 msgid "Not a ROOT file"
 msgstr "No és cap fitxer ROOT"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1511
+#: src/backend/datasources/filters/ROOTFilter.cpp:1510
 #, kde-format
 msgid "File format version: %1"
 msgstr "Versió del format de fitxer: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1519
+#: src/backend/datasources/filters/ROOTFilter.cpp:1518
 #, kde-format
 msgid "FREE data record size: %1 bytes"
 msgstr "Mida de l'enregistrament de les dades LLIURES: %1 bytes"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1521
+#: src/backend/datasources/filters/ROOTFilter.cpp:1520
 #, kde-format
 msgid "Number of free data records: %1"
 msgstr "Nombre dels enregistraments de dades lliures: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1523
+#: src/backend/datasources/filters/ROOTFilter.cpp:1522
 #, kde-format
 msgid "TNamed size: %1 bytes"
 msgstr "Mida del «TNamed»: %1 bytes"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1525
+#: src/backend/datasources/filters/ROOTFilter.cpp:1524
 #, kde-format
 msgid "Size of file pointers: %1 bytes"
 msgstr "Mida de la memòria en punters: %1 bytes"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1530
+#: src/backend/datasources/filters/ROOTFilter.cpp:1529
 #, kde-format
 msgid "Compression level and algorithm: %1"
 msgstr "Nivell i algorisme de compressió: %1"
 
-#: src/backend/datasources/filters/ROOTFilter.cpp:1535
+#: src/backend/datasources/filters/ROOTFilter.cpp:1534
 #, kde-format
 msgid "Size of TStreamerInfo record: %1 bytes"
 msgstr "Mida de l'enregistrament «TStreamerInfo»: %1 bytes"
@@ -2444,17 +2443,17 @@ msgstr "Fitxer DBC no vàlid."
 msgid "Unknown error,"
 msgstr "Error desconegut,"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:443
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:445
 #, kde-format
 msgid "Time_s"
 msgstr "Hora_s"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:445
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:447
 #, kde-format
 msgid "Time_ns"
 msgstr "Hora_ns"
 
-#: src/backend/datasources/filters/VectorBLFFilter.cpp:447
+#: src/backend/datasources/filters/VectorBLFFilter.cpp:449
 #, kde-format
 msgid "Time_10µs"
 msgstr "Hora_10µs"
@@ -6924,7 +6923,7 @@ msgstr "Distància radial"
 #. i18n: ectx: property (text), widget (QLabel, lInterpolation)
 #: src/backend/nsl/nsl_geom_linesim.c:23
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:413
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2011
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2039
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:270
 #, kde-format
 msgid "Interpolation"
@@ -7337,6 +7336,34 @@ msgstr "Tri-ponderada"
 msgid "Tricube"
 msgstr "Tri-cúbica"
 
+#: src/backend/script/Script.cpp:117 src/backend/script/Script.cpp:325
+#, fuzzy, kde-format
+#| msgid "no note element found"
+msgid "no script element found"
+msgstr "no s'ha trobat cap element de nota"
+
+#: src/backend/script/Script.cpp:186
+#, kde-format
+msgid "%1: run %2 script"
+msgstr ""
+
+#: src/backend/script/Script.cpp:305 src/backend/script/Script.cpp:310
+#, fuzzy, kde-format
+#| msgid "&Script"
+msgid "Script"
+msgstr "&Script"
+
+#: src/backend/script/Script.cpp:305
+#, fuzzy, kde-format
+#| msgid "Failed to open the file."
+msgid "Failed to run the script."
+msgstr "Ha fallat en obrir el fitxer."
+
+#: src/backend/script/Script.cpp:310
+#, kde-format
+msgid "A script is already running."
+msgstr ""
+
 #: src/backend/spreadsheet/Spreadsheet.cpp:341
 #, kde-format
 msgid "%1: remove rows with missing values"
@@ -7737,13 +7764,13 @@ msgstr "%1: estableix l'opacitat de la línia"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1341
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1345
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1: estableix un farciment horitzontal"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1367
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1371
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1: estableix un farciment vertical"
@@ -7758,13 +7785,13 @@ msgstr "%1: estableix un farciment a la dreta"
 msgid "%1: set bottom padding"
 msgstr "%1: estableix un farciment a la part inferior"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:287
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:288
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:232
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:106
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:98
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:119
-#: src/frontend/dockwidgets/AxisDock.cpp:255
+#: src/frontend/dockwidgets/AxisDock.cpp:257
 #: src/frontend/dockwidgets/BarPlotDock.cpp:271
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:283
 #: src/frontend/dockwidgets/HistogramDock.cpp:269
@@ -7776,17 +7803,17 @@ msgstr "%1: estableix un farciment a la part inferior"
 msgid "Horizontal"
 msgstr "Horitzontal"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:290
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:291
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:92
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:235
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:109
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:101
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:122
-#: src/frontend/dockwidgets/AxisDock.cpp:256
+#: src/frontend/dockwidgets/AxisDock.cpp:258
 #: src/frontend/dockwidgets/BarPlotDock.cpp:272
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:284
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:905
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:909
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:913
 #: src/frontend/dockwidgets/HistogramDock.cpp:268
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:246
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:91
@@ -7796,7 +7823,7 @@ msgstr "Horitzontal"
 msgid "Vertical"
 msgstr "Vertical"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:310
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:311
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:100
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:243
 #: src/backend/worksheet/plots/cartesian/LollipopPlot.cpp:117
@@ -7812,8 +7839,8 @@ msgstr "Orientació"
 #. i18n: ectx: property (text), widget (QLabel, lLine)
 #. i18n: ectx: property (text), widget (QLabel, lCenter)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:316
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:670
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:317
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:697
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:124
 #: src/frontend/dockwidgets/XYCurveDock.cpp:485
 #: src/frontend/ui/dockwidgets/axisdock.ui:488
@@ -7832,273 +7859,272 @@ msgstr "Orientació"
 msgid "Line"
 msgstr "Línia"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:318
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:319
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:126
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:147
 #, kde-format
 msgid "Style"
 msgstr "Estil"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:323
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:324
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:131
 #: src/backend/worksheet/plots/cartesian/ReferenceRange.cpp:152
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
-#: src/frontend/dockwidgets/AxisDock.cpp:325
+#: src/frontend/dockwidgets/AxisDock.cpp:327
 #: src/frontend/widgets/BackgroundWidget.cpp:122
 #, kde-format
 msgid "Color"
 msgstr "Color"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:553
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:554
 #, kde-format
 msgid "%1: set axis range type"
 msgstr "%1: estableix el tipus d'interval de l'eix"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:578
-#: src/frontend/dockwidgets/AxisDock.cpp:622
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:579
+#: src/frontend/dockwidgets/AxisDock.cpp:624
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr "%1: estableix l'orientació de l'eix"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:585
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:586
 #, kde-format
 msgid "%1: set axis position"
 msgstr "%1: estableix la posició de l'eix"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:593
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:594
 #, kde-format
 msgid "%1: set axis offset"
 msgstr "%1: estableix el desplaçament de l'eix"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:608
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:609
 #, kde-format
 msgid "%1: set axis range"
 msgstr "%1: estableix l'interval de l'eix"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:647
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:644
 #, kde-format
 msgid "%1: set range scale"
 msgstr "%1: estableix l'interval de l'escala"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:654
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:651
 #, kde-format
 msgid "%1: set scale"
 msgstr "%1: estableix l'escala"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:661
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:658
 #, kde-format
 msgid "%1: set major tick start type"
 msgstr "%1: estableix el tipus d'inici de les marques més grans"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:668
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:665
 #, kde-format
 msgid "%1: set major tick start offset"
 msgstr "%1: estableix el desplaçament d'inici de les marques més grans"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:676
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:673
 #, kde-format
 msgid "%1: set major tick start value"
 msgstr "%1: estableix el valor d'inici de les marques més grans"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:688
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:685
 #, kde-format
 msgid "%1: set axis scaling factor"
 msgstr "%1: estableix el factor del canvi d'escala de l'eix"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:697
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:694
 #, kde-format
 msgid "%1: set axis zero offset"
 msgstr "%1: estableix un desplaçament zero de l'eix"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:703
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:700
 #, kde-format
 msgid "%1: show scale and offset"
 msgstr "%1: mostra l'escala i el desplaçament"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:710
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:707
 #, kde-format
 msgid "%1: set axis logical position"
 msgstr "%1: estableix la posició lògica de l'eix"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:718
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:725
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:715
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:722
 #, kde-format
 msgid "%1: set title offset"
 msgstr "%1: estableix el desplaçament del títol"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:733
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:730
 #, kde-format
 msgid "%1: set arrow type"
 msgstr "%1: estableix el tipus de la fletxa"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:740
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:737
 #, kde-format
 msgid "%1: set arrow position"
 msgstr "%1: estableix la posició de la fletxa"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:747
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:744
 #, kde-format
 msgid "%1: set arrow size"
 msgstr "%1: estableix la mida de la fletxa"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:755
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:752
 #, kde-format
 msgid "%1: set major ticks direction"
 msgstr "%1: estableix la direcció de les marques més grans"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:762
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:759
 #, kde-format
 msgid "%1: set major ticks type"
 msgstr "%1: estableix el tipus a les marques més grans"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:770
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:767
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
 msgstr "%1: activa/desactiva els números de les marques automàtiques més grans"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:772
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:787
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:770
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:785
 #, kde-format
 msgid "%1: set the total number of the major ticks"
 msgstr "%1: estableix el nombre total de les marques més grans"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:789
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:873
-#, kde-format
-msgid "%1: disable major automatic tick numbers"
-msgstr "%1: desactiva els números de les marques automàtiques més grans"
-
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:814
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:808
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
 msgstr "%1: estableix l'espaiat de les marques més grans"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:821
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:815
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr "%1: assigna els valors a les marques més grans"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:835
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:829
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr "%1: estableix la longitud de les marques més grans"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:843
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:837
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr "%1: estableix la direcció de les marques més petites"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:850
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:844
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr "%1: estableix el tipus a les marques més petites"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:858
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:852
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr ""
 "%1: activa/desactiva els números de les marques automàtiques més petites"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:861
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:872
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:855
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:866
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr "%1: estableix el nombre total de les marques més petites"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:905
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:867
+#, kde-format
+msgid "%1: disable major automatic tick numbers"
+msgstr "%1: desactiva els números de les marques automàtiques més grans"
+
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:899
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
 msgstr "%1: estableix l'espaiat de les marques més petites"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:912
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:906
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr "%1: assigna els valors a les marques més petites"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:926
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:920
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr "%1: estableix la longitud de les marques més petites"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:935
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:929
 #, kde-format
 msgid "%1: set labels format"
 msgstr "%1: estableix el format de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:942
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:936
 #, kde-format
 msgid "%1: set labels format automatic"
 msgstr "%1: estableix el format automàtic de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:949
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:956
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:943
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:950
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: estableix la precisió de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:963
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:957
 #, kde-format
 msgid "%1: set labels datetime format"
 msgstr "%1: estableix el format «datahora» de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:970
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:964
 #, kde-format
 msgid "%1: set labels position"
 msgstr "%1: estableix la posició de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:977
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:971
 #, kde-format
 msgid "%1: set label offset"
 msgstr "%1: estableix el desplaçament de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:984
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:978
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr "%1: estableix l'angle de gir de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:991
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:985
 #, kde-format
 msgid "%1: set labels text type"
 msgstr "%1: estableix el tipus de text de l'etiqueta"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:998
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:992
 #, kde-format
 msgid "%1: set labels text column"
 msgstr "%1: estableix la columna de text de l'etiqueta"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1012
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1006
 #, kde-format
 msgid "%1: set label color"
 msgstr "%1: estableix el color de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1019
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1013
 #, kde-format
 msgid "%1: set label font"
 msgstr "%1: estableix la lletra de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1026
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1020
 #, kde-format
 msgid "%1: set labels background type"
 msgstr "%1: estableix el tipus de fons de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1033
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1027
 #, kde-format
 msgid "%1: set label background color"
 msgstr "%1: estableix el color del fons de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1040
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1034
 #, kde-format
 msgid "%1: set label prefix"
 msgstr "%1: estableix el prefix de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1047
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1041
 #, kde-format
 msgid "%1: set label suffix"
 msgstr "%1: estableix el sufix de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:1054
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:1048
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr "%1: estableix l'opacitat de les etiquetes"
@@ -8260,7 +8286,7 @@ msgstr "sense informació disponible"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:141
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5227
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5302
 #: src/frontend/ui/dockwidgets/axisdock.ui:483
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:542
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:478
@@ -8271,14 +8297,14 @@ msgstr "Títol"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:410
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:447
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1954
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1982
 #, kde-format
 msgid "Data Reduction"
 msgstr "Reducció de les dades"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:411
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1973
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2001
 #: src/frontend/notebook/NotebookView.cpp:149
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:269
 #, kde-format
@@ -8287,7 +8313,7 @@ msgstr "Diferenciació"
 
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:412
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1992
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2020
 #: src/frontend/notebook/NotebookView.cpp:155
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:157
 #, kde-format
@@ -8297,7 +8323,7 @@ msgstr "Integració"
 #. i18n: ectx: property (text), widget (QLabel, lSmooth)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:414
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:451
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2030
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2058
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:509
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:73
 #, kde-format
@@ -8305,8 +8331,8 @@ msgid "Smooth"
 msgstr "Suavitza"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:415
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:607
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2049
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:634
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2077
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:623
 #, kde-format
 msgctxt "Curve fitting"
@@ -8315,7 +8341,7 @@ msgstr "Ajusta"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:416
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:499
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2089
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2117
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:511
 #, kde-format
 msgid "Fourier Filter"
@@ -8423,7 +8449,7 @@ msgstr "Funció d'error"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLegendVisible)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:525
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2131
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2159
 #: src/frontend/ui/dockwidgets/barplotdock.ui:235
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:248
 #: src/frontend/ui/dockwidgets/histogramdock.ui:385
@@ -8461,7 +8487,7 @@ msgid "Vertical Axis"
 msgstr "Eix vertical"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:532
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2178
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2206
 #: src/frontend/datasources/ImportFileWidget.cpp:112
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:110
@@ -8473,33 +8499,45 @@ msgid "Image"
 msgstr "Imatge"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:533
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2154
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2182
 #, kde-format
 msgid "Info Element"
 msgstr "Element d'informació"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:534
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2198
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2226
 #, kde-format
 msgid "Custom Point"
 msgstr "Punt personalitzat"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabReferenceLine)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:535
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2223
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2251
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:176
 #, kde-format
 msgid "Reference Line"
 msgstr "Línia de referència"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:536
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2236
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2310
 #, kde-format
 msgid "Reference Range"
 msgstr "Interval de referència"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:552
-#: src/frontend/MainWin.cpp:901 src/frontend/notebook/NotebookView.cpp:168
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:555
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2270
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2292
+#, kde-format
+msgid "Inset Plot Area"
+msgstr "Àrea de diagrama intercalat"
+
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
+#, kde-format
+msgid "Inset Plot Area with Data"
+msgstr "Àrea de diagrama intercalat amb dades"
+
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:574
+#: src/frontend/MainWin.cpp:947 src/frontend/notebook/NotebookView.cpp:168
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:295
 #: src/frontend/worksheet/WorksheetView.cpp:434
@@ -8507,106 +8545,106 @@ msgstr "Interval de referència"
 msgid "Add New"
 msgstr "Afegeix un nou"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:561
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:583
 #, kde-format
 msgid "Formula Plot"
 msgstr "Diagrama de fórmula"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:562
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:584
 #, kde-format
 msgid "Add a new xy-plot that is defined via a mathematical expression."
 msgstr ""
 "Afegeix un diagrama XY nou que es defineix mitjançant una expressió "
 "matemàtica."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:569
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:591
 #, kde-format
 msgid "Analysis Plots"
 msgstr "Diagrames d'anàlisi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:605
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:632
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:186
 #, kde-format
 msgid "Analysis"
 msgstr "Anàlisi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:646
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:673
 #: src/frontend/ThemeHandler.cpp:49 src/frontend/ThemeHandler.cpp:144
 #: src/frontend/worksheet/WorksheetView.cpp:544
 #, kde-format
 msgid "Theme"
 msgstr "Tema"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:668
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:695
 #, kde-format
 msgid "Line Plots"
 msgstr "Diagrames de línies"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:674
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:701
 #, kde-format
 msgid "Horizontal Step"
 msgstr "Pas horitzontal"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:678
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:705
 #, kde-format
 msgid "Vertical Step"
 msgstr "Pas vertical"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:682
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:709
 #, kde-format
 msgid "Spline Interpolated"
 msgstr "Spline interpolada"
 
 # skip-rule: kct-box
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:689
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:716
 #, kde-format
 msgid "Scatter Plots"
 msgstr "Diagrames de dispersió"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:691
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:718
 #, kde-format
 msgid "Scatter"
 msgstr "Dispersió"
 
 #. i18n: ectx: property (text), widget (QLabel, lYError)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:695
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:722
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:221
 #, kde-format
 msgid "Y Error"
 msgstr "Error de Y"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:699
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:726
 #, kde-format
 msgid "XY Error"
 msgstr "Error de XY"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:706
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:733
 #, kde-format
 msgid "Line and Symbol Plots"
 msgstr "Diagrames de línies i símbols"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:708
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:735
 #, kde-format
 msgid "Line + Symbol"
 msgstr "Línia + símbol"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:712
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:739
 #, kde-format
 msgid "2 Point Segment"
 msgstr "Segment de 2 punts"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:716
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:743
 #, kde-format
 msgid "3 Point Segment"
 msgstr "Segment de 3 punts"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:723
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:750
 #, kde-format
 msgid "Statistical Plots"
 msgstr "Diagrames estadístics"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:725
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1846
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:752
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1874
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:400
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:143
 #, kde-format
@@ -8614,36 +8652,36 @@ msgid "Histogram"
 msgstr "Histograma"
 
 # skip-rule: kct-box
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:729
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1843
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:756
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1871
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:770
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:146
 #, kde-format
 msgid "Box Plot"
 msgstr "Diagrama de caixes"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:733
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1849
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:760
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1877
 #, kde-format
 msgid "Q-Q Plot"
 msgstr "Diagrama Q-Q"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:737
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1852
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:764
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1880
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:144
 #, kde-format
 msgid "KDE Plot"
 msgstr "Diagrama del KDE"
 
 # skip-rule: kct-box
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:744
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:771
 #, kde-format
 msgid "Bar Plots"
 msgstr "Diagrama de barres"
 
 # skip-rule: kct-box
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:746
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1857
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:773
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1885
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:772
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:774
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:149
@@ -8651,287 +8689,297 @@ msgstr "Diagrama de barres"
 msgid "Bar Plot"
 msgstr "Diagrama de barres"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:750
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1860
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:777
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1888
 #, kde-format
 msgid "Lollipop Plot"
 msgstr "Diagrama de piruletes"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:757
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:784
 #, kde-format
 msgid "Continual Improvement Plots"
 msgstr "Diagrames de millora contínua"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:759
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1868
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:786
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1896
 #, kde-format
 msgid "Run Chart"
 msgstr "Executa el diagrama"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:763
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1865
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:790
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1893
 #, kde-format
 msgid "Process Behavior Chart"
 msgstr "Diagrama de comportament de procés"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:786
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:813
 #, kde-format
 msgid "No curves inside the plot area."
 msgstr "No hi ha corbes dins de l'àrea del diagrama."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1111
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1145
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1139
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1173
 #, kde-format
 msgid "%1: change geometry rect"
 msgstr "%1: canvia el rectangle geomètric"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1180
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1208
 #, kde-format
 msgid "%1: set range type"
 msgstr "%1: estableix el tipus d'interval"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1187
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1215
 #, kde-format
 msgid "%1: set nice extend"
 msgstr "%1: estableix una ampliació satisfactòria"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1194
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1201
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1222
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1229
 #, kde-format
 msgid "%1: set range"
 msgstr "%1: estableix l'interval"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1212
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1240
 #, kde-format
 msgid "%1: change %2-range %3 format"
 msgstr "%1: canvia el format %3 de l'interval de %2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1302
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1330
 #, kde-format
 msgid "%1: change %2-range %3 auto scaling"
 msgstr "%1: canvia l'escalat automàtic %3 de l'interval de %2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1543
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1571
 #, kde-format
 msgid "%1: change x-range %2 scale"
 msgstr "%1: canvia l'escalat %2 l'interval de X"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1671
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1699
 #, kde-format
 msgid "%1: set default plot range"
 msgstr "%1: estableix l'interval predeterminat del diagrama"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1689
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1717
 #, kde-format
 msgid "%1: x-range breaking enabled"
 msgstr "%1: s'ha habilitat el trencament de l'interval de X"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1698
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1726
 #, kde-format
 msgid "%1: x-range breaks changed"
 msgstr "%1: s'han canviat els trencaments de l'interval de X"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1707
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1735
 #, kde-format
 msgid "%1: y-range breaking enabled"
 msgstr "%1: s'ha habilitat el trencament de l'interval de Y"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1716
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1744
 #, kde-format
 msgid "%1: y-range breaks changed"
 msgstr "%1: s'han canviat els trencaments de l'interval de Y"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1730
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1758
 #, kde-format
 msgid "%1: Cursor0 enable"
 msgstr "%1: activació del cursor0"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1742
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1770
 #, kde-format
 msgid "%1: Cursor1 enable"
 msgstr "%1: activació del cursor1"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1753
-#: src/backend/worksheet/Worksheet.cpp:842
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1781
+#: src/backend/worksheet/Worksheet.cpp:847
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: carrega el tema %2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1755
-#: src/backend/worksheet/Worksheet.cpp:844
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1783
+#: src/backend/worksheet/Worksheet.cpp:849
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: carrega el tema predeterminat"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1757
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5553
-#: src/backend/worksheet/Worksheet.cpp:846
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1785
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5636
+#: src/backend/worksheet/Worksheet.cpp:851
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: estableix el tema"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1910
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1938
 #, kde-format
 msgid "%1: distribution fit to '%2'"
 msgstr "%1: ajust de la distribució a «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1911
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1939
 #, kde-format
 msgid "Distribution Fit to '%1'"
 msgstr "Ajust de la distribució a «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1957
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1985
 #, kde-format
 msgid "%1: reduce '%2'"
 msgstr "%1: redueix «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1958
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1986
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:665
 #, kde-format
 msgid "Reduction of '%1'"
 msgstr "Reducció de «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1965
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1993
 #, kde-format
 msgid "%1: add data reduction curve"
 msgstr "%1: s'ha afegit una corba amb la reducció"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1976
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2004
 #, kde-format
 msgid "%1: differentiate '%2'"
 msgstr "%1: diferenciació «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1977
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2005
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:668
 #, kde-format
 msgid "Derivative of '%1'"
 msgstr "Derivada de «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1984
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2012
 #, kde-format
 msgid "%1: add differentiation curve"
 msgstr "%1: s'ha afegit una corba amb la diferenciació"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1995
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2023
 #, kde-format
 msgid "%1: integrate '%2'"
 msgstr "%1: integra «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1996
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2024
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:671
 #, kde-format
 msgid "Integral of '%1'"
 msgstr "Integració de «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2003
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2031
 #, kde-format
 msgid "%1: add integration curve"
 msgstr "%1: s'ha afegit una corba d'integració"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2014
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2042
 #, kde-format
 msgid "%1: interpolate '%2'"
 msgstr "%1: interpola «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2043
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:674
 #, kde-format
 msgid "Interpolation of '%1'"
 msgstr "Interpolació de «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2022
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2050
 #, kde-format
 msgid "%1: add interpolation curve"
 msgstr "%1: s'ha afegit una corba amb la interpolació"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2033
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2061
 #, kde-format
 msgid "%1: smooth '%2'"
 msgstr "%1: suavitza «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2034
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2062
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:677
 #, kde-format
 msgid "Smoothing of '%1'"
 msgstr "Suavitzat de «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2041
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2069
 #, kde-format
 msgid "%1: add smoothing curve"
 msgstr "%1: s'ha afegit una corba amb suavitzat"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2052
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2080
 #, kde-format
 msgid "%1: fit to '%2'"
 msgstr "%1: ajusta a «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2053
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2081
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:690
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
 msgstr "Ajusta a «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2080
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2108
 #, kde-format
 msgid "%1: add fit curve"
 msgstr "%1: afegeix una corba d'ajust"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2092
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2120
 #, kde-format
 msgid "%1: Fourier filtering of '%2'"
 msgstr "%1: filtre de Fourier de «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2093
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2121
 #, kde-format
 msgid "Fourier filtering of '%1'"
 msgstr "Filtre de Fourier de «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2097
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2125
 #, kde-format
 msgid "%1: add Fourier filter curve"
 msgstr "%1: afegeix una corba de filtre de Fourier"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2108
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2136
 #, kde-format
 msgid "%1: add function of '%2'"
 msgstr "%1: afegeix una funció de «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2109
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2137
 #, kde-format
 msgid "Function of '%1'"
 msgstr "Funció de «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2112
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2140
 #, kde-format
 msgid "%1: add function curve"
 msgstr "%1: afegeix una corba de funció"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2161
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2189
 #: src/frontend/worksheet/WorksheetView.cpp:1339
 #: src/frontend/worksheet/WorksheetView.cpp:1340
 #, kde-format
 msgid "Text Label"
 msgstr "Etiqueta de text"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3929
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2269
+#, kde-format
+msgid "%1: add inset plot"
+msgstr "%1: afegeix un diagrama intercalat"
+
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2283
+#, kde-format
+msgid "%1: add inset plot with data"
+msgstr "%1: afegeix un diagrama intercalat amb dades"
+
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4021
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "No està a dins del rectangle contenidor"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4153
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4174
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4245
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4266
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "des de x=%1 a x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4161
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4187
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4253
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4279
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "des de y=%1 a y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4206
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4298
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -8968,50 +9016,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: estableix el radi de les cantonades de la vora"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
-#: src/backend/worksheet/Worksheet.cpp:714
-#: src/backend/worksheet/Worksheet.cpp:715
+#: src/backend/worksheet/Worksheet.cpp:719
+#: src/backend/worksheet/Worksheet.cpp:720
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: estableix el marge superior de la disposició"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:251
-#: src/backend/worksheet/Worksheet.cpp:724
-#: src/backend/worksheet/Worksheet.cpp:725
+#: src/backend/worksheet/Worksheet.cpp:729
+#: src/backend/worksheet/Worksheet.cpp:730
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: estableix el marge inferior de la disposició"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:258
-#: src/backend/worksheet/Worksheet.cpp:734
-#: src/backend/worksheet/Worksheet.cpp:735
+#: src/backend/worksheet/Worksheet.cpp:739
+#: src/backend/worksheet/Worksheet.cpp:740
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: estableix el marge esquerre de la disposició"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:265
-#: src/backend/worksheet/Worksheet.cpp:744
-#: src/backend/worksheet/Worksheet.cpp:745
+#: src/backend/worksheet/Worksheet.cpp:749
+#: src/backend/worksheet/Worksheet.cpp:750
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: estableix el marge dret de la disposició"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:272
-#: src/backend/worksheet/Worksheet.cpp:754
-#: src/backend/worksheet/Worksheet.cpp:755
+#: src/backend/worksheet/Worksheet.cpp:759
+#: src/backend/worksheet/Worksheet.cpp:760
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: estableix l'espaiat vertical de la disposició"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:279
-#: src/backend/worksheet/Worksheet.cpp:764
-#: src/backend/worksheet/Worksheet.cpp:765
+#: src/backend/worksheet/Worksheet.cpp:769
+#: src/backend/worksheet/Worksheet.cpp:770
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: estableix l'espaiat horitzontal de la disposició"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:286
-#: src/backend/worksheet/Worksheet.cpp:784
-#: src/backend/worksheet/Worksheet.cpp:785
+#: src/backend/worksheet/Worksheet.cpp:789
+#: src/backend/worksheet/Worksheet.cpp:790
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: estableix el comptador de columnes de la disposició"
@@ -10141,36 +10189,36 @@ msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Imprimeix el full de treball"
 
-#: src/backend/worksheet/Worksheet.cpp:684
+#: src/backend/worksheet/Worksheet.cpp:689
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: canvia de tipus de la mida"
 
-#: src/backend/worksheet/Worksheet.cpp:696
+#: src/backend/worksheet/Worksheet.cpp:701
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: canvia la propietat «torna a escalar el contingut»"
 
-#: src/backend/worksheet/Worksheet.cpp:704
-#: src/backend/worksheet/Worksheet.cpp:705
+#: src/backend/worksheet/Worksheet.cpp:709
+#: src/backend/worksheet/Worksheet.cpp:710
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: estableix la disposició"
 
-#: src/backend/worksheet/Worksheet.cpp:774
-#: src/backend/worksheet/Worksheet.cpp:775
+#: src/backend/worksheet/Worksheet.cpp:779
+#: src/backend/worksheet/Worksheet.cpp:780
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: estableix comptador de files de la disposició"
 
-#: src/backend/worksheet/Worksheet.cpp:815
-#: src/backend/worksheet/Worksheet.cpp:816
+#: src/backend/worksheet/Worksheet.cpp:820
+#: src/backend/worksheet/Worksheet.cpp:821
 #: src/frontend/dockwidgets/WorksheetDock.cpp:376
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: estableix la mida de la pàgina"
 
-#: src/backend/worksheet/Worksheet.cpp:1567
+#: src/backend/worksheet/Worksheet.cpp:1572
 #, kde-format
 msgid "Curves"
 msgstr "Corbes"
@@ -12184,7 +12232,7 @@ msgid "Open LabPlot Project"
 msgstr "Obre un projecte del LabPlot"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:1494
+#: src/frontend/MainWin.cpp:1584
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "Projectes del LabPlot (%1)"
@@ -12208,8 +12256,8 @@ msgstr "Nom de la carpeta:"
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:398 src/frontend/MainWin.cpp:647
-#: src/frontend/MainWin.cpp:1981 src/frontend/SettingsDialog.cpp:64
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:398 src/frontend/MainWin.cpp:684
+#: src/frontend/MainWin.cpp:2072 src/frontend/SettingsDialog.cpp:65
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12498,7 +12546,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2890
+#: src/frontend/MainWin.cpp:2994
 #, kde-format
 msgid "Warning"
 msgstr "Avís"
@@ -12582,9 +12630,9 @@ msgstr "Regions de les dades"
 
 #. i18n("Center") ); // must not updated
 #: src/frontend/dockwidgets/AxisDock.cpp:228
-#: src/frontend/dockwidgets/AxisDock.cpp:306
-#: src/frontend/dockwidgets/AxisDock.cpp:489
-#: src/frontend/dockwidgets/AxisDock.cpp:492
+#: src/frontend/dockwidgets/AxisDock.cpp:308
+#: src/frontend/dockwidgets/AxisDock.cpp:491
+#: src/frontend/dockwidgets/AxisDock.cpp:494
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:270
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:281
 #: src/frontend/dockwidgets/CustomPointDock.cpp:134
@@ -12597,9 +12645,9 @@ msgid "Top"
 msgstr "Dalt"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:229
-#: src/frontend/dockwidgets/AxisDock.cpp:307
-#: src/frontend/dockwidgets/AxisDock.cpp:490
-#: src/frontend/dockwidgets/AxisDock.cpp:493
+#: src/frontend/dockwidgets/AxisDock.cpp:309
+#: src/frontend/dockwidgets/AxisDock.cpp:492
+#: src/frontend/dockwidgets/AxisDock.cpp:495
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:272
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:283
 #: src/frontend/dockwidgets/CustomPointDock.cpp:136
@@ -12646,44 +12694,55 @@ msgstr ""
 "respectivament</li><li>A mida - especifica manualment els punts d'inici i "
 "finals dels eixos</li></ul>"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:260
+#: src/frontend/dockwidgets/AxisDock.cpp:249
+#, kde-format
+msgid ""
+"If enabled: Use the major tick number as base to determine the new number of "
+"ticks for nice looking values. The number of ticks might be different than "
+"the number previously set."
+msgstr ""
+"Si està activada: utilitza el número de marca principal com a base per a "
+"determinar el nombre nou de marques per a un aspecte agradable dels valors. "
+"El nombre de marques pot ser diferent del nombre establert anteriorment."
+
+#: src/frontend/dockwidgets/AxisDock.cpp:262
 #, kde-format
 msgid "No arrow"
 msgstr "Sense fletxa"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:261
+#: src/frontend/dockwidgets/AxisDock.cpp:263
 #, kde-format
 msgid "Simple, Small"
 msgstr "Senzilla, petita"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:262
+#: src/frontend/dockwidgets/AxisDock.cpp:264
 #, kde-format
 msgid "Simple, Big"
 msgstr "Senzilla, gran"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:263
+#: src/frontend/dockwidgets/AxisDock.cpp:265
 #, kde-format
 msgid "Filled, Small"
 msgstr "Farcida, petita"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:264
+#: src/frontend/dockwidgets/AxisDock.cpp:266
 #, kde-format
 msgid "Filled, Big"
 msgstr "Farcida, gran"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:265
+#: src/frontend/dockwidgets/AxisDock.cpp:267
 #, kde-format
 msgid "Semi-filled, Small"
 msgstr "Mig farcida, petita"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:266
+#: src/frontend/dockwidgets/AxisDock.cpp:268
 #, kde-format
 msgid "Semi-filled, Big"
 msgstr "Mig farcida, gran"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:271
-#: src/frontend/dockwidgets/AxisDock.cpp:497
-#: src/frontend/dockwidgets/AxisDock.cpp:501
+#: src/frontend/dockwidgets/AxisDock.cpp:273
+#: src/frontend/dockwidgets/AxisDock.cpp:499
+#: src/frontend/dockwidgets/AxisDock.cpp:503
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:264
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:276
 #: src/frontend/dockwidgets/CustomPointDock.cpp:129
@@ -12699,9 +12758,9 @@ msgid "Left"
 msgstr "Esquerra"
 
 #. i18n("Center") ); // must not updated
-#: src/frontend/dockwidgets/AxisDock.cpp:272
-#: src/frontend/dockwidgets/AxisDock.cpp:498
+#: src/frontend/dockwidgets/AxisDock.cpp:274
 #: src/frontend/dockwidgets/AxisDock.cpp:500
+#: src/frontend/dockwidgets/AxisDock.cpp:502
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:266
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:278
 #: src/frontend/dockwidgets/CustomPointDock.cpp:131
@@ -12716,148 +12775,148 @@ msgstr "Esquerra"
 msgid "Right"
 msgstr "Dreta"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:273
+#: src/frontend/dockwidgets/AxisDock.cpp:275
 #: src/frontend/dockwidgets/XYCurveDock.cpp:525
 #, kde-format
 msgid "Both"
 msgstr "Ambdues"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:277
-#: src/frontend/dockwidgets/AxisDock.cpp:293
+#: src/frontend/dockwidgets/AxisDock.cpp:279
+#: src/frontend/dockwidgets/AxisDock.cpp:295
 #, kde-format
 msgid "In"
 msgstr "A"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:278
-#: src/frontend/dockwidgets/AxisDock.cpp:294
+#: src/frontend/dockwidgets/AxisDock.cpp:280
+#: src/frontend/dockwidgets/AxisDock.cpp:296
 #, kde-format
 msgid "Out"
 msgstr "Fora"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:279
-#: src/frontend/dockwidgets/AxisDock.cpp:295
+#: src/frontend/dockwidgets/AxisDock.cpp:281
+#: src/frontend/dockwidgets/AxisDock.cpp:297
 #, kde-format
 msgid "In and Out"
 msgstr "Dins i fora"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:282
-#: src/frontend/dockwidgets/AxisDock.cpp:298
+#: src/frontend/dockwidgets/AxisDock.cpp:284
+#: src/frontend/dockwidgets/AxisDock.cpp:300
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:58
 #, kde-format
 msgid "Number"
 msgstr "Número"
 
 #. i18n: ectx: property (text), widget (QLabel, lSpacing)
-#: src/frontend/dockwidgets/AxisDock.cpp:283
-#: src/frontend/dockwidgets/AxisDock.cpp:299
+#: src/frontend/dockwidgets/AxisDock.cpp:285
+#: src/frontend/dockwidgets/AxisDock.cpp:301
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:659
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:454
 #, kde-format
 msgid "Spacing"
 msgstr "Espaiat"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:284
-#: src/frontend/dockwidgets/AxisDock.cpp:300
-#: src/frontend/dockwidgets/AxisDock.cpp:311
+#: src/frontend/dockwidgets/AxisDock.cpp:286
+#: src/frontend/dockwidgets/AxisDock.cpp:302
+#: src/frontend/dockwidgets/AxisDock.cpp:313
 #, kde-format
 msgid "Custom column"
 msgstr "Columna personalitzada"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:285
+#: src/frontend/dockwidgets/AxisDock.cpp:287
 #, kde-format
 msgid "Column labels"
 msgstr "Etiquetes de columnes"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:288
+#: src/frontend/dockwidgets/AxisDock.cpp:290
 #, kde-format
 msgid "Absolute Value"
 msgstr "Valor absolut"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:289
+#: src/frontend/dockwidgets/AxisDock.cpp:291
 #, kde-format
 msgid "Offset"
 msgstr "Desplaçament"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:305
+#: src/frontend/dockwidgets/AxisDock.cpp:307
 #, kde-format
 msgid "No labels"
 msgstr "Sense etiquetes"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:310
+#: src/frontend/dockwidgets/AxisDock.cpp:312
 #, kde-format
 msgid "Position values"
 msgstr "Valors de posició"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:315
+#: src/frontend/dockwidgets/AxisDock.cpp:317
 #, kde-format
 msgid "Decimal notation"
 msgstr "Notació decimal"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:316
+#: src/frontend/dockwidgets/AxisDock.cpp:318
 #, kde-format
 msgid "Scientific notation"
 msgstr "Notació científica"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:317
+#: src/frontend/dockwidgets/AxisDock.cpp:319
 #, kde-format
 msgid "Scientific E notation"
 msgstr "Notació científica E"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:318
+#: src/frontend/dockwidgets/AxisDock.cpp:320
 #, kde-format
 msgid "Powers of 10"
 msgstr "Potències de 10"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:319
+#: src/frontend/dockwidgets/AxisDock.cpp:321
 #, kde-format
 msgid "Powers of 2"
 msgstr "Potències de 2"
 
 # skip-rule: t-e_sola
-#: src/frontend/dockwidgets/AxisDock.cpp:320
+#: src/frontend/dockwidgets/AxisDock.cpp:322
 #, kde-format
 msgid "Powers of e"
 msgstr "Potències de e"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:321
+#: src/frontend/dockwidgets/AxisDock.cpp:323
 #, kde-format
 msgid "Multiples of π"
 msgstr "Múltiples de π"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:324
+#: src/frontend/dockwidgets/AxisDock.cpp:326
 #, kde-format
 msgid "Transparent"
 msgstr "Transparent"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:577
+#: src/frontend/dockwidgets/AxisDock.cpp:579
 #, kde-format
 msgid "%1: set axis color"
 msgstr "%1: estableix el color de l'eix"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:579
+#: src/frontend/dockwidgets/AxisDock.cpp:581
 #, kde-format
 msgid "%1 axes: set color"
 msgstr "%1 eixos: estableix el color"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:1584
+#: src/frontend/dockwidgets/AxisDock.cpp:1582
 #, kde-format
 msgid "Scale is in sync with the plot scale"
 msgstr "L'escala està sincronitzada amb l'escala del diagrama"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:1587
+#: src/frontend/dockwidgets/AxisDock.cpp:1585
 #, kde-format
 msgid "Scale is async with the plot"
 msgstr "L'escala és asíncrona amb el diagrama"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:2040
+#: src/frontend/dockwidgets/AxisDock.cpp:2037
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1 eixos: s'ha carregat la plantilla «%2»"
 
-#: src/frontend/dockwidgets/AxisDock.cpp:2042
+#: src/frontend/dockwidgets/AxisDock.cpp:2039
 #: src/frontend/dockwidgets/BarPlotDock.cpp:509
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:735
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1842
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1846
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:803
 #: src/frontend/dockwidgets/CustomPointDock.cpp:385
 #: src/frontend/dockwidgets/HistogramDock.cpp:580
@@ -13094,31 +13153,31 @@ msgstr "Diagrames de caixes %1: s'ha carregat la plantilla «%2»"
 msgid "Save current plot area definition as template"
 msgstr "Desa la definició de l'àrea del diagrama actual com una plantilla"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:625
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:629
 #, kde-format
 msgid "%1-Ranges:"
 msgstr "Intervals de %1:"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:627
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:631
 #, kde-format
 msgid "%1-Range:"
 msgstr "Interval de %1:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:651
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:655
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:53
 #, kde-format
 msgid "Numeric"
 msgstr "Numèric"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:797
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:801
 #, kde-format
 msgid "Plot Ranges:"
 msgstr "Intervals del diagrama:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:799
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:803
 #: src/frontend/ui/dockwidgets/axisdock.ui:262
 #: src/frontend/ui/dockwidgets/barplotdock.ui:186
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:90
@@ -13145,35 +13204,35 @@ msgstr "Intervals del diagrama:"
 msgid "Plot Range:"
 msgstr "Interval del diagrama:"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:898
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:902
 #, kde-format
 msgid "Free"
 msgstr "Lliure"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:899
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:903
 #, kde-format
 msgid "Last Points"
 msgstr "Darrers punts"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:900
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:904
 #, kde-format
 msgid "First Points"
 msgstr "Primers punts"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:904
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:908
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:912
 #, kde-format
 msgid "Simple"
 msgstr "Simple"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:906
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:910
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:914
 #, kde-format
 msgid "Sloped"
 msgstr "Inclinada"
 
 # skip-rule: t-sc-plot
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:914
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:918
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -13185,32 +13244,32 @@ msgstr ""
 "li><li>Primers punts - es dibuixa el nombre especificat dels primers punts</"
 "li></ul>"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:923
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:927
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
 "Si està marcat, l'interval del diagrama s'amplia automàticament a valors "
 "satisfactoris"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1166
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1170
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr "L'interval %2 de %1 s'usa a l'interval del diagrama %3. "
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1167
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1220
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1171
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1224
 #, kde-format
 msgid "Really remove it?"
 msgstr "Esteu segur d'eliminar-lo?"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1220
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1224
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr "L'element «%2» usa l'interval del diagrama %1. "
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1313
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1317
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:560
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:769
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:342
@@ -13220,7 +13279,7 @@ msgstr "Horitzontal:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1314
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1318
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:861
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:724
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:428
@@ -13230,7 +13289,7 @@ msgstr "Vertical:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1316
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1320
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:796
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:717
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:414
@@ -13240,7 +13299,7 @@ msgstr "Esquerra:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1317
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1321
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:803
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:666
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:407
@@ -13248,18 +13307,18 @@ msgstr "Esquerra:"
 msgid "Top:"
 msgstr "Dalt:"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1649
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1653
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr "Trieu el fitxer de desament de plantilla"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1651
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1655
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr "Plantilles de diagrames del LabPlot (*%1)"
 
-#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1840
+#: src/frontend/dockwidgets/CartesianPlotDock.cpp:1844
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "Diagrames cartesians %1: s'ha carregat la plantilla «%2»"
@@ -14382,296 +14441,304 @@ msgstr ""
 "No s'ha pogut obrir el fitxer %1 de col·leccions d'exemples. Comproveu la "
 "instal·lació."
 
-#: src/frontend/GuiObserver.cpp:176 src/frontend/MainWin.cpp:1401
+#: src/frontend/GuiObserver.cpp:178 src/frontend/MainWin.cpp:1491
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
 msgstr "Propietats"
 
-#: src/frontend/GuiObserver.cpp:212
+#: src/frontend/GuiObserver.cpp:214
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Spreadsheet"
 msgstr "Propietats: Full de càlcul"
 
-#: src/frontend/GuiObserver.cpp:217
+#: src/frontend/GuiObserver.cpp:219
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
 msgstr "Propietats: Estadístiques de les columnes"
 
-#: src/frontend/GuiObserver.cpp:227
+#: src/frontend/GuiObserver.cpp:229
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Worksheet"
 msgstr "Full de treball %1"
 
-#: src/frontend/GuiObserver.cpp:232
+#: src/frontend/GuiObserver.cpp:234
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Column"
 msgstr "Propietats: Columna"
 
-#: src/frontend/GuiObserver.cpp:239
+#: src/frontend/GuiObserver.cpp:241
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Matrix"
 msgstr "Propietats: Matriu"
 
-#: src/frontend/GuiObserver.cpp:244
+#: src/frontend/GuiObserver.cpp:246
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
 msgstr "Propietats: Full de treball"
 
-#: src/frontend/GuiObserver.cpp:250
+#: src/frontend/GuiObserver.cpp:252
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Plot Area"
 msgstr "Propietats: Àrea del diagrama"
 
-#: src/frontend/GuiObserver.cpp:256
+#: src/frontend/GuiObserver.cpp:258
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Legend"
 msgstr "Propietats: Llegenda"
 
-#: src/frontend/GuiObserver.cpp:261
+#: src/frontend/GuiObserver.cpp:263
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Axis"
 msgstr "Propietats: Eix"
 
-#: src/frontend/GuiObserver.cpp:266
+#: src/frontend/GuiObserver.cpp:268
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Curve"
 msgstr "Propietats: Corba-XY"
 
-#: src/frontend/GuiObserver.cpp:271
+#: src/frontend/GuiObserver.cpp:273
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: XY-Equation"
 msgstr "Propietats: Equació-XY"
 
-#: src/frontend/GuiObserver.cpp:276
+#: src/frontend/GuiObserver.cpp:278
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Function Curve"
 msgstr "Propietats: Corba de funció"
 
-#: src/frontend/GuiObserver.cpp:281
+#: src/frontend/GuiObserver.cpp:283
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Reduction"
 msgstr "Propietats: Reducció de dades"
 
-#: src/frontend/GuiObserver.cpp:297
+#: src/frontend/GuiObserver.cpp:299
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Differentiation"
 msgstr "Propietats: Diferenciació"
 
-#: src/frontend/GuiObserver.cpp:302
+#: src/frontend/GuiObserver.cpp:304
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Integration"
 msgstr "Propietats: Integració"
 
-#: src/frontend/GuiObserver.cpp:307
+#: src/frontend/GuiObserver.cpp:309
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Interpolation"
 msgstr "Propietats: Interpolació"
 
-#: src/frontend/GuiObserver.cpp:312
+#: src/frontend/GuiObserver.cpp:314
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
 msgstr "Propietats: Suavitzat"
 
-#: src/frontend/GuiObserver.cpp:317
+#: src/frontend/GuiObserver.cpp:319
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fit"
 msgstr "Propietats: Ajust"
 
-#: src/frontend/GuiObserver.cpp:322
+#: src/frontend/GuiObserver.cpp:324
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Transform"
 msgstr "Propietats: Transformada de Fourier"
 
-#: src/frontend/GuiObserver.cpp:327
+#: src/frontend/GuiObserver.cpp:329
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hilbert Transform"
 msgstr "Propietats: Transformada de Hilbert"
 
-#: src/frontend/GuiObserver.cpp:332
+#: src/frontend/GuiObserver.cpp:334
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
 msgstr "Propietats: Filtre de Fourier"
 
-#: src/frontend/GuiObserver.cpp:337
+#: src/frontend/GuiObserver.cpp:339
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Convolution/Deconvolution"
 msgstr "Propietats: Convolució/Desconvolució"
 
-#: src/frontend/GuiObserver.cpp:342
+#: src/frontend/GuiObserver.cpp:344
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
 msgstr "Propietats: Correlació creuada/automàtica"
 
-#: src/frontend/GuiObserver.cpp:347
+#: src/frontend/GuiObserver.cpp:349
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Histogram"
 msgstr "Propietats: Histograma"
 
-#: src/frontend/GuiObserver.cpp:353
+#: src/frontend/GuiObserver.cpp:355
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
 msgstr "Propietats: Diagrama de barres"
 
 # skip-rule: kct-box
-#: src/frontend/GuiObserver.cpp:358
+#: src/frontend/GuiObserver.cpp:360
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Lollipop Plot"
 msgstr "Propietats: Diagrama de piruletes"
 
 # skip-rule: kct-box
-#: src/frontend/GuiObserver.cpp:364
+#: src/frontend/GuiObserver.cpp:366
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
 msgstr "Propietats: Diagrama de caixes"
 
-#: src/frontend/GuiObserver.cpp:369
+#: src/frontend/GuiObserver.cpp:371
 #, kde-format
 msgctxt "@title:window"
 msgid "KDE Plot"
 msgstr "Diagrama del KDE"
 
-#: src/frontend/GuiObserver.cpp:374
+#: src/frontend/GuiObserver.cpp:376
 #, kde-format
 msgctxt "@title:window"
 msgid "Q-Q Plot"
 msgstr "Diagrama Q-Q"
 
-#: src/frontend/GuiObserver.cpp:380
+#: src/frontend/GuiObserver.cpp:382
 #, kde-format
 msgctxt "@title:window"
 msgid "Process Behavior Chart"
 msgstr "Diagrama de comportament de procés"
 
-#: src/frontend/GuiObserver.cpp:385
+#: src/frontend/GuiObserver.cpp:387
 #, kde-format
 msgctxt "@title:window"
 msgid "Run Chart"
 msgstr "Executa el diagrama"
 
-#: src/frontend/GuiObserver.cpp:390
+#: src/frontend/GuiObserver.cpp:392
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Text Label"
 msgstr "Propietats: Etiqueta de text"
 
-#: src/frontend/GuiObserver.cpp:395
+#: src/frontend/GuiObserver.cpp:397
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Image"
 msgstr "Propietats: Imatge"
 
-#: src/frontend/GuiObserver.cpp:400
+#: src/frontend/GuiObserver.cpp:402
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Custom Point"
 msgstr "Propietats: Punt personalitzat"
 
-#: src/frontend/GuiObserver.cpp:405
+#: src/frontend/GuiObserver.cpp:407
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Reference Line"
 msgstr "Propietats: Línia de referència"
 
-#: src/frontend/GuiObserver.cpp:410
+#: src/frontend/GuiObserver.cpp:412
 #, kde-format
 msgctxt "@title:window"
 msgid "Reference Range"
 msgstr "Interval de referència"
 
-#: src/frontend/GuiObserver.cpp:415
+#: src/frontend/GuiObserver.cpp:417
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Datapicker Curve"
 msgstr "Propietats: Corba del selector de dades"
 
-#: src/frontend/GuiObserver.cpp:420
+#: src/frontend/GuiObserver.cpp:422
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Extractor"
 msgstr "Propietats: Extractor de dades"
 
-#: src/frontend/GuiObserver.cpp:430
+#: src/frontend/GuiObserver.cpp:432
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Project"
 msgstr "Propietats: Projecte"
 
-#: src/frontend/GuiObserver.cpp:440
+#: src/frontend/GuiObserver.cpp:442
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Notebook"
 msgstr "Bloc de notes del %1"
 
-#: src/frontend/GuiObserver.cpp:442
+#: src/frontend/GuiObserver.cpp:444
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notebook"
 msgstr "Propietats: Bloc de notes"
 
-#: src/frontend/GuiObserver.cpp:448
+#: src/frontend/GuiObserver.cpp:450
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notes"
 msgstr "Propietats: Notes"
 
-#: src/frontend/GuiObserver.cpp:453
+#: src/frontend/GuiObserver.cpp:455
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Info Element"
 msgstr "Propietats: Element d'informació"
 
-#: src/frontend/GuiObserver.cpp:460 src/frontend/GuiObserver.cpp:467
-#: src/frontend/GuiObserver.cpp:474
+#: src/frontend/GuiObserver.cpp:462 src/frontend/GuiObserver.cpp:469
+#: src/frontend/GuiObserver.cpp:476
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
 msgstr "Propietats: Origen de dades MQTT"
 
-#: src/frontend/GuiObserver.cpp:480
+#: src/frontend/GuiObserver.cpp:482
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
 msgstr "Propietats: Dades d'origen en viu"
 
-#: src/frontend/GuiObserver.cpp:494
+#: src/frontend/GuiObserver.cpp:496
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Folder"
 msgstr "Propietats: Carpeta"
 
-#: src/frontend/GuiObserver.cpp:501
+#: src/frontend/GuiObserver.cpp:503
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Workbook"
 msgstr "Propietats: Llibre de treball"
+
+#: src/frontend/GuiObserver.cpp:508
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Properties: Fit"
+msgctxt "@title:window"
+msgid "Properties: Script"
+msgstr "Propietats: Ajust"
 
 #: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
@@ -15103,99 +15170,107 @@ msgstr "Barra d'eines de full de càlcul"
 msgid "Notebook Toolbar"
 msgstr "Barra d'eines de bloc de notes"
 
-#. i18n: ectx: ToolBar (cartesian_plot_toolbar)
+#. i18n: ectx: ToolBar (script_toolbar)
 #: src/frontend/labplotui.rc:40
+#, fuzzy, kde-format
+#| msgid "Project Toolbar"
+msgid "Script Toolbar"
+msgstr "Barra d'eines de projecte"
+
+#. i18n: ectx: ToolBar (cartesian_plot_toolbar)
+#: src/frontend/labplotui.rc:44
 #, kde-format
 msgid "Plot Area Toolbar"
 msgstr "Barra d'eines d'àrea de diagrames"
 
 #. i18n: ectx: Menu (file)
-#: src/frontend/labplotui.rc:44
+#: src/frontend/labplotui.rc:48
 #, kde-format
 msgid "&File"
 msgstr "&Fitxer"
 
 #. i18n: ectx: Menu (new)
-#: src/frontend/labplotui.rc:46
+#: src/frontend/labplotui.rc:50
 #, kde-format
 msgid "&Add New"
 msgstr "&Afegeix nou"
 
 #. i18n: ectx: Menu (new_notebook)
 #. i18n: ectx: Menu (notebook)
-#: src/frontend/labplotui.rc:56 src/frontend/labplotui.rc:84
+#: src/frontend/labplotui.rc:60 src/frontend/labplotui.rc:92
 #, kde-format
 msgid "&Notebook"
 msgstr "Bloc de &notes"
 
+#. i18n: ectx: Menu (new_script)
+#. i18n: ectx: Menu (script)
+#: src/frontend/labplotui.rc:66 src/frontend/labplotui.rc:95
+#, kde-format
+msgid "&Script"
+msgstr "&Script"
+
 #. i18n: ectx: Menu (import)
-#: src/frontend/labplotui.rc:63
+#: src/frontend/labplotui.rc:71
 #, kde-format
 msgid "Import"
 msgstr "Importa"
 
 #. i18n: ectx: Menu (edit)
-#: src/frontend/labplotui.rc:76
+#: src/frontend/labplotui.rc:84
 #, kde-format
 msgid "&Edit"
 msgstr "&Edita"
 
 #. i18n: ectx: Menu (spreadsheet)
-#: src/frontend/labplotui.rc:81
+#: src/frontend/labplotui.rc:89
 #, kde-format
 msgid "&Spreadsheet"
 msgstr "&Full de càlcul"
 
 #. i18n: ectx: Menu (matrix)
-#: src/frontend/labplotui.rc:82
+#: src/frontend/labplotui.rc:90
 #, kde-format
 msgid "&Matrix"
 msgstr "&Matriu"
 
 #. i18n: ectx: Menu (worksheet)
-#: src/frontend/labplotui.rc:83
+#: src/frontend/labplotui.rc:91
 #, kde-format
 msgid "&Worksheet"
 msgstr "&Full de treball"
 
 #. i18n: ectx: Menu (datapicker)
-#: src/frontend/labplotui.rc:85
+#: src/frontend/labplotui.rc:93
 #, kde-format
 msgid "&Data Extractor"
 msgstr "Extractor de &dades"
 
 #. i18n: ectx: Menu (drawing)
-#: src/frontend/labplotui.rc:86
+#: src/frontend/labplotui.rc:94
 #, kde-format
 msgid "&Drawing"
 msgstr "&Dibuix"
 
-#. i18n: ectx: Menu (script)
-#: src/frontend/labplotui.rc:87
-#, kde-format
-msgid "&Script"
-msgstr "&Script"
-
 #. i18n: ectx: Menu (tools)
-#: src/frontend/labplotui.rc:88
+#: src/frontend/labplotui.rc:96
 #, kde-format
 msgid "&Tools"
 msgstr "&Eines"
 
 #. i18n: ectx: Menu (windows)
-#: src/frontend/labplotui.rc:92
+#: src/frontend/labplotui.rc:100
 #, kde-format
 msgid "&Windows"
 msgstr "&Finestres"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
-#: src/frontend/MainWin.cpp:210 src/frontend/ui/settingsworksheetpage.ui:106
+#: src/frontend/MainWin.cpp:235 src/frontend/ui/settingsworksheetpage.ui:106
 #: src/frontend/worksheet/WorksheetView.cpp:269
 #, kde-format
 msgid "Presenter Mode"
 msgstr "Mode de presentació"
 
-#: src/frontend/MainWin.cpp:210
+#: src/frontend/MainWin.cpp:235
 #, kde-format
 msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
@@ -15204,261 +15279,267 @@ msgstr ""
 "Al projecte no hi ha fulls de treball disponibles. No s'iniciarà el mode de "
 "presentació."
 
-#: src/frontend/MainWin.cpp:224
+#: src/frontend/MainWin.cpp:249
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Us donem la benvinguda al LabPlot %1"
 
-#: src/frontend/MainWin.cpp:616
+#: src/frontend/MainWin.cpp:653
 #, kde-format
 msgid "&Open Example"
 msgstr "&Obre un exemple"
 
-#: src/frontend/MainWin.cpp:637 src/frontend/MainWin.cpp:1965
+#: src/frontend/MainWin.cpp:674 src/frontend/MainWin.cpp:2056
 #, kde-format
 msgid "Workbook"
 msgstr "Llibre de treball"
 
-#: src/frontend/MainWin.cpp:639
+#: src/frontend/MainWin.cpp:676
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 "Crea un llibre de treball nou per a obtenir fulls de càlcul, matrius i "
 "diagrames"
 
-#: src/frontend/MainWin.cpp:642 src/frontend/MainWin.cpp:1973
+#: src/frontend/MainWin.cpp:679 src/frontend/MainWin.cpp:2064
 #, kde-format
 msgid "Data Extractor"
 msgstr "Extractor de dades"
 
-#: src/frontend/MainWin.cpp:643
+#: src/frontend/MainWin.cpp:680
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "Crea un extractor de dades per a obtenir dades des d'una imatge"
 
-#: src/frontend/MainWin.cpp:649
+#: src/frontend/MainWin.cpp:686
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "Crea un full de càlcul nou per a l'edició de les dades"
 
-#: src/frontend/MainWin.cpp:655
+#: src/frontend/MainWin.cpp:692
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Crea una matriu nova per a l'edició de les dades"
 
-#: src/frontend/MainWin.cpp:659 src/frontend/MainWin.cpp:2017
-#: src/frontend/SettingsDialog.cpp:59
+#: src/frontend/MainWin.cpp:696 src/frontend/MainWin.cpp:2118
+#: src/frontend/SettingsDialog.cpp:60
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:86
 #, kde-format
 msgid "Worksheet"
 msgstr "Full de treball"
 
-#: src/frontend/MainWin.cpp:661
+#: src/frontend/MainWin.cpp:698
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "Crea un full de treball nou per al traçat de les dades"
 
-#: src/frontend/MainWin.cpp:665 src/frontend/MainWin.cpp:2025
+#: src/frontend/MainWin.cpp:705
+#, fuzzy, kde-format
+#| msgid "Creates a new %1 notebook"
+msgid "Creates a new %1 script"
+msgstr "Crea un bloc de notes nou de %1"
+
+#: src/frontend/MainWin.cpp:711 src/frontend/MainWin.cpp:2126
 #, kde-format
 msgid "Note"
 msgstr "Nota"
 
-#: src/frontend/MainWin.cpp:666
+#: src/frontend/MainWin.cpp:712
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Crea una nota nova per al text arbitrari"
 
-#: src/frontend/MainWin.cpp:670 src/frontend/MainWin.cpp:1957
+#: src/frontend/MainWin.cpp:716 src/frontend/MainWin.cpp:2048
 #, kde-format
 msgid "Folder"
 msgstr "Carpeta"
 
-#: src/frontend/MainWin.cpp:671
+#: src/frontend/MainWin.cpp:717
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "Crea una carpeta nova per a col·leccionar els fulls i altres elements"
 
-#: src/frontend/MainWin.cpp:676
+#: src/frontend/MainWin.cpp:722
 #, kde-format
 msgid "Live Data Source..."
 msgstr "Origen de les dades en viu..."
 
-#: src/frontend/MainWin.cpp:677
+#: src/frontend/MainWin.cpp:723
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 "Crea un origen de les dades en viu per a llegir-les des d'un dispositiu en "
 "temps real"
 
-#: src/frontend/MainWin.cpp:684 src/frontend/MainWin.cpp:693
+#: src/frontend/MainWin.cpp:730 src/frontend/MainWin.cpp:739
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Importa les dades des d'un fitxer normal"
 
-#: src/frontend/MainWin.cpp:698
+#: src/frontend/MainWin.cpp:744
 #, kde-format
 msgid "From kaggle.com..."
 msgstr "Des de kaggle.com..."
 
-#: src/frontend/MainWin.cpp:699
+#: src/frontend/MainWin.cpp:745
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr "Importa les dades des de kaggle.com"
 
-#: src/frontend/MainWin.cpp:704
+#: src/frontend/MainWin.cpp:750
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Importa les dades des d'una base de dades SQL"
 
-#: src/frontend/MainWin.cpp:708
+#: src/frontend/MainWin.cpp:754
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Des d'una col·lecció de conjunt de dades..."
 
-#: src/frontend/MainWin.cpp:709
+#: src/frontend/MainWin.cpp:755
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr "Importa les dades des d'un conjunt de dades en línia"
 
-#: src/frontend/MainWin.cpp:713
+#: src/frontend/MainWin.cpp:759
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "Projecte del LabPlot..."
 
-#: src/frontend/MainWin.cpp:714
+#: src/frontend/MainWin.cpp:760
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Importa un projecte des d'un fitxer de projecte del LabPlot (.lml)"
 
-#: src/frontend/MainWin.cpp:719
+#: src/frontend/MainWin.cpp:765
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Projecte de l'Origin (OPJ)..."
 
-#: src/frontend/MainWin.cpp:720
+#: src/frontend/MainWin.cpp:766
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr ""
 "Importa un projecte des d'un fitxer de projecte Origin de l'OriginLab (.opj)"
 
-#: src/frontend/MainWin.cpp:725
+#: src/frontend/MainWin.cpp:771
 #, kde-format
 msgid "Export..."
 msgstr "Exporta..."
 
-#: src/frontend/MainWin.cpp:726
+#: src/frontend/MainWin.cpp:772
 #, kde-format
 msgid "Export selected element"
 msgstr "Exporta l'element seleccionat"
 
-#: src/frontend/MainWin.cpp:732 src/frontend/MainWin.cpp:2506
-#: src/frontend/MainWin.cpp:2514
+#: src/frontend/MainWin.cpp:778 src/frontend/MainWin.cpp:2610
+#: src/frontend/MainWin.cpp:2618
 #, kde-format
 msgid "Share"
 msgstr "Comparteix"
 
-#: src/frontend/MainWin.cpp:737
+#: src/frontend/MainWin.cpp:783
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Navegador de mapes de color"
 
-#: src/frontend/MainWin.cpp:738
+#: src/frontend/MainWin.cpp:784
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "Obre el diàleg per a navegar a través dels mapes de color disponibles."
 
-#: src/frontend/MainWin.cpp:747
+#: src/frontend/MainWin.cpp:793
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "Editor de metadades del FITS..."
 
-#: src/frontend/MainWin.cpp:748
+#: src/frontend/MainWin.cpp:794
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Obre l'editor per a editar les metadades del FITS"
 
-#: src/frontend/MainWin.cpp:757
+#: src/frontend/MainWin.cpp:803
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Historial de desfer/refer..."
 
-#: src/frontend/MainWin.cpp:777
+#: src/frontend/MainWin.cpp:823
 #, kde-format
 msgid "Close the active window"
 msgstr "Tanca la finestra activa"
 
-#: src/frontend/MainWin.cpp:780
+#: src/frontend/MainWin.cpp:826
 #, kde-format
 msgid "Close &All"
 msgstr "T&anca-ho tot"
 
-#: src/frontend/MainWin.cpp:781
+#: src/frontend/MainWin.cpp:827
 #, kde-format
 msgid "Close all the windows"
 msgstr "Tanca totes les finestres"
 
-#: src/frontend/MainWin.cpp:784
+#: src/frontend/MainWin.cpp:830
 #, kde-format
 msgid "Ne&xt"
 msgstr "Se&güent"
 
-#: src/frontend/MainWin.cpp:786
+#: src/frontend/MainWin.cpp:832
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Mou el focus a la finestra següent"
 
-#: src/frontend/MainWin.cpp:789
+#: src/frontend/MainWin.cpp:835
 #, kde-format
 msgid "Pre&vious"
 msgstr "A&nterior"
 
-#: src/frontend/MainWin.cpp:791
+#: src/frontend/MainWin.cpp:837
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Mou el focus a la finestra anterior"
 
-#: src/frontend/MainWin.cpp:798
+#: src/frontend/MainWin.cpp:844
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Només la &carpeta actual"
 
-#: src/frontend/MainWin.cpp:803
+#: src/frontend/MainWin.cpp:849
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Carpeta actual i &subcarpetes"
 
-#: src/frontend/MainWin.cpp:807
+#: src/frontend/MainWin.cpp:853
 #, kde-format
 msgid "&All"
 msgstr "&Totes"
 
-#: src/frontend/MainWin.cpp:829
+#: src/frontend/MainWin.cpp:875
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Mostra l'ús de la memòria"
 
-#: src/frontend/MainWin.cpp:837
+#: src/frontend/MainWin.cpp:883
 #, kde-format
 msgid "Project Explorer"
 msgstr "Explorador del projecte"
 
-#: src/frontend/MainWin.cpp:842
+#: src/frontend/MainWin.cpp:888
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Explorador de les propietats"
 
-#: src/frontend/MainWin.cpp:847
+#: src/frontend/MainWin.cpp:893
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "Vista prèvia del full de treball"
 
-#: src/frontend/MainWin.cpp:870
+#: src/frontend/MainWin.cpp:916
 #, kde-format
 msgid "Configure CAS..."
 msgstr "Configura el CAS..."
 
-#: src/frontend/MainWin.cpp:871
+#: src/frontend/MainWin.cpp:917
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
@@ -15467,118 +15548,118 @@ msgstr ""
 "Obre la configuració per als sistemes algebraics d'ordinador per a modificar "
 "els sistemes disponibles o per a habilitar-ne de nous"
 
-#: src/frontend/MainWin.cpp:931
+#: src/frontend/MainWin.cpp:977
 #, kde-format
 msgid "Window Visibility"
 msgstr "Visibilitat de les finestres"
 
-#: src/frontend/MainWin.cpp:948
+#: src/frontend/MainWin.cpp:994
 #, kde-format
 msgid "Color Scheme"
 msgstr "Esquema de color"
 
-#: src/frontend/MainWin.cpp:1006
+#: src/frontend/MainWin.cpp:1072
 #, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "El projecte actual «%1» s'ha modificat. El voleu desar?"
 
-#: src/frontend/MainWin.cpp:1007
+#: src/frontend/MainWin.cpp:1073
 #, kde-format
 msgid "Save Project"
 msgstr "Desa el projecte"
 
-#: src/frontend/MainWin.cpp:1362
+#: src/frontend/MainWin.cpp:1452
 #, kde-format
 msgid "%1: created"
 msgstr "%1: creat"
 
-#: src/frontend/MainWin.cpp:1388
+#: src/frontend/MainWin.cpp:1478
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Explorador del projecte"
 
-#: src/frontend/MainWin.cpp:1413
+#: src/frontend/MainWin.cpp:1503
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Vista prèvia del full de treball"
 
-#: src/frontend/MainWin.cpp:1422
+#: src/frontend/MainWin.cpp:1512
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Contingut"
 
-#: src/frontend/MainWin.cpp:1499
+#: src/frontend/MainWin.cpp:1589
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Projectes de l'Origin (%1)"
 
-#: src/frontend/MainWin.cpp:1505
+#: src/frontend/MainWin.cpp:1595
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "Projectes del Cantor (*.cws)"
 
-#: src/frontend/MainWin.cpp:1506
+#: src/frontend/MainWin.cpp:1596
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Blocs de notes del Jupyter (*.ipynb)"
 
-#: src/frontend/MainWin.cpp:1513
+#: src/frontend/MainWin.cpp:1603
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Tots els fitxers admesos (%1)"
 
-#: src/frontend/MainWin.cpp:1517
+#: src/frontend/MainWin.cpp:1607
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Obre un projecte"
 
-#: src/frontend/MainWin.cpp:1534
+#: src/frontend/MainWin.cpp:1624
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "El fitxer de projecte %1 ja està obert."
 
-#: src/frontend/MainWin.cpp:1534 src/frontend/MainWin.cpp:1542
-#: src/frontend/MainWin.cpp:1547
+#: src/frontend/MainWin.cpp:1624 src/frontend/MainWin.cpp:1632
+#: src/frontend/MainWin.cpp:1637
 #, kde-format
 msgid "Open Project"
 msgstr "Obre un projecte"
 
-#: src/frontend/MainWin.cpp:1542
+#: src/frontend/MainWin.cpp:1632
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "El fitxer de projecte %1 no existeix."
 
-#: src/frontend/MainWin.cpp:1547
+#: src/frontend/MainWin.cpp:1637
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "No s'ha pogut llegir el fitxer de projecte %1."
 
-#: src/frontend/MainWin.cpp:1555
+#: src/frontend/MainWin.cpp:1645
 #, kde-format
 msgid "Loading %1..."
 msgstr "S'està carregant %1..."
 
-#: src/frontend/MainWin.cpp:1610
+#: src/frontend/MainWin.cpp:1700
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: obert"
 
-#: src/frontend/MainWin.cpp:1645
+#: src/frontend/MainWin.cpp:1735
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "S'ha obert el projecte amb èxit (en %1 segons)."
 
-#: src/frontend/MainWin.cpp:1737
+#: src/frontend/MainWin.cpp:1828
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Desa el projecte com a"
 
-#: src/frontend/MainWin.cpp:1739
+#: src/frontend/MainWin.cpp:1830
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15587,70 +15668,77 @@ msgstr ""
 "Projectes del LabPlot (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *."
 "LML.BZ2 *.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:1766
+#: src/frontend/MainWin.cpp:1857
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "No s'ha pogut obrir el fitxer temporal per a escriptura."
 
-#: src/frontend/MainWin.cpp:1846
+#: src/frontend/MainWin.cpp:1937
 #, kde-format
 msgid "Project saved"
 msgstr "S'ha desat el projecte"
 
-#: src/frontend/MainWin.cpp:1862
+#: src/frontend/MainWin.cpp:1953
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "No s'ha pogut desar el fitxer «%1»."
 
-#: src/frontend/MainWin.cpp:1867
+#: src/frontend/MainWin.cpp:1958
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "No s'ha pogut obrir el fitxer «%1» per a escriptura."
 
-#: src/frontend/MainWin.cpp:1917
+#: src/frontend/MainWin.cpp:2008
 #, kde-format
 msgid "Changed"
 msgstr "Canviat"
 
-#: src/frontend/MainWin.cpp:1932 src/frontend/MainWin.cpp:1944
+#: src/frontend/MainWin.cpp:2023 src/frontend/MainWin.cpp:2035
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "S'està preparant la impressió de %1"
 
-#: src/frontend/MainWin.cpp:1934 src/frontend/MainWin.cpp:1946
+#: src/frontend/MainWin.cpp:2025 src/frontend/MainWin.cpp:2037
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 impresa"
 
+#: src/frontend/MainWin.cpp:2092
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3795
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3796
+#, kde-format
+msgid "%1"
+msgstr "%1"
+
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2469
+#: src/frontend/MainWin.cpp:2570
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
 #: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Cursor"
 msgstr "cursor"
 
-#: src/frontend/MainWin.cpp:2506
+#: src/frontend/MainWin.cpp:2610
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "S'ha produït un problema en compartir el projecte: %1"
 
-#: src/frontend/MainWin.cpp:2510
+#: src/frontend/MainWin.cpp:2614
 #, kde-format
 msgid "Project shared successfully"
 msgstr "El projecte s'ha compartit correctament"
 
-#: src/frontend/MainWin.cpp:2513
+#: src/frontend/MainWin.cpp:2617
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "El projecte compartit es pot trobar a: <a href=\"%1\">%1</a>"
 
-#: src/frontend/MainWin.cpp:2786
+#: src/frontend/MainWin.cpp:2890
 #, kde-format
 msgid "Kaggle CLI tool not found"
 msgstr "No s'ha trobat l'eina CLI de Kaggle"
 
-#: src/frontend/MainWin.cpp:2787
+#: src/frontend/MainWin.cpp:2891
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
@@ -15659,32 +15747,32 @@ msgstr ""
 "Proporcioneu el camí a l'eina Kaggle CLI a la configuració de l'aplicació i "
 "torneu-ho a provar."
 
-#: src/frontend/MainWin.cpp:2853
+#: src/frontend/MainWin.cpp:2957
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exportada"
 
-#: src/frontend/MainWin.cpp:2860
+#: src/frontend/MainWin.cpp:2964
 #, kde-format
 msgid "FITS files saved"
 msgstr "Fitxers FITS desats"
 
-#: src/frontend/MainWin.cpp:2872
+#: src/frontend/MainWin.cpp:2976
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Client MQTT %1"
 
-#: src/frontend/MainWin.cpp:2890
+#: src/frontend/MainWin.cpp:2994
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Ja hi ha un MQTTClient amb aquesta màquina!"
 
-#: src/frontend/MainWin.cpp:2894
+#: src/frontend/MainWin.cpp:2998
 #, kde-format
 msgid "Live data source%1"
 msgstr "Origen de les dades en viu %1"
 
-#: src/frontend/MainWin.cpp:2945
+#: src/frontend/MainWin.cpp:3049
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Crea un bloc de notes nou de %1"
@@ -16315,8 +16403,8 @@ msgstr "Memòria cau dels conjunts de dades"
 msgid "Downloaded files successfully deleted."
 msgstr "Els fitxers baixats s'han suprimit correctament."
 
-#: src/frontend/SettingsDialog.cpp:45 src/frontend/SettingsDialog.cpp:144
-#: src/frontend/SettingsDialog.cpp:151
+#: src/frontend/SettingsDialog.cpp:46 src/frontend/SettingsDialog.cpp:151
+#: src/frontend/SettingsDialog.cpp:158
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
@@ -16327,7 +16415,7 @@ msgstr "Preferències"
 #. i18n: ectx: property (text), widget (QLabel, lGeneral)
 #. i18n: ectx: property (text), widget (QLabel, lValuesGeneral)
 #. i18n: ectx: attribute (title), widget (QWidget, tGeneral)
-#: src/frontend/SettingsDialog.cpp:54
+#: src/frontend/SettingsDialog.cpp:55
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:95
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:101
 #: src/frontend/ui/datapickercurvewidget.ui:27
@@ -16357,29 +16445,35 @@ msgstr "Preferències"
 msgid "General"
 msgstr "General"
 
-#: src/frontend/SettingsDialog.cpp:70
+#: src/frontend/SettingsDialog.cpp:71
 #, kde-format
 msgid "Notebook"
 msgstr "Bloc de notes"
 
-#: src/frontend/SettingsDialog.cpp:77
+#: src/frontend/SettingsDialog.cpp:78
 #, kde-format
 msgid "Datasets"
 msgstr "Conjunts de dades"
 
-#: src/frontend/SettingsDialog.cpp:92
+#: src/frontend/SettingsDialog.cpp:93
 #, kde-format
 msgid "User Feedback"
 msgstr "Comentaris de l'usuari"
 
-#: src/frontend/SettingsDialog.cpp:148
+#: src/frontend/SettingsDialog.cpp:98
+#, fuzzy, kde-format
+#| msgid "Text position"
+msgid "Text Editor"
+msgstr "Posició del text"
+
+#: src/frontend/SettingsDialog.cpp:155
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr ""
 "Es reiniciarà tota la configuració als seus valors predeterminats. Voleu "
 "continuar?"
 
-#: src/frontend/SettingsDialog.cpp:159
+#: src/frontend/SettingsDialog.cpp:166
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences    [Changed]"
@@ -18457,12 +18551,6 @@ msgstr "valors que manquen"
 msgid " , "
 msgstr " , "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3795
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3796
-#, kde-format
-msgid "%1"
-msgstr "%1"
-
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3796
 #, kde-format
 msgid ", "
@@ -18772,6 +18860,7 @@ msgstr "Tipus d'error Y:"
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:119
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:56
 #: src/frontend/ui/dockwidgets/runchartdock.ui:138
+#: src/frontend/ui/dockwidgets/scriptdock.ui:73
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:182
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:151
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:162
@@ -18825,6 +18914,7 @@ msgstr "Comentari:"
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:190
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:112
 #: src/frontend/ui/dockwidgets/runchartdock.ui:112
+#: src/frontend/ui/dockwidgets/scriptdock.ui:63
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:93
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:46
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:181
@@ -19610,6 +19700,7 @@ msgstr "Crea la columna de l'índex"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WorksheetPreviewWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SettingsNotebookPage)
+#. i18n: ectx: property (windowTitle), widget (QWidget, ScriptEditorWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SampleValuesWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, FlattenColumnsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SearchReplaceWidget)
@@ -19637,6 +19728,7 @@ msgstr "Crea la columna de l'índex"
 #: src/frontend/ui/dockwidgets/runchartdock.ui:14
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:14
 #: src/frontend/ui/dockwidgets/valuewidget.ui:14
+#: src/frontend/ui/script/scripteditorwidget.ui:14
 #: src/frontend/ui/settingsnotebookpage.ui:14
 #: src/frontend/ui/spreadsheet/flattencolumnswidget.ui:14
 #: src/frontend/ui/spreadsheet/samplevalueswidget.ui:14
@@ -22079,6 +22171,32 @@ msgstr "Centre:"
 #, kde-format
 msgid "Center Line"
 msgstr "Línia del centre"
+
+#. i18n: ectx: property (text), widget (QLabel, lOutputFont)
+#: src/frontend/ui/dockwidgets/scriptdock.ui:33
+#, fuzzy, kde-format
+#| msgid "Output:"
+msgid "Output Font:"
+msgstr "Sortida:"
+
+#. i18n: ectx: property (text), widget (QLabel, lEditorFont)
+#: src/frontend/ui/dockwidgets/scriptdock.ui:40
+#, kde-format
+msgid "Editor Font:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lRuntime)
+#: src/frontend/ui/dockwidgets/scriptdock.ui:99
+#, kde-format
+msgid "Runtime:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lTheme)
+#: src/frontend/ui/dockwidgets/scriptdock.ui:141
+#, fuzzy, kde-format
+#| msgid "Theme:"
+msgid "Editor Theme:"
+msgstr "Tema:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
