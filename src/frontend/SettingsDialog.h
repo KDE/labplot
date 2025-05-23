@@ -21,6 +21,7 @@ class SettingsWorksheetPage;
 class SettingsNotebookPage;
 // class SettingsWelcomePage;
 class SettingsDatasetsPage;
+class SettingsEditorPage;
 
 #ifdef HAVE_KUSERFEEDBACK
 namespace KUserFeedback {
@@ -53,6 +54,7 @@ private:
 	KPageWidgetItem* m_notebookPageItem{nullptr};
 #endif
 	SettingsDatasetsPage* m_datasetsPage{nullptr};
+	SettingsEditorPage* m_editorRootPage;
 	KPageWidgetItem* m_datasetsPageItem{nullptr};
 
 #ifdef HAVE_KUSERFEEDBACK

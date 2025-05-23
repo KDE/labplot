@@ -937,12 +937,6 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	// for the analysis curve itself.
 	bool hasChildren = (aspect->childCount<AbstractAspect>() > 0 && !aspect->inherits(AspectType::XYAnalysisCurve));
 
-	// aspects in the project that can be used as sources/references:
-	auto* project = aspect->project();
-	const auto& columns = project->children<Column>(ChildIndexFlag::Recursive);
-	const auto& histogramsAll = project->children<Histogram>(ChildIndexFlag::Recursive); // needed for fit curves only.
-	const auto& curvesAll = project->children<XYCurve>(ChildIndexFlag::Recursive);
-
 #ifndef SDK
 	// LiveDataSource:
 	// call finalizeLoad() to replace relative with absolute paths if required
@@ -953,6 +947,12 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		source->finalizeLoad();
 	}
 #endif
+
+	// aspects in the project that can be used as sources/references:
+	auto* project = aspect->project();
+	const auto& columns = project->children<Column>(ChildIndexFlag::Recursive);
+	const auto& histogramsAll = project->children<Histogram>(ChildIndexFlag::Recursive); // needed for fit curves only.
+	const auto& curvesAll = project->children<XYCurve>(ChildIndexFlag::Recursive);
 
 	// xy-curves
 	//  cannot be removed by the column observer, because it does not react
@@ -1317,4 +1317,22 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 		d->saveCalculations = str.toInt();
 
 	return true;
+}
+
+/*!
+ * This static member variable will hold a pointer to the current project.
+ * It starts out as nullptr but is updated in various places in MainWin.
+ */
+Project* Project::currentProject = nullptr;
+
+/*!
+ * This free function will return a pointer to the current project.
+ * It was created for our scripting runtimes which need access to the current project.
+ * So, our scripting runtimes can do something like:
+ * 		project = project()
+ * Having a singular function is less error prone than our former approach of manually
+ * injecting the project variable into the scripting runtime.
+ */
+Project* project() {
+	return Project::currentProject;
 }

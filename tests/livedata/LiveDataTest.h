@@ -82,6 +82,11 @@ private Q_SLOTS:
 
 	// reading from UDP sockets:
 	void testUdpReadContinuousFixed00();
+
+	void testLoadSaveLiveDataLinkedFile_FileExists();
+	void testLoadSaveLiveDataLinkedFile_FileNotExists();
+	void testLoadSaveLiveDataNoLinkedFile();
+	// void testLoadSaveLiveDataSource();
 };
 
 #endif // LIVEDATATEST_H

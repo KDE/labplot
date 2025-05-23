@@ -1,0 +1,317 @@
+<typesystem package="pylabplot">
+    <load-typesystem name="typesystem_widgets.xml" generate="no"/>
+
+    <!-- Global -->
+    <enum-type name="AspectType"/>
+    <function signature="project()"/>
+
+    <!-- Abstract Classes -->
+    <object-type name="AbstractAspect" force-abstract="yes" disable-wrapper="yes" parent-management="yes">
+        <enum-type name="ChildIndexFlag" flags="yes"/>
+        <enum-type name="NameHandling"/>
+        <modify-function signature="addChild(AbstractAspect*)">
+            <modify-argument index="this">
+                <parent index="1" action="add"/>
+            </modify-argument>
+            <inject-code class="target" position="end">
+                Py_INCREF(%PYARG_1);
+            </inject-code>
+        </modify-function>
+        <modify-function signature="removeChild(AbstractAspect*)">
+            <modify-argument index="this">
+                <parent index="1" action="remove"/>
+            </modify-argument>
+            <inject-code class="target" position="end">
+                Py_DECREF(%PYARG_1);
+            </inject-code>
+        </modify-function>
+    </object-type>
+    <object-type name="AbstractColumn" force-abstract="yes" disable-wrapper="yes">
+        <enum-type name="PlotDesignation"/>
+        <enum-type name="TimeUnit"/>
+        <enum-type name="ColumnMode"/>
+        <enum-type name="Properties"/>
+        <enum-type name="Formatting"/>
+    </object-type>
+    <object-type name="AbstractCoordinateSystem" force-abstract="yes" disable-wrapper="yes">
+        <enum-type name="MappingFlag" flags="yes"/>
+    </object-type>
+    <object-type name="AbstractDataSource" force-abstract="yes" disable-wrapper="yes"/>
+    <object-type name="AbstractFileFilter" force-abstract="yes" disable-wrapper="yes">
+        <enum-type name="FileType"/>
+        <enum-type name="ImportMode"/>
+    </object-type>
+    <object-type name="AbstractPart" force-abstract="yes" disable-wrapper="yes"/>
+    <object-type name="AbstractPlot" force-abstract="yes" disable-wrapper="yes"/>
+    <object-type name="Plot" force-abstract="yes" disable-wrapper="yes">
+        <enum-type name="PlotType"/>
+    </object-type>
+    <object-type name="WorksheetElement" force-abstract="yes" disable-wrapper="yes">
+        <enum-type name="Orientation"/>
+        <enum-type name="HorizontalPosition"/>
+        <enum-type name="VerticalPosition"/>
+        <enum-type name="HorizontalAlignment"/>
+        <enum-type name="VerticalAlignment"/>
+        <enum-type name="PositionLimit"/>
+        <value-type name="PositionWrapper" disable-wrapper="yes"/>
+    </object-type>
+    <object-type name="WorksheetElementContainer" force-abstract="yes" disable-wrapper="yes"/>
+    <object-type name="XYAnalysisCurve" force-abstract="yes" disable-wrapper="yes">
+        <enum-type name="DataSourceType"/>
+        <enum-type name="AnalysisAction"/>
+        <value-type name="Result" disable-wrapper="yes"/>
+    </object-type>
+
+    <!-- Aspect Containers -->
+    <object-type name="Folder" disable-wrapper="yes"/>
+    <object-type name="Project" disable-wrapper="yes">
+        <modify-function signature="Project()" remove="all"/>
+        <enum-type name="DockVisibility"/>
+    </object-type>
+
+    <!-- Column -->
+    <object-type name="Column" disable-wrapper="yes"/>
+
+    <!-- Data Containers -->
+    <object-type name="Spreadsheet" disable-wrapper="yes"/>
+    <object-type name="Matrix" disable-wrapper="yes">
+        <enum-type name="HeaderFormat"/>
+    </object-type>
+
+    <!-- Filters -->
+    <object-type name="AsciiFilter" disable-wrapper="yes">
+        <value-type name="Properties" disable-wrapper="yes"/>
+        <enum-type name="Status"/>
+    </object-type>
+    <object-type name="BinaryFilter" disable-wrapper="yes">
+        <enum-type name="DataType"/>
+    </object-type>
+    <object-type name="CANFilter" disable-wrapper="yes">
+        <enum-type name="TimeHandling"/>
+    </object-type>
+    <object-type name="FITSFilter" disable-wrapper="yes"/>
+    <object-type name="HDF5Filter" disable-wrapper="yes"/>
+    <object-type name="ImageFilter" disable-wrapper="yes">
+        <enum-type name="ImportFormat"/>
+    </object-type>
+    <object-type name="JsonFilter" disable-wrapper="yes">
+        <enum-type name="DataContainerType"/>
+    </object-type>
+    <object-type name="MatioFilter" disable-wrapper="yes"/>
+    <object-type name="McapFilter" disable-wrapper="yes">
+        <enum-type name="DataContainerType"/>
+    </object-type>
+    <object-type name="NetCDFFilter" disable-wrapper="yes"/>
+    <object-type name="OdsFilter" disable-wrapper="yes"/>
+    <object-type name="ReadStatFilter" disable-wrapper="yes"/>
+    <object-type name="ROOTFilter" disable-wrapper="yes"/>
+    <object-type name="SpiceFilter" disable-wrapper="yes"/>
+    <object-type name="VectorBLFFilter" disable-wrapper="yes"/>
+    <object-type name="XLSXFilter" disable-wrapper="yes"/>
+
+    <!-- Helper Classes -->
+    <object-type name="Background" disable-wrapper="yes">
+        <enum-type name="Position"/>
+        <enum-type name="Type"/>
+        <enum-type name="ColorStyle"/>
+        <enum-type name="ImageStyle"/>
+    </object-type>
+    <object-type name="CartesianCoordinateSystem" disable-wrapper="yes">
+        <enum-type name="Dimension"/>
+    </object-type>
+    <object-type name="CartesianScale" disable-wrapper="yes"/>
+    <object-type name="ColumnStringIO" disable-wrapper="yes"/>
+    <object-type name="ErrorBar" disable-wrapper="yes">
+        <enum-type name="ErrorType"/>
+        <enum-type name="Type"/>
+        <enum-type name="Dimension"/>
+    </object-type>
+    <object-type name="Line" disable-wrapper="yes"/>
+    <object-type name="PlotArea" disable-wrapper="yes">
+        <enum-type name="BorderTypeFlags" flags="yes"/>
+    </object-type>
+    <!-- <object-type name="Range" disable-wrapper="yes"/> -->
+    <object-type name="RangeT" disable-wrapper="yes">
+        <enum-type name="Format"/>
+        <enum-type name="Scale"/>
+    </object-type>
+    <object-type name="StatisticsSpreadsheet" disable-wrapper="yes">
+        <enum-type name="Metric" flags="yes"/>
+    </object-type>
+    <object-type name="Symbol" disable-wrapper="yes">
+        <enum-type name="Style"/>
+    </object-type>
+    <object-type name="Value" disable-wrapper="yes">
+        <enum-type name="Type"/>
+        <enum-type name="Position"/>
+    </object-type>
+
+    <!-- Plot Area Elements -->
+    <object-type name="Axis" disable-wrapper="yes">
+        <enum-type name="RangeType"/>
+        <enum-type name="Position"/>
+        <enum-type name="LabelsFormat"/>
+        <enum-type name="TicksType"/>
+        <enum-type name="ArrowType"/>
+        <enum-type name="ArrowPosition"/>
+        <enum-type name="LabelsPosition"/>
+        <enum-type name="LabelsTextType"/>
+        <enum-type name="LabelsBackgroundType"/>
+        <enum-type name="TicksStartType"/>
+        <enum-type name="TicksFlags" flags="yes"/>
+    </object-type>
+    <object-type name="CartesianPlotLegend" disable-wrapper="yes"/>
+    <object-type name="CustomPoint" disable-wrapper="yes"/>
+    <object-type name="ReferenceLine" disable-wrapper="yes"/>
+    <object-type name="ReferenceRange" disable-wrapper="yes"/>
+    
+    <!-- Plots -->
+    <object-type name="BarPlot" disable-wrapper="yes">
+        <enum-type name="Type"/>
+    </object-type>
+    <object-type name="BoxPlot" disable-wrapper="yes">
+        <enum-type name="Ordering"/>
+        <enum-type name="WhiskersType"/>
+    </object-type>
+    <object-type name="Histogram" disable-wrapper="yes">
+        <enum-type name="Type"/>
+        <enum-type name="Normalization"/>
+        <enum-type name="BinningMethod"/>
+        <enum-type name="LineType"/>
+        <enum-type name="ValuesType"/>
+        <enum-type name="ValuesPosition"/>
+    </object-type>
+    <object-type name="KDEPlot" disable-wrapper="yes"/>
+    <object-type name="LollipopPlot" disable-wrapper="yes"/>
+    <object-type name="ProcessBehaviorChart" disable-wrapper="yes">
+        <enum-type name="Type"/>
+        <enum-type name="LimitsMetric"/>
+    </object-type>
+    <object-type name="QQPlot" disable-wrapper="yes"/>
+    <object-type name="RunChart" disable-wrapper="yes">
+        <enum-type name="CenterMetric"/>
+    </object-type>
+    <object-type name="XYCurve" disable-wrapper="yes">
+        <enum-type name="LineType"/>
+        <enum-type name="DropLineType"/>
+        <enum-type name="ValuesType"/>
+        <enum-type name="ValuesPosition"/>
+    </object-type>
+    <object-type name="XYEquationCurve" disable-wrapper="yes">
+        <value-type name="EquationData" disable-wrapper="yes"/>
+        <enum-type name="EquationType"/>
+    </object-type>
+    
+    <!-- Analysis Plots -->
+    <object-type name="XYConvolutionCurve" disable-wrapper="yes">
+        <value-type name="ConvolutionData" disable-wrapper="yes"/>
+    </object-type>
+    <object-type name="XYCorrelationCurve" disable-wrapper="yes">
+        <value-type name="CorrelationData" disable-wrapper="yes"/>
+    </object-type>
+    <object-type name="XYDataReductionCurve" disable-wrapper="yes">
+        <value-type name="DataReductionData" disable-wrapper="yes"/>
+        <value-type name="DataReductionResult" disable-wrapper="yes"/>
+    </object-type>
+    <object-type name="XYDifferentiationCurve" disable-wrapper="yes">
+        <value-type name="DifferentiationData" disable-wrapper="yes"/>
+    </object-type>
+    <object-type name="XYFitCurve" disable-wrapper="yes">
+        <value-type name="FitData" disable-wrapper="yes"/>
+        <value-type name="FitResult" disable-wrapper="yes"/>
+    </object-type>
+    <object-type name="XYFourierFilterCurve" disable-wrapper="yes">
+        <value-type name="FilterData" disable-wrapper="yes"/>
+        <value-type name="FilterResult" disable-wrapper="yes"/>
+    </object-type>
+    <object-type name="XYFourierTransformCurve" disable-wrapper="yes">
+        <value-type name="TransformData" disable-wrapper="yes"/>
+    </object-type>
+    <object-type name="XYFunctionCurve" disable-wrapper="yes">
+        <value-type name="FunctionData" disable-wrapper="yes"/>
+    </object-type>
+    <object-type name="XYHilbertTransformCurve" disable-wrapper="yes">
+        <value-type name="TransformData" disable-wrapper="yes"/>
+    </object-type>
+    <object-type name="XYIntegrationCurve" disable-wrapper="yes">
+        <value-type name="IntegrationData" disable-wrapper="yes"/>
+        <value-type name="IntegrationResult" disable-wrapper="yes"/>
+    </object-type>
+    <object-type name="XYInterpolationCurve" disable-wrapper="yes">
+        <enum-type name="PointsMode"/>
+        <value-type name="InterpolationData" disable-wrapper="yes"/>
+    </object-type>
+    <object-type name="XYSmoothCurve" disable-wrapper="yes">
+        <value-type name="SmoothData" disable-wrapper="yes"/>
+    </object-type>
+
+    <!-- Worksheet -->
+    <object-type name="Worksheet" disable-wrapper="yes">
+        <enum-type name="Unit"/>
+        <enum-type name="Layout"/>
+        <enum-type name="CartesianPlotActionMode"/>
+        <enum-type name="ZoomFit"/>
+        <enum-type name="ExportFormat"/>
+        <enum-type name="ExportArea"/>
+    </object-type>
+
+    <!-- Worksheet Element Containers -->
+    <object-type name="CartesianPlot" disable-wrapper="yes">
+        <enum-type name="Type"/>
+        <enum-type name="MouseMode"/>
+        <enum-type name="NavigationOperation"/>
+        <enum-type name="RangeType"/>
+        <enum-type name="RangeBreakStyle"/>
+    </object-type>
+
+    <!-- Worksheet Elements -->
+    <object-type name="Image" disable-wrapper="yes"/>
+    <object-type name="InfoElement" disable-wrapper="yes"/>
+    <object-type name="TextLabel" disable-wrapper="yes">
+        <enum-type name="Type"/>
+        <enum-type name="Mode"/>
+        <enum-type name="BorderShape"/>
+        <value-type name="TextWrapper" disable-wrapper="yes"/>
+    </object-type>
+
+    <!-- Scripting -->
+    <object-type name="PythonLogger" disable-wrapper="yes"/>
+
+    <!-- NSL -->
+    <enum-type name="nsl_fit_model_category"/>
+    <enum-type name="nsl_sf_stats_distribution"/>
+    <enum-type name="nsl_fit_algorithm"/>
+    <enum-type name="round_method"/>
+    <enum-type name="nsl_kernel_type"/>
+    <enum-type name="nsl_kde_bandwidth_type"/>
+    <enum-type name="nsl_conv_direction_type"/>
+    <enum-type name="nsl_conv_type_type"/>
+    <enum-type name="nsl_conv_method_type"/>
+    <enum-type name="nsl_conv_norm_type"/>
+    <enum-type name="nsl_conv_wrap_type"/>
+    <enum-type name="nsl_conv_kernel_type"/>
+    <enum-type name="nsl_corr_type_type"/>
+    <enum-type name="nsl_corr_norm_type"/>
+    <enum-type name="nsl_geom_linesim_type"/>
+    <enum-type name="nsl_diff_deriv_order_type"/>
+    <enum-type name="nsl_fit_model_type_basic"/>
+    <enum-type name="nsl_fit_model_type_peak"/>
+    <enum-type name="nsl_fit_model_type_growth"/>
+    <enum-type name="nsl_fit_weight_type"/>
+    <enum-type name="nsl_filter_type"/>
+    <enum-type name="nsl_filter_form"/>
+    <enum-type name="nsl_filter_cutoff_unit"/>
+    <enum-type name="nsl_sf_window_type"/>
+    <enum-type name="nsl_dft_result_type"/>
+    <enum-type name="nsl_dft_xscale"/>
+    <enum-type name="nsl_hilbert_result_type"/>
+    <enum-type name="nsl_int_method_type"/>
+    <enum-type name="nsl_interp_type"/>
+    <enum-type name="nsl_interp_pch_variant"/>
+    <enum-type name="nsl_interp_evaluate"/>
+    <enum-type name="nsl_smooth_type"/>
+    <enum-type name="nsl_smooth_pad_mode"/>
+    <enum-type name="nsl_smooth_weight_type"/>
+
+    <rejection class="*" argument-type="std::vector&lt;bool&gt;&amp;"/>
+</typesystem>

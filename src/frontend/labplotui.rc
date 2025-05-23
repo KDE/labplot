@@ -83,6 +83,10 @@
 	<Action name="notebook_restart"/>
 </ToolBar>
 
+<ToolBar name="script_toolbar">
+<text>Script Toolbar</text>
+</ToolBar>
+
 <ToolBar name="cartesian_plot_toolbar" position="left">
 	<text>Plot Area Toolbar</text>
 	<Action name="plot_area_add_new"/>
@@ -129,6 +133,10 @@
 		<Separator/>
 		<Action name="configure_cas" />
 	</Menu>
+	<Separator/>
+	<Menu name="new_script"><text>&amp;Script</text>
+		<ActionList name="scripts_list" />
+	</Menu>
 </Menu>
 <Separator/>
 <Menu name="import"><text>Import</text>
@@ -155,7 +163,7 @@
 <Menu name="notebook"><text>&amp;Notebook</text></Menu>
 <Menu name="data_extractor"><text>&amp;Data Extractor</text></Menu>
 <!-- <Menu name="drawing"><text>&amp;Drawing</text></Menu> -->
-<!-- <Menu name="script"><text>&amp;Script</text></Menu> -->
+<Menu name="script"><text>&amp;Script</text></Menu>
 <Menu name="tools"><text>&amp;Tools</text>
 	<Action name="color_maps" />
 	<Action name="edit_fits" />

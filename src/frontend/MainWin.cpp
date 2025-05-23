@@ -28,6 +28,8 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 #include "backend/note/Note.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/script/Script.h"
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
 #endif
@@ -52,6 +54,7 @@
 #include "frontend/widgets/LabelWidget.h"
 #include "frontend/worksheet/WorksheetPreviewWidget.h"
 #include "frontend/worksheet/WorksheetView.h"
+#include "frontend/script/ScriptEditor.h"
 
 #ifdef HAVE_KUSERFEEDBACK
 #include <KUserFeedback/ApplicationVersionSource>
@@ -91,6 +94,9 @@
 #include <KRecentFilesAction>
 #include <KToolBar>
 #include <kxmlguifactory.h>
+#include <KTextEditor/Editor>
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
 
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/notebook/Notebook.h"
@@ -134,6 +140,25 @@ MainWin::MainWin(QWidget* parent, const QString& fileName)
 	m_userFeedbackProvider.addDataSource(new KUserFeedback::StartCountSource);
 	m_userFeedbackProvider.addDataSource(new KUserFeedback::UsageTimeSource);
 #endif
+
+	// ktexteditor minor setup
+	KTextEditor::Editor* kTextEditor = KTextEditor::Editor::instance();
+	connect(kTextEditor, &KTextEditor::Editor::configChanged, [kTextEditor] {
+		for (auto* document : kTextEditor->documents()) {
+			for (auto* view : document->views()) {
+				QFont editorFont = kTextEditor->font();
+				QString editorThemeName = kTextEditor->theme().name();
+
+				// when a view sets it own font, it ignores changes from the editor, so we change manually
+				if (view->configValue(QStringLiteral("font")).value<QFont>() != editorFont)
+					view->setConfigValue(QStringLiteral("font"), editorFont);
+				
+				// when a view sets it own theme, it ignores changes from the editor, so we change manually
+				if (view->theme().name() != editorThemeName)
+					view->setConfigValue(QStringLiteral("theme"), editorThemeName);
+			}
+		}
+	});
 }
 
 MainWin::~MainWin() {
@@ -495,6 +520,7 @@ bool MainWin::newProject(bool createInitialContent) {
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	m_project = new Project();
+	Project::currentProject = m_project;
 	undoStackIndexLastSave = 0;
 	m_currentAspect = m_project;
 	m_currentFolder = m_project;
@@ -894,6 +920,7 @@ bool MainWin::closeProject() {
 	m_aspectTreeModel = nullptr;
 	delete m_project;
 	m_project = nullptr;
+	Project::currentProject = m_project;
 	m_projectClosing = false;
 
 	// update the UI if we're just closing a project
@@ -1193,6 +1220,16 @@ void MainWin::newSpreadsheet() {
 		workbook->addChild(spreadsheet);
 	else
 		this->addAspectToProject(spreadsheet);
+}
+
+/*!
+	adds a new Script to the project.
+*/
+void MainWin::newScript() {
+	auto* action = static_cast<QAction*>(QObject::sender());
+	m_tbScript->setDefaultAction(action);
+	auto* script = new Script(i18n("%1", action->data().toString()), action->data().toString());
+	this->addAspectToProject(script);
 }
 
 /*!

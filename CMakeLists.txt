@@ -68,6 +68,7 @@ find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     XmlGui
     NewStuffCore
     NewStuff
+    TextEditor
 OPTIONAL_COMPONENTS
     DocTools
     Service
@@ -315,14 +316,18 @@ endif()
 option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
 option(ENABLE_TESTS "Build with tests" ON)
 option(ENABLE_SDK "Build with SDK support" ON)
+option(ENABLE_SDK_EXAMPLES "Build SDK examples" OFF)
 if(ENABLE_SDK)
 if(WIN32)
-    option(ENABLE_PYTHON_SDK "Build with Python SDK support" OFF)
+option(ENABLE_PYTHON_SDK "Build with Python SDK support" OFF)
 else()
-    option(ENABLE_PYTHON_SDK "Build with Python SDK support" ON)
+option(ENABLE_PYTHON_SDK "Build with Python SDK support" ON)
 endif()
-
-    option(ENABLE_SDK_EXAMPLES "Build SDK examples" OFF)
+endif()
+if(WIN32)
+option(ENABLE_PYTHON_SCRIPTING "Build with Python scripting support" OFF)
+else()
+option(ENABLE_PYTHON_SCRIPTING "Build with Python scripting support" ON)
 endif()
 
 ### OS macros ####################################
@@ -708,6 +713,23 @@ if(ENABLE_EIGEN3)
     endif()
 else()
     message(STATUS "Eigen3 support DISABLED")
+endif()
+
+if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
+    find_package(Python3 COMPONENTS Development REQUIRED)
+    find_package(PySide6 REQUIRED)
+    find_package(Shiboken6 REQUIRED)
+
+    add_definitions(-DPy_LIMITED_API=0x03090000)
+endif()
+
+if(ENABLE_PYTHON_SDK)
+    find_package(Python3 COMPONENTS Interpreter REQUIRED)
+endif()
+
+if(ENABLE_PYTHON_SCRIPTING)
+    find_package(Python3 COMPONENTS Development.Embed REQUIRED)
+    add_definitions(-DHAVE_PYTHON_SCRIPTING)
 endif()
 
 # Qt Advanced Docking System (required) #####################

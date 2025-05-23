@@ -186,6 +186,7 @@ private Q_SLOTS:
 	void newSpreadsheet();
 	void newMatrix();
 	void newWorksheet();
+	void newScript();
 	void newNotes();
 	void newDatapicker();
 	void newLiveDataSource();
