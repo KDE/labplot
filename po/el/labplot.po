@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-21 00:39+0000\n"
+"POT-Creation-Date: 2025-05-23 00:38+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -380,14 +380,14 @@ msgstr "In%1"
 msgid "Import Data"
 msgstr "Εισαγωγή"
 
-#: src/backend/core/AbstractPart.cpp:126 src/frontend/MainWin.cpp:683
-#: src/frontend/MainWin.cpp:692
+#: src/backend/core/AbstractPart.cpp:126 src/frontend/MainWin.cpp:728
+#: src/frontend/MainWin.cpp:737
 #, fuzzy, kde-format
 #| msgid "Close File"
 msgid "From File..."
 msgstr "Κλείσιμο αρχείου"
 
-#: src/backend/core/AbstractPart.cpp:128 src/frontend/MainWin.cpp:704
+#: src/backend/core/AbstractPart.cpp:128 src/frontend/MainWin.cpp:749
 #, kde-format
 msgid "From SQL Database..."
 msgstr ""
@@ -412,7 +412,7 @@ msgstr "Εκτύπωση"
 msgid "Print Preview"
 msgstr "Προεπισκόπηση εκτύπωσης"
 
-#: src/backend/core/AbstractPart.cpp:147 src/frontend/MainWin.cpp:776
+#: src/backend/core/AbstractPart.cpp:147 src/frontend/MainWin.cpp:821
 #, kde-format
 msgid "&Close"
 msgstr "&Κλείσιμο"
@@ -428,7 +428,7 @@ msgid "incompatible filter type"
 msgstr "ασύμβατος τύπος φίλτρου"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:703
+#: src/backend/core/Folder.cpp:152 src/backend/core/Project.cpp:703
 #: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
@@ -696,7 +696,7 @@ msgstr "%1: αριθμός δεκαδικών ψηφίων %2"
 msgid "set decimal digits to %1"
 msgstr "αριθμός δεκαδικών ψηφίων %1"
 
-#: src/backend/core/Folder.cpp:358
+#: src/backend/core/Folder.cpp:372
 #, kde-format
 msgid "unknown element '%1' found"
 msgstr "βρέθηκε άγνωστο αντικείμενο '%1'"
@@ -1995,7 +1995,7 @@ msgid "Unknown"
 msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:654 src/frontend/MainWin.cpp:2000
+#: src/frontend/MainWin.cpp:690 src/frontend/MainWin.cpp:2100
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -7447,6 +7447,34 @@ msgstr "Ύψος"
 msgid "Tricube"
 msgstr ""
 
+#: src/backend/script/Script.cpp:117 src/backend/script/Script.cpp:325
+#, fuzzy, kde-format
+#| msgid "no simple filter element found"
+msgid "no script element found"
+msgstr "αδυναμία εύρεσης απλού φίλτρου"
+
+#: src/backend/script/Script.cpp:186
+#, kde-format
+msgid "%1: run %2 script"
+msgstr ""
+
+#: src/backend/script/Script.cpp:305 src/backend/script/Script.cpp:310
+#, fuzzy, kde-format
+#| msgid "&Script"
+msgid "Script"
+msgstr "&Σενάριο"
+
+#: src/backend/script/Script.cpp:305
+#, fuzzy, kde-format
+#| msgid "Connection:"
+msgid "Failed to run the script."
+msgstr "Σύνδεση:"
+
+#: src/backend/script/Script.cpp:310
+#, kde-format
+msgid "A script is already running."
+msgstr ""
+
 #: src/backend/spreadsheet/Spreadsheet.cpp:341
 #, kde-format
 msgid "%1: remove rows with missing values"
@@ -8700,7 +8728,7 @@ msgid "Inset Plot Area with Data"
 msgstr "Περιοχή σχεδίασης"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:574
-#: src/frontend/MainWin.cpp:902 src/frontend/notebook/NotebookView.cpp:168
+#: src/frontend/MainWin.cpp:947 src/frontend/notebook/NotebookView.cpp:168
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:295
 #: src/frontend/worksheet/WorksheetView.cpp:434
@@ -12475,7 +12503,7 @@ msgid "Open LabPlot Project"
 msgstr "Άνοιγμα έργου"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:1495
+#: src/frontend/MainWin.cpp:1584
 #, fuzzy, kde-format
 #| msgid "Save Project"
 msgid "LabPlot Projects (%1)"
@@ -12503,8 +12531,8 @@ msgstr "Όνομα αρχείου"
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:398 src/frontend/MainWin.cpp:648
-#: src/frontend/MainWin.cpp:1982 src/frontend/SettingsDialog.cpp:64
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:398 src/frontend/MainWin.cpp:684
+#: src/frontend/MainWin.cpp:2072 src/frontend/SettingsDialog.cpp:65
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12755,7 +12783,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2894
+#: src/frontend/MainWin.cpp:2994
 #, kde-format
 msgid "Warning"
 msgstr ""
@@ -14599,336 +14627,343 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/frontend/GuiObserver.cpp:176 src/frontend/MainWin.cpp:1402
+#: src/frontend/GuiObserver.cpp:178 src/frontend/MainWin.cpp:1491
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:212
+#: src/frontend/GuiObserver.cpp:214
 #, fuzzy, kde-format
 #| msgid "&Spreadsheet"
 msgctxt "@title:window"
 msgid "Properties: Spreadsheet"
 msgstr "Λογι&στικό φύλλο"
 
-#: src/frontend/GuiObserver.cpp:217
+#: src/frontend/GuiObserver.cpp:219
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Column Statistics"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:227
+#: src/frontend/GuiObserver.cpp:229
 #, fuzzy, kde-format
 #| msgid "&Worksheet"
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Worksheet"
 msgstr "&Φύλλο εργασίας"
 
-#: src/frontend/GuiObserver.cpp:232
+#: src/frontend/GuiObserver.cpp:234
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Column"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:239
+#: src/frontend/GuiObserver.cpp:241
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Matrix"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:244
+#: src/frontend/GuiObserver.cpp:246
 #, fuzzy, kde-format
 #| msgid "&Worksheet"
 msgctxt "@title:window"
 msgid "Properties: Worksheet"
 msgstr "&Φύλλο εργασίας"
 
-#: src/frontend/GuiObserver.cpp:250
+#: src/frontend/GuiObserver.cpp:252
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Plot Area"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:256
+#: src/frontend/GuiObserver.cpp:258
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Legend"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:261
+#: src/frontend/GuiObserver.cpp:263
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Axis"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:266
+#: src/frontend/GuiObserver.cpp:268
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: XY-Curve"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:271
+#: src/frontend/GuiObserver.cpp:273
 #, fuzzy, kde-format
 #| msgid "Equation type"
 msgctxt "@title:window"
 msgid "Properties: XY-Equation"
 msgstr "τύπος εξίσωσης"
 
-#: src/frontend/GuiObserver.cpp:276
+#: src/frontend/GuiObserver.cpp:278
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Function Curve"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:281
+#: src/frontend/GuiObserver.cpp:283
 #, fuzzy, kde-format
 #| msgid "Data portion to read"
 msgctxt "@title:window"
 msgid "Properties: Data Reduction"
 msgstr "Τμήμα δεδομένων για ανάγνωση"
 
-#: src/frontend/GuiObserver.cpp:297
+#: src/frontend/GuiObserver.cpp:299
 #, fuzzy, kde-format
 #| msgid "Differentiation:"
 msgctxt "@title:window"
 msgid "Properties: Differentiation"
 msgstr "Διαφορισμός:"
 
-#: src/frontend/GuiObserver.cpp:302
+#: src/frontend/GuiObserver.cpp:304
 #, fuzzy, kde-format
 #| msgid "Integration:"
 msgctxt "@title:window"
 msgid "Properties: Integration"
 msgstr "Ολοκλήρωση:"
 
-#: src/frontend/GuiObserver.cpp:307
+#: src/frontend/GuiObserver.cpp:309
 #, fuzzy, kde-format
 #| msgid "Interpolation:"
 msgctxt "@title:window"
 msgid "Properties: Interpolation"
 msgstr "Παρεμβολή:"
 
-#: src/frontend/GuiObserver.cpp:312
+#: src/frontend/GuiObserver.cpp:314
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:317
+#: src/frontend/GuiObserver.cpp:319
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Fit"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:322
+#: src/frontend/GuiObserver.cpp:324
 #, fuzzy, kde-format
 #| msgid "Differentiation:"
 msgctxt "@title:window"
 msgid "Properties: Fourier Transform"
 msgstr "Διαφορισμός:"
 
-#: src/frontend/GuiObserver.cpp:327
+#: src/frontend/GuiObserver.cpp:329
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hilbert Transform"
 msgstr ""
 
-#: src/frontend/GuiObserver.cpp:332
+#: src/frontend/GuiObserver.cpp:334
 #, fuzzy, kde-format
 #| msgid "Derivative"
 msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
 msgstr "Παράγωγος"
 
-#: src/frontend/GuiObserver.cpp:337
+#: src/frontend/GuiObserver.cpp:339
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgctxt "@title:window"
 msgid "Properties: Convolution/Deconvolution"
 msgstr "Σύνδεση:"
 
-#: src/frontend/GuiObserver.cpp:342
+#: src/frontend/GuiObserver.cpp:344
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
 msgstr "Σύνδεση:"
 
-#: src/frontend/GuiObserver.cpp:347
+#: src/frontend/GuiObserver.cpp:349
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Histogram"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:353
+#: src/frontend/GuiObserver.cpp:355
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:358
+#: src/frontend/GuiObserver.cpp:360
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Lollipop Plot"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:364
+#: src/frontend/GuiObserver.cpp:366
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:369
+#: src/frontend/GuiObserver.cpp:371
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgctxt "@title:window"
 msgid "KDE Plot"
 msgstr "LabPlot2"
 
-#: src/frontend/GuiObserver.cpp:374
+#: src/frontend/GuiObserver.cpp:376
 #, fuzzy, kde-format
 #| msgid "LabPlot2"
 msgctxt "@title:window"
 msgid "Q-Q Plot"
 msgstr "LabPlot2"
 
-#: src/frontend/GuiObserver.cpp:380
+#: src/frontend/GuiObserver.cpp:382
 #, kde-format
 msgctxt "@title:window"
 msgid "Process Behavior Chart"
 msgstr ""
 
-#: src/frontend/GuiObserver.cpp:385
+#: src/frontend/GuiObserver.cpp:387
 #, fuzzy, kde-format
 #| msgid "Auto Fit"
 msgctxt "@title:window"
 msgid "Run Chart"
 msgstr "Αυτόματο ταίριασμα"
 
-#: src/frontend/GuiObserver.cpp:390
+#: src/frontend/GuiObserver.cpp:392
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Text Label"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:395
+#: src/frontend/GuiObserver.cpp:397
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Image"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:400
+#: src/frontend/GuiObserver.cpp:402
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Custom Point"
 msgstr ""
 
-#: src/frontend/GuiObserver.cpp:405
+#: src/frontend/GuiObserver.cpp:407
 #, fuzzy, kde-format
 #| msgid "Preferences"
 msgctxt "@title:window"
 msgid "Properties: Reference Line"
 msgstr "Προτιμήσεις"
 
-#: src/frontend/GuiObserver.cpp:410
+#: src/frontend/GuiObserver.cpp:412
 #, fuzzy, kde-format
 #| msgid "Preferences"
 msgctxt "@title:window"
 msgid "Reference Range"
 msgstr "Προτιμήσεις"
 
-#: src/frontend/GuiObserver.cpp:415
+#: src/frontend/GuiObserver.cpp:417
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Datapicker Curve"
 msgstr ""
 
-#: src/frontend/GuiObserver.cpp:420
+#: src/frontend/GuiObserver.cpp:422
 #, fuzzy, kde-format
 #| msgid "Max. iterations"
 msgctxt "@title:window"
 msgid "Properties: Data Extractor"
 msgstr "Max. επαναλήψεις"
 
-#: src/frontend/GuiObserver.cpp:430
+#: src/frontend/GuiObserver.cpp:432
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Project"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:440
+#: src/frontend/GuiObserver.cpp:442
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Notebook"
 msgstr ""
 
-#: src/frontend/GuiObserver.cpp:442
+#: src/frontend/GuiObserver.cpp:444
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Notebook"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:448
+#: src/frontend/GuiObserver.cpp:450
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Notes"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:453
+#: src/frontend/GuiObserver.cpp:455
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Info Element"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:460 src/frontend/GuiObserver.cpp:467
-#: src/frontend/GuiObserver.cpp:474
+#: src/frontend/GuiObserver.cpp:462 src/frontend/GuiObserver.cpp:469
+#: src/frontend/GuiObserver.cpp:476
 #, fuzzy, kde-format
 #| msgid "x-Range"
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
 msgstr "x-Range"
 
-#: src/frontend/GuiObserver.cpp:480
+#: src/frontend/GuiObserver.cpp:482
 #, fuzzy, kde-format
 #| msgid "x-Range"
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
 msgstr "x-Range"
 
-#: src/frontend/GuiObserver.cpp:494
+#: src/frontend/GuiObserver.cpp:496
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Folder"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/GuiObserver.cpp:501
+#: src/frontend/GuiObserver.cpp:503
 #, fuzzy, kde-format
 #| msgid "Properties explorer"
 msgctxt "@title:window"
 msgid "Properties: Workbook"
+msgstr "Εξερευνητής ιδιοτήτων"
+
+#: src/frontend/GuiObserver.cpp:508
+#, fuzzy, kde-format
+#| msgid "Properties explorer"
+msgctxt "@title:window"
+msgid "Properties: Script"
 msgstr "Εξερευνητής ιδιοτήτων"
 
 #: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
@@ -15372,499 +15407,513 @@ msgstr "Λογι&στικό φύλλο"
 msgid "Notebook Toolbar"
 msgstr "Βιβλίο εργασίας"
 
-#. i18n: ectx: ToolBar (cartesian_plot_toolbar)
+#. i18n: ectx: ToolBar (script_toolbar)
 #: src/frontend/labplotui.rc:40
+#, fuzzy, kde-format
+#| msgid "Project Explorer"
+msgid "Script Toolbar"
+msgstr "Εξερευνητής Έργων"
+
+#. i18n: ectx: ToolBar (cartesian_plot_toolbar)
+#: src/frontend/labplotui.rc:44
 #, fuzzy, kde-format
 #| msgid "From"
 msgid "Plot Area Toolbar"
 msgstr "Από"
 
 #. i18n: ectx: Menu (file)
-#: src/frontend/labplotui.rc:44
+#: src/frontend/labplotui.rc:48
 #, kde-format
 msgid "&File"
 msgstr "&Αρχείο"
 
 #. i18n: ectx: Menu (new)
-#: src/frontend/labplotui.rc:46
+#: src/frontend/labplotui.rc:50
 #, kde-format
 msgid "&Add New"
 msgstr ""
 
 #. i18n: ectx: Menu (new_notebook)
 #. i18n: ectx: Menu (notebook)
-#: src/frontend/labplotui.rc:56 src/frontend/labplotui.rc:84
+#: src/frontend/labplotui.rc:60 src/frontend/labplotui.rc:92
 #, kde-format
 msgid "&Notebook"
 msgstr ""
 
+#. i18n: ectx: Menu (new_script)
+#. i18n: ectx: Menu (script)
+#: src/frontend/labplotui.rc:66 src/frontend/labplotui.rc:95
+#, kde-format
+msgid "&Script"
+msgstr "&Σενάριο"
+
 #. i18n: ectx: Menu (import)
-#: src/frontend/labplotui.rc:63
+#: src/frontend/labplotui.rc:71
 #, kde-format
 msgid "Import"
 msgstr "Εισαγωγή"
 
 #. i18n: ectx: Menu (edit)
-#: src/frontend/labplotui.rc:76
+#: src/frontend/labplotui.rc:84
 #, kde-format
 msgid "&Edit"
 msgstr "&Επεξεργασία"
 
 #. i18n: ectx: Menu (spreadsheet)
-#: src/frontend/labplotui.rc:81
+#: src/frontend/labplotui.rc:89
 #, kde-format
 msgid "&Spreadsheet"
 msgstr "Λογι&στικό φύλλο"
 
 #. i18n: ectx: Menu (matrix)
-#: src/frontend/labplotui.rc:82
+#: src/frontend/labplotui.rc:90
 #, kde-format
 msgid "&Matrix"
 msgstr "&Μήτρα"
 
 #. i18n: ectx: Menu (worksheet)
-#: src/frontend/labplotui.rc:83
+#: src/frontend/labplotui.rc:91
 #, kde-format
 msgid "&Worksheet"
 msgstr "&Φύλλο εργασίας"
 
 #. i18n: ectx: Menu (datapicker)
-#: src/frontend/labplotui.rc:85
+#: src/frontend/labplotui.rc:93
 #, fuzzy, kde-format
 #| msgid "Max. iterations"
 msgid "&Data Extractor"
 msgstr "Max. επαναλήψεις"
 
 #. i18n: ectx: Menu (drawing)
-#: src/frontend/labplotui.rc:86
+#: src/frontend/labplotui.rc:94
 #, kde-format
 msgid "&Drawing"
 msgstr ""
 
-#. i18n: ectx: Menu (script)
-#: src/frontend/labplotui.rc:87
-#, kde-format
-msgid "&Script"
-msgstr "&Σενάριο"
-
 #. i18n: ectx: Menu (tools)
-#: src/frontend/labplotui.rc:88
+#: src/frontend/labplotui.rc:96
 #, kde-format
 msgid "&Tools"
 msgstr "&Εργαλεία"
 
 #. i18n: ectx: Menu (windows)
-#: src/frontend/labplotui.rc:92
+#: src/frontend/labplotui.rc:100
 #, kde-format
 msgid "&Windows"
 msgstr "&Παράθυρα"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
-#: src/frontend/MainWin.cpp:211 src/frontend/ui/settingsworksheetpage.ui:106
+#: src/frontend/MainWin.cpp:235 src/frontend/ui/settingsworksheetpage.ui:106
 #: src/frontend/worksheet/WorksheetView.cpp:269
 #, kde-format
 msgid "Presenter Mode"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:211
+#: src/frontend/MainWin.cpp:235
 #, kde-format
 msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
 "started."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:225
+#: src/frontend/MainWin.cpp:249
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Καλώς ορίσατε στο Labplot %1"
 
-#: src/frontend/MainWin.cpp:617
+#: src/frontend/MainWin.cpp:653
 #, fuzzy, kde-format
 #| msgid "Open File"
 msgid "&Open Example"
 msgstr "Άνοιγμα αρχείου"
 
-#: src/frontend/MainWin.cpp:638 src/frontend/MainWin.cpp:1966
+#: src/frontend/MainWin.cpp:674 src/frontend/MainWin.cpp:2056
 #, kde-format
 msgid "Workbook"
 msgstr "Βιβλίο εργασίας"
 
-#: src/frontend/MainWin.cpp:640
+#: src/frontend/MainWin.cpp:676
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:643 src/frontend/MainWin.cpp:1974
+#: src/frontend/MainWin.cpp:679 src/frontend/MainWin.cpp:2064
 #, fuzzy, kde-format
 #| msgid "Max. iterations"
 msgid "Data Extractor"
 msgstr "Max. επαναλήψεις"
 
-#: src/frontend/MainWin.cpp:644
+#: src/frontend/MainWin.cpp:680
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:650
+#: src/frontend/MainWin.cpp:686
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:656
+#: src/frontend/MainWin.cpp:692
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:660 src/frontend/MainWin.cpp:2018
-#: src/frontend/SettingsDialog.cpp:59
+#: src/frontend/MainWin.cpp:696 src/frontend/MainWin.cpp:2118
+#: src/frontend/SettingsDialog.cpp:60
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:86
 #, kde-format
 msgid "Worksheet"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:662
+#: src/frontend/MainWin.cpp:698
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:666 src/frontend/MainWin.cpp:2026
+#: src/frontend/MainWin.cpp:705
+#, fuzzy, kde-format
+#| msgid "Create new color map"
+msgid "Creates a new %1 script"
+msgstr "Δημιουργία νέου χρωματικού χάρτη"
+
+#: src/frontend/MainWin.cpp:711 src/frontend/MainWin.cpp:2126
 #, kde-format
 msgid "Note"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:667
+#: src/frontend/MainWin.cpp:712
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:671 src/frontend/MainWin.cpp:1958
+#: src/frontend/MainWin.cpp:716 src/frontend/MainWin.cpp:2048
 #, kde-format
 msgid "Folder"
 msgstr "Φάκελος"
 
-#: src/frontend/MainWin.cpp:672
+#: src/frontend/MainWin.cpp:717
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:677
+#: src/frontend/MainWin.cpp:722
 #, fuzzy, kde-format
 #| msgid "x-Range"
 msgid "Live Data Source..."
 msgstr "x-Range"
 
-#: src/frontend/MainWin.cpp:678
+#: src/frontend/MainWin.cpp:723
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:685 src/frontend/MainWin.cpp:694
+#: src/frontend/MainWin.cpp:730 src/frontend/MainWin.cpp:739
 #, kde-format
 msgid "Import data from a regular file"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:699
+#: src/frontend/MainWin.cpp:744
 #, fuzzy, kde-format
 #| msgid "Close File"
 msgid "From kaggle.com..."
 msgstr "Κλείσιμο αρχείου"
 
-#: src/frontend/MainWin.cpp:700
+#: src/frontend/MainWin.cpp:745
 #, fuzzy, kde-format
 #| msgid "Import"
 msgid "Import data from kaggle.com"
 msgstr "Εισαγωγή"
 
-#: src/frontend/MainWin.cpp:705
+#: src/frontend/MainWin.cpp:750
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:709
+#: src/frontend/MainWin.cpp:754
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "From Dataset Collection..."
 msgstr "Σύνδεση:"
 
-#: src/frontend/MainWin.cpp:710
+#: src/frontend/MainWin.cpp:755
 #, fuzzy, kde-format
 #| msgid "Import"
 msgid "Import data from an online dataset"
 msgstr "Εισαγωγή"
 
-#: src/frontend/MainWin.cpp:714
+#: src/frontend/MainWin.cpp:759
 #, fuzzy, kde-format
 #| msgid "Save Project"
 msgid "LabPlot Project..."
 msgstr "Αποθήκευση έργου"
 
-#: src/frontend/MainWin.cpp:715
+#: src/frontend/MainWin.cpp:760
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:720
+#: src/frontend/MainWin.cpp:765
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Project (OPJ)..."
 msgstr "Άνοιγμα έργου"
 
-#: src/frontend/MainWin.cpp:721
+#: src/frontend/MainWin.cpp:766
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:726
+#: src/frontend/MainWin.cpp:771
 #, kde-format
 msgid "Export..."
 msgstr "Εξαγωγή..."
 
-#: src/frontend/MainWin.cpp:727
+#: src/frontend/MainWin.cpp:772
 #, fuzzy, kde-format
 #| msgid "Export to"
 msgid "Export selected element"
 msgstr "Εξαγωγή σε"
 
-#: src/frontend/MainWin.cpp:733 src/frontend/MainWin.cpp:2510
-#: src/frontend/MainWin.cpp:2518
+#: src/frontend/MainWin.cpp:778 src/frontend/MainWin.cpp:2610
+#: src/frontend/MainWin.cpp:2618
 #, kde-format
 msgid "Share"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:738
+#: src/frontend/MainWin.cpp:783
 #, kde-format
 msgid "Color Maps Browser"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:739
+#: src/frontend/MainWin.cpp:784
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:748
+#: src/frontend/MainWin.cpp:793
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "Επεξεργαστής μεταδεδομένων FITS..."
 
-#: src/frontend/MainWin.cpp:749
+#: src/frontend/MainWin.cpp:794
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:758
+#: src/frontend/MainWin.cpp:803
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Αναίρεση/Επαναφορά ιστορικού..."
 
-#: src/frontend/MainWin.cpp:778
+#: src/frontend/MainWin.cpp:823
 #, kde-format
 msgid "Close the active window"
 msgstr "Κλείσιμο του ενεργού παραθύρου"
 
-#: src/frontend/MainWin.cpp:781
+#: src/frontend/MainWin.cpp:826
 #, kde-format
 msgid "Close &All"
 msgstr "Κλείσιμο όλ&ων"
 
-#: src/frontend/MainWin.cpp:782
+#: src/frontend/MainWin.cpp:827
 #, kde-format
 msgid "Close all the windows"
 msgstr "Κλείσιμο όλων των παραθύρων"
 
-#: src/frontend/MainWin.cpp:785
+#: src/frontend/MainWin.cpp:830
 #, kde-format
 msgid "Ne&xt"
 msgstr "Ε&πόμενο"
 
-#: src/frontend/MainWin.cpp:787
+#: src/frontend/MainWin.cpp:832
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Εστίαση στο επόμενο παράθυρο"
 
-#: src/frontend/MainWin.cpp:790
+#: src/frontend/MainWin.cpp:835
 #, kde-format
 msgid "Pre&vious"
 msgstr "Προη&γούμενο"
 
-#: src/frontend/MainWin.cpp:792
+#: src/frontend/MainWin.cpp:837
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Εστίαση στο προηγούμενο παράθυρο"
 
-#: src/frontend/MainWin.cpp:799
+#: src/frontend/MainWin.cpp:844
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Τρέχον &φάκελος μόνο"
 
-#: src/frontend/MainWin.cpp:804
+#: src/frontend/MainWin.cpp:849
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Τρέχον φάκελος και υ&ποφάκελοι"
 
-#: src/frontend/MainWin.cpp:808
+#: src/frontend/MainWin.cpp:853
 #, kde-format
 msgid "&All"
 msgstr "Όλ&α"
 
-#: src/frontend/MainWin.cpp:830
+#: src/frontend/MainWin.cpp:875
 #, fuzzy, kde-format
 #| msgid "Show file info"
 msgid "Show Memory Usage"
 msgstr "Εμφάνιση πληροφοριών αρχείου"
 
-#: src/frontend/MainWin.cpp:838
+#: src/frontend/MainWin.cpp:883
 #, kde-format
 msgid "Project Explorer"
 msgstr "Εξερευνητής Έργων"
 
-#: src/frontend/MainWin.cpp:843
+#: src/frontend/MainWin.cpp:888
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Εξερευνητής ιδιοτήτων"
 
-#: src/frontend/MainWin.cpp:848
+#: src/frontend/MainWin.cpp:893
 #, fuzzy, kde-format
 #| msgid "&Worksheet"
 msgid "Worksheet Preview"
 msgstr "&Φύλλο εργασίας"
 
-#: src/frontend/MainWin.cpp:871
+#: src/frontend/MainWin.cpp:916
 #, kde-format
 msgid "Configure CAS..."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:872
+#: src/frontend/MainWin.cpp:917
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
 "systems or to enable new ones"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:932
+#: src/frontend/MainWin.cpp:977
 #, fuzzy, kde-format
 #| msgid "Window visibility policy"
 msgid "Window Visibility"
 msgstr "Πολιτική ορατότητας παραθύρων"
 
-#: src/frontend/MainWin.cpp:949
+#: src/frontend/MainWin.cpp:994
 #, fuzzy, kde-format
 #| msgid "Color map"
 msgid "Color Scheme"
 msgstr "Χρωματικός χάρτης"
 
-#: src/frontend/MainWin.cpp:1007
+#: src/frontend/MainWin.cpp:1072
 #, fuzzy, kde-format
 #| msgid "The current project %1 has been modified. Do you want to save it?"
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "Το τρέχον έργο %1 έχει τροποποιηθεί. Να αποθηκευθεί;"
 
-#: src/frontend/MainWin.cpp:1008
+#: src/frontend/MainWin.cpp:1073
 #, kde-format
 msgid "Save Project"
 msgstr "Αποθήκευση έργου"
 
-#: src/frontend/MainWin.cpp:1363
+#: src/frontend/MainWin.cpp:1452
 #, fuzzy, kde-format
 #| msgid "Project %1 created"
 msgid "%1: created"
 msgstr "Το έργο %1 δημιουργήθηκε"
 
-#: src/frontend/MainWin.cpp:1389
+#: src/frontend/MainWin.cpp:1478
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Εξερευνητής Έργων"
 
-#: src/frontend/MainWin.cpp:1414
+#: src/frontend/MainWin.cpp:1503
 #, fuzzy, kde-format
 #| msgid "&Worksheet"
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "&Φύλλο εργασίας"
 
-#: src/frontend/MainWin.cpp:1423
+#: src/frontend/MainWin.cpp:1512
 #, fuzzy, kde-format
 #| msgid "Comment:"
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Σχόλιο:"
 
-#: src/frontend/MainWin.cpp:1500
+#: src/frontend/MainWin.cpp:1589
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Projects (%1)"
 msgstr "Άνοιγμα έργου"
 
-#: src/frontend/MainWin.cpp:1506
+#: src/frontend/MainWin.cpp:1595
 #, fuzzy, kde-format
 #| msgid "Save Project"
 msgid "Cantor Projects (*.cws)"
 msgstr "Αποθήκευση έργου"
 
-#: src/frontend/MainWin.cpp:1507
+#: src/frontend/MainWin.cpp:1596
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1514
+#: src/frontend/MainWin.cpp:1603
 #, kde-format
 msgid "All supported files (%1)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1518
+#: src/frontend/MainWin.cpp:1607
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Άνοιγμα έργου"
 
-#: src/frontend/MainWin.cpp:1535
+#: src/frontend/MainWin.cpp:1624
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "το αρχείο %1 του έργου είναι ήδη ανοιχτό."
 
-#: src/frontend/MainWin.cpp:1535 src/frontend/MainWin.cpp:1543
-#: src/frontend/MainWin.cpp:1548
+#: src/frontend/MainWin.cpp:1624 src/frontend/MainWin.cpp:1632
+#: src/frontend/MainWin.cpp:1637
 #, kde-format
 msgid "Open Project"
 msgstr "Άνοιγμα έργου"
 
-#: src/frontend/MainWin.cpp:1543
+#: src/frontend/MainWin.cpp:1632
 #, fuzzy, kde-format
 #| msgid "The project file %1 is already opened."
 msgid "The project file %1 doesn't exist."
 msgstr "το αρχείο %1 του έργου είναι ήδη ανοιχτό."
 
-#: src/frontend/MainWin.cpp:1548
+#: src/frontend/MainWin.cpp:1637
 #, fuzzy, kde-format
 #| msgid "Sorry. Could not open file for writing."
 msgid "Couldn't read the project file %1."
 msgstr "Αδυναμία ανοίγματος αρχείου για εγγραφή."
 
-#: src/frontend/MainWin.cpp:1556
+#: src/frontend/MainWin.cpp:1645
 #, kde-format
 msgid "Loading %1..."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1611
+#: src/frontend/MainWin.cpp:1700
 #, fuzzy, kde-format
 #| msgid "Project %1 opened"
 msgid "%1: opened"
 msgstr "Το έργο %1 άνοιξε"
 
-#: src/frontend/MainWin.cpp:1646
+#: src/frontend/MainWin.cpp:1735
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Το έργο άνοιξε με επιτυχία (σε %1 δευτερόλεπτα)."
 
-#: src/frontend/MainWin.cpp:1738
+#: src/frontend/MainWin.cpp:1828
 #, fuzzy, kde-format
 #| msgid "Save Project"
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Αποθήκευση έργου"
 
-#: src/frontend/MainWin.cpp:1740
+#: src/frontend/MainWin.cpp:1830
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15873,109 +15922,117 @@ msgstr ""
 "LabPlot έργα (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *."
 "LML.XZ)"
 
-#: src/frontend/MainWin.cpp:1767
+#: src/frontend/MainWin.cpp:1857
 #, fuzzy, kde-format
 #| msgid "Sorry. Could not open file for writing."
 msgid "Couldn't open the temporary file for writing."
 msgstr "Αδυναμία ανοίγματος αρχείου για εγγραφή."
 
-#: src/frontend/MainWin.cpp:1847
+#: src/frontend/MainWin.cpp:1937
 #, kde-format
 msgid "Project saved"
 msgstr "Το έργο αποθηκεύτηκε"
 
-#: src/frontend/MainWin.cpp:1863
+#: src/frontend/MainWin.cpp:1953
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1868
+#: src/frontend/MainWin.cpp:1958
 #, fuzzy, kde-format
 #| msgid "Sorry. Could not open file for writing."
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Αδυναμία ανοίγματος αρχείου για εγγραφή."
 
-#: src/frontend/MainWin.cpp:1918
+#: src/frontend/MainWin.cpp:2008
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgid "Changed"
 msgstr "Το %1    [άλλαξε]"
 
-#: src/frontend/MainWin.cpp:1933 src/frontend/MainWin.cpp:1945
+#: src/frontend/MainWin.cpp:2023 src/frontend/MainWin.cpp:2035
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Προετοιμασία εκτύπωσης του %1"
 
-#: src/frontend/MainWin.cpp:1935 src/frontend/MainWin.cpp:1947
+#: src/frontend/MainWin.cpp:2025 src/frontend/MainWin.cpp:2037
 #, kde-format
 msgid "%1 printed"
 msgstr "Το %1 εκτυπώθηκε"
 
+#: src/frontend/MainWin.cpp:2092
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3795
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3796
+#, fuzzy, kde-format
+#| msgid "10"
+msgid "%1"
+msgstr "10"
+
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2470
+#: src/frontend/MainWin.cpp:2570
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
 #: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Cursor"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2510
+#: src/frontend/MainWin.cpp:2610
 #, fuzzy, kde-format
 #| msgid "The following problems occurred when loading the project file:\n"
 msgid "There was a problem sharing the project: %1"
 msgstr "Προβλήματα που εμφανίστηκαν με τη φόρτωση του αρχείου έργου:\n"
 
-#: src/frontend/MainWin.cpp:2514
+#: src/frontend/MainWin.cpp:2614
 #, fuzzy, kde-format
 #| msgid "Project saved"
 msgid "Project shared successfully"
 msgstr "Το έργο αποθηκεύτηκε"
 
-#: src/frontend/MainWin.cpp:2517
+#: src/frontend/MainWin.cpp:2617
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2790
+#: src/frontend/MainWin.cpp:2890
 #, fuzzy, kde-format
 #| msgid "Format Type"
 msgid "Kaggle CLI tool not found"
 msgstr "Τύπος αποθήκευσης"
 
-#: src/frontend/MainWin.cpp:2791
+#: src/frontend/MainWin.cpp:2891
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
 "again."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2857
+#: src/frontend/MainWin.cpp:2957
 #, kde-format
 msgid "%1 exported"
 msgstr "Το %1 εξήχθη"
 
-#: src/frontend/MainWin.cpp:2864
+#: src/frontend/MainWin.cpp:2964
 #, kde-format
 msgid "FITS files saved"
 msgstr "Τα αρχεία FITS αποθηκεύτηκαν"
 
-#: src/frontend/MainWin.cpp:2876
+#: src/frontend/MainWin.cpp:2976
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2894
+#: src/frontend/MainWin.cpp:2994
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2898
+#: src/frontend/MainWin.cpp:2998
 #, fuzzy, kde-format
 #| msgid "x-Range"
 msgid "Live data source%1"
 msgstr "x-Range"
 
-#: src/frontend/MainWin.cpp:2949
+#: src/frontend/MainWin.cpp:3049
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr ""
@@ -16632,8 +16689,8 @@ msgstr "Δεδομένα:"
 msgid "Downloaded files successfully deleted."
 msgstr ""
 
-#: src/frontend/SettingsDialog.cpp:45 src/frontend/SettingsDialog.cpp:144
-#: src/frontend/SettingsDialog.cpp:151
+#: src/frontend/SettingsDialog.cpp:46 src/frontend/SettingsDialog.cpp:151
+#: src/frontend/SettingsDialog.cpp:158
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
@@ -16644,7 +16701,7 @@ msgstr "Προτιμήσεις"
 #. i18n: ectx: property (text), widget (QLabel, lGeneral)
 #. i18n: ectx: property (text), widget (QLabel, lValuesGeneral)
 #. i18n: ectx: attribute (title), widget (QWidget, tGeneral)
-#: src/frontend/SettingsDialog.cpp:54
+#: src/frontend/SettingsDialog.cpp:55
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:95
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:101
 #: src/frontend/ui/datapickercurvewidget.ui:27
@@ -16674,29 +16731,35 @@ msgstr "Προτιμήσεις"
 msgid "General"
 msgstr "Γενικά"
 
-#: src/frontend/SettingsDialog.cpp:70
+#: src/frontend/SettingsDialog.cpp:71
 #, fuzzy, kde-format
 #| msgid "Workbook"
 msgid "Notebook"
 msgstr "Βιβλίο εργασίας"
 
-#: src/frontend/SettingsDialog.cpp:77
+#: src/frontend/SettingsDialog.cpp:78
 #, fuzzy, kde-format
 #| msgid "Data:"
 msgid "Datasets"
 msgstr "Δεδομένα:"
 
-#: src/frontend/SettingsDialog.cpp:92
+#: src/frontend/SettingsDialog.cpp:93
 #, kde-format
 msgid "User Feedback"
 msgstr ""
 
-#: src/frontend/SettingsDialog.cpp:148
+#: src/frontend/SettingsDialog.cpp:98
+#, fuzzy, kde-format
+#| msgid "Tab position"
+msgid "Text Editor"
+msgstr "Θέση καρτέλας"
+
+#: src/frontend/SettingsDialog.cpp:155
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr ""
 
-#: src/frontend/SettingsDialog.cpp:159
+#: src/frontend/SettingsDialog.cpp:166
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgctxt "@title:window"
@@ -18862,13 +18925,6 @@ msgstr "%1 τιμή"
 msgid " , "
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3795
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3796
-#, fuzzy, kde-format
-#| msgid "10"
-msgid "%1"
-msgstr "10"
-
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3796
 #, kde-format
 msgid ", "
@@ -19186,6 +19242,7 @@ msgstr "Τύπος σφάλματος"
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:119
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:56
 #: src/frontend/ui/dockwidgets/runchartdock.ui:138
+#: src/frontend/ui/dockwidgets/scriptdock.ui:73
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:182
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:151
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:162
@@ -19239,6 +19296,7 @@ msgstr "Σχόλιο:"
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:190
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:112
 #: src/frontend/ui/dockwidgets/runchartdock.ui:112
+#: src/frontend/ui/dockwidgets/scriptdock.ui:63
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:93
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:46
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:181
@@ -20043,6 +20101,7 @@ msgstr "Δημιουργία νέου χρωματικού χάρτη"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WorksheetPreviewWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SettingsNotebookPage)
+#. i18n: ectx: property (windowTitle), widget (QWidget, ScriptEditorWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SampleValuesWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, FlattenColumnsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, SearchReplaceWidget)
@@ -20070,6 +20129,7 @@ msgstr "Δημιουργία νέου χρωματικού χάρτη"
 #: src/frontend/ui/dockwidgets/runchartdock.ui:14
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:14
 #: src/frontend/ui/dockwidgets/valuewidget.ui:14
+#: src/frontend/ui/script/scripteditorwidget.ui:14
 #: src/frontend/ui/settingsnotebookpage.ui:14
 #: src/frontend/ui/spreadsheet/flattencolumnswidget.ui:14
 #: src/frontend/ui/spreadsheet/samplevalueswidget.ui:14
@@ -22626,6 +22686,30 @@ msgstr "Ολοκλήρωση:"
 #| msgid "Preferences"
 msgid "Center Line"
 msgstr "Προτιμήσεις"
+
+#. i18n: ectx: property (text), widget (QLabel, lOutputFont)
+#: src/frontend/ui/dockwidgets/scriptdock.ui:33
+#, kde-format
+msgid "Output Font:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lEditorFont)
+#: src/frontend/ui/dockwidgets/scriptdock.ui:40
+#, kde-format
+msgid "Editor Font:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lRuntime)
+#: src/frontend/ui/dockwidgets/scriptdock.ui:99
+#, kde-format
+msgid "Runtime:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lTheme)
+#: src/frontend/ui/dockwidgets/scriptdock.ui:141
+#, kde-format
+msgid "Editor Theme:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
@@ -27119,9 +27203,6 @@ msgstr "Σύνδεση:"
 #~| msgid "no column element found"
 #~ msgid "no Cantor worksheet element found"
 #~ msgstr "αδυναμία εύρεσης αντικειμένου στήλης"
-
-#~ msgid "no simple filter element found"
-#~ msgstr "αδυναμία εύρεσης απλού φίλτρου"
 
 #~ msgid "no folder element found"
 #~ msgstr "αδυναμία εύρεσης φακέλου"
