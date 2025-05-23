@@ -114,9 +114,9 @@ private:
 	QAction* m_newDatapickerAction{nullptr};
 #ifdef HAVE_CANTOR_LIBS
 	QAction* m_lastUsedNotebookAction{nullptr};
-	QToolButton* m_tbNotebook{nullptr};
+	ToggleActionMenu* m_tbNotebook{nullptr};
 #endif
-	QToolButton* m_tbScript{nullptr};
+	ToggleActionMenu* m_tbScript{nullptr};
 
 	// toggling dock widgets, status bar and full screen
 	QAction* m_projectExplorerDockAction;

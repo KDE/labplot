@@ -136,12 +136,13 @@ void ActionsManager::init() {
 		}
 	}
 
-	m_tbNotebook = new QToolButton(mainToolBar);
+	m_tbNotebook = new ToggleActionMenu(mainToolBar);
 	m_tbNotebook->setPopupMode(QToolButton::MenuButtonPopup);
 	m_tbNotebook->setMenu(m_newNotebookMenu); // m_newNotebookMenu is never nullptr and always contains at least the configure cas action
 	m_tbNotebook->setDefaultAction(!m_lastUsedNotebookAction ? m_newNotebookMenu->actions().first() : m_lastUsedNotebookAction);
+	connect(m_tbNotebook->menu(), &QMenu::triggered, m_tbNotebook, &ToggleActionMenu::setDefaultAction);
 	auto* lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 2);
-	mainToolBar->insertWidget(lastAction, m_tbNotebook);
+	mainToolBar->insertAction(lastAction, m_tbNotebook);
 #endif
 
 	auto* tbImport = new QToolButton(mainToolBar);
@@ -151,7 +152,7 @@ void ActionsManager::init() {
 	auto* lastAction_ = mainToolBar->actions().at(mainToolBar->actions().count() - 1);
 	mainToolBar->insertWidget(lastAction_, tbImport);
 
-	m_tbScript = new QToolButton(mainToolBar);
+	m_tbScript = new ToggleActionMenu(mainToolBar);
 	m_tbScript->setPopupMode(QToolButton::MenuButtonPopup);
 	m_tbScript->setMenu(m_newScriptMenu);
 	if (m_newScriptActions.isEmpty()) {
@@ -160,8 +161,9 @@ void ActionsManager::init() {
 	} else {
 		m_tbScript->setDefaultAction(m_newScriptActions.first());
 	}
+	connect(m_tbScript->menu(), &QMenu::triggered, m_tbScript, &ToggleActionMenu::setDefaultAction);
 	auto* _lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 4);
-	mainToolBar->insertWidget(_lastAction, m_tbScript);
+	mainToolBar->insertAction(_lastAction, m_tbScript);
 
 	// hamburger menu
 	m_hamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, m_mainWindow->actionCollection());
