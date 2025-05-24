@@ -282,6 +282,8 @@ void ActionsManager::initActions() {
 	// initialization is completed in initMenus
 	m_tbNotebook = new ToggleActionMenu(this);
 	m_tbNotebook->setPopupMode(QToolButton::MenuButtonPopup);
+	m_tbNotebook->setToolTip(QStringLiteral("New Notebook"));
+	m_tbNotebook->setIconText(QStringLiteral("New Notebook"));
 	collection->addAction(QStringLiteral("new_notebook"), m_tbNotebook);
 #endif
 
@@ -289,12 +291,16 @@ void ActionsManager::initActions() {
 	// initialization is completed in initMenus
 	m_tbImport = new ToggleActionMenu(this);
 	m_tbImport->setPopupMode(QToolButton::MenuButtonPopup);
+	m_tbImport->setToolTip(QStringLiteral("Import"));
+	m_tbImport->setIconText(QStringLiteral("Import"));
 	collection->addAction(QStringLiteral("import"), m_tbImport);
 
 	// create the new_script action declared in the rc file
 	// initialization is completed in initMenus
 	m_tbScript = new ToggleActionMenu(this);
 	m_tbScript->setPopupMode(QToolButton::MenuButtonPopup);
+	m_tbScript->setToolTip(QStringLiteral("New Script"));
+	m_tbScript->setIconText(QStringLiteral("New Script"));
 	collection->addAction(QStringLiteral("new_script"), m_tbScript);
 
 	m_exportAction = new QAction(QIcon::fromTheme(QStringLiteral("document-export")), i18n("Export..."), this);
