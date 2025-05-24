@@ -117,6 +117,7 @@ private:
 	ToggleActionMenu* m_tbNotebook{nullptr};
 #endif
 	ToggleActionMenu* m_tbScript{nullptr};
+	ToggleActionMenu* m_tbImport{nullptr};
 
 	// toggling dock widgets, status bar and full screen
 	QAction* m_projectExplorerDockAction;
