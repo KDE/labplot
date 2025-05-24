@@ -89,14 +89,13 @@ void ToggleActionMenu::setDefaultActionFromData(const QVariant& data) {
 
 Qt::ToolButtonStyle ToggleActionMenu::styleFor(QToolButton *button) const
 {
-    // Qt::ToolButtonStyle style = m_originalToolButtonStyle[button];
+    Qt::ToolButtonStyle style = m_originalToolButtonStyle[button];
 
-    // if (style == Qt::ToolButtonTextBesideIcon && priority() < QAction::NormalPriority) {
-    //     style = Qt::ToolButtonIconOnly;
-    // }
+    if (style == Qt::ToolButtonTextBesideIcon && priority() < QAction::NormalPriority) {
+        style = Qt::ToolButtonIconOnly;
+    }
 
-    // return style;
-    return Qt::ToolButtonIconOnly;
+    return style;
 }
 
 void ToggleActionMenu::updateButtons()
