@@ -70,7 +70,8 @@
  * \brief Class managing all actions and their containers (menus and toolbars) in MainWin.
  * This class is intended to simplify (or not to overload) the code in MainWin.
  *
- * Note, the actions shown in the toolbars are subject of modifications and customizations done by the user via the "Configure Toolbars"-dialog.
+ * Note, the actions shown in the toolbars are subject of modifications and customizations done by the user via the "Configure Toolbars"-dialog
+ * and the modifications (custom icon, name and position of actions) are stored in $GOME/.local/share/kxmlgui5/labplot/labplotui.rc).
  * In this dialog it's only possible to manage the top-level actions . Because of this, it is sufficient to handle in this class the the top-level actions only.
  * For the actions used in the sub-menus it is enough to manage their lifecycle in the objects controlled via these toolbars like Worksheet, etc.
  *

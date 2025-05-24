@@ -1,5 +1,7 @@
 -----3.0.0 (XX) -----
 New features:
+	* [general]
+		* Allow to customize which actions have to be shown in the toolbars
 	* [worksheet]
 		* Inset plot areas - plot areas added as child of another plot area
 		* Improve axis ticks locations. The don't need to be always from the bottom to top if it does not look nice (!700)

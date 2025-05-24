@@ -1801,7 +1801,6 @@ void WorksheetView::handleReferences(WorksheetElement::Orientation orientation, 
 
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllX:
-		// TODO
 		// mouse mode actions
 		for (auto* action : mouseModeActionGroup->actions()) {
 			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
@@ -1811,15 +1810,40 @@ void WorksheetView::handleReferences(WorksheetElement::Orientation orientation, 
 				action->setEnabled(!vertical);
 		}
 
+		// navigation actions
+		// TODO: same as for ApplyActionToSelection
+		for (auto* action : navigationActionGroup->actions()) {
+			const auto op = static_cast<CartesianPlot::NavigationOperation>(action->data().toInt());
+			const bool x = (op == CartesianPlot::NavigationOperation::ZoomInX ||op == CartesianPlot::NavigationOperation::ZoomOutX
+				||  op == CartesianPlot::NavigationOperation::ShiftLeftX ||  op == CartesianPlot::NavigationOperation::ShiftRightX
+				||  op == CartesianPlot::NavigationOperation::ScaleAutoX);
+			if (x)
+				action->setEnabled(vertical);
+			else
+				action->setEnabled(!vertical);
+		}
+
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllY:
-		// TODO
 		// mouse mode actions
 		for (auto* action : mouseModeActionGroup->actions()) {
 			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
 			if (mode == CartesianPlot::MouseMode::ZoomXSelection)
 				action->setEnabled(vertical);
 			else if (mode == CartesianPlot::MouseMode::ZoomYSelection)
+				action->setEnabled(!vertical);
+		}
+
+		// navigation actions
+		// TODO: same as for ApplyActionToSelection
+		for (auto* action : navigationActionGroup->actions()) {
+			const auto op = static_cast<CartesianPlot::NavigationOperation>(action->data().toInt());
+			const bool x = (op == CartesianPlot::NavigationOperation::ZoomInX ||op == CartesianPlot::NavigationOperation::ZoomOutX
+				||  op == CartesianPlot::NavigationOperation::ShiftLeftX ||  op == CartesianPlot::NavigationOperation::ShiftRightX
+				||  op == CartesianPlot::NavigationOperation::ScaleAutoX);
+			if (x)
+				action->setEnabled(vertical);
+			else
 				action->setEnabled(!vertical);
 		}
 
