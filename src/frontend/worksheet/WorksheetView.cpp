@@ -2025,7 +2025,8 @@ void WorksheetView::registerCartesianPlotActions(QActionGroup* mouseModeActionGr
 */
 void WorksheetView::updateCartesianPlotActions() {
 	// update the internal actions shown in the context menu
-	updateCartesianPlotActions(m_plotMouseModeActionGroup, m_plotNavigationActionGroup);
+	if (m_plotMouseModeActionGroup && m_plotNavigationActionGroup)
+		updateCartesianPlotActions(m_plotMouseModeActionGroup, m_plotNavigationActionGroup);
 
 	// update the external actions, if available, shown in the main window toolbar and managed by ActionManager
 	if (m_plotMouseModeActionGroupExternal && m_plotNavigationActionGroupExternal)
