@@ -325,6 +325,7 @@ void MainWin::initGUI(const QString& fileName) {
 	auto* lastAction_ = mainToolBar->actions().at(mainToolBar->actions().count() - 1);
 	mainToolBar->insertWidget(lastAction_, tbImport);
 
+#ifdef HAVE_PYTHON_SCRIPTING
 	m_tbScript = new QToolButton(mainToolBar);
 	m_tbScript->setPopupMode(QToolButton::MenuButtonPopup);
 	m_tbScript->setMenu(m_newScriptMenu);
@@ -336,6 +337,7 @@ void MainWin::initGUI(const QString& fileName) {
 	}
 	auto* _lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 4);
 	mainToolBar->insertWidget(_lastAction, m_tbScript);
+#endif
 
 	// hamburger menu
 	m_hamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, actionCollection());
@@ -699,6 +701,7 @@ void MainWin::initActions() {
 	actionCollection()->addAction(QLatin1String("new_worksheet"), m_newWorksheetAction);
 	connect(m_newWorksheetAction, &QAction::triggered, this, &MainWin::newWorksheet);
 
+#ifdef HAVE_PYTHON_SCRIPTING
 	for (auto& language : Script::languages) {
 		auto* action = new QAction(QIcon::fromTheme(QStringLiteral("quickopen")), language, this);
 		action->setData(language);
@@ -707,6 +710,7 @@ void MainWin::initActions() {
 		connect(action, &QAction::triggered, this, &MainWin::newScript);
 		m_newScriptActions << action;
 	}
+#endif
 
 	m_newNotesAction = new QAction(QIcon::fromTheme(QLatin1String("document-new")), i18n("Note"), this);
 	m_newNotesAction->setWhatsThis(i18n("Creates a new note for arbitrary text"));
@@ -1034,6 +1038,7 @@ void MainWin::initMenus() {
 	delete this->guiFactory()->container(QStringLiteral("notebook_toolbar"), this);
 #endif
 
+#ifdef HAVE_PYTHON_SCRIPTING
 	// This menu is at File > Add New > Script
 	auto* newScriptMenu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("new_script"), this));
 	if (newScriptMenu) {
@@ -1053,6 +1058,7 @@ void MainWin::initMenus() {
 		newScriptMenu->setEnabled(false);
 		m_newScriptMenu->setEnabled(false);
 	}
+#endif
 }
 
 void MainWin::colorSchemeChanged(QAction* action) {
@@ -1107,8 +1113,10 @@ void MainWin::updateGUIOnProjectChanges() {
 		factory->container(QLatin1String("notebook"), this)->setEnabled(false);
 		factory->container(QLatin1String("notebook_toolbar"), this)->hide();
 #endif
+#ifdef HAVE_PYTHON_SCRIPTING
 		factory->container(QLatin1String("script"), this)->setEnabled(false);
 		factory->container(QLatin1String("script_toolbar"), this)->hide();
+#endif
 	}
 
 	updateTitleBar();
@@ -1159,8 +1167,10 @@ void MainWin::updateGUI() {
 		factory->container(QLatin1String("notebook"), this)->setEnabled(false);
 		factory->container(QLatin1String("notebook_toolbar"), this)->hide();
 #endif
+#ifdef HAVE_PYTHON_SCRIPTING
 		factory->container(QLatin1String("script"), this)->setEnabled(false);
 		factory->container(QLatin1String("script_toolbar"), this)->hide();
+#endif
 		m_printAction->setEnabled(false);
 		m_printPreviewAction->setEnabled(false);
 		m_exportAction->setEnabled(false);
@@ -1322,6 +1332,7 @@ void MainWin::updateGUI() {
 	}
 #endif
 
+#ifdef HAVE_PYTHON_SCRIPTING
 	const auto* script = dynamic_cast<Script*>(m_currentAspect);
 	if (!script)
 		script = dynamic_cast<Script*>(m_currentAspect->parent(AspectType::Script));
@@ -1340,6 +1351,7 @@ void MainWin::updateGUI() {
 		factory->container(QLatin1String("script"), this)->setEnabled(false);
 		factory->container(QLatin1String("script_toolbar"), this)->setVisible(false);
 	}
+#endif
 
 	const auto* datapicker = dynamic_cast<Datapicker*>(m_currentAspect);
 	if (!datapicker)
@@ -2086,12 +2098,14 @@ void MainWin::newSpreadsheet() {
 /*!
 	adds a new Script to the project.
 */
+#ifdef HAVE_PYTHON_SCRIPTING
 void MainWin::newScript() {
 	auto* action = static_cast<QAction*>(QObject::sender());
 	m_tbScript->setDefaultAction(action);
 	auto* script = new Script(i18n("%1", action->data().toString()), action->data().toString());
 	this->addAspectToProject(script);
 }
+#endif
 
 /*!
 	adds a new Matrix to the project.

@@ -150,7 +150,9 @@ private:
 	QAction* m_newSpreadsheetAction;
 	QAction* m_newMatrixAction;
 	QAction* m_newWorksheetAction;
+#ifdef HAVE_PYTHON_SCRIPTING
 	QList<QAction*> m_newScriptActions;
+#endif
 	QAction* m_newNotesAction;
 	QAction* m_newLiveDataSourceAction;
 	QAction* m_newProjectAction;
@@ -167,7 +169,9 @@ private:
 	QAction* m_lastUsedNotebookAction{nullptr};
 	QToolButton* m_tbNotebook{nullptr};
 #endif
+#ifdef HAVE_PYTHON_SCRIPTING
 	QToolButton* m_tbScript{nullptr};
+#endif
 
 	// toggling dock widgets, status bar and full screen
 	QAction* m_projectExplorerDockAction;
@@ -188,7 +192,9 @@ private:
 	QMenu* m_newMenu{nullptr};
 	QMenu* m_importMenu{nullptr};
 	QMenu* m_newNotebookMenu{nullptr};
+#ifdef HAVE_PYTHON_SCRIPTING
 	QMenu* m_newScriptMenu{nullptr};
+#endif
 	KHamburgerMenu* m_hamburgerMenu{nullptr};
 
 #ifdef HAVE_PURPOSE
@@ -277,7 +283,9 @@ private Q_SLOTS:
 	void newSpreadsheet();
 	void newMatrix();
 	void newWorksheet();
+#ifdef HAVE_PYTHON_SCRIPTING
 	void newScript();
+#endif
 	void newNotes();
 	void newDatapicker();
 	void newLiveDataSource();
