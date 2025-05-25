@@ -54,6 +54,7 @@
 #include "frontend/widgets/LabelWidget.h"
 #include "frontend/worksheet/WorksheetPreviewWidget.h"
 #include "frontend/worksheet/WorksheetView.h"
+#include "frontend/widgets/toggleactionmenu.h"
 
 #ifdef HAVE_KUSERFEEDBACK
 #include <KUserFeedback/ApplicationVersionSource>
@@ -1226,7 +1227,6 @@ void MainWin::newSpreadsheet() {
 */
 void MainWin::newScript() {
 	auto* action = static_cast<QAction*>(QObject::sender());
-	m_actionsManager->m_tbScript->setDefaultAction(action);
 	auto* script = new Script(i18n("%1", action->data().toString()), action->data().toString());
 	this->addAspectToProject(script);
 }
@@ -1297,8 +1297,6 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 void MainWin::newNotebook() {
 	auto* action = static_cast<QAction*>(QObject::sender());
 	m_actionsManager->m_lastUsedNotebookAction = action;
-	if (m_actionsManager->m_tbNotebook)
-		m_actionsManager->m_tbNotebook->setDefaultAction(m_actionsManager->m_lastUsedNotebookAction);
 	auto* notebook = new Notebook(action->data().toString());
 	this->addAspectToProject(notebook);
 }

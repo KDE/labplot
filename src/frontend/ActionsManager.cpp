@@ -123,46 +123,6 @@ void ActionsManager::init() {
 
 	auto* mainToolBar = qobject_cast<QToolBar*>(factory->container(QStringLiteral("main_toolbar"), m_mainWindow));
 
-#ifdef HAVE_CANTOR_LIBS
-	if (groupMain.exists()) {
-		const QString& lastUsedNotebook = groupMain.readEntry(QLatin1String("lastUsedNotebook"), QString());
-		if (!lastUsedNotebook.isEmpty()) {
-			for (auto* action : m_newNotebookMenu->actions()) {
-				if (lastUsedNotebook.compare(action->data().toString(), Qt::CaseInsensitive) == 0) {
-					m_lastUsedNotebookAction = action;
-					break;
-				}
-			}
-		}
-	}
-
-	m_tbNotebook = new QToolButton(mainToolBar);
-	m_tbNotebook->setPopupMode(QToolButton::MenuButtonPopup);
-	m_tbNotebook->setMenu(m_newNotebookMenu); // m_newNotebookMenu is never nullptr and always contains at least the configure cas action
-	m_tbNotebook->setDefaultAction(!m_lastUsedNotebookAction ? m_newNotebookMenu->actions().first() : m_lastUsedNotebookAction);
-	auto* lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 2);
-	mainToolBar->insertWidget(lastAction, m_tbNotebook);
-#endif
-
-	auto* tbImport = new QToolButton(mainToolBar);
-	tbImport->setPopupMode(QToolButton::MenuButtonPopup);
-	tbImport->setMenu(m_importMenu);
-	tbImport->setDefaultAction(m_importFileAction);
-	auto* lastAction_ = mainToolBar->actions().at(mainToolBar->actions().count() - 1);
-	mainToolBar->insertWidget(lastAction_, tbImport);
-
-	m_tbScript = new QToolButton(mainToolBar);
-	m_tbScript->setPopupMode(QToolButton::MenuButtonPopup);
-	m_tbScript->setMenu(m_newScriptMenu);
-	if (m_newScriptActions.isEmpty()) {
-		m_tbScript->setIcon(QIcon::fromTheme(QStringLiteral("quickopen"))); // a placeholder icon since we have no runtimes
-		m_tbScript->setEnabled(false);
-	} else {
-		m_tbScript->setDefaultAction(m_newScriptActions.first());
-	}
-	auto* _lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 4);
-	mainToolBar->insertWidget(_lastAction, m_tbScript);
-
 	// hamburger menu
 	m_hamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, m_mainWindow->actionCollection());
 	m_mainWindow->toolBar()->addAction(m_hamburgerMenu);
@@ -316,6 +276,32 @@ void ActionsManager::initActions() {
 	collection->addAction(QStringLiteral("import_opj"), m_importOpjAction);
 	connect(m_importOpjAction, &QAction::triggered, m_mainWindow, &MainWin::importProjectDialog);
 #endif
+
+#ifdef HAVE_CANTOR_LIBS
+	// create the new_notebook action declared in the rc file
+	// initialization is completed in initMenus
+	m_tbNotebook = new ToggleActionMenu(this);
+	m_tbNotebook->setPopupMode(QToolButton::MenuButtonPopup);
+	m_tbNotebook->setToolTip(QStringLiteral("New Notebook"));
+	m_tbNotebook->setIconText(QStringLiteral("New Notebook"));
+	collection->addAction(QStringLiteral("new_notebook"), m_tbNotebook);
+#endif
+
+	// create the import action declared in the rc file
+	// initialization is completed in initMenus
+	m_tbImport = new ToggleActionMenu(this);
+	m_tbImport->setPopupMode(QToolButton::MenuButtonPopup);
+	m_tbImport->setToolTip(QStringLiteral("Import"));
+	m_tbImport->setIconText(QStringLiteral("Import"));
+	collection->addAction(QStringLiteral("import"), m_tbImport);
+
+	// create the new_script action declared in the rc file
+	// initialization is completed in initMenus
+	m_tbScript = new ToggleActionMenu(this);
+	m_tbScript->setPopupMode(QToolButton::MenuButtonPopup);
+	m_tbScript->setToolTip(QStringLiteral("New Script"));
+	m_tbScript->setIconText(QStringLiteral("New Script"));
+	collection->addAction(QStringLiteral("new_script"), m_tbScript);
 
 	m_exportAction = new QAction(QIcon::fromTheme(QStringLiteral("document-export")), i18n("Export..."), this);
 	m_exportAction->setWhatsThis(i18n("Export selected element"));
@@ -860,6 +846,10 @@ void ActionsManager::initMenus() {
 #ifdef HAVE_LIBORIGIN
 	m_importMenu->addAction(m_importOpjAction);
 #endif
+	// complete initialization of import action after m_importMenu is created
+	m_tbImport->setMenu(m_importMenu);
+	m_tbImport->setDefaultAction(m_importMenu->actions().first());
+	connect(m_tbImport->menu(), &QMenu::triggered, m_tbImport, &ToggleActionMenu::setDefaultAction);
 
 	// icon for the menu "import" in the main menu created via the rc file
 	menu = qobject_cast<QMenu*>(factory->container(QStringLiteral("import"), m_mainWindow));
@@ -920,10 +910,31 @@ void ActionsManager::initMenus() {
 			updateNotebookActions();
 		}
 	}
+
+	// read the last used notebook from the settings
+	auto groupMain = Settings::group(QStringLiteral("MainWin"));
+	if (groupMain.exists()) {
+		const QString& lastUsedNotebook = groupMain.readEntry(QLatin1String("lastUsedNotebook"), QString());
+		if (!lastUsedNotebook.isEmpty()) {
+			for (auto* action : m_newNotebookMenu->actions()) {
+				if (lastUsedNotebook.compare(action->data().toString(), Qt::CaseInsensitive) == 0) {
+					m_lastUsedNotebookAction = action;
+					break;
+				}
+			}
+		}
+	}
+
+	// complete initialization of new_notebook action after m_newNotebookMenu is created
+	m_tbNotebook->setMenu(m_newNotebookMenu);
+	m_tbNotebook->setDefaultAction(m_lastUsedNotebookAction ? m_lastUsedNotebookAction : m_newNotebookMenu->actions().first());
+	connect(m_tbNotebook->menu(), &QMenu::triggered, m_tbNotebook, &ToggleActionMenu::setDefaultAction);
 #else
 	delete factory->container(QStringLiteral("notebook"), m_mainWindow);
 	delete factory->container(QStringLiteral("new_notebook"), m_mainWindow);
 	delete factory->container(QStringLiteral("notebook_toolbar"), m_mainWindow);
+	// remove the new_notebook action created in the rc file
+	delete m_mainWindow->actionCollection()->action(QStringLiteral("new_notebook"));
 #endif
 
 	// This menu is at File > Add New > Script
@@ -945,6 +956,16 @@ void ActionsManager::initMenus() {
 		newScriptMenu->setEnabled(false);
 		m_newScriptMenu->setEnabled(false);
 	}
+
+	// complete initialization of new_script action after m_newScriptMenu is created
+	m_tbScript->setMenu(m_newScriptMenu);
+	if (m_newScriptActions.isEmpty()) {
+		m_tbScript->setIcon(QIcon::fromTheme(QStringLiteral("quickopen"))); // a placeholder icon since we have no runtimes
+		m_tbScript->setEnabled(false);
+	} else {
+		m_tbScript->setDefaultAction(m_newScriptActions.first());
+	}
+	connect(m_tbScript->menu(), &QMenu::triggered, m_tbScript, &ToggleActionMenu::setDefaultAction);
 }
 
 void MainWin::colorSchemeChanged(QAction* action) {

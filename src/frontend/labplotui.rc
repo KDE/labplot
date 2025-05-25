@@ -16,7 +16,10 @@
 <Action name="new_notes" />
 <Action name="new_datapicker" />
 <Action name="new_live_datasource" />
+<Action name="new_script" />
+<Action name="new_notebook" />
 <Separator/>
+<Action name="import" />
 <Action name="export" />
 </ToolBar>
 
