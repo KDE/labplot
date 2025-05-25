@@ -15348,8 +15348,8 @@ msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
 "to exit the application."
 msgstr ""
-"No s'ha pogut obrir el fitxer «%1». Feu clic en «Continua» per a seguir amb "
-"l'inici o «Cancel·la» per a eixir de l'aplicació."
+"No s'ha pogut obrir el fitxer «%1». Cliqueu damunt «Continua» per a seguir "
+"amb l'inici o «Cancel·la» per a eixir de l'aplicació."
 
 #: src/kdefrontend/LabPlot.cpp:160
 #, kde-format
@@ -17703,13 +17703,13 @@ msgstr "Tema «%1»"
 #, kde-format
 msgid "Theme '%1' is active. Click on the button to change the theme."
 msgstr ""
-"El tema «%1» es troba actiu. Feu clic damunt del botó per a canviar el tema."
+"El tema «%1» es troba actiu. Cliqueu damunt del botó per a canviar el tema."
 
 #: src/kdefrontend/ThemeHandler.cpp:145
 #, kde-format
 msgid "No theme is active. Click on the button to select a theme."
 msgstr ""
-"Ni hi ha cap tema actiu. Feu clic damunt del botó per a seleccionar un tema."
+"Ni hi ha cap tema actiu. Cliqueu damunt del botó per a seleccionar un tema."
 
 #: src/kdefrontend/ThemeHandler.cpp:156
 #, kde-format
@@ -18684,7 +18684,7 @@ msgstr "Controlador:"
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:58
 #, kde-format
 msgid "Host:"
-msgstr "Màquina:"
+msgstr "Amfitrió:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPort)
 #. i18n: ectx: property (text), widget (QLabel, lSerialPort)
@@ -19595,7 +19595,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:634
 #, kde-format
 msgid "Length:"
-msgstr "Longitud:"
+msgstr "Llargària:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicks)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:993
@@ -22041,7 +22041,7 @@ msgstr "Interval de temps"
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:244
 #, kde-format
 msgid "On Click"
-msgstr "En clicar"
+msgstr "Quan es clique"
 
 #. i18n: ectx: property (text), widget (QLabel, lWillUpdateInterval)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:255
@@ -23081,7 +23081,7 @@ msgid ""
 "Select the range for the value, the degree of lightness of the color.\n"
 "Everything outside of this range will be set to white."
 msgstr ""
-"Seleccioneu l'interval per al valor del grau de lluminositat del color.\n"
+"Seleccioneu l'interval per al valor del grau de claredat del color.\n"
 "Qualsevol valor fora d'este interval s'establirà com a blanc."
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:155
@@ -23513,12 +23513,12 @@ msgstr "Rectangle amb els costats rodons"
 #: src/kdefrontend/widgets/LabelWidget.cpp:184
 #, kde-format
 msgid "Round corner rectangle"
-msgstr "Rectangle amb cantó arrodonit"
+msgstr "Rectangle amb cantó arredonit"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:185
 #, kde-format
 msgid "Inwards round corner rectangle"
-msgstr "Rectangle amb cantó arrodonit cap a dins"
+msgstr "Rectangle amb cantó arredonit cap a dins"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:186
 #, kde-format
