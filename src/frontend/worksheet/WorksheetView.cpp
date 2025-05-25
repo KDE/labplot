@@ -1733,10 +1733,6 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot, const
 		}
 		break;
 	}
-
-	plotSelectionModeAction->setEnabled(true);
-	if (plotCursorModeAction) // not available in the presenter mode
-		plotCursorModeAction->setEnabled(true);
 }
 
 void WorksheetView::handleReferences(WorksheetElement::Orientation orientation, const QActionGroup* mouseModeActionGroup, const QActionGroup* navigationActionGroup) {
@@ -1762,7 +1758,7 @@ void WorksheetView::handleReferences(WorksheetElement::Orientation orientation, 
 
 	const bool vertical = (orientation == WorksheetElement::Orientation::Vertical);
 
-		   // mouse mode actions
+	// mouse mode actions
 	for (auto* action : mouseModeActionGroup->actions()) {
 		const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
 		if (mode == CartesianPlot::MouseMode::ZoomXSelection)
@@ -1773,7 +1769,7 @@ void WorksheetView::handleReferences(WorksheetElement::Orientation orientation, 
 			action->setEnabled(false);
 	}
 
-		   // navigation actions
+	// navigation actions
 	for (auto* action : navigationActionGroup->actions()) {
 		const auto op = static_cast<CartesianPlot::NavigationOperation>(action->data().toInt());
 		const bool x = (op == CartesianPlot::NavigationOperation::ZoomInX ||op == CartesianPlot::NavigationOperation::ZoomOutX
@@ -1784,9 +1780,6 @@ void WorksheetView::handleReferences(WorksheetElement::Orientation orientation, 
 						||  op == CartesianPlot::NavigationOperation::ScaleAutoY);
 		action->setEnabled((x && vertical) || (y && !vertical));
 	}
-
-	plotSelectionModeAction->setEnabled(true);
-	plotCursorModeAction->setEnabled(false);
 }
 
 void WorksheetView::handlePlotSelected(const QActionGroup* mouseModeActionGroup, const QActionGroup* navigationActionGroup) {
@@ -1870,8 +1863,6 @@ void WorksheetView::handlePlotSelected(const QActionGroup* mouseModeActionGroup,
 		}
 		break;
 	}
-	plotSelectionModeAction->setEnabled(true);
-	plotCursorModeAction->setEnabled(false);
 }
 
 void WorksheetView::handleAxisSelected(const Axis* a, const QActionGroup* mouseModeActionGroup, const QActionGroup* navigationActionGroup) {
@@ -1940,9 +1931,6 @@ void WorksheetView::handleAxisSelected(const Axis* a, const QActionGroup* mouseM
 			action->setEnabled(y);
 		}
 	}
-
-	plotSelectionModeAction->setEnabled(true);
-	plotCursorModeAction->setEnabled(false);
 }
 
 /*!
@@ -2008,9 +1996,19 @@ void WorksheetView::updateCartesianPlotActions(const QActionGroup* mouseModeActi
 		}
 	}
 
+	// activate additionally Selection, Crossshair and Cursor actions.
 	// if no elements are selected where navigation makes sense and that were handled above,
 	// disable all navigation actions
-	if (!handled) {
+	if (handled) {
+		// mouse mode actions
+		for (auto* action : mouseModeActionGroup->actions()) {
+			const auto mode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
+			if (mode == CartesianPlot::MouseMode::Selection || mode == CartesianPlot::MouseMode::Crosshair)
+				action->setEnabled(true);
+			else if (mode == CartesianPlot::MouseMode::Cursor)
+				action->setEnabled(m_selectedElement->type() == AspectType::CartesianPlot);
+		}
+	} else {
 		// mouse mode actions
 		for (auto* action : mouseModeActionGroup->actions()) {
 			action->setEnabled(false);
