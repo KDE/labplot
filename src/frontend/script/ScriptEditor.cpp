@@ -74,6 +74,12 @@ ScriptEditor::~ScriptEditor() {
     group.writeEntry(QStringLiteral("SplitterState"), splitterState());
 }
 
+bool ScriptEditor::isInitialized() const {
+    if (!m_script)
+        return false;
+    return m_script->isInitialized();
+}
+
 void ScriptEditor::createContextMenu(QMenu* menu) {
 	Q_ASSERT(menu);
     if (!m_script)
@@ -102,39 +108,14 @@ void ScriptEditor::createContextMenu(QMenu* menu) {
         menu->insertSeparator(firstAction);
 }
 
-void ScriptEditor::fillToolBar(QToolBar* toolbar) {
-	if (!m_script)
-		return;
-
-    if (!m_script->isInitialized()) {
-        m_runScriptAction->setEnabled(false);
-        m_clearOutputAction->setEnabled(false);
-    } else {
-        m_runScriptAction->setEnabled(true);
-        m_clearOutputAction->setEnabled(true);
-    }
-
-	toolbar->addAction(m_runScriptAction);
-    toolbar->addSeparator();
-    toolbar->addAction(m_clearOutputAction);
-}
-
 void ScriptEditor::initActions() {
     m_runScriptAction = new QAction(QIcon::fromTheme(QStringLiteral("quickopen")), QStringLiteral("Run"), this);
 	m_runScriptAction->setWhatsThis(QStringLiteral("Run the script"));
-	connect(m_runScriptAction, &QAction::triggered, [firstOutputOfRun = &m_firstOutputOfRun, script = m_script] {
-        *firstOutputOfRun = true;
-        script->runScript();
-    });
+	connect(m_runScriptAction, &QAction::triggered, this, &ScriptEditor::run);
 
     m_clearOutputAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), QStringLiteral("Clear Output"), this);
-	m_clearOutputAction->setWhatsThis(QStringLiteral("Clears the script editor output"));
-	connect(m_clearOutputAction, &QAction::triggered, [this] {
-        QFont currentOutputFont = outputFont(); 
-        ui.output->clear();
-        ui.output->setReadOnly(true);
-        setOutputFont(currentOutputFont);
-    });
+	m_clearOutputAction->setWhatsThis(QStringLiteral("Clear the output of the script editor"));
+	connect(m_clearOutputAction, &QAction::triggered, this, &ScriptEditor::clearOutput);
 }
 
 void ScriptEditor::writeOutput(bool isErr, const QString& msg) {
@@ -187,4 +168,19 @@ QString ScriptEditor::editorTheme() {
 
 QString ScriptEditor::outputText() {
     return ui.output->toPlainText();
+}
+
+// ##############################################################################
+// ####################################  SLOTs   ################################
+// ##############################################################################
+void ScriptEditor::run() {
+    m_firstOutputOfRun = true;
+    m_script->runScript();
+}
+
+void ScriptEditor::clearOutput() {
+    QFont currentOutputFont = outputFont();
+    ui.output->clear();
+    ui.output->setReadOnly(true);
+    setOutputFont(currentOutputFont);
 }

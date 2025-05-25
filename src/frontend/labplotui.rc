@@ -87,7 +87,10 @@
 </ToolBar>
 
 <ToolBar name="script_toolbar">
-<text>Script Toolbar</text>
+	<text>Script Toolbar</text>
+	<Action name="script_run"/>
+	<Separator/>
+	<Action name="script_clear"/>
 </ToolBar>
 
 <ToolBar name="cartesian_plot_toolbar" position="left">

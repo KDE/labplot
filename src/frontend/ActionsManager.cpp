@@ -71,7 +71,7 @@
  * This class is intended to simplify (or not to overload) the code in MainWin.
  *
  * Note, the actions shown in the toolbars are subject of modifications and customizations done by the user via the "Configure Toolbars"-dialog
- * and the modifications (custom icon, name and position of actions) are stored in $GOME/.local/share/kxmlgui5/labplot/labplotui.rc).
+ * and the modifications (custom icon, name and position of actions) are stored in $HOME/.local/share/kxmlgui5/labplot/labplotui.rc).
  * In this dialog it's only possible to manage the top-level actions . Because of this, it is sufficient to handle in this class the the top-level actions only.
  * For the actions used in the sub-menus it is enough to manage their lifecycle in the objects controlled via these toolbars like Worksheet, etc.
  *
@@ -120,8 +120,6 @@ void ActionsManager::init() {
 	}
 
 	initMenus();
-
-	auto* mainToolBar = qobject_cast<QToolBar*>(factory->container(QStringLiteral("main_toolbar"), m_mainWindow));
 
 	// hamburger menu
 	m_hamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, m_mainWindow->actionCollection());
@@ -483,6 +481,7 @@ void ActionsManager::initActions() {
 #ifdef HAVE_CANTOR_LIBS
 	initNotebookToolbarActions();
 #endif
+	initScriptToolbarActions();
 }
 
 /*!
@@ -794,6 +793,18 @@ void ActionsManager::initDataExtractorToolbarActions() {
 	m_dataExtractorMagnificationMenu->setPopupMode(QToolButton::MenuButtonPopup);
 	connect(m_dataExtractorMagnificationMenu->menu(), &QMenu::triggered, m_dataExtractorMagnificationMenu, &ToggleActionMenu::setDefaultAction);
 	collection->addAction(QStringLiteral("data_extractor_magnification"), m_dataExtractorMagnificationMenu);
+}
+
+void ActionsManager::initScriptToolbarActions() {
+	auto* collection = m_mainWindow->actionCollection();
+
+	m_scriptRunAction = new QAction(QIcon::fromTheme(QStringLiteral("quickopen")), QStringLiteral("Run"), this);
+	m_scriptRunAction->setWhatsThis(QStringLiteral("Run the script"));
+	collection->addAction(QStringLiteral("script_run"), m_scriptRunAction);
+
+	m_scriptClearAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), QStringLiteral("Clear Output"), this);
+	m_scriptClearAction->setWhatsThis(QStringLiteral("Clear the output of the script editor"));
+	collection->addAction(QStringLiteral("script_clear"), m_scriptClearAction);
 }
 
 void ActionsManager::initMenus() {
@@ -1189,14 +1200,15 @@ void ActionsManager::updateGUI() {
 	if (!notebook)
 		notebook = dynamic_cast<Notebook*>(m_mainWindow->m_currentAspect->parent(AspectType::Notebook));
 	if (notebook) {
+		// menu
 		auto* view = qobject_cast<NotebookView*>(notebook->view());
 		auto* menu = qobject_cast<QMenu*>(factory->container(QStringLiteral("notebook"), m_mainWindow));
 		menu->clear();
 		view->createContextMenu(menu);
 		menu->setEnabled(true);
 
+		// toolbar
 		connectNotebookToolbarActions(view);
-		factory->container(QStringLiteral("notebook"), m_mainWindow)->setEnabled(true);
 		factory->container(QStringLiteral("notebook_toolbar"), m_mainWindow)->setVisible(true);
 	} else {
 		// no notebook selected -> deactivate notebook related menu and toolbar
@@ -1206,19 +1218,17 @@ void ActionsManager::updateGUI() {
 #endif
 
 	const auto* script = dynamic_cast<Script*>(m_mainWindow->m_currentAspect);
-	if (!script)
-		script = dynamic_cast<Script*>(m_mainWindow->m_currentAspect->parent(AspectType::Script));
 	if (script) {
+		// mneu
 		auto* view = qobject_cast<ScriptEditor*>(script->view());
 		auto* menu = qobject_cast<QMenu*>(factory->container(QLatin1String("script"), m_mainWindow));
 		menu->clear();
 		view->createContextMenu(menu);
 		menu->setEnabled(true);
 
-		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("script_toolbar"), m_mainWindow));
-		toolbar->setVisible(true);
-		toolbar->clear();
-		view->fillToolBar(toolbar);
+		// toolbar
+		connectScriptToolbarActions(view);
+		factory->container(QLatin1String("script_toolbar"), m_mainWindow)->setVisible(true);
 	} else {
 		factory->container(QLatin1String("script"), m_mainWindow)->setEnabled(false);
 		factory->container(QLatin1String("script_toolbar"), m_mainWindow)->setVisible(false);
@@ -1241,7 +1251,7 @@ void ActionsManager::updateGUI() {
 		menu->setEnabled(true);
 
 		// toolbar
-		factory->container(QStringLiteral("data_extractor"), m_mainWindow)->setEnabled(true);
+		// TODO: connectDataExtractorToolbarActions(view);
 		factory->container(QStringLiteral("data_extractor_toolbar"), m_mainWindow)->setVisible(true);
 	} else {
 		factory->container(QStringLiteral("data_extractor"), m_mainWindow)->setEnabled(false);
@@ -1349,7 +1359,6 @@ void ActionsManager::toggleDockWidget(QAction* action) {
 	} else if (action->objectName() == QStringLiteral("toggle_worksheet_preview_dock"))
 		m_mainWindow->m_worksheetPreviewDock->toggleView(!m_mainWindow->m_worksheetPreviewDock->isVisible());
 }
-
 
 // ##############################################################################
 // ################  Connect actions to the actual views ########################
@@ -1480,4 +1489,16 @@ void ActionsManager::connectDataExtractorToolbarActions(const DatapickerImageVie
 	m_dataExtractorMagnificationMenu->menu()->clear();
 	view->fillMagnificationMenu(m_worksheetMagnificationMenu);
 	m_dataExtractorMagnificationMenu->setDefaultActionFromData(view->magnification());
+}
+
+void ActionsManager::connectScriptToolbarActions(const ScriptEditor* view) {
+	disconnect(m_scriptRunAction, &QAction::triggered, nullptr, nullptr);
+	connect(m_scriptRunAction, &QAction::triggered, view, &ScriptEditor::run);
+
+	disconnect(m_scriptClearAction, &QAction::triggered, nullptr, nullptr);
+	connect(m_scriptClearAction, &QAction::triggered, view, &ScriptEditor::clearOutput);
+
+	const bool initialized = view->isInitialized();
+	m_scriptRunAction->setEnabled(initialized);
+	m_scriptRunAction->setEnabled(initialized);
 }
