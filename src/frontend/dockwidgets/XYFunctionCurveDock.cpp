@@ -183,7 +183,7 @@ void XYFunctionCurveDock::addVariable() {
 	le->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
 	auto* validator = new QRegularExpressionValidator(QRegularExpression(QLatin1String("[a-zA-Z][a-zA-Z0-9_]*")), le);
 	le->setValidator(validator);
-	// le->setMaximumWidth(40); // hardcoding size is bad. 40 is enough for three letters
+	le->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding));
 	connect(le, &QLineEdit::textChanged, this, &XYFunctionCurveDock::variableNameChanged);
 	m_gridLayoutVariables->addWidget(le, row, 0, 1, 1);
 	m_variableLineEdits << le;

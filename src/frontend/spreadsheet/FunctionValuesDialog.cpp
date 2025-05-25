@@ -278,8 +278,7 @@ void FunctionValuesDialog::addVariable() {
 	le->setToolTip(i18n("Variable name can contain letters, digits and '_' only and should start with a letter"));
 	auto* validator = new QRegularExpressionValidator(QRegularExpression(QLatin1String("[a-zA-Z][a-zA-Z0-9_]*")), le);
 	le->setValidator(validator);
-	// hardcoding size is bad. 40 is enough for three letters
-	le->setMaximumWidth(40);
+	le->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding));
 	connect(le, &QLineEdit::textChanged, this, &FunctionValuesDialog::variableNameChanged);
 	layout->addWidget(le, row, 0, 1, 1);
 	m_variableLineEdits << le;
