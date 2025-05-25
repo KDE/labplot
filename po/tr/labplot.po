@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-23 00:38+0000\n"
-"PO-Revision-Date: 2025-05-20 22:04+0300\n"
+"PO-Revision-Date: 2025-05-24 20:50+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -7245,32 +7245,29 @@ msgid "Tricube"
 msgstr "Üçlü Küp"
 
 #: src/backend/script/Script.cpp:117 src/backend/script/Script.cpp:325
-#, fuzzy, kde-format
-#| msgid "no note element found"
+#, kde-format
 msgid "no script element found"
-msgstr "not elemanı bulunamadı"
+msgstr "Bulunan betik ögesi yok"
 
 #: src/backend/script/Script.cpp:186
 #, kde-format
 msgid "%1: run %2 script"
-msgstr ""
+msgstr "%1: %2 betiğini çalıştır"
 
 #: src/backend/script/Script.cpp:305 src/backend/script/Script.cpp:310
-#, fuzzy, kde-format
-#| msgid "&Script"
+#, kde-format
 msgid "Script"
-msgstr "&Betik"
+msgstr "Betik"
 
 #: src/backend/script/Script.cpp:305
-#, fuzzy, kde-format
-#| msgid "Failed to open the file."
+#, kde-format
 msgid "Failed to run the script."
-msgstr "Dosya açılamadı."
+msgstr "Betik çalıştırılamadı."
 
 #: src/backend/script/Script.cpp:310
 #, kde-format
 msgid "A script is already running."
-msgstr ""
+msgstr "Bir betik halihazırda çalışıyor."
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:341
 #, kde-format
@@ -14550,12 +14547,10 @@ msgid "Properties: Workbook"
 msgstr "Özellikler: Çalışma Kitabı"
 
 #: src/frontend/GuiObserver.cpp:508
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Fit"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Script"
-msgstr "Özellikler: Sığdır"
+msgstr "Özellikler: Betik"
 
 #: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
@@ -14987,10 +14982,9 @@ msgstr "Defter Araç Çubuğu"
 
 #. i18n: ectx: ToolBar (script_toolbar)
 #: src/frontend/labplotui.rc:40
-#, fuzzy, kde-format
-#| msgid "Project Toolbar"
+#, kde-format
 msgid "Script Toolbar"
-msgstr "Proje Araç Çubuğu"
+msgstr "Betik Araç Çubuğu"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/frontend/labplotui.rc:44
@@ -15149,10 +15143,9 @@ msgid "Creates a new worksheet for data plotting"
 msgstr "Veri çizimi için yeni bir çalışma sayfası oluşturur"
 
 #: src/frontend/MainWin.cpp:705
-#, fuzzy, kde-format
-#| msgid "Creates a new %1 notebook"
+#, kde-format
 msgid "Creates a new %1 script"
-msgstr "Yeni bir %1 defteri oluşturur"
+msgstr "Yeni bir %1 betiği oluşturur"
 
 #: src/frontend/MainWin.cpp:711 src/frontend/MainWin.cpp:2126
 #, kde-format
@@ -16270,10 +16263,9 @@ msgid "User Feedback"
 msgstr "Kullanıcı Geri Bildirimi"
 
 #: src/frontend/SettingsDialog.cpp:98
-#, fuzzy, kde-format
-#| msgid "Text position"
+#, kde-format
 msgid "Text Editor"
-msgstr "Metin konumu"
+msgstr "Metin Düzenleyicisi"
 
 #: src/frontend/SettingsDialog.cpp:155
 #, kde-format
@@ -21946,29 +21938,27 @@ msgstr "Merkeze Çizgi"
 
 #. i18n: ectx: property (text), widget (QLabel, lOutputFont)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:33
-#, fuzzy, kde-format
-#| msgid "Output:"
+#, kde-format
 msgid "Output Font:"
-msgstr "Çıktı:"
+msgstr "Çıktı yazıtipi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEditorFont)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:40
 #, kde-format
 msgid "Editor Font:"
-msgstr ""
+msgstr "Düzenleyici yazıtipi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRuntime)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:99
 #, kde-format
 msgid "Runtime:"
-msgstr ""
+msgstr "Çalışma zamanı:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTheme)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:141
-#, fuzzy, kde-format
-#| msgid "Theme:"
+#, kde-format
 msgid "Editor Theme:"
-msgstr "Tema:"
+msgstr "Düzenleyici teması:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
