@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-19 02:37+0000\n"
-"PO-Revision-Date: 2025-05-10 08:47+0200\n"
+"PO-Revision-Date: 2025-05-24 09:19+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -3682,7 +3682,7 @@ msgstr "Cell (index, variable)"
 #: src/backend/gsl/functions.cpp:242
 #, kde-format
 msgid "Cell (index; default_value; variable)"
-msgstr "Cell (index, valeur_par_défaut, variable)"
+msgstr "Cell (index, valeur-par-défaut, variable)"
 
 #: src/backend/gsl/functions.cpp:243
 #, kde-format
@@ -3732,7 +3732,7 @@ msgstr "Cellule de colonne courante (index)"
 #: src/backend/gsl/functions.cpp:253
 #, kde-format
 msgid "Current column cell (index; default_value)"
-msgstr "Cellule de colonne courante (index ; valeur_par_défaut)"
+msgstr "Cellule de colonne courante (index ; valeur-par-défaut)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:257
@@ -9890,7 +9890,7 @@ msgstr "Moyenne quadratique résiduelle"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1956
 #, kde-format
 msgid "Root mean square deviation"
-msgstr "Écart quadratique moyen (RMSD)"
+msgstr "Écart quadratique moyen"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1957
