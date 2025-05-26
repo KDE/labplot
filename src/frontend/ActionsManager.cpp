@@ -1251,7 +1251,7 @@ void ActionsManager::updateGUI() {
 		menu->setEnabled(true);
 
 		// toolbar
-		// TODO: connectDataExtractorToolbarActions(view);
+		connectDataExtractorToolbarActions(datapicker->imageView());
 		factory->container(QStringLiteral("data_extractor_toolbar"), m_mainWindow)->setVisible(true);
 	} else {
 		factory->container(QStringLiteral("data_extractor"), m_mainWindow)->setEnabled(false);

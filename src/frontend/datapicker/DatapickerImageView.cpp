@@ -173,7 +173,7 @@ void DatapickerImageView::initActions() {
 
 	// magnification actions
 	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-1x-zoom")), i18n("No Magnification"), magnificationActionGroup);
-	action->setData(0);
+	action->setData(1);
 	action->setCheckable(true);
 	action->setChecked(true);
 
@@ -193,7 +193,7 @@ void DatapickerImageView::initActions() {
 	action->setData(5);
 	action->setCheckable(true);
 
-	// // set some default values
+	// set some default values
 	switch (m_image->plotPointsType()) {
 	case DatapickerImage::PointsType::AxisPoints:
 		currentPlotPointsTypeAction = setAxisPointsAction;
@@ -528,7 +528,7 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 	}
 
 	// show the magnification window
-	if (m_magnificationFactor && m_image->isLoaded && sceneRect().contains(pos)) {
+	if (m_magnificationFactor > 1 && m_image->isLoaded && sceneRect().contains(pos)) {
 		if (!m_image->m_magnificationWindow) {
 			m_image->m_magnificationWindow = new QGraphicsPixmapItem;
 			scene()->addItem(m_image->m_magnificationWindow);
@@ -725,7 +725,7 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 void DatapickerImageView::changeMagnification(QAction* action) {
 	m_magnificationFactor = action->data().toInt();
 
-	if (m_magnificationFactor == 0 && m_image->m_magnificationWindow)
+	if (m_magnificationFactor == 1 && m_image->m_magnificationWindow)
 		m_image->m_magnificationWindow->setVisible(false);
 }
 

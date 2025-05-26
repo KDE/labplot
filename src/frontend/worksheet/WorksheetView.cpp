@@ -203,7 +203,7 @@ void WorksheetView::initActions() {
 
 	// Magnification actions
 	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-1x-zoom")), i18n("No Magnification"), magnificationActionGroup);
-	action->setData(0);
+	action->setData(1);
 	action->setCheckable(true);
 	action->setChecked(true);
 
@@ -972,7 +972,7 @@ void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 	}
 
 	// show the magnification window
-	if (m_magnificationFactor /*&& m_mouseMode == SelectAndEditMode*/) {
+	if (m_magnificationFactor > 1 /*&& m_mouseMode == SelectAndEditMode*/) {
 		if (!m_magnificationWindow) {
 			m_magnificationWindow = new QGraphicsPixmapItem(nullptr);
 			m_magnificationWindow->setZValue(std::numeric_limits<int>::max());
@@ -1260,7 +1260,7 @@ void WorksheetView::updateLabelsZoom() const {
 
 void WorksheetView::changeMagnification(QAction* action) {
 	m_magnificationFactor = action->data().toInt();
-	if (m_magnificationFactor == 0 && m_magnificationWindow)
+	if (m_magnificationFactor == 1 && m_magnificationWindow)
 		m_magnificationWindow->setVisible(false);
 }
 
