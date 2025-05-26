@@ -563,9 +563,6 @@ add_library(labplotlib STATIC ${LABPLOT_SRCS} ${CANTOR_SOURCES} ${DATASOURCES_SO
 # set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
 target_include_directories(labplotbackendlib PUBLIC ${FRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
 target_include_directories(labplotlib PUBLIC ${FRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
-if(ENABLE_PYTHON_SCRIPTING)
-target_include_directories(labplotbackendlib PUBLIC ${python_scripting_includes})
-endif()
 
 # add system QADS include path
 if(qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
