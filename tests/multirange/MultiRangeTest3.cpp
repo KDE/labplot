@@ -47,6 +47,7 @@ void MultiRangeTest3::curveRangeChange() {
 
 	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	QVERIFY(plot != nullptr);
+	plot->setNiceExtend(true);
 	ws->addChild(plot);
 
 	auto* curve{new XYEquationCurve(QStringLiteral("f(x)"))};

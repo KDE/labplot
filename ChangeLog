@@ -1,15 +1,21 @@
 -----3.0.0 (XX) -----
 New features:
+	* [general]
+		* Allow to customize which actions have to be shown in the toolbars
 	* [worksheet]
 		* Inset plot areas - plot areas added as child of another plot area
+		* Improve axis ticks locations. The don't need to be always from the bottom to top if it does not look nice (!700)
 
 Bug fixes:
 	* Fix using default font for axis title
 	* Fix build with system QXlsx (!693)
-	* Fix build with system qads 4.4 (!694)
+	* Fix build with system QADS 4.4 (!694)
 	* Crash on import when no projects opened (BUG 503800)
+	* Save rotation of axis title seperately for x and y axis
+	* Fix disappearing axis ticks (#1146)
 
------2.12.0 (25.04.2025) -----
+
+-----2.12.0 (2025-04-25) -----
 New features:
 	* [general]
 		* Detail info view mode in the Color Maps Browser
@@ -85,7 +91,7 @@ Internal:
 	* make QtSvg optional
 
 
------2.11.1 (16.07.2024) -----
+-----2.11.1 (2024-07-16) -----
 Bug fixes:
 	* Improve ODS support (selected platforms only)
 	* Fixed the initial positioninig of the docks, should be put besides each other and not below
@@ -95,7 +101,7 @@ Bug fixes:
 	* Fixed copy&paste and duplication of the matrix
 
 
------2.11.0 (09.07.2024) -----
+-----2.11.0 (2024-07-09) -----
 New features:
 	* [general]
 		* New application theme "Dracula"
@@ -187,7 +193,7 @@ Internal:
 	* Log skipped tests
 
 
------2.10.1 (12.07.2023) -----
+-----2.10.1 (2023-07-12) -----
 Bug fixes:
 	* Support markdown library discount version 3
 	* Improve Vector BLF dependency (git download must be enabled if needed)
@@ -213,7 +219,7 @@ Bug fixes:
 	* Initialize the parameters for the baseline subtraction with reasonable values on first startup and better apperance of the preview plot (Issues #594)
 
 
------2.10.0 (21.03.2023) -----
+-----2.10.0 (2023-03-21) -----
 New features:
 	* [worksheet]
 		* Bar plots
@@ -282,7 +288,7 @@ Bug fixes:
 	* [i18n] fix switch language option
 
 
------2.9.0 (03.05.2022) -----
+-----2.9.0 (2022-05-03) -----
 	* [general]
 		* Allow to copy&paste and to duplicate single objects in the project explorer
 		* Allow to change the order of objects in the project explorer (move up and down)
@@ -351,7 +357,7 @@ Bug fixes:
 	* Interpolation: avoid crash when x data contains invalid data points or is not strictly increasing
 	* HDF5: Fix reading attribute strings and better handle strings in compound data
 
------2.8.2 (01.04.2021) -----
+-----2.8.2 (2021-04-01) -----
 Bug fixes:
 	* [CAS]
 		* Fixed the regression introduced after the python2 backend was deprecated in Cantor
@@ -388,7 +394,7 @@ Bug fixes:
 	* BUG 431535 - Save/Load value format
 	* BUG 432291 - Show the relevant parts of the drop lines also when the data points are outside of the plot range
 
------2.8.1 (13.11.2020) -----
+-----2.8.1 (2020-11-13) -----
 	* [worksheet] allow to change the background color for axis labels (default: transparent)
 	* [worksheet] allow to copy the plot cursor cordinates
 	* [spreadsheet] better auto-detection of datetime format for values pasted in the spreadsheet
@@ -412,7 +418,7 @@ Bug fixes:
 		* Use application number locale
 		* insert predefined functions with correct number of arguments
 
------2.8 (16.09.2020) -----
+-----2.8 (2020-09-16) -----
 	* Improved DateTime data support
 	* Show the size of the members in the JSON file in the import file dialog
 	* [worksheet] In the Export Worksheet Dialog allow to export to the clipboard
@@ -444,7 +450,7 @@ Bug fixes:
 	* Fix Cantor support and Unicode characters on Windows
 	* Fix evaluating fit residuals
 
------2.7 (24.10.2019)-----
+-----2.7 (2019-10-24)-----
 New features:
 	* Allow to move objects (drag&drop) to different folders in the project explorer
 	* [spreadsheet] allow to insert multiple rows and columns in one step
@@ -484,7 +490,7 @@ Bug fixes:
 	* [nsl] fix memory leak in line simplification (Douglas Peuker variant)
 	* [nsl] fix bug in calculating Bessel polynomials on Windows (used in Bessel filter)
 
------2.6 (19.04.2019)-----
+-----2.6 (2019-04-19)-----
 New features:
 	* Histogram
 	* Import from MQTT sources
@@ -517,7 +523,7 @@ Bug fixes:
 	* [import] fix preview update and add missing close of netcdf files
 	* Don't crash when a scaling factor equal to zero was set for axis
 
------2.5 (21.06.2018)-----
+-----2.5 (2018-06-21)-----
 New features:
 	* Support for reading and plotting of live-data
 	* Improved data fitting
@@ -573,7 +579,7 @@ Bug fixes:
 	* Correctly save and restore masked cells
 	* Don't crash if the rc-file was not found during the startup
 
------2.4 (09.04.2017)-----
+-----2.4 (2017-04-09)-----
 New features:
 	* Support themes for plots
 	* Import and editing of FITS data files
@@ -603,7 +609,7 @@ Bug fixes:
 	* Constants are now available with full accuracy
 	* Windows: Import of files and open recent files fixed
 
------2.3 (23.07.2016)-----
+-----2.3 (2016-07-23)-----
 New features:
 	* Integration of Cantor - Support for different open-source computer algebra systems
 	* Statistics on spreadsheets and matrices
@@ -627,7 +633,7 @@ Bug fixes:
 	* Save and restore custom column widths in the spreadsheet
 	* Fixed sporadic crashes during project close
 
------2.2 (29.03.2016)-----
+-----2.2 (2016-03-29)-----
 New features:
 	* Datapicker - tool for extracting curves and data points from imported images
 	* Custom point on the plot with user-defined position and appearance
@@ -646,7 +652,7 @@ Bug fixes:
 	* Fixed some bugs in painting of the selection band on the worksheet
 	* Allow to open gz- and bz2-compressed LabPlot project files on the command line interface
 
------2.1 (25.10.2015)-----
+-----2.1 (2015-10-25)-----
 New features:
 	* New Matrix view for handling matrix data.
 	* Workbook - a new container for grouping several objects of type Spreadsheet and/or Matrix.
@@ -667,7 +673,7 @@ Performance improvements:
 Bug fixes:
 	* Fixed wrong behaviour when doing "zoom&select" in a plot and then deselecting the plot - it was not possible anymore to select the plot again on the worksheet.
 
------2.0.2 (15.03.2015)-----
+-----2.0.2 (2015-03-15)-----
 New features:
 	* Plot 2D-curves defined by mathematical equations in cartesian and polar coordinates or via a parametric equation.
 	* Linear and non-linear regression analysis. Several predefined fit-models are provided. User-defined models are also possible.
@@ -694,12 +700,12 @@ Bug fixes:
 	* BUG: 330774 - fixed wrong positioning of axis on orientation changes.
 	* Update main window title when project name is changed
 
------2.0.1 (01.03.2014)-----
+-----2.0.1 (2014-03-01)-----
 Bug fix release. Solved issues:
 	* Fixed wrong scaling of legend's text labels in pdf-export
 	* Fixed memory corruption in CartesianPlotDock that can lead to crashes
 
------2.0.0 (19.01.2014)-----
+-----2.0.0 (2014-01-19)-----
 First stable release of LabPlot2. LabPlot2 is a complete rewrite of LabPlot1 and lacks in this release a lot of features available in the predecessor. On the other hand, the GUI and the usability is more superior as compared to LabPlot1 and there are several new features that were not available in LabPlot1.
 
 Brief summary of features and capabilities of LabPlot2 implemented in the first release:

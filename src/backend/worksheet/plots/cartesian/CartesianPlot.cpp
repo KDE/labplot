@@ -539,18 +539,18 @@ void CartesianPlot::initActions() {
 	QIcon icon;
 	Q_D(CartesianPlot);
 	switch (d->type) {
-		case Type::FourAxes:
-			icon = QIcon::fromTheme(QStringLiteral("labplot-xy-plot-four-axes"));
-			break;
-		case Type::TwoAxes:
-			icon = QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes"));
-			break;
-		case Type::TwoAxesCentered:
-			icon = QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered"));
-			break;
-		case Type::TwoAxesCenteredZero:
-			icon = QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered-origin"));
-			break;
+	case Type::FourAxes:
+		icon = QIcon::fromTheme(QStringLiteral("labplot-xy-plot-four-axes"));
+		break;
+	case Type::TwoAxes:
+		icon = QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes"));
+		break;
+	case Type::TwoAxesCentered:
+		icon = QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered"));
+		break;
+	case Type::TwoAxesCenteredZero:
+		icon = QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered-origin"));
+		break;
 	}
 	addInsetPlotAction = new QAction(icon, i18n("Inset Plot Area"), this);
 	addInsetPlotWithDataAction = new QAction(icon, i18n("Inset Plot Area with Data"), this);
@@ -2295,9 +2295,9 @@ void CartesianPlot::addInsetPlotWithData() {
 }
 
 /*!
-* sets the size of the inset plot to 30% of the parent plot's size
-* and allows to resize it with the mouse (not controlled by worksheet's layout)
-*/
+ * sets the size of the inset plot to 30% of the parent plot's size
+ * and allows to resize it with the mouse (not controlled by worksheet's layout)
+ */
 void CartesianPlot::resizeInsetPlot(CartesianPlot* insetPlot) {
 	auto insetRect = rect();
 	insetRect.setWidth(insetRect.width() * 0.3);
@@ -3438,7 +3438,7 @@ void CartesianPlotPrivate::retransform() {
 		return;
 
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
-	
+
 	prepareGeometryChange();
 	setPos(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
 	updateDataRect();
@@ -3851,7 +3851,8 @@ void CartesianPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* even
 	calledFromContextMenu = true;
 	auto* menu = q->createContextMenu();
 	if (q->parentAspect()->type() == AspectType::CartesianPlot)
-		Q_EMIT q->parentAspect()->contextMenuRequested(q->AbstractAspect::type(), menu); // for inset plots emit the signal for the parent to handle it in Worksheet
+		Q_EMIT q->parentAspect()->contextMenuRequested(q->AbstractAspect::type(),
+													   menu); // for inset plots emit the signal for the parent to handle it in Worksheet
 	else
 		Q_EMIT q->contextMenuRequested(q->AbstractAspect::type(), menu);
 }

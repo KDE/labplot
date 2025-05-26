@@ -19,7 +19,6 @@ class AxisTest : public CommonTest {
 
 private Q_SLOTS:
 	void axisLine();
-	void majorTicksAutoNumberEnableDisable();
 	void minorTicksAutoNumberEnableDisable();
 	void majorTicksStartValue();
 	void TestSetCoordinateSystem();
@@ -38,6 +37,8 @@ private Q_SLOTS:
 	void automaticTicNumberUpdateDockMajorTicks();
 	void automaticTicNumberUpdateDockMinorTicks();
 	void tickSpacingUpdateDockMajorTicks();
+
+	void testComputeMajorTickStart();
 };
 
 #endif // AXISTEST_H

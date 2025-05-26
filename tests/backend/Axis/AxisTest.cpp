@@ -131,106 +131,6 @@ void AxisTest::axisLine() {
 	}
 }
 
-void AxisTest::majorTicksAutoNumberEnableDisable() {
-	Project project;
-	auto* ws = new Worksheet(QStringLiteral("worksheet"));
-	QVERIFY(ws != nullptr);
-	project.addChild(ws);
-
-	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	QVERIFY(p != nullptr);
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
-	ws->addChild(p);
-
-	auto axes = p->children<Axis>();
-	QCOMPARE(axes.count(), 2);
-	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
-	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
-
-	AxisDock axisDock(nullptr);
-
-	auto* xAxis = axes.at(0);
-	QCOMPARE(xAxis->majorTicksNumber(), 6); // Default number created by autonumbering
-	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
-
-	{
-		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
-		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
-	}
-
-	// To check also if the dock shows the correct values
-	axisDock.setAxes({xAxis});
-
-	QCOMPARE(axisDock.ui.cbMajorTicksAutoNumber->isChecked(), true);
-	QCOMPARE(axisDock.ui.sbMajorTicksNumber->isEnabled(), false);
-
-	// Not possible, because sbMajorTicksNumber is disabled
-	// test it nevertless
-	xAxis->setMajorTicksNumber(5);
-	QCOMPARE(xAxis->majorTicksNumber(), 5);
-	QCOMPARE(xAxis->majorTicksAutoNumber(), false);
-
-	{
-		QVector<double> expectedTickValues = {0, 0.25, 0.5, 0.75, 1};
-		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
-	}
-
-	QCOMPARE(axisDock.ui.cbMajorTicksAutoNumber->isChecked(), false);
-	QCOMPARE(axisDock.ui.sbMajorTicksNumber->isEnabled(), true);
-	QCOMPARE(axisDock.ui.sbMajorTicksNumber->value(), 5);
-
-	// Check that undo/redo works for setting manual ticknumber
-	project.undoStack()->undo();
-	QCOMPARE(xAxis->majorTicksNumber(), 6);
-	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
-
-	{
-		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
-		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
-	}
-
-	QCOMPARE(axisDock.ui.cbMajorTicksAutoNumber->isChecked(), true);
-	QCOMPARE(axisDock.ui.sbMajorTicksNumber->isEnabled(), false);
-	QCOMPARE(axisDock.ui.sbMajorTicksNumber->value(), 6);
-
-	project.undoStack()->redo();
-	QCOMPARE(xAxis->majorTicksNumber(), 5);
-	QCOMPARE(xAxis->majorTicksAutoNumber(), false);
-
-	{
-		QVector<double> expectedTickValues = {0, 0.25, 0.5, 0.75, 1};
-		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
-	}
-
-	xAxis->setMajorTicksAutoNumber(true);
-	QCOMPARE(xAxis->majorTicksNumber(), 6);
-	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
-
-	{
-		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
-		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
-	}
-
-	// Check that undo/redo works for setting autonumber enable/disable
-	project.undoStack()->undo();
-	QCOMPARE(xAxis->majorTicksNumber(), 5);
-	QCOMPARE(xAxis->majorTicksAutoNumber(), false);
-
-	{
-		QVector<double> expectedTickValues = {0, 0.25, 0.5, 0.75, 1};
-		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
-	}
-
-	project.undoStack()->redo();
-	QCOMPARE(xAxis->majorTicksNumber(), 6);
-	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
-
-	{
-		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
-		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
-	}
-}
-
 void AxisTest::minorTicksAutoNumberEnableDisable() {
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
@@ -315,6 +215,8 @@ void AxisTest::majorTicksStartValue() {
 	AxisDock axisDock(nullptr);
 
 	auto* xAxis = axes.at(0);
+	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
+	xAxis->setMajorTicksNumber(5); // Expected might different because of auto
 
 	{
 		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
@@ -328,7 +230,7 @@ void AxisTest::majorTicksStartValue() {
 
 	QCOMPARE(xAxis->majorTicksStartType(), Axis::TicksStartType::Offset);
 
-	xAxis->setMajorTickStartValue(0.1); // does not affect anything, but just that the ticklabels are different to the offset when setting
+	xAxis->setMajorTickStartValue(0.5); // does not affect anything, but just that the ticklabels are different to the offset when setting
 
 	xAxis->setMajorTicksStartType(Axis::TicksStartType::Absolute);
 
@@ -336,15 +238,15 @@ void AxisTest::majorTicksStartValue() {
 
 	QCOMPARE(xAxis->majorTicksStartType(), Axis::TicksStartType::Absolute);
 	{
-		QVector<double> expectedTickValues = {0.1, 0.4, 0.7, 1.0}; // starting now from 0.1
+		QVector<double> expectedTickValues = {0.5, 0.6, 0.7, 0.8, 0.9, 1.0}; // starting now from 0.5
 		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
 	}
 
-	xAxis->setMajorTickStartValue(0.2);
-	QCOMPARE(axisDock.ui.sbMajorTickStartValue->value(), 0.2);
+	xAxis->setMajorTickStartValue(0.7);
+	QCOMPARE(axisDock.ui.sbMajorTickStartValue->value(), 0.7);
 
 	{
-		QVector<double> expectedTickValues = {0.2, 0.4, 0.6, 0.8, 1.0}; // starting now from 0.2
+		QVector<double> expectedTickValues = {0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0}; // starting now from 0.7
 		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
 	}
 
@@ -353,7 +255,7 @@ void AxisTest::majorTicksStartValue() {
 	QCOMPARE(xAxis->majorTicksStartType(), Axis::TicksStartType::Absolute);
 
 	{
-		QVector<double> expectedTickValues = {0.1, 0.4, 0.7, 1.0}; // starting now from 0.1
+		QVector<double> expectedTickValues = {0.5, 0.6, 0.7, 0.8, 0.9, 1.0}; // starting again from 0.5
 		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
 	}
 
@@ -933,6 +835,24 @@ void AxisTest::tickSpacingUpdateDockMajorTicks() {
 	// * for minor ticks, the spacing between the major ticks is 0.2 and the number of minor ticks is 1 which corresponds to spacing = 0.1
 	QCOMPARE(xAxis->majorTicksSpacing(), 0.2);
 	QCOMPARE(xAxis->minorTicksSpacing(), 0.1);
+}
+
+void AxisTest::testComputeMajorTickStart() {
+	int majorTickCount = 5;
+	double spacing = 0;
+	AxisPrivate::calculateAutoParameters(majorTickCount, Range<double>(-0.7, 0.8, RangeT::Format::Numeric, RangeT::Scale::Linear), spacing);
+
+	majorTickCount = 5;
+	AxisPrivate::calculateAutoParameters(majorTickCount, Range<double>(0.3, 1.0, RangeT::Format::Numeric, RangeT::Scale::Linear), spacing);
+
+	majorTickCount = 5;
+	AxisPrivate::calculateAutoParameters(majorTickCount, Range<double>(0.1, 1.0, RangeT::Format::Numeric, RangeT::Scale::Linear), spacing);
+
+	majorTickCount = 5;
+	AxisPrivate::calculateAutoParameters(majorTickCount, Range<double>(-250., 250., RangeT::Format::Numeric, RangeT::Scale::Linear), spacing);
+
+	majorTickCount = 7;
+	AxisPrivate::calculateAutoParameters(majorTickCount, Range<double>(-250., 250., RangeT::Format::Numeric, RangeT::Scale::Linear), spacing);
 }
 
 QTEST_MAIN(AxisTest)

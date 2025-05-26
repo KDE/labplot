@@ -200,7 +200,7 @@ public:
 	void retransformScales();
 	void retransformScale(Dimension, int index);
 
-  	void resizeInsetPlot(CartesianPlot*);
+	void resizeInsetPlot(CartesianPlot*);
 
 	QString theme() const;
 

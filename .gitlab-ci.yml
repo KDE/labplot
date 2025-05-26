@@ -86,11 +86,11 @@ craft_macos_qt6_arm64:
       allow_failure: true
 
 clang_format:
-  stage: test
+  stage: validate
   image: debian:bookworm
   before_script:
     - apt-get update
-    - apt-get install --yes --no-install-recommends git clang-format-13
+    - apt-get install --yes --no-install-recommends git clang-format-19
   script: |
     ./cl-fmt.sh
     git diff --exit-code

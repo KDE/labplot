@@ -111,7 +111,6 @@ public:
 	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(Position, position, Position)
 	BASIC_D_ACCESSOR_DECL(Range<double>, range, Range)
-	BASIC_D_ACCESSOR_DECL(bool, rangeScale, RangeScale) // if true, the scale of the range will be used
 	BASIC_D_ACCESSOR_DECL(RangeT::Scale, scale, Scale)
 	void setStart(const double);
 	void setEnd(const double);
@@ -136,7 +135,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(TicksType, majorTicksType, MajorTicksType)
 	BASIC_D_ACCESSOR_DECL(bool, majorTicksAutoNumber, MajorTicksAutoNumber)
 	int majorTicksNumber() const;
-	void setMajorTicksNumber(const int number, bool automatic = false);
+	void setMajorTicksNumber(const int number);
 	BASIC_D_ACCESSOR_DECL(qreal, majorTicksSpacing, MajorTicksSpacing)
 	BASIC_D_ACCESSOR_DECL(TicksStartType, majorTicksStartType, MajorTicksStartType)
 	BASIC_D_ACCESSOR_DECL(qreal, majorTickStartOffset, MajorTickStartOffset)
@@ -201,6 +200,7 @@ private:
 	void init(Orientation, bool loading = false);
 	void initActions();
 	void initMenus();
+	BASIC_D_ACCESSOR_DECL(bool, rangeScale, RangeScale) // if true, the scale of the range will be used. Deprecated, just for compatibility
 
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
@@ -294,6 +294,8 @@ Q_SIGNALS:
 	friend class AxisTest;
 	friend class AxisTest2;
 	friend class AxisTest3;
+	friend class AxisDock; // To be able to access range scale
+	friend class Project; // To be able to access range scale
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Axis::TicksDirection)

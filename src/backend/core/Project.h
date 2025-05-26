@@ -22,6 +22,8 @@ class ProjectPrivate;
 class QMimeData;
 class QString;
 
+Project* project();
+
 #ifdef SDK
 #include "labplot_export.h"
 class LABPLOT_EXPORT Project : public Folder {
@@ -86,6 +88,8 @@ public:
 	static int currentBuildXmlVersion();
 
 	typedef ProjectPrivate Private;
+
+	static Project* currentProject;
 
 public Q_SLOTS:
 	void descriptionChanged(const AbstractAspect*);

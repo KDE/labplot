@@ -196,13 +196,13 @@ WorksheetElementContainer* ResizeItem::container() {
 void ResizeItem::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) {
 }
 
-#define IMPL_SET_FN(TYPE, POS)                                                                                                                                 \
+#define IMPL_SET_FN(TYPE, POS)                                                                                                                             \
 void ResizeItem::set##POS(TYPE v) {                                                                                                                        \
-		m_rect.set##POS(v);                                                                                                                                    \
-		if (m_container->parentAspect()->type() == AspectType::CartesianPlot)                                                                                  \
-			m_container->setRect(m_rect);                                                                                                                      \
-		else                                                                                                                                                   \
-			m_container->setRect(mapRectToScene(m_rect));                                                                                                      \
+	m_rect.set##POS(v);                                                                                                                                    \
+	if (m_container->parentAspect()->type() == AspectType::CartesianPlot)                                                                                  \
+		m_container->setRect(m_rect);                                                                                                                      \
+	else                                                                                                                                                   \
+		m_container->setRect(mapRectToScene(m_rect));                                                                                                      \
 }
 
 IMPL_SET_FN(qreal, Top)

@@ -246,6 +246,8 @@ void AxisDock::retranslateUi() {
 	ui.lRangeType->setToolTip(msg);
 	ui.cbRangeType->setToolTip(msg);
 
+	ui.cbMajorTicksAutoNumber->setToolTip(i18n("If enabled: Use the major tick number as base to determine the new number of ticks for nice looking values. The number of ticks might be different than the number previously set."));
+
 	// scales
 	ui.cbScale->clear();
 	for (const auto& name : RangeT::scaleNames)
@@ -523,7 +525,7 @@ void AxisDock::updatePlotRangeList() {
 	if (m_axis->coordinateSystemCount() == 0)
 		return;
 
-	Axis::Orientation orientation = m_axis->orientation();
+	auto orientation = m_axis->orientation();
 	Range<double> logicalRange;
 	if (orientation == Axis::Orientation::Horizontal)
 		logicalRange = m_axis->plot()->range(Dimension::Y, m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->index(Dimension::Y));
@@ -929,12 +931,9 @@ void AxisDock::majorTicksDirectionChanged(int index) {
 	ui.cbMajorTicksType->setEnabled(b);
 	ui.cbMajorTicksAutoNumber->setEnabled(b);
 
-	if (b) {
-		if (ui.cbMajorTicksAutoNumber->isChecked())
-			ui.sbMajorTicksNumber->setEnabled(false);
-		else
-			ui.sbMajorTicksNumber->setEnabled(true);
-	} else
+	if (b)
+		ui.sbMajorTicksNumber->setEnabled(true);
+	else
 		ui.sbMajorTicksNumber->setEnabled(false);
 
 	ui.sbMajorTicksSpacingNumeric->setEnabled(b);
@@ -1057,7 +1056,6 @@ void AxisDock::majorTicksTypeChanged(int index) {
 
 void AxisDock::majorTicksAutoNumberChanged(int state) {
 	bool automatic = (state == Qt::CheckState::Checked ? true : false);
-	ui.sbMajorTicksNumber->setEnabled(!automatic);
 
 	CONDITIONAL_LOCK_RETURN;
 
@@ -1953,7 +1951,6 @@ void AxisDock::load() {
 	ui.cbMajorTicksDirection->setCurrentIndex((int)m_axis->majorTicksDirection());
 	ui.cbMajorTicksType->setCurrentIndex(ui.cbMajorTicksType->findData((int)m_axis->majorTicksType()));
 	ui.cbMajorTicksAutoNumber->setChecked(m_axis->majorTicksAutoNumber());
-	ui.sbMajorTicksNumber->setEnabled(!m_axis->majorTicksAutoNumber());
 
 	ui.sbMajorTicksNumber->setValue(m_axis->majorTicksNumber());
 	auto value{m_axis->majorTicksSpacing()};
@@ -2156,7 +2153,8 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	auto group = config.group(QStringLiteral("Axis"));
 
 	// General
-	group.writeEntry(QStringLiteral("Orientation"), ui.cbOrientation->currentIndex());
+	auto orientation = (WorksheetElement::Orientation)ui.cbOrientation->currentIndex();
+	group.writeEntry(QStringLiteral("Orientation"), (int)orientation);
 
 	if (ui.cbPosition->currentIndex() == 2) {
 		group.writeEntry(QStringLiteral("Position"), static_cast<int>(Axis::Position::Centered));
@@ -2179,9 +2177,18 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry(QStringLiteral("ScalingFactor"), ui.sbScalingFactor->value());
 	group.writeEntry(QStringLiteral("ShowScaleOffset"), ui.chkShowScaleOffset->isChecked());
 
-	// Title
+	// BOOKMARK(axis title): Title
 	auto axisTitleGroup = config.group(QStringLiteral("AxisTitle"));
 	labelWidget->saveConfig(axisTitleGroup);
+	// addtionally save rotation for x and y seperately to allow independent values
+	if (orientation == Axis::Orientation::Horizontal)
+		axisTitleGroup.writeEntry(QStringLiteral("RotationX"), labelWidget->ui.sbRotation->value());
+	else {
+		axisTitleGroup.writeEntry(QStringLiteral("RotationY"), labelWidget->ui.sbRotation->value());
+	}
+	// reset rotation used by the other axis (only used when other axis not saved)
+	// see Axis.cpp:BOOKMARK(axis title)
+	axisTitleGroup.writeEntry(QStringLiteral("Rotation"), 0);
 
 	// Line
 	lineWidget->saveConfig(group);

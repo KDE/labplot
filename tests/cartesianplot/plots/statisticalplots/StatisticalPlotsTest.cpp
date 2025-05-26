@@ -266,6 +266,7 @@ void StatisticalPlotsTest::testKDEPlotRange() {
 	// prepare the worksheet + plot
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setNiceExtend(true);
 	ws->addChild(p);
 
 	auto* kdePlot = new KDEPlot(QStringLiteral("kdeplot"));
@@ -364,6 +365,7 @@ void StatisticalPlotsTest::testQQPlotRange() {
 	// prepare the worksheet + plot
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setNiceExtend(true);
 	ws->addChild(p);
 
 	auto* qqPlot = new QQPlot(QStringLiteral("qqplot"));

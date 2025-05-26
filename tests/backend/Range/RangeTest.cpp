@@ -74,8 +74,7 @@ void RangeTest::testTickCount() {
 		{{1.3, 2.7}, 8},
 		{{0., 3.2}, 5},
 		{{0.4, 2.}, 5},
-		{{0.5, 2.5}, 5}
-		// size=29,41 should not happen when nice extended
+		{{0.5, 2.5}, 5} // size=29,41 should not happen when nice extended
 	};
 
 	for (auto& test : tests) {

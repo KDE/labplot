@@ -17,8 +17,9 @@ enum class Type {
 #endif
 	Datasets,
 #ifdef HAVE_KUSERFEEDBACK
-	Feedback
+	Feedback,
 #endif
+	ScriptEditor
 };
 
 KConfigGroup group(const QString& name);
