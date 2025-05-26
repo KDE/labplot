@@ -140,20 +140,19 @@ void ResizeItem::HandleItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (!(event->buttons() & Qt::LeftButton))
 		return;
 	const QPointF mouseLocal = m_parent->mapFromScene(event->scenePos());
-	const QPointF clamped   = restrictPosition(mouseLocal);
+	const QPointF restricted = restrictPosition(mouseLocal);
 	switch (m_position) {
-	case TopLeft:     m_parent->setTopLeft    (clamped);           break;
-	case Top:         m_parent->setTop        (clamped.y());       break;
-	case TopRight:    m_parent->setTopRight   (clamped);           break;
-	case Right:       m_parent->setRight      (clamped.x());       break;
-	case BottomRight: m_parent->setBottomRight(clamped);           break;
-	case Bottom:      m_parent->setBottom     (clamped.y());       break;
-	case BottomLeft:  m_parent->setBottomLeft (clamped);           break;
-	case Left:        m_parent->setLeft       (clamped.x());       break;
+	case TopLeft:     m_parent->setTopLeft    (restricted);           break;
+	case Top:         m_parent->setTop        (restricted.y());       break;
+	case TopRight:    m_parent->setTopRight   (restricted);           break;
+	case Right:       m_parent->setRight      (restricted.x());       break;
+	case BottomRight: m_parent->setBottomRight(restricted);           break;
+	case Bottom:      m_parent->setBottom     (restricted.y());       break;
+	case BottomLeft:  m_parent->setBottomLeft (restricted);           break;
+	case Left:        m_parent->setLeft       (restricted.x());       break;
 	}
 	event->accept();
 }
-
 
 ResizeItem::ResizeItem(WorksheetElementContainer* container)
 	: QGraphicsItem(container->graphicsItem())
