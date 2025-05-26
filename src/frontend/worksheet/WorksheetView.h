@@ -81,6 +81,7 @@ public:
 	void fillAddNewPlotMenu(ToggleActionMenu*) const;
 	void fillZoomMenu(ToggleActionMenu*) const;
 	void fillMagnificationMenu(ToggleActionMenu*) const;
+	void fillCartesianPlotNavigationToolBar(QToolBar*);
 	QMenu* plotAddNewMenu() const;
 
 private:
@@ -142,7 +143,6 @@ private:
 	bool m_isClosing{false};
 	bool m_isPrinting{false};
 	bool m_actionsInitialized{false};
-	bool m_plotActionsInitialized{false};
 	bool m_menusInitialized{false};
 	int m_numScheduledScalings{0};
 	bool m_suppressMouseModeChange{false};
@@ -248,7 +248,6 @@ public Q_SLOTS:
 #ifdef HAVE_TOUCHBAR
 	void fillTouchBar(KDMacTouchBar*);
 #endif
-	void fillCartesianPlotNavigationToolBar(QToolBar*, bool enableCursor = true) const;
 	void print(QPrinter*);
 	void selectItem(QGraphicsItem*);
 	void presenterMode();

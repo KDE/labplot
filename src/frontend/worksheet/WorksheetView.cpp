@@ -429,10 +429,6 @@ void WorksheetView::initPlotNavigationActions() {
 	plotShiftDownYAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ShiftDownY));
 
 	connect(m_plotNavigationActionGroup, &QActionGroup::triggered, this, &WorksheetView::changePlotNavigation);
-
-	m_plotActionsInitialized = true;
-
-	updateCartesianPlotActions();
 }
 
 void WorksheetView::initMenus() {
@@ -659,14 +655,14 @@ QMenu* WorksheetView::plotAddNewMenu() const {
  * adds the navigation related actions to the toolbar \c toolbar,
  * used in the Presenter Widget to populate its own navigation bar.
  */
-void WorksheetView::fillCartesianPlotNavigationToolBar(QToolBar* toolBar, bool enableCursor) const {
+void WorksheetView::fillCartesianPlotNavigationToolBar(QToolBar* toolBar) {
+	if (!plotSelectionModeAction)
+		initPlotNavigationActions();
 	toolBar->addAction(plotSelectionModeAction);
 	toolBar->addAction(plotCrosshairModeAction);
 	toolBar->addAction(plotZoomSelectionModeAction);
 	toolBar->addAction(plotZoomXSelectionModeAction);
 	toolBar->addAction(plotZoomYSelectionModeAction);
-	if (enableCursor)
-		toolBar->addAction(plotCursorModeAction);
 	toolBar->addSeparator();
 	toolBar->addAction(plotScaleAutoAction);
 	toolBar->addAction(plotScaleAutoXAction);
@@ -681,6 +677,7 @@ void WorksheetView::fillCartesianPlotNavigationToolBar(QToolBar* toolBar, bool e
 	toolBar->addAction(plotShiftRightXAction);
 	toolBar->addAction(plotShiftUpYAction);
 	toolBar->addAction(plotShiftDownYAction);
+	updateCartesianPlotActions();
 }
 
 void WorksheetView::setScene(QGraphicsScene* scene) {

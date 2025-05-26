@@ -124,7 +124,7 @@ SlidingPanelBottom::SlidingPanelBottom(const QRect& screenRect, WorksheetView* v
 	layout->setContentsMargins(0, 0, 0, 0);
 	setLayout(layout);
 
-	view->fillCartesianPlotNavigationToolBar(m_toolBar, false /* disable cursor action */);
+	view->fillCartesianPlotNavigationToolBar(m_toolBar);
 
 	// add an action to pin/unpin the panel (to make it fixed or floating)
 	m_toolBar->addSeparator();
