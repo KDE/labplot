@@ -117,6 +117,9 @@ void Spreadsheet::init() {
  * called initially and on column count changes (columns inserts/removals).
  */
 void Spreadsheet::initConnectionsRowCountChanges() {
+	if (columnCount() == 0)
+		return;
+
 	// check first if the first column was changed
 	Q_D(Spreadsheet);
 	auto* firstColumn = children<Column>().first();
