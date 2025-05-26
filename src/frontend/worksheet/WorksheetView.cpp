@@ -1609,7 +1609,7 @@ void WorksheetView::selectionChanged() {
 	if (m_suppressSelectionChangedEvent)
 		return;
 
-	QList<QGraphicsItem*> items = scene()->selectedItems();
+	const auto& items = scene()->selectedItems();
 
 	// check, whether the previously selected items were deselected now.
 	// Forward the deselection prior to the selection of new items

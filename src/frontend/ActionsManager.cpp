@@ -1113,8 +1113,7 @@ void ActionsManager::updateGUI() {
 		toolbar->setEnabled(true);
 
 		// populate the toolbar for cartesian plots
-		if (update)
-			connectPlotAreaToolbarActions(view);
+		connectPlotAreaToolbarActions(view); // connect even if update = true (same worksheet, but different worksheet element/plot selected potentially)
 		toolbar = qobject_cast<QToolBar*>(factory->container(QStringLiteral("cartesian_plot_toolbar"), m_mainWindow));
 		toolbar->setVisible(true);
 		toolbar->setEnabled(true);
