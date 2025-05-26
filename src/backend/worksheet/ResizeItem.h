@@ -54,7 +54,6 @@ private:
 		int m_position;
 		ResizeItem* m_parent;
 		QRectF m_oldRect;
-		QPointF m_lastMousePos;
 	};
 
 	QRectF boundingRect() const override;
