@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-23 00:38+0000\n"
-"PO-Revision-Date: 2025-05-20 16:47+0200\n"
+"PO-Revision-Date: 2025-05-24 09:19+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -3665,7 +3665,7 @@ msgstr "Cell (index, variable)"
 #: src/backend/gsl/functions.cpp:242
 #, kde-format
 msgid "Cell (index; default_value; variable)"
-msgstr "Cell (index, valeur_par_défaut, variable)"
+msgstr "Cell (index, valeur-par-défaut, variable)"
 
 #: src/backend/gsl/functions.cpp:243
 #, kde-format
@@ -3715,7 +3715,7 @@ msgstr "Cellule de colonne courante (index)"
 #: src/backend/gsl/functions.cpp:253
 #, kde-format
 msgid "Current column cell (index; default_value)"
-msgstr "Cellule de colonne courante (index ; valeur_par_défaut)"
+msgstr "Cellule de colonne courante (index ; valeur-par-défaut)"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:257
@@ -7309,32 +7309,29 @@ msgid "Tricube"
 msgstr "Tricubique"
 
 #: src/backend/script/Script.cpp:117 src/backend/script/Script.cpp:325
-#, fuzzy, kde-format
-#| msgid "no matrix element found"
+#, kde-format
 msgid "no script element found"
-msgstr "Aucun élément matrice trouvé"
+msgstr "Aucun élément de script n'a été trouvé."
 
 #: src/backend/script/Script.cpp:186
 #, kde-format
 msgid "%1: run %2 script"
-msgstr ""
+msgstr "%1 : exécuter le script %2"
 
 #: src/backend/script/Script.cpp:305 src/backend/script/Script.cpp:310
-#, fuzzy, kde-format
-#| msgid "&Script"
+#, kde-format
 msgid "Script"
-msgstr "&Script"
+msgstr "Script"
 
 #: src/backend/script/Script.cpp:305
-#, fuzzy, kde-format
-#| msgid "Failed to open the file."
+#, kde-format
 msgid "Failed to run the script."
-msgstr "Impossible d'ouvrir le fichier."
+msgstr "Impossible de lancer le script."
 
 #: src/backend/script/Script.cpp:310
 #, kde-format
 msgid "A script is already running."
-msgstr ""
+msgstr "Un script est déjà en cours d'exécution."
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:341
 #, kde-format
@@ -9922,7 +9919,7 @@ msgstr "Moyenne quadratique résiduelle"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1956
 #, kde-format
 msgid "Root mean square deviation"
-msgstr "Écart quadratique moyen (RMSD)"
+msgstr "Écart quadratique moyen"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1957
@@ -14709,12 +14706,10 @@ msgid "Properties: Workbook"
 msgstr "Propriétés : classeur"
 
 #: src/frontend/GuiObserver.cpp:508
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Fit"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Script"
-msgstr "Propriétés : ajusté"
+msgstr "Propriétés : script"
 
 #: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
@@ -15149,10 +15144,9 @@ msgstr "Barre d'outils des cahiers de notes"
 
 #. i18n: ectx: ToolBar (script_toolbar)
 #: src/frontend/labplotui.rc:40
-#, fuzzy, kde-format
-#| msgid "Project Toolbar"
+#, kde-format
 msgid "Script Toolbar"
-msgstr "Barre d'outils du projet"
+msgstr "Barre d'outils pour les scripts"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/frontend/labplotui.rc:44
@@ -15312,10 +15306,9 @@ msgid "Creates a new worksheet for data plotting"
 msgstr "Créé une nouvelle feuille de travail pour le tracé des données."
 
 #: src/frontend/MainWin.cpp:705
-#, fuzzy, kde-format
-#| msgid "Creates a new %1 notebook"
+#, kde-format
 msgid "Creates a new %1 script"
-msgstr "Crée un nouveau carnet %1"
+msgstr "Crée un nouveau script %1"
 
 #: src/frontend/MainWin.cpp:711 src/frontend/MainWin.cpp:2126
 #, kde-format
@@ -16438,10 +16431,9 @@ msgid "User Feedback"
 msgstr "Retour des utilisateurs"
 
 #: src/frontend/SettingsDialog.cpp:98
-#, fuzzy, kde-format
-#| msgid "Text position"
+#, kde-format
 msgid "Text Editor"
-msgstr "Position du texte"
+msgstr "Éditeur de texte"
 
 #: src/frontend/SettingsDialog.cpp:155
 #, kde-format
@@ -22152,29 +22144,27 @@ msgstr "Centrer la ligne"
 
 #. i18n: ectx: property (text), widget (QLabel, lOutputFont)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:33
-#, fuzzy, kde-format
-#| msgid "Output:"
+#, kde-format
 msgid "Output Font:"
-msgstr "Sortie :"
+msgstr "Fonte de la sortie :"
 
 #. i18n: ectx: property (text), widget (QLabel, lEditorFont)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:40
 #, kde-format
 msgid "Editor Font:"
-msgstr ""
+msgstr "Fonte de l'éditeur :"
 
 #. i18n: ectx: property (text), widget (QLabel, lRuntime)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:99
 #, kde-format
 msgid "Runtime:"
-msgstr ""
+msgstr "Durée d'exécution : "
 
 #. i18n: ectx: property (text), widget (QLabel, lTheme)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:141
-#, fuzzy, kde-format
-#| msgid "Theme:"
+#, kde-format
 msgid "Editor Theme:"
-msgstr "Thème :"
+msgstr "Thème de l'éditeur :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
