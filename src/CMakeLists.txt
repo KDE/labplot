@@ -12,6 +12,7 @@ endif()
 
 set(GUI_SOURCES
     ${FRONTEND_DIR}/AboutDialog.cpp
+    ${FRONTEND_DIR}/ActionsManager.cpp
     ${FRONTEND_DIR}/DatasetModel.cpp
     ${FRONTEND_DIR}/GuiObserver.cpp
     ${FRONTEND_DIR}/GuiTools.cpp
@@ -166,6 +167,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/widgets/TimedLineEdit.cpp
     ${FRONTEND_DIR}/widgets/TreeViewComboBox.cpp
     ${FRONTEND_DIR}/widgets/qxtspanslider.cpp
+    ${FRONTEND_DIR}/widgets/toggleactionmenu.cpp
     ${FRONTEND_DIR}/widgets/MemoryWidget.cpp
     ${FRONTEND_DIR}/widgets/DateTimeSpinBox.cpp
     ${FRONTEND_DIR}/widgets/NumberSpinBox.cpp
