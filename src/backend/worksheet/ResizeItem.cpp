@@ -142,14 +142,30 @@ void ResizeItem::HandleItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	const QPointF mouseLocal = m_parent->mapFromScene(event->scenePos());
 	const QPointF restricted = restrictPosition(mouseLocal);
 	switch (m_position) {
-	case TopLeft:     m_parent->setTopLeft    (restricted);           break;
-	case Top:         m_parent->setTop        (restricted.y());       break;
-	case TopRight:    m_parent->setTopRight   (restricted);           break;
-	case Right:       m_parent->setRight      (restricted.x());       break;
-	case BottomRight: m_parent->setBottomRight(restricted);           break;
-	case Bottom:      m_parent->setBottom     (restricted.y());       break;
-	case BottomLeft:  m_parent->setBottomLeft (restricted);           break;
-	case Left:        m_parent->setLeft       (restricted.x());       break;
+	case TopLeft:
+		m_parent->setTopLeft(restricted);
+		break;
+	case Top:
+		m_parent->setTop(restricted.y());
+		break;
+	case TopRight:
+		m_parent->setTopRight(restricted);
+		break;
+	case Right:
+		m_parent->setRight(restricted.x());
+		break;
+	case BottomRight:
+		m_parent->setBottomRight(restricted);
+		break;
+	case Bottom:
+		m_parent->setBottom(restricted.y());
+		break;
+	case BottomLeft:
+		m_parent->setBottomLeft(restricted);
+		break;
+	case Left:
+		m_parent->setLeft(restricted.x());
+		break;
 	}
 	event->accept();
 }
@@ -195,14 +211,14 @@ WorksheetElementContainer* ResizeItem::container() {
 void ResizeItem::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) {
 }
 
-#define IMPL_SET_FN(TYPE, POS)                                                                                                                             \
-void ResizeItem::set##POS(TYPE v) {                                                                                                                        \
-	m_rect.set##POS(v);                                                                                                                                    \
-	if (m_container->parentAspect()->type() == AspectType::CartesianPlot)                                                                                  \
-		m_container->setRect(m_rect);                                                                                                                      \
-	else                                                                                                                                                   \
-		m_container->setRect(mapRectToScene(m_rect));                                                                                                      \
-}
+#define IMPL_SET_FN(TYPE, POS)                                                                                                                                 \
+	void ResizeItem::set##POS(TYPE v) {                                                                                                                        \
+		m_rect.set##POS(v);                                                                                                                                    \
+		if (m_container->parentAspect()->type() == AspectType::CartesianPlot)                                                                                  \
+			m_container->setRect(m_rect);                                                                                                                      \
+		else                                                                                                                                                   \
+			m_container->setRect(mapRectToScene(m_rect));                                                                                                      \
+	}
 
 IMPL_SET_FN(qreal, Top)
 IMPL_SET_FN(qreal, Right)
