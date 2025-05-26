@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-23 00:38+0000\n"
-"PO-Revision-Date: 2025-05-13 18:44+0200\n"
+"PO-Revision-Date: 2025-05-23 10:58+0200\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -8452,16 +8452,14 @@ msgstr "Referenzbereich"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:555
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2270
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2292
-#, fuzzy, kde-format
-#| msgid "As Plot Area"
+#, kde-format
 msgid "Inset Plot Area"
-msgstr "Als Plotbereich"
+msgstr "Einsatzplotbereich"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
-#, fuzzy, kde-format
-#| msgid "One Plot Area per Plot"
+#, kde-format
 msgid "Inset Plot Area with Data"
-msgstr "Ein Plotbereich pro Plot"
+msgstr "Einsatzplotbereich mit Daten"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:574
 #: src/frontend/MainWin.cpp:947 src/frontend/notebook/NotebookView.cpp:168
@@ -8876,16 +8874,14 @@ msgid "Text Label"
 msgstr "Textmarke"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2269
-#, fuzzy, kde-format
-#| msgid "%1: add new point"
+#, kde-format
 msgid "%1: add inset plot"
-msgstr "%1: Neuen Punkt hinzufügen"
+msgstr "%1: Einsatzplot hinzufügen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2283
-#, fuzzy, kde-format
-#| msgid "%1: add new point"
+#, kde-format
 msgid "%1: add inset plot with data"
-msgstr "%1: Neuen Punkt hinzufügen"
+msgstr "%1: Einsatzplot mit Daten hinzufügen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4021
 #, kde-format
@@ -12552,6 +12548,9 @@ msgid ""
 "ticks for nice looking values. The number of ticks might be different than "
 "the number previously set."
 msgstr ""
+"Wenn aktiv: Verwende die Hautptickanzahl als Basis zur Bestimmung der Anzahl "
+"an Ticks für gerade Werte. Die tatsächliche Anzahl kann von der gesetzten "
+"Anzahl abweichen."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:262
 #, kde-format

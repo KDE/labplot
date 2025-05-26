@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-23 00:38+0000\n"
-"PO-Revision-Date: 2025-05-19 13:23+0200\n"
+"PO-Revision-Date: 2025-05-23 12:36+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -7337,32 +7337,29 @@ msgid "Tricube"
 msgstr "Tri-cúbica"
 
 #: src/backend/script/Script.cpp:117 src/backend/script/Script.cpp:325
-#, fuzzy, kde-format
-#| msgid "no note element found"
+#, kde-format
 msgid "no script element found"
-msgstr "no s'ha trobat cap element de nota"
+msgstr "no s'ha trobat cap element de script"
 
 #: src/backend/script/Script.cpp:186
 #, kde-format
 msgid "%1: run %2 script"
-msgstr ""
+msgstr "%1: executa l'script %2"
 
 #: src/backend/script/Script.cpp:305 src/backend/script/Script.cpp:310
-#, fuzzy, kde-format
-#| msgid "&Script"
+#, kde-format
 msgid "Script"
-msgstr "&Script"
+msgstr "Script"
 
 #: src/backend/script/Script.cpp:305
-#, fuzzy, kde-format
-#| msgid "Failed to open the file."
+#, kde-format
 msgid "Failed to run the script."
-msgstr "Ha fallat en obrir el fitxer."
+msgstr "Ha fallat en executar l'script."
 
 #: src/backend/script/Script.cpp:310
 #, kde-format
 msgid "A script is already running."
-msgstr ""
+msgstr "Ja s'està executant un script."
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:341
 #, kde-format
@@ -14733,12 +14730,10 @@ msgid "Properties: Workbook"
 msgstr "Propietats: Llibre de treball"
 
 #: src/frontend/GuiObserver.cpp:508
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Fit"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Script"
-msgstr "Propietats: Ajust"
+msgstr "Propietats: Script"
 
 #: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
@@ -15172,10 +15167,9 @@ msgstr "Barra d'eines de bloc de notes"
 
 #. i18n: ectx: ToolBar (script_toolbar)
 #: src/frontend/labplotui.rc:40
-#, fuzzy, kde-format
-#| msgid "Project Toolbar"
+#, kde-format
 msgid "Script Toolbar"
-msgstr "Barra d'eines de projecte"
+msgstr "Barra d'eines de scripts"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/frontend/labplotui.rc:44
@@ -15335,10 +15329,9 @@ msgid "Creates a new worksheet for data plotting"
 msgstr "Crea un full de treball nou per al traçat de les dades"
 
 #: src/frontend/MainWin.cpp:705
-#, fuzzy, kde-format
-#| msgid "Creates a new %1 notebook"
+#, kde-format
 msgid "Creates a new %1 script"
-msgstr "Crea un bloc de notes nou de %1"
+msgstr "Crea un script nou de %1"
 
 #: src/frontend/MainWin.cpp:711 src/frontend/MainWin.cpp:2126
 #, kde-format
@@ -16461,10 +16454,9 @@ msgid "User Feedback"
 msgstr "Comentaris de l'usuari"
 
 #: src/frontend/SettingsDialog.cpp:98
-#, fuzzy, kde-format
-#| msgid "Text position"
+#, kde-format
 msgid "Text Editor"
-msgstr "Posició del text"
+msgstr "Editor de text"
 
 #: src/frontend/SettingsDialog.cpp:155
 #, kde-format
@@ -22174,29 +22166,27 @@ msgstr "Línia del centre"
 
 #. i18n: ectx: property (text), widget (QLabel, lOutputFont)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:33
-#, fuzzy, kde-format
-#| msgid "Output:"
+#, kde-format
 msgid "Output Font:"
-msgstr "Sortida:"
+msgstr "Lletra de sortida:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEditorFont)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:40
 #, kde-format
 msgid "Editor Font:"
-msgstr ""
+msgstr "Lletra de l'editor:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRuntime)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:99
 #, kde-format
 msgid "Runtime:"
-msgstr ""
+msgstr "Temps d'execució:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTheme)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:141
-#, fuzzy, kde-format
-#| msgid "Theme:"
+#, kde-format
 msgid "Editor Theme:"
-msgstr "Tema:"
+msgstr "Tema de l'editor:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)

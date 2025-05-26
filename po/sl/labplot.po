@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-23 00:38+0000\n"
-"PO-Revision-Date: 2025-05-19 06:57+0200\n"
+"PO-Revision-Date: 2025-05-23 07:15+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -7273,32 +7273,29 @@ msgid "Tricube"
 msgstr "Trikubično"
 
 #: src/backend/script/Script.cpp:117 src/backend/script/Script.cpp:325
-#, fuzzy, kde-format
-#| msgid "no note element found"
+#, kde-format
 msgid "no script element found"
-msgstr "ni najdenega elementa opombe"
+msgstr "ni najdenega elementa skripta"
 
 #: src/backend/script/Script.cpp:186
 #, kde-format
 msgid "%1: run %2 script"
-msgstr ""
+msgstr "%1: poženi %2 skript"
 
 #: src/backend/script/Script.cpp:305 src/backend/script/Script.cpp:310
-#, fuzzy, kde-format
-#| msgid "&Script"
+#, kde-format
 msgid "Script"
-msgstr "&Skript"
+msgstr "Skript"
 
 #: src/backend/script/Script.cpp:305
-#, fuzzy, kde-format
-#| msgid "Failed to open the file."
+#, kde-format
 msgid "Failed to run the script."
-msgstr "Odpiranje datoteke ni uspelo."
+msgstr "Skripta ni bilo mogoče zagnati."
 
 #: src/backend/script/Script.cpp:310
 #, kde-format
 msgid "A script is already running."
-msgstr ""
+msgstr "Skript se že izvaja."
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:341
 #, kde-format
@@ -14607,12 +14604,10 @@ msgid "Properties: Workbook"
 msgstr "Lastnosti: Delovni zvezek"
 
 #: src/frontend/GuiObserver.cpp:508
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Fit"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Script"
-msgstr "Lastnosti: Prileganje"
+msgstr "Lastnosti: Skript"
 
 #: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
@@ -15046,10 +15041,9 @@ msgstr "Orodna vrstica zvezka"
 
 #. i18n: ectx: ToolBar (script_toolbar)
 #: src/frontend/labplotui.rc:40
-#, fuzzy, kde-format
-#| msgid "Project Toolbar"
+#, kde-format
 msgid "Script Toolbar"
-msgstr "Orodna vrstica projektov"
+msgstr "Orodna vrstica skripta"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/frontend/labplotui.rc:44
@@ -15207,10 +15201,9 @@ msgid "Creates a new worksheet for data plotting"
 msgstr "Ustvari nov delovni list za urejanje podatkov"
 
 #: src/frontend/MainWin.cpp:705
-#, fuzzy, kde-format
-#| msgid "Creates a new %1 notebook"
+#, kde-format
 msgid "Creates a new %1 script"
-msgstr "Ustvari novo %1 zvezek"
+msgstr "Ustvari nov %1 skript"
 
 #: src/frontend/MainWin.cpp:711 src/frontend/MainWin.cpp:2126
 #, kde-format
@@ -16332,10 +16325,9 @@ msgid "User Feedback"
 msgstr "Povratne informacije uporabnika"
 
 #: src/frontend/SettingsDialog.cpp:98
-#, fuzzy, kde-format
-#| msgid "Text position"
+#, kde-format
 msgid "Text Editor"
-msgstr "Položaj besedila"
+msgstr "Urejevalnik besedila"
 
 #: src/frontend/SettingsDialog.cpp:155
 #, kde-format
@@ -22023,29 +22015,27 @@ msgstr "Osrednja črta"
 
 #. i18n: ectx: property (text), widget (QLabel, lOutputFont)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:33
-#, fuzzy, kde-format
-#| msgid "Output:"
+#, kde-format
 msgid "Output Font:"
-msgstr "Izhod:"
+msgstr "Pisava izhoda:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEditorFont)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:40
 #, kde-format
 msgid "Editor Font:"
-msgstr ""
+msgstr "Pisava urejevalnika:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRuntime)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:99
 #, kde-format
 msgid "Runtime:"
-msgstr ""
+msgstr "Čas delovanja:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTheme)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:141
-#, fuzzy, kde-format
-#| msgid "Theme:"
+#, kde-format
 msgid "Editor Theme:"
-msgstr "Tema:"
+msgstr "Tema urejevalnika:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)

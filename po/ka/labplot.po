@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-23 00:38+0000\n"
-"PO-Revision-Date: 2025-05-19 03:34+0200\n"
+"PO-Revision-Date: 2025-05-23 04:04+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -7259,32 +7259,29 @@ msgid "Tricube"
 msgstr "ტრიკუბიკური"
 
 #: src/backend/script/Script.cpp:117 src/backend/script/Script.cpp:325
-#, fuzzy, kde-format
-#| msgid "no note element found"
+#, kde-format
 msgid "no script element found"
-msgstr "ელემენტი note აღმოჩენილი არაა"
+msgstr "სკრიპტის ელემენტი აღმოჩენილი არაა"
 
 #: src/backend/script/Script.cpp:186
 #, kde-format
 msgid "%1: run %2 script"
-msgstr ""
+msgstr "%1: %2 სკრიპტის გაშვება"
 
 #: src/backend/script/Script.cpp:305 src/backend/script/Script.cpp:310
-#, fuzzy, kde-format
-#| msgid "&Script"
+#, kde-format
 msgid "Script"
-msgstr "&სკრიპტი"
+msgstr "სკრიპტი"
 
 #: src/backend/script/Script.cpp:305
-#, fuzzy, kde-format
-#| msgid "Failed to open the file."
+#, kde-format
 msgid "Failed to run the script."
-msgstr "ფაილის გახსნის შეცდომა."
+msgstr "სკრიპტის გაშვება ჩავარდა."
 
 #: src/backend/script/Script.cpp:310
 #, kde-format
 msgid "A script is already running."
-msgstr ""
+msgstr "სკრიპტი უკვე გაშვებულია."
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:341
 #, kde-format
@@ -14585,12 +14582,10 @@ msgid "Properties: Workbook"
 msgstr "თვისებები: სამუშაო წიგნი"
 
 #: src/frontend/GuiObserver.cpp:508
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Fit"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Script"
-msgstr "თვისებები: ჩატევა"
+msgstr "თვისებები: სკრიპტი"
 
 #: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
@@ -15024,10 +15019,9 @@ msgstr "ნოუთბუქის პანელი"
 
 #. i18n: ectx: ToolBar (script_toolbar)
 #: src/frontend/labplotui.rc:40
-#, fuzzy, kde-format
-#| msgid "Project Toolbar"
+#, kde-format
 msgid "Script Toolbar"
-msgstr "პროექტის პანელი"
+msgstr "სკრიპტის პანელი"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/frontend/labplotui.rc:44
@@ -15187,10 +15181,9 @@ msgid "Creates a new worksheet for data plotting"
 msgstr "ქმნის ახალ სამუშაო ფურცელს მონაცემების დასახატად"
 
 #: src/frontend/MainWin.cpp:705
-#, fuzzy, kde-format
-#| msgid "Creates a new %1 notebook"
+#, kde-format
 msgid "Creates a new %1 script"
-msgstr "ქმნის ახალ %1 ბლოკნოტს"
+msgstr "ქმნის ახალ %1 სკრიპტს"
 
 #: src/frontend/MainWin.cpp:711 src/frontend/MainWin.cpp:2126
 #, kde-format
@@ -16307,10 +16300,9 @@ msgid "User Feedback"
 msgstr "მომხარებლის უკუკავშირი"
 
 #: src/frontend/SettingsDialog.cpp:98
-#, fuzzy, kde-format
-#| msgid "Text position"
+#, kde-format
 msgid "Text Editor"
-msgstr "ტექსტის მდებარეობა"
+msgstr "ტექსტური რედაქტორი"
 
 #: src/frontend/SettingsDialog.cpp:155
 #, kde-format
@@ -21980,29 +21972,27 @@ msgstr "ცენტრის ხაზი"
 
 #. i18n: ectx: property (text), widget (QLabel, lOutputFont)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:33
-#, fuzzy, kde-format
-#| msgid "Output:"
+#, kde-format
 msgid "Output Font:"
-msgstr "გამოტანა:"
+msgstr "გამოტანის ფონტი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEditorFont)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:40
 #, kde-format
 msgid "Editor Font:"
-msgstr ""
+msgstr "რედაქტორის ფონტი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRuntime)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:99
 #, kde-format
 msgid "Runtime:"
-msgstr ""
+msgstr "გაშვების გარემო:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTheme)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:141
-#, fuzzy, kde-format
-#| msgid "Theme:"
+#, kde-format
 msgid "Editor Theme:"
-msgstr "თემა:"
+msgstr "რედაქტორის თემა:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
