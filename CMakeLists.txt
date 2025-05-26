@@ -730,6 +730,7 @@ endif()
 if(ENABLE_PYTHON_SCRIPTING)
     find_package(Python3 COMPONENTS Development.Embed REQUIRED)
     add_definitions(-DHAVE_PYTHON_SCRIPTING)
+    add_definitions(-DPYTHON3_VERSION_STRING=\"${Python3_VERSION}\")
 endif()
 
 # Qt Advanced Docking System (required) #####################

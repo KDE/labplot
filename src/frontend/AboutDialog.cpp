@@ -208,6 +208,12 @@ QVector<QStringList> AboutDialog::components() {
 	// alphabetically
 	QString version;
 	QString missing = QLatin1String("<font color=\"red\">") + i18n("missing") + QLatin1String("</font>");
+#ifdef HAVE_PYTHON_SCRIPTING
+	version = QLatin1String(PYTHON3_VERSION_STRING);
+#else
+	version = missing;
+#endif
+	components << (QStringList() << QLatin1String("Python") << i18n("Python scripting support") << version << QStringLiteral("https://www.python.org"));
 #ifdef HAVE_CANTOR_LIBS
 	version = QLatin1String(CANTOR_VERSION_STRING);
 #else
