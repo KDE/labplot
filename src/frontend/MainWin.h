@@ -18,6 +18,7 @@
 #include <KXmlGuiWindow>
 #include <QStringLiteral>
 #include <QTimer>
+#include <QPointer>
 
 class AbstractAspect;
 class ActionsManager;
@@ -46,6 +47,7 @@ class KColorSchemeManager;
 namespace ads {
 class CDockManager;
 class CDockWidget;
+class CDockAreaWidget;
 }
 
 #ifdef HAVE_KUSERFEEDBACK
@@ -88,6 +90,9 @@ private:
 	ads::CDockWidget* m_worksheetPreviewDock{nullptr};
 	AbstractAspect* m_currentAspect{nullptr};
 	ads::CDockWidget* m_currentAspectDock{nullptr};
+	// introduce a QPointer for the current aspect dock area
+	// we use QPointer because it internally sets itself to nullptr when the object it manages is deleted
+	QPointer<ads::CDockAreaWidget> m_currentAspectDockArea{nullptr};
 	Folder* m_currentFolder{nullptr};
 	QString m_undoViewEmptyLabel;
 	bool m_suppressCurrentSubWindowChangedEvent{false};

@@ -460,8 +460,10 @@ void MainWin::activatePreviousDock() {
 }
 
 void MainWin::dockWidgetRemoved(ads::CDockWidget* w) {
-	if (w == m_currentAspectDock)
+	if (w == m_currentAspectDock) {
 		m_currentAspectDock = nullptr;
+		m_currentAspectDockArea = nullptr;
+	}
 }
 
 void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
@@ -1419,7 +1421,9 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 		if (dock == nullptr) {
 			// Add new dock if not found
 			ads::CDockAreaWidget* areaWidget{nullptr};
-			if (m_dockManagerContent->dockWidgetsMap().isEmpty() || !m_currentAspectDock) {
+			// when a dock area is empty, it is deleted and becomes invalid (for example after all its dock widgets are hidden/unpinned)
+			// so we also need to check that the dock area of the current aspect is valid
+			if (m_dockManagerContent->dockWidgetsMap().isEmpty() || !m_currentAspectDock || !m_currentAspectDockArea) {
 				// If only project explorer and properties dock exist place it right to the project explorer
 				areaWidget = m_dockManagerContent->addDockWidget(ads::CenterDockWidgetArea, win);
 			} else {
@@ -1443,6 +1447,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 			dock->toggleView(true);
 
 		m_currentAspectDock = win;
+		m_currentAspectDockArea = m_currentAspectDock->dockAreaWidget();
 		m_dockManagerContent->setDockWidgetFocused(win);
 	} else {
 		// activate the mdiView of the parent, if a child was selected
