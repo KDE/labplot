@@ -7,6 +7,7 @@ Bug fixes:
 	* Crash on import when no projects opened (BUG 503800)
 	* Save rotation of axis title seperately for x and y axis
 	* Don't crash when creating the data spreadsheet for analysis curves (BUG 504662)
+	* Fix crash when aspect is added and all docks in content area are hidden (BUG 504794, 502043)
 
 
 -----2.12.0 (25.04.2025) -----
