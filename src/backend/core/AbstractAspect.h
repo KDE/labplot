@@ -102,6 +102,7 @@ enum class AspectType : quint64 {
 	Note = 0x0420008,
 	Workbook = 0x0420010,
 	Worksheet = 0x0420020,
+	Script = 0x0420030,
 
 	AbstractColumn = 0x1000000,
 	Column = 0x1000001,
@@ -251,6 +252,8 @@ public:
 			return QStringLiteral("Workbook");
 		case AspectType::Worksheet:
 			return QStringLiteral("Worksheet");
+		case AspectType::Script:
+			return QStringLiteral("Script");
 		case AspectType::AbstractColumn:
 			return QStringLiteral("AbstractColumn");
 		case AspectType::Column:
@@ -305,12 +308,12 @@ public:
 	void setParentAspect(AbstractAspect*);
 	Folder* folder();
 	bool isDescendantOf(AbstractAspect* other);
-	void addChild(AbstractAspect*, QUndoCommand* parent = nullptr);
+	void addChild(AbstractAspect*);
 	void addChildFast(AbstractAspect*);
-	virtual void finalizeAdd(){};
+	virtual void finalizeAdd() { };
 	QVector<AbstractAspect*> children(AspectType, ChildIndexFlags = {}) const;
-	void insertChild(AbstractAspect* child, int index, QUndoCommand* parent = nullptr);
-	void insertChildBefore(AbstractAspect* child, AbstractAspect* before, QUndoCommand* parent = nullptr);
+	void insertChild(AbstractAspect* child, int index);
+	void insertChildBefore(AbstractAspect* child, AbstractAspect* before);
 	void insertChildBeforeFast(AbstractAspect* child, AbstractAspect* before);
 	void reparent(AbstractAspect* newParent, int newIndex = -1);
 	/*!
@@ -319,15 +322,15 @@ public:
 	 * \param parent If parent is not nullptr the command will not be executed, but the parent must be executed
 	 * to indirectly execute the created undocommand
 	 */
-	void removeChild(AbstractAspect*, QUndoCommand* parent = nullptr);
+	void removeChild(AbstractAspect*);
 	void removeAllChildren();
-	void moveChild(AbstractAspect*, int steps, QUndoCommand* parent = nullptr);
+	void moveChild(AbstractAspect*, int steps);
 	virtual QVector<AbstractAspect*> dependsOn() const;
 
 	virtual QVector<AspectType> pasteTypes() const;
 	virtual bool isDraggable() const;
 	virtual QVector<AspectType> dropableOn() const;
-	virtual void processDropEvent(const QVector<quintptr>&){};
+	virtual void processDropEvent(const QVector<quintptr>&) { };
 
 	template<class T>
 	T* ancestor() const {
@@ -374,6 +377,14 @@ public:
 			T* c = dynamic_cast<T*>(child);
 			if (c && child->name() == name)
 				return c;
+		}
+		return nullptr;
+	}
+
+	AbstractAspect* child(const QString& name, AspectType type) const {
+		for (auto* child : children()) {
+			if (child->type() == type && child->name() == name)
+				return child;
 		}
 		return nullptr;
 	}
@@ -451,7 +462,6 @@ public Q_SLOTS:
 	bool setName(const QString&, NameHandling handling = NameHandling::AutoUnique, QUndoCommand* parent = nullptr);
 	void setComment(const QString&);
 	void remove();
-	void remove(QUndoCommand* parent);
 	void copy();
 	void duplicate();
 	void paste(bool duplicate = false, int index = -1);
@@ -467,6 +477,10 @@ protected Q_SLOTS:
 Q_SIGNALS:
 	void aspectDescriptionAboutToChange(const AbstractAspect*);
 	void aspectDescriptionChanged(const AbstractAspect*);
+
+	void aspectCommentAboutToChange(const AbstractAspect*);
+	void aspectCommentChanged(const AbstractAspect*);
+
 	/*!
 	 * \brief aspectAboutToBeAdded
 	 * Signal indicating a new child was added at position \p index. Do not connect to both variants of aspectAboutToBeAdded!

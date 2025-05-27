@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Aspect providing a spreadsheet table with column logic
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2006-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -58,12 +58,16 @@ public:
 	Column* column(const QString&) const;
 	int rowCount() const; // TODO: should be size_t?
 
-	void removeRows(int first, int count, QUndoCommand* parent = nullptr);
-	void insertRows(int before, int count, QUndoCommand* parent = nullptr);
-	void removeColumns(int first, int count, QUndoCommand* parent = nullptr);
-	void insertColumns(int before, int count, QUndoCommand* parent = nullptr);
+	void removeRows(int first, int count);
+	void insertRows(int before, int count);
+	void removeColumns(int first, int count);
+	void insertColumns(int before, int count);
 
 	QString text(int row, int col) const;
+
+	BASIC_D_ACCESSOR_DECL(bool, showComments, ShowComments)
+	BASIC_D_ACCESSOR_DECL(bool, showSparklines, ShowSparklines)
+	BASIC_D_ACCESSOR_DECL(bool, linking, Linking)
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -77,8 +81,6 @@ public:
 	void emitColumnCountChanged() {
 		Q_EMIT columnCountChanged(columnCount());
 	}
-
-	bool isSparklineShown{false};
 
 	// data import
 	int prepareImport(std::vector<void*>& dataContainer,
@@ -115,10 +117,9 @@ public Q_SLOTS:
 	void appendColumn();
 	void prependColumns(int);
 
-	void setColumnCount(int, QUndoCommand* parent = nullptr);
-	void setRowCount(int, QUndoCommand* parent = nullptr);
+	void setColumnCount(int);
+	void setRowCount(int);
 
-	BASIC_D_ACCESSOR_DECL(bool, linking, Linking)
 	const Spreadsheet* linkedSpreadsheet() const;
 	void setLinkedSpreadsheet(const Spreadsheet*, bool skipUndo = false);
 	QString linkedSpreadsheetPath() const;
@@ -148,6 +149,7 @@ protected:
 private Q_SLOTS:
 	void childSelected(const AbstractAspect*) override;
 	void childDeselected(const AbstractAspect*) override;
+	void initConnectionsRowCountChanges();
 	void linkedSpreadsheetDeleted();
 	void linkedSpreadsheetNewRowCount(int);
 	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*);
@@ -174,6 +176,8 @@ Q_SIGNALS:
 	void rowsAboutToBeRemoved(int first, int count);
 	void rowsRemoved(int newRowCount);
 
+	void showCommentsChanged(bool);
+	void showSparklinesChanged(bool);
 	void linkingChanged(bool);
 	void linkedSpreadsheetChanged(const Spreadsheet*);
 

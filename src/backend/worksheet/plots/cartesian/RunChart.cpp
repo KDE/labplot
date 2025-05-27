@@ -122,8 +122,12 @@ void RunChart::finalizeAdd() {
 
 void RunChart::renameInternalCurves() {
 	Q_D(RunChart);
+	d->dataCurve->setUndoAware(false);
+	d->centerCurve->setUndoAware(false);
 	d->dataCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->centerCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
+	d->dataCurve->setUndoAware(true);
+	d->centerCurve->setUndoAware(true);
 }
 
 /*!

@@ -971,7 +971,7 @@ void WorksheetElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	m_leftButtonPressed = false;
-	if (!m_moveStarted) {
+	if (!m_moveStarted || !(this->flags() & QGraphicsItem::ItemIsMovable)) {
 		QGraphicsItem::mouseReleaseEvent(event);
 		return;
 	}
@@ -981,15 +981,17 @@ void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 	auto point = q->align(pos(), boundingRect(), horizontalAlignment, verticalAlignment, false);
 	// in percentage
 	auto parentRect = q->parentRect();
-	point.setX(point.x() / parentRect.width() + 0.5);
-	point.setY(point.y() / parentRect.height() + 0.5);
+	point.setX((point.x() - parentRect.x()) / parentRect.width());
+	point.setY((point.y() - parentRect.y()) / parentRect.height());
 	QDEBUG(Q_FUNC_INFO << ", new position (relative) =" << point)
 
-	if (point != position.point) {
-		// position was changed -> set the position related member variables
+	if (point != position.point) { // position was changed
 		suppressRetransform = true;
 		auto tempPosition = position;
 		tempPosition.point = point;
+		// switch to relative
+		tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Relative;
+		tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Relative;
 		q->setPosition(tempPosition);
 		updatePosition(); // to update the logical position if available
 		suppressRetransform = false;
@@ -999,8 +1001,9 @@ void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 	QGraphicsItem::mouseReleaseEvent(event);
 }
 
+// called when any property changes (like position)
 QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QVariant& value) {
-	if (suppressItemChangeEvent)
+	if (suppressItemChangeEvent || !(this->flags() & QGraphicsItem::ItemIsMovable))
 		return value;
 
 	if (change == QGraphicsItem::ItemPositionChange) {
@@ -1035,8 +1038,8 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 			tempPosition.point = q->align(newPos, boundingRect(), horizontalAlignment, verticalAlignment, false);
 			// in percentage
 			auto parentRect = q->parentRect();
-			tempPosition.point.setX(tempPosition.point.x() / parentRect.width() + 0.5);
-			tempPosition.point.setY(tempPosition.point.y() / parentRect.height() + 0.5);
+			tempPosition.point.setX((tempPosition.point.x() - parentRect.x()) / parentRect.width());
+			tempPosition.point.setY((tempPosition.point.y() - parentRect.y()) / parentRect.height());
 
 			// Q_EMIT the signals in order to notify the UI.
 			Q_EMIT q->positionChanged(tempPosition);

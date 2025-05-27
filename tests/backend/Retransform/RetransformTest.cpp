@@ -241,7 +241,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 
 	QAction a(nullptr);
 	a.setData(static_cast<int>(CartesianPlot::MouseMode::ZoomXSelection));
-	view->cartesianPlotMouseModeChanged(&a);
+	view->changePlotMouseMode(&a);
 
 	QCOMPARE(c.elementLogCount(false), 0);
 	QVERIFY(c.calledExact(0, false));
@@ -291,7 +291,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	c.resetRetransformCount();
 	view->selectItem(plot->graphicsItem());
 	a.setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAutoX));
-	view->cartesianPlotNavigationChanged(&a);
+	view->changePlotNavigation(&a);
 
 	QCOMPARE(c.elementLogCount(false), list.count());
 	for (auto& s : list)
@@ -396,7 +396,7 @@ void RetransformTest::TestZoomAutoscaleSingleYRange() {
 	auto* view = static_cast<WorksheetView*>(worksheet->view());
 	QVERIFY(view);
 	view->initActions();
-	view->cartesianPlotMouseModeChanged(&a);
+	view->changePlotMouseMode(&a);
 
 	view->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToAllX);
 
@@ -494,7 +494,7 @@ void RetransformTest::TestZoomAutoscaleSingleXRange() {
 	auto* view = static_cast<WorksheetView*>(worksheet->view());
 	QVERIFY(view);
 	view->initActions();
-	view->cartesianPlotMouseModeChanged(&a);
+	view->changePlotMouseMode(&a);
 
 	view->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToAllY);
 
@@ -687,8 +687,9 @@ void RetransformTest::TestAddCurve() {
 	data.type = XYEquationCurve::EquationType::Cartesian;
 	equationCurve->setEquationData(data);
 
-	auto list =
-		QStringList({QStringLiteral("Project/Worksheet/plot/x"), QStringLiteral("Project/Worksheet/plot/y"), QStringLiteral("Project/Worksheet/plot/f(x)")});
+	auto list = QStringList({i18n("Project") + QStringLiteral("/Worksheet/plot/x"),
+							 i18n("Project") + QStringLiteral("/Worksheet/plot/y"),
+							 i18n("Project") + QStringLiteral("/Worksheet/plot/f(x)")});
 	QCOMPARE(c.elementLogCount(false), list.count());
 	QCOMPARE(c.callCount(list.at(0)), 1);
 	QCOMPARE(c.callCount(list.at(1)), 1);
@@ -873,12 +874,14 @@ void RetransformTest::TestImportCSV() {
 	// check axis ranges
 	auto axes = p->children(AspectType::Axis, AbstractAspect::ChildIndexFlag::Recursive);
 	QCOMPARE(axes.length(), 2);
-	auto* xAxis = axes.at(0);
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	xAxis->setMajorTicksNumber(5);
 	QVector<double> ref = {1, 1.5, 2, 2.5, 3};
-	COMPARE_DOUBLE_VECTORS(static_cast<Axis*>(xAxis)->tickLabelValues(), ref);
-	auto* yAxis = axes.at(1);
+	COMPARE_DOUBLE_VECTORS(xAxis->tickLabelValues(), ref);
+	auto* yAxis = static_cast<Axis*>(axes.at(1));
+	yAxis->setMajorTicksNumber(5);
 	ref = {2, 2.5, 3, 3.5, 4};
-	COMPARE_DOUBLE_VECTORS(static_cast<Axis*>(yAxis)->tickLabelValues(), ref);
+	COMPARE_DOUBLE_VECTORS(yAxis->tickLabelValues(), ref);
 
 	QTemporaryFile file;
 	QCOMPARE(file.open(), true);
@@ -921,8 +924,9 @@ void RetransformTest::TestImportCSV() {
 	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, p);
 	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
 
-	auto list = QStringList(
-		{QStringLiteral("Project/Worksheet/plot/x"), QStringLiteral("Project/Worksheet/plot/y"), QStringLiteral("Project/Worksheet/plot/xy-curve")});
+	auto list = QStringList({i18n("Project") + QStringLiteral("/Worksheet/plot/x"),
+							 i18n("Project") + QStringLiteral("/Worksheet/plot/y"),
+							 i18n("Project") + QStringLiteral("/Worksheet/plot/xy-curve")});
 	QCOMPARE(c.elementLogCount(false), list.count());
 	for (auto& s : list) {
 		qDebug() << s;
@@ -1011,7 +1015,7 @@ void RetransformTest::TestImportCSVInvalidateCurve() {
 
 	// the curve that lost the column assignemnt should be retransformed
 	QCOMPARE(c.elementLogCount(false), 1);
-	QCOMPARE(c.callCount(QStringLiteral("Project/plot/curve")), 1);
+	QCOMPARE(c.callCount(i18n("Project") + QStringLiteral("/plot/curve")), 1);
 }
 
 void RetransformTest::TestSetScale() {
@@ -1074,11 +1078,11 @@ void RetransformTest::TestSetScale() {
 
 	auto list = QStringList({// data rect of the plot does not change, so retransforming the
 							 // plot is not needed
-							 QStringLiteral("Project/Worksheet/Plot/x"),
-							 QStringLiteral("Project/Worksheet/Plot/x2"),
-							 QStringLiteral("Project/Worksheet/Plot/y"),
-							 QStringLiteral("Project/Worksheet/Plot/y2"),
-							 QStringLiteral("Project/Worksheet/Plot/curve")});
+							 i18n("Project") + QStringLiteral("/Worksheet/Plot/x"),
+							 i18n("Project") + QStringLiteral("/Worksheet/Plot/x2"),
+							 i18n("Project") + QStringLiteral("/Worksheet/Plot/y"),
+							 i18n("Project") + QStringLiteral("/Worksheet/Plot/y2"),
+							 i18n("Project") + QStringLiteral("/Worksheet/Plot/curve")});
 
 	plot->setRangeScale(Dimension::X, 0, RangeT::Scale::Log10);
 
@@ -1120,6 +1124,7 @@ void RetransformTest::TestChangePlotRange() {
 	project.addChild(worksheet);
 
 	auto* p = new CartesianPlot(QStringLiteral("Plot"));
+	p->setNiceExtend(true); // Extend from 0..99 (spreadsheet data) to 0..100
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	worksheet->addChild(p);
 
@@ -1164,14 +1169,16 @@ void RetransformTest::TestChangePlotRange() {
 	dock.autoScaleChanged(Dimension::X, 1, false);
 	QCOMPARE(plot->autoScale(Dimension::X, 1), false);
 
-	dock.minChanged(Dimension::X, 1, 10);
-	dock.maxChanged(Dimension::X, 1, 20);
+	dock.minChanged(Dimension::X, 1, 10); // Does not have any impact because nothing is using range 1 yet
+	dock.maxChanged(Dimension::X, 1, 20); // Does not have any impact because nothing is using range 1 yet
 
 	// check axis ranges
 	auto axes = project.children(AspectType::Axis, AbstractAspect::ChildIndexFlag::Recursive);
 	QCOMPARE(axes.length(), 2);
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	xAxis->setMajorTicksNumber(5);
 	auto* yAxis = static_cast<Axis*>(axes.at(1));
+	yAxis->setMajorTicksNumber(5);
 
 	QCOMPARE(xAxis->name(), QStringLiteral("x"));
 	QCOMPARE(yAxis->name(), QStringLiteral("y"));
@@ -1242,6 +1249,7 @@ void RetransformTest::TestChangePlotRangeElement() {
 	project.addChild(worksheet);
 
 	auto* p = new CartesianPlot(QStringLiteral("Plot"));
+	p->setNiceExtend(true); // extend from 0..99 (spreadsheet data) to 0..100
 	p->setType(CartesianPlot::Type::FourAxes); // Otherwise no axis are created
 	worksheet->addChild(p);
 
@@ -1968,6 +1976,7 @@ void RetransformTest::xyFunctionCurve() {
 	RetransformCallCounter c;
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setNiceExtend(true);
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);

@@ -11,6 +11,7 @@
 #include "backend/worksheet/WorksheetElementContainer.h"
 #include <QBrush>
 #include <QCursor>
+#include <QGraphicsSceneMouseEvent>
 
 ResizeItem::HandleItem::HandleItem(int position, ResizeItem* parent)
 	: QGraphicsRectItem(-10, -10, 20, 20, parent)
@@ -72,15 +73,10 @@ void ResizeItem::HandleItem::mousePressEvent(QGraphicsSceneMouseEvent*) {
 
 void ResizeItem::HandleItem::mouseReleaseEvent(QGraphicsSceneMouseEvent*) {
 	m_parent->container()->setUndoAware(true);
-
-	// the container has already the current rect set, we just need
-	// to pass the previous rect so the undo-step can be done properly
 	m_parent->container()->setPrevRect(m_oldRect);
 }
 
 void ResizeItem::HandleItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event) {
-	// HACK: make the parent container/plot non-movable otherwise
-	// the move event doesn't reach HandleItem. Better solution?
 	m_parent->container()->graphicsItem()->setFlag(ItemIsMovable, false);
 
 	switch (m_position) {
@@ -109,7 +105,8 @@ void ResizeItem::HandleItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event) {
 		setCursor(Qt::SizeHorCursor);
 		break;
 	}
-	QGraphicsItem::hoverLeaveEvent(event);
+
+	QGraphicsItem::hoverEnterEvent(event);
 }
 
 void ResizeItem::HandleItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
@@ -139,6 +136,40 @@ QPointF ResizeItem::HandleItem::restrictPosition(const QPointF& pos) {
 	return newPos;
 }
 
+void ResizeItem::HandleItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+	if (!(event->buttons() & Qt::LeftButton))
+		return;
+	const QPointF mouseLocal = m_parent->mapFromScene(event->scenePos());
+	const QPointF restricted = restrictPosition(mouseLocal);
+	switch (m_position) {
+	case TopLeft:
+		m_parent->setTopLeft(restricted);
+		break;
+	case Top:
+		m_parent->setTop(restricted.y());
+		break;
+	case TopRight:
+		m_parent->setTopRight(restricted);
+		break;
+	case Right:
+		m_parent->setRight(restricted.x());
+		break;
+	case BottomRight:
+		m_parent->setBottomRight(restricted);
+		break;
+	case Bottom:
+		m_parent->setBottom(restricted.y());
+		break;
+	case BottomLeft:
+		m_parent->setBottomLeft(restricted);
+		break;
+	case Left:
+		m_parent->setLeft(restricted.x());
+		break;
+	}
+	event->accept();
+}
+
 ResizeItem::ResizeItem(WorksheetElementContainer* container)
 	: QGraphicsItem(container->graphicsItem())
 	, m_container(container) {
@@ -157,6 +188,15 @@ ResizeItem::~ResizeItem() = default;
 void ResizeItem::setRect(QRectF rect) {
 	prepareGeometryChange();
 	m_rect = mapRectFromScene(rect);
+
+	// for a container in a container, the rect is in the parent's coordinates, transfer x and y coordinates
+	if (dynamic_cast<WorksheetElementContainer*>(m_container->parentAspect())) {
+		m_rect.setX(-rect.width() / 2);
+		m_rect.setY(-rect.height() / 2);
+		m_rect.setWidth(rect.width());
+		m_rect.setHeight(rect.height());
+	}
+
 	updateHandleItemPositions();
 }
 
@@ -174,7 +214,10 @@ void ResizeItem::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) {
 #define IMPL_SET_FN(TYPE, POS)                                                                                                                                 \
 	void ResizeItem::set##POS(TYPE v) {                                                                                                                        \
 		m_rect.set##POS(v);                                                                                                                                    \
-		m_container->setRect(mapRectToScene(m_rect));                                                                                                          \
+		if (m_container->parentAspect()->type() == AspectType::CartesianPlot)                                                                                  \
+			m_container->setRect(m_rect);                                                                                                                      \
+		else                                                                                                                                                   \
+			m_container->setRect(mapRectToScene(m_rect));                                                                                                      \
 	}
 
 IMPL_SET_FN(qreal, Top)
@@ -195,28 +238,27 @@ void ResizeItem::updateHandleItemPositions() {
 			item->setPos(m_rect.topLeft());
 			break;
 		case Top:
-			item->setPos(m_rect.left() + m_rect.width() / 2 - 1, m_rect.top());
+			item->setPos(m_rect.left() + m_rect.width() / 2, m_rect.top());
 			break;
 		case TopRight:
 			item->setPos(m_rect.topRight());
 			break;
 		case Right:
-			item->setPos(m_rect.right(), m_rect.top() + m_rect.height() / 2 - 1);
+			item->setPos(m_rect.right(), m_rect.top() + m_rect.height() / 2);
 			break;
 		case BottomRight:
 			item->setPos(m_rect.bottomRight());
 			break;
 		case Bottom:
-			item->setPos(m_rect.left() + m_rect.width() / 2 - 1, m_rect.bottom());
+			item->setPos(m_rect.left() + m_rect.width() / 2, m_rect.bottom());
 			break;
 		case BottomLeft:
 			item->setPos(m_rect.bottomLeft());
 			break;
 		case Left:
-			item->setPos(m_rect.left(), m_rect.top() + m_rect.height() / 2 - 1);
+			item->setPos(m_rect.left(), m_rect.top() + m_rect.height() / 2);
 			break;
 		}
-
 		item->setFlag(ItemSendsGeometryChanges, true);
 	}
 }

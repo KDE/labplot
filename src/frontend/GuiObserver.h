@@ -60,6 +60,7 @@ class ImageDock;
 class LabelWidget;
 class DatapickerImageWidget;
 class DatapickerCurveWidget;
+class ScriptDock;
 
 #ifdef HAVE_CANTOR_LIBS
 class NotebookDock;
@@ -134,6 +135,8 @@ private:
 
 	// hypothesis test
 	HypothesisTestDock* m_hypothesisTestDock{nullptr};
+
+	ScriptDock* m_scriptDock{nullptr};
 
 #ifdef HAVE_CANTOR_LIBS
 	NotebookDock* m_notebookDock{nullptr};

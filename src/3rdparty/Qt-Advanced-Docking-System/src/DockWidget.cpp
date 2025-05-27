@@ -1,17 +1,17 @@
 /*******************************************************************************
 ** Qt Advanced Docking System
 ** Copyright (C) 2017 Uwe Kindler
-**
+** 
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Lesser General Public
 ** License as published by the Free Software Foundation; either
 ** version 2.1 of the License, or (at your option) any later version.
-**
+** 
 ** This library is distributed in the hope that it will be useful,
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ** Lesser General Public License for more details.
-**
+** 
 ** You should have received a copy of the GNU Lesser General Public
 ** License along with this library; If not, see <http://www.gnu.org/licenses/>.
 ******************************************************************************/
@@ -69,12 +69,12 @@ namespace ads
  */
 struct DockWidgetPrivate
 {
-	struct WidgetFactory
+	struct WidgetFactory 
 	{
 		CDockWidget::FactoryFunc createWidget;
 		CDockWidget::eInsertMode insertMode;
-	};
-
+	};	
+	
 	CDockWidget* _this = nullptr;
 	QBoxLayout* Layout = nullptr;
 	QWidget* Widget = nullptr;
@@ -96,11 +96,19 @@ struct DockWidgetPrivate
 	WidgetFactory* Factory = nullptr;
 	QPointer<CAutoHideTab> SideTabWidget;
 	CDockWidget::eToolBarStyleSource ToolBarStyleSource = CDockWidget::ToolBarStyleFromDockManager;
-
+	
 	/**
 	 * Private data constructor
 	 */
 	DockWidgetPrivate(CDockWidget* _public);
+
+	/**
+	 * Convenience function to ease components factory access
+	 */
+	QSharedPointer<ads::CDockComponentsFactory> componentsFactory() const
+	{
+        return DockManager ? DockManager->componentsFactory() : CDockComponentsFactory::factory();
+    }
 
 	/**
 	 * Show dock widget
@@ -134,7 +142,7 @@ struct DockWidgetPrivate
 	 * Setup the main scroll area
 	 */
 	void setupScrollArea();
-
+	
 	/**
 	 * Creates the content widget with the registered widget factory and
 	 * returns true on success.
@@ -166,10 +174,10 @@ void DockWidgetPrivate::showDockWidget()
 			Q_ASSERT(!Features.testFlag(CDockWidget::DeleteContentOnClose)
 					 && "DeleteContentOnClose flag was set, but the widget "
 						"factory is missing or it doesn't return a valid QWidget.");
-			return;
+			return;	
 		}
 	}
-
+	
 	if (!DockArea)
 	{
 		CFloatingDockContainer* FloatingWidget = new CFloatingDockContainer(_this);
@@ -319,22 +327,22 @@ void DockWidgetPrivate::setupScrollArea()
 //============================================================================
 bool DockWidgetPrivate::createWidgetFromFactory()
 {
-	if (!Features.testFlag(CDockWidget::DeleteContentOnClose))
+	if (!Features.testFlag(CDockWidget::DeleteContentOnClose)) 
 	{
 		return false;
 	}
-
+	
 	if (!Factory)
 	{
 		return false;
 	}
-
+	
 	QWidget* w = Factory->createWidget(_this);
 	if (!w)
 	{
 		return false;
 	}
-
+	
 	_this->setWidget(w, Factory->insertMode);
 	return true;
 }
@@ -358,9 +366,17 @@ void DockWidgetPrivate::setToolBarStyleFromDockManager()
 
 //============================================================================
 CDockWidget::CDockWidget(const QString &title, QWidget *parent) :
-	QFrame(parent),
-	d(new DockWidgetPrivate(this))
+      CDockWidget(nullptr, title, parent)
 {
+}
+
+
+//============================================================================
+CDockWidget::CDockWidget(CDockManager *manager, const QString &title, QWidget* parent)
+	: QFrame(parent),
+	  d(new DockWidgetPrivate(this))
+{
+	d->DockManager = manager;
 	d->Layout = new QBoxLayout(QBoxLayout::TopToBottom);
 	d->Layout->setContentsMargins(0, 0, 0, 0);
 	d->Layout->setSpacing(0);
@@ -368,7 +384,7 @@ CDockWidget::CDockWidget(const QString &title, QWidget *parent) :
 	setWindowTitle(title);
 	setObjectName(title);
 
-	d->TabWidget = componentsFactory()->createDockWidgetTab(this);
+	d->TabWidget = d->componentsFactory()->createDockWidgetTab(this);
 
 	d->ToggleViewAction = new QAction(title, this);
 	d->ToggleViewAction->setCheckable(true);
@@ -381,6 +397,7 @@ CDockWidget::CDockWidget(const QString &title, QWidget *parent) :
 		setFocusPolicy(Qt::ClickFocus);
 	}
 }
+
 
 //============================================================================
 CDockWidget::~CDockWidget()

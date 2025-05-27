@@ -6,8 +6,13 @@ set(TOOLS_DIR "${CMAKE_CURRENT_LIST_DIR}/tools")
 set(CMAKE_AUTOMOC ON)
 set(SRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 
+if(ENABLE_PYTHON_SCRIPTING)
+include(PythonScripting)
+endif()
+
 set(GUI_SOURCES
     ${FRONTEND_DIR}/AboutDialog.cpp
+    ${FRONTEND_DIR}/ActionsManager.cpp
     ${FRONTEND_DIR}/DatasetModel.cpp
     ${FRONTEND_DIR}/GuiObserver.cpp
     ${FRONTEND_DIR}/GuiTools.cpp
@@ -105,6 +110,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/dockwidgets/XYCorrelationCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
     ${FRONTEND_DIR}/dockwidgets/HypothesisTestDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/ScriptDock.cpp
     ${FRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
     ${FRONTEND_DIR}/matrix/MatrixView.cpp
     ${FRONTEND_DIR}/note/NoteView.cpp
@@ -164,11 +170,14 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/widgets/TimedLineEdit.cpp
     ${FRONTEND_DIR}/widgets/TreeViewComboBox.cpp
     ${FRONTEND_DIR}/widgets/qxtspanslider.cpp
+    ${FRONTEND_DIR}/widgets/toggleactionmenu.cpp
     ${FRONTEND_DIR}/widgets/MemoryWidget.cpp
     ${FRONTEND_DIR}/widgets/DateTimeSpinBox.cpp
     ${FRONTEND_DIR}/widgets/NumberSpinBox.cpp
     ${FRONTEND_DIR}/widgets/UTCDateTimeEdit.cpp
     ${FRONTEND_DIR}/workbook/WorkbookView.cpp
+    ${FRONTEND_DIR}/script/ScriptEditor.cpp
+    ${FRONTEND_DIR}/SettingsEditorPage.cpp
 )
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
@@ -293,6 +302,8 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/fitsheadereditwidget.ui
     ${FRONTEND_DIR}/ui/fitsheadereditnewkeywordwidget.ui
     ${FRONTEND_DIR}/ui/fitsheadereditaddunitwidget.ui
+    ${FRONTEND_DIR}/ui/script/scripteditorwidget.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/scriptdock.ui
 )
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
@@ -459,7 +470,14 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/statistics/TableModel.cpp
     ${BACKEND_DIR}/statistics/TextEdit.cpp
     ${BACKEND_DIR}/statistics/HtmlTableBuilder.cpp
+    ${BACKEND_DIR}/script/Script.cpp
+    ${BACKEND_DIR}/script/ScriptRuntime.cpp
 )
+
+if(ENABLE_PYTHON_SCRIPTING)
+    list(APPEND BACKEND_SOURCES ${shiboken_scripting_generated_sources})
+    list(APPEND BACKEND_SOURCES ${python_scripting_backend_sources})
+endif()
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
     list(APPEND BACKEND_SOURCES ${FRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp)
@@ -559,7 +577,7 @@ target_include_directories(labplotlib PUBLIC ${FRONTEND_DIR}/widgets) # so that 
 if(qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
     get_target_property(QADS_INCLUDES ads::qt${QT_VERSION_MAJOR}advanceddocking INTERFACE_INCLUDE_DIRECTORIES)
     get_target_property(QADS_LIBRARIES ads::qt${QT_VERSION_MAJOR}advanceddocking INTERFACE_LINK_LIBRARIES)
-    message(STATUS "QADS Found LINK_LIBRARIES: ${QADS_LIBRARIES} INCLUDES: ${QADS_INCLUDES}")
+    message(STATUS "QADS Found: ${QADS_LIBRARIES}, ${QADS_INCLUDES}")
     target_include_directories(labplotbackendlib PUBLIC ${QADS_INCLUDES})
     target_include_directories(labplotlib PUBLIC ${QADS_INCLUDES})
 endif()
@@ -615,7 +633,13 @@ target_link_libraries(labplotbackendlib
     ${MATIO_LIBRARIES}
     ${READSTAT_LIBRARIES}
     ads::qt${QT_VERSION_MAJOR}advanceddocking
+    KF${KF_MAJOR_VERSION}::TextEditor	# KTextEditor
 )
+
+if(ENABLE_PYTHON_SCRIPTING)
+target_link_libraries(labplotbackendlib ${python_scripting_link_libraries})
+endif()
+
 target_link_libraries(labplotlib
     Qt${QT_MAJOR_VERSION}::Sql
     Qt${QT_MAJOR_VERSION}::PrintSupport    # QPrinter
@@ -634,6 +658,7 @@ target_link_libraries(labplotlib
     KF${KF_MAJOR_VERSION}::TextWidgets    # KTextEdit
     ${Poppler_LIBRARIES}
     ads::qt${QT_VERSION_MAJOR}advanceddocking
+    KF${KF_MAJOR_VERSION}::TextEditor	# KTextEditor
 )
 
 if(Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
@@ -751,6 +776,27 @@ set(LML_ICONS
     ${CMAKE_CURRENT_SOURCE_DIR}/../icons/512-application-x-labplot.png
 )
 
+if(ENABLE_PYTHON_SCRIPTING)
+get_target_property(labplotlib_INCLUDE_DIRECTORIES labplotlib INCLUDE_DIRECTORIES)
+get_target_property(labplotbackendlib_INCLUDE_DIRECTORIES labplotbackendlib INCLUDE_DIRECTORIES)
+get_target_property(labplotnsllib_INCLUDE_DIRECTORIES labplotnsllib INCLUDE_DIRECTORIES)
+get_target_property(KFi18n_INCLUDE_DIRECTORIES KF${KF_MAJOR_VERSION}::I18n INTERFACE_INCLUDE_DIRECTORIES)
+
+generate_shiboken_sources(
+    PACKAGE_NAME ${scripting_library}
+    VERSION ${PROJECT_VERSION}
+    WRAPPED_HEADER ${scripting_wrapped_header}
+    TYPESYSTEM ${scripting_typesystem_file}
+    GENERATED_SOURCES ${shiboken_scripting_generated_sources}
+    INCLUDES ${labplotlib_INCLUDE_DIRECTORIES} ${labplotbackendlib_INCLUDE_DIRECTORIES} ${labplotnsllib_INCLUDE_DIRECTORIES} ${Qt${QT_MAJOR_VERSION}Core_INCLUDE_DIRS} ${Qt${QT_MAJOR_VERSION}Gui_INCLUDE_DIRS} ${Qt${QT_MAJOR_VERSION}Widgets_INCLUDE_DIRS} ${KFi18n_INCLUDE_DIRECTORIES}
+    QT_VERSION ${QT_MIN_VERSION}
+    HOMEPAGE_URL "https://invent.kde.org/education/labplot"
+    ISSUES_URL "https://bugs.kde.org/describecomponents.cgi?product=labplot2"
+    AUTHOR "The LabPlot Team"
+    README ../README.md
+)
+endif()
+
 add_subdirectory(3rdparty)
 
 # main executable
@@ -771,7 +817,7 @@ if(APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 endif()
 
 add_executable(labplot ${LABPLOT_SOURCE} ${GUI_QRC} ${qml_QRC})
-target_link_libraries(labplot labplotlib labplotbackendlib labplotnsllib)
+target_link_libraries(labplot labplotbackendlib labplotlib labplotnsllib)
 
 #if(KUserFeedbackQt6_FOUND)
 #    target_link_libraries(labplot KUserFeedbackCoreQt6 KUserFeedbackWidgetsQt6)

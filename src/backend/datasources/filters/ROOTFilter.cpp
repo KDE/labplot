@@ -174,7 +174,7 @@ ROOTFilterPrivate::FileType ROOTFilterPrivate::currentObjectPosition(const QStri
 
 	typeobject.removeFirst();
 	auto path = typeobject.join(QLatin1Char(':')).split(QLatin1Char('/'));
-	auto dir = type == FileType::Hist ? listHistograms(fileName) : listTrees(fileName);
+	const auto& dir = (type == FileType::Hist) ? listHistograms(fileName) : listTrees(fileName);
 	const auto* node = &dir;
 	while (path.size() > 1) {
 		bool next = false;
@@ -1285,8 +1285,7 @@ ROOTData::ContentType ROOTData::leafType(const char type) {
 }
 
 template<class T>
-T (*ROOTData::readType(ROOTData::ContentType type, bool sign) const)
-(char*&) {
+T (*ROOTData::readType(ROOTData::ContentType type, bool sign) const)(char*&) {
 	switch (type) {
 	case ContentType::Double:
 		return readcast<double, T>;

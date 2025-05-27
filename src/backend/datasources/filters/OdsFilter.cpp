@@ -28,6 +28,12 @@
 
 #include <ixion/model_context.hpp>
 
+#ifndef HAVE_AT_LEAST_IXION_0_20_0
+namespace ixion {
+using cell_t = celltype_t;
+}
+#endif
+
 using namespace orcus;
 #endif
 
@@ -73,8 +79,8 @@ QString OdsFilter::fileInfoString(const QString& fileName) {
 	return info;
 #else
 	Q_UNUSED(fileName)
-#endif
 	return {};
+#endif
 }
 
 void OdsFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
@@ -299,13 +305,13 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 
 			auto type = model.get_celltype(pos);
 			switch (type) {
-			case ixion::celltype_t::string:
+			case ixion::cell_t::string:
 				columnModes[col] = AbstractColumn::ColumnMode::Text;
 				break;
-			case ixion::celltype_t::numeric: // numeric values are always double (can't detect if integer)
+			case ixion::cell_t::numeric: // numeric values are always double (can't detect if integer)
 				// default: Double
 				break;
-			case ixion::celltype_t::formula: {
+			case ixion::cell_t::formula: {
 				auto formula = model.get_formula_result(pos);
 				switch (formula.get_type()) { // conside formula type
 				case ixion::formula_result::result_type::value:
@@ -315,8 +321,9 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 					columnModes[col] = AbstractColumn::ColumnMode::Text;
 					break;
 				case ixion::formula_result::result_type::error:
-				// available with ixion >= 0.18
-				// case ixion::formula_result::result_type::boolean:
+#ifdef HAVE_AT_LEAST_IXION_0_18_0
+				case ixion::formula_result::result_type::boolean:
+#endif
 				case ixion::formula_result::result_type::matrix:
 					DEBUG(Q_FUNC_INFO << ", formula type not supported yet.")
 					q->setLastError(i18n("Formulas not supported yet."));
@@ -324,9 +331,9 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 				}
 				break;
 			}
-			case ixion::celltype_t::boolean:
-			case ixion::celltype_t::empty:
-			case ixion::celltype_t::unknown: // default: Double
+			case ixion::cell_t::boolean:
+			case ixion::cell_t::empty:
+			case ixion::cell_t::unknown: // default: Double
 				break;
 			}
 		}
@@ -339,17 +346,17 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 
 			auto type = model.get_celltype(pos);
 			switch (type) {
-			case ixion::celltype_t::string: {
+			case ixion::cell_t::string: {
 				auto value = model.get_string_value(pos);
 				vectorNames << QString::fromStdString(std::string(value));
 				break;
 			}
-			case ixion::celltype_t::numeric: {
+			case ixion::cell_t::numeric: {
 				double value = model.get_numeric_value(pos);
 				vectorNames << QLocale().toString(value);
 				break;
 			}
-			case ixion::celltype_t::formula: {
+			case ixion::cell_t::formula: {
 				auto formula = model.get_formula_result(pos);
 				switch (formula.get_type()) {
 				case ixion::formula_result::result_type::value: {
@@ -361,8 +368,9 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 					vectorNames << QString::fromStdString(formula.get_string());
 					break;
 				case ixion::formula_result::result_type::error:
-				// TODO: not available in ixion 0.17 ?
-				// case ixion::formula_result::result_type::boolean:
+#ifdef HAVE_AT_LEAST_IXION_0_18_0
+				case ixion::formula_result::result_type::boolean:
+#endif
 				case ixion::formula_result::result_type::matrix:
 					vectorNames << AbstractFileFilter::convertFromNumberToColumn(ranges.first.column + startColumn - 1 + col);
 					;
@@ -371,9 +379,9 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 				// TODO
 				break;
 			}
-			case ixion::celltype_t::empty:
-			case ixion::celltype_t::unknown:
-			case ixion::celltype_t::boolean:
+			case ixion::cell_t::empty:
+			case ixion::cell_t::unknown:
+			case ixion::cell_t::boolean:
 				vectorNames << AbstractFileFilter::convertFromNumberToColumn(ranges.first.column + startColumn - 1 + col);
 				;
 			}
@@ -402,7 +410,7 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 
 			auto type = model.get_celltype(pos);
 			switch (type) {
-			case ixion::celltype_t::numeric: {
+			case ixion::cell_t::numeric: {
 				double value = model.get_numeric_value(pos);
 				// column mode may be non-numeric
 				if (columnModes.at(col) == AbstractColumn::ColumnMode::Double)
@@ -411,7 +419,7 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 					(*static_cast<QVector<QString>*>(dataContainer[col]))[row] = QLocale().toString(value);
 				break;
 			}
-			case ixion::celltype_t::formula: {
+			case ixion::cell_t::formula: {
 				// read formula result. We can't handle formulas yet (?)
 				auto formula = model.get_formula_result(pos);
 				switch (formula.get_type()) {
@@ -434,15 +442,16 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 						(*static_cast<QVector<QString>*>(dataContainer[col]))[row] = QString::fromStdString(formula.get_string());
 					break;
 				case ixion::formula_result::result_type::error:
-				// TODO: not available in ixion 0.17 ?
-				// case ixion::formula_result::result_type::boolean:
+#ifdef HAVE_AT_LEAST_IXION_0_18_0
+				case ixion::formula_result::result_type::boolean:
+#endif
 				case ixion::formula_result::result_type::matrix:
 					DEBUG(Q_FUNC_INFO << ", formula type not supported yet.")
 					break;
 				}
 				break;
 			}
-			case ixion::celltype_t::string: {
+			case ixion::cell_t::string: {
 				// column mode may be numeric
 				if (columnModes.at(col) == AbstractColumn::ColumnMode::Double)
 					(*static_cast<QVector<double>*>(dataContainer[col]))[row] = model.get_numeric_value(pos);
@@ -450,10 +459,10 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 					(*static_cast<QVector<QString>*>(dataContainer[col]))[row] = QString::fromStdString(std::string(model.get_string_value(pos)));
 				break;
 			}
-			case ixion::celltype_t::empty: // nothing to do
+			case ixion::cell_t::empty: // nothing to do
 				break;
-			case ixion::celltype_t::unknown:
-			case ixion::celltype_t::boolean:
+			case ixion::cell_t::unknown:
+			case ixion::cell_t::boolean:
 				DEBUG(Q_FUNC_INFO << ", cell type unknown or boolean not supported yet.")
 			}
 		}
@@ -488,7 +497,7 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 	const auto ranges = sheet->get_data_range();
 	DEBUG(Q_FUNC_INFO << ", data range: col " << ranges.first.column << ".." << ranges.last.column << ", row " << ranges.first.row << ".." << ranges.last.row)
 
-	const int maxCols = 100;
+	const int maxCols = 100; // max. columns to preview
 	DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << " " << endRow)
 	DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " " << endColumn)
 	int actualStartRow = (startRow > (ranges.last.row - ranges.first.row + 1) ? ranges.first.row : ranges.first.row + startRow - 1);
@@ -506,19 +515,19 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 
 			auto type = model.get_celltype(pos);
 			switch (type) {
-			case ixion::celltype_t::string: {
+			case ixion::cell_t::string: {
 				auto value = model.get_string_value(pos);
 				DEBUG(Q_FUNC_INFO << " " << value)
 				line << QString::fromStdString(std::string(value));
 				break;
 			}
-			case ixion::celltype_t::numeric: {
+			case ixion::cell_t::numeric: {
 				double value = model.get_numeric_value(pos);
 				DEBUG(Q_FUNC_INFO << " " << value)
 				line << QLocale().toString(value);
 				break;
 			}
-			case ixion::celltype_t::formula: {
+			case ixion::cell_t::formula: {
 				// read formula result. We can't handle formulas yet (?)
 				auto formula = model.get_formula_result(pos);
 				switch (formula.get_type()) {
@@ -529,8 +538,9 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 					line << QString::fromStdString(formula.get_string());
 					break;
 				case ixion::formula_result::result_type::error:
-				// TODO: not available in ixion 0.17 ?
-				// case ixion::formula_result::result_type::boolean:
+#ifdef HAVE_AT_LEAST_IXION_0_18_0
+				case ixion::formula_result::result_type::boolean:
+#endif
 				case ixion::formula_result::result_type::matrix:
 					line << QString();
 					DEBUG(Q_FUNC_INFO << ", formula type error, boolean or matrix not implemented yet.")
@@ -538,11 +548,11 @@ QVector<QStringList> OdsFilterPrivate::preview(const QString& sheetName, int lin
 				}
 				break;
 			}
-			case ixion::celltype_t::empty:
+			case ixion::cell_t::empty:
 				line << QString();
 				break;
-			case ixion::celltype_t::unknown:
-			case ixion::celltype_t::boolean:
+			case ixion::cell_t::unknown:
+			case ixion::cell_t::boolean:
 				line << QString();
 				DEBUG(Q_FUNC_INFO << ", cell type unknown or boolean not implemented yet.")
 				break;

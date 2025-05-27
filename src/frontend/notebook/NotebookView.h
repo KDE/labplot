@@ -16,12 +16,14 @@
 #include <cantor/session.h>
 #endif
 
+class Column;
+class Notebook;
+
 class QActionGroup;
 class QMenu;
 class QToolBar;
 
-class Notebook;
-class Column;
+class KActionCollection;
 
 namespace KParts {
 class ReadWritePart;
@@ -37,7 +39,12 @@ public:
 public Q_SLOTS:
 	void createContextMenu(QMenu*);
 	void fillColumnContextMenu(QMenu*, Column*);
-	void fillToolBar(QToolBar*);
+
+	void evaluate();
+	void restart();
+	void zoomIn();
+	void zoomOut();
+	void find();
 
 private Q_SLOTS:
 	void triggerAction(QAction*);
@@ -49,12 +56,12 @@ private:
 	QActionGroup* m_actionGroup{nullptr};
 	QAction* m_evaluateEntryAction{nullptr};
 	QAction* m_removeCurrentEntryAction{nullptr};
-	QAction* m_restartBackendAction{nullptr};
-	QAction* m_evaluateWorsheetAction{nullptr};
-	QAction* m_zoomIn{nullptr};
-	QAction* m_zoomOut{nullptr};
-	QAction* m_find{nullptr};
-	QAction* m_replace{nullptr};
+	QAction* m_restartAction{nullptr};
+	QAction* m_evaluateAction{nullptr};
+	QAction* m_zoomInAction{nullptr};
+	QAction* m_zoomOutAction{nullptr};
+	QAction* m_findAction{nullptr};
+	QAction* m_replaceAction{nullptr};
 	QAction* m_statisticsAction{nullptr};
 	Column* m_contextMenuColumn{nullptr};
 

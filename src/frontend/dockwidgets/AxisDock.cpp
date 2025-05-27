@@ -246,7 +246,9 @@ void AxisDock::retranslateUi() {
 	ui.lRangeType->setToolTip(msg);
 	ui.cbRangeType->setToolTip(msg);
 
-		   // scales
+	ui.cbMajorTicksAutoNumber->setToolTip(i18n("If enabled: Use the major tick number as base to determine the new number of ticks for nice looking values. The number of ticks might be different than the number previously set."));
+
+	// scales
 	ui.cbScale->clear();
 	for (const auto& name : RangeT::scaleNames)
 		ui.cbScale->addItem(name.toString());
@@ -523,7 +525,7 @@ void AxisDock::updatePlotRangeList() {
 	if (m_axis->coordinateSystemCount() == 0)
 		return;
 
-	Axis::Orientation orientation = m_axis->orientation();
+	auto orientation = m_axis->orientation();
 	Range<double> logicalRange;
 	if (orientation == Axis::Orientation::Horizontal)
 		logicalRange = m_axis->plot()->range(Dimension::Y, m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->index(Dimension::Y));
@@ -929,12 +931,9 @@ void AxisDock::majorTicksDirectionChanged(int index) {
 	ui.cbMajorTicksType->setEnabled(b);
 	ui.cbMajorTicksAutoNumber->setEnabled(b);
 
-	if (b) {
-		if (ui.cbMajorTicksAutoNumber->isChecked())
-			ui.sbMajorTicksNumber->setEnabled(false);
-		else
-			ui.sbMajorTicksNumber->setEnabled(true);
-	} else
+	if (b)
+		ui.sbMajorTicksNumber->setEnabled(true);
+	else
 		ui.sbMajorTicksNumber->setEnabled(false);
 
 	ui.sbMajorTicksSpacingNumeric->setEnabled(b);
@@ -1057,7 +1056,6 @@ void AxisDock::majorTicksTypeChanged(int index) {
 
 void AxisDock::majorTicksAutoNumberChanged(int state) {
 	bool automatic = (state == Qt::CheckState::Checked ? true : false);
-	ui.sbMajorTicksNumber->setEnabled(!automatic);
 
 	CONDITIONAL_LOCK_RETURN;
 
@@ -1953,7 +1951,6 @@ void AxisDock::load() {
 	ui.cbMajorTicksDirection->setCurrentIndex((int)m_axis->majorTicksDirection());
 	ui.cbMajorTicksType->setCurrentIndex(ui.cbMajorTicksType->findData((int)m_axis->majorTicksType()));
 	ui.cbMajorTicksAutoNumber->setChecked(m_axis->majorTicksAutoNumber());
-	ui.sbMajorTicksNumber->setEnabled(!m_axis->majorTicksAutoNumber());
 
 	ui.sbMajorTicksNumber->setValue(m_axis->majorTicksNumber());
 	auto value{m_axis->majorTicksSpacing()};
@@ -2047,7 +2044,7 @@ void AxisDock::loadConfigFromTemplate(KConfig& config) {
 }
 
 void AxisDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group(QStringLiteral("Axis"));
+	auto group = config.group(QStringLiteral("Axis"));
 
 		   // General
 	ui.cbOrientation->setCurrentIndex(group.readEntry(QStringLiteral("Orientation"), (int)m_axis->orientation()));
@@ -2070,9 +2067,9 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.sbScalingFactor->setValue(group.readEntry(QStringLiteral("ScalingFactor"), m_axis->scalingFactor()));
 	ui.chkShowScaleOffset->setChecked(group.readEntry(QStringLiteral("ShowScaleOffset"), static_cast<int>(m_axis->showScaleOffset())));
 
-		   // Title
-	KConfigGroup axisLabelGroup = config.group(QStringLiteral("AxisLabel"));
-	labelWidget->loadConfig(axisLabelGroup);
+	// Title
+	auto axisTitleGroup = config.group(QStringLiteral("AxisTitle"));
+	labelWidget->loadConfig(axisTitleGroup);
 
 		   // Line
 	lineWidget->loadConfig(group);
@@ -2153,10 +2150,11 @@ void AxisDock::loadConfig(KConfig& config) {
 }
 
 void AxisDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group(QStringLiteral("Axis"));
+	auto group = config.group(QStringLiteral("Axis"));
 
-		   // General
-	group.writeEntry(QStringLiteral("Orientation"), ui.cbOrientation->currentIndex());
+	// General
+	auto orientation = (WorksheetElement::Orientation)ui.cbOrientation->currentIndex();
+	group.writeEntry(QStringLiteral("Orientation"), (int)orientation);
 
 	if (ui.cbPosition->currentIndex() == 2) {
 		group.writeEntry(QStringLiteral("Position"), static_cast<int>(Axis::Position::Centered));
@@ -2179,9 +2177,19 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry(QStringLiteral("ScalingFactor"), ui.sbScalingFactor->value());
 	group.writeEntry(QStringLiteral("ShowScaleOffset"), ui.chkShowScaleOffset->isChecked());
 
-		   // Title
-	KConfigGroup axisLabelGroup = config.group(QStringLiteral("AxisLabel"));
-	labelWidget->saveConfig(axisLabelGroup);
+
+	// BOOKMARK(axis title): Title
+	auto axisTitleGroup = config.group(QStringLiteral("AxisTitle"));
+	labelWidget->saveConfig(axisTitleGroup);
+	// addtionally save rotation for x and y seperately to allow independent values
+	if (orientation == Axis::Orientation::Horizontal)
+		axisTitleGroup.writeEntry(QStringLiteral("RotationX"), labelWidget->ui.sbRotation->value());
+	else {
+		axisTitleGroup.writeEntry(QStringLiteral("RotationY"), labelWidget->ui.sbRotation->value());
+	}
+	// reset rotation used by the other axis (only used when other axis not saved)
+	// see Axis.cpp:BOOKMARK(axis title)
+	axisTitleGroup.writeEntry(QStringLiteral("Rotation"), 0);
 
 		   // Line
 	lineWidget->saveConfig(group);
@@ -2190,7 +2198,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry(QStringLiteral("MajorTicksDirection"), ui.cbMajorTicksDirection->currentIndex());
 	group.writeEntry(QStringLiteral("MajorTicksType"), ui.cbMajorTicksType->itemData(ui.cbMajorTicksType->currentIndex()));
 	group.writeEntry(QStringLiteral("MajorTicksNumber"), ui.sbMajorTicksNumber->value());
-	bool numeric = m_axis->isNumeric();
+	const bool numeric = m_axis->isNumeric();
 	if (numeric)
 		group.writeEntry(QStringLiteral("MajorTicksIncrement"), QString::number(ui.sbMajorTicksSpacingNumeric->value()));
 	else
@@ -2214,7 +2222,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 		group.writeEntry(QStringLiteral("MinorTicksIncrement"), QString::number(ui.sbMinorTicksSpacingNumeric->value()));
 	else
 		group.writeEntry(QStringLiteral("MinorTicksIncrement"), QString::number(dtsbMinorTicksIncrement->value()));
-	group.writeEntry(QStringLiteral("MinorTicksLength"), Worksheet::convertFromSceneUnits(ui.sbMinorTicksLength->value(), Worksheet::Unit::Point));
+	group.writeEntry(QStringLiteral("MinorTicksLength"), Worksheet::convertToSceneUnits(ui.sbMinorTicksLength->value(), Worksheet::Unit::Point));
 	minorTicksLineWidget->saveConfig(group);
 
 		   // Extra ticks

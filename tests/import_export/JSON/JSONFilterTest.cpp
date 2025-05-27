@@ -36,8 +36,8 @@ void JSONFilterTest::testArrayImport() {
 	QCOMPARE(spreadsheet.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
 	QCOMPARE(spreadsheet.column(0)->name(), i18n("index"));
-	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Column 1")); // TODO is translatable in JsonFilter
-	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("Column 2"));
+	QCOMPARE(spreadsheet.column(1)->name(), i18n("Column") + QStringLiteral(" 1"));
+	QCOMPARE(spreadsheet.column(2)->name(), i18n("Column") + QStringLiteral(" 2"));
 
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
 	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);

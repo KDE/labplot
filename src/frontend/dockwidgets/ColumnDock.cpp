@@ -306,8 +306,9 @@ void ColumnDock::retranslateUi() {
 	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Integer), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Integer)));
 	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::BigInt), QVariant(static_cast<int>(AbstractColumn::ColumnMode::BigInt)));
 	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Text), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Text)));
-	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Month), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Month)));
-	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Day), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Day)));
+	// TODO: activate month and day names once supported
+	// ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Month), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Month)));
+	// ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Day), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Day)));
 	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::DateTime),
 					   QVariant(static_cast<int>(AbstractColumn::ColumnMode::DateTime)));
 
@@ -320,6 +321,24 @@ void ColumnDock::retranslateUi() {
 	ui.cbNumericFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
 
 	// tooltip texts
+	QString info = i18n(
+		"Specifies how numeric values are formatted in the spreadsheet:"
+		"<ul>"
+		"<li>Decimal - format as [-]9.9</li>"
+		"<li>Scientific (e) - format as [-]9.9e[+|-]999</li>"
+		"<li>Scientific (E) - format as [-]9.9E[+|-]999</li>"
+		"<li>Automatic (e) - selects between 'Decimal' and 'Scientific (e)' to get the most concise format</li>"
+		"<li>Automatic (E) - selects between 'Decimal' and 'Scientific (E)' to get the most concise format</li>"
+		"</ul>"
+	);
+	ui.lNumericFormat->setToolTip(info);
+	ui.cbNumericFormat->setToolTip(info);
+
+	info = i18n("For the  'Decimal', 'Scientific (e)', and 'Scientific (E)' formats, the precision represents the number of digits after the decimal point.\n"
+		"For the 'Automatic (e)' and 'Automatic (E)' formats, the precision represents the maximum number of significant digits (trailing zeroes are omitted).");
+	ui.lPrecision->setToolTip(info);
+	ui.sbPrecision->setToolTip(info);
+
 	ui.bAddLabel->setToolTip(i18n("Add a new value label"));
 	ui.bRemoveLabel->setToolTip(i18n("Remove the selected value label"));
 	ui.bBatchEditLabels->setToolTip(i18n("Modify multiple values labels in a batch mode"));
@@ -549,7 +568,8 @@ void ColumnDock::columnFormatChanged() {
 	switch (columnMode) {
 	case AbstractColumn::ColumnMode::Double: {
 		auto* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
-		ui.cbNumericFormat->setCurrentIndex(ui.cbNumericFormat->findData(filter->numericFormat()));
+		const int index = ui.cbNumericFormat->findData(filter->numericFormat());
+		ui.cbNumericFormat->setCurrentIndex(index);
 		break;
 	}
 	case AbstractColumn::ColumnMode::Integer:

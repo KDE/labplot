@@ -2,9 +2,9 @@
     "id": "org.kde.labplot",
     "branch": "master",
     "runtime": "org.kde.Platform",
-    "runtime-version": "6.7",
+    "runtime-version": "6.9",
     "base": "io.qt.qtwebengine.BaseApp",
-    "base-version": "6.7",
+    "base-version": "6.9",
     "sdk": "org.kde.Sdk",
     "command": "labplot",
     "tags": ["nightly"],
@@ -64,8 +64,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-25.02.0.tar.xz",
-                    "sha256": "21234cb2a9647d73c752ce4031e65a79d11a511a835f2798284c2497b8701dee"
+                    "url": "https://poppler.freedesktop.org/poppler-25.04.0.tar.xz",
+                    "sha256": "b010c596dce127fba88532fd2f1043e55ea30601767952d0f2c0a80e7dc0da3d"
                 }
             ],
             "modules": [
@@ -79,8 +79,8 @@
                     "sources": [
                         {
                             "type": "archive",
-                            "url": "https://archives.boost.io/release/1.87.0/source/boost_1_87_0.tar.bz2",
-                            "sha256": "af57be25cb4c4f4b413ed692fe378affb4352ea50fbe294a11ef548f4d527d89"
+                            "url": "https://archives.boost.io/release/1.88.0/source/boost_1_88_0.tar.bz2",
+                            "sha256": "46d9d2c06637b219270877c9e16155cbd015b6dc84349af064c088e9b5b12f7b"
                         }
                     ]
                 },
@@ -106,8 +106,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://github.com/KDE/analitza/archive/v24.08.3.tar.gz",
-			    "sha256": "e40c563c6387200321e7b903bff2d66ed0454f322d58126761411fccbdaf1467"
+			    "url": "https://download.kde.org/stable/release-service/25.04.0/src/analitza-25.04.0.tar.xz",
+			    "sha256": "67390eec5438d69390f2d1ba589604cb8a7817f86bc931acc24f029ab2db3f2c"
 		    }
 	    ]
         },
@@ -117,8 +117,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/24.12.1/src/cantor-24.12.1.tar.xz",
-			    "sha256": "06b2d67e37046c832de741ed00557c4ab13c873223f6df3818a5af4721e79065"
+			    "url": "https://download.kde.org/stable/release-service/25.04.0/src/cantor-25.04.0.tar.xz",
+			    "sha256": "98f96661f20ad4c91fa5fe64bc0ecbef03d85969b64851c660d2d369682c3f00"
 		    }
 	    ]
         },
@@ -134,11 +134,18 @@
         },
         {
             "name": "hdf5",
+            "buildsystem": "simple",
+	    "build-commands": [
+                "cd hdf5* && ./configure --prefix=/app --enable-cxx=yes --enable-tools=no --enable-tests=no && make -j install"
+	    ],
+            "cleanup": [
+                "/share/hdf5_examples"
+            ],
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.8/src/hdf5-1.10.8.tar.gz",
-                    "sha256": "d341b80d380dd763753a0ebe22915e11e87aac4e44a084a850646ff934d19c80"
+                    "url": "https://support.hdfgroup.org/releases/hdf5/v1_14/v1_14_6/downloads/hdf5-1.14.6.tar.gz",
+                    "sha256": "e4defbac30f50d64e1556374aa49e574417c9e72c6b1de7a4ff88c4b1bea6e9b"
                 }
             ]
         },
@@ -157,8 +164,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://fossies.org/linux/misc/cfitsio-4.5.0.tar.gz",
-                    "sha256": "e4854fc3365c1462e493aa586bfaa2f3d0bb8c20b75a524955db64c27427ce09",
+                    "url": "https://fossies.org/linux/misc/cfitsio-4.6.2.tar.gz",
+                    "sha256": "66fd078cc0bea896b0d44b120d46d6805421a5361d3a5ad84d9f397b1b5de2cb",
 		    "disable-http-decompression": true
                 }
             ]
@@ -170,8 +177,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v2.4/libcerf-v2.4.tar.gz",
-                    "sha256": "080b30ae564c3dabe3b89264522adaf5647ec754021572bee54929697b276cdc"
+                    "url": "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v3.0/libcerf-v3.0.tar.gz",
+                    "sha256": "c6108fbda89af37f588119c0c542b6c1e824845a36bea2fa31f7ed2cc1a246db"
                 }
             ]
         },
@@ -181,9 +188,9 @@
 	    "builddir": true,
 	    "sources": [
 		{
-                    "type": "git",
-		    "url": "https://github.com/qt/qtmqtt.git",
-		    "tag": "v6.7.3"
+                    "type": "archive",
+		    "url": "https://github.com/qt/qtmqtt/archive/refs/tags/v6.9.0.tar.gz",
+		    "sha256": "7cdec84ca17ad2bd9d47418ca98820705a7798895a2315b5c20c46528a29547e"
 		}
 	    ]
 	},
@@ -193,9 +200,10 @@
 	    "config-opts": [ "-DBUILD_TESTING=OFF", "-DENABLE_DOCS=OFF" ],
             "sources": [
                 {
-                    "type": "git",
-                    "url": "https://github.com/KDE/kuserfeedback.git",
-                    "tag": "v6.7.0"
+                    "type": "archive",
+                    "url": "https://download.kde.org/stable/frameworks/6.13/kuserfeedback-6.13.0.tar.xz",
+                    "sha256": "48c186482fe7a6f1017a7e50b3a16fd7c10c10f7f963c00f32c61bb073404b9a",
+		    "_comment": "requires minimum ecm version provided by runtime"
                 }
             ]
         },
@@ -239,8 +247,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/Orc/discount/archive/v2.2.7d.tar.gz",
-                    "sha256": "eb9f6629dadddb44c3111267b82e51d5fb8364e228cc3533fe937d8a99e0155b"
+                    "url": "https://github.com/Orc/discount/archive/v3.0.0d.tar.gz",
+                    "sha256": "0ed8cc27ac5d46dc6a8beedd5e5673ac8b466a6474bdb7d35f37c815f670385f"
                 }
             ]
         },
@@ -305,22 +313,22 @@
             ]
         },
         {
-            "name": "libixion",
+            "name": "ixion",
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/api/v4/projects/ixion%2Fixion/packages/generic/source/0.20.0/libixion-0.20.0.tar.xz",
-                    "sha256": "8466a05f19f60b7568641a449704666308848f7bcaf8335f92ee9474a451e4cd"
+                    "url": "https://gitlab.com/ixion/ixion/-/archive/0.20.0/ixion-0.20.0.tar.bz2",
+                    "sha256": "39e54cd486fed458c2a6e83a5e658d4c2e818862355b33645bb1342449428463"
                 }
             ]
         },
         {
-            "name": "liborcus",
+            "name": "orcus",
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/api/v4/projects/orcus%2Forcus/packages/generic/source/0.20.0/liborcus-0.20.0.tar.xz",
-                    "sha256": "fb6438977a75e7f455b772acf80d861fbc787ab18d52f7997af44a212311a507"
+                    "url": "https://gitlab.com/orcus/orcus/-/archive/0.20.1/orcus-0.20.1.tar.bz2",
+                    "sha256": "f15e22d055b199299986a0de01864592a2b1caba57413d79969d1794128ef08a"
                 }
             ]
         },

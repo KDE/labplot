@@ -405,9 +405,8 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 		   // update active widgets
 	m_themeHandler->setCurrentTheme(m_plot->theme());
 
-		   // Deactivate the geometry related widgets, if the worksheet layout is active.
-		   // Currently, a plot can only be a child of the worksheet itself, so we only need to ask the parent aspect (=worksheet).
-		   // TODO redesign this, if the hierarchy will be changend in future (a plot is a child of a new object group/container or so)
+	// Deactivate the geometry related widgets, if the worksheet layout is active.
+	// activate otherwise and if the plot is a child of another plot
 	auto* w = dynamic_cast<Worksheet*>(m_plot->parentAspect());
 	if (w) {
 		bool b = (w->layout() == Worksheet::Layout::NoLayout);
@@ -416,6 +415,11 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 		ui.sbWidth->setEnabled(b);
 		ui.sbHeight->setEnabled(b);
 		connect(w, &Worksheet::layoutChanged, this, &CartesianPlotDock::layoutChanged);
+	} else {
+		ui.sbTop->setEnabled(true);
+		ui.sbLeft->setEnabled(true);
+		ui.sbWidth->setEnabled(true);
+		ui.sbHeight->setEnabled(true);
 	}
 
 		   // SIGNALs/SLOTs
@@ -533,7 +537,9 @@ void CartesianPlotDock::updateLocale() {
 		   // update the title label
 	labelWidget->updateLocale();
 
-		   // update locale plot range list
+	borderLineWidget->updateLocale();
+
+	// update plot range list locale
 	updatePlotRangeList();
 }
 

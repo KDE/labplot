@@ -186,17 +186,17 @@ void StatisticalPlotsTest::testHistogramColumnRemoved() {
 
 	histogram->setDataColumn(c);
 	c->setName(QStringLiteral("NewName"));
-	QCOMPARE(histogram->dataColumnPath(), QStringLiteral("Project/NewName"));
+	QCOMPARE(histogram->dataColumnPath(), i18n("Project") + QStringLiteral("/NewName"));
 
 	c->remove();
 
 	QCOMPARE(histogram->dataColumn(), nullptr);
-	QCOMPARE(histogram->dataColumnPath(), QStringLiteral("Project/NewName"));
+	QCOMPARE(histogram->dataColumnPath(), i18n("Project") + QStringLiteral("/NewName"));
 
-	c->setName(QStringLiteral("Another new name")); // Shall not lead to a crash
+	c->setName(QStringLiteral("Another new name")); // Should not lead to a crash
 
 	QCOMPARE(histogram->dataColumn(), nullptr);
-	QCOMPARE(histogram->dataColumnPath(), QStringLiteral("Project/NewName"));
+	QCOMPARE(histogram->dataColumnPath(), i18n("Project") + QStringLiteral("/NewName"));
 }
 
 // ##############################################################################
@@ -266,6 +266,7 @@ void StatisticalPlotsTest::testKDEPlotRange() {
 	// prepare the worksheet + plot
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setNiceExtend(true);
 	ws->addChild(p);
 
 	auto* kdePlot = new KDEPlot(QStringLiteral("kdeplot"));
@@ -364,6 +365,7 @@ void StatisticalPlotsTest::testQQPlotRange() {
 	// prepare the worksheet + plot
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setNiceExtend(true);
 	ws->addChild(p);
 
 	auto* qqPlot = new QQPlot(QStringLiteral("qqplot"));
@@ -569,6 +571,7 @@ void StatisticalPlotsTest::testPBChartXmRAverage() {
 	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
 	pbc->setType(ProcessBehaviorChart::Type::XmR);
 	pbc->setLimitsMetric(ProcessBehaviorChart::LimitsMetric::Average);
+	pbc->setMinLowerLimit(0.); // counts cannot become negative
 	pbc->setDataColumn(column);
 	p->addChild(pbc);
 
@@ -648,6 +651,7 @@ void StatisticalPlotsTest::testPBChartXmRMedian() {
 	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
 	pbc->setType(ProcessBehaviorChart::Type::XmR);
 	pbc->setLimitsMetric(ProcessBehaviorChart::LimitsMetric::Median);
+	pbc->setMinLowerLimit(0.); // counts cannot become negative
 	pbc->setDataColumn(column);
 	p->addChild(pbc);
 

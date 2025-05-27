@@ -17,7 +17,7 @@
 
 class AbstractColumnClearMasksCmd : public QUndoCommand {
 public:
-	explicit AbstractColumnClearMasksCmd(AbstractColumnPrivate*, QUndoCommand* parent = nullptr);
+	explicit AbstractColumnClearMasksCmd(AbstractColumnPrivate*);
 	~AbstractColumnClearMasksCmd() override;
 
 	void redo() override;
@@ -32,7 +32,7 @@ private:
 
 class AbstractColumnSetMaskedCmd : public QUndoCommand {
 public:
-	explicit AbstractColumnSetMaskedCmd(AbstractColumnPrivate*, const Interval<int>& interval, bool masked, QUndoCommand* parent = nullptr);
+	explicit AbstractColumnSetMaskedCmd(AbstractColumnPrivate*, const Interval<int>& interval, bool masked);
 	~AbstractColumnSetMaskedCmd() override;
 
 	void redo() override;
@@ -48,7 +48,7 @@ private:
 
 class AbstractColumnInsertRowsCmd : public QUndoCommand {
 public:
-	explicit AbstractColumnInsertRowsCmd(AbstractColumn*, int before, int count, QUndoCommand* parent = nullptr);
+	explicit AbstractColumnInsertRowsCmd(AbstractColumn*, int before, int count);
 	~AbstractColumnInsertRowsCmd() override;
 
 	void redo() override;
@@ -62,7 +62,7 @@ protected:
 
 class AbstractColumnRemoveRowsCmd : public QUndoCommand {
 public:
-	explicit AbstractColumnRemoveRowsCmd(AbstractColumn* col, int first, int count, QUndoCommand* parent = nullptr);
+	explicit AbstractColumnRemoveRowsCmd(AbstractColumn* col, int first, int count);
 	~AbstractColumnRemoveRowsCmd() override;
 
 	void redo() override;
@@ -77,7 +77,7 @@ protected:
 
 class AbstractColumnSetHeatmapFormatCmd : public QUndoCommand {
 public:
-	explicit AbstractColumnSetHeatmapFormatCmd(AbstractColumnPrivate*, const AbstractColumn::HeatmapFormat&, QUndoCommand* parent = nullptr);
+	explicit AbstractColumnSetHeatmapFormatCmd(AbstractColumnPrivate*, const AbstractColumn::HeatmapFormat&);
 	~AbstractColumnSetHeatmapFormatCmd() override;
 
 	void redo() override;
@@ -90,7 +90,7 @@ private:
 
 class AbstractColumnRemoveHeatmapFormatCmd : public QUndoCommand {
 public:
-	explicit AbstractColumnRemoveHeatmapFormatCmd(AbstractColumnPrivate*, QUndoCommand* parent = nullptr);
+	explicit AbstractColumnRemoveHeatmapFormatCmd(AbstractColumnPrivate*);
 	~AbstractColumnRemoveHeatmapFormatCmd() override;
 
 	void redo() override;

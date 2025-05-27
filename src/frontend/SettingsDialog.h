@@ -21,6 +21,7 @@ class SettingsWorksheetPage;
 class SettingsNotebookPage;
 // class SettingsWelcomePage;
 class SettingsDatasetsPage;
+class SettingsEditorPage;
 
 #ifdef HAVE_KUSERFEEDBACK
 namespace KUserFeedback {
@@ -33,6 +34,7 @@ class SettingsDialog : public KPageDialog {
 
 public:
 	explicit SettingsDialog(QWidget*, const QLocale&);
+	void navigateTo(Settings::Type);
 	~SettingsDialog() override;
 
 private Q_SLOTS:
@@ -41,17 +43,23 @@ private Q_SLOTS:
 
 private:
 	bool m_changed{false};
-	SettingsGeneralPage* m_generalPage;
-	SettingsWorksheetPage* m_worksheetPage;
-	SettingsSpreadsheetPage* m_spreadsheetPage;
+
+	SettingsGeneralPage* m_generalPage{nullptr};
+	SettingsWorksheetPage* m_worksheetPage{nullptr};
+	KPageWidgetItem* m_worksheetPageItem{nullptr};
+	SettingsSpreadsheetPage* m_spreadsheetPage{nullptr};
+	KPageWidgetItem* m_spreadsheetPageItem{nullptr};
 #ifdef HAVE_CANTOR_LIBS
-	SettingsNotebookPage* m_notebookPage;
+	SettingsNotebookPage* m_notebookPage{nullptr};
+	KPageWidgetItem* m_notebookPageItem{nullptr};
 #endif
-	// 	SettingsWelcomePage* m_welcomePage;
-	SettingsDatasetsPage* m_datasetsPage;
+	SettingsDatasetsPage* m_datasetsPage{nullptr};
+	SettingsEditorPage* m_editorRootPage;
+	KPageWidgetItem* m_datasetsPageItem{nullptr};
 
 #ifdef HAVE_KUSERFEEDBACK
-	KUserFeedback::FeedbackConfigWidget* m_userFeedbackWidget;
+	KUserFeedback::FeedbackConfigWidget* m_userFeedbackWidget{nullptr};
+	KPageWidgetItem* m_userFeedbackPageItem{nullptr};
 #endif
 
 	void applySettings();

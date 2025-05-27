@@ -30,7 +30,7 @@ class XYInterpolationCurve : public XYAnalysisCurve {
 public:
 	enum class PointsMode { Auto, Multiple, Custom };
 	struct InterpolationData {
-		InterpolationData(){};
+		InterpolationData() { };
 
 		nsl_interp_type type{nsl_interp_type_linear}; // type of interpolation
 		nsl_interp_pch_variant variant{nsl_interp_pch_variant_finite_difference}; // variant of cubic Hermite interpolation

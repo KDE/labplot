@@ -278,7 +278,7 @@ void AsciiFilterTest::singleColumn() {
 
 	QCOMPARE(spreadsheet.columnCount(), 1);
 	QCOMPARE(spreadsheet.rowCount(), 3);
-	QCOMPARE(spreadsheet.column(0)->name(), i18n("Column 1"));
+	QCOMPARE(spreadsheet.column(0)->name(), i18n("Column") + QStringLiteral(" 1"));
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
 
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 123);
@@ -308,7 +308,7 @@ void AsciiFilterTest::singleColumnSimplifyWhitespaceEnabled() {
 
 	QCOMPARE(spreadsheet.columnCount(), 1);
 	QCOMPARE(spreadsheet.rowCount(), 3);
-	QCOMPARE(spreadsheet.column(0)->name(), i18n("Column 1"));
+	QCOMPARE(spreadsheet.column(0)->name(), i18n("Column") + QStringLiteral(" 1"));
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
 
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 123);
@@ -2929,7 +2929,13 @@ void AsciiFilterTest::spreadsheetFormulaUpdateAfterImport() {
 	QStringList variableNames{QLatin1String("x"), QLatin1String("y")};
 	QVector<Column*> variableColumns{spreadsheet->column(0), spreadsheet->column(1)};
 	col->setFormula(QLatin1String("x+y"), variableNames, variableColumns, true);
+
+	int formulaChangedCounter = 0;
+	connect(col, &Column::formulaChanged, [&formulaChangedCounter]() {
+		formulaChangedCounter++;
+	});
 	col->updateFormula();
+	QCOMPARE(formulaChangedCounter, 1);
 
 	// check the results of the calculation first
 	QCOMPARE(spreadsheetFormula->columnCount(), 1);
@@ -2939,25 +2945,29 @@ void AsciiFilterTest::spreadsheetFormulaUpdateAfterImport() {
 	QCOMPARE(col->valueAt(1), 40.);
 	QCOMPARE(col->valueAt(2), 60.);
 
-	// import the data into the source spreadsheet
-	const QStringList content = {
-		QStringLiteral("c1;c2"),
-		QStringLiteral("1;1"),
-		QStringLiteral("2;2"),
-		QStringLiteral("3;3"),
-	};
-	AsciiFilter filter;
-	auto p = filter.properties();
-	p.automaticSeparatorDetection = true;
-	p.separator = QStringLiteral(" ");
-	p.headerEnabled = true;
-	p.headerLine = 1;
-	p.intAsDouble = false;
-	filter.setProperties(p);
+	{
+		// import the data into the source spreadsheet
+		const QStringList content = {
+			QStringLiteral("c1;c2"),
+			QStringLiteral("1;1"),
+			QStringLiteral("2;2"),
+			QStringLiteral("3;3"),
+		};
+		AsciiFilter filter;
+		auto p = filter.properties();
+		p.automaticSeparatorDetection = true;
+		p.separator = QStringLiteral(" ");
+		p.headerEnabled = true;
+		p.headerLine = 1;
+		p.intAsDouble = false;
+		filter.setProperties(p);
 
-	QString savePath;
-	SAVE_FILE("testfile", content);
-	filter.readDataFromFile(savePath, spreadsheet, AbstractFileFilter::ImportMode::Replace);
+		QString savePath;
+		SAVE_FILE("testfile", content);
+		formulaChangedCounter = 0;
+		filter.readDataFromFile(savePath, spreadsheet, AbstractFileFilter::ImportMode::Replace);
+		QCOMPARE(formulaChangedCounter, 1);
+	}
 
 	// re-check the results of the calculation
 	QCOMPARE(spreadsheetFormula->columnCount(), 1);
@@ -2966,6 +2976,39 @@ void AsciiFilterTest::spreadsheetFormulaUpdateAfterImport() {
 	QCOMPARE(col->valueAt(0), 2.); // c1 + c2
 	QCOMPARE(col->valueAt(1), 4.); // c1 + c2
 	QCOMPARE(col->valueAt(2), 6.); // c1 + c2
+
+	// Reread to check if it still works
+	{
+		// import the data into the source spreadsheet
+		const QStringList content = {
+			QStringLiteral("c1;c2"),
+			QStringLiteral("500;666"),
+			QStringLiteral("501;876"),
+			QStringLiteral("502;370"),
+		};
+		AsciiFilter filter;
+		auto p = filter.properties();
+		p.automaticSeparatorDetection = true;
+		p.separator = QStringLiteral(" ");
+		p.headerEnabled = true;
+		p.headerLine = 1;
+		p.intAsDouble = false;
+		filter.setProperties(p);
+
+		QString savePath;
+		SAVE_FILE("testfile", content);
+		formulaChangedCounter = 0;
+		filter.readDataFromFile(savePath, spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	}
+	QCOMPARE(formulaChangedCounter, 1);
+
+	// re-check the results of the calculation
+	QCOMPARE(spreadsheetFormula->columnCount(), 1);
+	QCOMPARE(spreadsheetFormula->rowCount(), 3);
+	QCOMPARE(col->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(col->valueAt(0), 1166.); // c1 + c2
+	QCOMPARE(col->valueAt(1), 1377.); // c1 + c2
+	QCOMPARE(col->valueAt(2), 872.); // c1 + c2
 }
 
 /*!
@@ -3644,7 +3687,9 @@ void AsciiFilterTest::determineColumns() {
 
 	expectedHeader = QStringList{QStringLiteral("header1"), QStringLiteral("header2"), QStringLiteral("header3")};
 	p.simplifyWhitespaces = true;
-	QBENCHMARK { QCOMPARE(AsciiFilterPrivate::determineColumnsSimplifyWhiteSpace(QStringLiteral("header1,header2,header3\n"), p), expectedHeader); }
+	QBENCHMARK {
+		QCOMPARE(AsciiFilterPrivate::determineColumnsSimplifyWhiteSpace(QStringLiteral("header1,header2,header3\n"), p), expectedHeader);
+	}
 }
 
 void AsciiFilterTest::determineColumnsWhiteSpaces() {

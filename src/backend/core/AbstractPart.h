@@ -33,9 +33,9 @@ public:
 	void deleteView() const;
 #ifndef SDK
 	ContentDockWidget* dockWidget() const;
-#endif
 	bool dockWidgetExists() const;
 	bool hasMdiSubWindow() const;
+#endif
 
 	QMenu* createContextMenu() override;
 	virtual bool exportView() const = 0;
@@ -46,8 +46,8 @@ public:
 	QVector<AspectType> dropableOn() const override;
 
 	// TODO: move these functions to a new class AbstractPartView
-	virtual void registerShortcuts(){};
-	virtual void unregisterShortcuts(){};
+	virtual void registerShortcuts() { };
+	virtual void unregisterShortcuts() { };
 
 	void suppressDeletion(bool suppress);
 

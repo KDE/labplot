@@ -26,6 +26,7 @@
 #include "backend/datasources/MQTTTopic.h"
 #endif
 #include "backend/datapicker/Datapicker.h"
+#include "backend/script/Script.h"
 
 #include "frontend/GuiObserver.h"
 #include "frontend/MainWin.h"
@@ -54,6 +55,7 @@
 #include "frontend/dockwidgets/ReferenceRangeDock.h"
 #include "frontend/dockwidgets/RunChartDock.h"
 #include "frontend/dockwidgets/SpreadsheetDock.h"
+#include "frontend/dockwidgets/ScriptDock.h"
 #include "frontend/dockwidgets/StatisticsSpreadsheetDock.h"
 #include "frontend/dockwidgets/WorksheetDock.h"
 #include "frontend/dockwidgets/XYConvolutionCurveDock.h"
@@ -423,7 +425,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 			QList<DatapickerImage*> list;
 			for (auto* aspect : selectedAspects)
 				list << static_cast<Datapicker*>(aspect)->image();
-			m_datapickerImageDock->setImages(list);
+			m_datapickerImageDock->setImages(std::move(list));
 		}
 		break;
 	case AspectType::HypothesisTest:
@@ -445,7 +447,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window %1 is a Cantor backend", "%1 Notebook", list.first()->backendName()));
 			else
 				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Notebook"));
-			m_notebookDock->setNotebooks(list);
+			m_notebookDock->setNotebooks(std::move(list));
 		}
 #endif
 		break;
@@ -506,6 +508,11 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Workbook"));
 		raiseDock(m_aspectDock, m_mainWindow->stackedWidget);
 		m_aspectDock->setAspects(selectedAspects);
+		break;
+	case AspectType::Script:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Script"));
+		raiseDockConnect(m_scriptDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_scriptDock->setScriptsList(castList<Script>(selectedAspects));
 		break;
 	case AspectType::WorksheetElement:
 	case AspectType::WorksheetElementContainer:

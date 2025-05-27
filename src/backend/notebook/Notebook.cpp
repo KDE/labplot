@@ -99,13 +99,13 @@ bool Notebook::init(QByteArray* content) {
 		//-> redesign this! expose Cantor's Worksheet directly and add more settings here.
 		auto* action = m_part->action(QStringLiteral("enable_highlighting"));
 		if (action) {
-			bool value = group.readEntry(QLatin1String("SyntaxHighlighting"), false);
+			bool value = group.readEntry(QLatin1String("SyntaxHighlighting"), true);
 			action->setChecked(value);
 		}
 
 		action = m_part->action(QStringLiteral("enable_completion"));
 		if (action) {
-			bool value = group.readEntry(QLatin1String("SyntaxCompletion"), false);
+			bool value = group.readEntry(QLatin1String("SyntaxCompletion"), true);
 			action->setChecked(value);
 		}
 
@@ -123,7 +123,7 @@ bool Notebook::init(QByteArray* content) {
 
 		action = m_part->action(QStringLiteral("enable_animations"));
 		if (action) {
-			bool value = group.readEntry(QLatin1String("Animations"), false);
+			bool value = group.readEntry(QLatin1String("Animations"), true);
 			action->setChecked(value);
 		}
 

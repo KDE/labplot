@@ -162,7 +162,7 @@ void XYFunctionCurveTest::removeCurves() {
 	QCOMPARE(functionCurve->xColumn()->rowCount(), 0);
 	QCOMPARE(functionCurve->functionData().count(), 1);
 	QCOMPARE(functionCurve->functionData().at(0).curve(), nullptr);
-	QCOMPARE(functionCurve->functionData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/curve1"));
+	QCOMPARE(functionCurve->functionData().at(0).curvePath(), i18n("Project") + QStringLiteral("/Worksheet/plot/curve1"));
 }
 
 void XYFunctionCurveTest::removeColumnFromCurve() {
@@ -265,7 +265,7 @@ void XYFunctionCurveTest::removeCurveRenameAutomaticAdd() {
 	equationCurve->remove();
 
 	QCOMPARE(functionCurve->functionData().at(0).curve(), nullptr);
-	QCOMPARE(functionCurve->functionData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
+	QCOMPARE(functionCurve->functionData().at(0).curvePath(), i18n("Project") + QStringLiteral("/Worksheet/plot/eq"));
 
 	p->addChild(new XYEquationCurve(QLatin1String("eqDifferent"))); // different name than eq!
 	auto eqs = p->children(AspectType::XYEquationCurve);
@@ -275,12 +275,12 @@ void XYFunctionCurveTest::removeCurveRenameAutomaticAdd() {
 	equationCurveNew->setEquationData(data);
 
 	QCOMPARE(functionCurve->functionData().at(0).curve(), nullptr);
-	QCOMPARE(functionCurve->functionData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
+	QCOMPARE(functionCurve->functionData().at(0).curvePath(), i18n("Project") + QStringLiteral("/Worksheet/plot/eq"));
 
 	equationCurveNew->setName(QStringLiteral("eq"));
 
 	QCOMPARE(functionCurve->functionData().at(0).curve(), equationCurveNew);
-	QCOMPARE(functionCurve->functionData().at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
+	QCOMPARE(functionCurve->functionData().at(0).curvePath(), i18n("Project") + QStringLiteral("/Worksheet/plot/eq"));
 
 	{
 		const auto* xColumn = functionCurve->xColumn();
@@ -365,7 +365,7 @@ void XYFunctionCurveTest::saveLoad() {
 
 		const auto& data = functionCurve->functionData();
 		QCOMPARE(data.length(), 1);
-		QCOMPARE(data.at(0).curvePath(), QStringLiteral("Project/Worksheet/plot/eq"));
+		QCOMPARE(data.at(0).curvePath(), i18n("Project") + QStringLiteral("/Worksheet/plot/eq"));
 		QCOMPARE(data.at(0).curve(), eq);
 		QCOMPARE(data.at(0).variableName(), QStringLiteral("z"));
 

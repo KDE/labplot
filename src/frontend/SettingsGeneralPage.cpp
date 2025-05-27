@@ -203,6 +203,8 @@ void SettingsGeneralPage::loadSettings() {
 	ui.chkInfoTrace->setChecked(group.readEntry<bool>(QLatin1String("InfoTrace"), false));
 	ui.chkDebugTrace->setChecked(group.readEntry<bool>(QLatin1String("DebugTrace"), false));
 	ui.chkPerfTrace->setChecked(group.readEntry<bool>(QLatin1String("PerfTrace"), false));
+
+	m_changed = false;
 }
 
 void SettingsGeneralPage::retranslateUi() {

@@ -93,7 +93,7 @@ public:
 	virtual void setVisible(bool on);
 	virtual bool isVisible() const;
 	virtual bool isFullyVisible() const;
-	virtual void updateLocale(){};
+	virtual void updateLocale() { };
 	void setSuppressRetransform(bool);
 
 	virtual void setPrinting(bool);
@@ -135,7 +135,6 @@ protected:
 	int m_cSystemIndex{0}; // index of the coordinate system used from plot
 	const CartesianCoordinateSystem* cSystem{nullptr}; // current cSystem
 
-	virtual void handleAspectUpdated(const QString& path, const AbstractAspect*);
 	friend class Project;
 
 public Q_SLOTS:
@@ -154,6 +153,7 @@ private:
 protected Q_SLOTS:
 	void changeVisibility();
 	void changeLocking();
+	virtual void handleAspectUpdated(const QString& path, const AbstractAspect*);
 
 private Q_SLOTS:
 	void prepareDrawingOrderMenu();

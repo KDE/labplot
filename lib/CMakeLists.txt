@@ -261,22 +261,30 @@ set_target_properties(liblabplot PROPERTIES
 
 target_compile_definitions(liblabplot PRIVATE -DSDK ${LABPLOT_COMPILE_DEFINITIONS})
 
+get_target_property(labplotlib_INCLUDE_DIRECTORIES labplotlib INCLUDE_DIRECTORIES)
+get_target_property(labplotbackendlib_INCLUDE_DIRECTORIES labplotbackendlib INCLUDE_DIRECTORIES)
+get_target_property(labplotnsllib_INCLUDE_DIRECTORIES labplotnsllib INCLUDE_DIRECTORIES)
+
 target_include_directories(liblabplot
     PRIVATE
-    $<TARGET_PROPERTY:labplotlib,INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:labplotbackendlib,INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:labplotnsllib,INCLUDE_DIRECTORIES>
+    ${labplotlib_INCLUDE_DIRECTORIES}
+    ${labplotbackendlib_INCLUDE_DIRECTORIES}
+    ${labplotnsllib_INCLUDE_DIRECTORIES}
     # any dependent building me directly
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../src>
     # any dependent not building me directly
     INTERFACE $<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/labplot>
 )
 
+get_target_property(labplotlib_LINK_LIBRARIES labplotlib LINK_LIBRARIES)
+get_target_property(labplotbackendlib_LINK_LIBRARIES labplotbackendlib LINK_LIBRARIES)
+get_target_property(labplotnsllib_LINK_LIBRARIES labplotnsllib LINK_LIBRARIES)
+
 target_link_libraries(liblabplot
     PRIVATE
-    $<TARGET_PROPERTY:labplotlib,LINK_LIBRARIES>
-    $<TARGET_PROPERTY:labplotbackendlib,LINK_LIBRARIES>
-    $<TARGET_PROPERTY:labplotnsllib,LINK_LIBRARIES>
+    ${labplotlib_LINK_LIBRARIES}
+    ${labplotbackendlib_LINK_LIBRARIES}
+    ${labplotnsllib_LINK_LIBRARIES}
     PUBLIC
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Gui
@@ -298,8 +306,9 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/labplot_export.h DESTINATION ${KDE_INS
 
 install(FILES labplot.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/ COMPONENT Devel)
 
-# top-level includes
-foreach(SDK_SOURCE IN LISTS SDK_SOURCES)
+# top-level and dependency includes
+set(SDK_AND_DEPENDENCY_SOURCES ${SDK_SOURCES} ${SDK_DEPENDENCY_SOURCES})
+foreach(SDK_SOURCE IN LISTS SDK_AND_DEPENDENCY_SOURCES)
     string(REPLACE .cpp .h SDK_SOURCE_HEADER ${SDK_SOURCE})
     if(EXISTS ${SDK_SOURCE_HEADER})
         string(REGEX REPLACE "^\.\./src/|/[^/]+$" "" SDK_SOURCE_HEADER_DIR ${SDK_SOURCE_HEADER})
@@ -308,31 +317,18 @@ foreach(SDK_SOURCE IN LISTS SDK_SOURCES)
 endforeach(SDK_SOURCE)
 
 # included from the top-level includes
-install(FILES ../src/backend/datasources/filters/AbstractFileFilter.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/datasources/filters/ COMPONENT Devel)
-install(FILES ../src/backend/core/AbstractColumn.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/core/ COMPONENT Devel)
-install(FILES ../src/backend/core/AbstractAspect.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/core/ COMPONENT Devel)
-install(FILES ../src/backend/datasources/AbstractDataSource.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/datasources/ COMPONENT Devel)
-install(FILES ../src/backend/core/AbstractPart.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/core/ COMPONENT Devel)
 install(FILES ../src/backend/lib/macros.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel)
 install(FILES ../src/backend/lib/macrosWarningStyle.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel)
 install(FILES ../src/backend/lib/Debug.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel)
-install(FILES ../src/backend/core/column/ColumnStringIO.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/core/column/ COMPONENT Devel)
-install(FILES ../src/backend/worksheet/WorksheetElement.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/ COMPONENT Devel)
-install(FILES ../src/tools/TeXRenderer.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/tools/ COMPONENT Devel)
-install(FILES ../src/backend/lib/Range.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel)
 install(FILES ../src/backend/gsl/Parser.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/gsl/ COMPONENT Devel)
 install(FILES ../src/backend/gsl/ParserDeclarations.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/gsl/ COMPONENT Devel)
 install(FILES ../src/backend/gsl/constants.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/gsl/ COMPONENT Devel)
 install(FILES ../src/backend/gsl/functions.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/gsl/ COMPONENT Devel)
 install(FILES ../src/backend/gsl/parserFunctionTypes.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/gsl/ COMPONENT Devel)
-install(FILES ../src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel)
-install(FILES ../src/backend/worksheet/plots/cartesian/CartesianScale.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel)
-install(FILES ../src/backend/worksheet/plots/AbstractCoordinateSystem.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/ COMPONENT Devel)
-install(FILES ../src/backend/worksheet/plots/AbstractPlot.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/ COMPONENT Devel)
-install(FILES ../src/backend/worksheet/WorksheetElementContainer.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/ COMPONENT Devel)
-install(FILES ../src/backend/worksheet/plots/cartesian/Plot.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel)
-install(FILES ../src/backend/worksheet/plots/cartesian/XYAnalysisCurve.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel)
-install(FILES ../src/backend/worksheet/plots/cartesian/ErrorBar.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel)
+install(FILES ../src/backend/datasources/filters/filters.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/datasources/filters/ COMPONENT Devel)
+install(FILES ../src/backend/worksheet/plots/cartesian/plots.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel)
+install(FILES ../src/tools/TeXRenderer.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/tools/ COMPONENT Devel)
+
 install(FILES ../src/backend/nsl/nsl_fit.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel)
 install(FILES ../src/backend/nsl/nsl_math.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel)
 install(FILES ../src/backend/nsl/nsl_sf_stats.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel)
@@ -349,8 +345,6 @@ install(FILES ../src/backend/nsl/nsl_kde.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}
 install(FILES ../src/backend/nsl/nsl_sf_kernel.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel)
 install(FILES ../src/backend/nsl/nsl_dft.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel)
 install(FILES ../src/backend/nsl/nsl_sf_window.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel)
-install(FILES ../src/backend/datasources/filters/filters.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/datasources/filters/ COMPONENT Devel)
-install(FILES ../src/backend/worksheet/plots/cartesian/plots.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel)
 
 install(EXPORT LabPlotTargets
     DESTINATION ${KDE_INSTALL_CMAKEPACKAGEDIR}/labplot
@@ -374,3 +368,8 @@ install(
     DESTINATION ${KDE_INSTALL_CMAKEPACKAGEDIR}/labplot
     COMPONENT Devel
 )
+
+if(ENABLE_PYTHON_SDK)
+    message(STATUS "Python SDK build ENABLED")
+    add_subdirectory(python)
+endif()

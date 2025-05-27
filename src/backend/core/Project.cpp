@@ -182,6 +182,10 @@ int ProjectPrivate::mXmlVersion = buildXmlVersion;
 Project::Project()
 	: Folder(i18n("Project"), AspectType::Project)
 	, d_ptr(new ProjectPrivate(this)) {
+#ifdef SDK
+	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
+	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
+#endif
 	Q_D(Project);
 
 	QString user = qEnvironmentVariable("USER"); // !Windows
@@ -257,15 +261,8 @@ QUndoStack* Project::undoStack() const {
 }
 
 QMenu* Project::createContextMenu() {
-	QMenu* menu = AbstractAspect::createContextMenu();
-
-	// add close action
-	menu->addSeparator();
-	menu->addAction(QIcon::fromTheme(QLatin1String("document-close")), i18n("Close"), this, SIGNAL(closeRequested()));
-
-	// add the actions from MainWin
-	Q_EMIT requestProjectContextMenu(menu);
-
+	QMenu* menu = AbstractAspect::createContextMenu(); // add default actions from Aspect
+	Q_EMIT requestProjectContextMenu(menu); // add the actions from MainWin
 	return menu;
 }
 
@@ -940,12 +937,6 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	// for the analysis curve itself.
 	bool hasChildren = (aspect->childCount<AbstractAspect>() > 0 && !aspect->inherits(AspectType::XYAnalysisCurve));
 
-	// aspects in the project that can be used as sources/references:
-	auto* project = aspect->project();
-	const auto& columns = project->children<Column>(ChildIndexFlag::Recursive);
-	const auto& histogramsAll = project->children<Histogram>(ChildIndexFlag::Recursive); // needed for fit curves only.
-	const auto& curvesAll = project->children<XYCurve>(ChildIndexFlag::Recursive);
-
 #ifndef SDK
 	// LiveDataSource:
 	// call finalizeLoad() to replace relative with absolute paths if required
@@ -956,6 +947,12 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		source->finalizeLoad();
 	}
 #endif
+
+	// aspects in the project that can be used as sources/references:
+	auto* project = aspect->project();
+	const auto& columns = project->children<Column>(ChildIndexFlag::Recursive);
+	const auto& histogramsAll = project->children<Histogram>(ChildIndexFlag::Recursive); // needed for fit curves only.
+	const auto& curvesAll = project->children<XYCurve>(ChildIndexFlag::Recursive);
 
 	// xy-curves
 	//  cannot be removed by the column observer, because it does not react
@@ -1092,15 +1089,16 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			continue;
 
 		// initialize the array for the column pointers
-		int count = boxPlot->dataColumnPaths().count();
+		const auto& paths = boxPlot->dataColumnPaths();
+		int count = paths.count();
 		QVector<const AbstractColumn*> dataColumns;
 		dataColumns.resize(count);
 
 		// restore the pointers
 		for (int i = 0; i < count; ++i) {
 			dataColumns[i] = nullptr;
-			const auto& path = boxPlot->dataColumnPaths().at(i);
-			for (Column* column : columns) {
+			const auto& path = paths.at(i);
+			for (auto* column : columns) {
 				if (!column)
 					continue;
 				if (column->path() == path) {
@@ -1125,7 +1123,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			continue;
 
 		// initialize the array for the column pointers
-		int count = barPlot->dataColumnPaths().count();
+		const auto& paths = barPlot->dataColumnPaths();
+		int count = paths.count();
 		QVector<const AbstractColumn*> dataColumns;
 		dataColumns.resize(count);
 
@@ -1133,8 +1132,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		for (int i = 0; i < count; ++i) {
 			// data columns
 			dataColumns[i] = nullptr;
-			const auto path = barPlot->dataColumnPaths().at(i);
-			for (Column* column : columns) {
+			const auto& path = paths.at(i);
+			for (auto* column : columns) {
 				if (!column)
 					continue;
 				if (column->path() == path) {
@@ -1169,14 +1168,15 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			continue;
 
 		// initialize the array for the column pointers
-		int count = lollipopPlot->dataColumnPaths().count();
+		const auto& paths = lollipopPlot->dataColumnPaths();
+		int count = paths.count();
 		QVector<const AbstractColumn*> dataColumns;
 		dataColumns.resize(count);
 
 		// restore the pointers
 		for (int i = 0; i < count; ++i) {
 			dataColumns[i] = nullptr;
-			const auto& path = lollipopPlot->dataColumnPaths().at(i);
+			const auto& path = paths.at(i);
 			for (Column* column : columns) {
 				if (!column)
 					continue;
@@ -1317,4 +1317,22 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 		d->saveCalculations = str.toInt();
 
 	return true;
+}
+
+/*!
+ * This static member variable will hold a pointer to the current project.
+ * It starts out as nullptr but is updated in various places in MainWin.
+ */
+Project* Project::currentProject = nullptr;
+
+/*!
+ * This free function will return a pointer to the current project.
+ * It was created for our scripting runtimes which need access to the current project.
+ * So, our scripting runtimes can do something like:
+ * 		project = project()
+ * Having a singular function is less error prone than our former approach of manually
+ * injecting the project variable into the scripting runtime.
+ */
+Project* project() {
+	return Project::currentProject;
 }

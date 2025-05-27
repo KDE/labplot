@@ -374,7 +374,7 @@ void ImportFileWidget::loadSettings() {
 
 	const QString& willStatistics = conf.readEntry("mqttWillStatistics", "");
 	const QStringList& statisticsList = willStatistics.split(QLatin1Char('|'), Qt::SkipEmptyParts);
-	for (auto value : statisticsList)
+	for (const auto& value : statisticsList)
 		m_willSettings.willStatistics[value.toInt()] = true;
 #endif
 

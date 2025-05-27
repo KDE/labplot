@@ -1,10 +1,9 @@
 /*
-	File                 : AboutDialog.h
-	Project              : LabPlot
-	Description          : Custom about dialog
-	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
-
+    File                 : AboutDialog.h
+    Project              : LabPlot
+    Description          : Custom about dialog
+    --------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2020-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -25,7 +24,8 @@ class AboutDialog : public KAboutApplicationDialog {
 public:
 	~AboutDialog() override;
 	static QString systemInfo();
-	static QVector<QStringList> components(); // list of additional components
+	static QString links();
+	static QVector<QStringList> components();	// list of additional components
 	explicit AboutDialog(const KAboutData&, QWidget*);
 
 private Q_SLOTS:

@@ -22,6 +22,7 @@
 #include <QTimer>
 #include <QToolBar>
 
+#include <KActionCollection>
 #include <KLocalizedString>
 #include <KParts/ReadWritePart>
 #include <KToggleAction>
@@ -51,27 +52,27 @@ void NotebookView::initActions() {
 	m_actionGroup->setExclusive(false);
 
 	// general notebook specific actions
-	m_zoomIn = new QAction(QIcon::fromTheme(QLatin1String("zoom-in")), i18n("Zoom In"), m_actionGroup);
-	m_zoomIn->setData(QStringLiteral("view_zoom_in"));
-	m_zoomIn->setShortcut(Qt::CTRL | Qt::Key_Plus);
+	m_zoomInAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-in")), i18n("Zoom In"), m_actionGroup);
+	m_zoomInAction->setData(QStringLiteral("view_zoom_in"));
+	m_zoomInAction->setShortcut(Qt::CTRL | Qt::Key_Plus);
 
-	m_zoomOut = new QAction(QIcon::fromTheme(QLatin1String("zoom-out")), i18n("Zoom Out"), m_actionGroup);
-	m_zoomOut->setData(QStringLiteral("view_zoom_out"));
-	m_zoomOut->setShortcut(Qt::CTRL | Qt::Key_Minus);
+	m_zoomOutAction = new QAction(QIcon::fromTheme(QLatin1String("zoom-out")), i18n("Zoom Out"), m_actionGroup);
+	m_zoomOutAction->setData(QStringLiteral("view_zoom_out"));
+	m_zoomOutAction->setShortcut(Qt::CTRL | Qt::Key_Minus);
 
-	m_find = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18n("Find"), m_actionGroup);
-	m_find->setData(QStringLiteral("edit_find"));
-	m_find->setShortcut(Qt::CTRL | Qt::Key_F);
+	m_findAction = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18n("Find"), m_actionGroup);
+	m_findAction->setData(QStringLiteral("edit_find"));
+	m_findAction->setShortcut(Qt::CTRL | Qt::Key_F);
 
-	m_replace = new QAction(QIcon::fromTheme(QLatin1String("edit-find-replace")), i18n("Replace"), m_actionGroup);
-	m_replace->setData(QStringLiteral("edit_replace"));
-	m_replace->setShortcut(Qt::CTRL | Qt::Key_R);
+	m_replaceAction = new QAction(QIcon::fromTheme(QLatin1String("edit-find-replace")), i18n("Replace"), m_actionGroup);
+	m_replaceAction->setData(QStringLiteral("edit_replace"));
+	m_replaceAction->setShortcut(Qt::CTRL | Qt::Key_R);
 
-	m_restartBackendAction = new QAction(QIcon::fromTheme(QLatin1String("system-reboot")), i18n("Restart Backend"), m_actionGroup);
-	m_restartBackendAction->setData(QStringLiteral("restart_backend"));
+	m_restartAction = new QAction(QIcon::fromTheme(QLatin1String("system-reboot")), i18n("Restart"), m_actionGroup);
+	m_restartAction->setData(QStringLiteral("restart_backend"));
 
-	m_evaluateWorsheetAction = new QAction(QIcon::fromTheme(QLatin1String("system-run")), i18n("Evaluate Notebook"), m_actionGroup);
-	m_evaluateWorsheetAction->setData(QStringLiteral("evaluate_worksheet"));
+	m_evaluateAction = new QAction(QIcon::fromTheme(QLatin1String("system-run")), i18n("Evaluate Notebook"), m_actionGroup);
+	m_evaluateAction->setData(QStringLiteral("evaluate_worksheet"));
 
 	// all other actions are initialized in initMenus() since they are only required for the main and context menu
 
@@ -235,7 +236,7 @@ void NotebookView::createContextMenu(QMenu* menu) {
 	if (!m_addNewMenu)
 		initMenus();
 
-	menu->insertAction(firstAction, m_evaluateWorsheetAction);
+	menu->insertAction(firstAction, m_evaluateAction);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, m_evaluateEntryAction);
 	menu->addSeparator();
@@ -263,15 +264,15 @@ void NotebookView::createContextMenu(QMenu* menu) {
 	}
 
 	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, m_zoomIn);
-	menu->insertAction(firstAction, m_zoomOut);
+	menu->insertAction(firstAction, m_zoomInAction);
+	menu->insertAction(firstAction, m_zoomOutAction);
 	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, m_find);
-	menu->insertAction(firstAction, m_replace);
+	menu->insertAction(firstAction, m_findAction);
+	menu->insertAction(firstAction, m_replaceAction);
 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_settingsMenu);
 	menu->insertSeparator(firstAction);
-	menu->insertAction(firstAction, m_restartBackendAction);
+	menu->insertAction(firstAction, m_restartAction);
 	menu->insertSeparator(firstAction);
 }
 
@@ -307,17 +308,6 @@ void NotebookView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	m_statisticsAction->setEnabled(hasValues);
 }
 
-void NotebookView::fillToolBar(QToolBar* toolbar) {
-	if (!m_part)
-		return;
-	toolbar->addAction(m_evaluateWorsheetAction);
-	toolbar->addAction(m_find);
-	toolbar->addAction(m_zoomIn);
-	toolbar->addAction(m_zoomOut);
-	toolbar->addSeparator();
-	toolbar->addAction(m_restartBackendAction);
-}
-
 /*!
  * Slot for actions triggered
  */
@@ -337,12 +327,12 @@ NotebookView::~NotebookView() {
 
 void NotebookView::statusChanged(Cantor::Session::Status status) {
 	if (status == Cantor::Session::Running) {
-		m_evaluateWorsheetAction->setText(i18n("Interrupt"));
-		m_evaluateWorsheetAction->setIcon(QIcon::fromTheme(QLatin1String("dialog-close")));
+		m_evaluateAction->setText(i18n("Interrupt"));
+		m_evaluateAction->setIcon(QIcon::fromTheme(QLatin1String("dialog-close")));
 		Q_EMIT m_notebook->statusInfo(i18n("Calculating..."));
 	} else {
-		m_evaluateWorsheetAction->setText(i18n("Evaluate Notebook"));
-		m_evaluateWorsheetAction->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
+		m_evaluateAction->setText(i18n("Evaluate Notebook"));
+		m_evaluateAction->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
 		Q_EMIT m_notebook->statusInfo(i18n("Ready"));
 	}
 }
@@ -369,4 +359,24 @@ void NotebookView::showStatistics() {
 	QTimer::singleShot(0, this, [=]() {
 		dlg->showStatistics();
 	});
+}
+
+void NotebookView::evaluate() {
+	m_part->action(QStringLiteral("evaluate_worksheet"))->trigger();
+}
+
+void NotebookView::restart() {
+	m_part->action(QStringLiteral("restart_backend"))->trigger();
+}
+
+void NotebookView::zoomIn() {
+	m_part->action(QStringLiteral("view_zoom_in"))->trigger();
+}
+
+void NotebookView::zoomOut() {
+	m_part->action(QStringLiteral("view_zoom_out"))->trigger();
+}
+
+void NotebookView::find() {
+	m_part->action(QStringLiteral("edit_find"))->trigger();
 }

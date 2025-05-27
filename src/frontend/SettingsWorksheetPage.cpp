@@ -27,6 +27,10 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent)
 	ui.lTheme->setToolTip(info);
 	m_cbThemes->setToolTip(info);
 
+	ui.cbPreviewThumbnailSize->addItem(i18n("Small (3cm x 3cm)"), 3);
+	ui.cbPreviewThumbnailSize->addItem(i18n("Medium (5cm x 5cm)"), 5);
+	ui.cbPreviewThumbnailSize->addItem(i18n("Big (7cm x 7cm)"), 7);
+
 	const int size = ui.cbTexEngine->height();
 	ui.lLatexWarning->setPixmap(QIcon::fromTheme(QLatin1String("state-warning")).pixmap(size, size));
 
@@ -44,6 +48,7 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent)
 		ui.cbTexEngine->addItem(QLatin1String("LaTeX"), QLatin1String("latex"));
 
 	connect(m_cbThemes, &ThemesComboBox::currentThemeChanged, this, &SettingsWorksheetPage::changed);
+	connect(ui.cbPreviewThumbnailSize, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsWorksheetPage::changed);
 	connect(ui.chkPresenterModeInteractive, &QCheckBox::toggled, this, &SettingsWorksheetPage::changed);
 	connect(ui.chkDoubleBuffering, &QCheckBox::toggled, this, &SettingsWorksheetPage::changed);
 	connect(ui.cbTexEngine, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsWorksheetPage::changed);
@@ -62,6 +67,9 @@ QList<Settings::Type> SettingsWorksheetPage::applySettings() {
 		group.writeEntry(QLatin1String("Theme"), QString());
 	else
 		group.writeEntry(QLatin1String("Theme"), m_cbThemes->currentText());
+
+	qDebug() << "size " << ui.cbPreviewThumbnailSize->currentData().toInt();
+	group.writeEntry(QLatin1String("PreviewThumbnailSize"), ui.cbPreviewThumbnailSize->currentData().toInt());
 	group.writeEntry(QLatin1String("PresenterModeInteractive"), ui.chkPresenterModeInteractive->isChecked());
 	group.writeEntry(QLatin1String("DoubleBuffering"), ui.chkDoubleBuffering->isChecked());
 	group.writeEntry(QLatin1String("LaTeXEngine"), ui.cbTexEngine->itemData(ui.cbTexEngine->currentIndex()));
@@ -74,6 +82,7 @@ void SettingsWorksheetPage::restoreDefaults() {
 	m_cbThemes->setItemText(0, i18n("Default")); // default theme
 	ui.chkPresenterModeInteractive->setChecked(false);
 	ui.chkDoubleBuffering->setChecked(true);
+	ui.cbPreviewThumbnailSize->setCurrentIndex(1); // medium
 
 	int index = ui.cbTexEngine->findData(QLatin1String("xelatex"));
 	if (index == -1) {
@@ -93,8 +102,14 @@ void SettingsWorksheetPage::loadSettings() {
 	ui.chkPresenterModeInteractive->setChecked(group.readEntry(QLatin1String("PresenterModeInteractive"), false));
 	ui.chkDoubleBuffering->setChecked(group.readEntry(QLatin1String("DoubleBuffering"), true));
 
+	int index = ui.cbPreviewThumbnailSize->findData(group.readEntry(QLatin1String("PreviewThumbnailSize"), 3));
+	if (index != -1)
+		ui.cbPreviewThumbnailSize->setCurrentIndex(index);
+	else
+		ui.cbPreviewThumbnailSize->setCurrentIndex(1); // medium
+
 	QString engine = group.readEntry(QLatin1String("LaTeXEngine"), "");
-	int index = -1;
+	index = -1;
 	if (engine.isEmpty()) {
 		// empty string was found in the settings (either the settings never saved or no tex engine was available during the last save)
 		//->check whether the latex environment was installed in the meantime
@@ -118,6 +133,8 @@ void SettingsWorksheetPage::loadSettings() {
 
 	ui.cbTexEngine->setCurrentIndex(index);
 	checkTeX(index);
+
+	m_changed = false;
 }
 
 void SettingsWorksheetPage::changed() {

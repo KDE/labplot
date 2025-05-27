@@ -40,7 +40,8 @@ void MultiRangeTest2::autoScaleYAfterZoomInX() {
 
 void MultiRangeTest2::autoScaleXAfterZoomInY() {
 	LOAD_PROJECT
-	auto refValues = vertAxisP1->tickLabelValues();
+	p1->setNiceExtend(true);
+	const auto refValues = vertAxisP1->tickLabelValues();
 	vertAxisP1->setSelected(true);
 	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomYSelection)
 
@@ -55,10 +56,16 @@ void MultiRangeTest2::autoScaleXAfterZoomInY() {
 	CHECK_RANGE(p1, logCurve, Dimension::X, 0., 100.);
 	CHECK_RANGE(p1, logCurve, Dimension::Y, -10., 6.);
 
+	// Revert the zoom
 	p1->navigate(tanCurve->coordinateSystemIndex(), CartesianPlot::NavigationOperation::ScaleAutoY);
 
-	// retransform of vertAxisP1 is done, so the tickLabelValues change back
-	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValues);
+	// All x ranges are zoomed, for plot 1 and plot 2
+	CHECK_RANGE(p1, sinCurve, Dimension::X, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, Dimension::X, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250., 250.); // autoscaled
+	CHECK_RANGE(p1, logCurve, Dimension::X, 0., 100.);
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10., 6.);
 }
 
 /*!

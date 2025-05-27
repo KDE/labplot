@@ -38,7 +38,7 @@ private:
 	Ui::AxisDock ui;
 	QList<Axis*> m_axesList;
 	Axis* m_axis{nullptr};
-	LabelWidget* labelWidget; // Title
+	LabelWidget* labelWidget; // for title
 	TreeViewComboBox* cbMajorTicksColumn;
 	TreeViewComboBox* cbMinorTicksColumn;
 	TreeViewComboBox* cbLabelsTextColumn;

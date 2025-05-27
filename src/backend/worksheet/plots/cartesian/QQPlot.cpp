@@ -114,8 +114,12 @@ void QQPlot::init() {
 	// so we have the same name shown on the undo stack
 	connect(this, &AbstractAspect::aspectDescriptionChanged, [this] {
 		Q_D(QQPlot);
+		d->referenceCurve->setUndoAware(false);
+		d->percentilesCurve->setUndoAware(false);
 		d->referenceCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 		d->percentilesCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
+		d->referenceCurve->setUndoAware(true);
+		d->percentilesCurve->setUndoAware(true);
 	});
 
 	// propage the visual changes to the parent

@@ -1497,4 +1497,215 @@ void LiveDataTest::testUdpReadContinuousFixed00() {
 	QCOMPARE(dataSource.column(1)->valueAt(dataSource.rowCount() - 1), 2.);
 }
 
+#define CREATE_DUMMY_LIVEDATA_PROJECT(project, importFileName)                                                                                                 \
+	/* initialize the live data source */                                                                                                                      \
+	auto dataSource = new LiveDataSource(QStringLiteral("test"), false);                                                                                       \
+	dataSource->setSourceType(LiveDataSource::SourceType::FileOrPipe);                                                                                         \
+	dataSource->setFileType(AbstractFileFilter::FileType::Ascii);                                                                                              \
+	dataSource->setFileName(importFileName);                                                                                                                   \
+	dataSource->setReadingType(LiveDataSource::ReadingType::ContinuousFixed);                                                                                  \
+	dataSource->setSampleSize(100); /* big number of samples, more then the new data has, meaning we read all new data */                                      \
+	dataSource->setUpdateType(LiveDataSource::UpdateType::NewData);                                                                                            \
+                                                                                                                                                               \
+	project.addChild(dataSource);                                                                                                                              \
+                                                                                                                                                               \
+	/* initialize the ASCII filter*/                                                                                                                           \
+	auto* filter = new AsciiFilter();                                                                                                                          \
+	auto properties = filter->defaultProperties();                                                                                                             \
+	properties.headerEnabled = false;                                                                                                                          \
+	properties.intAsDouble = false;                                                                                                                            \
+	properties.columnNamesRaw = QStringLiteral("x, y");                                                                                                        \
+	properties.columnModesString = QStringLiteral("Int, Int");                                                                                                 \
+	properties.automaticSeparatorDetection = false;                                                                                                            \
+	properties.separator = QStringLiteral(",");                                                                                                                \
+	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success);                                                                                    \
+                                                                                                                                                               \
+	dataSource->setFilter(filter);                                                                                                                             \
+                                                                                                                                                               \
+	/* read the data and perform checks, after the initial read all data is read */                                                                            \
+	dataSource->read();                                                                                                                                        \
+                                                                                                                                                               \
+	QCOMPARE(dataSource->columnCount(), 2);                                                                                                                    \
+	QCOMPARE(dataSource->rowCount(), 2);                                                                                                                       \
+                                                                                                                                                               \
+	QCOMPARE(dataSource->column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);                                                                        \
+	QCOMPARE(dataSource->column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);                                                                        \
+                                                                                                                                                               \
+	QCOMPARE(dataSource->column(0)->integerAt(0), 1);                                                                                                          \
+	QCOMPARE(dataSource->column(1)->integerAt(0), 2);                                                                                                          \
+                                                                                                                                                               \
+	QCOMPARE(dataSource->column(0)->integerAt(1), 3);                                                                                                          \
+	QCOMPARE(dataSource->column(1)->integerAt(1), 4);                                                                                                          \
+                                                                                                                                                               \
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));                                                                                                     \
+	QVERIFY(ws != nullptr);                                                                                                                                    \
+	project.addChild(ws);                                                                                                                                      \
+                                                                                                                                                               \
+	auto* p = new CartesianPlot(QStringLiteral("plot"));                                                                                                       \
+	p->setType(CartesianPlot::Type::TwoAxes); /* Otherwise no axis are created */                                                                              \
+	ws->addChild(p);                                                                                                                                           \
+                                                                                                                                                               \
+	auto* curve = new XYCurve(QStringLiteral("curve"));                                                                                                        \
+	p->addChild(curve);                                                                                                                                        \
+                                                                                                                                                               \
+	curve->setXColumn(dataSource->column(0));                                                                                                                  \
+	curve->setYColumn(dataSource->column(1));
+
+void LiveDataTest::testLoadSaveLiveDataLinkedFile_FileExists() {
+	// create a temp file and write some data into it
+	QTemporaryFile tempFile;
+	if (!tempFile.open())
+		QFAIL("failed to create the temp file for writing");
+
+	QFile file(tempFile.fileName());
+	if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
+		QFAIL("failed to open the temp file for writing");
+
+	file.write("1,2\n3,4\n");
+	file.flush();
+
+	QString savePath;
+	{
+		Project project;
+
+		CREATE_DUMMY_LIVEDATA_PROJECT(project, file.fileName());
+		dataSource->setFileLinked(true); // Linked file, no column data stored
+
+		SAVE_PROJECT("testLoadSaveLiveDataSource");
+	}
+
+	Project project;
+	project.load(savePath);
+
+	const auto children = project.children<LiveDataSource>();
+	QCOMPARE(children.count(), 1);
+	const auto* dataSource = children.first();
+
+	QCOMPARE(dataSource->columnCount(), 2);
+	QCOMPARE(dataSource->rowCount(), 2);
+
+	QCOMPARE(dataSource->column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource->column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(dataSource->column(0)->integerAt(0), 1);
+	QCOMPARE(dataSource->column(1)->integerAt(0), 2);
+
+	QCOMPARE(dataSource->column(0)->integerAt(1), 3);
+	QCOMPARE(dataSource->column(1)->integerAt(1), 4);
+
+	const auto curves = project.children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(curves.count(), 1);
+	const auto* curve = curves.first();
+	QCOMPARE(curve->xColumn(), dataSource->column(0));
+	QCOMPARE(curve->yColumn(), dataSource->column(1));
+}
+
+void LiveDataTest::testLoadSaveLiveDataLinkedFile_FileNotExists() {
+	QString savePath;
+	QString importFilename;
+	{
+		// create a temp file and write some data into it
+		QTemporaryFile tempFile;
+		if (!tempFile.open())
+			QFAIL("failed to create the temp file for writing");
+
+		importFilename = tempFile.fileName();
+		QFile file(importFilename);
+		if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
+			QFAIL("failed to open the temp file for writing");
+
+		file.write("1,2\n3,4\n");
+		file.flush();
+
+		Project project;
+		CREATE_DUMMY_LIVEDATA_PROJECT(project, importFilename);
+		dataSource->setFileLinked(true); // Not linked, the column data is stored in the file
+
+		SAVE_PROJECT("testLoadSaveLiveDataSource");
+	}
+
+	Project project;
+	project.load(savePath);
+	const auto curves = project.children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(curves.count(), 1);
+	const auto* curve = curves.first();
+
+	const auto children = project.children<LiveDataSource>();
+	QCOMPARE(children.count(), 1);
+	const auto* dataSource = children.first();
+
+	QCOMPARE(dataSource->columnCount(), 0);
+	QCOMPARE(dataSource->rowCount(), 0);
+	QCOMPARE(curve->xColumn(), nullptr);
+	QCOMPARE(curve->yColumn(), nullptr);
+
+	// Create file again
+	QFile file(importFilename);
+	if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
+		QFAIL("failed to open the temp file for writing");
+
+	file.write("1,2\n3,4\n");
+	file.flush();
+	file.close();
+
+	waitForSignal(dataSource, &LiveDataSource::readOnUpdateCalled);
+
+	QCOMPARE(dataSource->columnCount(), 2);
+	QCOMPARE(dataSource->rowCount(), 2);
+
+	QVERIFY(dataSource->column(0));
+	QVERIFY(dataSource->column(1));
+	QCOMPARE(curve->xColumn(), dataSource->column(0));
+	QCOMPARE(curve->yColumn(), dataSource->column(1));
+}
+
+void LiveDataTest::testLoadSaveLiveDataNoLinkedFile() {
+	QString savePath;
+	{
+		// create a temp file and write some data into it
+		QTemporaryFile tempFile;
+		if (!tempFile.open())
+			QFAIL("failed to create the temp file for writing");
+
+		QFile file(tempFile.fileName());
+		if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
+			QFAIL("failed to open the temp file for writing");
+
+		file.write("1,2\n3,4\n");
+		file.flush();
+
+		Project project;
+
+		CREATE_DUMMY_LIVEDATA_PROJECT(project, file.fileName());
+		dataSource->setFileLinked(false); // Not linked, the column data is stored in the file
+
+		SAVE_PROJECT("testLoadSaveLiveDataSource");
+	}
+
+	Project project;
+	project.load(savePath);
+
+	const auto children = project.children<LiveDataSource>();
+	QCOMPARE(children.count(), 1);
+	const auto* dataSource = children.first();
+
+	QCOMPARE(dataSource->columnCount(), 2);
+	QCOMPARE(dataSource->rowCount(), 2);
+
+	QCOMPARE(dataSource->column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(dataSource->column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	QCOMPARE(dataSource->column(0)->integerAt(0), 1);
+	QCOMPARE(dataSource->column(1)->integerAt(0), 2);
+
+	QCOMPARE(dataSource->column(0)->integerAt(1), 3);
+	QCOMPARE(dataSource->column(1)->integerAt(1), 4);
+
+	const auto curves = project.children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(curves.count(), 1);
+	const auto* curve = curves.first();
+	QCOMPARE(curve->xColumn(), dataSource->column(0));
+	QCOMPARE(curve->yColumn(), dataSource->column(1));
+}
+
 QTEST_MAIN(LiveDataTest)

@@ -1045,6 +1045,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 	case Plot::PlotType::ProcessBehaviorChart:
 	case Plot::PlotType::RunChart: {
 		plot->setNiceExtend(false);
+		plot->setRightPadding(plot->horizontalPadding()); // do symmetric padding horizontally to have enough space for values labels in PBC
 		// x-axis title
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Horizontal) {

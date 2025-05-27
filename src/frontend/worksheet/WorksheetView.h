@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Worksheet view
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -22,7 +22,7 @@ class QToolButton;
 class QWheelEvent;
 class QTimeLine;
 
-class AbstractAspect;
+class ToggleActionMenu;
 class WorksheetElement;
 
 #ifdef HAVE_TOUCHBAR
@@ -33,9 +33,13 @@ class WorksheetView : public QGraphicsView {
 	Q_OBJECT
 
 public:
-	explicit WorksheetView(Worksheet* worksheet);
+	explicit WorksheetView(Worksheet*);
 
 	enum class GridStyle { NoGrid, Line, Dot };
+	enum class ExportArea { BoundingBox, Selection, Worksheet };
+	enum class ZoomMode { ZoomIn, ZoomOut, ZoomOrigin };
+	enum class MouseMode { Selection, Navigation, ZoomSelection };
+	enum class AddNewMode { PlotAreaFourAxes, PlotAreaTwoAxes, PlotAreaTwoAxesCentered, PlotAreaTwoAxesCenteredZero, PlotAreaFromTemplate, TextLabel, Image};
 
 	struct GridSettings {
 		GridStyle style;
@@ -45,15 +49,14 @@ public:
 		double opacity;
 	};
 
-	enum class MouseMode { Selection, Navigation, ZoomSelection };
-
 	void setScene(QGraphicsScene*);
 	bool exportToFile(const QString&, const Worksheet::ExportFormat, const Worksheet::ExportArea, const bool, const int);
 	void exportToClipboard();
-	void exportToPixmap(QPixmap& pixmap);
+	void exportToPixmap(QPixmap&);
 	void setIsClosing();
-	void setIsBeingPresented(bool presenting);
+	void setIsBeingPresented(bool);
 	void setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode);
+	Worksheet::CartesianPlotActionMode getCartesianPlotActionMode() const;
 	void setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode);
 	void setPlotInteractive(bool);
 	void suppressSelectionChangedEvent(bool);
@@ -62,11 +65,24 @@ public:
 	double zoomFactor() const;
 	void processResize();
 
-	Worksheet::CartesianPlotActionMode getCartesianPlotActionMode() const;
 	void registerShortcuts();
 	void unregisterShortcuts();
+
 	void initActions();
 	void initPlotNavigationActions();
+	void registerCartesianPlotActions(QActionGroup* mouseModeActionGroup, QActionGroup* navigationActionGroup);
+
+	Worksheet::Layout layout() const;
+	MouseMode mouseMode() const;
+	ZoomMode zoomMode() const;
+	AddNewMode addNewMode() const;
+	int magnification() const;
+
+	void fillAddNewPlotMenu(ToggleActionMenu*) const;
+	void fillZoomMenu(ToggleActionMenu*) const;
+	void fillMagnificationMenu(ToggleActionMenu*) const;
+	void fillCartesianPlotNavigationToolBar(QToolBar*);
+	QMenu* plotAddNewMenu() const;
 
 private:
 	void initBasicActions();
@@ -75,14 +91,16 @@ private:
 	void drawBackground(QPainter*, const QRectF&) override;
 	void drawBackgroundItems(QPainter*, const QRectF&);
 	CartesianPlot* plotAt(QPoint) const;
-	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool background, const bool selection = false);
+	void exportPaint(QPainter*, const QRectF& targetRect, const QRectF& sourceRect, const bool background, const bool selection = false);
 	void cartesianPlotAdd(CartesianPlot*, QAction*);
-	void handleAxisSelected(const Axis*);
-	void handleCartesianPlotSelected(CartesianPlot*);
-	void handlePlotSelected();
-	void handleReferenceLineSelected();
-	void handleReferenceRangeSelected();
-	void handleReferences(bool vertical);
+
+	void updateCartesianPlotActions();
+	void updateCartesianPlotActions(const QActionGroup* mouseModeActionGroup, const QActionGroup* navigationActionGroup);
+	void handleAxisSelected(const Axis*, const QActionGroup* mouseModeActionGroup, const QActionGroup* navigationActionGroup);
+	void handleCartesianPlotSelected(const CartesianPlot*, const QActionGroup* mouseModeActionGroup, const QActionGroup* navigationActionGroup);
+	void handlePlotSelected(const QActionGroup* mouseModeActionGroup, const QActionGroup* navigationActionGroup);
+	void handleReferences(WorksheetElement::Orientation, const QActionGroup* mouseModeActionGroup, const QActionGroup* navigationActionGroup);
+
 	bool eventFilter(QObject* watched, QEvent*) override;
 	void updateLabelsZoom() const;
 	void updateScrollBarPolicy();
@@ -102,15 +120,17 @@ private:
 	void dragMoveEvent(QDragMoveEvent*) override;
 	void dropEvent(QDropEvent*) override;
 
-	Worksheet* m_worksheet;
+	Worksheet* m_worksheet{nullptr};
 	MouseMode m_mouseMode{MouseMode::Selection};
+	ZoomMode m_zoomMode{ZoomMode::ZoomIn};
+	AddNewMode m_addNewMode{AddNewMode::PlotAreaFourAxes};
 	CartesianPlot::MouseMode m_cartesianPlotMouseMode{CartesianPlot::MouseMode::Selection};
 	bool m_selectionBandIsShown{false};
 	QPoint m_selectionStart;
 	QPoint m_selectionEnd;
 	QPointF m_cursorPos;
 	bool m_calledFromContextMenu{false};
-	int magnificationFactor{0};
+	int m_magnificationFactor{0};
 	QGraphicsPixmapItem* m_magnificationWindow{nullptr};
 	GridSettings m_gridSettings;
 	QList<QGraphicsItem*> m_selectedItems;
@@ -123,39 +143,34 @@ private:
 	bool m_isClosing{false};
 	bool m_isPrinting{false};
 	bool m_actionsInitialized{false};
-	bool m_plotActionsInitialized{false};
 	bool m_menusInitialized{false};
 	int m_numScheduledScalings{0};
 	bool m_suppressMouseModeChange{false};
 
 	// Menus
 	QMenu* m_addNewMenu{nullptr};
-	QMenu* m_addNewCartesianPlotMenu{nullptr};
 	QMenu* m_zoomMenu{nullptr};
 	QMenu* m_magnificationMenu{nullptr};
 	QMenu* m_layoutMenu{nullptr};
 	QMenu* m_gridMenu{nullptr};
 	QMenu* m_themeMenu{nullptr};
 	QMenu* m_viewMouseModeMenu{nullptr};
-	QMenu* m_cartesianPlotMenu{nullptr};
-	QMenu* m_cartesianPlotMouseModeMenu{nullptr};
-	QMenu* m_cartesianPlotAddNewMenu{nullptr};
-	QMenu* m_cartesianPlotZoomMenu{nullptr};
-	QMenu* m_cartesianPlotActionModeMenu{nullptr};
-	QMenu* m_cartesianPlotCursorModeMenu{nullptr};
 
-	QToolButton* tbCartesianPlotAddNew{nullptr};
-	QToolButton* tbNewCartesianPlot{nullptr};
-	QToolButton* tbZoom{nullptr};
-	QToolButton* tbMagnification{nullptr};
-	QAction* currentZoomAction{nullptr};
-	QAction* currentMagnificationAction{nullptr};
+	// Menus for cartesan plot
+	QMenu* m_addNewPlotMenu{nullptr};
+	QMenu* m_plotMenu{nullptr};
+	QMenu* m_plotMouseModeMenu{nullptr};
+	QMenu* m_plotZoomMenu{nullptr};
+	QMenu* m_plotActionModeMenu{nullptr};
+	QMenu* m_plotCursorModeMenu{nullptr};
+	QToolButton* tbNewPlot{nullptr};
 
 	// Actions
 	QAction* selectAllAction{nullptr};
 	QAction* deleteAction{nullptr};
 	QAction* backspaceAction{nullptr};
 
+	QActionGroup* zoomActionGroup{nullptr};
 	QAction* zoomInViewAction{nullptr};
 	QAction* zoomOutViewAction{nullptr};
 	QAction* zoomOriginAction{nullptr};
@@ -190,72 +205,71 @@ private:
 	QAction* customGridAction{nullptr};
 	QAction* snapToGridAction{nullptr};
 
-	QAction* noMagnificationAction{nullptr};
-	QAction* twoTimesMagnificationAction{nullptr};
-	QAction* threeTimesMagnificationAction{nullptr};
-	QAction* fourTimesMagnificationAction{nullptr};
-	QAction* fiveTimesMagnificationAction{nullptr};
+	QActionGroup* magnificationActionGroup{nullptr};
 
 	QAction* plotsInteractiveAction{nullptr};
 	QAction* showPresenterMode{nullptr};
 
 	// Actions for cartesian plots
-	QAction* cartesianPlotAddNewAction{nullptr};
-	QAction* cartesianPlotApplyToSelectionAction{nullptr};
-	QAction* cartesianPlotApplyToAllAction{nullptr};
-	QAction* cartesianPlotApplyToAllXAction{nullptr};
-	QAction* cartesianPlotApplyToAllYAction{nullptr};
-	QAction* cartesianPlotApplyToAllCursor{nullptr};
-	QAction* cartesianPlotApplyToSelectionCursor{nullptr};
-	QAction* cartesianPlotSelectionModeAction{nullptr};
-	QAction* cartesianPlotCrosshairModeAction{nullptr};
-	QAction* cartesianPlotZoomSelectionModeAction{nullptr};
-	QAction* cartesianPlotZoomXSelectionModeAction{nullptr};
-	QAction* cartesianPlotZoomYSelectionModeAction{nullptr};
-	QAction* cartesianPlotCursorModeAction{nullptr};
+	QAction* plotApplyToSelectionAction{nullptr};
+	QAction* plotApplyToAllAction{nullptr};
+	QAction* plotApplyToAllXAction{nullptr};
+	QAction* plotApplyToAllYAction{nullptr};
+	QAction* plotApplyToAllCursor{nullptr};
+	QAction* plotApplyToSelectionCursor{nullptr};
 
-	QAction* scaleAutoXAction{nullptr};
-	QAction* scaleAutoYAction{nullptr};
-	QAction* scaleAutoAction{nullptr};
-	QAction* zoomInAction{nullptr};
-	QAction* zoomOutAction{nullptr};
-	QAction* zoomInXAction{nullptr};
-	QAction* zoomOutXAction{nullptr};
-	QAction* zoomInYAction{nullptr};
-	QAction* zoomOutYAction{nullptr};
-	QAction* shiftLeftXAction{nullptr};
-	QAction* shiftRightXAction{nullptr};
-	QAction* shiftUpYAction{nullptr};
-	QAction* shiftDownYAction{nullptr};
+	QActionGroup* m_plotMouseModeActionGroup{nullptr};
+	QActionGroup* m_plotMouseModeActionGroupExternal{nullptr};
+	QAction* plotSelectionModeAction{nullptr};
+	QAction* plotCrosshairModeAction{nullptr};
+	QAction* plotZoomSelectionModeAction{nullptr};
+	QAction* plotZoomXSelectionModeAction{nullptr};
+	QAction* plotZoomYSelectionModeAction{nullptr};
+	QAction* plotCursorModeAction{nullptr};
+
+	QActionGroup* m_plotNavigationActionGroup{nullptr};
+	QActionGroup* m_plotNavigationActionGroupExternal{nullptr};
+	QAction* plotScaleAutoXAction{nullptr};
+	QAction* plotScaleAutoYAction{nullptr};
+	QAction* plotScaleAutoAction{nullptr};
+	QAction* plotZoomInAction{nullptr};
+	QAction* plotZoomOutAction{nullptr};
+	QAction* plotZoomInXAction{nullptr};
+	QAction* plotZoomOutXAction{nullptr};
+	QAction* plotZoomInYAction{nullptr};
+	QAction* plotZoomOutYAction{nullptr};
+	QAction* plotShiftLeftXAction{nullptr};
+	QAction* plotShiftRightXAction{nullptr};
+	QAction* plotShiftUpYAction{nullptr};
+	QAction* plotShiftDownYAction{nullptr};
 
 public Q_SLOTS:
 	void createContextMenu(QMenu*);
-	void fillToolBar(QToolBar*);
 #ifdef HAVE_TOUCHBAR
 	void fillTouchBar(KDMacTouchBar*);
 #endif
-	void fillCartesianPlotToolBar(QToolBar*);
-	void fillCartesianPlotNavigationToolBar(QToolBar*, bool enableCursor = true) const;
 	void print(QPrinter*);
 	void selectItem(QGraphicsItem*);
 	void presenterMode();
 	void cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode); // from cartesian plot
 	void childContextMenuRequested(AspectType, QMenu*);
-	void cartesianPlotMouseModeChanged(QAction*);
+
+	void addNew(QAction*);
+	void changeLayout(QAction*) const;
+	void changeMouseMode(QAction*);
+	void changeZoom(QAction*);
+	void changeZoomFit(QAction*);
+	void changeMagnification(QAction*);
+	void changePlotMouseMode(QAction*);
+	void changePlotNavigation(QAction*);
 
 private Q_SLOTS:
-	void addNew(QAction*);
 	void aspectAboutToBeRemoved(const AbstractAspect*);
 	void selectAllElements();
 	void deleteElement();
 
-	void mouseModeChanged(QAction*);
 	void useViewSizeChanged(bool);
-	void changeZoom(QAction*);
-	void fitChanged(QAction*);
 	void updateFit();
-	void magnificationChanged(QAction*);
-	void changeLayout(QAction*);
 	void changeGrid(QAction*);
 	void changeSnapToGrid();
 	void plotsInteractiveActionChanged(bool checked);
@@ -275,8 +289,6 @@ private Q_SLOTS:
 	// SLOTs for cartesian plots
 	void cartesianPlotActionModeChanged(QAction*);
 	void cartesianPlotCursorModeChanged(QAction*);
-	void cartesianPlotNavigationChanged(QAction*);
-	void handleCartesianPlotActions();
 
 Q_SIGNALS:
 	void statusInfo(const QString&);

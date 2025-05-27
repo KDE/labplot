@@ -1,9 +1,9 @@
 /*
 	File                 : AxisTest3.cpp
 	Project              : LabPlot
-	Description          : Second tests for Axis
+	Description          : Third tests for Axis
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2022-2025 Martin Marmsoler <martin.marmsoler@gmail.com>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -26,7 +26,7 @@
 #include <QUndoStack>
 
 void AxisTest3::dateTime() {
-	QLocale::setDefault(QLocale::C); // . as decimal separator
+	QLocale::setDefault(QLocale::C); // use . as decimal separator
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -51,7 +51,7 @@ void AxisTest3::dateTime() {
 	QCOMPARE(spreadsheetData->columnCount(), 2);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	p->setNiceExtend(false);
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
@@ -67,7 +67,8 @@ void AxisTest3::dateTime() {
 	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
 
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
-	xAxis->setMajorTicksNumber(3, false);
+	xAxis->setMajorTicksAutoNumber(false);
+	xAxis->setMajorTicksNumber(3);
 	QCOMPARE(xAxis->range().start(), dt1.toMSecsSinceEpoch());
 	QCOMPARE(xAxis->range().end(), dt3.toMSecsSinceEpoch());
 	QCOMPARE(xAxis->majorTicksType(), Axis::TicksType::TotalNumber);
@@ -87,7 +88,7 @@ void AxisTest3::dateTime() {
 }
 
 void AxisTest3::dateTimeSpacing() {
-	QLocale::setDefault(QLocale::C); // . as decimal separator
+	QLocale::setDefault(QLocale::C); // use . as decimal separator
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -112,7 +113,7 @@ void AxisTest3::dateTimeSpacing() {
 	QCOMPARE(spreadsheetData->columnCount(), 2);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	p->setNiceExtend(false);
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
@@ -158,7 +159,7 @@ void AxisTest3::dateTimeSpacing() {
 }
 
 void AxisTest3::dateTimeSpacingOffsetNonZero() {
-	QLocale::setDefault(QLocale::C); // . as decimal separator
+	QLocale::setDefault(QLocale::C); // use . as decimal separator
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -183,7 +184,7 @@ void AxisTest3::dateTimeSpacingOffsetNonZero() {
 	QCOMPARE(spreadsheetData->columnCount(), 2);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	p->setNiceExtend(false);
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
@@ -235,7 +236,7 @@ void AxisTest3::dateTimeSpacingOffsetNonZero() {
 }
 
 void AxisTest3::dateTimeSpacingStartValueNonZero() {
-	QLocale::setDefault(QLocale::C); // . as decimal separator
+	QLocale::setDefault(QLocale::C); // use . as decimal separator
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -260,7 +261,7 @@ void AxisTest3::dateTimeSpacingStartValueNonZero() {
 	QCOMPARE(spreadsheetData->columnCount(), 2);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	p->setNiceExtend(false);
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
@@ -301,7 +302,7 @@ void AxisTest3::dateTimeSpacingStartValueNonZero() {
 }
 
 void AxisTest3::numeric() {
-	QLocale::setDefault(QLocale::C); // . as decimal separator
+	QLocale::setDefault(QLocale::C); // use . as decimal separator
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -323,7 +324,7 @@ void AxisTest3::numeric() {
 	QCOMPARE(spreadsheetData->columnCount(), 2);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	p->setNiceExtend(false);
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
@@ -339,7 +340,8 @@ void AxisTest3::numeric() {
 	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
 
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
-	xAxis->setMajorTicksNumber(3, false);
+	xAxis->setMajorTicksAutoNumber(false);
+	xAxis->setMajorTicksNumber(3);
 	QCOMPARE(xAxis->range().start(), 1.);
 	QCOMPARE(xAxis->range().end(), 5.);
 	QCOMPARE(xAxis->majorTicksType(), Axis::TicksType::TotalNumber);
@@ -358,7 +360,7 @@ void AxisTest3::numeric() {
 }
 
 void AxisTest3::numericSpacing() {
-	QLocale::setDefault(QLocale::C); // . as decimal separator
+	QLocale::setDefault(QLocale::C); // use . as decimal separator
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -380,7 +382,7 @@ void AxisTest3::numericSpacing() {
 	QCOMPARE(spreadsheetData->columnCount(), 2);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	p->setNiceExtend(false);
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
@@ -424,7 +426,7 @@ void AxisTest3::numericSpacing() {
 }
 
 void AxisTest3::numericSpacingOffsetNonZero() {
-	QLocale::setDefault(QLocale::C); // . as decimal separator
+	QLocale::setDefault(QLocale::C); // use . as decimal separator
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -446,7 +448,7 @@ void AxisTest3::numericSpacingOffsetNonZero() {
 	QCOMPARE(spreadsheetData->columnCount(), 2);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	p->setNiceExtend(false);
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
@@ -488,7 +490,7 @@ void AxisTest3::numericSpacingOffsetNonZero() {
 }
 
 void AxisTest3::numericSpacingStartValueNonZero() {
-	QLocale::setDefault(QLocale::C); // . as decimal separator
+	QLocale::setDefault(QLocale::C); // use . as decimal separator
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
@@ -510,7 +512,7 @@ void AxisTest3::numericSpacingStartValueNonZero() {
 	QCOMPARE(spreadsheetData->columnCount(), 2);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	p->setNiceExtend(false);
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
@@ -585,7 +587,7 @@ void AxisTest3::customColumnNumeric() {
 	labelsCol->replaceTexts(-1, QVector<QString>({QStringLiteral("first"), QStringLiteral("second"), QStringLiteral("third")}));
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	p->setNiceExtend(false);
 	QVERIFY(p != nullptr);
 	p->setBottomPadding(0);
@@ -684,7 +686,7 @@ void AxisTest3::customColumnNumericMaxValues() {
 	labelsCol->replaceTexts(-1, customLabels);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	p->setNiceExtend(false);
 	QVERIFY(p != nullptr);
 	p->setBottomPadding(0);
@@ -773,7 +775,7 @@ void AxisTest3::customColumnNonMonotonicColumnValues() {
 	QVERIFY(posCol->rowCount() > Axis::maxNumberMajorTicksCustomColumn());
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	p->setNiceExtend(false);
 	QVERIFY(p != nullptr);
 	p->setBottomPadding(0);
@@ -859,7 +861,7 @@ void AxisTest3::customColumnNumericMaxValuesLimitedRange() {
 	labelsCol->replaceTexts(-1, customLabels);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	p->setNiceExtend(false);
 	QVERIFY(p != nullptr);
 	p->setBottomPadding(0);
@@ -974,7 +976,7 @@ void AxisTest3::customColumnNumericMaxValuesLimitedRangeNotCompleteRange() {
 	labelsCol->replaceTexts(-1, customLabels);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	p->setNiceExtend(false);
 	QVERIFY(p != nullptr);
 	p->setBottomPadding(0);
@@ -1083,7 +1085,7 @@ void AxisTest3::customColumnDateTime() {
 	labelsCol->replaceTexts(-1, QVector<QString>({QStringLiteral("first"), QStringLiteral("second"), QStringLiteral("third")}));
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	p->setNiceExtend(false);
 	QVERIFY(p != nullptr);
 	p->setBottomPadding(0);
@@ -1142,15 +1144,15 @@ void AxisTest3::customColumnDateTime() {
 				 p->dataRect().x() + p->dataRect().width() * (dt3Label.toMSecsSinceEpoch() - dt1.toMSecsSinceEpoch()) / span);
 }
 
-void AxisTest3::autoScale() {
-	QLocale::setDefault(QLocale::C); // . as decimal separator
+void AxisTest3::autoScaleLog10() {
+	QLocale::setDefault(QLocale::C); // use . as decimal separator
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
 
@@ -1166,14 +1168,15 @@ void AxisTest3::autoScale() {
 	auto range = p->range(Dimension::X, 0);
 	range.setStart(10);
 	range.setEnd(10000);
-	p->setRange(Dimension::X, 0, range);
 	p->setNiceExtend(false);
+	p->setRange(Dimension::X, 0, range);
 
 	{
 		QStringList expectedStrings{
-			QStringLiteral("10"),
-			QStringLiteral("3340"),
-			QStringLiteral("6670"),
+			QStringLiteral("2000"),
+			QStringLiteral("4000"),
+			QStringLiteral("6000"),
+			QStringLiteral("8000"),
 			QStringLiteral("10000"),
 		};
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
@@ -1182,6 +1185,7 @@ void AxisTest3::autoScale() {
 	p->enableAutoScale(Dimension::X, 0, false, true);
 	range = p->range(Dimension::X, 0);
 	range.setScale(RangeT::Scale::Log10);
+	xAxis->setMajorTicksNumber(3);
 	p->setRange(Dimension::X, 0, range);
 
 	QCOMPARE(xAxis->range(), range);
@@ -1196,75 +1200,17 @@ void AxisTest3::autoScale() {
 		};
 		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
 	}
-
-	xAxis->setScale(RangeT::Scale::Square); // Shall not change anything
-	{
-		QStringList expectedStrings{
-			QStringLiteral("10"),
-			QStringLiteral("100"),
-			QStringLiteral("1000"),
-			QStringLiteral("10000"),
-		};
-		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
-	}
-
-	xAxis->setRangeScale(false);
-	{
-		QStringList expectedStrings{
-			QStringLiteral("10"),
-			QStringLiteral("5774"),
-			QStringLiteral("8165"),
-			QStringLiteral("10000"),
-		};
-		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
-	}
-	xAxis->undoStack()->undo();
-	QCOMPARE(xAxis->rangeScale(), true);
-	QCOMPARE(xAxis->scale(), RangeT::Scale::Log10);
-	{
-		QStringList expectedStrings{
-			QStringLiteral("10"),
-			QStringLiteral("100"),
-			QStringLiteral("1000"),
-			QStringLiteral("10000"),
-		};
-		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
-	}
-
-	xAxis->undoStack()->redo();
-	QCOMPARE(xAxis->rangeScale(), false);
-	QCOMPARE(xAxis->scale(), RangeT::Scale::Square);
-	{
-		QStringList expectedStrings{
-			QStringLiteral("10"),
-			QStringLiteral("5774"),
-			QStringLiteral("8165"),
-			QStringLiteral("10000"),
-		};
-		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
-	}
-
-	xAxis->setScale(RangeT::Scale::Linear);
-	{
-		QStringList expectedStrings{
-			QStringLiteral("10"),
-			QStringLiteral("3340"),
-			QStringLiteral("6670"),
-			QStringLiteral("10000"),
-		};
-		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
-	}
 }
 
-void AxisTest3::autoScale2() {
-	QLocale::setDefault(QLocale::C); // . as decimal separator
+void AxisTest3::autoScaleLog102() {
+	QLocale::setDefault(QLocale::C); // use . as decimal separator
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
 
@@ -1290,16 +1236,64 @@ void AxisTest3::autoScale2() {
 	QCOMPARE(xAxis->range(), p->range(Dimension::X, 0));
 	QCOMPARE(xAxis->scale(), RangeT::Scale::Log10);
 
-	{
-		const auto s = xAxis->tickLabelStrings();
-		QStringList expectedStrings{
-			QStringLiteral("0.01"),
-			QStringLiteral("0.05"),
-			QStringLiteral("0.22"),
-			QStringLiteral("1.00"),
-		};
-		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
-	}
+	VALUES_EQUAL(xAxis->range().start(), 0.01);
+	QCOMPARE(xAxis->range().end(), 1.0);
+
+	QStringList expectedStrings{
+		QStringLiteral("0.01"),
+		QStringLiteral("0.03"),
+		QStringLiteral("0.10"),
+		QStringLiteral("0.32"),
+		QStringLiteral("1.00"),
+	};
+	COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+}
+
+void AxisTest3::autoScaleLog102Vertical() {
+	QLocale::setDefault(QLocale::C); // use . as decimal separator
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* yAxis = static_cast<Axis*>(axes.at(1));
+	yAxis->setMajorTicksNumber(4);
+	QCOMPARE(yAxis->scale(), RangeT::Scale::Linear);
+	QCOMPARE(yAxis->rangeScale(), true);
+	yAxis->setLabelsAutoPrecision(false);
+	yAxis->setLabelsPrecision(2);
+
+	auto range = p->range(Dimension::Y, 0);
+	range.setStart(0);
+	range.setEnd(1);
+	p->setRange(Dimension::Y, 0, range);
+	p->setNiceExtend(false);
+	p->enableAutoScale(Dimension::Y, 0, false, true);
+	p->setRangeScale(Dimension::Y, 0, RangeT::Scale::Log10); // use different method
+
+	QCOMPARE(yAxis->range(), p->range(Dimension::Y, 0));
+	QCOMPARE(yAxis->scale(), RangeT::Scale::Log10);
+
+	VALUES_EQUAL(yAxis->range().start(), 0.01);
+	QCOMPARE(yAxis->range().end(), 1.0);
+
+	QStringList expectedStrings{
+		QStringLiteral("0.01"),
+		QStringLiteral("0.03"),
+		QStringLiteral("0.10"),
+		QStringLiteral("0.32"),
+		QStringLiteral("1.00"),
+	};
+	COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
 }
 
 QTEST_MAIN(AxisTest3)

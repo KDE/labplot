@@ -4,7 +4,7 @@
 	Description          : Datapicker
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-	SPDX-FileCopyrightText: 2015-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -18,6 +18,7 @@
 class Spreadsheet;
 class DatapickerCurve;
 class DatapickerImage;
+class DatapickerImageView;
 class DatapickerView;
 
 class QXmlStreamWriter;
@@ -44,6 +45,7 @@ public:
 	DatapickerCurve* activeCurve();
 	Spreadsheet* currentSpreadsheet() const;
 	DatapickerImage* image() const;
+	DatapickerImageView* imageView() const;
 
 	void setChildSelectedInView(int index, bool selected);
 	void setSelectedInView(const bool);

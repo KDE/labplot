@@ -49,7 +49,7 @@ Histogram::Histogram(const QString& name, bool loading)
 
 Histogram::Histogram(const QString& name, HistogramPrivate* dd)
 	: Plot(name, dd, AspectType::Histogram) {
-	init();
+	init(false);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
