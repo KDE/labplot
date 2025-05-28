@@ -26,11 +26,11 @@ public:
 	QList<Settings::Type> applySettings() override;
 	void restoreDefaults() override;
 
-    void addSubPages(KPageWidgetItem*, KPageDialog*);
+	void addSubPages(KPageWidgetItem*, KPageDialog*) override;
 
 private:
 	bool m_changed{false};
-    QVector<KTextEditor::ConfigPage*> m_editorPages;
+	QVector<KTextEditor::ConfigPage*> m_editorPages;
 
 private Q_SLOTS:
 	void changed();

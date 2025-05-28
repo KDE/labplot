@@ -68,7 +68,6 @@ find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     XmlGui
     NewStuffCore
     NewStuff
-    TextEditor
 OPTIONAL_COMPONENTS
     DocTools
     Service
@@ -715,21 +714,19 @@ else()
     message(STATUS "Eigen3 support DISABLED")
 endif()
 
+### Python3 (optional) #############################
 if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
     find_package(Python3 COMPONENTS Development REQUIRED)
     find_package(PySide6 REQUIRED)
     find_package(Shiboken6 REQUIRED)
-
-    add_definitions(-DPy_LIMITED_API=0x03090000)
 endif()
-
 if(ENABLE_PYTHON_SDK)
     find_package(Python3 COMPONENTS Interpreter REQUIRED)
 endif()
-
 if(ENABLE_PYTHON_SCRIPTING)
     find_package(Python3 COMPONENTS Development.Embed REQUIRED)
     add_definitions(-DHAVE_PYTHON_SCRIPTING)
+    add_definitions(-DPYTHON3_VERSION_STRING=\"${Python3_VERSION}\")
 endif()
 
 # Qt Advanced Docking System (required) #####################
@@ -750,6 +747,15 @@ endif()
 ### Touch bar on macOS (optional) #############################
 if(APPLE AND ENABLE_TOUCHBAR)
     add_definitions(-DHAVE_TOUCHBAR)
+endif()
+
+### Scripting (optional) #############################
+if(ENABLE_PYTHON_SCRIPTING #[[OR ENABLE_JULIA_SCRIPTING OR ENABLE_LUA_SCRIPTING ...]])
+    find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS TextEditor) # KTextEditor is required for the script editor
+    set(ENABLE_SCRIPTING ON) # at least one scripting runtime is enabled
+    add_definitions(-DHAVE_SCRIPTING)
+else()
+    set(ENABLE_SCRIPTING OFF) # no scripting runtime is enabled
 endif()
 
 #################################################

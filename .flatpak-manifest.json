@@ -2,9 +2,9 @@
     "id": "org.kde.labplot",
     "branch": "master",
     "runtime": "org.kde.Platform",
-    "runtime-version": "6.8",
+    "runtime-version": "6.9",
     "base": "io.qt.qtwebengine.BaseApp",
-    "base-version": "6.8",
+    "base-version": "6.9",
     "sdk": "org.kde.Sdk",
     "command": "labplot",
     "tags": ["nightly"],
@@ -188,9 +188,9 @@
 	    "builddir": true,
 	    "sources": [
 		{
-                    "type": "git",
-		    "url": "https://github.com/qt/qtmqtt.git",
-		    "tag": "v6.8.3"
+                    "type": "archive",
+		    "url": "https://github.com/qt/qtmqtt/archive/refs/tags/v6.9.0.tar.gz",
+		    "sha256": "7cdec84ca17ad2bd9d47418ca98820705a7798895a2315b5c20c46528a29547e"
 		}
 	    ]
 	},
@@ -200,9 +200,10 @@
 	    "config-opts": [ "-DBUILD_TESTING=OFF", "-DENABLE_DOCS=OFF" ],
             "sources": [
                 {
-                    "type": "git",
-                    "url": "https://github.com/KDE/kuserfeedback.git",
-                    "tag": "v6.13.0"
+                    "type": "archive",
+                    "url": "https://download.kde.org/stable/frameworks/6.13/kuserfeedback-6.13.0.tar.xz",
+                    "sha256": "48c186482fe7a6f1017a7e50b3a16fd7c10c10f7f963c00f32c61bb073404b9a",
+		    "_comment": "requires minimum ecm version provided by runtime"
                 }
             ]
         },
@@ -326,8 +327,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/orcus/orcus/-/archive/0.20.0/orcus-0.20.0.tar.bz2",
-                    "sha256": "767ddd06d72b18c5e6c65af74a78b8c7b9326c7163fde1066b97369769a68f35"
+                    "url": "https://gitlab.com/orcus/orcus/-/archive/0.20.1/orcus-0.20.1.tar.bz2",
+                    "sha256": "f15e22d055b199299986a0de01864592a2b1caba57413d79969d1794128ef08a"
                 }
             ]
         },

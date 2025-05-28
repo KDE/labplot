@@ -4,7 +4,7 @@
 	Description          : Datapicker
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -120,6 +120,10 @@ Spreadsheet* Datapicker::currentSpreadsheet() const {
 
 DatapickerImage* Datapicker::image() const {
 	return m_image;
+}
+
+DatapickerImageView* Datapicker::imageView() const {
+	return reinterpret_cast<DatapickerImageView*>(m_image->view());
 }
 
 /*!

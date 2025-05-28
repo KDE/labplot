@@ -248,7 +248,20 @@ set(python_scripting_link_libraries
     ${Python3_LIBRARIES}
 )
 
-# shiboken generates sources using deprecated code
+# Hide noisy warnings in shiboken scripting generated sources
+# 1. Wno-missing-include-dirs : pyside6 declares an include directory in the INTERFACE_INCLUDE_DIRECTORIES which doesn't actually exist and thus the compiler complains
+# 2. Wno-cast-function-type: the shiboken6 generated files contain weird but correct function casts which the compiler complains about
+set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_OPTIONS -Wno-cast-function-type -Wno-missing-include-dirs)
+
+# Previously, we were adding the python_scripting_includes to the liblabplotbackendlib target, but we can actually restrict things further and add these includes to only the
+# shiboken generated sources since they are the ones who require the includes
+set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_backend_sources} APPEND PROPERTY INCLUDE_DIRECTORIES ${python_scripting_includes})
+
+# Shiboken internally defines the Py_LIMITED_API to 3.8 and we also define the Py_LIMITED_API but to 3.9 so the compiler warns about a macro redefinition. Now we apply our
+# definition to only our source files
+set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_DEFINITIONS -DPy_LIMITED_API=0x03090000)
+
+# shiboken generates sources using deprecated code so we remove these deprecation macros to enable the shiboken generated files to compile
 get_property(_defs DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS)
 list(FILTER _defs EXCLUDE REGEX [[^QT_DISABLE_DEPRECATED_BEFORE=]])
 set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS ${_defs})

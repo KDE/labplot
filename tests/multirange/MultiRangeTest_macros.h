@@ -108,4 +108,4 @@
 #define SET_CARTESIAN_MOUSE_MODE(mode)                                                                                                                         \
 	QAction a(nullptr);                                                                                                                                        \
 	a.setData(static_cast<int>(mode));                                                                                                                         \
-	view->cartesianPlotMouseModeChanged(&a);
+	view->changePlotMouseMode(&a);
