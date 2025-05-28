@@ -109,7 +109,6 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/dockwidgets/XYConvolutionCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYCorrelationCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
-    ${FRONTEND_DIR}/dockwidgets/ScriptDock.cpp
     ${FRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
     ${FRONTEND_DIR}/matrix/MatrixView.cpp
     ${FRONTEND_DIR}/note/NoteView.cpp
@@ -173,9 +172,14 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/widgets/NumberSpinBox.cpp
     ${FRONTEND_DIR}/widgets/UTCDateTimeEdit.cpp
     ${FRONTEND_DIR}/workbook/WorkbookView.cpp
-    ${FRONTEND_DIR}/script/ScriptEditor.cpp
-    ${FRONTEND_DIR}/SettingsEditorPage.cpp
 )
+
+if(ENABLE_SCRIPTING)
+    list(APPEND GUI_SOURCES
+        ${FRONTEND_DIR}/dockwidgets/ScriptDock.cpp
+        ${FRONTEND_DIR}/script/ScriptEditor.cpp
+        ${FRONTEND_DIR}/SettingsEditorPage.cpp)
+endif()
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
     list(APPEND GUI_SOURCES ${FRONTEND_DIR}/datasources/MQTTConnectionManagerWidget.cpp)
@@ -298,9 +302,13 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/fitsheadereditwidget.ui
     ${FRONTEND_DIR}/ui/fitsheadereditnewkeywordwidget.ui
     ${FRONTEND_DIR}/ui/fitsheadereditaddunitwidget.ui
-    ${FRONTEND_DIR}/ui/script/scripteditorwidget.ui
-    ${FRONTEND_DIR}/ui/dockwidgets/scriptdock.ui
 )
+
+if(ENABLE_SCRIPTING)
+    list(APPEND UI_SOURCES
+        ${FRONTEND_DIR}/ui/script/scripteditorwidget.ui
+        ${FRONTEND_DIR}/ui/dockwidgets/scriptdock.ui)
+endif()
 
 if(Qt${QT_VERSION_MAJOR}Mqtt_FOUND)
     list(APPEND UI_SOURCES ${FRONTEND_DIR}/ui/datasources/mqttconnectionmanagerwidget.ui)
@@ -461,9 +469,13 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYConvolutionCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
-    ${BACKEND_DIR}/script/Script.cpp
-    ${BACKEND_DIR}/script/ScriptRuntime.cpp
 )
+
+if(ENABLE_SCRIPTING)
+    list(APPEND BACKEND_SOURCES
+        ${BACKEND_DIR}/script/Script.cpp
+        ${BACKEND_DIR}/script/ScriptRuntime.cpp)
+endif()
 
 if(ENABLE_PYTHON_SCRIPTING)
     list(APPEND BACKEND_SOURCES ${shiboken_scripting_generated_sources})
@@ -563,9 +575,6 @@ add_library(labplotlib STATIC ${LABPLOT_SRCS} ${CANTOR_SOURCES} ${DATASOURCES_SO
 # set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
 target_include_directories(labplotbackendlib PUBLIC ${FRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
 target_include_directories(labplotlib PUBLIC ${FRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
-if(ENABLE_PYTHON_SCRIPTING)
-target_include_directories(labplotbackendlib PUBLIC ${python_scripting_includes})
-endif()
 
 # add system QADS include path
 if(qt${QT_VERSION_MAJOR}advanceddocking_FOUND)
@@ -627,8 +636,11 @@ target_link_libraries(labplotbackendlib
     ${MATIO_LIBRARIES}
     ${READSTAT_LIBRARIES}
     ads::qt${QT_VERSION_MAJOR}advanceddocking
-    KF${KF_MAJOR_VERSION}::TextEditor	# KTextEditor
 )
+
+if(ENABLE_SCRIPTING)
+target_link_libraries(labplotbackendlib KF${KF_MAJOR_VERSION}::TextEditor)
+endif()
 
 if(ENABLE_PYTHON_SCRIPTING)
 target_link_libraries(labplotbackendlib ${python_scripting_link_libraries})
@@ -652,8 +664,11 @@ target_link_libraries(labplotlib
     KF${KF_MAJOR_VERSION}::TextWidgets    # KTextEdit
     ${Poppler_LIBRARIES}
     ads::qt${QT_VERSION_MAJOR}advanceddocking
-    KF${KF_MAJOR_VERSION}::TextEditor	# KTextEditor
 )
+
+if(ENABLE_SCRIPTING)
+target_link_libraries(labplotlib KF${KF_MAJOR_VERSION}::TextEditor)
+endif()
 
 if(Qt${QT_MAJOR_VERSION}SerialPort_FOUND)
     target_link_libraries(labplotbackendlib Qt${QT_MAJOR_VERSION}::SerialPort)

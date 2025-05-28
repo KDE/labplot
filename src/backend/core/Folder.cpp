@@ -27,7 +27,9 @@
 #endif
 
 #include "backend/lib/XmlStreamReader.h"
+#ifdef HAVE_SCRIPTING
 #include "backend/script/Script.h"
+#endif
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 
@@ -357,6 +359,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 #endif
 	} else if (element_name == QLatin1String("script")) {
 #ifndef SDK
+#ifdef HAVE_SCRIPTING
 		QString runtime = Script::readRuntime(reader);
 		if (runtime.isEmpty())
 			return false;
@@ -367,6 +370,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 			return false;
 		}
 		addChildFast(script);
+#endif
 #endif
 	} else {
 		reader->raiseWarning(i18n("unknown element '%1' found", element_name));
