@@ -20,6 +20,7 @@
 #include "frontend/widgets/FitParametersWidget.h"
 #include "frontend/widgets/FunctionsWidget.h"
 #include "frontend/widgets/TreeViewComboBox.h"
+#include "backend/core/Settings.h"
 
 #include "backend/nsl/nsl_sf_stats.h"
 
@@ -31,6 +32,7 @@
 #include <KUrlComboBox>
 
 #include <QClipboard>
+#include <QFileDialog>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QMenu>
@@ -191,7 +193,7 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.teEquation, &ExpressionTextEdit::expressionChanged, this, &XYFitCurveDock::expressionChanged);
 	connect(uiGeneralTab.tbConstants, &QToolButton::clicked, this, &XYFitCurveDock::showConstants);
 	connect(uiGeneralTab.tbFunctions, &QToolButton::clicked, this, &XYFitCurveDock::showFunctions);
-	//TODO connect(uiGeneralTab.pbLoadFunction, &QPushButton::clicked, this, &XYFitCurveDock::loadFunction);
+	connect(uiGeneralTab.pbLoadFunction, &QPushButton::clicked, this, &XYFitCurveDock::loadFunction);
 	connect(uiGeneralTab.pbSaveFunction, &QPushButton::clicked, this, &XYFitCurveDock::saveFunction);
 	connect(uiGeneralTab.pbOptions, &QPushButton::clicked, this, &XYFitCurveDock::showOptions);
 	connect(uiGeneralTab.cbAlgorithm, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::algorithmChanged);
@@ -1188,20 +1190,43 @@ void XYFitCurveDock::parametersValid(bool valid) {
 	m_parametersValid = valid;
 }
 
-void XYFitCurveDock::saveFunction() {
-	DEBUG(Q_FUNC_INFO)
+void XYFitCurveDock::loadFunction() {
+	// get lfd file
+	QString filter(i18n("LabPlot Function Definition (*.lfd *.LFD)"));
+	// use last open dir from MainWin (project dir)
+	KConfigGroup mainGroup = Settings::group(QStringLiteral("MainWin"));
+	const QString& dir = mainGroup.readEntry("LastOpenDir", "");
+	// TODO: preview (requires KFileWidget)
+	const QString& fileName = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select file to load function definition"), dir, filter);
 
+	//load config from file if accepted
+	DEBUG(Q_FUNC_INFO << ", load function from file " << fileName.toStdString())
+
+	KConfig config(fileName);
+	KConfigGroup general = config.group(QLatin1String("General"));
+	// TODO: use description and comment
+	m_fitData.model = general.readEntry("Function", "");
+	// switch to custom model
+	uiGeneralTab.cbCategory->setCurrentIndex(uiGeneralTab.cbCategory->count() - 1);
+}
+
+void XYFitCurveDock::saveFunction() {
 	// dialog to select file for saving function definition
 	QDialog dialog;
 	dialog.setWindowTitle(i18n("Select file to save function definition"));
 	auto* layout = new QVBoxLayout(&dialog);
 
-	//TODO: use current project dir
-	//TODO: preview?
-	auto* fileWidget = new KFileWidget(QUrl::fromLocalFile(QDir::homePath()), &dialog);
+	//using KFileWidget to add custom widgets
+	// use last open dir from MainWin (project dir)
+	KConfigGroup mainGroup = Settings::group(QStringLiteral("MainWin"));
+	const QString& dir = mainGroup.readEntry("LastOpenDir", "");
+
+	auto* fileWidget = new KFileWidget(QUrl(dir), &dialog);
 	fileWidget->setOperationMode(KFileWidget::Saving);
 	fileWidget->setMode(KFile::File | KFile::LocalOnly);
 	//fileWidget->setInlinePreviewShown(true);
+	//TODO: preview?
+	//fileWidget->setPreviewWidget(widget);
 
 	auto filterList = QList<KFileFilter>();
 	filterList << KFileFilter(i18n("LabPlot Function Definition"), {QLatin1String("*.lfd"), QLatin1String("*.LFD")}, {});
