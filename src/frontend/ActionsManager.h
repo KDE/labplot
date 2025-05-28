@@ -15,7 +15,9 @@
 class DatapickerImageView;
 class NotebookView;
 class MainWin;
+#ifdef HAVE_SCRIPTING
 class ScriptEditor;
+#endif
 class SpreadsheetView;
 class ToggleActionMenu;
 class WorksheetView;
@@ -69,8 +71,10 @@ private:
 	void connectNotebookToolbarActions(const NotebookView*);
 #endif
 
+#ifdef HAVE_SCRIPTING
 	void initScriptToolbarActions();
 	void connectScriptToolbarActions(const ScriptEditor*);
+#endif
 
 	MainWin* m_mainWindow{nullptr};
 	friend class MainWin;
@@ -103,7 +107,9 @@ private:
 	QAction* m_newSpreadsheetAction{nullptr};
 	QAction* m_newMatrixAction{nullptr};
 	QAction* m_newWorksheetAction{nullptr};
+#ifdef HAVE_SCRIPTING
 	QList<QAction*> m_newScriptActions;
+#endif
 	QAction* m_newNotesAction{nullptr};
 	QAction* m_newLiveDataSourceAction{nullptr};
 	QAction* m_newProjectAction{nullptr};
@@ -120,7 +126,9 @@ private:
 	QAction* m_lastUsedNotebookAction{nullptr};
 	ToggleActionMenu* m_tbNotebook{nullptr};
 #endif
+#ifdef HAVE_SCRIPTING
 	ToggleActionMenu* m_tbScript{nullptr};
+#endif
 	ToggleActionMenu* m_tbImport{nullptr};
 
 	// toggling dock widgets, status bar and full screen
@@ -178,15 +186,19 @@ private:
 #endif
 
 	// script
+#ifdef HAVE_SCRIPTING
 	QAction* m_scriptRunAction{nullptr};
 	QAction* m_scriptClearAction{nullptr};
+#endif
 
 	// Menus
 	QMenu* m_visibilityMenu{nullptr};
 	QMenu* m_newMenu{nullptr};
 	QMenu* m_importMenu{nullptr};
 	QMenu* m_newNotebookMenu{nullptr};
+#ifdef HAVE_SCRIPTING
 	QMenu* m_newScriptMenu{nullptr};
+#endif
 	KHamburgerMenu* m_hamburgerMenu{nullptr};
 
 #ifdef HAVE_PURPOSE
