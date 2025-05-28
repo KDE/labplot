@@ -86,6 +86,7 @@ private Q_SLOTS:
 	void updateParameterList();
 	void parametersChanged(bool updateParameterWidget = true);
 	void parametersValid(bool);
+	void saveFunction();
 	void showOptions();
 	void insertFunction(const QString&) const;
 	void insertConstant(const QString&) const;
