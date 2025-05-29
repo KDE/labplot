@@ -13702,13 +13702,13 @@ msgstr "Rectangle amb els costats rodons"
 #: src/frontend/widgets/LabelWidget.cpp:512
 #, kde-format
 msgid "Round corner rectangle"
-msgstr "Rectangle amb cantó arrodonit"
+msgstr "Rectangle amb cantó arredonit"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:229
 #: src/frontend/widgets/LabelWidget.cpp:513
 #, kde-format
 msgid "Inwards round corner rectangle"
-msgstr "Rectangle amb cantó arrodonit cap a dins"
+msgstr "Rectangle amb cantó arredonit cap a dins"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
 #: src/frontend/widgets/LabelWidget.cpp:514
@@ -15079,8 +15079,8 @@ msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
 "to exit the application."
 msgstr ""
-"No s'ha pogut obrir el fitxer «%1». Feu clic en «Continua» per a seguir amb "
-"l'inici o «Cancel·la» per a eixir de l'aplicació."
+"No s'ha pogut obrir el fitxer «%1». Cliqueu damunt «Continua» per a seguir "
+"amb l'inici o «Cancel·la» per a eixir de l'aplicació."
 
 #: src/frontend/LabPlot.cpp:156
 #, kde-format
@@ -18695,13 +18695,13 @@ msgstr "Tema «%1»"
 #, kde-format
 msgid "Theme '%1' is active. Click on the button to change the theme."
 msgstr ""
-"El tema «%1» es troba actiu. Feu clic damunt del botó per a canviar el tema."
+"El tema «%1» es troba actiu. Cliqueu damunt del botó per a canviar el tema."
 
 #: src/frontend/ThemeHandler.cpp:145
 #, kde-format
 msgid "No theme is active. Click on the button to select a theme."
 msgstr ""
-"Ni hi ha cap tema actiu. Feu clic damunt del botó per a seleccionar un tema."
+"Ni hi ha cap tema actiu. Cliqueu damunt del botó per a seleccionar un tema."
 
 #: src/frontend/ThemeHandler.cpp:156
 #, kde-format
@@ -20652,7 +20652,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:634
 #, kde-format
 msgid "Length:"
-msgstr "Longitud:"
+msgstr "Llargària:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicks)
 #: src/frontend/ui/dockwidgets/axisdock.ui:993
@@ -24333,7 +24333,7 @@ msgid ""
 "Select the range for the value, the degree of lightness of the color.\n"
 "Everything outside of this range will be set to white."
 msgstr ""
-"Seleccioneu l'interval per al valor del grau de lluminositat del color.\n"
+"Seleccioneu l'interval per al valor del grau de claredat del color.\n"
 "Qualsevol valor fora d'este interval s'establirà com a blanc."
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:351
