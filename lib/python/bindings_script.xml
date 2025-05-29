@@ -119,7 +119,6 @@
     <object-type name="CartesianCoordinateSystem" disable-wrapper="yes">
         <enum-type name="Dimension"/>
     </object-type>
-    <object-type name="CartesianScale" disable-wrapper="yes"/>
     <object-type name="ColumnStringIO" disable-wrapper="yes"/>
     <object-type name="ErrorBar" disable-wrapper="yes">
         <enum-type name="ErrorType"/>

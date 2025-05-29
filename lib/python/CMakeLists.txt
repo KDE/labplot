@@ -98,8 +98,6 @@ set(generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/background_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesiancoordinatesystem_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesiancoordinatesystem_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianscale_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianscale_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/columnstringio_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/columnstringio_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/errorbar_wrapper.cpp
