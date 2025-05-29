@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-05-28 00:38+0000\n"
+"POT-Creation-Date: 2025-05-29 00:38+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -1087,7 +1087,7 @@ msgstr "Não foi possível abrir o arquivo %1 para leitura."
 #: src/backend/datasources/filters/AsciiFilter.cpp:201
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2137
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1243
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1348
 #, kde-format
 msgid "Success"
 msgstr "Sucesso"
@@ -1864,8 +1864,8 @@ msgstr "Número de linhas: %1"
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
 #: src/backend/datasources/filters/MatioFilter.cpp:335
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:251
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:328
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:348
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:327
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:347
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:149
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:185
 #, fuzzy, kde-format
@@ -2286,7 +2286,7 @@ msgstr ""
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1884
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:414
 #: src/frontend/matrix/MatrixView.cpp:620
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2472
@@ -7045,7 +7045,7 @@ msgstr "Distribuição Logística"
 #: src/frontend/dockwidgets/AxisDock.cpp:237
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:172
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:806
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:819
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:81
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:550
 #, kde-format
@@ -8885,7 +8885,7 @@ msgstr "Funções de erro"
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:509
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:418
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:407
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:432
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:446
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:486
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:351
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:277
@@ -9087,7 +9087,7 @@ msgstr "Estatísticas"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:752
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1874
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:400
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:411
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:143
 #, kde-format
 msgid "Histogram"
@@ -10493,13 +10493,13 @@ msgid "PARAMETERS"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:414
 #, kde-format
 msgid "Uncertainty"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:414
 #, kde-format
 msgid "Uncertainty, %"
 msgstr ""
@@ -10511,14 +10511,14 @@ msgid "t Statistic"
 msgstr "Estatísticas"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1889
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:414
 #, fuzzy, kde-format
 #| msgid "Power"
 msgid "Lower"
 msgstr "Potência"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1890
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:414
 #, fuzzy, kde-format
 #| msgid "Upper Cutoff"
 msgid "Upper"
@@ -10531,7 +10531,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1954
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:956
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:970
 #, fuzzy, kde-format
 #| msgid "sum of squared errors"
 msgid "Sum of squared residuals"
@@ -10551,7 +10551,7 @@ msgstr "erro da raiz da média ao quadrado"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1957
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:986
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1000
 #, fuzzy, kde-format
 #| msgid "coefficient of determination (R²)"
 msgid "Coefficient of determination"
@@ -10559,7 +10559,7 @@ msgstr "coeficiente determinístico (R²)"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1958
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:996
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1010
 #, fuzzy, kde-format
 #| msgid "adj. coefficient of determination (R²)"
 msgid "Adj. coefficient of determination"
@@ -10568,7 +10568,7 @@ msgstr "coeficiente adj. determinístico (R²)"
 #. i18n: ectx: property (text), widget (QPushButton, bTest)
 #. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1959
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:167
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:176
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:263
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:208
 #, kde-format
@@ -10609,7 +10609,7 @@ msgid "Not sufficient weight data points provided!"
 msgstr "Não foram fornecidos pontos de dados de ponderação suficientes."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2407
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:365
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:376
 #, fuzzy, kde-format
 #| msgid "No data points available."
 msgid "No X data available!"
@@ -10859,7 +10859,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:81
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:246
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:172
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:425
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:439
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:38
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:110
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:166
@@ -11228,7 +11228,7 @@ msgstr ""
 #: src/frontend/ActionsManager.cpp:195
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:398
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:409
 #: src/frontend/MainWin.cpp:1219 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
@@ -11960,9 +11960,9 @@ msgstr ""
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:314
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1373
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1379
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1385
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1478
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1484
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1490
 #, fuzzy, kde-format
 #| msgid "Selection"
 msgid "Copy Selection"
@@ -11970,9 +11970,9 @@ msgstr "Seleção"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:315
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1374
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1380
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1386
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1479
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1485
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1491
 #, fuzzy, kde-format
 #| msgid "collapse all"
 msgid "Copy All"
@@ -14375,7 +14375,7 @@ msgstr "centro"
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:466
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:33
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:165
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:848
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:862
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:334
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:252
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:173
@@ -15103,7 +15103,7 @@ msgid "calculation time: %1 ms"
 msgstr "tempo de cálculo: %1 ms"
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:58
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:399
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:410
 #, fuzzy, kde-format
 #| msgid "Curve"
 msgid "XY-Curve"
@@ -15373,43 +15373,43 @@ msgstr "t, mín"
 msgid "t, max"
 msgstr "t, máx"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:359
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:370
 #, fuzzy, kde-format
 #| msgid "No data points available."
 msgid "No X and Y column specified!"
 msgstr "Não há pontos de dados disponíveis."
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:361
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:372
 #, fuzzy, kde-format
 #| msgid "No data points available."
 msgid "No X column specified!"
 msgstr "Não há pontos de dados disponíveis."
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:363
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:374
 #, fuzzy, kde-format
 #| msgid "No data points available."
 msgid "No Y column specified!"
 msgstr "Não há pontos de dados disponíveis."
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:367
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:378
 #, fuzzy, kde-format
 #| msgid "No data points available."
 msgid "No Y data available!"
 msgstr "Não há pontos de dados disponíveis."
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:403
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:414
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "t statistic"
 msgstr "Estatísticas"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:435
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:446
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:217
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:359
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:449
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:56
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:340
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:354
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:479
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:389
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:166
@@ -15419,45 +15419,124 @@ msgstr "Estatísticas"
 msgid "Curve:"
 msgstr "Curva"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:456
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:467
 #, fuzzy, kde-format
 #| msgid "Histograms"
 msgid "Histogram:"
 msgstr "Histogramas"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:854
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:510
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:867
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:524
 #, fuzzy, kde-format
 #| msgid "Degree"
 msgid "Degree:"
 msgstr "Grau"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:914
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:927
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Number of peaks:"
 msgstr "Número de pontos"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1244
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1195
+#, kde-format
+msgid "LabPlot Function Definition (*.lfd *.LFD)"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1200
+#, fuzzy, kde-format
+#| msgid "function"
+msgctxt "@title:window"
+msgid "Select file to load function definition"
+msgstr "função"
+
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1216
+#, kde-format
+msgid "Select file to save function definition"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1232
+#, kde-format
+msgid "LabPlot Function Definition"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1236
+#, fuzzy, kde-format
+#| msgid "Direction"
+msgid "Description:"
+msgstr "Direção"
+
+#. i18n: ectx: property (text), widget (QLabel, lComment)
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1238
+#: src/frontend/ui/datapickercurvewidget.ui:49
+#: src/frontend/ui/datapickerimagewidget.ui:689
+#: src/frontend/ui/dockwidgets/aspectdock.ui:37
+#: src/frontend/ui/dockwidgets/axisdock.ui:181
+#: src/frontend/ui/dockwidgets/barplotdock.ui:157
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:185
+#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:438
+#: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:280
+#: src/frontend/ui/dockwidgets/columndock.ui:17
+#: src/frontend/ui/dockwidgets/custompointdock.ui:267
+#: src/frontend/ui/dockwidgets/histogramdock.ui:37
+#: src/frontend/ui/dockwidgets/imagedock.ui:374
+#: src/frontend/ui/dockwidgets/infoelementdock.ui:83
+#: src/frontend/ui/dockwidgets/kdeplotdock.ui:176
+#: src/frontend/ui/dockwidgets/livedatadock.ui:371
+#: src/frontend/ui/dockwidgets/lollipopplotdock.ui:92
+#: src/frontend/ui/dockwidgets/matrixdock.ui:43
+#: src/frontend/ui/dockwidgets/notebookdock.ui:65
+#: src/frontend/ui/dockwidgets/notedock.ui:43
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:87
+#: src/frontend/ui/dockwidgets/projectdock.ui:243
+#: src/frontend/ui/dockwidgets/qqplotdock.ui:99
+#: src/frontend/ui/dockwidgets/referencelinedock.ui:119
+#: src/frontend/ui/dockwidgets/referencerangedock.ui:56
+#: src/frontend/ui/dockwidgets/runchartdock.ui:138
+#: src/frontend/ui/dockwidgets/scriptdock.ui:73
+#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:182
+#: src/frontend/ui/dockwidgets/worksheetdock.ui:151
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:162
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:275
+#: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:121
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:439
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:253
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:312
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:276
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:407
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:53
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:284
+#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:287
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:127
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:40
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:524
+#: src/frontend/ui/fitsheadereditnewkeywordwidget.ui:27
+#: src/frontend/ui/labelwidget.ui:715
+#, kde-format
+msgid "Comment:"
+msgstr "Comentário:"
+
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1349
 #, fuzzy, kde-format
 #| msgid "status"
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "status"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1255
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1360
 #, fuzzy, kde-format
 #| msgid "No data points available."
 msgid "No data source available!"
 msgstr "Não há pontos de dados disponíveis."
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1425
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1530
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1426
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1531
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr ""
@@ -15524,14 +15603,14 @@ msgid ""
 msgstr ""
 
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:219
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:322
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:321
 #, kde-format
 msgid "Delete variable"
 msgstr "Excluir variável"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:251
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:348
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:347
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:22
 #, fuzzy, kde-format
 #| msgid "Variables"
@@ -18463,7 +18542,7 @@ msgstr ""
 msgid "Select a valid column"
 msgstr "Selecionar e ampliar/reduzir"
 
-#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:394
+#: src/frontend/spreadsheet/FunctionValuesDialog.cpp:393
 #, kde-format
 msgid "%1: fill column with function values"
 msgid_plural "%1: fill columns with function values"
@@ -19728,7 +19807,9 @@ msgstr "ladrilhado centralizado"
 msgid "Cumulative Percentage"
 msgstr ""
 
+#. i18n: ectx: property (text), widget (QPushButton, pbLoadFunction)
 #: src/frontend/TemplateHandler.cpp:181
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:61
 #, kde-format
 msgid "Load"
 msgstr ""
@@ -19738,7 +19819,9 @@ msgstr ""
 msgid "Load properties from a template"
 msgstr "Carregar as propriedades de um modelo"
 
+#. i18n: ectx: property (text), widget (QPushButton, pbSaveFunction)
 #: src/frontend/TemplateHandler.cpp:183
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:68
 #, fuzzy, kde-format
 #| msgid "Save as"
 msgid "Save"
@@ -19906,56 +19989,6 @@ msgstr "Digite aqui um termo de pesquisa"
 msgid "Y-error type:"
 msgstr "Tipo do erro em Y"
 
-#. i18n: ectx: property (text), widget (QLabel, lComment)
-#. i18n: ectx: property (text), widget (QLabel, label_9)
-#: src/frontend/ui/datapickercurvewidget.ui:49
-#: src/frontend/ui/datapickerimagewidget.ui:689
-#: src/frontend/ui/dockwidgets/aspectdock.ui:37
-#: src/frontend/ui/dockwidgets/axisdock.ui:181
-#: src/frontend/ui/dockwidgets/barplotdock.ui:157
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:185
-#: src/frontend/ui/dockwidgets/cartesianplotdock.ui:438
-#: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:280
-#: src/frontend/ui/dockwidgets/columndock.ui:17
-#: src/frontend/ui/dockwidgets/custompointdock.ui:267
-#: src/frontend/ui/dockwidgets/histogramdock.ui:37
-#: src/frontend/ui/dockwidgets/imagedock.ui:374
-#: src/frontend/ui/dockwidgets/infoelementdock.ui:83
-#: src/frontend/ui/dockwidgets/kdeplotdock.ui:176
-#: src/frontend/ui/dockwidgets/livedatadock.ui:371
-#: src/frontend/ui/dockwidgets/lollipopplotdock.ui:92
-#: src/frontend/ui/dockwidgets/matrixdock.ui:43
-#: src/frontend/ui/dockwidgets/notebookdock.ui:65
-#: src/frontend/ui/dockwidgets/notedock.ui:43
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:87
-#: src/frontend/ui/dockwidgets/projectdock.ui:243
-#: src/frontend/ui/dockwidgets/qqplotdock.ui:99
-#: src/frontend/ui/dockwidgets/referencelinedock.ui:119
-#: src/frontend/ui/dockwidgets/referencerangedock.ui:56
-#: src/frontend/ui/dockwidgets/runchartdock.ui:138
-#: src/frontend/ui/dockwidgets/scriptdock.ui:73
-#: src/frontend/ui/dockwidgets/spreadsheetdock.ui:182
-#: src/frontend/ui/dockwidgets/worksheetdock.ui:151
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:162
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:275
-#: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:121
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:439
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:253
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:312
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:262
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:407
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:53
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:284
-#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:287
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:127
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:40
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:524
-#: src/frontend/ui/fitsheadereditnewkeywordwidget.ui:27
-#: src/frontend/ui/labelwidget.ui:715
-#, kde-format
-msgid "Comment:"
-msgstr "Comentário:"
-
 #. i18n: ectx: property (text), widget (QLabel, lName)
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
@@ -19996,7 +20029,7 @@ msgstr "Comentário:"
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:42
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:340
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:101
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:92
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:106
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:101
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:242
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:207
@@ -21206,7 +21239,7 @@ msgstr "Mostrar informações sobre o arquivo"
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:216
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:49
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:73
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:298
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:312
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:61
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:144
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:417
@@ -22174,7 +22207,7 @@ msgstr "x:"
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:43
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:85
 #: src/frontend/ui/dockwidgets/runchartdock.ui:82
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:218
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:232
 #, kde-format
 msgid "Data:"
 msgstr "Dados:"
@@ -23586,7 +23619,7 @@ msgstr "Tipo de dados:"
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:75
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:159
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:404
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:858
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:872
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:358
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:173
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:90
@@ -23653,7 +23686,7 @@ msgstr "Dados"
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:85
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:61
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:324
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:469
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:483
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:453
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:23
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:211
@@ -23674,7 +23707,7 @@ msgstr "Tipo de dados:"
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #. i18n: ectx: property (text), widget (QLabel, lConvolution)
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:101
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1182
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1196
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "Correlation"
@@ -23744,7 +23777,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:107
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:502
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:353
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:350
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:364
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:304
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:344
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:17
@@ -23805,7 +23838,7 @@ msgstr "Tipo de equação"
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFunctions2)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:241
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:384
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:582
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:596
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:70
 #: src/frontend/ui/matrix/matrixfunctionwidget.ui:74
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:139
@@ -23818,7 +23851,7 @@ msgstr "Funções"
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbConstants2)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:251
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:394
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:595
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:609
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:60
 #: src/frontend/ui/matrix/matrixfunctionwidget.ui:84
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:129
@@ -23833,13 +23866,13 @@ msgid "y=g(t)"
 msgstr "y=g(t)"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:67
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:81
 #, kde-format
 msgid "Advanced fit options"
 msgstr "Opções de ajuste avançadas"
 
 #. i18n: ectx: property (whatsThis), widget (QPushButton, pbOptions)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:70
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:84
 #, kde-format
 msgid "Opens a dialog to change advanced fit options"
 msgstr ""
@@ -23847,7 +23880,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, gbOptions)
 #. i18n: ectx: property (text), widget (QLabel, lOptions)
 #. i18n: ectx: property (text), widget (QPushButton, pbOptions)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:76
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:90
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:186
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:227
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:75
@@ -23857,223 +23890,223 @@ msgid "Options"
 msgstr "Opções"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lName)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:89
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:103
 #, kde-format
 msgid "Name of the fit curve"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lYErrorCol)
 #. i18n: ectx: property (text), widget (QLabel, lXErrorCol)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:139
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:371
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:153
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:385
 #, kde-format
 msgid "col ="
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lYWeight)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:151
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:165
 #, kde-format
 msgid "Weight for y data"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lYWeight)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:154
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:168
 #, fuzzy, kde-format
 #| msgid "Weight"
 msgid "Y-Weight:"
 msgstr "Peso"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lXWeight)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:161
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:175
 #, kde-format
 msgid "Weight for x data"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lXWeight)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:164
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:178
 #, fuzzy, kde-format
 #| msgid "Weight"
 msgid "X-Weight:"
 msgstr "Peso"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lCategory)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:194
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:208
 #, kde-format
 msgid "Fit model category"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lCategory)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:197
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:211
 #, kde-format
 msgid "Category:"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbData)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:215
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:229
 #, fuzzy, kde-format
 #| msgid "Data type:"
 msgid "Data to fit"
 msgstr "Tipo de dados:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lComment)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:259
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:273
 #, fuzzy, kde-format
 #| msgid "Column comments"
 msgid "Optional comment"
 msgstr "Comentários da coluna"
 
 #. i18n: ectx: property (text), widget (QLabel, lAlgorithm)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:288
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:302
 #, fuzzy, kde-format
 #| msgid "Dilogarithm"
 msgid "Algorithm:"
 msgstr "Di-logaritmo"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceType)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:295
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:309
 #, fuzzy, kde-format
 #| msgid "File data source"
 msgid "Type of data source"
 msgstr "Fonte de dados em arquivo"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDataSourceCurve)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:337
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:351
 #, fuzzy, kde-format
 #| msgid "Source name"
 msgid "Source curve"
 msgstr "Nome da fonte"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lYColumn)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:347
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:361
 #, fuzzy, kde-format
 #| msgid "Force of 1 poundal"
 msgid "Source of y data"
 msgstr "Força de 1 poundal"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbWeights)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:394
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:408
 #, fuzzy, kde-format
 #| msgid "Not sufficient weight data points provided."
 msgid "How to weight the data points"
 msgstr "Não foram fornecidos pontos de dados de ponderação suficientes."
 
 #. i18n: ectx: property (text), widget (QToolButton, tbWeights)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:400
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:414
 #, fuzzy, kde-format
 #| msgid "Weight"
 msgid "Weights:"
 msgstr "Peso"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkVisible)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:422
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:436
 #, fuzzy, kde-format
 #| msgid "%1: add new curve."
 msgid "Show fit curve"
 msgstr "%1: adicionar nova curva."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbResults)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:466
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:480
 #, fuzzy, kde-format
 #| msgid "Results:"
 msgid "Fit results"
 msgstr "Resultados:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lDegree)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:507
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:521
 #, fuzzy, kde-format
 #| msgid "degrees of freedom"
 msgid "Degree of fit model"
 msgstr "graus de liberdade"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, tbFunctions)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:585
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:599
 #, fuzzy, kde-format
 #| msgid "function"
 msgid "Select predefined function"
 msgstr "função"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, tbConstants)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:598
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:612
 #, kde-format
 msgid "Select predefined constants"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFit)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:632
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:646
 #, kde-format
 msgid "Function to fit and options"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, tbFit)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:641
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:655
 #, kde-format
 msgid "Fit:"
 msgstr "Ajustar:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbRecalculate)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:721
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:735
 #, fuzzy, kde-format
 #| msgid "Robust fit"
 msgid "Run fit"
 msgstr "Ajuste robusto"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:724
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:738
 #, fuzzy, kde-format
 #| msgid "Robust fit"
 msgid "Run"
 msgstr "Ajuste robusto"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbParameters)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:751
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:765
 #, fuzzy, kde-format
 #| msgid "Specify parameters and their start values"
 msgid "Specify parameters and their properties"
 msgstr "Indica os parâmetros e seus valores iniciais"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbParameters)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:754
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:768
 #, fuzzy, kde-format
 #| msgid "Parameters"
 msgid "Parameters:"
 msgstr "Parâmetros"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lModel)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:776
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:790
 #, kde-format
 msgid "Fit model type"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lModel)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:779
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:793
 #, fuzzy, kde-format
 #| msgid "Model"
 msgid "Model:"
 msgstr "Modelo"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lEquation)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:835
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:849
 #, fuzzy, kde-format
 #| msgid "Airy function of the first kind"
 msgid "Function of fit model"
 msgstr "Função de Airy do primeiro tipo"
 
 #. i18n: ectx: property (text), widget (QLabel, lEquation)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:838
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:852
 #, fuzzy, kde-format
 #| msgid "f(x)"
 msgid "f(x) ="
 msgstr "f(x)"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lXColumn)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:855
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:869
 #, fuzzy, kde-format
 #| msgid "Force of 1 poundal"
 msgid "Source of x data"
 msgstr "Força de 1 poundal"
 
 #. i18n: ectx: property (toolTip), widget (QTabWidget, twResults)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:865
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:879
 #, fuzzy, kde-format
 #| msgid "Specify parameters and their start values"
 msgid "Resulting fit parameter and properties"
@@ -24081,106 +24114,106 @@ msgstr "Indica os parâmetros e seus valores iniciais"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:875
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1162
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:889
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1176
 #, kde-format
 msgid "Parameters"
 msgstr "Parâmetros"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:912
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:926
 #, kde-format
 msgid "Goodness of fit"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:966
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:980
 #, fuzzy, kde-format
 #| msgid "residual mean square"
 msgid "Residual mean square"
 msgstr "quadrado da média residual"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:976
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:990
 #, fuzzy, kde-format
 #| msgid "root-mean squared error"
 msgid "Root mean square deviation (RMSD, SD)"
 msgstr "erro da raiz da média ao quadrado"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1016
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1030
 #, kde-format
 msgid "F test"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1026
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1040
 #, kde-format
 msgid "P > F"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1036
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1050
 #, fuzzy, kde-format
 #| msgid "mean absolute error"
 msgid "Mean absolute error (MAE)"
 msgstr "erro absoluto da média"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1046
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1060
 #, kde-format
 msgid "Akaike information criterion (AIC)"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1056
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1070
 #, kde-format
 msgid "Bayesian information criterion (BIC)"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1070
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1084
 #, kde-format
 msgid "Log"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1112
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1126
 #, fuzzy, kde-format
 #| msgid "status"
 msgid "Status"
 msgstr "status"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1122
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1192
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1136
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1206
 #, fuzzy, kde-format
 #| msgid "iterations"
 msgid "Iterations"
 msgstr "iterações"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1132
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1146
 #, kde-format
 msgid "Tolerance"
 msgstr "Tolerância"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1142
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1156
 #, fuzzy, kde-format
 #| msgid "calculation time: %1 s"
 msgid "Calculation time"
 msgstr "tempo de cálculo: %1 s"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1152
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1166
 #, fuzzy, kde-format
 #| msgid "degrees of freedom"
 msgid "Degrees of Freedom"
 msgstr "graus de liberdade"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1172
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1186
 #, fuzzy, kde-format
 #| msgid "orange"
 msgid "X range"
