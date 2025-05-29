@@ -111,7 +111,6 @@
     <object-type name="CartesianCoordinateSystem" disable-wrapper="yes">
         <enum-type name="Dimension"/>
     </object-type>
-    <object-type name="CartesianScale" disable-wrapper="yes"/>
     <object-type name="ColumnStringIO" disable-wrapper="yes"/>
     <object-type name="ErrorBar" disable-wrapper="yes">
         <enum-type name="ErrorType"/>
@@ -122,7 +121,9 @@
     <object-type name="PlotArea" disable-wrapper="yes">
         <enum-type name="BorderTypeFlags" flags="yes"/>
     </object-type>
-    <!-- <object-type name="Range" disable-wrapper="yes"/> -->
+    <object-type name="Range" disable-wrapper="yes" generate="no"/>
+    <typedef-type name="DoubleRange" source="Range&lt;double&gt;"/>
+    <typedef-type name="IntRange" source="Range&lt;int&gt;"/>
     <object-type name="RangeT" disable-wrapper="yes">
         <enum-type name="Format"/>
         <enum-type name="Scale"/>

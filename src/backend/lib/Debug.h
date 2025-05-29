@@ -14,9 +14,17 @@
 #include <iomanip>
 #include <iostream>
 
+#ifdef SDK
+#include "labplot_export.h"
+#endif
+
 bool infoTraceEnabled();
 void enableInfoTrace(bool);
+#ifdef SDK
+bool LABPLOT_EXPORT debugTraceEnabled(); // required by Range template class in SDK
+#else
 bool debugTraceEnabled();
+#endif
 void enableDebugTrace(bool);
 bool perfTraceEnabled();
 void enablePerfTrace(bool);

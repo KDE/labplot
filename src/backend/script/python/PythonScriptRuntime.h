@@ -17,7 +17,6 @@ public:
 	virtual bool init() override;
 	virtual bool cancel() override;
 	virtual bool exec(const QString&) override;
-	virtual QIcon icon() override;
 
 private:
 	PythonLogger* m_loggerStdOut{nullptr};

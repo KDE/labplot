@@ -112,15 +112,15 @@ config12.background().setFirstColor(config12.color())
 config12.background().setSecondColor("white")
 config12.background().setOpacity(0.4)
 
-# plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
-# rangeX1 = plotArea1.range(CartesianCoordinateSystem.Dimension.X, 0)
-# rangeX1.setRange(350, 800)
-# plotArea1.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX1)
+plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
+rangeX1 = plotArea1.range(CartesianCoordinateSystem.Dimension.X, 0)
+rangeX1.setRange(350, 800)
+plotArea1.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX1)
 
-# plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
-# rangeY1 = plotArea1.range(CartesianCoordinateSystem.Dimension.Y, 0)
-# rangeY1.setRange(0, 80)
-# plotArea1.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY1)
+plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
+rangeY1 = plotArea1.range(CartesianCoordinateSystem.Dimension.Y, 0)
+rangeY1.setRange(0, 80)
+plotArea1.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY1)
 
 worksheet1.view().show()
 
@@ -160,22 +160,22 @@ plotArea2.setBottomPadding(Worksheet.convertToSceneUnits(1.7, Worksheet.Unit.Cen
 # border2.setFlag(PlotArea.BorderTypeFlags.BorderBottom, True)
 # plotArea2.plotArea().setBorderType(border2)
 
-# rangeX2 = plotArea2.range(CartesianCoordinateSystem.Dimension.X, 0)
-# rangeX2.setRange(350, 800)
-# plotArea2.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX2)
+rangeX2 = plotArea2.range(CartesianCoordinateSystem.Dimension.X, 0)
+rangeX2.setRange(350, 800)
+plotArea2.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX2)
 
-# rangeY21 = plotArea2.range(CartesianCoordinateSystem.Dimension.Y, 0)
-# rangeY21.setRange(0, 80)
-# plotArea2.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY21)
+rangeY21 = plotArea2.range(CartesianCoordinateSystem.Dimension.Y, 0)
+rangeY21.setRange(0, 80)
+plotArea2.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY21)
 
 plotArea2.addYRange()
 
-# rangeY22 = plotArea2.range(CartesianCoordinateSystem.Dimension.Y, 1)
-# rangeY22.setRange(0, 12)
-# plotArea2.setRange(CartesianCoordinateSystem.Dimension.Y, 1, rangeY22)
+rangeY22 = plotArea2.range(CartesianCoordinateSystem.Dimension.Y, 1)
+rangeY22.setRange(0, 12)
+plotArea2.setRange(CartesianCoordinateSystem.Dimension.Y, 1, rangeY22)
 
-# plotArea2.enableAutoScale(CartesianCoordinateSystem.Dimension.X, -1, False)
-# plotArea2.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, -1, False)
+plotArea2.enableAutoScale(CartesianCoordinateSystem.Dimension.X, -1, False)
+plotArea2.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, -1, False)
 
 plotArea2.addCoordinateSystem()
 plotArea2.setCoordinateSystemRangeIndex(1, CartesianCoordinateSystem.Dimension.Y, 1)
@@ -278,19 +278,19 @@ plotArea3.setBottomPadding(Worksheet.convertToSceneUnits(1.7, Worksheet.Unit.Cen
 # border3.setFlag(PlotArea.BorderTypeFlags.BorderBottom, True)
 # plotArea3.plotArea().setBorderType(border3)
 
-# rangeX3 = plotArea3.range(CartesianCoordinateSystem.Dimension.X, 0)
-# rangeX3.setRange(350, 800)
-# plotArea3.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX3)
+rangeX3 = plotArea3.range(CartesianCoordinateSystem.Dimension.X, 0)
+rangeX3.setRange(350, 800)
+plotArea3.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX3)
 
-# rangeY31 = plotArea3.range(CartesianCoordinateSystem.Dimension.Y, 0)
-# rangeY31.setRange(0, 80)
-# plotArea3.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY31)
+rangeY31 = plotArea3.range(CartesianCoordinateSystem.Dimension.Y, 0)
+rangeY31.setRange(0, 80)
+plotArea3.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY31)
 
 plotArea3.addYRange()
 
-# rangeY32 = plotArea3.range(CartesianCoordinateSystem.Dimension.Y, 1)
-# rangeY32.setRange(0, 12)
-# plotArea3.setRange(CartesianCoordinateSystem.Dimension.Y, 1, rangeY32)
+rangeY32 = plotArea3.range(CartesianCoordinateSystem.Dimension.Y, 1)
+rangeY32.setRange(0, 12)
+plotArea3.setRange(CartesianCoordinateSystem.Dimension.Y, 1, rangeY32)
 
 plotArea3.enableAutoScale(CartesianCoordinateSystem.Dimension.X, -1, False)
 plotArea3.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, -1, False)

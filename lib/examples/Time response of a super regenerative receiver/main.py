@@ -54,16 +54,16 @@ plotArea.setVerticalPadding(Worksheet.convertToSceneUnits(2, Worksheet.Unit.Cent
 plotArea.setRightPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Centimeter))
 plotArea.setBottomPadding(Worksheet.convertToSceneUnits(2, Worksheet.Unit.Centimeter))
 
-# rangeX = plotArea.range(CartesianCoordinateSystem.Dimension.X, 0)
-# rangeX.setRange(2E-09, 5E-09)
-# plotArea.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX)
+rangeX = plotArea.range(CartesianCoordinateSystem.Dimension.X, 0)
+rangeX.setRange(2E-09, 5E-09)
+plotArea.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX)
 
-# rangeY = plotArea.range(CartesianCoordinateSystem.Dimension.Y, 0)
-# rangeY.setRange(-0.00035, 0.00035)
-# plotArea.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY)
+rangeY = plotArea.range(CartesianCoordinateSystem.Dimension.Y, 0)
+rangeY.setRange(-0.00035, 0.00035)
+plotArea.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY)
 
-# plotArea.enableAutoScale(CartesianCoordinateSystem.Dimension.X, -1, False)
-# plotArea.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, -1, False)
+plotArea.enableAutoScale(CartesianCoordinateSystem.Dimension.X, -1, False)
+plotArea.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, -1, False)
 
 te = QTextEdit()
 te.setText("Time response of SuperRegenerative receiverQ=1,25  ·  tr=5ps  ·  wid=343,8ps  ·  delay=0ps")

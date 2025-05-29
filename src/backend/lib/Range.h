@@ -542,7 +542,7 @@ public:
 	 * TODO: implement zooming depending on the relZoomPosScene also for non linear scales!
 	 */
 	void zoom(const double factor, const bool nice, const double relZoomPosScene = 0.5) {
-		const double start{this->start()}, end{this->end()};
+		const double start{static_cast<double>(this->start())}, end{static_cast<double>(this->end())};
 		switch (scale()) {
 		case RangeT::Scale::Linear: {
 			if (relZoomPosScene == 0.5 || nice)

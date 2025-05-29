@@ -57,7 +57,7 @@ Script::~Script() {
 QIcon Script::icon() const {
 	if (!m_initialized)
 		return {};
-	return m_scriptRuntime->icon();
+	return Script::icon(m_language);
 }
 
 bool Script::printView() {
@@ -340,4 +340,14 @@ QString Script::readRuntime(XmlStreamReader* reader) {
 	}
 
 	return str;
+}
+
+QIcon Script::icon(const QString& lang) {
+	if (!Script::languages.contains(lang, Qt::CaseInsensitive))
+		return {};
+
+	if (lang.compare(QStringLiteral("python"), Qt::CaseInsensitive) == 0)
+		return QIcon::fromTheme(QStringLiteral("pythonbackend"));
+
+	return QIcon::fromTheme(QStringLiteral("quickopen"));
 }

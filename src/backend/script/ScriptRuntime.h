@@ -1,7 +1,6 @@
 #ifndef SCRIPTRUNTIME_H
 #define SCRIPTRUNTIME_H
 
-#include <QIcon>
 #include <QObject>
 
 class Script;
@@ -22,8 +21,6 @@ public:
 	virtual bool cancel() = 0;
 
 	virtual bool exec(const QString& code) = 0;
-
-	virtual QIcon icon() = 0;
 
 protected:
 	const QString m_name;
