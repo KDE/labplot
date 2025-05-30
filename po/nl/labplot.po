@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-29 00:38+0000\n"
-"PO-Revision-Date: 2025-05-27 15:47+0200\n"
+"PO-Revision-Date: 2025-05-29 10:30+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -14684,30 +14684,28 @@ msgstr "Aantal pieken:"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1195
 #, kde-format
 msgid "LabPlot Function Definition (*.lfd *.LFD)"
-msgstr ""
+msgstr "LabPlot functiedefinitie (*.lfd *.LFD)"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1200
-#, fuzzy, kde-format
-#| msgid "Select predefined function"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select file to load function definition"
-msgstr "Geselecteerde voorgedefinieerde functie"
+msgstr "Selecteer bestand om functiedefinitie te laden"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1216
 #, kde-format
 msgid "Select file to save function definition"
-msgstr ""
+msgstr "Selecteer bestand om functiedefinitie op te slaan"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1232
 #, kde-format
 msgid "LabPlot Function Definition"
-msgstr ""
+msgstr "LabPlot-functiedefinitie"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1236
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgid "Description:"
-msgstr "Beschrijving"
+msgstr "Beschrijving:"
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)

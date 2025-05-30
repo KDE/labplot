@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-29 00:38+0000\n"
-"PO-Revision-Date: 2025-05-27 17:31+0300\n"
+"PO-Revision-Date: 2025-05-29 17:32+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -14751,30 +14751,28 @@ msgstr "Кількість піків:"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1195
 #, kde-format
 msgid "LabPlot Function Definition (*.lfd *.LFD)"
-msgstr ""
+msgstr "визначення функцій LabPlot (*.lfd *.LFD)"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1200
-#, fuzzy, kde-format
-#| msgid "Select predefined function"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select file to load function definition"
-msgstr "Вибір попередньо визначеної функції"
+msgstr "Виберіть файл для завантаження визначення функції"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1216
 #, kde-format
 msgid "Select file to save function definition"
-msgstr ""
+msgstr "Виберіть файл для збереження визначення функції"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1232
 #, kde-format
 msgid "LabPlot Function Definition"
-msgstr ""
+msgstr "Визначення функції LabPlot"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1236
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgid "Description:"
-msgstr "Опис"
+msgstr "Опис:"
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
