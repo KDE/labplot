@@ -5,13 +5,13 @@
 #
 # SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Antoni Bella Pérez <antonibella5@yahoo.com>
 # Orestes Mas <orestes@tsc.upc.edu>, 2018.
-# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Josep M. Ferrer <txemaq@gmail.com>
+# Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-29 00:38+0000\n"
-"PO-Revision-Date: 2025-05-27 11:59+0200\n"
+"PO-Revision-Date: 2025-05-29 09:43+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.04.1\n"
+"X-Generator: Lokalize 22.12.3\n"
 "X-Accelerator-Marker: &\n"
 
 #: src/backend/core/AbstractAspect.cpp:234
@@ -14823,31 +14823,28 @@ msgstr "Nombre de pics:"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1195
 #, kde-format
 msgid "LabPlot Function Definition (*.lfd *.LFD)"
-msgstr ""
+msgstr "Definició de funció del LabPlot (*.lfd *.LFD)"
 
-# Nota: https://ca.wikipedia.org/wiki/Funci%C3%B3_signe
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1200
-#, fuzzy, kde-format
-#| msgid "Select predefined function"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select file to load function definition"
-msgstr "Selecciona la funció predefinida"
+msgstr "Seleccioneu un fitxer per a carregar la definició de funció"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1216
 #, kde-format
 msgid "Select file to save function definition"
-msgstr ""
+msgstr "Seleccioneu un fitxer per a desar la definició de funció"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1232
 #, kde-format
 msgid "LabPlot Function Definition"
-msgstr ""
+msgstr "Definició de funció del LabPlot"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1236
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgid "Description:"
-msgstr "Descripció"
+msgstr "Descripció:"
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)

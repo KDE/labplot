@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-29 00:38+0000\n"
-"PO-Revision-Date: 2025-05-27 06:59+0200\n"
+"PO-Revision-Date: 2025-05-29 07:00+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -14696,30 +14696,28 @@ msgstr "Število vrhov:"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1195
 #, kde-format
 msgid "LabPlot Function Definition (*.lfd *.LFD)"
-msgstr ""
+msgstr "Definicija funkcije Labplot (*.lfd *.LFD)"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1200
-#, fuzzy, kde-format
-#| msgid "Select predefined function"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select file to load function definition"
-msgstr "Izberi vnaprej določeno funkcijo"
+msgstr "Izberite datoteko za nalaganje definicije funkcije"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1216
 #, kde-format
 msgid "Select file to save function definition"
-msgstr ""
+msgstr "Izberite datoteko za shranjevanje definicije funkcije"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1232
 #, kde-format
 msgid "LabPlot Function Definition"
-msgstr ""
+msgstr "Definicija funkcije Labplot"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1236
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgid "Description:"
-msgstr "Opis"
+msgstr "Opis:"
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-29 00:38+0000\n"
-"PO-Revision-Date: 2025-05-24 09:19+0200\n"
+"PO-Revision-Date: 2025-05-28 09:55+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -10382,7 +10382,7 @@ msgstr "manquant"
 #: src/frontend/AboutDialog.cpp:216
 #, kde-format
 msgid "Python scripting support"
-msgstr ""
+msgstr "Prise en charge du langage de scripts de Python"
 
 #: src/frontend/AboutDialog.cpp:222
 #, kde-format
@@ -10825,11 +10825,10 @@ msgstr ""
 "modifier les systèmes disponibles ou pour en activer de nouveaux"
 
 #: src/frontend/ActionsManager.cpp:505
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgctxt "@action"
 msgid "New Plot Area"
-msgstr "Zone de tracé"
+msgstr "Nouvelle zone de tracé"
 
 #: src/frontend/ActionsManager.cpp:521
 #: src/frontend/dockwidgets/WorksheetDock.cpp:281
@@ -10881,22 +10880,19 @@ msgid "Select and Zoom"
 msgstr "Sélectionner et agrandir"
 
 #: src/frontend/ActionsManager.cpp:560 src/frontend/ActionsManager.cpp:796
-#, fuzzy, kde-format
-#| msgid "Zoom"
+#, kde-format
 msgctxt "@action"
 msgid "Zoom"
 msgstr "Zoom"
 
 #: src/frontend/ActionsManager.cpp:566 src/frontend/ActionsManager.cpp:802
-#, fuzzy, kde-format
-#| msgid "Magnification"
+#, kde-format
 msgctxt "@action"
 msgid "Magnification"
 msgstr "Agrandissement"
 
 #: src/frontend/ActionsManager.cpp:579
-#, fuzzy, kde-format
-#| msgid "Add New"
+#, kde-format
 msgctxt "@action"
 msgid "Add New"
 msgstr "Ajouter un nouveau"
@@ -11369,12 +11365,9 @@ msgstr ""
 "vraiment continuer ?"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:688
-#, fuzzy, kde-format
-#| msgid "%1: change position of selected DatapickerPoints."
+#, kde-format
 msgid "%1: change position of selected points"
-msgstr ""
-"%1 : modification de la position des points sélectionnés dans le sélecteur "
-"de données."
+msgstr "%1 : modifier la position des points sélectionnés"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:737
 #, kde-format

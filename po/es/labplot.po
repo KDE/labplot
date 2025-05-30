@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-29 00:38+0000\n"
-"PO-Revision-Date: 2025-05-27 12:42+0100\n"
+"PO-Revision-Date: 2025-05-29 12:28+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -14719,30 +14719,28 @@ msgstr "Número de picos:"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1195
 #, kde-format
 msgid "LabPlot Function Definition (*.lfd *.LFD)"
-msgstr ""
+msgstr "Definición de función de LabPlot (*.lfd *.LFD)"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1200
-#, fuzzy, kde-format
-#| msgid "Select predefined function"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select file to load function definition"
-msgstr "Seleccionar función predefinida"
+msgstr "Seleccionar archivo para cargar definición de función"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1216
 #, kde-format
 msgid "Select file to save function definition"
-msgstr ""
+msgstr "Seleccionar archivo para guardar definición de función"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1232
 #, kde-format
 msgid "LabPlot Function Definition"
-msgstr ""
+msgstr "Definición de función de LabPlot"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1236
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgid "Description:"
-msgstr "Descripción"
+msgstr "Descripción:"
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
@@ -25340,6 +25338,3 @@ msgstr "el proceso «convert» ha fallado, código de salida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No se puede abrir el archivo:"
-
-#~ msgid "Restart Backend"
-#~ msgstr "Reiniciar el motor"
