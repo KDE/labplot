@@ -66,12 +66,12 @@ plotArea1.setBottomPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Cen
 # border1.setFlag(PlotArea.BorderTypeFlags.BorderBottom, True)
 # plotArea1.plotArea().setBorderType(border1)
 
-# plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, True)
+plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, True)
 
-# rangeY1 = plotArea1.range(CartesianCoordinateSystem.Dimension.Y, 0)
-# rangeY1.setRange(300, 650)
-# plotArea1.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY1)
-# plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
+rangeY1 = plotArea1.range(CartesianCoordinateSystem.Dimension.Y, 0)
+rangeY1.setRange(300, 650)
+plotArea1.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY1)
+plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
 
 for axis in plotArea1.children(AspectType.Axis):
     if axis.orientation() == WorksheetElement.Orientation.Horizontal and axis.position() == Axis.Position.Bottom:
@@ -155,12 +155,12 @@ plotArea2.setBottomPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Cen
 # border2.setFlag(PlotArea.BorderTypeFlags.BorderBottom, True)
 # plotArea2.plotArea().setBorderType(border2)
 
-# plotArea2.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, True)
+plotArea2.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, True)
 
-# rangeY2 = plotArea2.range(CartesianCoordinateSystem.Dimension.Y, 0)
-# rangeY2.setRange(-120, 100)
-# plotArea2.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY2)
-# plotArea2.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
+rangeY2 = plotArea2.range(CartesianCoordinateSystem.Dimension.Y, 0)
+rangeY2.setRange(-120, 100)
+plotArea2.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY2)
+plotArea2.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
 
 for axis in plotArea2.children(AspectType.Axis):
     if axis.orientation() == WorksheetElement.Orientation.Horizontal and axis.position() == Axis.Position.Bottom:

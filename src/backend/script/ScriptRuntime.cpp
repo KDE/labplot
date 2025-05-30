@@ -55,8 +55,3 @@ int ScriptRuntime::errorLine() const {
  * \param code - The statements to execute
  * \return Whether the execution was successful or not
  */
-
-/*!
- * \fn virtual QIcon ScriptRuntime::icon() = 0;
- * \return The icon for the script runtime
- */

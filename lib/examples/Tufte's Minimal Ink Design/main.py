@@ -70,15 +70,15 @@ config1.symbol().setStyle(Symbol.Style.Circle)
 config1.symbol().setSize(Worksheet.convertToSceneUnits(4, Worksheet.Unit.Point))
 config1.setValuesType(XYCurve.ValuesType.NoValues)
 
-# plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
-# rangeX1 = plotArea1.range(CartesianCoordinateSystem.Dimension.X, 0)
-# rangeX1.setRange(0.5, 5.5)
-# plotArea1.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX1)
+plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
+rangeX1 = plotArea1.range(CartesianCoordinateSystem.Dimension.X, 0)
+rangeX1.setRange(0.5, 5.5)
+plotArea1.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX1)
 
-# plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
-# rangeY1 = plotArea1.range(CartesianCoordinateSystem.Dimension.Y, 0)
-# rangeY1.setRange(-3, 3)
-# plotArea1.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY1)
+plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
+rangeY1 = plotArea1.range(CartesianCoordinateSystem.Dimension.Y, 0)
+rangeY1.setRange(-3, 3)
+plotArea1.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY1)
 
 ###################################################################################################################################################################
 ###################################################################################################################################################################
@@ -184,15 +184,15 @@ config4.symbol().setSize(Worksheet.convertToSceneUnits(4, Worksheet.Unit.Point))
 config4.symbol().setColor("black")
 config4.setValuesType(XYCurve.ValuesType.NoValues)
 
-# plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
-# rangeX4 = plotArea1.range(CartesianCoordinateSystem.Dimension.X, 0)
-# rangeX4.setRange(0.5, 5.5)
-# plotArea1.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX4)
+plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.X, 0, False)
+rangeX4 = plotArea1.range(CartesianCoordinateSystem.Dimension.X, 0)
+rangeX4.setRange(0.5, 5.5)
+plotArea1.setRange(CartesianCoordinateSystem.Dimension.X, 0, rangeX4)
 
-# plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
-# rangeY4 = plotArea1.range(CartesianCoordinateSystem.Dimension.Y, 0)
-# rangeY4.setRange(-3, 3)
-# plotArea1.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY4)
+plotArea1.enableAutoScale(CartesianCoordinateSystem.Dimension.Y, 0, False)
+rangeY4 = plotArea1.range(CartesianCoordinateSystem.Dimension.Y, 0)
+rangeY4.setRange(-3, 3)
+plotArea1.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY4)
 
 ###################################################################################################################################################################
 ###################################################################################################################################################################

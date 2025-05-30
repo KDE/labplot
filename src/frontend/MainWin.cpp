@@ -29,7 +29,9 @@
 #include "backend/lib/macros.h"
 #include "backend/note/Note.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#ifdef HAVE_SCRIPTING
 #include "backend/script/Script.h"
+#endif
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
 #endif
@@ -94,9 +96,11 @@
 #include <KRecentFilesAction>
 #include <KToolBar>
 #include <kxmlguifactory.h>
+#ifdef HAVE_SCRIPTING
 #include <KTextEditor/Editor>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
+#endif
 
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/notebook/Notebook.h"
@@ -141,6 +145,7 @@ MainWin::MainWin(QWidget* parent, const QString& fileName)
 	m_userFeedbackProvider.addDataSource(new KUserFeedback::UsageTimeSource);
 #endif
 
+#ifdef HAVE_SCRIPTING
 	// ktexteditor minor setup
 	KTextEditor::Editor* kTextEditor = KTextEditor::Editor::instance();
 	connect(kTextEditor, &KTextEditor::Editor::configChanged, [kTextEditor] {
@@ -159,6 +164,7 @@ MainWin::MainWin(QWidget* parent, const QString& fileName)
 			}
 		}
 	});
+#endif
 }
 
 MainWin::~MainWin() {
@@ -460,8 +466,10 @@ void MainWin::activatePreviousDock() {
 }
 
 void MainWin::dockWidgetRemoved(ads::CDockWidget* w) {
-	if (w == m_currentAspectDock)
+	if (w == m_currentAspectDock) {
 		m_currentAspectDock = nullptr;
+		m_currentAspectDockArea = nullptr;
+	}
 }
 
 void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
@@ -1228,12 +1236,13 @@ void MainWin::newSpreadsheet() {
 /*!
 	adds a new Script to the project.
 */
+#ifdef HAVE_SCRIPTING
 void MainWin::newScript() {
 	auto* action = static_cast<QAction*>(QObject::sender());
 	auto* script = new Script(i18n("%1", action->data().toString()), action->data().toString());
 	this->addAspectToProject(script);
 }
-
+#endif
 /*!
 	adds a new Matrix to the project.
 */
@@ -1422,7 +1431,9 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 		if (dock == nullptr) {
 			// Add new dock if not found
 			ads::CDockAreaWidget* areaWidget{nullptr};
-			if (m_dockManagerContent->dockWidgetsMap().isEmpty() || !m_currentAspectDock) {
+			// when a dock area is empty, it is deleted and becomes invalid (for example after all its dock widgets are hidden/unpinned)
+			// so we also need to check that the dock area of the current aspect is valid
+			if (m_dockManagerContent->dockWidgetsMap().isEmpty() || !m_currentAspectDock || !m_currentAspectDockArea) {
 				// If only project explorer and properties dock exist place it right to the project explorer
 				areaWidget = m_dockManagerContent->addDockWidget(ads::CenterDockWidgetArea, win);
 			} else {
@@ -1446,6 +1457,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 			dock->toggleView(true);
 
 		m_currentAspectDock = win;
+		m_currentAspectDockArea = m_currentAspectDock->dockAreaWidget();
 		m_dockManagerContent->setDockWidgetFocused(win);
 	} else {
 		// activate the mdiView of the parent, if a child was selected

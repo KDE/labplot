@@ -13,14 +13,18 @@
 #include "backend/core/Settings.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/matrix/Matrix.h"
+#ifdef HAVE_SCRIPTING
 #include "backend/script/Script.h"
+#endif
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/ActionsManager.h"
 #include "frontend/MainWin.h"
 #include "frontend/datapicker/DatapickerView.h"
 #include "frontend/datapicker/DatapickerImageView.h"
 #include "frontend/matrix/MatrixView.h"
+#ifdef HAVE_SCRIPTING
 #include "frontend/script/ScriptEditor.h"
+#endif
 #include "frontend/spreadsheet/SpreadsheetView.h"
 #include "frontend/widgets/toggleactionmenu.h"
 #include "frontend/widgets/MemoryWidget.h"
@@ -206,14 +210,16 @@ void ActionsManager::initActions() {
 	collection->addAction(QStringLiteral("new_worksheet"), m_newWorksheetAction);
 	connect(m_newWorksheetAction, &QAction::triggered, m_mainWindow, &MainWin::newWorksheet);
 
+#ifdef HAVE_SCRIPTING
 	for (auto& language : Script::languages) {
-		auto* action = new QAction(QIcon::fromTheme(QStringLiteral("quickopen")), language, this);
+		auto* action = new QAction(Script::icon(language), language, this);
 		action->setData(language);
 		action->setWhatsThis(i18n("Creates a new %1 script", language));
 		collection->addAction(QLatin1String("new_script_") + language, action);
 		connect(action, &QAction::triggered, m_mainWindow, &MainWin::newScript);
 		m_newScriptActions << action;
 	}
+#endif
 
 	m_newNotesAction = new QAction(QIcon::fromTheme(QStringLiteral("document-new")), i18n("Note"), this);
 	m_newNotesAction->setWhatsThis(i18n("Creates a new note for arbitrary text"));
@@ -295,11 +301,13 @@ void ActionsManager::initActions() {
 
 	// create the new_script action declared in the rc file
 	// initialization is completed in initMenus
+#ifdef HAVE_SCRIPTING
 	m_tbScript = new ToggleActionMenu(this);
 	m_tbScript->setPopupMode(QToolButton::MenuButtonPopup);
 	m_tbScript->setToolTip(QStringLiteral("New Script"));
 	m_tbScript->setIconText(QStringLiteral("New Script"));
 	collection->addAction(QStringLiteral("new_script"), m_tbScript);
+#endif
 
 	m_exportAction = new QAction(QIcon::fromTheme(QStringLiteral("document-export")), i18n("Export..."), this);
 	m_exportAction->setWhatsThis(i18n("Export selected element"));
@@ -481,7 +489,9 @@ void ActionsManager::initActions() {
 #ifdef HAVE_CANTOR_LIBS
 	initNotebookToolbarActions();
 #endif
+#ifdef HAVE_SCRIPTING
 	initScriptToolbarActions();
+#endif
 }
 
 /*!
@@ -795,6 +805,7 @@ void ActionsManager::initDataExtractorToolbarActions() {
 	collection->addAction(QStringLiteral("data_extractor_magnification"), m_dataExtractorMagnificationMenu);
 }
 
+#ifdef HAVE_SCRIPTING
 void ActionsManager::initScriptToolbarActions() {
 	auto* collection = m_mainWindow->actionCollection();
 
@@ -806,6 +817,7 @@ void ActionsManager::initScriptToolbarActions() {
 	m_scriptClearAction->setWhatsThis(QStringLiteral("Clear the output of the script editor"));
 	collection->addAction(QStringLiteral("script_clear"), m_scriptClearAction);
 }
+#endif
 
 void ActionsManager::initMenus() {
 #ifdef HAVE_PURPOSE
@@ -949,6 +961,7 @@ void ActionsManager::initMenus() {
 #endif
 
 	// This menu is at File > Add New > Script
+#ifdef HAVE_SCRIPTING
 	auto* newScriptMenu = dynamic_cast<QMenu*>(factory->container(QLatin1String("new_script"), m_mainWindow));
 	if (newScriptMenu) {
 		newScriptMenu->setIcon(QIcon::fromTheme(QLatin1String("quickopen")));
@@ -977,6 +990,13 @@ void ActionsManager::initMenus() {
 		m_tbScript->setDefaultAction(m_newScriptActions.first());
 	}
 	connect(m_tbScript->menu(), &QMenu::triggered, m_tbScript, &ToggleActionMenu::setDefaultAction);
+#else
+	delete factory->container(QStringLiteral("script"), m_mainWindow);
+	delete factory->container(QStringLiteral("new_script"), m_mainWindow);
+	delete factory->container(QStringLiteral("script_toolbar"), m_mainWindow);
+	// remove the new_script action created in the rc file
+	delete m_mainWindow->actionCollection()->action(QStringLiteral("new_script"));
+#endif
 }
 
 void MainWin::colorSchemeChanged(QAction* action) {
@@ -1009,8 +1029,10 @@ void ActionsManager::updateGUIOnProjectChanges() {
 		factory->container(QStringLiteral("notebook"), m_mainWindow)->setEnabled(false);
 		factory->container(QStringLiteral("notebook_toolbar"), m_mainWindow)->hide();
 #endif
+#ifdef HAVE_SCRIPTING
 		factory->container(QLatin1String("script"), m_mainWindow)->setEnabled(false);
 		factory->container(QLatin1String("script_toolbar"), m_mainWindow)->hide();
+#endif
 	}
 
 	m_mainWindow->updateTitleBar();
@@ -1061,8 +1083,10 @@ void ActionsManager::updateGUI() {
 		factory->container(QStringLiteral("notebook"), m_mainWindow)->setEnabled(false);
 		factory->container(QStringLiteral("notebook_toolbar"), m_mainWindow)->hide();
 #endif
+#ifdef HAVE_SCRIPTING
 		factory->container(QLatin1String("script"), m_mainWindow)->setEnabled(false);
 		factory->container(QLatin1String("script_toolbar"), m_mainWindow)->hide();
+#endif
 		m_printAction->setEnabled(false);
 		m_printPreviewAction->setEnabled(false);
 		m_exportAction->setEnabled(false);
@@ -1216,6 +1240,7 @@ void ActionsManager::updateGUI() {
 	}
 #endif
 
+#ifdef HAVE_SCRIPTING
 	const auto* script = dynamic_cast<Script*>(m_mainWindow->m_currentAspect);
 	if (script) {
 		// mneu
@@ -1232,6 +1257,7 @@ void ActionsManager::updateGUI() {
 		factory->container(QLatin1String("script"), m_mainWindow)->setEnabled(false);
 		factory->container(QLatin1String("script_toolbar"), m_mainWindow)->setVisible(false);
 	}
+#endif
 
 	const auto* datapicker = dynamic_cast<Datapicker*>(m_mainWindow->m_currentAspect);
 	if (!datapicker)
@@ -1490,6 +1516,7 @@ void ActionsManager::connectDataExtractorToolbarActions(const DatapickerImageVie
 	m_dataExtractorMagnificationMenu->setDefaultActionFromData(view->magnification());
 }
 
+#ifdef HAVE_SCRIPTING
 void ActionsManager::connectScriptToolbarActions(const ScriptEditor* view) {
 	disconnect(m_scriptRunAction, &QAction::triggered, nullptr, nullptr);
 	connect(m_scriptRunAction, &QAction::triggered, view, &ScriptEditor::run);
@@ -1501,3 +1528,4 @@ void ActionsManager::connectScriptToolbarActions(const ScriptEditor* view) {
 	m_scriptRunAction->setEnabled(initialized);
 	m_scriptRunAction->setEnabled(initialized);
 }
+#endif
