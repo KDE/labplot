@@ -27,7 +27,7 @@
   \class ProcessBehaviorChartDock
   \brief  Provides a widget for editing the properties of process behavior charts.
 
-\ingroup frontend
+  \ingroup frontend
 */
 ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	: BaseDock(parent)
@@ -38,7 +38,7 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	setBaseWidgets(ui.leName, ui.teComment);
 	setVisibilityWidgets(ui.chkVisible, ui.chkLegendVisible);
 
-		   // Tab "General"
+	// Tab "General"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
 	gridLayout->addWidget(cbDataColumn, 4, 2, 1, 1);
 	gridLayout->addWidget(cbData2Column, 5, 2, 1, 1);
@@ -65,7 +65,7 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	dataSymbolWidget = new SymbolWidget(ui.tabDataLine);
 	hBoxLayout->insertWidget(3, dataSymbolWidget);
 
-		   // Tab "Contol Limit Lines"
+	// Tab "Contol Limit Lines"
 	hBoxLayout = static_cast<QHBoxLayout*>(ui.tabControlLimitLines->layout());
 	centerLineWidget = new LineWidget(ui.tabControlLimitLines);
 	hBoxLayout->insertWidget(1, centerLineWidget);
@@ -234,7 +234,7 @@ void ProcessBehaviorChartDock::retranslateUi() {
 	ui.cbLabelsBorderShape->addItem(i18n("Left pointing rectangle"), static_cast<int>(TextLabel::BorderShape::LeftPointingRectangle));
 	ui.cbLabelsBorderShape->addItem(i18n("Right pointing rectangle"), static_cast<int>(TextLabel::BorderShape::RightPointingRectangle));
 
-		   // tooltips
+	// tooltips
 	QString info = i18n(
 		"The supported chart types are grouped according to the plotted statistics and to the metric defining the limits.<br><br>"
 		"Individual Values and Moving Ranges, Limits Based on the Average or Median Moving Range:"
@@ -336,7 +336,7 @@ void ProcessBehaviorChartDock::typeChanged(int index) {
 
 	// depending on the current type, show/hide the settings for the metric used to define the limits
 	visible = (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::XbarR
-			   || type == ProcessBehaviorChart::Type::R);
+				|| type == ProcessBehaviorChart::Type::R);
 	ui.lLimitsMetric->setVisible(visible);
 	ui.cbLimitsMetric->setVisible(visible);
 

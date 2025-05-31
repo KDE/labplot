@@ -76,19 +76,19 @@ QList<Settings::Type> SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("NewProjectNotebook"), ui.cbNewProjectNotebook->currentText());
 	group.writeEntry(QLatin1String("TitleBar"), ui.cbTitleBar->currentIndex());
 
-		   // units
+	// units
 	if (ui.cbUnits->currentIndex() != group.readEntry(QLatin1String("Units"), 0)) {
 		group.writeEntry(QLatin1String("Units"), ui.cbUnits->currentIndex());
 		changes << Settings::Type::General_Units;
 	}
 
-		   // number format
+	// number format
 	if (ui.cbNumberFormat->currentData().toInt() != group.readEntry(QLatin1String("NumberFormat"), 0)) {
 		group.writeEntry(QLatin1String("NumberFormat"), ui.cbNumberFormat->currentData().toInt());
 		changes << Settings::Type::General_Number_Format;
 	}
 
-		   // number options
+	// number options
 	QLocale::NumberOptions numberOptions{QLocale::DefaultNumberOptions};
 	if (ui.chkOmitGroupSeparator->isChecked())
 		numberOptions |= QLocale::OmitGroupSeparator;
@@ -103,7 +103,7 @@ QList<Settings::Type> SettingsGeneralPage::applySettings() {
 			changes << Settings::Type::General_Number_Format;
 	}
 
-		   // minus/hyphen sign
+	// minus/hyphen sign
 	if (ui.chkUseHyphen->isChecked() != group.readEntry(QLatin1String("UseHyphen"), false)) {
 		group.writeEntry(QLatin1String("UseHyphen"), ui.chkUseHyphen->isChecked());
 		changes << Settings::Type::General_Number_Format;
@@ -179,11 +179,11 @@ void SettingsGeneralPage::loadSettings() {
 	ui.cbUnits->setCurrentIndex(group.readEntry(QLatin1String("Units"), 0));
 	ui.chkGUMTerms->setChecked(group.readEntry<bool>(QLatin1String("GUMTerms"), false));
 
-		   // number format
+	// number format
 	const auto language = group.readEntry(QLatin1String("NumberFormat"), static_cast<int>(QLocale::AnyLanguage));
 	ui.cbNumberFormat->setCurrentIndex(ui.cbNumberFormat->findData(language));
 
-		   // number options
+	// number options
 	QLocale::NumberOptions numberOptions{
 										 static_cast<QLocale::NumberOptions>(group.readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)))};
 	if (numberOptions & QLocale::OmitGroupSeparator)

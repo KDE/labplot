@@ -44,7 +44,7 @@
 	\class ImportFileDialog
 	\brief Dialog for importing data from a file. Embeds \c ImportFileWidget and provides the standard buttons.
 
- \ingroup frontend
+	\ingroup frontend
 */
 
 ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const QString& fileName)
@@ -53,7 +53,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	vLayout->addWidget(m_importFileWidget);
 	m_liveDataSource = liveDataSource;
 
-		   // dialog buttons
+	// dialog buttons
 	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Reset | QDialogButtonBox::Cancel);
 	okButton = buttonBox->button(QDialogButtonBox::Ok);
 	m_optionsButton = buttonBox->button(QDialogButtonBox::Reset); // we highjack the default "Reset" button and use if for showing/hiding the options
@@ -65,7 +65,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	else
 		setAttribute(Qt::WA_DeleteOnClose, false); // don't delete on close for live data sources, it's done in MainWin::newLiveDataSource()
 
-		   // Signals/Slots
+	// Signals/Slots
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &ImportDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
@@ -76,7 +76,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 
 	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-import-database")));
 
-		   // restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
 
 	KConfigGroup conf = Settings::group(QStringLiteral("ImportFileDialog"));
@@ -106,7 +106,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	m_showOptions ? m_optionsButton->setText(i18n("Hide Options")) : m_optionsButton->setText(i18n("Show Options"));
 	connect(m_optionsButton, &QPushButton::clicked, this, &ImportFileDialog::toggleOptions);
 
-		   // Must be after connect, to send an error message if loading failed
+	// Must be after connect, to send an error message if loading failed
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	m_importFileWidget->loadSettings();
 }
@@ -132,7 +132,7 @@ void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar
 	DEBUG(Q_FUNC_INFO);
 	m_importFileWidget->saveSettings(source);
 
-		   // show a progress bar in the status bar
+	// show a progress bar in the status bar
 	auto* progressBar = new QProgressBar();
 	progressBar->setRange(0, 100);
 	connect(source->filter(), &AbstractFileFilter::completed, progressBar, &QProgressBar::setValue);
@@ -180,7 +180,7 @@ bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	QString fileName = m_importFileWidget->fileName();
 	auto mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
 
-		   // show a progress bar in the status bar
+	// show a progress bar in the status bar
 	auto* progressBar = new QProgressBar();
 	progressBar->setRange(0, 100);
 	auto* filter = m_importFileWidget->currentFileFilter();
@@ -235,24 +235,24 @@ bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			int nrNames = names.size(), offset = sheets.size();
 			QDEBUG(Q_FUNC_INFO << ", selected names: " << names)
 
-				   // TODO: think about importing multiple sets into one sheet
+			// TODO: think about importing multiple sets into one sheet
 
 			int start = 0; // add nrNames sheets (0 to nrNames)
 
-				   // in replace mode add only missing sheets (from offset to nrNames)
-				   // and rename the already available sheets
+			// in replace mode add only missing sheets (from offset to nrNames)
+			// and rename the already available sheets
 			if (mode == AbstractFileFilter::ImportMode::Replace) {
 				start = offset;
 
-					   // if there are more available spreadsheets, than needed,
-					   // delete the unneeded spreadsheets
+				// if there are more available spreadsheets, than needed,
+				// delete the unneeded spreadsheets
 				if (offset > nrNames) {
 					for (int i = nrNames; i < offset; i++)
 						sheets.at(i)->remove();
 					offset = nrNames;
 				}
 
-					   // rename the available sheets
+				// rename the available sheets
 				for (int i = 0; i < offset; ++i) {
 					// HDF5 and Ods names contain the whole path, remove it and keep the name only
 					QString sheetName = names.at(i);
@@ -266,7 +266,7 @@ bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				}
 			}
 
-				   // add additional spreadsheets
+			// add additional spreadsheets
 			for (int i = start; i < nrNames; ++i) {
 				// HDF5 and Ods names contain the whole path, remove it and keep the name only
 				QString sheetName = names.at(i);
@@ -280,11 +280,11 @@ bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					workbook->addChildFast(spreadsheet);
 			}
 
-				   // start at offset for append, else at 0
+			// start at offset for append, else at 0
 			if (mode != AbstractFileFilter::ImportMode::Append)
 				offset = 0;
 
-				   // import every set to a different sheet
+			// import every set to a different sheet
 			sheets = workbook->children<AbstractAspect>();
 			for (int i = 0; i < nrNames; ++i) {
 				if (fileType == AbstractFileFilter::FileType::HDF5)
@@ -322,13 +322,13 @@ bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 	RESET_CURSOR;
 
-		   // handle errors
+	// handle errors
 	if (!filter->lastError().isEmpty()) {
 		const_cast<ImportFileDialog*>(this)->showErrorMessage(filter->lastError());
 		return false;
 	}
 
-		   // show warnings, if available
+	// show warnings, if available
 	const auto& warnings = filter->lastWarnings();
 	if (!warnings.isEmpty()) {
 		auto* d = new ImportWarningsDialog(warnings, m_mainWin);
@@ -345,7 +345,7 @@ void ImportFileDialog::toggleOptions() {
 	m_showOptions = !m_showOptions;
 	m_showOptions ? m_optionsButton->setText(i18n("Hide Options")) : m_optionsButton->setText(i18n("Show Options"));
 
-		   // resize the dialog
+	// resize the dialog
 	layout()->activate();
 	resize(QSize(this->width(), 0).expandedTo(minimumSize()));
 }
@@ -390,23 +390,23 @@ void ImportFileDialog::checkOkButton() {
 	QString fileName = ImportFileWidget::absolutePath(m_importFileWidget->fileName());
 	const auto sourceType = m_importFileWidget->currentSourceType();
 	switch (sourceType) {
-	case LiveDataSource::SourceType::FileOrPipe: // fall through
-	case LiveDataSource::SourceType::LocalSocket: {
-		if (fileName.isEmpty()) {
-			okButton->setEnabled(false);
-			okButton->setToolTip(i18n("No file provided for import."));
-			return;
+		case LiveDataSource::SourceType::FileOrPipe: // fall through
+		case LiveDataSource::SourceType::LocalSocket: {
+			if (fileName.isEmpty()) {
+				okButton->setEnabled(false);
+				okButton->setToolTip(i18n("No file provided for import."));
+				return;
+			}
+			break;
 		}
-		break;
-	}
-	case LiveDataSource::SourceType::NetworkTCPSocket: // fall through
-	case LiveDataSource::SourceType::NetworkUDPSocket: // fall through
-	case LiveDataSource::SourceType::SerialPort: // fall through
-	case LiveDataSource::SourceType::MQTT: // fall through
-		break;
+		case LiveDataSource::SourceType::NetworkTCPSocket: // fall through
+		case LiveDataSource::SourceType::NetworkUDPSocket: // fall through
+		case LiveDataSource::SourceType::SerialPort: // fall through
+		case LiveDataSource::SourceType::MQTT: // fall through
+			break;
 	}
 
-		   // process all events first so the dialog is completely drawn before we wait for the socket connect below
+	// process all events first so the dialog is completely drawn before we wait for the socket connect below
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	DEBUG(Q_FUNC_INFO << ", Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, sourceType));

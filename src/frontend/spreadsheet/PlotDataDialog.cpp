@@ -52,7 +52,7 @@ enum class PlotPlacement {
 	\class PlotDataDialog
 	\brief Dialog for generating plots for the spreadsheet data.
 
- \ingroup frontend
+	\ingroup frontend
 */
 PlotDataDialog::PlotDataDialog(AbstractAspect* parentAspect, Plot::PlotType type, QWidget* parent)
 	: QDialog(parent)
@@ -66,9 +66,9 @@ PlotDataDialog::PlotDataDialog(AbstractAspect* parentAspect, Plot::PlotType type
 	setWindowIcon(QIcon::fromTheme(QStringLiteral("office-chart-line")));
 
 	m_basicPlotType = (m_plotType == Plot::PlotType::Line || m_plotType == Plot::PlotType::LineHorizontalStep || m_plotType == Plot::PlotType::LineVerticalStep
-					   || m_plotType == Plot::PlotType::LineSpline || m_plotType == Plot::PlotType::Scatter || m_plotType == Plot::PlotType::ScatterYError
-					   || m_plotType == Plot::PlotType::ScatterXYError || m_plotType == Plot::PlotType::LineSymbol || m_plotType == Plot::PlotType::LineSymbol2PointSegment
-					   || m_plotType == Plot::PlotType::LineSymbol3PointSegment);
+			|| m_plotType == Plot::PlotType::LineSpline || m_plotType == Plot::PlotType::Scatter || m_plotType == Plot::PlotType::ScatterYError
+			|| m_plotType == Plot::PlotType::ScatterXYError || m_plotType == Plot::PlotType::LineSymbol || m_plotType == Plot::PlotType::LineSymbol2PointSegment
+			|| m_plotType == Plot::PlotType::LineSymbol3PointSegment);
 
 	auto* mainWidget = new QWidget(this);
 	ui->setupUi(mainWidget);
@@ -84,7 +84,7 @@ PlotDataDialog::PlotDataDialog(AbstractAspect* parentAspect, Plot::PlotType type
 	layout->addWidget(buttonBox);
 	setLayout(layout);
 
-		   // create combox boxes for the existing plots and worksheets
+	// create combox boxes for the existing plots and worksheets
 	auto* gridLayout = dynamic_cast<QGridLayout*>(ui->gbPlotPlacement->layout());
 	cbExistingPlots = new TreeViewComboBox(ui->gbPlotPlacement);
 	cbExistingPlots->setMinimumWidth(250); // TODO: use proper sizeHint in TreeViewComboBox
@@ -98,7 +98,7 @@ PlotDataDialog::PlotDataDialog(AbstractAspect* parentAspect, Plot::PlotType type
 	m_plotsModel->setSelectableAspects({AspectType::CartesianPlot});
 	cbExistingPlots->setModel(m_plotsModel);
 
-		   // select the first available plot, if available
+	// select the first available plot, if available
 	auto plots = m_parentAspect->project()->children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive);
 	if (!plots.isEmpty()) {
 		const auto* plot = plots.first();
@@ -109,26 +109,26 @@ PlotDataDialog::PlotDataDialog(AbstractAspect* parentAspect, Plot::PlotType type
 	m_worksheetsModel->setSelectableAspects({AspectType::Worksheet});
 	cbExistingWorksheets->setModel(m_worksheetsModel);
 
-		   // select the first available worksheet, if available
+	// select the first available worksheet, if available
 	auto worksheets = m_parentAspect->project()->children<Worksheet>(AbstractAspect::ChildIndexFlag::Recursive);
 	if (!worksheets.isEmpty()) {
 		const auto* worksheet = worksheets.first();
 		cbExistingWorksheets->setCurrentModelIndex(m_worksheetsModel->modelIndexOfAspect(worksheet));
 	}
 
-		   // in the grid layout of the scroll area we have on default one row for the x-column,
-		   // one row for the separating line and one line for the y-column.
-		   // set the height of this default content as the minimal size of the scroll area.
+	// in the grid layout of the scroll area we have on default one row for the x-column,
+	// one row for the separating line and one line for the y-column.
+	// set the height of this default content as the minimal size of the scroll area.
 	gridLayout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
 	int height = 2 * ui->cbXColumn->height() + ui->line->height() + 2 * gridLayout->verticalSpacing() + gridLayout->contentsMargins().top()
 		+ gridLayout->contentsMargins().bottom();
 	ui->scrollAreaColumns->setMinimumSize(0, height);
 
-		   // hide the check box for creation of original data, only shown if analysis curves are to be created
+	// hide the check box for creation of original data, only shown if analysis curves are to be created
 	ui->spacer->changeSize(0, 0);
 	ui->chkCreateDataCurve->hide();
 
-		   // SIGNALs/SLOTs
+	// SIGNALs/SLOTs
 	connect(buttonBox, &QDialogButtonBox::accepted, this, [=]() {
 		hide();
 		plot();
@@ -143,7 +143,7 @@ PlotDataDialog::PlotDataDialog(AbstractAspect* parentAspect, Plot::PlotType type
 	connect(cbExistingPlots, &TreeViewComboBox::currentModelIndexChanged, this, &PlotDataDialog::checkOkButton);
 	connect(cbExistingWorksheets, &TreeViewComboBox::currentModelIndexChanged, this, &PlotDataDialog::checkOkButton);
 
-		   // restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
 	KConfigGroup conf = Settings::group(QStringLiteral("PlotDataDialog"));
 	ui->rbPlotPlacementNewWorksheet->setChecked(true); // default, because this can be always the case
@@ -223,15 +223,15 @@ void PlotDataDialog::setSelectedColumns(QVector<Column*> selectedColumns) {
 			m_columns << col;
 	}
 
-		   // disable everything if the spreadsheet doesn't have any columns to plot
+	// disable everything if the spreadsheet doesn't have any columns to plot
 	if (m_columns.isEmpty()) {
 		ui->gbCurvePlacement->setEnabled(false);
 		ui->gbPlotPlacement->setEnabled(false);
 		return;
 	}
 
-		   // determine the column names
-		   // and the name of the first column having "X" as the plot designation (relevant for xy-curves only)
+	// determine the column names
+	// and the name of the first column having "X" as the plot designation (relevant for xy-curves only)
 	QStringList columnNames;
 	QString xColumnName;
 	for (const Column* column : m_columns) {
@@ -274,7 +274,7 @@ void PlotDataDialog::setSelectedColumns(QVector<Column*> selectedColumns) {
 	else
 		processColumnsForHistogram(columnNames);
 
-		   // resize the scroll area to show five ComboBoxes at maximum without showing the scroll bars
+	// resize the scroll area to show five ComboBoxes at maximum without showing the scroll bars
 	int size = m_columnComboBoxes.size() >= 5 ? 5 : m_columnComboBoxes.size();
 	int height = size * ui->cbXColumn->height();
 	auto* layout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
@@ -292,7 +292,7 @@ void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, co
 	m_columnComboBoxes << ui->cbXColumn;
 	m_columnComboBoxes << ui->cbYColumn;
 
-		   // ui-widget only has one combobox for the y-data -> add additional comboboxes dynamically if required
+	// ui-widget only has one combobox for the y-data -> add additional comboboxes dynamically if required
 	if (m_columns.size() > 2) {
 		auto* gridLayout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
 		for (int i = 2; i < m_columns.size(); ++i) {
@@ -309,7 +309,7 @@ void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, co
 		ui->gbPlotPlacement->setTitle(i18n("Add Plot to"));
 	}
 
-		   // show all selected/available column names in the data comboboxes
+	// show all selected/available column names in the data comboboxes
 	for (auto* const comboBox : m_columnComboBoxes)
 		comboBox->addItems(columnNames);
 
@@ -348,7 +348,7 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 	ui->spacer->changeSize(0, 0);
 	ui->chkCreateDataCurve->hide();
 
-		   // use the already available cbXColumn combo box
+	// use the already available cbXColumn combo box
 	ui->lXColumn->setText(i18n("Data"));
 	m_columnComboBoxes << ui->cbXColumn;
 	ui->cbXColumn->addItems(columnNames);
@@ -367,13 +367,13 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 		ui->gbPlotPlacement->setTitle(i18n("Add Plots to"));
 		ui->scrollAreaColumns->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
-			   // use the already available cbYColumn combo box
+		// use the already available cbYColumn combo box
 		ui->lYColumn->setText(i18n("Data"));
 		m_columnComboBoxes << ui->cbYColumn;
 		ui->cbYColumn->addItems(columnNames);
 		ui->cbYColumn->setCurrentIndex(1);
 
-			   // add a ComboBox for every further column to be plotted
+		// add a ComboBox for every further column to be plotted
 		auto* gridLayout = dynamic_cast<QGridLayout*>(ui->scrollAreaColumns->widget()->layout());
 		for (int i = 2; i < m_columns.size(); ++i) {
 			auto* label = new QLabel(i18n("Data"));
@@ -449,20 +449,20 @@ void PlotDataDialog::plot() {
 			addCurvesToPlots(worksheet);
 		}
 
-			   // when creating a new worksheet with many plots it can happen the place available for the data in the plot
-			   // is small and the result created here doesn't look nice. To avoid this and as a quick a dirty workaround,
-			   // we increase the size of the worksheet so the plots have a certain minimal size.
-			   // TODO:
-			   // A more sophisticated and better logic would require further adjustments for properties like plot area
-			   // paddings, the font size of axis ticks and title labels, etc. Also, this logic should be applied maybe if
-			   // we add plots to an already created worksheet.
+		// when creating a new worksheet with many plots it can happen the place available for the data in the plot
+		// is small and the result created here doesn't look nice. To avoid this and as a quick a dirty workaround,
+		// we increase the size of the worksheet so the plots have a certain minimal size.
+		// TODO:
+		// A more sophisticated and better logic would require further adjustments for properties like plot area
+		// paddings, the font size of axis ticks and title labels, etc. Also, this logic should be applied maybe if
+		// we add plots to an already created worksheet.
 		adjustWorksheetSize(worksheet);
 
 		parent->endMacro();
 	}
 
-		   // if new curves are created via this dialog, select the parent plot of the last added curve in the project explorer.
-		   // if a custom fit is being done, select the last created fit curve independent of the number of created curves.
+	// if new curves are created via this dialog, select the parent plot of the last added curve in the project explorer.
+	// if a custom fit is being done, select the last created fit curve independent of the number of created curves.
 	m_parentAspect->project()->setSuppressAspectAddedSignal(false);
 	if (m_lastAddedCurve) {
 		QString path;
@@ -510,8 +510,8 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 			const QString& name = comboBox->currentText();
 			Column* yColumn = columnFromName(name);
 
-				   // if only one column was selected, allow to use this column for x and for y.
-				   // otherwise, don't assign xColumn to y
+			// if only one column was selected, allow to use this column for x and for y.
+			// otherwise, don't assign xColumn to y
 			if (yColumn == xColumn) {
 				if (m_columns.size() == 1) {
 					addCurve(name, xColumn, yColumn, plot);
@@ -548,7 +548,7 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 	}
 	}
 
-		   // TODO: check if it really needs to update all ranges
+	// TODO: check if it really needs to update all ranges
 	plot->dataChanged(-1, -1);
 }
 
@@ -901,7 +901,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 			}
 		}
 
-			   // y-axis title
+		// y-axis title
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Vertical) {
 				if (!name.isEmpty()) {
@@ -939,7 +939,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 			}
 		}
 
-			   // y-axis title
+		// y-axis title
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Vertical) {
 				if (m_plotType == Plot::PlotType::Histogram)
@@ -960,7 +960,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 			}
 		}
 
-			   // y-axis title
+		// y-axis title
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Vertical) {
 				axis->title()->setText(i18n("Sample Quantiles"));
@@ -973,15 +973,15 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		auto* boxPlot = static_cast<BoxPlot*>(m_lastAddedCurve);
 		auto orientation = boxPlot->orientation();
 
-			   // number of box plots per plot:
+		// number of box plots per plot:
 		int count = 1; // 1 if we create a separate plot for every box plot
 		if (ui->rbCurvePlacementAllInOnePlotArea->isChecked())
 			count = m_columnComboBoxes.count(); // all box plots in one single plot
 
-			   // set the range of the plot and the number of ticks manually.
-			   // the n-th box plot is positioned at x=n and has the width=0.5 in logical coordinatates.
-			   // manually set the range to (0.5, n+0.5) and ajdust the number of ticks starting at 0.5
-			   // to make sure we have every tick precisely under the middle of the box plot
+		// set the range of the plot and the number of ticks manually.
+		// the n-th box plot is positioned at x=n and has the width=0.5 in logical coordinatates.
+		// manually set the range to (0.5, n+0.5) and ajdust the number of ticks starting at 0.5
+		// to make sure we have every tick precisely under the middle of the box plot
 		const auto xIndex = plot->coordinateSystem(boxPlot->coordinateSystemIndex())->index(Dimension::X);
 		const auto yIndex = plot->coordinateSystem(boxPlot->coordinateSystemIndex())->index(Dimension::Y);
 		Range<double> range(0.5, count + 0.5);
@@ -1000,7 +1000,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 			axis->title()->setText(QString()); // no title
 		}
 
-			   // y-axis title
+		// y-axis title
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Vertical) {
 				if (!name.isEmpty()) {
@@ -1054,7 +1054,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 			}
 		}
 
-			   // y-axis title
+		// y-axis title
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Vertical) {
 				if (!name.isEmpty()) {

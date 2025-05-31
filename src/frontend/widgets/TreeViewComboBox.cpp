@@ -28,7 +28,7 @@
 	\class TreeViewComboBox
 	\brief Provides a QTreeView in a QComboBox.
 
- \ingroup backend/widgets
+	\ingroup backend/widgets
 */
 TreeViewComboBox::TreeViewComboBox(QWidget* parent)
 	: QComboBox(parent)
@@ -59,7 +59,7 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent)
 	setCurrentIndex(0);
 	setEditText(m_currentText);
 
-		   // signal activated() is platform dependent
+	// signal activated() is platform dependent
 	connect(m_treeView, &QTreeView::pressed, this, &TreeViewComboBox::treeViewIndexActivated);
 	connect(m_lineEdit, &QLineEdit::textChanged, this, &TreeViewComboBox::filterChanged);
 }
@@ -79,11 +79,11 @@ void TreeViewComboBox::setModel(AspectTreeModel* model) {
 	m_model = model;
 	m_treeView->setModel(model);
 
-		   // show only the first column in the combo box
+	// show only the first column in the combo box
 	for (int i = 1; i < model->columnCount(); i++)
 		m_treeView->hideColumn(i);
 
-		   // Expand the complete tree in order to see everything in the first popup.
+	// Expand the complete tree in order to see everything in the first popup.
 	m_treeView->expandAll();
 
 	setEditText(m_currentText);
@@ -188,7 +188,7 @@ void TreeViewComboBox::setInvalid(bool invalid, const QString& tooltip) {
 	if (invalid) {
 		SET_WARNING_PALETTE
 
-				setToolTip(tooltip);
+		setToolTip(tooltip);
 	} else {
 		setPalette(qApp->palette());
 		setToolTip(m_model->data(currentModelIndex(), Qt::ToolTipRole).toString());
@@ -314,7 +314,7 @@ bool TreeViewComboBox::isTopLevel(const AbstractAspect* aspect) const {
 			if (selectableTypes.indexOf(type) != -1)
 				return true;
 
-				   // check whether the current aspect has selectable children
+			// check whether the current aspect has selectable children
 			bool hasSelectableAspects = false;
 			for (auto selectableType : selectableTypes) {
 				const auto& children = aspect->children(selectableType, AbstractAspect::ChildIndexFlag::Recursive);
@@ -353,7 +353,7 @@ void TreeViewComboBox::setAspect(const AbstractAspect* aspect, const QString& pa
 	DEBUG(Q_FUNC_INFO)
 	setAspect(aspect);
 
-		   // don't make the combobox red for initially created curves
+	// don't make the combobox red for initially created curves
 	if (!aspect && path.isEmpty()) {
 		setText(QString());
 		setInvalid(false);

@@ -14,8 +14,8 @@
 #include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "frontend/MainWin.h"
 #include "frontend/widgets/TreeViewComboBox.h"
+#include "frontend/MainWin.h"
 
 #include <QDialogButtonBox>
 #include <QElapsedTimer>

@@ -7,9 +7,9 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "frontend/datasources/ImportKaggleDatasetWidget.h"
 #include "backend/core/Settings.h"
 #include "frontend/datasources/ImportFileWidget.h"
+#include "frontend/datasources/ImportKaggleDatasetWidget.h"
 
 #include <QDirIterator>
 #include <QJsonDocument>

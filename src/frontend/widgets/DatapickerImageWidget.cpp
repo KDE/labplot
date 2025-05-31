@@ -6,7 +6,7 @@
 	SPDX-FileCopyrightText: 2015-2016 Ankit Wagadre <wagadre.ankit@gmail.com>
 	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
 
- SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "DatapickerImageWidget.h"
@@ -82,9 +82,9 @@ void HistogramView::drawBackground(QPainter* painter, const QRectF& rect) {
 		if (bins[i] > max)
 			max = bins[i];
 
-		   // convert y-scale count to log scale so small counts are still visible
-		   // scene rect is 1000*100 where upper 1000*80 is for histogram graph
-		   // and lower 1000*20 is for histogram scale
+	// convert y-scale count to log scale so small counts are still visible
+	// scene rect is 1000*100 where upper 1000*80 is for histogram graph
+	// and lower 1000*20 is for histogram scale
 	QPainterPath path(QPointF(0, (log(bins[0]) * 100 / log(max))));
 	for (int i = 1; i <= m_range; i++) {
 		int x = i * 1000 / m_range;
@@ -106,18 +106,18 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
 
-		   //"General"-tab
+	//"General"-tab
 	ui.leFileName->setClearButtonEnabled(true);
 	ui.bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
 	ui.leFileName->setCompleter(new QCompleter(new QFileSystemModel, this));
 
-		   //"Symbol"-tab
+	//"Symbol"-tab
 	symbolWidget = new SymbolWidget(ui.tSymbol);
 	auto* gridLayout = dynamic_cast<QGridLayout*>(ui.tSymbol->layout());
 	if (gridLayout)
 		gridLayout->addWidget(symbolWidget, 0, 0, 1, 1);
 
-		   //"Edit Image"-tab
+	//"Edit Image"-tab
 	auto* editTabLayout = static_cast<QGridLayout*>(ui.tEdit->layout());
 	editTabLayout->setContentsMargins(2, 2, 2, 2);
 	editTabLayout->setHorizontalSpacing(2);
@@ -179,15 +179,15 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 	updateLocale();
 	retranslateUi();
 
-		   // SLOTS
-		   // general
+	// SLOTS
+	// general
 	connect(ui.bOpen, &QPushButton::clicked, this, &DatapickerImageWidget::selectFile);
 	connect(ui.leFileName, &QLineEdit::returnPressed, this, &DatapickerImageWidget::fileNameChanged);
 	connect(ui.leFileName, &QLineEdit::textChanged, this, &DatapickerImageWidget::fileNameChanged);
 	connect(ui.cbFileRelativePath, &QCheckBox::clicked, this, &DatapickerImageWidget::relativeChanged);
 	connect(ui.cbFileEmbedd, &QCheckBox::clicked, this, &DatapickerImageWidget::embeddedChanged);
 
-		   // edit image
+	// edit image
 	connect(ui.cbPlotImageType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerImageWidget::plotImageTypeChanged);
 	connect(ui.sbRotation, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::rotationChanged);
 	connect(ssIntensity, &SpanSlider::spanChanged, this, &DatapickerImageWidget::intensitySpanChanged);
@@ -203,7 +203,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 	connect(ui.sbMinSegmentLength, QOverload<int>::of(&QSpinBox::valueChanged), this, &DatapickerImageWidget::minSegmentLengthChanged);
 	connect(ui.sbPointSeparation, QOverload<int>::of(&QSpinBox::valueChanged), this, &DatapickerImageWidget::pointSeparationChanged);
 
-		   // axis point
+	// axis point
 	connect(ui.cbGraphType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerImageWidget::graphTypeChanged);
 	connect(ui.sbTernaryScale, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::ternaryScaleChanged);
 	connect(ui.sbPositionX1, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
@@ -229,7 +229,7 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 	m_imagesList = list;
 	m_image = list.first();
 
-		   // Set parents as aspects, because their name will be changed
+	// Set parents as aspects, because their name will be changed
 	QList<AbstractAspect*> datapickers;
 	for (const auto* l : list)
 		datapickers.push_back(l->parentAspect());
@@ -346,7 +346,7 @@ void DatapickerImageWidget::retranslateUi() {
 	ui.cbPlotImageType->addItem(i18n("Original Image"));
 	ui.cbPlotImageType->addItem(i18n("Processed Image"));
 
-		   // tooltip texts
+	// tooltip texts
 	ssValue->setToolTip(i18n("Select the range for the value, the degree of lightness of the color.\nEverything outside of this range will be set to white."));
 	ssIntensity->setToolTip(i18n("Select the range for the intensity.\nEverything outside of this range will be set to white."));
 	ssForeground->setToolTip(
@@ -398,7 +398,7 @@ void DatapickerImageWidget::embeddedChanged(bool embedded) {
 	for (auto* image : m_imagesList)
 		image->setEmbedded(embedded);
 
-		   // embedded property was set, update the file name LineEdit after this
+	// embedded property was set, update the file name LineEdit after this
 	if (embedded) {
 		QFileInfo fi(m_image->fileName());
 		ui.leFileName->setText(fi.fileName());
@@ -413,7 +413,7 @@ void DatapickerImageWidget::relativeChanged(bool relative) {
 		image->setRelativeFilePath(relative);
 	}
 
-		   // Load new filename
+	// Load new filename
 	ui.leFileName->setText(m_image->fileName());
 }
 
@@ -685,14 +685,14 @@ void DatapickerImageWidget::load() {
 	if (!m_image)
 		return;
 
-		   // No lock, because it is done already in the caller function
+	// No lock, because it is done already in the caller function
 	ui.cbFileEmbedd->setChecked(m_image->embedded());
 	embeddedChanged(m_image->embedded());
 	ui.cbFileRelativePath->setChecked(m_image->isRelativeFilePath());
 	updateFileRelativePathCheckBoxEnable();
 	ui.leFileName->setText(m_image->fileName());
 
-		   // highlight the text field for the background image red if an image is used and cannot be found
+	// highlight the text field for the background image red if an image is used and cannot be found
 	const QString& fileName = m_image->fileName();
 	bool invalid = (!m_image->embedded() && !fileName.isEmpty() && !QFile::exists(fileName));
 	GuiTools::highlight(ui.leFileName, invalid);

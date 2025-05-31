@@ -53,7 +53,7 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent, bool liveData)
 	ui.cbDecimalSeparator->setToolTip(textNumberFormatShort);
 	ui.cbDecimalSeparator->setWhatsThis(textNumberFormat);
 
-		   // only available for live data, will be activated explicitly
+	// only available for live data, will be activated explicitly
 	ui.chbCreateTimestamp->setVisible(false);
 
 	const QString textDateTimeFormatShort = i18n(
@@ -116,18 +116,18 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent, bool liveData)
 	ui.lColumnMode->setToolTip(info);
 	ui.kleColumnMode->setToolTip(info);
 
-		   // https://en.wikipedia.org/wiki/Double-precision_floating-point_format
-		   // 15.955 digits
+	// https://en.wikipedia.org/wiki/Double-precision_floating-point_format
+	// 15.955 digits
 	info = i18n(
-		"If not empty, the number of columns must match the number of column names if provided and it must match the number of columns in the imported file.<br>"
-		"Data Types:"
-		"<table>"
-		"<tr><td>%1</td><td>Integer number with 32bit size (−2.147.483.648 .. 2.147.483.647).</td></tr>"
-		"<tr><td>%2</td><td>Integer number with 64bit size (−9.223.372.036.854.775.808 .. 9.223.372.036.854.775.807).</td></tr>"
-		"<tr><td>%3</td><td>Floating point number 64bit size. Resolution of around 16 digits.</td></tr>"
-		"<tr><td>%4</td><td>Datetime with the format from the datetime text box if not empty, otherwise automatically determined.</td></tr>"
-		"<tr><td>%5</td><td>A text.</td></tr>"
-		"</table>");
+			   "If not empty, the number of columns must match the number of column names if provided and it must match the number of columns in the imported file.<br>"
+			   "Data Types:"
+			   "<table>"
+			   "<tr><td>%1</td><td>Integer number with 32bit size (−2.147.483.648 .. 2.147.483.647).</td></tr>"
+			   "<tr><td>%2</td><td>Integer number with 64bit size (−9.223.372.036.854.775.808 .. 9.223.372.036.854.775.807).</td></tr>"
+			   "<tr><td>%3</td><td>Floating point number 64bit size. Resolution of around 16 digits.</td></tr>"
+			   "<tr><td>%4</td><td>Datetime with the format from the datetime text box if not empty, otherwise automatically determined.</td></tr>"
+			   "<tr><td>%5</td><td>A text.</td></tr>"
+			   "</table>");
 	using Mode = AbstractColumn::ColumnMode;
 	const QVector<Mode> vec = {Mode::Integer, Mode::BigInt, Mode::Double, Mode::DateTime, Mode::Text};
 	for (const auto m: vec) {
@@ -157,7 +157,7 @@ void AsciiOptionsWidget::showAsciiHeaderOptions(bool headerLinevisible, bool col
 	ui.chbHeader->setVisible(headerLinevisible);
 	ui.sbHeaderLine->setVisible(headerLinevisible);
 
-		   // if the columns names are visible in general, show/hide them depending on the current setting for the option "Names at Line"
+	// if the columns names are visible in general, show/hide them depending on the current setting for the option "Names at Line"
 	if (columnNamesVisible) {
 		ui.lVectorNames->setVisible(!ui.chbHeader->isChecked());
 		ui.kleVectorNames->setVisible(!ui.chbHeader->isChecked());
@@ -215,14 +215,14 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter::Properties& properties
 		properties.separator = v;
 	}
 
-		   // TODO: use general setting for decimal separator?
+	// TODO: use general setting for decimal separator?
 	const auto lang = ui.cbDecimalSeparator->currentIndex() == 0 ? QLocale::Language::C : QLocale::Language::German;
 	properties.locale = lang;
 	properties.dateTimeFormat = ui.cbDateTimeFormat->currentText();
 	properties.createIndex = ui.chbCreateIndex->isChecked();
 
-		   // save the timestamp option only if it's visible, i.e. live source is used.
-		   // use the default setting in the filter (false) otherwise for non-live source
+	// save the timestamp option only if it's visible, i.e. live source is used.
+	// use the default setting in the filter (false) otherwise for non-live source
 	if (m_createTimeStampAvailable)
 		properties.createTimestamp = ui.chbCreateTimestamp->isChecked();
 

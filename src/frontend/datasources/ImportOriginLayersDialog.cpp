@@ -23,22 +23,22 @@ ImportOriginLayersDialog::ImportOriginLayersDialog(QWidget* parent)
 	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-import")));
 
 	QString info = i18n(
-		"Multiple layers are used in Origin to either implement multiple plots or multiple axes on the same plot "
-		"(see <a href=\"https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph\">Origin's Documentation</a> for more details).<br>"
-		"LabPlot can process only one type at the same time."
-		"<br><br>"
-		"Specify how to import multi-layered graphs in the selected project:"
-		"<ul>"
-		"<li>As Plot Area - a new plot area is created for every layer.</li>"
-		"<li>As Coordinate System - a new coordinate system (data range) on the same plot area is created for every layer.</li>"
-		"</ul>");
+			"Multiple layers are used in Origin to either implement multiple plots or multiple axes on the same plot "
+			"(see <a href=\"https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph\">Origin's Documentation</a> for more details).<br>"
+			"LabPlot can process only one type at the same time."
+			"<br><br>"
+			"Specify how to import multi-layered graphs in the selected project:"
+			"<ul>"
+			"<li>As Plot Area - a new plot area is created for every layer.</li>"
+			"<li>As Coordinate System - a new coordinate system (data range) on the same plot area is created for every layer.</li>"
+			"</ul>");
 	ui->lInfo->setText(info);
 
-		   // add options to control how to read Origin's graph layers - as new plot areas or as new coordinate systems
+	// add options to control how to read Origin's graph layers - as new plot areas or as new coordinate systems
 	ui->cbGraphLayer->addItem(i18n("As Plot Area"));
 	ui->cbGraphLayer->addItem(i18n("As Coordinate System"));
 
-		   // restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
 	KConfigGroup conf = Settings::group(QStringLiteral("ImportOriginLayersDialog"));
 	if (conf.exists()) {

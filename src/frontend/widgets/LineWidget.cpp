@@ -243,8 +243,7 @@ void LineWidget::loadConfig(const KConfigGroup& group) {
 
 	ui.cbStyle->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("Style"), static_cast<int>(m_line->style())));
 	setColor(group.readEntry(m_prefix + QStringLiteral("Color"), m_line->color()));
-	ui.sbWidth->setValue(
-		std::round(Worksheet::convertFromSceneUnits(group.readEntry(m_prefix + QStringLiteral("Width"), m_line->width()), Worksheet::Unit::Point)));
+	ui.sbWidth->setValue(std::round(Worksheet::convertFromSceneUnits(group.readEntry(m_prefix + QStringLiteral("Width"), m_line->width()), Worksheet::Unit::Point)));
 	ui.sbOpacity->setValue(group.readEntry(m_prefix + QStringLiteral("Opacity"), m_line->opacity()) * 100);
 	GuiTools::updatePenStyles(ui.cbStyle, ui.kcbColor->color());
 }

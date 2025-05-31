@@ -42,7 +42,7 @@ LiveDataDock::LiveDataDock(QWidget* parent)
 
 	retranslateUi();
 
-	// SLOTs
+	//SLOTs
 	connect(ui.bPausePlayReading, &QPushButton::clicked, this, &LiveDataDock::pauseContinueReading);
 	connect(ui.bUpdateNow, &QPushButton::clicked, this, &LiveDataDock::updateNow);
 	connect(ui.sbUpdateInterval, QOverload<int>::of(&QSpinBox::valueChanged), this, &LiveDataDock::updateIntervalChanged);

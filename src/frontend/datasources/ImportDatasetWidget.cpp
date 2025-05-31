@@ -8,11 +8,11 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "frontend/datasources/ImportDatasetWidget.h"
 #include "backend/core/Settings.h"
 #include "backend/datasources/DatasetHandler.h"
 #include "backend/lib/macros.h"
 #include "frontend/DatasetModel.h"
+#include "frontend/datasources/ImportDatasetWidget.h"
 
 #include <QCompleter>
 #include <QDir>

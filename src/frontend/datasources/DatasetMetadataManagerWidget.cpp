@@ -7,10 +7,10 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "frontend/datasources/DatasetMetadataManagerWidget.h"
 #include "backend/core/Settings.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/lib/macros.h"
+#include "frontend/datasources/DatasetMetadataManagerWidget.h"
 #include "frontend/DatasetModel.h"
 #include "frontend/GuiTools.h"
 

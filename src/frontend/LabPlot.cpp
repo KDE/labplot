@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
 	qputenv("QT_QPA_PLATFORM", xcbQtQpaEnvVar);
 #endif
 
-		   // trigger initialisation of proper icon theme
+	// trigger initialisation of proper icon theme
 	KIconTheme::initTheme();
 
 	QApplication app(argc, argv);
@@ -167,8 +167,8 @@ int main(int argc, char* argv[]) {
 		splash->show();
 	}
 
-		   // needed in order to have the signals triggered by SignallingUndoCommand
-		   // TODO: redesign/remove this
+	// needed in order to have the signals triggered by SignallingUndoCommand
+	// TODO: redesign/remove this
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
 	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 

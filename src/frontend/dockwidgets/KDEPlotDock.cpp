@@ -11,11 +11,11 @@
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/KDEPlot.h"
+#include "frontend/widgets/TreeViewComboBox.h"
 #include "frontend/GuiTools.h"
 #include "frontend/TemplateHandler.h"
 #include "frontend/widgets/BackgroundWidget.h"
 #include "frontend/widgets/LineWidget.h"
-#include "frontend/widgets/TreeViewComboBox.h"
 
 #include <KConfig>
 #include <KLocalizedString>
@@ -179,8 +179,7 @@ void KDEPlotDock::retranslateUi() {
 	// note to translators:
 	// here, Silverman and Scott and the names of the authors who introduced these formulas,
 	// the strings "min", "sigma", "IRQ" and "n" are part of the formula expressions.
-	info = i18n(
-		"Method to select the bandwidth of the kernel:"
+	info = i18n("Method to select the bandwidth of the kernel:"
 		"<ul>"
 		"<li>Silverman -  0.9 * min(sigma, IQR / 1.34) * n^(-0.2)</li>"
 		"<li>Scott -  1.059 * sigma * n^(-0.2)</li>"

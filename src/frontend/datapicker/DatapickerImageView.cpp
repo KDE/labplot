@@ -9,7 +9,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "frontend/datapicker/DatapickerImageView.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/datapicker/DatapickerCurve.h"
 #include "backend/datapicker/DatapickerImage.h"

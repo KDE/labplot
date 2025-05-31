@@ -7,9 +7,9 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "frontend/colormaps/ColorMapsWidget.h"
 #include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
+#include "frontend/colormaps/ColorMapsWidget.h"
 #include "frontend/GuiTools.h"
 #include "tools/ColorMapsManager.h"
 

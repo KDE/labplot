@@ -34,9 +34,9 @@
 	\class TeXRenderer
 	\brief Implements rendering of latex code to a PNG image.
 
- Uses latex engine specified by the user (default xelatex) to render LaTeX text
+	Uses latex engine specified by the user (default xelatex) to render LaTeX text
 
- \ingroup tools
+	\ingroup tools
 */
 QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, const TeXRenderer::Formatting& format) {
 	const QColor& fontColor = format.fontColor;

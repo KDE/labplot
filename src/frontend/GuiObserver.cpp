@@ -31,8 +31,8 @@
 #endif
 
 #include "frontend/GuiObserver.h"
-#include "frontend/MainWin.h"
 #include "frontend/ProjectExplorer.h"
+#include "frontend/MainWin.h"
 #include "frontend/dockwidgets/AspectDock.h"
 #include "frontend/dockwidgets/AxisDock.h"
 #include "frontend/dockwidgets/BarPlotDock.h"

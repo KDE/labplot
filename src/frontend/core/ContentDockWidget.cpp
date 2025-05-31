@@ -8,8 +8,8 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "frontend/core/ContentDockWidget.h"
 #include "backend/core/AbstractPart.h"
+#include "frontend/core/ContentDockWidget.h"
 
 #include <QUuid>
 

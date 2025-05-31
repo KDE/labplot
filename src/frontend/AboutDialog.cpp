@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2020-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
- SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "AboutDialog.h"
@@ -72,7 +72,7 @@
 	\class AboutDialog
 	\brief Custom about dialog (not used at the moment)
 
- \ingroup frontend
+	\ingroup frontend
 */
 //AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : QDialog(parent), aboutData(aboutData) {
 AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutApplicationDialog(aboutData, parent) {
@@ -83,12 +83,12 @@ AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutA
 	linkLabel->setOpenExternalLinks(true);
 	linkLabel->setText(text.replace(QLatin1Char('\n'), QStringLiteral("<br />")));
 
-		   // button to copy config
+	// button to copy config
 	auto* copyEnvButton = new QPushButton(i18n("Copy Environment"));
 	copyEnvButton->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
 	connect(copyEnvButton, &QPushButton::clicked, this, &AboutDialog::copyEnvironment);
 
-		   // button to copy citation
+	// button to copy citation
 	auto* copyCiteButton = new QPushButton(i18n("Copy Citation"));
 	copyCiteButton->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
 	connect(copyCiteButton, &QPushButton::clicked, this, &AboutDialog::copyCitation);
@@ -106,17 +106,17 @@ AboutDialog::AboutDialog(const KAboutData& aboutData, QWidget* parent) : KAboutA
 
 	((QVBoxLayout *)layout())->insertLayout(1, linkCopyLayout);
 
-		   // when deriving from QDialog
-		   //init();
+	// when deriving from QDialog
+	//init();
 
-		   // Find and hide the "Copy to Clipboard" button
+	// Find and hide the "Copy to Clipboard" button
 	auto buttons = findChildren<QPushButton *>();
 	for (auto* button : buttons) {
 		if (button->text() == i18n("Copy to Clipboard"))
 			button->hide();
 	}
 
-		   // restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
 	const auto conf = Settings::group(QStringLiteral("AboutDialog"));
 	if (conf.exists()) {

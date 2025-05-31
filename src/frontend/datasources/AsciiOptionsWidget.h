@@ -11,8 +11,8 @@
 #ifndef ASCIIOPTIONSWIDGET_H
 #define ASCIIOPTIONSWIDGET_H
 
-#include "backend/datasources/filters/AsciiFilter.h"
 #include "ui_asciioptionswidget.h"
+#include "backend/datasources/filters/AsciiFilter.h"
 
 class KConfig;
 
@@ -23,7 +23,7 @@ public:
 	explicit AsciiOptionsWidget(QWidget*, bool liveData = false);
 	void showAsciiHeaderOptions(bool headerLinevisible, bool columnNamesVisible);
 	void showTimestampOptions(bool);
-	void applyFilterSettings(AsciiFilter::Properties& properties) const;
+	void applyFilterSettings(AsciiFilter::Properties &properties) const;
 	void updateWidgets(const AsciiFilter::Properties& properties);
 	void setSeparatingCharacter(QLatin1Char);
 
