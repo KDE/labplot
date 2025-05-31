@@ -563,7 +563,7 @@ void ImportFileWidget::updateHeaderOptions() {
 	if (m_targetContainer)
 		spreadsheet = m_targetContainer->type() == AspectType::Spreadsheet;
 
-		   // handle ASCII
+	// handle ASCII
 	if (m_asciiOptionsWidget) {
 		const auto sourceType = currentSourceType();
 		bool headerLinevisible = (fileType == AbstractFileFilter::FileType::Ascii) && spreadsheet && sourceType == LiveDataSource::SourceType::FileOrPipe;
@@ -571,7 +571,7 @@ void ImportFileWidget::updateHeaderOptions() {
 		m_asciiOptionsWidget->showAsciiHeaderOptions(headerLinevisible, columnNamesVisible);
 	}
 
-		   // handle XLSX or ODS
+	// handle XLSX or ODS
 	bool headerLinevisible = (fileType == AbstractFileFilter::FileType::XLSX || fileType == AbstractFileFilter::FileType::Ods) && spreadsheet;
 	ui.lFirstRowAsColNames->setVisible(headerLinevisible);
 	ui.chbFirstRowAsColName->setVisible(headerLinevisible);
@@ -1611,7 +1611,7 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 
 		infoStrings << QStringLiteral("<u><b>") + fileName + QStringLiteral("</b></u><br>");
 
-	   // File type given by "file"
+		// File type given by "file"
 #ifdef Q_OS_LINUX
 		const QString fileFullPath = safeExecutableName(QStringLiteral("file"));
 		if (fileFullPath.isEmpty())
@@ -1809,7 +1809,7 @@ void ImportFileWidget::refreshPreview() {
 		filter->clearLastError();
 		filter->clearLastWarnings();
 
-			   // sequential
+		// sequential
 		if (!automaticAllowed(sourceType)) {
 			auto p = filter->properties();
 			filter->initialize(p);
@@ -1861,7 +1861,7 @@ void ImportFileWidget::refreshPreview() {
 				tcpSocket.disconnectFromHost();
 			} else {
 				DEBUG("failed to connect to TCP socket within " << timeoutTime_ms << "ms"
-																<< " - " << STDSTRING(tcpSocket.errorString()));
+				  << " - " << STDSTRING(tcpSocket.errorString()));
 				errorMessage = i18n("Socket operation timed out.");
 			}
 
@@ -2139,7 +2139,7 @@ void ImportFileWidget::refreshPreview() {
 				}
 			}
 
-				   // XLSX and Ods has special h/vheader, don't overwrite the preview table
+			// XLSX and Ods has special h/vheader, don't overwrite the preview table
 			if (fileType != AbstractFileFilter::FileType::XLSX && fileType != AbstractFileFilter::FileType::Ods) {
 				// set header if columnMode available
 				for (int i = 0; i < std::min(static_cast<qsizetype>(tmpTableWidget->columnCount()), columnModes.size()); ++i) {
@@ -2216,7 +2216,7 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 			//			break;
 		case AbstractFileFilter::FileType::FITS:
 #ifdef HAVE_FITS
-												 // TODO: check status (see HDF5)
+			// TODO: check status (see HDF5)
 			m_fitsOptionsWidget->updateContent(static_cast<FITSFilter*>(filter), fileName);
 #endif
 			break;
@@ -2253,7 +2253,7 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 			break;
 		case AbstractFileFilter::FileType::XLSX:
 #ifdef HAVE_QXLSX
-												 // TODO: check status (see HDF5)
+			// TODO: check status (see HDF5)
 			m_xlsxOptionsWidget->updateContent(static_cast<XLSXFilter*>(filter), fileName);
 #endif
 			break;
@@ -2785,7 +2785,7 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray& /*message*/, const 
 				}
 			}
 
-				// if not we simply add every level of the topic to the tree
+			// if not we simply add every level of the topic to the tree
 			if (topItemIdx < 0) {
 				auto* currentItem = new QTreeWidgetItem(name);
 				m_subscriptionWidget->addTopic(currentItem);
@@ -2925,7 +2925,7 @@ void ImportFileWidget::showMQTTConnectionManager() {
 		readMQTTConnections();
 		m_initialisingMQTT = false;
 
-			   // select the connection the user has selected in MQTTConnectionManager
+		// select the connection the user has selected in MQTTConnectionManager
 		const QString& conn = dlg->connection();
 
 		int index = ui.cbConnection->findText(conn);

@@ -2177,7 +2177,6 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry(QStringLiteral("ScalingFactor"), ui.sbScalingFactor->value());
 	group.writeEntry(QStringLiteral("ShowScaleOffset"), ui.chkShowScaleOffset->isChecked());
 
-
 	// BOOKMARK(axis title): Title
 	auto axisTitleGroup = config.group(QStringLiteral("AxisTitle"));
 	labelWidget->saveConfig(axisTitleGroup);
