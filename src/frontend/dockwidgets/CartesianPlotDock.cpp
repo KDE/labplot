@@ -72,26 +72,26 @@ protected:
 		case Dimension::Y:                                                                                                                                     \
 			treewidget = ui.twYRanges;                                                                                                                         \
 			break;                                                                                                                                             \
-	}                                                                                                                                                      \
-	if (rangeIndex < 0) {                                                                                                                                  \
-		for (int i = 0; i < treewidget->rowCount(); i++) {                                                                                                 \
-			auto obj = qobject_cast<castObject*>(treewidget->cellWidget(i, Column));                                                                       \
-			if (obj)                                                                                                                                       \
-				obj->function;                                                                                                                             \
-			else                                                                                                                                           \
-				DEBUG("ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " ( rangeIndex:" << rangeIndex                        \
-																	<< ", Column: " << Column                                                               \
-																	<< "). Wether the object does not exist or the cellWidget has differnt type");          \
-		}                                                                                                                                                  \
-	} else {                                                                                                                                               \
-		auto obj = qobject_cast<castObject*>(treewidget->cellWidget(rangeIndex, Column));                                                                  \
-		if (obj)                                                                                                                                           \
-			obj->function;                                                                                                                                 \
-		else                                                                                                                                               \
-			DEBUG("ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " (rangeIndex:" << rangeIndex << ", Column: " << Column   \
-															   << "). Wether the object does not exist or the cellWidget has differnt type");              \
-	}                                                                                                                                                      \
-}
+		}                                                                                                                                                      \
+		if (rangeIndex < 0) {                                                                                                                                  \
+			for (int i = 0; i < treewidget->rowCount(); i++) {                                                                                                 \
+				auto obj = qobject_cast<castObject*>(treewidget->cellWidget(i, Column));                                                                       \
+				if (obj)                                                                                                                                       \
+					obj->function;                                                                                                                             \
+				else                                                                                                                                           \
+					DEBUG("ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " ( rangeIndex:" << rangeIndex                        \
+																	   << ", Column: " << Column                                                               \
+																	   << "). Wether the object does not exist or the cellWidget has differnt type");          \
+			}                                                                                                                                                  \
+		} else {                                                                                                                                               \
+			auto obj = qobject_cast<castObject*>(treewidget->cellWidget(rangeIndex, Column));                                                                  \
+			if (obj)                                                                                                                                           \
+				obj->function;                                                                                                                                 \
+			else                                                                                                                                               \
+				DEBUG("ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " (rangeIndex:" << rangeIndex << ", Column: " << Column   \
+																   << "). Wether the object does not exist or the cellWidget has differnt type");              \
+		}                                                                                                                                                      \
+	}
 
 /*!
   \class CartesianPlotDock
@@ -1148,7 +1148,7 @@ void CartesianPlotDock::removeRange(const Dimension dim) {
 	}
 	QDEBUG(Q_FUNC_INFO << ", removing range " << currentRow)
 
-		   // check plot ranges using range to remove
+	// check plot ranges using range to remove
 	const int cSystemCount{m_plot->coordinateSystemCount()};
 	DEBUG(Q_FUNC_INFO << ", nr of cSystems = " << cSystemCount)
 	QString msg;

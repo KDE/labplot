@@ -142,7 +142,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #ifdef HAVE_MCAP
 		ui.cbFileType->addItem(i18n("MCAP Data"), static_cast<int>(AbstractFileFilter::FileType::MCAP));
 #endif
-	   // hide widgets relevant for live data reading only
+		// hide widgets relevant for live data reading only
 		ui.lRelativePath->hide();
 		ui.chbRelativePath->hide();
 		ui.lSourceType->hide();
@@ -207,7 +207,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	if (gridLayout)
 		gridLayout->addWidget(m_cbDBCFileName, 2, 2, 1, 3);
 
-		   // tooltips
+	// tooltips
 	QString info = i18n(
 		"Specify how the data source has to be processed on every read:"
 		"<ul>"
@@ -304,7 +304,7 @@ void ImportFileWidget::loadSettings() {
 	// read the source type first since settings in fileNameChanged() depend on this
 	ui.cbSourceType->setCurrentIndex(conf.readEntry("SourceType").toInt());
 
-		   // general settings
+	// general settings
 	auto fileType = static_cast<AbstractFileFilter::FileType>(conf.readEntry("Type", 0));
 	for (int i = 0; i < ui.cbFileType->count(); ++i) {
 		if (static_cast<AbstractFileFilter::FileType>(ui.cbFileType->itemData(i).toInt()) == fileType) {
@@ -344,7 +344,7 @@ void ImportFileWidget::loadSettings() {
 	ui.sbPreviewLines->setValue(conf.readEntry("PreviewLines", 100));
 	ui.chbFirstRowAsColName->setChecked(conf.readEntry("ExcelFirstLineAsColNames", false));
 
-		   // live data related settings
+	// live data related settings
 	ui.cbBaudRate->setCurrentIndex(conf.readEntry("BaudRate", 13)); // index for bautrate 19200b/s
 	ui.cbReadingType->setCurrentIndex(conf.readEntry("ReadingType", static_cast<int>(LiveDataSource::ReadingType::WholeFile)));
 	ui.cbSerialPort->setCurrentIndex(conf.readEntry("SerialPort").toInt());
@@ -480,7 +480,7 @@ ImportFileWidget::~ImportFileWidget() {
 	conf.writeEntry("mqttWillUse", static_cast<int>(m_willSettings.enabled));
 #endif
 
-		   // data type specific settings
+	// data type specific settings
 	if (m_asciiOptionsWidget)
 		m_asciiOptionsWidget->saveSettings();
 	if (m_binaryOptionsWidget)
@@ -603,14 +603,14 @@ QString ImportFileWidget::selectedObject() const {
 	DEBUG(Q_FUNC_INFO)
 	const QString& path = fileName();
 
-		   // determine the file name only
+	// determine the file name only
 	QString name = path.right(path.length() - path.lastIndexOf(QLatin1Char('/')) - 1);
 
-		   // strip away the extension if existing
+	// strip away the extension if existing
 	if (name.indexOf(QLatin1Char('.')) != -1)
 		name = name.left(name.lastIndexOf(QLatin1Char('.')));
 
-		   // for multi-dimensional formats add the currently selected object
+	// for multi-dimensional formats add the currently selected object
 	const auto format = currentFileType();
 	if (format == AbstractFileFilter::FileType::HDF5) {
 		const QStringList& names = m_hdf5OptionsWidget->selectedNames();

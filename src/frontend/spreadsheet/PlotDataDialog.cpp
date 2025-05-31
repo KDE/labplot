@@ -53,7 +53,7 @@ enum class PlotPlacement {
 	\brief Dialog for generating plots for the spreadsheet data.
 
 	\ingroup frontend
-*/
+ */
 PlotDataDialog::PlotDataDialog(AbstractAspect* parentAspect, Plot::PlotType type, QWidget* parent)
 	: QDialog(parent)
 	, ui(new Ui::PlotDataWidget())
@@ -317,8 +317,8 @@ void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, co
 		// show in the X-data combobox the first column having X as the plot designation
 		ui->cbXColumn->setCurrentIndex(ui->cbXColumn->findText(xColumnName));
 
-			   // for the remaining columns, show the names in the comboboxes for the Y-data
-			   // TODO: handle columns with error-designations
+		// for the remaining columns, show the names in the comboboxes for the Y-data
+		// TODO: handle columns with error-designations
 		int yColumnIndex = 1; // the index of the first Y-data comboBox in m_columnComboBoxes
 		for (const QString& name : columnNames) {
 			if (name != xColumnName) {
@@ -724,7 +724,7 @@ void PlotDataDialog::addSingleSourceColumnPlot(const Column* column, CartesianPl
 			histogram->setDataColumn(column);
 			plotArea->addChild(histogram);
 
-				   // set fit model category and type and initialize fit
+			// set fit model category and type and initialize fit
 			auto* fitCurve = new XYFitCurve(i18nc("Curve fitting", "Distribution Fit to '%1'", name));
 			fitCurve->setDataSourceType(XYAnalysisCurve::DataSourceType::Histogram);
 			fitCurve->setDataSourceHistogram(histogram);
@@ -813,7 +813,7 @@ void PlotDataDialog::adjustWorksheetSize(Worksheet* worksheet) const {
 		double height = Worksheet::convertFromSceneUnits(plot->rect().height(), Worksheet::Unit::Centimeter);
 		if (height < 4.) {
 			double newHeight = worksheet->layoutTopMargin() + worksheet->layoutBottomMargin() + (count - 1) * worksheet->layoutHorizontalSpacing()
-			+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
+				+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
 			QRectF newRect = worksheet->pageRect();
 			newRect.setHeight(round(newHeight));
 			worksheet->setPageRect(newRect);
@@ -825,7 +825,7 @@ void PlotDataDialog::adjustWorksheetSize(Worksheet* worksheet) const {
 		double width = Worksheet::convertFromSceneUnits(plot->rect().width(), Worksheet::Unit::Centimeter);
 		if (width < 4.) {
 			double newWidth = worksheet->layoutLeftMargin() + worksheet->layoutRightMargin() + (count - 1) * worksheet->layoutVerticalSpacing()
-			+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
+				+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
 			QRectF newRect = worksheet->pageRect();
 			newRect.setWidth(round(newWidth));
 			worksheet->setPageRect(newRect);
@@ -840,11 +840,11 @@ void PlotDataDialog::adjustWorksheetSize(Worksheet* worksheet) const {
 			QRectF newRect = worksheet->pageRect();
 			if (height < 4.) {
 				double newHeight = worksheet->layoutTopMargin() + worksheet->layoutBottomMargin() + (count - 1) * worksheet->layoutHorizontalSpacing()
-				+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
+					+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
 				newRect.setHeight(round(newHeight));
 			} else {
 				double newWidth = worksheet->layoutLeftMargin() + worksheet->layoutRightMargin() + (count - 1) * worksheet->layoutVerticalSpacing()
-				+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
+					+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
 				newRect.setWidth(round(newWidth));
 			}
 			worksheet->setPageRect(newRect);

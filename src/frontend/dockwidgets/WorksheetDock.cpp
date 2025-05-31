@@ -265,10 +265,10 @@ void WorksheetDock::retranslateUi() {
 	ui.cbSizeType->addItem(i18n("Custom"), (int)SizeType::Custom);
 
 	const QVector<QPageSize::PageSizeId> pageSizeIds = {
-														QPageSize::A0,	  QPageSize::A1,	 QPageSize::A2,	   QPageSize::A3,	  QPageSize::A4,	  QPageSize::A5,	 QPageSize::A6,	 QPageSize::A7,
-														QPageSize::A8,	  QPageSize::A9,	 QPageSize::B0,	   QPageSize::B1,	  QPageSize::B2,	  QPageSize::B3,	 QPageSize::B4,	 QPageSize::B5,
-														QPageSize::B6,	  QPageSize::B7,	 QPageSize::B8,	   QPageSize::B9,	  QPageSize::B10,	  QPageSize::C5E,	 QPageSize::DLE, QPageSize::Executive,
-														QPageSize::Folio, QPageSize::Ledger, QPageSize::Legal, QPageSize::Letter, QPageSize::Tabloid, QPageSize::Comm10E};
+		QPageSize::A0,	  QPageSize::A1,	 QPageSize::A2,	   QPageSize::A3,	  QPageSize::A4,	  QPageSize::A5,	 QPageSize::A6,	 QPageSize::A7,
+		QPageSize::A8,	  QPageSize::A9,	 QPageSize::B0,	   QPageSize::B1,	  QPageSize::B2,	  QPageSize::B3,	 QPageSize::B4,	 QPageSize::B5,
+		QPageSize::B6,	  QPageSize::B7,	 QPageSize::B8,	   QPageSize::B9,	  QPageSize::B10,	  QPageSize::C5E,	 QPageSize::DLE, QPageSize::Executive,
+		QPageSize::Folio, QPageSize::Ledger, QPageSize::Legal, QPageSize::Letter, QPageSize::Tabloid, QPageSize::Comm10E};
 	ui.cbPage->clear();
 	for (auto id : pageSizeIds)
 		ui.cbPage->addItem(QPageSize::name(id), id);

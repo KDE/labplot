@@ -45,7 +45,7 @@
 	\brief Dialog for importing data from a file. Embeds \c ImportFileWidget and provides the standard buttons.
 
 	\ingroup frontend
-*/
+ */
 
 ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const QString& fileName)
 	: ImportDialog(parent)

@@ -567,12 +567,12 @@ void AxisDock::updateLabelsPosition(Axis::LabelsPosition position) {
 void AxisDock::colorChanged(const QColor& color) {
 	CONDITIONAL_LOCK_RETURN;
 
-		   // Set colors of all other ui elements
-		   // - Line widget color
-		   // - Title color
-		   // - Major tick color
-		   // - Minor tick color
-		   // - Tick label color
+	// Set colors of all other ui elements
+	// - Line widget color
+	// - Title color
+	// - Major tick color
+	// - Minor tick color
+	// - Tick label color
 
 	const int axesCount = m_axesList.count();
 	if (axesCount == 1)
