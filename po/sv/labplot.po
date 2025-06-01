@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-05-29 00:38+0000\n"
-"PO-Revision-Date: 2025-04-17 12:42+0200\n"
+"PO-Revision-Date: 2025-05-31 15:08+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Lokalize 25.04.1\n"
 
 #: src/backend/core/AbstractAspect.cpp:234
 #, kde-format
@@ -7250,32 +7250,29 @@ msgid "Tricube"
 msgstr "Trikubisk"
 
 #: src/backend/script/Script.cpp:117 src/backend/script/Script.cpp:325
-#, fuzzy, kde-format
-#| msgid "no matrix element found"
+#, kde-format
 msgid "no script element found"
-msgstr "inget matriselement hittades"
+msgstr "inget skriptelement hittades"
 
 #: src/backend/script/Script.cpp:186
 #, kde-format
 msgid "%1: run %2 script"
-msgstr ""
+msgstr "%1: kör skript %2"
 
 #: src/backend/script/Script.cpp:305 src/backend/script/Script.cpp:310
-#, fuzzy, kde-format
-#| msgid "&Script"
+#, kde-format
 msgid "Script"
-msgstr "&Skript"
+msgstr "Skript"
 
 #: src/backend/script/Script.cpp:305
-#, fuzzy, kde-format
-#| msgid "Failed to open the file."
+#, kde-format
 msgid "Failed to run the script."
-msgstr "Misslyckades öppna filen."
+msgstr "Misslyckades köra skriptet."
 
 #: src/backend/script/Script.cpp:310
 #, kde-format
 msgid "A script is already running."
-msgstr ""
+msgstr "Ett skript kör redan."
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:344
 #, kde-format
@@ -7288,16 +7285,14 @@ msgid "%1: mask rows with missing values"
 msgstr "%1: maska rader med saknade värden"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:420
-#, fuzzy, kde-format
-#| msgid "%1: change comment"
+#, kde-format
 msgid "%1: toggle comments header"
-msgstr "%1: ändra kommentar"
+msgstr "%1: ändra huvud för kommentarer"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:428
-#, fuzzy, kde-format
-#| msgid "Unable to parse header"
+#, kde-format
 msgid "%1: toggle sparklines header"
-msgstr "Kan inte tolka huvud"
+msgstr "%1: ändra huvud för små linjediagram"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:492
 #: src/backend/spreadsheet/Spreadsheet.cpp:493
@@ -8436,16 +8431,14 @@ msgstr "Referensintervall"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:555
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2270
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2292
-#, fuzzy, kde-format
-#| msgid "As Plot Area"
+#, kde-format
 msgid "Inset Plot Area"
-msgstr "Som diagramområde"
+msgstr "Infogat diagramområde"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
-#, fuzzy, kde-format
-#| msgid "One Plot Area per Plot"
+#, kde-format
 msgid "Inset Plot Area with Data"
-msgstr "Ett diagramområde per diagram"
+msgstr "Infogat diagramområde med data"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:574
 #: src/frontend/ActionsManager.cpp:848
@@ -8859,16 +8852,14 @@ msgid "Text Label"
 msgstr "Textbeteckning"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2269
-#, fuzzy, kde-format
-#| msgid "%1: add new point"
+#, kde-format
 msgid "%1: add inset plot"
-msgstr "%1: lägg till ny punkt"
+msgstr "%1: lägg till infogat diagram"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2283
-#, fuzzy, kde-format
-#| msgid "%1: add new point"
+#, kde-format
 msgid "%1: add inset plot with data"
-msgstr "%1: lägg till ny punkt"
+msgstr "%1: lägg till infogat diagram med data"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4021
 #, kde-format
@@ -10319,7 +10310,7 @@ msgstr "saknas"
 #: src/frontend/AboutDialog.cpp:216
 #, kde-format
 msgid "Python scripting support"
-msgstr ""
+msgstr "Stöd för Python-skript"
 
 #: src/frontend/AboutDialog.cpp:222
 #, kde-format
@@ -10539,10 +10530,9 @@ msgid "Creates a new worksheet for data plotting"
 msgstr "Skapar ett nytt kalkylark för datauppritning"
 
 #: src/frontend/ActionsManager.cpp:217
-#, fuzzy, kde-format
-#| msgid "Creates a new %1 notebook"
+#, kde-format
 msgid "Creates a new %1 script"
-msgstr "Skapar ett nytt %1 anteckningsblock"
+msgstr "Skapar ett nytt %1-skript"
 
 #: src/frontend/ActionsManager.cpp:224 src/frontend/MainWin.cpp:1273
 #, kde-format
@@ -10750,11 +10740,10 @@ msgstr ""
 "systemen eller aktivera nya"
 
 #: src/frontend/ActionsManager.cpp:505
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgctxt "@action"
 msgid "New Plot Area"
-msgstr "Diagramområde"
+msgstr "Nytt diagramområde"
 
 #: src/frontend/ActionsManager.cpp:521
 #: src/frontend/dockwidgets/WorksheetDock.cpp:281
@@ -10806,22 +10795,19 @@ msgid "Select and Zoom"
 msgstr "Markera och zooma"
 
 #: src/frontend/ActionsManager.cpp:560 src/frontend/ActionsManager.cpp:796
-#, fuzzy, kde-format
-#| msgid "Zoom"
+#, kde-format
 msgctxt "@action"
 msgid "Zoom"
 msgstr "Zooma"
 
 #: src/frontend/ActionsManager.cpp:566 src/frontend/ActionsManager.cpp:802
-#, fuzzy, kde-format
-#| msgid "Magnification"
+#, kde-format
 msgctxt "@action"
 msgid "Magnification"
 msgstr "Förstoring"
 
 #: src/frontend/ActionsManager.cpp:579
-#, fuzzy, kde-format
-#| msgid "Add New"
+#, kde-format
 msgctxt "@action"
 msgid "Add New"
 msgstr "Lägg till ny"
@@ -11293,10 +11279,9 @@ msgstr ""
 "Alla tillgängliga referenspunkter kommer att tas bort. Vill du fortsätta?"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:688
-#, fuzzy, kde-format
-#| msgid "%1: change position of selected DatapickerPoints."
+#, kde-format
 msgid "%1: change position of selected points"
-msgstr "%1: ändra position för markerade dataväljarpunkter."
+msgstr "%1: ändra position för markerade punkter"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:737
 #, kde-format
@@ -13129,6 +13114,9 @@ msgid ""
 "ticks for nice looking values. The number of ticks might be different than "
 "the number previously set."
 msgstr ""
+"Om aktiverad: Använd huvudgraderingens nummer som bas för att bestämma det "
+"nya antalet graderingar för snygga värden. Antalet graderingar kan skilja "
+"sig från det tidigare inställda antalet."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:262
 #, kde-format
@@ -14657,30 +14645,28 @@ msgstr "Antal toppar:"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1195
 #, kde-format
 msgid "LabPlot Function Definition (*.lfd *.LFD)"
-msgstr ""
+msgstr "LabPlot funktionsdefinition (*.lfd *.LFD)"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1200
-#, fuzzy, kde-format
-#| msgid "Select predefined function"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select file to load function definition"
-msgstr "Välj fördefinierad funktion"
+msgstr "Välj fil för att läsa in funktionsdefinition"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1216
 #, kde-format
 msgid "Select file to save function definition"
-msgstr ""
+msgstr "Välj fil för att spara funktionsdefinition"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1232
 #, kde-format
 msgid "LabPlot Function Definition"
-msgstr ""
+msgstr "LabPlot funktionsdefinition"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1236
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgid "Description:"
-msgstr "Beskrivning"
+msgstr "Beskrivning:"
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
@@ -15178,12 +15164,10 @@ msgid "Properties: Workbook"
 msgstr "Egenskaper: Arbetsbok"
 
 #: src/frontend/GuiObserver.cpp:513
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Fit"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Script"
-msgstr "Egenskaper: Anpassa"
+msgstr "Egenskaper: Skript"
 
 #: src/frontend/GuiTools.cpp:70 src/frontend/GuiTools.cpp:96
 #, kde-format
@@ -15529,12 +15513,10 @@ msgid "Fábián Kristóf-Szabolcs"
 msgstr "Fábián Kristóf-Szabolcs"
 
 #: src/frontend/LabPlot.cpp:91
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Open FITS File"
+#, kde-format
 msgctxt "@info:credit"
 msgid "FITS Filter"
-msgstr "Öppna FITS-fil"
+msgstr "FITS-filter"
 
 #: src/frontend/LabPlot.cpp:92
 #, kde-format
@@ -15619,10 +15601,9 @@ msgstr "Verktygsrad för anteckningsblock"
 
 #. i18n: ectx: ToolBar (script_toolbar)
 #: src/frontend/labplotui.rc:90
-#, fuzzy, kde-format
-#| msgid "Project Toolbar"
+#, kde-format
 msgid "Script Toolbar"
-msgstr "Verktygsrad för projekt"
+msgstr "Verktygsrad för skript"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/frontend/labplotui.rc:97
@@ -15885,10 +15866,9 @@ msgid "%1"
 msgstr "%1"
 
 #: src/frontend/MainWin.cpp:1918
-#, fuzzy, kde-format
-#| msgid "Running Kaggle CLI tool failed"
+#, kde-format
 msgid "Kaggle CLI tool not found"
-msgstr "Misslyckades köra kommandoradsverktyget i Kaggle"
+msgstr "Kommandoradsverktyget i Kaggle hittades inte"
 
 #: src/frontend/MainWin.cpp:1919
 #, kde-format
@@ -15896,6 +15876,8 @@ msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
 "again."
 msgstr ""
+"Ange sökvägen till kommandoradsverktyget i Kaggle i programinställningarna "
+"och försök igen."
 
 #: src/frontend/MainWin.cpp:1985
 #, kde-format
@@ -16586,10 +16568,9 @@ msgid "User Feedback"
 msgstr "Användaråterkoppling"
 
 #: src/frontend/SettingsDialog.cpp:101
-#, fuzzy, kde-format
-#| msgid "Text position"
+#, kde-format
 msgid "Text Editor"
-msgstr "Textplacering"
+msgstr "Texteditor"
 
 #: src/frontend/SettingsDialog.cpp:159
 #, kde-format
@@ -22152,29 +22133,27 @@ msgstr "Centerlinje"
 
 #. i18n: ectx: property (text), widget (QLabel, lOutputFont)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:33
-#, fuzzy, kde-format
-#| msgid "Output:"
+#, kde-format
 msgid "Output Font:"
-msgstr "Utdata:"
+msgstr "Utmatningsteckensnitt:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEditorFont)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:40
 #, kde-format
 msgid "Editor Font:"
-msgstr ""
+msgstr "Editorns teckensnitt:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRuntime)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:99
 #, kde-format
 msgid "Runtime:"
-msgstr ""
+msgstr "Körtidsprogram:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTheme)
 #: src/frontend/ui/dockwidgets/scriptdock.ui:141
-#, fuzzy, kde-format
-#| msgid "Theme:"
+#, kde-format
 msgid "Editor Theme:"
-msgstr "Tema:"
+msgstr "Editorns tema:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
@@ -24943,12 +24922,7 @@ msgid "Bounding Box"
 msgstr "Omgivande ruta"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:89
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specifies the area to export:<ul><li>Bounding Box - the bounding box of "
-#| "all objects on the worksheet is exported</li><li>Selection - the area of "
-#| "the currently selected objects is exported</li><li>Worskheet - the "
-#| "complete worksheet area is exported</li></ul>"
+#, kde-format
 msgid ""
 "Specifies the area to export:<ul><li>Bounding Box - the bounding box of all "
 "objects on the worksheet is exported</li><li>Selection - the area of the "
