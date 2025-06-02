@@ -350,7 +350,7 @@ void SpreadsheetView::initActions() {
 	action_clear_columns = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clear Content"), this);
 	action_freeze_columns = new QAction(i18n("Freeze Column"), this);
 
-	action_do_hypothesis_test = new QAction(i18n("One Sample T-Test"), this);
+	action_do_hypothesis_test = new QAction(i18n("Statistical Test"), this);
 
 	// TODO: action collection?
 	action_set_as_none = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::NoDesignation, false), this);
@@ -944,8 +944,8 @@ void SpreadsheetView::connectActions() {
 	connect(addDistributionFitActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotDataDistributionFit);
 
 	connect(action_do_hypothesis_test, &QAction::triggered, this, [=] {
-		auto* test = new HypothesisTest(i18n("One Sample T-Test for %1", m_spreadsheet->name()));
-		test->setDataSourceSpreadsheet(m_spreadsheet);
+		auto* test = new HypothesisTest(i18n("Statistical Test for %1", m_spreadsheet->name()));
+		// TODO: set column
 		m_spreadsheet->parentAspect()->addChild(test);
 	});
 }

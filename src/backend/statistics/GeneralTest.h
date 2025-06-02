@@ -1,28 +1,14 @@
-/***************************************************************************
+/*
 	File                 : GeneralTest.h
 	Project              : LabPlot
-	Description          : Performing hypothesis tests on provided data
+	Description          : Base class for statistical tests
 	--------------------------------------------------------------------
-	Copyright            : (C) 2019 Devanshu Agarwal
-						   (agarwaldevanshu8@gmail.com)
-	Copyright            : (C) 2025 Kuntal Bar
-						   (barkuntal6@gmail.com)
+	SPDX-FileCopyrightText: 2019 Devanshu Agarwal <agarwaldevanshu8@gmail.com>
+	SPDX-FileCopyrightText: 2025 Kuntal Bar <barkuntal6@gmail.com>
+	SPDX-FileCopyrightText: 2025 Alexander Semke <alexander.semke@web.de>
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor,
-Boston, MA  02110-1301  USA
-***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef GENERALTEST_H
 #define GENERALTEST_H
@@ -31,16 +17,15 @@ Boston, MA  02110-1301  USA
 #include "frontend/statistics/GeneralTestView.h"
 
 #include <QAbstractItemModel>
-#include <QLabel>
 #include <QString>
 #include <QStringList>
-#include <QVBoxLayout>
 #include <QVariant>
 #include <QVector>
 
 class Spreadsheet;
 class Column;
 class TableModel;
+class QVBoxLayout;
 
 #define RESULT_LINES_COUNT 10
 
@@ -71,14 +56,8 @@ public:
 
 	enum GeneralErrorType { ErrorUnqualSize, ErrorEmptyColumn, NoError };
 
-	// Data source management.
-	void setDataSourceSpreadsheet(Spreadsheet* spreadsheet);
-	Spreadsheet* getDataSourceSpreadsheet() const;
-
 	// Column selection methods.
-	void setColumns(const QVector<Column*>& cols);
-	void setColumns(const QStringList& cols);
-	QStringList getAllColumns() const;
+	void setColumns(const QVector<Column*>&);
 
 	// Getters for test properties.
 	QString getTestName() const;
@@ -103,12 +82,9 @@ public Q_SLOTS:
 Q_SIGNALS:
 	void changed();
 	void requestProjectContextMenu(QMenu*);
-	void dataSourceSpreadsheetChanged(Spreadsheet*);
 
 protected:
-	Spreadsheet* m_dataSourceSpreadsheet{nullptr};
 	QVector<Column*> m_columns;
-	QStringList m_allColumnNames;
 
 	QString m_currentTestName;
 	QString m_statsTable;

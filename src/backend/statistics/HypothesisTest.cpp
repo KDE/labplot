@@ -1,23 +1,20 @@
 /***************************************************************************
 	File                 : HypothesisTest.cpp
 	Project              : LabPlot
-	Description          : Hypothesis Test – One Sample T-Test
+	Description          : Hypothesis Test
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019  Devanshu Agarwal
-	SPDX-FileCopyrightText: 2023  Alexander Semke
-	SPDX-FileCopyrightText: 2025  Kuntal Bar
+	SPDX-FileCopyrightText: 2019 Devanshu Agarwal <agarwaldevanshu8@gmail.com>
+	SPDX-FileCopyrightText: 2023-205 Alexander Semke >alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025 Kuntal Bar <barkuntal6@gmail.com>
 
- SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 ***************************************************************************/
 
 #include "HypothesisTest.h"
 #include "HtmlTableBuilder.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
-#include <QLabel>
-#include <QList>
-#include <QString>
-#include <QVector>
+
 #include <cmath>
 #include <gsl/gsl_cdf.h>
 

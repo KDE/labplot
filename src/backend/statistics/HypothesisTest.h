@@ -1,11 +1,12 @@
 /***************************************************************************
-	File                 : HypothesisTest.h
+	File                 : HypothesisTest.cpp
 	Project              : LabPlot
-	Description          : Hypothesis Test – One Sample T-Test
+	Description          : Hypothesis Test
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019  Devanshu Agarwal (agarwaldevanshu8@gmail.com)
-	SPDX-FileCopyrightText: 2023  Alexander Semke (alexander.semke@web.de)
-	SPDX-FileCopyrightText: 2025  Kuntal Bar (barkuntal6@gmail.com)
+	SPDX-FileCopyrightText: 2019 Devanshu Agarwal <agarwaldevanshu8@gmail.com>
+	SPDX-FileCopyrightText: 2023-205 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025 Kuntal Bar <barkuntal6@gmail.com>
+
 	SPDX-License-Identifier: GPL-2.0-or-later
 ***************************************************************************/
 
@@ -13,7 +14,6 @@
 #define HYPOTHESISTEST_H
 
 #include "GeneralTest.h"
-#include <QVector>
 
 /*!
  * \brief The HypothesisTest class implements a one-sample t-test.
@@ -24,6 +24,9 @@ class HypothesisTest : public GeneralTest {
 public:
 	explicit HypothesisTest(const QString& name);
 	~HypothesisTest() override;
+
+	enum class Test {t_test_one_sample, t_test_two_sample, t_test_paired, one_way_anova, mann_whitney_u_test, kruskal_wallis_test, log_rank_test};
+
 	enum NullHypothesisType {
 		NullEquality, // H0: μ = μ₀
 		NullLessEqual, // H0: μ ≤ μ₀

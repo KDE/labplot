@@ -1,28 +1,14 @@
-/***************************************************************************
+/*
 	File                 : GeneralTest.cpp
 	Project              : LabPlot
-	Description          : Performing hypothesis tests on provided data
+	Description          : Base class for statistical tests
 	--------------------------------------------------------------------
-	Copyright            : (C) 2019 Devanshu Agarwal
-						   (agarwaldevanshu8@gmail.com)
-	Copyright            : (C) 2025 Kuntal Bar
-						   (barkuntal6@gmail.com)
+	SPDX-FileCopyrightText: 2019 Devanshu Agarwal (agarwaldevanshu8@gmail.com)
+	SPDX-FileCopyrightText: 2025 Kuntal Bar (barkuntal6@gmail.com)
+	SPDX-FileCopyrightText: 2025 Alexander Semke <alexander.semke@web.de>
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor,
-Boston, MA  02110-1301  USA
-***************************************************************************/
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "GeneralTest.h"
 #include "backend/core/column/Column.h"
@@ -60,18 +46,6 @@ GeneralTest::~GeneralTest() {
 	// No additional cleanup required.
 }
 
-void GeneralTest::setDataSourceSpreadsheet(Spreadsheet* spreadsheet) {
-	m_dataSourceSpreadsheet = spreadsheet;
-	m_allColumnNames.clear();
-	for (auto* col : m_dataSourceSpreadsheet->children<Column>()) {
-		m_allColumnNames << col->name();
-	}
-}
-
-Spreadsheet* GeneralTest::getDataSourceSpreadsheet() const {
-	return m_dataSourceSpreadsheet;
-}
-
 QString GeneralTest::getTestName() const {
 	return m_currentTestName;
 }
@@ -86,25 +60,6 @@ QVBoxLayout* GeneralTest::getSummaryLayout() const {
 
 QAbstractItemModel* GeneralTest::getInputStatsTableModel() const {
 	return m_inputStatsTableModel;
-}
-
-void GeneralTest::setColumns(const QStringList& cols) {
-	m_columns.clear();
-	// For each non-empty column name, obtain the column pointer.
-	for (const QString& colName : cols) {
-		if (!colName.isEmpty()) {
-			Column* col = m_dataSourceSpreadsheet->column(colName);
-			if (col)
-				m_columns.append(col);
-		}
-	}
-}
-
-QStringList GeneralTest::getAllColumns() const {
-	QStringList allColumns;
-	for (auto* col : m_dataSourceSpreadsheet->children<Column>())
-		allColumns << col->name();
-	return allColumns;
 }
 
 void GeneralTest::setColumns(const QVector<Column*>& cols) {
