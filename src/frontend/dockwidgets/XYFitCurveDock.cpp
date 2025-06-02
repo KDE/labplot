@@ -1215,7 +1215,6 @@ void XYFitCurveDock::loadFunction() {
 	}
 	if (!comment.isEmpty())
 		uiGeneralTab.cbModel->setToolTip(comment);
-		//uiGeneralTab.teEquation->setToolTip(comment);
 }
 
 void XYFitCurveDock::saveFunction() {
@@ -1242,9 +1241,9 @@ void XYFitCurveDock::saveFunction() {
 
 	// custom widgets
 	auto* lDescription = new QLabel(i18n("Description:"));
-	auto* leDescription = new KLineEdit();
+	auto* leDescription = new KLineEdit(uiGeneralTab.cbModel->currentText());
 	auto* lComment = new QLabel(i18n("Comment:"));
-	auto* leComment = new KLineEdit();
+	auto* leComment = new KLineEdit(uiGeneralTab.cbModel->toolTip());
 
 	fileWidget->okButton()->show();
 	fileWidget->cancelButton()->show();
@@ -1300,12 +1299,18 @@ void XYFitCurveDock::saveFunction() {
 		// FORMAT: LFD - LabPlot Function Definition
 		KConfig config(fileName);	// selected lfd file
 		auto group = config.group(QLatin1String("General"));
+		auto description = leDescription->text();
+		auto comment = leComment->text();
 		group.writeEntry("Function", m_fitData.model);	// model function
-		group.writeEntry("Description", leDescription->text());
-		group.writeEntry("Comment", leComment->text());
+		group.writeEntry("Description", description);
+		group.writeEntry("Comment", comment);
 		config.sync();
 		QDEBUG(Q_FUNC_INFO << ", saved function to" << fileName)
-		//TODO: set Description and comment in Dock when saving?
+
+		// set description and comment in Dock (even when empty)
+		uiGeneralTab.cbModel->clear();
+		uiGeneralTab.cbModel->addItem(description);
+		uiGeneralTab.cbModel->setToolTip(comment);
 	}
 }
 
