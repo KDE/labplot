@@ -1242,7 +1242,25 @@ void XYFitCurveDock::saveFunction() {
 	fileWidget->cancelButton()->show();
 	QObject::connect(fileWidget->okButton(), &QPushButton::clicked, &dialog, &QDialog::accept);
 	QObject::connect(fileWidget->cancelButton(), &QPushButton::clicked, &dialog, &QDialog::reject);
-	//TODO: update leDescription,leComment when selection changes
+
+	// update description and comment when selection changes
+	connect(fileWidget, &KFileWidget::fileHighlighted, this, [=]() {
+		QString fileName = fileWidget->locationEdit()->currentText();
+		auto currentDir = fileWidget->baseUrl().toLocalFile();
+		fileName.prepend(currentDir);
+		QDEBUG(Q_FUNC_INFO << ", file selected:" << fileName)
+		if (QFile::exists(fileName)) {
+
+			KConfig config(fileName);
+			auto group = config.group(QLatin1String("General"));
+			const QString& description = group.readEntry(QLatin1String("Description"), "");
+			const QString& comment = group.readEntry(QLatin1String("Comment"), "");
+			if (!description.isEmpty())
+				leDescription->setText(description);
+			if (!comment.isEmpty())
+				leComment->setText(comment);
+		}
+	});
 
 	layout->addWidget(fileWidget);
 	auto* grid = new QGridLayout;
@@ -1258,7 +1276,7 @@ void XYFitCurveDock::saveFunction() {
 
 		QString fileName = fileWidget->selectedFile();
 		if (fileName.isEmpty()) {	// if entered directly and not selected (also happens when selected!)
-			DEBUG(Q_FUNC_INFO << ", no file selected")
+			// DEBUG(Q_FUNC_INFO << ", no file selected")
 			fileName = fileWidget->locationEdit()->currentText();
 			auto* cbExtension = fileWidget->findChild<QCheckBox*>();
 			if (cbExtension) {
@@ -1273,12 +1291,12 @@ void XYFitCurveDock::saveFunction() {
 		// save current model (with description and comment)
 		// FORMAT: LFD - LabPlot Function Definition
 		KConfig config(fileName);	// selected lfd file
-		KConfigGroup group = config.group(QLatin1String("General"));
+		auto group = config.group(QLatin1String("General"));
 		group.writeEntry("Function", m_fitData.model);	// model function
 		group.writeEntry("Description", leDescription->text());
 		group.writeEntry("Comment", leComment->text());
 		config.sync();
-		DEBUG(Q_FUNC_INFO << ", saved function to \"" << fileName.toStdString() << "\"")
+		QDEBUG(Q_FUNC_INFO << ", saved function to" << fileName)
 	}
 }
 
