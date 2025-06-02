@@ -2642,8 +2642,12 @@ void SpreadsheetView::insertColumnsLeft() {
  * private helper function doing the actual insertion of columns to the left
  */
 void SpreadsheetView::insertColumnsLeft(int count) {
-	const int first = firstSelectedColumn();
-	m_spreadsheet->insertColumns(first, count);
+	int first = firstSelectedColumn();
+
+	if (first < 0) // its possible that there is no selected column or the spreadsheet is empty so a negative number is returned
+		first = 0; // in both cases, we set first to 0 and insert at the beginning
+
+	m_spreadsheet->insertColumns(first, count); // insert count columns before first
 }
 
 /*!
@@ -2675,75 +2679,19 @@ void SpreadsheetView::insertColumnsRight() {
 /*!
  * private helper function doing the actual insertion of columns to the right
  */
-// TODO: check whether this function can be rewritten to use Spreadsheet::insertColumns()
 void SpreadsheetView::insertColumnsRight(int count) {
-	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18np("%1: insert empty column", "%1: insert empty columns", m_spreadsheet->name(), count));
-
-	const int last = lastSelectedColumn();
+	int last = lastSelectedColumn();
 	const int cols = m_spreadsheet->columnCount();
-	if (last >= 0) {
-		if (last < m_spreadsheet->columnCount() - 1) {
-			// determine the column next to the last selected column
-			Column* nextCol = m_spreadsheet->child<Column>(last + 1);
 
-			for (int i = 0; i < count; ++i) {
-				Column* newCol = new Column(QString::number(cols + i + 1), AbstractColumn::ColumnMode::Double);
-				newCol->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
-				newCol->insertRows(0, m_spreadsheet->rowCount());
-
-				// insert the new column before the column next to the last selected column
-				m_spreadsheet->insertChildBefore(newCol, nextCol);
-			}
-		} else {
-			for (int i = 0; i < count; ++i) {
-				Column* newCol = new Column(QString::number(cols + i + 1), AbstractColumn::ColumnMode::Double);
-				newCol->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
-				newCol->insertRows(0, m_spreadsheet->rowCount());
-
-				// last column selected, no next column available -> add/append a new column
-				if (!m_spreadsheet->statisticsSpreadsheet())
-					m_spreadsheet->addChild(newCol);
-				else
-					m_spreadsheet->insertChildBefore(newCol, m_spreadsheet->statisticsSpreadsheet());
-			}
+	if (last < 0) // its possible that there is no selected column or the spreadsheet is empty so a negative number is returned
+		if (cols == 0) // the spreadsheet is empty 
+			last = -1; // so we insert at the beginning. default is -1 because of the last + 1 below
+		else { // there is no selected column
+			m_spreadsheet->appendColumns(count); // so we append to the spreadsheet
+			return;
 		}
-	} else {
-		if (m_spreadsheet->columnCount() > 0) {
-			for (int i = 0; i < count; ++i) {
-				Column* newCol = new Column(QString::number(cols + i + 1), AbstractColumn::ColumnMode::Double);
-				newCol->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
-				newCol->insertRows(0, m_spreadsheet->rowCount());
 
-				// columns available but no columns selected -> append the new column at the very end
-				if (!m_spreadsheet->statisticsSpreadsheet())
-					m_spreadsheet->addChild(newCol);
-				else
-					m_spreadsheet->insertChildBefore(newCol, m_spreadsheet->statisticsSpreadsheet());
-			}
-		} else {
-			// no columns available anymore -> resize the spreadsheet and the new column to the default size
-			KConfigGroup group = Settings::group(QStringLiteral("Spreadsheet"));
-			const int rows = group.readEntry(QLatin1String("RowCount"), 100);
-			m_spreadsheet->setRowCount(rows);
-
-			for (int i = 0; i < count; ++i) {
-				Column* newCol = new Column(QString::number(cols + i + 1), AbstractColumn::ColumnMode::Double);
-				(i == 0) ? newCol->setPlotDesignation(AbstractColumn::PlotDesignation::X) : newCol->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
-				newCol->insertRows(0, rows);
-
-				// add/append a new column
-				if (!m_spreadsheet->statisticsSpreadsheet())
-					m_spreadsheet->addChild(newCol);
-				else
-					m_spreadsheet->insertChildBefore(newCol, m_spreadsheet->statisticsSpreadsheet());
-			}
-		}
-	}
-	Q_EMIT m_spreadsheet->emitColumnCountChanged();
-
-	m_spreadsheet->endMacro();
-	RESET_CURSOR;
+	m_spreadsheet->insertColumns(last + 1, count); // insert count columns before last + 1 because it is same as after last
 }
 
 void SpreadsheetView::removeSelectedColumns() {
@@ -3407,14 +3355,11 @@ void SpreadsheetView::insertRowsAbove() {
  */
 void SpreadsheetView::insertRowsAbove(int count) {
 	int first = firstSelectedRow();
-	if (first < 0)
-		return;
 
-	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18np("%1: insert empty row", "%1: insert empty rows", m_spreadsheet->name(), count));
-	m_spreadsheet->insertRows(first, count);
-	m_spreadsheet->endMacro();
-	RESET_CURSOR;
+	if (first < 0) // its possible that there is no selected row or the spreadsheet is empty so a negative number is returned
+		first = 0; // in both cases insert rows at the beginning
+
+	m_spreadsheet->insertRows(first, count); // insert count rows before first
 }
 
 /*!
@@ -3446,19 +3391,17 @@ void SpreadsheetView::insertRowsBelow() {
  */
 void SpreadsheetView::insertRowsBelow(int count) {
 	int last = lastSelectedRow();
-	if (last < 0)
-		return;
+	const int rows = m_spreadsheet->rowCount();
 
-	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18np("%1: insert empty row", "%1: insert empty rows", m_spreadsheet->name(), count));
+	if (last < 0) // its possible that there is no selected row or the spreadsheet is empty so a negative number is returned
+		if (rows == 0) // the spreadsheet is empty 
+			last = -1; // insert rows at the beginning. we use -1 because of last + 1 below
+		else { // there is no selected row
+			m_spreadsheet->appendRows(count); // append rows at the end
+			return;
+		}
 
-	if (last < m_spreadsheet->rowCount() - 1)
-		m_spreadsheet->insertRows(last + 1, count); // insert before the next to the last selected row
-	else
-		m_spreadsheet->appendRows(count); // append new rows at the end
-
-	m_spreadsheet->endMacro();
-	RESET_CURSOR;
+	m_spreadsheet->insertRows(last + 1, count); // insert count rows before last + 1 because it is same as after last
 }
 
 void SpreadsheetView::removeSelectedRows() {
