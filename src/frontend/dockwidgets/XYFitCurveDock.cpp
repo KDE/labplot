@@ -753,15 +753,15 @@ void XYFitCurveDock::categoryChanged(int index) {
 	if (m_fitData.modelCategory == (nsl_fit_model_category)index
 		|| (m_fitData.modelCategory == nsl_fit_model_custom && index == uiGeneralTab.cbCategory->count() - 1))
 		hasChanged = false;
-	DEBUG("HAS CHANGED: " << hasChanged)
+	DEBUG(Q_FUNC_INFO << ", has changed: " << hasChanged)
 
 	if (uiGeneralTab.cbCategory->currentIndex() == uiGeneralTab.cbCategory->count() - 1)
 		m_fitData.modelCategory = nsl_fit_model_custom;
 	else
 		m_fitData.modelCategory = (nsl_fit_model_category)index;
+	uiGeneralTab.lModel->setText(i18n("Model:"));
 	uiGeneralTab.cbModel->clear();
-	uiGeneralTab.cbModel->show();
-	uiGeneralTab.lModel->show();
+	uiGeneralTab.cbModel->setToolTip(QLatin1String(""));
 
 	// enable algorithm selection only for distributions
 	if (m_fitData.modelCategory == nsl_fit_model_distribution) {
@@ -816,13 +816,12 @@ void XYFitCurveDock::categoryChanged(int index) {
 		break;
 	}
 	case nsl_fit_model_custom:
-		uiGeneralTab.cbModel->addItem(i18n("Custom"));
-		uiGeneralTab.cbModel->hide();
-		uiGeneralTab.lModel->hide();
+		uiGeneralTab.lModel->setText(i18n("Description:"));
+		uiGeneralTab.cbModel->addItem(i18n("User defined model"));
 	}
 
 	if (hasChanged) {
-		DEBUG("HAS CHANGED! Resetting MODEL")
+		DEBUG(Q_FUNC_INFO << ", Resetting model")
 		// show the fit-model for the currently selected default (first) fit-model
 		uiGeneralTab.cbModel->setCurrentIndex(0);
 		uiGeneralTab.sbDegree->setValue(1);
@@ -858,8 +857,6 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
 		custom = true;
 	uiGeneralTab.teEquation->setReadOnly(!custom);
-	uiGeneralTab.lModel->setVisible(!custom);
-	uiGeneralTab.cbModel->setVisible(!custom);
 	uiGeneralTab.tbFunctions->setVisible(custom);
 	uiGeneralTab.tbConstants->setVisible(custom);
 
@@ -1204,10 +1201,21 @@ void XYFitCurveDock::loadFunction() {
 
 	KConfig config(fileName);
 	KConfigGroup general = config.group(QLatin1String("General"));
-	// TODO: use description and comment
 	m_fitData.model = general.readEntry("Function", "");
 	// switch to custom model
 	uiGeneralTab.cbCategory->setCurrentIndex(uiGeneralTab.cbCategory->count() - 1);
+
+	auto description = general.readEntry("Description", "");
+	auto comment = general.readEntry("Comment", "");
+	QDEBUG("Description:" << description)
+	QDEBUG("Comment:" << comment)
+	if (!description.isEmpty()) {
+		uiGeneralTab.cbModel->clear();
+		uiGeneralTab.cbModel->addItem(description);
+	}
+	if (!comment.isEmpty())
+		uiGeneralTab.cbModel->setToolTip(comment);
+		//uiGeneralTab.teEquation->setToolTip(comment);
 }
 
 void XYFitCurveDock::saveFunction() {
@@ -1253,8 +1261,8 @@ void XYFitCurveDock::saveFunction() {
 
 			KConfig config(fileName);
 			auto group = config.group(QLatin1String("General"));
-			const QString& description = group.readEntry(QLatin1String("Description"), "");
-			const QString& comment = group.readEntry(QLatin1String("Comment"), "");
+			const QString& description = group.readEntry("Description", "");
+			const QString& comment = group.readEntry("Comment", "");
 			if (!description.isEmpty())
 				leDescription->setText(description);
 			if (!comment.isEmpty())
@@ -1297,6 +1305,7 @@ void XYFitCurveDock::saveFunction() {
 		group.writeEntry("Comment", leComment->text());
 		config.sync();
 		QDEBUG(Q_FUNC_INFO << ", saved function to" << fileName)
+		//TODO: set Description and comment in Dock when saving?
 	}
 }
 
