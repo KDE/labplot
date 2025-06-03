@@ -23,6 +23,9 @@
         "--system-talk-name=org.freedesktop.UDisks2",
         "--talk-name=org.freedesktop.Flatpak"
     ],
+    "extensions": {
+        "org.freedesktop.Sdk.Extension.python3": {}
+    },
     "cleanup": [
         "/include",
         "/lib/cmake",
@@ -35,7 +38,14 @@
         "/share/man"
     ],
     "modules": [
-       {
+        {
+            "name": "python-modules",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --prefix=/app PySide6"
+            ]
+        },
+        {
             "name": "eigen",
             "buildsystem": "cmake-ninja",
             "builddir": true,
