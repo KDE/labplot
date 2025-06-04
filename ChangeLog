@@ -18,6 +18,7 @@ Bug fixes:
 	* Don't crash when creating the data spreadsheet for analysis curves (BUG 504662)
 	* Fix crash when aspect is added and all docks in content area are hidden (BUG 504794, 502043)
 	* Fix crash when column or row was added to spreadsheet from toolbar and no column or row was selected (BUG 504839)
+	* Fix issue when the statistics spreadsheet was not shown if the spreadsheet was a child of workbook
 
 -----2.12.0 (2025-04-25) -----
 New features:
