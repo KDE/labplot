@@ -7,6 +7,9 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <developer_name translate="no">KDE</developer_name>
+  <developer id="org.kde.labplot">
+    <name>LabPlot Team</name>
+  </developer>
   <launchable type="desktop-id">org.kde.labplot.desktop</launchable>
   <name>LabPlot</name>
   <name xml:lang="ar">معمل الرسم</name>
