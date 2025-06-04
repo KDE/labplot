@@ -98,7 +98,7 @@ void ScriptEditor::createContextMenu(QMenu* menu) {
     if (menu->actions().size() > 1)
         firstAction = menu->actions().at(1);
 
-	menu->insertAction(firstAction, m_runScriptAction);
+    menu->insertAction(firstAction, m_runScriptAction);
 
     menu->insertSeparator(firstAction);
 
@@ -118,7 +118,7 @@ void ScriptEditor::initActions() {
 	connect(m_clearOutputAction, &QAction::triggered, this, &ScriptEditor::clearOutput);
 }
 
-void ScriptEditor::writeOutput(bool isErr, const QString& msg) {
+void ScriptEditor::writeOutput(bool /*isErr*/, const QString& msg) {
     if (msg.trimmed().isEmpty())
         return;
 

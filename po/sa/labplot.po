@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-03 00:39+0000\n"
+"POT-Creation-Date: 2025-06-04 00:39+0000\n"
 "PO-Revision-Date: 2024-12-29 23:07+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -595,7 +595,7 @@ msgid "%1: change cell values"
 msgstr "%1: कोष्ठकमूल्यानि परिवर्तयन्तु"
 
 #: src/backend/core/column/columncommands.cpp:529
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2743
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2744
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: प्लॉट् पदनाम सेट् कुर्वन्तु"
@@ -6119,13 +6119,13 @@ msgid "unexpected end of document"
 msgstr "दस्तावेजस्य अप्रत्याशितः अन्तः"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3750
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3752
 #, kde-format
 msgid "FITS image"
 msgstr "FITS इमेज"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3750
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3752
 #, kde-format
 msgid "FITS table"
 msgstr "FITS तालिका"
@@ -10182,268 +10182,268 @@ msgstr "%1: तार्किकनिर्देशाङ्कानां �
 msgid "%1: set logical position"
 msgstr "%1: तार्किकस्थानं सेट् कुर्वन्तु"
 
-#: src/frontend/AboutDialog.cpp:82
+#: src/frontend/AboutDialog.cpp:79
 #, kde-format
 msgid "What's new"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:88
+#: src/frontend/AboutDialog.cpp:85
 #, kde-format
 msgid "Copy Environment"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:93
+#: src/frontend/AboutDialog.cpp:90
 #, fuzzy, kde-format
 #| msgid "Copy Selection"
 msgid "Copy Citation"
 msgstr "प्रतिलिपि चयनम्"
 
-#: src/frontend/AboutDialog.cpp:97
+#: src/frontend/AboutDialog.cpp:94
 #, kde-format
 msgid "Donate"
 msgstr "वितरणं"
 
-#: src/frontend/AboutDialog.cpp:116
+#: src/frontend/AboutDialog.cpp:110
 #, fuzzy, kde-format
 #| msgid "Clipboard"
 msgid "Copy to Clipboard"
 msgstr "क्लिपबोर्ड"
 
-#: src/frontend/AboutDialog.cpp:142
+#: src/frontend/AboutDialog.cpp:136
 #, fuzzy, kde-format
 #| msgid "Release build "
 msgid "Release build"
 msgstr "निर्माणं विमोचयतु "
 
-#: src/frontend/AboutDialog.cpp:144
+#: src/frontend/AboutDialog.cpp:138
 #, fuzzy, kde-format
 #| msgid "Debug build "
 msgid "Debug build"
 msgstr "बिल्ड् डिबग् "
 
-#: src/frontend/AboutDialog.cpp:180
+#: src/frontend/AboutDialog.cpp:174
 #, kde-format
 msgid "System:"
 msgstr "व्यवस्था:"
 
-#: src/frontend/AboutDialog.cpp:181
+#: src/frontend/AboutDialog.cpp:175
 #, kde-format
 msgid "Locale:"
 msgstr "स्थानिक:"
 
 #. i18n("Used Locale:") + QLatin1String(" </td><td>") + usedLanguage + QLatin1String("</td></tr>")
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
-#: src/frontend/AboutDialog.cpp:183 src/frontend/ui/settingsgeneralpage.ui:60
+#: src/frontend/AboutDialog.cpp:177 src/frontend/ui/settingsgeneralpage.ui:60
 #, fuzzy, kde-format
 #| msgid "Number format:"
 msgid "Number Format:"
 msgstr "संख्यास्वरूपम् :"
 
-#: src/frontend/AboutDialog.cpp:183
+#: src/frontend/AboutDialog.cpp:177
 #, kde-format
 msgid "Updated on restart"
 msgstr "पुनः आरम्भे अद्यतनम्"
 
-#: src/frontend/AboutDialog.cpp:184
+#: src/frontend/AboutDialog.cpp:178
 #, kde-format
 msgid "Architecture:"
 msgstr "संरचना:"
 
-#: src/frontend/AboutDialog.cpp:185
+#: src/frontend/AboutDialog.cpp:179
 #, kde-format
 msgid "Kernel: "
 msgstr "कर्नेलः : "
 
-#: src/frontend/AboutDialog.cpp:193
+#: src/frontend/AboutDialog.cpp:187
 #, kde-format
 msgid "Visit website:"
 msgstr "वेबसाइट् पश्यन्तु :"
 
-#: src/frontend/AboutDialog.cpp:195
+#: src/frontend/AboutDialog.cpp:189
 #, kde-format
 msgid "Watch video tutorials:"
 msgstr "विडियो पाठ्यक्रमं पश्यन्तु:"
 
-#: src/frontend/AboutDialog.cpp:196
+#: src/frontend/AboutDialog.cpp:190
 #, kde-format
 msgid "Discuss on Mastodon:"
 msgstr "मस्टोडन् विषये चर्चां कुर्वन्तु :"
 
-#: src/frontend/AboutDialog.cpp:197
+#: src/frontend/AboutDialog.cpp:191
 #, kde-format
 msgid "Development:"
 msgstr "विकासः:"
 
-#: src/frontend/AboutDialog.cpp:198
+#: src/frontend/AboutDialog.cpp:192
 #, kde-format
 msgid "Please report bugs to:"
 msgstr "कृपया दोषान् सूचयन्तु:"
 
-#: src/frontend/AboutDialog.cpp:199
+#: src/frontend/AboutDialog.cpp:193
 #, kde-format
 msgid "Partly funded by:"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:210 src/frontend/AboutDialog.cpp:376
-#: src/frontend/AboutDialog.cpp:377
+#: src/frontend/AboutDialog.cpp:204 src/frontend/AboutDialog.cpp:370
+#: src/frontend/AboutDialog.cpp:371
 #, kde-format
 msgid "missing"
 msgstr "असमेत"
 
-#: src/frontend/AboutDialog.cpp:216
+#: src/frontend/AboutDialog.cpp:210
 #, kde-format
 msgid "Python scripting support"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:222
+#: src/frontend/AboutDialog.cpp:216
 #, kde-format
 msgid "Frontend to Mathematical Applications"
 msgstr "गणितीय अनुप्रयोगानाम् अग्रभागः"
 
-#: src/frontend/AboutDialog.cpp:228
+#: src/frontend/AboutDialog.cpp:222
 #, kde-format
 msgid ""
 "Support data files in FITS (Flexible Image Transport System) data format"
 msgstr ""
 "FITS (Flexible Image Transport System) इति आँकडास्वरूपे आँकडासञ्चिकानां समर्थनं कुर्वन्तु"
 
-#: src/frontend/AboutDialog.cpp:234
+#: src/frontend/AboutDialog.cpp:228
 #, kde-format
 msgid "Markdown markup language support"
 msgstr "मार्कडाउन मार्कअप भाषा समर्थन"
 
-#: src/frontend/AboutDialog.cpp:240
+#: src/frontend/AboutDialog.cpp:234
 #, kde-format
 msgid "C++ library for linear algebra"
 msgstr "रेखीयबीजगणितस्य कृते C++ पुस्तकालयः"
 
-#: src/frontend/AboutDialog.cpp:246
+#: src/frontend/AboutDialog.cpp:240
 #, kde-format
 msgid "Fastest Fourier Transform in the West"
 msgstr "पश्चिमे द्रुततमं फूरियररूपान्तरणं"
 
-#: src/frontend/AboutDialog.cpp:247
+#: src/frontend/AboutDialog.cpp:241
 #, kde-format
 msgid "GNU Scientific Library"
 msgstr "जीएनयू वैज्ञानिक पुस्तकालय"
 
-#: src/frontend/AboutDialog.cpp:253
+#: src/frontend/AboutDialog.cpp:247
 #, kde-format
 msgid "High-performance data management and storage suite"
 msgstr "उच्च-प्रदर्शन-दत्तांश-प्रबन्धन-भण्डारण-समूहः"
 
-#: src/frontend/AboutDialog.cpp:259
+#: src/frontend/AboutDialog.cpp:253
 #, kde-format
 msgid "Syntax highlighting engine"
 msgstr "वाक्यविन्यास हाइलाइटिंग इञ्जिन"
 
-#: src/frontend/AboutDialog.cpp:265
+#: src/frontend/AboutDialog.cpp:259
 #, kde-format
 msgid "Support collecting feedback from users"
 msgstr "उपयोक्तृभ्यः प्रतिक्रियासङ्ग्रहणस्य समर्थनं करोति"
 
-#: src/frontend/AboutDialog.cpp:271
+#: src/frontend/AboutDialog.cpp:265
 #, kde-format
 msgid "Complex error and related functions"
 msgstr "जटिलदोषः तथा तत्सम्बद्धाः कार्याः"
 
-#: src/frontend/AboutDialog.cpp:277
+#: src/frontend/AboutDialog.cpp:271
 #, kde-format
 msgid "importing Origin OPJ project files"
 msgstr "Origin OPJ परियोजना सञ्चिकाः आयातयन्"
 
-#: src/frontend/AboutDialog.cpp:283
+#: src/frontend/AboutDialog.cpp:277
 #, kde-format
 msgid "Import binary MATLAB MAT files"
 msgstr "द्विचक्रीय MATLAB MAT सञ्चिकाः आयातयन्तु"
 
-#: src/frontend/AboutDialog.cpp:289
+#: src/frontend/AboutDialog.cpp:283
 #, kde-format
 msgid "MCAP file support"
 msgstr "MCAP सञ्चिकासमर्थनम्"
 
-#: src/frontend/AboutDialog.cpp:295
+#: src/frontend/AboutDialog.cpp:289
 #, kde-format
 msgid "Network Common Data Form"
 msgstr "संजाल सामान्य आँकडा प्रपत्र"
 
-#: src/frontend/AboutDialog.cpp:301
+#: src/frontend/AboutDialog.cpp:295
 #, kde-format
 msgid "Import ODS (Open Document Spreadsheet) files"
 msgstr "ODS (Open Document Spreadsheet) सञ्चिकाः आयातयन्तु"
 
-#: src/frontend/AboutDialog.cpp:307
+#: src/frontend/AboutDialog.cpp:301
 #, kde-format
 msgid "PDF rendering library"
 msgstr "PDF प्रतिपादन पुस्तकालयः"
 
-#: src/frontend/AboutDialog.cpp:313
+#: src/frontend/AboutDialog.cpp:307
 #, kde-format
 msgid "Offers available actions for a specific purpose"
 msgstr "विशिष्टप्रयोजनाय उपलब्धानि क्रियाणि प्रस्तावति"
 
-#: src/frontend/AboutDialog.cpp:314
+#: src/frontend/AboutDialog.cpp:308
 #, kde-format
 msgid "Qt Advanced Docking System"
 msgstr "Qt उन्नत डॉकिंग प्रणाली"
 
-#: src/frontend/AboutDialog.cpp:320
+#: src/frontend/AboutDialog.cpp:314
 #, kde-format
 msgid "Support data from MQTT brokers"
 msgstr "MQTT दलालानां समर्थनदत्तांशः"
 
-#: src/frontend/AboutDialog.cpp:326
+#: src/frontend/AboutDialog.cpp:320
 #, kde-format
 msgid "Serial port functionality support"
 msgstr "क्रमिक पोर्ट कार्यक्षमता समर्थन"
 
-#: src/frontend/AboutDialog.cpp:332
+#: src/frontend/AboutDialog.cpp:326
 #, kde-format
 msgid "SVG export support"
 msgstr "SVG निर्यातसमर्थनम्"
 
-#: src/frontend/AboutDialog.cpp:338
+#: src/frontend/AboutDialog.cpp:332
 #, kde-format
 msgid "Import Excel xlsx files"
 msgstr "Excel xlsx सञ्चिकाः आयातयन्तु"
 
-#: src/frontend/AboutDialog.cpp:344
+#: src/frontend/AboutDialog.cpp:338
 #, kde-format
 msgid "Read (and write) data sets from SAS, Stata, and SPSS"
 msgstr "SAS, Stata, SPSS इत्येतयोः दत्तांशसमूहान् पठन्तु (लेखयन्तु च)"
 
-#: src/frontend/AboutDialog.cpp:350
+#: src/frontend/AboutDialog.cpp:344
 #, kde-format
 msgid "Binary Log File (BLF) file support"
 msgstr "द्विचक्रीयलॉगसञ्चिका (BLF) सञ्चिकासमर्थनम्"
 
-#: src/frontend/AboutDialog.cpp:353 src/frontend/AboutDialog.cpp:378
+#: src/frontend/AboutDialog.cpp:347 src/frontend/AboutDialog.cpp:372
 #, kde-format
 msgid "C++ Compiler: "
 msgstr "C++ संकलकः : "
 
-#: src/frontend/AboutDialog.cpp:358 src/frontend/AboutDialog.cpp:378
+#: src/frontend/AboutDialog.cpp:352 src/frontend/AboutDialog.cpp:372
 #, fuzzy, kde-format
 #| msgid "C++ Compiler Flags: "
 msgid "C++ Compiler Flags:"
 msgstr "C++ संकलक ध्वजाः: "
 
-#: src/frontend/AboutDialog.cpp:372
+#: src/frontend/AboutDialog.cpp:366
 #, kde-format
 msgid "Components:"
 msgstr "घटकाः :"
 
-#: src/frontend/AboutDialog.cpp:373
+#: src/frontend/AboutDialog.cpp:367
 #, kde-format
 msgid "Qt"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:374
+#: src/frontend/AboutDialog.cpp:368
 #, kde-format
 msgid "KDE Frameworks"
 msgstr ""
 
-#: src/frontend/AboutDialog.cpp:389
+#: src/frontend/AboutDialog.cpp:383
 #, fuzzy, kde-format
 #| msgid ""
 #| "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
@@ -11286,16 +11286,16 @@ msgid "Curve"
 msgstr "वक्रम्"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:879
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3997
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4051
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3999
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4053
 #: src/frontend/worksheet/WorksheetView.cpp:2150
 #, kde-format
 msgid "Failed to export"
 msgstr "निर्यातं कर्तुं असफलम्"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:879
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3997
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4051
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3999
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4053
 #: src/frontend/worksheet/WorksheetView.cpp:2150
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -15381,7 +15381,7 @@ msgstr "किं भवन्तः वास्तवमेव पूर्व
 msgid "Clear History"
 msgstr "इतिहासं स्पष्टं कुरुत"
 
-#: src/frontend/LabPlot.cpp:73
+#: src/frontend/LabPlot.cpp:72
 #, kde-format
 msgid ""
 "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
@@ -15390,62 +15390,62 @@ msgstr ""
 "LabPlot इति निःशुल्कं, मुक्त-स्रोत-पार-मञ्चं Data Visualization and Analysis सॉफ्टवेयरं "
 "सर्वेषां कृते सुलभम् अस्ति ।"
 
-#: src/frontend/LabPlot.cpp:75
+#: src/frontend/LabPlot.cpp:74
 #, fuzzy, kde-format
 #| msgid "(c) 2007-2024 LabPlot authors"
 msgid "(c) 2007-%1 LabPlot Team"
 msgstr "(ग) 2007-2024 लैबप्लॉट लेखक"
 
-#: src/frontend/LabPlot.cpp:76
+#: src/frontend/LabPlot.cpp:75
 #, kde-format
 msgid "Stefan Gerlach"
 msgstr "स्टीफन् गेर्लाच्"
 
-#: src/frontend/LabPlot.cpp:76 src/frontend/LabPlot.cpp:77
-#: src/frontend/LabPlot.cpp:78
+#: src/frontend/LabPlot.cpp:75 src/frontend/LabPlot.cpp:76
+#: src/frontend/LabPlot.cpp:77
 #, kde-format
 msgctxt "@info:credit"
 msgid "Developer"
 msgstr "विकासकः"
 
-#: src/frontend/LabPlot.cpp:77
+#: src/frontend/LabPlot.cpp:76
 #, kde-format
 msgid "Alexander Semke"
 msgstr "अलेक्जेण्डर सेम्के"
 
-#: src/frontend/LabPlot.cpp:78
+#: src/frontend/LabPlot.cpp:77
 #, kde-format
 msgid "Martin Marmsoler"
 msgstr "मार्टिन् मार्मसोलर"
 
-#: src/frontend/LabPlot.cpp:79
+#: src/frontend/LabPlot.cpp:78
 #, kde-format
 msgid "Dariusz Laska"
 msgstr "दारियुस् लस्का"
 
-#: src/frontend/LabPlot.cpp:80
+#: src/frontend/LabPlot.cpp:79
 #, kde-format
 msgctxt "@info:credit"
 msgid "Conceptual work, documentation, example projects"
 msgstr "अवधारणात्मकं कार्यं, दस्तावेजीकरणं, उदाहरणप्रकल्पाः"
 
-#: src/frontend/LabPlot.cpp:86
+#: src/frontend/LabPlot.cpp:85
 #, kde-format
 msgid "Andreas Kainz"
 msgstr "आन्द्रियास कैन्ज"
 
-#: src/frontend/LabPlot.cpp:86
+#: src/frontend/LabPlot.cpp:85
 #, kde-format
 msgctxt "@info:credit"
 msgid "Icon designer"
 msgstr "चिह्न डिजाइनर"
 
-#: src/frontend/LabPlot.cpp:87
+#: src/frontend/LabPlot.cpp:86
 #, kde-format
 msgid "Yuri Chornoivan"
 msgstr "युरी चोरनोइवान"
 
-#: src/frontend/LabPlot.cpp:88
+#: src/frontend/LabPlot.cpp:87
 #, kde-format
 msgctxt "@info:credit"
 msgid ""
@@ -15453,12 +15453,12 @@ msgid ""
 "topics"
 msgstr "KDE-मूलसंरचनायाः अनुवादसम्बद्धविषयाणां च विषये अनेकेषु प्रश्नेषु सहायतां कुर्वन्तु"
 
-#: src/frontend/LabPlot.cpp:91
+#: src/frontend/LabPlot.cpp:90
 #, kde-format
 msgid "Fábián Kristóf-Szabolcs"
 msgstr "Fábián Kristóf-Szabolcs"
 
-#: src/frontend/LabPlot.cpp:91
+#: src/frontend/LabPlot.cpp:90
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Open FITS File"
@@ -15466,44 +15466,44 @@ msgctxt "@info:credit"
 msgid "FITS Filter"
 msgstr "FITS File उद्घाटयन्तु"
 
-#: src/frontend/LabPlot.cpp:92
+#: src/frontend/LabPlot.cpp:91
 #, kde-format
 msgid "Garvit Khatri"
 msgstr "गरवित खत्री"
 
-#: src/frontend/LabPlot.cpp:93
+#: src/frontend/LabPlot.cpp:92
 #, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
 msgstr "LabPlot इत्यस्य KF5 मध्ये पोर्ट् करणं तथा च Cantor इत्यनेन सह एकीकरणम्"
 
-#: src/frontend/LabPlot.cpp:96
+#: src/frontend/LabPlot.cpp:95
 #, kde-format
 msgid "Christoph Roick"
 msgstr "क्रिस्टोफ रॉक्"
 
-#: src/frontend/LabPlot.cpp:97
+#: src/frontend/LabPlot.cpp:96
 #, kde-format
 msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr "ROOT (CERN) TH1 हिस्टोग्रामस्य आयातस्य समर्थनम्"
 
-#: src/frontend/LabPlot.cpp:128
+#: src/frontend/LabPlot.cpp:127
 #, kde-format
 msgid "Disable splash screen"
 msgstr "स्पलैश स्क्रीन अक्षमम्"
 
-#: src/frontend/LabPlot.cpp:131
+#: src/frontend/LabPlot.cpp:130
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr "प्रस्तोता मोड् मध्ये आरभत"
 
-#: src/frontend/LabPlot.cpp:134
+#: src/frontend/LabPlot.cpp:133
 #, kde-format
 msgid "Open a project file."
 msgstr "परियोजनासञ्चिकां उद्घाटयन्तु ।"
 
-#: src/frontend/LabPlot.cpp:155
+#: src/frontend/LabPlot.cpp:154
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -15512,7 +15512,7 @@ msgstr ""
 "'%1' सञ्चिकां उद्घाटयितुं न शक्यते । आरम्भं कर्तुं 'Continue' नुदन्तु अथवा अनुप्रयोगात् निर्गन्तुं "
 "'Cancel' नुदन्तु ।"
 
-#: src/frontend/LabPlot.cpp:156
+#: src/frontend/LabPlot.cpp:155
 #, kde-format
 msgid "Failed to Open"
 msgstr "उद्घाटयितुं असफलम्"
@@ -15806,8 +15806,8 @@ msgid "%1 printed"
 msgstr "%1 मुद्रितम्"
 
 #: src/frontend/MainWin.cpp:1239
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3718
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3719
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3720
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3721
 #, kde-format
 msgid "%1"
 msgstr "%1"
@@ -18279,236 +18279,236 @@ msgstr "रिक्तस्तम्भान् सम्मिलितं �
 msgid "Enter the number of columns to insert"
 msgstr "सम्मिलितुं स्तम्भानां संख्यां प्रविशन्तु"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2679
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2680
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: चयनितस्तम्भान् निष्कासयन्तु"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2776
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2777
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
 msgstr[0] "%1: विपरीतस्तम्भः"
 msgstr[1] "%1: विपर्ययस्तम्भाः"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2849
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2850
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
 "because of this. "
 msgstr "चयनितस्तम्भानां भिन्नाः दत्तांशप्रकाराः सन्ति, अतः ते समतलं कर्तुं न शक्यन्ते । "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2883
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2884
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: स्तम्भान् सामान्यीकरोतु"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2903
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2904
 #, kde-format
 msgid "Sum = 0"
 msgstr "योग = ०"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2914
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2915
 #, kde-format
 msgid "Min = 0"
 msgstr "मिन = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2925
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2926
 #, kde-format
 msgid "Max = 0"
 msgstr "अधिकतम = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2936
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2937
 #, kde-format
 msgid "Count = 0"
 msgstr "गणना = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2947
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2948
 #, kde-format
 msgid "Mean = 0"
 msgstr "माध्यम् = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2958
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2959
 #, kde-format
 msgid "Median = 0"
 msgstr "माध्यिका = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2970
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2971
 #, kde-format
 msgid "Mode = 0"
 msgstr "मोड = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2972
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2973
 #, kde-format
 msgid "'Mode not defined'"
 msgstr "'गुणः न परिभाषितः' इति ।"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2983
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2984
 #, kde-format
 msgid "Range = 0"
 msgstr "परिधि = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2994
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3028
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2995
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3029
 #, kde-format
 msgid "SD = 0"
 msgstr "SD = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3005
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3040
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3006
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3041
 #, kde-format
 msgid "MAD = 0"
 msgstr "MAD = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3016
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3052
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3017
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3053
 #, kde-format
 msgid "IQR = 0"
 msgstr "IQR = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3064
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3065
 #, kde-format
 msgid "Max - Min = 0"
 msgstr "अधिकतम - न्यूनतम = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3083
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3084
 #, kde-format
 msgid "Normalization not possible"
 msgstr "सामान्यीकरणं न सम्भवम्"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3095
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3096
 #, kde-format
 msgid "%1: power transform columns"
 msgstr "%1: शक्तिरूपान्तरणस्तम्भाः"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3213
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3214
 #, kde-format
 msgid "%1: column statistics"
 msgstr "%1: स्तम्भसांख्यिकीयम्"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3244
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3245
 #, kde-format
 msgid "Selection in %1"
 msgstr "%1 मध्ये चयनम्"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3287
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3288
 #, kde-format
 msgid "%1: row statistics"
 msgstr "%1: पङ्क्तिसांख्यिकीयम्"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3297
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3298
 #, kde-format
 msgid "Row %1"
 msgstr "पङ्क्ति %1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3322
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3358
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3323
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3359
 #, kde-format
 msgid "Insert multiple rows"
 msgstr "बहुपङ्क्तयः सम्मिलितं कुर्वन्तु"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3323
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3359
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3324
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3360
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr "सम्मिलितुं पङ्क्तिसङ्ख्यां प्रविशन्तु"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3393
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3395
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: चयनितपङ्क्तयः निष्कासयन्तु"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3429
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3431
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: चयनितकोष्ठकाः स्वच्छं कुर्वन्तु"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3684
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3686
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
 msgstr "चयनितम् 1: %1 पङ्क्तयः, %2 स्तम्भाः"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3694
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3696
 #, kde-format
 msgid "Selected: %1 cells"
 msgstr "चयनितम्: %1 कोष्ठकाः"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3713
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3715
 #, kde-format
 msgid "row"
 msgid_plural "rows"
 msgstr[0] "पंक्ति"
 msgstr[1] "पङ्क्तयः"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3714
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3716
 #, kde-format
 msgid "column"
 msgid_plural "columns"
 msgstr[0] "स्तम्भ:"
 msgstr[1] "स्तम्भाः"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3715
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3717
 #, kde-format
 msgid "cells"
 msgstr "कोष्ठकाः"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3716
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3718
 #, kde-format
 msgid "masked value"
 msgstr "मुखौटायुक्तं मूल्यम्"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3716
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3718
 #, kde-format
 msgid "masked values"
 msgstr "मुखौटायुक्तानि मूल्यानि"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3717
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3719
 #, kde-format
 msgid "missing value"
 msgstr "गम्यमानं मूल्यम्"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3717
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3719
 #, kde-format
 msgid "missing values"
 msgstr "मूल्यानि लुप्ताः"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3718
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3720
 #, kde-format
 msgid " , "
 msgstr " , ९. "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3719
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3721
 #, kde-format
 msgid ", "
 msgstr ", ९. "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3723
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3725
 #, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
 msgstr "चयनितम् : %1 %2, %3 %4%5 %6 %7 %8"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3733
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3735
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr "चयनितम् : %1 %2%3 %4 %5 %6"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3814
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3816
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "स्प्रेडशीट् मुद्रयन्तु"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4426
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4428
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "SQLite दत्तांशकोशं %1 निर्मातुं न शक्तम् ।"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4458
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4460
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "SQLite दत्तांशकोशे %1 मध्ये सारणी निर्मातुं असफलम् ।"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4511
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4513
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "सारणीयां मूल्यानि सम्मिलितुं असफलम् ।"

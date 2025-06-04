@@ -23,6 +23,9 @@
         "--system-talk-name=org.freedesktop.UDisks2",
         "--talk-name=org.freedesktop.Flatpak"
     ],
+    "extensions": {
+        "org.freedesktop.Sdk.Extension.python3": {}
+    },
     "cleanup": [
         "/include",
         "/lib/cmake",
@@ -35,7 +38,14 @@
         "/share/man"
     ],
     "modules": [
-       {
+        {
+            "name": "python-modules",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --prefix=/app PySide6"
+            ]
+        },
+        {
             "name": "eigen",
             "buildsystem": "cmake-ninja",
             "builddir": true,
@@ -64,8 +74,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-25.04.0.tar.xz",
-                    "sha256": "b010c596dce127fba88532fd2f1043e55ea30601767952d0f2c0a80e7dc0da3d"
+                    "url": "https://poppler.freedesktop.org/poppler-25.06.0.tar.xz",
+                    "sha256": "8199532d38984fab46dbd0020ec9c40f20e928e33e9b4cc6043572603a821d83"
                 }
             ],
             "modules": [
