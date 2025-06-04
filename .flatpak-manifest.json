@@ -23,6 +23,9 @@
         "--system-talk-name=org.freedesktop.UDisks2",
         "--talk-name=org.freedesktop.Flatpak"
     ],
+    "build-args": [
+        "--share=network"
+    ],
     "extensions": {
         "org.freedesktop.Sdk.Extension.python3": {}
     },
@@ -137,17 +140,16 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "http://ftp.gnu.org/gnu/gsl/gsl-2.8.tar.gz",
+                    "url": "http://ftpmirror.gnu.org/gnu/gsl/gsl-2.8.tar.gz",
                     "sha256": "6a99eeed15632c6354895b1dd542ed5a855c0f15d9ad1326c6fe2b2c9e423190"
                 }
             ]
         },
         {
             "name": "hdf5",
-            "buildsystem": "simple",
-	    "build-commands": [
-                "cd hdf5* && ./configure --prefix=/app --enable-cxx=yes --enable-tools=no --enable-tests=no && make -j install"
-	    ],
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [ "-DBUILD_TESTING=OFF", "-DHDF5_BUILD_TOOLS=OFF" ],
             "cleanup": [
                 "/share/hdf5_examples"
             ],
@@ -155,7 +157,8 @@
                 {
                     "type": "archive",
                     "url": "https://support.hdfgroup.org/releases/hdf5/v1_14/v1_14_6/downloads/hdf5-1.14.6.tar.gz",
-                    "sha256": "e4defbac30f50d64e1556374aa49e574417c9e72c6b1de7a4ff88c4b1bea6e9b"
+                    "sha256": "e4defbac30f50d64e1556374aa49e574417c9e72c6b1de7a4ff88c4b1bea6e9b",
+		    "strip-components": 2
                 }
             ]
         },
