@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-04 00:39+0000\n"
+"POT-Creation-Date: 2025-06-05 00:38+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -802,12 +802,12 @@ msgstr "Falha ao abrir"
 msgid "Invalid project modification time. Using current time."
 msgstr "A hora de modificação do projeto é inválida. Usando a hora atual."
 
-#: src/backend/core/Workbook.cpp:217
+#: src/backend/core/Workbook.cpp:219
 #, kde-format
 msgid "matrix"
 msgstr "matriz"
 
-#: src/backend/core/Workbook.cpp:224
+#: src/backend/core/Workbook.cpp:226
 #, kde-format
 msgid "unknown workbook element '%1'"
 msgstr "elemento de folha de trabalho desconhecido '%1'"
@@ -1087,7 +1087,7 @@ msgstr "Não foi possível abrir o arquivo %1 para leitura."
 #: src/backend/datasources/filters/AsciiFilter.cpp:201
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2137
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1348
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1451
 #, kde-format
 msgid "Success"
 msgstr "Sucesso"
@@ -2286,7 +2286,7 @@ msgstr ""
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1884
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:414
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:416
 #: src/frontend/matrix/MatrixView.cpp:620
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2472
@@ -7045,7 +7045,6 @@ msgstr "Distribuição Logística"
 #: src/frontend/dockwidgets/AxisDock.cpp:237
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:172
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:819
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:81
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:550
 #, kde-format
@@ -9087,7 +9086,7 @@ msgstr "Estatísticas"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:752
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1874
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:411
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:413
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:143
 #, kde-format
 msgid "Histogram"
@@ -10493,13 +10492,13 @@ msgid "PARAMETERS"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:414
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:416
 #, kde-format
 msgid "Uncertainty"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:414
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:416
 #, kde-format
 msgid "Uncertainty, %"
 msgstr ""
@@ -10511,14 +10510,14 @@ msgid "t Statistic"
 msgstr "Estatísticas"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1889
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:414
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:416
 #, fuzzy, kde-format
 #| msgid "Power"
 msgid "Lower"
 msgstr "Potência"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1890
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:414
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:416
 #, fuzzy, kde-format
 #| msgid "Upper Cutoff"
 msgid "Upper"
@@ -10568,7 +10567,7 @@ msgstr "coeficiente adj. determinístico (R²)"
 #. i18n: ectx: property (text), widget (QPushButton, bTest)
 #. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1959
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:176
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:178
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:263
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:208
 #, kde-format
@@ -10609,7 +10608,7 @@ msgid "Not sufficient weight data points provided!"
 msgstr "Não foram fornecidos pontos de dados de ponderação suficientes."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2407
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:376
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:378
 #, fuzzy, kde-format
 #| msgid "No data points available."
 msgid "No X data available!"
@@ -11228,7 +11227,7 @@ msgstr ""
 #: src/frontend/ActionsManager.cpp:195
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:409
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:411
 #: src/frontend/MainWin.cpp:1219 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
@@ -11960,9 +11959,9 @@ msgstr ""
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:314
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1478
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1484
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1490
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1581
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1587
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1593
 #, fuzzy, kde-format
 #| msgid "Selection"
 msgid "Copy Selection"
@@ -11970,9 +11969,9 @@ msgstr "Seleção"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:315
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1479
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1485
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1491
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1582
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1588
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1594
 #, fuzzy, kde-format
 #| msgid "collapse all"
 msgid "Copy All"
@@ -15103,7 +15102,7 @@ msgid "calculation time: %1 ms"
 msgstr "tempo de cálculo: %1 ms"
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:58
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:410
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, fuzzy, kde-format
 #| msgid "Curve"
 msgid "XY-Curve"
@@ -15373,38 +15372,38 @@ msgstr "t, mín"
 msgid "t, max"
 msgstr "t, máx"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:370
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:372
 #, fuzzy, kde-format
 #| msgid "No data points available."
 msgid "No X and Y column specified!"
 msgstr "Não há pontos de dados disponíveis."
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:372
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:374
 #, fuzzy, kde-format
 #| msgid "No data points available."
 msgid "No X column specified!"
 msgstr "Não há pontos de dados disponíveis."
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:374
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:376
 #, fuzzy, kde-format
 #| msgid "No data points available."
 msgid "No Y column specified!"
 msgstr "Não há pontos de dados disponíveis."
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:378
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:380
 #, fuzzy, kde-format
 #| msgid "No data points available."
 msgid "No Y data available!"
 msgstr "Não há pontos de dados disponíveis."
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:414
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:416
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "t statistic"
 msgstr "Estatísticas"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:446
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:448
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:217
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:359
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:449
@@ -15419,57 +15418,66 @@ msgstr "Estatísticas"
 msgid "Curve:"
 msgstr "Curva"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:467
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:469
 #, fuzzy, kde-format
 #| msgid "Histograms"
 msgid "Histogram:"
 msgstr "Histogramas"
 
+#. i18n: ectx: property (text), widget (QLabel, lModel)
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:764
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:793
+#, fuzzy, kde-format
+#| msgid "Model"
+msgid "Model:"
+msgstr "Modelo"
+
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:821
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1321
+#, fuzzy, kde-format
+#| msgid "Direction"
+msgid "Description:"
+msgstr "Direção"
+
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:822
+#, kde-format
+msgid "User defined model"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:867
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:866
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:524
 #, fuzzy, kde-format
 #| msgid "Degree"
 msgid "Degree:"
 msgstr "Grau"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:927
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:926
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Number of peaks:"
 msgstr "Número de pontos"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1195
-#, kde-format
-msgid "LabPlot Function Definition (*.lfd *.LFD)"
-msgstr ""
-
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1200
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1231
 #, fuzzy, kde-format
 #| msgid "function"
-msgctxt "@title:window"
 msgid "Select file to load function definition"
 msgstr "função"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1216
-#, kde-format
-msgid "Select file to save function definition"
-msgstr ""
-
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1232
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1248
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1310
 #, kde-format
 msgid "LabPlot Function Definition"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1236
-#, fuzzy, kde-format
-#| msgid "Direction"
-msgid "Description:"
-msgstr "Direção"
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1294
+#, kde-format
+msgid "Select file to save function definition"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1238
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1323
 #: src/frontend/ui/datapickercurvewidget.ui:49
 #: src/frontend/ui/datapickerimagewidget.ui:689
 #: src/frontend/ui/dockwidgets/aspectdock.ui:37
@@ -15518,25 +15526,25 @@ msgstr "Direção"
 msgid "Comment:"
 msgstr "Comentário:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1349
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1452
 #, fuzzy, kde-format
 #| msgid "status"
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "status"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1360
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1463
 #, fuzzy, kde-format
 #| msgid "No data points available."
 msgid "No data source available!"
 msgstr "Não há pontos de dados disponíveis."
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1530
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1633
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1531
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1634
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr ""
@@ -24059,13 +24067,6 @@ msgstr "Parâmetros"
 #, kde-format
 msgid "Fit model type"
 msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lModel)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:793
-#, fuzzy, kde-format
-#| msgid "Model"
-msgid "Model:"
-msgstr "Modelo"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lEquation)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:849

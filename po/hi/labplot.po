@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-04 00:39+0000\n"
+"POT-Creation-Date: 2025-06-05 00:38+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -782,12 +782,12 @@ msgstr "प्रोजेक्ट खोलने में विफल"
 msgid "Invalid project modification time. Using current time."
 msgstr "परियोजना संशोधन समय अमान्य है। वर्तमान समय का उपयोग किया जा रहा है।"
 
-#: src/backend/core/Workbook.cpp:217
+#: src/backend/core/Workbook.cpp:219
 #, kde-format
 msgid "matrix"
 msgstr "मैट्रिक्स"
 
-#: src/backend/core/Workbook.cpp:224
+#: src/backend/core/Workbook.cpp:226
 #, kde-format
 msgid "unknown workbook element '%1'"
 msgstr "अज्ञात कार्यपुस्तिका तत्व '%1'"
@@ -1067,7 +1067,7 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:201
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2137
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1348
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1451
 #, kde-format
 msgid "Success"
 msgstr "सफलता"
@@ -2194,7 +2194,7 @@ msgstr "चाबी"
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1884
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:414
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:416
 #: src/frontend/matrix/MatrixView.cpp:620
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2472
@@ -6657,7 +6657,6 @@ msgstr "सांख्यिकी (वितरण)"
 #: src/frontend/dockwidgets/AxisDock.cpp:237
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:172
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:819
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:81
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:550
 #, kde-format
@@ -8530,7 +8529,7 @@ msgstr "सांख्यिकीय प्लॉट"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:752
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1874
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:411
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:413
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:143
 #, kde-format
 msgid "Histogram"
@@ -9804,13 +9803,13 @@ msgid "PARAMETERS"
 msgstr "पैरामीटर"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:414
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:416
 #, kde-format
 msgid "Uncertainty"
 msgstr "अनिश्चितता"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:414
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:416
 #, kde-format
 msgid "Uncertainty, %"
 msgstr "अनिश्चितता, %"
@@ -9821,13 +9820,13 @@ msgid "t Statistic"
 msgstr "टी सांख्यिकी"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1889
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:414
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:416
 #, kde-format
 msgid "Lower"
 msgstr "निचला"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1890
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:414
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:416
 #, kde-format
 msgid "Upper"
 msgstr "अपर"
@@ -9871,7 +9870,7 @@ msgstr "समायोजन निर्धारण गुणांक"
 #. i18n: ectx: property (text), widget (QPushButton, bTest)
 #. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1959
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:176
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:178
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:263
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:208
 #, kde-format
@@ -9909,7 +9908,7 @@ msgid "Not sufficient weight data points provided!"
 msgstr "पर्याप्त वजन डेटा बिंदु उपलब्ध नहीं कराया गया!"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2407
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:376
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:378
 #, kde-format
 msgid "No X data available!"
 msgstr "कोई एक्स डेटा उपलब्ध नहीं है!"
@@ -10499,7 +10498,7 @@ msgstr "चित्र से डेटा प्राप्त करने �
 #: src/frontend/ActionsManager.cpp:195
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:409
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:411
 #: src/frontend/MainWin.cpp:1219 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
@@ -11177,18 +11176,18 @@ msgstr "विवरण के साथ सूची देखें"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:314
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1478
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1484
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1490
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1581
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1587
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1593
 #, kde-format
 msgid "Copy Selection"
 msgstr "कॉपी चयन"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:315
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1479
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1485
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1491
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1582
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1588
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1594
 #, kde-format
 msgid "Copy All"
 msgstr "सभी को कॉपी करें"
@@ -14317,7 +14316,7 @@ msgid "calculation time: %1 ms"
 msgstr "गणना समय: %1 ms"
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:58
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:410
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, kde-format
 msgid "XY-Curve"
 msgstr "XY-वक्र"
@@ -14559,33 +14558,33 @@ msgstr "टी, मिनट"
 msgid "t, max"
 msgstr "टी, अधिकतम"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:370
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:372
 #, kde-format
 msgid "No X and Y column specified!"
 msgstr "कोई X और Y कॉलम निर्दिष्ट नहीं!"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:372
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:374
 #, kde-format
 msgid "No X column specified!"
 msgstr "कोई X स्तंभ निर्दिष्ट नहीं!"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:374
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:376
 #, kde-format
 msgid "No Y column specified!"
 msgstr "कोई Y स्तंभ निर्दिष्ट नहीं!"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:378
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:380
 #, kde-format
 msgid "No Y data available!"
 msgstr "कोई Y डेटा उपलब्ध नहीं है!"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:414
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:416
 #, kde-format
 msgid "t statistic"
 msgstr "टी सांख्यिकी"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:446
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:448
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:217
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:359
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:449
@@ -14599,54 +14598,62 @@ msgstr "टी सांख्यिकी"
 msgid "Curve:"
 msgstr "वक्र:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:467
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:469
 #, kde-format
 msgid "Histogram:"
 msgstr "हिस्टोग्राम:"
 
-#. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:867
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:524
+#. i18n: ectx: property (text), widget (QLabel, lModel)
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:764
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:793
 #, kde-format
-msgid "Degree:"
-msgstr "डिग्री:"
+msgid "Model:"
+msgstr "नमूना:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:927
-#, kde-format
-msgid "Number of peaks:"
-msgstr "चोटियों की संख्या:"
-
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1195
-#, kde-format
-msgid "LabPlot Function Definition (*.lfd *.LFD)"
-msgstr ""
-
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1200
-#, fuzzy, kde-format
-#| msgid "Select predefined function"
-msgctxt "@title:window"
-msgid "Select file to load function definition"
-msgstr "पूर्वनिर्धारित फ़ंक्शन का चयन करें"
-
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1216
-#, kde-format
-msgid "Select file to save function definition"
-msgstr ""
-
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1232
-#, kde-format
-msgid "LabPlot Function Definition"
-msgstr ""
-
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1236
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:821
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1321
 #, fuzzy, kde-format
 #| msgid "Description"
 msgid "Description:"
 msgstr "विवरण"
 
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:822
+#, kde-format
+msgid "User defined model"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lDegree)
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:866
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:524
+#, kde-format
+msgid "Degree:"
+msgstr "डिग्री:"
+
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:926
+#, kde-format
+msgid "Number of peaks:"
+msgstr "चोटियों की संख्या:"
+
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1231
+#, fuzzy, kde-format
+#| msgid "Select predefined function"
+msgid "Select file to load function definition"
+msgstr "पूर्वनिर्धारित फ़ंक्शन का चयन करें"
+
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1248
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1310
+#, kde-format
+msgid "LabPlot Function Definition"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1294
+#, kde-format
+msgid "Select file to save function definition"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1238
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1323
 #: src/frontend/ui/datapickercurvewidget.ui:49
 #: src/frontend/ui/datapickerimagewidget.ui:689
 #: src/frontend/ui/dockwidgets/aspectdock.ui:37
@@ -14695,23 +14702,23 @@ msgstr "विवरण"
 msgid "Comment:"
 msgstr "टिप्पणी:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1349
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1452
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "फिट स्थिति: %1"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1360
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1463
 #, kde-format
 msgid "No data source available!"
 msgstr "कोई डेटा स्रोत उपलब्ध नहीं है!"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1530
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1633
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "%1 % कम आत्मविश्वास स्तर"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1531
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1634
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "%1 % ऊपरी विश्वास स्तर"
@@ -22613,12 +22620,6 @@ msgstr "पैरामीटर:"
 #, kde-format
 msgid "Fit model type"
 msgstr "फिट मॉडल प्रकार"
-
-#. i18n: ectx: property (text), widget (QLabel, lModel)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:793
-#, kde-format
-msgid "Model:"
-msgstr "नमूना:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lEquation)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:849
