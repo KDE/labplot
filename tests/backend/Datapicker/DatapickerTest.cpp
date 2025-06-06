@@ -19,6 +19,7 @@
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/DatapickerPointPrivate.h"
 #include "backend/datapicker/Transform.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/datapicker/DatapickerImageView.h"
 #include "frontend/widgets/DatapickerImageWidget.h"
 
@@ -1825,10 +1826,18 @@ void DatapickerTest::saveLoad() {
 		QVERIFY(curve);
 		const auto& curvePoints = curve->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 		QCOMPARE(curvePoints.length(), 2);
+		QCOMPARE(curve->posXColumn()->rowCount(), 2);
+		QCOMPARE(curve->posYColumn()->rowCount(), 2);
 		VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5.);
 		VALUES_EQUAL(curve->posYColumn()->valueAt(0), 5.);
 		VALUES_EQUAL(curve->posXColumn()->valueAt(1), 7.);
 		VALUES_EQUAL(curve->posYColumn()->valueAt(1), 6.5);
+
+		QCOMPARE(curve->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::IncludeHidden).size(), 1);
+		const auto* data = curve->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::IncludeHidden).at(0);
+		QCOMPARE(data->columnCount(), 2);
+		QCOMPARE(data->column(0), curve->posXColumn());
+		QCOMPARE(data->column(1), curve->posYColumn());
 	}
 }
 
