@@ -525,12 +525,12 @@ void DatapickerCurvePrivate::retransform() {
 // if not, write the name stored in the object. Use this macro only if you
 // are sure that the path is not relevant and the name is enough like
 // For the datapickercurve and their columns
-#define WRITE_COLUMN_NAME(column, columnName)                                                                                                                       \
-if (column) {                                                                                                                                              \
+#define WRITE_COLUMN_NAME(column, columnName)                                                                                                                  \
+	if (column) {                                                                                                                                              \
 		writer->writeAttribute(QStringLiteral(#columnName), column->name());                                                                                   \
-} else {                                                                                                                                                   \
+	} else {                                                                                                                                                   \
 		writer->writeAttribute(QStringLiteral(#columnName), column##Name);                                                                                     \
-}
+	}
 
 //! Save as XML
 void DatapickerCurve::save(QXmlStreamWriter* writer) const {
@@ -571,22 +571,21 @@ void DatapickerCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement(); // close section
 }
 
-
-#define READ_COLUMN_NAME(columnName)                                                                                                                                \
-{                                                                                                                                                          \
-	str = attribs.value(QStringLiteral(#columnName)).toString();\
-	if (Project::xmlVersion() < 16)\
-		str = str.split(QStringLiteral("/")).last(); /* In the old version the complete path was stored */\
-	d->columnName##Name = str;\
-}
+#define READ_COLUMN_NAME(columnName)                                                                                                                           \
+	{                                                                                                                                                          \
+		str = attribs.value(QStringLiteral(#columnName)).toString();                                                                                           \
+		if (Project::xmlVersion() < 16)                                                                                                                        \
+			str = str.split(QStringLiteral("/")).last(); /* In the old version the complete path was stored */                                                 \
+		d->columnName##Name = str;                                                                                                                             \
+	}
 
 #undef RESTORE_COLUMN_POINTER // Already defined in macros.h
-#define RESTORE_COLUMN_POINTER(columnPtr, col) \
-if (!col##Name().isEmpty()) {                                                                                                                         \
-		if (columnPtr->name() == col##Name()) {                                                                                                          \
-			d->col = columnPtr;                                                                                                                         \
-	}                                                                                                                                                  \
-}
+#define RESTORE_COLUMN_POINTER(columnPtr, col)                                                                                                                 \
+	if (!col##Name().isEmpty()) {                                                                                                                              \
+		if (columnPtr->name() == col##Name()) {                                                                                                                \
+			d->col = columnPtr;                                                                                                                                \
+		}                                                                                                                                                      \
+	}
 
 //! Load from XML
 bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
