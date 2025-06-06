@@ -93,8 +93,6 @@ private:
 	QAction* selectSegmentAction{nullptr};
 
 	QAction* addCurveAction{nullptr};
-	QAction* currentPlotPointsTypeAction{nullptr};
-
 	QAction* navigationModeAction{nullptr};
 	QAction* zoomSelectionModeAction{nullptr};
 
@@ -110,7 +108,7 @@ public Q_SLOTS:
 	void createContextMenu(QMenu*) const;
 	void print(QPrinter*);
 
-	void changeMouseMode(QAction*);
+	bool changeMouseMode(QAction*);
 	void changeMagnification(QAction*);
 	void changeZoom(QAction*);
 	void changeSelectedItemsPosition(QAction*);

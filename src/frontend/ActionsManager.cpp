@@ -1487,15 +1487,21 @@ void ActionsManager::connectNotebookToolbarActions(const NotebookView* view) {
 }
 #endif
 
-void ActionsManager::connectDataExtractorToolbarActions(const DatapickerImageView* view) {
+void ActionsManager::connectDataExtractorToolbarActions(DatapickerImageView* view) {
+	const auto action_update = [this, view] (DatapickerImageView::MouseMode mouseMode) {
+		for (auto* action : m_dataExtractorMouseModeActionGroup->actions()) {
+			if (static_cast<DatapickerImageView::MouseMode>(action->data().toInt()) == mouseMode)
+				action->setChecked(true);
+		}
+	};
+
 	// mouse mode actions
 	disconnect(m_dataExtractorMouseModeActionGroup, &QActionGroup::triggered, nullptr, nullptr);
-	connect(m_dataExtractorMouseModeActionGroup, &QActionGroup::triggered, view, &DatapickerImageView::changeMouseMode);
-	const auto mouseMode = view->mouseMode();
-	for (auto* action : m_worksheeMouseModeActionGroup->actions()) {
-		if (static_cast<DatapickerImageView::MouseMode>(action->data().toInt()) == mouseMode)
-			action->setChecked(true);
-	}
+	connect(m_dataExtractorMouseModeActionGroup, &QActionGroup::triggered, [this, view, action_update](QAction* action) {
+		if (!view->changeMouseMode(action))
+			action_update(view->mouseMode());
+	});
+	action_update(view->mouseMode());
 
 	// add curve action
 	disconnect(m_dataExtractorAddCurveAction, &QAction::triggered, nullptr, nullptr);
