@@ -87,9 +87,8 @@ void DatapickerCurve::childAdded(const AbstractAspect* child) {
 	if (m_supressResizeDatasheet)
 		return;
 	const auto* p = dynamic_cast<const DatapickerPoint*>(child);
-	if (!p)
-		return;
-	m_datasheet->setRowCount(m_datasheet->rowCount() + 1);
+	if (p)
+		m_datasheet->setRowCount(m_datasheet->rowCount() + 1);
 }
 
 void DatapickerCurve::childRemoved(const AbstractAspect* child) {
