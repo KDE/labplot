@@ -19,9 +19,9 @@
 #include "frontend/datapicker/DatapickerView.h"
 
 #include "QIcon"
-#include <KLocalizedString>
 #include <KConfig>
 #include <KConfigGroup>
+#include <KLocalizedString>
 #include <QGraphicsScene>
 
 /**
@@ -327,7 +327,7 @@ void Datapicker::setColorPalette(const KConfig& config) {
 	if (config.hasGroup(QStringLiteral("Theme"))) {
 		KConfigGroup group = config.group(QStringLiteral("Theme"));
 
-			   // read the five colors defining the palette
+		// read the five colors defining the palette
 		m_themeColorPalette.clear();
 		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor1"), QColor()));
 		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor2"), QColor()));
@@ -407,7 +407,7 @@ bool Datapicker::load(XmlStreamReader* reader, bool preview) {
 			handleAspectAdded(point);
 	}
 
-	for (auto* curve: children<DatapickerCurve>(ChildIndexFlag::IncludeHidden))
+	for (auto* curve : children<DatapickerCurve>(ChildIndexFlag::IncludeHidden))
 		curve->updatePoints();
 
 	return true;
