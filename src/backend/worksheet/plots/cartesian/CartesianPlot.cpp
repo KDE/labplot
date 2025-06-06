@@ -12,10 +12,10 @@
 #include "CartesianPlot.h"
 #include "CartesianPlotPrivate.h"
 
+#include "backend/core/DefaultColorTheme.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
-#include "backend/core/DefaultColorTheme.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
@@ -5677,7 +5677,7 @@ void CartesianPlot::setColorPalette(const KConfig& config) {
 		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor5"), QColor()));
 	} else {
 		// no theme is available, provide "default colors"
-        m_themeColorPalette = defaultColorPalette;
+		m_themeColorPalette = defaultColorPalette;
 	}
 
 	// use the color of the axis lines as the color for the different mouse cursor lines
