@@ -20,6 +20,8 @@
 
 #include "QIcon"
 #include <KLocalizedString>
+#include <KConfig>
+#include <KConfigGroup>
 #include <QGraphicsScene>
 
 /**
@@ -283,6 +285,8 @@ void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
 	if (addedPoint)
 		handleChildAspectAdded(addedPoint);
 	else if (curve) {
+		const auto count = childCount<DatapickerCurve>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+		curve->symbol()->setColor(themeColorPalette(count - 1));
 		connect(m_image, &DatapickerImage::axisPointsChanged, curve, &DatapickerCurve::updatePoints);
 		auto points = curve->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 		for (auto* point : points)
@@ -321,6 +325,28 @@ void Datapicker::handleChildAspectAdded(const AbstractAspect* aspect) {
 		Q_ASSERT(m_image != nullptr);
 		m_image->scene()->addItem(item);
 	}
+}
+
+void Datapicker::setColorPalette(const KConfig& config) {
+	if (config.hasGroup(QStringLiteral("Theme"))) {
+		KConfigGroup group = config.group(QStringLiteral("Theme"));
+
+			   // read the five colors defining the palette
+		m_themeColorPalette.clear();
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor1"), QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor2"), QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor3"), QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor4"), QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor5"), QColor()));
+	} else {
+		// no theme is available, provide "default colors"
+		m_themeColorPalette = defaultColorPalette;
+	}
+}
+
+QColor Datapicker::themeColorPalette(int index) const {
+	const int i = index % m_themeColorPalette.count();
+	return m_themeColorPalette.at(i);
 }
 
 // ##############################################################################
