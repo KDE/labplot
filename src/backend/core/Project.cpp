@@ -73,7 +73,7 @@ namespace {
 // the project version will be compared with this.
 // if you make any imcompatible changes to the xmlfile
 // or the function in labplot, increase this number.
-int buildXmlVersion = 15;
+int buildXmlVersion = 16;
 }
 
 /**
@@ -1218,26 +1218,6 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			continue;
 		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
 	}
-
-	// data picker curves
-#ifndef SDK
-	QVector<DatapickerCurve*> dataPickerCurves;
-	if (hasChildren)
-		dataPickerCurves = aspect->children<DatapickerCurve>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::DatapickerCurve)
-		dataPickerCurves << static_cast<DatapickerCurve*>(aspect);
-
-	for (auto* dataPickerCurve : dataPickerCurves) {
-		if (!dataPickerCurve)
-			continue;
-		RESTORE_COLUMN_POINTER(dataPickerCurve, posXColumn, PosXColumn);
-		RESTORE_COLUMN_POINTER(dataPickerCurve, posYColumn, PosYColumn);
-		RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaXColumn, PlusDeltaXColumn);
-		RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaXColumn, MinusDeltaXColumn);
-		RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaYColumn, PlusDeltaYColumn);
-		RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
-	}
-#endif
 
 	// spreadsheet
 	QVector<Spreadsheet*> spreadsheets;
