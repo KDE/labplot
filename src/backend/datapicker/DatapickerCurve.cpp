@@ -10,6 +10,7 @@
 */
 
 #include "DatapickerCurve.h"
+#include "backend/core/Project.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/datapicker/DatapickerCurvePrivate.h"
 #include "backend/datapicker/DatapickerPoint.h"
@@ -133,38 +134,38 @@ BASIC_SHARED_D_READER_IMPL(DatapickerCurve, QPen, pointErrorBarPen, pointErrorBa
 BASIC_SHARED_D_READER_IMPL(DatapickerCurve, bool, pointVisibility, pointVisibility)
 
 BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, posXColumn, posXColumn)
-QString& DatapickerCurve::posXColumnPath() const {
-	return d_ptr->posXColumnPath;
+QString& DatapickerCurve::posXColumnName() const {
+	return d_ptr->posXColumnName;
 }
 
 BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, posYColumn, posYColumn)
-QString& DatapickerCurve::posYColumnPath() const {
-	return d_ptr->posYColumnPath;
+QString& DatapickerCurve::posYColumnName() const {
+	return d_ptr->posYColumnName;
 }
 
 BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, posZColumn, posZColumn)
-QString& DatapickerCurve::posZColumnPath() const {
-	return d_ptr->posZColumnPath;
+QString& DatapickerCurve::posZColumnName() const {
+	return d_ptr->posZColumnName;
 }
 
 BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, plusDeltaXColumn, plusDeltaXColumn)
-QString& DatapickerCurve::plusDeltaXColumnPath() const {
-	return d_ptr->plusDeltaXColumnPath;
+QString& DatapickerCurve::plusDeltaXColumnName() const {
+	return d_ptr->plusDeltaXColumnName;
 }
 
 BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, minusDeltaXColumn, minusDeltaXColumn)
-QString& DatapickerCurve::minusDeltaXColumnPath() const {
-	return d_ptr->minusDeltaXColumnPath;
+QString& DatapickerCurve::minusDeltaXColumnName() const {
+	return d_ptr->minusDeltaXColumnName;
 }
 
 BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, plusDeltaYColumn, plusDeltaYColumn)
-QString& DatapickerCurve::plusDeltaYColumnPath() const {
-	return d_ptr->plusDeltaYColumnPath;
+QString& DatapickerCurve::plusDeltaYColumnName() const {
+	return d_ptr->plusDeltaYColumnName;
 }
 
 BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, minusDeltaYColumn, minusDeltaYColumn)
-QString& DatapickerCurve::minusDeltaYColumnPath() const {
-	return d_ptr->minusDeltaYColumnPath;
+QString& DatapickerCurve::minusDeltaYColumnName() const {
+	return d_ptr->minusDeltaYColumnName;
 }
 
 // ##############################################################################
@@ -520,6 +521,18 @@ void DatapickerCurvePrivate::retransform() {
 // ##############################################################################
 // ##################  Serialization/Deserialization  ###########################
 // ##############################################################################
+
+// If the data column is valid, write their current name
+// if not, write the name stored in the object. Use this macro only if you
+// are sure that the path is not relevant and the name is enough like
+// For the datapickercurve and their columns
+#define WRITE_COLUMN_NAME(column, columnName)                                                                                                                       \
+if (column) {                                                                                                                                              \
+		writer->writeAttribute(QStringLiteral(#columnName), column->name());                                                                                   \
+} else {                                                                                                                                                   \
+		writer->writeAttribute(QStringLiteral(#columnName), column##Name);                                                                                     \
+}
+
 //! Save as XML
 void DatapickerCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const DatapickerCurve);
@@ -530,13 +543,13 @@ void DatapickerCurve::save(QXmlStreamWriter* writer) const {
 
 	// general
 	writer->writeStartElement(QStringLiteral("general"));
-	WRITE_COLUMN(d->posXColumn, posXColumn);
-	WRITE_COLUMN(d->posYColumn, posYColumn);
-	WRITE_COLUMN(d->posZColumn, posZColumn);
-	WRITE_COLUMN(d->plusDeltaXColumn, plusDeltaXColumn);
-	WRITE_COLUMN(d->minusDeltaXColumn, minusDeltaXColumn);
-	WRITE_COLUMN(d->plusDeltaYColumn, plusDeltaYColumn);
-	WRITE_COLUMN(d->minusDeltaYColumn, minusDeltaYColumn);
+	WRITE_COLUMN_NAME(d->posXColumn, posXColumn);
+	WRITE_COLUMN_NAME(d->posYColumn, posYColumn);
+	WRITE_COLUMN_NAME(d->posZColumn, posZColumn);
+	WRITE_COLUMN_NAME(d->plusDeltaXColumn, plusDeltaXColumn);
+	WRITE_COLUMN_NAME(d->minusDeltaXColumn, minusDeltaXColumn);
+	WRITE_COLUMN_NAME(d->plusDeltaYColumn, plusDeltaYColumn);
+	WRITE_COLUMN_NAME(d->minusDeltaYColumn, minusDeltaYColumn);
 	writer->writeAttribute(QStringLiteral("curveErrorType_X"), QString::number(static_cast<int>(d->curveErrorTypes.x)));
 	writer->writeAttribute(QStringLiteral("curveErrorType_Y"), QString::number(static_cast<int>(d->curveErrorTypes.y)));
 	writer->writeAttribute(QStringLiteral("vibible"), QString::number(d->pointVisibility));
@@ -557,6 +570,23 @@ void DatapickerCurve::save(QXmlStreamWriter* writer) const {
 		child->save(writer);
 
 	writer->writeEndElement(); // close section
+}
+
+
+#define READ_COLUMN_NAME(columnName)                                                                                                                                \
+{                                                                                                                                                          \
+	str = attribs.value(QStringLiteral(#columnName)).toString();\
+	if (Project::xmlVersion() < 16)\
+		str = str.split(QStringLiteral("/")).last(); /* In the old version the complete path was stored */\
+	d->columnName##Name = str;\
+}
+
+#undef RESTORE_COLUMN_POINTER // Already defined in macros.h
+#define RESTORE_COLUMN_POINTER(columnPtr, col) \
+if (!col##Name().isEmpty()) {                                                                                                                         \
+		if (columnPtr->name() == col##Name()) {                                                                                                          \
+			d->col = columnPtr;                                                                                                                         \
+	}                                                                                                                                                  \
 }
 
 //! Load from XML
@@ -587,13 +617,13 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("curveErrorType_X", curveErrorTypes.x, ErrorType);
 			READ_INT_VALUE("curveErrorType_Y", curveErrorTypes.y, ErrorType);
 
-			READ_COLUMN(posXColumn);
-			READ_COLUMN(posYColumn);
-			READ_COLUMN(posZColumn);
-			READ_COLUMN(plusDeltaXColumn);
-			READ_COLUMN(minusDeltaXColumn);
-			READ_COLUMN(plusDeltaYColumn);
-			READ_COLUMN(minusDeltaYColumn);
+			READ_COLUMN_NAME(posXColumn);
+			READ_COLUMN_NAME(posYColumn);
+			READ_COLUMN_NAME(posZColumn);
+			READ_COLUMN_NAME(plusDeltaXColumn);
+			READ_COLUMN_NAME(minusDeltaXColumn);
+			READ_COLUMN_NAME(plusDeltaYColumn);
+			READ_COLUMN_NAME(minusDeltaYColumn);
 		} else if (!preview && reader->name() == QLatin1String("symbolProperties")) {
 			// old serialization that was used before the switch to Symbol::load().
 			// in the old serialization the symbol properties and "point visibility" where saved
@@ -721,12 +751,23 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 				for (auto* col : columns)
 					col->setFixed(true);
 				m_datasheet = datasheet;
+				m_datasheet->setRowCount(0); // The rows are filled by adding datapickerpoints
 			}
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}
+	}
+
+	for (int i = 0; i < m_datasheet->columnCount(); i++) {
+		auto* c = m_datasheet->column(i);
+		RESTORE_COLUMN_POINTER(c, posXColumn)
+		RESTORE_COLUMN_POINTER(c, posYColumn)
+		RESTORE_COLUMN_POINTER(c, plusDeltaXColumn)
+		RESTORE_COLUMN_POINTER(c, minusDeltaXColumn)
+		RESTORE_COLUMN_POINTER(c, plusDeltaYColumn)
+		RESTORE_COLUMN_POINTER(c, minusDeltaYColumn)
 	}
 
 	d->retransform();

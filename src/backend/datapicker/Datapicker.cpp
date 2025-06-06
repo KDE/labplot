@@ -381,5 +381,8 @@ bool Datapicker::load(XmlStreamReader* reader, bool preview) {
 			handleAspectAdded(point);
 	}
 
+	for (auto* curve: children<DatapickerCurve>(ChildIndexFlag::IncludeHidden))
+		curve->updatePoints();
+
 	return true;
 }
