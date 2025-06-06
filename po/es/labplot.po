@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-05 00:38+0000\n"
-"PO-Revision-Date: 2025-05-29 12:28+0100\n"
+"PO-Revision-Date: 2025-06-05 14:40+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -14719,7 +14719,7 @@ msgstr "Descripción:"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:822
 #, kde-format
 msgid "User defined model"
-msgstr ""
+msgstr "Modelo definido por el usuario"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:866
@@ -14734,9 +14734,7 @@ msgid "Number of peaks:"
 msgstr "Número de picos:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1231
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select file to load function definition"
+#, kde-format
 msgid "Select file to load function definition"
 msgstr "Seleccionar archivo para cargar definición de función"
 
@@ -25326,16 +25324,3 @@ msgstr "el proceso «convert» ha fallado, código de salida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No se puede abrir el archivo:"
-
-#~ msgid "LabPlot Function Definition (*.lfd *.LFD)"
-#~ msgstr "Definición de función de LabPlot (*.lfd *.LFD)"
-
-#~ msgid "%1: insert empty column"
-#~ msgid_plural "%1: insert empty columns"
-#~ msgstr[0] "%1: insertar columna vacía"
-#~ msgstr[1] "%1: insertar columnas vacías"
-
-#~ msgid "%1: insert empty row"
-#~ msgid_plural "%1: insert empty rows"
-#~ msgstr[0] "%1: insertar fila vacía"
-#~ msgstr[1] "%1: insertar filas vacías"

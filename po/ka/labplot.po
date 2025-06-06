@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-05 00:38+0000\n"
-"PO-Revision-Date: 2025-05-29 04:35+0200\n"
+"PO-Revision-Date: 2025-06-05 05:55+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -14677,7 +14677,7 @@ msgstr "აღწერა:"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:822
 #, kde-format
 msgid "User defined model"
-msgstr ""
+msgstr "მომხმარებლის აღწერილი მოდელი"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:866
@@ -14692,9 +14692,7 @@ msgid "Number of peaks:"
 msgstr "პიკების რაოდენობა:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1231
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select file to load function definition"
+#, kde-format
 msgid "Select file to load function definition"
 msgstr "აირჩიეთ ფაილი ფუნქციის აღწერის ჩასატვირთად"
 

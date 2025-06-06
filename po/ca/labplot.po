@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-05 00:38+0000\n"
-"PO-Revision-Date: 2025-05-29 09:43+0200\n"
+"PO-Revision-Date: 2025-06-05 10:38+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -14823,7 +14823,7 @@ msgstr "Descripció:"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:822
 #, kde-format
 msgid "User defined model"
-msgstr ""
+msgstr "Model definit per l'usuari"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:866
@@ -14838,11 +14838,9 @@ msgid "Number of peaks:"
 msgstr "Nombre de pics:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1231
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select file to load function definition"
+#, kde-format
 msgid "Select file to load function definition"
-msgstr "Seleccioneu un fitxer per a carregar la definició de funció"
+msgstr "Selecció de fitxer per a carregar la definició de funció"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1248
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1310
@@ -25454,22 +25452,6 @@ msgstr "El procés «convert» ha fallat, codi de sortida ="
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
 
-#~ msgid "LabPlot Function Definition (*.lfd *.LFD)"
-#~ msgstr "Definició de funció del LabPlot (*.lfd *.LFD)"
-
-#~ msgid "%1: insert empty column"
-#~ msgid_plural "%1: insert empty columns"
-#~ msgstr[0] "%1: insereix columna buida"
-#~ msgstr[1] "%1: insereix columnes buides"
-
-#~ msgid "%1: insert empty row"
-#~ msgid_plural "%1: insert empty rows"
-#~ msgstr[0] "%1: insereix fila buida"
-#~ msgstr[1] "%1: insereix files buides"
-
-#~ msgid "Restart Backend"
-#~ msgstr "Reinicialitza el dorsal"
-
 #~ msgctxt "NAME OF TRANSLATORS"
 #~ msgid "Your names"
 #~ msgstr "Antoni Bella,Orestes Mas"
@@ -25477,23 +25459,3 @@ msgstr "No s'ha pogut obrir el fitxer:"
 #~ msgctxt "EMAIL OF TRANSLATORS"
 #~ msgid "Your emails"
 #~ msgstr "antonibella5@yahoo.com,orestes@tsc.upc.edu"
-
-#~ msgid "Close"
-#~ msgstr "Tanca"
-
-#~ msgid ""
-#~ "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/"
-#~ "api\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
-#~ msgstr ""
-#~ "Seguiu les instruccions de <a href=\"https://www.kaggle.com/docs/api"
-#~ "\">«How to Use Kaggle»</a> (Com utilitzar Kaggle) per a configurar l'eina "
-#~ "CLI de Kaggle."
-
-#~ msgid "Show SparkLines"
-#~ msgstr "Mostra els minidiagrames"
-
-#~ msgid "Current Selection"
-#~ msgstr "Selecció actual"
-
-#~ msgid "Complete Worksheet"
-#~ msgstr "Tot el full de treball"
