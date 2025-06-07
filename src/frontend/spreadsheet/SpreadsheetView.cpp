@@ -998,7 +998,8 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 }
 
 /*!
- * adds column specific actions in SpreadsheetView to the context menu shown in the project explorer.
+ * adds column specific actions in SpreadsheetView to the context menu shown in the project explorer,
+ * called when one single column is selected in the project explorer.
  */
 void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	if (!column)
@@ -1043,6 +1044,17 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	menu->insertAction(firstAction, action_statistics_columns);
 
 	checkColumnMenus(QVector<Column*>{column});
+}
+
+/*!
+ * adds column specific actions in SpreadsheetView to the context menu shown in the project explorer,
+ * called when one single column is selected in the project explorer and shows the same context menu
+ * as if columns were selected in the views (context menu of the horizontal header).
+ */
+void SpreadsheetView::fillColumnsContextMenu(QMenu* menu) {
+	checkColumnMenus(selectedColumns());
+	m_columnMenu->setTitle(i18n("Columns"));
+	menu->addMenu(m_columnMenu);
 }
 
 // SLOTS

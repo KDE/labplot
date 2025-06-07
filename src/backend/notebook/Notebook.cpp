@@ -323,14 +323,19 @@ QMenu* Notebook::createContextMenu() {
 }
 
 void Notebook::fillColumnContextMenu(QMenu* menu, Column* column) {
+	fillColumnsContextMenu(menu, {column});
+}
+
+void Notebook::fillColumnsContextMenu(QMenu* menu, const QVector<Column*>& columns) {
 #ifndef SDK
 	if (m_view)
-		m_view->fillColumnContextMenu(menu, column);
+		m_view->fillColumnsContextMenu(menu, columns);
 #else
 	Q_UNUSED(menu)
-	Q_UNUSED(column)
+	Q_UNUSED(columns)
 #endif
 }
+
 
 QString Notebook::backendName() {
 	return this->m_backendName;
