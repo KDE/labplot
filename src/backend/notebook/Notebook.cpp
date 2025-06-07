@@ -336,7 +336,6 @@ void Notebook::fillColumnsContextMenu(QMenu* menu, const QVector<Column*>& colum
 #endif
 }
 
-
 QString Notebook::backendName() {
 	return this->m_backendName;
 }
