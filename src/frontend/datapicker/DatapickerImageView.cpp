@@ -191,14 +191,17 @@ void DatapickerImageView::initActions() {
 
 	switch (m_image->plotPointsType()) {
 	case DatapickerImage::PointsType::AxisPoints:
+		currentPlotPointsTypeAction = setAxisPointsAction;
 		setAxisPointsAction->setChecked(true);
 		mouseModeChanged(setAxisPointsAction);
 		break;
 	case DatapickerImage::PointsType::CurvePoints:
+		currentPlotPointsTypeAction = setCurvePointsAction;
 		setCurvePointsAction->setChecked(true);
 		mouseModeChanged(setCurvePointsAction);
 		break;
 	case DatapickerImage::PointsType::SegmentPoints:
+		currentPlotPointsTypeAction = selectSegmentAction;
 		selectSegmentAction->setChecked(true);
 		mouseModeChanged(selectSegmentAction);
 	}
@@ -599,24 +602,22 @@ void DatapickerImageView::contextMenuEvent(QContextMenuEvent*) {
 void DatapickerImageView::mouseModeChanged(QAction* action) {
 	const auto mode = (DatapickerImageView::MouseMode)action->data().toInt();
 
-	if (mode == DatapickerImageView::MouseMode::Navigation) {
+	if (action == navigationModeAction) {
 		setInteractive(false);
 		setDragMode(QGraphicsView::ScrollHandDrag);
 		m_image->setSegmentsHoverEvent(false);
-		m_mouseMode = mode;
-	} else if (mode == DatapickerImageView::MouseMode::ZoomSelection) {
+	} else if (action == zoomSelectionModeAction) {
 		setInteractive(false);
 		setDragMode(QGraphicsView::NoDrag);
 		m_image->setSegmentsHoverEvent(false);
 		setCursor(Qt::ArrowCursor);
-		m_mouseMode = mode;
 	} else {
 		setInteractive(true);
 		setDragMode(QGraphicsView::NoDrag);
 		m_image->setSegmentsHoverEvent(true);
 		setCursor(Qt::CrossCursor);
-		if (m_mouseMode != mode) {
-			switch (mode) {
+		if (currentPlotPointsTypeAction != action) {
+			switch (m_mouseMode) {
 				case DatapickerImageView::MouseMode::ReferencePointsEntry: {
 					int count = m_image->childCount<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 					if (count) {
@@ -625,7 +626,8 @@ void DatapickerImageView::mouseModeChanged(QAction* action) {
 															i18n("All available reference points will be removed. Do you want to continue?"));
 						if (button != QMessageBox::Yes) {
 							// Reset back to the old one
-							return false;
+							currentPlotPointsTypeAction->setChecked(true);
+							return;
 						}
 					}
 
@@ -639,10 +641,10 @@ void DatapickerImageView::mouseModeChanged(QAction* action) {
 					m_image->setPlotPointsType(DatapickerImage::PointsType::SegmentPoints);
 					break;
 			}
-			m_mouseMode = mode;
 		}
 	}
-	return true;
+	currentPlotPointsTypeAction = action;
+	m_mouseMode = mode;
 }
 
 void DatapickerImageView::changeZoom(QAction* action) {
