@@ -1015,7 +1015,7 @@ void DatapickerTest::recreateAxisReferencePoints() {
 	Datapicker datapicker(QStringLiteral("Test"));
 	auto* image = datapicker.image();
 
-		   // Set reference points
+	// Set reference points
 	datapicker.addNewPoint(QPointF(0, 1), image);
 	datapicker.addNewPoint(QPointF(0, 0), image);
 	datapicker.addNewPoint(QPointF(1, 0), image);
