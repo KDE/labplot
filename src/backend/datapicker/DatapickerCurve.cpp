@@ -87,18 +87,19 @@ void DatapickerCurve::childAdded(const AbstractAspect* child) {
 	if (m_supressResizeDatasheet)
 		return;
 	const auto* p = dynamic_cast<const DatapickerPoint*>(child);
-	if (p)
+	if (p) {
+		connect(p, &DatapickerPoint::dataChanged, this, &DatapickerCurve::updatePoint);
 		m_datasheet->setRowCount(m_datasheet->rowCount() + 1);
+	}
 }
 
 void DatapickerCurve::childRemoved(const AbstractAspect* child) {
-	Q_UNUSED(child);
 	const auto* point = dynamic_cast<const DatapickerPoint*>(child);
-	if (!point)
-		return;
-
-	int row = indexOfChild<DatapickerPoint>(point, ChildIndexFlag::IncludeHidden);
-	m_datasheet->removeRows(row, 1);
+	if (point) {
+		int row = indexOfChild<DatapickerPoint>(point, ChildIndexFlag::IncludeHidden);
+		m_datasheet->removeRows(row, 1);
+		disconnect(point, nullptr, this, nullptr);
+	}
 }
 
 /*!

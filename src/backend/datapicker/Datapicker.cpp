@@ -224,27 +224,23 @@ void Datapicker::addNewPoint(QPointF pos, AbstractAspect* parentAspect) {
 	newPoint->setHidden(true);
 
 	beginMacro(i18n("%1: add %2", parentAspect->name(), newPoint->name()));
-	parentAspect->addChild(newPoint);
-	const QPointF oldPos = newPoint->position();
-	newPoint->setPosition(pos);
-	if (oldPos == pos) {
-		// Just if pos == oldPos, setPosition will not trigger retransform() then
-		newPoint->retransform();
-	}
+	if (parentAspect->addChild(newPoint)) {
+		const QPointF oldPos = newPoint->position();
+		newPoint->setPosition(pos);
+		if (oldPos == pos) {
+			// Just if pos == oldPos, setPosition will not trigger retransform() then
+			newPoint->retransform();
+		}
 
-	auto* datapickerCurve = static_cast<DatapickerCurve*>(parentAspect);
-	if (m_image == parentAspect) {
-		auto axisPoints = m_image->axisPoints();
-		axisPoints.scenePos[points.count()].setX(pos.x());
-		axisPoints.scenePos[points.count()].setY(pos.y());
-		m_image->setAxisPoints(axisPoints);
-		newPoint->setIsReferencePoint(true);
-		connect(newPoint, &DatapickerPoint::pointSelected, m_image, QOverload<const DatapickerPoint*>::of(&DatapickerImage::referencePointSelected));
-	} else if (datapickerCurve) {
-		newPoint->initErrorBar(datapickerCurve->curveErrorTypes());
-		// datapickerCurve->updatePoint(newPoint);
-	}
-
+		auto* datapickerCurve = static_cast<DatapickerCurve*>(parentAspect);
+		if (m_image == parentAspect)
+			newPoint->setIsReferencePoint(true);
+		else if (datapickerCurve) {
+			newPoint->initErrorBar(datapickerCurve->curveErrorTypes());
+			// datapickerCurve->updatePoint(newPoint);
+		}
+	} else
+		delete newPoint;
 	endMacro();
 	Q_EMIT requestUpdateActions();
 }
@@ -288,6 +284,7 @@ void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
 		const auto count = childCount<DatapickerCurve>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 		curve->symbol()->setColor(themeColorPalette(count - 1));
 		connect(m_image, &DatapickerImage::axisPointsChanged, curve, &DatapickerCurve::updatePoints);
+		connect(m_image, &DatapickerImage::axisPointsRemoved, curve, &DatapickerCurve::updatePoints);
 		auto points = curve->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 		for (auto* point : points)
 			handleChildAspectAdded(point);

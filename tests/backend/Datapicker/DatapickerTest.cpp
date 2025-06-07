@@ -1011,6 +1011,85 @@ void DatapickerTest::selectReferencePoint() {
 	QCOMPARE(w.ui.rbRefPoint3->isChecked(), true);
 }
 
+void DatapickerTest::recreateAxisReferencePoints() {
+	Datapicker datapicker(QStringLiteral("Test"));
+	auto* image = datapicker.image();
+
+		   // Set reference points
+	datapicker.addNewPoint(QPointF(0, 1), image);
+	datapicker.addNewPoint(QPointF(0, 0), image);
+	datapicker.addNewPoint(QPointF(1, 0), image);
+
+	auto ap = image->axisPoints();
+	ap.type = DatapickerImage::GraphType::Linear;
+	image->setAxisPoints(ap);
+
+	DatapickerImageWidget w(nullptr);
+	w.setImages({image});
+	w.ui.sbPositionX1->setValue(0);
+	w.ui.sbPositionY1->setValue(10);
+	w.ui.sbPositionZ1->setValue(0);
+	w.ui.sbPositionX2->setValue(0);
+	w.ui.sbPositionY2->setValue(0);
+	w.ui.sbPositionZ2->setValue(0);
+	w.ui.sbPositionX3->setValue(10);
+	w.ui.sbPositionY3->setValue(0);
+	w.ui.sbPositionZ3->setValue(0);
+	w.logicalPositionChanged();
+
+	auto* curve = new DatapickerCurve(i18n("Curve"));
+	curve->addDatasheet(image->axisPoints().type);
+	datapicker.addChild(curve);
+
+	datapicker.addNewPoint(QPointF(0.5, 0.5), curve); // updates the curve data
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5.);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 5.);
+
+	datapicker.addNewPoint(QPointF(0.7, 0.65), curve); // updates the curve data
+	VALUES_EQUAL(curve->posXColumn()->valueAt(1), 7.);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(1), 6.5);
+
+	// QVERIFY(datapicker.image()->plotPointsType() != DatapickerImage::PointsType::AxisPoints);
+	// datapicker.image()->setPlotPointsType(DatapickerImage::PointsType::AxisPoints);
+
+	datapicker.image()->clearReferencePoints();
+	QCOMPARE(datapicker.image()->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden).count(), 0);
+
+	QVERIFY(std::isnan(curve->posXColumn()->valueAt(0)));
+	QVERIFY(std::isnan(curve->posYColumn()->valueAt(0)));
+	QVERIFY(std::isnan(curve->posXColumn()->valueAt(1)));
+	QVERIFY(std::isnan(curve->posYColumn()->valueAt(1)));
+
+	// Recreate points again
+	datapicker.addNewPoint(QPointF(0, 1), image);
+	datapicker.addNewPoint(QPointF(0, 0), image);
+	datapicker.addNewPoint(QPointF(1, 0), image);
+
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5.);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 5.);
+	VALUES_EQUAL(curve->posXColumn()->valueAt(1), 7.);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(1), 6.5);
+
+	// Change position
+	{
+		auto points = datapicker.image()->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+
+		// The logical position is still 10 for y1. So at 0.5 we have now 10 instead of 5.
+		points.at(0)->setPosition(QPointF(0., 0.5));
+		VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5.);
+		VALUES_EQUAL(curve->posYColumn()->valueAt(0), 10.);
+		VALUES_EQUAL(curve->posXColumn()->valueAt(1), 7.);
+		VALUES_EQUAL(curve->posYColumn()->valueAt(1), 13.);
+
+		// Now we stretch the x axis as well
+		points.at(2)->setPosition(QPointF(0.5, 0.));
+		VALUES_EQUAL(curve->posXColumn()->valueAt(0), 10.);
+		VALUES_EQUAL(curve->posYColumn()->valueAt(0), 10.);
+		VALUES_EQUAL(curve->posXColumn()->valueAt(1), 14.);
+		VALUES_EQUAL(curve->posYColumn()->valueAt(1), 13.);
+	}
+}
+
 void DatapickerTest::imageAxisPointsChanged() {
 	DatapickerImageWidget w(nullptr);
 	Datapicker datapicker(QStringLiteral("Test"));

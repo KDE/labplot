@@ -518,8 +518,12 @@ QString AbstractAspect::path() const {
 /**
  * \brief Add the given Aspect to my list of children.
  */
-void AbstractAspect::addChild(AbstractAspect* child) {
+bool AbstractAspect::addChild(AbstractAspect* child) {
 	Q_CHECK_PTR(child);
+
+	if (!validAddingChild(child)) {
+		return false;
+	}
 
 	const QString new_name = uniqueNameFor(child->name());
 	beginMacro(i18n("%1: add %2", name(), new_name));
@@ -530,6 +534,7 @@ void AbstractAspect::addChild(AbstractAspect* child) {
 
 	exec(new AspectChildAddCmd(d, child, d->m_children.count()));
 	endMacro();
+	return true;
 }
 
 /**
@@ -542,6 +547,15 @@ void AbstractAspect::addChildFast(AbstractAspect* child) {
 	// PERFTRACE(Q_FUNC_INFO);
 	Q_EMIT childAspectAdded(child);
 	// print_callstack();
+}
+
+/*!
+ * \brief AbstractAspect::validAddingChild
+ * Check if it is valid to add this child.
+ * \return true if valid to add the child, otherwise false
+ */
+bool AbstractAspect::validAddingChild(const AbstractAspect*) {
+	return true;
 }
 
 /**
