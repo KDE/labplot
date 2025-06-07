@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-05 00:38+0000\n"
-"PO-Revision-Date: 2025-05-31 15:08+0200\n"
+"PO-Revision-Date: 2025-06-06 11:46+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -14645,7 +14645,7 @@ msgstr "Beskrivning:"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:822
 #, kde-format
 msgid "User defined model"
-msgstr ""
+msgstr "Användardefinierad modell"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:866
@@ -14660,9 +14660,7 @@ msgid "Number of peaks:"
 msgstr "Antal toppar:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1231
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select file to load function definition"
+#, kde-format
 msgid "Select file to load function definition"
 msgstr "Välj fil för att läsa in funktionsdefinition"
 
