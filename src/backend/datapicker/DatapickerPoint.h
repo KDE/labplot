@@ -87,6 +87,7 @@ private:
 	QList<ErrorBarItem*> m_errorBarItemList;
 
 Q_SIGNALS:
+	void dataChanged(const DatapickerPoint*);
 	void positionChanged(QPointF);
 	void plusDeltaXPosChanged(QPointF);
 	void minusDeltaXPosChanged(QPointF);

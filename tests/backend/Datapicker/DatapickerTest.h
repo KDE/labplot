@@ -50,6 +50,7 @@ private Q_SLOTS:
 	void curvePointMove();
 	void curvePointMoveUndoRedo();
 	void selectReferencePoint();
+	void recreateAxisReferencePoints();
 
 	void imageAxisPointsChanged();
 
