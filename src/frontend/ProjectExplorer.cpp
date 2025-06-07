@@ -141,7 +141,6 @@ void ProjectExplorer::createActions() {
   treeview specific options are added.
 */
 void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
-#ifndef SDK
 	if (!m_treeView->model())
 		return;
 
@@ -217,6 +216,7 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 					auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect);
 					spreadsheet->fillColumnsContextMenu(menu);
 				} else if (parentAspect->type() == AspectType::Notebook) {
+#ifdef HAVE_CANTOR_LIBS
 					auto* notebook = static_cast<Notebook*>(parentAspect);
 					QVector<Column*> columns;
 					for (const auto* aspect : selectedAspects) {
@@ -224,6 +224,7 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 						columns << const_cast<Column*>(column);
 					}
 					notebook->fillColumnsContextMenu(menu, columns);
+#endif
 				}
 				menu->addSeparator();
 			}
@@ -259,7 +260,6 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 		menu->exec(event->globalPos());
 
 	delete menu;
-#endif
 }
 
 void ProjectExplorer::setCurrentAspect(const AbstractAspect* aspect) {

@@ -738,7 +738,6 @@ void Spreadsheet::fillColumnsContextMenu(QMenu* menu) {
 		m_view->fillColumnsContextMenu(menu);
 #else
 	Q_UNUSED(menu)
-	Q_UNUSED(column)
 #endif
 }
 
