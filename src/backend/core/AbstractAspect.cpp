@@ -1068,7 +1068,7 @@ void AbstractAspect::beginMacro(const QString& text) {
 	if (!d->m_undoAware)
 		return;
 
-	QUndoStack* stack = undoStack();
+	auto* stack = undoStack();
 	if (stack)
 		stack->beginMacro(text);
 }
@@ -1080,7 +1080,7 @@ void AbstractAspect::endMacro() {
 	if (!d->m_undoAware)
 		return;
 
-	QUndoStack* stack = undoStack();
+	auto* stack = undoStack();
 	if (stack)
 		stack->endMacro();
 }
@@ -1108,7 +1108,7 @@ void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 	//* XYFitCurve with the child column for calculated residuals
 	//* XYSmouthCurve with the child column for calculated rough values
 	//* CantorWorksheet with the child columns for CAS variables
-	AbstractAspect* parent = this->parentAspect();
+	auto* parent = this->parentAspect();
 	if (parent && !parent->inherits(AspectType::Folder) && !parent->inherits(AspectType::XYFitCurve) && !parent->inherits(AspectType::XYSmoothCurve)
 		&& !parent->inherits(AspectType::Notebook))
 		Q_EMIT this->selected(aspect);
@@ -1122,7 +1122,7 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 	//* XYFitCurve with the child column for calculated residuals
 	//* XYSmouthCurve with the child column for calculated rough values
 	//* CantorWorksheet with the child columns for CAS variables
-	AbstractAspect* parent = this->parentAspect();
+	auto* parent = this->parentAspect();
 	if (parent && !parent->inherits(AspectType::Folder) && !parent->inherits(AspectType::XYFitCurve) && !parent->inherits(AspectType::XYSmoothCurve)
 		&& !parent->inherits(AspectType::Notebook))
 		Q_EMIT this->deselected(aspect);

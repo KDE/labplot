@@ -57,6 +57,10 @@ public:
 	void setFocus();
 	void setSuppressResizeHeader(bool);
 
+	void createContextMenu(QMenu*);
+	void fillColumnContextMenu(QMenu*, Column*);
+	void fillColumnsContextMenu(QMenu*);
+
 	void showComments(bool on = true);
 	void showSparklines(bool on = true);
 
@@ -236,8 +240,6 @@ private:
 
 public Q_SLOTS:
 	void handleAspectsAdded(int first, int last);
-	void createContextMenu(QMenu*);
-	void fillColumnContextMenu(QMenu*, Column*);
 
 #ifdef HAVE_TOUCHBAR
 	void fillTouchBar(KDMacTouchBar*);

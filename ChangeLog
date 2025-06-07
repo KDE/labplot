@@ -2,6 +2,7 @@
 New features:
 	* [general]
 		* Allow to customize which actions have to be shown in the toolbars
+		* Expose more column related actions the context menu in the project (plot data, etc.) also when multiple columns are selected
 	* [analysis]
 		* Save and Load custom fit functions
 	* [worksheet]

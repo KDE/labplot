@@ -4,7 +4,7 @@
 	Description          : View class for Notebook
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -20,12 +20,9 @@
 #include <QLabel>
 #include <QMenu>
 #include <QTimer>
-#include <QToolBar>
 
-#include <KActionCollection>
 #include <KLocalizedString>
 #include <KParts/ReadWritePart>
-#include <KToggleAction>
 
 NotebookView::NotebookView(Notebook* worksheet)
 	: QWidget()
@@ -279,11 +276,8 @@ void NotebookView::createContextMenu(QMenu* menu) {
 /*!
  * adds column specific actions in SpreadsheetView to the context menu shown in the project explorer.
  */
-void NotebookView::fillColumnContextMenu(QMenu* menu, Column* column) {
-	if (!column)
-		return; // should never happen, since the sender is always a Column
-
-	m_contextMenuColumn = column;
+void NotebookView::fillColumnsContextMenu(QMenu* menu, const QVector<Column*>& columns) {
+	m_contextMenuColumns = columns;
 
 	if (!m_plotDataMenu) {
 		auto* plotDataActionGroup = new QActionGroup(this);
@@ -295,10 +289,26 @@ void NotebookView::fillColumnContextMenu(QMenu* menu, Column* column) {
 		connect(m_statisticsAction, &QAction::triggered, this, &NotebookView::showStatistics);
 	}
 
-	const bool hasValues = column->hasValues();
-	const bool plottable = column->isPlottable();
+	QAction* firstAction = nullptr;
+	if (!menu->actions().isEmpty())
+		firstAction = menu->actions().at(1); // called for a menu that has already actions, prepend notbook's actions here
 
-	QAction* firstAction = menu->actions().at(1);
+	bool plottable = false;
+	for (const auto* col : columns) {
+		if (col->isPlottable()) {
+			plottable = true;
+			break;
+		}
+	}
+
+	bool hasValues = false;
+	for (const auto* col : columns) {
+		if (col->hasValues()) {
+			hasValues = true;
+			break;
+		}
+	}
+
 	menu->insertMenu(firstAction, m_plotDataMenu);
 	menu->insertSeparator(firstAction);
 	m_plotDataMenu->setEnabled(plottable && hasValues);
@@ -338,21 +348,21 @@ void NotebookView::statusChanged(Cantor::Session::Status status) {
 }
 
 void NotebookView::plotData(QAction* action) {
-	if (!m_contextMenuColumn)
+	if (m_contextMenuColumns.isEmpty())
 		return;
 
 	auto type = static_cast<Plot::PlotType>(action->data().toInt());
 	auto* dlg = new PlotDataDialog(m_notebook, type);
-	dlg->setSelectedColumns(QVector<Column*>({m_contextMenuColumn}));
+	dlg->setSelectedColumns(m_contextMenuColumns);
 	dlg->exec();
 }
 
 void NotebookView::showStatistics() {
-	if (!m_contextMenuColumn)
+	if (m_contextMenuColumns.isEmpty())
 		return;
 
-	QString dlgTitle(i18n("%1: variable statistics", m_contextMenuColumn->name()));
-	auto* dlg = new StatisticsDialog(dlgTitle, QVector<Column*>({m_contextMenuColumn}));
+	QString dlgTitle(i18n("%1: variable statistics", m_notebook->name()));
+	auto* dlg = new StatisticsDialog(dlgTitle, m_contextMenuColumns);
 	dlg->setModal(true);
 	dlg->show();
 	QApplication::processEvents(QEventLoop::AllEvents, 0);

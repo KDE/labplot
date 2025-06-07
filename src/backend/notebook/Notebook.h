@@ -41,6 +41,7 @@ public:
 	QWidget* view() const override;
 	QMenu* createContextMenu() override;
 	void fillColumnContextMenu(QMenu*, Column*);
+	void fillColumnsContextMenu(QMenu*, const QVector<Column*>&);
 	QIcon icon() const override;
 
 	bool exportView() const override;

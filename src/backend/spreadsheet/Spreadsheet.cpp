@@ -732,6 +732,16 @@ void Spreadsheet::fillColumnContextMenu(QMenu* menu, Column* column) {
 #endif
 }
 
+void Spreadsheet::fillColumnsContextMenu(QMenu* menu) {
+#ifndef SDK
+	if (m_view)
+		m_view->fillColumnsContextMenu(menu);
+#else
+	Q_UNUSED(menu)
+	Q_UNUSED(column)
+#endif
+}
+
 /*!
  * Move column at \c from index to \c to index.
  * @param from The current index of the column.
