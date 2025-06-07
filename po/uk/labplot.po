@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-05 00:38+0000\n"
-"PO-Revision-Date: 2025-05-29 17:32+0300\n"
+"PO-Revision-Date: 2025-06-05 17:40+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -14751,7 +14751,7 @@ msgstr "Опис:"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:822
 #, kde-format
 msgid "User defined model"
-msgstr ""
+msgstr "Визначена користувачем модель"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:866
@@ -14766,9 +14766,7 @@ msgid "Number of peaks:"
 msgstr "Кількість піків:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1231
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select file to load function definition"
+#, kde-format
 msgid "Select file to load function definition"
 msgstr "Виберіть файл для завантаження визначення функції"
 

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-05 00:38+0000\n"
-"PO-Revision-Date: 2025-05-29 07:00+0200\n"
+"PO-Revision-Date: 2025-06-05 20:44+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -14696,7 +14696,7 @@ msgstr "Opis:"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:822
 #, kde-format
 msgid "User defined model"
-msgstr ""
+msgstr "Uporabniško definiran model"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:866
@@ -14711,9 +14711,7 @@ msgid "Number of peaks:"
 msgstr "Število vrhov:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1231
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select file to load function definition"
+#, kde-format
 msgid "Select file to load function definition"
 msgstr "Izberite datoteko za nalaganje definicije funkcije"
 
