@@ -141,6 +141,7 @@ void ProjectExplorer::createActions() {
   treeview specific options are added.
 */
 void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
+#ifndef SDK
 	if (!m_treeView->model())
 		return;
 
@@ -258,6 +259,7 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 		menu->exec(event->globalPos());
 
 	delete menu;
+#endif
 }
 
 void ProjectExplorer::setCurrentAspect(const AbstractAspect* aspect) {
