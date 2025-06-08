@@ -146,6 +146,10 @@
   </description>
   <url type="homepage">https://labplot.kde.org/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?product=LabPlot2&amp;format=guided</url>
+  <branding>
+    <color type="primary" scheme_preference="light">#ffbe6f</color>
+    <color type="primary" scheme_preference="dark">#c64600</color>
+  </branding>
   <screenshots>
     <screenshot type="default">
       <caption>Basic visualization of data</caption>
@@ -492,6 +496,7 @@
   <project_group>KDE</project_group>
   <provides>
     <binary>labplot</binary>
+    <id>org.kde.labplot.desktop</id>
     <id>org.kde.labplot2</id>
   </provides>
   <content_rating type="oars-1.1"/>
@@ -508,6 +513,9 @@
   </releases>
   <custom>
     <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9ngxfc68925l</value>
+    <value key="KDE::macos_download">https://labplot.org/download/#tab-8cIUbqvRly-3</value>
+    <value key="KDE::matrix">#labplot:kde.org</value>
+    <value key="KDE::mailinglist">labplot-support@kde.org</value>
     <value key="KDE::supporters">PJ;CounterFlow;[Jan Andrle](https://fosstodon.org/@jaandrle);Alessio Adamo</value>
   </custom>
 </component>
