@@ -4,7 +4,7 @@
 	Description       	 : A tree view for displaying and editing an AspectTreeModel.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -16,6 +16,8 @@
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/notebook/Notebook.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "frontend/core/ContentDockWidget.h"
 
@@ -149,61 +151,109 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 	if (!index.isValid())
 		m_treeView->clearSelection();
 
+	// for the current selection determine the selected aspects
 	const auto& items = m_treeView->selectionModel()->selectedIndexes();
+	const int selectedAspectsCount = items.size() / 4; // 4 columns in the tree view, devide by 4 to get the number of rows/aspects
+	QVector<AbstractAspect*> selectedAspects;
+	for (int i = 0; i < selectedAspectsCount; ++i) {
+		const auto& index = items.at(i * 4);
+		selectedAspects << static_cast<AbstractAspect*>(index.internalPointer());
+	}
+
 	QMenu* menu = nullptr;
-	if (items.size() / 4 == 1) {
-		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	if (selectedAspectsCount == 1) { // one single aspect is selected
+		// show aspects own context menu
+		auto* aspect = selectedAspects.constFirst();
 		menu = aspect->createContextMenu();
 
+		// if the top-level project item is selected, add actions to expand/collapse the tree
 		if (aspect == m_project) {
 			auto* firstAction = menu->actions().at(2);
 			menu->insertSeparator(firstAction);
 			menu->insertAction(firstAction, expandTreeAction);
 			menu->insertAction(firstAction, collapseTreeAction);
 		}
-	} else {
+	} else if (selectedAspectsCount > 1) { // multiple aspects are selected
 		menu = new QMenu(this);
+		// add "expand/collapse" actions if the selected aspects have children
+		bool hasChildren = false;
+		for (const auto* aspect : selectedAspects) {
+			if (aspect->childCount<AbstractAspect>()) {
+				hasChildren = true;
+				break;
+			}
+		}
 
-		if (items.size() / 4 > 1) {
-			// add "expand/collapse" entries if the selected indices have children
-			bool hasChildren = false;
-			for (int i = 0; i < items.size() / 4; ++i) {
-				const auto& index = items.at(i * 4);
-				const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-				if (aspect->childCount<AbstractAspect>()) {
-					hasChildren = true;
+		if (hasChildren) {
+			menu->addAction(expandSelectedTreeAction);
+			menu->addAction(collapseSelectedTreeAction);
+			menu->addSeparator();
+		} else {
+			// check if columns from the same parent were selected only
+			// and show parent's context menu for columns to allow plot data, etc.
+			bool columnsOnly = true;
+			bool sameParent = true;
+			AbstractAspect* parentAspect = nullptr;
+			for (const auto* aspect : selectedAspects) {
+				if (aspect->type() != AspectType::Column) {
+					columnsOnly = false;
 					break;
 				}
+
+				if (!parentAspect)
+					parentAspect = aspect->parentAspect();
+				else {
+					if (aspect->parentAspect() != parentAspect) {
+						sameParent = false;
+						break;
+					}
+					parentAspect = aspect->parentAspect();
+				}
 			}
-			if (hasChildren) {
-				menu->addAction(expandSelectedTreeAction);
-				menu->addAction(collapseSelectedTreeAction);
+
+			if (columnsOnly && sameParent) {
+				if (parentAspect->type() == AspectType::Spreadsheet) {
+					auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect);
+					spreadsheet->fillColumnsContextMenu(menu);
+				} else if (parentAspect->type() == AspectType::Notebook) {
+#ifdef HAVE_CANTOR_LIBS
+					auto* notebook = static_cast<Notebook*>(parentAspect);
+					QVector<Column*> columns;
+					for (const auto* aspect : selectedAspects) {
+						const auto* column = static_cast<const Column*>(aspect);
+						columns << const_cast<Column*>(column);
+					}
+					notebook->fillColumnsContextMenu(menu, columns);
+#endif
+				}
 				menu->addSeparator();
 			}
-
-			menu->addAction(deleteSelectedTreeAction);
-		} else {
-			QMenu* projectMenu = m_project->createContextMenu();
-			projectMenu->setTitle(m_project->name());
-			menu->addMenu(projectMenu);
-
-			menu->addSeparator();
-			menu->addAction(expandTreeAction);
-			menu->addAction(collapseTreeAction);
-			menu->addSeparator();
-			menu->addAction(toggleFilterAction);
-
-			// Menu for showing/hiding the columns in the tree view
-			QMenu* columnsMenu = menu->addMenu(i18n("Columns"));
-			columnsMenu->addAction(showAllColumnsAction);
-			columnsMenu->addSeparator();
-			for (auto* action : std::as_const(list_showColumnActions))
-				columnsMenu->addAction(action);
-
-			// TODO
-			// Menu for showing/hiding the top-level aspects (Worksheet, Spreadhsheet, etc) in the tree view
-			//  QMenu* objectsMenu = menu->addMenu(i18n("Show/Hide objects"));
 		}
+
+		menu->addAction(deleteSelectedTreeAction);
+	} else if (selectedAspectsCount == 0) {
+		// no aspects selected, show the actions relevant for the project explorer itself only
+		menu = new QMenu(this);
+		QMenu* projectMenu = m_project->createContextMenu();
+		projectMenu->setTitle(m_project->name());
+		menu->addMenu(projectMenu);
+
+		menu->addSeparator();
+		menu->addAction(expandTreeAction);
+		menu->addAction(collapseTreeAction);
+		menu->addSeparator();
+		menu->addAction(toggleFilterAction);
+
+		// Menu for showing/hiding the columns in the tree view
+		QMenu* columnsMenu = menu->addMenu(i18n("Columns"));
+		columnsMenu->addAction(showAllColumnsAction);
+		columnsMenu->addSeparator();
+		for (auto* action : std::as_const(list_showColumnActions))
+			columnsMenu->addAction(action);
+
+		// TODO
+		// Menu for showing/hiding the top-level aspects (Worksheet, Spreadhsheet, etc) in the tree view
+		//  QMenu* objectsMenu = menu->addMenu(i18n("Show/Hide objects"));
 	}
 
 	if (menu)

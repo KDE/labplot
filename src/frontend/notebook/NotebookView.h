@@ -4,7 +4,7 @@
 	Description          : View class for Notebeook
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -21,9 +21,6 @@ class Notebook;
 
 class QActionGroup;
 class QMenu;
-class QToolBar;
-
-class KActionCollection;
 
 namespace KParts {
 class ReadWritePart;
@@ -38,7 +35,7 @@ public:
 
 public Q_SLOTS:
 	void createContextMenu(QMenu*);
-	void fillColumnContextMenu(QMenu*, Column*);
+	void fillColumnsContextMenu(QMenu*, const QVector<Column*>&);
 
 	void evaluate();
 	void restart();
@@ -63,7 +60,7 @@ private:
 	QAction* m_findAction{nullptr};
 	QAction* m_replaceAction{nullptr};
 	QAction* m_statisticsAction{nullptr};
-	Column* m_contextMenuColumn{nullptr};
+	QVector<Column*> m_contextMenuColumns;
 
 	QMenu* m_addNewMenu{nullptr};
 	QMenu* m_plotDataMenu{nullptr};
