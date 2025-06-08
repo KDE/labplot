@@ -25,7 +25,7 @@ public:
 	explicit HypothesisTest(const QString& name);
 	~HypothesisTest() override;
 
-	enum class Test {t_test_one_sample, t_test_two_sample, t_test_paired, one_way_anova, mann_whitney_u_test, kruskal_wallis_test, log_rank_test};
+	enum class Test { t_test_one_sample, t_test_two_sample, t_test_paired, one_way_anova, mann_whitney_u_test, kruskal_wallis_test, log_rank_test };
 
 	enum NullHypothesisType {
 		NullEquality, // H0: μ = μ₀
