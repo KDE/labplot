@@ -89,8 +89,6 @@ public:
 
 	typedef ProjectPrivate Private;
 
-	static Project* currentProject;
-
 public Q_SLOTS:
 	void descriptionChanged(const AbstractAspect*);
 	void aspectAddedSlot(const AbstractAspect*);
@@ -117,6 +115,7 @@ private:
 	void updateSpreadsheetDependencies(const Spreadsheet*) const;
 	bool readProjectAttributes(XmlStreamReader*);
 	void save(QXmlStreamWriter*) const override;
+	static Project* currentProject;
 
 	template<typename T>
 	void updateDependencies(const QVector<const AbstractAspect*>);
@@ -126,6 +125,7 @@ private:
 	friend class AbstractAspect;
 	friend class MainWin;
 	friend class ImportDialog;
+	friend Project* project();
 };
 
 #endif // ifndef PROJECT_H

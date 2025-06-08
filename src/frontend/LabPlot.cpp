@@ -15,7 +15,6 @@
 #include "frontend/AboutDialog.h"
 
 #include <KAboutData>
-#include <KAboutComponent>
 #include <KColorSchemeManager>
 #include <KConfigGroup>
 #include <KCrash>

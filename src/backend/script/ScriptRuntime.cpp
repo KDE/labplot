@@ -21,8 +21,8 @@
  */
 ScriptRuntime::ScriptRuntime(const QString& lang, Script* script)
 	: QObject()
-	, m_name(script->name())
-	, lang(lang) {
+	, lang(lang)
+	, m_name(script->name()) {
 }
 
 /*!

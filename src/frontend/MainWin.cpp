@@ -1461,7 +1461,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 		m_dockManagerContent->setDockWidgetFocused(win);
 	} else {
 		// activate the mdiView of the parent, if a child was selected
-		const AbstractAspect* parent = aspect->parentAspect();
+		const auto* parent = aspect->parentAspect();
 		if (parent) {
 			activateSubWindowForAspect(parent);
 

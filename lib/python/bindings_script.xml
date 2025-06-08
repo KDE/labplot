@@ -2,7 +2,34 @@
     <load-typesystem name="typesystem_widgets.xml" generate="no"/>
 
     <!-- Global -->
-    <enum-type name="AspectType"/>
+    <enum-type name="AspectType">
+        <reject-enum-value name="DatapickerCurve"/>
+        <reject-enum-value name="DatapickerPoint"/>
+        <reject-enum-value name="LiveDataSource"/>
+        <reject-enum-value name="MQTTTopic"/>
+        <reject-enum-value name="Datapicker"/>
+        <reject-enum-value name="DatapickerImage"/>
+        <reject-enum-value name="Workbook"/>
+        <reject-enum-value name="MQTTClient"/>
+        <reject-enum-value name="MQTTSubscription"/>
+        <reject-enum-value name="ColumnStringIO"/>
+        <reject-enum-value name="SimpleFilterColumn"/>
+        <reject-enum-value name="AbstractColumn"/>
+        <reject-enum-value name="Note"/>
+        <reject-enum-value name="Notebook"/>
+        <reject-enum-value name="AbstractDataSource"/>
+        <reject-enum-value name="AbstractPart"/>
+        <reject-enum-value name="XYAnalysisCurve"/>
+        <reject-enum-value name="WorksheetElementGroup"/>
+        <reject-enum-value name="AbstractPlot"/>
+        <reject-enum-value name="WorksheetElementContainer"/>
+        <reject-enum-value name="PlotArea"/>
+        <reject-enum-value name="WorksheetElement"/>
+        <reject-enum-value name="AbstractFilter"/>
+        <reject-enum-value name="AbstractAspect"/>
+        <reject-enum-value name="Script"/>
+        <reject-enum-value name="StatisticsSpreadsheet"/>
+    </enum-type>
     <function signature="project()"/>
 
     <!-- Abstract Classes -->

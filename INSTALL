@@ -110,6 +110,6 @@ To remove all build files in the base directory execute
 ================================================================================
 Fedora dependencies:
 sudo dnf install extra-cmake-modules qt6-qtsvg-devel
-sudo dnf install kf6-kcoreaddons-devel kf6-kcrash-devel kf6-kdoctools-devel kf6-kiconthemes-devel kf6-ktextwidgets-devel kf6-kwidgetsaddons-devel kf6-kxmlgui-devel kf6-karchive-devel kf6-kcompletion-devel kf6-kio-devel kf6-knewstuff-devel kf6-kuserfeedback-devel qt6-qtbase-private-devel
+sudo dnf install kf6-kcoreaddons-devel kf6-kcrash-devel kf6-kdoctools-devel kf6-kiconthemes-devel kf6-ktextwidgets-devel kf6-kwidgetsaddons-devel kf6-kxmlgui-devel kf6-karchive-devel kf6-kcompletion-devel kf6-kio-devel kf6-knewstuff-devel kf6-kuserfeedback-devel qt6-qtbase-private-devel kf6-ktexteditor-devel
 sudo dnf install bison gsl-devel eigen3-devel
 
