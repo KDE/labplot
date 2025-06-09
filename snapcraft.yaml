@@ -12,7 +12,7 @@ apps:
   labplot:
     extensions:
       - kde-neon-6
-    common-id: org.kde.labplot.deskto
+    common-id: org.kde.labplot.desktop
     command: usr/bin/labplot
     plugs:
       - cups
