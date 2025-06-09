@@ -49,33 +49,6 @@
   <name xml:lang="zh-CN">LabPlot</name>
   <name xml:lang="zh-TW">LabPlot</name>
   <summary>Data visualization and analysis</summary>
-  <summary xml:lang="ar">تصور وتحليل البيانات التفاعلي</summary>
-  <summary xml:lang="ca">Visualització i anàlisi interactiva de dades</summary>
-  <summary xml:lang="ca-valencia">Visualització i anàlisi interactiva de dades</summary>
-  <summary xml:lang="de">Interaktive Datenvisualisierung und -analyse</summary>
-  <summary xml:lang="en-GB">Interactive Data Visualisation and Analysis</summary>
-  <summary xml:lang="eo">Interaga Datuma Bildigo kaj Analizo</summary>
-  <summary xml:lang="es">Visualización y análisis de datos interactivo</summary>
-  <summary xml:lang="eu">Datuen irudikatze eta azterketa elkarreragilea</summary>
-  <summary xml:lang="fi">Vuorovaikutteinen tiedon visualisointi ja analyysi</summary>
-  <summary xml:lang="fr">Analyse et affichage interactif de données</summary>
-  <summary xml:lang="gl">Visualización e análise interactiva de datos</summary>
-  <summary xml:lang="hi">इंटरैक्टिव डेटा विज़ुअलाइज़ेशन और विश्लेषण</summary>
-  <summary xml:lang="ia">Visualisation e Analyse de Datos Interactive</summary>
-  <summary xml:lang="id">Visualisasi dan Analisis Data Interaktif</summary>
-  <summary xml:lang="it">Analisi e visualizzazione dei dati interattiva</summary>
-  <summary xml:lang="ka">მონაცემების ვიზუალიზაცია და ანალიზი</summary>
-  <summary xml:lang="nl">Interactieve Datavisualisatie en analyse</summary>
-  <summary xml:lang="pl">Interaktywne obrazowanie i analiza danych</summary>
-  <summary xml:lang="pt">Visualização e Análise Interactivas de Dados</summary>
-  <summary xml:lang="pt-BR">Visualização e análise de dados interativa</summary>
-  <summary xml:lang="ru">Интерактивная визуализация и анализ данных</summary>
-  <summary xml:lang="sa">अन्तरक्रियाशील आँकडा दृश्यीकरण एवं विश्लेषण</summary>
-  <summary xml:lang="sl">Interaktivna vizualizacija in analiza podatkov</summary>
-  <summary xml:lang="sv">Interaktiv datavisualisering och analys</summary>
-  <summary xml:lang="tr">Etkileşimli Veri Görselleştirme ve Çözümleme</summary>
-  <summary xml:lang="uk">Інтерактивна візуалізація та аналіз даних</summary>
-  <summary xml:lang="x-test">xxInteractive Data Visualization and Analysisxx</summary>
   <description>
     <p>
       LabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.
