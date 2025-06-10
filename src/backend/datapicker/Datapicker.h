@@ -14,7 +14,7 @@
 
 #include "Vector3D.h"
 #include "backend/core/AbstractPart.h"
-#include "backend/core/DefaultColorTheme.h"
+#include "backend/worksheet/DefaultColorTheme.h"
 
 class Spreadsheet;
 class DatapickerCurve;
