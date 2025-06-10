@@ -16,6 +16,7 @@
 #include "backend/datapicker/Transform.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/DefaultColorTheme.h"
 #include "frontend/datapicker/DatapickerView.h"
 
 #include "QIcon"
