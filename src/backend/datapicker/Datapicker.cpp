@@ -232,10 +232,8 @@ void Datapicker::addNewPoint(QPointF pos, AbstractAspect* parentAspect) {
 		auto* datapickerCurve = static_cast<DatapickerCurve*>(parentAspect);
 		if (m_image == parentAspect)
 			newPoint->setIsReferencePoint(true);
-		else if (datapickerCurve) {
+		else if (datapickerCurve)
 			newPoint->initErrorBar(datapickerCurve->curveErrorTypes());
-			// datapickerCurve->updatePoint(newPoint);
-		}
 	} else
 		delete newPoint;
 	endMacro();
@@ -332,9 +330,6 @@ void Datapicker::setColorPalette(const KConfig& config) {
 		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor3"), QColor()));
 		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor4"), QColor()));
 		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor5"), QColor()));
-	} else {
-		// no theme is available, provide "default colors"
-		m_themeColorPalette = defaultColorPalette;
 	}
 }
 
