@@ -505,10 +505,11 @@ void DatapickerImage::childRemoved(const AbstractAspect* child) {
 		disconnect(point, nullptr, this, nullptr);
 }
 
-bool DatapickerImage::validAddingChild(const AbstractAspect*) {
-	if (children<DatapickerPoint>(ChildIndexFlag::IncludeHidden).count() >= 3)
+bool DatapickerImage::addChild(AbstractAspect* child) {
+	if (dynamic_cast<DatapickerPoint*>(child) && children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden).count() >= 3)
 		return false;
-	return true;
+
+	return AbstractAspect::addChild(child);
 }
 
 void DatapickerImage::datapickerPointChanged(const DatapickerPoint* point) {
