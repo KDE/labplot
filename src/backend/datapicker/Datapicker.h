@@ -61,7 +61,7 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-	void setColorPalette(const KConfig& config);
+	void setColorPalette(const KConfig&);
 	QColor themeColorPalette(int index) const;
 
 public Q_SLOTS:
