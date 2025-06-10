@@ -33,6 +33,7 @@ class DatapickerImage : public AbstractPart {
 public:
 	explicit DatapickerImage(const QString& name, bool loading = false);
 	~DatapickerImage() override;
+	bool addChild(AbstractAspect* child) override;
 
 	enum class GraphType { Linear, PolarInDegree, PolarInRadians, LnX, LnY, Ternary, LnXY, Log10XY, Log10X, Log10Y };
 	enum class ColorAttributes { None, Intensity, Foreground, Hue, Saturation, Value };
@@ -126,7 +127,6 @@ private:
 	void childAdded(const AbstractAspect* child);
 	void datapickerPointChanged(const DatapickerPoint*);
 	void childRemoved(const AbstractAspect* child);
-	bool validAddingChild(const AbstractAspect*) override;
 
 	Q_DECLARE_PRIVATE(DatapickerImage)
 	DatapickerImagePrivate* const d_ptr;

@@ -300,7 +300,7 @@ public:
 	void setParentAspect(AbstractAspect*);
 	Folder* folder();
 	bool isDescendantOf(AbstractAspect* other);
-	bool addChild(AbstractAspect*);
+	virtual bool addChild(AbstractAspect*);
 	void addChildFast(AbstractAspect*);
 	virtual void finalizeAdd(){};
 	QVector<AbstractAspect*> children(AspectType, ChildIndexFlags = {}) const;
@@ -432,8 +432,6 @@ protected:
 	void writeBasicAttributes(QXmlStreamWriter*) const;
 	void writeCommentElement(QXmlStreamWriter*) const;
 	bool readCommentElement(XmlStreamReader*);
-
-	virtual bool validAddingChild(const AbstractAspect*);
 
 	const AspectType m_type;
 
