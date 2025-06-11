@@ -637,7 +637,7 @@ void LollipopPlotPrivate::verticalPlot(int columnIndex) {
 		++valueIndex;
 	}
 
-	m_barLines[columnIndex] = q->cSystem->mapLogicalToScene(barLines);
+	m_barLines[columnIndex] = q->cSystem->mapLogicalToSceneCopy(barLines);
 	m_symbolPoints[columnIndex] = q->cSystem->mapLogicalToScene(symbolPoints);
 }
 
@@ -675,7 +675,7 @@ void LollipopPlotPrivate::horizontalPlot(int columnIndex) {
 		++valueIndex;
 	}
 
-	m_barLines[columnIndex] = q->cSystem->mapLogicalToScene(barLines);
+	m_barLines[columnIndex] = q->cSystem->mapLogicalToSceneCopy(barLines);
 	m_symbolPoints[columnIndex] = q->cSystem->mapLogicalToScene(symbolPoints);
 }
 

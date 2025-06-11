@@ -1196,7 +1196,7 @@ void AxisPrivate::retransformLine() {
 			endPoint = QPointF(range.end(), logicalPosition);
 			lines.append(QLineF(startPoint, endPoint));
 			// QDEBUG(Q_FUNC_INFO << ", Logical LINE = " << lines)
-			lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
+			lines = q->cSystem->mapLogicalToSceneCopy(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
 		} else {
 			WorksheetElement::PositionWrapper wrapper;
 			if (position == Axis::Position::Top)
@@ -1211,7 +1211,7 @@ void AxisPrivate::retransformLine() {
 
 			Lines ranges{QLineF(QPointF(range.start(), 1.), QPointF(range.end(), 1.))};
 			// y=1 may be outside clip range: suppress clipping. value must be > 0 for log scales
-			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+			const auto sceneRange = q->cSystem->mapLogicalToSceneCopy(ranges, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 			// QDEBUG(Q_FUNC_INFO << ", scene range = " << sceneRange)
 
 			if (sceneRange.size() > 0) {
@@ -1230,7 +1230,7 @@ void AxisPrivate::retransformLine() {
 			endPoint = QPointF(logicalPosition, range.end());
 			lines.append(QLineF(startPoint, endPoint));
 			// QDEBUG(Q_FUNC_INFO << ", LOGICAL LINES = " << lines)
-			lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
+			lines = q->cSystem->mapLogicalToSceneCopy(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
 		} else {
 			WorksheetElement::PositionWrapper wrapper;
 			if (position == Axis::Position::Left)
@@ -1245,7 +1245,7 @@ void AxisPrivate::retransformLine() {
 
 			Lines ranges{QLineF(QPointF(1., range.start()), QPointF(1., range.end()))};
 			// x=1 may be outside clip range: suppress clipping. value must be > 0 for log scales
-			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+			const auto sceneRange = q->cSystem->mapLogicalToSceneCopy(ranges, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 			// QDEBUG(Q_FUNC_INFO << ", scene range = " << sceneRange)
 			if (sceneRange.size() > 0) {
 				// std::max/std::min: stay inside rect()
@@ -2723,7 +2723,7 @@ void AxisPrivate::retransformMajorGrid() {
 		}
 	}
 
-	lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	lines = q->cSystem->mapLogicalToSceneCopy(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	for (const auto& line : lines) {
 		majorGridPath.moveTo(line.p1());
 		majorGridPath.lineTo(line.p2());
@@ -2765,7 +2765,7 @@ void AxisPrivate::retransformMinorGrid() {
 			lines.append(QLineF(xRange.start(), point.y(), xRange.end(), point.y()));
 	}
 
-	lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	lines = q->cSystem->mapLogicalToSceneCopy(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	for (const auto& line : lines) {
 		minorGridPath.moveTo(line.p1());
 		minorGridPath.lineTo(line.p2());

@@ -360,7 +360,7 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, bool&
 	return QPointF{};
 }
 
-Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFlags flags) const {
+Lines CartesianCoordinateSystem::mapLogicalToSceneCopy(const Lines& lines, MappingFlags flags) const {
 	QRectF pageRect = d->plot->dataRect();
 	Lines result;
 	const bool doPageClipping = !pageRect.isNull() && !(flags & MappingFlag::SuppressPageClipping);

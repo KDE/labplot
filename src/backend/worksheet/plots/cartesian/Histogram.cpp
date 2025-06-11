@@ -982,8 +982,8 @@ void HistogramPrivate::updateLines() {
 		horizontalHistogram();
 
 	// map the lines and the symbol positions to the scene coordinates
-	linesUnclipped = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-	lines = q->cSystem->mapLogicalToScene(lines);
+	linesUnclipped = q->cSystem->mapLogicalToSceneCopy(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	lines = q->cSystem->mapLogicalToSceneCopy(lines);
 	visiblePoints = std::vector<bool>(pointsLogical.count(), false);
 	q->cSystem->mapLogicalToScene(pointsLogical, pointsScene, visiblePoints);
 

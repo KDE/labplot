@@ -1147,7 +1147,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 		lines << QLineF(xMinBox, notchMax, xMinBox, yMaxBox);
 	}
 
-	m_boxRect[index] = q->cSystem->mapLogicalToScene(lines);
+	m_boxRect[index] = q->cSystem->mapLogicalToSceneCopy(lines);
 	updateFillingRect(index, lines);
 
 	// median line
@@ -1159,7 +1159,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 		lines << QLineF(xMinBox + 0.1 * width, median, m_xMaxBox.at(index) - 0.1 * width, median);
 	}
 
-	lines = q->cSystem->mapLogicalToScene(lines);
+	lines = q->cSystem->mapLogicalToSceneCopy(lines);
 	if (!lines.isEmpty())
 		m_medianLine[index] = lines.first();
 
@@ -1167,7 +1167,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	lines.clear();
 	lines << QLineF(x, m_yMaxBox.at(index), x, m_whiskerMax.at(index)); // upper whisker
 	lines << QLineF(x, m_yMinBox.at(index), x, m_whiskerMin.at(index)); // lower whisker
-	lines = q->cSystem->mapLogicalToScene(lines);
+	lines = q->cSystem->mapLogicalToSceneCopy(lines);
 	for (const auto& line : std::as_const(lines)) {
 		m_whiskersPath[index].moveTo(line.p1());
 		m_whiskersPath[index].lineTo(line.p2());
@@ -1235,7 +1235,7 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 		lines << QLineF(xMinBox, yMinBox, xMinBox, yMaxBox);
 	}
 
-	m_boxRect[index] = q->cSystem->mapLogicalToScene(lines);
+	m_boxRect[index] = q->cSystem->mapLogicalToSceneCopy(lines);
 	updateFillingRect(index, lines);
 
 	// median line
@@ -1247,7 +1247,7 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 		lines << QLineF(median, yMinBox + 0.1 * width, median, yMaxBox - 0.1 * width);
 	}
 
-	lines = q->cSystem->mapLogicalToScene(lines);
+	lines = q->cSystem->mapLogicalToSceneCopy(lines);
 	if (!lines.isEmpty())
 		m_medianLine[index] = lines.first();
 
@@ -1255,7 +1255,7 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 	lines.clear();
 	lines << QLineF(m_xMaxBox.at(index), y, m_whiskerMax.at(index), y); // upper whisker
 	lines << QLineF(m_xMinBox.at(index), y, m_whiskerMin.at(index), y); // lower whisker
-	lines = q->cSystem->mapLogicalToScene(lines);
+	lines = q->cSystem->mapLogicalToSceneCopy(lines);
 	for (const auto& line : std::as_const(lines)) {
 		m_whiskersPath[index].moveTo(line.p1());
 		m_whiskersPath[index].lineTo(line.p2());
@@ -1340,7 +1340,7 @@ void BoxPlotPrivate::updateRug() {
 }
 
 void BoxPlotPrivate::updateFillingRect(int index, const QVector<QLineF>& lines) {
-	const auto& unclippedLines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	const auto& unclippedLines = q->cSystem->mapLogicalToSceneCopy(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	if (unclippedLines.isEmpty()) {
 		m_fillPolygon[index] = QPolygonF();

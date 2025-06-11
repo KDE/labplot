@@ -758,7 +758,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 
 			valuesPointsLogical << QPointF(x + width / 2, value);
 
-			barLines << q->cSystem->mapLogicalToScene(lines);
+			barLines << q->cSystem->mapLogicalToSceneCopy(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
 
 			++valueIndex;
@@ -806,7 +806,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 				valuesPointsLogical << QPointF(x + width / 2, m_stackedBarNegativeOffsets.at(valueIndex));
 			}
 
-			barLines << q->cSystem->mapLogicalToScene(lines);
+			barLines << q->cSystem->mapLogicalToSceneCopy(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
 
 			++valueIndex;
@@ -850,7 +850,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 
 			valuesPointsLogical << QPointF(x + width / 2, m_stackedBarPositiveOffsets.at(valueIndex));
 
-			barLines << q->cSystem->mapLogicalToScene(lines);
+			barLines << q->cSystem->mapLogicalToSceneCopy(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
 
 			++valueIndex;
@@ -906,7 +906,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 
 			valuesPointsLogical << QPointF(value, y + width / 2);
 
-			barLines << q->cSystem->mapLogicalToScene(lines);
+			barLines << q->cSystem->mapLogicalToSceneCopy(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
 
 			++valueIndex;
@@ -952,7 +952,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 				m_stackedBarNegativeOffsets[valueIndex] += value;
 				valuesPointsLogical << QPointF(m_stackedBarNegativeOffsets.at(valueIndex), y + width / 2);
 			}
-			barLines << q->cSystem->mapLogicalToScene(lines);
+			barLines << q->cSystem->mapLogicalToSceneCopy(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
 
 			++valueIndex;
@@ -994,7 +994,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			m_stackedBarPositiveOffsets[valueIndex] += value;
 			valuesPointsLogical << QPointF(m_stackedBarPositiveOffsets.at(valueIndex), y + width / 2);
 
-			barLines << q->cSystem->mapLogicalToScene(lines);
+			barLines << q->cSystem->mapLogicalToSceneCopy(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
 
 			++valueIndex;
@@ -1008,7 +1008,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 }
 
 void BarPlotPrivate::updateFillingRect(int columnIndex, int valueIndex, const QVector<QLineF>& lines) {
-	const auto& unclippedLines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	const auto& unclippedLines = q->cSystem->mapLogicalToSceneCopy(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	if (unclippedLines.isEmpty()) {
 		m_fillPolygons[columnIndex][valueIndex] = QPolygonF();
