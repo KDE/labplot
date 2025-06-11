@@ -87,13 +87,7 @@ double nsl_math_trunc_places(double value, int n) {
 	return nsl_math_places(value, n, 3);
 }
 
-double nsl_math_places_1(double value, int method);
-
 double nsl_math_trunc_places_1(double value) {
-	return nsl_math_places_1(value, 3);
-}
-
-double nsl_math_places_1(double value, int method) {
 	// no need to round
 	if (value == 0. || fabs(value) > 1.e16 || fabs(value) < 1.e-16 || isnan(value) || isinf(value)) {
 		/*		printf("nsl_math_places(): not changed : %.19g\n", value); */
@@ -112,23 +106,7 @@ double nsl_math_places_1(double value, int method) {
 		printf("nsl_math_places(): value = %g, n = %d, DBL_EPSILON = %.19g, scale = %.19g, scaled_value = %.19g, round(scaled_value) = %.19g
 	   round(scaled_value)/scale = %.19g\n", value, n, DBL_EPSILON, scale, scaled_value, round(scaled_value), round(scaled_value)/scale);
 	*/
-	switch (method) {
-	case 0:
-		return round(scaled_value) / scale;
-		break;
-	case 1:
-		return floor(scaled_value + eps) / scale;
-		break;
-	case 2:
-		return ceil(scaled_value - eps) / scale;
-		break;
-	case 3:
-		return trunc(scaled_value) / scale;
-		break;
-	default:
-		printf("ERROR: unknown rounding method %d\n", method);
-		return value;
-	}
+	return trunc(scaled_value) / scale;
 }
 
 double nsl_math_places(double value, int n, int method) {
