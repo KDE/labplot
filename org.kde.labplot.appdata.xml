@@ -49,6 +49,15 @@
   <name xml:lang="zh-CN">LabPlot</name>
   <name xml:lang="zh-TW">LabPlot</name>
   <summary>Visualize and analyze data</summary>
+  <summary xml:lang="ca">Visualitza i analitza dades</summary>
+  <summary xml:lang="ca-valencia">Visualitza i analitza les dades</summary>
+  <summary xml:lang="es">Visualizar y analizar datos</summary>
+  <summary xml:lang="ka">მონაცემების ვიზუალიზაცია და ანალიზი</summary>
+  <summary xml:lang="nl">Gegevens visualiseren en analyseren</summary>
+  <summary xml:lang="sl">Vizualizira in analizira podatke</summary>
+  <summary xml:lang="tr">Veri görselleyin ve çözümleyin</summary>
+  <summary xml:lang="uk">Візуалізація та аналіз даних</summary>
+  <summary xml:lang="x-test">xxVisualize and analyze dataxx</summary>
   <description>
     <p>
       LabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.
