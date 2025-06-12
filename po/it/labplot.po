@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-09 02:37+0000\n"
-"PO-Revision-Date: 2025-05-02 10:03+0200\n"
+"PO-Revision-Date: 2025-05-31 08:55+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.04.0\n"
+"X-Generator: Lokalize 25.04.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1177,6 +1177,7 @@ msgstr "Separatore non valido."
 #, kde-format
 msgid "Serial device must be initialized before reading data from it"
 msgstr ""
+"Un dispositivo seriale deve essere inizializzato prima di leggere i suoi dati"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
 #, kde-format
@@ -8609,7 +8610,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1865
 #, kde-format
 msgid "Process Behavior Chart"
-msgstr ""
+msgstr "Grafico del comportamento del processo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:786
 #, kde-format
@@ -10368,7 +10369,7 @@ msgstr "Importa file binari MAT di MATLAB"
 #: src/frontend/AboutDialog.cpp:283
 #, kde-format
 msgid "MCAP file support"
-msgstr ""
+msgstr "Supporto ai file MCAP"
 
 #: src/frontend/AboutDialog.cpp:289
 #, kde-format
@@ -11639,6 +11640,8 @@ msgstr "File DBC (*.dbc)"
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 msgstr ""
+"I file di progetto di Origin devono essere aperti da \"Import -> Progetto "
+"Origin\"."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1124
 #, kde-format
@@ -11968,7 +11971,7 @@ msgstr "Impossibile trovare file .csv in %1"
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Origin Multi-Layer Graphs"
-msgstr ""
+msgstr "Importa grafici multi livello Origin"
 
 #: src/frontend/datasources/ImportOriginLayersDialog.cpp:26
 #: src/frontend/datasources/ImportProjectDialog.cpp:169
@@ -13620,6 +13623,7 @@ msgstr ""
 #, kde-format
 msgid "Minimal value for the lower control limit. No constraint, if empty."
 msgstr ""
+"Valore minimo per il limite di controllo inferiore. Se vuoto, nessun vincolo."
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:273
 #, kde-format
@@ -13668,6 +13672,8 @@ msgid ""
 "Metric of the dataset used to determine where the center line should be "
 "placed at"
 msgstr ""
+"Metrica dell'insieme di dati utilizzata per determinare il punto in cui deve "
+"essere posizionata la linea centrale"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:57
 #, kde-format
@@ -14403,7 +14409,7 @@ msgstr "Grafico Q-Q"
 #, kde-format
 msgctxt "@title:window"
 msgid "Process Behavior Chart"
-msgstr ""
+msgstr "Grafico del comportamento del processo"
 
 #: src/frontend/GuiObserver.cpp:385
 #, kde-format
@@ -16441,17 +16447,17 @@ msgstr ""
 #: src/frontend/SettingsWorksheetPage.cpp:30
 #, kde-format
 msgid "Small (3cm x 3cm)"
-msgstr ""
+msgstr "Piccolo (3cm x 3cm)"
 
 #: src/frontend/SettingsWorksheetPage.cpp:31
 #, kde-format
 msgid "Medium (5cm x 5cm)"
-msgstr ""
+msgstr "Medio (5cm x 5cm)"
 
 #: src/frontend/SettingsWorksheetPage.cpp:32
 #, kde-format
 msgid "Big (7cm x 7cm)"
-msgstr ""
+msgstr "Grande (7cm x 7cm)"
 
 #: src/frontend/SettingsWorksheetPage.cpp:152
 #, kde-format
@@ -23348,7 +23354,7 @@ msgstr "Termini:"
 #: src/frontend/ui/settingsgeneralpage.ui:439
 #, kde-format
 msgid "Use Hyphen '-' instead of Minus '–'"
-msgstr ""
+msgstr "Usa un trattino «-» invece del meno «–»"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
