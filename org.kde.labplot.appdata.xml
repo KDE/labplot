@@ -30,6 +30,10 @@
   <name xml:lang="uk">LabPlot</name>
   <name xml:lang="zh-CN">LabPlot</name>
   <summary>Visualize and analyze data</summary>
+  <summary xml:lang="ca">Visualitza i analitza dades</summary>
+  <summary xml:lang="es">Visualizar y analizar datos</summary>
+  <summary xml:lang="nl">Gegevens visualiseren en analyseren</summary>
+  <summary xml:lang="sl">Vizualizira in analizira podatke</summary>
   <description>
     <p>
       LabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.
