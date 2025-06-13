@@ -4,7 +4,7 @@
 	Description          : View class for Notebeook
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -16,12 +16,11 @@
 #include <cantor/session.h>
 #endif
 
+class Column;
+class Notebook;
+
 class QActionGroup;
 class QMenu;
-class QToolBar;
-
-class Notebook;
-class Column;
 
 namespace KParts {
 class ReadWritePart;
@@ -36,8 +35,13 @@ public:
 
 public Q_SLOTS:
 	void createContextMenu(QMenu*);
-	void fillColumnContextMenu(QMenu*, Column*);
-	void fillToolBar(QToolBar*);
+	void fillColumnsContextMenu(QMenu*, const QVector<Column*>&);
+
+	void evaluate();
+	void restart();
+	void zoomIn();
+	void zoomOut();
+	void find();
 
 private Q_SLOTS:
 	void triggerAction(QAction*);
@@ -49,14 +53,14 @@ private:
 	QActionGroup* m_actionGroup{nullptr};
 	QAction* m_evaluateEntryAction{nullptr};
 	QAction* m_removeCurrentEntryAction{nullptr};
-	QAction* m_restartBackendAction{nullptr};
-	QAction* m_evaluateWorsheetAction{nullptr};
-	QAction* m_zoomIn{nullptr};
-	QAction* m_zoomOut{nullptr};
-	QAction* m_find{nullptr};
-	QAction* m_replace{nullptr};
+	QAction* m_restartAction{nullptr};
+	QAction* m_evaluateAction{nullptr};
+	QAction* m_zoomInAction{nullptr};
+	QAction* m_zoomOutAction{nullptr};
+	QAction* m_findAction{nullptr};
+	QAction* m_replaceAction{nullptr};
 	QAction* m_statisticsAction{nullptr};
-	Column* m_contextMenuColumn{nullptr};
+	QVector<Column*> m_contextMenuColumns;
 
 	QMenu* m_addNewMenu{nullptr};
 	QMenu* m_plotDataMenu{nullptr};

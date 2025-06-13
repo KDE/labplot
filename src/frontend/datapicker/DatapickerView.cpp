@@ -4,7 +4,7 @@
 	Description          : View class for Datapicker
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -81,11 +81,6 @@ DatapickerView::~DatapickerView() {
 		if (part)
 			part->deleteView();
 	}
-}
-
-void DatapickerView::fillToolBar(QToolBar* toolBar) {
-	auto* view = static_cast<DatapickerImageView*>(m_datapicker->image()->view());
-	view->fillToolBar(toolBar);
 }
 
 void DatapickerView::createContextMenu(QMenu* menu) const {

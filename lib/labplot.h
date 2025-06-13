@@ -47,7 +47,6 @@
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianScale.h"
 #include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"

@@ -19,21 +19,29 @@ class ScriptEditor : public QWidget {
 public:
     explicit ScriptEditor(Script*, QWidget* parent = nullptr);
     ~ScriptEditor();
-    void fillToolBar(QToolBar*);
+
+    bool isInitialized() const;
+
     void writeOutput(bool, const QString&);
+    QString outputText();
+
     void setEditorFont(const QFont&);
     QFont editorFont();
+
     void setOutputFont(const QFont&);
 	QFont outputFont();
+
     void setEditorTheme(const QString&);
 	QString editorTheme();
-    QString outputText();
+
 
 protected:
     bool eventFilter(QObject* object, QEvent* event) override;
 
 public Q_SLOTS:
 	void createContextMenu(QMenu*);
+    void run();
+    void clearOutput();
 
 private:
     Ui::ScriptEditorWidget ui;

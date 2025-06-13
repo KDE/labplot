@@ -52,9 +52,14 @@ public:
 	explicit SpreadsheetView(Spreadsheet*, bool readOnly = false);
 	~SpreadsheetView() override;
 
+	bool isReadOnly() const;
 	void resizeHeader();
 	void setFocus();
 	void setSuppressResizeHeader(bool);
+
+	void createContextMenu(QMenu*);
+	void fillColumnContextMenu(QMenu*, Column*);
+	void fillColumnsContextMenu(QMenu*);
 
 	void showComments(bool on = true);
 	void showSparklines(bool on = true);
@@ -235,9 +240,6 @@ private:
 
 public Q_SLOTS:
 	void handleAspectsAdded(int first, int last);
-	void createContextMenu(QMenu*);
-	void fillColumnContextMenu(QMenu*, Column*);
-	void fillToolBar(QToolBar*);
 
 #ifdef HAVE_TOUCHBAR
 	void fillTouchBar(KDMacTouchBar*);
@@ -253,6 +255,17 @@ public Q_SLOTS:
 	void goToCell(int row, int col);
 	void selectCell(int row, int col);
 	void clearSelection();
+
+	// public slots that are also used in the toolbar
+	void insertRowAbove();
+	void insertRowBelow();
+	void removeSelectedRows();
+	void insertColumnLeft();
+	void insertColumnRight();
+	void removeSelectedColumns();
+	void sortCustom();
+	void sortAscending();
+	void sortDescending();
 
 private Q_SLOTS:
 	void searchReplace();
@@ -281,17 +294,11 @@ private Q_SLOTS:
 	void fillWithFunctionValues();
 	void fillSelectedCellsWithConstValues();
 
-	void insertRowAbove();
-	void insertRowBelow();
 	void insertRowsAbove();
 	void insertRowsBelow();
-	void removeSelectedRows();
 
-	void insertColumnLeft();
-	void insertColumnRight();
 	void insertColumnsLeft();
 	void insertColumnsRight();
-	void removeSelectedColumns();
 	void clearSelectedColumns();
 	void toggleFreezeColumn();
 
@@ -304,12 +311,7 @@ private Q_SLOTS:
 	void normalizeSelectedColumns(QAction*);
 	void powerTransformSelectedColumns(QAction*);
 
-	void sortCustom();
-	void sortAscending();
-	void sortDescending();
-
 	void setSelectionAs();
-
 	void activateFormulaMode(bool on);
 
 	void showColumnStatistics(bool forAll = false);

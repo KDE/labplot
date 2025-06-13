@@ -168,7 +168,9 @@ void WorkbookView::addSpreadsheet() {
 
 void WorkbookView::handleDescriptionChanged(const AbstractAspect* aspect) {
 	int index = m_workbook->indexOfChild<AbstractAspect>(aspect);
-	if (index != -1 && index < m_tabWidget->count())
+	if (index < 0)
+		return;
+	if (index < m_tabWidget->count())
 		m_tabWidget->setTabText(index, aspect->name());
 }
 
@@ -178,6 +180,8 @@ void WorkbookView::handleAspectAdded(const AbstractAspect* aspect) {
 		return;
 
 	int index = m_workbook->indexOfChild<AbstractAspect>(aspect);
+	if (index < 0)
+		return;
 	m_tabWidget->insertTab(index, part->view(), aspect->name());
 	m_tabWidget->setCurrentIndex(index);
 	m_tabWidget->setTabIcon(m_tabWidget->count(), aspect->icon());
@@ -186,5 +190,7 @@ void WorkbookView::handleAspectAdded(const AbstractAspect* aspect) {
 
 void WorkbookView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	int index = m_workbook->indexOfChild<AbstractAspect>(aspect);
+	if (index < 0)
+		return;
 	m_tabWidget->removeTab(index);
 }

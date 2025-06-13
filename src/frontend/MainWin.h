@@ -12,14 +12,16 @@
 #ifndef MAINWIN_H
 #define MAINWIN_H
 
-#include "SettingsDialog.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "SettingsDialog.h" // for Settings::Type enum
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h" // for CartesianPlot::MouseMode enum
 
 #include <KXmlGuiWindow>
 #include <QStringLiteral>
 #include <QTimer>
+#include <QPointer>
 
 class AbstractAspect;
+class ActionsManager;
 class AspectTreeModel;
 class Folder;
 class ProjectExplorer;
@@ -41,28 +43,15 @@ class QToolButton;
 // class QQuickWidget;
 
 class KColorSchemeManager;
-class KHamburgerMenu;
-class KRecentFilesAction;
-class KToggleAction;
-class KToggleFullScreenAction;
 
 namespace ads {
 class CDockManager;
 class CDockWidget;
+class CDockAreaWidget;
 }
 
 #ifdef HAVE_KUSERFEEDBACK
 #include <KUserFeedback/Provider>
-#endif
-
-#ifdef HAVE_PURPOSE
-namespace Purpose {
-class Menu;
-}
-#endif
-
-#ifdef HAVE_TOUCHBAR
-class KDMacTouchBar;
 #endif
 
 class MainWin : public KXmlGuiWindow {
@@ -101,6 +90,9 @@ private:
 	ads::CDockWidget* m_worksheetPreviewDock{nullptr};
 	AbstractAspect* m_currentAspect{nullptr};
 	ads::CDockWidget* m_currentAspectDock{nullptr};
+	// introduce a QPointer for the current aspect dock area
+	// we use QPointer because it internally sets itself to nullptr when the object it manages is deleted
+	QPointer<ads::CDockAreaWidget> m_currentAspectDockArea{nullptr};
 	Folder* m_currentFolder{nullptr};
 	QString m_undoViewEmptyLabel;
 	bool m_suppressCurrentSubWindowChangedEvent{false};
@@ -123,93 +115,15 @@ private:
 	KUserFeedback::Provider m_userFeedbackProvider;
 #endif
 
-#ifdef Q_OS_MAC
-#ifdef HAVE_TOUCHBAR
-	KDMacTouchBar* m_touchBar;
-#endif
-	QAction* m_undoIconOnlyAction;
-	QAction* m_redoIconOnlyAction;
-#endif
-
-	KRecentFilesAction* m_recentProjectsAction;
-	QAction* m_searchAction;
-	QAction* m_saveAction;
-	QAction* m_saveAsAction;
-	QAction* m_printAction;
-	QAction* m_printPreviewAction;
-	QAction* m_importFileAction;
-	QAction* m_importFileAction_2;
-	QAction* m_importKaggleDatasetAction;
-	QAction* m_importSqlAction;
-	QAction* m_importDatasetAction;
-	QAction* m_importLabPlotAction;
-	QAction* m_importOpjAction;
-	QAction* m_exportAction;
-	QAction* m_newFolderAction;
-	QAction* m_newWorkbookAction;
-	QAction* m_newSpreadsheetAction;
-	QAction* m_newMatrixAction;
-	QAction* m_newWorksheetAction;
-	QList<QAction*> m_newScriptActions;
-	QAction* m_newNotesAction;
-	QAction* m_newLiveDataSourceAction;
-	QAction* m_newProjectAction;
-	QAction* m_openProjectAction;
-	QAction* m_historyAction;
-	QAction* m_undoAction;
-	QAction* m_redoAction;
-	QAction* m_closeWindowAction;
-	QAction* m_closeAllWindowsAction;
-	QAction* m_nextWindowAction;
-	QAction* m_prevWindowAction;
-	QAction* m_newDatapickerAction;
-#ifdef HAVE_CANTOR_LIBS
-	QAction* m_lastUsedNotebookAction{nullptr};
-	QToolButton* m_tbNotebook{nullptr};
-#endif
-	QToolButton* m_tbScript{nullptr};
-
-	// toggling dock widgets, status bar and full screen
-	QAction* m_projectExplorerDockAction;
-	QAction* m_propertiesDockAction;
-	QAction* m_worksheetPreviewAction;
-	KToggleAction* m_statusBarAction;
-	QAction* m_memoryInfoAction;
-	KToggleFullScreenAction* m_fullScreenAction;
-	QAction* m_configureNotebookAction;
-
-	// window visibility
-	QAction* m_visibilityFolderAction;
-	QAction* m_visibilitySubfolderAction;
-	QAction* m_visibilityAllAction;
-
-	// Menus
-	QMenu* m_visibilityMenu{nullptr};
-	QMenu* m_newMenu{nullptr};
-	QMenu* m_importMenu{nullptr};
-	QMenu* m_newNotebookMenu{nullptr};
-	QMenu* m_newScriptMenu{nullptr};
-	KHamburgerMenu* m_hamburgerMenu{nullptr};
-
-#ifdef HAVE_PURPOSE
-	QAction* m_shareAction{nullptr};
-	Purpose::Menu* m_shareMenu{nullptr};
-	void fillShareMenu();
-#endif
-
 	// Docks
 	ads::CDockWidget* cursorDock{nullptr};
 
 	QStackedWidget* stackedWidget{nullptr};
 	CursorDock* cursorWidget{nullptr};
 
-	void initActions();
-	void initMenus();
 	bool warnModified();
 	void activateSubWindowForAspect(const AbstractAspect*);
 	bool save(const QString&);
-	// 	void toggleShowWidget(QWidget* widget, bool showToRight);
-	// 	void toggleHideWidget(QWidget* widget, bool hideToLeft);
 	// 	QQuickWidget* createWelcomeScreen();
 	// 	void resetWelcomeScreen();
 	void initDocks();
@@ -218,6 +132,9 @@ private:
 	void migrateSettings();
 
 	Spreadsheet* activeSpreadsheet() const;
+
+	friend class ActionsManager;
+	ActionsManager* m_actionsManager{nullptr};
 
 	friend class GuiObserver;
 	GuiObserver* m_guiObserver{nullptr};
@@ -230,13 +147,10 @@ protected:
 
 private Q_SLOTS:
 	void initGUI(const QString&);
-	void customAboutDialog();
 	void activateNextDock();
 	void activatePreviousDock();
 	void dockWidgetRemoved(ads::CDockWidget*);
 	void dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now);
-	void updateGUI();
-	void updateGUIOnProjectChanges();
 	void undo();
 	void redo();
 
@@ -253,6 +167,7 @@ private Q_SLOTS:
 	void print();
 	void printPreview();
 
+	void exampleProjectsDialog();
 	void historyDialog();
 	void importFileDialog(const QString& fileName = QString());
 	void importKaggleDatasetDialog();
@@ -269,7 +184,6 @@ private Q_SLOTS:
 #ifdef HAVE_CANTOR_LIBS
 	void newNotebook();
 	void settingsNotebookDialog();
-	void updateNotebookActions();
 #endif
 
 	void newFolder();
@@ -277,7 +191,9 @@ private Q_SLOTS:
 	void newSpreadsheet();
 	void newMatrix();
 	void newWorksheet();
+#ifdef HAVE_SCRIPTING
 	void newScript();
+#endif
 	void newNotes();
 	void newDatapicker();
 	void newLiveDataSource();
@@ -295,11 +211,6 @@ private Q_SLOTS:
 
 	void setDockVisibility(QAction*);
 	void updateDockWindowVisibility() const;
-	void toggleDockWidget(QAction*);
-	void toggleStatusBar(bool);
-	void toggleMenuBar(bool);
-	void toggleMemoryInfo();
-	void toggleFullScreen(bool);
 	void projectExplorerDockVisibilityChanged(bool);
 	void propertiesDockVisibilityChanged(bool);
 	void worksheetPreviewDockVisibilityChanged(bool);
@@ -309,10 +220,6 @@ private Q_SLOTS:
 	void focusCursorDock();
 
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
-
-#ifdef HAVE_PURPOSE
-	void shareActionFinished(const QJsonObject& output, int error, const QString& message);
-#endif
 };
 
 #endif

@@ -2,7 +2,34 @@
     <load-typesystem name="typesystem_widgets.xml" generate="no"/>
 
     <!-- Global -->
-    <enum-type name="AspectType"/>
+    <enum-type name="AspectType">
+        <reject-enum-value name="DatapickerCurve"/>
+        <reject-enum-value name="DatapickerPoint"/>
+        <reject-enum-value name="LiveDataSource"/>
+        <reject-enum-value name="MQTTTopic"/>
+        <reject-enum-value name="Datapicker"/>
+        <reject-enum-value name="DatapickerImage"/>
+        <reject-enum-value name="Workbook"/>
+        <reject-enum-value name="MQTTClient"/>
+        <reject-enum-value name="MQTTSubscription"/>
+        <reject-enum-value name="ColumnStringIO"/>
+        <reject-enum-value name="SimpleFilterColumn"/>
+        <reject-enum-value name="AbstractColumn"/>
+        <reject-enum-value name="Note"/>
+        <reject-enum-value name="Notebook"/>
+        <reject-enum-value name="AbstractDataSource"/>
+        <reject-enum-value name="AbstractPart"/>
+        <reject-enum-value name="XYAnalysisCurve"/>
+        <reject-enum-value name="WorksheetElementGroup"/>
+        <reject-enum-value name="AbstractPlot"/>
+        <reject-enum-value name="WorksheetElementContainer"/>
+        <reject-enum-value name="PlotArea"/>
+        <reject-enum-value name="WorksheetElement"/>
+        <reject-enum-value name="AbstractFilter"/>
+        <reject-enum-value name="AbstractAspect"/>
+        <reject-enum-value name="Script"/>
+        <reject-enum-value name="StatisticsSpreadsheet"/>
+    </enum-type>
 
     <!-- Abstract Classes -->
     <object-type name="AbstractAspect" force-abstract="yes" disable-wrapper="yes" parent-management="yes">
@@ -111,7 +138,6 @@
     <object-type name="CartesianCoordinateSystem" disable-wrapper="yes">
         <enum-type name="Dimension"/>
     </object-type>
-    <object-type name="CartesianScale" disable-wrapper="yes"/>
     <object-type name="ColumnStringIO" disable-wrapper="yes"/>
     <object-type name="ErrorBar" disable-wrapper="yes">
         <enum-type name="ErrorType"/>
@@ -122,7 +148,9 @@
     <object-type name="PlotArea" disable-wrapper="yes">
         <enum-type name="BorderTypeFlags" flags="yes"/>
     </object-type>
-    <!-- <object-type name="Range" disable-wrapper="yes"/> -->
+    <object-type name="Range" disable-wrapper="yes" generate="no"/>
+    <typedef-type name="DoubleRange" source="Range&lt;double&gt;"/>
+    <typedef-type name="IntRange" source="Range&lt;int&gt;"/>
     <object-type name="RangeT" disable-wrapper="yes">
         <enum-type name="Format"/>
         <enum-type name="Scale"/>

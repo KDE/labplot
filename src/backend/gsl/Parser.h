@@ -28,7 +28,13 @@ struct StaticSymbol;
 struct parser_var;
 struct param;
 
+// required by the Range template class
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Parser {
+#else
 class Parser {
+#endif
 public:
 	Parser(bool highPerformance = true);
 

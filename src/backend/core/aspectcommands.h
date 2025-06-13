@@ -26,7 +26,7 @@ public:
 		int index = parent->indexOfChild(child);
 		Q_ASSERT(index != -1);
 		parent->m_children.removeAll(child);
-		QObject::disconnect(child, nullptr, nullptr, nullptr);
+		QObject::disconnect(child, nullptr, parent->q, nullptr);
 		child->setParentAspect(nullptr);
 		// QDEBUG(Q_FUNC_INFO << " DONE. CHILD = " << child)
 		return index;

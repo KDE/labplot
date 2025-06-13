@@ -18,6 +18,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
+#include "backend/worksheet/DefaultColorTheme.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Line.h"
@@ -5676,24 +5677,7 @@ void CartesianPlot::setColorPalette(const KConfig& config) {
 		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor5"), QColor()));
 	} else {
 		// no theme is available, provide "default colors"
-		m_themeColorPalette.clear();
-
-		m_themeColorPalette.append(QColor(28, 113, 216));
-		m_themeColorPalette.append(QColor(255, 120, 0));
-		m_themeColorPalette.append(QColor(224, 27, 36));
-		m_themeColorPalette.append(QColor(46, 194, 126));
-		m_themeColorPalette.append(QColor(246, 211, 45));
-		m_themeColorPalette.append(QColor(143, 19, 178));
-		m_themeColorPalette.append(QColor(0, 255, 255));
-		m_themeColorPalette.append(QColor(235, 26, 209));
-		m_themeColorPalette.append(QColor(41, 221, 37));
-		m_themeColorPalette.append(QColor(33, 6, 227));
-		m_themeColorPalette.append(QColor(14, 136, 22));
-		m_themeColorPalette.append(QColor(147, 97, 22));
-		m_themeColorPalette.append(QColor(85, 85, 91));
-		m_themeColorPalette.append(QColor(156, 4, 4));
-		// TODO: maybe removing black?
-		m_themeColorPalette.append(QColor(0, 0, 0));
+		m_themeColorPalette = defaultColorPalette;
 	}
 
 	// use the color of the axis lines as the color for the different mouse cursor lines
@@ -5711,4 +5695,12 @@ const QList<QColor>& CartesianPlot::themeColorPalette() const {
 const QColor CartesianPlot::themeColorPalette(int index) const {
 	const int i = index % m_themeColorPalette.count();
 	return m_themeColorPalette.at(i);
+}
+
+void CartesianPlot::setXRange(int index, const Range<double>& range) {
+	setRange(Dimension::X, index, range);
+}
+
+void CartesianPlot::setYRange(int index, const Range<double>& range) {
+	setRange(Dimension::Y, index, range);
 }

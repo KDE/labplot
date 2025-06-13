@@ -117,6 +117,9 @@ void Spreadsheet::init() {
  * called initially and on column count changes (columns inserts/removals).
  */
 void Spreadsheet::initConnectionsRowCountChanges() {
+	if (columnCount() == 0)
+		return;
+
 	// check first if the first column was changed
 	Q_D(Spreadsheet);
 	auto* firstColumn = children<Column>().first();
@@ -726,6 +729,15 @@ void Spreadsheet::fillColumnContextMenu(QMenu* menu, Column* column) {
 #else
 	Q_UNUSED(menu)
 	Q_UNUSED(column)
+#endif
+}
+
+void Spreadsheet::fillColumnsContextMenu(QMenu* menu) {
+#ifndef SDK
+	if (m_view)
+		m_view->fillColumnsContextMenu(menu);
+#else
+	Q_UNUSED(menu)
 #endif
 }
 

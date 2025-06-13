@@ -33,6 +33,7 @@ class DatapickerImage : public AbstractPart {
 public:
 	explicit DatapickerImage(const QString& name, bool loading = false);
 	~DatapickerImage() override;
+	bool addChild(AbstractAspect* child) override;
 
 	enum class GraphType { Linear, PolarInDegree, PolarInRadians, LnX, LnY, Ternary, LnXY, Log10XY, Log10X, Log10Y };
 	enum class ColorAttributes { None, Intensity, Foreground, Hue, Saturation, Value };
@@ -40,6 +41,7 @@ public:
 	enum class PointsType { AxisPoints, CurvePoints, SegmentPoints };
 
 	struct ReferencePoints {
+		void clearPoints();
 		GraphType type{GraphType::Linear};
 		QPointF scenePos[3];
 		Vector3D logicalPos[3];
@@ -110,6 +112,8 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, pointSeparation, PointSeparation)
 	BASIC_D_ACCESSOR_DECL(int, minSegmentLength, minSegmentLength)
 
+	void clearReferencePoints();
+
 	Symbol* symbol() const;
 	BASIC_D_ACCESSOR_DECL(bool, pointVisibility, PointVisibility)
 
@@ -120,6 +124,9 @@ public Q_SLOTS:
 
 private:
 	void init();
+	void childAdded(const AbstractAspect* child);
+	void datapickerPointChanged(const DatapickerPoint*);
+	void childRemoved(const AbstractAspect* child);
 
 	Q_DECLARE_PRIVATE(DatapickerImage)
 	DatapickerImagePrivate* const d_ptr;
@@ -139,6 +146,7 @@ Q_SIGNALS:
 	void embeddedChanged(bool);
 	void rotationAngleChanged(float);
 	void axisPointsChanged(const DatapickerImage::ReferencePoints&);
+	void axisPointsRemoved();
 	void settingsChanged(const DatapickerImage::EditorSettings&);
 	void minSegmentLengthChanged(const int);
 	void pointStyleChanged(Symbol::Style);

@@ -131,6 +131,8 @@ Matrix* Workbook::currentMatrix() const {
  */
 void Workbook::childSelected(const AbstractAspect* aspect) {
 	int index = indexOfChild<AbstractAspect>(aspect);
+	if (index < 0)
+		return;
 	Q_EMIT workbookItemSelected(index);
 }
 

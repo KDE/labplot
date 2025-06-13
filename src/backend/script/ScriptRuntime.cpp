@@ -21,8 +21,8 @@
  */
 ScriptRuntime::ScriptRuntime(const QString& lang, Script* script)
 	: QObject()
-	, m_name(script->name())
-	, lang(lang) {
+	, lang(lang)
+	, m_name(script->name()) {
 }
 
 /*!
@@ -54,9 +54,4 @@ int ScriptRuntime::errorLine() const {
  * \brief Executes the statements using the runtime
  * \param code - The statements to execute
  * \return Whether the execution was successful or not
- */
-
-/*!
- * \fn virtual QIcon ScriptRuntime::icon() = 0;
- * \return The icon for the script runtime
  */
