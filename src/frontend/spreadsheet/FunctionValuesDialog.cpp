@@ -4,7 +4,7 @@
 	Description          : Dialog for generating values from a mathematical function
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014-2018 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2020-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -77,6 +77,8 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 	connect(ui.teEquation, &ExpressionTextEdit::expressionChanged, this, &FunctionValuesDialog::checkValues);
 	connect(ui.tbConstants, &QToolButton::clicked, this, &FunctionValuesDialog::showConstants);
 	connect(ui.tbFunctions, &QToolButton::clicked, this, &FunctionValuesDialog::showFunctions);
+	connect(ui.pbLoadFunction, &QPushButton::clicked, this, &FunctionValuesDialog::loadFunction);
+	connect(ui.pbSaveFunction, &QPushButton::clicked, this, &FunctionValuesDialog::saveFunction);
 	connect(m_okButton, &QPushButton::clicked, this, &FunctionValuesDialog::generate);
 
 	// restore saved settings if available
@@ -230,6 +232,16 @@ void FunctionValuesDialog::checkValues() {
 
 	m_okButton->setToolTip(i18n("Generate function values"));
 	m_okButton->setEnabled(true);
+}
+
+void FunctionValuesDialog::loadFunction() {
+	DEBUG(Q_FUNC_INFO)
+	//TODO
+}
+
+void FunctionValuesDialog::saveFunction() {
+	DEBUG(Q_FUNC_INFO)
+	//TODO
 }
 
 void FunctionValuesDialog::showConstants() {

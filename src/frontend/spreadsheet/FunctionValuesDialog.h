@@ -4,6 +4,7 @@
 	Description          : Dialog for generating values from a mathematical function
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014-2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -50,6 +51,8 @@ private:
 private Q_SLOTS:
 	void generate(); // calculate and set values from function
 	void checkValues(); // check user input and enable/diable Ok-button accordingly
+	void loadFunction();
+	void saveFunction();
 	void showConstants(); // select predefined constant
 	void showFunctions(); // select predefined function
 	void insertFunction(const QString&) const;

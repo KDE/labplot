@@ -4,7 +4,7 @@
 	Description      : widget for editing properties of fit curves
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014-2025 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2016-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2016-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */

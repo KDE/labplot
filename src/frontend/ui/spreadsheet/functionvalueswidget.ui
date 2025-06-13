@@ -51,16 +51,34 @@
     </spacer>
    </item>
    <item>
-    <widget class="QLabel" name="lFunc">
-     <property name="font">
-      <font>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Function:</string>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="FunctionLayout">
+     <item>
+      <widget class="QLabel" name="lFunc">
+       <property name="font">
+        <font>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Function:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pbLoadFunction">
+       <property name="text">
+        <string>Load</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pbSaveFunction">
+       <property name="text">
+        <string>Save</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QFrame" name="frame">
@@ -98,7 +116,7 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <item row="0" column="1" rowspan="3">
+      <item row="0" column="2" rowspan="3">
        <widget class="ExpressionTextEdit" name="teEquation">
         <property name="maximumSize">
          <size>
@@ -123,7 +141,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
+      <item row="1" column="3">
        <widget class="QToolButton" name="tbConstants">
         <property name="toolTip">
          <string>Constants</string>
@@ -133,7 +151,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
+      <item row="0" column="3">
        <widget class="QToolButton" name="tbFunctions">
         <property name="toolTip">
          <string>Functions</string>
