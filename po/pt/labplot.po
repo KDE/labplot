@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-11 00:38+0000\n"
+"POT-Creation-Date: 2025-06-14 00:39+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -2579,13 +2579,13 @@ msgstr "Folhas: "
 msgid "Invalid region specified."
 msgstr "Foi indicada uma tolerância inválida"
 
-#: src/backend/datasources/LiveDataSource.cpp:730
+#: src/backend/datasources/LiveDataSource.cpp:733
 #, fuzzy, kde-format
 #| msgid "File does not exist."
 msgid "Device doesn't exist."
 msgstr "O ficheiro não existe."
 
-#: src/backend/datasources/LiveDataSource.cpp:733
+#: src/backend/datasources/LiveDataSource.cpp:736
 #, fuzzy, kde-format
 #| msgid ""
 #| "Failed to open the device. Please check your permissions on this device."
@@ -2594,40 +2594,40 @@ msgstr ""
 "Não foi possível aceder ao dispositivo. Verifique por favor as suas "
 "permissões para esse dispositivo."
 
-#: src/backend/datasources/LiveDataSource.cpp:736
+#: src/backend/datasources/LiveDataSource.cpp:739
 #, kde-format
 msgid "Device already opened."
 msgstr "O dispositivo já está aberto."
 
-#: src/backend/datasources/LiveDataSource.cpp:739
+#: src/backend/datasources/LiveDataSource.cpp:742
 #, fuzzy, kde-format
 #| msgid "The device is not opened."
 msgid "Device is not open."
 msgstr "O dispositivo não está aberto."
 
-#: src/backend/datasources/LiveDataSource.cpp:742
+#: src/backend/datasources/LiveDataSource.cpp:745
 #, kde-format
 msgid "Failed to read data."
 msgstr "Não foi possível ler os dados."
 
-#: src/backend/datasources/LiveDataSource.cpp:745
+#: src/backend/datasources/LiveDataSource.cpp:748
 #, fuzzy, kde-format
 #| msgid "no info available"
 msgid "Device not available."
 msgstr "Nenhuma informação disponível"
 
-#: src/backend/datasources/LiveDataSource.cpp:748
+#: src/backend/datasources/LiveDataSource.cpp:751
 #, fuzzy, kde-format
 #| msgid "An error occurred."
 msgid "Timeout occured."
 msgstr "Ocorreu um erro."
 
-#: src/backend/datasources/LiveDataSource.cpp:753
+#: src/backend/datasources/LiveDataSource.cpp:756
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr "Ocorreu o seguinte erro: %1."
 
-#: src/backend/datasources/LiveDataSource.cpp:764
+#: src/backend/datasources/LiveDataSource.cpp:767
 #, kde-format
 msgid "Serial Port Error"
 msgstr "Erro na Porta Série"
