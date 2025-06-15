@@ -16,9 +16,12 @@
 #include "backend/datapicker/Transform.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/DefaultColorTheme.h"
 #include "frontend/datapicker/DatapickerView.h"
 
 #include "QIcon"
+#include <KConfig>
+#include <KConfigGroup>
 #include <KLocalizedString>
 #include <QGraphicsScene>
 
@@ -222,27 +225,21 @@ void Datapicker::addNewPoint(QPointF pos, AbstractAspect* parentAspect) {
 	newPoint->setHidden(true);
 
 	beginMacro(i18n("%1: add %2", parentAspect->name(), newPoint->name()));
-	parentAspect->addChild(newPoint);
-	const QPointF oldPos = newPoint->position();
-	newPoint->setPosition(pos);
-	if (oldPos == pos) {
-		// Just if pos == oldPos, setPosition will not trigger retransform() then
-		newPoint->retransform();
-	}
+	if (parentAspect->addChild(newPoint)) {
+		const QPointF oldPos = newPoint->position();
+		newPoint->setPosition(pos);
+		if (oldPos == pos) {
+			// Just if pos == oldPos, setPosition will not trigger retransform() then
+			newPoint->retransform();
+		}
 
-	auto* datapickerCurve = static_cast<DatapickerCurve*>(parentAspect);
-	if (m_image == parentAspect) {
-		auto axisPoints = m_image->axisPoints();
-		axisPoints.scenePos[points.count()].setX(pos.x());
-		axisPoints.scenePos[points.count()].setY(pos.y());
-		m_image->setAxisPoints(axisPoints);
-		newPoint->setIsReferencePoint(true);
-		connect(newPoint, &DatapickerPoint::pointSelected, m_image, QOverload<const DatapickerPoint*>::of(&DatapickerImage::referencePointSelected));
-	} else if (datapickerCurve) {
-		newPoint->initErrorBar(datapickerCurve->curveErrorTypes());
-		// datapickerCurve->updatePoint(newPoint);
-	}
-
+		auto* datapickerCurve = static_cast<DatapickerCurve*>(parentAspect);
+		if (m_image == parentAspect)
+			newPoint->setIsReferencePoint(true);
+		else if (datapickerCurve)
+			newPoint->initErrorBar(datapickerCurve->curveErrorTypes());
+	} else
+		delete newPoint;
 	endMacro();
 	Q_EMIT requestUpdateActions();
 }
@@ -283,7 +280,10 @@ void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
 	if (addedPoint)
 		handleChildAspectAdded(addedPoint);
 	else if (curve) {
+		const auto count = childCount<DatapickerCurve>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+		curve->symbol()->setColor(themeColorPalette(count - 1));
 		connect(m_image, &DatapickerImage::axisPointsChanged, curve, &DatapickerCurve::updatePoints);
+		connect(m_image, &DatapickerImage::axisPointsRemoved, curve, &DatapickerCurve::updatePoints);
 		auto points = curve->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 		for (auto* point : points)
 			handleChildAspectAdded(point);
@@ -321,6 +321,25 @@ void Datapicker::handleChildAspectAdded(const AbstractAspect* aspect) {
 		Q_ASSERT(m_image != nullptr);
 		m_image->scene()->addItem(item);
 	}
+}
+
+void Datapicker::setColorPalette(const KConfig& config) {
+	if (config.hasGroup(QStringLiteral("Theme"))) {
+		KConfigGroup group = config.group(QStringLiteral("Theme"));
+
+		// read the five colors defining the palette
+		m_themeColorPalette.clear();
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor1"), QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor2"), QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor3"), QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor4"), QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor5"), QColor()));
+	}
+}
+
+QColor Datapicker::themeColorPalette(int index) const {
+	const int i = index % m_themeColorPalette.count();
+	return m_themeColorPalette.at(i);
 }
 
 // ##############################################################################
@@ -384,6 +403,9 @@ bool Datapicker::load(XmlStreamReader* reader, bool preview) {
 		for (auto* point : aspect->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden))
 			handleAspectAdded(point);
 	}
+
+	for (auto* curve : children<DatapickerCurve>(ChildIndexFlag::IncludeHidden))
+		curve->updatePoints();
 
 	return true;
 }

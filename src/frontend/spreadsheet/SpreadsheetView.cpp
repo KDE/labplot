@@ -998,7 +998,8 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 }
 
 /*!
- * adds column specific actions in SpreadsheetView to the context menu shown in the project explorer.
+ * adds column specific actions in SpreadsheetView to the context menu shown in the project explorer,
+ * called when one single column is selected in the project explorer.
  */
 void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	if (!column)
@@ -1043,6 +1044,17 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	menu->insertAction(firstAction, action_statistics_columns);
 
 	checkColumnMenus(QVector<Column*>{column});
+}
+
+/*!
+ * adds column specific actions in SpreadsheetView to the context menu shown in the project explorer,
+ * called when one single column is selected in the project explorer and shows the same context menu
+ * as if columns were selected in the views (context menu of the horizontal header).
+ */
+void SpreadsheetView::fillColumnsContextMenu(QMenu* menu) {
+	checkColumnMenus(selectedColumns());
+	m_columnMenu->setTitle(i18n("Columns"));
+	menu->addMenu(m_columnMenu);
 }
 
 // SLOTS
@@ -2663,13 +2675,14 @@ void SpreadsheetView::insertColumnsRight(int count) {
 	int last = lastSelectedColumn();
 	const int cols = m_spreadsheet->columnCount();
 
-	if (last < 0) // its possible that there is no selected column or the spreadsheet is empty so a negative number is returned
-		if (cols == 0) // the spreadsheet is empty 
+	if (last < 0) { // its possible that there is no selected column or the spreadsheet is empty so a negative number is returned
+		if (cols == 0) { // the spreadsheet is empty
 			last = -1; // so we insert at the beginning. default is -1 because of the last + 1 below
-		else { // there is no selected column
+		} else { // there is no selected column
 			m_spreadsheet->appendColumns(count); // so we append to the spreadsheet
 			return;
 		}
+	}
 
 	m_spreadsheet->insertColumns(last + 1, count); // insert count columns before last + 1 because it is same as after last
 }
@@ -3373,13 +3386,14 @@ void SpreadsheetView::insertRowsBelow(int count) {
 	int last = lastSelectedRow();
 	const int rows = m_spreadsheet->rowCount();
 
-	if (last < 0) // its possible that there is no selected row or the spreadsheet is empty so a negative number is returned
-		if (rows == 0) // the spreadsheet is empty 
+	if (last < 0) { // its possible that there is no selected row or the spreadsheet is empty so a negative number is returned
+		if (rows == 0) { // the spreadsheet is empty
 			last = -1; // insert rows at the beginning. we use -1 because of last + 1 below
-		else { // there is no selected row
+		} else { // there is no selected row
 			m_spreadsheet->appendRows(count); // append rows at the end
 			return;
 		}
+	}
 
 	m_spreadsheet->insertRows(last + 1, count); // insert count rows before last + 1 because it is same as after last
 }

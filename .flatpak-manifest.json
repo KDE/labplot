@@ -12,8 +12,7 @@
     "finish-args": [
         "--share=network",
         "--share=ipc",
-        "--socket=wayland",
-        "--socket=fallback-x11",
+        "--socket=x11",
 	"--socket=cups",
 	"--socket=session-bus",
         "--device=dri",
@@ -23,6 +22,12 @@
         "--system-talk-name=org.freedesktop.UDisks2",
         "--talk-name=org.freedesktop.Flatpak"
     ],
+    "build-args": [
+        "--share=network"
+    ],
+    "extensions": {
+        "org.freedesktop.Sdk.Extension.python3": {}
+    },
     "cleanup": [
         "/include",
         "/lib/cmake",
@@ -35,7 +40,14 @@
         "/share/man"
     ],
     "modules": [
-       {
+        {
+            "name": "python-modules",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --prefix=/app PySide6"
+            ]
+        },
+        {
             "name": "eigen",
             "buildsystem": "cmake-ninja",
             "builddir": true,
@@ -64,8 +76,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-25.04.0.tar.xz",
-                    "sha256": "b010c596dce127fba88532fd2f1043e55ea30601767952d0f2c0a80e7dc0da3d"
+                    "url": "https://poppler.freedesktop.org/poppler-25.06.0.tar.xz",
+                    "sha256": "8199532d38984fab46dbd0020ec9c40f20e928e33e9b4cc6043572603a821d83"
                 }
             ],
             "modules": [
@@ -106,8 +118,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.04.0/src/analitza-25.04.0.tar.xz",
-			    "sha256": "67390eec5438d69390f2d1ba589604cb8a7817f86bc931acc24f029ab2db3f2c"
+			    "url": "https://download.kde.org/stable/release-service/25.04.2/src/analitza-25.04.2.tar.xz",
+			    "sha256": "47177e0a8400e108491b769b825ef4990f3dd97b3348eec182da3e65e5704db7"
 		    }
 	    ]
         },
@@ -117,8 +129,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.04.0/src/cantor-25.04.0.tar.xz",
-			    "sha256": "98f96661f20ad4c91fa5fe64bc0ecbef03d85969b64851c660d2d369682c3f00"
+			    "url": "https://download.kde.org/stable/release-service/25.04.2/src/cantor-25.04.2.tar.xz",
+			    "sha256": "8cb744b18da22de4315b300f88b3e580eb2af559918187a73b78b3948615be74"
 		    }
 	    ]
         },
@@ -127,16 +139,18 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "http://ftp.gnu.org/gnu/gsl/gsl-2.8.tar.gz",
+                    "url": "http://ftpmirror.gnu.org/gnu/gsl/gsl-2.8.tar.gz",
                     "sha256": "6a99eeed15632c6354895b1dd542ed5a855c0f15d9ad1326c6fe2b2c9e423190"
                 }
             ]
         },
         {
             "name": "hdf5",
-            "buildsystem": "simple",
-	    "build-commands": [
-                "cd hdf5* && ./configure --prefix=/app --enable-cxx=yes --enable-tools=no --enable-tests=no && make -j install"
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DBUILD_TESTING=OFF",
+                "-DHDF5_BUILD_TOOLS=OFF"
 	    ],
             "cleanup": [
                 "/share/hdf5_examples"
@@ -145,7 +159,8 @@
                 {
                     "type": "archive",
                     "url": "https://support.hdfgroup.org/releases/hdf5/v1_14/v1_14_6/downloads/hdf5-1.14.6.tar.gz",
-                    "sha256": "e4defbac30f50d64e1556374aa49e574417c9e72c6b1de7a4ff88c4b1bea6e9b"
+                    "sha256": "e4defbac30f50d64e1556374aa49e574417c9e72c6b1de7a4ff88c4b1bea6e9b",
+		    "strip-components": 2
                 }
             ]
         },

@@ -36,6 +36,7 @@ public:
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	void fillColumnContextMenu(QMenu*, Column*);
+	void fillColumnsContextMenu(QMenu*);
 	QWidget* view() const override;
 	StatisticsSpreadsheet* statisticsSpreadsheet() const;
 

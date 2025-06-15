@@ -196,17 +196,14 @@ void DatapickerImageView::initActions() {
 	// set some default values
 	switch (m_image->plotPointsType()) {
 	case DatapickerImage::PointsType::AxisPoints:
-		currentPlotPointsTypeAction = setAxisPointsAction;
 		setAxisPointsAction->setChecked(true);
 		changeMouseMode(setAxisPointsAction);
 		break;
 	case DatapickerImage::PointsType::CurvePoints:
-		currentPlotPointsTypeAction = setCurvePointsAction;
 		setCurvePointsAction->setChecked(true);
 		changeMouseMode(setCurvePointsAction);
 		break;
 	case DatapickerImage::PointsType::SegmentPoints:
-		currentPlotPointsTypeAction = selectSegmentAction;
 		selectSegmentAction->setChecked(true);
 		changeMouseMode(selectSegmentAction);
 	}
@@ -581,46 +578,53 @@ void DatapickerImageView::contextMenuEvent(QContextMenuEvent*) {
 // ##############################################################################
 // ####################################  SLOTs   ###############################
 // ##############################################################################
-void DatapickerImageView::changeMouseMode(QAction* action) {
-	m_mouseMode = (DatapickerImageView::MouseMode)action->data().toInt();
+bool DatapickerImageView::changeMouseMode(QAction* action) {
+	const auto mode = (DatapickerImageView::MouseMode)action->data().toInt();
 
-	if (action == navigationModeAction) {
+	if (mode == DatapickerImageView::MouseMode::Navigation) {
 		setInteractive(false);
 		setDragMode(QGraphicsView::ScrollHandDrag);
 		m_image->setSegmentsHoverEvent(false);
-	} else if (action == zoomSelectionModeAction) {
+		m_mouseMode = mode;
+	} else if (mode == DatapickerImageView::MouseMode::ZoomSelection) {
 		setInteractive(false);
 		setDragMode(QGraphicsView::NoDrag);
 		m_image->setSegmentsHoverEvent(false);
 		setCursor(Qt::ArrowCursor);
+		m_mouseMode = mode;
 	} else {
 		setInteractive(true);
 		setDragMode(QGraphicsView::NoDrag);
 		m_image->setSegmentsHoverEvent(true);
 		setCursor(Qt::CrossCursor);
-
-		if (currentPlotPointsTypeAction != action) {
-			if (action == setAxisPointsAction) {
-				int count = m_image->childCount<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
-				if (count) {
-					auto button = QMessageBox::question(this,
-														i18n("Remove existing reference points?"),
-														i18n("All available reference points will be removed. Do you want to continue?"));
-					if (button != QMessageBox::Yes) {
-						currentPlotPointsTypeAction->setChecked(true);
-						return;
+		if (m_mouseMode != mode) {
+			switch (mode) {
+				case DatapickerImageView::MouseMode::ReferencePointsEntry: {
+					int count = m_image->childCount<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+					if (count) {
+						auto button = QMessageBox::question(this,
+															i18n("Remove existing reference points?"),
+															i18n("All available reference points will be removed. Do you want to continue?"));
+						if (button != QMessageBox::Yes) {
+							// Reset back to the old one
+							return false;
+						}
 					}
+
+					m_image->setPlotPointsType(DatapickerImage::PointsType::AxisPoints);
+					break;
 				}
-
-				m_image->setPlotPointsType(DatapickerImage::PointsType::AxisPoints);
-			} else if (action == setCurvePointsAction)
-				m_image->setPlotPointsType(DatapickerImage::PointsType::CurvePoints);
-			else if (action == selectSegmentAction)
-				m_image->setPlotPointsType(DatapickerImage::PointsType::SegmentPoints);
-
-			currentPlotPointsTypeAction = action;
+				case DatapickerImageView::MouseMode::CurvePointsEntry:
+					m_image->setPlotPointsType(DatapickerImage::PointsType::CurvePoints);
+					break;
+				case DatapickerImageView::MouseMode::CurveSegmentsEntry:
+					m_image->setPlotPointsType(DatapickerImage::PointsType::SegmentPoints);
+					break;
+			}
+			m_mouseMode = mode;
 		}
 	}
+	return true;
 }
 
 DatapickerImageView::MouseMode DatapickerImageView::mouseMode() const {

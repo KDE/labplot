@@ -30,11 +30,13 @@
 #include <KLineEdit>
 #include <KMessageWidget>
 #include <KUrlComboBox>
+#include <KPreviewWidgetBase>
 
 #include <QClipboard>
 #include <QFileDialog>
 #include <QDialog>
 #include <QDialogButtonBox>
+#include <QPlainTextEdit>
 #include <QMenu>
 #include <QStandardItemModel>
 #include <QStandardPaths>
@@ -753,15 +755,15 @@ void XYFitCurveDock::categoryChanged(int index) {
 	if (m_fitData.modelCategory == (nsl_fit_model_category)index
 		|| (m_fitData.modelCategory == nsl_fit_model_custom && index == uiGeneralTab.cbCategory->count() - 1))
 		hasChanged = false;
-	DEBUG("HAS CHANGED: " << hasChanged)
+	DEBUG(Q_FUNC_INFO << ", has changed: " << hasChanged)
 
 	if (uiGeneralTab.cbCategory->currentIndex() == uiGeneralTab.cbCategory->count() - 1)
 		m_fitData.modelCategory = nsl_fit_model_custom;
 	else
 		m_fitData.modelCategory = (nsl_fit_model_category)index;
+	uiGeneralTab.lModel->setText(i18n("Model:"));
 	uiGeneralTab.cbModel->clear();
-	uiGeneralTab.cbModel->show();
-	uiGeneralTab.lModel->show();
+	uiGeneralTab.cbModel->setToolTip(QLatin1String(""));
 
 	// enable algorithm selection only for distributions
 	if (m_fitData.modelCategory == nsl_fit_model_distribution) {
@@ -816,13 +818,12 @@ void XYFitCurveDock::categoryChanged(int index) {
 		break;
 	}
 	case nsl_fit_model_custom:
-		uiGeneralTab.cbModel->addItem(i18n("Custom"));
-		uiGeneralTab.cbModel->hide();
-		uiGeneralTab.lModel->hide();
+		uiGeneralTab.lModel->setText(i18n("Description:"));
+		uiGeneralTab.cbModel->addItem(i18n("User defined model"));
 	}
 
 	if (hasChanged) {
-		DEBUG("HAS CHANGED! Resetting MODEL")
+		DEBUG(Q_FUNC_INFO << ", Resetting model")
 		// show the fit-model for the currently selected default (first) fit-model
 		uiGeneralTab.cbModel->setCurrentIndex(0);
 		uiGeneralTab.sbDegree->setValue(1);
@@ -858,8 +859,6 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
 		custom = true;
 	uiGeneralTab.teEquation->setReadOnly(!custom);
-	uiGeneralTab.lModel->setVisible(!custom);
-	uiGeneralTab.cbModel->setVisible(!custom);
 	uiGeneralTab.tbFunctions->setVisible(custom);
 	uiGeneralTab.tbConstants->setVisible(custom);
 
@@ -1190,61 +1189,158 @@ void XYFitCurveDock::parametersValid(bool valid) {
 	m_parametersValid = valid;
 }
 
+// TextPreview for FileWidget
+class TextPreview : public KPreviewWidgetBase {
+public:
+	explicit TextPreview(QWidget *parent = nullptr)
+		: KPreviewWidgetBase(parent) {
+        textEdit = new QPlainTextEdit(this);
+        textEdit->setReadOnly(true);
+        textEdit->setWordWrapMode(QTextOption::WrapAnywhere);
+
+        auto* layout = new QVBoxLayout(this);
+        layout->addWidget(textEdit);
+        layout->setContentsMargins(0, 0, 0, 0);
+        setLayout(layout);
+    }
+
+    void showPreview(const QUrl &url) override {
+        textEdit->clear();
+        if (!url.isLocalFile()) return;
+
+        QFile file(url.toLocalFile());
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QTextStream in(&file);
+            QString text = in.read(1000);  // Limit size for preview
+            textEdit->setPlainText(text);
+        }
+    }
+
+    void clearPreview() override {
+        textEdit->clear();
+    }
+
+private:
+    QPlainTextEdit* textEdit;
+};
+
 void XYFitCurveDock::loadFunction() {
-	// get lfd file
-	QString filter(i18n("LabPlot Function Definition (*.lfd *.LFD)"));
-	// use last open dir from MainWin (project dir)
-	KConfigGroup mainGroup = Settings::group(QStringLiteral("MainWin"));
-	const QString& dir = mainGroup.readEntry("LastOpenDir", "");
-	// TODO: preview (requires KFileWidget)
-	const QString& fileName = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select file to load function definition"), dir, filter);
+	//easy alternative: const QString& fileName = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select file to load function definition"), dir, filter);
 
-	//load config from file if accepted
-	DEBUG(Q_FUNC_INFO << ", load function from file " << fileName.toStdString())
-
-	KConfig config(fileName);
-	KConfigGroup general = config.group(QLatin1String("General"));
-	// TODO: use description and comment
-	m_fitData.model = general.readEntry("Function", "");
-	// switch to custom model
-	uiGeneralTab.cbCategory->setCurrentIndex(uiGeneralTab.cbCategory->count() - 1);
-}
-
-void XYFitCurveDock::saveFunction() {
-	// dialog to select file for saving function definition
 	QDialog dialog;
-	dialog.setWindowTitle(i18n("Select file to save function definition"));
+	dialog.setWindowTitle(i18n("Select file to load function definition"));
 	auto* layout = new QVBoxLayout(&dialog);
 
-	//using KFileWidget to add custom widgets
 	// use last open dir from MainWin (project dir)
 	KConfigGroup mainGroup = Settings::group(QStringLiteral("MainWin"));
 	const QString& dir = mainGroup.readEntry("LastOpenDir", "");
 
+	//using KFileWidget to add custom widgets
 	auto* fileWidget = new KFileWidget(QUrl(dir), &dialog);
-	fileWidget->setOperationMode(KFileWidget::Saving);
-	fileWidget->setMode(KFile::File | KFile::LocalOnly);
-	//fileWidget->setInlinePreviewShown(true);
-	//TODO: preview?
-	//fileWidget->setPreviewWidget(widget);
+	fileWidget->setOperationMode(KFileWidget::Opening);
+	fileWidget->setMode(KFile::File);
+
+	// preview
+	auto* preview = new TextPreview();
+	fileWidget->setPreviewWidget(preview);
 
 	auto filterList = QList<KFileFilter>();
 	filterList << KFileFilter(i18n("LabPlot Function Definition"), {QLatin1String("*.lfd"), QLatin1String("*.LFD")}, {});
 	fileWidget->setFilters(filterList);
 
-	// custom widgets
-	auto* lDescription = new QLabel(i18n("Description:"));
-	auto* leDescription = new KLineEdit();
-	auto* lComment = new QLabel(i18n("Comment:"));
-	auto* leComment = new KLineEdit();
+	fileWidget->okButton()->show();
+	fileWidget->okButton()->setEnabled(false);
+	fileWidget->cancelButton()->show();
+	QObject::connect(fileWidget->okButton(), &QPushButton::clicked, &dialog, &QDialog::accept);
+	QObject::connect(fileWidget, &KFileWidget::selectionChanged, &dialog, [=]() {
+		QString fileName = fileWidget->locationEdit()->currentText();
+		auto currentDir = fileWidget->baseUrl().toLocalFile();
+		fileName.prepend(currentDir);
+		if (QFile::exists(fileName))
+			fileWidget->okButton()->setEnabled(true);
+	});
+	QObject::connect(fileWidget->cancelButton(), &QPushButton::clicked, &dialog, &QDialog::reject);
+	layout->addWidget(fileWidget);
+
+	if (dialog.exec() == QDialog::Accepted) {
+		QString fileName = fileWidget->locationEdit()->currentText();
+		auto currentDir = fileWidget->baseUrl().toLocalFile();
+		fileName.prepend(currentDir);
+
+		//load config from file if accepted
+		QDEBUG(Q_FUNC_INFO << ", load function from file" << fileName)
+
+		KConfig config(fileName);
+		auto general = config.group(QLatin1String("General"));
+		m_fitData.model = general.readEntry("Function", "");
+		// switch to custom model
+		uiGeneralTab.cbCategory->setCurrentIndex(uiGeneralTab.cbCategory->count() - 1);
+
+		auto description = general.readEntry("Description", "");
+		auto comment = general.readEntry("Comment", "");
+		QDEBUG("Description:" << description)
+		QDEBUG("Comment:" << comment)
+		if (!description.isEmpty()) {
+			uiGeneralTab.cbModel->clear();
+			uiGeneralTab.cbModel->addItem(description);
+		}
+		if (!comment.isEmpty())
+			uiGeneralTab.cbModel->setToolTip(comment);
+	}
+}
+
+void XYFitCurveDock::saveFunction() {
+	QDialog dialog;
+	dialog.setWindowTitle(i18n("Select file to save function definition"));
+	auto* layout = new QVBoxLayout(&dialog);
+
+	// use last open dir from MainWin (project dir)
+	KConfigGroup mainGroup = Settings::group(QStringLiteral("MainWin"));
+	const QString& dir = mainGroup.readEntry("LastOpenDir", "");
+
+	//using KFileWidget to add custom widgets
+	auto* fileWidget = new KFileWidget(QUrl(dir), &dialog);
+	fileWidget->setOperationMode(KFileWidget::Saving);
+	fileWidget->setMode(KFile::File);
+	// preview
+	auto* preview = new TextPreview();
+	fileWidget->setPreviewWidget(preview);
+
+	auto filterList = QList<KFileFilter>();
+	filterList << KFileFilter(i18n("LabPlot Function Definition"), {QLatin1String("*.lfd"), QLatin1String("*.LFD")}, {});
+	fileWidget->setFilters(filterList);
 
 	fileWidget->okButton()->show();
+	fileWidget->okButton()->setEnabled(false);
 	fileWidget->cancelButton()->show();
 	QObject::connect(fileWidget->okButton(), &QPushButton::clicked, &dialog, &QDialog::accept);
 	QObject::connect(fileWidget->cancelButton(), &QPushButton::clicked, &dialog, &QDialog::reject);
-	//TODO: update leDescription,leComment when selection changes
-
 	layout->addWidget(fileWidget);
+
+	// custom widgets
+	auto* lDescription = new QLabel(i18n("Description:"));
+	auto* leDescription = new KLineEdit(uiGeneralTab.cbModel->currentText());
+	auto* lComment = new QLabel(i18n("Comment:"));
+	auto* leComment = new KLineEdit(uiGeneralTab.cbModel->toolTip());
+
+	// update description and comment when selection changes
+	connect(fileWidget, &KFileWidget::fileHighlighted, this, [=]() {
+		QString fileName = fileWidget->locationEdit()->currentText();
+		auto currentDir = fileWidget->baseUrl().toLocalFile();
+		fileName.prepend(currentDir);
+		QDEBUG(Q_FUNC_INFO << ", file selected:" << fileName)
+		if (QFile::exists(fileName)) {
+			KConfig config(fileName);
+			auto group = config.group(QLatin1String("General"));
+			const QString& description = group.readEntry("Description", "");
+			const QString& comment = group.readEntry("Comment", "");
+			if (!description.isEmpty())
+				leDescription->setText(description);
+			if (!comment.isEmpty())
+				leComment->setText(comment);
+		}
+	});
+
 	auto* grid = new QGridLayout;
 	grid->addWidget(lDescription, 0, 0);
 	grid->addWidget(leDescription, 0, 1);
@@ -1258,7 +1354,7 @@ void XYFitCurveDock::saveFunction() {
 
 		QString fileName = fileWidget->selectedFile();
 		if (fileName.isEmpty()) {	// if entered directly and not selected (also happens when selected!)
-			DEBUG(Q_FUNC_INFO << ", no file selected")
+			// DEBUG(Q_FUNC_INFO << ", no file selected")
 			fileName = fileWidget->locationEdit()->currentText();
 			auto* cbExtension = fileWidget->findChild<QCheckBox*>();
 			if (cbExtension) {
@@ -1273,12 +1369,19 @@ void XYFitCurveDock::saveFunction() {
 		// save current model (with description and comment)
 		// FORMAT: LFD - LabPlot Function Definition
 		KConfig config(fileName);	// selected lfd file
-		KConfigGroup group = config.group(QLatin1String("General"));
+		auto group = config.group(QLatin1String("General"));
+		auto description = leDescription->text();
+		auto comment = leComment->text();
 		group.writeEntry("Function", m_fitData.model);	// model function
-		group.writeEntry("Description", leDescription->text());
-		group.writeEntry("Comment", leComment->text());
+		group.writeEntry("Description", description);
+		group.writeEntry("Comment", comment);
 		config.sync();
-		DEBUG(Q_FUNC_INFO << ", saved function to \"" << fileName.toStdString() << "\"")
+		QDEBUG(Q_FUNC_INFO << ", saved function to" << fileName)
+
+		// set description and comment in Dock (even when empty)
+		uiGeneralTab.cbModel->clear();
+		uiGeneralTab.cbModel->addItem(description);
+		uiGeneralTab.cbModel->setToolTip(comment);
 	}
 }
 

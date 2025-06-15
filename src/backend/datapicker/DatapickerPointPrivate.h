@@ -26,7 +26,6 @@ public:
 	QString name() const;
 	void retransform();
 	virtual void recalcShapeAndBoundingRect();
-	void updatePoint();
 	void updateProperties();
 	void retransformErrorBar();
 
@@ -54,6 +53,7 @@ public:
 	DatapickerPoint* const q;
 
 private:
+	void update() const;
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
@@ -61,6 +61,10 @@ private:
 	QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value) override;
 
 	friend class DatapickerTest;
+	friend class DatapickerPointSetMinusDeltaXPosCmd;
+	friend class DatapickerPointSetPlusDeltaXPosCmd;
+	friend class DatapickerPointSetMinusDeltaYPosCmd;
+	friend class DatapickerPointSetPlusDeltaYPosCmd;
 };
 
 #endif
