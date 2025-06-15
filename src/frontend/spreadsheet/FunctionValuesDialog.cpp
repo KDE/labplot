@@ -18,6 +18,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/widgets/ConstantsWidget.h"
 #include "frontend/widgets/FunctionsWidget.h"
+#include "frontend/widgets/TextPreview.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
 #include <QDialogButtonBox>
@@ -26,8 +27,9 @@
 #include <QWidgetAction>
 #include <QWindow>
 
+#include <KFileWidget>
 #include <KLocalizedString>
-
+#include <KUrlComboBox>
 #include <KWindowConfig>
 
 /*!
@@ -236,7 +238,68 @@ void FunctionValuesDialog::checkValues() {
 
 void FunctionValuesDialog::loadFunction() {
 	DEBUG(Q_FUNC_INFO)
-	//TODO
+	//easy alternative: const QString& fileName = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select file to load function definition"), dir, filter);
+
+	QDialog dialog;
+	dialog.setWindowTitle(i18n("Select file to load function definition"));
+	auto* layout = new QVBoxLayout(&dialog);
+
+	// use last open dir from MainWin (project dir)
+	KConfigGroup mainGroup = Settings::group(QStringLiteral("MainWin"));
+	const QString& dir = mainGroup.readEntry("LastOpenDir", "");
+
+	//using KFileWidget to add custom widgets
+	auto* fileWidget = new KFileWidget(QUrl(dir), &dialog);
+	fileWidget->setOperationMode(KFileWidget::Opening);
+	fileWidget->setMode(KFile::File);
+
+	// preview
+	auto* preview = new TextPreview();
+	fileWidget->setPreviewWidget(preview);
+
+	auto filterList = QList<KFileFilter>();
+	filterList << KFileFilter(i18n("LabPlot Function Definition"), {QLatin1String("*.lfd"), QLatin1String("*.LFD")}, {});
+	fileWidget->setFilters(filterList);
+
+	fileWidget->okButton()->show();
+	fileWidget->okButton()->setEnabled(false);
+	fileWidget->cancelButton()->show();
+	QObject::connect(fileWidget->okButton(), &QPushButton::clicked, &dialog, &QDialog::accept);
+	QObject::connect(fileWidget, &KFileWidget::selectionChanged, &dialog, [=]() {
+		QString fileName = fileWidget->locationEdit()->currentText();
+		auto currentDir = fileWidget->baseUrl().toLocalFile();
+		fileName.prepend(currentDir);
+		if (QFile::exists(fileName))
+			fileWidget->okButton()->setEnabled(true);
+	});
+	QObject::connect(fileWidget->cancelButton(), &QPushButton::clicked, &dialog, &QDialog::reject);
+	layout->addWidget(fileWidget);
+
+	if (dialog.exec() == QDialog::Accepted) {
+		QString fileName = fileWidget->locationEdit()->currentText();
+		auto currentDir = fileWidget->baseUrl().toLocalFile();
+		fileName.prepend(currentDir);
+
+		//load config from file if accepted
+		QDEBUG(Q_FUNC_INFO << ", load function from file" << fileName)
+
+		KConfig config(fileName);
+		auto general = config.group(QLatin1String("General"));
+		//TODO: m_fitData.model = general.readEntry("Function", "");
+		// switch to custom model
+		//TODO: uiGeneralTab.cbCategory->setCurrentIndex(uiGeneralTab.cbCategory->count() - 1);
+
+		auto description = general.readEntry("Description", "");
+		auto comment = general.readEntry("Comment", "");
+		QDEBUG("Description:" << description)
+		QDEBUG("Comment:" << comment)
+		if (!description.isEmpty()) {
+			//TODO: uiGeneralTab.cbModel->clear();
+			//TODO: uiGeneralTab.cbModel->addItem(description);
+		}
+		//TODO: if (!comment.isEmpty())
+			//uiGeneralTab.cbModel->setToolTip(comment);
+	}
 }
 
 void FunctionValuesDialog::saveFunction() {

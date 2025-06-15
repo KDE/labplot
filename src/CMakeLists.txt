@@ -163,6 +163,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
     ${FRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
     ${FRONTEND_DIR}/widgets/ResizableTextEdit.cpp
+    ${FRONTEND_DIR}/widgets/TextPreview.cpp
     ${FRONTEND_DIR}/widgets/TimedLineEdit.cpp
     ${FRONTEND_DIR}/widgets/TreeViewComboBox.cpp
     ${FRONTEND_DIR}/widgets/qxtspanslider.cpp

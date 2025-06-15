@@ -19,6 +19,7 @@
 #include "frontend/widgets/FitOptionsWidget.h"
 #include "frontend/widgets/FitParametersWidget.h"
 #include "frontend/widgets/FunctionsWidget.h"
+#include "frontend/widgets/TextPreview.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 #include "backend/core/Settings.h"
 
@@ -30,13 +31,11 @@
 #include <KLineEdit>
 #include <KMessageWidget>
 #include <KUrlComboBox>
-#include <KPreviewWidgetBase>
 
 #include <QClipboard>
 #include <QFileDialog>
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <QPlainTextEdit>
 #include <QMenu>
 #include <QStandardItemModel>
 #include <QStandardPaths>
@@ -1188,41 +1187,6 @@ void XYFitCurveDock::parametersValid(bool valid) {
 	DEBUG(Q_FUNC_INFO << ", valid = " << valid);
 	m_parametersValid = valid;
 }
-
-// TextPreview for FileWidget
-class TextPreview : public KPreviewWidgetBase {
-public:
-	explicit TextPreview(QWidget *parent = nullptr)
-		: KPreviewWidgetBase(parent) {
-        textEdit = new QPlainTextEdit(this);
-        textEdit->setReadOnly(true);
-        textEdit->setWordWrapMode(QTextOption::WrapAnywhere);
-
-        auto* layout = new QVBoxLayout(this);
-        layout->addWidget(textEdit);
-        layout->setContentsMargins(0, 0, 0, 0);
-        setLayout(layout);
-    }
-
-    void showPreview(const QUrl &url) override {
-        textEdit->clear();
-        if (!url.isLocalFile()) return;
-
-        QFile file(url.toLocalFile());
-        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            QTextStream in(&file);
-            QString text = in.read(1000);  // Limit size for preview
-            textEdit->setPlainText(text);
-        }
-    }
-
-    void clearPreview() override {
-        textEdit->clear();
-    }
-
-private:
-    QPlainTextEdit* textEdit;
-};
 
 void XYFitCurveDock::loadFunction() {
 	//easy alternative: const QString& fileName = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select file to load function definition"), dir, filter);
