@@ -38,6 +38,8 @@ public:
 	inline static constexpr ConstLatin1String saveName = "xyFunctionCurve";
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
+
+	typedef XYAnalysisCurve::Result FunctionResult;
 	const XYAnalysisCurve::Result& result() const override;
 
 	void setFunction(const QString& function, const QStringList& variableNames, const QVector<const XYCurve*>& curve);

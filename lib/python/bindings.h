@@ -1,9 +1,11 @@
 #ifndef WRAPPEDCLASSES_H
 #define WRAPPEDCLASSES_H
 
-#include <QXmlStreamWriter>
-
+#ifndef SCRIPTING
 #define SDK
+#endif
+
+#include <QXmlStreamWriter>
 
 // abstract classes
 #include "src/backend/core/AbstractAspect.h"
@@ -103,5 +105,10 @@
 #include "src/backend/worksheet/Image.h"
 #include "src/backend/worksheet/InfoElement.h"
 #include "src/backend/worksheet/TextLabel.h"
+
+#ifdef SCRIPTING
+// proxy for stdout/stderr
+#include "src/backend/script/python/PythonLogger.h"
+#endif
 
 #endif // WRAPPEDCLASSES_H

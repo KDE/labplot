@@ -45,12 +45,9 @@ plotArea = CartesianPlot("Plot Area")
 plotArea.setType(CartesianPlot.Type.FourAxes)
 plotArea.title().setText("Rydberg Spectrum of Helium")
 
-# border = plotArea.plotArea().borderType()
-# border.setFlag(PlotArea.BorderTypeFlags.BorderLeft, True)
-# border.setFlag(PlotArea.BorderTypeFlags.BorderTop, True)
-# border.setFlag(PlotArea.BorderTypeFlags.BorderRight, True)
-# border.setFlag(PlotArea.BorderTypeFlags.BorderBottom, True)
-# plotArea.plotArea().setBorderType(border)
+border = plotArea.plotArea().borderType()
+border = PlotArea.BorderTypeFlags.BorderLeft | PlotArea.BorderTypeFlags.BorderTop | PlotArea.BorderTypeFlags.BorderRight | PlotArea.BorderTypeFlags.BorderBottom
+plotArea.plotArea().setBorderType(border)
 
 plotArea.setSymmetricPadding(False)
 plotArea.setHorizontalPadding(Worksheet.convertToSceneUnits(2.1, Worksheet.Unit.Centimeter))
@@ -132,5 +129,3 @@ for curve in plotArea.children(AspectType.XYCurve):
 infoElement.title().setPosition(QPointF(Worksheet.convertToSceneUnits(4.6, Worksheet.Unit.Centimeter),Worksheet.convertToSceneUnits(1.3, Worksheet.Unit.Centimeter)))
 
 infoElement.retransform()
-
-Project.retransformElements(project)

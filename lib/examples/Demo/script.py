@@ -1,15 +1,13 @@
 from PySide6.QtWidgets import QApplication
 from pylabplot import *
 
-app = QApplication()
-
 # create a spreadsheet and import the data into it
 spreadsheet = Spreadsheet("data")
 filter = AsciiFilter()
 p = filter.properties()
 p.headerEnabled = False
 filter.setProperties(p)
-filter.readDataFromFile("Demo/data.txt", spreadsheet)
+filter.readDataFromFile("lib/examples/Demo/data.txt", spreadsheet)
 
 # create a worksheet
 worksheet = Worksheet("worksheet")

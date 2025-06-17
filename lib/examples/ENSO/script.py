@@ -42,12 +42,9 @@ worksheet.setLayoutVerticalSpacing(ms)
 plotArea = CartesianPlot("xy-plot")
 plotArea.setType(CartesianPlot.Type.FourAxes)
 plotArea.title().setText("El Niño-Southern Oscillation")
-# border = plotArea.plotArea().borderType()
-# border.setFlag(PlotArea.BorderTypeFlags.BorderLeft, True)
-# border.setFlag(PlotArea.BorderTypeFlags.BorderTop, True)
-# border.setFlag(PlotArea.BorderTypeFlags.BorderRight, True)
-# border.setFlag(PlotArea.BorderTypeFlags.BorderBottom, True)
-# plotArea.plotArea().setBorderType(border)
+border = plotArea.plotArea().borderType()
+border = PlotArea.BorderTypeFlags.BorderLeft | PlotArea.BorderTypeFlags.BorderTop | PlotArea.BorderTypeFlags.BorderRight | PlotArea.BorderTypeFlags.BorderBottom
+plotArea.plotArea().setBorderType(border)
 worksheet.addChild(plotArea)
 
 for axis in plotArea.children(AspectType.Axis):
@@ -64,7 +61,6 @@ plotArea.addChild(data)
 
 fit = XYFitCurve("fit")
 
-fit.initFitData(XYAnalysisCurve.AnalysisAction.FitCustom)
 fitData = fit.fitData()
 
 fitData.modelCategory = nsl_fit_model_category.nsl_fit_model_custom
@@ -77,12 +73,12 @@ fitData.paramFixed = [False] * len(fitData.paramNames)
 fitData.paramLowerLimits = [-1 * sys.float_info.max] * len(fitData.paramNames)
 fitData.paramUpperLimits = [sys.float_info.max] * len(fitData.paramNames)
 
-XYFitCurve.initFitData(fitData)
+fitData = XYFitCurve.initFitData(fitData)
 
 fit.setYDataColumn(spreadsheet.column(0))
 fit.setXDataColumn(spreadsheet.column(1))
 
-fit.initStartValues(fitData)
+fitData = fit.initStartValues(fitData)
 fit.setFitData(fitData)
 fit.recalculate()
 
@@ -91,5 +87,3 @@ plotArea.addChild(fit)
 fit.recalculate()
 
 plotArea.addLegend()
-
-Project.retransformElements(project)

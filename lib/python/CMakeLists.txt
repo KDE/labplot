@@ -98,8 +98,6 @@ set(generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/background_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesiancoordinatesystem_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesiancoordinatesystem_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/columnstringio_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/columnstringio_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/errorbar_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/errorbar_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/line_wrapper.cpp
@@ -220,12 +218,18 @@ set(generated_sources
     # worksheet element containers
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_rangebreak_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_rangebreak_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_rangebreaks_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_rangebreaks_wrapper.h
 
     # worksheet elements
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/image_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/image_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/infoelement_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/infoelement_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/infoelement_markerpoints_t_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/infoelement_markerpoints_t_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/textlabel_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/textlabel_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/textlabel_textwrapper_wrapper.cpp
