@@ -4416,7 +4416,7 @@ msgstr "Funció de risc per a la distribució normal Z/Q"
 #: src/backend/gsl/functions.cpp:436
 #, kde-format
 msgid "Underflow-compensating function exp(x^2) erfc(x) for real x"
-msgstr "Funció de compensació per defecte exp(x^2) erfc(x) per «x» real"
+msgstr "Funció de compensació predeterminada exp(x^2) erfc(x) per «x» real"
 
 #: src/backend/gsl/functions.cpp:437
 #, kde-format
@@ -16067,7 +16067,7 @@ msgstr "Mida total - %1"
 #: src/kdefrontend/SettingsDatasetsPage.cpp:86
 #, kde-format
 msgid "Total size - 0B"
-msgstr "Mida total - 0B"
+msgstr "Mida total - 0 B"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:85
 #, kde-format
@@ -17627,7 +17627,7 @@ msgstr "Guarda al predeterminat"
 #: src/kdefrontend/TemplateHandler.cpp:186
 #, kde-format
 msgid "Save current properties as default"
-msgstr "Guarda les propietats actuals com per defecte"
+msgstr "Guarda les propietats actuals com predeterminades"
 
 #: src/kdefrontend/TemplateHandler.cpp:199
 #, kde-format
