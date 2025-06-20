@@ -455,6 +455,9 @@ QIcon LiveDataSource::icon() const {
  */
 void LiveDataSource::readOnUpdate() {
 	DEBUG(Q_FUNC_INFO)
+	// This can happen when the update type gets changed to periodically during a livedata is running
+	if (!m_fileSystemWatcher)
+		return;
 	if (!m_fileSystemWatcher->files().contains(m_fileName)) {
 		m_fileSystemWatcher->addPath(m_fileName);
 		QFileInfo file(m_fileName);

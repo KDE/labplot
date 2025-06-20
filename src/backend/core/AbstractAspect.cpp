@@ -518,7 +518,7 @@ QString AbstractAspect::path() const {
 /**
  * \brief Add the given Aspect to my list of children.
  */
-void AbstractAspect::addChild(AbstractAspect* child) {
+bool AbstractAspect::addChild(AbstractAspect* child) {
 	Q_CHECK_PTR(child);
 
 	const QString new_name = uniqueNameFor(child->name());
@@ -530,6 +530,7 @@ void AbstractAspect::addChild(AbstractAspect* child) {
 
 	exec(new AspectChildAddCmd(d, child, d->m_children.count()));
 	endMacro();
+	return true;
 }
 
 /**

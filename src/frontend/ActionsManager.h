@@ -64,7 +64,7 @@ private:
 	void connectSpreadsheetToolbarActions(const SpreadsheetView*);
 
 	void initDataExtractorToolbarActions();
-	void connectDataExtractorToolbarActions(const DatapickerImageView*);
+	void connectDataExtractorToolbarActions(DatapickerImageView *);
 
 #ifdef HAVE_CANTOR_LIBS
 	void initNotebookToolbarActions();

@@ -14,6 +14,7 @@
 
 #include "Vector3D.h"
 #include "backend/core/AbstractPart.h"
+#include "backend/worksheet/DefaultColorTheme.h"
 
 class Spreadsheet;
 class DatapickerCurve;
@@ -26,6 +27,7 @@ class XmlStreamReader;
 class Transform;
 class QPointF;
 class QVector3D;
+class KConfig;
 
 class Datapicker : public AbstractPart {
 	Q_OBJECT
@@ -59,6 +61,9 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
+	void setColorPalette(const KConfig&);
+	QColor themeColorPalette(int index) const;
+
 public Q_SLOTS:
 	void childSelected(const AbstractAspect*) override;
 
@@ -67,6 +72,7 @@ private:
 	DatapickerCurve* m_activeCurve{nullptr};
 	Transform* m_transform;
 	DatapickerImage* m_image{nullptr};
+	QList<QColor> m_themeColorPalette = defaultColorPalette;
 
 	void init();
 	void handleChildAspectAboutToBeRemoved(const AbstractAspect*);
