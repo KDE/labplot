@@ -52,7 +52,8 @@ double nsl_stats_independent_t_p(const double sample1[], size_t n1, const double
 
 /* One Sample Student's t-test */
 double nsl_stats_one_sample_t(const double sample[], size_t n, double hypothesized_mean);
-double nsl_stats_one_sample_t_p(const double sample[], size_t n, double hypothesized_mean, int tail);
+typedef enum { nsl_stats_tail_type_two, nsl_stats_tail_type_negative, nsl_stats_tail_type_positive } nsl_stats_tail_type;
+double nsl_stats_one_sample_t_p(const double sample[], size_t n, double hypothesized_mean, nsl_stats_tail_type tail);
 
 __END_DECLS
 

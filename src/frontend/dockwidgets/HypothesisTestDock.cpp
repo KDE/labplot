@@ -190,13 +190,13 @@ void HypothesisTestDock::onNullOneTail2Clicked() {
 void HypothesisTestDock::runHypothesisTest() {
 	if (ui.rbH0TwoTail->isChecked()) {
 		m_test->setNullHypothesis(HypothesisTest::NullHypothesisType::NullEquality);
-		m_test->setTail(HypothesisTest::TailType::TailTwo);
+		m_test->setTail(nsl_stats_tail_type_two);
 	} else if (ui.rbH0OneTail1->isChecked()) {
 		m_test->setNullHypothesis(HypothesisTest::NullHypothesisType::NullLessEqual);
-		m_test->setTail(HypothesisTest::TailType::TailPositive);
+		m_test->setTail(nsl_stats_tail_type_positive);
 	} else if (ui.rbH0OneTail2->isChecked()) {
 		m_test->setNullHypothesis(HypothesisTest::NullHypothesisType::NullGreaterEqual);
-		m_test->setTail(HypothesisTest::TailType::TailNegative);
+		m_test->setTail(nsl_stats_tail_type_negative);
 	}
 
 	bool ok = false;

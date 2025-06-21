@@ -406,25 +406,20 @@ double nsl_stats_one_sample_t(const double sample[], size_t n, double hypothesiz
 	return t_stat;
 }
 
-/* One Sample Student's t-test p-value
- * tail parameter:
- *    0 → two-tailed
- *    1 → left-tailed
- *    2 → right-tailed
- */
-double nsl_stats_one_sample_t_p(const double sample[], size_t n, double hypothesized_mean, int tail) {
+/* One Sample Student's t-test p-value */
+double nsl_stats_one_sample_t_p(const double sample[], size_t n, double hypothesized_mean, nsl_stats_tail_type tail) {
 	size_t df = n - 1;
 	double t_stat = nsl_stats_one_sample_t(sample, n, hypothesized_mean);
 	double p_value = 0.0;
 	switch (tail) {
-	case 1: // Left-tailed test: p = P(T ≤ t_stat)
+	case nsl_stats_tail_type_two: // Two-tailed test: p = 2 * (1 - P(T ≤ |t_stat|))
+		p_value = 2.0 * (1.0 - gsl_cdf_tdist_P(fabs(t_stat), df));
+		break;
+	case nsl_stats_tail_type_negative: // Left-tailed test: p = P(T ≤ t_stat)
 		p_value = gsl_cdf_tdist_P(t_stat, df);
 		break;
-	case 2: // Right-tailed test: p = P(T ≥ t_stat) = 1 - P(T ≤ t_stat)
+	case nsl_stats_tail_type_positive: // Right-tailed test: p = P(T ≥ t_stat) = 1 - P(T ≤ t_stat)
 		p_value = 1.0 - gsl_cdf_tdist_P(t_stat, df);
-		break;
-	default: // Two-tailed test: p = 2 * (1 - P(T ≤ |t_stat|))
-		p_value = 2.0 * (1.0 - gsl_cdf_tdist_P(fabs(t_stat), df));
 		break;
 	}
 	return p_value;

@@ -13,17 +13,11 @@
 #include "HypothesisTest.h"
 #include "HtmlTableBuilder.h"
 #include "backend/core/column/Column.h"
-#include "backend/lib/commandtemplates.h"
 
-#include <cmath>
-#include <gsl/gsl_cdf.h>
+#include <KLocalizedString>
 
-// Include the updated nsl_statistical_test functions.
-extern "C" {
-#include "backend/nsl/nsl_statistical_test.h"
-}
-
-HypothesisTest::HypothesisTest(const QString& name) : GeneralTest(name, AspectType::HypothesisTest) {
+HypothesisTest::HypothesisTest(const QString& name)
+	: GeneralTest(name, AspectType::HypothesisTest) {
 }
 
 HypothesisTest::~HypothesisTest() {
@@ -37,8 +31,8 @@ void HypothesisTest::setSignificanceLevel(double alpha) {
 	m_significanceLevel = alpha;
 }
 
-void HypothesisTest::setTail(TailType tail) {
-	m_tail = tail;
+void HypothesisTest::setTail(nsl_stats_tail_type type) {
+	m_tail = type;
 }
 
 void HypothesisTest::setNullHypothesis(NullHypothesisType type) {
@@ -113,32 +107,25 @@ void HypothesisTest::performOneSampleTTest() {
 	for (int i = 0; i < n; ++i)
 		sample.append(m_columns[0]->valueAt(i));
 
-	// Map our tail enum to an integer parameter for the nsl_stats function:
-	// TailTwo → 0, TailNegative → 1, TailPositive → 2.
-	int tail_param = 0;
 	QString nullHypothesisSign;
 	QString alternateHypothesisSign;
-
 	switch (m_tail) {
-	case TailType::TailNegative:
-		nullHypothesisSign = UTF8_QSTRING("≥");
-		alternateHypothesisSign = UTF8_QSTRING("<");
-		tail_param = 1;
+	case nsl_stats_tail_type_two:
+		nullHypothesisSign = QString::fromUtf8("=");
+		alternateHypothesisSign = QString::fromUtf8("≠");
 		break;
-	case TailType::TailPositive:
-		nullHypothesisSign = UTF8_QSTRING("≤");
-		alternateHypothesisSign = UTF8_QSTRING(">");
-		tail_param = 2;
+	case nsl_stats_tail_type_negative:
+		nullHypothesisSign = QString::fromUtf8("≥");
+		alternateHypothesisSign = QString::fromUtf8("<");
 		break;
-	case TailType::TailTwo:
-		nullHypothesisSign = UTF8_QSTRING("=");
-		alternateHypothesisSign = UTF8_QSTRING("≠");
-		tail_param = 0;
+	case nsl_stats_tail_type_positive:
+		nullHypothesisSign = QString::fromUtf8("≤");
+		alternateHypothesisSign = QString::fromUtf8(">");
 		break;
 	}
 
 	double tValue = nsl_stats_one_sample_t(sample.constData(), static_cast<size_t>(n), m_populationMean);
-	double pValue = nsl_stats_one_sample_t_p(sample.constData(), static_cast<size_t>(n), m_populationMean, tail_param);
+	double pValue = nsl_stats_one_sample_t_p(sample.constData(), static_cast<size_t>(n), m_populationMean, m_tail);
 
 	displayLine(0, i18n("<b>Null Hypothesis:</b> µ %1 µ₀", nullHypothesisSign), QStringLiteral("black"));
 	displayLine(1, i18n("<b>Alternate Hypothesis:</b> µ %1 µ₀", alternateHypothesisSign), QStringLiteral("black"));

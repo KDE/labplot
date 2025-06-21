@@ -15,6 +15,10 @@
 
 #include "GeneralTest.h"
 
+extern "C" {
+#include "backend/nsl/nsl_statistical_test.h"
+}
+
 /*!
  * \brief The HypothesisTest class implements a one-sample t-test.
  */
@@ -31,12 +35,11 @@ public:
 		NullLessEqual, // H0: μ ≤ μ₀
 		NullGreaterEqual // H0: μ ≥ μ₀
 	};
-	enum class TailType { TailPositive, TailNegative, TailTwo };
 
 	void setPopulationMean(double mean);
 	void setSignificanceLevel(double alpha);
-	void setTail(TailType);
-	void setNullHypothesis(NullHypothesisType );
+	void setTail(nsl_stats_tail_type);
+	void setNullHypothesis(NullHypothesisType);
 	NullHypothesisType nullHypothesis() const;
 
 	void runTest();
@@ -49,7 +52,7 @@ private:
 	NullHypothesisType m_nullHypothesisType{NullHypothesisType::NullEquality};
 	double m_populationMean{0.0};
 	double m_significanceLevel{0.05};
-	TailType m_tail{TailType::TailTwo};
+	nsl_stats_tail_type m_tail{nsl_stats_tail_type_two};
 	QList<double> m_pValue;
 	QList<double> m_statisticValue;
 };
