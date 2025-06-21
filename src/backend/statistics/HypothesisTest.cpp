@@ -23,11 +23,7 @@ extern "C" {
 #include "backend/nsl/nsl_statistical_test.h"
 }
 
-HypothesisTest::HypothesisTest(const QString& name)
-	: GeneralTest(name, AspectType::HypothesisTest)
-	, m_populationMean(0.0)
-	, m_significanceLevel(0.05)
-	, m_tail(TailTwo) {
+HypothesisTest::HypothesisTest(const QString& name) : GeneralTest(name, AspectType::HypothesisTest) {
 }
 
 HypothesisTest::~HypothesisTest() {
@@ -41,7 +37,7 @@ void HypothesisTest::setSignificanceLevel(double alpha) {
 	m_significanceLevel = alpha;
 }
 
-void HypothesisTest::setTail(HypothesisTailType tail) {
+void HypothesisTest::setTail(TailType tail) {
 	m_tail = tail;
 }
 
@@ -50,8 +46,12 @@ void HypothesisTest::setNullHypothesis(NullHypothesisType type) {
 }
 
 void HypothesisTest::runTest() {
-	m_currentTestName = QLatin1String("<h2>") + i18n("One Sample Test") + QLatin1String("</h2>");
-	performOneSampleTTest();
+	switch (m_test) {
+	case Test::t_test_one_sample:
+		performOneSampleTTest();
+		break;
+	}
+
 	Q_EMIT changed();
 }
 
@@ -60,7 +60,8 @@ void HypothesisTest::performOneSampleTTest() {
 		displayError(i18n("Inappropriate number of columns selected."));
 		return;
 	}
-	if (!m_columns[0]->isNumeric()) {
+
+	if (!m_columns.constFirst()->isNumeric()) {
 		displayError(i18n("Only numeric columns can be used for the test."));
 		return;
 	}
@@ -109,9 +110,8 @@ void HypothesisTest::performOneSampleTTest() {
 	// Build an array of sample values from the column.
 	QVector<double> sample;
 	sample.reserve(n);
-	for (int i = 0; i < n; ++i) {
+	for (int i = 0; i < n; ++i)
 		sample.append(m_columns[0]->valueAt(i));
-	}
 
 	// Map our tail enum to an integer parameter for the nsl_stats function:
 	// TailTwo → 0, TailNegative → 1, TailPositive → 2.
@@ -120,17 +120,17 @@ void HypothesisTest::performOneSampleTTest() {
 	QString alternateHypothesisSign;
 
 	switch (m_tail) {
-	case TailNegative:
+	case TailType::TailNegative:
 		nullHypothesisSign = UTF8_QSTRING("≥");
 		alternateHypothesisSign = UTF8_QSTRING("<");
 		tail_param = 1;
 		break;
-	case TailPositive:
+	case TailType::TailPositive:
 		nullHypothesisSign = UTF8_QSTRING("≤");
 		alternateHypothesisSign = UTF8_QSTRING(">");
 		tail_param = 2;
 		break;
-	case TailTwo:
+	case TailType::TailTwo:
 		nullHypothesisSign = UTF8_QSTRING("=");
 		alternateHypothesisSign = UTF8_QSTRING("≠");
 		tail_param = 0;
@@ -153,15 +153,12 @@ void HypothesisTest::performOneSampleTTest() {
 	displayLine(5, i18n("<b>P-Value:</b> %1", formatRoundedValue(pValue, 4)), QStringLiteral("black"));
 
 	QString conclusion;
-	if (pValue < m_significanceLevel) {
+	if (pValue < m_significanceLevel)
 		conclusion = QStringLiteral("<span style='color:black;'><b>Conclusion:</b> Reject the Null Hypothesis.</span>");
-	} else {
+	else
 		conclusion = QStringLiteral("<span style='color:red;'><b>Conclusion:</b> Fail to Reject the Null Hypothesis.</span>");
-	}
+
 	displayLine(7, conclusion, QStringLiteral("black"));
-}
-void HypothesisTest::logError(const QString& errorMsg) {
-	qCritical() << errorMsg;
 }
 
 QString HypothesisTest::generatePValueTooltip(const double& pValue) {

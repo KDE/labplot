@@ -17,10 +17,8 @@
 #include "frontend/dockwidgets/BaseDock.h"
 #include "ui_hypothesistestdock.h"
 
-class AbstractAspect;
 class AspectTreeModel;
 class TreeViewComboBox;
-class Spreadsheet;
 
 class HypothesisTestDock : public BaseDock {
 	Q_OBJECT
@@ -37,7 +35,6 @@ private:
 	TreeViewComboBox* cbColumn1{nullptr};
 	TreeViewComboBox* cbColumn2{nullptr};
 	TreeViewComboBox* cbColumn3{nullptr};
-	HypothesisTest::HypothesisTailType m_tail;
 
 private Q_SLOTS:
 	void testChanged(int);
@@ -45,6 +42,7 @@ private Q_SLOTS:
 	void onNullTwoTailClicked();
 	void onNullOneTail1Clicked();
 	void onNullOneTail2Clicked();
+	void enableRecalculate();
 
 Q_SIGNALS:
 

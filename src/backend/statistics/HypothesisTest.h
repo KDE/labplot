@@ -26,30 +26,30 @@ public:
 	~HypothesisTest() override;
 
 	enum class Test { t_test_one_sample, t_test_two_sample, t_test_paired, one_way_anova, mann_whitney_u_test, kruskal_wallis_test, log_rank_test };
-
-	enum NullHypothesisType {
+	enum class NullHypothesisType {
 		NullEquality, // H0: μ = μ₀
 		NullLessEqual, // H0: μ ≤ μ₀
 		NullGreaterEqual // H0: μ ≥ μ₀
 	};
-	enum HypothesisTailType { TailPositive, TailNegative, TailTwo };
+	enum class TailType { TailPositive, TailNegative, TailTwo };
+
 	void setPopulationMean(double mean);
 	void setSignificanceLevel(double alpha);
-	void setTail(HypothesisTailType tail);
-	void setNullHypothesis(NullHypothesisType type);
+	void setTail(TailType);
+	void setNullHypothesis(NullHypothesisType );
 	NullHypothesisType nullHypothesis() const;
 
 	void runTest();
 	void performOneSampleTTest();
 
 private:
-	void logError(const QString& errorMsg);
 	QString generatePValueTooltip(const double& pValue);
 
-	NullHypothesisType m_nullHypothesisType = NullEquality; // default null hypothesis type
-	double m_populationMean;
-	double m_significanceLevel;
-	HypothesisTailType m_tail;
+	Test m_test{Test::t_test_one_sample};
+	NullHypothesisType m_nullHypothesisType{NullHypothesisType::NullEquality};
+	double m_populationMean{0.0};
+	double m_significanceLevel{0.05};
+	TailType m_tail{TailType::TailTwo};
 	QList<double> m_pValue;
 	QList<double> m_statisticValue;
 };

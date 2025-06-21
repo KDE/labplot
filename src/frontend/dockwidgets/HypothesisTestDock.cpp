@@ -11,16 +11,11 @@
 */
 
 #include "HypothesisTestDock.h"
-#include "TreeViewComboBox.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/widgets/TreeViewComboBox.h"
-
-#include <QLocale>
-#include <QPushButton>
 
 /*!
   \class HypothesisTestDock
-  \brief Provides a dock (widget) for One-Sample T-Test.
+  \brief Provides a dock widget for statistical hypothesis tests.
   \ingroup frontend
 */
 HypothesisTestDock::HypothesisTestDock(QWidget* parent)
@@ -30,11 +25,11 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent)
 
 	// combo boxes for sample columns
 	cbColumn1 = new TreeViewComboBox(this);
-	ui.gridLayout->addWidget(cbColumn1, 8, 3, 1, 3);
+	ui.gridLayout->addWidget(cbColumn1, 6, 3, 1, 3);
 	cbColumn2 = new TreeViewComboBox(this);
-	ui.gridLayout->addWidget(cbColumn2, 9, 3, 1, 3);
+	ui.gridLayout->addWidget(cbColumn2, 7, 3, 1, 3);
 	cbColumn3 = new TreeViewComboBox(this);
-	ui.gridLayout->addWidget(cbColumn3, 10, 3, 1, 3);
+	ui.gridLayout->addWidget(cbColumn3, 8, 3, 1, 3);
 
 	QList<AspectType> list{AspectType::Folder, AspectType::Workbook, AspectType::Spreadsheet, AspectType::Notebook, AspectType::Column};
 	cbColumn1->setTopLevelClasses(list);
@@ -50,7 +45,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent)
 	ui.lPopulationSigma->hide();
 	ui.chbPopulationSigma->hide();
 	ui.lePopulationSigma->hide();
-	ui.pbPerformTest->setEnabled(false);
+	ui.pbRecalculate->setEnabled(false);
 
 	const QString mu = UTF8_QSTRING("μ");
 	const QString mu0 = UTF8_QSTRING("μₒ");
@@ -69,7 +64,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent)
 	ui.leMuo->setValidator(new QDoubleValidator(ui.leMuo));
 	ui.leAlpha->setValidator(new QDoubleValidator(ui.leAlpha));
 
-	ui.pbPerformTest->setIcon(QIcon::fromTheme(QLatin1String("run-build")));
+	ui.pbRecalculate->setIcon(QIcon::fromTheme(QLatin1String("run-build")));
 
 	ui.rbH1TwoTail->setEnabled(false);
 	ui.rbH1OneTail1->setEnabled(false);
@@ -78,12 +73,14 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent)
 	retranslateUi();
 
 	//**********************************  Slots **********************************************
-	// connect(cbColumn1, &TreeViewComboBox::currentModelIndexChanged, this, &HypothesisTestDock::xColumnChanged);
+	connect(cbColumn1, &TreeViewComboBox::currentModelIndexChanged, this, &HypothesisTestDock::enableRecalculate);
+	connect(cbColumn2, &TreeViewComboBox::currentModelIndexChanged, this, &HypothesisTestDock::enableRecalculate);
+	connect(cbColumn3, &TreeViewComboBox::currentModelIndexChanged, this, &HypothesisTestDock::enableRecalculate);
 	connect(ui.cbTest, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HypothesisTestDock::testChanged);
 	connect(ui.rbH0TwoTail, &QRadioButton::clicked, this, &HypothesisTestDock::onNullTwoTailClicked);
 	connect(ui.rbH0OneTail1, &QRadioButton::clicked, this, &HypothesisTestDock::onNullOneTail1Clicked);
 	connect(ui.rbH0OneTail2, &QRadioButton::clicked, this, &HypothesisTestDock::onNullOneTail2Clicked);
-	connect(ui.pbPerformTest, &QPushButton::clicked, this, &HypothesisTestDock::runHypothesisTest);
+	connect(ui.pbRecalculate, &QPushButton::clicked, this, &HypothesisTestDock::runHypothesisTest);
 }
 
 void HypothesisTestDock::setTest(HypothesisTest* test) {
@@ -91,9 +88,11 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	m_test = test;
 	setAspects(QList<AbstractAspect*>{m_test});
 
-	QList<AspectType> list{AspectType::Column};
+	// TODO load the settings
+	testChanged(ui.cbTest->currentIndex());
+
 	auto* model = aspectModel();
-	model->setSelectableAspects(list);
+	model->setSelectableAspects({AspectType::Column});
 	cbColumn1->setModel(model);
 	cbColumn2->setModel(model);
 	cbColumn3->setModel(model);
@@ -131,9 +130,40 @@ void HypothesisTestDock::retranslateUi() {
 // ####################################  SLOTs   ################################
 // ##############################################################################
 void HypothesisTestDock::testChanged(int) {
-	auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
+	const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
 
-	// TODO.:
+	switch (test) {
+	case HypothesisTest::Test::t_test_one_sample:
+		ui.lColumn2->hide();
+		cbColumn2->hide();
+		ui.lColumn3->hide();
+		cbColumn3->hide();
+		break;
+	case HypothesisTest::Test::t_test_two_sample:
+		ui.lColumn2->show();
+		cbColumn2->show();
+		ui.lColumn3->hide();
+		cbColumn3->hide();
+		break;
+	case HypothesisTest::Test::t_test_paired:
+
+		break;
+	case HypothesisTest::Test::one_way_anova:
+
+		break;
+	case HypothesisTest::Test::mann_whitney_u_test:
+
+		break;
+	case HypothesisTest::Test::kruskal_wallis_test:
+
+		break;
+	case HypothesisTest::Test::log_rank_test:
+
+		break;
+	default:
+
+		break;
+	}
 }
 
 void HypothesisTestDock::onNullTwoTailClicked() {
@@ -159,14 +189,14 @@ void HypothesisTestDock::onNullOneTail2Clicked() {
 
 void HypothesisTestDock::runHypothesisTest() {
 	if (ui.rbH0TwoTail->isChecked()) {
-		m_test->setNullHypothesis(HypothesisTest::NullEquality);
-		m_test->setTail(HypothesisTest::TailTwo);
+		m_test->setNullHypothesis(HypothesisTest::NullHypothesisType::NullEquality);
+		m_test->setTail(HypothesisTest::TailType::TailTwo);
 	} else if (ui.rbH0OneTail1->isChecked()) {
-		m_test->setNullHypothesis(HypothesisTest::NullLessEqual);
-		m_test->setTail(HypothesisTest::TailPositive);
+		m_test->setNullHypothesis(HypothesisTest::NullHypothesisType::NullLessEqual);
+		m_test->setTail(HypothesisTest::TailType::TailPositive);
 	} else if (ui.rbH0OneTail2->isChecked()) {
-		m_test->setNullHypothesis(HypothesisTest::NullGreaterEqual);
-		m_test->setTail(HypothesisTest::TailNegative);
+		m_test->setNullHypothesis(HypothesisTest::NullHypothesisType::NullGreaterEqual);
+		m_test->setTail(HypothesisTest::TailType::TailNegative);
 	}
 
 	bool ok = false;
@@ -180,11 +210,31 @@ void HypothesisTestDock::runHypothesisTest() {
 		return; // TODO: Handle conversion error
 	m_test->setSignificanceLevel(alpha);
 
-	// if (ui.cbCol1->count() == 0)
-	// 	return;
-	// QVector<Column*> columns;
-	// columns << reinterpret_cast<Column*>(ui.cbCol1->currentData().toLongLong());
-	// m_test->setColumns(columns);
+	QVector<Column*> columns;
+	columns << reinterpret_cast<Column*>(cbColumn1->currentModelIndex().internalPointer());
+	if (cbColumn2->isVisible())
+		columns << reinterpret_cast<Column*>(cbColumn2->currentModelIndex().internalPointer());
+	if (cbColumn2->isVisible())
+		columns << reinterpret_cast<Column*>(cbColumn3->currentModelIndex().internalPointer());
+	m_test->setColumns(columns);
 
 	m_test->runTest();
+}
+
+void HypothesisTestDock::enableRecalculate() {
+	bool ok = false;
+	QLocale().toDouble(ui.leMuo->text(), &ok);
+	if (!ok) {
+		ui.pbRecalculate->setToolTip(i18n("Provide a numerical value for the test mean"));
+		ui.pbRecalculate->setEnabled(false);
+	}
+
+	QLocale().toDouble(ui.leAlpha->text(), &ok);
+	if (!ok) {
+		ui.pbRecalculate->setToolTip(i18n("Provide a numerical value for the confidence level"));
+		ui.pbRecalculate->setEnabled(false);
+	}
+
+	ui.pbRecalculate->setToolTip(QString());
+	ui.pbRecalculate->setEnabled(true);
 }

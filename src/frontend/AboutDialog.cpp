@@ -343,10 +343,10 @@ QVector<QStringList> AboutDialog::components() {
 #endif
 	components << (QStringList() << QLatin1String("Vector BLF") << i18n("Binary Log File (BLF) file support") << version << QStringLiteral("https://github.com/Technica-Engineering/vector_blf"));
 
-		   // compiler info
+	// compiler info
 	components << (QStringList() << i18n("C++ Compiler: ") + QLatin1String(CXX_COMPILER_ID) << QLatin1String(CXX_COMPILER_VERSION) << QString() << QString());
 
-		   // compiler flags
+	// compiler flags
 	auto flags = QString::fromLatin1(CXX_COMPILER_FLAGS);
 	flags.replace(QLatin1String(" -"), QStringLiteral("\n-")); // add line breaks to avoid big window width
 	components << (QStringList() << i18n("C++ Compiler Flags:") << flags << QString() << QString());
@@ -359,10 +359,10 @@ void AboutDialog::copyEnvironment() {
 	QString text;
 	text += QLatin1String("LabPlot ") + QLatin1String(LVERSION) + QLatin1Char('\n');
 
-		   // system info
+	// system info
 	text += QTextDocumentFragment::fromHtml(systemInfo()).toPlainText();
 
-		   // components
+	// components
 	text += QLatin1Char('\n') + i18n("Components:") + QLatin1Char('\n');
 	text += i18n("Qt") + QLatin1Char(' ') + QLatin1String(QT_VERSION_STR) + QLatin1Char('\n');
 	text += i18n("KDE Frameworks") + QLatin1Char(' ') + QLatin1String(KCOREADDONS_VERSION_STRING) + QLatin1Char('\n');
