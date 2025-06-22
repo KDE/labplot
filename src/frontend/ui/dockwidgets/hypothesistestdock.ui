@@ -56,7 +56,7 @@
    <item row="9" column="0" colspan="2">
     <widget class="QLabel" name="lEqualVariance">
      <property name="text">
-      <string>Equal Variance</string>
+      <string>Equal Variance:</string>
      </property>
     </widget>
    </item>
@@ -99,7 +99,7 @@
    <item row="10" column="0" colspan="2">
     <widget class="QLabel" name="lCategorical">
      <property name="text">
-      <string>Independent Var. 1 Categorical</string>
+      <string>Independent Var. 1 Categorical:</string>
      </property>
     </widget>
    </item>
@@ -118,7 +118,7 @@
    <item row="3" column="0" colspan="2">
     <widget class="QLabel" name="lTest">
      <property name="text">
-      <string>Test</string>
+      <string>Test:</string>
      </property>
     </widget>
    </item>
@@ -139,7 +139,7 @@
    <item row="16" column="0" colspan="2">
     <widget class="QLabel" name="lH1">
      <property name="text">
-      <string>Alternate</string>
+      <string>Alternate:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
@@ -160,9 +160,9 @@
     </spacer>
    </item>
    <item row="18" column="0" colspan="2">
-    <widget class="QLabel" name="lAlpha">
+    <widget class="QLabel" name="lSignificanceLevel">
      <property name="text">
-      <string>Confidence Level α</string>
+      <string>Significance Level α:</string>
      </property>
     </widget>
    </item>
@@ -191,7 +191,7 @@
     <widget class="QComboBox" name="cbTest"/>
    </item>
    <item row="18" column="3" colspan="3">
-    <widget class="QLineEdit" name="leAlpha"/>
+    <widget class="QLineEdit" name="leSignificanceLevel"/>
    </item>
    <item row="11" column="0" colspan="2">
     <widget class="QLabel" name="lPopulationSigma">
@@ -298,7 +298,7 @@
    <item row="8" column="0" colspan="2">
     <widget class="QLabel" name="lColumn3">
      <property name="text">
-      <string>Variable 3</string>
+      <string>Variable 3:</string>
      </property>
     </widget>
    </item>
@@ -363,14 +363,14 @@
    <item row="7" column="0" colspan="2">
     <widget class="QLabel" name="lColumn2">
      <property name="text">
-      <string>Variable 2</string>
+      <string>Variable 2:</string>
      </property>
     </widget>
    </item>
    <item row="15" column="0" colspan="2">
     <widget class="QLabel" name="lH0">
      <property name="text">
-      <string>Null</string>
+      <string>Null:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
@@ -380,7 +380,7 @@
    <item row="6" column="0" colspan="2">
     <widget class="QLabel" name="lColumn1">
      <property name="text">
-      <string>Variable 1</string>
+      <string>Variable 1:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
@@ -388,14 +388,14 @@
     </widget>
    </item>
    <item row="14" column="0">
-    <widget class="QLabel" name="lMuo">
+    <widget class="QLabel" name="lTestMean">
      <property name="text">
-      <string>Test Mean μ₀</string>
+      <string>Test Mean μ₀: </string>
      </property>
     </widget>
    </item>
    <item row="14" column="3" colspan="3">
-    <widget class="QLineEdit" name="leMuo"/>
+    <widget class="QLineEdit" name="leTestMean"/>
    </item>
   </layout>
  </widget>

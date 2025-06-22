@@ -26,7 +26,7 @@ public:
 	explicit HypothesisTest(const QString& name);
 	~HypothesisTest() override;
 
-	enum class Test { t_test_one_sample, t_test_two_sample, t_test_paired, one_way_anova, mann_whitney_u_test, kruskal_wallis_test, log_rank_test };
+	enum class Test { t_test_one_sample, t_test_two_sample, t_test_two_sample_paired, one_way_anova, mann_whitney_u_test, kruskal_wallis_test, log_rank_test };
 	enum class NullHypothesisType {
 		NullEquality, // H0: μ = μ₀
 		NullLessEqual, // H0: μ ≤ μ₀
@@ -42,9 +42,14 @@ public:
 	void recalculate();
 
 private:
-	QString generatePValueTooltip(const double& pValue);
 	void performOneSampleTTest();
+	void performTowSampleTTest(bool paired);
+	void performOneWayANOVATest();
+	void performMannWhitneyUTest();
+	void performKruskalWallisTest();
+	void performLogRankTest();
 
+	// TODO: move to a private class
 	Test m_test{Test::t_test_one_sample};
 	NullHypothesisType m_nullHypothesisType{NullHypothesisType::NullEquality};
 	double m_populationMean{0.0};

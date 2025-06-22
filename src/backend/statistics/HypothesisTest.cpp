@@ -40,21 +40,32 @@ void HypothesisTest::setNullHypothesis(NullHypothesisType type) {
 }
 
 void HypothesisTest::recalculate() {
+	if (m_columns.isEmpty()) {
+		Q_EMIT info(i18n("No variable column provided."));
+		return;
+	}
+
 	switch (m_test) {
 	case Test::t_test_one_sample:
 		performOneSampleTTest();
 		break;
 	case Test::t_test_two_sample:
+		performTowSampleTTest(false /* paired */);
 		break;
-	case Test::t_test_paired:
+	case Test::t_test_two_sample_paired:
+		performTowSampleTTest(true /* paired */);
 		break;
 	case Test::one_way_anova:
+		performOneWayANOVATest();
 		break;
 	case Test::mann_whitney_u_test:
+		performMannWhitneyUTest();
 		break;
 	case Test::kruskal_wallis_test:
+		performKruskalWallisTest();
 		break;
 	case Test::log_rank_test:
+		performLogRankTest();
 		break;
 	}
 
@@ -62,12 +73,6 @@ void HypothesisTest::recalculate() {
 }
 
 void HypothesisTest::performOneSampleTTest() {
-	if (m_columns.isEmpty()) {
-		Q_EMIT info(i18n("No variable column provided."));
-		return;
-	}
-
-	// perform the test
 	double pValue = NAN;
 	double tValue = NAN;
 	const auto* col = m_columns.constFirst();
@@ -150,6 +155,19 @@ void HypothesisTest::performOneSampleTTest() {
 		} else
 			addResultLine(i18n("Test result not available"));
 	}
+}
 
-	Q_EMIT(changed());
+void HypothesisTest::performTowSampleTTest(bool paired) {
+}
+
+void HypothesisTest::performOneWayANOVATest() {
+}
+
+void HypothesisTest::performMannWhitneyUTest() {
+}
+
+void HypothesisTest::performKruskalWallisTest() {
+}
+
+void HypothesisTest::performLogRankTest() {
 }

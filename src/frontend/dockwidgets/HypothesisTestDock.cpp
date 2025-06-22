@@ -56,13 +56,13 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent)
 	ui.rbH0OneTail1->setText(i18n("%1 ≤ %2", mu, mu0));
 	ui.rbH0OneTail2->setText(i18n("%1 ≥ %2", mu, mu0));
 	ui.rbH0TwoTail->setText(i18n("%1 = %2", mu, mu0));
-	ui.lMuo->setText(QStringLiteral("μ₀"));
-	ui.lAlpha->setText(QString::fromUtf8("α"));
+	ui.lTestMean->setText(QStringLiteral("μ₀"));
+	ui.lSignificanceLevel->setText(QString::fromUtf8("α"));
 
-	ui.leMuo->setText(QLocale().toString(0.0));
-	ui.leAlpha->setText(QLocale().toString(0.05));
-	ui.leMuo->setValidator(new QDoubleValidator(ui.leMuo));
-	ui.leAlpha->setValidator(new QDoubleValidator(ui.leAlpha));
+	ui.leTestMean->setText(QLocale().toString(0.0));
+	ui.leSignificanceLevel->setText(QLocale().toString(0.05));
+	ui.leTestMean->setValidator(new QDoubleValidator(ui.leTestMean));
+	ui.leSignificanceLevel->setValidator(new QDoubleValidator(ui.leSignificanceLevel));
 
 	ui.pbRecalculate->setIcon(QIcon::fromTheme(QLatin1String("run-build")));
 
@@ -88,14 +88,20 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	m_test = test;
 	setAspects(QList<AbstractAspect*>{m_test});
 
-	// TODO load the settings
-	testChanged(ui.cbTest->currentIndex());
-
 	auto* model = aspectModel();
 	model->setSelectableAspects({AspectType::Column});
 	cbColumn1->setModel(model);
 	cbColumn2->setModel(model);
 	cbColumn3->setModel(model);
+
+	// load the settings
+	// TODO:
+	// ui.cbTest->setCurrentIndex(ui.cbtest->findData((int)m_test->test()));
+	// const auto numberLocale = QLocale();
+	// ui.leTestMean->setText(numberLocale.toString(m_test->testMean());
+	// ui.leSignificanceLevel->setText(numberLocale.toString(m_test->significanceLevel());
+	// columns, etc.
+	testChanged(ui.cbTest->currentIndex());
 }
 
 void HypothesisTestDock::retranslateUi() {
@@ -104,26 +110,32 @@ void HypothesisTestDock::retranslateUi() {
 	ui.cbTest->clear();
 	ui.cbTest->addItem(i18n("One-Sample t-Test"), static_cast<int>(HypothesisTest::Test::t_test_one_sample));
 	ui.cbTest->addItem(i18n("Two-Sample t-Test (Independent)"), static_cast<int>(HypothesisTest::Test::t_test_two_sample));
-	ui.cbTest->addItem(i18n("Paired t-Test"), static_cast<int>(HypothesisTest::Test::t_test_one_sample));
-	ui.cbTest->addItem(i18n("One-Way ANOVA"), static_cast<int>(HypothesisTest::Test::t_test_one_sample));
-	ui.cbTest->addItem(i18n("Mann-Whitney U Test"), static_cast<int>(HypothesisTest::Test::t_test_one_sample));
-	ui.cbTest->addItem(i18n("Kruskal-Wallis Test"), static_cast<int>(HypothesisTest::Test::t_test_one_sample));
-	ui.cbTest->addItem(i18n("Logrank Test"), static_cast<int>(HypothesisTest::Test::t_test_one_sample));
+	ui.cbTest->addItem(i18n("Paired t-Test"), static_cast<int>(HypothesisTest::Test::t_test_two_sample_paired));
+	ui.cbTest->addItem(i18n("One-Way ANOVA"), static_cast<int>(HypothesisTest::Test::one_way_anova));
+	ui.cbTest->addItem(i18n("Mann-Whitney U Test"), static_cast<int>(HypothesisTest::Test::mann_whitney_u_test));
+	ui.cbTest->addItem(i18n("Kruskal-Wallis Test"), static_cast<int>(HypothesisTest::Test::kruskal_wallis_test));
+	ui.cbTest->addItem(i18n("Logrank Test"), static_cast<int>(HypothesisTest::Test::log_rank_test));
 
 	// tooltip texts
 	QString info = i18n(
 		"<ul>"
-		"<li><b>One-Sample t-Test</b> - tests whether the mean of a single sample differs significantly from a known or hypothesized population mean</li>"
-		"<li><b>Two-Sample t-Test (Independent)</b> - compares the means of two independent groups to determine if they are significantly different</li>"
-		"<li><b>Paired t-Test</b> - tests the difference between paired observations (e.g., before and after measurements) to see if the mean difference is significantly different from zero</li>"
-		"<li><b>One-Way ANOVA</b> - tests whether there are significant differences among the means of three or more independent groups</li>"
-		"<li><b>Mann-Whitney U Test</b> - </li>"
-		"<li><b>Kruskal-Wallis Test</b> - </li>"
-		"<li><b>Logrank Test</b> - </li>"
+		"<li><b>One-Sample t-Test</b> - tests if a sample mean differs significantly from a known population mean</li>"
+		"<li><b>Two-Sample t-Test (Independent)</b> - tests if two independent samples have the same mean</li>"
+		"<li><b>Paired t-Test</b> - tests if the mean difference between two related samples is zero.</li>"
+		"<li><b>One-Way ANOVA</b> - tests if three or more independent samples have the same mean</li>"
+		"<li><b>Mann-Whitney U Test</b> - tests differences in medians between two independent groups</li>"
+		"<li><b>Kruskal-Wallis Test</b> - tests differences in medians among three or more independent groups</li>"
+		"<li><b>Logrank Test</b> - tests differences in survival distributions between two or more groups</li>"
 		"</ul>"
 	);
 	ui.lTest->setToolTip(info);
 	ui.cbTest->setToolTip(info);
+}
+
+void HypothesisTestDock::updateLocale() {
+	const auto numberLocale = QLocale();
+	ui.leTestMean->setLocale(numberLocale);
+	ui.leSignificanceLevel->setLocale(numberLocale);
 }
 
 // ##############################################################################
@@ -140,28 +152,20 @@ void HypothesisTestDock::testChanged(int) {
 		cbColumn3->hide();
 		break;
 	case HypothesisTest::Test::t_test_two_sample:
+	case HypothesisTest::Test::t_test_two_sample_paired:
 		ui.lColumn2->show();
 		cbColumn2->show();
 		ui.lColumn3->hide();
 		cbColumn3->hide();
 		break;
-	case HypothesisTest::Test::t_test_paired:
-
 		break;
 	case HypothesisTest::Test::one_way_anova:
-
 		break;
 	case HypothesisTest::Test::mann_whitney_u_test:
-
 		break;
 	case HypothesisTest::Test::kruskal_wallis_test:
-
 		break;
 	case HypothesisTest::Test::log_rank_test:
-
-		break;
-	default:
-
 		break;
 	}
 }
@@ -200,12 +204,12 @@ void HypothesisTestDock::recalculate() {
 	}
 
 	bool ok = false;
-	double mean = QLocale().toDouble(ui.leMuo->text(), &ok);
+	double mean = QLocale().toDouble(ui.leTestMean->text(), &ok);
 	if (!ok)
 		return; // TODO: Handle conversion error
 	m_test->setPopulationMean(mean);
 
-	double alpha = QLocale().toDouble(ui.leAlpha->text(), &ok);
+	double alpha = QLocale().toDouble(ui.leSignificanceLevel->text(), &ok);
 	if (!ok)
 		return; // TODO: Handle conversion error
 	m_test->setSignificanceLevel(alpha);
@@ -223,13 +227,13 @@ void HypothesisTestDock::recalculate() {
 
 void HypothesisTestDock::enableRecalculate() {
 	bool ok = false;
-	QLocale().toDouble(ui.leMuo->text(), &ok);
+	QLocale().toDouble(ui.leTestMean->text(), &ok);
 	if (!ok) {
 		ui.pbRecalculate->setToolTip(i18n("Provide a numerical value for the test mean"));
 		ui.pbRecalculate->setEnabled(false);
 	}
 
-	QLocale().toDouble(ui.leAlpha->text(), &ok);
+	QLocale().toDouble(ui.leSignificanceLevel->text(), &ok);
 	if (!ok) {
 		ui.pbRecalculate->setToolTip(i18n("Provide a numerical value for the confidence level"));
 		ui.pbRecalculate->setEnabled(false);

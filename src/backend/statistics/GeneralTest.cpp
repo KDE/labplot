@@ -14,32 +14,22 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
-#include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/statistics/TableModel.h"
 #include "frontend/statistics/GeneralTestView.h"
 
-#include <QLabel>
 #include <QMenu>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
-#include <QVBoxLayout>
 
 #include <KLocalizedString>
 
 #include <gsl/gsl_math.h>
-#include <math.h>
-extern "C" {
-#include "backend/nsl/nsl_statistical_test.h"
-}
 
 GeneralTest::GeneralTest(const QString& name, const AspectType& type)
 	: AbstractPart(name, type) {
 }
 
-GeneralTest::~GeneralTest() {
-	// No additional cleanup required.
-}
+GeneralTest::~GeneralTest() = default;
 
 QString GeneralTest::resultHtml() const {
 	return m_result;
@@ -261,6 +251,7 @@ GeneralTest::GeneralErrorType GeneralTest::computeCategoricalStats(Column* colum
  *                        Virtual Functions Implementations
  ********************************************************************************************************************/
 bool GeneralTest::exportView() const {
+	// TODO: implement the export of the html to a file
 	return true;
 }
 
