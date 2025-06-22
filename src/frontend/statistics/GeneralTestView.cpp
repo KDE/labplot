@@ -1,7 +1,7 @@
 /***************************************************************************
 	File                 : GeneralTestView.cpp
 	Project              : LabPlot
-	Description          : View class for Hypothesis Tests' Table
+	Description          : View class for statistical tests
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 205 Alexander Semke >alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -11,32 +11,31 @@
 #include "backend/statistics/GeneralTest.h"
 
 #include <QFile>
-#include <QLabel>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
+#include <QTextEdit>
 #include <QVBoxLayout>
 
 #include <KLocalizedString>
 
 /*!
 	\class GeneralTestView
-	\brief View class for Hypothesis Test
+	\brief View class for statistical tests showing the HTML formatted results.
 	\ingroup frontend
 */
-
 GeneralTestView::GeneralTestView(GeneralTest* test) : QWidget()
 	, m_test(test) {
 
 	auto* layout = new QVBoxLayout(this);
-	auto* m_resultLabel = new QLabel(this);
-	layout->addWidget(m_resultLabel);
+	auto* textEdit = new QTextEdit(this);
+	textEdit->setReadOnly(true);
+	layout->addWidget(textEdit);
 
-	auto* spacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	layout->addItem(spacer);
-
+	// show the initial/default result and connect to the changes to update it
+	textEdit->setText(m_test->resultHtml());
 	connect(m_test, &GeneralTest::changed, [=]() {
-		m_resultLabel->setText(m_test->resultHtml());
+		textEdit->setText(m_test->resultHtml());
 	});
 }
 

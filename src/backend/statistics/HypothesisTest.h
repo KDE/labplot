@@ -39,11 +39,11 @@ public:
 	void setNullHypothesis(NullHypothesisType);
 	NullHypothesisType nullHypothesis() const;
 
-	void runTest();
-	void performOneSampleTTest();
+	void recalculate();
 
 private:
 	QString generatePValueTooltip(const double& pValue);
+	void performOneSampleTTest();
 
 	Test m_test{Test::t_test_one_sample};
 	NullHypothesisType m_nullHypothesisType{NullHypothesisType::NullEquality};

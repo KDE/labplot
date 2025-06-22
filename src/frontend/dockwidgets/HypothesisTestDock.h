@@ -4,8 +4,8 @@
 	Description          : Dock for Hypothesis Tests
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2019  Devanshu Agarwal <agarwaldevanshu8@gmail.com>
-	SPDX-FileCopyrightText: 2023-205 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2025 Kuntal Bar <barkuntal6@gmail.com>
+	SPDX-FileCopyrightText: 2023-205 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -38,14 +38,12 @@ private:
 
 private Q_SLOTS:
 	void testChanged(int);
-	void runHypothesisTest();
+	void recalculate();
+	void enableRecalculate();
+
 	void onNullTwoTailClicked();
 	void onNullOneTail1Clicked();
 	void onNullOneTail2Clicked();
-	void enableRecalculate();
-
-Q_SIGNALS:
-
 };
 
 #endif // HYPOTHESISTESTDOCK_H

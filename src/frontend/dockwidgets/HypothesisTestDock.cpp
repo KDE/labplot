@@ -80,7 +80,7 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent)
 	connect(ui.rbH0TwoTail, &QRadioButton::clicked, this, &HypothesisTestDock::onNullTwoTailClicked);
 	connect(ui.rbH0OneTail1, &QRadioButton::clicked, this, &HypothesisTestDock::onNullOneTail1Clicked);
 	connect(ui.rbH0OneTail2, &QRadioButton::clicked, this, &HypothesisTestDock::onNullOneTail2Clicked);
-	connect(ui.pbRecalculate, &QPushButton::clicked, this, &HypothesisTestDock::runHypothesisTest);
+	connect(ui.pbRecalculate, &QPushButton::clicked, this, &HypothesisTestDock::recalculate);
 }
 
 void HypothesisTestDock::setTest(HypothesisTest* test) {
@@ -187,7 +187,7 @@ void HypothesisTestDock::onNullOneTail2Clicked() {
 	ui.rbH1OneTail1->setEnabled(false);
 }
 
-void HypothesisTestDock::runHypothesisTest() {
+void HypothesisTestDock::recalculate() {
 	if (ui.rbH0TwoTail->isChecked()) {
 		m_test->setNullHypothesis(HypothesisTest::NullHypothesisType::NullEquality);
 		m_test->setTail(nsl_stats_tail_type_two);
@@ -218,7 +218,7 @@ void HypothesisTestDock::runHypothesisTest() {
 		columns << reinterpret_cast<Column*>(cbColumn3->currentModelIndex().internalPointer());
 	m_test->setColumns(columns);
 
-	m_test->runTest();
+	m_test->recalculate();
 }
 
 void HypothesisTestDock::enableRecalculate() {

@@ -10,11 +10,11 @@
 #include "HypothesisTest.h"
 #include "backend/core/column/Column.h"
 
-#include <QLocale>
 #include <KLocalizedString>
+#include <QLocale>
 
 /*!
- * \brief Thsi class implements various statistical hypothesis tests.
+ * \brief This class implements various statistical hypothesis tests.
  */
 HypothesisTest::HypothesisTest(const QString& name)
 	: GeneralTest(name, AspectType::HypothesisTest) {
@@ -39,7 +39,7 @@ void HypothesisTest::setNullHypothesis(NullHypothesisType type) {
 	m_nullHypothesisType = type;
 }
 
-void HypothesisTest::runTest() {
+void HypothesisTest::recalculate() {
 	switch (m_test) {
 	case Test::t_test_one_sample:
 		performOneSampleTTest();
@@ -86,9 +86,8 @@ void HypothesisTest::performOneSampleTTest() {
 	bool outputConclusion = true;
 
 	// title
-	if (outputTitle) {
+	if (outputTitle)
 		addResultTitle(i18n("One-Sample t-Test"));
-	}
 
 	// test setup
 	if (outputTestSetup) {
@@ -120,7 +119,7 @@ void HypothesisTest::performOneSampleTTest() {
 	if (outputDeccriptiveStatistics) {
 		addResultSection(i18n("Descriptive Statistics"));
 		addResultLine(i18n("Size"), statistics.size);
-		addResultLine(i18n("Mean"),  statistics.arithmeticMean);
+		addResultLine(i18n("Mean"), statistics.arithmeticMean);
 		addResultLine(i18n("Standard Deviation"), statistics.standardDeviation);
 	}
 
@@ -135,9 +134,9 @@ void HypothesisTest::performOneSampleTTest() {
 	if (outputConclusion) {
 		m_result += QStringLiteral("<h2>") + i18n("Statistical Conclusion") + QStringLiteral(":</h2>");
 		if (pValue < m_significanceLevel)
-			addResultLine(i18n("Reject the Null Hypothesis"));
+			addResultLine(i18n("At the significance level %1, the population mean is significantly different from %2. Reject the null Hypothesis", m_significanceLevel, m_populationMean));
 		else
-			addResultLine(i18n("Fail to reject the Null Hypothesis"));
+			addResultLine(i18n("At the significance level %1, the population mean is not significantly different from %2. Fail to reject the null Hypothesis", m_significanceLevel, m_populationMean));
 	}
 
 	Q_EMIT(changed());

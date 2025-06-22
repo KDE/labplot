@@ -944,8 +944,11 @@ void SpreadsheetView::connectActions() {
 	connect(addDistributionFitActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotDataDistributionFit);
 
 	connect(action_do_hypothesis_test, &QAction::triggered, this, [=] {
-		auto* test = new HypothesisTest(i18n("Statistical Test for %1", m_spreadsheet->name()));
-		// TODO: set column
+		const auto& columns = selectedColumns();
+		QString name = (columns.size() == 1) ? columns.constFirst()->name() : m_spreadsheet->name();
+		auto* test = new HypothesisTest(i18n("Statistical Test for %1", name));
+		test->setColumns(columns);
+		test->recalculate();
 		m_spreadsheet->parentAspect()->addChild(test);
 	});
 }

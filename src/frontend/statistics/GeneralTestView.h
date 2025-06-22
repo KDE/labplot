@@ -1,7 +1,7 @@
 /***************************************************************************
 	File                 : GeneralTestView.h
 	Project              : LabPlot
-	Description          : View class for Hypothesis Tests'
+	Description          : View class for statistical tests
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 205 Alexander Semke >alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
