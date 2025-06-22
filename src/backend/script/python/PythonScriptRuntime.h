@@ -27,23 +27,22 @@ private:
 	bool reset();
 	bool redirectOutput();
 	bool unRedirectOutput();
+	bool populateVariableInfo();
+	PyObject* createLocalDict();
 
 	// singleton methods (called once for all PythonScripts)
 	static bool initPython();
 
 	// utilities
 	static PyObject* getModuleDict(const QString&);
-	static PyObject* getPyObjectFromModule(const QString&, const QString&);
-	static bool setPyObjectInModule(const QString&, const QString&, PyObject*);
-	static bool setObjectInModule(const QString&, const QString&, int, void*);
 	static PyObject* shibokenConvertToPyObject(int, void*);
-	static PyObject* createLocalDict();
 	static int getPyErrorLine();
+	static QString pyUnicodeToQString(PyObject*);
 
 	// singletons (shared between PythonScripts)
 	static bool ready;
-	static PyObject* sysStdOut;
-	static PyObject* sysStdErr;
+	static PyObject* sysStdOutWrite;
+	static PyObject* sysStdErrWrite;
 };
 
 #endif

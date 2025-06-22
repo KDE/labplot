@@ -144,27 +144,6 @@ MainWin::MainWin(QWidget* parent, const QString& fileName)
 	m_userFeedbackProvider.addDataSource(new KUserFeedback::StartCountSource);
 	m_userFeedbackProvider.addDataSource(new KUserFeedback::UsageTimeSource);
 #endif
-
-#ifdef HAVE_SCRIPTING
-	// ktexteditor minor setup
-	KTextEditor::Editor* kTextEditor = KTextEditor::Editor::instance();
-	connect(kTextEditor, &KTextEditor::Editor::configChanged, [kTextEditor] {
-		for (auto* document : kTextEditor->documents()) {
-			for (auto* view : document->views()) {
-				QFont editorFont = kTextEditor->font();
-				QString editorThemeName = kTextEditor->theme().name();
-
-				// when a view sets it own font, it ignores changes from the editor, so we change manually
-				if (view->configValue(QStringLiteral("font")).value<QFont>() != editorFont)
-					view->setConfigValue(QStringLiteral("font"), editorFont);
-				
-				// when a view sets it own theme, it ignores changes from the editor, so we change manually
-				if (view->theme().name() != editorThemeName)
-					view->setConfigValue(QStringLiteral("theme"), editorThemeName);
-			}
-		}
-	});
-#endif
 }
 
 MainWin::~MainWin() {

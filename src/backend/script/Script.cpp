@@ -94,15 +94,10 @@ void Script::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	writer->writeStartElement(QStringLiteral("editor"));
-	QFont peditorFont = editorFont();
-	WRITE_QFONT(peditorFont);
-	writer->writeAttribute(QStringLiteral("theme"), editorTheme());
 	writer->writeAttribute(QStringLiteral("text"), m_kTextEditorDocument->text());
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("output"));
-	QFont poutputFont = outputFont();
-	WRITE_QFONT(poutputFont);
 	writer->writeAttribute(QStringLiteral("text"), dynamic_cast<ScriptEditor*>(view())->outputText());
 	writer->writeEndElement();
 
@@ -138,23 +133,10 @@ bool Script::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("editor")) {
 			attribs = reader->attributes();
 
-			// editor font
-			QFont editorFont;
-			READ_QFONT(editorFont);
-			setEditorFont(editorFont);
-
-			// editor theme
-			setEditorTheme(attribs.value(QStringLiteral("theme")).toString());
-
 			// editor text
 			m_kTextEditorDocument->setText(attribs.value(QStringLiteral("text")).toString());
 		} else if (!preview && reader->name() == QLatin1String("output")) {
 			attribs = reader->attributes();
-
-			// output font
-			QFont outputFont;
-			READ_QFONT(outputFont);
-			setOutputFont(outputFont);
 
 			// output text
 			dynamic_cast<ScriptEditor*>(view())->writeOutput(false, attribs.value(QStringLiteral("text")).toString());
@@ -176,10 +158,15 @@ void Script::runScript() {
 	if (!m_initialized)
 		return;
 
+	ScriptEditor* scriptView = dynamic_cast<ScriptEditor*>(view());
+
+	m_kTextEditorDocument->clearMarks();
+	m_scriptRuntime->clearErrorLine();
+	scriptView->clearOutput();
+
 	// connect to the writeOutput signal from the script runtime
-	auto conn = connect(m_scriptRuntime, &ScriptRuntime::writeOutput, [&](bool isErr, const QString& msg) {
-		ScriptEditor* p_view = dynamic_cast<ScriptEditor*>(view());
-		p_view->writeOutput(isErr, msg); // write the output to the scripteditor output
+	auto conn = connect(m_scriptRuntime, &ScriptRuntime::writeOutput, [scriptView](bool isErr, const QString& msg) {
+		scriptView->writeOutput(isErr, msg); // write the output to the scripteditor output
 	});
 
 	// push all changes at once to undo stack
@@ -189,6 +176,14 @@ void Script::runScript() {
 
 	// disconnect from writeOutput signal
 	disconnect(conn);
+
+	int errorLine = m_scriptRuntime->errorLine();
+	if (errorLine != -1)
+		m_kTextEditorDocument->addMark(errorLine, KTextEditor::Document::MarkTypes::Error);
+}
+
+QAbstractItemModel* Script::variableModel() {
+	return m_scriptRuntime->variableModel();
 }
 
 KTextEditor::Document* Script::kTextEditorDocument() const {
@@ -242,28 +237,12 @@ QMenu* Script::createContextMenu() {
 	return menu;
 }
 
-void Script::setEditorFont(const QFont& font) {
-	dynamic_cast<ScriptEditor*>(view())->setEditorFont(font);
+void Script::registerShortcuts() {
+	static_cast<ScriptEditor*>(view())->registerShortcuts();
 }
 
-void Script::setOutputFont(const QFont& font) {
-	dynamic_cast<ScriptEditor*>(view())->setOutputFont(font);
-}
-
-QFont Script::editorFont() const {
-	return dynamic_cast<ScriptEditor*>(view())->editorFont();
-}
-
-QFont Script::outputFont() const {
-	return dynamic_cast<ScriptEditor*>(view())->outputFont();
-}
-
-void Script::setEditorTheme(const QString& theme) {
-	dynamic_cast<ScriptEditor*>(view())->setEditorTheme(theme);
-}
-
-QString Script::editorTheme() const {
-	return dynamic_cast<ScriptEditor*>(view())->editorTheme();
+void Script::unregisterShortcuts() {
+	static_cast<ScriptEditor*>(view())->unregisterShortcuts();
 }
 
 // static data members
