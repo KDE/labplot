@@ -1242,14 +1242,14 @@ void XYFitCurveDock::loadFunction() {
 
 		auto description = general.readEntry("Description", "");
 		auto comment = general.readEntry("Comment", "");
-		QDEBUG("Description:" << description)
-		QDEBUG("Comment:" << comment)
+		QDEBUG(Q_FUNC_INFO << ", description:" << description)
+		QDEBUG(Q_FUNC_INFO << ", comment:" << comment)
 		if (!description.isEmpty()) {
 			uiGeneralTab.cbModel->clear();
 			uiGeneralTab.cbModel->addItem(description);
 		}
 		if (!comment.isEmpty())
-			uiGeneralTab.cbModel->setToolTip(comment);
+			uiGeneralTab.teEquation->viewport()->setToolTip(comment);
 	}
 }
 
@@ -1285,7 +1285,7 @@ void XYFitCurveDock::saveFunction() {
 	auto* lDescription = new QLabel(i18n("Description:"));
 	auto* leDescription = new KLineEdit(uiGeneralTab.cbModel->currentText());
 	auto* lComment = new QLabel(i18n("Comment:"));
-	auto* leComment = new KLineEdit(uiGeneralTab.cbModel->toolTip());
+	auto* leComment = new KLineEdit(uiGeneralTab.teEquation->viewport()->toolTip());
 
 	// update description and comment when selection changes
 	connect(fileWidget, &KFileWidget::fileHighlighted, this, [=]() {
@@ -1345,7 +1345,7 @@ void XYFitCurveDock::saveFunction() {
 		// set description and comment in Dock (even when empty)
 		uiGeneralTab.cbModel->clear();
 		uiGeneralTab.cbModel->addItem(description);
-		uiGeneralTab.cbModel->setToolTip(comment);
+		uiGeneralTab.teEquation->viewport()->setToolTip(comment);
 	}
 }
 

@@ -289,13 +289,17 @@ void FunctionValuesDialog::loadFunction() {
 
 		auto description = general.readEntry("Description", "");
 		auto comment = general.readEntry("Comment", "");
-		QDEBUG("Description:" << description)
-		QDEBUG("Comment:" << comment)
-		//TODO: not working
-		if (!description.isEmpty())
-			ui.teEquation->setToolTip(description);
-		//TODO: if (!comment.isEmpty())
-			//uiGeneralTab.cbModel->setToolTip(comment);
+		QDEBUG(Q_FUNC_INFO << ", description:" << description)
+		QDEBUG(Q_FUNC_INFO << ", comment:" << comment)
+		QString tip;
+		if (!description.isEmpty()) {
+			tip = description;
+			if (!comment.isEmpty())
+				tip += NEWLINE + comment;
+		} else if (!comment.isEmpty())
+			tip = comment;
+		if (!tip.isEmpty())
+			ui.teEquation->viewport()->setToolTip(tip);
 	}
 }
 
