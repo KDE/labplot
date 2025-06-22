@@ -40,6 +40,8 @@ void HypothesisTest::setNullHypothesis(NullHypothesisType type) {
 }
 
 void HypothesisTest::recalculate() {
+	m_result.clear(); // clear the previous result
+
 	if (m_columns.isEmpty()) {
 		Q_EMIT info(i18n("No variable column provided."));
 		return;
@@ -69,7 +71,7 @@ void HypothesisTest::recalculate() {
 		break;
 	}
 
-	Q_EMIT changed();
+	Q_EMIT changed(); // notify the view about the changes
 }
 
 void HypothesisTest::performOneSampleTTest() {
@@ -93,7 +95,6 @@ void HypothesisTest::performOneSampleTTest() {
 	}
 
 	// show the results
-	m_result.clear();
 	bool outputTitle = true;
 	bool outputTestSetup = true;
 	bool outputDeccriptiveStatistics = true;
@@ -149,9 +150,14 @@ void HypothesisTest::performOneSampleTTest() {
 		addResultSection(i18n("Statistical Conclusion"));
 		if (!std::isnan(pValue)) {
 			if (pValue < m_significanceLevel)
-				addResultLine(i18n("At the significance level %1, the population mean is significantly different from %2. Reject the null Hypothesis", m_significanceLevel, m_populationMean));
+				addResultLine(i18n("At the significance level %1, the population mean is significantly different from %2. Reject the null Hypothesis",
+								   m_significanceLevel,
+								   m_populationMean));
 			else
-				addResultLine(i18n("At the significance level %1, the population mean is not significantly different from %2. Fail to reject the null Hypothesis", m_significanceLevel, m_populationMean));
+				addResultLine(
+					i18n("At the significance level %1, the population mean is not significantly different from %2. Fail to reject the null Hypothesis",
+						 m_significanceLevel,
+						 m_populationMean));
 		} else
 			addResultLine(i18n("Test result not available"));
 	}
