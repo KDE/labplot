@@ -285,18 +285,15 @@ void FunctionValuesDialog::loadFunction() {
 
 		KConfig config(fileName);
 		auto general = config.group(QLatin1String("General"));
-		//TODO: m_fitData.model = general.readEntry("Function", "");
-		// switch to custom model
-		//TODO: uiGeneralTab.cbCategory->setCurrentIndex(uiGeneralTab.cbCategory->count() - 1);
+		ui.teEquation->setPlainText(general.readEntry("Function", ""));
 
 		auto description = general.readEntry("Description", "");
 		auto comment = general.readEntry("Comment", "");
 		QDEBUG("Description:" << description)
 		QDEBUG("Comment:" << comment)
-		if (!description.isEmpty()) {
-			//TODO: uiGeneralTab.cbModel->clear();
-			//TODO: uiGeneralTab.cbModel->addItem(description);
-		}
+		//TODO: not working
+		if (!description.isEmpty())
+			ui.teEquation->setToolTip(description);
 		//TODO: if (!comment.isEmpty())
 			//uiGeneralTab.cbModel->setToolTip(comment);
 	}
