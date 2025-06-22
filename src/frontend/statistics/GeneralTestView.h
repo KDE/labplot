@@ -3,19 +3,17 @@
 	Project              : LabPlot
 	Description          : View class for statistical tests
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 205 Alexander Semke >alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025 Alexander Semke >alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 ***************************************************************************/
 
 #ifndef GENERALTESTVIEW_H
 #define GENERALTESTVIEW_H
 
-#include <QLocale>
 #include <QWidget>
 
-class Column;
 class GeneralTest;
-class AbstractAspect;
+class QTextEdit;
 class QPrinter;
 
 class GeneralTestView : public QWidget {
@@ -25,23 +23,12 @@ public:
 	explicit GeneralTestView(GeneralTest*);
 	~GeneralTestView() override;
 
-	bool exportDisplay();
-	bool executePrintView();
-	bool previewPrintView();
+public Q_SLOTS:
+	void print(QPrinter*) const;
 
 private:
-	void initializeActions();
-	void initializeMenus();
-	void setupConnections();
-
-	void exportDataToFile(const QString& path, bool exportHeader, const QString& separator, QLocale::Language language) const;
-	void
-	exportDataToLaTeX(const QString& path, bool exportHeaders, bool gridLines, bool captions, bool latexHeaders, bool skipEmptyRows, bool exportEntire) const;
-
-	GeneralTest* m_test;
-
-public Q_SLOTS:
-	void renderToPrinter(QPrinter*) const;
+	GeneralTest* m_test{nullptr};
+	QTextEdit* m_textEdit{nullptr};
 };
 
 #endif // GENERALTESTVIEW_H

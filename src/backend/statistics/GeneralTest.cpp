@@ -20,6 +20,9 @@
 
 #include <QLabel>
 #include <QMenu>
+#include <QPrintDialog>
+#include <QPrintPreviewDialog>
+#include <QPrinter>
 #include <QVBoxLayout>
 
 #include <KLocalizedString>
@@ -257,31 +260,34 @@ GeneralTest::GeneralErrorType GeneralTest::computeCategoricalStats(Column* colum
 /********************************************************************************************************************
  *                        Virtual Functions Implementations
  ********************************************************************************************************************/
-
-void GeneralTest::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement(QLatin1String("GeneralTest"));
-	writeBasicAttributes(writer);
-	writeCommentElement(writer);
-	writer->writeEndElement();
-}
-
-bool GeneralTest::load(XmlStreamReader* reader, bool preview) {
-	Q_UNUSED(preview)
-	if (!readBasicAttributes(reader))
-		return false;
-	return !reader->hasError();
-}
-
 bool GeneralTest::exportView() const {
 	return true;
 }
 
 bool GeneralTest::printView() {
-	return true;
+	#ifndef SDK
+	QPrinter printer;
+	auto* dlg = new QPrintDialog(&printer, m_view);
+	dlg->setWindowTitle(i18nc("@title:window", "Statistical Test"));
+	bool ret;
+	if ((ret = (dlg->exec() == QDialog::Accepted)))
+		m_view->print(&printer);
+
+	delete dlg;
+	return ret;
+#else
+	return false;
+#endif
 }
 
 bool GeneralTest::printPreview() const {
-	return true;
+#ifndef SDK
+	auto* dlg = new QPrintPreviewDialog(m_view);
+	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &GeneralTestView::print);
+	return dlg->exec();
+#else
+	return false;
+#endif
 }
 
 QMenu* GeneralTest::createContextMenu() {
@@ -296,4 +302,24 @@ QWidget* GeneralTest::view() const {
 		m_partView = m_view;
 	}
 	return m_partView;
+}
+
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
+
+//! Save as XML
+void GeneralTest::save(QXmlStreamWriter* writer) const {
+	writer->writeStartElement(QLatin1String("GeneralTest"));
+	writeBasicAttributes(writer);
+	writeCommentElement(writer);
+	writer->writeEndElement();
+}
+
+//! Load from XML
+bool GeneralTest::load(XmlStreamReader* reader, bool preview) {
+	Q_UNUSED(preview)
+	if (!readBasicAttributes(reader))
+		return false;
+	return !reader->hasError();
 }

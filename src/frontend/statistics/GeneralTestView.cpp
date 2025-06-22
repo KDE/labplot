@@ -3,21 +3,16 @@
 	Project              : LabPlot
 	Description          : View class for statistical tests
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 205 Alexander Semke >alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025 Alexander Semke >alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 ***************************************************************************/
 
 #include "GeneralTestView.h"
 #include "backend/statistics/GeneralTest.h"
 
-#include <QFile>
-#include <QPrintDialog>
-#include <QPrintPreviewDialog>
 #include <QPrinter>
 #include <QTextEdit>
 #include <QVBoxLayout>
-
-#include <KLocalizedString>
 
 /*!
 	\class GeneralTestView
@@ -28,85 +23,19 @@ GeneralTestView::GeneralTestView(GeneralTest* test) : QWidget()
 	, m_test(test) {
 
 	auto* layout = new QVBoxLayout(this);
-	auto* textEdit = new QTextEdit(this);
-	textEdit->setReadOnly(true);
-	layout->addWidget(textEdit);
+	m_textEdit = new QTextEdit(this);
+	m_textEdit->setReadOnly(true);
+	layout->addWidget(m_textEdit);
 
 	// show the initial/default result and connect to the changes to update it
-	textEdit->setText(m_test->resultHtml());
+	m_textEdit->setText(m_test->resultHtml());
 	connect(m_test, &GeneralTest::changed, [=]() {
-		textEdit->setText(m_test->resultHtml());
+		m_textEdit->setText(m_test->resultHtml());
 	});
 }
 
-GeneralTestView::~GeneralTestView() {
-}
+GeneralTestView::~GeneralTestView() = default;
 
-void GeneralTestView::initializeActions() {
-	// Initialize actions here.
-}
-
-void GeneralTestView::initializeMenus() {
-	// Initialize menus here.
-}
-
-void GeneralTestView::setupConnections() {
-	// Additional connections can be set up here.
-}
-
-bool GeneralTestView::exportDisplay() {
-	return true;
-}
-
-bool GeneralTestView::executePrintView() {
-	QPrinter printer;
-	auto* dlg = new QPrintDialog(&printer, this);
-	dlg->setWindowTitle(i18nc("@title:window", "Print Spreadsheet"));
-
-	bool result = false;
-	if ((result = (dlg->exec() == QDialog::Accepted)))
-		renderToPrinter(&printer);
-	delete dlg;
-	return result;
-}
-
-bool GeneralTestView::previewPrintView() {
-	auto* dlg = new QPrintPreviewDialog(this);
-	connect(dlg, &QPrintPreviewDialog::paintRequested, this, &GeneralTestView::renderToPrinter);
-	return dlg->exec();
-}
-
-void GeneralTestView::renderToPrinter(QPrinter* printer) const {
-	// WAIT_CURSOR;
-	// QPainter painter(printer);
-	// RESET_CURSOR;
-}
-
-void GeneralTestView::exportDataToFile(const QString& path, bool exportHeader, const QString& separator, QLocale::Language language) const {
-	Q_UNUSED(exportHeader);
-	Q_UNUSED(separator);
-	Q_UNUSED(language);
-	QFile file(path);
-	if (!file.open(QFile::WriteOnly | QFile::Truncate))
-		return;
-	// File export logic goes here.
-}
-
-void GeneralTestView::exportDataToLaTeX(const QString& path,
-										bool exportHeaders,
-										bool gridLines,
-										bool captions,
-										bool latexHeaders,
-										bool skipEmptyRows,
-										bool exportEntire) const {
-	Q_UNUSED(exportHeaders);
-	Q_UNUSED(gridLines);
-	Q_UNUSED(captions);
-	Q_UNUSED(latexHeaders);
-	Q_UNUSED(skipEmptyRows);
-	Q_UNUSED(exportEntire);
-	QFile file(path);
-	if (!file.open(QFile::WriteOnly | QFile::Truncate))
-		return;
-	// LaTeX export logic goes here.
+void GeneralTestView::print(QPrinter* printer) const {
+	m_textEdit->print(printer);
 }
