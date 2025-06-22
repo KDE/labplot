@@ -3,28 +3,18 @@
 	Project              : LabPlot
 	Description          : View class for Hypothesis Tests' Table
 	--------------------------------------------------------------------
-	Copyright            : (C) 2019 Devanshu Agarwal
-						   (agarwaldevanshu8@gmail.com)
-	Copyright            : (C) 2025 Kuntal Bar
-						   (barkuntal6@gmail.com)
+	SPDX-FileCopyrightText: 205 Alexander Semke >alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 ***************************************************************************/
 
 #include "GeneralTestView.h"
-#include "backend/lib/macros.h"
-#include "backend/lib/trace.h"
 #include "backend/statistics/GeneralTest.h"
-#include "backend/statistics/TextEdit.h"
 
 #include <QFile>
-#include <QHeaderView>
 #include <QLabel>
-#include <QPainter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
-#include <QPushButton>
-#include <QStandardItemModel>
-#include <QTableView>
 #include <QVBoxLayout>
 
 #include <KLocalizedString>
@@ -35,70 +25,22 @@
 	\ingroup frontend
 */
 
-GeneralTestView::GeneralTestView(GeneralTest* test)
-	: QWidget()
-	, m_generalTest(test)
-	, m_testName(new QLabel())
-	, m_statsTable(new TextEdit())
-	, m_summaryResults(new QWidget())
-	, m_inputStatsWidget(new QWidget())
-	, m_labelInputStatsTable(new QLabel())
-	, m_inputStatsTable(new QTableView())
-	, m_clearInputStats(new QPushButton()) {
-	// Set up the input statistics widget.
-	auto* inputStatsLayout = new QVBoxLayout(m_inputStatsWidget);
-	inputStatsLayout->addWidget(m_labelInputStatsTable);
-	auto* tableContainerLayout = new QHBoxLayout();
-	tableContainerLayout->addStretch();
-	tableContainerLayout->addWidget(m_inputStatsTable);
-	tableContainerLayout->addStretch();
-	inputStatsLayout->addLayout(tableContainerLayout);
-	inputStatsLayout->addWidget(m_clearInputStats, 0, Qt::AlignCenter);
-
-	m_statsTable->setReadOnly(true);
-
-	m_testName->setStyleSheet(QLatin1String("background-color: white"));
-	m_statsTable->setStyleSheet(QLatin1String("background-color: white"));
-	m_summaryResults->setStyleSheet(QLatin1String("QToolTip { color: black; background-color: yellow; border: 0px; }"));
-	m_inputStatsWidget->setStyleSheet(QLatin1String("background-color: white"));
-
-	m_testName->hide();
-	m_statsTable->hide();
-	m_summaryResults->hide();
-	m_inputStatsWidget->hide();
+GeneralTestView::GeneralTestView(GeneralTest* test) : QWidget()
+	, m_test(test) {
 
 	auto* layout = new QVBoxLayout(this);
-	m_labelInputStatsTable->setText(QLatin1String("<h3>") + i18n("Statistic Table"));
-	m_labelInputStatsTable->setToolTip(i18n("Fill this table with pre-calculated statistic value and then press recalculate") + QLatin1String("<br><br>")
-									   + i18n("You can leave one or more columns empty if you feel they are not useful") + QLatin1String("</h3>"));
-	m_clearInputStats->setText(i18n("Clear"));
-	m_clearInputStats->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+	auto* m_resultLabel = new QLabel(this);
+	layout->addWidget(m_resultLabel);
 
-	layout->addWidget(m_inputStatsWidget, 0, Qt::AlignCenter);
-	layout->addWidget(m_testName);
-	layout->addWidget(m_statsTable);
-	layout->addWidget(m_summaryResults);
-	layout->addStretch(1);
+	auto* spacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
+	layout->addItem(spacer);
 
-	initializeComponents();
+	connect(m_test, &GeneralTest::changed, [=]() {
+		m_resultLabel->setText(m_test->resultHtml());
+	});
 }
 
 GeneralTestView::~GeneralTestView() {
-	// Destructor
-}
-
-void GeneralTestView::initializeComponents() {
-	initializeActions();
-	initializeMenus();
-
-	m_inputStatsTable->setModel(m_generalTest->getInputStatsTableModel());
-	m_inputStatsTable->horizontalHeader()->setVisible(false);
-	m_inputStatsTable->verticalHeader()->setVisible(false);
-	m_inputStatsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-
-	m_statsTable->setMouseTracking(true);
-	connect(m_generalTest, &GeneralTest::changed, this, &GeneralTestView::updateDisplay);
-	connect(m_clearInputStats, &QPushButton::clicked, m_generalTest, &GeneralTest::clearInputStats);
 }
 
 void GeneralTestView::initializeActions() {
@@ -111,20 +53,6 @@ void GeneralTestView::initializeMenus() {
 
 void GeneralTestView::setupConnections() {
 	// Additional connections can be set up here.
-}
-
-void GeneralTestView::resetResults() {
-	for (int i = 0; i < RESULT_LINES_COUNT; ++i)
-		m_resultLine[i]->clear();
-}
-
-void GeneralTestView::populateToolBar(QToolBar* toolBar) {
-	Q_UNUSED(toolBar);
-}
-
-void GeneralTestView::buildContextMenu(QMenu* menu) {
-	Q_ASSERT(menu);
-	// Populate the context menu with actions if necessary.
 }
 
 bool GeneralTestView::exportDisplay() {
@@ -150,30 +78,9 @@ bool GeneralTestView::previewPrintView() {
 }
 
 void GeneralTestView::renderToPrinter(QPrinter* printer) const {
-	WAIT_CURSOR;
-	QPainter painter(printer);
-	RESET_CURSOR;
-}
-
-void GeneralTestView::updateDisplay() {
-	m_testName->setText(m_generalTest->getTestName());
-	m_testName->show();
-	m_summaryResults->show();
-
-	if (m_generalTest->getStatsTable().isEmpty())
-		m_statsTable->hide();
-	else {
-		QString centeredHtml = QLatin1String("<div style='text-align: center; width: 100%;'>") + m_generalTest->getStatsTable() + QLatin1String("</div>");
-		m_statsTable->setHtml(centeredHtml);
-		m_statsTable->show();
-	}
-
-	m_summaryResults->setLayout(m_generalTest->getSummaryLayout());
-
-	if (m_inputStatsTable->model()->rowCount() > 0 && m_inputStatsTable->model()->columnCount() > 0)
-		m_inputStatsWidget->show();
-	else
-		m_inputStatsWidget->hide();
+	// WAIT_CURSOR;
+	// QPainter painter(printer);
+	// RESET_CURSOR;
 }
 
 void GeneralTestView::exportDataToFile(const QString& path, bool exportHeader, const QString& separator, QLocale::Language language) const {

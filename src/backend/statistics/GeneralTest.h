@@ -14,18 +14,9 @@
 #define GENERALTEST_H
 
 #include "backend/core/AbstractPart.h"
-#include "frontend/statistics/GeneralTestView.h"
 
-#include <QAbstractItemModel>
-#include <QString>
-#include <QStringList>
-#include <QVariant>
-#include <QVector>
-
-class Spreadsheet;
 class Column;
-class TableModel;
-class QVBoxLayout;
+class GeneralTestView;
 
 #define RESULT_LINES_COUNT 10
 
@@ -36,37 +27,11 @@ public:
 	explicit GeneralTest(const QString& name, const AspectType& type);
 	~GeneralTest() override;
 
-	// Structure representing a cell in an HTML table.
-	struct HtmlText {
-		QString data;
-		int level;
-		bool isHeader;
-		QString tooltip;
-		int rowSpanCount;
-		int columnSpanCount;
-		HtmlText(QVariant cellData, int lvl = 0, bool header = false, QString tip = QString(), int rowSpan = 1, int colSpan = 1) {
-			data = cellData.toString();
-			level = lvl;
-			isHeader = header;
-			tooltip = tip;
-			rowSpanCount = rowSpan;
-			columnSpanCount = colSpan;
-		}
-	};
-
 	enum GeneralErrorType { ErrorUnqualSize, ErrorEmptyColumn, NoError };
 
-	// Column selection methods.
 	void setColumns(const QVector<Column*>&);
+	QString resultHtml() const;
 
-	// Getters for test properties.
-	QString getTestName() const;
-	QString getStatsTable() const;
-
-	QVBoxLayout* getSummaryLayout() const;
-	QAbstractItemModel* getInputStatsTableModel() const;
-
-	// Virtual methods.
 	QMenu* createContextMenu() override;
 	QWidget* view() const override;
 	bool exportView() const override;
@@ -76,28 +41,11 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-public Q_SLOTS:
-	void clearInputStats();
-
 Q_SIGNALS:
 	void changed();
 	void requestProjectContextMenu(QMenu*);
 
-protected:
-	QVector<Column*> m_columns;
-
-	QString m_currentTestName;
-	QString m_statsTable;
-
-	QVBoxLayout* m_summaryLayout{nullptr};
-	QLabel* m_resultLabels[RESULT_LINES_COUNT];
-
-	TableModel* m_inputStatsTableModel;
-
-	// Helper functions with renamed versions.
-	int extractTestType(int test);
-	int extractTestSubtype(int test);
-
+private:
 	QString formatRoundedValue(QVariant number, int precision = 3);
 	double calculateSum(const Column* column, int N = -1);
 	double calculateSumOfSquares(const Column* column, int N = -1);
@@ -115,15 +63,17 @@ protected:
 											 const int& np,
 											 const int& totalRows);
 
-	QString buildHtmlTable(int row, int column, QVariant* data);
-	QString buildHtmlTableFromCells(const QList<HtmlText*>& cells);
-
-	QString formatHtmlLine(const QString& msg, const QString& color = QLatin1String("black"));
-	void displayLine(const int& index, const QString& msg, const QString& color = QLatin1String("black"));
-	void displayTooltip(const int& index, const QString& msg);
-	void displayError(const QString& errorMsg);
-
 	mutable GeneralTestView* m_view{nullptr};
+
+protected:
+	QString m_result; // result html text
+	QVector<Column*> m_columns;
+
+	void addResultTitle(const QString&);
+	void addResultSection(const QString&);
+	void addResultLine(const QString& name, const QString& value);
+	void addResultLine(const QString& name, double value);
+	void addResultLine(const QString& name);
 };
 
 #endif // GENERALTEST_H

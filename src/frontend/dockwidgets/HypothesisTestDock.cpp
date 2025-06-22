@@ -200,10 +200,10 @@ void HypothesisTestDock::runHypothesisTest() {
 	}
 
 	bool ok = false;
-	double popMean = QLocale().toDouble(ui.leMuo->text(), &ok);
+	double mean = QLocale().toDouble(ui.leMuo->text(), &ok);
 	if (!ok)
 		return; // TODO: Handle conversion error
-	m_test->setPopulationMean(popMean);
+	m_test->setPopulationMean(mean);
 
 	double alpha = QLocale().toDouble(ui.leAlpha->text(), &ok);
 	if (!ok)

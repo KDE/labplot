@@ -19,9 +19,6 @@ extern "C" {
 #include "backend/nsl/nsl_statistical_test.h"
 }
 
-/*!
- * \brief The HypothesisTest class implements a one-sample t-test.
- */
 class HypothesisTest : public GeneralTest {
 	Q_OBJECT
 

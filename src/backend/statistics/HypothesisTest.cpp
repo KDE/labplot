@@ -3,19 +3,19 @@
 	Project              : LabPlot
 	Description          : Hypothesis Test
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019 Devanshu Agarwal <agarwaldevanshu8@gmail.com>
-	SPDX-FileCopyrightText: 2023-205 Alexander Semke >alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2025 Kuntal Bar <barkuntal6@gmail.com>
-
+	SPDX-FileCopyrightText: 2025 Alexander Semke >alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 ***************************************************************************/
 
 #include "HypothesisTest.h"
-#include "HtmlTableBuilder.h"
 #include "backend/core/column/Column.h"
 
+#include <QLocale>
 #include <KLocalizedString>
 
+/*!
+ * \brief Thsi class implements various statistical hypothesis tests.
+ */
 HypothesisTest::HypothesisTest(const QString& name)
 	: GeneralTest(name, AspectType::HypothesisTest) {
 }
@@ -50,107 +50,95 @@ void HypothesisTest::runTest() {
 }
 
 void HypothesisTest::performOneSampleTTest() {
-	if (m_columns.size() != 1) {
-		displayError(i18n("Inappropriate number of columns selected."));
-		return;
-	}
+	// if (m_columns.size() != 1) {
+	// 	displayError(i18n("Inappropriate number of columns selected."));
+	// 	return;
+	// }
+ //
+	const auto* col = m_columns.constFirst();
+	// if (!col->isNumeric()) {
+	// 	displayError(i18n("Only numeric columns can be used for the test."));
+	// 	return;
+	// }
 
-	if (!m_columns.constFirst()->isNumeric()) {
-		displayError(i18n("Only numeric columns can be used for the test."));
-		return;
-	}
-
-	int n = 0;
-	double sum = 0.0, mean = 0.0, stdDev = 0.0;
-	GeneralTest::GeneralErrorType errorCode = computeColumnStats(m_columns[0], n, sum, mean, stdDev);
-	switch (errorCode) {
-	case ErrorEmptyColumn:
-		displayError(i18n("The selected column is empty."));
-		return;
-	case ErrorUnqualSize:
-		displayError(i18n("Column size mismatch."));
-		return;
-	case NoError:
-		break;
-	}
-
-	HtmlTableBuilder tableBuilder;
-	tableBuilder.setStyle(
-		QStringLiteral("table { border-collapse: collapse; margin: auto; width: 90%; font-size: 16px; } "
-					   "th, td { border: 1px solid #333; padding: 8px; text-align: center; } "
-					   "th { background-color: #ddd; }"));
-	tableBuilder.setTableAttributes(QStringLiteral("id='statsTable'"));
-	HtmlRow headerRow;
-	headerRow.addCell(HtmlCell(QStringLiteral(""), true))
-		.addCell(HtmlCell(QStringLiteral("N"), true))
-		.addCell(HtmlCell(QStringLiteral("Sum"), true))
-		.addCell(HtmlCell(QStringLiteral("Mean"), true))
-		.addCell(HtmlCell(QStringLiteral("Std Dev"), true));
-	tableBuilder.addRow(headerRow);
-	HtmlRow dataRow;
-	dataRow.addCell(HtmlCell(m_columns[0]->name()))
-		.addCell(HtmlCell(QString::number(n)))
-		.addCell(HtmlCell(QString::number(sum)))
-		.addCell(HtmlCell(formatRoundedValue(mean)))
-		.addCell(HtmlCell(formatRoundedValue(stdDev)));
-	tableBuilder.addRow(dataRow);
-	m_statsTable = tableBuilder.build();
-
-	if (stdDev == 0.0) {
-		displayError(i18n("Standard deviation is zero."));
-		return;
-	}
-
-	// Build an array of sample values from the column.
+	// copy valid values only
+	const auto& statistics = col->statistics();
+	const int n = statistics.size;
 	QVector<double> sample;
 	sample.reserve(n);
-	for (int i = 0; i < n; ++i)
-		sample.append(m_columns[0]->valueAt(i));
-
-	QString nullHypothesisSign;
-	QString alternateHypothesisSign;
-	switch (m_tail) {
-	case nsl_stats_tail_type_two:
-		nullHypothesisSign = QString::fromUtf8("=");
-		alternateHypothesisSign = QString::fromUtf8("≠");
-		break;
-	case nsl_stats_tail_type_negative:
-		nullHypothesisSign = QString::fromUtf8("≥");
-		alternateHypothesisSign = QString::fromUtf8("<");
-		break;
-	case nsl_stats_tail_type_positive:
-		nullHypothesisSign = QString::fromUtf8("≤");
-		alternateHypothesisSign = QString::fromUtf8(">");
-		break;
+	for (int row = 0; row < col->rowCount(); ++row) {
+		if (!col->isValid(row) || col->isMasked(row))
+			continue;
+		sample.append(col->valueAt(row));
 	}
 
+	// TODO: handle empty columns with n=0
+
+	// perform the test
 	double tValue = nsl_stats_one_sample_t(sample.constData(), static_cast<size_t>(n), m_populationMean);
 	double pValue = nsl_stats_one_sample_t_p(sample.constData(), static_cast<size_t>(n), m_populationMean, m_tail);
 
-	displayLine(0, i18n("<b>Null Hypothesis:</b> µ %1 µ₀", nullHypothesisSign), QStringLiteral("black"));
-	displayLine(1, i18n("<b>Alternate Hypothesis:</b> µ %1 µ₀", alternateHypothesisSign), QStringLiteral("black"));
+	// show the results
+	m_result.clear();
+	bool outputTitle = true;
+	bool outputTestSetup = true;
+	bool outputDeccriptiveStatistics = true;
+	bool outputConclusion = true;
 
-	int df = n - 1;
-	m_statisticValue.append(tValue);
-	displayLine(6, i18n("<b>Degrees of Freedom:</b> %1", df), QStringLiteral("black"));
+	// title
+	if (outputTitle) {
+		addResultTitle(i18n("One-Sample t-Test"));
+	}
 
-	m_currentTestName = QStringLiteral("<h2>") + i18n("One Sample T-Test for %1", m_columns[0]->name()) + QStringLiteral("</h2>");
-	displayLine(2, i18n("<b>Significance Level:</b> %1", m_significanceLevel), QStringLiteral("black"));
-	displayLine(4, i18n("<b>T-Value:</b> %1", formatRoundedValue(tValue)), QStringLiteral("black"));
-	displayLine(5, i18n("<b>P-Value:</b> %1", formatRoundedValue(pValue, 4)), QStringLiteral("black"));
+	// test setup
+	if (outputTestSetup) {
+		addResultLine(i18n("Sample"), col->name());
+		addResultLine(i18n("Test Mean"), QStringLiteral("µ₀ = ") + QLocale().toString(m_populationMean));
 
-	QString conclusion;
-	if (pValue < m_significanceLevel)
-		conclusion = QStringLiteral("<span style='color:black;'><b>Conclusion:</b> Reject the Null Hypothesis.</span>");
-	else
-		conclusion = QStringLiteral("<span style='color:red;'><b>Conclusion:</b> Fail to Reject the Null Hypothesis.</span>");
+		QString nullHypothesisSign;
+		QString alternateHypothesisSign;
+		switch (m_tail) {
+		case nsl_stats_tail_type_two:
+			nullHypothesisSign = QString::fromUtf8("=");
+			alternateHypothesisSign = QString::fromUtf8("≠");
+			break;
+		case nsl_stats_tail_type_negative:
+			nullHypothesisSign = QString::fromUtf8("≥");
+			alternateHypothesisSign = QString::fromUtf8("<");
+			break;
+		case nsl_stats_tail_type_positive:
+			nullHypothesisSign = QString::fromUtf8("≤");
+			alternateHypothesisSign = QString::fromUtf8(">");
+			break;
+		}
 
-	displayLine(7, conclusion, QStringLiteral("black"));
-}
+		addResultLine(i18n("Null Hypothesis"), QStringLiteral("µ ") + nullHypothesisSign + QStringLiteral(" µ₀"));
+		addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("µ ") + alternateHypothesisSign + QStringLiteral(" µ₀"));
+	}
 
-QString HypothesisTest::generatePValueTooltip(const double& pValue) {
-	if (pValue <= m_significanceLevel)
-		return i18n("We can safely reject Null Hypothesis for significance level %1", formatRoundedValue(m_significanceLevel));
+	// descriptive statistics
+	if (outputDeccriptiveStatistics) {
+		addResultSection(i18n("Descriptive Statistics"));
+		addResultLine(i18n("Size"), statistics.size);
+		addResultLine(i18n("Mean"),  statistics.arithmeticMean);
+		addResultLine(i18n("Standard Deviation"), statistics.standardDeviation);
+	}
 
-	return i18n("There is a plausibility for Null Hypothesis to be true");
+	// test statistics
+	addResultSection(i18n("t-Test Statistics"));
+	addResultLine(i18n("Significance Level"), m_significanceLevel);
+	addResultLine(i18n("t-Value"), tValue);
+	addResultLine(i18n("p-Value"), pValue);
+	addResultLine(i18n("Degrees of Freedom"), n - 1);
+
+	// conclusion
+	if (outputConclusion) {
+		m_result += QStringLiteral("<h2>") + i18n("Statistical Conclusion") + QStringLiteral(":</h2>");
+		if (pValue < m_significanceLevel)
+			addResultLine(i18n("Reject the Null Hypothesis"));
+		else
+			addResultLine(i18n("Fail to reject the Null Hypothesis"));
+	}
+
+	Q_EMIT(changed());
 }

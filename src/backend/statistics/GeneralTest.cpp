@@ -20,7 +20,6 @@
 
 #include <QLabel>
 #include <QMenu>
-#include <QStandardItemModel>
 #include <QVBoxLayout>
 
 #include <KLocalizedString>
@@ -32,34 +31,15 @@ extern "C" {
 }
 
 GeneralTest::GeneralTest(const QString& name, const AspectType& type)
-	: AbstractPart(name, type)
-	, m_summaryLayout(new QVBoxLayout())
-	, m_inputStatsTableModel(new TableModel()) {
-	m_inputStatsTableModel->setParent(this);
-	for (int i = 0; i < RESULT_LINES_COUNT; i++) {
-		m_resultLabels[i] = new QLabel();
-		m_summaryLayout->addWidget(m_resultLabels[i]);
-	}
+	: AbstractPart(name, type) {
 }
 
 GeneralTest::~GeneralTest() {
 	// No additional cleanup required.
 }
 
-QString GeneralTest::getTestName() const {
-	return m_currentTestName;
-}
-
-QString GeneralTest::getStatsTable() const {
-	return m_statsTable;
-}
-
-QVBoxLayout* GeneralTest::getSummaryLayout() const {
-	return m_summaryLayout;
-}
-
-QAbstractItemModel* GeneralTest::getInputStatsTableModel() const {
-	return m_inputStatsTableModel;
+QString GeneralTest::resultHtml() const {
+	return m_result;
 }
 
 void GeneralTest::setColumns(const QVector<Column*>& cols) {
@@ -69,12 +49,24 @@ void GeneralTest::setColumns(const QVector<Column*>& cols) {
 /********************************************************************************************************************
  *                        Protected Helper Functions Implementations (Renamed)
  ********************************************************************************************************************/
-int GeneralTest::extractTestType(int test) {
-	return test & 0x0F;
+void GeneralTest::addResultTitle(const QString& text) {
+	m_result += QStringLiteral("<h1>") + text + QStringLiteral("</h1>");
 }
 
-int GeneralTest::extractTestSubtype(int test) {
-	return test & 0xF0;
+void GeneralTest::addResultSection(const QString& text) {
+	m_result += QStringLiteral("<h2>") + text + QStringLiteral("</h2>");
+}
+
+void GeneralTest::addResultLine(const QString& name, const QString& value) {
+	m_result += QStringLiteral("<b>") + name + QStringLiteral("</b>: ") + value + QStringLiteral("<br>");
+}
+
+void GeneralTest::addResultLine(const QString& name, double value) {
+	addResultLine(name, QLocale().toString(value));
+}
+
+void GeneralTest::addResultLine(const QString& name) {
+	m_result += name;
 }
 
 QString GeneralTest::formatRoundedValue(QVariant number, int precision) {
@@ -259,96 +251,6 @@ GeneralTest::GeneralErrorType GeneralTest::computeCategoricalStats(Column* colum
 	return GeneralTest::NoError;
 }
 
-QString GeneralTest::buildHtmlTable(int row, int column, QVariant* data) {
-	QString table;
-	table = QLatin1String("<style type='text/css'>") + QLatin1String("table {border-collapse: collapse; margin: auto; width: 80%; font-size: 18px;}")
-		+ QLatin1String("th, td {border: 1px solid black; padding: 12px; text-align: center; font-size: 16px;}")
-		+ QLatin1String("th {background-color: #f2f2f2; font-size: 18px;}") + QLatin1String("</style>") + QLatin1String("<div style='text-align: center;'>")
-		+ QLatin1String("<table>");
-	table += QLatin1String("<tr>");
-	// Add column headers.
-	for (int j = 0; j < column; ++j)
-		table += QLatin1String("<th>") + data[j].toString() + QLatin1String("</th>");
-	table += QLatin1String("</tr>");
-	// Add data rows.
-	for (int i = 1; i < row; ++i) {
-		table += QLatin1String("<tr>");
-		for (int j = 0; j < column; ++j)
-			table += QLatin1String("<td>") + data[i * column + j].toString() + QLatin1String("</td>");
-		table += QLatin1String("</tr>");
-	}
-	table += QLatin1String("</table>");
-	table += QLatin1String("</table></div>");
-	return table;
-}
-
-QString GeneralTest::buildHtmlTableFromCells(const QList<HtmlText*>& cells) {
-	int cellCount = cells.size();
-	if (cellCount == 0)
-		return QString();
-
-	// HTML tooltip markers.
-	const QString startToolTip = QLatin1String("[tooltip]");
-	const QString endToolTip = QLatin1String("[/tooltip]");
-	const QString startData = QLatin1String("[data]");
-	const QString endData = QLatin1String("[/data]");
-	const QString startTip = QLatin1String("[tip]");
-	const QString endTip = QLatin1String("[/tip]");
-
-	QString table;
-	table = QLatin1String(
-		"<style type='text/css'>"
-		".tg  {border-collapse:collapse;border: 1px solid black;}"
-		".tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border: 1px solid "
-		"black;overflow:hidden;word-break:normal;color:#333;background-color:#fff;}"
-		".tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:bold;padding:10px 5px;border: 1px solid "
-		"black;overflow:hidden;word-break:normal;color:#333;background-color:#f0f0f0;}"
-		"</style>");
-	table += QLatin1String("<table class='tg'>");
-
-	table += QLatin1String("<tr>");
-	int prevLevel = 0;
-	for (int i = 0; i < cellCount; i++) {
-		HtmlText* currentCell = cells[i];
-		if (currentCell->level != prevLevel) {
-			table += QLatin1String("</tr><tr>");
-			prevLevel = currentCell->level;
-		}
-		QString cellStartTag = currentCell->isHeader ? QLatin1String("<th ") : QLatin1String("<td ");
-		QString cellEndTag = currentCell->isHeader ? QLatin1String("</th>") : QLatin1String("</td>");
-		QString cellContent = i18n("%1", currentCell->data);
-		if (!currentCell->tooltip.isEmpty())
-			cellContent = startToolTip + startData + cellContent + endData + startTip + i18n("%1", currentCell->tooltip) + endTip + endToolTip;
-		table += cellStartTag + QLatin1String("rowspan=") + QString::number(currentCell->rowSpanCount) + QLatin1String(" colspan=")
-			+ QString::number(currentCell->columnSpanCount) + QLatin1String(">") + cellContent + cellEndTag;
-	}
-	table += QLatin1String("</tr></table>");
-	return table;
-}
-
-QString GeneralTest::formatHtmlLine(const QString& msg, const QString& color) {
-	return QLatin1String("<p style='color:") + color + QLatin1String(";'>") + i18n("%1", msg) + QLatin1String("</p>");
-}
-
-void GeneralTest::displayLine(const int& index, const QString& msg, const QString& color) {
-	if (index < 0 || index >= RESULT_LINES_COUNT)
-		return;
-
-	QString formattedMsg = QLatin1String("<p style='color:") + color + QLatin1String("; font-size:14px;'>") + i18n("%1", msg) + QLatin1String("</p>");
-	m_resultLabels[index]->setText(formattedMsg);
-}
-
-void GeneralTest::displayTooltip(const int& index, const QString& msg) {
-	if (index < 0 || index >= RESULT_LINES_COUNT)
-		return;
-
-	m_resultLabels[index]->setToolTip(i18n("%1", msg));
-}
-
-void GeneralTest::displayError(const QString& errorMsg) {
-	displayLine(0, errorMsg, QLatin1String("red"));
-}
-
 /********************************************************************************************************************
  *                        Virtual Functions Implementations
  ********************************************************************************************************************/
@@ -365,17 +267,6 @@ bool GeneralTest::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 	return !reader->hasError();
-}
-
-void GeneralTest::clearInputStats() {
-	QList<QStandardItem*> horizontalHeader = m_inputStatsTableModel->takeRow(0);
-	QList<QStandardItem*> verticalHeader = m_inputStatsTableModel->takeColumn(0);
-
-	m_inputStatsTableModel->clear();
-	m_inputStatsTableModel->appendRow(horizontalHeader);
-
-	verticalHeader.push_front(m_inputStatsTableModel->takeColumn(0)[0]);
-	m_inputStatsTableModel->insertColumn(0, verticalHeader);
 }
 
 bool GeneralTest::exportView() const {
