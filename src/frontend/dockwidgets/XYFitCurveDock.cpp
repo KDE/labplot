@@ -1188,6 +1188,7 @@ void XYFitCurveDock::parametersValid(bool valid) {
 	m_parametersValid = valid;
 }
 
+// see also FunctionValuesDialog::loadFunction()
 void XYFitCurveDock::loadFunction() {
 	//easy alternative: const QString& fileName = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select file to load function definition"), dir, filter);
 
@@ -1253,6 +1254,7 @@ void XYFitCurveDock::loadFunction() {
 	}
 }
 
+// see also FunctionValuesDialog::saveFunction()
 void XYFitCurveDock::saveFunction() {
 	QDialog dialog;
 	dialog.setWindowTitle(i18n("Select file to save function definition"));
