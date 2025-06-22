@@ -62,7 +62,10 @@ void GeneralTest::addResultLine(const QString& name, const QString& value) {
 }
 
 void GeneralTest::addResultLine(const QString& name, double value) {
-	addResultLine(name, QLocale().toString(value));
+	if (!std::isnan(value))
+		addResultLine(name, QLocale().toString(value));
+	else
+		addResultLine(name, QStringLiteral("-"));
 }
 
 void GeneralTest::addResultLine(const QString& name) {

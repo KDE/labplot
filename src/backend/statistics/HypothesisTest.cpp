@@ -44,39 +44,48 @@ void HypothesisTest::recalculate() {
 	case Test::t_test_one_sample:
 		performOneSampleTTest();
 		break;
+	case Test::t_test_two_sample:
+		break;
+	case Test::t_test_paired:
+		break;
+	case Test::one_way_anova:
+		break;
+	case Test::mann_whitney_u_test:
+		break;
+	case Test::kruskal_wallis_test:
+		break;
+	case Test::log_rank_test:
+		break;
 	}
 
 	Q_EMIT changed();
 }
 
 void HypothesisTest::performOneSampleTTest() {
-	// if (m_columns.size() != 1) {
-	// 	displayError(i18n("Inappropriate number of columns selected."));
-	// 	return;
-	// }
- //
-	const auto* col = m_columns.constFirst();
-	// if (!col->isNumeric()) {
-	// 	displayError(i18n("Only numeric columns can be used for the test."));
-	// 	return;
-	// }
-
-	// copy valid values only
-	const auto& statistics = col->statistics();
-	const int n = statistics.size;
-	QVector<double> sample;
-	sample.reserve(n);
-	for (int row = 0; row < col->rowCount(); ++row) {
-		if (!col->isValid(row) || col->isMasked(row))
-			continue;
-		sample.append(col->valueAt(row));
+	if (m_columns.isEmpty()) {
+		Q_EMIT info(i18n("No variable column provided."));
+		return;
 	}
 
-	// TODO: handle empty columns with n=0
-
 	// perform the test
-	double tValue = nsl_stats_one_sample_t(sample.constData(), static_cast<size_t>(n), m_populationMean);
-	double pValue = nsl_stats_one_sample_t_p(sample.constData(), static_cast<size_t>(n), m_populationMean, m_tail);
+	double pValue = NAN;
+	double tValue = NAN;
+	const auto* col = m_columns.constFirst();
+	const auto& statistics = col->statistics();
+	const int n = statistics.size;
+	if (n != 0) {
+		// copy valid values only
+		QVector<double> sample;
+		sample.reserve(n);
+		for (int row = 0; row < col->rowCount(); ++row) {
+			if (!col->isValid(row) || col->isMasked(row))
+				continue;
+			sample.append(col->valueAt(row));
+		}
+
+		tValue = nsl_stats_one_sample_t(sample.constData(), static_cast<size_t>(n), m_populationMean);
+		pValue = nsl_stats_one_sample_t_p(sample.constData(), static_cast<size_t>(n), m_populationMean, m_tail);
+	}
 
 	// show the results
 	m_result.clear();
@@ -132,11 +141,14 @@ void HypothesisTest::performOneSampleTTest() {
 
 	// conclusion
 	if (outputConclusion) {
-		m_result += QStringLiteral("<h2>") + i18n("Statistical Conclusion") + QStringLiteral(":</h2>");
-		if (pValue < m_significanceLevel)
-			addResultLine(i18n("At the significance level %1, the population mean is significantly different from %2. Reject the null Hypothesis", m_significanceLevel, m_populationMean));
-		else
-			addResultLine(i18n("At the significance level %1, the population mean is not significantly different from %2. Fail to reject the null Hypothesis", m_significanceLevel, m_populationMean));
+		addResultSection(i18n("Statistical Conclusion"));
+		if (!std::isnan(pValue)) {
+			if (pValue < m_significanceLevel)
+				addResultLine(i18n("At the significance level %1, the population mean is significantly different from %2. Reject the null Hypothesis", m_significanceLevel, m_populationMean));
+			else
+				addResultLine(i18n("At the significance level %1, the population mean is not significantly different from %2. Fail to reject the null Hypothesis", m_significanceLevel, m_populationMean));
+		} else
+			addResultLine(i18n("Test result not available"));
 	}
 
 	Q_EMIT(changed());

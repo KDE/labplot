@@ -408,6 +408,9 @@ double nsl_stats_one_sample_t(const double sample[], size_t n, double hypothesiz
 
 /* One Sample Student's t-test p-value */
 double nsl_stats_one_sample_t_p(const double sample[], size_t n, double hypothesized_mean, nsl_stats_tail_type tail) {
+	if (n == 1)
+		return NAN;
+
 	size_t df = n - 1;
 	double t_stat = nsl_stats_one_sample_t(sample, n, hypothesized_mean);
 	double p_value = 0.0;
