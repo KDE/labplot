@@ -180,7 +180,7 @@ void NSLStatisticalTestTest::testOneSampleT() {
 	size_t n = 5;
 	double hypothesized_mean = 15.0;
 	double t_stat = nsl_stats_one_sample_t(sample, n, hypothesized_mean);
-	double p_value = nsl_stats_one_sample_t_p(sample, n, hypothesized_mean, nsl_stats_tail_type.nsl_stats_tail_type_two);
+	double p_value = nsl_stats_one_sample_t_p(sample, n, hypothesized_mean, nsl_stats_tail_type_two);
 
 	double expected_t = 0.8165;
 	double expected_p = 0.4601;
