@@ -18,20 +18,15 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/widgets/ConstantsWidget.h"
 #include "frontend/widgets/FunctionsWidget.h"
-#include "frontend/widgets/TextPreview.h"
 #include "frontend/widgets/TreeViewComboBox.h"
+#include "frontend/GuiTools.h"
+
+#include <KWindowConfig>
 
 #include <QDialogButtonBox>
-#include <QMenu>
-#include <QPushButton>
 #include <QWidgetAction>
+#include <QMenu>
 #include <QWindow>
-
-#include <KFileWidget>
-#include <KLineEdit>
-#include <KLocalizedString>
-#include <KUrlComboBox>
-#include <KWindowConfig>
 
 /*!
 	\class FunctionValuesDialog
@@ -237,162 +232,12 @@ void FunctionValuesDialog::checkValues() {
 	m_okButton->setEnabled(true);
 }
 
-// see also XYFitCurveDock::loadFunction()
 void FunctionValuesDialog::loadFunction() {
-	//easy alternative: const QString& fileName = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select file to load function definition"), dir, filter);
-
-	QDialog dialog;
-	dialog.setWindowTitle(i18n("Select file to load function definition"));
-	auto* layout = new QVBoxLayout(&dialog);
-
-	// use last open dir from MainWin (project dir)
-	KConfigGroup mainGroup = Settings::group(QStringLiteral("MainWin"));
-	const QString& dir = mainGroup.readEntry("LastOpenDir", "");
-
-	//using KFileWidget to add custom widgets
-	auto* fileWidget = new KFileWidget(QUrl(dir), &dialog);
-	fileWidget->setOperationMode(KFileWidget::Opening);
-	fileWidget->setMode(KFile::File);
-
-	// preview
-	auto* preview = new TextPreview();
-	fileWidget->setPreviewWidget(preview);
-
-	auto filterList = QList<KFileFilter>();
-	filterList << KFileFilter(i18n("LabPlot Function Definition"), {QLatin1String("*.lfd"), QLatin1String("*.LFD")}, {});
-	fileWidget->setFilters(filterList);
-
-	fileWidget->okButton()->show();
-	fileWidget->okButton()->setEnabled(false);
-	fileWidget->cancelButton()->show();
-	QObject::connect(fileWidget->okButton(), &QPushButton::clicked, &dialog, &QDialog::accept);
-	QObject::connect(fileWidget, &KFileWidget::selectionChanged, &dialog, [=]() {
-		QString fileName = fileWidget->locationEdit()->currentText();
-		auto currentDir = fileWidget->baseUrl().toLocalFile();
-		fileName.prepend(currentDir);
-		if (QFile::exists(fileName))
-			fileWidget->okButton()->setEnabled(true);
-	});
-	QObject::connect(fileWidget->cancelButton(), &QPushButton::clicked, &dialog, &QDialog::reject);
-	layout->addWidget(fileWidget);
-
-	if (dialog.exec() == QDialog::Accepted) {
-		QString fileName = fileWidget->locationEdit()->currentText();
-		auto currentDir = fileWidget->baseUrl().toLocalFile();
-		fileName.prepend(currentDir);
-
-		//load config from file if accepted
-		QDEBUG(Q_FUNC_INFO << ", load function from file" << fileName)
-
-		KConfig config(fileName);
-		auto general = config.group(QLatin1String("General"));
-		ui.teEquation->setPlainText(general.readEntry("Function", ""));
-
-		auto description = general.readEntry("Description", "");
-		auto comment = general.readEntry("Comment", "");
-		QDEBUG(Q_FUNC_INFO << ", description:" << description)
-		QDEBUG(Q_FUNC_INFO << ", comment:" << comment)
-		if (!description.isEmpty())
-			ui.teEquation->viewport()->setToolTip(description);
-		if (!comment.isEmpty())
-			ui.teEquation->viewport()->setWhatsThis(comment);
-	}
+	GuiTools::loadFunction(ui.teEquation);
 }
 
-// see also XYFitCurveDock::saveFunction()
 void FunctionValuesDialog::saveFunction() {
-	QDialog dialog;
-	dialog.setWindowTitle(i18n("Select file to save function definition"));
-	auto* layout = new QVBoxLayout(&dialog);
-
-	// use last open dir from MainWin (project dir)
-	KConfigGroup mainGroup = Settings::group(QStringLiteral("MainWin"));
-	const QString& dir = mainGroup.readEntry("LastOpenDir", "");
-
-	//using KFileWidget to add custom widgets
-	auto* fileWidget = new KFileWidget(QUrl(dir), &dialog);
-	fileWidget->setOperationMode(KFileWidget::Saving);
-	fileWidget->setMode(KFile::File);
-	// preview
-	auto* preview = new TextPreview();
-	fileWidget->setPreviewWidget(preview);
-
-	auto filterList = QList<KFileFilter>();
-	filterList << KFileFilter(i18n("LabPlot Function Definition"), {QLatin1String("*.lfd"), QLatin1String("*.LFD")}, {});
-	fileWidget->setFilters(filterList);
-
-	fileWidget->okButton()->show();
-	fileWidget->okButton()->setEnabled(false);
-	fileWidget->cancelButton()->show();
-	QObject::connect(fileWidget->okButton(), &QPushButton::clicked, &dialog, &QDialog::accept);
-	QObject::connect(fileWidget->cancelButton(), &QPushButton::clicked, &dialog, &QDialog::reject);
-	layout->addWidget(fileWidget);
-
-	// custom widgets
-	auto* lDescription = new QLabel(i18n("Description:"));
-	auto* leDescription = new KLineEdit(ui.teEquation->viewport()->toolTip());
-	auto* lComment = new QLabel(i18n("Comment:"));
-	auto* leComment = new KLineEdit(ui.teEquation->viewport()->whatsThis());
-
-	// update description and comment when selection changes
-	connect(fileWidget, &KFileWidget::fileHighlighted, this, [=]() {
-		QString fileName = fileWidget->locationEdit()->currentText();
-		auto currentDir = fileWidget->baseUrl().toLocalFile();
-		fileName.prepend(currentDir);
-		QDEBUG(Q_FUNC_INFO << ", file selected:" << fileName)
-		if (QFile::exists(fileName)) {
-			KConfig config(fileName);
-			auto group = config.group(QLatin1String("General"));
-			const QString& description = group.readEntry("Description", "");
-			const QString& comment = group.readEntry("Comment", "");
-			if (!description.isEmpty())
-				leDescription->setText(description);
-			if (!comment.isEmpty())
-				leComment->setText(comment);
-		}
-	});
-
-	auto* grid = new QGridLayout;
-	grid->addWidget(lDescription, 0, 0);
-	grid->addWidget(leDescription, 0, 1);
-	grid->addWidget(lComment, 1, 0);
-	grid->addWidget(leComment, 1, 1);
-	layout->addLayout(grid);
-
-	dialog.adjustSize();
-	if (dialog.exec() == QDialog::Accepted) {
-		fileWidget->slotOk();
-
-		QString fileName = fileWidget->selectedFile();
-		if (fileName.isEmpty()) {	// if entered directly and not selected (also happens when selected!)
-			// DEBUG(Q_FUNC_INFO << ", no file selected")
-			fileName = fileWidget->locationEdit()->currentText();
-			auto* cbExtension = fileWidget->findChild<QCheckBox*>();
-			if (cbExtension) {
-				bool checked = cbExtension->isChecked();
-				if (checked && ! (fileName.endsWith(QLatin1String(".lfd")) || fileName.endsWith(QLatin1String(".LFD"))))
-							fileName.append(QLatin1String(".lfd"));
-			}
-			// add current folder
-			auto currentDir = fileWidget->baseUrl().toLocalFile();
-			fileName.prepend(currentDir);
-		}
-		// save current model (with description and comment)
-		// FORMAT: LFD - LabPlot Function Definition
-		KConfig config(fileName);	// selected lfd file
-		auto group = config.group(QLatin1String("General"));
-		auto description = leDescription->text();
-		auto comment = leComment->text();
-		group.writeEntry("Function", ui.teEquation->toPlainText());	// model function
-		group.writeEntry("Description", description);
-		group.writeEntry("Comment", comment);
-		config.sync();
-		QDEBUG(Q_FUNC_INFO << ", saved function to" << fileName)
-
-		// set description and comment in Dock (even when empty)
-		ui.teEquation->viewport()->setToolTip(description);
-		ui.teEquation->viewport()->setWhatsThis(comment);
-	}
+	GuiTools::saveFunction(ui.teEquation);
 }
 
 void FunctionValuesDialog::showConstants() {

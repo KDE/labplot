@@ -1,9 +1,10 @@
 /*
 	File                 : GuiTools.h
 	Project              : LabPlot
-	Description          :  contains several static functions which are used on frequently throughout the kde frontend.
+	Description          : contains several static functions which are used frequently throughout the kde frontend
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011 Alexander Semke <alexander.semke*web.de  (use @ for *)>
+	SPDX-FileCopyrightText: 2011 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -12,12 +13,16 @@
 
 #include <QPen>
 
+class ExpressionTextEdit;
+
 class QComboBox;
 class QColor;
 class QLineEdit;
 class QMenu;
 class QActionGroup;
 class QAction;
+
+class KComboBox;
 
 class GuiTools {
 public:
@@ -43,6 +48,9 @@ public:
 	static QImage imageFromPDFData(const QByteArray&, double zoomFactor = 1.);
 
 	static QString replaceExtension(const QString& fileName, const QString& extension);
+
+	static void loadFunction(ExpressionTextEdit*, QComboBox* = nullptr, KComboBox* = nullptr);
+	static void saveFunction(ExpressionTextEdit*, KComboBox* = nullptr);
 };
 
 #endif // GUITOOLS_H
