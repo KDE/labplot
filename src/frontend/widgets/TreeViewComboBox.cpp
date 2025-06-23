@@ -93,10 +93,10 @@ void TreeViewComboBox::setModel(AspectTreeModel* model) {
 	overload to handle base class setModel()
  */
 void TreeViewComboBox::setModel(QAbstractItemModel* model) {
-	if (auto* aspectModel = qobject_cast<AspectTreeModel*>(model))
-		setModel(aspectModel);
-	else
-		QComboBox::setModel(model);
+    if (auto* aspectModel = qobject_cast<AspectTreeModel*>(model))
+        setModel(aspectModel);
+    else
+        QComboBox::setModel(model);
 }
 
 /*!

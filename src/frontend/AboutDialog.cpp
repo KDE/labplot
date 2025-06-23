@@ -1,8 +1,8 @@
 /*
-	File                 : AboutDialog.cpp
-	Project              : LabPlot
-	Description          : Custom about dialog
-	--------------------------------------------------------------------
+    File                 : AboutDialog.cpp
+    Project              : LabPlot
+    Description          : Custom about dialog
+    --------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2020-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later

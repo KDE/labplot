@@ -41,7 +41,7 @@ bool OdsOptionsWidget::updateContent(OdsFilter* filter, const QString& fileName)
 	ui.twDataRegions->clear();
 	auto* rootItem = ui.twDataRegions->invisibleRootItem();
 
-	if (!filter->parse(fileName, rootItem))
+	if (! filter->parse(fileName, rootItem))
 		return false;
 
 	ui.twDataRegions->insertTopLevelItem(0, rootItem);

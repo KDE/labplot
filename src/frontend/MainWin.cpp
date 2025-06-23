@@ -21,8 +21,8 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #ifdef HAVE_LIBORIGIN
-#include "backend/datasources/projects/OriginProjectParser.h"
 #include "frontend/datasources/ImportOriginLayersDialog.h"
+#include "backend/datasources/projects/OriginProjectParser.h"
 #endif
 #include "backend/datapicker/Datapicker.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -500,11 +500,8 @@ void MainWin::dockFocusChanged(ads::CDockWidget* old, ads::CDockWidget* now) {
  */
 bool MainWin::warnModified() {
 	if (m_project->hasChanged()) {
-		int option = KMessageBox::warningTwoActionsCancel(this,
-														  i18n("The current project \"%1\" has been modified. Do you want to save it?", m_project->name()),
-														  i18n("Save Project"),
-														  KStandardGuiItem::save(),
-														  KStandardGuiItem::dontSave());
+		int option = KMessageBox::warningTwoActionsCancel(this, i18n("The current project \"%1\" has been modified. Do you want to save it?", m_project->name()),
+				i18n("Save Project"), KStandardGuiItem::save(), KStandardGuiItem::dontSave());
 		switch (option) {
 		case KMessageBox::PrimaryAction:
 			return !saveProject();
@@ -962,8 +959,8 @@ bool MainWin::saveProject() {
 	else {
 		// don't overwrite OPJ files, replace ending
 		if (fileName.endsWith(QLatin1String(".opj"), Qt::CaseInsensitive)) {
-			// fileName.replace(QLatin1String(".opj"), QLatin1String(".lml"), Qt::CaseInsensitive);
-			//  better append ending (don't overwrite existing project.lml file)
+			//fileName.replace(QLatin1String(".opj"), QLatin1String(".lml"), Qt::CaseInsensitive);
+			// better append ending (don't overwrite existing project.lml file)
 			fileName.append(QLatin1String(".lml"));
 			DEBUG(Q_FUNC_INFO << ", renamed file name to " << fileName.toStdString())
 		}

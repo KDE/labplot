@@ -72,7 +72,9 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 						  i18n("Joint Photographic Experts Group (JPG)"),
 						  static_cast<int>(Worksheet::ExportFormat::JPG));
 	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-bmp")), i18n("Windows Bitmap (BMP)"), static_cast<int>(Worksheet::ExportFormat::BMP));
-	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("Portable Pixmap (PPM)"), static_cast<int>(Worksheet::ExportFormat::PPM));
+	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")),
+						  i18n("Portable Pixmap (PPM)"),
+						  static_cast<int>(Worksheet::ExportFormat::PPM));
 	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("X11 Bitmap (XBM)"), static_cast<int>(Worksheet::ExportFormat::XBM));
 	ui->cbFormat->addItem(QIcon::fromTheme(QLatin1String("image-x-generic")), i18n("X11 Bitmap (XPM)"), static_cast<int>(Worksheet::ExportFormat::XPM));
 
@@ -93,7 +95,8 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 	);
 	ui->cbExportArea->setToolTip(info);
 
-	ui->cbResolution->addItem(i18nc("%1 is the value of DPI of the current screen", "%1 (desktop)", QString::number(GuiTools::dpi(this).first)));
+	ui->cbResolution->addItem(
+		i18nc("%1 is the value of DPI of the current screen", "%1 (desktop)", QString::number(GuiTools::dpi(this).first)));
 	ui->cbResolution->addItem(QLatin1String("100"));
 	ui->cbResolution->addItem(QLatin1String("150"));
 	ui->cbResolution->addItem(QLatin1String("200"));

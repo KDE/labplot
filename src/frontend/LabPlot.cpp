@@ -132,9 +132,11 @@ int main(int argc, char* argv[]) {
 
 	parser.addPositionalArgument(QStringLiteral("+[file]"), i18n("Open a project file."));
 
+
 	aboutData.setupCommandLine(&parser);
 	parser.process(app);
 	aboutData.processCommandLine(&parser);
+
 
 	const auto args = parser.positionalArguments();
 	QString fileName;

@@ -185,7 +185,7 @@ void SettingsGeneralPage::loadSettings() {
 
 	// number options
 	QLocale::NumberOptions numberOptions{
-										 static_cast<QLocale::NumberOptions>(group.readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)))};
+		static_cast<QLocale::NumberOptions>(group.readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)))};
 	if (numberOptions & QLocale::OmitGroupSeparator)
 		ui.chkOmitGroupSeparator->setChecked(true);
 	if (numberOptions & QLocale::OmitLeadingZeroInExponent)

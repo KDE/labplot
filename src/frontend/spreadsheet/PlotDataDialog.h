@@ -61,6 +61,7 @@ private:
 	nsl_sf_stats_distribution m_fitDistribution{nsl_sf_stats_gaussian};
 	bool m_fitDistributionMode{false};
 
+
 	void processColumnsForXYCurve(const QStringList& columnNames, const QString& xColumnName);
 	void processColumnsForHistogram(const QStringList&);
 

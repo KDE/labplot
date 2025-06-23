@@ -1861,7 +1861,7 @@ void ImportFileWidget::refreshPreview() {
 				tcpSocket.disconnectFromHost();
 			} else {
 				DEBUG("failed to connect to TCP socket within " << timeoutTime_ms << "ms"
-				  << " - " << STDSTRING(tcpSocket.errorString()));
+					  << " - " << STDSTRING(tcpSocket.errorString()));
 				errorMessage = i18n("Socket operation timed out.");
 			}
 
