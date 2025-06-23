@@ -474,9 +474,6 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
     ${BACKEND_DIR}/statistics/GeneralTest.cpp
     ${BACKEND_DIR}/statistics/HypothesisTest.cpp
-    ${BACKEND_DIR}/statistics/TableModel.cpp
-    ${BACKEND_DIR}/statistics/TextEdit.cpp
-    ${BACKEND_DIR}/statistics/HtmlTableBuilder.cpp
 )
 
 if(ENABLE_SCRIPTING)
