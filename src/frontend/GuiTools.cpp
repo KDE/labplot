@@ -411,7 +411,7 @@ QString GuiTools::replaceExtension(const QString& path, const QString& extension
  * load custom function from file
  * using TextEdit. Only FitCurve used cbCategory and cbModel
  */
-void GuiTools::loadFunction(ExpressionTextEdit* te, QComboBox* cbCategory, KComboBox* cbModel) {
+void GuiTools::loadFunction(ExpressionTextEdit* te, KComboBox* cbCategory, KComboBox* cbModel) {
 	//easy alternative: const QString& fileName = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select file to load function definition"), dir, filter);
 
 	QDialog dialog;

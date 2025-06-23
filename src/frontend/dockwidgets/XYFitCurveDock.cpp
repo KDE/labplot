@@ -180,12 +180,12 @@ void XYFitCurveDock::setupGeneral() {
 	retranslateUi();
 
 	// Slots
-	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::dataSourceTypeChanged);
+	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &XYFitCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.tbWeights, &QPushButton::clicked, this, &XYFitCurveDock::showWeightsOptions);
-	connect(uiGeneralTab.cbXWeight, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::xWeightChanged);
-	connect(uiGeneralTab.cbYWeight, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::yWeightChanged);
-	connect(uiGeneralTab.cbCategory, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::categoryChanged);
-	connect(uiGeneralTab.cbModel, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::modelTypeChanged);
+	connect(uiGeneralTab.cbXWeight, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &XYFitCurveDock::xWeightChanged);
+	connect(uiGeneralTab.cbYWeight, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &XYFitCurveDock::yWeightChanged);
+	connect(uiGeneralTab.cbCategory, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &XYFitCurveDock::categoryChanged);
+	connect(uiGeneralTab.cbModel, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &XYFitCurveDock::modelTypeChanged);
 	connect(uiGeneralTab.sbDegree, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYFitCurveDock::updateModelEquation);
 	connect(uiGeneralTab.teEquation, &ExpressionTextEdit::expressionChanged, this, &XYFitCurveDock::expressionChanged);
 	connect(uiGeneralTab.tbConstants, &QToolButton::clicked, this, &XYFitCurveDock::showConstants);
@@ -193,13 +193,13 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.pbLoadFunction, &QPushButton::clicked, this, &XYFitCurveDock::loadFunction);
 	connect(uiGeneralTab.pbSaveFunction, &QPushButton::clicked, this, &XYFitCurveDock::saveFunction);
 	connect(uiGeneralTab.pbOptions, &QPushButton::clicked, this, &XYFitCurveDock::showOptions);
-	connect(uiGeneralTab.cbAlgorithm, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::algorithmChanged);
+	connect(uiGeneralTab.cbAlgorithm, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &XYFitCurveDock::algorithmChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYFitCurveDock::recalculateClicked);
 	connect(uiGeneralTab.tbData, &QPushButton::clicked, this, &XYFitCurveDock::showDataOptions);
 	connect(uiGeneralTab.tbFit, &QPushButton::clicked, this, &XYFitCurveDock::showFitOptions);
 	connect(uiGeneralTab.tbParameters, &QPushButton::clicked, this, &XYFitCurveDock::showParameters);
 	connect(uiGeneralTab.tbResults, &QPushButton::clicked, this, &XYFitCurveDock::showResults);
-	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::plotRangeChanged);
+	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &XYFitCurveDock::plotRangeChanged);
 
 	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYFitCurveDock::dataSourceCurveChanged);
 	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYFitCurveDock::xDataColumnChanged);
