@@ -256,7 +256,7 @@ bool GeneralTest::exportView() const {
 }
 
 bool GeneralTest::printView() {
-	#ifndef SDK
+#ifndef SDK
 	QPrinter printer;
 	auto* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18nc("@title:window", "Statistical Test"));
