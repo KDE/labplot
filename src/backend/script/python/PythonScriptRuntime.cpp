@@ -12,7 +12,7 @@
 
 static wchar_t programName[] = L"labplot";
 static wchar_t* argv[] = {programName};
-static const wchar_t* pythonInterpreter = L"PYTHON3_EXECUTABLE";
+static const wchar_t* pythonInterpreter = L"PYTHON3_EXECUTABLE"; // PYTHON3_EXECUTABLE is a macro and will be replaced by the actual python executable path
 
 // The name of our python extension module: pylabplot
 static const char* moduleName = "pylabplot";

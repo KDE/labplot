@@ -265,6 +265,7 @@ set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_b
 # definition to only our source files
 set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_DEFINITIONS -DPy_LIMITED_API=0x03090000)
 
+# PYTHON3_EXECUTABLE is the python executable path and is needed when initializing the python scripting interpreter
 set_property(SOURCE ${BACKEND_DIR}/script/python/PythonScriptRuntime.cpp APPEND PROPERTY COMPILE_DEFINITIONS -DPYTHON3_EXECUTABLE=${Python3_EXECUTABLE})
 
 # shiboken generates sources using deprecated code so we remove these deprecation macros to enable the shiboken generated files to compile
