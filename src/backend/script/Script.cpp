@@ -97,10 +97,6 @@ void Script::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("text"), m_kTextEditorDocument->text());
 	writer->writeEndElement();
 
-	writer->writeStartElement(QStringLiteral("output"));
-	writer->writeAttribute(QStringLiteral("text"), dynamic_cast<ScriptEditor*>(view())->outputText());
-	writer->writeEndElement();
-
 	writer->writeEndElement(); // close "script" section
 }
 
@@ -135,11 +131,6 @@ bool Script::load(XmlStreamReader* reader, bool preview) {
 
 			// editor text
 			m_kTextEditorDocument->setText(attribs.value(QStringLiteral("text")).toString());
-		} else if (!preview && reader->name() == QLatin1String("output")) {
-			attribs = reader->attributes();
-
-			// output text
-			dynamic_cast<ScriptEditor*>(view())->writeOutput(false, attribs.value(QStringLiteral("text")).toString());
 		} else { // unknown element
 			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
