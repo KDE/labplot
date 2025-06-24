@@ -1,3 +1,5 @@
+#include <QDir>
+#include <QFileDialog>
 #include <QIcon>
 #include <QMessageBox>
 #include <QWidget>
@@ -9,6 +11,7 @@
 #include <KTextEditor/View>
 
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 
@@ -71,7 +74,33 @@ bool Script::printPreview() const {
 }
 
 bool Script::exportView() const {
-	return false;
+	KConfigGroup conf = Settings::group(QStringLiteral("ExportScript"));
+	QString dir = conf.readEntry("LastDir", "");
+	QString extensions = i18n("Python file (*.py)");
+
+	const QString path = QFileDialog::getSaveFileName(view(), i18nc("@title:window", "Export to File"), dir, extensions);
+
+	if (path.isEmpty())
+		return false;
+
+	int pos = path.lastIndexOf(QStringLiteral("/"));
+	if (pos != -1) {
+		QString newDir = path.left(pos);
+		if (newDir != dir)
+			conf.writeEntry(QStringLiteral("LastDir"), newDir);
+	}
+
+	QFile file(path);
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+		QMessageBox::critical(view(), i18n("Export failed"), i18n("Failed to open '%1' for writing.", QDir::toNativeSeparators(path)));
+		return false;
+	}
+
+	QTextStream out(&file);
+	out << m_kTextEditorDocument->text();
+	file.close();
+
+	return true;
 }
 
 QWidget* Script::view() const {
