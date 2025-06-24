@@ -17,7 +17,6 @@ public:
 	struct VariableInfo {
 		QString value;
 		QString type;
-		bool persist{false};
 	};
 
 	const QString lang;
@@ -51,17 +50,14 @@ Q_SIGNALS:
 class VariablesInfoModel : public QAbstractTableModel {
 public:
 	explicit VariablesInfoModel(ScriptRuntime*);
-	const QMap<QString, ScriptRuntime::VariableInfo>& variablesInfo() const;
-	void clearVariablesInfo();
+
 	void setVariablesInfo(const QMap<QString, ScriptRuntime::VariableInfo>&);
 
 protected:
 	int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 	QVariant headerData(int, Qt::Orientation, int role = Qt::DisplayRole) const override;
-	Qt::ItemFlags flags(const QModelIndex&) const override;
 	QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
-	bool setData(const QModelIndex&, const QVariant&, int role = Qt::EditRole) override;
 
 private:
 	QStringList m_variableNames;

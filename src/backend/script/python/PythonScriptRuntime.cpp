@@ -395,18 +395,6 @@ PyObject* PythonScriptRuntime::createLocalDict() {
 
 	Py_DECREF(mainDict);
 
-	if (m_localDict) {
-		for (const auto& [name, variableInfo] : m_variableModel->variablesInfo().asKeyValueRange()) {
-			if (variableInfo.persist) {
-				// copy python variable to the dictionary
-				if (PyDict_SetItemString(localDict, name.toLocal8Bit().constData(), PyDict_GetItemString(m_localDict, name.toLocal8Bit().constData())) < 0) {
-					Py_DECREF(localDict);
-					return nullptr;
-				}
-			}
-		}
-	}
-
 	return localDict;
 }
 
@@ -566,14 +554,12 @@ bool PythonScriptRuntime::populateVariableInfo() {
 		ScriptRuntime::VariableInfo variableInfo;
 		variableInfo.value = value;
 		variableInfo.type = type;
-		variableInfo.persist = m_variableModel->variablesInfo().contains(key) ? m_variableModel->variablesInfo().value(key).persist : false;
 
 		variablesInfo.insert(key, variableInfo);
 	}
 
 	Py_DECREF(items);
 
-	m_variableModel->clearVariablesInfo();
 	m_variableModel->setVariablesInfo(variablesInfo);
 
 	return true;
