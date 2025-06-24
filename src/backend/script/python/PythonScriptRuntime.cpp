@@ -451,11 +451,11 @@ int PythonScriptRuntime::getPyErrorLine() {
 }
 
 bool PythonScriptRuntime::populateVariableInfo() {
-	QMap<QString, VariableInfo> variablesInfo;
-
 	PyObject* items = PyDict_Items(m_localDict);
 	if (!items)
 		return false;
+
+	QMap<QString, VariableInfo> variablesInfo;
 
 	Py_ssize_t size = PyList_Size(items);
 

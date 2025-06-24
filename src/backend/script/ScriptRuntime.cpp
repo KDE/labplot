@@ -118,7 +118,7 @@ QVariant VariablesInfoModel::data(const QModelIndex& index, int role) const {
 
 	const auto& variable = m_variableNames.at(index.row());
 
-	const ScriptRuntime::VariableInfo& variableInfo = m_variablesInfo.value(variable);
+	const auto& variableInfo = m_variablesInfo.value(variable);
 
 	if (role == Qt::DisplayRole) {
 		switch (index.column()) {
@@ -148,7 +148,7 @@ bool VariablesInfoModel::setData(const QModelIndex& index, const QVariant& value
 
 	QString name = data(index.siblingAtColumn(0)).toString();
 
-	ScriptRuntime::VariableInfo variableInfo = m_variablesInfo.value(name);
+	auto variableInfo = m_variablesInfo.value(name);
 	variableInfo.persist = value.toBool();
 
 	m_variablesInfo.insert(name, variableInfo);

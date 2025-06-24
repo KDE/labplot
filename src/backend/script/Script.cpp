@@ -158,7 +158,7 @@ void Script::runScript() {
 	if (!m_initialized)
 		return;
 
-	ScriptEditor* scriptView = dynamic_cast<ScriptEditor*>(view());
+	ScriptEditor* scriptView = static_cast<ScriptEditor*>(view());
 
 	m_kTextEditorDocument->clearMarks();
 	m_scriptRuntime->clearErrorLine();
@@ -177,7 +177,7 @@ void Script::runScript() {
 	// disconnect from writeOutput signal
 	disconnect(conn);
 
-	int errorLine = m_scriptRuntime->errorLine();
+	const int errorLine = m_scriptRuntime->errorLine();
 	if (errorLine != -1)
 		m_kTextEditorDocument->addMark(errorLine, KTextEditor::Document::MarkTypes::Error);
 }
