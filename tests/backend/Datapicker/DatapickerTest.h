@@ -50,12 +50,24 @@ private Q_SLOTS:
 	void curvePointMove();
 	void curvePointMoveUndoRedo();
 	void selectReferencePoint();
+	void recreateAxisReferencePoints();
 
 	void imageAxisPointsChanged();
 
 	void datapickerDateTime();
 
 	void datapickerDeleteCurvePoint();
+
+	void datapickerImageLoadImageAbsolute();
+	void datapickerImageLoadImageRelative();
+	void datapickerImageLoadImageEmbeddAbsolute();
+	void datapickerImageLoadImageEmbeddAbsoluteUndoRedo();
+	void datapickerImageLoadImageEmbeddRelative();
+	void datapickerImageLoadImageEmbeddRelativeUndoRedo();
+	void datapickerImageClipboard();
+	void datapickerImageClipboardSelectImageFromPath();
+
+	void saveLoad();
 };
 
 #endif // DATAPICKERTEST_H

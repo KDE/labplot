@@ -1,5 +1,9 @@
-add_executable (RangeTest RangeTest.cpp)
+option(ENABLE_TEST_BACKEND_RANGE "Enable Range Tests" ON)
 
-target_link_libraries(RangeTest labplot2lib labplot2test)
+if(ENABLE_TEST_BACKEND_RANGE)
+    add_executable (RangeTest RangeTest.cpp)
 
-add_test(NAME RangeTest COMMAND RangeTest)
+    target_link_libraries(RangeTest labplotbackendlib labplotlib labplottest)
+
+    add_test(NAME RangeTest COMMAND RangeTest)
+endif()

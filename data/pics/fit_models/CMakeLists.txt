@@ -1,2 +1,6 @@
-FILE(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/*.pdf")
-install(FILES ${files} DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME}/pics/fit_models)
+file(GLOB files "${CMAKE_CURRENT_SOURCE_DIR}/*.pdf")
+if(APPLE)
+    install(FILES ${files} DESTINATION ${KDE_INSTALL_DATADIR}/pics/fit_models)
+else()
+    install(FILES ${files} DESTINATION ${KDE_INSTALL_DATADIR}/${PROJECT_NAME}/pics/fit_models)
+endif()

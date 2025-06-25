@@ -151,6 +151,7 @@ void ColumnSetModeCmd::redo() {
 		m_old_out_filter = m_col->outputFilter();
 
 		// do the conversion
+		m_col->setLabelsMode(m_mode); // must be done before setColumnMode, because setColumnMode() sends signal to dock
 		m_col->setColumnMode(m_mode);
 
 		// save new values
@@ -171,6 +172,7 @@ void ColumnSetModeCmd::redo() {
 void ColumnSetModeCmd::undo() {
 	// reset to old values
 	m_col->replaceModeData(m_old_mode, m_old_data, m_old_in_filter, m_old_out_filter);
+	// setLabelsMode will be done in replaceModeData()
 
 	m_undone = true;
 }
@@ -385,14 +387,21 @@ ColumnInsertRowsCmd::ColumnInsertRowsCmd(ColumnPrivate* col, int before, int cou
  * \brief Execute the command
  */
 void ColumnInsertRowsCmd::redo() {
+	Q_EMIT m_col->q->rowsAboutToBeInserted(m_col->q, m_before, m_count);
 	m_col->insertRows(m_before, m_count);
+	m_col->q->updateFormula(); // only needed in redo
+	m_col->owner()->setChanged();
+	Q_EMIT m_col->q->rowsInserted(m_col->q, m_before, m_count);
 }
 
 /**
  * \brief Undo the command
  */
 void ColumnInsertRowsCmd::undo() {
+	Q_EMIT m_col->q->rowsAboutToBeRemoved(m_col->q, m_before, m_count);
 	m_col->removeRows(m_before, m_count);
+	m_col->owner()->setChanged();
+	Q_EMIT m_col->q->rowsRemoved(m_col->q, m_before, m_count);
 }
 
 /** ***************************************************************************
@@ -471,17 +480,23 @@ void ColumnRemoveRowsCmd::redo() {
 		m_backup->copy(m_col, m_first, 0, m_data_row_count);
 		m_formulas = m_col->formulaAttribute();
 	}
+	Q_EMIT m_col->q->rowsAboutToBeRemoved(m_col->q, m_first, m_count);
 	m_col->removeRows(m_first, m_count);
+	m_col->owner()->setChanged();
+	Q_EMIT m_col->q->rowsRemoved(m_col->q, m_first, m_count);
 }
 
 /**
  * \brief Undo the command
  */
 void ColumnRemoveRowsCmd::undo() {
+	Q_EMIT m_col->q->rowsAboutToBeInserted(m_col->q, m_first, m_count);
 	m_col->insertRows(m_first, m_count);
 	m_col->copy(m_backup, 0, m_first, m_data_row_count);
 	m_col->resizeTo(m_old_size);
 	m_col->replaceFormulas(m_formulas);
+	m_col->owner()->setChanged();
+	Q_EMIT m_col->q->rowsInserted(m_col->q, m_first, m_count);
 }
 
 /** ***************************************************************************
@@ -677,13 +692,16 @@ ColumnSetGlobalFormulaCmd::ColumnSetGlobalFormulaCmd(ColumnPrivate* col,
 													 QString formula,
 													 QStringList variableNames,
 													 QVector<Column*> variableColumns,
-													 bool autoUpdate)
-	: QUndoCommand()
+													 bool autoUpdate,
+													 bool autoResize,
+													 QUndoCommand* parent)
+	: QUndoCommand(parent)
 	, m_col(col)
 	, m_newFormula(std::move(formula))
 	, m_newVariableNames(std::move(variableNames))
 	, m_newVariableColumns(std::move(variableColumns))
-	, m_newAutoUpdate(autoUpdate) {
+	, m_newAutoUpdate(autoUpdate)
+	, m_newAutoResize(autoResize) {
 	setText(i18n("%1: set formula", col->name()));
 }
 
@@ -695,6 +713,7 @@ void ColumnSetGlobalFormulaCmd::redo() {
 			m_variableColumns << d.m_column;
 		}
 		m_autoUpdate = m_col->formulaAutoUpdate();
+		m_autoResize = m_col->formulaAutoResize();
 		m_copied = true;
 	}
 
@@ -703,14 +722,14 @@ void ColumnSetGlobalFormulaCmd::redo() {
 		if (i < m_newVariableColumns.size()) // names may be defined but without column
 			formulaData << Column::FormulaData(m_newVariableNames.at(i), m_newVariableColumns.at(i));
 
-	m_col->setFormula(m_newFormula, formulaData, m_newAutoUpdate);
+	m_col->setFormula(m_newFormula, formulaData, m_newAutoUpdate, m_newAutoResize);
 }
 
 void ColumnSetGlobalFormulaCmd::undo() {
 	QVector<Column::FormulaData> formulaData;
 	for (int i = 0; i < m_variableNames.count(); i++)
 		formulaData << Column::FormulaData(m_variableNames.at(i), m_variableColumns.at(i));
-	m_col->setFormula(m_formula, formulaData, m_autoUpdate);
+	m_col->setFormula(m_formula, formulaData, m_autoUpdate, m_autoResize);
 }
 
 /** ***************************************************************************

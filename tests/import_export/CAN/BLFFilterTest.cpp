@@ -15,6 +15,8 @@
 #include "qtestcase.h"
 #include <math.h>
 
+#ifdef HAVE_VECTOR_BLF
+
 #include <Vector/BLF.h>
 
 static const std::string PRIMITIVE_DBC =
@@ -28,9 +30,9 @@ BU_: DBG DRIVER IO MOTOR SENSOR
 
 )";
 
-//##########################################################################################################
-//##### Helper functions ###################################################################################
-//##########################################################################################################
+// ##########################################################################################################
+// ##### Helper functions ###################################################################################
+// ##########################################################################################################
 void BLFFilterTest::createDBCFile(const QString& filename, const std::string& content) {
 	auto* file = std::fopen(filename.toStdString().c_str(), "w");
 	QVERIFY(file);
@@ -68,9 +70,9 @@ void BLFFilterTest::createBLFFile(const QString& filename, QVector<Vector::BLF::
 	blfFile.close();
 }
 
-//##########################################################################################################
-//##### Test functions #####################################################################################
-//##########################################################################################################
+// ##########################################################################################################
+// ##### Test functions #####################################################################################
+// ##########################################################################################################
 void BLFFilterTest::testInvalidBLF() {
 	VectorBLFFilter filter;
 	QCOMPARE(filter.isValid(QStringLiteral("UnavailableBLFFile.blf")), false); // File not available
@@ -207,7 +209,7 @@ BO_ 565 MSG2: 8 Vector__XXX
 
 	{
 		const auto* c = s.column(0);
-		QCOMPARE(c->name(), QStringLiteral("Time_s"));
+		QCOMPARE(c->name(), i18n("Time_s"));
 		QCOMPARE(c->rowCount(), 6);
 
 		QVector<double> refData{5e-9, 6e-9, 8e-9, 10e-9, 12e-9, 14e-9};
@@ -320,7 +322,7 @@ BO_ 123 MSG2: 8 Vector__XXX
 	{
 		// Time
 		const auto* c = s.column(0);
-		QCOMPARE(c->name(), QStringLiteral("Time_s"));
+		QCOMPARE(c->name(), i18n("Time_s"));
 		QCOMPARE(c->rowCount(), 6);
 
 		QVector<double> refData{5e-9, 6e-9, 8e-9, 10e-9, 12e-9, 14e-9};
@@ -424,7 +426,7 @@ BO_ 123 MSG2: 8 Vector__XXX
 	{
 		// Time
 		const auto* c = s.column(0);
-		QCOMPARE(c->name(), QStringLiteral("Time_ns"));
+		QCOMPARE(c->name(), i18n("Time_ns"));
 		QCOMPARE(c->rowCount(), 6);
 
 		QVector<double> refData{5, 6, 8, 10, 12, 14};
@@ -592,7 +594,7 @@ BO_ 541 MSG2: 8 Vector__XXX
 	{
 		// Time
 		const auto* c = s.column(0);
-		QCOMPARE(c->name(), QStringLiteral("Time_s"));
+		QCOMPARE(c->name(), i18n("Time_s"));
 		QCOMPARE(c->rowCount(), 5);
 
 		QVector<double> refData{5e-9, 10e-9, 15e-9, 20e-9, 25e-9};
@@ -793,7 +795,7 @@ BO_ 541 MSG2: 8 Vector__XXX
 	{
 		// Time
 		const auto* c = s.column(0);
-		QCOMPARE(c->name(), QStringLiteral("Time_s"));
+		QCOMPARE(c->name(), i18n("Time_s"));
 		QCOMPARE(c->rowCount(), 5);
 
 		QVector<double> refData{5e-9, 10e-9, 15e-9, 20e-9, 25e-9};
@@ -946,5 +948,7 @@ BO_ 541 MSG2: 8 Vector__XXX
 		}
 	}
 }
+
+#endif
 
 QTEST_MAIN(BLFFilterTest)

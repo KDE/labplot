@@ -10,27 +10,32 @@
 # SPDX-FileCopyrightText: 2018 Sune Vuorela <sune@kde.org>
 # SPDX-License-Identifier: BSD-3-Clause
 
+find_package(PkgConfig QUIET)
+
+if (PKG_CONFIG_FOUND)
+    pkg_check_modules(MARKDOWN libmarkdown)
+    set(Discount_VERSION ${MARKDOWN_VERSION})
+endif ()
+
 if (Discount_INCLUDE_DIR AND Discount_LIBRARIES)
+    # Already in cache
+    set (Discount_FOUND TRUE)
+else ()
+    find_library (Discount_LIBRARIES
+        NAMES markdown libmarkdown
+        HINTS ${MARKDOWN_LIBRARY_DIRS}
+    )
 
-  # Already in cache
-  set (Discount_FOUND TRUE)
+    find_path (Discount_INCLUDE_DIR
+        NAMES mkdio.h
+        HINTS ${MARKDOWN_INCLUDE_DIRS}
+    )
 
-else (Discount_INCLUDE_DIR AND Discount_LIBRARIES)
+    include (FindPackageHandleStandardArgs)
+    find_package_handle_standard_args (Discount DEFAULT_MSG Discount_LIBRARIES Discount_INCLUDE_DIR)
+endif ()
 
-  find_library (Discount_LIBRARIES
-    NAMES markdown libmarkdown
-  )
-
-  find_path (Discount_INCLUDE_DIR
-    NAMES mkdio.h
-  )
-
-  include (FindPackageHandleStandardArgs)
-  find_package_handle_standard_args (Discount DEFAULT_MSG Discount_LIBRARIES Discount_INCLUDE_DIR)
-
-endif (Discount_INCLUDE_DIR AND Discount_LIBRARIES)
-
-mark_as_advanced(Discount_INCLUDE_DIR Discount_LIBRARIES)
+mark_as_advanced(Discount_INCLUDE_DIR Discount_LIBRARIES Discount_VERSION)
 
 if (Discount_FOUND)
    add_library(Discount::Lib UNKNOWN IMPORTED)

@@ -10,7 +10,6 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-#include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 
 #include <QPen>
@@ -20,7 +19,12 @@ class ImagePrivate;
 class QBrush;
 class QFont;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Image : public WorksheetElement {
+#else
 class Image : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:
@@ -28,9 +32,7 @@ public:
 	~Image() override;
 
 	QIcon icon() const override;
-	QMenu* createContextMenu() override;
-	QGraphicsItem* graphicsItem() const override;
-	void setParentGraphicsItem(QGraphicsItem*);
+	virtual void setParentGraphicsItem(QGraphicsItem*) override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -57,8 +59,6 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(Image)
 	void init();
-
-	QAction* visibilityAction{nullptr};
 
 Q_SIGNALS:
 	void fileNameChanged(const QString&);

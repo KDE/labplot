@@ -15,6 +15,7 @@
 #include <QDateTime>
 #include <QStringList>
 #include <QTime>
+#include <QTimeZone>
 #include <QUndoCommand>
 
 #include <KLocalizedString>
@@ -44,22 +45,16 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const {
 
 	// first try the selected format string m_format
 	QDateTime result = QDateTime::fromString(input_value, m_format);
-	result.setTimeSpec(Qt::UTC);
+	result.setTimeZone(QTimeZone::UTC);
 	if (result.isValid())
 		return result;
 
-		// fallback:
-		// try other format strings built from date_formats and time_formats
-		// comma and space are valid separators between date and time
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+	// fallback:
+	// try other format strings built from date_formats and time_formats
+	// comma and space are valid separators between date and time
 	QStringList strings = input_value.simplified().split(QLatin1Char(','), Qt::SkipEmptyParts);
 	if (strings.size() == 1)
 		strings = strings.at(0).split(QLatin1Char(' '), Qt::SkipEmptyParts);
-#else
-	QStringList strings = input_value.simplified().split(QLatin1Char(','), QString::SkipEmptyParts);
-	if (strings.size() == 1)
-		strings = strings.at(0).split(QLatin1Char(' '), QString::SkipEmptyParts);
-#endif
 
 	if (strings.size() < 1)
 		return result; // invalid date/time from first attempt
@@ -75,14 +70,14 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const {
 		time_string = date_string;
 
 	// try to find a valid date
-	for (const auto& format : AbstractColumn::dateFormats()) {
-		date_result = QDate::fromString(date_string, format);
+	for (const auto& dateFormat : AbstractColumn::dateFormats()) {
+		date_result = QDate::fromString(date_string, dateFormat);
 		if (date_result.isValid())
 			break;
 	}
 	// try to find a valid time
-	for (const auto& format : AbstractColumn::timeFormats()) {
-		time_result = QTime::fromString(time_string, format);
+	for (const auto& timeFormat : AbstractColumn::timeFormats()) {
+		time_result = QTime::fromString(time_string, timeFormat);
 		if (time_result.isValid())
 			break;
 	}
@@ -142,7 +137,7 @@ String2DateTimeFilterSetFormatCmd::String2DateTimeFilterSetFormatCmd(String2Date
 void String2DateTimeFilterSetFormatCmd::redo() {
 	QString tmp = m_target->m_format;
 	m_target->m_format = m_other_format;
-	m_other_format = tmp;
+	m_other_format = std::move(tmp);
 	Q_EMIT m_target->formatChanged();
 }
 

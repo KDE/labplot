@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Line
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -18,7 +18,9 @@
 #include "LinePrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 
 Line::Line(const QString& name)
@@ -56,33 +58,25 @@ void Line::init(const KConfigGroup& group) {
 	if (d->histogramLineTypeAvailable)
 		d->histogramLineType = (Histogram::LineType)group.readEntry(d->prefix + QStringLiteral("Type"), (int)Histogram::Bars);
 
-	if (d->errorBarsTypeAvailable) {
-		d->errorBarsType = (XYCurve::ErrorBarsType)group.readEntry(d->prefix + QStringLiteral("Type"), static_cast<int>(XYCurve::ErrorBarsType::Simple));
-		d->errorBarsCapSize = group.readEntry(d->prefix + QStringLiteral("CapSize"), Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
-	}
-
 	if (d->prefix == QLatin1String("DropLine"))
 		d->dropLineType = (XYCurve::DropLineType)group.readEntry(d->prefix + QStringLiteral("Type"), (int)XYCurve::DropLineType::NoDropLine);
 
-	d->style = static_cast<Qt::PenStyle>(group.readEntry("BorderStyle", (int)Qt::SolidLine));
+	d->style = static_cast<Qt::PenStyle>(group.readEntry(d->prefix + QStringLiteral("Style"), (int)Qt::SolidLine));
 	d->width = group.readEntry(d->prefix + QStringLiteral("Width"), Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point));
 	d->color = group.readEntry(d->prefix + QStringLiteral("Color"), QColor(Qt::black));
 	d->pen.setStyle(d->style);
 	d->pen.setColor(d->color);
 	d->pen.setWidthF(d->width);
+	d->pen.setCapStyle(Qt::FlatCap);
+	d->pen.setJoinStyle(Qt::MiterJoin);
 	d->opacity = group.readEntry(d->prefix + QStringLiteral("Opacity"), 1.0);
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(Line, bool, histogramLineTypeAvailable, histogramLineTypeAvailable)
 BASIC_SHARED_D_READER_IMPL(Line, Histogram::LineType, histogramLineType, histogramLineType)
-
-BASIC_SHARED_D_READER_IMPL(Line, bool, errorBarsTypeAvailable, errorBarsTypeAvailable)
-BASIC_SHARED_D_READER_IMPL(Line, XYCurve::ErrorBarsType, errorBarsType, errorBarsType)
-BASIC_SHARED_D_READER_IMPL(Line, double, errorBarsCapSize, errorBarsCapSize)
-
 BASIC_SHARED_D_READER_IMPL(Line, XYCurve::DropLineType, dropLineType, dropLineType)
 
 BASIC_SHARED_D_READER_IMPL(Line, QPen, pen, pen)
@@ -91,9 +85,9 @@ BASIC_SHARED_D_READER_IMPL(Line, QColor, color, color)
 BASIC_SHARED_D_READER_IMPL(Line, double, width, width)
 BASIC_SHARED_D_READER_IMPL(Line, double, opacity, opacity)
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 void Line::setHistogramLineTypeAvailable(bool available) {
 	Q_D(Line);
 	d->histogramLineTypeAvailable = available;
@@ -104,25 +98,6 @@ void Line::setHistogramLineType(Histogram::LineType type) {
 	Q_D(Line);
 	if (type != d->histogramLineType)
 		exec(new LineSetHistogramLineTypeCmd(d, type, ki18n("%1: line type changed")));
-}
-
-void Line::setErrorBarsTypeAvailable(bool available) {
-	Q_D(Line);
-	d->errorBarsTypeAvailable = available;
-}
-
-STD_SETTER_CMD_IMPL_S(Line, SetErrorBarsCapSize, double, errorBarsCapSize)
-void Line::setErrorBarsCapSize(qreal size) {
-	Q_D(Line);
-	if (size != d->errorBarsCapSize)
-		exec(new LineSetErrorBarsCapSizeCmd(d, size, ki18n("%1: set error bar cap size")));
-}
-
-STD_SETTER_CMD_IMPL_S(Line, SetErrorBarsType, XYCurve::ErrorBarsType, errorBarsType)
-void Line::setErrorBarsType(XYCurve::ErrorBarsType type) {
-	Q_D(Line);
-	if (type != d->errorBarsType)
-		exec(new LineSetErrorBarsTypeCmd(d, type, ki18n("%1: error bar type changed")));
 }
 
 STD_SETTER_CMD_IMPL_S(Line, SetDropLineType, XYCurve::DropLineType, dropLineType)
@@ -150,7 +125,7 @@ STD_SETTER_CMD_IMPL_F_S(Line, SetColor, QColor, color, update)
 void Line::setColor(const QColor& color) {
 	Q_D(Line);
 	if (color != d->color)
-		exec(new LineSetColorCmd(d, color, ki18n("%1: set line pen")));
+		exec(new LineSetColorCmd(d, color, ki18n("%1: set line color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Line, SetOpacity, double, opacity, updatePixmap)
@@ -160,15 +135,18 @@ void Line::setOpacity(qreal opacity) {
 		exec(new LineSetOpacityCmd(d, opacity, ki18n("%1: set line opacity")));
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 LinePrivate::LinePrivate(Line* owner)
 	: q(owner) {
 }
 
 QString LinePrivate::name() const {
-	return q->parentAspect()->name();
+	if (dynamic_cast<ErrorBar*>(q->parentAspect()))
+		return q->parentAspect()->parentAspect()->name(); // for error bars we need to go one level higher to get the curve/plot name
+	else
+		return q->parentAspect()->name();
 }
 
 void LinePrivate::update() {
@@ -182,9 +160,9 @@ void LinePrivate::updatePixmap() {
 	Q_EMIT q->updatePixmapRequested();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void Line::save(QXmlStreamWriter* writer) const {
 	Q_D(const Line);
@@ -202,10 +180,7 @@ void Line::save(QXmlStreamWriter* writer) const {
 
 	if (d->histogramLineTypeAvailable)
 		writer->writeAttribute(QStringLiteral("type"), QString::number(d->histogramLineType));
-	else if (d->errorBarsTypeAvailable) {
-		writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->errorBarsType)));
-		writer->writeAttribute(QStringLiteral("capSize"), QString::number(d->errorBarsCapSize));
-	} else if (d->prefix == QLatin1String("DropLine"))
+	else if (d->prefix == QLatin1String("DropLine"))
 		writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->dropLineType)));
 
 	WRITE_QPEN(d->pen);
@@ -221,18 +196,11 @@ bool Line::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	Q_D(Line);
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QString str;
-
 	auto attribs = reader->attributes();
 
 	if (d->histogramLineTypeAvailable)
 		READ_INT_VALUE("type", histogramLineType, Histogram::LineType);
-
-	if (d->errorBarsTypeAvailable) {
-		READ_INT_VALUE("type", errorBarsType, XYCurve::ErrorBarsType);
-		READ_DOUBLE_VALUE("capSize", errorBarsCapSize);
-	}
 
 	if (d->prefix == QLatin1String("DropLine"))
 		READ_INT_VALUE("type", dropLineType, XYCurve::DropLineType);
@@ -247,9 +215,9 @@ bool Line::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void Line::loadThemeConfig(const KConfigGroup& group) {
 	Q_D(const Line);
 	const auto& themeColor = group.readEntry(d->prefix + QStringLiteral("Color"), QColor(Qt::black));

@@ -23,12 +23,12 @@ MatrixInsertColumnsCmd::MatrixInsertColumnsCmd(MatrixPrivate* private_obj, int b
 
 void MatrixInsertColumnsCmd::redo() {
 	m_private_obj->insertColumns(m_before, m_count);
-	Q_EMIT m_private_obj->q->columnCountChanged(m_private_obj->columnCount);
+	Q_EMIT m_private_obj->q->columnCountChanged(m_private_obj->columnCount());
 }
 
 void MatrixInsertColumnsCmd::undo() {
 	m_private_obj->removeColumns(m_before, m_count);
-	Q_EMIT m_private_obj->q->columnCountChanged(m_private_obj->columnCount);
+	Q_EMIT m_private_obj->q->columnCountChanged(m_private_obj->columnCount());
 }
 
 // Insert rows
@@ -42,12 +42,12 @@ MatrixInsertRowsCmd::MatrixInsertRowsCmd(MatrixPrivate* private_obj, int before,
 
 void MatrixInsertRowsCmd::redo() {
 	m_private_obj->insertRows(m_before, m_count);
-	Q_EMIT m_private_obj->q->rowCountChanged(m_private_obj->rowCount);
+	Q_EMIT m_private_obj->q->rowCountChanged(m_private_obj->rowCount());
 }
 
 void MatrixInsertRowsCmd::undo() {
 	m_private_obj->removeRows(m_before, m_count);
-	Q_EMIT m_private_obj->q->rowCountChanged(m_private_obj->rowCount);
+	Q_EMIT m_private_obj->q->rowCountChanged(m_private_obj->rowCount());
 }
 
 // set coordinates
@@ -89,7 +89,7 @@ MatrixSetFormulaCmd::MatrixSetFormulaCmd(MatrixPrivate* private_obj, QString for
 void MatrixSetFormulaCmd::redo() {
 	QString tmp = m_private_obj->formula;
 	m_private_obj->formula = m_other_formula;
-	m_other_formula = tmp;
+	m_other_formula = std::move(tmp);
 }
 
 void MatrixSetFormulaCmd::undo() {
@@ -107,11 +107,11 @@ MatrixReplaceValuesCmd::MatrixReplaceValuesCmd(MatrixPrivate* private_obj, void*
 void MatrixReplaceValuesCmd::redo() {
 	m_old_values = m_private_obj->data;
 	m_private_obj->data = m_new_values;
-	m_private_obj->emitDataChanged(0, 0, m_private_obj->rowCount - 1, m_private_obj->columnCount - 1);
+	m_private_obj->emitDataChanged(0, 0, m_private_obj->rowCount() - 1, m_private_obj->columnCount() - 1);
 }
 
 void MatrixReplaceValuesCmd::undo() {
 	m_new_values = m_private_obj->data;
 	m_private_obj->data = m_old_values;
-	m_private_obj->emitDataChanged(0, 0, m_private_obj->rowCount - 1, m_private_obj->columnCount - 1);
+	m_private_obj->emitDataChanged(0, 0, m_private_obj->rowCount() - 1, m_private_obj->columnCount() - 1);
 }

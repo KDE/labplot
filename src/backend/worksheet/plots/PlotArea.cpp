@@ -55,10 +55,10 @@ void PlotArea::init() {
 	d->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 
 	KConfig config;
-	KConfigGroup group = config.group("PlotArea");
+	KConfigGroup group = config.group(QStringLiteral("PlotArea"));
 
 	// Background
-	d->background = new Background(QString());
+	d->background = new Background(QStringLiteral("background"));
 	addChild(d->background);
 	d->background->setHidden(true);
 	d->background->init(group);
@@ -68,14 +68,10 @@ void PlotArea::init() {
 
 	// Border
 	PlotArea::BorderType type; // default value
-	type.setFlag(PlotArea::BorderTypeFlags::BorderLeft);
-	type.setFlag(PlotArea::BorderTypeFlags::BorderTop);
-	type.setFlag(PlotArea::BorderTypeFlags::BorderRight);
-	type.setFlag(PlotArea::BorderTypeFlags::BorderBottom);
-	d->borderType = static_cast<PlotArea::BorderType>(group.readEntry("BorderType", static_cast<int>(type)));
+	d->borderType = static_cast<PlotArea::BorderType>(group.readEntry(QStringLiteral("BorderType"), static_cast<int>(type)));
 
-	d->borderLine = new Line(QString());
-	d->borderLine->setPrefix(QLatin1String("Border"));
+	d->borderLine = new Line(QStringLiteral("borderLine"));
+	d->borderLine->setPrefix(QStringLiteral("Border"));
 	d->borderLine->setCreateXmlElement(false);
 	d->borderLine->setHidden(true);
 	addChild(d->borderLine);
@@ -85,9 +81,10 @@ void PlotArea::init() {
 	});
 	connect(d->borderLine, &Line::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
+		Q_EMIT changed();
 	});
 
-	d->borderCornerRadius = group.readEntry("BorderCornerRadius", 0.0);
+	d->borderCornerRadius = group.readEntry(QStringLiteral("BorderCornerRadius"), 0.0);
 }
 
 QGraphicsItem* PlotArea::graphicsItem() const {
@@ -167,9 +164,9 @@ void PlotArea::setBorderCornerRadius(qreal radius) {
 		exec(new PlotAreaSetBorderCornerRadiusCmd(d, radius, ki18n("%1: set plot area corner radius")));
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 PlotAreaPrivate::PlotAreaPrivate(PlotArea* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
@@ -185,9 +182,12 @@ bool PlotAreaPrivate::toggleClipping(bool on) {
 	return oldValue;
 }
 
+/*!
+ * sets the rect which is in parent's coordinates or in scene coordinates if there is no parent.
+ */
 void PlotAreaPrivate::setRect(const QRectF& r) {
 	prepareGeometryChange();
-	rect = mapRectFromScene(r);
+	rect = r;
 }
 
 QRectF PlotAreaPrivate::boundingRect() const {
@@ -210,99 +210,22 @@ QPainterPath PlotAreaPrivate::shape() const {
 	return path;
 }
 
+void PlotAreaPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
+	// Ignore context menu event and forward to next
+	QGraphicsItem::contextMenuEvent(event);
+}
+
+void PlotAreaPrivate::update() {
+	QGraphicsItem::update();
+	Q_EMIT q->changed();
+}
+
 void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	if (!isVisible())
 		return;
 
-	// draw the area
-	painter->setOpacity(background->opacity());
-	painter->setPen(Qt::NoPen);
-	if (background->type() == Background::Type::Color) {
-		switch (background->colorStyle()) {
-		case Background::ColorStyle::SingleColor: {
-			painter->setBrush(QBrush(background->firstColor()));
-			break;
-		}
-		case Background::ColorStyle::HorizontalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::VerticalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::RadialGradient: {
-			QRadialGradient radialGrad(rect.center(), rect.width() / 2);
-			radialGrad.setColorAt(0, background->firstColor());
-			radialGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(radialGrad));
-			break;
-		}
-		}
-	} else if (background->type() == Background::Type::Image) {
-		if (!background->fileName().trimmed().isEmpty()) {
-			QPixmap pix(background->fileName());
-			switch (background->imageStyle()) {
-			case Background::ImageStyle::ScaledCropped:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
-				break;
-			case Background::ImageStyle::Scaled:
-				pix = pix.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
-				break;
-			case Background::ImageStyle::ScaledAspectRatio:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
-				break;
-			case Background::ImageStyle::Centered:
-				painter->drawPixmap(QPointF(rect.center().x() - pix.size().width() / 2, rect.center().y() - pix.size().height() / 2), pix);
-				break;
-			case Background::ImageStyle::Tiled:
-				painter->setBrush(QBrush(pix));
-				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
-				break;
-			case Background::ImageStyle::CenterTiled:
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
-			}
-		}
-	} else if (background->type() == Background::Type::Pattern) {
-		painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
-	}
-
-	// draw the background
-	if (qFuzzyIsNull(borderCornerRadius))
-		painter->drawRect(rect);
-	else
-		painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
+	// draw the background area
+	background->draw(painter, rect, borderCornerRadius);
 
 	// draw the border
 	if (borderLine->pen().style() != Qt::NoPen) {
@@ -324,26 +247,26 @@ void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /
 			painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 	}
 
-	if (q->isHovered() || q->isSelected()) {
-		const double penWidth = 6.;
-		QRectF rect = boundingRect();
-		rect = QRectF(-rect.width() / 2 + penWidth / 2, -rect.height() / 2 + penWidth / 2, rect.width() - penWidth, rect.height() - penWidth);
+	const bool selected = q->isSelected();
+	const bool hovered = (q->isHovered() && !selected);
+	if ((hovered || selected) && !q->isPrinting()) {
+		static double penWidth = 6.;
+		const qreal width = rect.width();
+		const qreal height = rect.height();
+		const QRectF newRect = QRectF(-width / 2 + penWidth / 2, -height / 2 + penWidth / 2, width - penWidth, height - penWidth);
 
-		if (q->isHovered() && !q->isSelected() && !q->isPrinting()) {
-			painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth, Qt::SolidLine));
-			painter->drawRect(rect);
-		}
+		if (hovered)
+			painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth));
+		else
+			painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth));
 
-		if (q->isSelected() && !q->isPrinting()) {
-			painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth, Qt::SolidLine));
-			painter->drawRect(rect);
-		}
+		painter->drawRect(newRect);
 	}
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 //! Save as XML
 void PlotArea::save(QXmlStreamWriter* writer) const {
@@ -373,7 +296,6 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -398,11 +320,11 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("borderCornerRadius")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("borderCornerRadius")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("borderCornerRadius"));
 			else
 				d->borderCornerRadius = str.toDouble();
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}
@@ -413,10 +335,10 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 
 void PlotArea::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
-	if (config.hasGroup(QLatin1String("Theme")))
-		group = config.group("CartesianPlot");
+	if (config.hasGroup(QStringLiteral("Theme")))
+		group = config.group(QStringLiteral("CartesianPlot"));
 	else
-		group = config.group("PlotArea");
+		group = config.group(QStringLiteral("PlotArea"));
 
 	// background
 	background()->loadThemeConfig(group);
@@ -424,11 +346,11 @@ void PlotArea::loadThemeConfig(const KConfig& config) {
 	// border
 	Q_D(PlotArea);
 	d->borderLine->loadThemeConfig(group);
-	this->setBorderCornerRadius(group.readEntry("BorderCornerRadius", 0.0));
+	this->setBorderCornerRadius(group.readEntry(QStringLiteral("BorderCornerRadius"), 0.0));
 }
 
 void PlotArea::saveThemeConfig(const KConfig& config) {
-	KConfigGroup group = config.group("CartesianPlot");
+	KConfigGroup group = config.group(QStringLiteral("CartesianPlot"));
 
 	// background
 	background()->saveThemeConfig(group);
@@ -436,5 +358,5 @@ void PlotArea::saveThemeConfig(const KConfig& config) {
 	// border
 	Q_D(PlotArea);
 	d->borderLine->saveThemeConfig(group);
-	group.writeEntry("BorderCornerRadius", this->borderCornerRadius());
+	group.writeEntry(QStringLiteral("BorderCornerRadius"), this->borderCornerRadius());
 }

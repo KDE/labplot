@@ -27,9 +27,6 @@ class AxisPrivate : public WorksheetElementPrivate {
 public:
 	explicit AxisPrivate(Axis*);
 
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
-
 	void retransform() override;
 	void retransformRange();
 	void retransformLine();
@@ -42,7 +39,6 @@ public:
 	void updateGrid();
 	bool swapVisible(bool);
 	void recalcShapeAndBoundingRect() override;
-	bool isHovered() const;
 	static QString createScientificRepresentation(const QString& mantissa, const QString& exponent);
 
 	bool isDefault{false};
@@ -51,9 +47,10 @@ public:
 	Axis::RangeType rangeType{Axis::RangeType::Auto};
 	Axis::Orientation orientation{Axis::Orientation::Horizontal}; //!< horizontal or vertical
 	Axis::Position position{Axis::Position::Centered}; //!< left, right, bottom, top or custom (usually not changed after creation)
-	RangeT::Scale scale{RangeT::Scale::Linear};
 	double offset{0}; //!< offset from zero in the direction perpendicular to the axis
 	Range<double> range; //!< coordinate range of the axis line
+	bool rangeScale{true};
+	RangeT::Scale scale{RangeT::Scale::Linear}; //!< Scale if rangeScale is false
 	Axis::TicksStartType majorTicksStartType{Axis::TicksStartType::Offset};
 	qreal majorTickStartOffset{0};
 	qreal majorTickStartValue{0};
@@ -79,7 +76,7 @@ public:
 	Axis::TicksType majorTicksType{
 		Axis::TicksType::TotalNumber}; //!< the way how the number of major ticks is specified  - either as a total number or an increment
 	bool majorTicksAutoNumber{true}; //!< If the number of ticks should be adjusted automatically or not
-	int majorTicksNumber{11}; //!< number of major ticks
+	int majorTicksNumber{6}; //!< number of major ticks
 	qreal majorTicksSpacing{0.0}; //!< spacing (step) for the major ticks
 	const AbstractColumn* majorTicksColumn{nullptr}; //!< column containing values for major ticks' positions
 	QString majorTicksColumnPath;
@@ -129,7 +126,7 @@ public:
 	QPainterPath minorGridPath;
 
 	QVector<QPointF> majorTickPoints; //!< position of the major ticks  on the axis.
-	QVector<QPointF> minorTickPoints; //!< position of the major ticks  on the axis.
+	QVector<QPointF> minorTickPoints; //!< position of the minor ticks  on the axis.
 	QVector<QPointF> tickLabelPoints; //!< position of the major tick labels (left lower edge of label's bounding rect)
 	QVector<double> tickLabelValues; //!< major tick labels values
 	QVector<QString> tickLabelValuesString; //!< major tick labels used when a custom text column is selected
@@ -137,11 +134,8 @@ public:
 
 private:
 	CartesianPlot* plot() const {
-		return q->m_plot; // convenience method
+		return m_plot; // convenience method
 	}
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
@@ -150,18 +144,37 @@ private:
 	void addArrow(QPointF point, int direction);
 	int upperLabelsPrecision(int precision, Axis::LabelsFormat);
 	int lowerLabelsPrecision(int precision, Axis::LabelsFormat);
-	bool transformAnchor(QPointF*);
+	bool calculateTickHorizontal(Axis::TicksDirection tickDirection,
+								 double ticksLength,
+								 double xTickPos,
+								 double yAnchorPos,
+								 double centerValue,
+								 int rangeDirection,
+								 QPointF& anchorPointOut,
+								 QPointF& startPointOut,
+								 QPointF& endPointOut);
+	bool calculateTickVertical(Axis::TicksDirection tickDirection,
+							   double ticksLength,
+							   double yTickPos,
+							   double xAnchorPos,
+							   double centerValue,
+							   int rangeDirection,
+							   QPointF& anchorPointOut,
+							   QPointF& startPointOut,
+							   QPointF& endPointOut);
+	int determineMinorTicksNumber() const;
+	static double calculateAutoParameters(int& majorTickCount, const Range<double>& r, double& spacing);
+	static double calculateStartFromIncrement(double start, RangeT::Scale scale, double increment, bool* ok);
+	static int calculateTicksNumberFromIncrement(double start, double end, RangeT::Scale scale, double increment);
 
 	QPainterPath arrowPath;
 	QPainterPath majorTicksPath;
 	QPainterPath minorTicksPath;
-	QRectF boundingRectangle;
-	QPainterPath axisShape;
 
-	bool m_hovered{false};
-	bool m_suppressRecalc{false};
 	bool m_panningStarted{false};
 	QPointF m_panningStart;
+
+	friend class AxisTest;
 };
 
 #endif

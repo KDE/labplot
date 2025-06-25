@@ -17,7 +17,12 @@
 typedef QVector<QPointF> Points;
 typedef QVector<QLineF> Lines;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT AbstractCoordinateSystem {
+#else
 class AbstractCoordinateSystem {
+#endif
 public:
 	enum class MappingFlag {
 		DefaultMapping = 0x00,
@@ -44,6 +49,9 @@ public:
 		return {};
 	};
 
+	QString name() const;
+	void setName(const QString&);
+
 	class LineClipResult {
 	public:
 		LineClipResult() {
@@ -65,6 +73,9 @@ public:
 
 	// static members
 	static bool clipLineToRect(QLineF* line, const QRectF& rect, LineClipResult* clipResult = nullptr);
+
+private:
+	QString m_name;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractCoordinateSystem::MappingFlags)

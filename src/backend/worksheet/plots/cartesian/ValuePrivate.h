@@ -13,6 +13,7 @@
 
 #include "backend/worksheet/Worksheet.h"
 
+#include "Value.h"
 #include <QColor>
 #include <QFont>
 
@@ -27,6 +28,7 @@ public:
 	Value::Type type{Value::NoValues};
 	const AbstractColumn* column{nullptr};
 	QString columnPath;
+	bool centerPositionAvailable{false};
 	Value::Position position{Value::Above};
 	qreal distance{Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point)};
 	qreal rotationAngle{0.0};

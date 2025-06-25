@@ -3,20 +3,31 @@
 	Project              : LabPlot
 	Description          : NSL special statistics functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2016-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef NSL_SF_STATS_H
 #define NSL_SF_STATS_H
 
+#undef __BEGIN_DECLS
+#undef __END_DECLS
+#ifdef __cplusplus
+#define __BEGIN_DECLS extern "C" {
+#define __END_DECLS }
+#else
+#define __BEGIN_DECLS /* empty */
+#define __END_DECLS /* empty */
+#endif
+__BEGIN_DECLS
+
 #include <stdbool.h>
 
-#define NSL_SF_STATS_DISTRIBUTION_COUNT 35
-#define NSL_SF_STATS_DISTRIBUTION_RNG_COUNT 31 /* GSL RNG distributions */
+#define NSL_SF_STATS_DISTRIBUTION_COUNT 36
 /* ordered as defined in GSL random number distributions */
 /* order is fixed, so append new distros at the end */
 typedef enum {
+	/* RNG distributions */
 	nsl_sf_stats_gaussian,
 	nsl_sf_stats_gaussian_tail,
 	nsl_sf_stats_exponential,
@@ -48,17 +59,24 @@ typedef enum {
 	nsl_sf_stats_geometric,
 	nsl_sf_stats_hypergeometric,
 	nsl_sf_stats_logarithmic,
+	/* other distributions */
 	nsl_sf_stats_maxwell_boltzmann,
 	nsl_sf_stats_sech,
 	nsl_sf_stats_levy,
-	nsl_sf_stats_frechet
+	nsl_sf_stats_frechet,
+	nsl_sf_stats_triangular
 } nsl_sf_stats_distribution;
-/*TODO: CDF, SF, ... */
+/*TODO: CDF, SF, ... ? */
 
 extern const char* nsl_sf_stats_distribution_name[];
 extern const char* nsl_sf_stats_distribution_pic_name[];
 extern const char* nsl_sf_stats_distribution_equation[];
 
+/* distribution supports random number generation? */
+bool nsl_sf_stats_distribution_supports_RNG(nsl_sf_stats_distribution);
+/* distribution supports maximum likelyhood estimation? */
 bool nsl_sf_stats_distribution_supports_ML(nsl_sf_stats_distribution);
+
+__END_DECLS
 
 #endif /* NSL_SF_STATS_H */

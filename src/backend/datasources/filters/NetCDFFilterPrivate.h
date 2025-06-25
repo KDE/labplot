@@ -35,7 +35,7 @@ public:
 	static QString translateDataType(nc_type type);
 #endif
 
-	const NetCDFFilter* q;
+	NetCDFFilter* const q;
 
 	QString currentVarName;
 	int startRow{1};

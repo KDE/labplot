@@ -11,7 +11,6 @@
 #include "SpiceFilterTest.h"
 #include "src/backend/datasources/filters/SpiceFilter.h"
 #include "src/backend/spreadsheet/Spreadsheet.h"
-#include <qglobal.h>
 
 #include <data/ltspice/AC/LowPassFilter_AC.raw.h>
 #include <data/ltspice/DCTransfer/DCTransfer.raw.h>
@@ -86,13 +85,6 @@ const QString ltspicePath = QStringLiteral("data/ltspice"); // relative path
 			QVERIFY(qFuzzyCompare(static_cast<float>(spreadsheet.column(col)->valueAt(row)), refData.at(row).at(col).toFloat()));                              \
 		}                                                                                                                                                      \
 	}
-
-void SpiceFilterTest::initTestCase() {
-	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	// TODO: redesign/remove this
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
-}
 
 void SpiceFilterTest::NgSpiceAsciiFileToBinaryFilter() {
 	using namespace dc_ascii;
@@ -363,9 +355,9 @@ void SpiceFilterTest::NgSpiceACBinaryStartRowNotZero() {
 	COMPARE_ROW_VALUES_START_END_ROW(sheet, refData, refDataRowCount, refColumnCount, startRow, endRow);
 }
 
-//########################################################################################################
+// ########################################################################################################
 //
-//########################################################################################################
+// ########################################################################################################
 
 void SpiceFilterTest::NgSpiceDCBinaryBulkReadNumberLines() {
 	using namespace dc_binary;

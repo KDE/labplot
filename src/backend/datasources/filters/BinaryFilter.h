@@ -14,16 +14,20 @@
 #include <limits>
 
 class BinaryFilterPrivate;
-class QStringList;
 class QIODevice;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT BinaryFilter : public AbstractFileFilter {
+#else
 class BinaryFilter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
-	Q_ENUMS(DataType)
 
 public:
 	// TODO; use ColumnMode when it supports all these types
 	enum class DataType { INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, REAL32, REAL64 };
+	Q_ENUM(DataType)
 
 	BinaryFilter();
 	~BinaryFilter() override;
@@ -34,14 +38,10 @@ public:
 	static QString fileInfoString(const QString&);
 
 	// read data from any device
-	void
-	readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
-	void readDataFromFile(const QString& fileName, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	void readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace, int lines = -1);
+	void readDataFromFile(const QString& fileName, AbstractDataSource*, ImportMode = ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 	QVector<QStringList> preview(const QString& fileName, int lines);
-
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
 
 	void setVectors(const size_t);
 	size_t vectors() const;

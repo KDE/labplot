@@ -3,34 +3,34 @@
 	Project              : LabPlot
 	Description          : Reference range on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef REFERENCERANGE_H
 #define REFERENCERANGE_H
 
-#include <QPen>
-
-#include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 
 class ReferenceRangePrivate;
-class CartesianPlot;
 class Background;
 class Line;
 class QActionGroup;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT ReferenceRange : public WorksheetElement {
+#else
 class ReferenceRange : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:
-	explicit ReferenceRange(CartesianPlot*, const QString&);
+	explicit ReferenceRange(CartesianPlot*, const QString&, bool loading = false);
 	~ReferenceRange() override;
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
-	QGraphicsItem* graphicsItem() const override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -55,11 +55,10 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(ReferenceRange)
-	void init();
+	void init(bool loading);
 	void initActions();
 	void initMenus();
 
-	QAction* visibilityAction{nullptr};
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
 
@@ -76,7 +75,6 @@ private Q_SLOTS:
 	void orientationChangedSlot(QAction*);
 	void lineStyleChanged(QAction*);
 	void lineColorChanged(QAction*);
-	void visibilityChangedSlot();
 
 	void updateStartEndPositions();
 

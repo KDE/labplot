@@ -13,9 +13,9 @@
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
-extern "C" {
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
+extern "C" {
 #include <netcdf.h>
 }
 

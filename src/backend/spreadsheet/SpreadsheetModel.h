@@ -15,7 +15,6 @@
 #include "backend/core/AbstractColumn.h"
 #include <QAbstractItemModel>
 
-class QStringList;
 class Column;
 class Spreadsheet;
 class AbstractAspect;
@@ -30,6 +29,7 @@ public:
 		MaskingRole = Qt::UserRole, //!< bool determining whether the cell is masked
 		FormulaRole = Qt::UserRole + 1, //!< the cells formula
 		CommentRole = Qt::UserRole + 2, //!< the column comment (for headerData())
+		SparkLineRole = Qt::UserRole + 3, // the sparkline comment ( for headerData())
 	};
 
 	Qt::ItemFlags flags(const QModelIndex&) const override;
@@ -47,15 +47,24 @@ public:
 	void activateFormulaMode(bool on);
 	bool formulaModeActive() const;
 
-	void updateHorizontalHeader();
+	void updateHorizontalHeader(bool sendSignal = true);
 	void suppressSignals(bool);
 
 	void setSearchText(const QString&);
 	QModelIndex index(const QString&) const;
 
+	Spreadsheet* spreadsheet();
+
 private Q_SLOTS:
-	void handleAspectAdded(const AbstractAspect*);
-	void handleAspectAboutToBeRemoved(const AbstractAspect*);
+	void handleAspectsAboutToBeInserted(int first, int last);
+	void handleAspectsInserted(int first, int last);
+	void handleAspectsAboutToBeRemoved(int first, int last);
+	void handleAspectsRemoved();
+	void handleAspectCountChanged();
+
+	void handleAspectAboutToBeAdded(const AbstractAspect*, int index, const AbstractAspect*);
+	void handleAspectAdded(const AbstractAspect* aspect);
+	void handleAspectAboutToBeRemoved(const AbstractAspect* aspect);
 	void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 
 	void handleDescriptionChange(const AbstractAspect*);
@@ -63,7 +72,12 @@ private Q_SLOTS:
 	void handleDigitsChange();
 	void handlePlotDesignationChange(const AbstractColumn*);
 	void handleDataChange(const AbstractColumn*);
-	void handleRowCountChanged(const AbstractColumn*, int before, int count);
+	void handleRowsInserted(int newRowCount);
+	void handleRowsRemoved(int newRowCount);
+	void handleRowsAboutToBeInserted(int before, int last);
+	void handleRowsAboutToBeRemoved(int first, int last);
+
+	void handleRowCountChanged(int newRowCount);
 
 protected:
 	void updateVerticalHeader();
@@ -74,6 +88,7 @@ private:
 	QStringList m_horizontal_header_data;
 	int m_defaultHeaderHeight;
 	bool m_suppressSignals{false};
+	bool m_spreadsheetColumnCountChanging{false};
 	int m_rowCount{0};
 	int m_verticalHeaderCount{0};
 	int m_columnCount{0};

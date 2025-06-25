@@ -40,3 +40,21 @@
   \ingroup backend
   Contains classes relevant for the \c Worksheet.
 */
+
+/*!
+  \defgroup CartesianPlotArea Cartesian Plot Area
+  \ingroup worksheet
+  Contains classes relevant for the \c CartesianPlot comprising all its children like the different visualization plots, etc.
+*/
+
+/*!
+  \defgroup CartesianPlots Cartesian Plots
+  \ingroup CartesianPlotArea
+  Contains classes implementing different visualizations for the cartesian coordinate system.
+*/
+
+/*!
+  \defgroup CartesianAnalysisPlots Cartesian Analysis Plots
+  \ingroup CartesianPlotArea
+  Contains classes implementing different analysis algorithms and visualizations for the cartesian coordinate system.
+*/

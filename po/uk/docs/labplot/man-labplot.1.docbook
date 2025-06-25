@@ -1,0 +1,187 @@
+<?xml version="1.0" ?>
+<!DOCTYPE refentry PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+<!ENTITY % Ukrainian "INCLUDE">
+]>
+
+<!--  Please keep this man page content in sync with Command Line Options sections of Okular handbook -->
+<refentry lang="&language;">
+<refentryinfo>
+<title
+>Підручник користувача LabPlot</title>
+<author
+><firstname
+>Helen</firstname
+><surname
+>Faulkner</surname
+> <contrib
+>Сторінка підручника LabPlot.</contrib
+> <email
+>helen_ml_faulkner@yahoo.co.uk</email
+></author>
+<date
+>28 вересня 2018 року</date>
+<releaseinfo
+>LabPlot 2.6</releaseinfo>
+<productname
+>LabPlot</productname>
+</refentryinfo>
+
+<refmeta>
+<refentrytitle
+><command
+>labplot</command
+></refentrytitle>
+<manvolnum
+>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname
+>labplot</refname>
+<refpurpose
+>програма KDE для інтерактивної побудови графіків та аналізу наукових даних.</refpurpose>
+</refnamediv>
+<!-- body begins here -->
+<refsynopsisdiv id='synopsis'>
+<cmdsynopsis
+><command
+>labplot</command
+> <arg choice="opt"
+><replaceable
+>параметри LabPlot</replaceable
+></arg
+> <arg choice="opt"
+><replaceable
+>файл</replaceable
+></arg
+> </cmdsynopsis>
+</refsynopsisdiv>
+
+
+<refsect1 id="description"
+><title
+>Опис</title>
+<para
+>LabPlot — програма для створення креслень та аналізу даних. </para>
+<para
+>Серед можливостей програми креслення плоских і просторових графіків за даними або функціональними залежностями, просте редагування графіків, аналіз даних і функцій, підтримка різних робочих аркушів з використанням багатодокументного інтерфейсу та збереження даних у файлах проєктів LabPlot. </para>
+<para
+>Зауважте, що LabPlot запускається командою <command
+>labplot</command
+>. </para>
+
+</refsect1>
+
+<refsect1 id="options"
+><title
+>Параметри LabPlot</title>
+<para
+>Щоб ознайомитися із повним списком загальних параметрів, віддайте команду <userinput
+><command
+>labplot</command
+> <parameter
+>--help</parameter
+></userinput
+>. </para>
+
+<variablelist>
+<varlistentry>
+<term
+><option
+>--no-splash</option
+></term>
+<listitem>
+<para
+>Не показувати вікно вітання.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><option
+>--presenter</option
+></term>
+<listitem>
+<para
+>Запустити у режимі презентації.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</refsect1>
+
+<refsect1 id="arguments"
+><title
+>Аргументи</title>
+<variablelist>
+  <varlistentry>
+    <term
+><option
+>файл</option
+></term>
+  <listitem>
+    <para
+>Файл проєкту, який слід відкрити. Зазвичай, суфіксом назви такого файла є <literal role="extension"
+>.lml</literal
+>.</para>
+    <para
+>Файл проєкту може бути стиснуто. Назви стиснути файлів проєктів завершуються суфіксами <literal role="extension"
+>.lml.gz</literal
+>, <literal role="extension"
+>.lml.bz2</literal
+> та <literal role="extension"
+>.lml.xz</literal
+>.</para>
+  </listitem>
+  </varlistentry>
+</variablelist>
+</refsect1>
+
+<refsect1>
+<title
+>Також прочитайте</title>
+<simplelist>
+<member
+>Із повною документацією для користувачів можна ознайомитися у Центрі довідки KDE. Ви також можете ввести адресу <ulink url="help:/labplot"
+>help:/labplot</ulink
+> (безпосередньо у поле адреси &dolphin; або за допомогою рядка команди <userinput
+><command
+>khelpcenter</command
+> <parameter
+>help:/labplot</parameter
+></userinput
+>).</member>
+<member
+>kf5options(7)</member>
+<member
+>qt5options(7)</member>
+<member
+>Докладніші відомості можна знайти на <ulink url="https://labplot.kde.org/"
+>https://labplot.kde.org/</ulink
+></member>
+</simplelist>
+</refsect1>
+
+<refsect1 id="authors"
+><title
+>Автори</title>
+<para
+>Авторами LabPlot є </para>
+<simplelist>
+    <member
+>Stefan Gerlach &lt;stefan.gerlach@uni.kn&gt;,</member>
+    <member
+>Alexander Semke &lt;alexander.semke@web.de&gt;,</member>
+    <member
+>F&aacute;bi&aacute;n Krist&oacute;f-Szabolcs &lt;f-kristof@hotmail.com&gt;</member>
+    <member
+>та декілька інших розробників.</member>
+</simplelist>
+<para
+>Цю сторінку підручника було створено Helen Faulkner &lt;helen_ml_faulkner@yahoo.co.uk&gt; для системи Debian GNU/Linux (втім, нею можна користуватися і у інших системах). </para>
+<para
+>Умови ліцензування: GNU General Public License, версія 2 &lt;<ulink url="http://www.gnu.org/licenses/gpl-2.0.html"
+>http://www.gnu.org/licenses/gpl-2.0.html</ulink
+>&gt; </para>
+</refsect1>
+</refentry>
+

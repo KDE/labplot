@@ -10,6 +10,7 @@
 */
 
 #include "DatapickerCurve.h"
+#include "backend/core/Project.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/datapicker/DatapickerCurvePrivate.h"
 #include "backend/datapicker/DatapickerPoint.h"
@@ -53,18 +54,18 @@ void DatapickerCurve::init() {
 
 	KConfig config;
 	KConfigGroup group;
-	group = config.group("DatapickerCurve");
-	d->pointVisibility = group.readEntry("PointVisibility", true);
+	group = config.group(QStringLiteral("DatapickerCurve"));
+	d->pointVisibility = group.readEntry(QStringLiteral("PointVisibility"), true);
 
 	// error bars
-	d->curveErrorTypes.x = (ErrorType)group.readEntry("CurveErrorType_X", static_cast<int>(ErrorType::NoError));
-	d->curveErrorTypes.y = (ErrorType)group.readEntry("CurveErrorType_Y", static_cast<int>(ErrorType::NoError));
-	d->pointErrorBarSize = group.readEntry("ErrorBarSize", Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
-	d->pointErrorBarBrush.setStyle((Qt::BrushStyle)group.readEntry("ErrorBarFillingStyle", (int)Qt::NoBrush));
-	d->pointErrorBarBrush.setColor(group.readEntry("ErrorBarFillingColor", QColor(Qt::black)));
-	d->pointErrorBarPen.setStyle((Qt::PenStyle)group.readEntry("ErrorBarBorderStyle", (int)Qt::SolidLine));
-	d->pointErrorBarPen.setColor(group.readEntry("ErrorBarBorderColor", QColor(Qt::black)));
-	d->pointErrorBarPen.setWidthF(group.readEntry("ErrorBarBorderWidth", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)));
+	d->curveErrorTypes.x = (ErrorType)group.readEntry(QStringLiteral("CurveErrorType_X"), static_cast<int>(ErrorType::NoError));
+	d->curveErrorTypes.y = (ErrorType)group.readEntry(QStringLiteral("CurveErrorType_Y"), static_cast<int>(ErrorType::NoError));
+	d->pointErrorBarSize = group.readEntry(QStringLiteral("ErrorBarSize"), Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
+	d->pointErrorBarBrush.setStyle((Qt::BrushStyle)group.readEntry(QStringLiteral("ErrorBarFillingStyle"), (int)Qt::NoBrush));
+	d->pointErrorBarBrush.setColor(group.readEntry(QStringLiteral("ErrorBarFillingColor"), QColor(Qt::black)));
+	d->pointErrorBarPen.setStyle((Qt::PenStyle)group.readEntry(QStringLiteral("ErrorBarBorderStyle"), (int)Qt::SolidLine));
+	d->pointErrorBarPen.setColor(group.readEntry(QStringLiteral("ErrorBarBorderColor"), QColor(Qt::black)));
+	d->pointErrorBarPen.setWidthF(group.readEntry(QStringLiteral("ErrorBarBorderWidth"), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)));
 
 	// initialize the symbol
 	d->symbol = new Symbol(QString());
@@ -78,27 +79,27 @@ void DatapickerCurve::init() {
 	});
 	d->symbol->init(group);
 
-	connect(this, &AbstractAspect::aspectAdded, this, &DatapickerCurve::childAdded);
-	connect(this, &AbstractAspect::aspectAboutToBeRemoved, this, &DatapickerCurve::childRemoved);
+	connect(this, &AbstractAspect::childAspectAdded, this, &DatapickerCurve::childAdded);
+	connect(this, &AbstractAspect::childAspectAboutToBeRemoved, this, &DatapickerCurve::childRemoved);
 }
 
 void DatapickerCurve::childAdded(const AbstractAspect* child) {
 	if (m_supressResizeDatasheet)
 		return;
 	const auto* p = dynamic_cast<const DatapickerPoint*>(child);
-	if (!p)
-		return;
-	m_datasheet->setRowCount(m_datasheet->rowCount() + 1);
+	if (p) {
+		connect(p, &DatapickerPoint::dataChanged, this, &DatapickerCurve::updatePoint);
+		m_datasheet->setRowCount(m_datasheet->rowCount() + 1);
+	}
 }
 
 void DatapickerCurve::childRemoved(const AbstractAspect* child) {
-	Q_UNUSED(child);
 	const auto* point = dynamic_cast<const DatapickerPoint*>(child);
-	if (!point)
-		return;
-
-	int row = indexOfChild<DatapickerPoint>(point, ChildIndexFlag::IncludeHidden);
-	m_datasheet->removeRows(row, 1);
+	if (point) {
+		int row = indexOfChild<DatapickerPoint>(point, ChildIndexFlag::IncludeHidden);
+		m_datasheet->removeRows(row, 1);
+		disconnect(point, nullptr, this, nullptr);
+	}
 }
 
 /*!
@@ -118,9 +119,9 @@ Column* DatapickerCurve::appendColumn(const QString& name) {
 	return col;
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 Symbol* DatapickerCurve::symbol() const {
 	Q_D(const DatapickerCurve);
 	return d->symbol;
@@ -133,43 +134,43 @@ BASIC_SHARED_D_READER_IMPL(DatapickerCurve, QPen, pointErrorBarPen, pointErrorBa
 BASIC_SHARED_D_READER_IMPL(DatapickerCurve, bool, pointVisibility, pointVisibility)
 
 BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, posXColumn, posXColumn)
-QString& DatapickerCurve::posXColumnPath() const {
-	return d_ptr->posXColumnPath;
+QString& DatapickerCurve::posXColumnName() const {
+	return d_ptr->posXColumnName;
 }
 
 BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, posYColumn, posYColumn)
-QString& DatapickerCurve::posYColumnPath() const {
-	return d_ptr->posYColumnPath;
+QString& DatapickerCurve::posYColumnName() const {
+	return d_ptr->posYColumnName;
 }
 
 BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, posZColumn, posZColumn)
-QString& DatapickerCurve::posZColumnPath() const {
-	return d_ptr->posZColumnPath;
+QString& DatapickerCurve::posZColumnName() const {
+	return d_ptr->posZColumnName;
 }
 
 BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, plusDeltaXColumn, plusDeltaXColumn)
-QString& DatapickerCurve::plusDeltaXColumnPath() const {
-	return d_ptr->plusDeltaXColumnPath;
+QString& DatapickerCurve::plusDeltaXColumnName() const {
+	return d_ptr->plusDeltaXColumnName;
 }
 
 BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, minusDeltaXColumn, minusDeltaXColumn)
-QString& DatapickerCurve::minusDeltaXColumnPath() const {
-	return d_ptr->minusDeltaXColumnPath;
+QString& DatapickerCurve::minusDeltaXColumnName() const {
+	return d_ptr->minusDeltaXColumnName;
 }
 
 BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, plusDeltaYColumn, plusDeltaYColumn)
-QString& DatapickerCurve::plusDeltaYColumnPath() const {
-	return d_ptr->plusDeltaYColumnPath;
+QString& DatapickerCurve::plusDeltaYColumnName() const {
+	return d_ptr->plusDeltaYColumnName;
 }
 
 BASIC_SHARED_D_READER_IMPL(DatapickerCurve, AbstractColumn*, minusDeltaYColumn, minusDeltaYColumn)
-QString& DatapickerCurve::minusDeltaYColumnPath() const {
-	return d_ptr->minusDeltaYColumnPath;
+QString& DatapickerCurve::minusDeltaYColumnName() const {
+	return d_ptr->minusDeltaYColumnName;
 }
 
-//##############################################################################
-//#########################  setter methods  ###################################
-//##############################################################################
+// ##############################################################################
+// #########################  setter methods  ###################################
+// ##############################################################################
 void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 	Q_D(DatapickerCurve);
 
@@ -267,9 +268,17 @@ void DatapickerCurve::setCurveErrorTypes(const DatapickerCurve::Errors errors) {
 		beginMacro(i18n("%1: set xy-error type", name()));
 		exec(new DatapickerCurveSetCurveErrorTypesCmd(d, errors, ki18n("%1: set xy-error type")));
 
-		if (errors.x != ErrorType::NoError && !d->plusDeltaXColumn)
-			setPlusDeltaXColumn(appendColumn(QLatin1String("+delta_x")));
-		else if (d->plusDeltaXColumn && errors.x == ErrorType::NoError) {
+		if (errors.x == ErrorType::AsymmetricError) {
+			if (!d->plusDeltaXColumn)
+				setPlusDeltaXColumn(appendColumn(QLatin1String("+delta_x")));
+			else
+				d->plusDeltaXColumn->setName(QLatin1String("+delta_x")); // make sure we have the proper name when switching from Symmetric to Asymmetric
+		} else if (errors.x == ErrorType::SymmetricError) {
+			if (!d->plusDeltaXColumn)
+				setPlusDeltaXColumn(appendColumn(QLatin1String("+-delta_x")));
+			else
+				d->plusDeltaXColumn->setName(QLatin1String("+-delta_x")); // make sure we have the proper name when switching from Asymmetric to Symmetric
+		} else if (d->plusDeltaXColumn && errors.x == ErrorType::NoError) {
 			d->plusDeltaXColumn->remove();
 			d->plusDeltaXColumn = nullptr;
 		}
@@ -281,9 +290,17 @@ void DatapickerCurve::setCurveErrorTypes(const DatapickerCurve::Errors errors) {
 			d->minusDeltaXColumn = nullptr;
 		}
 
-		if (errors.y != ErrorType::NoError && !d->plusDeltaYColumn)
-			setPlusDeltaYColumn(appendColumn(QLatin1String("+delta_y")));
-		else if (d->plusDeltaYColumn && errors.y == ErrorType::NoError) {
+		if (errors.y == ErrorType::AsymmetricError) {
+			if (!d->plusDeltaYColumn)
+				setPlusDeltaYColumn(appendColumn(QLatin1String("+delta_y")));
+			else
+				d->plusDeltaYColumn->setName(QLatin1String("+delta_y")); // make sure we have the proper name when switching from Symmetric to Asymmetric
+		} else if (errors.y == ErrorType::SymmetricError) {
+			if (!d->plusDeltaYColumn)
+				setPlusDeltaYColumn(appendColumn(QLatin1String("+-delta_y")));
+			else
+				d->plusDeltaYColumn->setName(QLatin1String("+-delta_y")); // make sure we have the proper name when switching from Asymmetric to Symmetric
+		} else if (d->plusDeltaYColumn && errors.y == ErrorType::NoError) {
 			d->plusDeltaYColumn->remove();
 			d->plusDeltaYColumn = nullptr;
 		}
@@ -392,15 +409,15 @@ void DatapickerCurve::setSelectedInView(bool b) {
 		Q_EMIT childAspectDeselectedInView(this);
 }
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 void DatapickerCurve::suppressUpdatePoint(bool suppress) {
 	m_supressResizeDatasheet = suppress;
 
 	if (!suppress) {
 		// update points
-		auto points = children<DatapickerPoint>();
+		auto points = children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 		m_datasheet->setRowCount(points.count());
 		updatePoints();
 	}
@@ -482,9 +499,9 @@ void DatapickerCurve::updateColumns(bool datetime) {
 		d->posXColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 DatapickerCurvePrivate::DatapickerCurvePrivate(DatapickerCurve* curve)
 	: q(curve) {
 }
@@ -501,9 +518,21 @@ void DatapickerCurvePrivate::retransform() {
 		point->retransform();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
+
+// If the data column is valid, write their current name
+// if not, write the name stored in the object. Use this macro only if you
+// are sure that the path is not relevant and the name is enough like
+// For the datapickercurve and their columns
+#define WRITE_COLUMN_NAME(column, columnName)                                                                                                                  \
+	if (column) {                                                                                                                                              \
+		writer->writeAttribute(QStringLiteral(#columnName), column->name());                                                                                   \
+	} else {                                                                                                                                                   \
+		writer->writeAttribute(QStringLiteral(#columnName), column##Name);                                                                                     \
+	}
+
 //! Save as XML
 void DatapickerCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const DatapickerCurve);
@@ -514,13 +543,13 @@ void DatapickerCurve::save(QXmlStreamWriter* writer) const {
 
 	// general
 	writer->writeStartElement(QStringLiteral("general"));
-	WRITE_COLUMN(d->posXColumn, posXColumn);
-	WRITE_COLUMN(d->posYColumn, posYColumn);
-	WRITE_COLUMN(d->posZColumn, posZColumn);
-	WRITE_COLUMN(d->plusDeltaXColumn, plusDeltaXColumn);
-	WRITE_COLUMN(d->minusDeltaXColumn, minusDeltaXColumn);
-	WRITE_COLUMN(d->plusDeltaYColumn, plusDeltaYColumn);
-	WRITE_COLUMN(d->minusDeltaYColumn, minusDeltaYColumn);
+	WRITE_COLUMN_NAME(d->posXColumn, posXColumn);
+	WRITE_COLUMN_NAME(d->posYColumn, posYColumn);
+	WRITE_COLUMN_NAME(d->posZColumn, posZColumn);
+	WRITE_COLUMN_NAME(d->plusDeltaXColumn, plusDeltaXColumn);
+	WRITE_COLUMN_NAME(d->minusDeltaXColumn, minusDeltaXColumn);
+	WRITE_COLUMN_NAME(d->plusDeltaYColumn, plusDeltaYColumn);
+	WRITE_COLUMN_NAME(d->minusDeltaYColumn, minusDeltaYColumn);
 	writer->writeAttribute(QStringLiteral("curveErrorType_X"), QString::number(static_cast<int>(d->curveErrorTypes.x)));
 	writer->writeAttribute(QStringLiteral("curveErrorType_Y"), QString::number(static_cast<int>(d->curveErrorTypes.y)));
 	writer->writeAttribute(QStringLiteral("vibible"), QString::number(d->pointVisibility));
@@ -543,6 +572,22 @@ void DatapickerCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement(); // close section
 }
 
+#define READ_COLUMN_NAME(columnName)                                                                                                                           \
+	{                                                                                                                                                          \
+		str = attribs.value(QStringLiteral(#columnName)).toString();                                                                                           \
+		if (Project::xmlVersion() < 16)                                                                                                                        \
+			str = str.split(QStringLiteral("/")).last(); /* In the old version the complete path was stored */                                                 \
+		d->columnName##Name = str;                                                                                                                             \
+	}
+
+#undef RESTORE_COLUMN_POINTER // Already defined in macros.h
+#define RESTORE_COLUMN_POINTER(columnPtr, col)                                                                                                                 \
+	if (!col##Name().isEmpty()) {                                                                                                                              \
+		if (columnPtr->name() == col##Name()) {                                                                                                                \
+			d->col = columnPtr;                                                                                                                                \
+		}                                                                                                                                                      \
+	}
+
 //! Load from XML
 bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(DatapickerCurve);
@@ -550,7 +595,6 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -572,13 +616,13 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("curveErrorType_X", curveErrorTypes.x, ErrorType);
 			READ_INT_VALUE("curveErrorType_Y", curveErrorTypes.y, ErrorType);
 
-			READ_COLUMN(posXColumn);
-			READ_COLUMN(posYColumn);
-			READ_COLUMN(posZColumn);
-			READ_COLUMN(plusDeltaXColumn);
-			READ_COLUMN(minusDeltaXColumn);
-			READ_COLUMN(plusDeltaYColumn);
-			READ_COLUMN(minusDeltaYColumn);
+			READ_COLUMN_NAME(posXColumn);
+			READ_COLUMN_NAME(posYColumn);
+			READ_COLUMN_NAME(posZColumn);
+			READ_COLUMN_NAME(plusDeltaXColumn);
+			READ_COLUMN_NAME(minusDeltaXColumn);
+			READ_COLUMN_NAME(plusDeltaYColumn);
+			READ_COLUMN_NAME(minusDeltaYColumn);
 		} else if (!preview && reader->name() == QLatin1String("symbolProperties")) {
 			// old serialization that was used before the switch to Symbol::load().
 			// in the old serialization the symbol properties and "point visibility" where saved
@@ -587,25 +631,25 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("pointRotationAngle")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("pointRotationAngle")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("pointRotationAngle"));
 			else
 				d->symbol->setRotationAngle(str.toDouble());
 
 			str = attribs.value(QStringLiteral("pointOpacity")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("pointOpacity")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("pointOpacity"));
 			else
 				d->symbol->setOpacity(str.toDouble());
 
 			str = attribs.value(QStringLiteral("pointSize")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("pointSize")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("pointSize"));
 			else
 				d->symbol->setSize(str.toDouble());
 
 			str = attribs.value(QStringLiteral("pointStyle")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("pointStyle")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("pointStyle"));
 			else
 				d->symbol->setStyle(static_cast<Symbol::Style>(str.toInt()));
 
@@ -613,26 +657,26 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 			QBrush brush;
 			str = attribs.value(QStringLiteral("brush_style")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_style")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("brush_style"));
 			else
 				brush.setStyle(static_cast<Qt::BrushStyle>(str.toInt()));
 
 			QColor color;
 			str = attribs.value(QStringLiteral("brush_color_r")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_r")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("brush_color_r"));
 			else
 				color.setRed(str.toInt());
 
 			str = attribs.value(QStringLiteral("brush_color_g")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_g")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("brush_color_g"));
 			else
 				color.setGreen(str.toInt());
 
 			str = attribs.value(QStringLiteral("brush_color_b")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_b")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("brush_color_b"));
 			else
 				color.setBlue(str.toInt());
 
@@ -643,25 +687,25 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 			QPen pen;
 			str = attribs.value(QStringLiteral("style")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("style")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("style"));
 			else
 				pen.setStyle(static_cast<Qt::PenStyle>(str.toInt()));
 
 			str = attribs.value(QStringLiteral("color_r")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_r")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("color_r"));
 			else
 				color.setRed(str.toInt());
 
 			str = attribs.value(QStringLiteral("color_g")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_g")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("color_g"));
 			else
 				color.setGreen(str.toInt());
 
 			str = attribs.value(QStringLiteral("color_b")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_b")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("color_b"));
 			else
 				color.setBlue(str.toInt());
 
@@ -669,7 +713,7 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("width")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("width"));
 			else
 				pen.setWidthF(str.toDouble());
 
@@ -706,12 +750,23 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 				for (auto* col : columns)
 					col->setFixed(true);
 				m_datasheet = datasheet;
+				m_datasheet->setRowCount(0); // The rows are filled by adding datapickerpoints
 			}
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}
+	}
+
+	for (int i = 0; i < m_datasheet->columnCount(); i++) {
+		auto* c = m_datasheet->column(i);
+		RESTORE_COLUMN_POINTER(c, posXColumn)
+		RESTORE_COLUMN_POINTER(c, posYColumn)
+		RESTORE_COLUMN_POINTER(c, plusDeltaXColumn)
+		RESTORE_COLUMN_POINTER(c, minusDeltaXColumn)
+		RESTORE_COLUMN_POINTER(c, plusDeltaYColumn)
+		RESTORE_COLUMN_POINTER(c, minusDeltaYColumn)
 	}
 
 	d->retransform();

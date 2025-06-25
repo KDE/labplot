@@ -5,18 +5,19 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AbstractColumnPrivate.h"
+#include "backend/core/Settings.h"
 #include "backend/core/abstractcolumncommands.h"
-#include "backend/lib/SignallingUndoCommand.h"
 #include "backend/lib/XmlStreamReader.h"
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
+
 #include <QDateTime>
 #include <QIcon>
 
@@ -71,6 +72,7 @@ AbstractColumn::AbstractColumn(const QString& name, AspectType type)
 
 AbstractColumn::~AbstractColumn() {
 	Q_EMIT aboutToBeDestroyed(this);
+	delete d->m_heatmapFormat;
 	delete d;
 }
 
@@ -116,9 +118,13 @@ QStringList AbstractColumn::dateTimeFormats() {
 	QStringList dateTimes = dateFormats();
 	dateTimes << timeFormats();
 	// any combination of date and times
-	for (const auto& d : dateFormats())
-		for (const auto& t : timeFormats())
+	for (const auto& d : dateFormats()) {
+		dateTimes << d;
+		for (const auto& t : timeFormats()) {
+			dateTimes << t;
 			dateTimes << d + QLatin1Char(' ') + t;
+		}
+	}
 
 	return dateTimes;
 }
@@ -151,7 +157,7 @@ QString AbstractColumn::timeUnitString(TimeUnit unit) {
 QString AbstractColumn::plotDesignationString(PlotDesignation d, bool withBrackets) {
 	QString s;
 
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	switch (d) {
 	case PlotDesignation::NoDesignation:
 		s = i18n("None");
@@ -319,28 +325,12 @@ bool AbstractColumn::copy(const AbstractColumn* /*source*/, int /*source_start*/
  */
 void AbstractColumn::insertRows(int before, int count) {
 	beginMacro(i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count));
-	exec(new SignallingUndoCommand(QStringLiteral("pre-signal"),
-								   this,
-								   "rowsAboutToBeInserted",
-								   "rowsRemoved",
-								   Q_ARG(const AbstractColumn*, this),
-								   Q_ARG(int, before),
-								   Q_ARG(int, count)));
-
 	handleRowInsertion(before, count);
-
-	exec(new SignallingUndoCommand(QStringLiteral("post-signal"),
-								   this,
-								   "rowsInserted",
-								   "rowsAboutToBeRemoved",
-								   Q_ARG(const AbstractColumn*, this),
-								   Q_ARG(int, before),
-								   Q_ARG(int, count)));
 	endMacro();
 }
 
 void AbstractColumn::handleRowInsertion(int before, int count) {
-	exec(new AbstractColumnInsertRowsCmd(this, before, count));
+	new AbstractColumnInsertRowsCmd(this, before, count);
 }
 
 /**
@@ -348,28 +338,12 @@ void AbstractColumn::handleRowInsertion(int before, int count) {
  */
 void AbstractColumn::removeRows(int first, int count) {
 	beginMacro(i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count));
-	exec(new SignallingUndoCommand(QStringLiteral("change signal"),
-								   this,
-								   "rowsAboutToBeRemoved",
-								   "rowsInserted",
-								   Q_ARG(const AbstractColumn*, this),
-								   Q_ARG(int, first),
-								   Q_ARG(int, count)));
-
 	handleRowRemoval(first, count);
-
-	exec(new SignallingUndoCommand(QStringLiteral("change signal"),
-								   this,
-								   "rowsRemoved",
-								   "rowsAboutToBeInserted",
-								   Q_ARG(const AbstractColumn*, this),
-								   Q_ARG(int, first),
-								   Q_ARG(int, count)));
 	endMacro();
 }
 
 void AbstractColumn::handleRowRemoval(int first, int count) {
-	exec(new AbstractColumnRemoveRowsCmd(this, first, count));
+	new AbstractColumnRemoveRowsCmd(this, first, count);
 }
 
 /**
@@ -404,10 +378,8 @@ void AbstractColumn::clear() {
  */
 bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
-	case ColumnMode::Double: {
-		double value = valueAt(row);
-		return std::isfinite(value);
-	}
+	case ColumnMode::Double:
+		return std::isfinite(doubleAt(row));
 	case ColumnMode::Integer: // there is no invalid integer
 	case ColumnMode::BigInt:
 		return true;
@@ -452,7 +424,7 @@ QVector<Interval<int>> AbstractColumn::maskedIntervals() const {
  * \brief Clear all masking information
  */
 void AbstractColumn::clearMasks() {
-	exec(new AbstractColumnClearMasksCmd(d), "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*, this));
+	exec(new AbstractColumnClearMasksCmd(d), "maskingAboutToChange", "maskingChanged", QArgument<const AbstractColumn*>("const AbstractColumn*", this));
 }
 
 /**
@@ -462,7 +434,7 @@ void AbstractColumn::clearMasks() {
  * \param mask true: mask, false: unmask
  */
 void AbstractColumn::setMasked(const Interval<int>& i, bool mask) {
-	exec(new AbstractColumnSetMaskedCmd(d, i, mask), "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*, this));
+	exec(new AbstractColumnSetMaskedCmd(d, i, mask), "maskingAboutToChange", "maskingChanged", QArgument<const AbstractColumn*>("const AbstractColumn*", this));
 }
 
 /**
@@ -541,6 +513,40 @@ void AbstractColumn::setHeatmapFormat(const AbstractColumn::HeatmapFormat& forma
 
 void AbstractColumn::removeFormat() {
 	exec(new AbstractColumnRemoveHeatmapFormatCmd(d));
+}
+
+/*!
+ * resets the connections for the dependent objects like plots and formulas in other columns
+ * to the dataChanged signal in the current column.
+ */
+void AbstractColumn::reset() {
+	// don't disconnect from all signals since we'd loose all connections done in AbstractAspect::connectChild().
+	// disconnect from the dataChanged signal only, the reconnect is triggered in Project::descriptionChanged().
+	Q_EMIT aboutToReset(this);
+	disconnect(this, &AbstractColumn::dataChanged, nullptr, nullptr);
+}
+
+/*!
+ * invalidates the internal properties of the columns and emits the signal \c dataChanged().
+ *
+ * call this function if the data of the column was changed directly via the data()-pointer
+ * and not via the setValueAt() or when multiple cells are being notified and the signal \c dataChanged()
+ * is suppressed for performance reasons and this function needs to be called after all cells were modified.
+ */
+void AbstractColumn::setChanged() {
+	invalidateProperties();
+	if (!d->m_suppressDataChangedSignal)
+		Q_EMIT dataChanged(this);
+}
+
+/*!
+ * suppresses the \c dataChanged signal if \c value is \c true, enables it otherwise.
+ *
+ * used when multiple cells are being modified and the signal needs to be supressed for performance reasons,
+ * \sa setChanged().
+ */
+void AbstractColumn::setSuppressDataChangedSignal(bool value) {
+	d->m_suppressDataChangedSignal = value;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -757,7 +763,7 @@ bool AbstractColumn::indicesMinMax(double /*v1*/, double /*v2*/, int& /*start*/,
 	return false;
 }
 
-int AbstractColumn::indexForValue(double /*x*/) const {
+int AbstractColumn::indexForValue(double /*x*/, bool /* smaller */) const {
 	return 0;
 }
 

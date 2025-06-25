@@ -19,7 +19,12 @@ class SymbolPrivate;
 class KConfigGroup;
 class QPainter;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Symbol : public AbstractAspect {
+#else
 class Symbol : public AbstractAspect {
+#endif
 	Q_OBJECT
 
 public:
@@ -98,8 +103,8 @@ public:
 	~Symbol() override;
 	void init(const KConfigGroup&);
 
-	void draw(QPainter*, QPointF);
-	void draw(QPainter*, const QVector<QPointF>&);
+	void draw(QPainter*, QPointF) const;
+	void draw(QPainter*, const QVector<QPointF>&) const;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -107,6 +112,7 @@ public:
 	void saveThemeConfig(const KConfigGroup&) const;
 
 	BASIC_D_ACCESSOR_DECL(Symbol::Style, style, Style)
+	void setColor(const QColor& value);
 	BASIC_D_ACCESSOR_DECL(qreal, opacity, Opacity)
 	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
 	BASIC_D_ACCESSOR_DECL(qreal, size, Size)
@@ -128,6 +134,7 @@ Q_SIGNALS:
 	void opacityChanged(qreal);
 	void brushChanged(QBrush);
 	void penChanged(const QPen&);
+	void colorChanged(const QColor&);
 
 	void updateRequested();
 	void updatePixmapRequested();

@@ -7,29 +7,24 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYCorrelationCurve
-  \brief A xy-curve defined by a correlation
-
-  \ingroup worksheet
-*/
-
 #include "XYCorrelationCurve.h"
 #include "XYCorrelationCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 
 #include <KLocalizedString>
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
 
-extern "C" {
 #include <gsl/gsl_math.h>
-}
 
+/*!
+ * \class XYCorrelationCurve
+ * \brief A xy-curve defined by a correlation.
+ * \ingroup CartesianAnalysisPlots
+ */
 XYCorrelationCurve::XYCorrelationCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYCorrelationCurvePrivate(this), AspectType::XYCorrelationCurve) {
 }
@@ -41,11 +36,6 @@ XYCorrelationCurve::XYCorrelationCurve(const QString& name, XYCorrelationCurvePr
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 XYCorrelationCurve::~XYCorrelationCurve() = default;
-
-void XYCorrelationCurve::recalculate() {
-	Q_D(XYCorrelationCurve);
-	d->recalculate();
-}
 
 const XYAnalysisCurve::Result& XYCorrelationCurve::result() const {
 	Q_D(const XYCorrelationCurve);
@@ -60,9 +50,9 @@ QIcon XYCorrelationCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYCorrelationCurve, XYCorrelationCurve::CorrelationData, correlationData, correlationData)
 
 const XYCorrelationCurve::CorrelationResult& XYCorrelationCurve::correlationResult() const {
@@ -70,18 +60,18 @@ const XYCorrelationCurve::CorrelationResult& XYCorrelationCurve::correlationResu
 	return d->correlationResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYCorrelationCurve, SetCorrelationData, XYCorrelationCurve::CorrelationData, correlationData, recalculate)
 void XYCorrelationCurve::setCorrelationData(const XYCorrelationCurve::CorrelationData& correlationData) {
 	Q_D(XYCorrelationCurve);
 	exec(new XYCorrelationCurveSetCorrelationDataCmd(d, correlationData, ki18n("%1: set options and perform the correlation")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYCorrelationCurvePrivate::XYCorrelationCurvePrivate(XYCorrelationCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -216,9 +206,9 @@ bool XYCorrelationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDa
 	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYCorrelationCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYCorrelationCurve);
@@ -258,10 +248,8 @@ void XYCorrelationCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYCorrelationCurve::load(XmlStreamReader* reader, bool preview) {
-	DEBUG("XYCorrelationCurve::load()");
 	Q_D(XYCorrelationCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -300,6 +288,10 @@ bool XYCorrelationCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
@@ -322,7 +314,7 @@ bool XYCorrelationCurve::load(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
-		recalcLogicalPoints();
+		recalc();
 	}
 
 	return true;

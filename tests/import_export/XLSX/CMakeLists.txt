@@ -1,5 +1,5 @@
-add_executable (ExcelFilterTest ExcelFilterTest.cpp)
+add_executable(XLSXFilterTest XLSXFilterTest.cpp)
 
-target_link_libraries(ExcelFilterTest labplot2lib labplot2test)
+target_link_libraries(XLSXFilterTest labplotmetatest)
 
-add_test(NAME ExcelFilterTest COMMAND ExcelFilterTest)
+add_test(NAME XLSXFilterTest COMMAND XLSXFilterTest)

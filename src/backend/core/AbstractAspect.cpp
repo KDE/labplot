@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -19,6 +19,8 @@
 #include "backend/lib/PropertyChangeCommand.h"
 #include "backend/lib/SignallingUndoCommand.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 
 #include <KStandardAction>
@@ -197,6 +199,14 @@ QString AbstractAspect::name() const {
 	return d->m_name;
 }
 
+QUuid AbstractAspect::uuid() const {
+	return d->m_uuid;
+}
+
+void AbstractAspect::setSuppressWriteUuid(bool suppress) {
+	d->m_suppressWriteUuid = suppress;
+}
+
 /*!
  * \brief AbstractAspect::setName
  * sets the name of the abstract aspect
@@ -205,7 +215,7 @@ QString AbstractAspect::name() const {
  * \param skipAutoUnique - if set to \true, don't check for uniqueness, the caller has to guarantee the uniqueness. default is \false.
  * \return returns, if the new name is valid or not
  */
-bool AbstractAspect::setName(const QString& value, NameHandling handling) {
+bool AbstractAspect::setName(const QString& value, NameHandling handling, QUndoCommand* /*parent*/) {
 	if (value.isEmpty())
 		return setName(QLatin1String("1"), handling);
 
@@ -224,11 +234,7 @@ bool AbstractAspect::setName(const QString& value, NameHandling handling) {
 			info(i18n(R"(Intended name "%1" was changed to "%2" in order to avoid name collision.)", value, new_name));
 	} else
 		new_name = value;
-
-	exec(new PropertyChangeCommand<QString>(i18n("%1: rename to %2", d->m_name, new_name), &d->m_name, new_name),
-		 "aspectDescriptionAboutToChange",
-		 "aspectDescriptionChanged",
-		 Q_ARG(const AbstractAspect*, this));
+	exec(new AspectNameChangeCmd(this->d, new_name));
 	return true;
 }
 
@@ -240,9 +246,9 @@ void AbstractAspect::setComment(const QString& value) {
 	if (value == d->m_comment)
 		return;
 	exec(new PropertyChangeCommand<QString>(i18n("%1: change comment", d->m_name), &d->m_comment, value),
-		 "aspectDescriptionAboutToChange",
-		 "aspectDescriptionChanged",
-		 Q_ARG(const AbstractAspect*, this));
+		 "aspectCommentAboutToChange",
+		 "aspectCommentChanged",
+		 QArgument<const AbstractAspect*>("const AbstractAspect*", this));
 }
 
 void AbstractAspect::setCreationTime(const QDateTime& time) {
@@ -253,7 +259,7 @@ QDateTime AbstractAspect::creationTime() const {
 	return d->m_creation_time;
 }
 
-bool AbstractAspect::hidden() const {
+bool AbstractAspect::isHidden() const {
 	return d->m_hidden;
 }
 
@@ -314,7 +320,8 @@ QMenu* AbstractAspect::createContextMenu() {
 	// TODO: activate this again when the functionality is implemented
 	// 	menu->addAction( KStandardAction::cut(this) );
 
-	if (!isFixed() && m_type != AspectType::Project && m_type != AspectType::CantorWorksheet) {
+	QAction* actionDuplicate = nullptr;
+	if (!isFixed() && m_type != AspectType::Project && m_type != AspectType::Notebook && m_type != AspectType::Script) {
 		// copy action:
 		// don't allow to copy fixed aspects
 		auto* action = KStandardAction::copy(this);
@@ -324,8 +331,8 @@ QMenu* AbstractAspect::createContextMenu() {
 		// duplicate action:
 		// don't allow to duplicate legends in the plots
 		if (m_type != AspectType::CartesianPlotLegend) {
-			auto* actionDuplicate = new QAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18n("Duplicate Here"), this);
-			actionDuplicate->setShortcut(Qt::CTRL + Qt::Key_D);
+			actionDuplicate = new QAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18n("Duplicate Here"), this);
+			actionDuplicate->setShortcut(Qt::CTRL | Qt::Key_D);
 			connect(actionDuplicate, &QAction::triggered, this, &AbstractAspect::duplicate);
 			menu->addAction(actionDuplicate);
 		}
@@ -340,8 +347,13 @@ QMenu* AbstractAspect::createContextMenu() {
 	if (t != AspectType::AbstractAspect && pasteTypes().indexOf(t) != -1) {
 		auto* action = KStandardAction::paste(this);
 		action->setText(i18n("Paste '%1'", name));
-		menu->addAction(action);
-		connect(action, &QAction::triggered, this, &AbstractAspect::paste);
+		if (actionDuplicate)
+			menu->insertAction(actionDuplicate, action);
+		else
+			menu->addAction(action);
+		connect(action, &QAction::triggered, [=]() {
+			paste();
+		});
 	}
 	menu->addSeparator();
 
@@ -396,7 +408,7 @@ QMenu* AbstractAspect::createContextMenu() {
 	// rename and delete actions:
 	menu->addAction(QIcon::fromTheme(QLatin1String("edit-rename")), i18n("Rename"), this, &AbstractAspect::renameRequested);
 	if (m_type != AspectType::Project)
-		menu->addAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this, &AbstractAspect::remove);
+		menu->addAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this, QOverload<>::of(&AbstractAspect::remove));
 
 	// move up and down actions:
 	// don't shown them for worksheet elements since they implement their own "Drawing order" menu
@@ -404,7 +416,7 @@ QMenu* AbstractAspect::createContextMenu() {
 		const auto* parent = parentAspect();
 		int count = parent->childCount<AbstractAspect>();
 		if (count > 1) {
-			auto* moveMenu = new QMenu(i18n("Move"));
+			auto* moveMenu = new QMenu(i18n("Move"), menu);
 			moveMenu->setIcon(QIcon::fromTheme(QStringLiteral("layer-bottom")));
 			if (parent->indexOfChild<AbstractAspect>(this) != 0)
 				moveMenu->addAction(QIcon::fromTheme(QStringLiteral("draw-arrow-up")), i18n("Up"), this, &AbstractAspect::moveUp);
@@ -490,6 +502,12 @@ Project* AbstractAspect::project() {
 	return parentAspect() ? parentAspect()->project() : nullptr;
 }
 
+void AbstractAspect::setProjectChanged(bool changed) {
+	auto* p = project();
+	if (p)
+		p->setChanged(changed);
+}
+
 /**
  * \brief Return the path that leads from the top-most Aspect (usually a Project) to me.
  */
@@ -500,7 +518,7 @@ QString AbstractAspect::path() const {
 /**
  * \brief Add the given Aspect to my list of children.
  */
-void AbstractAspect::addChild(AbstractAspect* child) {
+bool AbstractAspect::addChild(AbstractAspect* child) {
 	Q_CHECK_PTR(child);
 
 	const QString new_name = uniqueNameFor(child->name());
@@ -512,17 +530,18 @@ void AbstractAspect::addChild(AbstractAspect* child) {
 
 	exec(new AspectChildAddCmd(d, child, d->m_children.count()));
 	endMacro();
+	return true;
 }
 
 /**
  * \brief Add the given Aspect to my list of children without any checks and without putting this step onto the undo-stack
  */
 void AbstractAspect::addChildFast(AbstractAspect* child) {
-	Q_EMIT aspectAboutToBeAdded(this, nullptr, child); // TODO: before-pointer is 0 here, also in the commands classes. why?
+	Q_EMIT childAspectAboutToBeAdded(this, nullptr, child); // TODO: before-pointer is 0 here, also in the commands classes. why?
 	d->insertChild(d->m_children.count(), child);
 	child->finalizeAdd();
 	// PERFTRACE(Q_FUNC_INFO);
-	Q_EMIT aspectAdded(child);
+	Q_EMIT childAspectAdded(child);
 	// print_callstack();
 }
 
@@ -530,17 +549,21 @@ void AbstractAspect::addChildFast(AbstractAspect* child) {
  * \brief Insert the given Aspect at a specific position in my list of children.
  */
 void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* before) {
-	Q_CHECK_PTR(child);
+	insertChild(child, d->indexOfChild(before));
+}
 
+void AbstractAspect::insertChild(AbstractAspect* child, int index) {
+	Q_CHECK_PTR(child);
+	if (index == -1)
+		index = d->m_children.count();
+
+	const auto* before = this->child<AbstractAspect>(index);
 	QString new_name = uniqueNameFor(child->name());
 	beginMacro(before ? i18n("%1: insert %2 before %3", name(), new_name, before->name()) : i18n("%1: insert %2 before end", name(), new_name));
 	if (new_name != child->name()) {
 		info(i18n(R"(Renaming "%1" to "%2" in order to avoid name collision.)", child->name(), new_name));
 		child->setName(new_name);
 	}
-	int index = d->indexOfChild(before);
-	if (index == -1)
-		index = d->m_children.count();
 
 	exec(new AspectChildAddCmd(d, child, index));
 	endMacro();
@@ -557,10 +580,10 @@ void AbstractAspect::insertChildBeforeFast(AbstractAspect* child, AbstractAspect
 	if (index == -1)
 		index = d->m_children.count();
 
-	Q_EMIT aspectAboutToBeAdded(this, nullptr, child);
+	Q_EMIT childAspectAboutToBeAdded(this, nullptr, child);
 	d->insertChild(index, child);
 	child->finalizeAdd();
-	Q_EMIT aspectAdded(child);
+	Q_EMIT childAspectAdded(child);
 }
 
 /**
@@ -571,11 +594,13 @@ void AbstractAspect::insertChildBeforeFast(AbstractAspect* child, AbstractAspect
  * \sa reparent()
  */
 void AbstractAspect::removeChild(AbstractAspect* child) {
-	// QDEBUG(Q_FUNC_INFO << ", CHILD =" << child << ", PARENT =" << child->parentAspect())
-
 	beginMacro(i18n("%1: remove %2", name(), child->name()));
 	exec(new AspectChildRemoveCmd(d, child));
 	endMacro();
+}
+
+void AbstractAspect::moveChild(AbstractAspect* child, int steps) {
+	exec(new AspectChildMoveCmd(d, child, steps));
 }
 
 /**
@@ -594,9 +619,9 @@ void AbstractAspect::removeAllChildren() {
 	}
 
 	while (current) {
-		Q_EMIT aspectAboutToBeRemoved(current);
+		Q_EMIT childAspectAboutToBeRemoved(current);
 		exec(new AspectChildRemoveCmd(d, current));
-		Q_EMIT aspectRemoved(this, nextSibling, current);
+		Q_EMIT childAspectRemoved(this, nextSibling, current);
 
 		current = nextSibling;
 		if (i != children_list.constEnd() && ++i != children_list.constEnd())
@@ -632,7 +657,7 @@ void AbstractAspect::reparent(AbstractAspect* newParent, int newIndex) {
 QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFlags flags) const {
 	QVector<AbstractAspect*> result;
 	for (auto* child : children()) {
-		if (flags & ChildIndexFlag::IncludeHidden || !child->hidden()) {
+		if (flags & ChildIndexFlag::IncludeHidden || !child->isHidden()) {
 			if (child->inherits(type))
 				result << child;
 
@@ -659,26 +684,14 @@ void AbstractAspect::remove() {
 
 void AbstractAspect::moveUp() {
 	auto* parent = parentAspect();
-	int index = parent->indexOfChild<AbstractAspect>(this);
-	auto* sibling = parent->child<AbstractAspect>(index - 1);
-	beginMacro(i18n("%1: move up", name()));
-	setMoved(true);
-	remove();
-	parent->insertChildBefore(this, sibling);
-	setMoved(false);
-	endMacro();
+	if (parent)
+		parent->moveChild(this, -1);
 }
 
 void AbstractAspect::moveDown() {
 	auto* parent = parentAspect();
-	int index = parent->indexOfChild<AbstractAspect>(this);
-	auto* sibling = parent->child<AbstractAspect>(index + 2);
-	beginMacro(i18n("%1: move down", name()));
-	setMoved(true);
-	remove();
-	parent->insertChildBefore(this, sibling);
-	setMoved(false);
-	endMacro();
+	if (parent)
+		parent->moveChild(this, 1);
 }
 
 /*!
@@ -701,11 +714,15 @@ QVector<AspectType> AbstractAspect::pasteTypes() const {
 	return {};
 }
 
+STD_SETTER_CMD_IMPL(AbstractAspect, SetPasted, bool, m_pasted)
 void AbstractAspect::setPasted(bool pasted) {
-	d->m_pasted = pasted;
+	// this property is part of the aspect state which is evaluated during the duplicate/paste steps,
+	// its modification needs to be put onto the undo stack.
+	if (pasted != d->m_pasted)
+		exec(new AbstractAspectSetPastedCmd(d, pasted, ki18n("%1: pasted")));
 }
 
-bool AbstractAspect::pasted() const {
+bool AbstractAspect::isPasted() const {
 	return d->m_pasted;
 }
 
@@ -713,7 +730,7 @@ bool AbstractAspect::pasted() const {
  * copies the aspect to the clipboard. The standard XML-serialization
  * via AbstractAspect::load() is used.
  */
-void AbstractAspect::copy() const {
+void AbstractAspect::copy() {
 	QString output;
 	QXmlStreamWriter writer(&output);
 	writer.writeStartDocument();
@@ -727,17 +744,32 @@ void AbstractAspect::copy() const {
 	writer.writeAttribute(QStringLiteral("value"), QString::number(static_cast<int>(m_type)));
 	writer.writeEndElement();
 
+	setSuppressWriteUuid(true);
+	const auto& children = this->children(AspectType::AbstractAspect, {ChildIndexFlag::IncludeHidden, ChildIndexFlag::Recursive});
+	for (const auto& child : children)
+		child->setSuppressWriteUuid(true);
+
 	// write the aspect itself
 	save(&writer);
+
+	for (const auto& child : children)
+		child->setSuppressWriteUuid(false);
+	setSuppressWriteUuid(false);
 
 	writer.writeEndElement(); // end the root-element
 	writer.writeEndDocument();
 	QApplication::clipboard()->setText(output);
 }
 
+/*!
+ * duplicates the aspect in the project hierarchy, the copy of the duplicated aspect is
+ * added below the current aspect at the same level in the hierarchy.
+ */
 void AbstractAspect::duplicate() {
 	copy();
-	parentAspect()->paste(true);
+	auto* parent = parentAspect();
+	const int index = parent->indexOfChild<AbstractAspect>(this, ChildIndexFlag::IncludeHidden) + 1;
+	parent->paste(true, index);
 }
 
 /*!
@@ -745,7 +777,7 @@ void AbstractAspect::duplicate() {
  * this function deserializes the XML string and adds the created aspect as
  * a child to the current aspect ("paste").
  */
-void AbstractAspect::paste(bool duplicate) {
+void AbstractAspect::paste(bool duplicate, int index) {
 	const QClipboard* clipboard = QApplication::clipboard();
 	const QMimeData* mimeData = clipboard->mimeData();
 	if (!mimeData->hasText())
@@ -772,6 +804,7 @@ void AbstractAspect::paste(bool duplicate) {
 		} else {
 			if (aspect) {
 				aspect->setPasted(true);
+				aspect->setIsLoading(true);
 				aspect->load(&reader, false);
 				break;
 			}
@@ -786,17 +819,27 @@ void AbstractAspect::paste(bool duplicate) {
 			aspect->setName(i18n("Copy of '%1'", aspect->name()));
 		}
 
-		if (aspect->type() != AspectType::CartesianPlotLegend)
-			addChild(aspect);
-		else {
-			// spectial handling for the legend since only one single
+		if (aspect->type() != AspectType::CartesianPlotLegend) {
+			setPasted(true);
+			insertChild(aspect, index);
+			setPasted(false);
+		} else {
+			// special handling for the legend since only one single
 			// legend object is allowed per plot
 			auto* plot = static_cast<CartesianPlot*>(this);
 			auto* legend = static_cast<CartesianPlotLegend*>(aspect);
 			plot->addLegend(legend);
 		}
 
+		// special handling for inset plots to resize them to make sure they are not bigger than the plot they are being pasted into
+		if (type() == AspectType::CartesianPlot && aspect->type() == AspectType::CartesianPlot) {
+			auto* plot = static_cast<CartesianPlot*>(this);
+			auto* insetPlot = static_cast<CartesianPlot*>(aspect);
+			plot->resizeInsetPlot(insetPlot);
+		}
+
 		project()->restorePointers(aspect);
+		aspect->setIsLoading(false); // set back to false before calling retransformElements()
 		project()->retransformElements(aspect);
 		aspect->setPasted(false);
 		endMacro();
@@ -805,7 +848,7 @@ void AbstractAspect::paste(bool duplicate) {
 }
 
 /*!
- * helper function determening whether the current content of the clipboard
+ * helper function determining whether the current content of the clipboard
  * contants the labplot specific copy&paste XML content. In case a valid content
  * is available, the aspect type of the object to be pasted is returned.
  * AspectType::AbstractAspect is returned otherwise.
@@ -890,7 +933,7 @@ void AbstractAspect::writeCommentElement(QXmlStreamWriter* writer) const {
  * \brief Load comment from an XML element
  */
 bool AbstractAspect::readCommentElement(XmlStreamReader* reader) {
-	setComment(reader->readElementText());
+	d->m_comment = reader->readElementText();
 	return true;
 }
 
@@ -900,6 +943,8 @@ bool AbstractAspect::readCommentElement(XmlStreamReader* reader) {
 void AbstractAspect::writeBasicAttributes(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QLatin1String("creation_time"), creationTime().toString(QLatin1String("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QLatin1String("name"), name());
+	if (!d->m_suppressWriteUuid)
+		writer->writeAttribute(QLatin1String("uuid"), uuid().toString());
 }
 
 /**
@@ -925,11 +970,15 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 	} else {
 		QDateTime creation_time = QDateTime::fromString(str, QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"));
 		if (creation_time.isValid())
-			d->m_creation_time = creation_time;
+			d->m_creation_time = std::move(creation_time);
 		else
 			d->m_creation_time = QDateTime::currentDateTime();
 	}
 
+	str = attribs.value(QLatin1String("uuid")).toString();
+	if (!str.isEmpty()) {
+		d->m_uuid = QUuid(str);
+	}
 	return true;
 }
 
@@ -943,6 +992,11 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void AbstractAspect::setUndoAware(bool b) {
 	d->m_undoAware = b;
+
+	// propagate the value to the internal and hidden aspects, if available (Line, Background, etc.)
+	const auto& children = this->children<AbstractAspect>(ChildIndexFlag::IncludeHidden);
+	for (auto* child : children)
+		child->setUndoAware(b);
 }
 
 /**
@@ -971,7 +1025,7 @@ void AbstractAspect::exec(QUndoCommand* cmd) {
 		}
 
 		if (project())
-			project()->setChanged(true);
+			setProjectChanged(true);
 	} else {
 		cmd->redo();
 		delete cmd;
@@ -1015,7 +1069,7 @@ void AbstractAspect::beginMacro(const QString& text) {
 	if (!d->m_undoAware)
 		return;
 
-	QUndoStack* stack = undoStack();
+	auto* stack = undoStack();
 	if (stack)
 		stack->beginMacro(text);
 }
@@ -1027,7 +1081,7 @@ void AbstractAspect::endMacro() {
 	if (!d->m_undoAware)
 		return;
 
-	QUndoStack* stack = undoStack();
+	auto* stack = undoStack();
 	if (stack)
 		stack->endMacro();
 }
@@ -1055,9 +1109,9 @@ void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 	//* XYFitCurve with the child column for calculated residuals
 	//* XYSmouthCurve with the child column for calculated rough values
 	//* CantorWorksheet with the child columns for CAS variables
-	AbstractAspect* parent = this->parentAspect();
+	auto* parent = this->parentAspect();
 	if (parent && !parent->inherits(AspectType::Folder) && !parent->inherits(AspectType::XYFitCurve) && !parent->inherits(AspectType::XYSmoothCurve)
-		&& !parent->inherits(AspectType::CantorWorksheet))
+		&& !parent->inherits(AspectType::Notebook))
 		Q_EMIT this->selected(aspect);
 }
 
@@ -1069,9 +1123,9 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 	//* XYFitCurve with the child column for calculated residuals
 	//* XYSmouthCurve with the child column for calculated rough values
 	//* CantorWorksheet with the child columns for CAS variables
-	AbstractAspect* parent = this->parentAspect();
+	auto* parent = this->parentAspect();
 	if (parent && !parent->inherits(AspectType::Folder) && !parent->inherits(AspectType::XYFitCurve) && !parent->inherits(AspectType::XYSmoothCurve)
-		&& !parent->inherits(AspectType::CantorWorksheet))
+		&& !parent->inherits(AspectType::Notebook))
 		Q_EMIT this->deselected(aspect);
 }
 
@@ -1117,7 +1171,7 @@ QString AbstractAspect::uniqueNameFor(const QString& name, const QStringList& na
 	if (last_non_digit >= 0 && base[last_non_digit].category() != QChar::Separator_Space)
 		base.append(QLatin1Char(' '));
 
-	int new_nr = name.rightRef(name.size() - base.size()).toInt();
+	int new_nr = QStringView(name).right(name.size() - base.size()).toInt();
 	QString new_name;
 	do
 		new_name = base + QString::number(++new_nr);
@@ -1129,10 +1183,18 @@ QString AbstractAspect::uniqueNameFor(const QString& name, const QStringList& na
 void AbstractAspect::connectChild(AbstractAspect* child) {
 	connect(child, &AbstractAspect::aspectDescriptionAboutToChange, this, &AbstractAspect::aspectDescriptionAboutToChange);
 	connect(child, &AbstractAspect::aspectDescriptionChanged, this, &AbstractAspect::aspectDescriptionChanged);
-	connect(child, &AbstractAspect::aspectAboutToBeAdded, this, &AbstractAspect::aspectAboutToBeAdded);
-	connect(child, &AbstractAspect::aspectAdded, this, &AbstractAspect::aspectAdded);
-	connect(child, &AbstractAspect::aspectAboutToBeRemoved, this, &AbstractAspect::aspectAboutToBeRemoved);
-	connect(child, &AbstractAspect::aspectRemoved, this, &AbstractAspect::aspectRemoved);
+	connect(child,
+			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeAdded),
+			this,
+			QOverload<const AbstractAspect*, const AbstractAspect*, const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeAdded));
+	connect(child, &AbstractAspect::childAspectAdded, this, &AbstractAspect::childAspectAdded);
+	connect(child,
+			QOverload<const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeRemoved),
+			this,
+			QOverload<const AbstractAspect*>::of(&AbstractAspect::childAspectAboutToBeRemoved));
+	connect(child, &AbstractAspect::childAspectRemoved, this, &AbstractAspect::childAspectRemoved);
+	connect(child, &AbstractAspect::childAspectAboutToBeMoved, this, &AbstractAspect::childAspectAboutToBeMoved);
+	connect(child, &AbstractAspect::childAspectMoved, this, &AbstractAspect::childAspectMoved);
 	connect(child, &AbstractAspect::aspectHiddenAboutToChange, this, &AbstractAspect::aspectHiddenAboutToChange);
 	connect(child, &AbstractAspect::aspectHiddenChanged, this, &AbstractAspect::aspectHiddenChanged);
 	connect(child, &AbstractAspect::statusInfo, this, &AbstractAspect::statusInfo);
@@ -1141,9 +1203,9 @@ void AbstractAspect::connectChild(AbstractAspect* child) {
 	connect(child, &AbstractAspect::deselected, this, &AbstractAspect::childDeselected);
 }
 
-//##############################################################################
-//######################  Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ######################  Private implementation ###############################
+// ##############################################################################
 AbstractAspectPrivate::AbstractAspectPrivate(AbstractAspect* owner, const QString& name)
 	: m_name(name.isEmpty() ? QLatin1String("1") : name)
 	, q(owner) {
@@ -1151,10 +1213,19 @@ AbstractAspectPrivate::AbstractAspectPrivate(AbstractAspect* owner, const QStrin
 }
 
 AbstractAspectPrivate::~AbstractAspectPrivate() {
-	for (auto* child : qAsConst(m_children))
+	for (auto* child : std::as_const(m_children))
 		delete child;
 }
 
+QString AbstractAspectPrivate::name() const {
+	return q->name();
+}
+
+/*!
+ * inserts the child \child at the index \index in the list of children.
+ * note, the index needs to take the hidden aspects into account when calling
+ * this function since the private list includes all children, also the hidden ones.
+ */
 void AbstractAspectPrivate::insertChild(int index, AbstractAspect* child) {
 	m_children.insert(index, child);
 
@@ -1171,15 +1242,4 @@ int AbstractAspectPrivate::indexOfChild(const AbstractAspect* child) const {
 			return i;
 
 	return -1;
-}
-
-int AbstractAspectPrivate::removeChild(AbstractAspect* child) {
-	// QDEBUG(Q_FUNC_INFO << " CHILD = " << child << ", PARENT =" << child->parentAspect())
-	int index = indexOfChild(child);
-	Q_ASSERT(index != -1);
-	m_children.removeAll(child);
-	QObject::disconnect(child, nullptr, q, nullptr);
-	child->setParentAspect(nullptr);
-	// QDEBUG(Q_FUNC_INFO << " DONE. CHILD = " << child)
-	return index;
 }

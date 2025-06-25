@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Symbol
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -21,14 +21,13 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Worksheet.h"
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 
 #include <QFont>
 #include <QPainter>
 
-extern "C" {
 #include <gsl/gsl_math.h>
-}
 
 // order of styles in UI comboboxes (defined in Symbol.h, order can be changed without breaking projects)
 static QVector<Symbol::Style> StyleOrder = {Symbol::Style::NoSymbols,
@@ -110,8 +109,8 @@ void Symbol::init(const KConfigGroup& group) {
 	QColor defaultBorderColor(Qt::black);
 	double defaultBorderWidth = Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point);
 
-	auto type = parentAspect()->type();
-	if (type == AspectType::CustomPoint)
+	const auto type = parentAspect()->type();
+	if (type == AspectType::CustomPoint || type == AspectType::LollipopPlot)
 		defaultStyle = Symbol::Style::Circle;
 	else if (type == AspectType::DatapickerImage || type == AspectType::DatapickerCurve) {
 		defaultStyle = Symbol::Style::Cross;
@@ -131,9 +130,9 @@ void Symbol::init(const KConfigGroup& group) {
 	d->pen.setWidthF(group.readEntry("SymbolBorderWidth", defaultBorderWidth));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(Symbol, Symbol::Style, style, style)
 BASIC_SHARED_D_READER_IMPL(Symbol, qreal, opacity, opacity)
 BASIC_SHARED_D_READER_IMPL(Symbol, qreal, rotationAngle, rotationAngle)
@@ -141,9 +140,9 @@ BASIC_SHARED_D_READER_IMPL(Symbol, qreal, size, size)
 BASIC_SHARED_D_READER_IMPL(Symbol, QBrush, brush, brush)
 BASIC_SHARED_D_READER_IMPL(Symbol, QPen, pen, pen)
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(Symbol, SetStyle, Symbol::Style, style, updateSymbols)
 void Symbol::setStyle(Symbol::Style style) {
 	Q_D(Symbol);
@@ -156,6 +155,13 @@ void Symbol::setSize(qreal size) {
 	Q_D(Symbol);
 	if (!qFuzzyCompare(1 + size, 1 + d->size))
 		exec(new SymbolSetSizeCmd(d, size, ki18n("%1: set symbol size")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Symbol, SetColor, QColor, color, update)
+void Symbol::setColor(const QColor& color) {
+	Q_D(Symbol);
+	if (color != d->color)
+		exec(new SymbolSetColorCmd(d, color, ki18n("%1: set symbol color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Symbol, SetRotationAngle, qreal, rotationAngle, updateSymbols)
@@ -186,15 +192,21 @@ void Symbol::setOpacity(qreal opacity) {
 		exec(new SymbolSetOpacityCmd(d, opacity, ki18n("%1: set symbols opacity")));
 }
 
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 SymbolPrivate::SymbolPrivate(Symbol* owner)
 	: q(owner) {
 }
 
 QString SymbolPrivate::name() const {
 	return q->parentAspect()->name();
+}
+
+void SymbolPrivate::update() {
+	pen.setColor(color);
+	brush.setColor(color);
+	Q_EMIT q->updateRequested();
 }
 
 void SymbolPrivate::updateSymbols() {
@@ -205,14 +217,14 @@ void SymbolPrivate::updatePixmap() {
 	Q_EMIT q->updatePixmapRequested();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void Symbol::save(QXmlStreamWriter* writer) const {
 	Q_D(const Symbol);
 
-	if (parentAspect()->type() == AspectType::CustomPoint)
+	if (parentAspect()->type() == AspectType::CustomPoint || parentAspect()->type() == AspectType::LollipopPlot)
 		writer->writeStartElement(QStringLiteral("symbol"));
 	else if (parentAspect()->type() == AspectType::BoxPlot)
 		writer->writeStartElement(name()); // BoxPlot has multiple symbols, differentiated by their names
@@ -234,7 +246,6 @@ bool Symbol::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	Q_D(Symbol);
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QString str;
 	const auto& attribs = reader->attributes();
 	READ_INT_VALUE("symbolsStyle", style, Symbol::Style);
@@ -247,9 +258,9 @@ bool Symbol::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void Symbol::loadThemeConfig(const KConfigGroup& group, const QColor& themeColor) {
 	setOpacity(group.readEntry("SymbolOpacity", 1.0));
 	QBrush brush;
@@ -888,7 +899,7 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 	return path;
 }
 
-void Symbol::draw(QPainter* painter, QPointF point) {
+void Symbol::draw(QPainter* painter, QPointF point) const {
 	Q_D(const Symbol);
 	if (d->style == Symbol::Style::NoSymbols)
 		return;
@@ -909,7 +920,7 @@ void Symbol::draw(QPainter* painter, QPointF point) {
 	painter->drawPath(trafo.map(path));
 }
 
-void Symbol::draw(QPainter* painter, const QVector<QPointF>& points) {
+void Symbol::draw(QPainter* painter, const QVector<QPointF>& points) const {
 	Q_D(const Symbol);
 	if (d->style == Symbol::Style::NoSymbols || points.isEmpty())
 		return;

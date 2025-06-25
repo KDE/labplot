@@ -7,25 +7,12 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYHilbertTransformCurve
-  \brief A xy-curve defined by a Hilbert transform
-
-  \ingroup worksheet
-*/
-
 #include "XYHilbertTransformCurve.h"
 #include "XYHilbertTransformCurvePrivate.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/gsl/errors.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
-
-extern "C" {
-//#include "backend/nsl/nsl_sf_poly.h"
-}
 
 #include <KLocalizedString>
 #include <QDebug> // qWarning()
@@ -33,6 +20,11 @@ extern "C" {
 #include <QIcon>
 #include <QThreadPool>
 
+/*!
+ * \class XYHilbertTransformCurve
+ * \brief A xy-curve defined by a Hilbert transform
+ * \ingroup CartesianAnalysisPlots
+ */
 XYHilbertTransformCurve::XYHilbertTransformCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYHilbertTransformCurvePrivate(this), AspectType::XYHilbertTransformCurve) {
 }
@@ -44,11 +36,6 @@ XYHilbertTransformCurve::XYHilbertTransformCurve(const QString& name, XYHilbertT
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 XYHilbertTransformCurve::~XYHilbertTransformCurve() = default;
-
-void XYHilbertTransformCurve::recalculate() {
-	Q_D(XYHilbertTransformCurve);
-	d->recalculate();
-}
 
 const XYAnalysisCurve::Result& XYHilbertTransformCurve::result() const {
 	Q_D(const XYHilbertTransformCurve);
@@ -62,23 +49,23 @@ QIcon XYHilbertTransformCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYHilbertTransformCurve, XYHilbertTransformCurve::TransformData, transformData, transformData)
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYHilbertTransformCurve, SetTransformData, XYHilbertTransformCurve::TransformData, transformData, recalculate)
 void XYHilbertTransformCurve::setTransformData(const XYHilbertTransformCurve::TransformData& transformData) {
 	Q_D(XYHilbertTransformCurve);
 	exec(new XYHilbertTransformCurveSetTransformDataCmd(d, transformData, ki18n("%1: set transform options and perform the Hilbert transform")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYHilbertTransformCurvePrivate::XYHilbertTransformCurvePrivate(XYHilbertTransformCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -155,6 +142,7 @@ bool XYHilbertTransformCurvePrivate::recalculateSpecific(const AbstractColumn* t
 	///////////////////////////////////////////////////////////
 	// transform with window
 	//	TODO: type
+	gsl_set_error_handler_off();
 	int status = nsl_hilbert_transform(ydata, 1, n, type);
 
 	unsigned int N = n;
@@ -178,9 +166,9 @@ bool XYHilbertTransformCurvePrivate::recalculateSpecific(const AbstractColumn* t
 	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYHilbertTransformCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYHilbertTransformCurve);
@@ -219,7 +207,6 @@ void XYHilbertTransformCurve::save(QXmlStreamWriter* writer) const {
 bool XYHilbertTransformCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYHilbertTransformCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -257,6 +244,10 @@ bool XYHilbertTransformCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
@@ -279,7 +270,7 @@ bool XYHilbertTransformCurve::load(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
-		recalcLogicalPoints();
+		recalc();
 	}
 
 	return true;

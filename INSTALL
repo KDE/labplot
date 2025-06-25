@@ -1,9 +1,8 @@
-To compile LabPlot from source following packages are required:
-	* CMake version 3.2.0 or higher
-	* ECM (extra cmake modules)
-	* KDE Frameworks 5.16.0 or higher (including the devel-package),
-		optional 5.28.0 or higher for syntax highlighting
-	* Qt version 5.6 or higher (including the devel-package, libqt5-devel or similar)
+To compile LabPlot from source following packages are required (for Fedora see section below):
+	* CMake version 3.17.0 or higher
+	* Qt version 5.12 or higher (including the devel-package, libqt5-devel or similar)
+	* KDE Frameworks 5.32.0 or higher (including the devel-package)
+	* Qt Advanced Docking System (QADS) or Qt5::GuiPrivate to build QADS locally
 	* GSL version 1.15 or higher (including the devel-package, gsl-devel or similar)
 
 optional packages
@@ -16,18 +15,24 @@ optional packages
 	* NetCDF version 3 or higher (including the devel-package, netcdf-devel or similar)
 	* CFITSIO version 3 or higher to support FITS data format (including the devel-package, cfitsio-devel or similar)
 	* libcerf version 1.0 or higher to support complex error and related functions (including the devel-package, libcerf-devel or similar)
-	* Cantor version 19.12 or higher (including the devel-package, cantor-devel or similar)
+	* Cantor version 24.11.70 or higher (including the devel-package, cantor-devel or similar)
 		* To use the backends the corresponding application must be installed
-		* The Python backend needs Python 3.8 installed on Windows
+		* The Python backend needs Python 3.11 installed on Windows
 	* ZLIB and LZ4 to support ROOT (CERN) TH1 histograms (including the devel-package, zlib-devel and liblz4-devel or similar)
 	* ReadStat for importing serveral statistical data formats (will be build if not available)
-	* liborigin version 3 or higher for importing Origin project files (will be build if not available)
+	* liborigin version 3 or higher for importing Origin OPJ project files (will be build if not available)
 	* Matio for importing binary MATLAB MAT files (including the devel-package, libmatio-devel or similar)
 	* QXlsx for importing Excel xlsx files (will be build if not available)
+	* Orcus for importing ODS (Open Document Spreadsheet) files (including the devel-packages, liborcus-devel and libixion-devel or similar)
 	* Qt SerialPort to support serial port functionality
+	* Qt Svg to support SVG export
 	* Qt MQTT module (https://github.com/qt/qtmqtt) to support reading and plotting of data from MQTT brokers
 	* KUserFeedback to support collecting feedback from users
 	* Discount to support Markdown markup language text
+	* Eigen3 to support fast baseline removal
+	* fast_float, dbc_parser_cpp (can be fetched from git by setting -DLOCAL_DBC_PARSER=ON) and vector_blf (static library from included sources can be built by setting -DLOCAL_VECTOR_BLF=ON) for Vector BLF support
+	* MCAP for MCAP file support (Downloading instead of using local copy can be set by using LOCAL_MCAP_DOWNLOAD=ON)
+	* python3, pyside6 and shiboken6 for python scripting and creating the Python SDK (python3-devel python3-pyside6 python3-pyside6-devel python3-shiboken6 python3-shiboken6-devel)
 
 ===============================================================================
 To build LabPlot execute
@@ -40,28 +45,44 @@ E.g. specify a custom installation path via
 or build a debug build via
 -DCMAKE_BUILD_TYPE=debug
 
-
 LabPlot's cmake configuration script searches for the optional packages and uses them if they are found.
 To compile LabPlot without optional dependencies even if they are present on the system, use the following parameters (default is "ON"):
+-DENABLE_CANTOR=OFF
 -DENABLE_FFTW=OFF
 -DENABLE_HDF5=OFF
 -DENABLE_NETCDF=OFF
 -DENABLE_FITS=OFF
 -DENABLE_LIBCERF=OFF
--DENABLE_CANTOR=OFF
+-DENABLE_LIBORIGIN=OFF
 -DENABLE_ROOT=OFF
 -DENABLE_READSTAT=OFF
 -DENABLE_MATIO=OFF
 -DENABLE_MQTT=OFF
 -DENABLE_QTSERIALPORT=OFF
--DENABLE_LIBORIGIN=OFF
+-DENABLE_QTSVG=OFF
+-DENABLE_DISCOUNT=OFF
+-DENABLE_XLSX=OFF
+-DENABLE_ORCUS=OFF
+-DENABLE_VECTOR_BLF=OFF
+-DENABLE_EIGEN3=OFF
+-DENABLE_MCAP=OFF
 -DENABLE_TOUCHBAR=OFF
--DENABLE_EXCEL=OFF
+-DENABLE_PYTHON_SCRIPTING=OFF
 
 Note, by switching off these libraries the feature set of LabPlot will be reduced.
 
 To enable reproducable builds, use
 -DENABLE_REPRODUCIBLE=ON
+
+To disable building tests, use
+-DENABLE_TESTS=OFF
+
+To disable building the SDK (C++ and Python), use
+-DENABLE_SDK=OFF
+To only disable building the SDK examples, use
+-DENABLE_SDK_EXAMPLES=OFF
+To only disable building the Python SDK, use
+-DENABLE_PYTHON_SDK=OFF
 
 ================================================================================
 To run the tests execute
@@ -85,3 +106,10 @@ To uninstall LabPlot execute
 To remove all build files in the base directory execute
 
 # rm -rf build
+
+================================================================================
+Fedora dependencies:
+sudo dnf install extra-cmake-modules qt6-qtsvg-devel
+sudo dnf install kf6-kcoreaddons-devel kf6-kcrash-devel kf6-kdoctools-devel kf6-kiconthemes-devel kf6-ktextwidgets-devel kf6-kwidgetsaddons-devel kf6-kxmlgui-devel kf6-karchive-devel kf6-kcompletion-devel kf6-kio-devel kf6-knewstuff-devel kf6-kuserfeedback-devel qt6-qtbase-private-devel kf6-ktexteditor-devel
+sudo dnf install bison gsl-devel eigen3-devel
+

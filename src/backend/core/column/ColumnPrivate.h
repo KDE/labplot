@@ -4,7 +4,7 @@
 	Description          : Private data class of Column
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -12,7 +12,7 @@
 #ifndef COLUMNPRIVATE_H
 #define COLUMNPRIVATE_H
 
-#include "backend/core/AbstractColumn.h"
+#include "backend/core/AbstractColumnPrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/IntervalAttribute.h"
 
@@ -21,7 +21,7 @@
 class Column;
 class ColumnSetGlobalFormulaCmd;
 
-class ColumnPrivate : public QObject {
+class ColumnPrivate : public AbstractColumnPrivate {
 	Q_OBJECT
 
 public:
@@ -40,7 +40,14 @@ public:
 	bool copy(const ColumnPrivate*);
 	bool copy(const ColumnPrivate*, int source_start, int dest_start, int num_rows);
 
+	static int calculateMaxSteps(unsigned int value);
+	static int indexForValue(double x, QVector<double>& column, Column::Properties properties, bool smaller);
+	static int indexForValue(const double x, const QVector<QPointF>& column, Column::Properties properties, bool smaller);
+	static int indexForValue(double x, QVector<QLineF>& lines, Column::Properties properties, bool smaller);
+	int indexForValue(double x, bool smaller) const;
+
 	int rowCount() const;
+	int rowCount(double min, double max) const;
 	int availableRowCount(int max = -1) const; // valid rows (stops when max rows found)
 	void resizeTo(int);
 
@@ -57,9 +64,12 @@ public:
 	void setData(void*);
 	void* data() const;
 	void deleteData();
-	bool hasValueLabels() const;
+	bool valueLabelsInitialized() const;
 	void removeValueLabel(const QString&);
-	void clearValueLabels();
+	void setLabelsMode(Column::ColumnMode mode);
+	void valueLabelsRemoveAll();
+	double valueLabelsMinimum();
+	double valueLabelsMaximum();
 
 	AbstractSimpleFilter* inputFilter() const;
 	AbstractSimpleFilter* outputFilter() const;
@@ -77,8 +87,9 @@ public:
 	void setFormulVariableColumn(int index, Column* column);
 	void setFormulVariableColumn(Column*);
 	bool formulaAutoUpdate() const;
-	void setFormula(const QString& formula, const QVector<Column::FormulaData>& formulaData, bool autoUpdate);
-	void setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPaths, bool autoUpdate);
+	bool formulaAutoResize() const;
+	void setFormula(const QString& formula, const QVector<Column::FormulaData>& formulaData, bool autoUpdate, bool autoResize);
+	void setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPaths, bool autoUpdate, bool autoResize);
 	void updateFormula();
 
 	// cell formulas
@@ -88,6 +99,9 @@ public:
 	void setFormula(int row, const QString& formula);
 	void clearFormulas();
 
+	// settings used to generate random values
+	Column::RandomValuesData randomValuesData;
+
 	QString textAt(int row) const;
 	void setValueAt(int row, QString new_value);
 	void setTextAt(int row, const QString&);
@@ -95,8 +109,6 @@ public:
 	void replaceTexts(int first, const QVector<QString>&);
 	int dictionaryIndex(int row) const;
 	const QMap<QString, int>& frequencies() const;
-	void addValueLabel(const QString&, const QString&);
-	const QMap<QString, QString>* textValueLabels();
 
 	QDate dateAt(int row) const;
 	void setDateAt(int row, QDate);
@@ -107,45 +119,34 @@ public:
 	void setDateTimeAt(int row, const QDateTime&);
 	void replaceValues(int first, const QVector<QDateTime>&);
 	void replaceDateTimes(int first, const QVector<QDateTime>&);
-	void addValueLabel(const QDateTime&, const QString&);
-	const QMap<QDateTime, QString>* dateTimeValueLabels();
 
 	double doubleAt(int row) const;
 	double valueAt(int row) const;
 	void setValueAt(int row, double new_value);
 	void replaceValues(int first, const QVector<double>&);
-	void addValueLabel(double, const QString&);
-	const QMap<double, QString>* valueLabels();
 
 	int integerAt(int row) const;
 	void setValueAt(int row, int new_value);
 	void setIntegerAt(int row, int new_value);
 	void replaceValues(int first, const QVector<int>&);
 	void replaceInteger(int first, const QVector<int>&);
-	void addValueLabel(int, const QString&);
-	const QMap<int, QString>* intValueLabels();
 
 	qint64 bigIntAt(int row) const;
 	void setValueAt(int row, qint64 new_value);
 	void setBigIntAt(int row, qint64 new_value);
 	void replaceValues(int first, const QVector<qint64>&);
 	void replaceBigInt(int first, const QVector<qint64>&);
-	void addValueLabel(qint64, const QString&);
-	const QMap<qint64, QString>* bigIntValueLabels();
 
 	void updateProperties();
 	void calculateStatistics();
 	void invalidate();
 	void finalizeLoad();
 
+	void formulaVariableColumnAdded(const AbstractAspect*);
+
 	struct CachedValuesAvailable {
 		void setUnavailable() {
-			statistics = false;
-			min = false;
-			max = false;
-			hasValues = false;
-			dictionary = false;
-			properties = false;
+			*this = CachedValuesAvailable();
 		}
 		bool statistics{false}; // is 'statistics' already available or needs to be (re-)calculated?
 		// are minMax already calculated or needs to be (re-)calculated?
@@ -165,32 +166,94 @@ public:
 	AbstractColumn::Properties properties{
 		AbstractColumn::Properties::No}; // declares the properties of the curve (monotonic increasing/decreasing ...). Speed up algorithms
 
-	struct Labels {
-		void initLabels(AbstractColumn::ColumnMode);
-		void clearLabels();
-		void addValueLabel(qint64, const QString&);
-		void addValueLabel(int, const QString&);
-		void addValueLabel(double, const QString&);
-		void addValueLabel(const QDateTime&, const QString&);
-		void addValueLabel(const QString&, const QString&);
-		AbstractColumn::ColumnMode mode() const {
-			return m_mode;
-		}
-		bool hasValueLabels() const {
+	struct ValueLabels {
+		void setMode(AbstractColumn::ColumnMode);
+		void migrateLabels(AbstractColumn::ColumnMode newMode);
+		void migrateDoubleTo(AbstractColumn::ColumnMode newMode);
+		void migrateIntTo(AbstractColumn::ColumnMode newMode);
+		void migrateBigIntTo(AbstractColumn::ColumnMode newMode);
+		void migrateTextTo(AbstractColumn::ColumnMode newMode);
+		void migrateDateTimeTo(AbstractColumn::ColumnMode newMode);
+		int count() const;
+		int count(double min, double max) const;
+		void add(qint64, const QString&);
+		void add(int, const QString&);
+		void add(double, const QString&);
+		void add(const QDateTime&, const QString&);
+		void add(const QString&, const QString&);
+		void removeAll();
+		AbstractColumn::ColumnMode mode() const;
+		AbstractColumn::Properties properties() const;
+		bool initialized() const {
 			return m_labels != nullptr;
 		}
-		void removeValueLabel(const QString&);
-		const QMap<QString, QString>* textValueLabels();
-		const QMap<QDateTime, QString>* dateTimeValueLabels();
-		const QMap<double, QString>* valueLabels();
-		const QMap<int, QString>* intValueLabels();
-		const QMap<qint64, QString>* bigIntValueLabels();
+		void remove(const QString&);
+		template<typename T>
+		inline QVector<Column::ValueLabel<T>>* cast_vector() {
+			return static_cast<QVector<Column::ValueLabel<T>>*>(m_labels);
+		}
+		template<typename T>
+		inline const QVector<Column::ValueLabel<T>>* cast_vector() const {
+			return static_cast<QVector<Column::ValueLabel<T>>*>(m_labels);
+		}
+		double minimum();
+		double maximum();
+		const QVector<Column::ValueLabel<QString>>* textValueLabels() const;
+		const QVector<Column::ValueLabel<QDateTime>>* dateTimeValueLabels() const;
+		const QVector<Column::ValueLabel<double>>* valueLabels() const;
+		const QVector<Column::ValueLabel<int>>* intValueLabels() const;
+		const QVector<Column::ValueLabel<qint64>>* bigIntValueLabels() const;
+		int indexForValue(double value, bool smaller) const;
+		double valueAt(int index) const;
+		QDateTime dateTimeAt(int index) const;
+		bool isValid(int index) const;
+		bool isMasked(int index) const;
+		QString labelAt(int index) const;
 
 	private:
-		AbstractColumn::ColumnMode m_mode;
+		void invalidateStatistics();
+		void recalculateStatistics();
+		bool init(AbstractColumn::ColumnMode);
+		void deinit();
+
+		// Do not call manually, because it is not doing a type checking!
+		template<typename T>
+		void remove(const T& value) {
+			auto* v = cast_vector<T>();
+			for (int i = 0; i < v->length(); i++) {
+				if (v->at(i).value == value)
+					v->remove(i);
+			}
+		}
+
+	private:
+		AbstractColumn::ColumnMode m_mode{AbstractColumn::ColumnMode::Integer};
 		void* m_labels{nullptr}; // pointer to the container for the value labels(QMap<T, QString>)
+		struct Statistics {
+			bool available{false};
+			double minimum;
+			double maximum;
+		};
+		Statistics m_statistics;
 	};
-	Labels m_labels;
+	ValueLabels m_labels;
+	int valueLabelsCount() const;
+	int valueLabelsCount(double min, double max) const;
+	int valueLabelsIndexForValue(double value, bool smaller) const;
+	double valueLabelsValueAt(int index) const;
+	QString valueLabelAt(int index) const;
+	void addValueLabel(qint64, const QString&);
+	const QVector<Column::ValueLabel<qint64>>* bigIntValueLabels() const;
+	void addValueLabel(int, const QString&);
+	const QVector<Column::ValueLabel<int>>* intValueLabels() const;
+	void addValueLabel(double, const QString&);
+	const QVector<Column::ValueLabel<double>>* valueLabels() const;
+	void addValueLabel(const QDateTime&, const QString&);
+	const QVector<Column::ValueLabel<QDateTime>>* dateTimeValueLabels() const;
+	void addValueLabel(const QString&, const QString&);
+	const QVector<Column::ValueLabel<QString>>* textValueLabels() const;
+
+	Column* const q{nullptr};
 
 private:
 	AbstractColumn::ColumnMode m_columnMode; // type of column data
@@ -203,11 +266,11 @@ private:
 	AbstractSimpleFilter* m_outputFilter{nullptr}; // output filter for data type -> string conversion
 	QString m_formula;
 	QVector<Column::FormulaData> m_formulaData;
-	bool m_formulaAutoUpdate{false};
+	bool m_formulaAutoUpdate{true};
+	bool m_formulaAutoResize{true};
 	IntervalAttribute<QString> m_formulas;
 	AbstractColumn::PlotDesignation m_plotDesignation{AbstractColumn::PlotDesignation::NoDesignation};
 	int m_width{0}; // column width in the view
-	Column* m_owner{nullptr};
 	QVector<QMetaObject::Connection> m_connectionsUpdateFormula;
 
 	void initDictionary();
@@ -215,11 +278,61 @@ private:
 	void calculateDateTimeStatistics();
 	void connectFormulaColumn(const AbstractColumn*);
 
+	// Never call this function directly, because it does no
+	// mode checking.
+	template<typename T>
+	void setValueAtPrivate(int row, const T& new_value) {
+		if (!m_data) {
+			if (!initDataContainer())
+				return; // failed to allocate memory
+		}
+
+		invalidate();
+
+		Q_EMIT q->dataAboutToChange(q);
+		if (row >= rowCount())
+			resizeTo(row + 1);
+
+		static_cast<QVector<T>*>(m_data)->replace(row, new_value);
+		if (!m_suppressDataChangedSignal)
+			Q_EMIT q->dataChanged(q);
+	}
+
+	// Never call this function directly, because it does no
+	// mode checking.
+	template<typename T>
+	void replaceValuePrivate(int first, const QVector<T>& new_values) {
+		if (!m_data) {
+			const bool resize = (first >= 0);
+			if (!initDataContainer(resize))
+				return; // failed to allocate memory
+		}
+
+		invalidate();
+
+		Q_EMIT q->dataAboutToChange(q);
+
+		if (first < 0)
+			*static_cast<QVector<T>*>(m_data) = new_values;
+		else {
+			const int num_rows = new_values.size();
+			resizeTo(first + num_rows);
+
+			T* ptr = static_cast<QVector<T>*>(m_data)->data();
+			for (int i = 0; i < num_rows; ++i)
+				ptr[first + i] = new_values.at(i);
+		}
+
+		if (!m_suppressDataChangedSignal)
+			Q_EMIT q->dataChanged(q);
+	}
+
 private Q_SLOTS:
 	void formulaVariableColumnRemoved(const AbstractAspect*);
-	void formulaVariableColumnAdded(const AbstractAspect*);
 
-	friend ColumnSetGlobalFormulaCmd;
+	friend class ColumnSetGlobalFormulaCmd;
+	friend class ColumnRemoveRowsCmd;
+	friend class ColumnInsertRowsCmd;
 };
 
 #endif

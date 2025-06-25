@@ -12,16 +12,14 @@
 #include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 #include "backend/worksheet/plots/AbstractPlot.h"
 
-extern "C" {
 #include "backend/nsl/nsl_math.h"
-}
 #include <cmath>
 
 /**
  * \class AbstractCoordinateSystem
  * \brief Base class of all worksheet coordinate systems.
  *
- *  \ingroup backend\worksheet
+ *  \ingroup worksheet
  */
 
 AbstractCoordinateSystem::AbstractCoordinateSystem(AbstractPlot*) {
@@ -171,4 +169,12 @@ bool AbstractCoordinateSystem::clipLineToRect(QLineF* line, const QRectF& rect, 
 		*line = QLineF(QPointF(x1, y1), QPointF(x2, y2));
 	}
 	return true;
+}
+
+QString AbstractCoordinateSystem::name() const {
+	return m_name;
+}
+
+void AbstractCoordinateSystem::setName(const QString& name) {
+	m_name = name;
 }

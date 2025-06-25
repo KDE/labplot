@@ -58,6 +58,7 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
+	void finalizeAdd() override;
 
 	BASIC_D_ACCESSOR_DECL(QPointF, position, Position)
 	BASIC_D_ACCESSOR_DECL(QPointF, plusDeltaXPos, PlusDeltaXPos)
@@ -86,6 +87,7 @@ private:
 	QList<ErrorBarItem*> m_errorBarItemList;
 
 Q_SIGNALS:
+	void dataChanged(const DatapickerPoint*);
 	void positionChanged(QPointF);
 	void plusDeltaXPosChanged(QPointF);
 	void minusDeltaXPosChanged(QPointF);

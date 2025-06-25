@@ -3,7 +3,7 @@
 	Project		: LabPlot
 	Description	: Represents live data source
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
@@ -18,8 +18,10 @@
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/datasources/filters/SpiceFilter.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
-#include "kdefrontend/spreadsheet/PlotDataDialog.h"
+#include "backend/lib/trace.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "frontend/spreadsheet/PlotDataDialog.h"
+#include "frontend/spreadsheet/SpreadsheetView.h"
 
 #include <QAction>
 #include <QDateTime>
@@ -48,13 +50,16 @@ LiveDataSource::LiveDataSource(const QString& name, bool loading)
 	: Spreadsheet(name, loading, AspectType::LiveDataSource)
 	, m_updateTimer(new QTimer(this))
 	, m_watchTimer(new QTimer(this)) {
+	setSuppressSetCommentFinalizeImport(true);
 	m_watchTimer->setSingleShot(true);
-	m_watchTimer->setInterval(100);
+	m_watchTimer->setInterval(100); // maximum read frequency is 1/100ms = 10Hz
 
 	// stop reading from the source before removing the child from the project
 	connect(this, &AbstractAspect::aspectAboutToBeRemoved, [this](const AbstractAspect* aspect) {
-		if (aspect == this)
+		if (aspect == this) {
 			pauseReading();
+			m_device->close();
+		}
 	});
 
 	connect(m_updateTimer, &QTimer::timeout, this, &LiveDataSource::read);
@@ -67,16 +72,19 @@ LiveDataSource::~LiveDataSource() {
 
 	delete m_filter;
 	delete m_fileSystemWatcher;
-	delete m_localSocket;
-	delete m_tcpSocket;
-#ifdef HAVE_QTSERIALPORT
-	delete m_serialPort;
-#endif
+	// Deleting m_device is enough!
+	// 	delete m_localSocket;
+	// 	delete m_tcpSocket;
+	// #ifdef HAVE_QTSERIALPORT
+	// 	delete m_serialPort;
+	// #endif
+	delete m_device;
 }
 
 QWidget* LiveDataSource::view() const {
 	if (!m_partView) {
 		m_view = new SpreadsheetView(const_cast<LiveDataSource*>(this), true);
+		m_view->setSuppressResizeHeader(true);
 		m_partView = m_view;
 	}
 	return m_partView;
@@ -120,7 +128,7 @@ QStringList LiveDataSource::supportedBaudRates() {
  * \brief Updates this data source at this moment
  */
 void LiveDataSource::updateNow() {
-	DEBUG("LiveDataSource::updateNow() update interval = " << m_updateInterval);
+	DEBUG("LiveDataSource::updateNow() update interval = " << m_updateInterval_ms << "ms");
 	if (m_updateType == UpdateType::TimeInterval)
 		m_updateTimer->stop();
 	else
@@ -129,7 +137,7 @@ void LiveDataSource::updateNow() {
 
 	// restart the timer after update
 	if (m_updateType == UpdateType::TimeInterval && !m_paused)
-		m_updateTimer->start(m_updateInterval);
+		m_updateTimer->start(m_updateInterval_ms);
 }
 
 /*!
@@ -184,6 +192,9 @@ AbstractFileFilter::FileType LiveDataSource::fileType() const {
 
 void LiveDataSource::setFilter(AbstractFileFilter* f) {
 	delete m_filter;
+	auto* asciiFilter = dynamic_cast<AsciiFilter*>(f);
+	if (asciiFilter)
+		asciiFilter->setDataSource(this);
 	m_filter = f;
 }
 
@@ -207,14 +218,19 @@ int LiveDataSource::baudRate() const {
  * \brief Sets the source's update interval to \c interval
  * \param interval
  */
-void LiveDataSource::setUpdateInterval(int interval) {
-	m_updateInterval = interval;
+void LiveDataSource::setUpdateInterval(int interval_ms) {
+	m_updateInterval_ms = interval_ms;
 	if (!m_paused)
-		m_updateTimer->start(m_updateInterval);
+		m_updateTimer->start(m_updateInterval_ms);
 }
 
+/*!
+ * \brief LiveDataSource::updateInterval
+ * Get update interval in ms
+ * \return
+ */
 int LiveDataSource::updateInterval() const {
-	return m_updateInterval;
+	return m_updateInterval_ms;
 }
 
 /*!
@@ -235,6 +251,7 @@ int LiveDataSource::keepNValues() const {
  */
 void LiveDataSource::setPort(quint16 port) {
 	m_port = port;
+	initDevice();
 }
 
 void LiveDataSource::setBytesRead(qint64 bytes) {
@@ -313,6 +330,7 @@ void LiveDataSource::setUpdateType(UpdateType updatetype) {
 			m_fileSystemWatcher = new QFileSystemWatcher(this);
 
 		m_fileSystemWatcher->addPath(m_fileName);
+
 		QFileInfo file(m_fileName);
 		// If the watched file currently does not exist (because it is recreated for instance), watch its containing
 		// directory instead. Once the file exists again, switch to watching the file in readOnUpdate().
@@ -348,7 +366,11 @@ LiveDataSource::UpdateType LiveDataSource::updateType() const {
  * \param host
  */
 void LiveDataSource::setHost(const QString& host) {
-	m_host = host.simplified();
+	if (host.compare(QStringLiteral("localhost"), Qt::CaseSensitivity::CaseInsensitive) == 0)
+		m_host = QStringLiteral("127.0.0.1");
+	else
+		m_host = host.simplified();
+	initDevice();
 }
 
 QString LiveDataSource::host() const {
@@ -392,11 +414,9 @@ QIcon LiveDataSource::icon() const {
 	case AbstractFileFilter::FileType::Image:
 		icon = QIcon::fromTheme(QStringLiteral("image-x-generic"));
 		break;
-	// TODO: missing icons
-	case AbstractFileFilter::FileType::HDF5:
-	case AbstractFileFilter::FileType::NETCDF:
-	case AbstractFileFilter::FileType::Excel:
-	case AbstractFileFilter::FileType::VECTOR_BLF:
+	case AbstractFileFilter::FileType::XLSX:
+	case AbstractFileFilter::FileType::Ods:
+		icon = QIcon::fromTheme(QStringLiteral("x-office-spreadsheet"));
 		break;
 	case AbstractFileFilter::FileType::FITS:
 		icon = QIcon::fromTheme(QStringLiteral("kstars_fitsviewer"));
@@ -413,43 +433,31 @@ QIcon LiveDataSource::icon() const {
 	case AbstractFileFilter::FileType::ROOT:
 		icon = QIcon::fromTheme(QStringLiteral("application-x-root"));
 		break;
+	// TODO: missing icons
 	case AbstractFileFilter::FileType::Spice:
+	case AbstractFileFilter::FileType::HDF5:
+	case AbstractFileFilter::FileType::NETCDF:
+	case AbstractFileFilter::FileType::VECTOR_BLF:
+	case AbstractFileFilter::FileType::MCAP:
 		break;
 	}
 
 	return icon;
 }
 
-QMenu* LiveDataSource::createContextMenu() {
-	QMenu* menu = AbstractPart::createContextMenu();
-
-	QAction* firstAction = nullptr;
-	// if we're populating the context menu for the project explorer, then
-	// there're already actions available there. Skip the first title-action
-	// and insert the action at the beginning of the menu.
-	if (menu->actions().size() > 1)
-		firstAction = menu->actions().at(1);
-
-	if (!m_plotDataAction) {
-		m_plotDataAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-line")), i18n("Plot data"), this);
-		connect(m_plotDataAction, &QAction::triggered, this, &LiveDataSource::plotData);
-	}
-
-	menu->insertAction(firstAction, m_plotDataAction);
-	menu->insertSeparator(firstAction);
-
-	return menu;
-}
-
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 
 /*
  * Called when the watch timer times out, i.e. when modifying the file or directory
  * presumably has finished. Also see LiveDataSource::setUpdateType().
  */
 void LiveDataSource::readOnUpdate() {
+	DEBUG(Q_FUNC_INFO)
+	// This can happen when the update type gets changed to periodically during a livedata is running
+	if (!m_fileSystemWatcher)
+		return;
 	if (!m_fileSystemWatcher->files().contains(m_fileName)) {
 		m_fileSystemWatcher->addPath(m_fileName);
 		QFileInfo file(m_fileName);
@@ -465,6 +473,84 @@ void LiveDataSource::readOnUpdate() {
 		m_pending = true;
 	else
 		read();
+
+	Q_EMIT readOnUpdateCalled();
+}
+
+void LiveDataSource::initDevice() {
+	switch (m_sourceType) {
+	case SourceType::FileOrPipe:
+		delete m_device;
+		m_device = new QFile(m_fileName);
+		break;
+	case SourceType::NetworkTCPSocket:
+		if (!m_tcpSocket)
+			m_tcpSocket = new QTcpSocket(this);
+		m_device = m_tcpSocket;
+		m_tcpSocket->abort();
+		m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
+
+		connect(m_tcpSocket, &QTcpSocket::readyRead, this, &LiveDataSource::readyRead);
+		connect(m_tcpSocket,
+				static_cast<void (QTcpSocket::*)(QAbstractSocket::SocketError)>(&QTcpSocket::errorOccurred),
+				this,
+				&LiveDataSource::tcpSocketError);
+		break;
+	case SourceType::NetworkUDPSocket: {
+		if (!m_udpSocket)
+			m_udpSocket = new QUdpSocket(this);
+		m_device = m_udpSocket;
+		m_udpSocket->abort();
+		if (m_udpSocket->bind(QHostAddress(m_host), m_port)) {
+			if (m_updateType == UpdateType::NewData)
+				connect(m_udpSocket, &QUdpSocket::readyRead, this, &LiveDataSource::readyRead);
+			m_udpSocket->connectToHost(m_host, 0, QUdpSocket::ReadOnly);
+
+			if (m_udpSocket->waitForConnected()) {
+				// only connect to readyRead when update is on new data
+				connect(m_udpSocket,
+						static_cast<void (QUdpSocket::*)(QAbstractSocket::SocketError)>(&QUdpSocket::errorOccurred),
+						this,
+						&LiveDataSource::tcpSocketError);
+			} else
+				DEBUG("failed to connect to UDP socket - " << STDSTRING(m_udpSocket->errorString()));
+		} else
+			DEBUG("Unable to bind - " << m_udpSocket->errorString().toStdString());
+
+		break;
+	}
+	case SourceType::LocalSocket:
+		if (!m_localSocket)
+			m_localSocket = new QLocalSocket(this);
+		m_device = m_localSocket;
+		m_localSocket->abort();
+		m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
+
+		connect(m_localSocket, &QLocalSocket::readyRead, this, &LiveDataSource::readyRead);
+		connect(m_localSocket,
+				static_cast<void (QLocalSocket::*)(QLocalSocket::LocalSocketError)>(&QLocalSocket::errorOccurred),
+				this,
+				&LiveDataSource::localSocketError);
+		break;
+	case SourceType::SerialPort:
+#ifdef HAVE_QTSERIALPORT
+		if (!m_serialPort)
+			m_serialPort = new QSerialPort(this);
+		m_device = m_serialPort;
+		DEBUG("	Serial: " << STDSTRING(m_serialPortName) << ", " << m_baudRate);
+		m_serialPort->setBaudRate(m_baudRate);
+		m_serialPort->setPortName(m_serialPortName);
+		// m_serialPort->open(QIODevice::ReadOnly); // Not required
+
+		// only connect to readyRead when update is on new data
+		if (m_updateType == UpdateType::NewData)
+			connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
+		connect(m_serialPort, &QSerialPort::errorOccurred, this, &LiveDataSource::serialPortError);
+#endif
+		break;
+	case SourceType::MQTT:
+		break;
+	}
 }
 
 /*
@@ -478,91 +564,13 @@ void LiveDataSource::read() {
 	if (m_reading)
 		return;
 
+	static bool firstRead = true;
+
 	m_reading = true;
 
 	// initialize the device (file, socket, serial port) when calling this function for the first time
 	if (!m_prepared) {
-		DEBUG("	Preparing device: update type = " << ENUM_TO_STRING(LiveDataSource, UpdateType, m_updateType));
-		switch (m_sourceType) {
-		case SourceType::FileOrPipe:
-			delete m_device;
-			m_device = new QFile(m_fileName);
-			break;
-		case SourceType::NetworkTCPSocket:
-			m_tcpSocket = new QTcpSocket(this);
-			m_device = m_tcpSocket;
-			m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
-
-			connect(m_tcpSocket, &QTcpSocket::readyRead, this, &LiveDataSource::readyRead);
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
-			connect(m_tcpSocket,
-					static_cast<void (QTcpSocket::*)(QAbstractSocket::SocketError)>(&QTcpSocket::errorOccurred),
-					this,
-					&LiveDataSource::tcpSocketError);
-#else
-			connect(m_tcpSocket, static_cast<void (QTcpSocket::*)(QAbstractSocket::SocketError)>(&QTcpSocket::error), this, &LiveDataSource::tcpSocketError);
-#endif
-
-			break;
-		case SourceType::NetworkUDPSocket:
-			m_udpSocket = new QUdpSocket(this);
-			m_device = m_udpSocket;
-			m_udpSocket->bind(QHostAddress(m_host), m_port);
-			m_udpSocket->connectToHost(m_host, 0, QUdpSocket::ReadOnly);
-
-			// only connect to readyRead when update is on new data
-			if (m_updateType == UpdateType::NewData)
-				connect(m_udpSocket, &QUdpSocket::readyRead, this, &LiveDataSource::readyRead);
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
-			connect(m_udpSocket,
-					static_cast<void (QUdpSocket::*)(QAbstractSocket::SocketError)>(&QUdpSocket::errorOccurred),
-					this,
-					&LiveDataSource::tcpSocketError);
-#else
-			connect(m_udpSocket, static_cast<void (QUdpSocket::*)(QAbstractSocket::SocketError)>(&QUdpSocket::error), this, &LiveDataSource::tcpSocketError);
-#endif
-
-			break;
-		case SourceType::LocalSocket:
-			m_localSocket = new QLocalSocket(this);
-			m_device = m_localSocket;
-			m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
-
-			connect(m_localSocket, &QLocalSocket::readyRead, this, &LiveDataSource::readyRead);
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
-			connect(m_localSocket,
-					static_cast<void (QLocalSocket::*)(QLocalSocket::LocalSocketError)>(&QLocalSocket::errorOccurred),
-					this,
-					&LiveDataSource::localSocketError);
-#else
-			connect(m_localSocket,
-					static_cast<void (QLocalSocket::*)(QLocalSocket::LocalSocketError)>(&QLocalSocket::error),
-					this,
-					&LiveDataSource::localSocketError);
-#endif
-
-			break;
-		case SourceType::SerialPort:
-#ifdef HAVE_QTSERIALPORT
-			m_serialPort = new QSerialPort(this);
-			m_device = m_serialPort;
-			DEBUG("	Serial: " << STDSTRING(m_serialPortName) << ", " << m_baudRate);
-			m_serialPort->setBaudRate(m_baudRate);
-			m_serialPort->setPortName(m_serialPortName);
-			m_serialPort->open(QIODevice::ReadOnly);
-
-			// only connect to readyRead when update is on new data
-			if (m_updateType == UpdateType::NewData)
-				connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
-			connect(m_serialPort,
-					static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
-					this,
-					&LiveDataSource::serialPortError);
-#endif
-			break;
-		case SourceType::MQTT:
-			break;
-		}
+		initDevice();
 		m_prepared = true;
 	}
 
@@ -572,11 +580,17 @@ void LiveDataSource::read() {
 		switch (m_fileType) {
 		case AbstractFileFilter::FileType::Ascii:
 			if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
-				static_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_device, this, 0);
+				static_cast<AsciiFilter*>(m_filter)
+					->readFromDevice(*m_device, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Replace, 0, -1, 0);
 			} else {
-				qint64 bytes = static_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_device, this, m_bytesRead);
+				qint64 bytes = static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device,
+																				   AbstractFileFilter::ImportMode::Replace,
+																				   AbstractFileFilter::ImportMode::Append,
+																				   m_bytesRead,
+																				   sampleSize(),
+																				   m_keepNValues);
 				m_bytesRead += bytes;
-				DEBUG("Read " << bytes << " bytes, in total: " << m_bytesRead);
+				// DEBUG("Read " << bytes << " bytes, in total: " << m_bytesRead);
 			}
 			break;
 		case AbstractFileFilter::FileType::Binary:
@@ -589,7 +603,8 @@ void LiveDataSource::read() {
 			m_filter->readDataFromFile(m_fileName, this);
 			break;
 		// TODO: other types not implemented yet
-		case AbstractFileFilter::FileType::Excel:
+		case AbstractFileFilter::FileType::XLSX:
+		case AbstractFileFilter::FileType::Ods:
 		case AbstractFileFilter::FileType::Image:
 		case AbstractFileFilter::FileType::HDF5:
 		case AbstractFileFilter::FileType::VECTOR_BLF:
@@ -598,21 +613,16 @@ void LiveDataSource::read() {
 		case AbstractFileFilter::FileType::JSON:
 		case AbstractFileFilter::FileType::READSTAT:
 		case AbstractFileFilter::FileType::MATIO:
+		case AbstractFileFilter::FileType::MCAP:
 			break;
 		}
 		break;
-	case SourceType::NetworkTCPSocket:
-		DEBUG("reading from TCP socket. state before abort = " << m_tcpSocket->state());
-		m_tcpSocket->abort();
-		m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
-		DEBUG("reading from TCP socket. state after reconnect = " << m_tcpSocket->state());
-		break;
+	case SourceType::NetworkTCPSocket: // fall through
 	case SourceType::NetworkUDPSocket:
-		DEBUG("	Reading from UDP socket. state = " << m_udpSocket->state());
-
 		// reading data here
 		if (m_fileType == AbstractFileFilter::FileType::Ascii)
-			static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
+			static_cast<AsciiFilter*>(m_filter)
+				->readFromDevice(*m_device, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, sampleSize(), m_keepNValues);
 		break;
 	case SourceType::LocalSocket:
 		DEBUG("	Reading from local socket. state before abort = " << m_localSocket->state());
@@ -623,15 +633,26 @@ void LiveDataSource::read() {
 			m_localSocket->waitForReadyRead();
 		DEBUG("	Reading from local socket. state after reconnect = " << m_localSocket->state());
 		break;
-	case SourceType::SerialPort:
+	case SourceType::SerialPort: {
 		DEBUG("	Reading from serial port");
 #ifdef HAVE_QTSERIALPORT
-
 		// reading data here
-		if (m_fileType == AbstractFileFilter::FileType::Ascii)
-			static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
+		if (m_fileType == AbstractFileFilter::FileType::Ascii) {
+			if (firstRead)
+				static_cast<AsciiFilter*>(m_filter)->clearLastError();
+			static_cast<AsciiFilter*>(m_filter)->readFromDevice(*m_device,
+																AbstractFileFilter::ImportMode::Replace,
+																AbstractFileFilter::ImportMode::Append,
+																0,
+																sampleSize(),
+																m_keepNValues,
+																firstRead);
+			if (static_cast<AsciiFilter*>(m_filter)->lastError().isEmpty())
+				firstRead = false;
+		}
 #endif
 		break;
+	}
 	case SourceType::MQTT:
 		break;
 	}
@@ -648,8 +669,8 @@ void LiveDataSource::readyRead() {
 	DEBUG(Q_FUNC_INFO << ", update type = " << ENUM_TO_STRING(LiveDataSource, UpdateType, m_updateType));
 	DEBUG("	REMAINING TIME = " << m_updateTimer->remainingTime());
 
-	if (m_fileType == AbstractFileFilter::FileType::Ascii)
-		static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
+	// if (m_fileType == AbstractFileFilter::FileType::Ascii)
+	// 	static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this); // TODO: turn on again
 
 	// TODO: not implemented yet
 	//	else if (m_fileType == AbstractFileFilter::FileType::Binary)
@@ -705,43 +726,45 @@ void LiveDataSource::tcpSocketError(QAbstractSocket::SocketError /*socketError*/
 }
 
 #ifdef HAVE_QTSERIALPORT
-void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortError) {
-	switch (serialPortError) {
+QString LiveDataSource::serialPortErrorEnumToString(QSerialPort::SerialPortError error, const QString errorString) {
+	QString msg;
+	switch (error) {
 	case QSerialPort::DeviceNotFoundError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Failed to open the device."));
+		msg = i18n("Device doesn't exist.");
 		break;
 	case QSerialPort::PermissionError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Failed to open the device. Please check your permissions on this device."));
+		msg = i18n("User doesn't have enough permissions to open the device.");
 		break;
 	case QSerialPort::OpenError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Device already opened."));
+		msg = i18n("Device already opened.");
 		break;
 	case QSerialPort::NotOpenError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("The device is not opened."));
+		msg = i18n("Device is not open.");
 		break;
 	case QSerialPort::ReadError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Failed to read data."));
+		msg = i18n("Failed to read data.");
 		break;
 	case QSerialPort::ResourceError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("Failed to read data. The device is removed."));
+		msg = i18n("Device not available.");
 		break;
 	case QSerialPort::TimeoutError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("The device timed out."));
+		msg = i18n("Timeout occured.");
 		break;
-#ifndef _MSC_VER
-	// MSVC complains about the usage of deprecated enums, g++ and clang complain about missing enums
-	case QSerialPort::ParityError:
-	case QSerialPort::FramingError:
-	case QSerialPort::BreakConditionError:
-#endif
 	case QSerialPort::WriteError:
 	case QSerialPort::UnsupportedOperationError:
 	case QSerialPort::UnknownError:
-		QMessageBox::critical(nullptr, i18n("Serial Port Error"), i18n("The following error occurred: %1.", m_serialPort->errorString()));
+		msg = i18n("The following error occurred: %1.", errorString);
 		break;
 	case QSerialPort::NoError:
 		break;
 	}
+
+	return msg;
+}
+
+void LiveDataSource::serialPortError(QSerialPort::SerialPortError error) {
+	if (error != QSerialPort::SerialPortError::NoError)
+		QMessageBox::critical(nullptr, i18n("Serial Port Error"), serialPortErrorEnumToString(error, m_serialPort->errorString()));
 }
 #endif
 
@@ -750,9 +773,9 @@ void LiveDataSource::plotData() {
 	dlg->exec();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 /*!
   Saves as XML.
  */
@@ -799,7 +822,7 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("keepNValues"), QString::number(m_keepNValues));
 
 	if (m_updateType == UpdateType::TimeInterval)
-		writer->writeAttribute(QStringLiteral("updateInterval"), QString::number(m_updateInterval));
+		writer->writeAttribute(QStringLiteral("updateInterval"), QString::number(m_updateInterval_ms));
 
 	if (m_readingType != ReadingType::TillEnd)
 		writer->writeAttribute(QStringLiteral("sampleSize"), QString::number(m_sampleSize));
@@ -828,7 +851,6 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -850,58 +872,58 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("fileName")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("fileName")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("fileName"));
 			else
 				m_fileName = str;
 
 			str = attribs.value(QStringLiteral("fileType")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("fileType")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("fileType"));
 			else
 				m_fileType = (AbstractFileFilter::FileType)str.toInt();
 
 			str = attribs.value(QStringLiteral("fileLinked")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("fileLinked")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("fileLinked"));
 			else
 				m_fileLinked = str.toInt();
 
 			str = attribs.value(QStringLiteral("relativePath")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("relativePath")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("relativePath"));
 			else
 				m_relativePath = str.toInt();
 
 			str = attribs.value(QStringLiteral("updateType")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("updateType")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("updateType"));
 			else
 				m_updateType = static_cast<UpdateType>(str.toInt());
 
 			str = attribs.value(QStringLiteral("sourceType")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("sourceType")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("sourceType"));
 			else
 				m_sourceType = static_cast<SourceType>(str.toInt());
 
 			str = attribs.value(QStringLiteral("readingType")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("readingType")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("readingType"));
 			else
 				m_readingType = static_cast<ReadingType>(str.toInt());
 
 			if (m_updateType == UpdateType::TimeInterval) {
 				str = attribs.value(QStringLiteral("updateInterval")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("updateInterval")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("updateInterval"));
 				else
-					m_updateInterval = str.toInt();
+					m_updateInterval_ms = str.toInt();
 			}
 
 			if (m_readingType != ReadingType::TillEnd) {
 				str = attribs.value(QStringLiteral("sampleSize")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("sampleSize")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("sampleSize"));
 				else
 					m_sampleSize = str.toInt();
 			}
@@ -910,13 +932,13 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			case SourceType::SerialPort:
 				str = attribs.value(QStringLiteral("baudRate")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("baudRate")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("baudRate"));
 				else
 					m_baudRate = str.toInt();
 
 				str = attribs.value(QStringLiteral("serialPortName")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("serialPortName")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("serialPortName"));
 				else
 					m_serialPortName = str;
 
@@ -925,13 +947,13 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			case SourceType::NetworkUDPSocket:
 				str = attribs.value(QStringLiteral("host")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("host")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("host"));
 				else
 					m_host = str;
 
 				str = attribs.value(QStringLiteral("port")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("port")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("port"));
 				else
 					m_port = str.toInt();
 				break;
@@ -965,7 +987,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			column->setFixed(true);
 			addChild(column);
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}

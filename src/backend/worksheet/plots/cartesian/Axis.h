@@ -4,7 +4,7 @@
 	Description          : Axis for cartesian coordinate systems.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -13,20 +13,21 @@
 #ifndef AXISNEW_H
 #define AXISNEW_H
 
-#include "backend/lib/Range.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
-class CartesianPlot;
+class AbstractColumn;
+class AxisPrivate;
 class Line;
 class TextLabel;
-class AxisPrivate;
-class AbstractColumn;
 class QActionGroup;
 
-using Dimension = CartesianCoordinateSystem::Dimension;
-
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Axis : public WorksheetElement {
+#else
 class Axis : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:
@@ -42,7 +43,8 @@ public:
 	};
 	Q_DECLARE_FLAGS(TicksDirection, TicksFlags)
 
-	enum class TicksType { TotalNumber, Spacing, CustomColumn, CustomValues };
+	enum class TicksType { TotalNumber, Spacing, CustomColumn, CustomValues, ColumnLabels };
+	Q_ENUM(TicksType)
 	enum class ArrowType { NoArrow, SimpleSmall, SimpleBig, FilledSmall, FilledBig, SemiFilledSmall, SemiFilledBig };
 	enum class ArrowPosition { Left, Right, Both };
 	enum class LabelsPosition { NoLabels, In, Out };
@@ -93,13 +95,11 @@ public:
 
 	typedef AxisPrivate Private; // for Axis::Private used in macros instead of AxisPrivate
 
-	explicit Axis(const QString&, Orientation = Orientation::Horizontal);
+	explicit Axis(const QString&, Orientation = Orientation::Horizontal, bool loading = false);
 	~Axis() override;
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
-
-	QGraphicsItem* graphicsItem() const override;
 	void setZValue(qreal) override;
 
 	void save(QXmlStreamWriter*) const override;
@@ -110,8 +110,8 @@ public:
 	BASIC_D_ACCESSOR_DECL(RangeType, rangeType, RangeType)
 	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(Position, position, Position)
-	BASIC_D_ACCESSOR_DECL(RangeT::Scale, scale, Scale)
 	BASIC_D_ACCESSOR_DECL(Range<double>, range, Range)
+	BASIC_D_ACCESSOR_DECL(RangeT::Scale, scale, Scale)
 	void setStart(const double);
 	void setEnd(const double);
 	void setRange(const double, const double);
@@ -122,7 +122,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, showScaleOffset, ShowScaleOffset)
 	BASIC_D_ACCESSOR_DECL(double, logicalPosition, LogicalPosition)
 
-	POINTER_D_ACCESSOR_DECL(TextLabel, title, Title)
+	TextLabel* title() const;
 	BASIC_D_ACCESSOR_DECL(double, titleOffsetX, TitleOffsetX)
 	BASIC_D_ACCESSOR_DECL(double, titleOffsetY, TitleOffsetY)
 
@@ -135,7 +135,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(TicksType, majorTicksType, MajorTicksType)
 	BASIC_D_ACCESSOR_DECL(bool, majorTicksAutoNumber, MajorTicksAutoNumber)
 	int majorTicksNumber() const;
-	void setMajorTicksNumber(const int number, bool automatic = false);
+	void setMajorTicksNumber(const int number);
 	BASIC_D_ACCESSOR_DECL(qreal, majorTicksSpacing, MajorTicksSpacing)
 	BASIC_D_ACCESSOR_DECL(TicksStartType, majorTicksStartType, MajorTicksStartType)
 	BASIC_D_ACCESSOR_DECL(qreal, majorTickStartOffset, MajorTickStartOffset)
@@ -175,6 +175,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, labelsPrefix, LabelsPrefix)
 	CLASS_D_ACCESSOR_DECL(QString, labelsSuffix, LabelsSuffix)
 	BASIC_D_ACCESSOR_DECL(qreal, labelsOpacity, LabelsOpacity)
+	static int maxNumberMajorTicksCustomColumn();
 
 	Line* majorGridLine() const;
 	Line* minorGridLine() const;
@@ -184,11 +185,11 @@ public:
 	void setDefault(bool);
 	bool isDefault() const;
 
-	bool isHovered() const;
 	void setSuppressRetransform(bool);
 	void retransform() override;
 	void retransformTickLabelStrings();
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	void updateLocale() override;
 
 protected:
 	Axis(const QString&, Orientation, AxisPrivate*);
@@ -196,11 +197,11 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(Axis)
-	void init(Orientation);
+	void init(Orientation, bool loading = false);
 	void initActions();
 	void initMenus();
+	BASIC_D_ACCESSOR_DECL(bool, rangeScale, RangeScale) // if true, the scale of the range will be used. Deprecated, just for compatibility
 
-	QAction* visibilityAction{nullptr};
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
 
@@ -223,13 +224,13 @@ private Q_SLOTS:
 	void orientationChangedSlot(QAction*);
 	void lineStyleChanged(QAction*);
 	void lineColorChanged(QAction*);
-	void visibilityChangedSlot();
 
 Q_SIGNALS:
 	void orientationChanged(Orientation);
 	void positionChanged(Position);
 	void positionChanged(double);
 	void scaleChanged(RangeT::Scale);
+	void rangeScaleChanged(bool);
 	void startChanged(double);
 	void rangeTypeChanged(RangeType);
 	void endChanged(double);
@@ -290,6 +291,11 @@ Q_SIGNALS:
 	void labelsOpacityChanged(qreal);
 
 	friend class RetransformTest;
+	friend class AxisTest;
+	friend class AxisTest2;
+	friend class AxisTest3;
+	friend class AxisDock; // To be able to access range scale
+	friend class Project; // To be able to access range scale
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Axis::TicksDirection)

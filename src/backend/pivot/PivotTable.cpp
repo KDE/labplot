@@ -26,8 +26,8 @@
  ***************************************************************************/
 #include "PivotTable.h"
 #include "PivotTablePrivate.h"
-#include "kdefrontend/pivot/PivotTableView.h"
-#include "kdefrontend/pivot/HierarchicalHeaderView.h"
+#include "frontend/pivot/PivotTableView.h"
+#include "frontend/pivot/HierarchicalHeaderView.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -35,7 +35,7 @@
 
 #include <QAbstractItemModel>
 #include <QIcon>
-#include <QSqlQuery>
+#include <QSql/QSqlQuery>
 #include <QSqlError>
 #include <QSqlRecord>
 #include <QStandardItemModel>
@@ -153,7 +153,7 @@ QWidget* PivotTable::view() const {
 QMenu* PivotTable::createContextMenu() {
 	QMenu* menu = AbstractPart::createContextMenu();
 	Q_ASSERT(menu);
-	emit requestProjectContextMenu(menu);
+	Q_EMIT requestProjectContextMenu(menu);
 	return menu;
 }
 
@@ -256,7 +256,7 @@ void PivotTablePrivate::recalculate() {
 
 	if (rows.isEmpty() && columns.isEmpty() && !showTotals) {
 		//notify about the new result
-		emit q->changed();
+		Q_EMIT q->changed();
 		return;
 	}
 
@@ -315,7 +315,7 @@ void PivotTablePrivate::recalculate() {
 	if (!sqlQuery.exec(query)) {
 		RESET_CURSOR;
 		KMessageBox::error(nullptr, i18n("Failed to process the query.") + QLatin1Char('\n') + sqlQuery.lastError().databaseText());
-		emit q->changed();
+		Q_EMIT q->changed();
 		return;
 	}
 
@@ -495,7 +495,7 @@ void PivotTablePrivate::recalculate() {
 
 
 	//notify about the new result
-	emit q->changed();
+	Q_EMIT q->changed();
 	RESET_CURSOR;
 }
 

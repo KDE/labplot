@@ -15,9 +15,9 @@
 
 #include <KLocalizedString>
 
-extern "C" {
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
+extern "C" {
 #include <hdf5.h>
 }
 

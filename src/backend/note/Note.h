@@ -4,7 +4,7 @@
 	Description          : Widget for taking notes
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -12,18 +12,22 @@
 #define NOTE_H
 
 #include "backend/core/AbstractPart.h"
+#include "backend/lib/macros.h"
 
 #include <QFont>
 #include <QIcon>
 
-class QColor;
+class NotePrivate;
+#ifndef SDK
 class NoteView;
+#endif
 
 class Note : public AbstractPart {
 	Q_OBJECT
 
 public:
 	explicit Note(const QString& name);
+	~Note() override;
 
 	QWidget* view() const override;
 	QIcon icon() const override;
@@ -32,35 +36,28 @@ public:
 	bool printView() override;
 	bool printPreview() const override;
 
-	void setNote(const QString&);
-	void setText(const QString& s) {
-		this->setNote(s);
-	}
-	const QString& note() const;
-
-	void setBackgroundColor(const QColor&);
-	const QColor& backgroundColor() const;
-
-	void setTextColor(const QColor&);
-	const QColor& textColor() const;
-
-	void setTextFont(const QFont&);
-	const QFont& textFont() const;
+	CLASS_D_ACCESSOR_DECL(QString, text, Text)
+	CLASS_D_ACCESSOR_DECL(QColor, backgroundColor, BackgroundColor)
+	CLASS_D_ACCESSOR_DECL(QColor, textColor, TextColor)
+	CLASS_D_ACCESSOR_DECL(QFont, textFont, TextFont)
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
+	typedef NotePrivate Private;
+
 Q_SIGNALS:
-	void backgroundColorChanged(QColor);
-	void textColorChanged(QColor);
-	void textFontChanged(QFont);
+	void textChanged(const QString&);
+	void backgroundColorChanged(const QColor&);
+	void textColorChanged(const QColor&);
+	void textFontChanged(const QFont&);
 
 private:
+	Q_DECLARE_PRIVATE(Note)
+	NotePrivate* const d_ptr;
+#ifndef SDK
 	mutable NoteView* m_view{nullptr};
-	QColor m_backgroundColor;
-	QColor m_textColor;
-	QFont m_textFont;
-	QString m_note;
+#endif
 };
 
 #endif // NOTE_H

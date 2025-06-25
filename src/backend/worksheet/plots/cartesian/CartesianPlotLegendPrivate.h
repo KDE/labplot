@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of CartesianPlotLegend
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -17,11 +17,6 @@
 class Background;
 class CartesianPlotLegend;
 class Line;
-class XYCurve;
-
-class QBrush;
-class QGraphicsSceneContextMenuEvent;
-class QKeyEvent;
 
 class CartesianPlotLegendPrivate : public WorksheetElementPrivate {
 public:
@@ -34,19 +29,16 @@ public:
 
 	// QGraphicsItem's virtual functions
 	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
+	virtual QPainterPath shape() const override;
 	virtual void recalcShapeAndBoundingRect() override;
 
-	bool m_hovered{false};
-
-	QRectF rect;
 	QFont labelFont;
+	bool usePlotColor{true};
 	QColor labelColor;
 	bool labelColumnMajor{true};
 	qreal lineSymbolWidth{Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)}; // the width of line+symbol
-	QList<float> maxColumnTextWidths; // the maximal width of the text within each column
-	int columnCount{0}; // the actual number of columns, can be smaller then the specified layoutColumnCount
+	QList<double> maxColumnTextWidths; // the maximal width of the text within each column
+	int columnCount{0}; // the actual number of columns, can be smaller than the specified layoutColumnCount
 	int rowCount{0}; // the number of rows in the legend, depends on the number of curves and on columnCount
 
 	const CartesianPlot* plot{nullptr};
@@ -68,14 +60,10 @@ public:
 	int layoutColumnCount{1};
 
 private:
-	QList<WorksheetElement*> m_curves; // list containing all visible curves
+	QList<Plot*> m_plots; // list containing all visible plots/curves
 	QStringList m_names;
 
 	bool translatePainter(QPainter*, int& row, int& col, int height);
-
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 };
 
 #endif

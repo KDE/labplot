@@ -1,12 +1,12 @@
 #=============================================================================
-# SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+# SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 #
 # SPDX-License-Identifier: BSD-3-Clause
 #=============================================================================
 
 find_package(PkgConfig QUIET)
 if (PKG_CONFIG_FOUND)
-	pkg_check_modules(PC_LIBORIGIN liborigin>=3.0.0 QUIET)
+	pkg_check_modules(PC_LIBORIGIN liborigin>=3.0.3 QUIET)
 endif ()
 
 find_library(LIBORIGIN_LIBRARIES

@@ -10,16 +10,19 @@
 #ifndef RANGE_H
 #define RANGE_H
 
+#include "backend/gsl/Parser.h"
+#include "backend/nsl/nsl_math.h"
 #include "macros.h" //const auto numberLocale = QLocale();
 
-extern "C" {
-#include "backend/gsl/parser.h"
-#include "backend/nsl/nsl_math.h"
-}
+#ifndef SDK
+#include <KLocalizedString>
+#endif
 
+#include <QDateTime>
 #include <QStringList>
+#include <QTimeZone>
+
 #include <cmath>
-#include <klocalizedstring.h>
 
 class QString;
 
@@ -35,7 +38,12 @@ class QString;
  *
  *	Only types supporting comparison are supported
  */
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT RangeT {
+#else
 class RangeT { // access enum without template
+#endif
 	Q_GADGET
 public:
 	enum class Format { Numeric, DateTime };
@@ -44,9 +52,10 @@ public:
 	// TODO: InverseOffset, Prob, Probit, Logit, Weibull
 	enum class Scale { Linear, Log10, Log2, Ln, Sqrt, Square, Inverse };
 	Q_ENUM(Scale)
-	static const QStringList& scaleNames(); // see Range.cpp
-	// TODO: when we have C++17: use inline initialization
-	//	const static inline QStringList scaleNames{ i18n("Linear"), i18n("Log10"), i18n("Log2"), i18n("Ln"), i18n("Sqrt"), i18n("Square") };
+#ifndef SDK
+	static inline QList<KLocalizedString>
+		scaleNames{ki18n("Linear"), ki18n("Log10"), ki18n("Log2"), ki18n("Ln"), ki18n("Sqrt"), ki18n("Square"), ki18n("Inverse")};
+#endif
 	static bool isLogScale(Scale scale) {
 		if (scale == Scale::Log10 || scale == Scale::Log2 || scale == Scale::Ln)
 			return true;
@@ -54,8 +63,14 @@ public:
 	}
 };
 
+#ifdef SDK
+#include "labplot_export.h"
+template<class T>
+class LABPLOT_EXPORT Range : RangeT {
+#else
 template<class T>
 class Range : RangeT {
+#endif
 public:
 	Range() {
 	}
@@ -65,18 +80,21 @@ public:
 	// start and end as localized strings like "pi + 1.5" (will be parsed)
 	Range(const QString& start, const QString& end, const Format format = Format::Numeric, const Scale scale = Scale::Linear) {
 		const auto numberLocale = QLocale();
+
+		Parsing::Parser parser;
+
 		// min
-		double min = parse(qPrintable(start.simplified()), qPrintable(numberLocale.name()));
-		if (parse_errors() > 0) // if parsing fails, try default locale
-			min = parse(qPrintable(start.simplified()), "en_US");
-		if (parse_errors() > 0)
+		double min = parser.parse(qPrintable(start.simplified()), qPrintable(numberLocale.name()));
+		if (parser.parseErrors() > 0) // if parsing fails, try default locale
+			min = parser.parse(qPrintable(start.simplified()), "en_US");
+		if (parser.parseErrors() > 0)
 			min = 0;
 
 		// max
-		double max = parse(qPrintable(end.simplified()), qPrintable(numberLocale.name()));
-		if (parse_errors() > 0) // if parsing fails, try default locale
-			max = parse(qPrintable(end.simplified()), "en_US");
-		if (parse_errors() > 0)
+		double max = parser.parse(qPrintable(end.simplified()), qPrintable(numberLocale.name()));
+		if (parser.parseErrors() > 0) // if parsing fails, try default locale
+			max = parser.parse(qPrintable(end.simplified()), "en_US");
+		if (parser.parseErrors() > 0)
 			max = 1.;
 
 		// TODO: check for NAN, INF?
@@ -153,7 +171,54 @@ public:
 		return qAbs(m_end - m_start);
 	}
 	T center() const {
-		return (m_start + m_end) / 2;
+		switch (m_scale) {
+		case Scale::Linear:
+			return (m_start + m_end) / 2.;
+		case Scale::Log10:
+			return std::pow(10., log10(m_end * m_start) / 2.);
+		case Scale::Log2:
+			return std::pow(2., log2(m_end * m_start) / 2.);
+		case Scale::Ln:
+			return std::exp(log(m_end * m_start) / 2.);
+		case Scale::Sqrt:
+			return std::pow((std::sqrt(m_end) + std::sqrt(m_start)) / 2., 2.);
+		case Scale::Square:
+			return std::sqrt((std::pow(m_end, 2.) + std::pow(m_start, 2.)) / 2.);
+		case Scale::Inverse:
+			return 1. / ((1. / m_end + 1. / m_start) / 2.);
+		}
+		return T();
+	}
+
+	T diff() const {
+		return diff(m_scale, m_start, m_end);
+	}
+
+	static T diff(Scale scale, T start, T end) {
+		switch (scale) {
+		case RangeT::Scale::Linear:
+		case RangeT::Scale::Inverse:
+			return end - start;
+		case RangeT::Scale::Log10:
+			if (start != 0. && end / start > 0.)
+				return log10(end / start);
+			break;
+		case RangeT::Scale::Log2:
+			if (start != 0. && end / start > 0.)
+				return log2(end / start);
+			break;
+		case RangeT::Scale::Ln:
+			if (start != 0. && end / start > 0.)
+				return log(end / start);
+			break;
+		case RangeT::Scale::Sqrt:
+			if (start >= 0. && end >= 0.)
+				return std::sqrt(end) - std::sqrt(start);
+			break;
+		case RangeT::Scale::Square:
+			return end * end - start * start;
+		}
+		return T();
 	}
 	// calculate step size from number of steps
 	T stepSize(const int steps) const {
@@ -193,10 +258,10 @@ public:
 		m_end += value;
 	}
 	bool operator==(const Range<T>& other) const {
-		return (m_start == other.start() && m_end == other.end());
+		return (m_start == other.start() && m_end == other.end() && m_format == other.format() && m_scale == other.scale());
 	}
 	bool operator!=(const Range<T>& other) const {
-		return (m_start != other.start() || m_end != other.end());
+		return (m_start != other.start() || m_end != other.end() || m_format != other.format() || m_scale != other.scale());
 	}
 	Range<T>& operator+=(const T value) {
 		m_start += value;
@@ -216,8 +281,8 @@ public:
 		if (m_format == Format::Numeric)
 			return locale.toString(m_start) + QStringLiteral(" .. ") + locale.toString(m_end);
 		else
-			return QDateTime::fromMSecsSinceEpoch(m_start, Qt::UTC).toString(m_dateTimeFormat) + QStringLiteral(" .. ")
-				+ QDateTime::fromMSecsSinceEpoch(m_end, Qt::UTC).toString(m_dateTimeFormat);
+			return QDateTime::fromMSecsSinceEpoch(m_start, QTimeZone::UTC).toString(m_dateTimeFormat) + QStringLiteral(" .. ")
+				+ QDateTime::fromMSecsSinceEpoch(m_end, QTimeZone::UTC).toString(m_dateTimeFormat);
 	}
 	std::string toStdString(bool round = true) const {
 		return STDSTRING(toString(round));
@@ -226,6 +291,41 @@ public:
 	QString toLocaleString(bool round = true) const {
 		return this->toString(round, QLocale());
 	}
+
+	// fix start and end when not supported by scale
+	void fixLimits() {
+		switch (m_scale) {
+		case Scale::Linear: // all values are allowed (catch inf, nan?)
+			break;
+		case Scale::Log10:
+			if (m_end <= 0)
+				m_end = 10.;
+			if (m_start <= 0)
+				m_start = m_end / 10.;
+			break;
+		case Scale::Log2:
+			if (m_end <= 0)
+				m_end = 2.;
+			if (m_start <= 0)
+				m_start = m_end / 2.;
+			break;
+		case Scale::Ln:
+			if (m_end <= 0)
+				m_end = M_E;
+			if (m_start <= 0)
+				m_start = m_end / M_E;
+			break;
+		case Scale::Sqrt:
+		case Scale::Square:
+		case Scale::Inverse:
+			if (m_end <= 0) // end must be > 0 for start to be < end
+				m_end = 1.;
+			if (m_start < 0)
+				m_start = 0.;
+			break;
+		}
+	}
+
 	// extend/shrink range to nice numbers (used in auto scaling)
 	//  get nice size to extend to (see Glassner: Graphic Gems)
 	double niceSize(double size, bool round) {
@@ -236,7 +336,7 @@ public:
 		if (round) {
 			if (fraction < 1.5)
 				niceFraction = 1;
-			else if (fraction <= 2)
+			else if (fraction <= 2.5)
 				niceFraction = 2;
 			else if (fraction < 7)
 				niceFraction = 5;
@@ -252,7 +352,7 @@ public:
 			else
 				niceFraction = 10;
 		}
-		DEBUG(Q_FUNC_INFO << ", fraction = " << fraction);
+		DEBUG(Q_FUNC_INFO << ", round = " << round << ", fraction = " << fraction);
 		DEBUG(Q_FUNC_INFO << ", nice fraction = " << niceFraction);
 
 		return niceFraction * std::pow(10., exponent);
@@ -263,18 +363,21 @@ public:
 	void niceExtend(bool extend = true) { // extend == false means shrink
 		if (length() == 0)
 			return;
+
+		if (isLogScale(scale()) && (m_start <= 0 || m_end <= 0))
+			return;
+
+		double base = 10.;
 		double oldSize = size();
 		switch (scale()) {
 		case Scale::Linear:
-			break;
 		case Scale::Log10:
-			oldSize = log10(oldSize);
-			break;
+			break; // default base
 		case Scale::Log2:
-			oldSize = log2(oldSize);
+			base = 2.;
 			break;
 		case Scale::Ln:
-			oldSize = log(oldSize);
+			base = M_E;
 			break;
 		case Scale::Sqrt:
 			oldSize = sqrt(oldSize);
@@ -284,38 +387,34 @@ public:
 			break;
 		case Scale::Inverse:
 			oldSize = 1. / oldSize;
-			break;
 		}
-		// DEBUG("old size = " << oldSize)
+
+		if (isLogScale(scale())) {
+			if ((extend && m_start < m_end) || (!extend && m_start > m_end)) {
+				m_start = nsl_math_round_basex(m_start, -1, base);
+				m_end = nsl_math_round_basex(m_end, -1, base) * base;
+			} else {
+				m_start = nsl_math_round_basex(m_start, -1, base) * base;
+				m_end = nsl_math_round_basex(m_end, -1, base);
+			}
+			return; // log scales end here
+		}
+
+		DEBUG(Q_FUNC_INFO << ", scale = " << (int)scale() << ", old size = " << oldSize)
 
 		const double newSize = niceSize(oldSize, false);
 		DEBUG(Q_FUNC_INFO << ", new size = " << newSize);
 		const double maxTicks = 10; // TODO: parameter?
 		const double spacing = niceSize(newSize / (maxTicks - 1), true);
-		// DEBUG("spacing = " << spacing)
+		DEBUG("spacing = " << spacing)
 
 		// extend/shrink range
 		double new_start = m_start, new_end = m_end;
 		switch (scale()) {
 		case Scale::Linear:
-			break;
-		case Scale::Log10:
-			if (m_start <= 0 || m_end <= 0)
-				return;
-			new_start = log10(m_start);
-			new_end = log10(m_end);
-			break;
+		case Scale::Log10: // log-scales already done
 		case Scale::Log2:
-			if (m_start <= 0 || m_end <= 0)
-				return;
-			new_start = log2(m_start);
-			new_end = log2(m_end);
-			break;
 		case Scale::Ln:
-			if (m_start <= 0 || m_end <= 0)
-				return;
-			new_start = log(m_start);
-			new_end = log(m_end);
 			break;
 		case Scale::Sqrt:
 			if (m_start < 0 || m_end < 0)
@@ -332,8 +431,8 @@ public:
 				return;
 			new_start = 1. / m_start;
 			new_end = 1. / m_end;
-			break;
 		}
+
 		if ((extend && m_start < m_end) || (!extend && m_start > m_end)) {
 			new_start = std::floor(new_start / spacing) * spacing;
 			new_end = std::ceil(new_end / spacing) * spacing;
@@ -341,22 +440,13 @@ public:
 			new_start = std::ceil(new_start / spacing) * spacing;
 			new_end = std::floor(new_end / spacing) * spacing;
 		}
-		// DEBUG(" tmp new range: " << new_start << " .. " << new_end)
+		DEBUG(" tmp new range: " << new_start << " .. " << new_end)
 
 		switch (scale()) {
 		case Scale::Linear:
-			break;
-		case Scale::Log10:
-			new_start = pow(10, new_start);
-			new_end = pow(10, new_end);
-			break;
+		case Scale::Log10: // log-scales already done
 		case Scale::Log2:
-			new_start = exp2(new_start);
-			new_end = exp2(new_end);
-			break;
 		case Scale::Ln:
-			new_start = exp(new_start);
-			new_end = exp(new_end);
 			break;
 		case Scale::Sqrt:
 			new_start *= new_start;
@@ -373,7 +463,6 @@ public:
 				return;
 			new_start = 1. / new_start;
 			new_end = 1. / new_end;
-			break;
 		}
 
 		if (std::abs(new_end - new_start) == 0) // avoid empty range
@@ -384,12 +473,43 @@ public:
 		DEBUG(Q_FUNC_INFO << ", new range: " << toStdString())
 	}
 	int autoTickCount() const {
+		QDEBUG(Q_FUNC_INFO << ", scale = " << scale())
+
 		if (length() == 0)
 			return 0;
 
+		if (isLogScale(scale()) && (m_start <= 0 || m_end <= 0))
+			return 1; // datetime test expects value > 0
+
+		double order = 0.;
+		switch (scale()) {
+		case Scale::Linear:
+		case Scale::Sqrt:
+		case Scale::Square:
+		case Scale::Inverse:
+			break;
+		case Scale::Log10:
+			order = log10(m_end) - log10(m_start);
+			break;
+		case Scale::Log2:
+			order = log2(m_end) - log2(m_start);
+			break;
+		case Scale::Ln:
+			order = log(m_end) - log(m_start);
+			break;
+		}
+
+		if (isLogScale(scale())) {
+			DEBUG(Q_FUNC_INFO << ", order = " << std::round(order))
+			if (order >= 0)
+				return std::round(order) + 1;
+			else // reverse range
+				return -std::round(order) + 1;
+		} // log scales end here
+
 		DEBUG(Q_FUNC_INFO << ", range = " << toStdString() << ", length() = " << length())
-		const double order = pow(10.0, std::floor(log10(length())));
-		;
+		order = pow(10.0, std::floor(log10(length())));
+
 		DEBUG(Q_FUNC_INFO << ", order of magnitude = " << order)
 		const int factor = qRound(100 * length() / order);
 		DEBUG(Q_FUNC_INFO << ", factor = " << factor)
@@ -418,6 +538,86 @@ public:
 	}
 	// TODO: touches(), merge(), subtract(), split(), etc. (see Interval)
 
+	/*!
+	 * TODO: implement zooming depending on the relZoomPosScene also for non linear scales!
+	 */
+	void zoom(const double factor, const bool nice, const double relZoomPosScene = 0.5) {
+		const double start{static_cast<double>(this->start())}, end{static_cast<double>(this->end())};
+		switch (scale()) {
+		case RangeT::Scale::Linear: {
+			if (relZoomPosScene == 0.5 || nice)
+				extend(size() * (factor - 1.) / 2.);
+			else {
+				// zoom and shift in one step
+				//                                                              Example:		        Example 1      Example 2        Example 3
+				//                                                              Start                   0               0             4.5
+				//                                                              End                     10              10            9.5
+				//                                                              factor:                 0.5             0.5           2
+				//                                                              relZoomPosScene:        0.9             0.5           0.9
+				//                                                              Expected new start:     2.5             0
+				//                                                              Expected new end:       7.5             10
+				const double pos = start + (end - start) * relZoomPosScene; // Number at pos scene     9               5             9
+				this->start() += (pos - start) * (1 - factor); // 4.5             2.5           0
+				this->end() -= (end - pos) * (1 - factor); // 9.5             7.5          relZoomPos at number    0.9 (fine)      0.5 (fine)           (Number
+														   // at pos scene - start) / (end - start)
+			}
+			break;
+		}
+		case RangeT::Scale::Log10: {
+			if (start == 0 || end / start <= 0)
+				break;
+			const double diff = log10(end / start) * (factor - 1.);
+			const double extend = pow(10, diff / 2.);
+			this->end() *= extend;
+			this->start() /= extend;
+			break;
+		}
+		case RangeT::Scale::Log2: {
+			if (start == 0 || end / start <= 0)
+				break;
+			const double diff = log2(end / start) * (factor - 1.);
+			const double extend = exp2(diff / 2.);
+			this->end() *= extend;
+			this->start() /= extend;
+			break;
+		}
+		case RangeT::Scale::Ln: {
+			if (start == 0 || end / start <= 0)
+				break;
+			const double diff = log(end / start) * (factor - 1.);
+			const double extend = exp(diff / 2.);
+			this->end() *= extend;
+			this->start() /= extend;
+			break;
+		}
+		case RangeT::Scale::Sqrt: {
+			if (start < 0 || end < 0)
+				break;
+			const double diff = (sqrt(end) - sqrt(start)) * (factor - 1.);
+			extend(diff * diff / 4.);
+			break;
+		}
+		case RangeT::Scale::Square: {
+			const double diff = (end * end - start * start) * (factor - 1.);
+			extend(sqrt(std::abs(diff / 2.)));
+			break;
+		}
+		case RangeT::Scale::Inverse: {
+			const double diff = (1. / start - 1. / end) * (factor - 1.);
+			extend(1. / std::abs(diff / 2.));
+			break;
+		}
+		}
+
+		// make nice again
+		if (nice) {
+			if (factor < 1) // zoomIn
+				niceShrink();
+			else
+				niceExtend();
+		}
+	}
+
 private:
 	T m_start{0}; // start value
 	T m_end{1}; // end value
@@ -439,8 +639,8 @@ inline QString Range<double>::toString(bool round, QLocale locale) const {
 		} else
 			return locale.toString(m_start, 'g', 12) + QLatin1String(" .. ") + locale.toString(m_end, 'g', 12);
 	} else
-		return QDateTime::fromMSecsSinceEpoch(m_start, Qt::UTC).toString(m_dateTimeFormat) + QLatin1String(" .. ")
-			+ QDateTime::fromMSecsSinceEpoch(m_end, Qt::UTC).toString(m_dateTimeFormat);
+		return QDateTime::fromMSecsSinceEpoch(m_start, QTimeZone::UTC).toString(m_dateTimeFormat) + QLatin1String(" .. ")
+			+ QDateTime::fromMSecsSinceEpoch(m_end, QTimeZone::UTC).toString(m_dateTimeFormat);
 }
 
 #endif

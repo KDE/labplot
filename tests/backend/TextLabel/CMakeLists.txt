@@ -1,5 +1,9 @@
-add_executable (TextLabelTest TextLabelTest.cpp)
+option(ENABLE_TEST_BACKEND_TEXTLABEL "Enable Textlabel Tests" ON)
 
-target_link_libraries(TextLabelTest labplot2lib labplot2test)
+if(ENABLE_TEST_BACKEND_TEXTLABEL)
+    add_executable (TextLabelTest TextLabelTest.cpp)
 
-add_test(NAME TextLabelTest COMMAND TextLabelTest)
+    target_link_libraries(TextLabelTest labplotbackendlib labplotlib labplottest)
+
+    add_test(NAME TextLabelTest COMMAND TextLabelTest)
+endif()

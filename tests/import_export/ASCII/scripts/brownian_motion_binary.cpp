@@ -2,10 +2,8 @@
 #include <iostream>
 #include <math.h>
 
-extern "C" {
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
-}
 
 int main() {
 	std::string fileName = "out_1M_5pathes.bin";

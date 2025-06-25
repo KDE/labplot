@@ -8,24 +8,15 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYFourierFilterCurve
-  \brief A xy-curve defined by a Fourier filter
-
-  \ingroup worksheet
-*/
-
 #include "XYFourierFilterCurve.h"
 #include "XYFourierFilterCurvePrivate.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/gsl/errors.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 
-extern "C" {
 #include <gsl/gsl_sf_pow_int.h>
+extern "C" {
 #ifdef HAVE_FFTW3
 #include <fftw3.h>
 #endif
@@ -37,6 +28,11 @@ extern "C" {
 #include <QIcon>
 #include <QThreadPool>
 
+/*!
+ * \class XYFourierFilterCurve
+ * \brief A xy-curve defined by a Fourier filter.
+ * \ingroup CartesianAnalysisPlots
+ */
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYFourierFilterCurvePrivate(this), AspectType::XYFourierFilterCurve) {
 }
@@ -48,11 +44,6 @@ XYFourierFilterCurve::XYFourierFilterCurve(const QString& name, XYFourierFilterC
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 XYFourierFilterCurve::~XYFourierFilterCurve() = default;
-
-void XYFourierFilterCurve::recalculate() {
-	Q_D(XYFourierFilterCurve);
-	d->recalculate();
-}
 
 const XYAnalysisCurve::Result& XYFourierFilterCurve::result() const {
 	Q_D(const XYFourierFilterCurve);
@@ -66,9 +57,9 @@ QIcon XYFourierFilterCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYFourierFilterCurve, XYFourierFilterCurve::FilterData, filterData, filterData)
 
 const XYFourierFilterCurve::FilterResult& XYFourierFilterCurve::filterResult() const {
@@ -76,18 +67,18 @@ const XYFourierFilterCurve::FilterResult& XYFourierFilterCurve::filterResult() c
 	return d->filterResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYFourierFilterCurve, SetFilterData, XYFourierFilterCurve::FilterData, filterData, recalculate)
 void XYFourierFilterCurve::setFilterData(const XYFourierFilterCurve::FilterData& filterData) {
 	Q_D(XYFourierFilterCurve);
 	exec(new XYFourierFilterCurveSetFilterDataCmd(d, filterData, ki18n("%1: set filter options and perform the Fourier filter")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYFourierFilterCurvePrivate::XYFourierFilterCurvePrivate(XYFourierFilterCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -229,6 +220,7 @@ bool XYFourierFilterCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 	DEBUG("bandwidth =" << bandwidth);
 
 	// run filter
+	gsl_set_error_handler_off();
 	int status = nsl_filter_fourier(ydata, n, type, form, order, cutindex, bandwidth);
 
 	xVector->resize((int)n);
@@ -245,9 +237,9 @@ bool XYFourierFilterCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYFourierFilterCurve);
@@ -292,7 +284,6 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const {
 bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYFourierFilterCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -336,6 +327,10 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
@@ -358,7 +353,7 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
-		recalcLogicalPoints();
+		recalc();
 	}
 
 	return true;

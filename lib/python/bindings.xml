@@ -1,0 +1,1719 @@
+<typesystem package="pylabplot">
+    <load-typesystem name="typesystem_widgets.xml" generate="no"/>
+
+    <!-- Global -->
+    <enum-type name="AspectType">
+        <reject-enum-value name="DatapickerCurve"/>
+        <reject-enum-value name="DatapickerPoint"/>
+        <reject-enum-value name="LiveDataSource"/>
+        <reject-enum-value name="MQTTTopic"/>
+        <reject-enum-value name="Datapicker"/>
+        <reject-enum-value name="DatapickerImage"/>
+        <reject-enum-value name="Workbook"/>
+        <reject-enum-value name="MQTTClient"/>
+        <reject-enum-value name="MQTTSubscription"/>
+        <reject-enum-value name="ColumnStringIO"/>
+        <reject-enum-value name="SimpleFilterColumn"/>
+        <reject-enum-value name="AbstractColumn"/>
+        <reject-enum-value name="Note"/>
+        <reject-enum-value name="Notebook"/>
+        <reject-enum-value name="AbstractDataSource"/>
+        <reject-enum-value name="AbstractPart"/>
+        <reject-enum-value name="XYAnalysisCurve"/>
+        <reject-enum-value name="WorksheetElementGroup"/>
+        <reject-enum-value name="AbstractPlot"/>
+        <reject-enum-value name="WorksheetElementContainer"/>
+        <reject-enum-value name="PlotArea"/>
+        <reject-enum-value name="WorksheetElement"/>
+        <reject-enum-value name="AbstractFilter"/>
+        <reject-enum-value name="AbstractAspect"/>
+        <reject-enum-value name="Script"/>
+        <reject-enum-value name="StatisticsSpreadsheet"/>
+    </enum-type>
+    <?if scripting ?>
+    <function signature="project()"/>
+    <?endif?>
+
+    <!-- Abstract Classes -->
+    <rejection class="AbstractAspect" field-name="*"/>
+    <rejection class="AbstractAspect" function-name="*"/>
+    <object-type name="AbstractAspect" force-abstract="yes" disable-wrapper="yes" parent-management="yes">
+        <enum-type name="ChildIndexFlag" flags="yes"/>
+        <enum-type name="NameHandling"/>
+        <declare-function signature="name()const" return-type="QString"/>
+        <declare-function signature="setName(const QString&amp;,AbstractAspect::NameHandling,QUndoCommand*)" return-type="bool">
+            <modify-argument index="2">
+                <replace-default-expression with="AbstractAspect::NameHandling::AutoUnique"/>
+                <remove-argument/>
+            </modify-argument>
+            <modify-argument index="3">
+                <replace-default-expression with="nullptr"/>
+                <remove-argument/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="type()const" return-type="AspectType"/>
+        <declare-function signature="parentAspect()const" return-type="AbstractAspect*"/>
+        <declare-function signature="child(const QString&amp;,AspectType)const" return-type="AbstractAspect*"/>
+        <declare-function signature="children(AspectType,AbstractAspect::ChildIndexFlags)const" return-type="QVector&lt;AbstractAspect*&gt;">
+            <modify-argument index="2">
+                <replace-default-expression with="{}"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="addChild(AbstractAspect*)" return-type="bool">
+            <modify-argument index="1">
+                <parent index="this" action="add"/>
+            </modify-argument>
+        </declare-function>
+    </object-type>
+    <rejection class="AbstractColumn" field-name="*"/>
+    <rejection class="AbstractColumn" function-name="*"/>
+    <object-type name="AbstractColumn" force-abstract="yes" disable-wrapper="yes">
+        <enum-type name="PlotDesignation"/>
+        <enum-type name="TimeUnit"/>
+        <enum-type name="ColumnMode"/>
+        <enum-type name="Properties"/>
+        <enum-type name="Formatting"/>
+        <declare-function signature="columnMode()const" return-type="AbstractColumn::ColumnMode"/>
+        <declare-function signature="setColumnMode(AbstractColumn::ColumnMode)" return-type="void"/>
+        <declare-function signature="plotDesignation()const" return-type="AbstractColumn::PlotDesignation"/>
+        <declare-function signature="setPlotDesignation(AbstractColumn::PlotDesignation)" return-type="void"/>
+        <declare-function signature="rowCount()const" return-type="int"/>
+        <declare-function signature="insertRows(int,int)" return-type="void"/>
+        <declare-function signature="removeRows(int,int)" return-type="void"/>
+        <declare-function signature="clear()" return-type="void"/>
+        <declare-function signature="textAt(int)const" return-type="QString"/>
+        <declare-function signature="setTextAt(int,const QString&amp;)" return-type="void"/>
+        <declare-function signature="replaceTexts(int, const QVector&lt;QString&gt;&amp;)" return-type="void"/>
+        <declare-function signature="valueAt(int)const" return-type="double"/>
+        <declare-function signature="setValueAt(int,double)" return-type="void"/>
+        <declare-function signature="replaceValues(int, const QVector&lt;double&gt;&amp;)" return-type="void"/>
+        <declare-function signature="integerAt(int)const" return-type="int"/>
+        <declare-function signature="setIntegerAt(int,int)" return-type="void"/>
+        <declare-function signature="replaceInteger(int,const QVector&lt;int&gt;&amp;)" return-type="void"/>
+        <declare-function signature="bigIntAt(int)const" return-type="qint64"/>
+        <declare-function signature="setBigIntAt(int,qint64)" return-type="void"/>
+        <declare-function signature="replaceBigInt(int,const QVector&lt;qint64&gt;&amp;)" return-type="void"/>
+        <declare-function signature="dateAt(int)const" return-type="QDate"/>
+        <declare-function signature="setDateAt(int,QDate)" return-type="void"/>
+        <declare-function signature="timeAt(int)const" return-type="QTime"/>
+        <declare-function signature="setTimeAt(int,QTime)" return-type="void"/>
+        <declare-function signature="dateTimeAt(int)const" return-type="QDateTime"/>
+        <declare-function signature="setDateTimeAt(int,const QDateTime&amp;)" return-type="void"/>
+        <declare-function signature="replaceDateTimes(int,const QVector&lt;QDateTime&gt;&amp;)" return-type="void"/>
+    </object-type>
+    <rejection class="AbstractCoordinateSystem" field-name="*"/>
+    <rejection class="AbstractCoordinateSystem" function-name="*"/>
+    <object-type name="AbstractCoordinateSystem" force-abstract="yes" disable-wrapper="yes">
+        <enum-type name="MappingFlag" flags="yes"/>
+    </object-type>
+    <rejection class="AbstractDataSource" field-name="*"/>
+    <rejection class="AbstractDataSource" function-name="*"/>
+    <object-type name="AbstractDataSource" force-abstract="yes" disable-wrapper="yes"/>
+    <rejection class="AbstractFileFilter" field-name="*"/>
+    <rejection class="AbstractFileFilter" function-name="*"/>
+    <object-type name="AbstractFileFilter" force-abstract="yes" disable-wrapper="yes">
+        <enum-type name="FileType"/>
+        <enum-type name="ImportMode"/>
+        <declare-function signature="readDataFromFile(const QString&amp;,AbstractDataSource*,AbstractFileFilter::ImportMode)" return-type="void">
+            <modify-argument index="3">
+                <replace-default-expression with="AbstractFileFilter::ImportMode::Replace"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="write(const QString&amp;,AbstractDataSource*)" return-type="void"/>
+        <declare-function signature="type()const" return-type="AbstractFileFilter::FileType"/>
+        <declare-function signature="lastError()const" return-type="QString"/>
+        <declare-function signature="clearLastError()" return-type="void"/>
+        <declare-function signature="lastWarnings()const" return-type="QStringList"/>
+        <declare-function signature="clearLastWarnings()" return-type="void"/>
+    </object-type>
+    <rejection class="AbstractPart" field-name="*"/>
+    <rejection class="AbstractPart" function-name="*"/>
+    <object-type name="AbstractPart" force-abstract="yes" disable-wrapper="yes"/>
+    <rejection class="AbstractPlot" field-name="*"/>
+    <rejection class="AbstractPlot" function-name="*"/>
+    <object-type name="AbstractPlot" force-abstract="yes" disable-wrapper="yes">
+        <declare-function signature="plotArea()" return-type="PlotArea*"/>
+        <declare-function signature="title()" return-type="TextLabel*"/>
+        <declare-function signature="horizontalPadding()" return-type="double"/>
+        <declare-function signature="setHorizontalPadding(double)" return-type="void"/>
+        <declare-function signature="verticalPadding()" return-type="double"/>
+        <declare-function signature="setVerticalPadding(double)" return-type="void"/>
+        <declare-function signature="rightPadding()" return-type="double"/>
+        <declare-function signature="setRightPadding(double)" return-type="void"/>
+        <declare-function signature="bottomPadding()" return-type="double"/>
+        <declare-function signature="setBottomPadding(double)" return-type="void"/>
+        <declare-function signature="symmetricPadding()" return-type="bool"/>
+        <declare-function signature="setSymmetricPadding(bool)" return-type="void"/>
+    </object-type>
+    <rejection class="Plot" field-name="*"/>
+    <rejection class="Plot" function-name="*"/>
+    <object-type name="Plot" force-abstract="yes" disable-wrapper="yes">
+        <enum-type name="PlotType"/>
+        <declare-function signature="legendVisible()" return-type="bool"/>
+        <declare-function signature="setLegendVisible(bool)" return-type="void"/>
+        <declare-function signature="color()const" return-type="QColor"/>
+        <declare-function signature="recalc()" return-type="void"/>
+    </object-type>
+    <rejection class="WorksheetElement" field-name="*"/>
+    <rejection class="WorksheetElement" function-name="*"/>
+    <object-type name="WorksheetElement" force-abstract="yes" disable-wrapper="yes">
+        <enum-type name="Orientation"/>
+        <enum-type name="HorizontalPosition"/>
+        <enum-type name="VerticalPosition"/>
+        <enum-type name="HorizontalAlignment"/>
+        <enum-type name="VerticalAlignment"/>
+        <enum-type name="PositionLimit"/>
+        <value-type name="PositionWrapper" disable-wrapper="yes"/>
+        <declare-function signature="position()" return-type="WorksheetElement::PositionWrapper"/>
+        <declare-function signature="setPosition(WorksheetElement::PositionWrapper)" return-type="void"/>
+        <declare-function signature="setPosition(QPointF)" return-type="void"/>
+        <declare-function signature="positionLogical()" return-type="QPointF"/>
+        <declare-function signature="setPositionLogical(QPointF)" return-type="void"/>
+        <declare-function signature="horizontalAlignment()" return-type="WorksheetElement::HorizontalAlignment"/>
+        <declare-function signature="setHorizontalAlignment(WorksheetElement::HorizontalAlignment)" return-type="void"/>
+        <declare-function signature="verticalAlignment()" return-type="WorksheetElement::VerticalAlignment"/>
+        <declare-function signature="setVerticalAlignment(WorksheetElement::VerticalAlignment)" return-type="void"/>
+        <declare-function signature="setVisible(bool)" return-type="void"/>
+        <declare-function signature="isVisible()const" return-type="bool"/>
+        <declare-function signature="plot()const" return-type="CartesianPlot*"/>
+        <declare-function signature="retransform()" return-type="void"/>
+        <declare-function signature="setZValue(qreal)" return-type="void"/>
+        <declare-function signature="coordinateSystemIndex()const" return-type="int"/>
+        <declare-function signature="setCoordinateSystemIndex(int,QUndoCommand*)" return-type="void">
+            <modify-argument index="2">
+                <replace-default-expression with="nullptr"/>
+                <remove-argument/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="coordinateBindingEnabled()const" return-type="bool"/>
+        <declare-function signature="setCoordinateBindingEnabled(bool)" return-type="bool"/>
+    </object-type>
+    <rejection class="WorksheetElementContainer" field-name="*"/>
+    <rejection class="WorksheetElementContainer" function-name="*"/>
+    <object-type name="WorksheetElementContainer" force-abstract="yes" disable-wrapper="yes">
+        <declare-function signature="retransform()" return-type="void"/>
+        <declare-function signature="rect()const" return-type="QRectF"/>
+        <declare-function signature="setRect(const QRectF&amp;)" return-type="void"/>
+    </object-type>
+    <rejection class="XYAnalysisCurve" field-name="*"/>
+    <rejection class="XYAnalysisCurve" function-name="*"/>
+    <object-type name="XYAnalysisCurve" force-abstract="yes" disable-wrapper="yes">
+        <enum-type name="DataSourceType"/>
+        <enum-type name="AnalysisAction"/>
+        <value-type name="Result" disable-wrapper="yes"/>
+        <declare-function signature="dataSourceType()" return-type="XYAnalysisCurve::DataSourceType"/>
+        <declare-function signature="setDataSourceType(XYAnalysisCurve::DataSourceType)" return-type="void"/>
+        <declare-function signature="dataSourceCurve()" return-type="const XYCurve*"/>
+        <declare-function signature="setDataSourceCurve(const XYCurve*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="xDataColumn()" return-type="const AbstractColumn*"/>
+        <declare-function signature="setXDataColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="yDataColumn()" return-type="const AbstractColumn*"/>
+        <declare-function signature="setYDataColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="y2DataColumn()" return-type="const AbstractColumn*"/>
+        <declare-function signature="setY2DataColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="recalculate()" return-type="void"/>
+    </object-type>
+
+    <!-- Aspect Containers -->
+    <rejection class="Folder" field-name="*"/>
+    <rejection class="Folder" function-name="*"/>
+    <object-type name="Folder" disable-wrapper="yes">
+        <declare-function signature="Folder(const QString&amp;,AspectType)" return-type="void">
+            <modify-argument index="2">
+                <replace-default-expression with="AspectType::Folder"/>
+                <remove-argument/>
+            </modify-argument>
+        </declare-function>
+    </object-type>
+    <rejection class="Project" field-name="*"/>
+    <rejection class="Project" function-name="*"/>
+    <object-type name="Project" disable-wrapper="yes">
+        <enum-type name="DockVisibility"/>
+        <?if !scripting ?>
+        <declare-function signature="Project()" return-type="void"/>
+        <?endif?>
+    </object-type>
+
+    <!-- Column -->
+    <rejection class="Column" field-name="*"/>
+    <rejection class="Column" function-name="*"/>
+    <object-type name="Column" disable-wrapper="yes">
+        <declare-function signature="Column(const QString&amp;,AbstractColumn::ColumnMode)" return-type="void">
+            <modify-argument index="2">
+                <replace-default-expression with="AbstractColumn::ColumnMode::Double"/>
+            </modify-argument>
+        </declare-function>
+    </object-type>
+
+    <!-- Data Containers -->
+    <rejection class="Spreadsheet" field-name="*"/>
+    <rejection class="Spreadsheet" function-name="*"/>
+    <object-type name="Spreadsheet" disable-wrapper="yes">
+        <declare-function signature="Spreadsheet(const QString&amp;,bool,AspectType)" return-type="void">
+            <modify-argument index="2">
+                <replace-default-expression with="false"/>
+                <remove-argument/>
+            </modify-argument>
+            <modify-argument index="3">
+                <replace-default-expression with="AspectType::Spreadsheet"/>
+                <remove-argument/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="statisticsSpreadsheet()const" return-type="StatisticsSpreadsheet*"/>
+        <declare-function signature="toggleStatisticsSpreadsheet(bool)" return-type="void"/>
+        <declare-function signature="column(int)const" return-type="Column*"/>
+        <declare-function signature="column(const QString&amp;)const" return-type="Column*"/>
+        <declare-function signature="columnCount()const" return-type="int"/>
+        <declare-function signature="removeColumns(int,int)" return-type="void"/>
+        <declare-function signature="insertColumns(int,int)" return-type="void"/>
+        <declare-function signature="appendColumns(int)" return-type="void"/>
+        <declare-function signature="setColumnCount(int)" return-type="void"/>
+        <declare-function signature="rowCount()const" return-type="int"/>
+        <declare-function signature="removeRows(int,int)" return-type="void"/>
+        <declare-function signature="insertRows(int,int)" return-type="void"/>
+        <declare-function signature="appendRows(int)" return-type="void"/>
+        <declare-function signature="setRowCount(int)" return-type="void"/>
+        <declare-function signature="clear()" return-type="void"/>
+    </object-type>
+    <rejection class="Matrix" field-name="*"/>
+    <rejection class="Matrix" function-name="*"/>
+    <object-type name="Matrix" disable-wrapper="yes">
+        <enum-type name="HeaderFormat"/>
+        <declare-function signature="Matrix(const QString&amp;,bool,const AbstractColumn::ColumnMode)" return-type="void">
+            <modify-argument index="2">
+                <replace-default-expression with="false"/>
+                <remove-argument/>
+            </modify-argument>
+            <modify-argument index="3">
+                <replace-default-expression with="AbstractColumn::ColumnMode::Double"/>
+                <remove-argument/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="mode()const" return-type="AbstractColumn::ColumnMode"/>
+        <declare-function signature="rowCount()const" return-type="int"/>
+        <declare-function signature="setRowCount(int)" return-type="void"/>
+        <declare-function signature="columnCount()const" return-type="int"/>
+        <declare-function signature="setColumnCount(int)" return-type="void"/>
+        <declare-function signature="precision()const" return-type="int"/>
+        <declare-function signature="setPrecision(int)" return-type="void"/>
+        <declare-function signature="xStart()const" return-type="double"/>
+        <declare-function signature="setXStart(double)" return-type="void"/>
+        <declare-function signature="xEnd()const" return-type="double"/>
+        <declare-function signature="setXEnd(double)" return-type="void"/>
+        <declare-function signature="yStart()const" return-type="double"/>
+        <declare-function signature="setYStart(double)" return-type="void"/>
+        <declare-function signature="yEnd()const" return-type="double"/>
+        <declare-function signature="setYEnd(double)" return-type="void"/>
+        <declare-function signature="formula()const" return-type="QString"/>
+        <declare-function signature="setFormula(QString)" return-type="void"/>
+        <declare-function signature="setDimensions(int,int)" return-type="void"/>
+        <declare-function signature="setCoordinates(double,double,double,double)" return-type="void"/>
+        <declare-function signature="insertColumns(int,int)" return-type="void"/>
+        <declare-function signature="appendColumns(int)" return-type="void"/>
+        <declare-function signature="removeColumns(int,int)" return-type="void"/>
+        <declare-function signature="clearColumn(int)" return-type="void"/>
+        <declare-function signature="insertRows(int,int)" return-type="void"/>
+        <declare-function signature="appendRows(int)" return-type="void"/>
+        <declare-function signature="removeRows(int,int)" return-type="void"/>
+        <declare-function signature="clearRow(int)" return-type="void"/>
+        <add-function signature="cell(int,int)const" return-type="double" access="public" static="no" classmethod="no">
+            <inject-code class="target" position="beginning">
+                int row = %CONVERTTOCPP[int](%PYARG_1);
+                int col = %CONVERTTOCPP[int](%PYARG_2);
+                double result = %CPPSELF-&gt;cell&lt;double&gt;(row, col);
+                return %CONVERTTOPYTHON[double](result);
+            </inject-code>
+        </add-function>
+        <add-function signature="setCell(int,int,double)" return-type="void" access="public" static="no" classmethod="no">
+            <inject-code class="target" position="beginning">
+                int row = %CONVERTTOCPP[int](%PYARG_1);
+                int col = %CONVERTTOCPP[int](%PYARG_2);
+                double value = %CONVERTTOCPP[int](%PYARG_3);
+                %CPPSELF-&gt;setCell&lt;double&gt;(row, col, value);
+            </inject-code>
+        </add-function>
+        <declare-function signature="clearCell(int,int)" return-type="void"/>
+        <declare-function signature="clear()" return-type="void"/>
+        <declare-function signature="transpose()" return-type="void"/>
+        <declare-function signature="mirrorVertically()" return-type="void"/>
+        <declare-function signature="mirrorHorizontally()" return-type="void"/>
+    </object-type>
+
+    <!-- Filters -->
+    <rejection class="^.*Filter$" function-name="save"/>
+    <rejection class="^.*Filter$" function-name="load"/>
+    <rejection class="^.*Filter$" function-name="^.*preview.*$"/>
+    <rejection class="^.*Filter$" function-name="parse"/>
+    <rejection class="^.*Filter$" function-name="^.*Device.*$"/>
+    <rejection class="^.*Filter$" function-name="fileInfoString"/>
+    <object-type name="AsciiFilter" disable-wrapper="yes">
+        <value-type name="Properties" disable-wrapper="yes"/>
+        <enum-type name="Status"/>
+    </object-type>
+    <object-type name="BinaryFilter" disable-wrapper="yes">
+        <enum-type name="DataType"/>
+    </object-type>
+    <object-type name="CANFilter" disable-wrapper="yes">
+        <enum-type name="TimeHandling"/>
+    </object-type>
+    <object-type name="FITSFilter" disable-wrapper="yes"/>
+    <object-type name="HDF5Filter" disable-wrapper="yes"/>
+    <object-type name="ImageFilter" disable-wrapper="yes">
+        <enum-type name="ImportFormat"/>
+    </object-type>
+    <object-type name="JsonFilter" disable-wrapper="yes">
+        <enum-type name="DataContainerType"/>
+    </object-type>
+    <object-type name="MatioFilter" disable-wrapper="yes"/>
+    <object-type name="McapFilter" disable-wrapper="yes">
+        <enum-type name="DataContainerType"/>
+    </object-type>
+    <object-type name="NetCDFFilter" disable-wrapper="yes"/>
+    <object-type name="OdsFilter" disable-wrapper="yes"/>
+    <object-type name="ReadStatFilter" disable-wrapper="yes"/>
+    <object-type name="ROOTFilter" disable-wrapper="yes"/>
+    <object-type name="SpiceFilter" disable-wrapper="yes"/>
+    <object-type name="VectorBLFFilter" disable-wrapper="yes"/>
+    <object-type name="XLSXFilter" disable-wrapper="yes"/>
+
+    <!-- Helper Classes -->
+    <rejection class="Background" field-name="*"/>
+    <rejection class="Background" function-name="*"/>
+    <object-type name="Background" disable-wrapper="yes">
+        <enum-type name="Position"/>
+        <enum-type name="Type"/>
+        <enum-type name="ColorStyle"/>
+        <enum-type name="ImageStyle"/>
+        <declare-function signature="enabled()const" return-type="bool"/>
+        <declare-function signature="setEnabled(const bool)" return-type="void"/>
+        <declare-function signature="position()const" return-type="Background::Position"/>
+        <declare-function signature="setPosition(const Background::Position)" return-type="void"/>
+        <declare-function signature="type()const" return-type="Background::Type"/>
+        <declare-function signature="setType(const Background::Type)" return-type="void"/>
+        <declare-function signature="colorStyle()const" return-type="Background::ColorStyle"/>
+        <declare-function signature="setColorStyle(const Background::ColorStyle)" return-type="void"/>
+        <declare-function signature="imageStyle()const" return-type="Background::ImageStyle"/>
+        <declare-function signature="setImageStyle(const Background::ImageStyle)" return-type="void"/>
+        <declare-function signature="brushStyle()const" return-type="Qt::BrushStyle"/>
+        <declare-function signature="setBrushStyle(const Qt::BrushStyle)" return-type="void"/>
+        <declare-function signature="firstColor()const" return-type="QColor"/>
+        <declare-function signature="setFirstColor(const QColor&amp;)" return-type="void"/>
+        <declare-function signature="secondColor()const" return-type="QColor"/>
+        <declare-function signature="setSecondColor(const QColor&amp;)" return-type="void"/>
+        <declare-function signature="fileName()const" return-type="QString"/>
+        <declare-function signature="setFileName(const QString&amp;)" return-type="void"/>
+        <declare-function signature="opacity()const" return-type="double"/>
+        <declare-function signature="setOpacity(double)" return-type="void"/>
+    </object-type>
+    <rejection class="CartesianCoordinateSystem" field-name="*"/>
+    <rejection class="CartesianCoordinateSystem" function-name="*"/>
+    <object-type name="CartesianCoordinateSystem" disable-wrapper="yes">
+        <enum-type name="Dimension"/>
+    </object-type>
+    <rejection class="ErrorBar" field-name="*"/>
+    <rejection class="ErrorBar" function-name="*"/>
+    <object-type name="ErrorBar" disable-wrapper="yes">
+        <enum-type name="ErrorType"/>
+        <enum-type name="Type"/>
+        <enum-type name="Dimension"/>
+        <declare-function signature="update()" return-type="void"/>
+        <declare-function signature="dimension()const" return-type="ErrorBar::Dimension"/>
+        <declare-function signature="xErrorType()const" return-type="ErrorBar::ErrorType"/>
+        <declare-function signature="setXErrorType(ErrorBar::ErrorType)" return-type="void"/>
+        <declare-function signature="xPlusColumn()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setXPlusColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="xMinusColumn()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setXMinusColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="yErrorType()const" return-type="ErrorBar::ErrorType"/>
+        <declare-function signature="setYErrorType(ErrorBar::ErrorType)" return-type="void"/>
+        <declare-function signature="yPlusColumn()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setYPlusColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="yMinusColumn()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setYMinusColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="type()const" return-type="ErrorBar::Type"/>
+        <declare-function signature="setType(ErrorBar::Type)" return-type="void"/>
+        <declare-function signature="capSize()const" return-type="double"/>
+        <declare-function signature="setCapSize(double)" return-type="void"/>
+        <declare-function signature="line()const" return-type="Line*"/>
+    </object-type>
+    <rejection class="Line" field-name="*"/>
+    <rejection class="Line" function-name="*"/>
+    <object-type name="Line" disable-wrapper="yes">
+        <declare-function signature="histogramLineType()const" return-type="Histogram::LineType"/>
+        <declare-function signature="setHistogramLineType(Histogram::LineType)" return-type="void"/>
+        <declare-function signature="dropLineType()const" return-type="XYCurve::DropLineType"/>
+        <declare-function signature="setDropLineType(XYCurve::DropLineType)" return-type="void"/>
+        <declare-function signature="style()const" return-type="Qt::PenStyle"/>
+        <declare-function signature="setStyle(Qt::PenStyle)" return-type="void"/>
+        <declare-function signature="color()const" return-type="QColor"/>
+        <declare-function signature="setColor(const QColor&amp;)" return-type="void"/>
+        <declare-function signature="width()const" return-type="double"/>
+        <declare-function signature="setWidth(double)" return-type="void"/>
+        <declare-function signature="opacity()const" return-type="double"/>
+        <declare-function signature="setOpacity(double)" return-type="void"/>
+    </object-type>
+    <rejection class="PlotArea" field-name="*"/>
+    <rejection class="PlotArea" function-name="*"/>
+    <object-type name="PlotArea" disable-wrapper="yes">
+        <enum-type name="BorderTypeFlags" flags="yes"/>
+        <declare-function signature="background()const" return-type="Background*"/>
+        <declare-function signature="borderLine()const" return-type="Line*"/>
+        <declare-function signature="borderType()const" return-type="PlotArea::BorderType"/>
+        <declare-function signature="setBorderType(PlotArea::BorderType)" return-type="void"/>
+        <declare-function signature="borderCornerRadius()const" return-type="qreal"/>
+        <declare-function signature="setBorderCornerRadius(qreal)" return-type="void"/>
+    </object-type>
+    <value-type name="Range" disable-wrapper="yes" generate="no"/>
+    <typedef-type name="DoubleRange" source="Range&lt;double&gt;"/>
+    <typedef-type name="IntRange" source="Range&lt;int&gt;"/>
+    <rejection class="RangeT" field-name="*"/>
+    <rejection class="RangeT" function-name="*"/>
+    <value-type name="RangeT" disable-wrapper="yes">
+        <enum-type name="Format"/>
+        <enum-type name="Scale"/>
+    </value-type>
+    <rejection class="StatisticsSpreadsheet" field-name="*"/>
+    <rejection class="StatisticsSpreadsheet" function-name="*"/>
+    <object-type name="StatisticsSpreadsheet" disable-wrapper="yes">
+        <enum-type name="Metric" flags="yes"/>
+        <declare-function signature="metrics()const" return-type="StatisticsSpreadsheet::Metrics"/>
+        <declare-function signature="setMetrics(StatisticsSpreadsheet::Metrics)" return-type="void"/>
+    </object-type>
+    <rejection class="Symbol" field-name="*"/>
+    <rejection class="Symbol" function-name="*"/>
+    <object-type name="Symbol" disable-wrapper="yes">
+        <enum-type name="Style"/>
+        <declare-function signature="setColor(const QColor&amp;)" return-type="void"/>
+        <declare-function signature="style()const" return-type="Symbol::Style"/>
+        <declare-function signature="setStyle(Symbol::Style)" return-type="void"/>
+        <declare-function signature="opacity()const" return-type="qreal"/>
+        <declare-function signature="setOpacity(qreal)" return-type="void"/>
+        <declare-function signature="rotationAngle()const" return-type="qreal"/>
+        <declare-function signature="setRotationAngle(qreal)" return-type="void"/>
+        <declare-function signature="size()const" return-type="qreal"/>
+        <declare-function signature="setSize(qreal)" return-type="void"/>
+    </object-type>
+    <rejection class="Value" field-name="*"/>
+    <rejection class="Value" function-name="*"/>
+    <object-type name="Value" disable-wrapper="yes">
+        <enum-type name="Type"/>
+        <enum-type name="Position"/>
+        <declare-function signature="type()const" return-type="Value::Type"/>
+        <declare-function signature="setType(Value::Type)" return-type="void"/>
+        <declare-function signature="column()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="position()const" return-type="Value::Position"/>
+        <declare-function signature="setPosition(Value::Position)" return-type="void"/>
+        <declare-function signature="distance()const" return-type="double"/>
+        <declare-function signature="setDistance(double)" return-type="void"/>
+        <declare-function signature="rotationAngle()const" return-type="double"/>
+        <declare-function signature="setRotationAngle(double)" return-type="void"/>
+        <declare-function signature="opacity()const" return-type="double"/>
+        <declare-function signature="setOpacity(double)" return-type="void"/>
+        <declare-function signature="numericFormat()const" return-type="char"/>
+        <declare-function signature="setNumericFormat(char)" return-type="void"/>
+        <declare-function signature="precision()const" return-type="int"/>
+        <declare-function signature="setPrecision(int)" return-type="void"/>
+        <declare-function signature="dateTimeFormat()const" return-type="QString"/>
+        <declare-function signature="setDateTimeFormat(const QString&amp;)" return-type="void"/>
+        <declare-function signature="prefix()const" return-type="QString"/>
+        <declare-function signature="setPrefix(const QString&amp;)" return-type="void"/>
+        <declare-function signature="suffix()const" return-type="QString"/>
+        <declare-function signature="setSuffix(const QString&amp;)" return-type="void"/>
+        <declare-function signature="color()const" return-type="QColor"/>
+        <declare-function signature="setColor(const QColor&amp;)" return-type="void"/>
+        <declare-function signature="font()const" return-type="QFont"/>
+        <declare-function signature="setFont(const QFont&amp;)" return-type="void"/>
+    </object-type>
+
+    <!-- Plot Area Elements -->
+    <rejection class="Axis" field-name="*"/>
+    <rejection class="Axis" function-name="*"/>
+    <object-type name="Axis" disable-wrapper="yes">
+        <enum-type name="RangeType"/>
+        <enum-type name="Position"/>
+        <enum-type name="LabelsFormat"/>
+        <enum-type name="TicksType"/>
+        <enum-type name="ArrowType"/>
+        <enum-type name="ArrowPosition"/>
+        <enum-type name="LabelsPosition"/>
+        <enum-type name="LabelsTextType"/>
+        <enum-type name="LabelsBackgroundType"/>
+        <enum-type name="TicksStartType"/>
+        <enum-type name="TicksFlags" flags="yes"/>
+        <declare-function signature="Axis(const QString&amp;,WorksheetElement::Orientation,bool)" return-type="void">
+            <modify-argument index="2">
+                <replace-default-expression with="WorksheetElement::Orientation::Horizontal"/>
+            </modify-argument>
+            <modify-argument index="3">
+                <replace-default-expression with="false"/>
+                <remove-argument/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="rangeType()const" return-type="Axis::RangeType"/>
+        <declare-function signature="setRangeType(Axis::RangeType)" return-type="void"/>
+        <declare-function signature="orientation()const" return-type="WorksheetElement::Orientation"/>
+        <declare-function signature="setOrientation(WorksheetElement::Orientation)" return-type="void"/>
+        <declare-function signature="position()const" return-type="Axis::Position"/>
+        <declare-function signature="setPosition(Axis::Position)" return-type="void"/>
+        <declare-function signature="range()const" return-type="DoubleRange"/>
+        <declare-function signature="setRange(DoubleRange)" return-type="void"/>
+        <declare-function signature="scale()const" return-type="RangeT::Scale"/>
+        <declare-function signature="setScale(RangeT::Scale)" return-type="void"/>
+
+        <declare-function signature="setStart(const double)" return-type="void"/>
+        <declare-function signature="setEnd(const double)" return-type="void"/>
+        <declare-function signature="setRange(const double,const double)" return-type="void"/>
+        <declare-function signature="setOffset(const double,const bool)" return-type="void">
+            <modify-argument index="2">
+                <replace-default-expression with="true"/>
+                <remove-argument/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="offset()const" return-type="double"/>
+
+        <declare-function signature="scalingFactor()const" return-type="qreal"/>
+        <declare-function signature="setScalingFactor(qreal)" return-type="void"/>
+        <declare-function signature="zeroOffset()const" return-type="qreal"/>
+        <declare-function signature="setZeroOffset(qreal)" return-type="void"/>
+        <declare-function signature="showScaleOffset()const" return-type="bool"/>
+        <declare-function signature="setShowScaleOffset(bool)" return-type="void"/>
+        <declare-function signature="logicalPosition()const" return-type="double"/>
+        <declare-function signature="setLogicalPosition(double)" return-type="void"/>
+
+        <declare-function signature="title()const" return-type="TextLabel*"/>
+        <declare-function signature="titleOffsetX()const" return-type="double"/>
+        <declare-function signature="setTitleOffsetX(double)" return-type="void"/>
+        <declare-function signature="titleOffsetY()const" return-type="double"/>
+        <declare-function signature="setTitleOffsetY(double)" return-type="void"/>
+
+        <declare-function signature="line()const" return-type="Line*"/>
+        <declare-function signature="arrowType()const" return-type="Axis::ArrowType"/>
+        <declare-function signature="setArrowType(Axis::ArrowType)" return-type="void"/>
+        <declare-function signature="arrowPosition()const" return-type="Axis::ArrowPosition"/>
+        <declare-function signature="setArrowPosition(Axis::ArrowPosition)" return-type="void"/>
+        <declare-function signature="arrowSize()const" return-type="double"/>
+        <declare-function signature="setArrowSize(double)" return-type="void"/>
+
+        <declare-function signature="majorTicksDirection()const" return-type="Axis::TicksDirection"/>
+        <declare-function signature="setMajorTicksDirection(Axis::TicksDirection)" return-type="void"/>
+        <declare-function signature="majorTicksType()const" return-type="Axis::TicksType"/>
+        <declare-function signature="setMajorTicksType(Axis::TicksType)" return-type="void"/>
+        <declare-function signature="majorTicksAutoNumber()const" return-type="bool"/>
+        <declare-function signature="setMajorTicksAutoNumber(bool)" return-type="void"/>
+
+        <declare-function signature="majorTicksNumber()const" return-type="int"/>
+        <declare-function signature="setMajorTicksNumber(const int)" return-type="void"/>
+        <declare-function signature="majorTicksSpacing()const" return-type="qreal"/>
+        <declare-function signature="setMajorTicksSpacing(qreal)" return-type="void"/>
+        <declare-function signature="majorTicksStartType()const" return-type="Axis::TicksStartType"/>
+        <declare-function signature="setMajorTicksStartType(Axis::TicksStartType)" return-type="void"/>
+        <declare-function signature="majorTickStartOffset()const" return-type="qreal"/>
+        <declare-function signature="setMajorTickStartOffset(qreal)" return-type="void"/>
+        <declare-function signature="majorTickStartValue()const" return-type="qreal"/>
+        <declare-function signature="setMajorTickStartValue(qreal)" return-type="void"/>
+        <declare-function signature="majorTicksColumn()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setMajorTicksColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="majorTicksLine()const" return-type="Line*"/>
+        <declare-function signature="majorTicksLength()const" return-type="qreal"/>
+        <declare-function signature="setMajorTicksLength(qreal)" return-type="void"/>
+
+        <declare-function signature="minorTicksDirection()const" return-type="Axis::TicksDirection"/>
+        <declare-function signature="setMinorTicksDirection(Axis::TicksDirection)" return-type="void"/>
+        <declare-function signature="minorTicksType()const" return-type="Axis::TicksType"/>
+        <declare-function signature="setMinorTicksType(Axis::TicksType)" return-type="void"/>
+        <declare-function signature="minorTicksAutoNumber()const" return-type="bool"/>
+        <declare-function signature="setMinorTicksAutoNumber(bool)" return-type="void"/>
+        <declare-function signature="minorTicksNumber()const" return-type="int"/>
+        <declare-function signature="setMinorTicksNumber(int)" return-type="void"/>
+        <declare-function signature="minorTicksSpacing()const" return-type="qreal"/>
+        <declare-function signature="setMinorTicksSpacing(qreal)" return-type="void"/>
+        <declare-function signature="minorTicksColumn()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setMinorTicksColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="minorTicksLine()const" return-type="Line*"/>
+        <declare-function signature="minorTicksLength()const" return-type="qreal"/>
+        <declare-function signature="setMinorTicksLength(qreal)" return-type="void"/>
+
+        <declare-function signature="labelsFormat()const" return-type="Axis::LabelsFormat"/>
+        <declare-function signature="setLabelsFormat(Axis::LabelsFormat)" return-type="void"/>
+        <declare-function signature="labelsFormatAuto()const" return-type="bool"/>
+        <declare-function signature="setLabelsFormatAuto(bool)" return-type="void"/>
+        <declare-function signature="labelsAutoPrecision()const" return-type="bool"/>
+        <declare-function signature="setLabelsAutoPrecision(bool)" return-type="void"/>
+        <declare-function signature="labelsPrecision()const" return-type="int"/>
+        <declare-function signature="setLabelsPrecision(int)" return-type="void"/>
+        <declare-function signature="labelsDateTimeFormat()const" return-type="QString"/>
+        <declare-function signature="setLabelsDateTimeFormat(const QString&amp;)" return-type="void"/>
+        <declare-function signature="labelsPosition()const" return-type="Axis::LabelsPosition"/>
+        <declare-function signature="setLabelsPosition(Axis::LabelsPosition)" return-type="void"/>
+        <declare-function signature="labelsOffset()const" return-type="qreal"/>
+        <declare-function signature="setLabelsOffset(qreal)" return-type="void"/>
+        <declare-function signature="labelsRotationAngle()const" return-type="qreal"/>
+        <declare-function signature="setLabelsRotationAngle(qreal)" return-type="void"/>
+        <declare-function signature="labelsTextType()const" return-type="Axis::LabelsTextType"/>
+        <declare-function signature="setLabelsTextType(Axis::LabelsTextType)" return-type="void"/>
+
+        <declare-function signature="labelsTextColumn()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setLabelsTextColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="tickLabelValues()const" return-type="QVector&lt;double&gt;"/>
+        <declare-function signature="tickLabelStrings()const" return-type="QVector&lt;QString&gt;"/>
+        <declare-function signature="labelsColor()const" return-type="QColor"/>
+        <declare-function signature="setLabelsColor(const QColor&amp;)" return-type="void"/>
+        <declare-function signature="labelsFont()const" return-type="QFont"/>
+        <declare-function signature="setLabelsFont(const QFont&amp;)" return-type="void"/>
+        <declare-function signature="labelsBackgroundType()const" return-type="Axis::LabelsBackgroundType"/>
+        <declare-function signature="setLabelsBackgroundType(Axis::LabelsBackgroundType)" return-type="void"/>
+        <declare-function signature="labelsBackgroundColor()const" return-type="QColor"/>
+        <declare-function signature="setLabelsBackgroundColor(const QColor&amp;)" return-type="void"/>
+        <declare-function signature="labelsPrefix()const" return-type="QString"/>
+        <declare-function signature="setLabelsPrefix(const QString&amp;)" return-type="void"/>
+        <declare-function signature="labelsSuffix()const" return-type="QString"/>
+        <declare-function signature="setLabelsSuffix(const QString&amp;)" return-type="void"/>
+        <declare-function signature="labelsOpacity()const" return-type="qreal"/>
+        <declare-function signature="setLabelsOpacity(qreal)" return-type="void"/>
+
+        <declare-function signature="majorGridLine()const" return-type="Line*"/>
+        <declare-function signature="minorGridLine()const" return-type="Line*"/>
+
+        <declare-function signature="isNumeric()const" return-type="bool"/>
+
+        <declare-function signature="setDefault(bool)" return-type="void"/>
+        <declare-function signature="isDefault()const" return-type="bool"/>
+    </object-type>
+    <rejection class="CartesianPlotLegend" field-name="*"/>
+    <rejection class="CartesianPlotLegend" function-name="*"/>
+    <object-type name="CartesianPlotLegend" disable-wrapper="yes">
+        <declare-function signature="CartesianPlotLegend(const QString&amp;)" return-type="void"/>
+        <declare-function signature="title()" return-type="TextLabel*"/>
+        <declare-function signature="background()const" return-type="Background*"/>
+        <declare-function signature="borderLine()const" return-type="Line*"/>
+        <declare-function signature="labelFont()const" return-type="QFont"/>
+        <declare-function signature="setLabelFont(const QFont&amp;)" return-type="void"/>
+        <declare-function signature="labelColor()const" return-type="QColor"/>
+        <declare-function signature="setLabelColor(const QColor&amp;)" return-type="void"/>
+        <declare-function signature="lineSymbolWidth()const" return-type="qreal"/>
+        <declare-function signature="setLineSymbolWidth(qreal)" return-type="void"/>
+        <declare-function signature="borderCornerRadius()const" return-type="qreal"/>
+        <declare-function signature="setBorderCornerRadius(qreal)" return-type="void"/>
+        <declare-function signature="layoutTopMargin()const" return-type="qreal"/>
+        <declare-function signature="setLayoutTopMargin(qreal)" return-type="void"/>
+        <declare-function signature="layoutBottomMargin()const" return-type="qreal"/>
+        <declare-function signature="setLayoutBottomMargin(qreal)" return-type="void"/>
+        <declare-function signature="layoutLeftMargin()const" return-type="qreal"/>
+        <declare-function signature="setLayoutLeftMargin(qreal)" return-type="void"/>
+        <declare-function signature="layoutRightMargin()const" return-type="qreal"/>
+        <declare-function signature="setLayoutRightMargin(qreal)" return-type="void"/>
+        <declare-function signature="layoutHorizontalSpacing()const" return-type="qreal"/>
+        <declare-function signature="setLayoutHorizontalSpacing(qreal)" return-type="void"/>
+        <declare-function signature="layoutVerticalSpacing()const" return-type="qreal"/>
+        <declare-function signature="setLayoutVerticalSpacing(qreal)" return-type="void"/>
+        <declare-function signature="layoutColumnCount()const" return-type="int"/>
+        <declare-function signature="setLayoutColumnCount(int)" return-type="void"/>
+    </object-type>
+    <rejection class="CustomPoint" field-name="*"/>
+    <rejection class="CustomPoint" function-name="*"/>
+    <object-type name="CustomPoint" disable-wrapper="yes">
+        <declare-function signature="CustomPoint(CartesianPlot*,const QString&amp;,bool)" return-type="void">
+            <modify-argument index="3">
+                <replace-default-expression with="false"/>
+                <remove-argument/>
+            </modify-argument>
+            <modify-argument index="this">
+                <parent index="1" action="add"/>
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="symbol()const" return-type="Symbol*"/>
+    </object-type>
+    <rejection class="ReferenceLine" field-name="*"/>
+    <rejection class="ReferenceLine" function-name="*"/>
+    <object-type name="ReferenceLine" disable-wrapper="yes">
+        <declare-function signature="ReferenceLine(CartesianPlot*,const QString&amp;,bool)" return-type="void">
+            <modify-argument index="3">
+                <replace-default-expression with="false"/>
+                <remove-argument/>
+            </modify-argument>
+            <modify-argument index="this">
+                <parent index="1" action="add"/>
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="line()const" return-type="Line*"/>
+        <declare-function signature="orientation()const" return-type="WorksheetElement::Orientation"/>
+        <declare-function signature="setOrientation(WorksheetElement::Orientation)" return-type="void"/>
+    </object-type>
+    <rejection class="ReferenceRange" field-name="*"/>
+    <rejection class="ReferenceRange" function-name="*"/>
+    <object-type name="ReferenceRange" disable-wrapper="yes">
+        <declare-function signature="ReferenceRange(CartesianPlot*,const QString&amp;,bool)" return-type="void">
+            <modify-argument index="3">
+                <replace-default-expression with="false"/>
+                <remove-argument/>
+            </modify-argument>
+            <modify-argument index="this">
+                <parent index="1" action="add"/>
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="background()const" return-type="Background*"/>
+        <declare-function signature="line()const" return-type="Line*"/>
+        <declare-function signature="positionLogicalStart()const" return-type="QPointF"/>
+        <declare-function signature="setPositionLogicalStart(QPointF)" return-type="void"/>
+        <declare-function signature="positionLogicalEnd()const" return-type="QPointF"/>
+        <declare-function signature="setPositionLogicalEnd(QPointF)" return-type="void"/>
+        <declare-function signature="orientation()const" return-type="WorksheetElement::Orientation"/>
+        <declare-function signature="setOrientation(WorksheetElement::Orientation)" return-type="void"/>
+    </object-type>
+
+    <!-- Plots -->
+    <rejection class="BarPlot" field-name="*"/>
+    <rejection class="BarPlot" function-name="*"/>
+    <object-type name="BarPlot" disable-wrapper="yes">
+        <enum-type name="Type"/>
+        <declare-function signature="BarPlot(const QString&amp;)" return-type="void"/>
+        <declare-function signature="xColumn()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setXColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="dataColumns()const" return-type="QVector&lt;const AbstractColumn*&gt;"/>
+        <declare-function signature="setDataColumns(QVector&lt;const AbstractColumn*&gt;)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="type()const" return-type="BarPlot::Type"/>
+        <declare-function signature="setType(BarPlot::Type)" return-type="void"/>
+        <declare-function signature="orientation()const" return-type="WorksheetElement::Orientation"/>
+        <declare-function signature="setOrientation(WorksheetElement::Orientation)" return-type="void"/>
+        <declare-function signature="widthFactor()const" return-type="double"/>
+        <declare-function signature="setWidthFactor(double)" return-type="void"/>
+        <declare-function signature="backgroundAt(int)const" return-type="Background*"/>
+        <declare-function signature="lineAt(int)const" return-type="Line*"/>
+        <declare-function signature="errorBarAt(int)const" return-type="ErrorBar*"/>
+        <declare-function signature="colorAt(int)const" return-type="QColor"/>
+        <declare-function signature="value()const" return-type="Value*"/>
+    </object-type>
+    <rejection class="BoxPlot" field-name="*"/>
+    <rejection class="BoxPlot" function-name="*"/>
+    <object-type name="BoxPlot" disable-wrapper="yes">
+        <enum-type name="Ordering"/>
+        <enum-type name="WhiskersType"/>
+        <declare-function signature="BoxPlot(const QString&amp;,bool)" return-type="void">
+            <modify-argument index="2">
+                <replace-default-expression with="false"/>
+                <remove-argument/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="dataColumns()const" return-type="QVector&lt;const AbstractColumn*&gt;"/>
+        <declare-function signature="setDataColumns(QVector&lt;const AbstractColumn*&gt;)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="ordering()const" return-type="BoxPlot::Ordering"/>
+        <declare-function signature="setOrdering(BoxPlot::Ordering)" return-type="void"/>
+        <declare-function signature="orientation()const" return-type="WorksheetElement::Orientation"/>
+        <declare-function signature="setOrientation(WorksheetElement::Orientation)" return-type="void"/>
+        <declare-function signature="variableWidth()const" return-type="bool"/>
+        <declare-function signature="setVariableWidth(bool)" return-type="void"/>
+        <declare-function signature="widthFactor()const" return-type="double"/>
+        <declare-function signature="setWidthFactor(double)" return-type="void"/>
+        <declare-function signature="notchesEnabled()const" return-type="bool"/>
+        <declare-function signature="setNotchesEnabled(bool)" return-type="void"/>
+        <declare-function signature="backgroundAt(int)const" return-type="Background*"/>
+        <declare-function signature="colorAt(int)const" return-type="QColor"/>
+        <declare-function signature="borderLineAt(int)const" return-type="Line*"/>
+        <declare-function signature="medianLineAt(int)const" return-type="Line*"/>
+        <declare-function signature="whiskersLine()const" return-type="Line*"/>
+        <declare-function signature="whiskersCapLine()const" return-type="Line*"/>
+        <declare-function signature="symbolMean()const" return-type="Symbol*"/>
+        <declare-function signature="symbolMedian()const" return-type="Symbol*"/>
+        <declare-function signature="symbolOutlier()const" return-type="Symbol*"/>
+        <declare-function signature="symbolFarOut()const" return-type="Symbol*"/>
+        <declare-function signature="symbolData()const" return-type="Symbol*"/>
+        <declare-function signature="symbolWhiskerEnd()const" return-type="Symbol*"/>
+        <declare-function signature="jitteringEnabled()const" return-type="bool"/>
+        <declare-function signature="setJitteringEnabled(bool)" return-type="void"/>
+        <declare-function signature="whiskersType()const" return-type="BoxPlot::WhiskersType"/>
+        <declare-function signature="setWhiskersType(BoxPlot::WhiskersType)" return-type="void"/>
+        <declare-function signature="whiskersRangeParameter()const" return-type="double"/>
+        <declare-function signature="setWhiskersRangeParameter(double)" return-type="void"/>
+        <declare-function signature="whiskersCapSize()const" return-type="double"/>
+        <declare-function signature="setWhiskersCapSize(double)" return-type="void"/>
+        <declare-function signature="rugEnabled()const" return-type="bool"/>
+        <declare-function signature="setRugEnabled(bool)" return-type="void"/>
+        <declare-function signature="rugOffset()const" return-type="double"/>
+        <declare-function signature="setRugOffset(double)" return-type="void"/>
+        <declare-function signature="rugLength()const" return-type="double"/>
+        <declare-function signature="setRugLength(double)" return-type="void"/>
+        <declare-function signature="rugWidth()const" return-type="double"/>
+        <declare-function signature="setRugWidth(double)" return-type="void"/>
+    </object-type>
+    <rejection class="Histogram" field-name="*"/>
+    <rejection class="Histogram" function-name="*"/>
+    <object-type name="Histogram" disable-wrapper="yes">
+        <enum-type name="Type"/>
+        <enum-type name="Normalization"/>
+        <enum-type name="BinningMethod"/>
+        <enum-type name="LineType"/>
+        <enum-type name="ValuesType"/>
+        <enum-type name="ValuesPosition"/>
+        <declare-function signature="Histogram(const QString&amp;,bool)" return-type="void">
+            <modify-argument index="2">
+                <replace-default-expression with="false"/>
+                <remove-argument/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="dataColumn()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setDataColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="type()const" return-type="Histogram::Type"/>
+        <declare-function signature="setType(Histogram::Type)" return-type="void"/>
+        <declare-function signature="orientation()const" return-type="WorksheetElement::Orientation"/>
+        <declare-function signature="setOrientation(WorksheetElement::Orientation)" return-type="void"/>
+        <declare-function signature="normalization()const" return-type="Histogram::Normalization"/>
+        <declare-function signature="setNormalization(Histogram::Normalization)" return-type="void"/>
+        <declare-function signature="binningMethod()const" return-type="Histogram::BinningMethod"/>
+        <declare-function signature="setBinningMethod(Histogram::BinningMethod)" return-type="void"/>
+        <declare-function signature="binCount()const" return-type="int"/>
+        <declare-function signature="setBinCount(int)" return-type="void"/>
+        <declare-function signature="binWidth()const" return-type="double"/>
+        <declare-function signature="setBinWidth(double)" return-type="void"/>
+        <declare-function signature="autoBinRanges()const" return-type="bool"/>
+        <declare-function signature="setAutoBinRanges(bool)" return-type="void"/>
+        <declare-function signature="binRangesMin()const" return-type="double"/>
+        <declare-function signature="setBinRangesMin(double)" return-type="void"/>
+        <declare-function signature="binRangesMax()const" return-type="double"/>
+        <declare-function signature="setBinRangesMax(double)" return-type="void"/>
+        <declare-function signature="line()const" return-type="Line*"/>
+        <declare-function signature="background()const" return-type="Background*"/>
+        <declare-function signature="symbol()const" return-type="Symbol*"/>
+        <declare-function signature="value()const" return-type="Value*"/>
+        <declare-function signature="errorBar()const" return-type="ErrorBar*"/>
+        <declare-function signature="bins()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="binValues()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="binPDValues()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="rugEnabled()const" return-type="bool"/>
+        <declare-function signature="setRugEnabled(bool)" return-type="void"/>
+        <declare-function signature="rugOffset()const" return-type="double"/>
+        <declare-function signature="setRugOffset(double)" return-type="void"/>
+        <declare-function signature="rugLength()const" return-type="double"/>
+        <declare-function signature="setRugLength(double)" return-type="void"/>
+        <declare-function signature="rugWidth()const" return-type="double"/>
+        <declare-function signature="setRugWidth(double)" return-type="void"/>
+    </object-type>
+    <rejection class="KDEPlot" field-name="*"/>
+    <rejection class="KDEPlot" function-name="*"/>
+    <object-type name="KDEPlot" disable-wrapper="yes">
+        <declare-function signature="KDEPlot(const QString&amp;)" return-type="void"/>
+        <declare-function signature="dataColumn()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setDataColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="kernelType()const" return-type="nsl_kernel_type"/>
+        <declare-function signature="setKernelType(nsl_kernel_type)" return-type="void"/>
+        <declare-function signature="bandwidthType()const" return-type="nsl_kde_bandwidth_type"/>
+        <declare-function signature="setBandwidthType(nsl_kde_bandwidth_type)" return-type="void"/>
+        <declare-function signature="bandwidth()const" return-type="double"/>
+        <declare-function signature="setBandwidth(double)" return-type="void"/>
+        <declare-function signature="estimationCurve()const" return-type="XYCurve*"/>
+        <declare-function signature="rugCurve()const" return-type="XYCurve*"/>
+        <declare-function signature="gridPointsCount()const" return-type="int"/>
+    </object-type>
+    <rejection class="LollipopPlot" field-name="*"/>
+    <rejection class="LollipopPlot" function-name="*"/>
+    <object-type name="LollipopPlot" disable-wrapper="yes">
+        <declare-function signature="LollipopPlot(const QString&amp;)" return-type="void"/>
+        <declare-function signature="xColumn()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setXColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="dataColumns()const" return-type="QVector&lt;const AbstractColumn*&gt;"/>
+        <declare-function signature="setDataColumns(QVector&lt;const AbstractColumn*&gt;)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="orientation()const" return-type="WorksheetElement::Orientation"/>
+        <declare-function signature="setOrientation(WorksheetElement::Orientation)" return-type="void"/>
+        <declare-function signature="colorAt(int)const" return-type="QColor"/>
+        <declare-function signature="lineAt(int)const" return-type="Line*"/>
+        <declare-function signature="symbolAt(int)const" return-type="Symbol*"/>
+        <declare-function signature="value()const" return-type="Value*"/>
+    </object-type>
+    <rejection class="ProcessBehaviorChart" field-name="*"/>
+    <rejection class="ProcessBehaviorChart" function-name="*"/>
+    <object-type name="ProcessBehaviorChart" disable-wrapper="yes">
+        <enum-type name="Type"/>
+        <enum-type name="LimitsMetric"/>
+        <declare-function signature="ProcessBehaviorChart(const QString&amp;,bool)" return-type="void">
+            <modify-argument index="2">
+                <replace-default-expression with="false"/>
+                <remove-argument/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="type()const" return-type="ProcessBehaviorChart::Type"/>
+        <declare-function signature="setType(ProcessBehaviorChart::Type)" return-type="void"/>
+        <declare-function signature="limitsMetric()const" return-type="ProcessBehaviorChart::LimitsMetric"/>
+        <declare-function signature="setLimitsMetric(ProcessBehaviorChart::LimitsMetric)" return-type="void"/>
+        <declare-function signature="dataColumn()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setDataColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="data2Column()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setData2Column(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="sampleSize()const" return-type="int"/>
+        <declare-function signature="setSampleSize(int)" return-type="void"/>
+        <declare-function signature="exactLimitsEnabled()const" return-type="bool"/>
+        <declare-function signature="setExactLimitsEnabled(bool)" return-type="void"/>
+        <declare-function signature="maxUpperLimit()const" return-type="double"/>
+        <declare-function signature="setMaxUpperLimit(double)" return-type="void"/>
+        <declare-function signature="minLowerLimit()const" return-type="double"/>
+        <declare-function signature="setMinLowerLimit(double)" return-type="void"/>
+        <declare-function signature="labelsEnabled()const" return-type="bool"/>
+        <declare-function signature="setLabelsEnabled(bool)" return-type="void"/>
+        <declare-function signature="labelsAutoPrecision()const" return-type="bool"/>
+        <declare-function signature="setLabelsAutoPrecision(bool)" return-type="void"/>
+        <declare-function signature="labelsPrecision()const" return-type="int"/>
+        <declare-function signature="setLabelsPrecision(int)" return-type="void"/>
+        <declare-function signature="labelsFontColor()const" return-type="QColor"/>
+        <declare-function signature="setLabelsFontColor(const QColor&amp;)" return-type="void"/>
+        <declare-function signature="labelsBackgroundColor()const" return-type="QColor"/>
+        <declare-function signature="setLabelsBackgroundColor(const QColor&amp;)" return-type="void"/>
+        <declare-function signature="labelsFont()const" return-type="QFont"/>
+        <declare-function signature="setLabelsFont(const QFont&amp;)" return-type="void"/>
+        <declare-function signature="labelsBorderShape()const" return-type="TextLabel::BorderShape"/>
+        <declare-function signature="setLabelsBorderShape(TextLabel::BorderShape)" return-type="void"/>        
+        <declare-function signature="labelsBorderLine()const" return-type="Line*"/>
+        <declare-function signature="dataLine()const" return-type="Line*"/>
+        <declare-function signature="centerLine()const" return-type="Line*"/>
+        <declare-function signature="upperLimitLine()const" return-type="Line*"/>
+        <declare-function signature="lowerLimitLine()const" return-type="Line*"/>
+        <declare-function signature="dataSymbol()const" return-type="Symbol*"/>
+    </object-type>
+    <rejection class="QQPlot" field-name="*"/>
+    <rejection class="QQPlot" function-name="*"/>
+    <object-type name="QQPlot" disable-wrapper="yes">
+        <declare-function signature="QQPlot(const QString&amp;)" return-type="void"/>
+        <declare-function signature="dataColumn()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setDataColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="distribution()const" return-type="nsl_sf_stats_distribution"/>
+        <declare-function signature="setDistribution(nsl_sf_stats_distribution)" return-type="void"/>
+        <declare-function signature="line()const" return-type="Line*"/>
+        <declare-function signature="symbol()const" return-type="Symbol*"/>
+    </object-type>
+    <rejection class="RunChart" field-name="*"/>
+    <rejection class="RunChart" function-name="*"/>
+    <object-type name="RunChart" disable-wrapper="yes">
+        <enum-type name="CenterMetric"/>
+        <declare-function signature="RunChart(const QString&amp;)" return-type="void"/>
+        <declare-function signature="centerMetric()const" return-type="RunChart::CenterMetric"/>
+        <declare-function signature="setCenterMetric(RunChart::CenterMetric)" return-type="void"/>
+        <declare-function signature="dataColumn()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setDataColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="dataSymbol()const" return-type="Symbol*"/>
+        <declare-function signature="dataLine()const" return-type="Line*"/>
+        <declare-function signature="centerLine()const" return-type="Line*"/>
+    </object-type>
+    <rejection class="XYCurve" field-name="*"/>
+    <rejection class="XYCurve" function-name="*"/>
+    <object-type name="XYCurve" disable-wrapper="yes">
+        <enum-type name="LineType"/>
+        <enum-type name="DropLineType"/>
+        <enum-type name="ValuesType"/>
+        <enum-type name="ValuesPosition"/>
+        <declare-function signature="XYCurve(const QString&amp;,AspectType,bool)" return-type="void">
+            <modify-argument index="2">
+                <replace-default-expression with="AspectType::XYCurve"/>
+                <remove-argument/>
+            </modify-argument>
+            <modify-argument index="3">
+                <replace-default-expression with="false"/>
+                <remove-argument/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="setPlotType(Plot::PlotType)" return-type="void"/>        
+        <declare-function signature="line()const" return-type="Line*"/>
+        <declare-function signature="dropLine()const" return-type="Line*"/>
+        <declare-function signature="symbol()const" return-type="Symbol*"/>
+        <declare-function signature="background()const" return-type="Background*"/>
+        <declare-function signature="errorBar() const" return-type="ErrorBar*"/>
+        <declare-function signature="xColumn()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setXColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="yColumn()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setYColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="lineType()const" return-type="XYCurve::LineType"/>
+        <declare-function signature="setLineType(XYCurve::LineType)" return-type="void"/>
+        <declare-function signature="lineSkipGaps()const" return-type="bool"/>
+        <declare-function signature="setLineSkipGaps(bool)" return-type="void"/>
+        <declare-function signature="lineIncreasingXOnly()const" return-type="bool"/>
+        <declare-function signature="setLineIncreasingXOnly(bool)" return-type="void"/>
+        <declare-function signature="lineInterpolationPointsCount()const" return-type="int"/>
+        <declare-function signature="setLineInterpolationPointsCount(int)" return-type="void"/>
+        <declare-function signature="valuesType()const" return-type="XYCurve::ValuesType"/>
+        <declare-function signature="setValuesType(XYCurve::ValuesType)" return-type="void"/>
+        <declare-function signature="valuesColumn()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setValuesColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="valuesPosition()const" return-type="XYCurve::ValuesPosition"/>
+        <declare-function signature="setValuesPosition(XYCurve::ValuesPosition)" return-type="void"/>
+        <declare-function signature="valuesDistance()const" return-type="qreal"/>
+        <declare-function signature="setValuesDistance(qreal)" return-type="void"/>
+        <declare-function signature="valuesRotationAngle()const" return-type="qreal"/>
+        <declare-function signature="setValuesRotationAngle(qreal)" return-type="void"/>
+        <declare-function signature="valuesOpacity()const" return-type="qreal"/>
+        <declare-function signature="setValuesOpacity(qreal)" return-type="void"/>
+        <declare-function signature="valuesNumericFormat()const" return-type="char"/>
+        <declare-function signature="setValuesNumericFormat(char)" return-type="void"/>
+        <declare-function signature="valuesPrecision()const" return-type="int"/>
+        <declare-function signature="setValuesPrecision(int)" return-type="void"/>
+        <declare-function signature="valuesDateTimeFormat()const" return-type="QString"/>
+        <declare-function signature="setValuesDateTimeFormat(const QString&amp;)" return-type="void"/>
+        <declare-function signature="valuesPrefix()const" return-type="QString"/>
+        <declare-function signature="setValuesPrefix(const QString&amp;)" return-type="void"/>
+        <declare-function signature="valuesSuffix()const" return-type="QString"/>
+        <declare-function signature="setValuesSuffix(const QString&amp;)" return-type="void"/>
+        <declare-function signature="valuesColor()const" return-type="QColor"/>
+        <declare-function signature="setValuesColor(const QColor&amp;)" return-type="void"/>
+        <declare-function signature="valuesFont()const" return-type="QFont"/>
+        <declare-function signature="setValuesFont(const QFont&amp;)" return-type="void"/>
+        <declare-function signature="rugEnabled()const" return-type="bool"/>
+        <declare-function signature="setRugEnabled(bool)" return-type="void"/>
+        <declare-function signature="rugOrientation()const" return-type="WorksheetElement::Orientation"/>
+        <declare-function signature="setRugOrientation(WorksheetElement::Orientation)" return-type="void"/>
+        <declare-function signature="rugOffset()const" return-type="double"/>
+        <declare-function signature="setRugOffset(double)" return-type="void"/>
+        <declare-function signature="rugLength()const" return-type="double"/>
+        <declare-function signature="setRugLength(double)" return-type="void"/>
+        <declare-function signature="rugWidth()const" return-type="double"/>
+        <declare-function signature="setRugWidth(double)" return-type="void"/>
+    </object-type>
+    <rejection class="XYEquationCurve" field-name="*"/>
+    <rejection class="XYEquationCurve" function-name="*"/>
+    <object-type name="XYEquationCurve" disable-wrapper="yes">
+        <value-type name="EquationData" disable-wrapper="yes"/>
+        <enum-type name="EquationType"/>
+        <declare-function signature="XYEquationCurve(const QString&amp;)" return-type="void"/>
+        <declare-function signature="recalculate()" return-type="void"/>
+        <declare-function signature="dataAvailable()const" return-type="bool"/>
+        <declare-function signature="equationData()const" return-type="XYEquationCurve::EquationData"/>
+        <declare-function signature="setEquationData(const XYEquationCurve::EquationData&amp;)" return-type="void"/>
+    </object-type>
+    
+    <!-- Analysis Plots -->
+    <rejection class="XYConvolutionCurve" field-name="*"/>
+    <rejection class="XYConvolutionCurve" function-name="*"/>
+    <object-type name="XYConvolutionCurve" disable-wrapper="yes">
+        <value-type name="ConvolutionData" disable-wrapper="yes"/>
+        <declare-function signature="XYConvolutionCurve(const QString&amp;)" return-type="void"/>
+        <declare-function signature="convolutionData()const" return-type="XYConvolutionCurve::ConvolutionData"/>
+        <declare-function signature="setConvolutionData(const XYConvolutionCurve::ConvolutionData&amp;)" return-type="void"/>
+        <declare-function signature="convolutionResult()const" return-type="const XYConvolutionCurve::ConvolutionResult&amp;"/>
+    </object-type>
+    <rejection class="XYCorrelationCurve" field-name="*"/>
+    <rejection class="XYCorrelationCurve" function-name="*"/>
+    <object-type name="XYCorrelationCurve" disable-wrapper="yes">
+        <value-type name="CorrelationData" disable-wrapper="yes"/>
+        <declare-function signature="XYCorrelationCurve(const QString&amp;)" return-type="void"/>
+        <declare-function signature="correlationData()const" return-type="XYCorrelationCurve::CorrelationData"/>
+        <declare-function signature="setCorrelationData(const XYCorrelationCurve::CorrelationData&amp;)" return-type="void"/>
+        <declare-function signature="correlationResult()const" return-type="const XYCorrelationCurve::CorrelationResult&amp;"/>
+    </object-type>
+    <rejection class="XYDataReductionCurve" field-name="*"/>
+    <rejection class="XYDataReductionCurve" function-name="*"/>
+    <object-type name="XYDataReductionCurve" disable-wrapper="yes">
+        <value-type name="DataReductionData" disable-wrapper="yes"/>
+        <value-type name="DataReductionResult" disable-wrapper="yes"/>
+        <declare-function signature="XYDataReductionCurve(const QString&amp;)" return-type="void"/>
+        <declare-function signature="dataReductionData()const" return-type="XYDataReductionCurve::DataReductionData"/>
+        <declare-function signature="setDataReductionData(const XYDataReductionCurve::DataReductionData&amp;)" return-type="void"/>
+        <declare-function signature="dataReductionResult()const" return-type="const XYDataReductionCurve::DataReductionResult&amp;"/>
+    </object-type>
+    <rejection class="XYDifferentiationCurve" field-name="*"/>
+    <rejection class="XYDifferentiationCurve" function-name="*"/>
+    <object-type name="XYDifferentiationCurve" disable-wrapper="yes">
+        <value-type name="DifferentiationData" disable-wrapper="yes"/>
+        <declare-function signature="XYDifferentiationCurve(const QString&amp;)" return-type="void"/>
+        <declare-function signature="differentiationData()const" return-type="XYDifferentiationCurve::DifferentiationData"/>
+        <declare-function signature="setDifferentiationData(const XYDifferentiationCurve::DifferentiationData&amp;)" return-type="void"/>
+        <declare-function signature="differentiationResult()const" return-type="const XYDifferentiationCurve::DifferentiationResult&amp;"/>
+    </object-type>
+    <rejection class="XYFitCurve" field-name="*"/>
+    <rejection class="XYFitCurve" function-name="*"/>
+    <object-type name="XYFitCurve" disable-wrapper="yes">
+        <value-type name="FitData" disable-wrapper="yes"/>
+        <value-type name="FitResult" disable-wrapper="yes"/>
+        <declare-function signature="XYFitCurve(const QString&amp;)" return-type="void"/>
+        <add-function signature="initStartValues(const XYFitCurve::FitData&amp;)" return-type="XYFitCurve::FitData" access="public" classmethod="no">
+            <inject-code class="target" position="beginning">
+                XYFitCurve::FitData val = %CONVERTTOCPP[XYFitCurve::FitData](%PYARG_1);
+                %CPPSELF-&gt;initStartValues(val);
+                return %CONVERTTOPYTHON[XYFitCurve::FitData](val);
+            </inject-code>
+        </add-function>
+        <add-function signature="initFitData(const XYFitCurve::FitData&amp;)" return-type="XYFitCurve::FitData" access="public" classmethod="yes">
+            <inject-code class="target" position="beginning">
+                XYFitCurve::FitData val = %CONVERTTOCPP[XYFitCurve::FitData](%PYARG_1);
+                %CPPTYPE::initFitData(val);
+                return %CONVERTTOPYTHON[XYFitCurve::FitData](val);
+            </inject-code>
+        </add-function>
+        <declare-function signature="clearFitResult()" return-type="void"/>
+        <declare-function signature="residualsColumn()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="fitData()const" return-type="XYFitCurve::FitData"/>
+        <declare-function signature="setFitData(const XYFitCurve::FitData&amp;)" return-type="void"/>
+        <declare-function signature="fitResult()const" return-type="const XYFitCurve::FitResult&amp;"/>
+        <declare-function signature="dataSourceHistogram()const" return-type="const Histogram*"/>
+        <declare-function signature="setDataSourceHistogram(const Histogram*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="xErrorColumn()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setXErrorColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="yErrorColumn()const" return-type="const AbstractColumn*"/>
+        <declare-function signature="setYErrorColumn(const AbstractColumn*)" return-type="void">
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+    </object-type>
+    <rejection class="XYFourierFilterCurve" field-name="*"/>
+    <rejection class="XYFourierFilterCurve" function-name="*"/>
+    <object-type name="XYFourierFilterCurve" disable-wrapper="yes">
+        <value-type name="FilterData" disable-wrapper="yes"/>
+        <value-type name="FilterResult" disable-wrapper="yes"/>
+        <declare-function signature="XYFourierFilterCurve(const QString&amp;)" return-type="void"/>
+        <declare-function signature="filterData()const" return-type="XYFourierFilterCurve::FilterData"/>
+        <declare-function signature="setFilterData(const XYFourierFilterCurve::FilterData&amp;)" return-type="void"/>
+        <declare-function signature="filterResult()const" return-type="const XYFourierFilterCurve::FilterResult&amp;"/>
+    </object-type>
+    <rejection class="XYFourierTransformCurve" field-name="*"/>
+    <rejection class="XYFourierTransformCurve" function-name="*"/>
+    <object-type name="XYFourierTransformCurve" disable-wrapper="yes">
+        <value-type name="TransformData" disable-wrapper="yes"/>
+        <declare-function signature="XYFourierTransformCurve(const QString&amp;)" return-type="void"/>
+        <declare-function signature="transformData()const" return-type="XYFourierTransformCurve::TransformData"/>
+        <declare-function signature="setTransformData(const XYFourierTransformCurve::TransformData&amp;)" return-type="void"/>
+        <add-function signature="transformResult()const" return-type="const XYFourierTransformCurve::TransformResult&amp;" access="public" static="no" classmethod="no">
+            <inject-code class="target" position="beginning">
+                const XYAnalysisCurve::Result &amp; result = %CPPSELF-&gt;result();
+                return %CONVERTTOPYTHON[const XYAnalysisCurve::Result&amp;](result);
+            </inject-code>
+        </add-function>
+    </object-type>
+    <rejection class="XYFunctionCurve" field-name="*"/>
+    <rejection class="XYFunctionCurve" function-name="*"/>
+    <object-type name="XYFunctionCurve" disable-wrapper="yes">
+        <value-type name="FunctionData" disable-wrapper="yes"/>
+        <declare-function signature="XYFunctionCurve(const QString&amp;)" return-type="void"/>
+        <declare-function signature="setFunction(const QString&amp;,const QStringList&amp;,const QVector&lt;const XYCurve*&gt;&amp;)" return-type="void">
+            <modify-argument index="3">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="function()const" return-type="QString"/>
+        <declare-function signature="clearFunction()" return-type="void"/>
+        <declare-function signature="functionData()const" return-type="const QVector&lt;FunctionData&gt;&amp;"/>
+        <add-function signature="functionResult()const" return-type="const XYFunctionCurve::FunctionResult&amp;" access="public" static="no" classmethod="no">
+            <inject-code class="target" position="beginning">
+                const XYAnalysisCurve::Result &amp; result = %CPPSELF-&gt;result();
+                return %CONVERTTOPYTHON[const XYAnalysisCurve::Result&amp;](result);
+            </inject-code>
+        </add-function>
+    </object-type>
+    <rejection class="XYHilbertTransformCurve" field-name="*"/>
+    <rejection class="XYHilbertTransformCurve" function-name="*"/>
+    <object-type name="XYHilbertTransformCurve" disable-wrapper="yes">
+        <value-type name="TransformData" disable-wrapper="yes"/>
+        <declare-function signature="XYHilbertTransformCurve(const QString&amp;)" return-type="void"/>
+        <declare-function signature="transformData()const" return-type="XYHilbertTransformCurve::TransformData"/>
+        <declare-function signature="setTransformData(const XYHilbertTransformCurve::TransformData&amp;)" return-type="void"/>
+        <add-function signature="transformResult()const" return-type="const XYHilbertTransformCurve::TransformResult&amp;" access="public" static="no" classmethod="no">
+            <inject-code class="target" position="beginning">
+                const XYAnalysisCurve::Result &amp; result = %CPPSELF-&gt;result();
+                return %CONVERTTOPYTHON[const XYAnalysisCurve::Result&amp;](result);
+            </inject-code>
+        </add-function>
+    </object-type>
+    <rejection class="XYIntegrationCurve" field-name="*"/>
+    <rejection class="XYIntegrationCurve" function-name="*"/>
+    <object-type name="XYIntegrationCurve" disable-wrapper="yes">
+        <value-type name="IntegrationData" disable-wrapper="yes"/>
+        <value-type name="IntegrationResult" disable-wrapper="yes"/>
+        <declare-function signature="XYIntegrationCurve(const QString&amp;)" return-type="void"/>
+        <declare-function signature="integrationData()const" return-type="XYIntegrationCurve::IntegrationData"/>
+        <declare-function signature="setIntegrationData(const XYIntegrationCurve::IntegrationData&amp;)" return-type="void"/>
+        <declare-function signature="integrationResult()const" return-type="const XYIntegrationCurve::IntegrationResult&amp;"/>
+    </object-type>
+    <rejection class="XYInterpolationCurve" field-name="*"/>
+    <rejection class="XYInterpolationCurve" function-name="*"/>
+    <object-type name="XYInterpolationCurve" disable-wrapper="yes">
+        <enum-type name="PointsMode"/>
+        <value-type name="InterpolationData" disable-wrapper="yes"/>
+        <declare-function signature="XYInterpolationCurve(const QString&amp;)" return-type="void"/>
+        <declare-function signature="interpolationData()const" return-type="XYInterpolationCurve::InterpolationData"/>
+        <declare-function signature="setInterpolationData(const XYInterpolationCurve::InterpolationData&amp;)" return-type="void"/>
+        <add-function signature="interpolationResult()const" return-type="const XYInterpolationCurve::InterpolationResult&amp;" access="public" static="no" classmethod="no">
+            <inject-code class="target" position="beginning">
+                const XYAnalysisCurve::Result &amp; result = %CPPSELF-&gt;result();
+                return %CONVERTTOPYTHON[const XYAnalysisCurve::Result&amp;](result);
+            </inject-code>
+        </add-function>
+    </object-type>
+    <rejection class="XYSmoothCurve" field-name="*"/>
+    <rejection class="XYSmoothCurve" function-name="*"/>
+    <object-type name="XYSmoothCurve" disable-wrapper="yes">
+        <value-type name="SmoothData" disable-wrapper="yes"/>
+        <declare-function signature="XYSmoothCurve(const QString&amp;)" return-type="void"/>
+        <declare-function signature="smoothData()const" return-type="XYSmoothCurve::SmoothData"/>
+        <declare-function signature="setSmoothData(const XYSmoothCurve::SmoothData&amp;)" return-type="void"/>
+        <add-function signature="smoothResult()const" return-type="const XYSmoothCurve::SmoothResult&amp;" access="public" static="no" classmethod="no">
+            <inject-code class="target" position="beginning">
+                const XYAnalysisCurve::Result &amp; result = %CPPSELF-&gt;result();
+                return %CONVERTTOPYTHON[const XYAnalysisCurve::Result&amp;](result);
+            </inject-code>
+        </add-function>
+        <declare-function signature="roughsColumn()const" return-type="const AbstractColumn*"/>
+    </object-type>
+
+    <!-- Worksheet -->
+    <rejection class="Worksheet" field-name="*"/>
+    <rejection class="Worksheet" function-name="*"/>
+    <object-type name="Worksheet" disable-wrapper="yes">
+        <enum-type name="Unit"/>
+        <enum-type name="Layout"/>
+        <enum-type name="CartesianPlotActionMode"/>
+        <enum-type name="ZoomFit"/>
+        <enum-type name="ExportFormat"/>
+        <enum-type name="ExportArea"/>
+        <declare-function signature="Worksheet(const QString&amp;,bool)" return-type="void">
+            <modify-argument index="2">
+                <replace-default-expression with="false"/>
+                <remove-argument/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="background()const" return-type="Background*"/>
+        <add-function signature="convertToSceneUnits(const double,const Worksheet::Unit)" return-type="double" access="public" classmethod="yes">
+            <inject-code class="target" position="beginning">
+                double val = %CONVERTTOCPP[const double](%PYARG_1);
+                Worksheet::Unit unit = %CONVERTTOCPP[const Worksheet::Unit](%PYARG_2);
+                double result = %CPPTYPE::convertToSceneUnits(val, unit);
+                return %CONVERTTOPYTHON[double](result);
+            </inject-code>
+        </add-function>
+        <add-function signature="convertFromSceneUnits(const double,const Worksheet::Unit)" return-type="double" access="public" classmethod="yes">
+            <inject-code class="target" position="beginning">
+                double val = %CONVERTTOCPP[const double](%PYARG_1);
+                Worksheet::Unit unit = %CONVERTTOCPP[const Worksheet::Unit](%PYARG_2);
+                double result = %CPPTYPE::convertFromSceneUnits(val, unit);
+                return %CONVERTTOPYTHON[double](result);
+            </inject-code>
+        </add-function>
+        <declare-function signature="exportToFile(const QString&amp;,const Worksheet::ExportFormat,const Worksheet::ExportArea,const bool,const int)const" return-type="bool">
+            <modify-argument index="3">
+                <replace-default-expression with="Worksheet::ExportArea::Worksheet"/>
+            </modify-argument>
+            <modify-argument index="4">
+                <replace-default-expression with="true"/>
+            </modify-argument>
+            <modify-argument index="5">
+                <replace-default-expression with="100"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="pageRect()const" return-type="QRectF"/>
+        <declare-function signature="setPageRect(const QRectF&amp;)" return-type="void"/>
+        <declare-function signature="scaleContent()const" return-type="bool"/>
+        <declare-function signature="setScaleContent(bool)" return-type="void"/>
+        <declare-function signature="useViewSize()const" return-type="bool"/>
+        <declare-function signature="setUseViewSize(bool)" return-type="void"/>
+        <declare-function signature="zoomFit()const" return-type="Worksheet::ZoomFit"/>
+        <declare-function signature="setZoomFit(Worksheet::ZoomFit)" return-type="void"/>
+        <declare-function signature="layout()const" return-type="Worksheet::Layout"/>
+        <declare-function signature="setLayout(Worksheet::Layout)" return-type="void"/>
+        <declare-function signature="layoutTopMargin()const" return-type="double"/>
+        <declare-function signature="setLayoutTopMargin(double)" return-type="void"/>
+        <declare-function signature="layoutBottomMargin()const" return-type="double"/>
+        <declare-function signature="setLayoutBottomMargin(double)" return-type="void"/>
+        <declare-function signature="layoutLeftMargin()const" return-type="double"/>
+        <declare-function signature="setLayoutLeftMargin(double)" return-type="void"/>
+        <declare-function signature="layoutRightMargin()const" return-type="double"/>
+        <declare-function signature="setLayoutRightMargin(double)" return-type="void"/>
+        <declare-function signature="layoutHorizontalSpacing()const" return-type="double"/>
+        <declare-function signature="setLayoutHorizontalSpacing(double)" return-type="void"/>
+        <declare-function signature="layoutVerticalSpacing()const" return-type="double"/>
+        <declare-function signature="setLayoutVerticalSpacing(double)" return-type="void"/>
+        <declare-function signature="layoutRowCount()const" return-type="int"/>
+        <declare-function signature="setLayoutRowCount(int)" return-type="void"/>
+        <declare-function signature="layoutColumnCount()const" return-type="int"/>
+        <declare-function signature="setLayoutColumnCount(int)" return-type="void"/>
+        <declare-function signature="theme()const" return-type="QString"/>
+        <declare-function signature="setTheme(const QString&amp;)" return-type="void"/>
+        <?if !scripting ?>
+        <declare-function signature="view()const" return-type="QWidget*"/>
+        <?endif?>
+    </object-type>
+
+    <!-- Worksheet Element Containers -->
+    <rejection class="CartesianPlot" field-name="*"/>
+    <rejection class="CartesianPlot" function-name="*"/>
+    <object-type name="CartesianPlot" disable-wrapper="yes">
+        <enum-type name="Type"/>
+        <enum-type name="MouseMode"/>
+        <enum-type name="NavigationOperation"/>
+        <enum-type name="RangeType"/>
+        <enum-type name="RangeBreakStyle"/>
+        <value-type name="RangeBreak" disable-wrapper="yes"/>
+        <value-type name="RangeBreaks" disable-wrapper="yes"/>
+        <declare-function signature="CartesianPlot(const QString&amp;,bool)" return-type="void">
+            <modify-argument index="2">
+                <replace-default-expression with="false"/>
+                <remove-argument/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="addLegend()" return-type="void"/>
+        <declare-function signature="addLegend(CartesianPlotLegend*)" return-type="void">
+            <modify-argument index="1">
+                <parent index="this" action="add"/>
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="type()const" return-type="CartesianPlot::Type"/>
+        <declare-function signature="setType(CartesianPlot::Type)" return-type="void"/>        
+        <declare-function signature="rangeType()const" return-type="CartesianPlot::RangeType"/>
+        <declare-function signature="setRangeType(CartesianPlot::RangeType)" return-type="void"/>
+        <declare-function signature="niceExtend()const" return-type="bool"/>
+        <declare-function signature="setNiceExtend(bool)" return-type="void"/>
+        <declare-function signature="rangeFirstValues()const" return-type="int"/>
+        <declare-function signature="setRangeFirstValues(int)" return-type="void"/>
+        <declare-function signature="rangeLastValues()const" return-type="int"/>
+        <declare-function signature="setRangeLastValues(int)" return-type="void"/>
+
+        <declare-function signature="autoScale(const CartesianCoordinateSystem::Dimension,int)const" return-type="bool">
+            <modify-argument index="2">
+                <replace-default-expression with="-1"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="enableAutoScale(const CartesianCoordinateSystem::Dimension,int,bool,bool)" return-type="void">
+            <modify-argument index="4">
+                <replace-default-expression with="false"/>
+            </modify-argument>
+        </declare-function>
+
+        <declare-function signature="rangeCount(const CartesianCoordinateSystem::Dimension)const" return-type="int"/>
+        <declare-function signature="range(const CartesianCoordinateSystem::Dimension,int)const" return-type="const DoubleRange&amp;">
+            <modify-argument index="2">
+                <replace-default-expression with="-1"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="setRangeDefault(const CartesianCoordinateSystem::Dimension,const DoubleRange)" return-type="void"/>
+        <declare-function signature="setRange(const CartesianCoordinateSystem::Dimension,const int,const DoubleRange)" return-type="void"/>
+        <declare-function signature="setXRange(int,const DoubleRange&amp;)" return-type="void"/>
+        <declare-function signature="setYRange(int,const DoubleRange&amp;)" return-type="void"/>
+        <declare-function signature="addXRange()" return-type="void"/>
+        <declare-function signature="addYRange()" return-type="void"/>
+        <declare-function signature="addXRange(const DoubleRange&amp;)" return-type="void"/>
+        <declare-function signature="addYRange(const DoubleRange&amp;)" return-type="void"/>
+        <declare-function signature="removeRange(const CartesianCoordinateSystem::Dimension,int)" return-type="void"/>
+        <declare-function signature="setMin(const CartesianCoordinateSystem::Dimension,int,double)" return-type="void"/>
+        <declare-function signature="setMax(const CartesianCoordinateSystem::Dimension,int,double)" return-type="void"/>
+
+        <declare-function signature="xRangeFormat(int)const" return-type="RangeT::Format"/>
+        <declare-function signature="setXRangeFormat(int,RangeT::Format)" return-type="void"/>
+        <declare-function signature="yRangeFormat(int)const" return-type="RangeT::Format"/>
+        <declare-function signature="setYRangeFormat(int,RangeT::Format)" return-type="void"/>
+        <declare-function signature="rangeDateTimeFormat(const CartesianCoordinateSystem::Dimension, const int)const" return-type="const QString"/>
+
+        <declare-function signature="xRangeScale(int)const" return-type="RangeT::Scale"/>
+        <declare-function signature="setXRangeScale(int,RangeT::Scale)" return-type="void"/>
+        <declare-function signature="yRangeScale(int)const" return-type="RangeT::Scale"/>
+        <declare-function signature="setYRangeScale(int,RangeT::Scale)" return-type="void"/>
+
+        <declare-function signature="xRangeBreakingEnabled()const" return-type="bool"/>
+        <declare-function signature="setXRangeBreakingEnabled(bool)" return-type="void"/>
+        <declare-function signature="yRangeBreakingEnabled()const" return-type="bool"/>
+        <declare-function signature="setYRangeBreakingEnabled(bool)" return-type="void"/>
+        <declare-function signature="xRangeBreaks()const" return-type="CartesianPlot::RangeBreaks"/>
+        <declare-function signature="setXRangeBreaks(const CartesianPlot::RangeBreaks&amp;)" return-type="void"/>
+        <declare-function signature="yRangeBreaks()const" return-type="CartesianPlot::RangeBreaks"/>
+        <declare-function signature="setYRangeBreaks(const CartesianPlot::RangeBreaks&amp;)" return-type="void"/>
+
+        <declare-function signature="cursorLine()const" return-type="Line*"/>
+        <declare-function signature="cursor0Enable()const" return-type="bool"/>
+        <declare-function signature="setCursor0Enable(const bool&amp;)" return-type="void"/>
+        <declare-function signature="cursor1Enable()const" return-type="bool"/>
+        <declare-function signature="setCursor1Enable(const bool&amp;)" return-type="void"/>
+
+        <declare-function signature="coordinateSystemCount()const" return-type="int"/>
+        <declare-function signature="addCoordinateSystem()" return-type="void"/>
+        <declare-function signature="removeCoordinateSystem(int)" return-type="void"/>
+        <declare-function signature="defaultCoordinateSystemIndex()const" return-type="int"/>
+        <declare-function signature="setDefaultCoordinateSystemIndex(int)" return-type="void"/>
+        <declare-function signature="setCoordinateSystemRangeIndex(int,CartesianCoordinateSystem::Dimension,int)" return-type="void"/>
+
+        <declare-function signature="retransformScales()" return-type="void"/>
+        <declare-function signature="retransformScale(CartesianCoordinateSystem::Dimension,int)" return-type="void"/>
+
+        <declare-function signature="theme()const" return-type="QString"/>
+        <declare-function signature="setTheme(const QString&amp;)" return-type="void"/>
+
+        <declare-function signature="zoomInX(int)" return-type="void">
+            <modify-argument index="1">
+                <replace-default-expression with="-1"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="zoomOutX(int)" return-type="void">
+            <modify-argument index="1">
+                <replace-default-expression with="-1"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="zoomInY(int)" return-type="void">
+            <modify-argument index="1">
+                <replace-default-expression with="-1"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="zoomOutY(int)" return-type="void">
+            <modify-argument index="1">
+                <replace-default-expression with="-1"/>
+            </modify-argument>
+        </declare-function>
+
+        <declare-function signature="shiftLeftX(int)" return-type="void">
+            <modify-argument index="1">
+                <replace-default-expression with="-1"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="shiftRightX(int)" return-type="void">
+            <modify-argument index="1">
+                <replace-default-expression with="-1"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="shiftUpY(int)" return-type="void">
+            <modify-argument index="1">
+                <replace-default-expression with="-1"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="shiftDownY(int)" return-type="void">
+            <modify-argument index="1">
+                <replace-default-expression with="-1"/>
+            </modify-argument>
+        </declare-function>
+    </object-type>
+
+    <!-- Worksheet Elements -->
+    <rejection class="Image" field-name="*"/>
+    <rejection class="Image" function-name="*"/>
+    <object-type name="Image" disable-wrapper="yes">
+        <declare-function signature="Image(const QString&amp;)" return-type="void"/>
+        <declare-function signature="borderLine()const" return-type="Line*"/>
+        <declare-function signature="fileName()const" return-type="QString"/>
+        <declare-function signature="setFileName(const QString&amp;)" return-type="void"/>
+        <declare-function signature="embedded()const" return-type="bool"/>
+        <declare-function signature="setEmbedded(bool)" return-type="void"/>
+        <declare-function signature="opacity()const" return-type="qreal"/>
+        <declare-function signature="setOpacity(qreal)" return-type="void"/>
+        <declare-function signature="width()const" return-type="int"/>
+        <declare-function signature="setWidth(int)" return-type="void"/>
+        <declare-function signature="height()const" return-type="int"/>
+        <declare-function signature="setHeight(int)" return-type="void"/>
+        <declare-function signature="keepRatio()const" return-type="bool"/>
+        <declare-function signature="setKeepRatio(bool)" return-type="void"/>
+    </object-type>
+    <rejection class="InfoElement" field-name="*"/>
+    <rejection class="InfoElement" function-name="*"/>
+    <object-type name="InfoElement" disable-wrapper="yes">
+        <value-type name="MarkerPoints_T" disable-wrapper="yes"/>
+        <declare-function signature="InfoElement(const QString&amp;,CartesianPlot*)" return-type="void">
+            <modify-argument index="this">
+                <define-ownership class="target" owner="c++"/>
+                <parent index="2" action="add"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="InfoElement(const QString&amp;,CartesianPlot*,const XYCurve*,double)" return-type="void">
+            <modify-argument index="this">
+                <define-ownership class="target" owner="c++"/>
+                <parent index="2" action="add"/>
+            </modify-argument>
+            <modify-argument index="3">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="title()" return-type="TextLabel*"/>
+        <declare-function signature="addCurve(const XYCurve*,CustomPoint*)" return-type="void">
+            <modify-argument index="2">
+                <replace-default-expression with="nullptr"/>
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+            <modify-argument index="1">
+                <define-ownership class="target" owner="c++"/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="removeCurve(const XYCurve*)" return-type="void"/>
+        <declare-function signature="markerPointsCount()const" return-type="int"/>
+        <declare-function signature="markerPointAt(int)const" return-type="InfoElement::MarkerPoints_T"/>
+        <declare-function signature="positionLogical()const" return-type="double"/>
+        <declare-function signature="setPositionLogical(double)" return-type="void"/>
+        <declare-function signature="connectionLineCurveName()const" return-type="QString"/>
+        <declare-function signature="setConnectionLineCurveName(const QString&amp;)" return-type="void"/>
+        <declare-function signature="verticalLine()const" return-type="Line*"/>
+        <declare-function signature="connectionLine()const" return-type="Line*"/>
+    </object-type>
+    <rejection class="TextLabel" field-name="*"/>
+    <rejection class="TextLabel" function-name="*"/>
+    <object-type name="TextLabel" disable-wrapper="yes">
+        <enum-type name="Type"/>
+        <enum-type name="Mode"/>
+        <enum-type name="BorderShape"/>
+        <value-type name="TextWrapper" disable-wrapper="yes"/>
+        <declare-function signature="TextLabel(const QString&amp;,TextLabel::Type)" return-type="void">
+            <modify-argument index="2">
+                <replace-default-expression with="TextLabel::Type::General"/>
+                <remove-argument/>
+            </modify-argument>
+        </declare-function>
+        <declare-function signature="borderLine()const" return-type="Line*"/>
+        <declare-function signature="setFont(const QFont&amp;)" return-type="void"/>
+        <declare-function signature="setPlaceholderText(const TextLabel::TextWrapper&amp;)" return-type="void"/>
+        <declare-function signature="fontColor()const" return-type="QColor"/>
+        <declare-function signature="setFontColor(QColor)" return-type="void"/>
+        <declare-function signature="backgroundColor()const" return-type="QColor"/>
+        <declare-function signature="setBackgroundColor(QColor)" return-type="void"/>
+        <declare-function signature="teXFont()const" return-type="QFont"/>
+        <declare-function signature="setTeXFont(const QFont&amp;)" return-type="void"/>
+        <declare-function signature="borderShape()const" return-type="TextLabel::BorderShape"/>
+        <declare-function signature="setBorderShape(TextLabel::BorderShape)" return-type="void"/>
+        <declare-function signature="text()const" return-type="TextLabel::TextWrapper"/>
+        <declare-function signature="setText(const TextLabel::TextWrapper&amp;)" return-type="void"/>
+    </object-type>
+
+    <!-- Scripting -->
+    <?if scripting ?>
+    <rejection class="PythonLogger" field-name="*"/>
+    <rejection class="PythonLogger" function-name="*"/>
+    <object-type name="PythonLogger" disable-wrapper="yes">
+        <declare-function signature="write(const QString&amp;)" return-type="void"/>
+    </object-type>
+    <?endif?>
+
+    <!-- NSL -->
+    <enum-type name="nsl_fit_model_category"/>
+    <enum-type name="nsl_sf_stats_distribution"/>
+    <enum-type name="nsl_fit_algorithm"/>
+    <enum-type name="round_method"/>
+    <enum-type name="nsl_kernel_type"/>
+    <enum-type name="nsl_kde_bandwidth_type"/>
+    <enum-type name="nsl_conv_direction_type"/>
+    <enum-type name="nsl_conv_type_type"/>
+    <enum-type name="nsl_conv_method_type"/>
+    <enum-type name="nsl_conv_norm_type"/>
+    <enum-type name="nsl_conv_wrap_type"/>
+    <enum-type name="nsl_conv_kernel_type"/>
+    <enum-type name="nsl_corr_type_type"/>
+    <enum-type name="nsl_corr_norm_type"/>
+    <enum-type name="nsl_geom_linesim_type"/>
+    <enum-type name="nsl_diff_deriv_order_type"/>
+    <enum-type name="nsl_fit_model_type_basic"/>
+    <enum-type name="nsl_fit_model_type_peak"/>
+    <enum-type name="nsl_fit_model_type_growth"/>
+    <enum-type name="nsl_fit_weight_type"/>
+    <enum-type name="nsl_filter_type"/>
+    <enum-type name="nsl_filter_form"/>
+    <enum-type name="nsl_filter_cutoff_unit"/>
+    <enum-type name="nsl_sf_window_type"/>
+    <enum-type name="nsl_dft_result_type"/>
+    <enum-type name="nsl_dft_xscale"/>
+    <enum-type name="nsl_hilbert_result_type"/>
+    <enum-type name="nsl_int_method_type"/>
+    <enum-type name="nsl_interp_type"/>
+    <enum-type name="nsl_interp_pch_variant"/>
+    <enum-type name="nsl_interp_evaluate"/>
+    <enum-type name="nsl_smooth_type"/>
+    <enum-type name="nsl_smooth_pad_mode"/>
+    <enum-type name="nsl_smooth_weight_type"/>
+</typesystem>

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Cartesian plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -17,22 +17,17 @@
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
-extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
-}
 
-class AbstractColumn;
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
-class CartesianCoordinateSystem;
 class CartesianPlotDock;
 class Histogram;
 class InfoElementDialog;
 class Line;
 class XYCurve;
 class KConfig;
-
-using Dimension = CartesianCoordinateSystem::Dimension;
+class Plot;
 
 #ifdef SDK
 #include "labplot_export.h"
@@ -43,7 +38,7 @@ class CartesianPlot : public AbstractPlot {
 	Q_OBJECT
 
 public:
-	explicit CartesianPlot(const QString& name);
+	explicit CartesianPlot(const QString& name, bool loading = false);
 	~CartesianPlot() override;
 
 	enum class Type { FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero };
@@ -99,7 +94,9 @@ public:
 	static int cSystemIndex(WorksheetElement* e);
 
 	QIcon icon() const override;
-	QMenu* createContextMenu() override;
+	virtual QMenu* createContextMenu() override;
+	static void fillAddNewPlotMenu(QMenu*, QActionGroup*);
+	QMenu* addNewMenu();
 	QMenu* analysisMenu();
 	QVector<AbstractAspect*> dependsOn() const override;
 	QVector<AspectType> pasteTypes() const override;
@@ -109,13 +106,12 @@ public:
 	QRectF dataRect() const;
 	void setMouseMode(MouseMode);
 	MouseMode mouseMode() const;
-	BASIC_D_ACCESSOR_DECL(bool, isLocked, Locked)
+	BASIC_D_ACCESSOR_DECL(bool, isInteractive, Interactive)
 	void navigate(int cSystemIndex, NavigationOperation);
 	const QList<QColor>& themeColorPalette() const;
 	const QColor themeColorPalette(int index) const;
 	void processDropEvent(const QVector<quintptr>&) override;
 	bool isPanningActive() const;
-	bool isHovered() const;
 	bool isPrinted() const;
 	bool isSelected() const;
 
@@ -127,10 +123,9 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
-	void finalizeLoad();
 	void loadThemeConfig(const KConfig&) override;
 	void saveTheme(KConfig& config);
-	void wheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
+	void wheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
 	void mousePressZoomSelectionMode(QPointF logicPos, int cSystemIndex);
 	void mousePressCursorMode(int cursorNumber, QPointF logicPos);
 	void mouseMoveZoomSelectionMode(QPointF logicPos, int cSystemIndex);
@@ -205,6 +200,8 @@ public:
 	void retransformScales();
 	void retransformScale(Dimension, int index);
 
+	void resizeInsetPlot(CartesianPlot*);
+
 	QString theme() const;
 
 	typedef CartesianPlotPrivate Private;
@@ -214,12 +211,12 @@ public Q_SLOTS:
 	virtual void retransform() override;
 
 private:
-	void init();
+	void init(bool loading);
 	void initActions();
 	void initMenus();
 	void setColorPalette(const KConfig&);
 	const XYCurve* currentCurve() const;
-	void zoom(int index, const Dimension, bool in);
+	void zoom(int index, const Dimension, bool in, const double relPosSceneRange);
 	void checkAxisFormat(const int cSystemIndex, const AbstractColumn*, Axis::Orientation);
 	void calculateDataRange(const Dimension, const int index, bool completeRange = true);
 	int curveTotalCount() const;
@@ -229,14 +226,7 @@ private:
 	QList<QColor> m_themeColorPalette;
 	bool m_menusInitialized{false};
 
-	QAction* visibilityAction{nullptr};
-
-	//"add new" actions
-	QAction* addCurveAction{nullptr};
-	QAction* addEquationCurveAction{nullptr};
-	QAction* addHistogramAction{nullptr};
-	QAction* addBarPlotAction{nullptr};
-	QAction* addBoxPlotAction{nullptr};
+	// analysis curves actions
 	QAction* addDataReductionCurveAction{nullptr};
 	QAction* addDifferentiationCurveAction{nullptr};
 	QAction* addIntegrationCurveAction{nullptr};
@@ -248,6 +238,7 @@ private:
 	QAction* addHilbertTransformCurveAction{nullptr};
 	QAction* addConvolutionCurveAction{nullptr};
 	QAction* addCorrelationCurveAction{nullptr};
+	QAction* addFunctionCurveAction{nullptr};
 
 	QAction* addHorizontalAxisAction{nullptr};
 	QAction* addVerticalAxisAction{nullptr};
@@ -258,6 +249,8 @@ private:
 	QAction* addCustomPointAction{nullptr};
 	QAction* addReferenceLineAction{nullptr};
 	QAction* addReferenceRangeAction{nullptr};
+	QAction* addInsetPlotAction{nullptr};
+	QAction* addInsetPlotWithDataAction{nullptr};
 
 	// analysis menu actions
 	QAction* addDataOperationAction{nullptr};
@@ -273,7 +266,7 @@ private:
 	QAction* addConvolutionAction{nullptr};
 	QAction* addCorrelationAction{nullptr};
 
-	QMenu* addNewMenu{nullptr};
+	QMenu* m_addNewMenu{nullptr};
 	QMenu* addNewAnalysisMenu{nullptr};
 	QMenu* dataAnalysisMenu{nullptr};
 	QMenu* themeMenu{nullptr};
@@ -286,48 +279,24 @@ private:
 	Q_DECLARE_PRIVATE(CartesianPlot)
 
 	friend CartesianPlotDock;
+	friend class AxisTest;
 	friend class CartesianPlotTest;
-	friend class MultiRangeTest;
+	friend class MultiRangeTest2;
 
 public Q_SLOTS:
-	void addHorizontalAxis();
-	void addVerticalAxis();
-	void addCurve();
-	void addHistogram();
 	void addHistogramFit(Histogram*, nsl_sf_stats_distribution);
-	void addBarPlot();
-	void addBoxPlot();
-	void addEquationCurve();
-	void addDataReductionCurve();
-	void addDifferentiationCurve();
-	void addIntegrationCurve();
-	void addInterpolationCurve();
-	void addSmoothCurve();
-	void addFitCurve();
-	void addFourierFilterCurve();
-	void addFourierTransformCurve();
-	void addHilbertTransformCurve();
-	void addConvolutionCurve();
-	void addCorrelationCurve();
-
 	void addLegend();
-	void addTextLabel();
-	void addImage();
-	void addCustomPoint();
-	void addReferenceLine();
-	void addReferenceRange();
-	void addInfoElement();
 
 	bool scaleAuto(int xIndex = -1, int yIndex = -1, bool fullRange = true, bool suppressRetransformScale = false);
 	bool scaleAuto(const Dimension, int index = -1, bool fullRange = true, bool suppressRetransformScale = false);
 
-	void zoomIn(int xIndex = -1, int yIndex = -1);
-	void zoomOut(int xIndex = -1, int yIndex = -1);
+	void zoomIn(int xIndex = -1, int yIndex = -1, const QPointF& sceneRelPos = QPointF(0.5, 0.5));
+	void zoomOut(int xIndex = -1, int yIndex = -1, const QPointF& sceneRelPos = QPointF(0.5, 0.5));
 	void zoomInX(int index = -1);
 	void zoomOutX(int index = -1);
 	void zoomInY(int index = -1);
 	void zoomOutY(int index = -1);
-	void zoomInOut(const int index, const Dimension dim, const bool zoomIn);
+	void zoomInOut(const int index, const Dimension dim, const bool zoomIn, const double relScenePosRange = 0.5);
 
 	void shiftLeftX(int index = -1);
 	void shiftRightX(int index = -1);
@@ -340,14 +309,36 @@ public Q_SLOTS:
 	void dataChanged(int xIndex = -1, int yIndex = -1, WorksheetElement* sender = nullptr);
 
 private Q_SLOTS:
+	void addPlot(QAction*);
+
+	void addDataReductionCurve();
+	void addDifferentiationCurve();
+	void addIntegrationCurve();
+	void addInterpolationCurve();
+	void addSmoothCurve();
+	void addFitCurve();
+	void addFourierFilterCurve();
+	void addFunctionCurve();
+
+	void addHorizontalAxis();
+	void addVerticalAxis();
+	void addTextLabel();
+	void addImage();
+	void addCustomPoint();
+	void addReferenceLine();
+	void addReferenceRange();
+	void addInfoElement();
+	void addInsetPlot();
+	void addInsetPlotWithData();
+
 	void updateLegend();
 	void childAdded(const AbstractAspect*);
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void childHovered();
 
 	void dataChanged(WorksheetElement*);
-	void dataChanged(XYCurve*, const Dimension);
-	void curveLinePenChanged(QPen);
+	void dataChanged(Plot*, const Dimension);
+	void plotColorChanged();
 	void curveVisibilityChanged();
 	void boxPlotOrientationChanged(WorksheetElement::Orientation);
 
@@ -366,7 +357,6 @@ Q_SIGNALS:
 	void rectChanged(QRectF&);
 	void autoScaleChanged(const Dimension, int xRangeIndex, bool);
 	void rangeChanged(const Dimension, int, Range<double>);
-	void yRangeChanged(int yRangeIndex, Range<double>);
 	void minChanged(const Dimension, int rangeIndex, double);
 	void maxChanged(const Dimension, int rangeIndex, double);
 	void scaleChanged(const Dimension, int rangeIndex, RangeT::Scale);
@@ -386,12 +376,12 @@ Q_SIGNALS:
 	void mouseReleaseZoomSelectionModeSignal();
 	void mouseHoverZoomSelectionModeSignal(QPointF logicalPoint);
 	void mouseHoverOutsideDataRectSignal();
-	void wheelEventSignal(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
+	void wheelEventSignal(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
 	void curveNameChanged(const AbstractAspect* curve);
 	void cursorPosChanged(int cursorNumber, double xPos);
 	void curveAdded(const XYCurve*);
 	void curveRemoved(const XYCurve*);
-	void curveLinePenChanged(QPen, QString curveName);
+	void plotColorChanged(const QColor&, const QString& curveName);
 	void cursorPenChanged(QPen);
 	void curveDataChanged(const XYCurve*);
 	void curveVisibilityChangedSignal();
@@ -399,7 +389,10 @@ Q_SIGNALS:
 	void cursor0EnableChanged(bool enable);
 	void cursor1EnableChanged(bool enable);
 
-	void scaleRetransformed(const CartesianPlot* plot, const Dimension dim, int index);
+	void scaleRetransformed(const CartesianPlot*, const Dimension, int index);
+
+	friend class FitTest;
+	friend class FourierTest;
 };
 
 #endif

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Background
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -16,7 +16,12 @@
 class BackgroundPrivate;
 class KConfigGroup;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Background : public AbstractAspect {
+#else
 class Background : public AbstractAspect {
+#endif
 	Q_OBJECT
 
 public:
@@ -38,6 +43,8 @@ public:
 	void setPrefix(const QString&);
 	const QString& prefix() const;
 	void init(const KConfigGroup&);
+
+	void draw(QPainter*, const QPolygonF&, double radius = 0) const;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

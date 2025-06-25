@@ -8,19 +8,11 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYSmoothCurve
-  \brief A xy-curve defined by a smooth
-
-  \ingroup worksheet
-*/
-
 #include "XYSmoothCurve.h"
 #include "XYSmoothCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 
 #include <KLocalizedString>
 
@@ -30,10 +22,15 @@
 
 extern "C" {
 #include "backend/nsl/nsl_sf_kernel.h"
+}
 #include "backend/nsl/nsl_stats.h"
 #include <gsl/gsl_math.h> // gsl_pow_*
-}
 
+/*!
+ * \class XYSmoothCurve
+ * \brief A xy-curve defined by a smooth.
+ * \ingroup CartesianAnalysisPlots
+ */
 XYSmoothCurve::XYSmoothCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYSmoothCurvePrivate(this), AspectType::XYSmoothCurve) {
 }
@@ -46,11 +43,6 @@ XYSmoothCurve::XYSmoothCurve(const QString& name, XYSmoothCurvePrivate* dd)
 // and is deleted during the cleanup in QGraphicsScene
 XYSmoothCurve::~XYSmoothCurve() = default;
 
-void XYSmoothCurve::recalculate() {
-	Q_D(XYSmoothCurve);
-	d->recalculate();
-}
-
 /*!
 	Returns an icon to be used in the project explorer.
 */
@@ -58,9 +50,9 @@ QIcon XYSmoothCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 const AbstractColumn* XYSmoothCurve::roughsColumn() const {
 	Q_D(const XYSmoothCurve);
 	return d->roughColumn;
@@ -73,18 +65,18 @@ const XYAnalysisCurve::Result& XYSmoothCurve::result() const {
 	return d->smoothResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYSmoothCurve, SetSmoothData, XYSmoothCurve::SmoothData, smoothData, recalculate)
 void XYSmoothCurve::setSmoothData(const XYSmoothCurve::SmoothData& smoothData) {
 	Q_D(XYSmoothCurve);
 	exec(new XYSmoothCurveSetSmoothDataCmd(d, smoothData, ki18n("%1: set options and perform the smooth")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYSmoothCurvePrivate::XYSmoothCurvePrivate(XYSmoothCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -172,6 +164,7 @@ bool XYSmoothCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataCol
 
 	///////////////////////////////////////////////////////////
 	int status = 0;
+	gsl_set_error_handler_off();
 
 	switch (type) {
 	case nsl_smooth_type_moving_average:
@@ -215,9 +208,9 @@ bool XYSmoothCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDataCol
 	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYSmoothCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYSmoothCurve);
@@ -268,7 +261,6 @@ void XYSmoothCurve::save(QXmlStreamWriter* writer) const {
 bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYSmoothCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -314,6 +306,10 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 				d->yColumn = column;
 			else
 				d->roughColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
@@ -336,7 +332,7 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
-		recalcLogicalPoints();
+		recalc();
 	}
 
 	if (d->roughColumn) {

@@ -13,9 +13,7 @@
 #include <QMutex>
 #include <QThreadPool>
 
-extern "C" {
 #include <gsl/gsl_math.h>
-}
 
 static const QRgb white = QColor(Qt::white).rgb();
 static const QRgb black = QColor(Qt::black).rgb();
@@ -38,7 +36,7 @@ public:
 		, m_plotImage(plotImage)
 		, m_originalImage(originalImage)
 		, m_settings(settings)
-		, m_background(std::move(background)){};
+		, m_background(std::move(background)) { };
 
 	void run() override {
 		for (int y = m_start; y < m_end; ++y) {
@@ -109,9 +107,9 @@ bool ImageEditor::processedPixelIsOn(const QImage& plotImage, int x, int y) {
 	return (gray < BLACK_WHITE_THRESHOLD);
 }
 
-//##############################################################################
-//#####################  private helper functions  #############################
-//##############################################################################
+// ##############################################################################
+// #####################  private helper functions  #############################
+// ##############################################################################
 QRgb ImageEditor::findBackgroundColor(const QImage* plotImage) {
 	ColorList::iterator itrC;
 	ColorList colors;

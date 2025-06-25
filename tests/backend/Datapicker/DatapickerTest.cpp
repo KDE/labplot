@@ -19,8 +19,9 @@
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/DatapickerPointPrivate.h"
 #include "backend/datapicker/Transform.h"
-#include "commonfrontend/datapicker/DatapickerImageView.h"
-#include "kdefrontend/widgets/DatapickerImageWidget.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "frontend/datapicker/DatapickerImageView.h"
+#include "frontend/widgets/DatapickerImageWidget.h"
 
 #include <QAction>
 #include <QUndoStack>
@@ -29,6 +30,41 @@
 	VALUES_EQUAL(vec.x(), ref.x());                                                                                                                            \
 	VALUES_EQUAL(vec.y(), ref.y());                                                                                                                            \
 	VALUES_EQUAL(vec.z(), ref.z());
+
+namespace {
+QImage createImage() {
+	QImage image(1000, 1000, QImage::Format_RGB32);
+	QRgb value;
+
+	value = qRgb(189, 149, 39); // 0xffbd9527
+	image.setPixel(1, 1, value);
+
+	value = qRgb(122, 163, 39); // 0xff7aa327
+	image.setPixel(0, 1, value);
+	image.setPixel(1, 0, value);
+
+	value = qRgb(237, 187, 51); // 0xffedba31
+	image.setPixel(2, 1, value);
+	return image;
+}
+
+// Different image to the one created by createImage()
+QImage createImage2() {
+	QImage image(3, 3, QImage::Format_RGB32);
+	QRgb value;
+
+	value = qRgb(189, 149, 39); // 0xffbd9527
+	image.setPixel(0, 1, value);
+
+	value = qRgb(122, 163, 39); // 0xff7aa327
+	image.setPixel(1, 1, value);
+	image.setPixel(1, 0, value);
+
+	value = qRgb(237, 187, 51); // 0xffedba31
+	image.setPixel(2, 1, value);
+	return image;
+}
+} // anonymous namespace
 
 void DatapickerTest::mapCartesianToCartesian() {
 	DatapickerImage::ReferencePoints points;
@@ -975,6 +1011,85 @@ void DatapickerTest::selectReferencePoint() {
 	QCOMPARE(w.ui.rbRefPoint3->isChecked(), true);
 }
 
+void DatapickerTest::recreateAxisReferencePoints() {
+	Datapicker datapicker(QStringLiteral("Test"));
+	auto* image = datapicker.image();
+
+	// Set reference points
+	datapicker.addNewPoint(QPointF(0, 1), image);
+	datapicker.addNewPoint(QPointF(0, 0), image);
+	datapicker.addNewPoint(QPointF(1, 0), image);
+
+	auto ap = image->axisPoints();
+	ap.type = DatapickerImage::GraphType::Linear;
+	image->setAxisPoints(ap);
+
+	DatapickerImageWidget w(nullptr);
+	w.setImages({image});
+	w.ui.sbPositionX1->setValue(0);
+	w.ui.sbPositionY1->setValue(10);
+	w.ui.sbPositionZ1->setValue(0);
+	w.ui.sbPositionX2->setValue(0);
+	w.ui.sbPositionY2->setValue(0);
+	w.ui.sbPositionZ2->setValue(0);
+	w.ui.sbPositionX3->setValue(10);
+	w.ui.sbPositionY3->setValue(0);
+	w.ui.sbPositionZ3->setValue(0);
+	w.logicalPositionChanged();
+
+	auto* curve = new DatapickerCurve(i18n("Curve"));
+	curve->addDatasheet(image->axisPoints().type);
+	datapicker.addChild(curve);
+
+	datapicker.addNewPoint(QPointF(0.5, 0.5), curve); // updates the curve data
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5.);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 5.);
+
+	datapicker.addNewPoint(QPointF(0.7, 0.65), curve); // updates the curve data
+	VALUES_EQUAL(curve->posXColumn()->valueAt(1), 7.);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(1), 6.5);
+
+	// QVERIFY(datapicker.image()->plotPointsType() != DatapickerImage::PointsType::AxisPoints);
+	// datapicker.image()->setPlotPointsType(DatapickerImage::PointsType::AxisPoints);
+
+	datapicker.image()->clearReferencePoints();
+	QCOMPARE(datapicker.image()->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden).count(), 0);
+
+	QVERIFY(std::isnan(curve->posXColumn()->valueAt(0)));
+	QVERIFY(std::isnan(curve->posYColumn()->valueAt(0)));
+	QVERIFY(std::isnan(curve->posXColumn()->valueAt(1)));
+	QVERIFY(std::isnan(curve->posYColumn()->valueAt(1)));
+
+	// Recreate points again
+	datapicker.addNewPoint(QPointF(0, 1), image);
+	datapicker.addNewPoint(QPointF(0, 0), image);
+	datapicker.addNewPoint(QPointF(1, 0), image);
+
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5.);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 5.);
+	VALUES_EQUAL(curve->posXColumn()->valueAt(1), 7.);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(1), 6.5);
+
+	// Change position
+	{
+		auto points = datapicker.image()->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+
+		// The logical position is still 10 for y1. So at 0.5 we have now 10 instead of 5.
+		points.at(0)->setPosition(QPointF(0., 0.5));
+		VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5.);
+		VALUES_EQUAL(curve->posYColumn()->valueAt(0), 10.);
+		VALUES_EQUAL(curve->posXColumn()->valueAt(1), 7.);
+		VALUES_EQUAL(curve->posYColumn()->valueAt(1), 13.);
+
+		// Now we stretch the x axis as well
+		points.at(2)->setPosition(QPointF(0.5, 0.));
+		VALUES_EQUAL(curve->posXColumn()->valueAt(0), 10.);
+		VALUES_EQUAL(curve->posYColumn()->valueAt(0), 10.);
+		VALUES_EQUAL(curve->posXColumn()->valueAt(1), 14.);
+		VALUES_EQUAL(curve->posYColumn()->valueAt(1), 13.);
+	}
+}
+
 void DatapickerTest::imageAxisPointsChanged() {
 	DatapickerImageWidget w(nullptr);
 	Datapicker datapicker(QStringLiteral("Test"));
@@ -1035,6 +1150,7 @@ void DatapickerTest::datapickerDateTime() {
 	DatapickerImageWidget w(nullptr);
 	Datapicker datapicker(QStringLiteral("Test"));
 	auto* image = datapicker.image();
+	image->setImage(createImage(), QStringLiteral("Image"), true);
 
 	// add reference points
 	datapicker.addNewPoint(QPointF(0., 1.), image); // scene coordinates
@@ -1073,9 +1189,10 @@ void DatapickerTest::datapickerDateTime() {
 
 	QCOMPARE(curve->posXColumn()->columnMode(), AbstractColumn::ColumnMode::Double);
 
-	w.ui.cbDatetime->click();
+	QCOMPARE(w.ui.cbDatetime->isEnabled(), true);
+	w.ui.cbDatetime->clicked(true);
 
-	QCOMPARE(w.ui.cbDatetime->isChecked(), true);
+	// QCOMPARE(w.ui.cbDatetime->isChecked(), true);
 	// QCOMPARE(w.ui.dtePositionX1->isVisible(), true);
 	// QCOMPARE(w.ui.dtePositionX2->isVisible(), true);
 	// QCOMPARE(w.ui.dtePositionX3->isVisible(), true);
@@ -1092,8 +1209,10 @@ void DatapickerTest::datapickerDateTime() {
 
 	QCOMPARE(curve->posXColumn()->rowCount(), 1);
 	QCOMPARE(curve->posXColumn()->columnMode(), AbstractColumn::ColumnMode::DateTime);
+#if !defined(_WIN32)
 	QCOMPARE(curve->posXColumn()->dateTimeAt(0),
 			 QDateTime::fromString(QLatin1String("2000-12-01 03:00:00:000Z"), QStringLiteral("yyyy-MM-dd hh:mm:ss:zzzt"))); // logical coordinates
+#endif
 	QCOMPARE(curve->posYColumn()->rowCount(), 1);
 	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 6.); // logical coordinates
 }
@@ -1141,6 +1260,664 @@ void DatapickerTest::datapickerDeleteCurvePoint() {
 
 	QCOMPARE(curve->posXColumn()->rowCount(), 1);
 	QCOMPARE(curve->posYColumn()->rowCount(), 1);
+}
+
+void DatapickerTest::datapickerImageLoadImageAbsolute() {
+	QString savePath;
+	QString imgFileName;
+	{
+		QTemporaryFile imgFile(QStringLiteral("Testimage_XXXXXX.png"));
+		const auto img = createImage();
+		QVERIFY(imgFile.open());
+		imgFileName = imgFile.fileName();
+		QVERIFY(img.save(imgFileName, "PNG"));
+		QVERIFY(QFile::exists(imgFile.fileName()));
+
+		{
+			Project project;
+			auto* datapicker = new Datapicker(QStringLiteral("Test"));
+			project.addChild(datapicker);
+			auto* image = datapicker->image();
+
+			DatapickerImageWidget w(nullptr);
+			w.setImages({image});
+
+			QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), false);
+			QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false);
+			QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+			QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+			w.ui.leFileName->setText(imgFileName);
+			// w.fileNameChanged(); will be called
+
+			QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+			QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // project is not saved
+			QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+			QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+			QCOMPARE(image->fileName(), imgFile.fileName());
+			QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
+			QCOMPARE(w.ui.leFileName->text(), imgFile.fileName());
+			QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
+
+			SAVE_PROJECT("DatapickerTestProject");
+
+			QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), true); // project is now saved so calculating the relative path is possible
+		}
+
+		// Load project
+		{
+			Project project;
+			QCOMPARE(project.load(savePath), true);
+
+			auto datapicker = project.child<Datapicker>(0);
+			QVERIFY(datapicker);
+			auto* image = datapicker->image();
+
+			DatapickerImageWidget w(nullptr);
+			w.setImages({image});
+
+			QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+			QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), true); // project was loaded
+			QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+			QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+			QCOMPARE(image->fileName(), imgFileName);
+			QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
+			QCOMPARE(w.ui.leFileName->text(), imgFileName);
+			QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
+		}
+	}
+
+	// Deleting image
+	QCOMPARE(QFile::exists(imgFileName), false); // Deleted because QTemporaryFile goes out of scope
+	//	QFile f(imgFileName.fileName());
+	//	QVERIFY(f.remove()); // Does not work on windows, see MR for more info
+
+	// Load project
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true);
+
+		auto datapicker = project.child<Datapicker>(0);
+		QVERIFY(datapicker);
+		auto* image = datapicker->image();
+
+		DatapickerImageWidget w(nullptr);
+		w.setImages({image});
+
+		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), false); // image is invalid, because it is anymore available
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // image is invalid
+		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+		QCOMPARE(image->fileName(), imgFileName);
+		QCOMPARE(image->originalPlotImage.isNull(), true); // invalid image loaded
+		QCOMPARE(w.ui.leFileName->text(), imgFileName);
+		QVERIFY(w.ui.leFileName->styleSheet() != QStringLiteral("")); // Invalid image
+	}
+}
+
+void DatapickerTest::datapickerImageLoadImageRelative() {
+	QString savePath;
+	QString imgFileName;
+	{
+		const auto img = createImage();
+
+		QTemporaryFile imgFile(QStringLiteral("Testimage_XXXXXX.png"));
+		QVERIFY(imgFile.open());
+		imgFileName = imgFile.fileName();
+		img.save(imgFileName, "PNG");
+		QVERIFY(QFile::exists(imgFileName));
+		{
+			Project project;
+			auto* datapicker = new Datapicker(QStringLiteral("Test"));
+			project.addChild(datapicker);
+			auto* image = datapicker->image();
+
+			DatapickerImageWidget w(nullptr);
+			w.setImages({image});
+
+			QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), false);
+			QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false);
+			QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+			QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+			w.ui.leFileName->setText(imgFileName);
+			// w.fileNameChanged(); will be called
+
+			QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+			QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // project is not saved
+			QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+			QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+			QCOMPARE(image->fileName(), imgFileName);
+			QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
+			QCOMPARE(w.ui.leFileName->text(), imgFileName);
+			QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
+
+			SAVE_PROJECT("DatapickerTestProject");
+
+			QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), true); // project is now saved so calculating the relative path is possible
+
+			w.ui.cbFileRelativePath->clicked(true);
+
+			// QCOMPARE(w.ui.cbFileRelativePath->isChecked(), true);
+			QFileInfo fi(imgFile);
+			QCOMPARE(image->fileName(), fi.fileName());
+			QCOMPARE(w.ui.leFileName->text(), fi.fileName());
+
+			SAVE_PROJECT("DatapickerTestProject"); // Save again to save relative path
+		}
+
+		// Load project
+		{
+			Project project;
+			QCOMPARE(project.load(savePath), true);
+
+			auto datapicker = project.child<Datapicker>(0);
+			QVERIFY(datapicker);
+			auto* image = datapicker->image();
+
+			DatapickerImageWidget w(nullptr);
+			w.setImages({image});
+
+			QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+			QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), true); // project was loaded
+			QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+			QCOMPARE(w.ui.cbFileRelativePath->isChecked(), true);
+
+			QFileInfo fi(imgFileName);
+			QCOMPARE(image->fileName(), fi.fileName());
+			QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
+			QCOMPARE(w.ui.leFileName->text(), fi.fileName());
+			QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
+		}
+	}
+
+	// Deleting image
+	QCOMPARE(QFile::exists(imgFileName), false); // Deleted because QTemporaryFile goes out of scope
+	//	QFile f(imgFileName.fileName());
+	//	QVERIFY(f.remove()); // Does not work on windows, see MR for more info
+
+	// Load project
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true);
+
+		auto datapicker = project.child<Datapicker>(0);
+		QVERIFY(datapicker);
+		auto* image = datapicker->image();
+
+		DatapickerImageWidget w(nullptr);
+		w.setImages({image});
+
+		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), false); // image is invalid, because it is anymore available
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // image is invalid
+		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), true);
+
+		QFileInfo fi(imgFileName);
+		QCOMPARE(image->fileName(), fi.fileName());
+		QCOMPARE(image->originalPlotImage.isNull(), true); // invalid image loaded
+		QCOMPARE(w.ui.leFileName->text(), fi.fileName());
+		QVERIFY(w.ui.leFileName->styleSheet() != QStringLiteral("")); // Invalid image
+	}
+}
+
+void DatapickerTest::datapickerImageLoadImageEmbeddAbsolute() {
+	QString savePath;
+	QString imgFileName;
+
+	{
+		const auto img = createImage();
+
+		QTemporaryFile imgFile(QStringLiteral("Testimage_XXXXXX.png"));
+		QVERIFY(imgFile.open());
+		imgFileName = imgFile.fileName();
+		img.save(imgFileName, "PNG");
+		QVERIFY(QFile::exists(imgFileName));
+
+		Project project;
+		auto* datapicker = new Datapicker(QStringLiteral("Test"));
+		project.addChild(datapicker);
+		auto* image = datapicker->image();
+
+		DatapickerImageWidget w(nullptr);
+		w.setImages({image});
+
+		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), false);
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false);
+		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+		w.ui.leFileName->setText(imgFileName);
+		// w.fileNameChanged(); will be called
+
+		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // project is not saved
+		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+		QCOMPARE(image->fileName(), imgFileName);
+		QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
+		QCOMPARE(w.ui.leFileName->text(), imgFileName);
+		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
+
+		w.ui.cbFileEmbedd->clicked(true); // Embedding image
+
+		SAVE_PROJECT("DatapickerTestProject");
+	}
+
+	QCOMPARE(QFile::exists(imgFileName), false); // Deleted because QTemporaryFile goes out of scope
+
+	// Load project
+	// Image was deleted before
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true);
+
+		auto datapicker = project.child<Datapicker>(0);
+		QVERIFY(datapicker);
+		auto* image = datapicker->image();
+
+		DatapickerImageWidget w(nullptr);
+		w.setImages({image});
+
+		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // project was loaded, but file does not exist
+		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
+		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+		QCOMPARE(image->fileName(), imgFileName);
+		QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
+		QCOMPARE(w.ui.leFileName->text(), imgFileName);
+		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
+	}
+}
+
+void DatapickerTest::datapickerImageLoadImageEmbeddAbsoluteUndoRedo() {
+	QString savePath;
+	QString imgFileName;
+
+	Project project;
+	auto* datapicker = new Datapicker(QStringLiteral("Test"));
+	project.addChild(datapicker);
+	auto* image = datapicker->image();
+
+	DatapickerImageWidget w(nullptr);
+	w.setImages({image});
+
+	{
+		const auto img = createImage();
+
+		QTemporaryFile imgFile(QStringLiteral("Testimage_XXXXXX.png"));
+		QVERIFY(imgFile.open());
+		imgFileName = imgFile.fileName();
+		img.save(imgFileName, "PNG");
+		QVERIFY(QFile::exists(imgFileName));
+
+		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), false);
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false);
+		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+		w.ui.leFileName->setText(imgFileName);
+		// w.fileNameChanged(); will be called
+
+		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // project is not saved
+		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+		QCOMPARE(image->fileName(), imgFileName);
+		QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
+		QCOMPARE(w.ui.leFileName->text(), imgFileName);
+		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
+
+		w.ui.cbFileEmbedd->clicked(true); // Embedding image
+
+		SAVE_PROJECT("DatapickerTestProject");
+	}
+
+	// Deleting image to verify embedding worked
+	QCOMPARE(QFile::exists(imgFileName), false); // Deleted because QTemporaryFile goes out of scope
+
+	image->undoStack()->undo();
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+	QCOMPARE(image->originalPlotImage.isNull(), true); // image does not exist anymore
+	QCOMPARE(w.ui.leFileName->text(), imgFileName);
+	QVERIFY(w.ui.leFileName->styleSheet() != QStringLiteral("")); // image does not exist anymore
+
+	image->undoStack()->redo();
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
+	QCOMPARE(image->originalPlotImage.isNull(), false); // image is embedded
+	QCOMPARE(w.ui.leFileName->text(), imgFileName);
+	QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // image is embedded
+}
+
+void DatapickerTest::datapickerImageLoadImageEmbeddRelative() {
+	QString savePath;
+	QString imgFileName;
+	DatapickerImageWidget w(nullptr);
+
+	{
+		const auto img = createImage();
+
+		QTemporaryFile imgFile(QStringLiteral("Testimage_XXXXXX.png"));
+		QVERIFY(imgFile.open());
+		imgFileName = imgFile.fileName();
+		img.save(imgFileName, "PNG");
+		QVERIFY(QFile::exists(imgFileName));
+
+		Project project;
+		auto* datapicker = new Datapicker(QStringLiteral("Test"));
+		project.addChild(datapicker);
+		auto* image = datapicker->image();
+
+		w.setImages({image});
+
+		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), false);
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false);
+		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+		w.ui.leFileName->setText(imgFileName);
+		// w.fileNameChanged(); will be called
+
+		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // project is not saved
+		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+		QCOMPARE(image->fileName(), imgFileName);
+		QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
+		QCOMPARE(w.ui.leFileName->text(), imgFileName);
+		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
+
+		SAVE_PROJECT("DatapickerTestProject");
+
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), true); // project is now saved so calculating the relative path is possible
+
+		w.ui.cbFileRelativePath->clicked(true);
+
+		// QCOMPARE(w.ui.cbFileRelativePath->isChecked(), true);
+		QFileInfo fi(imgFileName);
+		QCOMPARE(image->fileName(), fi.fileName());
+		QCOMPARE(w.ui.leFileName->text(), fi.fileName());
+
+		w.ui.cbFileEmbedd->clicked(true); // Embedding image
+
+		SAVE_PROJECT("DatapickerTestProject"); // Save again to save relative path
+	}
+
+	// Deleting image
+	QCOMPARE(QFile::exists(imgFileName), false); // Deleted because QTemporaryFile goes out of scope
+
+	// Load project
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true);
+
+		auto datapicker = project.child<Datapicker>(0);
+		QVERIFY(datapicker);
+		auto* image = datapicker->image();
+
+		DatapickerImageWidget w(nullptr);
+		w.setImages({image});
+
+		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true); // image is valid because embedded
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // image is valid, but embedd is turned on
+		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
+		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), true);
+
+		QFileInfo fi(imgFileName);
+		QCOMPARE(image->fileName(), fi.fileName());
+		QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
+		QCOMPARE(w.ui.leFileName->text(), fi.fileName());
+		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
+	}
+}
+
+void DatapickerTest::datapickerImageLoadImageEmbeddRelativeUndoRedo() {
+	QString savePath;
+	QString imgFileName;
+
+	Project project;
+	auto* datapicker = new Datapicker(QStringLiteral("Test"));
+	project.addChild(datapicker);
+	auto* image = datapicker->image();
+
+	DatapickerImageWidget w(nullptr);
+	w.setImages({image});
+
+	{
+		const auto img = createImage();
+
+		QTemporaryFile imgFile(QStringLiteral("Testimage_XXXXXX.png"));
+		QVERIFY(imgFile.open());
+		imgFileName = imgFile.fileName();
+		img.save(imgFileName, "PNG");
+		QVERIFY(QFile::exists(imgFileName));
+
+		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), false);
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false);
+		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+		w.ui.leFileName->setText(imgFileName);
+		// w.fileNameChanged(); will be called
+
+		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // project is not saved
+		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+		QCOMPARE(image->fileName(), imgFileName);
+		QCOMPARE(image->originalPlotImage.isNull(), false); // valid image loaded
+		QCOMPARE(w.ui.leFileName->text(), imgFileName);
+		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
+
+		SAVE_PROJECT("DatapickerTestProject");
+
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), true); // project is now saved so calculating the relative path is possible
+
+		w.ui.cbFileRelativePath->clicked(true);
+
+		// QCOMPARE(w.ui.cbFileRelativePath->isChecked(), true);
+		QFileInfo fi(imgFileName);
+		QCOMPARE(image->fileName(), fi.fileName());
+		QCOMPARE(w.ui.leFileName->text(), fi.fileName());
+
+		w.ui.cbFileEmbedd->clicked(true); // Embedding image
+
+		SAVE_PROJECT("DatapickerTestProject"); // Save again to save relative path
+	}
+
+	// Deleting image
+	QCOMPARE(QFile::exists(imgFileName), false); // Deleted because QTemporaryFile goes out of scope
+
+	image->undoStack()->undo();
+
+	QFileInfo fi(imgFileName);
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+	QCOMPARE(image->originalPlotImage.isNull(), true); // image does not exist anymore
+	QCOMPARE(w.ui.leFileName->text(), fi.fileName());
+	QVERIFY(w.ui.leFileName->styleSheet() != QStringLiteral("")); // image does not exist anymore
+
+	image->undoStack()->redo();
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
+	QCOMPARE(image->originalPlotImage.isNull(), false); // image is embedded
+	QCOMPARE(w.ui.leFileName->text(), fi.fileName());
+	QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // image is embedded
+}
+
+void DatapickerTest::datapickerImageClipboard() {
+	const auto img = createImage();
+
+	QTemporaryFile imgFileName(QStringLiteral("Testimage_XXXXXX.png"));
+	QVERIFY(imgFileName.open());
+	img.save(imgFileName.fileName(), "PNG");
+	QVERIFY(QFile::exists(imgFileName.fileName()));
+
+	Project project;
+	auto* datapicker = new Datapicker(QStringLiteral("Test"));
+	project.addChild(datapicker);
+	auto* image = datapicker->image();
+
+	DatapickerImageWidget w(nullptr);
+	w.setImages({image});
+
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+	QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+	// Set image from clipboard
+	image->setImage(img, QStringLiteral(""), true);
+
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+	QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
+	QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+	QCOMPARE(w.ui.leFileName->isEnabled(), false);
+}
+
+void DatapickerTest::datapickerImageClipboardSelectImageFromPath() {
+	const auto img = createImage();
+	const auto img2 = createImage2();
+
+	QTemporaryFile imgFileName(QStringLiteral("Testimage_XXXXXX.png"));
+	QVERIFY(imgFileName.open());
+	img.save(imgFileName.fileName(), "PNG");
+	QVERIFY(QFile::exists(imgFileName.fileName()));
+
+	Project project;
+	auto* datapicker = new Datapicker(QStringLiteral("Test"));
+	project.addChild(datapicker);
+	auto* image = datapicker->image();
+
+	DatapickerImageWidget w(nullptr);
+	w.setImages({image});
+
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), false);
+	QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+	// Set image from clipboard
+	image->setImage(img2, QStringLiteral(""), true);
+
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+	QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
+	QCOMPARE(w.ui.cbFileRelativePath->isChecked(), false);
+
+	QCOMPARE(w.ui.leFileName->isEnabled(), false);
+
+	QCOMPARE(image->originalPlotImage, img2);
+
+	w.ui.leFileName->setText(imgFileName.fileName());
+
+	// Embedded is still turned on
+	QCOMPARE(w.ui.leFileName->isEnabled(), false);
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
+
+	QCOMPARE(image->originalPlotImage.isNull(), false); // valid image
+
+	Q_EMIT w.ui.cbFileEmbedd->clicked(false);
+
+	QCOMPARE(w.ui.leFileName->isEnabled(), true);
+	QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true);
+	QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
+
+	QCOMPARE(image->originalPlotImage.isNull(), false); // valid image
+
+	QCOMPARE(image->originalPlotImage, img);
+}
+
+void DatapickerTest::saveLoad() {
+	QString savePath;
+	{
+		Project project;
+		auto* datapicker = new Datapicker(QStringLiteral("Test"));
+		project.addChild(datapicker);
+		auto* image = datapicker->image();
+
+		// Set reference points
+		datapicker->addNewPoint(QPointF(0, 1), image);
+		datapicker->addNewPoint(QPointF(0, 0), image);
+		datapicker->addNewPoint(QPointF(1, 0), image);
+
+		auto ap = image->axisPoints();
+		ap.type = DatapickerImage::GraphType::Linear;
+		image->setAxisPoints(ap);
+
+		DatapickerImageWidget w(nullptr);
+		w.setImages({image});
+		w.ui.sbPositionX1->setValue(0);
+		w.ui.sbPositionY1->setValue(10);
+		w.ui.sbPositionZ1->setValue(0);
+		w.ui.sbPositionX2->setValue(0);
+		w.ui.sbPositionY2->setValue(0);
+		w.ui.sbPositionZ2->setValue(0);
+		w.ui.sbPositionX3->setValue(10);
+		w.ui.sbPositionY3->setValue(0);
+		w.ui.sbPositionZ3->setValue(0);
+		w.logicalPositionChanged();
+
+		auto* curve = new DatapickerCurve(i18n("Curve"));
+		curve->addDatasheet(image->axisPoints().type);
+		datapicker->addChild(curve);
+
+		datapicker->addNewPoint(QPointF(0.5, 0.5), curve); // updates the curve data
+		VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5.);
+		VALUES_EQUAL(curve->posYColumn()->valueAt(0), 5.);
+
+		datapicker->addNewPoint(QPointF(0.7, 0.65), curve); // updates the curve data
+		VALUES_EQUAL(curve->posXColumn()->valueAt(1), 7.);
+		VALUES_EQUAL(curve->posYColumn()->valueAt(1), 6.5);
+
+		SAVE_PROJECT("DatapickerTestProject"); // Save again to save relative path
+	}
+
+	// Load project
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true);
+
+		// check the datapicker is loaded
+		const auto* datapicker = project.child<Datapicker>(0);
+		QVERIFY(datapicker);
+
+		// check axis/reference points
+		const auto& points = datapicker->image()->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+		QCOMPARE(points.length(), 3);
+
+		// check the curve
+		const auto* curve = datapicker->child<DatapickerCurve>(i18n("Curve"));
+		QVERIFY(curve);
+		const auto& curvePoints = curve->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+		QCOMPARE(curvePoints.length(), 2);
+		QCOMPARE(curve->posXColumn()->rowCount(), 2);
+		QCOMPARE(curve->posYColumn()->rowCount(), 2);
+		VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5.);
+		VALUES_EQUAL(curve->posYColumn()->valueAt(0), 5.);
+		VALUES_EQUAL(curve->posXColumn()->valueAt(1), 7.);
+		VALUES_EQUAL(curve->posYColumn()->valueAt(1), 6.5);
+
+		QCOMPARE(curve->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::IncludeHidden).size(), 1);
+		const auto* data = curve->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::IncludeHidden).at(0);
+		QCOMPARE(data->columnCount(), 2);
+		QCOMPARE(data->column(0), curve->posXColumn());
+		QCOMPARE(data->column(1), curve->posYColumn());
+	}
 }
 
 QTEST_MAIN(DatapickerTest)

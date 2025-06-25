@@ -4,22 +4,25 @@
 	Description          : Tests for Axis
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2022-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "AxisTest.h"
 #include "backend/core/Project.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "src/backend/core/Time.h"
 #include "src/backend/worksheet/Line.h"
 #include "src/backend/worksheet/TextLabel.h"
 #include "src/backend/worksheet/WorksheetElement.h"
 #include "src/backend/worksheet/plots/cartesian/Axis.h" // already included in CartesianPlot
 #include "src/backend/worksheet/plots/cartesian/AxisPrivate.h"
-#include "src/kdefrontend/dockwidgets/AxisDock.h" // access ui elements
-#include "src/kdefrontend/widgets/LabelWidget.h"
-#include "src/kdefrontend/widgets/LineWidget.h"
+#include "src/frontend/dockwidgets/AxisDock.h" // access ui elements
+#include "src/frontend/widgets/LabelWidget.h"
+#include "src/frontend/widgets/LineWidget.h"
 
 #include <QUndoStack>
 
@@ -31,15 +34,15 @@
 			QCOMPARE(currentTickValues.at(i), expectedTickValues.at(i));                                                                                       \
 	}
 
-void AxisTest::majorTicksAutoNumberEnableDisable() {
+void AxisTest::axisLine() {
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
@@ -47,87 +50,84 @@ void AxisTest::majorTicksAutoNumberEnableDisable() {
 	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
 	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
 
-	AxisDock axisDock(nullptr);
-
 	auto* xAxis = axes.at(0);
-	QCOMPARE(xAxis->majorTicksNumber(), 6); // Default number created by autonumbering
-	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
+	auto* yAxis1 = axes.at(1);
+
+	const auto dataRect = p->dataRect();
+	const auto bottomLeft = dataRect.bottomLeft();
+	const auto topLeft = dataRect.topLeft();
+	const auto bottomRight = dataRect.bottomRight();
 
 	{
-		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
-		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
+		auto* axis = yAxis1;
+
+		QCOMPARE(axis->offset(), 0);
+		QCOMPARE(axis->position(), Axis::Position::Left);
+
+		const auto& linePath = axis->d_func()->linePath;
+		QCOMPARE(linePath.isEmpty(), false);
+		QCOMPARE(linePath.elementCount(), 2);
+
+		auto element = linePath.elementAt(0);
+		QCOMPARE(element.type, QPainterPath::MoveToElement);
+		QCOMPARE(element.x, bottomLeft.x());
+		QCOMPARE(element.y, bottomLeft.y());
+		element = linePath.elementAt(1);
+		QCOMPARE(element.type, QPainterPath::LineToElement);
+		QCOMPARE(element.x, topLeft.x());
+		QCOMPARE(element.y, topLeft.y());
 	}
 
-	// To check also if the dock shows the correct values
-	axisDock.setAxes({xAxis});
-
-	QCOMPARE(axisDock.ui.cbMajorTicksAutoNumber->isChecked(), true);
-	QCOMPARE(axisDock.ui.sbMajorTicksNumber->isEnabled(), false);
-
-	// Not possible, because sbMajorTicksNumber is disabled
-	// test it nevertless
-	xAxis->setMajorTicksNumber(5);
-	QCOMPARE(xAxis->majorTicksNumber(), 5);
-	QCOMPARE(xAxis->majorTicksAutoNumber(), false);
-
 	{
-		QVector<double> expectedTickValues = {0, 0.25, 0.5, 0.75, 1};
-		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
+		auto* axis = xAxis;
+
+		QCOMPARE(axis->offset(), 0);
+		QCOMPARE(axis->position(), Axis::Position::Bottom);
+
+		const auto& linePath = axis->d_func()->linePath;
+		QCOMPARE(linePath.isEmpty(), false);
+		QCOMPARE(linePath.elementCount(), 2);
+
+		auto element = linePath.elementAt(0);
+		QCOMPARE(element.type, QPainterPath::MoveToElement);
+		QCOMPARE(element.x, bottomLeft.x());
+		QCOMPARE(element.y, bottomLeft.y());
+		element = linePath.elementAt(1);
+		QCOMPARE(element.type, QPainterPath::LineToElement);
+		QCOMPARE(element.x, bottomRight.x());
+		QCOMPARE(element.y, bottomRight.y());
 	}
 
-	QCOMPARE(axisDock.ui.cbMajorTicksAutoNumber->isChecked(), false);
-	QCOMPARE(axisDock.ui.sbMajorTicksNumber->isEnabled(), true);
-	QCOMPARE(axisDock.ui.sbMajorTicksNumber->value(), 5);
+	yAxis1->copy();
+	p->paste();
 
-	// Check that undo/redo works for setting manual ticknumber
-	project.undoStack()->undo();
-	QCOMPARE(xAxis->majorTicksNumber(), 6);
-	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
+	axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 3);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	QCOMPARE(axes.at(1), yAxis1);
+	QVERIFY(axes.at(2)->name().startsWith(QLatin1Char('y')));
 
-	{
-		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
-		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
-	}
-
-	QCOMPARE(axisDock.ui.cbMajorTicksAutoNumber->isChecked(), true);
-	QCOMPARE(axisDock.ui.sbMajorTicksNumber->isEnabled(), false);
-	QCOMPARE(axisDock.ui.sbMajorTicksNumber->value(), 6);
-
-	project.undoStack()->redo();
-	QCOMPARE(xAxis->majorTicksNumber(), 5);
-	QCOMPARE(xAxis->majorTicksAutoNumber(), false);
+	auto yAxis2 = axes.at(2);
 
 	{
-		QVector<double> expectedTickValues = {0, 0.25, 0.5, 0.75, 1};
-		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
-	}
+		auto* axis = yAxis2;
 
-	xAxis->setMajorTicksAutoNumber(true);
-	QCOMPARE(xAxis->majorTicksNumber(), 6);
-	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
+		QCOMPARE(axis->offset(), 0);
+		QCOMPARE(axis->position(), Axis::Position::Left);
 
-	{
-		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
-		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
-	}
+		const auto& linePath = axis->d_func()->linePath;
+		QCOMPARE(linePath.isEmpty(), false);
+		QCOMPARE(linePath.elementCount(), 2);
 
-	// Check that undo/redo works for setting autonumber enable/disable
-	project.undoStack()->undo();
-	QCOMPARE(xAxis->majorTicksNumber(), 5);
-	QCOMPARE(xAxis->majorTicksAutoNumber(), false);
-
-	{
-		QVector<double> expectedTickValues = {0, 0.25, 0.5, 0.75, 1};
-		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
-	}
-
-	project.undoStack()->redo();
-	QCOMPARE(xAxis->majorTicksNumber(), 6);
-	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
-
-	{
-		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
-		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
+		auto element = linePath.elementAt(0);
+		QCOMPARE(element.type, QPainterPath::MoveToElement);
+		QCOMPARE(element.x, bottomLeft.x());
+		QCOMPARE(element.y, bottomLeft.y());
+		element = linePath.elementAt(1);
+		QCOMPARE(element.type, QPainterPath::LineToElement);
+		QCOMPARE(element.x, topLeft.x());
+		QCOMPARE(element.y, topLeft.y());
 	}
 }
 
@@ -138,8 +138,8 @@ void AxisTest::minorTicksAutoNumberEnableDisable() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
@@ -203,8 +203,8 @@ void AxisTest::majorTicksStartValue() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
@@ -215,6 +215,8 @@ void AxisTest::majorTicksStartValue() {
 	AxisDock axisDock(nullptr);
 
 	auto* xAxis = axes.at(0);
+	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
+	xAxis->setMajorTicksNumber(5); // Expected might different because of auto
 
 	{
 		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
@@ -228,7 +230,7 @@ void AxisTest::majorTicksStartValue() {
 
 	QCOMPARE(xAxis->majorTicksStartType(), Axis::TicksStartType::Offset);
 
-	xAxis->setMajorTickStartValue(0.1); // does not affect anything, but just that the ticklabels are different to the offset when setting
+	xAxis->setMajorTickStartValue(0.5); // does not affect anything, but just that the ticklabels are different to the offset when setting
 
 	xAxis->setMajorTicksStartType(Axis::TicksStartType::Absolute);
 
@@ -236,15 +238,15 @@ void AxisTest::majorTicksStartValue() {
 
 	QCOMPARE(xAxis->majorTicksStartType(), Axis::TicksStartType::Absolute);
 	{
-		QVector<double> expectedTickValues = {0.1, 0.3, 0.5, 0.7, 0.9}; // starting now from 0.1
+		QVector<double> expectedTickValues = {0.5, 0.6, 0.7, 0.8, 0.9, 1.0}; // starting now from 0.5
 		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
 	}
 
-	xAxis->setMajorTickStartValue(0.2);
-	QCOMPARE(axisDock.ui.sbMajorTickStartValue->value(), 0.2);
+	xAxis->setMajorTickStartValue(0.7);
+	QCOMPARE(axisDock.ui.sbMajorTickStartValue->value(), 0.7);
 
 	{
-		QVector<double> expectedTickValues = {0.2, 0.4, 0.6, 0.8, 1.0}; // starting now from 0.2
+		QVector<double> expectedTickValues = {0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0}; // starting now from 0.7
 		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
 	}
 
@@ -253,7 +255,7 @@ void AxisTest::majorTicksStartValue() {
 	QCOMPARE(xAxis->majorTicksStartType(), Axis::TicksStartType::Absolute);
 
 	{
-		QVector<double> expectedTickValues = {0.1, 0.3, 0.5, 0.7, 0.9}; // starting now from 0.1
+		QVector<double> expectedTickValues = {0.5, 0.6, 0.7, 0.8, 0.9, 1.0}; // starting again from 0.5
 		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
 	}
 
@@ -276,9 +278,8 @@ void AxisTest::TestSetCoordinateSystem() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	QVERIFY(p != nullptr);
-
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
@@ -312,9 +313,29 @@ void AxisTest::TestSetCoordinateSystem() {
 }
 
 void AxisTest::TestSetRange() {
-	Axis a(QStringLiteral("x"), Axis::Orientation::Horizontal);
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
 
-	auto arange = a.range();
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	QVERIFY(p != nullptr);
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
+	ws->addChild(p);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	auto xAxis = axes.at(0);
+	QCOMPARE(xAxis->name(), QStringLiteral("x"));
+
+	// This does not work anymore, because isNumeric() is depending on the
+	// CoordinateSystem which is not available when using creating the object
+	// TODO: find a way to sync AxisPrivate::Range with the CartesianPlotRange
+	// (Not only the start/end, but also the format and the scale!)
+	// Then this can be used again
+	// Axis xAxis(QStringLiteral("x"), Axis::Orientation::Horizontal);
+
+	auto arange = xAxis->range();
 	// different to default values!
 	Range<double> r(5, 11, RangeT::Format::DateTime, RangeT::Scale::Log10);
 	QVERIFY(arange.start() != r.start());
@@ -322,29 +343,29 @@ void AxisTest::TestSetRange() {
 	QVERIFY(arange.format() != r.format());
 	QVERIFY(arange.scale() != r.scale());
 
-	a.setRange(r);
-	arange = a.range();
+	xAxis->setRange(r);
+	arange = xAxis->range();
 	QCOMPARE(arange.start(), 5);
 	QCOMPARE(arange.end(), 11);
 	QCOMPARE(arange.format(), RangeT::Format::DateTime);
 	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
 
-	a.setStart(1);
-	arange = a.range();
+	xAxis->setStart(1);
+	arange = xAxis->range();
 	QCOMPARE(arange.start(), 1);
 	QCOMPARE(arange.end(), 11);
 	QCOMPARE(arange.format(), RangeT::Format::DateTime);
 	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
 
-	a.setEnd(23);
-	arange = a.range();
+	xAxis->setEnd(23);
+	arange = xAxis->range();
 	QCOMPARE(arange.start(), 1);
 	QCOMPARE(arange.end(), 23);
 	QCOMPARE(arange.format(), RangeT::Format::DateTime);
 	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
 
-	a.setRange(-10, 10);
-	arange = a.range();
+	xAxis->setRange(-10, 10);
+	arange = xAxis->range();
 	QCOMPARE(arange.start(), -10);
 	QCOMPARE(arange.end(), 10);
 	QCOMPARE(arange.format(), RangeT::Format::DateTime);
@@ -358,9 +379,8 @@ void AxisTest::TestAddingHorizontalAxis() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	QVERIFY(p != nullptr);
-
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	ws->addChild(p);
 
 	p->addHorizontalAxis(); // should not crash
@@ -373,23 +393,23 @@ void AxisTest::TestAddingVerticalAxis() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	QVERIFY(p != nullptr);
-
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	ws->addChild(p);
 
 	p->addVerticalAxis(); // should not crash
 }
 
 void AxisTest::tickLabelRepresentationAutomatic() {
+	QLocale::setDefault(QLocale::C); // . as decimal separator
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
@@ -445,14 +465,15 @@ void AxisTest::tickLabelRepresentationAutomatic() {
 }
 
 void AxisTest::tickLabelRepresentationManual() {
+	QLocale::setDefault(QLocale::English); // . as decimal separator
 	Project project;
 	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
@@ -709,8 +730,8 @@ void AxisTest::automaticTicNumberUpdateDockMajorTicks() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
@@ -721,6 +742,7 @@ void AxisTest::automaticTicNumberUpdateDockMajorTicks() {
 	auto* xAxis = static_cast<Axis*>(axes.at(0));
 
 	AxisDock dock(nullptr);
+
 	dock.setAxes({xAxis, yAxis});
 	dock.ui.cbMajorTicksAutoNumber->setChecked(false);
 	dock.ui.sbMajorTicksNumber->setValue(10);
@@ -749,8 +771,8 @@ void AxisTest::automaticTicNumberUpdateDockMinorTicks() {
 	project.addChild(ws);
 
 	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
@@ -782,6 +804,55 @@ void AxisTest::automaticTicNumberUpdateDockMinorTicks() {
 	QCOMPARE(yAxis->minorTicksNumber(), 1);
 	QCOMPARE(xAxis->minorTicksAutoNumber(), true);
 	QCOMPARE(dock.ui.sbMinorTicksNumber->value(), 1);
+}
+
+/*!
+ * checks the spacing of the ticks that is automatically calculated and set
+ * after the switch from "number" to "spacing" ticks type in the dock widget.
+ */
+void AxisTest::tickSpacingUpdateDockMajorTicks() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	QVERIFY(p != nullptr);
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	ws->addChild(p);
+
+	auto axes = p->children<Axis>();
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+
+	AxisDock dock(nullptr);
+	dock.setAxes({xAxis});
+	dock.ui.cbMajorTicksType->setCurrentIndex(dock.ui.cbMajorTicksType->findData((int)Axis::TicksType::Spacing));
+	dock.ui.cbMinorTicksType->setCurrentIndex(dock.ui.cbMinorTicksType->findData((int)Axis::TicksType::Spacing));
+
+	// initially, the spacing is not set (equal to zero) and after the switch to "spacing"
+	// it's adjusted to the current spacing determined by the total number of the ticks:
+	// * for major ticks, for the range 0-1 and the initial number of ticks is 6 and it corresponds to spacing = 0.2
+	// * for minor ticks, the spacing between the major ticks is 0.2 and the number of minor ticks is 1 which corresponds to spacing = 0.1
+	QCOMPARE(xAxis->majorTicksSpacing(), 0.2);
+	QCOMPARE(xAxis->minorTicksSpacing(), 0.1);
+}
+
+void AxisTest::testComputeMajorTickStart() {
+	int majorTickCount = 5;
+	double spacing = 0;
+	AxisPrivate::calculateAutoParameters(majorTickCount, Range<double>(-0.7, 0.8, RangeT::Format::Numeric, RangeT::Scale::Linear), spacing);
+
+	majorTickCount = 5;
+	AxisPrivate::calculateAutoParameters(majorTickCount, Range<double>(0.3, 1.0, RangeT::Format::Numeric, RangeT::Scale::Linear), spacing);
+
+	majorTickCount = 5;
+	AxisPrivate::calculateAutoParameters(majorTickCount, Range<double>(0.1, 1.0, RangeT::Format::Numeric, RangeT::Scale::Linear), spacing);
+
+	majorTickCount = 5;
+	AxisPrivate::calculateAutoParameters(majorTickCount, Range<double>(-250., 250., RangeT::Format::Numeric, RangeT::Scale::Linear), spacing);
+
+	majorTickCount = 7;
+	AxisPrivate::calculateAutoParameters(majorTickCount, Range<double>(-250., 250., RangeT::Format::Numeric, RangeT::Scale::Linear), spacing);
 }
 
 QTEST_MAIN(AxisTest)

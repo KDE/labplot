@@ -8,30 +8,24 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYIntegrationCurve
-  \brief A xy-curve defined by an integration
-
-  \ingroup worksheet
-*/
-
 #include "XYIntegrationCurve.h"
-#include "CartesianCoordinateSystem.h"
 #include "XYIntegrationCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 
-extern "C" {
 #include <gsl/gsl_errno.h>
-}
 
 #include <KLocalizedString>
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
 
+/*!
+ * \class XYIntegrationCurve
+ * \brief A xy-curve defined by an integration.
+ * \ingroup CartesianAnalysisPlots
+ */
 XYIntegrationCurve::XYIntegrationCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYIntegrationCurvePrivate(this), AspectType::XYIntegrationCurve) {
 }
@@ -43,11 +37,6 @@ XYIntegrationCurve::XYIntegrationCurve(const QString& name, XYIntegrationCurvePr
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 XYIntegrationCurve::~XYIntegrationCurve() = default;
-
-void XYIntegrationCurve::recalculate() {
-	Q_D(XYIntegrationCurve);
-	d->recalculate();
-}
 
 const XYAnalysisCurve::Result& XYIntegrationCurve::result() const {
 	Q_D(const XYIntegrationCurve);
@@ -61,9 +50,9 @@ QIcon XYIntegrationCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYIntegrationCurve, XYIntegrationCurve::IntegrationData, integrationData, integrationData)
 
 const XYIntegrationCurve::IntegrationResult& XYIntegrationCurve::integrationResult() const {
@@ -71,18 +60,18 @@ const XYIntegrationCurve::IntegrationResult& XYIntegrationCurve::integrationResu
 	return d->integrationResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYIntegrationCurve, SetIntegrationData, XYIntegrationCurve::IntegrationData, integrationData, recalculate)
 void XYIntegrationCurve::setIntegrationData(const XYIntegrationCurve::IntegrationData& integrationData) {
 	Q_D(XYIntegrationCurve);
 	exec(new XYIntegrationCurveSetIntegrationDataCmd(d, integrationData, ki18n("%1: set options and perform the integration")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYIntegrationCurvePrivate::XYIntegrationCurvePrivate(XYIntegrationCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -164,14 +153,15 @@ bool XYIntegrationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpXDa
 	integrationResult.valid = (status == 0);
 	integrationResult.status = QString::number(status);
 	integrationResult.elapsedTime = timer.elapsed();
-	integrationResult.value = ydata[np - 1];
+	if (np > 0)
+		integrationResult.value = ydata[np - 1];
 
 	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYIntegrationCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYIntegrationCurve);
@@ -213,7 +203,6 @@ void XYIntegrationCurve::save(QXmlStreamWriter* writer) const {
 bool XYIntegrationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYIntegrationCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -252,6 +241,10 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
@@ -274,7 +267,7 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
-		recalcLogicalPoints();
+		recalc();
 	}
 
 	return true;

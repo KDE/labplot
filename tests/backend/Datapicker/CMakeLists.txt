@@ -1,5 +1,9 @@
-add_executable (DatapickerTest DatapickerTest.cpp)
+option(ENABLE_TEST_BACKEND_DATAPICKER "Enable Datapicker Tests" ON)
 
-target_link_libraries(DatapickerTest labplot2lib labplot2test)
+if(ENABLE_TEST_BACKEND_DATAPICKER)
+    add_executable (DatapickerTest DatapickerTest.cpp)
 
-add_test(NAME DatapickerTest COMMAND DatapickerTest)
+    target_link_libraries(DatapickerTest labplotbackendlib labplotlib labplottest)
+
+    add_test(NAME DatapickerTest COMMAND DatapickerTest)
+endif()

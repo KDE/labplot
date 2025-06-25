@@ -6,7 +6,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -17,12 +17,88 @@
 #include <KLocalizedString>
 #include <QUndoCommand>
 
-class AspectChildRemoveCmd : public QUndoCommand {
+class AspectCommonCmd : public QUndoCommand {
+public:
+	AspectCommonCmd(QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent) {
+	}
+	int removeChild(AbstractAspectPrivate* parent, AbstractAspect* child) {
+		int index = parent->indexOfChild(child);
+		Q_ASSERT(index != -1);
+		parent->m_children.removeAll(child);
+		QObject::disconnect(child, nullptr, parent->q, nullptr);
+		child->setParentAspect(nullptr);
+		// QDEBUG(Q_FUNC_INFO << " DONE. CHILD = " << child)
+		return index;
+	}
+};
+
+class AspectChildMoveCmd : public QUndoCommand {
+public:
+	AspectChildMoveCmd(AbstractAspectPrivate* target, AbstractAspect* child, int steps)
+		: m_target(target)
+		, m_child(child) {
+		setText(i18n("%1: move up", m_target->m_name));
+		const int origIndex = m_target->indexOfChild(m_child);
+		int newIndex = origIndex + steps;
+		if (newIndex > m_target->m_children.count() - 1)
+			newIndex = m_target->m_children.count() - 1;
+		else if (newIndex < 0)
+			newIndex = 0;
+		m_index = newIndex;
+	}
+
+	virtual ~AspectChildMoveCmd() override {
+	}
+
+	virtual void redo() override {
+		move(m_index); // move up
+	}
+
+	virtual void undo() override {
+		move(m_index); // move down
+	}
+
+	void move(int newIndex) {
+		// First child (index 0): Most behind child
+		// Last child: Most front child
+		const int origIndex = m_target->indexOfChild(m_child);
+		if (newIndex != origIndex) {
+			int nonHiddenIndex = 0;
+			for (int i = 0; i < newIndex; i++) {
+				if (!m_target->m_children.at(i)->isHidden())
+					nonHiddenIndex++;
+			}
+
+			// According to qt documentation
+			// https://doc.qt.io/qt-5/qabstractitemmodel.html#beginMoveRows
+			if (newIndex > origIndex)
+				nonHiddenIndex++;
+
+			Q_EMIT m_target->q->childAspectAboutToBeMoved(m_child, nonHiddenIndex);
+
+			m_target->m_children.removeAll(m_child);
+			m_target->m_children.insert(newIndex, m_child);
+
+			m_index = origIndex;
+
+			Q_EMIT m_target->q->childAspectMoved();
+		}
+	}
+
+protected:
+	AbstractAspectPrivate* m_target{nullptr};
+	AbstractAspect* m_child{nullptr};
+	int m_index{-1};
+};
+
+class AspectChildRemoveCmd : public AspectCommonCmd {
 public:
 	AspectChildRemoveCmd(AbstractAspectPrivate* target, AbstractAspect* child)
-		: m_target(target)
-		, m_child(child)
-		, m_moved(child->isMoved()) {
+		: AspectCommonCmd()
+		, m_target(target)
+		, m_child(child) {
+		Q_ASSERT(!child->isMoved());
 		setText(i18n("%1: remove %2", m_target->m_name, m_child->name()));
 	}
 
@@ -41,13 +117,11 @@ public:
 		else
 			nextSibling = m_target->m_children.at(m_target->indexOfChild(m_child) + 1);
 
-		// emit the "about to be removed" signal also for all children columns so the curves can react.
-		// no need to notify when the parent is just being moved (move up, moved down in the project explorer),
-		//(move = delete at the current position + insert at the new position)
-		if (!m_moved) {
-			const auto& columns = m_child->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
-			for (auto* col : columns)
-				emit col->parentAspect()->aspectAboutToBeRemoved(col);
+		// emit the "about to be removed" signal also for all children columns so the plots can react.
+		const auto& columns = m_child->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+		for (auto* col : columns) {
+			Q_EMIT col->parentAspect()->childAspectAboutToBeRemoved(col);
+			Q_EMIT col->aspectAboutToBeRemoved(col);
 		}
 
 		// no need to emit signals if the aspect is hidden, the only exceptions is it's a datapicker point
@@ -58,41 +132,36 @@ public:
 		// will most probably trigger again crashes in the debug build of Qt if the datapicker is involved but we
 		// rather accept this "edge case" than having no undo/redo for position changes for datapicker points until
 		// we have a better solution.
-		if (!m_child->hidden() || m_child->type() == AspectType::DatapickerPoint)
-			emit m_target->q->aspectAboutToBeRemoved(m_child);
+		if (!m_child->isHidden() || m_child->type() == AspectType::DatapickerPoint)
+			Q_EMIT m_target->q->childAspectAboutToBeRemoved(m_child);
+		Q_EMIT m_child->aspectAboutToBeRemoved(m_child);
 
-		m_index = m_target->removeChild(m_child);
+		m_index = removeChild(m_target, m_child);
 
-		if (!m_child->hidden() || m_child->type() == AspectType::DatapickerPoint)
-			emit m_target->q->aspectRemoved(m_target->q, nextSibling, m_child);
-
-		// QDEBUG(Q_FUNC_INFO << ", DONE. CHILD = " << m_child)
-		//		m_removed = true;
+		if (!m_child->isHidden() || m_child->type() == AspectType::DatapickerPoint)
+			Q_EMIT m_target->q->childAspectRemoved(m_target->q, nextSibling, m_child);
 	}
 
 	// calling undo transfers ownership of m_child back to its parent aspect
 	void undo() override {
 		Q_ASSERT(m_index != -1); // m_child must be a child of m_target->q
 
-		if (m_moved)
-			m_child->setMoved(true);
-
-		emit m_target->q->aspectAboutToBeAdded(m_target->q, nullptr, m_child);
+		Q_EMIT m_target->q->childAspectAboutToBeAdded(m_target->q, nullptr, m_child);
+		Q_EMIT m_target->q->childAspectAboutToBeAdded(m_target->q, m_index, m_child);
 		m_target->insertChild(m_index, m_child);
-		m_child->finalizeAdd();
-		emit m_target->q->aspectAdded(m_child);
-
-		if (m_moved)
-			m_child->setMoved(false);
-		// 		m_removed = false;
+		if (!m_addChildFinalized) {
+			// finalizAdd() is used to finalize the initialization of objects internally, no need to call it again during the undo/redo steps
+			m_child->finalizeAdd();
+			m_addChildFinalized = true;
+		}
+		Q_EMIT m_target->q->childAspectAdded(m_child);
 	}
 
 protected:
 	AbstractAspectPrivate* m_target{nullptr};
 	AbstractAspect* m_child{nullptr};
 	int m_index{-1};
-	bool m_moved{false};
-	// 	bool m_removed{false};
+	bool m_addChildFinalized{false};
 };
 
 class AspectChildAddCmd : public AspectChildRemoveCmd {
@@ -101,7 +170,6 @@ public:
 		: AspectChildRemoveCmd(target, child) {
 		setText(i18n("%1: add %2", m_target->m_name, m_child->name()));
 		m_index = index;
-		// 		m_removed = true;
 	}
 
 	void redo() override {
@@ -113,10 +181,15 @@ public:
 	}
 };
 
-class AspectChildReparentCmd : public QUndoCommand {
+class AspectChildReparentCmd : public AspectCommonCmd {
 public:
-	AspectChildReparentCmd(AbstractAspectPrivate* target, AbstractAspectPrivate* new_parent, AbstractAspect* child, int new_index)
-		: m_target(target)
+	AspectChildReparentCmd(AbstractAspectPrivate* target,
+						   AbstractAspectPrivate* new_parent,
+						   AbstractAspect* child,
+						   int new_index,
+						   QUndoCommand* parent = nullptr)
+		: AspectCommonCmd(parent)
+		, m_target(target)
 		, m_new_parent(new_parent)
 		, m_child(child)
 		, m_new_index(new_index) {
@@ -125,19 +198,19 @@ public:
 
 	// calling redo transfers ownership of m_child to the new parent aspect
 	void redo() override {
-		emit m_child->aspectAboutToBeRemoved(m_child);
-		m_index = m_target->removeChild(m_child);
+		Q_EMIT m_child->childAspectAboutToBeRemoved(m_child);
+		m_index = removeChild(m_target, m_child);
 		m_new_parent->insertChild(m_new_index, m_child);
-		emit m_child->aspectAdded(m_child);
+		Q_EMIT m_child->childAspectAdded(m_child);
 	}
 
 	// calling undo transfers ownership of m_child back to its previous parent aspect
 	void undo() override {
 		Q_ASSERT(m_index != -1);
-		emit m_child->aspectAboutToBeRemoved(m_child);
-		m_new_parent->removeChild(m_child);
+		Q_EMIT m_child->childAspectAboutToBeRemoved(m_child);
+		removeChild(m_new_parent, m_child);
 		m_target->insertChild(m_index, m_child);
-		emit m_child->aspectAdded(m_child);
+		Q_EMIT m_child->childAspectAdded(m_child);
 	}
 
 protected:
@@ -146,6 +219,30 @@ protected:
 	AbstractAspect* m_child;
 	int m_index{-1};
 	int m_new_index;
+};
+
+class AspectNameChangeCmd : public AspectCommonCmd {
+public:
+	AspectNameChangeCmd(AbstractAspectPrivate* aspect, const QString& newName, QUndoCommand* parent = nullptr)
+		: AspectCommonCmd(parent)
+		, m_aspect(aspect)
+		, m_name(newName) {
+		setText(i18n("%1: rename to %2", m_aspect->m_name, newName));
+	}
+
+	void redo() override {
+		Q_EMIT m_aspect->q->aspectDescriptionAboutToChange(m_aspect->q);
+		m_aspect->m_name.swap(m_name);
+		Q_EMIT m_aspect->q->aspectDescriptionChanged(m_aspect->q);
+	}
+
+	void undo() override {
+		redo();
+	}
+
+protected:
+	AbstractAspectPrivate* m_aspect;
+	QString m_name;
 };
 
 #endif

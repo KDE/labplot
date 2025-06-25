@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Custom user-defined point on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -14,10 +14,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "kdefrontend/GuiTools.h"
+#include "frontend/GuiTools.h"
 
 #include <QActionGroup>
 #include <QGraphicsSceneMouseEvent>
@@ -28,90 +25,80 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-using Dimension = CartesianCoordinateSystem::Dimension;
-
 /**
  * \class ReferenceLine
- * \brief A customizable point.
+ * \brief This class implements line that can be placed at a custom reference position on the plot
+ * to highlight certain aspects of the visualized data.
  *
- * The position can be either specified by mouse events or by providing the
- * x- and y- coordinates in parent's coordinate system
+ * The custom position can be either specified by moving the line with the mouse or by manually providing
+ * the x- or y- coordinate for the vertical or horizontal orientations, respectively.
+ * The coordinates are provided relatively to plot's coordinate system.
  */
-
-ReferenceLine::ReferenceLine(CartesianPlot* plot, const QString& name)
+ReferenceLine::ReferenceLine(CartesianPlot* plot, const QString& name, bool loading)
 	: WorksheetElement(name, new ReferenceLinePrivate(this), AspectType::ReferenceLine) {
-	m_plot = plot;
-	init();
+	Q_D(ReferenceLine);
+	d->m_plot = plot;
+	init(loading);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 ReferenceLine::~ReferenceLine() = default;
 
-void ReferenceLine::init() {
+void ReferenceLine::init(bool loading) {
 	Q_D(ReferenceLine);
 
-	KConfig config;
-	KConfigGroup group = config.group("ReferenceLine");
-
-	d->orientation = (Orientation)group.readEntry("Orientation", static_cast<int>(Orientation::Vertical));
-	switch (d->orientation) {
-	case WorksheetElement::Orientation::Horizontal:
-		d->position.positionLimit = WorksheetElement::PositionLimit::Y;
-		break;
-	case WorksheetElement::Orientation::Vertical:
-		d->position.positionLimit = WorksheetElement::PositionLimit::X;
-		break;
-	case WorksheetElement::Orientation::Both:
-		d->position.positionLimit = WorksheetElement::PositionLimit::None;
-		break;
-	}
-
-	if (plot()) {
-		d->coordinateBindingEnabled = true;
-		// default position
-		auto cs = plot()->coordinateSystem(plot()->defaultCoordinateSystemIndex());
-		const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
-		const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
-		DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
-		d->positionLogical = QPointF(x, y);
-	} else
-		d->position.point = QPointF(0, 0);
-	d->updatePosition(); // To update also scene coordinates
-
-	// line
+	// create the line
 	d->line = new Line(QString());
 	d->line->setHidden(true);
 	addChild(d->line);
 	connect(d->line, &Line::updatePixmapRequested, [=] {
 		d->update();
+		Q_EMIT changed();
 	});
 	connect(d->line, &Line::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
 	});
+
+	// init the properties
+	if (!loading) {
+		KConfig config;
+		KConfigGroup group = config.group(QStringLiteral("ReferenceLine"));
+		d->orientation = (Orientation)group.readEntry(QStringLiteral("Orientation"), static_cast<int>(Orientation::Vertical));
+		d->updatePositionLimit(); // set the position limit after the orientation was set
+		d->line->init(group);
+
+		if (plot()) {
+			d->coordinateBindingEnabled = true;
+			// default position
+			auto cs = plot()->coordinateSystem(plot()->defaultCoordinateSystemIndex());
+			const auto x = d->m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
+			const auto y = d->m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
+			DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
+			d->positionLogical = QPointF(x, y);
+		} else
+			d->position.point = QPointF(0, 0);
+		d->updatePosition(); // To update also scene coordinates
+	}
 }
 
 /*!
 	Returns an icon to be used in the project explorer.
 */
 QIcon ReferenceLine::icon() const {
-	return QIcon::fromTheme(QLatin1String("draw-line"));
+	return QIcon::fromTheme(QStringLiteral("draw-line"));
 }
 
 void ReferenceLine::initActions() {
-	visibilityAction = new QAction(i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &ReferenceLine::visibilityChangedSlot);
-
 	// Orientation
 	auto* orientationActionGroup = new QActionGroup(this);
 	orientationActionGroup->setExclusive(true);
 	connect(orientationActionGroup, &QActionGroup::triggered, this, &ReferenceLine::orientationChangedSlot);
 
-	orientationHorizontalAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-axis-horizontal")), i18n("Horizontal"), orientationActionGroup);
+	orientationHorizontalAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-horizontal")), i18n("Horizontal"), orientationActionGroup);
 	orientationHorizontalAction->setCheckable(true);
 
-	orientationVerticalAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-axis-vertical")), i18n("Vertical"), orientationActionGroup);
+	orientationVerticalAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-vertical")), i18n("Vertical"), orientationActionGroup);
 	orientationVerticalAction->setCheckable(true);
 
 	// Line
@@ -129,20 +116,20 @@ void ReferenceLine::initMenus() {
 
 	// Orientation
 	orientationMenu = new QMenu(i18n("Orientation"));
-	orientationMenu->setIcon(QIcon::fromTheme(QLatin1String("labplot-axis-horizontal")));
+	orientationMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-axis-horizontal")));
 	orientationMenu->addAction(orientationHorizontalAction);
 	orientationMenu->addAction(orientationVerticalAction);
 
 	// Line
 	lineMenu = new QMenu(i18n("Line"));
-	lineMenu->setIcon(QIcon::fromTheme(QLatin1String("draw-line")));
+	lineMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-line")));
 	lineStyleMenu = new QMenu(i18n("Style"), lineMenu);
-	lineStyleMenu->setIcon(QIcon::fromTheme(QLatin1String("object-stroke-style")));
-	lineMenu->setIcon(QIcon::fromTheme(QLatin1String("draw-line")));
+	lineStyleMenu->setIcon(QIcon::fromTheme(QStringLiteral("object-stroke-style")));
+	lineMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-line")));
 	lineMenu->addMenu(lineStyleMenu);
 
 	lineColorMenu = new QMenu(i18n("Color"), lineMenu);
-	lineColorMenu->setIcon(QIcon::fromTheme(QLatin1String("fill-color")));
+	lineColorMenu->setIcon(QIcon::fromTheme(QStringLiteral("fill-color")));
 	GuiTools::fillColorMenu(lineColorMenu, lineColorActionGroup);
 	lineMenu->addMenu(lineColorMenu);
 }
@@ -151,10 +138,8 @@ QMenu* ReferenceLine::createContextMenu() {
 	if (!orientationMenu)
 		initMenus();
 
-	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
+	auto* menu = WorksheetElement::createContextMenu();
+	auto* visibilityAction = this->visibilityAction();
 
 	Q_D(const ReferenceLine);
 
@@ -163,7 +148,7 @@ QMenu* ReferenceLine::createContextMenu() {
 		orientationHorizontalAction->setChecked(true);
 	else
 		orientationVerticalAction->setChecked(true);
-	menu->insertMenu(firstAction, orientationMenu);
+	menu->insertMenu(visibilityAction, orientationMenu);
 
 	// Line styles
 	const auto& pen = d->line->pen();
@@ -171,14 +156,10 @@ QMenu* ReferenceLine::createContextMenu() {
 	GuiTools::selectPenStyleAction(lineStyleActionGroup, pen.style());
 	GuiTools::selectColorAction(lineColorActionGroup, pen.color());
 
-	menu->insertMenu(firstAction, lineMenu);
-	menu->insertSeparator(firstAction);
+	menu->insertMenu(visibilityAction, lineMenu);
+	menu->insertSeparator(visibilityAction);
 
 	return menu;
-}
-
-QGraphicsItem* ReferenceLine::graphicsItem() const {
-	return d_ptr;
 }
 
 void ReferenceLine::retransform() {
@@ -205,9 +186,9 @@ void ReferenceLine::setOrientation(Orientation orientation) {
 		exec(new ReferenceLineSetOrientationCmd(d, orientation, ki18n("%1: set orientation")));
 }
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 void ReferenceLine::orientationChangedSlot(QAction* action) {
 	if (action == orientationHorizontalAction)
 		this->setOrientation(Orientation::Horizontal);
@@ -225,14 +206,9 @@ void ReferenceLine::lineColorChanged(QAction* action) {
 	d->line->setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
 }
 
-void ReferenceLine::visibilityChangedSlot() {
-	Q_D(const ReferenceLine);
-	this->setVisible(!d->isVisible());
-}
-
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 ReferenceLinePrivate::ReferenceLinePrivate(ReferenceLine* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
@@ -250,9 +226,8 @@ void ReferenceLinePrivate::retransform() {
 	if (suppressRetransform || !q->cSystem || q->isLoading())
 		return;
 
-	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
-	const auto xRange{q->m_plot->range(Dimension::X, cs->index(Dimension::X))};
-	const auto yRange{q->m_plot->range(Dimension::Y, cs->index(Dimension::Y))};
+	const auto& xRange = m_plot->range(Dimension::X, q->cSystem->index(Dimension::X));
+	const auto& yRange = m_plot->range(Dimension::Y, q->cSystem->index(Dimension::Y));
 
 	// calculate the position in the scene coordinates
 	if (orientation == ReferenceLine::Orientation::Vertical)
@@ -292,6 +267,11 @@ void ReferenceLinePrivate::retransform() {
 }
 
 void ReferenceLinePrivate::updateOrientation() {
+	updatePositionLimit();
+	retransform();
+}
+
+void ReferenceLinePrivate::updatePositionLimit() {
 	switch (orientation) {
 	case WorksheetElement::Orientation::Horizontal:
 		position.positionLimit = WorksheetElement::PositionLimit::Y;
@@ -303,30 +283,14 @@ void ReferenceLinePrivate::updateOrientation() {
 		position.positionLimit = WorksheetElement::PositionLimit::None;
 		break;
 	}
-	retransform();
 }
-
-/*!
-	Returns the outer bounds of the item as a rectangle.
- */
-QRectF ReferenceLinePrivate::boundingRect() const {
-	return boundingRectangle;
-}
-
-/*!
-	Returns the shape of this item as a QPainterPath in local coordinates.
-*/
-QPainterPath ReferenceLinePrivate::shape() const {
-	return lineShape;
-}
-
 /*!
   recalculates the outer bounds and the shape of the item.
 */
 void ReferenceLinePrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	lineShape = QPainterPath();
+	m_shape = QPainterPath();
 	if (insidePlot) {
 		QPainterPath path;
 		if (orientation == ReferenceLine::Orientation::Horizontal) {
@@ -336,9 +300,11 @@ void ReferenceLinePrivate::recalcShapeAndBoundingRect() {
 			path.moveTo(0, length / 2);
 			path.lineTo(0, -length / 2);
 		}
-		lineShape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
-		boundingRectangle = lineShape.boundingRect();
+		m_shape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
+		m_boundingRectangle = m_shape.boundingRect();
 	}
+
+	Q_EMIT q->changed();
 }
 
 void ReferenceLinePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
@@ -354,38 +320,18 @@ void ReferenceLinePrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(lineShape);
+		painter->drawPath(m_shape);
 	}
 
 	if (isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(lineShape);
+		painter->drawPath(m_shape);
 	}
 }
 
-void ReferenceLinePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
-}
-
-void ReferenceLinePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
-}
-
-void ReferenceLinePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
-	}
-}
-
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void ReferenceLine::save(QXmlStreamWriter* writer) const {
 	Q_D(const ReferenceLine);
@@ -411,7 +357,6 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -432,7 +377,7 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 			auto str = attribs.value(QStringLiteral("position")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("position")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("position"));
 			else {
 				d->positionLogical.setX(str.toDouble());
 				d->positionLogical.setY(str.toDouble());
@@ -440,22 +385,24 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 			d->coordinateBindingEnabled = true;
 
 			READ_INT_VALUE("orientation", orientation, Orientation);
+			d->updatePositionLimit(); // set the position limit after the orientation was set
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 			else
 				d->setVisible(str.toInt());
 		} else if (!preview && reader->name() == QLatin1String("geometry")) {
 			attribs = reader->attributes();
 			// new logic for the position for xmlVersion >= 6
 			READ_INT_VALUE("orientation", orientation, Orientation);
+			d->updatePositionLimit(); // set the position limit after the orientation was set
 			WorksheetElement::load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("line")) {
 			d->line->load(reader, preview);
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}
@@ -463,13 +410,13 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void ReferenceLine::loadThemeConfig(const KConfig& config) {
 	Q_D(ReferenceLine);
 
 	// for the properties of the line read the properties of the axis line
-	const KConfigGroup& group = config.group("Axis");
+	const KConfigGroup& group = config.group(QStringLiteral("Axis"));
 	d->line->loadThemeConfig(group);
 }

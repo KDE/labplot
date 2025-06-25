@@ -4,13 +4,16 @@
 	Description          : Base class of Aspects with MDI windows as views.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "backend/core/AbstractPart.h"
-#include "commonfrontend/core/PartMdiView.h"
-
+#include "backend/core/Settings.h"
+#ifndef SDK
+#include "frontend/core/ContentDockWidget.h"
+#include <DockManager.h>
+#endif
 #include <QMenu>
 #include <QStyle>
 
@@ -25,8 +28,10 @@ AbstractPart::AbstractPart(const QString& name, AspectType type)
 }
 
 AbstractPart::~AbstractPart() {
-	if (m_mdiWindow)
-		delete m_mdiWindow;
+#ifndef SDK
+	if (m_dockWidget)
+		delete m_dockWidget;
+#endif
 }
 
 /**
@@ -38,23 +43,47 @@ AbstractPart::~AbstractPart() {
  * This method may be called multiple times during the life time of a Part, or it might not get
  * called at all. Parts must not depend on the existence of a view for their operation.
  */
-
+#ifndef SDK
 /**
  * \brief Wrap the view() into a PartMdiView.
  *
  * A new view is only created the first time this method is called;
  * after that, a pointer to the pre-existing view is returned.
  */
-PartMdiView* AbstractPart::mdiSubWindow() const {
-#ifndef SDK
-	if (!m_mdiWindow)
-		m_mdiWindow = new PartMdiView(const_cast<AbstractPart*>(this));
+ContentDockWidget* AbstractPart::dockWidget() const {
+	if (!m_dockWidget) {
+		m_dockWidget = new ContentDockWidget(const_cast<AbstractPart*>(this));
+		connect(m_dockWidget, &ads::CDockWidget::closed, [this] {
+			const bool deleteOnClose = Settings::readDockPosBehavior() == Settings::DockPosBehavior::AboveLastActive;
+			if (deleteOnClose && !m_suppressDeletion) {
+				m_dockWidget->dockManager()->removeDockWidget(m_dockWidget);
+				m_dockWidget = nullptr;
+				deleteView();
+			}
+		});
+	}
+	return m_dockWidget;
+}
 #endif
-	return m_mdiWindow;
+
+#ifndef SDK
+bool AbstractPart::dockWidgetExists() const {
+	return m_dockWidget != nullptr;
+}
+#endif
+
+void AbstractPart::suppressDeletion(bool suppress) {
+	m_suppressDeletion = suppress;
 }
 
+#ifndef SDK
 bool AbstractPart::hasMdiSubWindow() const {
-	return m_mdiWindow;
+	return m_dockWidget;
+}
+#endif
+
+bool AbstractPart::viewCreated() const {
+	return m_partView != nullptr;
 }
 
 /*!
@@ -73,9 +102,9 @@ void AbstractPart::deleteView() const {
 	}
 
 	if (m_partView) {
+		Q_EMIT viewAboutToBeDeleted();
 		delete m_partView;
 		m_partView = nullptr;
-		m_mdiWindow = nullptr;
 	}
 }
 
@@ -83,9 +112,13 @@ void AbstractPart::deleteView() const {
  * \brief Return AbstractAspect::createContextMenu() plus operations on the primary view.
  */
 QMenu* AbstractPart::createContextMenu() {
-	QMenu* menu = AbstractAspect::createContextMenu();
-	menu->addSeparator();
 	auto type = this->type();
+	QMenu* menu;
+	if (type != AspectType::StatisticsSpreadsheet) {
+		menu = AbstractAspect::createContextMenu();
+		menu->addSeparator();
+	} else
+		menu = new QMenu();
 
 	// import actions for spreadsheet and matrix
 	if ((type == AspectType::Spreadsheet || type == AspectType::Matrix) && type != AspectType::LiveDataSource && type != AspectType::MQTTTopic) {
@@ -100,28 +133,25 @@ QMenu* AbstractPart::createContextMenu() {
 	}
 
 	// export/print actions
-	if (type != AspectType::CantorWorksheet)
+	if (type != AspectType::Notebook && type != AspectType::Script)
 		menu->addAction(QIcon::fromTheme(QLatin1String("document-export-database")), i18n("Export"), this, &AbstractPart::exportRequested);
 	menu->addAction(QIcon::fromTheme(QLatin1String("document-print")), i18n("Print"), this, &AbstractPart::printRequested);
 	menu->addAction(QIcon::fromTheme(QLatin1String("document-print-preview")), i18n("Print Preview"), this, &AbstractPart::printPreviewRequested);
 	menu->addSeparator();
 
 	// window state related actions
-	if (m_mdiWindow) {
-		const QStyle* style = m_mdiWindow->style();
-		if (m_mdiWindow->windowState() & (Qt::WindowMinimized | Qt::WindowMaximized)) {
-			auto* action = menu->addAction(i18n("&Restore"), m_mdiWindow, &QMdiSubWindow::showNormal);
-			action->setIcon(style->standardIcon(QStyle::SP_TitleBarNormalButton));
-		}
-
-		if (!(m_mdiWindow->windowState() & Qt::WindowMinimized)) {
-			auto* action = menu->addAction(i18n("Mi&nimize"), m_mdiWindow, &QMdiSubWindow::showMinimized);
-			action->setIcon(style->standardIcon(QStyle::SP_TitleBarMinButton));
-		}
-
-		if (!(m_mdiWindow->windowState() & Qt::WindowMaximized)) {
-			auto* action = menu->addAction(i18n("Ma&ximize"), m_mdiWindow, &QMdiSubWindow::showMaximized);
-			action->setIcon(style->standardIcon(QStyle::SP_TitleBarMaxButton));
+#ifndef SDK
+	if (m_dockWidget) {
+		const QStyle* style = m_dockWidget->style();
+		if (!m_dockWidget->isClosed()) {
+			auto* action = menu->addAction(i18n("&Close"), [this]() {
+				m_dockWidget->toggleView(false);
+			});
+			action->setIcon(style->standardIcon(QStyle::SP_TitleBarCloseButton));
+		} else {
+			menu->addAction(i18n("Show"), [this]() {
+				m_dockWidget->toggleView(true);
+			});
 		}
 	} else {
 		// if the mdi window was closed, add the "Show" action.
@@ -131,9 +161,13 @@ QMenu* AbstractPart::createContextMenu() {
 		auto parentType = parentAspect()->type();
 		bool disableShow = ((type == AspectType::Spreadsheet || type == AspectType::Matrix) && parentType == AspectType::Workbook)
 			|| (type == AspectType::Spreadsheet && parentType == AspectType::DatapickerCurve);
-		if (!disableShow)
-			menu->addAction(i18n("Show"), this, &AbstractPart::showRequested);
+		if (!disableShow) {
+			menu->addAction(i18n("Show"), [this]() {
+				m_dockWidget->toggleView(true);
+			});
+		}
 	}
+#endif
 
 	return menu;
 }

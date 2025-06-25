@@ -13,9 +13,10 @@
 
 #include "backend/spreadsheet/Spreadsheet.h"
 
+#include <QMqttMessage>
+
 class MQTTSubscription;
 class MQTTClient;
-
 class AsciiFilter;
 
 class MQTTTopic : public Spreadsheet {
@@ -34,7 +35,7 @@ public:
 
 	QString topicName() const;
 	MQTTClient* mqttClient() const;
-	void newMessage(const QString&);
+	void newMessage(const QMqttMessage& msg);
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -45,7 +46,7 @@ private:
 	QString m_topicName;
 	MQTTClient* m_MQTTClient;
 	AsciiFilter* m_filter;
-	QVector<QString> m_messagePuffer;
+	QVector<QMqttMessage> m_messagePuffer;
 	QAction* m_plotDataAction;
 
 public Q_SLOTS:

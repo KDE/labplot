@@ -10,10 +10,9 @@
 #ifndef HDF5FILTERTEST_H
 #define HDF5FILTERTEST_H
 
-#include "../../CommonTest.h"
-#include <QtTest>
+#include "../../CommonMetaTest.h"
 
-class HDF5FilterTest : public CommonTest {
+class HDF5FilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:

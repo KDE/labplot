@@ -21,7 +21,6 @@
 #include <QDateTime>
 #include <QUndoCommand>
 
-class QStringList;
 class AbstractSimpleFilter;
 
 class ColumnSetModeCmd : public QUndoCommand {
@@ -142,7 +141,13 @@ private:
 
 class ColumnSetGlobalFormulaCmd : public QUndoCommand {
 public:
-	explicit ColumnSetGlobalFormulaCmd(ColumnPrivate* col, QString formula, QStringList variableNames, QVector<Column*> columns, bool autoUpdate);
+	explicit ColumnSetGlobalFormulaCmd(ColumnPrivate* col,
+									   QString formula,
+									   QStringList variableNames,
+									   QVector<Column*> columns,
+									   bool autoUpdate,
+									   bool autoResize,
+									   QUndoCommand* parent = nullptr);
 
 	void redo() override;
 	void undo() override;
@@ -153,10 +158,12 @@ private:
 	QStringList m_variableNames;
 	QVector<Column*> m_variableColumns;
 	bool m_autoUpdate{false};
+	bool m_autoResize{true};
 	QString m_newFormula;
 	QStringList m_newVariableNames;
 	QVector<Column*> m_newVariableColumns;
 	bool m_newAutoUpdate{false};
+	bool m_newAutoResize{true};
 	bool m_copied{false};
 };
 

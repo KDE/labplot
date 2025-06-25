@@ -4,7 +4,7 @@
 	Description          : Interface definition for data with column logic
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2013 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -24,16 +24,20 @@ class QTime;
 template<class T>
 class Interval;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT AbstractColumn : public AbstractAspect {
+#else
 class AbstractColumn : public AbstractAspect {
+#endif
 	Q_OBJECT
-	Q_ENUMS(PlotDesignation)
-	Q_ENUMS(TimeUnit)
-	Q_ENUMS(ColumnMode)
 
 public:
 	enum class PlotDesignation { NoDesignation, X, Y, Z, XError, XErrorPlus, XErrorMinus, YError, YErrorPlus, YErrorMinus };
+	Q_ENUM(PlotDesignation)
 	// how to convert numeric <-> datetime
 	enum class TimeUnit { Milliseconds, Seconds, Minutes, Hours, Days };
+	Q_ENUM(TimeUnit)
 	enum class ColumnMode {
 		// BASIC FORMATS
 		Double = 0, // double
@@ -62,7 +66,7 @@ public:
 		//		UInt16 = 23,	// quint16 (unsigned short)
 		Integer = 24, // qint32 (int)
 		//		UInt32 = 25,	// quint32 (unsigned int)
-		BigInt = 26, // qint64 (long)
+		BigInt = 26 // qint64 (long)
 		//		UInt64 = 27,	// quint64 (unsigned long)
 		// MISC
 		// QBrush = 30
@@ -74,6 +78,7 @@ public:
 		// QMatrix
 		// etc.
 	};
+	Q_ENUM(ColumnMode)
 	enum class Properties { // TODO: why bit pattern? Aren't they exclusive?
 		No = 0x00, // invalid values or masked values
 		Constant = 0x01,
@@ -82,6 +87,7 @@ public:
 		NonMonotonic = 0x8,
 		// add new values with next bit set (0x10)
 	};
+	Q_ENUM(Properties)
 
 	// exposed in function dialog (ColumnPrivate::updateFormula(), ExpressionParser::initFunctions(), functions.h)
 	struct ColumnStatistics {
@@ -140,6 +146,7 @@ public:
 	virtual bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows);
 
 	virtual int rowCount() const = 0;
+	virtual int rowCount(double min, double max) const = 0;
 	virtual int availableRowCount(int max = -1) const = 0;
 	void insertRows(int before, int count);
 	void removeRows(int first, int count);
@@ -150,7 +157,7 @@ public:
 	virtual double minimum(int count = 0) const;
 	virtual double minimum(int startIndex, int endIndex) const;
 	virtual bool indicesMinMax(double v1, double v2, int& start, int& end) const;
-	virtual int indexForValue(double x) const;
+	virtual int indexForValue(double x, bool smaller) const;
 
 	bool isValid(int row) const;
 
@@ -194,6 +201,7 @@ public:
 	virtual void replaceBigInt(int first, const QVector<qint64>& new_values);
 
 	virtual Properties properties() const;
+	virtual void invalidateProperties() { };
 
 	// conditional formatting
 	enum class Formatting { Background, Foreground, Icon };
@@ -210,6 +218,9 @@ public:
 	HeatmapFormat& heatmapFormat() const;
 	void setHeatmapFormat(const HeatmapFormat&);
 	void removeFormat();
+	void reset();
+	void setChanged();
+	void setSuppressDataChangedSignal(const bool);
 
 Q_SIGNALS:
 	void plotDesignationAboutToChange(const AbstractColumn* source);
@@ -219,15 +230,39 @@ Q_SIGNALS:
 	void dataAboutToChange(const AbstractColumn* source);
 	void dataChanged(const AbstractColumn* source);
 	void formatChanged(const AbstractColumn* source);
+	/*!
+	 * \brief rowsAboutToBeInserted
+	 * \param source
+	 * \param before Old number of rows
+	 * \param count Number of rows added
+	 */
 	void rowsAboutToBeInserted(const AbstractColumn* source, int before, int count);
+	/*!
+	 * \brief rowsInserted
+	 * \param source
+	 * \param before Old number of rows
+	 * \param count Number of rows added
+	 */
 	void rowsInserted(const AbstractColumn* source, int before, int count);
+	/*!
+	 * \brief rowsAboutToBeRemoved
+	 * \param source
+	 * \param first Old number of rows
+	 * \param count Number of rows removed
+	 */
 	void rowsAboutToBeRemoved(const AbstractColumn* source, int first, int count);
+	/*!
+	 * \brief rowsRemoved
+	 * \param source
+	 * \param first Old number of rows
+	 * \param count Number of rows removed
+	 */
 	void rowsRemoved(const AbstractColumn* source, int first, int count);
 	void maskingAboutToChange(const AbstractColumn* source);
 	void maskingChanged(const AbstractColumn* source);
 	void aboutToBeDestroyed(const AbstractColumn* source);
-	void reset(const AbstractColumn*
-				   source); // this signal is emitted when the column is reused for another purpose. The curves must know that and disconnect all connections
+	void aboutToReset(const AbstractColumn* source); // this signal is emitted when the column is reused for another purpose. The curves must know that and
+													 // disconnect all connections
 
 protected:
 	bool XmlReadMask(XmlStreamReader*);

@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -35,9 +35,8 @@
 /**
  * \brief Ctor
  */
-AbstractColumnClearMasksCmd::AbstractColumnClearMasksCmd(AbstractColumnPrivate* col, QUndoCommand* parent)
-	: QUndoCommand(parent)
-	, m_col(col) {
+AbstractColumnClearMasksCmd::AbstractColumnClearMasksCmd(AbstractColumnPrivate* col)
+	: m_col(col) {
 	setText(i18n("%1: clear masks", col->name()));
 	m_copied = false;
 }
@@ -56,7 +55,7 @@ void AbstractColumnClearMasksCmd::redo() {
 		m_copied = true;
 	}
 	m_col->m_masking.clear();
-	Q_EMIT m_col->owner()->dataChanged(m_col->owner());
+	finalize();
 }
 
 /**
@@ -64,7 +63,14 @@ void AbstractColumnClearMasksCmd::redo() {
  */
 void AbstractColumnClearMasksCmd::undo() {
 	m_col->m_masking = m_masking;
+	finalize();
+}
+
+void AbstractColumnClearMasksCmd::finalize() const {
+	// TODO: implement AbstractColumn::setChanged() instead of these two calls,
+	// move the already available Column::setChanged to the base class.
 	Q_EMIT m_col->owner()->dataChanged(m_col->owner());
+	m_col->owner()->invalidateProperties();
 }
 
 /** ***************************************************************************
@@ -100,9 +106,8 @@ void AbstractColumnClearMasksCmd::undo() {
 /**
  * \brief Ctor
  */
-AbstractColumnSetMaskedCmd::AbstractColumnSetMaskedCmd(AbstractColumnPrivate* col, const Interval<int>& interval, bool masked, QUndoCommand* parent)
-	: QUndoCommand(parent)
-	, m_col(col)
+AbstractColumnSetMaskedCmd::AbstractColumnSetMaskedCmd(AbstractColumnPrivate* col, const Interval<int>& interval, bool masked)
+	: m_col(col)
 	, m_interval(interval)
 	, m_masked(masked) {
 	if (masked)
@@ -126,7 +131,7 @@ void AbstractColumnSetMaskedCmd::redo() {
 		m_copied = true;
 	}
 	m_col->m_masking.setValue(m_interval, m_masked);
-	Q_EMIT m_col->owner()->dataChanged(m_col->owner());
+	m_col->owner()->setChanged();
 }
 
 /**
@@ -134,7 +139,7 @@ void AbstractColumnSetMaskedCmd::redo() {
  */
 void AbstractColumnSetMaskedCmd::undo() {
 	m_col->m_masking = m_masking;
-	Q_EMIT m_col->owner()->dataChanged(m_col->owner());
+	m_col->owner()->setChanged();
 }
 
 /** ***************************************************************************
@@ -160,9 +165,8 @@ void AbstractColumnSetMaskedCmd::undo() {
 /**
  * \brief Ctor
  */
-AbstractColumnInsertRowsCmd::AbstractColumnInsertRowsCmd(AbstractColumn* col, int before, int count, QUndoCommand* parent)
-	: QUndoCommand(parent)
-	, m_col(col->d)
+AbstractColumnInsertRowsCmd::AbstractColumnInsertRowsCmd(AbstractColumn* col, int before, int count)
+	: m_col(col->d)
 	, m_before(before)
 	, m_count(count) {
 }
@@ -205,9 +209,8 @@ void AbstractColumnInsertRowsCmd::undo() {
 /**
  * \brief Ctor
  */
-AbstractColumnRemoveRowsCmd::AbstractColumnRemoveRowsCmd(AbstractColumn* col, int first, int count, QUndoCommand* parent)
-	: QUndoCommand(parent)
-	, m_col(col->d)
+AbstractColumnRemoveRowsCmd::AbstractColumnRemoveRowsCmd(AbstractColumn* col, int first, int count)
+	: m_col(col->d)
 	, m_first(first)
 	, m_count(count) {
 }
@@ -230,11 +233,8 @@ void AbstractColumnRemoveRowsCmd::undo() {
  * \class AbstractColumnSetHeatmapFormatCmd
  * \brief Set the heatmap format
  ** ***************************************************************************/
-AbstractColumnSetHeatmapFormatCmd::AbstractColumnSetHeatmapFormatCmd(AbstractColumnPrivate* col,
-																	 const AbstractColumn::HeatmapFormat& format,
-																	 QUndoCommand* parent)
-	: QUndoCommand(parent)
-	, m_col(col)
+AbstractColumnSetHeatmapFormatCmd::AbstractColumnSetHeatmapFormatCmd(AbstractColumnPrivate* col, const AbstractColumn::HeatmapFormat& format)
+	: m_col(col)
 	, m_format(format) {
 	setText(i18n("%1: set heatmap format", col->name()));
 }
@@ -245,9 +245,9 @@ void AbstractColumnSetHeatmapFormatCmd::redo() {
 	if (!m_col->m_heatmapFormat)
 		m_col->m_heatmapFormat = new AbstractColumn::HeatmapFormat();
 
-	AbstractColumn::HeatmapFormat tmp = *(m_col->m_heatmapFormat);
+	auto tmp = *(m_col->m_heatmapFormat);
 	*(m_col->m_heatmapFormat) = m_format;
-	m_format = tmp;
+	m_format = std::move(tmp);
 
 	Q_EMIT m_col->owner()->formatChanged(m_col->owner());
 }
@@ -260,9 +260,8 @@ void AbstractColumnSetHeatmapFormatCmd::undo() {
  * \class AbstractColumnRemoveHeatmapFormatCmd
  * \brief Set the heatmap format
  ** ***************************************************************************/
-AbstractColumnRemoveHeatmapFormatCmd::AbstractColumnRemoveHeatmapFormatCmd(AbstractColumnPrivate* col, QUndoCommand* parent)
-	: QUndoCommand(parent)
-	, m_col(col) {
+AbstractColumnRemoveHeatmapFormatCmd::AbstractColumnRemoveHeatmapFormatCmd(AbstractColumnPrivate* col)
+	: m_col(col) {
 	setText(i18n("%1: remove heatmap format", col->name()));
 }
 

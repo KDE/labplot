@@ -28,7 +28,7 @@ ColorMapsManager* ColorMapsManager::m_instance{nullptr};
 	\class ColorMapsManager
 	\brief color maps manager. singleton class holding the information about the data and metadata of the available color maps.
 
-	\ingroup kdefrontend
+	\ingroup frontend
  */
 ColorMapsManager::ColorMapsManager() {
 	m_jsonDir = QStandardPaths::locate(QStandardPaths::AppDataLocation, QLatin1String("colormaps"), QStandardPaths::LocateDirectory);
@@ -79,7 +79,7 @@ QStringList ColorMapsManager::colorMapNames(const QString& collectionName) {
 					const auto& colorsArray = colorMaps.value(key).toArray();
 					for (const auto& color : colorsArray)
 						colors << color.toString();
-					m_colors[key] = colors;
+					m_colors[key] = std::move(colors);
 				}
 			}
 		}

@@ -17,11 +17,37 @@
 
 #include <KLocalizedString>
 
+#include "backend/lib/macros.h"
+
+/*!
+ * \brief The LongExecutionCmd class
+ * Use this undo command if you expect long execution times
+ * Executes all child commands and sets the cursor to the waiting symbol
+ */
+class LongExecutionCmd : public QUndoCommand {
+public:
+	LongExecutionCmd(const QString& text, QUndoCommand* parent = nullptr)
+		: QUndoCommand(text, parent) {
+	}
+
+	virtual void redo() override {
+		WAIT_CURSOR;
+		QUndoCommand::redo();
+		RESET_CURSOR;
+	}
+
+	virtual void undo() override {
+		WAIT_CURSOR;
+		QUndoCommand::undo();
+		RESET_CURSOR;
+	}
+};
+
 template<class target_class, typename value_type>
 class StandardSetterCmd : public QUndoCommand {
 public:
 	StandardSetterCmd(target_class* target,
-					  value_type target_class::*field,
+					  value_type target_class::* field,
 					  value_type newValue,
 					  const KLocalizedString& description,
 					  QUndoCommand* parent = nullptr) // use ki18n("%1: ...")
@@ -41,7 +67,7 @@ public:
 		initialize();
 		value_type tmp = *m_target.*m_field;
 		*m_target.*m_field = m_otherValue;
-		m_otherValue = tmp;
+		m_otherValue = std::move(tmp);
 		QUndoCommand::redo(); // redo all childs
 		finalize();
 	}
@@ -52,7 +78,7 @@ public:
 
 protected:
 	target_class* m_target;
-	value_type target_class::*m_field;
+	value_type target_class::* m_field;
 	value_type m_otherValue;
 };
 
@@ -60,7 +86,7 @@ template<class target_class, typename value_type>
 class StandardQVectorSetterCmd : public QUndoCommand {
 public:
 	StandardQVectorSetterCmd(target_class* target,
-							 QVector<value_type> target_class::*field,
+							 QVector<value_type> target_class::* field,
 							 int index,
 							 value_type newValue,
 							 const KLocalizedString& description) // use ki18n("%1: ...")
@@ -92,7 +118,7 @@ public:
 
 protected:
 	target_class* m_target;
-	QVector<value_type> target_class::*m_field;
+	QVector<value_type> target_class::* m_field;
 	int m_index;
 	value_type m_otherValue;
 };
@@ -101,7 +127,7 @@ template<class target_class, typename value_type>
 class StandardMacroSetterCmd : public QUndoCommand {
 public:
 	StandardMacroSetterCmd(target_class* target,
-						   value_type target_class::*field,
+						   value_type target_class::* field,
 						   value_type newValue,
 						   const KLocalizedString& description) // use ki18n("%1: ...")
 		: m_target(target)
@@ -140,7 +166,7 @@ public:
 
 protected:
 	target_class* m_target;
-	value_type target_class::*m_field;
+	value_type target_class::* m_field;
 	value_type m_otherValue;
 };
 

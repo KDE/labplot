@@ -1,15 +1,59 @@
 ## 3rd party libraries
 
-This folder contains versions of libraries and files LabPlot depends on.
+This folder contains or downloads versions of libraries and files LabPlot can use.
 
 
 ## KDMacTouchBar
 
 KDAB's Qt Widget for the Mac Touch Bar ([link](https://github.com/KDAB/KDMacTouchBar))
 
-## ReadStat
+## liborigin
+
+A library for reading OriginLab project files (.OPJ) ([link](https://sourceforge.net/projects/liborigin))
+
+    * adapted CMakeLists.txt
+
+## QXlsx
+
+QXlsx is an excel file(.xlsx) reader/writer MIT-licensed C++ (with Qt) library ([link](https://github.com/QtExcel/QXlsx))
+
+    # git clone -b v1.4.6 https://github.com/QtExcel/QXlsx.git tmp
+    # mv tmp/QXlsx .
+    # mv tmp/{LICENSE,README.md} QXlsx
+    # rm -rf tmp
+
+## Qt Advanced Docking System
+
+Qt Advanced Docking System lets you create customizable layouts using a full featured window docking system ([link](https://github.com/githubuser0xFFFF/Qt-Advanced-Docking-System))
+
+Changes:
+
+src/CMakeLists.txt:
++ if(NOT MSVC_FOUND)
++    target_compile_options(${library_name} PRIVATE -Wno-switch-enum)
++ endif()
+
+## MCAP
+
+MCAP provides classes for reading and writing the MCAP file format.
+
+https://github.com/foxglove/mcap
+
+copy cpp/mcap/{include,LICENSE} -> mcap/
+
+## QStringTokenizer
+
+QStringTokenizer is a universal, safe, zero-allocation string splitter and is part of KDToolBox ([link](https://github.com/KDABLabs/KDToolBox/tree/master)).
+
+## ReadStat (not included)
 
 ReadStat is a command-line tool and MIT-licensed C library for reading files from popular stats packages ([link](https://github.com/WizardMac/ReadStat))
+
+## Vector BLF
+
+A library to access Binary Log File (BLF) files from Vector Informatik ([link](https://github.com/Murmele/vector_blf)).
+Depends on fast_float ([link](https://github.com/fastfloat/fast_float.git)) and C++ DBC Parser ([link](https://github.com/Murmele/dbc_parser_cpp))
+Included Vector BLF commit SHA 5fe16eb200a476a38fbe3f1d4281432ea5e6b976
 
 ## preview.sty
 

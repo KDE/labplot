@@ -1,5 +1,5 @@
-add_executable (NSLDiffTest NSLDiffTest.cpp)
+add_executable(NSLDiffTest NSLDiffTest.cpp)
 
-target_link_libraries(NSLDiffTest labplot2lib labplot2test)
+target_link_libraries(NSLDiffTest labplottest)
 
 add_test(NAME NSLDiffTest COMMAND NSLDiffTest)

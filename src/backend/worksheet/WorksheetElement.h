@@ -4,7 +4,7 @@
 	Description          : Base class for all Worksheet children.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -27,7 +27,12 @@ class QAction;
 class QGraphicsItem;
 class QPen;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT WorksheetElement : public AbstractAspect {
+#else
 class WorksheetElement : public AbstractAspect {
+#endif
 	Q_OBJECT
 
 public:
@@ -35,13 +40,19 @@ public:
 	~WorksheetElement() override;
 
 	enum class Orientation { Horizontal, Vertical, Both };
-	enum class HorizontalPosition { Left, Center, Right, Custom };
-	enum class VerticalPosition { Top, Center, Bottom, Custom };
+	Q_ENUM(Orientation)
+	enum class HorizontalPosition { Left, Center, Right, Relative }; // Relative: relative to plot area
+	Q_ENUM(HorizontalPosition)
+	enum class VerticalPosition { Top, Center, Bottom, Relative };
+	Q_ENUM(VerticalPosition)
 
 	enum class HorizontalAlignment { Left, Center, Right };
+	Q_ENUM(HorizontalAlignment)
 	enum class VerticalAlignment { Top, Center, Bottom };
+	Q_ENUM(VerticalAlignment)
 
 	enum class PositionLimit { None, X, Y };
+	Q_ENUM(PositionLimit)
 
 	struct PositionWrapper {
 		PositionWrapper() {
@@ -53,7 +64,7 @@ public:
 			, positionLimit(limit) {
 		}
 
-		QPointF point;
+		QPointF point; // range [0 .. 1] for relative position
 		HorizontalPosition horizontalPosition{HorizontalPosition::Center};
 		VerticalPosition verticalPosition{VerticalPosition::Center};
 		PositionLimit positionLimit{PositionLimit::None};
@@ -70,15 +81,19 @@ public:
 	BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
 	BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment)
 	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
-	BASIC_D_ACCESSOR_DECL(qreal, scale, Scale)
+	qreal scale() const;
+	BASIC_D_ACCESSOR_DECL(bool, isLocked, Lock)
+	BASIC_D_ACCESSOR_DECL(bool, isHovered, Hover)
 
 	void finalizeAdd() override;
 
-	virtual QGraphicsItem* graphicsItem() const = 0;
+	virtual QGraphicsItem* graphicsItem() const;
+	virtual void setParentGraphicsItem(QGraphicsItem* item);
 	virtual void setZValue(qreal);
 	virtual void setVisible(bool on);
 	virtual bool isVisible() const;
 	virtual bool isFullyVisible() const;
+	virtual void updateLocale() { };
 	void setSuppressRetransform(bool);
 
 	virtual void setPrinting(bool);
@@ -90,7 +105,9 @@ public:
 
 	QPointF align(QPointF, QRectF, HorizontalAlignment, VerticalAlignment, bool positive) const;
 
-	QMenu* createContextMenu() override;
+	virtual QMenu* createContextMenu() override;
+	QAction* visibilityAction();
+	QAction* lockingAction();
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool) override;
@@ -100,27 +117,25 @@ public:
 	static QPainterPath shapeFromPath(const QPainterPath&, const QPen&);
 	virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) = 0;
 
-	CartesianPlot* plot() const {
-		return m_plot;
-	} // used in the element docks
+	CartesianPlot* plot() const; // used in the element docks
 	int coordinateSystemIndex() const {
 		return m_cSystemIndex;
 	}
-	void setCoordinateSystemIndex(int);
+	void setCoordinateSystemIndex(int, QUndoCommand* parent = nullptr);
 	int coordinateSystemCount() const;
 	QString coordinateSystemInfo(int index) const;
 
 private:
 	void init();
+	QAction* m_visibilityAction{nullptr};
+	QAction* m_lockingAction{nullptr};
 
 protected:
 	WorksheetElement(const QString&, WorksheetElementPrivate* dd, AspectType);
-	int m_cSystemIndex{0}; // index of coordinate system used from plot
-	// parent plot if available
-	// not const because of prepareGeometryChange()
-	// normally set in finalizeAdd()
-	CartesianPlot* m_plot{nullptr};
+	int m_cSystemIndex{0}; // index of the coordinate system used from plot
 	const CartesianCoordinateSystem* cSystem{nullptr}; // current cSystem
+
+	friend class Project;
 
 public Q_SLOTS:
 	virtual void retransform() = 0;
@@ -137,6 +152,8 @@ private:
 
 protected Q_SLOTS:
 	void changeVisibility();
+	void changeLocking();
+	virtual void handleAspectUpdated(const QString& path, const AbstractAspect*);
 
 private Q_SLOTS:
 	void prepareDrawingOrderMenu();
@@ -157,21 +174,20 @@ Q_SIGNALS:
 	void rotationAngleChanged(qreal) const;
 	void rotationChanged(qreal) const;
 	void visibleChanged(bool) const;
+	void lockChanged(bool) const;
 	void coordinateSystemIndexChanged(int) const;
 	void changed();
+	void hoveredChanged(bool) const;
 
-	void objectPositionChanged(); // Position changed, independend of logical or scene, bot are triggering this
+	void objectPositionChanged(); // Position changed, independent of logical or scene, both are triggering this
 
 	void hovered();
 	void unhovered();
-	// needed in the worksheet info element, because execMoveInFrontOf and execMoveBehind
-	// call also child removed but this is only temporary
-	void moveBegin(); // called, at the begin of execMoveInFrontOf or execMoveBehind is called
-	void moveEnd(); // called, at the end of execMoveInFrontOf or execMoveBehind is called
 
 	void plotRangeListChanged();
 
 	friend class WorksheetElementTest;
+	friend class SetCoordinateSystemIndexCmd;
 };
 
 #endif

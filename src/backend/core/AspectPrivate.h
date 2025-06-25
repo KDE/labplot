@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private data managed by AbstractAspect.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2013 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -14,6 +14,7 @@
 
 #include <QDateTime>
 #include <QList>
+#include <QUuid>
 
 class AbstractAspect;
 
@@ -24,7 +25,7 @@ public:
 
 	void insertChild(int index, AbstractAspect*);
 	int indexOfChild(const AbstractAspect*) const;
-	int removeChild(AbstractAspect*);
+	QString name() const;
 
 public:
 	QVector<AbstractAspect*> m_children;
@@ -39,6 +40,8 @@ public:
 	bool m_undoAware{true};
 	bool m_isLoading{false};
 	bool m_pasted{false};
+	QUuid m_uuid{QUuid::createUuid()};
+	bool m_suppressWriteUuid{false};
 };
 
 #endif // ifndef ASPECT_PRIVATE_H

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Legend for the cartesian plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -11,7 +11,6 @@
 #ifndef CARTESIANPLOTLEGEND_H
 #define CARTESIANPLOTLEGEND_H
 
-#include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 
 class Background;
@@ -26,8 +25,6 @@ class LABPLOT_EXPORT CartesianPlotLegend : public WorksheetElement {
 class CartesianPlotLegend : public WorksheetElement {
 #endif
 	Q_OBJECT
-	Q_ENUMS(HorizontalPosition)
-	Q_ENUMS(VerticalPosition)
 
 public:
 	explicit CartesianPlotLegend(const QString& name);
@@ -35,8 +32,6 @@ public:
 
 	void finalizeAdd() override;
 	QIcon icon() const override;
-	QMenu* createContextMenu() override;
-	QGraphicsItem* graphicsItem() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig& config) override;
@@ -44,6 +39,7 @@ public:
 	TextLabel* title();
 
 	CLASS_D_ACCESSOR_DECL(QFont, labelFont, LabelFont)
+	BASIC_D_ACCESSOR_DECL(bool, usePlotColor, UsePlotColor)
 	CLASS_D_ACCESSOR_DECL(QColor, labelColor, LabelColor)
 	BASIC_D_ACCESSOR_DECL(bool, labelColumnMajor, LabelColumnMajor)
 	BASIC_D_ACCESSOR_DECL(qreal, lineSymbolWidth, LineSymbolWidth)
@@ -74,14 +70,10 @@ private:
 	Q_DECLARE_PRIVATE(CartesianPlotLegend)
 	void init();
 	void initActions();
-	QAction* visibilityAction{nullptr};
-
-private Q_SLOTS:
-	// SLOTs for changes triggered via QActions in the context menu
-	void visibilityChangedSlot();
 
 Q_SIGNALS:
 	void labelFontChanged(QFont&);
+	void usePlotColorChanged(bool);
 	void labelColorChanged(QColor&);
 	void labelColumnMajorChanged(bool);
 	void lineSymbolWidthChanged(float);

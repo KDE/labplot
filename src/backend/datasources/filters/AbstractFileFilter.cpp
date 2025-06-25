@@ -4,7 +4,7 @@
 	Description          : file I/O-filter related interface
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009-2017 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -12,13 +12,16 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/SpiceFilter.h"
 #include "backend/datasources/filters/VectorBLFFilter.h"
+#include "backend/lib/hostprocess.h"
 #include "backend/lib/macros.h"
 
 #include <KLocalizedString>
+
 #include <QDateTime>
 #include <QImageReader>
 #include <QLocale>
 #include <QProcess>
+#include <QStandardPaths>
 
 bool AbstractFileFilter::isNan(const QString& s) {
 	const static QStringList nanStrings{QStringLiteral("NA"),
@@ -41,14 +44,13 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
  * return the column mode for the given value string and settings \c dateTimeFormat and \c locale.
  * in case \c dateTimeFormat is empty, all possible datetime formats are tried out to determine the valid datetime object.
  */
-AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueString, QString& dateTimeFormat, const QLocale& locale) {
+AbstractColumn::ColumnMode
+AbstractFileFilter::columnMode(const QString& valueString, QString& dateTimeFormat, const QLocale& locale, bool intAsDouble, int baseYear) {
+	if (valueString.isEmpty() || isNan(valueString))
+		return AbstractColumn::ColumnMode::Double;
+
 	// TODO: use BigInt as default integer?
 	auto mode = AbstractColumn::ColumnMode::Integer;
-	if (valueString.size() == 0) // empty string treated as integer (meaning the non-empty strings will determine the data type)
-		return mode;
-
-	if (isNan(valueString))
-		return AbstractColumn::ColumnMode::Double;
 
 	// check if integer first
 	bool ok;
@@ -60,7 +62,7 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 		QDateTime valueDateTime;
 		if (dateTimeFormat.isEmpty()) {
 			for (const auto& format : AbstractColumn::dateTimeFormats()) {
-				valueDateTime = QDateTime::fromString(valueString, format);
+				valueDateTime = QDateTime::fromString(valueString, format, baseYear);
 				if (valueDateTime.isValid()) {
 					DEBUG(Q_FUNC_INFO << ", " << STDSTRING(valueString) << " : valid DateTime format - " << STDSTRING(format));
 					dateTimeFormat = format;
@@ -89,6 +91,8 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 
 			mode = ok ? AbstractColumn::ColumnMode::Double : AbstractColumn::ColumnMode::Text;
 		}
+	} else if (intAsDouble) {
+		mode = AbstractColumn::ColumnMode::Double;
 	}
 
 	return mode;
@@ -116,12 +120,61 @@ QStringList AbstractFileFilter::numberFormats() {
 }
 
 /*!
- * \brief AbstractFileFilter::lastErrors
- * Errors occured during last parse
- * \return
+ * Returns the last error that occured during the last parse step.
  */
-QStringList AbstractFileFilter::lastErrors() {
-	return QStringList();
+QString AbstractFileFilter::lastError() const {
+	return m_lastError;
+}
+
+void AbstractFileFilter::setLastError(const QString& error) {
+	m_lastError = error;
+}
+
+void AbstractFileFilter::clearLastError() {
+	m_lastError.clear();
+}
+
+/*!
+ * Returns the list of warnings that occured during the last parse step.
+ */
+QStringList AbstractFileFilter::lastWarnings() const {
+	return m_lastWarnings;
+}
+
+void AbstractFileFilter::addWarning(const QString& warning) {
+	m_lastWarnings << warning;
+}
+
+void AbstractFileFilter::clearLastWarnings() {
+	m_lastWarnings.clear();
+}
+
+/*!
+ * which file types are exclusive (filter can only open files of this type)
+ * used to deactivate selection if of other type
+ */
+bool AbstractFileFilter::exclusiveFileType(const AbstractFileFilter::FileType type) {
+	switch (type) {
+	case FileType::Ods:
+	case FileType::HDF5:
+	case FileType::NETCDF:
+	case FileType::XLSX:
+	case FileType::FITS:
+	case FileType::ROOT:
+	case FileType::Spice:
+	case FileType::MATIO:
+	case FileType::VECTOR_BLF:
+	case FileType::MCAP:
+		return true;
+	case FileType::Ascii:
+	case FileType::Binary:
+	case FileType::Image:
+	case FileType::JSON:
+	case FileType::READSTAT:
+		break;
+	}
+
+	return false;
 }
 
 AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileName) {
@@ -129,10 +182,10 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 	QString fileInfo;
 #ifndef HAVE_WINDOWS
 	// check, if we can guess the file type by content
-	const QString fileFullPath = QStandardPaths::findExecutable(QLatin1String("file"));
+	const QString fileFullPath = safeExecutableName(QStringLiteral("file"));
 	if (!fileFullPath.isEmpty()) {
 		QProcess proc;
-		proc.start(fileFullPath, QStringList() << QStringLiteral("-b") << QStringLiteral("-z") << fileName);
+		startHostProcess(proc, fileFullPath, QStringList() << QStringLiteral("-b") << QStringLiteral("-z") << fileName);
 		if (!proc.waitForFinished(1000)) {
 			proc.kill();
 			DEBUG("ERROR: reading file type of file" << STDSTRING(fileName));
@@ -154,9 +207,13 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		fileType = FileType::JSON;
 	} else if (SpiceFilter::isSpiceFile(fileName))
 		fileType = FileType::Spice;
-#ifdef HAVE_EXCEL // before ASCII, because XLSX is XML and XML is ASCII
+#ifdef HAVE_QXLSX // before ASCII, because XLSX is XML and XML is ASCII
 	else if (fileInfo.contains(QLatin1String("Microsoft Excel")) || fileName.endsWith(QLatin1String("xlsx"), Qt::CaseInsensitive))
-		fileType = FileType::Excel;
+		fileType = FileType::XLSX;
+#endif
+#ifdef HAVE_ORCUS // before ASCII, because ODS is XML and XML is ASCII
+	else if (fileInfo.contains(QLatin1String("OpenDocument Spreadsheet")) || fileName.endsWith(QLatin1String("ods"), Qt::CaseInsensitive))
+		fileType = FileType::Ods;
 #endif
 	else if (fileInfo.contains(QLatin1String("ASCII")) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)
 			 || fileName.endsWith(QLatin1String("csv"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive)
@@ -205,6 +262,10 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 #endif
 	else if (fileInfo.contains(QLatin1String("image")) || fileInfo.contains(QLatin1String("bitmap")) || !imageFormat.isEmpty())
 		fileType = FileType::Image;
+#ifdef HAVE_MCAP
+	else if (fileInfo.contains(QLatin1String("mcap")) || fileName.endsWith(QLatin1String(".mcap")))
+		fileType = FileType::MCAP;
+#endif
 	else
 		fileType = FileType::Binary;
 
@@ -214,8 +275,46 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 /*!
   returns the list of all supported data file formats
 */
-QStringList AbstractFileFilter::fileTypes() {
+/*QStringList AbstractFileFilter::fileTypes() {
+	// TODO: #ifdef HAVE_QXLSX?
 	return (QStringList() << i18n("ASCII Data") << i18n("Binary Data") << i18n("Image") << i18n("Excel") << i18n("Hierarchical Data Format 5 (HDF5)")
 						  << i18n("Network Common Data Format (NetCDF)") << i18n("Flexible Image Transport System Data Format (FITS)") << i18n("JSON Data")
 						  << i18n("ROOT (CERN) Histograms") << i18n("Spice") << i18n("SAS, Stata or SPSS"));
+}*/
+
+QString AbstractFileFilter::convertFromNumberToColumn(int n) {
+	// main code from https://www.geeksforgeeks.org/find-excel-column-name-given-number/
+	// Function to print column name for a given column number
+
+	char str[1000]; // To store result (column name)
+	int i = 0; // To store current index in str which is result
+
+	while (n > 0) {
+		// Find remainder
+		int rem = n % 26;
+
+		// If remainder is 0, then a 'Z' must be there in output
+		if (rem == 0) {
+			str[i++] = 'Z';
+			n = (n / 26) - 1;
+		} else // If remainder is non-zero
+		{
+			str[i++] = (rem - 1) + 'A';
+			n = n / 26;
+		}
+	}
+	str[i] = '\0';
+
+	// Reverse the string and print result
+	std::reverse(str, str + strlen(str));
+
+	return QLatin1String(str);
+}
+
+int AbstractFileFilter::previewPrecision() const {
+	return m_previewPrecision;
+}
+
+void AbstractFileFilter::setPreviewPrecision(int precision) {
+	m_previewPrecision = precision;
 }

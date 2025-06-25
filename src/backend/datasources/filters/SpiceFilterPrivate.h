@@ -27,7 +27,7 @@ public:
 	void write(const QString& fileName, AbstractDataSource*);
 	void generateVectorNamesColumnModes(const SpiceFileReader& reader);
 
-	const SpiceFilter* q;
+	SpiceFilter* const q;
 
 	QStringList vectorNames;
 	QVector<AbstractColumn::ColumnMode> columnModes;

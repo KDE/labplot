@@ -8,26 +8,22 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYDataReductionCurve
-  \brief A xy-curve defined by a data reduction
-
-  \ingroup worksheet
-*/
-
 #include "XYDataReductionCurve.h"
-#include "CartesianCoordinateSystem.h"
 #include "XYDataReductionCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 
 #include <KLocalizedString>
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
 
+/*!
+ * \class XYDataReductionCurve
+ * \brief A xy-curve defined by a data reduction.
+ * \ingroup CartesianAnalysisPlots
+ */
 XYDataReductionCurve::XYDataReductionCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYDataReductionCurvePrivate(this), AspectType::XYDataReductionCurve) {
 }
@@ -40,11 +36,6 @@ XYDataReductionCurve::XYDataReductionCurve(const QString& name, XYDataReductionC
 // and is deleted during the cleanup in QGraphicsScene
 XYDataReductionCurve::~XYDataReductionCurve() = default;
 
-void XYDataReductionCurve::recalculate() {
-	Q_D(XYDataReductionCurve);
-	d->recalculate();
-}
-
 const XYAnalysisCurve::Result& XYDataReductionCurve::result() const {
 	Q_D(const XYDataReductionCurve);
 	return d->dataReductionResult;
@@ -56,9 +47,9 @@ QIcon XYDataReductionCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-data-reduction-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYDataReductionCurve, XYDataReductionCurve::DataReductionData, dataReductionData, dataReductionData)
 
 const XYDataReductionCurve::DataReductionResult& XYDataReductionCurve::dataReductionResult() const {
@@ -66,18 +57,18 @@ const XYDataReductionCurve::DataReductionResult& XYDataReductionCurve::dataReduc
 	return d->dataReductionResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYDataReductionCurve, SetDataReductionData, XYDataReductionCurve::DataReductionData, dataReductionData, recalculate)
 void XYDataReductionCurve::setDataReductionData(const XYDataReductionCurve::DataReductionData& reductionData) {
 	Q_D(XYDataReductionCurve);
 	exec(new XYDataReductionCurveSetDataReductionDataCmd(d, reductionData, ki18n("%1: set options and perform the data reduction")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYDataReductionCurvePrivate::XYDataReductionCurvePrivate(XYDataReductionCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -132,10 +123,10 @@ bool XYDataReductionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 	const double tol = dataReductionData.tolerance;
 	const double tol2 = dataReductionData.tolerance2;
 
-	DEBUG("n =" << n);
-	DEBUG("type:" << nsl_geom_linesim_type_name[type]);
-	DEBUG("tolerance/step:" << tol);
-	DEBUG("tolerance2/repeat/maxtol/region:" << tol2);
+	DEBUG(Q_FUNC_INFO << ", n = " << n);
+	DEBUG(Q_FUNC_INFO << ", type: " << nsl_geom_linesim_type_name[type]);
+	DEBUG(Q_FUNC_INFO << ", tolerance/step: " << tol);
+	DEBUG(Q_FUNC_INFO << ", tolerance2/repeat/maxtol/region: " << tol2);
 
 	///////////////////////////////////////////////////////////
 	Q_EMIT q->completed(10);
@@ -145,7 +136,7 @@ bool XYDataReductionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 	size_t* index = (size_t*)malloc(n * sizeof(size_t));
 	switch (type) {
 	case nsl_geom_linesim_type_douglas_peucker_variant: // tol used as number of points
-		npoints = tol;
+		npoints = size_t(tol);
 		calcTolerance = nsl_geom_linesim_douglas_peucker_variant(xdata, ydata, n, npoints, index);
 		break;
 	case nsl_geom_linesim_type_douglas_peucker:
@@ -173,13 +164,13 @@ bool XYDataReductionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 		npoints = nsl_geom_linesim_opheim(xdata, ydata, n, tol, tol2, index);
 		break;
 	case nsl_geom_linesim_type_lang: // tol2 used as region
-		npoints = nsl_geom_linesim_opheim(xdata, ydata, n, tol, tol2, index);
+		npoints = nsl_geom_linesim_lang(xdata, ydata, n, tol, tol2, index);
 		break;
 	}
 
-	DEBUG("npoints =" << npoints);
+	DEBUG(Q_FUNC_INFO << ", npoints = " << npoints);
 	if (type == nsl_geom_linesim_type_douglas_peucker_variant) {
-		DEBUG("calculated tolerance =" << calcTolerance)
+		DEBUG(Q_FUNC_INFO << ", calculated tolerance = " << calcTolerance)
 	} else
 		Q_UNUSED(calcTolerance);
 
@@ -217,9 +208,9 @@ bool XYDataReductionCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYDataReductionCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYDataReductionCurve);
@@ -266,7 +257,6 @@ void XYDataReductionCurve::save(QXmlStreamWriter* writer) const {
 bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYDataReductionCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -310,6 +300,10 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
@@ -332,7 +326,7 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
-		recalcLogicalPoints();
+		recalc();
 	}
 
 	return true;

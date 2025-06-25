@@ -7,30 +7,22 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYDifferentiationCurve
-  \brief A xy-curve defined by an differentiation
-
-  \ingroup worksheet
-*/
-
 #include "XYDifferentiationCurve.h"
-#include "CartesianCoordinateSystem.h"
 #include "XYDifferentiationCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
-
-extern "C" {
-#include <gsl/gsl_errno.h>
-}
 
 #include <KLocalizedString>
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
 
+/*!
+ * \class XYDifferentiationCurve
+ * \brief A xy-curve defined by a differentiation.
+ * \ingroup CartesianAnalysisPlots
+ */
 XYDifferentiationCurve::XYDifferentiationCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYDifferentiationCurvePrivate(this), AspectType::XYDifferentiationCurve) {
 }
@@ -43,11 +35,6 @@ XYDifferentiationCurve::XYDifferentiationCurve(const QString& name, XYDifferenti
 // and is deleted during the cleanup in QGraphicsScene
 XYDifferentiationCurve::~XYDifferentiationCurve() = default;
 
-void XYDifferentiationCurve::recalculate() {
-	Q_D(XYDifferentiationCurve);
-	d->recalculate();
-}
-
 const XYAnalysisCurve::Result& XYDifferentiationCurve::result() const {
 	return differentiationResult();
 }
@@ -59,9 +46,9 @@ QIcon XYDifferentiationCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYDifferentiationCurve, XYDifferentiationCurve::DifferentiationData, differentiationData, differentiationData)
 
 const XYDifferentiationCurve::DifferentiationResult& XYDifferentiationCurve::differentiationResult() const {
@@ -69,18 +56,18 @@ const XYDifferentiationCurve::DifferentiationResult& XYDifferentiationCurve::dif
 	return d->differentiationResult;
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYDifferentiationCurve, SetDifferentiationData, XYDifferentiationCurve::DifferentiationData, differentiationData, recalculate)
 void XYDifferentiationCurve::setDifferentiationData(const XYDifferentiationCurve::DifferentiationData& differentiationData) {
 	Q_D(XYDifferentiationCurve);
 	exec(new XYDifferentiationCurveSetDifferentiationDataCmd(d, differentiationData, ki18n("%1: set options and perform the differentiation")));
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYDifferentiationCurvePrivate::XYDifferentiationCurvePrivate(XYDifferentiationCurve* owner)
 	: XYAnalysisCurvePrivate(owner)
 	, q(owner) {
@@ -180,9 +167,9 @@ bool XYDifferentiationCurvePrivate::recalculateSpecific(const AbstractColumn* tm
 	return true;
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYDifferentiationCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYDifferentiationCurve);
@@ -223,7 +210,6 @@ void XYDifferentiationCurve::save(QXmlStreamWriter* writer) const {
 bool XYDifferentiationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYDifferentiationCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -261,6 +247,10 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
@@ -283,7 +273,7 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
-		recalcLogicalPoints();
+		recalc();
 	}
 
 	return true;

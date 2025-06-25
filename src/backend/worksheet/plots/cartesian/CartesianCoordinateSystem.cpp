@@ -3,21 +3,17 @@
 	Project              : LabPlot
 	Description          : Cartesian coordinate system for plots.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2012-2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystemPrivate.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include <KLocalizedString>
 
-extern "C" {
 #include "backend/nsl/nsl_math.h"
-}
-
-using Dimension = CartesianCoordinateSystem::Dimension;
 
 /* ============================================================================ */
 /* ========================= coordinate system ================================ */
@@ -49,6 +45,9 @@ QString CartesianCoordinateSystem::dimensionToString(Dimension dim) {
 
 QString CartesianCoordinateSystem::info() const {
 	DEBUG(Q_FUNC_INFO)
+	if (!name().isEmpty())
+		return name();
+
 	if (d->plot)
 		return QString(QLatin1String("x = ") + d->plot->range(Dimension::X, d->xIndex).toString() + QLatin1String(", y = ")
 					   + d->plot->range(Dimension::Y, d->yIndex).toString());
@@ -56,9 +55,67 @@ QString CartesianCoordinateSystem::info() const {
 	return i18n("no info available");
 }
 
-//##############################################################################
-//######################### logical to scene mappers ###########################
-//##############################################################################
+// ##############################################################################
+// ######################### logical to scene mappers ###########################
+// ##############################################################################
+bool CartesianCoordinateSystem::mapXLogicalToScene(double& x, MappingFlags flags) const {
+	const QRectF pageRect = d->plot->dataRect();
+	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	const bool limit = flags & MappingFlag::Limit;
+	const double xPage = pageRect.x();
+	const double w = pageRect.width();
+
+	for (const auto* xScale : d->xScales) {
+		if (!xScale)
+			continue;
+
+		if (!xScale->contains(x))
+			continue;
+		if (!xScale->map(&x))
+			continue;
+
+		if (limit) {
+			// set to max/min if passed over
+			x = qBound(xPage, x, xPage + w);
+		}
+
+		if (noPageClipping || limit || !(nsl_math_definitely_less_than(x, xPage) || nsl_math_definitely_greater_than(x, xPage + w)))
+			return true;
+	}
+	return false;
+}
+
+bool CartesianCoordinateSystem::mapYLogicalToScene(double& y, MappingFlags flags) const {
+	const QRectF pageRect = d->plot->dataRect();
+	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
+	const bool limit = flags & MappingFlag::Limit;
+	const double yPage = pageRect.y();
+	const double h = pageRect.height();
+
+	for (const auto* yScale : d->yScales) {
+		if (!yScale)
+			continue;
+
+		if (!yScale->contains(y))
+			continue;
+		if (!yScale->map(&y))
+			continue;
+
+		if (limit) {
+			// set to max/min if passed over
+			y = qBound(yPage, y, yPage + h);
+		}
+
+		if (noPageClippingY)
+			y = yPage + h / 2.;
+
+		if (noPageClipping || limit || !(nsl_math_definitely_less_than(y, yPage) || nsl_math_definitely_greater_than(y, yPage + h)))
+			return true;
+	}
+	return false;
+}
+
 Points CartesianCoordinateSystem::mapLogicalToScene(const Points& points, MappingFlags flags) const {
 	// DEBUG(Q_FUNC_INFO << ", (points with flags)")
 	const QRectF pageRect = d->plot->dataRect();
@@ -313,7 +370,7 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 	double yGapBefore;
 	double yGapAfter = NAN;
 
-	DEBUG(Q_FUNC_INFO << ", xScales/yScales size: " << d->xScales.size() << '/' << d->yScales.size())
+	// DEBUG(Q_FUNC_INFO << ", xScales/yScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
 	QVectorIterator<CartesianScale*> xIterator(d->xScales);
 	while (xIterator.hasNext()) {
@@ -450,7 +507,7 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 				QLineF mappedLine(QPointF(x1, y1), QPointF(x2, y2));
 				if (doPageClipping) {
 					if (!AbstractCoordinateSystem::clipLineToRect(&mappedLine, pageRect)) {
-						DEBUG(Q_FUNC_INFO << ", WARNING: OMIT mapped line!")
+						// DEBUG(Q_FUNC_INFO << ", WARNING: OMIT mapped line!")
 						continue;
 					}
 				}
@@ -464,9 +521,9 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 	return result;
 }
 
-//##############################################################################
-//######################### scene to logical mappers ###########################
-//##############################################################################
+// ##############################################################################
+// ######################### scene to logical mappers ###########################
+// ##############################################################################
 Points CartesianCoordinateSystem::mapSceneToLogical(const Points& points, MappingFlags flags) const {
 	QRectF pageRect = d->plot->dataRect();
 	Points result;
@@ -720,9 +777,9 @@ bool CartesianCoordinateSystem::rectContainsPoint(const QRectF& rect, QPointF po
 	return true;
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 CartesianCoordinateSystemPrivate::CartesianCoordinateSystemPrivate(CartesianCoordinateSystem* owner)
 	: q(owner) {
 }

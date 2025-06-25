@@ -9,16 +9,14 @@
 */
 
 #include "NotebookTest.h"
-#include "backend/cantorWorksheet/VariableParser.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/notebook/VariableParser.h"
 
-extern "C" {
 #include <gsl/gsl_math.h>
-}
 
 void NotebookTest::initTestCase() {
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
+	CommonTest::initTestCase();
+
 	QLocale::setDefault(QLocale(QLocale::C));
 }
 
@@ -98,7 +96,7 @@ void NotebookTest::testParserPython02() {
 */
 void NotebookTest::testParserPython03() {
 	QString input = QStringLiteral("{1.0, 2.0}");
-	VariableParser parser(QStringLiteral("python"), input);
+	VariableParser parser(QStringLiteral("python"), std::move(input));
 
 	QCOMPARE(parser.isParsed(), true);
 	QCOMPARE(parser.dataType(), AbstractColumn::ColumnMode::Double);
@@ -227,6 +225,31 @@ void NotebookTest::testParserPython10() {
 	QTEST_ASSERT(res.at(0).toString(QStringLiteral("yyyy-MM-ddThh:mm:ss.zzz")) == QStringLiteral("2016-03-26T00:00:00.000"));
 	QTEST_ASSERT(res.at(1).toString(QStringLiteral("yyyy-MM-ddThh:mm:ss.zzz")) == QStringLiteral("2017-03-26T00:00:00.000"));
 	QTEST_ASSERT(res.at(2).toString(QStringLiteral("yyyy-MM-ddThh:mm:ss.zzz")) == QStringLiteral("2018-03-26T00:00:00.000"));
+}
+
+void NotebookTest::testParserDateTime64ns() {
+	// Testing datetime day
+	// example output taken from a column in panda's dataframe, contains line breaks after every second value
+	QString input = QStringLiteral(
+		"array(['2009-01-01T00:10:00.000000000', '2009-01-01T00:20:00.000000000',\n       '2009-01-01T00:30:00.000000000', '2009-01-01T00:40:00.000000000'],\n "
+		"      dtype='datetime64[ns]')");
+	VariableParser parser(QStringLiteral("python"), input);
+
+	QTEST_ASSERT(parser.dataType() == AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(parser.isParsed(), true);
+	auto res = parser.dateTime();
+
+	QCOMPARE(res.length(), 4);
+	QCOMPARE(res.at(0).isValid(), true);
+	QCOMPARE(res.at(1).isValid(), true);
+	QCOMPARE(res.at(2).isValid(), true);
+	QCOMPARE(res.at(3).isValid(), true);
+
+	// ns are read as ms at the moment, higher precision not supported yet.
+	QTEST_ASSERT(res.at(0).toString(QStringLiteral("yyyy-MM-ddThh:mm:ss.zzz")) == QStringLiteral("2009-01-01T00:10:00.000"));
+	QTEST_ASSERT(res.at(1).toString(QStringLiteral("yyyy-MM-ddThh:mm:ss.zzz")) == QStringLiteral("2009-01-01T00:20:00.000"));
+	QTEST_ASSERT(res.at(2).toString(QStringLiteral("yyyy-MM-ddThh:mm:ss.zzz")) == QStringLiteral("2009-01-01T00:30:00.000"));
+	QTEST_ASSERT(res.at(3).toString(QStringLiteral("yyyy-MM-ddThh:mm:ss.zzz")) == QStringLiteral("2009-01-01T00:40:00.000"));
 }
 
 //**********************************************************

@@ -14,7 +14,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 
-#include <KFilterDev>
+#include <KCompressionDevice>
 #include <KLocalizedString>
 #include <QDataStream>
 #include <QtEndian>
@@ -53,14 +53,14 @@ BinaryFilter::~BinaryFilter() = default;
 /*!
   reads the content of the file \c fileName.
 */
-void BinaryFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void BinaryFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 
 /*!
   reads the content of the device \c device.
 */
-void BinaryFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+void BinaryFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, ImportMode importMode, int lines) {
 	d->readDataFromDevice(device, dataSource, importMode, lines);
 }
 
@@ -100,7 +100,7 @@ int BinaryFilter::dataSize(BinaryFilter::DataType type) {
   returns the number of rows (length of vectors) in the file \c fileName.
 */
 size_t BinaryFilter::rowNumber(const QString& fileName, const size_t vectors, const BinaryFilter::DataType type, const size_t maxRows) {
-	KFilterDev device(fileName);
+	KCompressionDevice device(fileName);
 	if (!device.open(QIODevice::ReadOnly))
 		return 0;
 
@@ -115,19 +115,6 @@ size_t BinaryFilter::rowNumber(const QString& fileName, const size_t vectors, co
 	}
 
 	return rows;
-}
-
-///////////////////////////////////////////////////////////////////////
-/*!
-  loads the predefined filter settings for \c filterName
-*/
-void BinaryFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-  saves the current settings as a new filter with the name \c filterName
-*/
-void BinaryFilter::saveFilterSettings(const QString& /*filterName*/) const {
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -207,9 +194,9 @@ QString BinaryFilter::fileInfoString(const QString& /*fileName*/) {
 	return info;
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 
 BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner)
 	: q(owner) {
@@ -222,7 +209,7 @@ BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner)
 void BinaryFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	DEBUG(Q_FUNC_INFO);
 
-	KFilterDev device(fileName);
+	KCompressionDevice device(fileName);
 	numRows = BinaryFilter::rowNumber(fileName, vectors, dataType);
 
 	if (!device.open(QIODevice::ReadOnly)) {
@@ -280,19 +267,22 @@ int BinaryFilterPrivate::prepareStreamToRead(QDataStream& in) {
 */
 QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int lines) {
 	DEBUG(Q_FUNC_INFO << ", fileName = " << STDSTRING(fileName) << ", lines = " << lines);
-	QVector<QStringList> dataStrings;
 
-	KFilterDev device(fileName);
-	if (!device.open(QIODevice::ReadOnly))
-		return dataStrings << (QStringList() << i18n("could not open device"));
+	KCompressionDevice device(fileName);
+	if (!device.open(QIODevice::ReadOnly)) {
+		q->setLastError(i18n("Failed to open the device/file."));
+		return {};
+	}
 
 	numRows = BinaryFilter::rowNumber(fileName, vectors, dataType, lines);
 
 	QDataStream in(&device);
 	const int deviceError = prepareStreamToRead(in);
 
-	if (deviceError)
-		return dataStrings << (QStringList() << i18n("data selection empty"));
+	if (deviceError) {
+		q->setLastError(i18n("Data selection empty."));
+		return {};
+	}
 
 	// all columns as double is ok for preview
 	columnModes.resize(m_actualCols);
@@ -311,6 +301,7 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 	int progressIndex = 0;
 	const qreal progressInterval = 0.01 * lines; // update on every 1% only
 
+	QVector<QStringList> dataStrings;
 	for (int i = 0; i < lines; ++i) {
 		QStringList lineString;
 
@@ -410,6 +401,7 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 	if (deviceError) {
 		dataSource->clear();
 		DEBUG(Q_FUNC_INFO << ", Device error. Gving up");
+		q->setLastError(i18n("Failed to open the device/file or it's empty."));
 		return;
 	}
 
@@ -424,19 +416,16 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 	case BinaryFilter::DataType::INT32:
 	case BinaryFilter::DataType::UINT8:
 	case BinaryFilter::DataType::UINT16:
-		for (auto& c : columnModes)
-			c = AbstractColumn::ColumnMode::Integer;
+		columnModes.fill(AbstractColumn::ColumnMode::Integer);
 		break;
 	case BinaryFilter::DataType::UINT32:
 	case BinaryFilter::DataType::INT64:
-		for (auto& c : columnModes)
-			c = AbstractColumn::ColumnMode::BigInt;
+		columnModes.fill(AbstractColumn::ColumnMode::BigInt);
 		break;
 	case BinaryFilter::DataType::UINT64:
 	case BinaryFilter::DataType::REAL32:
 	case BinaryFilter::DataType::REAL64:
-		for (auto& c : columnModes)
-			c = AbstractColumn::ColumnMode::Double;
+		columnModes.fill(AbstractColumn::ColumnMode::Double);
 		break;
 	}
 
@@ -449,7 +438,12 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 	}
 
 	std::vector<void*> dataContainer;
-	int columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
+	bool ok = false;
+	int columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes, ok);
+	if (!ok) {
+		q->setLastError(i18n("Not enough memory."));
+		return;
+	}
 
 	if (lines == -1)
 		lines = m_actualRows;
@@ -534,9 +528,9 @@ void BinaryFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource*
 	// TODO: writing binary files not supported yet
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 /*!
   Saves as XML.
@@ -559,61 +553,60 @@ void BinaryFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool BinaryFilter::load(XmlStreamReader* reader) {
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 
 	// read attributes
 	QString str = attribs.value(QStringLiteral("vectors")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("vectors")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("vectors"));
 	else
 		d->vectors = (size_t)str.toULong();
 
 	str = attribs.value(QStringLiteral("dataType")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("dataType")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("dataType"));
 	else
 		d->dataType = (BinaryFilter::DataType)str.toInt();
 
 	str = attribs.value(QStringLiteral("byteOrder")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("byteOrder")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("byteOrder"));
 	else
 		d->byteOrder = (QDataStream::ByteOrder)str.toInt();
 
 	str = attribs.value(QStringLiteral("autoMode")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("autoMode")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("autoMode"));
 	else
 		d->autoModeEnabled = str.toInt();
 
 	str = attribs.value(QStringLiteral("startRow")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("startRow")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("startRow"));
 	else
 		d->startRow = str.toInt();
 
 	str = attribs.value(QStringLiteral("endRow")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("endRow")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("endRow"));
 	else
 		d->endRow = str.toInt();
 
 	str = attribs.value(QStringLiteral("skipStartBytes")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("skipStartBytes")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("skipStartBytes"));
 	else
 		d->skipStartBytes = (size_t)str.toULong();
 
 	str = attribs.value(QStringLiteral("skipBytes")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("skipBytes")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("skipBytes"));
 	else
 		d->skipBytes = (size_t)str.toULong();
 
 	str = attribs.value(QStringLiteral("createIndex")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("createIndex")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("createIndex"));
 	else
 		d->createIndexEnabled = str.toInt();
 

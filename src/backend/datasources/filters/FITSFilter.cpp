@@ -18,11 +18,16 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/matrix/MatrixModel.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "commonfrontend/matrix/MatrixView.h"
+#ifndef SDK
+#include "frontend/matrix/MatrixView.h"
+#endif
 
-#include <QDebug>
+#include <KLocalizedString>
+
 #include <QFile>
 #include <QMultiMap>
+#include <QTableWidget>
+#include <QTreeWidget>
 
 /*! \class FITSFilter
  * \brief Manages the import/export of data from/to a FITS file.
@@ -36,12 +41,12 @@ FITSFilter::FITSFilter()
 
 FITSFilter::~FITSFilter() = default;
 
-void FITSFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+void FITSFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
 	d->readCHDU(fileName, dataSource, importMode);
 }
 
 QVector<QStringList> FITSFilter::readChdu(const QString& fileName, bool* okToMatrix, int lines) {
-	return d->readCHDU(fileName, nullptr, AbstractFileFilter::ImportMode::Replace, okToMatrix, lines);
+	return d->readCHDU(fileName, nullptr, ImportMode::Replace, okToMatrix, lines);
 }
 
 void FITSFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
@@ -78,12 +83,6 @@ void FITSFilter::parseExtensions(const QString& fileName, QTreeWidget* tw, bool 
 
 QList<FITSFilter::Keyword> FITSFilter::chduKeywords(const QString& fileName) {
 	return d->chduKeywords(fileName);
-}
-
-void FITSFilter::loadFilterSettings(const QString& /*fileName*/) {
-}
-
-void FITSFilter::saveFilterSettings(const QString& /*fileName*/) const {
 }
 
 /*!
@@ -237,9 +236,9 @@ QString FITSFilter::fileInfoString(const QString& fileName) {
 	return info;
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 
 FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner)
 	: q(owner) {
@@ -254,22 +253,24 @@ FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner)
 QVector<QStringList>
 FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, bool* okToMatrix, int lines) {
 	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(fileName));
-	QVector<QStringList> dataStrings;
 
+	QVector<QStringList> dataStrings;
 #ifdef HAVE_FITS
 	int status = 0;
 
 	if (fits_open_file(&m_fitsFile, qPrintable(fileName), READONLY, &status)) {
 		DEBUG(Q_FUNC_INFO << ", ERROR opening file " << STDSTRING(fileName));
 		printError(status);
-		return dataStrings;
+		q->setLastError(i18n("Failed to open the file."));
+		return {};
 	}
 
 	int chduType;
 
 	if (fits_get_hdu_type(m_fitsFile, &chduType, &status)) {
 		printError(status);
-		return dataStrings;
+		q->setLastError(i18n("Failed to read the file."));
+		return {};
 	}
 
 	long actualRows;
@@ -285,11 +286,13 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 
 		if (fits_get_img_param(m_fitsFile, maxdim, &bitpix, &naxis, naxes, &status)) {
 			printError(status);
-			return dataStrings;
+			return {};
 		}
 
-		if (naxis == 0)
-			return dataStrings;
+		if (naxis == 0) {
+			q->setLastError(i18n("Zero dimensions."));
+			return {};
+		}
 		actualRows = naxes[1];
 		actualCols = naxes[0];
 		DEBUG("rows/cols = " << actualRows << " " << actualCols)
@@ -306,8 +309,6 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 		}
 		if (endColumn != -1)
 			actualCols = endColumn;
-		if (!dataSource)
-			dataStrings.reserve(lines);
 
 		int i = 0;
 		int j = 0;
@@ -327,7 +328,12 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 		std::vector<void*> dataContainer;
 		if (dataSource) {
 			dataContainer.reserve(actualCols - j);
-			columnOffset = dataSource->prepareImport(dataContainer, importMode, lines - i, actualCols - j, vectorNames, columnModes);
+			bool ok = false;
+			columnOffset = dataSource->prepareImport(dataContainer, importMode, lines - i, actualCols - j, vectorNames, columnModes, ok);
+			if (!ok) {
+				q->setLastError(i18n("Not enough memory."));
+				return {};
+			}
 		}
 
 		long pixelCount = lines * actualCols;
@@ -335,17 +341,21 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 
 		if (!data) {
 			DEBUG(Q_FUNC_INFO << ", Not enough memory for data");
-			return dataStrings;
+			q->setLastError(i18n("Not enough memory."));
+			return {};
 		}
 
 		// TODO: other types
 		if (fits_read_img(m_fitsFile, TDOUBLE, 1, pixelCount, nullptr, data, nullptr, &status)) {
 			printError(status);
-			return dataStrings << (QStringList() << QLatin1String("Error"));
+			q->setLastError(i18n("Failed to read the file."));
+			return {};
 		}
 
 		int ii = 0;
 		DEBUG("	Import " << lines << " lines");
+		if (!dataSource) // preview
+			dataStrings.reserve(lines);
 		for (; i < lines; ++i) {
 			int jj = 0;
 			QStringList line;
@@ -517,7 +527,18 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 			} else {
 				numericDataPointers.reserve(matrixNumericColumnIndices.size());
 
-				columnOffset = dataSource->prepareImport(numericDataPointers, importMode, lines - startRrow, matrixNumericColumnIndices.size());
+				bool ok = false;
+				columnOffset = dataSource->prepareImport(numericDataPointers,
+														 importMode,
+														 lines - startRrow,
+														 matrixNumericColumnIndices.size(),
+														 QStringList{},
+														 QVector<AbstractColumn::ColumnMode>{},
+														 ok);
+				if (!ok) {
+					q->setLastError(i18n("Not enough memory."));
+					return dataStrings;
+				}
 			}
 		}
 
@@ -669,10 +690,16 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 			tform.squeeze();
 			// TODO: mode
 			const QVector<QVector<double>>* const matrixData = static_cast<QVector<QVector<double>>*>(matrix->data());
+#ifndef SDK
 			const MatrixModel* matrixModel = static_cast<MatrixView*>(matrix->view())->model();
+#endif
 			const int precision = matrix->precision();
 			for (int i = 0; i < tfields; ++i) {
+#ifndef SDK
 				const QString& columnName = matrixModel->headerData(i, Qt::Horizontal).toString();
+#else
+				const QString columnName;
+#endif
 				columnNames[i] = new char[columnName.size() + 1];
 				strcpy(columnNames[i], columnName.toLatin1().constData());
 				int maxSize = -1;
@@ -1057,6 +1084,7 @@ void FITSFilterPrivate::printError(int status) const {
 	if (status) {
 		char errorText[FLEN_ERRMSG];
 		fits_get_errstatus(status, errorText);
+		q->setLastError(i18n(errorText));
 		qDebug() << QLatin1String(errorText);
 	}
 #else
@@ -1313,9 +1341,8 @@ void FITSFilterPrivate::addKeywordUnit(const QString& fileName, const QList<FITS
  */
 void FITSFilterPrivate::removeExtensions(const QStringList& extensions) {
 #ifdef HAVE_FITS
-	int status = 0;
 	for (const auto& ext : extensions) {
-		status = 0;
+		int status = 0;
 		if (fits_open_file(&m_fitsFile, qPrintable(ext), READWRITE, &status)) {
 			printError(status);
 			continue;
@@ -1577,9 +1604,9 @@ void FITSFilterPrivate::parseExtensions(const QString& fileName, QTreeWidget* tw
 
 FITSFilterPrivate::~FITSFilterPrivate() = default;
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 /*!
   Saves as XML.

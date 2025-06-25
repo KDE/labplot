@@ -18,12 +18,17 @@ extern "C" {
 
 class XYCorrelationCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYCorrelationCurve : public XYAnalysisCurve {
+#else
 class XYCorrelationCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:
 	struct CorrelationData {
-		CorrelationData(){};
+		CorrelationData() { };
 
 		double samplingInterval{1.}; // sampling interval used when no x-axis is present
 		nsl_corr_type_type type{nsl_corr_type_linear}; // linear or circular
@@ -39,7 +44,6 @@ public:
 	typedef XYAnalysisCurve::Result CorrelationResult;
 	virtual const XYAnalysisCurve::Result& result() const override;
 
-	void recalculate() override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

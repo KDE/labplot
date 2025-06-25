@@ -11,65 +11,76 @@
 #ifndef EXPRESSIONPARSER_H
 #define EXPRESSIONPARSER_H
 
+#include "backend/gsl/ParserDeclarations.h"
 #include "backend/lib/Range.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
-#include <QVector>
 
-class QStringList;
+#include <QVector>
 
 class ExpressionParser {
 public:
 	static ExpressionParser* getInstance();
 	static int functionArgumentCount(const QString& functionName);
+	static QString parameters(const QString& functionName);
 	static QString functionArgumentString(const QString& functionName, const XYEquationCurve::EquationType);
 	QString functionDescription(const QString& function);
 	QString constantDescription(const QString& constant);
+	void setSpecialFunctionValuePayload(const char* function_name, Parsing::func_tValuePayload, std::shared_ptr<Parsing::Payload> payload);
+	void setSpecialFunction2ValuePayload(const char* function_name, Parsing::func_t2ValuePayload, std::shared_ptr<Parsing::Payload> payload);
+	void setSpecialFunctionVariablePayload(const char* function_name, Parsing::func_tVariablePayload funct, std::shared_ptr<Parsing::Payload> payload);
+	void
+	setSpecialFunctionValueVariablePayload(const char* function_name, Parsing::func_tValueVariablePayload funct, std::shared_ptr<Parsing::Payload> payload);
 
-	bool isValid(const QString& expr, const QStringList& vars);
+	static bool isValid(const QString& expr, const QStringList& vars = QStringList());
 	QStringList getParameter(const QString& expr, const QStringList& vars);
-	bool evaluateCartesian(const QString& expr,
-						   Range<double> range,
-						   int count,
-						   QVector<double>* xVector,
-						   QVector<double>* yVector,
-						   const QStringList& paramNames,
-						   const QVector<double>& paramValues);
-	bool evaluateCartesian(const QString& expr,
-						   const QString& min,
-						   const QString& max,
-						   int count,
-						   QVector<double>* xVector,
-						   QVector<double>* yVector,
-						   const QStringList& paramNames,
-						   const QVector<double>& paramValues);
-	bool evaluateCartesian(const QString& expr, const QString& min, const QString& max, int count, QVector<double>* xVector, QVector<double>* yVector);
-	bool evaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector);
-	bool evaluateCartesian(const QString& expr,
-						   const QVector<double>* xVector,
-						   QVector<double>* yVector,
-						   const QStringList& paramNames,
-						   const QVector<double>& paramValues);
-	bool evaluateCartesian(const QString& expr, const QStringList& vars, const QVector<QVector<double>*>& xVectors, QVector<double>* yVector);
-	bool evaluatePolar(const QString& expr, const QString& min, const QString& max, int count, QVector<double>* xVector, QVector<double>* yVector);
-	bool evaluateParametric(const QString& expr1,
-							const QString& expr2,
-							const QString& min,
-							const QString& max,
-							int count,
-							QVector<double>* xVector,
-							QVector<double>* yVector);
+	bool tryEvaluateCartesian(const QString& expr,
+							  Range<double> range,
+							  int count,
+							  QVector<double>* xVector,
+							  QVector<double>* yVector,
+							  const QStringList& paramNames,
+							  const QVector<double>& paramValues);
+	bool tryEvaluateCartesian(const QString& expr,
+							  const QString& min,
+							  const QString& max,
+							  int count,
+							  QVector<double>* xVector,
+							  QVector<double>* yVector,
+							  const QStringList& paramNames,
+							  const QVector<double>& paramValues);
+	bool tryEvaluateCartesian(const QString& expr, const QString& min, const QString& max, int count, QVector<double>* xVector, QVector<double>* yVector);
+	bool tryEvaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector);
+	bool tryEvaluateCartesian(const QString& expr,
+							  const QVector<double>* xVector,
+							  QVector<double>* yVector,
+							  const QStringList& paramNames,
+							  const QVector<double>& paramValues);
+	bool tryEvaluateCartesian(const QString& expr,
+							  const QStringList& vars,
+							  const QVector<QVector<double>*>& xVectors,
+							  QVector<double>* yVector,
+							  bool performanceOptimization = true);
+	bool tryEvaluatePolar(const QString& expr, const QString& min, const QString& max, int count, QVector<double>* xVector, QVector<double>* yVector);
+	bool tryEvaluateParametric(const QString& expr1,
+							   const QString& expr2,
+							   const QString& min,
+							   const QString& max,
+							   int count,
+							   QVector<double>* xVector,
+							   QVector<double>* yVector);
+	QString errorMessage() const;
 
 	const QStringList& functions();
 	const QStringList& functionsGroups();
-	const QStringList& functionsNames();
-	const QVector<int>& functionsGroupIndices();
+	const QStringList& functionsDescriptions();
+	const QVector<Parsing::FunctionGroups>& functionsGroupIndices();
 
 	const QStringList& constants();
 	const QStringList& constantsGroups();
 	const QStringList& constantsNames();
 	const QStringList& constantsValues();
 	const QStringList& constantsUnits();
-	const QVector<int>& constantsGroupIndices();
+	const QVector<Parsing::ConstantGroups>& constantsGroupIndices();
 
 private:
 	ExpressionParser();
@@ -82,14 +93,15 @@ private:
 
 	QStringList m_functions;
 	QStringList m_functionsGroups;
-	QStringList m_functionsNames;
-	QVector<int> m_functionsGroupIndex;
+	QStringList m_functionsDescription;
+	QVector<Parsing::FunctionGroups> m_functionsGroupIndex;
 
 	QStringList m_constants;
 	QStringList m_constantsGroups;
-	QStringList m_constantsNames;
+	QStringList m_constantsDescription;
 	QStringList m_constantsValues;
 	QStringList m_constantsUnits;
-	QVector<int> m_constantsGroupIndex;
+	QVector<Parsing::ConstantGroups> m_constantsGroupIndex;
+	QString m_lastErrorMessage;
 };
 #endif

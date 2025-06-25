@@ -14,6 +14,8 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 
+#include <KLocalizedString>
+
 //////////////////////////////////////////////////////////////////////
 CANFilter::CANFilter(FileType type, CANFilterPrivate* p)
 	: AbstractFileFilter(type)
@@ -25,7 +27,7 @@ CANFilter::~CANFilter() = default;
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void CANFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+void CANFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode mode) {
 	d->readDataFromFile(fileName, dataSource, mode);
 }
 
@@ -37,24 +39,6 @@ void CANFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
 }
 
 ///////////////////////////////////////////////////////////////////////
-/*!
-  loads the predefined filter settings for \c filterName
-*/
-void CANFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-  saves the current settings as a new filter with the name \c filterName
-*/
-void CANFilter::saveFilterSettings(const QString& /*filterName*/) const {
-}
-
-///////////////////////////////////////////////////////////////////////
-
-QStringList CANFilter::lastErrors() {
-	return d->lastErrors();
-}
-
 QStringList CANFilter::vectorNames() const {
 	return d->m_signals.signal_names;
 }
@@ -97,9 +81,9 @@ std::vector<void*> CANFilter::dataContainer() const {
 	return d->m_DataContainer.dataContainer();
 }
 
-//#####################################################################
-//################### Private implementation ##########################
-//#####################################################################
+// #####################################################################
+// ################### Private implementation ##########################
+// #####################################################################
 void CANFilterPrivate::DataContainer::clear() {
 	for (uint i = 0; i < m_dataContainer.size(); i++) {
 		switch (m_columnModes.at(i)) {
@@ -232,15 +216,18 @@ CANFilterPrivate::CANFilterPrivate(CANFilter* owner)
 	returns -1 on error
 */
 QVector<QStringList> CANFilterPrivate::preview(const QString& fileName, int lines) {
-	if (!isValid(fileName))
-		return QVector<QStringList>();
+	if (!isValid(fileName)) {
+		q->setLastError(i18n("Invalid file."));
+		return {};
+	}
 
 	const int readMessages = readDataFromFile(fileName, lines);
-	if (readMessages == 0)
-		return QVector<QStringList>();
+	if (readMessages == 0) {
+		q->setLastError(i18n("No messages read."));
+		return {};
+	}
 
 	QVector<QStringList> strings;
-
 	for (int i = 0; i < readMessages; i++) {
 		QStringList l;
 		for (size_t c = 0; c < m_DataContainer.size(); c++) {
@@ -250,17 +237,17 @@ QVector<QStringList> CANFilterPrivate::preview(const QString& fileName, int line
 
 			switch (m_DataContainer.columnMode(c)) {
 			case AbstractColumn::ColumnMode::BigInt: {
-				const auto v = *static_cast<const QVector<qint64>*>(data_ptr);
+				const auto& v = *static_cast<const QVector<qint64>*>(data_ptr);
 				l.append(QString::number(v.at(i)));
 				break;
 			}
 			case AbstractColumn::ColumnMode::Integer: {
-				const auto v = *static_cast<const QVector<qint32>*>(data_ptr);
+				const auto& v = *static_cast<const QVector<qint32>*>(data_ptr);
 				l.append(QString::number(v.at(i)));
 				break;
 			}
 			case AbstractColumn::ColumnMode::Double: {
-				const auto v = *static_cast<const QVector<double>*>(data_ptr);
+				const auto& v = *static_cast<const QVector<double>*>(data_ptr);
 				l.append(QString::number(v.at(i)));
 				break;
 			}
@@ -306,12 +293,20 @@ int CANFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSour
 		return 0;
 
 	auto dc = m_DataContainer.dataContainer();
-	const int columnOffset = dataSource->prepareImport(dc, mode, rows, m_signals.signal_names.length(), m_signals.signal_names, columnModes(), false);
-	dataSource->finalizeImport(columnOffset);
+	bool ok = false;
+
+	// apply datacontainer data to the dataSource
+	const int columnOffset = dataSource->prepareImport(dc, mode, rows, m_signals.signal_names.length(), m_signals.signal_names, columnModes(), ok, false);
+	if (!ok) {
+		q->setLastError(i18n("Not enough memory."));
+		return 0;
+	}
+
+	dataSource->finalizeImport(columnOffset, 0, m_signals.signal_names.length() - 1);
 
 	// Assign value labels to the column
 	auto columns = dataSource->children<Column>();
-	if (columns.size() == m_signals.value_descriptions.size()) {
+	if ((size_t)columns.size() == m_signals.value_descriptions.size()) {
 		int counter = 0;
 		auto signal_descriptions = m_signals.value_descriptions.begin();
 		while (signal_descriptions != m_signals.value_descriptions.end()) {
@@ -337,16 +332,16 @@ void CANFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* /*
 }
 
 bool CANFilterPrivate::setDBCFile(const QString& filename) {
-	return m_dbcParser.parseFile(filename);
+	return m_dbcParser.parseFile(filename) == DbcParser::ParseStatus::Success;
 }
 
 const QVector<AbstractColumn::ColumnMode> CANFilterPrivate::columnModes() {
 	return m_DataContainer.columnModes();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
 /*!
   Saves as XML.
@@ -360,7 +355,5 @@ void CANFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool CANFilter::load(XmlStreamReader*) {
-	// 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
-	// 	QXmlStreamAttributes attribs = reader->attributes();
 	return true;
 }

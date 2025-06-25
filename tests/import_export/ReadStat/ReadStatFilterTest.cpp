@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for the ReadStat I/O-filter.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2021-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -151,9 +151,15 @@ void ReadStatFilterTest::testSAVImport() {
 
 	// check value label
 	QVERIFY(spreadsheet.column(4)->valueLabels() != nullptr);
-	QCOMPARE(spreadsheet.column(4)->valueLabels()->value(1), QLatin1String("setosa"));
-	QCOMPARE(spreadsheet.column(4)->valueLabels()->value(2), QLatin1String("versicolor"));
-	QCOMPARE(spreadsheet.column(4)->valueLabels()->value(3), QLatin1String("virginica"));
+	QCOMPARE(spreadsheet.column(4)->valueLabels()->count(), 3);
+	for (const auto& vl : *spreadsheet.column(4)->valueLabels()) {
+		if (vl.value == 1)
+			QCOMPARE(vl.label, QLatin1String("setosa"));
+		if (vl.value == 2)
+			QCOMPARE(vl.label, QLatin1String("versicolor"));
+		if (vl.value == 3)
+			QCOMPARE(vl.label, QLatin1String("virginica"));
+	}
 }
 
 void ReadStatFilterTest::testPORImport() {
@@ -234,11 +240,24 @@ void ReadStatFilterTest::testPORImport() {
 
 	// check value label
 	QVERIFY(spreadsheet.column(4)->valueLabels() != nullptr);
-	QCOMPARE(spreadsheet.column(4)->valueLabels()->value(1), QLatin1String("Male"));
-	QCOMPARE(spreadsheet.column(4)->valueLabels()->value(2), QLatin1String("Female"));
-	QCOMPARE(spreadsheet.column(5)->valueLabels()->value(1), QLatin1String("low"));
-	QCOMPARE(spreadsheet.column(5)->valueLabels()->value(2), QLatin1String("medium"));
-	QCOMPARE(spreadsheet.column(5)->valueLabels()->value(3), QLatin1String("high"));
+	QCOMPARE(spreadsheet.column(4)->valueLabels()->count(), 2);
+	for (const auto& vl : *spreadsheet.column(4)->valueLabels()) {
+		if (vl.value == 1)
+			QCOMPARE(vl.label, QLatin1String("Male"));
+		if (vl.value == 2)
+			QCOMPARE(vl.label, QLatin1String("Female"));
+	}
+
+	QVERIFY(spreadsheet.column(5)->valueLabels() != nullptr);
+	QCOMPARE(spreadsheet.column(5)->valueLabels()->count(), 3);
+	for (const auto& vl : *spreadsheet.column(5)->valueLabels()) {
+		if (vl.value == 1)
+			QCOMPARE(vl.label, QLatin1String("low"));
+		if (vl.value == 2)
+			QCOMPARE(vl.label, QLatin1String("medium"));
+		if (vl.value == 3)
+			QCOMPARE(vl.label, QLatin1String("high"));
+	}
 }
 
 void ReadStatFilterTest::testXPTImport() {

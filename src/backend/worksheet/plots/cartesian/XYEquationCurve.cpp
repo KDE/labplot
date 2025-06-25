@@ -8,16 +8,8 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYEquationCurve
-  \brief A xy-curve defined by a mathematical equation
-
-  \ingroup worksheet
-*/
-
 #include "XYEquationCurve.h"
 #include "XYEquationCurvePrivate.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/Folder.h"
 #include "backend/core/column/Column.h"
 #include "backend/gsl/ExpressionParser.h"
@@ -29,6 +21,11 @@
 #include <KLocalizedString>
 #include <QIcon>
 
+/*!
+ * \class XYEquationCurve
+ * \brief A xy-curve defined by a mathematical equation.
+ * \ingroup CartesianAnalysisPlots
+ */
 XYEquationCurve::XYEquationCurve(const QString& name)
 	: XYCurve(name, new XYEquationCurvePrivate(this), AspectType::XYEquationCurve) {
 	init();
@@ -81,14 +78,14 @@ QIcon XYEquationCurve::icon() const {
 	return QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve"));
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYEquationCurve, XYEquationCurve::EquationData, equationData, equationData)
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(XYEquationCurve, SetEquationData, XYEquationCurve::EquationData, equationData, recalculate)
 void XYEquationCurve::setEquationData(const XYEquationCurve::EquationData& equationData) {
 	Q_D(XYEquationCurve);
@@ -97,9 +94,9 @@ void XYEquationCurve::setEquationData(const XYEquationCurve::EquationData& equat
 		exec(new XYEquationCurveSetEquationDataCmd(d, equationData, ki18n("%1: set equation")));
 }
 
-//##############################################################################
-//#################################  SLOTS  ####################################
-//##############################################################################
+// ##############################################################################
+// #################################  SLOTS  ####################################
+// ##############################################################################
 
 /*!
  * creates a new spreadsheet having the data with the results of the calculation.
@@ -129,9 +126,9 @@ void XYEquationCurve::createDataSpreadsheet() {
 	folder()->addChild(spreadsheet);
 }
 
-//##############################################################################
-//######################### Private implementation #############################
-//##############################################################################
+// ##############################################################################
+// ######################### Private implementation #############################
+// ##############################################################################
 XYEquationCurvePrivate::XYEquationCurvePrivate(XYEquationCurve* owner)
 	: XYCurvePrivate(owner)
 	, xColumn(new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double))
@@ -155,7 +152,7 @@ void XYEquationCurvePrivate::recalculate() {
 			// invalid number of points provided
 			xVector->clear();
 			yVector->clear();
-			recalcLogicalPoints();
+			recalc();
 			Q_EMIT q->dataChanged();
 			return;
 		}
@@ -166,36 +163,36 @@ void XYEquationCurvePrivate::recalculate() {
 			return;
 	}
 
-	ExpressionParser* parser = ExpressionParser::getInstance();
-	bool rc = false;
+	auto* parser = ExpressionParser::getInstance();
+	bool valid = false;
 	if (equationData.type == XYEquationCurve::EquationType::Cartesian) {
-		rc = parser->evaluateCartesian(equationData.expression1, equationData.min, equationData.max, equationData.count, xVector, yVector);
+		valid = parser->tryEvaluateCartesian(equationData.expression1, equationData.min, equationData.max, equationData.count, xVector, yVector);
 	} else if (equationData.type == XYEquationCurve::EquationType::Polar) {
-		rc = parser->evaluatePolar(equationData.expression1, equationData.min, equationData.max, equationData.count, xVector, yVector);
+		valid = parser->tryEvaluatePolar(equationData.expression1, equationData.min, equationData.max, equationData.count, xVector, yVector);
 	} else if (equationData.type == XYEquationCurve::EquationType::Parametric) {
-		rc = parser->evaluateParametric(equationData.expression1,
-										equationData.expression2,
-										equationData.min,
-										equationData.max,
-										equationData.count,
-										xVector,
-										yVector);
+		valid = parser->tryEvaluateParametric(equationData.expression1,
+											  equationData.expression2,
+											  equationData.min,
+											  equationData.max,
+											  equationData.count,
+											  xVector,
+											  yVector);
 	}
 
-	if (!rc) {
+	if (!valid) {
 		xVector->clear();
 		yVector->clear();
 	}
 	xColumn->invalidateProperties();
 	yColumn->invalidateProperties();
 
-	recalcLogicalPoints();
+	recalc();
 	Q_EMIT q->dataChanged();
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void XYEquationCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYEquationCurve);
@@ -222,7 +219,6 @@ void XYEquationCurve::save(QXmlStreamWriter* writer) const {
 bool XYEquationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYEquationCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -246,6 +242,10 @@ bool XYEquationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_STRING_VALUE("min", equationData.min);
 			READ_STRING_VALUE("max", equationData.max);
 			READ_INT_VALUE("count", equationData.count, int);
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

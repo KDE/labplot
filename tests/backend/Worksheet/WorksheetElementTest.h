@@ -1,7 +1,7 @@
 /*
-	File                 : WorksheetTest.h
+	File                 : WorksheetElementTest.h
 	Project              : LabPlot
-	Description          : Tests for Worksheets and positioning them on the plot
+	Description          : Tests for WorksheetElements and positioning them on the plot
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2023 Martin Marmsoler <martin.marmsoler@gmail.com>
 
@@ -41,17 +41,42 @@ private Q_SLOTS:
 	ALL_WORKSHEET_TESTS_DEFINITION(TextLabel)
 	ALL_WORKSHEET_TESTS_DEFINITION(Image)
 
+	// tests for ReferenceRange
+	void testReferenceRangeInit();
+	void testReferenceRangeDuplicate();
 	void referenceRangeXMouseMove();
 	void referenceRangeYMouseMove();
-
 	void referenceRangeXClippingLeftMouse();
 	void referenceRangeXClippingLeftSetStart();
 	void referenceRangeXClippingRightSetEnd();
-
 	void referenceRangeYClippingBottomSetEnd();
 	void referenceRangeYClippingTopSetEnd();
-
 	void referenceRangeYKeyPressUp();
+	void referenceRangeSaveLoad();
+
+	// tests for ReferenceLine
+	void testReferenceLineInit();
+	void testReferenceLineDuplicate();
+	void referenceLineLinearScaling();
+	void referenceLineLog10Scaling();
+	void referenceLineSquareScaling();
+	void referenceLineSqrtScaling();
+	void referenceLineInverseScaling();
+
+	// general tests
+	void moveElementBefore();
+	void moveElementAfter();
+	void prepareDrawingMenu();
+
+	void moveTreeModelInteraction();
+
+	// relative positioning
+	void mouseMoveRelative();
+	void mouseMoveRelativeWithBinding();
+	void positionRelative();
+	void positionRelativeWithBinding();
+	void positionRelativeDock();
+	void positionRelativeDockWithBinding();
 };
 
 #endif // WORKSHEETELEMENTTEST_H

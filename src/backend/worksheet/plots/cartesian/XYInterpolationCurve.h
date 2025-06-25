@@ -14,18 +14,23 @@
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 extern "C" {
 #include "backend/nsl/nsl_interp.h"
-#include <gsl/gsl_version.h>
 }
+#include <gsl/gsl_version.h>
 
 class XYInterpolationCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYInterpolationCurve : public XYAnalysisCurve {
+#else
 class XYInterpolationCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:
 	enum class PointsMode { Auto, Multiple, Custom };
 	struct InterpolationData {
-		InterpolationData(){};
+		InterpolationData() { };
 
 		nsl_interp_type type{nsl_interp_type_linear}; // type of interpolation
 		nsl_interp_pch_variant variant{nsl_interp_pch_variant_finite_difference}; // variant of cubic Hermite interpolation
@@ -40,8 +45,6 @@ public:
 
 	explicit XYInterpolationCurve(const QString& name);
 	~XYInterpolationCurve() override;
-
-	void recalculate() override;
 
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;

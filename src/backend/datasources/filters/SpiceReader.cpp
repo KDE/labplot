@@ -11,9 +11,7 @@
 #include "backend/lib/macros.h"
 
 #include <QDataStream>
-#include <QTextCodec>
-
-#include <cmath>
+#include <QStringDecoder>
 
 void SpiceFileReader::init() {
 	bool ok;
@@ -27,14 +25,14 @@ void SpiceFileReader::init() {
 	QTextStream stream(&mFile);
 
 	// Determine if ltspice or ngspice or none of both
-	QByteArray l = mFile.readLine();
-	int pos = l.count();
+	auto l = mFile.readLine();
+	int pos = l.length();
 	if (!QLatin1String(l).startsWith(QLatin1String("Title:"))) {
 		if (!convertLTSpiceBinary(l).startsWith(QLatin1String("Title:")))
 			return;
 		mNgspice = false;
 		mInfoString += convertLTSpiceBinary(l + mFile.read(1)); // because of utf16 end of line "\n 0x00" the 0x00 must be flushed
-		stream.setCodec(QTextCodec::codecForMib(1015));
+		stream.setEncoding(QStringConverter::Utf16);
 		pos++;
 	} else // title: removed trailing '\r' and '\n'
 		addInfoStringLine(QLatin1String(l).trimmed());
@@ -218,7 +216,7 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 	} else { // Ascii
 		QTextStream stream(&mFile);
 		if (!mNgspice)
-			stream.setCodec(QTextCodec::codecForMib(1015));
+			stream.setEncoding(QStringConverter::Utf16);
 
 		for (int s = 0; s < skipLines; s++) {
 			for (int i = 0; i < mVariables.count(); i++)
@@ -234,7 +232,7 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 		for (int l = 0; l < points; l++) {
 			for (int j = 0; j < mVariables.count(); j++) {
 				line = stream.readLine();
-				QStringList tokens = line.split(QLatin1Char('\t'));
+				auto tokens = line.split(QLatin1Char('\t'));
 
 				// skip lines that don't contain the proper number of tokens (wrong format, corrupted file)
 				if (tokens.size() < 2)
@@ -242,7 +240,7 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 
 				QString valueString = tokens.at(1).simplified(); // string containing the value(s), 0 is the index of the data
 				if (isComplex) {
-					QStringList realImgTokens = valueString.split(QLatin1Char(','));
+					auto realImgTokens = valueString.split(QLatin1Char(','));
 					if (realImgTokens.size() == 2) { // sanity check to make sure we really have both parts
 						// real part
 						double value = locale.toDouble(realImgTokens.at(0), &isNumber);
@@ -268,10 +266,8 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 }
 
 QString SpiceFileReader::convertLTSpiceBinary(const QByteArray& s) {
-	// (1015 is UTF-16, 1014 is UTF-16LE, 1013 is UTF-16BE, 106 is UTF-8)
-	// https://stackoverflow.com/questions/14131127/qbytearray-to-qstring
-
-	return QTextCodec::codecForMib(1015)->toUnicode(s);
+	auto toUtf16 = QStringDecoder(QStringDecoder::Utf16);
+	return toUtf16(s);
 }
 
 SpiceFileReader::PlotMode SpiceFileReader::plotNameToPlotMode(const QString& name) {

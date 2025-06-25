@@ -10,7 +10,7 @@
 
 #include "MatrixTest.h"
 #include "backend/matrix/Matrix.h"
-#include "commonfrontend/matrix/MatrixView.h"
+#include "frontend/matrix/MatrixView.h"
 
 // TODO
 

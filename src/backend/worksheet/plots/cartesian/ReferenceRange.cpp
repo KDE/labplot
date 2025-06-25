@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Reference range on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -14,10 +14,7 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "kdefrontend/GuiTools.h"
+#include "frontend/GuiTools.h"
 
 #include <QActionGroup>
 #include <QGraphicsSceneMouseEvent>
@@ -30,81 +27,80 @@
 
 /**
  * \class ReferenceRange
- * \brief A customizable point.
+ * \brief This class implements a rectangular that can be placed at a custom reference position on the plot
+ * to highlight certain range of the visualized data.
  *
- * The position can be either specified by mouse events or by providing the
- * x- and y- coordinates in parent's coordinate system
+ *
+ * The custom position can be either specified by moving the line with the mouse or by manually providing
+ * the start and end values for x or y for the vertical or horizontal orientations, respectively.
+ * The coordinates are provided relatively to plot's coordinate system.
  */
-
-ReferenceRange::ReferenceRange(CartesianPlot* plot, const QString& name)
+ReferenceRange::ReferenceRange(CartesianPlot* plot, const QString& name, bool loading)
 	: WorksheetElement(name, new ReferenceRangePrivate(this), AspectType::ReferenceRange) {
-	m_plot = plot;
-	init();
+	Q_D(ReferenceRange);
+	d->m_plot = plot;
+	init(loading);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 ReferenceRange::~ReferenceRange() = default;
 
-void ReferenceRange::init() {
+void ReferenceRange::init(bool loading) {
 	Q_D(ReferenceRange);
 
-	KConfig config;
-	KConfigGroup group = config.group(QStringLiteral("ReferenceRange"));
-
-	d->orientation = (Orientation)group.readEntry(QStringLiteral("Orientation"), static_cast<int>(Orientation::Vertical));
-	switch (d->orientation) {
-	case WorksheetElement::Orientation::Horizontal:
-		d->position.positionLimit = WorksheetElement::PositionLimit::Y;
-		break;
-	case WorksheetElement::Orientation::Vertical:
-		d->position.positionLimit = WorksheetElement::PositionLimit::X;
-		break;
-	case WorksheetElement::Orientation::Both:
-		d->position.positionLimit = WorksheetElement::PositionLimit::None;
-		break;
-	}
-
-	if (plot()) {
-		setCoordinateSystemIndex(plot()->defaultCoordinateSystemIndex());
-		d->coordinateBindingEnabled = true;
-		// default position - 10% of the plot width/height positioned around the center
-		auto cs = plot()->coordinateSystem(coordinateSystemIndex());
-		const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
-		const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
-		const auto w = m_plot->range(Dimension::X, cs->index(Dimension::X)).length() * 0.1;
-		const auto h = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).length() * 0.1;
-		d->positionLogical = QPointF(x, y);
-		d->positionLogicalStart = QPointF(x - w / 2, y - h / 2);
-		d->positionLogicalEnd = QPointF(x + w / 2, y + h / 2);
-	} else
-		d->position.point = QPointF(0, 0); // center of parent
-	d->updatePosition(); // to update also scene coordinates
-
-	// background
+	// create the background
 	d->background = new Background(QString());
 	d->background->setEnabledAvailable(true);
 	addChild(d->background);
 	d->background->setHidden(true);
-	d->background->init(group);
 	connect(d->background, &Background::updateRequested, [=] {
 		d->update();
+		Q_EMIT changed();
 	});
 
-	// border
+	// create the border line
 	d->line = new Line(QString());
 	d->line->setHidden(true);
 	addChild(d->line);
-	d->line->init(group);
 	connect(d->line, &Line::updatePixmapRequested, [=] {
 		d->update();
+		Q_EMIT changed();
 	});
 	connect(d->line, &Line::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
 	});
 
+	// init the properties
+	if (!loading) {
+		KConfig config;
+		KConfigGroup group = config.group(QStringLiteral("ReferenceRange"));
+
+		d->orientation = (Orientation)group.readEntry(QStringLiteral("Orientation"), static_cast<int>(Orientation::Vertical));
+		d->updatePositionLimit(); // set the position limit after the orientation was set
+		d->background->init(group);
+		d->line->init(group);
+
+		if (plot()) {
+			m_cSystemIndex = plot()->defaultCoordinateSystemIndex();
+			cSystem = plot()->coordinateSystem(m_cSystemIndex);
+			d->coordinateBindingEnabled = true;
+			// default position - 10% of the plot width/height positioned around the center
+			auto cs = plot()->coordinateSystem(coordinateSystemIndex());
+			const auto x = d->m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
+			const auto y = d->m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
+			const auto w = d->m_plot->range(Dimension::X, cs->index(Dimension::X)).length() * 0.1;
+			const auto h = d->m_plot->range(Dimension::Y, cs->index(Dimension::Y)).length() * 0.1;
+			d->positionLogical = QPointF(x, y);
+			d->positionLogicalStart = QPointF(x - w / 2, y - h / 2);
+			d->positionLogicalEnd = QPointF(x + w / 2, y + h / 2);
+		} else
+			d->position.point = QPointF(0, 0); // center of parent
+		d->updatePosition(); // to update also scene coordinates
+	}
+
 	connect(this, &WorksheetElement::objectPositionChanged, this, &ReferenceRange::updateStartEndPositions);
-	retransform();
+	retransform(); // TODO: why is this required here?!?
 }
 
 /*!
@@ -115,10 +111,6 @@ QIcon ReferenceRange::icon() const {
 }
 
 void ReferenceRange::initActions() {
-	visibilityAction = new QAction(i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &ReferenceRange::visibilityChangedSlot);
-
 	// Orientation
 	auto* orientationActionGroup = new QActionGroup(this);
 	orientationActionGroup->setExclusive(true);
@@ -168,9 +160,7 @@ QMenu* ReferenceRange::createContextMenu() {
 		initMenus();
 
 	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
+	QAction* visibilityAction = this->visibilityAction();
 
 	Q_D(const ReferenceRange);
 
@@ -179,7 +169,7 @@ QMenu* ReferenceRange::createContextMenu() {
 		orientationHorizontalAction->setChecked(true);
 	else
 		orientationVerticalAction->setChecked(true);
-	menu->insertMenu(firstAction, orientationMenu);
+	menu->insertMenu(visibilityAction, orientationMenu);
 
 	// Border line styles
 	const auto& pen = d->line->pen();
@@ -187,14 +177,10 @@ QMenu* ReferenceRange::createContextMenu() {
 	GuiTools::selectPenStyleAction(lineStyleActionGroup, pen.style());
 	GuiTools::selectColorAction(lineColorActionGroup, pen.color());
 
-	menu->insertMenu(firstAction, lineMenu);
-	menu->insertSeparator(firstAction);
+	menu->insertMenu(visibilityAction, lineMenu);
+	menu->insertSeparator(visibilityAction);
 
 	return menu;
-}
-
-QGraphicsItem* ReferenceRange::graphicsItem() const {
-	return d_ptr;
 }
 
 void ReferenceRange::retransform() {
@@ -242,9 +228,9 @@ void ReferenceRange::setPositionLogicalEnd(QPointF pos) {
 		exec(new ReferenceRangeSetPositionLogicalEndCmd(d, pos, ki18n("%1: set end logical position")));
 }
 
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
+// ##############################################################################
+// ######  SLOTs for changes triggered via QActions in the context menu  ########
+// ##############################################################################
 void ReferenceRange::orientationChangedSlot(QAction* action) {
 	if (action == orientationHorizontalAction)
 		this->setOrientation(Orientation::Horizontal);
@@ -262,14 +248,9 @@ void ReferenceRange::lineColorChanged(QAction* action) {
 	d->line->setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
 }
 
-void ReferenceRange::visibilityChangedSlot() {
-	Q_D(const ReferenceRange);
-	this->setVisible(!d->isVisible());
-}
-
-//##############################################################################
-//####################### Private implementation ###############################
-//##############################################################################
+// ##############################################################################
+// ####################### Private implementation ###############################
+// ##############################################################################
 ReferenceRangePrivate::ReferenceRangePrivate(ReferenceRange* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
@@ -281,18 +262,21 @@ ReferenceRangePrivate::ReferenceRangePrivate(ReferenceRange* owner)
 }
 
 QPointF ReferenceRangePrivate::recalculateRect() {
+	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
+	if (!cs->isValid())
+		return QPointF();
+
 	// calculate rect in logical coordinates
 	QPointF p1, p2;
-	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
 	switch (orientation) {
 	case ReferenceRange::Orientation::Vertical: {
-		const auto yRange{q->m_plot->range(Dimension::Y, cs->index(Dimension::Y))};
+		const auto& yRange = m_plot->range(Dimension::Y, cs->index(Dimension::Y));
 		p1 = QPointF(positionLogicalStart.x(), yRange.start());
 		p2 = QPointF(positionLogicalEnd.x(), yRange.end());
 		break;
 	}
 	case ReferenceRange::Orientation::Horizontal: {
-		const auto xRange{q->m_plot->range(Dimension::X, cs->index(Dimension::X))};
+		const auto& xRange = m_plot->range(Dimension::X, cs->index(Dimension::X));
 		p1 = QPointF(xRange.start(), positionLogicalStart.y());
 		p2 = QPointF(xRange.end(), positionLogicalEnd.y());
 		break;
@@ -407,12 +391,16 @@ void ReferenceRangePrivate::retransform() {
 	const QPointF newPosScene = recalculateRect();
 
 	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
-
 	positionLogical = cs->mapSceneToLogical(newPosScene, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 	updatePosition();
 }
 
 void ReferenceRangePrivate::updateOrientation() {
+	updatePositionLimit();
+	retransform();
+}
+
+void ReferenceRangePrivate::updatePositionLimit() {
 	switch (orientation) {
 	case WorksheetElement::Orientation::Horizontal:
 		position.positionLimit = WorksheetElement::PositionLimit::Y;
@@ -424,7 +412,6 @@ void ReferenceRangePrivate::updateOrientation() {
 		position.positionLimit = WorksheetElement::PositionLimit::None;
 		break;
 	}
-	retransform();
 }
 
 /*!
@@ -453,26 +440,12 @@ void ReferenceRange::updateStartEndPositions() {
 }
 
 /*!
-	Returns the outer bounds of the item as a rectangle.
- */
-QRectF ReferenceRangePrivate::boundingRect() const {
-	return boundingRectangle;
-}
-
-/*!
-	Returns the shape of this item as a QPainterPath in local coordinates.
-*/
-QPainterPath ReferenceRangePrivate::shape() const {
-	return rangeShape;
-}
-
-/*!
   recalculates the outer bounds and the shape of the item.
 */
 void ReferenceRangePrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	rangeShape = QPainterPath();
+	m_shape = QPainterPath();
 	if (m_visible) {
 		QPainterPath path;
 
@@ -500,9 +473,11 @@ void ReferenceRangePrivate::recalcShapeAndBoundingRect() {
 			}
 		}
 
-		rangeShape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
-		boundingRectangle = rangeShape.boundingRect();
+		m_shape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
+		m_boundingRectangle = m_shape.boundingRect();
 	}
+
+	Q_EMIT q->changed();
 }
 
 void ReferenceRangePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
@@ -512,15 +487,9 @@ void ReferenceRangePrivate::paint(QPainter* painter, const QStyleOptionGraphicsI
 	if (rect.width() == 0 || rect.height() == 0)
 		return;
 
-	// draw filling
-	if (background->enabled()) {
-		painter->setOpacity(background->opacity());
-		painter->setPen(Qt::NoPen);
-		drawFilling(painter);
-	}
-
-	// draw the background
-	painter->drawRect(rect);
+	// draw the background filling
+	if (background->enabled())
+		background->draw(painter, QPolygonF(rect));
 
 	// draw the border
 	if (line->style() != Qt::NoPen) {
@@ -529,120 +498,22 @@ void ReferenceRangePrivate::paint(QPainter* painter, const QStyleOptionGraphicsI
 		painter->setOpacity(line->opacity());
 	}
 
-	painter->drawPath(rangeShape);
+	painter->drawPath(m_shape);
 
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(rangeShape);
+		painter->drawPath(m_shape);
 	}
 
 	if (isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(rangeShape);
+		painter->drawPath(m_shape);
 	}
 }
 
-void ReferenceRangePrivate::drawFilling(QPainter* painter) const {
-	if (background->type() == Background::Type::Color) {
-		switch (background->colorStyle()) {
-		case Background::ColorStyle::SingleColor: {
-			painter->setBrush(QBrush(background->firstColor()));
-			break;
-		}
-		case Background::ColorStyle::HorizontalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::VerticalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
-			QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
-			linearGrad.setColorAt(0, background->firstColor());
-			linearGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(linearGrad));
-			break;
-		}
-		case Background::ColorStyle::RadialGradient: {
-			QRadialGradient radialGrad(rect.center(), rect.width() / 2);
-			radialGrad.setColorAt(0, background->firstColor());
-			radialGrad.setColorAt(1, background->secondColor());
-			painter->setBrush(QBrush(radialGrad));
-			break;
-		}
-		}
-	} else if (background->type() == Background::Type::Image) {
-		if (!background->fileName().trimmed().isEmpty()) {
-			QPixmap pix(background->fileName());
-			switch (background->imageStyle()) {
-			case Background::ImageStyle::ScaledCropped:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::Scaled:
-				pix = pix.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::ScaledAspectRatio:
-				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-				break;
-			case Background::ImageStyle::Centered:
-				painter->drawPixmap(QPointF(rect.center().x() - pix.size().width() / 2, rect.center().y() - pix.size().height() / 2), pix);
-				break;
-			case Background::ImageStyle::Tiled:
-				painter->setBrush(QBrush(pix));
-				break;
-			case Background::ImageStyle::CenterTiled:
-				painter->setBrush(QBrush(pix));
-				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
-			}
-		}
-	} else if (background->type() == Background::Type::Pattern) {
-		painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
-	}
-}
-
-void ReferenceRangePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
-}
-
-void ReferenceRangePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
-}
-
-void ReferenceRangePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
-	}
-}
-
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 //! Save as XML
 void ReferenceRange::save(QXmlStreamWriter* writer) const {
 	Q_D(const ReferenceRange);
@@ -674,7 +545,6 @@ bool ReferenceRange::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -692,29 +562,30 @@ bool ReferenceRange::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QStringLiteral("geometry")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("orientation", orientation, Orientation);
+			d->updatePositionLimit(); // set the position limit after the orientation was set
 			WorksheetElement::load(reader, preview);
 
 			str = attribs.value(QStringLiteral("logicalPosStartX")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("logicalPosStartX")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("logicalPosStartX"));
 			else
 				d->positionLogicalStart.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("logicalPosStartY")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("logicalPosStartY")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("logicalPosStartY"));
 			else
 				d->positionLogicalStart.setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("logicalPosEndX")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("logicalPosEndX")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("logicalPosEndX"));
 			else
 				d->positionLogicalEnd.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("logicalPosEndY")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("logicalPosEndY")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("logicalPosEndY"));
 			else
 				d->positionLogicalEnd.setY(str.toDouble());
 		} else if (!preview && reader->name() == QStringLiteral("background"))
@@ -722,7 +593,7 @@ bool ReferenceRange::load(XmlStreamReader* reader, bool preview) {
 		else if (!preview && reader->name() == QStringLiteral("line"))
 			d->line->load(reader, preview);
 		else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}
@@ -730,9 +601,9 @@ bool ReferenceRange::load(XmlStreamReader* reader, bool preview) {
 	return true;
 }
 
-//##############################################################################
-//#########################  Theme management ##################################
-//##############################################################################
+// ##############################################################################
+// #########################  Theme management ##################################
+// ##############################################################################
 void ReferenceRange::loadThemeConfig(const KConfig& config) {
 	// determine the index of the current range in the list of all range children
 	// and apply the theme color for this index

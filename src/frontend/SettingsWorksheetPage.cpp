@@ -1,0 +1,188 @@
+/*
+	File                 : SettingsWorksheetPage.cpp
+	Project              : LabPlot
+	Description          : settings page for Worksheet
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
+#include "SettingsWorksheetPage.h"
+#include "frontend/widgets/ThemesComboBox.h"
+#include "tools/TeXRenderer.h"
+
+#include <KConfigGroup>
+
+/**
+ * \brief Page for the 'General' settings of the Labplot settings dialog.
+ */
+SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent)
+	: SettingsPage(parent) {
+	ui.setupUi(this);
+
+	m_cbThemes = new ThemesComboBox();
+	ui.gridLayout->addWidget(m_cbThemes, 1, 4, 1, 1);
+	QString info = i18n("Default theme for newly created worksheets and worksheet objects");
+	ui.lTheme->setToolTip(info);
+	m_cbThemes->setToolTip(info);
+
+	ui.cbPreviewThumbnailSize->addItem(i18n("Small (3cm x 3cm)"), 3);
+	ui.cbPreviewThumbnailSize->addItem(i18n("Medium (5cm x 5cm)"), 5);
+	ui.cbPreviewThumbnailSize->addItem(i18n("Big (7cm x 7cm)"), 7);
+
+	const int size = ui.cbTexEngine->height();
+	ui.lLatexWarning->setPixmap(QIcon::fromTheme(QLatin1String("state-warning")).pixmap(size, size));
+
+	// add available TeX typesetting engines
+	if (TeXRenderer::executableExists(QLatin1String("lualatex")))
+		ui.cbTexEngine->addItem(QLatin1String("LuaLaTeX"), QLatin1String("lualatex"));
+
+	if (TeXRenderer::executableExists(QLatin1String("xelatex")))
+		ui.cbTexEngine->addItem(QLatin1String("XeLaTex"), QLatin1String("xelatex"));
+
+	if (TeXRenderer::executableExists(QLatin1String("pdflatex")))
+		ui.cbTexEngine->addItem(QLatin1String("pdfLaTeX"), QLatin1String("pdflatex"));
+
+	if (TeXRenderer::executableExists(QLatin1String("latex")))
+		ui.cbTexEngine->addItem(QLatin1String("LaTeX"), QLatin1String("latex"));
+
+	connect(m_cbThemes, &ThemesComboBox::currentThemeChanged, this, &SettingsWorksheetPage::changed);
+	connect(ui.cbPreviewThumbnailSize, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsWorksheetPage::changed);
+	connect(ui.chkPresenterModeInteractive, &QCheckBox::toggled, this, &SettingsWorksheetPage::changed);
+	connect(ui.chkDoubleBuffering, &QCheckBox::toggled, this, &SettingsWorksheetPage::changed);
+	connect(ui.cbTexEngine, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsWorksheetPage::changed);
+	connect(ui.cbTexEngine, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsWorksheetPage::checkTeX);
+
+	loadSettings();
+}
+
+QList<Settings::Type> SettingsWorksheetPage::applySettings() {
+	QList<Settings::Type> changes;
+	if (!m_changed)
+		return changes;
+
+	KConfigGroup group = Settings::group(QStringLiteral("Settings_Worksheet"));
+	if (m_cbThemes->currentText() == i18n("Default"))
+		group.writeEntry(QLatin1String("Theme"), QString());
+	else
+		group.writeEntry(QLatin1String("Theme"), m_cbThemes->currentText());
+
+	qDebug() << "size " << ui.cbPreviewThumbnailSize->currentData().toInt();
+	group.writeEntry(QLatin1String("PreviewThumbnailSize"), ui.cbPreviewThumbnailSize->currentData().toInt());
+	group.writeEntry(QLatin1String("PresenterModeInteractive"), ui.chkPresenterModeInteractive->isChecked());
+	group.writeEntry(QLatin1String("DoubleBuffering"), ui.chkDoubleBuffering->isChecked());
+	group.writeEntry(QLatin1String("LaTeXEngine"), ui.cbTexEngine->itemData(ui.cbTexEngine->currentIndex()));
+
+	changes << Settings::Type::Worksheet;
+	return changes;
+}
+
+void SettingsWorksheetPage::restoreDefaults() {
+	m_cbThemes->setItemText(0, i18n("Default")); // default theme
+	ui.chkPresenterModeInteractive->setChecked(false);
+	ui.chkDoubleBuffering->setChecked(true);
+	ui.cbPreviewThumbnailSize->setCurrentIndex(1); // medium
+
+	int index = ui.cbTexEngine->findData(QLatin1String("xelatex"));
+	if (index == -1) {
+		index = ui.cbTexEngine->findData(QLatin1String("lualatex"));
+		if (index == -1) {
+			index = ui.cbTexEngine->findData(QLatin1String("pdflatex"));
+			if (index == -1)
+				index = ui.cbTexEngine->findData(QLatin1String("latex"));
+		}
+	}
+	ui.cbTexEngine->setCurrentIndex(index);
+}
+
+void SettingsWorksheetPage::loadSettings() {
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_Worksheet"));
+	m_cbThemes->setItemText(0, group.readEntry(QLatin1String("Theme"), ""));
+	ui.chkPresenterModeInteractive->setChecked(group.readEntry(QLatin1String("PresenterModeInteractive"), false));
+	ui.chkDoubleBuffering->setChecked(group.readEntry(QLatin1String("DoubleBuffering"), true));
+
+	int index = ui.cbPreviewThumbnailSize->findData(group.readEntry(QLatin1String("PreviewThumbnailSize"), 3));
+	if (index != -1)
+		ui.cbPreviewThumbnailSize->setCurrentIndex(index);
+	else
+		ui.cbPreviewThumbnailSize->setCurrentIndex(1); // medium
+
+	QString engine = group.readEntry(QLatin1String("LaTeXEngine"), "");
+	index = -1;
+	if (engine.isEmpty()) {
+		// empty string was found in the settings (either the settings never saved or no tex engine was available during the last save)
+		//->check whether the latex environment was installed in the meantime
+		index = ui.cbTexEngine->findData(QLatin1String("xelatex"));
+		if (index == -1) {
+			index = ui.cbTexEngine->findData(QLatin1String("lualatex"));
+			if (index == -1) {
+				index = ui.cbTexEngine->findData(QLatin1String("pdflatex"));
+				if (index == -1)
+					index = ui.cbTexEngine->findData(QLatin1String("latex"));
+			}
+		}
+
+		if (index != -1) {
+			// one of the tex engines was found -> automatically save it in the settings without any user action
+			KConfigGroup group = Settings::group(QStringLiteral("Settings_Worksheet"));
+			group.writeEntry(QLatin1String("LaTeXEngine"), ui.cbTexEngine->itemData(index));
+		}
+	} else
+		index = ui.cbTexEngine->findData(engine);
+
+	ui.cbTexEngine->setCurrentIndex(index);
+	checkTeX(index);
+
+	m_changed = false;
+}
+
+void SettingsWorksheetPage::changed() {
+	m_changed = true;
+	Q_EMIT settingsChanged();
+}
+
+/*!
+ checks whether all tools required for latex typesetting are available. shows a warning if not.
+ \sa TeXRenderer::active()
+ */
+void SettingsWorksheetPage::checkTeX(int engineIndex) {
+	if (engineIndex == -1) {
+		ui.lLatexWarning->show();
+		ui.lLatexWarning->setToolTip(i18n("No LaTeX installation found or selected. LaTeX typesetting not possible."));
+		return;
+	}
+
+	QString engine = ui.cbTexEngine->itemData(engineIndex).toString();
+
+	if (engine == QLatin1String("latex")) {
+		// need convert to convert to PNG
+		if (!TeXRenderer::executableExists(QLatin1String("convert"))) {
+			ui.lLatexWarning->show();
+			ui.lLatexWarning->setToolTip(i18n("No 'convert' found. LaTeX typesetting not possible."));
+			return;
+		}
+		// to convert the generated PS files to DVI we need 'dvips'
+		if (!TeXRenderer::executableExists(QLatin1String("dvips"))) {
+			ui.lLatexWarning->show();
+			ui.lLatexWarning->setToolTip(i18n("No 'dvips' found. LaTeX typesetting not possible."));
+			return;
+		}
+
+#if defined(_WIN64)
+		if (!TeXRenderer::executableExists(QLatin1String("gswin64c"))) {
+			ui.lLatexWarning->show();
+			ui.lLatexWarning->setToolTip(i18n("No Ghostscript found. LaTeX typesetting not possible."));
+			return;
+		}
+#elif defined(HAVE_WINDOWS)
+		if (!TeXRenderer::executableExists(QLatin1String("gswin32c"))) {
+			ui.lLatexWarning->show();
+			ui.lLatexWarning->setToolTip(i18n("No Ghostscript found. LaTeX typesetting not possible."));
+			return;
+		}
+#endif
+	}
+
+	ui.lLatexWarning->hide();
+}

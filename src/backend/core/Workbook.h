@@ -15,7 +15,9 @@
 
 class Spreadsheet;
 class Matrix;
+#ifndef SDK
 class WorkbookView;
+#endif
 class QXmlStreamWriter;
 class XmlStreamReader;
 
@@ -47,7 +49,9 @@ public Q_SLOTS:
 	void childSelected(const AbstractAspect*) override;
 
 private:
+#ifndef SDK
 	mutable WorkbookView* m_view{nullptr};
+#endif
 
 private Q_SLOTS:
 	void childDeselected(const AbstractAspect*) override;
