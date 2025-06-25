@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-23 00:38+0000\n"
+"POT-Creation-Date: 2025-06-25 00:39+0000\n"
 "PO-Revision-Date: 2014-02-09 10:11+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -1918,7 +1918,7 @@ msgid "Unknown"
 msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/ActionsManager.cpp:201 src/frontend/MainWin.cpp:1247
+#: src/frontend/ActionsManager.cpp:201 src/frontend/MainWin.cpp:1226
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -2123,7 +2123,9 @@ msgstr ""
 msgid "Dimensions"
 msgstr ""
 
+#. i18n: ectx: attribute (title), widget (QWidget, tVariables)
 #: src/backend/datasources/filters/NetCDFFilter.cpp:631
+#: src/frontend/ui/dockwidgets/scriptdock.ui:116
 #, kde-format
 msgid "Variables"
 msgstr ""
@@ -6286,7 +6288,7 @@ msgstr ""
 msgid "Text file (*.txt)"
 msgstr ""
 
-#: src/backend/note/Note.cpp:101
+#: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:81
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:308
 #, kde-format
@@ -6294,12 +6296,12 @@ msgctxt "@title:window"
 msgid "Export to File"
 msgstr ""
 
-#: src/backend/note/Note.cpp:115
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:95
 #, kde-format
 msgid "Export failed"
 msgstr ""
 
-#: src/backend/note/Note.cpp:115
+#: src/backend/note/Note.cpp:115 src/backend/script/Script.cpp:95
 #, kde-format
 msgid "Failed to open '%1' for writing."
 msgstr ""
@@ -7237,30 +7239,56 @@ msgstr ""
 msgid "Tricube"
 msgstr ""
 
-#: src/backend/script/Script.cpp:117 src/backend/script/Script.cpp:325
+#: src/backend/script/Script.cpp:79
+#, kde-format
+msgid "Python file (*.py)"
+msgstr ""
+
+#: src/backend/script/Script.cpp:137 src/backend/script/Script.cpp:324
 #, kde-format
 msgid "no script element found"
 msgstr ""
 
-#: src/backend/script/Script.cpp:186
+#: src/backend/script/Script.cpp:193
 #, kde-format
 msgid "%1: run %2 script"
 msgstr ""
 
-#: src/backend/script/Script.cpp:305 src/backend/script/Script.cpp:310
+#: src/backend/script/Script.cpp:304 src/backend/script/Script.cpp:309
 #, kde-format
 msgid "Script"
 msgstr ""
 
-#: src/backend/script/Script.cpp:305
+#: src/backend/script/Script.cpp:304
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "Failed to run the script."
 msgstr "Statisztikák"
 
-#: src/backend/script/Script.cpp:310
+#: src/backend/script/Script.cpp:309
 #, kde-format
 msgid "A script is already running."
+msgstr ""
+
+#: src/backend/script/ScriptRuntime.cpp:92
+#, fuzzy, kde-format
+#| msgid "Name"
+msgctxt "@title:column"
+msgid "Name"
+msgstr "Név"
+
+#: src/backend/script/ScriptRuntime.cpp:94
+#, fuzzy, kde-format
+#| msgctxt "NAME OF TRANSLATORS"
+#| msgid "Your names"
+msgctxt "@title:column"
+msgid "Value"
+msgstr "Úr Balázs"
+
+#: src/backend/script/ScriptRuntime.cpp:96
+#, kde-format
+msgctxt "@title:column"
+msgid "Type"
 msgstr ""
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:344
@@ -10475,7 +10503,7 @@ msgstr ""
 msgid "&Open Example"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:185 src/frontend/MainWin.cpp:1203
+#: src/frontend/ActionsManager.cpp:185 src/frontend/MainWin.cpp:1182
 #, kde-format
 msgid "Workbook"
 msgstr ""
@@ -10485,7 +10513,7 @@ msgstr ""
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:190 src/frontend/MainWin.cpp:1211
+#: src/frontend/ActionsManager.cpp:190 src/frontend/MainWin.cpp:1190
 #, kde-format
 msgid "Data Extractor"
 msgstr ""
@@ -10500,7 +10528,7 @@ msgstr ""
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:410
-#: src/frontend/MainWin.cpp:1219 src/frontend/SettingsDialog.cpp:67
+#: src/frontend/MainWin.cpp:1198 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -10518,7 +10546,7 @@ msgstr ""
 msgid "Creates a new matrix for data editing"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:207 src/frontend/MainWin.cpp:1265
+#: src/frontend/ActionsManager.cpp:207 src/frontend/MainWin.cpp:1244
 #: src/frontend/SettingsDialog.cpp:62
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:86
 #, kde-format
@@ -10535,7 +10563,7 @@ msgstr ""
 msgid "Creates a new %1 script"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:224 src/frontend/MainWin.cpp:1273
+#: src/frontend/ActionsManager.cpp:224 src/frontend/MainWin.cpp:1252
 #, kde-format
 msgid "Note"
 msgstr ""
@@ -10545,7 +10573,7 @@ msgstr ""
 msgid "Creates a new note for arbitrary text"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:229 src/frontend/MainWin.cpp:1195
+#: src/frontend/ActionsManager.cpp:229 src/frontend/MainWin.cpp:1174
 #, kde-format
 msgid "Folder"
 msgstr ""
@@ -10838,7 +10866,7 @@ msgid "Select Y-Region and Zoom In"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:611 src/frontend/MainWin.cpp:1619
+#: src/frontend/ActionsManager.cpp:611 src/frontend/MainWin.cpp:1598
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
 #: src/frontend/worksheet/WorksheetView.cpp:378
 #, kde-format
@@ -12562,7 +12590,7 @@ msgid "Open LabPlot Project"
 msgstr ""
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:731
+#: src/frontend/MainWin.cpp:710
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr ""
@@ -12814,7 +12842,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2022
+#: src/frontend/MainWin.cpp:2001
 #, kde-format
 msgid "Warning"
 msgstr ""
@@ -14044,6 +14072,36 @@ msgid ""
 "placed at"
 msgstr ""
 
+#: src/frontend/dockwidgets/ScriptDock.cpp:38
+#: src/frontend/ProjectExplorer.cpp:709
+#, kde-format
+msgid "Case Sensitive"
+msgstr ""
+
+#: src/frontend/dockwidgets/ScriptDock.cpp:42
+#: src/frontend/ProjectExplorer.cpp:717
+#, kde-format
+msgid "Match Complete Word"
+msgstr ""
+
+#: src/frontend/dockwidgets/ScriptDock.cpp:53
+#, fuzzy, kde-format
+#| msgid "Name"
+msgid "Copy Name"
+msgstr "Név"
+
+#: src/frontend/dockwidgets/ScriptDock.cpp:54
+#, fuzzy, kde-format
+#| msgctxt "NAME OF TRANSLATORS"
+#| msgid "Your names"
+msgid "Copy Value"
+msgstr "Úr Balázs"
+
+#: src/frontend/dockwidgets/ScriptDock.cpp:55
+#, kde-format
+msgid "Copy Name and Value"
+msgstr ""
+
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:57
 #, kde-format
 msgid ""
@@ -14482,7 +14540,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:119
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:56
 #: src/frontend/ui/dockwidgets/runchartdock.ui:138
-#: src/frontend/ui/dockwidgets/scriptdock.ui:73
+#: src/frontend/ui/dockwidgets/scriptdock.ui:53
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:182
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:151
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:162
@@ -14656,7 +14714,7 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/frontend/GuiObserver.cpp:182 src/frontend/MainWin.cpp:638
+#: src/frontend/GuiObserver.cpp:182 src/frontend/MainWin.cpp:617
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -15476,208 +15534,208 @@ msgid "&Windows"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
-#: src/frontend/MainWin.cpp:209 src/frontend/ui/settingsworksheetpage.ui:106
+#: src/frontend/MainWin.cpp:188 src/frontend/ui/settingsworksheetpage.ui:106
 #: src/frontend/worksheet/WorksheetView.cpp:295
 #, kde-format
 msgid "Presenter Mode"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:209
+#: src/frontend/MainWin.cpp:188
 #, kde-format
 msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
 "started."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:223
+#: src/frontend/MainWin.cpp:202
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:503
+#: src/frontend/MainWin.cpp:482
 #, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:504
+#: src/frontend/MainWin.cpp:483
 #, kde-format
 msgid "Save Project"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:599
+#: src/frontend/MainWin.cpp:578
 #, kde-format
 msgid "%1: created"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:625
+#: src/frontend/MainWin.cpp:604
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:650
+#: src/frontend/MainWin.cpp:629
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:659
+#: src/frontend/MainWin.cpp:638
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:736
+#: src/frontend/MainWin.cpp:715
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:742
+#: src/frontend/MainWin.cpp:721
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:743
+#: src/frontend/MainWin.cpp:722
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:750
+#: src/frontend/MainWin.cpp:729
 #, kde-format
 msgid "All supported files (%1)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:754
+#: src/frontend/MainWin.cpp:733
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:771
+#: src/frontend/MainWin.cpp:750
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:771 src/frontend/MainWin.cpp:779
-#: src/frontend/MainWin.cpp:784
+#: src/frontend/MainWin.cpp:750 src/frontend/MainWin.cpp:758
+#: src/frontend/MainWin.cpp:763
 #, kde-format
 msgid "Open Project"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:779
+#: src/frontend/MainWin.cpp:758
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:784
+#: src/frontend/MainWin.cpp:763
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:792
+#: src/frontend/MainWin.cpp:771
 #, kde-format
 msgid "Loading %1..."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:847
+#: src/frontend/MainWin.cpp:826
 #, kde-format
 msgid "%1: opened"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:882
+#: src/frontend/MainWin.cpp:861
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:975
+#: src/frontend/MainWin.cpp:954
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:977
+#: src/frontend/MainWin.cpp:956
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1004
+#: src/frontend/MainWin.cpp:983
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1084
+#: src/frontend/MainWin.cpp:1063
 #, kde-format
 msgid "Project saved"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1100
+#: src/frontend/MainWin.cpp:1079
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1105
+#: src/frontend/MainWin.cpp:1084
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1155
+#: src/frontend/MainWin.cpp:1134
 #, kde-format
 msgid "Changed"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1170 src/frontend/MainWin.cpp:1182
+#: src/frontend/MainWin.cpp:1149 src/frontend/MainWin.cpp:1161
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1172 src/frontend/MainWin.cpp:1184
+#: src/frontend/MainWin.cpp:1151 src/frontend/MainWin.cpp:1163
 #, kde-format
 msgid "%1 printed"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1239
+#: src/frontend/MainWin.cpp:1218
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3732
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3733
 #, kde-format
 msgid "%1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1918
+#: src/frontend/MainWin.cpp:1897
 #, kde-format
 msgid "Kaggle CLI tool not found"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1919
+#: src/frontend/MainWin.cpp:1898
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
 "again."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1985
+#: src/frontend/MainWin.cpp:1964
 #, kde-format
 msgid "%1 exported"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1992
+#: src/frontend/MainWin.cpp:1971
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2004
+#: src/frontend/MainWin.cpp:1983
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2022
+#: src/frontend/MainWin.cpp:2001
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2026
+#: src/frontend/MainWin.cpp:2005
 #, kde-format
 msgid "Live data source%1"
 msgstr ""
@@ -16150,7 +16208,9 @@ msgstr ""
 msgid "XML error: No cartesianPlot found"
 msgstr ""
 
+#. i18n: ectx: property (placeholderText), widget (QLineEdit, leFilter)
 #: src/frontend/ProjectExplorer.cpp:71
+#: src/frontend/ui/dockwidgets/scriptdock.ui:127
 #, kde-format
 msgid "Search/Filter"
 msgstr ""
@@ -16206,16 +16266,6 @@ msgstr ""
 msgid ""
 "Data cannot be pasted into '%1' directly. Select a spreadsheet column for "
 "this."
-msgstr ""
-
-#: src/frontend/ProjectExplorer.cpp:709
-#, kde-format
-msgid "Case Sensitive"
-msgstr ""
-
-#: src/frontend/ProjectExplorer.cpp:717
-#, kde-format
-msgid "Match Complete Word"
 msgstr ""
 
 #: src/frontend/ProjectExplorer.cpp:726
@@ -16327,6 +16377,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:24
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:24
 #: src/frontend/ui/dockwidgets/runchartdock.ui:24
+#: src/frontend/ui/dockwidgets/scriptdock.ui:21
 #: src/frontend/ui/dockwidgets/valuewidget.ui:41
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:24
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:21
@@ -18636,7 +18687,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:190
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:112
 #: src/frontend/ui/dockwidgets/runchartdock.ui:112
-#: src/frontend/ui/dockwidgets/scriptdock.ui:63
+#: src/frontend/ui/dockwidgets/scriptdock.ui:27
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:93
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:46
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:181
@@ -21010,9 +21061,11 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QToolButton, tbAddPlotRange)
 #. i18n: ectx: property (text), widget (QToolButton, tbRemovePlotRange)
 #. i18n: ectx: property (text), widget (QToolButton, bAddVariable)
+#. i18n: ectx: property (text), widget (QToolButton, tbFilterOptions)
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:285
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:413
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:426
+#: src/frontend/ui/dockwidgets/scriptdock.ui:134
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:264
 #, kde-format
 msgid "..."
@@ -21909,28 +21962,10 @@ msgstr "Úr Balázs"
 msgid "Center Line"
 msgstr "Úr Balázs"
 
-#. i18n: ectx: property (text), widget (QLabel, lOutputFont)
-#: src/frontend/ui/dockwidgets/scriptdock.ui:33
-#, kde-format
-msgid "Output Font:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lEditorFont)
-#: src/frontend/ui/dockwidgets/scriptdock.ui:40
-#, kde-format
-msgid "Editor Font:"
-msgstr ""
-
 #. i18n: ectx: property (text), widget (QLabel, lRuntime)
-#: src/frontend/ui/dockwidgets/scriptdock.ui:99
+#: src/frontend/ui/dockwidgets/scriptdock.ui:82
 #, kde-format
 msgid "Runtime:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lTheme)
-#: src/frontend/ui/dockwidgets/scriptdock.ui:141
-#, kde-format
-msgid "Editor Theme:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
