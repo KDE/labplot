@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-25 00:39+0000\n"
-"PO-Revision-Date: 2025-06-05 05:55+0200\n"
+"PO-Revision-Date: 2025-06-25 04:10+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -7261,10 +7261,9 @@ msgid "Tricube"
 msgstr "ტრიკუბიკური"
 
 #: src/backend/script/Script.cpp:79
-#, fuzzy, kde-format
-#| msgid "Text file (*.txt)"
+#, kde-format
 msgid "Python file (*.py)"
-msgstr "ტექსტური ფაილი (*.txt)"
+msgstr "Python-ის ფაილი (*.py)"
 
 #: src/backend/script/Script.cpp:137 src/backend/script/Script.cpp:324
 #, kde-format
@@ -7292,22 +7291,19 @@ msgid "A script is already running."
 msgstr "სკრიპტი უკვე გაშვებულია."
 
 #: src/backend/script/ScriptRuntime.cpp:92
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "სახელი"
 
 #: src/backend/script/ScriptRuntime.cpp:94
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "მნიშვნელობა"
 
 #: src/backend/script/ScriptRuntime.cpp:96
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr "ტიპი"
@@ -14349,22 +14345,19 @@ msgid "Match Complete Word"
 msgstr "სიტყვის სრული დამთხვევა"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:53
-#, fuzzy, kde-format
-#| msgid "Day Names"
+#, kde-format
 msgid "Copy Name"
-msgstr "დღის სახელები"
+msgstr "სახელის კოპირება"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:54
-#, fuzzy, kde-format
-#| msgid "Drop Values"
+#, kde-format
 msgid "Copy Value"
-msgstr "მნიშვნელობის მოცილება"
+msgstr "მნიშვნელობის კოპირება"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:55
-#, fuzzy, kde-format
-#| msgid "Uniform Random Values"
+#, kde-format
 msgid "Copy Name and Value"
-msgstr "ერთვაროვანი შემთხვევითი მნიშვნელობები"
+msgstr "სახელისა და მნიშვნელობის კოპირება"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:57
 #, kde-format
