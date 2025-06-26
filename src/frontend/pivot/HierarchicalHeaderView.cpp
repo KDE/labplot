@@ -74,11 +74,10 @@ HierarchicalHeaderItem* HierarchicalHeaderItem::parent() {
 }
 
 void HierarchicalHeaderItem::clear() {
-	QList<HierarchicalHeaderItem*> items = child_items.values();
-	foreach (HierarchicalHeaderItem* item, child_items) {
-        if (item) {
+	auto items = child_items.values();
+	for(auto* item : child_items) {
+        if (item)
             delete item;
-        }
 	}
 	child_items.clear();
 }
@@ -348,7 +347,7 @@ void HierarchicalHeaderView::mousePressEvent(QMouseEvent* event) {
 		int numbers = 0;
 		numbers = getSectionRange(index,&beginSection,&endSection);
 		if (numbers > 0) {
-			emit sectionPressed(beginSection,endSection);
+			Q_EMIT sectionPressed(beginSection,endSection);
 			return;
 		} else {
 			const int LEVEL_CNT = (OTN == Qt::Horizontal)?m_model->rowCount():m_model->columnCount();
@@ -365,7 +364,7 @@ void HierarchicalHeaderView::mousePressEvent(QMouseEvent* event) {
 							continue;
 						int endLevel   = beginLevel + levelSpanCnt.toInt()-1;
 						if (beginLevel <= curLevel && curLevel <= endLevel) {
-							emit sectionPressed(beginSection,endSection);
+							Q_EMIT sectionPressed(beginSection,endSection);
 							break;
 						}
 					}

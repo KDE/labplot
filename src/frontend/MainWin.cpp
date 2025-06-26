@@ -18,6 +18,7 @@
 #include "backend/datasources/DatasetHandler.h"
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/matrix/Matrix.h"
+#include "backend/pivot/PivotTable.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #ifdef HAVE_LIBORIGIN
@@ -1235,6 +1236,14 @@ void MainWin::newMatrix() {
 		workbook->addChild(matrix);
 	else
 		this->addAspectToProject(matrix);
+}
+
+/*!
+	adds a new pivot table to the project.
+*/
+void MainWin::newPivotTable() {
+	auto* pivotTable = new PivotTable(i18n("PivotTable"));
+	this->addAspectToProject(pivotTable);
 }
 
 /*!
