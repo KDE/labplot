@@ -29,7 +29,7 @@
 #ifndef PIVOTTABLEDOCK_H
 #define PIVOTTABLEDOCK_H
 
-#include "kdefrontend/dockwidgets/BaseDock.h"
+#include "frontend/dockwidgets/BaseDock.h"
 #include "backend/pivot/PivotTable.h"
 #include "ui_pivottabledock.h"
 

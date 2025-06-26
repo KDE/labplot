@@ -12,13 +12,10 @@
 
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectTreeModel.h"
-<<<<<<< HEAD:src/kdefrontend/GuiObserver.cpp
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/pivot/PivotTable.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-=======
->>>>>>> master:src/frontend/GuiObserver.cpp
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"

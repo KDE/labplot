@@ -30,11 +30,11 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "commonfrontend/widgets/TreeViewComboBox.h"
-#include "kdefrontend/datasources/DatabaseManagerDialog.h"
-#include "kdefrontend/datasources/DatabaseManagerWidget.h"
-#include "kdefrontend/pivot/PivotTableView.h"
-#include "kdefrontend/TemplateHandler.h"
+#include "frontend/widgets/TreeViewComboBox.h"
+#include "frontend/datasources/DatabaseManagerDialog.h"
+#include "frontend/datasources/DatabaseManagerWidget.h"
+#include "frontend/pivot/PivotTableView.h"
+#include "frontend/TemplateHandler.h"
 
 #include <QDir>
 #include <QSqlError>

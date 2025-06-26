@@ -623,6 +623,7 @@ target_link_libraries(labplotbackendlib
     Qt${QT_MAJOR_VERSION}::Network    # QLocalSocket
     Qt${QT_MAJOR_VERSION}::Xml    # QDomElement (Cantor)
     Qt${QT_MAJOR_VERSION}::PrintSupport    # QPrintDialog
+    Qt${QT_MAJOR_VERSION}::Sql    # QSql
     KF${KF_MAJOR_VERSION}::ConfigCore    # KConfigGroup
     KF${KF_MAJOR_VERSION}::I18n
     KF${KF_MAJOR_VERSION}::ConfigWidgets    # KStandardAction
