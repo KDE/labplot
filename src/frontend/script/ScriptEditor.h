@@ -25,18 +25,8 @@ public:
     void writeOutput(bool, const QString&);
     QString outputText();
 
-    void setEditorFont(const QFont&);
-    QFont editorFont();
-
-    void setOutputFont(const QFont&);
-	QFont outputFont();
-
-    void setEditorTheme(const QString&);
-	QString editorTheme();
-
-
-protected:
-    bool eventFilter(QObject* object, QEvent* event) override;
+    void registerShortcuts();
+	void unregisterShortcuts();
 
 public Q_SLOTS:
 	void createContextMenu(QMenu*);
@@ -49,13 +39,12 @@ private:
     KTextEditor::View* m_kTextEditorView{nullptr};
     QAction* m_runScriptAction{nullptr};
     QAction* m_clearOutputAction{nullptr};
-    bool m_firstOutputOfRun{false};
-    QFont m_lastEditorFont;
-    QString m_lastEditorTheme;
 
     void initActions();
     void initMenus();
     void setSplitterState(const QByteArray&);
 	QByteArray splitterState();
+    void setOutputFont(const QFont&);
+    QFont outputFont();
 };
 #endif

@@ -17,28 +17,43 @@
 #include <KSyntaxHighlighting/Repository>
 #include <KSyntaxHighlighting/Theme>
 #include <KTextEditor/Editor>
+#include <QAction>
+#include <QPushButton>
+#include <QActionGroup>
+#include <QMenu>
+#include <QContextMenuEvent>
+#include <QClipboard>
 
 ScriptDock::ScriptDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
 
-    QStringList themeNames;
-    for (KSyntaxHighlighting::Theme theme : KTextEditor::Editor::instance()->repository().themes())
-        themeNames << theme.name();
-    ui.cbTheme->addItems(themeNames);
+	ui.tvVariables->setRootIsDecorated(false);
+    ui.tvVariables->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui.tvVariables->setAlternatingRowColors(true);
 
-	connect(ui.kfrEditorFont, &KFontRequester::fontSelected, this, &ScriptDock::setScriptEditorFont);
-    connect(ui.kfrOutputFont, &KFontRequester::fontSelected, this, &ScriptDock::setScriptOutputFont);
-    connect(ui.cbTheme, &QComboBox::currentTextChanged, this, &ScriptDock::setScriptEditorTheme);
+	ui.tbFilterOptions->setIcon(QIcon::fromTheme(QLatin1String("configure")));
 
-	auto* templateHandler = new TemplateHandler(this, QLatin1String("Script"));
-    templateHandler->setSaveDefaultAvailable(false);
-	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &ScriptDock::loadConfigFromTemplate);
-	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &ScriptDock::saveConfigAsTemplate);
-    connect(templateHandler, &TemplateHandler::info, this, &ScriptDock::info);
-    ui.gridLayout->addWidget(templateHandler, 10, 3);
-	templateHandler->show();
+	m_caseSensitiveAction = new QAction(i18n("Case Sensitive"), this);
+    m_caseSensitiveAction->setCheckable(true);
+    m_caseSensitiveAction->setChecked(false);
+
+    m_matchCompleteWordAction = new QAction(i18n("Match Complete Word"), this);
+    m_matchCompleteWordAction->setCheckable(true);
+    m_matchCompleteWordAction->setChecked(false);
+
+	connect(ui.leFilter, &QLineEdit::textChanged, this, &ScriptDock::filterTextChanged);
+    connect(ui.tbFilterOptions, &QPushButton::toggled, this, &ScriptDock::toggleFilterOptionsMenu);
+    connect(m_caseSensitiveAction, &QAction::triggered, this, [=]() {filterTextChanged(ui.leFilter->text());});
+    connect(m_matchCompleteWordAction, &QAction::triggered, this, [=]() {filterTextChanged(ui.leFilter->text());});
+
+	// initialize the actions if not done yet
+	auto* group = new QActionGroup(this);
+	m_copyNameAction = new QAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18n("Copy Name"), group);
+	m_copyValueAction = new QAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18n("Copy Value"), group);
+	m_copyNameValueAction = new QAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18n("Copy Name and Value"), group);
+	connect(group, &QActionGroup::triggered, this, &ScriptDock::copy);
 }
 
 void ScriptDock::setScriptsList(QList<Script*> list) {
@@ -46,72 +61,70 @@ void ScriptDock::setScriptsList(QList<Script*> list) {
 	m_script = list.first();
 	setAspects(std::move(list));
 
-	connect(m_script, &Script::editorFontChanged, this, &ScriptDock::setEditorFont);
-    connect(m_script, &Script::outputFontChanged, this, &ScriptDock::setOutputFont);
-    connect(m_script, &Script::editorThemeChanged, this, &ScriptDock::setEditorTheme);
-
 	CONDITIONAL_LOCK_RETURN;
 
-	ui.kfrEditorFont->setFont(m_script->editorFont());
-    ui.kfrOutputFont->setFont(m_script->outputFont());
     ui.leRuntime->setText(m_script->language());
-    ui.cbTheme->setCurrentText(m_script->editorTheme());
+	ui.tvVariables->setModel(m_script->variableModel());
 }
 
 void ScriptDock::retranslateUi() {
 }
 
-//*************************************************************
-//************ SLOTs for changes triggered in Script **********
-//*************************************************************
-
-void ScriptDock::setEditorFont(const QFont& font) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.kfrEditorFont->setFont(font);
+void ScriptDock::toggleFilterOptionsMenu(bool checked) {
+    if (checked) {
+        QMenu menu;
+        menu.addAction(m_caseSensitiveAction);
+        menu.addAction(m_matchCompleteWordAction);
+        connect(&menu, &QMenu::aboutToHide, ui.tbFilterOptions, &QPushButton::toggle);
+        menu.exec(ui.tbFilterOptions->mapToGlobal(QPoint(0, ui.tbFilterOptions->height())));
+    }
 }
 
-void ScriptDock::setOutputFont(const QFont& font) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.kfrOutputFont->setFont(font);
+void ScriptDock::filterTextChanged(const QString& text) {
+    auto sensitivity = m_caseSensitiveAction->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+    bool matchCompleteWord = m_matchCompleteWordAction->isChecked();
+    const auto* model = ui.tvVariables->model();
+
+    for (int i = 0; i < model->rowCount(); i++) {
+        const auto& child = model->index(i, 0);
+        const auto& name = model->data(child).toString();
+        bool visible = true;
+        if (text.isEmpty())
+            visible = true;
+        else if (matchCompleteWord)
+            visible = name.startsWith(text, sensitivity);
+        else
+            visible = name.contains(text, sensitivity);
+
+        ui.tvVariables->setRowHidden(i, QModelIndex(), !visible);
+    }
 }
 
-void ScriptDock::setEditorTheme(const QString& theme) {
-	CONDITIONAL_LOCK_RETURN;
-	ui.cbTheme->setCurrentText(theme);
+void ScriptDock::contextMenuEvent(QContextMenuEvent* event) {
+    const auto& index  = ui.tvVariables->currentIndex();
+    if (!index.isValid())
+        return;
+
+    QMenu menu;
+    menu.addAction(m_copyNameAction);
+    menu.addAction(m_copyValueAction);
+    menu.addAction(m_copyNameValueAction);
+    menu.exec(event->globalPos());
 }
 
-//*************************************************************
-//************************* Settings **************************
-//*************************************************************
-void ScriptDock::loadConfigFromTemplate(KConfig& config) {
-	KConfigGroup group = config.group(QStringLiteral("ScriptEditor"));
+void ScriptDock::copy(const QAction* action) const {
+    const auto& items = ui.tvVariables->selectionModel()->selectedIndexes();
+    QString text;
+    if (action == m_copyNameAction) {
+        text = items.at(0).data().toString();
+	} else if (action == m_copyValueAction) {
+        text = items.at(1).data().toString();
+        text = text.replace(QStringLiteral("; "), QStringLiteral("\n"));
+    } else if (action == m_copyNameValueAction) {
+        text = items.at(0).data().toString();
+        text += QLatin1Char('\n') + items.at(1).data().toString();
+        text = text.replace(QStringLiteral("; "), QStringLiteral("\n"));
+    }
 
-	ui.kfrEditorFont->setFont(group.readEntry(QStringLiteral("EditorFont"), m_script->editorFont()));
-    ui.kfrOutputFont->setFont(group.readEntry(QStringLiteral("OutputFont"), m_script->outputFont()));
-    ui.cbTheme->setCurrentText(group.readEntry(QStringLiteral("EditorTheme"), m_script->editorTheme()));
-}
-
-void ScriptDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group(QStringLiteral("ScriptEditor"));
-
-    group.writeEntry(QStringLiteral("EditorFont"), ui.kfrEditorFont->font());
-    group.writeEntry(QStringLiteral("OutputFont"), ui.kfrOutputFont->font());
-    group.writeEntry(QStringLiteral("EditorTheme"), ui.cbTheme->currentText());
-
-    config.sync();
-}
-
-void ScriptDock::setScriptEditorFont(const QFont& font) {
-    CONDITIONAL_LOCK_RETURN;
-    m_script->setEditorFont(font);
-}
-
-void ScriptDock::setScriptOutputFont(const QFont& font) {
-    CONDITIONAL_LOCK_RETURN;
-    m_script->setOutputFont(font);
-}
-
-void ScriptDock::setScriptEditorTheme(const QString& theme) {
-    CONDITIONAL_LOCK_RETURN;
-    m_script->setEditorTheme(theme);
+    QApplication::clipboard()->setText(text);
 }

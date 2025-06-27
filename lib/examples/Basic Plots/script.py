@@ -91,8 +91,8 @@ fitData11 = fit11.fitData()
 fitData11.modelCategory = nsl_fit_model_category.nsl_fit_model_distribution
 fitData11.modelType = nsl_sf_stats_distribution.nsl_sf_stats_gaussian
 
-XYFitCurve.initFitData(fitData11)
-fit11.initStartValues(fitData11)
+fitData11 = XYFitCurve.initFitData(fitData11)
+fitData11 = fit11.initStartValues(fitData11)
 fit11.setFitData(fitData11)
 fit11.recalculate()
 
@@ -127,8 +127,8 @@ fitData12 = fit12.fitData()
 fitData12.modelCategory = nsl_fit_model_category.nsl_fit_model_distribution
 fitData12.modelType = nsl_sf_stats_distribution.nsl_sf_stats_gaussian
 
-XYFitCurve.initFitData(fitData12)
-fit12.initStartValues(fitData12)
+fitData12 = XYFitCurve.initFitData(fitData12)
+fitData12 = fit12.initStartValues(fitData12)
 fit12.setFitData(fitData12)
 fit12.recalculate()
 
@@ -228,5 +228,3 @@ config32.recalc()
 
 ###################################################################################################################################################################
 ###################################################################################################################################################################
-
-Project.retransformElements(project)

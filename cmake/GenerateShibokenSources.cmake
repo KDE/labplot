@@ -117,6 +117,8 @@ function(generate_shiboken_sources)
 
     # Set up the options to pass to shiboken.
     set(shiboken_options --enable-pyside-extensions
+        --keywords=scripting
+        --clang-option=-DSCRIPTING
         "${INCLUDES}${PATH_SEP}${PBC_INCLUDES}"
         --include-paths=${CMAKE_SOURCE_DIR}
         --typesystem-paths=${CMAKE_SOURCE_DIR}
