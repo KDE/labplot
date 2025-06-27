@@ -4,6 +4,7 @@
 	Description      : widget for editing properties of equation curves
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -13,6 +14,7 @@
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "frontend/widgets/ConstantsWidget.h"
 #include "frontend/widgets/FunctionsWidget.h"
+#include "frontend/GuiTools.h"
 
 #include <QCompleter>
 #include <QKeyEvent>
@@ -90,6 +92,8 @@ void XYEquationCurveDock::setupGeneral() {
 	connect(uiGeneralTab.tbFunctions1, &QToolButton::clicked, this, &XYEquationCurveDock::showFunctions);
 	connect(uiGeneralTab.tbConstants2, &QToolButton::clicked, this, &XYEquationCurveDock::showConstants);
 	connect(uiGeneralTab.tbFunctions2, &QToolButton::clicked, this, &XYEquationCurveDock::showFunctions);
+	connect(uiGeneralTab.pbLoadFunction, &QPushButton::clicked, this, &XYEquationCurveDock::loadFunction);
+	connect(uiGeneralTab.pbSaveFunction, &QPushButton::clicked, this, &XYEquationCurveDock::saveFunction);
 	connect(uiGeneralTab.teMin, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
 	connect(uiGeneralTab.teMax, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
 	connect(uiGeneralTab.sbCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYEquationCurveDock::enableRecalculate);
@@ -257,6 +261,18 @@ void XYEquationCurveDock::showFunctions() {
 		QPoint pos(-menu.sizeHint().width() + uiGeneralTab.tbFunctions2->width(), -menu.sizeHint().height());
 		menu.exec(uiGeneralTab.tbFunctions2->mapToGlobal(pos));
 	}
+}
+
+void XYEquationCurveDock::loadFunction() {
+	GuiTools::loadFunction(uiGeneralTab.teEquation1);
+	//TODO: xmin, xmax, npoints
+	//custom code if accepted
+}
+
+void XYEquationCurveDock::saveFunction() {
+	GuiTools::saveFunction(uiGeneralTab.teEquation1);
+	//TODO: xmin, xmax, npoints
+	//custom code if accepted
 }
 
 void XYEquationCurveDock::insertFunction1(const QString& functionName) {
