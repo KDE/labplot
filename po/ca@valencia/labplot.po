@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-25 00:39+0000\n"
-"PO-Revision-Date: 2025-06-05 10:38+0200\n"
+"PO-Revision-Date: 2025-06-25 16:54+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -7340,10 +7340,9 @@ msgid "Tricube"
 msgstr "Tri-cúbica"
 
 #: src/backend/script/Script.cpp:79
-#, fuzzy, kde-format
-#| msgid "Text file (*.txt)"
+#, kde-format
 msgid "Python file (*.py)"
-msgstr "Fitxer de text (*.txt)"
+msgstr "Fitxer Python (*.py)"
 
 #: src/backend/script/Script.cpp:137 src/backend/script/Script.cpp:324
 #, kde-format
@@ -7371,22 +7370,19 @@ msgid "A script is already running."
 msgstr "Ja s'està executant un script."
 
 #: src/backend/script/ScriptRuntime.cpp:92
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Nom"
 
 #: src/backend/script/ScriptRuntime.cpp:94
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "Valor"
 
 #: src/backend/script/ScriptRuntime.cpp:96
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr "Tipus"
@@ -14492,22 +14488,19 @@ msgid "Match Complete Word"
 msgstr "Coincidix tota la paraula"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:53
-#, fuzzy, kde-format
-#| msgid "Day Names"
+#, kde-format
 msgid "Copy Name"
-msgstr "Noms dels dies"
+msgstr "Copia el nom"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:54
-#, fuzzy, kde-format
-#| msgid "Drop Values"
+#, kde-format
 msgid "Copy Value"
-msgstr "Valors d'omissió"
+msgstr "Copia el valor"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:55
-#, fuzzy, kde-format
-#| msgid "Uniform Random Values"
+#, kde-format
 msgid "Copy Name and Value"
-msgstr "Valors aleatoris uniformes"
+msgstr "Copia el nom i el valor"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:57
 #, kde-format
@@ -25501,12 +25494,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Output Font:"
-#~ msgstr "Lletra d'eixida:"
-
-#~ msgid "Editor Font:"
-#~ msgstr "Lletra de l'editor:"
-
-#~ msgid "Editor Theme:"
-#~ msgstr "Tema de l'editor:"
