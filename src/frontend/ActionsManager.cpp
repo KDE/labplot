@@ -1488,7 +1488,7 @@ void ActionsManager::connectNotebookToolbarActions(const NotebookView* view) {
 #endif
 
 void ActionsManager::connectDataExtractorToolbarActions(DatapickerImageView* view) {
-	const auto action_update = [this, view] (DatapickerImageView::MouseMode mouseMode) {
+	const auto action_update = [this] (DatapickerImageView::MouseMode mouseMode) {
 		for (auto* action : m_dataExtractorMouseModeActionGroup->actions()) {
 			if (static_cast<DatapickerImageView::MouseMode>(action->data().toInt()) == mouseMode)
 				action->setChecked(true);
@@ -1497,7 +1497,7 @@ void ActionsManager::connectDataExtractorToolbarActions(DatapickerImageView* vie
 
 	// mouse mode actions
 	disconnect(m_dataExtractorMouseModeActionGroup, &QActionGroup::triggered, nullptr, nullptr);
-	connect(m_dataExtractorMouseModeActionGroup, &QActionGroup::triggered, [this, view, action_update](QAction* action) {
+	connect(m_dataExtractorMouseModeActionGroup, &QActionGroup::triggered, [view, action_update](QAction* action) {
 		if (!view->changeMouseMode(action))
 			action_update(view->mouseMode());
 	});
