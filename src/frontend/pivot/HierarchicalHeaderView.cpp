@@ -36,14 +36,16 @@ HierarchicalHeaderItem* HierarchicalHeaderItem::insertChild(int row, int col) {
 }
 
 const HierarchicalHeaderItem* HierarchicalHeaderItem::child(int row,int col) const {
-	QHash<QPair<int,int>,HierarchicalHeaderItem*>::const_iterator itr = child_items.find(QPair<int,int>(row,col));
-	if (itr != child_items.end()) return itr.value();
+	auto itr = child_items.find(QPair<int,int>(row,col));
+	if (itr != child_items.end())
+		return itr.value();
     return nullptr;
 }
 
 HierarchicalHeaderItem* HierarchicalHeaderItem::child(int row,int col) {
-	QHash<QPair<int,int>,HierarchicalHeaderItem*>::iterator itr = child_items.find(QPair<int,int>(row,col));
-	if (itr != child_items.end()) return itr.value();
+	auto itr = child_items.find(QPair<int,int>(row,col));
+	if (itr != child_items.end())
+		return itr.value();
     return nullptr;
 }
 
@@ -52,8 +54,9 @@ void HierarchicalHeaderItem::setText(const QString& text) {
 }
 
 QVariant HierarchicalHeaderItem::data(int role) const {
-	QHash<int,QVariant>::const_iterator itr = role_datas.find(role);
-	if (itr != role_datas.end()) return itr.value();
+	auto itr = role_datas.find(role);
+	if (itr != role_datas.end())
+		return itr.value();
 	return QVariant();
 }
 
@@ -76,8 +79,8 @@ HierarchicalHeaderItem* HierarchicalHeaderItem::parent() {
 void HierarchicalHeaderItem::clear() {
 	auto items = child_items.values();
 	for(auto* item : child_items) {
-        if (item)
-            delete item;
+		if (item)
+			delete item;
 	}
 	child_items.clear();
 }
@@ -90,56 +93,56 @@ HierarchicalHeaderModel::HierarchicalHeaderModel(QObject* parent) : QAbstractTab
 	m_rootItem(new HierarchicalHeaderItem()) {
 }
 HierarchicalHeaderModel::HierarchicalHeaderModel(int rows, int cols, QObject* parent) :
-	QAbstractTableModel(parent),m_rowCount(rows),m_columnCount(cols),m_rootItem(new HierarchicalHeaderItem()) {
-    maxWidthArr = new int[m_columnCount];
-       for(int col=0; col<m_columnCount; col++)
-           maxWidthArr[col] = 50;
+	QAbstractTableModel(parent),
+	m_rowCount(rows),
+	m_columnCount(cols),
+	m_rootItem(new HierarchicalHeaderItem()) {
+	maxWidthArr = new int[m_columnCount];
+		for(int col = 0; col < m_columnCount; col++)
+			maxWidthArr[col] = 50;
 }
 
 HierarchicalHeaderModel::~HierarchicalHeaderModel() {
 	m_rootItem->clear();
 	delete m_rootItem;
-    delete maxWidthArr;
+	delete maxWidthArr;
 }
 
-void HierarchicalHeaderModel::setBaseSectionSize(QSize size)
-{
+void HierarchicalHeaderModel::setBaseSectionSize(QSize size) {
+	baseSectionSize = size;
 
-    baseSectionSize = size;
+	if(orientation == Qt::Vertical){
+		for (int row = 0; row < m_rowCount; ++row)
+			for (int col = 0; col < m_columnCount; ++col) {
+				baseSectionSize.setWidth(maxWidthArr[col]);
+				this->setData(this->index(row,col),baseSectionSize,Qt::SizeHintRole);
+			}
+		return;
+	}
 
-    if(orientation == Qt::Vertical){
-        for (int row=0;row<m_rowCount;++row)
-            for (int col=0;col<m_columnCount;++col)
-            {
-                baseSectionSize.setWidth(maxWidthArr[col]);
-                this->setData(this->index(row,col),baseSectionSize,Qt::SizeHintRole);
-            }
-        return;
-    }
-
-    for (int row=0;row<m_rowCount;++row)
-        for (int col=0;col<m_columnCount;++col)
-        {
-            this->setData(this->index(row,col),baseSectionSize,Qt::SizeHintRole);
-        }
+	for (int row = 0; row < m_rowCount; ++row)
+		for (int col = 0; col < m_columnCount; ++col)
+			this->setData(this->index(row,col),baseSectionSize,Qt::SizeHintRole);
 }
 
-void HierarchicalHeaderModel::setOrientation(Qt::Orientation orient)
-{
-    orientation = orient;
+void HierarchicalHeaderModel::setOrientation(Qt::Orientation orient) {
+	orientation = orient;
 }
 
 QModelIndex HierarchicalHeaderModel::index(int row, int column, const QModelIndex & parent) const {
 	if (!hasIndex(row,column,parent)) return QModelIndex();
 
 	HierarchicalHeaderItem* parentItem;
-	if (!parent.isValid()) parentItem = m_rootItem; // parent item is always the m_rootItem on table model
-	else parentItem = static_cast<HierarchicalHeaderItem*>(parent.internalPointer()); // no effect
+	if (!parent.isValid())
+		parentItem = m_rootItem; // parent item is always the m_rootItem on table model
+	else
+		parentItem = static_cast<HierarchicalHeaderItem*>(parent.internalPointer()); // no effect
 
-	HierarchicalHeaderItem* childItem = parentItem->child(row,column);
-	if (!childItem) childItem = parentItem->insertChild(row,column);
+	auto* childItem = parentItem->child(row,column);
+	if (!childItem)
+		childItem = parentItem->insertChild(row,column);
+
 	return createIndex(row,column,childItem);
-
 }
 
 void HierarchicalHeaderModel::setRowCount(int count) {
@@ -154,16 +157,18 @@ void HierarchicalHeaderModel::setRowCount(int count) {
 void HierarchicalHeaderModel::setColumnCount(int count) {
 	m_columnCount = count;
 
-    if(m_columnCount == 0) return;
-    maxWidthArr = new int[m_columnCount];
-    for(int col=0; col<m_columnCount; col++)
-       maxWidthArr[col] = 50;
+	if(m_columnCount == 0)
+		return;
+	maxWidthArr = new int[m_columnCount];
+	for(int col = 0; col < m_columnCount; col++)
+		maxWidthArr[col] = 50;
 }
 
 void HierarchicalHeaderModel::setSpan(int row, int column, int rowSpanCount, int columnSpanCount) {
-	QModelIndex index = this->index(row, column);
+	auto index = this->index(row, column);
 	if (rowSpanCount > 0)
 		setData(index, rowSpanCount, ROW_SPAN_ROLE);
+
 	if (columnSpanCount)
 		setData(index, columnSpanCount, COLUMN_SPAN_ROLE);
 }
@@ -185,14 +190,14 @@ QVariant HierarchicalHeaderModel::data(const QModelIndex& index, int role) const
 	if (index.row() >= m_rowCount || index.row() < 0 || index.column() >= m_columnCount || index.column() < 0)
 		return QVariant();
 
-	HierarchicalHeaderItem* item = static_cast<HierarchicalHeaderItem*>(index.internalPointer());
+	auto* item = static_cast<HierarchicalHeaderItem*>(index.internalPointer());
 
 	return item->data(role);
 }
 
 bool HierarchicalHeaderModel::setData(const QModelIndex & index, const QVariant & value, int role) {
 	if (index.isValid()) {
-		HierarchicalHeaderItem* item = static_cast<HierarchicalHeaderItem*>(index.internalPointer());
+		auto* item = static_cast<HierarchicalHeaderItem*>(index.internalPointer());
 		if (role == COLUMN_SPAN_ROLE) {
 			int col = index.column();
 			int span = value.toInt();
@@ -209,17 +214,17 @@ bool HierarchicalHeaderModel::setData(const QModelIndex & index, const QVariant 
 					span = m_rowCount-row;
 				item->setData(span,ROW_SPAN_ROLE);
 			}
-        }
-        else if (role == Qt::DisplayRole || role == Qt::EditRole){
-            item->setData(value, role);
-            if(orientation == Qt::Vertical)
-            {
-                int width = value.toString().length()*10;
-                int col = index.column();
-                if(width > maxWidthArr[col])
-                    maxWidthArr[col] = width;
-            }
-         }
+		}
+		else if (role == Qt::DisplayRole || role == Qt::EditRole){
+			item->setData(value, role);
+			if(orientation == Qt::Vertical)
+			{
+				int width = value.toString().length()*10;
+				int col = index.column();
+				if(width > maxWidthArr[col])
+					maxWidthArr[col] = width;
+			}
+			}
         else
 			item->setData(value,role);
 
@@ -242,7 +247,6 @@ void HierarchicalHeaderModel::clear() {
 
 /**********************************************************************************************
  *                                    VIEW IMPLEMENTATION
- *
  * ********************************************************************************************/
 HierarchicalHeaderView::HierarchicalHeaderView(Qt::Orientation orientation, int rows, int columns, QWidget* parent):
 	QHeaderView(orientation,parent) {
@@ -256,7 +260,7 @@ HierarchicalHeaderView::HierarchicalHeaderView(Qt::Orientation orientation, int 
 	}
 
 	// create header model
-	HierarchicalHeaderModel* headerModel = new HierarchicalHeaderModel(rows,columns);
+	auto* headerModel = new HierarchicalHeaderModel(rows,columns);
 
 	// set default size of item
 	for (int row=0; row<rows; ++row)
@@ -287,22 +291,18 @@ HierarchicalHeaderView::HierarchicalHeaderView(Qt::Orientation orientation, QWid
 HierarchicalHeaderView::~HierarchicalHeaderView() = default;
 
 
-QSize HierarchicalHeaderView::getBaseSectionSize() const
-{
-    return baseSectionSize;
+QSize HierarchicalHeaderView::getBaseSectionSize() const {
+	return baseSectionSize;
 }
 
-void HierarchicalHeaderView::setNewModel(HierarchicalHeaderModel* model)
-{
-    m_model = model;
-    setModel(m_model);
+void HierarchicalHeaderView::setNewModel(HierarchicalHeaderModel* model) {
+	m_model = model;
+	setModel(m_model);
 }
 
 HierarchicalHeaderModel* HierarchicalHeaderView::hierarchicalModel() const {
 	return m_model;
 }
-
-
 
 void HierarchicalHeaderView::setRowHeight(int row, int rowHeight) {
 	const int cols = m_model->columnCount();
@@ -643,9 +643,9 @@ int HierarchicalHeaderView::getSectionRange(QModelIndex& index, int* beginSectio
 }
 
 void HierarchicalHeaderView::onSectionResized(int logicalIndex,int oldSize,int newSize) {
-    Q_UNUSED(oldSize);
+	Q_UNUSED(oldSize);
 
-    if (!m_model)
+	if (!m_model)
 		return;
 
 	const int OTN = orientation();

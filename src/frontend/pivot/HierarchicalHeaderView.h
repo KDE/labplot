@@ -4,7 +4,7 @@
 	Description          : Hierarchical header view
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Lee Cho Kang <pzesseto@gmail.com>
-	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-3.0-or-later
 */
 
@@ -13,7 +13,6 @@
 
 #include <QHeaderView>
 #include <QModelIndex>
-
 
 #include <QAbstractTableModel>
 #include <QHash>
@@ -27,6 +26,7 @@ enum eRbHeaderRole {
 };
 
 class HierarchicalHeaderItem {
+
 public:
 	HierarchicalHeaderItem(HierarchicalHeaderItem* parent = nullptr);
 	HierarchicalHeaderItem(int row, int column, HierarchicalHeaderItem* parent = nullptr);
@@ -37,7 +37,7 @@ public:
 	HierarchicalHeaderItem* child(int row,int col);
 
 	void setData(const QVariant& data, int role);
-	QVariant data(int role=Qt::UserRole+1) const;
+	QVariant data(int role = Qt::UserRole + 1) const;
 
 	int column() const;
 	int row() const;
@@ -54,12 +54,11 @@ private:
 };
 
 /****************************************************************************************************
- *
  *                              MODEL DECLARATIONS
  * *************************************************************************************************/
-
-class HierarchicalHeaderModel: public QAbstractTableModel {
+class HierarchicalHeaderModel : public QAbstractTableModel {
 	Q_OBJECT
+
 public:
 	HierarchicalHeaderModel(QObject* parent = nullptr);
 	HierarchicalHeaderModel(int rows, int cols, QObject* parent = nullptr);
@@ -70,35 +69,35 @@ public:
 	void setColumnCount(int);
 	void setSpan(int row, int column, int rowSpanCount, int columnSpanCount);
 	QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
-	int rowCount(const QModelIndex &parent=QModelIndex()) const override;
-	int columnCount(const QModelIndex &parent=QModelIndex()) const override;
-	QVariant data(const QModelIndex &index, int role) const override;
-	bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole) override;
-	Qt::ItemFlags flags(const QModelIndex &index) const override;
+	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+	int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+	QVariant data(const QModelIndex&, int role) const override;
+	bool setData(const QModelIndex&, const QVariant& value, int role = Qt::EditRole) override;
+	Qt::ItemFlags flags(const QModelIndex&) const override;
 	void clear();
 
-    void setBaseSectionSize(QSize size);
-    void setOrientation(Qt::Orientation orient);
+	void setBaseSectionSize(QSize);
+	void setOrientation(Qt::Orientation);
+
 private:
 	int m_rowCount{0};
 	int m_columnCount{0};
 	HierarchicalHeaderItem* m_rootItem{nullptr};
 
-    int *maxWidthArr;
-    QSize baseSectionSize;
-    Qt::Orientation orientation;
+	int *maxWidthArr;
+	QSize baseSectionSize;
+	Qt::Orientation orientation;
 };
 
 /****************************************************************************************************
- *
  *                              VIEW DECLARATIONS
  * *************************************************************************************************/
-
 class HierarchicalHeaderView : public QHeaderView {
 	Q_OBJECT
+
 public:
-	HierarchicalHeaderView(Qt::Orientation orientation, QWidget* parent = nullptr);
-	HierarchicalHeaderView(Qt::Orientation orientation, int rows, int columns, QWidget* parent = nullptr);
+	HierarchicalHeaderView(Qt::Orientation, QWidget* parent = nullptr);
+	HierarchicalHeaderView(Qt::Orientation, int rows, int columns, QWidget* parent = nullptr);
 	~HierarchicalHeaderView() override;
 
 	HierarchicalHeaderModel* hierarchicalModel() const;
@@ -107,13 +106,13 @@ public:
 	void setCellBackgroundColor(const QModelIndex&, const QColor&);
 	void setCellForegroundColor(const QModelIndex&, const QColor&);
 
-    QSize getBaseSectionSize() const;
-    void setNewModel(HierarchicalHeaderModel* model);
+	QSize getBaseSectionSize() const;
+	void setNewModel(HierarchicalHeaderModel*);
 
 protected:
 	void mousePressEvent(QMouseEvent*) override;
 	QModelIndex indexAt(const QPoint&) const override;
-	void paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const override;
+	void paintSection(QPainter*, const QRect& rect, int logicalIndex) const override;
 	QSize sectionSizeFromContents(int logicalIndex) const override;
 
 	QModelIndex columnSpanIndex(const QModelIndex&) const;
