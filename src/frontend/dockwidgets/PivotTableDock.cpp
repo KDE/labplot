@@ -15,7 +15,6 @@
 #include "frontend/datasources/DatabaseManagerDialog.h"
 #include "frontend/datasources/DatabaseManagerWidget.h"
 #include "frontend/pivot/PivotTableView.h"
-// #include "frontend/TemplateHandler.h"
 
 #include <QFile>
 #include <QSqlError>
@@ -102,7 +101,7 @@ PivotTableDock::PivotTableDock(QWidget* parent) : BaseDock(parent) {
 }
 
 void PivotTableDock::setPivotTable(PivotTable* pivotTable) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_pivotTable = pivotTable;
 	setAspects(QList{pivotTable});
 
@@ -112,12 +111,9 @@ void PivotTableDock::setPivotTable(PivotTable* pivotTable) {
 
 	//show the properties
 	ui.cbDataSourceType->setCurrentIndex(m_pivotTable->dataSourceType());
-	if (m_pivotTable->dataSourceType() == PivotTable::DataSourceSpreadsheet)
-		setModelIndexFromAspect(cbSpreadsheet, m_pivotTable->dataSourceSpreadsheet());
-	else
-		ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(m_pivotTable->dataSourceConnection()));
-
-	this->dataSourceTypeChanged(ui.cbDataSourceType->currentIndex());
+	cbSpreadsheet->setAspect(m_pivotTable->dataSourceSpreadsheet());
+	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(m_pivotTable->dataSourceConnection()));
+	dataSourceTypeChanged(ui.cbDataSourceType->currentIndex());
 
 	//available dimensions and measures
 	ui.lwFields->clear();
@@ -128,17 +124,7 @@ void PivotTableDock::setPivotTable(PivotTable* pivotTable) {
 		ui.lwFields->addItem(new QListWidgetItem(measure));
 
 	//undo functions
-	connect(m_pivotTable, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(pivotTableDescriptionChanged(const AbstractAspect*)));
 	//TODO:
-
-	m_initializing = false;
-}
-
-void PivotTableDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {
-	if (aspect)
-		cb->setCurrentModelIndex(aspectModel()->modelIndexOfAspect(aspect));
-	else
-		cb->setCurrentModelIndex(QModelIndex());
 }
 
 void PivotTableDock::updateLocale() {
@@ -154,7 +140,7 @@ void PivotTableDock::retranslateUi() {
 	The selected connection is selected in the connection combo box in this widget.
 **/
 void PivotTableDock::showDatabaseManager() {
-	DatabaseManagerDialog* dlg = new DatabaseManagerDialog(this, ui.cbConnection->currentText());
+	auto* dlg = new DatabaseManagerDialog(this, ui.cbConnection->currentText());
 
 	if (dlg->exec() == QDialog::Accepted) {
 		//re-read the available connections to be in sync with the changes in DatabaseManager

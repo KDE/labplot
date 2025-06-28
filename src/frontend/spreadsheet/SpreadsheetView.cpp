@@ -969,10 +969,9 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 	if (m_spreadsheet->columnCount() > 0 && m_spreadsheet->rowCount() > 0) {
 		menu->insertMenu(firstAction, m_plotDataMenu);
 		menu->insertMenu(firstAction, m_analyzePlotMenu);
+		menu->insertAction(firstAction, action_pivot_table);
 		menu->insertSeparator(firstAction);
 	}
-	menu->addSeparator();
-	menu->addAction(action_pivot_table);
 	menu->addSeparator();
 	menu->insertMenu(firstAction, m_selectionMenu);
 	menu->insertSeparator(firstAction);
@@ -1173,7 +1172,7 @@ void SpreadsheetView::showSparklines(bool on) {
 }
 
 void SpreadsheetView::createPivotTable() {
-	PivotTable* pivot = new PivotTable(i18n("Pivot Table for %1", m_spreadsheet->name()));
+	auto* pivot = new PivotTable(i18n("Pivot Table for %1", m_spreadsheet->name()));
 	pivot->setDataSourceType(PivotTable::DataSourceSpreadsheet);
 	pivot->setDataSourceSpreadsheet(m_spreadsheet);
 	m_spreadsheet->parentAspect()->addChild(pivot);

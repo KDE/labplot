@@ -39,7 +39,6 @@ private:
 	QString m_configPath;
 
 	void load();
-	void setModelIndexFromAspect(TreeViewComboBox*, const AbstractAspect*);
 	void readConnections();
 	void updateFields();
 	bool fieldSelected(const QString&);
