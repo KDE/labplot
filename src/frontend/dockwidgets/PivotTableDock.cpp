@@ -25,16 +25,13 @@
 
  /*!
   \class PivotTableDock
-  \brief Provides a widget for editing the properties of the matrices currently selected in the project explorer.
+  \brief Provides a widget for editing the properties of the pivot table currently selected in the project explorer.
 
   \ingroup kdefrontend
 */
 PivotTableDock::PivotTableDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	setBaseWidgets(ui.leName, ui.teComment);
-
-	ui.cbDataSourceType->addItem(i18n("Spreadsheet"));
-	ui.cbDataSourceType->addItem(i18n("Database"));
 
 	cbSpreadsheet = new TreeViewComboBox;
 	ui.gridLayout->addWidget(cbSpreadsheet, 5, 3, 1, 4);
@@ -45,27 +42,23 @@ PivotTableDock::PivotTableDock(QWidget* parent) : BaseDock(parent) {
 						   AspectType::LiveDataSource};
 	cbSpreadsheet->setTopLevelClasses(list);
 
-	ui.bDatabaseManager->setIcon(QIcon::fromTheme(QLatin1String("network-server-database")));
-	ui.bDatabaseManager->setToolTip(i18n("Manage connections"));
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  QLatin1String("sql_connections");
 	readConnections();
 
 	const auto* style = ui.bAddRow->style();
 	ui.bAddRow->setIcon(style->standardIcon(QStyle::SP_ArrowRight));
-	ui.bAddRow->setToolTip(i18n("Add the selected field to rows"));
 	ui.bRemoveRow->setIcon(style->standardIcon(QStyle::SP_ArrowLeft));
-	ui.bRemoveRow->setToolTip(i18n("Remove the selected field from rows"));
-
 	ui.bAddColumn->setIcon(style->standardIcon(QStyle::SP_ArrowRight));
-	ui.bAddColumn->setToolTip(i18n("Add the selected field to columns"));
 	ui.bRemoveColumn->setIcon(style->standardIcon(QStyle::SP_ArrowLeft));
-	ui.bRemoveColumn->setToolTip(i18n("Remove the selected field from columns"));
+	ui.bDatabaseManager->setIcon(QIcon::fromTheme(QLatin1String("network-server-database")));
 
 	//add/remove buttons only enabled if something was selected
 	ui.bAddRow->setEnabled(false);
 	ui.bRemoveRow->setEnabled(false);
 	ui.bAddColumn->setEnabled(false);
 	ui.bRemoveColumn->setEnabled(false);
+
+	retranslateUi();
 
 	//**********************************  Slots **********************************************
 	connect(ui.cbDataSourceType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
@@ -116,12 +109,14 @@ void PivotTableDock::setPivotTable(PivotTable* pivotTable) {
 	dataSourceTypeChanged(ui.cbDataSourceType->currentIndex());
 
 	//available dimensions and measures
+	/*
 	ui.lwFields->clear();
 	for (auto dimension : m_pivotTable->dimensions())
 		ui.lwFields->addItem(new QListWidgetItem(QIcon::fromTheme(QLatin1String("draw-text")), dimension));
 
 	for (auto measure : m_pivotTable->measures())
 		ui.lwFields->addItem(new QListWidgetItem(measure));
+	*/
 
 	//undo functions
 	//TODO:
@@ -132,7 +127,15 @@ void PivotTableDock::updateLocale() {
 }
 
 void PivotTableDock::retranslateUi() {
+	ui.cbDataSourceType->clear();
+	ui.cbDataSourceType->addItem(i18n("Spreadsheet"));
+	ui.cbDataSourceType->addItem(i18n("Database"));
 
+	ui.bDatabaseManager->setToolTip(i18n("Manage connections"));
+	ui.bAddRow->setToolTip(i18n("Add the selected field to rows"));
+	ui.bRemoveRow->setToolTip(i18n("Remove the selected field from rows"));
+	ui.bAddColumn->setToolTip(i18n("Add the selected field to columns"));
+	ui.bRemoveColumn->setToolTip(i18n("Remove the selected field from columns"));
 }
 
 /*!

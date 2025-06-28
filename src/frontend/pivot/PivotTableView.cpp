@@ -1,30 +1,11 @@
 /***************************************************************************
-    File                 : PivotTableView.cpp
-    Project              : LabPlot
-    Description          : View class for PivotTable
-    --------------------------------------------------------------------
-    Copyright            : (C) 2019-2023 by Alexander Semke (alexander.semke@web.de)
-
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+	File                 : PivotTableView.cpp
+	Project              : LabPlot
+	Description          : View class for PivotTable
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "PivotTableView.h"
 #include "HierarchicalHeaderView.h"
@@ -41,16 +22,13 @@
 #include <QPrintPreviewDialog>
 #include <QTableView>
 
-#include <KConfigGroup>
 #include <KLocalizedString>
-#include <KMessageBox>
-#include <KSharedConfig>
 
 /*!
 	\class PivotTableView
 	\brief View class for PivotTable
 
-	\ingroup commonfrontend
+	\ingroup frontend
  */
 PivotTableView::PivotTableView(PivotTable* pivotTable, bool readOnly) : QWidget(),
 	m_pivotTable(pivotTable),
@@ -107,10 +85,6 @@ void PivotTableView::initMenus() {
 
 void PivotTableView::connectActions() {
 
-}
-
-void PivotTableView::fillToolBar(QToolBar* toolBar) {
-	Q_UNUSED(toolBar);
 }
 
 /*!
@@ -176,24 +150,22 @@ void PivotTableView::print(QPrinter* printer) const {
 }
 
 void PivotTableView::changed() {
-     qDebug() << "in PivotTableView::changed()";
 	// m_pivotTable->setHorizontalHeaderModel(m_horizontalHeaderView->hierarchicalModel());
 	// m_pivotTable->setVerticalHeaderModel(m_verticalHeaderView->hierarchicalModel());
 
+	HierarchicalHeaderModel* horizontalHeaderModel = static_cast<HierarchicalHeaderModel*>(m_horizontalHeaderView->hierarchicalModel());
+	HierarchicalHeaderModel* verticalHeaderModel = static_cast<HierarchicalHeaderModel*>(m_verticalHeaderView->hierarchicalModel());
 
-     HierarchicalHeaderModel* horizontalHeaderModel = static_cast<HierarchicalHeaderModel*>(m_horizontalHeaderView->hierarchicalModel());
-     HierarchicalHeaderModel* verticalHeaderModel = static_cast<HierarchicalHeaderModel*>(m_verticalHeaderView->hierarchicalModel());
+	horizontalHeaderModel->setOrientation(Qt::Horizontal);
+	verticalHeaderModel->setOrientation(Qt::Vertical);
 
-     horizontalHeaderModel->setOrientation(Qt::Horizontal);
-     verticalHeaderModel->setOrientation(Qt::Vertical);
+	// qDebug() << " setting size for horizontal header";
+	// qDebug() << " rows, cols = " << horizontalHeaderModel->rowCount() << ", " << horizontalHeaderModel->columnCount();
+	horizontalHeaderModel->setBaseSectionSize(m_horizontalHeaderView->getBaseSectionSize());
 
-//     qDebug() << " setting size for horizontal header";
-//     qDebug() << " rows, cols = " << horizontalHeaderModel->rowCount() << ", " << horizontalHeaderModel->columnCount();
-     horizontalHeaderModel->setBaseSectionSize(m_horizontalHeaderView->getBaseSectionSize());
-
-//     qDebug() << "settign size for vertical header";
-//     qDebug() << " rows, cols = " << verticalHeaderModel->rowCount() << ", " << verticalHeaderModel->columnCount();
-     verticalHeaderModel->setBaseSectionSize(m_verticalHeaderView->getBaseSectionSize());
+	// qDebug() << "settign size for vertical header";
+	// qDebug() << " rows, cols = " << verticalHeaderModel->rowCount() << ", " << verticalHeaderModel->columnCount();
+	verticalHeaderModel->setBaseSectionSize(m_verticalHeaderView->getBaseSectionSize());
 }
 
 void PivotTableView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {

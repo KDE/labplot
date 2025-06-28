@@ -1813,7 +1813,6 @@ bool Spreadsheet::exportToSQLite(const QString& path, const QString& tableName) 
 	}
 	query += QLatin1Char(')');
 	QSqlQuery q;
-	qDebug() << "create " << query;
 	if (!q.exec(query)) {
 		RESET_CURSOR;
 		KMessageBox::error(nullptr, i18n("Failed to create table in the SQLite database %1.", path) + QLatin1Char('\n') + q.lastError().databaseText());
@@ -1869,12 +1868,10 @@ bool Spreadsheet::exportToSQLite(const QString& path, const QString& tableName) 
 			query += QLatin1Char(';');
 
 			// insert values for the current chunk of data
-			qDebug()<<"query " << query;
 			if (!q.exec(query)) {
 				RESET_CURSOR;
 				KMessageBox::error(nullptr, i18n("Failed to insert values into the table."));
 				QDEBUG(Q_FUNC_INFO << ", bulk insert error " << q.lastError().databaseText());
-				qDebug()<<q.lastError().databaseText();
 				db.close();
 				return false;
 			}
