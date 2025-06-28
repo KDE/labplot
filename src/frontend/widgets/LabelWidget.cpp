@@ -261,7 +261,7 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 void LabelWidget::setAxes(QList<Axis*> axes) {
 	m_labelsList.clear();
 	for (const auto* axis : axes) {
-		DEBUG(Q_FUNC_INFO << ", axis TITLE = " << axis->title())
+		DEBUG(Q_FUNC_INFO << ", axis TITLE = " << axis->title()->text().text.toStdString())
 		m_labelsList.append(axis->title());
 		connect(axis, &Axis::titleOffsetXChanged, this, &LabelWidget::labelOffsetXChanged);
 		connect(axis, &Axis::titleOffsetYChanged, this, &LabelWidget::labelOffsetYChanged);

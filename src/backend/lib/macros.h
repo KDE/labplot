@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2013-2015 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2016-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -543,13 +543,21 @@ private:
 								: QFont::Black)
 
 // uses font.setLegacyWeight(int)
+// "MS Shell Dlg 2" is a logical font on Windows (mapped to Tahoma) not used in Qt6 anymore
 #define READ_QFONT(font)                                                                                                                                       \
 	{                                                                                                                                                          \
 		str = attribs.value(QStringLiteral("fontFamily")).toString();                                                                                          \
 		if (str.isEmpty())                                                                                                                                     \
 			reader->raiseMissingAttributeWarning(QStringLiteral("fontFamily"));                                                                                \
-		else                                                                                                                                                   \
+		else {                                                                                                                                                 \
+			if (str == QStringLiteral("MS Shell Dlg 2")) {                                                                                                     \
+				if (QSysInfo::productType() == QStringLiteral("windows"))                                                                                      \
+					str = QStringLiteral("Tahoma");                                                                                                            \
+				else                                                                                                                                           \
+					str = QStringLiteral("Sans Serif");                                                                                                        \
+			}                                                                                                                                                  \
 			font.setFamily(str);                                                                                                                               \
+		}                                                                                                                                                      \
                                                                                                                                                                \
 		str = attribs.value(QStringLiteral("fontSize")).toString();                                                                                            \
 		if (str.isEmpty())                                                                                                                                     \
