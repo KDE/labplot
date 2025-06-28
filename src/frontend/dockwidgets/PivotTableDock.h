@@ -16,7 +16,6 @@
 
 #include <QSqlDatabase>
 
-class AspectTreeModel;
 class PivotTable;
 class TreeViewComboBox;
 class KConfig;
@@ -36,12 +35,10 @@ private:
 	bool m_initializing{false};
 	TreeViewComboBox* cbSpreadsheet{nullptr};
 	PivotTable* m_pivotTable{nullptr};
-	AspectTreeModel* m_aspectTreeModel{nullptr};
 	QSqlDatabase m_db;
 	QString m_configPath;
 
 	void load();
-	void loadConfig(KConfig&);
 	void setModelIndexFromAspect(TreeViewComboBox*, const AbstractAspect*);
 	void readConnections();
 	void updateFields();
@@ -49,8 +46,6 @@ private:
 
 private Q_SLOTS:
 	//SLOTs for changes triggered in PivotTableDock
-	void nameChanged();
-	void commentChanged();
 	void dataSourceTypeChanged(int);
 	void spreadsheetChanged(const QModelIndex&);
 	void connectionChanged();
@@ -58,16 +53,11 @@ private Q_SLOTS:
 	void showDatabaseManager();
 
 	//SLOTs for changes triggered in PivotTable
-	void pivotTableDescriptionChanged(const AbstractAspect*);
 
 	void addRow();
 	void removeRow();
 	void addColumn();
 	void removeColumn();
-
-	//save/load template
-	void loadConfigFromTemplate(KConfig&);
-	void saveConfigAsTemplate(KConfig&);
 
 Q_SIGNALS:
 	void info(const QString&);

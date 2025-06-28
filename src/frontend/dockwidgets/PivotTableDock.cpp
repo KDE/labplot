@@ -15,9 +15,9 @@
 #include "frontend/datasources/DatabaseManagerDialog.h"
 #include "frontend/datasources/DatabaseManagerWidget.h"
 #include "frontend/pivot/PivotTableView.h"
-#include "frontend/TemplateHandler.h"
+// #include "frontend/TemplateHandler.h"
 
-#include <QDir>
+#include <QFile>
 #include <QSqlError>
 
 #include <KConfig>
@@ -32,6 +32,7 @@
 */
 PivotTableDock::PivotTableDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
+	setBaseWidgets(ui.leName, ui.teComment);
 
 	ui.cbDataSourceType->addItem(i18n("Spreadsheet"));
 	ui.cbDataSourceType->addItem(i18n("Database"));
@@ -39,12 +40,18 @@ PivotTableDock::PivotTableDock(QWidget* parent) : BaseDock(parent) {
 	cbSpreadsheet = new TreeViewComboBox;
 	ui.gridLayout->addWidget(cbSpreadsheet, 5, 3, 1, 4);
 
+	QList<AspectType> list{AspectType::Folder,
+						   AspectType::Workbook,
+						   AspectType::Spreadsheet,
+						   AspectType::LiveDataSource};
+	cbSpreadsheet->setTopLevelClasses(list);
+
 	ui.bDatabaseManager->setIcon(QIcon::fromTheme(QLatin1String("network-server-database")));
 	ui.bDatabaseManager->setToolTip(i18n("Manage connections"));
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  QLatin1String("sql_connections");
 	readConnections();
 
-	auto* style = ui.bAddRow->style();
+	const auto* style = ui.bAddRow->style();
 	ui.bAddRow->setIcon(style->standardIcon(QStyle::SP_ArrowRight));
 	ui.bAddRow->setToolTip(i18n("Add the selected field to rows"));
 	ui.bRemoveRow->setIcon(style->standardIcon(QStyle::SP_ArrowLeft));
@@ -61,8 +68,7 @@ PivotTableDock::PivotTableDock(QWidget* parent) : BaseDock(parent) {
 	ui.bAddColumn->setEnabled(false);
 	ui.bRemoveColumn->setEnabled(false);
 
-	connect(ui.leName, &QLineEdit::textChanged, this, &PivotTableDock::nameChanged);
-	connect(ui.leComment, &QLineEdit::textChanged, this, &PivotTableDock::commentChanged);
+	//**********************************  Slots **********************************************
 	connect(ui.cbDataSourceType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
 			this, &PivotTableDock::dataSourceTypeChanged);
 
@@ -98,23 +104,13 @@ PivotTableDock::PivotTableDock(QWidget* parent) : BaseDock(parent) {
 void PivotTableDock::setPivotTable(PivotTable* pivotTable) {
 	m_initializing = true;
 	m_pivotTable = pivotTable;
+	setAspects(QList{pivotTable});
 
-	m_aspectTreeModel = new AspectTreeModel(m_pivotTable->project());
-
-	QList<AspectType> list{AspectType::Folder,
-						   AspectType::Workbook,
-						   AspectType::Spreadsheet,
-						   AspectType::LiveDataSource};
-	cbSpreadsheet->setTopLevelClasses(list);
-
-	list = {AspectType::Spreadsheet, AspectType::LiveDataSource};
-	m_aspectTreeModel->setSelectableAspects(list);
-
-	cbSpreadsheet->setModel(m_aspectTreeModel);
+	auto* model = aspectModel();
+	model->setSelectableAspects({AspectType::Spreadsheet, AspectType::LiveDataSource});
+	cbSpreadsheet->setModel(model);
 
 	//show the properties
-	ui.leName->setText(m_pivotTable->name());
-	ui.leComment->setText(m_pivotTable->comment());
 	ui.cbDataSourceType->setCurrentIndex(m_pivotTable->dataSourceType());
 	if (m_pivotTable->dataSourceType() == PivotTable::DataSourceSpreadsheet)
 		setModelIndexFromAspect(cbSpreadsheet, m_pivotTable->dataSourceSpreadsheet());
@@ -140,7 +136,7 @@ void PivotTableDock::setPivotTable(PivotTable* pivotTable) {
 
 void PivotTableDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {
 	if (aspect)
-		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(aspect));
+		cb->setCurrentModelIndex(aspectModel()->modelIndexOfAspect(aspect));
 	else
 		cb->setCurrentModelIndex(QModelIndex());
 }
@@ -261,23 +257,9 @@ bool PivotTableDock::fieldSelected(const QString& field) {
 //*************************************************************
 //****** SLOTs for changes triggered in PivotTableDock *******
 //*************************************************************
-void PivotTableDock::nameChanged() {
-	if (m_initializing)
-		return;
-
-	m_pivotTable->setName(ui.leName->text());
-}
-
-void PivotTableDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_pivotTable->setComment(ui.leComment->text());
-}
-
 void PivotTableDock::dataSourceTypeChanged(int index) {
 	PivotTable::DataSourceType type = (PivotTable::DataSourceType)index;
-	bool showDatabase = (type == PivotTable::DataSourceDatabase);
+	const bool showDatabase = (type == PivotTable::DataSourceDatabase);
 	ui.lSpreadsheet->setVisible(!showDatabase);
 	cbSpreadsheet->setVisible(!showDatabase);
 	ui.lConnection->setVisible(showDatabase);
@@ -289,21 +271,19 @@ void PivotTableDock::dataSourceTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	m_pivotTable->setComment(ui.leComment->text());
+	// TODO:
 }
 
 void PivotTableDock::spreadsheetChanged(const QModelIndex& index) {
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(aspect);
-
-	//clear the previos definiot of the data fields
+	//clear the previous content shown in the list widgets
 	ui.lwFields->clear();
-	//TODO:
-	//rows, columns, values
+	ui.lwColumns->clear();
+	ui.lwRows->clear();
 
 	//show all spreadsheet columns as available dimensions
+	auto* spreadsheet = static_cast<Spreadsheet*>(index.internalPointer());
 	for (const auto* col : spreadsheet->children<Column>()) {
-		QListWidgetItem* item = new QListWidgetItem(col->icon(), col->name());
+		auto* item = new QListWidgetItem(col->icon(), col->name());
 		ui.lwFields->addItem(item);
 	}
 
@@ -312,7 +292,6 @@ void PivotTableDock::spreadsheetChanged(const QModelIndex& index) {
 
 	m_pivotTable->setDataSourceSpreadsheet(spreadsheet);
 }
-
 
 void PivotTableDock::connectionChanged() {
 	if (ui.cbConnection->currentIndex() == -1) {
@@ -404,42 +383,13 @@ void PivotTableDock::tableChanged() {
 }
 
 //*************************************************************
-//******** SLOTs for changes triggered in Matrix *********
+//******** SLOTs for changes triggered in PivotTable **********
 //*************************************************************
-void PivotTableDock::pivotTableDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_pivotTable != aspect)
-		return;
 
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text())
-		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.leComment->text())
-		ui.leComment->setText(aspect->comment());
-
-	m_initializing = false;
-}
 
 //*************************************************************
 //******************** SETTINGS *******************************
 //*************************************************************
 void PivotTableDock::load() {
 
-}
-
-void PivotTableDock::loadConfigFromTemplate(KConfig& config) {
-	Q_UNUSED(config);
-}
-
-/*!
-	loads saved matrix properties from \c config.
- */
-void PivotTableDock::loadConfig(KConfig& config) {
-	Q_UNUSED(config);
-}
-
-/*!
-	saves matrix properties to \c config.
- */
-void PivotTableDock::saveConfigAsTemplate(KConfig& config) {
-	Q_UNUSED(config);
 }
