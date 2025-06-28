@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-25 00:39+0000\n"
-"PO-Revision-Date: 2025-06-10 08:01+0200\n"
+"PO-Revision-Date: 2025-06-26 17:55+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -7311,10 +7311,9 @@ msgid "Tricube"
 msgstr "Tricubique"
 
 #: src/backend/script/Script.cpp:79
-#, fuzzy, kde-format
-#| msgid "Text file (*.txt)"
+#, kde-format
 msgid "Python file (*.py)"
-msgstr "Fichiers Texte (*.tex)"
+msgstr "Fichiers Python (*.py)"
 
 #: src/backend/script/Script.cpp:137 src/backend/script/Script.cpp:324
 #, kde-format
@@ -7342,22 +7341,19 @@ msgid "A script is already running."
 msgstr "Un script est déjà en cours d'exécution."
 
 #: src/backend/script/ScriptRuntime.cpp:92
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Nom"
 
 #: src/backend/script/ScriptRuntime.cpp:94
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "Valeur"
 
 #: src/backend/script/ScriptRuntime.cpp:96
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr "Type"
@@ -14468,22 +14464,19 @@ msgid "Match Complete Word"
 msgstr "Faire correspondre par mot complet"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:53
-#, fuzzy, kde-format
-#| msgid "Day Names"
+#, kde-format
 msgid "Copy Name"
-msgstr "Noms des jours"
+msgstr "Copier le nom"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:54
-#, fuzzy, kde-format
-#| msgid "Drop Values"
+#, kde-format
 msgid "Copy Value"
-msgstr "Ignorer des valeurs"
+msgstr "Copier la valeur"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:55
-#, fuzzy, kde-format
-#| msgid "Drop Numeric Values"
+#, kde-format
 msgid "Copy Name and Value"
-msgstr "Abandonner les valeurs numériques"
+msgstr "Copier le nom et la valeur"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:57
 #, kde-format
