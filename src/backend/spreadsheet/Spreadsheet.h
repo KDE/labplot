@@ -83,7 +83,7 @@ public:
 		Q_EMIT columnCountChanged(columnCount());
 	}
 
-	// data import
+	// data import and export
 	int prepareImport(std::vector<void*>& dataContainer,
 					  AbstractFileFilter::ImportMode,
 					  int rows,
@@ -94,6 +94,8 @@ public:
 					  bool initializeContainer) override;
 	void finalizeImport(size_t columnOffset, size_t startColumn, size_t endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
 	int resize(AbstractFileFilter::ImportMode, const QStringList& colNameList, int cols);
+	bool exportToSQLite(const QString& path, const QString& tableName = QString()) const;
+	int maxRowToExport() const;
 
 	struct Linking {
 		bool linking{false};

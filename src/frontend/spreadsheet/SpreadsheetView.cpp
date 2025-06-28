@@ -66,9 +66,6 @@
 #include <QPrinter>
 #include <QRandomGenerator>
 #include <QScrollBar>
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QSqlQuery>
 #include <QTableView>
 #include <QTextStream>
 #include <QTimer>
@@ -3818,7 +3815,7 @@ bool SpreadsheetView::exportView() {
 			break;
 		}
 		case ExportSpreadsheetDialog::Format::SQLite: {
-			exportToSQLite(path);
+			m_spreadsheet->exportToSQLite(path);
 			break;
 		}
 		case ExportSpreadsheetDialog::Format::MCAP: {
@@ -3976,47 +3973,6 @@ void SpreadsheetView::print(QPrinter* printer) const {
 	RESET_CURSOR;
 }
 
-/*!
- * the spreadsheet can have empty rows at the end full with NaNs.
- * for the export we only need to export valid (non-empty) rows.
- * this functions determines the maximal row to export, or -1
- * if the spreadsheet doesn't have any data yet.
- */
-int SpreadsheetView::maxRowToExport() const {
-	int maxRow = -1;
-	for (int j = 0; j < m_spreadsheet->columnCount(); ++j) {
-		Column* col = m_spreadsheet->column(j);
-		auto mode = col->columnMode();
-		if (mode == AbstractColumn::ColumnMode::Double) {
-			for (int i = 0; i < m_spreadsheet->rowCount(); ++i) {
-				if (!std::isnan(col->valueAt(i)) && i > maxRow)
-					maxRow = i;
-			}
-		}
-		if (mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt) {
-			// TODO:
-			// integer column found. Since empty integer cells are equal to 0
-			// at the moment, we need to export the whole column.
-			// this logic needs to be adjusted once we're able to descriminate
-			// between empty and 0 values for integer columns
-			maxRow = m_spreadsheet->rowCount() - 1;
-			break;
-		} else if (mode == AbstractColumn::ColumnMode::DateTime) {
-			for (int i = 0; i < m_spreadsheet->rowCount(); ++i) {
-				if (col->dateTimeAt(i).isValid() && i > maxRow)
-					maxRow = i;
-			}
-		} else if (mode == AbstractColumn::ColumnMode::Text) {
-			for (int i = 0; i < m_spreadsheet->rowCount(); ++i) {
-				if (!col->textAt(i).isEmpty() && i > maxRow)
-					maxRow = i;
-			}
-		}
-	}
-
-	return maxRow;
-}
-
 void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {
 	QFile file(path);
 	if (!file.open(QFile::WriteOnly | QFile::Truncate)) {
@@ -4028,7 +3984,7 @@ void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader,
 	PERFTRACE(QStringLiteral("export spreadsheet to file"));
 	QTextStream out(&file);
 
-	int maxRow = maxRowToExport();
+	int maxRow = m_spreadsheet->maxRowToExport();
 	if (maxRow < 0)
 		return;
 
@@ -4428,123 +4384,4 @@ void SpreadsheetView::exportToXLSX(const QString& fileName, const bool exportHea
 	filter->write(fileName, m_spreadsheet);
 
 	delete filter;
-}
-
-void SpreadsheetView::exportToSQLite(const QString& path) const {
-	QFile file(path);
-	if (!file.open(QFile::WriteOnly | QFile::Truncate))
-		return;
-
-	PERFTRACE(QStringLiteral("export spreadsheet to SQLite database"));
-	QApplication::processEvents(QEventLoop::AllEvents, 0);
-
-	// create database
-	const QStringList& drivers = QSqlDatabase::drivers();
-	QString driver;
-	if (drivers.contains(QLatin1String("QSQLITE3")))
-		driver = QLatin1String("QSQLITE3");
-	else
-		driver = QLatin1String("QSQLITE");
-
-	QSqlDatabase db = QSqlDatabase::addDatabase(driver);
-	db.setDatabaseName(path);
-	if (!db.open()) {
-		RESET_CURSOR;
-		KMessageBox::error(nullptr, i18n("Couldn't create the SQLite database %1.", path));
-	}
-
-	// create table
-	const int cols = m_spreadsheet->columnCount();
-	QString query = QLatin1String("create table ") + m_spreadsheet->name() + QLatin1String(" (");
-	for (int i = 0; i < cols; ++i) {
-		Column* col = m_spreadsheet->column(i);
-		if (i != 0)
-			query += QLatin1String(", ");
-
-		query += QLatin1String("\"") + col->name() + QLatin1String("\" ");
-		switch (col->columnMode()) {
-		case AbstractColumn::ColumnMode::Double:
-			query += QLatin1String("REAL");
-			break;
-		case AbstractColumn::ColumnMode::Integer:
-		case AbstractColumn::ColumnMode::BigInt:
-			query += QLatin1String("INTEGER");
-			break;
-		case AbstractColumn::ColumnMode::Text:
-		case AbstractColumn::ColumnMode::Month:
-		case AbstractColumn::ColumnMode::Day:
-		case AbstractColumn::ColumnMode::DateTime:
-			query += QLatin1String("TEXT");
-			break;
-		}
-	}
-	query += QLatin1Char(')');
-	QSqlQuery q;
-	if (!q.exec(query)) {
-		RESET_CURSOR;
-		KMessageBox::error(nullptr, i18n("Failed to create table in the SQLite database %1.", path) + QLatin1Char('\n') + q.lastError().databaseText());
-		db.close();
-		return;
-	}
-
-	int maxRow = maxRowToExport();
-	if (maxRow < 0) {
-		db.close();
-		return;
-	}
-
-	// create bulk insert statement in batches of 10k rows
-	{
-		PERFTRACE(QStringLiteral("Insert the data"));
-		q.exec(QLatin1String("BEGIN TRANSACTION;"));
-
-		// create the first part of the INSERT-statement without the values
-		QString insertQuery = QStringLiteral("INSERT INTO '") + m_spreadsheet->name() + QStringLiteral("' (");
-		for (int i = 0; i < cols; ++i) {
-			if (i != 0)
-				insertQuery += QLatin1String(", ");
-			insertQuery += QLatin1Char('\'') + m_spreadsheet->column(i)->name() + QLatin1Char('\'');
-		}
-		insertQuery += QLatin1String(") VALUES ");
-
-		// add values in chunks of 10k row
-		int chunkSize = 10000;
-		int chunks = std::ceil((double)maxRow / chunkSize);
-		for (int chunk = 0; chunk < chunks; ++chunk) {
-			query = insertQuery;
-			for (int i = 0; i < chunkSize; ++i) {
-				int row = chunk * chunkSize + i;
-				if (row > maxRow)
-					break;
-
-				if (i != 0)
-					query += QLatin1String(",");
-
-				query += QLatin1Char('(');
-				for (int j = 0; j < cols; ++j) {
-					auto* col = m_spreadsheet->column(j);
-					if (j != 0)
-						query += QLatin1String(", ");
-
-					query += QLatin1Char('\'') + col->asStringColumn()->textAt(row) + QLatin1Char('\'');
-				}
-				query += QLatin1String(")");
-			}
-			query += QLatin1Char(';');
-
-			// insert values for the current chunk of data
-			if (!q.exec(query)) {
-				RESET_CURSOR;
-				KMessageBox::error(nullptr, i18n("Failed to insert values into the table."));
-				QDEBUG(Q_FUNC_INFO << ", bulk insert error " << q.lastError().databaseText());
-				db.close();
-				return;
-			}
-		}
-
-	} // end of perf-trace scope
-
-	// commit the transaction and close the database
-	q.exec(QLatin1String("COMMIT TRANSACTION;"));
-	db.close();
 }

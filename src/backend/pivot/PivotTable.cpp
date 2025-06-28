@@ -1,29 +1,12 @@
-/***************************************************************************
-    File                 : PivotTable.cpp
-    Project              : LabPlot
-    Description          : Aspect providing pivot table functionality
-    --------------------------------------------------------------------
-    Copyright            : (C) 2019-2023 Alexander Semke (alexander.semke@web.de)
- ***************************************************************************/
+/*
+	File                 : PivotTable.cpp
+	Project              : LabPlot
+	Description          : Aspect providing pivot table functionality
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019-2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
 #include "PivotTable.h"
 #include "PivotTablePrivate.h"
 #include "frontend/pivot/PivotTableView.h"
@@ -330,7 +313,8 @@ void PivotTablePrivate::recalculate() {
 	DEBUG("number values: " << valuesCount);
 	DEBUG("index of the first value column: " << firstValueIndex);
 
-	qDebug()<<"model in recalculate " << horizontalHeaderModel;
+	// qDebug()<<"model in recalculate " << horizontalHeaderModel;
+
 	if (!horizontalHeaderModel) {
 		RESET_CURSOR;
 		return;
@@ -493,7 +477,6 @@ void PivotTablePrivate::recalculate() {
 		//TODO
 	}
 
-
 	//notify about the new result
 	Q_EMIT q->changed();
 	RESET_CURSOR;
@@ -507,97 +490,8 @@ void PivotTablePrivate::createDb() {
 			dimensions << col->name();
 	}
 
-	PERFTRACE(QLatin1String("export spreadsheet to SQLite database"));
-	QApplication::processEvents(QEventLoop::AllEvents, 0);
-
-	//create database
-	const QStringList& drivers = QSqlDatabase::drivers();
-	QString driver;
-	if (drivers.contains(QLatin1String("QSQLITE3")))
-		driver = QLatin1String("QSQLITE3");
-	else
-		driver = QLatin1String("QSQLITE");
-
-	QSqlDatabase db = QSqlDatabase::addDatabase(driver);
-	db.open();
-
-	//create table
-	const int cols = dataSourceSpreadsheet->columnCount();
-	QString query = QLatin1String("create table ") + QLatin1String("pivot") + QLatin1String(" (");
-	for (int i = 0; i < cols; ++i) {
-		Column* col = dataSourceSpreadsheet->column(i);
-		if (i != 0)
-			query += QLatin1String(", ");
-
-		query += QLatin1String("\"") + col->name() + QLatin1String("\" ");
-		switch (col->columnMode()) {
-			case AbstractColumn::ColumnMode::Double:
-			query += QLatin1String("REAL");
-			break;
-		case AbstractColumn::ColumnMode::Integer:
-		case AbstractColumn::ColumnMode::BigInt:
-			query += QLatin1String("INTEGER");
-			break;
-		case AbstractColumn::ColumnMode::Text:
-		case AbstractColumn::ColumnMode::Month:
-		case AbstractColumn::ColumnMode::Day:
-		case AbstractColumn::ColumnMode::DateTime:
-			query += QLatin1String("TEXT");
-			break;
-		}
-	}
-	query += QLatin1Char(')');
-	QSqlQuery q;
-	if (!q.exec(query)) {
-		RESET_CURSOR;
-		KMessageBox::error(nullptr, i18n("Failed to create the SQLite database.") + QLatin1Char('\n') + q.lastError().databaseText());
-		db.close();
-		return;
-	}
-
-	//create bulk insert statement
-	{
-	PERFTRACE(QLatin1String("Create the bulk insert statement"));
-	q.exec(QLatin1String("BEGIN TRANSACTION;"));
-	query = QLatin1String("INSERT INTO '") + QLatin1String("pivot") + QLatin1String("' (");
-	for (int i = 0; i < cols; ++i) {
-		if (i != 0)
-			query += QLatin1String(", ");
-		query += QLatin1Char('\'') + dataSourceSpreadsheet->column(i)->name() + QLatin1Char('\'');
-	}
-	query += QLatin1String(") VALUES ");
-
-	for (int i = 0; i < dataSourceSpreadsheet->rowCount(); ++i) {
-		if (i != 0)
-			query += QLatin1String(",");
-
-		query += QLatin1Char('(');
-		for (int j = 0; j < cols; ++j) {
-			Column* col = dataSourceSpreadsheet->column(j);
-			if (j != 0)
-				query += QLatin1String(", ");
-
-			QString text = col->asStringColumn()->textAt(i);
-			text = text.replace(QLatin1String("'"), QLatin1String("''"));
-			query += QLatin1Char('\'') + text + QLatin1Char('\'');
-		}
-		query += QLatin1String(")");
-	}
-	query += QLatin1Char(';');
-	}
-
-	//insert values
-	if (!q.exec(query)) {
-		RESET_CURSOR;
-		KMessageBox::error(nullptr, i18n("Failed to insert values into the table."));
-		QDEBUG(query);
-		QDEBUG("bulk insert error " << q.lastError().databaseText());
-	} else
-		q.exec(QLatin1String("COMMIT TRANSACTION;"));
-
-	m_dbCreated = true;
+	m_dbCreated = dataSourceSpreadsheet->exportToSQLite(QString(), QLatin1String("pivot"));
 }
-
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
