@@ -234,12 +234,13 @@ void PivotTablePrivate::recalculate() {
 	verticalHeaderModel->clear();
 
 	//nothing to do if no spreadsheet is set yet
-	if (dataSourceType == PivotTable::DataSourceSpreadsheet && !dataSourceSpreadsheet)
+	if (dataSourceType == PivotTable::DataSourceSpreadsheet && !dataSourceSpreadsheet) {
+		Q_EMIT q->changed(); //notify about the new result
 		return;
+	}
 
 	if (rows.isEmpty() && columns.isEmpty() && !showTotals) {
-		//notify about the new result
-		Q_EMIT q->changed();
+		Q_EMIT q->changed(); //notify about the new result
 		return;
 	}
 
@@ -291,10 +292,9 @@ void PivotTablePrivate::recalculate() {
 
 	}
 
-	QDEBUG(query);
-
 	//execute the query
 	QSqlQuery sqlQuery;
+	QDEBUG(query);
 	if (!sqlQuery.exec(query)) {
 		RESET_CURSOR;
 		KMessageBox::error(nullptr, i18n("Failed to process the query.") + QLatin1Char('\n') + sqlQuery.lastError().databaseText());
@@ -302,8 +302,13 @@ void PivotTablePrivate::recalculate() {
 		return;
 	}
 
-	//copy the result into the models
-	int rowsCount = sqlQuery.size();
+	// copy the result into the models
+	// navigate to the last record to get the total number of records in the resultset
+	sqlQuery.last();
+	int rowsCount = sqlQuery.at() + 1;
+	sqlQuery.first();
+	sqlQuery.previous(); // navigate in front of the first record so we also read it below in the whie loop
+
 	int columnsCount = sqlQuery.record().count();
 	int firstValueIndex = rows.size() + columns.size();
 	int valuesCount = columnsCount - firstValueIndex;
@@ -313,18 +318,9 @@ void PivotTablePrivate::recalculate() {
 	DEBUG("number values: " << valuesCount);
 	DEBUG("index of the first value column: " << firstValueIndex);
 
-	// qDebug()<<"model in recalculate " << horizontalHeaderModel;
-
-	if (!horizontalHeaderModel) {
-		RESET_CURSOR;
-		return;
-	}
-
-	//resize the hierarhical header models
-	if (columns.isEmpty() && rows.isEmpty()) {
-		//no labels provided, show the total count only
-
-		//vertical header
+	// resize the hierarhical header models
+	if (columns.isEmpty() && rows.isEmpty()) { // no labels provided, show the total count only
+		// vertical header
 		verticalHeaderModel->setColumnCount(0);
 		verticalHeaderModel->setRowCount(0);
 
@@ -332,125 +328,84 @@ void PivotTablePrivate::recalculate() {
 		horizontalHeaderModel->setColumnCount(1);
 		horizontalHeaderModel->setRowCount(1);
 		horizontalHeaderModel->setData(horizontalHeaderModel->index(0, 0), i18n("Totals"), Qt::DisplayRole);
-	} else if (columns.isEmpty()) {
-		//no column labels provided, we have:
-		//* all labels on rows
+	} else if (columns.isEmpty()) { // no column labels
+		// we have:
+		// * all labels on rows
 		//   -> one column for the vertical header with the number of rows equal to the number of record sets in the result query
-		//* only values on columns
+		// * only values on columns
 		//   -> one row for the horizontal header with the number of columns equal to the number of values
 
-		//vertical header
+		// vertical header
 		verticalHeaderModel->setColumnCount(rows.count());
+		verticalHeaderModel->setRowCount(rowsCount);
 
-		//horizontal header
+		// horizontal header
 		horizontalHeaderModel->setColumnCount(valuesCount);
 		horizontalHeaderModel->setRowCount(1);
 
 		//TODO: only "Totals" value at the moment, needs to be extended later when we allow to add other values
 		horizontalHeaderModel->setData(horizontalHeaderModel->index(0, 0), i18n("Totals"), Qt::DisplayRole);
-	} else if (rows.isEmpty()) {
-		//no row labels provided, we have:
-		//* all labels on rows
+	} else if (rows.isEmpty()) { // no row labels
+		// we have:
+		// * all labels on rows
 		//   -> one column for the vertical header with the number of rows equal to the number of record sets in the result query
-		//* only values on columns
+		// * only values on columns
 		//   -> one row for the horizontal header with the number of columns equal to the number of values
 
-		//vertical header
+		// vertical header
 
-		//horizontal header
+		// horizontal header
 
 // 		for (int i = 0; i < columns.size(); ++i)
 // 			horizontalHeaderModel->setData(horizontalHeaderModel->index(0, i), columns.at(i), Qt::DisplayRole);
 
 	} else {
-		//TODO:
+		// TODO:
 	}
 
-	//handle the data model
+	// handle the data model
 	dataModel->setColumnCount(valuesCount);
-
 	if (rowsCount != -1)
 		dataModel->setRowCount(rowsCount);
 
-	int row = 0;
-
-	//add values to the data models
-	if (columns.isEmpty() && rows.isEmpty()) {
-
-	} else if (columns.isEmpty()) {
-		qDebug()<<"everything on rows";
-
-		/*
-		while (sqlQuery.next()) {
-			qDebug()<<"row: " << row;
-			horizontalHeaderModel->setRowCount(row+1);
-			for (int i = 0; i < firstValueIndex; ++i) {
-				// qDebug()<<"adding to the horizontal header " << sqlQuery.value(i);
-				horizontalHeaderModel->setData(horizontalHeaderModel->index(row, i), sqlQuery.value(i), Qt::DisplayRole);
-			}
-
-			//values
-			for (int i = firstValueIndex; i < columnsCount; ++i) {
-				QString value = sqlQuery.value(i).toString();
-				// qDebug()<<"adding value " << value;
-				if (rowsCount == -1)
-					dataModel->setRowCount(row + 1);
-				dataModel->setItem(row, i - firstValueIndex, new QStandardItem(value));
-			}
-
-			++row;
-		}
-		*/
-
+	// add values to the data models
+	if (columns.isEmpty() && rows.isEmpty()) { // Totals only
+		sqlQuery.next();
+		dataModel->setItem(0, 0, new QStandardItem(sqlQuery.value(0).toString()));
+	} else if (columns.isEmpty()) { // everything on rows
 		int* start_span = new int[firstValueIndex];
 		int* end_span = new int[firstValueIndex];
 		QString* last_value= new QString[firstValueIndex];
 
-		verticalHeaderModel->setRowCount(row+1);
 		for (int i = 0; i < firstValueIndex; ++i) {
 			start_span[i] = 1;
 			end_span[i] = 1;
 			last_value[i] = QLatin1String("");
-			verticalHeaderModel->setData(verticalHeaderModel->index(row, i), rows.at(i), Qt::DisplayRole);
+			verticalHeaderModel->setData(verticalHeaderModel->index(0, i), rows.at(i), Qt::DisplayRole);
 		}
-		row++;
 
+		int row = 0;
 		while (sqlQuery.next()) {
-			qDebug()<<"row: " << row;
-			verticalHeaderModel->setRowCount(row+1);
-
-//            if(sqlQuery.value(0).toString() != last_value)
-//            {
-//                if(end_span > start_span)
-//                    verticalHeaderModel->setSpan(start_span,0,end_span-start_span,0);
-//                start_span = end_span;
-//                last_value = sqlQuery.value(0).toString();
-//            }
-//            end_span = end_span + 1;
 			bool parent_header_changed = false;
 			for (int i = 0; i < firstValueIndex; ++i) {
 				QString queryVal = sqlQuery.value(i).toString();
-				qDebug()<<"adding to the horizontal header " << query;
-
-				if(queryVal != last_value[i] || parent_header_changed)
-				{
+				if(queryVal != last_value[i] || parent_header_changed) {
 					verticalHeaderModel->setData(verticalHeaderModel->index(row, i), queryVal, Qt::DisplayRole);
 
-					if(end_span[i] > start_span[i]+1)
-						verticalHeaderModel->setSpan(start_span[i],i,end_span[i]-start_span[i],0);
+					if(end_span[i] > start_span[i] + 1)
+						verticalHeaderModel->setSpan(start_span[i], i, end_span[i] - start_span[i], 0);
+
 					start_span[i] = end_span[i];
 					parent_header_changed = true;
-					}
-					last_value[i] = queryVal;
-					end_span[i] = end_span[i] + 1;
+				}
+
+				last_value[i] = queryVal;
+				end_span[i] = end_span[i] + 1;
 			}
 
 			//values
             for (int i = firstValueIndex; i < columnsCount; ++i) {
-				QString value = sqlQuery.value(i).toString();
-				qDebug()<<"adding value " << value;
-				if (rowsCount == -1)
-					dataModel->setRowCount(row + 1);
+				const auto& value = sqlQuery.value(i).toString();
 				dataModel->setItem(row, i - firstValueIndex, new QStandardItem(value));
 			}
 
@@ -458,20 +413,13 @@ void PivotTablePrivate::recalculate() {
 		}
 
 		for(int i = 0; i < firstValueIndex; ++i){
-			if(end_span[i] > start_span[i]){
-				verticalHeaderModel->setSpan(start_span[i],i,end_span[i]-start_span[i],0);
-			}
+			if(end_span[i] > start_span[i])
+				verticalHeaderModel->setSpan(start_span[i], i, end_span[i] - start_span[i], 0);
 		}
 		verticalHeaderModel->setSpan(1,0,0,rows.count());
 
-	} else if (rows.isEmpty()) {
-		qDebug()<<"everything on columns";
-// 		for (int i = firstValueIndex; i < columnsCount; ++i) {
-// 			QString value = sqlQuery.value(i).toString();
-// 			if (rowsCount == -1)
-// 				dataModel->setRowCount(row + 1);
-// 			dataModel->setItem(0, i - firstValueIndex + row, new QStandardItem(value));
-// 		}
+	} else if (rows.isEmpty()) { // everything on columns
+		// TODO
 
 	} else {
 		//TODO
