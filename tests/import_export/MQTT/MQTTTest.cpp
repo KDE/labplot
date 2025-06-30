@@ -17,6 +17,7 @@
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
 #include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/datasources/filters/AsciiFilterStatus.h"
 #include "frontend/dockwidgets/LiveDataDock.h"
 
 #include <QDebug>
@@ -150,7 +151,7 @@ void MQTTTest::testIntegerMessage() {
 	properties.headerEnabled = false;
 	properties.columnModesString = QStringLiteral("Int");
 	properties.intAsDouble = false;
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success); // Livedata must be initialized!
+	QVERIFY(std::dynamic_pointer_cast<StatusSuccess>(filter->initialize(properties))); // Livedata must be initialized!
 
 	auto* project = new Project();
 
@@ -269,7 +270,7 @@ void MQTTTest::testNumericMessage() {
 	properties.headerEnabled = false;
 	properties.columnModesString = QStringLiteral("Double");
 	properties.intAsDouble = false;
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success); // Livedata must be initialized!
+	QVERIFY(std::dynamic_pointer_cast<StatusSuccess>(filter->initialize(properties))); // Livedata must be initialized!
 
 	Project* project = new Project();
 
@@ -401,7 +402,7 @@ void MQTTTest::testTextMessage() {
 	properties.columnModesString = QStringLiteral("Text");
 	properties.intAsDouble = false;
 	properties.commentCharacter = QStringLiteral("#");
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success); // Livedata must be initialized!
+	QVERIFY(std::dynamic_pointer_cast<StatusSuccess>(filter->initialize(properties))); // Livedata must be initialized!
 
 	Project* project = new Project();
 

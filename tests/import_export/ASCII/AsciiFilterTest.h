@@ -146,6 +146,8 @@ private Q_SLOTS:
 
 	void bufferReader();
 
+	void invalidDataColumnCount();
+
 private:
 	QString benchDataFileName;
 	const size_t lines = 1e5;

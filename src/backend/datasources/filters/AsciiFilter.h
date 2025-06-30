@@ -15,6 +15,7 @@
 #define ASCIIFILTER_H
 
 class AsciiFilterPrivate;
+struct Status;
 
 /*!
  * \brief The BufferReader class
@@ -45,35 +46,6 @@ public:
 	AsciiFilter();
 	~AsciiFilter();
 
-	enum class Status {
-		Success,
-		UnableToOpenDevice,
-		DeviceAtEnd,
-		NotEnoughRowsSelected,
-		NoNewLine,
-		SeparatorDeterminationFailed,
-		SequentialDeviceHeaderEnabled,
-		SequentialDeviceAutomaticSeparatorDetection,
-		SequentialDeviceNoColumnModes,
-		InvalidNumberDataColumns,
-		InvalidNumberColumnNames,
-		NotEnoughMemory,
-		UnsupportedDataSource,
-		UnableParsingHeader,
-		MatrixUnsupportedColumnMode,
-		NoDateTimeFormat,
-		HeaderDetectionNotAllowed,
-		SeparatorDetectionNotAllowed,
-		InvalidSeparator,
-		SerialDeviceUninitialized,
-		NoColumns,
-		ColumnModeDeterminationFailed,
-		WrongEndColumn,
-		WrongEndRow,
-		UTF16NotSupported,
-		NoDataSource
-	};
-
 	void setDataSource(AbstractDataSource*);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode columnImportMode = ImportMode::Replace) override;
 	qint64 readFromDevice(QIODevice& device,
@@ -86,7 +58,6 @@ public:
 	void write(const QString& fileName, AbstractDataSource*) override;
 	QVector<QStringList> preview(QIODevice& device, int lines, bool reinit = true, bool skipFirstLine = false);
 	QVector<QStringList> preview(const QString& fileName, int lines, bool reinit = true);
-	static QString statusToString(Status);
 
 	static QString autoSeparatorDetectionString();
 	static QStringList separatorCharacters();
@@ -149,7 +120,7 @@ public:
 		bool m_dirty{true};
 	};
 
-	Status initialize(Properties p);
+	std::shared_ptr<Status> initialize(Properties p);
 	bool initialized() const;
 	Properties properties() const;
 	Properties defaultProperties() const;
@@ -162,6 +133,8 @@ private:
 
 	Q_DECLARE_PRIVATE(AsciiFilter)
 	const std::unique_ptr<Private> d_ptr;
+
+	friend class AsciiFilterTest;
 };
 
 #endif // ASCIIFILTER_H
