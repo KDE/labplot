@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-25 00:39+0000\n"
-"PO-Revision-Date: 2025-06-25 09:01+0300\n"
+"PO-Revision-Date: 2025-06-29 17:48+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -2509,7 +2509,7 @@ msgstr "%1 çiz"
 #: src/backend/datasources/projects/OriginProjectParser.cpp:1507
 #, kde-format
 msgid "legend"
-msgstr "gösterge"
+msgstr "lejant"
 
 #: src/backend/datasources/projects/ProjectParser.cpp:99
 #, kde-format
@@ -8397,7 +8397,7 @@ msgstr "Hata İşlevi"
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:581
 #, kde-format
 msgid "Legend"
-msgstr "Gösterge"
+msgstr "Lejant"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:530
 #, kde-format
@@ -9133,7 +9133,7 @@ msgstr "%1: Bant genişliğini ayarla"
 #: src/backend/worksheet/plots/cartesian/Plot.cpp:58
 #, kde-format
 msgid "%1: legend visibility changed"
-msgstr "%1: Gösterge görünürlüğü değişti"
+msgstr "%1: Lejant görünürlüğü değişti"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:553
 #, kde-format
@@ -13790,13 +13790,12 @@ msgid ""
 "Use the main color of the plot (line, symbol, etc.) for the color of the "
 "name in the legend."
 msgstr ""
-"Göstergedeki adın rengi için çizimin ana rengini kullanın (çizgi, sembol "
-"vb.)."
+"Lejanttaki adın rengi için çizimin ana rengini kullanın (çizgi, sembol vb.)."
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:801
 #, kde-format
 msgid "%1 cartesian plot legends: template \"%2\" loaded"
-msgstr "%1 kartezyen çizim göstergeleri: “%2” şablonu yüklendi"
+msgstr "%1 kartezyen çizim lejantları: “%2” şablonu yüklendi"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:317
 #: src/frontend/dockwidgets/MatrixDock.cpp:81
@@ -14988,7 +14987,7 @@ msgstr "Özellikler: Çizim Alanı"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Legend"
-msgstr "Özellikler: Gösterge"
+msgstr "Özellikler: Lejant"
 
 #: src/frontend/GuiObserver.cpp:267
 #, kde-format
