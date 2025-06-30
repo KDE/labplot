@@ -126,7 +126,8 @@ void ActionsManager::init() {
 	initMenus();
 
 	// hamburger menu
-	m_hamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, m_mainWindow->actionCollection());
+	auto* collection = m_mainWindow->actionCollection();
+	m_hamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, collection);
 	m_mainWindow->toolBar()->addAction(m_hamburgerMenu);
 	m_hamburgerMenu->hideActionsOf(m_mainWindow->toolBar());
 	m_hamburgerMenu->setMenuBar(m_mainWindow->menuBar());
@@ -143,6 +144,25 @@ void ActionsManager::init() {
 	if (memoryInfoShown)
 		toggleMemoryInfo();
 
+	// hide "Donate" in the help menu
+	auto* donateAction = collection->action(QStringLiteral("help_donate"));
+	if (donateAction)
+		collection->removeAction(donateAction);
+
+	// custom about dialog
+	auto* aboutAction = collection->action(QStringLiteral("help_about_app"));
+	if (aboutAction) {
+		// set menu icon
+		aboutAction->setIcon(KAboutData::applicationData().programLogo().value<QIcon>());
+
+		// disconnect default slot
+		disconnect(aboutAction, nullptr, nullptr, nullptr);
+		connect(aboutAction, &QAction::triggered, this,
+		[=]() {
+			AboutDialog aboutDialog(KAboutData::applicationData(), m_mainWindow);
+			aboutDialog.exec();
+		});
+	}
 }
 
 ActionsManager::~ActionsManager() {
@@ -460,26 +480,6 @@ void ActionsManager::initActions() {
 	collection->addAction(QStringLiteral("configure_cas"), m_configureNotebookAction);
 	connect(m_configureNotebookAction, &QAction::triggered, m_mainWindow, &MainWin::settingsNotebookDialog);
 #endif
-
-	// hide "Donate" in the help menu
-	auto* donateAction = collection->action(QStringLiteral("help_donate"));
-	if (donateAction)
-		collection->removeAction(donateAction);
-
-	// custom about dialog
-	auto* aboutAction = m_mainWindow->actionCollection()->action(QStringLiteral("help_about_app"));
-	if (aboutAction) {
-		// set menu icon
-		aboutAction->setIcon(KAboutData::applicationData().programLogo().value<QIcon>());
-
-		// disconnect default slot
-		disconnect(aboutAction, nullptr, nullptr, nullptr);
-		connect(aboutAction, &QAction::triggered, this,
-		[=]() {
-			AboutDialog aboutDialog(KAboutData::applicationData(), m_mainWindow);
-			aboutDialog.exec();
-		});
-	}
 
 	// actions used in the toolbars
 	initSpreadsheetToolbarActions();
