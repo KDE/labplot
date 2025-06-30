@@ -1576,7 +1576,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 	for (size_t col = startColumn; col <= endColumn; col++) {
 		// DEBUG(Q_FUNC_INFO << ", column " << columnOffset + col - startColumn);
 		Column* column = this->column((int)(columnOffset + col - startColumn));
-		DEBUG(Q_FUNC_INFO << ", type " << ENUM_TO_STRING(AbstractColumn, ColumnMode, column->columnMode()))
+		// DEBUG(Q_FUNC_INFO << ", type " << ENUM_TO_STRING(AbstractColumn, ColumnMode, column->columnMode()))
 
 		if (!d->suppressSetCommentFinalizeImport) {
 			QString comment;
