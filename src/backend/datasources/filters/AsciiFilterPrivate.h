@@ -13,13 +13,15 @@
 #include "AsciiFilter.h"
 #include <QString>
 
+struct Status;
+
 class AsciiFilterPrivate {
 public:
 	AsciiFilterPrivate(AsciiFilter* owner);
-	AsciiFilter::Status initialize(AsciiFilter::Properties);
-	AsciiFilter::Status initialize(QIODevice&);
+	std::shared_ptr<Status> initialize(AsciiFilter::Properties);
+	std::shared_ptr<Status> initialize(QIODevice&);
 	void setDataSource(AbstractDataSource*);
-	AsciiFilter::Status readFromDevice(QIODevice&,
+	std::shared_ptr<Status> readFromDevice(QIODevice&,
 									   AbstractFileFilter::ImportMode columnImportMode,
 									   AbstractFileFilter::ImportMode rowImportMode,
 									   qint64 from,
@@ -33,7 +35,7 @@ public:
 	static QMap<QString, QPair<QString, AbstractColumn::ColumnMode>> modeMap();
 	static bool determineColumnModes(const QStringView&, QVector<AbstractColumn::ColumnMode>&, QString& invalidString);
 	static QString convertTranslatedColumnModesToNative(const QStringView);
-	AsciiFilter::Status setLastError(AsciiFilter::Status);
+	std::shared_ptr<Status> setLastError(std::shared_ptr<Status>);
 	bool isUTF16(QIODevice&);
 
 	AsciiFilter::Properties properties;
@@ -55,11 +57,10 @@ private:
 								   bool separatorSingleCharacter,
 								   const QChar separatorCharacter,
 								   QVector<QStringView>& columnValues);
-	static AsciiFilter::Status determineSeparator(const QString& line, bool removeQuotes, bool simplifyWhiteSpaces, QString& separator);
+	static std::shared_ptr<Status> determineSeparator(const QString& line, bool removeQuotes, bool simplifyWhiteSpaces, QString& separator);
 	static QVector<AbstractColumn::ColumnMode>
 	determineColumnModes(const QVector<QStringList>& values, const AsciiFilter::Properties&, QString& dateTimeFormat);
-	AsciiFilter::Status getLine(QIODevice&, QString& line);
-	static QString statusToString(AsciiFilter::Status);
+	std::shared_ptr<Status> getLine(QIODevice&, QString& line);
 
 	template<typename T>
 	void setValues(const QVector<T>& values, int rowIndex, const AsciiFilter::Properties&);
@@ -120,7 +121,7 @@ private:
 
 	DataContainer m_DataContainer;
 	qint64 m_index{1}; // Index counter used when a index column was prepended
-	AsciiFilter::Status lastStatus{AsciiFilter::Status::Success};
+	std::shared_ptr<Status> lastStatus;
 	AbstractDataSource* m_dataSource{nullptr};
 
 private:
