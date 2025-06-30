@@ -14,6 +14,7 @@
 #include <klocalizedstring.h>
 
 struct Status {
+	virtual ~Status() = default;
     virtual QString message() const = 0;
     virtual QString type() const = 0;
 };
