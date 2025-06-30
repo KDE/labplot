@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-25 00:39+0000\n"
-"PO-Revision-Date: 2025-06-05 12:00+0300\n"
+"PO-Revision-Date: 2025-06-29 17:48+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.04.1\n"
+"X-Generator: Lokalize 25.04.2\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #: src/backend/core/AbstractAspect.cpp:234
@@ -2509,7 +2509,7 @@ msgstr "%1 çiz"
 #: src/backend/datasources/projects/OriginProjectParser.cpp:1507
 #, kde-format
 msgid "legend"
-msgstr "gösterge"
+msgstr "lejant"
 
 #: src/backend/datasources/projects/ProjectParser.cpp:99
 #, kde-format
@@ -7247,10 +7247,9 @@ msgid "Tricube"
 msgstr "Üçlü Küp"
 
 #: src/backend/script/Script.cpp:79
-#, fuzzy, kde-format
-#| msgid "Text file (*.txt)"
+#, kde-format
 msgid "Python file (*.py)"
-msgstr "Metin dosyası (*.txt)"
+msgstr "Python dosyası (*.py)"
 
 #: src/backend/script/Script.cpp:137 src/backend/script/Script.cpp:324
 #, kde-format
@@ -7278,22 +7277,19 @@ msgid "A script is already running."
 msgstr "Bir betik halihazırda çalışıyor."
 
 #: src/backend/script/ScriptRuntime.cpp:92
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Ad"
 
 #: src/backend/script/ScriptRuntime.cpp:94
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "Değer"
 
 #: src/backend/script/ScriptRuntime.cpp:96
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr "Tür"
@@ -8401,7 +8397,7 @@ msgstr "Hata İşlevi"
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:581
 #, kde-format
 msgid "Legend"
-msgstr "Gösterge"
+msgstr "Lejant"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:530
 #, kde-format
@@ -9137,7 +9133,7 @@ msgstr "%1: Bant genişliğini ayarla"
 #: src/backend/worksheet/plots/cartesian/Plot.cpp:58
 #, kde-format
 msgid "%1: legend visibility changed"
-msgstr "%1: Gösterge görünürlüğü değişti"
+msgstr "%1: Lejant görünürlüğü değişti"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:553
 #, kde-format
@@ -13794,13 +13790,12 @@ msgid ""
 "Use the main color of the plot (line, symbol, etc.) for the color of the "
 "name in the legend."
 msgstr ""
-"Göstergedeki adın rengi için çizimin ana rengini kullanın (çizgi, sembol "
-"vb.)."
+"Lejanttaki adın rengi için çizimin ana rengini kullanın (çizgi, sembol vb.)."
 
 #: src/frontend/dockwidgets/CartesianPlotLegendDock.cpp:801
 #, kde-format
 msgid "%1 cartesian plot legends: template \"%2\" loaded"
-msgstr "%1 kartezyen çizim göstergeleri: “%2” şablonu yüklendi"
+msgstr "%1 kartezyen çizim lejantları: “%2” şablonu yüklendi"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:317
 #: src/frontend/dockwidgets/MatrixDock.cpp:81
@@ -14313,22 +14308,19 @@ msgid "Match Complete Word"
 msgstr "Tüm Sözcüğü Eşleştir"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:53
-#, fuzzy, kde-format
-#| msgid "Day Names"
+#, kde-format
 msgid "Copy Name"
-msgstr "Gün Adları"
+msgstr "Adı Kopyala"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:54
-#, fuzzy, kde-format
-#| msgid "Drop Values"
+#, kde-format
 msgid "Copy Value"
-msgstr "Değerleri Bırak"
+msgstr "Değeri Kopyala"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:55
-#, fuzzy, kde-format
-#| msgid "Uniform Random Values"
+#, kde-format
 msgid "Copy Name and Value"
-msgstr "Tekdüze Rastgele Değerler"
+msgstr "Adı ve Değeri Kopyala"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:57
 #, kde-format
@@ -14995,7 +14987,7 @@ msgstr "Özellikler: Çizim Alanı"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Legend"
-msgstr "Özellikler: Gösterge"
+msgstr "Özellikler: Lejant"
 
 #: src/frontend/GuiObserver.cpp:267
 #, kde-format

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-25 00:39+0000\n"
-"PO-Revision-Date: 2025-06-06 11:46+0200\n"
+"PO-Revision-Date: 2025-06-28 20:38+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -7251,10 +7251,9 @@ msgid "Tricube"
 msgstr "Trikubisk"
 
 #: src/backend/script/Script.cpp:79
-#, fuzzy, kde-format
-#| msgid "Text file (*.txt)"
+#, kde-format
 msgid "Python file (*.py)"
-msgstr "Textfil (*.txt)"
+msgstr "Python-fil (*.py)"
 
 #: src/backend/script/Script.cpp:137 src/backend/script/Script.cpp:324
 #, kde-format
@@ -7282,22 +7281,19 @@ msgid "A script is already running."
 msgstr "Ett skript kör redan."
 
 #: src/backend/script/ScriptRuntime.cpp:92
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Namn"
 
 #: src/backend/script/ScriptRuntime.cpp:94
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "Värde"
 
 #: src/backend/script/ScriptRuntime.cpp:96
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr "Typ"
@@ -14317,22 +14313,19 @@ msgid "Match Complete Word"
 msgstr "Matcha hela ord"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:53
-#, fuzzy, kde-format
-#| msgid "Day Names"
+#, kde-format
 msgid "Copy Name"
-msgstr "Veckodagsnamn"
+msgstr "Kopiera namn"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:54
-#, fuzzy, kde-format
-#| msgid "Drop Values"
+#, kde-format
 msgid "Copy Value"
-msgstr "Utelämna värden"
+msgstr "Kopiera värde"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:55
-#, fuzzy, kde-format
-#| msgid "Uniform Random Values"
+#, kde-format
 msgid "Copy Name and Value"
-msgstr "Likformiga slumpvärden"
+msgstr "Kopiera namn och värde"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:57
 #, kde-format

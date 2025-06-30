@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-25 00:39+0000\n"
-"PO-Revision-Date: 2025-06-05 12:24+0200\n"
+"PO-Revision-Date: 2025-06-25 11:31+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.04.1\n"
+"X-Generator: Lokalize 25.04.2\n"
 
 #: src/backend/core/AbstractAspect.cpp:234
 #, kde-format
@@ -7254,10 +7254,9 @@ msgid "Tricube"
 msgstr "Tricube"
 
 #: src/backend/script/Script.cpp:79
-#, fuzzy, kde-format
-#| msgid "Text file (*.txt)"
+#, kde-format
 msgid "Python file (*.py)"
-msgstr "Tekstbestand (*.txt)"
+msgstr "Python-bestand (*.py)"
 
 #: src/backend/script/Script.cpp:137 src/backend/script/Script.cpp:324
 #, kde-format
@@ -7285,22 +7284,19 @@ msgid "A script is already running."
 msgstr "Er wordt al een script uitgevoerd."
 
 #: src/backend/script/ScriptRuntime.cpp:92
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Naam"
 
 #: src/backend/script/ScriptRuntime.cpp:94
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "Waarde"
 
 #: src/backend/script/ScriptRuntime.cpp:96
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr "Type"
@@ -14353,22 +14349,19 @@ msgid "Match Complete Word"
 msgstr "Op hele woord zoeken"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:53
-#, fuzzy, kde-format
-#| msgid "Day Names"
+#, kde-format
 msgid "Copy Name"
-msgstr "Dagnamen"
+msgstr "Naam kopiëren"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:54
-#, fuzzy, kde-format
-#| msgid "Drop Values"
+#, kde-format
 msgid "Copy Value"
-msgstr "Waarden weglaten"
+msgstr "Waarde kopiëren"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:55
-#, fuzzy, kde-format
-#| msgid "Drop Numeric Values"
+#, kde-format
 msgid "Copy Name and Value"
-msgstr "Numerieke waarden weglaten"
+msgstr "Naam en waarde kopiëren"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:57
 #, kde-format
