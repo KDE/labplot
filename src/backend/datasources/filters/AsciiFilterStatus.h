@@ -15,17 +15,22 @@
 
 struct Status {
 	virtual ~Status() = default;
-    virtual QString message() const = 0;
-    virtual QString type() const = 0;
+	virtual QString message() const = 0;
+	virtual QString type() const = 0;
 };
 
-#define SIMPLE_STATUS(MessageName, Message) \
-struct Status##MessageName: public Status { \
-    Status##MessageName() = default; \
-    virtual ~Status##MessageName() {} \
-    QString message() const override { return i18n(Message); } \
-    QString type() const override { return QStringLiteral(#MessageName); } \
-}
+#define SIMPLE_STATUS(MessageName, Message)                                                                                                                    \
+	struct Status##MessageName : public Status {                                                                                                               \
+		Status##MessageName() = default;                                                                                                                       \
+		virtual ~Status##MessageName() {                                                                                                                       \
+		}                                                                                                                                                      \
+		QString message() const override {                                                                                                                     \
+			return i18n(Message);                                                                                                                              \
+		}                                                                                                                                                      \
+		QString type() const override {                                                                                                                        \
+			return QStringLiteral(#MessageName);                                                                                                               \
+		}                                                                                                                                                      \
+	}
 
 SIMPLE_STATUS(Success, "Success");
 SIMPLE_STATUS(DeviceAtEnd, "Device at end");
@@ -53,21 +58,31 @@ SIMPLE_STATUS(NoColumns, "No columns");
 SIMPLE_STATUS(ColumnModeDeterminationFailed, "Unable to determine column modes. Check if they are correctly written");
 SIMPLE_STATUS(UTF16NotSupported, "UTF16 encoding is not supported");
 
-struct StatusInvalidNumberDataColumns: public Status {
-    StatusInvalidNumberDataColumns() = delete;
-    StatusInvalidNumberDataColumns(int expectedNumberColumns, int receivedColumnCount, int lineIndex): mExpectedNumberColumns(expectedNumberColumns), mReceivedColumnCount(receivedColumnCount), mLineIndex(lineIndex) {
-    }
-    virtual ~StatusInvalidNumberDataColumns() {}
-    QString message() const override {
-		return i18n("Invalid number of data columns. First row column count: %1. %2th row column count >= %3. Check if the correct separator is used and the data contains same number of columns.")
-        .arg(mExpectedNumberColumns).arg(mLineIndex).arg(mReceivedColumnCount);
-    }
-    QString type() const override { return QStringLiteral("InvalidNumberDataColumns"); }
+struct StatusInvalidNumberDataColumns : public Status {
+	StatusInvalidNumberDataColumns() = delete;
+	StatusInvalidNumberDataColumns(int expectedNumberColumns, int receivedColumnCount, int lineIndex)
+		: mExpectedNumberColumns(expectedNumberColumns)
+		, mReceivedColumnCount(receivedColumnCount)
+		, mLineIndex(lineIndex) {
+	}
+	virtual ~StatusInvalidNumberDataColumns() {
+	}
+	QString message() const override {
+		return i18n(
+				   "Invalid number of data columns. First row column count: %1. %2th row column count >= %3. Check if the correct separator is used and the "
+				   "data contains same number of columns.")
+			.arg(mExpectedNumberColumns)
+			.arg(mLineIndex)
+			.arg(mReceivedColumnCount);
+	}
+	QString type() const override {
+		return QStringLiteral("InvalidNumberDataColumns");
+	}
 
 private:
-    int mExpectedNumberColumns;
-    int mReceivedColumnCount;
-    int mLineIndex;
+	int mExpectedNumberColumns;
+	int mReceivedColumnCount;
+	int mLineIndex;
 
 	friend class AsciiFilterTest;
 };

@@ -3567,12 +3567,14 @@ void AsciiFilterTest::determineSeparator() {
 	QCOMPARE(separator, QStringLiteral(";"));
 
 	// Whitespaces
-	QCOMPARE(AsciiFilterPrivate::determineSeparator(QStringLiteral("\t header1; \theader2; \theader3 \n"), removeQuotes, simplifyWhiteSpaces, separator)->message(),
-			 i18n("Success"));
+	QCOMPARE(
+		AsciiFilterPrivate::determineSeparator(QStringLiteral("\t header1; \theader2; \theader3 \n"), removeQuotes, simplifyWhiteSpaces, separator)->message(),
+		i18n("Success"));
 	QCOMPARE(separator, QStringLiteral(";"));
 
 	// Whitespace in header string
-	QCOMPARE(AsciiFilterPrivate::determineSeparator(QStringLiteral("\"\t header1\"; \theader2; \theader3 \n"), removeQuotes, simplifyWhiteSpaces, separator)->message(),
+	QCOMPARE(AsciiFilterPrivate::determineSeparator(QStringLiteral("\"\t header1\"; \theader2; \theader3 \n"), removeQuotes, simplifyWhiteSpaces, separator)
+				 ->message(),
 			 i18n("Success"));
 	QCOMPARE(separator, QStringLiteral(";"));
 
@@ -3583,7 +3585,8 @@ void AsciiFilterTest::determineSeparator() {
 	QCOMPARE(separator, QStringLiteral(" "));
 
 	simplifyWhiteSpaces = true; // With simplify whitespace
-	QCOMPARE(AsciiFilterPrivate::determineSeparator(QStringLiteral("   header1\t     header2     header3\n"), removeQuotes, simplifyWhiteSpaces, separator)->message(),
+	QCOMPARE(AsciiFilterPrivate::determineSeparator(QStringLiteral("   header1\t     header2     header3\n"), removeQuotes, simplifyWhiteSpaces, separator)
+				 ->message(),
 			 i18n("Success"));
 	QCOMPARE(separator, QStringLiteral(" "));
 
@@ -3595,8 +3598,9 @@ void AsciiFilterTest::determineSeparator() {
 
 	// Space in quoted text
 	simplifyWhiteSpaces = false;
-	QCOMPARE(AsciiFilterPrivate::determineSeparator(QStringLiteral("\"header 1\"\theader2\theader3\n"), removeQuotes, simplifyWhiteSpaces, separator)->message(),
-			 i18n("Success"));
+	QCOMPARE(
+		AsciiFilterPrivate::determineSeparator(QStringLiteral("\"header 1\"\theader2\theader3\n"), removeQuotes, simplifyWhiteSpaces, separator)->message(),
+		i18n("Success"));
 	QCOMPARE(separator, QStringLiteral("\t"));
 }
 

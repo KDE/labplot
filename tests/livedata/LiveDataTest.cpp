@@ -1519,7 +1519,7 @@ void LiveDataTest::testUdpReadContinuousFixed00() {
 	properties.columnModesString = QStringLiteral("Int, Int");                                                                                                 \
 	properties.automaticSeparatorDetection = false;                                                                                                            \
 	properties.separator = QStringLiteral(",");                                                                                                                \
-	QCOMPARE(filter->initialize(properties)->message(), i18n("Success"));                                                                                    \
+	QCOMPARE(filter->initialize(properties)->message(), i18n("Success"));                                                                                      \
                                                                                                                                                                \
 	dataSource->setFilter(filter);                                                                                                                             \
                                                                                                                                                                \

@@ -629,13 +629,13 @@ void AsciiFilterPrivate::setDataSource(AbstractDataSource* dataSource) {
  * \return
  */
 std::shared_ptr<Status> AsciiFilterPrivate::readFromDevice(QIODevice& device,
-													   AbstractFileFilter::ImportMode columnImportMode,
-													   AbstractFileFilter::ImportMode rowImportMode,
-													   qint64 from,
-													   qint64 lines,
-													   qint64 keepNRows,
-													   qint64& bytes_read,
-													   bool skipFirstLine) {
+														   AbstractFileFilter::ImportMode columnImportMode,
+														   AbstractFileFilter::ImportMode rowImportMode,
+														   qint64 from,
+														   qint64 lines,
+														   qint64 keepNRows,
+														   qint64& bytes_read,
+														   bool skipFirstLine) {
 	bytes_read = 0;
 
 	bool ok;

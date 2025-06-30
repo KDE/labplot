@@ -22,13 +22,13 @@ public:
 	std::shared_ptr<Status> initialize(QIODevice&);
 	void setDataSource(AbstractDataSource*);
 	std::shared_ptr<Status> readFromDevice(QIODevice&,
-									   AbstractFileFilter::ImportMode columnImportMode,
-									   AbstractFileFilter::ImportMode rowImportMode,
-									   qint64 from,
-									   qint64 lines,
-									   qint64 keepNRows,
-									   qint64& bytes_read,
-									   bool skipFirstLine = false);
+										   AbstractFileFilter::ImportMode columnImportMode,
+										   AbstractFileFilter::ImportMode rowImportMode,
+										   qint64 from,
+										   qint64 lines,
+										   qint64 keepNRows,
+										   qint64& bytes_read,
+										   bool skipFirstLine = false);
 	QVector<QStringList> preview(QIODevice&, int lines, bool reinit = true, bool skipFirstLine = false);
 	QVector<QStringList> preview(const QString& fileName, int lines, bool reinit = true);
 
