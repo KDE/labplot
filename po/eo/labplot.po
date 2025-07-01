@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-25 00:39+0000\n"
+"POT-Creation-Date: 2025-07-01 00:38+0000\n"
 "PO-Revision-Date: 2025-03-23 07:29+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -362,13 +362,13 @@ msgstr "En%1"
 msgid "Import Data"
 msgstr "Importi Datumojn"
 
-#: src/backend/core/AbstractPart.cpp:126 src/frontend/ActionsManager.cpp:241
-#: src/frontend/ActionsManager.cpp:250
+#: src/backend/core/AbstractPart.cpp:126 src/frontend/ActionsManager.cpp:261
+#: src/frontend/ActionsManager.cpp:270
 #, kde-format
 msgid "From File..."
 msgstr "El Dosiero..."
 
-#: src/backend/core/AbstractPart.cpp:128 src/frontend/ActionsManager.cpp:262
+#: src/backend/core/AbstractPart.cpp:128 src/frontend/ActionsManager.cpp:282
 #, kde-format
 msgid "From SQL Database..."
 msgstr "El SQL-datumbazo..."
@@ -393,7 +393,7 @@ msgstr "Presi"
 msgid "Print Preview"
 msgstr "Presita antaŭvido"
 
-#: src/backend/core/AbstractPart.cpp:147 src/frontend/ActionsManager.cpp:362
+#: src/backend/core/AbstractPart.cpp:147 src/frontend/ActionsManager.cpp:382
 #, kde-format
 msgid "&Close"
 msgstr "&Fermi"
@@ -1919,7 +1919,7 @@ msgid "Unknown"
 msgstr "Nekonata"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/ActionsManager.cpp:201 src/frontend/MainWin.cpp:1226
+#: src/frontend/ActionsManager.cpp:221 src/frontend/MainWin.cpp:1226
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -10493,34 +10493,34 @@ msgstr ""
 "pri Vidigo kaj Analizo de Datumoj alirebla por ĉiuj, (Versio %2) [Komputila "
 "programaro]. %3."
 
-#: src/frontend/ActionsManager.cpp:172
+#: src/frontend/ActionsManager.cpp:192
 #, kde-format
 msgid "&Open Example"
 msgstr "Malfermi Ekzempl&on"
 
-#: src/frontend/ActionsManager.cpp:185 src/frontend/MainWin.cpp:1182
+#: src/frontend/ActionsManager.cpp:205 src/frontend/MainWin.cpp:1182
 #, kde-format
 msgid "Workbook"
 msgstr "Laborlibro"
 
-#: src/frontend/ActionsManager.cpp:187
+#: src/frontend/ActionsManager.cpp:207
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 "Kreas novan laborlibron por kolekto-kalkultabeloj, matricoj kaj diagramigoj"
 
-#: src/frontend/ActionsManager.cpp:190 src/frontend/MainWin.cpp:1190
+#: src/frontend/ActionsManager.cpp:210 src/frontend/MainWin.cpp:1190
 #, kde-format
 msgid "Data Extractor"
 msgstr "Eltilo de datumoj"
 
-#: src/frontend/ActionsManager.cpp:191
+#: src/frontend/ActionsManager.cpp:211
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "Kreas datuman ĉerpilon por akiri datumojn de bildo"
 
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
-#: src/frontend/ActionsManager.cpp:195
+#: src/frontend/ActionsManager.cpp:215
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:410
@@ -10532,231 +10532,231 @@ msgstr "Kreas datuman ĉerpilon por akiri datumojn de bildo"
 msgid "Spreadsheet"
 msgstr "Tabelfolio"
 
-#: src/frontend/ActionsManager.cpp:197
+#: src/frontend/ActionsManager.cpp:217
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "Kreas novan kalkultabelon por redaktado de datumoj"
 
-#: src/frontend/ActionsManager.cpp:203
+#: src/frontend/ActionsManager.cpp:223
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Kreas novan matricon por redaktado de datumoj"
 
-#: src/frontend/ActionsManager.cpp:207 src/frontend/MainWin.cpp:1244
+#: src/frontend/ActionsManager.cpp:227 src/frontend/MainWin.cpp:1244
 #: src/frontend/SettingsDialog.cpp:62
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:86
 #, kde-format
 msgid "Worksheet"
 msgstr "Laborfolio"
 
-#: src/frontend/ActionsManager.cpp:209
+#: src/frontend/ActionsManager.cpp:229
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "Kreas novan laborfolion por datuma grafikaĵo"
 
-#: src/frontend/ActionsManager.cpp:217
+#: src/frontend/ActionsManager.cpp:237
 #, fuzzy, kde-format
 #| msgid "Creates a new %1 notebook"
 msgid "Creates a new %1 script"
 msgstr "Kreas novan %1 notlibron"
 
-#: src/frontend/ActionsManager.cpp:224 src/frontend/MainWin.cpp:1252
+#: src/frontend/ActionsManager.cpp:244 src/frontend/MainWin.cpp:1252
 #, kde-format
 msgid "Note"
 msgstr "Noto"
 
-#: src/frontend/ActionsManager.cpp:225
+#: src/frontend/ActionsManager.cpp:245
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Kreas novan noton por arbitra teksto"
 
-#: src/frontend/ActionsManager.cpp:229 src/frontend/MainWin.cpp:1174
+#: src/frontend/ActionsManager.cpp:249 src/frontend/MainWin.cpp:1174
 #, kde-format
 msgid "Folder"
 msgstr "Dosierujo"
 
-#: src/frontend/ActionsManager.cpp:230
+#: src/frontend/ActionsManager.cpp:250
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "Kreas novan dosierujon por kolekti foliojn kaj aliajn elementojn"
 
-#: src/frontend/ActionsManager.cpp:235
+#: src/frontend/ActionsManager.cpp:255
 #, kde-format
 msgid "Live Data Source..."
 msgstr "Viva datumfonto..."
 
-#: src/frontend/ActionsManager.cpp:236
+#: src/frontend/ActionsManager.cpp:256
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr "Kreas vivan datumfonton por legi datumojn de realtempa aparato"
 
-#: src/frontend/ActionsManager.cpp:243 src/frontend/ActionsManager.cpp:252
+#: src/frontend/ActionsManager.cpp:263 src/frontend/ActionsManager.cpp:272
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Importi datumojn de regula dosiero"
 
-#: src/frontend/ActionsManager.cpp:257
+#: src/frontend/ActionsManager.cpp:277
 #, kde-format
 msgid "From kaggle.com..."
 msgstr "El kaggle.com..."
 
-#: src/frontend/ActionsManager.cpp:258
+#: src/frontend/ActionsManager.cpp:278
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr "Enporti datumojn el kaggle.com"
 
-#: src/frontend/ActionsManager.cpp:263
+#: src/frontend/ActionsManager.cpp:283
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Importi datumojn de SQL-datumbazo"
 
-#: src/frontend/ActionsManager.cpp:267
+#: src/frontend/ActionsManager.cpp:287
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "El Datumarkolekto..."
 
-#: src/frontend/ActionsManager.cpp:268
+#: src/frontend/ActionsManager.cpp:288
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr "Enporti datumojn de interreta datenaro"
 
-#: src/frontend/ActionsManager.cpp:272
+#: src/frontend/ActionsManager.cpp:292
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "Projekto LabPlot..."
 
-#: src/frontend/ActionsManager.cpp:273
+#: src/frontend/ActionsManager.cpp:293
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Importi projekton el LabPlot-projektdosiero (.lml)"
 
-#: src/frontend/ActionsManager.cpp:278
+#: src/frontend/ActionsManager.cpp:298
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Origina Projekto (OPJ)..."
 
-#: src/frontend/ActionsManager.cpp:279
+#: src/frontend/ActionsManager.cpp:299
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr "Importi projekton el OriginLab Origin-projektdosiero (.opj)"
 
-#: src/frontend/ActionsManager.cpp:312
+#: src/frontend/ActionsManager.cpp:332
 #, kde-format
 msgid "Export..."
 msgstr "Eksporti..."
 
-#: src/frontend/ActionsManager.cpp:313
+#: src/frontend/ActionsManager.cpp:333
 #, kde-format
 msgid "Export selected element"
 msgstr "Eksporti elektitan elementon"
 
-#: src/frontend/ActionsManager.cpp:319 src/frontend/ActionsManager.cpp:1332
+#: src/frontend/ActionsManager.cpp:339 src/frontend/ActionsManager.cpp:1332
 #: src/frontend/ActionsManager.cpp:1340
 #, kde-format
 msgid "Share"
 msgstr "Kundividi"
 
-#: src/frontend/ActionsManager.cpp:324
+#: src/frontend/ActionsManager.cpp:344
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Retumilo de Koloraj Mapoj"
 
-#: src/frontend/ActionsManager.cpp:325
+#: src/frontend/ActionsManager.cpp:345
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "Malfermi dialogon por foliumi la disponeblajn kolormapojn."
 
-#: src/frontend/ActionsManager.cpp:334
+#: src/frontend/ActionsManager.cpp:354
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "FITS Metadatuma Redaktilo..."
 
-#: src/frontend/ActionsManager.cpp:335
+#: src/frontend/ActionsManager.cpp:355
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Malfermi redaktilon por redakti FITS-metadatumojn"
 
-#: src/frontend/ActionsManager.cpp:344
+#: src/frontend/ActionsManager.cpp:364
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Malfari/Refari Historion..."
 
-#: src/frontend/ActionsManager.cpp:364
+#: src/frontend/ActionsManager.cpp:384
 #, kde-format
 msgid "Close the active window"
 msgstr "Fermi la aktivan fenestron"
 
-#: src/frontend/ActionsManager.cpp:367
+#: src/frontend/ActionsManager.cpp:387
 #, kde-format
 msgid "Close &All"
 msgstr "Fermi Ĉi&an"
 
-#: src/frontend/ActionsManager.cpp:368
+#: src/frontend/ActionsManager.cpp:388
 #, kde-format
 msgid "Close all the windows"
 msgstr "Fermi ĉiujn fenestrojn"
 
-#: src/frontend/ActionsManager.cpp:371
+#: src/frontend/ActionsManager.cpp:391
 #, kde-format
 msgid "Ne&xt"
 msgstr "Se&kva"
 
-#: src/frontend/ActionsManager.cpp:373
+#: src/frontend/ActionsManager.cpp:393
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Movi la fokuson al la sekva fenestro"
 
-#: src/frontend/ActionsManager.cpp:376
+#: src/frontend/ActionsManager.cpp:396
 #, kde-format
 msgid "Pre&vious"
 msgstr "Antaŭ&a"
 
-#: src/frontend/ActionsManager.cpp:378
+#: src/frontend/ActionsManager.cpp:398
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Movi la fokuson al la antaŭa fenestro"
 
-#: src/frontend/ActionsManager.cpp:385
+#: src/frontend/ActionsManager.cpp:405
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Nuna &Dosierujo Nur"
 
-#: src/frontend/ActionsManager.cpp:390
+#: src/frontend/ActionsManager.cpp:410
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Nuna Dosierujo kaj &Subdosierujo"
 
-#: src/frontend/ActionsManager.cpp:394
+#: src/frontend/ActionsManager.cpp:414
 #, kde-format
 msgid "&All"
 msgstr "&Ĉiuj"
 
-#: src/frontend/ActionsManager.cpp:416
+#: src/frontend/ActionsManager.cpp:436
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Montri Memoruzon"
 
-#: src/frontend/ActionsManager.cpp:424
+#: src/frontend/ActionsManager.cpp:444
 #, kde-format
 msgid "Project Explorer"
 msgstr "Projekta Esploristo"
 
-#: src/frontend/ActionsManager.cpp:429
+#: src/frontend/ActionsManager.cpp:449
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Esploristo de Propraĵoj"
 
-#: src/frontend/ActionsManager.cpp:434
+#: src/frontend/ActionsManager.cpp:454
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "Antaŭrigardo de Laborfolio"
 
-#: src/frontend/ActionsManager.cpp:457
+#: src/frontend/ActionsManager.cpp:477
 #, kde-format
 msgid "Configure CAS..."
 msgstr "Agordi CAS..."
 
-#: src/frontend/ActionsManager.cpp:458
+#: src/frontend/ActionsManager.cpp:478
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
