@@ -126,7 +126,8 @@ void ActionsManager::init() {
 	initMenus();
 
 	// hamburger menu
-	m_hamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, m_mainWindow->actionCollection());
+	auto* collection = m_mainWindow->actionCollection();
+	m_hamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, collection);
 	m_mainWindow->toolBar()->addAction(m_hamburgerMenu);
 	m_hamburgerMenu->hideActionsOf(m_mainWindow->toolBar());
 	m_hamburgerMenu->setMenuBar(m_mainWindow->menuBar());
@@ -143,6 +144,25 @@ void ActionsManager::init() {
 	if (memoryInfoShown)
 		toggleMemoryInfo();
 
+	// hide "Donate" in the help menu
+	auto* donateAction = collection->action(QStringLiteral("help_donate"));
+	if (donateAction)
+		collection->removeAction(donateAction);
+
+	// custom about dialog
+	auto* aboutAction = collection->action(QStringLiteral("help_about_app"));
+	if (aboutAction) {
+		// set menu icon
+		aboutAction->setIcon(KAboutData::applicationData().programLogo().value<QIcon>());
+
+		// disconnect default slot
+		disconnect(aboutAction, nullptr, nullptr, nullptr);
+		connect(aboutAction, &QAction::triggered, this,
+		[=]() {
+			AboutDialog aboutDialog(KAboutData::applicationData(), m_mainWindow);
+			aboutDialog.exec();
+		});
+	}
 }
 
 ActionsManager::~ActionsManager() {
@@ -460,26 +480,6 @@ void ActionsManager::initActions() {
 	collection->addAction(QStringLiteral("configure_cas"), m_configureNotebookAction);
 	connect(m_configureNotebookAction, &QAction::triggered, m_mainWindow, &MainWin::settingsNotebookDialog);
 #endif
-
-	// hide "Donate" in the help menu
-	auto* donateAction = collection->action(QStringLiteral("help_donate"));
-	if (donateAction)
-		collection->removeAction(donateAction);
-
-	// custom about dialog
-	auto* aboutAction = m_mainWindow->actionCollection()->action(QStringLiteral("help_about_app"));
-	if (aboutAction) {
-		// set menu icon
-		aboutAction->setIcon(KAboutData::applicationData().programLogo().value<QIcon>());
-
-		// disconnect default slot
-		disconnect(aboutAction, nullptr, nullptr, nullptr);
-		connect(aboutAction, &QAction::triggered, this,
-		[=]() {
-			AboutDialog aboutDialog(KAboutData::applicationData(), m_mainWindow);
-			aboutDialog.exec();
-		});
-	}
 
 	// actions used in the toolbars
 	initSpreadsheetToolbarActions();
@@ -1488,7 +1488,7 @@ void ActionsManager::connectNotebookToolbarActions(const NotebookView* view) {
 #endif
 
 void ActionsManager::connectDataExtractorToolbarActions(DatapickerImageView* view) {
-	const auto action_update = [this, view] (DatapickerImageView::MouseMode mouseMode) {
+	const auto action_update = [this] (DatapickerImageView::MouseMode mouseMode) {
 		for (auto* action : m_dataExtractorMouseModeActionGroup->actions()) {
 			if (static_cast<DatapickerImageView::MouseMode>(action->data().toInt()) == mouseMode)
 				action->setChecked(true);
@@ -1497,7 +1497,7 @@ void ActionsManager::connectDataExtractorToolbarActions(DatapickerImageView* vie
 
 	// mouse mode actions
 	disconnect(m_dataExtractorMouseModeActionGroup, &QActionGroup::triggered, nullptr, nullptr);
-	connect(m_dataExtractorMouseModeActionGroup, &QActionGroup::triggered, [this, view, action_update](QAction* action) {
+	connect(m_dataExtractorMouseModeActionGroup, &QActionGroup::triggered, [view, action_update](QAction* action) {
 		if (!view->changeMouseMode(action))
 			action_update(view->mouseMode());
 	});

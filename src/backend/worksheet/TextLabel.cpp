@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2019-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2019-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -1162,9 +1162,16 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		} else if (!preview && reader->name() == QLatin1String("geometry")) {
 			WorksheetElement::load(reader, preview);
-		} else if (!preview && reader->name() == QLatin1String("text"))
+		} else if (!preview && reader->name() == QLatin1String("text")) {
 			d->textWrapper.text = reader->readElementText();
-		else if (!preview && reader->name() == QLatin1String("textPlaceholder"))
+			// "MS Shell Dlg 2" is a logical font on Windows (mapped to Tahoma) not used in Qt6 anymore
+			if (d->textWrapper.text.contains(QStringLiteral("MS Shell Dlg 2"))) {
+				if (QSysInfo::productType() == QStringLiteral("windows"))
+					d->textWrapper.text.replace(QStringLiteral("MS Shell Dlg 2"), QStringLiteral("Tahoma"));
+				else
+					d->textWrapper.text.replace(QStringLiteral("MS Shell Dlg 2"), QStringLiteral("Sans Serif"));
+			}
+		} else if (!preview && reader->name() == QLatin1String("textPlaceholder"))
 			d->textWrapper.textPlaceholder = reader->readElementText();
 		else if (!preview && reader->name() == QLatin1String("format")) {
 			attribs = reader->attributes();
