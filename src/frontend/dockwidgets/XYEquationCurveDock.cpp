@@ -16,12 +16,14 @@
 #include "frontend/widgets/FunctionsWidget.h"
 #include "frontend/GuiTools.h"
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
+
 #include <QCompleter>
 #include <QKeyEvent>
 #include <QMenu>
 #include <QWidgetAction>
-
-#include <KLocalizedString>
 
 /*!
   \class XYEquationCurveDock
@@ -264,15 +266,36 @@ void XYEquationCurveDock::showFunctions() {
 }
 
 void XYEquationCurveDock::loadFunction() {
-	GuiTools::loadFunction(uiGeneralTab.teEquation1);
-	//TODO: xmin, xmax, npoints
-	//custom code if accepted
+	auto fileName = GuiTools::loadFunction(uiGeneralTab.teEquation1);
+	if (fileName.isEmpty())
+		return;
+
+	// special options if accepted
+	KConfig config(fileName);
+	auto group = config.group(QLatin1String("EquationCurve"));
+	auto xmin = group.readEntry("XMin", 0);
+	auto xmax = group.readEntry("XMax", 1);
+	auto npoints = group.readEntry("NPoints", 1000);
+
+	const auto numberLocale = QLocale();
+	uiGeneralTab.teMin->setText(numberLocale.toString(xmin));
+	uiGeneralTab.teMax->setText(numberLocale.toString(xmax));
+	uiGeneralTab.sbCount->setValue(npoints);
 }
 
 void XYEquationCurveDock::saveFunction() {
-	GuiTools::saveFunction(uiGeneralTab.teEquation1);
-	//TODO: xmin, xmax, npoints
-	//custom code if accepted
+	auto fileName = GuiTools::saveFunction(uiGeneralTab.teEquation1);
+	if (fileName.isEmpty())
+		return;
+
+	// special option if accepted
+	KConfig config(fileName);
+	auto group = config.group(QLatin1String("EquationCurve"));
+	group.writeEntry("XMin", uiGeneralTab.teMin->document()->toPlainText());
+	group.writeEntry("XMax", uiGeneralTab.teMax->document()->toPlainText());
+	group.writeEntry("NPoints", uiGeneralTab.sbCount->value());
+	config.sync();
+	QDEBUG(Q_FUNC_INFO << ", saved function options to" << fileName)
 }
 
 void XYEquationCurveDock::insertFunction1(const QString& functionName) {

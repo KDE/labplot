@@ -6,6 +6,7 @@
 	SPDX-FileCopyrightText: 2007-2009 Knut Franke <knut.franke@gmx.de>
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -482,6 +483,40 @@ QModelIndex AspectTreeModel::modelIndexOfAspect(const QString& path, int column)
 		return modelIndexOfAspect(aspect, column);
 
 	return QModelIndex{};
+}
+
+QString AspectTreeModel::path(const QModelIndex& index, const QLatin1Char separator) const {
+	QStringList segments;
+	QModelIndex current = index;
+	while (current.isValid()) {
+		segments.prepend(current.data(Qt::DisplayRole).toString());
+		current = current.parent();
+	}
+	return segments.join(separator);
+}
+
+QModelIndex AspectTreeModel::modelIndexForPath(const QString& path, const QLatin1Char separator) const {
+	QStringList parts = path.split(separator, Qt::SkipEmptyParts);
+	QModelIndex parentIndex; // starts invalid, which refers to the root
+
+	for (const QString& part : parts) {
+		int rowCount = this->rowCount(parentIndex);
+
+		bool found = false;
+		for (int row = 0; row < rowCount; ++row) {
+			auto child = this->index(row, 0, parentIndex);
+			if (child.data(Qt::DisplayRole).toString() == part) {
+				parentIndex = child;
+				found = true;
+				break;
+			}
+		}
+
+		if (!found)
+			return {};
+	}
+
+	return parentIndex;
 }
 
 void AspectTreeModel::setFilterString(const QString& s) {

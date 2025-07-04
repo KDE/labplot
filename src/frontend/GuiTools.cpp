@@ -410,8 +410,9 @@ QString GuiTools::replaceExtension(const QString& path, const QString& extension
 /*
  * load custom function from file
  * using TextEdit. Only FitCurve used cbCategory and cbModel
+ * returns config file name if accepted (for loading specific options)
  */
-void GuiTools::loadFunction(ExpressionTextEdit* te, KComboBox* cbCategory, KComboBox* cbModel) {
+QString GuiTools::loadFunction(ExpressionTextEdit* te, KComboBox* cbCategory, KComboBox* cbModel) {
 	//easy alternative: const QString& fileName = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select file to load function definition"), dir, filter);
 
 	QDialog dialog;
@@ -481,14 +482,19 @@ void GuiTools::loadFunction(ExpressionTextEdit* te, KComboBox* cbCategory, KComb
 			if (!comment.isEmpty())
 				te->viewport()->setWhatsThis(comment);
 		}
+
+		return fileName;
 	}
+
+	return {};
 }
 
 /*
  * save custom function to file
  * using TextEdit. Only FitCurve used cb
+ * returning config file name if accepted (for saving specific options)
  */
-void GuiTools::saveFunction(ExpressionTextEdit* te, KComboBox* cb) {
+QString GuiTools::saveFunction(ExpressionTextEdit* te, KComboBox* cb) {
 	QDialog dialog;
 	dialog.setWindowTitle(i18n("Select file to save function definition"));
 	auto* layout = new QVBoxLayout(&dialog);
@@ -591,5 +597,9 @@ void GuiTools::saveFunction(ExpressionTextEdit* te, KComboBox* cb) {
 			te->viewport()->setToolTip(description);
 			te->viewport()->setWhatsThis(comment);
 		}
+
+		return fileName;	// for saving specific options
 	}
+
+	return {};
 }

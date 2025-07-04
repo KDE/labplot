@@ -49,8 +49,8 @@ public:
 
 	static QString replaceExtension(const QString& fileName, const QString& extension);
 
-	static void loadFunction(ExpressionTextEdit*, KComboBox* = nullptr, KComboBox* = nullptr);
-	static void saveFunction(ExpressionTextEdit*, KComboBox* = nullptr);
+	static QString loadFunction(ExpressionTextEdit*, KComboBox* = nullptr, KComboBox* = nullptr);
+	static QString saveFunction(ExpressionTextEdit*, KComboBox* = nullptr);
 };
 
 #endif // GUITOOLS_H

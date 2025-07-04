@@ -1186,10 +1186,14 @@ void XYFitCurveDock::parametersValid(bool valid) {
 
 void XYFitCurveDock::loadFunction() {
 	GuiTools::loadFunction(uiGeneralTab.teEquation, uiGeneralTab.cbCategory, uiGeneralTab.cbModel);
+
+	//TODO: special options if accepted
 }
 
 void XYFitCurveDock::saveFunction() {
 	GuiTools::saveFunction(uiGeneralTab.teEquation, uiGeneralTab.cbModel);
+
+	//TODO: special options if accepted
 }
 
 void XYFitCurveDock::showOptions() {
