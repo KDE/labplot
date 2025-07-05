@@ -266,7 +266,7 @@ void XYEquationCurveDock::showFunctions() {
 }
 
 void XYEquationCurveDock::loadFunction() {
-	auto fileName = GuiTools::loadFunction(uiGeneralTab.teEquation1);
+	QString fileName = GuiTools::loadFunction(uiGeneralTab.teEquation1);
 	if (fileName.isEmpty())
 		return;
 
@@ -284,7 +284,7 @@ void XYEquationCurveDock::loadFunction() {
 }
 
 void XYEquationCurveDock::saveFunction() {
-	auto fileName = GuiTools::saveFunction(uiGeneralTab.teEquation1);
+	QString fileName = GuiTools::saveFunction(uiGeneralTab.teEquation1);
 	if (fileName.isEmpty())
 		return;
 

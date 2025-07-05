@@ -1185,15 +1185,65 @@ void XYFitCurveDock::parametersValid(bool valid) {
 }
 
 void XYFitCurveDock::loadFunction() {
-	GuiTools::loadFunction(uiGeneralTab.teEquation, uiGeneralTab.cbCategory, uiGeneralTab.cbModel);
+	QString fileName = GuiTools::loadFunction(uiGeneralTab.teEquation, uiGeneralTab.cbCategory, uiGeneralTab.cbModel);
+	if (fileName.isEmpty())
+		return;
 
-	//TODO: special options if accepted
+	// special options if accepted
+	KConfig config(fileName);
+	auto group = config.group(QLatin1String("FitCurve"));
+
+	m_fitData.maxIterations = group.readEntry("MaxIterations", 500);
+	m_fitData.eps =  group.readEntry("Tolerance", 1.e-4);
+	m_fitData.evaluatedPoints = static_cast<size_t>(group.readEntry("EvaluatedPoints", quint64(1000)));
+
+	// parameter and settings
+	group = config.group(QLatin1String("Parameter"));
+	auto keys = group.keyList();
+	int i = 0;
+	for (const auto &name : keys) {
+		auto settings = group.readEntry(name, QStringList());
+		if (settings.isEmpty()) {
+			i++;
+			continue;
+		}
+
+		m_fitData.paramStartValues[i] = settings.at(0).toDouble();
+		m_fitData.paramFixed[i] = QVariant(settings.at(1)).toBool();
+		m_fitData.paramLowerLimits[i] = settings.at(2).toDouble();
+		m_fitData.paramUpperLimits[i] = settings.at(3).toDouble();
+		i++;
+	}
+	// update parameter widget
+	parametersChanged();
 }
 
 void XYFitCurveDock::saveFunction() {
-	GuiTools::saveFunction(uiGeneralTab.teEquation, uiGeneralTab.cbModel);
+	QString fileName = GuiTools::saveFunction(uiGeneralTab.teEquation, uiGeneralTab.cbModel);
+	if (fileName.isEmpty())
+		return;
 
-	//TODO: special options if accepted
+	// special option if accepted
+	KConfig config(fileName);
+	auto group = config.group(QLatin1String("FitCurve"));
+
+	// fit options: iterations, tol, points
+	group.writeEntry("MaxIterations", m_fitData.maxIterations);
+	group.writeEntry("Tolerance", m_fitData.eps);
+	group.writeEntry("EvaluatedPoints", static_cast<quint64>(m_fitData.evaluatedPoints));
+
+	// parameter and settings
+	group = config.group(QLatin1String("Parameter"));
+	for (int i = 0; i < m_fitData.paramNames.size(); i++) {
+		QStringList settings;
+		settings << QString::number(m_fitData.paramStartValues.at(i));
+		settings << QString::number(m_fitData.paramFixed.at(i));
+		settings << QString::number(m_fitData.paramLowerLimits.at(i));
+		settings << QString::number(m_fitData.paramUpperLimits.at(i));
+		group.writeEntry(m_fitData.paramNames.at(i), settings);
+	}
+
+	// data and weights are defined in a project (not model options)
 }
 
 void XYFitCurveDock::showOptions() {
