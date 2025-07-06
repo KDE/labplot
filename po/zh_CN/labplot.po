@@ -14554,7 +14554,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:credit"
 msgid "FITS Filter"
-msgstr ""
+msgstr "FITS 过滤器"
 
 #: src/frontend/LabPlot.cpp:92
 #, kde-format
@@ -24226,6 +24226,8 @@ msgid ""
 "currently selected objects is exported</li><li>Worksheet - the complete "
 "worksheet area is exported</li></ul>"
 msgstr ""
+"指定要导出的区域：<ul><li>边界框 - 导出工作表上所有对象的边界框</li><li>选中"
+"区域 - 导出当前选中对象的区域</li><li>工作表 - 导出完整的工作表区域</li></ul>"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:99
 #, kde-format
