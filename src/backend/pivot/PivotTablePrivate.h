@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Private members of Pivot Table
     --------------------------------------------------------------------
-    Copyright            : (C) 2019 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2025 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -32,6 +32,7 @@
 #include <backend/pivot/PivotTable.h>
 
 class QStandardItemModel;
+class QSqlQuery;
 class HierarchicalHeaderModel;
 
 class PivotTablePrivate {
@@ -74,6 +75,9 @@ public:
 private:
 	bool m_dbCreated{false};
 // 	QMap<QString, QStringList> m_members;
+
+	QString createSQLQuery() const;
+	void populateDataModels(QSqlQuery);
 };
 
 #endif

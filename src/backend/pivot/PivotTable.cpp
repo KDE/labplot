@@ -12,6 +12,7 @@
 #include "frontend/pivot/PivotTableView.h"
 #include "frontend/pivot/HierarchicalHeaderView.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -228,6 +229,8 @@ QStringList PivotTablePrivate::members(const QString& dimension, PivotTable::Sor
 */
 
 void PivotTablePrivate::recalculate() {
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
+
 	//clear the previos result
 	dataModel->clear();
 	horizontalHeaderModel->clear();
@@ -249,7 +252,27 @@ void PivotTablePrivate::recalculate() {
 	if (dataSourceType == PivotTable::DataSourceSpreadsheet && !m_dbCreated)
 		createDb();
 
-	//construct the SQL statement string
+	// construct and execute the SQL query
+	QSqlQuery sqlQuery;
+	QString query = createSQLQuery();
+	QDEBUG(query);
+	if (!sqlQuery.exec(query)) {
+		RESET_CURSOR;
+		KMessageBox::error(nullptr, i18n("Failed to process the query.") + QLatin1Char('\n') + sqlQuery.lastError().databaseText());
+		Q_EMIT q->changed();
+		return;
+	}
+
+	// copy the result into the data models
+	populateDataModels(sqlQuery);
+
+	//notify about the new result
+	Q_EMIT q->changed();
+	RESET_CURSOR;
+}
+
+QString PivotTablePrivate::createSQLQuery() const {
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	QString query{QLatin1String("SELECT ")};
 	QString groupByString;
 
@@ -292,15 +315,11 @@ void PivotTablePrivate::recalculate() {
 
 	}
 
-	//execute the query
-	QSqlQuery sqlQuery;
-	QDEBUG(query);
-	if (!sqlQuery.exec(query)) {
-		RESET_CURSOR;
-		KMessageBox::error(nullptr, i18n("Failed to process the query.") + QLatin1Char('\n') + sqlQuery.lastError().databaseText());
-		Q_EMIT q->changed();
-		return;
-	}
+	return query;
+}
+
+void PivotTablePrivate::populateDataModels(QSqlQuery sqlQuery) {
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 
 	// copy the result into the models
 	// navigate to the last record to get the total number of records in the resultset
@@ -381,25 +400,30 @@ void PivotTablePrivate::recalculate() {
 			start_span[i] = 1;
 			end_span[i] = 1;
 			last_value[i] = QLatin1String("");
-			verticalHeaderModel->setData(verticalHeaderModel->index(0, i), rows.at(i), Qt::DisplayRole);
+			// TODO:
+			// verticalHeaderModel->setData(verticalHeaderModel->index(0, i), rows.at(i), Qt::DisplayRole);
 		}
 
 		int row = 0;
 		while (sqlQuery.next()) {
 			bool parent_header_changed = false;
 			for (int i = 0; i < firstValueIndex; ++i) {
-				QString queryVal = sqlQuery.value(i).toString();
-				if(queryVal != last_value[i] || parent_header_changed) {
-					verticalHeaderModel->setData(verticalHeaderModel->index(row, i), queryVal, Qt::DisplayRole);
+				const auto& value = sqlQuery.value(i).toString();
+				// qDebug()<<"row/col " << row <<"/" << i << "  " << value << "  " << last_value[i];
+				if(value != last_value[i] || parent_header_changed) {
+					// qDebug()<<"set data for row/col " << row <<"/" << i << "  " << value;
+					verticalHeaderModel->setData(verticalHeaderModel->index(row, i), value, Qt::DisplayRole);
 
-					if(end_span[i] > start_span[i] + 1)
+					if(end_span[i] > start_span[i] + 1) {
+						// qDebug()<<
 						verticalHeaderModel->setSpan(start_span[i], i, end_span[i] - start_span[i], 0);
+					}
 
 					start_span[i] = end_span[i];
 					parent_header_changed = true;
 				}
 
-				last_value[i] = queryVal;
+				last_value[i] = value;
 				end_span[i] = end_span[i] + 1;
 			}
 
@@ -424,13 +448,10 @@ void PivotTablePrivate::recalculate() {
 	} else {
 		//TODO
 	}
-
-	//notify about the new result
-	Q_EMIT q->changed();
-	RESET_CURSOR;
 }
 
 void PivotTablePrivate::createDb() {
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	for (auto* col : dataSourceSpreadsheet->children<Column>()) {
 		if (col->isNumeric())
 			measures << col->name();
@@ -448,10 +469,14 @@ void PivotTablePrivate::createDb() {
   Saves as XML.
  */
 void PivotTable::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement(QLatin1String("pivotTable"));
+	writer->writeStartElement(QStringLiteral("pivotTable"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
-	//TODO:
+
+	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("dataSourceType"), QString::number(d->dataSourceType));
+	writer->writeAttribute(QStringLiteral("dataSourceSpreadsheet"), d->dataSourceSpreadsheet->path());
+	writer->writeEndElement();
 
 	writer->writeEndElement();
 }
@@ -464,7 +489,30 @@ bool PivotTable::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	//TODO:
+	QString str;
+	QXmlStreamAttributes attribs;
+
+	while (!reader->atEnd()) {
+		reader->readNext();
+
+		if (reader->isEndElement() && reader->name() == QStringLiteral("pivotTable"))
+			break;
+
+		if (reader->isStartElement()) {
+			if (reader->name() == QStringLiteral("comment")) {
+				if (!readCommentElement(reader))
+					return false;
+			} else if (reader->name() == QStringLiteral("general")) {
+				attribs = reader->attributes();
+				READ_INT_VALUE("dataSourceType", dataSourceType, PivotTable::DataSourceType);
+			} else { // unknown element
+				reader->raiseUnknownElementWarning();
+				if (!reader->skipToEndElement())
+					return false;
+			}
+		}
+	}
+
 
 	return !reader->hasError();
 }
