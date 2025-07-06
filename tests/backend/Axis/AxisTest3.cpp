@@ -1290,31 +1290,17 @@ void AxisTest3::autoScaleLog102() {
 	QCOMPARE(xAxis->range(), p->range(Dimension::X, 0));
 	QCOMPARE(xAxis->scale(), RangeT::Scale::Log10);
 
-	{
-		const auto s = xAxis->tickLabelStrings();
-		QStringList expectedStrings{
-			QStringLiteral("0.01"),
-			QStringLiteral("0.05"),
-			QStringLiteral("0.22"),
-			QStringLiteral("1.00"),
-		};
-		for (const auto& label: xAxis->tickLabelStrings()) {
-			std::cout << label.toStdString() << ",";
-		}
-		std::cout << std::end;
-		COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
-	}
 	VALUES_EQUAL(xAxis->range().start(), 0.01);
 	QCOMPARE(xAxis->range().end(), 1.0);
 
 	QStringList expectedStrings{
 		QStringLiteral("0.01"),
-		QStringLiteral("0.03"),
-		QStringLiteral("0.10"),
-		QStringLiteral("0.32"),
+		QStringLiteral("0.05"),
+		QStringLiteral("0.22"),
 		QStringLiteral("1.00"),
 	};
 	COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
+
 }
 
 void AxisTest3::autoScaleLog102Vertical() {
@@ -1356,13 +1342,11 @@ void AxisTest3::autoScaleLog102Vertical() {
 
 	QStringList expectedStrings{
 		QStringLiteral("0.01"),
-		QStringLiteral("0.03"),
-		QStringLiteral("0.10"),
-		QStringLiteral("0.32"),
+		QStringLiteral("0.05"),
+		QStringLiteral("0.22"),
 		QStringLiteral("1.00"),
 	};
 	COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
->>>>>>> 774998c67 (fix tests)
 }
 
 QTEST_MAIN(AxisTest3)

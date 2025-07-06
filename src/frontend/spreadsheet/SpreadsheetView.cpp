@@ -2683,13 +2683,14 @@ void SpreadsheetView::insertColumnsRight(int count) {
 	int last = lastSelectedColumn();
 	const int cols = m_spreadsheet->columnCount();
 
-	if (last < 0) // its possible that there is no selected column or the spreadsheet is empty so a negative number is returned
-		if (cols == 0) // the spreadsheet is empty 
+	if (last < 0) { // its possible that there is no selected column or the spreadsheet is empty so a negative number is returned
+		if (cols == 0) { // the spreadsheet is empty
 			last = -1; // so we insert at the beginning. default is -1 because of the last + 1 below
-		else { // there is no selected column
+		} else { // there is no selected column
 			m_spreadsheet->appendColumns(count); // so we append to the spreadsheet
 			return;
 		}
+	}
 
 	m_spreadsheet->insertColumns(last + 1, count); // insert count columns before last + 1 because it is same as after last
 }
@@ -3393,13 +3394,14 @@ void SpreadsheetView::insertRowsBelow(int count) {
 	int last = lastSelectedRow();
 	const int rows = m_spreadsheet->rowCount();
 
-	if (last < 0) // its possible that there is no selected row or the spreadsheet is empty so a negative number is returned
-		if (rows == 0) // the spreadsheet is empty 
+	if (last < 0) { // its possible that there is no selected row or the spreadsheet is empty so a negative number is returned
+		if (rows == 0) { // the spreadsheet is empty
 			last = -1; // insert rows at the beginning. we use -1 because of last + 1 below
-		else { // there is no selected row
+		} else { // there is no selected row
 			m_spreadsheet->appendRows(count); // append rows at the end
 			return;
 		}
+	}
 
 	m_spreadsheet->insertRows(last + 1, count); // insert count rows before last + 1 because it is same as after last
 }
