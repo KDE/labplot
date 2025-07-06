@@ -1300,7 +1300,6 @@ void AxisTest3::autoScaleLog102() {
 		QStringLiteral("1.00"),
 	};
 	COMPARE_STRING_VECTORS(xAxis->tickLabelStrings(), expectedStrings);
-
 }
 
 void AxisTest3::autoScaleLog102Vertical() {
