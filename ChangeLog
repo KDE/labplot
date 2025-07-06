@@ -9,6 +9,7 @@ New features:
 		* Inset plot areas - plot areas added as child of another plot area
 		* Improve axis ticks locations. The don't need to be always from the bottom to top if it does not look nice (!700)
 
+-----2.12.1 (2025-07) -----
 Bug fixes:
 	* Fix using default font for axis title
 	* Fix build with system QXlsx (!693)
