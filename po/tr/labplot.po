@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-09 02:37+0000\n"
+"POT-Creation-Date: 2025-07-07 02:30+0000\n"
 "PO-Revision-Date: 2025-06-29 17:48+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -87,65 +87,65 @@ msgstr "Aşağı"
 
 #: src/backend/core/AbstractAspect.cpp:525
 #: src/backend/core/aspectcommands.h:171
-#: src/backend/datapicker/Datapicker.cpp:220
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2201
+#: src/backend/datapicker/Datapicker.cpp:223
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2202
 #, kde-format
 msgid "%1: add %2"
 msgstr "%1: %2 ekle"
 
 #: src/backend/core/AbstractAspect.cpp:527
-#: src/backend/core/AbstractAspect.cpp:563
+#: src/backend/core/AbstractAspect.cpp:564
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
 msgstr "“%1”, ad çakışmasını önlemek için “%2” olarak yeniden adlandırılıyor."
 
-#: src/backend/core/AbstractAspect.cpp:561
+#: src/backend/core/AbstractAspect.cpp:562
 #, kde-format
 msgid "%1: insert %2 before %3"
 msgstr "%1: %2 ögesini, %3 öncesine ekle"
 
-#: src/backend/core/AbstractAspect.cpp:561
+#: src/backend/core/AbstractAspect.cpp:562
 #, kde-format
 msgid "%1: insert %2 before end"
 msgstr "%1: %2 ögesini sondan önce ekle"
 
-#: src/backend/core/AbstractAspect.cpp:596
+#: src/backend/core/AbstractAspect.cpp:597
 #: src/backend/core/aspectcommands.h:102
 #, kde-format
 msgid "%1: remove %2"
 msgstr "%1: %2 ögesini kaldır"
 
-#: src/backend/core/AbstractAspect.cpp:609
+#: src/backend/core/AbstractAspect.cpp:610
 #, kde-format
 msgid "%1: remove all children"
 msgstr "%1: Tüm alt ögeleri kaldır"
 
-#: src/backend/core/AbstractAspect.cpp:721
+#: src/backend/core/AbstractAspect.cpp:722
 #, kde-format
 msgid "%1: pasted"
 msgstr "%1: Yapıştırıldı"
 
-#: src/backend/core/AbstractAspect.cpp:815
+#: src/backend/core/AbstractAspect.cpp:816
 #, kde-format
 msgid "%1: pasted '%2'"
 msgstr "%1: “%2” yapıştırıldı"
 
-#: src/backend/core/AbstractAspect.cpp:817
+#: src/backend/core/AbstractAspect.cpp:818
 #, kde-format
 msgid "%1: duplicated '%2'"
 msgstr "%1: “%2” çoğaltıldı"
 
-#: src/backend/core/AbstractAspect.cpp:818
+#: src/backend/core/AbstractAspect.cpp:819
 #, kde-format
 msgid "Copy of '%1'"
 msgstr "“%1” kopyası"
 
-#: src/backend/core/AbstractAspect.cpp:953
+#: src/backend/core/AbstractAspect.cpp:954
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr "“name” özniteliği eksik veya boş."
 
-#: src/backend/core/AbstractAspect.cpp:960
+#: src/backend/core/AbstractAspect.cpp:961
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr "“%1” için geçersiz oluşturma zamanı. Geçerli zaman kullanılıyor."
@@ -277,7 +277,7 @@ msgstr "Büyük Tamsayı"
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:233
 #: src/backend/datasources/filters/AsciiFilter.cpp:610
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:531
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:532
 #: src/frontend/notebook/NotebookView.cpp:97
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:208
 #: src/frontend/ui/dockwidgets/axisdock.ui:1524
@@ -372,13 +372,13 @@ msgstr "İçinde:%1"
 msgid "Import Data"
 msgstr "Veri İçe Aktar"
 
-#: src/backend/core/AbstractPart.cpp:126 src/frontend/MainWin.cpp:686
-#: src/frontend/MainWin.cpp:695
+#: src/backend/core/AbstractPart.cpp:126 src/frontend/MainWin.cpp:684
+#: src/frontend/MainWin.cpp:693
 #, kde-format
 msgid "From File..."
 msgstr "Dosyadan…"
 
-#: src/backend/core/AbstractPart.cpp:128 src/frontend/MainWin.cpp:707
+#: src/backend/core/AbstractPart.cpp:128 src/frontend/MainWin.cpp:705
 #, kde-format
 msgid "From SQL Database..."
 msgstr "SQL Veritabanından…"
@@ -403,7 +403,7 @@ msgstr "Yazdır"
 msgid "Print Preview"
 msgstr "Yazdırma Önizlemesi"
 
-#: src/backend/core/AbstractPart.cpp:147 src/frontend/MainWin.cpp:779
+#: src/backend/core/AbstractPart.cpp:147 src/frontend/MainWin.cpp:777
 #, kde-format
 msgid "&Close"
 msgstr "&Kapat"
@@ -419,7 +419,7 @@ msgid "incompatible filter type"
 msgstr "uyumsuz süzgeç türü"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:706
+#: src/backend/core/Folder.cpp:151 src/backend/core/Project.cpp:699
 #: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
@@ -604,7 +604,7 @@ msgid "%1: change cell values"
 msgstr "%1: Hücre değerlerini değiştir"
 
 #: src/backend/core/column/columncommands.cpp:529
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2815
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2764
 #, kde-format
 msgid "%1: set plot designation"
 msgstr "%1: Çizim gösterimini ayarla"
@@ -692,52 +692,47 @@ msgstr "Henüz yüklenmedi."
 msgid "Project"
 msgstr "Proje"
 
-#: src/backend/core/Project.cpp:264
-#, kde-format
-msgid "Close"
-msgstr "Kapat"
-
-#: src/backend/core/Project.cpp:301
+#: src/backend/core/Project.cpp:294
 #, kde-format
 msgid "%1: set author"
 msgstr "%1: Yazarı ayarla"
 
-#: src/backend/core/Project.cpp:308
+#: src/backend/core/Project.cpp:301
 #, kde-format
 msgid "%1: save dock state changed"
 msgstr "%1: Rıhtım durumunu kaydetme ayarı değişti"
 
-#: src/backend/core/Project.cpp:315
+#: src/backend/core/Project.cpp:308
 #, kde-format
 msgid "%1: save calculation changed"
 msgstr "%1: Kaydetme hesaplaması değişti"
 
-#: src/backend/core/Project.cpp:550 src/backend/core/Project.cpp:580
+#: src/backend/core/Project.cpp:543 src/backend/core/Project.cpp:573
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Üzgünüm. Dosyayı okuma için açamadık."
 
-#: src/backend/core/Project.cpp:561 src/backend/core/Project.cpp:587
+#: src/backend/core/Project.cpp:554 src/backend/core/Project.cpp:580
 #, kde-format
 msgid "The project file is empty."
 msgstr "Proje dosyası boş."
 
-#: src/backend/core/Project.cpp:561 src/backend/core/Project.cpp:587
+#: src/backend/core/Project.cpp:554 src/backend/core/Project.cpp:580
 #, kde-format
 msgid "Error opening project"
 msgstr "Proje açılırken hata oluştu"
 
-#: src/backend/core/Project.cpp:606
+#: src/backend/core/Project.cpp:599
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "%1 projesini açarken bilinmeyen hata oluştu."
 
-#: src/backend/core/Project.cpp:607
+#: src/backend/core/Project.cpp:600
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Proje açılırken hata oluştu"
 
-#: src/backend/core/Project.cpp:627
+#: src/backend/core/Project.cpp:620
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -756,86 +751,86 @@ msgstr ""
 "\n"
 "Sürdürmek istiyor musunuz?"
 
-#: src/backend/core/Project.cpp:633
+#: src/backend/core/Project.cpp:626
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "CAS Desteği Eksik"
 
-#: src/backend/core/Project.cpp:663
+#: src/backend/core/Project.cpp:656
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "“version” özniteliği bulunamadı."
 
-#: src/backend/core/Project.cpp:713
+#: src/backend/core/Project.cpp:706
 #, kde-format
 msgid "no project element found"
 msgstr "proje ögesi bulunamadı"
 
-#: src/backend/core/Project.cpp:715
+#: src/backend/core/Project.cpp:708
 #, kde-format
 msgid "no valid XML document found"
 msgstr "geçerli XML belgesi bulunamadı"
 
-#: src/backend/core/Project.cpp:765 src/backend/core/Project.cpp:771
-#: src/backend/core/Project.cpp:822
+#: src/backend/core/Project.cpp:758 src/backend/core/Project.cpp:764
+#: src/backend/core/Project.cpp:815
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "“%1” dosyası açılamadı."
 
-#: src/backend/core/Project.cpp:828
+#: src/backend/core/Project.cpp:821
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "“%1” dosyasının içeriği işlenemedi."
 
-#: src/backend/core/Project.cpp:831
+#: src/backend/core/Project.cpp:824
 #, kde-format
 msgid "Failed to open project"
 msgstr "Proje açılamadı"
 
-#: src/backend/core/Project.cpp:1299
+#: src/backend/core/Project.cpp:1272
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Geçersiz proje değiştirme zamanı. Geçerli zaman kullanılıyor."
 
-#: src/backend/core/Workbook.cpp:217
+#: src/backend/core/Workbook.cpp:219
 #, kde-format
 msgid "matrix"
 msgstr "matris"
 
-#: src/backend/core/Workbook.cpp:224
+#: src/backend/core/Workbook.cpp:226
 #, kde-format
 msgid "unknown workbook element '%1'"
 msgstr "bilinmeyen çalışma kitabı ögesi “%1”"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: src/backend/datapicker/Datapicker.cpp:45
-#: src/backend/datapicker/Datapicker.cpp:356
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1776
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1782
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1788
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1794
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1800
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1806
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1812
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1818
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1824
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1830
+#: src/backend/datapicker/Datapicker.cpp:48
+#: src/backend/datapicker/Datapicker.cpp:375
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1777
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1783
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1789
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1795
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1801
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1807
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1813
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1819
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1825
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1831
 #: src/frontend/ui/datapickerimagewidget.ui:260
 #, kde-format
 msgid "Plot"
 msgstr "Çizim"
 
-#: src/backend/datapicker/Datapicker.cpp:138
+#: src/backend/datapicker/Datapicker.cpp:141
 #, kde-format
 msgid "%1, active curve \"%2\""
 msgstr "%1, etkin eğri “%2”"
 
-#: src/backend/datapicker/Datapicker.cpp:217
+#: src/backend/datapicker/Datapicker.cpp:220
 #, kde-format
 msgid "Point %1"
 msgstr "%1 noktası"
 
-#: src/backend/datapicker/Datapicker.cpp:373
+#: src/backend/datapicker/Datapicker.cpp:392
 #, kde-format
 msgid "unknown datapicker element '%1'"
 msgstr "geçersiz veri seçici ögesi “%1”"
@@ -844,7 +839,7 @@ msgstr "geçersiz veri seçici ögesi “%1”"
 #. i18n: ectx: property (text), widget (QLabel, lData)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lFormat_2)
-#: src/backend/datapicker/DatapickerCurve.cpp:176
+#: src/backend/datapicker/DatapickerCurve.cpp:177
 #: src/frontend/matrix/MatrixView.cpp:130
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:352
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:371
@@ -868,64 +863,64 @@ msgstr "geçersiz veri seçici ögesi “%1”"
 msgid "Data"
 msgstr "Veri"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:267
 #: src/backend/datapicker/DatapickerCurve.cpp:268
+#: src/backend/datapicker/DatapickerCurve.cpp:269
 #, kde-format
 msgid "%1: set xy-error type"
 msgstr "%1: xy hatası türünü ayarla"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:322
+#: src/backend/datapicker/DatapickerCurve.cpp:323
 #, kde-format
 msgid "%1: set position X column"
 msgstr "%1: X konumu sütununu ayarla"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:329
+#: src/backend/datapicker/DatapickerCurve.cpp:330
 #, kde-format
 msgid "%1: set position Y column"
 msgstr "%1: Y konumu sütununu ayarla"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:336
+#: src/backend/datapicker/DatapickerCurve.cpp:337
 #, kde-format
 msgid "%1: set position Z column"
 msgstr "%1: Z konumu sütununu ayarla"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:343
+#: src/backend/datapicker/DatapickerCurve.cpp:344
 #, kde-format
 msgid "%1: set +delta_X column"
 msgstr "%1: +delta_X sütununu ayarla"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:350
+#: src/backend/datapicker/DatapickerCurve.cpp:351
 #, kde-format
 msgid "%1: set -delta_X column"
 msgstr "%1: −delta_X sütununu ayarla"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:357
+#: src/backend/datapicker/DatapickerCurve.cpp:358
 #, kde-format
 msgid "%1: set +delta_Y column"
 msgstr "%1: +delta_Y sütununu ayarla"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:364
+#: src/backend/datapicker/DatapickerCurve.cpp:365
 #, kde-format
 msgid "%1: set -delta_Y column"
 msgstr "%1: −delta_Y sütununu ayarla"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:371
+#: src/backend/datapicker/DatapickerCurve.cpp:372
 #, kde-format
 msgid "%1: set error bar size"
 msgstr "%1: Hata çubuğu boyutunu ayarla"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:378
+#: src/backend/datapicker/DatapickerCurve.cpp:379
 #, kde-format
 msgid "%1: set error bar filling"
 msgstr "%1: Hata çubuğu dolgusunu ayarla"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:385
+#: src/backend/datapicker/DatapickerCurve.cpp:386
 #, kde-format
 msgid "%1: set error bar outline style"
 msgstr "%1: Hata çubuğu taslak biçemini ayarla"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:392
-#: src/backend/datapicker/DatapickerImage.cpp:417
+#: src/backend/datapicker/DatapickerCurve.cpp:393
+#: src/backend/datapicker/DatapickerImage.cpp:425
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:281
@@ -938,8 +933,8 @@ msgstr "%1: Hata çubuğu taslak biçemini ayarla"
 msgid "%1: set visible"
 msgstr "%1: Görünürlüğünü ayarla"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:392
-#: src/backend/datapicker/DatapickerImage.cpp:417
+#: src/backend/datapicker/DatapickerCurve.cpp:393
+#: src/backend/datapicker/DatapickerImage.cpp:425
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:281
@@ -953,50 +948,50 @@ msgstr "%1: Görünürlüğünü ayarla"
 msgid "%1: set invisible"
 msgstr "%1: Görünmez yap"
 
-#: src/backend/datapicker/DatapickerImage.cpp:182
+#: src/backend/datapicker/DatapickerImage.cpp:190
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Datapicker Image"
 msgstr "Veri Seçicisi Görselini Yazdır"
 
-#: src/backend/datapicker/DatapickerImage.cpp:314
-#: src/backend/datapicker/DatapickerImage.cpp:369
+#: src/backend/datapicker/DatapickerImage.cpp:322
+#: src/backend/datapicker/DatapickerImage.cpp:377
 #, kde-format
 msgid "%1: upload image"
 msgstr "%1: Görsel yükle"
 
-#: src/backend/datapicker/DatapickerImage.cpp:368
+#: src/backend/datapicker/DatapickerImage.cpp:376
 #, kde-format
 msgid "%1: upload new image"
 msgstr "%1: Yeni görsel yükle"
 
-#: src/backend/datapicker/DatapickerImage.cpp:388
+#: src/backend/datapicker/DatapickerImage.cpp:396
 #: src/backend/worksheet/WorksheetElement.cpp:842
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: Döndürme açısını ayarla"
 
-#: src/backend/datapicker/DatapickerImage.cpp:395
+#: src/backend/datapicker/DatapickerImage.cpp:403
 #, kde-format
 msgid "%1: set Axis points"
 msgstr "%1: Eksen noktalarını ayarla"
 
-#: src/backend/datapicker/DatapickerImage.cpp:402
+#: src/backend/datapicker/DatapickerImage.cpp:410
 #, kde-format
 msgid "%1: set editor settings"
 msgstr "%1: Düzenleyici ayarlarını ayarla"
 
-#: src/backend/datapicker/DatapickerImage.cpp:409
+#: src/backend/datapicker/DatapickerImage.cpp:417
 #, kde-format
 msgid "%1: set minimum segment length"
 msgstr "%1: En düşük bölüt uzunluğunu ayarla"
 
-#: src/backend/datapicker/DatapickerImage.cpp:437
+#: src/backend/datapicker/DatapickerImage.cpp:438
 #, kde-format
 msgid "%1: remove all axis points"
 msgstr "%1: Tüm eksen noktalarını kaldır"
 
-#: src/backend/datapicker/DatapickerImage.cpp:686
+#: src/backend/datapicker/DatapickerImage.cpp:733
 #: src/backend/worksheet/Image.cpp:410
 #, kde-format
 msgid "Failed to read image data"
@@ -1911,8 +1906,8 @@ msgstr "UInt64"
 #: src/backend/datasources/filters/MatioFilter.cpp:402
 #: src/backend/datasources/filters/MatioFilter.cpp:452
 #: src/backend/nsl/nsl_interp.c:26
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:442
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2105
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:443
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2106
 #, kde-format
 msgid "Function"
 msgstr "İşlev"
@@ -1935,7 +1930,7 @@ msgid "Unknown"
 msgstr "Bilinmeyen"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/MainWin.cpp:657 src/frontend/MainWin.cpp:2003
+#: src/frontend/MainWin.cpp:655 src/frontend/MainWin.cpp:2001
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -2701,7 +2696,7 @@ msgid "Stefan-Boltzmann constant"
 msgstr "Stefan–Boltzmann sabiti"
 
 #: src/backend/gsl/constants.cpp:83
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:475
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:476
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:160
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:531
 #, kde-format
@@ -6112,7 +6107,7 @@ msgid "ep"
 msgstr "ep"
 
 #: src/backend/lib/Range.h:57 src/backend/nsl/nsl_interp.c:14
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:456
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:516
 #, kde-format
 msgid "Linear"
@@ -6165,13 +6160,13 @@ msgid "unexpected end of document"
 msgstr "belgenin beklenmedik sonu"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3827
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3772
 #, kde-format
 msgid "FITS image"
 msgstr "FITS görseli"
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3827
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3772
 #, kde-format
 msgid "FITS table"
 msgstr "FITS tablosu"
@@ -6540,7 +6535,7 @@ msgid "Imaginary Part"
 msgstr "Sanal Kısım"
 
 #: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:459
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:460
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:519
 #, kde-format
 msgid "Power"
@@ -6698,7 +6693,7 @@ msgid "Statistics (Distributions)"
 msgstr "İstatistik (Dağılımlar)"
 
 #: src/backend/nsl/nsl_fit.c:24
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:495
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:496
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
 #: src/frontend/datasources/ImportFileWidget.cpp:1366
 #: src/frontend/dockwidgets/AxisDock.cpp:237
@@ -6740,7 +6735,7 @@ msgid "Gaussian (normal)"
 msgstr "Gauss (normal)"
 
 #: src/backend/nsl/nsl_fit.c:31
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:479
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:480
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:534
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:560
 #, kde-format
@@ -6773,7 +6768,7 @@ msgid "Inverse Tangent"
 msgstr "Ters Tanjant"
 
 #: src/backend/nsl/nsl_fit.c:45
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:487
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:488
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:540
 #, kde-format
 msgid "Hyperbolic Tangent"
@@ -6846,8 +6841,8 @@ msgstr "Radyal Uzaklık"
 
 #. i18n: ectx: property (text), widget (QLabel, lInterpolation)
 #: src/backend/nsl/nsl_geom_linesim.c:23
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:413
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2011
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:414
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2012
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:270
 #, kde-format
 msgid "Interpolation"
@@ -7734,7 +7729,7 @@ msgstr "Yönelim"
 #. i18n: ectx: property (text), widget (QLabel, lCenter)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:317
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:670
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:671
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:124
 #: src/frontend/dockwidgets/XYCurveDock.cpp:485
 #: src/frontend/ui/dockwidgets/axisdock.ui:488
@@ -8174,8 +8169,8 @@ msgid "no info available"
 msgstr "kullanılabilir veri yok"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:141
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5227
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:142
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5228
 #: src/frontend/ui/dockwidgets/axisdock.ui:483
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:542
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:478
@@ -8184,16 +8179,16 @@ msgstr "kullanılabilir veri yok"
 msgid "Title"
 msgstr "Başlık"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:410
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:447
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1954
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:411
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:448
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1955
 #, kde-format
 msgid "Data Reduction"
 msgstr "Veri İndirgeme"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:411
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1973
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:412
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1974
 #: src/frontend/notebook/NotebookView.cpp:149
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:269
 #, kde-format
@@ -8201,8 +8196,8 @@ msgid "Differentiation"
 msgstr "Türev Alma"
 
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:412
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1992
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:413
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1993
 #: src/frontend/notebook/NotebookView.cpp:155
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:157
 #, kde-format
@@ -8210,72 +8205,72 @@ msgid "Integration"
 msgstr "Tümleştirme"
 
 #. i18n: ectx: property (text), widget (QLabel, lSmooth)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:414
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:451
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2030
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:415
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:452
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2031
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:509
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:73
 #, kde-format
 msgid "Smooth"
 msgstr "Pürüzsüzleştir"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:415
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:607
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2049
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:416
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:608
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2050
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:623
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit"
 msgstr "Uydur"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:416
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:499
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2089
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:417
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:500
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2090
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:511
 #, kde-format
 msgid "Fourier Filter"
 msgstr "Fourier Süzgeci"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:417
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:430
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:500
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:518
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:418
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:431
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:501
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:519
 #, kde-format
 msgid "Fourier Transform"
 msgstr "Fourier Dönüşümü"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:418
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:433
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:501
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:521
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:419
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:434
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:502
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:522
 #, kde-format
 msgid "Hilbert Transform"
 msgstr "Hilbert Dönüşümü"
 
 #. i18n: ectx: property (text), widget (QLabel, lConvolution)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:419
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:420
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:311
 #, kde-format
 msgid "(De-)Convolution"
 msgstr "(Ters) Evrişim"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:420
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:439
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:453
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:512
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:421
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:440
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:454
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:513
 #, kde-format
 msgid "Auto-/Cross-Correlation"
 msgstr "Kendiliğinden/Çapraz Bağlılık"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:436
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:509
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:437
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:510
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:342
 #: src/frontend/dockwidgets/XYConvolutionCurveDock.cpp:347
 #, kde-format
 msgid "Convolution"
 msgstr "Evrişim"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:443
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:444
 #, kde-format
 msgid ""
 "Add a new xy-curve that is defined as a function of other xy-curves (scaled, "
@@ -8284,61 +8279,61 @@ msgstr ""
 "Diğer XY eğrilerinin bir işlevi olarak tanımlanmış yeni bir XY eğrisi "
 "ekleyin (ölçekli, kaydırılmış vb.)."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:448
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:449
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:501
 #, kde-format
 msgid "Differentiate"
 msgstr "Türev Al"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:449
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:450
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:504
 #, kde-format
 msgid "Integrate"
 msgstr "Integral Al"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:450
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:451
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:507
 #, kde-format
 msgid "Interpolate"
 msgstr "Aradeğerle"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:452
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:453
 #, kde-format
 msgid "Convolute/Deconvolute"
 msgstr "Sar/Sarmayı Aç"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:463
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:464
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:522
 #, kde-format
 msgid "Exponential (degree 1)"
 msgstr "Üstel (derece 1)"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:467
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:468
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:525
 #, kde-format
 msgid "Exponential (degree 2)"
 msgstr "Üstel (derece 2)"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:471
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:472
 #, kde-format
 msgid "Inverse exponential"
 msgstr "Ters üstel"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:483
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:484
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:537
 #, kde-format
 msgid "Arc Tangent"
 msgstr "Ark Tanjant"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:491
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:492
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:543
 #, kde-format
 msgid "Error Function"
 msgstr "Hata İşlevi"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLegendVisible)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:525
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2131
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:526
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2132
 #: src/frontend/ui/dockwidgets/barplotdock.ui:235
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:248
 #: src/frontend/ui/dockwidgets/histogramdock.ui:385
@@ -8365,18 +8360,18 @@ msgstr "Hata İşlevi"
 msgid "Legend"
 msgstr "Lejant"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:529
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:530
 #, kde-format
 msgid "Horizontal Axis"
 msgstr "Yatay Eksen"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:530
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:531
 #, kde-format
 msgid "Vertical Axis"
 msgstr "Dikey Eksen"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:532
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2178
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:533
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2179
 #: src/frontend/datasources/ImportFileWidget.cpp:112
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:110
@@ -8387,34 +8382,34 @@ msgstr "Dikey Eksen"
 msgid "Image"
 msgstr "Görsel"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:533
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2154
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:534
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2155
 #, kde-format
 msgid "Info Element"
 msgstr "Bilgi Ögesi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:534
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2198
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:535
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2199
 #, kde-format
 msgid "Custom Point"
 msgstr "Özel Nokta"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabReferenceLine)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:535
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2223
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:536
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2224
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:176
 #, kde-format
 msgid "Reference Line"
 msgstr "Başvuru Çizgisi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:536
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2236
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:537
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2237
 #, kde-format
 msgid "Reference Range"
 msgstr "Başvuru Erimi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:552
-#: src/frontend/MainWin.cpp:905 src/frontend/notebook/NotebookView.cpp:168
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:553
+#: src/frontend/MainWin.cpp:903 src/frontend/notebook/NotebookView.cpp:168
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:295
 #: src/frontend/worksheet/WorksheetView.cpp:434
@@ -8422,137 +8417,137 @@ msgstr "Başvuru Erimi"
 msgid "Add New"
 msgstr "Yeni Ekle"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:561
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:562
 #, kde-format
 msgid "Formula Plot"
 msgstr "Formül Çizimi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:562
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:563
 #, kde-format
 msgid "Add a new xy-plot that is defined via a mathematical expression."
 msgstr "Bir matematiksel ifadeyle tanımlanan yeni bir XY çizimi ekleyin."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:569
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:570
 #, kde-format
 msgid "Analysis Plots"
 msgstr "Çözümleme Çizimleri"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:605
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:606
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:186
 #, kde-format
 msgid "Analysis"
 msgstr "Çözümleme"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:646
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:647
 #: src/frontend/ThemeHandler.cpp:49 src/frontend/ThemeHandler.cpp:144
 #: src/frontend/worksheet/WorksheetView.cpp:544
 #, kde-format
 msgid "Theme"
 msgstr "Tema"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:668
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:669
 #, kde-format
 msgid "Line Plots"
 msgstr "Çizgi Çizimleri"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:674
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:675
 #, kde-format
 msgid "Horizontal Step"
 msgstr "Yatay Adım"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:678
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:679
 #, kde-format
 msgid "Vertical Step"
 msgstr "Dikey Adım"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:682
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:683
 #, kde-format
 msgid "Spline Interpolated"
 msgstr "Aradeğerlenmiş Yiv"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:689
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:690
 #, kde-format
 msgid "Scatter Plots"
 msgstr "Dağınık Çizimler"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:691
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:692
 #, kde-format
 msgid "Scatter"
 msgstr "Dağınık"
 
 #. i18n: ectx: property (text), widget (QLabel, lYError)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:695
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:696
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:221
 #, kde-format
 msgid "Y Error"
 msgstr "Y Hatası"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:699
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:700
 #, kde-format
 msgid "XY Error"
 msgstr "XY Hatası"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:706
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:707
 #, kde-format
 msgid "Line and Symbol Plots"
 msgstr "Satır ve Sembol Çizimleri"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:708
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:709
 #, kde-format
 msgid "Line + Symbol"
 msgstr "Satır+Sembol"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:712
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:713
 #, kde-format
 msgid "2 Point Segment"
 msgstr "2 Noktalı Bölüt"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:716
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:717
 #, kde-format
 msgid "3 Point Segment"
 msgstr "3 Noktalı Bölüt"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:723
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:724
 #, kde-format
 msgid "Statistical Plots"
 msgstr "İstatistiksel Çizimler"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:725
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1846
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:726
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1847
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:400
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:143
 #, kde-format
 msgid "Histogram"
 msgstr "Histogram"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:729
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1843
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:730
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1844
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:770
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:146
 #, kde-format
 msgid "Box Plot"
 msgstr "Kutu Çizim"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:733
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1849
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:734
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1850
 #, kde-format
 msgid "Q-Q Plot"
 msgstr "Q–Q Çizimi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:737
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1852
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:738
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1853
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:144
 #, kde-format
 msgid "KDE Plot"
 msgstr "KDE Çizimi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:744
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:745
 #, kde-format
 msgid "Bar Plots"
 msgstr "Çubuk Çizimler"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:746
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1857
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:747
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1858
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:772
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:774
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:149
@@ -8560,287 +8555,287 @@ msgstr "Çubuk Çizimler"
 msgid "Bar Plot"
 msgstr "Çubuk Çizim"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:750
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1860
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:751
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1861
 #, kde-format
 msgid "Lollipop Plot"
 msgstr "Lolipop Çizim"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:757
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:758
 #, kde-format
 msgid "Continual Improvement Plots"
 msgstr "Sürekli İyileştirme Çizileri"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:759
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1868
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:760
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1869
 #, kde-format
 msgid "Run Chart"
 msgstr "Grafiği Çalıştır"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:763
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1865
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:764
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1866
 #, kde-format
 msgid "Process Behavior Chart"
 msgstr "Süreç Davranış Grafiği"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:786
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:787
 #, kde-format
 msgid "No curves inside the plot area."
 msgstr "Çizim alanı içinde eğri yok."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1111
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1145
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1112
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1146
 #, kde-format
 msgid "%1: change geometry rect"
 msgstr "%1: Geometri dikdörtgeni değiştir"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1180
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1181
 #, kde-format
 msgid "%1: set range type"
 msgstr "%1: Erim türünü ayarla"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1187
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1188
 #, kde-format
 msgid "%1: set nice extend"
 msgstr "%1: Güzel genişletme ayarla"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1194
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1201
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1195
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1202
 #, kde-format
 msgid "%1: set range"
 msgstr "%1: Erim ayarla"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1212
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1213
 #, kde-format
 msgid "%1: change %2-range %3 format"
 msgstr "%1: %2 erimi %3 biçimi değiştir"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1302
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1303
 #, kde-format
 msgid "%1: change %2-range %3 auto scaling"
 msgstr "%1: %2 erimi %3 kendiliğinden ölçeklemeyi değiştir"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1543
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1544
 #, kde-format
 msgid "%1: change x-range %2 scale"
 msgstr "%1: X aralığı %2 ölçeği değiştir"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1671
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1672
 #, kde-format
 msgid "%1: set default plot range"
 msgstr "%1: Öntanımlı çizim erimi ayarla"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1689
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1690
 #, kde-format
 msgid "%1: x-range breaking enabled"
 msgstr "%1: X erimi kesimi etkinleştirildi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1698
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1699
 #, kde-format
 msgid "%1: x-range breaks changed"
 msgstr "%1: X erimi kesmeleri değişti"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1707
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1708
 #, kde-format
 msgid "%1: y-range breaking enabled"
 msgstr "%1: Y erimi kesimi etkinleştirildi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1716
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1717
 #, kde-format
 msgid "%1: y-range breaks changed"
 msgstr "%1: Y erimi kesmesi değiştirildi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1730
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1731
 #, kde-format
 msgid "%1: Cursor0 enable"
 msgstr "%1: İmleç0 etkinleştir"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1742
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1743
 #, kde-format
 msgid "%1: Cursor1 enable"
 msgstr "%1: İmleç1 etkinleştir"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1753
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1754
 #: src/backend/worksheet/Worksheet.cpp:842
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: %2 temasını yükle"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1755
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1756
 #: src/backend/worksheet/Worksheet.cpp:844
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: Öntanımlı temayı yükle"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1757
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5553
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1758
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5554
 #: src/backend/worksheet/Worksheet.cpp:846
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: Temayı ayarla"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1910
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1911
 #, kde-format
 msgid "%1: distribution fit to '%2'"
 msgstr "%1: “%2” ögesine dağılımı sığdır"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1911
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1912
 #, kde-format
 msgid "Distribution Fit to '%1'"
 msgstr "“%1” Ögesine Dağılımı Sığdır"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1957
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1958
 #, kde-format
 msgid "%1: reduce '%2'"
 msgstr "%1: “%2” azalt"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1958
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1959
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:665
 #, kde-format
 msgid "Reduction of '%1'"
 msgstr "“%1” Ögesinin indirgenmesi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1965
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1966
 #, kde-format
 msgid "%1: add data reduction curve"
 msgstr "%1: Veri indirgeme eğrisi ekle"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1976
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1977
 #, kde-format
 msgid "%1: differentiate '%2'"
 msgstr "%1: “%2” türevini al"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1977
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1978
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:668
 #, kde-format
 msgid "Derivative of '%1'"
 msgstr "“%1” türevi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1984
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1985
 #, kde-format
 msgid "%1: add differentiation curve"
 msgstr "%1: Türev eğrisi ekle"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1995
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1996
 #, kde-format
 msgid "%1: integrate '%2'"
 msgstr "%1: “%2” ögesini tümleştir"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1996
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1997
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:671
 #, kde-format
 msgid "Integral of '%1'"
 msgstr "“%1” ögesinin integrali"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2003
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2004
 #, kde-format
 msgid "%1: add integration curve"
 msgstr "%1: Tümleştirme eğrisi ekle"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2014
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
 #, kde-format
 msgid "%1: interpolate '%2'"
 msgstr "%1: “%2” aradeğerle"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2016
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:674
 #, kde-format
 msgid "Interpolation of '%1'"
 msgstr "“%1” ögesinin aradeğerlendirilmesi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2022
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2023
 #, kde-format
 msgid "%1: add interpolation curve"
 msgstr "%1: Aradeğerleme eğrisi ekle"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2033
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2034
 #, kde-format
 msgid "%1: smooth '%2'"
 msgstr "%1: “%2” yumuşat"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2034
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2035
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:677
 #, kde-format
 msgid "Smoothing of '%1'"
 msgstr "“%1” ögesinin yumuşatılması"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2041
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2042
 #, kde-format
 msgid "%1: add smoothing curve"
 msgstr "%1: Yumuşatma eğrisi ekle"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2052
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2053
 #, kde-format
 msgid "%1: fit to '%2'"
 msgstr "%1: “%2” ögesine sığdır"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2053
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2054
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:690
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit to '%1'"
 msgstr "“%1” ögesine uydur"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2080
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2081
 #, kde-format
 msgid "%1: add fit curve"
 msgstr "%1: Sığdırma eğrisi ekle"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2092
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2093
 #, kde-format
 msgid "%1: Fourier filtering of '%2'"
 msgstr "%1: “%2” ögesinin Fourier süzmesi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2093
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2094
 #, kde-format
 msgid "Fourier filtering of '%1'"
 msgstr "“%1” ögesinin Fourier süzmesi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2097
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2098
 #, kde-format
 msgid "%1: add Fourier filter curve"
 msgstr "%1: Fourier süzgeci eğrisi ekle"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2108
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2109
 #, kde-format
 msgid "%1: add function of '%2'"
 msgstr "%1: “%2” işlevini ekle"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2109
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2110
 #, kde-format
 msgid "Function of '%1'"
 msgstr "“%1” işlevi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2112
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2113
 #, kde-format
 msgid "%1: add function curve"
 msgstr "%1: İşlev eğrisi ekle"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2161
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2162
 #: src/frontend/worksheet/WorksheetView.cpp:1339
 #: src/frontend/worksheet/WorksheetView.cpp:1340
 #, kde-format
 msgid "Text Label"
 msgstr "Metin Etiketi"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3929
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3930
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "Sınırlayıcı dörtgenin içinde değil"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4153
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4174
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4154
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4175
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "x=%1 konumundan x=%2 konumuna"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4161
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4187
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4162
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4188
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "y=%1 konumundan y=%2 konumuna"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4206
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4207
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -10675,32 +10670,32 @@ msgid ""
 msgstr ""
 "Tüm kullanılabilir başvuru noktaları kaldırılacak. Sürdürmek istiyor musunuz?"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:686
+#: src/frontend/datapicker/DatapickerImageView.cpp:692
 #, kde-format
 msgid "%1: change position of selected DatapickerPoints."
 msgstr "%1: Seçili DatapickerPoints’in konumunu değiştirin."
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:739
+#: src/frontend/datapicker/DatapickerImageView.cpp:745
 #, kde-format
 msgid "%1: add new curve."
 msgstr "%1: Yeni eğri ekle."
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:740
+#: src/frontend/datapicker/DatapickerImageView.cpp:746
 #, kde-format
 msgid "Curve"
 msgstr "Eğri"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:881
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4074
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4128
+#: src/frontend/datapicker/DatapickerImageView.cpp:887
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4019
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4073
 #: src/frontend/worksheet/WorksheetView.cpp:2204
 #, kde-format
 msgid "Failed to export"
 msgstr "Dışa aktarılamadı"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:881
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4074
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4128
+#: src/frontend/datapicker/DatapickerImageView.cpp:887
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4019
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4073
 #: src/frontend/worksheet/WorksheetView.cpp:2204
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -12064,7 +12059,7 @@ msgid "Open LabPlot Project"
 msgstr "LabPlot Projesi Aç"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:1498
+#: src/frontend/MainWin.cpp:1496
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "LabPlot Projeleri (%1)"
@@ -12088,8 +12083,8 @@ msgstr "Klasör adı:"
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:398 src/frontend/MainWin.cpp:651
-#: src/frontend/MainWin.cpp:1985 src/frontend/SettingsDialog.cpp:64
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:398 src/frontend/MainWin.cpp:649
+#: src/frontend/MainWin.cpp:1983 src/frontend/SettingsDialog.cpp:64
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -12370,7 +12365,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2897
+#: src/frontend/MainWin.cpp:2895
 #, kde-format
 msgid "Warning"
 msgstr "Uyarı"
@@ -14214,7 +14209,7 @@ msgid ""
 "installation."
 msgstr "Örnek koleksiyon dosyası %1 açılamadı. Lütfen kurulumunuzu denetleyin."
 
-#: src/frontend/GuiObserver.cpp:176 src/frontend/MainWin.cpp:1405
+#: src/frontend/GuiObserver.cpp:176 src/frontend/MainWin.cpp:1403
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -15037,254 +15032,254 @@ msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "LabPlot %1 sürümüne hoş geldiniz"
 
-#: src/frontend/MainWin.cpp:620
+#: src/frontend/MainWin.cpp:618
 #, kde-format
 msgid "&Open Example"
 msgstr "Örnek &Aç"
 
-#: src/frontend/MainWin.cpp:641 src/frontend/MainWin.cpp:1969
+#: src/frontend/MainWin.cpp:639 src/frontend/MainWin.cpp:1967
 #, kde-format
 msgid "Workbook"
 msgstr "Çalışma Kitabı"
 
-#: src/frontend/MainWin.cpp:643
+#: src/frontend/MainWin.cpp:641
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 "Hesap tablolarını, matrisleri ve çizimleri toplamak için yeni bir çalışma "
 "kitabı oluşturur"
 
-#: src/frontend/MainWin.cpp:646 src/frontend/MainWin.cpp:1977
+#: src/frontend/MainWin.cpp:644 src/frontend/MainWin.cpp:1975
 #, kde-format
 msgid "Data Extractor"
 msgstr "Veri Çıkarıcısı"
 
-#: src/frontend/MainWin.cpp:647
+#: src/frontend/MainWin.cpp:645
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
 msgstr "Bir resimden veri almak için bir veri çıkarıcısı oluşturur"
 
-#: src/frontend/MainWin.cpp:653
+#: src/frontend/MainWin.cpp:651
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
 msgstr "Veri düzenleme için yeni bir hesap tablosu oluşturur"
 
-#: src/frontend/MainWin.cpp:659
+#: src/frontend/MainWin.cpp:657
 #, kde-format
 msgid "Creates a new matrix for data editing"
 msgstr "Veri düzenleme için yeni bir matris oluşturur"
 
-#: src/frontend/MainWin.cpp:663 src/frontend/MainWin.cpp:2021
+#: src/frontend/MainWin.cpp:661 src/frontend/MainWin.cpp:2019
 #: src/frontend/SettingsDialog.cpp:59
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:86
 #, kde-format
 msgid "Worksheet"
 msgstr "Çalışma Sayfası"
 
-#: src/frontend/MainWin.cpp:665
+#: src/frontend/MainWin.cpp:663
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
 msgstr "Veri çizimi için yeni bir çalışma sayfası oluşturur"
 
-#: src/frontend/MainWin.cpp:669 src/frontend/MainWin.cpp:2029
+#: src/frontend/MainWin.cpp:667 src/frontend/MainWin.cpp:2027
 #, kde-format
 msgid "Note"
 msgstr "Not"
 
-#: src/frontend/MainWin.cpp:670
+#: src/frontend/MainWin.cpp:668
 #, kde-format
 msgid "Creates a new note for arbitrary text"
 msgstr "Gelişigüzel metinler için yeni bir not oluşturur"
 
-#: src/frontend/MainWin.cpp:674 src/frontend/MainWin.cpp:1961
+#: src/frontend/MainWin.cpp:672 src/frontend/MainWin.cpp:1959
 #, kde-format
 msgid "Folder"
 msgstr "Klasör"
 
-#: src/frontend/MainWin.cpp:675
+#: src/frontend/MainWin.cpp:673
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
 msgstr "Sayfaları ve diğer ögeleri toplamak için yeni bir klasör oluşturur"
 
-#: src/frontend/MainWin.cpp:680
+#: src/frontend/MainWin.cpp:678
 #, kde-format
 msgid "Live Data Source..."
 msgstr "Canlı Veri Kaynağı…"
 
-#: src/frontend/MainWin.cpp:681
+#: src/frontend/MainWin.cpp:679
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
 "Gerçek zamanlı bir aygıttan veri okumak için yeni bir canlı veri kaynağı "
 "oluşturur"
 
-#: src/frontend/MainWin.cpp:688 src/frontend/MainWin.cpp:697
+#: src/frontend/MainWin.cpp:686 src/frontend/MainWin.cpp:695
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Normal bir dosyadan veri içe aktar"
 
-#: src/frontend/MainWin.cpp:702
+#: src/frontend/MainWin.cpp:700
 #, kde-format
 msgid "From kaggle.com..."
 msgstr "kaggle.com’dan…"
 
-#: src/frontend/MainWin.cpp:703
+#: src/frontend/MainWin.cpp:701
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr "kaggle.com’dan Veri İçe Aktar"
 
-#: src/frontend/MainWin.cpp:708
+#: src/frontend/MainWin.cpp:706
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Bir SQL veritabanından veri içe aktar"
 
-#: src/frontend/MainWin.cpp:712
+#: src/frontend/MainWin.cpp:710
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Veri Kümesi Koleksiyonundan…"
 
-#: src/frontend/MainWin.cpp:713
+#: src/frontend/MainWin.cpp:711
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr "Çevrimiçi Veri Kümesinden Veri İçe Akta"
 
-#: src/frontend/MainWin.cpp:717
+#: src/frontend/MainWin.cpp:715
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "LabPlot Projesi…"
 
-#: src/frontend/MainWin.cpp:718
+#: src/frontend/MainWin.cpp:716
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Bir LabPlot proje dosyasından (.lml) bir proje içe aktar"
 
-#: src/frontend/MainWin.cpp:723
+#: src/frontend/MainWin.cpp:721
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Origin Projesi (OPJ)…"
 
-#: src/frontend/MainWin.cpp:724
+#: src/frontend/MainWin.cpp:722
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr "Bir OriginLab Origin proje dosyasından bir proje içe aktar (.opj)"
 
-#: src/frontend/MainWin.cpp:729
+#: src/frontend/MainWin.cpp:727
 #, kde-format
 msgid "Export..."
 msgstr "Dışa Aktar…"
 
-#: src/frontend/MainWin.cpp:730
+#: src/frontend/MainWin.cpp:728
 #, kde-format
 msgid "Export selected element"
 msgstr "Seçili ögeyi dışa aktar"
 
-#: src/frontend/MainWin.cpp:736 src/frontend/MainWin.cpp:2513
-#: src/frontend/MainWin.cpp:2521
+#: src/frontend/MainWin.cpp:734 src/frontend/MainWin.cpp:2511
+#: src/frontend/MainWin.cpp:2519
 #, kde-format
 msgid "Share"
 msgstr "Paylaş"
 
-#: src/frontend/MainWin.cpp:741
+#: src/frontend/MainWin.cpp:739
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Renk Haritası Tarayıcısı"
 
-#: src/frontend/MainWin.cpp:742
+#: src/frontend/MainWin.cpp:740
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "Kullanılabilir renk haritaları içinde dolaşmak için bir pencere açın."
 
-#: src/frontend/MainWin.cpp:751
+#: src/frontend/MainWin.cpp:749
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "FITS Üst Veri Düzenleyicisi…"
 
-#: src/frontend/MainWin.cpp:752
+#: src/frontend/MainWin.cpp:750
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "FITS üst verisi düzenlemek için düzenleyici aç"
 
-#: src/frontend/MainWin.cpp:761
+#: src/frontend/MainWin.cpp:759
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Geri Al/Yinele Geçmişi…"
 
-#: src/frontend/MainWin.cpp:781
+#: src/frontend/MainWin.cpp:779
 #, kde-format
 msgid "Close the active window"
 msgstr "Etkin pencereyi kapat"
 
-#: src/frontend/MainWin.cpp:784
+#: src/frontend/MainWin.cpp:782
 #, kde-format
 msgid "Close &All"
 msgstr "&Tümünü Kapat"
 
-#: src/frontend/MainWin.cpp:785
+#: src/frontend/MainWin.cpp:783
 #, kde-format
 msgid "Close all the windows"
 msgstr "Tüm pencereleri kapat"
 
-#: src/frontend/MainWin.cpp:788
+#: src/frontend/MainWin.cpp:786
 #, kde-format
 msgid "Ne&xt"
 msgstr "Sonra&ki"
 
-#: src/frontend/MainWin.cpp:790
+#: src/frontend/MainWin.cpp:788
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Odağı sonraki pencereye taşı"
 
-#: src/frontend/MainWin.cpp:793
+#: src/frontend/MainWin.cpp:791
 #, kde-format
 msgid "Pre&vious"
 msgstr "Ön&ceki"
 
-#: src/frontend/MainWin.cpp:795
+#: src/frontend/MainWin.cpp:793
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Odağu önceki pencereye taşı"
 
-#: src/frontend/MainWin.cpp:802
+#: src/frontend/MainWin.cpp:800
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Yalnızca Geçerli &Klasör"
 
-#: src/frontend/MainWin.cpp:807
+#: src/frontend/MainWin.cpp:805
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Geçerli Klasör ve &Alt Klasörler"
 
-#: src/frontend/MainWin.cpp:811
+#: src/frontend/MainWin.cpp:809
 #, kde-format
 msgid "&All"
 msgstr "&Tümü"
 
-#: src/frontend/MainWin.cpp:833
+#: src/frontend/MainWin.cpp:831
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Bellek Kullanımını Göster"
 
-#: src/frontend/MainWin.cpp:841
+#: src/frontend/MainWin.cpp:839
 #, kde-format
 msgid "Project Explorer"
 msgstr "Proje Tarayıcısı"
 
-#: src/frontend/MainWin.cpp:846
+#: src/frontend/MainWin.cpp:844
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Özellikler Tarayıcısı"
 
-#: src/frontend/MainWin.cpp:851
+#: src/frontend/MainWin.cpp:849
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "Çalışma Sayfası Önizlemesi"
 
-#: src/frontend/MainWin.cpp:874
+#: src/frontend/MainWin.cpp:872
 #, kde-format
 msgid "Configure CAS..."
 msgstr "CAS’ı Yapılandır…"
 
-#: src/frontend/MainWin.cpp:875
+#: src/frontend/MainWin.cpp:873
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
@@ -15293,118 +15288,118 @@ msgstr ""
 "Kullanılabilir sistemleri değiştirmek veya yenilerini etkinleştirmek için "
 "Bilgisayar Cebir Sistemlerinin ayarlarını açar"
 
-#: src/frontend/MainWin.cpp:935
+#: src/frontend/MainWin.cpp:933
 #, kde-format
 msgid "Window Visibility"
 msgstr "Pencere Görünürlüğü"
 
-#: src/frontend/MainWin.cpp:952
+#: src/frontend/MainWin.cpp:950
 #, kde-format
 msgid "Color Scheme"
 msgstr "Renk Şeması"
 
-#: src/frontend/MainWin.cpp:1010
+#: src/frontend/MainWin.cpp:1008
 #, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "Geçerli “%1” projesi değiştirildi. Kaydetmek istiyor musunuz?"
 
-#: src/frontend/MainWin.cpp:1011
+#: src/frontend/MainWin.cpp:1009
 #, kde-format
 msgid "Save Project"
 msgstr "Projeyi Kaydet"
 
-#: src/frontend/MainWin.cpp:1366
+#: src/frontend/MainWin.cpp:1364
 #, kde-format
 msgid "%1: created"
 msgstr "%1: Oluşturuldu"
 
-#: src/frontend/MainWin.cpp:1392
+#: src/frontend/MainWin.cpp:1390
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Proje Tarayıcısı"
 
-#: src/frontend/MainWin.cpp:1417
+#: src/frontend/MainWin.cpp:1415
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Çalışma Sayfası Önizlemesi"
 
-#: src/frontend/MainWin.cpp:1426
+#: src/frontend/MainWin.cpp:1424
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "İçerik"
 
-#: src/frontend/MainWin.cpp:1503
+#: src/frontend/MainWin.cpp:1501
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Origin Projeleri (%1)"
 
-#: src/frontend/MainWin.cpp:1509
+#: src/frontend/MainWin.cpp:1507
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "Cantor Projeleri (*.cws)"
 
-#: src/frontend/MainWin.cpp:1510
+#: src/frontend/MainWin.cpp:1508
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Jupyter Defterleri (*.ipynb)"
 
-#: src/frontend/MainWin.cpp:1517
+#: src/frontend/MainWin.cpp:1515
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Tüm desteklenen dosyalar (%1)"
 
-#: src/frontend/MainWin.cpp:1521
+#: src/frontend/MainWin.cpp:1519
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Proje Aç"
 
-#: src/frontend/MainWin.cpp:1538
+#: src/frontend/MainWin.cpp:1536
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "%1 proje dosyası halihazırda açık."
 
-#: src/frontend/MainWin.cpp:1538 src/frontend/MainWin.cpp:1546
-#: src/frontend/MainWin.cpp:1551
+#: src/frontend/MainWin.cpp:1536 src/frontend/MainWin.cpp:1544
+#: src/frontend/MainWin.cpp:1549
 #, kde-format
 msgid "Open Project"
 msgstr "Proje Aç"
 
-#: src/frontend/MainWin.cpp:1546
+#: src/frontend/MainWin.cpp:1544
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "Proje dosyası %1 yok."
 
-#: src/frontend/MainWin.cpp:1551
+#: src/frontend/MainWin.cpp:1549
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "Proje dosyası %1 okunamadı."
 
-#: src/frontend/MainWin.cpp:1559
+#: src/frontend/MainWin.cpp:1557
 #, kde-format
 msgid "Loading %1..."
 msgstr "%1 yükleniyor…"
 
-#: src/frontend/MainWin.cpp:1614
+#: src/frontend/MainWin.cpp:1612
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: Açıldı"
 
-#: src/frontend/MainWin.cpp:1649
+#: src/frontend/MainWin.cpp:1647
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Proje başarılı bir biçimde açıldı (%1 saniyede)."
 
-#: src/frontend/MainWin.cpp:1741
+#: src/frontend/MainWin.cpp:1739
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Projeyi Farklı Kaydet"
 
-#: src/frontend/MainWin.cpp:1743
+#: src/frontend/MainWin.cpp:1741
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15413,70 +15408,70 @@ msgstr ""
 "LabPlot Projeleri (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML."
 "BZ2 *.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:1770
+#: src/frontend/MainWin.cpp:1768
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Geçici dosya yazma için açılamadı."
 
-#: src/frontend/MainWin.cpp:1850
+#: src/frontend/MainWin.cpp:1848
 #, kde-format
 msgid "Project saved"
 msgstr "Proje kaydedildi"
 
-#: src/frontend/MainWin.cpp:1866
+#: src/frontend/MainWin.cpp:1864
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "“%1” dosyası kaydedilemedi."
 
-#: src/frontend/MainWin.cpp:1871
+#: src/frontend/MainWin.cpp:1869
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "“%1” dosyası yazma için açılamadı."
 
-#: src/frontend/MainWin.cpp:1921
+#: src/frontend/MainWin.cpp:1919
 #, kde-format
 msgid "Changed"
 msgstr "Değiştirildi"
 
-#: src/frontend/MainWin.cpp:1936 src/frontend/MainWin.cpp:1948
+#: src/frontend/MainWin.cpp:1934 src/frontend/MainWin.cpp:1946
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "%1, yazdırma için hazırlanıyor"
 
-#: src/frontend/MainWin.cpp:1938 src/frontend/MainWin.cpp:1950
+#: src/frontend/MainWin.cpp:1936 src/frontend/MainWin.cpp:1948
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 yazdırıldı"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/MainWin.cpp:2476
+#: src/frontend/MainWin.cpp:2474
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
 #: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Cursor"
 msgstr "İmleç"
 
-#: src/frontend/MainWin.cpp:2513
+#: src/frontend/MainWin.cpp:2511
 #, kde-format
 msgid "There was a problem sharing the project: %1"
 msgstr "Projeyi paylaşırken bir sorun oluştu: %1"
 
-#: src/frontend/MainWin.cpp:2517
+#: src/frontend/MainWin.cpp:2515
 #, kde-format
 msgid "Project shared successfully"
 msgstr "Proje başarıyla paylaşıldı"
 
-#: src/frontend/MainWin.cpp:2520
+#: src/frontend/MainWin.cpp:2518
 #, kde-format
 msgid "You can find the shared project at: <a href=\"%1\">%1</a>"
 msgstr "Paylaşılan projeyi şurada bulabilirsiniz: <a href=\"%1\">%1</a>"
 
-#: src/frontend/MainWin.cpp:2793
+#: src/frontend/MainWin.cpp:2791
 #, kde-format
 msgid "Kaggle CLI tool not found"
 msgstr "Kaggle komut satırı aracı bulunamadı"
 
-#: src/frontend/MainWin.cpp:2794
+#: src/frontend/MainWin.cpp:2792
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
@@ -15485,32 +15480,32 @@ msgstr ""
 "Uygulama ayarlarında Kaggle komut satırı aracına olan yolu sağlayın ve "
 "yeniden deneyin."
 
-#: src/frontend/MainWin.cpp:2860
+#: src/frontend/MainWin.cpp:2858
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 dışa aktarıldı"
 
-#: src/frontend/MainWin.cpp:2867
+#: src/frontend/MainWin.cpp:2865
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS dosyaları kaydedildi"
 
-#: src/frontend/MainWin.cpp:2879
+#: src/frontend/MainWin.cpp:2877
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT İstemcisi%1"
 
-#: src/frontend/MainWin.cpp:2897
+#: src/frontend/MainWin.cpp:2895
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Bu makineyle halihazırda bir MQTT istemcisi var!"
 
-#: src/frontend/MainWin.cpp:2901
+#: src/frontend/MainWin.cpp:2899
 #, kde-format
 msgid "Live data source%1"
 msgstr "Canlı veri kaynağı%1"
 
-#: src/frontend/MainWin.cpp:2952
+#: src/frontend/MainWin.cpp:2950
 #, kde-format
 msgid "Creates a new %1 notebook"
 msgstr "Yeni bir %1 defteri oluşturur"
@@ -18031,37 +18026,30 @@ msgid "Fill the selection with constant value"
 msgstr "Seçimi sabit değerle doldur"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2628
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2662
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2666
 #, kde-format
 msgid "Insert empty columns"
 msgstr "Boş sütunlar ekle"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2629
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2663
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2667
 #, kde-format
 msgid "Enter the number of columns to insert"
 msgstr "Eklenecek sütun sayısını gir"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2681
-#, kde-format
-msgid "%1: insert empty column"
-msgid_plural "%1: insert empty columns"
-msgstr[0] "%1: Boş sütun ekle"
-msgstr[1] "%1: Boş sütun ekle"
-
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2751
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2700
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: Seçili sütunları kaldır"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2848
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2797
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
 msgstr[0] "%1: Sütunu ters çevir"
 msgstr[1] "%1: Sütunları ters çevir"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2921
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2870
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
@@ -18069,231 +18057,223 @@ msgid ""
 msgstr ""
 "Seçili sütunlarda farklı veri türleri var ve bu yüzden düzleştirilemiyorlar. "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2955
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2904
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: Sütunları normalleştir"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2975
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2924
 #, kde-format
 msgid "Sum = 0"
 msgstr "Toplam = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2986
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2935
 #, kde-format
 msgid "Min = 0"
 msgstr "En Küçük = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2997
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2946
 #, kde-format
 msgid "Max = 0"
 msgstr "En Büyük = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3008
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2957
 #, kde-format
 msgid "Count = 0"
 msgstr "Sayım = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3019
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2968
 #, kde-format
 msgid "Mean = 0"
 msgstr "Ortalama = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3030
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2979
 #, kde-format
 msgid "Median = 0"
 msgstr "Ortanca = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3042
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2991
 #, kde-format
 msgid "Mode = 0"
 msgstr "Kip = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3044
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2993
 #, kde-format
 msgid "'Mode not defined'"
 msgstr "“Kip tanımlanmamış”"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3055
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3004
 #, kde-format
 msgid "Range = 0"
 msgstr "Erim = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3066
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3100
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3015
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3049
 #, kde-format
 msgid "SD = 0"
 msgstr "SD = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3077
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3112
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3026
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3061
 #, kde-format
 msgid "MAD = 0"
 msgstr "MAD = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3088
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3124
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3037
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3073
 #, kde-format
 msgid "IQR = 0"
 msgstr "IQR = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3136
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3085
 #, kde-format
 msgid "Max - Min = 0"
 msgstr "En büyük − En küçük = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3155
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3104
 #, kde-format
 msgid "Normalization not possible"
 msgstr "Normalleştirme olanaklı değil"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3167
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3116
 #, kde-format
 msgid "%1: power transform columns"
 msgstr "%1: Sütunları üs dönüştür"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3285
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3234
 #, kde-format
 msgid "%1: column statistics"
 msgstr "%1: Sütun istatistikleri"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3316
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3265
 #, kde-format
 msgid "Selection in %1"
 msgstr "%1 İçindeki Seçim"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3359
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3308
 #, kde-format
 msgid "%1: row statistics"
 msgstr "%1: Satır istatistikleri"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3369
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3318
 #, kde-format
 msgid "Row %1"
 msgstr "%1. Satır"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3394
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3433
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3343
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3379
 #, kde-format
 msgid "Insert multiple rows"
 msgstr "Birden çok satır ekle"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3395
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3434
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3344
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3380
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr "Eklenecek satır sayısını gir"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3414
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3453
-#, kde-format
-msgid "%1: insert empty row"
-msgid_plural "%1: insert empty rows"
-msgstr[0] "%1: Boş satır ekle"
-msgstr[1] "%1: Boş satırlar ekle"
-
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3470
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3415
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: Seçili satırları kaldır"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3506
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3451
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: Seçili hücreleri temizle"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3761
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3706
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
 msgstr "Seçili 1: %1 satır, %2 sütun"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3771
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3716
 #, kde-format
 msgid "Selected: %1 cells"
 msgstr "Seçili: %1 hücre"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3790
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3735
 #, kde-format
 msgid "row"
 msgid_plural "rows"
 msgstr[0] "satır"
 msgstr[1] "satır"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3791
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3736
 #, kde-format
 msgid "column"
 msgid_plural "columns"
 msgstr[0] "sütun"
 msgstr[1] "sütun"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3792
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3737
 #, kde-format
 msgid "cells"
 msgstr "hücre"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3793
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3738
 #, kde-format
 msgid "masked value"
 msgstr "maskelenmiş değer"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3793
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3738
 #, kde-format
 msgid "masked values"
 msgstr "maskelenmiş değer"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3794
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3739
 #, kde-format
 msgid "missing value"
 msgstr "eksik değer"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3794
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3739
 #, kde-format
 msgid "missing values"
 msgstr "eksik değer"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3795
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3740
 #, kde-format
 msgid " , "
 msgstr " , "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3795
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3796
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3740
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3741
 #, kde-format
 msgid "%1"
 msgstr "%1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3796
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3741
 #, kde-format
 msgid ", "
 msgstr ", "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3800
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3745
 #, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
 msgstr "Seçili: %1 %2, %3 %4%5 %6 %7 %8"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3810
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3755
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr "Seçili: %1 %2%3 %4 %5 %6"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3891
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3836
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Hesap Tablosunu Yazdır"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4503
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4448
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "%1 SQLite veritabanı oluşturulamadı.."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4535
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4480
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "%1 SQLite veritabanında tablo oluşturulamadı.."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4588
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4533
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "Tabloya veriler eklenemedi."
@@ -25033,3 +25013,16 @@ msgstr "dönüştürme süreci başarısız, çıkış kodu ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Dosya açılamadı:"
+
+#~ msgid "Close"
+#~ msgstr "Kapat"
+
+#~ msgid "%1: insert empty column"
+#~ msgid_plural "%1: insert empty columns"
+#~ msgstr[0] "%1: Boş sütun ekle"
+#~ msgstr[1] "%1: Boş sütun ekle"
+
+#~ msgid "%1: insert empty row"
+#~ msgid_plural "%1: insert empty rows"
+#~ msgstr[0] "%1: Boş satır ekle"
+#~ msgstr[1] "%1: Boş satırlar ekle"
