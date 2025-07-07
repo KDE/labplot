@@ -58,7 +58,8 @@ LiveDataSource::LiveDataSource(const QString& name, bool loading)
 	connect(this, &AbstractAspect::aspectAboutToBeRemoved, [this](const AbstractAspect* aspect) {
 		if (aspect == this) {
 			pauseReading();
-			m_device->close();
+			if (m_device)
+				m_device->close();
 		}
 	});
 
