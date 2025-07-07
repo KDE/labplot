@@ -11,6 +11,9 @@ Bug fixes:
 	* Fix crash when column or row was added to spreadsheet from toolbar and no column or row was selected (BUG 504839)
 	* Fix issue when the statistics spreadsheet was not shown if the spreadsheet was a child of workbook
 	* Fix issue which caused the context menu of an aspect to not be shown after being reparented
+	* Fix the issue with the load of projects with the data extractor where the extracted point were duplicated
+	* Use different colors for the different curves in the data extractor, similar to how it's done in the plot area
+	* Fix the handling of axis points in the data extractor after they were deleted and recreated again
 	* Handle Windows logical font "MS Shell Dlg 2"
 	* Fix crash when deleting a livedata source with missing source file
 
