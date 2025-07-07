@@ -23,6 +23,7 @@ Bug fixes:
 	* Fix issue when the statistics spreadsheet was not shown if the spreadsheet was a child of workbook
 	* Fix issue which caused the context menu of an aspect to not be shown after being reparented
 	* Handle Windows logical font "MS Shell Dlg 2"
+	* Fix crash when deleting a livedata source with missing source file
 
 -----2.12.0 (2025-04-25) -----
 New features:

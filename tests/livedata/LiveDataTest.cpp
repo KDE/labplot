@@ -1659,6 +1659,48 @@ void LiveDataTest::testLoadSaveLiveDataLinkedFile_FileNotExists() {
 	QCOMPARE(curve->yColumn(), dataSource->column(1));
 }
 
+void LiveDataTest::testLoadSaveLiveDataLinkedFile_FileNotExistsRemoveLivedata() {
+	QString savePath;
+	QString importFilename;
+	{
+		// create a temp file and write some data into it
+		QTemporaryFile tempFile;
+		if (!tempFile.open())
+			QFAIL("failed to create the temp file for writing");
+
+		importFilename = tempFile.fileName();
+		QFile file(importFilename);
+		if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
+			QFAIL("failed to open the temp file for writing");
+
+		file.write("1,2\n3,4\n");
+		file.flush();
+
+		Project project;
+		CREATE_DUMMY_LIVEDATA_PROJECT(project, importFilename);
+		dataSource->setFileLinked(true); // Not linked, the column data is stored in the file
+
+		SAVE_PROJECT("testLoadSaveLiveDataSource");
+	}
+
+	Project project;
+	project.load(savePath);
+	const auto curves = project.children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(curves.count(), 1);
+	const auto* curve = curves.first();
+
+	const auto children = project.children<LiveDataSource>();
+	QCOMPARE(children.count(), 1);
+	auto* dataSource = children.first();
+
+	QCOMPARE(dataSource->columnCount(), 0);
+	QCOMPARE(dataSource->rowCount(), 0);
+	QCOMPARE(curve->xColumn(), nullptr);
+	QCOMPARE(curve->yColumn(), nullptr);
+
+	dataSource->remove(); // Should not lead to a crash!
+}
+
 void LiveDataTest::testLoadSaveLiveDataNoLinkedFile() {
 	QString savePath;
 	{
