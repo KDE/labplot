@@ -4,7 +4,7 @@ New features:
 		* Allow to customize which actions have to be shown in the toolbars
 		* Expose more column related actions the context menu in the project (plot data, etc.) also when multiple columns are selected
 	* [analysis]
-		* Save and Load custom fit functions
+		* Save and load custom functions for fit, equation curve and function values
 	* [worksheet]
 		* Inset plot areas - plot areas added as child of another plot area
 		* Improve axis ticks locations. The don't need to be always from the bottom to top if it does not look nice (!700)
