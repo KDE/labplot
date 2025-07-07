@@ -35,6 +35,10 @@ QString GeneralTest::resultHtml() const {
 	return m_result;
 }
 
+const QVector<Column*>& GeneralTest::columns() const {
+	return m_columns;
+}
+
 void GeneralTest::setColumns(const QVector<Column*>& cols) {
 	m_columns = cols;
 }

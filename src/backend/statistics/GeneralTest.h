@@ -29,7 +29,8 @@ public:
 
 	enum GeneralErrorType { ErrorUnqualSize, ErrorEmptyColumn, NoError };
 
-	void setColumns(const QVector<Column*>&);
+	const QVector<Column*>& columns() const;
+	virtual void setColumns(const QVector<Column*>&);
 	QString resultHtml() const;
 
 	QMenu* createContextMenu() override;

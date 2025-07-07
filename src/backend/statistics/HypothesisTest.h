@@ -15,6 +15,8 @@
 
 #include "GeneralTest.h"
 
+#include <QPair>
+
 extern "C" {
 #include "backend/nsl/nsl_statistical_test.h"
 }
@@ -33,26 +35,39 @@ public:
 		NullGreaterEqual // H0: μ ≥ μ₀
 	};
 
-	void setPopulationMean(double mean);
+	void setTestMean(double mean);
+	double testMean() const;
+
 	void setSignificanceLevel(double alpha);
-	void setTail(nsl_stats_tail_type);
+	double significanceLevel() const;
+
 	void setNullHypothesis(NullHypothesisType);
 	NullHypothesisType nullHypothesis() const;
 
+	void setTest(HypothesisTest::Test);
+	HypothesisTest::Test test() const;
+
 	void recalculate();
+	void resetResult();
+
+	void setColumns(const QVector<Column*>&) override;
+
+	static QPair<int, int> variableCount(HypothesisTest::Test);
 
 private:
 	void performOneSampleTTest();
-	void performTowSampleTTest(bool paired);
+	void performTwoSampleTTest(bool paired);
 	void performOneWayANOVATest();
 	void performMannWhitneyUTest();
 	void performKruskalWallisTest();
 	void performLogRankTest();
 
+	nsl_stats_tail_type tail() const;
+
 	// TODO: move to a private class
 	Test m_test{Test::t_test_one_sample};
 	NullHypothesisType m_nullHypothesisType{NullHypothesisType::NullEquality};
-	double m_populationMean{0.0};
+	double m_testMean{0.0};
 	double m_significanceLevel{0.05};
 	nsl_stats_tail_type m_tail{nsl_stats_tail_type_two};
 	QList<double> m_pValue;

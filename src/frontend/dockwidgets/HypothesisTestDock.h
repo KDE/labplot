@@ -28,24 +28,25 @@ public:
 	void setTest(HypothesisTest*);
 
 	void retranslateUi() override;
-	void updateLocale() override;
 
 private:
 	Ui::HypothesisTestDock ui;
 	HypothesisTest* m_test{nullptr};
-	AspectTreeModel* m_aspectTreeModel{nullptr};
-	TreeViewComboBox* cbColumn1{nullptr};
-	TreeViewComboBox* cbColumn2{nullptr};
-	TreeViewComboBox* cbColumn3{nullptr};
+	QMetaObject::Connection m_rbNullTwoTailedAspectConn;
+	QMetaObject::Connection m_rbNullOneTailedLeftAspectConn;
+	QMetaObject::Connection m_rbNullOneTailedRightAspectConn;
+	QMetaObject::Connection m_cbTestAspectConn;
 
-private Q_SLOTS:
+	void hideControls();
+	void addVariable(bool updateCols = true);
+	void removeVariable(bool updateCols = true);
+	void setHypothesisText(HypothesisTest::Test);
+	void ensureVariableCount(HypothesisTest::Test);
+	void manageAddRemoveVariable(HypothesisTest::Test);
+	void manageRecalculate();
 	void testChanged(int);
 	void recalculate();
-	void enableRecalculate();
-
-	void onNullTwoTailClicked();
-	void onNullOneTail1Clicked();
-	void onNullOneTail2Clicked();
+	void updateColumns();
 };
 
 #endif // HYPOTHESISTESTDOCK_H

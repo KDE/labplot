@@ -948,7 +948,8 @@ void SpreadsheetView::connectActions() {
 		QString name = (columns.size() == 1) ? columns.constFirst()->name() : m_spreadsheet->name();
 		auto* test = new HypothesisTest(i18n("Statistical Test for %1", name));
 		test->setColumns(columns);
-		test->recalculate();
+		if (!test->columns().isEmpty())
+			test->recalculate();
 		m_spreadsheet->parentAspect()->addChild(test);
 	});
 }
