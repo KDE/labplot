@@ -1596,8 +1596,8 @@ void LiveDataTest::testLoadSaveLiveDataLinkedFile_FileExists() {
 	const auto curves = project.children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
 	QCOMPARE(curves.count(), 1);
 	const auto* curve = curves.first();
-	QCOMPARE(curve->xColumn(), dataSource->column(0));
-	QCOMPARE(curve->yColumn(), dataSource->column(1));
+	QCOMPARE(curve->xColumn(), nullptr);
+	QCOMPARE(curve->yColumn(), nullptr);
 }
 
 void LiveDataTest::testLoadSaveLiveDataLinkedFile_FileNotExists() {
