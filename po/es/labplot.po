@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-07 02:30+0000\n"
+"POT-Creation-Date: 2025-07-08 02:36+0000\n"
 "PO-Revision-Date: 2025-05-10 00:18+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -2465,47 +2465,47 @@ msgstr "Hojas: "
 msgid "Invalid region specified."
 msgstr "Se ha indicado una región no válida."
 
-#: src/backend/datasources/LiveDataSource.cpp:730
+#: src/backend/datasources/LiveDataSource.cpp:731
 #, kde-format
 msgid "Device doesn't exist."
 msgstr "El dispositivo no existe."
 
-#: src/backend/datasources/LiveDataSource.cpp:733
+#: src/backend/datasources/LiveDataSource.cpp:734
 #, kde-format
 msgid "User doesn't have enough permissions to open the device."
 msgstr "El usuario no tiene suficientes permisos para abrir el dispositivo."
 
-#: src/backend/datasources/LiveDataSource.cpp:736
+#: src/backend/datasources/LiveDataSource.cpp:737
 #, kde-format
 msgid "Device already opened."
 msgstr "Dispositivo ya abierto."
 
-#: src/backend/datasources/LiveDataSource.cpp:739
+#: src/backend/datasources/LiveDataSource.cpp:740
 #, kde-format
 msgid "Device is not open."
 msgstr "El dispositivo no está abierto."
 
-#: src/backend/datasources/LiveDataSource.cpp:742
+#: src/backend/datasources/LiveDataSource.cpp:743
 #, kde-format
 msgid "Failed to read data."
 msgstr "Ha fallado la lectura de datos."
 
-#: src/backend/datasources/LiveDataSource.cpp:745
+#: src/backend/datasources/LiveDataSource.cpp:746
 #, kde-format
 msgid "Device not available."
 msgstr "Dispositivo no disponible."
 
-#: src/backend/datasources/LiveDataSource.cpp:748
+#: src/backend/datasources/LiveDataSource.cpp:749
 #, kde-format
 msgid "Timeout occured."
 msgstr "Se ha agotado el tiempo de espera."
 
-#: src/backend/datasources/LiveDataSource.cpp:753
+#: src/backend/datasources/LiveDataSource.cpp:754
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr "Ha ocurrido el siguiente error: %1."
 
-#: src/backend/datasources/LiveDataSource.cpp:764
+#: src/backend/datasources/LiveDataSource.cpp:765
 #, kde-format
 msgid "Serial Port Error"
 msgstr "Error de puerto serie"

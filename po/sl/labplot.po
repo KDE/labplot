@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-07 02:30+0000\n"
+"POT-Creation-Date: 2025-07-08 02:36+0000\n"
 "PO-Revision-Date: 2025-05-09 07:29+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -2462,47 +2462,47 @@ msgstr "Listi: "
 msgid "Invalid region specified."
 msgstr "Navedena neveljavna regija."
 
-#: src/backend/datasources/LiveDataSource.cpp:730
+#: src/backend/datasources/LiveDataSource.cpp:731
 #, kde-format
 msgid "Device doesn't exist."
 msgstr "Naprava ne obstaja."
 
-#: src/backend/datasources/LiveDataSource.cpp:733
+#: src/backend/datasources/LiveDataSource.cpp:734
 #, kde-format
 msgid "User doesn't have enough permissions to open the device."
 msgstr "Uporabnik nima dovolj dovoljenj za odpiranje naprave."
 
-#: src/backend/datasources/LiveDataSource.cpp:736
+#: src/backend/datasources/LiveDataSource.cpp:737
 #, kde-format
 msgid "Device already opened."
 msgstr "Naprava je že odprta."
 
-#: src/backend/datasources/LiveDataSource.cpp:739
+#: src/backend/datasources/LiveDataSource.cpp:740
 #, kde-format
 msgid "Device is not open."
 msgstr "Naprava ni odprta."
 
-#: src/backend/datasources/LiveDataSource.cpp:742
+#: src/backend/datasources/LiveDataSource.cpp:743
 #, kde-format
 msgid "Failed to read data."
 msgstr "Branja podatkov ni uspelo."
 
-#: src/backend/datasources/LiveDataSource.cpp:745
+#: src/backend/datasources/LiveDataSource.cpp:746
 #, kde-format
 msgid "Device not available."
 msgstr "Naprava ni na voljo."
 
-#: src/backend/datasources/LiveDataSource.cpp:748
+#: src/backend/datasources/LiveDataSource.cpp:749
 #, kde-format
 msgid "Timeout occured."
 msgstr "Prišlo je do časovne omejitve."
 
-#: src/backend/datasources/LiveDataSource.cpp:753
+#: src/backend/datasources/LiveDataSource.cpp:754
 #, kde-format
 msgid "The following error occurred: %1."
 msgstr "Prišlo je do naslednje napake: %1."
 
-#: src/backend/datasources/LiveDataSource.cpp:764
+#: src/backend/datasources/LiveDataSource.cpp:765
 #, kde-format
 msgid "Serial Port Error"
 msgstr "Napaka zaporednih vrat"
