@@ -4,6 +4,7 @@
 	Description      : widget for editing properties of equation curves
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -13,13 +14,16 @@
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "frontend/widgets/ConstantsWidget.h"
 #include "frontend/widgets/FunctionsWidget.h"
+#include "frontend/GuiTools.h"
+
+#include <KConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
 
 #include <QCompleter>
 #include <QKeyEvent>
 #include <QMenu>
 #include <QWidgetAction>
-
-#include <KLocalizedString>
 
 /*!
   \class XYEquationCurveDock
@@ -90,6 +94,8 @@ void XYEquationCurveDock::setupGeneral() {
 	connect(uiGeneralTab.tbFunctions1, &QToolButton::clicked, this, &XYEquationCurveDock::showFunctions);
 	connect(uiGeneralTab.tbConstants2, &QToolButton::clicked, this, &XYEquationCurveDock::showConstants);
 	connect(uiGeneralTab.tbFunctions2, &QToolButton::clicked, this, &XYEquationCurveDock::showFunctions);
+	connect(uiGeneralTab.pbLoadFunction, &QPushButton::clicked, this, &XYEquationCurveDock::loadFunction);
+	connect(uiGeneralTab.pbSaveFunction, &QPushButton::clicked, this, &XYEquationCurveDock::saveFunction);
 	connect(uiGeneralTab.teMin, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
 	connect(uiGeneralTab.teMax, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
 	connect(uiGeneralTab.sbCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYEquationCurveDock::enableRecalculate);
@@ -257,6 +263,39 @@ void XYEquationCurveDock::showFunctions() {
 		QPoint pos(-menu.sizeHint().width() + uiGeneralTab.tbFunctions2->width(), -menu.sizeHint().height());
 		menu.exec(uiGeneralTab.tbFunctions2->mapToGlobal(pos));
 	}
+}
+
+void XYEquationCurveDock::loadFunction() {
+	QString fileName = GuiTools::loadFunction(uiGeneralTab.teEquation1);
+	if (fileName.isEmpty())
+		return;
+
+	// special options if accepted
+	KConfig config(fileName);
+	auto group = config.group(QLatin1String("EquationCurve"));
+	auto xmin = group.readEntry("XMin", 0);
+	auto xmax = group.readEntry("XMax", 1);
+	auto npoints = group.readEntry("NPoints", 1000);
+
+	const auto numberLocale = QLocale();
+	uiGeneralTab.teMin->setText(numberLocale.toString(xmin));
+	uiGeneralTab.teMax->setText(numberLocale.toString(xmax));
+	uiGeneralTab.sbCount->setValue(npoints);
+}
+
+void XYEquationCurveDock::saveFunction() {
+	QString fileName = GuiTools::saveFunction(uiGeneralTab.teEquation1);
+	if (fileName.isEmpty())
+		return;
+
+	// special option if accepted
+	KConfig config(fileName);
+	auto group = config.group(QLatin1String("EquationCurve"));
+	group.writeEntry("XMin", uiGeneralTab.teMin->document()->toPlainText());
+	group.writeEntry("XMax", uiGeneralTab.teMax->document()->toPlainText());
+	group.writeEntry("NPoints", uiGeneralTab.sbCount->value());
+	config.sync();
+	QDEBUG(Q_FUNC_INFO << ", saved function options to" << fileName)
 }
 
 void XYEquationCurveDock::insertFunction1(const QString& functionName) {

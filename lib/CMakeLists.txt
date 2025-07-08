@@ -220,6 +220,7 @@ set(SDK_INTERNAL_SOURCES
     ${BACKEND_DIR}/gsl/functions.cpp
     ${BACKEND_DIR}/gsl/constants.cpp
     ${BACKEND_DIR}/core/Settings.cpp
+    ${FRONTEND_DIR}/widgets/TextPreview.cpp
     ${FRONTEND_DIR}/GuiTools.cpp
     ${FRONTEND_DIR}/ThemeHandler.cpp
     ${TOOLS_DIR}/ImageTools.cpp

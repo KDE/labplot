@@ -108,7 +108,7 @@
     </widget>
    </item>
    <item row="31" column="2" colspan="2">
-    <widget class="QComboBox" name="cbPlotRanges">
+    <widget class="KComboBox" name="cbPlotRanges">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -136,7 +136,7 @@
    <item row="11" column="2" colspan="2">
     <layout class="QHBoxLayout" name="hlYWeight">
      <item>
-      <widget class="QComboBox" name="cbYWeight"/>
+      <widget class="KComboBox" name="cbYWeight"/>
      </item>
      <item>
       <widget class="QLabel" name="lYErrorCol">
@@ -180,7 +180,7 @@
     </widget>
    </item>
    <item row="14" column="2" colspan="2">
-    <widget class="QComboBox" name="cbCategory">
+    <widget class="KComboBox" name="cbCategory">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -368,7 +368,7 @@
    <item row="10" column="2" colspan="2">
     <layout class="QHBoxLayout" name="hlXError">
      <item>
-      <widget class="QComboBox" name="cbXWeight"/>
+      <widget class="KComboBox" name="cbXWeight"/>
      </item>
      <item>
       <widget class="QLabel" name="lXErrorCol">
@@ -818,7 +818,7 @@
     </widget>
    </item>
    <item row="4" column="2" colspan="2">
-    <widget class="QComboBox" name="cbDataSourceType">
+    <widget class="KComboBox" name="cbDataSourceType">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>

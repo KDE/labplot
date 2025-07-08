@@ -85,6 +85,7 @@ private Q_SLOTS:
 
 	void testLoadSaveLiveDataLinkedFile_FileExists();
 	void testLoadSaveLiveDataLinkedFile_FileNotExists();
+	void testLoadSaveLiveDataLinkedFile_FileNotExistsRemoveLivedata();
 	void testLoadSaveLiveDataNoLinkedFile();
 	// void testLoadSaveLiveDataSource();
 };

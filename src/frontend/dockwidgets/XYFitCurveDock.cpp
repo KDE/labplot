@@ -25,15 +25,11 @@
 
 #include "backend/nsl/nsl_sf_stats.h"
 
-#include <KFileWidget>
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLineEdit>
 #include <KMessageWidget>
-#include <KUrlComboBox>
 
 #include <QClipboard>
-#include <QFileDialog>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QMenu>
@@ -184,12 +180,12 @@ void XYFitCurveDock::setupGeneral() {
 	retranslateUi();
 
 	// Slots
-	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::dataSourceTypeChanged);
+	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &XYFitCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.tbWeights, &QPushButton::clicked, this, &XYFitCurveDock::showWeightsOptions);
-	connect(uiGeneralTab.cbXWeight, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::xWeightChanged);
-	connect(uiGeneralTab.cbYWeight, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::yWeightChanged);
-	connect(uiGeneralTab.cbCategory, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::categoryChanged);
-	connect(uiGeneralTab.cbModel, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::modelTypeChanged);
+	connect(uiGeneralTab.cbXWeight, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &XYFitCurveDock::xWeightChanged);
+	connect(uiGeneralTab.cbYWeight, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &XYFitCurveDock::yWeightChanged);
+	connect(uiGeneralTab.cbCategory, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &XYFitCurveDock::categoryChanged);
+	connect(uiGeneralTab.cbModel, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &XYFitCurveDock::modelTypeChanged);
 	connect(uiGeneralTab.sbDegree, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYFitCurveDock::updateModelEquation);
 	connect(uiGeneralTab.teEquation, &ExpressionTextEdit::expressionChanged, this, &XYFitCurveDock::expressionChanged);
 	connect(uiGeneralTab.tbConstants, &QToolButton::clicked, this, &XYFitCurveDock::showConstants);
@@ -197,13 +193,13 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.pbLoadFunction, &QPushButton::clicked, this, &XYFitCurveDock::loadFunction);
 	connect(uiGeneralTab.pbSaveFunction, &QPushButton::clicked, this, &XYFitCurveDock::saveFunction);
 	connect(uiGeneralTab.pbOptions, &QPushButton::clicked, this, &XYFitCurveDock::showOptions);
-	connect(uiGeneralTab.cbAlgorithm, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::algorithmChanged);
+	connect(uiGeneralTab.cbAlgorithm, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &XYFitCurveDock::algorithmChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYFitCurveDock::recalculateClicked);
 	connect(uiGeneralTab.tbData, &QPushButton::clicked, this, &XYFitCurveDock::showDataOptions);
 	connect(uiGeneralTab.tbFit, &QPushButton::clicked, this, &XYFitCurveDock::showFitOptions);
 	connect(uiGeneralTab.tbParameters, &QPushButton::clicked, this, &XYFitCurveDock::showParameters);
 	connect(uiGeneralTab.tbResults, &QPushButton::clicked, this, &XYFitCurveDock::showResults);
-	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::plotRangeChanged);
+	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &XYFitCurveDock::plotRangeChanged);
 
 	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYFitCurveDock::dataSourceCurveChanged);
 	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYFitCurveDock::xDataColumnChanged);
@@ -1188,167 +1184,66 @@ void XYFitCurveDock::parametersValid(bool valid) {
 	m_parametersValid = valid;
 }
 
-// see also FunctionValuesDialog::loadFunction()
 void XYFitCurveDock::loadFunction() {
-	//easy alternative: const QString& fileName = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select file to load function definition"), dir, filter);
+	QString fileName = GuiTools::loadFunction(uiGeneralTab.teEquation, uiGeneralTab.cbCategory, uiGeneralTab.cbModel);
+	if (fileName.isEmpty())
+		return;
 
-	QDialog dialog;
-	dialog.setWindowTitle(i18n("Select file to load function definition"));
-	auto* layout = new QVBoxLayout(&dialog);
+	// special options if accepted
+	KConfig config(fileName);
+	auto group = config.group(QLatin1String("FitCurve"));
 
-	// use last open dir from MainWin (project dir)
-	KConfigGroup mainGroup = Settings::group(QStringLiteral("MainWin"));
-	const QString& dir = mainGroup.readEntry("LastOpenDir", "");
+	m_fitData.maxIterations = group.readEntry("MaxIterations", 500);
+	m_fitData.eps =  group.readEntry("Tolerance", 1.e-4);
+	m_fitData.evaluatedPoints = static_cast<size_t>(group.readEntry("EvaluatedPoints", quint64(1000)));
 
-	//using KFileWidget to add custom widgets
-	auto* fileWidget = new KFileWidget(QUrl(dir), &dialog);
-	fileWidget->setOperationMode(KFileWidget::Opening);
-	fileWidget->setMode(KFile::File);
-
-	// preview
-	auto* preview = new TextPreview();
-	fileWidget->setPreviewWidget(preview);
-
-	auto filterList = QList<KFileFilter>();
-	filterList << KFileFilter(i18n("LabPlot Function Definition"), {QLatin1String("*.lfd"), QLatin1String("*.LFD")}, {});
-	fileWidget->setFilters(filterList);
-
-	fileWidget->okButton()->show();
-	fileWidget->okButton()->setEnabled(false);
-	fileWidget->cancelButton()->show();
-	QObject::connect(fileWidget->okButton(), &QPushButton::clicked, &dialog, &QDialog::accept);
-	QObject::connect(fileWidget, &KFileWidget::selectionChanged, &dialog, [=]() {
-		QString fileName = fileWidget->locationEdit()->currentText();
-		auto currentDir = fileWidget->baseUrl().toLocalFile();
-		fileName.prepend(currentDir);
-		if (QFile::exists(fileName))
-			fileWidget->okButton()->setEnabled(true);
-	});
-	QObject::connect(fileWidget->cancelButton(), &QPushButton::clicked, &dialog, &QDialog::reject);
-	layout->addWidget(fileWidget);
-
-	if (dialog.exec() == QDialog::Accepted) {
-		QString fileName = fileWidget->locationEdit()->currentText();
-		auto currentDir = fileWidget->baseUrl().toLocalFile();
-		fileName.prepend(currentDir);
-
-		//load config from file if accepted
-		QDEBUG(Q_FUNC_INFO << ", load function from file" << fileName)
-
-		KConfig config(fileName);
-		auto general = config.group(QLatin1String("General"));
-		m_fitData.model = general.readEntry("Function", "");
-		// switch to custom model
-		uiGeneralTab.cbCategory->setCurrentIndex(uiGeneralTab.cbCategory->count() - 1);
-
-		auto description = general.readEntry("Description", "");
-		auto comment = general.readEntry("Comment", "");
-		QDEBUG(Q_FUNC_INFO << ", description:" << description)
-		QDEBUG(Q_FUNC_INFO << ", comment:" << comment)
-		if (!description.isEmpty()) {
-			uiGeneralTab.cbModel->clear();
-			uiGeneralTab.cbModel->addItem(description);
+	// parameter and settings
+	group = config.group(QLatin1String("Parameter"));
+	auto keys = group.keyList();
+	int i = 0;
+	for (const auto &name : keys) {
+		auto settings = group.readEntry(name, QStringList());
+		if (settings.isEmpty()) {
+			i++;
+			continue;
 		}
-		if (!comment.isEmpty())
-			uiGeneralTab.teEquation->viewport()->setToolTip(comment);
+
+		m_fitData.paramStartValues[i] = settings.at(0).toDouble();
+		m_fitData.paramFixed[i] = QVariant(settings.at(1)).toBool();
+		m_fitData.paramLowerLimits[i] = settings.at(2).toDouble();
+		m_fitData.paramUpperLimits[i] = settings.at(3).toDouble();
+		i++;
 	}
+	// update parameter widget
+	parametersChanged();
 }
 
-// see also FunctionValuesDialog::saveFunction()
 void XYFitCurveDock::saveFunction() {
-	QDialog dialog;
-	dialog.setWindowTitle(i18n("Select file to save function definition"));
-	auto* layout = new QVBoxLayout(&dialog);
+	QString fileName = GuiTools::saveFunction(uiGeneralTab.teEquation, uiGeneralTab.cbModel);
+	if (fileName.isEmpty())
+		return;
 
-	// use last open dir from MainWin (project dir)
-	KConfigGroup mainGroup = Settings::group(QStringLiteral("MainWin"));
-	const QString& dir = mainGroup.readEntry("LastOpenDir", "");
+	// special option if accepted
+	KConfig config(fileName);
+	auto group = config.group(QLatin1String("FitCurve"));
 
-	//using KFileWidget to add custom widgets
-	auto* fileWidget = new KFileWidget(QUrl(dir), &dialog);
-	fileWidget->setOperationMode(KFileWidget::Saving);
-	fileWidget->setMode(KFile::File);
-	// preview
-	auto* preview = new TextPreview();
-	fileWidget->setPreviewWidget(preview);
+	// fit options: iterations, tol, points
+	group.writeEntry("MaxIterations", m_fitData.maxIterations);
+	group.writeEntry("Tolerance", m_fitData.eps);
+	group.writeEntry("EvaluatedPoints", static_cast<quint64>(m_fitData.evaluatedPoints));
 
-	auto filterList = QList<KFileFilter>();
-	filterList << KFileFilter(i18n("LabPlot Function Definition"), {QLatin1String("*.lfd"), QLatin1String("*.LFD")}, {});
-	fileWidget->setFilters(filterList);
-
-	fileWidget->okButton()->show();
-	fileWidget->okButton()->setEnabled(false);
-	fileWidget->cancelButton()->show();
-	QObject::connect(fileWidget->okButton(), &QPushButton::clicked, &dialog, &QDialog::accept);
-	QObject::connect(fileWidget->cancelButton(), &QPushButton::clicked, &dialog, &QDialog::reject);
-	layout->addWidget(fileWidget);
-
-	// custom widgets
-	auto* lDescription = new QLabel(i18n("Description:"));
-	auto* leDescription = new KLineEdit(uiGeneralTab.cbModel->currentText());
-	auto* lComment = new QLabel(i18n("Comment:"));
-	auto* leComment = new KLineEdit(uiGeneralTab.teEquation->viewport()->toolTip());
-
-	// update description and comment when selection changes
-	connect(fileWidget, &KFileWidget::fileHighlighted, this, [=]() {
-		QString fileName = fileWidget->locationEdit()->currentText();
-		auto currentDir = fileWidget->baseUrl().toLocalFile();
-		fileName.prepend(currentDir);
-		QDEBUG(Q_FUNC_INFO << ", file selected:" << fileName)
-		if (QFile::exists(fileName)) {
-			KConfig config(fileName);
-			auto group = config.group(QLatin1String("General"));
-			const QString& description = group.readEntry("Description", "");
-			const QString& comment = group.readEntry("Comment", "");
-			if (!description.isEmpty())
-				leDescription->setText(description);
-			if (!comment.isEmpty())
-				leComment->setText(comment);
-		}
-	});
-
-	auto* grid = new QGridLayout;
-	grid->addWidget(lDescription, 0, 0);
-	grid->addWidget(leDescription, 0, 1);
-	grid->addWidget(lComment, 1, 0);
-	grid->addWidget(leComment, 1, 1);
-	layout->addLayout(grid);
-
-	dialog.adjustSize();
-	if (dialog.exec() == QDialog::Accepted) {
-		fileWidget->slotOk();
-
-		QString fileName = fileWidget->selectedFile();
-		if (fileName.isEmpty()) {	// if entered directly and not selected (also happens when selected!)
-			// DEBUG(Q_FUNC_INFO << ", no file selected")
-			fileName = fileWidget->locationEdit()->currentText();
-			auto* cbExtension = fileWidget->findChild<QCheckBox*>();
-			if (cbExtension) {
-				bool checked = cbExtension->isChecked();
-				if (checked && ! (fileName.endsWith(QLatin1String(".lfd")) || fileName.endsWith(QLatin1String(".LFD"))))
-							fileName.append(QLatin1String(".lfd"));
-			}
-			// add current folder
-			auto currentDir = fileWidget->baseUrl().toLocalFile();
-			fileName.prepend(currentDir);
-		}
-		// save current model (with description and comment)
-		// FORMAT: LFD - LabPlot Function Definition
-		KConfig config(fileName);	// selected lfd file
-		auto group = config.group(QLatin1String("General"));
-		auto description = leDescription->text();
-		auto comment = leComment->text();
-		group.writeEntry("Function", m_fitData.model);	// model function
-		group.writeEntry("Description", description);
-		group.writeEntry("Comment", comment);
-		config.sync();
-		QDEBUG(Q_FUNC_INFO << ", saved function to" << fileName)
-
-		// set description and comment in Dock (even when empty)
-		uiGeneralTab.cbModel->clear();
-		uiGeneralTab.cbModel->addItem(description);
-		uiGeneralTab.teEquation->viewport()->setToolTip(comment);
+	// parameter and settings
+	group = config.group(QLatin1String("Parameter"));
+	for (int i = 0; i < m_fitData.paramNames.size(); i++) {
+		QStringList settings;
+		settings << QString::number(m_fitData.paramStartValues.at(i));
+		settings << QString::number(m_fitData.paramFixed.at(i));
+		settings << QString::number(m_fitData.paramLowerLimits.at(i));
+		settings << QString::number(m_fitData.paramUpperLimits.at(i));
+		group.writeEntry(m_fitData.paramNames.at(i), settings);
 	}
+
+	// data and weights are defined in a project (not model options)
 }
 
 void XYFitCurveDock::showOptions() {
