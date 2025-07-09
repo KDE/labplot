@@ -1378,7 +1378,7 @@ void LiveDataTest::testPlotting() {
 		QFAIL("failed to open the temp file for writing");
 	file.write("1000,3000\n2000,4000\n3000,8000\n4000,10000\n");
 	file.close();
-	QCOMPARE(waitForSignal(dataSource, &LiveDataSource::readOnUpdateCalled), false);
+	QCOMPARE(waitForSignal(dataSource, &LiveDataSource::readOnUpdateCalled), true);
 
 	QCOMPARE(dataSource->columnCount(), 2);
 	QCOMPARE(dataSource->rowCount(), 4);
