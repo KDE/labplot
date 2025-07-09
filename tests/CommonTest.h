@@ -12,6 +12,7 @@
 
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include <QtTest>
+#include <iostream>
 
 #include <gsl/gsl_math.h>
 
@@ -187,6 +188,7 @@ protected:
 		});
 		timer.start(timeout_ms);
 		loop.exec();
+		std::cout << "-------------------- Remaining time: " << timer.remainingTime() << std::endl;
 		// This disconnect is important, because outside of this function timer does not exist anymore and therefore the capture is invalid
 		disconnect(con);
 
