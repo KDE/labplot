@@ -61,6 +61,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, dockWidgetState, DockWidgetState)
 	BASIC_D_ACCESSOR_DECL(bool, saveDefaultDockWidgetState, SaveDefaultDockWidgetState)
 	CLASS_D_ACCESSOR_DECL(QString, defaultDockWidgetState, DefaultDockWidgetState)
+	BASIC_D_ACCESSOR_DECL(bool, fileCompression, FileCompression)
 
 	bool hasChanged() const;
 	void navigateTo(const QString& path);
