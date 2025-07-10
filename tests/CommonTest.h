@@ -191,7 +191,7 @@ protected:
 		});
 		timer.start(timeout_ms);
 		loop.exec();
-		std::cout << "-------------------- Remaining time: " << remainingTime << std::endl;
+		DEBUG("waitForSignal(): Remaining time: " << remainingTime);
 		// This disconnect is important, because outside of this function timer does not exist anymore and therefore the capture is invalid
 		disconnect(con);
 
