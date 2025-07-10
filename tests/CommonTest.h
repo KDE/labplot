@@ -175,20 +175,23 @@ protected:
 		timer.setSingleShot(true);
 
 		bool timeout = false;
+		int remainingTime = -999;
 
 		QEventLoop loop;
-		QTimer::connect(&timer, &QTimer::timeout, [&loop, &timeout] {
+		QTimer::connect(&timer, &QTimer::timeout, [&loop, &timeout, &remainingTime] {
 			timeout = true;
+			remainingTime = -1;
 			loop.quit();
 		});
 
-		const auto con = connect(sender, signal, [&loop, &timer] {
+		const auto con = connect(sender, signal, [&loop, &timer, &remainingTime] {
+			remainingTime = timer.remainingTime();
 			timer.stop();
 			loop.quit();
 		});
 		timer.start(timeout_ms);
 		loop.exec();
-		std::cout << "-------------------- Remaining time: " << timer.remainingTime() << std::endl;
+		std::cout << "-------------------- Remaining time: " << remainingTime << std::endl;
 		// This disconnect is important, because outside of this function timer does not exist anymore and therefore the capture is invalid
 		disconnect(con);
 
