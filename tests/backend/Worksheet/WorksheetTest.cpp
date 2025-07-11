@@ -69,6 +69,74 @@ void WorksheetTest::cursorCurveColor() {
 	}
 }
 
+#define PLOT_MODEL_INDEX(row) treemodel->index(row, (int)WorksheetPrivate::TreeModelColumn::PLOTNAME)
+#define CURVE_MODEL_INDEX(plotIndex, curveRow) treemodel->index(curveRow, (int)WorksheetPrivate::TreeModelColumn::SIGNALNAME, plotIndex)
+
+void WorksheetTest::cursorNotAllPlotsVisible() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot1"));
+	worksheet->addChild(plot);
+	auto* curve1 = new XYCurve(QStringLiteral("Curve1"));
+	plot->addChild(curve1);
+	auto* curve2 = new XYCurve(QStringLiteral("Curve2"));
+	plot->addChild(curve2);
+
+	auto* plot2 = new CartesianPlot(QStringLiteral("plot2"));
+	worksheet->addChild(plot2);
+	auto* curve1plot2 = new XYCurve(QStringLiteral("Curve3"));
+	plot2->addChild(curve1plot2);
+	auto* curve2plot2 = new XYCurve(QStringLiteral("Curve4"));
+	plot2->addChild(curve2plot2);
+
+	auto* plot3 = new CartesianPlot(QStringLiteral("plot3"));
+	worksheet->addChild(plot3);
+	auto* curve1plot3 = new XYCurve(QStringLiteral("Curve5"));
+	plot3->addChild(curve1plot3);
+
+	const auto* treemodel = worksheet->cursorModel();
+
+	// Row0: X Value
+	// Row1: Plot
+	// Row1: Plot
+	// Row1: Plot
+	QCOMPARE(treemodel->rowCount(), 4);
+
+	QCOMPARE(treemodel->data(treemodel->index(0, (int)WorksheetPrivate::TreeModelColumn::PLOTNAME), Qt::DisplayRole).toString(), QStringLiteral("X"));
+	QCOMPARE(treemodel->data(PLOT_MODEL_INDEX(1), Qt::DisplayRole).toString(), QStringLiteral("plot1"));
+	QCOMPARE(treemodel->data(PLOT_MODEL_INDEX(2), Qt::DisplayRole).toString(), QStringLiteral("plot2"));
+	QCOMPARE(treemodel->data(PLOT_MODEL_INDEX(3), Qt::DisplayRole).toString(), QStringLiteral("plot3"));
+
+	QCOMPARE(treemodel->rowCount(PLOT_MODEL_INDEX(1)), 2);
+	QCOMPARE(treemodel->data(CURVE_MODEL_INDEX(PLOT_MODEL_INDEX(1), 0), Qt::DisplayRole).toString(), curve1->name());
+	QCOMPARE(treemodel->data(CURVE_MODEL_INDEX(PLOT_MODEL_INDEX(1), 1), Qt::DisplayRole).toString(), curve2->name());
+
+	QCOMPARE(treemodel->rowCount(PLOT_MODEL_INDEX(2)), 2);
+	QCOMPARE(treemodel->data(CURVE_MODEL_INDEX(PLOT_MODEL_INDEX(2), 0), Qt::DisplayRole).toString(), curve1plot2->name());
+	QCOMPARE(treemodel->data(CURVE_MODEL_INDEX(PLOT_MODEL_INDEX(2), 1), Qt::DisplayRole).toString(), curve2plot2->name());
+
+	QCOMPARE(treemodel->rowCount(PLOT_MODEL_INDEX(3)), 1);
+	QCOMPARE(treemodel->data(CURVE_MODEL_INDEX(PLOT_MODEL_INDEX(3), 0), Qt::DisplayRole).toString(), curve1plot3->name());
+
+	plot2->setVisible(false);
+
+	QCOMPARE(treemodel->rowCount(), 3);
+
+	QCOMPARE(treemodel->data(treemodel->index(0, (int)WorksheetPrivate::TreeModelColumn::PLOTNAME), Qt::DisplayRole).toString(), QStringLiteral("X"));
+	QCOMPARE(treemodel->data(PLOT_MODEL_INDEX(1), Qt::DisplayRole).toString(), QStringLiteral("plot1"));
+	QCOMPARE(treemodel->data(PLOT_MODEL_INDEX(2), Qt::DisplayRole).toString(), QStringLiteral("plot3"));
+
+	QCOMPARE(treemodel->rowCount(PLOT_MODEL_INDEX(1)), 2);
+	QCOMPARE(treemodel->data(CURVE_MODEL_INDEX(PLOT_MODEL_INDEX(1), 0), Qt::DisplayRole).toString(), curve1->name());
+	QCOMPARE(treemodel->data(CURVE_MODEL_INDEX(PLOT_MODEL_INDEX(1), 1), Qt::DisplayRole).toString(), curve2->name());
+
+	QCOMPARE(treemodel->rowCount(PLOT_MODEL_INDEX(2)), 1);
+	QCOMPARE(treemodel->data(CURVE_MODEL_INDEX(PLOT_MODEL_INDEX(2), 0), Qt::DisplayRole).toString(), curve1plot3->name());
+}
+
 /*!
  * tests the replacement of the file extension when switching between the different formats during the export.
  */
