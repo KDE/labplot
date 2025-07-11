@@ -32,7 +32,7 @@
 namespace {
 const QLatin1String mqttHostName(HOSTNAME);
 const int mqttPort = PORT;
-constexpr double timeout_ms = 10000.0;
+constexpr double timeout_ms = 30000.0;
 }
 
 // This is not yet required. Can be used to start an external process which publishes mqtt messages
