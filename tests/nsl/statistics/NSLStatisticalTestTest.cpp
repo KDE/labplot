@@ -161,7 +161,7 @@ void NSLStatisticalTestTest::testIndependentT() {
 	size_t n2 = 5;
 
 	double t_stat = nsl_stats_independent_t(sample1, n1, sample2, n2);
-	double p_value = nsl_stats_independent_t_p(sample1, n1, sample2, n2);
+	double p_value = nsl_stats_independent_t_p(sample1, n1, sample2, n2, nsl_stats_tail_type_two);
 
 	double expected_t = -5.0671;
 	double expected_p = 0.0010;
