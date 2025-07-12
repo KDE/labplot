@@ -72,6 +72,7 @@ nsl_stats_tail_type HypothesisTest::tail() const {
 	}
 
 	Q_ASSERT(false);
+	return nsl_stats_tail_type_two;
 }
 
 void HypothesisTest::setColumns(const QVector<Column*>& cols) {
