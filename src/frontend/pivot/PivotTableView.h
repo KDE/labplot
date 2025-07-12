@@ -23,7 +23,7 @@ class PivotTableView : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit PivotTableView(PivotTable*, bool readOnly = false);
+	explicit PivotTableView(PivotTable*);
 	~PivotTableView() override;
 
 	bool exportView();
@@ -45,7 +45,6 @@ private:
 	QTableView* m_tableView{nullptr};
 	HierarchicalHeaderView* m_horizontalHeaderView{nullptr};
 	HierarchicalHeaderView* m_verticalHeaderView{nullptr};
-	bool m_readOnly{false};
 
 public Q_SLOTS:
 	void createContextMenu(QMenu*);

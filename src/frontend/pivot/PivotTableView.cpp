@@ -30,21 +30,18 @@
 
 	\ingroup frontend
  */
-PivotTableView::PivotTableView(PivotTable* pivotTable, bool readOnly) : QWidget(),
+PivotTableView::PivotTableView(PivotTable* pivotTable) : QWidget(),
 	m_pivotTable(pivotTable),
 	m_tableView(new QTableView(this)),
 	m_horizontalHeaderView(new HierarchicalHeaderView(Qt::Horizontal, m_tableView)),
-	m_verticalHeaderView(new HierarchicalHeaderView(Qt::Vertical, m_tableView)),
-	m_readOnly(readOnly) {
+	m_verticalHeaderView(new HierarchicalHeaderView(Qt::Vertical, m_tableView)) {
 
 	auto* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0,0,0,0);
 	layout->addWidget(m_tableView);
 
 	m_tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-
-	if (m_readOnly)
-		m_tableView->setEditTriggers(QTableView::NoEditTriggers);
+	m_tableView->setEditTriggers(QTableView::NoEditTriggers); // read-only mode
 
 	m_tableView->setHorizontalHeader(m_horizontalHeaderView);
 	m_horizontalHeaderView->setHighlightSections(true);
