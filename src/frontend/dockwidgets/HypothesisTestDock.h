@@ -31,22 +31,26 @@ public:
 
 private:
 	Ui::HypothesisTestDock ui;
+
 	HypothesisTest* m_test{nullptr};
+
 	QMetaObject::Connection m_rbNullTwoTailedAspectConn;
 	QMetaObject::Connection m_rbNullOneTailedLeftAspectConn;
 	QMetaObject::Connection m_rbNullOneTailedRightAspectConn;
 	QMetaObject::Connection m_cbTestAspectConn;
+	QMetaObject::Connection m_sbSignificanceLevelAspectConn;
+	QMetaObject::Connection m_sbTestMeanAspectConn;
 
 	void hideControls();
-	void addVariable(bool updateCols = true);
-	void removeVariable(bool updateCols = true);
+	void addVariable();
+	void removeVariable();
 	void setHypothesisText(HypothesisTest::Test);
 	void ensureVariableCount(HypothesisTest::Test);
 	void manageAddRemoveVariable(HypothesisTest::Test);
 	void manageRecalculate();
-	void testChanged(int);
-	void recalculate();
+	void testChanged();
 	void updateColumns();
+	void recalculate();
 };
 
 #endif // HYPOTHESISTESTDOCK_H

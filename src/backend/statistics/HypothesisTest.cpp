@@ -422,6 +422,8 @@ QPair<int, int> HypothesisTest::variableCount(HypothesisTest::Test test) {
 void HypothesisTest::setTest(HypothesisTest::Test test) {
 	m_test = test;
 
+	m_columns.clear();
+
 	resetResult();
 }
 

@@ -78,10 +78,9 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent)
 void HypothesisTestDock::setTest(HypothesisTest* test) {
 	CONDITIONAL_LOCK_RETURN;
 
-	if (m_test) {
-		disconnect(ui.sbSignificanceLevel, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setSignificanceLevel);
-		disconnect(ui.sbTestMean, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setTestMean);
-	}
+	// disconnect all connections to the previous test
+	disconnect(m_sbSignificanceLevelAspectConn);
+	disconnect(m_sbTestMeanAspectConn);
 	disconnect(m_rbNullTwoTailedAspectConn);
 	disconnect(m_rbNullOneTailedLeftAspectConn);
 	disconnect(m_rbNullOneTailedRightAspectConn);
@@ -90,20 +89,22 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	m_test = test;
 	setAspects(QList<AbstractAspect*>{m_test});
 
-	// clear past variables
+	// we want to restore the properties from the aspect to the ui
+
+	// clear all variables
 	for (int i = 0, count = ui.variablesVerticalLayout->count(); i < count; i++)
-		removeVariable(false);
+		removeVariable();
 
 	// confirm that all variables are cleared
 	Q_ASSERT(ui.variablesVerticalLayout->count() == 0);
 
 	// restore variables from aspect columns
 	for (auto* col : m_test->columns()) {
-		addVariable(false);
-		int varCount = ui.variablesVerticalLayout->count(); // layoutitem for the just added variable above
-		auto* layout = ui.variablesVerticalLayout->itemAt(varCount - 1)->layout();
-		auto* treeViewCb = static_cast<TreeViewComboBox*>(layout->itemAt(1)->widget());
-		treeViewCb->setAspect(col);
+		addVariable();
+		int varCount = ui.variablesVerticalLayout->count();
+		auto* layout = ui.variablesVerticalLayout->itemAt(varCount - 1)->layout(); // layoutitem for the just added variable above
+		auto* treeViewCb = static_cast<TreeViewComboBox*>(layout->itemAt(1)->widget()); // treeviewcombobox for the just added variable above
+		treeViewCb->setAspect(col); // set the aspect for the treeviewcombobox to the column
 	}
 
 	// restore significance level
@@ -125,26 +126,31 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	// restore test mean
 	ui.sbTestMean->setValue(m_test->testMean());
 
+	// trigger testChanged() to update the ui
 	int oldIndex = ui.cbTest->currentIndex();
-	ui.cbTest->setCurrentIndex(static_cast<int>(m_test->test())); // auto trigger testChanged(int)
+	ui.cbTest->setCurrentIndex(ui.cbTest->findData(static_cast<int>(m_test->test()))); // auto trigger testChanged()
 	int newIndex = ui.cbTest->currentIndex();
 	if (oldIndex == newIndex)
-		testChanged(newIndex); // manually trigger testChanged(int)
+		testChanged(); // manually trigger testChanged()
 
-	connect(ui.sbSignificanceLevel, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setSignificanceLevel);
-	connect(ui.sbTestMean, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setTestMean);
-
-	m_rbNullTwoTailedAspectConn = connect(ui.rbNullTwoTailed, &QRadioButton::toggled, [this] {
-		m_test->setNullHypothesis(HypothesisTest::NullHypothesisType::NullEquality);
+	// update the aspect properties when the ui properties change
+	m_sbSignificanceLevelAspectConn = connect(ui.sbSignificanceLevel, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setSignificanceLevel);
+	m_sbTestMeanAspectConn = connect(ui.sbTestMean, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setTestMean);
+	m_rbNullTwoTailedAspectConn = connect(ui.rbNullTwoTailed, &QRadioButton::toggled, [this](bool checked) {
+		if (checked)
+			m_test->setNullHypothesis(HypothesisTest::NullHypothesisType::NullEquality);
 	});
-	m_rbNullOneTailedLeftAspectConn = connect(ui.rbNullOneTailedLeft, &QRadioButton::toggled, [this] {
-		m_test->setNullHypothesis(HypothesisTest::NullHypothesisType::NullLessEqual);
+	m_rbNullOneTailedLeftAspectConn = connect(ui.rbNullOneTailedLeft, &QRadioButton::toggled, [this](bool checked) {
+		if (checked)
+			m_test->setNullHypothesis(HypothesisTest::NullHypothesisType::NullLessEqual);
 	});
-	m_rbNullOneTailedRightAspectConn = connect(ui.rbNullOneTailedRight, &QRadioButton::toggled, [this] {
-		m_test->setNullHypothesis(HypothesisTest::NullHypothesisType::NullGreaterEqual);
+	m_rbNullOneTailedRightAspectConn = connect(ui.rbNullOneTailedRight, &QRadioButton::toggled, [this](bool checked) {
+		if (checked)
+			m_test->setNullHypothesis(HypothesisTest::NullHypothesisType::NullGreaterEqual);
 	});
-	m_cbTestAspectConn = connect(ui.cbTest, &QComboBox::currentIndexChanged, [this](int i) {
-		m_test->setTest(static_cast<HypothesisTest::Test>(i));
+	m_cbTestAspectConn = connect(ui.cbTest, &QComboBox::currentIndexChanged, [this] {
+		const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
+		m_test->setTest(test);
 	});
 }
 
@@ -177,29 +183,42 @@ void HypothesisTestDock::setHypothesisText(HypothesisTest::Test test) {
 }
 
 void HypothesisTestDock::ensureVariableCount(HypothesisTest::Test test) {
+	// get the min and max number of columns needed for the test
 	const auto [min, max] = HypothesisTest::variableCount(test);
 
-	void (HypothesisTestDock::*func)(bool) = nullptr;
+	// function pointer to add or remove variables
+	void (HypothesisTestDock::*func)() = nullptr;
+
+	// difference between the current number of columns and the min/max number of columns needed for the test
 	int diff = 0;
+
+	// get the current number of columns
 	int varCount = ui.variablesVerticalLayout->count();
 
 	if (varCount < min) {
+		// if the current number of columns is less than the min number of columns needed for the test, add columns to reach min
 		func = &HypothesisTestDock::addVariable;
 		diff = qAbs(min - varCount);
 	} else if (varCount > max) {
+		// if the current number of columns is greater than the max number of columns needed for the test, remove columns to reach max
 		func = &HypothesisTestDock::removeVariable;
 		diff = qAbs(varCount - max);
 	}
 
+	// add or remove columns to reach the min/max number of columns needed for the test
 	for (int i = diff; i > 0; --i) {
-		(this->*func)(true);
+		(this->*func)();
 	}
 
+	// confirm that the number of columns is correct for the test
 	int newVarCount = ui.variablesVerticalLayout->count();
-
 	Q_ASSERT(newVarCount >= min && newVarCount <= max);
 
+	// enable or disable the add/remove variables buttons
 	manageAddRemoveVariable(test);
+
+	// update the columns in the aspect
+	updateColumns();
 }
 
 void HypothesisTestDock::manageAddRemoveVariable(HypothesisTest::Test test) {
@@ -210,6 +229,10 @@ void HypothesisTestDock::manageAddRemoveVariable(HypothesisTest::Test test) {
 	ui.tbAddVariable->setEnabled(count < max);
 }
 
+// called:
+// - when the user has selected a column in the treeviewcombobox
+// - when the user has added or removed a column
+// - in ensureVariableCount()
 void HypothesisTestDock::updateColumns() {
 	QVector<Column*> columns;
 	int varCount = ui.variablesVerticalLayout->count();
@@ -221,16 +244,21 @@ void HypothesisTestDock::updateColumns() {
 			columns << col;
 	}
 
-	const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
-	const auto [min, max] = HypothesisTest::variableCount(test);
-
-	if (columns.size() >= min && columns.size() <= max)
-		m_test->setColumns(columns);
+	m_test->setColumns(columns);
 }
 
 // ##############################################################################
 // ####################################  SLOTs   ################################
 // ##############################################################################
+void HypothesisTestDock::recalculate() {
+	// m_test->setTest clears the columns, so we need to update them
+	updateColumns();
+
+	// every other property should already be set via the connections
+
+	m_test->recalculate();
+}
+
 void HypothesisTestDock::manageRecalculate() {
 	const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
 
@@ -257,14 +285,20 @@ void HypothesisTestDock::hideControls() {
 	ui.sbTestMean->hide();
 }
 
-void HypothesisTestDock::testChanged(int) {
+void HypothesisTestDock::testChanged() {
+	// reset the ui to a default state
 	hideControls();
 
 	const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
+	m_test->setTest(test);
 
+	// set symbols for the null and alternate hypotheses for the test
 	setHypothesisText(test);
+
+	// ensure that the number of variables is correct for the test
 	ensureVariableCount(test);
 
+	// show any specific controls for the test
 	switch (test) {
 	case HypothesisTest::Test::t_test_one_sample:
 		ui.lTestMean->show();
@@ -272,35 +306,11 @@ void HypothesisTestDock::testChanged(int) {
 		break;
 	}
 
+	// check if the recalculate button should be enabled or disabled
 	manageRecalculate();
 }
 
-void HypothesisTestDock::recalculate() {
-	if (ui.rbNullTwoTailed->isChecked()) {
-		m_test->setNullHypothesis(HypothesisTest::NullHypothesisType::NullEquality);
-	} else if (ui.rbNullOneTailedLeft->isChecked()) {
-		m_test->setNullHypothesis(HypothesisTest::NullHypothesisType::NullLessEqual);
-	} else if (ui.rbNullOneTailedRight->isChecked()) {
-		m_test->setNullHypothesis(HypothesisTest::NullHypothesisType::NullGreaterEqual);
-	}
-
-	m_test->setSignificanceLevel(ui.sbSignificanceLevel->value());
-
-	const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
-	m_test->setTest(test);
-
-	switch (test) {
-	case HypothesisTest::Test::t_test_one_sample:
-		m_test->setTestMean(ui.sbTestMean->value());
-		break;
-	}
-
-	updateColumns();
-
-	m_test->recalculate();
-}
-
-void HypothesisTestDock::addVariable(bool updateCols) {
+void HypothesisTestDock::addVariable() {
 	auto* layout = new QHBoxLayout();
 
 	// size of the items in layout
@@ -322,11 +332,10 @@ void HypothesisTestDock::addVariable(bool updateCols) {
 	const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
 	manageAddRemoveVariable(test); // disable or enable add/remove variables buttons
 
-	if (updateCols)
-		updateColumns();
+	updateColumns();
 }
 
-void HypothesisTestDock::removeVariable(bool updateCols) {
+void HypothesisTestDock::removeVariable() {
 	int count = ui.variablesVerticalLayout->count();
 	if (count > 0) {
 		auto* layoutItem = ui.variablesVerticalLayout->takeAt(count - 1);
@@ -342,6 +351,5 @@ void HypothesisTestDock::removeVariable(bool updateCols) {
 	const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
 	manageAddRemoveVariable(test); // disable or enable add/remove variables buttons
 
-	if (updateCols)
-		updateColumns();
+	updateColumns();
 }
