@@ -36,7 +36,7 @@
   \ingroup backend
 */
 PivotTable::PivotTable(const QString& name, bool loading) : AbstractPart(name, AspectType::PivotTable),
-	d(new PivotTablePrivate(this)) {
+	d_ptr(new PivotTablePrivate(this)) {
 	Q_UNUSED(loading)
 }
 
@@ -44,19 +44,22 @@ PivotTable::PivotTable(const QString& name, bool loading) : AbstractPart(name, A
 //##########################  getter methods  ##################################
 //##############################################################################
 BASIC_D_READER_IMPL(PivotTable, PivotTable::DataSourceType, dataSourceType, dataSourceType)
-BASIC_D_READER_IMPL(PivotTable, Spreadsheet*, dataSourceSpreadsheet, dataSourceSpreadsheet)
+BASIC_SHARED_D_READER_IMPL(PivotTable, const Spreadsheet*, dataSourceSpreadsheet, dataSourceSpreadsheet)
 BASIC_SHARED_D_READER_IMPL(PivotTable, QString, dataSourceConnection, dataSourceConnection)
 BASIC_SHARED_D_READER_IMPL(PivotTable, QString, dataSourceTable, dataSourceTable)
 
 QAbstractItemModel* PivotTable::dataModel() const {
+	Q_D(const PivotTable);
 	return d->dataModel;
 }
 
-void PivotTable::setHorizontalHeaderModel(QAbstractItemModel* model) const {
+void PivotTable::setHorizontalHeaderModel(QAbstractItemModel* model) {
+	Q_D(PivotTable);
 	d->horizontalHeaderModel = dynamic_cast<HierarchicalHeaderModel*>(model);
 }
 
-void PivotTable::setVerticalHeaderModel(QAbstractItemModel* model) const {
+void PivotTable::setVerticalHeaderModel(QAbstractItemModel* model) {
+	Q_D(PivotTable);
 	d->verticalHeaderModel = dynamic_cast<HierarchicalHeaderModel*>(model);
 }
 
@@ -65,45 +68,55 @@ void PivotTable::setVerticalHeaderModel(QAbstractItemModel* model) const {
 //##############################################################################
 STD_SETTER_CMD_IMPL_F_S(PivotTable, SetDataSourceType, PivotTable::DataSourceType, dataSourceType, recalculate)
 void PivotTable::setDataSourceType(DataSourceType type) {
+	Q_D(PivotTable);
 	if (type != d->dataSourceType)
 		exec(new PivotTableSetDataSourceTypeCmd(d, type, ki18n("%1: data source type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(PivotTable, SetDataSourceSpreadsheet, Spreadsheet*, dataSourceSpreadsheet, recalculate)
-void PivotTable::setDataSourceSpreadsheet(Spreadsheet* spreadsheet) {
+STD_SETTER_CMD_IMPL_F_S(PivotTable, SetDataSourceSpreadsheet, const Spreadsheet*, dataSourceSpreadsheet, recalculate)
+void PivotTable::setDataSourceSpreadsheet(const Spreadsheet* spreadsheet) {
+	Q_D(PivotTable);
 	if (spreadsheet != d->dataSourceSpreadsheet)
 		exec(new PivotTableSetDataSourceSpreadsheetCmd(d, spreadsheet, ki18n("%1: data source spreadsheet changed")));
 }
 
 const QStringList& PivotTable::dimensions() const {
+	Q_D(const PivotTable);
 	return d->dimensions;
 }
 
 const QStringList& PivotTable::measures() const {
+	Q_D(const PivotTable);
 	return d->measures;
 }
 
 const QStringList& PivotTable::rows() const {
+	Q_D(const PivotTable);
 	return d->rows;
 }
 
 void PivotTable::addToRows(const QString& field) {
+	Q_D(PivotTable);
 	d->addToRows(field);
 }
 
 void PivotTable::removeFromRows(const QString& field) {
+	Q_D(PivotTable);
 	d->removeFromRows(field);
 }
 
 const QStringList& PivotTable::columns() const {
+	Q_D(const PivotTable);
 	return d->columns;
 }
 
 void PivotTable::addToColumns(const QString& dimension) {
+	Q_D(PivotTable);
 	d->addToColumns(dimension);
 }
 
 void PivotTable::removeFromColumns(const QString& field) {
+	Q_D(PivotTable);
 	d->removeFromColumns(field);
 }
 
@@ -498,6 +511,7 @@ void PivotTablePrivate::createDb() {
   Saves as XML.
  */
 void PivotTable::save(QXmlStreamWriter* writer) const {
+	Q_D(const PivotTable);
 	writer->writeStartElement(QStringLiteral("pivotTable"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
@@ -514,6 +528,7 @@ void PivotTable::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool PivotTable::load(XmlStreamReader* reader, bool preview) {
+	Q_D(PivotTable);
 	Q_UNUSED(preview);
 	if (!readBasicAttributes(reader))
 		return false;

@@ -30,14 +30,14 @@ public:
 	enum SortType {NoSort, SortAscending, SortDescending};
 
 	BASIC_D_ACCESSOR_DECL(DataSourceType, dataSourceType, DataSourceType)
-	POINTER_D_ACCESSOR_DECL(Spreadsheet, dataSourceSpreadsheet, DataSourceSpreadsheet)
+	POINTER_D_ACCESSOR_DECL(const Spreadsheet, dataSourceSpreadsheet, DataSourceSpreadsheet)
 	CLASS_D_ACCESSOR_DECL(QString, dataSourceConnection, DataSourceConnection)
 	CLASS_D_ACCESSOR_DECL(QString, dataSourceTable, DataSourceTable)
 
 	QAbstractItemModel* dataModel() const;
-	void setDataModel(QAbstractItemModel*) const;
-	void setHorizontalHeaderModel(QAbstractItemModel*) const;
-	void setVerticalHeaderModel(QAbstractItemModel*) const;
+	void setDataModel(QAbstractItemModel*);
+	void setHorizontalHeaderModel(QAbstractItemModel*);
+	void setVerticalHeaderModel(QAbstractItemModel*);
 
 	const QStringList& dimensions() const;
 	const QStringList& measures() const;
@@ -65,9 +65,9 @@ public:
 
 private:
 	Q_DECLARE_PRIVATE(PivotTable)
+	PivotTablePrivate* const d_ptr;
 	void init();
 
-	PivotTablePrivate* const d;
 	mutable PivotTableView* m_view{nullptr};
 	friend class PivotTablePrivate;
 
