@@ -221,13 +221,12 @@ void HypothesisTest::performOneSampleTTest() {
 	if (!std::isnan(pValue)) {
 		if (pValue <= m_significanceLevel)
 			addResultLine(i18n("At the significance level %1, the population mean is significantly different from %2. Reject the null Hypothesis",
-								m_significanceLevel,
-								m_testMean));
+							   m_significanceLevel,
+							   m_testMean));
 		else
-			addResultLine(
-				i18n("At the significance level %1, the population mean is not significantly different from %2. Fail to reject the null Hypothesis",
-						m_significanceLevel,
-						m_testMean));
+			addResultLine(i18n("At the significance level %1, the population mean is not significantly different from %2. Fail to reject the null Hypothesis",
+							   m_significanceLevel,
+							   m_testMean));
 	} else
 		addResultLine(i18n("Test result not available"));
 }
@@ -422,5 +421,6 @@ QPair<QString, QString> HypothesisTest::hypothesisText(HypothesisTest::Test test
 	const auto [nullHypothesisSign, alternateHypothesisSign] = HypothesisTest::hypothesisSigns(tail);
 	const auto [lhs, rhs] = HypothesisTest::hypothesisSymbols(test);
 
-	return {lhs + QChar(QChar::Space) + nullHypothesisSign + QChar(QChar::Space) + rhs, lhs + QChar(QChar::Space) + alternateHypothesisSign + QChar(QChar::Space) + rhs};
+	return {lhs + QChar(QChar::Space) + nullHypothesisSign + QChar(QChar::Space) + rhs,
+			lhs + QChar(QChar::Space) + alternateHypothesisSign + QChar(QChar::Space) + rhs};
 }
