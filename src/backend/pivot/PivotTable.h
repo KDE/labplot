@@ -75,7 +75,7 @@ Q_SIGNALS:
 	void changed();
 	void requestProjectContextMenu(QMenu*);
 	void dataSourceTypeChanged(PivotTable::DataSourceType);
-	void dataSourceSpreadsheetChanged(Spreadsheet*);
+	void dataSourceSpreadsheetChanged(const Spreadsheet*);
 };
 
 #endif

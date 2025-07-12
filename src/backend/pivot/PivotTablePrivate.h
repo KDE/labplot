@@ -54,7 +54,7 @@ public:
 	PivotTable* const q;
 
 	PivotTable::DataSourceType dataSourceType{PivotTable::DataSourceSpreadsheet};
-	Spreadsheet* dataSourceSpreadsheet{nullptr};
+	const Spreadsheet* dataSourceSpreadsheet{nullptr};
 	QString dataSourceConnection;
 	QString dataSourceTable;
 
