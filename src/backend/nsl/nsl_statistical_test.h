@@ -14,6 +14,8 @@ __BEGIN_DECLS
 
 #include <stdlib.h>
 
+typedef enum { nsl_stats_tail_type_two, nsl_stats_tail_type_negative, nsl_stats_tail_type_positive } nsl_stats_tail_type;
+
 /* Mann-Whitney U test */
 double nsl_stats_mannwhitney_u(const double sample1[], size_t n1, const double sample2[], size_t n2);
 double nsl_stats_mannwhitney_p(double U, size_t n1, size_t n2);
@@ -48,11 +50,10 @@ double nsl_stats_log_rank_test_p(const double* time, const int* status, const si
 
 /* Independent Sample Student's t-test */
 double nsl_stats_independent_t(const double sample1[], size_t n1, const double sample2[], size_t n2);
-double nsl_stats_independent_t_p(const double sample1[], size_t n1, const double sample2[], size_t n2);
+double nsl_stats_independent_t_p(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail);
 
 /* One Sample Student's t-test */
 double nsl_stats_one_sample_t(const double sample[], size_t n, double hypothesized_mean);
-typedef enum { nsl_stats_tail_type_two, nsl_stats_tail_type_negative, nsl_stats_tail_type_positive } nsl_stats_tail_type;
 double nsl_stats_one_sample_t_p(const double sample[], size_t n, double hypothesized_mean, nsl_stats_tail_type tail);
 
 __END_DECLS

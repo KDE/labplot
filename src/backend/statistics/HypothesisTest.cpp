@@ -63,14 +63,14 @@ HypothesisTest::NullHypothesisType HypothesisTest::nullHypothesis() const {
 }
 
 nsl_stats_tail_type HypothesisTest::tail() const {
-	switch (m_nullHypothesisType) {
-	case HypothesisTest::NullHypothesisType::NullEquality:
-		return nsl_stats_tail_type_two;
-	case HypothesisTest::NullHypothesisType::NullLessEqual:
-		return nsl_stats_tail_type_positive;
-	case HypothesisTest::NullHypothesisType::NullGreaterEqual:
-		return nsl_stats_tail_type_negative;
-	}
+    switch (m_nullHypothesisType) {
+    case HypothesisTest::NullHypothesisType::NullEquality:
+		return nsl_stats_tail_type_two;      // μ = μ₀
+    case HypothesisTest::NullHypothesisType::NullLessEqual:
+		return nsl_stats_tail_type_positive; // μ ≤ μ₀
+    case HypothesisTest::NullHypothesisType::NullGreaterEqual:
+		return nsl_stats_tail_type_negative; // μ ≥ μ₀
+    }
 
 	Q_ASSERT(false);
 }
@@ -115,6 +115,9 @@ void HypothesisTest::recalculate() {
 		break;
 	}
 
+	if (m_result.isEmpty())
+		resetResult();
+
 	Q_EMIT changed(); // notify the view about the changes
 }
 
@@ -147,8 +150,12 @@ void HypothesisTest::resetResult() {
 		// conclusion
 		addResultSection(i18n("Statistical Conclusion"));
 		addResultLine(i18n("Test result not available"));
-	} else if (m_test == HypothesisTest::Test::t_test_two_sample) {
-		addResultTitle(i18n("Two-Sample t-Test"));
+	} else if (m_test == HypothesisTest::Test::t_test_two_sample || m_test == HypothesisTest::Test::t_test_two_sample_paired) {
+		if (m_test == HypothesisTest::Test::t_test_two_sample_paired) {
+			addResultTitle(i18n("Paired Two-Sample t-Test"));
+		} else if (m_test == HypothesisTest::Test::t_test_two_sample) {
+			addResultTitle(i18n("Independent Two-Sample t-Test"));
+		}
 
 		addResultLine(i18n("Sample 1"), QStringLiteral("-"));
 		addResultLine(i18n("Sample 2"), QStringLiteral("-"));
@@ -303,11 +310,31 @@ void HypothesisTest::performTwoSampleTTest(bool paired) {
 		Q_ASSERT(sample1.size() == n1);
 		Q_ASSERT(sample2.size() == n2);
 
-		tValue = nsl_stats_independent_t(sample1.constData(), static_cast<size_t>(n1), sample2.constData(), static_cast<size_t>(n2));
-		pValue = nsl_stats_independent_t_p(sample1.constData(), static_cast<size_t>(n1), sample2.constData(), static_cast<size_t>(n2));
+		if (paired) {
+			if (n1 != n2) {
+				Q_EMIT info(i18n("Paired t-test requires equal sample sizes."));
+				return;
+			}
+
+			QVector<double> differences;
+			differences.reserve(n1);
+			for (int i = 0; i < n1; ++i) {
+				differences.append(sample1[i] - sample2[i]);
+			}
+
+			tValue = nsl_stats_one_sample_t(differences.constData(), static_cast<size_t>(n1), 0.0);
+			pValue = nsl_stats_one_sample_t_p(differences.constData(), static_cast<size_t>(n1), 0.0, tail());
+		} else {
+			tValue = nsl_stats_independent_t(sample1.constData(), static_cast<size_t>(n1), sample2.constData(), static_cast<size_t>(n2));
+			pValue = nsl_stats_independent_t_p(sample1.constData(), static_cast<size_t>(n1), sample2.constData(), static_cast<size_t>(n2), tail());
+		}
 	}
 
-	addResultTitle(i18n("Two-Sample t-Test"));
+	if (paired) {
+		addResultTitle(i18n("Paired Two-Sample t-Test"));
+	} else {
+		addResultTitle(i18n("Independent Two-Sample t-Test"));
+	}
 
 	addResultLine(i18n("Sample 1"), col1->name());
 	addResultLine(i18n("Sample 2"), col2->name());
@@ -344,7 +371,14 @@ void HypothesisTest::performTwoSampleTTest(bool paired) {
 	addResultLine(i18n("Significance Level"), m_significanceLevel);
 	addResultLine(i18n("t-Value"), tValue);
 	addResultLine(i18n("p-Value"), pValue);
-	addResultLine(i18n("Degrees of Freedom"), n1 + n2 - 2);
+
+	int degreesOfFreedom;
+	if (paired) {
+		degreesOfFreedom = n1 - 1; // n-1 for paired
+	} else {
+		degreesOfFreedom = n1 + n2 - 2; // n1+n2-2 for independent
+	}
+	addResultLine(i18n("Degrees of Freedom"), degreesOfFreedom);
 
 	// conclusion
 	addResultSection(i18n("Statistical Conclusion"));
@@ -378,6 +412,7 @@ QPair<int, int> HypothesisTest::variableCount(HypothesisTest::Test test) {
 		return {1, 1};
 		break;
 	case HypothesisTest::Test::t_test_two_sample:
+	case HypothesisTest::Test::t_test_two_sample_paired:
 		return {2, 2};
 		break;
 	}

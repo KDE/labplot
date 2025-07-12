@@ -384,11 +384,23 @@ double nsl_stats_independent_t(const double sample1[], size_t n1, const double s
 	return t_stat;
 }
 
-double nsl_stats_independent_t_p(const double sample1[], size_t n1, const double sample2[], size_t n2) {
+double nsl_stats_independent_t_p(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail) {
 	size_t df = n1 + n2 - 2;
 	double t_stat = nsl_stats_independent_t(sample1, n1, sample2, n2);
 	double t_abs = fabs(t_stat);
-	double p_value = 2.0 * (1.0 - gsl_cdf_tdist_P(t_abs, df));
+	double two_tailed_p_value = 2.0 * (1.0 - gsl_cdf_tdist_P(t_abs, df));
+	double p_value = 0.0;
+	switch (tail) {
+	case nsl_stats_tail_type_two:
+		p_value = two_tailed_p_value;
+		break;
+	case nsl_stats_tail_type_negative: // Left-tailed: p = two_tailed_p / 2 if t < 0, else 1 - two_tailed_p / 2
+		p_value = (t_stat < 0) ? two_tailed_p_value / 2.0 : 1.0 - two_tailed_p_value / 2.0;
+		break;
+	case nsl_stats_tail_type_positive: // Right-tailed: p = two_tailed_p / 2 if t > 0, else 1 - two_tailed_p / 2
+		p_value = (t_stat > 0) ? two_tailed_p_value / 2.0 : 1.0 - two_tailed_p_value / 2.0;
+		break;
+	}
 	return p_value;
 }
 
