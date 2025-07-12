@@ -182,10 +182,13 @@ void HypothesisTest::performOneSampleTTest() {
 		QVector<double> sample;
 		sample.reserve(n);
 		for (int row = 0; row < col->rowCount(); ++row) {
-			if (!col->isValid(row) || col->isMasked(row))
+			auto val = col->valueAt(row);
+			if (!std::isfinite(val) || col->isMasked(row))
 				continue;
-			sample.append(col->valueAt(row));
+			sample.append(val);
 		}
+
+		Q_ASSERT(sample.size() == n);
 
 		tValue = nsl_stats_one_sample_t(sample.constData(), static_cast<size_t>(n), m_testMean);
 		pValue = nsl_stats_one_sample_t_p(sample.constData(), static_cast<size_t>(n), m_testMean, m_tail);
@@ -255,13 +258,16 @@ void HypothesisTest::performTwoSampleTTest(bool paired) {
 		sample2.reserve(n2);
 
 		for (int row = 0; row < qMax(col1->rowCount(), col2->rowCount()); ++row) {
-			if (row < col1->rowCount())
-				if (col1->isValid(row) && !col1->isMasked(row))
-					sample1.append(col1->valueAt(row));
-
-			if (row < col2->rowCount())
-				if (col2->isValid(row) && !col2->isMasked(row))
-					sample2.append(col2->valueAt(row));
+			if (row < col1->rowCount()) {
+				auto val = col1->valueAt(row);
+				if (std::isfinite(val) && !col1->isMasked(row))
+					sample1.append(val);
+			}
+			if (row < col2->rowCount()) {
+				auto val = col2->valueAt(row);
+				if (std::isfinite(val) && !col2->isMasked(row))
+					sample2.append(val);
+			}
 		}
 
 		Q_ASSERT(sample1.size() == n1);
@@ -275,9 +281,10 @@ void HypothesisTest::performTwoSampleTTest(bool paired) {
 
 			QVector<double> differences;
 			differences.reserve(n1);
-			for (int i = 0; i < n1; ++i) {
+			for (int i = 0; i < n1; ++i)
 				differences.append(sample1[i] - sample2[i]);
-			}
+
+			Q_ASSERT(differences.size() == n1);
 
 			tValue = nsl_stats_one_sample_t(differences.constData(), static_cast<size_t>(n1), 0.0);
 			pValue = nsl_stats_one_sample_t_p(differences.constData(), static_cast<size_t>(n1), 0.0, m_tail);
@@ -287,11 +294,10 @@ void HypothesisTest::performTwoSampleTTest(bool paired) {
 		}
 	}
 
-	if (paired) {
+	if (paired)
 		addResultTitle(i18n("Paired Two-Sample t-Test"));
-	} else {
+	else
 		addResultTitle(i18n("Independent Two-Sample t-Test"));
-	}
 
 	addResultLine(i18n("Sample 1"), col1->name());
 	addResultLine(i18n("Sample 2"), col2->name());
@@ -315,11 +321,11 @@ void HypothesisTest::performTwoSampleTTest(bool paired) {
 	addResultLine(i18n("p-Value"), pValue);
 
 	int degreesOfFreedom;
-	if (paired) {
+	if (paired)
 		degreesOfFreedom = n1 - 1; // n-1 for paired
-	} else {
+	else
 		degreesOfFreedom = n1 + n2 - 2; // n1+n2-2 for independent
-	}
+
 	addResultLine(i18n("Degrees of Freedom"), degreesOfFreedom);
 
 	// conclusion

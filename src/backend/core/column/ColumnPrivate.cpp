@@ -3331,10 +3331,9 @@ void ColumnPrivate::calculateStatistics() {
 	rowData.reserve(rowValuesSize);
 
 	for (int row = 0; row < rowValuesSize; ++row) {
-		if (!q->isValid(row) || q->isMasked(row))
-			continue;
-
 		double val = valueAt(row);
+		if (!std::isfinite(val) || q->isMasked(row))
+			continue;
 
 		if (val < statistics.minimum)
 			statistics.minimum = val;
@@ -3487,7 +3486,7 @@ void ColumnPrivate::calculateTextStatistics() {
 
 	int valid = 0;
 	for (int row = 0; row < rowCount(); ++row) {
-		if (!q->isValid(row) || q->isMasked(row))
+		if (q->isMasked(row))
 			continue;
 
 		++valid;
@@ -3504,7 +3503,7 @@ void ColumnPrivate::calculateDateTimeStatistics() {
 
 	int valid = 0;
 	for (int row = 0; row < rowCount(); ++row) {
-		if (!q->isValid(row) || q->isMasked(row))
+		if (q->isMasked(row))
 			continue;
 
 		const auto& value = dateTimeAt(row);

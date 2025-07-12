@@ -79,12 +79,10 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	CONDITIONAL_LOCK_RETURN;
 
 	// disconnect all connections to the previous test
-	disconnect(m_sbSignificanceLevelAspectConn);
-	disconnect(m_sbTestMeanAspectConn);
-	disconnect(m_rbNullTwoTailedAspectConn);
-	disconnect(m_rbNullOneTailedLeftAspectConn);
-	disconnect(m_rbNullOneTailedRightAspectConn);
-	disconnect(m_cbTestAspectConn);
+	for (auto& conn : m_aspectConnections)
+		disconnect(conn);
+
+	m_aspectConnections.clear();
 
 	m_test = test;
 	setAspects(QList<AbstractAspect*>{m_test});
@@ -134,21 +132,21 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 		testChanged(); // manually trigger testChanged()
 
 	// update the aspect properties when the ui properties change
-	m_sbSignificanceLevelAspectConn = connect(ui.sbSignificanceLevel, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setSignificanceLevel);
-	m_sbTestMeanAspectConn = connect(ui.sbTestMean, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setTestMean);
-	m_rbNullTwoTailedAspectConn = connect(ui.rbNullTwoTailed, &QRadioButton::toggled, [this](bool checked) {
+	m_aspectConnections << connect(ui.sbSignificanceLevel, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setSignificanceLevel);
+	m_aspectConnections << connect(ui.sbTestMean, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setTestMean);
+	m_aspectConnections << connect(ui.rbNullTwoTailed, &QRadioButton::toggled, [this](bool checked) {
 		if (checked)
 			m_test->setTail(nsl_stats_tail_type_two);
 	});
-	m_rbNullOneTailedLeftAspectConn = connect(ui.rbNullOneTailedLeft, &QRadioButton::toggled, [this](bool checked) {
+	m_aspectConnections << connect(ui.rbNullOneTailedLeft, &QRadioButton::toggled, [this](bool checked) {
 		if (checked)
 			m_test->setTail(nsl_stats_tail_type_positive);
 	});
-	m_rbNullOneTailedRightAspectConn = connect(ui.rbNullOneTailedRight, &QRadioButton::toggled, [this](bool checked) {
+	m_aspectConnections << connect(ui.rbNullOneTailedRight, &QRadioButton::toggled, [this](bool checked) {
 		if (checked)
 			m_test->setTail(nsl_stats_tail_type_negative);
 	});
-	m_cbTestAspectConn = connect(ui.cbTest, &QComboBox::currentIndexChanged, [this] {
+	m_aspectConnections << connect(ui.cbTest, &QComboBox::currentIndexChanged, [this] {
 		const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
 		m_test->setTest(test);
 	});

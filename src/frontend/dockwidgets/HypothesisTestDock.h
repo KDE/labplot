@@ -34,12 +34,7 @@ private:
 
 	HypothesisTest* m_test{nullptr};
 
-	QMetaObject::Connection m_rbNullTwoTailedAspectConn;
-	QMetaObject::Connection m_rbNullOneTailedLeftAspectConn;
-	QMetaObject::Connection m_rbNullOneTailedRightAspectConn;
-	QMetaObject::Connection m_cbTestAspectConn;
-	QMetaObject::Connection m_sbSignificanceLevelAspectConn;
-	QMetaObject::Connection m_sbTestMeanAspectConn;
+	QVector<QMetaObject::Connection> m_aspectConnections;
 
 	void hideControls();
 	void addVariable();
