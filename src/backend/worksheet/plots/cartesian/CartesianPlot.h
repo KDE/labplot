@@ -116,9 +116,9 @@ public:
 	bool isSelected() const;
 
 	void addLegend(CartesianPlotLegend*);
-	int curveCount();
-	const XYCurve* getCurve(int index);
-	double cursorPos(int cursorNumber);
+	int curveCount() const;
+	const XYCurve* getCurve(int index) const;
+	double cursorPos(int cursorNumber) const;
 	int curveChildIndex(const WorksheetElement*) const;
 
 	void save(QXmlStreamWriter*) const override;

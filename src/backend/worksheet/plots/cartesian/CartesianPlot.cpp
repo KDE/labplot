@@ -2321,7 +2321,7 @@ void CartesianPlot::addReferenceRange() {
 	range->retransform();
 }
 
-int CartesianPlot::curveCount() {
+int CartesianPlot::curveCount() const {
 	return children<XYCurve>().size();
 }
 
@@ -2329,11 +2329,11 @@ int CartesianPlot::curveTotalCount() const {
 	return children<Plot>().size();
 }
 
-const XYCurve* CartesianPlot::getCurve(int index) {
+const XYCurve* CartesianPlot::getCurve(int index) const {
 	return children<XYCurve>().at(index);
 }
 
-double CartesianPlot::cursorPos(int cursorNumber) {
+double CartesianPlot::cursorPos(int cursorNumber) const {
 	Q_D(const CartesianPlot);
 	return (cursorNumber == 0 ? d->cursor0Pos.x() : d->cursor1Pos.x());
 }
