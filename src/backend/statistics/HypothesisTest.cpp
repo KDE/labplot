@@ -10,22 +10,21 @@
 #include "HypothesisTest.h"
 #include "backend/core/column/Column.h"
 
-#include <cmath>
-#include <limits>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <QLocale>
+#include <cmath>
+#include <limits>
 
 /*!
  * \brief This class implements various statistical hypothesis tests.
  */
 HypothesisTest::HypothesisTest(const QString& name)
 	: GeneralTest(name, AspectType::HypothesisTest) {
-	
 	KConfig config;
 	KConfigGroup group = config.group(QStringLiteral("HypothesisTest"));
-    int lastUsedTest = group.readEntry(QStringLiteral("LastUsedTest"), 0);
+	int lastUsedTest = group.readEntry(QStringLiteral("LastUsedTest"), 0);
 
 	setTest(static_cast<HypothesisTest::Test>(lastUsedTest));
 }
@@ -33,7 +32,7 @@ HypothesisTest::HypothesisTest(const QString& name)
 HypothesisTest::~HypothesisTest() {
 	KConfig config;
 	KConfigGroup group = config.group(QStringLiteral("HypothesisTest"));
-    group.writeEntry(QStringLiteral("LastUsedTest"), static_cast<int>(m_test));
+	group.writeEntry(QStringLiteral("LastUsedTest"), static_cast<int>(m_test));
 }
 
 void HypothesisTest::setTestMean(double mean) {
@@ -63,14 +62,14 @@ HypothesisTest::NullHypothesisType HypothesisTest::nullHypothesis() const {
 }
 
 nsl_stats_tail_type HypothesisTest::tail() const {
-    switch (m_nullHypothesisType) {
-    case HypothesisTest::NullHypothesisType::NullEquality:
-		return nsl_stats_tail_type_two;      // μ = μ₀
-    case HypothesisTest::NullHypothesisType::NullLessEqual:
+	switch (m_nullHypothesisType) {
+	case HypothesisTest::NullHypothesisType::NullEquality:
+		return nsl_stats_tail_type_two; // μ = μ₀
+	case HypothesisTest::NullHypothesisType::NullLessEqual:
 		return nsl_stats_tail_type_positive; // μ ≤ μ₀
-    case HypothesisTest::NullHypothesisType::NullGreaterEqual:
+	case HypothesisTest::NullHypothesisType::NullGreaterEqual:
 		return nsl_stats_tail_type_negative; // μ ≥ μ₀
-    }
+	}
 
 	Q_ASSERT(false);
 }
@@ -384,12 +383,11 @@ void HypothesisTest::performTwoSampleTTest(bool paired) {
 	addResultSection(i18n("Statistical Conclusion"));
 	if (!std::isnan(pValue)) {
 		if (pValue < m_significanceLevel)
-			addResultLine(i18n("At the significance level %1, the population means are significantly different. Reject the null Hypothesis",
-								m_significanceLevel));
-		else
 			addResultLine(
-				i18n("At the significance level %1, the population means are not significantly different. Fail to reject the null Hypothesis",
-						m_significanceLevel));
+				i18n("At the significance level %1, the population means are significantly different. Reject the null Hypothesis", m_significanceLevel));
+		else
+			addResultLine(i18n("At the significance level %1, the population means are not significantly different. Fail to reject the null Hypothesis",
+							   m_significanceLevel));
 	} else
 		addResultLine(i18n("Test result not available"));
 }
