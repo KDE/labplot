@@ -53,26 +53,12 @@ double HypothesisTest::significanceLevel() const {
 	return m_significanceLevel;
 }
 
-void HypothesisTest::setNullHypothesis(NullHypothesisType type) {
-	m_nullHypothesisType = type;
-}
-
-HypothesisTest::NullHypothesisType HypothesisTest::nullHypothesis() const {
-	return m_nullHypothesisType;
+void HypothesisTest::setTail(nsl_stats_tail_type type) {
+	m_tail = type;
 }
 
 nsl_stats_tail_type HypothesisTest::tail() const {
-	switch (m_nullHypothesisType) {
-	case HypothesisTest::NullHypothesisType::NullEquality:
-		return nsl_stats_tail_type_two; // μ = μ₀
-	case HypothesisTest::NullHypothesisType::NullLessEqual:
-		return nsl_stats_tail_type_positive; // μ ≤ μ₀
-	case HypothesisTest::NullHypothesisType::NullGreaterEqual:
-		return nsl_stats_tail_type_negative; // μ ≥ μ₀
-	}
-
-	Q_ASSERT(false);
-	return nsl_stats_tail_type_two;
+	return m_tail;
 }
 
 void HypothesisTest::setColumns(const QVector<Column*>& cols) {
@@ -202,52 +188,26 @@ void HypothesisTest::performOneSampleTTest() {
 		}
 
 		tValue = nsl_stats_one_sample_t(sample.constData(), static_cast<size_t>(n), m_testMean);
-		pValue = nsl_stats_one_sample_t_p(sample.constData(), static_cast<size_t>(n), m_testMean, tail());
+		pValue = nsl_stats_one_sample_t_p(sample.constData(), static_cast<size_t>(n), m_testMean, m_tail);
 	}
-
-	// show the results
-	bool outputTitle = true;
-	bool outputTestSetup = true;
-	bool outputDeccriptiveStatistics = true;
-	bool outputConclusion = true;
 
 	// title
-	if (outputTitle)
-		addResultTitle(i18n("One-Sample t-Test"));
+	addResultTitle(i18n("One-Sample t-Test"));
 
 	// test setup
-	if (outputTestSetup) {
-		addResultLine(i18n("Sample"), col->name());
-		addResultLine(i18n("Test Mean"), QStringLiteral("µ₀ = ") + QLocale().toString(m_testMean));
+	addResultLine(i18n("Sample"), col->name());
+	addResultLine(i18n("Test Mean"), QStringLiteral("µ₀ = ") + QLocale().toString(m_testMean));
 
-		QString nullHypothesisSign;
-		QString alternateHypothesisSign;
-		switch (tail()) {
-		case nsl_stats_tail_type_two:
-			nullHypothesisSign = QString::fromUtf8("=");
-			alternateHypothesisSign = QString::fromUtf8("≠");
-			break;
-		case nsl_stats_tail_type_negative:
-			nullHypothesisSign = QString::fromUtf8("≥");
-			alternateHypothesisSign = QString::fromUtf8("&lt;");
-			break;
-		case nsl_stats_tail_type_positive:
-			nullHypothesisSign = QString::fromUtf8("≤");
-			alternateHypothesisSign = QString::fromUtf8(">");
-			break;
-		}
+	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(m_test, m_tail);
 
-		addResultLine(i18n("Null Hypothesis"), QStringLiteral("µ ") + nullHypothesisSign + QStringLiteral(" µ₀"));
-		addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("µ ") + alternateHypothesisSign + QStringLiteral(" µ₀"));
-	}
+	addResultLine(i18n("Null Hypothesis"), nullHypothesisText);
+	addResultLine(i18n("Alternate Hypothesis"), alternateHypothesisText);
 
 	// descriptive statistics
-	if (outputDeccriptiveStatistics) {
-		addResultSection(i18n("Descriptive Statistics"));
-		addResultLine(i18n("Size"), statistics.size);
-		addResultLine(i18n("Mean"), statistics.arithmeticMean);
-		addResultLine(i18n("Standard Deviation"), statistics.standardDeviation);
-	}
+	addResultSection(i18n("Descriptive Statistics"));
+	addResultLine(i18n("Size"), statistics.size);
+	addResultLine(i18n("Mean"), statistics.arithmeticMean);
+	addResultLine(i18n("Standard Deviation"), statistics.standardDeviation);
 
 	// test statistics
 	addResultSection(i18n("t-Test Statistics"));
@@ -257,21 +217,19 @@ void HypothesisTest::performOneSampleTTest() {
 	addResultLine(i18n("Degrees of Freedom"), n - 1);
 
 	// conclusion
-	if (outputConclusion) {
-		addResultSection(i18n("Statistical Conclusion"));
-		if (!std::isnan(pValue)) {
-			if (pValue < m_significanceLevel)
-				addResultLine(i18n("At the significance level %1, the population mean is significantly different from %2. Reject the null Hypothesis",
-								   m_significanceLevel,
-								   m_testMean));
-			else
-				addResultLine(
-					i18n("At the significance level %1, the population mean is not significantly different from %2. Fail to reject the null Hypothesis",
-						 m_significanceLevel,
-						 m_testMean));
-		} else
-			addResultLine(i18n("Test result not available"));
-	}
+	addResultSection(i18n("Statistical Conclusion"));
+	if (!std::isnan(pValue)) {
+		if (pValue <= m_significanceLevel)
+			addResultLine(i18n("At the significance level %1, the population mean is significantly different from %2. Reject the null Hypothesis",
+								m_significanceLevel,
+								m_testMean));
+		else
+			addResultLine(
+				i18n("At the significance level %1, the population mean is not significantly different from %2. Fail to reject the null Hypothesis",
+						m_significanceLevel,
+						m_testMean));
+	} else
+		addResultLine(i18n("Test result not available"));
 }
 
 void HypothesisTest::performTwoSampleTTest(bool paired) {
@@ -323,10 +281,10 @@ void HypothesisTest::performTwoSampleTTest(bool paired) {
 			}
 
 			tValue = nsl_stats_one_sample_t(differences.constData(), static_cast<size_t>(n1), 0.0);
-			pValue = nsl_stats_one_sample_t_p(differences.constData(), static_cast<size_t>(n1), 0.0, tail());
+			pValue = nsl_stats_one_sample_t_p(differences.constData(), static_cast<size_t>(n1), 0.0, m_tail);
 		} else {
 			tValue = nsl_stats_independent_t(sample1.constData(), static_cast<size_t>(n1), sample2.constData(), static_cast<size_t>(n2));
-			pValue = nsl_stats_independent_t_p(sample1.constData(), static_cast<size_t>(n1), sample2.constData(), static_cast<size_t>(n2), tail());
+			pValue = nsl_stats_independent_t_p(sample1.constData(), static_cast<size_t>(n1), sample2.constData(), static_cast<size_t>(n2), m_tail);
 		}
 	}
 
@@ -339,25 +297,10 @@ void HypothesisTest::performTwoSampleTTest(bool paired) {
 	addResultLine(i18n("Sample 1"), col1->name());
 	addResultLine(i18n("Sample 2"), col2->name());
 
-	QString nullHypothesisSign;
-	QString alternateHypothesisSign;
-	switch (tail()) {
-	case nsl_stats_tail_type_two:
-		nullHypothesisSign = QString::fromUtf8("=");
-		alternateHypothesisSign = QString::fromUtf8("≠");
-		break;
-	case nsl_stats_tail_type_negative:
-		nullHypothesisSign = QString::fromUtf8("≥");
-		alternateHypothesisSign = QString::fromUtf8("&lt;");
-		break;
-	case nsl_stats_tail_type_positive:
-		nullHypothesisSign = QString::fromUtf8("≤");
-		alternateHypothesisSign = QString::fromUtf8(">");
-		break;
-	}
+	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(m_test, m_tail);
 
-	addResultLine(i18n("Null Hypothesis"), QStringLiteral("µ<sub>1</sub> ") + nullHypothesisSign + QStringLiteral(" µ<sub>2</sub>"));
-	addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("µ<sub>1</sub> ") + alternateHypothesisSign + QStringLiteral(" µ<sub>2</sub>"));
+	addResultLine(i18n("Null Hypothesis"), nullHypothesisText);
+	addResultLine(i18n("Alternate Hypothesis"), alternateHypothesisText);
 
 	addResultSection(i18n("Descriptive Statistics"));
 	addResultLine(i18n("Size 1"), n1);
@@ -383,7 +326,7 @@ void HypothesisTest::performTwoSampleTTest(bool paired) {
 	// conclusion
 	addResultSection(i18n("Statistical Conclusion"));
 	if (!std::isnan(pValue)) {
-		if (pValue < m_significanceLevel)
+		if (pValue <= m_significanceLevel)
 			addResultLine(
 				i18n("At the significance level %1, the population means are significantly different. Reject the null Hypothesis", m_significanceLevel));
 		else
@@ -429,4 +372,55 @@ void HypothesisTest::setTest(HypothesisTest::Test test) {
 
 HypothesisTest::Test HypothesisTest::test() const {
 	return m_test;
+}
+
+QPair<QString, QString> HypothesisTest::hypothesisSigns(nsl_stats_tail_type tail) {
+	QString nullHypothesisSign;
+	QString alternateHypothesisSign;
+
+	switch (tail) {
+	case nsl_stats_tail_type_two:
+		nullHypothesisSign = QStringLiteral("=");
+		alternateHypothesisSign = QStringLiteral("≠");
+		break;
+	case nsl_stats_tail_type_negative:
+		nullHypothesisSign = QStringLiteral("≥");
+		alternateHypothesisSign = QStringLiteral("&lt;");
+		break;
+	case nsl_stats_tail_type_positive:
+		nullHypothesisSign = QStringLiteral("≤");
+		alternateHypothesisSign = QStringLiteral(">");
+		break;
+	}
+
+	return {nullHypothesisSign, alternateHypothesisSign};
+}
+
+QPair<QString, QString> HypothesisTest::hypothesisSymbols(HypothesisTest::Test test) {
+	QString lHSymbol;
+	QString rHSymbol;
+
+	switch (test) {
+	case HypothesisTest::Test::t_test_one_sample:
+		lHSymbol = QStringLiteral("µ");
+		rHSymbol = QStringLiteral("µ₀");
+		break;
+	case HypothesisTest::Test::t_test_two_sample:
+		lHSymbol = QStringLiteral("µ<sub>1</sub>");
+		rHSymbol = QStringLiteral("µ<sub>2</sub>");
+		break;
+	case HypothesisTest::Test::t_test_two_sample_paired:
+		lHSymbol = QStringLiteral("µ<sub>D</sub>");
+		rHSymbol = QStringLiteral("0");
+		break;
+	}
+
+	return {lHSymbol, rHSymbol};
+}
+
+QPair<QString, QString> HypothesisTest::hypothesisText(HypothesisTest::Test test, nsl_stats_tail_type tail) {
+	const auto [nullHypothesisSign, alternateHypothesisSign] = HypothesisTest::hypothesisSigns(tail);
+	const auto [lhs, rhs] = HypothesisTest::hypothesisSymbols(test);
+
+	return {lhs + QChar(QChar::Space) + nullHypothesisSign + QChar(QChar::Space) + rhs, lhs + QChar(QChar::Space) + alternateHypothesisSign + QChar(QChar::Space) + rhs};
 }

@@ -111,14 +111,14 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	ui.sbSignificanceLevel->setValue(m_test->significanceLevel());
 
 	// restore null hypothesis
-	switch (m_test->nullHypothesis()) {
-	case HypothesisTest::NullHypothesisType::NullEquality:
+	switch (m_test->tail()) {
+	case nsl_stats_tail_type_two:
 		ui.rbNullTwoTailed->setChecked(true);
 		break;
-	case HypothesisTest::NullHypothesisType::NullLessEqual:
+	case nsl_stats_tail_type_positive:
 		ui.rbNullOneTailedLeft->setChecked(true);
 		break;
-	case HypothesisTest::NullHypothesisType::NullGreaterEqual:
+	case nsl_stats_tail_type_negative:
 		ui.rbNullOneTailedRight->setChecked(true);
 		break;
 	}
@@ -138,15 +138,15 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	m_sbTestMeanAspectConn = connect(ui.sbTestMean, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setTestMean);
 	m_rbNullTwoTailedAspectConn = connect(ui.rbNullTwoTailed, &QRadioButton::toggled, [this](bool checked) {
 		if (checked)
-			m_test->setNullHypothesis(HypothesisTest::NullHypothesisType::NullEquality);
+			m_test->setTail(nsl_stats_tail_type_two);
 	});
 	m_rbNullOneTailedLeftAspectConn = connect(ui.rbNullOneTailedLeft, &QRadioButton::toggled, [this](bool checked) {
 		if (checked)
-			m_test->setNullHypothesis(HypothesisTest::NullHypothesisType::NullLessEqual);
+			m_test->setTail(nsl_stats_tail_type_positive);
 	});
 	m_rbNullOneTailedRightAspectConn = connect(ui.rbNullOneTailedRight, &QRadioButton::toggled, [this](bool checked) {
 		if (checked)
-			m_test->setNullHypothesis(HypothesisTest::NullHypothesisType::NullGreaterEqual);
+			m_test->setTail(nsl_stats_tail_type_negative);
 	});
 	m_cbTestAspectConn = connect(ui.cbTest, &QComboBox::currentIndexChanged, [this] {
 		const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
@@ -159,27 +159,16 @@ void HypothesisTestDock::retranslateUi() {
 }
 
 void HypothesisTestDock::setHypothesisText(HypothesisTest::Test test) {
-	QString a;
-	QString b;
+	const auto [nullTwoTailedHypText, alternateTwoTailedHypText] = HypothesisTest::hypothesisText(test, nsl_stats_tail_type_two);
+	const auto [nullOneTailedLeftHypText, alternateOneTailedLeftHypText] = HypothesisTest::hypothesisText(test, nsl_stats_tail_type_positive);
+	const auto [nullOneTailedRightHypText, alternateOneTailedRightHypText] = HypothesisTest::hypothesisText(test, nsl_stats_tail_type_negative);
 
-	switch (test) {
-	case HypothesisTest::Test::t_test_one_sample:
-		a = UTF8_QSTRING("μ");
-		b = UTF8_QSTRING("μₒ");
-		break;
-	case HypothesisTest::Test::t_test_two_sample:
-	case HypothesisTest::Test::t_test_two_sample_paired:
-		a = QStringLiteral("µ<sub>1</sub>");
-		b = QStringLiteral("µ<sub>2</sub>");
-		break;
-	}
-
-	ui.lNullOneTailedLeft->setText(a + QStringLiteral(" ≤ ") + b);
-	ui.lNullOneTailedRight->setText(a + QStringLiteral(" ≥ ") + b);
-	ui.lNullTwoTailed->setText(a + QStringLiteral(" = ") + b);
-	ui.lAlternateOneTailedLeft->setText(a + QStringLiteral(" > ") + b);
-	ui.lAlternateOneTailedRight->setText(a + QStringLiteral(" &lt; ") + b);
-	ui.lAlternateTwoTailed->setText(a + QStringLiteral(" ≠ ") + b);
+	ui.lNullTwoTailed->setText(nullTwoTailedHypText);
+	ui.lAlternateTwoTailed->setText(alternateTwoTailedHypText);
+	ui.lNullOneTailedLeft->setText(nullOneTailedLeftHypText);
+	ui.lAlternateOneTailedLeft->setText(alternateOneTailedLeftHypText);
+	ui.lNullOneTailedRight->setText(nullOneTailedRightHypText);
+	ui.lAlternateOneTailedRight->setText(alternateOneTailedRightHypText);
 }
 
 void HypothesisTestDock::ensureVariableCount(HypothesisTest::Test test) {

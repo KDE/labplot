@@ -29,11 +29,6 @@ public:
 	~HypothesisTest() override;
 
 	enum class Test { t_test_one_sample, t_test_two_sample, t_test_two_sample_paired, one_way_anova, mann_whitney_u_test, kruskal_wallis_test, log_rank_test };
-	enum class NullHypothesisType {
-		NullEquality, // H0: μ = μ₀
-		NullLessEqual, // H0: μ ≤ μ₀
-		NullGreaterEqual // H0: μ ≥ μ₀
-	};
 
 	void setTestMean(double mean);
 	double testMean() const;
@@ -41,8 +36,8 @@ public:
 	void setSignificanceLevel(double alpha);
 	double significanceLevel() const;
 
-	void setNullHypothesis(NullHypothesisType);
-	NullHypothesisType nullHypothesis() const;
+	void setTail(nsl_stats_tail_type);
+	nsl_stats_tail_type tail() const;
 
 	void setTest(HypothesisTest::Test);
 	HypothesisTest::Test test() const;
@@ -53,6 +48,9 @@ public:
 	void setColumns(const QVector<Column*>&) override;
 
 	static QPair<int, int> variableCount(HypothesisTest::Test);
+	static QPair<QString, QString> hypothesisSigns(nsl_stats_tail_type);
+	static QPair<QString, QString> hypothesisSymbols(HypothesisTest::Test);
+	static QPair<QString, QString> hypothesisText(HypothesisTest::Test, nsl_stats_tail_type);
 
 private:
 	void performOneSampleTTest();
@@ -62,16 +60,10 @@ private:
 	void performKruskalWallisTest();
 	void performLogRankTest();
 
-	nsl_stats_tail_type tail() const;
-
-	// TODO: move to a private class
 	Test m_test{Test::t_test_one_sample};
-	NullHypothesisType m_nullHypothesisType{NullHypothesisType::NullEquality};
 	double m_testMean{0.0};
 	double m_significanceLevel{0.05};
 	nsl_stats_tail_type m_tail{nsl_stats_tail_type_two};
-	QList<double> m_pValue;
-	QList<double> m_statisticValue;
 };
 
 #endif // HYPOTHESISTEST_H
