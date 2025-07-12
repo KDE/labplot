@@ -7241,22 +7241,19 @@ msgid "A script is already running."
 msgstr ""
 
 #: src/backend/script/ScriptRuntime.cpp:92
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Název"
 
 #: src/backend/script/ScriptRuntime.cpp:94
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "Hodnota"
 
 #: src/backend/script/ScriptRuntime.cpp:96
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr "Typ"
@@ -14032,16 +14029,14 @@ msgid "Match Complete Word"
 msgstr "Porovnávat celé slovo"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:53
-#, fuzzy, kde-format
-#| msgid "Copy Data"
+#, kde-format
 msgid "Copy Name"
-msgstr "Kopírovat data"
+msgstr "Kopírovat název"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:54
-#, fuzzy, kde-format
-#| msgid "Const Values"
+#, kde-format
 msgid "Copy Value"
-msgstr "Hodnoty konstant"
+msgstr "Kopírovat hodnotu"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:55
 #, kde-format
