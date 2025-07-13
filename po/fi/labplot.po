@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-08 00:38+0000\n"
+"POT-Creation-Date: 2025-07-13 00:39+0000\n"
 "PO-Revision-Date: 2024-11-15 10:08+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -9327,14 +9327,14 @@ msgid "%1: Cursor1 enable"
 msgstr "Arvot"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1782
-#: src/backend/worksheet/Worksheet.cpp:847
+#: src/backend/worksheet/Worksheet.cpp:851
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: load theme %2"
 msgstr "%1: lisää %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1784
-#: src/backend/worksheet/Worksheet.cpp:849
+#: src/backend/worksheet/Worksheet.cpp:853
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: load default theme"
@@ -9342,7 +9342,7 @@ msgstr "%1: lisää %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1786
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5637
-#: src/backend/worksheet/Worksheet.cpp:851
+#: src/backend/worksheet/Worksheet.cpp:855
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
 msgid "%1: set theme"
@@ -9585,50 +9585,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: aseta reunan kulman säde"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
-#: src/backend/worksheet/Worksheet.cpp:719
-#: src/backend/worksheet/Worksheet.cpp:720
+#: src/backend/worksheet/Worksheet.cpp:723
+#: src/backend/worksheet/Worksheet.cpp:724
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: aseta asettelun yläreunus"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:251
-#: src/backend/worksheet/Worksheet.cpp:729
-#: src/backend/worksheet/Worksheet.cpp:730
+#: src/backend/worksheet/Worksheet.cpp:733
+#: src/backend/worksheet/Worksheet.cpp:734
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: aseta asettelu alareunus"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:258
-#: src/backend/worksheet/Worksheet.cpp:739
-#: src/backend/worksheet/Worksheet.cpp:740
+#: src/backend/worksheet/Worksheet.cpp:743
+#: src/backend/worksheet/Worksheet.cpp:744
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: aseta asettelu vasen reunus"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:265
-#: src/backend/worksheet/Worksheet.cpp:749
-#: src/backend/worksheet/Worksheet.cpp:750
+#: src/backend/worksheet/Worksheet.cpp:753
+#: src/backend/worksheet/Worksheet.cpp:754
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: aseta asettelu oikea reunus"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:272
-#: src/backend/worksheet/Worksheet.cpp:759
-#: src/backend/worksheet/Worksheet.cpp:760
+#: src/backend/worksheet/Worksheet.cpp:763
+#: src/backend/worksheet/Worksheet.cpp:764
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: aseta asettelun pystyvälistys"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:279
-#: src/backend/worksheet/Worksheet.cpp:769
-#: src/backend/worksheet/Worksheet.cpp:770
+#: src/backend/worksheet/Worksheet.cpp:773
+#: src/backend/worksheet/Worksheet.cpp:774
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: aseta asettelun vaakavälistys"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:286
-#: src/backend/worksheet/Worksheet.cpp:789
-#: src/backend/worksheet/Worksheet.cpp:790
+#: src/backend/worksheet/Worksheet.cpp:793
+#: src/backend/worksheet/Worksheet.cpp:794
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: aseta asettelun sarakemäärä"
@@ -10833,42 +10833,42 @@ msgstr "%1: aseta TeX-pääfontti"
 msgid "%1: set border shape"
 msgstr "%1: aseta reunan tyyli"
 
-#: src/backend/worksheet/Worksheet.cpp:242
+#: src/backend/worksheet/Worksheet.cpp:246
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Tulosta työvihko"
 
-#: src/backend/worksheet/Worksheet.cpp:689
+#: src/backend/worksheet/Worksheet.cpp:693
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: muuta koon tyyppiä"
 
-#: src/backend/worksheet/Worksheet.cpp:701
+#: src/backend/worksheet/Worksheet.cpp:705
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr ""
 
-#: src/backend/worksheet/Worksheet.cpp:709
-#: src/backend/worksheet/Worksheet.cpp:710
+#: src/backend/worksheet/Worksheet.cpp:713
+#: src/backend/worksheet/Worksheet.cpp:714
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: aseta asettelu"
 
-#: src/backend/worksheet/Worksheet.cpp:779
-#: src/backend/worksheet/Worksheet.cpp:780
+#: src/backend/worksheet/Worksheet.cpp:783
+#: src/backend/worksheet/Worksheet.cpp:784
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: aseta asettelun rivimäärä"
 
-#: src/backend/worksheet/Worksheet.cpp:820
-#: src/backend/worksheet/Worksheet.cpp:821
+#: src/backend/worksheet/Worksheet.cpp:824
+#: src/backend/worksheet/Worksheet.cpp:825
 #: src/frontend/dockwidgets/WorksheetDock.cpp:376
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: aseta sivukoko"
 
-#: src/backend/worksheet/Worksheet.cpp:1572
+#: src/backend/worksheet/Worksheet.cpp:1527
 #, kde-format
 msgid "Curves"
 msgstr "Käyrät"
