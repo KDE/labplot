@@ -22,17 +22,10 @@
  */
 HypothesisTest::HypothesisTest(const QString& name)
 	: GeneralTest(name, AspectType::HypothesisTest) {
-	KConfig config;
-	KConfigGroup group = config.group(QStringLiteral("HypothesisTest"));
-	int lastUsedTest = group.readEntry(QStringLiteral("LastUsedTest"), 0);
-
-	setTest(static_cast<HypothesisTest::Test>(lastUsedTest));
+	setTest(m_test);
 }
 
 HypothesisTest::~HypothesisTest() {
-	KConfig config;
-	KConfigGroup group = config.group(QStringLiteral("HypothesisTest"));
-	group.writeEntry(QStringLiteral("LastUsedTest"), static_cast<int>(m_test));
 }
 
 void HypothesisTest::setTestMean(double mean) {
