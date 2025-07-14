@@ -143,8 +143,6 @@ public Q_SLOTS:
 	void updateCurveBackground(QColor, const QString& curveName);
 	void updateCompleteCursorTreeModel();
 	void cursorPosChanged(int cursorNumber, double xPos);
-	void curveAdded(const XYCurve* curve);
-	void curveRemoved(const XYCurve* curve);
 	void curveDataChanged(const XYCurve* curve);
 
 private:
