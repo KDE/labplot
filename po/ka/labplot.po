@@ -2300,7 +2300,7 @@ msgstr "ფაილის დამუშავება ჩავარდა.
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:490
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
-msgstr "ატრიბუტი '%1' აკლია ან ცარიელია. გამოიყენება ნაგულისხმები მნისვნელობა"
+msgstr "ატრიბუტი '%1' აკლია ან ცარიელია. გამოიყენება ნაგულისხმევი მნისვნელობა"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:149
 #, kde-format
@@ -16397,7 +16397,7 @@ msgstr "ხაზვის ადგილის ნიმუშები"
 #: src/frontend/widgets/ThemesWidget.cpp:71
 #, kde-format
 msgid "Default"
-msgstr "ნაგულისხმები"
+msgstr "ნაგულისხმევი"
 
 #: src/frontend/PlotTemplateDialog.cpp:45
 #, kde-format
@@ -18775,12 +18775,12 @@ msgstr "მიმდინარე თვისებების ნიმუ�
 #: src/frontend/TemplateHandler.cpp:185
 #, kde-format
 msgid "Save Default"
-msgstr "ნაგულისხმების შენახვა"
+msgstr "ნაგულისხმევის შენახვა"
 
 #: src/frontend/TemplateHandler.cpp:186
 #, kde-format
 msgid "Save current properties as default"
-msgstr "მიმდინარე თვსებების ნაგულისხმებად შენახვა"
+msgstr "მიმდინარე თვსებების ნაგულისხმევად შენახვა"
 
 #: src/frontend/TemplateHandler.cpp:199
 #, kde-format
