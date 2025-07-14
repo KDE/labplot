@@ -316,8 +316,7 @@ void Project::setSaveCalculations(bool save) {
 
 void Project::setFileCompression(bool compression) {
 	Q_D(Project);
-	// No Undocommand, because we don't have this on the stack because it could be changed
-	// easily unintentionally then
+	// No Undo command, because we don't have this on the stack since it could be changed easily unintentionally
 	d->fileCompression = compression;
 	setProjectChanged(true);
 }

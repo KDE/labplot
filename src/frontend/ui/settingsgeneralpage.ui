@@ -94,7 +94,7 @@
    <item row="19" column="2">
     <widget class="QCheckBox" name="chkCompatible">
      <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save projects in a uncompressed format xml format that can be opened in LabPlot versions older than 2.9 and are useful for version controlled projects.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save projects in a uncompressed xml format that can be opened in LabPlot versions older than 2.9 and are useful for version controlled projects&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="text">
       <string>Save in uncompressed format</string>
