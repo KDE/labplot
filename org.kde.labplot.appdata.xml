@@ -34,6 +34,7 @@
   <summary xml:lang="ca-valencia">Visualitza i analitza les dades</summary>
   <summary xml:lang="de">Daten visualisieren and analysieren</summary>
   <summary xml:lang="es">Visualizar y analizar datos</summary>
+  <summary xml:lang="eu">Datuak irudikatu eta analizatu</summary>
   <summary xml:lang="fr">Analyser et afficher des données</summary>
   <summary xml:lang="gl">Ver e analizar datos</summary>
   <summary xml:lang="it">Visualizza e analizza i dati</summary>
@@ -52,7 +53,7 @@
     <p xml:lang="ca-valencia">LabPlot és un programari de visualització i anàlisi de dades LLIURE, de codi obert i multiplataforma, accessible a tothom.</p>
     <p xml:lang="de">LabPlot ist ein FREIE, Open Source und plattformübergreifende Software zur Datenvisualisierung und -analyse, die für jeden verfügbar ist.</p>
     <p xml:lang="es">LabPlot es un software de visualización y análisis de datos LIBRE, de código abierto y multiplataforma, al que todo el mundo puede acceder.</p>
-    <p xml:lang="eu">LabPlot, guztiontzako erabilgarri dagoen datuak irudikatzeko eta aztertzeko software ASKE, sorburu irekiko eta plataforma-anitzeko bat da.</p>
+    <p xml:lang="eu">LabPlot, guztiontzako erabilgarri dagoen datuak irudikatzeko eta analizatzeko software ASKE, sorburu irekiko eta plataforma-anitzeko bat da.</p>
     <p xml:lang="fi">LabPlot on VAPAA, kaikkien käytettävissä oleva, avointa lähdekoodia ja monialustainen tiedon visualisointi- ja analyysiohjelma.</p>
     <p xml:lang="fr">LabPlot est un logiciel d'affichage et d'analyse de données, libre, « Open-source » et multi-plate-forme, accessible à tous.</p>
     <p xml:lang="gl">LabPlot é un programa libre, de código aberto e multiplataforma de visualización e análise de datos, a disposición de calquera.</p>
@@ -72,7 +73,7 @@
     <p xml:lang="ca-valencia">LabPlot proporciona una manera fàcil de crear, gestionar i editar diagrames. Permet produir diagrames a partir de les dades d'un full de càlcul o en les dades importades des de fitxers externs. Els diagrames es poden exportar cap a diversos formats de mapa de píxels i de gràfics vectorials.</p>
     <p xml:lang="de">LabPlot erlaubt es auf einfache Weise Grafiken zu erzeugen, zu verwalten und zu bearbeiten.Grafiken können aus externen Daten oder aus einer Tabelle erzeugt werden.Der Export der Grafiken in verschiedene Pixmap- und Vektorformate ist möglich.</p>
     <p xml:lang="es">LabPlot proporciona un modo fácil de crear, gestionar y editar gráficos. Le permite generar gráficos basados en datos de una hoja de cálculo o en datos importados de archivos externos. Los gráficos se pueden exportar a varios formatos de mapas de bits y de gráficos vectoriales.</p>
-    <p xml:lang="eu">LabPlot-ek grafikoak sortu, kudeatu eta editatzeko era erraz bat eskaintzen du. Grafikoak kalkulu-orrietako datuekin edo kanpoko fitxategietatik inportatutako datuekin sortzeko aukera ematen dizu. Grafikoak hainbat pixel-mapa eta bektore-grafiko formatutara esportatu daitezke.</p>
+    <p xml:lang="eu">LabPlot-ek grafikoak sortzeko, kudeatzeko eta editatzeko era erraz bat eskaintzen du. Grafikoak kalkulu-orri bateko datuekin edo kanpoko fitxategietatik inportatutako datuekin sortzeko aukera ematen dizu. Grafikoak hainbat pixel-mapa eta bektore-grafiko formatutara esportatu daitezke.</p>
     <p xml:lang="fi">LabPlot tarjoaa helpon tavan luoda, hallita ja muokata kaavioita. Voit tuottaa kaavioita laskentataulukon tai muiden ulkoisten tiedostojen datasta. Kaavioita voi viedä eri bittikartta- ja vektorigrafiikkamuotoihin.</p>
     <p xml:lang="fr">LabPlot fournit une moyen facile de créer, gérer et éditer des courbes. Il vous permet de produire des courbes produites à partir de données issues d'un tableur ou d'un fichier externe. Les courbes peuvent être exportées vers plusieurs format d'image matriciels ou vectoriels.</p>
     <p xml:lang="gl">LabPlot fornece unha forma doada de crear, xestionar e editar gráficos. Permítelle producir gráficos baseados en datos dunha folla de cálculo ou datos importados de ficheiros externos. Pode exportar os gráficos en distintos formatos de imaxe, de mapas de píxeles ou vectoriais.</p>
@@ -145,7 +146,7 @@
       <caption xml:lang="ca-valencia">Disposició avançada de diagrames i imatges</caption>
       <caption xml:lang="de">Fortgeschrittenes Layout von Plots und Bildern</caption>
       <caption xml:lang="es">Diseño avanzado de gráficos e imágenes</caption>
-      <caption xml:lang="eu">Grafikoen eta irudien antolamendu aurreratua</caption>
+      <caption xml:lang="eu">Grafikoen eta irudien antolaera aurreratua</caption>
       <caption xml:lang="fi">Kaavioiden ja kuvioiden edistynyt asettelu</caption>
       <caption xml:lang="fr">Mise en forme avancée de tracés et d'images</caption>
       <caption xml:lang="gl">Disposicións avanzadas de gráficos e imaxes.</caption>
@@ -251,7 +252,7 @@
       <caption xml:lang="ca-valencia">Interfície de bloc de notes per a sessions interactives en Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="de">Notebookschnittstelle zu interaktiven Sitzungen in Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="es">Interfaz de bloc de notas para sesiones interactivas en Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
-      <caption xml:lang="eu">Ohar-blokaren interfazea, Maxima, Octave, R, Sage, Scilab, Python, Julia, eta abarrekin saio elkarreragileak egiteko</caption>
+      <caption xml:lang="eu">koadernoaren interfazea, Maxima, Octave, R, Sage, Scilab, Python, Julia, eta abarrekin saio elkarreragileak egiteko</caption>
       <caption xml:lang="fi">Muistiokäyttöliittymä vuorovaikutteisiin istuntoihin Maximassa, Octavessa, R:ssä, Sagessa, Scilabissa, Pythonissa, Juliassa jne.</caption>
       <caption xml:lang="fr">Interface pour ordinateur de type « Notebook » pour des sessions interactives pour Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="gl">Interface de caderno para sesións interactivas en Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
@@ -273,7 +274,7 @@
       <caption xml:lang="cs">Analýza signálu</caption>
       <caption xml:lang="de">Signalanalyse</caption>
       <caption xml:lang="es">Análisis de señales</caption>
-      <caption xml:lang="eu">Seinaleen analisia</caption>
+      <caption xml:lang="eu">Seinale-analisia</caption>
       <caption xml:lang="fi">Signaalianalyysi</caption>
       <caption xml:lang="fr">Analyse de signaux</caption>
       <caption xml:lang="gl">Análise de sinais.</caption>
