@@ -701,6 +701,23 @@ private:
 #define READ_STRING_VALUE(name, var)                                                                                                                           \
 	{ d->var = attribs.value(QLatin1String(name)).toString(); }
 
+#define WRITE_STRING_LIST(name, list)                                                                                                                          \
+	{                                                                                                                                                          \
+		if (!list.isEmpty())                                                                                                                                   \
+			writer->writeAttribute(QLatin1String(name), list.join(QStringLiteral("\n")));                                                                      \
+		else                                                                                                                                                   \
+			writer->writeAttribute(QLatin1String(name), QString());                                                                                            \
+	}
+
+#define READ_STRING_LIST(name, list)                                                                                                                           \
+	{                                                                                                                                                          \
+		str = attribs.value(QLatin1String(name)).toString();                                                                                                   \
+		if (str.isEmpty())                                                                                                                                     \
+			reader->raiseMissingAttributeWarning(QStringLiteral(name));                                                                                        \
+		else                                                                                                                                                   \
+			list = str.split(QStringLiteral("\n"), Qt::SkipEmptyParts);                                                                                        \
+	}
+
 // used in Project::load()
 #define RESTORE_COLUMN_POINTER(obj, col, Col)                                                                                                                  \
 	if (!obj->col##Path().isEmpty()) {                                                                                                                         \

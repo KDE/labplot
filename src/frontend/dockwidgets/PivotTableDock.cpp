@@ -102,21 +102,8 @@ void PivotTableDock::setPivotTable(PivotTable* pivotTable) {
 	model->setSelectableAspects({AspectType::Spreadsheet, AspectType::LiveDataSource});
 	cbSpreadsheet->setModel(model);
 
-	//show the properties
-	ui.cbDataSourceType->setCurrentIndex(m_pivotTable->dataSourceType());
-	cbSpreadsheet->setAspect(m_pivotTable->dataSourceSpreadsheet());
-	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(m_pivotTable->dataSourceConnection()));
-	dataSourceTypeChanged(ui.cbDataSourceType->currentIndex());
-
-	//available dimensions and measures
-	/*
-	ui.lwFields->clear();
-	for (auto dimension : m_pivotTable->dimensions())
-		ui.lwFields->addItem(new QListWidgetItem(QIcon::fromTheme(QLatin1String("draw-text")), dimension));
-
-	for (auto measure : m_pivotTable->measures())
-		ui.lwFields->addItem(new QListWidgetItem(measure));
-	*/
+	// show the properties
+	load();
 
 	//undo functions
 	//TODO:
@@ -264,22 +251,18 @@ void PivotTableDock::dataSourceTypeChanged(int index) {
 }
 
 void PivotTableDock::spreadsheetChanged(const QModelIndex& index) {
-	//clear the previous content shown in the list widgets
-	ui.lwFields->clear();
+	// clear the previous content shown in the list widgets
+	//ui.lwFields->clear();
 	ui.lwColumns->clear();
 	ui.lwRows->clear();
 
-	//show all spreadsheet columns as available dimensions
-	auto* spreadsheet = static_cast<Spreadsheet*>(index.internalPointer());
-	for (const auto* col : spreadsheet->children<Column>()) {
-		auto* item = new QListWidgetItem(col->icon(), col->name());
-		ui.lwFields->addItem(item);
-	}
-
+	// show all spreadsheet columns as available dimensions
 	if (m_initializing)
 		return;
 
+	const auto* spreadsheet = static_cast<Spreadsheet*>(index.internalPointer());
 	m_pivotTable->setDataSourceSpreadsheet(spreadsheet);
+	updateFields();
 }
 
 void PivotTableDock::connectionChanged() {
@@ -380,5 +363,19 @@ void PivotTableDock::tableChanged() {
 //******************** SETTINGS *******************************
 //*************************************************************
 void PivotTableDock::load() {
+	ui.cbDataSourceType->setCurrentIndex(m_pivotTable->dataSourceType());
+	cbSpreadsheet->setAspect(m_pivotTable->dataSourceSpreadsheet());
+	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(m_pivotTable->dataSourceConnection()));
+	dataSourceTypeChanged(ui.cbDataSourceType->currentIndex());
 
+	// available dimensions and measures
+	updateFields();
+
+	ui.lwRows->clear();
+	for (const auto& row : m_pivotTable->rows())
+		ui.lwRows->addItem(new QListWidgetItem(row));
+
+	ui.lwColumns->clear();
+	for (const auto& column : m_pivotTable->columns())
+		ui.lwColumns->addItem(new QListWidgetItem(column));
 }

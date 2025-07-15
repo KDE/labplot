@@ -31,6 +31,7 @@ public:
 
 	BASIC_D_ACCESSOR_DECL(DataSourceType, dataSourceType, DataSourceType)
 	POINTER_D_ACCESSOR_DECL(const Spreadsheet, dataSourceSpreadsheet, DataSourceSpreadsheet)
+	QString dataSourceSpreadsheetPath() const;
 	CLASS_D_ACCESSOR_DECL(QString, dataSourceConnection, DataSourceConnection)
 	CLASS_D_ACCESSOR_DECL(QString, dataSourceTable, DataSourceTable)
 

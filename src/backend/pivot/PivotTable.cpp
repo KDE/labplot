@@ -45,6 +45,12 @@ PivotTable::PivotTable(const QString& name, bool loading) : AbstractPart(name, A
 //##############################################################################
 BASIC_D_READER_IMPL(PivotTable, PivotTable::DataSourceType, dataSourceType, dataSourceType)
 BASIC_SHARED_D_READER_IMPL(PivotTable, const Spreadsheet*, dataSourceSpreadsheet, dataSourceSpreadsheet)
+
+QString PivotTable::dataSourceSpreadsheetPath() const {
+	Q_D(const PivotTable);
+	return d->dataSourceSpreadsheetPath;
+}
+
 BASIC_SHARED_D_READER_IMPL(PivotTable, QString, dataSourceConnection, dataSourceConnection)
 BASIC_SHARED_D_READER_IMPL(PivotTable, QString, dataSourceTable, dataSourceTable)
 
@@ -243,29 +249,33 @@ QStringList PivotTablePrivate::members(const QString& dimension, PivotTable::Sor
 
 void PivotTablePrivate::recalculate() {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
-	if (!dataModel || !horizontalHeaderModel || !verticalHeaderModel)
-		return;
+	WAIT_CURSOR;
 
-	//clear the previos result
+	if (dataSourceType == PivotTable::DataSourceSpreadsheet && !m_dbCreated)
+		createDb();
+
+	if (!dataModel || !horizontalHeaderModel || !verticalHeaderModel) {
+		RESET_CURSOR;
+		return;
+	}
+
+	// clear the previous result
 	dataModel->clear();
 	horizontalHeaderModel->clear();
 	verticalHeaderModel->clear();
 
-	//nothing to do if no spreadsheet is set yet
+	// nothing to do if no spreadsheet is set yet
 	if (dataSourceType == PivotTable::DataSourceSpreadsheet && !dataSourceSpreadsheet) {
 		Q_EMIT q->changed(); //notify about the new result
+		RESET_CURSOR;
 		return;
 	}
 
 	if (rows.isEmpty() && columns.isEmpty() && !showTotals) {
 		Q_EMIT q->changed(); //notify about the new result
+		RESET_CURSOR;
 		return;
 	}
-
-	WAIT_CURSOR;
-
-	if (dataSourceType == PivotTable::DataSourceSpreadsheet && !m_dbCreated)
-		createDb();
 
 	// construct and execute the SQL query
 	QSqlQuery sqlQuery;
@@ -281,7 +291,7 @@ void PivotTablePrivate::recalculate() {
 	// copy the result into the data models
 	populateDataModels(sqlQuery);
 
-	//notify about the new result
+	// notify about the new result
 	Q_EMIT q->changed();
 	RESET_CURSOR;
 }
@@ -519,8 +529,8 @@ void PivotTable::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement(QStringLiteral("general"));
 	writer->writeAttribute(QStringLiteral("dataSourceType"), QString::number(d->dataSourceType));
 	writer->writeAttribute(QStringLiteral("dataSourceSpreadsheet"), d->dataSourceSpreadsheet->path());
-	writer->writeEndElement();
-
+	WRITE_STRING_LIST("rows", d->rows);
+	WRITE_STRING_LIST("columns", d->columns);
 	writer->writeEndElement();
 }
 
@@ -549,6 +559,12 @@ bool PivotTable::load(XmlStreamReader* reader, bool preview) {
 			} else if (reader->name() == QStringLiteral("general")) {
 				attribs = reader->attributes();
 				READ_INT_VALUE("dataSourceType", dataSourceType, PivotTable::DataSourceType);
+				str = attribs.value(QStringLiteral("dataSourceSpreadsheet")).toString();
+				d->dataSourceSpreadsheetPath = str;
+			} else if (reader->name() == QLatin1String("rows")) {
+				READ_STRING_LIST("row", d->rows);
+			} else if (reader->name() == QLatin1String("columns")) {
+				READ_STRING_LIST("columns", d->columns);
 			} else { // unknown element
 				reader->raiseUnknownElementWarning();
 				if (!reader->skipToEndElement())
@@ -556,7 +572,6 @@ bool PivotTable::load(XmlStreamReader* reader, bool preview) {
 			}
 		}
 	}
-
 
 	return !reader->hasError();
 }

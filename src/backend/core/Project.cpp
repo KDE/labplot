@@ -4,7 +4,7 @@
 	Description          : Represents a LabPlot project.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2011-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 
@@ -14,6 +14,7 @@
 #include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/pivot/PivotTable.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Worksheet.h"
@@ -1229,6 +1230,23 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		for (const auto* toLinkedSpreadsheet : spreadsheets) {
 			if (linkingSpreadsheet->linkedSpreadsheetPath() == toLinkedSpreadsheet->path()) {
 				linkingSpreadsheet->setLinkedSpreadsheet(toLinkedSpreadsheet, true);
+			}
+		}
+	}
+
+	// pivot tables
+	QVector<PivotTable*> pivotTables;
+	if (hasChildren)
+		pivotTables = aspect->children<PivotTable>(ChildIndexFlag::Recursive);
+	for (auto* pivotTable : pivotTables) {
+		if (!pivotTable)
+			continue;
+
+		const auto& path = pivotTable->dataSourceSpreadsheetPath();
+		for (const auto* spreadsheet : spreadsheets) {
+			if (spreadsheet->path() == path) {
+				pivotTable->setDataSourceSpreadsheet(spreadsheet);
+				break;
 			}
 		}
 	}
