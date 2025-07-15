@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-13 00:39+0000\n"
+"POT-Creation-Date: 2025-07-15 00:39+0000\n"
 "PO-Revision-Date: 2025-06-25 06:44+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -417,7 +417,7 @@ msgid "incompatible filter type"
 msgstr "nezdružljiva vrsta filtra"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:154 src/backend/core/Project.cpp:703
+#: src/backend/core/Folder.cpp:154 src/backend/core/Project.cpp:712
 #: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
@@ -684,53 +684,53 @@ msgid "Not yet loaded."
 msgstr "Še ni naloženo."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbProject)
-#: src/backend/core/Project.cpp:183
+#: src/backend/core/Project.cpp:184
 #: src/frontend/ui/datasources/importprojectwidget.ui:17
 #, kde-format
 msgid "Project"
 msgstr "Projekt"
 
-#: src/backend/core/Project.cpp:298
+#: src/backend/core/Project.cpp:300
 #, kde-format
 msgid "%1: set author"
 msgstr "%1: določi avtorja"
 
-#: src/backend/core/Project.cpp:305
+#: src/backend/core/Project.cpp:307
 #, kde-format
 msgid "%1: save dock state changed"
 msgstr "%1: shrani spremenjena stanja sidrišč"
 
-#: src/backend/core/Project.cpp:312
+#: src/backend/core/Project.cpp:314
 #, kde-format
 msgid "%1: save calculation changed"
 msgstr "%1: shrani spremenjen izračun"
 
-#: src/backend/core/Project.cpp:547 src/backend/core/Project.cpp:577
+#: src/backend/core/Project.cpp:556 src/backend/core/Project.cpp:586
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Oprostite. Datoteke ni bilo mogoče odpreti za branje."
 
-#: src/backend/core/Project.cpp:558 src/backend/core/Project.cpp:584
+#: src/backend/core/Project.cpp:567 src/backend/core/Project.cpp:593
 #, kde-format
 msgid "The project file is empty."
 msgstr "Datoteka projekta je prazna."
 
-#: src/backend/core/Project.cpp:558 src/backend/core/Project.cpp:584
+#: src/backend/core/Project.cpp:567 src/backend/core/Project.cpp:593
 #, kde-format
 msgid "Error opening project"
 msgstr "Napaka pri odpiranju projekta"
 
-#: src/backend/core/Project.cpp:603
+#: src/backend/core/Project.cpp:612
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Neznana napaka pri odpiranju projekta %1."
 
-#: src/backend/core/Project.cpp:604
+#: src/backend/core/Project.cpp:613
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Napaka pri odpiranju projekta"
 
-#: src/backend/core/Project.cpp:624
+#: src/backend/core/Project.cpp:633
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -749,43 +749,43 @@ msgstr ""
 "\n"
 "Ali želite nadaljevati?"
 
-#: src/backend/core/Project.cpp:630
+#: src/backend/core/Project.cpp:639
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "Manjkajoča podpora za CAS"
 
-#: src/backend/core/Project.cpp:660
+#: src/backend/core/Project.cpp:669
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "Manjka atribut »različica« (»version«)."
 
-#: src/backend/core/Project.cpp:710
+#: src/backend/core/Project.cpp:719
 #, kde-format
 msgid "no project element found"
 msgstr "ni najdenega elementa projekta"
 
-#: src/backend/core/Project.cpp:712
+#: src/backend/core/Project.cpp:721
 #, kde-format
 msgid "no valid XML document found"
 msgstr "ni bilo najdenega veljavnega dokumenta XML"
 
-#: src/backend/core/Project.cpp:762 src/backend/core/Project.cpp:768
-#: src/backend/core/Project.cpp:819
+#: src/backend/core/Project.cpp:771 src/backend/core/Project.cpp:777
+#: src/backend/core/Project.cpp:828
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "Odpiranje datoteke »%1« ni uspelo."
 
-#: src/backend/core/Project.cpp:825
+#: src/backend/core/Project.cpp:834
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "Obdelava vsebine datoteke »%1« ni uspela."
 
-#: src/backend/core/Project.cpp:828
+#: src/backend/core/Project.cpp:837
 #, kde-format
 msgid "Failed to open project"
 msgstr "Odpiranje projekta ni uspelo"
 
-#: src/backend/core/Project.cpp:1276
+#: src/backend/core/Project.cpp:1285
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Neveljaven čas spreminjanja projekta. Uporabljen bo trenutni čas."
@@ -1930,7 +1930,7 @@ msgid "Unknown"
 msgstr "Neznano"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/ActionsManager.cpp:221 src/frontend/MainWin.cpp:1226
+#: src/frontend/ActionsManager.cpp:221 src/frontend/MainWin.cpp:1227
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -10543,7 +10543,7 @@ msgstr ""
 msgid "&Open Example"
 msgstr "&Odpri primer"
 
-#: src/frontend/ActionsManager.cpp:205 src/frontend/MainWin.cpp:1182
+#: src/frontend/ActionsManager.cpp:205 src/frontend/MainWin.cpp:1183
 #, kde-format
 msgid "Workbook"
 msgstr "Delovni zvezek"
@@ -10553,7 +10553,7 @@ msgstr "Delovni zvezek"
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr "Ustvari nov delovni zvezek za preglednice, matrike in grafikone zbirke"
 
-#: src/frontend/ActionsManager.cpp:210 src/frontend/MainWin.cpp:1190
+#: src/frontend/ActionsManager.cpp:210 src/frontend/MainWin.cpp:1191
 #, kde-format
 msgid "Data Extractor"
 msgstr "Izvlečnik podatkov"
@@ -10568,7 +10568,7 @@ msgstr "Ustvari izvlečnik podatkov za pridobivanje podatkov iz slike"
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
-#: src/frontend/MainWin.cpp:1198 src/frontend/SettingsDialog.cpp:67
+#: src/frontend/MainWin.cpp:1199 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:122
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -10586,7 +10586,7 @@ msgstr "Ustvari novo preglednico za urejanje podatkov"
 msgid "Creates a new matrix for data editing"
 msgstr "Ustvari novo matriko za urejanje podatkov"
 
-#: src/frontend/ActionsManager.cpp:227 src/frontend/MainWin.cpp:1244
+#: src/frontend/ActionsManager.cpp:227 src/frontend/MainWin.cpp:1245
 #: src/frontend/SettingsDialog.cpp:62
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:86
 #, kde-format
@@ -10603,7 +10603,7 @@ msgstr "Ustvari nov delovni list za urejanje podatkov"
 msgid "Creates a new %1 script"
 msgstr "Ustvari nov %1 skript"
 
-#: src/frontend/ActionsManager.cpp:244 src/frontend/MainWin.cpp:1252
+#: src/frontend/ActionsManager.cpp:244 src/frontend/MainWin.cpp:1253
 #, kde-format
 msgid "Note"
 msgstr "Opomba"
@@ -10613,7 +10613,7 @@ msgstr "Opomba"
 msgid "Creates a new note for arbitrary text"
 msgstr "Ustvari novo opombo za poljubno besedilo"
 
-#: src/frontend/ActionsManager.cpp:249 src/frontend/MainWin.cpp:1174
+#: src/frontend/ActionsManager.cpp:249 src/frontend/MainWin.cpp:1175
 #, kde-format
 msgid "Folder"
 msgstr "Mapa"
@@ -10907,7 +10907,7 @@ msgid "Select Y-Region and Zoom In"
 msgstr "Izberite x-področje in ga približajte"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:611 src/frontend/MainWin.cpp:1598
+#: src/frontend/ActionsManager.cpp:611 src/frontend/MainWin.cpp:1599
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1425
 #: src/frontend/worksheet/WorksheetView.cpp:378
 #, kde-format
@@ -12738,7 +12738,7 @@ msgid "Open LabPlot Project"
 msgstr "Odpri projekt LabPlot"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:710
+#: src/frontend/MainWin.cpp:712
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "Projekti LabPlot (%1)"
@@ -13036,7 +13036,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2001
+#: src/frontend/MainWin.cpp:2002
 #, kde-format
 msgid "Warning"
 msgstr "Opozorilo"
@@ -14304,7 +14304,7 @@ msgstr ""
 "(\"mejne stopničaste vrednosti\"), sicer pa so za mejne vrednosti narisane "
 "ravne črte."
 
-#: src/frontend/dockwidgets/ProjectDock.cpp:69
+#: src/frontend/dockwidgets/ProjectDock.cpp:72
 #, kde-format
 msgid ""
 "If checked, the state of the default application docks is saved in the "
@@ -14313,7 +14313,7 @@ msgstr ""
 "Če je odkljukano, se stanje privzetih sidrišč aplikacij shrani v projektno "
 "datoteko in obnovi ob nalaganju projekta."
 
-#: src/frontend/dockwidgets/ProjectDock.cpp:74
+#: src/frontend/dockwidgets/ProjectDock.cpp:77
 #, kde-format
 msgid ""
 "If checked, the results of the calculations in the analysis curves will be "
@@ -14917,7 +14917,7 @@ msgid ""
 msgstr ""
 "Datoteke zbirk primerov %1 ni bilo mogoče odpreti. Preverite namestitev."
 
-#: src/frontend/GuiObserver.cpp:182 src/frontend/MainWin.cpp:617
+#: src/frontend/GuiObserver.cpp:182 src/frontend/MainWin.cpp:619
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -15475,7 +15475,7 @@ msgstr "Izberite datoteko za shranjevanje definicije funkcije"
 #: src/frontend/ui/dockwidgets/notebookdock.ui:65
 #: src/frontend/ui/dockwidgets/notedock.ui:43
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:87
-#: src/frontend/ui/dockwidgets/projectdock.ui:243
+#: src/frontend/ui/dockwidgets/projectdock.ui:137
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:99
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:119
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:56
@@ -15831,98 +15831,98 @@ msgstr "Trenutni projekt \"%1\" je bil spremenjen. Ali ga želite shraniti?"
 msgid "Save Project"
 msgstr "Shrani projekt"
 
-#: src/frontend/MainWin.cpp:578
+#: src/frontend/MainWin.cpp:580
 #, kde-format
 msgid "%1: created"
 msgstr "%1: ustvarjeno"
 
-#: src/frontend/MainWin.cpp:604
+#: src/frontend/MainWin.cpp:606
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Raziskovalec projektov"
 
-#: src/frontend/MainWin.cpp:629
+#: src/frontend/MainWin.cpp:631
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Predogled delovnega lista"
 
-#: src/frontend/MainWin.cpp:638
+#: src/frontend/MainWin.cpp:640
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Vsebina"
 
-#: src/frontend/MainWin.cpp:715
+#: src/frontend/MainWin.cpp:717
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Projekti Origin (%1)"
 
-#: src/frontend/MainWin.cpp:721
+#: src/frontend/MainWin.cpp:723
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "Projekti Cantor (*.cws)"
 
-#: src/frontend/MainWin.cpp:722
+#: src/frontend/MainWin.cpp:724
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Zvezki Jupyter (*.ipynb)"
 
-#: src/frontend/MainWin.cpp:729
+#: src/frontend/MainWin.cpp:731
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Vse podprte datoteke (%1)"
 
-#: src/frontend/MainWin.cpp:733
+#: src/frontend/MainWin.cpp:735
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Odpri projekt"
 
-#: src/frontend/MainWin.cpp:750
+#: src/frontend/MainWin.cpp:752
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "Projektna datoteka %1 je že odprta."
 
-#: src/frontend/MainWin.cpp:750 src/frontend/MainWin.cpp:758
-#: src/frontend/MainWin.cpp:763
+#: src/frontend/MainWin.cpp:752 src/frontend/MainWin.cpp:760
+#: src/frontend/MainWin.cpp:765
 #, kde-format
 msgid "Open Project"
 msgstr "Odpri projekt"
 
-#: src/frontend/MainWin.cpp:758
+#: src/frontend/MainWin.cpp:760
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "Projektna datoteka %1 ne obstaja."
 
-#: src/frontend/MainWin.cpp:763
+#: src/frontend/MainWin.cpp:765
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "Ni bilo mogoče prebrati projektne datoteka %1."
 
-#: src/frontend/MainWin.cpp:771
+#: src/frontend/MainWin.cpp:773
 #, kde-format
 msgid "Loading %1..."
 msgstr "Nalaganje %1 ..."
 
-#: src/frontend/MainWin.cpp:826
+#: src/frontend/MainWin.cpp:828
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: odprto"
 
-#: src/frontend/MainWin.cpp:861
+#: src/frontend/MainWin.cpp:863
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Projekt se je uspešno odprl (v %1 s)."
 
-#: src/frontend/MainWin.cpp:954
+#: src/frontend/MainWin.cpp:956
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Shrani projekt kot"
 
-#: src/frontend/MainWin.cpp:956
+#: src/frontend/MainWin.cpp:958
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -15931,54 +15931,54 @@ msgstr ""
 "Projekti LabPlot (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:983
+#: src/frontend/MainWin.cpp:985
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Začasne datoteke za pisanje ni bilo mogoče odpreti."
 
-#: src/frontend/MainWin.cpp:1063
+#: src/frontend/MainWin.cpp:1064
 #, kde-format
 msgid "Project saved"
 msgstr "Projekt shranjen"
 
-#: src/frontend/MainWin.cpp:1079
+#: src/frontend/MainWin.cpp:1080
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Datoteke »%1« ni bilo mogoče shraniti."
 
-#: src/frontend/MainWin.cpp:1084
+#: src/frontend/MainWin.cpp:1085
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Datoteke »%1« ni bilo mogoče odpreti za pisanje."
 
-#: src/frontend/MainWin.cpp:1134
+#: src/frontend/MainWin.cpp:1135
 #, kde-format
 msgid "Changed"
 msgstr "Spremenjeno"
 
-#: src/frontend/MainWin.cpp:1149 src/frontend/MainWin.cpp:1161
+#: src/frontend/MainWin.cpp:1150 src/frontend/MainWin.cpp:1162
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Priprava tiskanja %1"
 
-#: src/frontend/MainWin.cpp:1151 src/frontend/MainWin.cpp:1163
+#: src/frontend/MainWin.cpp:1152 src/frontend/MainWin.cpp:1164
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 natisnjeno"
 
-#: src/frontend/MainWin.cpp:1218
+#: src/frontend/MainWin.cpp:1219
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3732
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3733
 #, kde-format
 msgid "%1"
 msgstr "%1"
 
-#: src/frontend/MainWin.cpp:1897
+#: src/frontend/MainWin.cpp:1898
 #, kde-format
 msgid "Kaggle CLI tool not found"
 msgstr "Orodje Kaggle CLI ni bilo najdeno"
 
-#: src/frontend/MainWin.cpp:1898
+#: src/frontend/MainWin.cpp:1899
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
@@ -15986,27 +15986,27 @@ msgid ""
 msgstr ""
 "Vnesite pot do orodja Kaggle CLI v nastavitvah aplikacije in poskusite znova."
 
-#: src/frontend/MainWin.cpp:1964
+#: src/frontend/MainWin.cpp:1965
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 izvoženo"
 
-#: src/frontend/MainWin.cpp:1971
+#: src/frontend/MainWin.cpp:1972
 #, kde-format
 msgid "FITS files saved"
 msgstr "Datoteke FITS shranjene"
 
-#: src/frontend/MainWin.cpp:1983
+#: src/frontend/MainWin.cpp:1984
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Odjemalec MQTT%1"
 
-#: src/frontend/MainWin.cpp:2001
+#: src/frontend/MainWin.cpp:2002
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "S tem gostiteljem že obstaja MQTTClient!"
 
-#: src/frontend/MainWin.cpp:2005
+#: src/frontend/MainWin.cpp:2006
 #, kde-format
 msgid "Live data source%1"
 msgstr "Vir podatkov v živo%1"
@@ -18989,7 +18989,7 @@ msgstr "Vrsta napake Y:"
 #: src/frontend/ui/dockwidgets/notebookdock.ui:33
 #: src/frontend/ui/dockwidgets/notedock.ui:17
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:219
-#: src/frontend/ui/dockwidgets/projectdock.ui:107
+#: src/frontend/ui/dockwidgets/projectdock.ui:265
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:55
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:190
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:112
@@ -22140,56 +22140,63 @@ msgstr "Oblika:"
 msgid "Background Color:"
 msgstr "Barva ozadja:"
 
-#. i18n: ectx: property (text), widget (QLabel, lVersion_2)
-#: src/frontend/ui/dockwidgets/projectdock.ui:66
+#. i18n: ectx: property (text), widget (QLabel, lSettings)
+#: src/frontend/ui/dockwidgets/projectdock.ui:82
 #, kde-format
-msgid "Version:"
-msgstr "Različica:"
+msgid "Settings:"
+msgstr "Nastavitve:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: src/frontend/ui/dockwidgets/projectdock.ui:89
+#, kde-format
+msgid "Author:"
+msgstr "Avtor:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: src/frontend/ui/dockwidgets/projectdock.ui:73
+#: src/frontend/ui/dockwidgets/projectdock.ui:109
 #, kde-format
 msgid "Created:"
 msgstr "Ustvarjeno:"
 
-#. i18n: ectx: property (text), widget (QLabel, lSaveDockStates)
-#: src/frontend/ui/dockwidgets/projectdock.ui:80
-#: src/frontend/ui/settingsgeneralpage.ui:432
-#, kde-format
-msgid "Save Dock States:"
-msgstr "Shrani stanja sidrišč:"
-
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: src/frontend/ui/dockwidgets/projectdock.ui:100
+#: src/frontend/ui/dockwidgets/projectdock.ui:130
 #, kde-format
 msgid "Modified:"
 msgstr "Spremenjeno:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/dockwidgets/projectdock.ui:114
+#: src/frontend/ui/dockwidgets/projectdock.ui:147
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:49
 #, kde-format
 msgid "File Name:"
 msgstr "Ime datoteke:"
 
-#. i18n: ectx: property (text), widget (QLabel, lSettings)
-#: src/frontend/ui/dockwidgets/projectdock.ui:202
+#. i18n: ectx: property (text), widget (QLabel, lVersion_2)
+#: src/frontend/ui/dockwidgets/projectdock.ui:154
 #, kde-format
-msgid "Settings:"
-msgstr "Nastavitve:"
+msgid "Version:"
+msgstr "Različica:"
 
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: src/frontend/ui/dockwidgets/projectdock.ui:209
+#. i18n: ectx: property (text), widget (QLabel, lSaveDockStates)
+#: src/frontend/ui/dockwidgets/projectdock.ui:219
+#: src/frontend/ui/settingsgeneralpage.ui:432
 #, kde-format
-msgid "Author:"
-msgstr "Avtor:"
+msgid "Save Dock States:"
+msgstr "Shrani stanja sidrišč:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
-#: src/frontend/ui/dockwidgets/projectdock.ui:253
+#: src/frontend/ui/dockwidgets/projectdock.ui:239
 #, kde-format
 msgid "Save Calculations:"
 msgstr "Shrani izračune:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: src/frontend/ui/dockwidgets/projectdock.ui:288
+#, fuzzy, kde-format
+#| msgid "Compressed"
+msgid "Compress File:"
+msgstr "Stisnjeno"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:109
@@ -23592,18 +23599,23 @@ msgstr "V skladu z GUM"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:97
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Save projects in a compatible format that can be "
+#| "opened in LabPlot versions older than 2.9.</p></body></html>"
 msgid ""
-"<html><head/><body><p>Save projects in a compatible format that can be "
-"opened in LabPlot versions older than 2.9.</p></body></html>"
+"<html><head/><body><p>Save projects in a uncompressed xml format that can be "
+"opened in LabPlot versions older than 2.9 and are useful for version "
+"controlled projects</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Shranite projekte v združljivi obliki, ki jo je mogoče "
 "odpreti v različicah LabPlot, starejših od 2.9.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:100
-#, kde-format
-msgid "Save in compatible format"
+#, fuzzy, kde-format
+#| msgid "Save in compatible format"
+msgid "Save in uncompressed format"
 msgstr "Shrani v združljivi obliki"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
@@ -23638,9 +23650,10 @@ msgstr "Zvezek:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
 #: src/frontend/ui/settingsgeneralpage.ui:155
-#, kde-format
-msgid "Compatibility:"
-msgstr "Kompatibilnost:"
+#, fuzzy, kde-format
+#| msgid "Compression"
+msgid "Compression:"
+msgstr "Stiskanje"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
 #: src/frontend/ui/settingsgeneralpage.ui:197
@@ -25319,6 +25332,9 @@ msgstr "proces convert je izpadel, izhodna koda ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ni mogoče odpreti datoteke:"
+
+#~ msgid "Compatibility:"
+#~ msgstr "Kompatibilnost:"
 
 #~ msgid "Output Font:"
 #~ msgstr "Pisava izhoda:"
