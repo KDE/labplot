@@ -53,6 +53,10 @@ PivotTableView::PivotTableView(PivotTable* pivotTable) : QWidget(),
 	m_verticalHeaderView->setSectionResizeMode(QHeaderView::ResizeToContents);
 	m_verticalHeaderView->setSectionsClickable(true);
 
+	m_horizontalHeaderView->setHierarchicalModel(pivotTable->horizontalHeaderModel());
+	m_verticalHeaderView->setHierarchicalModel(pivotTable->verticalHeaderModel());
+	m_tableView->setModel(m_pivotTable->dataModel());
+
 	init();
 }
 
@@ -61,14 +65,6 @@ PivotTableView::~PivotTableView() = default;
 void PivotTableView::init() {
 	initActions();
 	initMenus();
-
-	//models
-	//TODO: at the moment we keep the data model in m_pivotTable, the header models are kept in HierarchicalHeaderView.
-	//re-design this. Let's keep all the models in m_pivotTable and set them here for the views.
-	m_tableView->setModel(m_pivotTable->dataModel());
-	m_pivotTable->setHorizontalHeaderModel(m_horizontalHeaderView->hierarchicalModel());
-	m_pivotTable->setVerticalHeaderModel(m_verticalHeaderView->hierarchicalModel());
-
 	connect(m_pivotTable, &PivotTable::changed, this, &PivotTableView::changed);
 }
 
@@ -147,11 +143,8 @@ void PivotTableView::print(QPrinter* printer) const {
 }
 
 void PivotTableView::changed() {
-	// m_pivotTable->setHorizontalHeaderModel(m_horizontalHeaderView->hierarchicalModel());
-	// m_pivotTable->setVerticalHeaderModel(m_verticalHeaderView->hierarchicalModel());
-
-	HierarchicalHeaderModel* horizontalHeaderModel = static_cast<HierarchicalHeaderModel*>(m_horizontalHeaderView->hierarchicalModel());
-	HierarchicalHeaderModel* verticalHeaderModel = static_cast<HierarchicalHeaderModel*>(m_verticalHeaderView->hierarchicalModel());
+	auto* horizontalHeaderModel = m_pivotTable->horizontalHeaderModel();
+	auto* verticalHeaderModel = m_pivotTable->verticalHeaderModel();
 
 	horizontalHeaderModel->setOrientation(Qt::Horizontal);
 	verticalHeaderModel->setOrientation(Qt::Vertical);

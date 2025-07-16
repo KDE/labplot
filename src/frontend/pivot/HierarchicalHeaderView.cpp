@@ -4,20 +4,18 @@
 	Description          : Hierarchical header view
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Lee Cho Kang <pzesseto@gmail.com>
-	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #include "HierarchicalHeaderView.h"
-#include <QPainter>
-#include <QStandardItem>
-#include <QMouseEvent>
 
 #include <QBrush>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QStandardItem>
 #include <QVariant>
 #include <qdrawutil.h>
-
-#include <QDebug>
 
 HierarchicalHeaderItem::HierarchicalHeaderItem(HierarchicalHeaderItem* parent):
 	row_prop(0),column_prop(0),parent_item(parent) {
@@ -290,12 +288,12 @@ HierarchicalHeaderView::HierarchicalHeaderView(Qt::Orientation orientation, QWid
 
 HierarchicalHeaderView::~HierarchicalHeaderView() = default;
 
-
 QSize HierarchicalHeaderView::getBaseSectionSize() const {
 	return baseSectionSize;
 }
 
-void HierarchicalHeaderView::setNewModel(HierarchicalHeaderModel* model) {
+void HierarchicalHeaderView::setHierarchicalModel(HierarchicalHeaderModel* model) {
+	delete m_model; // delete old model if exists
 	m_model = model;
 	setModel(m_model);
 }

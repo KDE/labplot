@@ -100,14 +100,15 @@ public:
 	HierarchicalHeaderView(Qt::Orientation, int rows, int columns, QWidget* parent = nullptr);
 	~HierarchicalHeaderView() override;
 
-	HierarchicalHeaderModel* hierarchicalModel() const;
 	void setRowHeight(int row, int height);
 	void setColumnWidth(int col, int width);
 	void setCellBackgroundColor(const QModelIndex&, const QColor&);
 	void setCellForegroundColor(const QModelIndex&, const QColor&);
 
 	QSize getBaseSectionSize() const;
-	void setNewModel(HierarchicalHeaderModel*);
+
+	HierarchicalHeaderModel* hierarchicalModel() const;
+	void setHierarchicalModel(HierarchicalHeaderModel*);
 
 protected:
 	void mousePressEvent(QMouseEvent*) override;

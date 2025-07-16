@@ -36,9 +36,8 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, dataSourceTable, DataSourceTable)
 
 	QAbstractItemModel* dataModel() const;
-	void setDataModel(QAbstractItemModel*);
-	void setHorizontalHeaderModel(QAbstractItemModel*);
-	void setVerticalHeaderModel(QAbstractItemModel*);
+	HierarchicalHeaderModel* horizontalHeaderModel() const;
+	HierarchicalHeaderModel* verticalHeaderModel() const;
 
 	const QStringList& dimensions() const;
 	const QStringList& measures() const;

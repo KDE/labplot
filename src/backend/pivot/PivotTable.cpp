@@ -58,15 +58,13 @@ QAbstractItemModel* PivotTable::dataModel() const {
 	Q_D(const PivotTable);
 	return d->dataModel;
 }
-
-void PivotTable::setHorizontalHeaderModel(QAbstractItemModel* model) {
-	Q_D(PivotTable);
-	d->horizontalHeaderModel = dynamic_cast<HierarchicalHeaderModel*>(model);
+HierarchicalHeaderModel* PivotTable::horizontalHeaderModel() const {
+	Q_D(const PivotTable);
+	return d->horizontalHeaderModel;
 }
-
-void PivotTable::setVerticalHeaderModel(QAbstractItemModel* model) {
-	Q_D(PivotTable);
-	d->verticalHeaderModel = dynamic_cast<HierarchicalHeaderModel*>(model);
+HierarchicalHeaderModel* PivotTable::verticalHeaderModel() const {
+	Q_D(const PivotTable);
+	return d->verticalHeaderModel;
 }
 
 // ##############################################################################
@@ -172,9 +170,9 @@ QIcon PivotTable::icon() const {
 // ##############################################################################
 PivotTablePrivate::PivotTablePrivate(PivotTable* owner)
 	: q(owner)
-	, dataModel(new QStandardItemModel) {
-// 	horizontalHeaderModel(new HierarchicalHeaderModel),
-// 	verticalHeaderModel(new HierarchicalHeaderModel)
+	, dataModel(new QStandardItemModel)
+	, horizontalHeaderModel(new HierarchicalHeaderModel)
+	, verticalHeaderModel(new HierarchicalHeaderModel) {
 }
 
 QString PivotTablePrivate::name() const {
