@@ -334,7 +334,7 @@ void SpreadsheetView::initActions() {
 	action_search_replace = new QAction(QIcon::fromTheme(QStringLiteral("edit-find-replace")), i18n("&Replace"), this);
 	action_search_replace->setShortcut(QKeySequence::Replace);
 	action_statistics_all_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics..."), this);
-	action_pivot_table = new QAction(QIcon::fromTheme(QLatin1String("table")), i18n("Pivot Table"), this);
+	action_pivot_table = new QAction(QIcon::fromTheme(QLatin1String("table")), i18n("Pivot"), this);
 
 	action_statistics_spreadsheet = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics Spreadsheet"), this);
 	action_statistics_spreadsheet->setCheckable(true);

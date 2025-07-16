@@ -6,15 +6,31 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>409</width>
-    <height>834</height>
+    <width>486</width>
+    <height>942</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="2">
+   <item row="2" column="1">
+    <spacer name="verticalSpacer_3">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Policy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="0">
     <widget class="QLabel" name="lName">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -24,6 +40,48 @@
      </property>
      <property name="text">
       <string>Name:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="3" colspan="5">
+    <widget class="QComboBox" name="cbTable"/>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QLabel" name="lDataSourceType">
+     <property name="text">
+      <string>Source:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="lTable">
+     <property name="text">
+      <string>Table:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="lData">
+     <property name="font">
+      <font>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Data</string>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="5" colspan="3">
+    <widget class="QListWidget" name="lwValues"/>
+   </item>
+   <item row="13" column="5" colspan="3">
+    <widget class="QLabel" name="lColumns">
+     <property name="text">
+      <string>Columns:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
    </item>
@@ -43,15 +101,31 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="QLabel" name="lComment">
-     <property name="text">
-      <string>Comment:</string>
+   <item row="14" column="5" colspan="3">
+    <widget class="QListWidget" name="lwColumns"/>
+   </item>
+   <item row="0" column="3" colspan="5">
+    <widget class="TimedLineEdit" name="leName">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
-    <spacer name="verticalSpacer_3">
+   <item row="11" column="5" colspan="3">
+    <widget class="QListWidget" name="lwRows">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="5" colspan="3">
+    <spacer name="verticalSpacer_8">
      <property name="orientation">
       <enum>Qt::Orientation::Vertical</enum>
      </property>
@@ -61,45 +135,12 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>13</height>
+       <height>5</height>
       </size>
      </property>
     </spacer>
    </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="lData">
-     <property name="font">
-      <font>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Data</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" colspan="2">
-    <widget class="QLabel" name="lDataSourceType">
-     <property name="text">
-      <string>Source:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0" colspan="2">
-    <widget class="QLabel" name="lSpreadsheet">
-     <property name="text">
-      <string>Spreadsheet:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0" colspan="2">
-    <widget class="QLabel" name="lConnection">
-     <property name="text">
-      <string>Connection:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="7">
+   <item row="6" column="8">
     <widget class="QPushButton" name="bDatabaseManager">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -112,158 +153,17 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="0" colspan="2">
-    <widget class="QLabel" name="lTable">
+   <item row="5" column="0" colspan="2">
+    <widget class="QLabel" name="lSpreadsheet">
      <property name="text">
-      <string>Table:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="1">
-    <spacer name="verticalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Orientation::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Policy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="9" column="0" colspan="2">
-    <widget class="QLabel" name="lDimensions">
-     <property name="font">
-      <font>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Structure:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="3">
-    <widget class="QLabel" name="lFields">
-     <property name="text">
-      <string>Fields</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="5">
-    <widget class="QLabel" name="lRows">
-     <property name="text">
-      <string>Rows</string>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="3" rowspan="4">
-    <widget class="QListWidget" name="lwFields">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="4">
-    <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,1,1,0">
-     <property name="spacing">
-      <number>12</number>
-     </property>
-     <property name="leftMargin">
-      <number>6</number>
-     </property>
-     <property name="topMargin">
-      <number>6</number>
-     </property>
-     <property name="rightMargin">
-      <number>6</number>
-     </property>
-     <item>
-      <spacer name="verticalSpacer_5">
-       <property name="orientation">
-        <enum>Qt::Orientation::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="bAddRow">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="bRemoveRow">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer_4">
-       <property name="orientation">
-        <enum>Qt::Orientation::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </item>
-   <item row="11" column="5" colspan="2">
-    <widget class="QListWidget" name="lwRows">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item row="12" column="6">
-    <spacer name="verticalSpacer_8">
-     <property name="orientation">
-      <enum>Qt::Orientation::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Policy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="13" column="5" colspan="2">
-    <widget class="QLabel" name="lColumns">
-     <property name="text">
-      <string>Columns</string>
+      <string>Spreadsheet:</string>
      </property>
     </widget>
    </item>
    <item row="14" column="4">
     <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0,1,1,0">
      <property name="spacing">
-      <number>12</number>
+      <number>0</number>
      </property>
      <property name="leftMargin">
       <number>6</number>
@@ -316,10 +216,191 @@
      </item>
     </layout>
    </item>
-   <item row="14" column="5" colspan="2">
-    <widget class="QListWidget" name="lwColumns"/>
+   <item row="16" column="5" colspan="3">
+    <widget class="QLabel" name="lValues">
+     <property name="text">
+      <string>Values:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
    </item>
-   <item row="15" column="0">
+   <item row="15" column="5" colspan="3">
+    <spacer name="verticalSpacer_9">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Policy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>138</width>
+       <height>5</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="8" column="1">
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Policy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="11" column="4">
+    <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,1,1,0">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>6</number>
+     </property>
+     <property name="topMargin">
+      <number>6</number>
+     </property>
+     <property name="rightMargin">
+      <number>6</number>
+     </property>
+     <item>
+      <spacer name="verticalSpacer_5">
+       <property name="orientation">
+        <enum>Qt::Orientation::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bAddRow">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bRemoveRow">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Orientation::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="QLabel" name="lConnection">
+     <property name="text">
+      <string>Connection:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="4">
+    <layout class="QVBoxLayout" name="verticalLayout_8" stretch="0,1,1,0">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>6</number>
+     </property>
+     <property name="topMargin">
+      <number>6</number>
+     </property>
+     <property name="rightMargin">
+      <number>6</number>
+     </property>
+     <item>
+      <spacer name="verticalSpacer_12">
+       <property name="orientation">
+        <enum>Qt::Orientation::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bAddValue">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bRemoveValue">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_13">
+       <property name="orientation">
+        <enum>Qt::Orientation::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="10" column="5" colspan="3">
+    <widget class="QLabel" name="lRows">
+     <property name="text">
+      <string>Rows:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3" colspan="5">
+    <widget class="ResizableTextEdit" name="teComment"/>
+   </item>
+   <item row="11" column="3" rowspan="7">
+    <widget class="QListWidget" name="lwFields">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="18" column="0" colspan="2">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Orientation::Vertical</enum>
@@ -332,20 +413,7 @@
      </property>
     </spacer>
    </item>
-   <item row="6" column="3" colspan="4">
-    <widget class="QComboBox" name="cbConnection">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="3" colspan="4">
-    <widget class="QComboBox" name="cbTable"/>
-   </item>
-   <item row="4" column="3" colspan="4">
+   <item row="4" column="3" colspan="5">
     <widget class="QComboBox" name="cbDataSourceType">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -355,18 +423,34 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="3" colspan="4">
-    <widget class="TimedLineEdit" name="leName">
+   <item row="1" column="0" colspan="2">
+    <widget class="QLabel" name="lComment">
+     <property name="text">
+      <string>Comment:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="3" colspan="5">
+    <widget class="QComboBox" name="cbConnection">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
     </widget>
    </item>
-   <item row="1" column="3" colspan="4">
-    <widget class="ResizableTextEdit" name="teComment"/>
+   <item row="10" column="0">
+    <widget class="QLabel" name="lDimensions">
+     <property name="font">
+      <font>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Fields</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

@@ -9,25 +9,24 @@
 
 #include "PivotTable.h"
 #include "PivotTablePrivate.h"
-#include "frontend/pivot/PivotTableView.h"
-#include "frontend/pivot/HierarchicalHeaderView.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
-#include "backend/lib/XmlStreamReader.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "frontend/pivot/HierarchicalHeaderView.h"
+#include "frontend/pivot/PivotTableView.h"
 
-#include <QAbstractItemModel>
 #include <QIcon>
-#include <QSqlQuery>
 #include <QSqlError>
+#include <QSqlQuery>
 #include <QSqlRecord>
 #include <QStandardItemModel>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 #include <KMessageBox>
+#include <KSharedConfig>
 
 /*!
   \class PivotTable
@@ -35,14 +34,15 @@
 
   \ingroup backend
 */
-PivotTable::PivotTable(const QString& name, bool loading) : AbstractPart(name, AspectType::PivotTable),
-	d_ptr(new PivotTablePrivate(this)) {
+PivotTable::PivotTable(const QString& name, bool loading)
+	: AbstractPart(name, AspectType::PivotTable)
+	, d_ptr(new PivotTablePrivate(this)) {
 	Q_UNUSED(loading)
 }
 
-//##############################################################################
-//##########################  getter methods  ##################################
-//##############################################################################
+// ##############################################################################
+// ##########################  getter methods  ##################################
+// ##############################################################################
 BASIC_D_READER_IMPL(PivotTable, PivotTable::DataSourceType, dataSourceType, dataSourceType)
 BASIC_SHARED_D_READER_IMPL(PivotTable, const Spreadsheet*, dataSourceSpreadsheet, dataSourceSpreadsheet)
 
@@ -69,9 +69,9 @@ void PivotTable::setVerticalHeaderModel(QAbstractItemModel* model) {
 	d->verticalHeaderModel = dynamic_cast<HierarchicalHeaderModel*>(model);
 }
 
-//##############################################################################
-//#################  setter methods and undo commands ##########################
-//##############################################################################
+// ##############################################################################
+// #################  setter methods and undo commands ##########################
+// ##############################################################################
 STD_SETTER_CMD_IMPL_F_S(PivotTable, SetDataSourceType, PivotTable::DataSourceType, dataSourceType, recalculate)
 void PivotTable::setDataSourceType(DataSourceType type) {
 	Q_D(PivotTable);
@@ -167,20 +167,14 @@ QIcon PivotTable::icon() const {
 	return QIcon::fromTheme(QLatin1String("labplot-spreadsheet"));
 }
 
-//##############################################################################
-//######################  Private implementation ###############################
-//##############################################################################
-PivotTablePrivate::PivotTablePrivate(PivotTable* owner) : q(owner)
-,
-	dataModel(new QStandardItemModel)
+// ##############################################################################
+// ######################  Private implementation ###############################
+// ##############################################################################
+PivotTablePrivate::PivotTablePrivate(PivotTable* owner)
+	: q(owner)
+	, dataModel(new QStandardItemModel) {
 // 	horizontalHeaderModel(new HierarchicalHeaderModel),
 // 	verticalHeaderModel(new HierarchicalHeaderModel)
-	{
-
-}
-
-PivotTablePrivate::~PivotTablePrivate() {
-
 }
 
 QString PivotTablePrivate::name() const {
@@ -266,13 +260,13 @@ void PivotTablePrivate::recalculate() {
 
 	// nothing to do if no spreadsheet is set yet
 	if (dataSourceType == PivotTable::DataSourceSpreadsheet && !dataSourceSpreadsheet) {
-		Q_EMIT q->changed(); //notify about the new result
+		Q_EMIT q->changed(); // notify about the new result
 		RESET_CURSOR;
 		return;
 	}
 
 	if (rows.isEmpty() && columns.isEmpty() && !showTotals) {
-		Q_EMIT q->changed(); //notify about the new result
+		Q_EMIT q->changed(); // notify about the new result
 		RESET_CURSOR;
 		return;
 	}
@@ -302,7 +296,7 @@ QString PivotTablePrivate::createSQLQuery() const {
 	QString groupByString;
 
 	if (!showNulls) {
-		//if we don't need to show combinations with empty intersections, put everything into GROUP BY
+		// if we don't need to show combinations with empty intersections, put everything into GROUP BY
 		if (!rows.isEmpty())
 			groupByString = rows.join(QLatin1Char(','));
 
@@ -314,7 +308,7 @@ QString PivotTablePrivate::createSQLQuery() const {
 
 		if (!groupByString.isEmpty()) {
 			query += groupByString;
-// 			if (showTotals)
+			// if (showTotals)
 			query += QLatin1String(", COUNT(*) FROM pivot");
 
 			query += QLatin1String(" GROUP BY ") + groupByString;
@@ -333,7 +327,7 @@ QString PivotTablePrivate::createSQLQuery() const {
 				}
 			}
 		} else {
-			//no dimensions selected, show totals only
+			// no dimensions selected, show totals only
 			query += QLatin1String("COUNT(*) FROM pivot");
 		}
 	} else {
@@ -397,7 +391,7 @@ void PivotTablePrivate::populateDataModels(QSqlQuery sqlQuery) {
 			dataModel->setRowCount(recordsCount);
 
 		// set the values
-		//TODO: only "Totals" value at the moment, needs to be extended later when we allow to add other values
+		// TODO: only "Totals" value at the moment, needs to be extended later when we allow to add other values
 		horizontalHeaderModel->setData(horizontalHeaderModel->index(0, 0), i18n("Totals"), Qt::DisplayRole);
 
 		QVector<int> start_span(firstValueIndex, 0);
@@ -439,7 +433,7 @@ void PivotTablePrivate::populateDataModels(QSqlQuery sqlQuery) {
 				verticalHeaderModel->setSpan(start_span[i], i, span, 1);
 		}
 
-		verticalHeaderModel->setSpan(1,0,0,rows.count());
+		verticalHeaderModel->setSpan(1, 0, 0, rows.count());
 	} else if (rows.isEmpty()) { // all selected field columns were put on colums
 		// we have:
 		// * all field colums on columns
@@ -459,46 +453,45 @@ void PivotTablePrivate::populateDataModels(QSqlQuery sqlQuery) {
 
 		// set the values
 		QVector<int> start_span(firstValueIndex, 0);
-        QVector<int> end_span(firstValueIndex, 0);
-        QVector<QString> last_value(firstValueIndex, QString());
+		QVector<int> end_span(firstValueIndex, 0);
+		QVector<QString> last_value(firstValueIndex, QString());
 
-        int col = 0;
-        while (sqlQuery.next()) {
-            bool parent_header_changed = false;
-            for (int i = 0; i < firstValueIndex; ++i) {
-                const auto& value = sqlQuery.value(i).toString();
-                if (col == 0 || value != last_value[i] || parent_header_changed) {
-                    // Set span for previous group if needed
-                    if (col > 0 && end_span[i] > start_span[i]) {
-                        int span = end_span[i] - start_span[i];
-                        if (span > 1)
-                            horizontalHeaderModel->setSpan(i, start_span[i], 1, span);
-                    }
-                    start_span[i] = col;
-                    parent_header_changed = true;
-                }
-                horizontalHeaderModel->setData(horizontalHeaderModel->index(i, col), value, Qt::DisplayRole);
-                last_value[i] = value;
-                end_span[i] = col + 1;
-            }
+		int col = 0;
+		while (sqlQuery.next()) {
+			bool parent_header_changed = false;
+			for (int i = 0; i < firstValueIndex; ++i) {
+				const auto& value = sqlQuery.value(i).toString();
+				if (col == 0 || value != last_value[i] || parent_header_changed) {
+					// Set span for previous group if needed
+					if (col > 0 && end_span[i] > start_span[i]) {
+						int span = end_span[i] - start_span[i];
+						if (span > 1)
+							horizontalHeaderModel->setSpan(i, start_span[i], 1, span);
+					}
+					start_span[i] = col;
+					parent_header_changed = true;
+				}
+				horizontalHeaderModel->setData(horizontalHeaderModel->index(i, col), value, Qt::DisplayRole);
+				last_value[i] = value;
+				end_span[i] = col + 1;
+			}
 
-            // values
-            for (int i = firstValueIndex; i < columnsCount; ++i) {
-                const auto& value = sqlQuery.value(i).toString();
-                dataModel->setItem(i - firstValueIndex, col, new QStandardItem(value));
-            }
-            ++col;
-        }
-        // finalize spans for the last group
-        for (int i = 0; i < firstValueIndex; ++i) {
-            int span = end_span[i] - start_span[i];
-            if (span > 1)
-                horizontalHeaderModel->setSpan(i, start_span[i], 1, span);
-        }
+			// values
+			for (int i = firstValueIndex; i < columnsCount; ++i) {
+				const auto& value = sqlQuery.value(i).toString();
+				dataModel->setItem(i - firstValueIndex, col, new QStandardItem(value));
+			}
+			++col;
+		}
+		// finalize spans for the last group
+		for (int i = 0; i < firstValueIndex; ++i) {
+			int span = end_span[i] - start_span[i];
+			if (span > 1)
+				horizontalHeaderModel->setSpan(i, start_span[i], 1, span);
+		}
 
 		horizontalHeaderModel->setSpan(0,1,columns.count(),0);
 	} else {
-
 	}
 }
 
@@ -514,9 +507,9 @@ void PivotTablePrivate::createDb() {
 	m_dbCreated = dataSourceSpreadsheet->exportToSQLite(QString(), QLatin1String("pivot"));
 }
 
-//##############################################################################
-//##################  Serialization/Deserialization  ###########################
-//##############################################################################
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 /*!
   Saves as XML.
  */
@@ -561,9 +554,7 @@ bool PivotTable::load(XmlStreamReader* reader, bool preview) {
 				READ_INT_VALUE("dataSourceType", dataSourceType, PivotTable::DataSourceType);
 				str = attribs.value(QStringLiteral("dataSourceSpreadsheet")).toString();
 				d->dataSourceSpreadsheetPath = str;
-			} else if (reader->name() == QLatin1String("rows")) {
-				READ_STRING_LIST("row", d->rows);
-			} else if (reader->name() == QLatin1String("columns")) {
+				READ_STRING_LIST("rows", d->rows);
 				READ_STRING_LIST("columns", d->columns);
 			} else { // unknown element
 				reader->raiseUnknownElementWarning();

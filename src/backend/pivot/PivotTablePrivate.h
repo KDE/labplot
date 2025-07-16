@@ -19,7 +19,6 @@ class HierarchicalHeaderModel;
 class PivotTablePrivate {
 public:
 	explicit PivotTablePrivate(PivotTable*);
-	virtual ~PivotTablePrivate();
 
 	QString name() const;
 
@@ -56,7 +55,7 @@ public:
 
 private:
 	bool m_dbCreated{false};
-// 	QMap<QString, QStringList> m_members;
+	// QMap<QString, QStringList> m_members;
 
 	QString createSQLQuery() const;
 	void populateDataModels(QSqlQuery);
