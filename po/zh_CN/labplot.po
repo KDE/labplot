@@ -21748,10 +21748,9 @@ msgstr "保存计算结果："
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: src/frontend/ui/dockwidgets/projectdock.ui:288
-#, fuzzy, kde-format
-#| msgid "Close File"
+#, kde-format
 msgid "Compress File:"
-msgstr "关闭文件"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:109
@@ -23135,24 +23134,18 @@ msgstr "遵循 GUM 标准"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:97
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Save projects in a compatible format that can be "
-#| "opened in LabPlot versions older than 2.9.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Save projects in a uncompressed xml format that can be "
 "opened in LabPlot versions older than 2.9 and are useful for version "
 "controlled projects</p></body></html>"
 msgstr ""
-"<html><head/><body><p>以兼容 LabPlot 2.9 以前版本的格式保存工程文件。</p></"
-"body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:100
-#, fuzzy, kde-format
-#| msgid "Save in compatible format"
+#, kde-format
 msgid "Save in uncompressed format"
-msgstr "以兼容格式保存"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
 #: src/frontend/ui/settingsgeneralpage.ui:107
@@ -23186,10 +23179,9 @@ msgstr "笔记本："
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
 #: src/frontend/ui/settingsgeneralpage.ui:155
-#, fuzzy, kde-format
-#| msgid "Precision:"
+#, kde-format
 msgid "Compression:"
-msgstr "精度："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
 #: src/frontend/ui/settingsgeneralpage.ui:197
@@ -24837,6 +24829,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
-
-#~ msgid "Compatibility:"
-#~ msgstr "兼容性："

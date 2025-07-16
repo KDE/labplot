@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-15 00:39+0000\n"
-"PO-Revision-Date: 2025-06-25 09:53+0300\n"
+"PO-Revision-Date: 2025-07-15 15:52+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -22271,10 +22271,9 @@ msgstr "Збереження обчислень:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: src/frontend/ui/dockwidgets/projectdock.ui:288
-#, fuzzy, kde-format
-#| msgid "Compressed"
+#, kde-format
 msgid "Compress File:"
-msgstr "Стиснений"
+msgstr "Стиснутий файл:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:109
@@ -23677,24 +23676,21 @@ msgstr "Сумісні з GUM"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:97
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Save projects in a compatible format that can be "
-#| "opened in LabPlot versions older than 2.9.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Save projects in a uncompressed xml format that can be "
 "opened in LabPlot versions older than 2.9 and are useful for version "
 "controlled projects</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Зберігати проєкти у сумісному форматі, який можна буде "
-"відкривати у версіях LabPlot, давніших за 2.9.</p></body></html>"
+"<html><head/><body><p>Зберігати проєкти у нестиснутому форматі xml, дані у "
+"якому може бути відкрито у версіях LabPlot до 2.9. Зручний для проєктів з "
+"керуванням версіями.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:100
-#, fuzzy, kde-format
-#| msgid "Save in compatible format"
+#, kde-format
 msgid "Save in uncompressed format"
-msgstr "Зберегти у сумісному форматі"
+msgstr "Зберегти у форматі без стискання"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
 #: src/frontend/ui/settingsgeneralpage.ui:107
@@ -23728,10 +23724,9 @@ msgstr "Нотатник:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
 #: src/frontend/ui/settingsgeneralpage.ui:155
-#, fuzzy, kde-format
-#| msgid "Compression"
+#, kde-format
 msgid "Compression:"
-msgstr "Стискання"
+msgstr "Стискання:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
 #: src/frontend/ui/settingsgeneralpage.ui:197

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-15 00:39+0000\n"
-"PO-Revision-Date: 2025-06-25 11:31+0200\n"
+"PO-Revision-Date: 2025-07-15 10:16+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.04.2\n"
+"X-Generator: Lokalize 25.04.3\n"
 
 #: src/backend/core/AbstractAspect.cpp:234
 #, kde-format
@@ -22173,10 +22173,9 @@ msgstr "Berekeningen opslaan:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: src/frontend/ui/dockwidgets/projectdock.ui:288
-#, fuzzy, kde-format
-#| msgid "Compressed"
+#, kde-format
 msgid "Compress File:"
-msgstr "Ingepakt"
+msgstr "Gecompileerd bestand:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:109
@@ -23577,24 +23576,21 @@ msgstr "GUM-compliant"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:97
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Save projects in a compatible format that can be "
-#| "opened in LabPlot versions older than 2.9.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Save projects in a uncompressed xml format that can be "
 "opened in LabPlot versions older than 2.9 and are useful for version "
 "controlled projects</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Projecten opslaan in een compatibel formaat dat kan "
-"worden gelezen in versies van LabPlot ouder dan 2.9.</p></body></html>"
+"<html><head/><body><p>Projecten opslaan in een niet-gecomprimeerd xml-"
+"formaat dat kan worden geopend versies van LabPlot ouder dan 2.9 en nuttig "
+"zijn voor versie gestuurde projecten.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:100
-#, fuzzy, kde-format
-#| msgid "Save in compatible format"
+#, kde-format
 msgid "Save in uncompressed format"
-msgstr "Opslaan in een compatibel formaat"
+msgstr "Opslaan in een niet-gecomprimeerd formaat"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
 #: src/frontend/ui/settingsgeneralpage.ui:107
@@ -23628,10 +23624,9 @@ msgstr "Notitieboek:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
 #: src/frontend/ui/settingsgeneralpage.ui:155
-#, fuzzy, kde-format
-#| msgid "Compression"
+#, kde-format
 msgid "Compression:"
-msgstr "Compressie"
+msgstr "Compressie:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
 #: src/frontend/ui/settingsgeneralpage.ui:197
