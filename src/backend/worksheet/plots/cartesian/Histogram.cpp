@@ -32,7 +32,8 @@
 #include <KLocalizedString>
 
 CURVE_COLUMN_CONNECT(Histogram, Data, data, recalc)
-static constexpr double zero = std::numeric_limits<double>::epsilon(); // zero baseline, don't use the exact 0.0 since it breaks the histrogram with log-scaling
+// zero baseline, don't use the exact 0.0 since it breaks the histogram with log-scaling
+static constexpr double zero = std::numeric_limits<double>::epsilon();
 
 /*!
  * \class Histogram
@@ -707,7 +708,7 @@ const AbstractColumn* HistogramPrivate::bins() {
 		const double width = (binRangesMax - binRangesMin) / m_bins;
 		m_binsColumn->resizeTo(m_bins);
 		for (size_t i = 0; i < m_bins; ++i) {
-			const double x = binRangesMin + i * width;
+			const double x = binRangesMin + i * width + width / 2.;
 			m_binsColumn->setValueAt(i, x);
 		}
 	}
@@ -873,9 +874,9 @@ void HistogramPrivate::recalc() {
 		}
 		}
 
-		DEBUG("min " << binRangesMin)
-		DEBUG("max " << binRangesMax)
-		DEBUG("number of bins " << m_bins)
+		DEBUG(Q_FUNC_INFO << ", min " << binRangesMin)
+		DEBUG(Q_FUNC_INFO << ", max " << binRangesMax)
+		DEBUG(Q_FUNC_INFO << ", number of bins " << m_bins)
 
 		// calculate the histogram
 		if (m_bins > 0) {
@@ -931,7 +932,7 @@ void HistogramPrivate::recalc() {
 					m_binPDValuesColumn->setValueAt(i, gsl_histogram_get(m_histogram, i) / totalCount / width); // probability density normalization
 			}
 		} else
-			DEBUG("Number of bins must be positive integer")
+			DEBUG(Q_FUNC_INFO << ", number of bins must be positive integer")
 	}
 
 	const double xMin = xMinimum();
@@ -1028,7 +1029,8 @@ void HistogramPrivate::histogramValue(double& value, int bin) const {
 	}
 	}
 
-	if (value == 0.0)
+	// don't use the exact 0.0 for probability or density since it breaks the histogram with log-scaling
+	if (value == 0.0 && normalization != Histogram::Count)
 		value = zero;
 }
 
