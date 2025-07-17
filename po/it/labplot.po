@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-08 02:36+0000\n"
-"PO-Revision-Date: 2025-05-31 08:55+0200\n"
+"PO-Revision-Date: 2025-07-13 09:38+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.04.1\n"
+"X-Generator: Lokalize 25.04.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2019,7 +2019,7 @@ msgstr "Totale dei messaggi: "
 #: src/backend/datasources/filters/McapFilter.cpp:203
 #, kde-format
 msgid "Schema count: "
-msgstr ""
+msgstr "Conteggio dello schema: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:205
 #, kde-format
@@ -7296,12 +7296,12 @@ msgstr "%1: maschera le righe con valori mancanti"
 #: src/backend/spreadsheet/Spreadsheet.cpp:420
 #, kde-format
 msgid "%1: toggle comments header"
-msgstr ""
+msgstr "%1: attiva/disattiva intestazione dei commenti"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:428
 #, kde-format
 msgid "%1: toggle sparklines header"
-msgstr ""
+msgstr "%1: attiva/disattiva intestazione delle sparkline"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:492
 #: src/backend/spreadsheet/Spreadsheet.cpp:493
@@ -8519,7 +8519,7 @@ msgstr "Errore XY"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:707
 #, kde-format
 msgid "Line and Symbol Plots"
-msgstr ""
+msgstr "Grafici a linee e a simboli"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:709
 #, kde-format
@@ -8593,7 +8593,7 @@ msgstr "Grafico lecca-lecca"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:758
 #, kde-format
 msgid "Continual Improvement Plots"
-msgstr ""
+msgstr "Grafici a miglioramento continuo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:760
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1869
@@ -9774,7 +9774,7 @@ msgstr "Risultati dell'adattamento"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1846
 #, kde-format
 msgid "Nonlinear Fit to X/Y data"
-msgstr ""
+msgstr "Adattamento non lineare a dati X/Y"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1852
 #, kde-format
@@ -10027,7 +10027,7 @@ msgstr "%1: imposta le opzioni ed esegui la smussatura"
 #: src/backend/worksheet/plots/PlotArea.cpp:141
 #, kde-format
 msgid "%1: toggle clipping"
-msgstr "%1: cambia il taglio"
+msgstr "%1: attiva/disattiva il taglio"
 
 #: src/backend/worksheet/plots/PlotArea.cpp:157
 #, kde-format
@@ -10419,7 +10419,7 @@ msgstr "Leggi (e scrivi) insiemi di dati da SAS, Stata e SPSS"
 #: src/frontend/AboutDialog.cpp:344
 #, kde-format
 msgid "Binary Log File (BLF) file support"
-msgstr ""
+msgstr "Supporto ai file Binary Log File (BLF)"
 
 #: src/frontend/AboutDialog.cpp:347 src/frontend/AboutDialog.cpp:372
 #, kde-format
@@ -10912,6 +10912,15 @@ msgid ""
 "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
 "td></tr></table>"
 msgstr ""
+"Se non è vuoto, il numero di colonne deve corrispondere al numero dei nomi "
+"delle colonne, se forniti, e deve corrispondere al numero di colonne del "
+"file importato.<br>Tipi di dato:<table><tr><td>%1</td><td>Numero intero a 32 "
+"bit (−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Numero "
+"intero a 64 bit (−9.223.372.036.854.775.808 .. 9.223.372.036.854.775.807).</"
+"td></tr><tr><td>%3</td><td>Numero in virgola mobile a 64 bit. Risoluzione di "
+"circa 16 cifre.</td></tr><tr><td>%4</td><td>Data e ora in formato di data e "
+"ora testuale se non vuoto, altrimenti viene determinato automaticamente.</"
+"td></tr><tr><td>%5</td><td>Un testo.</td></tr></table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:138
 #, kde-format
@@ -11981,6 +11990,15 @@ msgid ""
 "a new coordinate system (data range) on the same plot area is created for "
 "every layer.</li></ul>"
 msgstr ""
+"I livelli multipli sono usati in Origin sia per migliorare i grafici "
+"multipli che più assi sullo stesso grafico (per maggiori dettagli vedi la <a "
+"href=\"https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph"
+"\">documentazione di Origin</a>).<br>LabPlot può elaborare un tipo alla "
+"volta.<br><br>Specifica come importare i grafici multi livello nel progetto "
+"selezionato:<ul><li>Come Area del grafico: viene creata una nuova area del "
+"grafico per ogni livello.</li><li>Come Sistema di coordinate: viene creato "
+"un nuovo sistema di coordinate (intervallo di dati) per ogni livello nella "
+"stessa area del grafico.</li></ul>"
 
 #: src/frontend/datasources/ImportOriginLayersDialog.cpp:38
 #: src/frontend/datasources/ImportProjectDialog.cpp:159
@@ -12970,6 +12988,7 @@ msgstr ""
 msgid ""
 "Select to modify the properties of the symbol for the ends of the whiskers."
 msgstr ""
+"Seleziona per modificare le proprietà del simbolo per le estremità dei baffi."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:333
 #, kde-format
@@ -12977,6 +12996,8 @@ msgid ""
 "Activate to randomize the positions of the symbols (\"jittering\"), helpful "
 "for dense and overlapping data points."
 msgstr ""
+"Attiva per randomizzare le posizioni dei simboli (“jittering”), utile per "
+"punti di dati densi e sovrapposti."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:733
 #, kde-format
@@ -13262,6 +13283,11 @@ msgid ""
 "the most concise format</li><li>Automatic (E) - selects between 'Decimal' "
 "and 'Scientific (E)' to get the most concise format</li></ul>"
 msgstr ""
+"Specifica come sono formattati i valori numerici nel foglio elettronico:"
+"<ul><li>Decimale - formattato come [-]9.9</li><li>Scientifico (e) - "
+"formattato come [-]9.9e[+|-]999</li><li>Scientifico (E) - formattato come "
+"[-]9.9E[+|-]999</li><li>Automatico (e) - selezionato tra «Decimale» e "
+"«Scientifico (E)» per ottenere il formato più coinciso</li></ul>"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:337
 #, kde-format
@@ -13272,6 +13298,11 @@ msgid ""
 "represents the maximum number of significant digits (trailing zeroes are "
 "omitted)."
 msgstr ""
+"Per i formati «Decimale»,la precisione rappresenta il numero di cifre dopo "
+"il punto decimale.\n"
+"Invece, per i formati Automatico (e)» e Automatico (E)», la precisione "
+"rappresenta il massimo numero di cifre significative (gli zeri alla fine "
+"sono omessi)."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:342
 #, kde-format
@@ -13389,6 +13420,12 @@ msgid ""
 "the histogram are excluded. If you want to include these values for the last "
 "bin you will need to add an extra bin to your histogram."
 msgstr ""
+"Utilizza «Automatico» per determinare automaticamente i valori minimi e "
+"massimi dei dati da utilizzare per calcolare l'istogramma. Altrimenti, "
+"specifica i valori manualmente.<br><br><b>Nota:</b> ogni campione che cade "
+"sull'estremità superiore dell'istogramma vine escluso. Se vuoi includere "
+"questi valori per l'ultimo contenitore devi aggiungere un contenitore "
+"aggiuntivo all'istogramma."
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:578
 #, kde-format
@@ -13613,6 +13650,8 @@ msgstr ""
 #, kde-format
 msgid "Maximal value for the upper control limit. No constraint, if empty."
 msgstr ""
+"Valore massimo per il limite di controllo superiore. Se vuoto, nessun "
+"vincolo."
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:269
 #, kde-format
@@ -14856,7 +14895,7 @@ msgstr "Fábián Kristóf-Szabolcs"
 #, kde-format
 msgctxt "@info:credit"
 msgid "FITS Filter"
-msgstr ""
+msgstr "Filtro FITS"
 
 #: src/frontend/LabPlot.cpp:92
 #, kde-format
@@ -19243,7 +19282,7 @@ msgstr "Salta le parti vuote"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:33
 #, kde-format
 msgid "Column Data Types:"
-msgstr ""
+msgstr "Tipi di dati delle colonne:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chbSimplifyWhitespaces)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:43
@@ -23486,7 +23525,7 @@ msgstr "Smussatura (potenza di 10):"
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:162
 #, kde-format
 msgid "Termination Ratio:"
-msgstr ""
+msgstr "Rapporto di terminazione:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueStart)
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:175

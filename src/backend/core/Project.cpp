@@ -933,12 +933,6 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	// for the analysis curve itself.
 	bool hasChildren = (aspect->childCount<AbstractAspect>() > 0 && !aspect->inherits(AspectType::XYAnalysisCurve));
 
-	// aspects in the project that can be used as sources/references:
-	auto* project = aspect->project();
-	const auto& columns = project->children<Column>(ChildIndexFlag::Recursive);
-	const auto& histogramsAll = project->children<Histogram>(ChildIndexFlag::Recursive); // needed for fit curves only.
-	const auto& curvesAll = project->children<XYCurve>(ChildIndexFlag::Recursive);
-
 #ifndef SDK
 	// LiveDataSource:
 	// call finalizeLoad() to replace relative with absolute paths if required
@@ -949,6 +943,12 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		source->finalizeLoad();
 	}
 #endif
+
+	// aspects in the project that can be used as sources/references:
+	auto* project = aspect->project();
+	const auto& columns = project->children<Column>(ChildIndexFlag::Recursive);
+	const auto& histogramsAll = project->children<Histogram>(ChildIndexFlag::Recursive); // needed for fit curves only.
+	const auto& curvesAll = project->children<XYCurve>(ChildIndexFlag::Recursive);
 
 	// xy-curves
 	//  cannot be removed by the column observer, because it does not react
