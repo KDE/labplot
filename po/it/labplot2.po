@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-16 03:05+0000\n"
-"PO-Revision-Date: 2025-03-27 17:44+0100\n"
+"PO-Revision-Date: 2025-07-13 09:38+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.04.1\n"
+"X-Generator: Lokalize 25.04.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -9321,7 +9321,7 @@ msgstr "Risultati dell'adattamento"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1847
 #, kde-format
 msgid "Nonlinear Fit to X/Y data"
-msgstr ""
+msgstr "Adattamento non lineare a dati X/Y"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1853
 #, kde-format
@@ -9523,7 +9523,7 @@ msgstr "%1: imposta le opzioni ed esegui la smussatura"
 #: src/backend/worksheet/plots/PlotArea.cpp:145
 #, kde-format
 msgid "%1: toggle clipping"
-msgstr "%1: cambia il taglio"
+msgstr "%1: attiva/disattiva il taglio"
 
 #: src/backend/worksheet/plots/PlotArea.cpp:161
 #, kde-format
@@ -12584,6 +12584,15 @@ msgid ""
 "new coordinate system (data range) on the same plot area is created for "
 "every layer</li></ul>"
 msgstr ""
+"I livelli multipli sono usati in Origin sia per migliorare i grafici "
+"multipli che più assi sullo stesso grafico (per maggiori dettagli vedi la <a "
+"href=\"https://wwworiginlab.com/doc/Origin-Help/MultiLayer-Graph"
+"\">documentazione di Origin</a>).LabPlot può elaborare un tipo alla volta."
+"<br><br>Specifica come importare i grafici multi livello nel progetto "
+"selezionato:<ul><li>Come Area del grafico: viene creata una nuova area del "
+"grafico per ogni livello.<li>Come Sistema di coordinate: viene creato un "
+"nuovo sistema di coordinate (intervallo di dati) per ogni livello nella "
+"stessa area del grafico.</li></ul>"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:272
 #, kde-format
@@ -13503,6 +13512,7 @@ msgstr ""
 msgid ""
 "Select to modify the properties of the symbol for the ends of the whiskers."
 msgstr ""
+"Seleziona per modificare le proprietà del simbolo per le estremità dei baffi."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:117
 #, kde-format
@@ -13510,6 +13520,8 @@ msgid ""
 "Activate to randomize the positions of the symbols (\"jittering\"), helpful "
 "for dense and overlapping data points."
 msgstr ""
+"Attiva per randomizzare le posizioni dei simboli (“jittering”), utile per "
+"punti di dati densi e sovrapposti."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:726
 #, kde-format
@@ -22386,10 +22398,9 @@ msgstr "Smussatura (potenza di 10):"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter2)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:162
-#, fuzzy, kde-format
-#| msgid "Orientation:"
+#, kde-format
 msgid "Termination Ratio:"
-msgstr "Orientazione:"
+msgstr "Rapporto di terminazione:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueStart)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:175
