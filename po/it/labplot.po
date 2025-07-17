@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-15 00:39+0000\n"
-"PO-Revision-Date: 2025-05-31 08:55+0200\n"
+"PO-Revision-Date: 2025-07-13 09:38+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.04.1\n"
+"X-Generator: Lokalize 25.04.3\n"
 
 #: src/backend/core/AbstractAspect.cpp:234
 #, kde-format
@@ -2015,10 +2015,9 @@ msgid "Message count: "
 msgstr "Totale dei messaggi: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:203
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Schema count: "
-msgstr "Conteggio dei fogli: %1"
+msgstr "Conteggio dello schema: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:205
 #, kde-format
@@ -7294,16 +7293,14 @@ msgid "Tricube"
 msgstr "Tricubo"
 
 #: src/backend/script/Script.cpp:79
-#, fuzzy, kde-format
-#| msgid "Text file (*.txt)"
+#, kde-format
 msgid "Python file (*.py)"
-msgstr "File di testo (*.txt)"
+msgstr "File Python (*.py)"
 
 #: src/backend/script/Script.cpp:137 src/backend/script/Script.cpp:324
-#, fuzzy, kde-format
-#| msgid "no matrix element found"
+#, kde-format
 msgid "no script element found"
-msgstr "nessun elemento della matrice trovato"
+msgstr "Nessun elemento di script trovato"
 
 #: src/backend/script/Script.cpp:193
 #, kde-format
@@ -7316,10 +7313,9 @@ msgid "Script"
 msgstr "Script"
 
 #: src/backend/script/Script.cpp:304
-#, fuzzy, kde-format
-#| msgid "Failed to open the file."
+#, kde-format
 msgid "Failed to run the script."
-msgstr "Impossibile aprire il file."
+msgstr "Impossibile eseguire lo script."
 
 #: src/backend/script/Script.cpp:309
 #, kde-format
@@ -7327,22 +7323,19 @@ msgid "A script is already running."
 msgstr "Uno script è già in esecuzione."
 
 #: src/backend/script/ScriptRuntime.cpp:92
-#, fuzzy, kde-format
-#| msgid "Name"
+#, kde-format
 msgctxt "@title:column"
 msgid "Name"
 msgstr "Nome"
 
 #: src/backend/script/ScriptRuntime.cpp:94
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "@title:column"
 msgid "Value"
 msgstr "Valore"
 
 #: src/backend/script/ScriptRuntime.cpp:96
-#, fuzzy, kde-format
-#| msgid "Type"
+#, kde-format
 msgctxt "@title:column"
 msgid "Type"
 msgstr "Tipo"
@@ -7358,16 +7351,14 @@ msgid "%1: mask rows with missing values"
 msgstr "%1: maschera le righe con valori mancanti"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:420
-#, fuzzy, kde-format
-#| msgid "%1: change comment"
+#, kde-format
 msgid "%1: toggle comments header"
-msgstr "%1: cambia commento"
+msgstr "%1: attiva/disattiva intestazione dei commenti"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:428
-#, fuzzy, kde-format
-#| msgid "Unable to parse header"
+#, kde-format
 msgid "%1: toggle sparklines header"
-msgstr "Impossibile elaborare l'intestazione"
+msgstr "%1: attiva/disattiva intestazione delle sparkline"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:492
 #: src/backend/spreadsheet/Spreadsheet.cpp:493
@@ -8506,16 +8497,14 @@ msgstr "Intervallo di riferimento"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:556
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2271
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2293
-#, fuzzy, kde-format
-#| msgid "As Plot Area"
+#, kde-format
 msgid "Inset Plot Area"
-msgstr "Come area del grafico"
+msgstr "Inserisci area del grafico"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:557
-#, fuzzy, kde-format
-#| msgid "One Plot Area per Plot"
+#, kde-format
 msgid "Inset Plot Area with Data"
-msgstr "Un'area del grafico per grafico"
+msgstr "Inserisci area del grafico con dati"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:575
 #: src/frontend/ActionsManager.cpp:848
@@ -8598,10 +8587,9 @@ msgid "XY Error"
 msgstr "Errore XY"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:734
-#, fuzzy, kde-format
-#| msgid "Line+Symbol Width:"
+#, kde-format
 msgid "Line and Symbol Plots"
-msgstr "Larghezza di linea+simbolo:"
+msgstr "Grafici a linee e a simboli"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:736
 #, kde-format
@@ -8675,7 +8663,7 @@ msgstr "Grafico lecca-lecca"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:785
 #, kde-format
 msgid "Continual Improvement Plots"
-msgstr ""
+msgstr "Grafici a miglioramento continuo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:787
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1897
@@ -9871,7 +9859,7 @@ msgstr "Risultati dell'adattamento"
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1846
 #, kde-format
 msgid "Nonlinear Fit to X/Y data"
-msgstr ""
+msgstr "Adattamento non lineare a dati X/Y"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1852
 #, kde-format
@@ -10125,7 +10113,7 @@ msgstr "%1: imposta le opzioni ed esegui la smussatura"
 #: src/backend/worksheet/plots/PlotArea.cpp:141
 #, kde-format
 msgid "%1: toggle clipping"
-msgstr "%1: cambia il taglio"
+msgstr "%1: attiva/disattiva il taglio"
 
 #: src/backend/worksheet/plots/PlotArea.cpp:157
 #, kde-format
@@ -10523,10 +10511,9 @@ msgid "Read (and write) data sets from SAS, Stata, and SPSS"
 msgstr "Leggi (e scrivi) insiemi di dati da SAS, Stata e SPSS"
 
 #: src/frontend/AboutDialog.cpp:344
-#, fuzzy, kde-format
-#| msgid "Binary files (*.*)"
+#, kde-format
 msgid "Binary Log File (BLF) file support"
-msgstr "File binari (*.*)"
+msgstr "Supporto ai file Binary Log File (BLF)"
 
 #: src/frontend/AboutDialog.cpp:347 src/frontend/AboutDialog.cpp:372
 #, kde-format
@@ -10627,10 +10614,9 @@ msgid "Creates a new worksheet for data plotting"
 msgstr "Crea un nuovo foglio di lavoro per tracciare i dati"
 
 #: src/frontend/ActionsManager.cpp:237
-#, fuzzy, kde-format
-#| msgid "Creates a new %1 notebook"
+#, kde-format
 msgid "Creates a new %1 script"
-msgstr "Crea un nuovo notebook %1"
+msgstr "Crea un nuovo script %1"
 
 #: src/frontend/ActionsManager.cpp:244 src/frontend/MainWin.cpp:1253
 #, kde-format
@@ -10840,11 +10826,10 @@ msgstr ""
 "sistemi disponibili o per abilitarne di nuovi"
 
 #: src/frontend/ActionsManager.cpp:505
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgctxt "@action"
 msgid "New Plot Area"
-msgstr "Area del grafico"
+msgstr "Nuova area del grafico"
 
 #: src/frontend/ActionsManager.cpp:521
 #: src/frontend/dockwidgets/WorksheetDock.cpp:281
@@ -10896,15 +10881,13 @@ msgid "Select and Zoom"
 msgstr "Seleziona e ingrandisci"
 
 #: src/frontend/ActionsManager.cpp:560 src/frontend/ActionsManager.cpp:796
-#, fuzzy, kde-format
-#| msgid "Zoom"
+#, kde-format
 msgctxt "@action"
 msgid "Zoom"
 msgstr "Ingrandimento"
 
 #: src/frontend/ActionsManager.cpp:566 src/frontend/ActionsManager.cpp:802
-#, fuzzy, kde-format
-#| msgid "Magnification"
+#, kde-format
 msgctxt "@action"
 msgid "Magnification"
 msgstr "Ingrandimento"
@@ -11382,10 +11365,9 @@ msgstr ""
 "Verranno rimossi tutti i punti di riferimento disponibili. Vuoi continuare?"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:692
-#, fuzzy, kde-format
-#| msgid "%1: change position of selected DatapickerPoints."
+#, kde-format
 msgid "%1: change position of selected points"
-msgstr "%1: cambia la posizione dei DatapickerPoints selezionati."
+msgstr "%1: cambia la posizione dei punti selezionati"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:741
 #, kde-format
@@ -11591,6 +11573,15 @@ msgid ""
 "otherwise automatically determined.</td></tr><tr><td>%5</td><td>A text.</"
 "td></tr></table>"
 msgstr ""
+"Se non è vuoto, il numero di colonne deve corrispondere al numero dei nomi "
+"delle colonne, se forniti, e deve corrispondere al numero di colonne del "
+"file importato.<br>Tipi di dato:<table><tr><td>%1</td><td>Numero intero a 32 "
+"bit (−2.147.483.648 .. 2.147.483.647).</td></tr><tr><td>%2</td><td>Numero "
+"intero a 64 bit (−9.223.372.036.854.775.808 .. 9.223.372.036.854.775.807).</"
+"td></tr><tr><td>%3</td><td>Numero in virgola mobile a 64 bit. Risoluzione di "
+"circa 16 cifre.</td></tr><tr><td>%4</td><td>Data e ora in formato di data e "
+"ora testuale se non vuoto, altrimenti viene determinato automaticamente.</"
+"td></tr><tr><td>%5</td><td>Un testo.</td></tr></table>"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:138
 #, kde-format
@@ -12662,6 +12653,15 @@ msgid ""
 "a new coordinate system (data range) on the same plot area is created for "
 "every layer.</li></ul>"
 msgstr ""
+"I livelli multipli sono usati in Origin sia per migliorare i grafici "
+"multipli che più assi sullo stesso grafico (per maggiori dettagli vedi la <a "
+"href=\"https://www.originlab.com/doc/Origin-Help/MultiLayer-Graph"
+"\">documentazione di Origin</a>).<br>LabPlot può elaborare un tipo alla "
+"volta.<br><br>Specifica come importare i grafici multi livello nel progetto "
+"selezionato:<ul><li>Come Area del grafico: viene creata una nuova area del "
+"grafico per ogni livello.</li><li>Come Sistema di coordinate: viene creato "
+"un nuovo sistema di coordinate (intervallo di dati) per ogni livello nella "
+"stessa area del grafico.</li></ul>"
 
 #: src/frontend/datasources/ImportOriginLayersDialog.cpp:38
 #: src/frontend/datasources/ImportProjectDialog.cpp:159
@@ -13647,6 +13647,7 @@ msgstr ""
 msgid ""
 "Select to modify the properties of the symbol for the ends of the whiskers."
 msgstr ""
+"Seleziona per modificare le proprietà del simbolo per le estremità dei baffi."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:333
 #, kde-format
@@ -13654,6 +13655,8 @@ msgid ""
 "Activate to randomize the positions of the symbols (\"jittering\"), helpful "
 "for dense and overlapping data points."
 msgstr ""
+"Attiva per randomizzare le posizioni dei simboli (“jittering”), utile per "
+"punti di dati densi e sovrapposti."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:733
 #, kde-format
@@ -13939,6 +13942,11 @@ msgid ""
 "the most concise format</li><li>Automatic (E) - selects between 'Decimal' "
 "and 'Scientific (E)' to get the most concise format</li></ul>"
 msgstr ""
+"Specifica come sono formattati i valori numerici nel foglio elettronico:"
+"<ul><li>Decimale - formattato come [-]9.9</li><li>Scientifico (e) - "
+"formattato come [-]9.9e[+|-]999</li><li>Scientifico (E) - formattato come "
+"[-]9.9E[+|-]999</li><li>Automatico (e) - selezionato tra «Decimale» e "
+"«Scientifico (E)» per ottenere il formato più coinciso</li></ul>"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:337
 #, kde-format
@@ -13949,6 +13957,11 @@ msgid ""
 "represents the maximum number of significant digits (trailing zeroes are "
 "omitted)."
 msgstr ""
+"Per i formati «Decimale»,la precisione rappresenta il numero di cifre dopo "
+"il punto decimale.\n"
+"Invece, per i formati Automatico (e)» e Automatico (E)», la precisione "
+"rappresenta il massimo numero di cifre significative (gli zeri alla fine "
+"sono omessi)."
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:342
 #, kde-format
@@ -14066,6 +14079,12 @@ msgid ""
 "the histogram are excluded. If you want to include these values for the last "
 "bin you will need to add an extra bin to your histogram."
 msgstr ""
+"Utilizza «Automatico» per determinare automaticamente i valori minimi e "
+"massimi dei dati da utilizzare per calcolare l'istogramma. Altrimenti, "
+"specifica i valori manualmente.<br><br><b>Nota:</b> ogni campione che cade "
+"sull'estremità superiore dell'istogramma vine escluso. Se vuoi includere "
+"questi valori per l'ultimo contenitore devi aggiungere un contenitore "
+"aggiuntivo all'istogramma."
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:578
 #, kde-format
@@ -14290,6 +14309,8 @@ msgstr ""
 #, kde-format
 msgid "Maximal value for the upper control limit. No constraint, if empty."
 msgstr ""
+"Valore massimo per il limite di controllo superiore. Se vuoto, nessun "
+"vincolo."
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:269
 #, kde-format
@@ -14360,22 +14381,19 @@ msgid "Match Complete Word"
 msgstr "Corrispondenza con la parola completa"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:53
-#, fuzzy, kde-format
-#| msgid "Day Names"
+#, kde-format
 msgid "Copy Name"
-msgstr "Nomi dei giorni"
+msgstr "Copia il nome"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:54
-#, fuzzy, kde-format
-#| msgid "Drop Values"
+#, kde-format
 msgid "Copy Value"
-msgstr "Rilascia i valori"
+msgstr "Copia valore"
 
 #: src/frontend/dockwidgets/ScriptDock.cpp:55
-#, fuzzy, kde-format
-#| msgid "Drop Numeric Values"
+#, kde-format
 msgid "Copy Name and Value"
-msgstr "Rilascia i valori numerici"
+msgstr "Copia nome e valore"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:57
 #, kde-format
@@ -14743,15 +14761,14 @@ msgstr "Modello:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:816
 #: src/frontend/GuiTools.cpp:526
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgid "Description:"
-msgstr "Descrizione"
+msgstr "Descrizione:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:817
 #, kde-format
 msgid "User defined model"
-msgstr ""
+msgstr "Modello definito dall'utente"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:861
@@ -15213,12 +15230,10 @@ msgid "Properties: Workbook"
 msgstr "Proprietà: cartella di lavoro"
 
 #: src/frontend/GuiObserver.cpp:513
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Fit"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Script"
-msgstr "Proprietà: adatta"
+msgstr "Proprietà: script"
 
 #: src/frontend/GuiTools.cpp:79 src/frontend/GuiTools.cpp:105
 #, kde-format
@@ -15447,20 +15462,19 @@ msgid "Images (%1)"
 msgstr "Immagini (%1)"
 
 #: src/frontend/GuiTools.cpp:419
-#, fuzzy, kde-format
-#| msgid "Select predefined function"
+#, kde-format
 msgid "Select file to load function definition"
-msgstr "Seleziona le funzioni predefinite"
+msgstr "Seleziona file per caricare la definizione della funzione"
 
 #: src/frontend/GuiTools.cpp:436 src/frontend/GuiTools.cpp:515
 #, kde-format
 msgid "LabPlot Function Definition"
-msgstr ""
+msgstr "Definizione di funzione di Labplot"
 
 #: src/frontend/GuiTools.cpp:499
 #, kde-format
 msgid "Select file to save function definition"
-msgstr ""
+msgstr "Seleziona file per salvare la definizione della funzione"
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
@@ -15630,12 +15644,10 @@ msgid "Fábián Kristóf-Szabolcs"
 msgstr "Fábián Kristóf-Szabolcs"
 
 #: src/frontend/LabPlot.cpp:90
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Open FITS File"
+#, kde-format
 msgctxt "@info:credit"
 msgid "FITS Filter"
-msgstr "Apri file FITS"
+msgstr "Filtro FITS"
 
 #: src/frontend/LabPlot.cpp:91
 #, kde-format
@@ -15720,10 +15732,9 @@ msgstr "Barra degli strumenti Notebook"
 
 #. i18n: ectx: ToolBar (script_toolbar)
 #: src/frontend/labplotui.rc:90
-#, fuzzy, kde-format
-#| msgid "Project Toolbar"
+#, kde-format
 msgid "Script Toolbar"
-msgstr "Barra degli strumenti dei progetti"
+msgstr "Barra degli strumenti degli script"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/frontend/labplotui.rc:97
@@ -16682,10 +16693,9 @@ msgid "User Feedback"
 msgstr "Segnalazioni degli utenti"
 
 #: src/frontend/SettingsDialog.cpp:101
-#, fuzzy, kde-format
-#| msgid "Text position"
+#, kde-format
 msgid "Text Editor"
-msgstr "Posizione del testo"
+msgstr "Editor di testo"
 
 #: src/frontend/SettingsDialog.cpp:159
 #, kde-format
@@ -19636,10 +19646,9 @@ msgstr "Salta le parti vuote"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnMode)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:33
-#, fuzzy, kde-format
-#| msgid "Column labels"
+#, kde-format
 msgid "Column Data Types:"
-msgstr "Etichetta colonna"
+msgstr "Tipi di dati delle colonne:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chbSimplifyWhitespaces)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:43
@@ -23895,10 +23904,9 @@ msgstr "Smussatura (potenza di 10):"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter2)
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:162
-#, fuzzy, kde-format
-#| msgid "Orientation:"
+#, kde-format
 msgid "Termination Ratio:"
-msgstr "Orientazione:"
+msgstr "Rapporto di terminazione:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueStart)
 #: src/frontend/ui/spreadsheet/addsubtractvaluewidget.ui:175
