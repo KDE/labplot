@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-15 00:39+0000\n"
+"POT-Creation-Date: 2025-07-18 00:38+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -8601,7 +8601,7 @@ msgid "%1: width factor changed"
 msgstr "Ændret"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:300
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:160
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:161
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:335
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:109
 #, fuzzy, kde-format
@@ -8697,7 +8697,7 @@ msgid "%1: jitterring changed"
 msgstr "Ændret"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:517
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:518
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:705
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
@@ -8705,7 +8705,7 @@ msgid "%1: change rug enabled"
 msgstr "&Indsæt tomme rækker"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:589
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:524
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:525
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:719
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
@@ -8713,7 +8713,7 @@ msgid "%1: change rug width"
 msgstr "&Indsæt tomme rækker"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:596
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:531
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:532
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:726
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
@@ -8721,7 +8721,7 @@ msgid "%1: change rug length"
 msgstr "&Indsæt tomme rækker"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:603
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:538
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:539
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:733
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
@@ -9040,7 +9040,7 @@ msgid "Analysis Plots"
 msgstr "&Analyse"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:633
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:186
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:187
 #, fuzzy, kde-format
 #| msgid "&Analysis"
 msgid "Analysis"
@@ -9622,61 +9622,61 @@ msgstr "Ændret"
 msgid "%1: set error bar cap size"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:166
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:167
 #, fuzzy, kde-format
 #| msgid "Tab position"
 msgid "bin positions"
 msgstr "Fanebladsposition"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:172
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:173
 #, fuzzy, kde-format
 #| msgid "Values"
 msgid "bin values"
 msgstr "Værdier"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:189
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:190
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Fit Gaussian (Normal) Distribution"
 msgstr "Retning"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:195
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:196
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Fit Exponential Distribution"
 msgstr "Retning"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:201
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:202
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Fit Laplace Distribution"
 msgstr "Retning"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:207
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:208
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Fit Cauchy-Lorentz Distribution"
 msgstr "Retning"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:213
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:214
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Fit Log-normal Distribution"
 msgstr "Retning"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:219
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:220
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Fit Poisson Distribution"
 msgstr "Retning"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:225
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:226
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Fit Binomial Distribution"
 msgstr "Retning"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:399
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:400
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:248
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:522
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:534
@@ -9687,61 +9687,61 @@ msgstr "Retning"
 msgid "%1: set data column"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:411
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:412
 #, fuzzy, kde-format
 #| msgid "Data, -"
 msgid "%1: set histogram type"
 msgstr "Data, -"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:418
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:419
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set histogram orientation"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:425
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:426
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set histogram normalization"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:432
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:433
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set binning method"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:439
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:440
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set bin count"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:446
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:447
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "%1: set bin width"
 msgstr "&Indsæt tomme kolonner"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:454
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:455
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: change auto bin ranges"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:502
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:503
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set bin ranges start"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:509
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:510
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: set bin ranges end"
 msgstr "&Indsæt tomme rækker"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:843
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:844
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger than "
