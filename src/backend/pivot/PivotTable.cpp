@@ -243,7 +243,7 @@ void PivotTablePrivate::recalculate() {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	WAIT_CURSOR;
 
-	if (dataSourceType == PivotTable::DataSourceSpreadsheet && !m_dbCreated)
+	if (dataSourceType == PivotTable::DataSourceSpreadsheet && m_dbTableName != dataSourceSpreadsheet->uuid().toString(QUuid::Id128))
 		createDb();
 
 	if (!dataModel || !horizontalHeaderModel || !verticalHeaderModel) {
@@ -307,7 +307,7 @@ QString PivotTablePrivate::createSQLQuery() const {
 		if (!groupByString.isEmpty()) {
 			query += groupByString;
 			// if (showTotals)
-			query += QLatin1String(", COUNT(*) FROM pivot");
+			query += QLatin1String(", COUNT(*) FROM ") + m_dbTableName;
 
 			query += QLatin1String(" GROUP BY ") + groupByString;
 
@@ -326,7 +326,7 @@ QString PivotTablePrivate::createSQLQuery() const {
 			}
 		} else {
 			// no dimensions selected, show totals only
-			query += QLatin1String("COUNT(*) FROM pivot");
+			query += QLatin1String("COUNT(*) FROM ") + m_dbTableName;
 		}
 	} else {
 
@@ -495,14 +495,21 @@ void PivotTablePrivate::populateDataModels(QSqlQuery sqlQuery) {
 
 void PivotTablePrivate::createDb() {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
-	for (auto* col : dataSourceSpreadsheet->children<Column>()) {
+	measures.clear();
+	dimensions.clear();
+	for (const auto* col : dataSourceSpreadsheet->children<Column>()) {
 		if (col->isNumeric())
 			measures << col->name();
 		else
 			dimensions << col->name();
 	}
 
-	m_dbCreated = dataSourceSpreadsheet->exportToSQLite(QString(), QLatin1String("pivot"));
+	m_dbTableName = dataSourceSpreadsheet->uuid().toString(QUuid::Id128);
+	if (!QSqlDatabase::database().tables().contains(m_dbTableName)) {
+		const bool rc = dataSourceSpreadsheet->exportToSQLite(QString(), m_dbTableName);
+		if (!rc)
+			m_dbTableName = QString(); // reset the table name since the table creation has failed
+	}
 }
 
 // ##############################################################################

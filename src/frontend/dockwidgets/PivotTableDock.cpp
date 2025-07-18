@@ -370,9 +370,6 @@ void PivotTableDock::load() {
 	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(m_pivotTable->dataSourceConnection()));
 	dataSourceTypeChanged(ui.cbDataSourceType->currentIndex());
 
-	// available dimensions and measures
-	updateFields();
-
 	ui.lwRows->clear();
 	for (const auto& row : m_pivotTable->rows())
 		ui.lwRows->addItem(new QListWidgetItem(row));
@@ -380,4 +377,7 @@ void PivotTableDock::load() {
 	ui.lwColumns->clear();
 	for (const auto& column : m_pivotTable->columns())
 		ui.lwColumns->addItem(new QListWidgetItem(column));
+
+	// available dimensions and measures
+	updateFields();
 }

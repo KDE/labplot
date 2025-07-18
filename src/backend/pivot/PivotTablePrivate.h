@@ -54,7 +54,7 @@ public:
 	QString sortDimension;
 
 private:
-	bool m_dbCreated{false};
+	QString m_dbTableName;
 	// QMap<QString, QStringList> m_members;
 
 	QString createSQLQuery() const;
