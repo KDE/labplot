@@ -169,8 +169,11 @@ SpreadsheetModel* Spreadsheet::model() const {
 QWidget* Spreadsheet::view() const {
 #ifndef SDK
 	if (!m_partView) {
-		auto type = this->parentAspect()->type();
-		bool readOnly = (type == AspectType::Spreadsheet || type == AspectType::DatapickerCurve);
+		bool readOnly = false;
+		if (this->parentAspect()) {
+			const auto type = this->parentAspect()->type();
+			readOnly = (type == AspectType::Spreadsheet || type == AspectType::DatapickerCurve);
+		}
 		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this), readOnly);
 		m_partView = m_view;
 		connect(this, &Spreadsheet::viewAboutToBeDeleted, [this]() {
