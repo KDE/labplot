@@ -30,5 +30,8 @@ private Q_SLOTS:
 
 	// import the result of a custom query
 	void testQuery();
+
+	// export
+	void testExportSpreadsheetToSqlite();
 };
 #endif
