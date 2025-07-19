@@ -678,4 +678,35 @@ void ExpressionParserTest::testLog2() {
 	QCOMPARE(fnct(10), 3.32192809489);
 }
 
+void ExpressionParserTest::testPolarCircle() {
+	auto* parser = ExpressionParser::getInstance();
+	constexpr auto numElements = 100;
+	QVector<double> xVector(numElements);
+	QVector<double> yVector(numElements);
+	// Constant radius 5.7
+	QVERIFY(parser->tryEvaluatePolar(QStringLiteral("5.7"), QStringLiteral("0.0"), QStringLiteral("6.28"), numElements, &xVector, &yVector));
+
+	QCOMPARE(xVector.size(), numElements);
+	QCOMPARE(yVector.size(), numElements);
+
+	for (int i = 0; i < 100; i++)
+		VALUES_EQUAL(sqrt(xVector.at(i) * xVector.at(i) + yVector.at(i) * yVector.at(i)), 5.7);
+}
+
+void ExpressionParserTest::testPolarSpiral() {
+	auto* parser = ExpressionParser::getInstance();
+	constexpr auto numElements = 100;
+	QVector<double> xVector(numElements);
+	QVector<double> yVector(numElements);
+
+	// Radius increases with every iteration by 1/100
+	QVERIFY(parser->tryEvaluatePolar(QStringLiteral("i/100"), QStringLiteral("0.0"), QStringLiteral("6.28"), numElements, &xVector, &yVector));
+
+	QCOMPARE(xVector.size(), numElements);
+	QCOMPARE(yVector.size(), numElements);
+
+	for (int i = 0; i < numElements; i++)
+		VALUES_EQUAL(sqrt(xVector.at(i) * xVector.at(i) + yVector.at(i) * yVector.at(i)), (i + 1) / 100.);
+}
+
 QTEST_MAIN(ExpressionParserTest)
