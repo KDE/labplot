@@ -839,7 +839,7 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 			tunit.squeeze();
 
 			for (int i = 0; i < tfields; ++i) {
-				const Column* const column = spreadsheet->column(i);
+				const auto* const column = spreadsheet->column(i);
 
 				columnNames[i] = new char[column->name().size() + 1];
 				strcpy(columnNames[i], column->name().toLatin1().constData());
@@ -865,34 +865,19 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 				}
 				case AbstractColumn::ColumnMode::Double: {
 					int maxSize = -1;
+					int maxStringSize = -1;
 					for (int row = 0; row < nrows; ++row) {
 						if (QString::number(column->valueAt(row)).size() > maxSize)
 							maxSize = QString::number(column->valueAt(row)).size();
+						if (column->asStringColumn()->textAt(row).size() > maxStringSize)
+							maxStringSize = column->asStringColumn()->textAt(row).size();
 					}
-
+					// TODO: necessary? maxSize != maxStringSize possible?
+					const int diff = std::abs(maxSize - maxStringSize);
+					maxSize += diff;
 					const auto* const filter = static_cast<Double2StringFilter*>(column->outputFilter());
-					bool decimals = false;
-					for (int ii = 0; ii < nrows; ++ii) {
-						bool ok;
-						QString cell = column->asStringColumn()->textAt(ii);
-						double val = cell.toDouble(&ok);
-						if (cell.size() > QString::number(val).size() + 1) {
-							decimals = true;
-							break;
-						}
-					}
-					QString tformn;
-					if (decimals) {
-						int maxStringSize = -1;
-						for (int row = 0; row < nrows; ++row) {
-							if (column->asStringColumn()->textAt(row).size() > maxStringSize)
-								maxStringSize = column->asStringColumn()->textAt(row).size();
-						}
-						const int diff = abs(maxSize - maxStringSize);
-						maxSize += diff;
-						tformn = QLatin1String("F") + QString::number(maxSize) + QLatin1String(".") + QString::number(filter->numDigits());
-					} else
-						tformn = QLatin1String("F") + QString::number(maxSize) + QLatin1String(".0");
+					QString tformn = QLatin1String("F") + QString::number(maxSize) + QLatin1String(".") + QString::number(filter->numDigits());
+
 					tform[i] = new char[tformn.size()];
 					strcpy(tform[i], tformn.toLatin1().data());
 					break;
@@ -950,11 +935,13 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 			double* columnNumeric = new double[nrows];
 			for (int col = 1; col <= tfields; ++col) {
 				const auto* c = spreadsheet->column(col - 1);
-				auto columnMode = c->columnMode();
 
+				auto columnMode = c->columnMode();
+				// TODO: Integer, BigInt
 				if (columnMode == AbstractColumn::ColumnMode::Double) {
-					for (int row = 0; row < nrows; ++row)
+					for (int row = 0; row < nrows; ++row) {
 						columnNumeric[row] = c->valueAt(row);
+					}
 
 					fits_write_col(m_fitsFile, TDOUBLE, col, 1, 1, nrows, columnNumeric, &status);
 					if (status) {
