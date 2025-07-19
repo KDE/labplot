@@ -638,22 +638,21 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 		return;
 	int status = 0;
 	bool existed = false;
-
 	if (QFile(fileName).size() == 0)
 		QFile::remove(fileName);
 
 	if (!QFile::exists(fileName)) {
 		if (fits_create_file(&m_fitsFile, qPrintable(fileName), &status)) {
 			printError(status);
-			qDebug() << fileName;
+			DEBUG(Q_FUNC_INFO << ", file name " << fileName.toStdString());
 			return;
 		}
 	} else {
 		if (fits_open_file(&m_fitsFile, qPrintable(fileName), READWRITE, &status)) {
 			printError(status);
 			return;
-		} else
-			existed = true;
+		}
+		existed = true;
 	}
 
 	auto* const matrix = dynamic_cast<Matrix*>(dataSource);
@@ -739,7 +738,7 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 				printError(status);
 				fits_close_file(m_fitsFile, &status);
 				if (!existed)
-					QFile(fileName).remove();
+					QFile::remove(fileName);
 				return;
 			}
 
@@ -754,10 +753,8 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 					printError(status);
 					delete[] columnNumeric;
 					status = 0;
-					if (!existed) {
-						QFile file(fileName);
-						file.remove();
-					}
+					if (!existed)
+						QFile::remove(fileName);
 
 					fits_close_file(m_fitsFile, &status);
 					return;
@@ -797,10 +794,8 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 				printError(status);
 				status = 0;
 				fits_close_file(m_fitsFile, &status);
-				if (!existed) {
-					QFile file(fileName);
-					file.remove();
-				}
+				if (!existed)
+					QFile::remove(fileName);
 				return;
 			}
 			const long nelem = naxes[0] * naxes[1];
@@ -815,10 +810,8 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 				printError(status);
 				status = 0;
 				fits_close_file(m_fitsFile, &status);
-				if (!existed) {
-					QFile file(fileName);
-					file.remove();
-				}
+				if (!existed)
+					QFile::remove(fileName);
 				return;
 			}
 
@@ -893,6 +886,7 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 					strcpy(tform[i], tformn.toLatin1().data());
 					break;
 				}
+				// TODO
 				case AbstractColumn::ColumnMode::DateTime:
 				case AbstractColumn::ColumnMode::Day:
 				case AbstractColumn::ColumnMode::Month:
@@ -919,12 +913,9 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 			}
 			if (r) {
 				printError(status);
-				status = 0;
 				fits_close_file(m_fitsFile, &status);
-				if (!existed) {
-					QFile file(fileName);
-					file.remove();
-				}
+				if (!existed)
+					QFile::remove(fileName);
 				return;
 			}
 
@@ -933,50 +924,63 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 			column.squeeze();
 
 			double* columnNumeric = new double[nrows];
+			int* columnInteger = new int[nrows];
+			qint64* columnBigInt = new qint64[nrows];
+			status = 0;
 			for (int col = 1; col <= tfields; ++col) {
+				DEBUG("Column " << col)
+				if (status) {
+					printError(status);
+
+					if (!existed)
+						QFile(fileName).remove();
+					break;
+				}
+
 				const auto* c = spreadsheet->column(col - 1);
 
 				auto columnMode = c->columnMode();
-				// TODO: Integer, BigInt
-				if (columnMode == AbstractColumn::ColumnMode::Double) {
-					for (int row = 0; row < nrows; ++row) {
+				switch (columnMode) {
+				case AbstractColumn::ColumnMode::Integer:
+					for (int row = 0; row < nrows; ++row)
+						columnInteger[row] = c->valueAt(row);
+
+					fits_write_col(m_fitsFile, TINT, col, 1, 1, nrows, columnInteger, &status);
+					break;
+				case AbstractColumn::ColumnMode::BigInt:
+					for (int row = 0; row < nrows; ++row)
+						columnBigInt[row] = c->valueAt(row);
+
+					fits_write_col(m_fitsFile, TLONGLONG, col, 1, 1, nrows, columnBigInt, &status);
+					break;
+				case AbstractColumn::ColumnMode::Double:
+					for (int row = 0; row < nrows; ++row)
 						columnNumeric[row] = c->valueAt(row);
-					}
 
 					fits_write_col(m_fitsFile, TDOUBLE, col, 1, 1, nrows, columnNumeric, &status);
-					if (status) {
-						printError(status);
-						delete[] columnNumeric;
-						status = 0;
-						fits_close_file(m_fitsFile, &status);
-						if (!existed) {
-							QFile file(fileName);
-							file.remove();
-						}
-						return;
-					}
-				} else {
+					break;
+				case AbstractColumn::ColumnMode::Text:
 					for (int row = 0; row < nrows; ++row) {
 						column[row] = new char[c->textAt(row).size() + 1];
 						strcpy(column[row], c->textAt(row).toLatin1().constData());
 					}
+
 					fits_write_col(m_fitsFile, TSTRING, col, 1, 1, nrows, column.data(), &status);
 					for (int row = 0; row < nrows; ++row)
 						delete[] column[row];
-					if (status) {
-						printError(status);
-						status = 0;
-						fits_close_file(m_fitsFile, &status);
-
-						delete[] columnNumeric;
-						return;
-					}
+					break;
+				// TODO
+				case AbstractColumn::ColumnMode::DateTime:
+				case AbstractColumn::ColumnMode::Day:
+				case AbstractColumn::ColumnMode::Month:
+					break;
 				}
 			}
 
+			delete[] columnInteger;
 			delete[] columnNumeric;
+			delete[] columnBigInt;
 
-			status = 0;
 			fits_close_file(m_fitsFile, &status);
 		}
 	}
