@@ -16,6 +16,7 @@ Bug fixes:
 	* Fix the handling of axis points in the data extractor after they were deleted and recreated again
 	* Handle Windows logical font "MS Shell Dlg 2"
 	* Fix crash when deleting a livedata source with missing source file
+	* Parser: Remove not required function and reuse function instead of copying (BUG 506925)
 
 
 -----2.12.0 (2025-04-25) -----
