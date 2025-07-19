@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -278,7 +278,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 	int columnOffset = 0;
 
 	if (chduType == IMAGE_HDU) {
-		DEBUG("IMAGE_HDU");
+		DEBUG(Q_FUNC_INFO << ", IMAGE_HDU");
 		int maxdim = 2;
 		int bitpix;
 		int naxis;
@@ -295,7 +295,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 		}
 		actualRows = naxes[1];
 		actualCols = naxes[0];
-		DEBUG("rows/cols = " << actualRows << " " << actualCols)
+		DEBUG(Q_FUNC_INFO << ", rows/cols = " << actualRows << " " << actualCols)
 		if (lines == -1)
 			lines = actualRows;
 		else {
@@ -324,7 +324,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 		columnModes.resize(actualCols - j);
 		QStringList vectorNames;
 
-		DEBUG("lines/cols = " << lines << " " << actualCols << ", i/j = " << i << " " << j)
+		DEBUG(Q_FUNC_INFO << ", lines/cols = " << lines << " " << actualCols << ", i/j = " << i << " " << j)
 		std::vector<void*> dataContainer;
 		if (dataSource) {
 			dataContainer.reserve(actualCols - j);
@@ -353,7 +353,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 		}
 
 		int ii = 0;
-		DEBUG("	Import " << lines << " lines");
+		DEBUG(Q_FUNC_INFO << ", import " << lines << " lines");
 		if (!dataSource) // preview
 			dataStrings.reserve(lines);
 		for (; i < lines; ++i) {
@@ -381,7 +381,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 		return dataStrings;
 
 	} else if ((chduType == ASCII_TBL) || (chduType == BINARY_TBL)) {
-		DEBUG("ASCII_TBL or BINARY_TBL");
+		DEBUG(Q_FUNC_INFO << ", ASCII_TBL or BINARY_TBL");
 
 		if (endColumn != -1)
 			actualCols = endColumn;
@@ -490,7 +490,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 		if (!dataSource)
 			*okToMatrix = matrixNumericColumnIndices.isEmpty() ? false : true;
 		else {
-			DEBUG("HAS DataSource");
+			DEBUG(Q_FUNC_INFO << ", has DataSource");
 			auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 			if (spreadsheet) {
 				numericDataPointers.reserve(actualCols - startCol);
@@ -506,7 +506,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 					if (spreadsheet->rowCount() < (lines - startRrow))
 						spreadsheet->setRowCount(lines - startRrow);
 				}
-				DEBUG("Reading columns ...");
+				DEBUG(Q_FUNC_INFO << ", reading columns ...");
 				for (int n = 0; n < actualCols - startCol; ++n) {
 					if (columnNumericTypes.at(n)) {
 						spreadsheet->column(columnOffset + n)->setColumnMode(AbstractColumn::ColumnMode::Double);
@@ -522,7 +522,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 							list->clear();
 					}
 				}
-				DEBUG("	... DONE");
+				DEBUG(Q_FUNC_INFO << ",	DONE");
 				stringDataPointers.squeeze();
 			} else {
 				numericDataPointers.reserve(matrixNumericColumnIndices.size());
@@ -638,6 +638,10 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 		return;
 	int status = 0;
 	bool existed = false;
+
+	if (QFile(fileName).size() == 0)
+		QFile::remove(fileName);
+
 	if (!QFile::exists(fileName)) {
 		if (fits_create_file(&m_fitsFile, qPrintable(fileName), &status)) {
 			printError(status);
@@ -652,10 +656,11 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 			existed = true;
 	}
 
-	Matrix* const matrix = dynamic_cast<Matrix*>(dataSource);
+	auto* const matrix = dynamic_cast<Matrix*>(dataSource);
 	if (matrix) {
+		DEBUG(Q_FUNC_INFO << ", Matrix")
 		// FITS image
-		if (exportTo == 0) {
+		if (exportTo == 0) { // TODO: what is 0?
 			long naxes[2] = {matrix->columnCount(), matrix->rowCount()};
 			if (fits_create_img(m_fitsFile, FLOAT_IMG, 2, naxes, &status)) {
 				printError(status);
@@ -732,12 +737,9 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 			}
 			if (r) {
 				printError(status);
-				status = 0;
 				fits_close_file(m_fitsFile, &status);
-				if (!existed) {
-					QFile file(fileName);
-					file.remove();
-				}
+				if (!existed)
+					QFile(fileName).remove();
 				return;
 			}
 
@@ -769,13 +771,15 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 
 	auto* const spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
-		// FITS image
+		DEBUG(Q_FUNC_INFO << ", Spreadsheet")
+
+		// FITS image (primary header)
 		if (exportTo == 0) {
 			int maxRowIdx = -1;
-			// don't export lots of empty lines if all of those contain nans
+			// don't export lots of empty lines if all of those contain NaNs
 			//  TODO: option?
 			for (int c = 0; c < spreadsheet->columnCount(); ++c) {
-				const Column* const col = spreadsheet->column(c);
+				const auto* const col = spreadsheet->column(c);
 				int currMaxRoxIdx = -1;
 				for (int r = col->rowCount(); r >= 0; --r) {
 					if (col->isValid(r)) {
@@ -847,6 +851,18 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 					tunit[i][0] = '\0';
 				}
 				switch (column->columnMode()) {
+				case AbstractColumn::ColumnMode::Integer: {
+					const QString& tformn = QLatin1String("I11"); // 11 character for 32 bit integer
+					tform[i] = new char[tformn.size()];
+					strcpy(tform[i], tformn.toLatin1().data());
+					break;
+				}
+				case AbstractColumn::ColumnMode::BigInt: {
+					const QString& tformn = QLatin1String("I19"); // 19 character for 64 bit integer
+					tform[i] = new char[tformn.size()];
+					strcpy(tform[i], tformn.toLatin1().data());
+					break;
+				}
 				case AbstractColumn::ColumnMode::Double: {
 					int maxSize = -1;
 					for (int row = 0; row < nrows; ++row) {
@@ -854,7 +870,7 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 							maxSize = QString::number(column->valueAt(row)).size();
 					}
 
-					const Double2StringFilter* const filter = static_cast<Double2StringFilter*>(column->outputFilter());
+					const auto* const filter = static_cast<Double2StringFilter*>(column->outputFilter());
 					bool decimals = false;
 					for (int ii = 0; ii < nrows; ++ii) {
 						bool ok;
@@ -892,16 +908,16 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 					strcpy(tform[i], tformn.toLatin1().data());
 					break;
 				}
-				case AbstractColumn::ColumnMode::Integer: // TODO
-				case AbstractColumn::ColumnMode::BigInt:
 				case AbstractColumn::ColumnMode::DateTime:
 				case AbstractColumn::ColumnMode::Day:
 				case AbstractColumn::ColumnMode::Month:
 					break;
 				}
 			}
-			// TODO extension name containing[] ?
 
+			QDEBUG("TFORM =" << tform)
+			QDEBUG("ROWS COLS =" << nrows << tfields)
+			// TODO extension name containing[] ?
 			int r = fits_create_tbl(m_fitsFile,
 									ASCII_TBL,
 									nrows,
@@ -933,7 +949,7 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 
 			double* columnNumeric = new double[nrows];
 			for (int col = 1; col <= tfields; ++col) {
-				const Column* c = spreadsheet->column(col - 1);
+				const auto* c = spreadsheet->column(col - 1);
 				auto columnMode = c->columnMode();
 
 				if (columnMode == AbstractColumn::ColumnMode::Double) {
