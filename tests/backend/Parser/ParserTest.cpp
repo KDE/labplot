@@ -12,6 +12,7 @@
 
 #include "backend/gsl/Parser.h"
 
+#include <backend/lib/Range.h>
 #include <cstdlib>
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_errno.h>
@@ -178,7 +179,7 @@ void ParserTest::testVariables() {
 void ParserTest::testLocale() {
 // TODO: locale test currently does not work on FreeBSD
 #ifndef __FreeBSD__
-	Parsing::Parser parser;
+	Parsing::Parser parser(false);
 	const QVector<QPair<QString, double>> tests{{QStringLiteral("1,"), 1.},
 												{QStringLiteral("1,5"), 1.5},
 												{QStringLiteral("1+0,5"), 1.5},
@@ -195,7 +196,7 @@ void ParserTest::testLocale() {
 void ParserTest::testPerformance1() {
 	const int N = 1e5;
 
-	Parsing::Parser parser;
+	Parsing::Parser parser(false);
 
 	QBENCHMARK {
 		for (int i = 0; i < N; i++) {
@@ -209,13 +210,19 @@ void ParserTest::testPerformance1() {
 void ParserTest::testPerformance2() {
 	const int N = 1e5;
 
-	Parsing::Parser parser;
+	Parsing::Parser parser(false);
 	QBENCHMARK {
 		for (int i = 0; i < N; i++) {
 			parser.assign_symbol("alpha", i / 100.);
 			QCOMPARE(parser.parse("sin(alpha)^2 + cos(alpha)^2", "C"), 1.);
 		}
 	}
+}
+
+void ParserTest::testRangeParsing() {
+	Range<double> r(QString(QStringLiteral("0")), QString(QStringLiteral("2*pi")));
+	QCOMPARE(r.start(), 0.);
+	VALUES_EQUAL(r.end(), 2. * M_PI);
 }
 
 QTEST_MAIN(ParserTest)
