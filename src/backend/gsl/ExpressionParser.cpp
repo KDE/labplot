@@ -749,6 +749,7 @@ bool ExpressionParser::tryEvaluatePolar(const QString& expr,
 	for (int i = 0; i < count; i++) {
 		const double phi = range.start() + step * i;
 		parser.assign_symbol("phi", phi);
+		parser.assign_symbol("i", i + 1);
 
 		double r = parser.parse(qPrintable(expr), qPrintable(numberLocale.name()));
 		if (parser.parseErrors() > 0) // try default locale if failing
@@ -784,6 +785,7 @@ bool ExpressionParser::tryEvaluateParametric(const QString& xexpr,
 	const auto numberLocale = QLocale();
 	for (int i = 0; i < count; i++) {
 		parser.assign_symbol("t", range.start() + step * i);
+		parser.assign_symbol("i", i + 1);
 
 		double x = parser.parse(qPrintable(xexpr), qPrintable(numberLocale.name()));
 		if (parser.parseErrors() > 0) // try default locale if failing
