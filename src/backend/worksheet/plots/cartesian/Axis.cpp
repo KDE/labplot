@@ -2489,8 +2489,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 		return;
 	}
 
-	QFontMetrics fm(labelsFont);
-	double width = 0, height = fm.ascent();
+	QFontMetricsF fm(labelsFont);
+	double width = 0, height = 0;
 	QPointF pos;
 
 	//	const int xIndex{ q->cSystem->index(Dimension::X) }, yIndex{ q->cSystem->index(Dimension::Y) };
@@ -2518,14 +2518,20 @@ void AxisPrivate::retransformTickLabelPositions() {
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
 			|| (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {
 			if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
-				width = fm.boundingRect(tickLabelStrings.at(i)).width();
+				// use tightboundingrect to get the correct height
+				auto bdRect = fm.tightBoundingRect(tickLabelStrings.at(i));
+				width = bdRect.width();
+				height = bdRect.height();
 			} else {
 				td.setHtml(tickLabelStrings.at(i));
 				width = td.size().width();
 				height = td.size().height();
 			}
 		} else { // Datetime
-			width = fm.boundingRect(tickLabelStrings.at(i)).width();
+			// use tightboundingrect to get the correct height
+			auto bdRect = fm.tightBoundingRect(tickLabelStrings.at(i));
+			width = bdRect.width();
+			height = bdRect.height();
 		}
 
 		const double diffx = cosine * width;
@@ -2816,13 +2822,13 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	if (labelsPosition != Axis::LabelsPosition::NoLabels) {
 		QTransform trafo;
 		QPainterPath tempPath;
-		QFontMetrics fm(labelsFont);
+		QFontMetricsF fm(labelsFont);
 		QTextDocument td;
 		td.setDefaultFont(labelsFont);
 		for (int i = 0; i < tickLabelPoints.size(); i++) {
 			tempPath = QPainterPath();
 			if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
-				tempPath.addRect(fm.boundingRect(tickLabelStrings.at(i)));
+				tempPath.addRect(fm.tightBoundingRect(tickLabelStrings.at(i)));
 			} else {
 				td.setHtml(tickLabelStrings.at(i));
 				tempPath.addRect(QRectF(0, -td.size().height(), td.size().width(), td.size().height()));
@@ -2993,7 +2999,7 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 		painter->setFont(labelsFont);
 		QTextDocument doc;
 		doc.setDefaultFont(labelsFont);
-		QFontMetrics fm(labelsFont);
+		QFontMetricsF fm(labelsFont);
 		auto xRangeFormat{plot()->range(Dimension::X, cs->index(Dimension::X)).format()};
 		auto yRangeFormat{plot()->range(Dimension::Y, cs->index(Dimension::Y)).format()};
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
@@ -3003,13 +3009,14 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 				painter->translate(tickLabelPoints.at(i));
 				painter->save();
 				painter->rotate(-labelsRotationAngle);
+				auto rect = fm.boundingRect(tickLabelStrings.at(i));
+				if (orientation == Axis::Orientation::Horizontal)
+					rect.setX(0);
 
 				if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
-					if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent) {
-						const QRect& rect = fm.boundingRect(tickLabelStrings.at(i));
+					if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent)
 						painter->fillRect(rect, labelsBackgroundColor);
-					}
-					painter->drawText(QPoint(0, 0), tickLabelStrings.at(i));
+					painter->drawText(rect, Qt::AlignCenter, tickLabelStrings.at(i));
 				} else {
 					const QString style(QStringLiteral("p {color: %1;}"));
 					doc.setDefaultStyleSheet(style.arg(labelsColor.name()));
@@ -3031,11 +3038,15 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 				painter->translate(tickLabelPoints.at(i));
 				painter->save();
 				painter->rotate(-labelsRotationAngle);
-				if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent) {
-					const QRect& rect = fm.boundingRect(tickLabelStrings.at(i));
+				auto rect = fm.tightBoundingRect(tickLabelStrings.at(i));
+				if (orientation == Axis::Orientation::Horizontal)
+					rect.setX(0);
+				else if (orientation == Axis::Orientation::Vertical)
+					rect.setY(-rect.height());
+
+				if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent)
 					painter->fillRect(rect, labelsBackgroundColor);
-				}
-				painter->drawText(QPoint(0, 0), tickLabelStrings.at(i));
+				painter->drawText(rect, Qt::AlignCenter, tickLabelStrings.at(i));
 				painter->restore();
 				painter->translate(-tickLabelPoints.at(i));
 			}
