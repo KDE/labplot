@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-18 00:38+0000\n"
-"PO-Revision-Date: 2025-06-25 06:44+0200\n"
+"POT-Creation-Date: 2025-07-19 05:18+0000\n"
+"PO-Revision-Date: 2025-07-18 06:34+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -55,7 +55,7 @@ msgid "Rename"
 msgstr "Preimenuj"
 
 #: src/backend/core/AbstractAspect.cpp:411
-#: src/backend/spreadsheet/Spreadsheet.cpp:715
+#: src/backend/spreadsheet/Spreadsheet.cpp:718
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:488
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
 #: src/frontend/worksheet/WorksheetView.cpp:143
@@ -308,7 +308,7 @@ msgid "UNDEFINED"
 msgstr "NEDOLOČENO"
 
 #: src/backend/core/AbstractColumn.cpp:327
-#: src/backend/spreadsheet/Spreadsheet.cpp:313
+#: src/backend/spreadsheet/Spreadsheet.cpp:316
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -318,7 +318,7 @@ msgstr[2] "%1: vstavi %2 vrstice"
 msgstr[3] "%1: vstavi %2 vrstic"
 
 #: src/backend/core/AbstractColumn.cpp:340
-#: src/backend/spreadsheet/Spreadsheet.cpp:296
+#: src/backend/spreadsheet/Spreadsheet.cpp:299
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -383,7 +383,7 @@ msgstr "Iz zbirke podatkov SQL..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
 #: src/backend/core/AbstractPart.cpp:137
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:335
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:330
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:265
@@ -6240,7 +6240,7 @@ msgstr[2] "%1: dodaj %2 stolpce"
 msgstr[3] "%1: dodaj %2 stolpcev"
 
 #: src/backend/matrix/Matrix.cpp:704 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:660
+#: src/backend/spreadsheet/Spreadsheet.cpp:663
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: počisti"
@@ -6329,7 +6329,7 @@ msgid "Text file (*.txt)"
 msgstr "Besedilna datoteka (*.txt)"
 
 #: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:81
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:403
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:308
 #, kde-format
 msgctxt "@title:window"
@@ -7322,41 +7322,41 @@ msgctxt "@title:column"
 msgid "Type"
 msgstr "Vrsta"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:344
+#: src/backend/spreadsheet/Spreadsheet.cpp:347
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr "%1: odstrani vrstice z manjkajočimi vrednostmi"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:362
+#: src/backend/spreadsheet/Spreadsheet.cpp:365
 #, kde-format
 msgid "%1: mask rows with missing values"
 msgstr "%1: maskiraj vrstice z manjkajočimi vrednostmi"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:420
+#: src/backend/spreadsheet/Spreadsheet.cpp:423
 #, kde-format
 msgid "%1: toggle comments header"
 msgstr "%1: preklopi glavo komentarjev"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:428
+#: src/backend/spreadsheet/Spreadsheet.cpp:431
 #, kde-format
 msgid "%1: toggle sparklines header"
 msgstr "%1: preklopi glavo črt iskrenja"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:492
-#: src/backend/spreadsheet/Spreadsheet.cpp:493
-#: src/backend/spreadsheet/Spreadsheet.cpp:497
+#: src/backend/spreadsheet/Spreadsheet.cpp:495
+#: src/backend/spreadsheet/Spreadsheet.cpp:496
+#: src/backend/spreadsheet/Spreadsheet.cpp:500
 #, kde-format
 msgid "%1: set linking"
 msgstr "%1: nastavi povezovanje"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:515
-#: src/backend/spreadsheet/Spreadsheet.cpp:517
+#: src/backend/spreadsheet/Spreadsheet.cpp:518
 #: src/backend/spreadsheet/Spreadsheet.cpp:520
+#: src/backend/spreadsheet/Spreadsheet.cpp:523
 #, kde-format
 msgid "%1: set linked spreadsheet"
 msgstr "%1: nastavi povezano preglednico"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:618
+#: src/backend/spreadsheet/Spreadsheet.cpp:621
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
@@ -7365,7 +7365,7 @@ msgstr[1] "%1: odstrani %2 stolpca"
 msgstr[2] "%1: odstrani %2 stolpce"
 msgstr[3] "%1: odstrani %2 stolpcev"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:637
+#: src/backend/spreadsheet/Spreadsheet.cpp:640
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
@@ -7374,32 +7374,32 @@ msgstr[1] "%1: vstavi %2 stolpca"
 msgstr[2] "%1: vstavi %2 stolpce"
 msgstr[3] "%1: vstavi %2 stolpcev"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:682
+#: src/backend/spreadsheet/Spreadsheet.cpp:685
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: počisti izbrane stolpce"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:698
+#: src/backend/spreadsheet/Spreadsheet.cpp:701
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: počisti vse maske"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:752
+#: src/backend/spreadsheet/Spreadsheet.cpp:755
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: premaknite stolpec %2 iz položaja %3 na %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:805
+#: src/backend/spreadsheet/Spreadsheet.cpp:808
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: razvrščanje stolpcev"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1173
+#: src/backend/spreadsheet/Spreadsheet.cpp:1176
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: povezana preglednica odstranjena"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1582
+#: src/backend/spreadsheet/Spreadsheet.cpp:1585
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -7408,7 +7408,7 @@ msgstr[1] "dvojni številski podatki, %1 elementa"
 msgstr[2] "dvojni številski podatki, %1 elementi"
 msgstr[3] "dvojni številski podatki, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1585
+#: src/backend/spreadsheet/Spreadsheet.cpp:1588
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
@@ -7417,7 +7417,7 @@ msgstr[1] "celoštevilska podatka, %1 elementa"
 msgstr[2] "celoštevilski podatki, %1 elementi"
 msgstr[3] "celoštevilski podatki, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1588
+#: src/backend/spreadsheet/Spreadsheet.cpp:1591
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
@@ -7426,7 +7426,7 @@ msgstr[1] "dolga celoštevilska podatka, %1 elementa"
 msgstr[2] "dolgi celoštevilski podatki, %1 elementi"
 msgstr[3] "dolgi celoštevilski podatki, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1591
+#: src/backend/spreadsheet/Spreadsheet.cpp:1594
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
@@ -7435,7 +7435,7 @@ msgstr[1] "tekstovna podatka, %1 elementa"
 msgstr[2] "tekstovni podatki, %1 elementi"
 msgstr[3] "tekstovni podatki, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1594
+#: src/backend/spreadsheet/Spreadsheet.cpp:1597
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
@@ -7444,7 +7444,7 @@ msgstr[1] "podatka o mesecu, %1 elementa"
 msgstr[2] "podatki o mesecu, %1 elementi"
 msgstr[3] "podatki o mesecu, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1597
+#: src/backend/spreadsheet/Spreadsheet.cpp:1600
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
@@ -7453,7 +7453,7 @@ msgstr[1] "podatka o dnevu, %1 elementa"
 msgstr[2] "podatki o dnevu, %1 elementi"
 msgstr[3] "podatki o dnevu, %1 elementov"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1600
+#: src/backend/spreadsheet/Spreadsheet.cpp:1603
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -11382,7 +11382,7 @@ msgstr "Pisanje v »%1« ni uspelo. Preverite pot."
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:32
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:49
 #: src/frontend/datasources/JsonOptionsWidget.cpp:34
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:79
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:74
 #, kde-format
 msgid "Point '.'"
 msgstr "Pika ».«"
@@ -11390,7 +11390,7 @@ msgstr "Pika ».«"
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:33
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:50
 #: src/frontend/datasources/JsonOptionsWidget.cpp:35
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:80
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:75
 #, kde-format
 msgid "Comma ','"
 msgstr "Vejica »,«"
@@ -11941,8 +11941,8 @@ msgstr "Dodaj nov vir podatkov v živo"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:106
 #: src/frontend/datasources/ImportFileDialog.cpp:346
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:145
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:366
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:140
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:361
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:125
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:293
 #, kde-format
@@ -11951,8 +11951,8 @@ msgstr "Skrij možnosti"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:106
 #: src/frontend/datasources/ImportFileDialog.cpp:346
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:145
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:366
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:140
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:361
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:125
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:293
 #, kde-format
@@ -17384,71 +17384,71 @@ msgstr[3] "%1: zapolnite stolpce z enakimi števili"
 msgid "Not enough memory to perform this operation."
 msgstr "Ni dovolj pomnilnika za izvedbo te operacije."
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:82
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:77
 #, kde-format
 msgid "Export Spreadsheet"
 msgstr "Izvozi preglednico"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:83
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:78
 #, kde-format
 msgid "Export Selection"
 msgstr "Izvozi izbor"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:105
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:100
 #, kde-format
 msgid "This option determines how to convert numbers to strings."
 msgstr "Ta možnost določa, kako pretvoriti števila v nize."
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:119
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:114
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Spreadsheet"
 msgstr "Izvozi preglednico"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:231
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:226
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Matrix"
 msgstr "Izvoz matrike"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:245
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:240
 #, kde-format
 msgid "Export matrix"
 msgstr "Izvozi matriko"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:334
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:329
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:264
 #, kde-format
 msgid "The file already exists. Do you really want to overwrite it?"
 msgstr "Datoteka že obstaja. Ali jo res želite prepisati?"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:384
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:379
 #, kde-format
 msgid "Text files (*.txt *.dat *.csv)"
 msgstr "Besedilne datoteke (*.txt *.dat *.csv)"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:392
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:387
 #, kde-format
 msgid "LaTeX files (*.tex)"
 msgstr "Datoteke LaTeX (*.tex)"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:395
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:390
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:174
 #, kde-format
 msgid "FITS files (*.fits *.fit *.fts)"
 msgstr "Datoteke FITS (*.fits *.fit *.fts)"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:398
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:393
 #, kde-format
 msgid "Excel 2007+ (*.xlsx)"
 msgstr "Excel 2007+ (*.xlsx)"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:396
 #, kde-format
 msgid "MCAP Files (*.mcap)"
 msgstr "datoteke MCAP (*.mcap)"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:404
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:399
 #, kde-format
 msgid ""
 "SQLite databases files (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *.db3 *."
@@ -18699,17 +18699,17 @@ msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Natisni preglednico"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4440
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4442
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "Zbirke podatkov SQLite %1 ni bilo mogoče ustvariti."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4472
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4474
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Ustvarjanje tabele v zbirki podatkov SQLite %1 ni uspelo."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4525
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4529
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "V tabelo ni bilo mogoče vstaviti vrednosti."
@@ -22193,10 +22193,9 @@ msgstr "Shrani izračune:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: src/frontend/ui/dockwidgets/projectdock.ui:288
-#, fuzzy, kde-format
-#| msgid "Compressed"
+#, kde-format
 msgid "Compress File:"
-msgstr "Stisnjeno"
+msgstr "Stisni datoteko:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:109
@@ -23599,24 +23598,21 @@ msgstr "V skladu z GUM"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:97
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Save projects in a compatible format that can be "
-#| "opened in LabPlot versions older than 2.9.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Save projects in a uncompressed xml format that can be "
 "opened in LabPlot versions older than 2.9 and are useful for version "
 "controlled projects</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Shranite projekte v združljivi obliki, ki jo je mogoče "
-"odpreti v različicah LabPlot, starejših od 2.9.</p></body></html>"
+"<html><head/><body><p>Shrani projekte v nestisnjeni obliki XML, ki jo je "
+"mogoče odpreti v različicah LabPlota, starejših od 2.9, in je uporabna za "
+"projekte z nadzorom različic</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:100
-#, fuzzy, kde-format
-#| msgid "Save in compatible format"
+#, kde-format
 msgid "Save in uncompressed format"
-msgstr "Shrani v združljivi obliki"
+msgstr "Shrani v nestisnjeni obliki"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
 #: src/frontend/ui/settingsgeneralpage.ui:107
@@ -23650,10 +23646,9 @@ msgstr "Zvezek:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
 #: src/frontend/ui/settingsgeneralpage.ui:155
-#, fuzzy, kde-format
-#| msgid "Compression"
+#, kde-format
 msgid "Compression:"
-msgstr "Stiskanje"
+msgstr "Stiskanje:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
 #: src/frontend/ui/settingsgeneralpage.ui:197
