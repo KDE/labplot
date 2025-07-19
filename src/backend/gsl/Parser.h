@@ -30,7 +30,7 @@ struct param;
 
 class Parser {
 public:
-	Parser(bool highPerformance = true);
+	Parser(bool highPerformance);
 
 	double parse(const char* string, const char* locale);
 	double parse_with_vars(const char* str, const parser_var* vars, int nvars, const char* locale);

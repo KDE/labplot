@@ -291,7 +291,7 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 
 	gsl_set_error_handler_off();
 
-	Parser parser;
+	Parser parser(false);
 	parser.setSkipSpecialFunctionEvaluation(true);
 
 	for (const auto& var : vars)
@@ -356,7 +356,7 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	const double step = range.stepSize(count);
 	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString() << ", step = " << step)
 
-	Parser parser;
+	Parser parser(true);
 	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
 
 	for (int i = 0; i < paramNames.size(); ++i)
@@ -419,7 +419,7 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	DEBUG(Q_FUNC_INFO << ", v4")
 	gsl_set_error_handler_off();
 
-	Parser parser;
+	Parser parser(true);
 	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
 
 	for (int i = 0; i < paramNames.size(); ++i)
@@ -742,7 +742,7 @@ bool ExpressionParser::tryEvaluatePolar(const QString& expr,
 	const Range<double> range{min, max};
 	const double step = range.stepSize(count);
 
-	Parser parser;
+	Parser parser(true);
 	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
 
 	const auto numberLocale = QLocale();
@@ -779,7 +779,7 @@ bool ExpressionParser::tryEvaluateParametric(const QString& xexpr,
 	const Range<double> range{min, max};
 	const double step = range.stepSize(count);
 
-	Parser parser;
+	Parser parser(true);
 	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
 
 	const auto numberLocale = QLocale();
