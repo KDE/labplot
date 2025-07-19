@@ -24,6 +24,7 @@ Bug fixes:
 	* Fix issue which caused the context menu of an aspect to not be shown after being reparented
 	* Handle Windows logical font "MS Shell Dlg 2"
 	* Fix crash when deleting a livedata source with missing source file
+	* Parser: Remove not required function and reuse function instead of copying (BUG 506925)
 
 -----2.12.0 (2025-04-25) -----
 New features:
