@@ -39,6 +39,8 @@ XYEquationCurveDock::XYEquationCurveDock(QWidget* parent)
 	: XYCurveDock(parent) {
 	// remove the tab "Error bars"
 	ui.tabWidget->removeTab(5);
+
+	installEventFilter(this);
 }
 
 /*!
@@ -68,12 +70,14 @@ void XYEquationCurveDock::setupGeneral() {
 	uiGeneralTab.tbConstants2->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
 	uiGeneralTab.tbFunctions2->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
 
+	// TODO: move to retranslateUi()
 	uiGeneralTab.cbType->addItem(i18n("Cartesian"));
 	uiGeneralTab.cbType->addItem(i18n("Polar"));
 	uiGeneralTab.cbType->addItem(i18n("Parametric"));
 	// 	uiGeneralTab.cbType->addItem(i18n("Implicit"));
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
+	uiGeneralTab.pbRecalculate->setToolTip(i18n("Click this button or press Shift+Enter to recalculate the result."));
 
 	uiGeneralTab.teEquation2->setExpressionType(XYEquationCurve::EquationType::Parametric);
 
@@ -134,6 +138,18 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
 	updatePlotRangeList();
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
+}
+
+bool XYEquationCurveDock::eventFilter(QObject* /* watched */, QEvent* event) {
+	if (event->type() == QEvent::KeyPress) {
+		const auto* keyEvent = static_cast<QKeyEvent*>(event);
+		if (keyEvent->key() == Qt::Key_Return && keyEvent->modifiers() == Qt::ShiftModifier && uiGeneralTab.pbRecalculate->isEnabled()) {
+			recalculateClicked();
+			return true;
+		}
+	}
+
+	return false;
 }
 
 //*************************************************************
