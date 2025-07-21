@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-18 02:30+0000\n"
+"POT-Creation-Date: 2025-07-21 02:35+0000\n"
 "PO-Revision-Date: 2025-05-10 00:18+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -64,7 +64,7 @@ msgid "Rename"
 msgstr "Cambiar nombre"
 
 #: src/backend/core/AbstractAspect.cpp:411
-#: src/backend/spreadsheet/Spreadsheet.cpp:715
+#: src/backend/spreadsheet/Spreadsheet.cpp:718
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:484
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
 #: src/frontend/worksheet/WorksheetView.cpp:140
@@ -316,7 +316,7 @@ msgid "UNDEFINED"
 msgstr "SIN DEFINIR"
 
 #: src/backend/core/AbstractColumn.cpp:327
-#: src/backend/spreadsheet/Spreadsheet.cpp:313
+#: src/backend/spreadsheet/Spreadsheet.cpp:316
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -324,7 +324,7 @@ msgstr[0] "%1: insertar 1 fila"
 msgstr[1] "%1: insertar %2 filas"
 
 #: src/backend/core/AbstractColumn.cpp:340
-#: src/backend/spreadsheet/Spreadsheet.cpp:296
+#: src/backend/spreadsheet/Spreadsheet.cpp:299
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -387,7 +387,7 @@ msgstr "Desde base de datos SQL…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
 #: src/backend/core/AbstractPart.cpp:137
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:335
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:330
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:265
@@ -6241,7 +6241,7 @@ msgstr[0] "%1: añadir %2 columna"
 msgstr[1] "%1: añadir %2 columnas"
 
 #: src/backend/matrix/Matrix.cpp:704 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:660
+#: src/backend/spreadsheet/Spreadsheet.cpp:663
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: borrar"
@@ -6322,7 +6322,7 @@ msgid "Text file (*.txt)"
 msgstr "Archivo de texto (*.txt)"
 
 #: src/backend/note/Note.cpp:101
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:408
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:403
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:308
 #, kde-format
 msgctxt "@title:window"
@@ -7269,122 +7269,122 @@ msgstr "Triple peso"
 msgid "Tricube"
 msgstr "Tricubo"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:344
+#: src/backend/spreadsheet/Spreadsheet.cpp:347
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr "%1: eliminar filas con valores ausentes"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:362
+#: src/backend/spreadsheet/Spreadsheet.cpp:365
 #, kde-format
 msgid "%1: mask rows with missing values"
 msgstr "%1: enmascarar filas con valores ausentes"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:420
+#: src/backend/spreadsheet/Spreadsheet.cpp:423
 #, kde-format
 msgid "%1: toggle comments header"
 msgstr "%1: conmutar cabecera de comentarios"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:428
+#: src/backend/spreadsheet/Spreadsheet.cpp:431
 #, kde-format
 msgid "%1: toggle sparklines header"
 msgstr "%1: conmutar cabecera de minigráficos de pulso"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:492
-#: src/backend/spreadsheet/Spreadsheet.cpp:493
-#: src/backend/spreadsheet/Spreadsheet.cpp:497
+#: src/backend/spreadsheet/Spreadsheet.cpp:495
+#: src/backend/spreadsheet/Spreadsheet.cpp:496
+#: src/backend/spreadsheet/Spreadsheet.cpp:500
 #, kde-format
 msgid "%1: set linking"
 msgstr "%1: definir enlace"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:515
-#: src/backend/spreadsheet/Spreadsheet.cpp:517
+#: src/backend/spreadsheet/Spreadsheet.cpp:518
 #: src/backend/spreadsheet/Spreadsheet.cpp:520
+#: src/backend/spreadsheet/Spreadsheet.cpp:523
 #, kde-format
 msgid "%1: set linked spreadsheet"
 msgstr "%1: definir hoja de cálculo enlazada"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:618
+#: src/backend/spreadsheet/Spreadsheet.cpp:621
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
 msgstr[0] "%1: eliminar 1 columna"
 msgstr[1] "%1: eliminar %2 columnas"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:637
+#: src/backend/spreadsheet/Spreadsheet.cpp:640
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
 msgstr[0] "%1: insertar 1 columna"
 msgstr[1] "%1: insertar %2 columnas"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:682
+#: src/backend/spreadsheet/Spreadsheet.cpp:685
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: borrar columnas seleccionadas"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:698
+#: src/backend/spreadsheet/Spreadsheet.cpp:701
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: borrar todas las máscaras"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:743
+#: src/backend/spreadsheet/Spreadsheet.cpp:746
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: mover columna %2 de la posición %3 a la %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:796
+#: src/backend/spreadsheet/Spreadsheet.cpp:799
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: ordenar columnas"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1164
+#: src/backend/spreadsheet/Spreadsheet.cpp:1167
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: hoja de cálculo enlazada eliminada"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1573
+#: src/backend/spreadsheet/Spreadsheet.cpp:1576
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] "datos de doble precisión, %1 elemento"
 msgstr[1] "datos numéricos, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1576
+#: src/backend/spreadsheet/Spreadsheet.cpp:1579
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] "datos enteros, %1 elemento"
 msgstr[1] "datos enteros, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1579
+#: src/backend/spreadsheet/Spreadsheet.cpp:1582
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] "datos enteros grandes, %1 elemento"
 msgstr[1] "datos enteros grandes, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1582
+#: src/backend/spreadsheet/Spreadsheet.cpp:1585
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] "datos de texto, %1 elemento"
 msgstr[1] "datos de texto, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1585
+#: src/backend/spreadsheet/Spreadsheet.cpp:1588
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] "datos mensuales, %1 elemento"
 msgstr[1] "datos mensuales, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1588
+#: src/backend/spreadsheet/Spreadsheet.cpp:1591
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] "datos diarios, %1 elemento"
 msgstr[1] "datos diarios, %1 elementos"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1591
+#: src/backend/spreadsheet/Spreadsheet.cpp:1594
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -10724,7 +10724,7 @@ msgstr "No se ha podido escribir en «%1». Compruebe la ruta."
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:32
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:49
 #: src/frontend/datasources/JsonOptionsWidget.cpp:34
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:79
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:74
 #, kde-format
 msgid "Point '.'"
 msgstr "Punto «.»"
@@ -10732,7 +10732,7 @@ msgstr "Punto «.»"
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:33
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:50
 #: src/frontend/datasources/JsonOptionsWidget.cpp:35
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:80
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:75
 #, kde-format
 msgid "Comma ','"
 msgstr "Coma «;»"
@@ -11292,8 +11292,8 @@ msgstr "Añadir nueva fuente de datos en vivo"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:106
 #: src/frontend/datasources/ImportFileDialog.cpp:346
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:145
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:366
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:140
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:361
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:125
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:293
 #, kde-format
@@ -11302,8 +11302,8 @@ msgstr "Ocultar opciones"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:106
 #: src/frontend/datasources/ImportFileDialog.cpp:346
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:145
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:366
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:140
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:361
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:125
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:293
 #, kde-format
@@ -16992,71 +16992,71 @@ msgstr[1] "%1: rellenar columnas con números equidistantes"
 msgid "Not enough memory to perform this operation."
 msgstr "No hay suficiente memoria para realizar esta operación."
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:82
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:77
 #, kde-format
 msgid "Export Spreadsheet"
 msgstr "Exportar hoja de cálculo"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:83
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:78
 #, kde-format
 msgid "Export Selection"
 msgstr "Exportar selección"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:105
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:100
 #, kde-format
 msgid "This option determines how to convert numbers to strings."
 msgstr "Esta opción determina cómo se convierten los números a cadenas."
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:119
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:114
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Spreadsheet"
 msgstr "Exportar hoja de cálculo"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:231
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:226
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Matrix"
 msgstr "Exportar matriz"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:245
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:240
 #, kde-format
 msgid "Export matrix"
 msgstr "Exportar matriz"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:334
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:329
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:264
 #, kde-format
 msgid "The file already exists. Do you really want to overwrite it?"
 msgstr "El archivo ya existe. ¿Desea sobrescribirlo?"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:384
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:379
 #, kde-format
 msgid "Text files (*.txt *.dat *.csv)"
 msgstr "Archivos de texto (*.txt *.dat *.csv)"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:392
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:387
 #, kde-format
 msgid "LaTeX files (*.tex)"
 msgstr "Archivos LaTeX (*.tex)"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:395
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:390
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:174
 #, kde-format
 msgid "FITS files (*.fits *.fit *.fts)"
 msgstr "Archivos FITS (*.fits *.fit *.fts)"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:398
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:393
 #, kde-format
 msgid "Excel 2007+ (*.xlsx)"
 msgstr "Excel 2007+ (*.xlsx)"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:401
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:396
 #, kde-format
 msgid "MCAP Files (*.mcap)"
 msgstr "Archivos MCAP (*.mcap)"
 
-#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:404
+#: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:399
 #, kde-format
 msgid ""
 "SQLite databases files (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *.db3 *."
@@ -18366,17 +18366,17 @@ msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Imprimir hoja de cálculo"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4448
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4450
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "No se ha podido crear la base de datos SQLite %1."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4480
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4482
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Ha fallado al crear la tabla en la base de datos SQLite %1."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4533
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4537
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "Ha fallado al insertar valores en la tabla."
