@@ -24,7 +24,7 @@
       <string>or</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -64,7 +64,6 @@
     <widget class="QLabel" name="lData">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -77,7 +76,6 @@
     <widget class="QLabel" name="lResults">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -85,7 +83,7 @@
       <string>Results:</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
      </property>
     </widget>
    </item>
@@ -93,7 +91,6 @@
     <widget class="QLabel" name="lConvolution">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -115,7 +112,7 @@
    <item row="21" column="0" colspan="6">
     <widget class="Line" name="line_2">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
     </widget>
    </item>
@@ -178,15 +175,19 @@
     </widget>
    </item>
    <item row="1" column="2" colspan="4">
-    <widget class="ResizableTextEdit" name="teComment"/>
+    <widget class="ResizableTextEdit" name="teComment">
+     <property name="tabChangesFocus">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="13" column="2" colspan="4">
     <spacer name="verticalSpacer_4">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
+      <enum>QSizePolicy::Policy::Fixed</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -240,10 +241,10 @@
    <item row="24" column="2">
     <spacer name="verticalSpacerGeneral">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
+      <enum>QSizePolicy::Policy::Expanding</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -256,10 +257,10 @@
    <item row="18" column="2" colspan="4">
     <spacer name="verticalSpacer">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
+      <enum>QSizePolicy::Policy::Fixed</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -275,7 +276,7 @@
       <string>Comment:</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -326,7 +327,7 @@
    <item row="22" column="2" colspan="3">
     <spacer name="horizontalSpacer_2">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -363,10 +364,10 @@
    <item row="0" column="1">
     <spacer name="horizontalSpacer">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
+      <enum>QSizePolicy::Policy::Fixed</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -379,10 +380,10 @@
    <item row="2" column="2" colspan="4">
     <spacer name="verticalSpacer_3">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
+      <enum>QSizePolicy::Policy::Fixed</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -403,11 +404,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>NumberSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>NumberSpinBox.h</header>
-  </customwidget>
-  <customwidget>
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>frontend/widgets/ResizableTextEdit.h</header>
@@ -417,7 +413,28 @@
    <extends>QLineEdit</extends>
    <header>frontend/widgets/TimedLineEdit.h</header>
   </customwidget>
+  <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
+  </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>leName</tabstop>
+  <tabstop>teComment</tabstop>
+  <tabstop>cbDataSourceType</tabstop>
+  <tabstop>sbSamplingInterval</tabstop>
+  <tabstop>cbAutoRange</tabstop>
+  <tabstop>leMin</tabstop>
+  <tabstop>leMax</tabstop>
+  <tabstop>cbType</tabstop>
+  <tabstop>cbNorm</tabstop>
+  <tabstop>teResult</tabstop>
+  <tabstop>pbRecalculate</tabstop>
+  <tabstop>cbPlotRanges</tabstop>
+  <tabstop>chkLegendVisible</tabstop>
+  <tabstop>chkVisible</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

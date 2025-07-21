@@ -224,7 +224,11 @@
         <widget class="QComboBox" name="cbType"/>
        </item>
        <item row="1" column="2">
-        <widget class="ResizableTextEdit" name="teComment"/>
+        <widget class="ResizableTextEdit" name="teComment">
+         <property name="tabChangesFocus">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item row="9" column="0">
         <widget class="QLabel" name="lMaxUpperLimit">
@@ -715,6 +719,27 @@
    <header>frontend/widgets/TimedLineEdit.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>leName</tabstop>
+  <tabstop>teComment</tabstop>
+  <tabstop>cbType</tabstop>
+  <tabstop>cbLimitsMetric</tabstop>
+  <tabstop>sbSampleSize</tabstop>
+  <tabstop>leMaxUpperLimit</tabstop>
+  <tabstop>leMinLowerLimit</tabstop>
+  <tabstop>chbExactLimits</tabstop>
+  <tabstop>cbPlotRanges</tabstop>
+  <tabstop>chkLegendVisible</tabstop>
+  <tabstop>chkVisible</tabstop>
+  <tabstop>kcbLabelsFontColor</tabstop>
+  <tabstop>cbLabelsBorderShape</tabstop>
+  <tabstop>kcbLabelsBackgroundColor</tabstop>
+  <tabstop>kfrLabelsFont</tabstop>
+  <tabstop>chbLabelsEnabled</tabstop>
+  <tabstop>sbLabelsPrecision</tabstop>
+  <tabstop>chkLabelsAutoPrecision</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
