@@ -48,7 +48,7 @@ private Q_SLOTS:
 	void xRangeMaxDateTimeChanged(qint64);
 	void methodChanged(int);
 	void absoluteChanged();
-	void recalculateClicked();
+	void recalculateClicked() override;
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab

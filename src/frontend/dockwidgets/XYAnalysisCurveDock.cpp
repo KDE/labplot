@@ -2,6 +2,8 @@
 
 #include "frontend/widgets/TreeViewComboBox.h"
 
+#include <QKeyEvent>
+
 XYAnalysisCurveDock::XYAnalysisCurveDock(QWidget* parent, RequiredDataSource requiredDataSource)
 	: XYCurveDock(parent)
 	, m_requiredDataSource(requiredDataSource) {
@@ -38,6 +40,20 @@ void XYAnalysisCurveDock::showResult(const XYAnalysisCurve* curve, QTextEdit* te
 
 	// enable the "recalculate"-button if the source data was changed since the last calculation
 	m_recalculateButton->setEnabled(curve->isSourceDataChangedSinceLastRecalc());
+
+	installEventFilter(this);
+}
+
+bool XYAnalysisCurveDock::eventFilter(QObject* /* watched */, QEvent* event) {
+	if (event->type() == QEvent::KeyPress) {
+		const auto* keyEvent = static_cast<QKeyEvent*>(event);
+		if (keyEvent->key() == Qt::Key_Return && keyEvent->modifiers() == Qt::ShiftModifier && m_recalculateButton->isEnabled()) {
+			recalculateClicked();
+			return true;
+		}
+	}
+
+	return false;
 }
 
 QString XYAnalysisCurveDock::customText() const {
@@ -51,6 +67,7 @@ void XYAnalysisCurveDock::setBaseWidgets(TimedLineEdit* nameLabel, ResizableText
 	m_recalculateButton = recalculate;
 	Q_ASSERT(m_recalculateButton);
 	m_recalculateButton->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
+	m_recalculateButton->setToolTip(i18n("Click this button or press Shift+Enter to recalculate the result."));
 
 	cbDataSourceType = dataSourceType;
 	if (cbDataSourceType) {

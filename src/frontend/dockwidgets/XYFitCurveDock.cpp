@@ -341,14 +341,19 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 }
 
 bool XYFitCurveDock::eventFilter(QObject* obj, QEvent* event) {
-	if (event->type() == QEvent::KeyPress && (obj == uiGeneralTab.twParameters || obj == uiGeneralTab.twGoodness || obj == uiGeneralTab.twLog)) {
+	if (event->type() == QEvent::KeyPress) {
 		auto* key_event = static_cast<QKeyEvent*>(event);
-		if (key_event->matches(QKeySequence::Copy)) {
+		if (key_event->matches(QKeySequence::Copy) && (obj == uiGeneralTab.twParameters || obj == uiGeneralTab.twGoodness || obj == uiGeneralTab.twLog)) {
 			resultCopy();
+			return true;
+		} else if (key_event->key() == Qt::Key_Return && key_event->modifiers() == Qt::ShiftModifier && uiGeneralTab.pbRecalculate->isEnabled()) {
+			recalculateClicked();
 			return true;
 		}
 	}
+
 	return QWidget::eventFilter(obj, event);
+
 }
 
 void XYFitCurveDock::checkDataColumns() {
