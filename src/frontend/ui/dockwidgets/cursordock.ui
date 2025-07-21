@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>775</width>
+    <width>374</width>
     <height>378</height>
    </rect>
   </property>
@@ -23,10 +23,10 @@
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
+        <enum>QSizePolicy::Policy::Fixed</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -46,7 +46,7 @@
      <item>
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -75,12 +75,19 @@
    <item>
     <widget class="QTreeView" name="tvCursorData">
      <property name="editTriggers">
-      <set>QAbstractItemView::NoEditTriggers</set>
+      <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>cbCursor0en</tabstop>
+  <tabstop>cbCursor1en</tabstop>
+  <tabstop>bCollapseAll</tabstop>
+  <tabstop>bExpandAll</tabstop>
+  <tabstop>tvCursorData</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

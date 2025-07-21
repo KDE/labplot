@@ -115,7 +115,11 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="ResizableTextEdit" name="teComment"/>
+        <widget class="ResizableTextEdit" name="teComment">
+         <property name="tabChangesFocus">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item row="4" column="2">
         <widget class="QComboBox" name="cbKernelType"/>
@@ -476,11 +480,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>NumberSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>NumberSpinBox.h</header>
-  </customwidget>
-  <customwidget>
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>frontend/widgets/ResizableTextEdit.h</header>
@@ -490,7 +489,27 @@
    <extends>QLineEdit</extends>
    <header>frontend/widgets/TimedLineEdit.h</header>
   </customwidget>
+  <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
+  </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>leName</tabstop>
+  <tabstop>teComment</tabstop>
+  <tabstop>cbKernelType</tabstop>
+  <tabstop>cbBandwidthType</tabstop>
+  <tabstop>sbBandwidth</tabstop>
+  <tabstop>cbPlotRanges</tabstop>
+  <tabstop>chkLegendVisible</tabstop>
+  <tabstop>chkVisible</tabstop>
+  <tabstop>chkRugEnabled</tabstop>
+  <tabstop>sbRugLength</tabstop>
+  <tabstop>sbRugWidth</tabstop>
+  <tabstop>sbRugOffset</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
