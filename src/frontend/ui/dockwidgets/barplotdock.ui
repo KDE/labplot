@@ -211,7 +211,11 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="ResizableTextEdit" name="teComment"/>
+        <widget class="ResizableTextEdit" name="teComment">
+         <property name="tabChangesFocus">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item row="6" column="0">
         <spacer name="verticalSpacerST_2">
@@ -505,9 +509,15 @@
   <tabstop>tabWidget</tabstop>
   <tabstop>leName</tabstop>
   <tabstop>teComment</tabstop>
+  <tabstop>bRemoveXColumn</tabstop>
   <tabstop>cbType</tabstop>
   <tabstop>cbOrientation</tabstop>
+  <tabstop>cbPlotRanges</tabstop>
+  <tabstop>chkLegendVisible</tabstop>
   <tabstop>chkVisible</tabstop>
+  <tabstop>cbNumber</tabstop>
+  <tabstop>sbWidthFactor</tabstop>
+  <tabstop>cbErrorBarsNumber</tabstop>
  </tabstops>
  <resources/>
  <connections/>

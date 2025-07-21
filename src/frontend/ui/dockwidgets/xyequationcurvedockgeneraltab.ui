@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>419</width>
-    <height>1206</height>
+    <height>1220</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
@@ -94,6 +94,9 @@
           <height>16777215</height>
          </size>
         </property>
+        <property name="tabChangesFocus">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item row="0" column="1">
@@ -167,7 +170,11 @@
     </widget>
    </item>
    <item row="1" column="4" colspan="2">
-    <widget class="ResizableTextEdit" name="teComment"/>
+    <widget class="ResizableTextEdit" name="teComment">
+     <property name="tabChangesFocus">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="13" column="5">
     <widget class="QPushButton" name="pbRecalculate">
@@ -209,6 +216,9 @@
      </property>
      <property name="horizontalScrollBarPolicy">
       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="tabChangesFocus">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -285,6 +295,9 @@
      <property name="horizontalScrollBarPolicy">
       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
      </property>
+     <property name="tabChangesFocus">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
    <item row="14" column="0">
@@ -353,6 +366,9 @@
           <width>16777215</width>
           <height>16777215</height>
          </size>
+        </property>
+        <property name="tabChangesFocus">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -452,16 +468,36 @@
    <header>frontend/widgets/ResizableTextEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>ExpressionTextEdit</class>
-   <extends>QTextEdit</extends>
-   <header>frontend/widgets/ExpressionTextEdit.h</header>
-  </customwidget>
-  <customwidget>
    <class>TimedLineEdit</class>
    <extends>QLineEdit</extends>
    <header>frontend/widgets/TimedLineEdit.h</header>
   </customwidget>
+  <customwidget>
+   <class>ExpressionTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>frontend/widgets/ExpressionTextEdit.h</header>
+  </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>leName</tabstop>
+  <tabstop>teComment</tabstop>
+  <tabstop>pbLoadFunction</tabstop>
+  <tabstop>pbSaveFunction</tabstop>
+  <tabstop>cbType</tabstop>
+  <tabstop>teEquation1</tabstop>
+  <tabstop>tbFunctions1</tabstop>
+  <tabstop>tbConstants1</tabstop>
+  <tabstop>teEquation2</tabstop>
+  <tabstop>tbFunctions2</tabstop>
+  <tabstop>tbConstants2</tabstop>
+  <tabstop>teMin</tabstop>
+  <tabstop>teMax</tabstop>
+  <tabstop>sbCount</tabstop>
+  <tabstop>pbRecalculate</tabstop>
+  <tabstop>cbPlotRanges</tabstop>
+  <tabstop>chkLegendVisible</tabstop>
+  <tabstop>chkVisible</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
