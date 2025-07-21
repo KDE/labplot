@@ -57,15 +57,27 @@
       </item>
       <item>
        <widget class="QPushButton" name="pbLoadFunction">
+        <property name="toolTip">
+         <string>Load a custom function</string>
+        </property>
         <property name="text">
          <string>Load</string>
+        </property>
+        <property name="icon">
+         <iconset theme="QIcon::ThemeIcon::InsertLink"/>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="pbSaveFunction">
+        <property name="toolTip">
+         <string>Save a custom function</string>
+        </property>
         <property name="text">
          <string>Save</string>
+        </property>
+        <property name="icon">
+         <iconset theme="QIcon::ThemeIcon::DocumentSaveAs"/>
         </property>
        </widget>
       </item>
