@@ -42,6 +42,7 @@ FITSFilter::FITSFilter()
 FITSFilter::~FITSFilter() = default;
 
 void FITSFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode) {
+	DEBUG(Q_FUNC_INFO)
 	d->readCHDU(fileName, dataSource, importMode);
 }
 
@@ -266,7 +267,6 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 	}
 
 	int chduType;
-
 	if (fits_get_hdu_type(m_fitsFile, &chduType, &status)) {
 		printError(status);
 		q->setLastError(i18n("Failed to read the file."));
@@ -290,6 +290,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 		}
 
 		if (naxis == 0) {
+			// TODO: don't block the UI when the primary header is empty
 			q->setLastError(i18n("Zero dimensions."));
 			return {};
 		}
@@ -1092,7 +1093,7 @@ void FITSFilterPrivate::printError(int status) const {
 		char errorText[FLEN_ERRMSG];
 		fits_get_errstatus(status, errorText);
 		q->setLastError(i18n(errorText));
-		qDebug() << QLatin1String(errorText);
+		QDEBUG(QLatin1String(errorText))
 	}
 #else
 	Q_UNUSED(status)
@@ -1544,11 +1545,11 @@ const QString FITSFilterPrivate::valueOf(const QString& fileName, const char* ke
 void FITSFilterPrivate::parseExtensions(const QString& fileName, QTreeWidget* tw, bool checkPrimary) {
 	DEBUG(Q_FUNC_INFO);
 #ifdef HAVE_FITS
-	const QMultiMap<QString, QString>& extensions = extensionNames(fileName);
-	const QStringList& imageExtensions = extensions.values(QLatin1String("IMAGES"));
-	const QStringList& tableExtensions = extensions.values(QLatin1String("TABLES"));
+	const auto& extensions = extensionNames(fileName);
+	const auto& imageExtensions = extensions.values(QLatin1String("IMAGES"));
+	const auto& tableExtensions = extensions.values(QLatin1String("TABLES"));
 
-	QTreeWidgetItem* root = tw->invisibleRootItem();
+	auto* root = tw->invisibleRootItem();
 	// TODO: fileName may contain any data type: check if it's a FITS file
 	auto* treeNameItem = new QTreeWidgetItem((QTreeWidgetItem*)nullptr, QStringList() << fileName);
 	root->addChild(treeNameItem);
