@@ -405,6 +405,7 @@ void XYFitCurveDock::retranslateUi() {
 	uiGeneralTab.twParameters->setHorizontalHeaderLabels(labels);
 
 	fitParametersWidget->retranslateUi();
+	uiGeneralTab.pbRecalculate->setToolTip(i18n("Click this button or press Shift+Enter to recalculate the result."));
 
 	// retranslate fit results, if available
 	if (m_fitCurve)
