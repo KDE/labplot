@@ -199,7 +199,7 @@ bool FitParametersWidget::eventFilter(QObject* watched, QEvent* event) {
 	if (watched == ui.tableWidget) {
 		if (event->type() == QEvent::KeyPress) {
 			const auto* keyEvent = static_cast<QKeyEvent*>(event);
-			if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
+			if ((keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) && keyEvent->modifiers() == Qt::NoModifier) {
 				const int row = ui.tableWidget->currentRow();
 				const int col = ui.tableWidget->currentColumn();
 
