@@ -3,7 +3,6 @@ New features:
 	* [general]
 		* Allow to customize which actions have to be shown in the toolbars
 		* Expose more column related actions the context menu in the project (plot data, etc.) also when multiple columns are selected
-		* Improved handling of the tab-order to switch between the widgets in the properties explorer
 	* [analysis]
 		* Save and load custom functions for fit, equation curve and function values
 	* [worksheet]
@@ -30,6 +29,7 @@ Bug fixes:
 	* Fix the export to SQLite of text values in the spreadsheet containing single quotes
 
 Improvements:
+	* Improve handling of the tab-order to switch between the widgets in the properties explorer
 	* Added Shift+Enter shortcut in the properties explorer to recalculate the results of formula and analysis curves
 
 -----2.12.0 (2025-04-25) -----
