@@ -29,6 +29,9 @@ Bug fixes:
 	* Fix the export of spreadsheets to SQLite, wrong format was selected internally in the export dialog
 	* Fix the export to SQLite of text values in the spreadsheet containing single quotes
 
+Improvements:
+	* Added Shift+Enter shortcut in the properties explorer to recalculate the results of formula and analysis curves
+
 -----2.12.0 (2025-04-25) -----
 New features:
 	* [general]
