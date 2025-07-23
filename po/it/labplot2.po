@@ -1,15 +1,15 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the labplot package.
 # SPDX-FileCopyrightText: 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Paolo Zamponi <feus73@gmail.com>
-# Vincenzo Reale <smart2128vr@gmail.com>, 2020, 2022.
+# SPDX-FileCopyrightText: 2020, 2022, 2025 Vincenzo Reale <smart2128vr@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-16 03:05+0000\n"
-"PO-Revision-Date: 2025-07-13 09:38+0200\n"
-"Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
+"PO-Revision-Date: 2025-07-19 00:46+0200\n"
+"Last-Translator: Vincenzo Reale <>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -224,10 +224,9 @@ msgid "X-Error"
 msgstr "Errore X"
 
 #: src/backend/core/AbstractColumn.cpp:178
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "X-Uncertainty +"
-msgstr "Incertezza"
+msgstr "X-Uncertainty +"
 
 #: src/backend/core/AbstractColumn.cpp:180
 #, kde-format
@@ -255,28 +254,24 @@ msgid "Y-Error"
 msgstr "Errore Y"
 
 #: src/backend/core/AbstractColumn.cpp:196
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "Y-Uncertainty +"
-msgstr "Incertezza"
+msgstr "Y-Uncertainty +"
 
 #: src/backend/core/AbstractColumn.cpp:198
-#, fuzzy, kde-format
-#| msgid "Y-error +"
+#, kde-format
 msgid "Y-Error +"
-msgstr "+ errore Y"
+msgstr "Y-Error +"
 
 #: src/backend/core/AbstractColumn.cpp:202
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "Y-Uncertainty -"
-msgstr "Incertezza"
+msgstr "Y-Uncertainty -"
 
 #: src/backend/core/AbstractColumn.cpp:204
-#, fuzzy, kde-format
-#| msgid "Y-error -"
+#, kde-format
 msgid "Y-Error -"
-msgstr "- errore Y"
+msgstr "Y-Error -"
 
 #: src/backend/core/AbstractColumn.cpp:223
 #: src/backend/datasources/filters/MatioFilter.cpp:382
@@ -766,7 +761,7 @@ msgid ""
 "\n"
 "Do you want to continue?"
 msgstr ""
-"Il progetto è stato scritto con %1, ma l'installazione di Labplot non lo "
+"Il progetto è stato scritto con %1, ma l'installazione di LabPlot non lo "
 "supporta.\n"
 "\n"
 " Non sarai in grado di vedere quella parte del progetto. Se modifichi e "
@@ -3168,10 +3163,9 @@ msgid "Column Statistics"
 msgstr "Statistiche sulle colonne"
 
 #: src/backend/gsl/functions.cpp:65
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Moving Statistics"
-msgstr "Statistiche"
+msgstr "Statistiche mobili"
 
 #: src/backend/gsl/functions.cpp:67
 #, kde-format
@@ -3464,20 +3458,19 @@ msgid "Moving Average"
 msgstr "Media mobile"
 
 #: src/backend/gsl/functions.cpp:236
-#, fuzzy, kde-format
-#| msgid "Bin Ranges"
+#, kde-format
 msgid "Moving Range"
-msgstr "Intervalli del contenitore"
+msgstr "Intervallo mobile"
 
 #: src/backend/gsl/functions.cpp:237
 #, kde-format
 msgid "Simple Moving Minimum"
-msgstr ""
+msgstr "Minimo mobile semplice"
 
 #: src/backend/gsl/functions.cpp:238
 #, kde-format
 msgid "Simple Moving Maximum"
-msgstr ""
+msgstr "Massimo mobile semplice"
 
 #: src/backend/gsl/functions.cpp:239
 #, kde-format
@@ -3485,10 +3478,9 @@ msgid "Simple Moving Average"
 msgstr "Media mobile semplice"
 
 #: src/backend/gsl/functions.cpp:240
-#, fuzzy, kde-format
-#| msgid "Simple, Big"
+#, kde-format
 msgid "Simple Moving Range"
-msgstr "Semplice, grande"
+msgstr "Intervallo di movimento semplice"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:244
@@ -5239,10 +5231,9 @@ msgid "Binomial random numbers"
 msgstr "Numeri casuali binomiali"
 
 #: src/backend/gsl/functions.cpp:665
-#, fuzzy, kde-format
-#| msgid "Landau random numbers"
+#, kde-format
 msgid "Triangular random numbers"
-msgstr "Numeri casuali di Landau"
+msgstr "Numeri casuali triangolari"
 
 #: src/backend/gsl/functions.cpp:669
 #, kde-format
@@ -9384,10 +9375,9 @@ msgid "Sum of squared residuals"
 msgstr "Somma dei quadrati residui"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1905
-#, fuzzy, kde-format
-#| msgid "Residual mean square"
+#, kde-format
 msgid "Residuals mean square"
-msgstr "Residuo quadratico medio"
+msgstr "Quadrato medio dei residui"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1906
 #, kde-format
@@ -10503,7 +10493,7 @@ msgstr "Inserisci colonna a destra"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:344
 #, kde-format
 msgid "Insert Multiple Columns Left"
-msgstr "Inserisci colonne multple a sinistra"
+msgstr "Inserisci colonne multiple a sinistra"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:345
 #, kde-format
@@ -10621,19 +10611,17 @@ msgstr "Dividi per IQR"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:437
 #, kde-format
 msgid "(x-Mean)/SD"
-msgstr ""
+msgstr "(x-Mean)/SD"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:440
-#, fuzzy, kde-format
-#| msgid "Median"
+#, kde-format
 msgid "(x-Median)/MAD"
-msgstr "Mediana"
+msgstr "(x-Median)/MAD"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:443
-#, fuzzy, kde-format
-#| msgid "Median"
+#, kde-format
 msgid "(x-Median)/IQR"
-msgstr "Mediana"
+msgstr "(x-Median)/IQR"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:446
 #, kde-format
@@ -12126,10 +12114,9 @@ msgid "Network Common Data Format (NetCDF)"
 msgstr "Network Common Data Format (NetCDF)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:113
-#, fuzzy, kde-format
-#| msgid "Binary files (*.*)"
+#, kde-format
 msgid "Vector Binary Logfile (BLF)"
-msgstr "File binari (*.*)"
+msgstr "File di registro binario vettoriale (BLF)"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:116
 #, kde-format
@@ -12406,7 +12393,7 @@ msgstr "Ora di nascita: %1"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1494
 #, kde-format
 msgid "Last metadata changed: %1"
-msgstr "Ultimo metadato modificato: %1"
+msgstr "Ultimi metadati modificati: %1"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1495
 #, kde-format
@@ -13994,6 +13981,9 @@ msgid ""
 "If checked, the state of the default application docks is saved in the "
 "project file and restored on project load."
 msgstr ""
+"Se selezionata, lo stato delle aree di aggancio predefinite "
+"dell'applicazione viene salvato nel file di progetto e ripristinato al "
+"caricamento del progetto."
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:33
 #, kde-format
@@ -15226,7 +15216,7 @@ msgstr "Garvit Khatri"
 #, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot2 to KF5 and Integration with Cantor"
-msgstr "Conversione di Labplot a KF5 ed integrazione con Cantor"
+msgstr "Conversione di LabPlot a KF5 ed integrazione con Cantor"
 
 #: src/kdefrontend/LabPlot.cpp:118
 #, kde-format
@@ -16099,12 +16089,12 @@ msgstr "Con il Foglio elettronico e il foglio di lavoro"
 #: src/kdefrontend/SettingsGeneralPage.cpp:226
 #, kde-format
 msgid "With Notebook"
-msgstr "Con Notebook"
+msgstr "Con taccuino"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:229
 #, kde-format
 msgid "Notebook type to create automatically on startup"
-msgstr "Tipo notebook da creare automaticamente all'avvio"
+msgstr "Tipo taccuino da creare automaticamente all'avvio"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:233
 #, kde-format
@@ -16206,7 +16196,7 @@ msgstr ""
 #: src/kdefrontend/SettingsGeneralPage.cpp:273
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
-msgstr ""
+msgstr "Attiva un output di tracciamento aggiuntivo nel terminale."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:274
 #, kde-format
@@ -16223,6 +16213,8 @@ msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
 "bottlenecks."
 msgstr ""
+"Tracciamento delle prestazioni - utile per analizzare gli aspetti che "
+"influiscono sulle prestazioni e individuare i colli di bottiglia."
 
 #: src/kdefrontend/SettingsNotebookPage.cpp:23
 #, kde-format
@@ -16393,6 +16385,8 @@ msgid ""
 "Weighting termination ratio - value between 0 and 1, smaller values allow "
 "less negative values."
 msgstr ""
+"Rapporto di ponderazione della terminazione - un valore compreso tra 0 e 1, "
+"valori inferiori consentono meno valori negativi."
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:176
 #, kde-format
