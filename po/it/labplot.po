@@ -1,15 +1,15 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the labplot package.
 # SPDX-FileCopyrightText: 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Paolo Zamponi <feus73@gmail.com>
-# Vincenzo Reale <smart2128vr@gmail.com>, 2020, 2022.
+# SPDX-FileCopyrightText: 2020, 2022, 2025 Vincenzo Reale <smart2128vr@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-22 00:39+0000\n"
-"PO-Revision-Date: 2025-07-13 09:38+0200\n"
-"Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
+"POT-Creation-Date: 2025-07-23 00:39+0000\n"
+"PO-Revision-Date: 2025-07-19 00:46+0200\n"
+"Last-Translator: Vincenzo Reale <>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -195,10 +195,9 @@ msgid "X-Error"
 msgstr "Errore X"
 
 #: src/backend/core/AbstractColumn.cpp:182
-#, fuzzy, kde-format
-#| msgid "X Uncertainty"
+#, kde-format
 msgid "X-Uncertainty +"
-msgstr "Incertezza su X"
+msgstr "X-Uncertainty +"
 
 #: src/backend/core/AbstractColumn.cpp:184
 #, kde-format
@@ -226,28 +225,24 @@ msgid "Y-Error"
 msgstr "Errore Y"
 
 #: src/backend/core/AbstractColumn.cpp:200
-#, fuzzy, kde-format
-#| msgid "Y Uncertainty"
+#, kde-format
 msgid "Y-Uncertainty +"
-msgstr "Incertezza su Y"
+msgstr "Y-Uncertainty +"
 
 #: src/backend/core/AbstractColumn.cpp:202
-#, fuzzy, kde-format
-#| msgid "Y-error +"
+#, kde-format
 msgid "Y-Error +"
-msgstr "+ errore Y"
+msgstr "Y-Error +"
 
 #: src/backend/core/AbstractColumn.cpp:206
-#, fuzzy, kde-format
-#| msgid "Y Uncertainty"
+#, kde-format
 msgid "Y-Uncertainty -"
-msgstr "Incertezza su Y"
+msgstr "Y-Uncertainty -"
 
 #: src/backend/core/AbstractColumn.cpp:208
-#, fuzzy, kde-format
-#| msgid "Y-error -"
+#, kde-format
 msgid "Y-Error -"
-msgstr "- errore Y"
+msgstr "Y-Error -"
 
 #: src/backend/core/AbstractColumn.cpp:227
 #: src/backend/datasources/filters/AsciiFilter.cpp:609
@@ -740,7 +735,7 @@ msgid ""
 "\n"
 "Do you want to continue?"
 msgstr ""
-"Il progetto è stato scritto con %1, ma l'installazione di Labplot non lo "
+"Il progetto è stato scritto con %1, ma l'installazione di LabPlot non lo "
 "supporta.\n"
 "\n"
 " Non sarai in grado di vedere quella parte del progetto. Se modifichi e "
@@ -1074,7 +1069,7 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:201
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2137
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1312
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1314
 #, kde-format
 msgid "Success"
 msgstr "Successo"
@@ -2004,10 +1999,9 @@ msgid "Variables with rank greater than 2 not supported yet."
 msgstr "Le variabili con rank maggiore di 2 non sono ancora supportate."
 
 #: src/backend/datasources/filters/McapFilter.cpp:196
-#, fuzzy, kde-format
-#| msgid "Invalid DBC file."
+#, kde-format
 msgid "Valid MCAP file"
-msgstr "File DBC non valido."
+msgstr "File MCAP valido."
 
 #: src/backend/datasources/filters/McapFilter.cpp:201
 #, kde-format
@@ -2035,16 +2029,14 @@ msgid "Metadata count: "
 msgstr "Conteggio dei metadati: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:211
-#, fuzzy, kde-format
-#| msgid "Start Time:"
+#, kde-format
 msgid "Message Start Time: "
-msgstr "Ora d'inizio:"
+msgstr "Ora d'inizio del messaggio: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:213
-#, fuzzy, kde-format
-#| msgid "End Time: %1"
+#, kde-format
 msgid "Message End Time: "
-msgstr "Ora di fine: %1"
+msgstr "Ora di fine del messaggio: "
 
 #: src/backend/datasources/filters/McapFilter.cpp:215
 #, kde-format
@@ -2219,7 +2211,7 @@ msgstr "Chiave"
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1884
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:411
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #: src/frontend/matrix/MatrixView.cpp:620
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2484
@@ -2498,10 +2490,9 @@ msgid "Device not available."
 msgstr "Il dispositivo non disponibile."
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "Timeout occured."
-msgstr "Si è verificato un errore."
+msgstr "Si è verificato un timeout."
 
 #: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format
@@ -3359,10 +3350,9 @@ msgid "Column Statistics"
 msgstr "Statistiche sulle colonne"
 
 #: src/backend/gsl/functions.cpp:67
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Moving Statistics"
-msgstr "Statistiche"
+msgstr "Statistiche mobili"
 
 #: src/backend/gsl/functions.cpp:69
 #, kde-format
@@ -3660,22 +3650,19 @@ msgid "Moving Average"
 msgstr "Media mobile"
 
 #: src/backend/gsl/functions.cpp:244
-#, fuzzy, kde-format
-#| msgid "Bin Ranges"
+#, kde-format
 msgid "Moving Range"
-msgstr "Intervalli del contenitore"
+msgstr "Intervallo mobile"
 
 #: src/backend/gsl/functions.cpp:245
-#, fuzzy, kde-format
-#| msgid "sliding average"
+#, kde-format
 msgid "Simple Moving Minimum"
-msgstr "media mobile"
+msgstr "Minimo mobile semplice"
 
 #: src/backend/gsl/functions.cpp:246
-#, fuzzy, kde-format
-#| msgid "sliding average"
+#, kde-format
 msgid "Simple Moving Maximum"
-msgstr "media mobile"
+msgstr "Massimo mobile semplice"
 
 #: src/backend/gsl/functions.cpp:247
 #, kde-format
@@ -3683,16 +3670,14 @@ msgid "Simple Moving Average"
 msgstr "Media mobile semplice"
 
 #: src/backend/gsl/functions.cpp:248
-#, fuzzy, kde-format
-#| msgid "sliding average"
+#, kde-format
 msgid "Simple Moving Range"
-msgstr "media mobile"
+msgstr "Intervallo di movimento semplice"
 
 #: src/backend/gsl/functions.cpp:249
-#, fuzzy, kde-format
-#| msgid "Periodically"
+#, kde-format
 msgid "Period sample"
-msgstr "Periodicamente"
+msgstr "Campione di periodo"
 
 #: src/backend/gsl/functions.cpp:250
 #, kde-format
@@ -5460,10 +5445,9 @@ msgid "Binomial random numbers"
 msgstr "Numeri casuali binomiali"
 
 #: src/backend/gsl/functions.cpp:678
-#, fuzzy, kde-format
-#| msgid "Landau random numbers"
+#, kde-format
 msgid "Triangular random numbers"
-msgstr "Numeri casuali di Landau"
+msgstr "Numeri casuali triangolari"
 
 #: src/backend/gsl/functions.cpp:682
 #, kde-format
@@ -8259,7 +8243,7 @@ msgstr "nessuna informazione disponibile"
 #: src/frontend/ui/dockwidgets/axisdock.ui:487
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:546
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:481
-#: src/frontend/ui/dockwidgets/infoelementdock.ui:224
+#: src/frontend/ui/dockwidgets/infoelementdock.ui:227
 #, kde-format
 msgid "Title"
 msgstr "Titolo"
@@ -8613,7 +8597,7 @@ msgstr "Grafici statistici"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:753
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1875
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:408
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:409
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:143
 #, kde-format
 msgid "Histogram"
@@ -9882,13 +9866,13 @@ msgid "PARAMETERS"
 msgstr "PARAMETRI"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:411
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, kde-format
 msgid "Uncertainty"
 msgstr "Incertezza"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:411
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, kde-format
 msgid "Uncertainty, %"
 msgstr "Incertezza, %"
@@ -9899,13 +9883,13 @@ msgid "t Statistic"
 msgstr "Statistiche t"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1889
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:411
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, kde-format
 msgid "Lower"
 msgstr "Minuscolo"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1890
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:411
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, kde-format
 msgid "Upper"
 msgstr "Maiuscolo"
@@ -9923,10 +9907,9 @@ msgid "Sum of squared residuals"
 msgstr "Somma dei quadrati residui"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1955
-#, fuzzy, kde-format
-#| msgid "Residual mean square"
+#, kde-format
 msgid "Residuals mean square"
-msgstr "Residuo quadratico medio"
+msgstr "Quadrato medio dei residui"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1956
 #, kde-format
@@ -9950,7 +9933,7 @@ msgstr "Regola il coefficiente di determinazione"
 #. i18n: ectx: property (text), widget (QPushButton, bTest)
 #. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1959
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:173
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:170
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:263
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:208
 #, kde-format
@@ -9988,7 +9971,7 @@ msgid "Not sufficient weight data points provided!"
 msgstr "Non sono stati forniti abbastanza punti peso."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2407
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:373
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:374
 #, kde-format
 msgid "No X data available!"
 msgstr "Nessun dato X disponibile."
@@ -10413,11 +10396,9 @@ msgid "C++ library for linear algebra"
 msgstr "Libreria C++ per l'algebra lineare"
 
 #: src/frontend/AboutDialog.cpp:240
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Fourier Transform"
+#, kde-format
 msgid "Fastest Fourier Transform in the West"
-msgstr "Proprietà: trasformata di Fourier"
+msgstr "La trasformata di Fourier più veloce del West"
 
 #: src/frontend/AboutDialog.cpp:241
 #, kde-format
@@ -10485,10 +10466,9 @@ msgid "Qt Advanced Docking System"
 msgstr ""
 
 #: src/frontend/AboutDialog.cpp:314
-#, fuzzy, kde-format
-#| msgid "Import data from a regular file"
+#, kde-format
 msgid "Support data from MQTT brokers"
-msgstr "Importa dati da un file"
+msgstr "Supporto dati dai broker MQTT"
 
 #: src/frontend/AboutDialog.cpp:320
 #, kde-format
@@ -10547,7 +10527,7 @@ msgid ""
 "Visualization and Analysis software accessible to everyone, (Version %2) "
 "[Computer software]. %3."
 msgstr ""
-"La squadra di LabPlot (%1). Labplot è un software GRATUITO, open source e "
+"La squadra di LabPlot (%1). LabPlot è un software GRATUITO, open source e "
 "multi piattaforma per la visualizzazione e per l'analisi dei dati "
 "accessibile da chiunque. (Versione %2) [software per computer]. %3."
 
@@ -10581,8 +10561,8 @@ msgstr "Crea un estrattore di dati per ottenere i dati da un'immagine"
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/frontend/ActionsManager.cpp:215
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
-#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
+#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:74
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:407
 #: src/frontend/MainWin.cpp:1199 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:125
 #: src/frontend/workbook/WorkbookView.cpp:52
@@ -11257,18 +11237,18 @@ msgstr "Visualizza elenco con dettagli"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:314
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1442
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1448
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1454
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1444
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1450
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1456
 #, kde-format
 msgid "Copy Selection"
 msgstr "Copia la selezione"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:315
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1443
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1449
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1455
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1445
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1451
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1457
 #, kde-format
 msgid "Copy All"
 msgstr "Copia tutto"
@@ -11554,10 +11534,9 @@ msgstr ""
 "Nomi delle colonne personalizzati, separati da virgole, ad esempio «x, y»"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:115
-#, fuzzy, kde-format
-#| msgid "Custom column modes, comma separated"
+#, kde-format
 msgid "Custom column data types, comma separated"
-msgstr "Modalità colonna personalizzata, separata da virgole"
+msgstr "Tipi di dati di colonne personalizzate, separati da virgole"
 
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:122
 #, kde-format
@@ -11895,7 +11874,7 @@ msgstr "Aggiungi un nuovo contenitore di dati al progetto"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:999
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1161
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:42
-#: src/frontend/ui/dockwidgets/infoelementdock.ui:180
+#: src/frontend/ui/dockwidgets/infoelementdock.ui:183
 #: src/frontend/ui/dockwidgets/valuewidget.ui:88
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:499
 #, kde-format
@@ -12099,10 +12078,9 @@ msgid "Network Common Data Format (NetCDF)"
 msgstr "Network Common Data Format (NetCDF)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:126
-#, fuzzy, kde-format
-#| msgid "Binary files (*.*)"
+#, kde-format
 msgid "Vector Binary Logfile (BLF)"
-msgstr "File binari (*.*)"
+msgstr "File di registro binario vettoriale (BLF)"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:129
 #, kde-format
@@ -12315,7 +12293,7 @@ msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
 msgstr ""
 "I file di progetto di LabPlot si devono aprire con «Importa -> Progetto di "
-"Labplot»."
+"LabPlot»."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
 #: src/frontend/datasources/ImportFileWidget.cpp:1272
@@ -12409,7 +12387,7 @@ msgstr "Ora di nascita: %1"
 #: src/frontend/datasources/ImportFileWidget.cpp:1646
 #, kde-format
 msgid "Last metadata changed: %1"
-msgstr "Ultimo metadato modificato: %1"
+msgstr "Ultimi metadati modificati: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1647
 #, kde-format
@@ -12480,10 +12458,9 @@ msgstr "Impossibile connettersi al socket TCP. %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1865
 #: src/frontend/datasources/ImportFileWidget.cpp:1894
-#, fuzzy, kde-format
-#| msgid "The device timed out."
+#, kde-format
 msgid "Socket operation timed out."
-msgstr "Tempo scaduto per il dispositivo."
+msgstr "Operazione socket scaduta."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1879
 #, kde-format
@@ -13698,7 +13675,7 @@ msgstr "Intervalli del grafico"
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:94
 #: src/frontend/ui/dockwidgets/custompointdock.ui:158
 #: src/frontend/ui/dockwidgets/histogramdock.ui:128
-#: src/frontend/ui/dockwidgets/infoelementdock.ui:194
+#: src/frontend/ui/dockwidgets/infoelementdock.ui:197
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:192
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:235
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:262
@@ -14331,6 +14308,9 @@ msgid ""
 "If checked, the state of the default application docks is saved in the "
 "project file and restored on project load."
 msgstr ""
+"Se selezionata, lo stato delle aree di aggancio predefinite "
+"dell'applicazione viene salvato nel file di progetto e ripristinato al "
+"caricamento del progetto."
 
 #: src/frontend/dockwidgets/ProjectDock.cpp:77
 #, kde-format
@@ -14447,23 +14427,30 @@ msgstr ""
 msgid "%1 worksheets: template \"%2\" loaded"
 msgstr "%1 fogli di lavoro: modello «%2» caricato"
 
-#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:20
+#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:22
 #, kde-format
 msgid "status: %1"
 msgstr "stato: %1"
 
-#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:29
+#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:31
 #, kde-format
 msgid "calculation time: %1 s"
 msgstr "tempo di calcolo: %1 s"
 
-#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:31
+#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:33
 #, kde-format
 msgid "calculation time: %1 ms"
 msgstr "tempo di calcolo: %1 ms"
 
-#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:58
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:407
+#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:70
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:84
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:416
+#, kde-format
+msgid "Click this button or press Shift+Enter to recalculate the result."
+msgstr ""
+
+#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:75
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:408
 #, kde-format
 msgid "XY-Curve"
 msgstr "Curva xy"
@@ -14658,82 +14645,82 @@ msgstr "area di errore: %1"
 msgid "Differentiation status: %1"
 msgstr "Stato della derivazione: %1"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:75
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:78
 #, kde-format
 msgid "Cartesian"
 msgstr "Cartesiano"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:76
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:79
 #, kde-format
 msgid "Polar"
 msgstr "Polare"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:77
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:80
 #, kde-format
 msgid "Parametric"
 msgstr "Parametrico"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:160
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:176
 #, kde-format
 msgid "x, min"
 msgstr "x, minimo"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:161
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:177
 #, kde-format
 msgid "x, max"
 msgstr "x, massimo"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:172
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:188
 #, kde-format
 msgid "φ, min"
 msgstr "φ, minimo"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:173
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:189
 #, kde-format
 msgid "φ, max"
 msgstr "φ, massimo"
 
 #. i18n: ectx: property (text), widget (QLabel, lMin)
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:185
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:201
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:228
 #, kde-format
 msgid "t, min"
 msgstr "t, minimo"
 
 #. i18n: ectx: property (text), widget (QLabel, lMax)
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:186
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:202
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:258
 #, kde-format
 msgid "t, max"
 msgstr "t, massimo"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:367
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:368
 #, kde-format
 msgid "No X and Y column specified!"
 msgstr "Nessuna colonna X e Y specificata."
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:369
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:370
 #, kde-format
 msgid "No X column specified!"
 msgstr "Nessuna colonna X specificata."
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:371
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:372
 #, kde-format
 msgid "No Y column specified!"
 msgstr "Nessuna colonna Y specificata."
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:375
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:376
 #, kde-format
 msgid "No Y data available!"
 msgstr "Nessun dato Y disponibile."
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:411
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, kde-format
 msgid "t statistic"
 msgstr "statistiche t"
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:443
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:445
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:217
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:360
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:453
@@ -14747,58 +14734,58 @@ msgstr "statistiche t"
 msgid "Curve:"
 msgstr "Curva:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:464
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:466
 #, kde-format
 msgid "Histogram:"
 msgstr "Istogramma:"
 
 #. i18n: ectx: property (text), widget (QLabel, lModel)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:759
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:761
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:809
 #, kde-format
 msgid "Model:"
 msgstr "Modello:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:816
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:818
 #: src/frontend/GuiTools.cpp:526
 #, kde-format
 msgid "Description:"
 msgstr "Descrizione:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:817
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:819
 #, kde-format
 msgid "User defined model"
 msgstr "Modello definito dall'utente"
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:861
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:863
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:536
 #, kde-format
 msgid "Degree:"
 msgstr "Gradi:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:921
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:923
 #, kde-format
 msgid "Number of peaks:"
 msgstr "Numero di picchi:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1313
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1315
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr "Stato dell'adattamento: %1"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1324
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1326
 #, kde-format
 msgid "No data source available!"
 msgstr "Nessun sorgente di dati disponibile."
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1494
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1496
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "%1 % livello di confidenza inferiore"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1495
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1497
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "%1 % livello di confidenza superiore"
@@ -15469,7 +15456,7 @@ msgstr "Seleziona file per caricare la definizione della funzione"
 #: src/frontend/GuiTools.cpp:436 src/frontend/GuiTools.cpp:515
 #, kde-format
 msgid "LabPlot Function Definition"
-msgstr "Definizione di funzione di Labplot"
+msgstr "Definizione di funzione di LabPlot"
 
 #: src/frontend/GuiTools.cpp:499
 #, kde-format
@@ -15577,7 +15564,7 @@ msgstr ""
 #: src/frontend/LabPlot.cpp:74
 #, kde-format
 msgid "(c) 2007-%1 LabPlot Team"
-msgstr "(c) 2007-%1 della squadra di Labplot"
+msgstr "(c) 2007-%1 della squadra di LabPlot"
 
 #: src/frontend/LabPlot.cpp:75
 #, kde-format
@@ -15658,7 +15645,7 @@ msgstr "Garvit Khatri"
 #, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot to KF5 and Integration with Cantor"
-msgstr "Conversione di Labplot a KF5, e integrazione con Cantor"
+msgstr "Conversione di LabPlot a KF5, e integrazione con Cantor"
 
 #: src/frontend/LabPlot.cpp:95
 #, kde-format
@@ -15997,10 +15984,9 @@ msgid "%1"
 msgstr "%1"
 
 #: src/frontend/MainWin.cpp:1898
-#, fuzzy, kde-format
-#| msgid "Running Kaggle CLI tool failed"
+#, kde-format
 msgid "Kaggle CLI tool not found"
-msgstr "Esecuzione dello strumento a riga di comando Kaggle non riuscita"
+msgstr "Strumento CLI di Kaggle non trovato"
 
 #: src/frontend/MainWin.cpp:1899
 #, kde-format
@@ -16008,6 +15994,8 @@ msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
 "again."
 msgstr ""
+"Fornisci il percorso allo strumento CLI di Kaggle nelle impostazioni "
+"dell'applicazione e riprova."
 
 #: src/frontend/MainWin.cpp:1965
 #, kde-format
@@ -16749,12 +16737,12 @@ msgstr "Con il Foglio elettronico e il foglio di lavoro"
 #: src/frontend/SettingsGeneralPage.cpp:221
 #, kde-format
 msgid "With Notebook"
-msgstr "Con Notebook"
+msgstr "Con taccuino"
 
 #: src/frontend/SettingsGeneralPage.cpp:224
 #, kde-format
 msgid "Notebook type to create automatically on startup"
-msgstr "Tipo notebook da creare automaticamente all'avvio"
+msgstr "Tipo taccuino da creare automaticamente all'avvio"
 
 #: src/frontend/SettingsGeneralPage.cpp:228
 #, kde-format
@@ -16877,7 +16865,7 @@ msgstr ""
 #: src/frontend/SettingsGeneralPage.cpp:280
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
-msgstr ""
+msgstr "Attiva un output di tracciamento aggiuntivo nel terminale."
 
 #: src/frontend/SettingsGeneralPage.cpp:281
 #, kde-format
@@ -16901,6 +16889,8 @@ msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
 "bottlenecks."
 msgstr ""
+"Tracciamento delle prestazioni - utile per analizzare gli aspetti che "
+"influiscono sulle prestazioni e individuare i colli di bottiglia."
 
 #: src/frontend/SettingsNotebookPage.cpp:30
 #, kde-format
@@ -17088,6 +17078,8 @@ msgid ""
 "Weighting termination ratio - value between 0 and 1, smaller values allow "
 "less negative values."
 msgstr ""
+"Rapporto di ponderazione della terminazione - un valore compreso tra 0 e 1, "
+"valori inferiori consentono meno valori negativi."
 
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:171
 #, kde-format
@@ -18223,7 +18215,7 @@ msgstr "Statistiche sulle colonne del foglio elettronico"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:346
 #, kde-format
 msgid "Insert Multiple Columns Left"
-msgstr "Inserisci colonne multple a sinistra"
+msgstr "Inserisci colonne multiple a sinistra"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:347
 #, kde-format
@@ -18336,19 +18328,17 @@ msgstr "Dividi per IQR"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:439
 #, kde-format
 msgid "(x-Mean)/SD"
-msgstr ""
+msgstr "(x-Mean)/SD"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:442
-#, fuzzy, kde-format
-#| msgid "Median"
+#, kde-format
 msgid "(x-Median)/MAD"
-msgstr "Mediana"
+msgstr "(x-Median)/MAD"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:445
-#, fuzzy, kde-format
-#| msgid "Median"
+#, kde-format
 msgid "(x-Median)/IQR"
-msgstr "Mediana"
+msgstr "(x-Median)/IQR"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:448
 #, kde-format
@@ -19272,7 +19262,7 @@ msgstr "Dimensione:"
 #: src/frontend/ui/dockwidgets/imagedock.ui:289
 #: src/frontend/ui/dockwidgets/imagedock.ui:329
 #: src/frontend/ui/dockwidgets/imagedock.ui:541
-#: src/frontend/ui/dockwidgets/infoelementdock.ui:213
+#: src/frontend/ui/dockwidgets/infoelementdock.ui:216
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:388
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:420
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:452
@@ -19695,7 +19685,7 @@ msgstr "Importa intero come double"
 #: src/frontend/ui/datasources/asciioptionswidget.ui:97
 #, kde-format
 msgid "Base year when only 2 digits are provided for the year"
-msgstr ""
+msgstr "Anno base quando sono fornite solo 2 cifre per l'anno"
 
 #. i18n: ectx: property (text), widget (QLabel, lVectorNames)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:116
@@ -19711,10 +19701,9 @@ msgstr "Elimina citazioni"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:130
-#, fuzzy, kde-format
-#| msgid "Years"
+#, kde-format
 msgid "Year Base:"
-msgstr "Anni"
+msgstr "Anno base:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: src/frontend/ui/datasources/asciioptionswidget.ui:137
@@ -21942,20 +21931,20 @@ msgid "Anchor:"
 msgstr "Ancora:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLines)
-#: src/frontend/ui/dockwidgets/infoelementdock.ui:229
+#: src/frontend/ui/dockwidgets/infoelementdock.ui:232
 #: src/frontend/worksheet/GridDialog.cpp:45
 #, kde-format
 msgid "Lines"
 msgstr "Linee"
 
 #. i18n: ectx: property (text), widget (QLabel, lVerticalLine)
-#: src/frontend/ui/dockwidgets/infoelementdock.ui:246
+#: src/frontend/ui/dockwidgets/infoelementdock.ui:249
 #, kde-format
 msgid "Vertical Line"
 msgstr "Linea verticale"
 
 #. i18n: ectx: property (text), widget (QLabel, lConnectionLines)
-#: src/frontend/ui/dockwidgets/infoelementdock.ui:264
+#: src/frontend/ui/dockwidgets/infoelementdock.ui:267
 #, kde-format
 msgid "Connection Line"
 msgstr "Linea di connessione"
@@ -22133,10 +22122,9 @@ msgstr "Linea dei dati"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLines)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:311
-#, fuzzy, kde-format
-#| msgid "Crossing Lines"
+#, kde-format
 msgid "Center/Limits Lines"
-msgstr "Linee incrociate"
+msgstr "Linee centrali/limiti"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimit)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:366
@@ -22154,10 +22142,9 @@ msgstr "Limite inferiore"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLabels)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:447
-#, fuzzy, kde-format
-#| msgid "Crossing Lines"
+#, kde-format
 msgid "Center/Limit Values"
-msgstr "Linee incrociate"
+msgstr "Valori centrali/limite"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBorderShape)
@@ -22229,10 +22216,9 @@ msgstr "Salva calcoli"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: src/frontend/ui/dockwidgets/projectdock.ui:291
-#, fuzzy, kde-format
-#| msgid "Compressed"
+#, kde-format
 msgid "Compress File:"
-msgstr "Compressa"
+msgstr "Comprimi file:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:113
@@ -22285,7 +22271,7 @@ msgstr "Centra linea"
 #: src/frontend/ui/dockwidgets/scriptdock.ui:86
 #, kde-format
 msgid "Runtime:"
-msgstr ""
+msgstr "Runtime:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
@@ -23595,7 +23581,7 @@ msgstr "Kaggle"
 #: src/frontend/ui/settingsdatasetspage.ui:46
 #, kde-format
 msgid "CLI Path:"
-msgstr ""
+msgstr "Percorso CLI:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/frontend/ui/settingsdatasetspage.ui:66
@@ -23655,25 +23641,21 @@ msgstr "Conforme a GUM"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:97
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Save projects in a compatible format that can be "
-#| "opened in LabPlot versions older than 2.9.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Save projects in a uncompressed xml format that can be "
 "opened in LabPlot versions older than 2.9 and are useful for version "
 "controlled projects</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Salva i progetti in un formato compatibile che può "
-"essere aperto con le versioni di LabPlot precedenti alla 2.9.</p></body></"
-"html>"
+"<html><head/><body><p>Salva i progetti in un formato xml non compresso che "
+"può essere aperto nelle versioni di LabPlot precedenti alla 2.9 ed è utile "
+"per i progetti con controllo di versione</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:100
-#, fuzzy, kde-format
-#| msgid "Save in compatible format"
+#, kde-format
 msgid "Save in uncompressed format"
-msgstr "Salva in formato compatibile"
+msgstr "Salva in formato non compresso"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
 #: src/frontend/ui/settingsgeneralpage.ui:107
@@ -23707,10 +23689,9 @@ msgstr "Notebook:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
 #: src/frontend/ui/settingsgeneralpage.ui:155
-#, fuzzy, kde-format
-#| msgid "Compression"
+#, kde-format
 msgid "Compression:"
-msgstr "Compressione"
+msgstr "Compressione:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
 #: src/frontend/ui/settingsgeneralpage.ui:197
@@ -25087,6 +25068,11 @@ msgid ""
 "currently selected objects is exported</li><li>Worksheet - the complete "
 "worksheet area is exported</li></ul>"
 msgstr ""
+"Specifica l'area da esportare:<ul><li>Riquadro di delimitazione: viene "
+"esportato il riquadro di delimitazione di tutti gli oggetti nel foglio di "
+"lavoro</li><li>Selezione: viene esportata l'area degli oggetti attualmente "
+"selezionati</li><li>Foglio di lavoro: viene esportata l'area completa del "
+"foglio di lavoro</li></ul>"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:99
 #, kde-format

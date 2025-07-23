@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-22 00:39+0000\n"
+"POT-Creation-Date: 2025-07-23 00:39+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -1052,7 +1052,7 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:201
 #: src/backend/gsl/errors.h:20
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2137
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1312
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1314
 #, kde-format
 msgid "Success"
 msgstr "成功"
@@ -2179,7 +2179,7 @@ msgstr "键"
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1884
 #: src/frontend/colormaps/ColorMapsWidget.cpp:195
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:411
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #: src/frontend/matrix/MatrixView.cpp:620
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:188
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2484
@@ -8146,7 +8146,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/axisdock.ui:487
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:546
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:481
-#: src/frontend/ui/dockwidgets/infoelementdock.ui:224
+#: src/frontend/ui/dockwidgets/infoelementdock.ui:227
 #, kde-format
 msgid "Title"
 msgstr "标题"
@@ -8497,7 +8497,7 @@ msgstr "统计图类"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:753
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1875
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:408
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:409
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:143
 #, kde-format
 msgid "Histogram"
@@ -9757,13 +9757,13 @@ msgid "PARAMETERS"
 msgstr "【参数】"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1885
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:411
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, kde-format
 msgid "Uncertainty"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1886
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:411
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, kde-format
 msgid "Uncertainty, %"
 msgstr ""
@@ -9774,13 +9774,13 @@ msgid "t Statistic"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1889
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:411
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, kde-format
 msgid "Lower"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1890
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:411
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, kde-format
 msgid "Upper"
 msgstr ""
@@ -9824,7 +9824,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, bTest)
 #. i18n: ectx: property (text), widget (QPushButton, bTestConnection)
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1959
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:173
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:170
 #: src/frontend/ui/datasources/databasemanagerwidget.ui:263
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:208
 #, kde-format
@@ -9862,7 +9862,7 @@ msgid "Not sufficient weight data points provided!"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2407
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:373
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:374
 #, kde-format
 msgid "No X data available!"
 msgstr ""
@@ -10439,8 +10439,8 @@ msgstr "创建新的数据点提取器，用于从图片中获取数据点"
 #. i18n: ectx: property (text), widget (QLabel, lLinkedSpreadsheet)
 #: src/frontend/ActionsManager.cpp:215
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
-#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:57
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:406
+#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:74
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:407
 #: src/frontend/MainWin.cpp:1199 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:125
 #: src/frontend/workbook/WorkbookView.cpp:52
@@ -11111,18 +11111,18 @@ msgstr ""
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:314
 #: src/frontend/dockwidgets/CursorDock.cpp:148
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1442
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1448
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1454
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1444
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1450
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1456
 #, kde-format
 msgid "Copy Selection"
 msgstr ""
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:315
 #: src/frontend/dockwidgets/CursorDock.cpp:149
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1443
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1449
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1455
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1445
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1451
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1457
 #, kde-format
 msgid "Copy All"
 msgstr "全部复制"
@@ -11701,7 +11701,7 @@ msgstr "向工程中添加新的数据容器"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:999
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1161
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:42
-#: src/frontend/ui/dockwidgets/infoelementdock.ui:180
+#: src/frontend/ui/dockwidgets/infoelementdock.ui:183
 #: src/frontend/ui/dockwidgets/valuewidget.ui:88
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:499
 #, kde-format
@@ -13378,7 +13378,7 @@ msgstr "绘图范围："
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:94
 #: src/frontend/ui/dockwidgets/custompointdock.ui:158
 #: src/frontend/ui/dockwidgets/histogramdock.ui:128
-#: src/frontend/ui/dockwidgets/infoelementdock.ui:194
+#: src/frontend/ui/dockwidgets/infoelementdock.ui:197
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:192
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:235
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:262
@@ -14088,23 +14088,30 @@ msgstr "如果选中此项，将在大小更改时缩放工作表中的内容，
 msgid "%1 worksheets: template \"%2\" loaded"
 msgstr "工作表 %1：加载模板“%2”"
 
-#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:20
+#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:22
 #, kde-format
 msgid "status: %1"
 msgstr "状态: %1"
 
-#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:29
+#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:31
 #, kde-format
 msgid "calculation time: %1 s"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:31
+#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:33
 #, kde-format
 msgid "calculation time: %1 ms"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:58
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:407
+#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:70
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:84
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:416
+#, kde-format
+msgid "Click this button or press Shift+Enter to recalculate the result."
+msgstr ""
+
+#: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:75
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:408
 #, kde-format
 msgid "XY-Curve"
 msgstr ""
@@ -14295,82 +14302,82 @@ msgstr ""
 msgid "Differentiation status: %1"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:75
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:78
 #, kde-format
 msgid "Cartesian"
 msgstr "直角坐标"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:76
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:79
 #, kde-format
 msgid "Polar"
 msgstr "极坐标"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:77
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:80
 #, kde-format
 msgid "Parametric"
 msgstr "参数方程"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:160
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:176
 #, kde-format
 msgid "x, min"
 msgstr "x 最小值"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:161
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:177
 #, kde-format
 msgid "x, max"
 msgstr "x 最大值"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:172
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:188
 #, kde-format
 msgid "φ, min"
 msgstr "φ 最小值"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:173
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:189
 #, kde-format
 msgid "φ, max"
 msgstr "φ 最大值"
 
 #. i18n: ectx: property (text), widget (QLabel, lMin)
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:185
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:201
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:228
 #, kde-format
 msgid "t, min"
 msgstr "t 最小值"
 
 #. i18n: ectx: property (text), widget (QLabel, lMax)
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:186
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:202
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:258
 #, kde-format
 msgid "t, max"
 msgstr "t 最大值"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:367
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:368
 #, kde-format
 msgid "No X and Y column specified!"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:369
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:370
 #, kde-format
 msgid "No X column specified!"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:371
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:372
 #, kde-format
 msgid "No Y column specified!"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:375
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:376
 #, kde-format
 msgid "No Y data available!"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:411
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #, kde-format
 msgid "t statistic"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lDataSourceCurve)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:443
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:445
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:217
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:360
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:453
@@ -14384,58 +14391,58 @@ msgstr ""
 msgid "Curve:"
 msgstr "曲线:"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:464
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:466
 #, kde-format
 msgid "Histogram:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lModel)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:759
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:761
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:809
 #, kde-format
 msgid "Model:"
 msgstr "模式："
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:816
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:818
 #: src/frontend/GuiTools.cpp:526
 #, kde-format
 msgid "Description:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:817
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:819
 #, kde-format
 msgid "User defined model"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lDegree)
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:861
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:863
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:536
 #, kde-format
 msgid "Degree:"
 msgstr "度"
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:921
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:923
 #, kde-format
 msgid "Number of peaks:"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1313
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1315
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit status: %1"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1324
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1326
 #, kde-format
 msgid "No data source available!"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1494
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1496
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1495
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1497
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr ""
@@ -18805,7 +18812,7 @@ msgstr "尺寸："
 #: src/frontend/ui/dockwidgets/imagedock.ui:289
 #: src/frontend/ui/dockwidgets/imagedock.ui:329
 #: src/frontend/ui/dockwidgets/imagedock.ui:541
-#: src/frontend/ui/dockwidgets/infoelementdock.ui:213
+#: src/frontend/ui/dockwidgets/infoelementdock.ui:216
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:388
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:420
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:452
@@ -21464,20 +21471,20 @@ msgid "Anchor:"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLines)
-#: src/frontend/ui/dockwidgets/infoelementdock.ui:229
+#: src/frontend/ui/dockwidgets/infoelementdock.ui:232
 #: src/frontend/worksheet/GridDialog.cpp:45
 #, kde-format
 msgid "Lines"
 msgstr "线"
 
 #. i18n: ectx: property (text), widget (QLabel, lVerticalLine)
-#: src/frontend/ui/dockwidgets/infoelementdock.ui:246
+#: src/frontend/ui/dockwidgets/infoelementdock.ui:249
 #, kde-format
 msgid "Vertical Line"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lConnectionLines)
-#: src/frontend/ui/dockwidgets/infoelementdock.ui:264
+#: src/frontend/ui/dockwidgets/infoelementdock.ui:267
 #, kde-format
 msgid "Connection Line"
 msgstr ""
