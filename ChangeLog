@@ -3,6 +3,7 @@ New features:
 	* [general]
 		* Allow to customize which actions have to be shown in the toolbars
 		* Expose more column related actions the context menu in the project (plot data, etc.) also when multiple columns are selected
+		* Add possibility to skip storing the data from columns and matrices in the saved file
 	* [analysis]
 		* Save and load custom functions for fit, equation curve and function values
 	* [worksheet]

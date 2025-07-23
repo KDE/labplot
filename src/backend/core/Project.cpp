@@ -164,6 +164,7 @@ public:
 	static int mXmlVersion;
 	static QString versionString;
 
+	bool saveData{true}; // Save column and matrix data in the file. If false, the data gets not stored in the saved file
 	bool fileCompression{true};
 	QDateTime modificationTime;
 	Project* const q;
@@ -292,6 +293,7 @@ BASIC_D_READER_IMPL(Project, bool, saveDefaultDockWidgetState, saveDefaultDockWi
 CLASS_D_ACCESSOR_IMPL(Project, QString, defaultDockWidgetState, DefaultDockWidgetState, defaultDockWidgetState)
 BASIC_D_READER_IMPL(Project, bool, saveCalculations, saveCalculations)
 BASIC_D_READER_IMPL(Project, bool, fileCompression, fileCompression)
+BASIC_D_READER_IMPL(Project, bool, saveData, saveData)
 
 STD_SETTER_CMD_IMPL_S(Project, SetAuthor, QString, author)
 void Project::setAuthor(const QString& author) {
@@ -318,6 +320,13 @@ void Project::setFileCompression(bool compression) {
 	Q_D(Project);
 	// No Undo command, because we don't have this on the stack since it could be changed easily unintentionally
 	d->fileCompression = compression;
+	setProjectChanged(true);
+}
+
+void Project::setSaveData(bool save) {
+	Q_D(Project);
+	// No Undo command, because we don't have this on the stack since it could be changed easily unintentionally
+	d->saveData = save;
 	setProjectChanged(true);
 }
 

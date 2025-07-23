@@ -39,7 +39,7 @@ public:
 	Project();
 	~Project() override;
 
-	virtual const Project* project() const {
+	const Project* project() const override {
 		return this;
 	}
 	Project* project() override {
@@ -62,6 +62,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, saveDefaultDockWidgetState, SaveDefaultDockWidgetState)
 	CLASS_D_ACCESSOR_DECL(QString, defaultDockWidgetState, DefaultDockWidgetState)
 	BASIC_D_ACCESSOR_DECL(bool, fileCompression, FileCompression)
+	BASIC_D_ACCESSOR_DECL(bool, saveData, SaveData)
 
 	bool hasChanged() const;
 	void navigateTo(const QString& path);
