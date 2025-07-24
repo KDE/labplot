@@ -34,7 +34,7 @@ void SerialPortTest::initTestCase() {
 	m_process_socat.setProgram(QStringLiteral("socat"));
 	m_process_socat.setArguments({QStringLiteral("-d2"), QStringLiteral("pty,raw,echo=0"), QStringLiteral("pty,raw,echo=0")});
 	m_process_socat.start();
-	QVERIFY2(m_process_socat.waitForStarted(), STDSTRING(m_process_socat.errorString()).data());
+	QVERIFY(m_process_socat.waitForStarted()); //, STDSTRING(m_process_socat.errorString()).data());
 
 	QVERIFY(waitForSignal(&m_process_socat, &QProcess::readyReadStandardError, 5000));
 
@@ -100,17 +100,17 @@ void SerialPortTest::testReading() {
 
 	const auto command_template = QStringLiteral("(echo %1 > %2)");
 	connect(&m_process_send, &QProcess::errorOccurred, [this]() {
-		QVERIFY2(false, STDSTRING(m_process_send.errorString()).data());
+		QVERIFY(false); //, STDSTRING(m_process_send.errorString()).data());
 	});
 	connect(&m_process_send, &QProcess::readyReadStandardError, [this]() {
-		QVERIFY2(false, STDSTRING(UTF8_QSTRING(m_process_send.readAllStandardError())).data());
+		QVERIFY(false); //, STDSTRING(UTF8_QSTRING(m_process_send.readAllStandardError())).data());
 	});
 
 	// read the data and perform checks
 
 	auto data = QStringLiteral("'1,2,3.4345\n2,5,-234\n3,490,293.65\n4,23,0.0001\n'");
 	m_process_send.start(QStringLiteral("/bin/bash"), QStringList() << QStringLiteral("-c") << command_template.arg(data).arg(m_senderDevice));
-	QVERIFY2(m_process_send.waitForStarted(), STDSTRING(m_process_send.errorString()).data());
+	QVERIFY(m_process_send.waitForStarted()); //, STDSTRING(m_process_send.errorString()).data());
 	dataSource.read();
 
 	wait(2000);
