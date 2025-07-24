@@ -19,7 +19,7 @@ void SerialPortTest::initTestCase() {
 #ifndef _WIN32
 	QProcess p;
 	p.start(QStringLiteral("which"), {QStringLiteral("socat")});
-	QVERIFY2(p.waitForStarted(), p.errorString().toStdString().data());
+	QVERIFY2(p.waitForStarted(), STDSTRING(p.errorString()).data());
 	QVERIFY(p.waitForFinished());
 
 	const auto whichResult = UTF8_QSTRING(p.readAllStandardOutput()).trimmed();
@@ -34,7 +34,7 @@ void SerialPortTest::initTestCase() {
 	m_process_socat.setProgram(QStringLiteral("socat"));
 	m_process_socat.setArguments({QStringLiteral("-d2"), QStringLiteral("pty,raw,echo=0"), QStringLiteral("pty,raw,echo=0")});
 	m_process_socat.start();
-	QVERIFY2(m_process_socat.waitForStarted(), m_process_socat.errorString().toStdString().data());
+	QVERIFY2(m_process_socat.waitForStarted(), STDSTRING(m_process_socat.errorString()).data());
 
 	QVERIFY(waitForSignal(&m_process_socat, &QProcess::readyReadStandardError, 5000));
 
@@ -58,7 +58,7 @@ void SerialPortTest::initTestCase() {
 	// DEBUG("Command: " << STDSTRING(command));
 
 	// connect(&m_process_send,&QProcess::errorOccurred, [this] () {
-	// 	QVERIFY2(false, m_process_send.errorString().toStdString().data());
+	// 	QVERIFY2(false, STDSTRING(m_process_send.errorString()).data());
 	// });
 	// connect(&m_process_send, &QProcess::readyReadStandardError, [this](){
 	// 	QVERIFY2(false, STDSTRING(m_process_send.readAllStandardError()).data());
@@ -66,10 +66,10 @@ void SerialPortTest::initTestCase() {
 	// // connect(&m_process_send, &QProcess::finished, [this](){
 	// // 	DEBUG("m_process_send: " << STDSTRING(m_process_send.readAllStandardOutput()));
 	// // 	DEBUG("m_process_send std error: " << STDSTRING(m_process_send.readAllStandardError()));
-	// // 	QVERIFY2(false, m_process_send.errorString().toStdString().data());
+	// // 	QVERIFY2(false, STDSTRING(m_process_send.errorString()).data());
 	// // });
 	// m_process_send.start(QStringLiteral("/bin/bash"), QStringList() << QStringLiteral("-c") << command);
-	// QVERIFY2(m_process_send.waitForStarted(), m_process_send.errorString().toStdString().data());
+	// QVERIFY2(m_process_send.waitForStarted(), STDSTRING(m_process_send.errorString()).data());
 }
 
 void SerialPortTest::cleanupTestCase() {
@@ -100,7 +100,7 @@ void SerialPortTest::testReading() {
 
 	const auto command_template = QStringLiteral("(echo %1 > %2)");
 	connect(&m_process_send, &QProcess::errorOccurred, [this]() {
-		QVERIFY2(false, m_process_send.errorString().toStdString().data());
+		QVERIFY2(false, STDSTRING(m_process_send.errorString()).data());
 	});
 	connect(&m_process_send, &QProcess::readyReadStandardError, [this]() {
 		QVERIFY2(false, STDSTRING(m_process_send.readAllStandardError()).data());
@@ -110,7 +110,7 @@ void SerialPortTest::testReading() {
 
 	auto data = QStringLiteral("'1,2,3.4345\n2,5,-234\n3,490,293.65\n4,23,0.0001\n'");
 	m_process_send.start(QStringLiteral("/bin/bash"), QStringList() << QStringLiteral("-c") << command_template.arg(data).arg(m_senderDevice));
-	QVERIFY2(m_process_send.waitForStarted(), m_process_send.errorString().toStdString().data());
+	QVERIFY2(m_process_send.waitForStarted(), STDSTRING(m_process_send.errorString()).data());
 	dataSource.read();
 
 	wait(2000);
