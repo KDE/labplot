@@ -19,8 +19,8 @@
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/DatapickerPointPrivate.h"
 #include "backend/datapicker/Transform.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/lib/UndoStack.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/datapicker/DatapickerImageView.h"
 #include "frontend/widgets/DatapickerImageWidget.h"
 
