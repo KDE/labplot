@@ -22,8 +22,8 @@ void SerialPortTest::initTestCase() {
 	QVERIFY2(p.waitForStarted(), p.errorString().toStdString().data());
 	QVERIFY(p.waitForFinished());
 
-	const auto se2 = UTF8_QSTRING(p.readAllStandardOutput()).trimmed();
-	m_socat_command_available = !se2.isEmpty();
+	const auto whichResult = UTF8_QSTRING(p.readAllStandardOutput()).trimmed();
+	m_socat_command_available = !whichResult.isEmpty();
 #else
 	m_socat_command_available = false;
 #endif
