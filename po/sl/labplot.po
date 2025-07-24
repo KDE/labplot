@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-23 02:35+0000\n"
-"PO-Revision-Date: 2025-05-09 07:29+0200\n"
+"PO-Revision-Date: 2025-07-23 07:07+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -13818,6 +13818,7 @@ msgstr "čas izračuna: %1 ms"
 #, kde-format
 msgid "Click this button or press Shift+Enter to recalculate the result."
 msgstr ""
+"Kliknite ta gumb ali pritisnite Shift+Enter, da ponovno izračunate rezultat."
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:75
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:400
@@ -21939,7 +21940,7 @@ msgstr "Osrednja črta"
 #: src/frontend/ui/dockwidgets/scriptdock.ui:86
 #, kde-format
 msgid "Runtime:"
-msgstr ""
+msgstr "Čas delovanja:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
