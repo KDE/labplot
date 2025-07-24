@@ -103,7 +103,7 @@ void SerialPortTest::testReading() {
 		QVERIFY2(false, STDSTRING(m_process_send.errorString()).data());
 	});
 	connect(&m_process_send, &QProcess::readyReadStandardError, [this]() {
-		QVERIFY2(false, STDSTRING(m_process_send.readAllStandardError()).data());
+		QVERIFY2(false, UTF8_QSTRING(m_process_send.readAllStandardError()).data());
 	});
 
 	// read the data and perform checks
