@@ -12,8 +12,8 @@
 */
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
-#include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/UndoStack.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/InfoElement.h"
