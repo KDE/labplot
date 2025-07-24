@@ -361,7 +361,8 @@ bool AsciiFilter::determineColumnModes(const QStringView& s, QVector<AbstractCol
 // ##  PRIVATE IMPLEMENTATIONS  ###########################################################################################
 // ########################################################################################################################
 AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner)
-	: q(owner), lastStatus(std::make_shared<StatusSuccess>()) {
+	: q(owner)
+	, lastStatus(std::make_shared<StatusSuccess>()) {
 }
 
 /*!
