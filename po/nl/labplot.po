@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-23 00:39+0000\n"
-"PO-Revision-Date: 2025-07-22 11:45+0200\n"
+"PO-Revision-Date: 2025-07-23 12:22+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
-"Language-Team: \n"
+"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14436,6 +14436,8 @@ msgstr "berekeningstijd: %1ms"
 #, kde-format
 msgid "Click this button or press Shift+Enter to recalculate the result."
 msgstr ""
+"Klik op deze knop of druk Shift+Enter in om het resultaat opnieuw te "
+"berekenen."
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:75
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:408

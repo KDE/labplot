@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-23 00:39+0000\n"
-"PO-Revision-Date: 2025-07-22 04:44+0200\n"
+"PO-Revision-Date: 2025-07-23 03:45+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -14430,6 +14430,8 @@ msgstr "გამოთვლის დრო: %1 მწმ"
 #, kde-format
 msgid "Click this button or press Shift+Enter to recalculate the result."
 msgstr ""
+"შედეგის თავიდან გამოსათვლელად დააწკაპუნეთ ამ ღილაკზე, ან დააჭირეთ Shift"
+"+Enter."
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:75
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:408

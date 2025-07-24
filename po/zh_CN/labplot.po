@@ -22141,19 +22141,17 @@ msgstr "方程"
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:444
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:61
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:70
-#, fuzzy, kde-format
-#| msgid "Clausen function"
+#, kde-format
 msgid "Load a custom function"
-msgstr "克劳森函数"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbSaveFunction)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:457
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:74
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:83
-#, fuzzy, kde-format
-#| msgid "Clausen function"
+#, kde-format
 msgid "Save a custom function"
-msgstr "克劳森函数"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:93

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-23 00:39+0000\n"
-"PO-Revision-Date: 2025-07-22 08:27+0300\n"
+"PO-Revision-Date: 2025-07-23 16:13+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -14504,6 +14504,8 @@ msgstr "тривалість обчислення: %1 мс"
 #, kde-format
 msgid "Click this button or press Shift+Enter to recalculate the result."
 msgstr ""
+"Натисніть цю кнопку або комбінацію клавіш Shift+Enter, щоб повторно "
+"обчислити результат."
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:75
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:408
