@@ -856,7 +856,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		if (!m_currentFilter)
 			m_currentFilter.reset(new HDF5Filter);
 		auto filter = static_cast<HDF5Filter*>(m_currentFilter.get());
-		QStringList names = selectedHDF5Names();
+		auto names = selectedHDF5Names();
 		QDEBUG(Q_FUNC_INFO << ", selected HDF5 names =" << names);
 		if (!names.isEmpty())
 			filter->setCurrentDataSetName(names.at(0));
@@ -901,6 +901,10 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		if (!m_currentFilter)
 			m_currentFilter.reset(new FITSFilter);
 		auto filter = static_cast<FITSFilter*>(m_currentFilter.get());
+		auto extensions = selectedFITSExtensions();
+		QDEBUG(Q_FUNC_INFO << ", selected FITS extensions =" << extensions);
+		if (!extensions.isEmpty())
+			filter->setCurrentExtensionName(extensions.at(0));
 		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
 		filter->setStartColumn(ui.sbStartColumn->value());
@@ -1762,10 +1766,10 @@ void ImportFileWidget::refreshPreview() {
 	auto* currentFilter = currentFileFilter();
 	currentFilter->setLastError(QString()); // clear the last error message, if any available
 
-	auto file = absolutePath(fileName());
+	auto path = absolutePath(fileName());
 	const auto sourceType = currentSourceType();
 
-	if (sourceType == LiveDataSource::SourceType::FileOrPipe && file.isEmpty())
+	if (sourceType == LiveDataSource::SourceType::FileOrPipe && path.isEmpty())
 		return; // initial open with no file selected yet, nothing to preview
 
 	const auto fileType = currentFileType();
@@ -1822,23 +1826,23 @@ void ImportFileWidget::refreshPreview() {
 		DEBUG(Q_FUNC_INFO << ", Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, sourceType));
 		switch (sourceType) {
 		case LiveDataSource::SourceType::FileOrPipe: {
-			DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(file));
-			importedStrings = filter->preview(file, lines);
+			DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(path));
+			importedStrings = filter->preview(path, lines);
 			break;
 		}
 		case LiveDataSource::SourceType::LocalSocket: {
 			QLocalSocket lsocket{this};
 			DEBUG("Local socket: CONNECT PREVIEW");
-			lsocket.connectToServer(file, QLocalSocket::ReadOnly);
+			lsocket.connectToServer(path, QLocalSocket::ReadOnly);
 			if (lsocket.waitForConnected()) {
-				DEBUG("connected to local socket " << STDSTRING(file));
+				DEBUG("connected to local socket " << STDSTRING(path));
 				if (lsocket.waitForReadyRead())
 					importedStrings = filter->preview(lsocket, lines, true);
 				DEBUG("Local socket: DISCONNECT PREVIEW");
 				lsocket.disconnectFromServer();
 				// read-only socket is disconnected immediately (no waitForDisconnected())
 			} else {
-				DEBUG("failed connect to local socket " << STDSTRING(file) << " - " << STDSTRING(lsocket.errorString()));
+				DEBUG("failed connect to local socket " << STDSTRING(path) << " - " << STDSTRING(lsocket.errorString()));
 				Q_EMIT error(i18n("Failed to connect to the local socket: %1", lsocket.errorString()));
 				return;
 			}
@@ -1951,7 +1955,7 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::FileType::Binary: {
 		ui.tePreview->clear();
 		auto filter = static_cast<BinaryFilter*>(currentFilter);
-		importedStrings = filter->preview(file, lines);
+		importedStrings = filter->preview(path, lines);
 		break;
 	}
 	case AbstractFileFilter::FileType::XLSX:
@@ -1969,7 +1973,7 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::FileType::Image: {
 		ui.tePreview->clear();
 
-		QImage image(file);
+		QImage image(path);
 		auto cursor = ui.tePreview->textCursor();
 		cursor.insertImage(image);
 		error(currentFilter->lastError());
@@ -1980,7 +1984,7 @@ void ImportFileWidget::refreshPreview() {
 		auto filter = static_cast<HDF5Filter*>(currentFilter);
 		lines = m_hdf5OptionsWidget->lines();
 
-		importedStrings = filter->readCurrentDataSet(file, nullptr, ok, AbstractFileFilter::ImportMode::Replace, lines);
+		importedStrings = filter->readCurrentDataSet(path, nullptr, ok, AbstractFileFilter::ImportMode::Replace, lines);
 		tmpTableWidget = m_hdf5OptionsWidget->previewWidget();
 		break;
 	}
@@ -1989,7 +1993,7 @@ void ImportFileWidget::refreshPreview() {
 		auto filter = static_cast<NetCDFFilter*>(currentFilter);
 		lines = m_netcdfOptionsWidget->lines();
 
-		importedStrings = filter->readCurrentVar(file, nullptr, AbstractFileFilter::ImportMode::Replace, lines);
+		importedStrings = filter->readCurrentVar(path, nullptr, AbstractFileFilter::ImportMode::Replace, lines);
 		tmpTableWidget = m_netcdfOptionsWidget->previewWidget();
 		break;
 	}
@@ -1997,7 +2001,7 @@ void ImportFileWidget::refreshPreview() {
 		ui.tePreview->clear();
 		auto filter = static_cast<VectorBLFFilter*>(currentFilter);
 		filter->setDBCFile(dbcFile);
-		importedStrings = filter->preview(file, lines);
+		importedStrings = filter->preview(path, lines);
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
 		break;
@@ -2007,14 +2011,14 @@ void ImportFileWidget::refreshPreview() {
 		auto filter = static_cast<FITSFilter*>(currentFilter);
 		lines = m_fitsOptionsWidget->lines();
 
-		QString extensionName = m_fitsOptionsWidget->extensionName(&ok);
-		if (!extensionName.isEmpty()) {
-			DEBUG(Q_FUNC_INFO << ", extension name = " << STDSTRING(extensionName));
-			file = extensionName;
-		}
+		// set current extension
+		auto currentExtensionName = m_fitsOptionsWidget->currentExtensionName();
+		DEBUG(Q_FUNC_INFO << ", current extension name: " << currentExtensionName.toStdString())
+		if (!currentExtensionName.isEmpty())
+			filter->setCurrentExtensionName(m_fitsOptionsWidget->currentExtensionName());
 
 		bool readFitsTableToMatrix;
-		importedStrings = filter->readChdu(file, &readFitsTableToMatrix, lines);
+		importedStrings = filter->readChdu(path, &readFitsTableToMatrix, lines);
 		Q_EMIT enableImportToMatrix(readFitsTableToMatrix);
 
 		tmpTableWidget = m_fitsOptionsWidget->previewWidget();
@@ -2024,7 +2028,7 @@ void ImportFileWidget::refreshPreview() {
 		ui.tePreview->clear();
 		auto filter = static_cast<JsonFilter*>(currentFilter);
 		m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
-		importedStrings = filter->preview(file, lines);
+		importedStrings = filter->preview(path, lines);
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
 		break;
@@ -2037,7 +2041,7 @@ void ImportFileWidget::refreshPreview() {
 
 		if (!mcapTopicsInitialized) {
 			ui.cbMcapTopics->clear();
-			auto s = filter->getValidTopics(file);
+			auto s = filter->getValidTopics(path);
 			for (int i = 0; i < s.size(); i++) {
 				ui.cbMcapTopics->addItem(s[i]);
 			}
@@ -2047,7 +2051,7 @@ void ImportFileWidget::refreshPreview() {
 		const auto& currentMcapTopic = ui.cbMcapTopics->currentText();
 		DEBUG("Current selected topic" << STDSTRING(currentMcapTopic));
 		filter->setCurrentTopic(currentMcapTopic);
-		importedStrings = filter->preview(file, lines);
+		importedStrings = filter->preview(path, lines);
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
 		break;
@@ -2055,10 +2059,9 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::FileType::ROOT: {
 		auto filter = static_cast<ROOTFilter*>(currentFilter);
 		lines = m_rootOptionsWidget->lines();
-		m_rootOptionsWidget->setNRows(filter->rowsInCurrentObject(file));
-		importedStrings = filter->previewCurrentObject(file,
-													   m_rootOptionsWidget->startRow(),
-													   std::min(m_rootOptionsWidget->startRow() + lines - 1, m_rootOptionsWidget->endRow()));
+		m_rootOptionsWidget->setNRows(filter->rowsInCurrentObject(path));
+		importedStrings = filter->previewCurrentObject(path, m_rootOptionsWidget->startRow(),
+					std::min(m_rootOptionsWidget->startRow() + lines - 1, m_rootOptionsWidget->endRow()));
 		tmpTableWidget = m_rootOptionsWidget->previewWidget();
 		// the last vector element contains the column names
 		vectorNameList = importedStrings.last();
@@ -2069,7 +2072,7 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::FileType::Spice: {
 		ui.tePreview->clear();
 		auto filter = static_cast<SpiceFilter*>(currentFilter);
-		importedStrings = filter->preview(file, lines);
+		importedStrings = filter->preview(path, lines);
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
 		break;
@@ -2077,7 +2080,7 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::FileType::READSTAT: {
 		ui.tePreview->clear();
 		auto filter = static_cast<ReadStatFilter*>(currentFilter);
-		importedStrings = filter->preview(file, lines);
+		importedStrings = filter->preview(path, lines);
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
 		DEBUG(Q_FUNC_INFO << ", got " << columnModes.size() << " columns and " << importedStrings.size() << " rows")
@@ -2092,7 +2095,7 @@ void ImportFileWidget::refreshPreview() {
 		for (const QString& var : filter->selectedVarNames()) {
 			// DEBUG(Q_FUNC_INFO << ", reading variable: " << STDSTRING(var))
 			filter->setCurrentVarName(var);
-			strings = filter->readCurrentVar(file, nullptr, AbstractFileFilter::ImportMode::Replace, lines);
+			strings = filter->readCurrentVar(path, nullptr, AbstractFileFilter::ImportMode::Replace, lines);
 			if (importedStrings.size() == 0) // first var
 				importedStrings = strings;
 			else { // append

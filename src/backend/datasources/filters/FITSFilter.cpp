@@ -53,6 +53,15 @@ void FITSFilter::write(const QString& fileName, AbstractDataSource* dataSource) 
 	d->writeCHDU(fileName, dataSource);
 }
 
+void FITSFilter::setCurrentExtensionName(const QString& e) {
+	DEBUG(Q_FUNC_INFO << ", extension name = " << STDSTRING(e))
+	d->currentExtensionName = e;
+}
+
+const QString FITSFilter::currentExtensionName() const {
+	return d->currentExtensionName;
+}
+
 void FITSFilter::addNewKeyword(const QString& filename, const QList<Keyword>& keywords) {
 	d->addNewKeyword(filename, keywords);
 }
@@ -252,14 +261,26 @@ FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner)
  */
 QVector<QStringList>
 FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, bool* okToMatrix, int lines) {
-	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(fileName));
+	auto path = fileName;
+	QDEBUG(Q_FUNC_INFO << ", file name:" << path)
 
 	QVector<QStringList> dataStrings;
 #ifdef HAVE_FITS
-	int status = 0;
+	QDEBUG(Q_FUNC_INFO << ", current extension:" << currentExtensionName)
+	// append current extension when available and not given in path ("[]" or file name only)
+	if (!currentExtensionName.isEmpty()) {
+		if (path.contains(QLatin1String("[]"))) {
+			int pos = path.indexOf(QLatin1Char(']'));
+			path.insert(pos, currentExtensionName);
+		} else if (!path.endsWith(QLatin1Char(']')))
+			path.append(QLatin1Char('[') + currentExtensionName + QLatin1Char(']'));
 
-	if (fits_open_file(&m_fitsFile, qPrintable(fileName), READONLY, &status)) {
-		DEBUG(Q_FUNC_INFO << ", ERROR opening file " << STDSTRING(fileName));
+		QDEBUG(Q_FUNC_INFO << ", using path:" << path)
+	}
+
+	int status = 0;
+	if (fits_open_file(&m_fitsFile, qPrintable(path), READONLY, &status)) {
+		QDEBUG(Q_FUNC_INFO << ", ERROR opening file" << path)
 		printError(status);
 		q->setLastError(i18n("Failed to open the file."));
 		return {};
@@ -278,7 +299,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 	int columnOffset = 0;
 
 	if (chduType == IMAGE_HDU) {
-		DEBUG("IMAGE_HDU");
+		DEBUG(Q_FUNC_INFO << ", IMAGE_HDU")
 		int maxdim = 2;
 		int bitpix;
 		int naxis;
@@ -295,7 +316,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 		}
 		actualRows = naxes[1];
 		actualCols = naxes[0];
-		DEBUG("rows/cols = " << actualRows << " " << actualCols)
+		DEBUG(Q_FUNC_INFO << ", rows/cols = " << actualRows << " " << actualCols)
 		if (lines == -1)
 			lines = actualRows;
 		else {
@@ -324,7 +345,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 		columnModes.resize(actualCols - j);
 		QStringList vectorNames;
 
-		DEBUG("lines/cols = " << lines << " " << actualCols << ", i/j = " << i << " " << j)
+		DEBUG(Q_FUNC_INFO << ", lines/cols = " << lines << " " << actualCols << ", i/j = " << i << " " << j)
 		std::vector<void*> dataContainer;
 		if (dataSource) {
 			dataContainer.reserve(actualCols - j);
@@ -353,7 +374,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 		}
 
 		int ii = 0;
-		DEBUG("	Import " << lines << " lines");
+		DEBUG(Q_FUNC_INFO << ", importing " << lines << " lines");
 		if (!dataSource) // preview
 			dataStrings.reserve(lines);
 		for (; i < lines; ++i) {
@@ -381,7 +402,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 		return dataStrings;
 
 	} else if ((chduType == ASCII_TBL) || (chduType == BINARY_TBL)) {
-		DEBUG("ASCII_TBL or BINARY_TBL");
+		DEBUG(Q_FUNC_INFO << ", ASCII_TBL or BINARY_TBL");
 
 		if (endColumn != -1)
 			actualCols = endColumn;
@@ -490,7 +511,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 		if (!dataSource)
 			*okToMatrix = matrixNumericColumnIndices.isEmpty() ? false : true;
 		else {
-			DEBUG("HAS DataSource");
+			DEBUG(Q_FUNC_INFO << ", DataSource available");
 			auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 			if (spreadsheet) {
 				numericDataPointers.reserve(actualCols - startCol);
