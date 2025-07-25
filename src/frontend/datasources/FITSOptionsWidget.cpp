@@ -4,7 +4,7 @@
 	Description          : Widget providing options for the import of FITS data
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
-	SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -37,28 +37,25 @@ void FITSOptionsWidget::clear() {
 }
 
 QString FITSOptionsWidget::currentExtensionName() {
-	QString name;
-
 	if (ui.twExtensions->currentItem() != nullptr && ui.twExtensions->currentItem()->text(0) != i18n("Primary header"))
-		name = ui.twExtensions->currentItem()->text(ui.twExtensions->currentColumn());
+		return ui.twExtensions->currentItem()->text(ui.twExtensions->currentColumn());
 
-	return name;
+	return {};
 }
 
 void FITSOptionsWidget::updateContent(FITSFilter* filter, const QString& fileName) {
-	DEBUG("FITSOptionsWidget::updateContent() file name = " << STDSTRING(fileName));
+	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(fileName));
 	ui.twExtensions->clear();
 	filter->parseExtensions(fileName, ui.twExtensions, true);
-	DEBUG("FITSOptionsWidget::updateContent() DONE");
+	DEBUG(Q_FUNC_INFO << ", DONE");
 }
 
 /*!
-	updates the selected var name of a NetCDF file when the tree widget item is selected
+	updates the selected var name of a FITS file when the tree widget item is selected
 */
 // TODO
 void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
-	DEBUG("fitsTreeWidgetSelectionChanges()");
-	QDEBUG("SELECTED ITEMS =" << ui.twExtensions->selectedItems());
+	QDEBUG(Q_FUNC_INFO << ", SELECTED ITEMS =" << ui.twExtensions->selectedItems());
 
 	if (ui.twExtensions->selectedItems().isEmpty())
 		return;
@@ -133,29 +130,31 @@ const QStringList FITSOptionsWidget::selectedExtensions() const {
 	return names;
 }
 
+// return full path of file name and [extension] appended
 const QString FITSOptionsWidget::extensionName(bool* ok) {
-	if (ui.twExtensions->currentItem() != nullptr) {
-		const QTreeWidgetItem* item = ui.twExtensions->currentItem();
-		const int currentColumn = ui.twExtensions->currentColumn();
-		QString itemText = item->text(currentColumn);
-		int extType = 0;
-		if (itemText.contains(QLatin1String("IMAGE #")) || itemText.contains(QLatin1String("ASCII_TBL #")) || itemText.contains(QLatin1String("BINARY_TBL #")))
-			extType = 1;
-		else if (!itemText.compare(i18n("Primary header")))
-			extType = 2;
+	const auto* item = ui.twExtensions->currentItem();
+	if (item == nullptr)
+		return {};
 
-		if (extType == 0) {
-			if (item->parent() != nullptr && item->parent()->parent() != nullptr)
-				return item->parent()->parent()->text(0) + QLatin1String("[") + item->text(currentColumn) + QLatin1String("]");
-		} else if (extType == 1) {
-			if (item->parent() != nullptr && item->parent()->parent() != nullptr) {
-				int hduNum = itemText.right(1).toInt(ok);
-				return item->parent()->parent()->text(0) + QLatin1String("[") + QString::number(hduNum - 1) + QLatin1String("]");
-			}
-		} else {
-			if (item->parent()->parent() != nullptr)
-				return item->parent()->parent()->text(currentColumn);
+	const int currentColumn = ui.twExtensions->currentColumn();
+	QString itemText = item->text(currentColumn);
+	int extType = 0;
+	if (itemText.contains(QLatin1String("IMAGE #")) || itemText.contains(QLatin1String("ASCII_TBL #")) || itemText.contains(QLatin1String("BINARY_TBL #")))
+		extType = 1;
+	else if (!itemText.compare(i18n("Primary header")))
+		extType = 2;
+
+	if (extType == 0) {
+		if (item->parent() != nullptr && item->parent()->parent() != nullptr)
+			return item->parent()->parent()->text(0) + QLatin1String("[") + item->text(currentColumn) + QLatin1String("]");
+	} else if (extType == 1) {
+		if (item->parent() != nullptr && item->parent()->parent() != nullptr) {
+			int hduNum = itemText.right(1).toInt(ok);
+			return item->parent()->parent()->text(0) + QLatin1String("[") + QString::number(hduNum - 1) + QLatin1String("]");
 		}
+	} else {
+		if (item->parent()->parent() != nullptr)
+			return item->parent()->parent()->text(currentColumn);
 	}
 
 	return {};
