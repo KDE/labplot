@@ -18,6 +18,6 @@ class CartesianCoordinateSystemTest: public CommonTest {
 
 private Q_SLOTS:
     void testMapLogicalToSceneLines();
-}
+};
 
 #endif // CARTESIANCOORDINATESYSTEMTEST_H
