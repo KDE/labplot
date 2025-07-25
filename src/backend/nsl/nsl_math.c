@@ -94,7 +94,7 @@ double nsl_math_trunc_places_1(double value) {
 		return value;
 	}
 
-	constexpr double scale = 10.;
+	const double scale = 10.;
 	double scaled_value = value * scale;
 	if (fabs(scaled_value) > 1.e16)
 		return value;
