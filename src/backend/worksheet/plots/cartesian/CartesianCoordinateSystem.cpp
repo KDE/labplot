@@ -360,10 +360,9 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, bool&
 	return QPointF{};
 }
 
-void CartesianCoordinateSystem::mapLogicalToSceneNoMarkGaps(Lines& lines, MappingFlags flags) const {
+void CartesianCoordinateSystem::mapLogicalToSceneNoMarkGaps(Lines& lines) const {
 	const QRectF pageRect = d->plot->dataRect();
-	const bool doPageClipping = !pageRect.isNull() && !(flags & MappingFlag::SuppressPageClipping);
-	assert(!(flags & MappingFlag::MarkGaps));
+	const bool doPageClipping = !pageRect.isNull();
 
 	for (const auto* xScale: std::as_const(d->xScales)) {
 		if (!xScale)

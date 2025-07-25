@@ -48,8 +48,8 @@ public:
 						   std::vector<bool>& visiblePoints,
 						   MappingFlags flags = MappingFlag::DefaultMapping) const;
 	QPointF mapLogicalToScene(QPointF, bool& visible, MappingFlags flags = MappingFlag::DefaultMapping) const override;
-	void mapLogicalToSceneNoMarkGaps(Lines& lines, MappingFlags flags = MappingFlag::DefaultMapping) const;
-	Lines mapLogicalToSceneCopy(const Lines&, MappingFlags flags = MappingFlag::DefaultMapping) const;
+	void mapLogicalToSceneNoMarkGaps(Lines& lines) const;
+	Lines mapLogicalToSceneCopy(const Lines&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	Points mapSceneToLogical(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	QPointF mapSceneToLogical(QPointF, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	virtual bool isValid() const override;
