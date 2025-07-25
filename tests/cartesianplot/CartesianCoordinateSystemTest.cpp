@@ -8,7 +8,7 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "CartesianCoordinateSystemTest.cpp"
+#include "CartesianCoordinateSystemTest.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
 void CartesianCoordinateSystemTest::testMapLogicalToSceneLines() {
