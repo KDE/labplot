@@ -10,6 +10,7 @@
 
 #include "CartesianCoordinateSystemTest.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 void CartesianCoordinateSystemTest::testMapLogicalToSceneLines() {
     using Dimension = CartesianCoordinateSystem::Dimension;
