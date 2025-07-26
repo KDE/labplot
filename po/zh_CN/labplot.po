@@ -23283,11 +23283,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveData)
 #: src/frontend/ui/settingsgeneralpage.ui:453
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Save Project As"
+#, kde-format
 msgid "Save Data in Project file:"
-msgstr "工程另存为"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)

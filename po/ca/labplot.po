@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-25 00:39+0000\n"
-"PO-Revision-Date: 2025-07-23 11:09+0200\n"
+"PO-Revision-Date: 2025-07-25 08:56+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -17020,6 +17020,8 @@ msgstr ""
 #, kde-format
 msgid "If enabled spreadsheet and matrix data is saved in the project file"
 msgstr ""
+"Si està activat, les dades del full de càlcul i de la matriu es desaran al "
+"fitxer del projecte"
 
 #: src/frontend/SettingsNotebookPage.cpp:30
 #, kde-format
@@ -22369,7 +22371,7 @@ msgstr "Desa els càlculs:"
 #: src/frontend/ui/dockwidgets/projectdock.ui:305
 #, kde-format
 msgid "Save Data in File:"
-msgstr ""
+msgstr "Desa les dades en el fitxer:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:113
@@ -23911,10 +23913,9 @@ msgstr "Situació del giny acoblat:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveData)
 #: src/frontend/ui/settingsgeneralpage.ui:453
-#, fuzzy, kde-format
-#| msgid "Open a project file."
+#, kde-format
 msgid "Save Data in Project file:"
-msgstr "Obre un fitxer de projecte."
+msgstr "Desa les dades en el fitxer del projecte:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)

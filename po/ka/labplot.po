@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-25 00:39+0000\n"
-"PO-Revision-Date: 2025-07-23 03:45+0200\n"
+"PO-Revision-Date: 2025-07-25 06:15+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16861,6 +16861,7 @@ msgstr ""
 #, kde-format
 msgid "If enabled spreadsheet and matrix data is saved in the project file"
 msgstr ""
+"თუ ჩართულია, ელცხრილის და მატრიცის მონაცემები პროექტის ფაილში იქნება შენახული"
 
 #: src/frontend/SettingsNotebookPage.cpp:30
 #, kde-format
@@ -22176,7 +22177,7 @@ msgstr "გამოთვლების შენახვა:"
 #: src/frontend/ui/dockwidgets/projectdock.ui:305
 #, kde-format
 msgid "Save Data in File:"
-msgstr ""
+msgstr "მონაცემების შენახვა ფაილში:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:113
@@ -23711,10 +23712,9 @@ msgstr "დოკის ვიჯეტის განთავსება:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveData)
 #: src/frontend/ui/settingsgeneralpage.ui:453
-#, fuzzy, kde-format
-#| msgid "Open a project file."
+#, kde-format
 msgid "Save Data in Project file:"
-msgstr "პროექტის ფაილის გახსნა."
+msgstr "მონაცემების შენახვა პროექტის ფაილში:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
