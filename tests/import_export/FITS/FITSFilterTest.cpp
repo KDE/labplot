@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for the FITS filter
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -12,6 +12,8 @@
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "frontend/spreadsheet/SpreadsheetView.h"
+#include "frontend/spreadsheet/EquidistantValuesDialog.h"
 
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
@@ -81,6 +83,66 @@ void FITSFilterTest::importFile2() {
 	QCOMPARE(spreadsheet.column(0)->valueAt(1), 182.6255233634);
 	QCOMPARE(spreadsheet.column(1)->valueAt(1), 39.41214313815);
 	QCOMPARE(spreadsheet.column(48)->valueAt(3), 0.3466465);
+}
+
+void FITSFilterTest::exportImport() {
+	// create Spreadsheet with data
+	Spreadsheet spreadsheet(QStringLiteral("Spreadsheet"), false);
+	spreadsheet.setColumnCount(3);
+        spreadsheet.setRowCount(10);
+
+	const QVector<double> data{0.5, -0.2, GSL_NAN, 2.0, -1.0};
+
+	auto* col1{spreadsheet.column(0)};
+	col1->setColumnMode(AbstractColumn::ColumnMode::Integer);
+        auto* col2{spreadsheet.column(1)};
+        auto* col3{spreadsheet.column(2)};
+
+	SpreadsheetView view(&spreadsheet, false);
+	view.selectColumn(0);
+	view.fillWithRowNumbers();
+	view.selectColumn(1);
+
+	EquidistantValuesDialog dlg(&spreadsheet);
+        dlg.setColumns(QVector<Column*>{col2});
+        dlg.setType(EquidistantValuesDialog::Type::FixedNumber);
+        dlg.setNumber(6);
+        dlg.setFromValue(1.);
+        dlg.setToValue(2.);
+        dlg.generate();
+
+	col3->replaceValues(0, data);
+
+	// export to FITS
+	QTemporaryFile file;
+	if (!file.open()) // needed to generate file name
+		return;
+	file.close(); // only file name is used
+
+	QString fileName = file.fileName();
+	fileName.append(QStringLiteral(".fits"));
+
+	FITSFilter filter;
+	filter.write(fileName, &spreadsheet);
+
+	// import FITS file to another spreadsheet
+	Spreadsheet spreadsheet2(QStringLiteral("Import"), false);
+	filter.readDataFromFile(fileName, &spreadsheet2);
+
+	QCOMPARE(spreadsheet2.columnCount(), 3);
+	QCOMPARE(spreadsheet2.rowCount(), 10);
+
+	// check values
+	for (int i = 0; i < spreadsheet2.rowCount(); i++)
+		QCOMPARE(spreadsheet2.column(0)->valueAt(i), i+1);
+
+	for (int i = 0; i < 6; i++)
+		QCOMPARE(spreadsheet2.column(1)->valueAt(i), 1. + i * 0.2);
+
+	for (int i = 0; i < data.size(); i++)
+		QCOMPARE(spreadsheet2.column(2)->valueAt(i), data.at(i));
+
+	//TODO QFile::remove(fileName);
 }
 
 // BENCHMARKS

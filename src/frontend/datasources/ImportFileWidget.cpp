@@ -901,10 +901,13 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		if (!m_currentFilter)
 			m_currentFilter.reset(new FITSFilter);
 		auto filter = static_cast<FITSFilter*>(m_currentFilter.get());
-		auto extensions = selectedFITSExtensions();
-		QDEBUG(Q_FUNC_INFO << ", selected FITS extensions =" << extensions);
-		if (!extensions.isEmpty())
-			filter->setCurrentExtensionName(extensions.at(0));
+
+		// reset extension name
+		bool ok;
+		auto extensionName = m_fitsOptionsWidget->extensionName(&ok);
+		QDEBUG(Q_FUNC_INFO << ", set FITS extension name:" << extensionName);
+		filter->setCurrentExtensionName(extensionName);
+
 		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
 		filter->setStartColumn(ui.sbStartColumn->value());
@@ -1563,10 +1566,6 @@ const QStringList ImportFileWidget::selectedNetCDFNames() const {
 
 const QStringList ImportFileWidget::selectedMatioNames() const {
 	return m_matioOptionsWidget->selectedNames();
-}
-
-const QStringList ImportFileWidget::selectedFITSExtensions() const {
-	return m_fitsOptionsWidget->selectedExtensions();
 }
 
 const QStringList ImportFileWidget::selectedROOTNames() const {

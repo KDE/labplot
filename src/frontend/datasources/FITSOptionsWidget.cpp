@@ -66,6 +66,7 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 	WAIT_CURSOR;
 	const QString& itemText = item->text(column);
 	QString selectedExtension;
+	// TODO: same as extensionName() ?
 	int extType = 0;
 	if (itemText.contains(QLatin1String("IMAGE #")) || itemText.contains(QLatin1String("ASCII_TBL #")) || itemText.contains(QLatin1String("BINARY_TBL #")))
 		extType = 1;
@@ -119,42 +120,32 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 	RESET_CURSOR;
 }
 
-/*!
-	return list of selected FITS extension names
-*/
-const QStringList FITSOptionsWidget::selectedExtensions() const {
-	QStringList names;
-	for (const auto* item : ui.twExtensions->selectedItems())
-		names << item->text(0);
-
-	return names;
-}
-
 // return full path of file name and [extension] appended
 const QString FITSOptionsWidget::extensionName(bool* ok) {
 	const auto* item = ui.twExtensions->currentItem();
-	if (item == nullptr)
+	if (!item)
 		return {};
 
 	const int currentColumn = ui.twExtensions->currentColumn();
 	QString itemText = item->text(currentColumn);
-	int extType = 0;
-	if (itemText.contains(QLatin1String("IMAGE #")) || itemText.contains(QLatin1String("ASCII_TBL #")) || itemText.contains(QLatin1String("BINARY_TBL #")))
-		extType = 1;
-	else if (!itemText.compare(i18n("Primary header")))
-		extType = 2;
+	QDEBUG(Q_FUNC_INFO << ", item text:" << itemText)
 
-	if (extType == 0) {
-		if (item->parent() != nullptr && item->parent()->parent() != nullptr)
-			return item->parent()->parent()->text(0) + QLatin1String("[") + item->text(currentColumn) + QLatin1String("]");
-	} else if (extType == 1) {
-		if (item->parent() != nullptr && item->parent()->parent() != nullptr) {
-			int hduNum = itemText.right(1).toInt(ok);
-			return item->parent()->parent()->text(0) + QLatin1String("[") + QString::number(hduNum - 1) + QLatin1String("]");
+	ExtensionType extType = ExtensionType::UNKNOWN;
+	if (itemText.contains(QLatin1String("IMAGE #")) || itemText.contains(QLatin1String("ASCII_TBL #")) || itemText.contains(QLatin1String("BINARY_TBL #")))
+		extType = ExtensionType::IMAGE_OR_TBL;
+	else if (!itemText.compare(QLatin1String("Primary header")))
+		extType = ExtensionType::PRIMARY;
+	//DEBUG(Q_FUNC_INFO << ", extension type:" << extType)
+
+	switch (extType) {
+	case ExtensionType::UNKNOWN:
+		return itemText;
+	case ExtensionType::IMAGE_OR_TBL: {
+		int hduNum = itemText.right(1).toInt(ok);
+		return QString::number(hduNum - 1);
 		}
-	} else {
-		if (item->parent()->parent() != nullptr)
-			return item->parent()->parent()->text(currentColumn);
+	case ExtensionType::PRIMARY:
+		break;
 	}
 
 	return {};
