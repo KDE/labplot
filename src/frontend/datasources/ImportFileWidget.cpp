@@ -1791,8 +1791,6 @@ void ImportFileWidget::refreshPreview() {
 	QStringList vectorNameList;
 	QVector<AbstractColumn::ColumnMode> columnModes;
 
-	DEBUG(Q_FUNC_INFO << ", Data File Type: " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
-
 	WAIT_CURSOR_AUTO_RESET;
 
 	QString errorMessage;
