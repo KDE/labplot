@@ -24,6 +24,13 @@ Bug fixes:
 	* Fix issue which caused the context menu of an aspect to not be shown after being reparented
 	* Handle Windows logical font "MS Shell Dlg 2"
 	* Fix crash when deleting a livedata source with missing source file
+	* Parser: Remove not required function and reuse function instead of copying (BUG 506925)
+	* Fix the export of spreadsheets to SQLite, wrong format was selected internally in the export dialog
+	* Fix the export to SQLite of text values in the spreadsheet containing single quotes
+
+Improvements:
+	* Improve handling of the tab-order to switch between the widgets in the properties explorer
+	* Added Shift+Enter shortcut in the properties explorer to recalculate the results of formula and analysis curves
 
 -----2.12.0 (2025-04-25) -----
 New features:

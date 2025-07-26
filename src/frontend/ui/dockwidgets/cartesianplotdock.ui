@@ -164,7 +164,11 @@
         </spacer>
        </item>
        <item row="1" column="4">
-        <widget class="ResizableTextEdit" name="teComment"/>
+        <widget class="ResizableTextEdit" name="teComment">
+         <property name="tabChangesFocus">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item row="15" column="0" colspan="6">
         <widget class="QTableWidget" name="twYRanges">
@@ -1458,11 +1462,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>NumberSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>NumberSpinBox.h</header>
-  </customwidget>
-  <customwidget>
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>frontend/widgets/ResizableTextEdit.h</header>
@@ -1472,27 +1471,59 @@
    <extends>QLineEdit</extends>
    <header>frontend/widgets/TimedLineEdit.h</header>
   </customwidget>
+  <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>tabWidget</tabstop>
   <tabstop>leName</tabstop>
   <tabstop>teComment</tabstop>
+  <tabstop>cbRangeType</tabstop>
+  <tabstop>leRangePoints</tabstop>
+  <tabstop>cbNiceExtend</tabstop>
+  <tabstop>tbAddXRange</tabstop>
+  <tabstop>tbRemoveXRange</tabstop>
+  <tabstop>twXRanges</tabstop>
+  <tabstop>tbAddYRange</tabstop>
+  <tabstop>tbRemoveYRange</tabstop>
+  <tabstop>twYRanges</tabstop>
+  <tabstop>tbAddPlotRange</tabstop>
+  <tabstop>tbRemovePlotRange</tabstop>
+  <tabstop>twPlotRanges</tabstop>
   <tabstop>chkVisible</tabstop>
-  <tabstop>chkXBreak</tabstop>
-  <tabstop>bAddXBreak</tabstop>
-  <tabstop>bRemoveXBreak</tabstop>
-  <tabstop>cbXBreak</tabstop>
-  <tabstop>leXBreakStart</tabstop>
-  <tabstop>leXBreakEnd</tabstop>
-  <tabstop>sbXBreakPosition</tabstop>
-  <tabstop>cbXBreakStyle</tabstop>
-  <tabstop>chkYBreak</tabstop>
-  <tabstop>bAddYBreak</tabstop>
-  <tabstop>bRemoveYBreak</tabstop>
-  <tabstop>cbYBreak</tabstop>
-  <tabstop>leYBreakStart</tabstop>
   <tabstop>leYBreakEnd</tabstop>
   <tabstop>sbYBreakPosition</tabstop>
   <tabstop>cbYBreakStyle</tabstop>
+  <tabstop>leYBreakStart</tabstop>
+  <tabstop>bAddXBreak</tabstop>
+  <tabstop>cbYBreak</tabstop>
+  <tabstop>chkYBreak</tabstop>
+  <tabstop>cbXBreak</tabstop>
+  <tabstop>leXBreakStart</tabstop>
+  <tabstop>chkXBreak</tabstop>
+  <tabstop>leXBreakEnd</tabstop>
+  <tabstop>bRemoveXBreak</tabstop>
+  <tabstop>bAddYBreak</tabstop>
+  <tabstop>bRemoveYBreak</tabstop>
+  <tabstop>sbXBreakPosition</tabstop>
+  <tabstop>cbXBreakStyle</tabstop>
+  <tabstop>sbTop</tabstop>
+  <tabstop>sbPaddingHorizontal</tabstop>
+  <tabstop>cbPaddingSymmetric</tabstop>
+  <tabstop>sbWidth</tabstop>
+  <tabstop>sbPaddingVertical</tabstop>
+  <tabstop>sbPaddingRight</tabstop>
+  <tabstop>sbLeft</tabstop>
+  <tabstop>sbHeight</tabstop>
+  <tabstop>sbPaddingBottom</tabstop>
+  <tabstop>tbBorderTypeLeft</tabstop>
+  <tabstop>tbBorderTypeTop</tabstop>
+  <tabstop>tbBorderTypeRight</tabstop>
+  <tabstop>tbBorderTypeBottom</tabstop>
+  <tabstop>sbBorderCornerRadius</tabstop>
  </tabstops>
  <resources/>
  <connections>

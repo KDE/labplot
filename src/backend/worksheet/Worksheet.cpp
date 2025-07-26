@@ -1177,13 +1177,13 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 	if (!sender)
 		return;
 
-	TreeModel* treeModel = cursorModel();
+	auto* treeModel = cursorModel();
 
 	// if ApplyActionToSelection, each plot has it's own x value
 	bool isDatetime = sender->xRangeFormatDefault() == RangeT::Format::DateTime;
 	if (cartesianPlotCursorMode() == CartesianPlotActionMode::ApplyActionToAll) {
 		// x values
-		QModelIndex xName = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME));
+		auto xName = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME));
 		treeModel->setData(xName, QVariant(QStringLiteral("X")));
 		double valueCursor[2];
 		QDateTime datetime[2];
@@ -1205,7 +1205,7 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 		// y values
 		const auto& plots = children<CartesianPlot>();
 		const auto plotCount = treeModel->rowCount();
-		for (size_t plotRow = 0; plotRow < plotCount; plotRow++) {
+		for (int plotRow = 0; plotRow < plotCount; plotRow++) {
 			const auto& plotModelIndex = treeModel->index(plotRow + 1, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME));
 			const auto& searchingPlotUuid = treeModel->data(plotModelIndex, CURSOR_UUID_EDIT_ROLE);
 			for (const auto* plot : plots) {
@@ -1214,7 +1214,7 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 
 				const auto& curves = plot->children<XYCurve>();
 				const auto numCurves = treeModel->rowCount(plotModelIndex);
-				for (size_t curveRow = 0; curveRow < numCurves; curveRow++) {
+				for (int curveRow = 0; curveRow < numCurves; curveRow++) {
 					const auto& curveModelIndex = treeModel->index(curveRow, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotModelIndex);
 					const auto& searchingCurveUuid = treeModel->data(curveModelIndex, CURSOR_UUID_EDIT_ROLE);
 					for (const auto* curve : curves) {
@@ -1250,7 +1250,7 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 		// assumption: plot is visible
 		int rowCount = treeModel->rowCount();
 		for (int i = 0; i < rowCount; i++) {
-			QModelIndex plotModelIndex = treeModel->index(i, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME));
+			auto plotModelIndex = treeModel->index(i, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME));
 			if (plotModelIndex.data(CURSOR_UUID_EDIT_ROLE) != sender->uuid())
 				continue;
 
@@ -1270,7 +1270,7 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 
 			const auto numCurves = treeModel->rowCount(plotModelIndex);
 			const auto& curves = sender->children<XYCurve>();
-			for (size_t rowCurve = 1; rowCurve < numCurves; rowCurve++) { // First is the x value
+			for (int rowCurve = 1; rowCurve < numCurves; rowCurve++) { // First is the x value
 				const auto& curveModelIndex = treeModel->index(rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotModelIndex);
 				const auto& searchingCurveUuid = treeModel->data(curveModelIndex, CURSOR_UUID_EDIT_ROLE);
 				for (const auto* curve : curves) {
@@ -1343,16 +1343,16 @@ void Worksheet::curveDataChanged(const XYCurve* curve) {
 	if (!plot || !curve)
 		return;
 
-	TreeModel* treeModel = cursorModel();
+	auto* treeModel = cursorModel();
 	int rowCount = treeModel->rowCount();
 
-	for (int i = 0; i < rowCount; i++) {
-		QModelIndex plotModelIndex = treeModel->index(i, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME));
+	for (int row = 0; row < rowCount; row++) {
+		auto plotModelIndex = treeModel->index(row, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME));
 		if (plotModelIndex.data(CURSOR_UUID_EDIT_ROLE) != plot->uuid())
 			continue;
 
 		const auto curveCount = treeModel->rowCount(plotModelIndex);
-		for (size_t curveRow = 0; curveRow < curveCount; curveRow++) {
+		for (int curveRow = 0; curveRow < curveCount; curveRow++) {
 			const auto& curveModelIndex = treeModel->index(curveRow, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotModelIndex);
 			if (curveModelIndex.data(CURSOR_UUID_EDIT_ROLE) != curve->uuid())
 				continue;

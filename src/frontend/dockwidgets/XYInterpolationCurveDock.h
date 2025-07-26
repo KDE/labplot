@@ -54,7 +54,7 @@ private Q_SLOTS:
 	void evaluateChanged(int);
 	void numberOfPointsChanged();
 	void pointsModeChanged(int);
-	void recalculateClicked();
+	void recalculateClicked() override;
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab
