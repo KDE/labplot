@@ -295,7 +295,7 @@ Q_SIGNALS:
 	void propertiesExplorerRequested();
 
 	friend class RetransformTest;
-	friend class MultiRangeTest2;
+	friend class MultiRangeTest;
 	friend class CartesianPlotTest;
 };
 

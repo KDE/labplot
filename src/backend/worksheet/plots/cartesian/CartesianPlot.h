@@ -281,7 +281,7 @@ private:
 	friend CartesianPlotDock;
 	friend class AxisTest;
 	friend class CartesianPlotTest;
-	friend class MultiRangeTest2;
+	friend class MultiRangeTest;
 
 public Q_SLOTS:
 	void addHistogramFit(Histogram*, nsl_sf_stats_distribution);

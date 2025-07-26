@@ -140,7 +140,7 @@ private:
 	bool m_suppressPlotRetransform{false};
 
 	friend class RetransformTest;
-	friend class MultiRangeTest3;
+	friend class MultiRangeTest;
 	friend class WorksheetElementTest;
 };
 
