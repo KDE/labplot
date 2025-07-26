@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for the FITS filter
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -18,6 +18,8 @@ class FITSFilterTest : public CommonMetaTest {
 private Q_SLOTS:
 	void importFile1();
 	void importFile2();
+
+	void exportImport();
 
 	void benchDoubleImport_data();
 	// this is called multiple times (warm-up of BENCHMARK)

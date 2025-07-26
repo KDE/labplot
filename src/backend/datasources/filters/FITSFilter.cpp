@@ -267,14 +267,9 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 	QVector<QStringList> dataStrings;
 #ifdef HAVE_FITS
 	QDEBUG(Q_FUNC_INFO << ", current extension:" << currentExtensionName)
-	// append current extension when available and not given in path ("[]" or file name only)
-	if (!currentExtensionName.isEmpty()) {
-		if (path.contains(QLatin1String("[]"))) {
-			int pos = path.indexOf(QLatin1Char(']'));
-			path.insert(pos, currentExtensionName);
-		} else if (!path.endsWith(QLatin1Char(']')))
-			path.append(QLatin1Char('[') + currentExtensionName + QLatin1Char(']'));
-
+	// append current extension when available and not given in path (file name only)
+	if (!currentExtensionName.isEmpty() && !path.endsWith(QLatin1Char(']'))) {
+		path.append(QLatin1Char('[') + currentExtensionName + QLatin1Char(']'));
 		QDEBUG(Q_FUNC_INFO << ", using path:" << path)
 	}
 
@@ -654,15 +649,16 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
  */
 
 void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* dataSource) {
+	QDEBUG(Q_FUNC_INFO << "file name:" << fileName)
 #ifdef HAVE_FITS
-	if (!fileName.endsWith(QLatin1String(".fits")))
+	if (!fileName.endsWith(QLatin1String(".fits"), Qt::CaseInsensitive))
 		return;
 	int status = 0;
 	bool existed = false;
 	if (!QFile::exists(fileName)) {
 		if (fits_create_file(&m_fitsFile, qPrintable(fileName), &status)) {
 			printError(status);
-			qDebug() << fileName;
+			QDEBUG("file name:" << fileName);
 			return;
 		}
 	} else {
@@ -790,6 +786,7 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 
 	auto* const spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
+		DEBUG(Q_FUNC_INFO <<", Spreadsheet " << exportTo)
 		// FITS image
 		if (exportTo == 0) {
 			int maxRowIdx = -1;
@@ -844,6 +841,7 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 		} else {
 			const int nrows = spreadsheet->rowCount();
 			const int tfields = spreadsheet->columnCount();
+			DEBUG("rows/cols: " << nrows << "/" << tfields)
 
 			QVector<char*> columnNames;
 			columnNames.resize(tfields);
@@ -855,6 +853,7 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 			tunit.resize(tfields);
 			tunit.squeeze();
 
+			DEBUG("HERE")
 			for (int i = 0; i < tfields; ++i) {
 				const Column* const column = spreadsheet->column(i);
 
@@ -922,6 +921,7 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 				}
 			}
 			// TODO extension name containing[] ?
+			DEBUG("HERE 2")
 
 			int r = fits_create_tbl(m_fitsFile,
 									ASCII_TBL,
@@ -947,6 +947,7 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 				}
 				return;
 			}
+			DEBUG("HERE 3")
 
 			QVector<char*> column;
 			column.resize(nrows);
@@ -991,6 +992,7 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 					}
 				}
 			}
+			DEBUG("HERE 4")
 
 			delete[] columnNumeric;
 
