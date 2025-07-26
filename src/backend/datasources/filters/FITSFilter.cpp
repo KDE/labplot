@@ -786,8 +786,8 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 
 	auto* const spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
+		DEBUG(Q_FUNC_INFO << ", Spreadsheet to " << exportTo)
 		// FITS image (primary header)
-		DEBUG(Q_FUNC_INFO <<", Spreadsheet " << exportTo)
 		if (exportTo == 0) {
 			int maxRowIdx = -1;
 			// don't export lots of empty lines if all of those contain NaNs
@@ -795,18 +795,18 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 			for (int c = 0; c < spreadsheet->columnCount(); ++c) {
 				const auto* const col = spreadsheet->column(c);
 				int currMaxRoxIdx = -1;
-				for (int r = col->rowCount(); r >= 0; --r) {
+				for (int r = col->rowCount(); r >= 0; r--) {
 					if (col->isValid(r)) {
 						currMaxRoxIdx = r;
 						break;
 					}
 				}
 
-				if (currMaxRoxIdx > maxRowIdx) {
+				if (currMaxRoxIdx > maxRowIdx)
 					maxRowIdx = currMaxRoxIdx;
-				}
 			}
-			long naxes[2] = {spreadsheet->columnCount(), maxRowIdx + 1};
+			DEBUG(Q_FUNC_INFO << ", dim: " << spreadsheet->columnCount() << " " << maxRowIdx)
+			long naxes[2] = {spreadsheet->columnCount(), maxRowIdx};
 			if (fits_create_img(m_fitsFile, FLOAT_IMG, 2, naxes, &status)) {
 				printError(status);
 				status = 0;
@@ -837,7 +837,6 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 		} else {
 			const int nrows = spreadsheet->rowCount();
 			const int tfields = spreadsheet->columnCount();
-			DEBUG("rows/cols: " << nrows << "/" << tfields)
 
 			QVector<char*> columnNames;
 			columnNames.resize(tfields);
@@ -849,7 +848,6 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 			tunit.resize(tfields);
 			tunit.squeeze();
 
-			DEBUG("HERE")
 			for (int i = 0; i < tfields; ++i) {
 				const auto* const column = spreadsheet->column(i);
 
@@ -937,7 +935,6 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 					QFile::remove(fileName);
 				return;
 			}
-			DEBUG("HERE 3")
 
 			QVector<char*> column;
 			column.resize(nrows);
@@ -948,7 +945,6 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 			qint64* columnBigInt = new qint64[nrows];
 			status = 0;
 			for (int col = 1; col <= tfields; ++col) {
-				DEBUG("Column " << col)
 				if (status) {
 					printError(status);
 
@@ -996,7 +992,6 @@ void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* d
 					break;
 				}
 			}
-			DEBUG("HERE 4")
 
 			delete[] columnInteger;
 			delete[] columnNumeric;
