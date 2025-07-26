@@ -3009,14 +3009,13 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 				painter->translate(tickLabelPoints.at(i));
 				painter->save();
 				painter->rotate(-labelsRotationAngle);
-				auto rect = fm.boundingRect(tickLabelStrings.at(i));
-				if (orientation == Axis::Orientation::Horizontal)
-					rect.setX(0);
 
 				if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
-					if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent)
+					if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent) {
+						const QRect& rect = fm.boundingRect(tickLabelStrings.at(i));
 						painter->fillRect(rect, labelsBackgroundColor);
-					painter->drawText(rect, Qt::AlignCenter, tickLabelStrings.at(i));
+					}
+					painter->drawText(QPoint(0, 0), tickLabelStrings.at(i));
 				} else {
 					const QString style(QStringLiteral("p {color: %1;}"));
 					doc.setDefaultStyleSheet(style.arg(labelsColor.name()));
@@ -3038,15 +3037,11 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 				painter->translate(tickLabelPoints.at(i));
 				painter->save();
 				painter->rotate(-labelsRotationAngle);
-				auto rect = fm.tightBoundingRect(tickLabelStrings.at(i));
-				if (orientation == Axis::Orientation::Horizontal)
-					rect.setX(0);
-				else if (orientation == Axis::Orientation::Vertical)
-					rect.setY(-rect.height());
-
-				if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent)
+				if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent) {
+					const QRect& rect = fm.boundingRect(tickLabelStrings.at(i));
 					painter->fillRect(rect, labelsBackgroundColor);
-				painter->drawText(rect, Qt::AlignCenter, tickLabelStrings.at(i));
+				}
+				painter->drawText(QPoint(0, 0), tickLabelStrings.at(i));
 				painter->restore();
 				painter->translate(-tickLabelPoints.at(i));
 			}
