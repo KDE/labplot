@@ -1061,10 +1061,15 @@ QIcon Column::icon() const {
  * \brief Save the column as XML
  */
 void Column::save(QXmlStreamWriter* writer) const {
+	bool saveData = true;
+	if (project() && !project()->saveData()) {
+		saveData = false;
+	}
+
 	writer->writeStartElement(QStringLiteral("column"));
 	writeBasicAttributes(writer);
 
-	writer->writeAttribute(QStringLiteral("rows"), QString::number(rowCount()));
+	writer->writeAttribute(QStringLiteral("rows"), QString::number(saveData ? rowCount() : 0));
 	writer->writeAttribute(QStringLiteral("designation"), QString::number(static_cast<int>(plotDesignation())));
 	writer->writeAttribute(QStringLiteral("mode"), QString::number(static_cast<int>(columnMode())));
 	writer->writeAttribute(QStringLiteral("width"), QString::number(width()));
@@ -1226,44 +1231,45 @@ void Column::save(QXmlStreamWriter* writer) const {
 	}
 
 	// data
-	int i;
-	switch (columnMode()) {
-	case ColumnMode::Double: {
-		const char* data = reinterpret_cast<const char*>(static_cast<QVector<double>*>(d->data())->constData());
-		size_t size = d->rowCount() * sizeof(double);
-		writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, (int)size).toBase64()));
-		break;
-	}
-	case ColumnMode::Integer: {
-		const char* data = reinterpret_cast<const char*>(static_cast<QVector<int>*>(d->data())->constData());
-		size_t size = d->rowCount() * sizeof(int);
-		writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, (int)size).toBase64()));
-		break;
-	}
-	case ColumnMode::BigInt: {
-		const char* data = reinterpret_cast<const char*>(static_cast<QVector<qint64>*>(d->data())->constData());
-		size_t size = d->rowCount() * sizeof(qint64);
-		writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, (int)size).toBase64()));
-		break;
-	}
-	case ColumnMode::Text:
-		for (i = 0; i < rowCount(); ++i) {
-			writer->writeStartElement(QStringLiteral("row"));
-			writer->writeAttribute(QStringLiteral("index"), QString::number(i));
-			writer->writeCharacters(textAt(i));
-			writer->writeEndElement();
+	if (saveData) {
+		switch (columnMode()) {
+		case ColumnMode::Double: {
+			const char* data = reinterpret_cast<const char*>(static_cast<QVector<double>*>(d->data())->constData());
+			size_t size = d->rowCount() * sizeof(double);
+			writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, (int)size).toBase64()));
+			break;
 		}
-		break;
-	case ColumnMode::DateTime:
-	case ColumnMode::Month:
-	case ColumnMode::Day:
-		for (i = 0; i < rowCount(); ++i) {
-			writer->writeStartElement(QStringLiteral("row"));
-			writer->writeAttribute(QStringLiteral("index"), QString::number(i));
-			writer->writeCharacters(dateTimeAt(i).toString(QLatin1String("yyyy-dd-MM hh:mm:ss:zzz")));
-			writer->writeEndElement();
+		case ColumnMode::Integer: {
+			const char* data = reinterpret_cast<const char*>(static_cast<QVector<int>*>(d->data())->constData());
+			size_t size = d->rowCount() * sizeof(int);
+			writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, (int)size).toBase64()));
+			break;
 		}
-		break;
+		case ColumnMode::BigInt: {
+			const char* data = reinterpret_cast<const char*>(static_cast<QVector<qint64>*>(d->data())->constData());
+			size_t size = d->rowCount() * sizeof(qint64);
+			writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, (int)size).toBase64()));
+			break;
+		}
+		case ColumnMode::Text:
+			for (int i = 0; i < rowCount(); ++i) {
+				writer->writeStartElement(QStringLiteral("row"));
+				writer->writeAttribute(QStringLiteral("index"), QString::number(i));
+				writer->writeCharacters(textAt(i));
+				writer->writeEndElement();
+			}
+			break;
+		case ColumnMode::DateTime:
+		case ColumnMode::Month:
+		case ColumnMode::Day:
+			for (int i = 0; i < rowCount(); ++i) {
+				writer->writeStartElement(QStringLiteral("row"));
+				writer->writeAttribute(QStringLiteral("index"), QString::number(i));
+				writer->writeCharacters(dateTimeAt(i).toString(QLatin1String("yyyy-dd-MM hh:mm:ss:zzz")));
+				writer->writeEndElement();
+			}
+			break;
+		}
 	}
 
 	writer->writeEndElement(); // "column"
@@ -1450,6 +1456,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 		}
 
 		if (!preview) {
+			// Decode data
 			QString content = reader->text().toString().trimmed();
 			// Datetime and text are read in row by row
 			if (!content.isEmpty() && (columnMode() == ColumnMode::Double || columnMode() == ColumnMode::Integer || columnMode() == ColumnMode::BigInt)) {
