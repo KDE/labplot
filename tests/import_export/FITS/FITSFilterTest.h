@@ -16,9 +16,14 @@ class FITSFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void importFile1();
-	void importFile2();
+	void importFileWFPC2A();
+	void importFileWFPC2u();
+	void importFileUITfuv();
+	void importFileIUElwp();
+	void importFileHRSz0y();
+	void importFileFOSy19();
 
+	void importExported();
 	void exportImport();
 
 	void benchDoubleImport_data();
