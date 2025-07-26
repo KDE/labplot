@@ -3011,11 +3011,11 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 				painter->rotate(-labelsRotationAngle);
 
 				if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
+					const QRectF& rect = fm.tightBoundingRect(tickLabelStrings.at(i));
 					if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent) {
-						const QRect& rect = fm.boundingRect(tickLabelStrings.at(i));
-						painter->fillRect(rect, labelsBackgroundColor);
+						painter->fillRect(rect.translated(-rect.x(), 0), labelsBackgroundColor);
 					}
-					painter->drawText(QPoint(0, 0), tickLabelStrings.at(i));
+					painter->drawText(QPoint(-rect.x(), 0), tickLabelStrings.at(i));
 				} else {
 					const QString style(QStringLiteral("p {color: %1;}"));
 					doc.setDefaultStyleSheet(style.arg(labelsColor.name()));
@@ -3037,11 +3037,11 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 				painter->translate(tickLabelPoints.at(i));
 				painter->save();
 				painter->rotate(-labelsRotationAngle);
+				const QRectF& rect = fm.tightBoundingRect(tickLabelStrings.at(i));
 				if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent) {
-					const QRect& rect = fm.boundingRect(tickLabelStrings.at(i));
-					painter->fillRect(rect, labelsBackgroundColor);
+					painter->fillRect(rect.translated(-rect.x(), 0), labelsBackgroundColor);
 				}
-				painter->drawText(QPoint(0, 0), tickLabelStrings.at(i));
+				painter->drawText(QPoint(-rect.x(), 0), tickLabelStrings.at(i));
 				painter->restore();
 				painter->translate(-tickLabelPoints.at(i));
 			}
