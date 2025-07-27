@@ -164,7 +164,7 @@ public:
 		DEBUG("FILL col" << m_startCol << "-" << m_endCol << " x/y =" << x << '/' << y << " steps =" << m_xStep << '/' << m_yStep << " rows =" << rows)
 
 		Parsing::parser_var vars[] = {{"x", x}, {"y", y}};
-		Parsing::Parser parser;
+		Parsing::Parser parser(true);
 		for (int col = m_startCol; col < m_endCol; ++col) {
 			vars[0].value = x;
 			for (int row = 0; row < rows; ++row) {
@@ -239,7 +239,7 @@ void MatrixFunctionDialog::generate() {
 	double x = m_matrix->xStart();
 	double y = m_matrix->yStart();
 	Parsing::parser_var vars[] = {{"x", x}, {"y", y}};
-	Parsing::Parser parser;
+	Parsing::Parser parser(true);
 	for (int col = 0; col < m_matrix->columnCount(); ++col) {
 		vars[0].value = x;
 		for (int row = 0; row < m_matrix->rowCount(); ++row) {

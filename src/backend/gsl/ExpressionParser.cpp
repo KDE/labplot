@@ -291,7 +291,7 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 
 	gsl_set_error_handler_off();
 
-	Parser parser;
+	Parser parser(false);
 	parser.setSkipSpecialFunctionEvaluation(true);
 
 	for (const auto& var : vars)
@@ -356,7 +356,7 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	const double step = range.stepSize(count);
 	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString() << ", step = " << step)
 
-	Parser parser;
+	Parser parser(true);
 	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
 
 	for (int i = 0; i < paramNames.size(); ++i)
@@ -407,61 +407,8 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 											int count,
 											QVector<double>* xVector,
 											QVector<double>* yVector) {
-	DEBUG(Q_FUNC_INFO << ", v2")
-	gsl_set_error_handler_off();
-
 	const Range<double> range{min, max};
-	const double step = range.stepSize(count);
-
-	Parser parser;
-	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
-
-	const auto numberLocale = QLocale();
-	for (int i = 0; i < count; i++) {
-		const double x{range.start() + step * i};
-		parser.assign_symbol("x", x);
-
-		double y = parser.parse(qPrintable(expr), qPrintable(numberLocale.name()));
-		if (parser.parseErrors() > 0) { // try default locale if failing
-			y = parser.parse(qPrintable(expr), "en_US");
-			// DEBUG(Q_FUNC_INFO << ", WARNING: PARSER failed, trying default locale: y = " << y)
-		}
-		if (parser.parseErrors() > 0)
-			return false;
-
-		if (std::isnan(y))
-			WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " evaluated @ " << x << " is NAN")
-
-		(*xVector)[i] = x;
-		(*yVector)[i] = y;
-	}
-
-	return true;
-}
-
-bool ExpressionParser::tryEvaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector) {
-	DEBUG(Q_FUNC_INFO << ", v3")
-	gsl_set_error_handler_off();
-
-	Parser parser;
-	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
-
-	const auto numberLocale = QLocale();
-	for (int i = 0; i < xVector->count(); i++) {
-		parser.assign_symbol("x", xVector->at(i));
-		double y = parser.parse(qPrintable(expr), qPrintable(numberLocale.name()));
-		if (parser.parseErrors() > 0) // try default locale if failing
-			y = parser.parse(qPrintable(expr), "en_US");
-		if (parser.parseErrors() > 0)
-			return false;
-
-		if (std::isnan(y))
-			WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " evaluated @ " << xVector->at(i) << " is NAN")
-
-		(*yVector)[i] = y;
-	}
-
-	return true;
+	return tryEvaluateCartesian(expr, range, count, xVector, yVector, QStringList(), QVector<double>());
 }
 
 bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
@@ -472,7 +419,7 @@ bool ExpressionParser::tryEvaluateCartesian(const QString& expr,
 	DEBUG(Q_FUNC_INFO << ", v4")
 	gsl_set_error_handler_off();
 
-	Parser parser;
+	Parser parser(true);
 	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
 
 	for (int i = 0; i < paramNames.size(); ++i)
@@ -795,13 +742,14 @@ bool ExpressionParser::tryEvaluatePolar(const QString& expr,
 	const Range<double> range{min, max};
 	const double step = range.stepSize(count);
 
-	Parser parser;
+	Parser parser(true);
 	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
 
 	const auto numberLocale = QLocale();
 	for (int i = 0; i < count; i++) {
 		const double phi = range.start() + step * i;
 		parser.assign_symbol("phi", phi);
+		parser.assign_symbol("i", i + 1);
 
 		double r = parser.parse(qPrintable(expr), qPrintable(numberLocale.name()));
 		if (parser.parseErrors() > 0) // try default locale if failing
@@ -831,12 +779,13 @@ bool ExpressionParser::tryEvaluateParametric(const QString& xexpr,
 	const Range<double> range{min, max};
 	const double step = range.stepSize(count);
 
-	Parser parser;
+	Parser parser(true);
 	ParserLastErrorMessage lock(parser, m_lastErrorMessage);
 
 	const auto numberLocale = QLocale();
 	for (int i = 0; i < count; i++) {
 		parser.assign_symbol("t", range.start() + step * i);
+		parser.assign_symbol("i", i + 1);
 
 		double x = parser.parse(qPrintable(xexpr), qPrintable(numberLocale.name()));
 		if (parser.parseErrors() > 0) // try default locale if failing

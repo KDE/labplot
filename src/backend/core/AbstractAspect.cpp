@@ -502,6 +502,10 @@ Project* AbstractAspect::project() {
 	return parentAspect() ? parentAspect()->project() : nullptr;
 }
 
+const Project* AbstractAspect::project() const {
+	return parentAspect() ? parentAspect()->project() : nullptr;
+}
+
 void AbstractAspect::setProjectChanged(bool changed) {
 	auto* p = project();
 	if (p)

@@ -2000,4 +2000,78 @@ void ColumnTest::testRowCountValueLabelsDateTime() {
 			 3);
 }
 
+void ColumnTest::testLoadSaveNoData() {
+	QString savePath;
+	QString columnName;
+
+	{
+		Project project;
+		project.setSaveData(false);
+		auto* s = new Spreadsheet(QStringLiteral("MySpreadsheet"));
+		project.addChild(s);
+		s->setColumnCount(1);
+		auto* c = s->column(0);
+		columnName = c->name();
+		c->resizeTo(100);
+		QCOMPARE(c->rowCount(), 100);
+
+		for (int i = 0; i < c->rowCount(); i++)
+			c->setValueAt(i, i);
+
+		SAVE_PROJECT("testLoadSaveNoData");
+	}
+
+	{
+		Project project;
+		QVERIFY(project.load(savePath));
+
+		const auto& spreadsheets = project.children<Spreadsheet>();
+		QCOMPARE(spreadsheets.size(), 1);
+
+		const auto& columns = spreadsheets.at(0)->children<Column>();
+		QCOMPARE(columns.size(), 1);
+		const auto* column = columns.at(0);
+		QCOMPARE(column->name(), columnName);
+		QCOMPARE(column->rowCount(), 0);
+	}
+}
+
+void ColumnTest::testLoadSaveWithData() {
+	QString savePath;
+	QString columnName;
+	{
+		Project project;
+		project.setSaveData(true);
+		auto* s = new Spreadsheet(QStringLiteral("MySpreadsheet"));
+		project.addChild(s);
+		s->setColumnCount(1);
+		auto* c = s->column(0);
+		columnName = c->name();
+		c->resizeTo(100);
+		QCOMPARE(c->rowCount(), 100);
+
+		for (int i = 0; i < c->rowCount(); i++)
+			c->setValueAt(i, i);
+
+		SAVE_PROJECT("testLoadSaveNoData");
+	}
+
+	{
+		Project project;
+		QVERIFY(project.load(savePath));
+
+		const auto& spreadsheets = project.children<Spreadsheet>();
+		QCOMPARE(spreadsheets.size(), 1);
+
+		const auto& columns = spreadsheets.at(0)->children<Column>();
+		QCOMPARE(columns.size(), 1);
+		const auto* column = columns.at(0);
+		QCOMPARE(column->name(), columnName);
+		QCOMPARE(column->rowCount(), 100);
+
+		for (int i = 0; i < column->rowCount(); i++)
+			QCOMPARE(column->valueAt(i), i);
+	}
+}
+
 QTEST_MAIN(ColumnTest)

@@ -143,6 +143,37 @@ void AbstractAspectTest::testAddChildUndoRedo() {
 	QCOMPARE(undoStack->count(), 3);
 }
 
+void AbstractAspectTest::testAddChildUndoRedoTwice() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+
+	auto* undoStack = project.undoStack();
+
+	// there should be 2 entries on the undo stack:
+	// 1. add worksheet
+	// 2. add plot
+	QCOMPARE(undoStack->count(), 2);
+
+	// undo the creation of the plot and of the worksheet and redo it again
+	// the number of entries should stay the same after undo/redo
+	undoStack->undo();
+	QCOMPARE(undoStack->count(), 2);
+	undoStack->undo();
+	QCOMPARE(undoStack->count(), 2);
+	undoStack->redo();
+	QCOMPARE(undoStack->count(), 2);
+	undoStack->redo();
+	QCOMPARE(undoStack->count(), 2);
+
+	// make sure the plot is visible after the redo steps
+	QVERIFY(plot->isVisible());
+}
+
 void AbstractAspectTest::testDuplicateChildUndoRedo() {
 	Project project;
 

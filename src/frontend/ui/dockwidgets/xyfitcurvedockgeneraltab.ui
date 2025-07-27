@@ -57,15 +57,27 @@
       </item>
       <item>
        <widget class="QPushButton" name="pbLoadFunction">
+        <property name="toolTip">
+         <string>Load a custom function</string>
+        </property>
         <property name="text">
          <string>Load</string>
+        </property>
+        <property name="icon">
+         <iconset theme="QIcon::ThemeIcon::InsertLink"/>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="pbSaveFunction">
+        <property name="toolTip">
+         <string>Save a custom function</string>
+        </property>
         <property name="text">
          <string>Save</string>
+        </property>
+        <property name="icon">
+         <iconset theme="QIcon::ThemeIcon::DocumentSaveAs"/>
         </property>
        </widget>
       </item>
@@ -678,7 +690,11 @@
     <widget class="TimedLineEdit" name="leName"/>
    </item>
    <item row="1" column="2" colspan="2">
-    <widget class="ResizableTextEdit" name="teComment"/>
+    <widget class="ResizableTextEdit" name="teComment">
+     <property name="tabChangesFocus">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="22" column="3">
     <widget class="QFrame" name="frame_2">
@@ -1247,16 +1263,46 @@
    <header>frontend/widgets/ResizableTextEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>ExpressionTextEdit</class>
-   <extends>QTextEdit</extends>
-   <header>frontend/widgets/ExpressionTextEdit.h</header>
-  </customwidget>
-  <customwidget>
    <class>TimedLineEdit</class>
    <extends>QLineEdit</extends>
    <header>frontend/widgets/TimedLineEdit.h</header>
   </customwidget>
+  <customwidget>
+   <class>ExpressionTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>frontend/widgets/ExpressionTextEdit.h</header>
+  </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>leName</tabstop>
+  <tabstop>teComment</tabstop>
+  <tabstop>tbData</tabstop>
+  <tabstop>cbDataSourceType</tabstop>
+  <tabstop>tbWeights</tabstop>
+  <tabstop>cbXWeight</tabstop>
+  <tabstop>cbYWeight</tabstop>
+  <tabstop>tbFit</tabstop>
+  <tabstop>pbLoadFunction</tabstop>
+  <tabstop>pbSaveFunction</tabstop>
+  <tabstop>pbOptions</tabstop>
+  <tabstop>cbCategory</tabstop>
+  <tabstop>cbModel</tabstop>
+  <tabstop>sbDegree</tabstop>
+  <tabstop>teEquation</tabstop>
+  <tabstop>tbFunctions</tabstop>
+  <tabstop>tbConstants</tabstop>
+  <tabstop>tbParameters</tabstop>
+  <tabstop>cbAlgorithm</tabstop>
+  <tabstop>pbRecalculate</tabstop>
+  <tabstop>tbResults</tabstop>
+  <tabstop>twResults</tabstop>
+  <tabstop>twLog</tabstop>
+  <tabstop>cbPlotRanges</tabstop>
+  <tabstop>chkLegendVisible</tabstop>
+  <tabstop>chkVisible</tabstop>
+  <tabstop>twGoodness</tabstop>
+  <tabstop>twParameters</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

@@ -149,11 +149,8 @@ void XYFitCurveDock::setupGeneral() {
 	showParameters(true);
 	showResults(true);
 
-	// CTRL+C copies only the last cell in the selection, we want to copy the whole selection.
-	// install event filters to handle CTRL+C key events.
-	uiGeneralTab.twParameters->installEventFilter(this);
-	uiGeneralTab.twGoodness->installEventFilter(this);
-	uiGeneralTab.twLog->installEventFilter(this);
+	// install event filter to handle custom shortcuts
+	installEventFilter(this);
 
 	// context menus
 	uiGeneralTab.twParameters->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -341,13 +338,17 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 }
 
 bool XYFitCurveDock::eventFilter(QObject* obj, QEvent* event) {
-	if (event->type() == QEvent::KeyPress && (obj == uiGeneralTab.twParameters || obj == uiGeneralTab.twGoodness || obj == uiGeneralTab.twLog)) {
+	if (event->type() == QEvent::KeyPress) {
 		auto* key_event = static_cast<QKeyEvent*>(event);
-		if (key_event->matches(QKeySequence::Copy)) {
+		if (key_event->matches(QKeySequence::Copy) && (obj == uiGeneralTab.twParameters || obj == uiGeneralTab.twGoodness || obj == uiGeneralTab.twLog)) {
 			resultCopy();
+			return true;
+		} else if (key_event->key() == Qt::Key_Return && key_event->modifiers() == Qt::ShiftModifier && uiGeneralTab.pbRecalculate->isEnabled()) {
+			recalculateClicked();
 			return true;
 		}
 	}
+
 	return QWidget::eventFilter(obj, event);
 }
 
@@ -412,6 +413,7 @@ void XYFitCurveDock::retranslateUi() {
 	uiGeneralTab.twParameters->setHorizontalHeaderLabels(labels);
 
 	fitParametersWidget->retranslateUi();
+	uiGeneralTab.pbRecalculate->setToolTip(i18n("Click this button or press Shift+Enter to recalculate the result."));
 
 	// retranslate fit results, if available
 	if (m_fitCurve)

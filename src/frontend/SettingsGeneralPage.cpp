@@ -46,6 +46,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent, const QLocale& locale)
 	connect(ui.chkSaveDockStates, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkSaveCalculations, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkCompatible, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
+	connect(ui.chkSaveData, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkInfoTrace, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkDebugTrace, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 	connect(ui.chkPerfTrace, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
@@ -115,6 +116,7 @@ QList<Settings::Type> SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("SaveDockStates"), ui.chkSaveDockStates->isChecked());
 	group.writeEntry(QLatin1String("SaveCalculations"), ui.chkSaveCalculations->isChecked());
 	group.writeEntry(QLatin1String("CompatibleSave"), ui.chkCompatible->isChecked());
+	group.writeEntry(QLatin1String("SaveData"), ui.chkSaveData->isChecked());
 	const bool infoTraceEnabled = ui.chkInfoTrace->isChecked();
 	group.writeEntry(QLatin1String("InfoTrace"), infoTraceEnabled);
 	enableInfoTrace(infoTraceEnabled);
@@ -203,6 +205,7 @@ void SettingsGeneralPage::loadSettings() {
 	ui.chkInfoTrace->setChecked(group.readEntry<bool>(QLatin1String("InfoTrace"), false));
 	ui.chkDebugTrace->setChecked(group.readEntry<bool>(QLatin1String("DebugTrace"), false));
 	ui.chkPerfTrace->setChecked(group.readEntry<bool>(QLatin1String("PerfTrace"), false));
+	ui.chkSaveData->setChecked(group.readEntry<bool>(QLatin1String("SaveData"), true));
 
 	m_changed = false;
 }
@@ -281,6 +284,10 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.chkInfoTrace->setToolTip(i18n("Info trace - helpful to get information and warnings when running the application."));
 	ui.chkDebugTrace->setToolTip(i18n("Debug trace - helpful to diagnose the application, can have a negative impact on the performance."));
 	ui.chkPerfTrace->setToolTip(i18n("Performance trace - helpful to analyze performance relevant aspects and bottlenecks."));
+
+	const auto saveDataToolTip = i18n("If enabled spreadsheet and matrix data is saved in the project file");
+	ui.lSaveData->setToolTip(saveDataToolTip);
+	ui.chkSaveData->setToolTip(saveDataToolTip);
 }
 
 void SettingsGeneralPage::loadOnStartChanged() {

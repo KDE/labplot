@@ -59,7 +59,7 @@ private Q_SLOTS:
 	void autoTolerance2Changed();
 	void tolerance2Changed(double);
 
-	void recalculateClicked();
+	void recalculateClicked() override;
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab

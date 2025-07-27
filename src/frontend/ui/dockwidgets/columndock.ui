@@ -39,6 +39,9 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="tabChangesFocus">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
    <item row="4" column="2">
@@ -331,6 +334,19 @@
    <header>frontend/widgets/TimedLineEdit.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>leName</tabstop>
+  <tabstop>teComment</tabstop>
+  <tabstop>cbType</tabstop>
+  <tabstop>cbNumericFormat</tabstop>
+  <tabstop>sbPrecision</tabstop>
+  <tabstop>cbDateTimeFormat</tabstop>
+  <tabstop>cbPlotDesignation</tabstop>
+  <tabstop>twLabels</tabstop>
+  <tabstop>bAddLabel</tabstop>
+  <tabstop>bRemoveLabel</tabstop>
+  <tabstop>bBatchEditLabels</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

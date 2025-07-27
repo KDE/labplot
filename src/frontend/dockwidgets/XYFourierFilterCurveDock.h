@@ -51,7 +51,7 @@ private Q_SLOTS:
 	void orderChanged();
 	void unitChanged();
 	void unit2Changed();
-	void recalculateClicked();
+	void recalculateClicked() override;
 
 	// SLOTs for changes triggered in XYCurve
 	// General-Tab

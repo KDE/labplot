@@ -431,7 +431,11 @@
     </layout>
    </item>
    <item row="1" column="2" colspan="2">
-    <widget class="ResizableTextEdit" name="teComment"/>
+    <widget class="ResizableTextEdit" name="teComment">
+     <property name="tabChangesFocus">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="lComment">
@@ -519,14 +523,14 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>NumberSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>NumberSpinBox.h</header>
-  </customwidget>
-  <customwidget>
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>frontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TimedLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>frontend/widgets/TimedLineEdit.h</header>
   </customwidget>
   <customwidget>
    <class>UTCDateTimeEdit</class>
@@ -534,11 +538,31 @@
    <header>UTCDateTimeEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>TimedLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>frontend/widgets/TimedLineEdit.h</header>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>leName</tabstop>
+  <tabstop>teComment</tabstop>
+  <tabstop>cbDataSourceType</tabstop>
+  <tabstop>cbAutoRange</tabstop>
+  <tabstop>leMin</tabstop>
+  <tabstop>leMax</tabstop>
+  <tabstop>dateTimeEditMin</tabstop>
+  <tabstop>dateTimeEditMax</tabstop>
+  <tabstop>cbMethod</tabstop>
+  <tabstop>chkAuto</tabstop>
+  <tabstop>sbTolerance</tabstop>
+  <tabstop>chkAuto2</tabstop>
+  <tabstop>sbTolerance2</tabstop>
+  <tabstop>teResult</tabstop>
+  <tabstop>pbRecalculate</tabstop>
+  <tabstop>cbPlotRanges</tabstop>
+  <tabstop>chkLegendVisible</tabstop>
+  <tabstop>chkVisible</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

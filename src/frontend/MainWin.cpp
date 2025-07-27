@@ -507,13 +507,16 @@ bool MainWin::newProject(bool createInitialContent) {
 
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
+	KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
+
 	m_project = new Project();
+	m_project->setFileCompression(!group.readEntry("CompatibleSave", m_project->fileCompression()));
+	m_project->setSaveData(group.readEntry("SaveData", m_project->saveData()));
 	Project::currentProject = m_project;
 	undoStackIndexLastSave = 0;
 	m_currentAspect = m_project;
 	m_currentFolder = m_project;
 
-	KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	auto vis = Project::DockVisibility(group.readEntry("DockVisibility", 0));
 	m_project->setDockVisibility(vis);
 	if (vis == Project::DockVisibility::folderOnly)
@@ -992,12 +995,11 @@ bool MainWin::save(const QString& fileName) {
 
 	QIODevice* file;
 	// if file ending is .lml, do xz compression or gzip compression in compatibility mode
-	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	if (fileName.endsWith(QLatin1String(".lml"))) {
-		if (group.readEntry("CompatibleSave", false))
-			file = new KCompressionDevice(tempFileName, KCompressionDevice::GZip);
-		else
+		if (m_project->fileCompression())
 			file = new KCompressionDevice(tempFileName, KCompressionDevice::Xz);
+		else
+			file = new KCompressionDevice(tempFileName, KCompressionDevice::None);
 	} else // use file ending to find out how to compress file
 		file = new KCompressionDevice(tempFileName);
 	if (!file)

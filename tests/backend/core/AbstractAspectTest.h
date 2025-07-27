@@ -21,6 +21,7 @@ private Q_SLOTS:
 	void name();
 
 	void testAddChildUndoRedo();
+	void testAddChildUndoRedoTwice();
 	void testDuplicateChildUndoRedo();
 
 	void copyPaste();

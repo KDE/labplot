@@ -283,6 +283,7 @@ public:
 	void setCreationTime(const QDateTime&);
 	QDateTime creationTime() const;
 	virtual Project* project();
+	virtual const Project* project() const;
 	virtual QString path() const;
 	void setHidden(bool);
 	bool isHidden() const;
