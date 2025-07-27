@@ -225,7 +225,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	// theme and template handlers
 	auto* frame = new QFrame(this);
 	auto* layout = new QHBoxLayout(frame);
-	layout->setContentsMargins(0, 11, 0, 11);
+	layout->setContentsMargins(0, 0, 0, 0);
 
 	// themes
 	m_themeHandler = new ThemeHandler(this);

@@ -208,7 +208,7 @@ AxisDock::AxisDock(QWidget* parent)
 	// template handler
 	auto* frame = new QFrame(this);
 	auto* hlayout = new QHBoxLayout(frame);
-	hlayout->setContentsMargins(0, 11, 0, 11);
+	hlayout->setContentsMargins(0, 0, 0, 0);
 
 	auto* templateHandler = new TemplateHandler(this, QLatin1String("Axis"));
 	hlayout->addWidget(templateHandler);
