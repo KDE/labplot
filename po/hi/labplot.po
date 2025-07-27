@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-25 00:39+0000\n"
+"POT-Creation-Date: 2025-07-27 00:38+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -479,7 +479,7 @@ msgid "%1   (no values)"
 msgstr "%1 (कोई मान नहीं)"
 
 #: src/backend/core/AspectTreeModel.cpp:236
-#: src/frontend/datasources/ImportFileWidget.cpp:1651
+#: src/frontend/datasources/ImportFileWidget.cpp:1654
 #, kde-format
 msgid "Size: %1"
 msgstr "आकार: %1"
@@ -1268,9 +1268,9 @@ msgstr "डिवाइस/फ़ाइल खोलने में विफ�
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:301
-#: src/backend/datasources/filters/FITSFilter.cpp:334
-#: src/backend/datasources/filters/FITSFilter.cpp:344
-#: src/backend/datasources/filters/FITSFilter.cpp:539
+#: src/backend/datasources/filters/FITSFilter.cpp:351
+#: src/backend/datasources/filters/FITSFilter.cpp:361
+#: src/backend/datasources/filters/FITSFilter.cpp:556
 #: src/backend/datasources/filters/HDF5Filter.cpp:1642
 #: src/backend/datasources/filters/HDF5Filter.cpp:1759
 #: src/backend/datasources/filters/HDF5Filter.cpp:1809
@@ -1305,63 +1305,62 @@ msgstr "अमान्य लेख्यपत्र।"
 msgid "No messages read."
 msgstr "कोई संदेश नहीं पढ़ा गया."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:229
+#: src/backend/datasources/filters/FITSFilter.cpp:239
 #, kde-format
 msgid "Images: %1"
 msgstr "छवियाँ: %1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:234
+#: src/backend/datasources/filters/FITSFilter.cpp:244
 #, kde-format
 msgid "Tables: %1"
 msgstr "तालिकाएँ: %1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:264
+#: src/backend/datasources/filters/FITSFilter.cpp:281
 #: src/backend/datasources/filters/MatioFilter.cpp:647
 #, kde-format
 msgid "Failed to open the file."
 msgstr "फ़ाइल खोलने में विफल."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:272
-#: src/backend/datasources/filters/FITSFilter.cpp:351
+#: src/backend/datasources/filters/FITSFilter.cpp:288
+#: src/backend/datasources/filters/FITSFilter.cpp:368
 #, kde-format
 msgid "Failed to read the file."
 msgstr "फ़ाइल पढ़ने में विफल."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:293
+#: src/backend/datasources/filters/FITSFilter.cpp:310
 #, kde-format
 msgid "Zero dimensions."
 msgstr "शून्य आयाम."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1037
-#: src/backend/datasources/filters/FITSFilter.cpp:1557
-#: src/frontend/datasources/FITSOptionsWidget.cpp:42
-#: src/frontend/datasources/FITSOptionsWidget.cpp:75
-#: src/frontend/datasources/FITSOptionsWidget.cpp:144
+#: src/backend/datasources/filters/FITSFilter.cpp:1060
+#: src/backend/datasources/filters/FITSFilter.cpp:1580
+#: src/frontend/datasources/FITSOptionsWidget.cpp:40
+#: src/frontend/datasources/FITSOptionsWidget.cpp:73
 #, kde-format
 msgid "Primary header"
 msgstr "प्राथमिक हेडर"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1039
+#: src/backend/datasources/filters/FITSFilter.cpp:1062
 #, kde-format
 msgid "IMAGE #%1"
 msgstr "छवि #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1042
+#: src/backend/datasources/filters/FITSFilter.cpp:1065
 #, kde-format
 msgid "ASCII_TBL #%1"
 msgstr "ASCII_TBL #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1045
+#: src/backend/datasources/filters/FITSFilter.cpp:1068
 #, kde-format
 msgid "BINARY_TBL #%1"
 msgstr "बाइनरी_टीबीएल #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1550
+#: src/backend/datasources/filters/FITSFilter.cpp:1573
 #, kde-format
 msgid "Images"
 msgstr "इमेजिस"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1576
+#: src/backend/datasources/filters/FITSFilter.cpp:1599
 #, kde-format
 msgid "Tables"
 msgstr "टेबल"
@@ -1590,7 +1589,7 @@ msgstr "h5dump नहीं मिला."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/frontend/datasources/ImportFileWidget.cpp:1626
+#: src/frontend/datasources/ImportFileWidget.cpp:1629
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "फ़ाइल %1 से पढ़ना विफल."
@@ -6655,7 +6654,7 @@ msgstr "सांख्यिकी (वितरण)"
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:496
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
-#: src/frontend/datasources/ImportFileWidget.cpp:1366
+#: src/frontend/datasources/ImportFileWidget.cpp:1373
 #: src/frontend/dockwidgets/AxisDock.cpp:237
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:172
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
@@ -10128,7 +10127,7 @@ msgstr "%1: लेआउट पंक्ति संख्या सेट क�
 msgid "%1: set page size"
 msgstr "%1: पृष्ठ आकार निर्धारित करें"
 
-#: src/backend/worksheet/Worksheet.cpp:1527
+#: src/backend/worksheet/Worksheet.cpp:1524
 #, kde-format
 msgid "Curves"
 msgstr "घटता"
@@ -11892,7 +11891,7 @@ msgid "Matrix name:"
 msgstr "मैट्रिक्स नाम:"
 
 #: src/frontend/datasources/ImportDialog.cpp:202
-#: src/frontend/datasources/ImportFileDialog.cpp:365
+#: src/frontend/datasources/ImportFileDialog.cpp:367
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:158
 #, kde-format
 msgid "Close the dialog and import the data."
@@ -11912,7 +11911,7 @@ msgid "Add New Live Data Source"
 msgstr "नया लाइव डेटा स्रोत जोड़ें"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:106
-#: src/frontend/datasources/ImportFileDialog.cpp:346
+#: src/frontend/datasources/ImportFileDialog.cpp:348
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:140
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:361
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:125
@@ -11922,7 +11921,7 @@ msgid "Hide Options"
 msgstr "विकल्प छिपाएँ"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:106
-#: src/frontend/datasources/ImportFileDialog.cpp:346
+#: src/frontend/datasources/ImportFileDialog.cpp:348
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:140
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:361
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:125
@@ -11936,71 +11935,71 @@ msgstr "विकल्प दिखाएं"
 msgid "Live data source created in %1 seconds."
 msgstr "लाइव डेटा स्रोत %1 सेकंड में बनाया गया."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:176
+#: src/frontend/datasources/ImportFileDialog.cpp:175
 #, kde-format
 msgid "No target data container selected"
 msgstr "कोई लक्ष्य डेटा कंटेनर चयनित नहीं है"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:321
+#: src/frontend/datasources/ImportFileDialog.cpp:323
 #, kde-format
 msgid "File %1 imported in %2 seconds."
 msgstr "फ़ाइल %1 %2 सेकंड में आयातित हुई."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:367
+#: src/frontend/datasources/ImportFileDialog.cpp:369
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:152
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
 msgstr "मैट्रिक्स में आयात नहीं किया जा सकता क्योंकि डेटा में गैर-संख्यात्मक डेटा शामिल है।"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:379
+#: src/frontend/datasources/ImportFileDialog.cpp:381
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:136
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr "वह डेटा कंटेनर चुनें जिसमें डेटा आयात किया जाना है."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:397
+#: src/frontend/datasources/ImportFileDialog.cpp:399
 #, kde-format
 msgid "No file provided for import."
 msgstr "आयात के लिए कोई फ़ाइल उपलब्ध नहीं है."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:422
+#: src/frontend/datasources/ImportFileDialog.cpp:424
 #, kde-format
 msgid "The provided file doesn't exist."
 msgstr "प्रदान की गई फ़ाइल मौजूद नहीं है."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:442
+#: src/frontend/datasources/ImportFileDialog.cpp:444
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr "प्रदान किए गए स्थानीय सॉकेट से कनेक्ट नहीं किया जा सका। त्रुटि: %1."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:446
+#: src/frontend/datasources/ImportFileDialog.cpp:448
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
 msgstr "दिए गए स्थानीय सॉकेट से कनेक्ट नहीं किया जा सका। सॉकेट मौजूद नहीं है।"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:461
+#: src/frontend/datasources/ImportFileDialog.cpp:463
 #, kde-format
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr "प्रदान किए गए TCP सॉकेट से कनेक्ट नहीं हो सका। त्रुटि: %1."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:465
-#: src/frontend/datasources/ImportFileDialog.cpp:485
+#: src/frontend/datasources/ImportFileDialog.cpp:467
+#: src/frontend/datasources/ImportFileDialog.cpp:487
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr "या तो होस्ट नाम या पोर्ट नंबर गायब है."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:481
+#: src/frontend/datasources/ImportFileDialog.cpp:483
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "प्रदान किए गए UDP सॉकेट से कनेक्ट नहीं हो सका। त्रुटि: %1."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:513
+#: src/frontend/datasources/ImportFileDialog.cpp:515
 #, kde-format
 msgid "Serial port number is missing."
 msgstr "सीरियल पोर्ट नंबर गायब है."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:525
+#: src/frontend/datasources/ImportFileDialog.cpp:527
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
@@ -12217,30 +12216,30 @@ msgid ""
 "The number of rows is calculated from the values of the data portion tab"
 msgstr "पंक्तियों की संख्या की गणना डेटा भाग टैब के मानों से की जाती है"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1004
+#: src/frontend/datasources/ImportFileWidget.cpp:1011
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "फ़ाइल डेटा स्रोत का चयन करें"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1034
+#: src/frontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "DBC फ़ाइल का चयन करें"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1034
+#: src/frontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr "डीबीसी फ़ाइल (*.dbc)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1121
+#: src/frontend/datasources/ImportFileWidget.cpp:1128
 #, kde-format
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 msgstr "मूल परियोजना फ़ाइलों को \"आयात -> मूल परियोजना\" के साथ खोला जाना चाहिए!"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1124
+#: src/frontend/datasources/ImportFileWidget.cpp:1131
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
@@ -12248,7 +12247,7 @@ msgstr ""
 "लैबप्लॉट प्रोजेक्ट फ़ाइलों को \"आयात -> लैबप्लॉट प्रोजेक्ट\" के साथ खोला जाना चाहिए!"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/frontend/datasources/ImportFileWidget.cpp:1272
+#: src/frontend/datasources/ImportFileWidget.cpp:1279
 #: src/frontend/ui/datasources/importfilewidget.ui:416
 #, kde-format
 msgid "Data Format"
@@ -12256,7 +12255,7 @@ msgstr "डेटा प्रारूप"
 
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/frontend/datasources/ImportFileWidget.cpp:1273
+#: src/frontend/datasources/ImportFileWidget.cpp:1280
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
 #: src/frontend/ui/settingsworksheetpage.ui:134
@@ -12265,126 +12264,126 @@ msgid "Preview"
 msgstr "पूर्व दर्शन"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/frontend/datasources/ImportFileWidget.cpp:1275
+#: src/frontend/datasources/ImportFileWidget.cpp:1282
 #: src/frontend/ui/datasources/importfilewidget.ui:582
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "पढ़ने के लिए डेटा भाग"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1318
+#: src/frontend/datasources/ImportFileWidget.cpp:1325
 #, kde-format
 msgid "Data format && preview"
 msgstr "डेटा प्रारूप && पूर्वावलोकन"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1365
+#: src/frontend/datasources/ImportFileWidget.cpp:1372
 #, kde-format
 msgid "Automatic"
 msgstr "स्वचालित"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1618
+#: src/frontend/datasources/ImportFileWidget.cpp:1621
 #, kde-format
 msgid "file command not found"
 msgstr "फ़ाइल कमांड नहीं मिला"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1629
+#: src/frontend/datasources/ImportFileWidget.cpp:1632
 #, kde-format
 msgid "cannot open"
 msgstr "नहीं खुल सकता"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1634
+#: src/frontend/datasources/ImportFileWidget.cpp:1637
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>फ़ाइल प्रकार:</b> %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1639
+#: src/frontend/datasources/ImportFileWidget.cpp:1642
 #, kde-format
 msgid "General:"
 msgstr "सामान्य:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1641
-#: src/frontend/datasources/ImportFileWidget.cpp:1642
-#: src/frontend/datasources/ImportFileWidget.cpp:1643
+#: src/frontend/datasources/ImportFileWidget.cpp:1644
+#: src/frontend/datasources/ImportFileWidget.cpp:1645
+#: src/frontend/datasources/ImportFileWidget.cpp:1646
 #, kde-format
 msgid "yes"
 msgstr "हाँ"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1641
-#: src/frontend/datasources/ImportFileWidget.cpp:1642
-#: src/frontend/datasources/ImportFileWidget.cpp:1643
+#: src/frontend/datasources/ImportFileWidget.cpp:1644
+#: src/frontend/datasources/ImportFileWidget.cpp:1645
+#: src/frontend/datasources/ImportFileWidget.cpp:1646
 #, kde-format
 msgid "no"
 msgstr "नहीं"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1641
+#: src/frontend/datasources/ImportFileWidget.cpp:1644
 #, kde-format
 msgid "Readable: %1"
 msgstr "पठनीय: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1642
+#: src/frontend/datasources/ImportFileWidget.cpp:1645
 #, kde-format
 msgid "Writable: %1"
 msgstr "लिखने योग्य: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1643
+#: src/frontend/datasources/ImportFileWidget.cpp:1646
 #, kde-format
 msgid "Executable: %1"
 msgstr "निष्पादनयोग्य: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1645
+#: src/frontend/datasources/ImportFileWidget.cpp:1648
 #, kde-format
 msgid "Birth time: %1"
 msgstr "जन्म समय: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1646
+#: src/frontend/datasources/ImportFileWidget.cpp:1649
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "अंतिम मेटाडेटा परिवर्तित: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1647
+#: src/frontend/datasources/ImportFileWidget.cpp:1650
 #, kde-format
 msgid "Last modified: %1"
 msgstr "अंतिम बार संशोधित: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1648
+#: src/frontend/datasources/ImportFileWidget.cpp:1651
 #, kde-format
 msgid "Last read: %1"
 msgstr "अंतिम बार पढ़ा गया: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1649
+#: src/frontend/datasources/ImportFileWidget.cpp:1652
 #, kde-format
 msgid "Owner: %1"
 msgstr "स्वामी: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1650
+#: src/frontend/datasources/ImportFileWidget.cpp:1653
 #, kde-format
 msgid "Group: %1"
 msgstr "समूह: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1651
+#: src/frontend/datasources/ImportFileWidget.cpp:1654
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] "%1 सीबाइट्स"
 msgstr[1] "%1 सीबाइट्स"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1654
+#: src/frontend/datasources/ImportFileWidget.cpp:1657
 #, kde-format
 msgid "Summary:"
 msgstr "सारांश:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1677
-#: src/frontend/datasources/ImportFileWidget.cpp:1682
+#: src/frontend/datasources/ImportFileWidget.cpp:1680
+#: src/frontend/datasources/ImportFileWidget.cpp:1685
 #, kde-format
 msgid "Content:"
 msgstr "सामग्री:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1713
+#: src/frontend/datasources/ImportFileWidget.cpp:1716
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "फ़ाइल %1 को पढ़ने के लिए नहीं खोला जा सका."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1806
+#: src/frontend/datasources/ImportFileWidget.cpp:1807
 #, kde-format
 msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
@@ -12393,60 +12392,60 @@ msgstr ""
 "अमान्य संख्या पंक्तियाँ। कृपया 'अंतिम पंक्ति' और 'प्रारंभ पंक्ति' को चेक करें। 'अंतिम पंक्ति' "
 "'प्रारंभ पंक्ति' या -1 से बड़ी होनी चाहिए"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1817
+#: src/frontend/datasources/ImportFileWidget.cpp:1818
 #, fuzzy, kde-format
 #| msgid "Preview: Initialization failed: %1"
 msgid "Initialization failed: %1"
 msgstr "पूर्वावलोकन: आरंभीकरण विफल: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1842
+#: src/frontend/datasources/ImportFileWidget.cpp:1843
 #, fuzzy, kde-format
 #| msgid "Preview: Failed to connect to local socket %1 - %2"
 msgid "Failed to connect to the local socket: %1"
 msgstr "पूर्वावलोकन: स्थानीय सॉकेट %1 - %2 से कनेक्ट करने में विफल"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1859
+#: src/frontend/datasources/ImportFileWidget.cpp:1860
 #, fuzzy, kde-format
 #| msgid "Preview: Failed to connect to TCP socket - %1"
 msgid "Failed to connect to the TCP socket. %1"
 msgstr "पूर्वावलोकन: TCP सॉकेट से कनेक्ट करने में विफल - %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1865
-#: src/frontend/datasources/ImportFileWidget.cpp:1894
+#: src/frontend/datasources/ImportFileWidget.cpp:1866
+#: src/frontend/datasources/ImportFileWidget.cpp:1895
 #, kde-format
 msgid "Socket operation timed out."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1879
+#: src/frontend/datasources/ImportFileWidget.cpp:1880
 #, fuzzy, kde-format
 #| msgid "ERROR: not ready for read after 2 sec"
 msgid "Not ready for read after 2s:"
 msgstr "त्रुटि: 2 सेकंड के बाद पढ़ने के लिए तैयार नहीं"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1898
+#: src/frontend/datasources/ImportFileWidget.cpp:1899
 #, fuzzy, kde-format
 #| msgid "Unable to open file:"
 msgid "Unable to bind: "
 msgstr "फाइल खोलने में असमर्थ:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1915
+#: src/frontend/datasources/ImportFileWidget.cpp:1916
 #, kde-format
 msgid "Parse Error: %1"
 msgstr "पार्स त्रुटि: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1917
+#: src/frontend/datasources/ImportFileWidget.cpp:1918
 #, fuzzy, kde-format
 #| msgid "ERROR: not ready for read after 2 sec"
 msgid "Not ready for read after 2 sec"
 msgstr "त्रुटि: 2 सेकंड के बाद पढ़ने के लिए तैयार नहीं"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1921
+#: src/frontend/datasources/ImportFileWidget.cpp:1922
 #, fuzzy, kde-format
 #| msgid "ERROR: failed to open serial port. error: %1"
 msgid "Failed to open serial port. error: %1"
 msgstr "त्रुटि: सीरियल पोर्ट खोलने में विफल. त्रुटि: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1940
+#: src/frontend/datasources/ImportFileWidget.cpp:1941
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "चयनित विषय के लिए अभी तक कोई डेटा नहीं आया"

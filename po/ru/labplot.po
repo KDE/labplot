@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-25 00:39+0000\n"
+"POT-Creation-Date: 2025-07-27 00:38+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -491,7 +491,7 @@ msgid "%1   (no values)"
 msgstr "%1   (отсутствуют значения)"
 
 #: src/backend/core/AspectTreeModel.cpp:236
-#: src/frontend/datasources/ImportFileWidget.cpp:1651
+#: src/frontend/datasources/ImportFileWidget.cpp:1654
 #, kde-format
 msgid "Size: %1"
 msgstr "Размер: %1"
@@ -1298,9 +1298,9 @@ msgstr "Не удалось открыть устройство."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:301
-#: src/backend/datasources/filters/FITSFilter.cpp:334
-#: src/backend/datasources/filters/FITSFilter.cpp:344
-#: src/backend/datasources/filters/FITSFilter.cpp:539
+#: src/backend/datasources/filters/FITSFilter.cpp:351
+#: src/backend/datasources/filters/FITSFilter.cpp:361
+#: src/backend/datasources/filters/FITSFilter.cpp:556
 #: src/backend/datasources/filters/HDF5Filter.cpp:1642
 #: src/backend/datasources/filters/HDF5Filter.cpp:1759
 #: src/backend/datasources/filters/HDF5Filter.cpp:1809
@@ -1337,67 +1337,66 @@ msgstr "Недопустимый файл blf"
 msgid "No messages read."
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:229
+#: src/backend/datasources/filters/FITSFilter.cpp:239
 #, kde-format
 msgid "Images: %1"
 msgstr "Изображения: %1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:234
+#: src/backend/datasources/filters/FITSFilter.cpp:244
 #, kde-format
 msgid "Tables: %1"
 msgstr "Таблицы: %1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:264
+#: src/backend/datasources/filters/FITSFilter.cpp:281
 #: src/backend/datasources/filters/MatioFilter.cpp:647
 #, fuzzy, kde-format
 #| msgid "Failed to open the file '%1'."
 msgid "Failed to open the file."
 msgstr "Не удалось открыть файл «%1»."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:272
-#: src/backend/datasources/filters/FITSFilter.cpp:351
+#: src/backend/datasources/filters/FITSFilter.cpp:288
+#: src/backend/datasources/filters/FITSFilter.cpp:368
 #, fuzzy, kde-format
 #| msgid "Unable to read the file"
 msgid "Failed to read the file."
 msgstr "Не удалось прочитать файл"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:293
+#: src/backend/datasources/filters/FITSFilter.cpp:310
 #, fuzzy, kde-format
 msgid "Zero dimensions."
 msgstr "Размеры:"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1037
-#: src/backend/datasources/filters/FITSFilter.cpp:1557
-#: src/frontend/datasources/FITSOptionsWidget.cpp:42
-#: src/frontend/datasources/FITSOptionsWidget.cpp:75
-#: src/frontend/datasources/FITSOptionsWidget.cpp:144
+#: src/backend/datasources/filters/FITSFilter.cpp:1060
+#: src/backend/datasources/filters/FITSFilter.cpp:1580
+#: src/frontend/datasources/FITSOptionsWidget.cpp:40
+#: src/frontend/datasources/FITSOptionsWidget.cpp:73
 #, kde-format
 msgid "Primary header"
 msgstr "Основной заголовок"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1039
+#: src/backend/datasources/filters/FITSFilter.cpp:1062
 #, kde-format
 msgid "IMAGE #%1"
 msgstr "ИЗОБРАЖЕНИЕ #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1042
+#: src/backend/datasources/filters/FITSFilter.cpp:1065
 #, kde-format
 msgid "ASCII_TBL #%1"
 msgstr "ASCII_TBL #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1045
+#: src/backend/datasources/filters/FITSFilter.cpp:1068
 #, kde-format
 msgid "BINARY_TBL #%1"
 msgstr "BINARY_TBL #%1"
 
 # BUGME: please add ctxt --aspotashev
-#: src/backend/datasources/filters/FITSFilter.cpp:1550
+#: src/backend/datasources/filters/FITSFilter.cpp:1573
 #, kde-format
 msgid "Images"
 msgstr "Изображения"
 
 # BUGME: please add context --aspotashev
-#: src/backend/datasources/filters/FITSFilter.cpp:1576
+#: src/backend/datasources/filters/FITSFilter.cpp:1599
 #, kde-format
 msgid "Tables"
 msgstr "Таблицы"
@@ -1632,7 +1631,7 @@ msgstr "Не удалось найти h5dump."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/frontend/datasources/ImportFileWidget.cpp:1626
+#: src/frontend/datasources/ImportFileWidget.cpp:1629
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "Не удалось прочитать файл %1."
@@ -6974,7 +6973,7 @@ msgstr "Статистика (распределение)"
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:496
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
-#: src/frontend/datasources/ImportFileWidget.cpp:1366
+#: src/frontend/datasources/ImportFileWidget.cpp:1373
 #: src/frontend/dockwidgets/AxisDock.cpp:237
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:172
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
@@ -10548,7 +10547,7 @@ msgid "%1: set page size"
 msgstr "%1: задание размера страницы"
 
 # BUGME: please add ctxt --aspotashev
-#: src/backend/worksheet/Worksheet.cpp:1527
+#: src/backend/worksheet/Worksheet.cpp:1524
 #, kde-format
 msgid "Curves"
 msgstr "Кривые"
@@ -12372,7 +12371,7 @@ msgid "Matrix name:"
 msgstr "Матрица не квадратная"
 
 #: src/frontend/datasources/ImportDialog.cpp:202
-#: src/frontend/datasources/ImportFileDialog.cpp:365
+#: src/frontend/datasources/ImportFileDialog.cpp:367
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:158
 #, kde-format
 msgid "Close the dialog and import the data."
@@ -12392,7 +12391,7 @@ msgid "Add New Live Data Source"
 msgstr "Добавить новый источник передачи данных"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:106
-#: src/frontend/datasources/ImportFileDialog.cpp:346
+#: src/frontend/datasources/ImportFileDialog.cpp:348
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:140
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:361
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:125
@@ -12402,7 +12401,7 @@ msgid "Hide Options"
 msgstr "Скрыть параметры"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:106
-#: src/frontend/datasources/ImportFileDialog.cpp:346
+#: src/frontend/datasources/ImportFileDialog.cpp:348
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:140
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:361
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:125
@@ -12416,18 +12415,18 @@ msgstr "Показать параметры"
 msgid "Live data source created in %1 seconds."
 msgstr "Источник передачи данных создан за %1 секунд."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:176
+#: src/frontend/datasources/ImportFileDialog.cpp:175
 #, fuzzy, kde-format
 #| msgid "No data set selected"
 msgid "No target data container selected"
 msgstr "Не выбран набор данных"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:321
+#: src/frontend/datasources/ImportFileDialog.cpp:323
 #, kde-format
 msgid "File %1 imported in %2 seconds."
 msgstr "Файл %1 импортирован за %2 секунд."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:367
+#: src/frontend/datasources/ImportFileDialog.cpp:369
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:152
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
@@ -12435,57 +12434,57 @@ msgstr ""
 "Не удалось выполнить импортирование в матрицу, так как данные содержат "
 "нечисловые величины."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:379
+#: src/frontend/datasources/ImportFileDialog.cpp:381
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:136
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr "Выберите контейнер данных для импорта."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:397
+#: src/frontend/datasources/ImportFileDialog.cpp:399
 #, fuzzy, kde-format
 #| msgid "No data to import."
 msgid "No file provided for import."
 msgstr "Нет данных для импорта."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:422
+#: src/frontend/datasources/ImportFileDialog.cpp:424
 #, kde-format
 msgid "The provided file doesn't exist."
 msgstr "Указанного файла не существует."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:442
+#: src/frontend/datasources/ImportFileDialog.cpp:444
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr "Не удалось соединиться с указанным локальным сокетом. Ошибка: %1."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:446
+#: src/frontend/datasources/ImportFileDialog.cpp:448
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
 msgstr ""
 "Не удалось соединиться с указанным локальным сокетом. Сокет не существует."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:461
+#: src/frontend/datasources/ImportFileDialog.cpp:463
 #, kde-format
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr "Не удалось соединиться с указанным TCP-сокетом. Ошибка: %1."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:465
-#: src/frontend/datasources/ImportFileDialog.cpp:485
+#: src/frontend/datasources/ImportFileDialog.cpp:467
+#: src/frontend/datasources/ImportFileDialog.cpp:487
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr "Отсутствует либо имя узла, либо номер порта."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:481
+#: src/frontend/datasources/ImportFileDialog.cpp:483
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Не удалось соединиться с указанным UDP-сокетом. Ошибка: %1."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:513
+#: src/frontend/datasources/ImportFileDialog.cpp:515
 #, kde-format
 msgid "Serial port number is missing."
 msgstr "Отсутствует номер последовательного порта."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:525
+#: src/frontend/datasources/ImportFileDialog.cpp:527
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
@@ -12714,38 +12713,38 @@ msgid ""
 "The number of rows is calculated from the values of the data portion tab"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1004
+#: src/frontend/datasources/ImportFileWidget.cpp:1011
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Выбор файла источника данных"
 
 # BUGME: please add semantic ctxt --aspotashev
-#: src/frontend/datasources/ImportFileWidget.cpp:1034
+#: src/frontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Выбор файла DBC"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1034
+#: src/frontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr "Файл DBC (*.dbc)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1121
+#: src/frontend/datasources/ImportFileWidget.cpp:1128
 #, kde-format
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1124
+#: src/frontend/datasources/ImportFileWidget.cpp:1131
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/frontend/datasources/ImportFileWidget.cpp:1272
+#: src/frontend/datasources/ImportFileWidget.cpp:1279
 #: src/frontend/ui/datasources/importfilewidget.ui:416
 #, kde-format
 msgid "Data Format"
@@ -12753,7 +12752,7 @@ msgstr "Формат данных"
 
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/frontend/datasources/ImportFileWidget.cpp:1273
+#: src/frontend/datasources/ImportFileWidget.cpp:1280
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
 #: src/frontend/ui/settingsworksheetpage.ui:134
@@ -12762,104 +12761,104 @@ msgid "Preview"
 msgstr "Предпросмотр"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/frontend/datasources/ImportFileWidget.cpp:1275
+#: src/frontend/datasources/ImportFileWidget.cpp:1282
 #: src/frontend/ui/datasources/importfilewidget.ui:582
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "Фрагмент считываемых данных"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1318
+#: src/frontend/datasources/ImportFileWidget.cpp:1325
 #, kde-format
 msgid "Data format && preview"
 msgstr "Формат и предпросмотр данных"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1365
+#: src/frontend/datasources/ImportFileWidget.cpp:1372
 #, kde-format
 msgid "Automatic"
 msgstr "Автоматически"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1618
+#: src/frontend/datasources/ImportFileWidget.cpp:1621
 #, kde-format
 msgid "file command not found"
 msgstr "Команда «file» не найдена"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1629
+#: src/frontend/datasources/ImportFileWidget.cpp:1632
 #, kde-format
 msgid "cannot open"
 msgstr "cannot open"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1634
+#: src/frontend/datasources/ImportFileWidget.cpp:1637
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>Тип файла:</b> %1"
 
 # BUGME: please add @title:tab --aspotashev
-#: src/frontend/datasources/ImportFileWidget.cpp:1639
+#: src/frontend/datasources/ImportFileWidget.cpp:1642
 #, kde-format
 msgid "General:"
 msgstr "Общие сведения:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1641
-#: src/frontend/datasources/ImportFileWidget.cpp:1642
-#: src/frontend/datasources/ImportFileWidget.cpp:1643
+#: src/frontend/datasources/ImportFileWidget.cpp:1644
+#: src/frontend/datasources/ImportFileWidget.cpp:1645
+#: src/frontend/datasources/ImportFileWidget.cpp:1646
 #, kde-format
 msgid "yes"
 msgstr "да"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1641
-#: src/frontend/datasources/ImportFileWidget.cpp:1642
-#: src/frontend/datasources/ImportFileWidget.cpp:1643
+#: src/frontend/datasources/ImportFileWidget.cpp:1644
+#: src/frontend/datasources/ImportFileWidget.cpp:1645
+#: src/frontend/datasources/ImportFileWidget.cpp:1646
 #, kde-format
 msgid "no"
 msgstr "нет"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1641
+#: src/frontend/datasources/ImportFileWidget.cpp:1644
 #, kde-format
 msgid "Readable: %1"
 msgstr "Доступен для чтения: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1642
+#: src/frontend/datasources/ImportFileWidget.cpp:1645
 #, kde-format
 msgid "Writable: %1"
 msgstr "Доступен для записи: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1643
+#: src/frontend/datasources/ImportFileWidget.cpp:1646
 #, kde-format
 msgid "Executable: %1"
 msgstr "Исполняемый: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1645
+#: src/frontend/datasources/ImportFileWidget.cpp:1648
 #, kde-format
 msgid "Birth time: %1"
 msgstr "Время создания: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1646
+#: src/frontend/datasources/ImportFileWidget.cpp:1649
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "Время последнего изменения метаданных: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1647
+#: src/frontend/datasources/ImportFileWidget.cpp:1650
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Время последнего изменения: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1648
+#: src/frontend/datasources/ImportFileWidget.cpp:1651
 #, kde-format
 msgid "Last read: %1"
 msgstr "Время последнего чтения: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1649
+#: src/frontend/datasources/ImportFileWidget.cpp:1652
 #, kde-format
 msgid "Owner: %1"
 msgstr "Владелец: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1650
+#: src/frontend/datasources/ImportFileWidget.cpp:1653
 #, kde-format
 msgid "Group: %1"
 msgstr "Группа: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1651
+#: src/frontend/datasources/ImportFileWidget.cpp:1654
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
@@ -12868,24 +12867,24 @@ msgstr[1] "%1 байта"
 msgstr[2] "%1 байт"
 msgstr[3] "%1 байт"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1654
+#: src/frontend/datasources/ImportFileWidget.cpp:1657
 #, kde-format
 msgid "Summary:"
 msgstr "Описание:"
 
 # BUGME: please add context --aspotashev
-#: src/frontend/datasources/ImportFileWidget.cpp:1677
-#: src/frontend/datasources/ImportFileWidget.cpp:1682
+#: src/frontend/datasources/ImportFileWidget.cpp:1680
+#: src/frontend/datasources/ImportFileWidget.cpp:1685
 #, kde-format
 msgid "Content:"
 msgstr "Содержимое:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1713
+#: src/frontend/datasources/ImportFileWidget.cpp:1716
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Не удалось открыть файл %1 для чтения."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1806
+#: src/frontend/datasources/ImportFileWidget.cpp:1807
 #, kde-format
 msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
@@ -12893,60 +12892,60 @@ msgid ""
 msgstr ""
 
 # BUGME: please add semantic ctxt --aspotashev
-#: src/frontend/datasources/ImportFileWidget.cpp:1817
+#: src/frontend/datasources/ImportFileWidget.cpp:1818
 #, fuzzy, kde-format
 #| msgid "Factorization failed"
 msgid "Initialization failed: %1"
 msgstr "Сбой факторизации"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1842
+#: src/frontend/datasources/ImportFileWidget.cpp:1843
 #, fuzzy, kde-format
 #| msgid "Failed to connect to the broker '%1:%2'."
 msgid "Failed to connect to the local socket: %1"
 msgstr "Не удалось установить соединение с брокером «%1:%2»."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1859
+#: src/frontend/datasources/ImportFileWidget.cpp:1860
 #, fuzzy, kde-format
 #| msgid "Failed to connect to the broker '%1:%2'."
 msgid "Failed to connect to the TCP socket. %1"
 msgstr "Не удалось установить соединение с брокером «%1:%2»."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1865
-#: src/frontend/datasources/ImportFileWidget.cpp:1894
+#: src/frontend/datasources/ImportFileWidget.cpp:1866
+#: src/frontend/datasources/ImportFileWidget.cpp:1895
 #, fuzzy, kde-format
 #| msgid "The device timed out."
 msgid "Socket operation timed out."
 msgstr "Время ожидания устройства истекло."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1879
+#: src/frontend/datasources/ImportFileWidget.cpp:1880
 #, kde-format
 msgid "Not ready for read after 2s:"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1898
+#: src/frontend/datasources/ImportFileWidget.cpp:1899
 #, fuzzy, kde-format
 #| msgid "Unable to open file:"
 msgid "Unable to bind: "
 msgstr "Не удалось открыть файл:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1915
+#: src/frontend/datasources/ImportFileWidget.cpp:1916
 #, fuzzy, kde-format
 #| msgid "area error: %1"
 msgid "Parse Error: %1"
 msgstr "площадь погрешности: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1917
+#: src/frontend/datasources/ImportFileWidget.cpp:1918
 #, kde-format
 msgid "Not ready for read after 2 sec"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1921
+#: src/frontend/datasources/ImportFileWidget.cpp:1922
 #, fuzzy, kde-format
 #| msgid "Failed to open the file '%1'."
 msgid "Failed to open serial port. error: %1"
 msgstr "Не удалось открыть файл «%1»."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1940
+#: src/frontend/datasources/ImportFileWidget.cpp:1941
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "Данные по выбранной теме пока не поступили"
