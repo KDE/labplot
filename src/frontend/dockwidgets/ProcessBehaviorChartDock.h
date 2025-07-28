@@ -60,6 +60,7 @@ private Q_SLOTS:
 	void dataColumnChanged(const QModelIndex&);
 	void data2ColumnChanged(const QModelIndex&);
 	void typeChanged(int);
+	void limitsTypeChanged(int);
 	void limitsMetricChanged(int);
 	void sampleSizeChanged(int);
 	void maxUpperLimitChanged(const QString&);
@@ -81,6 +82,7 @@ private Q_SLOTS:
 	void plotDataColumnChanged(const AbstractColumn*);
 	void plotData2ColumnChanged(const AbstractColumn*);
 	void plotTypeChanged(ProcessBehaviorChart::Type);
+	void plotLimitsTypeChanged(ProcessBehaviorChart::LimitsType);
 	void plotLimitsMetricChanged(ProcessBehaviorChart::LimitsMetric);
 	void plotSampleSizeChanged(int);
 	void plotMaxUpperLimitChanged(double);

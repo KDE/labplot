@@ -162,6 +162,7 @@ void ProcessBehaviorChart::init(bool loading) {
 
 	// general properties
 	d->type = static_cast<ProcessBehaviorChart::Type>(group.readEntry(QStringLiteral("Type"), static_cast<int>(ProcessBehaviorChart::Type::XmR)));
+	d->limitsType = static_cast<ProcessBehaviorChart::LimitsType>(group.readEntry(QStringLiteral("LimitsType"), static_cast<int>(ProcessBehaviorChart::LimitsType::Statistical)));
 	d->sampleSize = group.readEntry(QStringLiteral("SampleSize"), 5);
 	d->limitsMetric = static_cast<ProcessBehaviorChart::LimitsMetric>(
 		group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(ProcessBehaviorChart::LimitsMetric::Average)));
@@ -304,6 +305,7 @@ void ProcessBehaviorChart::setZValue(qreal value) {
 // ##############################################################################
 //  general
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, ProcessBehaviorChart::Type, type, type)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, ProcessBehaviorChart::LimitsType, limitsType, limitsType)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, ProcessBehaviorChart::LimitsMetric, limitsMetric, limitsMetric)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, int, sampleSize, sampleSize)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, double, maxUpperLimit, maxUpperLimit)
@@ -544,6 +546,13 @@ void ProcessBehaviorChart::setType(ProcessBehaviorChart::Type type) {
 	Q_D(ProcessBehaviorChart);
 	if (type != d->type)
 		exec(new ProcessBehaviorChartSetTypeCmd(d, type, ki18n("%1: set type")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetLimitsType, ProcessBehaviorChart::LimitsType, limitsType, recalc)
+void ProcessBehaviorChart::setLimitsType(ProcessBehaviorChart::LimitsType limitsType) {
+	Q_D(ProcessBehaviorChart);
+	if (limitsType != d->limitsType)
+		exec(new ProcessBehaviorChartSetLimitsTypeCmd(d, limitsType, ki18n("%1: set limits type")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetLimitsMetric, ProcessBehaviorChart::LimitsMetric, limitsMetric, recalc)
@@ -1485,6 +1494,7 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 	WRITE_COLUMN(d->xLowerLimitColumn, xLowerLimitColumn);
 	WRITE_COLUMN(d->yLowerLimitColumn, yLowerLimitColumn);
 	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->type)));
+	writer->writeAttribute(QStringLiteral("limitsType"), QString::number(static_cast<int>(d->limitsType)));
 	writer->writeAttribute(QStringLiteral("limitsMetric"), QString::number(static_cast<int>(d->limitsMetric)));
 	writer->writeAttribute(QStringLiteral("sampleSize"), QString::number(d->sampleSize));
 	writer->writeAttribute(QStringLiteral("minLowerLimit"), QString::number(d->minLowerLimit));
@@ -1565,6 +1575,7 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 			READ_COLUMN(xLowerLimitColumn);
 			READ_COLUMN(yLowerLimitColumn);
 			READ_INT_VALUE("type", type, ProcessBehaviorChart::Type);
+			READ_INT_VALUE("limitsType", limitsType, ProcessBehaviorChart::LimitsType);
 			READ_INT_VALUE("limitsMetric", limitsMetric, ProcessBehaviorChart::LimitsMetric);
 			READ_INT_VALUE("sampleSize", sampleSize, int);
 			READ_DOUBLE_VALUE("minLowerLimit", minLowerLimit);

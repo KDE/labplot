@@ -29,6 +29,7 @@ public:
 	void updateLabels();
 
 	ProcessBehaviorChart::Type type{ProcessBehaviorChart::Type::XmR};
+	ProcessBehaviorChart::LimitsType limitsType{ProcessBehaviorChart::LimitsType::Statistical};
 	ProcessBehaviorChart::LimitsMetric limitsMetric{ProcessBehaviorChart::LimitsMetric::Average};
 
 	XYCurve* dataCurve{nullptr};

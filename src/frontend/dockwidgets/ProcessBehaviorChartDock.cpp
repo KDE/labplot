@@ -17,8 +17,6 @@
 #include "frontend/widgets/SymbolWidget.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
-#include <QFrame>
-
 #include <KConfig>
 #include <KLocalizedString>
 #include <KMessageWidget>
@@ -54,6 +52,8 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	ui.cbType->addItem(QStringLiteral("C"), static_cast<int>(ProcessBehaviorChart::Type::C));
 	ui.cbType->addItem(QStringLiteral("U"), static_cast<int>(ProcessBehaviorChart::Type::U));
 
+	ui.leUpperLimitSpecification->setValidator(new QDoubleValidator(ui.leUpperLimitSpecification));
+	ui.leLowerLimitSpecification->setValidator(new QDoubleValidator(ui.leLowerLimitSpecification));
 	ui.leMinLowerLimit->setValidator(new QDoubleValidator(ui.leMinLowerLimit));
 	ui.leMaxUpperLimit->setValidator(new QDoubleValidator(ui.leMaxUpperLimit));
 
@@ -101,6 +101,7 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &ProcessBehaviorChartDock::dataColumnChanged);
 	connect(cbData2Column, &TreeViewComboBox::currentModelIndexChanged, this, &ProcessBehaviorChartDock::data2ColumnChanged);
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::typeChanged);
+	connect(ui.cbLimitsType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::limitsTypeChanged);
 	connect(ui.cbLimitsMetric, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::limitsMetricChanged);
 	connect(ui.sbSampleSize, &QSpinBox::valueChanged, this, &ProcessBehaviorChartDock::sampleSizeChanged);
 	connect(ui.chbExactLimits, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::exactLimitsEnabledChanged);
@@ -199,6 +200,7 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 	connect(m_plot, &ProcessBehaviorChart::dataColumnChanged, this, &ProcessBehaviorChartDock::plotDataColumnChanged);
 	connect(m_plot, &ProcessBehaviorChart::data2ColumnChanged, this, &ProcessBehaviorChartDock::plotData2ColumnChanged);
 	connect(m_plot, &ProcessBehaviorChart::typeChanged, this, &ProcessBehaviorChartDock::plotTypeChanged);
+	connect(m_plot, &ProcessBehaviorChart::limitsTypeChanged, this, &ProcessBehaviorChartDock::plotLimitsTypeChanged);
 	connect(m_plot, &ProcessBehaviorChart::limitsMetricChanged, this, &ProcessBehaviorChartDock::plotLimitsMetricChanged);
 	connect(m_plot, &ProcessBehaviorChart::sampleSizeChanged, this, &ProcessBehaviorChartDock::plotSampleSizeChanged);
 	connect(m_plot, &ProcessBehaviorChart::maxUpperLimitChanged, this, &ProcessBehaviorChartDock::plotMaxUpperLimitChanged);
@@ -216,6 +218,10 @@ void ProcessBehaviorChartDock::setPlots(QList<ProcessBehaviorChart*> list) {
 }
 
 void ProcessBehaviorChartDock::retranslateUi() {
+	ui.cbLimitsType->clear();
+	ui.cbLimitsType->addItem(i18n("Statistical"), static_cast<int>(ProcessBehaviorChart::LimitsType::Statistical));
+	ui.cbLimitsType->addItem(i18n("Specification"), static_cast<int>(ProcessBehaviorChart::LimitsType::Specification));
+
 	ui.cbLimitsMetric->clear();
 	ui.cbLimitsMetric->addItem(i18n("Average"), static_cast<int>(ProcessBehaviorChart::LimitsMetric::Average));
 	ui.cbLimitsMetric->addItem(i18n("Median"), static_cast<int>(ProcessBehaviorChart::LimitsMetric::Median));
@@ -261,6 +267,15 @@ void ProcessBehaviorChartDock::retranslateUi() {
 		"</ul>");
 	ui.lType->setToolTip(info);
 	ui.cbType->setToolTip(info);
+
+	info = i18n(
+		"Determine which values to use for the center and limit lines:"
+		"<ul>"
+		"<li>Statistical - values are calculated based on the statistical properties of the sample.</li>"
+		"<li>Specification - custom user-defined values are used.</li>"
+		"</ul>");
+	ui.lLimitsType->setToolTip(info);
+	ui.cbLimitsType->setToolTip(info);
 
 	info = i18n("Maximal value for the upper control limit. No constraint, if empty.");
 	ui.lMaxUpperLimit->setToolTip(info);
@@ -325,8 +340,8 @@ void ProcessBehaviorChartDock::data2ColumnChanged(const QModelIndex& index) {
 		plot->setData2Column(column);
 }
 
-void ProcessBehaviorChartDock::typeChanged(int index) {
-	const auto type = static_cast<ProcessBehaviorChart::Type>(ui.cbType->itemData(index).toInt());
+void ProcessBehaviorChartDock::typeChanged(int) {
+	const auto type = static_cast<ProcessBehaviorChart::Type>(ui.cbType->currentData().toInt());
 
 	// depending on the current type, show/hide the settings for the sample type
 	bool visible = (type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::XbarS
@@ -355,9 +370,31 @@ void ProcessBehaviorChartDock::typeChanged(int index) {
 		plot->setType(type);
 }
 
-void ProcessBehaviorChartDock::limitsMetricChanged(int index) {
+void ProcessBehaviorChartDock::limitsTypeChanged(int) {
+	const auto limitsType = static_cast<ProcessBehaviorChart::LimitsType>(ui.cbLimitsType->currentData().toInt());
+	const bool statistical = (limitsType == ProcessBehaviorChart::LimitsType::Statistical);
+	ui.lLimitsMetric->setVisible(statistical);
+	ui.cbLimitsMetric->setVisible(statistical);
+	ui.lCenterSpecification->setVisible(!statistical);
+	ui.leCenterSpecification->setVisible(!statistical);
+	ui.lUpperLimitSpecification->setVisible(!statistical);
+	ui.leUpperLimitSpecification->setVisible(!statistical);
+	ui.lLowerLimitSpecification->setVisible(!statistical);
+	ui.leLowerLimitSpecification->setVisible(!statistical);
+	ui.lMaxUpperLimit->setVisible(statistical);
+	ui.leMaxUpperLimit->setVisible(statistical);
+	ui.lMinLowerLimit->setVisible(statistical);
+	ui.leMinLowerLimit->setVisible(statistical);
+	ui.lExactLimits->setVisible(statistical);
+	ui.chbExactLimits->setVisible(statistical);
 	CONDITIONAL_LOCK_RETURN;
-	const auto limitsMetric = static_cast<ProcessBehaviorChart::LimitsMetric>(ui.cbLimitsMetric->itemData(index).toInt());
+	for (auto* plot : m_plots)
+		plot->setLimitsType(limitsType);
+}
+
+void ProcessBehaviorChartDock::limitsMetricChanged(int) {
+	CONDITIONAL_LOCK_RETURN;
+	const auto limitsMetric = static_cast<ProcessBehaviorChart::LimitsMetric>(ui.cbLimitsMetric->currentData().toInt());
 	for (auto* plot : m_plots)
 		plot->setLimitsMetric(limitsMetric);
 }
@@ -498,6 +535,12 @@ void ProcessBehaviorChartDock::plotTypeChanged(ProcessBehaviorChart::Type type) 
 	CONDITIONAL_LOCK_RETURN;
 	const int index = ui.cbType->findData(static_cast<int>(type));
 	ui.cbType->setCurrentIndex(index);
+}
+
+void ProcessBehaviorChartDock::plotLimitsTypeChanged(ProcessBehaviorChart::LimitsType type) {
+	CONDITIONAL_LOCK_RETURN;
+	const int index = ui.cbLimitsType->findData(static_cast<int>(type));
+	ui.cbLimitsType->setCurrentIndex(index);
 }
 
 void ProcessBehaviorChartDock::plotLimitsMetricChanged(ProcessBehaviorChart::LimitsMetric limitsMetric) {
@@ -647,6 +690,12 @@ void ProcessBehaviorChartDock::loadConfig(KConfig& config) {
 	int index = ui.cbType->findData(static_cast<int>(type));
 	ui.cbType->setCurrentIndex(index);
 	typeChanged(index);
+
+	// limits type
+	const auto limitsType = group.readEntry(QStringLiteral("LimitsType"), static_cast<int>(m_plot->limitsType()));
+	index = ui.cbType->findData(static_cast<int>(limitsType));
+	ui.cbLimitsType->setCurrentIndex(index);
+	limitsTypeChanged(index);
 
 	// limits metric
 	const auto limitsMetric = group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(m_plot->limitsMetric()));
