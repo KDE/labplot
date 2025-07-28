@@ -17,6 +17,7 @@ class NSLMathTest : public NSLTest {
 
 private Q_SLOTS:
 	void mathMultiple();
+	void trunc();
 	// performance
 	// void testPerformance();
 };

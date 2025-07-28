@@ -37,6 +37,18 @@ void NSLMathTest::mathMultiple() {
 	QCOMPARE(nsl_math_trunc_multiple(value, multiple), 0.);
 }
 
+void NSLMathTest::trunc() {
+	VALUES_EQUAL(nsl_math_trunc_places_1(5.6), nsl_math_places(5.6, 1, 3));
+
+	QBENCHMARK {
+		nsl_math_trunc_places_1(5.6);
+	}
+
+	QBENCHMARK {
+		nsl_math_places(5.6, 1, 3);
+	}
+}
+
 // ##############################################################################
 // #################  performance
 // ##############################################################################
