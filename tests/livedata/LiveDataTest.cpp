@@ -105,9 +105,9 @@ void LiveDataTest::testReadContinuousFixed00() {
 	properties.columnModesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties)->message(), i18n("Success"));
+	QCOMPARE(filter->initialize(properties).success(), true);
 
-	// QCOMPARE(filter->initialize(properties)->message(), i18n("Success"));
+	// QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
@@ -189,7 +189,7 @@ void LiveDataTest::testReadContinuousFixed01() {
 	properties.columnModesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties)->message(), i18n("Success"));
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
@@ -280,7 +280,7 @@ void LiveDataTest::testReadContinuousFixed02() {
 	properties.columnModesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties)->message(), i18n("Success"));
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
@@ -367,7 +367,7 @@ void LiveDataTest::testReadContinuousFixedWithIndex() {
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
 	properties.createIndex = true;
-	QCOMPARE(filter->initialize(properties)->message(), i18n("Success"));
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
@@ -457,7 +457,7 @@ void LiveDataTest::testReadContinuousFixedWithTimestamp() {
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
 	properties.createTimestamp = true;
-	QCOMPARE(filter->initialize(properties)->message(), i18n("Success"));
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
@@ -548,7 +548,7 @@ void LiveDataTest::testReadContinuousFixedWithIndexTimestamp() {
 	properties.separator = QStringLiteral(",");
 	properties.createIndex = true;
 	properties.createTimestamp = true;
-	QCOMPARE(filter->initialize(properties)->message(), i18n("Success"));
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
@@ -649,7 +649,7 @@ void LiveDataTest::testReadFromEnd00() {
 	properties.columnModesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties)->message(), i18n("Success"));
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
@@ -730,7 +730,7 @@ void LiveDataTest::testReadFromEnd01() {
 	properties.columnModesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties)->message(), i18n("Success"));
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
@@ -841,7 +841,7 @@ void LiveDataTest::testReadFromEnd02() {
 	properties.columnModesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties)->message(), i18n("Success"));
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks, after the initial read all data is read
@@ -937,7 +937,7 @@ void LiveDataTest::testReadTillEnd00() {
 	properties.columnModesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties)->message(), i18n("Success"));
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks
@@ -1018,7 +1018,7 @@ void LiveDataTest::testReadTillEnd01() {
 	properties.columnModesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties)->message(), i18n("Success"));
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks
@@ -1096,7 +1096,7 @@ void LiveDataTest::testReadWholeFile00() {
 	properties.columnModesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties)->message(), i18n("Success"));
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks
@@ -1167,7 +1167,7 @@ void LiveDataTest::testReadWholeFile01() {
 	properties.columnModesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties)->message(), i18n("Success"));
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks
@@ -1238,7 +1238,7 @@ void LiveDataTest::testReadWholeFileSameContentSize() {
 	properties.columnModesString = QStringLiteral("Int, Int");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties)->message(), i18n("Success"));
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource.setFilter(filter);
 
 	// read the data and perform checks
@@ -1333,7 +1333,7 @@ void LiveDataTest::testPlotting() {
 	properties.columnModesString = QStringLiteral("Double, Double");
 	properties.automaticSeparatorDetection = false;
 	properties.separator = QStringLiteral(",");
-	QCOMPARE(filter->initialize(properties)->message(), i18n("Success"));
+	QCOMPARE(filter->initialize(properties).success(), true);
 	dataSource->setFilter(filter);
 
 	QCOMPARE(dataSource->column(0)->minimum(), 0.);
@@ -1519,7 +1519,7 @@ void LiveDataTest::testUdpReadContinuousFixed00() {
 	properties.columnModesString = QStringLiteral("Int, Int");                                                                                                 \
 	properties.automaticSeparatorDetection = false;                                                                                                            \
 	properties.separator = QStringLiteral(",");                                                                                                                \
-	QCOMPARE(filter->initialize(properties)->message(), i18n("Success"));                                                                                      \
+	QCOMPARE(filter->initialize(properties).success(), true);                                                                                                  \
                                                                                                                                                                \
 	dataSource->setFilter(filter);                                                                                                                             \
                                                                                                                                                                \

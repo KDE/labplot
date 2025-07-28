@@ -7,6 +7,7 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
+#include "AsciiFilterStatus.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include <QIODevice>
 #include <memory>
@@ -15,7 +16,6 @@
 #define ASCIIFILTER_H
 
 class AsciiFilterPrivate;
-struct Status;
 
 /*!
  * \brief The BufferReader class
@@ -120,7 +120,7 @@ public:
 		bool m_dirty{true};
 	};
 
-	std::shared_ptr<Status> initialize(Properties p);
+	Status initialize(Properties p);
 	bool initialized() const;
 	Properties properties() const;
 	Properties defaultProperties() const;

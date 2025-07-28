@@ -107,7 +107,7 @@ AsciiFilter::AsciiFilter()
 
 AsciiFilter::~AsciiFilter() = default;
 
-std::shared_ptr<Status> AsciiFilter::initialize(AsciiFilter::Properties p) {
+Status AsciiFilter::initialize(AsciiFilter::Properties p) {
 	Q_D(AsciiFilter);
 	return d->initialize(p);
 }
@@ -149,7 +149,7 @@ void AsciiFilter::readDataFromFile(const QString& fileName, AbstractDataSource* 
 	KCompressionDevice file(fileName);
 
 	if (d->isUTF16(file)) {
-		d->setLastError(std::make_shared<StatusUTF16NotSupported>());
+		d->setLastError(Status::UTF16NotSupported());
 		return;
 	}
 
@@ -361,20 +361,20 @@ bool AsciiFilter::determineColumnModes(const QStringView& s, QVector<AbstractCol
 // ##  PRIVATE IMPLEMENTATIONS  ###########################################################################################
 // ########################################################################################################################
 AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner)
-	: q(owner)
-	, lastStatus(std::make_shared<StatusSuccess>()) {
+	: lastStatus(Status::Success())
+	, q(owner) {
 }
 
 /*!
  * \brief AsciiFilter::initialize
  * Determine all automatic values like separator, endRow, endColumn
  */
-std::shared_ptr<Status> AsciiFilterPrivate::initialize(QIODevice& device) {
+Status AsciiFilterPrivate::initialize(QIODevice& device) {
 	IODeviceHandler d(device, true); // closes device automatically.
 
 	if (!properties.automaticSeparatorDetection && properties.endColumn > 0
 		&& properties.columnModes.size() == properties.endColumn - properties.startColumn + 1)
-		return std::make_shared<StatusSuccess>(); // Nothing to do since all unknows are determined
+		return Status::Success(); // Nothing to do since all unknows are determined
 
 	const bool removeQuotes = properties.removeQuotes;
 	const bool simplifyWhiteSpace = properties.simplifyWhitespaces;
@@ -385,20 +385,20 @@ std::shared_ptr<Status> AsciiFilterPrivate::initialize(QIODevice& device) {
 		// Initialization not required. Assuming that all parameters are set,
 		// makes no sense for serial port, because you never know if
 		// the line is really the first line and if it is a complete line
-		return std::make_shared<StatusSerialDeviceUninitialized>();
+		return Status::SerialDeviceUninitialized();
 	}
 #endif
 
 	if (!device.isOpen()) {
 		if (!device.open(QIODevice::ReadOnly))
-			return std::make_shared<StatusUnableToOpenDevice>();
+			return Status::UnableToOpenDevice();
 	}
 
 	if (properties.endColumn > 0 && properties.endColumn < properties.startColumn)
-		return std::make_shared<StatusWrongEndColumn>();
+		return Status::WrongEndColumn();
 
 	if (properties.endRow > 0 && properties.endRow < properties.startRow)
-		return std::make_shared<StatusWrongEndRow>();
+		return Status::WrongEndRow();
 
 	properties.columnModes.clear();
 	properties.columnNames.clear();
@@ -408,7 +408,7 @@ std::shared_ptr<Status> AsciiFilterPrivate::initialize(QIODevice& device) {
 	int validRowCounter = 0;
 	do {
 		const auto status = getLine(device, line);
-		if (!std::dynamic_pointer_cast<const StatusSuccess>(status))
+		if (!status.success())
 			return status;
 
 		if (ignoringLine(line, properties))
@@ -425,7 +425,7 @@ std::shared_ptr<Status> AsciiFilterPrivate::initialize(QIODevice& device) {
 	if (properties.automaticSeparatorDetection) {
 		QString separator;
 		const auto status = determineSeparator(line, removeQuotes, simplifyWhiteSpace, separator);
-		if (!std::dynamic_pointer_cast<const StatusSuccess>(status))
+		if (!status.success())
 			return status;
 		properties.separator = separator;
 	} else {
@@ -454,7 +454,7 @@ std::shared_ptr<Status> AsciiFilterPrivate::initialize(QIODevice& device) {
 																	1,
 																	properties.endColumn);
 		if (properties.columnNames.isEmpty())
-			return std::make_shared<StatusUnableParsingHeader>();
+			return Status::UnableParsingHeader();
 	} else {
 		// Create default column names
 		properties.columnNames.clear();
@@ -483,16 +483,16 @@ std::shared_ptr<Status> AsciiFilterPrivate::initialize(QIODevice& device) {
 		if (!properties.headerEnabled) {
 			rows.append(determineColumnsSimplifyWhiteSpace(line, properties));
 			if (rows.last().count() != numberColumns)
-				return std::make_shared<StatusInvalidNumberDataColumns>(numberColumns, rows.last().count(), i + 1);
+				return Status::InvalidNumberDataColumns(numberColumns, rows.last().count(), i + 1);
 			i++;
 		} else {
 			// Skip all lines until startRow line
 			int j = properties.startRow - 1;
 			while (j > 0) {
 				const auto status = getLine(device, line);
-				if (std::dynamic_pointer_cast<const StatusDeviceAtEnd>(status) || std::dynamic_pointer_cast<const StatusNoNewLine>(status))
+				if (status.type() == Status::Type::DeviceAtEnd || status.type() == Status::Type::NoNewLine)
 					break; // No more data to read. So we determine from the others
-				if (!std::dynamic_pointer_cast<const StatusSuccess>(status))
+				if (!status.success())
 					return status;
 
 				if (ignoringLine(line, properties))
@@ -503,9 +503,9 @@ std::shared_ptr<Status> AsciiFilterPrivate::initialize(QIODevice& device) {
 		}
 		while (i < m_dataTypeLines) {
 			const auto status = getLine(device, line);
-			if (std::dynamic_pointer_cast<const StatusDeviceAtEnd>(status) || std::dynamic_pointer_cast<const StatusNoNewLine>(status))
+			if (status.type() == Status::Type::DeviceAtEnd || status.type() == Status::Type::NoNewLine)
 				break; // No more data to read. So we determine from the others
-			if (!std::dynamic_pointer_cast<const StatusSuccess>(status))
+			if (!status.success())
 				return status;
 			if (ignoringLine(line, properties))
 				continue;
@@ -514,7 +514,7 @@ std::shared_ptr<Status> AsciiFilterPrivate::initialize(QIODevice& device) {
 				if (properties.headerEnabled) {
 					i += properties.startRow;
 				}
-				return std::make_shared<StatusInvalidNumberDataColumns>(numberColumns, rows.last().count(), i + 1);
+				return Status::InvalidNumberDataColumns(numberColumns, rows.last().count(), i + 1);
 			}
 			i++;
 		}
@@ -525,14 +525,14 @@ std::shared_ptr<Status> AsciiFilterPrivate::initialize(QIODevice& device) {
 	} else {
 		QString invalidString;
 		if (!determineColumnModes(properties.columnModesString, properties.columnModes, invalidString))
-			return std::make_shared<StatusColumnModeDeterminationFailed>();
+			return Status::ColumnModeDeterminationFailed();
 	}
 
 	if (properties.columnModes.size() != lineSplit.size())
-		return std::make_shared<StatusInvalidNumberDataColumns>(numberColumns, properties.columnModes.size(), 1);
+		return Status::InvalidNumberDataColumns(numberColumns, properties.columnModes.size(), 1);
 
 	if (properties.columnNames.size() != lineSplit.size())
-		return std::make_shared<StatusInvalidNumberColumnNames>();
+		return Status::InvalidNumberColumnNames();
 
 	// add time stamp and index column
 	if (properties.createTimestamp) {
@@ -545,7 +545,7 @@ std::shared_ptr<Status> AsciiFilterPrivate::initialize(QIODevice& device) {
 	}
 
 	initialized = true;
-	return std::make_shared<StatusSuccess>();
+	return Status::Success();
 }
 
 QMap<QString, QPair<QString, AbstractColumn::ColumnMode>> AsciiFilterPrivate::modeMap() {
@@ -629,27 +629,27 @@ void AsciiFilterPrivate::setDataSource(AbstractDataSource* dataSource) {
  * \param bytes_read
  * \return
  */
-std::shared_ptr<Status> AsciiFilterPrivate::readFromDevice(QIODevice& device,
-														   AbstractFileFilter::ImportMode columnImportMode,
-														   AbstractFileFilter::ImportMode rowImportMode,
-														   qint64 from,
-														   qint64 lines,
-														   qint64 keepNRows,
-														   qint64& bytes_read,
-														   bool skipFirstLine) {
+Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
+										  AbstractFileFilter::ImportMode columnImportMode,
+										  AbstractFileFilter::ImportMode rowImportMode,
+										  qint64 from,
+										  qint64 lines,
+										  qint64 keepNRows,
+										  qint64& bytes_read,
+										  bool skipFirstLine) {
 	bytes_read = 0;
 
 	bool ok;
 	if (!initialized) {
 		const auto status = initialize(device);
-		if (!std::dynamic_pointer_cast<const StatusSuccess>(status))
+		if (!status.success())
 			return status;
 
 		// matrix data has only one column mode
 		if (dynamic_cast<Matrix*>(m_dataSource)) {
 			for (auto& c : properties.columnModes)
 				if (c != AbstractColumn::ColumnMode::Double)
-					return std::make_shared<StatusMatrixUnsupportedColumnMode>();
+					return Status::MatrixUnsupportedColumnMode();
 		}
 	}
 
@@ -658,14 +658,14 @@ std::shared_ptr<Status> AsciiFilterPrivate::readFromDevice(QIODevice& device,
 		std::vector<void*> dataContainer;
 		if (!m_dataSource) {
 			assert(false);
-			return std::make_shared<StatusNoDataSource>();
+			return Status::NoDataSource();
 		}
 		// The column offset is already subtracted, so dataContainer contains only the new columns
 		m_dataSource
 			->prepareImport(dataContainer, columnImportMode, 0, properties.columnModes.size(), properties.columnNames, properties.columnModes, ok, true);
 
 		if (dataContainer.size() == 0)
-			return std::make_shared<StatusNoColumns>();
+			return Status::NoColumns();
 
 		// This must be done all the time, because it could be that the datacontainer of the datasource changed and then the datacontainer points to
 		// wrong data locations.
@@ -689,10 +689,10 @@ std::shared_ptr<Status> AsciiFilterPrivate::readFromDevice(QIODevice& device,
 		const auto newRowCount = qMax(dataContainerStartIndex * 2, numberRowsReallocation);
 		m_DataContainer.resize(newRowCount); // reserve to not having to reallocate all the time
 	} catch (std::bad_alloc&) {
-		return std::make_shared<StatusNotEnoughMemory>();
+		return Status::NotEnoughMemory();
 	}
 
-	auto handleError = [this](std::shared_ptr<Status> status) {
+	auto handleError = [this](Status status) {
 		setLastError(status);
 		m_DataContainer.resize(0);
 		return status;
@@ -700,19 +700,19 @@ std::shared_ptr<Status> AsciiFilterPrivate::readFromDevice(QIODevice& device,
 
 	if (!device.isOpen()) {
 		if (!device.open(QIODevice::ReadOnly))
-			return handleError(std::make_shared<StatusUnableToOpenDevice>());
+			return handleError(Status::UnableToOpenDevice());
 	}
 
 	if (!device.isSequential())
 		device.seek(from);
 
 	if (device.atEnd() && !device.isSequential())
-		return handleError(std::make_shared<StatusDeviceAtEnd>()); // File empty
+		return handleError(Status::DeviceAtEnd()); // File empty
 
 	QString line;
 	if (skipFirstLine) {
 		const auto status = getLine(device, line);
-		if (!std::dynamic_pointer_cast<const StatusSuccess>(status))
+		if (!status.success())
 			return handleError(status);
 	}
 
@@ -729,9 +729,9 @@ std::shared_ptr<Status> AsciiFilterPrivate::readFromDevice(QIODevice& device,
 	// Iterate over all rows
 	do {
 		const auto status = getLine(device, line);
-		if (std::dynamic_pointer_cast<const StatusDeviceAtEnd>(status) || std::dynamic_pointer_cast<const StatusNoNewLine>(status))
+		if (status.type() == Status::Type::DeviceAtEnd || status.type() == Status::Type::NoNewLine)
 			break;
-		else if (!std::dynamic_pointer_cast<const StatusSuccess>(status))
+		else if (!status.success())
 			return status;
 		bytes_read += line.count();
 
@@ -763,13 +763,13 @@ std::shared_ptr<Status> AsciiFilterPrivate::readFromDevice(QIODevice& device,
 		if (properties.simplifyWhitespaces) {
 			const auto& values = determineColumnsSimplifyWhiteSpace(line, properties);
 			if ((size_t)values.size() < columnCountExpected)
-				continue; // return std::make_shared<StatusInvalidNumberDataColumns>();
+				continue; // return Status::InvalidNumberDataColumns();
 			setValues(values, rowIndex, properties);
 		} else {
 			// Higher performance if no whitespaces are available
 			const auto columnCount = determineColumns(line, properties, separatorSingleCharacter, separatorCharacter, columnValues);
 			if (columnCount < columnCountExpected)
-				continue; // return std::make_shared<StatusInvalidNumberDataColumns>();
+				continue; // return Status::InvalidNumberDataColumns();
 			setValues(columnValues, rowIndex, properties);
 		}
 
@@ -779,7 +779,7 @@ std::shared_ptr<Status> AsciiFilterPrivate::readFromDevice(QIODevice& device,
 				m_DataContainer.resize(2 * m_DataContainer.rowCount()); // Always double
 			} catch (std::bad_alloc&) {
 				// q->setLastError(i18n("Not enough memory."));
-				return std::make_shared<StatusNotEnoughMemory>();
+				return Status::NotEnoughMemory();
 			}
 		}
 
@@ -809,7 +809,7 @@ std::shared_ptr<Status> AsciiFilterPrivate::readFromDevice(QIODevice& device,
 		m_DataContainer.resize(rowIndex);
 
 	m_dataSource->finalizeImport(0, 0, properties.columnNames.size() - 1, properties.dateTimeFormat, columnImportMode);
-	return std::make_shared<StatusSuccess>();
+	return Status::Success();
 }
 
 template<typename T>
@@ -1105,7 +1105,7 @@ QStringList AsciiFilterPrivate::determineColumnsSimplifyWhiteSpace(QStringView l
 	return columnNames;
 }
 
-std::shared_ptr<Status> AsciiFilterPrivate::determineSeparator(const QString& line, bool removeQuotes, bool simplifyWhiteSpaces, QString& separator) {
+Status AsciiFilterPrivate::determineSeparator(const QString& line, bool removeQuotes, bool simplifyWhiteSpaces, QString& separator) {
 	enum class State {
 		Column,
 		QuotedText,
@@ -1128,7 +1128,7 @@ std::shared_ptr<Status> AsciiFilterPrivate::determineSeparator(const QString& li
 			if (counter < lineView.size()) {
 				lineView = lineView.sliced(counter, lineView.size() - counter);
 			} else
-				return std::make_shared<StatusSeparatorDeterminationFailed>(); // Nothing found
+				return Status::SeparatorDeterminationFailed(); // Nothing found
 			break;
 		}
 	}
@@ -1154,7 +1154,7 @@ std::shared_ptr<Status> AsciiFilterPrivate::determineSeparator(const QString& li
 				// Simple non whitespace characters as separators
 				if (asc == c) {
 					separator = c; // This is the separator character
-					return std::make_shared<StatusSuccess>();
+					return Status::Success();
 				}
 			}
 			// Complex whitespace characters as separators
@@ -1164,12 +1164,12 @@ std::shared_ptr<Status> AsciiFilterPrivate::determineSeparator(const QString& li
 					// First whitespace found. Since simplifyWhitespaces all following whitespaces
 					// get merged into a single space and therefore a simple space must be the separator
 					separator = QLatin1Char(' ');
-					return std::make_shared<StatusSuccess>();
+					return Status::Success();
 				}
 				separatorSequence.append(c);
 			} else if (!separatorSequence.isEmpty()) {
 				separator = separatorSequence;
-				return std::make_shared<StatusSuccess>();
+				return Status::Success();
 			}
 			break;
 		}
@@ -1178,23 +1178,23 @@ std::shared_ptr<Status> AsciiFilterPrivate::determineSeparator(const QString& li
 		}
 	}
 
-	return std::make_shared<StatusSuccess>(); // Only one column, so no separator exists
+	return Status::Success(); // Only one column, so no separator exists
 }
 
-std::shared_ptr<Status> AsciiFilterPrivate::getLine(QIODevice& device, QString& line) {
+Status AsciiFilterPrivate::getLine(QIODevice& device, QString& line) {
 	auto* udpSocket = dynamic_cast<QUdpSocket*>(&device);
 	if (udpSocket) {
 		if (udpSocket->hasPendingDatagrams()) {
 			// TODO: Maybe using readDatagram and a const size array?
 			const auto& datagram = udpSocket->receiveDatagram();
 			line = QString::fromUtf8(datagram.data());
-			return std::make_shared<StatusSuccess>();
+			return Status::Success();
 		} else
-			return std::make_shared<StatusDeviceAtEnd>();
+			return Status::DeviceAtEnd();
 	}
 
 	if (device.atEnd()) {
-		return std::make_shared<StatusDeviceAtEnd>();
+		return Status::DeviceAtEnd();
 	}
 
 	// This is important especially for serial port because readLine reads everything from the buffer
@@ -1202,11 +1202,11 @@ std::shared_ptr<Status> AsciiFilterPrivate::getLine(QIODevice& device, QString& 
 	if (!device.canReadLine()) {
 		// Seems to be that KCompressionDevice has problems with this function
 		if (!dynamic_cast<KCompressionDevice*>(&device) && !dynamic_cast<QFile*>(&device) && !dynamic_cast<BufferReader*>(&device))
-			return std::make_shared<StatusNoNewLine>();
+			return Status::NoNewLine();
 	}
 
 	line = QString::fromUtf8(device.readLine());
-	return std::make_shared<StatusSuccess>();
+	return Status::Success();
 }
 
 /*!
@@ -1217,28 +1217,28 @@ std::shared_ptr<Status> AsciiFilterPrivate::getLine(QIODevice& device, QString& 
  * \param p
  * \return
  */
-std::shared_ptr<Status> AsciiFilterPrivate::initialize(AsciiFilter::Properties p) {
+Status AsciiFilterPrivate::initialize(AsciiFilter::Properties p) {
 	using ColumnMode = AbstractColumn::ColumnMode;
 
 	if (properties.endColumn > 0 && properties.endColumn < properties.startColumn)
-		return setLastError(std::make_shared<StatusWrongEndColumn>());
+		return setLastError(Status::WrongEndColumn());
 
 	if (properties.endRow > 0 && properties.endRow < properties.startRow)
-		return setLastError(std::make_shared<StatusWrongEndRow>());
+		return setLastError(Status::WrongEndRow());
 
 	if (p.automaticSeparatorDetection)
-		return setLastError(std::make_shared<StatusSeparatorDetectionNotAllowed>());
+		return setLastError(Status::SeparatorDetectionNotAllowed());
 
 	if (p.separator.isEmpty())
-		return setLastError(std::make_shared<StatusInvalidSeparator>());
+		return setLastError(Status::InvalidSeparator());
 
 	if (p.columnModes.isEmpty()) {
 		if (p.columnModesString.isEmpty())
-			return setLastError(std::make_shared<StatusSequentialDeviceNoColumnModes>());
+			return setLastError(Status::SequentialDeviceNoColumnModes());
 
 		QString invalidString;
 		if (!determineColumnModes(p.columnModesString, p.columnModes, invalidString))
-			return setLastError(std::make_shared<StatusSequentialDeviceNoColumnModes>());
+			return setLastError(Status::SequentialDeviceNoColumnModes());
 	}
 
 	if (p.columnNamesRaw.isEmpty() && p.columnNames.isEmpty()) {
@@ -1254,18 +1254,18 @@ std::shared_ptr<Status> AsciiFilterPrivate::initialize(AsciiFilter::Properties p
 			determineColumnsSimplifyWhiteSpace(p.columnNamesRaw, QLatin1String(INTERNAL_SEPARATOR), p.removeQuotes, true, p.skipEmptyParts, 1, p.endColumn);
 
 	if (p.columnNames.isEmpty())
-		return setLastError(std::make_shared<StatusUnableParsingHeader>());
+		return setLastError(Status::UnableParsingHeader());
 
 	if (p.columnModes.count() != p.columnNames.count())
-		return setLastError(std::make_shared<StatusSequentialDeviceNoColumnModes>());
+		return setLastError(Status::SequentialDeviceNoColumnModes());
 
 	if (p.headerEnabled)
-		return setLastError(std::make_shared<StatusHeaderDetectionNotAllowed>());
+		return setLastError(Status::HeaderDetectionNotAllowed());
 
 	if (p.dateTimeFormat.isEmpty()) {
 		for (const auto m : p.columnModes) {
 			if (m == ColumnMode::DateTime || m == ColumnMode::Month || m == ColumnMode::Day)
-				return setLastError(std::make_shared<StatusNoDateTimeFormat>());
+				return setLastError(Status::NoDateTimeFormat());
 		}
 	}
 
@@ -1280,7 +1280,7 @@ std::shared_ptr<Status> AsciiFilterPrivate::initialize(AsciiFilter::Properties p
 
 	properties = p;
 	initialized = true;
-	return std::make_shared<StatusSuccess>();
+	return Status::Success();
 }
 
 QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int lines, bool reinit) {
@@ -1302,7 +1302,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device, int lines, b
 		initialized = false;
 
 	if (isUTF16(device)) {
-		setLastError(std::make_shared<StatusUTF16NotSupported>());
+		setLastError(Status::UTF16NotSupported());
 		return {};
 	}
 
@@ -1315,7 +1315,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device, int lines, b
 	const auto status =
 		readFromDevice(device, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Replace, 0, lines, 0, bytes_read, skipFirstLine);
 	QVector<QStringList> p;
-	if (!std::dynamic_pointer_cast<const StatusSuccess>(status)) {
+	if (!status.success()) {
 		setLastError(status);
 		return p;
 	}
@@ -1333,7 +1333,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device, int lines, b
 
 		const auto status =
 			readFromDevice(device, AbstractFileFilter::ImportMode::Replace, AbstractFileFilter::ImportMode::Append, 0, lines, 0, bytes_read, skipFirstLine);
-		if (!std::dynamic_pointer_cast<const StatusSuccess>(status)) {
+		if (!status.success()) {
 			setLastError(status);
 			return p;
 		}
@@ -1371,10 +1371,10 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device, int lines, b
 	return p;
 }
 
-std::shared_ptr<Status> AsciiFilterPrivate::setLastError(std::shared_ptr<Status> status) {
+Status AsciiFilterPrivate::setLastError(Status status) {
 	lastStatus = status;
-	if (!std::dynamic_pointer_cast<const StatusSuccess>(status))
-		q->setLastError(status->message());
+	if (!status.success())
+		q->setLastError(status.message());
 	return status;
 }
 

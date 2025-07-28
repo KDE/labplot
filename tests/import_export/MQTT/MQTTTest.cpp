@@ -151,7 +151,7 @@ void MQTTTest::testIntegerMessage() {
 	properties.headerEnabled = false;
 	properties.columnModesString = QStringLiteral("Int");
 	properties.intAsDouble = false;
-	QVERIFY(std::dynamic_pointer_cast<StatusSuccess>(filter->initialize(properties))); // Livedata must be initialized!
+	QVERIFY(filter->initialize(properties).type() == Status::Type::Success); // Livedata must be initialized!
 
 	auto* project = new Project();
 
@@ -270,7 +270,7 @@ void MQTTTest::testNumericMessage() {
 	properties.headerEnabled = false;
 	properties.columnModesString = QStringLiteral("Double");
 	properties.intAsDouble = false;
-	QVERIFY(std::dynamic_pointer_cast<StatusSuccess>(filter->initialize(properties))); // Livedata must be initialized!
+	QVERIFY(filter->initialize(properties).type() == Status::Type::Success); // Livedata must be initialized!
 
 	Project* project = new Project();
 
@@ -402,7 +402,7 @@ void MQTTTest::testTextMessage() {
 	properties.columnModesString = QStringLiteral("Text");
 	properties.intAsDouble = false;
 	properties.commentCharacter = QStringLiteral("#");
-	QVERIFY(std::dynamic_pointer_cast<StatusSuccess>(filter->initialize(properties))); // Livedata must be initialized!
+	QVERIFY(filter->initialize(properties).type() == Status::Type::Success); // Livedata must be initialized!
 
 	Project* project = new Project();
 

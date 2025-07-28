@@ -11,6 +11,7 @@
 #define ASCIIFILTERPRIVATE_H
 
 #include "AsciiFilter.h"
+#include "AsciiFilterStatus.h"
 #include <QString>
 
 struct Status;
@@ -18,24 +19,24 @@ struct Status;
 class AsciiFilterPrivate {
 public:
 	AsciiFilterPrivate(AsciiFilter* owner);
-	std::shared_ptr<Status> initialize(AsciiFilter::Properties);
-	std::shared_ptr<Status> initialize(QIODevice&);
+	Status initialize(AsciiFilter::Properties);
+	Status initialize(QIODevice&);
 	void setDataSource(AbstractDataSource*);
-	std::shared_ptr<Status> readFromDevice(QIODevice&,
-										   AbstractFileFilter::ImportMode columnImportMode,
-										   AbstractFileFilter::ImportMode rowImportMode,
-										   qint64 from,
-										   qint64 lines,
-										   qint64 keepNRows,
-										   qint64& bytes_read,
-										   bool skipFirstLine = false);
+	Status readFromDevice(QIODevice&,
+						  AbstractFileFilter::ImportMode columnImportMode,
+						  AbstractFileFilter::ImportMode rowImportMode,
+						  qint64 from,
+						  qint64 lines,
+						  qint64 keepNRows,
+						  qint64& bytes_read,
+						  bool skipFirstLine = false);
 	QVector<QStringList> preview(QIODevice&, int lines, bool reinit = true, bool skipFirstLine = false);
 	QVector<QStringList> preview(const QString& fileName, int lines, bool reinit = true);
 
 	static QMap<QString, QPair<QString, AbstractColumn::ColumnMode>> modeMap();
 	static bool determineColumnModes(const QStringView&, QVector<AbstractColumn::ColumnMode>&, QString& invalidString);
 	static QString convertTranslatedColumnModesToNative(const QStringView);
-	std::shared_ptr<Status> setLastError(std::shared_ptr<Status>);
+	Status setLastError(Status);
 	bool isUTF16(QIODevice&);
 
 	AsciiFilter::Properties properties;
@@ -57,10 +58,10 @@ private:
 								   bool separatorSingleCharacter,
 								   const QChar separatorCharacter,
 								   QVector<QStringView>& columnValues);
-	static std::shared_ptr<Status> determineSeparator(const QString& line, bool removeQuotes, bool simplifyWhiteSpaces, QString& separator);
+	static Status determineSeparator(const QString& line, bool removeQuotes, bool simplifyWhiteSpaces, QString& separator);
 	static QVector<AbstractColumn::ColumnMode>
 	determineColumnModes(const QVector<QStringList>& values, const AsciiFilter::Properties&, QString& dateTimeFormat);
-	std::shared_ptr<Status> getLine(QIODevice&, QString& line);
+	Status getLine(QIODevice&, QString& line);
 
 	template<typename T>
 	void setValues(const QVector<T>& values, int rowIndex, const AsciiFilter::Properties&);
@@ -121,7 +122,7 @@ private:
 
 	DataContainer m_DataContainer;
 	qint64 m_index{1}; // Index counter used when a index column was prepended
-	std::shared_ptr<Status> lastStatus;
+	Status lastStatus;
 	AbstractDataSource* m_dataSource{nullptr};
 
 private:
