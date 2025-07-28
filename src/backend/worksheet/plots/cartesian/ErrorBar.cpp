@@ -301,7 +301,7 @@ void ErrorBarPrivate::painterPathForX(QPainterPath& path, const QVector<QPointF>
 	}
 
 	// map the error bars to scene coordinates
-	elines = cSystem->mapLogicalToScene(elines);
+	cSystem->mapLogicalToSceneDefaultMapping(elines);
 
 	// new painter path for the error bars
 	for (const auto& line : std::as_const(elines)) {
@@ -412,7 +412,7 @@ void ErrorBarPrivate::painterPathForY(QPainterPath& path,
 	}
 
 	// map the error bars to scene coordinates
-	elines = cSystem->mapLogicalToScene(elines);
+	cSystem->mapLogicalToSceneDefaultMapping(elines);
 
 	// new painter path for the error bars
 	for (const auto& line : std::as_const(elines)) {

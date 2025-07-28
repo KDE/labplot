@@ -1238,6 +1238,8 @@ void XYCurvePrivate::updateLines(bool performanceOptimization) {
 		numberOfPixelX = ceil(widthDatarectInch * dpi) * 10;
 	}
 
+	// m_lines.reserve(numberOfPixelX * 2);
+
 	// calculate the lines connecting the data points
 	{
 #if PERFTRACE_CURVES
@@ -1645,7 +1647,7 @@ void XYCurvePrivate::updateLines(bool performanceOptimization) {
 		PERFTRACE(QLatin1String(Q_FUNC_INFO) + QStringLiteral(", curve ") + name() + QStringLiteral(", map lines to scene coordinates"));
 #endif
 		Q_EMIT q->linesUpdated(q, m_lines);
-		m_lines = q->cSystem->mapLogicalToScene(m_lines);
+		q->cSystem->mapLogicalToSceneDefaultMapping(m_lines);
 	}
 
 	{
@@ -1739,7 +1741,7 @@ void XYCurvePrivate::updateDropLines() {
 	}
 
 	// map the drop lines to scene coordinates
-	dlines = q->cSystem->mapLogicalToScene(dlines);
+	q->cSystem->mapLogicalToSceneDefaultMapping(dlines);
 
 	// new painter path for the drop lines
 	for (const auto& line : std::as_const(dlines)) {
@@ -2078,7 +2080,7 @@ void XYCurvePrivate::updateFilling() {
 		if (fillLines.isEmpty())
 			return;
 
-		fillLines = q->cSystem->mapLogicalToScene(fillLines);
+		q->cSystem->mapLogicalToSceneDefaultMapping(fillLines);
 
 		// no lines available (no points) after mapping, nothing to do
 		if (fillLines.isEmpty())
