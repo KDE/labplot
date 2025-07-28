@@ -3857,9 +3857,9 @@ void AsciiFilterTest::invalidDataColumnCount() {
 
 	const auto status = filter.d_ptr->lastStatus;
 	QCOMPARE(status.type(), Status::Type::InvalidNumberDataColumns);
-	// QCOMPARE(status->mExpectedNumberColumns, 1);
-	// QCOMPARE(status->mLineIndex, 2);
-	// QVERIFY(status->mReceivedColumnCount > 1);
+	QCOMPARE(status.message(),
+			 i18n("Invalid number of data columns. First row column count: 1. 2th row column count >= 2. Check if the correct separator is used and the data "
+				  "contains same number of columns."));
 }
 
 QTEST_MAIN(AsciiFilterTest)
