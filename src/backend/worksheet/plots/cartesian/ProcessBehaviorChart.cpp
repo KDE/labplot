@@ -166,7 +166,7 @@ void ProcessBehaviorChart::init(bool loading) {
 	d->sampleSize = group.readEntry(QStringLiteral("SampleSize"), 5);
 	d->limitsMetric = static_cast<ProcessBehaviorChart::LimitsMetric>(
 		group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(ProcessBehaviorChart::LimitsMetric::Average)));
-	// TODO: limit contraints?
+	// TODO: limit contraints and specifications?
 	d->exactLimitsEnabled = group.readEntry(QStringLiteral("ExactLimitsEnabled"), true);
 
 	d->dataCurve->line()->init(group);
@@ -310,6 +310,9 @@ BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, ProcessBehaviorChart::LimitsMet
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, int, sampleSize, sampleSize)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, double, maxUpperLimit, maxUpperLimit)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, double, minLowerLimit, minLowerLimit)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, double, centerSpecification, centerSpecification)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, double, upperLimitSpecification, upperLimitSpecification)
+BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, double, lowerLimitSpecification, lowerLimitSpecification)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, bool, exactLimitsEnabled, exactLimitsEnabled)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, const AbstractColumn*, dataColumn, dataColumn)
 BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, QString, dataColumnPath, dataColumnPath)
@@ -591,6 +594,27 @@ void ProcessBehaviorChart::setMinLowerLimit(double minLowerLimit) {
 	Q_D(ProcessBehaviorChart);
 	if (minLowerLimit != d->minLowerLimit)
 		exec(new ProcessBehaviorChartSetMinLowerLimitCmd(d, minLowerLimit, ki18n("%1: set minimal lower limit")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetCenterSpecification, double, centerSpecification, updateSpecifications)
+void ProcessBehaviorChart::setCenterSpecification(double centerSpecification) {
+	Q_D(ProcessBehaviorChart);
+	if (centerSpecification != d->centerSpecification)
+		exec(new ProcessBehaviorChartSetCenterSpecificationCmd(d, centerSpecification, ki18n("%1: set center specification")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetUpperLimitSpecification, double, upperLimitSpecification, updateSpecifications)
+void ProcessBehaviorChart::setUpperLimitSpecification(double upperLimitSpecification) {
+	Q_D(ProcessBehaviorChart);
+	if (upperLimitSpecification != d->upperLimitSpecification)
+		exec(new ProcessBehaviorChartSetUpperLimitSpecificationCmd(d, upperLimitSpecification, ki18n("%1: set upper limit specification")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetLowerLimitSpecification, double, lowerLimitSpecification, updateSpecifications)
+void ProcessBehaviorChart::setLowerLimitSpecification(double lowerLimitSpecification) {
+	Q_D(ProcessBehaviorChart);
+	if (lowerLimitSpecification != d->lowerLimitSpecification)
+		exec(new ProcessBehaviorChartSetLowerLimitSpecificationCmd(d, lowerLimitSpecification, ki18n("%1: set lower limit specification")));
 }
 
 // labels
@@ -1341,54 +1365,77 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 	}
 	}
 
-	QDEBUG(Q_FUNC_INFO << ", center: " << center << " , upper limit: " << upperLimit << ", lower limit: " << lowerLimit);
+	if (limitsType == ProcessBehaviorChart::LimitsType::Statistical) {
+		// restrict the calculated limits to the min/max values for the current chart type:
+		// for P and U chart limits are calculated for every individual point ("stair-step limits"),
+		// for other charts straight lines are drawn
+		if ((type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U) && exactLimitsEnabled) {
+			for (int i = 0; i < yUpperLimitColumn->rowCount(); ++i) {
+				if (yUpperLimitColumn->valueAt(i) > maxUpperLimit)
+					yUpperLimitColumn->setValueAt(i, maxUpperLimit);
+			}
 
-	// restrict the calculated limits to the min/max values for the current chart type:
-	// for P and U chart limits are calculated for every individual point ("stair-step limits"),
-	// for other charts straight lines are drawn
-	if ((type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U) && exactLimitsEnabled) {
-		for (int i = 0; i < yUpperLimitColumn->rowCount(); ++i) {
-			if (yUpperLimitColumn->valueAt(i) > maxUpperLimit)
-				yUpperLimitColumn->setValueAt(i, maxUpperLimit);
+			for (int i = 0; i < yLowerLimitColumn->rowCount(); ++i) {
+				if (yLowerLimitColumn->valueAt(i) < minLowerLimit)
+					yLowerLimitColumn->setValueAt(i, minLowerLimit);
+			}
+
+			upperLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
+			lowerLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
+		} else {
+			if (lowerLimit < minLowerLimit)
+				lowerLimit = minLowerLimit;
+			if (upperLimit > maxUpperLimit)
+				upperLimit = maxUpperLimit;
+
+			yUpperLimitColumn->setValueAt(0, upperLimit);
+			yUpperLimitColumn->setValueAt(1, upperLimit);
+			yLowerLimitColumn->setValueAt(0, lowerLimit);
+			yLowerLimitColumn->setValueAt(1, lowerLimit);
 		}
 
-		for (int i = 0; i < yLowerLimitColumn->rowCount(); ++i) {
-			if (yLowerLimitColumn->valueAt(i) < minLowerLimit)
-				yLowerLimitColumn->setValueAt(i, minLowerLimit);
+		// show/hide the line for the lower limit depending on the chart type
+		lowerLimitCurve->setUndoAware(false);
+		if (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::XbarS)
+			lowerLimitCurve->setVisible(true); // lower limit line is always visible
+		else if (type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::S
+				|| type == ProcessBehaviorChart::Type::C) {
+			if (lowerLimit == 0.)
+				lowerLimitCurve->setVisible(false);
+			else
+				lowerLimitCurve->setVisible(true);
 		}
+		lowerLimitCurve->setUndoAware(true);
 
-		upperLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
-		lowerLimitCurve->setLineType(XYCurve::LineType::MidpointHorizontal); // required for stair-step lines for P and U charts
+		yCenterColumn->setValueAt(0, center);
+		yCenterColumn->setValueAt(1, center);
 	} else {
-		if (lowerLimit < minLowerLimit)
-			lowerLimit = minLowerLimit;
-		if (upperLimit > maxUpperLimit)
-			upperLimit = maxUpperLimit;
-
-		yUpperLimitColumn->setValueAt(0, upperLimit);
-		yUpperLimitColumn->setValueAt(1, upperLimit);
-		yLowerLimitColumn->setValueAt(0, lowerLimit);
-		yLowerLimitColumn->setValueAt(1, lowerLimit);
+		// if "Specification" is selected, we use the values for center and limit lines that were specified by the user without any further checks
+		// and just overwrite the values calculated above with the user-defined values
+		updateSpecifications();
 	}
 
-	// show/hide the line for the lower limit depending on the chart type
-	lowerLimitCurve->setUndoAware(false);
-	if (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::XbarS)
-		lowerLimitCurve->setVisible(true); // lower limit line is always visible
-	else if (type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::S
-			 || type == ProcessBehaviorChart::Type::C) {
-		if (lowerLimit == 0.)
-			lowerLimitCurve->setVisible(false);
-		else
-			lowerLimitCurve->setVisible(true);
-	}
-	lowerLimitCurve->setUndoAware(true);
-
-	yCenterColumn->setValueAt(0, center);
-	yCenterColumn->setValueAt(1, center);
+	QDEBUG(Q_FUNC_INFO << ", center: " << center << " , upper limit: " << upperLimit << ", lower limit: " << lowerLimit);
 
 	// update the texts in the value labels
 	updateLabels();
+}
+
+void ProcessBehaviorChartPrivate::updateSpecifications() {
+	center = centerSpecification;
+	upperLimit = upperLimitSpecification;
+	lowerLimit = lowerLimitSpecification;
+
+	yCenterColumn->setValueAt(0, center);
+	yCenterColumn->setValueAt(1, center);
+	yUpperLimitColumn->setValueAt(0, upperLimit);
+	yUpperLimitColumn->setValueAt(1, upperLimit);
+	yLowerLimitColumn->setValueAt(0, lowerLimit);
+	yLowerLimitColumn->setValueAt(1, lowerLimit);
+
+	lowerLimitCurve->setUndoAware(false);
+	lowerLimitCurve->setVisible(true);
+	lowerLimitCurve->setUndoAware(true);
 }
 
 void ProcessBehaviorChartPrivate::updateLabels() {
@@ -1402,7 +1449,7 @@ void ProcessBehaviorChartPrivate::updateLabels() {
 
 	const bool uniformLimitLabelsAvailable = !((type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U) && exactLimitsEnabled);
 	const bool lowerLimitAvailable = q->lowerLimitAvailable();
-	const bool validLimits = !std::isnan(center) && !std::isnan(upperLimit) && !std::isnan(lowerLimit);
+	const bool validLimits = std::isfinite(center) && std::isfinite(upperLimit) && std::isfinite(lowerLimit);
 
 	centerLabel->setVisible(labelsEnabled && validLimits);
 	upperLimitLabel->setVisible(labelsEnabled && validLimits && uniformLimitLabelsAvailable);
@@ -1500,6 +1547,9 @@ void ProcessBehaviorChart::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("minLowerLimit"), QString::number(d->minLowerLimit));
 	writer->writeAttribute(QStringLiteral("maxUpperLimit"), QString::number(d->maxUpperLimit));
 	writer->writeAttribute(QStringLiteral("exactLimitsEnabled"), QString::number(d->exactLimitsEnabled));
+	writer->writeAttribute(QStringLiteral("centerSpecification"), QString::number(d->centerSpecification));
+	writer->writeAttribute(QStringLiteral("lowerLimitSpecification"), QString::number(d->lowerLimitSpecification));
+	writer->writeAttribute(QStringLiteral("upperLimitSpecification"), QString::number(d->upperLimitSpecification));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeEndElement();
@@ -1581,6 +1631,9 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("minLowerLimit", minLowerLimit);
 			READ_DOUBLE_VALUE("maxUpperLimit", maxUpperLimit);
 			READ_INT_VALUE("exactLimitsEnabled", exactLimitsEnabled, bool);
+			READ_DOUBLE_VALUE("centerSpecification", centerSpecification);
+			READ_DOUBLE_VALUE("lowerLimitSpecification", lowerLimitSpecification);
+			READ_DOUBLE_VALUE("upperLimitSpecification", upperLimitSpecification);
 			READ_INT_VALUE("legendVisible", legendVisible, bool);
 
 			str = attribs.value(QStringLiteral("visible")).toString();

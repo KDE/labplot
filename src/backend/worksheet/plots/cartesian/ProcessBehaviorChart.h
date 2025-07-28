@@ -58,6 +58,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, exactLimitsEnabled, ExactLimitsEnabled)
 	BASIC_D_ACCESSOR_DECL(double, maxUpperLimit, MaxUpperLimit)
 	BASIC_D_ACCESSOR_DECL(double, minLowerLimit, MinLowerLimit)
+	BASIC_D_ACCESSOR_DECL(double, centerSpecification, CenterSpecification)
+	BASIC_D_ACCESSOR_DECL(double, lowerLimitSpecification, LowerLimitSpecification)
+	BASIC_D_ACCESSOR_DECL(double, upperLimitSpecification, UpperLimitSpecification)
 
 	BASIC_D_ACCESSOR_DECL(bool, labelsEnabled, LabelsEnabled)
 	BASIC_D_ACCESSOR_DECL(bool, labelsAutoPrecision, LabelsAutoPrecision)
@@ -133,6 +136,9 @@ Q_SIGNALS:
 	void limitConstraintsChanged();
 	void maxUpperLimitChanged(double);
 	void minLowerLimitChanged(double);
+	void centerSpecificationChanged(double);
+	void lowerLimitSpecificationChanged(double);
+	void upperLimitSpecificationChanged(double);
 
 	// labels for the control limits
 	void labelsEnabledChanged(bool);

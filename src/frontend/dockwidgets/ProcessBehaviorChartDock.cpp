@@ -52,6 +52,7 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	ui.cbType->addItem(QStringLiteral("C"), static_cast<int>(ProcessBehaviorChart::Type::C));
 	ui.cbType->addItem(QStringLiteral("U"), static_cast<int>(ProcessBehaviorChart::Type::U));
 
+	ui.leCenterSpecification->setValidator(new QDoubleValidator(ui.leUpperLimitSpecification));
 	ui.leUpperLimitSpecification->setValidator(new QDoubleValidator(ui.leUpperLimitSpecification));
 	ui.leLowerLimitSpecification->setValidator(new QDoubleValidator(ui.leLowerLimitSpecification));
 	ui.leMinLowerLimit->setValidator(new QDoubleValidator(ui.leMinLowerLimit));
@@ -107,6 +108,9 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	connect(ui.chbExactLimits, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::exactLimitsEnabledChanged);
 	connect(ui.leMaxUpperLimit, &QLineEdit::textChanged, this, &ProcessBehaviorChartDock::maxUpperLimitChanged);
 	connect(ui.leMinLowerLimit, &QLineEdit::textChanged, this, &ProcessBehaviorChartDock::minLowerLimitChanged);
+	connect(ui.leCenterSpecification, &QLineEdit::textChanged, this, &ProcessBehaviorChartDock::centerSpecificationChanged);
+	connect(ui.leLowerLimitSpecification, &QLineEdit::textChanged, this, &ProcessBehaviorChartDock::lowerLimitSpecificationChanged);
+	connect(ui.leUpperLimitSpecification, &QLineEdit::textChanged, this, &ProcessBehaviorChartDock::upperLimitSpecificationChanged);
 
 	// labels
 	connect(ui.chbLabelsEnabled, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::labelsEnabledChanged);
@@ -439,6 +443,47 @@ void ProcessBehaviorChartDock::exactLimitsEnabledChanged(bool enabled) {
 		plot->setExactLimitsEnabled(enabled);
 }
 
+void ProcessBehaviorChartDock::centerSpecificationChanged(const QString& value) {
+	double spec = NAN;
+	if (!value.isEmpty()) {
+		bool ok;
+		spec = QLocale().toDouble(value, &ok);
+		if (!ok)
+			return;
+	}
+
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plots)
+		plot->setCenterSpecification(spec);
+}
+
+void ProcessBehaviorChartDock::lowerLimitSpecificationChanged(const QString& value) {
+	double spec = NAN;
+	if (!value.isEmpty()) {
+		bool ok;
+		spec = QLocale().toDouble(value, &ok);
+		if (!ok)
+			return;
+	}
+
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plots)
+		plot->setLowerLimitSpecification(spec);
+}
+
+void ProcessBehaviorChartDock::upperLimitSpecificationChanged(const QString& value) {
+	double spec = NAN;
+	if (!value.isEmpty()) {
+		bool ok;
+		spec = QLocale().toDouble(value, &ok);
+		if (!ok)
+			return;
+	}
+
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* plot : m_plots)
+		plot->setUpperLimitSpecification(spec);;
+}
 /*!
  * toggle the properties for the lower limit line if the lower limit is not available,
  * called every time the chart is re-calculated since the precense of the lower limit
@@ -554,25 +599,41 @@ void ProcessBehaviorChartDock::plotSampleSizeChanged(int value) {
 	ui.sbSampleSize->setValue(value);
 }
 
+void setValue(QLineEdit* le, double value, const QLocale& locale) {
+	if (std::isfinite(value))
+		le->setText(locale.toString(value));
+	else
+		le->setText(QString());
+}
+
 void ProcessBehaviorChartDock::plotMinLowerLimitChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
-	if (value != -INFINITY)
-		ui.leMinLowerLimit->setText(QLocale().toString(value));
-	else
-		ui.leMinLowerLimit->setText(QString());
+	setValue(ui.leMinLowerLimit, value, QLocale());
 }
 
 void ProcessBehaviorChartDock::plotMaxUpperLimitChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
-	if (value != INFINITY)
-		ui.leMaxUpperLimit->setText(QLocale().toString(value));
-	else
-		ui.leMaxUpperLimit->setText(QString());
+	setValue(ui.leMaxUpperLimit, value, QLocale());
 }
 
 void ProcessBehaviorChartDock::plotExactLimitsEnabledChanged(bool enabled) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.chbExactLimits->setChecked(enabled);
+}
+
+void ProcessBehaviorChartDock::plotCenterSpecificationChanged(double value) {
+	CONDITIONAL_LOCK_RETURN;
+	setValue(ui.leCenterSpecification, value, QLocale());
+}
+
+void ProcessBehaviorChartDock::plotLowerLimitSpecificationChanged(double value) {
+	CONDITIONAL_LOCK_RETURN;
+	setValue(ui.leLowerLimitSpecification, value, QLocale());
+}
+
+void ProcessBehaviorChartDock::plotUpperLimitSpecificationChanged(double value) {
+	CONDITIONAL_LOCK_RETURN;
+	setValue(ui.leUpperLimitSpecification, value, QLocale());
 }
 
 // Labels-tab
@@ -636,6 +697,11 @@ void ProcessBehaviorChartDock::load() {
 	ui.cbType->setCurrentIndex(index);
 	typeChanged(index);
 
+	// type
+	index = ui.cbLimitsType->findData(static_cast<int>(m_plot->type()));
+	ui.cbLimitsType->setCurrentIndex(index);
+	limitsTypeChanged(index);
+
 	// limits metric
 	index = ui.cbLimitsMetric->findData(static_cast<int>(m_plot->limitsMetric()));
 	ui.cbLimitsMetric->setCurrentIndex(index);
@@ -645,17 +711,13 @@ void ProcessBehaviorChartDock::load() {
 
 	// constraints for the limits
 	const auto numberLocale = QLocale();
-	double value = m_plot->minLowerLimit();
-	if (value != -INFINITY)
-		ui.leMinLowerLimit->setText(QLocale().toString(value));
-	else
-		ui.leMinLowerLimit->setText(QString());
+	setValue(ui.leMinLowerLimit, m_plot->minLowerLimit(), numberLocale);
+	setValue(ui.leMaxUpperLimit, m_plot->maxUpperLimit(), numberLocale);
 
-	value = m_plot->maxUpperLimit();
-	if (value != INFINITY)
-		ui.leMaxUpperLimit->setText(QLocale().toString(value));
-	else
-		ui.leMaxUpperLimit->setText(QString());
+	// specification values
+	setValue(ui.leCenterSpecification, m_plot->centerSpecification(), numberLocale);
+	setValue(ui.leLowerLimitSpecification, m_plot->lowerLimitSpecification(), numberLocale);
+	setValue(ui.leUpperLimitSpecification, m_plot->upperLimitSpecification(), numberLocale);
 
 	// user exact/individual limits, relevant for P and U charts only
 	ui.chbExactLimits->setChecked(m_plot->exactLimitsEnabled());
@@ -693,7 +755,7 @@ void ProcessBehaviorChartDock::loadConfig(KConfig& config) {
 
 	// limits type
 	const auto limitsType = group.readEntry(QStringLiteral("LimitsType"), static_cast<int>(m_plot->limitsType()));
-	index = ui.cbType->findData(static_cast<int>(limitsType));
+	index = ui.cbLimitsType->findData(static_cast<int>(limitsType));
 	ui.cbLimitsType->setCurrentIndex(index);
 	limitsTypeChanged(index);
 

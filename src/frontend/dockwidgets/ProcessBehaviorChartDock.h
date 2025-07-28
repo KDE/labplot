@@ -67,6 +67,9 @@ private Q_SLOTS:
 	void minLowerLimitChanged(const QString&);
 	void exactLimitsEnabledChanged(bool);
 	void updateLowerLimitWidgets();
+	void centerSpecificationChanged(const QString&);
+	void lowerLimitSpecificationChanged(const QString&);
+	void upperLimitSpecificationChanged(const QString&);
 
 	// Labels-tab
 	void labelsEnabledChanged(bool);
@@ -88,6 +91,9 @@ private Q_SLOTS:
 	void plotMaxUpperLimitChanged(double);
 	void plotMinLowerLimitChanged(double);
 	void plotExactLimitsEnabledChanged(bool);
+	void plotCenterSpecificationChanged(double);
+	void plotLowerLimitSpecificationChanged(double);
+	void plotUpperLimitSpecificationChanged(double);
 
 	// Labels-tab
 	void plotLabelsEnabledChanged(bool);
