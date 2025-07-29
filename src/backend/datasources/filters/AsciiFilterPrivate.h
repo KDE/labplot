@@ -11,7 +11,7 @@
 #define ASCIIFILTERPRIVATE_H
 
 #include "AsciiFilter.h"
-#include "AsciiFilterStatus.h"
+#include "FilterStatus.h"
 #include <QString>
 
 struct Status;
