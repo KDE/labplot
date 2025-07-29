@@ -698,7 +698,7 @@ void ProcessBehaviorChartDock::load() {
 	typeChanged(index);
 
 	// type
-	index = ui.cbLimitsType->findData(static_cast<int>(m_plot->type()));
+	index = ui.cbLimitsType->findData(static_cast<int>(m_plot->limitsType()));
 	ui.cbLimitsType->setCurrentIndex(index);
 	limitsTypeChanged(index);
 

@@ -161,11 +161,11 @@ void ProcessBehaviorChart::init(bool loading) {
 	KConfigGroup group = config.group(QStringLiteral("ProcessBehaviorChart"));
 
 	// general properties
-	d->type = static_cast<ProcessBehaviorChart::Type>(group.readEntry(QStringLiteral("Type"), static_cast<int>(ProcessBehaviorChart::Type::XmR)));
-	d->limitsType = static_cast<ProcessBehaviorChart::LimitsType>(group.readEntry(QStringLiteral("LimitsType"), static_cast<int>(ProcessBehaviorChart::LimitsType::Statistical)));
+	d->type = static_cast<Type>(group.readEntry(QStringLiteral("Type"), static_cast<int>(Type::XmR)));
+	d->limitsType = static_cast<LimitsType>(group.readEntry(QStringLiteral("LimitsType"), static_cast<int>(LimitsType::Statistical)));
 	d->sampleSize = group.readEntry(QStringLiteral("SampleSize"), 5);
-	d->limitsMetric = static_cast<ProcessBehaviorChart::LimitsMetric>(
-		group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(ProcessBehaviorChart::LimitsMetric::Average)));
+	d->limitsMetric = static_cast<LimitsMetric>(
+		group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(LimitsMetric::Average)));
 	// TODO: limit contraints and specifications?
 	d->exactLimitsEnabled = group.readEntry(QStringLiteral("ExactLimitsEnabled"), true);
 
@@ -545,21 +545,21 @@ void ProcessBehaviorChart::setData2ColumnPath(const QString& path) {
 }
 
 STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetType, ProcessBehaviorChart::Type, type, recalc)
-void ProcessBehaviorChart::setType(ProcessBehaviorChart::Type type) {
+void ProcessBehaviorChart::setType(Type type) {
 	Q_D(ProcessBehaviorChart);
 	if (type != d->type)
 		exec(new ProcessBehaviorChartSetTypeCmd(d, type, ki18n("%1: set type")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetLimitsType, ProcessBehaviorChart::LimitsType, limitsType, recalc)
-void ProcessBehaviorChart::setLimitsType(ProcessBehaviorChart::LimitsType limitsType) {
+void ProcessBehaviorChart::setLimitsType(LimitsType limitsType) {
 	Q_D(ProcessBehaviorChart);
 	if (limitsType != d->limitsType)
 		exec(new ProcessBehaviorChartSetLimitsTypeCmd(d, limitsType, ki18n("%1: set limits type")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(ProcessBehaviorChart, SetLimitsMetric, ProcessBehaviorChart::LimitsMetric, limitsMetric, recalc)
-void ProcessBehaviorChart::setLimitsMetric(ProcessBehaviorChart::LimitsMetric limitsMetric) {
+void ProcessBehaviorChart::setLimitsMetric(LimitsMetric limitsMetric) {
 	Q_D(ProcessBehaviorChart);
 	if (limitsMetric != d->limitsMetric)
 		exec(new ProcessBehaviorChartSetLimitsMetricCmd(d, limitsMetric, ki18n("%1: set limits metric")));
@@ -1399,7 +1399,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		if (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::XbarS)
 			lowerLimitCurve->setVisible(true); // lower limit line is always visible
 		else if (type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::S
-				|| type == ProcessBehaviorChart::Type::C) {
+				 || type == ProcessBehaviorChart::Type::C) {
 			if (lowerLimit == 0.)
 				lowerLimitCurve->setVisible(false);
 			else
@@ -1624,9 +1624,9 @@ bool ProcessBehaviorChart::load(XmlStreamReader* reader, bool preview) {
 			READ_COLUMN(yUpperLimitColumn);
 			READ_COLUMN(xLowerLimitColumn);
 			READ_COLUMN(yLowerLimitColumn);
-			READ_INT_VALUE("type", type, ProcessBehaviorChart::Type);
-			READ_INT_VALUE("limitsType", limitsType, ProcessBehaviorChart::LimitsType);
-			READ_INT_VALUE("limitsMetric", limitsMetric, ProcessBehaviorChart::LimitsMetric);
+			READ_INT_VALUE("type", type, Type);
+			READ_INT_VALUE("limitsType", limitsType, LimitsType);
+			READ_INT_VALUE("limitsMetric", limitsMetric, LimitsMetric);
 			READ_INT_VALUE("sampleSize", sampleSize, int);
 			READ_DOUBLE_VALUE("minLowerLimit", minLowerLimit);
 			READ_DOUBLE_VALUE("maxUpperLimit", maxUpperLimit);
