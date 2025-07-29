@@ -364,7 +364,6 @@
     <rejection class="^.*Filter$" function-name="fileInfoString"/>
     <object-type name="AsciiFilter" disable-wrapper="yes">
         <value-type name="Properties" disable-wrapper="yes"/>
-        <enum-type name="Status"/>
     </object-type>
     <object-type name="BinaryFilter" disable-wrapper="yes">
         <enum-type name="DataType"/>
