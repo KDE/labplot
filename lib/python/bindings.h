@@ -33,7 +33,6 @@
 
 // filters
 #include "src/backend/datasources/filters/AsciiFilter.h"
-#include "src/backend/datasources/filters/AsciiFilterStatus.h"
 #include "src/backend/datasources/filters/BinaryFilter.h"
 #include "src/backend/datasources/filters/CANFilter.h"
 #include "src/backend/datasources/filters/FITSFilter.h"

@@ -365,11 +365,6 @@
     <object-type name="AsciiFilter" disable-wrapper="yes">
         <value-type name="Properties" disable-wrapper="yes"/>
     </object-type>
-    <rejection class="Status" function-name="*"/>
-    <object-type name="Status" disable-wrapper="yes">
-        <declare-function signature="success()const" return-type="bool"/>
-        <declare-function signature="message()const" return-type="QString"/>
-    </object-type>
     <object-type name="BinaryFilter" disable-wrapper="yes">
         <enum-type name="DataType"/>
     </object-type>
