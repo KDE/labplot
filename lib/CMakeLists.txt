@@ -12,6 +12,7 @@ set(SRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 include(GenerateExportHeader)
 
 set(FILTER_SOURCES
+    ${BACKEND_DIR}/datasources/filters/FilterStatus.cpp
     ${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
     ${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
     ${BACKEND_DIR}/datasources/filters/CANFilter.cpp
