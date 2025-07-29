@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-28 00:38+0000\n"
-"PO-Revision-Date: 2025-06-28 20:38+0200\n"
+"PO-Revision-Date: 2025-07-28 22:43+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.04.1\n"
+"X-Generator: Lokalize 25.04.2\n"
 
 #: src/backend/core/AbstractAspect.cpp:234
 #, kde-format
@@ -14398,6 +14398,7 @@ msgstr "beräkningstid: %1 ms"
 #, kde-format
 msgid "Click this button or press Shift+Enter to recalculate the result."
 msgstr ""
+"Klicka på knappen eller tryck på Skift+Retur för att beräkna om resultatet."
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:75
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:408
@@ -16827,7 +16828,7 @@ msgstr ""
 #: src/frontend/SettingsGeneralPage.cpp:288
 #, kde-format
 msgid "If enabled spreadsheet and matrix data is saved in the project file"
-msgstr ""
+msgstr "Om aktiverat sparas kalkylark och matrisdata i projektfilen"
 
 #: src/frontend/SettingsNotebookPage.cpp:30
 #, kde-format
@@ -22112,10 +22113,9 @@ msgstr "Version:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: src/frontend/ui/dockwidgets/projectdock.ui:214
-#, fuzzy, kde-format
-#| msgid "Compressed"
+#, kde-format
 msgid "Compress File:"
-msgstr "Komprimerad"
+msgstr "Komprimera fil:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/frontend/ui/dockwidgets/projectdock.ui:237
@@ -22148,7 +22148,7 @@ msgstr "Spara beräkningar:"
 #: src/frontend/ui/dockwidgets/projectdock.ui:305
 #, kde-format
 msgid "Save Data in File:"
-msgstr ""
+msgstr "Spara data i fil:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:113
@@ -22534,19 +22534,17 @@ msgstr "Ekvation"
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:444
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:61
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:70
-#, fuzzy, kde-format
-#| msgid "Clausen function"
+#, kde-format
 msgid "Load a custom function"
-msgstr "Clausen-funktion"
+msgstr "Läs in en egen funktion"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbSaveFunction)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:457
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:74
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:83
-#, fuzzy, kde-format
-#| msgid "Clausen function"
+#, kde-format
 msgid "Save a custom function"
-msgstr "Clausen-funktion"
+msgstr "Spara en egen funktion"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:93
@@ -23618,24 +23616,21 @@ msgstr "Spara automatiskt:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:273
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Save projects in a compatible format that can be "
-#| "opened in LabPlot versions older than 2.9.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Save projects in a uncompressed xml format that can be "
 "opened in LabPlot versions older than 2.9 and are useful for version "
 "controlled projects</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Spara projekt med ett kompatibelt format som kan "
-"öppnas i versioner av LabPlot äldre än 2.9.</p></body></html>"
+"<html><head/><body><p>Spara projekt med ett okomprimerat XML-format som kan "
+"öppnas i versioner av LabPlot äldre än 2.9 och är användbart för "
+"versionskontrollerade projekt.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:276
-#, fuzzy, kde-format
-#| msgid "Save in compatible format"
+#, kde-format
 msgid "Save in uncompressed format"
-msgstr "Spara med kompatibelt format"
+msgstr "Spara med okomprimerat format"
 
 #. i18n: ectx: property (text), widget (QLabel, lTracing)
 #: src/frontend/ui/settingsgeneralpage.ui:283
@@ -23645,10 +23640,9 @@ msgstr "Spårning:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
 #: src/frontend/ui/settingsgeneralpage.ui:290
-#, fuzzy, kde-format
-#| msgid "Compression"
+#, kde-format
 msgid "Compression:"
-msgstr "Komprimering"
+msgstr "Komprimering:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnits)
 #: src/frontend/ui/settingsgeneralpage.ui:329
@@ -23690,10 +23684,9 @@ msgstr "Placering av dockningskomponent:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveData)
 #: src/frontend/ui/settingsgeneralpage.ui:453
-#, fuzzy, kde-format
-#| msgid "Open a project file."
+#, kde-format
 msgid "Save Data in Project file:"
-msgstr "Öppna en projektfil."
+msgstr "Spara data i projektfil:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
