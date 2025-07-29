@@ -385,6 +385,7 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/datasources/DatasetHandler.cpp
     ${BACKEND_DIR}/datasources/LiveDataSource.cpp
     ${BACKEND_DIR}/datasources/filters/AbstractFileFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/FilterStatus.cpp
     ${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
     ${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
     ${BACKEND_DIR}/datasources/filters/XLSXFilter.cpp

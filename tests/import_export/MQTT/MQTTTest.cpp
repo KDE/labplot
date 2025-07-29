@@ -17,7 +17,7 @@
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
 #include "backend/datasources/filters/AsciiFilter.h"
-#include "backend/datasources/filters/AsciiFilterStatus.h"
+#include "backend/datasources/filters/FilterStatus.h"
 #include "frontend/dockwidgets/LiveDataDock.h"
 
 #include <QDebug>

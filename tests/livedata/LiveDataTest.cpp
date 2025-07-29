@@ -11,7 +11,7 @@
 #include "backend/core/Project.h"
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/datasources/filters/AsciiFilter.h"
-#include "backend/datasources/filters/AsciiFilterStatus.h"
+#include "backend/datasources/filters/FilterStatus.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"

@@ -7,7 +7,7 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "AsciiFilterStatus.h"
+#include "FilterStatus.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include <QIODevice>
 #include <memory>

@@ -13,7 +13,7 @@
 #include "backend/core/Project.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/filters/AsciiFilterPrivate.h"
-#include "backend/datasources/filters/AsciiFilterStatus.h"
+#include "backend/datasources/filters/FilterStatus.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"
