@@ -166,7 +166,6 @@ void ImportFileDialog::importToMQTT(MQTTClient* client) const {
   triggers data import to the currently selected data container
 */
 bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
-	DEBUG(Q_FUNC_INFO);
 	QDEBUG("	cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 	if (!aspect) {
@@ -178,6 +177,7 @@ bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	}
 
 	QString fileName = m_importFileWidget->fileName();
+	DEBUG(Q_FUNC_INFO << ", file name: " << fileName.toStdString());
 	auto mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
 
 	// show a progress bar in the status bar
@@ -204,6 +204,8 @@ bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	} else if (aspect->inherits(AspectType::Spreadsheet)) {
 		DEBUG(Q_FUNC_INFO << ", to Spreadsheet");
 		auto* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
+		DEBUG("CALLING filter->readDataFromFile()")
+		// TODO: which extension (table) is imported?
 		filter->readDataFromFile(fileName, spreadsheet, mode);
 	} else if (aspect->inherits(AspectType::Workbook)) {
 		DEBUG(Q_FUNC_INFO << ", to Workbook");
@@ -211,7 +213,7 @@ bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		workbook->setUndoAware(false);
 		auto sheets = workbook->children<AbstractAspect>();
 
-		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
+		auto fileType = m_importFileWidget->currentFileType();
 		// types supporting multiple data sets/variables
 		if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::NETCDF || fileType == AbstractFileFilter::FileType::ROOT
 			|| fileType == AbstractFileFilter::FileType::MATIO || fileType == AbstractFileFilter::FileType::XLSX

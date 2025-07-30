@@ -876,7 +876,7 @@ void ProcessBehaviorChartPrivate::recalc() {
 		Q_EMIT q->recalculated();
 
 		// notify the dock widget if the sample size is bigger than the number of rows in the data column
-		if (count == 0)
+		if (dataColumn && count == 0)
 			Q_EMIT q->statusInfo(i18n("Not enough data provided."));
 
 		return;
@@ -1393,12 +1393,13 @@ void ProcessBehaviorChartPrivate::updateLabels() {
 
 	const bool uniformLimitLabelsAvailable = !((type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U) && exactLimitsEnabled);
 	const bool lowerLimitAvailable = q->lowerLimitAvailable();
+	const bool validLimits = !std::isnan(center) && !std::isnan(upperLimit) && !std::isnan(lowerLimit);
 
-	centerLabel->setVisible(labelsEnabled);
-	upperLimitLabel->setVisible(labelsEnabled && uniformLimitLabelsAvailable);
-	lowerLimitLabel->setVisible(labelsEnabled && lowerLimitAvailable && uniformLimitLabelsAvailable);
+	centerLabel->setVisible(labelsEnabled && validLimits);
+	upperLimitLabel->setVisible(labelsEnabled && validLimits && uniformLimitLabelsAvailable);
+	lowerLimitLabel->setVisible(labelsEnabled && validLimits && lowerLimitAvailable && uniformLimitLabelsAvailable);
 
-	if (labelsEnabled) {
+	if (labelsEnabled && validLimits) {
 		const auto numberLocale = QLocale();
 		if (labelsAutoPrecision) {
 			centerLabel->setText(numberLocale.toString(center));
