@@ -39,7 +39,7 @@ void SerialPortTest::initTestCase() {
 	QVERIFY(waitForSignal(&m_process_socat, &QProcess::readyReadStandardError, 5000));
 
 	const auto se = UTF8_QSTRING(m_process_socat.readAllStandardError()); // Socat uses stderr for output by default
-	DEBUG("Output:" << STDSTRING(se));
+	DEBUG(Q_FUNC_INFO << ", Output:" << STDSTRING(se));
 
 	QRegularExpression re(QStringLiteral(".*(?<device>/dev/[a-zA-z0-9]*/[0-9]*)$"));
 
@@ -87,7 +87,7 @@ void SerialPortTest::testReading() {
 	properties.headerEnabled = false;
 	properties.columnModesString = QStringLiteral("Int,Int,Double");
 	properties.intAsDouble = false;
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success); // Livedata must be initialized!
+	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success); // Live data must be initialized!
 
 	// initialize the live data source
 	LiveDataSource dataSource(QStringLiteral("test"), false);
