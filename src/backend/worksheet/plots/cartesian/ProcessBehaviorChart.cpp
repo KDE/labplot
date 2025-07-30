@@ -164,9 +164,8 @@ void ProcessBehaviorChart::init(bool loading) {
 	d->type = static_cast<Type>(group.readEntry(QStringLiteral("Type"), static_cast<int>(Type::XmR)));
 	d->limitsType = static_cast<LimitsType>(group.readEntry(QStringLiteral("LimitsType"), static_cast<int>(LimitsType::Statistical)));
 	d->sampleSize = group.readEntry(QStringLiteral("SampleSize"), 5);
-	d->limitsMetric = static_cast<LimitsMetric>(
-		group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(LimitsMetric::Average)));
-	// TODO: limit contraints and specifications?
+	d->limitsMetric = static_cast<LimitsMetric>(group.readEntry(QStringLiteral("LimitsMetric"), static_cast<int>(LimitsMetric::Average)));
+	// TODO: limit constraints and specifications?
 	d->exactLimitsEnabled = group.readEntry(QStringLiteral("ExactLimitsEnabled"), true);
 
 	d->dataCurve->line()->init(group);
