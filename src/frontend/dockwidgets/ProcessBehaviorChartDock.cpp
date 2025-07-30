@@ -106,11 +106,11 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	connect(ui.cbLimitsMetric, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProcessBehaviorChartDock::limitsMetricChanged);
 	connect(ui.sbSampleSize, &QSpinBox::valueChanged, this, &ProcessBehaviorChartDock::sampleSizeChanged);
 	connect(ui.chbExactLimits, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::exactLimitsEnabledChanged);
-	connect(ui.leMaxUpperLimit, &QLineEdit::textChanged, this, &ProcessBehaviorChartDock::maxUpperLimitChanged);
-	connect(ui.leMinLowerLimit, &QLineEdit::textChanged, this, &ProcessBehaviorChartDock::minLowerLimitChanged);
-	connect(ui.leCenterSpecification, &QLineEdit::textChanged, this, &ProcessBehaviorChartDock::centerSpecificationChanged);
-	connect(ui.leLowerLimitSpecification, &QLineEdit::textChanged, this, &ProcessBehaviorChartDock::lowerLimitSpecificationChanged);
-	connect(ui.leUpperLimitSpecification, &QLineEdit::textChanged, this, &ProcessBehaviorChartDock::upperLimitSpecificationChanged);
+	connect(ui.leMaxUpperLimit, &TimedLineEdit::textEdited, this, &ProcessBehaviorChartDock::maxUpperLimitChanged);
+	connect(ui.leMinLowerLimit, &TimedLineEdit::textEdited, this, &ProcessBehaviorChartDock::minLowerLimitChanged);
+	connect(ui.leCenterSpecification, &TimedLineEdit::textEdited, this, &ProcessBehaviorChartDock::centerSpecificationChanged);
+	connect(ui.leLowerLimitSpecification, &TimedLineEdit::textEdited, this, &ProcessBehaviorChartDock::lowerLimitSpecificationChanged);
+	connect(ui.leUpperLimitSpecification, &TimedLineEdit::textEdited, this, &ProcessBehaviorChartDock::upperLimitSpecificationChanged);
 
 	// labels
 	connect(ui.chbLabelsEnabled, &QCheckBox::clicked, this, &ProcessBehaviorChartDock::labelsEnabledChanged);
@@ -409,8 +409,9 @@ void ProcessBehaviorChartDock::sampleSizeChanged(int value) {
 		plot->setSampleSize(value);
 }
 
-void ProcessBehaviorChartDock::maxUpperLimitChanged(const QString& value) {
+void ProcessBehaviorChartDock::maxUpperLimitChanged() {
 	double max = INFINITY;
+	const QString& value = ui.leMaxUpperLimit->text();
 	if (!value.isEmpty()) {
 		bool ok;
 		max = QLocale().toDouble(value, &ok);
@@ -423,8 +424,9 @@ void ProcessBehaviorChartDock::maxUpperLimitChanged(const QString& value) {
 		plot->setMaxUpperLimit(max);;
 }
 
-void ProcessBehaviorChartDock::minLowerLimitChanged(const QString& value) {
+void ProcessBehaviorChartDock::minLowerLimitChanged() {
 	double min = -INFINITY;
+	const QString& value = ui.leMinLowerLimit->text();
 	if (!value.isEmpty()) {
 		bool ok;
 		min = QLocale().toDouble(value, &ok);
@@ -443,8 +445,9 @@ void ProcessBehaviorChartDock::exactLimitsEnabledChanged(bool enabled) {
 		plot->setExactLimitsEnabled(enabled);
 }
 
-void ProcessBehaviorChartDock::centerSpecificationChanged(const QString& value) {
+void ProcessBehaviorChartDock::centerSpecificationChanged() {
 	double spec = NAN;
+	const QString& value = ui.leCenterSpecification->text();
 	if (!value.isEmpty()) {
 		bool ok;
 		spec = QLocale().toDouble(value, &ok);
@@ -457,8 +460,9 @@ void ProcessBehaviorChartDock::centerSpecificationChanged(const QString& value) 
 		plot->setCenterSpecification(spec);
 }
 
-void ProcessBehaviorChartDock::lowerLimitSpecificationChanged(const QString& value) {
+void ProcessBehaviorChartDock::lowerLimitSpecificationChanged() {
 	double spec = NAN;
+	const QString& value = ui.leLowerLimitSpecification->text();
 	if (!value.isEmpty()) {
 		bool ok;
 		spec = QLocale().toDouble(value, &ok);
@@ -471,8 +475,9 @@ void ProcessBehaviorChartDock::lowerLimitSpecificationChanged(const QString& val
 		plot->setLowerLimitSpecification(spec);
 }
 
-void ProcessBehaviorChartDock::upperLimitSpecificationChanged(const QString& value) {
+void ProcessBehaviorChartDock::upperLimitSpecificationChanged() {
 	double spec = NAN;
+	const QString& value = ui.leUpperLimitSpecification->text();
 	if (!value.isEmpty()) {
 		bool ok;
 		spec = QLocale().toDouble(value, &ok);

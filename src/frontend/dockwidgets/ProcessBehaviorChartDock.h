@@ -63,13 +63,13 @@ private Q_SLOTS:
 	void limitsTypeChanged(int);
 	void limitsMetricChanged(int);
 	void sampleSizeChanged(int);
-	void maxUpperLimitChanged(const QString&);
-	void minLowerLimitChanged(const QString&);
+	void maxUpperLimitChanged();
+	void minLowerLimitChanged();
 	void exactLimitsEnabledChanged(bool);
 	void updateLowerLimitWidgets();
-	void centerSpecificationChanged(const QString&);
-	void lowerLimitSpecificationChanged(const QString&);
-	void upperLimitSpecificationChanged(const QString&);
+	void centerSpecificationChanged();
+	void lowerLimitSpecificationChanged();
+	void upperLimitSpecificationChanged();
 
 	// Labels-tab
 	void labelsEnabledChanged(bool);
