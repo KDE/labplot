@@ -1267,7 +1267,6 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 								   plotModelIndex);
 
 			// y values
-
 			const auto numCurves = treeModel->rowCount(plotModelIndex);
 			const auto& curves = sender->children<XYCurve>();
 			for (int rowCurve = 1; rowCurve < numCurves; rowCurve++) { // First is the x value
@@ -1296,9 +1295,7 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 											   static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF),
 											   plotModelIndex);
 					}
-					break;
 				}
-				break;
 			}
 		}
 	}

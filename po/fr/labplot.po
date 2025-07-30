@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-23 00:39+0000\n"
+"POT-Creation-Date: 2025-07-28 00:38+0000\n"
 "PO-Revision-Date: 2025-07-16 09:30+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -83,7 +83,7 @@ msgstr "Haut"
 msgid "Down"
 msgstr "En bas"
 
-#: src/backend/core/AbstractAspect.cpp:525
+#: src/backend/core/AbstractAspect.cpp:529
 #: src/backend/core/aspectcommands.h:171
 #: src/backend/datapicker/Datapicker.cpp:227
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2230
@@ -91,59 +91,59 @@ msgstr "En bas"
 msgid "%1: add %2"
 msgstr "%1 : ajouter %2"
 
-#: src/backend/core/AbstractAspect.cpp:527
-#: src/backend/core/AbstractAspect.cpp:564
+#: src/backend/core/AbstractAspect.cpp:531
+#: src/backend/core/AbstractAspect.cpp:568
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
 msgstr "Renomme « %1 » vers « %2 » pour éviter un conflit de nom."
 
-#: src/backend/core/AbstractAspect.cpp:562
+#: src/backend/core/AbstractAspect.cpp:566
 #, kde-format
 msgid "%1: insert %2 before %3"
 msgstr "%1 : insérer %2 avant %3"
 
-#: src/backend/core/AbstractAspect.cpp:562
+#: src/backend/core/AbstractAspect.cpp:566
 #, kde-format
 msgid "%1: insert %2 before end"
 msgstr "%1 : insérer %2 avant la fin"
 
-#: src/backend/core/AbstractAspect.cpp:597
+#: src/backend/core/AbstractAspect.cpp:601
 #: src/backend/core/aspectcommands.h:102
 #, kde-format
 msgid "%1: remove %2"
 msgstr "%1 : supprimer %2"
 
-#: src/backend/core/AbstractAspect.cpp:610
+#: src/backend/core/AbstractAspect.cpp:614
 #, kde-format
 msgid "%1: remove all children"
 msgstr "%1 : supprimer tous les enfants"
 
-#: src/backend/core/AbstractAspect.cpp:722
+#: src/backend/core/AbstractAspect.cpp:726
 #, kde-format
 msgid "%1: pasted"
 msgstr "%1 : collé"
 
-#: src/backend/core/AbstractAspect.cpp:816
+#: src/backend/core/AbstractAspect.cpp:820
 #, kde-format
 msgid "%1: pasted '%2'"
 msgstr "%1 : collage de « %2 »"
 
-#: src/backend/core/AbstractAspect.cpp:818
+#: src/backend/core/AbstractAspect.cpp:822
 #, kde-format
 msgid "%1: duplicated '%2'"
 msgstr "%1 : duplicata de « %2 »"
 
-#: src/backend/core/AbstractAspect.cpp:819
+#: src/backend/core/AbstractAspect.cpp:823
 #, kde-format
 msgid "Copy of '%1'"
 msgstr "Copie de « %1 »"
 
-#: src/backend/core/AbstractAspect.cpp:961
+#: src/backend/core/AbstractAspect.cpp:965
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr "L'attribut « nom » n'existe pas ou est vide."
 
-#: src/backend/core/AbstractAspect.cpp:968
+#: src/backend/core/AbstractAspect.cpp:972
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr ""
@@ -419,7 +419,7 @@ msgid "incompatible filter type"
 msgstr "Type de filtre incompatible"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:154 src/backend/core/Project.cpp:712
+#: src/backend/core/Folder.cpp:154 src/backend/core/Project.cpp:721
 #: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
@@ -489,7 +489,7 @@ msgid "%1   (no values)"
 msgstr "%1 (aucune valeur)"
 
 #: src/backend/core/AspectTreeModel.cpp:236
-#: src/frontend/datasources/ImportFileWidget.cpp:1651
+#: src/frontend/datasources/ImportFileWidget.cpp:1654
 #, kde-format
 msgid "Size: %1"
 msgstr "Taille : %1"
@@ -587,14 +587,14 @@ msgstr "%1 : effacer la colonne"
 msgid "%1: set random values"
 msgstr "%1 : définir avec des valeurs aléatoires"
 
-#: src/backend/core/column/Column.cpp:1593
+#: src/backend/core/column/Column.cpp:1600
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "Index de ligne non valable ou manquant"
 
-#: src/backend/core/column/Column.cpp:1602
-#: src/backend/core/column/Column.cpp:1611
-#: src/backend/core/column/Column.cpp:1620
+#: src/backend/core/column/Column.cpp:1609
+#: src/backend/core/column/Column.cpp:1618
+#: src/backend/core/column/Column.cpp:1627
 #, kde-format
 msgid "invalid row value"
 msgstr "valeur de ligne non valable"
@@ -688,53 +688,53 @@ msgid "Not yet loaded."
 msgstr "Pas encore chargé"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbProject)
-#: src/backend/core/Project.cpp:184
+#: src/backend/core/Project.cpp:185
 #: src/frontend/ui/datasources/importprojectwidget.ui:17
 #, kde-format
 msgid "Project"
 msgstr "Projet"
 
-#: src/backend/core/Project.cpp:300
+#: src/backend/core/Project.cpp:302
 #, kde-format
 msgid "%1: set author"
 msgstr "%1 : définir l'auteur"
 
-#: src/backend/core/Project.cpp:307
+#: src/backend/core/Project.cpp:309
 #, kde-format
 msgid "%1: save dock state changed"
 msgstr "%1 : enregistrer les modifications de l'état des panneaux"
 
-#: src/backend/core/Project.cpp:314
+#: src/backend/core/Project.cpp:316
 #, kde-format
 msgid "%1: save calculation changed"
 msgstr "%1 : le calcul enregistré a été modifié"
 
-#: src/backend/core/Project.cpp:556 src/backend/core/Project.cpp:586
+#: src/backend/core/Project.cpp:565 src/backend/core/Project.cpp:595
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Impossible d'ouvrir le fichier en lecture."
 
-#: src/backend/core/Project.cpp:567 src/backend/core/Project.cpp:593
+#: src/backend/core/Project.cpp:576 src/backend/core/Project.cpp:602
 #, kde-format
 msgid "The project file is empty."
 msgstr "Le fichier projet est vide."
 
-#: src/backend/core/Project.cpp:567 src/backend/core/Project.cpp:593
+#: src/backend/core/Project.cpp:576 src/backend/core/Project.cpp:602
 #, kde-format
 msgid "Error opening project"
 msgstr "Erreur à l'ouverture du projet"
 
-#: src/backend/core/Project.cpp:612
+#: src/backend/core/Project.cpp:621
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Erreur inconnue lors de l'ouverture du projet %1."
 
-#: src/backend/core/Project.cpp:613
+#: src/backend/core/Project.cpp:622
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Erreur à l'ouverture du projet"
 
-#: src/backend/core/Project.cpp:633
+#: src/backend/core/Project.cpp:642
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -752,43 +752,43 @@ msgstr ""
 "\n"
 "Voulez-vous vraiment continuer ?"
 
-#: src/backend/core/Project.cpp:639
+#: src/backend/core/Project.cpp:648
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "Absence de prise en charge de « CAS »"
 
-#: src/backend/core/Project.cpp:669
+#: src/backend/core/Project.cpp:678
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "L'attribut « version » manque."
 
-#: src/backend/core/Project.cpp:719
+#: src/backend/core/Project.cpp:728
 #, kde-format
 msgid "no project element found"
 msgstr "Aucun élément projet trouvé"
 
-#: src/backend/core/Project.cpp:721
+#: src/backend/core/Project.cpp:730
 #, kde-format
 msgid "no valid XML document found"
 msgstr "aucun document XML valable trouvé"
 
-#: src/backend/core/Project.cpp:771 src/backend/core/Project.cpp:777
-#: src/backend/core/Project.cpp:828
+#: src/backend/core/Project.cpp:780 src/backend/core/Project.cpp:786
+#: src/backend/core/Project.cpp:837
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "Impossible d'ouvrir le fichier « %1 »."
 
-#: src/backend/core/Project.cpp:834
+#: src/backend/core/Project.cpp:843
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "Impossible de traiter le contenu du fichier « %1 »."
 
-#: src/backend/core/Project.cpp:837
+#: src/backend/core/Project.cpp:846
 #, kde-format
 msgid "Failed to open project"
 msgstr "Impossible d'ouvrir le projet"
 
-#: src/backend/core/Project.cpp:1285
+#: src/backend/core/Project.cpp:1294
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr ""
@@ -1290,9 +1290,9 @@ msgstr "Impossible d'ouvrir le périphérique / fichier ou celui-ci est vide."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:301
-#: src/backend/datasources/filters/FITSFilter.cpp:334
-#: src/backend/datasources/filters/FITSFilter.cpp:344
-#: src/backend/datasources/filters/FITSFilter.cpp:539
+#: src/backend/datasources/filters/FITSFilter.cpp:351
+#: src/backend/datasources/filters/FITSFilter.cpp:361
+#: src/backend/datasources/filters/FITSFilter.cpp:556
 #: src/backend/datasources/filters/HDF5Filter.cpp:1642
 #: src/backend/datasources/filters/HDF5Filter.cpp:1759
 #: src/backend/datasources/filters/HDF5Filter.cpp:1809
@@ -1327,63 +1327,62 @@ msgstr "Fichier non valable."
 msgid "No messages read."
 msgstr "Aucun message lu."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:229
+#: src/backend/datasources/filters/FITSFilter.cpp:239
 #, kde-format
 msgid "Images: %1"
 msgstr "Images %1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:234
+#: src/backend/datasources/filters/FITSFilter.cpp:244
 #, kde-format
 msgid "Tables: %1"
 msgstr "Tableaux : %1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:264
+#: src/backend/datasources/filters/FITSFilter.cpp:281
 #: src/backend/datasources/filters/MatioFilter.cpp:647
 #, kde-format
 msgid "Failed to open the file."
 msgstr "Impossible d'ouvrir le fichier."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:272
-#: src/backend/datasources/filters/FITSFilter.cpp:351
+#: src/backend/datasources/filters/FITSFilter.cpp:288
+#: src/backend/datasources/filters/FITSFilter.cpp:368
 #, kde-format
 msgid "Failed to read the file."
 msgstr "Impossible de lire le fichier."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:293
+#: src/backend/datasources/filters/FITSFilter.cpp:310
 #, kde-format
 msgid "Zero dimensions."
 msgstr "Zéro dimensions."
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1037
-#: src/backend/datasources/filters/FITSFilter.cpp:1557
-#: src/frontend/datasources/FITSOptionsWidget.cpp:42
-#: src/frontend/datasources/FITSOptionsWidget.cpp:75
-#: src/frontend/datasources/FITSOptionsWidget.cpp:144
+#: src/backend/datasources/filters/FITSFilter.cpp:1060
+#: src/backend/datasources/filters/FITSFilter.cpp:1580
+#: src/frontend/datasources/FITSOptionsWidget.cpp:40
+#: src/frontend/datasources/FITSOptionsWidget.cpp:73
 #, kde-format
 msgid "Primary header"
 msgstr "En-tête primaire"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1039
+#: src/backend/datasources/filters/FITSFilter.cpp:1062
 #, kde-format
 msgid "IMAGE #%1"
 msgstr "IMAGE #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1042
+#: src/backend/datasources/filters/FITSFilter.cpp:1065
 #, kde-format
 msgid "ASCII_TBL #%1"
 msgstr "ASCII_TBL #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1045
+#: src/backend/datasources/filters/FITSFilter.cpp:1068
 #, kde-format
 msgid "BINARY_TBL #%1"
 msgstr "BINARY_TBL #%1"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1550
+#: src/backend/datasources/filters/FITSFilter.cpp:1573
 #, kde-format
 msgid "Images"
 msgstr "Images"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1576
+#: src/backend/datasources/filters/FITSFilter.cpp:1599
 #, kde-format
 msgid "Tables"
 msgstr "Tableaux :"
@@ -1622,7 +1621,7 @@ msgstr "Impossible de trouver « h5dump »"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/frontend/datasources/ImportFileWidget.cpp:1626
+#: src/frontend/datasources/ImportFileWidget.cpp:1629
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "La lecture depuis le fichier %1 a échoué."
@@ -1951,7 +1950,7 @@ msgid "Unknown"
 msgstr "Inconnu"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/ActionsManager.cpp:221 src/frontend/MainWin.cpp:1227
+#: src/frontend/ActionsManager.cpp:221 src/frontend/MainWin.cpp:1228
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -6752,7 +6751,7 @@ msgstr "Statistiques (Distributions)"
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:496
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
-#: src/frontend/datasources/ImportFileWidget.cpp:1366
+#: src/frontend/datasources/ImportFileWidget.cpp:1373
 #: src/frontend/dockwidgets/AxisDock.cpp:237
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:172
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
@@ -10203,7 +10202,7 @@ msgstr "%1 : définir le nombre de lignes pour la mise en page"
 msgid "%1: set page size"
 msgstr "%1 : définir la taille de page"
 
-#: src/backend/worksheet/Worksheet.cpp:1527
+#: src/backend/worksheet/Worksheet.cpp:1524
 #, kde-format
 msgid "Curves"
 msgstr "Courbes"
@@ -10347,7 +10346,7 @@ msgstr "Localisation :"
 
 #. i18n("Used Locale:") + QLatin1String(" </td><td>") + usedLanguage + QLatin1String("</td></tr>")
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
-#: src/frontend/AboutDialog.cpp:177 src/frontend/ui/settingsgeneralpage.ui:60
+#: src/frontend/AboutDialog.cpp:177 src/frontend/ui/settingsgeneralpage.ui:183
 #, kde-format
 msgid "Number Format:"
 msgstr "Format du nombre :"
@@ -10575,7 +10574,7 @@ msgstr ""
 msgid "&Open Example"
 msgstr "&Ouvrir un exemple"
 
-#: src/frontend/ActionsManager.cpp:205 src/frontend/MainWin.cpp:1183
+#: src/frontend/ActionsManager.cpp:205 src/frontend/MainWin.cpp:1184
 #, kde-format
 msgid "Workbook"
 msgstr "Classeur"
@@ -10585,7 +10584,7 @@ msgstr "Classeur"
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr "Créé un nouveau classeur pour plusieurs feuilles de calcul et matrices"
 
-#: src/frontend/ActionsManager.cpp:210 src/frontend/MainWin.cpp:1191
+#: src/frontend/ActionsManager.cpp:210 src/frontend/MainWin.cpp:1192
 #, kde-format
 msgid "Data Extractor"
 msgstr "Extracteur de données"
@@ -10602,7 +10601,7 @@ msgstr ""
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:74
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:407
-#: src/frontend/MainWin.cpp:1199 src/frontend/SettingsDialog.cpp:67
+#: src/frontend/MainWin.cpp:1200 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:125
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -10620,7 +10619,7 @@ msgstr "Créer une nouvelle feuille de calcul pour l'édition de données."
 msgid "Creates a new matrix for data editing"
 msgstr "Crée une nouvelle matrice pour l'édition des données"
 
-#: src/frontend/ActionsManager.cpp:227 src/frontend/MainWin.cpp:1245
+#: src/frontend/ActionsManager.cpp:227 src/frontend/MainWin.cpp:1246
 #: src/frontend/SettingsDialog.cpp:62
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:86
 #, kde-format
@@ -10637,7 +10636,7 @@ msgstr "Créé une nouvelle feuille de travail pour le tracé des données."
 msgid "Creates a new %1 script"
 msgstr "Crée un nouveau script %1"
 
-#: src/frontend/ActionsManager.cpp:244 src/frontend/MainWin.cpp:1253
+#: src/frontend/ActionsManager.cpp:244 src/frontend/MainWin.cpp:1254
 #, kde-format
 msgid "Note"
 msgstr "Remarque"
@@ -10647,7 +10646,7 @@ msgstr "Remarque"
 msgid "Creates a new note for arbitrary text"
 msgstr "Crée une nouvelle note pour du texte arbitraire"
 
-#: src/frontend/ActionsManager.cpp:249 src/frontend/MainWin.cpp:1175
+#: src/frontend/ActionsManager.cpp:249 src/frontend/MainWin.cpp:1176
 #, kde-format
 msgid "Folder"
 msgstr "Dossier"
@@ -10946,7 +10945,7 @@ msgid "Select Y-Region and Zoom In"
 msgstr "Sélectionnez une région en Y et l'agrandir"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:611 src/frontend/MainWin.cpp:1599
+#: src/frontend/ActionsManager.cpp:611 src/frontend/MainWin.cpp:1600
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1429
 #: src/frontend/worksheet/WorksheetView.cpp:378
 #, kde-format
@@ -11970,7 +11969,7 @@ msgid "Matrix name:"
 msgstr "Nom de la matrice :"
 
 #: src/frontend/datasources/ImportDialog.cpp:202
-#: src/frontend/datasources/ImportFileDialog.cpp:365
+#: src/frontend/datasources/ImportFileDialog.cpp:367
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:158
 #, kde-format
 msgid "Close the dialog and import the data."
@@ -11990,7 +11989,7 @@ msgid "Add New Live Data Source"
 msgstr "Ajouter une nouvelle source de données en temps réel"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:106
-#: src/frontend/datasources/ImportFileDialog.cpp:346
+#: src/frontend/datasources/ImportFileDialog.cpp:348
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:140
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:361
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:125
@@ -12000,7 +11999,7 @@ msgid "Hide Options"
 msgstr "Cacher les options"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:106
-#: src/frontend/datasources/ImportFileDialog.cpp:346
+#: src/frontend/datasources/ImportFileDialog.cpp:348
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:140
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:361
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:125
@@ -12014,17 +12013,17 @@ msgstr "Afficher les options"
 msgid "Live data source created in %1 seconds."
 msgstr "Source de données en temps réel créée dans %1 secondes."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:176
+#: src/frontend/datasources/ImportFileDialog.cpp:175
 #, kde-format
 msgid "No target data container selected"
 msgstr "Aucun conteneur de donnée cibles sélectionné."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:321
+#: src/frontend/datasources/ImportFileDialog.cpp:323
 #, kde-format
 msgid "File %1 imported in %2 seconds."
 msgstr "Fichier %1 importé en %2 secondes."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:367
+#: src/frontend/datasources/ImportFileDialog.cpp:369
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:152
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
@@ -12032,7 +12031,7 @@ msgstr ""
 "Impossible d'importer dans une matrice car les données contiennent des "
 "données non numériques."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:379
+#: src/frontend/datasources/ImportFileDialog.cpp:381
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:136
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
@@ -12040,50 +12039,50 @@ msgstr ""
 "Sélectionner un conteneur de données dans lequel les données doivent être "
 "importées."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:397
+#: src/frontend/datasources/ImportFileDialog.cpp:399
 #, kde-format
 msgid "No file provided for import."
 msgstr "Aucun fichier à importer n'a été fourni."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:422
+#: src/frontend/datasources/ImportFileDialog.cpp:424
 #, kde-format
 msgid "The provided file doesn't exist."
 msgstr "Le fichier fourni n'existe pas."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:442
+#: src/frontend/datasources/ImportFileDialog.cpp:444
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr "Impossible de se connecter au socket local fourni. Erreur : %1"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:446
+#: src/frontend/datasources/ImportFileDialog.cpp:448
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
 msgstr ""
 "Impossible de se connecter au socket local fourni. Le socket n'existe pas."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:461
+#: src/frontend/datasources/ImportFileDialog.cpp:463
 #, kde-format
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr "Impossible de se connecter au socket « TCP » fourni. Erreur : %1"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:465
-#: src/frontend/datasources/ImportFileDialog.cpp:485
+#: src/frontend/datasources/ImportFileDialog.cpp:467
+#: src/frontend/datasources/ImportFileDialog.cpp:487
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr "Soit le nom de l'hôte ou le numéro de port est manquant."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:481
+#: src/frontend/datasources/ImportFileDialog.cpp:483
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Impossible de se connecter au socket « UCP » fourni. Erreur : %1"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:513
+#: src/frontend/datasources/ImportFileDialog.cpp:515
 #, kde-format
 msgid "Serial port number is missing."
 msgstr "Le numéro du port série est manquant."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:525
+#: src/frontend/datasources/ImportFileDialog.cpp:527
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
@@ -12310,24 +12309,24 @@ msgstr ""
 "Le nombre de lignes est calculé à partir des valeurs de l'onglet de la "
 "partie des données"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1004
+#: src/frontend/datasources/ImportFileWidget.cpp:1011
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Sélectionner la source de données du fichier"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1034
+#: src/frontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Sélectionner le fichier « DBC »"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1034
+#: src/frontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr "Fichier « DBC » (*.dbc)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1121
+#: src/frontend/datasources/ImportFileWidget.cpp:1128
 #, kde-format
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
@@ -12335,7 +12334,7 @@ msgstr ""
 "Les fichiers « Origin Project » doivent être ouverts avec « Importer / "
 "Origin Project » !"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1124
+#: src/frontend/datasources/ImportFileWidget.cpp:1131
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
@@ -12344,7 +12343,7 @@ msgstr ""
 "Projet LabPlot » !"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/frontend/datasources/ImportFileWidget.cpp:1272
+#: src/frontend/datasources/ImportFileWidget.cpp:1279
 #: src/frontend/ui/datasources/importfilewidget.ui:416
 #, kde-format
 msgid "Data Format"
@@ -12352,7 +12351,7 @@ msgstr "Format de données"
 
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/frontend/datasources/ImportFileWidget.cpp:1273
+#: src/frontend/datasources/ImportFileWidget.cpp:1280
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
 #: src/frontend/ui/settingsworksheetpage.ui:134
@@ -12361,126 +12360,126 @@ msgid "Preview"
 msgstr "Aperçu"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/frontend/datasources/ImportFileWidget.cpp:1275
+#: src/frontend/datasources/ImportFileWidget.cpp:1282
 #: src/frontend/ui/datasources/importfilewidget.ui:582
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "Portion de données à lire"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1318
+#: src/frontend/datasources/ImportFileWidget.cpp:1325
 #, kde-format
 msgid "Data format && preview"
 msgstr "Format de données && aperçu"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1365
+#: src/frontend/datasources/ImportFileWidget.cpp:1372
 #, kde-format
 msgid "Automatic"
 msgstr "Automatique"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1618
+#: src/frontend/datasources/ImportFileWidget.cpp:1621
 #, kde-format
 msgid "file command not found"
 msgstr "Impossible de trouver le fichier de commandes"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1629
+#: src/frontend/datasources/ImportFileWidget.cpp:1632
 #, kde-format
 msgid "cannot open"
 msgstr "ouverture impossible"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1634
+#: src/frontend/datasources/ImportFileWidget.cpp:1637
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>Type de fichiers :</b> %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1639
+#: src/frontend/datasources/ImportFileWidget.cpp:1642
 #, kde-format
 msgid "General:"
 msgstr "Général :"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1641
-#: src/frontend/datasources/ImportFileWidget.cpp:1642
-#: src/frontend/datasources/ImportFileWidget.cpp:1643
+#: src/frontend/datasources/ImportFileWidget.cpp:1644
+#: src/frontend/datasources/ImportFileWidget.cpp:1645
+#: src/frontend/datasources/ImportFileWidget.cpp:1646
 #, kde-format
 msgid "yes"
 msgstr "oui"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1641
-#: src/frontend/datasources/ImportFileWidget.cpp:1642
-#: src/frontend/datasources/ImportFileWidget.cpp:1643
+#: src/frontend/datasources/ImportFileWidget.cpp:1644
+#: src/frontend/datasources/ImportFileWidget.cpp:1645
+#: src/frontend/datasources/ImportFileWidget.cpp:1646
 #, kde-format
 msgid "no"
 msgstr "non"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1641
+#: src/frontend/datasources/ImportFileWidget.cpp:1644
 #, kde-format
 msgid "Readable: %1"
 msgstr "Lisible : %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1642
+#: src/frontend/datasources/ImportFileWidget.cpp:1645
 #, kde-format
 msgid "Writable: %1"
 msgstr "Accessible en écriture : %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1643
+#: src/frontend/datasources/ImportFileWidget.cpp:1646
 #, kde-format
 msgid "Executable: %1"
 msgstr "Exécutable : %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1645
+#: src/frontend/datasources/ImportFileWidget.cpp:1648
 #, kde-format
 msgid "Birth time: %1"
 msgstr "Heure de naissance : %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1646
+#: src/frontend/datasources/ImportFileWidget.cpp:1649
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "Dernière modification des métadonnées : %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1647
+#: src/frontend/datasources/ImportFileWidget.cpp:1650
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Dernière modification : %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1648
+#: src/frontend/datasources/ImportFileWidget.cpp:1651
 #, kde-format
 msgid "Last read: %1"
 msgstr "Dernier accès en lecture : %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1649
+#: src/frontend/datasources/ImportFileWidget.cpp:1652
 #, kde-format
 msgid "Owner: %1"
 msgstr "Propriétaire : %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1650
+#: src/frontend/datasources/ImportFileWidget.cpp:1653
 #, kde-format
 msgid "Group: %1"
 msgstr "Groupe : %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1651
+#: src/frontend/datasources/ImportFileWidget.cpp:1654
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] "%1 Octet"
 msgstr[1] "%1 Octets"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1654
+#: src/frontend/datasources/ImportFileWidget.cpp:1657
 #, kde-format
 msgid "Summary:"
 msgstr "Résumé :"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1677
-#: src/frontend/datasources/ImportFileWidget.cpp:1682
+#: src/frontend/datasources/ImportFileWidget.cpp:1680
+#: src/frontend/datasources/ImportFileWidget.cpp:1685
 #, kde-format
 msgid "Content:"
 msgstr "Contenu :"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1713
+#: src/frontend/datasources/ImportFileWidget.cpp:1716
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Impossible d'ouvrir le fichier %1 en lecture."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1806
+#: src/frontend/datasources/ImportFileWidget.cpp:1807
 #, kde-format
 msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
@@ -12490,53 +12489,53 @@ msgstr ""
 "de ligne ». La valeur « Fin de ligne » doit être plus grand que « Début de "
 "ligne » ou -1."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1817
+#: src/frontend/datasources/ImportFileWidget.cpp:1818
 #, kde-format
 msgid "Initialization failed: %1"
 msgstr "Échec de l'initialisation : %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1842
+#: src/frontend/datasources/ImportFileWidget.cpp:1843
 #, kde-format
 msgid "Failed to connect to the local socket: %1"
 msgstr "Impossible de se connecter au socket local : %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1859
+#: src/frontend/datasources/ImportFileWidget.cpp:1860
 #, kde-format
 msgid "Failed to connect to the TCP socket. %1"
 msgstr "Impossible de se connecter au socket « TCP ». %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1865
-#: src/frontend/datasources/ImportFileWidget.cpp:1894
+#: src/frontend/datasources/ImportFileWidget.cpp:1866
+#: src/frontend/datasources/ImportFileWidget.cpp:1895
 #, kde-format
 msgid "Socket operation timed out."
 msgstr "L'opération sur le socket n'a pu être réalisée dans le temps imparti."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1879
+#: src/frontend/datasources/ImportFileWidget.cpp:1880
 #, kde-format
 msgid "Not ready for read after 2s:"
 msgstr "Non prêt pour la lecture après 2 secondes :"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1898
+#: src/frontend/datasources/ImportFileWidget.cpp:1899
 #, kde-format
 msgid "Unable to bind: "
 msgstr "Impossible de faire l'association :"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1915
+#: src/frontend/datasources/ImportFileWidget.cpp:1916
 #, kde-format
 msgid "Parse Error: %1"
 msgstr "Erreur d'analyse : %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1917
+#: src/frontend/datasources/ImportFileWidget.cpp:1918
 #, kde-format
 msgid "Not ready for read after 2 sec"
 msgstr "Non prêt pour la lecture après 2 secondes"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1921
+#: src/frontend/datasources/ImportFileWidget.cpp:1922
 #, kde-format
 msgid "Failed to open serial port. error: %1"
 msgstr "Échec de l'ouverture du port série. Erreur : %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1940
+#: src/frontend/datasources/ImportFileWidget.cpp:1941
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "Aucune donnée n'est encore arrivée pour le sujet sélectionné."
@@ -12803,7 +12802,7 @@ msgid "Open LabPlot Project"
 msgstr "Ouvrir un projet LabPlot"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:712
+#: src/frontend/MainWin.cpp:713
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "Projet LabPlot (%1)"
@@ -13107,7 +13106,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2002
+#: src/frontend/MainWin.cpp:2003
 #, kde-format
 msgid "Warning"
 msgstr "Avertissement"
@@ -13487,7 +13486,7 @@ msgstr "%1 axes : modèle « %2 » chargé"
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:236
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:235
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1043
 #, kde-format
@@ -14405,7 +14404,7 @@ msgstr ""
 "échantillon individuel (« limites de marches d'escalier »). Sinon, des "
 "lignes droites sont tracées pour les limites."
 
-#: src/frontend/dockwidgets/ProjectDock.cpp:72
+#: src/frontend/dockwidgets/ProjectDock.cpp:74
 #, kde-format
 msgid ""
 "If checked, the state of the default application docks is saved in the "
@@ -14415,7 +14414,7 @@ msgstr ""
 "l'application est enregistré dans le fichier du projet et restauré au "
 "chargement du projet."
 
-#: src/frontend/dockwidgets/ProjectDock.cpp:77
+#: src/frontend/dockwidgets/ProjectDock.cpp:79
 #, kde-format
 msgid ""
 "If checked, the results of the calculations in the analysis curves will be "
@@ -14478,7 +14477,7 @@ msgstr "Copier la valeur"
 msgid "Copy Name and Value"
 msgstr "Copier le nom et la valeur"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:57
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:56
 #, kde-format
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
@@ -14486,12 +14485,12 @@ msgstr ""
 "Activer les liaisons pour synchroniser le nombre de lignes avec une autre "
 "feuille de calcul"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:61
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:60
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
 msgstr "Feuille de calcul avec laquelle synchroniser le nombre de lignes"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:234
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:233
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 feuilles de calcul : modèle « %2 » chargé"
@@ -15031,7 +15030,7 @@ msgstr ""
 "Impossible d'ouvrir le fichier %1 de collections des ensembles de données. "
 "Veuillez vérifier votre installation."
 
-#: src/frontend/GuiObserver.cpp:182 src/frontend/MainWin.cpp:619
+#: src/frontend/GuiObserver.cpp:182 src/frontend/MainWin.cpp:620
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -15591,7 +15590,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/notebookdock.ui:65
 #: src/frontend/ui/dockwidgets/notedock.ui:43
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:87
-#: src/frontend/ui/dockwidgets/projectdock.ui:140
+#: src/frontend/ui/dockwidgets/projectdock.ui:184
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:103
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:118
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:56
@@ -15948,98 +15947,98 @@ msgstr "Le projet courant « %1 » a été modifié. Voulez-vous l'enregistrer
 msgid "Save Project"
 msgstr "Enregistrer le projet"
 
-#: src/frontend/MainWin.cpp:580
+#: src/frontend/MainWin.cpp:581
 #, kde-format
 msgid "%1: created"
 msgstr " %1 : créé"
 
-#: src/frontend/MainWin.cpp:606
+#: src/frontend/MainWin.cpp:607
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Explorateur de projet"
 
-#: src/frontend/MainWin.cpp:631
+#: src/frontend/MainWin.cpp:632
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Aperçu de feuille de travail"
 
-#: src/frontend/MainWin.cpp:640
+#: src/frontend/MainWin.cpp:641
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Contenu"
 
-#: src/frontend/MainWin.cpp:717
+#: src/frontend/MainWin.cpp:718
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "Projets originels (%1)"
 
-#: src/frontend/MainWin.cpp:723
+#: src/frontend/MainWin.cpp:724
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "Projets Cantor (*.cws)"
 
-#: src/frontend/MainWin.cpp:724
+#: src/frontend/MainWin.cpp:725
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "Notebooks Jupyter (*.jpnynb)"
 
-#: src/frontend/MainWin.cpp:731
+#: src/frontend/MainWin.cpp:732
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "Tous les fichiers pris en charge (%1)"
 
-#: src/frontend/MainWin.cpp:735
+#: src/frontend/MainWin.cpp:736
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Ouvrir un projet"
 
-#: src/frontend/MainWin.cpp:752
+#: src/frontend/MainWin.cpp:753
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "Le fichier projet %1 est déjà ouvert."
 
-#: src/frontend/MainWin.cpp:752 src/frontend/MainWin.cpp:760
-#: src/frontend/MainWin.cpp:765
+#: src/frontend/MainWin.cpp:753 src/frontend/MainWin.cpp:761
+#: src/frontend/MainWin.cpp:766
 #, kde-format
 msgid "Open Project"
 msgstr "Ouvrir un projet"
 
-#: src/frontend/MainWin.cpp:760
+#: src/frontend/MainWin.cpp:761
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "Le fichier de projet %1 n'existe pas."
 
-#: src/frontend/MainWin.cpp:765
+#: src/frontend/MainWin.cpp:766
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "Impossible de lire le fichier de projet %1."
 
-#: src/frontend/MainWin.cpp:773
+#: src/frontend/MainWin.cpp:774
 #, kde-format
 msgid "Loading %1..."
 msgstr "Chargement de %1..."
 
-#: src/frontend/MainWin.cpp:828
+#: src/frontend/MainWin.cpp:829
 #, kde-format
 msgid "%1: opened"
 msgstr "%1 : ouvert"
 
-#: src/frontend/MainWin.cpp:863
+#: src/frontend/MainWin.cpp:864
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Projet ouvert avec succès (en %1 secondes)."
 
-#: src/frontend/MainWin.cpp:956
+#: src/frontend/MainWin.cpp:957
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Enregistrer un projet sous"
 
-#: src/frontend/MainWin.cpp:958
+#: src/frontend/MainWin.cpp:959
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -16048,54 +16047,54 @@ msgstr ""
 "Projets LabPlot (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:985
+#: src/frontend/MainWin.cpp:986
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Impossible d'ouvrir le fichier temporaire en écriture."
 
-#: src/frontend/MainWin.cpp:1064
+#: src/frontend/MainWin.cpp:1065
 #, kde-format
 msgid "Project saved"
 msgstr "Projet enregistré"
 
-#: src/frontend/MainWin.cpp:1080
+#: src/frontend/MainWin.cpp:1081
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Impossible d'enregistrer le fichier « %1 »."
 
-#: src/frontend/MainWin.cpp:1085
+#: src/frontend/MainWin.cpp:1086
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Impossible d'ouvrir le fichier « %1 » en écriture."
 
-#: src/frontend/MainWin.cpp:1135
+#: src/frontend/MainWin.cpp:1136
 #, kde-format
 msgid "Changed"
 msgstr "Modifié"
 
-#: src/frontend/MainWin.cpp:1150 src/frontend/MainWin.cpp:1162
+#: src/frontend/MainWin.cpp:1151 src/frontend/MainWin.cpp:1163
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Préparation de l'impression de %1"
 
-#: src/frontend/MainWin.cpp:1152 src/frontend/MainWin.cpp:1164
+#: src/frontend/MainWin.cpp:1153 src/frontend/MainWin.cpp:1165
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 imprimé"
 
-#: src/frontend/MainWin.cpp:1219
+#: src/frontend/MainWin.cpp:1220
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3732
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3733
 #, kde-format
 msgid "%1"
 msgstr "%1"
 
-#: src/frontend/MainWin.cpp:1898
+#: src/frontend/MainWin.cpp:1899
 #, kde-format
 msgid "Kaggle CLI tool not found"
 msgstr "Il a été impossible de trouver l'outil « Kaggle CLI »"
 
-#: src/frontend/MainWin.cpp:1899
+#: src/frontend/MainWin.cpp:1900
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
@@ -16104,27 +16103,27 @@ msgstr ""
 "Veuillez fournir l'emplacement complet d'accès à l'outil « Kaggle CLI » dans "
 "les paramètres de l'application et réessayez."
 
-#: src/frontend/MainWin.cpp:1965
+#: src/frontend/MainWin.cpp:1966
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exporté"
 
-#: src/frontend/MainWin.cpp:1972
+#: src/frontend/MainWin.cpp:1973
 #, kde-format
 msgid "FITS files saved"
 msgstr "Fichiers « FITS » enregistrés"
 
-#: src/frontend/MainWin.cpp:1984
+#: src/frontend/MainWin.cpp:1985
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Client « MQTT » %1"
 
-#: src/frontend/MainWin.cpp:2002
+#: src/frontend/MainWin.cpp:2003
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Il y a déjà un client « MQTT » avec cet hôte !"
 
-#: src/frontend/MainWin.cpp:2006
+#: src/frontend/MainWin.cpp:2007
 #, kde-format
 msgid "Live data source%1"
 msgstr "Source de données en temps réel (%1)"
@@ -16816,42 +16815,42 @@ msgstr "Préférences [Modifié]"
 msgid "min."
 msgstr "min."
 
-#: src/frontend/SettingsGeneralPage.cpp:212
+#: src/frontend/SettingsGeneralPage.cpp:215
 #, kde-format
 msgid "Create New Project"
 msgstr "Créer un nouveau projet"
 
-#: src/frontend/SettingsGeneralPage.cpp:213
+#: src/frontend/SettingsGeneralPage.cpp:216
 #, kde-format
 msgid "Load Last Used Project"
 msgstr "Charger le dernier projet utilisé"
 
-#: src/frontend/SettingsGeneralPage.cpp:217
+#: src/frontend/SettingsGeneralPage.cpp:220
 #, kde-format
 msgid "With Spreadsheet"
 msgstr "Avec une feuille de calcul"
 
-#: src/frontend/SettingsGeneralPage.cpp:218
+#: src/frontend/SettingsGeneralPage.cpp:221
 #, kde-format
 msgid "With Worksheet"
 msgstr "Avec une feuille de travail"
 
-#: src/frontend/SettingsGeneralPage.cpp:219
+#: src/frontend/SettingsGeneralPage.cpp:222
 #, kde-format
 msgid "With Spreadsheet and Worksheet"
 msgstr "Avec une feuille de calcul et une feuille de travail"
 
-#: src/frontend/SettingsGeneralPage.cpp:221
+#: src/frontend/SettingsGeneralPage.cpp:224
 #, kde-format
 msgid "With Notebook"
 msgstr "Avec un cahier de notes"
 
-#: src/frontend/SettingsGeneralPage.cpp:224
+#: src/frontend/SettingsGeneralPage.cpp:227
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr "Type « Notebook » à créer automatiquement au démarrage"
 
-#: src/frontend/SettingsGeneralPage.cpp:228
+#: src/frontend/SettingsGeneralPage.cpp:231
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
@@ -16860,42 +16859,42 @@ msgstr ""
 "Contrôle le comportement de l'emplacement des composants graphiques du dock "
 "après sa ré-ouverture"
 
-#: src/frontend/SettingsGeneralPage.cpp:232
+#: src/frontend/SettingsGeneralPage.cpp:235
 #, kde-format
 msgid "Original Position"
 msgstr "Position initiale"
 
-#: src/frontend/SettingsGeneralPage.cpp:233
+#: src/frontend/SettingsGeneralPage.cpp:236
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr "Au dessus du dernier composant graphique du dock actif"
 
-#: src/frontend/SettingsGeneralPage.cpp:236
+#: src/frontend/SettingsGeneralPage.cpp:239
 #, kde-format
 msgid "Show File Path"
 msgstr "Afficher l'emplacement du fichier"
 
-#: src/frontend/SettingsGeneralPage.cpp:237
+#: src/frontend/SettingsGeneralPage.cpp:240
 #, kde-format
 msgid "Show File Name"
 msgstr "Afficher le nom de fichier"
 
-#: src/frontend/SettingsGeneralPage.cpp:238
+#: src/frontend/SettingsGeneralPage.cpp:241
 #, kde-format
 msgid "Show Project Name"
 msgstr "Afficher le nom du projet"
 
-#: src/frontend/SettingsGeneralPage.cpp:241
+#: src/frontend/SettingsGeneralPage.cpp:244
 #, kde-format
 msgid "Metric"
 msgstr "Métrique"
 
-#: src/frontend/SettingsGeneralPage.cpp:242
+#: src/frontend/SettingsGeneralPage.cpp:245
 #, kde-format
 msgid "Imperial"
 msgstr "Impérial"
 
-#: src/frontend/SettingsGeneralPage.cpp:244
+#: src/frontend/SettingsGeneralPage.cpp:247
 #, kde-format
 msgid ""
 "Characters for the decimal and group separators defining the number format"
@@ -16903,12 +16902,12 @@ msgstr ""
 "Caractères pour les séparateurs décimaux et de groupe définissant le format "
 "numérique"
 
-#: src/frontend/SettingsGeneralPage.cpp:248
+#: src/frontend/SettingsGeneralPage.cpp:251
 #, kde-format
 msgid "%1 (System, %2)"
 msgstr "%1 (Système, %2)"
 
-#: src/frontend/SettingsGeneralPage.cpp:257
+#: src/frontend/SettingsGeneralPage.cpp:260
 #, kde-format
 msgid ""
 "Use the hyphen sign instead of the minus sign for negative numbers shown on "
@@ -16917,7 +16916,7 @@ msgstr ""
 "Utilisez le signe du trait d'union « – » au lieu du signe moins « - » pour "
 "les nombres négatifs affichés sur la feuille de calcul"
 
-#: src/frontend/SettingsGeneralPage.cpp:261
+#: src/frontend/SettingsGeneralPage.cpp:264
 #, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
@@ -16929,7 +16928,7 @@ msgstr ""
 "l'incertitude dans les mesures (« GUM », Guide to the Expression of "
 "Uncertainty in Measurement)</a>"
 
-#: src/frontend/SettingsGeneralPage.cpp:266
+#: src/frontend/SettingsGeneralPage.cpp:269
 #, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
@@ -16943,7 +16942,7 @@ msgstr ""
 "Le paramètre peut être modifié séparément pour chaque projet dans les "
 "propriétés du projet."
 
-#: src/frontend/SettingsGeneralPage.cpp:273
+#: src/frontend/SettingsGeneralPage.cpp:276
 #, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
@@ -16962,12 +16961,12 @@ msgstr ""
 "Le paramètre peut être modifié séparément pour chaque projet dans les "
 "propriétés du projet."
 
-#: src/frontend/SettingsGeneralPage.cpp:280
+#: src/frontend/SettingsGeneralPage.cpp:283
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
 msgstr "Active la sortie de traçage supplémentaire dans le terminal."
 
-#: src/frontend/SettingsGeneralPage.cpp:281
+#: src/frontend/SettingsGeneralPage.cpp:284
 #, kde-format
 msgid ""
 "Info trace - helpful to get information and warnings when running the "
@@ -16976,7 +16975,7 @@ msgstr ""
 "Trace d'informations - utile pour obtenir des informations et des "
 "avertissements lors de l'exécution de l'application."
 
-#: src/frontend/SettingsGeneralPage.cpp:282
+#: src/frontend/SettingsGeneralPage.cpp:285
 #, kde-format
 msgid ""
 "Debug trace - helpful to diagnose the application, can have a negative "
@@ -16985,7 +16984,7 @@ msgstr ""
 "Trace de débogage - Utile pour faire un diagnostic de l'application. Cela "
 "peut avoir un impact négatif sur les performances."
 
-#: src/frontend/SettingsGeneralPage.cpp:283
+#: src/frontend/SettingsGeneralPage.cpp:286
 #, kde-format
 msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
@@ -16993,6 +16992,11 @@ msgid ""
 msgstr ""
 "Suivi des performances - Utile pour analyser les caractéristiques et les "
 "goulots d'étranglement pertinents concernant les performances."
+
+#: src/frontend/SettingsGeneralPage.cpp:288
+#, kde-format
+msgid "If enabled spreadsheet and matrix data is saved in the project file"
+msgstr ""
 
 #: src/frontend/SettingsNotebookPage.cpp:30
 #, kde-format
@@ -19120,7 +19124,7 @@ msgstr "Type d'erreur en Y :"
 #: src/frontend/ui/dockwidgets/notebookdock.ui:33
 #: src/frontend/ui/dockwidgets/notedock.ui:17
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:219
-#: src/frontend/ui/dockwidgets/projectdock.ui:268
+#: src/frontend/ui/dockwidgets/projectdock.ui:141
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:59
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:189
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:111
@@ -22110,7 +22114,7 @@ msgstr "Sujets"
 #. i18n: ectx: property (text), widget (QLabel, lAutoSaveInterval)
 #. i18n: ectx: property (text), widget (QLabel, lUpdateInterval)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:112
-#: src/frontend/ui/settingsgeneralpage.ui:369
+#: src/frontend/ui/settingsgeneralpage.ui:106
 #, kde-format
 msgid "Interval:"
 msgstr "Intervalle :"
@@ -22281,61 +22285,67 @@ msgid "Background Color:"
 msgstr "Couleur d'arrière-plan :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSettings)
-#: src/frontend/ui/dockwidgets/projectdock.ui:82
+#: src/frontend/ui/dockwidgets/projectdock.ui:78
 #, kde-format
 msgid "Settings:"
 msgstr "Configuration :"
 
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: src/frontend/ui/dockwidgets/projectdock.ui:89
-#, kde-format
-msgid "Author:"
-msgstr "Auteur :"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: src/frontend/ui/dockwidgets/projectdock.ui:109
-#, kde-format
-msgid "Created:"
-msgstr "Créé : "
-
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: src/frontend/ui/dockwidgets/projectdock.ui:133
+#: src/frontend/ui/dockwidgets/projectdock.ui:98
 #, kde-format
 msgid "Modified:"
 msgstr "Modifié : "
 
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: src/frontend/ui/dockwidgets/projectdock.ui:121
+#, kde-format
+msgid "Created:"
+msgstr "Créé : "
+
+#. i18n: ectx: property (text), widget (QLabel, lVersion_2)
+#: src/frontend/ui/dockwidgets/projectdock.ui:207
+#, kde-format
+msgid "Version:"
+msgstr "Version :"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: src/frontend/ui/dockwidgets/projectdock.ui:214
+#, kde-format
+msgid "Compress File:"
+msgstr "Compresser le fichier :"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: src/frontend/ui/dockwidgets/projectdock.ui:237
+#, kde-format
+msgid "Author:"
+msgstr "Auteur :"
+
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/dockwidgets/projectdock.ui:150
+#: src/frontend/ui/dockwidgets/projectdock.ui:260
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:49
 #, kde-format
 msgid "File Name:"
 msgstr "Nom du fichier :"
 
-#. i18n: ectx: property (text), widget (QLabel, lVersion_2)
-#: src/frontend/ui/dockwidgets/projectdock.ui:157
-#, kde-format
-msgid "Version:"
-msgstr "Version :"
-
 #. i18n: ectx: property (text), widget (QLabel, lSaveDockStates)
-#: src/frontend/ui/dockwidgets/projectdock.ui:222
-#: src/frontend/ui/settingsgeneralpage.ui:432
+#: src/frontend/ui/dockwidgets/projectdock.ui:267
+#: src/frontend/ui/settingsgeneralpage.ui:250
 #, kde-format
 msgid "Save Dock States:"
 msgstr "Enregistrer les états de panneaux :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
-#: src/frontend/ui/dockwidgets/projectdock.ui:242
+#: src/frontend/ui/dockwidgets/projectdock.ui:288
 #, kde-format
 msgid "Save Calculations:"
 msgstr "Enregistrer les calculs :"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: src/frontend/ui/dockwidgets/projectdock.ui:291
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: src/frontend/ui/dockwidgets/projectdock.ui:305
 #, kde-format
-msgid "Compress File:"
-msgstr "Compresser le fichier :"
+msgid "Save Data in File:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:113
@@ -22393,11 +22403,13 @@ msgstr "Durée d'exécution : "
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveData)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:17
-#: src/frontend/ui/settingsgeneralpage.ui:53
-#: src/frontend/ui/settingsgeneralpage.ui:74
-#: src/frontend/ui/settingsgeneralpage.ui:346
+#: src/frontend/ui/settingsgeneralpage.ui:17
+#: src/frontend/ui/settingsgeneralpage.ui:51
+#: src/frontend/ui/settingsgeneralpage.ui:83
+#: src/frontend/ui/settingsgeneralpage.ui:446
 #, kde-format
 msgid "Enabled"
 msgstr "Activé"
@@ -23723,26 +23735,32 @@ msgstr "Fichiers -"
 msgid "Clear"
 msgstr "Effacer"
 
-#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
-#: src/frontend/ui/settingsgeneralpage.ui:17
-#, kde-format
-msgid "Auto-save:"
-msgstr "Enregistrement automatique :"
-
-#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
-#: src/frontend/ui/settingsgeneralpage.ui:46
-#, kde-format
-msgid "Dock Widget Placement:"
-msgstr "Placement du composant graphique de panneau :"
-
 #. i18n: ectx: property (text), widget (QLabel, lStartup)
-#: src/frontend/ui/settingsgeneralpage.ui:67
+#: src/frontend/ui/settingsgeneralpage.ui:27
 #, kde-format
 msgid "Startup:"
 msgstr "Démarrage :"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
+#: src/frontend/ui/settingsgeneralpage.ui:37
+#, kde-format
+msgid "Omit leading zero in exponent"
+msgstr "Omettre les zéros de tête dans l'exposant"
+
+#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
+#: src/frontend/ui/settingsgeneralpage.ui:44
+#, kde-format
+msgid "Terms:"
+msgstr "Termes :"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/frontend/ui/settingsgeneralpage.ui:58
+#, kde-format
+msgid "Save  Calculations:"
+msgstr "Enregistrer les calculs :"
+
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
-#: src/frontend/ui/settingsgeneralpage.ui:84
+#: src/frontend/ui/settingsgeneralpage.ui:139
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
@@ -23757,13 +23775,55 @@ msgstr ""
 "Uncertainty in Measurement)</span></a></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
-#: src/frontend/ui/settingsgeneralpage.ui:87
+#: src/frontend/ui/settingsgeneralpage.ui:142
 #, kde-format
 msgid "GUM compliant"
 msgstr "Conforme « GUM »"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
+#: src/frontend/ui/settingsgeneralpage.ui:159
+#, kde-format
+msgid "Omit group separator"
+msgstr "Omettre le séparateur de groupes"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
+#: src/frontend/ui/settingsgeneralpage.ui:166
+#, kde-format
+msgid "Include trailing zeroes after dot"
+msgstr "Inclure les zéros superflus après le point"
+
+#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
+#: src/frontend/ui/settingsgeneralpage.ui:173
+#, kde-format
+msgid "Notebook:"
+msgstr "Cahier de notes :"
+
+#. i18n: ectx: property (text), widget (QLabel, lNewProject)
+#: src/frontend/ui/settingsgeneralpage.ui:190
+#, kde-format
+msgid "New Project:"
+msgstr "Nouveau projet :"
+
+#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
+#: src/frontend/ui/settingsgeneralpage.ui:197
+#, kde-format
+msgid "Title Bar:"
+msgstr "Barre de titre :"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkUseHyphen)
+#: src/frontend/ui/settingsgeneralpage.ui:204
+#, kde-format
+msgid "Use Hyphen '-' instead of Minus '–'"
+msgstr "Utilisez le trait d'union « - » au lieu de moins « – »"
+
+#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
+#: src/frontend/ui/settingsgeneralpage.ui:243
+#, kde-format
+msgid "Auto-save:"
+msgstr "Enregistrement automatique :"
+
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
-#: src/frontend/ui/settingsgeneralpage.ui:97
+#: src/frontend/ui/settingsgeneralpage.ui:273
 #, kde-format
 msgid ""
 "<html><head/><body><p>Save projects in a uncompressed xml format that can be "
@@ -23776,108 +23836,67 @@ msgstr ""
 "html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
-#: src/frontend/ui/settingsgeneralpage.ui:100
+#: src/frontend/ui/settingsgeneralpage.ui:276
 #, kde-format
 msgid "Save in uncompressed format"
 msgstr "Enregistrer dans un format non compressé"
 
-#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
-#: src/frontend/ui/settingsgeneralpage.ui:107
-#, kde-format
-msgid "Number Options:"
-msgstr "Options des nombres :"
-
-#. i18n: ectx: property (text), widget (QLabel, lUnits)
-#: src/frontend/ui/settingsgeneralpage.ui:114
-#, kde-format
-msgid "Units:"
-msgstr "Unités :"
-
-#. i18n: ectx: property (text), widget (QLabel, lNewProject)
-#: src/frontend/ui/settingsgeneralpage.ui:121
-#, kde-format
-msgid "New Project:"
-msgstr "Nouveau projet :"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
-#: src/frontend/ui/settingsgeneralpage.ui:128
-#, kde-format
-msgid "Include trailing zeroes after dot"
-msgstr "Inclure les zéros superflus après le point"
-
-#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
-#: src/frontend/ui/settingsgeneralpage.ui:135
-#, kde-format
-msgid "Notebook:"
-msgstr "Cahier de notes :"
-
-#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
-#: src/frontend/ui/settingsgeneralpage.ui:155
-#, kde-format
-msgid "Compression:"
-msgstr "Compression :"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
-#: src/frontend/ui/settingsgeneralpage.ui:197
-#, kde-format
-msgid "Omit group separator"
-msgstr "Omettre le séparateur de groupes"
-
 #. i18n: ectx: property (text), widget (QLabel, lTracing)
-#: src/frontend/ui/settingsgeneralpage.ui:214
+#: src/frontend/ui/settingsgeneralpage.ui:283
 #, kde-format
 msgid "Tracing:"
 msgstr "Traçage :"
 
+#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
+#: src/frontend/ui/settingsgeneralpage.ui:290
+#, kde-format
+msgid "Compression:"
+msgstr "Compression :"
+
+#. i18n: ectx: property (text), widget (QLabel, lUnits)
+#: src/frontend/ui/settingsgeneralpage.ui:329
+#, kde-format
+msgid "Units:"
+msgstr "Unités :"
+
+#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
+#: src/frontend/ui/settingsgeneralpage.ui:336
+#, kde-format
+msgid "Number Options:"
+msgstr "Options des nombres :"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkInfoTrace)
-#: src/frontend/ui/settingsgeneralpage.ui:245
+#: src/frontend/ui/settingsgeneralpage.ui:367
 #, kde-format
 msgid "Info"
 msgstr "Informations"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
-#: src/frontend/ui/settingsgeneralpage.ui:281
+#: src/frontend/ui/settingsgeneralpage.ui:403
 #: src/frontend/ui/settingsworksheetpage.ui:50
 #, kde-format
 msgid "Performance"
 msgstr "Performance"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDebugTrace)
-#: src/frontend/ui/settingsgeneralpage.ui:301
+#: src/frontend/ui/settingsgeneralpage.ui:423
 #, kde-format
 msgid "Debug"
 msgstr "Déboguer"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
-#: src/frontend/ui/settingsgeneralpage.ui:311
-#, kde-format
-msgid "Omit leading zero in exponent"
-msgstr "Omettre les zéros de tête dans l'exposant"
-
-#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
-#: src/frontend/ui/settingsgeneralpage.ui:318
-#, kde-format
-msgid "Title Bar:"
-msgstr "Barre de titre :"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/settingsgeneralpage.ui:402
-#, kde-format
-msgid "Save  Calculations:"
-msgstr "Enregistrer les calculs :"
-
-#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
-#: src/frontend/ui/settingsgeneralpage.ui:409
-#, kde-format
-msgid "Terms:"
-msgstr "Termes :"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkUseHyphen)
+#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
 #: src/frontend/ui/settingsgeneralpage.ui:439
 #, kde-format
-msgid "Use Hyphen '-' instead of Minus '–'"
-msgstr "Utilisez le trait d'union « - » au lieu de moins « – »"
+msgid "Dock Widget Placement:"
+msgstr "Placement du composant graphique de panneau :"
+
+#. i18n: ectx: property (text), widget (QLabel, lSaveData)
+#: src/frontend/ui/settingsgeneralpage.ui:453
+#, fuzzy, kde-format
+#| msgid "Open a project file."
+msgid "Save Data in Project file:"
+msgstr "Ouvrir un fichier de projet."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)

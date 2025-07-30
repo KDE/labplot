@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-23 00:39+0000\n"
+"POT-Creation-Date: 2025-07-28 00:38+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -76,7 +76,7 @@ msgstr "px"
 msgid "Down"
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:525
+#: src/backend/core/AbstractAspect.cpp:529
 #: src/backend/core/aspectcommands.h:171
 #: src/backend/datapicker/Datapicker.cpp:227
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2230
@@ -84,66 +84,66 @@ msgstr ""
 msgid "%1: add %2"
 msgstr "%1: pridať %2"
 
-#: src/backend/core/AbstractAspect.cpp:527
-#: src/backend/core/AbstractAspect.cpp:564
+#: src/backend/core/AbstractAspect.cpp:531
+#: src/backend/core/AbstractAspect.cpp:568
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:562
+#: src/backend/core/AbstractAspect.cpp:566
 #, fuzzy, kde-format
 #| msgid "%1: insert %2 before %3."
 msgid "%1: insert %2 before %3"
 msgstr "Vložiť pred"
 
-#: src/backend/core/AbstractAspect.cpp:562
+#: src/backend/core/AbstractAspect.cpp:566
 #, fuzzy, kde-format
 #| msgid "%1: insert %2 before %3."
 msgid "%1: insert %2 before end"
 msgstr "Vložiť pred"
 
-#: src/backend/core/AbstractAspect.cpp:597
+#: src/backend/core/AbstractAspect.cpp:601
 #: src/backend/core/aspectcommands.h:102
 #, kde-format
 msgid "%1: remove %2"
 msgstr "%1: odstrániť %2"
 
-#: src/backend/core/AbstractAspect.cpp:610
+#: src/backend/core/AbstractAspect.cpp:614
 #, fuzzy, kde-format
 #| msgid "%1: remove %2"
 msgid "%1: remove all children"
 msgstr "Odstrániť stĺpec"
 
-#: src/backend/core/AbstractAspect.cpp:722
+#: src/backend/core/AbstractAspect.cpp:726
 #, fuzzy, kde-format
 #| msgid "%1: add %2"
 msgid "%1: pasted"
 msgstr "%1: pridať %2"
 
-#: src/backend/core/AbstractAspect.cpp:816
+#: src/backend/core/AbstractAspect.cpp:820
 #, fuzzy, kde-format
 #| msgid "%1: add %2"
 msgid "%1: pasted '%2'"
 msgstr "%1: pridať %2"
 
-#: src/backend/core/AbstractAspect.cpp:818
+#: src/backend/core/AbstractAspect.cpp:822
 #, fuzzy, kde-format
 #| msgid "%1: remove %2"
 msgid "%1: duplicated '%2'"
 msgstr "Redukovať"
 
-#: src/backend/core/AbstractAspect.cpp:819
+#: src/backend/core/AbstractAspect.cpp:823
 #, fuzzy, kde-format
 #| msgid "Do nothing"
 msgid "Copy of '%1'"
 msgstr "Vyhladzovanie"
 
-#: src/backend/core/AbstractAspect.cpp:961
+#: src/backend/core/AbstractAspect.cpp:965
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr ""
 
-#: src/backend/core/AbstractAspect.cpp:968
+#: src/backend/core/AbstractAspect.cpp:972
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr ""
@@ -437,7 +437,7 @@ msgid "incompatible filter type"
 msgstr ""
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:154 src/backend/core/Project.cpp:712
+#: src/backend/core/Folder.cpp:154 src/backend/core/Project.cpp:721
 #: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
@@ -509,7 +509,7 @@ msgid "%1   (no values)"
 msgstr "Hodnoty"
 
 #: src/backend/core/AspectTreeModel.cpp:236
-#: src/frontend/datasources/ImportFileWidget.cpp:1651
+#: src/frontend/datasources/ImportFileWidget.cpp:1654
 #, kde-format
 msgid "Size: %1"
 msgstr "Veľkosť: %1"
@@ -617,14 +617,14 @@ msgstr ""
 msgid "%1: set random values"
 msgstr "%1: nastaviť písmo"
 
-#: src/backend/core/column/Column.cpp:1593
+#: src/backend/core/column/Column.cpp:1600
 #, kde-format
 msgid "invalid or missing row index"
 msgstr ""
 
-#: src/backend/core/column/Column.cpp:1602
-#: src/backend/core/column/Column.cpp:1611
-#: src/backend/core/column/Column.cpp:1620
+#: src/backend/core/column/Column.cpp:1609
+#: src/backend/core/column/Column.cpp:1618
+#: src/backend/core/column/Column.cpp:1627
 #, kde-format
 msgid "invalid row value"
 msgstr ""
@@ -720,59 +720,59 @@ msgid "Not yet loaded."
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbProject)
-#: src/backend/core/Project.cpp:184
+#: src/backend/core/Project.cpp:185
 #: src/frontend/ui/datasources/importprojectwidget.ui:17
 #, kde-format
 msgid "Project"
 msgstr "Projekt"
 
-#: src/backend/core/Project.cpp:300
+#: src/backend/core/Project.cpp:302
 #, fuzzy, kde-format
 #| msgid "%1: set layout"
 msgid "%1: set author"
 msgstr "%1: nastaviť rozloženie"
 
-#: src/backend/core/Project.cpp:307
+#: src/backend/core/Project.cpp:309
 #, fuzzy, kde-format
 #| msgid "%1: set background image"
 msgid "%1: save dock state changed"
 msgstr "%1: nastaviť obrázok pozadia"
 
-#: src/backend/core/Project.cpp:314
+#: src/backend/core/Project.cpp:316
 #, fuzzy, kde-format
 #| msgid "%1: set background image"
 msgid "%1: save calculation changed"
 msgstr "%1: nastaviť obrázok pozadia"
 
-#: src/backend/core/Project.cpp:556 src/backend/core/Project.cpp:586
+#: src/backend/core/Project.cpp:565 src/backend/core/Project.cpp:595
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Sorry. Could not open file for reading."
 msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 
-#: src/backend/core/Project.cpp:567 src/backend/core/Project.cpp:593
+#: src/backend/core/Project.cpp:576 src/backend/core/Project.cpp:602
 #, kde-format
 msgid "The project file is empty."
 msgstr ""
 
-#: src/backend/core/Project.cpp:567 src/backend/core/Project.cpp:593
+#: src/backend/core/Project.cpp:576 src/backend/core/Project.cpp:602
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Error opening project"
 msgstr "Otvoriť projekt"
 
-#: src/backend/core/Project.cpp:612
+#: src/backend/core/Project.cpp:621
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Unknown error when opening the project %1."
 msgstr "Otvoriť projekt"
 
-#: src/backend/core/Project.cpp:613
+#: src/backend/core/Project.cpp:622
 #, kde-format
 msgid "Error when opening the project"
 msgstr ""
 
-#: src/backend/core/Project.cpp:633
+#: src/backend/core/Project.cpp:642
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -784,46 +784,46 @@ msgid ""
 "Do you want to continue?"
 msgstr ""
 
-#: src/backend/core/Project.cpp:639
+#: src/backend/core/Project.cpp:648
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr ""
 
-#: src/backend/core/Project.cpp:669
+#: src/backend/core/Project.cpp:678
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr ""
 
-#: src/backend/core/Project.cpp:719
+#: src/backend/core/Project.cpp:728
 #, kde-format
 msgid "no project element found"
 msgstr ""
 
-#: src/backend/core/Project.cpp:721
+#: src/backend/core/Project.cpp:730
 #, kde-format
 msgid "no valid XML document found"
 msgstr ""
 
-#: src/backend/core/Project.cpp:771 src/backend/core/Project.cpp:777
-#: src/backend/core/Project.cpp:828
+#: src/backend/core/Project.cpp:780 src/backend/core/Project.cpp:786
+#: src/backend/core/Project.cpp:837
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to open the file '%1'."
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/backend/core/Project.cpp:834
+#: src/backend/core/Project.cpp:843
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to process the content of the file '%1'."
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/backend/core/Project.cpp:837
+#: src/backend/core/Project.cpp:846
 #, fuzzy, kde-format
 #| msgid "Failed to Open"
 msgid "Failed to open project"
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/backend/core/Project.cpp:1285
+#: src/backend/core/Project.cpp:1294
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr ""
@@ -1358,9 +1358,9 @@ msgstr "Nepodarilo sa otvoriť"
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:301
-#: src/backend/datasources/filters/FITSFilter.cpp:334
-#: src/backend/datasources/filters/FITSFilter.cpp:344
-#: src/backend/datasources/filters/FITSFilter.cpp:539
+#: src/backend/datasources/filters/FITSFilter.cpp:351
+#: src/backend/datasources/filters/FITSFilter.cpp:361
+#: src/backend/datasources/filters/FITSFilter.cpp:556
 #: src/backend/datasources/filters/HDF5Filter.cpp:1642
 #: src/backend/datasources/filters/HDF5Filter.cpp:1759
 #: src/backend/datasources/filters/HDF5Filter.cpp:1809
@@ -1397,68 +1397,67 @@ msgstr "Exportovať do súboru"
 msgid "No messages read."
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:229
+#: src/backend/datasources/filters/FITSFilter.cpp:239
 #, fuzzy, kde-format
 #| msgid "Images"
 msgid "Images: %1"
 msgstr "Obrázky"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:234
+#: src/backend/datasources/filters/FITSFilter.cpp:244
 #, fuzzy, kde-format
 #| msgid "Readable: %1"
 msgid "Tables: %1"
 msgstr "Tabuľky"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:264
+#: src/backend/datasources/filters/FITSFilter.cpp:281
 #: src/backend/datasources/filters/MatioFilter.cpp:647
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to open the file."
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:272
-#: src/backend/datasources/filters/FITSFilter.cpp:351
+#: src/backend/datasources/filters/FITSFilter.cpp:288
+#: src/backend/datasources/filters/FITSFilter.cpp:368
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to read the file."
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:293
+#: src/backend/datasources/filters/FITSFilter.cpp:310
 #, fuzzy, kde-format
 #| msgid "dimension"
 msgid "Zero dimensions."
 msgstr "rozmer"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1037
-#: src/backend/datasources/filters/FITSFilter.cpp:1557
-#: src/frontend/datasources/FITSOptionsWidget.cpp:42
-#: src/frontend/datasources/FITSOptionsWidget.cpp:75
-#: src/frontend/datasources/FITSOptionsWidget.cpp:144
+#: src/backend/datasources/filters/FITSFilter.cpp:1060
+#: src/backend/datasources/filters/FITSFilter.cpp:1580
+#: src/frontend/datasources/FITSOptionsWidget.cpp:40
+#: src/frontend/datasources/FITSOptionsWidget.cpp:73
 #, kde-format
 msgid "Primary header"
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1039
+#: src/backend/datasources/filters/FITSFilter.cpp:1062
 #, fuzzy, kde-format
 msgid "IMAGE #%1"
 msgstr "Obrázok"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1042
+#: src/backend/datasources/filters/FITSFilter.cpp:1065
 #, kde-format
 msgid "ASCII_TBL #%1"
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1045
+#: src/backend/datasources/filters/FITSFilter.cpp:1068
 #, kde-format
 msgid "BINARY_TBL #%1"
 msgstr ""
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1550
+#: src/backend/datasources/filters/FITSFilter.cpp:1573
 #, kde-format
 msgid "Images"
 msgstr "Obrázky"
 
-#: src/backend/datasources/filters/FITSFilter.cpp:1576
+#: src/backend/datasources/filters/FITSFilter.cpp:1599
 #, kde-format
 msgid "Tables"
 msgstr "Tabuľky"
@@ -1696,7 +1695,7 @@ msgstr "Informácia o súbore"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/frontend/datasources/ImportFileWidget.cpp:1626
+#: src/frontend/datasources/ImportFileWidget.cpp:1629
 #, fuzzy, kde-format
 msgid "Reading from file %1 failed."
 msgstr "<p>Čítanie zo súboru <b>%1</b> zlyhalo:</p><p><tt>%2</tt></p>"
@@ -2049,7 +2048,7 @@ msgid "Unknown"
 msgstr "neznáme"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/ActionsManager.cpp:221 src/frontend/MainWin.cpp:1227
+#: src/frontend/ActionsManager.cpp:221 src/frontend/MainWin.cpp:1228
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -7111,7 +7110,7 @@ msgstr "Smer"
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:496
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
-#: src/frontend/datasources/ImportFileWidget.cpp:1366
+#: src/frontend/datasources/ImportFileWidget.cpp:1373
 #: src/frontend/dockwidgets/AxisDock.cpp:237
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:172
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
@@ -10862,7 +10861,7 @@ msgstr ""
 msgid "%1: set page size"
 msgstr ""
 
-#: src/backend/worksheet/Worksheet.cpp:1527
+#: src/backend/worksheet/Worksheet.cpp:1524
 #, fuzzy, kde-format
 #| msgid "Curve"
 msgid "Curves"
@@ -11013,7 +11012,7 @@ msgstr "Mierka:"
 
 #. i18n("Used Locale:") + QLatin1String(" </td><td>") + usedLanguage + QLatin1String("</td></tr>")
 #. i18n: ectx: property (text), widget (QLabel, lNumberFormat)
-#: src/frontend/AboutDialog.cpp:177 src/frontend/ui/settingsgeneralpage.ui:60
+#: src/frontend/AboutDialog.cpp:177 src/frontend/ui/settingsgeneralpage.ui:183
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Number Format:"
@@ -11244,7 +11243,7 @@ msgstr ""
 msgid "&Open Example"
 msgstr "Otvoriť súbor"
 
-#: src/frontend/ActionsManager.cpp:205 src/frontend/MainWin.cpp:1183
+#: src/frontend/ActionsManager.cpp:205 src/frontend/MainWin.cpp:1184
 #, kde-format
 msgid "Workbook"
 msgstr ""
@@ -11254,7 +11253,7 @@ msgstr ""
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:210 src/frontend/MainWin.cpp:1191
+#: src/frontend/ActionsManager.cpp:210 src/frontend/MainWin.cpp:1192
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Data Extractor"
@@ -11270,7 +11269,7 @@ msgstr ""
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:114
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:74
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:407
-#: src/frontend/MainWin.cpp:1199 src/frontend/SettingsDialog.cpp:67
+#: src/frontend/MainWin.cpp:1200 src/frontend/SettingsDialog.cpp:67
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:125
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -11288,7 +11287,7 @@ msgstr ""
 msgid "Creates a new matrix for data editing"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:227 src/frontend/MainWin.cpp:1245
+#: src/frontend/ActionsManager.cpp:227 src/frontend/MainWin.cpp:1246
 #: src/frontend/SettingsDialog.cpp:62
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:86
 #, kde-format
@@ -11305,7 +11304,7 @@ msgstr ""
 msgid "Creates a new %1 script"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:244 src/frontend/MainWin.cpp:1253
+#: src/frontend/ActionsManager.cpp:244 src/frontend/MainWin.cpp:1254
 #, kde-format
 msgid "Note"
 msgstr "Poznámka"
@@ -11315,7 +11314,7 @@ msgstr "Poznámka"
 msgid "Creates a new note for arbitrary text"
 msgstr ""
 
-#: src/frontend/ActionsManager.cpp:249 src/frontend/MainWin.cpp:1175
+#: src/frontend/ActionsManager.cpp:249 src/frontend/MainWin.cpp:1176
 #, kde-format
 msgid "Folder"
 msgstr "Priečinok"
@@ -11629,7 +11628,7 @@ msgid "Select Y-Region and Zoom In"
 msgstr "Vybrané stĺpce"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:611 src/frontend/MainWin.cpp:1599
+#: src/frontend/ActionsManager.cpp:611 src/frontend/MainWin.cpp:1600
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1429
 #: src/frontend/worksheet/WorksheetView.cpp:378
 #, kde-format
@@ -12640,7 +12639,7 @@ msgid "Matrix name:"
 msgstr "Matica %1"
 
 #: src/frontend/datasources/ImportDialog.cpp:202
-#: src/frontend/datasources/ImportFileDialog.cpp:365
+#: src/frontend/datasources/ImportFileDialog.cpp:367
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:158
 #, kde-format
 msgid "Close the dialog and import the data."
@@ -12662,7 +12661,7 @@ msgid "Add New Live Data Source"
 msgstr "Pridať novú premennú"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:106
-#: src/frontend/datasources/ImportFileDialog.cpp:346
+#: src/frontend/datasources/ImportFileDialog.cpp:348
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:140
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:361
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:125
@@ -12672,7 +12671,7 @@ msgid "Hide Options"
 msgstr "Skryť voľby"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:106
-#: src/frontend/datasources/ImportFileDialog.cpp:346
+#: src/frontend/datasources/ImportFileDialog.cpp:348
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:140
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:361
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:125
@@ -12687,74 +12686,74 @@ msgstr "Ukázať voľby"
 msgid "Live data source created in %1 seconds."
 msgstr "Pridať novú premennú"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:176
+#: src/frontend/datasources/ImportFileDialog.cpp:175
 #, fuzzy, kde-format
 #| msgid "Clea&r Selection"
 msgid "No target data container selected"
 msgstr "Vyčistiť výber"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:321
+#: src/frontend/datasources/ImportFileDialog.cpp:323
 #, kde-format
 msgid "File %1 imported in %2 seconds."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileDialog.cpp:367
+#: src/frontend/datasources/ImportFileDialog.cpp:369
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:152
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileDialog.cpp:379
+#: src/frontend/datasources/ImportFileDialog.cpp:381
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:136
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileDialog.cpp:397
+#: src/frontend/datasources/ImportFileDialog.cpp:399
 #, kde-format
 msgid "No file provided for import."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileDialog.cpp:422
+#: src/frontend/datasources/ImportFileDialog.cpp:424
 #, kde-format
 msgid "The provided file doesn't exist."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileDialog.cpp:442
+#: src/frontend/datasources/ImportFileDialog.cpp:444
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileDialog.cpp:446
+#: src/frontend/datasources/ImportFileDialog.cpp:448
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileDialog.cpp:461
+#: src/frontend/datasources/ImportFileDialog.cpp:463
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:465
-#: src/frontend/datasources/ImportFileDialog.cpp:485
+#: src/frontend/datasources/ImportFileDialog.cpp:467
+#: src/frontend/datasources/ImportFileDialog.cpp:487
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileDialog.cpp:481
+#: src/frontend/datasources/ImportFileDialog.cpp:483
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:513
+#: src/frontend/datasources/ImportFileDialog.cpp:515
 #, kde-format
 msgid "Serial port number is missing."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileDialog.cpp:525
+#: src/frontend/datasources/ImportFileDialog.cpp:527
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
@@ -12955,39 +12954,39 @@ msgid ""
 "The number of rows is calculated from the values of the data portion tab"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1004
+#: src/frontend/datasources/ImportFileWidget.cpp:1011
 #, fuzzy, kde-format
 #| msgid "Add new variable"
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Pridať novú premennú"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1034
+#: src/frontend/datasources/ImportFileWidget.cpp:1041
 #, fuzzy, kde-format
 #| msgid "Select all"
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Vybrať všetko"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1034
+#: src/frontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1121
+#: src/frontend/datasources/ImportFileWidget.cpp:1128
 #, kde-format
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1124
+#: src/frontend/datasources/ImportFileWidget.cpp:1131
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/frontend/datasources/ImportFileWidget.cpp:1272
+#: src/frontend/datasources/ImportFileWidget.cpp:1279
 #: src/frontend/ui/datasources/importfilewidget.ui:416
 #, fuzzy, kde-format
 #| msgid "Data format"
@@ -12996,7 +12995,7 @@ msgstr "Dátový formát"
 
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/frontend/datasources/ImportFileWidget.cpp:1273
+#: src/frontend/datasources/ImportFileWidget.cpp:1280
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
 #: src/frontend/ui/settingsworksheetpage.ui:134
@@ -13005,108 +13004,108 @@ msgid "Preview"
 msgstr "Náhľad"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/frontend/datasources/ImportFileWidget.cpp:1275
+#: src/frontend/datasources/ImportFileWidget.cpp:1282
 #: src/frontend/ui/datasources/importfilewidget.ui:582
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1318
+#: src/frontend/datasources/ImportFileWidget.cpp:1325
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Data format && preview"
 msgstr "Dátový formát"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1365
+#: src/frontend/datasources/ImportFileWidget.cpp:1372
 #, kde-format
 msgid "Automatic"
 msgstr "Automaticky"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1618
+#: src/frontend/datasources/ImportFileWidget.cpp:1621
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "File Information"
 msgid "file command not found"
 msgstr "Informácia o súbore"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1629
+#: src/frontend/datasources/ImportFileWidget.cpp:1632
 #, kde-format
 msgid "cannot open"
 msgstr "nemôžem otvoriť"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1634
+#: src/frontend/datasources/ImportFileWidget.cpp:1637
 #, fuzzy, kde-format
 #| msgid "File type: %1"
 msgid "<b>File type:</b> %1"
 msgstr "Typ súboru: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1639
+#: src/frontend/datasources/ImportFileWidget.cpp:1642
 #, kde-format
 msgid "General:"
 msgstr "Všeobecné:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1641
-#: src/frontend/datasources/ImportFileWidget.cpp:1642
-#: src/frontend/datasources/ImportFileWidget.cpp:1643
+#: src/frontend/datasources/ImportFileWidget.cpp:1644
+#: src/frontend/datasources/ImportFileWidget.cpp:1645
+#: src/frontend/datasources/ImportFileWidget.cpp:1646
 #, kde-format
 msgid "yes"
 msgstr "áno"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1641
-#: src/frontend/datasources/ImportFileWidget.cpp:1642
-#: src/frontend/datasources/ImportFileWidget.cpp:1643
+#: src/frontend/datasources/ImportFileWidget.cpp:1644
+#: src/frontend/datasources/ImportFileWidget.cpp:1645
+#: src/frontend/datasources/ImportFileWidget.cpp:1646
 #, kde-format
 msgid "no"
 msgstr "nie"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1641
+#: src/frontend/datasources/ImportFileWidget.cpp:1644
 #, kde-format
 msgid "Readable: %1"
 msgstr "Na čítanie: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1642
+#: src/frontend/datasources/ImportFileWidget.cpp:1645
 #, kde-format
 msgid "Writable: %1"
 msgstr "Zapisovateľné: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1643
+#: src/frontend/datasources/ImportFileWidget.cpp:1646
 #, kde-format
 msgid "Executable: %1"
 msgstr "Spustiteľný súbor: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1645
+#: src/frontend/datasources/ImportFileWidget.cpp:1648
 #, kde-format
 msgid "Birth time: %1"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1646
+#: src/frontend/datasources/ImportFileWidget.cpp:1649
 #, fuzzy, kde-format
 #| msgid "Last modified: %1"
 msgid "Last metadata changed: %1"
 msgstr "Posledná zmena: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1647
+#: src/frontend/datasources/ImportFileWidget.cpp:1650
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Posledná zmena: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1648
+#: src/frontend/datasources/ImportFileWidget.cpp:1651
 #, kde-format
 msgid "Last read: %1"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1649
+#: src/frontend/datasources/ImportFileWidget.cpp:1652
 #, kde-format
 msgid "Owner: %1"
 msgstr "Vlastník: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1650
+#: src/frontend/datasources/ImportFileWidget.cpp:1653
 #, kde-format
 msgid "Group: %1"
 msgstr "Skupina: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1651
+#: src/frontend/datasources/ImportFileWidget.cpp:1654
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
@@ -13114,82 +13113,82 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1654
+#: src/frontend/datasources/ImportFileWidget.cpp:1657
 #, fuzzy, kde-format
 msgid "Summary:"
 msgstr "Súhrn:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1677
-#: src/frontend/datasources/ImportFileWidget.cpp:1682
+#: src/frontend/datasources/ImportFileWidget.cpp:1680
+#: src/frontend/datasources/ImportFileWidget.cpp:1685
 #, kde-format
 msgid "Content:"
 msgstr "Obsah:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1713
+#: src/frontend/datasources/ImportFileWidget.cpp:1716
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1806
+#: src/frontend/datasources/ImportFileWidget.cpp:1807
 #, kde-format
 msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
 "be larger than 'Start Row' or -1"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1817
+#: src/frontend/datasources/ImportFileWidget.cpp:1818
 #, fuzzy, kde-format
 #| msgid "Connection failed"
 msgid "Initialization failed: %1"
 msgstr "Spojenie zlyhalo"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1842
+#: src/frontend/datasources/ImportFileWidget.cpp:1843
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to connect to the local socket: %1"
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1859
+#: src/frontend/datasources/ImportFileWidget.cpp:1860
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to connect to the TCP socket. %1"
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1865
-#: src/frontend/datasources/ImportFileWidget.cpp:1894
+#: src/frontend/datasources/ImportFileWidget.cpp:1866
+#: src/frontend/datasources/ImportFileWidget.cpp:1895
 #, kde-format
 msgid "Socket operation timed out."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1879
+#: src/frontend/datasources/ImportFileWidget.cpp:1880
 #, kde-format
 msgid "Not ready for read after 2s:"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1898
+#: src/frontend/datasources/ImportFileWidget.cpp:1899
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Unable to bind: "
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1915
+#: src/frontend/datasources/ImportFileWidget.cpp:1916
 #, fuzzy, kde-format
 #| msgid "Created: %1"
 msgid "Parse Error: %1"
 msgstr "Vytvorené: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1917
+#: src/frontend/datasources/ImportFileWidget.cpp:1918
 #, kde-format
 msgid "Not ready for read after 2 sec"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1921
+#: src/frontend/datasources/ImportFileWidget.cpp:1922
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to open serial port. error: %1"
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1940
+#: src/frontend/datasources/ImportFileWidget.cpp:1941
 #, fuzzy, kde-format
 #| msgid "Clea&r Selection"
 msgid "No data arrived yet for the selected topic"
@@ -13449,7 +13448,7 @@ msgid "Open LabPlot Project"
 msgstr "Otvoriť projekt"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:712
+#: src/frontend/MainWin.cpp:713
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "LabPlot Projects (%1)"
@@ -13713,7 +13712,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2002
+#: src/frontend/MainWin.cpp:2003
 #, fuzzy, kde-format
 msgid "Warning"
 msgstr "Upozornenie"
@@ -14107,7 +14106,7 @@ msgstr ""
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:236
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:235
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1043
 #, kde-format
@@ -14970,14 +14969,14 @@ msgid ""
 "step limits\"), straight lines are drawn for the limits otherwise."
 msgstr ""
 
-#: src/frontend/dockwidgets/ProjectDock.cpp:72
+#: src/frontend/dockwidgets/ProjectDock.cpp:74
 #, kde-format
 msgid ""
 "If checked, the state of the default application docks is saved in the "
 "project file and restored on project load."
 msgstr ""
 
-#: src/frontend/dockwidgets/ProjectDock.cpp:77
+#: src/frontend/dockwidgets/ProjectDock.cpp:79
 #, kde-format
 msgid ""
 "If checked, the results of the calculations in the analysis curves will be "
@@ -15035,18 +15034,18 @@ msgstr "Hodnoty"
 msgid "Copy Name and Value"
 msgstr "Hodnoty"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:57
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:56
 #, kde-format
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
 msgstr ""
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:61
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:60
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
 msgstr ""
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:234
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:233
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr ""
@@ -15618,7 +15617,7 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/frontend/GuiObserver.cpp:182 src/frontend/MainWin.cpp:619
+#: src/frontend/GuiObserver.cpp:182 src/frontend/MainWin.cpp:620
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -16239,7 +16238,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/notebookdock.ui:65
 #: src/frontend/ui/dockwidgets/notedock.ui:43
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:87
-#: src/frontend/ui/dockwidgets/projectdock.ui:140
+#: src/frontend/ui/dockwidgets/projectdock.ui:184
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:103
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:118
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:56
@@ -16600,152 +16599,152 @@ msgstr "Aktuálny projekt bol zmenený. Chcete ho uložiť?"
 msgid "Save Project"
 msgstr "Uloženie projektu"
 
-#: src/frontend/MainWin.cpp:580
+#: src/frontend/MainWin.cpp:581
 #, fuzzy, kde-format
 #| msgid "%1: clear"
 msgid "%1: created"
 msgstr "Vytvorené"
 
-#: src/frontend/MainWin.cpp:606
+#: src/frontend/MainWin.cpp:607
 #, fuzzy, kde-format
 #| msgid "Project properties"
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Vlastnosti projektu"
 
-#: src/frontend/MainWin.cpp:631
+#: src/frontend/MainWin.cpp:632
 #, fuzzy, kde-format
 #| msgid "Worksheet"
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "List"
 
-#: src/frontend/MainWin.cpp:640
+#: src/frontend/MainWin.cpp:641
 #, fuzzy, kde-format
 #| msgid "Content"
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Obsah"
 
-#: src/frontend/MainWin.cpp:717
+#: src/frontend/MainWin.cpp:718
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Projects (%1)"
 msgstr "Otvoriť projekt"
 
-#: src/frontend/MainWin.cpp:723
+#: src/frontend/MainWin.cpp:724
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "Cantor Projects (*.cws)"
 msgstr "Zatvoriť projekt"
 
-#: src/frontend/MainWin.cpp:724
+#: src/frontend/MainWin.cpp:725
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:731
+#: src/frontend/MainWin.cpp:732
 #, kde-format
 msgid "All supported files (%1)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:735
+#: src/frontend/MainWin.cpp:736
 #, fuzzy, kde-format
 #| msgid "Open Project"
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Otvoriť projekt"
 
-#: src/frontend/MainWin.cpp:752
+#: src/frontend/MainWin.cpp:753
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:752 src/frontend/MainWin.cpp:760
-#: src/frontend/MainWin.cpp:765
+#: src/frontend/MainWin.cpp:753 src/frontend/MainWin.cpp:761
+#: src/frontend/MainWin.cpp:766
 #, kde-format
 msgid "Open Project"
 msgstr "Otvoriť projekt"
 
-#: src/frontend/MainWin.cpp:760
+#: src/frontend/MainWin.cpp:761
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:765
+#: src/frontend/MainWin.cpp:766
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't read the project file %1."
 msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 
-#: src/frontend/MainWin.cpp:773
+#: src/frontend/MainWin.cpp:774
 #, kde-format
 msgid "Loading %1..."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:828
+#: src/frontend/MainWin.cpp:829
 #, fuzzy, kde-format
 msgid "%1: opened"
 msgstr "Otvorené"
 
-#: src/frontend/MainWin.cpp:863
+#: src/frontend/MainWin.cpp:864
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:956
+#: src/frontend/MainWin.cpp:957
 #, fuzzy, kde-format
 #| msgid "Save Project As"
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Uložiť projekt ako"
 
-#: src/frontend/MainWin.cpp:958
+#: src/frontend/MainWin.cpp:959
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:985
+#: src/frontend/MainWin.cpp:986
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't open the temporary file for writing."
 msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 
-#: src/frontend/MainWin.cpp:1064
+#: src/frontend/MainWin.cpp:1065
 #, kde-format
 msgid "Project saved"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1080
+#: src/frontend/MainWin.cpp:1081
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1085
+#: src/frontend/MainWin.cpp:1086
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 
-#: src/frontend/MainWin.cpp:1135
+#: src/frontend/MainWin.cpp:1136
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgid "Changed"
 msgstr "%1    [zmenené]"
 
-#: src/frontend/MainWin.cpp:1150 src/frontend/MainWin.cpp:1162
+#: src/frontend/MainWin.cpp:1151 src/frontend/MainWin.cpp:1163
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1152 src/frontend/MainWin.cpp:1164
+#: src/frontend/MainWin.cpp:1153 src/frontend/MainWin.cpp:1165
 #, fuzzy, kde-format
 msgid "%1 printed"
 msgstr "tlačené: %1"
 
-#: src/frontend/MainWin.cpp:1219
+#: src/frontend/MainWin.cpp:1220
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3732
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3733
 #, fuzzy, kde-format
@@ -16753,41 +16752,41 @@ msgstr "tlačené: %1"
 msgid "%1"
 msgstr "1"
 
-#: src/frontend/MainWin.cpp:1898
+#: src/frontend/MainWin.cpp:1899
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "File Information"
 msgid "Kaggle CLI tool not found"
 msgstr "Informácia o súbore"
 
-#: src/frontend/MainWin.cpp:1899
+#: src/frontend/MainWin.cpp:1900
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
 "again."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1965
+#: src/frontend/MainWin.cpp:1966
 #, kde-format
 msgid "%1 exported"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1972
+#: src/frontend/MainWin.cpp:1973
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1984
+#: src/frontend/MainWin.cpp:1985
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2002
+#: src/frontend/MainWin.cpp:2003
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2006
+#: src/frontend/MainWin.cpp:2007
 #, fuzzy, kde-format
 #| msgid "Add new variable"
 msgid "Live data source%1"
@@ -17524,112 +17523,112 @@ msgstr "Nastavenia"
 msgid "min."
 msgstr "min."
 
-#: src/frontend/SettingsGeneralPage.cpp:212
+#: src/frontend/SettingsGeneralPage.cpp:215
 #, fuzzy, kde-format
 #| msgid "new Spreadsheet"
 msgid "Create New Project"
 msgstr "nový zošit"
 
-#: src/frontend/SettingsGeneralPage.cpp:213
+#: src/frontend/SettingsGeneralPage.cpp:216
 #, kde-format
 msgid "Load Last Used Project"
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:217
+#: src/frontend/SettingsGeneralPage.cpp:220
 #, fuzzy, kde-format
 #| msgid "&Spreadsheet"
 msgid "With Spreadsheet"
 msgstr "Zošit"
 
-#: src/frontend/SettingsGeneralPage.cpp:218
+#: src/frontend/SettingsGeneralPage.cpp:221
 #, fuzzy, kde-format
 #| msgid "Worksheet"
 msgid "With Worksheet"
 msgstr "List"
 
-#: src/frontend/SettingsGeneralPage.cpp:219
+#: src/frontend/SettingsGeneralPage.cpp:222
 #, fuzzy, kde-format
 #| msgid "%1: set vertical alignment"
 msgid "With Spreadsheet and Worksheet"
 msgstr "%1: nastaviť vertikálne zarovnanie"
 
-#: src/frontend/SettingsGeneralPage.cpp:221
+#: src/frontend/SettingsGeneralPage.cpp:224
 #, fuzzy, kde-format
 #| msgid "Note"
 msgid "With Notebook"
 msgstr "Poznámka"
 
-#: src/frontend/SettingsGeneralPage.cpp:224
+#: src/frontend/SettingsGeneralPage.cpp:227
 #, kde-format
 msgid "Notebook type to create automatically on startup"
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:228
+#: src/frontend/SettingsGeneralPage.cpp:231
 #, kde-format
 msgid ""
 "Controls the behavior of where the dock widgets are placed after being re-"
 "opened"
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:232
+#: src/frontend/SettingsGeneralPage.cpp:235
 #, fuzzy, kde-format
 #| msgid "Original Size"
 msgid "Original Position"
 msgstr "Originálna veľkosť"
 
-#: src/frontend/SettingsGeneralPage.cpp:233
+#: src/frontend/SettingsGeneralPage.cpp:236
 #, kde-format
 msgid "On top of the last active Dock Widget"
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:236
+#: src/frontend/SettingsGeneralPage.cpp:239
 #, fuzzy, kde-format
 #| msgid "Show Controls"
 msgid "Show File Path"
 msgstr "Zobraziť posledné:"
 
-#: src/frontend/SettingsGeneralPage.cpp:237
+#: src/frontend/SettingsGeneralPage.cpp:240
 #, fuzzy, kde-format
 #| msgid "File name:"
 msgid "Show File Name"
 msgstr "Názov súboru:"
 
-#: src/frontend/SettingsGeneralPage.cpp:238
+#: src/frontend/SettingsGeneralPage.cpp:241
 #, fuzzy, kde-format
 #| msgid "Save Project As"
 msgid "Show Project Name"
 msgstr "Uložiť projekt ako"
 
-#: src/frontend/SettingsGeneralPage.cpp:241
+#: src/frontend/SettingsGeneralPage.cpp:244
 #, fuzzy, kde-format
 #| msgid "Geometric"
 msgid "Metric"
 msgstr "Geometrické"
 
-#: src/frontend/SettingsGeneralPage.cpp:242
+#: src/frontend/SettingsGeneralPage.cpp:245
 #, fuzzy, kde-format
 msgid "Imperial"
 msgstr "Imperiálne jednotky"
 
-#: src/frontend/SettingsGeneralPage.cpp:244
+#: src/frontend/SettingsGeneralPage.cpp:247
 #, kde-format
 msgid ""
 "Characters for the decimal and group separators defining the number format"
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:248
+#: src/frontend/SettingsGeneralPage.cpp:251
 #, kde-format
 msgid "%1 (System, %2)"
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:257
+#: src/frontend/SettingsGeneralPage.cpp:260
 #, kde-format
 msgid ""
 "Use the hyphen sign instead of the minus sign for negative numbers shown on "
 "the worksheet"
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:261
+#: src/frontend/SettingsGeneralPage.cpp:264
 #, kde-format
 msgid ""
 "Use terms compliant with the <a href=\"http://www.bipm.org/utils/common/"
@@ -17637,7 +17636,7 @@ msgid ""
 "in Measurement (GUM)</a>"
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:266
+#: src/frontend/SettingsGeneralPage.cpp:269
 #, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
@@ -17646,7 +17645,7 @@ msgid ""
 "properties."
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:273
+#: src/frontend/SettingsGeneralPage.cpp:276
 #, kde-format
 msgid ""
 "Save the results of the calculations in the analysis curves in the project "
@@ -17658,30 +17657,35 @@ msgid ""
 "properties."
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:280
+#: src/frontend/SettingsGeneralPage.cpp:283
 #, kde-format
 msgid "Activates additional tracing output in the terminal."
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:281
+#: src/frontend/SettingsGeneralPage.cpp:284
 #, kde-format
 msgid ""
 "Info trace - helpful to get information and warnings when running the "
 "application."
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:282
+#: src/frontend/SettingsGeneralPage.cpp:285
 #, kde-format
 msgid ""
 "Debug trace - helpful to diagnose the application, can have a negative "
 "impact on the performance."
 msgstr ""
 
-#: src/frontend/SettingsGeneralPage.cpp:283
+#: src/frontend/SettingsGeneralPage.cpp:286
 #, kde-format
 msgid ""
 "Performance trace - helpful to analyze performance relevant aspects and "
 "bottlenecks."
+msgstr ""
+
+#: src/frontend/SettingsGeneralPage.cpp:288
+#, kde-format
+msgid "If enabled spreadsheet and matrix data is saved in the project file"
 msgstr ""
 
 #: src/frontend/SettingsNotebookPage.cpp:30
@@ -19934,7 +19938,7 @@ msgstr "Formát:"
 #: src/frontend/ui/dockwidgets/notebookdock.ui:33
 #: src/frontend/ui/dockwidgets/notedock.ui:17
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:219
-#: src/frontend/ui/dockwidgets/projectdock.ui:268
+#: src/frontend/ui/dockwidgets/projectdock.ui:141
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:59
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:189
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:111
@@ -23068,7 +23072,7 @@ msgstr "Témy:"
 #. i18n: ectx: property (text), widget (QLabel, lAutoSaveInterval)
 #. i18n: ectx: property (text), widget (QLabel, lUpdateInterval)
 #: src/frontend/ui/dockwidgets/livedatadock.ui:112
-#: src/frontend/ui/settingsgeneralpage.ui:369
+#: src/frontend/ui/settingsgeneralpage.ui:106
 #, kde-format
 msgid "Interval:"
 msgstr "Interval:"
@@ -23254,69 +23258,75 @@ msgid "Background Color:"
 msgstr "Farba pozadia"
 
 #. i18n: ectx: property (text), widget (QLabel, lSettings)
-#: src/frontend/ui/dockwidgets/projectdock.ui:82
+#: src/frontend/ui/dockwidgets/projectdock.ui:78
 #, fuzzy, kde-format
 msgid "Settings:"
 msgstr "Nastavenia"
 
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: src/frontend/ui/dockwidgets/projectdock.ui:89
-#, kde-format
-msgid "Author:"
-msgstr "Autor:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_5)
-#: src/frontend/ui/dockwidgets/projectdock.ui:109
-#, fuzzy, kde-format
-#| msgid "Created"
-msgid "Created:"
-msgstr "Vytvorené:"
-
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: src/frontend/ui/dockwidgets/projectdock.ui:133
+#: src/frontend/ui/dockwidgets/projectdock.ui:98
 #, fuzzy, kde-format
 #| msgid "Last modified"
 msgid "Modified:"
 msgstr "Posledná zmena:"
 
-#. i18n: ectx: property (text), widget (QLabel, lFileName)
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/dockwidgets/projectdock.ui:150
-#: src/frontend/ui/worksheet/exportworksheetwidget.ui:49
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: src/frontend/ui/dockwidgets/projectdock.ui:121
 #, fuzzy, kde-format
-#| msgid "File name:"
-msgid "File Name:"
-msgstr "Názov súboru:"
+#| msgid "Created"
+msgid "Created:"
+msgstr "Vytvorené:"
 
 #. i18n: ectx: property (text), widget (QLabel, lVersion_2)
-#: src/frontend/ui/dockwidgets/projectdock.ui:157
+#: src/frontend/ui/dockwidgets/projectdock.ui:207
 #, fuzzy, kde-format
 #| msgctxt "matrix size"
 #| msgid "&Dimensions"
 msgid "Version:"
 msgstr "Rozmery"
 
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: src/frontend/ui/dockwidgets/projectdock.ui:214
+#, fuzzy, kde-format
+#| msgid "Show Options"
+msgid "Compress File:"
+msgstr "Ukázať voľby"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: src/frontend/ui/dockwidgets/projectdock.ui:237
+#, kde-format
+msgid "Author:"
+msgstr "Autor:"
+
+#. i18n: ectx: property (text), widget (QLabel, lFileName)
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/frontend/ui/dockwidgets/projectdock.ui:260
+#: src/frontend/ui/worksheet/exportworksheetwidget.ui:49
+#, fuzzy, kde-format
+#| msgid "File name:"
+msgid "File Name:"
+msgstr "Názov súboru:"
+
 #. i18n: ectx: property (text), widget (QLabel, lSaveDockStates)
-#: src/frontend/ui/dockwidgets/projectdock.ui:222
-#: src/frontend/ui/settingsgeneralpage.ui:432
+#: src/frontend/ui/dockwidgets/projectdock.ui:267
+#: src/frontend/ui/settingsgeneralpage.ui:250
 #, fuzzy, kde-format
 #| msgid "Save project as"
 msgid "Save Dock States:"
 msgstr "Uložiť projekt ako"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
-#: src/frontend/ui/dockwidgets/projectdock.ui:242
+#: src/frontend/ui/dockwidgets/projectdock.ui:288
 #, fuzzy, kde-format
 #| msgid "Tab position"
 msgid "Save Calculations:"
 msgstr "Riešiť rovnice"
 
-#. i18n: ectx: property (text), widget (QLabel, label_3)
-#: src/frontend/ui/dockwidgets/projectdock.ui:291
-#, fuzzy, kde-format
-#| msgid "Show Options"
-msgid "Compress File:"
-msgstr "Ukázať voľby"
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: src/frontend/ui/dockwidgets/projectdock.ui:305
+#, kde-format
+msgid "Save Data in File:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:113
@@ -23381,11 +23391,13 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
+#. i18n: ectx: property (text), widget (QCheckBox, chkSaveData)
 #. i18n: ectx: property (text), widget (QLabel, lLinkingEnabled)
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:17
-#: src/frontend/ui/settingsgeneralpage.ui:53
-#: src/frontend/ui/settingsgeneralpage.ui:74
-#: src/frontend/ui/settingsgeneralpage.ui:346
+#: src/frontend/ui/settingsgeneralpage.ui:17
+#: src/frontend/ui/settingsgeneralpage.ui:51
+#: src/frontend/ui/settingsgeneralpage.ui:83
+#: src/frontend/ui/settingsgeneralpage.ui:446
 #, fuzzy, kde-format
 msgid "Enabled"
 msgstr "Povolené"
@@ -24770,29 +24782,34 @@ msgstr "&Súbor"
 msgid "Clear"
 msgstr "V&yčistiť"
 
-#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
-#: src/frontend/ui/settingsgeneralpage.ui:17
-#, fuzzy, kde-format
-#| msgid "Auto-Save"
-msgid "Auto-save:"
-msgstr "Automatické ukladanie"
-
-#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
-#: src/frontend/ui/settingsgeneralpage.ui:46
-#, fuzzy, kde-format
-#| msgid "Plot"
-msgid "Dock Widget Placement:"
-msgstr "Kresliť"
-
 #. i18n: ectx: property (text), widget (QLabel, lStartup)
-#: src/frontend/ui/settingsgeneralpage.ui:67
+#: src/frontend/ui/settingsgeneralpage.ui:27
 #, fuzzy, kde-format
 #| msgid "Startup"
 msgid "Startup:"
 msgstr "Spustenie"
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
+#: src/frontend/ui/settingsgeneralpage.ui:37
+#, kde-format
+msgid "Omit leading zero in exponent"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
+#: src/frontend/ui/settingsgeneralpage.ui:44
+#, kde-format
+msgid "Terms:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/frontend/ui/settingsgeneralpage.ui:58
+#, fuzzy, kde-format
+#| msgid "Tab position"
+msgid "Save  Calculations:"
+msgstr "Riešiť rovnice"
+
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
-#: src/frontend/ui/settingsgeneralpage.ui:84
+#: src/frontend/ui/settingsgeneralpage.ui:139
 #, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
@@ -24802,13 +24819,60 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
-#: src/frontend/ui/settingsgeneralpage.ui:87
+#: src/frontend/ui/settingsgeneralpage.ui:142
 #, kde-format
 msgid "GUM compliant"
 msgstr ""
 
+#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
+#: src/frontend/ui/settingsgeneralpage.ui:159
+#, fuzzy, kde-format
+#| msgid "iterations"
+msgid "Omit group separator"
+msgstr "iterácie"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
+#: src/frontend/ui/settingsgeneralpage.ui:166
+#, kde-format
+msgid "Include trailing zeroes after dot"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
+#: src/frontend/ui/settingsgeneralpage.ui:173
+#, fuzzy, kde-format
+#| msgid "Note"
+msgid "Notebook:"
+msgstr "Poznámka"
+
+#. i18n: ectx: property (text), widget (QLabel, lNewProject)
+#: src/frontend/ui/settingsgeneralpage.ui:190
+#, fuzzy, kde-format
+#| msgid "Save Project"
+msgid "New Project:"
+msgstr "Uloženie projektu"
+
+#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
+#: src/frontend/ui/settingsgeneralpage.ui:197
+#, fuzzy, kde-format
+#| msgid "Title"
+msgid "Title Bar:"
+msgstr "Titulok"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkUseHyphen)
+#: src/frontend/ui/settingsgeneralpage.ui:204
+#, kde-format
+msgid "Use Hyphen '-' instead of Minus '–'"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lAutoSave)
+#: src/frontend/ui/settingsgeneralpage.ui:243
+#, fuzzy, kde-format
+#| msgid "Auto-Save"
+msgid "Auto-save:"
+msgstr "Automatické ukladanie"
+
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
-#: src/frontend/ui/settingsgeneralpage.ui:97
+#: src/frontend/ui/settingsgeneralpage.ui:273
 #, kde-format
 msgid ""
 "<html><head/><body><p>Save projects in a uncompressed xml format that can be "
@@ -24817,118 +24881,73 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
-#: src/frontend/ui/settingsgeneralpage.ui:100
+#: src/frontend/ui/settingsgeneralpage.ui:276
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Save in uncompressed format"
 msgstr "Dátový formát"
 
-#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
-#: src/frontend/ui/settingsgeneralpage.ui:107
-#, fuzzy, kde-format
-#| msgid "Number of points"
-msgid "Number Options:"
-msgstr "Počet bodov"
-
-#. i18n: ectx: property (text), widget (QLabel, lUnits)
-#: src/frontend/ui/settingsgeneralpage.ui:114
-#, fuzzy, kde-format
-#| msgid "Unit:"
-msgid "Units:"
-msgstr "Jednotka:"
-
-#. i18n: ectx: property (text), widget (QLabel, lNewProject)
-#: src/frontend/ui/settingsgeneralpage.ui:121
-#, fuzzy, kde-format
-#| msgid "Save Project"
-msgid "New Project:"
-msgstr "Uloženie projektu"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkIncludeTrailingZeroesAfterDot)
-#: src/frontend/ui/settingsgeneralpage.ui:128
-#, kde-format
-msgid "Include trailing zeroes after dot"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lNewProjectNotebook)
-#: src/frontend/ui/settingsgeneralpage.ui:135
-#, fuzzy, kde-format
-#| msgid "Note"
-msgid "Notebook:"
-msgstr "Poznámka"
-
-#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
-#: src/frontend/ui/settingsgeneralpage.ui:155
-#, fuzzy, kde-format
-#| msgid "Show Options"
-msgid "Compression:"
-msgstr "Ukázať voľby"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitGroupSeparator)
-#: src/frontend/ui/settingsgeneralpage.ui:197
-#, fuzzy, kde-format
-#| msgid "iterations"
-msgid "Omit group separator"
-msgstr "iterácie"
-
 #. i18n: ectx: property (text), widget (QLabel, lTracing)
-#: src/frontend/ui/settingsgeneralpage.ui:214
+#: src/frontend/ui/settingsgeneralpage.ui:283
 #, fuzzy, kde-format
 #| msgid "Spacing"
 msgid "Tracing:"
 msgstr "Medzery"
 
+#. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
+#: src/frontend/ui/settingsgeneralpage.ui:290
+#, fuzzy, kde-format
+#| msgid "Show Options"
+msgid "Compression:"
+msgstr "Ukázať voľby"
+
+#. i18n: ectx: property (text), widget (QLabel, lUnits)
+#: src/frontend/ui/settingsgeneralpage.ui:329
+#, fuzzy, kde-format
+#| msgid "Unit:"
+msgid "Units:"
+msgstr "Jednotka:"
+
+#. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
+#: src/frontend/ui/settingsgeneralpage.ui:336
+#, fuzzy, kde-format
+#| msgid "Number of points"
+msgid "Number Options:"
+msgstr "Počet bodov"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkInfoTrace)
-#: src/frontend/ui/settingsgeneralpage.ui:245
+#: src/frontend/ui/settingsgeneralpage.ui:367
 #, kde-format
 msgid "Info"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPerfTrace)
 #. i18n: ectx: property (text), widget (QLabel, lPerformance)
-#: src/frontend/ui/settingsgeneralpage.ui:281
+#: src/frontend/ui/settingsgeneralpage.ui:403
 #: src/frontend/ui/settingsworksheetpage.ui:50
 #, kde-format
 msgid "Performance"
 msgstr "Výkon"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDebugTrace)
-#: src/frontend/ui/settingsgeneralpage.ui:301
+#: src/frontend/ui/settingsgeneralpage.ui:423
 #, kde-format
 msgid "Debug"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkOmitLeadingZeroInExponent)
-#: src/frontend/ui/settingsgeneralpage.ui:311
-#, kde-format
-msgid "Omit leading zero in exponent"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QLabel, lTitleBar)
-#: src/frontend/ui/settingsgeneralpage.ui:318
-#, fuzzy, kde-format
-#| msgid "Title"
-msgid "Title Bar:"
-msgstr "Titulok"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/settingsgeneralpage.ui:402
-#, fuzzy, kde-format
-#| msgid "Tab position"
-msgid "Save  Calculations:"
-msgstr "Riešiť rovnice"
-
-#. i18n: ectx: property (text), widget (QLabel, lGUMTerms)
-#: src/frontend/ui/settingsgeneralpage.ui:409
-#, kde-format
-msgid "Terms:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkUseHyphen)
+#. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
 #: src/frontend/ui/settingsgeneralpage.ui:439
-#, kde-format
-msgid "Use Hyphen '-' instead of Minus '–'"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "Plot"
+msgid "Dock Widget Placement:"
+msgstr "Kresliť"
+
+#. i18n: ectx: property (text), widget (QLabel, lSaveData)
+#: src/frontend/ui/settingsgeneralpage.ui:453
+#, fuzzy, kde-format
+#| msgid "Open Project"
+msgid "Save Data in Project file:"
+msgstr "Otvoriť projekt"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)

@@ -20,8 +20,6 @@ class QPushButton;
 class EquidistantValuesDialog : public QDialog {
 	Q_OBJECT
 
-	friend class SpreadsheetGenerateDataTest;
-
 public:
 	enum class Type { FixedNumber, FixedIncrement, FixedNumberIncrement };
 	enum class DateTimeUnit { Year, Month, Day, Hour, Minute, Second, Millisecond };
@@ -64,6 +62,9 @@ private Q_SLOTS:
 	void checkValues() const;
 	bool checkNumberValue() const;
 	bool checkIncrementValue() const;
+
+	friend class SpreadsheetGenerateDataTest;
+	friend class FITSFilterTest;
 };
 
 #endif

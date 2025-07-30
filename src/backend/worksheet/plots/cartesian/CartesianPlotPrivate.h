@@ -330,7 +330,7 @@ private:
 	QStaticText m_cursor0Text{QStringLiteral("1")};
 	QStaticText m_cursor1Text{QStringLiteral("2")};
 
-	friend class MultiRangeTest2;
+	friend class MultiRangeTest;
 	friend class CartesianPlotTest;
 };
 

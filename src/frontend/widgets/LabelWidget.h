@@ -153,7 +153,6 @@ private Q_SLOTS:
 	friend class AxisDock; // fontColorChanged() and labelFontColorChanged() are private methods of LabelWidget
 	friend class TextLabelTest;
 	friend class AxisTest;
-	friend class AxisTest2;
 	friend class WorksheetElementTest;
 };
 

@@ -216,7 +216,7 @@ private Q_SLOTS:
 Q_SIGNALS:
 	void info(const QString&);
 
-	friend class AxisTest2;
+	friend class AxisTest;
 };
 
 #endif

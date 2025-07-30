@@ -292,8 +292,6 @@ Q_SIGNALS:
 
 	friend class RetransformTest;
 	friend class AxisTest;
-	friend class AxisTest2;
-	friend class AxisTest3;
 	friend class AxisDock; // To be able to access range scale
 	friend class Project; // To be able to access range scale
 };

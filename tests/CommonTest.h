@@ -160,5 +160,41 @@ protected:
 	static void listStack(QUndoStack* stack);
 
 	void wait(int milliseconds);
+
+	/*!
+	 * \brief waitForSignal
+	 * \param sender
+	 * \param signal
+	 * \param timeout_ms
+	 * \return false if no timeout occured and the signal was emitted, true if a timeout occured
+	 */
+	template<typename T1, typename T2>
+	bool waitForSignal(T1* sender, T2 signal, double timeout_ms = 2000) {
+		QTimer timer(this);
+		timer.setSingleShot(true);
+
+		bool timeout = true;
+		int remainingTime = -999;
+
+		QEventLoop loop;
+		QTimer::connect(&timer, &QTimer::timeout, [&loop, &timeout, &remainingTime] {
+			timeout = false;
+			remainingTime = -1;
+			loop.quit();
+		});
+
+		const auto connection = connect(sender, signal, [&loop, &timer, &remainingTime] {
+			remainingTime = timer.remainingTime();
+			timer.stop();
+			loop.quit();
+		});
+		timer.start(timeout_ms);
+		loop.exec();
+		DEBUG(Q_FUNC_INFO << ", Remaining time: " << remainingTime);
+		// This disconnect is important, because outside of this function timer does not exist anymore and therefore the capture is invalid
+		disconnect(connection);
+
+		return timeout;
+	}
 };
 #endif

@@ -51,7 +51,6 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 	connect(templateHandler, &TemplateHandler::info, this, &SpreadsheetDock::info);
 }
 
-
 void SpreadsheetDock::retranslateUi() {
 	// tooltip texts
 	QString info = i18n("Enable linking to synchronize the number of rows with another spreadsheet");

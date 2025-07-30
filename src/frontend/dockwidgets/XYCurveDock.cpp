@@ -133,7 +133,7 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	// template handler
 	auto* frame = new QFrame(this);
 	layout = new QHBoxLayout(frame);
-	layout->setContentsMargins(0, 11, 0, 11);
+	layout->setContentsMargins(0, 0, 0, 0);
 
 	auto* templateHandler = new TemplateHandler(this, QLatin1String("XYCurve"));
 	layout->addWidget(templateHandler);
