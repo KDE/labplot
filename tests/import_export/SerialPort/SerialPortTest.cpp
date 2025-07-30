@@ -79,7 +79,7 @@ void SerialPortTest::cleanupTestCase() {
 
 void SerialPortTest::testReading() {
 	if (!m_socat_command_available)
-		QSKIP("No Socat available, so it is not possible to execute this test!");
+		QSKIP("No Socat available, so it is not possible to execute this test!", SkipSingle);
 
 	auto* filter = new AsciiFilter();
 	auto properties = filter->properties();
@@ -99,10 +99,10 @@ void SerialPortTest::testReading() {
 	dataSource.setFilter(filter);
 
 	const auto command_template = QStringLiteral("(echo %1 > %2)");
-	connect(&m_process_send, &QProcess::errorOccurred, [this]() {
+	connect(&m_process_send, &QProcess::errorOccurred, []() {
 		QVERIFY(false); //, STDSTRING(m_process_send.errorString()).data());
 	});
-	connect(&m_process_send, &QProcess::readyReadStandardError, [this]() {
+	connect(&m_process_send, &QProcess::readyReadStandardError, []() {
 		QVERIFY(false); //, STDSTRING(UTF8_QSTRING(m_process_send.readAllStandardError())).data());
 	});
 
