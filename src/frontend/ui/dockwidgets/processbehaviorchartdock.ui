@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>447</width>
-    <height>835</height>
+    <height>987</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -764,7 +764,11 @@
   <tabstop>leName</tabstop>
   <tabstop>teComment</tabstop>
   <tabstop>cbType</tabstop>
+  <tabstop>cbLimitsType</tabstop>
   <tabstop>cbLimitsMetric</tabstop>
+  <tabstop>leUpperLimitSpecification</tabstop>
+  <tabstop>leCenterSpecification</tabstop>
+  <tabstop>leLowerLimitSpecification</tabstop>
   <tabstop>sbSampleSize</tabstop>
   <tabstop>leMaxUpperLimit</tabstop>
   <tabstop>leMinLowerLimit</tabstop>
@@ -772,13 +776,13 @@
   <tabstop>cbPlotRanges</tabstop>
   <tabstop>chkLegendVisible</tabstop>
   <tabstop>chkVisible</tabstop>
-  <tabstop>kcbLabelsFontColor</tabstop>
-  <tabstop>cbLabelsBorderShape</tabstop>
-  <tabstop>kcbLabelsBackgroundColor</tabstop>
-  <tabstop>kfrLabelsFont</tabstop>
   <tabstop>chbLabelsEnabled</tabstop>
   <tabstop>sbLabelsPrecision</tabstop>
   <tabstop>chkLabelsAutoPrecision</tabstop>
+  <tabstop>cbLabelsBorderShape</tabstop>
+  <tabstop>kcbLabelsBackgroundColor</tabstop>
+  <tabstop>kcbLabelsFontColor</tabstop>
+  <tabstop>kfrLabelsFont</tabstop>
  </tabstops>
  <resources/>
  <connections/>

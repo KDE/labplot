@@ -1408,16 +1408,16 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 
 		yCenterColumn->setValueAt(0, center);
 		yCenterColumn->setValueAt(1, center);
+
+		updateLabels(); // update the texts in the value labels
 	} else {
 		// if "Specification" is selected, we use the values for center and limit lines that were specified by the user without any further checks
 		// and just overwrite the values calculated above with the user-defined values
 		updateSpecifications();
+		// updateLabels() is called in updateModifications() above.
 	}
 
 	QDEBUG(Q_FUNC_INFO << ", center: " << center << " , upper limit: " << upperLimit << ", lower limit: " << lowerLimit);
-
-	// update the texts in the value labels
-	updateLabels();
 }
 
 void ProcessBehaviorChartPrivate::updateSpecifications() {
@@ -1435,8 +1435,13 @@ void ProcessBehaviorChartPrivate::updateSpecifications() {
 	lowerLimitCurve->setUndoAware(false);
 	lowerLimitCurve->setVisible(true);
 	lowerLimitCurve->setUndoAware(true);
+
+	updateLabels(); // update the texts in the value labels
 }
 
+/*!
+ * updates the value labels, called after the values for center and limits were modified.
+ */
 void ProcessBehaviorChartPrivate::updateLabels() {
 	// no need to update the labels during the load, the properties are set in label's load()
 	if (!q->plot() || q->isLoading())
