@@ -87,7 +87,7 @@ void SerialPortTest::testReading() {
 	properties.headerEnabled = false;
 	properties.columnModesString = QStringLiteral("Int,Int,Double");
 	properties.intAsDouble = false;
-	QCOMPARE(filter->initialize(properties), AsciiFilter::Status::Success); // Live data must be initialized!
+	QCOMPARE(filter->initialize(properties).success(), true); // Live data must be initialized!
 
 	// initialize the live data source
 	LiveDataSource dataSource(QStringLiteral("test"), false);

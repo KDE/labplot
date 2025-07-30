@@ -370,11 +370,11 @@ AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner)
  * Determine all automatic values like separator, endRow, endColumn
  */
 Status AsciiFilterPrivate::initialize(QIODevice& device) {
-	IODeviceHandler d(device, true); // closes device automatically.
+	IODeviceHandler d(device, true); // closes device automatically
 
 	if (!properties.automaticSeparatorDetection && properties.endColumn > 0
 		&& properties.columnModes.size() == properties.endColumn - properties.startColumn + 1)
-		return Status::Success(); // Nothing to do since all unknows are determined
+		return Status::Success(); // Nothing to do since all unknowns are determined
 
 	const bool removeQuotes = properties.removeQuotes;
 	const bool simplifyWhiteSpace = properties.simplifyWhitespaces;
