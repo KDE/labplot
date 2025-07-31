@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-28 00:38+0000\n"
+"POT-Creation-Date: 2025-07-31 00:39+0000\n"
 "PO-Revision-Date: 2025-07-25 07:04+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -248,7 +248,7 @@ msgid "Y-Error -"
 msgstr "Napaka Y -"
 
 #: src/backend/core/AbstractColumn.cpp:227
-#: src/backend/datasources/filters/AsciiFilter.cpp:609
+#: src/backend/datasources/filters/AsciiFilter.cpp:554
 #: src/backend/datasources/filters/MatioFilter.cpp:382
 #: src/backend/datasources/filters/MatioFilter.cpp:428
 #, kde-format
@@ -269,13 +269,13 @@ msgstr "Dolgo celo število"
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:233
-#: src/backend/datasources/filters/AsciiFilter.cpp:610
+#: src/backend/datasources/filters/AsciiFilter.cpp:555
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:532
 #: src/frontend/ActionsManager.cpp:510
 #: src/frontend/notebook/NotebookView.cpp:95
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:208
 #: src/frontend/ui/dockwidgets/axisdock.ui:1528
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:594
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:634
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:280
 #: src/frontend/widgets/LabelWidget.cpp:477
@@ -1072,166 +1072,31 @@ msgstr ""
 "Ni bilo mogoče odpreti datoteke %1 za pisanje.\n"
 "%2"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:201
-#: src/backend/gsl/errors.h:20
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2137
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1314
-#, kde-format
-msgid "Success"
-msgstr "Uspešno"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:203
-#, kde-format
-msgid "Device at end"
-msgstr "Naprava na koncu"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:205
-#, kde-format
-msgid "Not enough rows selected. Increase number of rows."
-msgstr "Ni izbranih dovolj vrstic. Povečajte število vrstic."
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:207
-#, kde-format
-msgid "Unable to open device"
-msgstr "Ni mogoče odpreti naprave"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:209
-#, kde-format
-msgid "No new line detected"
-msgstr "Ni zaznane nove vrstice"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:211
-#, kde-format
-msgid "Unable to determine the separator"
-msgstr "Ni mogoče določiti ločilnika"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:213
-#, kde-format
-msgid "Invalid number of data columns"
-msgstr "Neveljavno število stolpcev podatkov"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:215
-#, kde-format
-msgid "Invalid number of column names"
-msgstr "Neveljavno število imen stolpcev"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:217
-#, kde-format
-msgid "Matrix: Unsupported column mode"
-msgstr "Matrika: Nepodprt način stolpca"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:219
-#, kde-format
-msgid "Insufficient memory (RAM)"
-msgstr "Premalo pomnilnika (RAM)"
-
 #: src/backend/datasources/filters/AsciiFilter.cpp:221
-#, kde-format
-msgid "Unable to parse header"
-msgstr "Glave ni mogoče razčleniti"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:223
-#, kde-format
-msgid "Unsupported data source"
-msgstr "Nepodprt vir podatkov"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:227
-#, kde-format
-msgid "Live: No column separator selected"
-msgstr "V živo: Ni izbranega ločilnika stopca"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:229
-#, kde-format
-msgid "Live: No column modes set"
-msgstr "V živo: Ni nastavljenih načinov stolpca"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:231
-#, kde-format
-msgid "Datetime column found, but no Datetime format provided"
-msgstr ""
-"Najden je stolpec z datumom in časom, a ni podanega formata datuma in časa"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:233
-#, kde-format
-msgid "Header reading from device not allowed"
-msgstr "Branje glave iz naprave ni dovoljeno"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:235
-#, kde-format
-msgid "Separator detection not allowed"
-msgstr "Zaznavanje ločilnika ni dovoljeno"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:237
-#, kde-format
-msgid "Invalid separator"
-msgstr "Neveljaven ločilnik"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:239
-#, kde-format
-msgid "Serial device must be initialized before reading data from it"
-msgstr ""
-"Serijske naprave je treba inicializirati, preden z njih preberete podatke"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:241
-#, kde-format
-msgid "Wrong end column. Is it smaller than start column?"
-msgstr "Napačni končni stolpec. Ali je manjši kot začetni stolpec?"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:243
-#, kde-format
-msgid "Wrong end row. Is it smaller than start row?"
-msgstr "Napačna končna vrstica. Ali je manjša kot začetna vrstica?"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:245
-#, kde-format
-msgid "No data destination set"
-msgstr "Ni nastavljenega cilja podatkov"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:247
-#, kde-format
-msgid "No columns"
-msgstr "Ni stolpcev"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:249
-#, kde-format
-msgid "Unable to determine column modes. Check if they are correctly written"
-msgstr "Ni mogoče določiti načinov stolpca. Preverite ali so pravilno napisani"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:251
-#, kde-format
-msgid "UTF16 encoding is not supported"
-msgstr "Kodiranje UTF16 ni podprto"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:253
-#, kde-format
-msgid "Unhandled case"
-msgstr "Neobdelan primer"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:279
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "Število stolpcev: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:281
+#: src/backend/datasources/filters/AsciiFilter.cpp:223
 #, kde-format
 msgid "Number of lines: %1"
 msgstr "Število vrstic: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:524
-#: src/backend/datasources/filters/AsciiFilter.cpp:1311
+#: src/backend/datasources/filters/AsciiFilter.cpp:465
+#: src/backend/datasources/filters/AsciiFilter.cpp:1250
 #: src/backend/datasources/filters/JsonFilter.cpp:284
 #, kde-format
 msgid "Column %1"
 msgstr "Stolpec %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:594
-#: src/backend/datasources/filters/AsciiFilter.cpp:1334
+#: src/backend/datasources/filters/AsciiFilter.cpp:539
+#: src/backend/datasources/filters/AsciiFilter.cpp:1273
 #, kde-format
 msgid "Timestamp"
 msgstr "Časovni žig"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:598
-#: src/backend/datasources/filters/AsciiFilter.cpp:1338
+#: src/backend/datasources/filters/AsciiFilter.cpp:543
+#: src/backend/datasources/filters/AsciiFilter.cpp:1277
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1239,17 +1104,17 @@ msgstr "Časovni žig"
 msgid "Index"
 msgstr "Kazalo"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:611
+#: src/backend/datasources/filters/AsciiFilter.cpp:556
 #, kde-format
 msgid "DateTime"
 msgstr "Datum in čas"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:612
+#: src/backend/datasources/filters/AsciiFilter.cpp:557
 #, kde-format
 msgid "Int"
 msgstr "Int"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:613
+#: src/backend/datasources/filters/AsciiFilter.cpp:558
 #: src/backend/datasources/filters/MatioFilter.cpp:398
 #: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
@@ -1313,6 +1178,14 @@ msgstr "Neveljavna datoteka."
 #, kde-format
 msgid "No messages read."
 msgstr "Ni prebranih sporočil."
+
+#: src/backend/datasources/filters/FilterStatus.cpp:47
+#, kde-format
+msgid ""
+"Invalid number of data columns. First row column count: %1. %2th row column "
+"count >= %3. Check if the correct separator is used and the data contains "
+"same number of columns."
+msgstr ""
 
 #: src/backend/datasources/filters/FITSFilter.cpp:239
 #, kde-format
@@ -1815,7 +1688,7 @@ msgstr "Število spremenljivk: "
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:251
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:371
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:402
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:149
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:80
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:185
 #, kde-format
 msgid "Variables:"
@@ -3153,6 +3026,13 @@ msgstr "SI enota energije"
 msgid "Energy 1 erg"
 msgstr "Energija 1 erg"
 
+#: src/backend/gsl/errors.h:20
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2137
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1314
+#, kde-format
+msgid "Success"
+msgstr "Uspešno"
+
 #: src/backend/gsl/errors.h:22
 #, kde-format
 msgid "Failure"
@@ -3737,7 +3617,7 @@ msgstr "Aritmetična sredina"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:261
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:221
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:73
@@ -6426,7 +6306,7 @@ msgstr "Krožno"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:345
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:386
 #: src/frontend/ui/dockwidgets/histogramdock.ui:213
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:687
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:727
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:352
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:224
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:118
@@ -7823,7 +7703,7 @@ msgstr "Usmerjenost"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1440
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:237
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:237
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:258
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:298
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:250
 #: src/frontend/ui/dockwidgets/runchartdock.ui:174
 #: src/frontend/ui/dockwidgets/runchartdock.ui:238
@@ -8031,8 +7911,8 @@ msgstr "%1: samodejno določi obliko oznak"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:943
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:950
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:634
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:641
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: določi natančnost oznak"
@@ -8116,7 +7996,7 @@ msgid "%1: set data columns"
 msgstr "%1: nastavi podatkovne stolpce"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:304
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:546
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:550
 #, kde-format
 msgid "%1: set type"
 msgstr "%1: nastavi vrsto"
@@ -9098,8 +8978,8 @@ msgstr "Prilegajoča binomska porazdelitev"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:400
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:248
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:522
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:534
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:526
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:538
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:265
 #, kde-format
@@ -9180,84 +9060,108 @@ msgstr "%1: nastavite pasovno širino"
 msgid "%1: legend visibility changed"
 msgstr "%1: vidnost legende spremenjena"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:553
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:557
+#, fuzzy, kde-format
+#| msgid "%1: set limits metric"
+msgid "%1: set limits type"
+msgstr "%1: nastavite metriko omejitev"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:564
 #, kde-format
 msgid "%1: set limits metric"
 msgstr "%1: nastavite metriko omejitev"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:560
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:571
 #, kde-format
 msgid "%1: set sample size"
 msgstr "%1: določi velikost vzorca"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:568
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:579
 #, kde-format
 msgid "%1: enable exact limits"
 msgstr "%1: omogoči natančne meje"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:568
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:579
 #, kde-format
 msgid "%1: disable exact limits"
 msgstr "%1: oneogoči natančne meje"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:577
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:588
 #, kde-format
 msgid "%1: set maximal upper limit"
 msgstr "%1: nastavi največjo zgornjo mejo"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:584
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:595
 #, kde-format
 msgid "%1: set minimal lower limit"
 msgstr "%1: nastavi najmanjšo spodnjo mejo"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:593
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
+#, fuzzy, kde-format
+#| msgid "%1: set center metric"
+msgid "%1: set center specification"
+msgstr "%1: nastavi center metrike"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
+#, fuzzy, kde-format
+#| msgid "%1: set plot designation"
+msgid "%1: set upper limit specification"
+msgstr "%1: nastavitev določitve grafa"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:616
+#, fuzzy, kde-format
+#| msgid "%1: set plot designation"
+msgid "%1: set lower limit specification"
+msgstr "%1: nastavitev določitve grafa"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:625
 #, kde-format
 msgid "%1: enable control labels"
 msgstr "%1: omogoči nadzorne oznake"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:593
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:625
 #, kde-format
 msgid "%1: disable control labels"
 msgstr "%1: onemogoči nadzorne oznake"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:615
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:647
 #, kde-format
 msgid "%1: set labels border shape"
 msgstr "%1: nastavi obliko obrob"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:630
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:662
 #, kde-format
 msgid "%1: set labels font"
 msgstr "%1: nastavi pisavo oznak"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:665
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:697
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:729
 #, kde-format
 msgid "%1: set labels background color"
 msgstr "%1: nastavi barvo ozadja oznak"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:755
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:787
 #, kde-format
 msgid "%1: set labels border style"
 msgstr "%1: nastavi vrsto besedila oznak"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:766
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:798
 #, kde-format
 msgid "%1: set labels border width"
 msgstr "%1: nastavi širino obrobe oznak"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:777
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:788
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:809
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:820
 #, kde-format
 msgid "%1: set labels border color"
 msgstr "%1: nastavi barvo obrobe oznak"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:880
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:912
 #, kde-format
 msgid "Not enough data provided."
 msgstr "Na voljo ni dovolj podatkov."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:980
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1012
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "Zadnji vzorec je nepopoln in je bil izpuščen."
@@ -10203,7 +10107,7 @@ msgstr "%1: unlock"
 #: src/frontend/ui/dockwidgets/imagedock.ui:116
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:76
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:83
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:54
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:143
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:66
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:215
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:94
@@ -13409,7 +13313,7 @@ msgstr "%1 osi: naložena predloga »%2«"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:375
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:452
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:685
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:801
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
@@ -13817,7 +13721,7 @@ msgstr "Glavna vrstica"
 #: src/frontend/dockwidgets/ImageDock.cpp:187
 #: src/frontend/dockwidgets/ImageDock.cpp:192
 #: src/frontend/dockwidgets/ImageDock.cpp:197
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:322
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:362
 #: src/frontend/widgets/LabelWidget.cpp:486
 #: src/frontend/widgets/LabelWidget.cpp:492
 #: src/frontend/widgets/LabelWidget.cpp:498
@@ -14094,7 +13998,7 @@ msgid "Custom value for the kernel bandwidth"
 msgstr "Vrednost po meri za pasovno širino jedra"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:373
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:683
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:799
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1041
@@ -14172,85 +14076,97 @@ msgstr "%1 matrike: naložena predloga \"%2\""
 msgid "File Browser"
 msgstr "Brskalnik datotek"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:220
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Statistical"
+msgstr "Statistika"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
+#, fuzzy, kde-format
+#| msgid "Simplification"
+msgid "Specification"
+msgstr "Poenostavitev"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
 #, kde-format
 msgid "Average"
 msgstr "Povprečje"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:224
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:234
 #: src/frontend/widgets/LabelWidget.cpp:508
 #, kde-format
 msgid "No Border"
 msgstr "Brez obrobe"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:235
 #: src/frontend/widgets/LabelWidget.cpp:509
 #, kde-format
 msgid "Rectangle"
 msgstr "Pravokotnik"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:236
 #: src/frontend/widgets/LabelWidget.cpp:510
 #, kde-format
 msgid "Ellipse"
 msgstr "Elipsa"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:237
 #: src/frontend/widgets/LabelWidget.cpp:511
 #, kde-format
 msgid "Round sided rectangle"
 msgstr "Zaobljeni bočni pravokotnik"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:228
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:238
 #: src/frontend/widgets/LabelWidget.cpp:512
 #, kde-format
 msgid "Round corner rectangle"
 msgstr "Zaobljeno oglišče pravokotnika"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:229
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:239
 #: src/frontend/widgets/LabelWidget.cpp:513
 #, kde-format
 msgid "Inwards round corner rectangle"
 msgstr "Pravokotnik navznoter zaobljenega kota"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:240
 #: src/frontend/widgets/LabelWidget.cpp:514
 #, kde-format
 msgid "Dented border rectangle"
 msgstr "Vdolben obrobni pravokotnik"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:241
 #: src/frontend/widgets/LabelWidget.cpp:515
 #, kde-format
 msgid "Cuboid"
 msgstr "Kvader"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:232
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:242
 #: src/frontend/widgets/LabelWidget.cpp:516
 #, kde-format
 msgid "Up pointing rectangle"
 msgstr "Pravokotnik, ki kaže navzgor"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:233
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:243
 #: src/frontend/widgets/LabelWidget.cpp:517
 #, kde-format
 msgid "Down pointing rectangle"
 msgstr "Pravokotnik, ki kaže navzdol"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:234
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:244
 #: src/frontend/widgets/LabelWidget.cpp:518
 #, kde-format
 msgid "Left pointing rectangle"
 msgstr "Pravokotnik, ki kaže levo"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:235
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:245
 #: src/frontend/widgets/LabelWidget.cpp:519
 #, kde-format
 msgid "Right pointing rectangle"
 msgstr "Pravokotnik, ki kaže desno"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:239
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:249
 #, kde-format
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
@@ -14281,19 +14197,28 @@ msgstr ""
 "<b>binomski števci</b>.</li><li>C - grafikon <b>Poissonovi števci</b>.</"
 "li><li>U - grafikon <b>Poissonove stopnje</b>.</li></ul>"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:265
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:276
+#, kde-format
+msgid ""
+"Determine which values to use for the center and limit lines:"
+"<ul><li>Statistical - values are calculated based on the statistical "
+"properties of the sample.</li><li>Specification - custom user-defined values "
+"are used.</li></ul>"
+msgstr ""
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:284
 #, kde-format
 msgid "Maximal value for the upper control limit. No constraint, if empty."
 msgstr ""
 "Največja vrednost za zgornjo kontrolno mejo. Brez omejitve, če je prazno."
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:269
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:288
 #, kde-format
 msgid "Minimal value for the lower control limit. No constraint, if empty."
 msgstr ""
 "Najmanjša vrednost za spodnjo kontrolno mejo. Brez omejitve, če je prazno."
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:273
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:292
 #, kde-format
 msgid ""
 "If checked, exact limits are calculated for every individual sample (\"stair-"
@@ -15481,7 +15406,7 @@ msgstr "Izberite datoteko za shranjevanje definicije funkcije"
 #: src/frontend/ui/dockwidgets/matrixdock.ui:43
 #: src/frontend/ui/dockwidgets/notebookdock.ui:65
 #: src/frontend/ui/dockwidgets/notedock.ui:43
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:87
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:237
 #: src/frontend/ui/dockwidgets/projectdock.ui:184
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:103
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:118
@@ -17891,7 +17816,7 @@ msgstr "Perioda:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSampleSize)
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:105
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:30
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:163
 #, kde-format
 msgid "Sample Size:"
 msgstr "Velikost vzorca:"
@@ -19002,7 +18927,7 @@ msgstr "Vrsta napake Y:"
 #: src/frontend/ui/dockwidgets/matrixdock.ui:17
 #: src/frontend/ui/dockwidgets/notebookdock.ui:33
 #: src/frontend/ui/dockwidgets/notedock.ui:17
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:219
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:56
 #: src/frontend/ui/dockwidgets/projectdock.ui:141
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:59
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:189
@@ -19542,7 +19467,7 @@ msgstr "Relativna pot"
 #: src/frontend/ui/dockwidgets/linewidget.ui:85
 #: src/frontend/ui/dockwidgets/livedatadock.ui:152
 #: src/frontend/ui/dockwidgets/matrixdock.ui:268
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:182
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:223
 #: src/frontend/ui/dockwidgets/valuewidget.ui:48
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:305
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:302
@@ -20212,7 +20137,7 @@ msgstr "Teme:"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1172
 #: src/frontend/ui/dockwidgets/columndock.ui:207
 #: src/frontend/ui/dockwidgets/matrixdock.ui:285
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:643
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:683
 #: src/frontend/ui/dockwidgets/valuewidget.ui:211
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:238
 #, kde-format
@@ -20856,15 +20781,15 @@ msgstr "Oznake"
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbLabelsPrecision)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1169
 #: src/frontend/ui/dockwidgets/axisdock.ui:1206
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:640
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:677
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:680
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:717
 #, kde-format
 msgid "Number of digits after the decimal point"
 msgstr "Število decimalk za decimalno vejico"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkLabelsAutoPrecision)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1213
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:684
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:724
 #, kde-format
 msgid ""
 "Automatically determine the optimal number of digits after the decimal point"
@@ -20890,7 +20815,7 @@ msgstr "Položaj"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1424
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:126
 #: src/frontend/ui/dockwidgets/notedock.ui:96
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:511
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:551
 #: src/frontend/ui/dockwidgets/valuewidget.ui:310
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:301
 #: src/frontend/ui/labelwidget.ui:629
@@ -20981,7 +20906,7 @@ msgstr "Predpona:"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsColor)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsFontColor)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1516
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:621
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:661
 #: src/frontend/ui/labelwidget.ui:68
 #, kde-format
 msgid "Font Color:"
@@ -21019,7 +20944,7 @@ msgstr "Glavna mreža"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1045
 #: src/frontend/ui/dockwidgets/histogramdock.ui:493
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:336
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:601
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:641
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:611
 #: src/frontend/ui/mqttwillsettingswidget.ui:346
 #, kde-format
@@ -21117,7 +21042,7 @@ msgstr "Stolpci"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1332
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:599
 #: src/frontend/ui/dockwidgets/imagedock.ui:559
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:633
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:673
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:303
 #: src/frontend/ui/labelwidget.ui:303 src/frontend/ui/symbolwidget.ui:233
 #: src/frontend/widgets/SymbolWidget.cpp:133
@@ -21955,7 +21880,7 @@ msgstr "Pasovna širina:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:163
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:103
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:129
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:120
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:134
 #: src/frontend/ui/dockwidgets/runchartdock.ui:93
@@ -22075,72 +22000,101 @@ msgstr "Barva ozadja:"
 msgid "Text color:"
 msgstr "Barva besedila:"
 
-#. i18n: ectx: property (text), widget (QLabel, lExactLimits)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:37
-#, kde-format
-msgid "Exact Limits:"
-msgstr "Natančne meje:"
-
-#. i18n: ectx: property (text), widget (QLabel, lData2Column)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:77
-#, kde-format
-msgid "Sample Sizes:"
-msgstr "Velikosti vzorca:"
-
 #. i18n: ectx: property (text), widget (QLabel, lMinLowerLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:189
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:46
 #, kde-format
 msgid "Min. Lower Limit:"
 msgstr "Najmanjša spodnja omejitev:"
 
+#. i18n: ectx: property (text), widget (QLabel, lData2Column)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:112
+#, kde-format
+msgid "Sample Sizes:"
+msgstr "Velikosti vzorca:"
+
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:212
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:122
 #, kde-format
 msgid "Limits based on:"
 msgstr "Omejitve osnovanje na:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxUpperLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:236
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:136
 #, kde-format
 msgid "Max. Upper Limit:"
 msgstr "Največja zgornja omejitev:"
 
+#. i18n: ectx: property (text), widget (QLabel, lUpperLimitSpecification)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:186
+#, fuzzy, kde-format
+#| msgid "Upper Limit"
+msgid "Upper Limit:"
+msgstr "Zgornja omejitev"
+
+#. i18n: ectx: property (text), widget (QLabel, lLowerLimitSpecification)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:200
+#, fuzzy, kde-format
+#| msgid "Lower Limit"
+msgid "Lower Limit:"
+msgstr "Spodnja omejitev"
+
+#. i18n: ectx: property (text), widget (QLabel, lLimitsType)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:230
+#, fuzzy, kde-format
+#| msgid "Center/Limits Lines"
+msgid "Center/Limits:"
+msgstr "Osrednje/omejitvene črte"
+
+#. i18n: ectx: property (text), widget (QLabel, lExactLimits)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:269
+#, kde-format
+msgid "Exact Limits:"
+msgstr "Natančne meje:"
+
+#. i18n: ectx: property (text), widget (QLabel, lCenterMetric)
+#. i18n: ectx: property (text), widget (QLabel, lCenterSpecification)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:276
+#: src/frontend/ui/dockwidgets/runchartdock.ui:152
+#, kde-format
+msgid "Center:"
+msgstr "Sredina:"
+
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:247
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:287
 #: src/frontend/ui/dockwidgets/runchartdock.ui:163
 #, kde-format
 msgid "Data Line"
 msgstr "Črta podatkov"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLines)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:311
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:351
 #, kde-format
 msgid "Center/Limits Lines"
 msgstr "Osrednje/omejitvene črte"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:366
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:406
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
 msgid "Upper Limit"
 msgstr "Zgornja omejitev"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:410
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:450
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
 msgid "Lower Limit"
 msgstr "Spodnja omejitev"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLabels)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:447
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:487
 #, kde-format
 msgid "Center/Limit Values"
 msgstr "Osrednje/omejitvene vrednosti"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBorderShape)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:469
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:509
 #: src/frontend/ui/labelwidget.ui:75
 #, kde-format
 msgid "Shape:"
@@ -22148,7 +22102,7 @@ msgstr "Oblika:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBackgroundColor)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:518
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:558
 #: src/frontend/ui/labelwidget.ui:116
 #, kde-format
 msgid "Background Color:"
@@ -22251,12 +22205,6 @@ msgstr "Konec x:"
 #, kde-format
 msgid "Start x:"
 msgstr "Začetek x:"
-
-#. i18n: ectx: property (text), widget (QLabel, lCenterMetric)
-#: src/frontend/ui/dockwidgets/runchartdock.ui:152
-#, kde-format
-msgid "Center:"
-msgstr "Sredina:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCenterLine)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:227
@@ -25371,6 +25319,85 @@ msgstr "proces convert je izpadel, izhodna koda ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ni mogoče odpreti datoteke:"
+
+#~ msgid "Device at end"
+#~ msgstr "Naprava na koncu"
+
+#~ msgid "Not enough rows selected. Increase number of rows."
+#~ msgstr "Ni izbranih dovolj vrstic. Povečajte število vrstic."
+
+#~ msgid "Unable to open device"
+#~ msgstr "Ni mogoče odpreti naprave"
+
+#~ msgid "No new line detected"
+#~ msgstr "Ni zaznane nove vrstice"
+
+#~ msgid "Unable to determine the separator"
+#~ msgstr "Ni mogoče določiti ločilnika"
+
+#~ msgid "Invalid number of data columns"
+#~ msgstr "Neveljavno število stolpcev podatkov"
+
+#~ msgid "Invalid number of column names"
+#~ msgstr "Neveljavno število imen stolpcev"
+
+#~ msgid "Matrix: Unsupported column mode"
+#~ msgstr "Matrika: Nepodprt način stolpca"
+
+#~ msgid "Insufficient memory (RAM)"
+#~ msgstr "Premalo pomnilnika (RAM)"
+
+#~ msgid "Unable to parse header"
+#~ msgstr "Glave ni mogoče razčleniti"
+
+#~ msgid "Unsupported data source"
+#~ msgstr "Nepodprt vir podatkov"
+
+#~ msgid "Live: No column separator selected"
+#~ msgstr "V živo: Ni izbranega ločilnika stopca"
+
+#~ msgid "Live: No column modes set"
+#~ msgstr "V živo: Ni nastavljenih načinov stolpca"
+
+#~ msgid "Datetime column found, but no Datetime format provided"
+#~ msgstr ""
+#~ "Najden je stolpec z datumom in časom, a ni podanega formata datuma in časa"
+
+#~ msgid "Header reading from device not allowed"
+#~ msgstr "Branje glave iz naprave ni dovoljeno"
+
+#~ msgid "Separator detection not allowed"
+#~ msgstr "Zaznavanje ločilnika ni dovoljeno"
+
+#~ msgid "Invalid separator"
+#~ msgstr "Neveljaven ločilnik"
+
+#~ msgid "Serial device must be initialized before reading data from it"
+#~ msgstr ""
+#~ "Serijske naprave je treba inicializirati, preden z njih preberete podatke"
+
+#~ msgid "Wrong end column. Is it smaller than start column?"
+#~ msgstr "Napačni končni stolpec. Ali je manjši kot začetni stolpec?"
+
+#~ msgid "Wrong end row. Is it smaller than start row?"
+#~ msgstr "Napačna končna vrstica. Ali je manjša kot začetna vrstica?"
+
+#~ msgid "No data destination set"
+#~ msgstr "Ni nastavljenega cilja podatkov"
+
+#~ msgid "No columns"
+#~ msgstr "Ni stolpcev"
+
+#~ msgid ""
+#~ "Unable to determine column modes. Check if they are correctly written"
+#~ msgstr ""
+#~ "Ni mogoče določiti načinov stolpca. Preverite ali so pravilno napisani"
+
+#~ msgid "UTF16 encoding is not supported"
+#~ msgstr "Kodiranje UTF16 ni podprto"
+
+#~ msgid "Unhandled case"
+#~ msgstr "Neobdelan primer"
 
 #~ msgid "Compatibility:"
 #~ msgstr "Kompatibilnost:"

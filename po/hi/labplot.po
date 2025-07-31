@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-28 00:38+0000\n"
+"POT-Creation-Date: 2025-07-31 00:39+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -244,7 +244,7 @@ msgid "Y-Error -"
 msgstr "Y-त्रुटि -"
 
 #: src/backend/core/AbstractColumn.cpp:227
-#: src/backend/datasources/filters/AsciiFilter.cpp:609
+#: src/backend/datasources/filters/AsciiFilter.cpp:554
 #: src/backend/datasources/filters/MatioFilter.cpp:382
 #: src/backend/datasources/filters/MatioFilter.cpp:428
 #, kde-format
@@ -265,13 +265,13 @@ msgstr "बड़ा पूर्णांक"
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:233
-#: src/backend/datasources/filters/AsciiFilter.cpp:610
+#: src/backend/datasources/filters/AsciiFilter.cpp:555
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:532
 #: src/frontend/ActionsManager.cpp:510
 #: src/frontend/notebook/NotebookView.cpp:95
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:208
 #: src/frontend/ui/dockwidgets/axisdock.ui:1528
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:594
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:634
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:280
 #: src/frontend/widgets/LabelWidget.cpp:477
@@ -1064,165 +1064,31 @@ msgstr ""
 "फ़ाइल %1 को लिखने के लिए नहीं खोला जा सका.\n"
 "%2"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:201
-#: src/backend/gsl/errors.h:20
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2137
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1314
-#, kde-format
-msgid "Success"
-msgstr "सफलता"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:203
-#, kde-format
-msgid "Device at end"
-msgstr "अंत में डिवाइस"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:205
-#, kde-format
-msgid "Not enough rows selected. Increase number of rows."
-msgstr "पर्याप्त पंक्तियाँ चयनित नहीं हैं. पंक्तियों की संख्या बढ़ाएँ."
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:207
-#, kde-format
-msgid "Unable to open device"
-msgstr "डिवाइस खोलने में असमर्थ"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:209
-#, fuzzy, kde-format
-#| msgid "No sheet selected."
-msgid "No new line detected"
-msgstr "कोई शीट चयनित नहीं."
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:211
-#, kde-format
-msgid "Unable to determine the separator"
-msgstr "विभाजक निर्धारित करने में असमर्थ"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:213
-#, kde-format
-msgid "Invalid number of data columns"
-msgstr "डेटा कॉलम की संख्या अमान्य है"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:215
-#, kde-format
-msgid "Invalid number of column names"
-msgstr "स्तंभ नामों की संख्या अमान्य है"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:217
-#, kde-format
-msgid "Matrix: Unsupported column mode"
-msgstr "मैट्रिक्स: असमर्थित कॉलम मोड"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:219
-#, kde-format
-msgid "Insufficient memory (RAM)"
-msgstr "अपर्याप्त मेमोरी (RAM)"
-
 #: src/backend/datasources/filters/AsciiFilter.cpp:221
-#, kde-format
-msgid "Unable to parse header"
-msgstr "हेडर पार्स करने में असमर्थ"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:223
-#, kde-format
-msgid "Unsupported data source"
-msgstr "असमर्थित डेटा स्रोत"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:227
-#, kde-format
-msgid "Live: No column separator selected"
-msgstr "लाइव: कोई कॉलम विभाजक चयनित नहीं"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:229
-#, kde-format
-msgid "Live: No column modes set"
-msgstr "लाइव: कोई कॉलम मोड सेट नहीं है"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:231
-#, kde-format
-msgid "Datetime column found, but no Datetime format provided"
-msgstr "दिनांक-समय स्तंभ मिला, लेकिन कोई दिनांक-समय प्रारूप उपलब्ध नहीं कराया गया"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:233
-#, kde-format
-msgid "Header reading from device not allowed"
-msgstr "डिवाइस से हेडर पढ़ने की अनुमति नहीं है"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:235
-#, kde-format
-msgid "Separator detection not allowed"
-msgstr "विभाजक पहचान की अनुमति नहीं है"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:237
-#, kde-format
-msgid "Invalid separator"
-msgstr "अमान्य विभाजक"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:239
-#, kde-format
-msgid "Serial device must be initialized before reading data from it"
-msgstr ""
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:241
-#, kde-format
-msgid "Wrong end column. Is it smaller than start column?"
-msgstr "गलत अंतिम स्तंभ। क्या यह आरंभिक स्तंभ से छोटा है?"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:243
-#, kde-format
-msgid "Wrong end row. Is it smaller than start row?"
-msgstr "गलत अंतिम पंक्ति। क्या यह आरंभिक पंक्ति से छोटी है?"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:245
-#, kde-format
-msgid "No data destination set"
-msgstr "कोई डेटा गंतव्य सेट नहीं किया गया"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:247
-#, kde-format
-msgid "No columns"
-msgstr "कोई कॉलम नहीं"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:249
-#, kde-format
-msgid "Unable to determine column modes. Check if they are correctly written"
-msgstr "कॉलम मोड निर्धारित करने में असमर्थ। जाँचें कि क्या वे सही ढंग से लिखे गए हैं"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:251
-#, kde-format
-msgid "UTF16 encoding is not supported"
-msgstr "UTF16 एनकोडिंग समर्थित नहीं है"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:253
-#, kde-format
-msgid "Unhandled case"
-msgstr "अनसुलझा मामला"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:279
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "स्तंभों की संख्या: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:281
+#: src/backend/datasources/filters/AsciiFilter.cpp:223
 #, kde-format
 msgid "Number of lines: %1"
 msgstr "पंक्तियों की संख्या: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:524
-#: src/backend/datasources/filters/AsciiFilter.cpp:1311
+#: src/backend/datasources/filters/AsciiFilter.cpp:465
+#: src/backend/datasources/filters/AsciiFilter.cpp:1250
 #: src/backend/datasources/filters/JsonFilter.cpp:284
 #, kde-format
 msgid "Column %1"
 msgstr "स्तंभ %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:594
-#: src/backend/datasources/filters/AsciiFilter.cpp:1334
+#: src/backend/datasources/filters/AsciiFilter.cpp:539
+#: src/backend/datasources/filters/AsciiFilter.cpp:1273
 #, kde-format
 msgid "Timestamp"
 msgstr "समय-चिह्न"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:598
-#: src/backend/datasources/filters/AsciiFilter.cpp:1338
+#: src/backend/datasources/filters/AsciiFilter.cpp:543
+#: src/backend/datasources/filters/AsciiFilter.cpp:1277
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1230,17 +1096,17 @@ msgstr "समय-चिह्न"
 msgid "Index"
 msgstr "अनुक्रमणिका"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:611
+#: src/backend/datasources/filters/AsciiFilter.cpp:556
 #, kde-format
 msgid "DateTime"
 msgstr "दिनांक समय"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:612
+#: src/backend/datasources/filters/AsciiFilter.cpp:557
 #, kde-format
 msgid "Int"
 msgstr "int यहाँ"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:613
+#: src/backend/datasources/filters/AsciiFilter.cpp:558
 #: src/backend/datasources/filters/MatioFilter.cpp:398
 #: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
@@ -1304,6 +1170,14 @@ msgstr "अमान्य लेख्यपत्र।"
 #, kde-format
 msgid "No messages read."
 msgstr "कोई संदेश नहीं पढ़ा गया."
+
+#: src/backend/datasources/filters/FilterStatus.cpp:47
+#, kde-format
+msgid ""
+"Invalid number of data columns. First row column count: %1. %2th row column "
+"count >= %3. Check if the correct separator is used and the data contains "
+"same number of columns."
+msgstr ""
 
 #: src/backend/datasources/filters/FITSFilter.cpp:239
 #, kde-format
@@ -1804,7 +1678,7 @@ msgstr "चरों की संख्या:"
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:251
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:371
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:402
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:149
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:80
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:185
 #, kde-format
 msgid "Variables:"
@@ -3142,6 +3016,13 @@ msgstr "ऊर्जा की एसआई इकाई"
 msgid "Energy 1 erg"
 msgstr "ऊर्जा 1 एर्ग"
 
+#: src/backend/gsl/errors.h:20
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2137
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1314
+#, kde-format
+msgid "Success"
+msgstr "सफलता"
+
 #: src/backend/gsl/errors.h:22
 #, kde-format
 msgid "Failure"
@@ -3726,7 +3607,7 @@ msgstr "अंकगणित औसत"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:261
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:221
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:73
@@ -6365,7 +6246,7 @@ msgstr "परिपत्र"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:345
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:386
 #: src/frontend/ui/dockwidgets/histogramdock.ui:213
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:687
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:727
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:352
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:224
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:118
@@ -7753,7 +7634,7 @@ msgstr "अभिविन्यास"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1440
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:237
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:237
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:258
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:298
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:250
 #: src/frontend/ui/dockwidgets/runchartdock.ui:174
 #: src/frontend/ui/dockwidgets/runchartdock.ui:238
@@ -7961,8 +7842,8 @@ msgstr "%1: लेबल प्रारूप स्वचालित रू�
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:943
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:950
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:634
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:641
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: लेबल परिशुद्धता सेट करें"
@@ -8046,7 +7927,7 @@ msgid "%1: set data columns"
 msgstr "%1: डेटा कॉलम सेट करें"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:304
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:546
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:550
 #, kde-format
 msgid "%1: set type"
 msgstr "%1: प्रकार निर्धारित करें"
@@ -9046,8 +8927,8 @@ msgstr "फिट द्विपद वितरण"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:400
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:248
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:522
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:534
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:526
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:538
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:265
 #, kde-format
@@ -9126,96 +9007,120 @@ msgstr "%1:बैंडविड्थ सेट करें"
 msgid "%1: legend visibility changed"
 msgstr "%1: लेजेंड दृश्यता परिवर्तित"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:553
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:557
+#, fuzzy, kde-format
+#| msgid "%1: set limits metric"
+msgid "%1: set limits type"
+msgstr "%1: सीमा मीट्रिक सेट करें"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:564
 #, kde-format
 msgid "%1: set limits metric"
 msgstr "%1: सीमा मीट्रिक सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:560
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:571
 #, kde-format
 msgid "%1: set sample size"
 msgstr "%1: नमूना आकार सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:568
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:579
 #, fuzzy, kde-format
 #| msgid "%1: change exact limits"
 msgid "%1: enable exact limits"
 msgstr "%1: सटीक सीमाएँ बदलें"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:568
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:579
 #, fuzzy, kde-format
 #| msgid "%1: change exact limits"
 msgid "%1: disable exact limits"
 msgstr "%1: सटीक सीमाएँ बदलें"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:577
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:588
 #, fuzzy, kde-format
 #| msgid "%1: set axis zero offset"
 msgid "%1: set maximal upper limit"
 msgstr "%1: अक्ष शून्य ऑफसेट सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:584
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:595
 #, fuzzy, kde-format
 #| msgid "%1: change negative lower limit"
 msgid "%1: set minimal lower limit"
 msgstr "%1: नकारात्मक निचली सीमा बदलें"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:593
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
+#, fuzzy, kde-format
+#| msgid "%1: set center metric"
+msgid "%1: set center specification"
+msgstr "%1: केंद्र मीट्रिक सेट करें"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
+#, fuzzy, kde-format
+#| msgid "%1: set plot designation"
+msgid "%1: set upper limit specification"
+msgstr "%1: प्लॉट पदनाम निर्धारित करें"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:616
+#, fuzzy, kde-format
+#| msgid "%1: set plot designation"
+msgid "%1: set lower limit specification"
+msgstr "%1: प्लॉट पदनाम निर्धारित करें"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:625
 #, kde-format
 msgid "%1: enable control labels"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:593
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:625
 #, fuzzy, kde-format
 #| msgid "%1: set label offset"
 msgid "%1: disable control labels"
 msgstr "%1: लेबल ऑफ़सेट सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:615
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:647
 #, fuzzy, kde-format
 #| msgid "%1: set border shape"
 msgid "%1: set labels border shape"
 msgstr "%1: बॉर्डर आकार सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:630
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:662
 #, fuzzy, kde-format
 #| msgid "%1: set label font"
 msgid "%1: set labels font"
 msgstr "%1: लेबल फ़ॉन्ट सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:665
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:697
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:729
 #, fuzzy, kde-format
 #| msgid "%1: set label background color"
 msgid "%1: set labels background color"
 msgstr "%1: लेबल पृष्ठभूमि रंग सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:755
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:787
 #, fuzzy, kde-format
 #| msgid "%1: set labels text type"
 msgid "%1: set labels border style"
 msgstr "%1: लेबल पाठ प्रकार सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:766
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:798
 #, fuzzy, kde-format
 #| msgid "%1: set labels format"
 msgid "%1: set labels border width"
 msgstr "%1: लेबल प्रारूप सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:777
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:788
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:809
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:820
 #, fuzzy, kde-format
 #| msgid "%1: set label color"
 msgid "%1: set labels border color"
 msgstr "%1: लेबल रंग सेट करें"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:880
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:912
 #, fuzzy, kde-format
 #| msgid "Not enough data points available."
 msgid "Not enough data provided."
 msgstr "पर्याप्त डेटा बिंदु उपलब्ध नहीं हैं."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:980
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1012
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "अंतिम नमूना अधूरा है और उसे छोड़ दिया गया है।"
@@ -10156,7 +10061,7 @@ msgstr "%1: अनलॉक"
 #: src/frontend/ui/dockwidgets/imagedock.ui:116
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:76
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:83
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:54
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:143
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:66
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:215
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:94
@@ -13366,7 +13271,7 @@ msgstr "%1 अक्ष: टेम्पलेट \"%2\" लोड किया 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:375
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:452
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:685
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:801
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
@@ -13770,7 +13675,7 @@ msgstr "पंक्ति प्रमुख"
 #: src/frontend/dockwidgets/ImageDock.cpp:187
 #: src/frontend/dockwidgets/ImageDock.cpp:192
 #: src/frontend/dockwidgets/ImageDock.cpp:197
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:322
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:362
 #: src/frontend/widgets/LabelWidget.cpp:486
 #: src/frontend/widgets/LabelWidget.cpp:492
 #: src/frontend/widgets/LabelWidget.cpp:498
@@ -14017,7 +13922,7 @@ msgid "Custom value for the kernel bandwidth"
 msgstr ""
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:373
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:683
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:799
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1041
@@ -14095,89 +14000,101 @@ msgstr "%1 मैट्रिक्स: टेम्पलेट \"%2\" लो�
 msgid "File Browser"
 msgstr "फ़ाइल ब्राउज़र"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:220
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Statistical"
+msgstr "आंकड़े"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
+#, fuzzy, kde-format
+#| msgid "Simplification"
+msgid "Specification"
+msgstr "सरलीकरण"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
 #, kde-format
 msgid "Average"
 msgstr "औसत"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:224
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:234
 #: src/frontend/widgets/LabelWidget.cpp:508
 #, kde-format
 msgid "No Border"
 msgstr "कोई सीमा नहीं"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:235
 #: src/frontend/widgets/LabelWidget.cpp:509
 #, kde-format
 msgid "Rectangle"
 msgstr "आयत"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:236
 #: src/frontend/widgets/LabelWidget.cpp:510
 #, kde-format
 msgid "Ellipse"
 msgstr "अंडाकार"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:237
 #: src/frontend/widgets/LabelWidget.cpp:511
 #, kde-format
 msgid "Round sided rectangle"
 msgstr "गोल भुजा वाला आयताकार"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:228
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:238
 #: src/frontend/widgets/LabelWidget.cpp:512
 #, kde-format
 msgid "Round corner rectangle"
 msgstr "गोल कोना आयताकार"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:229
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:239
 #: src/frontend/widgets/LabelWidget.cpp:513
 #, kde-format
 msgid "Inwards round corner rectangle"
 msgstr "अंदर की ओर गोल कोना वाला आयताकार"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:240
 #: src/frontend/widgets/LabelWidget.cpp:514
 #, kde-format
 msgid "Dented border rectangle"
 msgstr "डेंटेड बॉर्डर आयत"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:241
 #: src/frontend/widgets/LabelWidget.cpp:515
 #, kde-format
 msgid "Cuboid"
 msgstr "घनाभ"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:232
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:242
 #: src/frontend/widgets/LabelWidget.cpp:516
 #, fuzzy, kde-format
 #| msgid "Up Pointing rectangle"
 msgid "Up pointing rectangle"
 msgstr "ऊपर की ओर इंगित करने वाला आयत"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:233
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:243
 #: src/frontend/widgets/LabelWidget.cpp:517
 #, fuzzy, kde-format
 #| msgid "Down Pointing rectangle"
 msgid "Down pointing rectangle"
 msgstr "नीचे की ओर इंगित करने वाला आयत"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:234
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:244
 #: src/frontend/widgets/LabelWidget.cpp:518
 #, fuzzy, kde-format
 #| msgid "Left Pointing rectangle"
 msgid "Left pointing rectangle"
 msgstr "बायीं ओर इंगित करने वाला आयत"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:235
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:245
 #: src/frontend/widgets/LabelWidget.cpp:519
 #, fuzzy, kde-format
 #| msgid "Right Pointing rectangle"
 msgid "Right pointing rectangle"
 msgstr "दांयी ओर इंगित करने वाला आयत"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:239
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:249
 #, fuzzy, kde-format
 #| msgid ""
 #| "The supported chart types are grouped according to the plotted statistics "
@@ -14220,17 +14137,26 @@ msgstr ""
 "- <b>द्विपद गणना</b> प्लॉट.</li><li> सी - प्लॉट <b>पॉइसन गणना</b> .</li><li> यू "
 "- प्लॉट <b>पॉइसन दरें</b> .</li></ul>"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:265
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:276
+#, kde-format
+msgid ""
+"Determine which values to use for the center and limit lines:"
+"<ul><li>Statistical - values are calculated based on the statistical "
+"properties of the sample.</li><li>Specification - custom user-defined values "
+"are used.</li></ul>"
+msgstr ""
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:284
 #, kde-format
 msgid "Maximal value for the upper control limit. No constraint, if empty."
 msgstr ""
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:269
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:288
 #, kde-format
 msgid "Minimal value for the lower control limit. No constraint, if empty."
 msgstr ""
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:273
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:292
 #, kde-format
 msgid ""
 "If checked, exact limits are calculated for every individual sample (\"stair-"
@@ -15409,7 +15335,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/matrixdock.ui:43
 #: src/frontend/ui/dockwidgets/notebookdock.ui:65
 #: src/frontend/ui/dockwidgets/notedock.ui:43
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:87
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:237
 #: src/frontend/ui/dockwidgets/projectdock.ui:184
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:103
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:118
@@ -17792,7 +17718,7 @@ msgstr "अवधि:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSampleSize)
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:105
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:30
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:163
 #, kde-format
 msgid "Sample Size:"
 msgstr "नमूने का आकार:"
@@ -18890,7 +18816,7 @@ msgstr "Y-त्रुटि प्रकार:"
 #: src/frontend/ui/dockwidgets/matrixdock.ui:17
 #: src/frontend/ui/dockwidgets/notebookdock.ui:33
 #: src/frontend/ui/dockwidgets/notedock.ui:17
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:219
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:56
 #: src/frontend/ui/dockwidgets/projectdock.ui:141
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:59
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:189
@@ -19430,7 +19356,7 @@ msgstr "तुलनात्मक पथ"
 #: src/frontend/ui/dockwidgets/linewidget.ui:85
 #: src/frontend/ui/dockwidgets/livedatadock.ui:152
 #: src/frontend/ui/dockwidgets/matrixdock.ui:268
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:182
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:223
 #: src/frontend/ui/dockwidgets/valuewidget.ui:48
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:305
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:302
@@ -20102,7 +20028,7 @@ msgstr "विषय:"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1172
 #: src/frontend/ui/dockwidgets/columndock.ui:207
 #: src/frontend/ui/dockwidgets/matrixdock.ui:285
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:643
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:683
 #: src/frontend/ui/dockwidgets/valuewidget.ui:211
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:238
 #, kde-format
@@ -20744,15 +20670,15 @@ msgstr "लेबल"
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbLabelsPrecision)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1169
 #: src/frontend/ui/dockwidgets/axisdock.ui:1206
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:640
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:677
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:680
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:717
 #, kde-format
 msgid "Number of digits after the decimal point"
 msgstr "दशमलव बिंदु के बाद अंकों की संख्या"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkLabelsAutoPrecision)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1213
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:684
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:724
 #, kde-format
 msgid ""
 "Automatically determine the optimal number of digits after the decimal point"
@@ -20778,7 +20704,7 @@ msgstr "पद"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1424
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:126
 #: src/frontend/ui/dockwidgets/notedock.ui:96
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:511
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:551
 #: src/frontend/ui/dockwidgets/valuewidget.ui:310
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:301
 #: src/frontend/ui/labelwidget.ui:629
@@ -20869,7 +20795,7 @@ msgstr "उपसर्ग:"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsColor)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsFontColor)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1516
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:621
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:661
 #: src/frontend/ui/labelwidget.ui:68
 #, kde-format
 msgid "Font Color:"
@@ -20907,7 +20833,7 @@ msgstr "प्रमुख ग्रिड"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1045
 #: src/frontend/ui/dockwidgets/histogramdock.ui:493
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:336
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:601
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:641
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:611
 #: src/frontend/ui/mqttwillsettingswidget.ui:346
 #, kde-format
@@ -21005,7 +20931,7 @@ msgstr "बार्स"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1332
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:599
 #: src/frontend/ui/dockwidgets/imagedock.ui:559
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:633
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:673
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:303
 #: src/frontend/ui/labelwidget.ui:303 src/frontend/ui/symbolwidget.ui:233
 #: src/frontend/widgets/SymbolWidget.cpp:133
@@ -21843,7 +21769,7 @@ msgstr "बैंडविड्थ:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:163
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:103
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:129
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:120
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:134
 #: src/frontend/ui/dockwidgets/runchartdock.ui:93
@@ -21964,67 +21890,96 @@ msgstr "पृष्ठभूमि का रंग:"
 msgid "Text color:"
 msgstr "पाठ का रंग:"
 
-#. i18n: ectx: property (text), widget (QLabel, lExactLimits)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:37
-#, kde-format
-msgid "Exact Limits:"
-msgstr "सटीक सीमाएँ:"
-
-#. i18n: ectx: property (text), widget (QLabel, lData2Column)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:77
-#, kde-format
-msgid "Sample Sizes:"
-msgstr "नमूना आकार:"
-
 #. i18n: ectx: property (text), widget (QLabel, lMinLowerLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:189
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:46
 #, fuzzy, kde-format
 #| msgid "Lower Limit"
 msgid "Min. Lower Limit:"
 msgstr "निचली सीमा"
 
+#. i18n: ectx: property (text), widget (QLabel, lData2Column)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:112
+#, kde-format
+msgid "Sample Sizes:"
+msgstr "नमूना आकार:"
+
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:212
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:122
 #, kde-format
 msgid "Limits based on:"
 msgstr "सीमाएँ निम्न पर आधारित हैं:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxUpperLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:236
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:136
 #, fuzzy, kde-format
 #| msgid "Upper Limit"
 msgid "Max. Upper Limit:"
 msgstr "ऊपरी सीमा"
 
+#. i18n: ectx: property (text), widget (QLabel, lUpperLimitSpecification)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:186
+#, fuzzy, kde-format
+#| msgid "Upper Limit"
+msgid "Upper Limit:"
+msgstr "ऊपरी सीमा"
+
+#. i18n: ectx: property (text), widget (QLabel, lLowerLimitSpecification)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:200
+#, fuzzy, kde-format
+#| msgid "Lower Limit"
+msgid "Lower Limit:"
+msgstr "निचली सीमा"
+
+#. i18n: ectx: property (text), widget (QLabel, lLimitsType)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:230
+#, fuzzy, kde-format
+#| msgid "Center/Limits Lines"
+msgid "Center/Limits:"
+msgstr "केंद्र/सीमा रेखाएं"
+
+#. i18n: ectx: property (text), widget (QLabel, lExactLimits)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:269
+#, kde-format
+msgid "Exact Limits:"
+msgstr "सटीक सीमाएँ:"
+
+#. i18n: ectx: property (text), widget (QLabel, lCenterMetric)
+#. i18n: ectx: property (text), widget (QLabel, lCenterSpecification)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:276
+#: src/frontend/ui/dockwidgets/runchartdock.ui:152
+#, kde-format
+msgid "Center:"
+msgstr "केंद्र:"
+
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:247
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:287
 #: src/frontend/ui/dockwidgets/runchartdock.ui:163
 #, kde-format
 msgid "Data Line"
 msgstr "डेटा लाइन"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLines)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:311
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:351
 #, kde-format
 msgid "Center/Limits Lines"
 msgstr "केंद्र/सीमा रेखाएं"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:366
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:406
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
 msgid "Upper Limit"
 msgstr "ऊपरी सीमा"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:410
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:450
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
 msgid "Lower Limit"
 msgstr "निचली सीमा"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLabels)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:447
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:487
 #, fuzzy, kde-format
 #| msgid "Center/Limits Lines"
 msgid "Center/Limit Values"
@@ -22032,7 +21987,7 @@ msgstr "केंद्र/सीमा रेखाएं"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBorderShape)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:469
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:509
 #: src/frontend/ui/labelwidget.ui:75
 #, kde-format
 msgid "Shape:"
@@ -22040,7 +21995,7 @@ msgstr "आकार:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBackgroundColor)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:518
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:558
 #: src/frontend/ui/labelwidget.ui:116
 #, kde-format
 msgid "Background Color:"
@@ -22144,12 +22099,6 @@ msgstr "अंत x:"
 #, kde-format
 msgid "Start x:"
 msgstr "प्रारंभ x:"
-
-#. i18n: ectx: property (text), widget (QLabel, lCenterMetric)
-#: src/frontend/ui/dockwidgets/runchartdock.ui:152
-#, kde-format
-msgid "Center:"
-msgstr "केंद्र:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCenterLine)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:227
@@ -25269,6 +25218,81 @@ msgstr "रूपांतरण प्रक्रिया विफल, न�
 #, kde-format
 msgid "Unable to open file:"
 msgstr "फाइल खोलने में असमर्थ:"
+
+#~ msgid "Device at end"
+#~ msgstr "अंत में डिवाइस"
+
+#~ msgid "Not enough rows selected. Increase number of rows."
+#~ msgstr "पर्याप्त पंक्तियाँ चयनित नहीं हैं. पंक्तियों की संख्या बढ़ाएँ."
+
+#~ msgid "Unable to open device"
+#~ msgstr "डिवाइस खोलने में असमर्थ"
+
+#, fuzzy
+#~| msgid "No sheet selected."
+#~ msgid "No new line detected"
+#~ msgstr "कोई शीट चयनित नहीं."
+
+#~ msgid "Unable to determine the separator"
+#~ msgstr "विभाजक निर्धारित करने में असमर्थ"
+
+#~ msgid "Invalid number of data columns"
+#~ msgstr "डेटा कॉलम की संख्या अमान्य है"
+
+#~ msgid "Invalid number of column names"
+#~ msgstr "स्तंभ नामों की संख्या अमान्य है"
+
+#~ msgid "Matrix: Unsupported column mode"
+#~ msgstr "मैट्रिक्स: असमर्थित कॉलम मोड"
+
+#~ msgid "Insufficient memory (RAM)"
+#~ msgstr "अपर्याप्त मेमोरी (RAM)"
+
+#~ msgid "Unable to parse header"
+#~ msgstr "हेडर पार्स करने में असमर्थ"
+
+#~ msgid "Unsupported data source"
+#~ msgstr "असमर्थित डेटा स्रोत"
+
+#~ msgid "Live: No column separator selected"
+#~ msgstr "लाइव: कोई कॉलम विभाजक चयनित नहीं"
+
+#~ msgid "Live: No column modes set"
+#~ msgstr "लाइव: कोई कॉलम मोड सेट नहीं है"
+
+#~ msgid "Datetime column found, but no Datetime format provided"
+#~ msgstr "दिनांक-समय स्तंभ मिला, लेकिन कोई दिनांक-समय प्रारूप उपलब्ध नहीं कराया गया"
+
+#~ msgid "Header reading from device not allowed"
+#~ msgstr "डिवाइस से हेडर पढ़ने की अनुमति नहीं है"
+
+#~ msgid "Separator detection not allowed"
+#~ msgstr "विभाजक पहचान की अनुमति नहीं है"
+
+#~ msgid "Invalid separator"
+#~ msgstr "अमान्य विभाजक"
+
+#~ msgid "Wrong end column. Is it smaller than start column?"
+#~ msgstr "गलत अंतिम स्तंभ। क्या यह आरंभिक स्तंभ से छोटा है?"
+
+#~ msgid "Wrong end row. Is it smaller than start row?"
+#~ msgstr "गलत अंतिम पंक्ति। क्या यह आरंभिक पंक्ति से छोटी है?"
+
+#~ msgid "No data destination set"
+#~ msgstr "कोई डेटा गंतव्य सेट नहीं किया गया"
+
+#~ msgid "No columns"
+#~ msgstr "कोई कॉलम नहीं"
+
+#~ msgid ""
+#~ "Unable to determine column modes. Check if they are correctly written"
+#~ msgstr "कॉलम मोड निर्धारित करने में असमर्थ। जाँचें कि क्या वे सही ढंग से लिखे गए हैं"
+
+#~ msgid "UTF16 encoding is not supported"
+#~ msgstr "UTF16 एनकोडिंग समर्थित नहीं है"
+
+#~ msgid "Unhandled case"
+#~ msgstr "अनसुलझा मामला"
 
 #~ msgid "Compatibility:"
 #~ msgstr "अनुकूलता:"

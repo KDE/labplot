@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-28 00:38+0000\n"
+"POT-Creation-Date: 2025-07-31 00:39+0000\n"
 "PO-Revision-Date: 2025-07-25 08:56+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -249,7 +249,7 @@ msgid "Y-Error -"
 msgstr "S'ha produït un error de Y -"
 
 #: src/backend/core/AbstractColumn.cpp:227
-#: src/backend/datasources/filters/AsciiFilter.cpp:609
+#: src/backend/datasources/filters/AsciiFilter.cpp:554
 #: src/backend/datasources/filters/MatioFilter.cpp:382
 #: src/backend/datasources/filters/MatioFilter.cpp:428
 #, kde-format
@@ -272,13 +272,13 @@ msgstr "Enter gran"
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:233
-#: src/backend/datasources/filters/AsciiFilter.cpp:610
+#: src/backend/datasources/filters/AsciiFilter.cpp:555
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:532
 #: src/frontend/ActionsManager.cpp:510
 #: src/frontend/notebook/NotebookView.cpp:95
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:208
 #: src/frontend/ui/dockwidgets/axisdock.ui:1528
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:594
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:634
 #: src/frontend/ui/dockwidgets/valuewidget.ui:269
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:280
 #: src/frontend/widgets/LabelWidget.cpp:477
@@ -1076,168 +1076,31 @@ msgstr ""
 "No s'ha pogut obrir el fitxer %1 per a escriptura.\n"
 "%2"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:201
-#: src/backend/gsl/errors.h:20
-#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2137
-#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1314
-#, kde-format
-msgid "Success"
-msgstr "Correcte"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:203
-#, kde-format
-msgid "Device at end"
-msgstr "Final del dispositiu"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:205
-#, kde-format
-msgid "Not enough rows selected. Increase number of rows."
-msgstr "No s'han seleccionat prou files. Incrementeu el nombre de files."
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:207
-#, kde-format
-msgid "Unable to open device"
-msgstr "No s'ha pogut obrir el dispositiu"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:209
-#, kde-format
-msgid "No new line detected"
-msgstr "No s'ha detectat cap línia nova"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:211
-#, kde-format
-msgid "Unable to determine the separator"
-msgstr "No s'ha pogut determinar el separador"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:213
-#, kde-format
-msgid "Invalid number of data columns"
-msgstr "Nombre no vàlid de columnes de dades"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:215
-#, kde-format
-msgid "Invalid number of column names"
-msgstr "Nombre no vàlid de noms de columnes"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:217
-#, kde-format
-msgid "Matrix: Unsupported column mode"
-msgstr "Matriu: Mode de columnes no admés"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:219
-#, kde-format
-msgid "Insufficient memory (RAM)"
-msgstr "Memòria insuficient (RAM)"
-
 #: src/backend/datasources/filters/AsciiFilter.cpp:221
-#, kde-format
-msgid "Unable to parse header"
-msgstr "No s'ha pogut analitzar la capçalera"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:223
-#, kde-format
-msgid "Unsupported data source"
-msgstr "Origen de les dades no admés"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:227
-#, kde-format
-msgid "Live: No column separator selected"
-msgstr "En viu: No s'ha seleccionat cap separador de columnes"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:229
-#, kde-format
-msgid "Live: No column modes set"
-msgstr "En viu: No s'ha establit cap mode de columna"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:231
-#, kde-format
-msgid "Datetime column found, but no Datetime format provided"
-msgstr ""
-"S'ha trobat una columna Datahora, però no s'ha proporcionat cap format "
-"Datahora"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:233
-#, kde-format
-msgid "Header reading from device not allowed"
-msgstr "No es permet la lectura de la capçalera des del dispositiu"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:235
-#, kde-format
-msgid "Separator detection not allowed"
-msgstr "No es permet la detecció de separador"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:237
-#, kde-format
-msgid "Invalid separator"
-msgstr "Separador no vàlid"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:239
-#, kde-format
-msgid "Serial device must be initialized before reading data from it"
-msgstr "El dispositiu en sèrie s'ha de restablir abans de llegir-ne les dades"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:241
-#, kde-format
-msgid "Wrong end column. Is it smaller than start column?"
-msgstr "Columna final incorrecta. És més xicoteta que la columna inicial?"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:243
-#, kde-format
-msgid "Wrong end row. Is it smaller than start row?"
-msgstr "Fila final incorrecta. És més xicoteta que la fila inicial?"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:245
-#, kde-format
-msgid "No data destination set"
-msgstr "No s'ha establit cap destinació de dades"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:247
-#, kde-format
-msgid "No columns"
-msgstr "Sense columnes"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:249
-#, kde-format
-msgid "Unable to determine column modes. Check if they are correctly written"
-msgstr ""
-"No s'han pogut determinar els modes de les columnes. Comproveu que estiguen "
-"escrits correctament"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:251
-#, kde-format
-msgid "UTF16 encoding is not supported"
-msgstr "No s'admet la codificació UTF16"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:253
-#, kde-format
-msgid "Unhandled case"
-msgstr "Cas no gestionat"
-
-#: src/backend/datasources/filters/AsciiFilter.cpp:279
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "Nombre de columnes: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:281
+#: src/backend/datasources/filters/AsciiFilter.cpp:223
 #, kde-format
 msgid "Number of lines: %1"
 msgstr "Nombre de línies: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:524
-#: src/backend/datasources/filters/AsciiFilter.cpp:1311
+#: src/backend/datasources/filters/AsciiFilter.cpp:465
+#: src/backend/datasources/filters/AsciiFilter.cpp:1250
 #: src/backend/datasources/filters/JsonFilter.cpp:284
 #, kde-format
 msgid "Column %1"
 msgstr "Columna %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:594
-#: src/backend/datasources/filters/AsciiFilter.cpp:1334
+#: src/backend/datasources/filters/AsciiFilter.cpp:539
+#: src/backend/datasources/filters/AsciiFilter.cpp:1273
 #, kde-format
 msgid "Timestamp"
 msgstr "Marca horària"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:598
-#: src/backend/datasources/filters/AsciiFilter.cpp:1338
+#: src/backend/datasources/filters/AsciiFilter.cpp:543
+#: src/backend/datasources/filters/AsciiFilter.cpp:1277
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1245,17 +1108,17 @@ msgstr "Marca horària"
 msgid "Index"
 msgstr "Índex"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:611
+#: src/backend/datasources/filters/AsciiFilter.cpp:556
 #, kde-format
 msgid "DateTime"
 msgstr "DataHora"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:612
+#: src/backend/datasources/filters/AsciiFilter.cpp:557
 #, kde-format
 msgid "Int"
 msgstr "Int"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:613
+#: src/backend/datasources/filters/AsciiFilter.cpp:558
 #: src/backend/datasources/filters/MatioFilter.cpp:398
 #: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
@@ -1319,6 +1182,14 @@ msgstr "Fitxer no vàlid."
 #, kde-format
 msgid "No messages read."
 msgstr "No s'ha llegit cap missatge."
+
+#: src/backend/datasources/filters/FilterStatus.cpp:47
+#, kde-format
+msgid ""
+"Invalid number of data columns. First row column count: %1. %2th row column "
+"count >= %3. Check if the correct separator is used and the data contains "
+"same number of columns."
+msgstr ""
 
 #: src/backend/datasources/filters/FITSFilter.cpp:239
 #, kde-format
@@ -1832,7 +1703,7 @@ msgstr "Nombre de variables: "
 #: src/frontend/dockwidgets/XYFunctionCurveDock.cpp:251
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:371
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:402
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:149
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:80
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:185
 #, kde-format
 msgid "Variables:"
@@ -3184,6 +3055,13 @@ msgstr "Unitat d'energia del SI"
 msgid "Energy 1 erg"
 msgstr "Energia d'1 erg"
 
+#: src/backend/gsl/errors.h:20
+#: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2137
+#: src/frontend/dockwidgets/XYFitCurveDock.cpp:1314
+#, kde-format
+msgid "Success"
+msgstr "Correcte"
+
 #: src/backend/gsl/errors.h:22
 #, kde-format
 msgid "Failure"
@@ -3773,7 +3651,7 @@ msgstr "Mitjana aritmètica"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:261
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:221
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:73
@@ -6484,7 +6362,7 @@ msgstr "Circular"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:345
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:386
 #: src/frontend/ui/dockwidgets/histogramdock.ui:213
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:687
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:727
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:352
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:224
 #: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:118
@@ -7871,7 +7749,7 @@ msgstr "Orientació"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1440
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:237
 #: src/frontend/ui/dockwidgets/lollipopplotdock.ui:237
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:258
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:298
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:250
 #: src/frontend/ui/dockwidgets/runchartdock.ui:174
 #: src/frontend/ui/dockwidgets/runchartdock.ui:238
@@ -8080,8 +7958,8 @@ msgstr "%1: establix el format automàtic de les etiquetes"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:943
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:950
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:634
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:641
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: establix la precisió de les etiquetes"
@@ -8165,7 +8043,7 @@ msgid "%1: set data columns"
 msgstr "%1: establix les columnes de dades"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:304
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:546
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:550
 #, kde-format
 msgid "%1: set type"
 msgstr "%1: establix el tipus"
@@ -9157,8 +9035,8 @@ msgstr "Ajusta a la distribució binomial"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:400
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:248
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:522
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:534
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:526
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:538
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:265
 #, kde-format
@@ -9239,84 +9117,108 @@ msgstr "%1: establix l'amplada de banda"
 msgid "%1: legend visibility changed"
 msgstr "%1: s'ha canviat la visibilitat de la llegenda"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:553
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:557
+#, fuzzy, kde-format
+#| msgid "%1: set limits metric"
+msgid "%1: set limits type"
+msgstr "%1: establix la mètrica dels límits"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:564
 #, kde-format
 msgid "%1: set limits metric"
 msgstr "%1: establix la mètrica dels límits"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:560
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:571
 #, kde-format
 msgid "%1: set sample size"
 msgstr "%1: establix la mida de la mostra"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:568
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:579
 #, kde-format
 msgid "%1: enable exact limits"
 msgstr "%1: activa els límits exactes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:568
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:579
 #, kde-format
 msgid "%1: disable exact limits"
 msgstr "%1: desactiva els límits exactes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:577
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:588
 #, kde-format
 msgid "%1: set maximal upper limit"
 msgstr "%1: establix el límit superior màxim"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:584
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:595
 #, kde-format
 msgid "%1: set minimal lower limit"
 msgstr "%1: establix el límit inferior mínim"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:593
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
+#, fuzzy, kde-format
+#| msgid "%1: set center metric"
+msgid "%1: set center specification"
+msgstr "%1: establix la mètrica del centre"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
+#, fuzzy, kde-format
+#| msgid "%1: set plot designation"
+msgid "%1: set upper limit specification"
+msgstr "%1: establix la designació del diagrama"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:616
+#, fuzzy, kde-format
+#| msgid "%1: set plot designation"
+msgid "%1: set lower limit specification"
+msgstr "%1: establix la designació del diagrama"
+
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:625
 #, kde-format
 msgid "%1: enable control labels"
 msgstr "%1: activa les etiquetes dels controls"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:593
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:625
 #, kde-format
 msgid "%1: disable control labels"
 msgstr "%1: desactiva les etiquetes dels controls"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:615
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:647
 #, kde-format
 msgid "%1: set labels border shape"
 msgstr "%1: establix la forma de la vora de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:630
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:662
 #, kde-format
 msgid "%1: set labels font"
 msgstr "%1: establix la lletra de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:665
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:697
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:729
 #, kde-format
 msgid "%1: set labels background color"
 msgstr "%1: establix el color de fons de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:755
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:787
 #, kde-format
 msgid "%1: set labels border style"
 msgstr "%1: establix l'estil de forma de la vora"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:766
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:798
 #, kde-format
 msgid "%1: set labels border width"
 msgstr "%1: establix l'amplària de la vora de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:777
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:788
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:809
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:820
 #, kde-format
 msgid "%1: set labels border color"
 msgstr "%1: establix el color de la vora de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:880
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:912
 #, kde-format
 msgid "Not enough data provided."
 msgstr "No s'han proporcionat prou dades."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:980
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1012
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "L'última mostra és incompleta i s'ha omés."
@@ -10270,7 +10172,7 @@ msgstr "%1: desbloqueig"
 #: src/frontend/ui/dockwidgets/imagedock.ui:116
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:76
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:83
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:54
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:143
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:66
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:215
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:94
@@ -13505,7 +13407,7 @@ msgstr "%1 eixos: s'ha carregat la plantilla «%2»"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:375
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:452
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:685
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:801
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
@@ -13928,7 +13830,7 @@ msgstr "Fila principal"
 #: src/frontend/dockwidgets/ImageDock.cpp:187
 #: src/frontend/dockwidgets/ImageDock.cpp:192
 #: src/frontend/dockwidgets/ImageDock.cpp:197
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:322
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:362
 #: src/frontend/widgets/LabelWidget.cpp:486
 #: src/frontend/widgets/LabelWidget.cpp:492
 #: src/frontend/widgets/LabelWidget.cpp:498
@@ -14215,7 +14117,7 @@ msgid "Custom value for the kernel bandwidth"
 msgstr "Valor personalitzat per a l'amplada de banda del nucli"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:373
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:683
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:799
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1041
@@ -14295,88 +14197,100 @@ msgstr "%1 matrius: s'ha carregat la plantilla «%2»"
 msgid "File Browser"
 msgstr "Navegador de fitxers"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:220
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Statistical"
+msgstr "Estadístiques"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
+#, fuzzy, kde-format
+#| msgid "Simplification"
+msgid "Specification"
+msgstr "Simplificació"
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
 #, kde-format
 msgid "Average"
 msgstr "Mitjana"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:224
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:234
 #: src/frontend/widgets/LabelWidget.cpp:508
 #, kde-format
 msgid "No Border"
 msgstr "Sense vores"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:225
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:235
 #: src/frontend/widgets/LabelWidget.cpp:509
 #, kde-format
 msgid "Rectangle"
 msgstr "Rectangle"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:236
 #: src/frontend/widgets/LabelWidget.cpp:510
 #, kde-format
 msgid "Ellipse"
 msgstr "El·lipse"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:237
 #: src/frontend/widgets/LabelWidget.cpp:511
 #, kde-format
 msgid "Round sided rectangle"
 msgstr "Rectangle amb els costats rodons"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:228
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:238
 #: src/frontend/widgets/LabelWidget.cpp:512
 #, kde-format
 msgid "Round corner rectangle"
 msgstr "Rectangle amb cantó arredonit"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:229
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:239
 #: src/frontend/widgets/LabelWidget.cpp:513
 #, kde-format
 msgid "Inwards round corner rectangle"
 msgstr "Rectangle amb cantó arredonit cap a dins"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:240
 #: src/frontend/widgets/LabelWidget.cpp:514
 #, kde-format
 msgid "Dented border rectangle"
 msgstr "Rectangle amb vora dentada"
 
 # Nota: https://ca.wikipedia.org/wiki/Ortoedre
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:241
 #: src/frontend/widgets/LabelWidget.cpp:515
 #, kde-format
 msgid "Cuboid"
 msgstr "Ortoedre"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:232
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:242
 #: src/frontend/widgets/LabelWidget.cpp:516
 #, kde-format
 msgid "Up pointing rectangle"
 msgstr "Rectangle que assenyala cap amunt"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:233
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:243
 #: src/frontend/widgets/LabelWidget.cpp:517
 #, kde-format
 msgid "Down pointing rectangle"
 msgstr "Rectangle que assenyala cap avall"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:234
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:244
 #: src/frontend/widgets/LabelWidget.cpp:518
 #, kde-format
 msgid "Left pointing rectangle"
 msgstr "Rectangle que assenyala cap a l'esquerra"
 
 # Nota: https://ca.wikipedia.org/wiki/Triangle_rectangle
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:235
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:245
 #: src/frontend/widgets/LabelWidget.cpp:519
 #, kde-format
 msgid "Right pointing rectangle"
 msgstr "Rectangle que assenyala cap a la dreta"
 
 # skip-rule: t-sc-plot
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:239
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:249
 #, kde-format
 msgid ""
 "The supported chart types are grouped according to the plotted statistics "
@@ -14408,19 +14322,28 @@ msgstr ""
 "li><li>C - dibuixa els <b>comptadors de Poisson</b>.</li><li>U - dibuixa les "
 "<b>ràtios de Poisson</b>.</li></ul>"
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:265
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:276
+#, kde-format
+msgid ""
+"Determine which values to use for the center and limit lines:"
+"<ul><li>Statistical - values are calculated based on the statistical "
+"properties of the sample.</li><li>Specification - custom user-defined values "
+"are used.</li></ul>"
+msgstr ""
+
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:284
 #, kde-format
 msgid "Maximal value for the upper control limit. No constraint, if empty."
 msgstr ""
 "Valor màxim del límit de control superior. Sense restriccions si està buit."
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:269
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:288
 #, kde-format
 msgid "Minimal value for the lower control limit. No constraint, if empty."
 msgstr ""
 "Valor mínim del límit de control inferior. Sense restriccions si està buit."
 
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:273
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:292
 #, kde-format
 msgid ""
 "If checked, exact limits are calculated for every individual sample (\"stair-"
@@ -15612,7 +15535,7 @@ msgstr "Seleccioneu un fitxer per a guardar la definició de funció"
 #: src/frontend/ui/dockwidgets/matrixdock.ui:43
 #: src/frontend/ui/dockwidgets/notebookdock.ui:65
 #: src/frontend/ui/dockwidgets/notedock.ui:43
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:87
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:237
 #: src/frontend/ui/dockwidgets/projectdock.ui:184
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:103
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:118
@@ -18043,7 +17966,7 @@ msgstr "Període:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSampleSize)
 #: src/frontend/spreadsheet/SampleValuesDialog.cpp:105
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:30
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:163
 #, kde-format
 msgid "Sample Size:"
 msgstr "Mida de la mostra:"
@@ -19150,7 +19073,7 @@ msgstr "Tipus d'error Y:"
 #: src/frontend/ui/dockwidgets/matrixdock.ui:17
 #: src/frontend/ui/dockwidgets/notebookdock.ui:33
 #: src/frontend/ui/dockwidgets/notedock.ui:17
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:219
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:56
 #: src/frontend/ui/dockwidgets/projectdock.ui:141
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:59
 #: src/frontend/ui/dockwidgets/referencelinedock.ui:189
@@ -19690,7 +19613,7 @@ msgstr "Camí relatiu"
 #: src/frontend/ui/dockwidgets/linewidget.ui:85
 #: src/frontend/ui/dockwidgets/livedatadock.ui:152
 #: src/frontend/ui/dockwidgets/matrixdock.ui:268
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:182
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:223
 #: src/frontend/ui/dockwidgets/valuewidget.ui:48
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:305
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:302
@@ -20361,7 +20284,7 @@ msgstr "Temes:"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1172
 #: src/frontend/ui/dockwidgets/columndock.ui:207
 #: src/frontend/ui/dockwidgets/matrixdock.ui:285
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:643
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:683
 #: src/frontend/ui/dockwidgets/valuewidget.ui:211
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:238
 #, kde-format
@@ -21010,15 +20933,15 @@ msgstr "Etiquetes"
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbLabelsPrecision)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1169
 #: src/frontend/ui/dockwidgets/axisdock.ui:1206
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:640
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:677
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:680
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:717
 #, kde-format
 msgid "Number of digits after the decimal point"
 msgstr "Nombre de dígits després de la coma decimal"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkLabelsAutoPrecision)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1213
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:684
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:724
 #, kde-format
 msgid ""
 "Automatically determine the optimal number of digits after the decimal point"
@@ -21045,7 +20968,7 @@ msgstr "Posició"
 #: src/frontend/ui/dockwidgets/axisdock.ui:1424
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:126
 #: src/frontend/ui/dockwidgets/notedock.ui:96
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:511
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:551
 #: src/frontend/ui/dockwidgets/valuewidget.ui:310
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:301
 #: src/frontend/ui/labelwidget.ui:629
@@ -21136,7 +21059,7 @@ msgstr "Prefix:"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsColor)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsFontColor)
 #: src/frontend/ui/dockwidgets/axisdock.ui:1516
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:621
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:661
 #: src/frontend/ui/labelwidget.ui:68
 #, kde-format
 msgid "Font Color:"
@@ -21174,7 +21097,7 @@ msgstr "Quadrícula més gran"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1045
 #: src/frontend/ui/dockwidgets/histogramdock.ui:493
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:336
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:601
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:641
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:611
 #: src/frontend/ui/mqttwillsettingswidget.ui:346
 #, kde-format
@@ -21272,7 +21195,7 @@ msgstr "Barres"
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1332
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:599
 #: src/frontend/ui/dockwidgets/imagedock.ui:559
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:633
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:673
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:303
 #: src/frontend/ui/labelwidget.ui:303 src/frontend/ui/symbolwidget.ui:233
 #: src/frontend/widgets/SymbolWidget.cpp:133
@@ -22114,7 +22037,7 @@ msgstr "Amplada de banda:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:163
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:103
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:129
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:120
 #: src/frontend/ui/dockwidgets/referencerangedock.ui:134
 #: src/frontend/ui/dockwidgets/runchartdock.ui:93
@@ -22234,72 +22157,101 @@ msgstr "Color del fons:"
 msgid "Text color:"
 msgstr "Color del text:"
 
-#. i18n: ectx: property (text), widget (QLabel, lExactLimits)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:37
-#, kde-format
-msgid "Exact Limits:"
-msgstr "Límits exactes:"
-
-#. i18n: ectx: property (text), widget (QLabel, lData2Column)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:77
-#, kde-format
-msgid "Sample Sizes:"
-msgstr "Mides de les mostres:"
-
 #. i18n: ectx: property (text), widget (QLabel, lMinLowerLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:189
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:46
 #, kde-format
 msgid "Min. Lower Limit:"
 msgstr "Límit inferior mín.:"
 
+#. i18n: ectx: property (text), widget (QLabel, lData2Column)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:112
+#, kde-format
+msgid "Sample Sizes:"
+msgstr "Mides de les mostres:"
+
 #. i18n: ectx: property (text), widget (QLabel, lLimitsMetric)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:212
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:122
 #, kde-format
 msgid "Limits based on:"
 msgstr "Límits basats en:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMaxUpperLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:236
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:136
 #, kde-format
 msgid "Max. Upper Limit:"
 msgstr "Límit superior màx.:"
 
+#. i18n: ectx: property (text), widget (QLabel, lUpperLimitSpecification)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:186
+#, fuzzy, kde-format
+#| msgid "Upper Limit"
+msgid "Upper Limit:"
+msgstr "Límit superior"
+
+#. i18n: ectx: property (text), widget (QLabel, lLowerLimitSpecification)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:200
+#, fuzzy, kde-format
+#| msgid "Lower Limit"
+msgid "Lower Limit:"
+msgstr "Límit inferior"
+
+#. i18n: ectx: property (text), widget (QLabel, lLimitsType)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:230
+#, fuzzy, kde-format
+#| msgid "Center/Limits Lines"
+msgid "Center/Limits:"
+msgstr "Línies de centre/límits"
+
+#. i18n: ectx: property (text), widget (QLabel, lExactLimits)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:269
+#, kde-format
+msgid "Exact Limits:"
+msgstr "Límits exactes:"
+
+#. i18n: ectx: property (text), widget (QLabel, lCenterMetric)
+#. i18n: ectx: property (text), widget (QLabel, lCenterSpecification)
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:276
+#: src/frontend/ui/dockwidgets/runchartdock.ui:152
+#, kde-format
+msgid "Center:"
+msgstr "Centre:"
+
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataLine)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:247
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:287
 #: src/frontend/ui/dockwidgets/runchartdock.ui:163
 #, kde-format
 msgid "Data Line"
 msgstr "Línia de dades"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLines)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:311
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:351
 #, kde-format
 msgid "Center/Limits Lines"
 msgstr "Línies de centre/límits"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:366
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:406
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
 msgid "Upper Limit"
 msgstr "Límit superior"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimit)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:410
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:450
 #: src/frontend/widgets/FitParametersWidget.cpp:192
 #, kde-format
 msgid "Lower Limit"
 msgstr "Límit inferior"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabControlLimitLabels)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:447
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:487
 #, kde-format
 msgid "Center/Limit Values"
 msgstr "Valors de centre/límits"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBorderShape)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:469
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:509
 #: src/frontend/ui/labelwidget.ui:75
 #, kde-format
 msgid "Shape:"
@@ -22307,7 +22259,7 @@ msgstr "Forma:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBackgroundColor)
-#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:518
+#: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:558
 #: src/frontend/ui/labelwidget.ui:116
 #, kde-format
 msgid "Background Color:"
@@ -22410,12 +22362,6 @@ msgstr "X final:"
 #, kde-format
 msgid "Start x:"
 msgstr "X inicial:"
-
-#. i18n: ectx: property (text), widget (QLabel, lCenterMetric)
-#: src/frontend/ui/dockwidgets/runchartdock.ui:152
-#, kde-format
-msgid "Center:"
-msgstr "Centre:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCenterLine)
 #: src/frontend/ui/dockwidgets/runchartdock.ui:227
@@ -25541,3 +25487,84 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
+
+#~ msgid "Device at end"
+#~ msgstr "Final del dispositiu"
+
+#~ msgid "Not enough rows selected. Increase number of rows."
+#~ msgstr "No s'han seleccionat prou files. Incrementeu el nombre de files."
+
+#~ msgid "Unable to open device"
+#~ msgstr "No s'ha pogut obrir el dispositiu"
+
+#~ msgid "No new line detected"
+#~ msgstr "No s'ha detectat cap línia nova"
+
+#~ msgid "Unable to determine the separator"
+#~ msgstr "No s'ha pogut determinar el separador"
+
+#~ msgid "Invalid number of data columns"
+#~ msgstr "Nombre no vàlid de columnes de dades"
+
+#~ msgid "Invalid number of column names"
+#~ msgstr "Nombre no vàlid de noms de columnes"
+
+#~ msgid "Matrix: Unsupported column mode"
+#~ msgstr "Matriu: Mode de columnes no admés"
+
+#~ msgid "Insufficient memory (RAM)"
+#~ msgstr "Memòria insuficient (RAM)"
+
+#~ msgid "Unable to parse header"
+#~ msgstr "No s'ha pogut analitzar la capçalera"
+
+#~ msgid "Unsupported data source"
+#~ msgstr "Origen de les dades no admés"
+
+#~ msgid "Live: No column separator selected"
+#~ msgstr "En viu: No s'ha seleccionat cap separador de columnes"
+
+#~ msgid "Live: No column modes set"
+#~ msgstr "En viu: No s'ha establit cap mode de columna"
+
+#~ msgid "Datetime column found, but no Datetime format provided"
+#~ msgstr ""
+#~ "S'ha trobat una columna Datahora, però no s'ha proporcionat cap format "
+#~ "Datahora"
+
+#~ msgid "Header reading from device not allowed"
+#~ msgstr "No es permet la lectura de la capçalera des del dispositiu"
+
+#~ msgid "Separator detection not allowed"
+#~ msgstr "No es permet la detecció de separador"
+
+#~ msgid "Invalid separator"
+#~ msgstr "Separador no vàlid"
+
+#~ msgid "Serial device must be initialized before reading data from it"
+#~ msgstr ""
+#~ "El dispositiu en sèrie s'ha de restablir abans de llegir-ne les dades"
+
+#~ msgid "Wrong end column. Is it smaller than start column?"
+#~ msgstr "Columna final incorrecta. És més xicoteta que la columna inicial?"
+
+#~ msgid "Wrong end row. Is it smaller than start row?"
+#~ msgstr "Fila final incorrecta. És més xicoteta que la fila inicial?"
+
+#~ msgid "No data destination set"
+#~ msgstr "No s'ha establit cap destinació de dades"
+
+#~ msgid "No columns"
+#~ msgstr "Sense columnes"
+
+#~ msgid ""
+#~ "Unable to determine column modes. Check if they are correctly written"
+#~ msgstr ""
+#~ "No s'han pogut determinar els modes de les columnes. Comproveu que "
+#~ "estiguen escrits correctament"
+
+#~ msgid "UTF16 encoding is not supported"
+#~ msgstr "No s'admet la codificació UTF16"
+
+#~ msgid "Unhandled case"
+#~ msgstr "Cas no gestionat"
