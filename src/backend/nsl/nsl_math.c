@@ -87,6 +87,12 @@ double nsl_math_trunc_places(double value, int n) {
 	return nsl_math_places(value, n, 3);
 }
 
+/*!
+ * \brief nsl_math_trunc_places_1
+ * Fast version of nsl_math_trun_places for 1 digit trunc
+ * \param value
+ * \return
+ */
 double nsl_math_trunc_places_1(double value) {
 	// no need to round
 	if (value == 0. || fabs(value) > 1.e16 || fabs(value) < 1.e-16 || isnan(value) || isinf(value)) {
