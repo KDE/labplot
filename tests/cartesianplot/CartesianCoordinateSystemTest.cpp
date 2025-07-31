@@ -49,9 +49,9 @@ void CartesianCoordinateSystemTest::testMapLogicalToSceneLines() {
 	VALUES_EQUAL(mapLogicalToSceneCopyLines.at(1).x1(), 0.);
 	VALUES_EQUAL(mapLogicalToSceneCopyLines.at(1).y1(), 10.);
 	VALUES_EQUAL(mapLogicalToSceneCopyLines.at(1).x2(), 0.9);
-	VALUES_EQUAL(
-		mapLogicalToSceneCopyLines.at(1).y2(),
-		51.4); // (7.3 - logicalYRange.start())/(logicalYRange.end() - logicalYRange.start()) * (sceneRangeY.end() - sceneRangeY.start()) + sceneRangeY.start()
+	VALUES_EQUAL(mapLogicalToSceneCopyLines.at(1).y2(),
+				 (7.3 - logicalRangeY.start()) / (logicalRangeY.end() - logicalRangeY.start()) * (sceneRangeY.end() - sceneRangeY.start())
+					 + sceneRangeY.start());
 
 	auto mapLogicalToSceneDefaultMappingLines = lines;
 	cSystem.mapLogicalToSceneDefaultMapping(mapLogicalToSceneDefaultMappingLines);
@@ -104,8 +104,10 @@ void CartesianCoordinateSystemTest::testMapLogicalToSceneLinesClipping() {
 
 	QCOMPARE(mapLogicalToSceneCopyLines.size(), 4);
 	VALUES_EQUAL(mapLogicalToSceneCopyLines.at(0).x1(), 0.0);
-	VALUES_EQUAL(mapLogicalToSceneCopyLines.at(0).y1(), -30.); // (6 - logicalYStart) / (logicalYEnd - logicalYStart) * (sceneYEnd - sceneYStart) + sceneYStart
-	VALUES_EQUAL(mapLogicalToSceneCopyLines.at(0).x2(), 0.35); // (7 - logicalXStart) / (logicalXEnd - logicalXStart) * (sceneXEnd - sceneXStart) + sceneXStart
+	VALUES_EQUAL(mapLogicalToSceneCopyLines.at(0).y1(),
+				 (6 - logicalRangeY.start()) / (logicalRangeY.end() - logicalRangeY.start()) * (sceneRangeY.end() - sceneRangeY.start()) + sceneRangeY.start());
+	VALUES_EQUAL(mapLogicalToSceneCopyLines.at(0).x2(),
+				 (7 - logicalRangeX.start()) / (logicalRangeX.end() - logicalRangeX.start()) * (sceneRangeX.end() - sceneRangeX.start()) + sceneRangeX.start());
 	VALUES_EQUAL(mapLogicalToSceneCopyLines.at(0).y2(), 50.);
 
 	VALUES_EQUAL(mapLogicalToSceneCopyLines.at(1).x1(), 0.0);
@@ -116,9 +118,9 @@ void CartesianCoordinateSystemTest::testMapLogicalToSceneLinesClipping() {
 	VALUES_EQUAL(mapLogicalToSceneCopyLines.at(2).x1(), -0.5);
 	VALUES_EQUAL(mapLogicalToSceneCopyLines.at(2).y1(), -50.);
 	VALUES_EQUAL(mapLogicalToSceneCopyLines.at(2).x2(), 0.4);
-	VALUES_EQUAL(
-		mapLogicalToSceneCopyLines.at(2).y2(),
-		-4); // (7.3 - logicalYRange.start())/(logicalYRange.end() - logicalYRange.start()) * (sceneRangeY.end() - sceneRangeY.start()) + sceneRangeY.start()
+	VALUES_EQUAL(mapLogicalToSceneCopyLines.at(2).y2(),
+				 (7.3 - logicalRangeY.start()) / (logicalRangeY.end() - logicalRangeY.start()) * (sceneRangeY.end() - sceneRangeY.start())
+					 + sceneRangeY.start());
 
 	VALUES_EQUAL(mapLogicalToSceneCopyLines.at(3).x1(), -0.5);
 	VALUES_EQUAL(mapLogicalToSceneCopyLines.at(3).y1(), -50.);
