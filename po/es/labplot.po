@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-31 00:39+0000\n"
-"PO-Revision-Date: 2025-07-27 00:24+0100\n"
+"PO-Revision-Date: 2025-08-01 00:20+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -1183,6 +1183,10 @@ msgid ""
 "count >= %3. Check if the correct separator is used and the data contains "
 "same number of columns."
 msgstr ""
+"Número no válido de columnas de datos. Contador de columnas de la primera "
+"fila: %1. El contador de columnas de la %2ª fila es >= %3. Compruebe que "
+"está usando el separador correcto y que los datos contienen el mismo número "
+"de columnas."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:239
 #, kde-format
@@ -9028,10 +9032,9 @@ msgid "%1: legend visibility changed"
 msgstr "%1: visibilidad de la leyenda cambiada"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:557
-#, fuzzy, kde-format
-#| msgid "%1: set limits metric"
+#, kde-format
 msgid "%1: set limits type"
-msgstr "%1: definir métrica de límites"
+msgstr "%1: definir tipo de límites"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:564
 #, kde-format
@@ -9064,22 +9067,19 @@ msgid "%1: set minimal lower limit"
 msgstr "%1: definir el límite mínimo inferior"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
-#, fuzzy, kde-format
-#| msgid "%1: set center metric"
+#, kde-format
 msgid "%1: set center specification"
-msgstr "%1: definir métrica del centro"
+msgstr "%1: definir especificación del centro"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#, kde-format
 msgid "%1: set upper limit specification"
-msgstr "%1: definir la designación del gráfico"
+msgstr "%1: definir la especificación del límite superior"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:616
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#, kde-format
 msgid "%1: set lower limit specification"
-msgstr "%1: definir la designación del gráfico"
+msgstr "%1: definir la especificación del límite inferior"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:625
 #, kde-format
@@ -14093,16 +14093,14 @@ msgid "File Browser"
 msgstr "Navegador de archivos"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistical"
-msgstr "Estadísticas"
+msgstr "Estadística"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Specification"
-msgstr "Simplificación"
+msgstr "Especificación"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
@@ -14222,6 +14220,10 @@ msgid ""
 "properties of the sample.</li><li>Specification - custom user-defined values "
 "are used.</li></ul>"
 msgstr ""
+"Determinar los valores que se deben usar para las líneas central y límite:"
+"<ul><li>Estadística: los valores se calculan según las propiedades "
+"estadísticas de la muestra.</li><li>Especificación: se usan valores "
+"personalizados definidos por el usuario.</li></ul>"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:284
 #, kde-format
@@ -22058,24 +22060,21 @@ msgstr "Límite superior máx.:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimitSpecification)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:186
-#, fuzzy, kde-format
-#| msgid "Upper Limit"
+#, kde-format
 msgid "Upper Limit:"
-msgstr "Límite superior"
+msgstr "Límite superior:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimitSpecification)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:200
-#, fuzzy, kde-format
-#| msgid "Lower Limit"
+#, kde-format
 msgid "Lower Limit:"
-msgstr "Límite inferior"
+msgstr "Límite inferior:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsType)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:230
-#, fuzzy, kde-format
-#| msgid "Center/Limits Lines"
+#, kde-format
 msgid "Center/Limits:"
-msgstr "Líneas de centrado/límite"
+msgstr "Centro/límites:"
 
 #. i18n: ectx: property (text), widget (QLabel, lExactLimits)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:269
@@ -25354,85 +25353,3 @@ msgstr "el proceso «convert» ha fallado, código de salida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No se puede abrir el archivo:"
-
-#~ msgid "Device at end"
-#~ msgstr "Dispositivo al final"
-
-#~ msgid "Not enough rows selected. Increase number of rows."
-#~ msgstr ""
-#~ "No se han seleccionado suficientes filas. Aumente el número de filas."
-
-#~ msgid "Unable to open device"
-#~ msgstr "No se ha podido abrir el dispositivo"
-
-#~ msgid "No new line detected"
-#~ msgstr "No se ha detectado ninguna línea nueva"
-
-#~ msgid "Unable to determine the separator"
-#~ msgstr "No se puede determinar el separador"
-
-#~ msgid "Invalid number of data columns"
-#~ msgstr "Número no válido de columnas de datos"
-
-#~ msgid "Invalid number of column names"
-#~ msgstr "Número no válido de nombres de columnas"
-
-#~ msgid "Matrix: Unsupported column mode"
-#~ msgstr "Matriz: modo de columnas no permitido"
-
-#~ msgid "Insufficient memory (RAM)"
-#~ msgstr "Memoria insuficiente (RAM)"
-
-#~ msgid "Unable to parse header"
-#~ msgstr "No se puede analizar la cabecera"
-
-#~ msgid "Unsupported data source"
-#~ msgstr "Fuente de datos no permitida"
-
-#~ msgid "Live: No column separator selected"
-#~ msgstr "En vivo: No se ha seleccionado ningún separador de columnas"
-
-#~ msgid "Live: No column modes set"
-#~ msgstr "En vivo: No se ha definido ningún modo de columna"
-
-#~ msgid "Datetime column found, but no Datetime format provided"
-#~ msgstr ""
-#~ "Columna de fecha y hora encontrada, pero no se ha indicado ningún formato "
-#~ "de fecha y hora"
-
-#~ msgid "Header reading from device not allowed"
-#~ msgstr "No se permite leer la cabecera del dispositivo"
-
-#~ msgid "Separator detection not allowed"
-#~ msgstr "No se permite la detección del separador"
-
-#~ msgid "Invalid separator"
-#~ msgstr "Separador no válido"
-
-#~ msgid "Serial device must be initialized before reading data from it"
-#~ msgstr ""
-#~ "El dispositivo en serie se debe inicializar antes de leer datos de él"
-
-#~ msgid "Wrong end column. Is it smaller than start column?"
-#~ msgstr "Columna final incorrecta. ¿Es menor que la columna inicial?"
-
-#~ msgid "Wrong end row. Is it smaller than start row?"
-#~ msgstr "Fila final incorrecta. ¿Es menor que la fila inicial?"
-
-#~ msgid "No data destination set"
-#~ msgstr "No se ha definido ningún destino de datos"
-
-#~ msgid "No columns"
-#~ msgstr "No hay columnas"
-
-#~ msgid ""
-#~ "Unable to determine column modes. Check if they are correctly written"
-#~ msgstr ""
-#~ "No se han podido determinar los modos de las columnas. Compruebe que se "
-#~ "han escrito correctamente."
-
-#~ msgid "UTF16 encoding is not supported"
-#~ msgstr "La codificación UTF16 no está permitida"
-
-#~ msgid "Unhandled case"
-#~ msgstr "Caso no contemplado"
