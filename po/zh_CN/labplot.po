@@ -13483,7 +13483,7 @@ msgstr ""
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:408
 #, kde-format
 msgid "Click this button or press Shift+Enter to recalculate the result."
-msgstr ""
+msgstr "点击此按钮或按 Shift+Enter 键来重新计算结果。"
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:75
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:400
