@@ -45,6 +45,10 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent)
 
 	connect(ui.tbAddVariable, &QToolButton::clicked, this, &HypothesisTestDock::addVariable);
 	connect(ui.tbRemoveVariable, &QToolButton::clicked, this, &HypothesisTestDock::removeVariable);
+
+	connect(ui.rbNullTwoTailed, &QRadioButton::toggled, ui.rbAlternateTwoTailed, &QRadioButton::setChecked);
+	connect(ui.rbNullOneTailedLeft, &QRadioButton::toggled, ui.rbAlternateOneTailedLeft, &QRadioButton::setChecked);
+	connect(ui.rbNullOneTailedRight, &QRadioButton::toggled, ui.rbAlternateOneTailedRight, &QRadioButton::setChecked);
 }
 
 void HypothesisTestDock::setTest(HypothesisTest* test) {
@@ -83,6 +87,23 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	// restore test mean
 	ui.sbTestMean->setValue(m_test->testMean());
 
+	int hypothesisCount = HypothesisTest::hypothesisCount(m_test->test());
+
+	// restore null hypothesis
+	if (hypothesisCount == 3) {
+		switch (m_test->tail()) {
+		case nsl_stats_tail_type_two:
+			ui.rbNullTwoTailed->setChecked(true);
+			break;
+		case nsl_stats_tail_type_positive:
+			ui.rbNullOneTailedLeft->setChecked(true);
+			break;
+		case nsl_stats_tail_type_negative:
+			ui.rbNullOneTailedRight->setChecked(true);
+			break;
+		}
+	}
+
 	// trigger testChanged() to update the ui
 	int oldIndex = ui.cbTest->currentIndex();
 	ui.cbTest->setCurrentIndex(ui.cbTest->findData(static_cast<int>(m_test->test()))); // auto trigger testChanged()
@@ -90,27 +111,21 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	if (oldIndex == newIndex)
 		testChanged(); // manually trigger testChanged()
 
-	int hypothesisCount = HypothesisTest::hypothesisCount(m_test->test());
-
-	// restore null hypothesis
-	if (hypothesisCount == 3) {
-		auto* layout = static_cast<QGridLayout*>(ui.fNullHypothesis->layout());
-		switch (m_test->tail()) {
-		case nsl_stats_tail_type_two:
-			static_cast<QRadioButton*>(layout->itemAt(0)->widget())->setChecked(true);
-			break;
-		case nsl_stats_tail_type_negative:
-			static_cast<QRadioButton*>(layout->itemAt(2)->widget())->setChecked(true);
-			break;
-		case nsl_stats_tail_type_positive:
-			static_cast<QRadioButton*>(layout->itemAt(4)->widget())->setChecked(true);
-			break;
-		}
-	}
-
 	// update the aspect properties when the ui properties change
 	m_aspectConnections << connect(ui.sbSignificanceLevel, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setSignificanceLevel);
 	m_aspectConnections << connect(ui.sbTestMean, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setTestMean);
+	m_aspectConnections << connect(ui.rbNullTwoTailed, &QRadioButton::toggled, [this](bool checked) {
+		if (checked)
+			m_test->setTail(nsl_stats_tail_type_two);
+	});
+	m_aspectConnections << connect(ui.rbNullOneTailedLeft, &QRadioButton::toggled, [this](bool checked) {
+		if (checked)
+			m_test->setTail(nsl_stats_tail_type_positive);
+	});
+	m_aspectConnections << connect(ui.rbNullOneTailedRight, &QRadioButton::toggled, [this](bool checked) {
+		if (checked)
+			m_test->setTail(nsl_stats_tail_type_negative);
+	});
 }
 
 void HypothesisTestDock::retranslateUi() {
@@ -142,65 +157,46 @@ void HypothesisTestDock::retranslateUi() {
 	ui.cbTest->setToolTip(info);
 }
 
-void HypothesisTestDock::ensureHypothesis(HypothesisTest::Test test) {
-	auto deleteChildren = [] (QWidget* widget) {
-		QLayout* layout = widget->layout();
-		if (!layout)
-			return;
-
-		QLayoutItem* child;
-		while ((child = layout->takeAt(0)) != nullptr) {
-			delete child->widget(); // delete the widget
-			delete child;   // delete the layout item
-		}
-	};
-
-	deleteChildren(ui.fNullHypothesis);
-	deleteChildren(ui.fAlternativeHypothesis);
-
-	for (const auto& [nullHypothesis, alternativeHypothesis] : HypothesisTest::hypothesisText(test)) {
-		int row = static_cast<QGridLayout*>(ui.fNullHypothesis->layout())->rowCount();
-
-		auto* rbNh = new QRadioButton(ui.fNullHypothesis);
-		rbNh->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
-		auto* lNh = new QLabel(nullHypothesis, ui.fNullHypothesis);
-		lNh->setWordWrap(true);
-		static_cast<QGridLayout*>(ui.fNullHypothesis->layout())->addWidget(rbNh, row, 0);
-		static_cast<QGridLayout*>(ui.fNullHypothesis->layout())->addWidget(lNh, row, 1);
-
-		auto* rbAh = new QRadioButton(ui.fAlternativeHypothesis);
-		rbAh->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
-		auto* lAh = new QLabel(alternativeHypothesis, ui.fAlternativeHypothesis);
-		lAh->setWordWrap(true);
-		static_cast<QGridLayout*>(ui.fAlternativeHypothesis->layout())->addWidget(rbAh, row, 0);
-		static_cast<QGridLayout*>(ui.fAlternativeHypothesis->layout())->addWidget(lAh, row, 1);
-
-		connect(rbNh, &QRadioButton::toggled, rbAh, &QRadioButton::setChecked);
-	}
-
-	// select something
-	static_cast<QRadioButton*>(static_cast<QGridLayout*>(ui.fNullHypothesis->layout())->itemAt(0)->widget())->setChecked(true);
-
+void HypothesisTestDock::ensureHypothesis() {
 	int hypothesisCount = HypothesisTest::hypothesisCount(m_test->test());
+	QVector<QPair<QString, QString>> hypothesisTexts = HypothesisTest::hypothesisText(m_test->test());
+
 	if (hypothesisCount == 3) {
-		connect(static_cast<QRadioButton*>(static_cast<QGridLayout*>(ui.fNullHypothesis->layout())->itemAt(0)->widget()), &QRadioButton::toggled, [this](bool checked) {
-			if (checked)
-				m_test->setTail(nsl_stats_tail_type_two);
-		});
-		connect(static_cast<QRadioButton*>(static_cast<QGridLayout*>(ui.fNullHypothesis->layout())->itemAt(2)->widget()), &QRadioButton::toggled, [this](bool checked) {
-			if (checked)
-				m_test->setTail(nsl_stats_tail_type_negative);
-		});
-		connect(static_cast<QRadioButton*>(static_cast<QGridLayout*>(ui.fNullHypothesis->layout())->itemAt(4)->widget()), &QRadioButton::toggled, [this](bool checked) {
-			if (checked)
-				m_test->setTail(nsl_stats_tail_type_positive);
-		});
+		ui.lNullTwoTailed->setText(hypothesisTexts[0].first);
+		ui.lAlternateTwoTailed->setText(hypothesisTexts[0].second);
+		ui.lNullOneTailedLeft->setText(hypothesisTexts[1].first);
+		ui.lAlternateOneTailedLeft->setText(hypothesisTexts[1].second);
+		ui.lNullOneTailedRight->setText(hypothesisTexts[2].first);
+		ui.lAlternateOneTailedRight->setText(hypothesisTexts[2].second);
+
+		ui.lNullOneTailedLeft->show();
+		ui.lAlternateOneTailedLeft->show();
+		ui.lNullOneTailedRight->show();
+		ui.lAlternateOneTailedRight->show();
+		ui.rbNullOneTailedLeft->show();
+		ui.rbAlternateOneTailedLeft->show();
+		ui.rbNullOneTailedRight->show();
+		ui.rbAlternateOneTailedRight->show();
+	} else if (hypothesisCount == 1) {
+		ui.lNullTwoTailed->setText(hypothesisTexts[0].first);
+		ui.lAlternateTwoTailed->setText(hypothesisTexts[0].second);
+
+		ui.lNullOneTailedLeft->hide();
+		ui.lAlternateOneTailedLeft->hide();
+		ui.lNullOneTailedRight->hide();
+		ui.lAlternateOneTailedRight->hide();
+		ui.rbNullOneTailedLeft->hide();
+		ui.rbAlternateOneTailedLeft->hide();
+		ui.rbNullOneTailedRight->hide();
+		ui.rbAlternateOneTailedRight->hide();
+
+		ui.rbNullTwoTailed->setChecked(true);
 	}
 }
 
-void HypothesisTestDock::ensureVariableCount(HypothesisTest::Test test) {
+void HypothesisTestDock::ensureVariableCount() {
 	// get the min and max number of columns needed for the test
-	const auto [min, max] = HypothesisTest::variableCount(test);
+	const auto [min, max] = HypothesisTest::variableCount(m_test->test());
 
 	// function pointer to add or remove variables
 	void (HypothesisTestDock::*func)() = nullptr;
@@ -231,14 +227,14 @@ void HypothesisTestDock::ensureVariableCount(HypothesisTest::Test test) {
 	Q_ASSERT(newVarCount >= min && newVarCount <= max);
 
 	// enable or disable the add/remove variables buttons
-	manageAddRemoveVariable(test);
+	manageAddRemoveVariable();
 
 	// update the columns in the aspect
 	updateColumns();
 }
 
-void HypothesisTestDock::manageAddRemoveVariable(HypothesisTest::Test test) {
-	const auto [min, max] = HypothesisTest::variableCount(test);
+void HypothesisTestDock::manageAddRemoveVariable() {
+	const auto [min, max] = HypothesisTest::variableCount(m_test->test());
 	const int count = ui.variablesVerticalLayout->count();
 
 	ui.tbRemoveVariable->setEnabled(count > min);
@@ -302,24 +298,22 @@ void HypothesisTestDock::hideControls() {
 }
 
 void HypothesisTestDock::testChanged() {
-	// reset the ui to a default state
-	hideControls();
-
 	const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
 	m_test->setTest(test);
 
+	// reset the ui to a default state
+	hideControls();
+
 	// set symbols for the null and alternate hypotheses for the test
-	ensureHypothesis(test);
+	ensureHypothesis();
 
 	// ensure that the number of variables is correct for the test
-	ensureVariableCount(test);
+	ensureVariableCount();
 
 	// show any specific controls for the test
-	switch (test) {
-	case HypothesisTest::Test::t_test_one_sample:
+	if (test == HypothesisTest::Test::t_test_one_sample) {
 		ui.lTestMean->show();
 		ui.sbTestMean->show();
-		break;
 	}
 
 	// check if the recalculate button should be enabled or disabled
@@ -345,8 +339,7 @@ void HypothesisTestDock::addVariable() {
 
 	ui.variablesVerticalLayout->addLayout(layout);
 
-	const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
-	manageAddRemoveVariable(test); // disable or enable add/remove variables buttons
+	manageAddRemoveVariable(); // disable or enable add/remove variables buttons
 
 	updateColumns();
 }
@@ -364,8 +357,7 @@ void HypothesisTestDock::removeVariable() {
 		delete layout; // delete the horizontal layout
 	}
 
-	const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
-	manageAddRemoveVariable(test); // disable or enable add/remove variables buttons
+	manageAddRemoveVariable(); // disable or enable add/remove variables buttons
 
 	updateColumns();
 }
