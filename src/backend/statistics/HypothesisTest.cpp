@@ -15,7 +15,6 @@
 #include <KLocalizedString>
 #include <QLocale>
 #include <cmath>
-#include <limits>
 
 /*!
  * \brief This class implements various statistical hypothesis tests.
@@ -58,6 +57,10 @@ void HypothesisTest::setColumns(const QVector<Column*>& cols) {
 	auto [min, max] = variableCount(m_test);
 	if (cols.size() < min || cols.size() > max)
 		return;
+
+	for (auto* col : cols)
+		if (!col->isNumeric())
+			return;
 
 	m_columns = cols;
 }
@@ -125,10 +128,6 @@ void HypothesisTest::resetResult() {
 		addResultLine(i18n("t-Value"), QStringLiteral("-"));
 		addResultLine(i18n("p-Value"), QStringLiteral("-"));
 		addResultLine(i18n("Degrees of Freedom"), QStringLiteral("-"));
-
-		// conclusion
-		addResultSection(i18n("Statistical Conclusion"));
-		addResultLine(i18n("Test result not available"));
 	} else if (m_test == HypothesisTest::Test::t_test_two_sample || m_test == HypothesisTest::Test::t_test_two_sample_paired) {
 		if (m_test == HypothesisTest::Test::t_test_two_sample_paired) {
 			addResultTitle(i18n("Paired Two-Sample t-Test"));
@@ -155,11 +154,25 @@ void HypothesisTest::resetResult() {
 		addResultLine(i18n("t-Value"), QStringLiteral("-"));
 		addResultLine(i18n("p-Value"), QStringLiteral("-"));
 		addResultLine(i18n("Degrees of Freedom"), QStringLiteral("-"));
+	} else if (m_test == HypothesisTest::Test::log_rank_test) {
+		addResultTitle(i18n("Log-Rank Test"));
 
-		// conclusion
-		addResultSection(i18n("Statistical Conclusion"));
-		addResultLine(i18n("Test result not available"));
+		addResultLine(i18n("Null Hypothesis"), QStringLiteral("-"));
+		addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("-"));
+
+		addResultSection(i18n("Descriptive Statistics"));
+		addResultLine(i18n("Group 0 Size"), QStringLiteral("-"));
+		addResultLine(i18n("Group 1 Size"), QStringLiteral("-"));
+
+		addResultSection(i18n("Log-Rank Statistics"));
+		addResultLine(i18n("Significance Level"), QStringLiteral("-"));
+		addResultLine(i18n("Statistic"), QStringLiteral("-"));
+		addResultLine(i18n("p-Value"), QStringLiteral("-"));
+		addResultLine(i18n("Degrees of Freedom"), QStringLiteral("-"));
 	}
+
+	addResultSection(i18n("Statistical Conclusion"));
+	addResultLine(i18n("Test result not available"));
 
 	Q_EMIT changed(); // notify the view about the changes
 }
@@ -194,7 +207,7 @@ void HypothesisTest::performOneSampleTTest() {
 	addResultLine(i18n("Sample"), col->name());
 	addResultLine(i18n("Test Mean"), QStringLiteral("µ₀ = ") + QLocale().toString(m_testMean));
 
-	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(m_test, m_tail);
+	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(m_test).at(m_tail);
 
 	addResultLine(i18n("Null Hypothesis"), nullHypothesisText);
 	addResultLine(i18n("Alternate Hypothesis"), alternateHypothesisText);
@@ -287,15 +300,11 @@ void HypothesisTest::performTwoSampleTTest(bool paired) {
 		}
 	}
 
-	if (paired)
-		addResultTitle(i18n("Paired Two-Sample t-Test"));
-	else
-		addResultTitle(i18n("Independent Two-Sample t-Test"));
-
+	addResultTitle(paired ? i18n("Paired Two-Sample t-Test") : i18n("Independent Two-Sample t-Test"));
 	addResultLine(i18n("Sample 1"), col1->name());
 	addResultLine(i18n("Sample 2"), col2->name());
 
-	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(m_test, m_tail);
+	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(m_test).at(m_tail);
 
 	addResultLine(i18n("Null Hypothesis"), nullHypothesisText);
 	addResultLine(i18n("Alternate Hypothesis"), alternateHypothesisText);
@@ -313,11 +322,7 @@ void HypothesisTest::performTwoSampleTTest(bool paired) {
 	addResultLine(i18n("t-Value"), tValue);
 	addResultLine(i18n("p-Value"), pValue);
 
-	int degreesOfFreedom;
-	if (paired)
-		degreesOfFreedom = n1 - 1; // n-1 for paired
-	else
-		degreesOfFreedom = n1 + n2 - 2; // n1+n2-2 for independent
+	int degreesOfFreedom = (paired) ? n1 - 1 : n1 + n2 - 2;
 
 	addResultLine(i18n("Degrees of Freedom"), degreesOfFreedom);
 
@@ -344,6 +349,92 @@ void HypothesisTest::performKruskalWallisTest() {
 }
 
 void HypothesisTest::performLogRankTest() {
+	// time, status and group columns required
+	if (m_columns.size() < 3) {
+		Q_EMIT info(i18n("Three columns are required to perform LogRank test."));
+		return;
+	}
+
+	const Column* timeCol = m_columns.at(0);
+	const Column* statusCol = m_columns.at(1);
+	const Column* groupCol = m_columns.at(2);
+
+	if (statusCol->rowCount() != timeCol->rowCount() || statusCol->rowCount() != timeCol->rowCount()) {
+		Q_EMIT info(i18n("Time, Status and Group columns should have equal size."));
+		return;
+	}
+
+	const int n = timeCol->rowCount();
+
+	QVector<double> time;
+	QVector<int> status;
+	QVector<size_t> group0Indices, group1Indices;
+
+	for (int row = 0; row < n; ++row) {
+		auto isValid = [] (const Column* column, int row) -> bool {
+			auto value = column->valueAt(row);
+			return std::isfinite(value) && !column->isMasked(row);
+		};
+
+		if (!isValid(timeCol, row) || !isValid(statusCol, row) || !isValid(groupCol, row))
+			continue;
+
+		double t = timeCol->valueAt(row);
+		int s = static_cast<int>(statusCol->valueAt(row)); // must be 0 or 1
+		int g = static_cast<int>(groupCol->valueAt(row)); // must be 0 or 1
+
+		if (s != 0 && s != 1) {
+			Q_EMIT info(i18n("Status column values must be either 0 or 1."));
+			return;
+		}
+
+		if (g != 0 && g != 1) {
+			Q_EMIT info(i18n("Group column values must be either 0 or 1."));
+			return;
+		}
+
+		time.append(t);
+		status.append(s);
+
+		size_t index = time.size() - 1;
+
+		if (g == 0)
+			group0Indices.append(index);
+		else if (g == 1)
+			group1Indices.append(index);
+	}
+
+	Q_ASSERT((time.size() == status.size()) && group0Indices.size() + group1Indices.size() == time.size());
+
+	double stat = nsl_stats_log_rank_test_statistic(time.constData(), status.constData(), group0Indices.constData(), group0Indices.size(), group1Indices.constData(), group1Indices.size());
+	double p = nsl_stats_log_rank_test_p(time.constData(), status.constData(), group0Indices.constData(), group0Indices.size(), group1Indices.constData(), group1Indices.size());
+
+	addResultTitle(i18n("Log-Rank Test"));
+
+	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(m_test).at(0);
+
+	addResultLine(i18n("Null Hypothesis"), nullHypothesisText);
+	addResultLine(i18n("Alternate Hypothesis"), alternateHypothesisText);
+
+	addResultSection(i18n("Descriptive Statistics"));
+	addResultLine(i18n("Group 0 Size"), group0Indices.size());
+	addResultLine(i18n("Group 1 Size"), group1Indices.size());
+
+	addResultSection(i18n("Log-Rank Statistics"));
+	addResultLine(i18n("Significance Level"), m_significanceLevel);
+	addResultLine(i18n("Statistic"), stat);
+	addResultLine(i18n("p-Value"), p);
+	addResultLine(i18n("Degrees of Freedom"), 1); // no of groups - 1 (we support only two groups)
+
+	addResultSection(i18n("Statistical Conclusion"));
+	if (!std::isnan(p)) {
+		if (p <= m_significanceLevel)
+			addResultLine(i18n("At the significance level %1, the survival curves are significantly different. Reject the null Hypothesis", m_significanceLevel));
+		else
+			addResultLine(i18n("At the significance level %1, no significant difference between survival curves. Fail to reject the null Hypothesis", m_significanceLevel));
+	} else {
+		addResultLine(i18n("Test result not available"));
+	}
 }
 
 QPair<int, int> HypothesisTest::variableCount(HypothesisTest::Test test) {
@@ -354,6 +445,9 @@ QPair<int, int> HypothesisTest::variableCount(HypothesisTest::Test test) {
 	case HypothesisTest::Test::t_test_two_sample:
 	case HypothesisTest::Test::t_test_two_sample_paired:
 		return {2, 2};
+		break;
+	case HypothesisTest::Test::log_rank_test:
+		return {3, 3};
 		break;
 	}
 
@@ -372,54 +466,51 @@ HypothesisTest::Test HypothesisTest::test() const {
 	return m_test;
 }
 
-QPair<QString, QString> HypothesisTest::hypothesisSigns(nsl_stats_tail_type tail) {
-	QString nullHypothesisSign;
-	QString alternateHypothesisSign;
+QVector<QPair<QString, QString>> HypothesisTest::hypothesisText(HypothesisTest::Test test) {
+	int hypCount = hypothesisCount(test);
 
-	switch (tail) {
-	case nsl_stats_tail_type_two:
-		nullHypothesisSign = QStringLiteral("=");
-		alternateHypothesisSign = QStringLiteral("≠");
-		break;
-	case nsl_stats_tail_type_negative:
-		nullHypothesisSign = QStringLiteral("≥");
-		alternateHypothesisSign = QStringLiteral("&lt;");
-		break;
-	case nsl_stats_tail_type_positive:
-		nullHypothesisSign = QStringLiteral("≤");
-		alternateHypothesisSign = QStringLiteral(">");
-		break;
+	QVector<QPair<QString, QString>> hypothesis(hypCount);
+
+	if (hypCount == 3) {
+		QString lHSymbol;
+		QString rHSymbol;
+		switch (test) {
+		case HypothesisTest::Test::t_test_one_sample:
+			lHSymbol = QStringLiteral("µ");
+			rHSymbol = QStringLiteral("µ₀");
+			break;
+		case HypothesisTest::Test::t_test_two_sample:
+			lHSymbol = QStringLiteral("µ<sub>1</sub>");
+			rHSymbol = QStringLiteral("µ<sub>2</sub>");
+			break;
+		case HypothesisTest::Test::t_test_two_sample_paired:
+			lHSymbol = QStringLiteral("µ<sub>D</sub>");
+			rHSymbol = QStringLiteral("0");
+			break;
+		}
+		hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(lHSymbol + QStringLiteral(" = ") + rHSymbol, lHSymbol + QStringLiteral(" ≠ ") + rHSymbol);
+		hypothesis[nsl_stats_tail_type_negative] = QPair<QString, QString>(lHSymbol + QStringLiteral(" ≥ ") + rHSymbol, lHSymbol + QStringLiteral(" &lt; ") + rHSymbol);
+		hypothesis[nsl_stats_tail_type_positive] = QPair<QString, QString>(lHSymbol + QStringLiteral(" ≤ ") + rHSymbol, lHSymbol + QStringLiteral(" > ") + rHSymbol);
+	} else if (hypCount == 1) {
+		switch (test) {
+		case HypothesisTest::Test::log_rank_test:
+			hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(QStringLiteral("S<sub>0</sub> = S<sub>1</sub>"), QStringLiteral("S<sub>0</sub> ≠ S<sub>1</sub>"));
+			break;
+		}
 	}
 
-	return {nullHypothesisSign, alternateHypothesisSign};
+	return hypothesis;
 }
 
-QPair<QString, QString> HypothesisTest::hypothesisSymbols(HypothesisTest::Test test) {
-	QString lHSymbol;
-	QString rHSymbol;
-
+int HypothesisTest::hypothesisCount(HypothesisTest::Test test) {
 	switch (test) {
 	case HypothesisTest::Test::t_test_one_sample:
-		lHSymbol = QStringLiteral("µ");
-		rHSymbol = QStringLiteral("µ₀");
-		break;
 	case HypothesisTest::Test::t_test_two_sample:
-		lHSymbol = QStringLiteral("µ<sub>1</sub>");
-		rHSymbol = QStringLiteral("µ<sub>2</sub>");
-		break;
 	case HypothesisTest::Test::t_test_two_sample_paired:
-		lHSymbol = QStringLiteral("µ<sub>D</sub>");
-		rHSymbol = QStringLiteral("0");
-		break;
+		return 3;
+	case HypothesisTest::Test::log_rank_test:
+		return 1;
 	}
 
-	return {lHSymbol, rHSymbol};
-}
-
-QPair<QString, QString> HypothesisTest::hypothesisText(HypothesisTest::Test test, nsl_stats_tail_type tail) {
-	const auto [nullHypothesisSign, alternateHypothesisSign] = HypothesisTest::hypothesisSigns(tail);
-	const auto [lhs, rhs] = HypothesisTest::hypothesisSymbols(test);
-
-	return {lhs + QChar(QChar::Space) + nullHypothesisSign + QChar(QChar::Space) + rhs,
-			lhs + QChar(QChar::Space) + alternateHypothesisSign + QChar(QChar::Space) + rhs};
+	return 0;
 }

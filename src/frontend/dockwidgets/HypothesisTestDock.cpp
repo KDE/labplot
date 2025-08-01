@@ -11,6 +11,7 @@
 */
 #include <KLocalizedString>
 #include <QAbstractButton>
+#include <QRadioButton>
 
 #include "HypothesisTestDock.h"
 #include "frontend/widgets/TreeViewComboBox.h"
@@ -44,10 +45,6 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent)
 
 	connect(ui.tbAddVariable, &QToolButton::clicked, this, &HypothesisTestDock::addVariable);
 	connect(ui.tbRemoveVariable, &QToolButton::clicked, this, &HypothesisTestDock::removeVariable);
-
-	connect(ui.rbNullTwoTailed, &QRadioButton::toggled, ui.rbAlternateTwoTailed, &QRadioButton::setChecked);
-	connect(ui.rbNullOneTailedLeft, &QRadioButton::toggled, ui.rbAlternateOneTailedLeft, &QRadioButton::setChecked);
-	connect(ui.rbNullOneTailedRight, &QRadioButton::toggled, ui.rbAlternateOneTailedRight, &QRadioButton::setChecked);
 }
 
 void HypothesisTestDock::setTest(HypothesisTest* test) {
@@ -83,19 +80,6 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	// restore significance level
 	ui.sbSignificanceLevel->setValue(m_test->significanceLevel());
 
-	// restore null hypothesis
-	switch (m_test->tail()) {
-	case nsl_stats_tail_type_two:
-		ui.rbNullTwoTailed->setChecked(true);
-		break;
-	case nsl_stats_tail_type_positive:
-		ui.rbNullOneTailedLeft->setChecked(true);
-		break;
-	case nsl_stats_tail_type_negative:
-		ui.rbNullOneTailedRight->setChecked(true);
-		break;
-	}
-
 	// restore test mean
 	ui.sbTestMean->setValue(m_test->testMean());
 
@@ -106,25 +90,27 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	if (oldIndex == newIndex)
 		testChanged(); // manually trigger testChanged()
 
+	int hypothesisCount = HypothesisTest::hypothesisCount(m_test->test());
+
+	// restore null hypothesis
+	if (hypothesisCount == 3) {
+		auto* layout = static_cast<QGridLayout*>(ui.fNullHypothesis->layout());
+		switch (m_test->tail()) {
+		case nsl_stats_tail_type_two:
+			static_cast<QRadioButton*>(layout->itemAt(0)->widget())->setChecked(true);
+			break;
+		case nsl_stats_tail_type_negative:
+			static_cast<QRadioButton*>(layout->itemAt(2)->widget())->setChecked(true);
+			break;
+		case nsl_stats_tail_type_positive:
+			static_cast<QRadioButton*>(layout->itemAt(4)->widget())->setChecked(true);
+			break;
+		}
+	}
+
 	// update the aspect properties when the ui properties change
 	m_aspectConnections << connect(ui.sbSignificanceLevel, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setSignificanceLevel);
 	m_aspectConnections << connect(ui.sbTestMean, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setTestMean);
-	m_aspectConnections << connect(ui.rbNullTwoTailed, &QRadioButton::toggled, [this](bool checked) {
-		if (checked)
-			m_test->setTail(nsl_stats_tail_type_two);
-	});
-	m_aspectConnections << connect(ui.rbNullOneTailedLeft, &QRadioButton::toggled, [this](bool checked) {
-		if (checked)
-			m_test->setTail(nsl_stats_tail_type_positive);
-	});
-	m_aspectConnections << connect(ui.rbNullOneTailedRight, &QRadioButton::toggled, [this](bool checked) {
-		if (checked)
-			m_test->setTail(nsl_stats_tail_type_negative);
-	});
-	m_aspectConnections << connect(ui.cbTest, &QComboBox::currentIndexChanged, [this] {
-		const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
-		m_test->setTest(test);
-	});
 }
 
 void HypothesisTestDock::retranslateUi() {
@@ -137,7 +123,7 @@ void HypothesisTestDock::retranslateUi() {
 	// ui.cbTest->addItem(i18n("One-Way ANOVA"), static_cast<int>(HypothesisTest::Test::one_way_anova));
 	// ui.cbTest->addItem(i18n("Mann-Whitney U Test"), static_cast<int>(HypothesisTest::Test::mann_whitney_u_test));
 	// ui.cbTest->addItem(i18n("Kruskal-Wallis Test"), static_cast<int>(HypothesisTest::Test::kruskal_wallis_test));
-	// ui.cbTest->addItem(i18n("Logrank Test"), static_cast<int>(HypothesisTest::Test::log_rank_test));
+	ui.cbTest->addItem(i18n("Logrank Test"), static_cast<int>(HypothesisTest::Test::log_rank_test));
 
 	// tooltip texts
 	QString info = i18n(
@@ -148,7 +134,7 @@ void HypothesisTestDock::retranslateUi() {
 		// 	"<li><b>One-Way ANOVA</b> - tests if three or more independent samples have the same mean</li>"
 		// 	"<li><b>Mann-Whitney U Test</b> - tests differences in medians between two independent groups</li>"
 		// 	"<li><b>Kruskal-Wallis Test</b> - tests differences in medians among three or more independent groups</li>"
-		// 	"<li><b>Logrank Test</b> - tests differences in survival distributions between two or more groups</li>"
+		"<li><b>Logrank Test</b> - tests differences in survival distributions between two or more groups</li>"
 		"</ul>"
 	);
 
@@ -156,17 +142,60 @@ void HypothesisTestDock::retranslateUi() {
 	ui.cbTest->setToolTip(info);
 }
 
-void HypothesisTestDock::setHypothesisText(HypothesisTest::Test test) {
-	const auto [nullTwoTailedHypText, alternateTwoTailedHypText] = HypothesisTest::hypothesisText(test, nsl_stats_tail_type_two);
-	const auto [nullOneTailedLeftHypText, alternateOneTailedLeftHypText] = HypothesisTest::hypothesisText(test, nsl_stats_tail_type_positive);
-	const auto [nullOneTailedRightHypText, alternateOneTailedRightHypText] = HypothesisTest::hypothesisText(test, nsl_stats_tail_type_negative);
+void HypothesisTestDock::ensureHypothesis(HypothesisTest::Test test) {
+	auto deleteChildren = [] (QWidget* widget) {
+		QLayout* layout = widget->layout();
+		if (!layout)
+			return;
 
-	ui.lNullTwoTailed->setText(nullTwoTailedHypText);
-	ui.lAlternateTwoTailed->setText(alternateTwoTailedHypText);
-	ui.lNullOneTailedLeft->setText(nullOneTailedLeftHypText);
-	ui.lAlternateOneTailedLeft->setText(alternateOneTailedLeftHypText);
-	ui.lNullOneTailedRight->setText(nullOneTailedRightHypText);
-	ui.lAlternateOneTailedRight->setText(alternateOneTailedRightHypText);
+		QLayoutItem* child;
+		while ((child = layout->takeAt(0)) != nullptr) {
+			delete child->widget(); // delete the widget
+			delete child;   // delete the layout item
+		}
+	};
+
+	deleteChildren(ui.fNullHypothesis);
+	deleteChildren(ui.fAlternativeHypothesis);
+
+	for (const auto& [nullHypothesis, alternativeHypothesis] : HypothesisTest::hypothesisText(test)) {
+		int row = static_cast<QGridLayout*>(ui.fNullHypothesis->layout())->rowCount();
+
+		auto* rbNh = new QRadioButton(ui.fNullHypothesis);
+		rbNh->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
+		auto* lNh = new QLabel(nullHypothesis, ui.fNullHypothesis);
+		lNh->setWordWrap(true);
+		static_cast<QGridLayout*>(ui.fNullHypothesis->layout())->addWidget(rbNh, row, 0);
+		static_cast<QGridLayout*>(ui.fNullHypothesis->layout())->addWidget(lNh, row, 1);
+
+		auto* rbAh = new QRadioButton(ui.fAlternativeHypothesis);
+		rbAh->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
+		auto* lAh = new QLabel(alternativeHypothesis, ui.fAlternativeHypothesis);
+		lAh->setWordWrap(true);
+		static_cast<QGridLayout*>(ui.fAlternativeHypothesis->layout())->addWidget(rbAh, row, 0);
+		static_cast<QGridLayout*>(ui.fAlternativeHypothesis->layout())->addWidget(lAh, row, 1);
+
+		connect(rbNh, &QRadioButton::toggled, rbAh, &QRadioButton::setChecked);
+	}
+
+	// select something
+	static_cast<QRadioButton*>(static_cast<QGridLayout*>(ui.fNullHypothesis->layout())->itemAt(0)->widget())->setChecked(true);
+
+	int hypothesisCount = HypothesisTest::hypothesisCount(m_test->test());
+	if (hypothesisCount == 3) {
+		connect(static_cast<QRadioButton*>(static_cast<QGridLayout*>(ui.fNullHypothesis->layout())->itemAt(0)->widget()), &QRadioButton::toggled, [this](bool checked) {
+			if (checked)
+				m_test->setTail(nsl_stats_tail_type_two);
+		});
+		connect(static_cast<QRadioButton*>(static_cast<QGridLayout*>(ui.fNullHypothesis->layout())->itemAt(2)->widget()), &QRadioButton::toggled, [this](bool checked) {
+			if (checked)
+				m_test->setTail(nsl_stats_tail_type_negative);
+		});
+		connect(static_cast<QRadioButton*>(static_cast<QGridLayout*>(ui.fNullHypothesis->layout())->itemAt(4)->widget()), &QRadioButton::toggled, [this](bool checked) {
+			if (checked)
+				m_test->setTail(nsl_stats_tail_type_positive);
+		});
+	}
 }
 
 void HypothesisTestDock::ensureVariableCount(HypothesisTest::Test test) {
@@ -280,7 +309,7 @@ void HypothesisTestDock::testChanged() {
 	m_test->setTest(test);
 
 	// set symbols for the null and alternate hypotheses for the test
-	setHypothesisText(test);
+	ensureHypothesis(test);
 
 	// ensure that the number of variables is correct for the test
 	ensureVariableCount(test);

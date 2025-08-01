@@ -48,9 +48,8 @@ public:
 	void setColumns(const QVector<Column*>&) override;
 
 	static QPair<int, int> variableCount(HypothesisTest::Test);
-	static QPair<QString, QString> hypothesisSigns(nsl_stats_tail_type);
-	static QPair<QString, QString> hypothesisSymbols(HypothesisTest::Test);
-	static QPair<QString, QString> hypothesisText(HypothesisTest::Test, nsl_stats_tail_type);
+	static int hypothesisCount(HypothesisTest::Test);
+	static QVector<QPair<QString, QString>> hypothesisText(HypothesisTest::Test);
 
 private:
 	void performOneSampleTTest();
