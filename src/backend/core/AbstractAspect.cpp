@@ -994,13 +994,22 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 //! \name undo related
 //@{
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void AbstractAspect::setUndoAware(bool b) {
-	d->m_undoAware = b;
 
-	// propagate the value to the internal and hidden aspects, if available (Line, Background, etc.)
-	const auto& children = this->children<AbstractAspect>(ChildIndexFlag::IncludeHidden);
+/*!
+ *
+ */
+void AbstractAspect::setUndoAware(bool value, bool includeHidden) {
+	d->m_undoAware = value;
+
+	// propagate the value to the internal and hidden aspects, if available (Line, Background, etc.) and if requested
+	QVector<AbstractAspect*> children;
+	if (includeHidden)
+		children = this->children<AbstractAspect>(ChildIndexFlag::IncludeHidden);
+	else
+		children = this->children<AbstractAspect>();
+
 	for (auto* child : children)
-		child->setUndoAware(b);
+		child->setUndoAware(value, includeHidden);
 }
 
 /**
