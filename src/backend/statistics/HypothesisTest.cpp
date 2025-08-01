@@ -371,7 +371,7 @@ void HypothesisTest::performLogRankTest() {
 	QVector<size_t> group0Indices, group1Indices;
 
 	for (int row = 0; row < n; ++row) {
-		auto isValid = [] (const Column* column, int row) -> bool {
+		auto isValid = [](const Column* column, int row) -> bool {
 			auto value = column->valueAt(row);
 			return std::isfinite(value) && !column->isMasked(row);
 		};
@@ -406,8 +406,18 @@ void HypothesisTest::performLogRankTest() {
 
 	Q_ASSERT((time.size() == status.size()) && group0Indices.size() + group1Indices.size() == time.size());
 
-	double stat = nsl_stats_log_rank_test_statistic(time.constData(), status.constData(), group0Indices.constData(), group0Indices.size(), group1Indices.constData(), group1Indices.size());
-	double p = nsl_stats_log_rank_test_p(time.constData(), status.constData(), group0Indices.constData(), group0Indices.size(), group1Indices.constData(), group1Indices.size());
+	double stat = nsl_stats_log_rank_test_statistic(time.constData(),
+													status.constData(),
+													group0Indices.constData(),
+													group0Indices.size(),
+													group1Indices.constData(),
+													group1Indices.size());
+	double p = nsl_stats_log_rank_test_p(time.constData(),
+										 status.constData(),
+										 group0Indices.constData(),
+										 group0Indices.size(),
+										 group1Indices.constData(),
+										 group1Indices.size());
 
 	addResultTitle(i18n("Log-Rank Test"));
 
@@ -429,9 +439,11 @@ void HypothesisTest::performLogRankTest() {
 	addResultSection(i18n("Statistical Conclusion"));
 	if (!std::isnan(p)) {
 		if (p <= m_significanceLevel)
-			addResultLine(i18n("At the significance level %1, the survival curves are significantly different. Reject the null Hypothesis", m_significanceLevel));
+			addResultLine(
+				i18n("At the significance level %1, the survival curves are significantly different. Reject the null Hypothesis", m_significanceLevel));
 		else
-			addResultLine(i18n("At the significance level %1, no significant difference between survival curves. Fail to reject the null Hypothesis", m_significanceLevel));
+			addResultLine(i18n("At the significance level %1, no significant difference between survival curves. Fail to reject the null Hypothesis",
+							   m_significanceLevel));
 	} else {
 		addResultLine(i18n("Test result not available"));
 	}
@@ -489,12 +501,15 @@ QVector<QPair<QString, QString>> HypothesisTest::hypothesisText(HypothesisTest::
 			break;
 		}
 		hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(lHSymbol + QStringLiteral(" = ") + rHSymbol, lHSymbol + QStringLiteral(" ≠ ") + rHSymbol);
-		hypothesis[nsl_stats_tail_type_negative] = QPair<QString, QString>(lHSymbol + QStringLiteral(" ≥ ") + rHSymbol, lHSymbol + QStringLiteral(" &lt; ") + rHSymbol);
-		hypothesis[nsl_stats_tail_type_positive] = QPair<QString, QString>(lHSymbol + QStringLiteral(" ≤ ") + rHSymbol, lHSymbol + QStringLiteral(" > ") + rHSymbol);
+		hypothesis[nsl_stats_tail_type_negative] =
+			QPair<QString, QString>(lHSymbol + QStringLiteral(" ≥ ") + rHSymbol, lHSymbol + QStringLiteral(" &lt; ") + rHSymbol);
+		hypothesis[nsl_stats_tail_type_positive] =
+			QPair<QString, QString>(lHSymbol + QStringLiteral(" ≤ ") + rHSymbol, lHSymbol + QStringLiteral(" > ") + rHSymbol);
 	} else if (hypCount == 1) {
 		switch (test) {
 		case HypothesisTest::Test::log_rank_test:
-			hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(QStringLiteral("S<sub>0</sub> = S<sub>1</sub>"), QStringLiteral("S<sub>0</sub> ≠ S<sub>1</sub>"));
+			hypothesis[nsl_stats_tail_type_two] =
+				QPair<QString, QString>(QStringLiteral("S<sub>0</sub> = S<sub>1</sub>"), QStringLiteral("S<sub>0</sub> ≠ S<sub>1</sub>"));
 			break;
 		}
 	}
