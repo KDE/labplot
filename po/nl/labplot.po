@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-31 00:39+0000\n"
-"PO-Revision-Date: 2025-07-25 11:11+0200\n"
+"PO-Revision-Date: 2025-07-31 13:34+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -1178,6 +1178,9 @@ msgid ""
 "count >= %3. Check if the correct separator is used and the data contains "
 "same number of columns."
 msgstr ""
+"Ongeldig aantal gegevenskolommen. Eerste rij aantal kolommen: %1. Rij %2 "
+"aantal kolommen >= %3. Controleer of het juiste scheidingsteken is gebruikt "
+"en de gegevens hetzelfde aantal kolommen bevatten."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:239
 #, kde-format
@@ -9024,10 +9027,9 @@ msgid "%1: legend visibility changed"
 msgstr "%1: zichtbaarheid legenda gewijzigd"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:557
-#, fuzzy, kde-format
-#| msgid "%1: set limits metric"
+#, kde-format
 msgid "%1: set limits type"
-msgstr "%1: metrische limieten instellen"
+msgstr "%1: zet type van limieten"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:564
 #, kde-format
@@ -9060,22 +9062,19 @@ msgid "%1: set minimal lower limit"
 msgstr "%1: minimale onderlimiet instellen"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
-#, fuzzy, kde-format
-#| msgid "%1: set center metric"
+#, kde-format
 msgid "%1: set center specification"
-msgstr "%1: stel middenmetriek in"
+msgstr "%1: zet centrumspecificatie"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#, kde-format
 msgid "%1: set upper limit specification"
-msgstr "%1: stel doel plot in"
+msgstr "%1: zet specificatie van bovenlimiet"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:616
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#, kde-format
 msgid "%1: set lower limit specification"
-msgstr "%1: stel doel plot in"
+msgstr "%1: zet specificatie van onderlimiet"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:625
 #, kde-format
@@ -14060,16 +14059,14 @@ msgid "File Browser"
 msgstr "Browser voor bestanden"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistical"
-msgstr "Statistieken"
+msgstr "Statistisch"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Specification"
-msgstr "Vereenvoudiging"
+msgstr "Specificatie"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
@@ -14189,6 +14186,10 @@ msgid ""
 "properties of the sample.</li><li>Specification - custom user-defined values "
 "are used.</li></ul>"
 msgstr ""
+"Bepaal welke waarden te gebruiken voor de centrum- en limietlijnen:"
+"<ul><li>Statistisch - waarden worden berekend gebaseerd op de statistische "
+"eigenschappen van het sample.</li><li>Specificatie - aangepaste "
+"gebruikergedefinieerde waarden worden gebruikt.</li></ul>"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:284
 #, kde-format
@@ -22007,24 +22008,21 @@ msgstr "Max. bovenlimiet:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimitSpecification)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:186
-#, fuzzy, kde-format
-#| msgid "Upper Limit"
+#, kde-format
 msgid "Upper Limit:"
-msgstr "Bovenlimiet"
+msgstr "Bovenlimiet:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimitSpecification)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:200
-#, fuzzy, kde-format
-#| msgid "Lower Limit"
+#, kde-format
 msgid "Lower Limit:"
-msgstr "Onderlimiet"
+msgstr "Onderlimiet:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsType)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:230
-#, fuzzy, kde-format
-#| msgid "Center/Limits Lines"
+#, kde-format
 msgid "Center/Limits:"
-msgstr "Centrum/limieten van lijnen"
+msgstr "Centrum/limieten:"
 
 #. i18n: ectx: property (text), widget (QLabel, lExactLimits)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:269
