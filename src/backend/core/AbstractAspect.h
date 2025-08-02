@@ -410,7 +410,7 @@ public:
 	}
 
 	// undo/redo related functions
-	void setUndoAware(bool value, bool includeHidden = true);
+	void setUndoAware(bool value, bool includeHidden = false);
 	virtual QUndoStack* undoStack() const;
 	void exec(QUndoCommand*);
 	void exec(QUndoCommand* command,

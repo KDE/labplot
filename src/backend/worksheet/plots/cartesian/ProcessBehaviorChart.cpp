@@ -250,18 +250,18 @@ void ProcessBehaviorChart::finalizeAdd() {
 
 void ProcessBehaviorChart::renameInternalCurves() {
 	Q_D(ProcessBehaviorChart);
-	d->dataCurve->setUndoAware(false, false);
-	d->centerCurve->setUndoAware(false, false);
-	d->upperLimitCurve->setUndoAware(false, false);
-	d->lowerLimitCurve->setUndoAware(false, false);
+	d->dataCurve->setUndoAware(false);
+	d->centerCurve->setUndoAware(false);
+	d->upperLimitCurve->setUndoAware(false);
+	d->lowerLimitCurve->setUndoAware(false);
 	d->dataCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->centerCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->upperLimitCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->lowerLimitCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
-	d->dataCurve->setUndoAware(true, false);
-	d->centerCurve->setUndoAware(true, false);
-	d->upperLimitCurve->setUndoAware(true, false);
-	d->lowerLimitCurve->setUndoAware(true, false);
+	d->dataCurve->setUndoAware(true);
+	d->centerCurve->setUndoAware(true);
+	d->upperLimitCurve->setUndoAware(true);
+	d->lowerLimitCurve->setUndoAware(true);
 }
 
 /*!
@@ -478,9 +478,9 @@ void ProcessBehaviorChart::handleAspectUpdated(const QString& aspectPath, const 
 	if (d->dataColumn == column) // the column is the same and was just renamed -> update the column path
 		d->dataColumnPath = aspectPath;
 	else if (d->dataColumnPath == aspectPath) { // another column was renamed to the current path -> set and connect to the new column
-		setUndoAware(false, false);
+		setUndoAware(false);
 		setDataColumn(column);
-		setUndoAware(true, false);
+		setUndoAware(true);
 	}
 }
 
@@ -863,18 +863,18 @@ void ProcessBehaviorChartPrivate::retransform() {
 	const auto& xRange = q->plot()->range(Dimension::X, cs->index(Dimension::X));
 	double x = xRange.end();
 
-	centerLabel->setUndoAware(false, false);
-	upperLimitLabel->setUndoAware(false, false);
-	lowerLimitLabel->setUndoAware(false, false);
+	centerLabel->setUndoAware(false);
+	upperLimitLabel->setUndoAware(false);
+	lowerLimitLabel->setUndoAware(false);
 	centerLabel->setPositionLogical(QPointF(x, center));
 	upperLimitLabel->setPositionLogical(QPointF(x, upperLimit));
 	lowerLimitLabel->setPositionLogical(QPointF(x, lowerLimit));
 	centerLabel->retransform();
 	upperLimitLabel->retransform();
 	lowerLimitLabel->retransform();
-	centerLabel->setUndoAware(true, false);
-	upperLimitLabel->setUndoAware(true, false);
-	lowerLimitLabel->setUndoAware(true, false);
+	centerLabel->setUndoAware(true);
+	upperLimitLabel->setUndoAware(true);
+	lowerLimitLabel->setUndoAware(true);
 
 	recalcShapeAndBoundingRect();
 }
@@ -1394,7 +1394,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		}
 
 		// show/hide the line for the lower limit depending on the chart type
-		lowerLimitCurve->setUndoAware(false, false);
+		lowerLimitCurve->setUndoAware(false);
 		if (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::XbarS)
 			lowerLimitCurve->setVisible(true); // lower limit line is always visible
 		else if (type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::S
@@ -1404,7 +1404,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 			else
 				lowerLimitCurve->setVisible(true);
 		}
-		lowerLimitCurve->setUndoAware(true, false);
+		lowerLimitCurve->setUndoAware(true);
 
 		yCenterColumn->setValueAt(0, center);
 		yCenterColumn->setValueAt(1, center);
@@ -1432,9 +1432,9 @@ void ProcessBehaviorChartPrivate::updateSpecifications() {
 	yLowerLimitColumn->setValueAt(0, lowerLimit);
 	yLowerLimitColumn->setValueAt(1, lowerLimit);
 
-	lowerLimitCurve->setUndoAware(false, false);
+	lowerLimitCurve->setUndoAware(false);
 	lowerLimitCurve->setVisible(true);
-	lowerLimitCurve->setUndoAware(true, false);
+	lowerLimitCurve->setUndoAware(true);
 
 	updateLabels(); // update the texts in the value labels
 }
@@ -1447,9 +1447,9 @@ void ProcessBehaviorChartPrivate::updateLabels() {
 	if (!q->plot() || q->isLoading())
 		return;
 
-	centerLabel->setUndoAware(false, false);
-	upperLimitLabel->setUndoAware(false, false);
-	lowerLimitLabel->setUndoAware(false, false);
+	centerLabel->setUndoAware(false);
+	upperLimitLabel->setUndoAware(false);
+	lowerLimitLabel->setUndoAware(false);
 
 	const bool uniformLimitLabelsAvailable = !((type == ProcessBehaviorChart::Type::P || type == ProcessBehaviorChart::Type::U) && exactLimitsEnabled);
 	const bool lowerLimitAvailable = q->lowerLimitAvailable();
@@ -1482,9 +1482,9 @@ void ProcessBehaviorChartPrivate::updateLabels() {
 		lowerLimitLabel->setPositionLogical(QPointF(x, lowerLimit));
 	}
 
-	centerLabel->setUndoAware(true, false);
-	upperLimitLabel->setUndoAware(true, false);
-	lowerLimitLabel->setUndoAware(true, false);
+	centerLabel->setUndoAware(true);
+	upperLimitLabel->setUndoAware(true);
+	lowerLimitLabel->setUndoAware(true);
 
 	recalcShapeAndBoundingRect();
 }

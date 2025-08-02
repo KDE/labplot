@@ -332,9 +332,9 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	// no need to put these changes onto the undo stack.
 	if (!d->theme.isEmpty() && !isLoading() && !isPasted() && !aspect->isPasted()) {
 		KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
-		const_cast<WorksheetElement*>(addedElement)->setUndoAware(false);
+		const_cast<WorksheetElement*>(addedElement)->setUndoAware(false, true);
 		const_cast<WorksheetElement*>(addedElement)->loadThemeConfig(config);
-		const_cast<WorksheetElement*>(addedElement)->setUndoAware(true);
+		const_cast<WorksheetElement*>(addedElement)->setUndoAware(true, true);
 	}
 
 	// recalculate the layout if enabled, set the currently added plot resizable otherwise
