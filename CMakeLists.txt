@@ -112,7 +112,11 @@ endif()
 find_package(BISON REQUIRED)
 
 ### compiler flags ######################################
-option (ENABLE_COMPILER_OPTIMIZATION "Optimization: -OX" true)
+if(CMAKE_BUILD_TYPE STREQUAL Debug)
+    option (ENABLE_COMPILER_OPTIMIZATION "Optimization: -OX" OFF)
+else ()
+    option (ENABLE_COMPILER_OPTIMIZATION "Optimization: -OX" ON)
+endif()
 if(${ENABLE_COMPILER_OPTIMIZATION})
     set(COMPILER_OPTIMIZATION_FLAG "-O2")
 else()
