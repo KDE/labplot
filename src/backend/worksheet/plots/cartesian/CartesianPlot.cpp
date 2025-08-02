@@ -2463,8 +2463,8 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		}
 
 		// if a theme was selected, apply the theme settings for newly added children,
-		// load default theme settings otherwise.
-		// TODO			const_cast<WorksheetElement*>(elem)->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
+		// load default theme settings otherwise, no need to put these changes onto the undo stack.
+		const_cast<WorksheetElement*>(elem)->setUndoAware(false, true);
 		if (!d->theme.isEmpty()) {
 			KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
 			const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
@@ -2472,6 +2472,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			KConfig config;
 			const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
 		}
+		const_cast<WorksheetElement*>(elem)->setUndoAware(true, true);
 	}
 }
 

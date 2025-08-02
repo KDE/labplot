@@ -327,7 +327,9 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	// if a theme was selected in the worksheet, apply this theme for newly added children
 	if (!d->theme.isEmpty() && !isLoading() && !isPasted() && !aspect->isPasted()) {
 		KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
+		const_cast<WorksheetElement*>(addedElement)->setUndoAware(false, true);
 		const_cast<WorksheetElement*>(addedElement)->loadThemeConfig(config);
+		const_cast<WorksheetElement*>(addedElement)->setUndoAware(true, true);
 	}
 
 	// recalculate the layout if enabled, set the currently added plot resizable otherwise
