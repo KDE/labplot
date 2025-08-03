@@ -1027,8 +1027,8 @@ QUndoStack* AbstractAspect::undoStack() const {
  */
 void AbstractAspect::exec(QUndoCommand* cmd) {
 	Q_CHECK_PTR(cmd);
-	if (d->m_undoAware) {
-		QUndoStack* stack = undoStack();
+	if (d->m_undoAware && (project() && project()->isUndoAware())) {
+		auto* stack = undoStack();
 		if (stack)
 			stack->push(cmd);
 		else {
