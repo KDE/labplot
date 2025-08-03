@@ -898,7 +898,7 @@ void ProcessBehaviorChartPrivate::recalc() {
 		xLowerLimitColumn->clear();
 		yLowerLimitColumn->clear();
 
-		// don't clear the labels while we're still loading and initilizing, the labels should keep their texts
+		// don't clear the labels while we're still loading and initializing, the labels should keep their texts
 		if (!q->isLoading()) {
 			centerLabel->setUndoAware(false);
 			upperLimitLabel->setUndoAware(false);
