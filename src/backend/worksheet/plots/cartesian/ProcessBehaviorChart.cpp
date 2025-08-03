@@ -868,9 +868,15 @@ void ProcessBehaviorChartPrivate::recalc() {
 
 		// don't clear the labels while we're still loading and initilizing, the labels should keep their texts
 		if (!q->isLoading()) {
+			centerLabel->setUndoAware(false);
+			upperLimitLabel->setUndoAware(false);
+			lowerLimitLabel->setUndoAware(false);
 			centerLabel->setText(QString());
 			upperLimitLabel->setText(QString());
 			lowerLimitLabel->setText(QString());
+			centerLabel->setUndoAware(false);
+			upperLimitLabel->setUndoAware(false);
+			lowerLimitLabel->setUndoAware(false);
 		}
 		Q_EMIT q->dataChanged();
 		Q_EMIT q->recalculated();
@@ -896,7 +902,9 @@ void ProcessBehaviorChartPrivate::recalc() {
 	for (int i = 0; i < count; ++i)
 		xColumn->setIntegerAt(i, i + 1);
 
+	dataCurve->setUndoAware(false);
 	dataCurve->setXColumn(xColumn);
+	dataCurve->setUndoAware(true);
 
 	// min and max labels for x
 	xCenterColumn->setIntegerAt(0, xMin);
@@ -969,6 +977,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 	yColumn->clear();
 	yColumn->resizeTo(xColumn->rowCount());
 	Q_EMIT q->statusInfo(QString()); // reset the previous info message
+	dataCurve->setUndoAware(false);
 
 	// determine the number of labels in the source data to be taken into account
 	int count = dataColumn->rowCount();
@@ -1370,18 +1379,15 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		yLowerLimitColumn->setValueAt(1, lowerLimit);
 	}
 
-	// show/hide the line for the lower limit depending on the chart type
-	lowerLimitCurve->setUndoAware(false);
-	if (type == ProcessBehaviorChart::Type::XmR || type == ProcessBehaviorChart::Type::XbarR || type == ProcessBehaviorChart::Type::XbarS)
-		lowerLimitCurve->setVisible(true); // lower limit line is always visible
-	else if (type == ProcessBehaviorChart::Type::mR || type == ProcessBehaviorChart::Type::R || type == ProcessBehaviorChart::Type::S
-			 || type == ProcessBehaviorChart::Type::C) {
-		if (lowerLimit == 0.)
-			lowerLimitCurve->setVisible(false);
-		else
-			lowerLimitCurve->setVisible(true);
-	}
-	lowerLimitCurve->setUndoAware(true);
+	dataCurve->setUndoAware(true);
+
+	QDEBUG(Q_FUNC_INFO << ", center: " << center << " , upper limit: " << upperLimit << ", lower limit: " << lowerLimit);
+}
+
+void ProcessBehaviorChartPrivate::updateSpecifications() {
+	center = centerSpecification;
+	upperLimit = upperLimitSpecification;
+	lowerLimit = lowerLimitSpecification;
 
 	yCenterColumn->setValueAt(0, center);
 	yCenterColumn->setValueAt(1, center);

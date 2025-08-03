@@ -985,20 +985,19 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*!
- *
+ * enables the undo awareness of the aspect (modifications are put onto the undo stack) if \c value is set to \c true,
+ * disables it otherwise. Note, this function doesn't modify the behavior of aspects's children, the behavior of the children
+ * needs to be handled separately, if needed.
  */
-void AbstractAspect::setUndoAware(bool value, bool includeHidden) {
+void AbstractAspect::setUndoAware(bool value) {
 	d->m_undoAware = value;
+}
 
-	// propagate the value to the internal and hidden aspects, if available (Line, Background, etc.) and if requested
-	QVector<AbstractAspect*> children;
-	if (includeHidden)
-		children = this->children<AbstractAspect>(ChildIndexFlag::IncludeHidden);
-	else
-		children = this->children<AbstractAspect>();
-
-	for (auto* child : children)
-		child->setUndoAware(value, includeHidden);
+/*!
+ * returns \c true if the aspect is undo aware (modifications are put onto the undo stack), returns \c false otherwise.
+ */
+bool AbstractAspect::isUndoAware() const {
+	return d->m_undoAware;
 }
 
 /**
@@ -1068,7 +1067,7 @@ void AbstractAspect::exec(QUndoCommand* command,
  * \brief Begin an undo stack macro (series of commands)
  */
 void AbstractAspect::beginMacro(const QString& text) {
-	if (!d->m_undoAware)
+	if (!d->m_undoAware || (project() && !project()->isUndoAware()))
 		return;
 
 	QUndoStack* stack = undoStack();
@@ -1080,7 +1079,7 @@ void AbstractAspect::beginMacro(const QString& text) {
  * \brief End the current undo stack macro
  */
 void AbstractAspect::endMacro() {
-	if (!d->m_undoAware)
+	if (!d->m_undoAware || (project() && !project()->isUndoAware()))
 		return;
 
 	QUndoStack* stack = undoStack();

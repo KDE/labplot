@@ -2463,8 +2463,12 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		}
 
 		// if a theme was selected, apply the theme settings for newly added children,
-		// load default theme settings otherwise, no need to put these changes onto the undo stack.
-		const_cast<WorksheetElement*>(elem)->setUndoAware(false, true);
+		// load default theme settings otherwise.
+		// no need to put these changes onto the undo stack, temprorarily deactivate the undo awareness
+		// for the project globally so it's ignored for all elements below when applying the theme recursively.
+		if (project())
+			project()->setUndoAware(false);
+
 		if (!d->theme.isEmpty()) {
 			KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
 			const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
@@ -2472,7 +2476,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			KConfig config;
 			const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
 		}
-		const_cast<WorksheetElement*>(elem)->setUndoAware(true, true);
+
+		if (project())
+			project()->setUndoAware(true);
 	}
 }
 
