@@ -1101,40 +1101,6 @@ void StatisticalPlotsTest::testPBChartU() {
 		QCOMPARE(xColumn->valueAt(i), i + 1);
 }
 
-/*!
- * test the position of the center and limit lines that are specified by the user
- */
-void StatisticalPlotsTest::testPBChartSpecifications() {
-	// prepare the data, same as in testPBChartXmRAverage()
-	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
-	column->setIntegers({11, 4, 6, 4, 5, 7, 5, 4, 7, 12, 4, 2, 4, 5, 6, 4, 2, 2, 5, 9, 5, 6, 5, 9});
-
-	// prepare the worksheet + plot
-	auto* ws = new Worksheet(QStringLiteral("worksheet"));
-	auto* p = new CartesianPlot(QStringLiteral("plot"));
-	ws->addChild(p);
-
-	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
-	pbc->setType(ProcessBehaviorChart::Type::XmR);
-	pbc->setLimitsType(ProcessBehaviorChart::LimitsType::Specification);
-	pbc->setDataColumn(column);
-	pbc->setCenterSpecification(5.);
-	pbc->setUpperLimitSpecification(10.);
-	pbc->setLowerLimitSpecification(2.);
-	p->addChild(pbc);
-
-	// check the limits, should be at the specified values
-	QCOMPARE(pbc->center(), 5.);
-	QCOMPARE(pbc->upperLimit(), 10.);
-	QCOMPARE(pbc->lowerLimit(), 2);
-
-	// check the chart type and check the limits again, they shouldn't be changed
-	pbc->setType(ProcessBehaviorChart::Type::mR);
-	QCOMPARE(pbc->center(), 5.);
-	QCOMPARE(pbc->upperLimit(), 10.);
-	QCOMPARE(pbc->lowerLimit(), 2);
-}
-
 // ##############################################################################
 // ############################ Run Chart #######################################
 // ##############################################################################
