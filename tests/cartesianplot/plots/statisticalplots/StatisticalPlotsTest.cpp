@@ -556,6 +556,46 @@ void StatisticalPlotsTest::testPBChartDuplicate() {
 }
 
 /*!
+ * perform modification on the pbc leading to the resize and modifications of the internal
+ * columns and curves and check the entries on the ondo stack - the internal changes should
+ * not be visible on the ondo stack, only the operation that were triggered by the user.
+ */
+void StatisticalPlotsTest::testPBChartUndoRedo() {
+	Project project;
+
+	// prepare the data, same as in testPBChartXmRAverage()
+	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
+	column->setIntegers({11, 4, 6, 4, 5, 7, 5, 4, 7, 12, 4, 2, 4, 5, 6, 4, 2, 2, 5, 9, 5, 6, 5, 9});
+
+	// prepare the worksheet + plot
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(p);
+
+	auto* pbc = new ProcessBehaviorChart(QStringLiteral("pbc"));
+	pbc->setType(ProcessBehaviorChart::Type::XmR);
+	p->addChild(pbc);
+
+	// check the initial number of entris on the undo stack
+	auto* stack = project.undoStack();
+	QCOMPARE(stack->count(), 3);
+
+	// change the sub-type which changes the number of points/samples on X
+	pbc->setType(ProcessBehaviorChart::Type::S);
+	QCOMPARE(stack->count(), 4);
+	stack->undo();
+	QCOMPARE(stack->count(), 4);
+
+	// use an empty column as the data source which will empty all internal columns in pbc
+	pbc->setDataColumn(new Column(QLatin1String("temp")));
+	QCOMPARE(stack->count(), 4);
+	stack->undo();
+	QCOMPARE(stack->count(), 4);
+}
+
+/*!
  * test the X (XmR) chart using Average for the limits, the example is taken from Wheeler "Making Sense of Data", chapter seven.
  */
 void StatisticalPlotsTest::testPBChartXmRAverage() {
@@ -1066,7 +1106,7 @@ void StatisticalPlotsTest::testPBChartU() {
 /*!
  * test the position of the center and limit lines that are specified by the user
  */
-void StatisticalPlotsTest::testPBCSpecifications() {
+void StatisticalPlotsTest::testPBChartSpecifications() {
 	// prepare the data, same as in testPBChartXmRAverage()
 	auto* column = new Column(QLatin1String("data"), AbstractColumn::ColumnMode::Integer);
 	column->setIntegers({11, 4, 6, 4, 5, 7, 5, 4, 7, 12, 4, 2, 4, 5, 6, 4, 2, 2, 5, 9, 5, 6, 5, 9});

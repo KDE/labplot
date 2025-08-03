@@ -329,12 +329,16 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		child->graphicsItem()->setZValue(zVal++);
 
 	// if a theme was selected in the worksheet, apply this theme for newly added children,
-	// no need to put these changes onto the undo stack.
+	// no need to put these changes onto the undo stack, temprorarily deactivate the undo awareness
+	// for the project globally so it's ignored for all elements below when applying the theme recursively.
 	if (!d->theme.isEmpty() && !isLoading() && !isPasted() && !aspect->isPasted()) {
 		KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
-		const_cast<WorksheetElement*>(addedElement)->setUndoAware(false, true);
+		// const_cast<WorksheetElement*>(addedElement)->setUndoAware(false, true);
+		if (project())
+			project()->setUndoAware(false);
 		const_cast<WorksheetElement*>(addedElement)->loadThemeConfig(config);
-		const_cast<WorksheetElement*>(addedElement)->setUndoAware(true, true);
+		if (project())
+			project()->setUndoAware(true);
 	}
 
 	// recalculate the layout if enabled, set the currently added plot resizable otherwise
