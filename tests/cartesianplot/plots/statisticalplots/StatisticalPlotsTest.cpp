@@ -554,9 +554,9 @@ void StatisticalPlotsTest::testPBChartDuplicate() {
 }
 
 /*!
- * perform modification on the pbc leading to the resize and modifications of the internal
- * columns and curves and check the entries on the ondo stack - the internal changes should
- * not be visible on the ondo stack, only the operation that were triggered by the user.
+ * perform modification on the PBC leading to the resize and modifications of the internal
+ * columns and curves and check the entries on the undo stack - the internal changes should
+ * not be visible on the undo stack, only the operation that was triggered by the user.
  */
 void StatisticalPlotsTest::testPBChartUndoRedo() {
 	Project project;
@@ -576,7 +576,7 @@ void StatisticalPlotsTest::testPBChartUndoRedo() {
 	pbc->setType(ProcessBehaviorChart::Type::XmR);
 	p->addChild(pbc);
 
-	// check the initial number of entris on the undo stack
+	// check the initial number of entries on the undo stack
 	auto* stack = project.undoStack();
 	QCOMPARE(stack->count(), 3);
 

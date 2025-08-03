@@ -1147,7 +1147,7 @@ public:
 	}
 
 	void redo() override {
-		if (m_initilized) {
+		if (m_initialized) {
 			qSwap(m_private->rect, m_rect);
 			m_private->retransform();
 			Q_EMIT m_private->q->rectChanged(m_private->rect);
@@ -1155,7 +1155,7 @@ public:
 			// this function is called for the first time,
 			// nothing to do, we just need to remember what the previous rect was
 			// which has happened already in the constructor.
-			m_initilized = true;
+			m_initialized = true;
 		}
 	}
 
@@ -1166,7 +1166,7 @@ public:
 private:
 	CartesianPlotPrivate* m_private;
 	QRectF m_rect;
-	bool m_initilized{false};
+	bool m_initialized{false};
 };
 
 void CartesianPlot::setPrevRect(const QRectF& prevRect) {
@@ -2464,7 +2464,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 		// if a theme was selected, apply the theme settings for newly added children,
 		// load default theme settings otherwise.
-		// no need to put these changes onto the undo stack, temprorarily deactivate the undo awareness
+		// no need to put these changes onto the undo stack, temporarily deactivate the undo awareness
 		// for the project globally so it's ignored for all elements below when applying the theme recursively.
 		if (project())
 			project()->setUndoAware(false);

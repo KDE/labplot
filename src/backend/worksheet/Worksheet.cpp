@@ -325,7 +325,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		child->graphicsItem()->setZValue(zVal++);
 
 	// if a theme was selected in the worksheet, apply this theme for newly added children,
-	// no need to put these changes onto the undo stack, temprorarily deactivate the undo awareness
+	// no need to put these changes onto the undo stack, temporarily deactivate the undo awareness
 	// for the project globally so it's ignored for all elements below when applying the theme recursively.
 	if (!d->theme.isEmpty() && !isLoading() && !isPasted() && !aspect->isPasted()) {
 		KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
