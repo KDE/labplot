@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-16 03:05+0000\n"
-"PO-Revision-Date: 2025-07-19 00:46+0200\n"
-"Last-Translator: Vincenzo Reale <>\n"
+"PO-Revision-Date: 2025-08-03 17:23+0200\n"
+"Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -715,10 +715,9 @@ msgid "%1: set author"
 msgstr "%1: imposta autore"
 
 #: src/backend/core/Project.cpp:306
-#, fuzzy, kde-format
-#| msgid "%1: save calculation changed"
+#, kde-format
 msgid "%1: save dock state changed"
-msgstr "%1: salva calcoli modificato"
+msgstr "%1: stato di salvataggio dei pannelli modificato"
 
 #: src/backend/core/Project.cpp:313
 #, kde-format
@@ -16174,6 +16173,10 @@ msgid ""
 "The setting can be changed for every project separately in the project "
 "properties."
 msgstr ""
+"Salva lo stato (posizione e geometria) dei pannelli nel file di progetto.\n"
+"Determina il comportamento predefinito per i nuovi progetti.\n"
+"L'impostazione può essere modificata separatamente per ogni progetto nelle "
+"proprietà del progetto."
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:266
 #, kde-format
@@ -20748,10 +20751,9 @@ msgstr "Creata:"
 #. i18n: ectx: property (text), widget (QLabel, lSaveDockStates)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:80
 #: src/kdefrontend/ui/settingsgeneralpage.ui:284
-#, fuzzy, kde-format
-#| msgid "Save project as"
+#, kde-format
 msgid "Save Dock States:"
-msgstr "Salva il progetto come"
+msgstr "Salva stato dei pannelli:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:100

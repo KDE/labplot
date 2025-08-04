@@ -6034,7 +6034,7 @@ msgstr[1] ""
 #: src/backend/spreadsheet/Spreadsheet.cpp:605
 #, kde-format
 msgid "%1: clear"
-msgstr "‏%1: امسح"
+msgstr "‏%1: امحُ"
 
 #: src/backend/matrix/matrixcommands.cpp:21
 #, kde-format
@@ -10337,7 +10337,7 @@ msgstr ""
 #: src/commonfrontend/ProjectExplorer.cpp:129
 #, kde-format
 msgid "Delete Selected"
-msgstr "امسح المحدد"
+msgstr "امحُ المحدد"
 
 #: src/commonfrontend/ProjectExplorer.cpp:132
 #, kde-format
@@ -12433,7 +12433,7 @@ msgstr "متوفّرة (%1)"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2605
 #, kde-format
 msgid "Wrong username or password"
-msgstr "اسم المستخدم أو كلمة المرور خاطئة"
+msgstr "اسم المستخدم أو كلمة السر خاطئة"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2608
 #, kde-format
@@ -14918,7 +14918,7 @@ msgstr ""
 #: src/kdefrontend/HistoryDialog.cpp:94 src/kdefrontend/HistoryDialog.cpp:99
 #, kde-format
 msgid "Clear History"
-msgstr "امسح التاريخ"
+msgstr "امحُ التاريخ"
 
 #: src/kdefrontend/LabPlot.cpp:44
 #, kde-format
@@ -21919,7 +21919,7 @@ msgstr "الحجم الكليّ - "
 #: src/kdefrontend/ui/settingsdatasetspage.ui:57
 #, kde-format
 msgid "Clear"
-msgstr "امسح"
+msgstr "امحُ"
 
 #. i18n: ectx: property (text), widget (QLabel, lStartup)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:17
