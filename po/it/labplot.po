@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-31 00:39+0000\n"
-"PO-Revision-Date: 2025-07-19 00:46+0200\n"
-"Last-Translator: Vincenzo Reale <>\n"
+"POT-Creation-Date: 2025-08-04 00:38+0000\n"
+"PO-Revision-Date: 2025-08-03 17:23+0200\n"
+"Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -689,10 +689,9 @@ msgid "%1: set author"
 msgstr "%1: imposta autore"
 
 #: src/backend/core/Project.cpp:309
-#, fuzzy, kde-format
-#| msgid "%1: save calculation changed"
+#, kde-format
 msgid "%1: save dock state changed"
-msgstr "%1: salva calcoli modificato"
+msgstr "%1: stato di salvataggio dei pannelli modificato"
 
 #: src/backend/core/Project.cpp:316
 #, kde-format
@@ -1180,6 +1179,9 @@ msgid ""
 "count >= %3. Check if the correct separator is used and the data contains "
 "same number of columns."
 msgstr ""
+"Numero di colonne di dati non valido. Numero di colonne nella prima riga: "
+"%1. Numero di colonne %2° riga >= %3. Controlla se è stato usato il "
+"separatore corretto, e se i dati contengono lo stesso numero di colonne."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:239
 #, kde-format
@@ -1922,7 +1924,7 @@ msgstr "Impossibile leggere il file. Motivo: %1"
 #: src/backend/datasources/filters/McapFilter.cpp:477
 #, kde-format
 msgid "No JSON encoded topics found."
-msgstr ""
+msgstr "Nessun argomento codificato in JSON trovato."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:213
 #, kde-format
@@ -8116,7 +8118,7 @@ msgstr "nessuna informazione disponibile"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:142
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5303
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5309
 #: src/frontend/ui/dockwidgets/axisdock.ui:487
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:546
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:481
@@ -8377,10 +8379,9 @@ msgid "Add New"
 msgstr "Aggiungi nuovo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:584
-#, fuzzy, kde-format
-#| msgid "Formula:"
+#, kde-format
 msgid "Formula Plot"
-msgstr "Formula:"
+msgstr "Grafico della formula"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:585
 #, kde-format
@@ -8528,10 +8529,9 @@ msgstr "Grafici a miglioramento continuo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:787
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1897
-#, fuzzy, kde-format
-#| msgid "Run fit"
+#, kde-format
 msgid "Run Chart"
-msgstr "Esegui l'adattamento"
+msgstr "Grafico di andament"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:791
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1894
@@ -8617,20 +8617,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: Puntatore 1 abilitato"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1782
-#: src/backend/worksheet/Worksheet.cpp:851
+#: src/backend/worksheet/Worksheet.cpp:855
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: carica il tema %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1784
-#: src/backend/worksheet/Worksheet.cpp:853
+#: src/backend/worksheet/Worksheet.cpp:857
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: carica il tema predefinito"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1786
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5637
-#: src/backend/worksheet/Worksheet.cpp:855
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5643
+#: src/backend/worksheet/Worksheet.cpp:859
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: imposta il tema"
@@ -8780,35 +8780,33 @@ msgid "Text Label"
 msgstr "Etichetta di testo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2270
-#, fuzzy, kde-format
-#| msgid "%1: add new point"
+#, kde-format
 msgid "%1: add inset plot"
-msgstr "%1: aggiungi un nuovo punto"
+msgstr "%1: aggiungi grafico inserito"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2284
-#, fuzzy, kde-format
-#| msgid "%1: add new point"
+#, kde-format
 msgid "%1: add inset plot with data"
-msgstr "%1: aggiungi un nuovo punto"
+msgstr "%1: aggiungi grafico inserito con dati"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4022
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4028
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "Non all'interno del riquadro dell'oggetto"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4246
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4267
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4252
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4273
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "da x=%1 a x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4254
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4280
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4260
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4286
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "da y=%1 a y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4299
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4305
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -8845,50 +8843,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: imposta il raggio dell'angolo del bordo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
-#: src/backend/worksheet/Worksheet.cpp:723
-#: src/backend/worksheet/Worksheet.cpp:724
+#: src/backend/worksheet/Worksheet.cpp:727
+#: src/backend/worksheet/Worksheet.cpp:728
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: imposta il margine superiore della disposizione"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:251
-#: src/backend/worksheet/Worksheet.cpp:733
-#: src/backend/worksheet/Worksheet.cpp:734
+#: src/backend/worksheet/Worksheet.cpp:737
+#: src/backend/worksheet/Worksheet.cpp:738
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: imposta il margine inferiore della disposizione"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:258
-#: src/backend/worksheet/Worksheet.cpp:743
-#: src/backend/worksheet/Worksheet.cpp:744
+#: src/backend/worksheet/Worksheet.cpp:747
+#: src/backend/worksheet/Worksheet.cpp:748
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: imposta il margine sinistro della disposizione"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:265
-#: src/backend/worksheet/Worksheet.cpp:753
-#: src/backend/worksheet/Worksheet.cpp:754
+#: src/backend/worksheet/Worksheet.cpp:757
+#: src/backend/worksheet/Worksheet.cpp:758
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: imposta il margine destro della disposizione"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:272
-#: src/backend/worksheet/Worksheet.cpp:763
-#: src/backend/worksheet/Worksheet.cpp:764
+#: src/backend/worksheet/Worksheet.cpp:767
+#: src/backend/worksheet/Worksheet.cpp:768
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: imposta la spaziatura verticale della disposizione"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:279
-#: src/backend/worksheet/Worksheet.cpp:773
-#: src/backend/worksheet/Worksheet.cpp:774
+#: src/backend/worksheet/Worksheet.cpp:777
+#: src/backend/worksheet/Worksheet.cpp:778
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: imposta la spaziatura orizzontale della disposizione"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:286
-#: src/backend/worksheet/Worksheet.cpp:793
-#: src/backend/worksheet/Worksheet.cpp:794
+#: src/backend/worksheet/Worksheet.cpp:797
+#: src/backend/worksheet/Worksheet.cpp:798
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: imposta il conteggio delle colonne della disposizione"
@@ -9047,16 +9045,14 @@ msgid "%1: legend visibility changed"
 msgstr "%1: visibilità legenda modificata"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:557
-#, fuzzy, kde-format
-#| msgid "%1: set axis start"
+#, kde-format
 msgid "%1: set limits type"
-msgstr "%1: imposta l'inizio dell'asse"
+msgstr "%1: imposta tipi di limite"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:564
-#, fuzzy, kde-format
-#| msgid "%1: set axis start"
+#, kde-format
 msgid "%1: set limits metric"
-msgstr "%1: imposta l'inizio dell'asse"
+msgstr "%1: imposta i limiti della metrica"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:571
 #, kde-format
@@ -9084,22 +9080,19 @@ msgid "%1: set minimal lower limit"
 msgstr "%1: imposta il limite minimo inferiore"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
-#, fuzzy, kde-format
-#| msgid "%1: set axis start"
+#, kde-format
 msgid "%1: set center specification"
-msgstr "%1: imposta l'inizio dell'asse"
+msgstr "%1: imposta specifiche centro"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#, kde-format
 msgid "%1: set upper limit specification"
-msgstr "%1: imposta la designazione dei grafici"
+msgstr "%1: imposta specifiche limite superiore"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:616
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#, kde-format
 msgid "%1: set lower limit specification"
-msgstr "%1: imposta la designazione dei grafici"
+msgstr "%1: imposta specifiche limite inferiore"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:625
 #, kde-format
@@ -9143,12 +9136,12 @@ msgstr "%1: imposta lo spessore del bordo delle etichette"
 msgid "%1: set labels border color"
 msgstr "%1: imposta il colore del bordo delle etichette"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:912
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:918
 #, kde-format
 msgid "Not enough data provided."
 msgstr "Non sono stati forniti abbastanza dati."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1012
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1021
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "L'ultimo campione è incompleto e verrà omesso."
@@ -9174,10 +9167,9 @@ msgid "%1: set end logical position"
 msgstr "%1: imposta la posizione logica finale"
 
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:277
-#, fuzzy, kde-format
-#| msgid "%1: set axis start"
+#, kde-format
 msgid "%1: set center metric"
-msgstr "%1: imposta l'inizio dell'asse"
+msgstr "%1: imposta la metrica centrale"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:150
 #, kde-format
@@ -10039,36 +10031,36 @@ msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Stampa il foglio di lavoro"
 
-#: src/backend/worksheet/Worksheet.cpp:693
+#: src/backend/worksheet/Worksheet.cpp:697
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: cambia il tipo di dimensione"
 
-#: src/backend/worksheet/Worksheet.cpp:705
+#: src/backend/worksheet/Worksheet.cpp:709
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: cambia la proprietà «ridimensiona il contenuto»"
 
-#: src/backend/worksheet/Worksheet.cpp:713
-#: src/backend/worksheet/Worksheet.cpp:714
+#: src/backend/worksheet/Worksheet.cpp:717
+#: src/backend/worksheet/Worksheet.cpp:718
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: imposta lo schema"
 
-#: src/backend/worksheet/Worksheet.cpp:783
-#: src/backend/worksheet/Worksheet.cpp:784
+#: src/backend/worksheet/Worksheet.cpp:787
+#: src/backend/worksheet/Worksheet.cpp:788
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: imposta il conteggio delle righe della disposizione"
 
-#: src/backend/worksheet/Worksheet.cpp:824
-#: src/backend/worksheet/Worksheet.cpp:825
+#: src/backend/worksheet/Worksheet.cpp:828
+#: src/backend/worksheet/Worksheet.cpp:829
 #: src/frontend/dockwidgets/WorksheetDock.cpp:376
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: imposta la dimensione della pagina"
 
-#: src/backend/worksheet/Worksheet.cpp:1524
+#: src/backend/worksheet/Worksheet.cpp:1528
 #, kde-format
 msgid "Curves"
 msgstr "Curve"
@@ -10364,7 +10356,7 @@ msgstr "Offre le azioni disponibili per uno scopo specifico"
 #: src/frontend/AboutDialog.cpp:308
 #, kde-format
 msgid "Qt Advanced Docking System"
-msgstr ""
+msgstr "Sistema di pannelli avanzato Qt"
 
 #: src/frontend/AboutDialog.cpp:314
 #, kde-format
@@ -13107,6 +13099,10 @@ msgid ""
 "ticks for nice looking values. The number of ticks might be different than "
 "the number previously set."
 msgstr ""
+"Se abilitato: utilizza il numero di tacche principale come base per "
+"determinare il nuovo numero di tacche per ottenere valori esteticamente "
+"gradevoli. Il numero di tacche potrebbe essere diverso da quello impostato "
+"in precedenza."
 
 #: src/frontend/dockwidgets/AxisDock.cpp:262
 #, kde-format
@@ -13947,6 +13943,17 @@ msgid ""
 "li><li>Scott - <i>h = 3.49 * sigma / pow(n, 3/2)</i>, optimal method for "
 "normally distributed data</li></ul>"
 msgstr ""
+"Metodo utilizzato per determinare il numero di bin <i>k</i> e la loro "
+"larghezza <i>h</i> per valori <i>n</i>:<ul><li>Per numero: il numero di bin "
+"viene specificato manualmente</li><li>Per larghezza: il numero di bin viene "
+"calcolato in base alla larghezza del bin specificata tramite <i>k = (max(x) "
+"- min(x) / h</i>)</li><li>Radice quadrata: <i>k = sqrt(n)</i></li><li>Rice: "
+"<i>k = 2 * pow(n, 3/2)</i>, alternativa più semplice al metodo di Sturges</"
+"li><li>Sturges: <i>k = log2(n) + 1</i>, presuppone una distribuzione "
+"approssimativamente normale</li><li>Doane: versione modificata del metodo di "
+"Sturges, vedere la documentazione per maggiori dettagli</li><li>Scott: <i>h "
+"= 3,49 * sigma / pow(n, 3/2)</i>, metodo ottimale per dati distribuiti "
+"normalmente</li></ul>"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:295
 #, kde-format
@@ -14088,16 +14095,14 @@ msgid "File Browser"
 msgstr "Navigatore dei file"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistical"
-msgstr "Statistiche"
+msgstr "Statistica"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Specification"
-msgstr "Semplificazione"
+msgstr "Specifiche"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
@@ -14194,6 +14199,20 @@ msgid ""
 "li><li>C - plot <b>Poisson counts</b>.</li><li>U - plot <b>Poisson rates</b>."
 "</li></ul>"
 msgstr ""
+"I tipi di grafico supportati sono raggruppati in base alle statistiche "
+"tracciate e alla metrica che definisce i limiti.<br><br>Valori individuali e "
+"intervalli mobili, limiti basati sull'intervallo mobile medio o mediano:"
+"<ul><li>X (XmR) - traccia le <b>etichette individuali</b>.</li><li>mR - "
+"traccia gli <b>intervalli mobili</b>.</li></ul>Medie e intervalli, limiti "
+"basati sull'intervallo medio o mediano:<ul><li>X̅ (X̅R) - traccia le <b>medie "
+"per ciascun campione</b>.</li><li>R (X̅R) - traccia gli <b>intervalli per "
+"ciascun campione</b>.</li></ul>Medie e deviazioni standard, limiti basati "
+"sulle deviazioni standard:<ul><li>X̅ (X̅S) - traccia le <b>medie per ciascun "
+"campione</b>.</li><li>S (X̅S) - traccia le<b>deviazioni standard per ciascun "
+"campione</b>.</li></ul>Attributi:<ul><li>P - traccia le <b>proporzioni "
+"binomiali</b>.</li><li>NP - traccia i <b>conteggi binomiali</b>.</li><li>C - "
+"traccia i <b>conteggi di Poisson</b>.</li><li>U - traccia le <b>velocità di "
+"Poisson</b>.</li></ul>"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:276
 #, kde-format
@@ -14203,6 +14222,10 @@ msgid ""
 "properties of the sample.</li><li>Specification - custom user-defined values "
 "are used.</li></ul>"
 msgstr ""
+"Determina quali valori utilizzare per le linee centrali e di limite: "
+"<ul><li>Statistica: i valori sono calcolati in base alla proprietà "
+"statistiche del campione.</li><li>Specifiche: vengono usati dei valori "
+"personalizzati definiti dall'utente.</li></ul>"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:284
 #, kde-format
@@ -14223,6 +14246,8 @@ msgid ""
 "If checked, exact limits are calculated for every individual sample (\"stair-"
 "step limits\"), straight lines are drawn for the limits otherwise."
 msgstr ""
+"Se selezionata, vengono calcolati i limiti esatti per ogni singolo campione "
+"(«limiti a gradini»), altrimenti vengono tracciate linee rette per i limiti."
 
 #: src/frontend/dockwidgets/ProjectDock.cpp:74
 #, kde-format
@@ -14370,6 +14395,8 @@ msgstr "tempo di calcolo: %1 ms"
 #, kde-format
 msgid "Click this button or press Shift+Enter to recalculate the result."
 msgstr ""
+"Fai clic su questo pulsante o premere Maiusc+Invio per ricalcolare il "
+"risultato."
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:75
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:408
@@ -15035,11 +15062,10 @@ msgid "Process Behavior Chart"
 msgstr "Grafico del comportamento del processo"
 
 #: src/frontend/GuiObserver.cpp:391
-#, fuzzy, kde-format
-#| msgid "Run fit"
+#, kde-format
 msgctxt "@title:window"
 msgid "Run Chart"
-msgstr "Esegui l'adattamento"
+msgstr "Grafico di andamento"
 
 #: src/frontend/GuiObserver.cpp:396
 #, kde-format
@@ -16744,27 +16770,17 @@ msgstr ""
 "nella misurazione (GUM)</a>"
 
 #: src/frontend/SettingsGeneralPage.cpp:269
-#, fuzzy, kde-format
-#| msgid ""
-#| "Save the results of the calculations in the analysis curves in the "
-#| "project file. \n"
-#| "Uncheck this option to reduce the size of the project file at costs of "
-#| "the longer project load times. \n"
-#| "Determines the default behaviour for new projects. \n"
-#| "The setting can be changed for every project separately in the project "
-#| "properties."
+#, kde-format
 msgid ""
 "Save the state (position and geometry) of the docks in the project file. \n"
 "Determines the default behavior for new projects. \n"
 "The setting can be changed for every project separately in the project "
 "properties."
 msgstr ""
-"Salva i risultati dei calcoli nelle curve di analisi nel file del progetto.\n"
-"Deseleziona questa opzione per ridurre la dimensione del file del progetto, "
-"che avrà tuttavia dei tempi di caricamento più lunghi.\n"
-"Determina il comportamento predefinito dei nuovi progetti. \n"
-"L'impostazione può essere modificata per ogni progetto in modo separato "
-"nelle proprietà del progetto."
+"Salva lo stato (posizione e geometria) dei pannelli nel file di progetto.\n"
+"Determina il comportamento predefinito per i nuovi progetti.\n"
+"L'impostazione può essere modificata separatamente per ogni progetto nelle "
+"proprietà del progetto."
 
 #: src/frontend/SettingsGeneralPage.cpp:276
 #, kde-format
@@ -16795,6 +16811,8 @@ msgid ""
 "Info trace - helpful to get information and warnings when running the "
 "application."
 msgstr ""
+"Tracciamento informazioni: utile per ottenere informazioni e avvisi durante "
+"l'esecuzione dell'applicazione."
 
 #: src/frontend/SettingsGeneralPage.cpp:285
 #, kde-format
@@ -16818,6 +16836,8 @@ msgstr ""
 #, kde-format
 msgid "If enabled spreadsheet and matrix data is saved in the project file"
 msgstr ""
+"Se abilitato, il foglio di calcolo e i dati della matrice vengono salvati "
+"nel file di progetto"
 
 #: src/frontend/SettingsNotebookPage.cpp:30
 #, kde-format
@@ -22036,24 +22056,21 @@ msgstr "Limite superiore max."
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimitSpecification)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:186
-#, fuzzy, kde-format
-#| msgid "Upper Limit"
+#, kde-format
 msgid "Upper Limit:"
-msgstr "Limite superiore"
+msgstr "Limite superiore:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimitSpecification)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:200
-#, fuzzy, kde-format
-#| msgid "Lower Limit"
+#, kde-format
 msgid "Lower Limit:"
-msgstr "Limite inferiore"
+msgstr "Limite inferiore:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsType)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:230
-#, fuzzy, kde-format
-#| msgid "Center/Limits Lines"
+#, kde-format
 msgid "Center/Limits:"
-msgstr "Linee centrali/limiti"
+msgstr "Centro/limiti:"
 
 #. i18n: ectx: property (text), widget (QLabel, lExactLimits)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:269
@@ -22165,10 +22182,9 @@ msgstr "Nome del file:"
 #. i18n: ectx: property (text), widget (QLabel, lSaveDockStates)
 #: src/frontend/ui/dockwidgets/projectdock.ui:267
 #: src/frontend/ui/settingsgeneralpage.ui:250
-#, fuzzy, kde-format
-#| msgid "Save project as"
+#, kde-format
 msgid "Save Dock States:"
-msgstr "Salva il progetto come"
+msgstr "Salva stato dei pannelli:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
 #: src/frontend/ui/dockwidgets/projectdock.ui:288
@@ -22180,7 +22196,7 @@ msgstr "Salva calcoli"
 #: src/frontend/ui/dockwidgets/projectdock.ui:305
 #, kde-format
 msgid "Save Data in File:"
-msgstr ""
+msgstr "Salva dati nel file:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:113
@@ -22560,19 +22576,17 @@ msgstr "Equazione"
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:444
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:61
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:70
-#, fuzzy, kde-format
-#| msgid "Clausen function"
+#, kde-format
 msgid "Load a custom function"
-msgstr "Funzione di Clausen"
+msgstr "Carica una funzione personalizzata"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbSaveFunction)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:457
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:74
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:83
-#, fuzzy, kde-format
-#| msgid "Clausen function"
+#, kde-format
 msgid "Save a custom function"
-msgstr "Funzione di Clausen"
+msgstr "Salva una funzione personalizzata"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:93
@@ -23715,10 +23729,9 @@ msgstr "Piazzamento dell'oggetto agganciabile:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveData)
 #: src/frontend/ui/settingsgeneralpage.ui:453
-#, fuzzy, kde-format
-#| msgid "Open a project file."
+#, kde-format
 msgid "Save Data in Project file:"
-msgstr "Apri un file di progetto."
+msgstr "Salva dati nel file di progetto:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
