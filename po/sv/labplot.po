@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-31 00:39+0000\n"
-"PO-Revision-Date: 2025-07-28 22:43+0200\n"
+"POT-Creation-Date: 2025-08-04 00:38+0000\n"
+"PO-Revision-Date: 2025-07-31 08:02+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.04.2\n"
+"X-Generator: Lokalize 25.04.3\n"
 
 #: src/backend/core/AbstractAspect.cpp:234
 #, kde-format
@@ -1176,6 +1176,9 @@ msgid ""
 "count >= %3. Check if the correct separator is used and the data contains "
 "same number of columns."
 msgstr ""
+"Ogiltigt antal datakolumner. Antal kolumner på första raden: %1. Antal "
+"kolumner på %2:a raden ≥ %3. Kontrollera om rätt avgränsare används och att "
+"data innehåller samma antal kolumner."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:239
 #, kde-format
@@ -8093,7 +8096,7 @@ msgstr "ingen information tillgänglig"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:142
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5303
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5309
 #: src/frontend/ui/dockwidgets/axisdock.ui:487
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:546
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:481
@@ -8593,20 +8596,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: Markör 1 aktiverad"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1782
-#: src/backend/worksheet/Worksheet.cpp:851
+#: src/backend/worksheet/Worksheet.cpp:855
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: läs in tema %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1784
-#: src/backend/worksheet/Worksheet.cpp:853
+#: src/backend/worksheet/Worksheet.cpp:857
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: läs in standardtema"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1786
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5637
-#: src/backend/worksheet/Worksheet.cpp:855
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5643
+#: src/backend/worksheet/Worksheet.cpp:859
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: ställ in tema"
@@ -8765,24 +8768,24 @@ msgstr "%1: lägg till infogat diagram"
 msgid "%1: add inset plot with data"
 msgstr "%1: lägg till infogat diagram med data"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4022
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4028
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "Inte inne i omgivande rektangel"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4246
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4267
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4252
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4273
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "från x=%1 till x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4254
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4280
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4260
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4286
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "från y=%1 till y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4299
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4305
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -8819,50 +8822,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: ställ in kanternas hörnradie"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
-#: src/backend/worksheet/Worksheet.cpp:723
-#: src/backend/worksheet/Worksheet.cpp:724
+#: src/backend/worksheet/Worksheet.cpp:727
+#: src/backend/worksheet/Worksheet.cpp:728
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: ställ in layoutens övre marginal"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:251
-#: src/backend/worksheet/Worksheet.cpp:733
-#: src/backend/worksheet/Worksheet.cpp:734
+#: src/backend/worksheet/Worksheet.cpp:737
+#: src/backend/worksheet/Worksheet.cpp:738
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: ställ in layoutens undre marginal"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:258
-#: src/backend/worksheet/Worksheet.cpp:743
-#: src/backend/worksheet/Worksheet.cpp:744
+#: src/backend/worksheet/Worksheet.cpp:747
+#: src/backend/worksheet/Worksheet.cpp:748
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: ställ in layoutens vänstra marginal"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:265
-#: src/backend/worksheet/Worksheet.cpp:753
-#: src/backend/worksheet/Worksheet.cpp:754
+#: src/backend/worksheet/Worksheet.cpp:757
+#: src/backend/worksheet/Worksheet.cpp:758
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: ställ in layoutens högra marginal"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:272
-#: src/backend/worksheet/Worksheet.cpp:763
-#: src/backend/worksheet/Worksheet.cpp:764
+#: src/backend/worksheet/Worksheet.cpp:767
+#: src/backend/worksheet/Worksheet.cpp:768
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: ställ in layoutens vertikala mellanrum"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:279
-#: src/backend/worksheet/Worksheet.cpp:773
-#: src/backend/worksheet/Worksheet.cpp:774
+#: src/backend/worksheet/Worksheet.cpp:777
+#: src/backend/worksheet/Worksheet.cpp:778
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: ställ in layoutens horisontella mellanrum"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:286
-#: src/backend/worksheet/Worksheet.cpp:793
-#: src/backend/worksheet/Worksheet.cpp:794
+#: src/backend/worksheet/Worksheet.cpp:797
+#: src/backend/worksheet/Worksheet.cpp:798
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: ställ in layoutens antal kolumner"
@@ -9021,10 +9024,9 @@ msgid "%1: legend visibility changed"
 msgstr "%1: förklaringens synlighet ändrad"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:557
-#, fuzzy, kde-format
-#| msgid "%1: set limits metric"
+#, kde-format
 msgid "%1: set limits type"
-msgstr "%1: ställ in begränsningsmått"
+msgstr "%1: ställ in begränsningstyp"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:564
 #, kde-format
@@ -9057,22 +9059,19 @@ msgid "%1: set minimal lower limit"
 msgstr "%1: ställ in minimal övre gräns"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
-#, fuzzy, kde-format
-#| msgid "%1: set center metric"
+#, kde-format
 msgid "%1: set center specification"
-msgstr "%1: ställ in centrummått"
+msgstr "%1: ställ in centrumspecifikation"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#, kde-format
 msgid "%1: set upper limit specification"
-msgstr "%1: ställ in diagrambenämning"
+msgstr "%1: ställ in specifikation för övre gräns"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:616
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#, kde-format
 msgid "%1: set lower limit specification"
-msgstr "%1: ställ in diagrambenämning"
+msgstr "%1: ställ in specifikation för undre gräns"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:625
 #, kde-format
@@ -9116,12 +9115,12 @@ msgstr "%1: ställ in beteckningarnas kantbredd"
 msgid "%1: set labels border color"
 msgstr "%1: ställ in beteckningarnas kantfärg"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:912
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:918
 #, kde-format
 msgid "Not enough data provided."
 msgstr "Otillräckligt antal tillhandahållna datapunkter."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1012
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1021
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "Den sista samplingen är ofullständig och utelämnades."
@@ -10006,36 +10005,36 @@ msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Skriv ut arbetsblad"
 
-#: src/backend/worksheet/Worksheet.cpp:693
+#: src/backend/worksheet/Worksheet.cpp:697
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: ändra storlekstyp"
 
-#: src/backend/worksheet/Worksheet.cpp:705
+#: src/backend/worksheet/Worksheet.cpp:709
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: ändra egenskapen \"skala om innehållet\""
 
-#: src/backend/worksheet/Worksheet.cpp:713
-#: src/backend/worksheet/Worksheet.cpp:714
+#: src/backend/worksheet/Worksheet.cpp:717
+#: src/backend/worksheet/Worksheet.cpp:718
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: ställ in layout"
 
-#: src/backend/worksheet/Worksheet.cpp:783
-#: src/backend/worksheet/Worksheet.cpp:784
+#: src/backend/worksheet/Worksheet.cpp:787
+#: src/backend/worksheet/Worksheet.cpp:788
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: ställ in layoutens antal rader"
 
-#: src/backend/worksheet/Worksheet.cpp:824
-#: src/backend/worksheet/Worksheet.cpp:825
+#: src/backend/worksheet/Worksheet.cpp:828
+#: src/backend/worksheet/Worksheet.cpp:829
 #: src/frontend/dockwidgets/WorksheetDock.cpp:376
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: ställ in sidstorlek"
 
-#: src/backend/worksheet/Worksheet.cpp:1524
+#: src/backend/worksheet/Worksheet.cpp:1528
 #, kde-format
 msgid "Curves"
 msgstr "Kurvor"
@@ -14029,16 +14028,14 @@ msgid "File Browser"
 msgstr "Filbläddrare"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistical"
 msgstr "Statistik"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Specification"
-msgstr "Förenkling"
+msgstr "Specifikation"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
@@ -14158,6 +14155,10 @@ msgid ""
 "properties of the sample.</li><li>Specification - custom user-defined values "
 "are used.</li></ul>"
 msgstr ""
+"Bestäm vilka värden som ska användas för mitt- och gränslinjerna:"
+"<ul><li>Statistisk: värden beräknas baserat på urvalets statistiska "
+"egenskaper.</li><li>Specifikation: anpassade användardefinierade värden "
+"används.</li></ul>"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:284
 #, kde-format
@@ -21960,24 +21961,21 @@ msgstr "Maximal övre gräns:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimitSpecification)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:186
-#, fuzzy, kde-format
-#| msgid "Upper Limit"
+#, kde-format
 msgid "Upper Limit:"
-msgstr "Övre gräns"
+msgstr "Övre gräns:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimitSpecification)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:200
-#, fuzzy, kde-format
-#| msgid "Lower Limit"
+#, kde-format
 msgid "Lower Limit:"
-msgstr "Undre gräns"
+msgstr "Undre gräns:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsType)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:230
-#, fuzzy, kde-format
-#| msgid "Center/Limits Lines"
+#, kde-format
 msgid "Center/Limits:"
-msgstr "Centrera/begränsa linjer"
+msgstr "Centrera/Begränsningar:"
 
 #. i18n: ectx: property (text), widget (QLabel, lExactLimits)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:269

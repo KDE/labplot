@@ -898,11 +898,17 @@ void ProcessBehaviorChartPrivate::recalc() {
 		xLowerLimitColumn->clear();
 		yLowerLimitColumn->clear();
 
-		// don't clear the labels while we're still loading and initilizing, the labels should keep their texts
+		// don't clear the labels while we're still loading and initializing, the labels should keep their texts
 		if (!q->isLoading()) {
+			centerLabel->setUndoAware(false);
+			upperLimitLabel->setUndoAware(false);
+			lowerLimitLabel->setUndoAware(false);
 			centerLabel->setText(QString());
 			upperLimitLabel->setText(QString());
 			lowerLimitLabel->setText(QString());
+			centerLabel->setUndoAware(false);
+			upperLimitLabel->setUndoAware(false);
+			lowerLimitLabel->setUndoAware(false);
 		}
 		Q_EMIT q->dataChanged();
 		Q_EMIT q->recalculated();
@@ -928,7 +934,9 @@ void ProcessBehaviorChartPrivate::recalc() {
 	for (int i = 0; i < count; ++i)
 		xColumn->setIntegerAt(i, i + 1);
 
+	dataCurve->setUndoAware(false);
 	dataCurve->setXColumn(xColumn);
+	dataCurve->setUndoAware(true);
 
 	// min and max labels for x
 	xCenterColumn->setIntegerAt(0, xMin);
@@ -1001,6 +1009,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 	yColumn->clear();
 	yColumn->resizeTo(xColumn->rowCount());
 	Q_EMIT q->statusInfo(QString()); // reset the previous info message
+	dataCurve->setUndoAware(false);
 
 	// determine the number of labels in the source data to be taken into account
 	int count = dataColumn->rowCount();
@@ -1416,6 +1425,8 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		updateSpecifications();
 		// updateLabels() is called in updateModifications() above.
 	}
+
+	dataCurve->setUndoAware(true);
 
 	QDEBUG(Q_FUNC_INFO << ", center: " << center << " , upper limit: " << upperLimit << ", lower limit: " << lowerLimit);
 }

@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-31 00:39+0000\n"
-"PO-Revision-Date: 2025-07-25 08:56+0200\n"
+"POT-Creation-Date: 2025-08-04 00:38+0000\n"
+"PO-Revision-Date: 2025-07-31 17:31+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -521,7 +521,7 @@ msgstr "actualització automàtica: fals"
 #: src/backend/core/AspectTreeModel.cpp:440
 #, kde-format
 msgid "The name \"%1\" is already in use. Choose another name."
-msgstr "El nom «%1» ja es troba en ús. Seleccioneu-ne un altre."
+msgstr "El nom «%1» ja es troba en ús. Trieu-ne un altre."
 
 #: src/backend/core/column/Column.cpp:122
 #, kde-format
@@ -1190,6 +1190,9 @@ msgid ""
 "count >= %3. Check if the correct separator is used and the data contains "
 "same number of columns."
 msgstr ""
+"Nombre no vàlid de columnes de dades. Nombre de columnes de la primera fila: "
+"%1. Comptador de columnes de la fila %2 >= %3. Comproveu si s'utilitza el "
+"separador correcte i les dades contenen el mateix nombre de columnes."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:239
 #, kde-format
@@ -8186,7 +8189,7 @@ msgstr "sense informació disponible"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:142
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5303
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5309
 #: src/frontend/ui/dockwidgets/axisdock.ui:487
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:546
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:481
@@ -8690,20 +8693,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: activació del cursor1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1782
-#: src/backend/worksheet/Worksheet.cpp:851
+#: src/backend/worksheet/Worksheet.cpp:855
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: carrega el tema %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1784
-#: src/backend/worksheet/Worksheet.cpp:853
+#: src/backend/worksheet/Worksheet.cpp:857
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: carrega el tema predeterminat"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1786
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5637
-#: src/backend/worksheet/Worksheet.cpp:855
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5643
+#: src/backend/worksheet/Worksheet.cpp:859
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: establix el tema"
@@ -8862,24 +8865,24 @@ msgstr "%1: afig un diagrama intercalat"
 msgid "%1: add inset plot with data"
 msgstr "%1: afig un diagrama intercalat amb dades"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4022
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4028
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "No està a dins del rectangle contenidor"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4246
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4267
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4252
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4273
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "des de x=%1 a x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4254
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4280
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4260
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4286
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "des de y=%1 a y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4299
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4305
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -8916,50 +8919,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: establix el radi dels cantons de la vora"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
-#: src/backend/worksheet/Worksheet.cpp:723
-#: src/backend/worksheet/Worksheet.cpp:724
+#: src/backend/worksheet/Worksheet.cpp:727
+#: src/backend/worksheet/Worksheet.cpp:728
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: establix el marge superior de la disposició"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:251
-#: src/backend/worksheet/Worksheet.cpp:733
-#: src/backend/worksheet/Worksheet.cpp:734
+#: src/backend/worksheet/Worksheet.cpp:737
+#: src/backend/worksheet/Worksheet.cpp:738
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: establix el marge inferior de la disposició"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:258
-#: src/backend/worksheet/Worksheet.cpp:743
-#: src/backend/worksheet/Worksheet.cpp:744
+#: src/backend/worksheet/Worksheet.cpp:747
+#: src/backend/worksheet/Worksheet.cpp:748
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: establix el marge esquerre de la disposició"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:265
-#: src/backend/worksheet/Worksheet.cpp:753
-#: src/backend/worksheet/Worksheet.cpp:754
+#: src/backend/worksheet/Worksheet.cpp:757
+#: src/backend/worksheet/Worksheet.cpp:758
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: establix el marge dret de la disposició"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:272
-#: src/backend/worksheet/Worksheet.cpp:763
-#: src/backend/worksheet/Worksheet.cpp:764
+#: src/backend/worksheet/Worksheet.cpp:767
+#: src/backend/worksheet/Worksheet.cpp:768
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: establix l'espaiat vertical de la disposició"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:279
-#: src/backend/worksheet/Worksheet.cpp:773
-#: src/backend/worksheet/Worksheet.cpp:774
+#: src/backend/worksheet/Worksheet.cpp:777
+#: src/backend/worksheet/Worksheet.cpp:778
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: establix l'espaiat horitzontal de la disposició"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:286
-#: src/backend/worksheet/Worksheet.cpp:793
-#: src/backend/worksheet/Worksheet.cpp:794
+#: src/backend/worksheet/Worksheet.cpp:797
+#: src/backend/worksheet/Worksheet.cpp:798
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: establix el comptador de columnes de la disposició"
@@ -9118,10 +9121,9 @@ msgid "%1: legend visibility changed"
 msgstr "%1: s'ha canviat la visibilitat de la llegenda"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:557
-#, fuzzy, kde-format
-#| msgid "%1: set limits metric"
+#, kde-format
 msgid "%1: set limits type"
-msgstr "%1: establix la mètrica dels límits"
+msgstr "%1: establix el tipus dels límits"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:564
 #, kde-format
@@ -9154,22 +9156,19 @@ msgid "%1: set minimal lower limit"
 msgstr "%1: establix el límit inferior mínim"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
-#, fuzzy, kde-format
-#| msgid "%1: set center metric"
+#, kde-format
 msgid "%1: set center specification"
-msgstr "%1: establix la mètrica del centre"
+msgstr "%1: establix l'especificació del centre"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#, kde-format
 msgid "%1: set upper limit specification"
-msgstr "%1: establix la designació del diagrama"
+msgstr "%1: establix l'especificació del límit superior"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:616
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#, kde-format
 msgid "%1: set lower limit specification"
-msgstr "%1: establix la designació del diagrama"
+msgstr "%1: establix l'especificació del límit inferior"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:625
 #, kde-format
@@ -9213,12 +9212,12 @@ msgstr "%1: establix l'amplària de la vora de les etiquetes"
 msgid "%1: set labels border color"
 msgstr "%1: establix el color de la vora de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:912
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:918
 #, kde-format
 msgid "Not enough data provided."
 msgstr "No s'han proporcionat prou dades."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1012
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1021
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "L'última mostra és incompleta i s'ha omés."
@@ -10114,36 +10113,36 @@ msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Imprimix el full de treball"
 
-#: src/backend/worksheet/Worksheet.cpp:693
+#: src/backend/worksheet/Worksheet.cpp:697
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: canvia de tipus de la mida"
 
-#: src/backend/worksheet/Worksheet.cpp:705
+#: src/backend/worksheet/Worksheet.cpp:709
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: canvia la propietat «torna a escalar el contingut»"
 
-#: src/backend/worksheet/Worksheet.cpp:713
-#: src/backend/worksheet/Worksheet.cpp:714
+#: src/backend/worksheet/Worksheet.cpp:717
+#: src/backend/worksheet/Worksheet.cpp:718
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: establix la disposició"
 
-#: src/backend/worksheet/Worksheet.cpp:783
-#: src/backend/worksheet/Worksheet.cpp:784
+#: src/backend/worksheet/Worksheet.cpp:787
+#: src/backend/worksheet/Worksheet.cpp:788
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: establix comptador de files de la disposició"
 
-#: src/backend/worksheet/Worksheet.cpp:824
-#: src/backend/worksheet/Worksheet.cpp:825
+#: src/backend/worksheet/Worksheet.cpp:828
+#: src/backend/worksheet/Worksheet.cpp:829
 #: src/frontend/dockwidgets/WorksheetDock.cpp:376
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: establix la mida de la pàgina"
 
-#: src/backend/worksheet/Worksheet.cpp:1524
+#: src/backend/worksheet/Worksheet.cpp:1528
 #, kde-format
 msgid "Curves"
 msgstr "Corbes"
@@ -11649,7 +11648,7 @@ msgstr "Nom de l'origen de les dades:"
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the Database File"
-msgstr "Seleccioneu el fitxer de la base de dades"
+msgstr "Trieu el fitxer de la base de dades"
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:349
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:409
@@ -12250,7 +12249,7 @@ msgstr "Seleccioneu el fitxer d'origen de dades"
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
-msgstr "Seleccioneu el fitxer DBC"
+msgstr "Trieu el fitxer DBC"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1041
 #, kde-format
@@ -13500,7 +13499,7 @@ msgstr "Diagrames de barres %1: s'ha carregat la plantilla «%2»"
 #: src/frontend/dockwidgets/BaseDock.cpp:212
 #, kde-format
 msgid "Please choose another name, because this is already in use."
-msgstr "Seleccioneu un altre nom perquè este ja es troba en ús."
+msgstr "Trieu un altre nom perquè este ja es troba en ús."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:278
 #, kde-format
@@ -13795,7 +13794,7 @@ msgstr "Dalt:"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
-msgstr "Seleccioneu el fitxer de guardada de plantilla"
+msgstr "Trieu el fitxer de guardada de plantilla"
 
 #: src/frontend/dockwidgets/CartesianPlotDock.cpp:1655
 #, kde-format
@@ -14198,16 +14197,14 @@ msgid "File Browser"
 msgstr "Navegador de fitxers"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistical"
-msgstr "Estadístiques"
+msgstr "Estadístic"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Specification"
-msgstr "Simplificació"
+msgstr "Especificació"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
@@ -14330,6 +14327,10 @@ msgid ""
 "properties of the sample.</li><li>Specification - custom user-defined values "
 "are used.</li></ul>"
 msgstr ""
+"Determina quins valors s'han d'utilitzar per al centre i les línies de límit:"
+"<ul><li>Estadístic: els valors es calculen en funció de les propietats "
+"estadístiques de la mostra.</li><li>Especificació: s'utilitzen valors "
+"personalitzats definits per l'usuari.</li></ul>"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:284
 #, kde-format
@@ -15512,7 +15513,7 @@ msgstr "Definició de funció de LabPlot"
 #: src/frontend/GuiTools.cpp:499
 #, kde-format
 msgid "Select file to save function definition"
-msgstr "Seleccioneu un fitxer per a guardar la definició de funció"
+msgstr "Trieu un fitxer per a guardar la definició de funció"
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
@@ -19426,7 +19427,7 @@ msgstr "Indiqueu el nom del fitxer de la imatge."
 #: src/frontend/ui/dockwidgets/imagedock.ui:437
 #, kde-format
 msgid " Select the image file"
-msgstr " Seleccioneu el fitxer d'imatge"
+msgstr " Trieu el fitxer d'imatge"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbPointSeparation)
 #. i18n: ectx: property (toolTip), widget (QLabel, lPointSeparation)
@@ -20132,7 +20133,7 @@ msgstr "Importa com a:"
 #: src/frontend/ui/datasources/imageoptionswidget.ui:50
 #, kde-format
 msgid "Choose how to import the image"
-msgstr "Seleccioneu com importar la imatge"
+msgstr "Trieu com importar la imatge"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, twCategories)
 #: src/frontend/ui/datasources/importdatasetwidget.ui:103
@@ -20224,7 +20225,7 @@ msgstr "Base de dades DBC"
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:29
 #, kde-format
 msgid " Select the file to import"
-msgstr " Seleccioneu el fitxer que s'ha d'importar"
+msgstr " Trieu el fitxer que s'ha d'importar"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bFileInfo)
 #: src/frontend/ui/datasources/importfilewidget.ui:256
@@ -22183,24 +22184,21 @@ msgstr "Límit superior màx.:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimitSpecification)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:186
-#, fuzzy, kde-format
-#| msgid "Upper Limit"
+#, kde-format
 msgid "Upper Limit:"
-msgstr "Límit superior"
+msgstr "Límit superior:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimitSpecification)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:200
-#, fuzzy, kde-format
-#| msgid "Lower Limit"
+#, kde-format
 msgid "Lower Limit:"
-msgstr "Límit inferior"
+msgstr "Límit inferior:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsType)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:230
-#, fuzzy, kde-format
-#| msgid "Center/Limits Lines"
+#, kde-format
 msgid "Center/Limits:"
-msgstr "Línies de centre/límits"
+msgstr "Centre/límits:"
 
 #. i18n: ectx: property (text), widget (QLabel, lExactLimits)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:269
@@ -25487,84 +25485,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Device at end"
-#~ msgstr "Final del dispositiu"
-
-#~ msgid "Not enough rows selected. Increase number of rows."
-#~ msgstr "No s'han seleccionat prou files. Incrementeu el nombre de files."
-
-#~ msgid "Unable to open device"
-#~ msgstr "No s'ha pogut obrir el dispositiu"
-
-#~ msgid "No new line detected"
-#~ msgstr "No s'ha detectat cap línia nova"
-
-#~ msgid "Unable to determine the separator"
-#~ msgstr "No s'ha pogut determinar el separador"
-
-#~ msgid "Invalid number of data columns"
-#~ msgstr "Nombre no vàlid de columnes de dades"
-
-#~ msgid "Invalid number of column names"
-#~ msgstr "Nombre no vàlid de noms de columnes"
-
-#~ msgid "Matrix: Unsupported column mode"
-#~ msgstr "Matriu: Mode de columnes no admés"
-
-#~ msgid "Insufficient memory (RAM)"
-#~ msgstr "Memòria insuficient (RAM)"
-
-#~ msgid "Unable to parse header"
-#~ msgstr "No s'ha pogut analitzar la capçalera"
-
-#~ msgid "Unsupported data source"
-#~ msgstr "Origen de les dades no admés"
-
-#~ msgid "Live: No column separator selected"
-#~ msgstr "En viu: No s'ha seleccionat cap separador de columnes"
-
-#~ msgid "Live: No column modes set"
-#~ msgstr "En viu: No s'ha establit cap mode de columna"
-
-#~ msgid "Datetime column found, but no Datetime format provided"
-#~ msgstr ""
-#~ "S'ha trobat una columna Datahora, però no s'ha proporcionat cap format "
-#~ "Datahora"
-
-#~ msgid "Header reading from device not allowed"
-#~ msgstr "No es permet la lectura de la capçalera des del dispositiu"
-
-#~ msgid "Separator detection not allowed"
-#~ msgstr "No es permet la detecció de separador"
-
-#~ msgid "Invalid separator"
-#~ msgstr "Separador no vàlid"
-
-#~ msgid "Serial device must be initialized before reading data from it"
-#~ msgstr ""
-#~ "El dispositiu en sèrie s'ha de restablir abans de llegir-ne les dades"
-
-#~ msgid "Wrong end column. Is it smaller than start column?"
-#~ msgstr "Columna final incorrecta. És més xicoteta que la columna inicial?"
-
-#~ msgid "Wrong end row. Is it smaller than start row?"
-#~ msgstr "Fila final incorrecta. És més xicoteta que la fila inicial?"
-
-#~ msgid "No data destination set"
-#~ msgstr "No s'ha establit cap destinació de dades"
-
-#~ msgid "No columns"
-#~ msgstr "Sense columnes"
-
-#~ msgid ""
-#~ "Unable to determine column modes. Check if they are correctly written"
-#~ msgstr ""
-#~ "No s'han pogut determinar els modes de les columnes. Comproveu que "
-#~ "estiguen escrits correctament"
-
-#~ msgid "UTF16 encoding is not supported"
-#~ msgstr "No s'admet la codificació UTF16"
-
-#~ msgid "Unhandled case"
-#~ msgstr "Cas no gestionat"

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-31 00:39+0000\n"
-"PO-Revision-Date: 2025-07-27 00:24+0100\n"
+"POT-Creation-Date: 2025-08-04 00:38+0000\n"
+"PO-Revision-Date: 2025-08-01 00:20+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -1183,6 +1183,10 @@ msgid ""
 "count >= %3. Check if the correct separator is used and the data contains "
 "same number of columns."
 msgstr ""
+"Número no válido de columnas de datos. Contador de columnas de la primera "
+"fila: %1. El contador de columnas de la %2ª fila es >= %3. Compruebe que "
+"está usando el separador correcto y que los datos contienen el mismo número "
+"de columnas."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:239
 #, kde-format
@@ -8101,7 +8105,7 @@ msgstr "no hay información disponible"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:142
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5303
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5309
 #: src/frontend/ui/dockwidgets/axisdock.ui:487
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:546
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:481
@@ -8600,20 +8604,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: Cursor1 activado"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1782
-#: src/backend/worksheet/Worksheet.cpp:851
+#: src/backend/worksheet/Worksheet.cpp:855
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: Cargar tema %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1784
-#: src/backend/worksheet/Worksheet.cpp:853
+#: src/backend/worksheet/Worksheet.cpp:857
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: Cargar tema predeterminado"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1786
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5637
-#: src/backend/worksheet/Worksheet.cpp:855
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5643
+#: src/backend/worksheet/Worksheet.cpp:859
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: definir tema"
@@ -8772,24 +8776,24 @@ msgstr "%1: añadir un recuadro de gráfico"
 msgid "%1: add inset plot with data"
 msgstr "%1: añadir un recuadro de gráfico con datos"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4022
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4028
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "No está dentro de la recta delimitadora"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4246
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4267
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4252
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4273
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "desde x=%1 hasta x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4254
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4280
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4260
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4286
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "desde y=%1 hasta y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4299
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4305
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -8826,50 +8830,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: definir radio de las esquinas del borde"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
-#: src/backend/worksheet/Worksheet.cpp:723
-#: src/backend/worksheet/Worksheet.cpp:724
+#: src/backend/worksheet/Worksheet.cpp:727
+#: src/backend/worksheet/Worksheet.cpp:728
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: definir margen superior de la distribución"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:251
-#: src/backend/worksheet/Worksheet.cpp:733
-#: src/backend/worksheet/Worksheet.cpp:734
+#: src/backend/worksheet/Worksheet.cpp:737
+#: src/backend/worksheet/Worksheet.cpp:738
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: definir margen inferior de la distribución"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:258
-#: src/backend/worksheet/Worksheet.cpp:743
-#: src/backend/worksheet/Worksheet.cpp:744
+#: src/backend/worksheet/Worksheet.cpp:747
+#: src/backend/worksheet/Worksheet.cpp:748
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: definir margen izquierdo de la distribución"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:265
-#: src/backend/worksheet/Worksheet.cpp:753
-#: src/backend/worksheet/Worksheet.cpp:754
+#: src/backend/worksheet/Worksheet.cpp:757
+#: src/backend/worksheet/Worksheet.cpp:758
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: definir margen derecho de la distribución"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:272
-#: src/backend/worksheet/Worksheet.cpp:763
-#: src/backend/worksheet/Worksheet.cpp:764
+#: src/backend/worksheet/Worksheet.cpp:767
+#: src/backend/worksheet/Worksheet.cpp:768
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: definir espaciado vertical de la distribución"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:279
-#: src/backend/worksheet/Worksheet.cpp:773
-#: src/backend/worksheet/Worksheet.cpp:774
+#: src/backend/worksheet/Worksheet.cpp:777
+#: src/backend/worksheet/Worksheet.cpp:778
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: definir espaciado horizontal de la distribución"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:286
-#: src/backend/worksheet/Worksheet.cpp:793
-#: src/backend/worksheet/Worksheet.cpp:794
+#: src/backend/worksheet/Worksheet.cpp:797
+#: src/backend/worksheet/Worksheet.cpp:798
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: definir contador de columnas de la distribución"
@@ -9028,10 +9032,9 @@ msgid "%1: legend visibility changed"
 msgstr "%1: visibilidad de la leyenda cambiada"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:557
-#, fuzzy, kde-format
-#| msgid "%1: set limits metric"
+#, kde-format
 msgid "%1: set limits type"
-msgstr "%1: definir métrica de límites"
+msgstr "%1: definir tipo de límites"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:564
 #, kde-format
@@ -9064,22 +9067,19 @@ msgid "%1: set minimal lower limit"
 msgstr "%1: definir el límite mínimo inferior"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
-#, fuzzy, kde-format
-#| msgid "%1: set center metric"
+#, kde-format
 msgid "%1: set center specification"
-msgstr "%1: definir métrica del centro"
+msgstr "%1: definir especificación del centro"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#, kde-format
 msgid "%1: set upper limit specification"
-msgstr "%1: definir la designación del gráfico"
+msgstr "%1: definir la especificación del límite superior"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:616
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#, kde-format
 msgid "%1: set lower limit specification"
-msgstr "%1: definir la designación del gráfico"
+msgstr "%1: definir la especificación del límite inferior"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:625
 #, kde-format
@@ -9123,12 +9123,12 @@ msgstr "%1: definir anchura del borde de las etiquetas"
 msgid "%1: set labels border color"
 msgstr "%1: definir color del borde de las etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:912
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:918
 #, kde-format
 msgid "Not enough data provided."
 msgstr "No se han proporcionado datos suficientes."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1012
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1021
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "La última muestra está incompleta y se ha omitido."
@@ -10019,36 +10019,36 @@ msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Imprimir hoja de trabajo"
 
-#: src/backend/worksheet/Worksheet.cpp:693
+#: src/backend/worksheet/Worksheet.cpp:697
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: cambiar tipo de tamaño"
 
-#: src/backend/worksheet/Worksheet.cpp:705
+#: src/backend/worksheet/Worksheet.cpp:709
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: cambiar la propiedad «reescalar el contenido»"
 
-#: src/backend/worksheet/Worksheet.cpp:713
-#: src/backend/worksheet/Worksheet.cpp:714
+#: src/backend/worksheet/Worksheet.cpp:717
+#: src/backend/worksheet/Worksheet.cpp:718
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: definir la distribución"
 
-#: src/backend/worksheet/Worksheet.cpp:783
-#: src/backend/worksheet/Worksheet.cpp:784
+#: src/backend/worksheet/Worksheet.cpp:787
+#: src/backend/worksheet/Worksheet.cpp:788
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: definir contador de filas de la distribución"
 
-#: src/backend/worksheet/Worksheet.cpp:824
-#: src/backend/worksheet/Worksheet.cpp:825
+#: src/backend/worksheet/Worksheet.cpp:828
+#: src/backend/worksheet/Worksheet.cpp:829
 #: src/frontend/dockwidgets/WorksheetDock.cpp:376
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: definir tamaño de página"
 
-#: src/backend/worksheet/Worksheet.cpp:1524
+#: src/backend/worksheet/Worksheet.cpp:1528
 #, kde-format
 msgid "Curves"
 msgstr "Curvas"
@@ -14093,16 +14093,14 @@ msgid "File Browser"
 msgstr "Navegador de archivos"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistical"
-msgstr "Estadísticas"
+msgstr "Estadística"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Specification"
-msgstr "Simplificación"
+msgstr "Especificación"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
@@ -14222,6 +14220,10 @@ msgid ""
 "properties of the sample.</li><li>Specification - custom user-defined values "
 "are used.</li></ul>"
 msgstr ""
+"Determinar los valores que se deben usar para las líneas central y límite:"
+"<ul><li>Estadística: los valores se calculan según las propiedades "
+"estadísticas de la muestra.</li><li>Especificación: se usan valores "
+"personalizados definidos por el usuario.</li></ul>"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:284
 #, kde-format
@@ -22058,24 +22060,21 @@ msgstr "Límite superior máx.:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimitSpecification)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:186
-#, fuzzy, kde-format
-#| msgid "Upper Limit"
+#, kde-format
 msgid "Upper Limit:"
-msgstr "Límite superior"
+msgstr "Límite superior:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimitSpecification)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:200
-#, fuzzy, kde-format
-#| msgid "Lower Limit"
+#, kde-format
 msgid "Lower Limit:"
-msgstr "Límite inferior"
+msgstr "Límite inferior:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsType)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:230
-#, fuzzy, kde-format
-#| msgid "Center/Limits Lines"
+#, kde-format
 msgid "Center/Limits:"
-msgstr "Líneas de centrado/límite"
+msgstr "Centro/límites:"
 
 #. i18n: ectx: property (text), widget (QLabel, lExactLimits)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:269
@@ -25354,85 +25353,3 @@ msgstr "el proceso «convert» ha fallado, código de salida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No se puede abrir el archivo:"
-
-#~ msgid "Device at end"
-#~ msgstr "Dispositivo al final"
-
-#~ msgid "Not enough rows selected. Increase number of rows."
-#~ msgstr ""
-#~ "No se han seleccionado suficientes filas. Aumente el número de filas."
-
-#~ msgid "Unable to open device"
-#~ msgstr "No se ha podido abrir el dispositivo"
-
-#~ msgid "No new line detected"
-#~ msgstr "No se ha detectado ninguna línea nueva"
-
-#~ msgid "Unable to determine the separator"
-#~ msgstr "No se puede determinar el separador"
-
-#~ msgid "Invalid number of data columns"
-#~ msgstr "Número no válido de columnas de datos"
-
-#~ msgid "Invalid number of column names"
-#~ msgstr "Número no válido de nombres de columnas"
-
-#~ msgid "Matrix: Unsupported column mode"
-#~ msgstr "Matriz: modo de columnas no permitido"
-
-#~ msgid "Insufficient memory (RAM)"
-#~ msgstr "Memoria insuficiente (RAM)"
-
-#~ msgid "Unable to parse header"
-#~ msgstr "No se puede analizar la cabecera"
-
-#~ msgid "Unsupported data source"
-#~ msgstr "Fuente de datos no permitida"
-
-#~ msgid "Live: No column separator selected"
-#~ msgstr "En vivo: No se ha seleccionado ningún separador de columnas"
-
-#~ msgid "Live: No column modes set"
-#~ msgstr "En vivo: No se ha definido ningún modo de columna"
-
-#~ msgid "Datetime column found, but no Datetime format provided"
-#~ msgstr ""
-#~ "Columna de fecha y hora encontrada, pero no se ha indicado ningún formato "
-#~ "de fecha y hora"
-
-#~ msgid "Header reading from device not allowed"
-#~ msgstr "No se permite leer la cabecera del dispositivo"
-
-#~ msgid "Separator detection not allowed"
-#~ msgstr "No se permite la detección del separador"
-
-#~ msgid "Invalid separator"
-#~ msgstr "Separador no válido"
-
-#~ msgid "Serial device must be initialized before reading data from it"
-#~ msgstr ""
-#~ "El dispositivo en serie se debe inicializar antes de leer datos de él"
-
-#~ msgid "Wrong end column. Is it smaller than start column?"
-#~ msgstr "Columna final incorrecta. ¿Es menor que la columna inicial?"
-
-#~ msgid "Wrong end row. Is it smaller than start row?"
-#~ msgstr "Fila final incorrecta. ¿Es menor que la fila inicial?"
-
-#~ msgid "No data destination set"
-#~ msgstr "No se ha definido ningún destino de datos"
-
-#~ msgid "No columns"
-#~ msgstr "No hay columnas"
-
-#~ msgid ""
-#~ "Unable to determine column modes. Check if they are correctly written"
-#~ msgstr ""
-#~ "No se han podido determinar los modos de las columnas. Compruebe que se "
-#~ "han escrito correctamente."
-
-#~ msgid "UTF16 encoding is not supported"
-#~ msgstr "La codificación UTF16 no está permitida"
-
-#~ msgid "Unhandled case"
-#~ msgstr "Caso no contemplado"

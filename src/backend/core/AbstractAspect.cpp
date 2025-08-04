@@ -994,13 +994,21 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 //! \name undo related
 //@{
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void AbstractAspect::setUndoAware(bool b) {
-	d->m_undoAware = b;
 
-	// propagate the value to the internal and hidden aspects, if available (Line, Background, etc.)
-	const auto& children = this->children<AbstractAspect>(ChildIndexFlag::IncludeHidden);
-	for (auto* child : children)
-		child->setUndoAware(b);
+/*!
+ * enables the undo awareness of the aspect (modifications are put onto the undo stack) if \c value is set to \c true,
+ * disables it otherwise. Note, this function doesn't modify the behavior of aspects's children, the behavior of the children
+ * needs to be handled separately, if needed.
+ */
+void AbstractAspect::setUndoAware(bool value) {
+	d->m_undoAware = value;
+}
+
+/*!
+ * returns \c true if the aspect is undo aware (modifications are put onto the undo stack), returns \c false otherwise.
+ */
+bool AbstractAspect::isUndoAware() const {
+	return d->m_undoAware;
 }
 
 /**
@@ -1019,8 +1027,8 @@ QUndoStack* AbstractAspect::undoStack() const {
  */
 void AbstractAspect::exec(QUndoCommand* cmd) {
 	Q_CHECK_PTR(cmd);
-	if (d->m_undoAware) {
-		QUndoStack* stack = undoStack();
+	if (d->m_undoAware && (project() && project()->isUndoAware())) {
+		auto* stack = undoStack();
 		if (stack)
 			stack->push(cmd);
 		else {
@@ -1070,7 +1078,7 @@ void AbstractAspect::exec(QUndoCommand* command,
  * \brief Begin an undo stack macro (series of commands)
  */
 void AbstractAspect::beginMacro(const QString& text) {
-	if (!d->m_undoAware)
+	if (!d->m_undoAware || (project() && !project()->isUndoAware()))
 		return;
 
 	auto* stack = undoStack();
@@ -1082,7 +1090,7 @@ void AbstractAspect::beginMacro(const QString& text) {
  * \brief End the current undo stack macro
  */
 void AbstractAspect::endMacro() {
-	if (!d->m_undoAware)
+	if (!d->m_undoAware || (project() && !project()->isUndoAware()))
 		return;
 
 	auto* stack = undoStack();

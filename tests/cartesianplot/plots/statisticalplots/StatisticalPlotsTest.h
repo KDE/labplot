@@ -42,6 +42,7 @@ private Q_SLOTS:
 	// process behavior chart
 	void testPBChartInit();
 	void testPBChartDuplicate();
+	void testPBChartUndoRedo();
 
 	void testPBChartXmRAverage();
 	void testPBChartmRAverage();
@@ -59,7 +60,7 @@ private Q_SLOTS:
 	void testPBChartC();
 	void testPBChartU();
 
-	void testPBCSpecifications();
+	void testPBChartSpecifications();
 
 	// run chart
 	void testRunChartInit();
