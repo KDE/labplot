@@ -200,7 +200,7 @@ void GuiTools::fillColorMenu(QMenu* menu, QActionGroup* actionGroup) {
 }
 
 /*!
- * Selects (checks) the action in the group \c actionGroup hat corresponds to the color \c color.
+ * Selects (checks) the action in the group \c actionGroup that corresponds to the color \c color.
  * Unchecks the previously checked action if the color
  * was not found in the list of predefined colors.
  */
@@ -244,6 +244,7 @@ QPair<float, float> GuiTools::dpi(const QWidget* widget) {
 		WARN("Widget is null, falling back to primary screen");
 
 	// Fallback to the primary screen if the widget's screen is not valid
+
 	if (!screen)
 		screen = QApplication::primaryScreen();
 
@@ -341,7 +342,7 @@ QImage GuiTools::importPDFFile(const QString& fileName) {
 	document->setRenderHint(Poppler::Document::TextSlightHinting);
 	document->setRenderHint(Poppler::Document::ThinLineSolid);
 
-	const static int dpi = QGuiApplication::primaryScreen()->logicalDotsPerInchX();
+	const static int dpi = QGuiApplication::primaryScreen()->physicalDotsPerInchX();
 	auto image = page->renderToImage(dpi, dpi);
 
 	return image;
@@ -372,7 +373,7 @@ QImage GuiTools::imageFromPDFData(const QByteArray& data, double zoomFactor) {
 	document->setRenderHint(Poppler::Document::TextSlightHinting);
 	document->setRenderHint(Poppler::Document::ThinLineSolid);
 
-	const static int dpi = QGuiApplication::primaryScreen()->logicalDotsPerInchX();
+	const static int dpi = QGuiApplication::primaryScreen()->physicalDotsPerInchX();
 	auto image = page->renderToImage(zoomFactor * dpi, zoomFactor * dpi);
 
 	return image;
