@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-27 02:36+0000\n"
+"POT-Creation-Date: 2025-08-04 02:51+0000\n"
 "PO-Revision-Date: 2025-07-23 12:22+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -8178,7 +8178,7 @@ msgstr "geen informatie beschikbaar."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:142
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5228
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5235
 #: src/frontend/ui/dockwidgets/axisdock.ui:487
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:546
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:481
@@ -8666,20 +8666,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: Muisaanwijzer1 aanzetten"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1754
-#: src/backend/worksheet/Worksheet.cpp:842
+#: src/backend/worksheet/Worksheet.cpp:849
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: thema %2 inlezen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1756
-#: src/backend/worksheet/Worksheet.cpp:844
+#: src/backend/worksheet/Worksheet.cpp:851
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: standaard thema inlezen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1758
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5554
-#: src/backend/worksheet/Worksheet.cpp:846
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5561
+#: src/backend/worksheet/Worksheet.cpp:853
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: thema instellen"
@@ -8828,24 +8828,24 @@ msgstr "%1: functiekromme toevoegen"
 msgid "Text Label"
 msgstr "Tekstlabel"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3930
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3937
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "Niet binnen rechthoek"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4154
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4175
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4161
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4182
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "van x=%1 tot x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4162
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4188
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4169
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4195
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "van y=%1 tot y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4207
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4214
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -8882,50 +8882,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: hoekradius rand instellen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
-#: src/backend/worksheet/Worksheet.cpp:714
-#: src/backend/worksheet/Worksheet.cpp:715
+#: src/backend/worksheet/Worksheet.cpp:721
+#: src/backend/worksheet/Worksheet.cpp:722
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: marge bovenkant instellen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:251
-#: src/backend/worksheet/Worksheet.cpp:724
-#: src/backend/worksheet/Worksheet.cpp:725
+#: src/backend/worksheet/Worksheet.cpp:731
+#: src/backend/worksheet/Worksheet.cpp:732
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: marge onderkant instellen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:258
-#: src/backend/worksheet/Worksheet.cpp:734
-#: src/backend/worksheet/Worksheet.cpp:735
+#: src/backend/worksheet/Worksheet.cpp:741
+#: src/backend/worksheet/Worksheet.cpp:742
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: marge linkerkant instellen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:265
-#: src/backend/worksheet/Worksheet.cpp:744
-#: src/backend/worksheet/Worksheet.cpp:745
+#: src/backend/worksheet/Worksheet.cpp:751
+#: src/backend/worksheet/Worksheet.cpp:752
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: marge rechterkant instellen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:272
-#: src/backend/worksheet/Worksheet.cpp:754
-#: src/backend/worksheet/Worksheet.cpp:755
+#: src/backend/worksheet/Worksheet.cpp:761
+#: src/backend/worksheet/Worksheet.cpp:762
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: verticale tussenruimte instellen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:279
-#: src/backend/worksheet/Worksheet.cpp:764
-#: src/backend/worksheet/Worksheet.cpp:765
+#: src/backend/worksheet/Worksheet.cpp:771
+#: src/backend/worksheet/Worksheet.cpp:772
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: horizontale tussenruimte instellen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:286
-#: src/backend/worksheet/Worksheet.cpp:784
-#: src/backend/worksheet/Worksheet.cpp:785
+#: src/backend/worksheet/Worksheet.cpp:791
+#: src/backend/worksheet/Worksheet.cpp:792
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: aantal kolommen instellen"
@@ -9155,12 +9155,12 @@ msgstr "%1: randbreedte van labels zetten"
 msgid "%1: set labels border color"
 msgstr "%1: randkleur van labels zetten"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:880
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:886
 #, kde-format
 msgid "Not enough data provided."
 msgstr "Niet genoeg gegevens geleverd."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:980
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:989
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "Het laatste sample is onvolledig en is niet overgeslagen."
@@ -10044,36 +10044,36 @@ msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Werkblad afdrukken"
 
-#: src/backend/worksheet/Worksheet.cpp:684
+#: src/backend/worksheet/Worksheet.cpp:691
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: groottetype wijzigen"
 
-#: src/backend/worksheet/Worksheet.cpp:696
+#: src/backend/worksheet/Worksheet.cpp:703
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: eigenschap \"inhoud herschalen\" wijzigen"
 
-#: src/backend/worksheet/Worksheet.cpp:704
-#: src/backend/worksheet/Worksheet.cpp:705
+#: src/backend/worksheet/Worksheet.cpp:711
+#: src/backend/worksheet/Worksheet.cpp:712
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1 opmaak instellen"
 
-#: src/backend/worksheet/Worksheet.cpp:774
-#: src/backend/worksheet/Worksheet.cpp:775
+#: src/backend/worksheet/Worksheet.cpp:781
+#: src/backend/worksheet/Worksheet.cpp:782
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: aantal rijen instellen"
 
-#: src/backend/worksheet/Worksheet.cpp:815
-#: src/backend/worksheet/Worksheet.cpp:816
+#: src/backend/worksheet/Worksheet.cpp:822
+#: src/backend/worksheet/Worksheet.cpp:823
 #: src/frontend/dockwidgets/WorksheetDock.cpp:376
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: paginagrootte instellen"
 
-#: src/backend/worksheet/Worksheet.cpp:1567
+#: src/backend/worksheet/Worksheet.cpp:1574
 #, kde-format
 msgid "Curves"
 msgstr "Krommen"

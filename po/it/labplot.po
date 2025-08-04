@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-27 02:36+0000\n"
-"PO-Revision-Date: 2025-07-19 00:46+0200\n"
-"Last-Translator: Vincenzo Reale <>\n"
+"POT-Creation-Date: 2025-08-04 02:51+0000\n"
+"PO-Revision-Date: 2025-08-03 17:23+0200\n"
+"Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -700,7 +700,7 @@ msgstr "%1: imposta autore"
 #: src/backend/core/Project.cpp:301
 #, kde-format
 msgid "%1: save dock state changed"
-msgstr ""
+msgstr "%1: stato di salvataggio dei pannelli modificato"
 
 #: src/backend/core/Project.cpp:308
 #, kde-format
@@ -1141,17 +1141,17 @@ msgstr "Fonte dati file non supportata"
 #: src/backend/datasources/filters/AsciiFilter.cpp:227
 #, kde-format
 msgid "Live: No column separator selected"
-msgstr ""
+msgstr "Live: nessun separatore di colonna selezionato"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:229
 #, kde-format
 msgid "Live: No column modes set"
-msgstr ""
+msgstr "Live: nessuna modalità di colonna impostata"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:231
 #, kde-format
 msgid "Datetime column found, but no Datetime format provided"
-msgstr ""
+msgstr "Colonna Datetime trovata, ma nessun formato Datetime fornito"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:233
 #, kde-format
@@ -2059,7 +2059,7 @@ msgstr "Impossibile leggere il file. Motivo: %1"
 #: src/backend/datasources/filters/McapFilter.cpp:477
 #, kde-format
 msgid "No JSON encoded topics found."
-msgstr ""
+msgstr "Nessun argomento codificato in JSON trovato."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:213
 #, kde-format
@@ -8200,7 +8200,7 @@ msgstr "nessuna informazione disponibile"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:142
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5228
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5235
 #: src/frontend/ui/dockwidgets/axisdock.ui:487
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:546
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:481
@@ -8450,7 +8450,7 @@ msgstr "Aggiungi nuovo"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:562
 #, kde-format
 msgid "Formula Plot"
-msgstr ""
+msgstr "Grafico della formula"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:563
 #, kde-format
@@ -8600,7 +8600,7 @@ msgstr "Grafici a miglioramento continuo"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1869
 #, kde-format
 msgid "Run Chart"
-msgstr ""
+msgstr "Grafico di andament"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:764
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1866
@@ -8686,20 +8686,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: Puntatore 1 abilitato"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1754
-#: src/backend/worksheet/Worksheet.cpp:842
+#: src/backend/worksheet/Worksheet.cpp:849
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: carica il tema %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1756
-#: src/backend/worksheet/Worksheet.cpp:844
+#: src/backend/worksheet/Worksheet.cpp:851
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: carica il tema predefinito"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1758
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5554
-#: src/backend/worksheet/Worksheet.cpp:846
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5561
+#: src/backend/worksheet/Worksheet.cpp:853
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: imposta il tema"
@@ -8848,24 +8848,24 @@ msgstr "%1: aggiungi curva funzione"
 msgid "Text Label"
 msgstr "Etichetta di testo"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3930
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3937
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "Non all'interno del riquadro dell'oggetto"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4154
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4175
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4161
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4182
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "da x=%1 a x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4162
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4188
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4169
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4195
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "da y=%1 a y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4207
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4214
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -8902,50 +8902,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: imposta il raggio dell'angolo del bordo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
-#: src/backend/worksheet/Worksheet.cpp:714
-#: src/backend/worksheet/Worksheet.cpp:715
+#: src/backend/worksheet/Worksheet.cpp:721
+#: src/backend/worksheet/Worksheet.cpp:722
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: imposta il margine superiore della disposizione"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:251
-#: src/backend/worksheet/Worksheet.cpp:724
-#: src/backend/worksheet/Worksheet.cpp:725
+#: src/backend/worksheet/Worksheet.cpp:731
+#: src/backend/worksheet/Worksheet.cpp:732
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: imposta il margine inferiore della disposizione"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:258
-#: src/backend/worksheet/Worksheet.cpp:734
-#: src/backend/worksheet/Worksheet.cpp:735
+#: src/backend/worksheet/Worksheet.cpp:741
+#: src/backend/worksheet/Worksheet.cpp:742
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: imposta il margine sinistro della disposizione"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:265
-#: src/backend/worksheet/Worksheet.cpp:744
-#: src/backend/worksheet/Worksheet.cpp:745
+#: src/backend/worksheet/Worksheet.cpp:751
+#: src/backend/worksheet/Worksheet.cpp:752
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: imposta il margine destro della disposizione"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:272
-#: src/backend/worksheet/Worksheet.cpp:754
-#: src/backend/worksheet/Worksheet.cpp:755
+#: src/backend/worksheet/Worksheet.cpp:761
+#: src/backend/worksheet/Worksheet.cpp:762
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: imposta la spaziatura verticale della disposizione"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:279
-#: src/backend/worksheet/Worksheet.cpp:764
-#: src/backend/worksheet/Worksheet.cpp:765
+#: src/backend/worksheet/Worksheet.cpp:771
+#: src/backend/worksheet/Worksheet.cpp:772
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: imposta la spaziatura orizzontale della disposizione"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:286
-#: src/backend/worksheet/Worksheet.cpp:784
-#: src/backend/worksheet/Worksheet.cpp:785
+#: src/backend/worksheet/Worksheet.cpp:791
+#: src/backend/worksheet/Worksheet.cpp:792
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: imposta il conteggio delle colonne della disposizione"
@@ -9106,7 +9106,7 @@ msgstr "%1: visibilità legenda modificata"
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:553
 #, kde-format
 msgid "%1: set limits metric"
-msgstr ""
+msgstr "%1: imposta i limiti della metrica"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:560
 #, kde-format
@@ -9175,12 +9175,12 @@ msgstr "%1: imposta lo spessore del bordo delle etichette"
 msgid "%1: set labels border color"
 msgstr "%1: imposta il colore del bordo delle etichette"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:880
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:886
 #, kde-format
 msgid "Not enough data provided."
 msgstr "Non sono stati forniti abbastanza dati."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:980
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:989
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "L'ultimo campione è incompleto e verrà omesso."
@@ -9208,7 +9208,7 @@ msgstr "%1: imposta la posizione logica finale"
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:277
 #, kde-format
 msgid "%1: set center metric"
-msgstr ""
+msgstr "%1: imposta la metrica centrale"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:150
 #, kde-format
@@ -10070,36 +10070,36 @@ msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Stampa il foglio di lavoro"
 
-#: src/backend/worksheet/Worksheet.cpp:684
+#: src/backend/worksheet/Worksheet.cpp:691
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: cambia il tipo di dimensione"
 
-#: src/backend/worksheet/Worksheet.cpp:696
+#: src/backend/worksheet/Worksheet.cpp:703
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: cambia la proprietà «ridimensiona il contenuto»"
 
-#: src/backend/worksheet/Worksheet.cpp:704
-#: src/backend/worksheet/Worksheet.cpp:705
+#: src/backend/worksheet/Worksheet.cpp:711
+#: src/backend/worksheet/Worksheet.cpp:712
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: imposta lo schema"
 
-#: src/backend/worksheet/Worksheet.cpp:774
-#: src/backend/worksheet/Worksheet.cpp:775
+#: src/backend/worksheet/Worksheet.cpp:781
+#: src/backend/worksheet/Worksheet.cpp:782
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: imposta il conteggio delle righe della disposizione"
 
-#: src/backend/worksheet/Worksheet.cpp:815
-#: src/backend/worksheet/Worksheet.cpp:816
+#: src/backend/worksheet/Worksheet.cpp:822
+#: src/backend/worksheet/Worksheet.cpp:823
 #: src/frontend/dockwidgets/WorksheetDock.cpp:376
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: imposta la dimensione della pagina"
 
-#: src/backend/worksheet/Worksheet.cpp:1567
+#: src/backend/worksheet/Worksheet.cpp:1574
 #, kde-format
 msgid "Curves"
 msgstr "Curve"
@@ -10390,7 +10390,7 @@ msgstr "Offre le azioni disponibili per uno scopo specifico"
 #: src/frontend/AboutDialog.cpp:308
 #, kde-format
 msgid "Qt Advanced Docking System"
-msgstr ""
+msgstr "Sistema di pannelli avanzato Qt"
 
 #: src/frontend/AboutDialog.cpp:314
 #, kde-format
@@ -13411,6 +13411,17 @@ msgid ""
 "li><li>Scott - <i>h = 3.49 * sigma / pow(n, 3/2)</i>, optimal method for "
 "normally distributed data</li></ul>"
 msgstr ""
+"Metodo utilizzato per determinare il numero di bin <i>k</i> e la loro "
+"larghezza <i>h</i> per valori <i>n</i>:<ul><li>Per numero: il numero di bin "
+"viene specificato manualmente</li><li>Per larghezza: il numero di bin viene "
+"calcolato in base alla larghezza del bin specificata tramite <i>k = (max(x) "
+"- min(x) / h</i>)</li><li>Radice quadrata: <i>k = sqrt(n)</i></li><li>Rice: "
+"<i>k = 2 * pow(n, 3/2)</i>, alternativa più semplice al metodo di Sturges</"
+"li><li>Sturges: <i>k = log2(n) + 1</i>, presuppone una distribuzione "
+"approssimativamente normale</li><li>Doane: versione modificata del metodo di "
+"Sturges, vedere la documentazione per maggiori dettagli</li><li>Scott: <i>h "
+"= 3,49 * sigma / pow(n, 3/2)</i>, metodo ottimale per dati distribuiti "
+"normalmente</li></ul>"
 
 #: src/frontend/dockwidgets/HistogramDock.cpp:295
 #, kde-format
@@ -13646,6 +13657,20 @@ msgid ""
 "li><li>C - plot <b>Poisson counts</b>.</li><li>U - plot <b>Poisson rates</b>."
 "</li></ul>"
 msgstr ""
+"I tipi di grafico supportati sono raggruppati in base alle statistiche "
+"tracciate e alla metrica che definisce i limiti.<br><br>Valori individuali e "
+"intervalli mobili, limiti basati sull'intervallo mobile medio o mediano:"
+"<ul><li>X (XmR) - traccia le <b>etichette individuali</b>.</li><li>mR - "
+"traccia gli <b>intervalli mobili</b>.</li></ul>Medie e intervalli, limiti "
+"basati sull'intervallo medio o mediano:<ul><li>X̅ (X̅R) - traccia le <b>medie "
+"per ciascun campione</b>.</li><li>R (X̅R) - traccia gli <b>intervalli per "
+"ciascun campione</b>.</li></ul>Medie e deviazioni standard, limiti basati "
+"sulle deviazioni standard:<ul><li>X̅ (X̅S) - traccia le <b>medie per ciascun "
+"campione</b>.</li><li>S (X̅S) - traccia le<b>deviazioni standard per ciascun "
+"campione</b>.</li></ul>Attributi:<ul><li>P - traccia le <b>proporzioni "
+"binomiali</b>.</li><li>NP - traccia i <b>conteggi binomiali</b>.</li><li>C - "
+"traccia i <b>conteggi di Poisson</b>.</li><li>U - traccia le <b>velocità di "
+"Poisson</b>.</li></ul>"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:265
 #, kde-format
@@ -13666,6 +13691,8 @@ msgid ""
 "If checked, exact limits are calculated for every individual sample (\"stair-"
 "step limits\"), straight lines are drawn for the limits otherwise."
 msgstr ""
+"Se selezionata, vengono calcolati i limiti esatti per ogni singolo campione "
+"(«limiti a gradini»), altrimenti vengono tracciate linee rette per i limiti."
 
 #: src/frontend/dockwidgets/ProjectDock.cpp:69
 #, kde-format
@@ -13810,6 +13837,8 @@ msgstr "tempo di calcolo: %1 ms"
 #, kde-format
 msgid "Click this button or press Shift+Enter to recalculate the result."
 msgstr ""
+"Fai clic su questo pulsante o premere Maiusc+Invio per ricalcolare il "
+"risultato."
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:75
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:400
@@ -14460,7 +14489,7 @@ msgstr "Grafico del comportamento del processo"
 #, kde-format
 msgctxt "@title:window"
 msgid "Run Chart"
-msgstr ""
+msgstr "Grafico di andamento"
 
 #: src/frontend/GuiObserver.cpp:390
 #, kde-format
@@ -16401,6 +16430,10 @@ msgid ""
 "The setting can be changed for every project separately in the project "
 "properties."
 msgstr ""
+"Salva lo stato (posizione e geometria) dei pannelli nel file di progetto.\n"
+"Determina il comportamento predefinito per i nuovi progetti.\n"
+"L'impostazione può essere modificata separatamente per ogni progetto nelle "
+"proprietà del progetto."
 
 #: src/frontend/SettingsGeneralPage.cpp:273
 #, kde-format
@@ -16431,6 +16464,8 @@ msgid ""
 "Info trace - helpful to get information and warnings when running the "
 "application."
 msgstr ""
+"Tracciamento informazioni: utile per ottenere informazioni e avvisi durante "
+"l'esecuzione dell'applicazione."
 
 #: src/frontend/SettingsGeneralPage.cpp:282
 #, kde-format
@@ -21849,7 +21884,7 @@ msgstr "Creata:"
 #: src/frontend/ui/settingsgeneralpage.ui:432
 #, kde-format
 msgid "Save Dock States:"
-msgstr ""
+msgstr "Salva stato dei pannelli:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: src/frontend/ui/dockwidgets/projectdock.ui:100
@@ -21934,7 +21969,7 @@ msgstr "Centra linea"
 #: src/frontend/ui/dockwidgets/scriptdock.ui:86
 #, kde-format
 msgid "Runtime:"
-msgstr ""
+msgstr "Runtime:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
