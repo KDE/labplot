@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-31 00:39+0000\n"
+"POT-Creation-Date: 2025-08-04 00:38+0000\n"
 "PO-Revision-Date: 2025-07-31 16:13+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -8168,7 +8168,7 @@ msgstr "немає доступних відомостей"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:142
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5303
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5309
 #: src/frontend/ui/dockwidgets/axisdock.ui:487
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:546
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:481
@@ -8667,20 +8667,20 @@ msgid "%1: Cursor1 enable"
 msgstr "%1: увімкнено Курсор1"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1782
-#: src/backend/worksheet/Worksheet.cpp:851
+#: src/backend/worksheet/Worksheet.cpp:855
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: завантажити тему %2"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1784
-#: src/backend/worksheet/Worksheet.cpp:853
+#: src/backend/worksheet/Worksheet.cpp:857
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: завантажити типову тему"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1786
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5637
-#: src/backend/worksheet/Worksheet.cpp:855
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5643
+#: src/backend/worksheet/Worksheet.cpp:859
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: встановити тему"
@@ -8839,24 +8839,24 @@ msgstr "%1: додати вбудоване креслення"
 msgid "%1: add inset plot with data"
 msgstr "%1: додати вбудоване креслення з даними"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4022
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4028
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "Поза межами обмежувального прямокутника"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4246
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4267
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4252
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4273
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "від x=%1 до x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4254
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4280
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4260
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4286
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "від y=%1 до y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4299
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4305
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
@@ -8893,50 +8893,50 @@ msgid "%1: set border corner radius"
 msgstr "%1: встановити радіус заокруглення кутів рамки"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
-#: src/backend/worksheet/Worksheet.cpp:723
-#: src/backend/worksheet/Worksheet.cpp:724
+#: src/backend/worksheet/Worksheet.cpp:727
+#: src/backend/worksheet/Worksheet.cpp:728
 #, kde-format
 msgid "%1: set layout top margin"
 msgstr "%1: встановити верхнє поле компонування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:251
-#: src/backend/worksheet/Worksheet.cpp:733
-#: src/backend/worksheet/Worksheet.cpp:734
+#: src/backend/worksheet/Worksheet.cpp:737
+#: src/backend/worksheet/Worksheet.cpp:738
 #, kde-format
 msgid "%1: set layout bottom margin"
 msgstr "%1: встановити нижнє поле компонування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:258
-#: src/backend/worksheet/Worksheet.cpp:743
-#: src/backend/worksheet/Worksheet.cpp:744
+#: src/backend/worksheet/Worksheet.cpp:747
+#: src/backend/worksheet/Worksheet.cpp:748
 #, kde-format
 msgid "%1: set layout left margin"
 msgstr "%1: встановити ліве поле компонування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:265
-#: src/backend/worksheet/Worksheet.cpp:753
-#: src/backend/worksheet/Worksheet.cpp:754
+#: src/backend/worksheet/Worksheet.cpp:757
+#: src/backend/worksheet/Worksheet.cpp:758
 #, kde-format
 msgid "%1: set layout right margin"
 msgstr "%1: встановити праве поле компонування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:272
-#: src/backend/worksheet/Worksheet.cpp:763
-#: src/backend/worksheet/Worksheet.cpp:764
+#: src/backend/worksheet/Worksheet.cpp:767
+#: src/backend/worksheet/Worksheet.cpp:768
 #, kde-format
 msgid "%1: set layout vertical spacing"
 msgstr "%1: встановити вертикальний інтервал компонування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:279
-#: src/backend/worksheet/Worksheet.cpp:773
-#: src/backend/worksheet/Worksheet.cpp:774
+#: src/backend/worksheet/Worksheet.cpp:777
+#: src/backend/worksheet/Worksheet.cpp:778
 #, kde-format
 msgid "%1: set layout horizontal spacing"
 msgstr "%1: встановити горизонтальний інтервал компонування"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:286
-#: src/backend/worksheet/Worksheet.cpp:793
-#: src/backend/worksheet/Worksheet.cpp:794
+#: src/backend/worksheet/Worksheet.cpp:797
+#: src/backend/worksheet/Worksheet.cpp:798
 #, kde-format
 msgid "%1: set layout column count"
 msgstr "%1: встановити кількість стовпчиків у компонуванні"
@@ -9186,12 +9186,12 @@ msgstr "%1: встановити товщину рамки міток"
 msgid "%1: set labels border color"
 msgstr "%1: встановити колір рамки міток"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:912
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:918
 #, kde-format
 msgid "Not enough data provided."
 msgstr "Надано недостатньо даних."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1012
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1021
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "Остання вибірка була неповною, її пропущено."
@@ -10078,36 +10078,36 @@ msgctxt "@title:window"
 msgid "Print Worksheet"
 msgstr "Друк робочого аркуша"
 
-#: src/backend/worksheet/Worksheet.cpp:693
+#: src/backend/worksheet/Worksheet.cpp:697
 #, kde-format
 msgid "%1: change size type"
 msgstr "%1: зміна типу розміру"
 
-#: src/backend/worksheet/Worksheet.cpp:705
+#: src/backend/worksheet/Worksheet.cpp:709
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
 msgstr "%1: змінити властивість «масштабувати за вмістом»"
 
-#: src/backend/worksheet/Worksheet.cpp:713
-#: src/backend/worksheet/Worksheet.cpp:714
+#: src/backend/worksheet/Worksheet.cpp:717
+#: src/backend/worksheet/Worksheet.cpp:718
 #, kde-format
 msgid "%1: set layout"
 msgstr "%1: встановити компонування"
 
-#: src/backend/worksheet/Worksheet.cpp:783
-#: src/backend/worksheet/Worksheet.cpp:784
+#: src/backend/worksheet/Worksheet.cpp:787
+#: src/backend/worksheet/Worksheet.cpp:788
 #, kde-format
 msgid "%1: set layout row count"
 msgstr "%1: встановити кількість рядків у компонуванні"
 
-#: src/backend/worksheet/Worksheet.cpp:824
-#: src/backend/worksheet/Worksheet.cpp:825
+#: src/backend/worksheet/Worksheet.cpp:828
+#: src/backend/worksheet/Worksheet.cpp:829
 #: src/frontend/dockwidgets/WorksheetDock.cpp:376
 #, kde-format
 msgid "%1: set page size"
 msgstr "%1: встановити розмір сторінки"
 
-#: src/backend/worksheet/Worksheet.cpp:1524
+#: src/backend/worksheet/Worksheet.cpp:1528
 #, kde-format
 msgid "Curves"
 msgstr "Криві"
