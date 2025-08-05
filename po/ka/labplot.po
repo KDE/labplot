@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-04 02:51+0000\n"
+"POT-Creation-Date: 2025-08-05 03:01+0000\n"
 "PO-Revision-Date: 2025-06-25 04:33+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -12653,7 +12653,7 @@ msgstr "%1 ღერძები: ნიმუში \"%2\" ჩაიტვი�
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:236
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:235
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1043
 #, kde-format
@@ -13572,18 +13572,18 @@ msgstr ""
 "მონაცემთა ნაკრების მეტრიკა, რომელიც გამოიყენება დასადგენად, სად მოთავსდება "
 "ცენტრალური ხაზი"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:57
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:56
 #, kde-format
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
 msgstr "ჩართეთ მიბმა, რომ დაასინქრონოთ მწკრივების რაოდენობა სხვა ელცხრილთან"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:61
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:60
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
 msgstr "ელცხრილი, რომელთანაც მწკრივების რაოდენობის სინქრონიზაცია მოხდება"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:234
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:233
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 ელცხრილი: ნიმუში \"%2\" ჩაიტვირთა"
@@ -14626,13 +14626,13 @@ msgstr "ნაცრისფერი"
 msgid "Light Grey"
 msgstr "ღია ნაცრისფერი"
 
-#: src/frontend/GuiTools.cpp:309
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
 msgstr "გამოსახულების ფაილის გახსნა"
 
-#: src/frontend/GuiTools.cpp:309
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Images (%1)"
 msgstr "სურათები (%1)"

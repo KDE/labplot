@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-04 02:51+0000\n"
+"POT-Creation-Date: 2025-08-05 03:01+0000\n"
 "PO-Revision-Date: 2025-07-23 11:09+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -12878,7 +12878,7 @@ msgstr "%1 eixos: s'ha carregat la plantilla «%2»"
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:236
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:235
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1043
 #, kde-format
@@ -13843,7 +13843,7 @@ msgstr ""
 "Mètrica del conjunt de dades utilitzat per a determinar a on s'ha de situar "
 "la línia central"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:57
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:56
 #, kde-format
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
@@ -13851,12 +13851,12 @@ msgstr ""
 "Activa l'enllaçat per a sincronitzar el nombre de files amb un altre full de "
 "càlcul"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:61
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:60
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
 msgstr "Full de càlcul amb el qual sincronitzar el nombre de files"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:234
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:233
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 fulls de càlcul: s'ha carregat la plantilla «%2»"
@@ -14906,13 +14906,13 @@ msgstr "Gris"
 msgid "Light Grey"
 msgstr "Gris clar"
 
-#: src/frontend/GuiTools.cpp:309
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
 msgstr "Obre un fitxer d'imatge"
 
-#: src/frontend/GuiTools.cpp:309
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Images (%1)"
 msgstr "Imatges (%1)"

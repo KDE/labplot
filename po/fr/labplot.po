@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-04 02:51+0000\n"
+"POT-Creation-Date: 2025-08-05 03:01+0000\n"
 "PO-Revision-Date: 2025-06-02 17:37+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -12855,7 +12855,7 @@ msgstr "%1 axes : modèle « %2 » chargé"
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:236
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:235
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1043
 #, kde-format
@@ -13819,7 +13819,7 @@ msgstr ""
 "Mesure de l'ensemble de données utilisé pour déterminer où la ligne centrale "
 "doit être placée"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:57
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:56
 #, kde-format
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
@@ -13827,12 +13827,12 @@ msgstr ""
 "Activer les liaisons pour synchroniser le nombre de lignes avec une autre "
 "feuille de calcul"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:61
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:60
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
 msgstr "Feuille de calcul avec laquelle synchroniser le nombre de lignes"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:234
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:233
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 feuilles de calcul : modèle « %2 » chargé"
@@ -14882,13 +14882,13 @@ msgstr "Gris"
 msgid "Light Grey"
 msgstr "Gris clair"
 
-#: src/frontend/GuiTools.cpp:309
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
 msgstr "Ouvrir un fichier d'image"
 
-#: src/frontend/GuiTools.cpp:309
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Images (%1)"
 msgstr "Images (%1)"

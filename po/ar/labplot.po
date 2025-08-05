@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-04 02:51+0000\n"
-"PO-Revision-Date: 2025-06-28 17:23+0400\n"
+"POT-Creation-Date: 2025-08-05 03:01+0000\n"
+"PO-Revision-Date: 2025-08-04 14:28+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -12520,7 +12520,7 @@ msgstr ""
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:236
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:235
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1043
 #, kde-format
@@ -13378,18 +13378,18 @@ msgid ""
 "placed at"
 msgstr ""
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:57
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:56
 #, kde-format
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
 msgstr ""
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:61
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:60
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
 msgstr ""
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:234
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:233
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr ""
@@ -14420,13 +14420,13 @@ msgstr "رمادي"
 msgid "Light Grey"
 msgstr "رمادي فاتح"
 
-#: src/frontend/GuiTools.cpp:309
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
 msgstr "افتح صورة"
 
-#: src/frontend/GuiTools.cpp:309
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Images (%1)"
 msgstr "الصور (%1)"
@@ -20647,7 +20647,7 @@ msgstr ""
 #: src/frontend/worksheet/WorksheetView.cpp:466
 #, kde-format
 msgid "Layout"
-msgstr "التّخطيط"
+msgstr "التخطيط"
 
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbTop)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbPaddingHorizontal)
@@ -22778,7 +22778,7 @@ msgstr "امحُ"
 #: src/frontend/ui/settingsgeneralpage.ui:17
 #, kde-format
 msgid "Auto-save:"
-msgstr "حفظ تلقائي:"
+msgstr "حفظ آليّ:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDockWindowPositionReopen)
 #: src/frontend/ui/settingsgeneralpage.ui:46
@@ -22980,7 +22980,7 @@ msgstr ""
 #: src/frontend/ui/settingsprintingpage.ui:16
 #, kde-format
 msgid "Auto-Save"
-msgstr "حفظ تلقائي"
+msgstr "حفظ آليّ"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/settingsprintingpage.ui:22
@@ -23010,7 +23010,7 @@ msgstr ""
 #: src/frontend/ui/settingswelcomepage.ui:17
 #, kde-format
 msgid "Reset Layout"
-msgstr "صفّر التّصميم"
+msgstr "صفّر التخطيط"
 
 #. i18n: ectx: property (text), widget (QLabel, lPreviewThumbnailSize)
 #: src/frontend/ui/settingsworksheetpage.ui:141
@@ -24438,7 +24438,7 @@ msgstr ""
 #: src/frontend/worksheet/WorksheetView.cpp:370
 #, kde-format
 msgid "Auto Scale"
-msgstr "تحجيم تلقائي"
+msgstr "تحجيم آليّ"
 
 #: src/frontend/worksheet/WorksheetView.cpp:374
 #, kde-format

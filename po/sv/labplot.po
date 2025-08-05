@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-04 02:51+0000\n"
+"POT-Creation-Date: 2025-08-05 03:01+0000\n"
 "PO-Revision-Date: 2025-07-24 18:04+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -12736,7 +12736,7 @@ msgstr "%1 axlar: mall \"%2\" inläst"
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:236
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:235
 #: src/frontend/dockwidgets/WorksheetDock.cpp:609
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1043
 #, kde-format
@@ -13673,19 +13673,19 @@ msgstr ""
 "Datauppsättningens mått som används för att bestämma var mittlinjen ska "
 "placeras"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:57
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:56
 #, kde-format
 msgid ""
 "Enable linking to synchronize the number of rows with another spreadsheet"
 msgstr ""
 "Aktivera länkning för att synkronisera antal rader med ett annat kalkylark"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:61
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:60
 #, kde-format
 msgid "Spreadsheet to synchronize the number of rows with"
 msgstr "Kalkylark att synkronisera antal rader med"
 
-#: src/frontend/dockwidgets/SpreadsheetDock.cpp:234
+#: src/frontend/dockwidgets/SpreadsheetDock.cpp:233
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 kalkylark: mall \"%2\" inläst"
@@ -14730,13 +14730,13 @@ msgstr "Grå"
 msgid "Light Grey"
 msgstr "Ljusgrå"
 
-#: src/frontend/GuiTools.cpp:309
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
 msgstr "Öppna bildfil"
 
-#: src/frontend/GuiTools.cpp:309
+#: src/frontend/GuiTools.cpp:310
 #, kde-format
 msgid "Images (%1)"
 msgstr "Bilder (%1)"
