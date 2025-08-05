@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-04 00:38+0000\n"
+"POT-Creation-Date: 2025-08-05 00:38+0000\n"
 "PO-Revision-Date: 2024-11-23 12:07+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -14696,7 +14696,7 @@ msgid "Model:"
 msgstr "Model:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:818
-#: src/frontend/GuiTools.cpp:526
+#: src/frontend/GuiTools.cpp:527
 #, fuzzy, kde-format
 #| msgid "Description"
 msgid "Description:"
@@ -15388,36 +15388,36 @@ msgstr "Grey"
 msgid "Light Grey"
 msgstr "Light Grey"
 
-#: src/frontend/GuiTools.cpp:318
+#: src/frontend/GuiTools.cpp:319
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
 msgstr "Open Image File"
 
-#: src/frontend/GuiTools.cpp:318
+#: src/frontend/GuiTools.cpp:319
 #, kde-format
 msgid "Images (%1)"
 msgstr "Images (%1)"
 
-#: src/frontend/GuiTools.cpp:419
+#: src/frontend/GuiTools.cpp:420
 #, fuzzy, kde-format
 #| msgid "Select predefined function"
 msgid "Select file to load function definition"
 msgstr "Select predefined function"
 
-#: src/frontend/GuiTools.cpp:436 src/frontend/GuiTools.cpp:515
+#: src/frontend/GuiTools.cpp:437 src/frontend/GuiTools.cpp:516
 #, kde-format
 msgid "LabPlot Function Definition"
 msgstr ""
 
-#: src/frontend/GuiTools.cpp:499
+#: src/frontend/GuiTools.cpp:500
 #, kde-format
 msgid "Select file to save function definition"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: src/frontend/GuiTools.cpp:527 src/frontend/ui/datapickercurvewidget.ui:49
+#: src/frontend/GuiTools.cpp:528 src/frontend/ui/datapickercurvewidget.ui:49
 #: src/frontend/ui/datapickerimagewidget.ui:689
 #: src/frontend/ui/dockwidgets/aspectdock.ui:40
 #: src/frontend/ui/dockwidgets/axisdock.ui:181

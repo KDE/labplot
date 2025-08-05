@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-04 00:38+0000\n"
-"PO-Revision-Date: 2025-06-28 17:23+0400\n"
+"POT-Creation-Date: 2025-08-05 00:38+0000\n"
+"PO-Revision-Date: 2025-08-04 14:28+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -11080,7 +11080,7 @@ msgstr "المؤشر"
 #: src/frontend/worksheet/WorksheetView.cpp:386
 #, kde-format
 msgid "Auto Scale"
-msgstr "تحجيم تلقائي"
+msgstr "تحجيم آليّ"
 
 #: src/frontend/ActionsManager.cpp:623
 #: src/frontend/worksheet/WorksheetView.cpp:390
@@ -14724,7 +14724,7 @@ msgid "Model:"
 msgstr "الطّراز:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:818
-#: src/frontend/GuiTools.cpp:526
+#: src/frontend/GuiTools.cpp:527
 #, fuzzy, kde-format
 #| msgid "Description"
 msgid "Description:"
@@ -15440,35 +15440,35 @@ msgstr "رمادي"
 msgid "Light Grey"
 msgstr "رمادي فاتح"
 
-#: src/frontend/GuiTools.cpp:318
+#: src/frontend/GuiTools.cpp:319
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
 msgstr "افتح صورة"
 
-#: src/frontend/GuiTools.cpp:318
+#: src/frontend/GuiTools.cpp:319
 #, kde-format
 msgid "Images (%1)"
 msgstr "الصور (%1)"
 
-#: src/frontend/GuiTools.cpp:419
+#: src/frontend/GuiTools.cpp:420
 #, kde-format
 msgid "Select file to load function definition"
 msgstr ""
 
-#: src/frontend/GuiTools.cpp:436 src/frontend/GuiTools.cpp:515
+#: src/frontend/GuiTools.cpp:437 src/frontend/GuiTools.cpp:516
 #, kde-format
 msgid "LabPlot Function Definition"
 msgstr ""
 
-#: src/frontend/GuiTools.cpp:499
+#: src/frontend/GuiTools.cpp:500
 #, kde-format
 msgid "Select file to save function definition"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: src/frontend/GuiTools.cpp:527 src/frontend/ui/datapickercurvewidget.ui:49
+#: src/frontend/GuiTools.cpp:528 src/frontend/ui/datapickercurvewidget.ui:49
 #: src/frontend/ui/datapickerimagewidget.ui:689
 #: src/frontend/ui/dockwidgets/aspectdock.ui:40
 #: src/frontend/ui/dockwidgets/axisdock.ui:181
@@ -21510,7 +21510,7 @@ msgstr "إلحاق"
 #: src/frontend/worksheet/WorksheetView.cpp:476
 #, kde-format
 msgid "Layout"
-msgstr "التّخطيط"
+msgstr "التخطيط"
 
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbTop)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbPaddingHorizontal)
@@ -23815,7 +23815,7 @@ msgstr ""
 #: src/frontend/ui/settingsgeneralpage.ui:243
 #, kde-format
 msgid "Auto-save:"
-msgstr "حفظ تلقائي:"
+msgstr "حفظ آليّ:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:273
@@ -23953,7 +23953,7 @@ msgstr ""
 #: src/frontend/ui/settingsprintingpage.ui:16
 #, kde-format
 msgid "Auto-Save"
-msgstr "حفظ تلقائي"
+msgstr "حفظ آليّ"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/settingsprintingpage.ui:22
@@ -23983,7 +23983,7 @@ msgstr ""
 #: src/frontend/ui/settingswelcomepage.ui:17
 #, kde-format
 msgid "Reset Layout"
-msgstr "صفّر التّصميم"
+msgstr "صفّر التخطيط"
 
 #. i18n: ectx: property (text), widget (QLabel, lPreviewThumbnailSize)
 #: src/frontend/ui/settingsworksheetpage.ui:141

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-04 00:38+0000\n"
+"POT-Creation-Date: 2025-08-05 00:38+0000\n"
 "PO-Revision-Date: 2025-07-31 17:31+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -14799,7 +14799,7 @@ msgid "Model:"
 msgstr "Model:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:818
-#: src/frontend/GuiTools.cpp:526
+#: src/frontend/GuiTools.cpp:527
 #, kde-format
 msgid "Description:"
 msgstr "Descripció:"
@@ -15489,35 +15489,35 @@ msgstr "Gris"
 msgid "Light Grey"
 msgstr "Gris clar"
 
-#: src/frontend/GuiTools.cpp:318
+#: src/frontend/GuiTools.cpp:319
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
 msgstr "Obri un fitxer d'imatge"
 
-#: src/frontend/GuiTools.cpp:318
+#: src/frontend/GuiTools.cpp:319
 #, kde-format
 msgid "Images (%1)"
 msgstr "Imatges (%1)"
 
-#: src/frontend/GuiTools.cpp:419
+#: src/frontend/GuiTools.cpp:420
 #, kde-format
 msgid "Select file to load function definition"
 msgstr "Seleccioneu un fitxer per a carregar la definició de funció"
 
-#: src/frontend/GuiTools.cpp:436 src/frontend/GuiTools.cpp:515
+#: src/frontend/GuiTools.cpp:437 src/frontend/GuiTools.cpp:516
 #, kde-format
 msgid "LabPlot Function Definition"
 msgstr "Definició de funció de LabPlot"
 
-#: src/frontend/GuiTools.cpp:499
+#: src/frontend/GuiTools.cpp:500
 #, kde-format
 msgid "Select file to save function definition"
 msgstr "Trieu un fitxer per a guardar la definició de funció"
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: src/frontend/GuiTools.cpp:527 src/frontend/ui/datapickercurvewidget.ui:49
+#: src/frontend/GuiTools.cpp:528 src/frontend/ui/datapickercurvewidget.ui:49
 #: src/frontend/ui/datapickerimagewidget.ui:689
 #: src/frontend/ui/dockwidgets/aspectdock.ui:40
 #: src/frontend/ui/dockwidgets/axisdock.ui:181

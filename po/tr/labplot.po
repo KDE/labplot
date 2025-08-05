@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-04 00:38+0000\n"
+"POT-Creation-Date: 2025-08-05 00:38+0000\n"
 "PO-Revision-Date: 2025-08-01 12:55+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -14621,7 +14621,7 @@ msgid "Model:"
 msgstr "Model:"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:818
-#: src/frontend/GuiTools.cpp:526
+#: src/frontend/GuiTools.cpp:527
 #, kde-format
 msgid "Description:"
 msgstr "Açıklama:"
@@ -15307,35 +15307,35 @@ msgstr "Gri"
 msgid "Light Grey"
 msgstr "Açık Gri"
 
-#: src/frontend/GuiTools.cpp:318
+#: src/frontend/GuiTools.cpp:319
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
 msgstr "Görsel Dosyası Aç"
 
-#: src/frontend/GuiTools.cpp:318
+#: src/frontend/GuiTools.cpp:319
 #, kde-format
 msgid "Images (%1)"
 msgstr "Görseller (%1)"
 
-#: src/frontend/GuiTools.cpp:419
+#: src/frontend/GuiTools.cpp:420
 #, kde-format
 msgid "Select file to load function definition"
 msgstr "İşlev Tanımı Dosyası Seç"
 
-#: src/frontend/GuiTools.cpp:436 src/frontend/GuiTools.cpp:515
+#: src/frontend/GuiTools.cpp:437 src/frontend/GuiTools.cpp:516
 #, kde-format
 msgid "LabPlot Function Definition"
 msgstr "LabPlot işlev tanımı"
 
-#: src/frontend/GuiTools.cpp:499
+#: src/frontend/GuiTools.cpp:500
 #, kde-format
 msgid "Select file to save function definition"
 msgstr "İşlev Tanımı Kayıt Yeri Seç"
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
-#: src/frontend/GuiTools.cpp:527 src/frontend/ui/datapickercurvewidget.ui:49
+#: src/frontend/GuiTools.cpp:528 src/frontend/ui/datapickercurvewidget.ui:49
 #: src/frontend/ui/datapickerimagewidget.ui:689
 #: src/frontend/ui/dockwidgets/aspectdock.ui:40
 #: src/frontend/ui/dockwidgets/axisdock.ui:181
