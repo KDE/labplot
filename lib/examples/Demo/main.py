@@ -22,9 +22,9 @@ worksheet.addChild(plotArea)
 
 # create a histogram for the imported data and add it to the plot area
 histogram = Histogram("histogram")
+plotArea.addChild(histogram)
 histogram.setNormalization(Histogram.Normalization.ProbabilityDensity)
 histogram.setDataColumn(spreadsheet.column(0))
-plotArea.addChild(histogram)
 
 # perform a fit to the raw data and show it
 fitCurve = XYFitCurve("fit")
@@ -37,7 +37,8 @@ fitData = fitCurve.fitData()
 fitData.modelCategory = nsl_fit_model_category.nsl_fit_model_distribution
 fitData.modelType = nsl_sf_stats_distribution.nsl_sf_stats_gaussian
 fitData.algorithm = nsl_fit_algorithm.nsl_fit_algorithm_ml # ML distribution fit
-XYFitCurve.initFitData(fitData)
+fitData = XYFitCurve.initFitData(fitData)
+fitData = fitCurve.initStartValues(fitData)
 fitCurve.setFitData(fitData)
 
 # perform the actual fit

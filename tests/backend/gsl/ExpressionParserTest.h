@@ -46,6 +46,9 @@ private Q_SLOTS:
 	void testIsInValid2();
 	void testIsValidStdev();
 	void testLog2();
+
+	void testPolarCircle();
+	void testPolarSpiral();
 };
 
 #endif // EXPRESSIONPARSERTEST_H

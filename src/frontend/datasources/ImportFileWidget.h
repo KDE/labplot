@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : import file data widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2017 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-FileCopyrightText: 2009-2025 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 	SPDX-FileCopyrightText: 2009-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2018 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
@@ -75,7 +75,6 @@ public:
 	const QStringList selectedOdsSheetNames() const;
 	const QStringList selectedHDF5Names() const;
 	const QStringList selectedNetCDFNames() const;
-	const QStringList selectedFITSExtensions() const;
 	const QStringList selectedROOTNames() const;
 	const QStringList selectedMatioNames() const;
 	//	const QStringList selectedVectorBLFNames() const;

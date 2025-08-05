@@ -34,6 +34,8 @@ private Q_SLOTS:
 	void authorChanged();
 	void saveDockStatesChanged(bool);
 	void saveCalculationsChanged(bool);
+	void compressFileChanged(bool);
+	void saveDataChanged(bool);
 
 	// SLOTs for changes triggered in Project
 	void projectAuthorChanged(const QString&);

@@ -30,7 +30,7 @@ private:
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in XYCurveDock
-	void recalculateClicked();
+	void recalculateClicked() override;
 	void showConstants();
 	void showFunctions();
 	void insertFunction(const QString&);

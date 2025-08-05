@@ -12,6 +12,7 @@ set(SRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 include(GenerateExportHeader)
 
 set(FILTER_SOURCES
+    ${BACKEND_DIR}/datasources/filters/FilterStatus.cpp
     ${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
     ${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
     ${BACKEND_DIR}/datasources/filters/CANFilter.cpp
@@ -220,6 +221,7 @@ set(SDK_INTERNAL_SOURCES
     ${BACKEND_DIR}/gsl/functions.cpp
     ${BACKEND_DIR}/gsl/constants.cpp
     ${BACKEND_DIR}/core/Settings.cpp
+    ${FRONTEND_DIR}/widgets/TextPreview.cpp
     ${FRONTEND_DIR}/GuiTools.cpp
     ${FRONTEND_DIR}/ThemeHandler.cpp
     ${TOOLS_DIR}/ImageTools.cpp

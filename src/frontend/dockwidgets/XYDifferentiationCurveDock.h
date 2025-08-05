@@ -47,7 +47,7 @@ private Q_SLOTS:
 	void xRangeMaxDateTimeChanged(qint64);
 	void derivOrderChanged(int);
 	void accOrderChanged(int);
-	void recalculateClicked();
+	void recalculateClicked() override;
 
 	// SLOTs for changes triggered in XYDifferentiationCurve
 	// General-Tab

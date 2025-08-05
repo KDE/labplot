@@ -4,7 +4,8 @@
 	Description          : Dialog for generating values from a mathematical function
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014-2018 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2020-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
+
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -19,16 +20,14 @@
 #include "frontend/widgets/ConstantsWidget.h"
 #include "frontend/widgets/FunctionsWidget.h"
 #include "frontend/widgets/TreeViewComboBox.h"
-
-#include <QDialogButtonBox>
-#include <QMenu>
-#include <QPushButton>
-#include <QWidgetAction>
-#include <QWindow>
-
-#include <KLocalizedString>
+#include "frontend/GuiTools.h"
 
 #include <KWindowConfig>
+
+#include <QDialogButtonBox>
+#include <QWidgetAction>
+#include <QMenu>
+#include <QWindow>
 
 /*!
 	\class FunctionValuesDialog
@@ -77,6 +76,8 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 	connect(ui.teEquation, &ExpressionTextEdit::expressionChanged, this, &FunctionValuesDialog::checkValues);
 	connect(ui.tbConstants, &QToolButton::clicked, this, &FunctionValuesDialog::showConstants);
 	connect(ui.tbFunctions, &QToolButton::clicked, this, &FunctionValuesDialog::showFunctions);
+	connect(ui.pbLoadFunction, &QPushButton::clicked, this, &FunctionValuesDialog::loadFunction);
+	connect(ui.pbSaveFunction, &QPushButton::clicked, this, &FunctionValuesDialog::saveFunction);
 	connect(m_okButton, &QPushButton::clicked, this, &FunctionValuesDialog::generate);
 
 	// restore saved settings if available
@@ -232,6 +233,49 @@ void FunctionValuesDialog::checkValues() {
 	m_okButton->setEnabled(true);
 }
 
+void FunctionValuesDialog::loadFunction() {
+	auto fileName = GuiTools::loadFunction(ui.teEquation);
+	if (fileName.isEmpty())
+		return;
+
+	// clean variable list
+	for (int i = 0; i < m_variableLineEdits.size(); i++)
+		deleteVariable();
+
+	// load variables
+	KConfig config(fileName);
+	auto group = config.group(QLatin1String("Variables"));
+	auto keys = group.keyList();
+	int i = 0;
+	for (const auto &name : keys) {
+		addVariable();
+		m_variableLineEdits[i]->setText(name);
+
+		// restore path
+		auto path = group.readEntry(name, {});
+		QDEBUG(Q_FUNC_INFO << ", variable" << name << ":" << path)
+		auto index = m_aspectTreeModel->modelIndexForPath(path);
+		m_variableDataColumns[i++]->setCurrentModelIndex(index);
+	}
+}
+
+void FunctionValuesDialog::saveFunction() {
+	auto fileName = GuiTools::saveFunction(ui.teEquation);
+	if (fileName.isEmpty())
+		return;
+
+	// save variables
+	KConfig config(fileName);
+	auto group = config.group(QLatin1String("Variables"));
+	int i = 0;
+	for (auto* varName : m_variableLineEdits) {
+		QString name = varName->text().simplified();
+		auto index = m_variableDataColumns.at(i++)->currentModelIndex();
+		QString path = m_aspectTreeModel->path(index);
+		group.writeEntry(name, path);
+	}
+}
+
 void FunctionValuesDialog::showConstants() {
 	QMenu menu;
 	ConstantsWidget constants(&menu);
@@ -316,7 +360,7 @@ void FunctionValuesDialog::addVariable() {
 
 	// add delete-button for the just added variable
 	if (row != 0) {
-		auto* b{new QToolButton()};
+		auto* b = new QToolButton();
 		b->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
 		b->setToolTip(i18n("Delete variable"));
 		layout->addWidget(b, row, 3, 1, 1);
@@ -330,13 +374,24 @@ void FunctionValuesDialog::addVariable() {
 }
 
 void FunctionValuesDialog::deleteVariable() {
-	QObject* ob{QObject::sender()};
-	const auto index{m_variableDeleteButtons.indexOf(qobject_cast<QToolButton*>(ob))};
+	auto* ob = qobject_cast<QToolButton*>(QObject::sender());
+	if (ob) {
+		const auto index = m_variableDeleteButtons.indexOf(ob);
 
-	delete m_variableLineEdits.takeAt(index + 1);
-	delete m_variableLabels.takeAt(index + 1);
-	delete m_variableDataColumns.takeAt(index + 1);
-	delete m_variableDeleteButtons.takeAt(index);
+		delete m_variableLineEdits.takeAt(index + 1);
+		delete m_variableLabels.takeAt(index + 1);
+		delete m_variableDataColumns.takeAt(index + 1);
+		delete m_variableDeleteButtons.takeAt(index);
+	} else {
+		if (!m_variableLineEdits.isEmpty())
+			delete m_variableLineEdits.takeLast();
+		if (!m_variableLabels.isEmpty())
+			delete m_variableLabels.takeLast();
+		if (!m_variableDataColumns.isEmpty())
+			delete m_variableDataColumns.takeLast();
+		if (!m_variableDeleteButtons.isEmpty())
+			delete m_variableDeleteButtons.takeLast();
+	}
 
 	variableNameChanged();
 	checkValues();
@@ -344,7 +399,7 @@ void FunctionValuesDialog::deleteVariable() {
 	// adjust the layout
 	resize(QSize(width(), 0).expandedTo(minimumSize()));
 
-	m_variableLineEdits.size() > 1 ? ui.lVariable->setText(i18n("Variables:")) : ui.lVariable->setText(i18n("Variable:"));
+	ui.lVariable->setText(m_variableLineEdits.size() > 1 ? i18n("Variables:") : i18n("Variable:"));
 
 	// TODO: adjust the tab-ordering after some widgets were deleted
 }

@@ -21,15 +21,6 @@ apps:
     #   - bin/tmpdir
     environment:
       QTWEBENGINE_DISABLE_SANDBOX: 1
-package-repositories:
--   type: apt
-    components:
-    - main
-    suites:
-    - noble
-    key-id: 444DABCF3667D0283F894EDDE6D4736255751E5D
-    url: http://origin.archive.neon.kde.org/user
-    key-server: keyserver.ubuntu.com
 parts:
   # launchers:
   #   source: snap/local/launchers
@@ -38,6 +29,7 @@ parts:
   #       '*': bin/
   analitza:
     source: https://invent.kde.org/education/analitza.git
+    source-branch: release/25.04
     plugin: cmake
     build-packages:
       - libxslt1-dev
@@ -51,65 +43,17 @@ parts:
       - -DQT_MAJOR_VERSION=6
       - -DBUILD_WITH_QT6=ON
       - -DBUILD_TESTING=OFF
-      - -DCMAKE_INSTALL_SYSCONFDIR=/etc
-      - -DCMAKE_INSTALL_LOCALSTATEDIR=/var
-      - -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON
-      - -DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF
-      - -DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON
-      - -DCMAKE_INSTALL_RUNSTATEDIR=/run
-      - -DCMAKE_SKIP_INSTALL_ALL_DEPENDENCY=ON
-      - -DCMAKE_VERBOSE_MAKEFILE=ON
-      - -DCMAKE_INSTALL_LIBDIR=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
-      - --log-level=STATUS
-      - -DCMAKE_LIBRARY_PATH=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
+      - -DQT_DEBUG_FIND_PACKAGE=ON
+      - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
+      - "-DCMAKE_PREFIX_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
     build-environment: &build_env
       - PATH: /snap/kf6-core24-sdk/current/usr/bin:/snap/kde-qt6-core24-sdk/current/usr/bin${PATH:+:$PATH}
       - PKG_CONFIG_PATH: /snap/kde-qt6-core24-sdk/current/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/pkgconfig:/snap/kf6-core24-sdk/current/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}
       - XDG_DATA_DIRS: $CRAFT_STAGE/usr/share:/snap/kf6-core24-sdk/current/usr/share:/snap/kde-qt6-core24-sdk/current/usr/share:/usr/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}
       - XDG_CONFIG_HOME: $CRAFT_STAGE/etc/xdg:/snap/kf6-core24-sdk/current/etc/xdg:/snap/kde-qt6-core24-sdk/current/etc/xdg:/etc/xdg${XDG_CONFIG_HOME:+:$XDG_CONFIG_HOME}
       - LD_LIBRARY_PATH: /snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy:/snap/kde-qt6-core24-sdk/current/usr/lib:/snap/kf6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/kf6-core24-sdk/current/usr/lib:$CRAFT_STAGE/usr/lib:$CRAFT_STAGE/lib/:$CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
-    override-stage: |
-        craftctl default
-        rsync -a --ignore-existing $CRAFT_PART_INSTALL/ /
-  cantor:
-    after:
-      - analitza
- #     - poppler
-    source: https://invent.kde.org/education/cantor.git
-    plugin: cmake
-    build-packages:
-      - libmarkdown2-dev
-      - libglib2.0-dev
-      - liblapack-dev
-      - libluajit-5.1-dev
-      - libqalculate-dev
-      - libspectre-dev
-      - pkg-config
-      - python3-dev
-      - r-base-core
-      - libxslt-dev
-      - libpoppler-qt6-dev
-    stage-packages:
-      - rsync
-      - cmake
-    cmake-parameters:
-      - -DCMAKE_INSTALL_PREFIX=/usr
-      - -DCMAKE_BUILD_TYPE=Release
-      - -DQT_MAJOR_VERSION=6
-      - -DBUILD_WITH_QT6=ON
-      - -DBUILD_TESTING=OFF
-      - -DCMAKE_INSTALL_SYSCONFDIR=/etc
-      - -DCMAKE_INSTALL_LOCALSTATEDIR=/var
-      - -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON
-      - -DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF
-      - -DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON
-      - -DCMAKE_INSTALL_RUNSTATEDIR=/run
-      - -DCMAKE_SKIP_INSTALL_ALL_DEPENDENCY=ON
-      - -DCMAKE_VERBOSE_MAKEFILE=ON
-      - -DCMAKE_INSTALL_LIBDIR=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
-      - --log-level=STATUS
-      - -DCMAKE_LIBRARY_PATH=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
-    build-environment: *build_env
+      - LDFLAGS: "-L$CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR"
+      - CFLAGS: "-I$CRAFT_STAGE/usr/include"
     override-stage: |
         craftctl default
         rsync -a --ignore-existing $CRAFT_PART_INSTALL/ /
@@ -127,17 +71,8 @@ parts:
       - -DQT_MAJOR_VERSION=6
       - -DBUILD_WITH_QT6=ON
       - -DBUILD_TESTING=OFF
-      - -DCMAKE_INSTALL_SYSCONFDIR=/etc
-      - -DCMAKE_INSTALL_LOCALSTATEDIR=/var
-      - -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON
-      - -DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF
-      - -DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON
-      - -DCMAKE_INSTALL_RUNSTATEDIR=/run
-      - -DCMAKE_SKIP_INSTALL_ALL_DEPENDENCY=ON
-      - -DCMAKE_VERBOSE_MAKEFILE=ON
-      - -DCMAKE_INSTALL_LIBDIR=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
-      - --log-level=STATUS
-      - -DCMAKE_LIBRARY_PATH=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
+      - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
+      - "-DCMAKE_PREFIX_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
     build-environment: *build_env
     override-stage: |
         craftctl default
@@ -156,17 +91,8 @@ parts:
       - -DQT_MAJOR_VERSION=6
       - -DBUILD_WITH_QT6=ON
       - -DBUILD_TESTING=OFF
-      - -DCMAKE_INSTALL_SYSCONFDIR=/etc
-      - -DCMAKE_INSTALL_LOCALSTATEDIR=/var
-      - -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON
-      - -DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF
-      - -DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON
-      - -DCMAKE_INSTALL_RUNSTATEDIR=/run
-      - -DCMAKE_SKIP_INSTALL_ALL_DEPENDENCY=ON
-      - -DCMAKE_VERBOSE_MAKEFILE=ON
-      - -DCMAKE_INSTALL_LIBDIR=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
-      - --log-level=STATUS
-      - -DCMAKE_LIBRARY_PATH=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
+      - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
+      - "-DCMAKE_PREFIX_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
     build-environment: *build_env
   gsl:
     after:
@@ -183,6 +109,26 @@ parts:
     override-build: |
       craftctl default
       rsync -a --ignore-existing $CRAFT_PART_INSTALL/ /
+  libqalculate:
+    plugin: autotools
+    source: https://github.com/Qalculate/libqalculate/releases/download/v5.5.0/libqalculate-5.5.0.tar.gz
+    autotools-configure-parameters:
+      - --prefix=/usr
+    build-packages:
+      - autotools-dev
+      - intltool
+      - libgmp-dev
+      - libmpfr-dev
+      - libcurl4-openssl-dev
+      - libicu-dev
+      - icu-devtools
+      - libxml2-dev
+    stage-packages:
+      - libgmp10
+      - libmpfr6
+      - libcurl4t64
+      - libicu74
+      - libxml2
   libgpgmepp-qt6:
     build-packages:
       - libassuan-dev
@@ -199,89 +145,141 @@ parts:
       - --enable-languages=cpp,qt6
       - --prefix=/usr
       - --enable-fixed-path=/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
-    build-environment:
-      - LD_LIBRARY_PATH: $LD_LIBRARY_PATH:/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/kf6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/usr
+    build-environment: &buildenvironment
+      - LD_LIBRARY_PATH: $LD_LIBRARY_PATH:/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy:/snap/kf6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/usr
       - PKG_CONFIG_PATH: /snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pkgconfig
     override-build: |
       craftctl default
       rsync -a --ignore-existing $CRAFT_PART_INSTALL/ /
-  # poppler:
-  #   after:
-  #     - libgpgmepp-qt6
-  #   plugin: cmake
-  #   source: https://poppler.freedesktop.org/poppler-25.02.0.tar.xz
-  #   build-packages:
-  #     - cmake
-  #     - libfreetype6-dev
-  #     - libfontconfig1-dev
-  #     - libjpeg-dev
-  #     - zlib1g-dev
-  #     - libnss3-dev
-  #     - liblcms2-dev
-  #     - libcurl4-openssl-dev
-  #     - libopenjp2-7-dev
-  #     - libboost-dev
-  #     - libtiff-dev
-  #   stage-packages:
-  #     - libasn1-8-heimdal
-  #     - libbrotli1
-  #     - libcurl4t64
-  #     - libdouble-conversion3
-  #     - libfontconfig1
-  #     - libfreetype6
-  #     - libgl1
-  #     - libglvnd0
-  #     - libglx0
-  #     - libgraphite2-3
-  #     - libharfbuzz0b
-  #     - libicu74
-  #     - libjbig0
-  #     - libjpeg-turbo8
-  #     - liblcms2-2
-  #     - libldap2
-  #     - libmd4c0
-  #     - libnghttp2-14
-  #     - libnspr4
-  #     - libnss3
-  #     - libopenjpip7
-  #     - libpcre2-16-0
-  #     - libpng16-16
-  #     - libpsl5
-  #     - librtmp1
-  #     - libsasl2-2
-  #     - libssh-4
-  #     - libwebp7
-  #     - libx11-6
-  #     - libxau6
-  #     - libxcb1
-  #     - libxdmcp6
-  #   cmake-parameters:
-  #     - -DCMAKE_INSTALL_PREFIX=/usr
-  #     - -DCMAKE_BUILD_TYPE=Release
-  #     - -DQT_MAJOR_VERSION=6
-  #     - -DENABLE_QT5=OFF
-  #     - -DENABLE_QT6=ON
-  #     - -DBUILD_TESTING=OFF
-  #     - -DCMAKE_INSTALL_SYSCONFDIR=/etc
-  #     - -DCMAKE_INSTALL_LOCALSTATEDIR=/var
-  #     - -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON
-  #     - -DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF
-  #     - -DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON
-  #     - -DCMAKE_INSTALL_RUNSTATEDIR=/run
-  #     - -DCMAKE_SKIP_INSTALL_ALL_DEPENDENCY=ON
-  #     - -DCMAKE_VERBOSE_MAKEFILE=ON
-  #     - -DCMAKE_INSTALL_LIBDIR=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
-  #     - --log-level=STATUS
-  #     - -DCMAKE_LIBRARY_PATH=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
-  #   build-environment: *build_env
-  #   override-build: |
-  #     craftctl default
-  #     rsync -a --ignore-existing $CRAFT_PART_INSTALL/ /
+  poppler:
+    after:
+      - libgpgmepp-qt6
+    plugin: cmake
+    source: https://poppler.freedesktop.org/poppler-25.06.0.tar.xz
+    build-packages:
+      - cmake
+      - libfreetype6-dev
+      - libfontconfig1-dev
+      - libjpeg-dev
+      - zlib1g-dev
+      - liblcms2-dev
+      - libcurl4-openssl-dev
+      - libopenjp2-7-dev
+      - libboost-dev
+      - libgl1-mesa-dev
+      - libtiff-dev
+      - libpulse0
+    stage-packages:
+      - libasn1-8-heimdal
+      - libbrotli1
+      - libcurl4t64
+      - libdouble-conversion3
+      - libfontconfig1
+      - libfreetype6
+      - libgraphite2-3
+      - libgssapi3-heimdal
+      - libharfbuzz0b
+      - libhcrypto5t64-heimdal
+      - libheimbase1-heimdal
+      - libheimntlm0-heimdal
+      - libhx509-5-heimdal
+      - libicu74
+      - libjbig0
+      - libjpeg-turbo8
+      - libkrb5-26-heimdal
+      - liblcms2-2
+      - libldap2
+      - libnghttp2-14
+      - libnspr4
+      - libpcre2-16-0
+      - libpng16-16
+      - libpsl5
+      - libroken19-heimdal
+      - librtmp1
+      - libsasl2-2
+      - libssh-4
+      - libtiff6
+      - libwebp7
+      - libwind0-heimdal
+      - libx11-6
+      - libxau6
+      - libxcb1
+      - libxdmcp6
+      - libmd4c0
+      - libopenjpip7
+      - libtiff6
+      - libpulse0
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DQT_MAJOR_VERSION=6
+      - -DENABLE_QT5=OFF
+      - -DENABLE_QT6=ON
+      - -DBUILD_GTK_TESTS=OFF
+      - -DBUILD_QT6_TESTS=OFF
+      - -DBUILD_QT5_TESTS=OFF
+      - -DBUILD_CPP_TESTS=OFF
+      - -DBUILD_MANUAL_TESTS=OFF
+      - -DENABLE_NSS3=OFF
+      - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
+      - "-DCMAKE_PREFIX_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
+    build-environment:
+      - LD_LIBRARY_PATH: $LD_LIBRARY_PATH:/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy:/snap/kf6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/usr
+      - PKG_CONFIG_PATH: /snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pkgconfig
+    override-build: |
+      craftctl default
+      rsync -a --ignore-existing $CRAFT_PART_INSTALL/ /
+  cantor:
+    after:
+      - analitza
+      - libqalculate
+      - poppler
+    parse-info:
+      - usr/share/metainfo/org.kde.cantor.appdata.xml
+    plugin: cmake
+    source: https://invent.kde.org/education/cantor.git
+    source-branch: release/25.04
+    build-packages:
+      - libmarkdown2-dev
+      - libglib2.0-dev
+      - liblapack-dev
+      - libluajit-5.1-dev
+      - libspectre-dev
+      - pkg-config
+      - python3-dev
+      - r-base-core
+      - libxslt-dev
+    stage-packages:
+      - libmarkdown2
+      - libglib2.0-0
+      - liblapack3
+      - libluajit-5.1-2
+      - libspectre1
+      - python3
+      - r-base-core
+      - libpython3.12
+      - libncurses6
+      - libreadline8
+      - libgl1
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DQT_MAJOR_VERSION=6
+      - -DBUILD_WITH_QT6=ON
+      - -DBUILD_TESTING=OFF
+      - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
+      - "-DCMAKE_PREFIX_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
+    build-environment:
+      - PATH: /snap/kf6-core24-sdk/current/usr/bin:/snap/kde-qt6-core24-sdk/current/usr/bin${PATH:+:$PATH}
+      - PKG_CONFIG_PATH: /snap/kde-qt6-core24-sdk/current/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/pkgconfig:/snap/kf6-core24-sdk/current/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}
+      - XDG_DATA_DIRS: $CRAFT_STAGE/usr/share:/snap/kf6-core24-sdk/current/usr/share:/snap/kde-qt6-core24-sdk/current/usr/share:/usr/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}
+      - XDG_CONFIG_HOME: $CRAFT_STAGE/etc/xdg:/snap/kf6-core24-sdk/current/etc/xdg:/snap/kde-qt6-core24-sdk/current/etc/xdg:/etc/xdg${XDG_CONFIG_HOME:+:$XDG_CONFIG_HOME}
+      - LD_LIBRARY_PATH: /snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy:/snap/kde-qt6-core24-sdk/current/usr/lib:/snap/kf6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/kf6-core24-sdk/current/usr/lib:$CRAFT_STAGE/usr/lib:$CRAFT_STAGE/lib/:$CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
   labplot:
     after:
       - qxlsx
       - qtmqtt
-  #    - poppler
+      - poppler
       - analitza
       - cantor
       - gsl
@@ -297,7 +295,7 @@ parts:
       - libcfitsio-dev
       - libcerf-dev
       - liblz4-dev
-      - liborigin-dev
+      - liborigin2-dev
       - libreadstat-dev
       - libmatio-dev
       - libmarkdown2-dev
@@ -311,7 +309,6 @@ parts:
       - libhdf5-dev
       - libnsl-dev
       - libnsl2
-      - libpoppler-qt6-dev
     stage-packages:
       - bison
       - discount
@@ -341,7 +338,6 @@ parts:
       - libnspr4
       - libnss3
       - libopenjp2-7
-      - liborigin
       - libpaper1
       - libpsl5
       - libreadstat1
@@ -363,10 +359,8 @@ parts:
       - libboost-program-options1.83.0
       - libboost-filesystem1.83.0
       - libboost-date-time1.83.0
-      - libpoppler-qt6-3t64
       - r-base-core
       - libluajit-5.1-2
-      - libqalculate22t64
     source: .
     source-type: local
     cmake-parameters:
@@ -375,23 +369,9 @@ parts:
       - -DQT_MAJOR_VERSION=6
       - -DBUILD_WITH_QT6=ON
       - -DENABLE_TESTS=OFF
-      - -DCMAKE_INSTALL_SYSCONFDIR=/etc
-      - -DCMAKE_INSTALL_LOCALSTATEDIR=/var
-      - -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON
-      - -DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF
-      - -DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON
-      - -DCMAKE_INSTALL_RUNSTATEDIR=/run
-      - -DCMAKE_SKIP_INSTALL_ALL_DEPENDENCY=ON
-      - -DCMAKE_VERBOSE_MAKEFILE=ON
-      - -DCMAKE_INSTALL_LIBDIR=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
-      - --log-level=STATUS
-      - -DCMAKE_LIBRARY_PATH=lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
-    build-environment:
-      - PATH: /snap/kf6-core24-sdk/current/usr/bin:/snap/kde-qt6-core24-sdk/current/usr/bin${PATH:+:$PATH}
-      - PKG_CONFIG_PATH: /snap/kde-qt6-core24-sdk/current/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/pkgconfig:/snap/kf6-core24-sdk/current/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}
-      - XDG_DATA_DIRS: $CRAFT_STAGE/usr/share:/snap/kf6-core24-sdk/current/usr/share:/snap/kde-qt6-core24-sdk/current/usr/share:/usr/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}
-      - XDG_CONFIG_HOME: $CRAFT_STAGE/etc/xdg:/snap/kf6-core24-sdk/current/etc/xdg:/snap/kde-qt6-core24-sdk/current/etc/xdg:/etc/xdg${XDG_CONFIG_HOME:+:$XDG_CONFIG_HOME}
-      - LD_LIBRARY_PATH: /snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/kde-qt6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libproxy:/snap/kde-qt6-core24-sdk/current/usr/lib:/snap/kf6-core24-sdk/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/snap/kf6-core24-sdk/current/usr/lib:$CRAFT_STAGE/usr/lib:$CRAFT_STAGE/lib/:$CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR
+      - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
+      - "-DCMAKE_PREFIX_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
+    build-environment: *build_env
     prime:
       - -usr/lib/*/cmake/*
       - -usr/include/*

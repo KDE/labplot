@@ -169,8 +169,11 @@ SpreadsheetModel* Spreadsheet::model() const {
 QWidget* Spreadsheet::view() const {
 #ifndef SDK
 	if (!m_partView) {
-		auto type = this->parentAspect()->type();
-		bool readOnly = (type == AspectType::Spreadsheet || type == AspectType::DatapickerCurve);
+		bool readOnly = false;
+		if (this->parentAspect()) {
+			const auto type = this->parentAspect()->type();
+			readOnly = (type == AspectType::Spreadsheet || type == AspectType::DatapickerCurve);
+		}
 		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this), readOnly);
 		m_partView = m_view;
 		connect(this, &Spreadsheet::viewAboutToBeDeleted, [this]() {
@@ -1573,7 +1576,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 	for (size_t col = startColumn; col <= endColumn; col++) {
 		// DEBUG(Q_FUNC_INFO << ", column " << columnOffset + col - startColumn);
 		Column* column = this->column((int)(columnOffset + col - startColumn));
-		DEBUG(Q_FUNC_INFO << ", type " << ENUM_TO_STRING(AbstractColumn, ColumnMode, column->columnMode()))
+		// DEBUG(Q_FUNC_INFO << ", type " << ENUM_TO_STRING(AbstractColumn, ColumnMode, column->columnMode()))
 
 		if (!d->suppressSetCommentFinalizeImport) {
 			QString comment;

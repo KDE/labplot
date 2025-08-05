@@ -92,7 +92,7 @@ WorksheetDock::WorksheetDock(QWidget* parent)
 	// theme and template handlers
 	auto* frame = new QFrame(this);
 	layout = new QHBoxLayout(frame);
-	layout->setContentsMargins(0, 11, 0, 11);
+	layout->setContentsMargins(0, 0, 0, 0);
 
 	m_themeHandler = new ThemeHandler(this);
 	layout->addWidget(m_themeHandler);

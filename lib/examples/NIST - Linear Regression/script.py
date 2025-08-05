@@ -21,7 +21,7 @@ allFits.setPageRect(QRectF(0, 0, w, h))
 allFits.setLayout(Worksheet.Layout.VerticalLayout)
 allFits.setLayoutTopMargin(Worksheet.convertToSceneUnits(1.2, Worksheet.Unit.Centimeter))
 
-wsTextLabel = TextLabel("WS Text Label", TextLabel.Type.General)
+wsTextLabel = TextLabel("WS Text Label")
 wsTextLabel.setText("Lower Level of Difficulty")
 
 allFits.addChild(wsTextLabel)
@@ -79,7 +79,6 @@ plotArea.addChild(plot)
 
 fit = XYFitCurve("Fit to 'Plot'")
 
-fit.initFitData(XYAnalysisCurve.AnalysisAction.FitCustom)
 fitData = fit.fitData()
 
 fitData.modelCategory = nsl_fit_model_category.nsl_fit_model_custom
@@ -92,12 +91,12 @@ fitData.paramFixed = [False] * len(fitData.paramNames)
 fitData.paramLowerLimits = [-sys.float_info.max]* len(fitData.paramNames)
 fitData.paramUpperLimits = [sys.float_info.max] * len(fitData.paramNames)
 
-XYFitCurve.initFitData(fitData)
+fitData = XYFitCurve.initFitData(fitData)
 
 fit.setDataSourceType(XYAnalysisCurve.DataSourceType.Curve)
 fit.setDataSourceCurve(plot)
 
-fit.initStartValues(fitData)
+fitData = fit.initStartValues(fitData)
 fit.setFitData(fitData)
 fit.recalculate()
 
@@ -149,7 +148,6 @@ plotArea2.addChild(plot2)
 
 fit2 = XYFitCurve("Fit to 'Plot'")
 
-fit2.initFitData(XYAnalysisCurve.AnalysisAction.FitCustom)
 fitData2 = fit2.fitData()
 
 fitData2.modelCategory = nsl_fit_model_category.nsl_fit_model_custom
@@ -162,12 +160,12 @@ fitData2.paramFixed = [False] * len(fitData2.paramNames)
 fitData2.paramLowerLimits = [-sys.float_info.max] * len(fitData2.paramNames)
 fitData2.paramUpperLimits = [sys.float_info.max] * len(fitData2.paramNames)
 
-XYFitCurve.initFitData(fitData2)
+fitData2 = XYFitCurve.initFitData(fitData2)
 
 fit2.setDataSourceType(XYAnalysisCurve.DataSourceType.Curve)
 fit2.setDataSourceCurve(plot2)
 
-fit2.initStartValues(fitData2)
+fitData2 = fit2.initStartValues(fitData2)
 fit2.setFitData(fitData2)
 fit2.recalculate()
 
@@ -193,7 +191,7 @@ allFits2.setPageRect(QRectF(0, 0, w2, h2))
 allFits2.setLayout(Worksheet.Layout.VerticalLayout)
 allFits2.setLayoutTopMargin(Worksheet.convertToSceneUnits(1, Worksheet.Unit.Centimeter))
 
-wsTextLabel2 = TextLabel("WS Text Label2", TextLabel.Type.General)
+wsTextLabel2 = TextLabel("WS Text Label2")
 wsTextLabel2.setText("Average Level of Difficulty")
 
 wsTextLabel2.setVerticalAlignment(WorksheetElement.VerticalAlignment.Center)
@@ -251,7 +249,6 @@ plotArea3.addChild(plot3)
 
 fit3 = XYFitCurve("Fit to 'Plot'")
 
-fit3.initFitData(XYAnalysisCurve.AnalysisAction.FitCustom)
 fitData3 = fit3.fitData()
 
 fitData3.modelCategory = nsl_fit_model_category.nsl_fit_model_custom
@@ -264,12 +261,12 @@ fitData3.paramFixed = [False] * len(fitData3.paramNames)
 fitData3.paramLowerLimits = [-sys.float_info.max] * len(fitData3.paramNames)
 fitData3.paramUpperLimits = [sys.float_info.max] * len(fitData3.paramNames)
 
-XYFitCurve.initFitData(fitData3)
+fitData3 = XYFitCurve.initFitData(fitData3)
 
 fit3.setDataSourceType(XYAnalysisCurve.DataSourceType.Curve)
 fit3.setDataSourceCurve(plot3)
 
-fit3.initStartValues(fitData3)
+fitData3 = fit3.initStartValues(fitData3)
 fit3.setFitData(fitData3)
 fit3.recalculate()
 
@@ -321,7 +318,6 @@ plotArea4.addChild(plot4)
 
 fit4 = XYFitCurve("Fit to 'Plot4'")
 
-fit4.initFitData(XYAnalysisCurve.AnalysisAction.FitCustom)
 fitData4 = fit4.fitData()
 
 fitData4.modelCategory = nsl_fit_model_category.nsl_fit_model_custom
@@ -334,17 +330,15 @@ fitData4.paramFixed = [False] * len(fitData4.paramNames)
 fitData4.paramLowerLimits = [-sys.float_info.max] * len(fitData4.paramNames)
 fitData4.paramUpperLimits = [sys.float_info.max] * len(fitData4.paramNames)
 
-XYFitCurve.initFitData(fitData4)
+fitData4 = XYFitCurve.initFitData(fitData4)
 
 fit4.setDataSourceType(XYAnalysisCurve.DataSourceType.Curve)
 fit4.setDataSourceCurve(plot4)
 
-fit4.initStartValues(fitData4)
+fitData4 = fit4.initStartValues(fitData4)
 fit4.setFitData(fitData4)
 fit4.recalculate()
 
 plotArea4.addChild(fit4)
 
 fit4.recalculate()
-
-Project.retransformElements(project)

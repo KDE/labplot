@@ -3,12 +3,15 @@ New features:
 	* [general]
 		* Allow to customize which actions have to be shown in the toolbars
 		* Expose more column related actions the context menu in the project (plot data, etc.) also when multiple columns are selected
+		* Add possibility to skip storing the data from columns and matrices in the saved file
 	* [analysis]
-		* Save and Load custom fit functions
+		* Save and load custom functions for fit, equation curve and function values
 	* [worksheet]
 		* Inset plot areas - plot areas added as child of another plot area
 		* Improve axis ticks locations. The don't need to be always from the bottom to top if it does not look nice (!700)
+		* Allow to position the center and limit lines in the process behavior chart based on user-defined specifications
 
+-----2.12.1 (2025-07) -----
 Bug fixes:
 	* Fix using default font for axis title
 	* Fix build with system QXlsx (!693)
@@ -21,6 +24,19 @@ Bug fixes:
 	* Fix crash when column or row was added to spreadsheet from toolbar and no column or row was selected (BUG 504839)
 	* Fix issue when the statistics spreadsheet was not shown if the spreadsheet was a child of workbook
 	* Fix issue which caused the context menu of an aspect to not be shown after being reparented
+	* Handle Windows logical font "MS Shell Dlg 2"
+	* Fix crash when deleting a livedata source with missing source file
+	* Parser: Remove not required function and reuse function instead of copying (BUG 506925)
+	* Fix the export of spreadsheets to SQLite, wrong format was selected internally in the export dialog
+	* Fix the export to SQLite of text values in the spreadsheet containing single quotes
+	* Fix FITS import and export issues
+	* Don't show any error messages and NaN values in the process behavior chart if no column or an empty column was selected
+	* Removed unwanted entries on the undo stack that were created when modifying properties of the process behavior and run charts
+	* Improved the quality of the fit model previews in the properties explorer on hidpi screens
+
+Improvements:
+	* Improve handling of the tab-order to switch between the widgets in the properties explorer
+	* Added Shift+Enter shortcut in the properties explorer to recalculate the results of formula and analysis curves
 
 -----2.12.0 (2025-04-25) -----
 New features:

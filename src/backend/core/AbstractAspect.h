@@ -285,6 +285,7 @@ public:
 	void setCreationTime(const QDateTime&);
 	QDateTime creationTime() const;
 	virtual Project* project();
+	virtual const Project* project() const;
 	virtual QString path() const;
 	void setHidden(bool);
 	bool isHidden() const;
@@ -414,7 +415,8 @@ public:
 	}
 
 	// undo/redo related functions
-	void setUndoAware(bool);
+	void setUndoAware(bool value);
+	bool isUndoAware() const;
 	virtual QUndoStack* undoStack() const;
 	void exec(QUndoCommand*);
 	void exec(QUndoCommand* command,

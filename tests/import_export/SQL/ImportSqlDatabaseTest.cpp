@@ -3,16 +3,20 @@
 	Project              : LabPlot
 	Description          : Tests for the import from SQL databases
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ImportSqlDatabaseTest.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/datasources/ImportSQLDatabaseWidget.h"
+#include "frontend/spreadsheet/SpreadsheetView.h"
 
 #include <KConfig>
 #include <KConfigGroup>
+
+#include <QSqlQuery>
+#include <QSqlRecord>
 
 void ImportSqlDatabaseTest::initTestCase() {
 	CommonMetaTest::initTestCase();
@@ -307,6 +311,85 @@ void ImportSqlDatabaseTest::testQuery() {
 
 	// last row in the spreadsheet
 	QCOMPARE(spreadsheet.column(0)->textAt(14), QLatin1String("The Best of Beethoven"));
+}
+
+// ##############################################################################
+// #################################  export ####################################
+// ##############################################################################
+
+void ImportSqlDatabaseTest::testExportSpreadsheetToSqlite() {
+	// prepare the source spreadsheet
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	spreadsheet.setColumnCount(3);
+	spreadsheet.setRowCount(3);
+
+	auto* col1 = spreadsheet.column(0);
+	col1->setColumnMode(AbstractColumn::ColumnMode::Text);
+	col1->setName(QLatin1String("text_column"));
+	col1->setTextAt(0, QLatin1String("A'a"));
+	col1->setTextAt(1, QLatin1String("B'b"));
+	col1->setTextAt(2, QLatin1String("C'c"));
+
+	auto* col2 = spreadsheet.column(1);
+	col2->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col2->setName(QLatin1String("integer_column"));
+	col2->setIntegerAt(0, 1);
+	col2->setIntegerAt(1, 2);
+	col2->setIntegerAt(2, 3);
+
+	auto* col3 = spreadsheet.column(2);
+	col3->setColumnMode(AbstractColumn::ColumnMode::Double);
+	col3->setName(QLatin1String("double_column"));
+	col3->setValueAt(0, 1.1);
+	col3->setValueAt(1, 2.2);
+	col3->setValueAt(2, 3.3);
+
+	// export to a temp file
+	auto* view = static_cast<SpreadsheetView*>(spreadsheet.view());
+	QTemporaryFile file;
+	QVERIFY(file.open());
+	view->exportToSQLite(file.fileName());
+
+	// check the content of the exported db
+	const QStringList& drivers = QSqlDatabase::drivers();
+	QString driver;
+	if (drivers.contains(QLatin1String("QSQLITE3")))
+		driver = QLatin1String("QSQLITE3");
+	else
+		driver = QLatin1String("QSQLITE");
+
+	QSqlDatabase db = QSqlDatabase::addDatabase(driver);
+	db.setDatabaseName(file.fileName());
+	QVERIFY(db.open());
+
+	QSqlQuery q(QStringLiteral("SELECT * FROM test;"));
+	QVERIFY(q.exec());
+
+	QVERIFY(q.next());
+	auto record = q.record();
+
+	// check the column names
+	QCOMPARE(record.count(), 3);
+	QCOMPARE(record.fieldName(0), QLatin1String("text_column"));
+	QCOMPARE(record.fieldName(1), QLatin1String("integer_column"));
+	QCOMPARE(record.fieldName(2), QLatin1String("double_column"));
+
+	// check the record values
+	QCOMPARE(q.value(0).toString(), QLatin1String("A'a"));
+	QCOMPARE(q.value(1).toInt(), 1);
+	QCOMPARE(q.value(2).toDouble(), 1.1);
+
+	QVERIFY(q.next());
+	QCOMPARE(q.value(0).toString(), QLatin1String("B'b"));
+	QCOMPARE(q.value(1).toInt(), 2);
+	QCOMPARE(q.value(2).toDouble(), 2.2);
+
+	QVERIFY(q.next());
+	QCOMPARE(q.value(0).toString(), QLatin1String("C'c"));
+	QCOMPARE(q.value(1).toInt(), 3);
+	QCOMPARE(q.value(2).toDouble(), 3.3);
+
+	QVERIFY(!q.next()); // last record reached
 }
 
 QTEST_MAIN(ImportSqlDatabaseTest)

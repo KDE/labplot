@@ -60,12 +60,16 @@ private Q_SLOTS:
 	void dataColumnChanged(const QModelIndex&);
 	void data2ColumnChanged(const QModelIndex&);
 	void typeChanged(int);
+	void limitsTypeChanged(int);
 	void limitsMetricChanged(int);
 	void sampleSizeChanged(int);
-	void maxUpperLimitChanged(const QString&);
-	void minLowerLimitChanged(const QString&);
+	void maxUpperLimitChanged();
+	void minLowerLimitChanged();
 	void exactLimitsEnabledChanged(bool);
 	void updateLowerLimitWidgets();
+	void centerSpecificationChanged();
+	void lowerLimitSpecificationChanged();
+	void upperLimitSpecificationChanged();
 
 	// Labels-tab
 	void labelsEnabledChanged(bool);
@@ -81,11 +85,15 @@ private Q_SLOTS:
 	void plotDataColumnChanged(const AbstractColumn*);
 	void plotData2ColumnChanged(const AbstractColumn*);
 	void plotTypeChanged(ProcessBehaviorChart::Type);
+	void plotLimitsTypeChanged(ProcessBehaviorChart::LimitsType);
 	void plotLimitsMetricChanged(ProcessBehaviorChart::LimitsMetric);
 	void plotSampleSizeChanged(int);
 	void plotMaxUpperLimitChanged(double);
 	void plotMinLowerLimitChanged(double);
 	void plotExactLimitsEnabledChanged(bool);
+	void plotCenterSpecificationChanged(double);
+	void plotLowerLimitSpecificationChanged(double);
+	void plotUpperLimitSpecificationChanged(double);
 
 	// Labels-tab
 	void plotLabelsEnabledChanged(bool);

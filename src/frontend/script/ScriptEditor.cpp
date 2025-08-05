@@ -29,8 +29,6 @@ ScriptEditor::ScriptEditor(Script* script, QWidget* parent)
     m_kTextEditorView->setContextMenu(m_kTextEditorView->defaultContextMenu(nullptr));
     ui.editorParent->layout()->addWidget(m_kTextEditorView);
     
-    ui.output->installEventFilter(this);
-
     KConfig config;
 	KConfigGroup group = config.group(QStringLiteral("ScriptEditor"));
 	// we dont manage default editor font or themes ourselves, so no need to check our config
@@ -46,24 +44,8 @@ ScriptEditor::ScriptEditor(Script* script, QWidget* parent)
     connect(m_script, &Script::viewPrintPreview, [kTextEditorView = m_kTextEditorView] {
         kTextEditorView->printPreview();
     });
-    connect(m_kTextEditorView, &KTextEditor::View::configChanged, [this] {
-        QFont currentFont = editorFont();
-        QString currentTheme = editorTheme();
-
-        if (currentFont != m_lastEditorFont) {
-            m_lastEditorFont = currentFont;
-            Q_EMIT m_script->editorFontChanged(currentFont);
-        }
-
-        if (currentTheme != m_lastEditorTheme) {
-            m_lastEditorTheme = currentTheme;
-            Q_EMIT m_script->editorThemeChanged(currentTheme);
-        }
-    });
 
     ui.output->setReadOnly(true);
-    m_lastEditorFont = editorFont();
-    m_lastEditorTheme = editorTheme();
 }
 
 ScriptEditor::~ScriptEditor() {    
@@ -122,25 +104,7 @@ void ScriptEditor::writeOutput(bool /*isErr*/, const QString& msg) {
     if (msg.trimmed().isEmpty())
         return;
 
-    ui.output->appendPlainText(msg);
-
-    m_firstOutputOfRun = false;
-}
-
-void ScriptEditor::setEditorFont(const QFont& font) {
-    m_kTextEditorView->setConfigValue(QStringLiteral("font"), font);
-}
-
-void ScriptEditor::setOutputFont(const QFont& font) {
-    ui.output->setFont(font);
-}
-
-QFont ScriptEditor::editorFont() {
-    return m_kTextEditorView->configValue(QStringLiteral("font")).value<QFont>();
-}
-
-QFont ScriptEditor::outputFont() {
-    return ui.output->font();
+    ui.output->setPlainText(msg);
 }
 
 void ScriptEditor::setSplitterState(const QByteArray& state) {
@@ -151,30 +115,30 @@ QByteArray ScriptEditor::splitterState() {
     return ui.splitter->saveState();
 }
 
-bool ScriptEditor::eventFilter(QObject* object, QEvent* event) {
-    if (object == ui.output && event->type() == QEvent::FontChange)
-        Q_EMIT m_script->outputFontChanged(ui.output->font());
-
-    return false;
-}
-
-void ScriptEditor::setEditorTheme(const QString& theme) {
-    m_kTextEditorView->setConfigValue(QStringLiteral("theme"), theme);
-}
-
-QString ScriptEditor::editorTheme() {
-    return m_kTextEditorView->configValue(QStringLiteral("theme")).toString();
-}
-
 QString ScriptEditor::outputText() {
     return ui.output->toPlainText();
+}
+
+void ScriptEditor::setOutputFont(const QFont& font) {
+    ui.output->setFont(font);
+}
+
+QFont ScriptEditor::outputFont() {
+    return ui.output->font();
+}
+
+void ScriptEditor::registerShortcuts() {
+
+}
+
+void ScriptEditor::unregisterShortcuts() {
+
 }
 
 // ##############################################################################
 // ####################################  SLOTs   ################################
 // ##############################################################################
 void ScriptEditor::run() {
-    m_firstOutputOfRun = true;
     m_script->runScript();
 }
 

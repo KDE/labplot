@@ -35,12 +35,9 @@ worksheet.setTheme("Solarized")
 plotArea = CartesianPlot("xy-plot")
 plotArea.setType(CartesianPlot.Type.FourAxes)
 
-# border = plotArea.plotArea().borderType()
-# border.setFlag(PlotArea.BorderTypeFlags.BorderLeft, True)
-# border.setFlag(PlotArea.BorderTypeFlags.BorderTop, True)
-# border.setFlag(PlotArea.BorderTypeFlags.BorderRight, True)
-# border.setFlag(PlotArea.BorderTypeFlags.BorderBottom, True)
-# plotArea.plotArea().setBorderType(border)
+border = plotArea.plotArea().borderType()
+border = PlotArea.BorderTypeFlags.BorderLeft | PlotArea.BorderTypeFlags.BorderTop | PlotArea.BorderTypeFlags.BorderRight | PlotArea.BorderTypeFlags.BorderBottom
+plotArea.plotArea().setBorderType(border)
 
 plotArea.setSymmetricPadding(True)
 plotArea.setHorizontalPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Centimeter))
@@ -108,12 +105,9 @@ plotArea.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY)
 plotArea1 = CartesianPlot("xy-plot 1")
 plotArea1.setType(CartesianPlot.Type.FourAxes)
 
-# border1 = plotArea1.plotArea().borderType()
-# border1.setFlag(PlotArea.BorderTypeFlags.BorderLeft, True)
-# border1.setFlag(PlotArea.BorderTypeFlags.BorderTop, True)
-# border1.setFlag(PlotArea.BorderTypeFlags.BorderRight, True)
-# border1.setFlag(PlotArea.BorderTypeFlags.BorderBottom, True)
-# plotArea1.plotArea().setBorderType(border1)
+border1 = plotArea1.plotArea().borderType()
+border1 = PlotArea.BorderTypeFlags.BorderLeft | PlotArea.BorderTypeFlags.BorderTop | PlotArea.BorderTypeFlags.BorderRight | PlotArea.BorderTypeFlags.BorderBottom
+plotArea1.plotArea().setBorderType(border1)
 
 plotArea1.setSymmetricPadding(True)
 plotArea1.setHorizontalPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Centimeter))
@@ -182,12 +176,9 @@ plotArea1.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY1)
 plotArea2 = CartesianPlot("xy-plot 2")
 plotArea2.setType(CartesianPlot.Type.FourAxes)
 
-# border2 = plotArea2.plotArea().borderType()
-# border2.setFlag(PlotArea.BorderTypeFlags.BorderLeft, True)
-# border2.setFlag(PlotArea.BorderTypeFlags.BorderTop, True)
-# border2.setFlag(PlotArea.BorderTypeFlags.BorderRight, True)
-# border2.setFlag(PlotArea.BorderTypeFlags.BorderBottom, True)
-# plotArea2.plotArea().setBorderType(border2)
+border2 = plotArea2.plotArea().borderType()
+border2 = PlotArea.BorderTypeFlags.BorderLeft | PlotArea.BorderTypeFlags.BorderTop | PlotArea.BorderTypeFlags.BorderRight | PlotArea.BorderTypeFlags.BorderBottom
+plotArea2.plotArea().setBorderType(border2)
 
 plotArea2.setSymmetricPadding(True)
 plotArea2.setHorizontalPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Centimeter))
@@ -256,12 +247,9 @@ plotArea2.setRange(CartesianCoordinateSystem.Dimension.Y, 0, rangeY2)
 plotArea3 = CartesianPlot("xy-plot 3")
 plotArea3.setType(CartesianPlot.Type.FourAxes)
 
-# border3 = plotArea3.plotArea().borderType()
-# border3.setFlag(PlotArea.BorderTypeFlags.BorderLeft, True)
-# border3.setFlag(PlotArea.BorderTypeFlags.BorderTop, True)
-# border3.setFlag(PlotArea.BorderTypeFlags.BorderRight, True)
-# border3.setFlag(PlotArea.BorderTypeFlags.BorderBottom, True)
-# plotArea3.plotArea().setBorderType(border3)
+border3 = plotArea3.plotArea().borderType()
+border3 = PlotArea.BorderTypeFlags.BorderLeft | PlotArea.BorderTypeFlags.BorderTop | PlotArea.BorderTypeFlags.BorderRight | PlotArea.BorderTypeFlags.BorderBottom
+plotArea3.plotArea().setBorderType(border3)
 
 plotArea3.setSymmetricPadding(True)
 plotArea3.setHorizontalPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Centimeter))

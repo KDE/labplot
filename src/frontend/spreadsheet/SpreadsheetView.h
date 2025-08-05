@@ -47,6 +47,7 @@ class SpreadsheetView : public QWidget {
 
 	friend class SpreadsheetTest;
 	friend class SpreadsheetFormulaTest;
+	friend class ImportSqlDatabaseTest;
 
 public:
 	explicit SpreadsheetView(Spreadsheet*, bool readOnly = false);

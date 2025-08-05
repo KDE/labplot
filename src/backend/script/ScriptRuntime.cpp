@@ -1,3 +1,5 @@
+#include <KLocalizedString>
+
 #include "ScriptRuntime.h"
 
 #include "Script.h"
@@ -22,7 +24,8 @@
 ScriptRuntime::ScriptRuntime(const QString& lang, Script* script)
 	: QObject()
 	, lang(lang)
-	, m_name(script->name()) {
+	, m_name(script->name())
+	, m_variableModel(new VariablesInfoModel(this)) {
 }
 
 /*!
@@ -31,6 +34,14 @@ ScriptRuntime::ScriptRuntime(const QString& lang, Script* script)
  */
 int ScriptRuntime::errorLine() const {
 	return m_errorLine;
+}
+
+void ScriptRuntime::clearErrorLine() {
+	m_errorLine = -1;
+}
+
+QAbstractItemModel* ScriptRuntime::variableModel() const {
+	return m_variableModel;
 }
 
 /*!
@@ -55,3 +66,66 @@ int ScriptRuntime::errorLine() const {
  * \param code - The statements to execute
  * \return Whether the execution was successful or not
  */
+
+VariablesInfoModel::VariablesInfoModel(ScriptRuntime* parent)
+	: QAbstractTableModel(parent) {
+}
+
+int VariablesInfoModel::columnCount(const QModelIndex& parent) const {
+	if (parent.isValid())
+		return 0;
+	else
+		return 3;
+}
+
+int VariablesInfoModel::rowCount(const QModelIndex& parent) const {
+	if (parent.isValid())
+		return 0;
+	else
+		return m_variablesInfo.size();
+}
+
+QVariant VariablesInfoModel::headerData(int section, Qt::Orientation orientation, int role) const {
+	if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
+		switch (section) {
+		case 0:
+			return i18nc("@title:column", "Name");
+		case 1:
+			return i18nc("@title:column", "Value");
+		case 2:
+			return i18nc("@title:column", "Type");
+		}
+	}
+	return QVariant();
+}
+
+QVariant VariablesInfoModel::data(const QModelIndex& index, int role) const {
+	if ((role != Qt::DisplayRole) || !index.isValid())
+		return QVariant();
+
+	const auto& variable = m_variableNames.at(index.row());
+	const auto& variableInfo = m_variablesInfo.value(variable);
+
+	switch (index.column()) {
+	case 0:
+		return QVariant(variable);
+	case 1:
+		return QVariant(variableInfo.value);
+	case 2:
+		return QVariant(variableInfo.type);
+	}
+
+	return {};
+}
+
+void VariablesInfoModel::setVariablesInfo(const QMap<QString, ScriptRuntime::VariableInfo>& variablesInfo) {
+	beginRemoveRows(QModelIndex(), 0, m_variablesInfo.size() - 1);
+	m_variablesInfo.clear();
+	m_variableNames.clear();
+	endRemoveRows();
+
+	beginInsertRows(QModelIndex(), 0, variablesInfo.size() - 1);
+	m_variablesInfo = variablesInfo;
+	m_variableNames = variablesInfo.keys();
+	endInsertRows();
+}

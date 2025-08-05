@@ -1,11 +1,12 @@
 /*
-	File       	    : AspectTreeModel.h
+	File            : AspectTreeModel.h
 	Project         : LabPlot
 	Description     : Represents a tree of AbstractAspect objects as a Qt item model.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Knut Franke <knut.franke@gmx.de>
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2011-2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -36,6 +37,8 @@ public:
 
 	QModelIndex modelIndexOfAspect(const AbstractAspect*, int column = 0) const;
 	QModelIndex modelIndexOfAspect(const QString& path, int column = 0) const;
+	QString path(const QModelIndex&, const QLatin1Char separator = QLatin1Char('/')) const;
+	QModelIndex modelIndexForPath(const QString& path, const QLatin1Char separator = QLatin1Char('/')) const;
 
 	void setSelectableAspects(const QList<AspectType>&);
 	const QList<AspectType>& selectableAspects() const;

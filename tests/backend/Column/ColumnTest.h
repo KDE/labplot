@@ -131,6 +131,9 @@ private Q_SLOTS:
 
 	void testRowCountValueLabels();
 	void testRowCountValueLabelsDateTime();
+
+	void testLoadSaveNoData();
+	void testLoadSaveWithData();
 };
 
 #endif // COLUMNTEST_H

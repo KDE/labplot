@@ -4410,6 +4410,7 @@ void SpreadsheetView::exportToLaTeX(const QString& path,
 }
 
 void SpreadsheetView::exportToFits(const QString& fileName, const int exportTo, const bool commentsAsUnits) const {
+	PERFTRACE(QStringLiteral("export spreadsheet to FITS"));
 	auto* filter = new FITSFilter;
 
 	filter->setExportTo(exportTo);
@@ -4420,6 +4421,7 @@ void SpreadsheetView::exportToFits(const QString& fileName, const int exportTo, 
 }
 
 void SpreadsheetView::exportToMCAP(const QString& fileName, int compressionMode, int compressionLevel) const {
+	PERFTRACE(QStringLiteral("export spreadsheet to MCAP"));
 	auto* filter = new McapFilter;
 	filter->writeWithOptions(fileName, m_spreadsheet, compressionMode, compressionLevel);
 
@@ -4427,9 +4429,9 @@ void SpreadsheetView::exportToMCAP(const QString& fileName, int compressionMode,
 }
 
 void SpreadsheetView::exportToXLSX(const QString& fileName, const bool exportHeader) const {
+	PERFTRACE(QStringLiteral("export spreadsheet to XLSL"));
 	auto* filter = new XLSXFilter;
 
-	DEBUG("EXPORT HEADER = " << exportHeader)
 	filter->setColumnNamesAsFirstRow(exportHeader);
 	filter->write(fileName, m_spreadsheet);
 
@@ -4532,7 +4534,9 @@ void SpreadsheetView::exportToSQLite(const QString& path) const {
 					if (j != 0)
 						query += QLatin1String(", ");
 
-					query += QLatin1Char('\'') + col->asStringColumn()->textAt(row) + QLatin1Char('\'');
+					QString text = col->asStringColumn()->textAt(row);
+					text = text.replace(QLatin1String("'"), QLatin1String("''"));
+					query += QLatin1Char('\'') + text + QLatin1Char('\'');
 				}
 				query += QLatin1String(")");
 			}
@@ -4547,7 +4551,6 @@ void SpreadsheetView::exportToSQLite(const QString& path) const {
 				return;
 			}
 		}
-
 	} // end of perf-trace scope
 
 	// commit the transaction and close the database

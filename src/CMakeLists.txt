@@ -165,6 +165,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
     ${FRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
     ${FRONTEND_DIR}/widgets/ResizableTextEdit.cpp
+    ${FRONTEND_DIR}/widgets/TextPreview.cpp
     ${FRONTEND_DIR}/widgets/TimedLineEdit.cpp
     ${FRONTEND_DIR}/widgets/TreeViewComboBox.cpp
     ${FRONTEND_DIR}/widgets/qxtspanslider.cpp
@@ -387,6 +388,7 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/datasources/DatasetHandler.cpp
     ${BACKEND_DIR}/datasources/LiveDataSource.cpp
     ${BACKEND_DIR}/datasources/filters/AbstractFileFilter.cpp
+    ${BACKEND_DIR}/datasources/filters/FilterStatus.cpp
     ${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
     ${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
     ${BACKEND_DIR}/datasources/filters/XLSXFilter.cpp

@@ -76,8 +76,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-25.06.0.tar.xz",
-                    "sha256": "8199532d38984fab46dbd0020ec9c40f20e928e33e9b4cc6043572603a821d83"
+                    "url": "https://poppler.freedesktop.org/poppler-25.07.0.tar.xz",
+                    "sha256": "c504a9066dbdfebe377ad53cec641fd971ee96c4e1e8ca74e6c9c03d46d817ae"
                 }
             ],
             "modules": [
@@ -118,8 +118,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.04.2/src/analitza-25.04.2.tar.xz",
-			    "sha256": "47177e0a8400e108491b769b825ef4990f3dd97b3348eec182da3e65e5704db7"
+			    "url": "https://download.kde.org/stable/release-service/25.04.3/src/analitza-25.04.3.tar.xz",
+			    "sha256": "5cd695fc83af74eedd3970725e35a6396120631e46866efc9094bce683ad626c"
 		    }
 	    ]
         },
@@ -129,8 +129,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.04.2/src/cantor-25.04.2.tar.xz",
-			    "sha256": "8cb744b18da22de4315b300f88b3e580eb2af559918187a73b78b3948615be74"
+			    "url": "https://download.kde.org/stable/release-service/25.04.3/src/cantor-25.04.3.tar.xz",
+			    "sha256": "1a7732a34bc703f2febeceb074fb2827f84adf913b86c115553d73a2eb67af05"
 		    }
 	    ]
         },
@@ -179,7 +179,7 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://fossies.org/linux/misc/cfitsio-4.6.2.tar.gz",
+                    "url": "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.6.2.tar.gz",
                     "sha256": "66fd078cc0bea896b0d44b120d46d6805421a5361d3a5ad84d9f397b1b5de2cb",
 		    "disable-http-decompression": true
                 }
@@ -322,8 +322,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/3.0.0/mdds-3.0.0.tar.xz",
-                    "sha256": "9b077e8d929050e9a432cc131beed2380ac85cfe98b17fc26d01d0ed532129c8"
+                    "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/3.1.0/mdds-3.1.0.tar.xz",
+                    "sha256": "ca295f4c86968a7eb1f5d503ff7ae180e6605210cfb26d01658be42048c0924c"
                 }
             ]
         },

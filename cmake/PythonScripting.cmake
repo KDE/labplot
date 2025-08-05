@@ -1,8 +1,8 @@
 include(GenerateShibokenSources)
 
 set(scripting_library "pylabplot")
-set(scripting_wrapped_header ${CMAKE_CURRENT_SOURCE_DIR}/../lib/python/bindings_script.h)
-set(scripting_typesystem_file ${CMAKE_CURRENT_SOURCE_DIR}/../lib/python/bindings_script.xml)
+set(scripting_wrapped_header ${CMAKE_CURRENT_SOURCE_DIR}/../lib/python/bindings.h)
+set(scripting_typesystem_file ${CMAKE_CURRENT_SOURCE_DIR}/../lib/python/bindings.xml)
 set(shiboken_scripting_generated_sources
     # abstract classes
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/abstractaspect_wrapper.cpp
@@ -89,8 +89,6 @@ set(shiboken_scripting_generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/background_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesiancoordinatesystem_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesiancoordinatesystem_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/columnstringio_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/columnstringio_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/errorbar_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/errorbar_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/line_wrapper.cpp
@@ -211,12 +209,18 @@ set(shiboken_scripting_generated_sources
     # worksheet element containers
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_rangebreak_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_rangebreak_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_rangebreaks_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/cartesianplot_rangebreaks_wrapper.h
 
     # worksheet elements
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/image_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/image_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/infoelement_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/infoelement_wrapper.h
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/infoelement_markerpoints_t_wrapper.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/infoelement_markerpoints_t_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/textlabel_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/textlabel_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/textlabel_textwrapper_wrapper.cpp
@@ -260,6 +264,9 @@ set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_b
 # Shiboken internally defines the Py_LIMITED_API to 3.8 and we also define the Py_LIMITED_API but to 3.9 so the compiler warns about a macro redefinition. Now we apply our
 # definition to only our source files
 set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_DEFINITIONS -DPy_LIMITED_API=0x03090000)
+
+# PYTHON3_EXECUTABLE is the python executable path and is needed when initializing the python scripting interpreter
+set_property(SOURCE ${BACKEND_DIR}/script/python/PythonScriptRuntime.cpp APPEND PROPERTY COMPILE_DEFINITIONS -DPYTHON3_EXECUTABLE=${Python3_EXECUTABLE})
 
 # shiboken generates sources using deprecated code so we remove these deprecation macros to enable the shiboken generated files to compile
 get_property(_defs DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS)

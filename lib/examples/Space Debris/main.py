@@ -83,13 +83,10 @@ plotArea1.setVerticalPadding(Worksheet.convertToSceneUnits(1.1, Worksheet.Unit.C
 plotArea1.setRightPadding(Worksheet.convertToSceneUnits(0.5, Worksheet.Unit.Centimeter))
 plotArea1.setBottomPadding(Worksheet.convertToSceneUnits(1.5, Worksheet.Unit.Centimeter))
 
-# border1 = plotArea1.plotArea().borderType()
-# border1.setFlag(PlotArea.BorderTypeFlags.BorderLeft, True)
-# border1.setFlag(PlotArea.BorderTypeFlags.BorderTop, True)
-# border1.setFlag(PlotArea.BorderTypeFlags.BorderRight, True)
-# border1.setFlag(PlotArea.BorderTypeFlags.BorderBottom, True)
-# plotArea1.plotArea().setBorderType(border1)
-# plotArea1.plotArea().borderLine().setWidth(0)
+border1 = plotArea1.plotArea().borderType()
+border1 = PlotArea.BorderTypeFlags.BorderLeft | PlotArea.BorderTypeFlags.BorderTop | PlotArea.BorderTypeFlags.BorderRight | PlotArea.BorderTypeFlags.BorderBottom
+plotArea1.plotArea().setBorderType(border1)
+plotArea1.plotArea().borderLine().setWidth(0)
 
 te.clear()
 te.setFontPointSize(10)
@@ -150,12 +147,9 @@ plotArea2.setVerticalPadding(Worksheet.convertToSceneUnits(1.3, Worksheet.Unit.C
 plotArea2.setRightPadding(Worksheet.convertToSceneUnits(0.5, Worksheet.Unit.Centimeter))
 plotArea2.setBottomPadding(Worksheet.convertToSceneUnits(1.3, Worksheet.Unit.Centimeter))
 
-# border2 = plotArea2.plotArea().borderType()
-# border2.setFlag(PlotArea.BorderTypeFlags.BorderLeft, True)
-# border2.setFlag(PlotArea.BorderTypeFlags.BorderTop, True)
-# border2.setFlag(PlotArea.BorderTypeFlags.BorderRight, True)
-# border2.setFlag(PlotArea.BorderTypeFlags.BorderBottom, True)
-# plotArea2.plotArea().setBorderType(border2)
+border2 = plotArea2.plotArea().borderType()
+border2 = PlotArea.BorderTypeFlags.BorderLeft | PlotArea.BorderTypeFlags.BorderTop | PlotArea.BorderTypeFlags.BorderRight | PlotArea.BorderTypeFlags.BorderBottom
+plotArea2.plotArea().setBorderType(border2)
 plotArea2.plotArea().borderLine().setWidth(0)
 
 te.clear()
@@ -237,12 +231,9 @@ plotArea3.setVerticalPadding(Worksheet.convertToSceneUnits(1.3, Worksheet.Unit.C
 plotArea3.setRightPadding(Worksheet.convertToSceneUnits(0.5, Worksheet.Unit.Centimeter))
 plotArea3.setBottomPadding(Worksheet.convertToSceneUnits(1.3, Worksheet.Unit.Centimeter))
 
-# border3 = plotArea3.plotArea().borderType()
-# border3.setFlag(PlotArea.BorderTypeFlags.BorderLeft, True)
-# border3.setFlag(PlotArea.BorderTypeFlags.BorderTop, True)
-# border3.setFlag(PlotArea.BorderTypeFlags.BorderRight, True)
-# border3.setFlag(PlotArea.BorderTypeFlags.BorderBottom, True)
-# plotArea3.plotArea().setBorderType(border3)
+border3 = plotArea3.plotArea().borderType()
+border3 = PlotArea.BorderTypeFlags.BorderLeft | PlotArea.BorderTypeFlags.BorderTop | PlotArea.BorderTypeFlags.BorderRight | PlotArea.BorderTypeFlags.BorderBottom
+plotArea3.plotArea().setBorderType(border3)
 plotArea3.plotArea().borderLine().setWidth(0)
 
 te.clear()
