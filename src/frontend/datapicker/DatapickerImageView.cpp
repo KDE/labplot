@@ -599,6 +599,9 @@ bool DatapickerImageView::changeMouseMode(QAction* action) {
 		setCursor(Qt::CrossCursor);
 		if (m_mouseMode != mode) {
 			switch (mode) {
+				case DatapickerImageView::MouseMode::Navigation:
+				case DatapickerImageView::MouseMode::ZoomSelection:
+					break;
 				case DatapickerImageView::MouseMode::ReferencePointsEntry: {
 					int count = m_image->childCount<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 					if (count) {
