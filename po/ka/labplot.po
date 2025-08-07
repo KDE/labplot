@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-05 03:01+0000\n"
-"PO-Revision-Date: 2025-06-25 04:33+0200\n"
+"PO-Revision-Date: 2025-08-07 09:48+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -21764,7 +21764,7 @@ msgstr "ცენტრის ხაზი"
 #: src/frontend/ui/dockwidgets/scriptdock.ui:86
 #, kde-format
 msgid "Runtime:"
-msgstr ""
+msgstr "გაშვების გარემო:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
