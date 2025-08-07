@@ -156,7 +156,7 @@ void ActionsManager::init() {
 		aboutAction->setIcon(KAboutData::applicationData().programLogo().value<QIcon>());
 
 		// disconnect default slot
-		disconnect(aboutAction, nullptr, nullptr, nullptr);
+		disconnect(aboutAction, &QAction::triggered, nullptr, nullptr);
 		connect(aboutAction, &QAction::triggered, this,
 		[=]() {
 			AboutDialog aboutDialog(KAboutData::applicationData(), m_mainWindow);
