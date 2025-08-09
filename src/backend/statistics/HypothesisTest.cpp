@@ -23,8 +23,10 @@
 #include <KLocalizedString>
 #include <QLocale>
 
+#include <QtConcurrent/QtConcurrent>
 #include <cmath>
-#include <gsl/gsl_math.h>
+#include <cstddef>
+#include <limits>
 
 /*!
  * \brief This class implements various statistical hypothesis tests.
@@ -82,28 +84,6 @@ nsl_stats_tail_type HypothesisTest::tail() const {
 	return m_tail;
 }
 
-QPair<int, int> HypothesisTest::variableCount(Test test) {
-	switch (test) {
-	case Test::t_test_one_sample:
-		return {1, 1};
-		break;
-	case Test::t_test_two_sample:
-	case Test::t_test_two_sample_paired:
-		return {2, 2};
-		break;
-	case Test::log_rank_test:
-		return {3, 3};
-		break;
-	case Test::one_way_anova:
-	case Test::mann_whitney_u_test:
-	case Test::kruskal_wallis_test:
-		// TODO
-		break;
-	}
-
-	return {0, 0};
-}
-
 void HypothesisTest::setTest(Test test) {
 	m_test = test;
 	m_columns.clear();
@@ -112,76 +92,6 @@ void HypothesisTest::setTest(Test test) {
 
 HypothesisTest::Test HypothesisTest::test() const {
 	return m_test;
-}
-
-QVector<QPair<QString, QString>> HypothesisTest::hypothesisText(Test test) {
-	int hypCount = hypothesisCount(test);
-
-	QVector<QPair<QString, QString>> hypothesis(hypCount);
-
-	if (hypCount == 3) {
-		QString lHSymbol;
-		QString rHSymbol;
-		switch (test) {
-		case Test::t_test_one_sample:
-			lHSymbol = QStringLiteral("µ");
-			rHSymbol = QStringLiteral("µ₀");
-			break;
-		case Test::t_test_two_sample:
-			lHSymbol = QStringLiteral("µ<sub>1</sub>");
-			rHSymbol = QStringLiteral("µ<sub>2</sub>");
-			break;
-		case Test::t_test_two_sample_paired:
-			lHSymbol = QStringLiteral("µ<sub>D</sub>");
-			rHSymbol = QStringLiteral("0");
-			break;
-		case Test::one_way_anova:
-		case Test::mann_whitney_u_test:
-		case Test::kruskal_wallis_test:
-		case Test::log_rank_test:
-			// TODO
-			break;
-		}
-
-		hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(lHSymbol + QStringLiteral(" = ") + rHSymbol, lHSymbol + QStringLiteral(" ≠ ") + rHSymbol);
-		hypothesis[nsl_stats_tail_type_negative] =
-			QPair<QString, QString>(lHSymbol + QStringLiteral(" ≥ ") + rHSymbol, lHSymbol + QStringLiteral(" &lt; ") + rHSymbol);
-		hypothesis[nsl_stats_tail_type_positive] =
-			QPair<QString, QString>(lHSymbol + QStringLiteral(" ≤ ") + rHSymbol, lHSymbol + QStringLiteral(" > ") + rHSymbol);
-	} else if (hypCount == 1) {
-		switch (test) {
-		case Test::t_test_one_sample:
-		case Test::t_test_two_sample:
-		case Test::t_test_two_sample_paired:
-		case Test::one_way_anova:
-		case Test::mann_whitney_u_test:
-		case Test::kruskal_wallis_test:
-			break;
-		case Test::log_rank_test:
-			hypothesis[nsl_stats_tail_type_two] =
-				QPair<QString, QString>(QStringLiteral("S<sub>0</sub> = S<sub>1</sub>"), QStringLiteral("S<sub>0</sub> ≠ S<sub>1</sub>"));
-			break;
-		}
-	}
-
-	return hypothesis;
-}
-
-int HypothesisTest::hypothesisCount(Test test) {
-	switch (test) {
-	case Test::t_test_one_sample:
-	case Test::t_test_two_sample:
-	case Test::t_test_two_sample_paired:
-		return 3;
-	case Test::log_rank_test:
-		return 1;
-	case Test::one_way_anova:
-	case Test::mann_whitney_u_test:
-	case Test::kruskal_wallis_test:
-		break;
-	}
-
-	return 0;
 }
 
 // ##############################################################################
@@ -348,6 +258,44 @@ void HypothesisTest::resetResult() {
 		addResultSection(i18n("t-Test Statistics"));
 		addResultLine(i18n("Significance Level"), QStringLiteral("-"));
 		addResultLine(i18n("t-Value"), QStringLiteral("-"));
+		addResultLine(i18n("p-Value"), QStringLiteral("-"));
+		addResultLine(i18n("Degrees of Freedom"), QStringLiteral("-"));
+	} else if (m_test == Test::one_way_anova) {
+		addResultTitle(i18n("One-Way ANOVA"));
+
+		addResultLine(i18n("Sample x"), QStringLiteral("-"));
+
+		addResultLine(i18n("Null Hypothesis"), QStringLiteral("-"));
+		addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("-"));
+
+		addResultSection(i18n("Descriptive Statistics"));
+		addResultLine(i18n("Group x Size"), QStringLiteral("-"));
+		addResultLine(i18n("Group x Mean"), QStringLiteral("-"));
+		addResultLine(i18n("Group x Standard Deviation"), QStringLiteral("-"));
+
+		addResultSection(i18n("ANOVA Statistics"));
+		addResultLine(i18n("Significance Level"), QStringLiteral("-"));
+		addResultLine(i18n("F-Statistic"), QStringLiteral("-"));
+		addResultLine(i18n("p-Value"), QStringLiteral("-"));
+		addResultLine(i18n("Between-Groups Degrees of Freedom"), QStringLiteral("-"));
+		addResultLine(i18n("Within-Groups Degrees of Freedom"), QStringLiteral("-"));
+	} else if (m_test == Test::mann_whitney_u_test) {
+	} else if (m_test == Test::kruskal_wallis_test) {
+		addResultTitle(i18n("Kruskal-Wallis Test"));
+
+		addResultLine(i18n("Sample x"), QStringLiteral("-"));
+
+		addResultLine(i18n("Null Hypothesis"), QStringLiteral("-"));
+		addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("-"));
+
+		addResultSection(i18n("Descriptive Statistics"));
+		addResultLine(i18n("Group x Size"), QStringLiteral("-"));
+		addResultLine(i18n("Group x Mean"), QStringLiteral("-"));
+		addResultLine(i18n("Group x Standard Deviation"), QStringLiteral("-"));
+
+		addResultSection(i18n("Kruskal-Wallis Statistics"));
+		addResultLine(i18n("Significance Level"), QStringLiteral("-"));
+		addResultLine(i18n("H-Statistic"), QStringLiteral("-"));
 		addResultLine(i18n("p-Value"), QStringLiteral("-"));
 		addResultLine(i18n("Degrees of Freedom"), QStringLiteral("-"));
 	} else if (m_test == Test::log_rank_test) {
@@ -536,12 +484,128 @@ void HypothesisTest::performTwoSampleTTest(bool paired) {
 }
 
 void HypothesisTest::performOneWayANOVATest() {
+	if (m_columns.size() < 2) {
+		Q_EMIT info(i18n("At least two columns are required to perform One-way ANOVA test."));
+		return;
+	}
+
+	const int groupCount = m_columns.size();
+
+	QVector<QVector<double>> groupData(filterColumnsParallel(m_columns));
+
+	Q_ASSERT(groupCount == groupData.size());
+
+	QVector<size_t> groupSizes(groupCount);
+
+	for (int n = 0; n < groupCount; n++)
+		groupSizes[n] = static_cast<size_t>(groupData[n].size());
+
+	double** groups = toArrayOfArrays(groupData);
+
+	double f = nsl_stats_anova_oneway_f(groups, groupSizes.data(), static_cast<size_t>(groupCount));
+	double p = nsl_stats_anova_oneway_p(groups, groupSizes.data(), static_cast<size_t>(groupCount));
+
+	delete[] groups;
+
+	addResultTitle(i18n("One-Way ANOVA"));
+
+	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(m_test).at(0);
+
+	for (int g = 0; g < groupCount; ++g)
+		addResultLine(i18n("Sample %1", g + 1), m_columns.at(g)->name());
+
+	addResultLine(i18n("Null Hypothesis"), nullHypothesisText);
+	addResultLine(i18n("Alternate Hypothesis"), alternateHypothesisText);
+
+	addResultSection(i18n("Descriptive Statistics"));
+	for (int g = 0; g < groupCount; ++g) {
+		auto columnStatistics = m_columns.at(g)->statistics();
+		addResultLine(i18n("Group %1 Size", g + 1), columnStatistics.size);
+		addResultLine(i18n("Group %1 Mean", g + 1), columnStatistics.arithmeticMean);
+		addResultLine(i18n("Group %1 Standard Deviation", g + 1), columnStatistics.standardDeviation);
+	}
+	addResultSection(i18n("ANOVA Statistics"));
+	addResultLine(i18n("Significance Level"), m_significanceLevel);
+	addResultLine(i18n("F-Statistic"), f);
+	addResultLine(i18n("p-Value"), p);
+	addResultLine(i18n("Between-Groups Degrees of Freedom"), groupCount - 1);
+	addResultLine(i18n("Within-Groups Degrees of Freedom"), std::accumulate(groupSizes.begin(), groupSizes.end(), 0) - groupCount);
+
+	addResultSection(i18n("Statistical Conclusion"));
+	if (!std::isnan(p)) {
+		if (p <= m_significanceLevel)
+			addResultLine(
+				i18n("At the significance level %1, at least one group mean is significantly different. Reject the null Hypothesis", m_significanceLevel));
+		else
+			addResultLine(
+				i18n("At the significance level %1, no significant difference between group means. Fail to reject the null Hypothesis", m_significanceLevel));
+	} else {
+		addResultLine(i18n("Test result not available"));
+	}
 }
 
 void HypothesisTest::performMannWhitneyUTest() {
 }
 
 void HypothesisTest::performKruskalWallisTest() {
+	if (m_columns.size() < 2) {
+		Q_EMIT info(i18n("At least two columns are required to perform Kruskal-Wallis test."));
+		return;
+	}
+
+	const int groupCount = m_columns.size();
+
+	QVector<QVector<double>> groupData(filterColumnsParallel(m_columns));
+
+	Q_ASSERT(groupCount == groupData.size());
+
+	QVector<size_t> groupSizes(groupCount);
+
+	for (int n = 0; n < groupCount; n++)
+		groupSizes[n] = static_cast<size_t>(groupData[n].size());
+
+	double** groups = toArrayOfArrays(groupData);
+
+	double h = nsl_stats_kruskal_wallis_h(groups, groupSizes.data(), static_cast<size_t>(groupCount));
+	double p = nsl_stats_kruskal_wallis_p(groups, groupSizes.data(), static_cast<size_t>(groupCount));
+
+	delete[] groups;
+
+	addResultTitle(i18n("Kruskal-Wallis Test"));
+
+	for (int g = 0; g < groupCount; ++g)
+		addResultLine(i18n("Sample %1", g + 1), m_columns.at(g)->name());
+
+	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(m_test).at(0);
+
+	addResultLine(i18n("Null Hypothesis"), nullHypothesisText);
+	addResultLine(i18n("Alternate Hypothesis"), alternateHypothesisText);
+
+	addResultSection(i18n("Descriptive Statistics"));
+	for (int g = 0; g < groupCount; ++g) {
+		auto columnStatistics = m_columns.at(g)->statistics();
+		addResultLine(i18n("Group %1 Size", g + 1), columnStatistics.size);
+		addResultLine(i18n("Group %1 Mean", g + 1), columnStatistics.arithmeticMean);
+		addResultLine(i18n("Group %1 Standard Deviation", g + 1), columnStatistics.standardDeviation);
+	}
+
+	addResultSection(i18n("Kruskal-Wallis Statistics"));
+	addResultLine(i18n("Significance Level"), m_significanceLevel);
+	addResultLine(i18n("H-Statistic"), h);
+	addResultLine(i18n("p-Value"), p);
+	addResultLine(i18n("Degrees of Freedom"), groupCount - 1);
+
+	addResultSection(i18n("Statistical Conclusion"));
+	if (!std::isnan(p)) {
+		if (p <= m_significanceLevel)
+			addResultLine(i18n("At the significance level %1, at least one group distribution is significantly different. Reject the null Hypothesis",
+							   m_significanceLevel));
+		else
+			addResultLine(i18n("At the significance level %1, no significant difference between group distributions. Fail to reject the null Hypothesis",
+							   m_significanceLevel));
+	} else {
+		addResultLine(i18n("Test result not available"));
+	}
 }
 
 void HypothesisTest::performLogRankTest() {
@@ -555,7 +619,7 @@ void HypothesisTest::performLogRankTest() {
 	const Column* statusCol = m_columns.at(1);
 	const Column* groupCol = m_columns.at(2);
 
-	if (statusCol->rowCount() != timeCol->rowCount() || statusCol->rowCount() != timeCol->rowCount()) {
+	if (statusCol->rowCount() != timeCol->rowCount() || groupCol->rowCount() != timeCol->rowCount()) {
 		Q_EMIT info(i18n("Time, Status and Group columns should have equal size."));
 		return;
 	}
@@ -567,12 +631,7 @@ void HypothesisTest::performLogRankTest() {
 	QVector<size_t> group0Indices, group1Indices;
 
 	for (int row = 0; row < n; ++row) {
-		auto isValid = [](const Column* column, int row) -> bool {
-			auto value = column->valueAt(row);
-			return std::isfinite(value) && !column->isMasked(row);
-		};
-
-		if (!isValid(timeCol, row) || !isValid(statusCol, row) || !isValid(groupCol, row))
+		if (!rowIsValid(timeCol, row) || !rowIsValid(statusCol, row) || !rowIsValid(groupCol, row))
 			continue;
 
 		double t = timeCol->valueAt(row);
@@ -663,4 +722,119 @@ bool HypothesisTest::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 	return !reader->hasError();
+}
+
+QPair<int, int> HypothesisTest::variableCount(Test test) {
+	switch (test) {
+	case Test::t_test_one_sample:
+		return {1, 1};
+		break;
+	case Test::t_test_two_sample:
+	case Test::t_test_two_sample_paired:
+	case Test::mann_whitney_u_test:
+		return {2, 2};
+		break;
+	case Test::one_way_anova:
+	case Test::kruskal_wallis_test:
+		return {2, std::numeric_limits<int>::max()};
+		break;
+	case Test::log_rank_test:
+		return {3, 3};
+		break;
+	}
+	return {0, 0};
+}
+
+QVector<QPair<QString, QString>> HypothesisTest::hypothesisText(Test test) {
+	int hypCount = hypothesisCount(test);
+
+	QVector<QPair<QString, QString>> hypothesis(hypCount);
+
+	if (hypCount == 3) {
+		QString lHSymbol;
+		QString rHSymbol;
+		if (test == Test::t_test_one_sample) {
+			lHSymbol = QStringLiteral("µ");
+			rHSymbol = QStringLiteral("µ₀");
+		} else if (test == Test::t_test_two_sample) {
+			lHSymbol = QStringLiteral("µ<sub>1</sub>");
+			rHSymbol = QStringLiteral("µ<sub>2</sub>");
+		} else if (test == Test::t_test_two_sample_paired) {
+			lHSymbol = QStringLiteral("µ<sub>D</sub>");
+			rHSymbol = QStringLiteral("0");
+		} else if (test == Test::mann_whitney_u_test) {
+			lHSymbol = QStringLiteral("µ<sub>r1</sub>");
+			rHSymbol = QStringLiteral("µ<sub>r2</sub>");
+		}
+
+		hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(lHSymbol + QStringLiteral(" = ") + rHSymbol, lHSymbol + QStringLiteral(" ≠ ") + rHSymbol);
+		hypothesis[nsl_stats_tail_type_negative] =
+			QPair<QString, QString>(lHSymbol + QStringLiteral(" ≥ ") + rHSymbol, lHSymbol + QStringLiteral(" &lt; ") + rHSymbol);
+		hypothesis[nsl_stats_tail_type_positive] =
+			QPair<QString, QString>(lHSymbol + QStringLiteral(" ≤ ") + rHSymbol, lHSymbol + QStringLiteral(" > ") + rHSymbol);
+	} else if (hypCount == 1) {
+		if (test == Test::one_way_anova) {
+			hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(QStringLiteral("µ<sub>1</sub> = µ<sub>2</sub> = ... = µ<sub>k</sub>"),
+																		  QStringLiteral("At least one µ<sub>i</sub> is different"));
+		} else if (test == Test::kruskal_wallis_test) {
+			hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(QStringLiteral("µ<sub>r1</sub> = µ<sub>r2</sub> = ... = µ<sub>rk</sub>"),
+																		  QStringLiteral("At least one µ<sub>ri</sub> is different"));
+		} else if (test == Test::log_rank_test) {
+			hypothesis[nsl_stats_tail_type_two] =
+				QPair<QString, QString>(QStringLiteral("S<sub>0</sub> = S<sub>1</sub>"), QStringLiteral("S<sub>0</sub> ≠ S<sub>1</sub>"));
+		}
+	}
+
+	return hypothesis;
+}
+
+int HypothesisTest::hypothesisCount(Test test) {
+	switch (test) {
+	case Test::t_test_one_sample:
+	case Test::t_test_two_sample:
+	case Test::t_test_two_sample_paired:
+	case Test::mann_whitney_u_test:
+		return 3;
+	case Test::one_way_anova:
+	case Test::kruskal_wallis_test:
+	case Test::log_rank_test:
+		return 1;
+	}
+
+	return 0;
+}
+
+bool HypothesisTest::rowIsValid(const Column* column, int row) {
+	return std::isfinite(column->valueAt(row)) && !column->isMasked(row);
+}
+
+QVector<double> HypothesisTest::filterColumn(const Column* col) {
+	QVector<double> sample;
+
+	for (int row = 0; row < col->rowCount(); ++row)
+		if (rowIsValid(col, row))
+			sample.append(col->valueAt(row));
+
+	return sample;
+}
+
+QVector<QVector<double>> HypothesisTest::filterColumns(const QVector<Column*>& columns) {
+	QVector<QVector<double>> samples;
+	samples.reserve(columns.size());
+
+	for (const Column* col : columns)
+		samples.append(std::move(filterColumn(col)));
+
+	return samples;
+}
+
+QVector<QVector<double>> HypothesisTest::filterColumnsParallel(const QVector<Column*>& columns) {
+	return QtConcurrent::mapped(columns, filterColumn).results();
+}
+
+double** HypothesisTest::toArrayOfArrays(QVector<QVector<double>>& data) {
+	double** result = new double*[data.size()];
+	for (int i = 0; i < data.size(); ++i)
+		result[i] = data[i].data();
+	return result;
 }

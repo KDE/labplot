@@ -27,7 +27,7 @@ class HypothesisTest : public AbstractPart {
 	Q_OBJECT
 
 public:
-	explicit HypothesisTest(const QString& name);
+	explicit HypothesisTest(const QString&);
 	~HypothesisTest() override;
 
 	enum class Test { t_test_one_sample, t_test_two_sample, t_test_two_sample_paired, one_way_anova, mann_whitney_u_test, kruskal_wallis_test, log_rank_test };
@@ -43,13 +43,13 @@ public:
 
 	// getters and setter
 	const QVector<Column*>& columns() const;
-	virtual void setColumns(const QVector<Column*>&);
+	void setColumns(const QVector<Column*>&);
 	QString resultHtml() const;
 
-	void setTestMean(double mean);
+	void setTestMean(double);
 	double testMean() const;
 
-	void setSignificanceLevel(double alpha);
+	void setSignificanceLevel(double);
 	double significanceLevel() const;
 
 	void setTail(nsl_stats_tail_type);
@@ -71,7 +71,7 @@ Q_SIGNALS:
 
 private:
 	void performOneSampleTTest();
-	void performTwoSampleTTest(bool paired);
+	void performTwoSampleTTest(bool);
 	void performOneWayANOVATest();
 	void performMannWhitneyUTest();
 	void performKruskalWallisTest();
@@ -82,6 +82,12 @@ private:
 	void addResultLine(const QString& name, const QString& value);
 	void addResultLine(const QString& name, double value);
 	void addResultLine(const QString& name);
+
+	static bool rowIsValid(const Column*, int);
+	static QVector<double> filterColumn(const Column* col);
+	static QVector<QVector<double>> filterColumns(const QVector<Column*>&);
+	static QVector<QVector<double>> filterColumnsParallel(const QVector<Column*>& columns);
+	static double** toArrayOfArrays(QVector<QVector<double>>& data);
 
 	QString m_result; // result html text
 	QVector<Column*> m_columns;

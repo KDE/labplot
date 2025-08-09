@@ -618,6 +618,7 @@ target_link_libraries(labplotnsllib
 )
 target_link_libraries(labplotbackendlib
     Qt${QT_MAJOR_VERSION}::Core
+    Qt${QT_MAJOR_VERSION}::Concurrent   # QConcurrent
     Qt${QT_MAJOR_VERSION}::Gui    # QColor
     Qt${QT_MAJOR_VERSION}::Widgets    # QApplication
     Qt${QT_MAJOR_VERSION}::Network    # QLocalSocket
