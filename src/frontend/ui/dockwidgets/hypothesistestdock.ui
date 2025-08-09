@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>468</width>
-    <height>950</height>
+    <height>1036</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,7 +24,7 @@
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>40</width>
+       <width>10</width>
        <height>20</height>
       </size>
      </property>
@@ -502,12 +502,12 @@
   <customwidget>
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
-   <header>src/frontend/widgets/ResizableTextEdit.h</header>
+   <header>frontend/widgets/ResizableTextEdit.h</header>
   </customwidget>
   <customwidget>
    <class>TimedLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>src/frontend/widgets/TimedLineEdit.h</header>
+   <header>frontend/widgets/TimedLineEdit.h</header>
   </customwidget>
   <customwidget>
    <class>NumberSpinBox</class>

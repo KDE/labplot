@@ -39,17 +39,17 @@ public:
 	void setTail(nsl_stats_tail_type);
 	nsl_stats_tail_type tail() const;
 
-	void setTest(HypothesisTest::Test);
-	HypothesisTest::Test test() const;
+	void setTest(Test);
+	Test test() const;
 
 	void recalculate();
 	void resetResult();
 
 	void setColumns(const QVector<Column*>&) override;
 
-	static QPair<int, int> variableCount(HypothesisTest::Test);
-	static int hypothesisCount(HypothesisTest::Test);
-	static QVector<QPair<QString, QString>> hypothesisText(HypothesisTest::Test);
+	static QPair<int, int> variableCount(Test);
+	static int hypothesisCount(Test);
+	static QVector<QPair<QString, QString>> hypothesisText(Test);
 
 private:
 	void performOneSampleTTest();

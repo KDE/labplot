@@ -47,13 +47,11 @@ Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
 
 private:
-	QString formatRoundedValue(QVariant number, int precision = 3);
+	// QString formatRoundedValue(QVariant number, int precision = 3);
 	double calculateSum(const Column* column, int N = -1);
 	double calculateSumOfSquares(const Column* column, int N = -1);
 	void countUniquePartitions(Column* column, int& np, int& totalRows);
 
-	GeneralErrorType computeColumnStats(const Column* column, int& count, double& sum, double& mean, double& stdDev);
-	GeneralErrorType computePairedColumnStats(const Column* column1, const Column* column2, int& count, double& sum, double& mean, double& stdDev);
 	GeneralErrorType computeCategoricalStats(Column* column1,
 											 Column* column2,
 											 int n[],

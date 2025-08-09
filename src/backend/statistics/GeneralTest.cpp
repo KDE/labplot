@@ -68,7 +68,7 @@ void GeneralTest::addResultLine(const QString& name, double value) {
 void GeneralTest::addResultLine(const QString& name) {
 	m_result += name;
 }
-
+/*
 QString GeneralTest::formatRoundedValue(QVariant number, int precision) {
 	// Only round if the value is a floating point type.
 	if (number.userType() == QMetaType::Double || number.userType() == QMetaType::Float) {
@@ -81,7 +81,7 @@ QString GeneralTest::formatRoundedValue(QVariant number, int precision) {
 			return QString::number((tempNum / 10 + 1) / multiplier);
 	}
 	return i18n("%1", number.toString());
-}
+}*/
 
 double GeneralTest::calculateSum(const Column* column, int N) {
 	if (!column->isNumeric())
@@ -107,63 +107,6 @@ double GeneralTest::calculateSumOfSquares(const Column* column, int N) {
 	for (int i = 0; i < N; i++)
 		sumSq += gsl_pow_2(column->valueAt(i));
 	return sumSq;
-}
-
-GeneralTest::GeneralErrorType GeneralTest::computeColumnStats(const Column* column, int& count, double& sum, double& mean, double& stdDev) {
-	const auto& statistics = column->statistics();
-	count = statistics.size;
-	if (count < 1)
-		return GeneralTest::ErrorEmptyColumn;
-
-	mean = statistics.arithmeticMean;
-	sum = calculateSum(column, count);
-	stdDev = statistics.standardDeviation;
-	return GeneralTest::NoError;
-}
-
-GeneralTest::GeneralErrorType
-GeneralTest::computePairedColumnStats(const Column* column1, const Column* column2, int& count, double& sum, double& mean, double& stdDev) {
-	sum = 0;
-	mean = 0;
-	stdDev = 0;
-
-	int count1 = column1->rowCount();
-	int count2 = column2->rowCount();
-
-	count = qMin(count1, count2);
-	double value1, value2;
-	for (int i = 0; i < count; i++) {
-		value1 = column1->valueAt(i);
-		value2 = column2->valueAt(i);
-
-		if (std::isnan(value1) || std::isnan(value2)) {
-			if (std::isnan(value1) && std::isnan(value2))
-				count = i;
-			else
-				return GeneralTest::ErrorUnqualSize;
-			break;
-		}
-		sum += value1 - value2;
-	}
-
-	if (count < 1)
-		return GeneralTest::ErrorEmptyColumn;
-
-	mean = sum / count;
-
-	double diff, variance = 0;
-	for (int i = 0; i < count; i++) {
-		value1 = column1->valueAt(i);
-		value2 = column2->valueAt(i);
-		diff = value1 - value2;
-		variance += gsl_pow_2(diff - mean);
-	}
-
-	if (count > 1)
-		variance /= (count - 1);
-
-	stdDev = sqrt(variance);
-	return GeneralTest::NoError;
 }
 
 void GeneralTest::countUniquePartitions(Column* column, int& np, int& totalRows) {
@@ -208,7 +151,7 @@ GeneralTest::GeneralErrorType GeneralTest::computeCategoricalStats(Column* colum
 		stdDev[i] = 0;
 	}
 
-	AbstractColumn::ColumnMode originalMode = columns[0]->columnMode();
+	auto originalMode = columns[0]->columnMode();
 	columns[0]->setColumnMode(AbstractColumn::ColumnMode::Text);
 
 	int partitionNumber = 1;

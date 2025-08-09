@@ -9,14 +9,12 @@
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
-#include <KLocalizedString>
-#include <QAbstractButton>
-#include <QRadioButton>
 
 #include "HypothesisTestDock.h"
+#include "backend/core/column/Column.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
-#include "backend/core/column/Column.h"
+#include <KLocalizedString>
 
 /*!
   \class HypothesisTestDock

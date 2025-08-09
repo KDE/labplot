@@ -26,14 +26,11 @@ class HypothesisTestDock : public BaseDock {
 public:
 	explicit HypothesisTestDock(QWidget*);
 	void setTest(HypothesisTest*);
-
 	void retranslateUi() override;
 
 private:
 	Ui::HypothesisTestDock ui;
-
 	HypothesisTest* m_test{nullptr};
-
 	QVector<QMetaObject::Connection> m_aspectConnections;
 
 	void hideControls();
