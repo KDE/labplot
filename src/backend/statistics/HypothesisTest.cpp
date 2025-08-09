@@ -9,22 +9,51 @@
 
 #include "HypothesisTest.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/macros.h"
+#include "frontend/statistics/HypothesisTestView.h"
+
+#include <QMenu>
+#include <QPrintDialog>
+#include <QPrintPreviewDialog>
+#include <QPrinter>
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <QLocale>
+
 #include <cmath>
+#include <gsl/gsl_math.h>
 
 /*!
  * \brief This class implements various statistical hypothesis tests.
  */
 HypothesisTest::HypothesisTest(const QString& name)
-	: GeneralTest(name, AspectType::HypothesisTest) {
+	: AbstractPart(name, AspectType::HypothesisTest) {
 	setTest(m_test);
 }
 
-HypothesisTest::~HypothesisTest() {
+HypothesisTest::~HypothesisTest() = default;
+
+QString HypothesisTest::resultHtml() const {
+	return m_result;
+}
+
+void HypothesisTest::setColumns(const QVector<Column*>& cols) {
+	auto [min, max] = variableCount(m_test);
+	if (cols.size() < min || cols.size() > max)
+		return;
+
+	for (auto* col : cols)
+		if (!col->isNumeric())
+			return;
+
+	m_columns = cols;
+}
+
+const QVector<Column*>& HypothesisTest::columns() const {
+	return m_columns;
 }
 
 void HypothesisTest::setTestMean(double mean) {
@@ -53,18 +82,185 @@ nsl_stats_tail_type HypothesisTest::tail() const {
 	return m_tail;
 }
 
-void HypothesisTest::setColumns(const QVector<Column*>& cols) {
-	auto [min, max] = variableCount(m_test);
-	if (cols.size() < min || cols.size() > max)
-		return;
+QPair<int, int> HypothesisTest::variableCount(Test test) {
+	switch (test) {
+	case Test::t_test_one_sample:
+		return {1, 1};
+		break;
+	case Test::t_test_two_sample:
+	case Test::t_test_two_sample_paired:
+		return {2, 2};
+		break;
+	case Test::log_rank_test:
+		return {3, 3};
+		break;
+	case Test::one_way_anova:
+	case Test::mann_whitney_u_test:
+	case Test::kruskal_wallis_test:
+		// TODO
+		break;
+	}
 
-	for (auto* col : cols)
-		if (!col->isNumeric())
-			return;
-
-	m_columns = cols;
+	return {0, 0};
 }
 
+void HypothesisTest::setTest(Test test) {
+	m_test = test;
+	m_columns.clear();
+	resetResult();
+}
+
+HypothesisTest::Test HypothesisTest::test() const {
+	return m_test;
+}
+
+QVector<QPair<QString, QString>> HypothesisTest::hypothesisText(Test test) {
+	int hypCount = hypothesisCount(test);
+
+	QVector<QPair<QString, QString>> hypothesis(hypCount);
+
+	if (hypCount == 3) {
+		QString lHSymbol;
+		QString rHSymbol;
+		switch (test) {
+		case Test::t_test_one_sample:
+			lHSymbol = QStringLiteral("µ");
+			rHSymbol = QStringLiteral("µ₀");
+			break;
+		case Test::t_test_two_sample:
+			lHSymbol = QStringLiteral("µ<sub>1</sub>");
+			rHSymbol = QStringLiteral("µ<sub>2</sub>");
+			break;
+		case Test::t_test_two_sample_paired:
+			lHSymbol = QStringLiteral("µ<sub>D</sub>");
+			rHSymbol = QStringLiteral("0");
+			break;
+		case Test::one_way_anova:
+		case Test::mann_whitney_u_test:
+		case Test::kruskal_wallis_test:
+		case Test::log_rank_test:
+			// TODO
+			break;
+		}
+
+		hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(lHSymbol + QStringLiteral(" = ") + rHSymbol, lHSymbol + QStringLiteral(" ≠ ") + rHSymbol);
+		hypothesis[nsl_stats_tail_type_negative] =
+			QPair<QString, QString>(lHSymbol + QStringLiteral(" ≥ ") + rHSymbol, lHSymbol + QStringLiteral(" &lt; ") + rHSymbol);
+		hypothesis[nsl_stats_tail_type_positive] =
+			QPair<QString, QString>(lHSymbol + QStringLiteral(" ≤ ") + rHSymbol, lHSymbol + QStringLiteral(" > ") + rHSymbol);
+	} else if (hypCount == 1) {
+		switch (test) {
+		case Test::t_test_one_sample:
+		case Test::t_test_two_sample:
+		case Test::t_test_two_sample_paired:
+		case Test::one_way_anova:
+		case Test::mann_whitney_u_test:
+		case Test::kruskal_wallis_test:
+			break;
+		case Test::log_rank_test:
+			hypothesis[nsl_stats_tail_type_two] =
+				QPair<QString, QString>(QStringLiteral("S<sub>0</sub> = S<sub>1</sub>"), QStringLiteral("S<sub>0</sub> ≠ S<sub>1</sub>"));
+			break;
+		}
+	}
+
+	return hypothesis;
+}
+
+int HypothesisTest::hypothesisCount(Test test) {
+	switch (test) {
+	case Test::t_test_one_sample:
+	case Test::t_test_two_sample:
+	case Test::t_test_two_sample_paired:
+		return 3;
+	case Test::log_rank_test:
+		return 1;
+	case Test::one_way_anova:
+	case Test::mann_whitney_u_test:
+	case Test::kruskal_wallis_test:
+		break;
+	}
+
+	return 0;
+}
+
+// ##############################################################################
+// #######################  Virtual functions  ##################################
+// ##############################################################################
+bool HypothesisTest::exportView() const {
+	// TODO: implement the export of the html to a file
+	return true;
+}
+
+bool HypothesisTest::printView() {
+#ifndef SDK
+	QPrinter printer;
+	auto* dlg = new QPrintDialog(&printer, m_view);
+	dlg->setWindowTitle(i18nc("@title:window", "Statistical Test"));
+	bool ret;
+	if ((ret = (dlg->exec() == QDialog::Accepted)))
+		m_view->print(&printer);
+
+	delete dlg;
+	return ret;
+#else
+	return false;
+#endif
+}
+
+bool HypothesisTest::printPreview() const {
+#ifndef SDK
+	auto* dlg = new QPrintPreviewDialog(m_view);
+	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &HypothesisTestView::print);
+	return dlg->exec();
+#else
+	return false;
+#endif
+}
+
+QMenu* HypothesisTest::createContextMenu() {
+	QMenu* menu = AbstractPart::createContextMenu();
+	// Additional menu customization can be done here.
+	return menu;
+}
+
+QWidget* HypothesisTest::view() const {
+	if (!m_partView) {
+		m_view = new HypothesisTestView(const_cast<HypothesisTest*>(this));
+		m_partView = m_view;
+	}
+	return m_partView;
+}
+
+// ##############################################################################
+// ##################  Result output related functions  #########################
+// ##############################################################################
+void HypothesisTest::addResultTitle(const QString& text) {
+	m_result += QStringLiteral("<h1>") + text + QStringLiteral("</h1>");
+}
+
+void HypothesisTest::addResultSection(const QString& text) {
+	m_result += QStringLiteral("<h2>") + text + QStringLiteral("</h2>");
+}
+
+void HypothesisTest::addResultLine(const QString& name, const QString& value) {
+	m_result += QStringLiteral("<b>") + name + QStringLiteral("</b>: ") + value + QStringLiteral("<br>");
+}
+
+void HypothesisTest::addResultLine(const QString& name, double value) {
+	if (!std::isnan(value))
+		addResultLine(name, QLocale().toString(value));
+	else
+		addResultLine(name, QStringLiteral("-"));
+}
+
+void HypothesisTest::addResultLine(const QString& name) {
+	m_result += name;
+}
+
+// ##############################################################################
+// ##################  Result output related functions  #########################
+// ##############################################################################
 void HypothesisTest::recalculate() {
 	if (m_columns.isEmpty()) {
 		Q_EMIT info(i18n("No variable column provided."));
@@ -449,106 +645,22 @@ void HypothesisTest::performLogRankTest() {
 	}
 }
 
-QPair<int, int> HypothesisTest::variableCount(Test test) {
-	switch (test) {
-	case Test::t_test_one_sample:
-		return {1, 1};
-		break;
-	case Test::t_test_two_sample:
-	case Test::t_test_two_sample_paired:
-		return {2, 2};
-		break;
-	case Test::log_rank_test:
-		return {3, 3};
-		break;
-	case Test::one_way_anova:
-	case Test::mann_whitney_u_test:
-	case Test::kruskal_wallis_test:
-		// TODO
-		break;
-	}
+// ##############################################################################
+// ##################  Serialization/Deserialization  ###########################
+// ##############################################################################
 
-	return {0, 0};
+//! Save as XML
+void HypothesisTest::save(QXmlStreamWriter* writer) const {
+	writer->writeStartElement(QLatin1String("HypothesisTest"));
+	writeBasicAttributes(writer);
+	writeCommentElement(writer);
+	writer->writeEndElement();
 }
 
-void HypothesisTest::setTest(Test test) {
-	m_test = test;
-
-	m_columns.clear();
-
-	resetResult();
-}
-
-HypothesisTest::Test HypothesisTest::test() const {
-	return m_test;
-}
-
-QVector<QPair<QString, QString>> HypothesisTest::hypothesisText(Test test) {
-	int hypCount = hypothesisCount(test);
-
-	QVector<QPair<QString, QString>> hypothesis(hypCount);
-
-	if (hypCount == 3) {
-		QString lHSymbol;
-		QString rHSymbol;
-		switch (test) {
-		case Test::t_test_one_sample:
-			lHSymbol = QStringLiteral("µ");
-			rHSymbol = QStringLiteral("µ₀");
-			break;
-		case Test::t_test_two_sample:
-			lHSymbol = QStringLiteral("µ<sub>1</sub>");
-			rHSymbol = QStringLiteral("µ<sub>2</sub>");
-			break;
-		case Test::t_test_two_sample_paired:
-			lHSymbol = QStringLiteral("µ<sub>D</sub>");
-			rHSymbol = QStringLiteral("0");
-			break;
-		case Test::one_way_anova:
-		case Test::mann_whitney_u_test:
-		case Test::kruskal_wallis_test:
-		case Test::log_rank_test:
-			// TODO
-			break;
-		}
-
-		hypothesis[nsl_stats_tail_type_two] = QPair<QString, QString>(lHSymbol + QStringLiteral(" = ") + rHSymbol, lHSymbol + QStringLiteral(" ≠ ") + rHSymbol);
-		hypothesis[nsl_stats_tail_type_negative] =
-			QPair<QString, QString>(lHSymbol + QStringLiteral(" ≥ ") + rHSymbol, lHSymbol + QStringLiteral(" &lt; ") + rHSymbol);
-		hypothesis[nsl_stats_tail_type_positive] =
-			QPair<QString, QString>(lHSymbol + QStringLiteral(" ≤ ") + rHSymbol, lHSymbol + QStringLiteral(" > ") + rHSymbol);
-	} else if (hypCount == 1) {
-		switch (test) {
-		case Test::t_test_one_sample:
-		case Test::t_test_two_sample:
-		case Test::t_test_two_sample_paired:
-		case Test::one_way_anova:
-		case Test::mann_whitney_u_test:
-		case Test::kruskal_wallis_test:
-			break;
-		case Test::log_rank_test:
-			hypothesis[nsl_stats_tail_type_two] =
-				QPair<QString, QString>(QStringLiteral("S<sub>0</sub> = S<sub>1</sub>"), QStringLiteral("S<sub>0</sub> ≠ S<sub>1</sub>"));
-			break;
-		}
-	}
-
-	return hypothesis;
-}
-
-int HypothesisTest::hypothesisCount(Test test) {
-	switch (test) {
-	case Test::t_test_one_sample:
-	case Test::t_test_two_sample:
-	case Test::t_test_two_sample_paired:
-		return 3;
-	case Test::log_rank_test:
-		return 1;
-	case Test::one_way_anova:
-	case Test::mann_whitney_u_test:
-	case Test::kruskal_wallis_test:
-		break;
-	}
-
-	return 0;
+//! Load from XML
+bool HypothesisTest::load(XmlStreamReader* reader, bool preview) {
+	Q_UNUSED(preview)
+	if (!readBasicAttributes(reader))
+		return false;
+	return !reader->hasError();
 }

@@ -144,7 +144,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/worksheet/SlidingPanel.cpp
     ${FRONTEND_DIR}/worksheet/WorksheetPreviewWidget.cpp
     ${FRONTEND_DIR}/worksheet/WorksheetView.cpp
-    ${FRONTEND_DIR}/statistics/GeneralTestView.cpp
+    ${FRONTEND_DIR}/statistics/HypothesisTestView.cpp
     ${FRONTEND_DIR}/widgets/BackgroundWidget.cpp
     ${FRONTEND_DIR}/widgets/ConstantsWidget.cpp
     ${FRONTEND_DIR}/widgets/ThemesComboBox.cpp
@@ -474,7 +474,6 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYConvolutionCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
-    ${BACKEND_DIR}/statistics/GeneralTest.cpp
     ${BACKEND_DIR}/statistics/HypothesisTest.cpp
 )
 

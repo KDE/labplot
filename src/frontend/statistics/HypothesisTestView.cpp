@@ -1,5 +1,5 @@
 /***************************************************************************
-	File                 : GeneralTestView.cpp
+	File                 : HypothesisTestView.cpp
 	Project              : LabPlot
 	Description          : View class for statistical tests
 	--------------------------------------------------------------------
@@ -7,19 +7,19 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 ***************************************************************************/
 
-#include "GeneralTestView.h"
-#include "backend/statistics/GeneralTest.h"
+#include "HypothesisTestView.h"
+#include "backend/statistics/HypothesisTest.h"
 
 #include <QPrinter>
 #include <QTextEdit>
 #include <QVBoxLayout>
 
 /*!
-	\class GeneralTestView
+	\class HypothesisTestView
 	\brief View class for statistical tests showing the HTML formatted results.
 	\ingroup frontend
 */
-GeneralTestView::GeneralTestView(GeneralTest* test) : QWidget()
+HypothesisTestView::HypothesisTestView(HypothesisTest* test) : QWidget()
 	, m_test(test) {
 
 	auto* layout = new QVBoxLayout(this);
@@ -29,13 +29,13 @@ GeneralTestView::GeneralTestView(GeneralTest* test) : QWidget()
 
 	// show the initial/default result and connect to the changes to update it
 	m_textEdit->setText(m_test->resultHtml());
-	connect(m_test, &GeneralTest::changed, [=]() {
+	connect(m_test, &HypothesisTest::changed, [=]() {
 		m_textEdit->setText(m_test->resultHtml());
 	});
 }
 
-GeneralTestView::~GeneralTestView() = default;
+HypothesisTestView::~HypothesisTestView() = default;
 
-void GeneralTestView::print(QPrinter* printer) const {
+void HypothesisTestView::print(QPrinter* printer) const {
 	m_textEdit->print(printer);
 }

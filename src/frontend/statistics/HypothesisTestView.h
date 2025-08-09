@@ -1,5 +1,5 @@
 /***************************************************************************
-	File                 : GeneralTestView.h
+	File                 : HypothesisTestView.h
 	Project              : LabPlot
 	Description          : View class for statistical tests
 	--------------------------------------------------------------------
@@ -7,28 +7,28 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 ***************************************************************************/
 
-#ifndef GENERALTESTVIEW_H
-#define GENERALTESTVIEW_H
+#ifndef HYPOTHESISTESTVIEW_H
+#define HYPOTHESISTESTVIEW_H
 
 #include <QWidget>
 
-class GeneralTest;
+class HypothesisTest;
 class QTextEdit;
 class QPrinter;
 
-class GeneralTestView : public QWidget {
+class HypothesisTestView : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit GeneralTestView(GeneralTest*);
-	~GeneralTestView() override;
+	explicit HypothesisTestView(HypothesisTest*);
+	~HypothesisTestView() override;
 
 public Q_SLOTS:
 	void print(QPrinter*) const;
 
 private:
-	GeneralTest* m_test{nullptr};
+	HypothesisTest* m_test{nullptr};
 	QTextEdit* m_textEdit{nullptr};
 };
 
-#endif // GENERALTESTVIEW_H
+#endif // HYPOTHESISTESTVIEW_H
