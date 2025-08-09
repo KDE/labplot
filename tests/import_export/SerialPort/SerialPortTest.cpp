@@ -23,6 +23,7 @@ void SerialPortTest::initTestCase() {
 	QVERIFY(p.waitForFinished());
 
 	const auto whichResult = UTF8_QSTRING(p.readAllStandardOutput()).trimmed();
+	DEBUG(Q_FUNC_INFO << ", socat found: \"" << whichResult.toStdString() << "\"")
 	m_socat_command_available = !whichResult.isEmpty();
 #else
 	m_socat_command_available = false;
@@ -38,8 +39,9 @@ void SerialPortTest::initTestCase() {
 
 	QVERIFY(waitForSignal(&m_process_socat, &QProcess::readyReadStandardError, 5000));
 
+	enableInfoTrace(true);
 	const auto se = UTF8_QSTRING(m_process_socat.readAllStandardError()); // Socat uses stderr for output by default
-	DEBUG(Q_FUNC_INFO << ", Output:" << STDSTRING(se));
+	DEBUG(Q_FUNC_INFO << ", Output:" << std::endl << "\"" << STDSTRING(se) << "\"");
 
 	QRegularExpression re(QStringLiteral(".*(?<device>/dev/[a-zA-z0-9]*/[0-9]*)$"));
 
@@ -48,10 +50,12 @@ void SerialPortTest::initTestCase() {
 	auto m = re.match(f.at(0));
 	QVERIFY(m.hasMatch());
 	m_senderDevice = m.captured(QStringLiteral("device"));
+	DEBUG(Q_FUNC_INFO << ", sender device: " << m_senderDevice.toStdString())
 
 	m = re.match(f.at(1));
 	QVERIFY(m.hasMatch());
 	m_receiverDevice = m.captured(QStringLiteral("device"));
+	DEBUG(Q_FUNC_INFO << ", receiver device: " << m_receiverDevice.toStdString())
 
 	// brackets are required around the command!
 	// const auto command = QStringLiteral("(while true; do echo Sending; echo $RANDOM,$RANDOM,$RANDOM.$RANDOM > %1; sleep %2; done)").arg(senderDevice).arg(1);
@@ -99,18 +103,27 @@ void SerialPortTest::testReading() {
 	dataSource.setFilter(filter);
 
 	const auto command_template = QStringLiteral("(echo %1 > %2)");
+	// Fail immediately if there is any process error
 	connect(&m_process_send, &QProcess::errorOccurred, []() {
-		QVERIFY(false); //, STDSTRING(m_process_send.errorString()).data());
+		QVERIFY2(false, "Unexpected QProcess error occurred.");
 	});
-	connect(&m_process_send, &QProcess::readyReadStandardError, []() {
-		QVERIFY(false); //, STDSTRING(UTF8_QSTRING(m_process_send.readAllStandardError())).data());
+
+	// Fail immediately if there is any stderr output
+	connect(&m_process_send, &QProcess::readyReadStandardError, [this]() {
+		auto err = m_process_send.readAllStandardError();
+		QVERIFY2(false, qPrintable(QStringLiteral("Unexpected stderr output: %1").arg(QString::fromUtf8(err))));
 	});
 
 	// read the data and perform checks
-
 	auto data = QStringLiteral("'1,2,3.4345\n2,5,-234\n3,490,293.65\n4,23,0.0001\n'");
+
+	QSignalSpy outSpy(&m_process_send, &QProcess::readyReadStandardOutput);
+
 	m_process_send.start(QStringLiteral("/bin/bash"), QStringList() << QStringLiteral("-c") << command_template.arg(data).arg(m_senderDevice));
-	QVERIFY(m_process_send.waitForStarted()); //, STDSTRING(m_process_send.errorString()).data());
+
+	// DEBUG(Q_FUNC_INFO << ", error = " << STDSTRING(m_process_send.errorString()).data());
+	QVERIFY(m_process_send.waitForStarted());
+
 	dataSource.read();
 
 	wait(2000);

@@ -126,7 +126,8 @@ void Spreadsheet::initConnectionsRowCountChanges() {
 	if (d->firstColumn == firstColumn)
 		return;
 	else {
-		disconnect(d->firstColumn, nullptr, this, nullptr);
+		if (d->firstColumn)
+			disconnect(d->firstColumn, nullptr, this, nullptr);
 		d->firstColumn = firstColumn;
 	}
 

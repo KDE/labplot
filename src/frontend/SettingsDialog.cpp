@@ -98,9 +98,9 @@ SettingsDialog::SettingsDialog(QWidget* parent, const QLocale& locale)
 
 #ifdef HAVE_SCRIPTING
 	m_editorRootPage = new SettingsEditorPage(this);
-	KPageWidgetItem* editorRootFrame = addPage(m_editorRootPage, i18n("Text Editor"));
-	m_editorRootPage->addSubPages(editorRootFrame, this);
-	editorRootFrame->setIcon(QIcon::fromTheme(QLatin1String("accessories-text-editor")));
+	m_editorRootItem = addPage(m_editorRootPage, i18n("Text Editor"));
+	m_editorRootPage->addSubPages(m_editorRootItem, this);
+	m_editorRootItem->setIcon(QIcon::fromTheme(QLatin1String("accessories-text-editor")));
 	connect(m_editorRootPage, &SettingsEditorPage::settingsChanged, this, &SettingsDialog::changed);
 #endif
 
@@ -143,6 +143,11 @@ void SettingsDialog::navigateTo(Settings::Type type) {
 #ifdef HAVE_KUSERFEEDBACK
 	case Settings::Type::Feedback:
 		setCurrentPage(m_userFeedbackPageItem);
+		break;
+#endif
+#ifdef HAVE_SCRIPTING
+	case Settings::Type::ScriptEditor:
+		setCurrentPage(m_editorRootItem);
 		break;
 #endif
 	}

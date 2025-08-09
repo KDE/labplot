@@ -31,8 +31,8 @@ Bug fixes:
 	* Fix the export to SQLite of text values in the spreadsheet containing single quotes
 	* Fix FITS import and export issues
 	* Don't show any error messages and NaN values in the process behavior chart if no column or an empty column was selected
-	* Removed unwanted entries on the undo stack that were created when modifying properties of the process behavior and run charts
-	* Improved the quality of the fit model previews in the properties explorer on hidpi screens
+	* Remove unwanted entries on the undo stack that were created when modifying properties of the process behavior and run charts
+	* Improve the quality of the fit model preview in the properties explorer and formula view in the random values dialog on hidpi screens
 
 Improvements:
 	* Improve handling of the tab-order to switch between the widgets in the properties explorer
