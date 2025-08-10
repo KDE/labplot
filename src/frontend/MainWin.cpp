@@ -2022,7 +2022,7 @@ void MainWin::newLiveDataSource() {
 }
 
 void MainWin::addAspectToProject(AbstractAspect* aspect) {
-	const QModelIndex& index = m_projectExplorer->currentIndex();
+	const auto& index = m_projectExplorer->currentIndex();
 	if (index.isValid()) {
 		auto* parent = static_cast<AbstractAspect*>(index.internalPointer());
 #ifdef HAVE_MQTT

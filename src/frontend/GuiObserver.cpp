@@ -518,13 +518,13 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		raiseDock(m_aspectDock, m_mainWindow->stackedWidget);
 		m_aspectDock->setAspects(selectedAspects);
 		break;
-#ifdef HAVE_SCRIPTING
 	case AspectType::Script:
+#ifdef HAVE_SCRIPTING
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Script"));
 		raiseDockConnect(m_scriptDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_scriptDock->setScriptsList(castList<Script>(selectedAspects));
-		break;
 #endif
+		break;
 	case AspectType::WorksheetElement:
 	case AspectType::WorksheetElementContainer:
 	case AspectType::WorksheetElementGroup:

@@ -57,7 +57,8 @@ private:
 #endif
 	SettingsDatasetsPage* m_datasetsPage{nullptr};
 #ifdef HAVE_SCRIPTING
-	SettingsEditorPage* m_editorRootPage;
+	SettingsEditorPage* m_editorRootPage{nullptr};
+	KPageWidgetItem* m_editorRootItem{nullptr};
 #endif
 	KPageWidgetItem* m_datasetsPageItem{nullptr};
 

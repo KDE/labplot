@@ -184,7 +184,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 		return {col_ptr->asStringColumn()->textAt(row)};
 	case Qt::ForegroundRole:
 		if (!col_ptr->isValid(row))
-			return {QBrush(Qt::red)};
+			return QBrush(Qt::red);
 		return color(col_ptr, row, AbstractColumn::Formatting::Foreground);
 	case Qt::BackgroundRole:
 		if (m_searchText.isEmpty())
@@ -193,7 +193,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 			if (col_ptr->asStringColumn()->textAt(row).indexOf(m_searchText) == -1)
 				return color(col_ptr, row, AbstractColumn::Formatting::Background);
 			else
-				return {QApplication::palette().color(QPalette::Highlight)};
+				return QApplication::palette().color(QPalette::Highlight);
 		}
 	case static_cast<int>(CustomDataRole::MaskingRole):
 		return {col_ptr->isMasked(row)};
@@ -589,7 +589,7 @@ QVariant SpreadsheetModel::color(const AbstractColumn* column, int row, Abstract
 	}
 
 	if (index < format.colors.count())
-		return {QColor(format.colors.at(index))};
+		return QColor(format.colors.at(index));
 	else
-		return {QColor(format.colors.constLast())};
+		return QColor(format.colors.constLast());
 }
