@@ -340,8 +340,7 @@ void HypothesisTest::performOneSampleTTest() {
 
 		Q_ASSERT(sample.size() == n);
 
-		tValue = nsl_stats_one_sample_t(sample.constData(), static_cast<size_t>(n), m_testMean);
-		pValue = nsl_stats_one_sample_t_p(sample.constData(), static_cast<size_t>(n), m_testMean, m_tail);
+		tValue = nsl_stats_one_sample_t(sample.constData(), static_cast<size_t>(n), m_testMean, m_tail, &pValue);
 	}
 
 	// title
@@ -436,11 +435,9 @@ void HypothesisTest::performTwoSampleTTest(bool paired) {
 
 			Q_ASSERT(differences.size() == n1);
 
-			tValue = nsl_stats_one_sample_t(differences.constData(), static_cast<size_t>(n1), 0.0);
-			pValue = nsl_stats_one_sample_t_p(differences.constData(), static_cast<size_t>(n1), 0.0, m_tail);
+			tValue = nsl_stats_one_sample_t(differences.constData(), static_cast<size_t>(n1), 0.0, m_tail, &pValue);
 		} else {
-			tValue = nsl_stats_independent_t(sample1.constData(), static_cast<size_t>(n1), sample2.constData(), static_cast<size_t>(n2));
-			pValue = nsl_stats_independent_t_p(sample1.constData(), static_cast<size_t>(n1), sample2.constData(), static_cast<size_t>(n2), m_tail);
+			tValue = nsl_stats_independent_t(sample1.constData(), static_cast<size_t>(n1), sample2.constData(), static_cast<size_t>(n2), m_tail, &pValue);
 		}
 	}
 
@@ -502,8 +499,8 @@ void HypothesisTest::performOneWayANOVATest() {
 
 	double** groups = toArrayOfArrays(groupData);
 
-	double f = nsl_stats_anova_oneway_f(groups, groupSizes.data(), static_cast<size_t>(groupCount));
-	double p = nsl_stats_anova_oneway_p(groups, groupSizes.data(), static_cast<size_t>(groupCount));
+	double p = NAN;
+	double f = nsl_stats_anova_oneway_f(groups, groupSizes.data(), static_cast<size_t>(groupCount), &p);
 
 	delete[] groups;
 
@@ -566,8 +563,8 @@ void HypothesisTest::performKruskalWallisTest() {
 
 	double** groups = toArrayOfArrays(groupData);
 
-	double h = nsl_stats_kruskal_wallis_h(groups, groupSizes.data(), static_cast<size_t>(groupCount));
-	double p = nsl_stats_kruskal_wallis_p(groups, groupSizes.data(), static_cast<size_t>(groupCount));
+	double p = NAN;
+	double h = nsl_stats_kruskal_wallis_h(groups, groupSizes.data(), static_cast<size_t>(groupCount), &p);
 
 	delete[] groups;
 
@@ -661,18 +658,14 @@ void HypothesisTest::performLogRankTest() {
 
 	Q_ASSERT((time.size() == status.size()) && group0Indices.size() + group1Indices.size() == time.size());
 
+	double p = NAN;
 	double stat = nsl_stats_log_rank_test_statistic(time.constData(),
 													status.constData(),
 													group0Indices.constData(),
 													group0Indices.size(),
 													group1Indices.constData(),
-													group1Indices.size());
-	double p = nsl_stats_log_rank_test_p(time.constData(),
-										 status.constData(),
-										 group0Indices.constData(),
-										 group0Indices.size(),
-										 group1Indices.constData(),
-										 group1Indices.size());
+													group1Indices.size(),
+													&p);
 
 	addResultTitle(i18n("Log-Rank Test"));
 

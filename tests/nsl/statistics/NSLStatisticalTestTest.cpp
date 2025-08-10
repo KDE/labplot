@@ -19,9 +19,9 @@ void NSLStatisticalTestTest::testMannWhitney() {
 	const size_t n1 = sizeof(sample1) / sizeof(sample1[0]);
 	const size_t n2 = sizeof(sample2) / sizeof(sample2[0]);
 
-	double U = nsl_stats_mannwhitney_u(sample1, n1, sample2, n2);
+	double p = NAN;
+	double U = nsl_stats_mannwhitney_u(sample1, n1, sample2, n2, nsl_stats_tail_type_two, &p);
 	printf("Mann-Whitney U: %f\n", U);
-	double p = nsl_stats_mannwhitney_p(U, n1, n2);
 	printf("Mann-Whitney p-value: %f\n", p);
 	double expected_U = 0.0;
 	double expected_p = 0.0808556;
@@ -38,10 +38,10 @@ void NSLStatisticalTestTest::testAnovaOneWay() {
 
 	double* groups[] = {const_cast<double*>(group1), const_cast<double*>(group2), const_cast<double*>(group3)};
 
-	double F = nsl_stats_anova_oneway_f(groups, sizes, n_groups);
+	double p = NAN;
+	double F = nsl_stats_anova_oneway_f(groups, sizes, n_groups, &p);
 	printf("Computed F-statistic: %f", F);
 
-	double p = nsl_stats_anova_oneway_p(groups, sizes, n_groups);
 	printf("Computed p-value: %f\n", p);
 
 	double expected_F = 13.0;
@@ -61,8 +61,8 @@ void NSLStatisticalTestTest::testKruskalWallis() {
 
 	double* groups[] = {const_cast<double*>(group1), const_cast<double*>(group2), const_cast<double*>(group3)};
 
-	double H = nsl_stats_kruskal_wallis_h(groups, sizes, n_groups);
-	double p = nsl_stats_kruskal_wallis_p(groups, sizes, n_groups);
+	double p = NAN;
+	double H = nsl_stats_kruskal_wallis_h(groups, sizes, n_groups, &p);
 	printf("Computed h-statistic: %f\n", H);
 	printf("Computed p-value: %f\n", p);
 
@@ -102,9 +102,9 @@ void NSLStatisticalTestTest::testLogRankTest() {
 		status1_combined[size1_1 + i] = status1_group2[i];
 	}
 
-	double H1 = nsl_stats_log_rank_test_statistic(time1_combined, status1_combined, group1_indices1, size1_1, group2_indices1, size2_1);
+	double p1 = NAN;
+	double H1 = nsl_stats_log_rank_test_statistic(time1_combined, status1_combined, group1_indices1, size1_1, group2_indices1, size2_1, &p1);
 
-	double p1 = nsl_stats_log_rank_test_p(time1_combined, status1_combined, group1_indices1, size1_1, group2_indices1, size2_1);
 	printf("Computed H-value: %f\n", H1);
 	printf("Computed p-value: %f\n", p1);
 
@@ -142,9 +142,9 @@ void NSLStatisticalTestTest::testLogRankTest() {
 		status2_combined[size1_2 + i] = status2_group2[i];
 	}
 
-	double H2 = nsl_stats_log_rank_test_statistic(time2_combined, status2_combined, group1_indices2, size1_2, group2_indices2, size2_2);
+	double p2 = NAN;
+	double H2 = nsl_stats_log_rank_test_statistic(time2_combined, status2_combined, group1_indices2, size1_2, group2_indices2, size2_2, &p2);
 
-	double p2 = nsl_stats_log_rank_test_p(time2_combined, status2_combined, group1_indices2, size1_2, group2_indices2, size2_2);
 	double expected_H2 = 0.586871;
 	double expected_p2 = 0.44362;
 	printf("Computed H-value: %f\n", H2);
@@ -160,8 +160,8 @@ void NSLStatisticalTestTest::testIndependentT() {
 	size_t n1 = 5;
 	size_t n2 = 5;
 
-	double t_stat = nsl_stats_independent_t(sample1, n1, sample2, n2);
-	double p_value = nsl_stats_independent_t_p(sample1, n1, sample2, n2, nsl_stats_tail_type_two);
+	double p_value = NAN;
+	double t_stat = nsl_stats_independent_t(sample1, n1, sample2, n2, nsl_stats_tail_type_two, &p_value);
 
 	double expected_t = -5.0671;
 	double expected_p = 0.0010;
@@ -179,8 +179,8 @@ void NSLStatisticalTestTest::testOneSampleT() {
 	const double sample[] = {15.2, 14.8, 15.5, 14.9, 15.1};
 	size_t n = 5;
 	double hypothesized_mean = 15.0;
-	double t_stat = nsl_stats_one_sample_t(sample, n, hypothesized_mean);
-	double p_value = nsl_stats_one_sample_t_p(sample, n, hypothesized_mean, nsl_stats_tail_type_two);
+	double p_value = NAN;
+	double t_stat = nsl_stats_one_sample_t(sample, n, hypothesized_mean, nsl_stats_tail_type_two, &p_value);
 
 	double expected_t = 0.8165;
 	double expected_p = 0.4601;

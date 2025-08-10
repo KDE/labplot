@@ -15,66 +15,94 @@
 #include <math.h>
 
 /* Mann-Whitney U test */
-double nsl_stats_mannwhitney_u(const double sample1[], size_t n1, const double sample2[], size_t n2) {
+double nsl_stats_mannwhitney_u(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail, double* p_out) {
 	size_t n = n1 + n2;
-	Rank combined[1000];
+
+	Rank* data = malloc(n * sizeof(Rank));
 
 	for (size_t i = 0; i < n1; i++) {
-		combined[i].value = sample1[i];
-		combined[i].group = 0;
+		data[i].value = sample1[i];
+		data[i].group = 0;
 	}
 	for (size_t i = 0; i < n2; i++) {
-		combined[n1 + i].value = sample2[i];
-		combined[n1 + i].group = 1;
+		data[n1 + i].value = sample2[i];
+		data[n1 + i].group = 1;
 	}
 
-	for (size_t i = 0; i < n - 1; i++) {
-		for (size_t j = i + 1; j < n; j++) {
-			if (combined[i].value > combined[j].value) {
-				Rank temp = combined[i];
-				combined[i] = combined[j];
-				combined[j] = temp;
-			}
-		}
-	}
+	qsort(data, n, sizeof(Rank), compare_rank);
 
-	double ranks[1000];
+	double tie_term = 0.0;
 	size_t i = 0;
 	while (i < n) {
-		size_t j = i;
-		while (j < n && combined[j].value == combined[i].value)
+		size_t j = i + 1;
+		while (j < n && data[j].value == data[i].value)
 			j++;
-		double rank = (i + j + 1) / 2.0;
+		size_t tie_count = j - i;
+		double avg_rank = ((double)(i + 1) + (double)j) / 2.0;
 		for (size_t k = i; k < j; k++)
-			ranks[k] = rank;
+			data[k].rank = avg_rank;
+		if (tie_count > 1)
+			tie_term += (tie_count * tie_count * tie_count - tie_count) / 12.0;
 		i = j;
 	}
 
 	double rank_sum1 = 0.0;
+	double rank_sum2 = 0.0;
 	for (size_t idx = 0; idx < n; idx++) {
-		if (combined[idx].group == 0)
-			rank_sum1 += ranks[idx];
+		if (data[idx].group == 0)
+			rank_sum1 += data[idx].rank;
+		else if (data[idx].group == 1)
+			rank_sum2 += data[idx].rank;
 	}
 
-	double U1 = rank_sum1 - (n1 * (n1 + 1)) / 2.0;
-	// double U2 = n1 * n2 - U1;
-	return U1;
-}
+	free(data);
 
-double nsl_stats_mannwhitney_p(double U, size_t n1, size_t n2) {
+	double U1 = n1 * n2 + (n1 * (n1 + 1)) / 2.0 - rank_sum1;
+	double U2 = n1 * n2 + (n2 * (n2 + 1)) / 2.0 - rank_sum2;
+
 	double mean_U = (n1 * n2) / 2.0;
-	double variance_U = (n1 * n2 * (n1 + n2 + 1)) / 12.0;
-	double sigma = sqrt(variance_U);
 
-	double z_abs = fabs(U - mean_U) - 0.5;
-	double z = z_abs / sigma;
+	double U = fmin(U1, U2);
 
-	double p_value = 2.0 * (1.0 - 0.5 * (1.0 + erf(z / sqrt(2.0))));
-	return p_value;
+	double stderr_U = sqrt((n1 * n2) / (n * (n - 1.0))) * sqrt((((n * n * n) - n) / 12.0) - tie_term);
+
+	double cc = NAN;
+	switch (tail) {
+	case nsl_stats_tail_type_two:
+		cc = (U > mean_U) ? 0.5 : (U < mean_U ? -0.5 : 0.0);
+		break;
+	case nsl_stats_tail_type_positive:
+		cc = -0.5;
+		break;
+	case nsl_stats_tail_type_negative:
+		cc = 0.5;
+		break;
+	}
+
+	double z = (U - mean_U - cc) / stderr_U;
+
+	double norm_cdf = gsl_cdf_ugaussian_P(z);
+
+	double p = NAN;
+	switch (tail) {
+	case nsl_stats_tail_type_two:
+		p = 2.0 * fmin(norm_cdf, 1.0 - norm_cdf);
+		break;
+	case nsl_stats_tail_type_positive:
+		p = 1.0 - norm_cdf;
+		break;
+	case nsl_stats_tail_type_negative:
+		p = norm_cdf;
+		break;
+	}
+
+	*p_out = p;
+
+	return U;
 }
 
 // one-way ANOVA
-double nsl_stats_anova_oneway_f(double** groups, size_t* sizes, size_t n_groups) {
+double nsl_stats_anova_oneway_f(double** groups, size_t* sizes, size_t n_groups, double* p_out) {
 	double grand_total = 0.0;
 	size_t total_samples = 0;
 	for (size_t i = 0; i < n_groups; i++) {
@@ -96,15 +124,11 @@ double nsl_stats_anova_oneway_f(double** groups, size_t* sizes, size_t n_groups)
 		ssw += gsl_stats_variance(groups[i], 1, sizes[i]) * (sizes[i] - 1);
 
 	const double delta = total_samples - n_groups;
+	double F = NAN;
 	if (delta != 0.) {
 		const double ms_within = ssw / delta;
-		return ms_between / ms_within;
-	} else
-		return NAN;
-}
-
-double nsl_stats_anova_oneway_p(double** groups, size_t* sizes, size_t n_groups) {
-	double F = nsl_stats_anova_oneway_f(groups, sizes, n_groups);
+		F = ms_between / ms_within;
+	}
 
 	size_t df_between = n_groups - 1;
 	size_t df_within = 0;
@@ -113,8 +137,9 @@ double nsl_stats_anova_oneway_p(double** groups, size_t* sizes, size_t n_groups)
 	df_within -= n_groups;
 
 	double p = nsl_stats_fdist_p(F, df_between, df_within);
+	*p_out = p;
 
-	return p;
+	return F;
 }
 
 // Helper function to compare Rank values for sorting
@@ -129,7 +154,7 @@ int compare_rank(const void* a, const void* b) {
 }
 
 // Kruskal-Wallis
-double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_groups) {
+double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_groups, double* p_out) {
 	size_t total_samples = 0;
 	size_t i, j;
 	for (i = 0; i < n_groups; i++)
@@ -137,17 +162,20 @@ double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_group
 
 	if (n_groups < 2) {
 		fprintf(stderr, "Error: Kruskal-Wallis test requires at least two groups.\n");
+		*p_out = NAN;
 		return NAN;
 	}
 	for (i = 0; i < n_groups; i++) {
 		if (sizes[i] < 1) {
 			fprintf(stderr, "Error: Each group must have at least one observation.\n");
+			*p_out = NAN;
 			return NAN;
 		}
 	}
 	Rank* ranks = (Rank*)malloc(total_samples * sizeof(Rank));
 	if (ranks == NULL) {
 		fprintf(stderr, "Error: Memory allocation failed.\n");
+		*p_out = NAN;
 		return NAN;
 	}
 	size_t idx = 0;
@@ -163,6 +191,7 @@ double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_group
 	if (rank_sum == NULL) {
 		fprintf(stderr, "Error: Memory allocation failed.\n");
 		free(ranks);
+		*p_out = NAN;
 		return NAN;
 	}
 	size_t* tie_counts = NULL;
@@ -196,6 +225,7 @@ double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_group
 					free(ranks);
 					free(rank_sum);
 					free(tie_counts);
+					*p_out = NAN;
 					return NAN;
 				}
 				tie_counts = temp;
@@ -226,15 +256,12 @@ double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_group
 	free(rank_sum);
 	free(tie_counts);
 
-	return H_corrected;
-}
-
-double nsl_stats_kruskal_wallis_p(double** groups, size_t* sizes, size_t n_groups) {
-	double H = nsl_stats_kruskal_wallis_h(groups, sizes, n_groups);
-	double p = gsl_cdf_chisq_Q(H, n_groups - 1);
+	double p = gsl_cdf_chisq_Q(H_corrected, n_groups - 1);
 	if (p < 1.e-9)
 		p = 0.0;
-	return p;
+
+	*p_out = p;
+	return H_corrected;
 }
 
 // Compare function for sorting indices by time
@@ -254,11 +281,13 @@ double nsl_stats_log_rank_test_statistic(const double* time,
 										 const size_t* group1_indices,
 										 size_t size1,
 										 const size_t* group2_indices,
-										 size_t size2) {
+										 size_t size2,
+										 double* p_out) {
 	size_t total_size = size1 + size2;
 	Observation* observations = (Observation*)malloc(total_size * sizeof(Observation));
 	if (observations == NULL) {
 		fprintf(stderr, "Error: Memory allocation failed.\n");
+		*p_out = NAN;
 		return NAN;
 	}
 
@@ -346,23 +375,21 @@ double nsl_stats_log_rank_test_statistic(const double* time,
 
 	if (V1 <= 0.0) {
 		fprintf(stderr, "Error: Variance is zero or negative. Cannot compute test statistic.\n");
+		*p_out = NAN;
 		return NAN;
 	}
 	double H = pow(O1 - E1, 2) / V1;
+	double p = gsl_cdf_chisq_Q(H, 1);
+	if (p < 1.e-9)
+		p = 0.0;
+
+	*p_out = p;
+
 	return H;
 }
 
-double
-nsl_stats_log_rank_test_p(const double* time, const int* status, const size_t* group1_indices, size_t size1, const size_t* group2_indices, size_t size2) {
-	double log_rank_stat = nsl_stats_log_rank_test_statistic(time, status, group1_indices, size1, group2_indices, size2);
-	double p = gsl_cdf_chisq_Q(log_rank_stat, 1);
-	if (p < 1.e-9)
-		p = 0.0;
-	return p;
-}
-
 /* Independent Sample Student's t-test */
-double nsl_stats_independent_t(const double sample1[], size_t n1, const double sample2[], size_t n2) {
+double nsl_stats_independent_t(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail, double* p_out) {
 	double mean1 = 0.0, mean2 = 0.0, var1 = 0.0, var2 = 0.0;
 	for (size_t i = 0; i < n1; i++)
 		mean1 += sample1[i];
@@ -381,31 +408,27 @@ double nsl_stats_independent_t(const double sample1[], size_t n1, const double s
 	double pooled_variance = ((n1 - 1) * var1 + (n2 - 1) * var2) / (n1 + n2 - 2);
 	double standard_error = sqrt(pooled_variance * (1.0 / n1 + 1.0 / n2));
 	double t_stat = (mean1 - mean2) / standard_error;
+
+	size_t df = n1 + n2 - 2;
+	double p_value = NAN;
+	switch (tail) {
+	case nsl_stats_tail_type_two:
+		p_value = 2.0 * (1.0 - gsl_cdf_tdist_P(fabs(t_stat), df));
+		break;
+	case nsl_stats_tail_type_negative: // Left-tailed: p = two_tailed_p / 2 if t < 0, else 1 - two_tailed_p / 2
+		p_value = gsl_cdf_tdist_P(t_stat, df);
+		break;
+	case nsl_stats_tail_type_positive: // Right-tailed: p = two_tailed_p / 2 if t > 0, else 1 - two_tailed_p / 2
+		p_value = 1.0 - gsl_cdf_tdist_P(t_stat, df);
+		break;
+	}
+	*p_out = p_value;
+
 	return t_stat;
 }
 
-double nsl_stats_independent_t_p(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail) {
-	size_t df = n1 + n2 - 2;
-	double t_stat = nsl_stats_independent_t(sample1, n1, sample2, n2);
-	double t_abs = fabs(t_stat);
-	double two_tailed_p_value = 2.0 * (1.0 - gsl_cdf_tdist_P(t_abs, df));
-	double p_value = 0.0;
-	switch (tail) {
-	case nsl_stats_tail_type_two:
-		p_value = two_tailed_p_value;
-		break;
-	case nsl_stats_tail_type_negative: // Left-tailed: p = two_tailed_p / 2 if t < 0, else 1 - two_tailed_p / 2
-		p_value = (t_stat < 0) ? two_tailed_p_value / 2.0 : 1.0 - two_tailed_p_value / 2.0;
-		break;
-	case nsl_stats_tail_type_positive: // Right-tailed: p = two_tailed_p / 2 if t > 0, else 1 - two_tailed_p / 2
-		p_value = (t_stat > 0) ? two_tailed_p_value / 2.0 : 1.0 - two_tailed_p_value / 2.0;
-		break;
-	}
-	return p_value;
-}
-
 /* One Sample Student's t-test */
-double nsl_stats_one_sample_t(const double sample[], size_t n, double hypothesized_mean) {
+double nsl_stats_one_sample_t(const double sample[], size_t n, double hypothesized_mean, nsl_stats_tail_type tail, double* p_out) {
 	double mean = 0.0, variance = 0.0;
 	for (size_t i = 0; i < n; i++)
 		mean += sample[i];
@@ -415,16 +438,8 @@ double nsl_stats_one_sample_t(const double sample[], size_t n, double hypothesiz
 	variance /= (n - 1);
 	double standard_error = sqrt(variance / n);
 	double t_stat = (mean - hypothesized_mean) / standard_error;
-	return t_stat;
-}
-
-/* One Sample Student's t-test p-value */
-double nsl_stats_one_sample_t_p(const double sample[], size_t n, double hypothesized_mean, nsl_stats_tail_type tail) {
-	if (n == 1)
-		return NAN;
 
 	size_t df = n - 1;
-	double t_stat = nsl_stats_one_sample_t(sample, n, hypothesized_mean);
 	double p_value = 0.0;
 	switch (tail) {
 	case nsl_stats_tail_type_two: // Two-tailed test: p = 2 * (1 - P(T ≤ |t_stat|))
@@ -437,7 +452,9 @@ double nsl_stats_one_sample_t_p(const double sample[], size_t n, double hypothes
 		p_value = 1.0 - gsl_cdf_tdist_P(t_stat, df);
 		break;
 	}
-	return p_value;
+	*p_out = p_value;
+
+	return t_stat;
 }
 
 // Logistic Regression Function for Binary Classification
