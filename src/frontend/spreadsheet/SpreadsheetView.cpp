@@ -350,7 +350,7 @@ void SpreadsheetView::initActions() {
 	action_clear_columns = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clear Content"), this);
 	action_freeze_columns = new QAction(i18n("Freeze Column"), this);
 
-	action_do_hypothesis_test = new QAction(i18n("Statistical Test"), this);
+	action_do_hypothesis_test = new QAction(i18n("Hypothesis Test"), this);
 
 	// TODO: action collection?
 	action_set_as_none = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::NoDesignation, false), this);
@@ -626,9 +626,6 @@ void SpreadsheetView::initMenus() {
 	m_columnMenu = new QMenu(this);
 	m_columnMenu->addMenu(m_plotDataMenu);
 
-	m_statisticalAnalysisMenu = new QMenu(i18n("Statistical Analysis"), this);
-	m_statisticalAnalysisMenu->addAction(action_do_hypothesis_test);
-
 	// Data fit sub-menu
 	QMenu* dataFitMenu = new QMenu(i18nc("Curve fitting", "Fit"), this);
 	dataFitMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")));
@@ -677,6 +674,11 @@ void SpreadsheetView::initMenus() {
 	m_analyzePlotMenu->addSeparator();
 	m_analyzePlotMenu->addAction(addDataReductionAction);
 	m_columnMenu->addMenu(m_analyzePlotMenu);
+
+	// statistical analysis
+	m_statisticalAnalysisMenu = new QMenu(i18n("Statistical Analysis"), this);
+	m_statisticalAnalysisMenu->addAction(action_do_hypothesis_test);
+	m_columnMenu->addMenu(m_statisticalAnalysisMenu);
 
 	m_columnSetAsMenu = new QMenu(i18n("Set Column As"), this);
 	m_columnMenu->addSeparator();
@@ -946,7 +948,7 @@ void SpreadsheetView::connectActions() {
 	connect(action_do_hypothesis_test, &QAction::triggered, this, [=] {
 		const auto& columns = selectedColumns();
 		QString name = (columns.size() == 1) ? columns.constFirst()->name() : m_spreadsheet->name();
-		auto* test = new HypothesisTest(i18n("Statistical Test for %1", name));
+		auto* test = new HypothesisTest(i18n("Hypothesis Test for %1", name));
 		test->setColumns(columns);
 		if (!test->columns().isEmpty())
 			test->recalculate();
