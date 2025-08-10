@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-05 00:38+0000\n"
+"POT-Creation-Date: 2025-08-10 00:39+0000\n"
 "PO-Revision-Date: 2025-08-04 14:28+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -51,7 +51,7 @@ msgid "Rename"
 msgstr "غيّر الاسم"
 
 #: src/backend/core/AbstractAspect.cpp:411
-#: src/backend/spreadsheet/Spreadsheet.cpp:718
+#: src/backend/spreadsheet/Spreadsheet.cpp:719
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:488
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
 #: src/frontend/worksheet/WorksheetView.cpp:143
@@ -318,7 +318,7 @@ msgid "UNDEFINED"
 msgstr "غير معرّف"
 
 #: src/backend/core/AbstractColumn.cpp:327
-#: src/backend/spreadsheet/Spreadsheet.cpp:316
+#: src/backend/spreadsheet/Spreadsheet.cpp:317
 #, fuzzy, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -330,7 +330,7 @@ msgstr[4] "أدرج صفوفا"
 msgstr[5] "أدرج صفوفا"
 
 #: src/backend/core/AbstractColumn.cpp:340
-#: src/backend/spreadsheet/Spreadsheet.cpp:299
+#: src/backend/spreadsheet/Spreadsheet.cpp:300
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -6196,7 +6196,7 @@ msgstr[4] ""
 msgstr[5] ""
 
 #: src/backend/matrix/Matrix.cpp:704 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:663
+#: src/backend/spreadsheet/Spreadsheet.cpp:664
 #, kde-format
 msgid "%1: clear"
 msgstr "‏%1: امحُ"
@@ -7352,45 +7352,45 @@ msgctxt "@title:column"
 msgid "Type"
 msgstr "النّوع"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:347
+#: src/backend/spreadsheet/Spreadsheet.cpp:348
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:365
+#: src/backend/spreadsheet/Spreadsheet.cpp:366
 #, kde-format
 msgid "%1: mask rows with missing values"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:423
+#: src/backend/spreadsheet/Spreadsheet.cpp:424
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: toggle comments header"
 msgstr "‏%1: غيّر التعليق"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:431
+#: src/backend/spreadsheet/Spreadsheet.cpp:432
 #, fuzzy, kde-format
 #| msgid "Failed to open the file '%1'."
 msgid "%1: toggle sparklines header"
 msgstr "فشل في فتح الملفّ '%1'."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:495
 #: src/backend/spreadsheet/Spreadsheet.cpp:496
-#: src/backend/spreadsheet/Spreadsheet.cpp:500
+#: src/backend/spreadsheet/Spreadsheet.cpp:497
+#: src/backend/spreadsheet/Spreadsheet.cpp:501
 #, fuzzy, kde-format
 #| msgid "%1: set line style"
 msgid "%1: set linking"
 msgstr "%1: اضبط نمط الخط"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:518
-#: src/backend/spreadsheet/Spreadsheet.cpp:520
-#: src/backend/spreadsheet/Spreadsheet.cpp:523
+#: src/backend/spreadsheet/Spreadsheet.cpp:519
+#: src/backend/spreadsheet/Spreadsheet.cpp:521
+#: src/backend/spreadsheet/Spreadsheet.cpp:524
 #, fuzzy, kde-format
 #| msgid "%1: set line style"
 msgid "%1: set linked spreadsheet"
 msgstr "%1: اضبط نمط الخط"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:621
+#: src/backend/spreadsheet/Spreadsheet.cpp:622
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
@@ -7401,7 +7401,7 @@ msgstr[3] "أزل الأعمدةأزل الأعمدة"
 msgstr[4] "أزل الأعمدةأزل الأعمدة"
 msgstr[5] "أزل الأعمدةأزل الأعمدة"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:640
+#: src/backend/spreadsheet/Spreadsheet.cpp:641
 #, fuzzy, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
@@ -7412,32 +7412,32 @@ msgstr[3] "أدرج أعمدة"
 msgstr[4] "أدرج أعمدة"
 msgstr[5] "أدرج أعمدة"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:685
+#: src/backend/spreadsheet/Spreadsheet.cpp:686
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:701
+#: src/backend/spreadsheet/Spreadsheet.cpp:702
 #, kde-format
 msgid "%1: clear all masks"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:755
+#: src/backend/spreadsheet/Spreadsheet.cpp:756
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:808
+#: src/backend/spreadsheet/Spreadsheet.cpp:809
 #, kde-format
 msgid "%1: sort columns"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1176
+#: src/backend/spreadsheet/Spreadsheet.cpp:1177
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1585
+#: src/backend/spreadsheet/Spreadsheet.cpp:1586
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -7448,7 +7448,7 @@ msgstr[3] ""
 msgstr[4] ""
 msgstr[5] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1588
+#: src/backend/spreadsheet/Spreadsheet.cpp:1589
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
@@ -7459,7 +7459,7 @@ msgstr[3] ""
 msgstr[4] ""
 msgstr[5] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1591
+#: src/backend/spreadsheet/Spreadsheet.cpp:1592
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
@@ -7470,7 +7470,7 @@ msgstr[3] ""
 msgstr[4] ""
 msgstr[5] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1594
+#: src/backend/spreadsheet/Spreadsheet.cpp:1595
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
@@ -7481,7 +7481,7 @@ msgstr[3] ""
 msgstr[4] ""
 msgstr[5] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1597
+#: src/backend/spreadsheet/Spreadsheet.cpp:1598
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
@@ -7492,7 +7492,7 @@ msgstr[3] ""
 msgstr[4] ""
 msgstr[5] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1600
+#: src/backend/spreadsheet/Spreadsheet.cpp:1601
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
@@ -7503,7 +7503,7 @@ msgstr[3] ""
 msgstr[4] ""
 msgstr[5] ""
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1603
+#: src/backend/spreadsheet/Spreadsheet.cpp:1604
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -11510,33 +11510,33 @@ msgstr "تكبير"
 msgid "%1, active curve \"%2\": %3=%4, %5=%6"
 msgstr ""
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:606
+#: src/frontend/datapicker/DatapickerImageView.cpp:609
 #, kde-format
 msgid "Remove existing reference points?"
 msgstr ""
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:607
+#: src/frontend/datapicker/DatapickerImageView.cpp:610
 #, kde-format
 msgid ""
 "All available reference points will be removed. Do you want to continue?"
 msgstr ""
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:692
+#: src/frontend/datapicker/DatapickerImageView.cpp:695
 #, kde-format
 msgid "%1: change position of selected points"
 msgstr ""
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:741
+#: src/frontend/datapicker/DatapickerImageView.cpp:744
 #, kde-format
 msgid "%1: add new curve."
 msgstr ""
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:742
+#: src/frontend/datapicker/DatapickerImageView.cpp:745
 #, kde-format
 msgid "Curve"
 msgstr "منحنى"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:883
+#: src/frontend/datapicker/DatapickerImageView.cpp:886
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4011
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4065
 #: src/frontend/worksheet/WorksheetView.cpp:2150
@@ -11544,7 +11544,7 @@ msgstr "منحنى"
 msgid "Failed to export"
 msgstr "فشل تصدير"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:883
+#: src/frontend/datapicker/DatapickerImageView.cpp:886
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4011
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4065
 #: src/frontend/worksheet/WorksheetView.cpp:2150
@@ -16641,8 +16641,8 @@ msgstr ""
 msgid "Downloaded files successfully deleted."
 msgstr ""
 
-#: src/frontend/SettingsDialog.cpp:48 src/frontend/SettingsDialog.cpp:155
-#: src/frontend/SettingsDialog.cpp:162
+#: src/frontend/SettingsDialog.cpp:48 src/frontend/SettingsDialog.cpp:160
+#: src/frontend/SettingsDialog.cpp:167
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
@@ -16705,12 +16705,12 @@ msgstr "مشاركة بياناتك"
 msgid "Text Editor"
 msgstr "موضع النص"
 
-#: src/frontend/SettingsDialog.cpp:159
+#: src/frontend/SettingsDialog.cpp:164
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr ""
 
-#: src/frontend/SettingsDialog.cpp:170
+#: src/frontend/SettingsDialog.cpp:175
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences    [Changed]"
