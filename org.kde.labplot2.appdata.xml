@@ -293,6 +293,7 @@
       <caption xml:lang="ka">წინასწარ განსაზღვრული და ხელით მითითებული მოდელების მონაცემებში ჩატევა</caption>
       <caption xml:lang="nl">Voorgedefinieerde of aangepaste modellen aan gegevens aanpassen</caption>
       <caption xml:lang="pl">Wpasuj uprzednio określone lub własne modele do danych</caption>
+      <caption xml:lang="pt-BR">Ajusta modelos predefinidos ou personalizados aos dados</caption>
       <caption xml:lang="ru">Подбор предопределённых или настраиваемых моделей по данным</caption>
       <caption xml:lang="sl">Podatkom prilagodite vnaprej določene modele ali modele po meri</caption>
       <caption xml:lang="sv">Anpassa data till fördefinierade eller egna modeller</caption>
@@ -320,6 +321,7 @@
       <caption xml:lang="ka">მონაცემების მოგლუვება სხვადასხვა მეთოდებით</caption>
       <caption xml:lang="nl">Gladstrijken van de gegevens met diverse methodes</caption>
       <caption xml:lang="pl">Wygładzanie danych przy pomocy różnych sposobów</caption>
+      <caption xml:lang="pt-BR">Suaviza os dados com a ajuda de vários métodos de suavização</caption>
       <caption xml:lang="ru">Сглаживание данных с помощью различных методов сглаживания</caption>
       <caption xml:lang="sl">Zgladite podatke s pomočjo različnih metod glajenja</caption>
       <caption xml:lang="sv">Jämna ut data med hjälp av diverse utjämningsmetoder</caption>
@@ -347,6 +349,7 @@
       <caption xml:lang="ka">წიგნაკის ინტერფეისი Maxima, Octave, R, Sage, Scilab, Python, Julia-ის და სხვების ინტერაქტიური სესიებისთვის</caption>
       <caption xml:lang="nl">Notebook-interface voor interactieve sessies  in Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="pl">Interfejs zeszytu dla interaktywnych posiedzeń w programach takich jak: Maxima, Octave, R, Sage, Scilab, Python, Julia, itp.</caption>
+      <caption xml:lang="pt-BR">Interface de notebook para sessões interativas em Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="ru">Блокнот служит в качестве интерфейса для интерактивного взаимодействия с Maxima, Octave, R, Sage, Scilab, Python, Julia и так далее.</caption>
       <caption xml:lang="sl">Vmesnik prenosnika za interaktivne seje v Maxima, Octave, R, Sage, Scilab, Python, Julia in Lua, itd.</caption>
       <caption xml:lang="sv">Anteckningsbok för interaktiva sessioner i Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
@@ -431,6 +434,7 @@
       <caption xml:lang="ka">Maxima-ის ინტერაქტიურ სესიაში გამოთვლილი მონაცემების ვიზუალიზაცია</caption>
       <caption xml:lang="nl">Visualiseren van gegevens, berekend in een interactieve sessie in Maxima</caption>
       <caption xml:lang="pl">Obrazowanie danych obliczonych w interaktywnym posiedzeniu Maximy</caption>
+      <caption xml:lang="pt-BR">Visualização de dados calculados em uma sessão interativa do Maxima</caption>
       <caption xml:lang="ru">Визаулизация данных, рассчитанных в результате интерактивного взаимодействия с Maxima</caption>
       <caption xml:lang="sl">Vizualizacija podatkov, izračunanih v interaktivni seji Maxima</caption>
       <caption xml:lang="sv">Visualisering av data beräknad i en interaktiv Maxima-session</caption>
