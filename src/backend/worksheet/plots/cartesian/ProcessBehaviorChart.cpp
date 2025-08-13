@@ -143,11 +143,6 @@ void ProcessBehaviorChart::init(bool loading) {
 	d->centerLabel = new TextLabel(QStringLiteral("centerValue"));
 	d->centerLabel->setHidden(true);
 	d->centerLabel->setHorizontalAlignment(WorksheetElement::HorizontalAlignment::Left);
-	// set alpha channel to 1 (solid) for background color (default is 0 for TextLabel)
-	auto bgcolor = d->centerLabel->backgroundColor();
-	// QDEBUG(Q_FUNC_INFO << ", COLOR = " << bgcolor)
-	bgcolor.setAlphaF(1.0);
-	d->centerLabel->setBackgroundColor(bgcolor);
 
 	d->lowerLimitLabel = new TextLabel(QStringLiteral("lowerLimitValue"));
 	d->lowerLimitLabel->setHidden(true);
@@ -322,14 +317,12 @@ BASIC_SHARED_D_READER_IMPL(ProcessBehaviorChart, int, labelsPrecision, labelsPre
 QColor ProcessBehaviorChart::labelsFontColor() const {
 	Q_D(const ProcessBehaviorChart);
 	// using center label color
-	// QDEBUG(Q_FUNC_INFO << ", font color =" << d->centerLabel->fontColor())
 	return d->centerLabel->fontColor();
 }
 
 QColor ProcessBehaviorChart::labelsBackgroundColor() const {
 	Q_D(const ProcessBehaviorChart);
 	// using center label color
-	// QDEBUG(Q_FUNC_INFO << ", background color =" << d->centerLabel->backgroundColor())
 	return d->centerLabel->backgroundColor();
 }
 
@@ -338,7 +331,6 @@ QFont ProcessBehaviorChart::labelsFont() const {
 	// using center label font
 	QTextEdit te(d->centerLabel->text().text);
 	te.selectAll();
-	// QDEBUG(Q_FUNC_INFO <<", FONT =" << te.currentCharFormat().font())
 	return te.currentCharFormat().font();
 }
 
