@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-05 03:01+0000\n"
+"POT-Creation-Date: 2025-08-14 02:47+0000\n"
 "PO-Revision-Date: 2025-07-23 11:09+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -932,7 +932,7 @@ msgstr "%1: establix l'estil del contorn de la barra d'errors"
 #: src/backend/datapicker/DatapickerImage.cpp:425
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:281
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:276
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:150
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:147
 #: src/backend/worksheet/WorksheetElement.cpp:163
@@ -946,7 +946,7 @@ msgstr "%1: establix com a visible"
 #: src/backend/datapicker/DatapickerImage.cpp:425
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:281
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:276
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:150
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:147
 #: src/backend/worksheet/WorksheetElement.cpp:163
@@ -8043,8 +8043,8 @@ msgstr "%1: establix el format automàtic de les etiquetes"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:950
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:957
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:594
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:601
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: establix la precisió de les etiquetes"
@@ -8128,7 +8128,7 @@ msgid "%1: set data columns"
 msgstr "%1: establix les columnes de dades"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:304
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:546
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:538
 #, kde-format
 msgid "%1: set type"
 msgstr "%1: establix el tipus"
@@ -9097,8 +9097,8 @@ msgstr "Ajusta a la distribució binomial"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:400
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:248
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:522
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:534
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:514
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:526
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:265
 #, kde-format
@@ -9179,84 +9179,84 @@ msgstr "%1: establix l'amplada de banda"
 msgid "%1: legend visibility changed"
 msgstr "%1: s'ha canviat la visibilitat de la llegenda"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:553
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:545
 #, kde-format
 msgid "%1: set limits metric"
 msgstr "%1: establix la mètrica dels límits"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:560
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:552
 #, kde-format
 msgid "%1: set sample size"
 msgstr "%1: establix la mida de la mostra"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:568
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:560
 #, kde-format
 msgid "%1: enable exact limits"
 msgstr "%1: activa els límits exactes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:568
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:560
 #, kde-format
 msgid "%1: disable exact limits"
 msgstr "%1: desactiva els límits exactes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:577
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:569
 #, kde-format
 msgid "%1: set maximal upper limit"
 msgstr "%1: establix el límit superior màxim"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:584
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:576
 #, kde-format
 msgid "%1: set minimal lower limit"
 msgstr "%1: establix el límit inferior mínim"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:593
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:585
 #, kde-format
 msgid "%1: enable control labels"
 msgstr "%1: activa les etiquetes dels controls"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:593
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:585
 #, kde-format
 msgid "%1: disable control labels"
 msgstr "%1: desactiva les etiquetes dels controls"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:615
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:607
 #, kde-format
 msgid "%1: set labels border shape"
 msgstr "%1: establix la forma de la vora de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:630
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:622
 #, kde-format
 msgid "%1: set labels font"
 msgstr "%1: establix la lletra de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:665
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:697
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:657
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:689
 #, kde-format
 msgid "%1: set labels background color"
 msgstr "%1: establix el color de fons de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:755
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:747
 #, kde-format
 msgid "%1: set labels border style"
 msgstr "%1: establix l'estil de forma de la vora"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:766
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:758
 #, kde-format
 msgid "%1: set labels border width"
 msgstr "%1: establix l'amplària de la vora de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:777
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:788
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:769
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:780
 #, kde-format
 msgid "%1: set labels border color"
 msgstr "%1: establix el color de la vora de les etiquetes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:886
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:878
 #, kde-format
 msgid "Not enough data provided."
 msgstr "No s'han proporcionat prou dades."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:989
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:981
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "L'última mostra és incompleta i s'ha omés."
