@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-05 00:38+0000\n"
+"POT-Creation-Date: 2025-08-14 00:38+0000\n"
 "PO-Revision-Date: 2025-07-31 16:13+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -53,7 +53,7 @@ msgid "Rename"
 msgstr "Перейменувати"
 
 #: src/backend/core/AbstractAspect.cpp:411
-#: src/backend/spreadsheet/Spreadsheet.cpp:718
+#: src/backend/spreadsheet/Spreadsheet.cpp:719
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:488
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
 #: src/frontend/worksheet/WorksheetView.cpp:143
@@ -307,7 +307,7 @@ msgid "UNDEFINED"
 msgstr "НЕ ВИЗНАЧЕНО"
 
 #: src/backend/core/AbstractColumn.cpp:327
-#: src/backend/spreadsheet/Spreadsheet.cpp:316
+#: src/backend/spreadsheet/Spreadsheet.cpp:317
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -317,7 +317,7 @@ msgstr[2] "%1: вставити %2 рядків"
 msgstr[3] "%1: вставити один рядок"
 
 #: src/backend/core/AbstractColumn.cpp:340
-#: src/backend/spreadsheet/Spreadsheet.cpp:299
+#: src/backend/spreadsheet/Spreadsheet.cpp:300
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -920,7 +920,7 @@ msgstr "%1: встановити стиль контурів позначок п
 #: src/backend/datapicker/DatapickerImage.cpp:425
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:281
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:276
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:150
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:147
 #: src/backend/worksheet/WorksheetElement.cpp:163
@@ -934,7 +934,7 @@ msgstr "%1: зробити видимим"
 #: src/backend/datapicker/DatapickerImage.cpp:425
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:281
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:276
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:150
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:147
 #: src/backend/worksheet/WorksheetElement.cpp:163
@@ -6149,7 +6149,7 @@ msgstr[2] "%1: додати %2 стовпчиків"
 msgstr[3] "%1: додати %2 стовпчик"
 
 #: src/backend/matrix/Matrix.cpp:704 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:663
+#: src/backend/spreadsheet/Spreadsheet.cpp:664
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: спорожнити"
@@ -7235,41 +7235,41 @@ msgctxt "@title:column"
 msgid "Type"
 msgstr "Тип"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:347
+#: src/backend/spreadsheet/Spreadsheet.cpp:348
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr "%1: вилучено рядки з пропущеними значеннями"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:365
+#: src/backend/spreadsheet/Spreadsheet.cpp:366
 #, kde-format
 msgid "%1: mask rows with missing values"
 msgstr "%1: замасковано рядки з пропущеними значеннями"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:423
+#: src/backend/spreadsheet/Spreadsheet.cpp:424
 #, kde-format
 msgid "%1: toggle comments header"
 msgstr "%1: перемкнути заголовок коментарів"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:431
+#: src/backend/spreadsheet/Spreadsheet.cpp:432
 #, kde-format
 msgid "%1: toggle sparklines header"
 msgstr "%1: перемкнути заголовок спарклайнів"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:495
 #: src/backend/spreadsheet/Spreadsheet.cpp:496
-#: src/backend/spreadsheet/Spreadsheet.cpp:500
+#: src/backend/spreadsheet/Spreadsheet.cpp:497
+#: src/backend/spreadsheet/Spreadsheet.cpp:501
 #, kde-format
 msgid "%1: set linking"
 msgstr "%1: встановлення зв'язку"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:518
-#: src/backend/spreadsheet/Spreadsheet.cpp:520
-#: src/backend/spreadsheet/Spreadsheet.cpp:523
+#: src/backend/spreadsheet/Spreadsheet.cpp:519
+#: src/backend/spreadsheet/Spreadsheet.cpp:521
+#: src/backend/spreadsheet/Spreadsheet.cpp:524
 #, kde-format
 msgid "%1: set linked spreadsheet"
 msgstr "%1: встановлення пов'язаної електронної таблиці"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:621
+#: src/backend/spreadsheet/Spreadsheet.cpp:622
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
@@ -7278,7 +7278,7 @@ msgstr[1] "%1: вилучити %2 стовпчики"
 msgstr[2] "%1: вилучити %2 стовпчиків"
 msgstr[3] "%1: вилучити один стовпчик"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:640
+#: src/backend/spreadsheet/Spreadsheet.cpp:641
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
@@ -7287,32 +7287,32 @@ msgstr[1] "%1: вставити %2 стовпчики"
 msgstr[2] "%1: вставити %2 стовпчиків"
 msgstr[3] "%1: вставити один стовпчик"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:685
+#: src/backend/spreadsheet/Spreadsheet.cpp:686
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: спорожнити позначені стовпчики"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:701
+#: src/backend/spreadsheet/Spreadsheet.cpp:702
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: зняти маскування повністю"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:755
+#: src/backend/spreadsheet/Spreadsheet.cpp:756
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: пересунути стовпчик %2 з позиції %3 на позицію %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:808
+#: src/backend/spreadsheet/Spreadsheet.cpp:809
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: упорядкувати стовпчики"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1176
+#: src/backend/spreadsheet/Spreadsheet.cpp:1177
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: вилучено пов'язану електронну таблицю"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1585
+#: src/backend/spreadsheet/Spreadsheet.cpp:1586
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -7321,7 +7321,7 @@ msgstr[1] "дані подвійної точності, %1 елементи"
 msgstr[2] "дані подвійної точності, %1 елементів"
 msgstr[3] "дані подвійної точності, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1588
+#: src/backend/spreadsheet/Spreadsheet.cpp:1589
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
@@ -7330,7 +7330,7 @@ msgstr[1] "цілочисельні дані, %1 елементи"
 msgstr[2] "цілочисельні дані, %1 елементів"
 msgstr[3] "цілочисельні дані, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1591
+#: src/backend/spreadsheet/Spreadsheet.cpp:1592
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
@@ -7339,7 +7339,7 @@ msgstr[1] "великі цілочисельні дані, %1 елементи"
 msgstr[2] "великі цілочисельні дані, %1 елементів"
 msgstr[3] "великі цілочисельні дані, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1594
+#: src/backend/spreadsheet/Spreadsheet.cpp:1595
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
@@ -7348,7 +7348,7 @@ msgstr[1] "текстові дані, %1 елементи"
 msgstr[2] "текстові дані, %1 елементів"
 msgstr[3] "текстові дані, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1597
+#: src/backend/spreadsheet/Spreadsheet.cpp:1598
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
@@ -7357,7 +7357,7 @@ msgstr[1] "дані щодо місяця, %1 елементи"
 msgstr[2] "дані щодо місяця, %1 елементів"
 msgstr[3] "дані щодо місяця, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1600
+#: src/backend/spreadsheet/Spreadsheet.cpp:1601
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
@@ -7366,7 +7366,7 @@ msgstr[1] "дані щодо дня, %1 елементи"
 msgstr[2] "дані щодо дня, %1 елементів"
 msgstr[3] "дані щодо дня, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1603
+#: src/backend/spreadsheet/Spreadsheet.cpp:1604
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -7945,8 +7945,8 @@ msgstr "%1: встановити автоматичний формат міто�
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:943
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:950
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:634
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:641
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:626
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:633
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: встановити точність міток"
@@ -8030,7 +8030,7 @@ msgid "%1: set data columns"
 msgstr "%1: встановити стовпчики даних"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:304
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:550
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:542
 #, kde-format
 msgid "%1: set type"
 msgstr "%1: встановити тип"
@@ -9012,8 +9012,8 @@ msgstr "Відповідність біноміальному розподілу
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:400
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:248
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:526
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:538
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:518
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:530
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:265
 #, kde-format
@@ -9094,104 +9094,104 @@ msgstr "%1: встановити ширину смуги"
 msgid "%1: legend visibility changed"
 msgstr "%1: змінено видимість панелі умовних позначень"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:557
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:549
 #, kde-format
 msgid "%1: set limits type"
 msgstr "%1: встановити тип меж"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:564
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:556
 #, kde-format
 msgid "%1: set limits metric"
 msgstr "%1: встановити метрику обмежень"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:571
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:563
 #, kde-format
 msgid "%1: set sample size"
 msgstr "%1: встановити розмір вибірки"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:579
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:571
 #, kde-format
 msgid "%1: enable exact limits"
 msgstr "%1: увімкнути точні обмеження"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:579
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:571
 #, kde-format
 msgid "%1: disable exact limits"
 msgstr "%1: вимкнути точні обмеження"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:588
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:580
 #, kde-format
 msgid "%1: set maximal upper limit"
 msgstr "%1: встановити максимальну верхню межу"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:595
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587
 #, kde-format
 msgid "%1: set minimal lower limit"
 msgstr "%1: встановити мінімальну нижню межу"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:594
 #, kde-format
 msgid "%1: set center specification"
 msgstr "%1: встановити специфікацію центру"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:601
 #, kde-format
 msgid "%1: set upper limit specification"
 msgstr "%1: встановити специфікацію верхньої межі"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:616
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:608
 #, kde-format
 msgid "%1: set lower limit specification"
 msgstr "%1: встановити специфікацію нижньої межі"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:625
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:617
 #, kde-format
 msgid "%1: enable control labels"
 msgstr "%1: увімкнути керівні мітки"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:625
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:617
 #, kde-format
 msgid "%1: disable control labels"
 msgstr "%1: вимкнути керівні мітки"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:647
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:639
 #, kde-format
 msgid "%1: set labels border shape"
 msgstr "%1: встановити форму рамки міток"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:662
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:654
 #, kde-format
 msgid "%1: set labels font"
 msgstr "%1: встановити шрифт міток"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:697
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:729
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:689
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:721
 #, kde-format
 msgid "%1: set labels background color"
 msgstr "%1: встановити колір тла міток"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:787
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:779
 #, kde-format
 msgid "%1: set labels border style"
 msgstr "%1: встановити стиль рамки міток"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:798
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:790
 #, kde-format
 msgid "%1: set labels border width"
 msgstr "%1: встановити товщину рамки міток"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:809
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:820
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:801
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:812
 #, kde-format
 msgid "%1: set labels border color"
 msgstr "%1: встановити колір рамки міток"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:918
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:910
 #, kde-format
 msgid "Not enough data provided."
 msgstr "Надано недостатньо даних."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1021
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1013
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "Остання вибірка була неповною, її пропущено."
@@ -11270,33 +11270,33 @@ msgstr "Збільшення"
 msgid "%1, active curve \"%2\": %3=%4, %5=%6"
 msgstr "%1, активна крива «%2»: %3=%4, %5=%6"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:606
+#: src/frontend/datapicker/DatapickerImageView.cpp:609
 #, kde-format
 msgid "Remove existing reference points?"
 msgstr "Вилучити наявні еталонні точки?"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:607
+#: src/frontend/datapicker/DatapickerImageView.cpp:610
 #, kde-format
 msgid ""
 "All available reference points will be removed. Do you want to continue?"
 msgstr "Буде вилучено усі доступні еталонні точки. Виконати цю дію?"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:692
+#: src/frontend/datapicker/DatapickerImageView.cpp:695
 #, kde-format
 msgid "%1: change position of selected points"
 msgstr "%1: змінити розташування позначених точок"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:741
+#: src/frontend/datapicker/DatapickerImageView.cpp:744
 #, kde-format
 msgid "%1: add new curve."
 msgstr "%1: додати нову криву."
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:742
+#: src/frontend/datapicker/DatapickerImageView.cpp:745
 #, kde-format
 msgid "Curve"
 msgstr "Крива"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:883
+#: src/frontend/datapicker/DatapickerImageView.cpp:886
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4011
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4065
 #: src/frontend/worksheet/WorksheetView.cpp:2150
@@ -11304,7 +11304,7 @@ msgstr "Крива"
 msgid "Failed to export"
 msgstr "Не вдалося експортувати"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:883
+#: src/frontend/datapicker/DatapickerImageView.cpp:886
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4011
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4065
 #: src/frontend/worksheet/WorksheetView.cpp:2150
@@ -16604,8 +16604,8 @@ msgstr "Кеш наборів даних"
 msgid "Downloaded files successfully deleted."
 msgstr "Отримані файли успішно вилучено."
 
-#: src/frontend/SettingsDialog.cpp:48 src/frontend/SettingsDialog.cpp:155
-#: src/frontend/SettingsDialog.cpp:162
+#: src/frontend/SettingsDialog.cpp:48 src/frontend/SettingsDialog.cpp:160
+#: src/frontend/SettingsDialog.cpp:167
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
@@ -16667,13 +16667,13 @@ msgstr "Відгуки користувача"
 msgid "Text Editor"
 msgstr "Текстовий редактор"
 
-#: src/frontend/SettingsDialog.cpp:159
+#: src/frontend/SettingsDialog.cpp:164
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr ""
 "Буде повернуто типові значення усіх параметрів. Хочете виконати цю дію?"
 
-#: src/frontend/SettingsDialog.cpp:170
+#: src/frontend/SettingsDialog.cpp:175
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences    [Changed]"

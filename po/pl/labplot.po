@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-05 00:38+0000\n"
+"POT-Creation-Date: 2025-08-14 00:38+0000\n"
 "PO-Revision-Date: 2025-02-09 08:30+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -50,7 +50,7 @@ msgid "Rename"
 msgstr "Zmień nazwę"
 
 #: src/backend/core/AbstractAspect.cpp:411
-#: src/backend/spreadsheet/Spreadsheet.cpp:718
+#: src/backend/spreadsheet/Spreadsheet.cpp:719
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:488
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
 #: src/frontend/worksheet/WorksheetView.cpp:143
@@ -303,7 +303,7 @@ msgid "UNDEFINED"
 msgstr "NIEOKREŚLONY"
 
 #: src/backend/core/AbstractColumn.cpp:327
-#: src/backend/spreadsheet/Spreadsheet.cpp:316
+#: src/backend/spreadsheet/Spreadsheet.cpp:317
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -312,7 +312,7 @@ msgstr[1] "%1: wstaw %2 wiersze"
 msgstr[2] "%1: wstaw %2 wierszy"
 
 #: src/backend/core/AbstractColumn.cpp:340
-#: src/backend/spreadsheet/Spreadsheet.cpp:299
+#: src/backend/spreadsheet/Spreadsheet.cpp:300
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -914,7 +914,7 @@ msgstr "%1: ustaw rodzaj zarysu słupka błędu"
 #: src/backend/datapicker/DatapickerImage.cpp:425
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:281
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:276
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:150
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:147
 #: src/backend/worksheet/WorksheetElement.cpp:163
@@ -928,7 +928,7 @@ msgstr "%1: ustaw widoczny"
 #: src/backend/datapicker/DatapickerImage.cpp:425
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:281
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:276
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:150
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:147
 #: src/backend/worksheet/WorksheetElement.cpp:163
@@ -6126,7 +6126,7 @@ msgstr[1] "%1: dodaj %2 kolumny"
 msgstr[2] "%1: dodaj %2 kolumn"
 
 #: src/backend/matrix/Matrix.cpp:704 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:663
+#: src/backend/spreadsheet/Spreadsheet.cpp:664
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: wyczyść"
@@ -7211,43 +7211,43 @@ msgctxt "@title:column"
 msgid "Type"
 msgstr "Rodzaj"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:347
+#: src/backend/spreadsheet/Spreadsheet.cpp:348
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr "%1: usuń wiersze, gdzie brakuje wartości"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:365
+#: src/backend/spreadsheet/Spreadsheet.cpp:366
 #, kde-format
 msgid "%1: mask rows with missing values"
 msgstr "%1: wypełnij wiersze, gdzie brakuje wartości"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:423
+#: src/backend/spreadsheet/Spreadsheet.cpp:424
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: toggle comments header"
 msgstr "%1: zmień komentarz"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:431
+#: src/backend/spreadsheet/Spreadsheet.cpp:432
 #, fuzzy, kde-format
 #| msgid "Unable to parse header"
 msgid "%1: toggle sparklines header"
 msgstr "Nie udało się przetworzyć nagłówka"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:495
 #: src/backend/spreadsheet/Spreadsheet.cpp:496
-#: src/backend/spreadsheet/Spreadsheet.cpp:500
+#: src/backend/spreadsheet/Spreadsheet.cpp:497
+#: src/backend/spreadsheet/Spreadsheet.cpp:501
 #, kde-format
 msgid "%1: set linking"
 msgstr "%1: ustaw dowiązanie"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:518
-#: src/backend/spreadsheet/Spreadsheet.cpp:520
-#: src/backend/spreadsheet/Spreadsheet.cpp:523
+#: src/backend/spreadsheet/Spreadsheet.cpp:519
+#: src/backend/spreadsheet/Spreadsheet.cpp:521
+#: src/backend/spreadsheet/Spreadsheet.cpp:524
 #, kde-format
 msgid "%1: set linked spreadsheet"
 msgstr "%1: ustaw dowiązany arkusz kalkulacyjny"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:621
+#: src/backend/spreadsheet/Spreadsheet.cpp:622
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
@@ -7255,7 +7255,7 @@ msgstr[0] "%1: usuń 1 kolumnę"
 msgstr[1] "%1: usuń %2 kolumny"
 msgstr[2] "%1: usuń %2 kolumn"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:640
+#: src/backend/spreadsheet/Spreadsheet.cpp:641
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
@@ -7263,32 +7263,32 @@ msgstr[0] "%1: wstaw %1 kolumnę"
 msgstr[1] "%1: wstaw %2 kolumny"
 msgstr[2] "%1: wstaw %2 kolumn"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:685
+#: src/backend/spreadsheet/Spreadsheet.cpp:686
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: wyczyść wybrane kolumny"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:701
+#: src/backend/spreadsheet/Spreadsheet.cpp:702
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: wyczyść wszystkie maski"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:755
+#: src/backend/spreadsheet/Spreadsheet.cpp:756
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: przenieś kolumnę %2 z położenia %3 do %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:808
+#: src/backend/spreadsheet/Spreadsheet.cpp:809
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: uszereguj kolumny"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1176
+#: src/backend/spreadsheet/Spreadsheet.cpp:1177
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: usunięto dowiązany arkusza kalkulacyjny"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1585
+#: src/backend/spreadsheet/Spreadsheet.cpp:1586
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -7296,7 +7296,7 @@ msgstr[0] "dana o podwójnej precyzji, %1 rzecz"
 msgstr[1] "dane numeryczne, %1 rzeczy"
 msgstr[2] "dane numeryczne, %1 rzeczy"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1588
+#: src/backend/spreadsheet/Spreadsheet.cpp:1589
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
@@ -7304,7 +7304,7 @@ msgstr[0] "dana liczbowa, %1 element"
 msgstr[1] "dana liczbowa, %1 elementy"
 msgstr[2] "dana liczbowa, %1 elementów"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1591
+#: src/backend/spreadsheet/Spreadsheet.cpp:1592
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
@@ -7312,7 +7312,7 @@ msgstr[0] "duże liczby całkowite, %1 element"
 msgstr[1] "duże liczby całkowite, %1 elementy"
 msgstr[2] "duże liczby całkowite, %1 elementów"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1594
+#: src/backend/spreadsheet/Spreadsheet.cpp:1595
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
@@ -7320,7 +7320,7 @@ msgstr[0] "dana tekstowa, %1 element"
 msgstr[1] "dana tekstowa, %1 elementy"
 msgstr[2] "dana tekstowa, %1 elementów"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1597
+#: src/backend/spreadsheet/Spreadsheet.cpp:1598
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
@@ -7328,7 +7328,7 @@ msgstr[0] "dana miesiąca, %1 element"
 msgstr[1] "dana miesiąca, %1 elementy"
 msgstr[2] "dana miesiąca, %1 elementów"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1600
+#: src/backend/spreadsheet/Spreadsheet.cpp:1601
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
@@ -7336,7 +7336,7 @@ msgstr[0] "dana dnia, %1 element"
 msgstr[1] "dana dnia, %1 elementy"
 msgstr[2] "dana dnia, %1 elementów"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1603
+#: src/backend/spreadsheet/Spreadsheet.cpp:1604
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -7914,8 +7914,8 @@ msgstr "%1: sam ustaw zapis etykiet"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:943
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:950
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:634
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:641
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:626
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:633
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: ustaw precyzję etykiet"
@@ -7999,7 +7999,7 @@ msgid "%1: set data columns"
 msgstr "%1: ustaw kolumny danych"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:304
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:550
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:542
 #, kde-format
 msgid "%1: set type"
 msgstr "%1: ustaw rodzaj"
@@ -8985,8 +8985,8 @@ msgstr "Dopasuj do rozkładu dwumianowego"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:400
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:248
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:526
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:538
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:518
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:530
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:265
 #, kde-format
@@ -9067,120 +9067,120 @@ msgstr "%1: ustaw szerokość pasma"
 msgid "%1: legend visibility changed"
 msgstr "%1: widoczność legendy uległa zmianie"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:557
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:549
 #, fuzzy, kde-format
 #| msgid "%1: set limits metric"
 msgid "%1: set limits type"
 msgstr "%1: ustaw metrykę granic"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:564
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:556
 #, kde-format
 msgid "%1: set limits metric"
 msgstr "%1: ustaw metrykę granic"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:571
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:563
 #, kde-format
 msgid "%1: set sample size"
 msgstr "%1: ustaw rozmiar próbki"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:579
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:571
 #, fuzzy, kde-format
 #| msgid "%1: change exact limits"
 msgid "%1: enable exact limits"
 msgstr "%1: zmień dokładne granice"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:579
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:571
 #, fuzzy, kde-format
 #| msgid "%1: change exact limits"
 msgid "%1: disable exact limits"
 msgstr "%1: zmień dokładne granice"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:588
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:580
 #, fuzzy, kde-format
 #| msgid "%1: set axis zero offset"
 msgid "%1: set maximal upper limit"
 msgstr "%1: ustaw przesunięcie zerowe osi"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:595
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587
 #, fuzzy, kde-format
 #| msgid "%1: change negative lower limit"
 msgid "%1: set minimal lower limit"
 msgstr "%1: zmień ujemną niższą granicę"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:594
 #, fuzzy, kde-format
 #| msgid "%1: set center metric"
 msgid "%1: set center specification"
 msgstr "%1: ustaw metrykę środka"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:601
 #, fuzzy, kde-format
 #| msgid "%1: set plot designation"
 msgid "%1: set upper limit specification"
 msgstr "%1: ustaw przeznaczenie wykresu"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:616
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:608
 #, fuzzy, kde-format
 #| msgid "%1: set plot designation"
 msgid "%1: set lower limit specification"
 msgstr "%1: ustaw przeznaczenie wykresu"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:625
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:617
 #, kde-format
 msgid "%1: enable control labels"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:625
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:617
 #, fuzzy, kde-format
 #| msgid "%1: disable theming"
 msgid "%1: disable control labels"
 msgstr "%1: wyłącz wygląd"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:647
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:639
 #, fuzzy, kde-format
 #| msgid "%1: set border shape"
 msgid "%1: set labels border shape"
 msgstr "%1: ustaw kształt obramowania"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:662
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:654
 #, fuzzy, kde-format
 #| msgid "%1: set label font"
 msgid "%1: set labels font"
 msgstr "%1: ustaw czcionkę etykiety"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:697
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:729
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:689
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:721
 #, fuzzy, kde-format
 #| msgid "%1: set label background color"
 msgid "%1: set labels background color"
 msgstr "%1: ustaw barwę tła etykiet"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:787
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:779
 #, fuzzy, kde-format
 #| msgid "%1: set border style"
 msgid "%1: set labels border style"
 msgstr "%1: ustaw styl obramowania"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:798
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:790
 #, fuzzy, kde-format
 #| msgid "%1: set labels format"
 msgid "%1: set labels border width"
 msgstr "%1: ustaw format etykiet"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:809
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:820
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:801
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:812
 #, fuzzy, kde-format
 #| msgid "%1: set label color"
 msgid "%1: set labels border color"
 msgstr "%1: ustaw kolor etykiety"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:918
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:910
 #, fuzzy, kde-format
 #| msgid "Not enough data points available."
 msgid "Not enough data provided."
 msgstr "Brak punktów danych."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1021
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1013
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "Ostatnia próbka jest niepełna, więc została pominięta."
@@ -11269,12 +11269,12 @@ msgstr "Wzmocnienie"
 msgid "%1, active curve \"%2\": %3=%4, %5=%6"
 msgstr "%1, aktywna krzywa \"%2\": %3=%4, %5=%6"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:606
+#: src/frontend/datapicker/DatapickerImageView.cpp:609
 #, kde-format
 msgid "Remove existing reference points?"
 msgstr "Usuń istniejące punkty odniesienia?"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:607
+#: src/frontend/datapicker/DatapickerImageView.cpp:610
 #, kde-format
 msgid ""
 "All available reference points will be removed. Do you want to continue?"
@@ -11282,23 +11282,23 @@ msgstr ""
 "Wszystkie dostępne punkty odniesienia zostaną usunięte. Czy chcesz "
 "kontynuować?"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:692
+#: src/frontend/datapicker/DatapickerImageView.cpp:695
 #, fuzzy, kde-format
 #| msgid "%1: change position of selected DatapickerPoints."
 msgid "%1: change position of selected points"
 msgstr "%1: zmień położenie wybranego wybierania danych punktu."
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:741
+#: src/frontend/datapicker/DatapickerImageView.cpp:744
 #, kde-format
 msgid "%1: add new curve."
 msgstr "%1: dodaj nową krzywą."
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:742
+#: src/frontend/datapicker/DatapickerImageView.cpp:745
 #, kde-format
 msgid "Curve"
 msgstr "Krzywa"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:883
+#: src/frontend/datapicker/DatapickerImageView.cpp:886
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4011
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4065
 #: src/frontend/worksheet/WorksheetView.cpp:2150
@@ -11306,7 +11306,7 @@ msgstr "Krzywa"
 msgid "Failed to export"
 msgstr "Nie udało się wyeksportować"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:883
+#: src/frontend/datapicker/DatapickerImageView.cpp:886
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4011
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4065
 #: src/frontend/worksheet/WorksheetView.cpp:2150
@@ -16596,8 +16596,8 @@ msgstr "Pamięć podręczna zestawu danych"
 msgid "Downloaded files successfully deleted."
 msgstr "Pomyślnie usunięto pobrane pliki."
 
-#: src/frontend/SettingsDialog.cpp:48 src/frontend/SettingsDialog.cpp:155
-#: src/frontend/SettingsDialog.cpp:162
+#: src/frontend/SettingsDialog.cpp:48 src/frontend/SettingsDialog.cpp:160
+#: src/frontend/SettingsDialog.cpp:167
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
@@ -16660,14 +16660,14 @@ msgstr "Informacja zwrotna"
 msgid "Text Editor"
 msgstr "Położenie tekstu"
 
-#: src/frontend/SettingsDialog.cpp:159
+#: src/frontend/SettingsDialog.cpp:164
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr ""
 "Wszystkie ustawienia zostaną wyzerowane do domyślnych wartości. Czy chcesz "
 "kontynuować?"
 
-#: src/frontend/SettingsDialog.cpp:170
+#: src/frontend/SettingsDialog.cpp:175
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences    [Changed]"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-05 00:38+0000\n"
+"POT-Creation-Date: 2025-08-14 00:38+0000\n"
 "PO-Revision-Date: 2024-12-29 23:07+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -51,7 +51,7 @@ msgid "Rename"
 msgstr "पुनर्नाम"
 
 #: src/backend/core/AbstractAspect.cpp:411
-#: src/backend/spreadsheet/Spreadsheet.cpp:718
+#: src/backend/spreadsheet/Spreadsheet.cpp:719
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:488
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
 #: src/frontend/worksheet/WorksheetView.cpp:143
@@ -305,7 +305,7 @@ msgid "UNDEFINED"
 msgstr "अनिर्धारितम्"
 
 #: src/backend/core/AbstractColumn.cpp:327
-#: src/backend/spreadsheet/Spreadsheet.cpp:316
+#: src/backend/spreadsheet/Spreadsheet.cpp:317
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -313,7 +313,7 @@ msgstr[0] "%1: १ पङ्क्तिं सम्मिलितं कु�
 msgstr[1] "%1: %2 पङ्क्तयः सम्मिलितं कुर्वन्तु"
 
 #: src/backend/core/AbstractColumn.cpp:340
-#: src/backend/spreadsheet/Spreadsheet.cpp:299
+#: src/backend/spreadsheet/Spreadsheet.cpp:300
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -914,7 +914,7 @@ msgstr "%1: त्रुटिपट्टिकारूपरेखाशै�
 #: src/backend/datapicker/DatapickerImage.cpp:425
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:281
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:276
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:150
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:147
 #: src/backend/worksheet/WorksheetElement.cpp:163
@@ -928,7 +928,7 @@ msgstr "%1: दृश्यमानं सेट् कुर्वन्तु
 #: src/backend/datapicker/DatapickerImage.cpp:425
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:281
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:276
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:150
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:147
 #: src/backend/worksheet/WorksheetElement.cpp:163
@@ -6068,7 +6068,7 @@ msgstr[0] "%1: %2 स्तम्भं योजयन्तु"
 msgstr[1] "%1: %2 स्तम्भान् योजयन्तु"
 
 #: src/backend/matrix/Matrix.cpp:704 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:663
+#: src/backend/spreadsheet/Spreadsheet.cpp:664
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: स्पष्टम्"
@@ -7149,124 +7149,124 @@ msgctxt "@title:column"
 msgid "Type"
 msgstr "प्रकारः"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:347
+#: src/backend/spreadsheet/Spreadsheet.cpp:348
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr "%1: लुप्तमूल्यानि सन्ति पङ्क्तयः निष्कासयन्तु"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:365
+#: src/backend/spreadsheet/Spreadsheet.cpp:366
 #, kde-format
 msgid "%1: mask rows with missing values"
 msgstr "%1: लुप्तमूल्यानि सह पङ्क्तयः मास्क कुर्वन्तु"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:423
+#: src/backend/spreadsheet/Spreadsheet.cpp:424
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: toggle comments header"
 msgstr "%1: कथं परिवर्तयतु"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:431
+#: src/backend/spreadsheet/Spreadsheet.cpp:432
 #, fuzzy, kde-format
 #| msgid "Unable to parse header"
 msgid "%1: toggle sparklines header"
 msgstr "शीर्षकं विश्लेषणं कर्तुं असमर्थः"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:495
 #: src/backend/spreadsheet/Spreadsheet.cpp:496
-#: src/backend/spreadsheet/Spreadsheet.cpp:500
+#: src/backend/spreadsheet/Spreadsheet.cpp:497
+#: src/backend/spreadsheet/Spreadsheet.cpp:501
 #, kde-format
 msgid "%1: set linking"
 msgstr "%1: लिङ्किंग् सेट् कुर्वन्तु"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:518
-#: src/backend/spreadsheet/Spreadsheet.cpp:520
-#: src/backend/spreadsheet/Spreadsheet.cpp:523
+#: src/backend/spreadsheet/Spreadsheet.cpp:519
+#: src/backend/spreadsheet/Spreadsheet.cpp:521
+#: src/backend/spreadsheet/Spreadsheet.cpp:524
 #, kde-format
 msgid "%1: set linked spreadsheet"
 msgstr "%1: लिङ्क् कृतं स्प्रेड्शीट् सेट् कुर्वन्तु"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:621
+#: src/backend/spreadsheet/Spreadsheet.cpp:622
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
 msgstr[0] "%1: 1 स्तम्भं निष्कासयन्तु"
 msgstr[1] "%1: %2 स्तम्भान् निष्कासयन्तु"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:640
+#: src/backend/spreadsheet/Spreadsheet.cpp:641
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
 msgstr[0] "%1: 1 स्तम्भं सम्मिलितं कुर्वन्तु"
 msgstr[1] "%1: %2 स्तम्भान् सम्मिलितं कुर्वन्तु"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:685
+#: src/backend/spreadsheet/Spreadsheet.cpp:686
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: चयनितस्तम्भान् स्वच्छं कुर्वन्तु"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:701
+#: src/backend/spreadsheet/Spreadsheet.cpp:702
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: सर्वाणि मास्क्स् स्वच्छं कुर्वन्तु"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:755
+#: src/backend/spreadsheet/Spreadsheet.cpp:756
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: %2 स्तम्भं %3 स्थानात् %4 यावत् चालयन्तु ।"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:808
+#: src/backend/spreadsheet/Spreadsheet.cpp:809
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: स्तम्भान् क्रमयन्तु"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1176
+#: src/backend/spreadsheet/Spreadsheet.cpp:1177
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: लिङ्क् कृतं स्प्रेड्शीट् निष्कासितम्"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1585
+#: src/backend/spreadsheet/Spreadsheet.cpp:1586
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] "द्विगुण परिशुद्धता दत्तांशः, %1 तत्त्वम्"
 msgstr[1] "संख्यात्मकदत्तांशः, %1 तत्त्वानि"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1588
+#: src/backend/spreadsheet/Spreadsheet.cpp:1589
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] "पूर्णाङ्कदत्तांशः, %1 तत्त्वम्"
 msgstr[1] "पूर्णाङ्कदत्तांशः, %1 तत्त्वानि"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1591
+#: src/backend/spreadsheet/Spreadsheet.cpp:1592
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] "बृहत् पूर्णाङ्कदत्तांशः, %1 तत्त्वम्"
 msgstr[1] "बृहत् पूर्णाङ्कदत्तांशः, %1 तत्त्वानि"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1594
+#: src/backend/spreadsheet/Spreadsheet.cpp:1595
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] "पाठदत्तांशः, %1 तत्त्वम्"
 msgstr[1] "पाठदत्तांशः, %1 तत्त्वानि"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1597
+#: src/backend/spreadsheet/Spreadsheet.cpp:1598
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] "मासस्य दत्तांशः, %1 तत्त्वम्"
 msgstr[1] "मासदत्तांशः, %1 तत्त्वानि"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1600
+#: src/backend/spreadsheet/Spreadsheet.cpp:1601
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] "दिवसदत्तांशः, %1 तत्त्वम्"
 msgstr[1] "दिवसदत्तांशः, %1 तत्त्वानि"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1603
+#: src/backend/spreadsheet/Spreadsheet.cpp:1604
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -7843,8 +7843,8 @@ msgstr "%1: लेबल्स् प्रारूपं स्वचालि
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:943
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:950
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:634
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:641
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:626
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:633
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: लेबल् परिशुद्धतां सेट् कुर्वन्तु"
@@ -7928,7 +7928,7 @@ msgid "%1: set data columns"
 msgstr "%1: दत्तांशस्तम्भान् सेट् कुर्वन्तु"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:304
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:550
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:542
 #, kde-format
 msgid "%1: set type"
 msgstr "%1: प्रकारं सेट् कुर्वन्तु"
@@ -8913,8 +8913,8 @@ msgstr "फिट द्विपद वितरण"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:400
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:248
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:526
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:538
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:518
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:530
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:265
 #, kde-format
@@ -8993,120 +8993,120 @@ msgstr "%1: बैण्डविड्थं सेट् कुर्वन्
 msgid "%1: legend visibility changed"
 msgstr "%1: आख्यायिकादृश्यता परिवर्तिता"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:557
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:549
 #, fuzzy, kde-format
 #| msgid "%1: set limits metric"
 msgid "%1: set limits type"
 msgstr "%1: सीमां मेट्रिकं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:564
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:556
 #, kde-format
 msgid "%1: set limits metric"
 msgstr "%1: सीमां मेट्रिकं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:571
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:563
 #, kde-format
 msgid "%1: set sample size"
 msgstr "%1: नमूना आकारं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:579
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:571
 #, fuzzy, kde-format
 #| msgid "%1: change exact limits"
 msgid "%1: enable exact limits"
 msgstr "%1: सटीकसीमाः परिवर्तयन्तु"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:579
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:571
 #, fuzzy, kde-format
 #| msgid "%1: change exact limits"
 msgid "%1: disable exact limits"
 msgstr "%1: सटीकसीमाः परिवर्तयन्तु"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:588
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:580
 #, fuzzy, kde-format
 #| msgid "%1: set axis zero offset"
 msgid "%1: set maximal upper limit"
 msgstr "%1: अक्षं शून्यं ऑफसेट् सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:595
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587
 #, fuzzy, kde-format
 #| msgid "%1: change negative lower limit"
 msgid "%1: set minimal lower limit"
 msgstr "%1: नकारात्मकं निम्नसीमा परिवर्तयतु"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:594
 #, fuzzy, kde-format
 #| msgid "%1: set center metric"
 msgid "%1: set center specification"
 msgstr "%1: केन्द्रमेट्रिकं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:601
 #, fuzzy, kde-format
 #| msgid "%1: set plot designation"
 msgid "%1: set upper limit specification"
 msgstr "%1: प्लॉट् पदनाम सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:616
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:608
 #, fuzzy, kde-format
 #| msgid "%1: set plot designation"
 msgid "%1: set lower limit specification"
 msgstr "%1: प्लॉट् पदनाम सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:625
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:617
 #, kde-format
 msgid "%1: enable control labels"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:625
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:617
 #, fuzzy, kde-format
 #| msgid "%1: set label offset"
 msgid "%1: disable control labels"
 msgstr "%1: लेबल-अफसेट् सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:647
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:639
 #, fuzzy, kde-format
 #| msgid "%1: set border shape"
 msgid "%1: set labels border shape"
 msgstr "%1: सीमारूपं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:662
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:654
 #, fuzzy, kde-format
 #| msgid "%1: set label font"
 msgid "%1: set labels font"
 msgstr "%1: लेबल font सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:697
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:729
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:689
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:721
 #, fuzzy, kde-format
 #| msgid "%1: set label background color"
 msgid "%1: set labels background color"
 msgstr "%1: लेबलपृष्ठभूमिवर्णं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:787
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:779
 #, fuzzy, kde-format
 #| msgid "%1: set labels text type"
 msgid "%1: set labels border style"
 msgstr "%1: लेबल् पाठप्रकारं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:798
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:790
 #, fuzzy, kde-format
 #| msgid "%1: set labels format"
 msgid "%1: set labels border width"
 msgstr "%1: लेबल्स् प्रारूपं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:809
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:820
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:801
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:812
 #, fuzzy, kde-format
 #| msgid "%1: set label color"
 msgid "%1: set labels border color"
 msgstr "%1: लेबलवर्णं सेट् कुर्वन्तु"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:918
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:910
 #, fuzzy, kde-format
 #| msgid "Not enough data points available."
 msgid "Not enough data provided."
 msgstr "पर्याप्तं दत्तांशबिन्दवः उपलब्धाः न सन्ति।"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1021
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1013
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "अन्तिमः नमूना अपूर्णः अस्ति, तत् च लोपितम् आसीत् ।"
@@ -11190,34 +11190,34 @@ msgstr "आवर्धनम्"
 msgid "%1, active curve \"%2\": %3=%4, %5=%6"
 msgstr "%1, सक्रियवक्रं \"%2\": %3=%4, %5=%6"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:606
+#: src/frontend/datapicker/DatapickerImageView.cpp:609
 #, kde-format
 msgid "Remove existing reference points?"
 msgstr "विद्यमानं सन्दर्भबिन्दून् निष्कासयन्तु?"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:607
+#: src/frontend/datapicker/DatapickerImageView.cpp:610
 #, kde-format
 msgid ""
 "All available reference points will be removed. Do you want to continue?"
 msgstr "सर्वे उपलब्धाः सन्दर्भबिन्दवः निष्कासिताः भविष्यन्ति। किं त्वं निरन्तरं कर्तुम् इच्छसि ?"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:692
+#: src/frontend/datapicker/DatapickerImageView.cpp:695
 #, fuzzy, kde-format
 #| msgid "%1: change position of selected DatapickerPoints."
 msgid "%1: change position of selected points"
 msgstr "%1: चयनितस्य DatapickerPoints इत्यस्य स्थानं परिवर्तयन्तु ।"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:741
+#: src/frontend/datapicker/DatapickerImageView.cpp:744
 #, kde-format
 msgid "%1: add new curve."
 msgstr "%1: नूतनं वक्रं योजयन्तु।"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:742
+#: src/frontend/datapicker/DatapickerImageView.cpp:745
 #, kde-format
 msgid "Curve"
 msgstr "वक्रम्"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:883
+#: src/frontend/datapicker/DatapickerImageView.cpp:886
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4011
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4065
 #: src/frontend/worksheet/WorksheetView.cpp:2150
@@ -11225,7 +11225,7 @@ msgstr "वक्रम्"
 msgid "Failed to export"
 msgstr "निर्यातं कर्तुं असफलम्"
 
-#: src/frontend/datapicker/DatapickerImageView.cpp:883
+#: src/frontend/datapicker/DatapickerImageView.cpp:886
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4011
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4065
 #: src/frontend/worksheet/WorksheetView.cpp:2150
@@ -16443,8 +16443,8 @@ msgstr "दत्तांशसमूहः संग्रहणम्"
 msgid "Downloaded files successfully deleted."
 msgstr "डाउनलोड् कृताः सञ्चिकाः सफलतया विलोपिताः।"
 
-#: src/frontend/SettingsDialog.cpp:48 src/frontend/SettingsDialog.cpp:155
-#: src/frontend/SettingsDialog.cpp:162
+#: src/frontend/SettingsDialog.cpp:48 src/frontend/SettingsDialog.cpp:160
+#: src/frontend/SettingsDialog.cpp:167
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences"
@@ -16507,13 +16507,13 @@ msgstr "उपयोक्तृप्रतिक्रिया"
 msgid "Text Editor"
 msgstr "पाठस्थानम्"
 
-#: src/frontend/SettingsDialog.cpp:159
+#: src/frontend/SettingsDialog.cpp:164
 #, kde-format
 msgid "All settings will be reset to default values. Do you want to continue?"
 msgstr ""
 "सर्वाणि सेटिङ्ग्स् पूर्वनिर्धारितमूल्यानि पुनः सेट् भविष्यन्ति । किं त्वं निरन्तरं कर्तुम् इच्छसि ?"
 
-#: src/frontend/SettingsDialog.cpp:170
+#: src/frontend/SettingsDialog.cpp:175
 #, kde-format
 msgctxt "@title:window"
 msgid "Preferences    [Changed]"

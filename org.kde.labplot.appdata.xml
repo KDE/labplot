@@ -59,6 +59,7 @@
   <summary xml:lang="it">Visualizza e analizza i dati</summary>
   <summary xml:lang="ka">მონაცემების ვიზუალიზაცია და ანალიზი</summary>
   <summary xml:lang="nl">Gegevens visualiseren en analyseren</summary>
+  <summary xml:lang="pt-BR">Visualize e analise dados</summary>
   <summary xml:lang="sl">Vizualizira in analizira podatke</summary>
   <summary xml:lang="sv">Åskådliggör och analysera data</summary>
   <summary xml:lang="tr">Veri görselleyin ve çözümleyin</summary>
@@ -319,6 +320,7 @@
       <caption xml:lang="nl">Voorgedefinieerde of aangepaste modellen aan gegevens aanpassen</caption>
       <caption xml:lang="pl">Wpasuj uprzednio określone lub własne modele do danych</caption>
       <caption xml:lang="pt">Ajuste de modelos predefinidos ou personalizados aos dados</caption>
+      <caption xml:lang="pt-BR">Ajusta modelos predefinidos ou personalizados aos dados</caption>
       <caption xml:lang="ru">Подбор предопределённых или настраиваемых моделей по данным</caption>
       <caption xml:lang="sa">पूर्वनिर्धारितं वा कस्टम् मॉडल् दत्तांशं प्रति फिट् कुर्वन्तु</caption>
       <caption xml:lang="sl">Prilagajanje vnaprej določenih modelov ali modelov po meri podatkom</caption>
@@ -349,6 +351,7 @@
       <caption xml:lang="nl">Gladstrijken van de gegevens met diverse methodes</caption>
       <caption xml:lang="pl">Wygładzanie danych przy pomocy różnych sposobów</caption>
       <caption xml:lang="pt">Suavização dos dados com a ajuda de vários métodos</caption>
+      <caption xml:lang="pt-BR">Suaviza os dados com a ajuda de vários métodos de suavização</caption>
       <caption xml:lang="ru">Сглаживание данных с помощью различных методов сглаживания</caption>
       <caption xml:lang="sa">विभिन्नानां स्मूथिंग पद्धतीनां साहाय्येन दत्तांशं सुस्पष्टं कुर्वन्तु</caption>
       <caption xml:lang="sl">Zgladite podatke s pomočjo različnih metod glajenja</caption>
@@ -379,6 +382,7 @@
       <caption xml:lang="nl">Notebook-interface voor interactieve sessies  in Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="pl">Interfejs zeszytu dla interaktywnych posiedzeń w programach takich jak: Maxima, Octave, R, Sage, Scilab, Python, Julia, itp.</caption>
       <caption xml:lang="pt">Interface de blocos de notas para sessões interactivas no Maxima, Octave, R, Sage, Scilab, Python, Julia, etc</caption>
+      <caption xml:lang="pt-BR">Interface de notebook para sessões interativas em Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="ru">Блокнот служит в качестве интерфейса для интерактивного взаимодействия с Maxima, Octave, R, Sage, Scilab, Python, Julia и так далее.</caption>
       <caption xml:lang="sa">Maxima, Octave, R, Sage, Scilab, Python, Julia इत्यादिषु अन्तरक्रियाशीलसत्रेषु नोटबुक-अन्तरफलकम्</caption>
       <caption xml:lang="sl">Prenosni vmesnik za interaktivne seje v Maxima, Octave, R, Sage, Scilab, Python, Julia itd.</caption>
@@ -472,6 +476,7 @@
       <caption xml:lang="nl">Visualiseren van gegevens, berekend in een interactieve sessie in Maxima</caption>
       <caption xml:lang="pl">Obrazowanie danych obliczonych w interaktywnym posiedzeniu Maximy</caption>
       <caption xml:lang="pt">Visualização dos dados calculados numa sessão interactiva do Maxima</caption>
+      <caption xml:lang="pt-BR">Visualização de dados calculados em uma sessão interativa do Maxima</caption>
       <caption xml:lang="ru">Визаулизация данных, рассчитанных в результате интерактивного взаимодействия с Maxima</caption>
       <caption xml:lang="sa">एकस्मिन् अन्तरक्रियाशील Maxima सत्रे गणितस्य आँकडानां दृश्यीकरणं</caption>
       <caption xml:lang="sl">Vizualizacija podatkov izračunanih v interaktivni seji Maxima</caption>
