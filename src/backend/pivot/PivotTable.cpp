@@ -243,9 +243,6 @@ void PivotTablePrivate::recalculate() {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	WAIT_CURSOR;
 
-	if (dataSourceType == PivotTable::DataSourceSpreadsheet && m_dbTableName != dataSourceSpreadsheet->uuid().toString(QUuid::Id128))
-		createDb();
-
 	if (!dataModel || !horizontalHeaderModel || !verticalHeaderModel) {
 		RESET_CURSOR;
 		return;
@@ -267,6 +264,15 @@ void PivotTablePrivate::recalculate() {
 		Q_EMIT q->changed(); // notify about the new result
 		RESET_CURSOR;
 		return;
+	}
+
+	if (dataSourceType == PivotTable::DataSourceSpreadsheet && m_dbTableName != dataSourceSpreadsheet->uuid().toString(QUuid::Id128)) {
+		createDb();
+		if (m_dbTableName.isEmpty()) {
+			Q_EMIT q->changed(); // notify about the new result
+			RESET_CURSOR;
+			return;
+		}
 	}
 
 	// construct and execute the SQL query
