@@ -16595,7 +16595,7 @@ msgstr ""
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:264
 #, kde-format
 msgid "The file already exists. Do you really want to overwrite it?"
-msgstr "الملفّ موجود بالفعل. أمتأكّد من الكتابة عليه؟"
+msgstr "الملفّ موجود فعلًا. أمتأكّد من الكتابة عليه؟"
 
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:379
 #, kde-format
