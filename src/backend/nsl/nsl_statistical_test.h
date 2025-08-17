@@ -16,41 +16,29 @@ __BEGIN_DECLS
 
 typedef enum { nsl_stats_tail_type_two, nsl_stats_tail_type_negative, nsl_stats_tail_type_positive } nsl_stats_tail_type;
 
-/* Mann-Whitney U test */
-double nsl_stats_mannwhitney_u(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail, double* p_out);
-/* One Way Annova test */
-double nsl_stats_anova_oneway_f(double** groups, size_t* sizes, size_t n_groups, double* p_out);
+double nsl_stats_one_sample_t(const double sample[], size_t n, double hypothesized_mean, nsl_stats_tail_type tail, double* p_out);
 
-// Function prototypes for Kruskal-Wallis Test
-int compare_rank(const void*, const void*);
-double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_groups, double* p_out);
-// Structure used for ranking in the Kruskal-Wallis test
-typedef struct {
-	double value;
-	size_t group;
-	double rank;
-} Rank;
-// Observation structure for log rank test
-typedef struct {
-	double time;
-	int status; // 1 = event occurred, 0 = censored
-	size_t group; // 1 or 2
-} Observation;
-
-// Function prototypes for Log-Rank Test
-double nsl_stats_log_rank_test_statistic(const double* time,
-										 const int* status,
-										 const size_t* group1_indices,
-										 size_t size1,
-										 const size_t* group2_indices,
-										 size_t size2,
-										 double* p_out);
-
-/* Independent Sample Student's t-test */
 double nsl_stats_independent_t(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail, double* p_out);
 
-/* One Sample Student's t-test */
-double nsl_stats_one_sample_t(const double sample[], size_t n, double hypothesized_mean, nsl_stats_tail_type tail, double* p_out);
+double nsl_stats_welch_t(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail, double* p_out);
+
+double nsl_stats_anova_oneway_f(double** groups, size_t* sizes, size_t n_groups, double* p_out);
+
+double nsl_stats_anova_oneway_repeated_f(double** groups, size_t n_samples, size_t n_groups, double* p_out);
+
+double nsl_stats_mannwhitney_u(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail, double* p_out);
+
+double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_groups, double* p_out);
+
+double nsl_stats_wilcoxon_w(const double sample1[], const double sample2[], size_t n, nsl_stats_tail_type tail, double* p_out);
+
+double nsl_stats_friedman_q(double** groups, size_t n_samples, size_t n_groups, double* p_out);
+
+double nsl_stats_chisq_ind_x2(double** table, size_t row, size_t column, double* p_out);
+
+double nsl_stats_chisq_gof_x2(double* observed, double* expected, size_t n, size_t params_estimated, double* p_out);
+
+double nsl_stats_log_rank_h(const double* time, const int* status, const size_t* g1_ind, size_t size1, const size_t* g2_ind, size_t size2, double* p_out);
 
 __END_DECLS
 

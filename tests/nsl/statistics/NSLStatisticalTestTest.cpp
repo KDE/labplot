@@ -103,7 +103,7 @@ void NSLStatisticalTestTest::testLogRankTest() {
 	}
 
 	double p1 = NAN;
-	double H1 = nsl_stats_log_rank_test_statistic(time1_combined, status1_combined, group1_indices1, size1_1, group2_indices1, size2_1, &p1);
+	double H1 = nsl_stats_log_rank_h(time1_combined, status1_combined, group1_indices1, size1_1, group2_indices1, size2_1, &p1);
 
 	printf("Computed H-value: %f\n", H1);
 	printf("Computed p-value: %f\n", p1);
@@ -143,7 +143,7 @@ void NSLStatisticalTestTest::testLogRankTest() {
 	}
 
 	double p2 = NAN;
-	double H2 = nsl_stats_log_rank_test_statistic(time2_combined, status2_combined, group1_indices2, size1_2, group2_indices2, size2_2, &p2);
+	double H2 = nsl_stats_log_rank_h(time2_combined, status2_combined, group1_indices2, size1_2, group2_indices2, size2_2, &p2);
 
 	double expected_H2 = 0.586871;
 	double expected_p2 = 0.44362;
@@ -190,6 +190,140 @@ void NSLStatisticalTestTest::testOneSampleT() {
 	printf("Computed p-value: %f\n", p_value);
 	QVERIFY(std::abs(t_stat - expected_t) < epsilon);
 	QVERIFY(std::abs(p_value - expected_p) < epsilon);
+}
+
+void NSLStatisticalTestTest::testAnovaOneWayRepeated() {
+	const double group1[] = {7.0, 2.0, 5.0, 6.0, 4.0, 7.0, 4.0, 5.0};
+	const double group2[] = {9.0, 3.0, 7.0, 6.0, 7.0, 8.0, 6.0, 3.0};
+	const double group3[] = {8.0, 3.0, 6.0, 4.0, 5.0, 4.0, 4.0, 7.0};
+	const size_t n_samples = 8;
+	const size_t n_groups = 3;
+
+	double* groups[] = {const_cast<double*>(group1), const_cast<double*>(group2), const_cast<double*>(group3)};
+
+	double p = NAN;
+	double F = nsl_stats_anova_oneway_repeated_f(groups, n_samples, n_groups, &p);
+	printf("Computed F-statistic: %f", F);
+
+	printf("Computed p-value: %f\n", p);
+
+	double expected_F = 1.69;
+	double expected_p = 0.22;
+
+	const double epsilon = 1e-4;
+
+	QVERIFY(std::abs(F - expected_F) < epsilon);
+	QVERIFY(std::abs(p - expected_p) < epsilon);
+}
+
+void NSLStatisticalTestTest::testWelchT() {
+	const double sample1[] = {14.0, 15.0, 15.0, 15.0, 16.0, 18.0, 22.0, 23.0, 24.0, 25.0, 25.0};
+	const double sample2[] = {10.0, 12.0, 14.0, 15.0, 18.0, 22.0, 24.0, 27.0, 31.0, 33.0, 34.0, 34.0, 34.0};
+
+	size_t n1 = 11;
+	size_t n2 = 13;
+
+	double p_value = NAN;
+	double t_stat = nsl_stats_welch_t(sample1, n1, sample2, n2, nsl_stats_tail_type_two, &p_value);
+
+	double expected_t = -1.5379;
+	double expected_p = 0.1414;
+
+	const double epsilon = 1e-4;
+
+	printf("Computed t-statistic: %f\n", t_stat);
+	printf("Computed p-value: %f\n", p_value);
+
+	QVERIFY(std::abs(t_stat - expected_t) < epsilon);
+	QVERIFY(std::abs(p_value - expected_p) < epsilon);
+}
+
+void NSLStatisticalTestTest::testWilcoxon() {
+	const double sample1[] = {34.0, 36.0, 41.0, 39.0, 44.0, 37.0, 39.0, 39.0, 45.0};
+	const double sample2[] = {45.0, 33.0, 35.0, 43.0, 42.0, 42.0, 43.0, 43.0, 42.0};
+
+	size_t n = 8;
+
+	double p_value = NAN;
+	double w_stat = nsl_stats_wilcoxon_w(sample1, sample2, n, nsl_stats_tail_type_two, &p_value);
+
+	double expected_w = 14;
+	double expected_p = 0.312;
+
+	const double epsilon = 1e-4;
+
+	printf("Computed w-statistic: %f\n", w_stat);
+	printf("Computed p-value: %f\n", p_value);
+
+	QVERIFY(std::abs(w_stat - expected_w) < epsilon);
+	QVERIFY(std::abs(p_value - expected_p) < epsilon);
+}
+
+void NSLStatisticalTestTest::testFriedman() {
+	const double group1[] = {34.0, 33.0, 41.0, 39.0, 44.0, 37.0, 39.0};
+	const double group2[] = {45.0, 36.0, 35.0, 43.0, 42.0, 42.0, 46.0};
+	const double group3[] = {36.0, 31.0, 44.0, 42.0, 41.0, 45.0, 40.0};
+	const size_t n_samples = 7;
+	const size_t n_groups = 3;
+
+	double* groups[] = {const_cast<double*>(group1), const_cast<double*>(group2), const_cast<double*>(group3)};
+
+	double p = NAN;
+	double Q = nsl_stats_friedman_q(groups, n_samples, n_groups, &p);
+	printf("Computed Q-statistic: %f", Q);
+
+	printf("Computed p-value: %f\n", p);
+
+	double expected_Q = 2.57;
+	double expected_p = 0.276;
+
+	const double epsilon = 1e-4;
+
+	QVERIFY(std::abs(Q - expected_Q) < epsilon);
+	QVERIFY(std::abs(p - expected_p) < epsilon);
+}
+
+void NSLStatisticalTestTest::testChisqIndependence() {
+	const double col1[] = {5.0, 5.0};
+	const double col2[] = {7.0, 5.0};
+	const size_t n_rows = 2;
+	const size_t n_cols = 2;
+
+	double* table[] = {const_cast<double*>(col1), const_cast<double*>(col2)};
+
+	double p = NAN;
+	double x2 = nsl_stats_chisq_ind_x2(table, n_rows, n_cols, &p);
+	printf("Computed x2-statistic: %f", x2);
+
+	printf("Computed p-value: %f\n", p);
+
+	double expected_x2 = 0.153;
+	double expected_p = 0.696;
+
+	const double epsilon = 1e-4;
+
+	QVERIFY(std::abs(x2 - expected_x2) < epsilon);
+	QVERIFY(std::abs(p - expected_p) < epsilon);
+}
+
+void NSLStatisticalTestTest::testChisqGoodnessOfFit() {
+	const double observed[] = {0.45455, 0.31818, 0.22727};
+	const double expected[] = {0.4, 0.35, 0.25};
+	const size_t n = 3;
+
+	double p = NAN;
+	double x2 = nsl_stats_chisq_gof_x2(const_cast<double*>(observed), const_cast<double*>(expected), n, 0, &p);
+	printf("Computed x2-statistic: %f", x2);
+
+	printf("Computed p-value: %f\n", p);
+
+	double expected_x2 = 0.264;
+	double expected_p = 0.876;
+
+	const double epsilon = 1e-4;
+
+	QVERIFY(std::abs(x2 - expected_x2) < epsilon);
+	QVERIFY(std::abs(p - expected_p) < epsilon);
 }
 
 QTEST_MAIN(NSLStatisticalTestTest)

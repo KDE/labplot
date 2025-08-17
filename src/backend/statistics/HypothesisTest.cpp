@@ -756,7 +756,7 @@ void HypothesisTestPrivate::performLogRankTest() {
 
 	QVector<double> time;
 	QVector<int> status;
-	QVector<size_t> group0Indices, group1Indices;
+	QVector<size_t> g0Indices, g1Indices;
 
 	for (int row = 0; row < n; ++row) {
 		if (!rowIsValid(timeCol, row) || !rowIsValid(statusCol, row) || !rowIsValid(groupCol, row))
@@ -782,21 +782,16 @@ void HypothesisTestPrivate::performLogRankTest() {
 		size_t index = time.size() - 1;
 
 		if (g == 0)
-			group0Indices.append(index);
+			g0Indices.append(index);
 		else if (g == 1)
-			group1Indices.append(index);
+			g1Indices.append(index);
 	}
 
-	Q_ASSERT((time.size() == status.size()) && group0Indices.size() + group1Indices.size() == time.size());
+	Q_ASSERT((time.size() == status.size()) && g0Indices.size() + g1Indices.size() == time.size());
 
 	double p = NAN;
-	double stat = nsl_stats_log_rank_test_statistic(time.constData(),
-													status.constData(),
-													group0Indices.constData(),
-													group0Indices.size(),
-													group1Indices.constData(),
-													group1Indices.size(),
-													&p);
+	double stat =
+		nsl_stats_log_rank_h(time.constData(), status.constData(), g0Indices.constData(), g0Indices.size(), g1Indices.constData(), g1Indices.size(), &p);
 
 	addResultTitle(i18n("Log-Rank Test"));
 
@@ -806,8 +801,8 @@ void HypothesisTestPrivate::performLogRankTest() {
 	addResultLine(i18n("Alternate Hypothesis"), alternateHypothesisText);
 
 	addResultSection(i18n("Descriptive Statistics"));
-	addResultLine(i18n("Group 0 Size"), group0Indices.size());
-	addResultLine(i18n("Group 1 Size"), group1Indices.size());
+	addResultLine(i18n("Group 0 Size"), g0Indices.size());
+	addResultLine(i18n("Group 1 Size"), g1Indices.size());
 
 	addResultSection(i18n("Log-Rank Statistics"));
 	addResultLine(i18n("Significance Level"), significanceLevel);

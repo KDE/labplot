@@ -22,5 +22,11 @@ private Q_SLOTS:
 	void testLogRankTest();
 	void testIndependentT();
 	void testOneSampleT();
+	void testAnovaOneWayRepeated();
+	void testWelchT();
+	void testWilcoxon();
+	void testFriedman();
+	void testChisqIndependence();
+	void testChisqGoodnessOfFit();
 };
 #endif // NSLSTATISTICALTESTTEST_H

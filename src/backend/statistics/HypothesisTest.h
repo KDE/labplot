@@ -31,7 +31,21 @@ public:
 	explicit HypothesisTest(const QString&);
 	~HypothesisTest() override;
 
-	enum class Test { t_test_one_sample, t_test_two_sample, t_test_two_sample_paired, one_way_anova, mann_whitney_u_test, kruskal_wallis_test, log_rank_test };
+	enum class Test {
+		t_test_one_sample,
+		t_test_two_sample,
+		t_test_two_sample_paired,
+		t_test_welch,
+		one_way_anova,
+		one_way_anova_repeated,
+		mann_whitney_u_test,
+		kruskal_wallis_test,
+		wilcoxon_test,
+		friedman_test,
+		chisq_independence,
+		chisq_goodness_of_fit,
+		log_rank_test
+	};
 
 	QWidget* view() const override;
 	bool exportView() const override;
