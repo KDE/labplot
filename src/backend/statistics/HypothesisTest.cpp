@@ -44,7 +44,7 @@ QString HypothesisTest::resultHtml() const {
 	return d->result;
 }
 
-void HypothesisTest::setDataColumns(const QVector<Column*>& cols) {
+void HypothesisTest::setDataColumns(const QVector<const AbstractColumn*>& cols) {
 	Q_D(HypothesisTest);
 	auto [min, max] = variableCount(d->test);
 	if (cols.size() < min || cols.size() > max)
@@ -57,7 +57,7 @@ void HypothesisTest::setDataColumns(const QVector<Column*>& cols) {
 	d->dataColumns = cols;
 }
 
-const QVector<Column*>& HypothesisTest::dataColumns() const {
+const QVector<const AbstractColumn*>& HypothesisTest::dataColumns() const {
 	Q_D(const HypothesisTest);
 	return d->dataColumns;
 }
@@ -437,7 +437,7 @@ void HypothesisTestPrivate::performOneSampleTTest() {
 	double pValue = NAN;
 	double tValue = NAN;
 	const auto* col = dataColumns.constFirst();
-	const auto& statistics = col->statistics();
+	const auto& statistics = static_cast<const Column*>(col)->statistics();
 	const int n = statistics.size;
 	if (n != 0) {
 		// copy valid values only
@@ -499,14 +499,16 @@ void HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 	if (dataColumns.size() < 2) // we need two columns for the two sample t test
 		return;
 
-	const Column* col1 = dataColumns.at(0);
-	const Column* col2 = dataColumns.at(1);
+	const auto* col1 = dataColumns.at(0);
+	const auto* col2 = dataColumns.at(1);
 
 	if (!col1->isNumeric() || !col2->isNumeric())
 		return;
 
-	const int n1 = col1->statistics().size;
-	const int n2 = col2->statistics().size;
+	const auto& statistics1 = static_cast<const Column*>(col1)->statistics();
+	const auto& statistics2 = static_cast<const Column*>(col2)->statistics();
+	const int n1 = statistics1.size;
+	const int n2 = statistics2.size;
 
 	double pValue = NAN;
 	double tValue = NAN;
@@ -565,10 +567,10 @@ void HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 	addResultSection(i18n("Descriptive Statistics"));
 	addResultLine(i18n("Size 1"), n1);
 	addResultLine(i18n("Size 2"), n2);
-	addResultLine(i18n("Mean 1"), col1->statistics().arithmeticMean);
-	addResultLine(i18n("Mean 2"), col2->statistics().arithmeticMean);
-	addResultLine(i18n("Standard Deviation 1"), col1->statistics().standardDeviation);
-	addResultLine(i18n("Standard Deviation 2"), col2->statistics().standardDeviation);
+	addResultLine(i18n("Mean 1"), statistics1.arithmeticMean);
+	addResultLine(i18n("Mean 2"), statistics2.arithmeticMean);
+	addResultLine(i18n("Standard Deviation 1"), statistics1.standardDeviation);
+	addResultLine(i18n("Standard Deviation 2"), statistics2.standardDeviation);
 
 	addResultSection(i18n("t-Test Statistics"));
 	addResultLine(i18n("Significance Level"), significanceLevel);
@@ -628,10 +630,10 @@ void HypothesisTestPrivate::performOneWayANOVATest() {
 
 	addResultSection(i18n("Descriptive Statistics"));
 	for (int g = 0; g < groupCount; ++g) {
-		auto columnStatistics = dataColumns.at(g)->statistics();
-		addResultLine(i18n("Group %1 Size", g + 1), columnStatistics.size);
-		addResultLine(i18n("Group %1 Mean", g + 1), columnStatistics.arithmeticMean);
-		addResultLine(i18n("Group %1 Standard Deviation", g + 1), columnStatistics.standardDeviation);
+		const auto& statistics = static_cast<const Column*>(dataColumns.at(g))->statistics();
+		addResultLine(i18n("Group %1 Size", g + 1), statistics.size);
+		addResultLine(i18n("Group %1 Mean", g + 1), statistics.arithmeticMean);
+		addResultLine(i18n("Group %1 Standard Deviation", g + 1), statistics.standardDeviation);
 	}
 	addResultSection(i18n("ANOVA Statistics"));
 	addResultLine(i18n("Significance Level"), significanceLevel);
@@ -692,10 +694,10 @@ void HypothesisTestPrivate::performKruskalWallisTest() {
 
 	addResultSection(i18n("Descriptive Statistics"));
 	for (int g = 0; g < groupCount; ++g) {
-		auto columnStatistics = dataColumns.at(g)->statistics();
-		addResultLine(i18n("Group %1 Size", g + 1), columnStatistics.size);
-		addResultLine(i18n("Group %1 Mean", g + 1), columnStatistics.arithmeticMean);
-		addResultLine(i18n("Group %1 Standard Deviation", g + 1), columnStatistics.standardDeviation);
+		const auto& statistics = static_cast<const Column*>(dataColumns.at(g))->statistics();
+		addResultLine(i18n("Group %1 Size", g + 1), statistics.size);
+		addResultLine(i18n("Group %1 Mean", g + 1), statistics.arithmeticMean);
+		addResultLine(i18n("Group %1 Standard Deviation", g + 1), statistics.standardDeviation);
 	}
 
 	addResultSection(i18n("Kruskal-Wallis Statistics"));
@@ -724,9 +726,9 @@ void HypothesisTestPrivate::performLogRankTest() {
 		return;
 	}
 
-	const Column* timeCol = dataColumns.at(0);
-	const Column* statusCol = dataColumns.at(1);
-	const Column* groupCol = dataColumns.at(2);
+	const auto* timeCol = dataColumns.at(0);
+	const auto* statusCol = dataColumns.at(1);
+	const auto* groupCol = dataColumns.at(2);
 
 	if (statusCol->rowCount() != timeCol->rowCount() || groupCol->rowCount() != timeCol->rowCount()) {
 		Q_EMIT q->info(i18n("Time, Status and Group columns should have equal size."));
@@ -812,11 +814,11 @@ void HypothesisTestPrivate::performLogRankTest() {
 // ##############################################################################
 // ##########################  Static helpers   #################################
 // ##############################################################################
-bool HypothesisTestPrivate::rowIsValid(const Column* column, int row) {
+bool HypothesisTestPrivate::rowIsValid(const AbstractColumn* column, int row) {
 	return std::isfinite(column->valueAt(row)) && !column->isMasked(row);
 }
 
-QVector<double> HypothesisTestPrivate::filterColumn(const Column* col) {
+QVector<double> HypothesisTestPrivate::filterColumn(const AbstractColumn* col) {
 	QVector<double> sample;
 
 	for (int row = 0; row < col->rowCount(); ++row)
@@ -826,17 +828,17 @@ QVector<double> HypothesisTestPrivate::filterColumn(const Column* col) {
 	return sample;
 }
 
-QVector<QVector<double>> HypothesisTestPrivate::filterColumns(const QVector<Column*>& columns) {
+QVector<QVector<double>> HypothesisTestPrivate::filterColumns(const QVector<const AbstractColumn*>& columns) {
 	QVector<QVector<double>> samples;
 	samples.reserve(columns.size());
 
-	for (const Column* col : columns)
+	for (const auto* col : columns)
 		samples.append(filterColumn(col));
 
 	return samples;
 }
 
-QVector<QVector<double>> HypothesisTestPrivate::filterColumnsParallel(const QVector<Column*>& columns) {
+QVector<QVector<double>> HypothesisTestPrivate::filterColumnsParallel(const QVector<const AbstractColumn*>& columns) {
 	return QtConcurrent::mapped(columns, filterColumn).results();
 }
 

@@ -244,12 +244,12 @@ void HypothesisTestDock::manageAddRemoveVariable() {
 // - when the user has added or removed a column
 // - in ensureVariableCount()
 void HypothesisTestDock::updateColumns() {
-	QVector<Column*> columns;
+	QVector<const AbstractColumn*> columns;
 	int varCount = ui.variablesVerticalLayout->count();
 	for (int i = 0; i < varCount; i++) {
 		auto* layout = ui.variablesVerticalLayout->itemAt(i)->layout();
 		auto* treeViewCb = static_cast<TreeViewComboBox*>(layout->itemAt(1)->widget());
-		auto* col = dynamic_cast<Column*>(treeViewCb->currentAspect());
+		auto* col = dynamic_cast<AbstractColumn*>(treeViewCb->currentAspect());
 		if (col)
 			columns << col;
 	}

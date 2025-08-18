@@ -30,7 +30,7 @@ public:
 	HypothesisTest* const q;
 
     QString result; // result html text
-	QVector<Column*> dataColumns; // colums with the data for the test
+	QVector<const AbstractColumn*> dataColumns; // colums with the data for the test
 	QVector<QString> dataColumnPaths; // paths of the columns with the data for the test
 	HypothesisTest::Test test{HypothesisTest::Test::t_test_one_sample};
 	double testMean{0.0};
@@ -44,10 +44,10 @@ private:
 	void addResultLine(const QString& name, double value);
 	void addResultLine(const QString& name);
 
-	static bool rowIsValid(const Column*, int);
-	static QVector<double> filterColumn(const Column* col);
-	static QVector<QVector<double>> filterColumns(const QVector<Column*>&);
-	static QVector<QVector<double>> filterColumnsParallel(const QVector<Column*>& columns);
+	static bool rowIsValid(const AbstractColumn*, int);
+	static QVector<double> filterColumn(const AbstractColumn* col);
+	static QVector<QVector<double>> filterColumns(const QVector<const AbstractColumn*>&);
+	static QVector<QVector<double>> filterColumnsParallel(const QVector<const AbstractColumn*>& columns);
 	static double** toArrayOfArrays(QVector<QVector<double>>& data);
 };
 

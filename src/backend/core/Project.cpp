@@ -4,7 +4,7 @@
 	Description          : Represents a LabPlot project.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2011-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 
@@ -15,6 +15,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/statistics/HypothesisTest.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
@@ -1249,6 +1250,40 @@ void Project::restorePointers(AbstractAspect* aspect) {
 				linkingSpreadsheet->setLinkedSpreadsheet(toLinkedSpreadsheet, true);
 			}
 		}
+	}
+
+	// hypothesis tests
+	QVector<HypothesisTest*> tests;
+	if (hasChildren)
+		tests = aspect->children<HypothesisTest>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::HypothesisTest)
+		tests << static_cast<HypothesisTest*>(aspect);
+
+	for (auto* test : tests) {
+		if (!test)
+			continue;
+
+		// initialize the array for the column pointers
+		const auto& paths = test->dataColumnPaths();
+		int count = paths.count();
+		QVector<const AbstractColumn*> dataColumns;
+		dataColumns.resize(count);
+
+		// restore the pointers
+		for (int i = 0; i < count; ++i) {
+			dataColumns[i] = nullptr;
+			const auto& path = paths.at(i);
+			for (auto* column : columns) {
+				if (!column)
+					continue;
+				if (column->path() == path) {
+					dataColumns[i] = column;
+					break;
+				}
+			}
+		}
+
+		test->setDataColumns(std::move(dataColumns));
 	}
 
 	// if a column was calculated via a formula, restore the pointers to the variable columns defining the formula

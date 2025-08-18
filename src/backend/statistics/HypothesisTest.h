@@ -16,7 +16,7 @@
 
 #include <QPair>
 
-class Column;
+class AbstractColumn;
 class HypothesisTestPrivate;
 class HypothesisTestView;
 
@@ -43,8 +43,8 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 
 	// getters and setter
-	const QVector<Column*>& dataColumns() const;
-	void setDataColumns(const QVector<Column*>&);
+	const QVector<const AbstractColumn*>& dataColumns() const;
+	void setDataColumns(const QVector<const AbstractColumn*>&);
 	const QVector<QString>& dataColumnPaths() const;
 
 	QString resultHtml() const;
