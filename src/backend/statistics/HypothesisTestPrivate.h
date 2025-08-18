@@ -29,7 +29,7 @@ public:
 
 	HypothesisTest* const q;
 
-    QString result; // result html text
+	QString result; // result html text
 	QVector<const AbstractColumn*> dataColumns; // colums with the data for the test
 	QVector<QString> dataColumnPaths; // paths of the columns with the data for the test
 	HypothesisTest::Test test{HypothesisTest::Test::t_test_one_sample};

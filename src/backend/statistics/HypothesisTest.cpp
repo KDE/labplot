@@ -801,11 +801,10 @@ void HypothesisTestPrivate::performLogRankTest() {
 	addResultSection(i18n("Statistical Conclusion"));
 	if (!std::isnan(p)) {
 		if (p <= significanceLevel)
-			addResultLine(
-				i18n("At the significance level %1, the survival curves are significantly different. Reject the null Hypothesis", significanceLevel));
+			addResultLine(i18n("At the significance level %1, the survival curves are significantly different. Reject the null Hypothesis", significanceLevel));
 		else
-			addResultLine(i18n("At the significance level %1, no significant difference between survival curves. Fail to reject the null Hypothesis",
-							   significanceLevel));
+			addResultLine(
+				i18n("At the significance level %1, no significant difference between survival curves. Fail to reject the null Hypothesis", significanceLevel));
 	} else {
 		addResultLine(i18n("Test result not available"));
 	}
