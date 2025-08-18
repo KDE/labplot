@@ -45,6 +45,7 @@ DECLARE_COMPARE_FUNCTION(observation, time)
 typedef struct {
 	double abs_diff;
 	int sign;
+	int rank;
 } signed_diff;
 DECLARE_COMPARE_FUNCTION(signed_diff, abs_diff)
 
@@ -106,10 +107,10 @@ double nsl_stats_mannwhitney_u(const double sample1[], size_t n1, const double s
 		cc = (U > mean_U) ? 0.5 : (U < mean_U ? -0.5 : 0.0);
 		break;
 	case nsl_stats_tail_type_positive:
-		cc = -0.5;
+		cc = 0.5;
 		break;
 	case nsl_stats_tail_type_negative:
-		cc = 0.5;
+		cc = -0.5;
 		break;
 	}
 
@@ -184,8 +185,8 @@ double nsl_stats_anova_oneway_repeated_f(double** groups, size_t n_samples, size
 
 	for (size_t i = 0; i < n_samples; i++) {
 		for (size_t j = 0; j < n_groups; j++) {
-			grand_total += groups[i][j];
-			sample_means[i] += groups[i][j];
+			grand_total += groups[j][i];
+			sample_means[i] += groups[j][i] / n_groups;
 		}
 	}
 
@@ -203,7 +204,7 @@ double nsl_stats_anova_oneway_repeated_f(double** groups, size_t n_samples, size
 	double ssw = 0.0;
 	for (size_t i = 0; i < n_samples; i++) {
 		for (size_t j = 0; j < n_groups; j++) {
-			double diff = groups[i][j] - sample_means[i];
+			double diff = groups[j][i] - sample_means[i];
 			ssw += diff * diff;
 		}
 	}
@@ -655,64 +656,54 @@ double nsl_stats_wilcoxon_w(const double sample1[], const double sample2[], size
 
 	qsort(diffs, N, sizeof(signed_diff), compare_signed_diff_abs_diff);
 
-	double* ranks = (double*)malloc(N * sizeof(double));
-
-	double tie_correction_term = 0.0;
-	for (size_t i = 0; i < N;) {
-		size_t j = i;
-		while (j < N - 1 && diffs[j].abs_diff == diffs[j + 1].abs_diff)
-			j++;
-
-		double avg_rank = 0;
-		for (size_t k = i; k <= j; ++k)
-			avg_rank += (k + 1);
-		avg_rank /= (double)(j - i + 1);
-
-		for (size_t k = i; k <= j; ++k)
-			ranks[k] = avg_rank;
-
-		double t = (double)(j - i + 1);
-		if (t > 1)
-			tie_correction_term += (t * t * t - t) / 2;
-
-		i = j + 1;
-	}
-
+	double tie_term = 0.0;
 	double T_plus = 0.0;
 	double T_minus = 0.0;
-	for (size_t i = 0; i < N; ++i)
-		if (diffs[i].sign == 1)
-			T_plus += ranks[i];
-		else if (diffs[i].sign == -1)
-			T_minus += ranks[i];
+	size_t i = 0;
+	while (i < N) {
+		size_t j = i + 1;
+		while (j < N && diffs[j].abs_diff == diffs[i].abs_diff)
+			j++;
+		size_t tie_count = j - i;
+		double avg_rank = ((double)(i + 1) + (double)j) / 2.0;
+		for (size_t k = i; k < j; k++) {
+			diffs[k].rank = avg_rank;
+			if (diffs[k].sign == 1)
+				T_plus += avg_rank;
+			else if (diffs[k].sign == -1)
+				T_minus += avg_rank;
+		}
+		if (tie_count > 1)
+			tie_term += tie_count * tie_count * tie_count - tie_count;
+		i = j;
+	}
 
-	double W = fmin(T_plus, T_minus);
+	double T = tail == nsl_stats_tail_type_two ? fmin(T_plus, T_minus) : T_plus;
 
-	double mu_W = (double)N * (N + 1.0) / 4.0;
-	double var_W = ((double)N * (N + 1.0) * (2.0 * N + 1.0) - tie_correction_term) / 24.0;
+	double mu_T = (double)N * (N + 1.0) / 4.0;
+	double var_T = ((double)N * (N + 1.0) * (2.0 * N + 1.0) - tie_term / 2) / 24.0;
 
-	if (var_W <= 0.0) {
+	if (var_T <= 0.0) {
 		free(diffs);
-		free(ranks);
 		*p_out = NAN;
 		return NAN;
 	}
-	double sigma_W = sqrt(var_W);
+	double sigma_T = sqrt(var_T);
 
 	double cc = NAN;
 	switch (tail) {
 	case nsl_stats_tail_type_two:
-		cc = (W > mu_W) ? 0.5 : (W < mu_W ? -0.5 : 0.0);
+		cc = (T > mu_T) ? 0.5 : (T < mu_T ? -0.5 : 0.0);
 		break;
 	case nsl_stats_tail_type_positive:
-		cc = -0.5;
+		cc = 0.5;
 		break;
 	case nsl_stats_tail_type_negative:
-		cc = 0.5;
+		cc = -0.5;
 		break;
 	}
 
-	double z = (W - cc - mu_W) / sigma_W;
+	double z = (T - cc - mu_T) / sigma_T;
 
 	double norm_cdf = gsl_cdf_ugaussian_P(z);
 
@@ -730,10 +721,9 @@ double nsl_stats_wilcoxon_w(const double sample1[], const double sample2[], size
 	}
 
 	free(diffs);
-	free(ranks);
 
 	*p_out = p;
-	return W;
+	return T;
 }
 
 /* Friedman test */
@@ -825,7 +815,7 @@ double nsl_stats_chisq_ind_x2(double** table, size_t row, size_t column, double*
 }
 
 /* Chi square Goodness of Fit Test */
-double nsl_stats_chisq_gof_x2(double* observed, double* expected, size_t n, size_t params_estimated, double* p_out) {
+double nsl_stats_chisq_gof_x2(int* observed, int* expected, size_t n, size_t params_estimated, double* p_out) {
 	double x2 = 0.0;
 
 	for (size_t i = 0; i < n; ++i) {

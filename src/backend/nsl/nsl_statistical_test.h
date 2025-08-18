@@ -36,7 +36,7 @@ double nsl_stats_friedman_q(double** groups, size_t n_samples, size_t n_groups, 
 
 double nsl_stats_chisq_ind_x2(double** table, size_t row, size_t column, double* p_out);
 
-double nsl_stats_chisq_gof_x2(double* observed, double* expected, size_t n, size_t params_estimated, double* p_out);
+double nsl_stats_chisq_gof_x2(int* observed, int* expected, size_t n, size_t params_estimated, double* p_out);
 
 double nsl_stats_log_rank_h(const double* time, const int* status, const size_t* g1_ind, size_t size1, const size_t* g2_ind, size_t size2, double* p_out);
 

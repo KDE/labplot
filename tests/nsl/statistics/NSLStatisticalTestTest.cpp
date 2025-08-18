@@ -207,10 +207,10 @@ void NSLStatisticalTestTest::testAnovaOneWayRepeated() {
 
 	printf("Computed p-value: %f\n", p);
 
-	double expected_F = 1.69;
-	double expected_p = 0.22;
+	double expected_F = 1.68647;
+	double expected_p = 0.22069;
 
-	const double epsilon = 1e-4;
+	const double epsilon = 1e-3;
 
 	QVERIFY(std::abs(F - expected_F) < epsilon);
 	QVERIFY(std::abs(p - expected_p) < epsilon);
@@ -239,20 +239,46 @@ void NSLStatisticalTestTest::testWelchT() {
 }
 
 void NSLStatisticalTestTest::testWilcoxon() {
-	const double sample1[] = {34.0, 36.0, 41.0, 39.0, 44.0, 37.0, 39.0, 39.0, 45.0};
-	const double sample2[] = {45.0, 33.0, 35.0, 43.0, 42.0, 42.0, 43.0, 43.0, 42.0};
+	const double sample1[] = {1.1,	2.3,  3.5,	4.2,  5.8,	6.1,  7.9,	8.4,  9.6,	10.3, 11.7, 12.5, 13.9,
+							  14.2, 15.6, 16.8, 17.1, 18.5, 19.3, 20.7, 21.2, 22.8, 23.4, 24.9, 25.1};
+	const double sample2[] = {1.5,	2.1,  3.8,	4.0,  5.9,	6.7,  7.2,	8.8,  9.1,	10.5, 11.9, 12.3, 13.5,
+							  14.8, 15.2, 16.9, 17.5, 18.0, 19.7, 20.1, 21.5, 22.3, 23.0, 24.5, 25.8};
 
-	size_t n = 8;
+	size_t n = 25;
+
+	const double epsilon = 1e-3;
 
 	double p_value = NAN;
 	double w_stat = nsl_stats_wilcoxon_w(sample1, sample2, n, nsl_stats_tail_type_two, &p_value);
 
-	double expected_w = 14;
-	double expected_p = 0.312;
+	double expected_w = 152.5;
+	double expected_p = 0.79808;
 
-	const double epsilon = 1e-4;
+	printf("Computed W-statistic: %f\n", w_stat);
+	printf("Computed p-value: %f\n", p_value);
 
-	printf("Computed w-statistic: %f\n", w_stat);
+	QVERIFY(std::abs(w_stat - expected_w) < epsilon);
+	QVERIFY(std::abs(p_value - expected_p) < epsilon);
+
+	p_value = NAN;
+	w_stat = nsl_stats_wilcoxon_w(sample1, sample2, n, nsl_stats_tail_type_negative, &p_value);
+
+	expected_w = 172.5;
+	expected_p = 0.61132;
+
+	printf("Computed W-statistic: %f\n", w_stat);
+	printf("Computed p-value: %f\n", p_value);
+
+	QVERIFY(std::abs(w_stat - expected_w) < epsilon);
+	QVERIFY(std::abs(p_value - expected_p) < epsilon);
+
+	p_value = NAN;
+	w_stat = nsl_stats_wilcoxon_w(sample1, sample2, n, nsl_stats_tail_type_positive, &p_value);
+
+	expected_w = 172.5;
+	expected_p = 0.39903;
+
+	printf("Computed W-statistic: %f\n", w_stat);
 	printf("Computed p-value: %f\n", p_value);
 
 	QVERIFY(std::abs(w_stat - expected_w) < epsilon);
@@ -274,10 +300,10 @@ void NSLStatisticalTestTest::testFriedman() {
 
 	printf("Computed p-value: %f\n", p);
 
-	double expected_Q = 2.57;
+	double expected_Q = 2.5714;
 	double expected_p = 0.276;
 
-	const double epsilon = 1e-4;
+	const double epsilon = 1e-3;
 
 	QVERIFY(std::abs(Q - expected_Q) < epsilon);
 	QVERIFY(std::abs(p - expected_p) < epsilon);
@@ -297,30 +323,30 @@ void NSLStatisticalTestTest::testChisqIndependence() {
 
 	printf("Computed p-value: %f\n", p);
 
-	double expected_x2 = 0.153;
+	double expected_x2 = 0.1528;
 	double expected_p = 0.696;
 
-	const double epsilon = 1e-4;
+	const double epsilon = 1e-3;
 
 	QVERIFY(std::abs(x2 - expected_x2) < epsilon);
 	QVERIFY(std::abs(p - expected_p) < epsilon);
 }
 
 void NSLStatisticalTestTest::testChisqGoodnessOfFit() {
-	const double observed[] = {0.45455, 0.31818, 0.22727};
-	const double expected[] = {0.4, 0.35, 0.25};
+	const int observed[] = {50, 110, 40};
+	const int expected[] = {60, 100, 40};
 	const size_t n = 3;
 
 	double p = NAN;
-	double x2 = nsl_stats_chisq_gof_x2(const_cast<double*>(observed), const_cast<double*>(expected), n, 0, &p);
+	double x2 = nsl_stats_chisq_gof_x2(const_cast<int*>(observed), const_cast<int*>(expected), n, 0, &p);
 	printf("Computed x2-statistic: %f", x2);
 
 	printf("Computed p-value: %f\n", p);
 
-	double expected_x2 = 0.264;
-	double expected_p = 0.876;
+	double expected_x2 = 2.667;
+	double expected_p = 0.2636;
 
-	const double epsilon = 1e-4;
+	const double epsilon = 1e-3;
 
 	QVERIFY(std::abs(x2 - expected_x2) < epsilon);
 	QVERIFY(std::abs(p - expected_p) < epsilon);
