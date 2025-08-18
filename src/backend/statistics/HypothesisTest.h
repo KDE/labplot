@@ -17,6 +17,7 @@
 #include <QPair>
 
 class Column;
+class HypothesisTestPrivate;
 class HypothesisTestView;
 
 extern "C" {
@@ -58,43 +59,23 @@ public:
 	void setTest(Test);
 	Test test() const;
 
+	void recalculate();
+
 	static QPair<int, int> variableCount(Test);
 	static int hypothesisCount(Test);
 	static QVector<QPair<QString, QString>> hypothesisText(Test);
 
-	void recalculate();
-	void resetResult();
+	typedef HypothesisTestPrivate Private;
 
 Q_SIGNALS:
 	void changed();
 	void requestProjectContextMenu(QMenu*);
 
 private:
-	void performOneSampleTTest();
-	void performTwoSampleTTest(bool);
-	void performOneWayANOVATest();
-	void performMannWhitneyUTest();
-	void performKruskalWallisTest();
-	void performLogRankTest();
+	Q_DECLARE_PRIVATE(HypothesisTest)
+	HypothesisTestPrivate* const d_ptr;
 
-	void addResultTitle(const QString&);
-	void addResultSection(const QString&);
-	void addResultLine(const QString& name, const QString& value);
-	void addResultLine(const QString& name, double value);
-	void addResultLine(const QString& name);
-
-	static bool rowIsValid(const Column*, int);
-	static QVector<double> filterColumn(const Column* col);
-	static QVector<QVector<double>> filterColumns(const QVector<Column*>&);
-	static QVector<QVector<double>> filterColumnsParallel(const QVector<Column*>& columns);
-	static double** toArrayOfArrays(QVector<QVector<double>>& data);
-
-	QString m_result; // result html text
-	QVector<Column*> m_columns;
-	Test m_test{Test::t_test_one_sample};
-	double m_testMean{0.0};
-	double m_significanceLevel{0.05};
-	nsl_stats_tail_type m_tail{nsl_stats_tail_type_two};
+protected:
 	mutable HypothesisTestView* m_view{nullptr};
 };
 
