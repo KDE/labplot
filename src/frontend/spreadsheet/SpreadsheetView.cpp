@@ -949,8 +949,8 @@ void SpreadsheetView::connectActions() {
 		const auto& columns = selectedColumns();
 		QString name = (columns.size() == 1) ? columns.constFirst()->name() : m_spreadsheet->name();
 		auto* test = new HypothesisTest(i18n("Hypothesis Test for %1", name));
-		test->setColumns(columns);
-		if (!test->columns().isEmpty())
+		test->setDataColumns(columns);
+		if (!test->dataColumns().isEmpty())
 			test->recalculate();
 		m_spreadsheet->parentAspect()->addChild(test);
 	});

@@ -43,8 +43,10 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 
 	// getters and setter
-	const QVector<Column*>& columns() const;
-	void setColumns(const QVector<Column*>&);
+	const QVector<Column*>& dataColumns() const;
+	void setDataColumns(const QVector<Column*>&);
+	const QVector<QString>& dataColumnPaths() const;
+
 	QString resultHtml() const;
 
 	void setTestMean(double);

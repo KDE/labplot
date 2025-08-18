@@ -71,7 +71,7 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	Q_ASSERT(ui.variablesVerticalLayout->count() == 0);
 
 	// restore variables from aspect columns
-	for (auto* col : m_test->columns()) {
+	for (auto* col : m_test->dataColumns()) {
 		addVariable();
 		int varCount = ui.variablesVerticalLayout->count();
 		auto* layout = ui.variablesVerticalLayout->itemAt(varCount - 1)->layout(); // layoutitem for the just added variable above
@@ -254,7 +254,7 @@ void HypothesisTestDock::updateColumns() {
 			columns << col;
 	}
 
-	m_test->setColumns(columns);
+	m_test->setDataColumns(columns);
 }
 
 // ##############################################################################
@@ -280,7 +280,7 @@ void HypothesisTestDock::manageRecalculate() {
 
 	// check variables
 	const auto [min, max] = HypothesisTest::variableCount(test);
-	if (m_test->columns().size() < min || m_test->columns().size() > max) {
+	if (m_test->dataColumns().size() < min || m_test->dataColumns().size() > max) {
 		ui.pbRecalculate->setToolTip(i18n("Selected test requires at least %1 and at most %2 non-empty variables to enable \"Recalculate\".", QString::number(min), QString::number(max)));
 		ui.pbRecalculate->setEnabled(false);
 		return;

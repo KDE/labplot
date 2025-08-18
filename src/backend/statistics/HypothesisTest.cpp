@@ -44,7 +44,7 @@ QString HypothesisTest::resultHtml() const {
 	return d->result;
 }
 
-void HypothesisTest::setColumns(const QVector<Column*>& cols) {
+void HypothesisTest::setDataColumns(const QVector<Column*>& cols) {
 	Q_D(HypothesisTest);
 	auto [min, max] = variableCount(d->test);
 	if (cols.size() < min || cols.size() > max)
@@ -54,12 +54,17 @@ void HypothesisTest::setColumns(const QVector<Column*>& cols) {
 		if (!col->isNumeric())
 			return;
 
-	d->columns = cols;
+	d->dataColumns = cols;
 }
 
-const QVector<Column*>& HypothesisTest::columns() const {
+const QVector<Column*>& HypothesisTest::dataColumns() const {
 	Q_D(const HypothesisTest);
-	return d->columns;
+	return d->dataColumns;
+}
+
+const QVector<QString>& HypothesisTest::dataColumnPaths() const {
+	Q_D(const HypothesisTest);
+	return d->dataColumnPaths;
 }
 
 void HypothesisTest::setTestMean(double mean) {
@@ -97,7 +102,7 @@ nsl_stats_tail_type HypothesisTest::tail() const {
 void HypothesisTest::setTest(Test test) {
 	Q_D(HypothesisTest);
 	d->test = test;
-	d->columns.clear();
+	d->dataColumns.clear();
 	d->resetResult();
 }
 
@@ -279,7 +284,7 @@ void HypothesisTestPrivate::addResultLine(const QString& name) {
 // ##################  (Re-)Calculation of the tests  ##########################
 // ##############################################################################
 void HypothesisTestPrivate::recalculate() {
-	if (columns.isEmpty()) {
+	if (dataColumns.isEmpty()) {
 		Q_EMIT q->info(i18n("No variable column provided."));
 		return;
 	}
@@ -431,7 +436,7 @@ void HypothesisTestPrivate::resetResult() {
 void HypothesisTestPrivate::performOneSampleTTest() {
 	double pValue = NAN;
 	double tValue = NAN;
-	const auto* col = columns.constFirst();
+	const auto* col = dataColumns.constFirst();
 	const auto& statistics = col->statistics();
 	const int n = statistics.size;
 	if (n != 0) {
@@ -491,11 +496,11 @@ void HypothesisTestPrivate::performOneSampleTTest() {
 }
 
 void HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
-	if (columns.size() < 2) // we need two columns for the two sample t test
+	if (dataColumns.size() < 2) // we need two columns for the two sample t test
 		return;
 
-	const Column* col1 = columns.at(0);
-	const Column* col2 = columns.at(1);
+	const Column* col1 = dataColumns.at(0);
+	const Column* col2 = dataColumns.at(1);
 
 	if (!col1->isNumeric() || !col2->isNumeric())
 		return;
@@ -588,14 +593,14 @@ void HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 }
 
 void HypothesisTestPrivate::performOneWayANOVATest() {
-	if (columns.size() < 2) {
+	if (dataColumns.size() < 2) {
 		Q_EMIT q->info(i18n("At least two columns are required to perform One-way ANOVA test."));
 		return;
 	}
 
-	const int groupCount = columns.size();
+	const int groupCount = dataColumns.size();
 
-	QVector<QVector<double>> groupData(filterColumnsParallel(columns));
+	QVector<QVector<double>> groupData(filterColumnsParallel(dataColumns));
 
 	Q_ASSERT(groupCount == groupData.size());
 
@@ -616,14 +621,14 @@ void HypothesisTestPrivate::performOneWayANOVATest() {
 	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(test).at(0);
 
 	for (int g = 0; g < groupCount; ++g)
-		addResultLine(i18n("Sample %1", g + 1), columns.at(g)->name());
+		addResultLine(i18n("Sample %1", g + 1), dataColumns.at(g)->name());
 
 	addResultLine(i18n("Null Hypothesis"), nullHypothesisText);
 	addResultLine(i18n("Alternate Hypothesis"), alternateHypothesisText);
 
 	addResultSection(i18n("Descriptive Statistics"));
 	for (int g = 0; g < groupCount; ++g) {
-		auto columnStatistics = columns.at(g)->statistics();
+		auto columnStatistics = dataColumns.at(g)->statistics();
 		addResultLine(i18n("Group %1 Size", g + 1), columnStatistics.size);
 		addResultLine(i18n("Group %1 Mean", g + 1), columnStatistics.arithmeticMean);
 		addResultLine(i18n("Group %1 Standard Deviation", g + 1), columnStatistics.standardDeviation);
@@ -652,14 +657,14 @@ void HypothesisTestPrivate::performMannWhitneyUTest() {
 }
 
 void HypothesisTestPrivate::performKruskalWallisTest() {
-	if (columns.size() < 2) {
+	if (dataColumns.size() < 2) {
 		Q_EMIT q->info(i18n("At least two columns are required to perform Kruskal-Wallis test."));
 		return;
 	}
 
-	const int groupCount = columns.size();
+	const int groupCount = dataColumns.size();
 
-	QVector<QVector<double>> groupData(filterColumnsParallel(columns));
+	QVector<QVector<double>> groupData(filterColumnsParallel(dataColumns));
 
 	Q_ASSERT(groupCount == groupData.size());
 
@@ -678,7 +683,7 @@ void HypothesisTestPrivate::performKruskalWallisTest() {
 	addResultTitle(i18n("Kruskal-Wallis Test"));
 
 	for (int g = 0; g < groupCount; ++g)
-		addResultLine(i18n("Sample %1", g + 1), columns.at(g)->name());
+		addResultLine(i18n("Sample %1", g + 1), dataColumns.at(g)->name());
 
 	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(test).at(0);
 
@@ -687,7 +692,7 @@ void HypothesisTestPrivate::performKruskalWallisTest() {
 
 	addResultSection(i18n("Descriptive Statistics"));
 	for (int g = 0; g < groupCount; ++g) {
-		auto columnStatistics = columns.at(g)->statistics();
+		auto columnStatistics = dataColumns.at(g)->statistics();
 		addResultLine(i18n("Group %1 Size", g + 1), columnStatistics.size);
 		addResultLine(i18n("Group %1 Mean", g + 1), columnStatistics.arithmeticMean);
 		addResultLine(i18n("Group %1 Standard Deviation", g + 1), columnStatistics.standardDeviation);
@@ -714,14 +719,14 @@ void HypothesisTestPrivate::performKruskalWallisTest() {
 
 void HypothesisTestPrivate::performLogRankTest() {
 	// time, status and group columns required
-	if (columns.size() < 3) {
+	if (dataColumns.size() < 3) {
 		Q_EMIT q->info(i18n("Three columns are required to perform LogRank test."));
 		return;
 	}
 
-	const Column* timeCol = columns.at(0);
-	const Column* statusCol = columns.at(1);
-	const Column* groupCol = columns.at(2);
+	const Column* timeCol = dataColumns.at(0);
+	const Column* statusCol = dataColumns.at(1);
+	const Column* groupCol = dataColumns.at(2);
 
 	if (statusCol->rowCount() != timeCol->rowCount() || groupCol->rowCount() != timeCol->rowCount()) {
 		Q_EMIT q->info(i18n("Time, Status and Group columns should have equal size."));
@@ -826,7 +831,7 @@ QVector<QVector<double>> HypothesisTestPrivate::filterColumns(const QVector<Colu
 	samples.reserve(columns.size());
 
 	for (const Column* col : columns)
-		samples.append(std::move(filterColumn(col)));
+		samples.append(filterColumn(col));
 
 	return samples;
 }
@@ -848,10 +853,19 @@ double** HypothesisTestPrivate::toArrayOfArrays(QVector<QVector<double>>& data) 
 
 //! Save as XML
 void HypothesisTest::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement(QLatin1String("HypothesisTest"));
+	Q_D(const HypothesisTest);
+	writer->writeStartElement(QLatin1String("hypothesisTest"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
-	writer->writeEndElement();
+
+	writer->writeStartElement(QLatin1String("general"));
+	writer->writeAttribute(QLatin1String("test"), QString::number(static_cast<int>(d->test)));
+	writer->writeAttribute(QLatin1String("testMean"), QString::number(d->testMean));
+	writer->writeAttribute(QLatin1String("significanceLevel"), QString::number(d->significanceLevel));
+	writer->writeAttribute(QLatin1String("tail"), QString::number(static_cast<int>(d->tail)));
+	WRITE_COLUMNS(d->dataColumns, d->dataColumnPaths);
+	writer->writeEndElement(); // general
+	writer->writeEndElement(); // hypothesisTest
 }
 
 //! Load from XML
@@ -859,5 +873,41 @@ bool HypothesisTest::load(XmlStreamReader* reader, bool preview) {
 	Q_UNUSED(preview)
 	if (!readBasicAttributes(reader))
 		return false;
+
+	Q_D(HypothesisTest);
+	QXmlStreamAttributes attribs;
+	QString str;
+
+	while (!reader->atEnd()) {
+		reader->readNext();
+		if (reader->isEndElement() && reader->name() == QLatin1String("hypothesisTest"))
+			break;
+
+		if (!reader->isStartElement())
+			continue;
+
+		if (reader->name() == QLatin1String("comment")) {
+			if (!readCommentElement(reader))
+				return false;
+		} else if (!preview && reader->name() == QLatin1String("general")) {
+			attribs = reader->attributes();
+
+			READ_INT_VALUE("test", test, HypothesisTest::Test);
+			READ_DOUBLE_VALUE("testMean", testMean);
+			READ_DOUBLE_VALUE("significanceLevel", significanceLevel);
+			READ_INT_VALUE("tail", tail, nsl_stats_tail_type);
+		} else if (reader->name() == QLatin1String("column")) {
+			attribs = reader->attributes();
+
+			str = attribs.value(QStringLiteral("path")).toString();
+			if (!str.isEmpty())
+				d->dataColumnPaths << str;
+		} else { // unknown element
+			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			if (!reader->skipToEndElement())
+				return false;
+		}
+	}
+
 	return !reader->hasError();
 }
