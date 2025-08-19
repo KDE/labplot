@@ -127,6 +127,7 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 }
 
 void HypothesisTestDock::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
 	ui.retranslateUi(this);
 
 	ui.cbTest->clear();
@@ -296,9 +297,6 @@ void HypothesisTestDock::hideControls() {
 }
 
 void HypothesisTestDock::testChanged() {
-	const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
-	m_test->setTest(test);
-
 	// reset the ui to a default state
 	hideControls();
 
@@ -309,6 +307,7 @@ void HypothesisTestDock::testChanged() {
 	ensureVariableCount();
 
 	// show any specific controls for the test
+	const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
 	if (test == HypothesisTest::Test::t_test_one_sample) {
 		ui.lTestMean->show();
 		ui.sbTestMean->show();
@@ -316,6 +315,9 @@ void HypothesisTestDock::testChanged() {
 
 	// check if the recalculate button should be enabled or disabled
 	manageRecalculate();
+
+	CONDITIONAL_LOCK_RETURN;
+	m_test->setTest(test);
 }
 
 void HypothesisTestDock::addVariable() {

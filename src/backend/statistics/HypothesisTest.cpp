@@ -9,11 +9,14 @@
 
 #include "HypothesisTest.h"
 #include "HypothesisTestPrivate.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/trace.h"
 #include "frontend/statistics/HypothesisTestView.h"
 
+#include <QFileDialog>
 #include <QMenu>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
@@ -112,6 +115,7 @@ HypothesisTest::Test HypothesisTest::test() const {
 }
 
 void HypothesisTest::recalculate() {
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 	Q_D(HypothesisTest);
 	d->recalculate();
 }
@@ -120,15 +124,37 @@ void HypothesisTest::recalculate() {
 // #######################  Virtual functions  ##################################
 // ##############################################################################
 bool HypothesisTest::exportView() const {
-	// TODO: implement the export of the html to a file
+#ifndef SDK
+	auto conf = Settings::group(QStringLiteral("HypothesisTest"));
+	const QString dir = conf.readEntry("LastDir", "");
+
+	QString path = QFileDialog::getSaveFileName(m_view, i18nc("@title:window", "Export to File"), dir, i18n("Portable Data Format (*.pdf *.PDF)"));
+	if (path.isEmpty())
+		return false;
+
+	int pos = path.lastIndexOf(QLatin1String("/"));
+	if (pos != -1) {
+		const QString newDir = path.left(pos);
+		if (newDir != dir && QDir(newDir).exists())
+			conf.writeEntry("LastDir", newDir);
+	}
+
+	QPrinter printer;
+	printer.setOutputFormat(QPrinter::PdfFormat);
+	printer.setOutputFileName(path);
+	printer.setCreator(QStringLiteral("LabPlot ") + QLatin1String(LVERSION));
+	m_view->print(&printer);
 	return true;
+#else
+	return false;
+#endif
 }
 
 bool HypothesisTest::printView() {
 #ifndef SDK
 	QPrinter printer;
 	auto* dlg = new QPrintDialog(&printer, m_view);
-	dlg->setWindowTitle(i18nc("@title:window", "Statistical Test"));
+	dlg->setWindowTitle(i18nc("@title:window", "Hypothesis Test"));
 	bool ret;
 	if ((ret = (dlg->exec() == QDialog::Accepted)))
 		m_view->print(&printer);
@@ -484,11 +510,11 @@ void HypothesisTestPrivate::performOneSampleTTest() {
 	addResultSection(i18n("Statistical Conclusion"));
 	if (!std::isnan(pValue)) {
 		if (pValue <= significanceLevel)
-			addResultLine(i18n("At the significance level %1, the population mean is significantly different from %2. Reject the null Hypothesis",
+			addResultLine(i18n("At the significance level %1, the population mean is significantly different from %2. Reject the null hypothesis.",
 							   significanceLevel,
 							   testMean));
 		else
-			addResultLine(i18n("At the significance level %1, the population mean is not significantly different from %2. Fail to reject the null Hypothesis",
+			addResultLine(i18n("At the significance level %1, the population mean is not significantly different from %2. Fail to reject the null hypothesis.",
 							   significanceLevel,
 							   testMean));
 	} else
