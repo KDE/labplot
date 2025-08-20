@@ -15,7 +15,9 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#ifndef SDK
 #include "backend/statistics/HypothesisTest.h"
+#endif
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
@@ -1252,6 +1254,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		}
 	}
 
+#ifndef SDK
 	// hypothesis tests
 	QVector<HypothesisTest*> tests;
 	if (hasChildren)
@@ -1285,6 +1288,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 
 		test->setDataColumns(std::move(dataColumns));
 	}
+#endif
 
 	// if a column was calculated via a formula, restore the pointers to the variable columns defining the formula
 	for (auto* col : columns) {
