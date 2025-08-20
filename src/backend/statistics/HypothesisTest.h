@@ -33,7 +33,6 @@ public:
 
 	enum class Test { t_test_one_sample, t_test_two_sample, t_test_two_sample_paired, one_way_anova, mann_whitney_u_test, kruskal_wallis_test, log_rank_test };
 
-	QMenu* createContextMenu() override;
 	QWidget* view() const override;
 	bool exportView() const override;
 	bool printView() override;

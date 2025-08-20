@@ -31,6 +31,7 @@
 #include "backend/script/Script.h"
 #endif
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/statistics/HypothesisTest.h"
 #include "backend/worksheet/Worksheet.h"
 
 #include <KLocalizedString>
@@ -372,6 +373,13 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		addChildFast(script);
 #endif
 #endif
+	} else if (element_name == QLatin1String("hypothesisTest")) {
+		auto* test = new HypothesisTest(QString());
+		if (!test->load(reader, preview)) {
+			delete test;
+			return false;
+		}
+		addChildFast(test);
 	} else {
 		reader->raiseWarning(i18n("unknown element '%1' found", element_name));
 		if (!reader->skipToEndElement())

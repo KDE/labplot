@@ -17,19 +17,16 @@
 #include "frontend/statistics/HypothesisTestView.h"
 
 #include <QFileDialog>
-#include <QMenu>
+#include <QLocale>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
+#include <QtConcurrent/QtConcurrent>
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <QLocale>
 
-#include <QtConcurrent/QtConcurrent>
-#include <cmath>
-#include <cstddef>
 #include <limits>
 
 /*!
@@ -174,12 +171,6 @@ bool HypothesisTest::printPreview() const {
 #else
 	return false;
 #endif
-}
-
-QMenu* HypothesisTest::createContextMenu() {
-	QMenu* menu = AbstractPart::createContextMenu();
-	// Additional menu customization can be done here.
-	return menu;
 }
 
 QWidget* HypothesisTest::view() const {
@@ -890,6 +881,7 @@ void HypothesisTest::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QLatin1String("testMean"), QString::number(d->testMean));
 	writer->writeAttribute(QLatin1String("significanceLevel"), QString::number(d->significanceLevel));
 	writer->writeAttribute(QLatin1String("tail"), QString::number(static_cast<int>(d->tail)));
+	writer->writeAttribute(QLatin1String("result"), d->result);
 	WRITE_COLUMNS(d->dataColumns, d->dataColumnPaths);
 	writer->writeEndElement(); // general
 	writer->writeEndElement(); // hypothesisTest
@@ -919,6 +911,7 @@ bool HypothesisTest::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
+			d->result = attribs.value(QStringLiteral("result")).toString();
 			READ_INT_VALUE("test", test, HypothesisTest::Test);
 			READ_DOUBLE_VALUE("testMean", testMean);
 			READ_DOUBLE_VALUE("significanceLevel", significanceLevel);
