@@ -36,8 +36,8 @@ private:
 	void hideControls();
 	void addVariable();
 	void removeVariable();
-	void ensureHypothesis();
-	void ensureVariableCount();
+	void ensureHypothesis(HypothesisTest::Test);
+	void ensureVariableCount(HypothesisTest::Test);
 	void manageAddRemoveVariable();
 	void manageRecalculate();
 	void testChanged();

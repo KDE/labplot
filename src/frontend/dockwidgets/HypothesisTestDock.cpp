@@ -161,6 +161,11 @@ void HypothesisTestDock::retranslateUi() {
 * It triggers the recalculation of the hypothesis test with the current settings.
 */
 void HypothesisTestDock::recalculate() {
+	// we need to call this here again for the special case of when we has previously
+	// selected variable columns and we change the selected hypothesis test. The aspect
+	// clears its list of columns, while the gui still shows columns as selected.
+	updateColumns();
+
 	m_test->recalculate();
 }
 
