@@ -33,8 +33,6 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent)
 
 	ui.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
-	hideControls();
-
 	retranslateUi();
 
 	//**********************************  Slots **********************************************
@@ -85,9 +83,8 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	// restore test mean
 	ui.sbTestMean->setValue(m_test->testMean());
 
-	int hypothesisCount = HypothesisTest::hypothesisCount(m_test->test());
-
 	// restore null hypothesis
+	const int hypothesisCount = HypothesisTest::hypothesisCount(m_test->test());
 	if (hypothesisCount == 3) {
 		switch (m_test->tail()) {
 		case nsl_stats_tail_type_two:
@@ -156,9 +153,49 @@ void HypothesisTestDock::retranslateUi() {
 	ui.cbTest->setToolTip(info);
 }
 
-void HypothesisTestDock::ensureHypothesis() {
-	int hypothesisCount = HypothesisTest::hypothesisCount(m_test->test());
-	QVector<QPair<QString, QString>> hypothesisTexts = HypothesisTest::hypothesisText(m_test->test());
+// ##############################################################################
+// ####################################  SLOTs   ################################
+// ##############################################################################
+/*!
+* This slot is called when the user clicks the recalculate button.
+* It triggers the recalculation of the hypothesis test with the current settings.
+*/
+void HypothesisTestDock::recalculate() {
+	m_test->recalculate();
+}
+
+/*! 
+* This slot is called when the user changes the test type in the combobox.
+* It updates the UI to reflect the selected test type, including showing/hiding controls and updating
+* the number of variables needed for the test.
+*/
+void HypothesisTestDock::testChanged() {
+	// set symbols for the null and alternate hypotheses for the test
+	const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
+	ensureHypothesis(test);
+
+	// ensure that the number of variables is correct for the test
+	ensureVariableCount(test);
+
+	// show any specific controls for the test
+	const bool visible = (test == HypothesisTest::Test::t_test_one_sample);
+	ui.lTestMean->setVisible(visible);
+	ui.sbTestMean->setVisible(visible);
+
+	// check if the recalculate button should be enabled or disabled
+	manageRecalculate();
+
+	CONDITIONAL_LOCK_RETURN;
+	m_test->setTest(test);
+}
+
+// ##############################################################################
+// #################################*  Helpers   ################################
+// ##############################################################################
+
+void HypothesisTestDock::ensureHypothesis(HypothesisTest::Test test) {
+	int hypothesisCount = HypothesisTest::hypothesisCount(test);
+	QVector<QPair<QString, QString>> hypothesisTexts = HypothesisTest::hypothesisText(test);
 
 	if (hypothesisCount == 3) {
 		ui.lNullTwoTailed->setText(hypothesisTexts[0].first);
@@ -193,9 +230,9 @@ void HypothesisTestDock::ensureHypothesis() {
 	}
 }
 
-void HypothesisTestDock::ensureVariableCount() {
+void HypothesisTestDock::ensureVariableCount(HypothesisTest::Test test) {
 	// get the min and max number of columns needed for the test
-	const auto [min, max] = HypothesisTest::variableCount(m_test->test());
+	const auto [min, max] = HypothesisTest::variableCount(test);
 
 	// function pointer to add or remove variables
 	void (HypothesisTestDock::*func)() = nullptr;
@@ -204,7 +241,7 @@ void HypothesisTestDock::ensureVariableCount() {
 	int diff = 0;
 
 	// get the current number of columns
-	int varCount = ui.variablesVerticalLayout->count();
+	const int varCount = ui.variablesVerticalLayout->count();
 
 	if (varCount < min) {
 		// if the current number of columns is less than the min number of columns needed for the test, add columns to reach min
@@ -222,7 +259,7 @@ void HypothesisTestDock::ensureVariableCount() {
 	}
 
 	// confirm that the number of columns is correct for the test
-	int newVarCount = ui.variablesVerticalLayout->count();
+	const int newVarCount = ui.variablesVerticalLayout->count();
 	Q_ASSERT(newVarCount >= min && newVarCount <= max);
 
 	// enable or disable the add/remove variables buttons
@@ -233,7 +270,8 @@ void HypothesisTestDock::ensureVariableCount() {
 }
 
 void HypothesisTestDock::manageAddRemoveVariable() {
-	const auto [min, max] = HypothesisTest::variableCount(m_test->test());
+	const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
+	const auto [min, max] = HypothesisTest::variableCount(test);
 	const int count = ui.variablesVerticalLayout->count();
 
 	ui.tbRemoveVariable->setEnabled(count > min);
@@ -258,21 +296,7 @@ void HypothesisTestDock::updateColumns() {
 	m_test->setDataColumns(columns);
 }
 
-// ##############################################################################
-// ####################################  SLOTs   ################################
-// ##############################################################################
-void HypothesisTestDock::recalculate() {
-	// m_test->setTest clears the columns, so we need to update them
-	updateColumns();
-
-	// every other property should already be set via the connections
-
-	m_test->recalculate();
-}
-
 void HypothesisTestDock::manageRecalculate() {
-	const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
-
 	// we don't need to check for null and alternate hypothesis since we have guarantees that they are selected
 
 	// we don't need to check for significance level since we have guarantees that it is above 0
@@ -280,44 +304,16 @@ void HypothesisTestDock::manageRecalculate() {
 	// we don't need to check for test mean since it can be any double value
 
 	// check variables
+	const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
 	const auto [min, max] = HypothesisTest::variableCount(test);
 	if (m_test->dataColumns().size() < min || m_test->dataColumns().size() > max) {
-		ui.pbRecalculate->setToolTip(i18n("Selected test requires at least %1 and at most %2 non-empty variables to enable \"Recalculate\".", QString::number(min), QString::number(max)));
+		ui.pbRecalculate->setToolTip(i18n("Selected test requires at least %1 and at most %2 non-empty variables.", QString::number(min), QString::number(max)));
 		ui.pbRecalculate->setEnabled(false);
 		return;
 	}
 
 	ui.pbRecalculate->setToolTip(QString());
 	ui.pbRecalculate->setEnabled(true);
-}
-
-void HypothesisTestDock::hideControls() {
-	ui.lTestMean->hide();
-	ui.sbTestMean->hide();
-}
-
-void HypothesisTestDock::testChanged() {
-	// reset the ui to a default state
-	hideControls();
-
-	// set symbols for the null and alternate hypotheses for the test
-	ensureHypothesis();
-
-	// ensure that the number of variables is correct for the test
-	ensureVariableCount();
-
-	// show any specific controls for the test
-	const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
-	if (test == HypothesisTest::Test::t_test_one_sample) {
-		ui.lTestMean->show();
-		ui.sbTestMean->show();
-	}
-
-	// check if the recalculate button should be enabled or disabled
-	manageRecalculate();
-
-	CONDITIONAL_LOCK_RETURN;
-	m_test->setTest(test);
 }
 
 void HypothesisTestDock::addVariable() {
