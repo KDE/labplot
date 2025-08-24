@@ -8,8 +8,10 @@ New features:
 		* Save and load custom functions for fit, equation curve and function values
 	* [worksheet]
 		* Inset plot areas - plot areas added as child of another plot area
-		* Improve axis ticks locations. The don't need to be always from the bottom to top if it does not look nice (!700)
+		* Improved axis ticks location. They don't need to be always placed at the edges of the axis if does not look nicely (!700)
 		* Allow to position the center and limit lines in the process behavior chart based on user-defined specifications
+	* [import]
+		* import directories - import multiple files in a directory in one single step
 
 -----2.12.1 (2025-08-15) -----
 Bug fixes:
