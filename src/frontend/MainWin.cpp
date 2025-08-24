@@ -1872,7 +1872,7 @@ void MainWin::historyDialog() {
 }
 
 /*!
-  Opens the dialog to import data to the selected container
+  Opens the dialog to import data into the selected container.
 */
 void MainWin::importFileDialog(const QString& fileName) {
 	DEBUG(Q_FUNC_INFO << ", file name = " << fileName.toStdString());
@@ -1886,6 +1886,23 @@ void MainWin::importFileDialog(const QString& fileName) {
 
 	dlg->exec();
 	DEBUG(Q_FUNC_INFO << " DONE");
+}
+
+/*!
+  Opens the dialog to import multiple files in a directory into the selected container.
+*/
+void MainWin::importDirDialog(const QString& dir) {
+	auto* dlg = new ImportFileDialog(this, false /* live source */, dir, true /* import directory */);
+
+	// when importing a directory, the data is imported into multipe spreadsheet or matrix objects that are
+	// created as  children of the current parent folder or workbook.
+	// select the current folder or workbook or use the parent folder of the current aspec if none of them is selected
+	if (m_currentAspect->type() == AspectType::Folder || m_currentAspect->type() == AspectType::Workbook)
+		dlg->setCurrentIndex(m_projectExplorer->currentIndex());
+	else
+		dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parent(AspectType::Folder)));
+
+	dlg->exec();
 }
 
 void MainWin::importKaggleDatasetDialog() {

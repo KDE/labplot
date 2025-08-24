@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : import data dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2008-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2008-2015 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -27,7 +27,7 @@ class ImportFileDialog : public ImportDialog {
 	Q_OBJECT
 
 public:
-	explicit ImportFileDialog(MainWin*, bool liveDataSource = false, const QString& fileName = QString());
+	explicit ImportFileDialog(MainWin*, bool liveDataSource = false, const QString& path = QString(), bool importDir = false);
 	~ImportFileDialog() override;
 
 	QString selectedObject() const override;
@@ -41,7 +41,10 @@ public:
 private:
 	ImportFileWidget* m_importFileWidget;
 	bool m_showOptions{false};
+	bool m_importDir{false};
 	QPushButton* m_optionsButton;
+
+	void importFile(const QString& fileName, AbstractAspect*, AbstractFileFilter*, AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace) const;
 
 protected Q_SLOTS:
 	void checkOkButton() override;

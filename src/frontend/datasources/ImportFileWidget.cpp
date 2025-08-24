@@ -94,11 +94,12 @@ QString ImportFileWidget::absolutePath(const QString& fileName) {
 
    \ingroup frontend
 */
-ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const QString& fileName, bool embedded)
+ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const QString& fileName, bool embedded, bool importDir)
 	: QWidget(parent)
 	, m_fileName(fileName)
 	, m_liveDataSource(liveDataSource)
 	, m_embedded(embedded)
+	, m_importDir(importDir)
 #ifdef HAVE_MQTT
 	, m_subscriptionWidget(new MQTTSubscriptionWidget(this))
 #endif
@@ -397,7 +398,7 @@ void ImportFileWidget::loadSettings() {
 	QTimer::singleShot(100, this, [=]() {
 		WAIT_CURSOR_AUTO_RESET;
 		if (currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {
-			const QString& file = absolutePath(fileName());
+			const QString& file = absolutePath(path());
 			if (QFile::exists(file))
 				updateContent(file);
 		}
@@ -591,7 +592,10 @@ void ImportFileWidget::showOptions(bool b) {
 	resize(layout()->minimumSize());
 }
 
-QString ImportFileWidget::fileName() const {
+/*!
+* returns the currently selected path (file or directory name).
+*/
+QString ImportFileWidget::path() const {
 	return m_cbFileName->currentText();
 }
 
@@ -601,7 +605,7 @@ QString ImportFileWidget::dbcFileName() const {
 
 QString ImportFileWidget::selectedObject() const {
 	DEBUG(Q_FUNC_INFO)
-	const QString& path = fileName();
+	const QString& path = this->path();
 
 	// determine the file name only
 	QString name = path.right(path.length() - path.lastIndexOf(QLatin1Char('/')) - 1);
@@ -683,16 +687,16 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	source->setSourceType(sourceType);
 	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe:
-		source->setFileName(fileName());
+		source->setFileName(path());
 		source->setFileLinked(ui.chbLinkFile->isChecked());
-		source->setComment(fileName());
+		source->setComment(path());
 		if (m_liveDataSource)
 			source->setUseRelativePath(ui.chbRelativePath->isChecked());
 		break;
 	case LiveDataSource::SourceType::LocalSocket:
-		source->setFileName(fileName());
-		source->setLocalSocketName(fileName());
-		source->setComment(fileName());
+		source->setFileName(path());
+		source->setLocalSocketName(path());
+		source->setComment(path());
 		break;
 	case LiveDataSource::SourceType::NetworkTCPSocket:
 	case LiveDataSource::SourceType::NetworkUDPSocket:
@@ -1391,7 +1395,7 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 	}
 
 	if (currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {
-		const QString& file = absolutePath(fileName());
+		const QString& file = absolutePath(path());
 		if (QFile::exists(file))
 			updateContent(file);
 	}
@@ -1588,7 +1592,7 @@ bool ImportFileWidget::useFirstRowAsColNames() const {
 	shows the dialog with the information about the file(s) to be imported.
 */
 void ImportFileWidget::showFileInfo() {
-	const QString& info = fileInfoString(fileName());
+	const QString& info = fileInfoString(path());
 	QWhatsThis::showText(ui.bFileInfo->mapToGlobal(QPoint(0, 0)), info, ui.bFileInfo);
 }
 
@@ -1765,7 +1769,7 @@ void ImportFileWidget::refreshPreview() {
 	auto* currentFilter = currentFileFilter();
 	currentFilter->setLastError(QString()); // clear the last error message, if any available
 
-	auto path = absolutePath(fileName());
+	auto path = absolutePath(this->path());
 	const auto sourceType = currentSourceType();
 
 	if (sourceType == LiveDataSource::SourceType::FileOrPipe && path.isEmpty())
@@ -2370,7 +2374,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-		fileNameChanged(fileName());
+		fileNameChanged(path());
 		ui.cbFileType->show();
 		ui.lFileType->show();
 		setMQTTVisible(false);

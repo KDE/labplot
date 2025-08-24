@@ -55,7 +55,7 @@ class ImportFileWidget : public QWidget {
 public:
 	static QString absolutePath(const QString& fileName);
 
-	explicit ImportFileWidget(QWidget*, bool liveDataSource, const QString& fileName = QString(), bool embedded = false);
+	explicit ImportFileWidget(QWidget*, bool liveDataSource, const QString& fileName = QString(), bool embedded = false, bool importDir = false);
 	~ImportFileWidget() override;
 
 	void showOptions(bool);
@@ -64,7 +64,7 @@ public:
 	AbstractFileFilter::FileType currentFileType() const;
 	LiveDataSource::SourceType currentSourceType() const;
 	AbstractFileFilter* currentFileFilter() const;
-	QString fileName() const;
+	QString path() const;
 	QString dbcFileName() const;
 	QString selectedObject() const;
 	bool importValid() const;
@@ -128,6 +128,7 @@ private:
 	bool m_liveDataSource;
 	bool m_suppressRefresh{false};
 	bool m_embedded{false};
+	bool m_importDir{false};
 	TemplateHandler* m_templateHandler{nullptr};
 	bool mcapTopicsInitialized{false};
 
