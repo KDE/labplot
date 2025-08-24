@@ -97,6 +97,7 @@ private:
 	void initOptionsWidget();
 	void initSlots();
 	QString fileInfoString(const QString&) const;
+	QString dirInfoString(const QString&) const;
 	void showJsonModel(bool);
 	void enableFirstRowAsColNames(bool enable); // used by XLSX and Ods
 	void updateHeaderOptions();
@@ -155,7 +156,7 @@ private Q_SLOTS:
 	void filterChanged(int);
 	void selectFile();
 	void selectDBCFile();
-	void showFileInfo();
+	void showInfo();
 	void refreshPreview();
 	void updateStartRow(int);
 	void enableDataPortionSelection(bool);

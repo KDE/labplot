@@ -445,14 +445,25 @@ ImportFileWidget::~ImportFileWidget() {
 	if (m_liveDataSource)
 		confName = QStringLiteral("LiveDataImport");
 	else
-		confName = QStringLiteral("FileImport");
+		confName = m_importDir ? QStringLiteral("DirectoryImport") : QStringLiteral("FileImport");
 	KConfigGroup conf = Settings::group(confName);
 
 	// general settings
 	conf.writeEntry("Type", (int)currentFileType());
 	conf.writeEntry("Filter", ui.cbFilter->currentIndex());
-	conf.writeEntry("LastImportedFile", m_cbFileName->currentText());
-	conf.writeXdgListEntry("LastImportedFiles", m_cbFileName->urls());
+
+	QString listEntryName;
+	QString entryName;
+	if (m_importDir) {
+		listEntryName = QStringLiteral("LastImportedDirectories");
+		entryName = QStringLiteral("LastImportedDirectory");
+	} else {
+		listEntryName = QStringLiteral("LastImportedFiles");
+		entryName = QStringLiteral("LastImportedFile");
+	}
+	conf.writeEntry(entryName, m_cbFileName->currentText());
+	conf.writeXdgListEntry(listEntryName, m_cbFileName->urls());
+
 	conf.writeEntry("LastImportedDBCFile", m_cbDBCFileName->currentText());
 	conf.writeXdgListEntry("LastImportedDBCFiles", m_cbDBCFileName->urls());
 	conf.writeEntry("PreviewLines", ui.sbPreviewLines->value());
@@ -518,7 +529,7 @@ void ImportFileWidget::initSlots() {
 
 	connect(ui.bOpen, &QPushButton::clicked, this, &ImportFileWidget::selectFile);
 	connect(ui.bOpenDBC, &QPushButton::clicked, this, &ImportFileWidget::selectDBCFile);
-	connect(ui.bFileInfo, &QPushButton::clicked, this, &ImportFileWidget::showFileInfo);
+	connect(ui.bFileInfo, &QPushButton::clicked, this, &ImportFileWidget::showInfo);
 	connect(ui.cbFileType, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &ImportFileWidget::fileTypeChanged);
 	connect(ui.cbUpdateType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImportFileWidget::updateTypeChanged);
 	connect(ui.cbReadingType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImportFileWidget::readingTypeChanged);
@@ -1624,8 +1635,8 @@ bool ImportFileWidget::useFirstRowAsColNames() const {
 /*!
 	shows the dialog with the information about the file(s) to be imported.
 */
-void ImportFileWidget::showFileInfo() {
-	const QString& info = fileInfoString(fileName());
+void ImportFileWidget::showInfo() {
+	const auto& info = m_importDir ? dirInfoString(path()) : fileInfoString(path());
 	QWhatsThis::showText(ui.bFileInfo->mapToGlobal(QPoint(0, 0)), info, ui.bFileInfo);
 }
 
@@ -1636,11 +1647,9 @@ void ImportFileWidget::showFileInfo() {
 */
 QString ImportFileWidget::fileInfoString(const QString& name) const {
 	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(name))
-	QString infoString;
 	QFileInfo fileInfo;
 	QString fileTypeString;
 	QIODevice* file = new QFile(name);
-
 	QString fileName = absolutePath(name);
 
 	if (!file)
@@ -1748,11 +1757,42 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 			break;
 		}
 
-		infoString += infoStrings.join(QLatin1String("<br>"));
+		return infoStrings.join(QLatin1String("<br>"));
 	} else
-		infoString += i18n("Could not open file %1 for reading.", fileName);
+		return i18n("Could not open file %1 for reading.", fileName);
+}
 
-	return infoString;
+/*!
+* returns a string containing the general information about the directory \c name.
+*/
+QString ImportFileWidget::dirInfoString(const QString& name) const {
+	QDir dir(name);
+	if (dir.exists()) {
+		QStringList infoStrings;
+
+		infoStrings << QStringLiteral("<u><b>") + name + QStringLiteral("</b></u><br>");
+		// General:
+		QFileInfo fileInfo(name);
+		infoStrings << QStringLiteral("<b>") << i18n("General:") << QStringLiteral("</b>");
+
+		infoStrings << i18n("Readable: %1", fileInfo.isReadable() ? i18n("yes") : i18n("no"));
+		infoStrings << i18n("Writable: %1", fileInfo.isWritable() ? i18n("yes") : i18n("no"));
+		infoStrings << i18n("Executable: %1", fileInfo.isExecutable() ? i18n("yes") : i18n("no"));
+
+		infoStrings << i18n("Birth time: %1", fileInfo.birthTime().toString());
+		infoStrings << i18n("Last metadata changed: %1", fileInfo.metadataChangeTime().toString());
+		infoStrings << i18n("Last modified: %1", fileInfo.lastModified().toString());
+		infoStrings << i18n("Last read: %1", fileInfo.lastRead().toString());
+		infoStrings << i18n("Owner: %1", fileInfo.owner());
+		infoStrings << i18n("Group: %1", fileInfo.group());
+
+		// Summary:
+		infoStrings << QStringLiteral("<b>") << i18n("Summary:") << QStringLiteral("</b>");
+		infoStrings << i18n("Number of files: %1", dir.entryList(QDir::Files | QDir::NoDotAndDotDot).count());
+		infoStrings << i18n("Number of sub-directories: %1", dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot).count());
+		return infoStrings.join(QLatin1String("<br>"));
+	} else
+		return i18n("Couldn't read the directory %1.", name);
 }
 
 /*!
