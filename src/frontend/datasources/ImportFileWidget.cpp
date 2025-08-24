@@ -299,7 +299,7 @@ void ImportFileWidget::loadSettings() {
 	if (m_liveDataSource)
 		confName = QStringLiteral("LiveDataImport");
 	else
-		confName = QStringLiteral("FileImport");
+		confName = m_importDir ? QStringLiteral("DirectoryImport") : QStringLiteral("FileImport");
 	KConfigGroup conf = Settings::group(confName);
 
 	// read the source type first since settings in fileNameChanged() depend on this
@@ -318,11 +318,20 @@ void ImportFileWidget::loadSettings() {
 		}
 	}
 
+	QString listEntryName;
+	QString entryName;
+	if (m_importDir) {
+		listEntryName = QStringLiteral("LastImportedDirectories");
+		entryName = QStringLiteral("LastImportedDirectory");
+	} else {
+		listEntryName = QStringLiteral("LastImportedFiles");
+		entryName = QStringLiteral("LastImportedFile");
+	}
 	auto urls = m_cbFileName->urls();
-	urls.append(conf.readXdgListEntry("LastImportedFiles"));
+	urls.append(conf.readXdgListEntry(listEntryName));
 	m_cbFileName->setUrls(urls);
 	if (m_fileName.isEmpty())
-		m_cbFileName->setUrl(QUrl(conf.readEntry("LastImportedFile", "")));
+		m_cbFileName->setUrl(QUrl(conf.readEntry(entryName, "")));
 	else {
 		if (m_fileName.contains(QLatin1Char('\\')))	// Windows path
 			m_cbFileName->setUrl(QUrl::fromLocalFile(m_fileName));
@@ -398,7 +407,7 @@ void ImportFileWidget::loadSettings() {
 	QTimer::singleShot(100, this, [=]() {
 		WAIT_CURSOR_AUTO_RESET;
 		if (currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {
-			const QString& file = absolutePath(path());
+			const QString& file = absolutePath(fileName());
 			if (QFile::exists(file))
 				updateContent(file);
 		}
@@ -592,11 +601,29 @@ void ImportFileWidget::showOptions(bool b) {
 	resize(layout()->minimumSize());
 }
 
+
 /*!
-* returns the currently selected path (file or directory name).
+* returns the currently selected path (file or directory name)
 */
 QString ImportFileWidget::path() const {
 	return m_cbFileName->currentText();
+}
+
+/*!
+* returns the currently selected file name (or rather its path, to be more precise)
+* or returns the name of the first file in the directory in case of a directory import.
+*/
+QString ImportFileWidget::fileName() const {
+	if (!m_importDir)
+		return m_cbFileName->currentText();
+	else {
+		const QDir dir(m_cbFileName->currentText());
+		const QStringList& files = dir.entryList(QDir::Files | QDir::NoDotAndDotDot);
+		if (!files.isEmpty())
+			return dir.absoluteFilePath(files.first());
+		else
+			return QString();
+	}
 }
 
 QString ImportFileWidget::dbcFileName() const {
@@ -605,7 +632,7 @@ QString ImportFileWidget::dbcFileName() const {
 
 QString ImportFileWidget::selectedObject() const {
 	DEBUG(Q_FUNC_INFO)
-	const QString& path = this->path();
+	const QString& path = fileName();
 
 	// determine the file name only
 	QString name = path.right(path.length() - path.lastIndexOf(QLatin1Char('/')) - 1);
@@ -687,16 +714,16 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	source->setSourceType(sourceType);
 	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe:
-		source->setFileName(path());
+		source->setFileName(fileName());
 		source->setFileLinked(ui.chbLinkFile->isChecked());
-		source->setComment(path());
+		source->setComment(fileName());
 		if (m_liveDataSource)
 			source->setUseRelativePath(ui.chbRelativePath->isChecked());
 		break;
 	case LiveDataSource::SourceType::LocalSocket:
-		source->setFileName(path());
-		source->setLocalSocketName(path());
-		source->setComment(path());
+		source->setFileName(fileName());
+		source->setLocalSocketName(fileName());
+		source->setComment(fileName());
 		break;
 	case LiveDataSource::SourceType::NetworkTCPSocket:
 	case LiveDataSource::SourceType::NetworkUDPSocket:
@@ -1006,15 +1033,21 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 }
 
 /*!
-	opens a file dialog and lets the user select the file data source.
+* opens a file dialog and lets the user select the data source file
+* or the directory in case of a directory import.
 */
 void ImportFileWidget::selectFile() {
 	DEBUG(Q_FUNC_INFO)
 	KConfigGroup conf = Settings::group(QStringLiteral("ImportFileWidget"));
 	const QString& dir = conf.readEntry(QStringLiteral("LastDir"), "");
-	const QString& path = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select the File Data Source"), dir);
-	DEBUG("	dir = " << STDSTRING(dir))
-	DEBUG("	path = " << STDSTRING(path))
+	DEBUG("	last used directory = " << STDSTRING(dir))
+	QString path;
+	if (m_importDir)
+		path = QFileDialog::getExistingDirectory(this, i18nc("@title:window", "Select the Directory Data Source"), dir, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+	else
+		path = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select the File Data Source"), dir);
+
+	DEBUG("	selected path = " << STDSTRING(path))
 	if (path.isEmpty()) // cancel was clicked in the file-dialog
 		return;
 
@@ -1034,7 +1067,7 @@ void ImportFileWidget::selectFile() {
 	m_cbFileName->setUrls(urls);
 	m_cbFileName->setCurrentText(urls.first());
 	DEBUG("	combobox text = " << STDSTRING(m_cbFileName->currentText()))
-	fileNameChanged(path); // why do I have to call this function separately
+	fileNameChanged(fileName()); // TODO: why do I have to call this function separately?
 }
 
 void ImportFileWidget::selectDBCFile() {
@@ -1395,7 +1428,7 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 	}
 
 	if (currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {
-		const QString& file = absolutePath(path());
+		const QString& file = absolutePath(fileName());
 		if (QFile::exists(file))
 			updateContent(file);
 	}
@@ -1592,7 +1625,7 @@ bool ImportFileWidget::useFirstRowAsColNames() const {
 	shows the dialog with the information about the file(s) to be imported.
 */
 void ImportFileWidget::showFileInfo() {
-	const QString& info = fileInfoString(path());
+	const QString& info = fileInfoString(fileName());
 	QWhatsThis::showText(ui.bFileInfo->mapToGlobal(QPoint(0, 0)), info, ui.bFileInfo);
 }
 
@@ -1769,7 +1802,7 @@ void ImportFileWidget::refreshPreview() {
 	auto* currentFilter = currentFileFilter();
 	currentFilter->setLastError(QString()); // clear the last error message, if any available
 
-	auto path = absolutePath(this->path());
+	auto path = absolutePath(fileName());
 	const auto sourceType = currentSourceType();
 
 	if (sourceType == LiveDataSource::SourceType::FileOrPipe && path.isEmpty())
@@ -2374,7 +2407,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
-		fileNameChanged(path());
+		fileNameChanged(fileName());
 		ui.cbFileType->show();
 		ui.lFileType->show();
 		setMQTTVisible(false);

@@ -65,6 +65,7 @@ public:
 	LiveDataSource::SourceType currentSourceType() const;
 	AbstractFileFilter* currentFileFilter() const;
 	QString path() const;
+	QString fileName() const;
 	QString dbcFileName() const;
 	QString selectedObject() const;
 	bool importValid() const;

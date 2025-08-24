@@ -49,7 +49,7 @@
 
 ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const QString& path, bool importDir)
 	: ImportDialog(parent)
-	, m_importFileWidget(new ImportFileWidget(this, liveDataSource, path, importDir))
+	, m_importFileWidget(new ImportFileWidget(this, liveDataSource, path, false /* embedded */, importDir))
 	, m_importDir(importDir) {
 	vLayout->addWidget(m_importFileWidget);
 	m_liveDataSource = liveDataSource;
