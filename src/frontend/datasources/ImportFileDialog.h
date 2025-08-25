@@ -41,7 +41,6 @@ public:
 private:
 	ImportFileWidget* m_importFileWidget;
 	bool m_showOptions{false};
-	bool m_importDir{false};
 	QPushButton* m_optionsButton;
 
 	void importFile(const QString& fileName, AbstractAspect*, AbstractFileFilter*, AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace) const;

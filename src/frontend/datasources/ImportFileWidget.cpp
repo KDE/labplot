@@ -318,15 +318,8 @@ void ImportFileWidget::loadSettings() {
 		}
 	}
 
-	QString listEntryName;
-	QString entryName;
-	if (m_importDir) {
-		listEntryName = QStringLiteral("LastImportedDirectories");
-		entryName = QStringLiteral("LastImportedDirectory");
-	} else {
-		listEntryName = QStringLiteral("LastImportedFiles");
-		entryName = QStringLiteral("LastImportedFile");
-	}
+	const QString listEntryName = m_importDir ? QStringLiteral("LastImportedDirectories") : QStringLiteral("LastImportedFiles");
+	const QString entryName = m_importDir ? QStringLiteral("LastImportedDirectory") : QStringLiteral("LastImportedFile");
 	auto urls = m_cbFileName->urls();
 	urls.append(conf.readXdgListEntry(listEntryName));
 	m_cbFileName->setUrls(urls);
@@ -451,19 +444,10 @@ ImportFileWidget::~ImportFileWidget() {
 	// general settings
 	conf.writeEntry("Type", (int)currentFileType());
 	conf.writeEntry("Filter", ui.cbFilter->currentIndex());
-
-	QString listEntryName;
-	QString entryName;
-	if (m_importDir) {
-		listEntryName = QStringLiteral("LastImportedDirectories");
-		entryName = QStringLiteral("LastImportedDirectory");
-	} else {
-		listEntryName = QStringLiteral("LastImportedFiles");
-		entryName = QStringLiteral("LastImportedFile");
-	}
+	const QString listEntryName = m_importDir ? QStringLiteral("LastImportedDirectories") : QStringLiteral("LastImportedFiles");
+	const QString entryName = m_importDir ? QStringLiteral("LastImportedDirectory") : QStringLiteral("LastImportedFile");
 	conf.writeEntry(entryName, m_cbFileName->currentText());
 	conf.writeXdgListEntry(listEntryName, m_cbFileName->urls());
-
 	conf.writeEntry("LastImportedDBCFile", m_cbDBCFileName->currentText());
 	conf.writeXdgListEntry("LastImportedDBCFiles", m_cbDBCFileName->urls());
 	conf.writeEntry("PreviewLines", ui.sbPreviewLines->value());

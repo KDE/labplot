@@ -49,10 +49,10 @@
 
 ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const QString& path, bool importDir)
 	: ImportDialog(parent)
-	, m_importFileWidget(new ImportFileWidget(this, liveDataSource, path, false /* embedded */, importDir))
-	, m_importDir(importDir) {
+	, m_importFileWidget(new ImportFileWidget(this, liveDataSource, path, false /* embedded */, importDir)) {
 	vLayout->addWidget(m_importFileWidget);
 	m_liveDataSource = liveDataSource;
+	m_importDir = importDir;
 
 	// dialog buttons
 	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Reset | QDialogButtonBox::Cancel);
@@ -402,13 +402,8 @@ void ImportFileDialog::checkOkButton() {
 		if (!aspect) {
 			okButton->setEnabled(false);
 			okButton->setToolTip(i18n("Select a data container where the data has to be imported into."));
-			lPosition->setEnabled(false);
-			cbPosition->setEnabled(false);
 			cbAddTo->setFocus(); // set the focus to make the user aware about the fact that a data container needs to be provided
 			return;
-		} else {
-			lPosition->setEnabled(true);
-			cbPosition->setEnabled(true);
 		}
 	}
 
