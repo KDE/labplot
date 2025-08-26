@@ -178,7 +178,7 @@ void CartesianCoordinateSystemTest::testMapLogicalToSceneLinesPerformance() {
 			VALUES_EQUAL(mapLogicalToSceneCopyLines.at(i).y2(), 100.);
 		}
 		const auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-		std::cout << "Diff: " << diff << " ms" << std::endl;
+		INFO("Diff: " << diff << " ms");
 	}
 
 	{
@@ -197,7 +197,7 @@ void CartesianCoordinateSystemTest::testMapLogicalToSceneLinesPerformance() {
 			VALUES_EQUAL(linesPerformance.at(i).y2(), 100.);
 		}
 		const auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-		std::cout << "Diff: " << diff << " ms" << std::endl;
+		INFO("Diff: " << diff << " ms");
 	}
 }
 
