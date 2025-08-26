@@ -75,8 +75,6 @@ double nsl_math_round_places(double value, int n);
 double nsl_math_floor_places(double value, int n);
 double nsl_math_ceil_places(double value, int n);
 double nsl_math_trunc_places(double value, int n);
-// Trunc to 1 digit
-double nsl_math_trunc_places_1(double value);
 double nsl_math_places(double value, int n, int method);
 
 /* round double value to precision p in scientific notation

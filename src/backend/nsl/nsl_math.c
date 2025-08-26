@@ -87,34 +87,6 @@ double nsl_math_trunc_places(double value, int n) {
 	return nsl_math_places(value, n, 3);
 }
 
-/*!
- * \brief nsl_math_trunc_places_1
- * Fast version of nsl_math_trun_places for 1 digit trunc
- * \param value
- * \return
- */
-double nsl_math_trunc_places_1(double value) {
-	// no need to round
-	if (value == 0. || fabs(value) > 1.e16 || fabs(value) < 1.e-16 || isnan(value) || isinf(value)) {
-		/*		printf("nsl_math_places(): not changed : %.19g\n", value); */
-		return value;
-	}
-
-	const double scale = 10.;
-	double scaled_value = value * scale;
-	if (fabs(scaled_value) > 1.e16)
-		return value;
-	if (fabs(scaled_value) < .5)
-		return 0.;
-
-	double eps = 1.e-15;
-	/*
-		printf("nsl_math_places(): value = %g, n = %d, DBL_EPSILON = %.19g, scale = %.19g, scaled_value = %.19g, round(scaled_value) = %.19g
-	   round(scaled_value)/scale = %.19g\n", value, n, DBL_EPSILON, scale, scaled_value, round(scaled_value), round(scaled_value)/scale);
-	*/
-	return trunc(scaled_value) / scale;
-}
-
 double nsl_math_places(double value, int n, int method) {
 	// no need to round
 	if (value == 0. || fabs(value) > 1.e16 || fabs(value) < 1.e-16 || isnan(value) || isinf(value)) {
@@ -122,7 +94,7 @@ double nsl_math_places(double value, int n, int method) {
 		return value;
 	}
 
-	double scale = gsl_pow_int(10., n);
+	double scale = n == 1 ? 10. : gsl_pow_int(10., n);
 	double scaled_value = value * scale;
 	if (fabs(scaled_value) > 1.e16)
 		return value;
