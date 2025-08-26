@@ -167,8 +167,8 @@ void ImportFileDialog::importToMQTT(MQTTClient* client) const {
   triggers data import to the currently selected data container
 */
 bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
-	QDEBUG("	cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
+	// a target aspect is required, do this check first
+	auto* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 	if (!aspect) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: No aspect available");
 		DEBUG("	cbAddTo->currentModelIndex().isValid() = " << cbAddTo->currentModelIndex().isValid());
@@ -192,12 +192,12 @@ bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	QElapsedTimer timer;
 	timer.start();
 
-	if (!m_importDir) {
+	if (!m_importDir) { // import a single file
 		connect(filter, &AbstractFileFilter::completed, progressBar, &QProgressBar::setValue);
 		const auto mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
 		importFile(path, aspect, filter, mode);
 		statusBar->showMessage(i18n("File %1 imported in %2 seconds.", path, (float)timer.elapsed() / 1000));
-	} else {
+	} else { // import all files from a directory
 		QDir dir(path);
 		if (!dir.exists()) {
 			const_cast<ImportFileDialog*>(this)->showErrorMessage(i18n("The directory %1 doesn't exist.", path));
@@ -209,8 +209,24 @@ bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		const auto files = dir.entryList(QDir::Files | QDir::NoDotAndDotDot);
 		const int totalCount = files.count();
 		int count = 0;
+
+		// iterate over all files in the directory and import them one by one.
+		// we import into spreadsheets only at the moment and re-use existing sheets if the name matches
+		const auto& sheets = aspect->children<Spreadsheet>();
 		for (const auto& fileName : files) {
-			importFile(dir.absoluteFilePath(fileName), aspect, filter);
+			// if there's already a sheet with the same name, use it
+			Spreadsheet* sheet = nullptr;
+			for (const auto& s : sheets) {
+				if (s->name() == fileName) {
+					sheet = s;
+					break;
+				}
+			}
+			if (!sheet) {
+				sheet = new Spreadsheet(fileName);
+				aspect->addChild(sheet);
+			}
+			importFile(dir.absoluteFilePath(fileName), sheet, filter);
 			++count;
 			progressBar->setValue(count/totalCount * 100);
 		}
