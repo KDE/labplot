@@ -1238,8 +1238,6 @@ void XYCurvePrivate::updateLines(bool performanceOptimization) {
 		numberOfPixelX = ceil(widthDatarectInch * dpi) * 10;
 	}
 
-	// m_lines.reserve(numberOfPixelX * 2);
-
 	// calculate the lines connecting the data points
 	{
 #if PERFTRACE_CURVES
