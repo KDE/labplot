@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-14 00:38+0000\n"
-"PO-Revision-Date: 2025-07-16 09:30+0200\n"
+"PO-Revision-Date: 2025-08-02 11:00+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 25.07.80\n"
+"X-Generator: Lokalize 25.07.90\n"
 "X-Text-Markup: kde4\n"
 
 #: src/backend/core/AbstractAspect.cpp:234
@@ -1195,6 +1195,10 @@ msgid ""
 "count >= %3. Check if the correct separator is used and the data contains "
 "same number of columns."
 msgstr ""
+"Nombre de colonnes de données non valable. Nombre de colonnes de la première "
+"ligne : %1. Nombre de colonnes %2 ième >= %3. Veuillez vérifier que le "
+"séparateur correct est utilisé et que les données contiennent le même nombre "
+"de colonnes."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:239
 #, kde-format
@@ -9079,10 +9083,9 @@ msgid "%1: legend visibility changed"
 msgstr "%1 : modification de la visibilité de la légende"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:549
-#, fuzzy, kde-format
-#| msgid "%1: set limits metric"
+#, kde-format
 msgid "%1: set limits type"
-msgstr "%1 : définir la métrique des limites"
+msgstr "%1 : définir le type de limites"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:556
 #, kde-format
@@ -9115,22 +9118,19 @@ msgid "%1: set minimal lower limit"
 msgstr "%1 : définir la limite inférieure minimale"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:594
-#, fuzzy, kde-format
-#| msgid "%1: set center metric"
+#, kde-format
 msgid "%1: set center specification"
-msgstr "%1 : définir la métrique centrale"
+msgstr "%1 : définir la spécification centrale"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:601
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#, kde-format
 msgid "%1: set upper limit specification"
-msgstr "%1 : définir la désignation du tracé"
+msgstr "%1 : définir la spécification pour la limite supérieure"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:608
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#, kde-format
 msgid "%1: set lower limit specification"
-msgstr "%1 : définir la désignation du tracé"
+msgstr "%1 : définir la spécification pour la limite inférieure"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:617
 #, kde-format
@@ -14171,16 +14171,14 @@ msgid "File Browser"
 msgstr "Navigateur de fichiers"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistical"
 msgstr "Statistiques"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Specification"
-msgstr "Simplification"
+msgstr "Spécification"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
@@ -14300,6 +14298,10 @@ msgid ""
 "properties of the sample.</li><li>Specification - custom user-defined values "
 "are used.</li></ul>"
 msgstr ""
+"Déterminez quelles valeurs utiliser pour les lignes de centre et de limites :"
+"<ul><li>Statistiques - les valeurs sont calculées en fonction des propriétés "
+"statistiques de l'échantillon.</li><li>Spécification - des valeurs "
+"personnalisées par l'utilisateur sont utilisées.</li></ul>"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:284
 #, kde-format
@@ -14472,6 +14474,8 @@ msgstr "temps de calcul : %1 ms"
 #, kde-format
 msgid "Click this button or press Shift+Enter to recalculate the result."
 msgstr ""
+"Cliquez sur ce bouton ou appuyez sur le raccourci « Maj » + « Entrée » pour "
+"recalculer le résultat."
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:75
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:408
@@ -16918,6 +16922,8 @@ msgstr ""
 #, kde-format
 msgid "If enabled spreadsheet and matrix data is saved in the project file"
 msgstr ""
+"Si cette option est activée, les données de la feuille de calcul et de la "
+"matrice sont enregistrées dans le fichier du projet"
 
 #: src/frontend/SettingsNotebookPage.cpp:30
 #, kde-format
@@ -22152,24 +22158,21 @@ msgstr "Limite supérieure maximale :"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimitSpecification)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:186
-#, fuzzy, kde-format
-#| msgid "Upper Limit"
+#, kde-format
 msgid "Upper Limit:"
-msgstr "Limite supérieure"
+msgstr "Limite supérieure :"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimitSpecification)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:200
-#, fuzzy, kde-format
-#| msgid "Lower Limit"
+#, kde-format
 msgid "Lower Limit:"
-msgstr "Limite inférieure"
+msgstr "Limite inférieure :"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsType)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:230
-#, fuzzy, kde-format
-#| msgid "Center/Limits Lines"
+#, kde-format
 msgid "Center/Limits:"
-msgstr "Lignes centrale et de limites"
+msgstr "Centre et limites :"
 
 #. i18n: ectx: property (text), widget (QLabel, lExactLimits)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:269
@@ -22295,7 +22298,7 @@ msgstr "Enregistrer les calculs :"
 #: src/frontend/ui/dockwidgets/projectdock.ui:305
 #, kde-format
 msgid "Save Data in File:"
-msgstr ""
+msgstr "Enregistrer les données dans un fichier :"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:113
@@ -22677,19 +22680,17 @@ msgstr "Équation"
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:444
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:61
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:70
-#, fuzzy, kde-format
-#| msgid "Clausen function"
+#, kde-format
 msgid "Load a custom function"
-msgstr "fonction de Clausen"
+msgstr "Charger une fonction personnalisée"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbSaveFunction)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:457
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:74
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:83
-#, fuzzy, kde-format
-#| msgid "Clausen function"
+#, kde-format
 msgid "Save a custom function"
-msgstr "fonction de Clausen"
+msgstr "Enregistrer une fonction personnalisée"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:93
@@ -23837,10 +23838,9 @@ msgstr "Placement du composant graphique de panneau :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveData)
 #: src/frontend/ui/settingsgeneralpage.ui:453
-#, fuzzy, kde-format
-#| msgid "Open a project file."
+#, kde-format
 msgid "Save Data in Project file:"
-msgstr "Ouvrir un fichier de projet."
+msgstr "Enregistrer les données dans un fichier de projet :"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
