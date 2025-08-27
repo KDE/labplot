@@ -80,12 +80,15 @@ void ImportDialog::setModel() {
 	grid->addWidget(cbAddTo, 0, 1);
 
 	QList<AspectType> list{AspectType::Folder, AspectType::Workbook};
-	if (!m_importDir)
+	if (m_importDir) {
+		cbAddTo->setTopLevelClasses(list);
+		m_aspectTreeModel->setSelectableAspects(list);
+	} else {
 		list << AspectType::Spreadsheet << AspectType::Matrix;
-	cbAddTo->setTopLevelClasses(list);
-
-	list.removeFirst(); // do not allow selection of Folders
-	m_aspectTreeModel->setSelectableAspects(list);
+		cbAddTo->setTopLevelClasses(list);
+		list.removeFirst(); // do not allow selection of Folders
+		m_aspectTreeModel->setSelectableAspects(list);
+	}
 
 	cbAddTo->setModel(m_aspectTreeModel);
 
@@ -97,7 +100,7 @@ void ImportDialog::setModel() {
 	grid->addWidget(tbNewDataContainer, 0, 2);
 
 	if (m_importDir) {
-		// TODO
+		// TODO add later an option to decide if spreadsheets or matrices should be created when importing a directory
 	} else {
 		// widgets for the import mode/position
 		lPosition = new QLabel(i18n("Position:"), frameAddTo);

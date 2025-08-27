@@ -596,7 +596,6 @@ void ImportFileWidget::showOptions(bool b) {
 	resize(layout()->minimumSize());
 }
 
-
 /*!
 * returns the currently selected path (file or directory name)
 */
@@ -625,11 +624,25 @@ QString ImportFileWidget::dbcFileName() const {
 	return m_cbDBCFileName->currentText();
 }
 
+/*!
+* returns the name of the selected object in case of multi-dimensional file formats
+* (HDF5, NetCDF, FITS, ROOT, MatIO, XLSX, Ods) or the file name without extension otherwise.
+* Used in ImportDialog to suggest a name for the new data container to import the data into.
+*/
 QString ImportFileWidget::selectedObject() const {
 	DEBUG(Q_FUNC_INFO)
-	const QString& path = fileName();
+
+	// retunr the name of the currently selected directory if importing a directory
+	if (m_importDir) {
+		QString name = path();
+		// strip away the path if existing
+		if (name.indexOf(QLatin1Char('/')) != -1)
+			name = name.right(name.length() - name.lastIndexOf(QLatin1Char('/')) - 1);
+		return name;
+	}
 
 	// determine the file name only
+	const QString& path = fileName();
 	QString name = path.right(path.length() - path.lastIndexOf(QLatin1Char('/')) - 1);
 
 	// strip away the extension if existing
