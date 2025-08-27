@@ -13,6 +13,10 @@ New features:
 	* [import]
 		* import directories - import multiple files in a directory in one single step
 
+Performance improvements:
+		* Improved drawing performance (!731)
+
+
 -----2.12.1 (2025-08-15) -----
 Bug fixes:
 	* Fix using default font for axis title
