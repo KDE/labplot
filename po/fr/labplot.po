@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-14 02:47+0000\n"
-"PO-Revision-Date: 2025-06-02 17:37+0200\n"
+"PO-Revision-Date: 2025-08-02 11:00+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 25.07.80\n"
+"X-Generator: Lokalize 25.07.90\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
@@ -13917,6 +13917,8 @@ msgstr "temps de calcul : %1 ms"
 #, kde-format
 msgid "Click this button or press Shift+Enter to recalculate the result."
 msgstr ""
+"Cliquez sur ce bouton ou appuyez sur le raccourci « Maj » + « Entrée » pour "
+"recalculer le résultat."
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:75
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:400
@@ -22072,7 +22074,7 @@ msgstr "Centrer la ligne"
 #: src/frontend/ui/dockwidgets/scriptdock.ui:86
 #, kde-format
 msgid "Runtime:"
-msgstr ""
+msgstr "Durée d'exécution : "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
