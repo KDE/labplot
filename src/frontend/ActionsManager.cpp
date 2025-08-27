@@ -204,29 +204,29 @@ void ActionsManager::initActions() {
 	// New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
 	m_newWorkbookAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-workbook-new")), i18n("Workbook"), this);
 	collection->addAction(QStringLiteral("new_workbook"), m_newWorkbookAction);
-	m_newWorkbookAction->setWhatsThis(i18n("Creates a new workbook for collection spreadsheets, matrices and plots"));
+	m_newWorkbookAction->setToolTip(i18n("Creates a new workbook for collection spreadsheets, matrices and plots"));
 	connect(m_newWorkbookAction, &QAction::triggered, m_mainWindow, &MainWin::newWorkbook);
 
 	m_newDatapickerAction = new QAction(QIcon::fromTheme(QStringLiteral("color-picker-black")), i18n("Data Extractor"), this);
-	m_newDatapickerAction->setWhatsThis(i18n("Creates a data extractor for getting data from a picture"));
+	m_newDatapickerAction->setToolTip(i18n("Creates a data extractor for getting data from a picture"));
 	collection->addAction(QStringLiteral("new_datapicker"), m_newDatapickerAction);
 	connect(m_newDatapickerAction, &QAction::triggered, m_mainWindow, &MainWin::newDatapicker);
 
 	m_newSpreadsheetAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-spreadsheet-new")), i18n("Spreadsheet"), this);
 	// 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
-	m_newSpreadsheetAction->setWhatsThis(i18n("Creates a new spreadsheet for data editing"));
+	m_newSpreadsheetAction->setToolTip(i18n("Creates a new spreadsheet for data editing"));
 	collection->addAction(QStringLiteral("new_spreadsheet"), m_newSpreadsheetAction);
 	connect(m_newSpreadsheetAction, &QAction::triggered, m_mainWindow, &MainWin::newSpreadsheet);
 
 	m_newMatrixAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-matrix-new")), i18n("Matrix"), this);
 	// 	m_newMatrixAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
-	m_newMatrixAction->setWhatsThis(i18n("Creates a new matrix for data editing"));
+	m_newMatrixAction->setToolTip(i18n("Creates a new matrix for data editing"));
 	collection->addAction(QStringLiteral("new_matrix"), m_newMatrixAction);
 	connect(m_newMatrixAction, &QAction::triggered, m_mainWindow, &MainWin::newMatrix);
 
 	m_newWorksheetAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-worksheet-new")), i18n("Worksheet"), this);
 	// 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
-	m_newWorksheetAction->setWhatsThis(i18n("Creates a new worksheet for data plotting"));
+	m_newWorksheetAction->setToolTip(i18n("Creates a new worksheet for data plotting"));
 	collection->addAction(QStringLiteral("new_worksheet"), m_newWorksheetAction);
 	connect(m_newWorksheetAction, &QAction::triggered, m_mainWindow, &MainWin::newWorksheet);
 
@@ -234,7 +234,7 @@ void ActionsManager::initActions() {
 	for (auto& language : Script::languages) {
 		auto* action = new QAction(Script::icon(language), language, this);
 		action->setData(language);
-		action->setWhatsThis(i18n("Creates a new %1 script", language));
+		action->setToolTip(i18n("Creates a new %1 script", language));
 		collection->addAction(QLatin1String("new_script_") + language, action);
 		connect(action, &QAction::triggered, m_mainWindow, &MainWin::newScript);
 		m_newScriptActions << action;
@@ -242,61 +242,60 @@ void ActionsManager::initActions() {
 #endif
 
 	m_newNotesAction = new QAction(QIcon::fromTheme(QStringLiteral("document-new")), i18n("Note"), this);
-	m_newNotesAction->setWhatsThis(i18n("Creates a new note for arbitrary text"));
+	m_newNotesAction->setToolTip(i18n("Creates a new note for arbitrary text"));
 	collection->addAction(QStringLiteral("new_notes"), m_newNotesAction);
 	connect(m_newNotesAction, &QAction::triggered, m_mainWindow, &MainWin::newNotes);
 
 	m_newFolderAction = new QAction(QIcon::fromTheme(QStringLiteral("folder-new")), i18n("Folder"), this);
-	m_newFolderAction->setWhatsThis(i18n("Creates a new folder to collect sheets and other elements"));
+	m_newFolderAction->setToolTip(i18n("Creates a new folder to collect sheets and other elements"));
 	collection->addAction(QStringLiteral("new_folder"), m_newFolderAction);
 	connect(m_newFolderAction, &QAction::triggered, m_mainWindow, &MainWin::newFolder);
 
 	//"New file datasources"
 	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-text-frame-update")), i18n("Live Data Source..."), this);
-	m_newLiveDataSourceAction->setWhatsThis(i18n("Creates a live data source to read data from a real time device"));
+	m_newLiveDataSourceAction->setToolTip(i18n("Creates a live data source to read data from a real time device"));
 	collection->addAction(QStringLiteral("new_live_datasource"), m_newLiveDataSourceAction);
 	connect(m_newLiveDataSourceAction, &QAction::triggered, m_mainWindow, &MainWin::newLiveDataSource);
 
 	// Import/Export
 	m_importFileAction = new QAction(QIcon::fromTheme(QStringLiteral("document-import")), i18n("From File..."), this);
+	collection->addAction(QStringLiteral("import_file"), m_importFileAction);
 	collection->setDefaultShortcut(m_importFileAction, Qt::CTRL | Qt::SHIFT | Qt::Key_I);
-	m_importFileAction->setWhatsThis(i18n("Import data from a regular file"));
+	m_importFileAction->setToolTip(i18n("Import data from a regular file"));
 	connect(m_importFileAction, &QAction::triggered, this, [=]() {
 		m_mainWindow->importFileDialog();
 	});
 
-	// second "import from file" action, with a shorter name, to be used in the sub-menu of the "Import"-menu.
-	// the first action defined above will be used in the toolbar and touchbar where we need the more detailed name "Import From File".
-	m_importFileAction_2 = new QAction(QIcon::fromTheme(QStringLiteral("document-import")), i18n("From File..."), this);
-	collection->addAction(QStringLiteral("import_file"), m_importFileAction_2);
-	m_importFileAction_2->setWhatsThis(i18n("Import data from a regular file"));
-	connect(m_importFileAction_2, &QAction::triggered, this, [=]() {
-		m_mainWindow->importFileDialog();
+	m_importDirAction = new QAction(QIcon::fromTheme(QStringLiteral("document-import")), i18n("From Directory..."), this);
+	collection->addAction(QStringLiteral("import_dir"), m_importDirAction);
+	m_importDirAction->setToolTip(i18n("Import multiple files from a directory"));
+	connect(m_importDirAction, &QAction::triggered, this, [=]() {
+		m_mainWindow->importDirDialog();
 	});
 
 	m_importKaggleDatasetAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-kaggle")), i18n("From kaggle.com..."), this);
-	m_importKaggleDatasetAction->setWhatsThis(i18n("Import data from kaggle.com"));
+	m_importKaggleDatasetAction->setToolTip(i18n("Import data from kaggle.com"));
 	collection->addAction(QStringLiteral("import_dataset_kaggle"), m_importKaggleDatasetAction);
 	connect(m_importKaggleDatasetAction, &QAction::triggered, m_mainWindow, &MainWin::importKaggleDatasetDialog);
 
 	m_importSqlAction = new QAction(QIcon::fromTheme(QStringLiteral("network-server-database")), i18n("From SQL Database..."), this);
-	m_importSqlAction->setWhatsThis(i18n("Import data from a SQL database"));
+	m_importSqlAction->setToolTip(i18n("Import data from a SQL database"));
 	collection->addAction(QStringLiteral("import_sql"), m_importSqlAction);
 	connect(m_importSqlAction, &QAction::triggered, m_mainWindow, &MainWin::importSqlDialog);
 
 	m_importDatasetAction = new QAction(QIcon::fromTheme(QStringLiteral("database-index")), i18n("From Dataset Collection..."), this);
-	m_importDatasetAction->setWhatsThis(i18n("Import data from an online dataset"));
+	m_importDatasetAction->setToolTip(i18n("Import data from an online dataset"));
 	collection->addAction(QStringLiteral("import_dataset_datasource"), m_importDatasetAction);
 	connect(m_importDatasetAction, &QAction::triggered, m_mainWindow, &MainWin::importDatasetDialog);
 
 	m_importLabPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("project-open")), i18n("LabPlot Project..."), this);
-	m_importLabPlotAction->setWhatsThis(i18n("Import a project from a LabPlot project file (.lml)"));
+	m_importLabPlotAction->setToolTip(i18n("Import a project from a LabPlot project file (.lml)"));
 	collection->addAction(QStringLiteral("import_labplot"), m_importLabPlotAction);
 	connect(m_importLabPlotAction, &QAction::triggered, m_mainWindow, &MainWin::importProjectDialog);
 
 #ifdef HAVE_LIBORIGIN
 	m_importOpjAction = new QAction(QIcon::fromTheme(QStringLiteral("project-open")), i18n("Origin Project (OPJ)..."), this);
-	m_importOpjAction->setWhatsThis(i18n("Import a project from an OriginLab Origin project file (.opj)"));
+	m_importOpjAction->setToolTip(i18n("Import a project from an OriginLab Origin project file (.opj)"));
 	collection->addAction(QStringLiteral("import_opj"), m_importOpjAction);
 	connect(m_importOpjAction, &QAction::triggered, m_mainWindow, &MainWin::importProjectDialog);
 #endif
@@ -330,7 +329,7 @@ void ActionsManager::initActions() {
 #endif
 
 	m_exportAction = new QAction(QIcon::fromTheme(QStringLiteral("document-export")), i18n("Export..."), this);
-	m_exportAction->setWhatsThis(i18n("Export selected element"));
+	m_exportAction->setToolTip(i18n("Export selected element"));
 	collection->setDefaultShortcut(m_exportAction, Qt::CTRL | Qt::SHIFT | Qt::Key_E);
 	collection->addAction(QStringLiteral("export"), m_exportAction);
 	connect(m_exportAction, &QAction::triggered, m_mainWindow, &MainWin::exportDialog);
@@ -342,7 +341,7 @@ void ActionsManager::initActions() {
 
 	// Tools
 	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("color-management")), i18n("Color Maps Browser"), this);
-	action->setWhatsThis(i18n("Open dialog to browse through the available color maps."));
+	action->setToolTip(i18n("Open dialog to browse through the available color maps."));
 	collection->addAction(QStringLiteral("color_maps"), action);
 	// connect(action, &QAction::triggered, this, [=]() {
 	// 	auto* dlg = new ColorMapsDialog(this);
@@ -352,7 +351,7 @@ void ActionsManager::initActions() {
 
 #ifdef HAVE_FITS
 	action = new QAction(QIcon::fromTheme(QStringLiteral("editor")), i18n("FITS Metadata Editor..."), this);
-	action->setWhatsThis(i18n("Open editor to edit FITS meta data"));
+	action->setToolTip(i18n("Open editor to edit FITS meta data"));
 	collection->addAction(QStringLiteral("edit_fits"), action);
 	connect(action, &QAction::triggered, m_mainWindow, &MainWin::editFitsFileDialog);
 #endif
@@ -475,7 +474,7 @@ void ActionsManager::initActions() {
 #ifdef HAVE_CANTOR_LIBS
 	// configure CAS backends
 	m_configureNotebookAction = new QAction(QIcon::fromTheme(QStringLiteral("cantor")), i18n("Configure CAS..."), this);
-	m_configureNotebookAction->setWhatsThis(i18n("Opens the settings for Computer Algebra Systems to modify the available systems or to enable new ones"));
+	m_configureNotebookAction->setToolTip(i18n("Opens the settings for Computer Algebra Systems to modify the available systems or to enable new ones"));
 	m_configureNotebookAction->setMenuRole(QAction::NoRole); // prevent macOS Qt heuristics to select this action for preferences
 	collection->addAction(QStringLiteral("configure_cas"), m_configureNotebookAction);
 	connect(m_configureNotebookAction, &QAction::triggered, m_mainWindow, &MainWin::settingsNotebookDialog);
@@ -810,11 +809,11 @@ void ActionsManager::initScriptToolbarActions() {
 	auto* collection = m_mainWindow->actionCollection();
 
 	m_scriptRunAction = new QAction(QIcon::fromTheme(QStringLiteral("quickopen")), QStringLiteral("Run"), this);
-	m_scriptRunAction->setWhatsThis(QStringLiteral("Run the script"));
+	m_scriptRunAction->setToolTip(QStringLiteral("Run the script"));
 	collection->addAction(QStringLiteral("script_run"), m_scriptRunAction);
 
 	m_scriptClearAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), QStringLiteral("Clear Output"), this);
-	m_scriptClearAction->setWhatsThis(QStringLiteral("Clear the output of the script editor"));
+	m_scriptClearAction->setToolTip(QStringLiteral("Clear the output of the script editor"));
 	collection->addAction(QStringLiteral("script_clear"), m_scriptClearAction);
 }
 #endif
@@ -860,7 +859,8 @@ void ActionsManager::initMenus() {
 	// import menu
 	m_importMenu = new QMenu(m_mainWindow);
 	m_importMenu->setIcon(QIcon::fromTheme(QStringLiteral("document-import")));
-	m_importMenu->addAction(m_importFileAction_2);
+	m_importMenu->addAction(m_importFileAction);
+	m_importMenu->addAction(m_importDirAction);
 	m_importMenu->addAction(m_importSqlAction);
 	m_importMenu->addAction(m_importDatasetAction);
 	m_importMenu->addAction(m_importKaggleDatasetAction);
@@ -1296,7 +1296,7 @@ void ActionsManager::updateNotebookActions() {
 
 		auto* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(), this);
 		action->setData(backend->name());
-		action->setWhatsThis(i18n("Creates a new %1 notebook", backend->name()));
+		action->setToolTip(i18n("Creates a new %1 notebook", backend->name()));
 		m_mainWindow->actionCollection()->addAction(QLatin1String("notebook_") + backend->name(), action);
 		connect(action, &QAction::triggered, m_mainWindow, &MainWin::newNotebook);
 		newBackendActions << action;

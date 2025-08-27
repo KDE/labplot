@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-10 00:39+0000\n"
-"PO-Revision-Date: 2025-07-16 09:30+0200\n"
+"POT-Creation-Date: 2025-08-14 00:38+0000\n"
+"PO-Revision-Date: 2025-08-02 11:00+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 25.07.80\n"
+"X-Generator: Lokalize 25.07.90\n"
 "X-Text-Markup: kde4\n"
 
 #: src/backend/core/AbstractAspect.cpp:234
@@ -925,7 +925,7 @@ msgstr "%1 : définir le style de contour de la barre d'erreur"
 #: src/backend/datapicker/DatapickerImage.cpp:425
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:281
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:276
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:150
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:147
 #: src/backend/worksheet/WorksheetElement.cpp:163
@@ -939,7 +939,7 @@ msgstr "%1 : définir comme visible"
 #: src/backend/datapicker/DatapickerImage.cpp:425
 #: src/backend/worksheet/InfoElement.cpp:868
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:147
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:281
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:276
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:150
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:147
 #: src/backend/worksheet/WorksheetElement.cpp:163
@@ -1195,6 +1195,10 @@ msgid ""
 "count >= %3. Check if the correct separator is used and the data contains "
 "same number of columns."
 msgstr ""
+"Nombre de colonnes de données non valable. Nombre de colonnes de la première "
+"ligne : %1. Nombre de colonnes %2 ième >= %3. Veuillez vérifier que le "
+"séparateur correct est utilisé et que les données contiennent le même nombre "
+"de colonnes."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:239
 #, kde-format
@@ -7927,8 +7931,8 @@ msgstr "%1 : définir automatiquement le format des étiquettes"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:943
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:950
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:634
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:641
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:626
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:633
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1 : définir la précision des étiquettes"
@@ -8012,7 +8016,7 @@ msgid "%1: set data columns"
 msgstr "%1 : définir les colonnes de données"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:304
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:550
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:542
 #, kde-format
 msgid "%1: set type"
 msgstr "%1 : définir un type"
@@ -8996,8 +9000,8 @@ msgstr "Ajuster vers une distribution binomiale"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:400
 #: src/backend/worksheet/plots/cartesian/KDEPlot.cpp:248
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:526
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:538
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:518
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:530
 #: src/backend/worksheet/plots/cartesian/QQPlot.cpp:264
 #: src/backend/worksheet/plots/cartesian/RunChart.cpp:265
 #, kde-format
@@ -9078,108 +9082,104 @@ msgstr "%1 : définir la bande passante"
 msgid "%1: legend visibility changed"
 msgstr "%1 : modification de la visibilité de la légende"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:557
-#, fuzzy, kde-format
-#| msgid "%1: set limits metric"
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:549
+#, kde-format
 msgid "%1: set limits type"
-msgstr "%1 : définir la métrique des limites"
+msgstr "%1 : définir le type de limites"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:564
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:556
 #, kde-format
 msgid "%1: set limits metric"
 msgstr "%1 : définir la métrique des limites"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:571
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:563
 #, kde-format
 msgid "%1: set sample size"
 msgstr "%1 : définir la taille des échantillons"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:579
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:571
 #, kde-format
 msgid "%1: enable exact limits"
 msgstr "%1 : activer les limites exactes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:579
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:571
 #, kde-format
 msgid "%1: disable exact limits"
 msgstr "%1 : désactiver les limites exactes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:588
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:580
 #, kde-format
 msgid "%1: set maximal upper limit"
 msgstr "%1 : définir la limite supérieure maximale"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:595
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:587
 #, kde-format
 msgid "%1: set minimal lower limit"
 msgstr "%1 : définir la limite inférieure minimale"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:602
-#, fuzzy, kde-format
-#| msgid "%1: set center metric"
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:594
+#, kde-format
 msgid "%1: set center specification"
-msgstr "%1 : définir la métrique centrale"
+msgstr "%1 : définir la spécification centrale"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:609
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:601
+#, kde-format
 msgid "%1: set upper limit specification"
-msgstr "%1 : définir la désignation du tracé"
+msgstr "%1 : définir la spécification pour la limite supérieure"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:616
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:608
+#, kde-format
 msgid "%1: set lower limit specification"
-msgstr "%1 : définir la désignation du tracé"
+msgstr "%1 : définir la spécification pour la limite inférieure"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:625
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:617
 #, kde-format
 msgid "%1: enable control labels"
 msgstr "%1 : activer les étiquettes de contrôle"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:625
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:617
 #, kde-format
 msgid "%1: disable control labels"
 msgstr "%1 : désactiver les étiquettes de contrôle"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:647
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:639
 #, kde-format
 msgid "%1: set labels border shape"
 msgstr "%1 : définir la forme des bordures d'étiquettes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:662
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:654
 #, kde-format
 msgid "%1: set labels font"
 msgstr "%1 : définir la police des étiquettes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:697
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:729
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:689
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:721
 #, kde-format
 msgid "%1: set labels background color"
 msgstr "%1 : définir la couleur d'arrière-plan des étiquettes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:787
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:779
 #, kde-format
 msgid "%1: set labels border style"
 msgstr "%1 : définir le style des bordures d'étiquettes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:798
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:790
 #, kde-format
 msgid "%1: set labels border width"
 msgstr "%1 : définir la largeur des bordures d'étiquettes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:809
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:820
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:801
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:812
 #, kde-format
 msgid "%1: set labels border color"
 msgstr "%1 : définir la couleur des bordures d'étiquettes"
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:918
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:910
 #, kde-format
 msgid "Not enough data provided."
 msgstr "Le volume de données fournies est insuffisant."
 
-#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1021
+#: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:1013
 #, kde-format
 msgid "The last sample is incomplete and was omitted."
 msgstr "Le dernier échantillon est incomplet et a été omis."
@@ -14171,16 +14171,14 @@ msgid "File Browser"
 msgstr "Navigateur de fichiers"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistical"
 msgstr "Statistiques"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Specification"
-msgstr "Simplification"
+msgstr "Spécification"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
@@ -14300,6 +14298,10 @@ msgid ""
 "properties of the sample.</li><li>Specification - custom user-defined values "
 "are used.</li></ul>"
 msgstr ""
+"Déterminez quelles valeurs utiliser pour les lignes de centre et de limites :"
+"<ul><li>Statistiques - les valeurs sont calculées en fonction des propriétés "
+"statistiques de l'échantillon.</li><li>Spécification - des valeurs "
+"personnalisées par l'utilisateur sont utilisées.</li></ul>"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:284
 #, kde-format
@@ -14472,6 +14474,8 @@ msgstr "temps de calcul : %1 ms"
 #, kde-format
 msgid "Click this button or press Shift+Enter to recalculate the result."
 msgstr ""
+"Cliquez sur ce bouton ou appuyez sur le raccourci « Maj » + « Entrée » pour "
+"recalculer le résultat."
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:75
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:408
@@ -16918,6 +16922,8 @@ msgstr ""
 #, kde-format
 msgid "If enabled spreadsheet and matrix data is saved in the project file"
 msgstr ""
+"Si cette option est activée, les données de la feuille de calcul et de la "
+"matrice sont enregistrées dans le fichier du projet"
 
 #: src/frontend/SettingsNotebookPage.cpp:30
 #, kde-format
@@ -22152,24 +22158,21 @@ msgstr "Limite supérieure maximale :"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimitSpecification)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:186
-#, fuzzy, kde-format
-#| msgid "Upper Limit"
+#, kde-format
 msgid "Upper Limit:"
-msgstr "Limite supérieure"
+msgstr "Limite supérieure :"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimitSpecification)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:200
-#, fuzzy, kde-format
-#| msgid "Lower Limit"
+#, kde-format
 msgid "Lower Limit:"
-msgstr "Limite inférieure"
+msgstr "Limite inférieure :"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsType)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:230
-#, fuzzy, kde-format
-#| msgid "Center/Limits Lines"
+#, kde-format
 msgid "Center/Limits:"
-msgstr "Lignes centrale et de limites"
+msgstr "Centre et limites :"
 
 #. i18n: ectx: property (text), widget (QLabel, lExactLimits)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:269
@@ -22295,7 +22298,7 @@ msgstr "Enregistrer les calculs :"
 #: src/frontend/ui/dockwidgets/projectdock.ui:305
 #, kde-format
 msgid "Save Data in File:"
-msgstr ""
+msgstr "Enregistrer les données dans un fichier :"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:113
@@ -22677,19 +22680,17 @@ msgstr "Équation"
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:444
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:61
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:70
-#, fuzzy, kde-format
-#| msgid "Clausen function"
+#, kde-format
 msgid "Load a custom function"
-msgstr "fonction de Clausen"
+msgstr "Charger une fonction personnalisée"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbSaveFunction)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:457
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:74
 #: src/frontend/ui/spreadsheet/functionvalueswidget.ui:83
-#, fuzzy, kde-format
-#| msgid "Clausen function"
+#, kde-format
 msgid "Save a custom function"
-msgstr "fonction de Clausen"
+msgstr "Enregistrer une fonction personnalisée"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:93
@@ -23837,10 +23838,9 @@ msgstr "Placement du composant graphique de panneau :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveData)
 #: src/frontend/ui/settingsgeneralpage.ui:453
-#, fuzzy, kde-format
-#| msgid "Open a project file."
+#, kde-format
 msgid "Save Data in Project file:"
-msgstr "Ouvrir un fichier de projet."
+msgstr "Enregistrer les données dans un fichier de projet :"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)

@@ -118,8 +118,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.04.3/src/analitza-25.04.3.tar.xz",
-			    "sha256": "5cd695fc83af74eedd3970725e35a6396120631e46866efc9094bce683ad626c"
+			    "url": "https://download.kde.org/stable/release-service/25.08.0/src/analitza-25.08.0.tar.xz",
+			    "sha256": "8d477f0af14bb9f7c15033a9d78987a7067135affc47f19eddda82e76c36d34b"
 		    }
 	    ]
         },
@@ -129,8 +129,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.04.3/src/cantor-25.04.3.tar.xz",
-			    "sha256": "1a7732a34bc703f2febeceb074fb2827f84adf913b86c115553d73a2eb67af05"
+			    "url": "https://download.kde.org/stable/release-service/25.08.0/src/cantor-25.08.0.tar.xz",
+			    "sha256": "5c98fa36bac3500a57d07813a101be709c58aa0ab755d4c9c9fa2b3f8836238d"
 		    }
 	    ]
         },
@@ -342,8 +342,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/orcus/orcus/-/archive/0.20.1/orcus-0.20.1.tar.bz2",
-                    "sha256": "f15e22d055b199299986a0de01864592a2b1caba57413d79969d1794128ef08a"
+                    "url": "https://gitlab.com/orcus/orcus/-/archive/0.20.2/orcus-0.20.2.tar.bz2",
+                    "sha256": "46cdeefef6bbf800e2e776630930fea6363107ac71460824ba54e37047eb85b8"
                 }
             ]
         },

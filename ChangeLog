@@ -8,10 +8,16 @@ New features:
 		* Save and load custom functions for fit, equation curve and function values
 	* [worksheet]
 		* Inset plot areas - plot areas added as child of another plot area
-		* Improve axis ticks locations. The don't need to be always from the bottom to top if it does not look nice (!700)
+		* Improved axis ticks location. They don't need to be always placed at the edges of the axis if does not look nicely (!700)
 		* Allow to position the center and limit lines in the process behavior chart based on user-defined specifications
+	* [import]
+		* import directories - import multiple files in a directory in one single step
 
------2.12.1 (2025-07) -----
+Performance improvements:
+		* Improved drawing performance (!731)
+
+
+-----2.12.1 (2025-08-15) -----
 Bug fixes:
 	* Fix using default font for axis title
 	* Fix build with system QXlsx (!693)
@@ -33,9 +39,10 @@ Bug fixes:
 	* Don't show any error messages and NaN values in the process behavior chart if no column or an empty column was selected
 	* Remove unwanted entries on the undo stack that were created when modifying properties of the process behavior and run charts
 	* Improve the quality of the fit model preview in the properties explorer and formula view in the random values dialog on hidpi screens
+	* Fix save/load of the background color for the center value label in the process behavior chart
 
 Improvements:
-	* Improve handling of the tab-order to switch between the widgets in the properties explorer
+	* Better handling of the tab-order to switch between the widgets in the properties explorer
 	* Added Shift+Enter shortcut in the properties explorer to recalculate the results of formula and analysis curves
 
 -----2.12.0 (2025-04-25) -----

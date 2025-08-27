@@ -170,6 +170,7 @@ private Q_SLOTS:
 	void exampleProjectsDialog();
 	void historyDialog();
 	void importFileDialog(const QString& fileName = QString());
+	void importDirDialog(const QString& dir = QString());
 	void importKaggleDatasetDialog();
 	void importSqlDialog();
 	void importProjectDialog();

@@ -94,11 +94,12 @@ QString ImportFileWidget::absolutePath(const QString& fileName) {
 
    \ingroup frontend
 */
-ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const QString& fileName, bool embedded)
+ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const QString& fileName, bool embedded, bool importDir)
 	: QWidget(parent)
 	, m_fileName(fileName)
 	, m_liveDataSource(liveDataSource)
 	, m_embedded(embedded)
+	, m_importDir(importDir)
 #ifdef HAVE_MQTT
 	, m_subscriptionWidget(new MQTTSubscriptionWidget(this))
 #endif
@@ -298,7 +299,7 @@ void ImportFileWidget::loadSettings() {
 	if (m_liveDataSource)
 		confName = QStringLiteral("LiveDataImport");
 	else
-		confName = QStringLiteral("FileImport");
+		confName = m_importDir ? QStringLiteral("DirectoryImport") : QStringLiteral("FileImport");
 	KConfigGroup conf = Settings::group(confName);
 
 	// read the source type first since settings in fileNameChanged() depend on this
@@ -317,11 +318,13 @@ void ImportFileWidget::loadSettings() {
 		}
 	}
 
+	const QString listEntryName = m_importDir ? QStringLiteral("LastImportedDirectories") : QStringLiteral("LastImportedFiles");
+	const QString entryName = m_importDir ? QStringLiteral("LastImportedDirectory") : QStringLiteral("LastImportedFile");
 	auto urls = m_cbFileName->urls();
-	urls.append(conf.readXdgListEntry("LastImportedFiles"));
+	urls.append(conf.readXdgListEntry(listEntryName));
 	m_cbFileName->setUrls(urls);
 	if (m_fileName.isEmpty())
-		m_cbFileName->setUrl(QUrl(conf.readEntry("LastImportedFile", "")));
+		m_cbFileName->setUrl(QUrl(conf.readEntry(entryName, "")));
 	else {
 		if (m_fileName.contains(QLatin1Char('\\')))	// Windows path
 			m_cbFileName->setUrl(QUrl::fromLocalFile(m_fileName));
@@ -435,14 +438,16 @@ ImportFileWidget::~ImportFileWidget() {
 	if (m_liveDataSource)
 		confName = QStringLiteral("LiveDataImport");
 	else
-		confName = QStringLiteral("FileImport");
+		confName = m_importDir ? QStringLiteral("DirectoryImport") : QStringLiteral("FileImport");
 	KConfigGroup conf = Settings::group(confName);
 
 	// general settings
 	conf.writeEntry("Type", (int)currentFileType());
 	conf.writeEntry("Filter", ui.cbFilter->currentIndex());
-	conf.writeEntry("LastImportedFile", m_cbFileName->currentText());
-	conf.writeXdgListEntry("LastImportedFiles", m_cbFileName->urls());
+	const QString listEntryName = m_importDir ? QStringLiteral("LastImportedDirectories") : QStringLiteral("LastImportedFiles");
+	const QString entryName = m_importDir ? QStringLiteral("LastImportedDirectory") : QStringLiteral("LastImportedFile");
+	conf.writeEntry(entryName, m_cbFileName->currentText());
+	conf.writeXdgListEntry(listEntryName, m_cbFileName->urls());
 	conf.writeEntry("LastImportedDBCFile", m_cbDBCFileName->currentText());
 	conf.writeXdgListEntry("LastImportedDBCFiles", m_cbDBCFileName->urls());
 	conf.writeEntry("PreviewLines", ui.sbPreviewLines->value());
@@ -508,7 +513,7 @@ void ImportFileWidget::initSlots() {
 
 	connect(ui.bOpen, &QPushButton::clicked, this, &ImportFileWidget::selectFile);
 	connect(ui.bOpenDBC, &QPushButton::clicked, this, &ImportFileWidget::selectDBCFile);
-	connect(ui.bFileInfo, &QPushButton::clicked, this, &ImportFileWidget::showFileInfo);
+	connect(ui.bFileInfo, &QPushButton::clicked, this, &ImportFileWidget::showInfo);
 	connect(ui.cbFileType, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &ImportFileWidget::fileTypeChanged);
 	connect(ui.cbUpdateType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImportFileWidget::updateTypeChanged);
 	connect(ui.cbReadingType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImportFileWidget::readingTypeChanged);
@@ -591,19 +596,53 @@ void ImportFileWidget::showOptions(bool b) {
 	resize(layout()->minimumSize());
 }
 
-QString ImportFileWidget::fileName() const {
+/*!
+* returns the currently selected path (file or directory name)
+*/
+QString ImportFileWidget::path() const {
 	return m_cbFileName->currentText();
+}
+
+/*!
+* returns the currently selected file name (or rather its path, to be more precise)
+* or returns the name of the first file in the directory in case of a directory import.
+*/
+QString ImportFileWidget::fileName() const {
+	if (!m_importDir)
+		return m_cbFileName->currentText();
+	else {
+		const QDir dir(m_cbFileName->currentText());
+		const QStringList& files = dir.entryList(QDir::Files | QDir::NoDotAndDotDot);
+		if (!files.isEmpty())
+			return dir.absoluteFilePath(files.first());
+		else
+			return QString();
+	}
 }
 
 QString ImportFileWidget::dbcFileName() const {
 	return m_cbDBCFileName->currentText();
 }
 
+/*!
+* returns the name of the selected object in case of multi-dimensional file formats
+* (HDF5, NetCDF, FITS, ROOT, MatIO, XLSX, Ods) or the file name without extension otherwise.
+* Used in ImportDialog to suggest a name for the new data container to import the data into.
+*/
 QString ImportFileWidget::selectedObject() const {
 	DEBUG(Q_FUNC_INFO)
-	const QString& path = fileName();
+
+	// retunr the name of the currently selected directory if importing a directory
+	if (m_importDir) {
+		QString name = path();
+		// strip away the path if existing
+		if (name.indexOf(QLatin1Char('/')) != -1)
+			name = name.right(name.length() - name.lastIndexOf(QLatin1Char('/')) - 1);
+		return name;
+	}
 
 	// determine the file name only
+	const QString& path = fileName();
 	QString name = path.right(path.length() - path.lastIndexOf(QLatin1Char('/')) - 1);
 
 	// strip away the extension if existing
@@ -1002,15 +1041,21 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 }
 
 /*!
-	opens a file dialog and lets the user select the file data source.
+* opens a file dialog and lets the user select the data source file
+* or the directory in case of a directory import.
 */
 void ImportFileWidget::selectFile() {
 	DEBUG(Q_FUNC_INFO)
 	KConfigGroup conf = Settings::group(QStringLiteral("ImportFileWidget"));
 	const QString& dir = conf.readEntry(QStringLiteral("LastDir"), "");
-	const QString& path = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select the File Data Source"), dir);
-	DEBUG("	dir = " << STDSTRING(dir))
-	DEBUG("	path = " << STDSTRING(path))
+	DEBUG("	last used directory = " << STDSTRING(dir))
+	QString path;
+	if (m_importDir)
+		path = QFileDialog::getExistingDirectory(this, i18nc("@title:window", "Select the Directory Data Source"), dir, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+	else
+		path = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select the File Data Source"), dir);
+
+	DEBUG("	selected path = " << STDSTRING(path))
 	if (path.isEmpty()) // cancel was clicked in the file-dialog
 		return;
 
@@ -1030,7 +1075,7 @@ void ImportFileWidget::selectFile() {
 	m_cbFileName->setUrls(urls);
 	m_cbFileName->setCurrentText(urls.first());
 	DEBUG("	combobox text = " << STDSTRING(m_cbFileName->currentText()))
-	fileNameChanged(path); // why do I have to call this function separately
+	fileNameChanged(fileName()); // TODO: why do I have to call this function separately?
 }
 
 void ImportFileWidget::selectDBCFile() {
@@ -1587,8 +1632,8 @@ bool ImportFileWidget::useFirstRowAsColNames() const {
 /*!
 	shows the dialog with the information about the file(s) to be imported.
 */
-void ImportFileWidget::showFileInfo() {
-	const QString& info = fileInfoString(fileName());
+void ImportFileWidget::showInfo() {
+	const auto& info = m_importDir ? dirInfoString(path()) : fileInfoString(path());
 	QWhatsThis::showText(ui.bFileInfo->mapToGlobal(QPoint(0, 0)), info, ui.bFileInfo);
 }
 
@@ -1599,11 +1644,9 @@ void ImportFileWidget::showFileInfo() {
 */
 QString ImportFileWidget::fileInfoString(const QString& name) const {
 	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(name))
-	QString infoString;
 	QFileInfo fileInfo;
 	QString fileTypeString;
 	QIODevice* file = new QFile(name);
-
 	QString fileName = absolutePath(name);
 
 	if (!file)
@@ -1711,11 +1754,42 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 			break;
 		}
 
-		infoString += infoStrings.join(QLatin1String("<br>"));
+		return infoStrings.join(QLatin1String("<br>"));
 	} else
-		infoString += i18n("Could not open file %1 for reading.", fileName);
+		return i18n("Could not open file %1 for reading.", fileName);
+}
 
-	return infoString;
+/*!
+* returns a string containing the general information about the directory \c name.
+*/
+QString ImportFileWidget::dirInfoString(const QString& name) const {
+	QDir dir(name);
+	if (dir.exists()) {
+		QStringList infoStrings;
+
+		infoStrings << QStringLiteral("<u><b>") + name + QStringLiteral("</b></u><br>");
+		// General:
+		QFileInfo fileInfo(name);
+		infoStrings << QStringLiteral("<b>") << i18n("General:") << QStringLiteral("</b>");
+
+		infoStrings << i18n("Readable: %1", fileInfo.isReadable() ? i18n("yes") : i18n("no"));
+		infoStrings << i18n("Writable: %1", fileInfo.isWritable() ? i18n("yes") : i18n("no"));
+		infoStrings << i18n("Executable: %1", fileInfo.isExecutable() ? i18n("yes") : i18n("no"));
+
+		infoStrings << i18n("Birth time: %1", fileInfo.birthTime().toString());
+		infoStrings << i18n("Last metadata changed: %1", fileInfo.metadataChangeTime().toString());
+		infoStrings << i18n("Last modified: %1", fileInfo.lastModified().toString());
+		infoStrings << i18n("Last read: %1", fileInfo.lastRead().toString());
+		infoStrings << i18n("Owner: %1", fileInfo.owner());
+		infoStrings << i18n("Group: %1", fileInfo.group());
+
+		// Summary:
+		infoStrings << QStringLiteral("<b>") << i18n("Summary:") << QStringLiteral("</b>");
+		infoStrings << i18n("Number of files: %1", dir.entryList(QDir::Files | QDir::NoDotAndDotDot).count());
+		infoStrings << i18n("Number of sub-directories: %1", dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot).count());
+		return infoStrings.join(QLatin1String("<br>"));
+	} else
+		return i18n("Couldn't read the directory %1.", name);
 }
 
 /*!

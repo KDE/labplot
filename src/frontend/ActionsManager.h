@@ -95,7 +95,7 @@ private:
 	QAction* m_printAction{nullptr};
 	QAction* m_printPreviewAction{nullptr};
 	QAction* m_importFileAction{nullptr};
-	QAction* m_importFileAction_2{nullptr};
+	QAction* m_importDirAction{nullptr};
 	QAction* m_importKaggleDatasetAction{nullptr};
 	QAction* m_importSqlAction{nullptr};
 	QAction* m_importDatasetAction{nullptr};
