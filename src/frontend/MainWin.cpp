@@ -1872,20 +1872,44 @@ void MainWin::historyDialog() {
 }
 
 /*!
-  Opens the dialog to import data to the selected container
+  Opens the dialog to import data into the selected container.
 */
 void MainWin::importFileDialog(const QString& fileName) {
 	DEBUG(Q_FUNC_INFO << ", file name = " << fileName.toStdString());
 	auto* dlg = new ImportFileDialog(this, false, fileName);
 
 	// select existing container
-	if (m_currentAspect->type() == AspectType::Spreadsheet || m_currentAspect->type() == AspectType::Matrix || m_currentAspect->type() == AspectType::Workbook)
+	const auto type = m_currentAspect->type();
+	if (type == AspectType::Spreadsheet || type == AspectType::Matrix || type == AspectType::Workbook)
 		dlg->setCurrentIndex(m_projectExplorer->currentIndex());
-	else if (m_currentAspect->type() == AspectType::Column && m_currentAspect->parentAspect()->type() == AspectType::Spreadsheet)
+	else if (type == AspectType::Column && m_currentAspect->parentAspect()->type() == AspectType::Spreadsheet)
 		dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(m_currentAspect->parentAspect()));
 
 	dlg->exec();
 	DEBUG(Q_FUNC_INFO << " DONE");
+}
+
+/*!
+  Opens the dialog to import multiple files in a directory into the selected container.
+*/
+void MainWin::importDirDialog(const QString& dir) {
+	auto* dlg = new ImportFileDialog(this, false /* live source */, dir, true /* import directory */);
+
+	// when importing a directory, the data is imported into multipe spreadsheet or matrix objects that are
+	// created as children of the current parent folder/project or workbook.
+	// select the current folder or workbook or use the parent folder of the current aspec if none of them is selected
+	AbstractAspect* targetAspect = nullptr;
+	const auto type = m_currentAspect->type();
+	if (type == AspectType::Folder || type == AspectType::Workbook)
+		targetAspect = m_currentAspect;
+	else {
+		targetAspect = m_currentAspect->parent(AspectType::Folder);
+		if (!targetAspect)
+			targetAspect = m_project;
+	}
+
+	dlg->setCurrentIndex(m_aspectTreeModel->modelIndexOfAspect(targetAspect));
+	dlg->exec();
 }
 
 void MainWin::importKaggleDatasetDialog() {

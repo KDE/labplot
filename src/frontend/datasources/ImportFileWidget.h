@@ -55,7 +55,7 @@ class ImportFileWidget : public QWidget {
 public:
 	static QString absolutePath(const QString& fileName);
 
-	explicit ImportFileWidget(QWidget*, bool liveDataSource, const QString& fileName = QString(), bool embedded = false);
+	explicit ImportFileWidget(QWidget*, bool liveDataSource, const QString& fileName = QString(), bool embedded = false, bool importDir = false);
 	~ImportFileWidget() override;
 
 	void showOptions(bool);
@@ -64,6 +64,7 @@ public:
 	AbstractFileFilter::FileType currentFileType() const;
 	LiveDataSource::SourceType currentSourceType() const;
 	AbstractFileFilter* currentFileFilter() const;
+	QString path() const;
 	QString fileName() const;
 	QString dbcFileName() const;
 	QString selectedObject() const;
@@ -96,6 +97,7 @@ private:
 	void initOptionsWidget();
 	void initSlots();
 	QString fileInfoString(const QString&) const;
+	QString dirInfoString(const QString&) const;
 	void showJsonModel(bool);
 	void enableFirstRowAsColNames(bool enable); // used by XLSX and Ods
 	void updateHeaderOptions();
@@ -128,6 +130,7 @@ private:
 	bool m_liveDataSource;
 	bool m_suppressRefresh{false};
 	bool m_embedded{false};
+	bool m_importDir{false};
 	TemplateHandler* m_templateHandler{nullptr};
 	bool mcapTopicsInitialized{false};
 
@@ -153,7 +156,7 @@ private Q_SLOTS:
 	void filterChanged(int);
 	void selectFile();
 	void selectDBCFile();
-	void showFileInfo();
+	void showInfo();
 	void refreshPreview();
 	void updateStartRow(int);
 	void enableDataPortionSelection(bool);

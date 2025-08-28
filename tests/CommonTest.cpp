@@ -20,6 +20,7 @@
 void CommonTest::initTestCase() {
 	// always enable debugging
 	enableDebugTrace(true);
+	enableInfoTrace(true);
 	KLocalizedString::setApplicationDomain("labplot");
 
 #ifdef _WIN32
