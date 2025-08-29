@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-28 00:38+0000\n"
-"PO-Revision-Date: 2025-07-31 16:13+0300\n"
+"PO-Revision-Date: 2025-08-28 13:20+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -10574,15 +10574,14 @@ msgid "Import data from a regular file"
 msgstr "Імпортувати дані зі звичайного файла"
 
 #: src/frontend/ActionsManager.cpp:269
-#, fuzzy, kde-format
-#| msgid "From File..."
+#, kde-format
 msgid "From Directory..."
-msgstr "З файла…"
+msgstr "З каталогу…"
 
 #: src/frontend/ActionsManager.cpp:271
 #, kde-format
 msgid "Import multiple files from a directory"
-msgstr ""
+msgstr "Імпортувати декілька з каталогу"
 
 #: src/frontend/ActionsManager.cpp:276
 #, kde-format
@@ -11855,8 +11854,7 @@ msgid "Matrix name:"
 msgstr "Назва матриці:"
 
 #: src/frontend/datasources/ImportDialog.cpp:154
-#, fuzzy, kde-format
-#| msgid "Add new folder"
+#, kde-format
 msgid "Add a new Folder"
 msgstr "Додати нову теку"
 
@@ -11867,10 +11865,9 @@ msgid "Folder name:"
 msgstr "Назва теки:"
 
 #: src/frontend/datasources/ImportDialog.cpp:187
-#, fuzzy, kde-format
-#| msgid "Folder"
+#, kde-format
 msgid "New Folder"
-msgstr "Тека"
+msgstr "Нова тека"
 
 #: src/frontend/datasources/ImportDialog.cpp:191
 #: src/frontend/datasources/ImportDialog.cpp:195
@@ -11944,16 +11941,14 @@ msgid "File %1 imported in %2 seconds."
 msgstr "Файл %1 імпортовано за %2 секунд."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:203
-#, fuzzy, kde-format
-#| msgid "The project file %1 doesn't exist."
+#, kde-format
 msgid "The directory %1 doesn't exist."
-msgstr "Файла проєкту %1 не існєу."
+msgstr "Каталогу %1 не існує."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:234
-#, fuzzy, kde-format
-#| msgid "File %1 imported in %2 seconds."
+#, kde-format
 msgid "%1 files imported in %2 seconds."
-msgstr "Файл %1 імпортовано за %2 секунд."
+msgstr "Імпортовано %1 файлів за %2 секунд."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:408
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:152
@@ -12233,12 +12228,10 @@ msgid ""
 msgstr "Кількість рядків обчислено на основі значень з вкладки частини даних"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1054
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the File Data Source"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Directory Data Source"
-msgstr "Виберіть файлове джерело даних"
+msgstr "Виберіть джерело даних — каталог"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1056
 #, kde-format
@@ -12430,16 +12423,14 @@ msgid "Could not open file %1 for reading."
 msgstr "Не вдалося відкрити файл %1 для читання."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1789
-#, fuzzy, kde-format
-#| msgid "Number of records: %1"
+#, kde-format
 msgid "Number of sub-directories: %1"
-msgstr "Кількість записів: %1"
+msgstr "Кількість підкаталогів: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1792
-#, fuzzy, kde-format
-#| msgid "Couldn't read the project file %1."
+#, kde-format
 msgid "Couldn't read the directory %1."
-msgstr "Не вдалося прочитати файл проєкту %1."
+msgstr "Не вдалося прочитати каталог %1."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1881
 #, kde-format

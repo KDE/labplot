@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-28 00:38+0000\n"
-"PO-Revision-Date: 2025-07-31 17:31+0200\n"
+"PO-Revision-Date: 2025-08-28 09:35+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.04.0\n"
 "X-Accelerator-Marker: &\n"
 
 #: src/backend/core/AbstractAspect.cpp:234
@@ -10612,15 +10612,14 @@ msgid "Import data from a regular file"
 msgstr "Importa les dades des d'un fitxer normal"
 
 #: src/frontend/ActionsManager.cpp:269
-#, fuzzy, kde-format
-#| msgid "From File..."
+#, kde-format
 msgid "From Directory..."
-msgstr "Des del fitxer..."
+msgstr "Des del directori..."
 
 #: src/frontend/ActionsManager.cpp:271
 #, kde-format
 msgid "Import multiple files from a directory"
-msgstr ""
+msgstr "Importa diversos fitxers des d'un directori"
 
 #: src/frontend/ActionsManager.cpp:276
 #, kde-format
@@ -11898,8 +11897,7 @@ msgid "Matrix name:"
 msgstr "Nom de la matriu:"
 
 #: src/frontend/datasources/ImportDialog.cpp:154
-#, fuzzy, kde-format
-#| msgid "Add new folder"
+#, kde-format
 msgid "Add a new Folder"
 msgstr "Afegeix una carpeta nova"
 
@@ -11910,10 +11908,9 @@ msgid "Folder name:"
 msgstr "Nom de la carpeta:"
 
 #: src/frontend/datasources/ImportDialog.cpp:187
-#, fuzzy, kde-format
-#| msgid "Folder"
+#, kde-format
 msgid "New Folder"
-msgstr "Carpeta"
+msgstr "Carpeta nova"
 
 #: src/frontend/datasources/ImportDialog.cpp:191
 #: src/frontend/datasources/ImportDialog.cpp:195
@@ -11987,16 +11984,14 @@ msgid "File %1 imported in %2 seconds."
 msgstr "S'ha importat el fitxer %1 en %2 segons."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:203
-#, fuzzy, kde-format
-#| msgid "The project file %1 doesn't exist."
+#, kde-format
 msgid "The directory %1 doesn't exist."
-msgstr "El fitxer de projecte %1 no existeix."
+msgstr "El directori %1 no existeix."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:234
-#, fuzzy, kde-format
-#| msgid "File %1 imported in %2 seconds."
+#, kde-format
 msgid "%1 files imported in %2 seconds."
-msgstr "S'ha importat el fitxer %1 en %2 segons."
+msgstr "S'han importat %1 fitxers en %2 segons."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:408
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:152
@@ -12282,12 +12277,10 @@ msgstr ""
 "porció de dades"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1054
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the File Data Source"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Directory Data Source"
-msgstr "Selecció del fitxer d'origen de dades"
+msgstr "Selecció del directori d'origen de dades"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1056
 #, kde-format
@@ -12477,16 +12470,14 @@ msgid "Could not open file %1 for reading."
 msgstr "No s'ha pogut obrir el fitxer %1 per a lectura."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1789
-#, fuzzy, kde-format
-#| msgid "Number of records: %1"
+#, kde-format
 msgid "Number of sub-directories: %1"
-msgstr "Nombre de registres: %1"
+msgstr "Nombre de subdirectoris: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1792
-#, fuzzy, kde-format
-#| msgid "Couldn't read the project file %1."
+#, kde-format
 msgid "Couldn't read the directory %1."
-msgstr "No s'ha pogut llegir el fitxer de projecte %1."
+msgstr "No s'ha pogut llegir el directori %1."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1881
 #, kde-format

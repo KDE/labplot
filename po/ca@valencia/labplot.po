@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-28 00:38+0000\n"
-"PO-Revision-Date: 2025-07-31 17:31+0200\n"
+"PO-Revision-Date: 2025-08-28 09:35+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.04.0\n"
 "X-Accelerator-Marker: &\n"
 
 #: src/backend/core/AbstractAspect.cpp:234
@@ -10614,15 +10614,14 @@ msgid "Import data from a regular file"
 msgstr "Importa les dades des d'un fitxer normal"
 
 #: src/frontend/ActionsManager.cpp:269
-#, fuzzy, kde-format
-#| msgid "From File..."
+#, kde-format
 msgid "From Directory..."
-msgstr "Des del fitxer…"
+msgstr "Des del directori…"
 
 #: src/frontend/ActionsManager.cpp:271
 #, kde-format
 msgid "Import multiple files from a directory"
-msgstr ""
+msgstr "Importa diversos fitxers des d'un directori"
 
 #: src/frontend/ActionsManager.cpp:276
 #, kde-format
@@ -10834,7 +10833,7 @@ msgstr "Sense disposició"
 #: src/frontend/worksheet/WorksheetView.cpp:353
 #, kde-format
 msgid "Select and Edit"
-msgstr "Selecciona i edita"
+msgstr "Tria i edita"
 
 #: src/frontend/ActionsManager.cpp:548 src/frontend/ActionsManager.cpp:761
 #: src/frontend/datapicker/DatapickerImageView.cpp:134
@@ -10848,7 +10847,7 @@ msgstr "Navega"
 #: src/frontend/worksheet/WorksheetView.cpp:200
 #, kde-format
 msgid "Select and Zoom"
-msgstr "Selecciona i amplia"
+msgstr "Tria i amplia"
 
 #: src/frontend/ActionsManager.cpp:559 src/frontend/ActionsManager.cpp:795
 #, kde-format
@@ -10878,19 +10877,19 @@ msgstr "Creu"
 #: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Select Region and Zoom In"
-msgstr "Selecciona una regió i acosta"
+msgstr "Tria una regió i acosta"
 
 #: src/frontend/ActionsManager.cpp:600
 #: src/frontend/worksheet/WorksheetView.cpp:368
 #, kde-format
 msgid "Select X-Region and Zoom In"
-msgstr "Selecciona una regió de X i acosta"
+msgstr "Tria una regió de X i acosta"
 
 #: src/frontend/ActionsManager.cpp:605
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
 msgid "Select Y-Region and Zoom In"
-msgstr "Selecciona una regió de Y i acosta"
+msgstr "Tria una regió de Y i acosta"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1600
@@ -11095,7 +11094,7 @@ msgstr "Establix els punts de la corba"
 #: src/frontend/datapicker/DatapickerImageView.cpp:150
 #, kde-format
 msgid "Select Curve Segments"
-msgstr "Selecciona els segments de la corba"
+msgstr "Tria els segments de la corba"
 
 #: src/frontend/ActionsManager.cpp:772
 #: src/frontend/datapicker/DatapickerImageView.cpp:155
@@ -11899,8 +11898,7 @@ msgid "Matrix name:"
 msgstr "Nom de la matriu:"
 
 #: src/frontend/datasources/ImportDialog.cpp:154
-#, fuzzy, kde-format
-#| msgid "Add new folder"
+#, kde-format
 msgid "Add a new Folder"
 msgstr "Afig una carpeta nova"
 
@@ -11911,10 +11909,9 @@ msgid "Folder name:"
 msgstr "Nom de la carpeta:"
 
 #: src/frontend/datasources/ImportDialog.cpp:187
-#, fuzzy, kde-format
-#| msgid "Folder"
+#, kde-format
 msgid "New Folder"
-msgstr "Carpeta"
+msgstr "Carpeta nova"
 
 #: src/frontend/datasources/ImportDialog.cpp:191
 #: src/frontend/datasources/ImportDialog.cpp:195
@@ -11988,16 +11985,14 @@ msgid "File %1 imported in %2 seconds."
 msgstr "S'ha importat el fitxer %1 en %2 segons."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:203
-#, fuzzy, kde-format
-#| msgid "The project file %1 doesn't exist."
+#, kde-format
 msgid "The directory %1 doesn't exist."
-msgstr "El fitxer de projecte %1 no existix."
+msgstr "El directori %1 no existix."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:234
-#, fuzzy, kde-format
-#| msgid "File %1 imported in %2 seconds."
+#, kde-format
 msgid "%1 files imported in %2 seconds."
-msgstr "S'ha importat el fitxer %1 en %2 segons."
+msgstr "S'han importat %1 fitxers en %2 segons."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:408
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:152
@@ -12011,7 +12006,7 @@ msgstr ""
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:136
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
-msgstr "Seleccioneu un contenidor de dades on s'importaran les dades."
+msgstr "Trieu un contenidor de dades on s'importaran les dades."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:433
 #, kde-format
@@ -12282,18 +12277,16 @@ msgstr ""
 "porció de dades"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1054
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the File Data Source"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Directory Data Source"
-msgstr "Seleccioneu el fitxer d'origen de dades"
+msgstr "Trieu el directori d'origen de dades"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1056
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
-msgstr "Seleccioneu el fitxer d'origen de dades"
+msgstr "Trieu el fitxer d'origen de dades"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1086
 #, kde-format
@@ -12477,16 +12470,14 @@ msgid "Could not open file %1 for reading."
 msgstr "No s'ha pogut obrir el fitxer %1 per a lectura."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1789
-#, fuzzy, kde-format
-#| msgid "Number of records: %1"
+#, kde-format
 msgid "Number of sub-directories: %1"
-msgstr "Nombre de registres: %1"
+msgstr "Nombre de subdirectoris: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1792
-#, fuzzy, kde-format
-#| msgid "Couldn't read the project file %1."
+#, kde-format
 msgid "Couldn't read the directory %1."
-msgstr "No s'ha pogut llegir el fitxer de projecte %1."
+msgstr "No s'ha pogut llegir el directori %1."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1881
 #, kde-format
@@ -12739,10 +12730,10 @@ msgid ""
 "objects will be automatically selected.\n"
 "To import the whole project, select the top-level project node."
 msgstr ""
-"Seleccioneu un o més objectes per a ser importats al projecte actual.\n"
+"Trieu un o més objectes per a ser importats al projecte actual.\n"
 "Nota: se seleccionaran automàticament els fills dels objectes seleccionats "
 "així com tots els objectes dependents.\n"
-"Per a importar tot el projecte, seleccioneu el node del nivell superior."
+"Per a importar tot el projecte, trieu el node del nivell superior."
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:130
 #, kde-format
@@ -12832,8 +12823,8 @@ msgid ""
 "Select a valid database object (table or query result set) that has to be "
 "imported."
 msgstr ""
-"Seleccioneu un objecte de base de dades vàlid (taula o resultats de la "
-"consulta) que s'importarà."
+"Trieu un objecte de base de dades vàlid (taula o resultats de la consulta) "
+"que s'importarà."
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:42
 #, kde-format
@@ -13520,8 +13511,8 @@ msgstr "Apilat 100%"
 msgid ""
 "Select the data column for which the properties should be shown and edited"
 msgstr ""
-"Seleccioneu la columna de dades de la que s'han de mostrar i editar les "
-"seues propietats"
+"Trieu la columna de dades de la que s'han de mostrar i editar les seues "
+"propietats"
 
 #: src/frontend/dockwidgets/BarPlotDock.cpp:281
 #, kde-format
@@ -13649,28 +13640,26 @@ msgstr ""
 #, kde-format
 msgid "Select to modify the properties of the symbol for the mean value."
 msgstr ""
-"Seleccioneu-ho per a modificar les propietats del símbol del valor de la "
-"mitjana."
+"Trieu-ho per a modificar les propietats del símbol del valor de la mitjana."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:318
 #, kde-format
 msgid "Select to modify the properties of the symbol for the median value."
 msgstr ""
-"Seleccioneu-ho per a modificar les propietats del símbol del valor de la "
-"mediana."
+"Trieu-ho per a modificar les propietats del símbol del valor de la mediana."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:321
 #, kde-format
 msgid "Select to modify the properties of the symbol for the outlier values."
 msgstr ""
-"Seleccioneu-ho per a modificar les propietats del símbol dels valors atípics."
+"Trieu-ho per a modificar les propietats del símbol dels valors atípics."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:324
 #, kde-format
 msgid ""
 "Select to modify the properties of the symbol for the \"far out\" values."
 msgstr ""
-"Seleccioneu-ho per a modificar les propietats del símbol dels valors «molt "
+"Trieu-ho per a modificar les propietats del símbol dels valors «molt "
 "llunyans»."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:327
@@ -13679,7 +13668,7 @@ msgid ""
 "Select to modify the properties of the symbol for all data values excluding "
 "the outlier and \"far out\" values."
 msgstr ""
-"Seleccioneu-ho per a modificar les propietats del símbol de totes les dades "
+"Trieu-ho per a modificar les propietats del símbol de totes les dades "
 "excloent-hi els valors atípics i els «molt llunyans»."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:330
@@ -13687,8 +13676,7 @@ msgstr ""
 msgid ""
 "Select to modify the properties of the symbol for the ends of the whiskers."
 msgstr ""
-"Seleccioneu-ho per a modificar les propietats del símbol dels extrems dels "
-"bigots."
+"Trieu-ho per a modificar les propietats del símbol dels extrems dels bigots."
 
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:333
 #, kde-format
@@ -15577,7 +15565,7 @@ msgstr "Imatges (%1)"
 #: src/frontend/GuiTools.cpp:420
 #, kde-format
 msgid "Select file to load function definition"
-msgstr "Seleccioneu un fitxer per a carregar la definició de funció"
+msgstr "Trieu un fitxer per a carregar la definició de funció"
 
 #: src/frontend/GuiTools.cpp:437 src/frontend/GuiTools.cpp:516
 #, kde-format
@@ -15646,7 +15634,7 @@ msgid ""
 "Select an item in the list to navigate to the corresponding step."
 msgstr ""
 "Llista de tots els passos/accions realitzats.\n"
-"Seleccioneu un element de la llista per a anar fins al seu pas corresponent."
+"Trieu un element de la llista per a anar fins al seu pas corresponent."
 
 #: src/frontend/HistoryDialog.cpp:44
 #, kde-format
@@ -16212,7 +16200,7 @@ msgstr "&Neteja la selecció"
 #: src/frontend/worksheet/WorksheetView.cpp:139
 #, kde-format
 msgid "Select All"
-msgstr "Selecciona-ho tot"
+msgstr "Tria-ho tot"
 
 #: src/frontend/matrix/MatrixView.cpp:137
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:321
@@ -16582,7 +16570,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Select template search path"
-msgstr "Seleccioneu el camí de busca de plantilles"
+msgstr "Trieu el camí de busca de plantilles"
 
 #: src/frontend/PlotTemplateDialog.cpp:143
 #, kde-format
@@ -16673,8 +16661,8 @@ msgid ""
 "Data cannot be pasted into '%1' directly. Select a spreadsheet column for "
 "this."
 msgstr ""
-"No s'han pogut apegar les dades dins de «%1» directament. Seleccioneu una "
-"columna del full de càlcul per a fer-ho."
+"No s'han pogut apegar les dades dins de «%1» directament. Trieu una columna "
+"del full de càlcul per a fer-ho."
 
 #: src/frontend/ProjectExplorer.cpp:726
 #, kde-format
@@ -17089,8 +17077,8 @@ msgstr "Gran (7cm x 7cm)"
 msgid ""
 "No LaTeX installation found or selected. LaTeX typesetting not possible."
 msgstr ""
-"No s'ha trobat o seleccionat cap instal·lació de LaTeX. La composició "
-"tipogràfica de LaTeX no és possible."
+"No s'ha trobat o triat cap instal·lació de LaTeX. La composició tipogràfica "
+"de LaTeX no és possible."
 
 #: src/frontend/SettingsWorksheetPage.cpp:162
 #, kde-format
@@ -17787,7 +17775,7 @@ msgstr "Sintaxi incorrecta de la fórmula: "
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:218
 #, kde-format
 msgid "Select a valid column"
-msgstr "Seleccioneu una columna vàlida"
+msgstr "Trieu una columna vàlida"
 
 #: src/frontend/spreadsheet/FunctionValuesDialog.cpp:448
 #, kde-format
@@ -18781,12 +18769,12 @@ msgstr "%1: neteja les cel·les seleccionades"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3698
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
-msgstr "Seleccionat 1: %1 files, %2 columnes"
+msgstr "Triat 1: %1 files, %2 columnes"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3708
 #, kde-format
 msgid "Selected: %1 cells"
-msgstr "Seleccionat: %1 cel·les"
+msgstr "Triat: %1 cel·les"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3727
 #, kde-format
@@ -18842,12 +18830,12 @@ msgstr ", "
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3737
 #, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
-msgstr "Seleccionat: %1 %2, %3 %4%5 %6 %7 %8"
+msgstr "Triat: %1 %2, %3 %4%5 %6 %7 %8"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3747
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
-msgstr "Seleccionat: %1 %2%3 %4 %5 %6"
+msgstr "Triat: %1 %2%3 %4 %5 %6"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3828
 #, kde-format
@@ -22936,13 +22924,13 @@ msgstr "Graus del model d'ajust"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:611
 #, kde-format
 msgid "Select predefined function"
-msgstr "Selecciona la funció predefinida"
+msgstr "Tria la funció predefinida"
 
 #. i18n: ectx: property (whatsThis), widget (QToolButton, tbConstants)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:624
 #, kde-format
 msgid "Select predefined constants"
-msgstr "Selecciona les constants predefinides"
+msgstr "Tria les constants predefinides"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFit)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:658
@@ -23349,7 +23337,7 @@ msgstr "Màx. de repeticions:"
 #: src/frontend/ui/fitoptionswidget.ui:141
 #, kde-format
 msgid "Select range of data to use for fitting"
-msgstr "Selecciona un interval de dades que s'utilitzarà per a ajustar"
+msgstr "Tria un interval de dades que s'utilitzarà per a ajustar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbAutoRange)
 #: src/frontend/ui/fitoptionswidget.ui:144
@@ -23361,7 +23349,7 @@ msgstr "Ajust automàtic d'interval"
 #: src/frontend/ui/fitoptionswidget.ui:154
 #, kde-format
 msgid "Select the range to evaluate the resulting fit function"
-msgstr "Seleccioneu l'interval per a avaluar la funció d'ajust resultant"
+msgstr "Trieu l'interval per a avaluar la funció d'ajust resultant"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbAutoEvalRange)
 #: src/frontend/ui/fitoptionswidget.ui:157
@@ -24703,7 +24691,7 @@ msgid ""
 "Select the range for the value, the degree of lightness of the color.\n"
 "Everything outside of this range will be set to white."
 msgstr ""
-"Seleccioneu l'interval per al valor del grau de claredat del color.\n"
+"Trieu l'interval per al valor del grau de claredat del color.\n"
 "Qualsevol valor fora d'este interval s'establirà com a blanc."
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:351
@@ -24713,7 +24701,7 @@ msgid ""
 "Select the range for the intensity.\n"
 "Everything outside of this range will be set to white."
 msgstr ""
-"Seleccioneu l'interval per a la intensitat.\n"
+"Trieu l'interval per a la intensitat.\n"
 "Qualsevol valor fora d'este interval s'establirà com a blanc."
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:353
@@ -24723,7 +24711,7 @@ msgid ""
 "Select the range for the colors that are not part of the background color.\n"
 "Everything outside of this range will be set to white."
 msgstr ""
-"Seleccioneu l'interval dels colors que no formen part del color de fons.\n"
+"Trieu l'interval dels colors que no formen part del color de fons.\n"
 "Qualsevol valor fora d'este interval s'establirà com a blanc."
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:354
@@ -24733,7 +24721,7 @@ msgid ""
 "Select the range for the hue.\n"
 "Everything outside of this range will be set to white."
 msgstr ""
-"Seleccioneu l'interval per al to.\n"
+"Trieu l'interval per al to.\n"
 "Qualsevol valor fora d'este interval s'establirà com a blanc."
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:355
@@ -24743,7 +24731,7 @@ msgid ""
 "Select the range for the saturation.\n"
 "Everything outside of this range will be set to white."
 msgstr ""
-"Seleccioneu l'interval per a la saturació.\n"
+"Trieu l'interval per a la saturació.\n"
 "Qualsevol valor fora d'este interval s'establirà com a blanc."
 
 #: src/frontend/widgets/DatapickerImageWidget.cpp:367
