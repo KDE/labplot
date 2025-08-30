@@ -55,8 +55,12 @@ private Q_SLOTS:
 
 	void addRow();
 	void removeRow();
+
 	void addColumn();
 	void removeColumn();
+
+	void addValue();
+	void removeValue();
 
 Q_SIGNALS:
 	void info(const QString&);

@@ -124,6 +124,21 @@ void PivotTable::removeFromColumns(const QString& field) {
 	d->removeFromColumns(field);
 }
 
+const QStringList& PivotTable::values() const {
+	Q_D(const PivotTable);
+	return d->values;
+}
+
+void PivotTable::addToValues(const QString& field) {
+	Q_D(PivotTable);
+	d->addToValues(field);
+}
+
+void PivotTable::removeFromValues(const QString& field) {
+	Q_D(PivotTable);
+	d->removeFromValues(field);
+}
+
 bool PivotTable::exportView() const {
 	return true;
 }
@@ -199,45 +214,15 @@ void PivotTablePrivate::removeFromColumns(const QString& field) {
 	recalculate();
 }
 
-/*
-QStringList PivotTablePrivate::members(const QString& dimension, PivotTable::SortType sort) {
-	//check whether we have the members already
-	if (m_members.contains(dimension))
-		return m_members.value(dimension);
-
-	QStringList members;
-
-	//construct the query
-	QString query;
-	swich case (sort) {
-	case PivotTable::NoSort:
-		query = "SELECT DISTINCT " + dimension " FROM pivot;";
-		break;
-	case PivotTable::SortAscending:
-		query = "SELECT DISTINCT " + dimension " FROM pivot ASC;";
-		break;
-	case PivotTable::SortDescending:
-		query = "SELECT DISTINCT " + dimension " FROM pivot DESC;";
-		break;
-	}
-
-	//execute the query
-	QSqlQuery q;
-	if (!q.exec(query)) {
-		KMessageBox::error(nullptr, i18n("Failed to process the query.") + "\n" + q.lastError().databaseText());
-		return members;
-	}
-
-	//copy the results to the string list
-	while (query.next())
-		members << query.value(0).toString();
-
-	//cache the members of the new dimension
-	m_members[dimension] = members;
-
-	return members;
+void PivotTablePrivate::addToValues(const QString& field) {
+	values << field;
+	recalculate();
 }
-*/
+
+void PivotTablePrivate::removeFromValues(const QString& field) {
+	values.removeOne(field);
+	recalculate();
+}
 
 void PivotTablePrivate::recalculate() {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
@@ -535,6 +520,7 @@ void PivotTable::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("dataSourceSpreadsheet"), d->dataSourceSpreadsheet->path());
 	WRITE_STRING_LIST("rows", d->rows);
 	WRITE_STRING_LIST("columns", d->columns);
+	WRITE_STRING_LIST("values", d->values);
 	writer->writeEndElement();
 }
 
@@ -567,6 +553,7 @@ bool PivotTable::load(XmlStreamReader* reader, bool preview) {
 				d->dataSourceSpreadsheetPath = str;
 				READ_STRING_LIST("rows", d->rows);
 				READ_STRING_LIST("columns", d->columns);
+				READ_STRING_LIST("values", d->values);
 			} else { // unknown element
 				reader->raiseUnknownElementWarning();
 				if (!reader->skipToEndElement())

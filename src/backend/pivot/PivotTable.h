@@ -50,6 +50,10 @@ public:
 	void addToColumns(const QString&);
 	void removeFromColumns(const QString&);
 
+	const QStringList& values() const;
+	void addToValues(const QString&);
+	void removeFromValues(const QString&);
+
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	QWidget* view() const override;

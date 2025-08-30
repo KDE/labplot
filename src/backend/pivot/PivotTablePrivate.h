@@ -28,6 +28,9 @@ public:
 	void addToColumns(const QString&);
 	void removeFromColumns(const QString&);
 
+	void addToValues(const QString&);
+	void removeFromValues(const QString&);
+
 	void recalculate();
 	void createDb();
 
@@ -47,6 +50,7 @@ public:
 	QStringList measures;
 	QStringList rows;
 	QStringList columns;
+	QStringList values;
 	bool showNulls{false};
 	bool showTotals{true};
 	PivotTable::SortType sortType{PivotTable::NoSort};
