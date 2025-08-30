@@ -25,9 +25,9 @@ class PivotTable : public AbstractPart {
 public:
 	explicit PivotTable(const QString& name, bool loading = false);
 
-	enum DataSourceType { DataSourceSpreadsheet, DataSourceDatabase };
-	enum AggregationType { AggregationCount, AggregationSum, AggregationMin, AggregationMax };
-	enum SortType { NoSort, SortAscending, SortDescending };
+	enum class DataSourceType { Spreadsheet, Database };
+	enum class Aggregation { Count, Sum, Min, Max, Avg };
+	enum class Sort { NoSort, Ascending, Descending };
 
 	BASIC_D_ACCESSOR_DECL(DataSourceType, dataSourceType, DataSourceType)
 	POINTER_D_ACCESSOR_DECL(const Spreadsheet, dataSourceSpreadsheet, DataSourceSpreadsheet)

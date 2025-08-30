@@ -239,7 +239,7 @@ void PivotTablePrivate::recalculate() {
 	verticalHeaderModel->clear();
 
 	// nothing to do if no spreadsheet is set yet
-	if (dataSourceType == PivotTable::DataSourceSpreadsheet && !dataSourceSpreadsheet) {
+	if (dataSourceType == PivotTable::DataSourceType::Spreadsheet && !dataSourceSpreadsheet) {
 		Q_EMIT q->changed(); // notify about the new result
 		RESET_CURSOR;
 		return;
@@ -251,7 +251,7 @@ void PivotTablePrivate::recalculate() {
 		return;
 	}
 
-	if (dataSourceType == PivotTable::DataSourceSpreadsheet && m_dbTableName != dataSourceSpreadsheet->uuid().toString(QUuid::Id128)) {
+	if (dataSourceType == PivotTable::DataSourceType::Spreadsheet && m_dbTableName != dataSourceSpreadsheet->uuid().toString(QUuid::Id128)) {
 		createDb();
 		if (m_dbTableName.isEmpty()) {
 			Q_EMIT q->changed(); // notify about the new result
@@ -281,46 +281,75 @@ void PivotTablePrivate::recalculate() {
 
 QString PivotTablePrivate::createSQLQuery() const {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
-	QString query{QLatin1String("SELECT ")};
-	QString groupByString;
 
-	if (!showNulls) {
-		// if we don't need to show combinations with empty intersections, put everything into GROUP BY
-		if (!rows.isEmpty())
-			groupByString = rows.join(QLatin1Char(','));
-
-		if (!columns.isEmpty()) {
-			if (!groupByString.isEmpty())
-				groupByString += QLatin1Char(',');
-			groupByString += columns.join(QLatin1Char(','));
-		}
-
-		if (!groupByString.isEmpty()) {
-			query += groupByString;
-			// if (showTotals)
-			query += QLatin1String(", COUNT(*) FROM ") + m_dbTableName;
-
-			query += QLatin1String(" GROUP BY ") + groupByString;
-
-			if (!sortDimension.isEmpty()) {
-				switch (sortType) {
-				case PivotTable::NoSort:
-					query += QLatin1String(" ORDER BY ") + sortDimension;
-					break;
-				case PivotTable::SortAscending:
-					query += QLatin1String(" ORDER BY ") + sortDimension + QLatin1String(" ASC");
-					break;
-				case PivotTable::SortDescending:
-					query += QLatin1String(" ORDER BY ") + sortDimension + QLatin1String(" DESC");
-					break;
-				}
+	// SELECT part
+	// add values to the selection
+	QString valuesString;
+	if ((!values.isEmpty())) {
+		QStringList valuesList;
+		for (const auto& value : values) {
+			switch (aggregationType) {
+			case PivotTable::Aggregation::Count:
+				valuesList << QLatin1String("COUNT(") + value + QLatin1Char(')');
+				break;
+			case PivotTable::Aggregation::Sum:
+				valuesList << QLatin1String("SUM(") + value + QLatin1Char(')');
+				break;
+			case PivotTable::Aggregation::Min:
+				valuesList << QLatin1String("MIN(") + value + QLatin1Char(')');
+				break;
+			case PivotTable::Aggregation::Max:
+				valuesList << QLatin1String("MAX(") + value + QLatin1Char(')');
+				break;
+			case PivotTable::Aggregation::Avg:
+				valuesList << QLatin1String("AVG(") + value + QLatin1Char(')');
+				break;
 			}
-		} else {
-			// no dimensions selected, show totals only
-			query += QLatin1String("COUNT(*) FROM ") + m_dbTableName;
 		}
-	} else {
 
+		valuesString = valuesList.join(QLatin1Char(','));
+	} else {
+		valuesString = QLatin1String("COUNT(*)");
+	}
+
+	// add dimensions to the selection
+	QString dimensionsString;
+	if (!rows.isEmpty())
+		dimensionsString = rows.join(QLatin1Char(','));
+
+	if (!columns.isEmpty()) {
+		if (!dimensionsString.isEmpty())
+			dimensionsString += QLatin1Char(',');
+		dimensionsString += columns.join(QLatin1Char(','));
+	}
+
+	QString query = QLatin1String("SELECT ") + valuesString;
+	if (!dimensionsString.isEmpty())
+		query += QLatin1Char(',') + dimensionsString;
+
+	// FROM part
+	query += QLatin1String(" FROM ") + m_dbTableName;
+
+	// WHERE part
+	// TODO: implement filtering
+
+	// GROUP BY part
+	if (!dimensionsString.isEmpty())
+		query += QLatin1String(" GROUP BY ") + dimensionsString;
+
+	// ORDER BY part
+	if (!sortDimension.isEmpty()) {
+		switch (sortType) {
+		case PivotTable::Sort::NoSort:
+			query += QLatin1String(" ORDER BY ") + sortDimension;
+			break;
+		case PivotTable::Sort::Ascending:
+			query += QLatin1String(" ORDER BY ") + sortDimension + QLatin1String(" ASC");
+			break;
+		case PivotTable::Sort::Descending:
+			query += QLatin1String(" ORDER BY ") + sortDimension + QLatin1String(" DESC");
+			break;
+		}
 	}
 
 	return query;
@@ -516,7 +545,7 @@ void PivotTable::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	writer->writeStartElement(QStringLiteral("general"));
-	writer->writeAttribute(QStringLiteral("dataSourceType"), QString::number(d->dataSourceType));
+	writer->writeAttribute(QStringLiteral("dataSourceType"), QString::number(static_cast<int>(d->dataSourceType)));
 	writer->writeAttribute(QStringLiteral("dataSourceSpreadsheet"), d->dataSourceSpreadsheet->path());
 	WRITE_STRING_LIST("rows", d->rows);
 	WRITE_STRING_LIST("columns", d->columns);

@@ -1173,7 +1173,7 @@ void SpreadsheetView::showSparklines(bool on) {
 
 void SpreadsheetView::createPivotTable() {
 	auto* pivot = new PivotTable(i18n("Pivot Table for %1", m_spreadsheet->name()));
-	pivot->setDataSourceType(PivotTable::DataSourceSpreadsheet);
+	pivot->setDataSourceType(PivotTable::DataSourceType::Spreadsheet);
 	pivot->setDataSourceSpreadsheet(m_spreadsheet);
 	m_spreadsheet->parentAspect()->addChild(pivot);
 }

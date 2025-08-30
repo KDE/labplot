@@ -270,8 +270,8 @@ bool PivotTableDock::fieldSelected(const QString& field) {
 //****** SLOTs for changes triggered in PivotTableDock *******
 //*************************************************************
 void PivotTableDock::dataSourceTypeChanged(int index) {
-	PivotTable::DataSourceType type = (PivotTable::DataSourceType)index;
-	const bool showDatabase = (type == PivotTable::DataSourceDatabase);
+	auto type = (PivotTable::DataSourceType)index;
+	const bool showDatabase = (type == PivotTable::DataSourceType::Database);
 	ui.lSpreadsheet->setVisible(!showDatabase);
 	cbSpreadsheet->setVisible(!showDatabase);
 	ui.lConnection->setVisible(showDatabase);
@@ -399,7 +399,7 @@ void PivotTableDock::tableChanged() {
 //******************** SETTINGS *******************************
 //*************************************************************
 void PivotTableDock::load() {
-	ui.cbDataSourceType->setCurrentIndex(m_pivotTable->dataSourceType());
+	ui.cbDataSourceType->setCurrentIndex(static_cast<int>(m_pivotTable->dataSourceType()));
 	cbSpreadsheet->setAspect(m_pivotTable->dataSourceSpreadsheet());
 	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(m_pivotTable->dataSourceConnection()));
 	dataSourceTypeChanged(ui.cbDataSourceType->currentIndex());

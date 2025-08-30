@@ -36,7 +36,7 @@ public:
 
 	PivotTable* const q;
 
-	PivotTable::DataSourceType dataSourceType{PivotTable::DataSourceSpreadsheet};
+	PivotTable::DataSourceType dataSourceType{PivotTable::DataSourceType::Spreadsheet};
 	const Spreadsheet* dataSourceSpreadsheet{nullptr};
 	QString dataSourceSpreadsheetPath; // path to the spreadsheet file, used for loading/saving
 	QString dataSourceConnection;
@@ -53,8 +53,8 @@ public:
 	QStringList values;
 	bool showNulls{false};
 	bool showTotals{true};
-	PivotTable::SortType sortType{PivotTable::NoSort};
-	PivotTable::AggregationType aggregationType{PivotTable::AggregationCount};
+	PivotTable::Sort sortType{PivotTable::Sort::NoSort};
+	PivotTable::Aggregation aggregationType{PivotTable::Aggregation::Count};
 	QString sortDimension;
 
 private:
