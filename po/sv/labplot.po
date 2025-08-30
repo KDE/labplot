@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-28 00:38+0000\n"
-"PO-Revision-Date: 2025-07-31 08:02+0200\n"
+"PO-Revision-Date: 2025-08-29 08:04+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.08.0\n"
 
 #: src/backend/core/AbstractAspect.cpp:234
 #, kde-format
@@ -10497,15 +10497,14 @@ msgid "Import data from a regular file"
 msgstr "Importera data från en vanlig fil"
 
 #: src/frontend/ActionsManager.cpp:269
-#, fuzzy, kde-format
-#| msgid "From File..."
+#, kde-format
 msgid "From Directory..."
-msgstr "Från fil..."
+msgstr "Från katalog..."
 
 #: src/frontend/ActionsManager.cpp:271
 #, kde-format
 msgid "Import multiple files from a directory"
-msgstr ""
+msgstr "Importera flera filer från en katalog"
 
 #: src/frontend/ActionsManager.cpp:276
 #, kde-format
@@ -11774,8 +11773,7 @@ msgid "Matrix name:"
 msgstr "Matrisnamn:"
 
 #: src/frontend/datasources/ImportDialog.cpp:154
-#, fuzzy, kde-format
-#| msgid "Add new folder"
+#, kde-format
 msgid "Add a new Folder"
 msgstr "Lägg till ny katalog"
 
@@ -11786,10 +11784,9 @@ msgid "Folder name:"
 msgstr "Katalognamn:"
 
 #: src/frontend/datasources/ImportDialog.cpp:187
-#, fuzzy, kde-format
-#| msgid "Folder"
+#, kde-format
 msgid "New Folder"
-msgstr "Katalog"
+msgstr "Ny katalog"
 
 #: src/frontend/datasources/ImportDialog.cpp:191
 #: src/frontend/datasources/ImportDialog.cpp:195
@@ -11863,16 +11860,14 @@ msgid "File %1 imported in %2 seconds."
 msgstr "Filen %1 importerad på %2 sekunder."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:203
-#, fuzzy, kde-format
-#| msgid "The project file %1 doesn't exist."
+#, kde-format
 msgid "The directory %1 doesn't exist."
-msgstr "Projektfilen %1 finns inte."
+msgstr "Katalogen %1 finns inte."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:234
-#, fuzzy, kde-format
-#| msgid "File %1 imported in %2 seconds."
+#, kde-format
 msgid "%1 files imported in %2 seconds."
-msgstr "Filen %1 importerad på %2 sekunder."
+msgstr "%1 filer importerade på %2 sekunder."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:408
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:152
@@ -12150,12 +12145,10 @@ msgid ""
 msgstr "Antalet rader beräknas från värdena i datadelens flik"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1054
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the File Data Source"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Directory Data Source"
-msgstr "Välj filens datakälla"
+msgstr "Välj katalogens datakälla"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1056
 #, kde-format
@@ -12342,16 +12335,14 @@ msgid "Could not open file %1 for reading."
 msgstr "Kunde inte öppna filen %1 för läsning."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1789
-#, fuzzy, kde-format
-#| msgid "Number of records: %1"
+#, kde-format
 msgid "Number of sub-directories: %1"
-msgstr "Antal poster: %1"
+msgstr "Antal underkataloger: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1792
-#, fuzzy, kde-format
-#| msgid "Couldn't read the project file %1."
+#, kde-format
 msgid "Couldn't read the directory %1."
-msgstr "Kunde inte läsa projektfilen %1."
+msgstr "Kunde inte läsa katalogen %1."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1881
 #, kde-format
