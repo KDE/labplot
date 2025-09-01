@@ -18,6 +18,7 @@
 
 class PivotTable;
 class TreeViewComboBox;
+class QComboBox;
 class KConfig;
 
 class PivotTableDock : public BaseDock {
@@ -27,7 +28,6 @@ public:
 	explicit PivotTableDock(QWidget*);
 	void setPivotTable(PivotTable*);
 
-	void updateLocale() override;
 	void retranslateUi() override;
 
 private:
@@ -37,10 +37,14 @@ private:
 	PivotTable* m_pivotTable{nullptr};
 	QSqlDatabase m_db;
 	QString m_configPath;
+	QVector<QComboBox*> m_valueNameComboBoxes;
+	QVector<QComboBox*> m_valueAggregationComboBoxes;
+	QVector<QPushButton*> m_removeValueButtons;
 
 	void load();
+	void loadFields();
+	void loadValues();
 	void readConnections();
-	void updateFields();
 	bool fieldSelected(const QString&);
 
 private Q_SLOTS:

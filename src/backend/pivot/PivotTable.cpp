@@ -124,21 +124,14 @@ void PivotTable::removeFromColumns(const QString& field) {
 	d->removeFromColumns(field);
 }
 
-const QStringList& PivotTable::values() const {
-	Q_D(const PivotTable);
-	return d->values;
-}
+BASIC_SHARED_D_READER_IMPL(PivotTable, QVector<PivotTable::Value>, values, values)
 
-void PivotTable::addToValues(const QString& field) {
+STD_SETTER_CMD_IMPL_F_S(PivotTable, SetValues, QVector<PivotTable::Value>, values, recalculate)
+void PivotTable::setValues(const QVector<Value> values) {
 	Q_D(PivotTable);
-	d->addToValues(field);
+	// if (columns != d->dataColumns)
+		exec(new PivotTableSetValuesCmd(d, values, ki18n("%1: set values")));
 }
-
-void PivotTable::removeFromValues(const QString& field) {
-	Q_D(PivotTable);
-	d->removeFromValues(field);
-}
-
 bool PivotTable::exportView() const {
 	return true;
 }
@@ -214,16 +207,6 @@ void PivotTablePrivate::removeFromColumns(const QString& field) {
 	recalculate();
 }
 
-void PivotTablePrivate::addToValues(const QString& field) {
-	values << field;
-	recalculate();
-}
-
-void PivotTablePrivate::removeFromValues(const QString& field) {
-	values.removeOne(field);
-	recalculate();
-}
-
 void PivotTablePrivate::recalculate() {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	WAIT_CURSOR;
@@ -288,21 +271,21 @@ QString PivotTablePrivate::createSQLQuery() const {
 	if ((!values.isEmpty())) {
 		QStringList valuesList;
 		for (const auto& value : values) {
-			switch (aggregationType) {
+			switch (value.aggregation) {
 			case PivotTable::Aggregation::Count:
-				valuesList << QLatin1String("COUNT(") + value + QLatin1Char(')');
+				valuesList << QLatin1String("COUNT(") + value.name + QLatin1Char(')');
 				break;
 			case PivotTable::Aggregation::Sum:
-				valuesList << QLatin1String("SUM(") + value + QLatin1Char(')');
+				valuesList << QLatin1String("SUM(") + value.name + QLatin1Char(')');
 				break;
 			case PivotTable::Aggregation::Min:
-				valuesList << QLatin1String("MIN(") + value + QLatin1Char(')');
+				valuesList << QLatin1String("MIN(") + value.name + QLatin1Char(')');
 				break;
 			case PivotTable::Aggregation::Max:
-				valuesList << QLatin1String("MAX(") + value + QLatin1Char(')');
+				valuesList << QLatin1String("MAX(") + value.name + QLatin1Char(')');
 				break;
 			case PivotTable::Aggregation::Avg:
-				valuesList << QLatin1String("AVG(") + value + QLatin1Char(')');
+				valuesList << QLatin1String("AVG(") + value.name + QLatin1Char(')');
 				break;
 			}
 		}
@@ -549,7 +532,7 @@ void PivotTable::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("dataSourceSpreadsheet"), d->dataSourceSpreadsheet->path());
 	WRITE_STRING_LIST("rows", d->rows);
 	WRITE_STRING_LIST("columns", d->columns);
-	WRITE_STRING_LIST("values", d->values);
+	// WRITE_STRING_LIST("values", d->values);
 	writer->writeEndElement();
 }
 
@@ -582,7 +565,7 @@ bool PivotTable::load(XmlStreamReader* reader, bool preview) {
 				d->dataSourceSpreadsheetPath = str;
 				READ_STRING_LIST("rows", d->rows);
 				READ_STRING_LIST("columns", d->columns);
-				READ_STRING_LIST("values", d->values);
+				// READ_STRING_LIST("values", d->values);
 			} else { // unknown element
 				reader->raiseUnknownElementWarning();
 				if (!reader->skipToEndElement())

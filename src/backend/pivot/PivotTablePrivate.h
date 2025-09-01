@@ -50,7 +50,7 @@ public:
 	QStringList measures;
 	QStringList rows;
 	QStringList columns;
-	QStringList values;
+	QVector<PivotTable::Value> values;
 	bool showNulls{false};
 	bool showTotals{true};
 	PivotTable::Sort sortType{PivotTable::Sort::NoSort};

@@ -50,17 +50,14 @@ PivotTableDock::PivotTableDock(QWidget* parent) : BaseDock(parent) {
 	ui.bRemoveRow->setIcon(style->standardIcon(QStyle::SP_ArrowLeft));
 	ui.bAddColumn->setIcon(style->standardIcon(QStyle::SP_ArrowRight));
 	ui.bRemoveColumn->setIcon(style->standardIcon(QStyle::SP_ArrowLeft));
-	ui.bAddValue->setIcon(style->standardIcon(QStyle::SP_ArrowRight));
-	ui.bRemoveValue->setIcon(style->standardIcon(QStyle::SP_ArrowLeft));
 	ui.bDatabaseManager->setIcon(QIcon::fromTheme(QLatin1String("network-server-database")));
+	ui.bAddValue->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 
 	//add/remove buttons only enabled if something was selected
 	ui.bAddRow->setEnabled(false);
 	ui.bRemoveRow->setEnabled(false);
 	ui.bAddColumn->setEnabled(false);
 	ui.bRemoveColumn->setEnabled(false);
-	ui.bAddValue->setEnabled(false);
-	ui.bRemoveValue->setEnabled(false);
 
 	retranslateUi();
 
@@ -81,13 +78,9 @@ PivotTableDock::PivotTableDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.bRemoveColumn, &QPushButton::clicked, this,&PivotTableDock::removeColumn);
 
 	connect(ui.lwFields, &QListWidget::itemSelectionChanged, this, [=]() {
-		bool enabled = !ui.lwFields->selectedItems().isEmpty();
+		const bool enabled = !ui.lwFields->selectedItems().isEmpty();
 		ui.bAddRow->setEnabled(enabled);
 		ui.bAddColumn->setEnabled(enabled);
-		if (enabled) // add value enabled for numerical columns ("measures") only
-			ui.bAddValue->setEnabled(m_pivotTable->measures().indexOf(ui.lwFields->currentItem()->text()) != -1);
-		else
-			ui.bAddValue->setEnabled(false);
 	});
 
 	connect(ui.lwRows, &QListWidget::doubleClicked, this,&PivotTableDock::removeRow);
@@ -117,10 +110,6 @@ void PivotTableDock::setPivotTable(PivotTable* pivotTable) {
 	//TODO:
 }
 
-void PivotTableDock::updateLocale() {
-
-}
-
 void PivotTableDock::retranslateUi() {
 	ui.cbDataSourceType->clear();
 	ui.cbDataSourceType->addItem(i18n("Spreadsheet"));
@@ -131,8 +120,7 @@ void PivotTableDock::retranslateUi() {
 	ui.bRemoveRow->setToolTip(i18n("Remove the selected field from rows"));
 	ui.bAddColumn->setToolTip(i18n("Add the selected field to columns"));
 	ui.bRemoveColumn->setToolTip(i18n("Remove the selected field from columns"));
-	ui.bAddValue->setToolTip(i18n("Add the selected field to values"));
-	ui.bRemoveValue->setToolTip(i18n("Remove the selected field from values"));
+	ui.bAddValue->setToolTip(i18n("Add new value"));
 }
 
 /*!
@@ -186,7 +174,7 @@ void PivotTableDock::removeRow() {
 	const QString& field = ui.lwRows->currentItem()->text();
 	ui.lwRows->takeItem(ui.lwRows->currentRow());
 	m_pivotTable->removeFromRows(field);
-	updateFields();
+	loadFields();
 }
 
 /*!
@@ -206,64 +194,64 @@ void PivotTableDock::removeColumn() {
 	const QString& field = ui.lwColumns->currentItem()->text();
 	ui.lwColumns->takeItem(ui.lwColumns->currentRow());
 	m_pivotTable->removeFromColumns(field);
-	updateFields();
+	loadFields();
 }
 
 /*!
  * adds the selected field to the values
  */
 void PivotTableDock::addValue() {
-	QString field = ui.lwFields->currentItem()->text();
-	ui.lwValues->addItem(field);
-	// TODO
-	ui.lwFields->takeItem(ui.lwFields->currentRow());
-	m_pivotTable->addToValues(field);
+	QComboBox* cbValueName = nullptr;
+	QComboBox* cbValueAggregation = nullptr;
+	if (m_valueNameComboBoxes.count() == 0) {
+		cbValueName = ui.cbValueName;
+		cbValueAggregation = ui.cbValueAggregation;
+	} else {
+		// create comboboxes for the new value
+	}
+
+	cbValueName->clear();
+	cbValueName->addItem(QString());
+	for (auto measure : m_pivotTable->measures())
+		cbValueName->addItem(measure);
+
+	cbValueAggregation->addItem(i18n("Count"), static_cast<int>(PivotTable::Aggregation::Count));
+	cbValueAggregation->addItem(i18n("Sum"), static_cast<int>(PivotTable::Aggregation::Sum));
+	cbValueAggregation->addItem(i18n("Minimum"), static_cast<int>(PivotTable::Aggregation::Min));
+	cbValueAggregation->addItem(i18n("Maximum"), static_cast<int>(PivotTable::Aggregation::Max));
+	cbValueAggregation->addItem(i18n("Average"), static_cast<int>(PivotTable::Aggregation::Avg));
 }
 
 /*!
  * removes the selected field from the values
  */
 void PivotTableDock::removeValue() {
-	const QString& field = ui.lwValues->currentItem()->text();
-	ui.lwValues->takeItem(ui.lwValues->currentRow());
 	// TODO
-	m_pivotTable->removeFromValues(field);
-	updateFields();
 }
 
 /*!
  * re-populates the content of the "Fields" list widget by adding the non-selected fields only.
- * called when a selected field is removed from rows, columns or values.
+ * called when a selected field is removed from rows or columns.
  */
-void PivotTableDock::updateFields() {
+void PivotTableDock::loadFields() {
 	ui.lwFields->clear();
 	for (auto dimension : m_pivotTable->dimensions())
 		if (!fieldSelected(dimension))
 			ui.lwFields->addItem(new QListWidgetItem(QIcon::fromTheme(QLatin1String("draw-text")), dimension));
+}
 
-	for (auto measure : m_pivotTable->measures())
-		if (!fieldSelected(measure))
-			ui.lwFields->addItem(new QListWidgetItem(measure));
+void PivotTableDock::loadValues() {
+	const auto& values = m_pivotTable->values();
+
 }
 
 /*!
- * return \c true if the field name \c field was selected among rows, columns or .
+ * return \c true if the field name \c field was selected among rows or columns.
  * return \c false otherwise.
  * */
 bool PivotTableDock::fieldSelected(const QString& field) {
-	for (int i = 0; i<ui.lwRows->count(); ++i)
-		if (ui.lwRows->item(i)->text() == field)
-			return true;
-
-	for (int i = 0; i<ui.lwColumns->count(); ++i)
-		if (ui.lwColumns->item(i)->text() == field)
-			return true;
-
-	for (int i = 0; i<ui.lwValues->count(); ++i)
-		if (ui.lwValues->item(i)->text() == field)
-			return true;
-
-	return false;
+	const bool selected = m_pivotTable->rows().indexOf(field) != -1 || m_pivotTable->columns().indexOf(field) != -1;
+	return selected;
 }
 
 //*************************************************************
@@ -298,7 +286,7 @@ void PivotTableDock::spreadsheetChanged(const QModelIndex& index) {
 
 	const auto* spreadsheet = static_cast<Spreadsheet*>(index.internalPointer());
 	m_pivotTable->setDataSourceSpreadsheet(spreadsheet);
-	updateFields();
+	loadFields();
 }
 
 void PivotTableDock::connectionChanged() {
@@ -412,10 +400,7 @@ void PivotTableDock::load() {
 	for (const auto& column : m_pivotTable->columns())
 		ui.lwColumns->addItem(new QListWidgetItem(column));
 
-	ui.lwValues->clear();
-	for (const auto& value : m_pivotTable->values())
-		ui.lwValues->addItem(new QListWidgetItem(value));
-
-	// available dimensions and measures
-	updateFields();
+	// fields, values
+	loadFields();
+	loadValues();
 }

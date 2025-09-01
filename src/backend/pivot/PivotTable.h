@@ -29,6 +29,11 @@ public:
 	enum class Aggregation { Count, Sum, Min, Max, Avg };
 	enum class Sort { NoSort, Ascending, Descending };
 
+	struct Value {
+		QString name;
+		Aggregation aggregation;
+	};
+
 	BASIC_D_ACCESSOR_DECL(DataSourceType, dataSourceType, DataSourceType)
 	POINTER_D_ACCESSOR_DECL(const Spreadsheet, dataSourceSpreadsheet, DataSourceSpreadsheet)
 	QString dataSourceSpreadsheetPath() const;
@@ -50,9 +55,7 @@ public:
 	void addToColumns(const QString&);
 	void removeFromColumns(const QString&);
 
-	const QStringList& values() const;
-	void addToValues(const QString&);
-	void removeFromValues(const QString&);
+	BASIC_D_ACCESSOR_DECL(QVector<Value>, values, Values)
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
@@ -80,6 +83,7 @@ Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
 	void dataSourceTypeChanged(PivotTable::DataSourceType);
 	void dataSourceSpreadsheetChanged(const Spreadsheet*);
+	void valuesChanged(const QVector<Value>&);
 };
 
 #endif
