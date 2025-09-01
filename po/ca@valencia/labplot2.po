@@ -10127,7 +10127,7 @@ msgstr "&Neteja la selecció"
 #: src/kdefrontend/ui/dockwidgets/statisticsspreadsheetdock.ui:288
 #, kde-format
 msgid "Select All"
-msgstr "Tria-ho tot"
+msgstr "Selecciona-ho tot"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:137
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:319
