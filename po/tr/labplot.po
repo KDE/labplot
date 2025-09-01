@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-28 00:38+0000\n"
-"PO-Revision-Date: 2025-08-01 12:55+0300\n"
+"PO-Revision-Date: 2025-08-30 18:51+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.04.2\n"
+"X-Generator: Lokalize 25.08.0\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #: src/backend/core/AbstractAspect.cpp:234
@@ -10498,15 +10498,14 @@ msgid "Import data from a regular file"
 msgstr "Normal bir dosyadan veri içe aktar"
 
 #: src/frontend/ActionsManager.cpp:269
-#, fuzzy, kde-format
-#| msgid "From File..."
+#, kde-format
 msgid "From Directory..."
-msgstr "Dosyadan…"
+msgstr "Dizinden…"
 
 #: src/frontend/ActionsManager.cpp:271
 #, kde-format
 msgid "Import multiple files from a directory"
-msgstr ""
+msgstr "Dizinden Birden Çok Dosya İçe Aktar"
 
 #: src/frontend/ActionsManager.cpp:276
 #, kde-format
@@ -11777,10 +11776,9 @@ msgid "Matrix name:"
 msgstr "Matris adı:"
 
 #: src/frontend/datasources/ImportDialog.cpp:154
-#, fuzzy, kde-format
-#| msgid "Add new folder"
+#, kde-format
 msgid "Add a new Folder"
-msgstr "Yeni klasör ekle"
+msgstr "Yeni Klasör Ekle"
 
 #: src/frontend/datasources/ImportDialog.cpp:155
 #: src/frontend/datasources/ImportProjectDialog.cpp:512
@@ -11789,10 +11787,9 @@ msgid "Folder name:"
 msgstr "Klasör adı:"
 
 #: src/frontend/datasources/ImportDialog.cpp:187
-#, fuzzy, kde-format
-#| msgid "Folder"
+#, kde-format
 msgid "New Folder"
-msgstr "Klasör"
+msgstr "Yeni Klasör"
 
 #: src/frontend/datasources/ImportDialog.cpp:191
 #: src/frontend/datasources/ImportDialog.cpp:195
@@ -11866,16 +11863,14 @@ msgid "File %1 imported in %2 seconds."
 msgstr "%1 dosyası %2 saniyede içe aktarıldı."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:203
-#, fuzzy, kde-format
-#| msgid "The project file %1 doesn't exist."
+#, kde-format
 msgid "The directory %1 doesn't exist."
-msgstr "Proje dosyası %1 yok."
+msgstr "%1 dizini yok."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:234
-#, fuzzy, kde-format
-#| msgid "File %1 imported in %2 seconds."
+#, kde-format
 msgid "%1 files imported in %2 seconds."
-msgstr "%1 dosyası %2 saniyede içe aktarıldı."
+msgstr "%1 dosya %2 saniyede içe aktarıldı."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:408
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:152
@@ -12152,12 +12147,10 @@ msgid ""
 msgstr "Satır sayısı, veri porsiyonu sekmesindeki değerlerden hesaplandı."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1054
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the File Data Source"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Directory Data Source"
-msgstr "Dosya Veri Kaynağını Seç"
+msgstr "Dizin Veri Kaynağını Seç"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1056
 #, kde-format
@@ -12347,16 +12340,14 @@ msgid "Could not open file %1 for reading."
 msgstr "%1 dosyası okuma için açılamadı."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1789
-#, fuzzy, kde-format
-#| msgid "Number of records: %1"
+#, kde-format
 msgid "Number of sub-directories: %1"
-msgstr "Kayıt sayısı: %1"
+msgstr "Alt dizin sayısı: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1792
-#, fuzzy, kde-format
-#| msgid "Couldn't read the project file %1."
+#, kde-format
 msgid "Couldn't read the directory %1."
-msgstr "Proje dosyası %1 okunamadı."
+msgstr "%1 dizini okunamadı."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1881
 #, kde-format

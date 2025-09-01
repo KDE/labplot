@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-28 00:38+0000\n"
-"PO-Revision-Date: 2025-07-31 03:46+0200\n"
+"PO-Revision-Date: 2025-08-28 06:03+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.7\n"
 
 #: src/backend/core/AbstractAspect.cpp:234
 #, kde-format
@@ -10510,15 +10510,14 @@ msgid "Import data from a regular file"
 msgstr "მონაცემების შემოტანა ჩვეულებრივი ფაილიდან"
 
 #: src/frontend/ActionsManager.cpp:269
-#, fuzzy, kde-format
-#| msgid "From File..."
+#, kde-format
 msgid "From Directory..."
-msgstr "ფაილიდან..."
+msgstr "საქაღალდიდან..."
 
 #: src/frontend/ActionsManager.cpp:271
 #, kde-format
 msgid "Import multiple files from a directory"
-msgstr ""
+msgstr "ერთზე მეტი ფაილის შემოტანა საქაღალდიდან"
 
 #: src/frontend/ActionsManager.cpp:276
 #, kde-format
@@ -11790,8 +11789,7 @@ msgid "Matrix name:"
 msgstr "მატრიცის სახელი:"
 
 #: src/frontend/datasources/ImportDialog.cpp:154
-#, fuzzy, kde-format
-#| msgid "Add new folder"
+#, kde-format
 msgid "Add a new Folder"
 msgstr "ახალი საქაღალდის დამატება"
 
@@ -11802,10 +11800,9 @@ msgid "Folder name:"
 msgstr "საქაღალდის სახელი:"
 
 #: src/frontend/datasources/ImportDialog.cpp:187
-#, fuzzy, kde-format
-#| msgid "Folder"
+#, kde-format
 msgid "New Folder"
-msgstr "საქაღალდე"
+msgstr "ახალი საქაღალდე"
 
 #: src/frontend/datasources/ImportDialog.cpp:191
 #: src/frontend/datasources/ImportDialog.cpp:195
@@ -11879,16 +11876,14 @@ msgid "File %1 imported in %2 seconds."
 msgstr "ფაილი %1 შემოტანილია %2 წამში."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:203
-#, fuzzy, kde-format
-#| msgid "The project file %1 doesn't exist."
+#, kde-format
 msgid "The directory %1 doesn't exist."
-msgstr "პროექტის ფაილი %1 არ არსებობს."
+msgstr "საქაღალდე %1 არ არსებობს."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:234
-#, fuzzy, kde-format
-#| msgid "File %1 imported in %2 seconds."
+#, kde-format
 msgid "%1 files imported in %2 seconds."
-msgstr "ფაილი %1 შემოტანილია %2 წამში."
+msgstr "%1 ფაილი შემოტანილია %2 წამში."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:408
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:152
@@ -12171,12 +12166,10 @@ msgstr ""
 "მნიშვნელობებიდან"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1054
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the File Data Source"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Directory Data Source"
-msgstr "აირჩიეთ ფაილის მონაცემთა წყარო"
+msgstr "აირჩიეთ საქაღალდის მონაცემთა წყარო"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1056
 #, kde-format
@@ -12366,16 +12359,14 @@ msgid "Could not open file %1 for reading."
 msgstr "ფაილის (\"%1\") წასაკითხად გახსნის შეცდომა."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1789
-#, fuzzy, kde-format
-#| msgid "Number of records: %1"
+#, kde-format
 msgid "Number of sub-directories: %1"
-msgstr "ჩანაწერების რაოდენობა: %1"
+msgstr "ქვესაქაღალდეების რაოდენობა: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1792
-#, fuzzy, kde-format
-#| msgid "Couldn't read the project file %1."
+#, kde-format
 msgid "Couldn't read the directory %1."
-msgstr "პროექტის ფაილის %1 წაკითხვა შეუძლებელია."
+msgstr "საქაღალდის %1 წაკითხვა შეუძლებელია."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1881
 #, kde-format
