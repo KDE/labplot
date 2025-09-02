@@ -16200,7 +16200,7 @@ msgstr "&Neteja la selecció"
 #: src/frontend/worksheet/WorksheetView.cpp:139
 #, kde-format
 msgid "Select All"
-msgstr "Tria-ho tot"
+msgstr "Selecciona-ho tot"
 
 #: src/frontend/matrix/MatrixView.cpp:137
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:321
