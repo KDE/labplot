@@ -232,7 +232,7 @@ StatisticsSpreadsheet* Spreadsheet::statisticsSpreadsheet() const {
 
 /*!
  * \brief Called when the application settings were changed.
- *  adjusts the appearence of the spreadsheet header.
+ *  adjusts the appearance of the spreadsheet header.
  */
 void Spreadsheet::updateHorizontalHeader() {
 #ifndef SDK
