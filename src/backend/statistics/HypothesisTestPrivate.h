@@ -11,6 +11,11 @@
 #define HYPOTHESISTESTPRIVATE_H
 
 #include "HypothesisTest.h"
+#include "backend/core/AbstractColumn.h"
+#include <qobject.h>
+#include <qstringliteral.h>
+
+class Column;
 
 class HypothesisTestPrivate {
 public:
@@ -20,12 +25,18 @@ public:
 	void recalculate();
 	void resetResult();
 
-	void performOneSampleTTest();
-	void performTwoSampleTTest(bool);
-	void performOneWayANOVATest();
-	void performMannWhitneyUTest();
-	void performKruskalWallisTest();
-	void performLogRankTest();
+	QString performOneSampleTTest();
+	QString performTwoSampleTTest(bool);
+	QString performWelchTTest();
+	QString performOneWayANOVATest();
+	QString performOneWayANOVARepeatedTest();
+	QString performMannWhitneyUTest();
+	QString performKruskalWallisTest();
+	QString performWilcoxonTest();
+	QString performFriedmanTest();
+	QString performChisqGoodnessOfFitTest();
+	// QString performChisqIndependenceTest();
+	QString performLogRankTest();
 
 	HypothesisTest* const q;
 
@@ -38,17 +49,42 @@ public:
 	nsl_stats_tail_type tail{nsl_stats_tail_type_two};
 
 private:
-	void addResultTitle(const QString&);
-	void addResultSection(const QString&);
-	void addResultLine(const QString& name, const QString& value);
-	void addResultLine(const QString& name, double value);
-	void addResultLine(const QString& name);
+	static QString addResultTitle(const QString&);
+	static QString addResultSection(const QString&);
+	static QString addResultLine(const QString& name, const QString& value);
+	static QString addResultLine(const QString& name, double value);
+	static QString addResultLine(const QString& name);
+	static QString addResultTable(const QVector<QVector<QString>>& data, bool horizontal);
+	static QString addResultColumnStatistics(const QVector<const AbstractColumn*>& columns);
 
 	static bool rowIsValid(const AbstractColumn*, int);
-	static QVector<double> filterColumn(const AbstractColumn* col);
-	static QVector<QVector<double>> filterColumns(const QVector<const AbstractColumn*>&);
-	static QVector<QVector<double>> filterColumnsParallel(const QVector<const AbstractColumn*>& columns);
-	static double** toArrayOfArrays(QVector<QVector<double>>& data);
+
+	template<typename T>
+	static QVector<T> filterColumn(const AbstractColumn* col);
+	template<typename T>
+	static QVector<QVector<T>> filterColumns(const QVector<const AbstractColumn*>&);
+	template<typename T>
+	static QVector<QVector<T>> filterColumnsParallel(const QVector<const AbstractColumn*>& columns);
+	template<typename T>
+	static T** toArrayOfArrays(const QVector<QVector<T>>& data);
+
+	static QString oneSampleTTestResultTemplate();
+	static QString independentTwoSampleTTestResultTemplate();
+	static QString pairedTwoSampleTTestResultTemplate();
+	static QString welchTTestResultTemplate();
+	static QString oneWayANOVAResultTemplate();
+	static QString oneWayANOVARepeatedResultTemplate();
+	static QString mannWhitneyUTestResultTemplate();
+	static QString kruskalWallisTestResultTemplate();
+	static QString wilcoxonTestResultTemplate();
+	static QString friedmanTestResultTemplate();
+	static QString chisqGoodnessOfFitTestResultTemplate();
+	static QString chisqIndependenceTestResultTemplate();
+	static QString logRankTestResultTemplate();
+	static QString notAvailable();
+	static QString testResultNotAvailable();
+	static QVector<QString> columnStatisticsHeaders();
+	static QString emptyResultColumnStatistics();
 };
 
 #endif

@@ -19,6 +19,7 @@
 class AbstractColumn;
 class HypothesisTestPrivate;
 class HypothesisTestView;
+class QActionGroup;
 
 extern "C" {
 #include "backend/nsl/nsl_statistical_test.h"
@@ -80,6 +81,7 @@ public:
 	static int hypothesisCount(Test);
 	static QVector<QPair<QString, QString>> hypothesisText(Test);
 
+	static void fillAddNewHypothesisTest(QMenu*, QActionGroup*);
 	typedef HypothesisTestPrivate Private;
 
 Q_SIGNALS:

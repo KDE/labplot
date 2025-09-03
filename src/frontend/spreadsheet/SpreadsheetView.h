@@ -165,7 +165,6 @@ private:
 
 	// hypothesis related actions
 	QAction* action_pivot_table{nullptr};
-	QAction* action_do_hypothesis_test{nullptr};
 
 	// column related actions
 	QAction* action_insert_column_left{nullptr};
@@ -227,6 +226,9 @@ private:
 	QActionGroup* addFitActionGroup{nullptr};
 	QActionGroup* addDistributionFitActionGroup{nullptr};
 
+	// hypothesis testing
+	QActionGroup* addHypothesisTestActionGroup{nullptr};
+
 	// Menus
 	QMenu* m_selectionMenu{nullptr};
 	QMenu* m_formattingMenu{nullptr};
@@ -242,6 +244,7 @@ private:
 	QMenu* m_analyzePlotMenu{nullptr};
 	// hypothesis related menu
 	QMenu* m_statisticalAnalysisMenu{nullptr};
+	QMenu* m_hypothesisTestMenu{nullptr};
 
 	bool m_suppressResize{false};
 

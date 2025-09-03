@@ -16,29 +16,139 @@ __BEGIN_DECLS
 
 typedef enum { nsl_stats_tail_type_two, nsl_stats_tail_type_negative, nsl_stats_tail_type_positive } nsl_stats_tail_type;
 
-double nsl_stats_one_sample_t(const double sample[], size_t n, double hypothesized_mean, nsl_stats_tail_type tail, double* p_out);
+struct one_sample_t_test_result {
+	double mean;
+	double variance;
+	double mean_standard_error;
+	double t;
+	double p;
+	int df;
+	double mean_difference;
+};
+struct one_sample_t_test_result nsl_stats_one_sample_t(const double sample[], size_t n, double hypothesized_mean, nsl_stats_tail_type tail);
 
-double nsl_stats_independent_t(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail, double* p_out);
+struct independent_t_test_result {
+	double mean1;
+	double variance1;
+	double mean_standard_error1;
+	double mean2;
+	double variance2;
+	double mean_standard_error2;
+	double t;
+	double p;
+	int df;
+	double pooled_variance;
+	double mean_difference_standard_error;
+	double mean_difference;
+};
+struct independent_t_test_result nsl_stats_independent_t(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail);
 
-double nsl_stats_welch_t(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail, double* p_out);
+struct welch_t_test_result {
+	double mean1;
+	double variance1;
+	double mean_standard_error1;
+	double mean2;
+	double variance2;
+	double mean_standard_error2;
+	double t;
+	double p;
+	int df;
+	double mean_difference_standard_error;
+	double mean_difference;
+};
+struct welch_t_test_result nsl_stats_welch_t(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail);
 
-double nsl_stats_anova_oneway_f(double** groups, size_t* sizes, size_t n_groups, double* p_out);
+struct anova_oneway_test_result {
+	double df_between_groups;
+	double df_within_groups;
+	double ss_between_groups;
+	double ss_within_groups;
+	double ms_between_groups;
+	double ms_within_groups;
+	double F;
+	double p;
+};
+struct anova_oneway_test_result nsl_stats_anova_oneway_f(const double** groups, const size_t* sizes, size_t n_groups);
 
-double nsl_stats_anova_oneway_repeated_f(double** groups, size_t n_samples, size_t n_groups, double* p_out);
+struct anova_oneway_repeated_test_result {
+	double df_treatment;
+	double df_residuals;
+	double ss_treatment;
+	double ss_residuals;
+	double ss_within_subjects;
+	double ms_treatment;
+	double ms_residuals;
+	double F;
+	double p;
+};
+struct anova_oneway_repeated_test_result nsl_stats_anova_oneway_repeated_f(const double** groups, size_t n_samples, size_t n_groups);
 
-double nsl_stats_mannwhitney_u(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail, double* p_out);
+struct mannwhitney_test_result {
+	int rank_sum1;
+	int rank_sum2;
+	double mean_rank1;
+	double mean_rank2;
+	double U;
+	double z;
+	double p;
+};
+struct mannwhitney_test_result nsl_stats_mannwhitney_u(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail);
 
-double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_groups, double* p_out);
+struct kruskal_wallis_test_result {
+	double p;
+	double H;
+	int df;
+};
+struct kruskal_wallis_test_result nsl_stats_kruskal_wallis_h(const double** groups, const size_t* sizes, size_t n_groups);
 
-double nsl_stats_wilcoxon_w(const double sample1[], const double sample2[], size_t n, nsl_stats_tail_type tail, double* p_out);
+struct wilcoxon_test_result {
+	int positive_rank_sum;
+	double positive_rank_mean;
+	int positive_rank_count;
+	int negative_rank_sum;
+	double negative_rank_mean;
+	int negative_rank_count;
+	int tie_count;
+	double W;
+	double z;
+	double p;
+};
+struct wilcoxon_test_result nsl_stats_wilcoxon_w(const double sample1[], const double sample2[], size_t n, nsl_stats_tail_type tail);
 
-double nsl_stats_friedman_q(double** groups, size_t n_samples, size_t n_groups, double* p_out);
+struct friedman_test_result {
+	double p;
+	double Q;
+	int df;
+};
+struct friedman_test_result nsl_stats_friedman_q(const double** groups, size_t n_samples, size_t n_groups);
 
-double nsl_stats_chisq_ind_x2(double** table, size_t row, size_t column, double* p_out);
+struct chisq_ind_test_result {
+	double p;
+	double x2;
+	int df;
+	int total_observed_frequencies;
+};
+struct chisq_ind_test_result nsl_stats_chisq_ind_x2(const int** table, size_t row, size_t column);
 
-double nsl_stats_chisq_gof_x2(int* observed, int* expected, size_t n, size_t params_estimated, double* p_out);
+struct chisq_gof_test_result {
+	double p;
+	double x2;
+	int df;
+};
+struct chisq_gof_test_result nsl_stats_chisq_gof_x2(const int* observed, const double* expected, size_t n, size_t params_estimated);
 
-double nsl_stats_log_rank_h(const double* time, const int* status, const size_t* g1_ind, size_t size1, const size_t* g2_ind, size_t size2, double* p_out);
+struct log_rank_test_result {
+	double H;
+	int df;
+	double p;
+	int event_count1;
+	int event_count2;
+	int censored_count1;
+	int censored_count2;
+	int total_count1;
+	int total_count2;
+};
+struct log_rank_test_result nsl_stats_log_rank_h(const double* time, const int* status, const size_t* g1_ind, size_t size1, const size_t* g2_ind, size_t size2);
 
 __END_DECLS
 

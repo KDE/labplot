@@ -350,8 +350,6 @@ void SpreadsheetView::initActions() {
 	action_clear_columns = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clear Content"), this);
 	action_freeze_columns = new QAction(i18n("Freeze Column"), this);
 
-	action_do_hypothesis_test = new QAction(i18n("Hypothesis Test"), this);
-
 	// TODO: action collection?
 	action_set_as_none = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::NoDesignation, false), this);
 	action_set_as_none->setData(static_cast<int>(AbstractColumn::PlotDesignation::NoDesignation));
@@ -576,6 +574,8 @@ void SpreadsheetView::initActions() {
 	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Binomial"), addDistributionFitActionGroup);
 	fitAction->setData(static_cast<int>(nsl_sf_stats_binomial));
 
+	addHypothesisTestActionGroup = new QActionGroup(this);
+
 	connectActions();
 }
 
@@ -677,7 +677,9 @@ void SpreadsheetView::initMenus() {
 
 	// statistical analysis
 	m_statisticalAnalysisMenu = new QMenu(i18n("Statistical Analysis"), this);
-	m_statisticalAnalysisMenu->addAction(action_do_hypothesis_test);
+	m_hypothesisTestMenu = new QMenu(i18n("Hypothesis Test"), this);
+	HypothesisTest::fillAddNewHypothesisTest(m_hypothesisTestMenu, addHypothesisTestActionGroup);
+	m_statisticalAnalysisMenu->addMenu(m_hypothesisTestMenu);
 	m_columnMenu->addMenu(m_statisticalAnalysisMenu);
 
 	m_columnSetAsMenu = new QMenu(i18n("Set Column As"), this);
@@ -945,19 +947,17 @@ void SpreadsheetView::connectActions() {
 	connect(addFitActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotAnalysisData);
 	connect(addDistributionFitActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotDataDistributionFit);
 
-	connect(action_do_hypothesis_test, &QAction::triggered, this, [=] {
+	connect(addHypothesisTestActionGroup, &QActionGroup::triggered, [=](QAction* action) {
 		const auto& columns = selectedColumns();
 		QString name = (columns.size() == 1) ? columns.constFirst()->name() : m_spreadsheet->name();
 		auto* test = new HypothesisTest(i18n("Hypothesis Test for %1", name));
+		test->setTest(static_cast<HypothesisTest::Test>(action->data().toInt()));
 		QVector<const AbstractColumn*> dataColumns;
 		for (const auto* column : columns) {
-			if (column->isNumeric())
-				dataColumns << column;
+			dataColumns << column;
 		}
-		if (!dataColumns.isEmpty()) {
-			test->setDataColumns(dataColumns);
-			test->recalculate();
-		}
+		test->setDataColumns(dataColumns);
+		test->recalculate();
 		m_spreadsheet->parentAspect()->addChild(test);
 	});
 }
@@ -1531,6 +1531,7 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	bool hasValues = this->hasValues(columns);
 	m_plotDataMenu->setEnabled(hasValues);
 	m_analyzePlotMenu->setEnabled(hasValues);
+	m_statisticalAnalysisMenu->setEnabled(hasValues);
 	m_selectionMenu->setEnabled(hasValues);
 	action_select_all->setEnabled(hasValues);
 	action_clear_spreadsheet->setEnabled(hasValues);

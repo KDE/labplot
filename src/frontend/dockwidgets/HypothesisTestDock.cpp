@@ -11,6 +11,7 @@
 */
 
 #include "HypothesisTestDock.h"
+#include "backend/core/AbstractAspect.h"
 #include "backend/core/column/Column.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
@@ -67,7 +68,6 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 
 	// confirm that all variables are cleared
 	Q_ASSERT(ui.variablesVerticalLayout->count() == 0);
-
 	// restore variables from aspect columns
 	for (auto* col : m_test->dataColumns()) {
 		addVariable();
@@ -131,10 +131,16 @@ void HypothesisTestDock::retranslateUi() {
 	ui.cbTest->addItem(i18n("One-Sample t-Test"), static_cast<int>(HypothesisTest::Test::t_test_one_sample));
 	ui.cbTest->addItem(i18n("Independent Two-Sample t-Test"), static_cast<int>(HypothesisTest::Test::t_test_two_sample));
 	ui.cbTest->addItem(i18n("Paired Two-Sample t-Test"), static_cast<int>(HypothesisTest::Test::t_test_two_sample_paired));
+	ui.cbTest->addItem(i18n("Welch t-Test"), static_cast<int>(HypothesisTest::Test::t_test_welch));
 	ui.cbTest->addItem(i18n("One-Way ANOVA"), static_cast<int>(HypothesisTest::Test::one_way_anova));
-	// ui.cbTest->addItem(i18n("Mann-Whitney U Test"), static_cast<int>(HypothesisTest::Test::mann_whitney_u_test));
+	ui.cbTest->addItem(i18n("One-Way ANOVA with Repeated Measures"), static_cast<int>(HypothesisTest::Test::one_way_anova_repeated));
+	ui.cbTest->addItem(i18n("Mann-Whitney U Test"), static_cast<int>(HypothesisTest::Test::mann_whitney_u_test));
+	ui.cbTest->addItem(i18n("Wilcoxon Signed Rank Test"), static_cast<int>(HypothesisTest::Test::wilcoxon_test));
 	ui.cbTest->addItem(i18n("Kruskal-Wallis Test"), static_cast<int>(HypothesisTest::Test::kruskal_wallis_test));
+	ui.cbTest->addItem(i18n("Friedman Test"), static_cast<int>(HypothesisTest::Test::friedman_test));
 	ui.cbTest->addItem(i18n("Logrank Test"), static_cast<int>(HypothesisTest::Test::log_rank_test));
+	ui.cbTest->addItem(i18n("Chi-Square Independence Test"), static_cast<int>(HypothesisTest::Test::chisq_independence));
+	ui.cbTest->addItem(i18n("Chi-Square Goodness of Fit Test"), static_cast<int>(HypothesisTest::Test::chisq_goodness_of_fit));
 
 	// tooltip texts
 	QString info = i18n(
@@ -142,10 +148,16 @@ void HypothesisTestDock::retranslateUi() {
 		"<li><b>One-Sample t-Test</b> - tests if a sample mean differs significantly from a known population mean</li>"
 		"<li><b>Independent Two-Sample t-Test</b> - tests if two independent samples have the same mean</li>"
 		"<li><b>Paired Two-Sample t-Test</b> - tests if the mean difference between two related samples is zero</li>"
-		"<li><b>One-Way ANOVA</b> - tests if three or more independent samples have the same mean</li>"
-		// 	"<li><b>Mann-Whitney U Test</b> - tests differences in medians between two independent groups</li>"
+		"<li><b>Welch t-Test</b> - tests if two independent samples with unequal variances have the same mean</li>"
+		"<li><b>One-Way ANOVA Test</b> - tests if three or more independent samples have the same mean</li>"
+		"<li><b>One-Way ANOVA with Repeated Measures Test</b> - tests if three or more related/repeated measurements have the same mean</li>"
+		"<li><b>Mann-Whitney U Test</b> - tests differences in medians between two independent groups</li>"
+		"<li><b>Wilcoxon Signed Rank Test</b> - tests if the median difference between two related samples is zero</li>"
 		"<li><b>Kruskal-Wallis Test</b> - tests differences in medians among three or more independent groups</li>"
+		"<li><b>Friedman Test</b> - tests differences in medians among three or more related/repeated measurements</li>"
 		"<li><b>Logrank Test</b> - tests differences in survival distributions between two or more groups</li>"
+		"<li><b>Chi-Square Independence Test</b> - tests if two categorical variables are independent of each other</li>"
+		"<li><b>Chi-Square Goodness of Fit Test</b> - tests if observed data follows a specified theoretical distribution</li>"
 		"</ul>"
 	);
 
@@ -271,7 +283,8 @@ void HypothesisTestDock::ensureVariableCount(HypothesisTest::Test test) {
 	manageAddRemoveVariable();
 
 	// update the columns in the aspect
-	updateColumns();
+	if (!m_initializing)
+		updateColumns();
 }
 
 void HypothesisTestDock::manageAddRemoveVariable() {
@@ -288,6 +301,8 @@ void HypothesisTestDock::manageAddRemoveVariable() {
 // - when the user has added or removed a column
 // - in ensureVariableCount()
 void HypothesisTestDock::updateColumns() {
+	if (m_initializing)
+		return;
 	QVector<const AbstractColumn*> columns;
 	int varCount = ui.variablesVerticalLayout->count();
 	for (int i = 0; i < varCount; i++) {
@@ -328,11 +343,13 @@ void HypothesisTestDock::addVariable() {
 	auto* lColumn = new QLabel(i18n("Variable %1:", QString::number(ui.variablesVerticalLayout->count() + 1)), this);
 	layout->addWidget(lColumn);
 
-	auto* cbColumn = new TreeViewComboBox(this);
-	layout->addWidget(cbColumn);
-	cbColumn->setTopLevelClasses({AspectType::Folder, AspectType::Workbook, AspectType::Spreadsheet, AspectType::Notebook, AspectType::Column});
 	auto* model = aspectModel();
+	model->enableNonEmptyNumericColumnsOnly(true);
 	model->setSelectableAspects({AspectType::Column});
+
+	auto* cbColumn = new TreeViewComboBox(this);
+	cbColumn->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
+	layout->addWidget(cbColumn);
 	cbColumn->setModel(model);
 	connect(cbColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HypothesisTestDock::updateColumns); // update columns in aspect whenever treeviewcombobox changes
 	// only checked once after updating columns since treeviewcombobox doesn't allow unselecting items
@@ -342,7 +359,8 @@ void HypothesisTestDock::addVariable() {
 
 	manageAddRemoveVariable(); // disable or enable add/remove variables buttons
 
-	updateColumns();
+	if (!m_initializing)
+		updateColumns();
 }
 
 void HypothesisTestDock::removeVariable() {
@@ -360,5 +378,6 @@ void HypothesisTestDock::removeVariable() {
 
 	manageAddRemoveVariable(); // disable or enable add/remove variables buttons
 
-	updateColumns();
+	if (!m_initializing)
+		updateColumns();
 }

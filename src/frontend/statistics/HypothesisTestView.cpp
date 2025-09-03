@@ -25,6 +25,7 @@ HypothesisTestView::HypothesisTestView(HypothesisTest* test) : QWidget()
 	auto* layout = new QVBoxLayout(this);
 	m_textEdit = new QTextEdit(this);
 	m_textEdit->setReadOnly(true);
+	m_textEdit->document()->setDefaultStyleSheet(QStringLiteral("table, th, td { border-width: 1px; border-collapse: collapse; padding: 5px; }"));
 	layout->addWidget(m_textEdit);
 
 	// show the initial/default result and connect to the changes to update it

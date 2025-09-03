@@ -50,7 +50,7 @@ typedef struct {
 DECLARE_COMPARE_FUNCTION(signed_diff, abs_diff)
 
 /* Mann-Whitney U test */
-double nsl_stats_mannwhitney_u(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail, double* p_out) {
+struct mannwhitney_test_result nsl_stats_mannwhitney_u(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail) {
 	size_t n = n1 + n2;
 
 	rank* data = malloc(n * sizeof(rank));
@@ -131,13 +131,21 @@ double nsl_stats_mannwhitney_u(const double sample1[], size_t n1, const double s
 		break;
 	}
 
-	*p_out = p;
+	struct mannwhitney_test_result result;
+	result.p = p;
+	result.U = U;
+	result.z = z;
+	result.rank_sum1 = rank_sum1;
+	result.rank_sum2 = rank_sum2;
+	result.mean_rank1 = rank_sum1 / n1;
+	result.mean_rank2 = rank_sum2 / n2;
 
-	return U;
+	return result;
 }
 
 // one-way ANOVA
-double nsl_stats_anova_oneway_f(double** groups, size_t* sizes, size_t n_groups, double* p_out) {
+struct anova_oneway_test_result nsl_stats_anova_oneway_f(const double** groups, const size_t* sizes, size_t n_groups) {
+	struct anova_oneway_test_result result;
 	double grand_total = 0.0;
 	size_t total_samples = 0;
 	for (size_t i = 0; i < n_groups; i++) {
@@ -162,7 +170,11 @@ double nsl_stats_anova_oneway_f(double** groups, size_t* sizes, size_t n_groups,
 	double F = NAN;
 	if (delta != 0.) {
 		const double ms_within = ssw / delta;
+		result.ms_within_groups = ms_within;
 		F = ms_between / ms_within;
+	} else {
+		result.p = NAN;
+		return result;
 	}
 
 	size_t df_between = n_groups - 1;
@@ -172,13 +184,21 @@ double nsl_stats_anova_oneway_f(double** groups, size_t* sizes, size_t n_groups,
 	df_within -= n_groups;
 
 	double p = nsl_stats_fdist_p(F, df_between, df_within);
-	*p_out = p;
 
-	return F;
+	result.p = p;
+	result.df_between_groups = df_between;
+	result.df_within_groups = df_within;
+	result.ss_between_groups = ssb;
+	result.ss_within_groups = ssw;
+	result.ms_between_groups = ms_between;
+	result.F = F;
+
+	return result;
 }
 
 /* one-way ANOVA with repeated measures */
-double nsl_stats_anova_oneway_repeated_f(double** groups, size_t n_samples, size_t n_groups, double* p_out) {
+struct anova_oneway_repeated_test_result nsl_stats_anova_oneway_repeated_f(const double** groups, size_t n_samples, size_t n_groups) {
+	struct anova_oneway_repeated_test_result result;
 	double grand_total = 0.0;
 	size_t total_samples = n_samples * n_groups;
 	double* sample_means = (double*)calloc(n_samples, sizeof(double));
@@ -190,8 +210,10 @@ double nsl_stats_anova_oneway_repeated_f(double** groups, size_t n_samples, size
 		}
 	}
 
-	if (total_samples == 0)
-		return NAN;
+	if (total_samples == 0) {
+		result.p = NAN;
+		return result;
+	}
 	double grand_mean = grand_total / total_samples;
 
 	double ssb = 0.0;
@@ -216,19 +238,33 @@ double nsl_stats_anova_oneway_repeated_f(double** groups, size_t n_samples, size
 	double dfb = n_groups - 1;
 	double dfe = (n_groups - 1) * (n_samples - 1);
 
-	if (dfb == 0. || dfe == 0.)
-		return NAN;
+	if (dfb == 0. || dfe == 0.) {
+		result.p = NAN;
+		return result;
+	}
 
-	double F = (ssb / dfb) / (sse / dfe);
+	double msb = (ssb / dfb);
+	double mse = (sse / dfe);
+
+	double F = msb / mse;
 
 	double p = nsl_stats_fdist_p(F, dfb, dfe);
-	*p_out = p;
+	result.p = p;
+	result.F = F;
+	result.df_treatment = dfb;
+	result.df_residuals = dfe;
+	result.ss_treatment = ssb;
+	result.ss_residuals = sse;
+	result.ss_within_subjects = ssw;
+	result.ms_treatment = msb;
+	result.ms_residuals = mse;
 
-	return F;
+	return result;
 }
 
 // Kruskal-Wallis
-double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_groups, double* p_out) {
+struct kruskal_wallis_test_result nsl_stats_kruskal_wallis_h(const double** groups, const size_t* sizes, size_t n_groups) {
+	struct kruskal_wallis_test_result result;
 	size_t total_samples = 0;
 	size_t i, j;
 	for (i = 0; i < n_groups; i++)
@@ -236,21 +272,21 @@ double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_group
 
 	if (n_groups < 2) {
 		fprintf(stderr, "Error: Kruskal-Wallis test requires at least two groups.\n");
-		*p_out = NAN;
-		return NAN;
+		result.p = NAN;
+		return result;
 	}
 	for (i = 0; i < n_groups; i++) {
 		if (sizes[i] < 1) {
 			fprintf(stderr, "Error: Each group must have at least one observation.\n");
-			*p_out = NAN;
-			return NAN;
+			result.p = NAN;
+			return result;
 		}
 	}
 	rank* ranks = (rank*)malloc(total_samples * sizeof(rank));
 	if (ranks == NULL) {
 		fprintf(stderr, "Error: Memory allocation failed.\n");
-		*p_out = NAN;
-		return NAN;
+		result.p = NAN;
+		return result;
 	}
 	size_t idx = 0;
 
@@ -265,8 +301,8 @@ double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_group
 	if (rank_sum == NULL) {
 		fprintf(stderr, "Error: Memory allocation failed.\n");
 		free(ranks);
-		*p_out = NAN;
-		return NAN;
+		result.p = NAN;
+		return result;
 	}
 	size_t* tie_counts = NULL;
 	size_t tie_count_size = 0;
@@ -299,8 +335,8 @@ double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_group
 					free(ranks);
 					free(rank_sum);
 					free(tie_counts);
-					*p_out = NAN;
-					return NAN;
+					result.p = NAN;
+					return result;
 				}
 				tie_counts = temp;
 			}
@@ -334,28 +370,47 @@ double nsl_stats_kruskal_wallis_h(double** groups, size_t* sizes, size_t n_group
 	if (p < 1.e-9)
 		p = 0.0;
 
-	*p_out = p;
-	return H_corrected;
+	result.p = p;
+	result.H = H_corrected;
+	result.df = n_groups - 1;
+	return result;
 }
 
 // Log-Rank test
-double nsl_stats_log_rank_h(const double* time, const int* status, const size_t* g1_ind, size_t size1, const size_t* g2_ind, size_t size2, double* p_out) {
+struct log_rank_test_result
+nsl_stats_log_rank_h(const double* time, const int* status, const size_t* g1_ind, size_t size1, const size_t* g2_ind, size_t size2) {
+	struct log_rank_test_result result;
 	size_t total_size = size1 + size2;
 	observation* observations = (observation*)malloc(total_size * sizeof(observation));
 	if (observations == NULL) {
 		fprintf(stderr, "Error: Memory allocation failed.\n");
-		*p_out = NAN;
-		return NAN;
+		result.p = NAN;
+		return result;
 	}
+
+	int event_count1 = 0;
+	int event_count2 = 0;
+	int censored_count1 = 0;
+	int censored_count2 = 0;
 
 	for (size_t i = 0; i < size1; i++) {
 		observations[i].time = time[g1_ind[i]];
-		observations[i].status = status[g1_ind[i]];
+		int stat = status[g1_ind[i]];
+		if (stat == 0)
+			censored_count1 += 1;
+		else if (stat == 1)
+			event_count1 += 1;
+		observations[i].status = stat;
 		observations[i].group = 1;
 	}
 	for (size_t i = 0; i < size2; i++) {
 		observations[size1 + i].time = time[g2_ind[i]];
-		observations[size1 + i].status = status[g2_ind[i]];
+		int stat = status[g2_ind[i]];
+		if (stat == 0)
+			censored_count2 += 1;
+		else if (stat == 1)
+			event_count2 += 1;
+		observations[size1 + i].status = stat;
 		observations[size1 + i].group = 2;
 	}
 
@@ -432,21 +487,29 @@ double nsl_stats_log_rank_h(const double* time, const int* status, const size_t*
 
 	if (V1 <= 0.0) {
 		fprintf(stderr, "Error: Variance is zero or negative. Cannot compute test statistic.\n");
-		*p_out = NAN;
-		return NAN;
+		result.p = NAN;
+		return result;
 	}
 	double H = pow(O1 - E1, 2) / V1;
 	double p = gsl_cdf_chisq_Q(H, 1);
 	if (p < 1.e-9)
 		p = 0.0;
 
-	*p_out = p;
+	result.p = p;
+	result.H = H;
+	result.df = 0;
+	result.event_count1 = event_count1;
+	result.event_count2 = event_count2;
+	result.censored_count1 = censored_count1;
+	result.censored_count2 = censored_count2;
+	result.total_count1 = size1;
+	result.total_count2 = size2;
 
-	return H;
+	return result;
 }
 
 /* Independent Sample Student's t-test */
-double nsl_stats_independent_t(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail, double* p_out) {
+struct independent_t_test_result nsl_stats_independent_t(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail) {
 	double mean1 = 0.0, mean2 = 0.0, var1 = 0.0, var2 = 0.0;
 	for (size_t i = 0; i < n1; i++)
 		mean1 += sample1[i];
@@ -479,13 +542,26 @@ double nsl_stats_independent_t(const double sample1[], size_t n1, const double s
 		p_value = 1.0 - gsl_cdf_tdist_P(t_stat, df);
 		break;
 	}
-	*p_out = p_value;
 
-	return t_stat;
+	struct independent_t_test_result result;
+	result.p = p_value;
+	result.t = t_stat;
+	result.df = df;
+	result.mean1 = mean1;
+	result.variance1 = var1;
+	result.mean_standard_error1 = sqrt(var1 / n1);
+	result.mean2 = mean2;
+	result.variance2 = var2;
+	result.mean_standard_error2 = sqrt(var2 / n2);
+	result.pooled_variance = pooled_variance;
+	result.mean_difference_standard_error = standard_error;
+	result.mean_difference = fabs(mean1 - mean2);
+
+	return result;
 }
 
 /* One Sample Student's t-test */
-double nsl_stats_one_sample_t(const double sample[], size_t n, double hypothesized_mean, nsl_stats_tail_type tail, double* p_out) {
+struct one_sample_t_test_result nsl_stats_one_sample_t(const double sample[], size_t n, double hypothesized_mean, nsl_stats_tail_type tail) {
 	double mean = 0.0, variance = 0.0;
 	for (size_t i = 0; i < n; i++)
 		mean += sample[i];
@@ -509,9 +585,17 @@ double nsl_stats_one_sample_t(const double sample[], size_t n, double hypothesiz
 		p_value = 1.0 - gsl_cdf_tdist_P(t_stat, df);
 		break;
 	}
-	*p_out = p_value;
 
-	return t_stat;
+	struct one_sample_t_test_result result;
+	result.p = p_value;
+	result.df = df;
+	result.t = t_stat;
+	result.mean_standard_error = standard_error;
+	result.variance = variance;
+	result.mean = mean;
+	result.mean_difference = fabs(mean - hypothesized_mean);
+
+	return result;
 }
 
 // Logistic Regression Function for Binary Classification
@@ -593,7 +677,7 @@ double nsl_univariate_cox_regression(double* x, double* time, int* event, int N,
 }
 
 /* Welch t-test */
-double nsl_stats_welch_t(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail, double* p_out) {
+struct welch_t_test_result nsl_stats_welch_t(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail) {
 	double mean1 = 0.0, mean2 = 0.0, var1 = 0.0, var2 = 0.0;
 	for (size_t i = 0; i < n1; i++)
 		mean1 += sample1[i];
@@ -610,12 +694,13 @@ double nsl_stats_welch_t(const double sample1[], size_t n1, const double sample2
 		var2 += (sample2[i] - mean2) * (sample2[i] - mean2);
 	var2 /= (n2 - 1);
 
-	double stderr1 = var1 / n1;
-	double stderr2 = var2 / n2;
+	double stderrsq1 = var1 / n1;
+	double stderrsq2 = var2 / n2;
+	double standard_error = sqrt(stderrsq1 + stderrsq2);
 
-	double t_stat = (mean1 - mean2) / sqrt(stderr1 + stderr2);
+	double t_stat = (mean1 - mean2) / standard_error;
 
-	double df = pow(stderr1 + stderr2, 2) / (pow(stderr1, 2) / (n1 - 1) + pow(stderr2, 2) / (n2 - 1));
+	double df = pow(stderrsq1 + stderrsq2, 2) / (pow(stderrsq1, 2) / (n1 - 1) + pow(stderrsq2, 2) / (n2 - 1));
 
 	double p_value = 0.0;
 	switch (tail) {
@@ -629,13 +714,27 @@ double nsl_stats_welch_t(const double sample1[], size_t n1, const double sample2
 		p_value = 1.0 - gsl_cdf_tdist_P(t_stat, df);
 		break;
 	}
-	*p_out = p_value;
 
-	return t_stat;
+	struct welch_t_test_result result;
+	result.p = p_value;
+	result.t = t_stat;
+	result.df = df;
+	result.mean1 = mean1;
+	result.variance1 = var1;
+	result.mean_standard_error1 = sqrt(stderrsq1);
+	result.mean2 = mean2;
+	result.variance2 = var2;
+	result.mean_standard_error2 = sqrt(stderrsq2);
+	result.mean_difference_standard_error = standard_error;
+	result.mean_difference = fabs(mean1 - mean2);
+
+	return result;
 }
 
 /* Wilcoxon signed rank test */
-double nsl_stats_wilcoxon_w(const double sample1[], const double sample2[], size_t n, nsl_stats_tail_type tail, double* p_out) {
+struct wilcoxon_test_result nsl_stats_wilcoxon_w(const double sample1[], const double sample2[], size_t n, nsl_stats_tail_type tail) {
+	struct wilcoxon_test_result result;
+
 	signed_diff* diffs = (signed_diff*)malloc(n * sizeof(signed_diff));
 
 	size_t N = 0;
@@ -650,15 +749,18 @@ double nsl_stats_wilcoxon_w(const double sample1[], const double sample2[], size
 
 	if (N == 0) {
 		free(diffs);
-		*p_out = NAN;
-		return NAN;
+		result.p = NAN;
+		return result;
 	}
 
 	qsort(diffs, N, sizeof(signed_diff), compare_signed_diff_abs_diff);
 
 	double tie_term = 0.0;
 	double T_plus = 0.0;
+	int nT_plus = 0;
 	double T_minus = 0.0;
+	int nT_minus = 0;
+	int ties = 0;
 	size_t i = 0;
 	while (i < N) {
 		size_t j = i + 1;
@@ -668,13 +770,18 @@ double nsl_stats_wilcoxon_w(const double sample1[], const double sample2[], size
 		double avg_rank = ((double)(i + 1) + (double)j) / 2.0;
 		for (size_t k = i; k < j; k++) {
 			diffs[k].rank = avg_rank;
-			if (diffs[k].sign == 1)
+			if (diffs[k].sign == 1) {
 				T_plus += avg_rank;
-			else if (diffs[k].sign == -1)
+				nT_plus += 1;
+			} else if (diffs[k].sign == -1) {
 				T_minus += avg_rank;
+				nT_minus += 1;
+			}
 		}
-		if (tie_count > 1)
+		if (tie_count > 1) {
 			tie_term += tie_count * tie_count * tie_count - tie_count;
+			ties += 1;
+		}
 		i = j;
 	}
 
@@ -685,8 +792,8 @@ double nsl_stats_wilcoxon_w(const double sample1[], const double sample2[], size
 
 	if (var_T <= 0.0) {
 		free(diffs);
-		*p_out = NAN;
-		return NAN;
+		result.p = NAN;
+		return result;
 	}
 	double sigma_T = sqrt(var_T);
 
@@ -722,15 +829,24 @@ double nsl_stats_wilcoxon_w(const double sample1[], const double sample2[], size
 
 	free(diffs);
 
-	*p_out = p;
-	return T;
+	result.p = p;
+	result.z = z;
+	result.W = T;
+	result.tie_count = ties;
+	result.positive_rank_sum = T_plus;
+	result.positive_rank_mean = T_plus / nT_plus;
+	result.positive_rank_count = nT_plus;
+	result.negative_rank_sum = T_minus;
+	result.negative_rank_mean = T_minus / nT_minus;
+	result.negative_rank_count = nT_minus;
+
+	return result;
 }
 
 /* Friedman test */
-double nsl_stats_friedman_q(double** groups, size_t n_samples, size_t n_groups, double* p_out) {
+struct friedman_test_result nsl_stats_friedman_q(const double** groups, size_t n_samples, size_t n_groups) {
 	rank* row = malloc(sizeof(rank) * n_groups);
 	double* rank_sums = calloc(n_groups, sizeof(double));
-	double tie_term = 0.0;
 
 	for (size_t i = 0; i < n_samples; ++i) {
 		for (size_t j = 0; j < n_groups; ++j) {
@@ -751,8 +867,6 @@ double nsl_stats_friedman_q(double** groups, size_t n_samples, size_t n_groups, 
 				row[k].rank = avg_rank;
 				rank_sums[row[k].group] += avg_rank;
 			}
-			if (tie_count > 1)
-				tie_term += (tie_count * tie_count * tie_count - tie_count) / 12.0;
 			i = j;
 		}
 	}
@@ -769,18 +883,22 @@ double nsl_stats_friedman_q(double** groups, size_t n_samples, size_t n_groups, 
 
 	double Q = ((12.0 * n_samples) / (n_groups * (n_groups + 1))) * sum;
 
-	double df = (double)(n_groups - 1);
-	double p_value = gsl_cdf_chisq_Q(Q, df);
-	*p_out = p_value;
+	int df = n_groups - 1;
+	double p_value = gsl_cdf_chisq_Q(Q, (double)df);
 
-	return Q;
+	struct friedman_test_result result;
+	result.p = p_value;
+	result.Q = Q;
+	result.df = df;
+
+	return result;
 }
 
 /* Chi square Independence test */
-double nsl_stats_chisq_ind_x2(double** table, size_t row, size_t column, double* p_out) {
-	double total = 0.0;
+struct chisq_ind_test_result nsl_stats_chisq_ind_x2(const int** table, size_t row, size_t column) {
+	int total = 0;
 
-	double* row_sums = (double*)calloc(row, sizeof(double));
+	int* row_sums = (int*)calloc(row, sizeof(int));
 	for (size_t i = 0; i < row; ++i) {
 		for (size_t j = 0; j < column; ++j) {
 			row_sums[i] += table[i][j];
@@ -788,7 +906,7 @@ double nsl_stats_chisq_ind_x2(double** table, size_t row, size_t column, double*
 		}
 	}
 
-	double* column_sums = (double*)calloc(column, sizeof(double));
+	int* column_sums = (int*)calloc(column, sizeof(int));
 	for (size_t j = 0; j < column; ++j) {
 		for (size_t i = 0; i < row; ++i) {
 			column_sums[j] += table[i][j];
@@ -798,7 +916,7 @@ double nsl_stats_chisq_ind_x2(double** table, size_t row, size_t column, double*
 	double x2 = 0.0;
 	for (size_t i = 0; i < row; ++i) {
 		for (size_t j = 0; j < column; ++j) {
-			double expected = (row_sums[i] * column_sums[j]) / total;
+			double expected = (double)(row_sums[i] * column_sums[j]) / total;
 			double diff = table[i][j] - expected;
 			x2 += (diff * diff) / expected;
 		}
@@ -807,15 +925,20 @@ double nsl_stats_chisq_ind_x2(double** table, size_t row, size_t column, double*
 	free(row_sums);
 	free(column_sums);
 
-	double df = (double)(row - 1) * (column - 1);
-	double p_value = gsl_cdf_chisq_Q(x2, df);
-	*p_out = p_value;
+	int df = (row - 1) * (column - 1);
+	double p_value = gsl_cdf_chisq_Q(x2, (double)df);
 
-	return x2;
+	struct chisq_ind_test_result result;
+	result.p = p_value;
+	result.x2 = x2;
+	result.total_observed_frequencies = total;
+	result.df = df;
+
+	return result;
 }
 
 /* Chi square Goodness of Fit Test */
-double nsl_stats_chisq_gof_x2(int* observed, int* expected, size_t n, size_t params_estimated, double* p_out) {
+struct chisq_gof_test_result nsl_stats_chisq_gof_x2(const int* observed, const double* expected, size_t n, size_t params_estimated) {
 	double x2 = 0.0;
 
 	for (size_t i = 0; i < n; ++i) {
@@ -826,7 +949,11 @@ double nsl_stats_chisq_gof_x2(int* observed, int* expected, size_t n, size_t par
 	size_t df = n - 1 - params_estimated;
 
 	double p_value = gsl_cdf_chisq_Q(x2, (double)df);
-	*p_out = p_value;
 
-	return x2;
+	struct chisq_gof_test_result result;
+	result.x2 = x2;
+	result.p = p_value;
+	result.df = df;
+
+	return result;
 }
