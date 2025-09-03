@@ -12,8 +12,7 @@
 
 #include "HypothesisTest.h"
 #include "backend/core/AbstractColumn.h"
-#include <qobject.h>
-#include <qstringliteral.h>
+#include <cstddef>
 
 class Column;
 
@@ -35,8 +34,10 @@ public:
 	QString performWilcoxonTest();
 	QString performFriedmanTest();
 	QString performChisqGoodnessOfFitTest();
-	// QString performChisqIndependenceTest();
+	QString performChisqIndependenceTest();
 	QString performLogRankTest();
+
+	size_t minSampleCount(HypothesisTest::Test);
 
 	HypothesisTest* const q;
 

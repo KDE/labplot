@@ -252,14 +252,6 @@ void HypothesisTest::setDataColumns(const QVector<const AbstractColumn*>& cols) 
 		return;
 	}
 
-	// all columns checks here with proper messages
-	// column and row counts
-	// column types
-	// equal row counts
-	// set greater type double > bigint > int
-	// check column not empty
-	// min row count in columns
-
 	for (auto* col : cols) {
 		// currently excluding bigint because bigint > double and then we have to start using long double everywhere to accomodate
 		if (col->columnMode() != AbstractColumn::ColumnMode::Double && col->columnMode() != AbstractColumn::ColumnMode::Integer) {
@@ -502,6 +494,29 @@ int HypothesisTest::hypothesisCount(Test test) {
 	return 0;
 }
 
+size_t HypothesisTestPrivate::minSampleCount(HypothesisTest::Test test) {
+	switch (test) {
+	case HypothesisTest::Test::t_test_one_sample:
+	case HypothesisTest::Test::t_test_two_sample:
+	case HypothesisTest::Test::t_test_two_sample_paired:
+	case HypothesisTest::Test::t_test_welch:
+	case HypothesisTest::Test::one_way_anova:
+	case HypothesisTest::Test::one_way_anova_repeated:
+		return 5;
+	case HypothesisTest::Test::mann_whitney_u_test:
+	case HypothesisTest::Test::kruskal_wallis_test:
+	case HypothesisTest::Test::wilcoxon_test:
+	case HypothesisTest::Test::friedman_test:
+		return 25;
+	case HypothesisTest::Test::chisq_independence:
+	case HypothesisTest::Test::chisq_goodness_of_fit:
+	case HypothesisTest::Test::log_rank_test:
+		return 50;
+	}
+
+	return 0;
+}
+
 // ##############################################################################
 // ######################### Private implementation #############################
 // ##############################################################################
@@ -615,40 +630,40 @@ void HypothesisTestPrivate::recalculate() {
 		result = performOneSampleTTest();
 		break;
 	case HypothesisTest::Test::t_test_two_sample:
-		performTwoSampleTTest(false /* paired */);
+		result = performTwoSampleTTest(false /* paired */);
 		break;
 	case HypothesisTest::Test::t_test_two_sample_paired:
-		performTwoSampleTTest(true /* paired */);
+		result = performTwoSampleTTest(true /* paired */);
 		break;
 	case HypothesisTest::Test::t_test_welch:
-		performWelchTTest();
+		result = performWelchTTest();
 		break;
 	case HypothesisTest::Test::one_way_anova:
-		performOneWayANOVATest();
+		result = performOneWayANOVATest();
 		break;
 	case HypothesisTest::Test::one_way_anova_repeated:
-		performOneWayANOVARepeatedTest();
+		result = performOneWayANOVARepeatedTest();
 		break;
 	case HypothesisTest::Test::mann_whitney_u_test:
-		performMannWhitneyUTest();
+		result = performMannWhitneyUTest();
 		break;
 	case HypothesisTest::Test::kruskal_wallis_test:
-		performKruskalWallisTest();
+		result = performKruskalWallisTest();
 		break;
 	case HypothesisTest::Test::wilcoxon_test:
-		performWilcoxonTest();
+		result = performWilcoxonTest();
 		break;
 	case HypothesisTest::Test::friedman_test:
-		performFriedmanTest();
+		result = performFriedmanTest();
 		break;
 	case HypothesisTest::Test::chisq_goodness_of_fit:
-		performChisqGoodnessOfFitTest();
+		result = performChisqGoodnessOfFitTest();
 		break;
 	case HypothesisTest::Test::chisq_independence:
-		// performChisqIndependenceTest();
+		result = performChisqIndependenceTest();
 		break;
 	case HypothesisTest::Test::log_rank_test:
-		performLogRankTest();
+		result = performLogRankTest();
 		break;
 	}
 
@@ -1400,67 +1415,63 @@ QString HypothesisTestPrivate::performChisqGoodnessOfFitTest() {
 		.arg(conclusion);
 }
 
-// void HypothesisTestPrivate::performChisqIndependenceTest() {
-// 	// if (dataColumns.size() < 2) { // we need at least two columns for the chi square independence test
-// 	// 	Q_EMIT q->info(i18n("At lest two columns are required to perform Chi-square Independence Test."));
-// 	// 	return;
-// 	// }
+QString HypothesisTestPrivate::performChisqIndependenceTest() {
+	if (dataColumns.size() < 2) { // we need at least two columns for the chi square independence test
+		Q_EMIT q->info(i18n("At lest two columns are required to perform Chi-square Independence Test."));
+		return {};
+	}
 
-// 	const int columnCount = dataColumns.size();
+	for (auto* col : dataColumns) {
+		if (col->columnMode() != AbstractColumn::ColumnMode::Integer) {
+			Q_EMIT q->info(i18n("The contingency table must have only integer values to perform Chi-square Independence test."));
+			return {};
+		}
+	}
 
-// 	QVector<QVector<double>> table(filterColumnsParallel(dataColumns));
+	const int columnCount = dataColumns.size();
 
-// 	Q_ASSERT(columnCount == table.size());
+	QVector<QVector<int>> table(filterColumnsParallel<int>(dataColumns));
 
-// 	auto rowCount = table[0].size();
+	Q_ASSERT(columnCount == table.size());
 
-// 	// for (int n = 1; n < columnCount; n++) {
-// 	// 	if (table[n].size() != rowCount) {
-// 	// 		Q_EMIT q->info(i18n("The size of each column in the contingency table must be equal to perform Chi-square Independence test."));
-// 	// 		return;
-// 	// 	}
-// 	// }
+	auto rowCount = table[0].size();
 
-// 	double** tableData = toArrayOfArrays(table);
+	for (int n = 1; n < columnCount; n++) {
+		if (table[n].size() != rowCount) {
+			Q_EMIT q->info(i18n("The size of each column in the contingency table must be equal to perform Chi-square Independence test."));
+			return {};
+		}
+	}
 
-// 	double x2 = NAN;
-// 	double q = nsl_stats_friedman_q(groups, static_cast<size_t>(groupSize), static_cast<size_t>(groupCount), &p);
+	int** tableData = toArrayOfArrays(table);
 
-// 	delete[] groups;
+	chisq_ind_test_result result = nsl_stats_chisq_ind_x2(const_cast<const int**>(tableData), static_cast<size_t>(rowCount), static_cast<size_t>(columnCount));
 
-// 	addResultTitle(i18n("Friedman Test"));
+	delete[] tableData;
 
-// 	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(test).at(0);
+	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(test).at(0);
 
-// 	for (int g = 0; g < groupCount; ++g)
-// 		addResultLine(i18n("Sample %1", g + 1), dataColumns.at(g)->name());
+	QString conclusion;
+	if (!std::isnan(result.p)) {
+		if (result.p <= significanceLevel)
+			conclusion =
+				addResultLine(i18n("At the significance level %1, both categorical variables are dependent. Reject the null Hypothesis", significanceLevel));
+		else
+			conclusion = addResultLine(
+				i18n("At the significance level %1, both categorical variables are independent. Fail to reject the null Hypothesis", significanceLevel));
+	} else {
+		conclusion = addResultLine(testResultNotAvailable());
+	}
 
-// 	addResultLine(i18n("Null Hypothesis"), nullHypothesisText);
-// 	addResultLine(i18n("Alternate Hypothesis"), alternateHypothesisText);
-
-// 	addResultSection(i18n("Descriptive Statistics"));
-// 	for (int g = 0; g < groupCount; ++g) {
-// 		const auto& statistics = static_cast<const Column*>(dataColumns.at(g))->statistics();
-// 		addResultLine(i18n("Group %1 Size", g + 1), statistics.size);
-// 		addResultLine(i18n("Group %1 Mean", g + 1), statistics.arithmeticMean);
-// 		addResultLine(i18n("Group %1 Standard Deviation", g + 1), statistics.standardDeviation);
-// 	}
-// 	addResultSection(i18n("Friedman Test Statistics"));
-// 	addResultLine(i18n("Significance Level"), significanceLevel);
-// 	addResultLine(i18n("Q"), q);
-// 	addResultLine(i18n("p-Value"), p);
-
-// 	addResultSection(i18n("Statistical Conclusion"));
-// 	if (!std::isnan(p)) {
-// 		if (p <= significanceLevel)
-// 			addResultLine(i18n("At the significance level %1, at least one group is significantly different. Reject the null Hypothesis", significanceLevel));
-// 		else
-// 			addResultLine(
-// 				i18n("At the significance level %1, no significant difference between groups. Fail to reject the null Hypothesis", significanceLevel));
-// 	} else {
-// 		addResultLine(testResultNotAvailable());
-// 	}
-// }
+	return chisqIndependenceTestResultTemplate()
+		.arg(nullHypothesisText)
+		.arg(alternateHypothesisText)
+		.arg(significanceLevel)
+		.arg(result.x2)
+		.arg(result.p)
+		.arg(result.df)
+		.arg(conclusion);
+}
 
 QString HypothesisTestPrivate::performLogRankTest() {
 	// time, status and group columns required
