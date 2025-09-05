@@ -32,6 +32,10 @@ public:
 	struct Value {
 		QString name;
 		Aggregation aggregation;
+
+		bool operator==(const Value& other) const {
+			return name == other.name && aggregation == other.aggregation;
+		}
 	};
 
 	BASIC_D_ACCESSOR_DECL(DataSourceType, dataSourceType, DataSourceType)

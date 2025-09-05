@@ -50,7 +50,7 @@ public:
 	QStringList measures;
 	QStringList rows;
 	QStringList columns;
-	QVector<PivotTable::Value> values;
+	QVector<PivotTable::Value> values{{QString(), PivotTable::Aggregation::Count}};
 	bool showNulls{false};
 	bool showTotals{true};
 	PivotTable::Sort sortType{PivotTable::Sort::NoSort};
@@ -63,6 +63,7 @@ private:
 
 	QString createSQLQuery() const;
 	void populateDataModels(QSqlQuery);
+	QString headerText(PivotTable::Value value) const;
 };
 
 #endif

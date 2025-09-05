@@ -44,6 +44,7 @@ private:
 	void load();
 	void loadFields();
 	void loadValues();
+	void addValue(const QString& = QString(), PivotTable::Aggregation aggregation = PivotTable::Aggregation::Count);
 	void readConnections();
 	bool fieldSelected(const QString&);
 
@@ -55,6 +56,9 @@ private Q_SLOTS:
 	void tableChanged();
 	void showDatabaseManager();
 
+	void valueNameChanged(int);
+	void valueAggregationChanged(int);
+
 	//SLOTs for changes triggered in PivotTable
 
 	void addRow();
@@ -63,7 +67,6 @@ private Q_SLOTS:
 	void addColumn();
 	void removeColumn();
 
-	void addValue();
 	void removeValue();
 
 Q_SIGNALS:

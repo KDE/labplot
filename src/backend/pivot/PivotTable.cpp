@@ -129,7 +129,7 @@ BASIC_SHARED_D_READER_IMPL(PivotTable, QVector<PivotTable::Value>, values, value
 STD_SETTER_CMD_IMPL_F_S(PivotTable, SetValues, QVector<PivotTable::Value>, values, recalculate)
 void PivotTable::setValues(const QVector<Value> values) {
 	Q_D(PivotTable);
-	// if (columns != d->dataColumns)
+	if (values != d->values)
 		exec(new PivotTableSetValuesCmd(d, values, ki18n("%1: set values")));
 }
 bool PivotTable::exportView() const {
@@ -291,9 +291,8 @@ QString PivotTablePrivate::createSQLQuery() const {
 		}
 
 		valuesString = valuesList.join(QLatin1Char(','));
-	} else {
+	} else
 		valuesString = QLatin1String("COUNT(*)");
-	}
 
 	// add dimensions to the selection
 	QString dimensionsString;
@@ -306,9 +305,12 @@ QString PivotTablePrivate::createSQLQuery() const {
 		dimensionsString += columns.join(QLatin1Char(','));
 	}
 
-	QString query = QLatin1String("SELECT ") + valuesString;
+	// SELECT part
+	QString query = QLatin1String("SELECT ");
 	if (!dimensionsString.isEmpty())
-		query += QLatin1Char(',') + dimensionsString;
+		query += dimensionsString + QLatin1Char(',');
+
+	query += valuesString;
 
 	// FROM part
 	query += QLatin1String(" FROM ") + m_dbTableName;
@@ -335,7 +337,28 @@ QString PivotTablePrivate::createSQLQuery() const {
 		}
 	}
 
+	qDebug()<< query;
 	return query;
+}
+
+QString PivotTablePrivate::headerText(PivotTable::Value value) const {
+	switch (value.aggregation) {
+	case PivotTable::Aggregation::Count: {
+		if (value.name.isEmpty())
+			return i18n("Count");
+		else
+			return i18n("Count of %1", value.name);
+	}
+	case PivotTable::Aggregation::Sum:
+		return i18n("Sum of %1", value.name);
+	case PivotTable::Aggregation::Min:
+		return i18n("Minimum of %1", value.name);
+	case PivotTable::Aggregation::Max:
+		return i18n("Maximum of %1", value.name);
+	case PivotTable::Aggregation::Avg:
+		return i18n("Average of %1", value.name);
+	}
+	return QString();
 }
 
 // copy the result into the models
@@ -351,6 +374,7 @@ void PivotTablePrivate::populateDataModels(QSqlQuery sqlQuery) {
 	const int columnsCount = sqlQuery.record().count(); // total number of columns in the result set
 	const int firstValueIndex = rows.size() + columns.size(); // index of the first value column (the first column with a value, not a field name
 	const int valuesCount = columnsCount - firstValueIndex; // number of value columns (the columns with values, not field names)
+	Q_ASSERT(valuesCount == values.size()); // the number of value columns must be equal to the number of values
 
 	DEBUG("number of columns " << columnsCount);
 	DEBUG("number rows: " << recordsCount);
@@ -358,21 +382,23 @@ void PivotTablePrivate::populateDataModels(QSqlQuery sqlQuery) {
 	DEBUG("index of the first value column: " << firstValueIndex);
 
 	// resize the data models and set the data
-	if (columns.isEmpty() && rows.isEmpty()) { // no fields provided, show the total count only
+	if (columns.isEmpty() && rows.isEmpty()) { // no fields provided, show the values only
 		// resize the models
 		verticalHeaderModel->setColumnCount(0);
 		verticalHeaderModel->setRowCount(0);
 
-		horizontalHeaderModel->setColumnCount(1);
+		horizontalHeaderModel->setColumnCount(valuesCount);
 		horizontalHeaderModel->setRowCount(1);
 
-		dataModel->setColumnCount(1);
+		dataModel->setColumnCount(valuesCount);
 		dataModel->setRowCount(1);
 
-		// set the value
-		horizontalHeaderModel->setData(horizontalHeaderModel->index(0, 0), i18n("Totals"), Qt::DisplayRole);
+		// set the values and their descriptions
 		sqlQuery.next();
-		dataModel->setItem(0, 0, new QStandardItem(sqlQuery.value(0).toString()));
+		for (int i = 0; i < valuesCount; ++i) {
+			horizontalHeaderModel->setData(horizontalHeaderModel->index(0, i), headerText(values.at(i)), Qt::DisplayRole);
+			dataModel->setItem(0, i, new QStandardItem(sqlQuery.value(i).toString()));
+		}
 	} else if (columns.isEmpty()) { // all selected field columns were put on rows
 		// we have:
 		// * all field columns on rows
@@ -391,9 +417,9 @@ void PivotTablePrivate::populateDataModels(QSqlQuery sqlQuery) {
 		if (recordsCount != -1)
 			dataModel->setRowCount(recordsCount);
 
-		// set the values
-		// TODO: only "Totals" value at the moment, needs to be extended later when we allow to add other values
-		horizontalHeaderModel->setData(horizontalHeaderModel->index(0, 0), i18n("Totals"), Qt::DisplayRole);
+		// set the description of the values
+		for (int i = 0; i < valuesCount; ++i)
+			horizontalHeaderModel->setData(horizontalHeaderModel->index(0, i), headerText(values.at(i)), Qt::DisplayRole);
 
 		QVector<int> start_span(firstValueIndex, 0);
 		QVector<int> end_span(firstValueIndex, 0);
@@ -435,22 +461,26 @@ void PivotTablePrivate::populateDataModels(QSqlQuery sqlQuery) {
 		}
 
 		verticalHeaderModel->setSpan(1, 0, 0, rows.count());
-	} else if (rows.isEmpty()) { // all selected field columns were put on colums
+	} else if (rows.isEmpty()) { // all selected field columns were put on columns
 		// we have:
-		// * all field colums on columns
+		// * all field columns on columns
 		//   -> one column for the vertical header with the number of rows equal to the number of record sets in the result query
 		// * only values on columns
 		//   -> one row for the horizontal header with the number of columns equal to the number of values
 
 		// resize the models
-		verticalHeaderModel->setColumnCount(recordsCount);
-		verticalHeaderModel->setRowCount(1);
+		verticalHeaderModel->setColumnCount(1);
+		verticalHeaderModel->setRowCount(valuesCount);
 
 		horizontalHeaderModel->setColumnCount(recordsCount);
-		horizontalHeaderModel->setRowCount(columns.size());
+		horizontalHeaderModel->setRowCount(columns.count());
 
-		dataModel->setRowCount(valuesCount);
 		dataModel->setColumnCount(recordsCount);
+		dataModel->setRowCount(valuesCount);
+
+		// set the description of the values
+		for (int i = 0; i < valuesCount; ++i)
+			verticalHeaderModel->setData(verticalHeaderModel->index(i, 0), headerText(values.at(i)), Qt::DisplayRole);
 
 		// set the values
 		QVector<int> start_span(firstValueIndex, 0);

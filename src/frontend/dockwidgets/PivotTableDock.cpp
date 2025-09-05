@@ -34,7 +34,7 @@ PivotTableDock::PivotTableDock(QWidget* parent) : BaseDock(parent) {
 	setBaseWidgets(ui.leName, ui.teComment);
 
 	cbSpreadsheet = new TreeViewComboBox;
-	ui.gridLayout->addWidget(cbSpreadsheet, 5, 3, 1, 5);
+	ui.gridLayout->addWidget(cbSpreadsheet, 6, 2, 1, 2);
 
 	QList<AspectType> list{AspectType::Folder,
 						   AspectType::Workbook,
@@ -76,6 +76,9 @@ PivotTableDock::PivotTableDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.bRemoveRow, &QPushButton::clicked, this,&PivotTableDock::removeRow);
 	connect(ui.bAddColumn,  &QPushButton::clicked, this, &PivotTableDock::addColumn);
 	connect(ui.bRemoveColumn, &QPushButton::clicked, this,&PivotTableDock::removeColumn);
+	connect(ui.bAddValue,  &QPushButton::clicked,  this, [=]() {
+		addValue();
+	});
 
 	connect(ui.lwFields, &QListWidget::itemSelectionChanged, this, [=]() {
 		const bool enabled = !ui.lwFields->selectedItems().isEmpty();
@@ -198,35 +201,118 @@ void PivotTableDock::removeColumn() {
 }
 
 /*!
- * adds the selected field to the values
+ * creates the widgets for a new value and adds them to the layout
+  \param name Name of the column to be used as value
+  \param aggregation Aggregation method to be used for this value
  */
-void PivotTableDock::addValue() {
-	QComboBox* cbValueName = nullptr;
-	QComboBox* cbValueAggregation = nullptr;
-	if (m_valueNameComboBoxes.count() == 0) {
-		cbValueName = ui.cbValueName;
-		cbValueAggregation = ui.cbValueAggregation;
-	} else {
-		// create comboboxes for the new value
-	}
-
-	cbValueName->clear();
+void PivotTableDock::addValue(const QString& name, PivotTable::Aggregation aggregation) {
+	// value name
+	auto* cbValueName = new QComboBox(this);
+	m_valueNameComboBoxes << cbValueName;
 	cbValueName->addItem(QString());
 	for (auto measure : m_pivotTable->measures())
 		cbValueName->addItem(measure);
+	cbValueName->setCurrentText(name);
+	connect(cbValueName, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &PivotTableDock::valueNameChanged);
+
+	// aggregation
+	auto* cbValueAggregation = new QComboBox(this);
+	m_valueAggregationComboBoxes << cbValueAggregation;
 
 	cbValueAggregation->addItem(i18n("Count"), static_cast<int>(PivotTable::Aggregation::Count));
 	cbValueAggregation->addItem(i18n("Sum"), static_cast<int>(PivotTable::Aggregation::Sum));
 	cbValueAggregation->addItem(i18n("Minimum"), static_cast<int>(PivotTable::Aggregation::Min));
 	cbValueAggregation->addItem(i18n("Maximum"), static_cast<int>(PivotTable::Aggregation::Max));
 	cbValueAggregation->addItem(i18n("Average"), static_cast<int>(PivotTable::Aggregation::Avg));
+	cbValueAggregation->setCurrentIndex(cbValueAggregation->findData(static_cast<int>(aggregation)));
+	connect(cbValueAggregation, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+			this, &PivotTableDock::valueAggregationChanged);
+
+	// add to layout
+	const int index = m_valueNameComboBoxes.count() - 1;
+	auto* gridLayout = static_cast<QGridLayout*>(ui.frameValues->layout());
+	gridLayout->addWidget(cbValueName, index, 0, 1, 1);
+	gridLayout->addWidget(cbValueAggregation, index, 1, 1, 1);
+
+	// remove button (not for the first value)
+	if (index != 0) {
+		auto* bRemoveValue = new QPushButton(this);
+		bRemoveValue->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
+		connect(bRemoveValue, &QPushButton::clicked, this, &PivotTableDock::removeValue);
+		m_removeValueButtons << bRemoveValue;
+		gridLayout->addWidget(bRemoveValue, index, 2, 1, 1);
+	}
+
+	// move the "Add Value" button one row down
+	gridLayout->addWidget(ui.bAddValue, index + 1, 2, 1, 1);
+
+	CONDITIONAL_LOCK_RETURN;
+
+	// add new value to the pivot table
+	auto values = m_pivotTable->values();
+	PivotTable::Value value;
+	value.name = name;
+	value.aggregation = aggregation;
+	values.append(value);
+	m_pivotTable->setValues(values);
 }
 
 /*!
  * removes the selected field from the values
  */
 void PivotTableDock::removeValue() {
-	// TODO
+	// remove widgets
+	auto* b = static_cast<QPushButton*>(sender());
+	const int index = m_removeValueButtons.indexOf(b);
+	delete m_valueNameComboBoxes.takeAt(index + 1); // +1 because the first value has no remove button
+	delete m_valueAggregationComboBoxes.takeAt(index + 1);
+	delete m_removeValueButtons.takeAt(index);
+
+	// remove the value from the pivot table
+	auto values = m_pivotTable->values();
+	if (index + 1 < values.size()) // +1 because the first value has no remove button
+		values.removeAt(index + 1);
+	m_pivotTable->setValues(values);
+}
+
+/*!
+* called when the user changes the name of a value
+*/
+void PivotTableDock::valueNameChanged(int) {
+	CONDITIONAL_LOCK_RETURN;
+
+	auto* cb = static_cast<QComboBox*>(sender());
+	const int i = m_valueNameComboBoxes.indexOf(cb);
+	if (i == -1)
+		return;
+
+	auto values = m_pivotTable->values();
+	Q_ASSERT(i < values.size());
+	auto value = values.at(i);
+	value.name = cb->currentText();
+	values[i] = value;
+	m_pivotTable->setValues(values);
+}
+
+/*!
+* called when the user changes the aggregation method of a value
+*/
+void PivotTableDock::valueAggregationChanged(int) {
+	CONDITIONAL_LOCK_RETURN;
+
+	auto* cb = static_cast<QComboBox*>(sender());
+	const int i = m_valueAggregationComboBoxes.indexOf(cb);
+	if (i == -1)
+		return;
+
+	const auto aggregation = static_cast<PivotTable::Aggregation>(cb->currentData().toInt());
+	auto values = m_pivotTable->values();
+	Q_ASSERT(i < values.size());
+	auto value = values.at(i);
+	value.aggregation = aggregation;
+	values[i] = value;
+	m_pivotTable->setValues(values);
 }
 
 /*!
@@ -242,7 +328,8 @@ void PivotTableDock::loadFields() {
 
 void PivotTableDock::loadValues() {
 	const auto& values = m_pivotTable->values();
-
+	for (const auto& value : values)
+		addValue(value.name, value.aggregation);
 }
 
 /*!
