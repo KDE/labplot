@@ -22,6 +22,7 @@
 #include <QFileDialog>
 #include <QLocale>
 #include <QMenu>
+#include <QMessageBox>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
@@ -33,6 +34,7 @@
 
 #include <cstddef>
 #include <limits>
+#include <qtypes.h>
 
 QString HypothesisTestPrivate::oneSampleTTestResultTemplate() {
 	return addResultTitle(i18n("One-Sample t-Test")) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
@@ -195,12 +197,18 @@ QVector<double> HypothesisTestPrivate::filterColumn<double>(const AbstractColumn
 }
 
 template<>
-QVector<int> HypothesisTestPrivate::filterColumn<int>(const AbstractColumn* col) {
-	QVector<int> sample;
+QVector<qint64> HypothesisTestPrivate::filterColumn<qint64>(const AbstractColumn* col) {
+	QVector<qint64> sample;
 	if (col->columnMode() == AbstractColumn::ColumnMode::Integer) {
 		for (int row = 0; row < col->rowCount(); ++row) {
 			if (rowIsValid(col, row)) {
-				sample.append(col->integerAt(row));
+				sample.append(static_cast<qint64>(col->integerAt(row)));
+			}
+		}
+	} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
+		for (int row = 0; row < col->rowCount(); ++row) {
+			if (rowIsValid(col, row)) {
+				sample.append(static_cast<qint64>(col->bigIntAt(row)));
 			}
 		}
 	}
@@ -252,15 +260,18 @@ void HypothesisTest::setDataColumns(const QVector<const AbstractColumn*>& cols) 
 		return;
 	}
 
+	QVector<QString> columnPaths;
 	for (auto* col : cols) {
 		// currently excluding bigint because bigint > double and then we have to start using long double everywhere to accomodate
-		if (col->columnMode() != AbstractColumn::ColumnMode::Double && col->columnMode() != AbstractColumn::ColumnMode::Integer) {
-			Q_EMIT info(i18n("Columns must be either of type double or integer."));
+		if (!col->isNumeric()) {
+			Q_EMIT info(i18n("Column '%1' must be of numeric type.", col->name()));
 			return;
 		}
+		columnPaths.append(col->path());
 	}
 
 	d->dataColumns = cols;
+	d->dataColumnPaths = columnPaths;
 }
 
 const QVector<const AbstractColumn*>& HypothesisTest::dataColumns() const {
@@ -309,6 +320,7 @@ void HypothesisTest::setTest(Test test) {
 	Q_D(HypothesisTest);
 	d->test = test;
 	d->dataColumns.clear();
+	d->dataColumnPaths.clear();
 	d->resetResult();
 }
 
@@ -502,16 +514,16 @@ size_t HypothesisTestPrivate::minSampleCount(HypothesisTest::Test test) {
 	case HypothesisTest::Test::t_test_welch:
 	case HypothesisTest::Test::one_way_anova:
 	case HypothesisTest::Test::one_way_anova_repeated:
-		return 5;
 	case HypothesisTest::Test::mann_whitney_u_test:
 	case HypothesisTest::Test::kruskal_wallis_test:
 	case HypothesisTest::Test::wilcoxon_test:
 	case HypothesisTest::Test::friedman_test:
-		return 25;
+		return 5;
 	case HypothesisTest::Test::chisq_independence:
 	case HypothesisTest::Test::chisq_goodness_of_fit:
+		return 2;
 	case HypothesisTest::Test::log_rank_test:
-		return 50;
+		return 2;
 	}
 
 	return 0;
@@ -619,7 +631,7 @@ QString HypothesisTestPrivate::addResultTable(const QVector<QVector<QString>>& d
 // ##############################################################################
 void HypothesisTestPrivate::recalculate() {
 	if (dataColumns.isEmpty()) {
-		Q_EMIT q->info(i18n("No variable column provided."));
+		QMessageBox::warning(q->view(), i18n("Hypothesis Test Error"), i18n("No variable columns provided."));
 		return;
 	}
 
@@ -814,6 +826,7 @@ void HypothesisTestPrivate::resetResult() {
 					 .arg(notAvailable())
 					 .arg(notAvailable())
 					 .arg(notAvailable())
+					 .arg(notAvailable())
 					 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::chisq_independence) {
 		result = chisqIndependenceTestResultTemplate()
@@ -850,10 +863,15 @@ QString HypothesisTestPrivate::performOneSampleTTest() {
 	QVector<double> sample = filterColumn<double>(col);
 	size_t n = sample.size();
 
+	if (n < minSampleCount(test)) {
+		QMessageBox::warning(q->view(), i18n("Sample Size Error"), i18n("Column '%1' requires at least %2 samples.", col->name(), minSampleCount(test)));
+		return {};
+	}
+
 	one_sample_t_test_result result;
 	result.p = NAN;
 	if (n != 0)
-		result = nsl_stats_one_sample_t(sample.constData(), static_cast<size_t>(n), testMean, tail);
+		result = nsl_stats_one_sample_t(sample.constData(), n, testMean, tail);
 
 	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(test).at(tail);
 
@@ -886,7 +904,9 @@ QString HypothesisTestPrivate::performOneSampleTTest() {
 
 QString HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 	if (dataColumns.size() < 2) { // we need two columns for the two sample t test
-		Q_EMIT q->info(i18n("Two columns are required to perform %1 Two-Sample t-Test.", paired ? i18n("Paired") : i18n("Independent")));
+		QMessageBox::warning(q->view(),
+							 i18n("Hypothesis Test Error"),
+							 i18n("Two columns are required to perform %1 Two-Sample t-Test.", paired ? i18n("Paired") : i18n("Independent")));
 		return {};
 	}
 
@@ -896,6 +916,16 @@ QString HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 	QVector<QVector<double>> samples = filterColumnsParallel<double>(QVector<const AbstractColumn*>{col1, col2});
 	size_t n1 = samples[0].size();
 	size_t n2 = samples[1].size();
+
+	if (n1 < minSampleCount(test)) {
+		QMessageBox::warning(q->view(), i18n("Sample Size Error"), i18n("Column '%1' requires at least %2 samples.", col1->name(), minSampleCount(test)));
+		return {};
+	}
+
+	if (n2 < minSampleCount(test)) {
+		QMessageBox::warning(q->view(), i18n("Sample Size Error"), i18n("Column '%1' requires at least %2 samples.", col2->name(), minSampleCount(test)));
+		return {};
+	}
 
 	double p = NAN;
 	int df = 0;
@@ -907,7 +937,7 @@ QString HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 	if (n1 != 0 && n2 != 0) {
 		if (paired) {
 			if (n1 != n2) {
-				Q_EMIT q->info(i18n("Paired t-test requires equal sample sizes."));
+				QMessageBox::warning(q->view(), i18n("Hypothesis Test Error"), i18n("Paired t-test requires equal sample sizes."));
 				return {};
 			}
 
@@ -916,14 +946,13 @@ QString HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 			for (size_t i = 0; i < n1; ++i)
 				differences.append(samples[0][i] - samples[1][i]);
 
-			one_sample_t_test_result result = nsl_stats_one_sample_t(differences.constData(), static_cast<size_t>(n1), 0.0, tail);
+			one_sample_t_test_result result = nsl_stats_one_sample_t(differences.constData(), n1, 0.0, tail);
 			p = result.p;
 			df = result.df;
 			t = result.t;
 			meanDifference = result.mean_difference;
 		} else {
-			independent_t_test_result result =
-				nsl_stats_independent_t(samples[0].constData(), static_cast<size_t>(n1), samples[1].constData(), static_cast<size_t>(n2), tail);
+			independent_t_test_result result = nsl_stats_independent_t(samples[0].constData(), n1, samples[1].constData(), n2, tail);
 			p = result.p;
 			df = result.df;
 			t = result.t;
@@ -977,7 +1006,7 @@ QString HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 
 QString HypothesisTestPrivate::performWelchTTest() {
 	if (dataColumns.size() < 2) { // we need two columns for the welch t test
-		Q_EMIT q->info(i18n("Two columns are required to perform Welch t-Test."));
+		QMessageBox::warning(q->view(), i18n("Hypothesis Test Error"), i18n("Two columns are required to perform Welch t-Test."));
 		return {};
 	}
 
@@ -988,11 +1017,21 @@ QString HypothesisTestPrivate::performWelchTTest() {
 	size_t n1 = samples[0].size();
 	size_t n2 = samples[1].size();
 
+	if (n1 < minSampleCount(test)) {
+		QMessageBox::warning(q->view(), i18n("Sample Size Error"), i18n("Column '%1' requires at least %2 samples.", col1->name(), minSampleCount(test)));
+		return {};
+	}
+
+	if (n2 < minSampleCount(test)) {
+		QMessageBox::warning(q->view(), i18n("Sample Size Error"), i18n("Column '%1' requires at least %2 samples.", col2->name(), minSampleCount(test)));
+		return {};
+	}
+
 	welch_t_test_result result;
 	result.p = NAN;
 
 	if (n1 != 0 && n2 != 0)
-		result = nsl_stats_welch_t(samples[0].constData(), static_cast<size_t>(n1), samples[1].constData(), static_cast<size_t>(n2), tail);
+		result = nsl_stats_welch_t(samples[0].constData(), n1, samples[1].constData(), n2, tail);
 
 	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(test).at(tail);
 
@@ -1023,7 +1062,7 @@ QString HypothesisTestPrivate::performWelchTTest() {
 
 QString HypothesisTestPrivate::performOneWayANOVATest() {
 	if (dataColumns.size() < 2) {
-		Q_EMIT q->info(i18n("At least two columns are required to perform One-way ANOVA test."));
+		QMessageBox::warning(q->view(), i18n("Hypothesis Test Error"), i18n("At least two columns are required to perform One-way ANOVA test."));
 		return {};
 	}
 
@@ -1035,8 +1074,16 @@ QString HypothesisTestPrivate::performOneWayANOVATest() {
 
 	QVector<size_t> groupSizes(groupCount);
 
-	for (int n = 0; n < groupCount; n++)
-		groupSizes[n] = static_cast<size_t>(groupData[n].size());
+	for (int n = 0; n < groupCount; n++) {
+		size_t sampleSize = groupData[n].size();
+		if (sampleSize < minSampleCount(test)) {
+			QMessageBox::warning(q->view(),
+								 i18n("Sample Size Error"),
+								 i18n("Column '%1' requires at least %2 samples.", dataColumns.at(n)->name(), minSampleCount(test)));
+			return {};
+		}
+		groupSizes[n] = static_cast<size_t>(sampleSize);
+	}
 
 	double** groups = toArrayOfArrays(groupData);
 
@@ -1076,7 +1123,9 @@ QString HypothesisTestPrivate::performOneWayANOVATest() {
 
 QString HypothesisTestPrivate::performOneWayANOVARepeatedTest() {
 	if (dataColumns.size() < 2) {
-		Q_EMIT q->info(i18n("At least two columns are required to perform One-way ANOVA with Repeated Measures test."));
+		QMessageBox::warning(q->view(),
+							 i18n("Hypothesis Test Error"),
+							 i18n("At least two columns are required to perform One-way ANOVA with Repeated Measures test."));
 		return {};
 	}
 
@@ -1088,9 +1137,18 @@ QString HypothesisTestPrivate::performOneWayANOVARepeatedTest() {
 
 	auto groupSize = groupData[0].size();
 
+	if (static_cast<size_t>(groupSize) < minSampleCount(test)) {
+		QMessageBox::warning(q->view(),
+							 i18n("Sample Size Error"),
+							 i18n("Column '%1' requires at least %2 samples.", dataColumns.at(0)->name(), minSampleCount(test)));
+		return {};
+	}
+
 	for (int n = 1; n < groupCount; n++) {
 		if (groupData[n].size() != groupSize) {
-			Q_EMIT q->info(i18n("The size of each sample must be equal to perform One-way ANOVA with Repeated Measures test."));
+			QMessageBox::warning(q->view(),
+								 i18n("Hypothesis Test Error"),
+								 i18n("The size of each sample must be equal to perform One-way ANOVA with Repeated Measures test."));
 			return {};
 		}
 	}
@@ -1135,7 +1193,7 @@ QString HypothesisTestPrivate::performOneWayANOVARepeatedTest() {
 
 QString HypothesisTestPrivate::performMannWhitneyUTest() {
 	if (dataColumns.size() < 2) {
-		Q_EMIT q->info(i18n("Two columns are required to perform Mann-Whitney U test."));
+		QMessageBox::warning(q->view(), i18n("Hypothesis Test Error"), i18n("Two columns are required to perform Mann-Whitney U test."));
 		return {};
 	}
 
@@ -1146,11 +1204,21 @@ QString HypothesisTestPrivate::performMannWhitneyUTest() {
 	size_t n1 = samples[0].size();
 	size_t n2 = samples[1].size();
 
+	if (n1 < minSampleCount(test)) {
+		QMessageBox::warning(q->view(), i18n("Sample Size Error"), i18n("Column '%1' requires at least %2 samples.", col1->name(), minSampleCount(test)));
+		return {};
+	}
+
+	if (n2 < minSampleCount(test)) {
+		QMessageBox::warning(q->view(), i18n("Sample Size Error"), i18n("Column '%1' requires at least %2 samples.", col2->name(), minSampleCount(test)));
+		return {};
+	}
+
 	mannwhitney_test_result result;
 	result.p = NAN;
 
 	if (n1 != 0 && n2 != 0)
-		result = nsl_stats_mannwhitney_u(samples[0].constData(), static_cast<size_t>(n1), samples[1].constData(), static_cast<size_t>(n2), tail);
+		result = nsl_stats_mannwhitney_u(samples[0].constData(), n1, samples[1].constData(), n2, tail);
 
 	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(test).at(tail);
 
@@ -1185,7 +1253,7 @@ QString HypothesisTestPrivate::performMannWhitneyUTest() {
 
 QString HypothesisTestPrivate::performKruskalWallisTest() {
 	if (dataColumns.size() < 2) {
-		Q_EMIT q->info(i18n("At least two columns are required to perform Kruskal-Wallis test."));
+		QMessageBox::warning(q->view(), i18n("Hypothesis Test Error"), i18n("At least two columns are required to perform Kruskal-Wallis test."));
 		return {};
 	}
 
@@ -1197,8 +1265,16 @@ QString HypothesisTestPrivate::performKruskalWallisTest() {
 
 	QVector<size_t> groupSizes(groupCount);
 
-	for (int n = 0; n < groupCount; n++)
-		groupSizes[n] = static_cast<size_t>(groupData[n].size());
+	for (int n = 0; n < groupCount; n++) {
+		size_t sampleSize = groupData[n].size();
+		if (sampleSize < minSampleCount(test)) {
+			QMessageBox::warning(q->view(),
+								 i18n("Sample Size Error"),
+								 i18n("Column '%1' requires at least %2 samples.", dataColumns.at(n)->name(), minSampleCount(test)));
+			return {};
+		}
+		groupSizes[n] = sampleSize;
+	}
 
 	double** groups = toArrayOfArrays(groupData);
 
@@ -1235,7 +1311,7 @@ QString HypothesisTestPrivate::performKruskalWallisTest() {
 
 QString HypothesisTestPrivate::performWilcoxonTest() {
 	if (dataColumns.size() < 2) {
-		Q_EMIT q->info(i18n("Two columns are required to perform Wilcoxon Signed Rank test."));
+		QMessageBox::warning(q->view(), i18n("Hypothesis Test Error"), i18n("Two columns are required to perform Wilcoxon Signed Rank test."));
 		return {};
 	}
 
@@ -1246,12 +1322,22 @@ QString HypothesisTestPrivate::performWilcoxonTest() {
 	size_t n1 = samples[0].size();
 	size_t n2 = samples[1].size();
 
+	if (n1 < minSampleCount(test)) {
+		QMessageBox::warning(q->view(), i18n("Sample Size Error"), i18n("Column '%1' requires at least %2 samples.", col1->name(), minSampleCount(test)));
+		return {};
+	}
+
+	if (n2 < minSampleCount(test)) {
+		QMessageBox::warning(q->view(), i18n("Sample Size Error"), i18n("Column '%1' requires at least %2 samples.", col2->name(), minSampleCount(test)));
+		return {};
+	}
+
 	wilcoxon_test_result result;
 	result.p = NAN;
 
 	if (n1 != 0 && n2 != 0) {
 		if (n1 != n2) {
-			Q_EMIT q->info(i18n("Wilcoxon Signed Rank test requires equal sample sizes."));
+			QMessageBox::warning(q->view(), i18n("Hypothesis Test Error"), i18n("Wilcoxon Signed Rank test requires equal sample sizes."));
 			return {};
 		}
 		result = nsl_stats_wilcoxon_w(samples[0].constData(), samples[1].constData(), n1, tail);
@@ -1293,7 +1379,7 @@ QString HypothesisTestPrivate::performWilcoxonTest() {
 
 QString HypothesisTestPrivate::performFriedmanTest() {
 	if (dataColumns.size() < 2) {
-		Q_EMIT q->info(i18n("At least two columns are required to perform Friedman test."));
+		QMessageBox::warning(q->view(), i18n("Hypothesis Test Error"), i18n("At least two columns are required to perform Friedman test."));
 		return {};
 	}
 
@@ -1305,9 +1391,16 @@ QString HypothesisTestPrivate::performFriedmanTest() {
 
 	auto groupSize = groupData[0].size();
 
+	if (static_cast<size_t>(groupSize) < minSampleCount(test)) {
+		QMessageBox::warning(q->view(),
+							 i18n("Sample Size Error"),
+							 i18n("Column '%1' requires at least %2 samples.", dataColumns.at(0)->name(), minSampleCount(test)));
+		return {};
+	}
+
 	for (int n = 1; n < groupCount; n++) {
 		if (groupData[n].size() != groupSize) {
-			Q_EMIT q->info(i18n("The size of each sample must be equal to perform Friedman test."));
+			QMessageBox::warning(q->view(), i18n("Hypothesis Test Error"), i18n("The size of each sample must be equal to perform Friedman test."));
 			return {};
 		}
 	}
@@ -1346,42 +1439,43 @@ QString HypothesisTestPrivate::performFriedmanTest() {
 
 QString HypothesisTestPrivate::performChisqGoodnessOfFitTest() {
 	if (dataColumns.size() < 2) { // we need two columns for the welch t test
-		Q_EMIT q->info(i18n("Two columns are required to perform Chi-square Goodness of Fit Test."));
+		QMessageBox::warning(q->view(), i18n("Hypothesis Test Error"), i18n("Two columns are required to perform Chi-square Goodness of Fit Test."));
 		return {};
 	}
 
-	const auto* col1 = dataColumns.at(0);
-	const auto* col2 = dataColumns.at(1);
+	const auto* observed = dataColumns.at(0);
+	const auto* expected = dataColumns.at(1);
 
-	AbstractColumn* observedT = nullptr;
-	AbstractColumn* expectedT = nullptr;
-
-	if (col1->columnMode() == AbstractColumn::ColumnMode::Integer) {
-		observedT = const_cast<AbstractColumn*>(col1);
-		expectedT = const_cast<AbstractColumn*>(col2);
-	} else if (col2->columnMode() == AbstractColumn::ColumnMode::Integer) {
-		observedT = const_cast<AbstractColumn*>(col2);
-		expectedT = const_cast<AbstractColumn*>(col1);
-	} else {
-		Q_EMIT q->info(i18n("An integer column for the observed frequencies is required to perform Chi-square Goodness of Fit Test."));
+	if (observed->columnMode() != AbstractColumn::ColumnMode::Integer && observed->columnMode() != AbstractColumn::ColumnMode::BigInt) {
+		QMessageBox::warning(
+			q->view(),
+			i18n("Hypothesis Test Error"),
+			i18n("Observed frequencies column '%1' must be of type integer or biginteger to perform Chi-square Goodness of Fit Test.", observed->name()));
 		return {};
 	}
 
-	const AbstractColumn* observed = const_cast<const AbstractColumn*>(observedT);
-	const AbstractColumn* expected = const_cast<const AbstractColumn*>(expectedT);
-
-	auto sample1 = filterColumn<int>(observed);
+	auto sample1 = filterColumn<qint64>(observed);
 	auto sample2 = filterColumn<double>(expected);
 
 	size_t n1 = sample1.size();
 	size_t n2 = sample2.size();
+
+	if (n1 < minSampleCount(test)) {
+		QMessageBox::warning(q->view(), i18n("Sample Size Error"), i18n("Column '%1' requires at least %2 samples.", observed->name(), minSampleCount(test)));
+		return {};
+	}
+
+	if (n2 < minSampleCount(test)) {
+		QMessageBox::warning(q->view(), i18n("Sample Size Error"), i18n("Column '%1' requires at least %2 samples.", expected->name(), minSampleCount(test)));
+		return {};
+	}
 
 	chisq_gof_test_result result;
 	result.p = NAN;
 
 	if (n1 != 0 && n2 != 0) {
 		if (n1 != n2) {
-			Q_EMIT q->info(i18n("Chi-square Goodness of Fit test requires equal sample sizes."));
+			QMessageBox::warning(q->view(), i18n("Hypothesis Test Error"), i18n("Chi-square Goodness of Fit test requires equal sample sizes."));
 			return {};
 		}
 
@@ -1407,7 +1501,7 @@ QString HypothesisTestPrivate::performChisqGoodnessOfFitTest() {
 	return chisqGoodnessOfFitTestResultTemplate()
 		.arg(nullHypothesisText)
 		.arg(nullHypothesisText)
-		.arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col1, col2})))
+		.arg(addResultColumnStatistics(QVector<const AbstractColumn*>({observed, expected})))
 		.arg(significanceLevel)
 		.arg(result.x2)
 		.arg(result.p)
@@ -1417,35 +1511,47 @@ QString HypothesisTestPrivate::performChisqGoodnessOfFitTest() {
 
 QString HypothesisTestPrivate::performChisqIndependenceTest() {
 	if (dataColumns.size() < 2) { // we need at least two columns for the chi square independence test
-		Q_EMIT q->info(i18n("At lest two columns are required to perform Chi-square Independence Test."));
+		QMessageBox::warning(q->view(), i18n("Hypothesis Test Error"), i18n("At lest two columns are required to perform Chi-square Independence Test."));
 		return {};
 	}
 
 	for (auto* col : dataColumns) {
-		if (col->columnMode() != AbstractColumn::ColumnMode::Integer) {
-			Q_EMIT q->info(i18n("The contingency table must have only integer values to perform Chi-square Independence test."));
+		if (col->columnMode() != AbstractColumn::ColumnMode::Integer && col->columnMode() != AbstractColumn::ColumnMode::BigInt) {
+			QMessageBox::warning(q->view(),
+								 i18n("Hypothesis Test Error"),
+								 i18n("Column '%1' must be of integer or biginteger type to perform Chi-square Independence test.", col->name()));
 			return {};
 		}
 	}
 
 	const int columnCount = dataColumns.size();
 
-	QVector<QVector<int>> table(filterColumnsParallel<int>(dataColumns));
+	QVector<QVector<qint64>> table(filterColumnsParallel<qint64>(dataColumns));
 
 	Q_ASSERT(columnCount == table.size());
 
 	auto rowCount = table[0].size();
 
+	if (static_cast<size_t>(rowCount) < minSampleCount(test)) {
+		QMessageBox::warning(q->view(),
+							 i18n("Sample Size Error"),
+							 i18n("Column '%1' requires at least %2 samples.", dataColumns.at(0)->name(), minSampleCount(test)));
+		return {};
+	}
+
 	for (int n = 1; n < columnCount; n++) {
 		if (table[n].size() != rowCount) {
-			Q_EMIT q->info(i18n("The size of each column in the contingency table must be equal to perform Chi-square Independence test."));
+			QMessageBox::warning(q->view(),
+								 i18n("Hypothesis Test Error"),
+								 i18n("The size of each column in the contingency table must be equal to perform Chi-square Independence test."));
 			return {};
 		}
 	}
 
-	int** tableData = toArrayOfArrays(table);
+	long long** tableData = toArrayOfArrays(table);
 
-	chisq_ind_test_result result = nsl_stats_chisq_ind_x2(const_cast<const int**>(tableData), static_cast<size_t>(rowCount), static_cast<size_t>(columnCount));
+	chisq_ind_test_result result =
+		nsl_stats_chisq_ind_x2(const_cast<const long long**>(tableData), static_cast<size_t>(rowCount), static_cast<size_t>(columnCount));
 
 	delete[] tableData;
 
@@ -1476,7 +1582,7 @@ QString HypothesisTestPrivate::performChisqIndependenceTest() {
 QString HypothesisTestPrivate::performLogRankTest() {
 	// time, status and group columns required
 	if (dataColumns.size() < 3) {
-		Q_EMIT q->info(i18n("Three columns are required to perform LogRank test."));
+		QMessageBox::warning(q->view(), i18n("Hypothesis Test Error"), i18n("Three columns are required to perform LogRank test."));
 		return {};
 	}
 
@@ -1484,8 +1590,18 @@ QString HypothesisTestPrivate::performLogRankTest() {
 	const auto* statusCol = dataColumns.at(1);
 	const auto* groupCol = dataColumns.at(2);
 
+	if (statusCol->columnMode() != AbstractColumn::ColumnMode::Integer) {
+		QMessageBox::warning(q->view(), i18n("Hypothesis Test Error"), i18n("Status column should be of integer type."));
+		return {};
+	}
+
+	if (groupCol->columnMode() != AbstractColumn::ColumnMode::Integer) {
+		QMessageBox::warning(q->view(), i18n("Hypothesis Test Error"), i18n("Group column should be of integer type."));
+		return {};
+	}
+
 	if (statusCol->rowCount() != timeCol->rowCount() || groupCol->rowCount() != timeCol->rowCount()) {
-		Q_EMIT q->info(i18n("Time, Status and Group columns should have equal size."));
+		QMessageBox::warning(q->view(), i18n("Hypothesis Test Error"), i18n("Time, Status and Group columns should have equal size."));
 		return {};
 	}
 
@@ -1500,16 +1616,16 @@ QString HypothesisTestPrivate::performLogRankTest() {
 			continue;
 
 		double t = timeCol->valueAt(row);
-		int s = static_cast<int>(statusCol->valueAt(row)); // must be 0 or 1
-		int g = static_cast<int>(groupCol->valueAt(row)); // must be 0 or 1
+		int s = statusCol->integerAt(row); // must be 0 or 1
+		int g = groupCol->integerAt(row); // must be 0 or 1
 
 		if (s != 0 && s != 1) {
-			Q_EMIT q->info(i18n("Status column values must be either 0 or 1."));
+			QMessageBox::warning(q->view(), i18n("Hypothesis Test Error"), i18n("Status column values must be either 0 or 1."));
 			return {};
 		}
 
 		if (g != 0 && g != 1) {
-			Q_EMIT q->info(i18n("Group column values must be either 0 or 1."));
+			QMessageBox::warning(q->view(), i18n("Hypothesis Test Error"), i18n("Group column values must be either 0 or 1."));
 			return {};
 		}
 
@@ -1524,10 +1640,26 @@ QString HypothesisTestPrivate::performLogRankTest() {
 			g1Indices.append(index);
 	}
 
-	Q_ASSERT((time.size() == status.size()) && g0Indices.size() + g1Indices.size() == time.size());
+	if ((time.size() != status.size()) || g0Indices.size() + g1Indices.size() != time.size()) {
+		QMessageBox::warning(q->view(), i18n("Hypothesis Test Error"), i18n("Time, Status and Group columns should have equal number of values."));
+		return {};
+	}
+
+	size_t group1size = g0Indices.size();
+	size_t group2size = g1Indices.size();
+
+	if (group1size < minSampleCount(test)) {
+		QMessageBox::warning(q->view(), i18n("Sample Size Error"), i18n("Group 1 requires at least %1 samples.", minSampleCount(test)));
+		return {};
+	}
+
+	if (group2size < minSampleCount(test)) {
+		QMessageBox::warning(q->view(), i18n("Sample Size Error"), i18n("Group 2 requires at least %1 samples.", minSampleCount(test)));
+		return {};
+	}
 
 	log_rank_test_result result =
-		nsl_stats_log_rank_h(time.constData(), status.constData(), g0Indices.constData(), g0Indices.size(), g1Indices.constData(), g1Indices.size());
+		nsl_stats_log_rank_h(time.constData(), status.constData(), g0Indices.constData(), group1size, g1Indices.constData(), group2size);
 
 	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(test).at(0);
 

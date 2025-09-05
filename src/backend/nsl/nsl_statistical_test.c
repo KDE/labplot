@@ -53,7 +53,7 @@ DECLARE_COMPARE_FUNCTION(signed_diff, abs_diff)
 struct mannwhitney_test_result nsl_stats_mannwhitney_u(const double sample1[], size_t n1, const double sample2[], size_t n2, nsl_stats_tail_type tail) {
 	size_t n = n1 + n2;
 
-	rank* data = malloc(n * sizeof(rank));
+	rank* data = (rank*)malloc(n * sizeof(rank));
 
 	for (size_t i = 0; i < n1; i++) {
 		data[i].value = sample1[i];
@@ -263,6 +263,7 @@ struct anova_oneway_repeated_test_result nsl_stats_anova_oneway_repeated_f(const
 }
 
 // Kruskal-Wallis
+// improve soon
 struct kruskal_wallis_test_result nsl_stats_kruskal_wallis_h(const double** groups, const size_t* sizes, size_t n_groups) {
 	struct kruskal_wallis_test_result result;
 	size_t total_samples = 0;
@@ -329,7 +330,7 @@ struct kruskal_wallis_test_result nsl_stats_kruskal_wallis_h(const double** grou
 		if (count > 1) {
 			if (tie_count_size == tie_count_capacity) {
 				tie_count_capacity = (tie_count_capacity == 0) ? 4 : tie_count_capacity * 2;
-				size_t* temp = realloc(tie_counts, tie_count_capacity * sizeof(size_t));
+				size_t* temp = (size_t*)realloc(tie_counts, tie_count_capacity * sizeof(size_t));
 				if (temp == NULL) {
 					fprintf(stderr, "Error: Memory allocation failed.\n");
 					free(ranks);
@@ -377,6 +378,7 @@ struct kruskal_wallis_test_result nsl_stats_kruskal_wallis_h(const double** grou
 }
 
 // Log-Rank test
+// improve soon
 struct log_rank_test_result
 nsl_stats_log_rank_h(const double* time, const int* status, const size_t* g1_ind, size_t size1, const size_t* g2_ind, size_t size2) {
 	struct log_rank_test_result result;
@@ -602,7 +604,7 @@ struct one_sample_t_test_result nsl_stats_one_sample_t(const double sample[], si
 double* nsl_stats_logistic_regression(double** x, int* y, int N, int n_in, int iterations, double lr) {
 	int i, j, epoch;
 	double* result;
-	double* W = 0;
+	double* W = NULL;
 	double b = 0.0;
 	double y_pred, gradient;
 
@@ -845,12 +847,12 @@ struct wilcoxon_test_result nsl_stats_wilcoxon_w(const double sample1[], const d
 
 /* Friedman test */
 struct friedman_test_result nsl_stats_friedman_q(const double** groups, size_t n_samples, size_t n_groups) {
-	rank* row = malloc(sizeof(rank) * n_groups);
-	double* rank_sums = calloc(n_groups, sizeof(double));
+	rank* row = (rank*)malloc(sizeof(rank) * n_groups);
+	double* rank_sums = (double*)calloc(n_groups, sizeof(double));
 
-	for (size_t i = 0; i < n_samples; ++i) {
+	for (size_t k = 0; k < n_samples; ++k) {
 		for (size_t j = 0; j < n_groups; ++j) {
-			row[j].value = groups[j][i];
+			row[j].value = groups[j][k];
 			row[j].group = j;
 		}
 
@@ -861,7 +863,6 @@ struct friedman_test_result nsl_stats_friedman_q(const double** groups, size_t n
 			size_t j = i + 1;
 			while (j < n_groups && row[j].value == row[i].value)
 				j++;
-			size_t tie_count = j - i;
 			double avg_rank = ((double)(i + 1) + (double)j) / 2.0;
 			for (size_t k = i; k < j; k++) {
 				row[k].rank = avg_rank;
@@ -872,8 +873,6 @@ struct friedman_test_result nsl_stats_friedman_q(const double** groups, size_t n
 	}
 
 	free(row);
-
-	double mean_R = (double)n_samples * (n_groups + 1) / 2;
 
 	double sum = 0.0;
 	for (size_t j = 0; j < n_groups; ++j) {
@@ -895,10 +894,10 @@ struct friedman_test_result nsl_stats_friedman_q(const double** groups, size_t n
 }
 
 /* Chi square Independence test */
-struct chisq_ind_test_result nsl_stats_chisq_ind_x2(const int** table, size_t row, size_t column) {
-	int total = 0;
+struct chisq_ind_test_result nsl_stats_chisq_ind_x2(const long long** table, size_t row, size_t column) {
+	long long total = 0;
 
-	int* row_sums = (int*)calloc(row, sizeof(int));
+	long long* row_sums = (long long*)calloc(row, sizeof(long long));
 	for (size_t i = 0; i < row; ++i) {
 		for (size_t j = 0; j < column; ++j) {
 			row_sums[i] += table[i][j];
@@ -906,7 +905,7 @@ struct chisq_ind_test_result nsl_stats_chisq_ind_x2(const int** table, size_t ro
 		}
 	}
 
-	int* column_sums = (int*)calloc(column, sizeof(int));
+	long long* column_sums = (long long*)calloc(column, sizeof(long long));
 	for (size_t j = 0; j < column; ++j) {
 		for (size_t i = 0; i < row; ++i) {
 			column_sums[j] += table[i][j];
@@ -916,7 +915,7 @@ struct chisq_ind_test_result nsl_stats_chisq_ind_x2(const int** table, size_t ro
 	double x2 = 0.0;
 	for (size_t i = 0; i < row; ++i) {
 		for (size_t j = 0; j < column; ++j) {
-			double expected = (double)(row_sums[i] * column_sums[j]) / total;
+			double expected = (row_sums[i] * column_sums[j]) / (double)total;
 			double diff = table[i][j] - expected;
 			x2 += (diff * diff) / expected;
 		}
@@ -938,7 +937,7 @@ struct chisq_ind_test_result nsl_stats_chisq_ind_x2(const int** table, size_t ro
 }
 
 /* Chi square Goodness of Fit Test */
-struct chisq_gof_test_result nsl_stats_chisq_gof_x2(const int* observed, const double* expected, size_t n, size_t params_estimated) {
+struct chisq_gof_test_result nsl_stats_chisq_gof_x2(const long long* observed, const double* expected, size_t n, size_t params_estimated) {
 	double x2 = 0.0;
 
 	for (size_t i = 0; i < n; ++i) {

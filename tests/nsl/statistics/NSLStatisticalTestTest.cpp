@@ -298,12 +298,12 @@ void NSLStatisticalTestTest::testFriedman() {
 }
 
 void NSLStatisticalTestTest::testChisqIndependence() {
-	const int col1[] = {5, 5};
-	const int col2[] = {7, 5};
+	const long long col1[] = {5, 5};
+	const long long col2[] = {7, 5};
 	const size_t n_rows = 2;
 	const size_t n_cols = 2;
 
-	const int* table[] = {const_cast<int*>(col1), const_cast<int*>(col2)};
+	const long long* table[] = {const_cast<long long*>(col1), const_cast<long long*>(col2)};
 
 	chisq_ind_test_result result = nsl_stats_chisq_ind_x2(table, n_rows, n_cols);
 	printf("Computed x2-statistic: %f", result.x2);
@@ -320,11 +320,11 @@ void NSLStatisticalTestTest::testChisqIndependence() {
 }
 
 void NSLStatisticalTestTest::testChisqGoodnessOfFit() {
-	const int observed[] = {50, 110, 40};
+	const long long observed[] = {50, 110, 40};
 	const double expected[] = {60.0, 100.0, 40.0};
 	const size_t n = 3;
 
-	chisq_gof_test_result result = nsl_stats_chisq_gof_x2(const_cast<int*>(observed), const_cast<double*>(expected), n, 0);
+	chisq_gof_test_result result = nsl_stats_chisq_gof_x2(observed, expected, n, 0);
 	printf("Computed x2-statistic: %f", result.x2);
 
 	printf("Computed p-value: %f\n", result.p);

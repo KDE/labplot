@@ -16,6 +16,7 @@
 #include "frontend/widgets/TreeViewComboBox.h"
 
 #include <KLocalizedString>
+#include <QPushButton>
 
 /*!
   \class HypothesisTestDock
@@ -34,14 +35,16 @@ HypothesisTestDock::HypothesisTestDock(QWidget* parent)
 
 	ui.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
+	m_buttonNew = new QPushButton();
+	m_buttonNew->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+
 	retranslateUi();
 
 	//**********************************  Slots **********************************************
 	connect(ui.cbTest, &QComboBox::currentIndexChanged, this, &HypothesisTestDock::testChanged);
 	connect(ui.pbRecalculate, &QPushButton::clicked, this, &HypothesisTestDock::recalculate);
 
-	connect(ui.tbAddVariable, &QToolButton::clicked, this, &HypothesisTestDock::addVariable);
-	connect(ui.tbRemoveVariable, &QToolButton::clicked, this, &HypothesisTestDock::removeVariable);
+	connect(m_buttonNew, &QPushButton::clicked, this, &HypothesisTestDock::addVariable);
 
 	connect(ui.rbNullTwoTailed, &QRadioButton::toggled, ui.rbAlternateTwoTailed, &QRadioButton::setChecked);
 	connect(ui.rbNullOneTailedLeft, &QRadioButton::toggled, ui.rbAlternateOneTailedLeft, &QRadioButton::setChecked);
@@ -60,21 +63,25 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	m_test = test;
 	setAspects(QList<AbstractAspect*>{m_test});
 
+	if (m_dataComboBoxes.isEmpty())
+		addVariable(); // create the first variable which is never deleted
+
 	// we want to restore the properties from the aspect to the ui
 
-	// clear all variables
-	for (int i = 0, count = ui.variablesVerticalLayout->count(); i < count; i++)
+	// clear all variables except the first
+	for (int i = 0, count = m_removeButtons.size(); i < count; i++)
 		removeVariable();
 
-	// confirm that all variables are cleared
-	Q_ASSERT(ui.variablesVerticalLayout->count() == 0);
 	// restore variables from aspect columns
-	for (auto* col : m_test->dataColumns()) {
-		addVariable();
-		int varCount = ui.variablesVerticalLayout->count();
-		auto* layout = ui.variablesVerticalLayout->itemAt(varCount - 1)->layout(); // layoutitem for the just added variable above
-		auto* treeViewCb = static_cast<TreeViewComboBox*>(layout->itemAt(1)->widget()); // treeviewcombobox for the just added variable above
-		treeViewCb->setAspect(col); // set the aspect for the treeviewcombobox to the column
+	for (int i = 0; i < m_test->dataColumns().size(); i++) {
+		auto* col = m_test->dataColumns().at(i);
+
+		if (i != 0) // no need to add for the first since it was never deleted
+			addVariable();
+		
+		auto* treeViewCb = static_cast<TreeViewComboBox*>(m_dataComboBoxes.at(i)); // treeviewcombobox for the just added variable above
+		treeViewCb->setModel(aspectModel());
+		treeViewCb->setAspect(col, col->path()); // set the aspect for the treeviewcombobox to the column
 	}
 
 	// restore significance level
@@ -132,8 +139,8 @@ void HypothesisTestDock::retranslateUi() {
 	ui.cbTest->addItem(i18n("Independent Two-Sample t-Test"), static_cast<int>(HypothesisTest::Test::t_test_two_sample));
 	ui.cbTest->addItem(i18n("Paired Two-Sample t-Test"), static_cast<int>(HypothesisTest::Test::t_test_two_sample_paired));
 	ui.cbTest->addItem(i18n("Welch t-Test"), static_cast<int>(HypothesisTest::Test::t_test_welch));
-	ui.cbTest->addItem(i18n("One-Way ANOVA"), static_cast<int>(HypothesisTest::Test::one_way_anova));
-	ui.cbTest->addItem(i18n("One-Way ANOVA with Repeated Measures"), static_cast<int>(HypothesisTest::Test::one_way_anova_repeated));
+	ui.cbTest->addItem(i18n("One-Way ANOVA Test"), static_cast<int>(HypothesisTest::Test::one_way_anova));
+	ui.cbTest->addItem(i18n("One-Way ANOVA with Repeated Measures Test"), static_cast<int>(HypothesisTest::Test::one_way_anova_repeated));
 	ui.cbTest->addItem(i18n("Mann-Whitney U Test"), static_cast<int>(HypothesisTest::Test::mann_whitney_u_test));
 	ui.cbTest->addItem(i18n("Wilcoxon Signed Rank Test"), static_cast<int>(HypothesisTest::Test::wilcoxon_test));
 	ui.cbTest->addItem(i18n("Kruskal-Wallis Test"), static_cast<int>(HypothesisTest::Test::kruskal_wallis_test));
@@ -173,11 +180,6 @@ void HypothesisTestDock::retranslateUi() {
 * It triggers the recalculation of the hypothesis test with the current settings.
 */
 void HypothesisTestDock::recalculate() {
-	// we need to call this here again for the special case of when we has previously
-	// selected variable columns and we change the selected hypothesis test. The aspect
-	// clears its list of columns, while the gui still shows columns as selected.
-	updateColumns();
-
 	m_test->recalculate();
 }
 
@@ -204,6 +206,10 @@ void HypothesisTestDock::testChanged() {
 
 	CONDITIONAL_LOCK_RETURN;
 	m_test->setTest(test);
+	// we need to call this here again for the case of when we has previously
+	// selected variable columns and we change the selected hypothesis test. The aspect
+	// clears its list of columns, while the gui still shows columns as selected.
+	updateColumns();
 }
 
 // ##############################################################################
@@ -258,7 +264,7 @@ void HypothesisTestDock::ensureVariableCount(HypothesisTest::Test test) {
 	int diff = 0;
 
 	// get the current number of columns
-	const int varCount = ui.variablesVerticalLayout->count();
+	const int varCount = m_dataComboBoxes.size();
 
 	if (varCount < min) {
 		// if the current number of columns is less than the min number of columns needed for the test, add columns to reach min
@@ -276,7 +282,7 @@ void HypothesisTestDock::ensureVariableCount(HypothesisTest::Test test) {
 	}
 
 	// confirm that the number of columns is correct for the test
-	const int newVarCount = ui.variablesVerticalLayout->count();
+	const int newVarCount = m_dataComboBoxes.size();
 	Q_ASSERT(newVarCount >= min && newVarCount <= max);
 
 	// enable or disable the add/remove variables buttons
@@ -290,10 +296,12 @@ void HypothesisTestDock::ensureVariableCount(HypothesisTest::Test test) {
 void HypothesisTestDock::manageAddRemoveVariable() {
 	const auto test = static_cast<HypothesisTest::Test>(ui.cbTest->currentData().toInt());
 	const auto [min, max] = HypothesisTest::variableCount(test);
-	const int count = ui.variablesVerticalLayout->count();
+	const int count = m_dataComboBoxes.size();
 
-	ui.tbRemoveVariable->setEnabled(count > min);
-	ui.tbAddVariable->setEnabled(count < max);
+	for (auto* btn : m_removeButtons)
+		btn->setEnabled(count > min);
+
+	m_buttonNew->setEnabled(count < max);
 }
 
 // called:
@@ -303,11 +311,9 @@ void HypothesisTestDock::manageAddRemoveVariable() {
 void HypothesisTestDock::updateColumns() {
 	if (m_initializing)
 		return;
+
 	QVector<const AbstractColumn*> columns;
-	int varCount = ui.variablesVerticalLayout->count();
-	for (int i = 0; i < varCount; i++) {
-		auto* layout = ui.variablesVerticalLayout->itemAt(i)->layout();
-		auto* treeViewCb = static_cast<TreeViewComboBox*>(layout->itemAt(1)->widget());
+	for (auto* treeViewCb : m_dataComboBoxes) {
 		auto* col = dynamic_cast<AbstractColumn*>(treeViewCb->currentAspect());
 		if (col)
 			columns << col;
@@ -337,25 +343,39 @@ void HypothesisTestDock::manageRecalculate() {
 }
 
 void HypothesisTestDock::addVariable() {
-	auto* layout = new QHBoxLayout();
-
-	// size of the items in layout
-	auto* lColumn = new QLabel(i18n("Variable %1:", QString::number(ui.variablesVerticalLayout->count() + 1)), this);
-	layout->addWidget(lColumn);
-
 	auto* model = aspectModel();
 	model->enableNonEmptyNumericColumnsOnly(true);
 	model->setSelectableAspects({AspectType::Column});
 
 	auto* cbColumn = new TreeViewComboBox(this);
 	cbColumn->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
-	layout->addWidget(cbColumn);
 	cbColumn->setModel(model);
 	connect(cbColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HypothesisTestDock::updateColumns); // update columns in aspect whenever treeviewcombobox changes
-	// only checked once after updating columns since treeviewcombobox doesn't allow unselecting items
-	connect(cbColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HypothesisTestDock::manageRecalculate, Qt::SingleShotConnection);
+	connect(cbColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HypothesisTestDock::manageRecalculate, Qt::SingleShotConnection); // only checked once after updating columns since treeviewcombobox doesn't allow unselecting items
 
-	ui.variablesVerticalLayout->addLayout(layout);
+	const int index = m_dataComboBoxes.size();
+	if (index == 0) {
+		QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Preferred);
+		sizePolicy1.setHorizontalStretch(0);
+		sizePolicy1.setVerticalStretch(0);
+		sizePolicy1.setHeightForWidth(cbColumn->sizePolicy().hasHeightForWidth());
+		cbColumn->setSizePolicy(sizePolicy1);
+	} else {
+		auto* button = new QPushButton();
+		button->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
+		connect(button, &QPushButton::clicked, this, &HypothesisTestDock::removeVariable);
+		ui.gridLayout_4->addWidget(button, index, 1, 1, 1);
+		m_removeButtons << button;
+	}
+
+	ui.gridLayout_4->addWidget(cbColumn, index, 0, 1, 1);
+	ui.gridLayout_4->addWidget(m_buttonNew, index + 1, 1, 1, 1);
+	m_dataComboBoxes << cbColumn;
+
+	if (!m_removeButtons.isEmpty())
+		ui.lVariables->setText(i18n("Columns:"));
+	else
+		ui.lVariables->setText(i18n("Column:"));
 
 	manageAddRemoveVariable(); // disable or enable add/remove variables buttons
 
@@ -364,17 +384,28 @@ void HypothesisTestDock::addVariable() {
 }
 
 void HypothesisTestDock::removeVariable() {
-	int count = ui.variablesVerticalLayout->count();
-	if (count > 0) {
-		auto* layoutItem = ui.variablesVerticalLayout->takeAt(count - 1);
-		auto* layout = layoutItem->layout();
-		QLayoutItem* child;
-		while ((child = layout->takeAt(0)) != nullptr) {
-			delete child->widget(); // delete the label and TreeViewComboBox
-			delete child; // delete the label and TreeViewComboBox layout item
+	auto* sender = dynamic_cast<QPushButton*>(QObject::sender());
+	if (sender) {
+		// remove button was clicked, determin which one and
+		// delete it together with the corresponding combobox
+		for (int i = 0; i < m_removeButtons.count(); ++i) {
+			if (sender == m_removeButtons.at(i)) {
+				delete m_dataComboBoxes.takeAt(i + 1);
+				delete m_removeButtons.takeAt(i);
+			}
 		}
-		delete layout; // delete the horizontal layout
+	} else {
+		// no sender is available, the function is being called directly
+		if (m_removeButtons.count() > 0) {
+			delete m_dataComboBoxes.takeLast();
+			delete m_removeButtons.takeLast();
+		}
 	}
+
+	if (!m_removeButtons.isEmpty())
+		ui.lVariables->setText(i18n("Columns:"));
+	else
+		ui.lVariables->setText(i18n("Column:"));
 
 	manageAddRemoveVariable(); // disable or enable add/remove variables buttons
 

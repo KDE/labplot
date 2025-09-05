@@ -128,14 +128,14 @@ struct chisq_ind_test_result {
 	int df;
 	int total_observed_frequencies;
 };
-struct chisq_ind_test_result nsl_stats_chisq_ind_x2(const int** table, size_t row, size_t column);
+struct chisq_ind_test_result nsl_stats_chisq_ind_x2(const long long** table, size_t row, size_t column);
 
 struct chisq_gof_test_result {
 	double p;
 	double x2;
 	int df;
 };
-struct chisq_gof_test_result nsl_stats_chisq_gof_x2(const int* observed, const double* expected, size_t n, size_t params_estimated);
+struct chisq_gof_test_result nsl_stats_chisq_gof_x2(const long long* observed, const double* expected, size_t n, size_t params_estimated);
 
 struct log_rank_test_result {
 	double H;

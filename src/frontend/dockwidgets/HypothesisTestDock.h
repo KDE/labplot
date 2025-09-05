@@ -19,6 +19,7 @@
 
 class AspectTreeModel;
 class TreeViewComboBox;
+class QPushButton;
 
 class HypothesisTestDock : public BaseDock {
 	Q_OBJECT
@@ -32,6 +33,9 @@ private:
 	Ui::HypothesisTestDock ui;
 	HypothesisTest* m_test{nullptr};
 	QVector<QMetaObject::Connection> m_aspectConnections;
+	QVector<TreeViewComboBox*> m_dataComboBoxes;
+	QVector<QPushButton*> m_removeButtons;
+	QPushButton* m_buttonNew;
 
 	void hideControls();
 	void addVariable();
