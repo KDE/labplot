@@ -66,6 +66,10 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	if (m_dataComboBoxes.isEmpty())
 		addVariable(); // create the first variable which is never deleted
 
+	auto* firstTreeViewCb = static_cast<TreeViewComboBox*>(m_dataComboBoxes.at(0)); // treeviewcombobox for the first variable
+	firstTreeViewCb->setModel(aspectModel());
+	firstTreeViewCb->setAspect(nullptr); // clear the current aspect
+
 	// we want to restore the properties from the aspect to the ui
 
 	// clear all variables except the first
@@ -204,7 +208,8 @@ void HypothesisTestDock::testChanged() {
 	// check if the recalculate button should be enabled or disabled
 	manageRecalculate();
 
-	CONDITIONAL_LOCK_RETURN;
+	if (m_initializing)
+		return;
 	m_test->setTest(test);
 	// we need to call this here again for the case of when we has previously
 	// selected variable columns and we change the selected hypothesis test. The aspect

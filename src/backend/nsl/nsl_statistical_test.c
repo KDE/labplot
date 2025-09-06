@@ -900,15 +900,15 @@ struct chisq_ind_test_result nsl_stats_chisq_ind_x2(const long long** table, siz
 	long long* row_sums = (long long*)calloc(row, sizeof(long long));
 	for (size_t i = 0; i < row; ++i) {
 		for (size_t j = 0; j < column; ++j) {
-			row_sums[i] += table[i][j];
-			total += table[i][j];
+			row_sums[i] += table[j][i];
+			total += table[j][i];
 		}
 	}
 
 	long long* column_sums = (long long*)calloc(column, sizeof(long long));
 	for (size_t j = 0; j < column; ++j) {
 		for (size_t i = 0; i < row; ++i) {
-			column_sums[j] += table[i][j];
+			column_sums[j] += table[j][i];
 		}
 	}
 
@@ -916,7 +916,7 @@ struct chisq_ind_test_result nsl_stats_chisq_ind_x2(const long long** table, siz
 	for (size_t i = 0; i < row; ++i) {
 		for (size_t j = 0; j < column; ++j) {
 			double expected = (row_sums[i] * column_sums[j]) / (double)total;
-			double diff = table[i][j] - expected;
+			double diff = table[j][i] - expected;
 			x2 += (diff * diff) / expected;
 		}
 	}

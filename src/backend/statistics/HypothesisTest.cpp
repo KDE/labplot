@@ -186,11 +186,9 @@ QString HypothesisTestPrivate::emptyResultColumnStatistics() {
 template<>
 QVector<double> HypothesisTestPrivate::filterColumn<double>(const AbstractColumn* col) {
 	QVector<double> sample;
-	if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
-		for (int row = 0; row < col->rowCount(); ++row) {
-			if (rowIsValid(col, row)) {
-				sample.append(col->valueAt(row));
-			}
+	for (int row = 0; row < col->rowCount(); ++row) {
+		if (rowIsValid(col, row)) {
+			sample.append(col->valueAt(row));
 		}
 	}
 	return sample;
@@ -208,7 +206,7 @@ QVector<qint64> HypothesisTestPrivate::filterColumn<qint64>(const AbstractColumn
 	} else if (col->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 		for (int row = 0; row < col->rowCount(); ++row) {
 			if (rowIsValid(col, row)) {
-				sample.append(static_cast<qint64>(col->bigIntAt(row)));
+				sample.append(col->bigIntAt(row));
 			}
 		}
 	}
