@@ -819,7 +819,7 @@ void HypothesisTestPrivate::resetResult() {
 		result = chisqGoodnessOfFitTestResultTemplate()
 					 .arg(notAvailable())
 					 .arg(notAvailable())
-					 .arg(notAvailable())
+					 .arg(emptyResultColumnStatistics())
 					 .arg(notAvailable())
 					 .arg(notAvailable())
 					 .arg(notAvailable())
