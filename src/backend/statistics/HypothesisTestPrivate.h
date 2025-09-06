@@ -24,18 +24,18 @@ public:
 	void recalculate();
 	void resetResult();
 
-	QString performOneSampleTTest();
-	QString performTwoSampleTTest(bool);
-	QString performWelchTTest();
-	QString performOneWayANOVATest();
-	QString performOneWayANOVARepeatedTest();
-	QString performMannWhitneyUTest();
-	QString performKruskalWallisTest();
-	QString performWilcoxonTest();
-	QString performFriedmanTest();
-	QString performChisqGoodnessOfFitTest();
-	QString performChisqIndependenceTest();
-	QString performLogRankTest();
+	void performOneSampleTTest();
+	void performTwoSampleTTest(bool);
+	void performWelchTTest();
+	void performOneWayANOVATest();
+	void performOneWayANOVARepeatedTest();
+	void performMannWhitneyUTest();
+	void performKruskalWallisTest();
+	void performWilcoxonTest();
+	void performFriedmanTest();
+	void performChisqGoodnessOfFitTest();
+	void performChisqIndependenceTest();
+	void performLogRankTest();
 
 	size_t minSampleCount(HypothesisTest::Test);
 
