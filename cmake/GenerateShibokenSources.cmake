@@ -47,7 +47,7 @@ that will be used to build the shared library.
 
 ``DEPENDENCIES`` is the list of dependencies that the bindings uses.
 
-``HOMEPAGE_URL`` is a URL to the proyect homepage.
+``HOMEPAGE_URL`` is a URL to the project homepage.
 
 ``ISSUES_URL` is a URL where users can report bugs and feature requests.
 
