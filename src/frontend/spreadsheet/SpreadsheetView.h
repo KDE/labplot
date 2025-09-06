@@ -163,9 +163,6 @@ private:
 	QAction* action_statistics_all_columns{nullptr};
 	QAction* action_statistics_spreadsheet{nullptr};
 
-	// hypothesis related actions
-	QAction* action_pivot_table{nullptr};
-
 	// column related actions
 	QAction* action_insert_column_left{nullptr};
 	QAction* action_insert_column_right{nullptr};
