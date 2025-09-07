@@ -12,6 +12,8 @@
 
 #include <QObject>
 
+#include <frontend/dockwidgets/HypothesisTestDock.h>
+
 class MainWin;
 class AbstractAspect;
 
@@ -132,6 +134,9 @@ private:
 	XYHilbertTransformCurveDock* m_xyHilbertTransformCurveDock{nullptr};
 	XYConvolutionCurveDock* m_xyConvolutionCurveDock{nullptr};
 	XYCorrelationCurveDock* m_xyCorrelationCurveDock{nullptr};
+
+	// hypothesis test
+	HypothesisTestDock* m_hypothesisTestDock{nullptr};
 
 #ifdef HAVE_SCRIPTING
 	ScriptDock* m_scriptDock{nullptr};

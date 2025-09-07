@@ -22,6 +22,7 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/StatisticsSpreadsheet.h"
+#include "backend/statistics/HypothesisTest.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "frontend/spreadsheet/SpreadsheetHeaderView.h"
 
@@ -573,6 +574,8 @@ void SpreadsheetView::initActions() {
 	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Binomial"), addDistributionFitActionGroup);
 	fitAction->setData(static_cast<int>(nsl_sf_stats_binomial));
 
+	addHypothesisTestActionGroup = new QActionGroup(this);
+
 	connectActions();
 }
 
@@ -671,6 +674,13 @@ void SpreadsheetView::initMenus() {
 	m_analyzePlotMenu->addSeparator();
 	m_analyzePlotMenu->addAction(addDataReductionAction);
 	m_columnMenu->addMenu(m_analyzePlotMenu);
+
+	// statistical analysis
+	m_statisticalAnalysisMenu = new QMenu(i18n("Statistical Analysis"), this);
+	m_hypothesisTestMenu = new QMenu(i18n("Hypothesis Test"), this);
+	HypothesisTest::fillAddNewHypothesisTest(m_hypothesisTestMenu, addHypothesisTestActionGroup);
+	m_statisticalAnalysisMenu->addMenu(m_hypothesisTestMenu);
+	m_columnMenu->addMenu(m_statisticalAnalysisMenu);
 
 	m_columnSetAsMenu = new QMenu(i18n("Set Column As"), this);
 	m_columnMenu->addSeparator();
@@ -936,6 +946,19 @@ void SpreadsheetView::connectActions() {
 	connect(addAnalysisActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotAnalysisData);
 	connect(addFitActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotAnalysisData);
 	connect(addDistributionFitActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotDataDistributionFit);
+
+	connect(addHypothesisTestActionGroup, &QActionGroup::triggered, [=](QAction* action) {
+		const auto& columns = selectedColumns();
+		QString name = (columns.size() == 1) ? columns.constFirst()->name() : m_spreadsheet->name();
+		auto* test = new HypothesisTest(i18n("Hypothesis Test for %1", name));
+		test->setTest(static_cast<HypothesisTest::Test>(action->data().toInt()));
+		QVector<const AbstractColumn*> dataColumns;
+		for (const auto* column : columns)
+			dataColumns << column;
+		test->setDataColumns(dataColumns);
+		test->recalculate();
+		m_spreadsheet->parentAspect()->addChild(test);
+	});
 }
 
 #ifdef HAVE_TOUCHBAR
@@ -969,6 +992,7 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 	if (m_spreadsheet->columnCount() > 0 && m_spreadsheet->rowCount() > 0) {
 		menu->insertMenu(firstAction, m_plotDataMenu);
 		menu->insertMenu(firstAction, m_analyzePlotMenu);
+		menu->insertMenu(firstAction, m_statisticalAnalysisMenu);
 		menu->insertSeparator(firstAction);
 	}
 	menu->insertMenu(firstAction, m_selectionMenu);
@@ -1014,6 +1038,7 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	QAction* firstAction = menu->actions().at(1);
 	menu->insertMenu(firstAction, m_plotDataMenu);
 	menu->insertMenu(firstAction, m_analyzePlotMenu);
+	menu->insertMenu(firstAction, m_statisticalAnalysisMenu);
 	menu->insertSeparator(firstAction);
 
 	if (numeric)
@@ -1505,6 +1530,7 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	bool hasValues = this->hasValues(columns);
 	m_plotDataMenu->setEnabled(hasValues);
 	m_analyzePlotMenu->setEnabled(hasValues);
+	m_statisticalAnalysisMenu->setEnabled(hasValues);
 	m_selectionMenu->setEnabled(hasValues);
 	action_select_all->setEnabled(hasValues);
 	action_clear_spreadsheet->setEnabled(hasValues);
@@ -1643,6 +1669,8 @@ void SpreadsheetView::checkColumnMenus(const QVector<Column*>& columns) {
 
 	m_plotDataMenu->setEnabled(plottable && hasValues);
 	m_analyzePlotMenu->setEnabled(numeric && hasValues);
+	m_statisticalAnalysisMenu->setEnabled(numeric && hasValues);
+
 	m_columnSetAsMenu->setEnabled(numeric);
 	action_statistics_columns->setEnabled(hasEnoughValues);
 	action_clear_columns->setEnabled(hasValues);
@@ -3703,8 +3731,7 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 	if (indexes.empty() || indexes.count() == 1) {
 		Q_EMIT m_spreadsheet->statusInfo(QString());
 		return;
-	}
-	else if (indexes.count() > 10000) { // more than 10k selected cells, skip the expensive logic below to check for maskes values, etc.
+	} else if (indexes.count() > 10000) { // more than 10k selected cells, skip the expensive logic below to check for maskes values, etc.
 		Q_EMIT m_spreadsheet->statusInfo(i18n("Selected: %1 cells", indexes.count()));
 		return;
 	}

@@ -3332,7 +3332,7 @@ void ColumnPrivate::calculateStatistics() {
 
 	for (int row = 0; row < rowValuesSize; ++row) {
 		double val = valueAt(row);
-		if (std::isnan(val) || q->isMasked(row))
+		if (!std::isfinite(val) || q->isMasked(row))
 			continue;
 
 		if (val < statistics.minimum)

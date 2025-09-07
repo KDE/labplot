@@ -61,6 +61,8 @@ enum class AspectType : quint64 {
 	QQPlot = 0x0210800,
 	KDEPlot = 0x0210802,
 
+	HypothesisTest = 0x0420080,
+
 	// continious improvement plots
 	ProcessBehaviorChart = 0x0211000,
 	RunChart = 0x0211001,
@@ -268,6 +270,9 @@ public:
 			return QStringLiteral("MQTTClient");
 		case AspectType::MQTTSubscription:
 			return QStringLiteral("MQTTSubscription");
+		case AspectType::HypothesisTest:
+			return QStringLiteral("HypothesisTest");
+			break;
 		}
 
 		return {};

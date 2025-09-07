@@ -405,10 +405,10 @@ NumberSpinBox::Errors NumberSpinBox::validate(QString& input, double& value, QSt
 	if (!properties(valueStr, p))
 		return Errors::Invalid;
 
-	if (value > maximum())
+	if (value > maximum() || value >= maximumNotEqual())
 		return Errors::Max;
 
-	if (value < minimum())
+	if (value < minimum() || value <= minimumNotEqual())
 		return Errors::Min;
 	return Errors::NoError;
 }
@@ -463,6 +463,22 @@ double NumberSpinBox::maximum() const {
 
 void NumberSpinBox::setMaximum(double max) {
 	m_maximum = max;
+}
+
+double NumberSpinBox::minimumNotEqual() const {
+	return m_minimumNotEqual;
+}
+
+void NumberSpinBox::setMinimumNotEqual(double min) {
+	m_minimumNotEqual = min;
+}
+
+double NumberSpinBox::maximumNotEqual() const {
+	return m_maximumNotEqual;
+}
+
+void NumberSpinBox::setMaximumNotEqual(double max) {
+	m_maximumNotEqual = max;
 }
 
 void NumberSpinBox::setFeedback(bool enable) {

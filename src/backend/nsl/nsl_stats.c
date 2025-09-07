@@ -11,6 +11,7 @@
 #include <float.h>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_sort.h>
+#include <gsl/gsl_statistics_double.h>
 #include <math.h>
 
 double nsl_stats_minimum(const double data[], const size_t n, size_t* index) {

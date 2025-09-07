@@ -432,6 +432,11 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 			m_datapickerImageDock->setImages(std::move(list));
 		}
 		break;
+	case AspectType::HypothesisTest:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Hypothesis Test"));
+		raiseDock(m_hypothesisTestDock, m_mainWindow->stackedWidget);
+		m_hypothesisTestDock->setTest(static_cast<HypothesisTest*>(selectedAspects.first()));
+		break;
 	case AspectType::Project:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Project"));
 		raiseDock(m_projectDock, m_mainWindow->stackedWidget);
