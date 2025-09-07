@@ -15,7 +15,7 @@
 #include "frontend/widgets/TreeViewComboBox.h"
 
 #include <KLocalizedString>
-#include <QPushButton>
+#include <KMessageWidget>
 
 /*!
   \class HypothesisTestDock
@@ -116,6 +116,8 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	if (oldIndex == newIndex)
 		testChanged(); // manually trigger testChanged()
 
+	showStatusInfo(QString()); // remove the message from the previous chart, if available
+
 	// update the aspect properties when the ui properties change
 	m_aspectConnections << connect(ui.sbSignificanceLevel, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setSignificanceLevel);
 	m_aspectConnections << connect(ui.sbTestMean, qOverload<double>(&NumberSpinBox::valueChanged), m_test, &HypothesisTest::setTestMean);
@@ -131,6 +133,8 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 		if (checked)
 			m_test->setTail(nsl_stats_tail_type_negative);
 	});
+
+	connect(m_test, &HypothesisTest::statusInfo, this, &HypothesisTestDock::showStatusInfo);
 }
 
 void HypothesisTestDock::retranslateUi() {
@@ -219,7 +223,6 @@ void HypothesisTestDock::testChanged() {
 // ##############################################################################
 // #################################*  Helpers   ################################
 // ##############################################################################
-
 void HypothesisTestDock::ensureHypothesis(HypothesisTest::Test test) {
 	int hypothesisCount = HypothesisTest::hypothesisCount(test);
 	auto hypothesisTexts = HypothesisTest::hypothesisText(test);
@@ -413,4 +416,20 @@ void HypothesisTestDock::removeVariable() {
 
 	if (!m_initializing)
 		updateColumns();
+}
+
+void HypothesisTestDock::showStatusInfo(const QString& info) {
+	if (info.isEmpty()) {
+		if (m_messageWidget && m_messageWidget->isVisible())
+			m_messageWidget->close();
+	} else {
+		if (!m_messageWidget) {
+			m_messageWidget = new KMessageWidget(this);
+			m_messageWidget->setMessageType(KMessageWidget::Warning);
+			ui.gridLayout->addWidget(m_messageWidget, 17, 0, 1, 3);
+		}
+		m_messageWidget->setText(info);
+		m_messageWidget->animatedShow();
+		QDEBUG(info);
+	}
 }

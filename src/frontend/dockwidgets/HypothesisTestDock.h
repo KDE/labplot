@@ -17,6 +17,7 @@
 #include "ui_hypothesistestdock.h"
 
 class TreeViewComboBox;
+class KMessageWidget;
 class QPushButton;
 
 class HypothesisTestDock : public BaseDock {
@@ -33,7 +34,8 @@ private:
 	QVector<QMetaObject::Connection> m_aspectConnections;
 	QVector<TreeViewComboBox*> m_dataComboBoxes;
 	QVector<QPushButton*> m_removeButtons;
-	QPushButton* m_buttonNew;
+	QPushButton* m_buttonNew{nullptr};
+	KMessageWidget* m_messageWidget{nullptr};
 
 	void hideControls();
 	void addVariable();
@@ -42,9 +44,18 @@ private:
 	void ensureVariableCount(HypothesisTest::Test);
 	void manageAddRemoveVariable();
 	void manageRecalculate();
-	void testChanged();
 	void updateColumns();
+
+private Q_SLOTS:
+	// SLOTs for changes triggered in HypothesisTestDock
+	// General-Tab
+	void testChanged();
 	void recalculate();
+
+	// SLOTs for changes triggered in HypothesisTest
+	// TODO
+
+	void showStatusInfo(const QString&);
 };
 
 #endif // HYPOTHESISTESTDOCK_H
