@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-14 00:38+0000\n"
-"PO-Revision-Date: 2025-07-31 16:13+0300\n"
+"POT-Creation-Date: 2025-08-28 00:38+0000\n"
+"PO-Revision-Date: 2025-08-28 13:20+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -270,7 +270,7 @@ msgstr "Велике ціле число"
 #: src/backend/core/AbstractColumn.cpp:233
 #: src/backend/datasources/filters/AsciiFilter.cpp:555
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:532
-#: src/frontend/ActionsManager.cpp:510
+#: src/frontend/ActionsManager.cpp:509
 #: src/frontend/notebook/NotebookView.cpp:95
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:208
 #: src/frontend/ui/dockwidgets/axisdock.ui:1528
@@ -370,12 +370,11 @@ msgid "Import Data"
 msgstr "Імпортувати дані"
 
 #: src/backend/core/AbstractPart.cpp:126 src/frontend/ActionsManager.cpp:261
-#: src/frontend/ActionsManager.cpp:270
 #, kde-format
 msgid "From File..."
 msgstr "З файла…"
 
-#: src/backend/core/AbstractPart.cpp:128 src/frontend/ActionsManager.cpp:282
+#: src/backend/core/AbstractPart.cpp:128 src/frontend/ActionsManager.cpp:281
 #, kde-format
 msgid "From SQL Database..."
 msgstr "З бази даних SQL…"
@@ -400,7 +399,7 @@ msgstr "Надрукувати"
 msgid "Print Preview"
 msgstr "Перегляд друку"
 
-#: src/backend/core/AbstractPart.cpp:147 src/frontend/ActionsManager.cpp:382
+#: src/backend/core/AbstractPart.cpp:147 src/frontend/ActionsManager.cpp:381
 #, kde-format
 msgid "&Close"
 msgstr "За&крити"
@@ -486,7 +485,7 @@ msgid "%1   (no values)"
 msgstr "%1   (без значень)"
 
 #: src/backend/core/AspectTreeModel.cpp:236
-#: src/frontend/datasources/ImportFileWidget.cpp:1654
+#: src/frontend/datasources/ImportFileWidget.cpp:1697
 #, kde-format
 msgid "Size: %1"
 msgstr "Розмір: %1"
@@ -1276,6 +1275,7 @@ msgid "Free space: %1 bytes"
 msgstr "Вільного місця: %1 байтів"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:199
+#: src/frontend/datasources/ImportFileWidget.cpp:1788
 #, kde-format
 msgid "Number of files: %1"
 msgstr "Кількість файлів: %1"
@@ -1480,7 +1480,7 @@ msgstr "Не знайдено h5dump."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/frontend/datasources/ImportFileWidget.cpp:1629
+#: src/frontend/datasources/ImportFileWidget.cpp:1672
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "Не вдалося прочитати дані з файла %1."
@@ -6629,7 +6629,7 @@ msgstr "Статистика (розподіли)"
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:496
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
-#: src/frontend/datasources/ImportFileWidget.cpp:1373
+#: src/frontend/datasources/ImportFileWidget.cpp:1418
 #: src/frontend/dockwidgets/AxisDock.cpp:237
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:172
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
@@ -8370,8 +8370,8 @@ msgstr "Вертикальної вісі"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:533
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2207
-#: src/frontend/ActionsManager.cpp:514
-#: src/frontend/datasources/ImportFileWidget.cpp:112
+#: src/frontend/ActionsManager.cpp:513
+#: src/frontend/datasources/ImportFileWidget.cpp:113
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:108
 #: src/frontend/widgets/BackgroundWidget.cpp:123
@@ -8420,7 +8420,7 @@ msgid "Inset Plot Area with Data"
 msgstr "Вбудована область креслення з даними"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:575
-#: src/frontend/ActionsManager.cpp:848
+#: src/frontend/ActionsManager.cpp:847
 #: src/frontend/notebook/NotebookView.cpp:166
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:446
@@ -10568,173 +10568,183 @@ msgstr "Інтерактивне джерело даних…"
 msgid "Creates a live data source to read data from a real time device"
 msgstr "Створити інтерактивне джерело даних для читання даних із пристрою"
 
-#: src/frontend/ActionsManager.cpp:263 src/frontend/ActionsManager.cpp:272
+#: src/frontend/ActionsManager.cpp:264
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Імпортувати дані зі звичайного файла"
 
-#: src/frontend/ActionsManager.cpp:277
+#: src/frontend/ActionsManager.cpp:269
+#, kde-format
+msgid "From Directory..."
+msgstr "З каталогу…"
+
+#: src/frontend/ActionsManager.cpp:271
+#, kde-format
+msgid "Import multiple files from a directory"
+msgstr "Імпортувати декілька з каталогу"
+
+#: src/frontend/ActionsManager.cpp:276
 #, kde-format
 msgid "From kaggle.com..."
 msgstr "З kaggle.com…"
 
-#: src/frontend/ActionsManager.cpp:278
+#: src/frontend/ActionsManager.cpp:277
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr "Імпортувати дані з kaggle.com"
 
-#: src/frontend/ActionsManager.cpp:283
+#: src/frontend/ActionsManager.cpp:282
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Імпортувати дані з бази даних SQL"
 
-#: src/frontend/ActionsManager.cpp:287
+#: src/frontend/ActionsManager.cpp:286
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Зі збірки наборів даних…"
 
-#: src/frontend/ActionsManager.cpp:288
+#: src/frontend/ActionsManager.cpp:287
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr "Імпортувати дані із набору даних у мережі"
 
-#: src/frontend/ActionsManager.cpp:292
+#: src/frontend/ActionsManager.cpp:291
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "Проєкт LabPlot…"
 
-#: src/frontend/ActionsManager.cpp:293
+#: src/frontend/ActionsManager.cpp:292
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Імпортувати проєкт з файла проєкту LabPlot (.lml)"
 
-#: src/frontend/ActionsManager.cpp:298
+#: src/frontend/ActionsManager.cpp:297
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Проєкт Origin (OPJ)…"
 
-#: src/frontend/ActionsManager.cpp:299
+#: src/frontend/ActionsManager.cpp:298
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr "Імпортувати проєкт з файла проєкту Origin OriginLab (.opj)"
 
-#: src/frontend/ActionsManager.cpp:332
+#: src/frontend/ActionsManager.cpp:331
 #, kde-format
 msgid "Export..."
 msgstr "Експортувати…"
 
-#: src/frontend/ActionsManager.cpp:333
+#: src/frontend/ActionsManager.cpp:332
 #, kde-format
 msgid "Export selected element"
 msgstr "Експортувати позначений елемент"
 
-#: src/frontend/ActionsManager.cpp:339 src/frontend/ActionsManager.cpp:1332
+#: src/frontend/ActionsManager.cpp:338 src/frontend/ActionsManager.cpp:1332
 #: src/frontend/ActionsManager.cpp:1340
 #, kde-format
 msgid "Share"
 msgstr "Оприлюднити"
 
-#: src/frontend/ActionsManager.cpp:344
+#: src/frontend/ActionsManager.cpp:343
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Навігатор картами кольорів"
 
-#: src/frontend/ActionsManager.cpp:345
+#: src/frontend/ActionsManager.cpp:344
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "Відкрити вікно для навігації доступними картами кольорів."
 
-#: src/frontend/ActionsManager.cpp:354
+#: src/frontend/ActionsManager.cpp:353
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "Редактор метаданих FITS…"
 
-#: src/frontend/ActionsManager.cpp:355
+#: src/frontend/ActionsManager.cpp:354
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Відкрити редактор для редагування метаданих FITS"
 
-#: src/frontend/ActionsManager.cpp:364
+#: src/frontend/ActionsManager.cpp:363
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Журнал скасування-поновлення дій…"
 
-#: src/frontend/ActionsManager.cpp:384
+#: src/frontend/ActionsManager.cpp:383
 #, kde-format
 msgid "Close the active window"
 msgstr "Закрити активне вікно"
 
-#: src/frontend/ActionsManager.cpp:387
+#: src/frontend/ActionsManager.cpp:386
 #, kde-format
 msgid "Close &All"
 msgstr "Закрити &всі"
 
-#: src/frontend/ActionsManager.cpp:388
+#: src/frontend/ActionsManager.cpp:387
 #, kde-format
 msgid "Close all the windows"
 msgstr "Закрити усі вікна"
 
-#: src/frontend/ActionsManager.cpp:391
+#: src/frontend/ActionsManager.cpp:390
 #, kde-format
 msgid "Ne&xt"
 msgstr "&Далі"
 
-#: src/frontend/ActionsManager.cpp:393
+#: src/frontend/ActionsManager.cpp:392
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Пересунути фокус до наступного вікна"
 
-#: src/frontend/ActionsManager.cpp:396
+#: src/frontend/ActionsManager.cpp:395
 #, kde-format
 msgid "Pre&vious"
 msgstr "&Назад"
 
-#: src/frontend/ActionsManager.cpp:398
+#: src/frontend/ActionsManager.cpp:397
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Пересунути фокус до попереднього вікна"
 
-#: src/frontend/ActionsManager.cpp:405
+#: src/frontend/ActionsManager.cpp:404
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Лише поточна &тека"
 
-#: src/frontend/ActionsManager.cpp:410
+#: src/frontend/ActionsManager.cpp:409
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Поточна тека і &підтеки"
 
-#: src/frontend/ActionsManager.cpp:414
+#: src/frontend/ActionsManager.cpp:413
 #, kde-format
 msgid "&All"
 msgstr "&Всі"
 
-#: src/frontend/ActionsManager.cpp:436
+#: src/frontend/ActionsManager.cpp:435
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Показати використання пам'яті"
 
-#: src/frontend/ActionsManager.cpp:444
+#: src/frontend/ActionsManager.cpp:443
 #, kde-format
 msgid "Project Explorer"
 msgstr "Навігатор проєктом"
 
-#: src/frontend/ActionsManager.cpp:449
+#: src/frontend/ActionsManager.cpp:448
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Навігатор властивостями"
 
-#: src/frontend/ActionsManager.cpp:454
+#: src/frontend/ActionsManager.cpp:453
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "Перегляд робочого аркуша"
 
-#: src/frontend/ActionsManager.cpp:477
+#: src/frontend/ActionsManager.cpp:476
 #, kde-format
 msgid "Configure CAS..."
 msgstr "Налаштувати КА…"
 
-#: src/frontend/ActionsManager.cpp:478
+#: src/frontend/ActionsManager.cpp:477
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
@@ -10743,130 +10753,130 @@ msgstr ""
 "Відкриває параметри системи комп'ютерної алгебри для внесення змін до "
 "доступних систем або вмикання нових"
 
-#: src/frontend/ActionsManager.cpp:505
+#: src/frontend/ActionsManager.cpp:504
 #, kde-format
 msgctxt "@action"
 msgid "New Plot Area"
 msgstr "Нова область графіка"
 
-#: src/frontend/ActionsManager.cpp:521
+#: src/frontend/ActionsManager.cpp:520
 #: src/frontend/dockwidgets/WorksheetDock.cpp:281
 #: src/frontend/worksheet/WorksheetView.cpp:255
 #, kde-format
 msgid "Vertical Layout"
 msgstr "Вертикальне компонування"
 
-#: src/frontend/ActionsManager.cpp:526
+#: src/frontend/ActionsManager.cpp:525
 #: src/frontend/dockwidgets/WorksheetDock.cpp:282
 #: src/frontend/worksheet/WorksheetView.cpp:259
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "Горизонтальне компонування"
 
-#: src/frontend/ActionsManager.cpp:531
+#: src/frontend/ActionsManager.cpp:530
 #: src/frontend/dockwidgets/WorksheetDock.cpp:283
 #: src/frontend/worksheet/WorksheetView.cpp:263
 #, kde-format
 msgid "Grid Layout"
 msgstr "Компонування сітки"
 
-#: src/frontend/ActionsManager.cpp:536
+#: src/frontend/ActionsManager.cpp:535
 #: src/frontend/dockwidgets/WorksheetDock.cpp:280
 #: src/frontend/worksheet/WorksheetView.cpp:267
 #, kde-format
 msgid "No Layout"
 msgstr "Немає компонування"
 
-#: src/frontend/ActionsManager.cpp:544 src/frontend/ActionsManager.cpp:585
+#: src/frontend/ActionsManager.cpp:543 src/frontend/ActionsManager.cpp:584
 #: src/frontend/worksheet/WorksheetView.cpp:191
 #: src/frontend/worksheet/WorksheetView.cpp:353
 #, kde-format
 msgid "Select and Edit"
 msgstr "Позначити і редагувати"
 
-#: src/frontend/ActionsManager.cpp:549 src/frontend/ActionsManager.cpp:762
+#: src/frontend/ActionsManager.cpp:548 src/frontend/ActionsManager.cpp:761
 #: src/frontend/datapicker/DatapickerImageView.cpp:134
 #: src/frontend/worksheet/WorksheetView.cpp:196
 #, kde-format
 msgid "Navigate"
 msgstr "Навігація"
 
-#: src/frontend/ActionsManager.cpp:554 src/frontend/ActionsManager.cpp:767
+#: src/frontend/ActionsManager.cpp:553 src/frontend/ActionsManager.cpp:766
 #: src/frontend/datapicker/DatapickerImageView.cpp:138
 #: src/frontend/worksheet/WorksheetView.cpp:200
 #, kde-format
 msgid "Select and Zoom"
 msgstr "Позначити і масштабувати"
 
-#: src/frontend/ActionsManager.cpp:560 src/frontend/ActionsManager.cpp:796
+#: src/frontend/ActionsManager.cpp:559 src/frontend/ActionsManager.cpp:795
 #, kde-format
 msgctxt "@action"
 msgid "Zoom"
 msgstr "Масштаб"
 
-#: src/frontend/ActionsManager.cpp:566 src/frontend/ActionsManager.cpp:802
+#: src/frontend/ActionsManager.cpp:565 src/frontend/ActionsManager.cpp:801
 #, kde-format
 msgctxt "@action"
 msgid "Magnification"
 msgstr "Збільшення"
 
-#: src/frontend/ActionsManager.cpp:579
+#: src/frontend/ActionsManager.cpp:578
 #, kde-format
 msgctxt "@action"
 msgid "Add New"
 msgstr "Додати"
 
-#: src/frontend/ActionsManager.cpp:591
+#: src/frontend/ActionsManager.cpp:590
 #: src/frontend/worksheet/WorksheetView.cpp:358
 #, kde-format
 msgid "Crosshair"
 msgstr "Перехрестя"
 
-#: src/frontend/ActionsManager.cpp:596
+#: src/frontend/ActionsManager.cpp:595
 #: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Select Region and Zoom In"
 msgstr "Позначити і збільшити область"
 
-#: src/frontend/ActionsManager.cpp:601
+#: src/frontend/ActionsManager.cpp:600
 #: src/frontend/worksheet/WorksheetView.cpp:368
 #, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr "Позначити і збільшити область за x"
 
-#: src/frontend/ActionsManager.cpp:606
+#: src/frontend/ActionsManager.cpp:605
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr "Позначити і збільшити область за x"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:611 src/frontend/MainWin.cpp:1600
+#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1600
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1429
 #: src/frontend/worksheet/WorksheetView.cpp:378
 #, kde-format
 msgid "Cursor"
 msgstr "Курсор"
 
-#: src/frontend/ActionsManager.cpp:619
+#: src/frontend/ActionsManager.cpp:618
 #: src/frontend/worksheet/WorksheetView.cpp:386
 #, kde-format
 msgid "Auto Scale"
 msgstr "Автомасштаб"
 
-#: src/frontend/ActionsManager.cpp:623
+#: src/frontend/ActionsManager.cpp:622
 #: src/frontend/worksheet/WorksheetView.cpp:390
 #, kde-format
 msgid "Auto Scale X"
 msgstr "автомасштаб за X"
 
-#: src/frontend/ActionsManager.cpp:627
+#: src/frontend/ActionsManager.cpp:626
 #: src/frontend/worksheet/WorksheetView.cpp:394
 #, kde-format
 msgid "Auto Scale Y"
 msgstr "автомасштаб за Y"
 
-#: src/frontend/ActionsManager.cpp:632 src/frontend/ActionsManager.cpp:721
+#: src/frontend/ActionsManager.cpp:631 src/frontend/ActionsManager.cpp:720
 #: src/frontend/datapicker/DatapickerImageView.cpp:121
 #: src/frontend/matrix/MatrixView.cpp:192
 #: src/frontend/notebook/NotebookView.cpp:52
@@ -10876,7 +10886,7 @@ msgstr "автомасштаб за Y"
 msgid "Zoom In"
 msgstr "збільшити"
 
-#: src/frontend/ActionsManager.cpp:636 src/frontend/ActionsManager.cpp:724
+#: src/frontend/ActionsManager.cpp:635 src/frontend/ActionsManager.cpp:723
 #: src/frontend/datapicker/DatapickerImageView.cpp:124
 #: src/frontend/matrix/MatrixView.cpp:193
 #: src/frontend/notebook/NotebookView.cpp:56
@@ -10886,190 +10896,190 @@ msgstr "збільшити"
 msgid "Zoom Out"
 msgstr "зменшити"
 
-#: src/frontend/ActionsManager.cpp:640
+#: src/frontend/ActionsManager.cpp:639
 #: src/frontend/worksheet/WorksheetView.cpp:406
 #, kde-format
 msgid "Zoom In X"
 msgstr "збільшити за X"
 
-#: src/frontend/ActionsManager.cpp:644
+#: src/frontend/ActionsManager.cpp:643
 #: src/frontend/worksheet/WorksheetView.cpp:410
 #, kde-format
 msgid "Zoom Out X"
 msgstr "зменшити за X"
 
-#: src/frontend/ActionsManager.cpp:648
+#: src/frontend/ActionsManager.cpp:647
 #: src/frontend/worksheet/WorksheetView.cpp:414
 #, kde-format
 msgid "Zoom In Y"
 msgstr "збільшити за Y"
 
-#: src/frontend/ActionsManager.cpp:652
+#: src/frontend/ActionsManager.cpp:651
 #: src/frontend/worksheet/WorksheetView.cpp:418
 #, kde-format
 msgid "Zoom Out Y"
 msgstr "зменшити за Y"
 
-#: src/frontend/ActionsManager.cpp:657
+#: src/frontend/ActionsManager.cpp:656
 #: src/frontend/worksheet/WorksheetView.cpp:422
 #, kde-format
 msgid "Shift Left X"
 msgstr "посунути ліворуч X"
 
-#: src/frontend/ActionsManager.cpp:661
+#: src/frontend/ActionsManager.cpp:660
 #: src/frontend/worksheet/WorksheetView.cpp:424
 #, kde-format
 msgid "Shift Right X"
 msgstr "посунути праворуч X"
 
-#: src/frontend/ActionsManager.cpp:665
+#: src/frontend/ActionsManager.cpp:664
 #: src/frontend/worksheet/WorksheetView.cpp:426
 #, kde-format
 msgid "Shift Up Y"
 msgstr "посунути вище Y"
 
-#: src/frontend/ActionsManager.cpp:669
+#: src/frontend/ActionsManager.cpp:668
 #: src/frontend/worksheet/WorksheetView.cpp:428
 #, kde-format
 msgid "Shift Down Y"
 msgstr "посунути нижче Y"
 
-#: src/frontend/ActionsManager.cpp:681
+#: src/frontend/ActionsManager.cpp:680
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:491
 #, kde-format
 msgid "Insert Row Above"
 msgstr "Вставити рядок вище"
 
-#: src/frontend/ActionsManager.cpp:684
+#: src/frontend/ActionsManager.cpp:683
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:492
 #, kde-format
 msgid "Insert Row Below"
 msgstr "Вставити рядок нижче"
 
-#: src/frontend/ActionsManager.cpp:687
+#: src/frontend/ActionsManager.cpp:686
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:495
 #, kde-format
 msgid "Remo&ve Selected Row(s)"
 msgstr "Ви&лучити позначені рядки"
 
-#: src/frontend/ActionsManager.cpp:691
+#: src/frontend/ActionsManager.cpp:690
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:344
 #, kde-format
 msgid "Insert Column Left"
 msgstr "Вставити стовпчик ліворуч"
 
-#: src/frontend/ActionsManager.cpp:694
+#: src/frontend/ActionsManager.cpp:693
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:345
 #, kde-format
 msgid "Insert Column Right"
 msgstr "Вставити стовпчик правіше"
 
-#: src/frontend/ActionsManager.cpp:697
+#: src/frontend/ActionsManager.cpp:696
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:348
 #, kde-format
 msgid "Delete Selected Column(s)"
 msgstr "Вилучити позначені стовпчики"
 
-#: src/frontend/ActionsManager.cpp:701
+#: src/frontend/ActionsManager.cpp:700
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:478
 #, kde-format
 msgid "&Sort..."
 msgstr "&Упорядкувати…"
 
-#: src/frontend/ActionsManager.cpp:702
+#: src/frontend/ActionsManager.cpp:701
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:479
 #, kde-format
 msgid "Sort multiple columns together"
 msgstr "Упорядкувати множину з декількох стовпчиків"
 
-#: src/frontend/ActionsManager.cpp:705
+#: src/frontend/ActionsManager.cpp:704
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:480
 #, kde-format
 msgid "Sort &Ascending"
 msgstr "Впорядкувати за з&ростанням"
 
-#: src/frontend/ActionsManager.cpp:706
+#: src/frontend/ActionsManager.cpp:705
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:481
 #, kde-format
 msgid "Sort the selected columns separately in ascending order"
 msgstr "Упорядкувати позначені стовпчики окремо за зростанням"
 
-#: src/frontend/ActionsManager.cpp:709
+#: src/frontend/ActionsManager.cpp:708
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:482
 #, kde-format
 msgid "Sort &Descending"
 msgstr "Сортування за сп&аданням"
 
-#: src/frontend/ActionsManager.cpp:710
+#: src/frontend/ActionsManager.cpp:709
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:483
 #, kde-format
 msgid "Sort the selected columns separately in descending order"
 msgstr "Упорядкувати позначені стовпчики окремо за спаданням"
 
-#: src/frontend/ActionsManager.cpp:727
+#: src/frontend/ActionsManager.cpp:726
 #: src/frontend/notebook/NotebookView.cpp:60
 #, kde-format
 msgid "Find"
 msgstr "Знайти"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
-#: src/frontend/ActionsManager.cpp:730
+#: src/frontend/ActionsManager.cpp:729
 #: src/frontend/notebook/NotebookView.cpp:68
 #: src/frontend/ui/dockwidgets/notebookdock.ui:113
 #, kde-format
 msgid "Restart"
 msgstr "Перезапустити"
 
-#: src/frontend/ActionsManager.cpp:733
+#: src/frontend/ActionsManager.cpp:732
 #: src/frontend/notebook/NotebookView.cpp:71
 #: src/frontend/notebook/NotebookView.cpp:344
 #, kde-format
 msgid "Evaluate Notebook"
 msgstr "Обчислити нотатник"
 
-#: src/frontend/ActionsManager.cpp:747
+#: src/frontend/ActionsManager.cpp:746
 #: src/frontend/datapicker/DatapickerImageView.cpp:142
 #, kde-format
 msgid "Set Axis Points"
 msgstr "Встановити точки осі"
 
-#: src/frontend/ActionsManager.cpp:752
+#: src/frontend/ActionsManager.cpp:751
 #: src/frontend/datapicker/DatapickerImageView.cpp:146
 #, kde-format
 msgid "Set Curve Points"
 msgstr "Встановити точки кривої"
 
-#: src/frontend/ActionsManager.cpp:757
+#: src/frontend/ActionsManager.cpp:756
 #: src/frontend/datapicker/DatapickerImageView.cpp:150
 #, kde-format
 msgid "Select Curve Segments"
 msgstr "Позначити сегменти кривої"
 
-#: src/frontend/ActionsManager.cpp:773
+#: src/frontend/ActionsManager.cpp:772
 #: src/frontend/datapicker/DatapickerImageView.cpp:155
 #, kde-format
 msgid "New Curve"
 msgstr "Нова крива"
 
-#: src/frontend/ActionsManager.cpp:779
+#: src/frontend/ActionsManager.cpp:778
 #: src/frontend/datapicker/DatapickerImageView.cpp:158
 #, kde-format
 msgid "Shift Left"
 msgstr "Зсунути ліворуч"
 
-#: src/frontend/ActionsManager.cpp:783
+#: src/frontend/ActionsManager.cpp:782
 #: src/frontend/datapicker/DatapickerImageView.cpp:162
 #, kde-format
 msgid "Shift Right"
 msgstr "Зсунути праворуч"
 
-#: src/frontend/ActionsManager.cpp:787
+#: src/frontend/ActionsManager.cpp:786
 #: src/frontend/datapicker/DatapickerImageView.cpp:166
 #, kde-format
 msgid "Shift Up"
 msgstr "Зсунути вгору"
 
-#: src/frontend/ActionsManager.cpp:791
+#: src/frontend/ActionsManager.cpp:790
 #: src/frontend/datapicker/DatapickerImageView.cpp:170
 #, kde-format
 msgid "Shift Down"
@@ -11748,45 +11758,30 @@ msgstr "Набір даних"
 msgid "Description"
 msgstr "Опис"
 
-#: src/frontend/datasources/ImportDialog.cpp:52
-#, kde-format
-msgid "New Workbook"
-msgstr "Нова робоча книга"
-
-#: src/frontend/datasources/ImportDialog.cpp:53
-#, kde-format
-msgid "New Spreadsheet"
-msgstr "Нова електронна таблиця"
-
-#: src/frontend/datasources/ImportDialog.cpp:54
-#, kde-format
-msgid "New Matrix"
-msgstr "Нова матриця"
-
 #. i18n: ectx: property (title), widget (QGroupBox, gbImportTo)
-#: src/frontend/datasources/ImportDialog.cpp:75
+#: src/frontend/datasources/ImportDialog.cpp:69
 #: src/frontend/ui/datasources/importprojectwidget.ui:108
 #, kde-format
 msgid "Import to"
 msgstr "Імпортування"
 
-#: src/frontend/datasources/ImportDialog.cpp:77
+#: src/frontend/datasources/ImportDialog.cpp:71
 #, kde-format
 msgid "Data container:"
 msgstr "Контейнер даних:"
 
+#: src/frontend/datasources/ImportDialog.cpp:72
 #: src/frontend/datasources/ImportDialog.cpp:78
-#: src/frontend/datasources/ImportDialog.cpp:84
 #, kde-format
 msgid "Data container where the data has to be imported into"
 msgstr "Контейнер даних, до якого слід імпортувати дані"
 
-#: src/frontend/datasources/ImportDialog.cpp:97
+#: src/frontend/datasources/ImportDialog.cpp:96
 #, kde-format
 msgid "New"
 msgstr "Новий"
 
-#: src/frontend/datasources/ImportDialog.cpp:100
+#: src/frontend/datasources/ImportDialog.cpp:99
 #, kde-format
 msgid "Add new data container to the project"
 msgstr "Додати новий контейнер даних до проєкту"
@@ -11798,7 +11793,7 @@ msgstr "Додати новий контейнер даних до проєкт�
 #. i18n: ectx: property (text), widget (QLabel, lLabelsPosition)
 #. i18n: ectx: property (text), widget (QLabel, lValuesPosition)
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTime)
-#: src/frontend/datasources/ImportDialog.cpp:103
+#: src/frontend/datasources/ImportDialog.cpp:106
 #: src/frontend/ui/dockwidgets/axisdock.ui:65
 #: src/frontend/ui/dockwidgets/axisdock.ui:620
 #: src/frontend/ui/dockwidgets/axisdock.ui:1276
@@ -11812,74 +11807,106 @@ msgstr "Додати новий контейнер даних до проєкт�
 msgid "Position:"
 msgstr "Розташування:"
 
-#: src/frontend/datasources/ImportDialog.cpp:109
+#: src/frontend/datasources/ImportDialog.cpp:110
 #, kde-format
 msgid "Append"
 msgstr "Дописати в кінець"
 
-#: src/frontend/datasources/ImportDialog.cpp:110
+#: src/frontend/datasources/ImportDialog.cpp:111
 #, kde-format
 msgid "Prepend"
 msgstr "Дописати на початок"
 
-#: src/frontend/datasources/ImportDialog.cpp:111
+#: src/frontend/datasources/ImportDialog.cpp:112
 #: src/frontend/notebook/NotebookView.cpp:64
 #, kde-format
 msgid "Replace"
 msgstr "Замінити"
 
-#: src/frontend/datasources/ImportDialog.cpp:146
+#: src/frontend/datasources/ImportDialog.cpp:145
 #, kde-format
 msgid "Add a new Workbook"
 msgstr "Додати нову робочу книгу"
 
-#: src/frontend/datasources/ImportDialog.cpp:147
+#: src/frontend/datasources/ImportDialog.cpp:146
 #, kde-format
 msgid "Workbook name:"
 msgstr "Назва робочої книги:"
 
-#: src/frontend/datasources/ImportDialog.cpp:149
+#: src/frontend/datasources/ImportDialog.cpp:148
 #, kde-format
 msgid "Add a new Spreadsheet"
 msgstr "Додати нову електронну таблицю"
 
-#: src/frontend/datasources/ImportDialog.cpp:150
+#: src/frontend/datasources/ImportDialog.cpp:149
 #, kde-format
 msgid "Spreadsheet name:"
 msgstr "Назва електронної таблиці:"
 
-#: src/frontend/datasources/ImportDialog.cpp:152
+#: src/frontend/datasources/ImportDialog.cpp:151
 #, kde-format
 msgid "Add a new Matrix"
 msgstr "Додати нову матрицю"
 
-#: src/frontend/datasources/ImportDialog.cpp:153
+#: src/frontend/datasources/ImportDialog.cpp:152
 #, kde-format
 msgid "Matrix name:"
 msgstr "Назва матриці:"
 
-#: src/frontend/datasources/ImportDialog.cpp:202
-#: src/frontend/datasources/ImportFileDialog.cpp:367
+#: src/frontend/datasources/ImportDialog.cpp:154
+#, kde-format
+msgid "Add a new Folder"
+msgstr "Додати нову теку"
+
+#: src/frontend/datasources/ImportDialog.cpp:155
+#: src/frontend/datasources/ImportProjectDialog.cpp:512
+#, kde-format
+msgid "Folder name:"
+msgstr "Назва теки:"
+
+#: src/frontend/datasources/ImportDialog.cpp:187
+#, kde-format
+msgid "New Folder"
+msgstr "Нова тека"
+
+#: src/frontend/datasources/ImportDialog.cpp:191
+#: src/frontend/datasources/ImportDialog.cpp:195
+#, kde-format
+msgid "New Workbook"
+msgstr "Нова робоча книга"
+
+#: src/frontend/datasources/ImportDialog.cpp:199
+#, kde-format
+msgid "New Spreadsheet"
+msgstr "Нова електронна таблиця"
+
+#: src/frontend/datasources/ImportDialog.cpp:203
+#, kde-format
+msgid "New Matrix"
+msgstr "Нова матриця"
+
+#: src/frontend/datasources/ImportDialog.cpp:230
+#: src/frontend/datasources/ImportFileDialog.cpp:406
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:158
 #, kde-format
 msgid "Close the dialog and import the data."
 msgstr "Закрити діалогове вікно й імпортувати дані."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:73
+#: src/frontend/datasources/ImportFileDialog.cpp:74
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:40
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Data to Spreadsheet or Matrix"
 msgstr "Імпортування даних до електронної таблиці або матриці"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:75
+#: src/frontend/datasources/ImportFileDialog.cpp:76
 #, kde-format
 msgctxt "@title:window"
 msgid "Add New Live Data Source"
 msgstr "Додати нове інтерактивне джерело даних"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:106
-#: src/frontend/datasources/ImportFileDialog.cpp:348
+#: src/frontend/datasources/ImportFileDialog.cpp:107
+#: src/frontend/datasources/ImportFileDialog.cpp:387
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:140
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:361
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:125
@@ -11888,8 +11915,8 @@ msgstr "Додати нове інтерактивне джерело даних
 msgid "Hide Options"
 msgstr "Сховати параметри"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:106
-#: src/frontend/datasources/ImportFileDialog.cpp:348
+#: src/frontend/datasources/ImportFileDialog.cpp:107
+#: src/frontend/datasources/ImportFileDialog.cpp:387
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:140
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:361
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:125
@@ -11898,51 +11925,61 @@ msgstr "Сховати параметри"
 msgid "Show Options"
 msgstr "Показати параметри"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:148
+#: src/frontend/datasources/ImportFileDialog.cpp:149
 #, kde-format
 msgid "Live data source created in %1 seconds."
 msgstr "Інтерактивне джерело даних створено протягом %1 секунд."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:175
+#: src/frontend/datasources/ImportFileDialog.cpp:176
 #, kde-format
 msgid "No target data container selected"
 msgstr "Не вибрано контейнера призначення даних"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:323
+#: src/frontend/datasources/ImportFileDialog.cpp:199
 #, kde-format
 msgid "File %1 imported in %2 seconds."
 msgstr "Файл %1 імпортовано за %2 секунд."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:369
+#: src/frontend/datasources/ImportFileDialog.cpp:203
+#, kde-format
+msgid "The directory %1 doesn't exist."
+msgstr "Каталогу %1 не існує."
+
+#: src/frontend/datasources/ImportFileDialog.cpp:234
+#, kde-format
+msgid "%1 files imported in %2 seconds."
+msgstr "Імпортовано %1 файлів за %2 секунд."
+
+#: src/frontend/datasources/ImportFileDialog.cpp:408
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:152
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
 msgstr ""
 "Імпортування даних до матриці неможливе, оскільки серед них є нечислові."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:381
+#: src/frontend/datasources/ImportFileDialog.cpp:420
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:136
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr "Виберіть контейнер даних, до якого слід імпортувати дані."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:399
+#: src/frontend/datasources/ImportFileDialog.cpp:433
 #, kde-format
 msgid "No file provided for import."
 msgstr "Не надано файла для імпортування."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:424
+#: src/frontend/datasources/ImportFileDialog.cpp:458
 #, kde-format
 msgid "The provided file doesn't exist."
 msgstr "Вказаного файла не існує."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:444
+#: src/frontend/datasources/ImportFileDialog.cpp:478
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr ""
 "Не вдалося встановити з'єднання із вказаним локальним сокетом. Помилка: %1."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:448
+#: src/frontend/datasources/ImportFileDialog.cpp:482
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
@@ -11950,28 +11987,28 @@ msgstr ""
 "Не вдалося встановити з'єднання із вказаним локальним сокетом. Сокета не "
 "існує."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:463
+#: src/frontend/datasources/ImportFileDialog.cpp:497
 #, kde-format
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr "Не вдалося встановити з'єднання із вказаним сокетом TCP. Помилка: %1."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:467
-#: src/frontend/datasources/ImportFileDialog.cpp:487
+#: src/frontend/datasources/ImportFileDialog.cpp:501
+#: src/frontend/datasources/ImportFileDialog.cpp:521
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr "Не вказано назву вузла або номер порту."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:483
+#: src/frontend/datasources/ImportFileDialog.cpp:517
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Не вдалося встановити з'єднання із вказаним сокетом UDP. Помилка: %1"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:515
+#: src/frontend/datasources/ImportFileDialog.cpp:549
 #, kde-format
 msgid "Serial port number is missing."
 msgstr "Не вказано номер послідовного порту."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:527
+#: src/frontend/datasources/ImportFileDialog.cpp:561
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
@@ -11980,89 +12017,89 @@ msgstr ""
 "Або немає з'єднання, або не було створено підписок, або фільтр для файлів "
 "записано не символами ASCII."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:110
+#: src/frontend/datasources/ImportFileWidget.cpp:111
 #, kde-format
 msgid "ASCII data"
 msgstr "Дані ASCII"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:111
+#: src/frontend/datasources/ImportFileWidget.cpp:112
 #, kde-format
 msgid "Binary data"
 msgstr "Двійкові дані"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:114
+#: src/frontend/datasources/ImportFileWidget.cpp:115
 #, kde-format
 msgid "Excel 2007+ (XSLX)"
 msgstr "Excel 2007+ (XSLX)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:117
+#: src/frontend/datasources/ImportFileWidget.cpp:118
 #, kde-format
 msgid "OpenDocument Spreadsheet (ODS)"
 msgstr "Електронна таблиця OpenDocument (ODS)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:120
+#: src/frontend/datasources/ImportFileWidget.cpp:121
 #, kde-format
 msgid "Hierarchical Data Format 5 (HDF5)"
 msgstr "Формат ієрархічних даних (HDF5)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:123
+#: src/frontend/datasources/ImportFileWidget.cpp:124
 #, kde-format
 msgid "Network Common Data Format (NetCDF)"
 msgstr "Network Common Data Format (NetCDF)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:126
+#: src/frontend/datasources/ImportFileWidget.cpp:127
 #, kde-format
 msgid "Vector Binary Logfile (BLF)"
 msgstr "векторний двійковий файл журналу (BLF)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:129
+#: src/frontend/datasources/ImportFileWidget.cpp:130
 #, kde-format
 msgid "Flexible Image Transport System Data Format (FITS)"
 msgstr "Формат даних Flexible Image Transport System (FITS)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:131
+#: src/frontend/datasources/ImportFileWidget.cpp:132
 #, kde-format
 msgid "JSON Data"
 msgstr "Дані JSON"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:133
-#: src/frontend/datasources/ImportFileWidget.cpp:155
+#: src/frontend/datasources/ImportFileWidget.cpp:134
+#: src/frontend/datasources/ImportFileWidget.cpp:156
 #, kde-format
 msgid "ROOT (CERN)"
 msgstr "ROOT (CERN)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:135
-#: src/frontend/datasources/ImportFileWidget.cpp:157
+#: src/frontend/datasources/ImportFileWidget.cpp:136
+#: src/frontend/datasources/ImportFileWidget.cpp:158
 #, kde-format
 msgid "Spice"
 msgstr "Spice"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:137
+#: src/frontend/datasources/ImportFileWidget.cpp:138
 #, kde-format
 msgid "SAS, Stata or SPSS"
 msgstr "SAS, Stata або SPSS"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:140
+#: src/frontend/datasources/ImportFileWidget.cpp:141
 #, kde-format
 msgid "MATLAB MAT file"
 msgstr "файл MAT MATLAB"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:143
+#: src/frontend/datasources/ImportFileWidget.cpp:144
 #, kde-format
 msgid "MCAP Data"
 msgstr "Дані MCAP"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:152
+#: src/frontend/datasources/ImportFileWidget.cpp:153
 #, kde-format
 msgid "ASCII Data"
 msgstr "Дані ASCII"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:153
+#: src/frontend/datasources/ImportFileWidget.cpp:154
 #, kde-format
 msgid "Binary Data"
 msgstr "Двійкові дані"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:165
+#: src/frontend/datasources/ImportFileWidget.cpp:166
 #, kde-format
 msgid ""
 "If this option is checked, only the link to the file is stored in the "
@@ -12071,7 +12108,7 @@ msgstr ""
 "Якщо позначено цей пункт, у проєкті зберігатиметься посилання на файл, але "
 "не його вміст."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:166
+#: src/frontend/datasources/ImportFileWidget.cpp:167
 #, kde-format
 msgid ""
 "If this option is checked, the relative path of the file (relative to "
@@ -12081,30 +12118,30 @@ msgstr ""
 "до файла."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/frontend/datasources/ImportFileWidget.cpp:174
+#: src/frontend/datasources/ImportFileWidget.cpp:175
 #: src/frontend/ui/dockwidgets/livedatadock.ui:345
 #, kde-format
 msgid "Continuously Fixed"
 msgstr "Неперервно фіксований"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/frontend/datasources/ImportFileWidget.cpp:175
+#: src/frontend/datasources/ImportFileWidget.cpp:176
 #: src/frontend/ui/dockwidgets/livedatadock.ui:350
 #, kde-format
 msgid "From End"
 msgstr "Від кінця"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:176
+#: src/frontend/datasources/ImportFileWidget.cpp:177
 #, kde-format
 msgid "Till End"
 msgstr "До кінця"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:177
+#: src/frontend/datasources/ImportFileWidget.cpp:178
 #, kde-format
 msgid "Whole File"
 msgstr "Увесь файл"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:212
+#: src/frontend/datasources/ImportFileWidget.cpp:213
 #, kde-format
 msgid ""
 "Specify how the data source has to be processed on every read:"
@@ -12123,7 +12160,7 @@ msgstr ""
 "кожному читанні виконується повторне повне читання і обробка усього файла. "
 "Доступний лише для джерел даних «Файл або іменований канал».</li></ul>"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:223
+#: src/frontend/datasources/ImportFileWidget.cpp:224
 #, kde-format
 msgid ""
 "Number of samples (lines) to be processed on every read.\n"
@@ -12133,7 +12170,7 @@ msgstr ""
 "Кількість вибірок (рядків), які слід обробляти при кожному читанні.\n"
 "Слід вказувати лише для режиму читання «Неперервно фіксований» та «З кінця»."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:229
+#: src/frontend/datasources/ImportFileWidget.cpp:230
 #, kde-format
 msgid ""
 "Specify when and how frequently the data source needs to be read:"
@@ -12146,12 +12183,12 @@ msgstr ""
 "інтервалом між читаннями.</li><li>При появі нових даних — читання з джерела "
 "даних відбувається, коли з'являються нові дані.</li></ul>"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:237
+#: src/frontend/datasources/ImportFileWidget.cpp:238
 #, kde-format
 msgid "Specify how frequently the data source has to be read."
 msgstr "Вкажіть, як часто слід читати дані з джерела даних."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:242
+#: src/frontend/datasources/ImportFileWidget.cpp:243
 #, kde-format
 msgid ""
 "Specify how many samples need to be kept in memory after reading.\n"
@@ -12160,7 +12197,7 @@ msgstr ""
 "Вкажіть, скільки вибірок має зберігатися у пам'яті після читання.\n"
 "Скористайтеся варіантом «Всі», якщо слід зберігати усі дані."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:247
+#: src/frontend/datasources/ImportFileWidget.cpp:248
 #, kde-format
 msgid ""
 "Enable to use the first row of the selected data region for the column names "
@@ -12169,12 +12206,12 @@ msgstr ""
 "Позначте, щоб скористатися першим рядком позначеної області даних, як "
 "назвами стовпчиків у електронній таблиці."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:262
+#: src/frontend/datasources/ImportFileWidget.cpp:263
 #, kde-format
 msgid "Manage MQTT connections"
 msgstr "Керування з'єднаннями MQTT"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:264
+#: src/frontend/datasources/ImportFileWidget.cpp:265
 #: src/frontend/dockwidgets/LiveDataDock.cpp:84
 #, kde-format
 msgid ""
@@ -12184,30 +12221,36 @@ msgstr ""
 "Визначає повідомлення «Останньої волі та заповіту («Last Will and Testament» "
 "або LWT). Має існувати підписка принаймні на одну тему."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:281
+#: src/frontend/datasources/ImportFileWidget.cpp:282
 #, kde-format
 msgid ""
 "The number of rows is calculated from the values of the data portion tab"
 msgstr "Кількість рядків обчислено на основі значень з вкладки частини даних"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1011
+#: src/frontend/datasources/ImportFileWidget.cpp:1054
+#, kde-format
+msgctxt "@title:window"
+msgid "Select the Directory Data Source"
+msgstr "Виберіть джерело даних — каталог"
+
+#: src/frontend/datasources/ImportFileWidget.cpp:1056
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Виберіть файлове джерело даних"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1041
+#: src/frontend/datasources/ImportFileWidget.cpp:1086
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Виберіть файл DBC"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1041
+#: src/frontend/datasources/ImportFileWidget.cpp:1086
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr "файл DBC (*.dbc)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1128
+#: src/frontend/datasources/ImportFileWidget.cpp:1173
 #, kde-format
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
@@ -12215,7 +12258,7 @@ msgstr ""
 "Файли проєктів Origin слід відкривати за допомогою пункту меню «Імпорт -> "
 "Проєкт Origin»!"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1131
+#: src/frontend/datasources/ImportFileWidget.cpp:1176
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
@@ -12224,7 +12267,7 @@ msgstr ""
 "Проєкт LabPlot»!"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/frontend/datasources/ImportFileWidget.cpp:1279
+#: src/frontend/datasources/ImportFileWidget.cpp:1324
 #: src/frontend/ui/datasources/importfilewidget.ui:416
 #, kde-format
 msgid "Data Format"
@@ -12232,7 +12275,7 @@ msgstr "Формат даних"
 
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/frontend/datasources/ImportFileWidget.cpp:1280
+#: src/frontend/datasources/ImportFileWidget.cpp:1325
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
 #: src/frontend/ui/settingsworksheetpage.ui:134
@@ -12241,103 +12284,119 @@ msgid "Preview"
 msgstr "Перегляд"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/frontend/datasources/ImportFileWidget.cpp:1282
+#: src/frontend/datasources/ImportFileWidget.cpp:1327
 #: src/frontend/ui/datasources/importfilewidget.ui:582
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "Частина даних для читання"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1325
+#: src/frontend/datasources/ImportFileWidget.cpp:1370
 #, kde-format
 msgid "Data format && preview"
 msgstr "Формат і перегляд даних"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1372
+#: src/frontend/datasources/ImportFileWidget.cpp:1417
 #, kde-format
 msgid "Automatic"
 msgstr "Автоматично"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1621
+#: src/frontend/datasources/ImportFileWidget.cpp:1664
 #, kde-format
 msgid "file command not found"
 msgstr "Не знайдено програми file"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1632
+#: src/frontend/datasources/ImportFileWidget.cpp:1675
 #, kde-format
 msgid "cannot open"
 msgstr "не вдалося відкрити"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1637
+#: src/frontend/datasources/ImportFileWidget.cpp:1680
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>Тип файла:</b> %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1642
+#: src/frontend/datasources/ImportFileWidget.cpp:1685
+#: src/frontend/datasources/ImportFileWidget.cpp:1773
 #, kde-format
 msgid "General:"
 msgstr "Загальне:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1644
-#: src/frontend/datasources/ImportFileWidget.cpp:1645
-#: src/frontend/datasources/ImportFileWidget.cpp:1646
+#: src/frontend/datasources/ImportFileWidget.cpp:1687
+#: src/frontend/datasources/ImportFileWidget.cpp:1688
+#: src/frontend/datasources/ImportFileWidget.cpp:1689
+#: src/frontend/datasources/ImportFileWidget.cpp:1775
+#: src/frontend/datasources/ImportFileWidget.cpp:1776
+#: src/frontend/datasources/ImportFileWidget.cpp:1777
 #, kde-format
 msgid "yes"
 msgstr "так"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1644
-#: src/frontend/datasources/ImportFileWidget.cpp:1645
-#: src/frontend/datasources/ImportFileWidget.cpp:1646
+#: src/frontend/datasources/ImportFileWidget.cpp:1687
+#: src/frontend/datasources/ImportFileWidget.cpp:1688
+#: src/frontend/datasources/ImportFileWidget.cpp:1689
+#: src/frontend/datasources/ImportFileWidget.cpp:1775
+#: src/frontend/datasources/ImportFileWidget.cpp:1776
+#: src/frontend/datasources/ImportFileWidget.cpp:1777
 #, kde-format
 msgid "no"
 msgstr "ні"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1644
+#: src/frontend/datasources/ImportFileWidget.cpp:1687
+#: src/frontend/datasources/ImportFileWidget.cpp:1775
 #, kde-format
 msgid "Readable: %1"
 msgstr "Придатність до читання: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1645
+#: src/frontend/datasources/ImportFileWidget.cpp:1688
+#: src/frontend/datasources/ImportFileWidget.cpp:1776
 #, kde-format
 msgid "Writable: %1"
 msgstr "Доступність для запису: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1646
+#: src/frontend/datasources/ImportFileWidget.cpp:1689
+#: src/frontend/datasources/ImportFileWidget.cpp:1777
 #, kde-format
 msgid "Executable: %1"
 msgstr "Виконуваний: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1648
+#: src/frontend/datasources/ImportFileWidget.cpp:1691
+#: src/frontend/datasources/ImportFileWidget.cpp:1779
 #, kde-format
 msgid "Birth time: %1"
 msgstr "Час народження: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1649
+#: src/frontend/datasources/ImportFileWidget.cpp:1692
+#: src/frontend/datasources/ImportFileWidget.cpp:1780
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "Востаннє змінено метадані: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1650
+#: src/frontend/datasources/ImportFileWidget.cpp:1693
+#: src/frontend/datasources/ImportFileWidget.cpp:1781
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Востаннє змінено: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1651
+#: src/frontend/datasources/ImportFileWidget.cpp:1694
+#: src/frontend/datasources/ImportFileWidget.cpp:1782
 #, kde-format
 msgid "Last read: %1"
 msgstr "Востаннє прочитано: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1652
+#: src/frontend/datasources/ImportFileWidget.cpp:1695
+#: src/frontend/datasources/ImportFileWidget.cpp:1783
 #, kde-format
 msgid "Owner: %1"
 msgstr "Власник: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1653
+#: src/frontend/datasources/ImportFileWidget.cpp:1696
+#: src/frontend/datasources/ImportFileWidget.cpp:1784
 #, kde-format
 msgid "Group: %1"
 msgstr "Група: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1654
+#: src/frontend/datasources/ImportFileWidget.cpp:1697
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
@@ -12346,23 +12405,34 @@ msgstr[1] "%1 байти C"
 msgstr[2] "%1 байтів C"
 msgstr[3] "%1 байт C"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1657
+#: src/frontend/datasources/ImportFileWidget.cpp:1700
+#: src/frontend/datasources/ImportFileWidget.cpp:1787
 #, kde-format
 msgid "Summary:"
 msgstr "Резюме:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1680
-#: src/frontend/datasources/ImportFileWidget.cpp:1685
+#: src/frontend/datasources/ImportFileWidget.cpp:1723
+#: src/frontend/datasources/ImportFileWidget.cpp:1728
 #, kde-format
 msgid "Content:"
 msgstr "Вміст:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1716
+#: src/frontend/datasources/ImportFileWidget.cpp:1759
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Не вдалося відкрити файл %1 для читання."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1807
+#: src/frontend/datasources/ImportFileWidget.cpp:1789
+#, kde-format
+msgid "Number of sub-directories: %1"
+msgstr "Кількість підкаталогів: %1"
+
+#: src/frontend/datasources/ImportFileWidget.cpp:1792
+#, kde-format
+msgid "Couldn't read the directory %1."
+msgstr "Не вдалося прочитати каталог %1."
+
+#: src/frontend/datasources/ImportFileWidget.cpp:1881
 #, kde-format
 msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
@@ -12372,119 +12442,119 @@ msgstr ""
 "і «Початковий рядок». Значення «Кінцевий рядок» має бути більшим за значення "
 "«Початковий рядок» або рівним -1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1818
+#: src/frontend/datasources/ImportFileWidget.cpp:1892
 #, kde-format
 msgid "Initialization failed: %1"
 msgstr "Помилка ініціалізації: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1843
+#: src/frontend/datasources/ImportFileWidget.cpp:1917
 #, kde-format
 msgid "Failed to connect to the local socket: %1"
 msgstr "Не вдалося з'єднатися із локальним сокетом %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1860
+#: src/frontend/datasources/ImportFileWidget.cpp:1934
 #, kde-format
 msgid "Failed to connect to the TCP socket. %1"
 msgstr "Не вдалося з'єднатися із сокетом TCP. %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1866
-#: src/frontend/datasources/ImportFileWidget.cpp:1895
+#: src/frontend/datasources/ImportFileWidget.cpp:1940
+#: src/frontend/datasources/ImportFileWidget.cpp:1969
 #, kde-format
 msgid "Socket operation timed out."
 msgstr "Перевищено час очікування на завершення дії із сокетом."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1880
+#: src/frontend/datasources/ImportFileWidget.cpp:1954
 #, kde-format
 msgid "Not ready for read after 2s:"
 msgstr "Немає готовності до читання за 2 с:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1899
+#: src/frontend/datasources/ImportFileWidget.cpp:1973
 #, kde-format
 msgid "Unable to bind: "
 msgstr "Не вдалося пов'язати: "
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1916
+#: src/frontend/datasources/ImportFileWidget.cpp:1990
 #, kde-format
 msgid "Parse Error: %1"
 msgstr "Помилка обробки: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1918
+#: src/frontend/datasources/ImportFileWidget.cpp:1992
 #, kde-format
 msgid "Not ready for read after 2 sec"
 msgstr "Немає готовності до читання після 2 секунд"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1922
+#: src/frontend/datasources/ImportFileWidget.cpp:1996
 #, kde-format
 msgid "Failed to open serial port. error: %1"
 msgstr "Не вдалося відкрити послідовний порт. Повідомлення: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1941
+#: src/frontend/datasources/ImportFileWidget.cpp:2015
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "Для вибраної теми даних ще не отримано"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2206
+#: src/frontend/datasources/ImportFileWidget.cpp:2280
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "Не є файлом HDF5: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2264
+#: src/frontend/datasources/ImportFileWidget.cpp:2338
 #, kde-format
 msgid "Parsing ODS file %1 failed."
 msgstr "Не вдалося обробити файл ODS %1."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2672
+#: src/frontend/datasources/ImportFileWidget.cpp:2746
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr "Не вдалося підписатися на усі доступні теми."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2680
+#: src/frontend/datasources/ImportFileWidget.cpp:2754
 #, kde-format
 msgid "Failed to connect to '%1'. Error %2."
 msgstr "Не вдалося з'єднатися з «%1». Помилка %2."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2702
+#: src/frontend/datasources/ImportFileWidget.cpp:2776
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr "Від'єднано від «%1»."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2768
+#: src/frontend/datasources/ImportFileWidget.cpp:2842
 #, kde-format
 msgid "Available (%1)"
 msgstr "Доступний (%1)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2872
+#: src/frontend/datasources/ImportFileWidget.cpp:2946
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Помилкове ім'я користувача або пароль"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2875
+#: src/frontend/datasources/ImportFileWidget.cpp:2949
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr "Ідентифікатор клієнта виявився неприйнятним"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2879
+#: src/frontend/datasources/ImportFileWidget.cpp:2953
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr "Не вдалося зв'язатися із вузлом %1."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2882
+#: src/frontend/datasources/ImportFileWidget.cpp:2956
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr "Клієнт не уповноважено на з'єднання."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2885
+#: src/frontend/datasources/ImportFileWidget.cpp:2959
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "Сталася невідома помилка."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2891
-#: src/frontend/datasources/ImportFileWidget.cpp:2894
+#: src/frontend/datasources/ImportFileWidget.cpp:2965
+#: src/frontend/datasources/ImportFileWidget.cpp:2968
 #, kde-format
 msgid "An error occurred."
 msgstr "Сталася помилка."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2908
+#: src/frontend/datasources/ImportFileWidget.cpp:2982
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "Перевищено час очікування на встановлення з'єднання із «%1:%2»."
@@ -12702,11 +12772,6 @@ msgstr "Відкрити проєкт OPJ Origin"
 #, kde-format
 msgid "Origin OPJ Projects (%1)"
 msgstr "проєкти OPJ Origin (%1)"
-
-#: src/frontend/datasources/ImportProjectDialog.cpp:512
-#, kde-format
-msgid "Folder name:"
-msgstr "Назва теки:"
 
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:119
 #, kde-format
@@ -12985,7 +13050,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2003
+#: src/frontend/MainWin.cpp:2027
 #, kde-format
 msgid "Warning"
 msgstr "Попередження"
@@ -15720,14 +15785,14 @@ msgstr "&Додати новий"
 
 #. i18n: ectx: Menu (new_notebook)
 #. i18n: ectx: Menu (notebook)
-#: src/frontend/labplotui.rc:137 src/frontend/labplotui.rc:169
+#: src/frontend/labplotui.rc:137 src/frontend/labplotui.rc:170
 #, kde-format
 msgid "&Notebook"
 msgstr "&Нотатник"
 
 #. i18n: ectx: Menu (new_script)
 #. i18n: ectx: Menu (script)
-#: src/frontend/labplotui.rc:143 src/frontend/labplotui.rc:172
+#: src/frontend/labplotui.rc:143 src/frontend/labplotui.rc:173
 #, kde-format
 msgid "&Script"
 msgstr "С&крипт"
@@ -15739,49 +15804,49 @@ msgid "Import"
 msgstr "Імпортувати"
 
 #. i18n: ectx: Menu (edit)
-#: src/frontend/labplotui.rc:161
+#: src/frontend/labplotui.rc:162
 #, kde-format
 msgid "&Edit"
 msgstr "З&міни"
 
 #. i18n: ectx: Menu (spreadsheet)
-#: src/frontend/labplotui.rc:166
+#: src/frontend/labplotui.rc:167
 #, kde-format
 msgid "&Spreadsheet"
 msgstr "&Електронна таблиця"
 
 #. i18n: ectx: Menu (matrix)
-#: src/frontend/labplotui.rc:167
+#: src/frontend/labplotui.rc:168
 #, kde-format
 msgid "&Matrix"
 msgstr "&Матриця"
 
 #. i18n: ectx: Menu (worksheet)
-#: src/frontend/labplotui.rc:168
+#: src/frontend/labplotui.rc:169
 #, kde-format
 msgid "&Worksheet"
 msgstr "Р&обочий аркуш"
 
 #. i18n: ectx: Menu (data_extractor)
-#: src/frontend/labplotui.rc:170
+#: src/frontend/labplotui.rc:171
 #, kde-format
 msgid "&Data Extractor"
 msgstr "&Засіб видобування даних"
 
 #. i18n: ectx: Menu (drawing)
-#: src/frontend/labplotui.rc:171
+#: src/frontend/labplotui.rc:172
 #, kde-format
 msgid "&Drawing"
 msgstr "&Малюнок"
 
 #. i18n: ectx: Menu (tools)
-#: src/frontend/labplotui.rc:173
+#: src/frontend/labplotui.rc:174
 #, kde-format
 msgid "&Tools"
 msgstr "&Інструменти"
 
 #. i18n: ectx: Menu (windows)
-#: src/frontend/labplotui.rc:177
+#: src/frontend/labplotui.rc:178
 #, kde-format
 msgid "&Windows"
 msgstr "&Вікна"
@@ -15960,12 +16025,12 @@ msgstr "Надруковано %1"
 msgid "%1"
 msgstr "%1"
 
-#: src/frontend/MainWin.cpp:1899
+#: src/frontend/MainWin.cpp:1923
 #, kde-format
 msgid "Kaggle CLI tool not found"
 msgstr "Не знайдено інструмент командного рядка Kaggle"
 
-#: src/frontend/MainWin.cpp:1900
+#: src/frontend/MainWin.cpp:1924
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
@@ -15974,27 +16039,27 @@ msgstr ""
 "Вкажіть шлях до інструменту командного рядка Kaggle у параметрах програми і "
 "повторіть спробу."
 
-#: src/frontend/MainWin.cpp:1966
+#: src/frontend/MainWin.cpp:1990
 #, kde-format
 msgid "%1 exported"
 msgstr "Експортовано %1"
 
-#: src/frontend/MainWin.cpp:1973
+#: src/frontend/MainWin.cpp:1997
 #, kde-format
 msgid "FITS files saved"
 msgstr "Файли FITS збережено"
 
-#: src/frontend/MainWin.cpp:1985
+#: src/frontend/MainWin.cpp:2009
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Клієнт MQTT%1"
 
-#: src/frontend/MainWin.cpp:2003
+#: src/frontend/MainWin.cpp:2027
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "На цьому вузлі вже є MQTTClient!"
 
-#: src/frontend/MainWin.cpp:2007
+#: src/frontend/MainWin.cpp:2031
 #, kde-format
 msgid "Live data source%1"
 msgstr "Інтерактивне джерело даних%1"
