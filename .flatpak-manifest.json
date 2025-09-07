@@ -76,8 +76,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-25.08.0.tar.xz",
-                    "sha256": "425ed4d4515a093bdcdbbaac6876f20617451edc710df6a4fd6c45dd67eb418d"
+                    "url": "https://poppler.freedesktop.org/poppler-25.09.0.tar.xz",
+                    "sha256": "758abfe0c77108c72d654b291dfbce54964b5315a53028e3875f07ef55ff20a3"
                 }
             ],
             "modules": [
@@ -118,8 +118,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.04.3/src/analitza-25.04.3.tar.xz",
-			    "sha256": "5cd695fc83af74eedd3970725e35a6396120631e46866efc9094bce683ad626c"
+			    "url": "https://download.kde.org/stable/release-service/25.08.0/src/analitza-25.08.0.tar.xz",
+			    "sha256": "8d477f0af14bb9f7c15033a9d78987a7067135affc47f19eddda82e76c36d34b"
 		    }
 	    ]
         },
@@ -129,8 +129,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.04.3/src/cantor-25.04.3.tar.xz",
-			    "sha256": "1a7732a34bc703f2febeceb074fb2827f84adf913b86c115553d73a2eb67af05"
+			    "url": "https://download.kde.org/stable/release-service/25.08.0/src/cantor-25.08.0.tar.xz",
+			    "sha256": "5c98fa36bac3500a57d07813a101be709c58aa0ab755d4c9c9fa2b3f8836238d"
 		    }
 	    ]
         },
@@ -192,8 +192,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v3.1/libcerf-v3.1.tar.gz",
-                    "sha256": "4c07e2a8e2b4d0e4d48db9e0fc9191b43a0e120e577d55d87e26dee8745c6fab"
+                    "url": "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v3.2/libcerf-v3.2.tar.gz",
+                    "sha256": "ea8d110d73ec24a643042ca3940461ccbb1b6541e21310ecb70ab4e4dc144aef"
                 }
             ]
         },
@@ -342,8 +342,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/orcus/orcus/-/archive/0.20.1/orcus-0.20.1.tar.bz2",
-                    "sha256": "f15e22d055b199299986a0de01864592a2b1caba57413d79969d1794128ef08a"
+                    "url": "https://gitlab.com/orcus/orcus/-/archive/0.20.2/orcus-0.20.2.tar.bz2",
+                    "sha256": "46cdeefef6bbf800e2e776630930fea6363107ac71460824ba54e37047eb85b8"
                 }
             ]
         },

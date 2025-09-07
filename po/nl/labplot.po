@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-14 00:38+0000\n"
-"PO-Revision-Date: 2025-07-31 13:34+0200\n"
+"POT-Creation-Date: 2025-08-28 00:38+0000\n"
+"PO-Revision-Date: 2025-08-28 18:53+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.08.0\n"
 
 #: src/backend/core/AbstractAspect.cpp:234
 #, kde-format
@@ -266,7 +266,7 @@ msgstr "Groot geheel getal"
 #: src/backend/core/AbstractColumn.cpp:233
 #: src/backend/datasources/filters/AsciiFilter.cpp:555
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:532
-#: src/frontend/ActionsManager.cpp:510
+#: src/frontend/ActionsManager.cpp:509
 #: src/frontend/notebook/NotebookView.cpp:95
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:208
 #: src/frontend/ui/dockwidgets/axisdock.ui:1528
@@ -362,12 +362,11 @@ msgid "Import Data"
 msgstr "Gegevens importeren"
 
 #: src/backend/core/AbstractPart.cpp:126 src/frontend/ActionsManager.cpp:261
-#: src/frontend/ActionsManager.cpp:270
 #, kde-format
 msgid "From File..."
 msgstr "Uit bestand..."
 
-#: src/backend/core/AbstractPart.cpp:128 src/frontend/ActionsManager.cpp:282
+#: src/backend/core/AbstractPart.cpp:128 src/frontend/ActionsManager.cpp:281
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Uit SQL-database..."
@@ -392,7 +391,7 @@ msgstr "Afdrukken"
 msgid "Print Preview"
 msgstr "Afdrukvoorbeeld"
 
-#: src/backend/core/AbstractPart.cpp:147 src/frontend/ActionsManager.cpp:382
+#: src/backend/core/AbstractPart.cpp:147 src/frontend/ActionsManager.cpp:381
 #, kde-format
 msgid "&Close"
 msgstr "&Sluiten"
@@ -478,7 +477,7 @@ msgid "%1   (no values)"
 msgstr "%1 (geen waarden)"
 
 #: src/backend/core/AspectTreeModel.cpp:236
-#: src/frontend/datasources/ImportFileWidget.cpp:1654
+#: src/frontend/datasources/ImportFileWidget.cpp:1697
 #, kde-format
 msgid "Size: %1"
 msgstr "Grootte: %1"
@@ -1268,6 +1267,7 @@ msgid "Free space: %1 bytes"
 msgstr "Vrije ruimte: %1 bytes"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:199
+#: src/frontend/datasources/ImportFileWidget.cpp:1788
 #, kde-format
 msgid "Number of files: %1"
 msgstr "Aantal bestanden: %1"
@@ -1466,7 +1466,7 @@ msgstr "h5dump niet gevonden."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/frontend/datasources/ImportFileWidget.cpp:1629
+#: src/frontend/datasources/ImportFileWidget.cpp:1672
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "Lezen uit bestand %1 is mislukt."
@@ -6577,7 +6577,7 @@ msgstr "Statistieken (verdelingen)"
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:496
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
-#: src/frontend/datasources/ImportFileWidget.cpp:1373
+#: src/frontend/datasources/ImportFileWidget.cpp:1418
 #: src/frontend/dockwidgets/AxisDock.cpp:237
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:172
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
@@ -8300,8 +8300,8 @@ msgstr "Verticale as"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:533
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2207
-#: src/frontend/ActionsManager.cpp:514
-#: src/frontend/datasources/ImportFileWidget.cpp:112
+#: src/frontend/ActionsManager.cpp:513
+#: src/frontend/datasources/ImportFileWidget.cpp:113
 #: src/frontend/matrix/MatrixView.cpp:133
 #: src/frontend/notebook/NotebookView.cpp:108
 #: src/frontend/widgets/BackgroundWidget.cpp:123
@@ -8350,7 +8350,7 @@ msgid "Inset Plot Area with Data"
 msgstr "Inzet in plotgebied met gegevens"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:575
-#: src/frontend/ActionsManager.cpp:848
+#: src/frontend/ActionsManager.cpp:847
 #: src/frontend/notebook/NotebookView.cpp:166
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:446
@@ -10500,174 +10500,184 @@ msgstr ""
 "Maakt een actieve gegevensbron aan om gegevens te lezen uit een reëel "
 "tijdapparaat"
 
-#: src/frontend/ActionsManager.cpp:263 src/frontend/ActionsManager.cpp:272
+#: src/frontend/ActionsManager.cpp:264
 #, kde-format
 msgid "Import data from a regular file"
 msgstr "Gegevens importeren uit regulier bestand"
 
-#: src/frontend/ActionsManager.cpp:277
+#: src/frontend/ActionsManager.cpp:269
+#, kde-format
+msgid "From Directory..."
+msgstr "Uit map..."
+
+#: src/frontend/ActionsManager.cpp:271
+#, kde-format
+msgid "Import multiple files from a directory"
+msgstr "Meerdere bestanden uit een map importeren"
+
+#: src/frontend/ActionsManager.cpp:276
 #, kde-format
 msgid "From kaggle.com..."
 msgstr "Uit kaggle.com..."
 
-#: src/frontend/ActionsManager.cpp:278
+#: src/frontend/ActionsManager.cpp:277
 #, kde-format
 msgid "Import data from kaggle.com"
 msgstr "Gegevens importeren uit kaggle.com"
 
-#: src/frontend/ActionsManager.cpp:283
+#: src/frontend/ActionsManager.cpp:282
 #, kde-format
 msgid "Import data from a SQL database"
 msgstr "Gegevens importeren uit SQL-database"
 
-#: src/frontend/ActionsManager.cpp:287
+#: src/frontend/ActionsManager.cpp:286
 #, kde-format
 msgid "From Dataset Collection..."
 msgstr "Uit collectie gegevensverzamelingen..."
 
-#: src/frontend/ActionsManager.cpp:288
+#: src/frontend/ActionsManager.cpp:287
 #, kde-format
 msgid "Import data from an online dataset"
 msgstr "Gegevens importeren uit een online gegevensset"
 
-#: src/frontend/ActionsManager.cpp:292
+#: src/frontend/ActionsManager.cpp:291
 #, kde-format
 msgid "LabPlot Project..."
 msgstr "LabPlot-project..."
 
-#: src/frontend/ActionsManager.cpp:293
+#: src/frontend/ActionsManager.cpp:292
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
 msgstr "Een project importeren uit een projectbestand van LabPlot (.lml)"
 
-#: src/frontend/ActionsManager.cpp:298
+#: src/frontend/ActionsManager.cpp:297
 #, kde-format
 msgid "Origin Project (OPJ)..."
 msgstr "Origin Project (OPJ)..."
 
-#: src/frontend/ActionsManager.cpp:299
+#: src/frontend/ActionsManager.cpp:298
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr ""
 "Een project importeren uit een projectbestand van OriginLab Origin (.lml)"
 
-#: src/frontend/ActionsManager.cpp:332
+#: src/frontend/ActionsManager.cpp:331
 #, kde-format
 msgid "Export..."
 msgstr "Exporteren..."
 
-#: src/frontend/ActionsManager.cpp:333
+#: src/frontend/ActionsManager.cpp:332
 #, kde-format
 msgid "Export selected element"
 msgstr "Geselecteerd element exporteren"
 
-#: src/frontend/ActionsManager.cpp:339 src/frontend/ActionsManager.cpp:1332
+#: src/frontend/ActionsManager.cpp:338 src/frontend/ActionsManager.cpp:1332
 #: src/frontend/ActionsManager.cpp:1340
 #, kde-format
 msgid "Share"
 msgstr "Delen"
 
-#: src/frontend/ActionsManager.cpp:344
+#: src/frontend/ActionsManager.cpp:343
 #, kde-format
 msgid "Color Maps Browser"
 msgstr "Browser voor kleurkaarten"
 
-#: src/frontend/ActionsManager.cpp:345
+#: src/frontend/ActionsManager.cpp:344
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr "Dialoog openen voor het bladeren door de beschikbare kleurkaarten."
 
-#: src/frontend/ActionsManager.cpp:354
+#: src/frontend/ActionsManager.cpp:353
 #, kde-format
 msgid "FITS Metadata Editor..."
 msgstr "Editor metagegevens van FITS..."
 
-#: src/frontend/ActionsManager.cpp:355
+#: src/frontend/ActionsManager.cpp:354
 #, kde-format
 msgid "Open editor to edit FITS meta data"
 msgstr "Editor openen voor bewerken FITS-metadata"
 
-#: src/frontend/ActionsManager.cpp:364
+#: src/frontend/ActionsManager.cpp:363
 #, kde-format
 msgid "Undo/Redo History..."
 msgstr "Geschiedenis ongedaan/opnieuw..."
 
-#: src/frontend/ActionsManager.cpp:384
+#: src/frontend/ActionsManager.cpp:383
 #, kde-format
 msgid "Close the active window"
 msgstr "Actieve venster sluiten"
 
-#: src/frontend/ActionsManager.cpp:387
+#: src/frontend/ActionsManager.cpp:386
 #, kde-format
 msgid "Close &All"
 msgstr "&Alle sluiten"
 
-#: src/frontend/ActionsManager.cpp:388
+#: src/frontend/ActionsManager.cpp:387
 #, kde-format
 msgid "Close all the windows"
 msgstr "Alle vensters sluiten"
 
-#: src/frontend/ActionsManager.cpp:391
+#: src/frontend/ActionsManager.cpp:390
 #, kde-format
 msgid "Ne&xt"
 msgstr "&Volgende"
 
-#: src/frontend/ActionsManager.cpp:393
+#: src/frontend/ActionsManager.cpp:392
 #, kde-format
 msgid "Move the focus to the next window"
 msgstr "Focus naar volgend venster verplaatsen"
 
-#: src/frontend/ActionsManager.cpp:396
+#: src/frontend/ActionsManager.cpp:395
 #, kde-format
 msgid "Pre&vious"
 msgstr "&Vorige"
 
-#: src/frontend/ActionsManager.cpp:398
+#: src/frontend/ActionsManager.cpp:397
 #, kde-format
 msgid "Move the focus to the previous window"
 msgstr "Focus naar vorig venster verplaatsen"
 
-#: src/frontend/ActionsManager.cpp:405
+#: src/frontend/ActionsManager.cpp:404
 #, kde-format
 msgid "Current &Folder Only"
 msgstr "Alleen huidige &map"
 
-#: src/frontend/ActionsManager.cpp:410
+#: src/frontend/ActionsManager.cpp:409
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr "Huidige map en &submappen"
 
-#: src/frontend/ActionsManager.cpp:414
+#: src/frontend/ActionsManager.cpp:413
 #, kde-format
 msgid "&All"
 msgstr "&Alle"
 
-#: src/frontend/ActionsManager.cpp:436
+#: src/frontend/ActionsManager.cpp:435
 #, kde-format
 msgid "Show Memory Usage"
 msgstr "Geheugengebruik tonen"
 
-#: src/frontend/ActionsManager.cpp:444
+#: src/frontend/ActionsManager.cpp:443
 #, kde-format
 msgid "Project Explorer"
 msgstr "Projectverkenner"
 
-#: src/frontend/ActionsManager.cpp:449
+#: src/frontend/ActionsManager.cpp:448
 #, kde-format
 msgid "Properties Explorer"
 msgstr "Eigenschappen verkenner"
 
-#: src/frontend/ActionsManager.cpp:454
+#: src/frontend/ActionsManager.cpp:453
 #, kde-format
 msgid "Worksheet Preview"
 msgstr "Werkbladvoorbeeld"
 
-#: src/frontend/ActionsManager.cpp:477
+#: src/frontend/ActionsManager.cpp:476
 #, kde-format
 msgid "Configure CAS..."
 msgstr "CAS instellen..."
 
-#: src/frontend/ActionsManager.cpp:478
+#: src/frontend/ActionsManager.cpp:477
 #, kde-format
 msgid ""
 "Opens the settings for Computer Algebra Systems to modify the available "
@@ -10676,130 +10686,130 @@ msgstr ""
 "Opent de instellingen voor Computer Algebra Systemen om de beschikbare "
 "systemen te wijzigen of nieuwe beschikbaar te maken"
 
-#: src/frontend/ActionsManager.cpp:505
+#: src/frontend/ActionsManager.cpp:504
 #, kde-format
 msgctxt "@action"
 msgid "New Plot Area"
 msgstr "Nieuw plotgebied"
 
-#: src/frontend/ActionsManager.cpp:521
+#: src/frontend/ActionsManager.cpp:520
 #: src/frontend/dockwidgets/WorksheetDock.cpp:281
 #: src/frontend/worksheet/WorksheetView.cpp:255
 #, kde-format
 msgid "Vertical Layout"
 msgstr "Verticale indeling"
 
-#: src/frontend/ActionsManager.cpp:526
+#: src/frontend/ActionsManager.cpp:525
 #: src/frontend/dockwidgets/WorksheetDock.cpp:282
 #: src/frontend/worksheet/WorksheetView.cpp:259
 #, kde-format
 msgid "Horizontal Layout"
 msgstr "Horizontale indeling"
 
-#: src/frontend/ActionsManager.cpp:531
+#: src/frontend/ActionsManager.cpp:530
 #: src/frontend/dockwidgets/WorksheetDock.cpp:283
 #: src/frontend/worksheet/WorksheetView.cpp:263
 #, kde-format
 msgid "Grid Layout"
 msgstr "Roosterindeling"
 
-#: src/frontend/ActionsManager.cpp:536
+#: src/frontend/ActionsManager.cpp:535
 #: src/frontend/dockwidgets/WorksheetDock.cpp:280
 #: src/frontend/worksheet/WorksheetView.cpp:267
 #, kde-format
 msgid "No Layout"
 msgstr "Geen opmaak"
 
-#: src/frontend/ActionsManager.cpp:544 src/frontend/ActionsManager.cpp:585
+#: src/frontend/ActionsManager.cpp:543 src/frontend/ActionsManager.cpp:584
 #: src/frontend/worksheet/WorksheetView.cpp:191
 #: src/frontend/worksheet/WorksheetView.cpp:353
 #, kde-format
 msgid "Select and Edit"
 msgstr "Selecteren en bewerken"
 
-#: src/frontend/ActionsManager.cpp:549 src/frontend/ActionsManager.cpp:762
+#: src/frontend/ActionsManager.cpp:548 src/frontend/ActionsManager.cpp:761
 #: src/frontend/datapicker/DatapickerImageView.cpp:134
 #: src/frontend/worksheet/WorksheetView.cpp:196
 #, kde-format
 msgid "Navigate"
 msgstr "Navigeren"
 
-#: src/frontend/ActionsManager.cpp:554 src/frontend/ActionsManager.cpp:767
+#: src/frontend/ActionsManager.cpp:553 src/frontend/ActionsManager.cpp:766
 #: src/frontend/datapicker/DatapickerImageView.cpp:138
 #: src/frontend/worksheet/WorksheetView.cpp:200
 #, kde-format
 msgid "Select and Zoom"
 msgstr "Selecteren en zoomen"
 
-#: src/frontend/ActionsManager.cpp:560 src/frontend/ActionsManager.cpp:796
+#: src/frontend/ActionsManager.cpp:559 src/frontend/ActionsManager.cpp:795
 #, kde-format
 msgctxt "@action"
 msgid "Zoom"
 msgstr "Zoomen"
 
-#: src/frontend/ActionsManager.cpp:566 src/frontend/ActionsManager.cpp:802
+#: src/frontend/ActionsManager.cpp:565 src/frontend/ActionsManager.cpp:801
 #, kde-format
 msgctxt "@action"
 msgid "Magnification"
 msgstr "Vergroting"
 
-#: src/frontend/ActionsManager.cpp:579
+#: src/frontend/ActionsManager.cpp:578
 #, kde-format
 msgctxt "@action"
 msgid "Add New"
 msgstr "Nieuw toevoegen"
 
-#: src/frontend/ActionsManager.cpp:591
+#: src/frontend/ActionsManager.cpp:590
 #: src/frontend/worksheet/WorksheetView.cpp:358
 #, kde-format
 msgid "Crosshair"
 msgstr "Kruisdraad"
 
-#: src/frontend/ActionsManager.cpp:596
+#: src/frontend/ActionsManager.cpp:595
 #: src/frontend/worksheet/WorksheetView.cpp:363
 #, kde-format
 msgid "Select Region and Zoom In"
 msgstr "Regio selecteren en inzoomen"
 
-#: src/frontend/ActionsManager.cpp:601
+#: src/frontend/ActionsManager.cpp:600
 #: src/frontend/worksheet/WorksheetView.cpp:368
 #, kde-format
 msgid "Select X-Region and Zoom In"
 msgstr "X-regio selecteren en inzoomen"
 
-#: src/frontend/ActionsManager.cpp:606
+#: src/frontend/ActionsManager.cpp:605
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
 msgid "Select Y-Region and Zoom In"
 msgstr "Y-regio selecteren en inzoomen"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:611 src/frontend/MainWin.cpp:1600
+#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1600
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1429
 #: src/frontend/worksheet/WorksheetView.cpp:378
 #, kde-format
 msgid "Cursor"
 msgstr "Muisaanwijzer"
 
-#: src/frontend/ActionsManager.cpp:619
+#: src/frontend/ActionsManager.cpp:618
 #: src/frontend/worksheet/WorksheetView.cpp:386
 #, kde-format
 msgid "Auto Scale"
 msgstr "Autoschalen"
 
-#: src/frontend/ActionsManager.cpp:623
+#: src/frontend/ActionsManager.cpp:622
 #: src/frontend/worksheet/WorksheetView.cpp:390
 #, kde-format
 msgid "Auto Scale X"
 msgstr "Autoschalen X"
 
-#: src/frontend/ActionsManager.cpp:627
+#: src/frontend/ActionsManager.cpp:626
 #: src/frontend/worksheet/WorksheetView.cpp:394
 #, kde-format
 msgid "Auto Scale Y"
 msgstr "Autoschalen Y"
 
-#: src/frontend/ActionsManager.cpp:632 src/frontend/ActionsManager.cpp:721
+#: src/frontend/ActionsManager.cpp:631 src/frontend/ActionsManager.cpp:720
 #: src/frontend/datapicker/DatapickerImageView.cpp:121
 #: src/frontend/matrix/MatrixView.cpp:192
 #: src/frontend/notebook/NotebookView.cpp:52
@@ -10809,7 +10819,7 @@ msgstr "Autoschalen Y"
 msgid "Zoom In"
 msgstr "Inzoomen"
 
-#: src/frontend/ActionsManager.cpp:636 src/frontend/ActionsManager.cpp:724
+#: src/frontend/ActionsManager.cpp:635 src/frontend/ActionsManager.cpp:723
 #: src/frontend/datapicker/DatapickerImageView.cpp:124
 #: src/frontend/matrix/MatrixView.cpp:193
 #: src/frontend/notebook/NotebookView.cpp:56
@@ -10819,190 +10829,190 @@ msgstr "Inzoomen"
 msgid "Zoom Out"
 msgstr "Uitzoomen"
 
-#: src/frontend/ActionsManager.cpp:640
+#: src/frontend/ActionsManager.cpp:639
 #: src/frontend/worksheet/WorksheetView.cpp:406
 #, kde-format
 msgid "Zoom In X"
 msgstr "Inzoomen X"
 
-#: src/frontend/ActionsManager.cpp:644
+#: src/frontend/ActionsManager.cpp:643
 #: src/frontend/worksheet/WorksheetView.cpp:410
 #, kde-format
 msgid "Zoom Out X"
 msgstr "Uitzoomen X"
 
-#: src/frontend/ActionsManager.cpp:648
+#: src/frontend/ActionsManager.cpp:647
 #: src/frontend/worksheet/WorksheetView.cpp:414
 #, kde-format
 msgid "Zoom In Y"
 msgstr "Inzoomen Y"
 
-#: src/frontend/ActionsManager.cpp:652
+#: src/frontend/ActionsManager.cpp:651
 #: src/frontend/worksheet/WorksheetView.cpp:418
 #, kde-format
 msgid "Zoom Out Y"
 msgstr "Uitzoomen Y"
 
-#: src/frontend/ActionsManager.cpp:657
+#: src/frontend/ActionsManager.cpp:656
 #: src/frontend/worksheet/WorksheetView.cpp:422
 #, kde-format
 msgid "Shift Left X"
 msgstr "Links schuiven X"
 
-#: src/frontend/ActionsManager.cpp:661
+#: src/frontend/ActionsManager.cpp:660
 #: src/frontend/worksheet/WorksheetView.cpp:424
 #, kde-format
 msgid "Shift Right X"
 msgstr "Rechts schuiven X"
 
-#: src/frontend/ActionsManager.cpp:665
+#: src/frontend/ActionsManager.cpp:664
 #: src/frontend/worksheet/WorksheetView.cpp:426
 #, kde-format
 msgid "Shift Up Y"
 msgstr "Omhoog schuiven Y"
 
-#: src/frontend/ActionsManager.cpp:669
+#: src/frontend/ActionsManager.cpp:668
 #: src/frontend/worksheet/WorksheetView.cpp:428
 #, kde-format
 msgid "Shift Down Y"
 msgstr "Omlaag schuiven Y"
 
-#: src/frontend/ActionsManager.cpp:681
+#: src/frontend/ActionsManager.cpp:680
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:491
 #, kde-format
 msgid "Insert Row Above"
 msgstr "Voeg rij boven in"
 
-#: src/frontend/ActionsManager.cpp:684
+#: src/frontend/ActionsManager.cpp:683
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:492
 #, kde-format
 msgid "Insert Row Below"
 msgstr "Voeg rij onder in"
 
-#: src/frontend/ActionsManager.cpp:687
+#: src/frontend/ActionsManager.cpp:686
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:495
 #, kde-format
 msgid "Remo&ve Selected Row(s)"
 msgstr "Geselecteerde rij(en) verwijderen"
 
-#: src/frontend/ActionsManager.cpp:691
+#: src/frontend/ActionsManager.cpp:690
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:344
 #, kde-format
 msgid "Insert Column Left"
 msgstr "Voeg kolom links in"
 
-#: src/frontend/ActionsManager.cpp:694
+#: src/frontend/ActionsManager.cpp:693
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:345
 #, kde-format
 msgid "Insert Column Right"
 msgstr "Voeg kolom rechts in"
 
-#: src/frontend/ActionsManager.cpp:697
+#: src/frontend/ActionsManager.cpp:696
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:348
 #, kde-format
 msgid "Delete Selected Column(s)"
 msgstr "Geselecteerde kolom(men) verwijderen"
 
-#: src/frontend/ActionsManager.cpp:701
+#: src/frontend/ActionsManager.cpp:700
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:478
 #, kde-format
 msgid "&Sort..."
 msgstr "&Sorteren..."
 
-#: src/frontend/ActionsManager.cpp:702
+#: src/frontend/ActionsManager.cpp:701
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:479
 #, kde-format
 msgid "Sort multiple columns together"
 msgstr "Meerdere kolommen samen sorteren"
 
-#: src/frontend/ActionsManager.cpp:705
+#: src/frontend/ActionsManager.cpp:704
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:480
 #, kde-format
 msgid "Sort &Ascending"
 msgstr "&Oplopend sorteren"
 
-#: src/frontend/ActionsManager.cpp:706
+#: src/frontend/ActionsManager.cpp:705
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:481
 #, kde-format
 msgid "Sort the selected columns separately in ascending order"
 msgstr "De geselecteerde kolommen gescheiden in oplopende volgorde sorteren"
 
-#: src/frontend/ActionsManager.cpp:709
+#: src/frontend/ActionsManager.cpp:708
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:482
 #, kde-format
 msgid "Sort &Descending"
 msgstr "Aflopen&d sorteren"
 
-#: src/frontend/ActionsManager.cpp:710
+#: src/frontend/ActionsManager.cpp:709
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:483
 #, kde-format
 msgid "Sort the selected columns separately in descending order"
 msgstr "De geselecteerde kolommen gescheiden in aflopende volgorde sorteren"
 
-#: src/frontend/ActionsManager.cpp:727
+#: src/frontend/ActionsManager.cpp:726
 #: src/frontend/notebook/NotebookView.cpp:60
 #, kde-format
 msgid "Find"
 msgstr "Zoeken"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
-#: src/frontend/ActionsManager.cpp:730
+#: src/frontend/ActionsManager.cpp:729
 #: src/frontend/notebook/NotebookView.cpp:68
 #: src/frontend/ui/dockwidgets/notebookdock.ui:113
 #, kde-format
 msgid "Restart"
 msgstr "Herstarten"
 
-#: src/frontend/ActionsManager.cpp:733
+#: src/frontend/ActionsManager.cpp:732
 #: src/frontend/notebook/NotebookView.cpp:71
 #: src/frontend/notebook/NotebookView.cpp:344
 #, kde-format
 msgid "Evaluate Notebook"
 msgstr "Notebook berekenen"
 
-#: src/frontend/ActionsManager.cpp:747
+#: src/frontend/ActionsManager.cpp:746
 #: src/frontend/datapicker/DatapickerImageView.cpp:142
 #, kde-format
 msgid "Set Axis Points"
 msgstr "Aspunten instellen"
 
-#: src/frontend/ActionsManager.cpp:752
+#: src/frontend/ActionsManager.cpp:751
 #: src/frontend/datapicker/DatapickerImageView.cpp:146
 #, kde-format
 msgid "Set Curve Points"
 msgstr "Punten kromme instellen"
 
-#: src/frontend/ActionsManager.cpp:757
+#: src/frontend/ActionsManager.cpp:756
 #: src/frontend/datapicker/DatapickerImageView.cpp:150
 #, kde-format
 msgid "Select Curve Segments"
 msgstr "Stukken kromme selecteren"
 
-#: src/frontend/ActionsManager.cpp:773
+#: src/frontend/ActionsManager.cpp:772
 #: src/frontend/datapicker/DatapickerImageView.cpp:155
 #, kde-format
 msgid "New Curve"
 msgstr "Nieuwe kromme"
 
-#: src/frontend/ActionsManager.cpp:779
+#: src/frontend/ActionsManager.cpp:778
 #: src/frontend/datapicker/DatapickerImageView.cpp:158
 #, kde-format
 msgid "Shift Left"
 msgstr "Links schuiven"
 
-#: src/frontend/ActionsManager.cpp:783
+#: src/frontend/ActionsManager.cpp:782
 #: src/frontend/datapicker/DatapickerImageView.cpp:162
 #, kde-format
 msgid "Shift Right"
 msgstr "Rechts schuiven"
 
-#: src/frontend/ActionsManager.cpp:787
+#: src/frontend/ActionsManager.cpp:786
 #: src/frontend/datapicker/DatapickerImageView.cpp:166
 #, kde-format
 msgid "Shift Up"
 msgstr "omhoog schuiven"
 
-#: src/frontend/ActionsManager.cpp:791
+#: src/frontend/ActionsManager.cpp:790
 #: src/frontend/datapicker/DatapickerImageView.cpp:170
 #, kde-format
 msgid "Shift Down"
@@ -11679,45 +11689,30 @@ msgstr "Gegevensverzameling"
 msgid "Description"
 msgstr "Beschrijving"
 
-#: src/frontend/datasources/ImportDialog.cpp:52
-#, kde-format
-msgid "New Workbook"
-msgstr "Nieuw werkboek"
-
-#: src/frontend/datasources/ImportDialog.cpp:53
-#, kde-format
-msgid "New Spreadsheet"
-msgstr "Nieuw rekenblad"
-
-#: src/frontend/datasources/ImportDialog.cpp:54
-#, kde-format
-msgid "New Matrix"
-msgstr "Nieuwe matrix"
-
 #. i18n: ectx: property (title), widget (QGroupBox, gbImportTo)
-#: src/frontend/datasources/ImportDialog.cpp:75
+#: src/frontend/datasources/ImportDialog.cpp:69
 #: src/frontend/ui/datasources/importprojectwidget.ui:108
 #, kde-format
 msgid "Import to"
 msgstr "Importeren naar"
 
-#: src/frontend/datasources/ImportDialog.cpp:77
+#: src/frontend/datasources/ImportDialog.cpp:71
 #, kde-format
 msgid "Data container:"
 msgstr "Plaats voor gegevens:"
 
+#: src/frontend/datasources/ImportDialog.cpp:72
 #: src/frontend/datasources/ImportDialog.cpp:78
-#: src/frontend/datasources/ImportDialog.cpp:84
 #, kde-format
 msgid "Data container where the data has to be imported into"
 msgstr "Gegevensbestand waarin de gegevens moeten worden geïmporteerd"
 
-#: src/frontend/datasources/ImportDialog.cpp:97
+#: src/frontend/datasources/ImportDialog.cpp:96
 #, kde-format
 msgid "New"
 msgstr "Nieuw"
 
-#: src/frontend/datasources/ImportDialog.cpp:100
+#: src/frontend/datasources/ImportDialog.cpp:99
 #, kde-format
 msgid "Add new data container to the project"
 msgstr "Nieuw gegevensbestand aan project toevoegen"
@@ -11729,7 +11724,7 @@ msgstr "Nieuw gegevensbestand aan project toevoegen"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsPosition)
 #. i18n: ectx: property (text), widget (QLabel, lValuesPosition)
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTime)
-#: src/frontend/datasources/ImportDialog.cpp:103
+#: src/frontend/datasources/ImportDialog.cpp:106
 #: src/frontend/ui/dockwidgets/axisdock.ui:65
 #: src/frontend/ui/dockwidgets/axisdock.ui:620
 #: src/frontend/ui/dockwidgets/axisdock.ui:1276
@@ -11743,74 +11738,106 @@ msgstr "Nieuw gegevensbestand aan project toevoegen"
 msgid "Position:"
 msgstr "Positie:"
 
-#: src/frontend/datasources/ImportDialog.cpp:109
+#: src/frontend/datasources/ImportDialog.cpp:110
 #, kde-format
 msgid "Append"
 msgstr "Achteraan toevoegen"
 
-#: src/frontend/datasources/ImportDialog.cpp:110
+#: src/frontend/datasources/ImportDialog.cpp:111
 #, kde-format
 msgid "Prepend"
 msgstr "Vooraan toevoegen"
 
-#: src/frontend/datasources/ImportDialog.cpp:111
+#: src/frontend/datasources/ImportDialog.cpp:112
 #: src/frontend/notebook/NotebookView.cpp:64
 #, kde-format
 msgid "Replace"
 msgstr "Vervangen"
 
-#: src/frontend/datasources/ImportDialog.cpp:146
+#: src/frontend/datasources/ImportDialog.cpp:145
 #, kde-format
 msgid "Add a new Workbook"
 msgstr "Een nieuw werkboek toevoegen"
 
-#: src/frontend/datasources/ImportDialog.cpp:147
+#: src/frontend/datasources/ImportDialog.cpp:146
 #, kde-format
 msgid "Workbook name:"
 msgstr "Naam werkboek:"
 
-#: src/frontend/datasources/ImportDialog.cpp:149
+#: src/frontend/datasources/ImportDialog.cpp:148
 #, kde-format
 msgid "Add a new Spreadsheet"
 msgstr "Een nieuw rekenblad toevoegen"
 
-#: src/frontend/datasources/ImportDialog.cpp:150
+#: src/frontend/datasources/ImportDialog.cpp:149
 #, kde-format
 msgid "Spreadsheet name:"
 msgstr "Naam van rekenblad:"
 
-#: src/frontend/datasources/ImportDialog.cpp:152
+#: src/frontend/datasources/ImportDialog.cpp:151
 #, kde-format
 msgid "Add a new Matrix"
 msgstr "Een nieuwe matrix toevoegen"
 
-#: src/frontend/datasources/ImportDialog.cpp:153
+#: src/frontend/datasources/ImportDialog.cpp:152
 #, kde-format
 msgid "Matrix name:"
 msgstr "Matrixnaam:"
 
-#: src/frontend/datasources/ImportDialog.cpp:202
-#: src/frontend/datasources/ImportFileDialog.cpp:367
+#: src/frontend/datasources/ImportDialog.cpp:154
+#, kde-format
+msgid "Add a new Folder"
+msgstr "Voeg een nieuwe map toe"
+
+#: src/frontend/datasources/ImportDialog.cpp:155
+#: src/frontend/datasources/ImportProjectDialog.cpp:512
+#, kde-format
+msgid "Folder name:"
+msgstr "Naam map:"
+
+#: src/frontend/datasources/ImportDialog.cpp:187
+#, kde-format
+msgid "New Folder"
+msgstr "Nieuwe map"
+
+#: src/frontend/datasources/ImportDialog.cpp:191
+#: src/frontend/datasources/ImportDialog.cpp:195
+#, kde-format
+msgid "New Workbook"
+msgstr "Nieuw werkboek"
+
+#: src/frontend/datasources/ImportDialog.cpp:199
+#, kde-format
+msgid "New Spreadsheet"
+msgstr "Nieuw rekenblad"
+
+#: src/frontend/datasources/ImportDialog.cpp:203
+#, kde-format
+msgid "New Matrix"
+msgstr "Nieuwe matrix"
+
+#: src/frontend/datasources/ImportDialog.cpp:230
+#: src/frontend/datasources/ImportFileDialog.cpp:406
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:158
 #, kde-format
 msgid "Close the dialog and import the data."
 msgstr "Dialoog afsluiten en de gegevens importeren."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:73
+#: src/frontend/datasources/ImportFileDialog.cpp:74
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:40
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Data to Spreadsheet or Matrix"
 msgstr "Gegevens importeren naar rekenblad of matrix"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:75
+#: src/frontend/datasources/ImportFileDialog.cpp:76
 #, kde-format
 msgctxt "@title:window"
 msgid "Add New Live Data Source"
 msgstr "Nieuw aangesloten bronbestand toevoegen"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:106
-#: src/frontend/datasources/ImportFileDialog.cpp:348
+#: src/frontend/datasources/ImportFileDialog.cpp:107
+#: src/frontend/datasources/ImportFileDialog.cpp:387
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:140
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:361
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:125
@@ -11819,8 +11846,8 @@ msgstr "Nieuw aangesloten bronbestand toevoegen"
 msgid "Hide Options"
 msgstr "Opties verbergen"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:106
-#: src/frontend/datasources/ImportFileDialog.cpp:348
+#: src/frontend/datasources/ImportFileDialog.cpp:107
+#: src/frontend/datasources/ImportFileDialog.cpp:387
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:140
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:361
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:125
@@ -11829,79 +11856,89 @@ msgstr "Opties verbergen"
 msgid "Show Options"
 msgstr "Opties tonen"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:148
+#: src/frontend/datasources/ImportFileDialog.cpp:149
 #, kde-format
 msgid "Live data source created in %1 seconds."
 msgstr "Actieve gegevensbron aangemaakt in %1 seconden."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:175
+#: src/frontend/datasources/ImportFileDialog.cpp:176
 #, kde-format
 msgid "No target data container selected"
 msgstr "Geen doelgegevenscontainer geselecteerd"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:323
+#: src/frontend/datasources/ImportFileDialog.cpp:199
 #, kde-format
 msgid "File %1 imported in %2 seconds."
 msgstr "Bestand %1 geïmporteerd in %2 seconden."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:369
+#: src/frontend/datasources/ImportFileDialog.cpp:203
+#, kde-format
+msgid "The directory %1 doesn't exist."
+msgstr "De map %1 bestaat niet."
+
+#: src/frontend/datasources/ImportFileDialog.cpp:234
+#, kde-format
+msgid "%1 files imported in %2 seconds."
+msgstr "%1 bestanden geïmporteerd in %2 seconden."
+
+#: src/frontend/datasources/ImportFileDialog.cpp:408
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:152
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
 msgstr ""
 "Kan niet in een matrix importeren, omdat er niet-numerieke gegevens zijn."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:381
+#: src/frontend/datasources/ImportFileDialog.cpp:420
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:136
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr ""
 "Selecteer een plaatshouder waarin de gegevens moeten worden geïmporteerd."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:399
+#: src/frontend/datasources/ImportFileDialog.cpp:433
 #, kde-format
 msgid "No file provided for import."
 msgstr "Geen te importeren bestand geleverd."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:424
+#: src/frontend/datasources/ImportFileDialog.cpp:458
 #, kde-format
 msgid "The provided file doesn't exist."
 msgstr "Het opgegeven bestand bestaat niet."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:444
+#: src/frontend/datasources/ImportFileDialog.cpp:478
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr "Kon geen verbinding maken met opgegeven lokale socket. Fout %1."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:448
+#: src/frontend/datasources/ImportFileDialog.cpp:482
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
 msgstr ""
 "Kon geen verbinding maken met opgegeven lokale socket. Deze bestaat niet."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:463
+#: src/frontend/datasources/ImportFileDialog.cpp:497
 #, kde-format
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr "Kon niet verbinden met opgegeven TCP-socket. Fout: %1."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:467
-#: src/frontend/datasources/ImportFileDialog.cpp:487
+#: src/frontend/datasources/ImportFileDialog.cpp:501
+#: src/frontend/datasources/ImportFileDialog.cpp:521
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr "De hostnaam of het poortnummer ontbreekt."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:483
+#: src/frontend/datasources/ImportFileDialog.cpp:517
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Kon niet verbinden met de opgegeven UDP-socket. Fout: %1."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:515
+#: src/frontend/datasources/ImportFileDialog.cpp:549
 #, kde-format
 msgid "Serial port number is missing."
 msgstr "Seriële pootnummer ontbreekt."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:527
+#: src/frontend/datasources/ImportFileDialog.cpp:561
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
@@ -11910,89 +11947,89 @@ msgstr ""
 "Of er is geen verbinding, of is er geen abonnement, of het bestandsfilter is "
 "niet Ascii."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:110
+#: src/frontend/datasources/ImportFileWidget.cpp:111
 #, kde-format
 msgid "ASCII data"
 msgstr "ASCII-gegevens"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:111
+#: src/frontend/datasources/ImportFileWidget.cpp:112
 #, kde-format
 msgid "Binary data"
 msgstr "Binaire gegevens"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:114
+#: src/frontend/datasources/ImportFileWidget.cpp:115
 #, kde-format
 msgid "Excel 2007+ (XSLX)"
 msgstr "Excel 2007+ (XSLX)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:117
+#: src/frontend/datasources/ImportFileWidget.cpp:118
 #, kde-format
 msgid "OpenDocument Spreadsheet (ODS)"
 msgstr "OpenDocument rekenblad (ODS)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:120
+#: src/frontend/datasources/ImportFileWidget.cpp:121
 #, kde-format
 msgid "Hierarchical Data Format 5 (HDF5)"
 msgstr "Hierarchical Data Format 5 (HDF5)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:123
+#: src/frontend/datasources/ImportFileWidget.cpp:124
 #, kde-format
 msgid "Network Common Data Format (NetCDF)"
 msgstr "Network Common Data Format (NetCDF)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:126
+#: src/frontend/datasources/ImportFileWidget.cpp:127
 #, kde-format
 msgid "Vector Binary Logfile (BLF)"
 msgstr "Vector binair logbestand (BLF)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:129
+#: src/frontend/datasources/ImportFileWidget.cpp:130
 #, kde-format
 msgid "Flexible Image Transport System Data Format (FITS)"
 msgstr "Gegevensformaat Flexible Image Transport System (FITS)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:131
+#: src/frontend/datasources/ImportFileWidget.cpp:132
 #, kde-format
 msgid "JSON Data"
 msgstr "JSON-gegevens"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:133
-#: src/frontend/datasources/ImportFileWidget.cpp:155
+#: src/frontend/datasources/ImportFileWidget.cpp:134
+#: src/frontend/datasources/ImportFileWidget.cpp:156
 #, kde-format
 msgid "ROOT (CERN)"
 msgstr "ROOT (CERN)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:135
-#: src/frontend/datasources/ImportFileWidget.cpp:157
+#: src/frontend/datasources/ImportFileWidget.cpp:136
+#: src/frontend/datasources/ImportFileWidget.cpp:158
 #, kde-format
 msgid "Spice"
 msgstr "Spice"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:137
+#: src/frontend/datasources/ImportFileWidget.cpp:138
 #, kde-format
 msgid "SAS, Stata or SPSS"
 msgstr "SAS, Stata of SPSS"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:140
+#: src/frontend/datasources/ImportFileWidget.cpp:141
 #, kde-format
 msgid "MATLAB MAT file"
 msgstr "Bestand MATLAB MAT"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:143
+#: src/frontend/datasources/ImportFileWidget.cpp:144
 #, kde-format
 msgid "MCAP Data"
 msgstr "MCAP-gegevens"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:152
+#: src/frontend/datasources/ImportFileWidget.cpp:153
 #, kde-format
 msgid "ASCII Data"
 msgstr "ASCII-gegevens"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:153
+#: src/frontend/datasources/ImportFileWidget.cpp:154
 #, kde-format
 msgid "Binary Data"
 msgstr "Binaire gegevens"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:165
+#: src/frontend/datasources/ImportFileWidget.cpp:166
 #, kde-format
 msgid ""
 "If this option is checked, only the link to the file is stored in the "
@@ -12001,7 +12038,7 @@ msgstr ""
 "Als deze optie wordt gekozen, wordt alleen de koppeling naar het bestand "
 "opgeslagen in het projectbestand, maar niet de inhoud."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:166
+#: src/frontend/datasources/ImportFileWidget.cpp:167
 #, kde-format
 msgid ""
 "If this option is checked, the relative path of the file (relative to "
@@ -12011,30 +12048,30 @@ msgstr ""
 "opgeslagen (ten opzichte van de map van het project)."
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/frontend/datasources/ImportFileWidget.cpp:174
+#: src/frontend/datasources/ImportFileWidget.cpp:175
 #: src/frontend/ui/dockwidgets/livedatadock.ui:345
 #, kde-format
 msgid "Continuously Fixed"
 msgstr "Continu vast"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
-#: src/frontend/datasources/ImportFileWidget.cpp:175
+#: src/frontend/datasources/ImportFileWidget.cpp:176
 #: src/frontend/ui/dockwidgets/livedatadock.ui:350
 #, kde-format
 msgid "From End"
 msgstr "Vanaf einde"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:176
+#: src/frontend/datasources/ImportFileWidget.cpp:177
 #, kde-format
 msgid "Till End"
 msgstr "Tot einde"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:177
+#: src/frontend/datasources/ImportFileWidget.cpp:178
 #, kde-format
 msgid "Whole File"
 msgstr "Gehele bestand"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:212
+#: src/frontend/datasources/ImportFileWidget.cpp:213
 #, kde-format
 msgid ""
 "Specify how the data source has to be processed on every read:"
@@ -12054,7 +12091,7 @@ msgstr ""
 "verwerkt. Alleen beschikbaar voor \"Bestands- of Pipe met naam\"-"
 "gegevensbronnen.</li></ul>"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:223
+#: src/frontend/datasources/ImportFileWidget.cpp:224
 #, kde-format
 msgid ""
 "Number of samples (lines) to be processed on every read.\n"
@@ -12065,7 +12102,7 @@ msgstr ""
 "Hoeft alleen te worden opgegeven in leesmodus \"Continu vast\" en \"Vanaf "
 "einde\"."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:229
+#: src/frontend/datasources/ImportFileWidget.cpp:230
 #, kde-format
 msgid ""
 "Specify when and how frequently the data source needs to be read:"
@@ -12078,12 +12115,12 @@ msgstr ""
 "gebruiker opgegeven tijdsinterval.</li><li>Bij nieuwe gegevens - de "
 "gegevensbron wordt gelezen zodra er nieuwe gegevens zijn.</li></ul>"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:237
+#: src/frontend/datasources/ImportFileWidget.cpp:238
 #, kde-format
 msgid "Specify how frequently the data source has to be read."
 msgstr "Geef frequentie op van het lezen van de gegevensbron."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:242
+#: src/frontend/datasources/ImportFileWidget.cpp:243
 #, kde-format
 msgid ""
 "Specify how many samples need to be kept in memory after reading.\n"
@@ -12092,7 +12129,7 @@ msgstr ""
 "Geef aantal monsters op dat na lezen moet worden opgeslagen.\n"
 "Gebruik \"Alles\" als alle gegevens moeten worden bewaard."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:247
+#: src/frontend/datasources/ImportFileWidget.cpp:248
 #, kde-format
 msgid ""
 "Enable to use the first row of the selected data region for the column names "
@@ -12101,12 +12138,12 @@ msgstr ""
 "Dit selecteren als de eerste rij van het geselecteerde gegevensgebied moet "
 "worden gebruikt voor de kolomnamen in het rekenblad."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:262
+#: src/frontend/datasources/ImportFileWidget.cpp:263
 #, kde-format
 msgid "Manage MQTT connections"
 msgstr "Verbindingen MQTT beheren"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:264
+#: src/frontend/datasources/ImportFileWidget.cpp:265
 #: src/frontend/dockwidgets/LiveDataDock.cpp:84
 #, kde-format
 msgid ""
@@ -12116,7 +12153,7 @@ msgstr ""
 "Geef het LWT-bericht (\"Last Will and Testament\") op. Hierin moet op "
 "tenminste een onderwerp worden ingeschreven."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:281
+#: src/frontend/datasources/ImportFileWidget.cpp:282
 #, kde-format
 msgid ""
 "The number of rows is calculated from the values of the data portion tab"
@@ -12124,24 +12161,30 @@ msgstr ""
 "Het aantal rijen is berekend uit de waarden van het tabblad met het "
 "gegevensgedeelte"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1011
+#: src/frontend/datasources/ImportFileWidget.cpp:1054
+#, kde-format
+msgctxt "@title:window"
+msgid "Select the Directory Data Source"
+msgstr "Selecteer de gegevensbronmap"
+
+#: src/frontend/datasources/ImportFileWidget.cpp:1056
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Selecteer het gegevensbronbestand"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1041
+#: src/frontend/datasources/ImportFileWidget.cpp:1086
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Het DBC-bestand selecteren"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1041
+#: src/frontend/datasources/ImportFileWidget.cpp:1086
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr "DBC-bestand (*.dbc)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1128
+#: src/frontend/datasources/ImportFileWidget.cpp:1173
 #, kde-format
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
@@ -12149,7 +12192,7 @@ msgstr ""
 "Bestanden van oorspronkelijk project moeten geopend worden met \"Importeren -"
 "> Oorspronkelijk project\"!"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1131
+#: src/frontend/datasources/ImportFileWidget.cpp:1176
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
@@ -12158,7 +12201,7 @@ msgstr ""
 "LabPlot-project\"!"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/frontend/datasources/ImportFileWidget.cpp:1279
+#: src/frontend/datasources/ImportFileWidget.cpp:1324
 #: src/frontend/ui/datasources/importfilewidget.ui:416
 #, kde-format
 msgid "Data Format"
@@ -12166,7 +12209,7 @@ msgstr "Gegevensopmaak"
 
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/frontend/datasources/ImportFileWidget.cpp:1280
+#: src/frontend/datasources/ImportFileWidget.cpp:1325
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
 #: src/frontend/ui/settingsworksheetpage.ui:134
@@ -12175,126 +12218,153 @@ msgid "Preview"
 msgstr "Voorbeeld"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/frontend/datasources/ImportFileWidget.cpp:1282
+#: src/frontend/datasources/ImportFileWidget.cpp:1327
 #: src/frontend/ui/datasources/importfilewidget.ui:582
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "Te lezen gegevensgedeelte"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1325
+#: src/frontend/datasources/ImportFileWidget.cpp:1370
 #, kde-format
 msgid "Data format && preview"
 msgstr "Gegevensopmaak && voorbeeld"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1372
+#: src/frontend/datasources/ImportFileWidget.cpp:1417
 #, kde-format
 msgid "Automatic"
 msgstr "Automatisch"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1621
+#: src/frontend/datasources/ImportFileWidget.cpp:1664
 #, kde-format
 msgid "file command not found"
 msgstr "bestandsopdracht niet gevonden"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1632
+#: src/frontend/datasources/ImportFileWidget.cpp:1675
 #, kde-format
 msgid "cannot open"
 msgstr "kan niet openen"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1637
+#: src/frontend/datasources/ImportFileWidget.cpp:1680
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>Bestandstype:</b> %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1642
+#: src/frontend/datasources/ImportFileWidget.cpp:1685
+#: src/frontend/datasources/ImportFileWidget.cpp:1773
 #, kde-format
 msgid "General:"
 msgstr "Algemeen:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1644
-#: src/frontend/datasources/ImportFileWidget.cpp:1645
-#: src/frontend/datasources/ImportFileWidget.cpp:1646
+#: src/frontend/datasources/ImportFileWidget.cpp:1687
+#: src/frontend/datasources/ImportFileWidget.cpp:1688
+#: src/frontend/datasources/ImportFileWidget.cpp:1689
+#: src/frontend/datasources/ImportFileWidget.cpp:1775
+#: src/frontend/datasources/ImportFileWidget.cpp:1776
+#: src/frontend/datasources/ImportFileWidget.cpp:1777
 #, kde-format
 msgid "yes"
 msgstr "ja"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1644
-#: src/frontend/datasources/ImportFileWidget.cpp:1645
-#: src/frontend/datasources/ImportFileWidget.cpp:1646
+#: src/frontend/datasources/ImportFileWidget.cpp:1687
+#: src/frontend/datasources/ImportFileWidget.cpp:1688
+#: src/frontend/datasources/ImportFileWidget.cpp:1689
+#: src/frontend/datasources/ImportFileWidget.cpp:1775
+#: src/frontend/datasources/ImportFileWidget.cpp:1776
+#: src/frontend/datasources/ImportFileWidget.cpp:1777
 #, kde-format
 msgid "no"
 msgstr "nee"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1644
+#: src/frontend/datasources/ImportFileWidget.cpp:1687
+#: src/frontend/datasources/ImportFileWidget.cpp:1775
 #, kde-format
 msgid "Readable: %1"
 msgstr "Leesbaar: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1645
+#: src/frontend/datasources/ImportFileWidget.cpp:1688
+#: src/frontend/datasources/ImportFileWidget.cpp:1776
 #, kde-format
 msgid "Writable: %1"
 msgstr "Beschrijfbaar: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1646
+#: src/frontend/datasources/ImportFileWidget.cpp:1689
+#: src/frontend/datasources/ImportFileWidget.cpp:1777
 #, kde-format
 msgid "Executable: %1"
 msgstr "Uitvoerbaar: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1648
+#: src/frontend/datasources/ImportFileWidget.cpp:1691
+#: src/frontend/datasources/ImportFileWidget.cpp:1779
 #, kde-format
 msgid "Birth time: %1"
 msgstr "Tijd geboorte: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1649
+#: src/frontend/datasources/ImportFileWidget.cpp:1692
+#: src/frontend/datasources/ImportFileWidget.cpp:1780
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "Laatste metadata gewijzigd: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1650
+#: src/frontend/datasources/ImportFileWidget.cpp:1693
+#: src/frontend/datasources/ImportFileWidget.cpp:1781
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Laatst gewijzigd: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1651
+#: src/frontend/datasources/ImportFileWidget.cpp:1694
+#: src/frontend/datasources/ImportFileWidget.cpp:1782
 #, kde-format
 msgid "Last read: %1"
 msgstr "Laatst gelezen: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1652
+#: src/frontend/datasources/ImportFileWidget.cpp:1695
+#: src/frontend/datasources/ImportFileWidget.cpp:1783
 #, kde-format
 msgid "Owner: %1"
 msgstr "Eigenaar: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1653
+#: src/frontend/datasources/ImportFileWidget.cpp:1696
+#: src/frontend/datasources/ImportFileWidget.cpp:1784
 #, kde-format
 msgid "Group: %1"
 msgstr "Groep: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1654
+#: src/frontend/datasources/ImportFileWidget.cpp:1697
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] "%1 cByte"
 msgstr[1] "%1 cBytes"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1657
+#: src/frontend/datasources/ImportFileWidget.cpp:1700
+#: src/frontend/datasources/ImportFileWidget.cpp:1787
 #, kde-format
 msgid "Summary:"
 msgstr "Samenvatting:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1680
-#: src/frontend/datasources/ImportFileWidget.cpp:1685
+#: src/frontend/datasources/ImportFileWidget.cpp:1723
+#: src/frontend/datasources/ImportFileWidget.cpp:1728
 #, kde-format
 msgid "Content:"
 msgstr "Inhoud:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1716
+#: src/frontend/datasources/ImportFileWidget.cpp:1759
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Kon bestand %1 niet openen om te lezen."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1807
+#: src/frontend/datasources/ImportFileWidget.cpp:1789
+#, kde-format
+msgid "Number of sub-directories: %1"
+msgstr "Aantal sub-mappen: %1"
+
+#: src/frontend/datasources/ImportFileWidget.cpp:1792
+#, kde-format
+msgid "Couldn't read the directory %1."
+msgstr "Kon de map %1 niet lezen."
+
+#: src/frontend/datasources/ImportFileWidget.cpp:1881
 #, kde-format
 msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
@@ -12303,119 +12373,119 @@ msgstr ""
 "Ongeldig aantal rijen. Controleer 'Eindrij' en 'Beginrij'. 'Eindrij' moet "
 "groter zijn dan 'Beginrij' of -1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1818
+#: src/frontend/datasources/ImportFileWidget.cpp:1892
 #, kde-format
 msgid "Initialization failed: %1"
 msgstr "Initialisatie is mislukt: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1843
+#: src/frontend/datasources/ImportFileWidget.cpp:1917
 #, kde-format
 msgid "Failed to connect to the local socket: %1"
 msgstr "Verbinden is mislukt met lokale socket: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1860
+#: src/frontend/datasources/ImportFileWidget.cpp:1934
 #, kde-format
 msgid "Failed to connect to the TCP socket. %1"
 msgstr "Verbinden is mislukt met TCP-socket. %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1866
-#: src/frontend/datasources/ImportFileWidget.cpp:1895
+#: src/frontend/datasources/ImportFileWidget.cpp:1940
+#: src/frontend/datasources/ImportFileWidget.cpp:1969
 #, kde-format
 msgid "Socket operation timed out."
 msgstr "Tijdslimiet voor bewerking met socket is verstreken."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1880
+#: src/frontend/datasources/ImportFileWidget.cpp:1954
 #, kde-format
 msgid "Not ready for read after 2s:"
 msgstr "Niet gereed om te lezen na 2 sec:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1899
+#: src/frontend/datasources/ImportFileWidget.cpp:1973
 #, kde-format
 msgid "Unable to bind: "
 msgstr "Kan niet verbinden: "
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1916
+#: src/frontend/datasources/ImportFileWidget.cpp:1990
 #, kde-format
 msgid "Parse Error: %1"
 msgstr "Fout bij ontleden: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1918
+#: src/frontend/datasources/ImportFileWidget.cpp:1992
 #, kde-format
 msgid "Not ready for read after 2 sec"
 msgstr "Niet gereed voor lezen na 2 sec"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1922
+#: src/frontend/datasources/ImportFileWidget.cpp:1996
 #, kde-format
 msgid "Failed to open serial port. error: %1"
 msgstr "Seriële poort openen is mislukt. fout: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1941
+#: src/frontend/datasources/ImportFileWidget.cpp:2015
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "Nog geen gegevens aangekomen over geselecteerd onderwerp"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2206
+#: src/frontend/datasources/ImportFileWidget.cpp:2280
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "Geen HDF5-bestand: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2264
+#: src/frontend/datasources/ImportFileWidget.cpp:2338
 #, kde-format
 msgid "Parsing ODS file %1 failed."
 msgstr "Ontleden van ODS-bestand %1 is mislukt."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2672
+#: src/frontend/datasources/ImportFileWidget.cpp:2746
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr "Kon niet inschrijven op alle beschikbare onderwerpen."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2680
+#: src/frontend/datasources/ImportFileWidget.cpp:2754
 #, kde-format
 msgid "Failed to connect to '%1'. Error %2."
 msgstr "Verbinden met '%1' is mislukt. Fout %2"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2702
+#: src/frontend/datasources/ImportFileWidget.cpp:2776
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr "Verbinding met '%1' verbroken."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2768
+#: src/frontend/datasources/ImportFileWidget.cpp:2842
 #, kde-format
 msgid "Available (%1)"
 msgstr "Beschikbaar (%1)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2872
+#: src/frontend/datasources/ImportFileWidget.cpp:2946
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Gebruikersnaam of wachtwoord is fout"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2875
+#: src/frontend/datasources/ImportFileWidget.cpp:2949
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr "Client-ID niet geaccepteerd"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2879
+#: src/frontend/datasources/ImportFileWidget.cpp:2953
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr "De broker %1 is onbereikbaar."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2882
+#: src/frontend/datasources/ImportFileWidget.cpp:2956
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr "De client heeft geen permissie te verbinden."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2885
+#: src/frontend/datasources/ImportFileWidget.cpp:2959
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "Er is een onbekende fout."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2891
-#: src/frontend/datasources/ImportFileWidget.cpp:2894
+#: src/frontend/datasources/ImportFileWidget.cpp:2965
+#: src/frontend/datasources/ImportFileWidget.cpp:2968
 #, kde-format
 msgid "An error occurred."
 msgstr "Er is een fout."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2908
+#: src/frontend/datasources/ImportFileWidget.cpp:2982
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "Verbinden met '%1:%2' kon niet binnen de tijdslimiet."
@@ -12626,11 +12696,6 @@ msgstr "Oorspronkelijk OPJ-project openen"
 #, kde-format
 msgid "Origin OPJ Projects (%1)"
 msgstr "Oorspronkelijke OPJ-projecten (%1)"
-
-#: src/frontend/datasources/ImportProjectDialog.cpp:512
-#, kde-format
-msgid "Folder name:"
-msgstr "Naam map:"
 
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:119
 #, kde-format
@@ -12905,7 +12970,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2003
+#: src/frontend/MainWin.cpp:2027
 #, kde-format
 msgid "Warning"
 msgstr "Waarschuwing"
@@ -15654,14 +15719,14 @@ msgstr "&Nieuw toevoegen"
 
 #. i18n: ectx: Menu (new_notebook)
 #. i18n: ectx: Menu (notebook)
-#: src/frontend/labplotui.rc:137 src/frontend/labplotui.rc:169
+#: src/frontend/labplotui.rc:137 src/frontend/labplotui.rc:170
 #, kde-format
 msgid "&Notebook"
 msgstr "&Notebook"
 
 #. i18n: ectx: Menu (new_script)
 #. i18n: ectx: Menu (script)
-#: src/frontend/labplotui.rc:143 src/frontend/labplotui.rc:172
+#: src/frontend/labplotui.rc:143 src/frontend/labplotui.rc:173
 #, kde-format
 msgid "&Script"
 msgstr "&Script"
@@ -15673,49 +15738,49 @@ msgid "Import"
 msgstr "Importeren"
 
 #. i18n: ectx: Menu (edit)
-#: src/frontend/labplotui.rc:161
+#: src/frontend/labplotui.rc:162
 #, kde-format
 msgid "&Edit"
 msgstr "Be&werken"
 
 #. i18n: ectx: Menu (spreadsheet)
-#: src/frontend/labplotui.rc:166
+#: src/frontend/labplotui.rc:167
 #, kde-format
 msgid "&Spreadsheet"
 msgstr "&Rekenblad"
 
 #. i18n: ectx: Menu (matrix)
-#: src/frontend/labplotui.rc:167
+#: src/frontend/labplotui.rc:168
 #, kde-format
 msgid "&Matrix"
 msgstr "&Matrix"
 
 #. i18n: ectx: Menu (worksheet)
-#: src/frontend/labplotui.rc:168
+#: src/frontend/labplotui.rc:169
 #, kde-format
 msgid "&Worksheet"
 msgstr "&Werkblad"
 
 #. i18n: ectx: Menu (data_extractor)
-#: src/frontend/labplotui.rc:170
+#: src/frontend/labplotui.rc:171
 #, kde-format
 msgid "&Data Extractor"
 msgstr "&Gegevens verkrijgen"
 
 #. i18n: ectx: Menu (drawing)
-#: src/frontend/labplotui.rc:171
+#: src/frontend/labplotui.rc:172
 #, kde-format
 msgid "&Drawing"
 msgstr "&Tekenen"
 
 #. i18n: ectx: Menu (tools)
-#: src/frontend/labplotui.rc:173
+#: src/frontend/labplotui.rc:174
 #, kde-format
 msgid "&Tools"
 msgstr "H&ulpmiddelen"
 
 #. i18n: ectx: Menu (windows)
-#: src/frontend/labplotui.rc:177
+#: src/frontend/labplotui.rc:178
 #, kde-format
 msgid "&Windows"
 msgstr "&Vensters"
@@ -15894,12 +15959,12 @@ msgstr "%1 afgedrukt"
 msgid "%1"
 msgstr "%1"
 
-#: src/frontend/MainWin.cpp:1899
+#: src/frontend/MainWin.cpp:1923
 #, kde-format
 msgid "Kaggle CLI tool not found"
 msgstr "Hulpmiddel Kaggle CLI hulpmiddel niet gevonden"
 
-#: src/frontend/MainWin.cpp:1900
+#: src/frontend/MainWin.cpp:1924
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
@@ -15908,27 +15973,27 @@ msgstr ""
 "Lever het pad naar het hulpmiddel Kaggle CLI in de toepassingeninstellingen "
 "en probeer het opnieuw."
 
-#: src/frontend/MainWin.cpp:1966
+#: src/frontend/MainWin.cpp:1990
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 geëxporteerd"
 
-#: src/frontend/MainWin.cpp:1973
+#: src/frontend/MainWin.cpp:1997
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS-bestanden opgeslagen"
 
-#: src/frontend/MainWin.cpp:1985
+#: src/frontend/MainWin.cpp:2009
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT Client%1"
 
-#: src/frontend/MainWin.cpp:2003
+#: src/frontend/MainWin.cpp:2027
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Er is al een MQTT-client met deze host!"
 
-#: src/frontend/MainWin.cpp:2007
+#: src/frontend/MainWin.cpp:2031
 #, kde-format
 msgid "Live data source%1"
 msgstr "Actieve gegevensbron %1"

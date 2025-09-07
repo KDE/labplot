@@ -360,6 +360,69 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, bool&
 	return QPointF{};
 }
 
+/*!
+ * \brief CartesianCoordinateSystem::mapLogicalToSceneDefaultMapping
+ *
+ * Optimized version of mapLogicalToScene(const Lines& lines, MappingFlags flags)
+ * It does not create a new line vector, but replaces the elements of the vector
+ *
+ * \param lines
+ */
+void CartesianCoordinateSystem::mapLogicalToSceneDefaultMapping(Lines& lines) const {
+	const QRectF pageRect = d->plot->dataRect();
+	const bool doPageClipping = !pageRect.isNull();
+
+	for (const auto* xScale : std::as_const(d->xScales)) {
+		if (!xScale)
+			continue;
+
+		for (const auto* yScale : std::as_const(d->yScales)) {
+			if (!yScale)
+				continue;
+
+			const QRectF scaleRect = QRectF(xScale->start(), yScale->start(), xScale->end() - xScale->start(), yScale->end() - yScale->start()).normalized();
+
+			const auto count = lines.count();
+			size_t resultIndex = 0;
+			for (size_t i = 0; i < count; i++) {
+				auto line = lines.at(i);
+				LineClipResult clipResult;
+				if (!AbstractCoordinateSystem::clipLineToRect(&line, scaleRect, &clipResult))
+					continue;
+
+				double x1 = line.x1();
+				if (!xScale->map(&x1))
+					continue;
+
+				double x2 = line.x2();
+				if (!xScale->map(&x2))
+					continue;
+
+				double y1 = line.y1();
+				if (!yScale->map(&y1))
+					continue;
+
+				double y2 = line.y2();
+				if (!yScale->map(&y2))
+					continue;
+
+				QLineF mappedLine(QPointF(x1, y1), QPointF(x2, y2));
+				if (doPageClipping) {
+					if (!AbstractCoordinateSystem::clipLineToRect(&mappedLine, pageRect)) {
+						// DEBUG(Q_FUNC_INFO << ", WARNING: OMIT mapped line!")
+						continue;
+					}
+				}
+
+				//				QDEBUG(Q_FUNC_INFO << ", append line " << mappedLine)
+				lines[resultIndex] = mappedLine;
+				resultIndex++;
+			}
+			lines.resize(resultIndex);
+		}
+	}
+}
+
 Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFlags flags) const {
 	QRectF pageRect = d->plot->dataRect();
 	Lines result;
