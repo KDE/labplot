@@ -3,8 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock for Hypothesis Tests
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019  Devanshu Agarwal <agarwaldevanshu8@gmail.com>
-	SPDX-FileCopyrightText: 2023-205 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2025 Kuntal Bar <barkuntal6@gmail.com>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -223,7 +222,7 @@ void HypothesisTestDock::testChanged() {
 
 void HypothesisTestDock::ensureHypothesis(HypothesisTest::Test test) {
 	int hypothesisCount = HypothesisTest::hypothesisCount(test);
-	QVector<QPair<QString, QString>> hypothesisTexts = HypothesisTest::hypothesisText(test);
+	auto hypothesisTexts = HypothesisTest::hypothesisText(test);
 
 	if (hypothesisCount == 3) {
 		ui.lNullTwoTailed->setText(hypothesisTexts[0].first);
@@ -329,9 +328,7 @@ void HypothesisTestDock::updateColumns() {
 
 void HypothesisTestDock::manageRecalculate() {
 	// we don't need to check for null and alternate hypothesis since we have guarantees that they are selected
-
 	// we don't need to check for significance level since we have guarantees that it is above 0
-
 	// we don't need to check for test mean since it can be any double value
 
 	// check variables

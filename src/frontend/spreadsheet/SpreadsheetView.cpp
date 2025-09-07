@@ -953,9 +953,8 @@ void SpreadsheetView::connectActions() {
 		auto* test = new HypothesisTest(i18n("Hypothesis Test for %1", name));
 		test->setTest(static_cast<HypothesisTest::Test>(action->data().toInt()));
 		QVector<const AbstractColumn*> dataColumns;
-		for (const auto* column : columns) {
+		for (const auto* column : columns)
 			dataColumns << column;
-		}
 		test->setDataColumns(dataColumns);
 		test->recalculate();
 		m_spreadsheet->parentAspect()->addChild(test);

@@ -445,10 +445,10 @@ nsl_stats_log_rank_h(const double* time, const int* status, const size_t* g1_ind
 		for (size_t k = i; k < j; k++) {
 			if (observations[k].status == 1) {
 				d++;
-				if (observations[k].group == 1) {
+				if (observations[k].group == 1)
 					d1++;
-				} else {
-					// d2++;
+				else {
+					// d2++; // TODO: ?
 				}
 			}
 		}
@@ -466,18 +466,16 @@ nsl_stats_log_rank_h(const double* time, const int* status, const size_t* g1_ind
 
 		for (size_t k = i; k < j; k++) {
 			if (observations[k].status == 1) {
-				if (observations[k].group == 1) {
+				if (observations[k].group == 1)
 					n_risk_1--;
-				} else {
+				else
 					n_risk_2--;
-				}
 				n_risk_total--;
 			} else {
-				if (observations[k].group == 1) {
+				if (observations[k].group == 1)
 					n_risk_1--;
-				} else {
+				else
 					n_risk_2--;
-				}
 				n_risk_total--;
 			}
 		}
@@ -619,15 +617,13 @@ double* nsl_stats_logistic_regression(double** x, int* y, int N, int n_in, int i
 	for (epoch = 0; epoch < iterations; epoch++) {
 		for (i = 0; i < N; i++) {
 			y_pred = b;
-			for (j = 0; j < n_in; j++) {
+			for (j = 0; j < n_in; j++)
 				y_pred += W[j] * x[i][j];
-			}
 			y_pred = 1.0 / (1.0 + exp(-y_pred));
 
 			gradient = y[i] - y_pred; // Error term
-			for (j = 0; j < n_in; j++) {
+			for (j = 0; j < n_in; j++)
 				W[j] += lr * gradient * x[i][j];
-			}
 			b += lr * gradient;
 		}
 	}

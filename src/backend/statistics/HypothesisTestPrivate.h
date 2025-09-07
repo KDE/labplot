@@ -11,10 +11,8 @@
 #define HYPOTHESISTESTPRIVATE_H
 
 #include "HypothesisTest.h"
-#include "backend/core/AbstractColumn.h"
-#include <cstddef>
 
-class Column;
+class AbstractColumn;
 
 class HypothesisTestPrivate {
 public:
