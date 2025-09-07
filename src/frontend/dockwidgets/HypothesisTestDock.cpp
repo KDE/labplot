@@ -69,53 +69,7 @@ void HypothesisTestDock::setTest(HypothesisTest* test) {
 	firstTreeViewCb->setModel(aspectModel());
 	firstTreeViewCb->setAspect(nullptr); // clear the current aspect
 
-	// we want to restore the properties from the aspect to the ui
-
-	// clear all variables except the first
-	for (int i = 0, count = m_removeButtons.size(); i < count; i++)
-		removeVariable();
-
-	// restore variables from aspect columns
-	for (int i = 0; i < m_test->dataColumns().size(); i++) {
-		auto* col = m_test->dataColumns().at(i);
-
-		if (i != 0) // no need to add for the first since it was never deleted
-			addVariable();
-		
-		auto* treeViewCb = static_cast<TreeViewComboBox*>(m_dataComboBoxes.at(i)); // treeviewcombobox for the just added variable above
-		treeViewCb->setModel(aspectModel());
-		treeViewCb->setAspect(col, col->path()); // set the aspect for the treeviewcombobox to the column
-	}
-
-	// restore significance level
-	ui.sbSignificanceLevel->setValue(m_test->significanceLevel());
-
-	// restore test mean
-	ui.sbTestMean->setValue(m_test->testMean());
-
-	// restore null hypothesis
-	const int hypothesisCount = HypothesisTest::hypothesisCount(m_test->test());
-	if (hypothesisCount == 3) {
-		switch (m_test->tail()) {
-		case nsl_stats_tail_type_two:
-			ui.rbNullTwoTailed->setChecked(true);
-			break;
-		case nsl_stats_tail_type_positive:
-			ui.rbNullOneTailedLeft->setChecked(true);
-			break;
-		case nsl_stats_tail_type_negative:
-			ui.rbNullOneTailedRight->setChecked(true);
-			break;
-		}
-	}
-
-	// trigger testChanged() to update the ui
-	int oldIndex = ui.cbTest->currentIndex();
-	ui.cbTest->setCurrentIndex(ui.cbTest->findData(static_cast<int>(m_test->test()))); // auto trigger testChanged()
-	int newIndex = ui.cbTest->currentIndex();
-	if (oldIndex == newIndex)
-		testChanged(); // manually trigger testChanged()
-
+	load(); // load the remaining properties
 	showStatusInfo(QString()); // remove the message from the previous chart, if available
 
 	// update the aspect properties when the ui properties change
@@ -213,7 +167,9 @@ void HypothesisTestDock::testChanged() {
 
 	if (m_initializing)
 		return;
+
 	m_test->setTest(test);
+
 	// we need to call this here again for the case of when we has previously
 	// selected variable columns and we change the selected hypothesis test. The aspect
 	// clears its list of columns, while the gui still shows columns as selected.
@@ -284,9 +240,8 @@ void HypothesisTestDock::ensureVariableCount(HypothesisTest::Test test) {
 	}
 
 	// add or remove columns to reach the min/max number of columns needed for the test
-	for (int i = diff; i > 0; --i) {
+	for (int i = diff; i > 0; --i)
 		(this->*func)();
-	}
 
 	// confirm that the number of columns is correct for the test
 	const int newVarCount = m_dataComboBoxes.size();
@@ -432,4 +387,54 @@ void HypothesisTestDock::showStatusInfo(const QString& info) {
 		m_messageWidget->animatedShow();
 		QDEBUG(info);
 	}
+}
+
+//*************************************************************
+//************************* Settings **************************
+//*************************************************************
+void HypothesisTestDock::load() {
+	// clear all variables except the first
+	for (int i = 0, count = m_removeButtons.size(); i < count; i++)
+		removeVariable();
+
+	// restore variables from aspect columns
+	for (int i = 0; i < m_test->dataColumns().size(); i++) {
+		auto* col = m_test->dataColumns().at(i);
+
+		if (i != 0) // no need to add for the first since it was never deleted
+			addVariable();
+
+		auto* treeViewCb = static_cast<TreeViewComboBox*>(m_dataComboBoxes.at(i)); // treeviewcombobox for the just added variable above
+		treeViewCb->setModel(aspectModel());
+		treeViewCb->setAspect(col, col->path()); // set the aspect for the treeviewcombobox to the column
+	}
+
+	// restore significance level
+	ui.sbSignificanceLevel->setValue(m_test->significanceLevel());
+
+	// restore test mean
+	ui.sbTestMean->setValue(m_test->testMean());
+
+	// restore null hypothesis
+	const int hypothesisCount = HypothesisTest::hypothesisCount(m_test->test());
+	if (hypothesisCount == 3) {
+		switch (m_test->tail()) {
+		case nsl_stats_tail_type_two:
+			ui.rbNullTwoTailed->setChecked(true);
+			break;
+		case nsl_stats_tail_type_positive:
+			ui.rbNullOneTailedLeft->setChecked(true);
+			break;
+		case nsl_stats_tail_type_negative:
+			ui.rbNullOneTailedRight->setChecked(true);
+			break;
+		}
+	}
+
+	// trigger testChanged() to update the ui
+	int oldIndex = ui.cbTest->currentIndex();
+	ui.cbTest->setCurrentIndex(ui.cbTest->findData(static_cast<int>(m_test->test()))); // auto trigger testChanged()
+	int newIndex = ui.cbTest->currentIndex();
+	if (oldIndex == newIndex)
+		testChanged(); // manually trigger testChanged()
 }

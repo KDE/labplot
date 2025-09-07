@@ -37,6 +37,7 @@ private:
 	QPushButton* m_buttonNew{nullptr};
 	KMessageWidget* m_messageWidget{nullptr};
 
+	void load();
 	void hideControls();
 	void addVariable();
 	void removeVariable();
