@@ -408,10 +408,6 @@ QString HypothesisTestPrivate::addResultLine(const QString& name, double value) 
 		return addResultLine(name, QStringLiteral("-"));
 }
 
-QString HypothesisTestPrivate::addResultLine(const QString& name) {
-	return name;
-}
-
 QString HypothesisTestPrivate::addResultColumnStatistics(const QVector<const AbstractColumn*>& columns) {
 	QVector<QVector<QString>> data;
 
@@ -976,14 +972,12 @@ void HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 	QString conclusion;
 	if (!std::isnan(p)) {
 		if (p <= significanceLevel)
-			conclusion = addResultLine(
-				i18n("At the significance level %1, the population means are significantly different. Reject the null Hypothesis", significanceLevel));
+			conclusion = i18n("At the significance level %1, the population means are significantly different. Reject the null Hypothesis", significanceLevel);
 		else
-			conclusion =
-				addResultLine(i18n("At the significance level %1, the population means are not significantly different. Fail to reject the null Hypothesis",
-								   significanceLevel));
+			conclusion = i18n("At the significance level %1, the population means are not significantly different. Fail to reject the null Hypothesis",
+							  significanceLevel);
 	} else
-		conclusion = addResultLine(testResultNotAvailable());
+		conclusion = testResultNotAvailable();
 
 	if (paired) {
 		this->result = pairedTwoSampleTTestResultTemplate()
@@ -1046,14 +1040,12 @@ void HypothesisTestPrivate::performWelchTTest() {
 	QString conclusion;
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
-			conclusion = addResultLine(
-				i18n("At the significance level %1, the population means are significantly different. Reject the null Hypothesis", significanceLevel));
+			conclusion = i18n("At the significance level %1, the population means are significantly different. Reject the null Hypothesis", significanceLevel);
 		else
-			conclusion =
-				addResultLine(i18n("At the significance level %1, the population means are not significantly different. Fail to reject the null Hypothesis",
-								   significanceLevel));
+			conclusion = i18n("At the significance level %1, the population means are not significantly different. Fail to reject the null Hypothesis",
+							  significanceLevel);
 	} else
-		conclusion = addResultLine(testResultNotAvailable());
+		conclusion = testResultNotAvailable();
 
 	this->result = welchTTestResultTemplate()
 					   .arg(nullHypothesisText)
@@ -1102,13 +1094,13 @@ void HypothesisTestPrivate::performOneWayANOVATest() {
 	QString conclusion;
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
-			conclusion = addResultLine(
-				i18n("At the significance level %1, at least one group mean is significantly different. Reject the null Hypothesis", significanceLevel));
+			conclusion =
+				i18n("At the significance level %1, at least one group mean is significantly different. Reject the null Hypothesis", significanceLevel);
 		else
-			conclusion = addResultLine(
-				i18n("At the significance level %1, no significant difference between group means. Fail to reject the null Hypothesis", significanceLevel));
+			conclusion =
+				i18n("At the significance level %1, no significant difference between group means. Fail to reject the null Hypothesis", significanceLevel);
 	} else {
-		conclusion = addResultLine(testResultNotAvailable());
+		conclusion = testResultNotAvailable();
 	}
 
 	this->result = oneWayANOVAResultTemplate()
@@ -1165,13 +1157,13 @@ void HypothesisTestPrivate::performOneWayANOVARepeatedTest() {
 	QString conclusion;
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
-			conclusion = addResultLine(
-				i18n("At the significance level %1, at least one group mean is significantly different. Reject the null Hypothesis", significanceLevel));
+			conclusion =
+				i18n("At the significance level %1, at least one group mean is significantly different. Reject the null Hypothesis", significanceLevel);
 		else
-			conclusion = addResultLine(
-				i18n("At the significance level %1, no significant difference between group means. Fail to reject the null Hypothesis", significanceLevel));
+			conclusion =
+				i18n("At the significance level %1, no significant difference between group means. Fail to reject the null Hypothesis", significanceLevel);
 	} else {
-		conclusion = addResultLine(testResultNotAvailable());
+		conclusion = testResultNotAvailable();
 	}
 
 	this->result = oneWayANOVARepeatedResultTemplate()
@@ -1226,14 +1218,12 @@ void HypothesisTestPrivate::performMannWhitneyUTest() {
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
 			conclusion =
-				addResultLine(i18n("At the significance level %1, at least one group distribution is significantly different. Reject the null Hypothesis",
-								   significanceLevel));
+				i18n("At the significance level %1, at least one group distribution is significantly different. Reject the null Hypothesis", significanceLevel);
 		else
-			conclusion =
-				addResultLine(i18n("At the significance level %1, no significant difference between group distributions. Fail to reject the null Hypothesis",
-								   significanceLevel));
+			conclusion = i18n("At the significance level %1, no significant difference between group distributions. Fail to reject the null Hypothesis",
+							  significanceLevel);
 	} else {
-		conclusion = addResultLine(testResultNotAvailable());
+		conclusion = testResultNotAvailable();
 	}
 
 	this->result = mannWhitneyUTestResultTemplate()
@@ -1286,14 +1276,12 @@ void HypothesisTestPrivate::performKruskalWallisTest() {
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
 			conclusion =
-				addResultLine(i18n("At the significance level %1, at least one group distribution is significantly different. Reject the null Hypothesis",
-								   significanceLevel));
+				i18n("At the significance level %1, at least one group distribution is significantly different. Reject the null Hypothesis", significanceLevel);
 		else
-			conclusion =
-				addResultLine(i18n("At the significance level %1, no significant difference between group distributions. Fail to reject the null Hypothesis",
-								   significanceLevel));
+			conclusion = i18n("At the significance level %1, no significant difference between group distributions. Fail to reject the null Hypothesis",
+							  significanceLevel);
 	} else {
-		conclusion = addResultLine(testResultNotAvailable());
+		conclusion = testResultNotAvailable();
 	}
 
 	this->result = kruskalWallisTestResultTemplate()
@@ -1347,14 +1335,12 @@ void HypothesisTestPrivate::performWilcoxonTest() {
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
 			conclusion =
-				addResultLine(i18n("At the significance level %1, at least one group distribution is significantly different. Reject the null Hypothesis",
-								   significanceLevel));
+				i18n("At the significance level %1, at least one group distribution is significantly different. Reject the null Hypothesis", significanceLevel);
 		else
-			conclusion =
-				addResultLine(i18n("At the significance level %1, no significant difference between group distributions. Fail to reject the null Hypothesis",
-								   significanceLevel));
+			conclusion = i18n("At the significance level %1, no significant difference between group distributions. Fail to reject the null Hypothesis",
+							  significanceLevel);
 	} else {
-		conclusion = addResultLine(testResultNotAvailable());
+		conclusion = testResultNotAvailable();
 	}
 
 	this->result = wilcoxonTestResultTemplate()
@@ -1412,13 +1398,11 @@ void HypothesisTestPrivate::performFriedmanTest() {
 	QString conclusion;
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
-			conclusion = addResultLine(
-				i18n("At the significance level %1, at least one group is significantly different. Reject the null Hypothesis", significanceLevel));
+			conclusion = i18n("At the significance level %1, at least one group is significantly different. Reject the null Hypothesis", significanceLevel);
 		else
-			conclusion = addResultLine(
-				i18n("At the significance level %1, no significant difference between groups. Fail to reject the null Hypothesis", significanceLevel));
+			conclusion = i18n("At the significance level %1, no significant difference between groups. Fail to reject the null Hypothesis", significanceLevel);
 	} else {
-		conclusion = addResultLine(testResultNotAvailable());
+		conclusion = testResultNotAvailable();
 	}
 
 	this->result = friedmanTestResultTemplate()
@@ -1480,15 +1464,15 @@ void HypothesisTestPrivate::performChisqGoodnessOfFitTest() {
 	QString conclusion;
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
-			conclusion = addResultLine(
+			conclusion =
 				i18n("At the significance level %1, the observed frequencies do not follow the expected frequency distribution. Reject the null Hypothesis",
-					 significanceLevel));
+					 significanceLevel);
 		else
-			conclusion = addResultLine(
+			conclusion =
 				i18n("At the significance level %1, the observed frequencies follow the expected frequency distribution. Fail to reject the null Hypothesis",
-					 significanceLevel));
+					 significanceLevel);
 	} else
-		conclusion = addResultLine(testResultNotAvailable());
+		conclusion = testResultNotAvailable();
 
 	this->result = chisqGoodnessOfFitTestResultTemplate()
 					   .arg(nullHypothesisText)
@@ -1545,13 +1529,12 @@ void HypothesisTestPrivate::performChisqIndependenceTest() {
 	QString conclusion;
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
-			conclusion =
-				addResultLine(i18n("At the significance level %1, both categorical variables are dependent. Reject the null Hypothesis", significanceLevel));
+			conclusion = i18n("At the significance level %1, both categorical variables are dependent. Reject the null Hypothesis", significanceLevel);
 		else
-			conclusion = addResultLine(
-				i18n("At the significance level %1, both categorical variables are independent. Fail to reject the null Hypothesis", significanceLevel));
+			conclusion =
+				i18n("At the significance level %1, both categorical variables are independent. Fail to reject the null Hypothesis", significanceLevel);
 	} else {
-		conclusion = addResultLine(testResultNotAvailable());
+		conclusion = testResultNotAvailable();
 	}
 
 	this->result = chisqIndependenceTestResultTemplate()
@@ -1651,13 +1634,12 @@ void HypothesisTestPrivate::performLogRankTest() {
 	QString conclusion;
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
-			conclusion = addResultLine(
-				i18n("At the significance level %1, the survival curves are significantly different. Reject the null Hypothesis", significanceLevel));
+			conclusion = i18n("At the significance level %1, the survival curves are significantly different. Reject the null Hypothesis", significanceLevel);
 		else
-			conclusion = addResultLine(
-				i18n("At the significance level %1, no significant difference between survival curves. Fail to reject the null Hypothesis", significanceLevel));
+			conclusion =
+				i18n("At the significance level %1, no significant difference between survival curves. Fail to reject the null Hypothesis", significanceLevel);
 	} else {
-		conclusion = addResultLine(testResultNotAvailable());
+		conclusion = testResultNotAvailable();
 	}
 
 	this->result = logRankTestResultTemplate()

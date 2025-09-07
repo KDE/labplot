@@ -53,7 +53,6 @@ private:
 	static QString addResultSection(const QString&);
 	static QString addResultLine(const QString& name, const QString& value);
 	static QString addResultLine(const QString& name, double value);
-	static QString addResultLine(const QString& name);
 	static QString addResultTable(const QVector<QVector<QString>>& data, bool horizontal);
 	static QString addResultColumnStatistics(const QVector<const AbstractColumn*>& columns);
 
