@@ -1,3 +1,13 @@
+/*
+	File                 : nsl_stats.h
+	Project              : LabPlot
+	Description          : NSL statistical test functions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2025 Kuntal Bar <barkuntal6@gmail.com>
+	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
 #ifndef NSL_STATISTICAL_TEST_H
 #define NSL_STATISTICAL_TEST_H
 

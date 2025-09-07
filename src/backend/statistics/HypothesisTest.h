@@ -3,8 +3,9 @@
 	Project              : LabPlot
 	Description          : Hypothesis Test
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-205 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2025 Kuntal Bar <barkuntal6@gmail.com>
+	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 ***************************************************************************/

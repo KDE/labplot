@@ -4,6 +4,7 @@
 	Description          : Private members of HypothesisTest
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2025 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -80,8 +81,13 @@ private:
 	static QString chisqGoodnessOfFitTestResultTemplate();
 	static QString chisqIndependenceTestResultTemplate();
 	static QString logRankTestResultTemplate();
+
 	static QString notAvailable();
 	static QString testResultNotAvailable();
+	static QString twoColumnsRequired();
+	static QString atLeastTwoColumnsRequired();
+	static QString atLeastXSamplesRequired();
+	static QString samplesMustBeEqualSize();
 	static QVector<QString> columnStatisticsHeaders();
 	static QString emptyResultColumnStatistics();
 };

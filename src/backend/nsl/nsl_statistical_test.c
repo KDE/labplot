@@ -4,6 +4,7 @@
 	Description          : NSL statistical test functions
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2025 Kuntal Bar <barkuntal6@gmail.com>
+	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 

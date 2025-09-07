@@ -4,6 +4,7 @@
 	Description          : Hypothesis Test
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2025 Alexander Semke >alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2025 Israel Galadima <izzygaladima@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 ***************************************************************************/
 
@@ -607,6 +608,22 @@ QString HypothesisTestPrivate::testResultNotAvailable() {
 	return i18n("Test result is not available.");
 }
 
+QString HypothesisTestPrivate::twoColumnsRequired() {
+	return i18n("Two columns are required for this test.");
+}
+
+QString HypothesisTestPrivate::atLeastTwoColumnsRequired() {
+	return i18n("At least two columns are required.");
+}
+
+QString HypothesisTestPrivate::atLeastXSamplesRequired() {
+	return i18n("Column '%1' requires at least %L2 samples.");
+}
+
+QString HypothesisTestPrivate::samplesMustBeEqualSize() {
+	return i18n("The size of each sample must be equal.");
+}
+
 QVector<QString> HypothesisTestPrivate::columnStatisticsHeaders() {
 	return {i18n("Name"), i18n("Size"), i18n("Mean"), i18n("Median"), i18n("Variance"), i18n("Skewness"), i18n("Kurtosis")};
 }
@@ -857,7 +874,7 @@ void HypothesisTestPrivate::performOneSampleTTest() {
 	size_t n = sample.size();
 
 	if (n < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(i18n("Column '%1' requires at least %2 samples.", col->name(), minSampleCount(test)));
+		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(col->name()).arg(minSampleCount(test)));
 		return;
 	}
 
@@ -897,7 +914,7 @@ void HypothesisTestPrivate::performOneSampleTTest() {
 
 void HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 	if (dataColumns.size() < 2) { // we need two columns for the two sample t test
-		Q_EMIT q->statusInfo(i18n("Two columns are required for this test."));
+		Q_EMIT q->statusInfo(twoColumnsRequired());
 		return;
 	}
 
@@ -909,12 +926,12 @@ void HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 	size_t n2 = samples[1].size();
 
 	if (n1 < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(i18n("Column '%1' requires at least %2 samples.", col1->name(), minSampleCount(test)));
+		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(col1->name()).arg(minSampleCount(test)));
 		return;
 	}
 
 	if (n2 < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(i18n("Column '%1' requires at least %2 samples.", col2->name(), minSampleCount(test)));
+		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(col2->name()).arg(minSampleCount(test)));
 		return;
 	}
 
@@ -928,7 +945,7 @@ void HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 	if (n1 != 0 && n2 != 0) {
 		if (paired) {
 			if (n1 != n2) {
-				Q_EMIT q->statusInfo(i18n("Paired t-test requires equal sample sizes."));
+				Q_EMIT q->statusInfo(samplesMustBeEqualSize());
 				return;
 			}
 
@@ -997,7 +1014,7 @@ void HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 
 void HypothesisTestPrivate::performWelchTTest() {
 	if (dataColumns.size() < 2) { // we need two columns for the welch t test
-		Q_EMIT q->statusInfo(i18n("Two columns are required."));
+		Q_EMIT q->statusInfo(twoColumnsRequired());
 		return;
 	}
 
@@ -1009,12 +1026,12 @@ void HypothesisTestPrivate::performWelchTTest() {
 	size_t n2 = samples.at(1).size();
 
 	if (n1 < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(i18n("Column '%1' requires at least %2 samples.", col1->name(), minSampleCount(test)));
+		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(col1->name()).arg(minSampleCount(test)));
 		return;
 	}
 
 	if (n2 < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(i18n("Column '%1' requires at least %2 samples.", col2->name(), minSampleCount(test)));
+		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(col2->name()).arg(minSampleCount(test)));
 		return;
 	}
 
@@ -1053,7 +1070,7 @@ void HypothesisTestPrivate::performWelchTTest() {
 
 void HypothesisTestPrivate::performOneWayANOVATest() {
 	if (dataColumns.size() < 2) {
-		Q_EMIT q->statusInfo(i18n("At least two columns are required."));
+		Q_EMIT q->statusInfo(atLeastTwoColumnsRequired());
 		return;
 	}
 
@@ -1068,7 +1085,7 @@ void HypothesisTestPrivate::performOneWayANOVATest() {
 	for (int n = 0; n < groupCount; n++) {
 		size_t sampleSize = groupData[n].size();
 		if (sampleSize < minSampleCount(test)) {
-			Q_EMIT q->statusInfo(i18n("Column '%1' requires at least %2 samples.", dataColumns.at(n)->name(), minSampleCount(test)));
+			Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(dataColumns.at(n)->name()).arg(minSampleCount(test)));
 			return;
 		}
 		groupSizes[n] = static_cast<size_t>(sampleSize);
@@ -1112,7 +1129,7 @@ void HypothesisTestPrivate::performOneWayANOVATest() {
 
 void HypothesisTestPrivate::performOneWayANOVARepeatedTest() {
 	if (dataColumns.size() < 2) {
-		Q_EMIT q->statusInfo(i18n("At least two columns are required."));
+		Q_EMIT q->statusInfo(atLeastTwoColumnsRequired());
 		return;
 	}
 
@@ -1125,13 +1142,13 @@ void HypothesisTestPrivate::performOneWayANOVARepeatedTest() {
 	auto groupSize = groupData[0].size();
 
 	if (static_cast<size_t>(groupSize) < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(i18n("Column '%1' requires at least %2 samples.", dataColumns.at(0)->name(), minSampleCount(test)));
+		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(dataColumns.at(0)->name()).arg(minSampleCount(test)));
 		return;
 	}
 
 	for (int n = 1; n < groupCount; n++) {
 		if (groupData[n].size() != groupSize) {
-			Q_EMIT q->statusInfo(i18n("The size of each sample must be equal."));
+			Q_EMIT q->statusInfo(samplesMustBeEqualSize());
 			return;
 		}
 	}
@@ -1176,7 +1193,7 @@ void HypothesisTestPrivate::performOneWayANOVARepeatedTest() {
 
 void HypothesisTestPrivate::performMannWhitneyUTest() {
 	if (dataColumns.size() < 2) {
-		Q_EMIT q->statusInfo(i18n("Two columns are required."));
+		Q_EMIT q->statusInfo(twoColumnsRequired());
 		return;
 	}
 
@@ -1188,12 +1205,12 @@ void HypothesisTestPrivate::performMannWhitneyUTest() {
 	size_t n2 = samples.at(1).size();
 
 	if (n1 < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(i18n("Column '%1' requires at least %2 samples.", col1->name(), minSampleCount(test)));
+		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(col1->name()).arg(minSampleCount(test)));
 		return;
 	}
 
 	if (n2 < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(i18n("Column '%1' requires at least %2 samples.", col2->name(), minSampleCount(test)));
+		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(col2->name()).arg(minSampleCount(test)));
 		return;
 	}
 
@@ -1236,7 +1253,7 @@ void HypothesisTestPrivate::performMannWhitneyUTest() {
 
 void HypothesisTestPrivate::performKruskalWallisTest() {
 	if (dataColumns.size() < 2) {
-		Q_EMIT q->statusInfo(i18n("At least two columns are required."));
+		Q_EMIT q->statusInfo(atLeastTwoColumnsRequired());
 		return;
 	}
 
@@ -1251,7 +1268,7 @@ void HypothesisTestPrivate::performKruskalWallisTest() {
 	for (int n = 0; n < groupCount; n++) {
 		size_t sampleSize = groupData[n].size();
 		if (sampleSize < minSampleCount(test)) {
-			Q_EMIT q->statusInfo(i18n("Column '%1' requires at least %2 samples.", dataColumns.at(n)->name(), minSampleCount(test)));
+			Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(dataColumns.at(n)->name()).arg(minSampleCount(test)));
 			return;
 		}
 		groupSizes[n] = sampleSize;
@@ -1292,7 +1309,7 @@ void HypothesisTestPrivate::performKruskalWallisTest() {
 
 void HypothesisTestPrivate::performWilcoxonTest() {
 	if (dataColumns.size() < 2) {
-		Q_EMIT q->statusInfo(i18n("Two columns are required."));
+		Q_EMIT q->statusInfo(twoColumnsRequired());
 		return;
 	}
 
@@ -1304,12 +1321,12 @@ void HypothesisTestPrivate::performWilcoxonTest() {
 	size_t n2 = samples.at(1).size();
 
 	if (n1 < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(i18n("Column '%1' requires at least %2 samples.", col1->name(), minSampleCount(test)));
+		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(col1->name()).arg(minSampleCount(test)));
 		return;
 	}
 
 	if (n2 < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(i18n("Column '%1' requires at least %2 samples.", col2->name(), minSampleCount(test)));
+		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(col2->name()).arg(minSampleCount(test)));
 		return;
 	}
 
@@ -1318,7 +1335,7 @@ void HypothesisTestPrivate::performWilcoxonTest() {
 
 	if (n1 != 0 && n2 != 0) {
 		if (n1 != n2) {
-			Q_EMIT q->statusInfo(i18n("The size of each sample must be equal."));
+			Q_EMIT q->statusInfo(samplesMustBeEqualSize());
 			return;
 		}
 		result = nsl_stats_wilcoxon_w(samples.at(0).constData(), samples.at(1).constData(), n1, tail);
@@ -1360,7 +1377,7 @@ void HypothesisTestPrivate::performWilcoxonTest() {
 
 void HypothesisTestPrivate::performFriedmanTest() {
 	if (dataColumns.size() < 2) {
-		Q_EMIT q->statusInfo(i18n("At least two columns are required."));
+		Q_EMIT q->statusInfo(atLeastTwoColumnsRequired());
 		return;
 	}
 
@@ -1373,13 +1390,13 @@ void HypothesisTestPrivate::performFriedmanTest() {
 	const auto groupSize = groupData.at(0).size();
 
 	if (static_cast<size_t>(groupSize) < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(i18n("Column '%1' requires at least %2 samples.", dataColumns.at(0)->name(), minSampleCount(test)));
+		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(dataColumns.at(0)->name()).arg(minSampleCount(test)));
 		return;
 	}
 
 	for (int n = 1; n < groupCount; n++) {
 		if (groupData.at(n).size() != groupSize) {
-			Q_EMIT q->statusInfo(i18n("The size of each sample must be equal."));
+			Q_EMIT q->statusInfo(samplesMustBeEqualSize());
 			return;
 		}
 	}
@@ -1393,7 +1410,6 @@ void HypothesisTestPrivate::performFriedmanTest() {
 	const auto [nullHypothesisText, alternateHypothesisText] = HypothesisTest::hypothesisText(test).at(0);
 
 	QString conclusion;
-	addResultSection(i18n("Statistical Conclusion"));
 	if (!std::isnan(result.p)) {
 		if (result.p <= significanceLevel)
 			conclusion = addResultLine(
@@ -1418,7 +1434,7 @@ void HypothesisTestPrivate::performFriedmanTest() {
 
 void HypothesisTestPrivate::performChisqGoodnessOfFitTest() {
 	if (dataColumns.size() < 2) { // we need two columns for the welch t test
-		Q_EMIT q->statusInfo(i18n("Two columns are required."));
+		Q_EMIT q->statusInfo(twoColumnsRequired());
 		return;
 	}
 
@@ -1437,12 +1453,12 @@ void HypothesisTestPrivate::performChisqGoodnessOfFitTest() {
 	size_t n2 = sample2.size();
 
 	if (n1 < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(i18n("Column '%1' requires at least %2 samples.", observed->name(), minSampleCount(test)));
+		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(observed->name()).arg(minSampleCount(test)));
 		return;
 	}
 
 	if (n2 < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(i18n("Column '%1' requires at least %2 samples.", expected->name(), minSampleCount(test)));
+		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(expected->name()).arg(minSampleCount(test)));
 		return;
 	}
 
@@ -1451,7 +1467,7 @@ void HypothesisTestPrivate::performChisqGoodnessOfFitTest() {
 
 	if (n1 != 0 && n2 != 0) {
 		if (n1 != n2) {
-			Q_EMIT q->statusInfo(i18n("The size of each sample must be equal."));
+			Q_EMIT q->statusInfo(samplesMustBeEqualSize());
 			return;
 		}
 
@@ -1487,7 +1503,7 @@ void HypothesisTestPrivate::performChisqGoodnessOfFitTest() {
 
 void HypothesisTestPrivate::performChisqIndependenceTest() {
 	if (dataColumns.size() < 2) { // we need at least two columns for the chi square independence test
-		Q_EMIT q->statusInfo(i18n("At lest two columns are required."));
+		Q_EMIT q->statusInfo(atLeastTwoColumnsRequired());
 		return;
 	}
 
@@ -1507,7 +1523,7 @@ void HypothesisTestPrivate::performChisqIndependenceTest() {
 	auto rowCount = table[0].size();
 
 	if (static_cast<size_t>(rowCount) < minSampleCount(test)) {
-		Q_EMIT q->statusInfo(i18n("Column '%1' requires at least %2 samples.", dataColumns.at(0)->name(), minSampleCount(test)));
+		Q_EMIT q->statusInfo(atLeastXSamplesRequired().arg(dataColumns.at(0)->name()).arg(minSampleCount(test)));
 		return;
 	}
 
