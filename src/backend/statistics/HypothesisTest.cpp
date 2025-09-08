@@ -1426,7 +1426,7 @@ void HypothesisTestPrivate::performChisqGoodnessOfFitTest() {
 	const auto* expected = dataColumns.at(1);
 
 	if (observed->columnMode() != AbstractColumn::ColumnMode::Integer && observed->columnMode() != AbstractColumn::ColumnMode::BigInt) {
-		Q_EMIT q->statusInfo(i18n("Column '%1' must be of type integer.", observed->name()));
+		Q_EMIT q->statusInfo(i18n("Column '%1' must be of integer type.", observed->name()));
 		return;
 	}
 
@@ -1493,7 +1493,7 @@ void HypothesisTestPrivate::performChisqIndependenceTest() {
 
 	for (auto* col : dataColumns) {
 		if (col->columnMode() != AbstractColumn::ColumnMode::Integer && col->columnMode() != AbstractColumn::ColumnMode::BigInt) {
-			Q_EMIT q->statusInfo(i18n("Column '%1' must be of integer.", col->name()));
+			Q_EMIT q->statusInfo(i18n("Column '%1' must be of integer type.", col->name()));
 			return;
 		}
 	}
