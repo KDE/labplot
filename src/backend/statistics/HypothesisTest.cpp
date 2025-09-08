@@ -613,7 +613,7 @@ QString HypothesisTestPrivate::atLeastTwoColumnsRequired() {
 }
 
 QString HypothesisTestPrivate::atLeastXSamplesRequired() {
-	return i18n("Column '%1' requires at least %L2 samples.");
+	return i18n("Column '%1' requires at least %2 samples.");
 }
 
 QString HypothesisTestPrivate::samplesMustBeEqualSize() {
