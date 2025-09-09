@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-08 00:38+0000\n"
-"PO-Revision-Date: 2025-08-28 11:58+0100\n"
+"POT-Creation-Date: 2025-09-09 00:41+0000\n"
+"PO-Revision-Date: 2025-09-09 01:05+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -7458,18 +7458,18 @@ msgstr "Columna"
 #, kde-format
 msgid "One column is required."
 msgid_plural "%1 columns are required."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Se requiere 1 columna."
+msgstr[1] "Se requieren %1 columnas."
 
 #: src/backend/statistics/HypothesisTest.cpp:56
 #, kde-format
 msgid "At least %1 and at most %2 columns are required."
-msgstr ""
+msgstr "Se requieren como mínimo %1 y como máximo %2 columnas."
 
 #: src/backend/statistics/HypothesisTest.cpp:64
 #, kde-format
 msgid "Column '%1' must be of numeric type."
-msgstr ""
+msgstr "La columna «%1» debe ser de tipo numérico."
 
 #: src/backend/statistics/HypothesisTest.cpp:143
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:235
@@ -7536,10 +7536,9 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:554
 #: src/backend/statistics/HypothesisTest.cpp:566
 #: src/backend/statistics/HypothesisTest.cpp:574
-#, fuzzy, kde-format
-#| msgid "t Statistic"
+#, kde-format
 msgid "Descriptive Statistics"
-msgstr "Estadística t"
+msgstr "Estadísticas descriptivas"
 
 #: src/backend/statistics/HypothesisTest.cpp:474
 #: src/backend/statistics/HypothesisTest.cpp:483
@@ -7565,7 +7564,7 @@ msgstr "Estadística t"
 #: src/backend/statistics/HypothesisTest.cpp:591
 #, kde-format
 msgid "Significance Level"
-msgstr ""
+msgstr "Nivel de significación"
 
 #: src/backend/statistics/HypothesisTest.cpp:475
 #: src/backend/statistics/HypothesisTest.cpp:484
@@ -7637,10 +7636,9 @@ msgstr "Diferencia"
 #: src/backend/statistics/HypothesisTest.cpp:577
 #: src/backend/statistics/HypothesisTest.cpp:585
 #: src/backend/statistics/HypothesisTest.cpp:596
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Conclusion"
-msgstr "Gráficos estadísticos"
+msgstr "Conclusión estadística"
 
 #: src/backend/statistics/HypothesisTest.cpp:481
 #: src/backend/statistics/HypothesisTest.cpp:1740
@@ -7694,16 +7692,14 @@ msgid "F-Statistic"
 msgstr "Estadísticas"
 
 #: src/backend/statistics/HypothesisTest.cpp:514
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees of Freedom Between Groups"
-msgstr "Grados de libertad"
+msgstr "Grados de libertad entre grupos"
 
 #: src/backend/statistics/HypothesisTest.cpp:515
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees of Freedom Within Groups"
-msgstr "Grados de libertad"
+msgstr "Grados de libertad dentro de grupos"
 
 #: src/backend/statistics/HypothesisTest.cpp:516
 #, fuzzy, kde-format
@@ -8015,7 +8011,7 @@ msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:616
 #, kde-format
-msgid "Column '%1' requires at least %L2 samples."
+msgid "Column '%1' requires at least %2 samples."
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:620
@@ -8116,9 +8112,11 @@ msgid ""
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:1429
-#, kde-format
-msgid "Column '%1' must be of type integer."
-msgstr ""
+#: src/backend/statistics/HypothesisTest.cpp:1496
+#, fuzzy, kde-format
+#| msgid "Column '%1' must be of numeric type."
+msgid "Column '%1' must be of integer type."
+msgstr "La columna «%1» debe ser de tipo numérico."
 
 #: src/backend/statistics/HypothesisTest.cpp:1468
 #, kde-format
@@ -8132,11 +8130,6 @@ msgstr ""
 msgid ""
 "At the significance level %1, the observed frequencies follow the expected "
 "frequency distribution. Fail to reject the null Hypothesis"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:1496
-#, kde-format
-msgid "Column '%1' must be of integer."
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:1516
@@ -19254,10 +19247,9 @@ msgid "Analyze and Plot Data"
 msgstr "Analizar y trazar datos"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:679
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Analysis"
-msgstr "Gráficos estadísticos"
+msgstr "Análisis estadístico"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:680
 #, kde-format
@@ -22773,7 +22765,7 @@ msgstr "Usuario:"
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:269
 #, kde-format
 msgid "Hypothesis"
-msgstr ""
+msgstr "Hipótesis"
 
 #. i18n: ectx: property (text), widget (QLabel, lTest)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:289
