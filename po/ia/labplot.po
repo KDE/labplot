@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-08 00:38+0000\n"
+"POT-Creation-Date: 2025-09-09 00:41+0000\n"
 "PO-Revision-Date: 2025-05-30 18:48+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -7957,7 +7957,7 @@ msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:616
 #, kde-format
-msgid "Column '%1' requires at least %L2 samples."
+msgid "Column '%1' requires at least %2 samples."
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:620
@@ -8058,8 +8058,9 @@ msgid ""
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:1429
+#: src/backend/statistics/HypothesisTest.cpp:1496
 #, kde-format
-msgid "Column '%1' must be of type integer."
+msgid "Column '%1' must be of integer type."
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:1468
@@ -8074,11 +8075,6 @@ msgstr ""
 msgid ""
 "At the significance level %1, the observed frequencies follow the expected "
 "frequency distribution. Fail to reject the null Hypothesis"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:1496
-#, kde-format
-msgid "Column '%1' must be of integer."
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:1516
