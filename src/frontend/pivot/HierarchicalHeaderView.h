@@ -84,9 +84,9 @@ private:
 	int m_columnCount{0};
 	HierarchicalHeaderItem* m_rootItem{nullptr};
 
-	int *maxWidthArr;
+	int *maxWidthArr{nullptr};
 	QSize baseSectionSize;
-	Qt::Orientation orientation;
+	Qt::Orientation orientation{Qt::Horizontal};
 };
 
 /****************************************************************************************************
