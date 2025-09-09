@@ -30,7 +30,6 @@
     <comment xml:lang="sl">Projektna datoteka LabPlot2</comment>
     <comment xml:lang="sv">Labplot2 projektfil</comment>
     <comment xml:lang="uk">файл проєкту LabPlot2</comment>
-    <comment xml:lang="x_test">xxLabPlot2 Project Filexx</comment>
     <comment xml:lang="zh_CN">LabPlot2 工程文件</comment>
     <glob pattern="*.lml"/>
   </mime-type>
