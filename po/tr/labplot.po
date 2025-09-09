@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-14 02:47+0000\n"
-"PO-Revision-Date: 2025-07-24 20:19+0300\n"
+"PO-Revision-Date: 2025-09-08 10:52+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.04.2\n"
+"X-Generator: Lokalize 25.08.0\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #, kde-format
@@ -3547,7 +3547,7 @@ msgstr "Lognormal Dağılım"
 #: src/backend/gsl/functions.cpp:155
 #, kde-format
 msgid "Chi-squared Distribution"
-msgstr "Ki kare Dağılımı"
+msgstr "Ki Kare Dağılımı"
 
 #: src/backend/gsl/functions.cpp:157
 #, kde-format
@@ -4643,7 +4643,7 @@ msgstr "Hiperbolik integral Shi"
 #: src/backend/gsl/functions.cpp:471
 #, kde-format
 msgid "Hyperbolic integral Chi"
-msgstr "Hiperbolik integral Chi"
+msgstr "Hiperbolik integral ki"
 
 #: src/backend/gsl/functions.cpp:472
 #, kde-format
@@ -24665,7 +24665,7 @@ msgstr "Çalışma Sayfasını Dışa Aktar"
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:235
 #, kde-format
 msgid "Portable Data Format (*.pdf *.PDF)"
-msgstr "Taşınabilir Veri Biçimi (*.pdf *.PDF)"
+msgstr "Taşınabilir veri biçimi (*.pdf *.PDF)"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:237
 #, kde-format
