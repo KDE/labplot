@@ -74,7 +74,7 @@
 namespace {
 // xmlVersion of this labplot version
 // the project version will be compared with this.
-// if you make any imcompatible changes to the xmlfile
+// if you make any incompatible changes to the xmlfile
 // or the function in labplot, increase this number.
 int buildXmlVersion = 16;
 }
@@ -369,7 +369,7 @@ bool Project::hasChanged() const {
 template<typename T>
 void Project::updateDependencies(const QVector<const AbstractAspect*> changedAspects) {
 	if (!changedAspects.isEmpty()) {
-		// if a new aspect was addded, check whether the aspect names match the missing
+		// if a new aspect was added, check whether the aspect names match the missing
 		// names in the other aspects and update the dependencies
 		const auto& children = this->children<T>(ChildIndexFlag::Recursive);
 
@@ -419,7 +419,7 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 	if (aspect->inherits(AspectType::Spreadsheet)) {
 		const auto* spreadsheet = static_cast<const Spreadsheet*>(aspect);
 
-		// if a new spreadsheet was addded, check whether the spreadsheet name match the missing
+		// if a new spreadsheet was added, check whether the spreadsheet name match the missing
 		// name in a linked spreadsheet, etc. and update the dependencies
 		connect(spreadsheet, &Spreadsheet::aboutToResize, [this]() {
 			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
@@ -444,7 +444,7 @@ void Project::navigateTo(const QString& path) {
 }
 
 /*!
- * returns \c true if the project file \fileName has a supported format and can be openned in LabPlot directly,
+ * returns \c true if the project file \fileName has a supported format and can be opened in LabPlot directly,
  * returns \c false otherwise.
  */
 bool Project::isSupportedProject(const QString& fileName) {

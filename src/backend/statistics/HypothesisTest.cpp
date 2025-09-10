@@ -59,7 +59,7 @@ void HypothesisTest::setDataColumns(const QVector<const AbstractColumn*>& cols) 
 
 	QVector<QString> columnPaths;
 	for (auto* col : cols) {
-		// currently excluding bigint because bigint > double and then we have to start using long double everywhere to accomodate
+		// currently excluding bigint because bigint > double and then we have to start using long double everywhere to accommodate
 		if (!col->isNumeric()) {
 			Q_EMIT info(i18n("Column '%1' must be of numeric type.", col->name()));
 			return;

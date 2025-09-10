@@ -542,7 +542,7 @@ void AbstractColumn::setChanged() {
 /*!
  * suppresses the \c dataChanged signal if \c value is \c true, enables it otherwise.
  *
- * used when multiple cells are being modified and the signal needs to be supressed for performance reasons,
+ * used when multiple cells are being modified and the signal needs to be suppressed for performance reasons,
  * \sa setChanged().
  */
 void AbstractColumn::setSuppressDataChangedSignal(bool value) {

@@ -778,7 +778,7 @@ void Axis::setMajorTicksNumber(int number) {
 	DEBUG(Q_FUNC_INFO << ", number = " << number)
 	Q_D(Axis);
 	if (number > maxNumberMajorTicks) {
-		// Notifiy the user that the number was invalid
+		// Notify the user that the number was invalid
 		Q_EMIT majorTicksNumberChanged(maxNumberMajorTicks);
 		return;
 	} else if (number != d->majorTicksNumber)
@@ -1115,7 +1115,7 @@ bool AxisPrivate::swapVisible(bool on) {
 
 	// When making a graphics item invisible, it gets deselected in the scene.
 	// In this case we don't want to deselect the item in the project explorer.
-	// We need to supress the deselection in the view.
+	// We need to suppress the deselection in the view.
 	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
 	if (worksheet) {
 		worksheet->suppressSelectionChangedEvent(true);

@@ -722,7 +722,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 		return;
 
 	QVector<QLineF> lines; // four lines for one bar in logical coordinates
-	QVector<QVector<QLineF>> barLines; // lines for all bars for one colum in scene coordinates
+	QVector<QVector<QLineF>> barLines; // lines for all bars for one column in scene coordinates
 	QVector<QPointF> valuesPointsLogical;
 
 	switch (type) {
@@ -731,7 +731,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 		const int barCount = dataColumns.size(); // number of bars within a group
 		double width = (m_groupWidth - 2 * m_groupGap - (barCount - 1) * barGap) / barCount; // bar width
 		width *= widthFactor; // scaled bar width
-		const double scalingOffset = width * (1. / widthFactor - 1.) / 2.; // offset to be added to x to accomodate for a smaller/scaled bar width
+		const double scalingOffset = width * (1. / widthFactor - 1.) / 2.; // offset to be added to x to accommodate for a smaller/scaled bar width
 
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
@@ -768,7 +768,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 	case BarPlot::Type::Stacked: {
 		double width = m_groupWidth - 2 * m_groupGap; // bar width
 		width *= widthFactor; // scaled bar width
-		const double scalingOffset = width * (1. / widthFactor - 1.) / 2.; // offset to be added to x to accomodate for a smaller/scaled bar width
+		const double scalingOffset = width * (1. / widthFactor - 1.) / 2.; // offset to be added to x to accommodate for a smaller/scaled bar width
 		int valueIndex = 0;
 
 		for (int i = 0; i < column->rowCount(); ++i) {
@@ -816,7 +816,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 	case BarPlot::Type::Stacked_100_Percent: {
 		double width = m_groupWidth - 2 * m_groupGap; // bar width
 		width *= widthFactor; // scaled bar width
-		const double scalingOffset = width * (1. / widthFactor - 1.) / 2.; // offset to be added to x to accomodate for a smaller/scaled bar width
+		const double scalingOffset = width * (1. / widthFactor - 1.) / 2.; // offset to be added to x to accommodate for a smaller/scaled bar width
 		int valueIndex = 0;
 
 		for (int i = 0; i < column->rowCount(); ++i) {
@@ -870,7 +870,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 		return;
 
 	QVector<QLineF> lines; // four lines for one bar in logical coordinates
-	QVector<QVector<QLineF>> barLines; // lines for all bars for one colum in scene coordinates
+	QVector<QVector<QLineF>> barLines; // lines for all bars for one column in scene coordinates
 	QVector<QPointF> valuesPointsLogical;
 
 	switch (type) {
@@ -879,7 +879,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 		const int barCount = dataColumns.size(); // number of bars within a group
 		double width = (m_groupWidth - 2 * m_groupGap - (barCount - 1) * barGap) / barCount; // bar width
 		width *= widthFactor; // scaled bar width
-		const double scalingOffset = width * (1. / widthFactor - 1.) / 2.; // offset to be added to y to accomodate for a smaller/scaled bar width
+		const double scalingOffset = width * (1. / widthFactor - 1.) / 2.; // offset to be added to y to accommodate for a smaller/scaled bar width
 
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
@@ -916,7 +916,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 	case BarPlot::Type::Stacked: {
 		double width = m_groupWidth - 2 * m_groupGap; // bar width
 		width *= widthFactor; // scaled bar width
-		const double scalingOffset = width * (1. / widthFactor - 1.) / 2.; // offset to be added to y to accomodate for a smaller/scaled bar width
+		const double scalingOffset = width * (1. / widthFactor - 1.) / 2.; // offset to be added to y to accommodate for a smaller/scaled bar width
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
 			if (!column->isValid(i) || column->isMasked(i))
@@ -962,7 +962,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 	case BarPlot::Type::Stacked_100_Percent: {
 		double width = m_groupWidth - 2 * m_groupGap; // bar width
 		width *= widthFactor; // scaled bar width
-		const double scalingOffset = width * (1. / widthFactor - 1.) / 2.; // offset to be added to x to accomodate for a smaller/scaled bar width
+		const double scalingOffset = width * (1. / widthFactor - 1.) / 2.; // offset to be added to x to accommodate for a smaller/scaled bar width
 		int valueIndex = 0;
 
 		for (int i = 0; i < column->rowCount(); ++i) {

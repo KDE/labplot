@@ -38,7 +38,7 @@ CURVE_COLUMN_CONNECT(ProcessBehaviorChart, Data2, data2, recalc)
  *
  * The sub-types XmR, mR, XbarR, R, XbarS, S, P, NP, C, U are implemented and the implementation follows
  * the conventions used in the book "Making Sense of Data", Donald J. Wheeler.
- * The visual properties of the plotted line for the controll limits and for the actual data can be modified
+ * The visual properties of the plotted line for the control limits and for the actual data can be modified
  * independently of each other.
  *
  * \ingroup CartesianPlots
@@ -357,7 +357,7 @@ int ProcessBehaviorChart::xIndexCount() const {
 		return 0;
 
 	int count = d->dataColumn->rowCount();
-	// subract the remainder to handle complete samples only for chart types where one point per sample is plotted
+	// subtract the remainder to handle complete samples only for chart types where one point per sample is plotted
 	if (d->type == ProcessBehaviorChart::Type::XbarR || d->type == ProcessBehaviorChart::Type::R || d->type == ProcessBehaviorChart::Type::XbarS
 		|| d->type == ProcessBehaviorChart::Type::S) {
 		const int remainder = count % d->sampleSize;
@@ -912,7 +912,7 @@ void ProcessBehaviorChartPrivate::recalc() {
 		return;
 	}
 
-	// supress retransforms in all internal curves while modifying the data,
+	// suppress retransforms in all internal curves while modifying the data,
 	// everything will be retransformend at the very end
 	dataCurve->setSuppressRetransform(true);
 	centerCurve->setSuppressRetransform(true);
@@ -1009,7 +1009,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 		|| type == ProcessBehaviorChart::Type::S) {
 		const int remainder = count % sampleSize;
 		if (remainder > 0) {
-			count -= remainder; // subract the remainder to handle complete samples only
+			count -= remainder; // subtract the remainder to handle complete samples only
 			Q_EMIT q->statusInfo(i18n("The last sample is incomplete and was omitted."));
 		}
 	}

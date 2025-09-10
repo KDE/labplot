@@ -1244,7 +1244,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	worksheet->setComment(QLatin1String(graph.label.c_str()));
 
 	// TODO: width, height, view mode (print view, page view, window view, draft view)
-	// Origin allows to freely resize the window and ajusts the size of the plot (layer) automatically
+	// Origin allows to freely resize the window and adjusts the size of the plot (layer) automatically
 	// by keeping a certain width-to-height ratio. It's not clear what the actual size of the plot/layer is and how to handle this.
 	// For now we simply create a new worksheet here with it's default size and make it using the whole view size.
 	// Later we can decide to use one of the following properties:
@@ -1396,7 +1396,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			position.point.setY(ratios.height());
 			position.horizontalPosition = WorksheetElement::HorizontalPosition::Relative;
 			position.verticalPosition = WorksheetElement::VerticalPosition::Relative;
-			// achor depending on rotation
+			// anchor depending on rotation
 			auto rotation = label->rotationAngle();
 			auto hAlign = WorksheetElement::HorizontalAlignment::Left;
 			auto vAlign = WorksheetElement::VerticalAlignment::Top;
@@ -1554,7 +1554,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		DEBUG(Q_FUNC_INFO << ", page size = " << graphSize.width() << "/" << graphSize.height())
 		CartesianPlotLegend::PositionWrapper position;
 		QSizeF relativePosition(legendRect.left / (double)graphSize.width(), legendRect.top / (double)graphSize.height());
-		// achor depending on rotation
+		// anchor depending on rotation
 		auto rotation = originLegend.rotation;
 		if (rotation > 45 && rotation <= 135) // left/bottom
 			relativePosition.setHeight(legendRect.bottom / (double)graphSize.height());
@@ -1568,7 +1568,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 
 		position.point.setX(relativePosition.width());
 		position.point.setY(relativePosition.height());
-		// achor depending on rotation
+		// anchor depending on rotation
 		position.horizontalPosition = WorksheetElement::HorizontalPosition::Relative;
 		position.verticalPosition = WorksheetElement::VerticalPosition::Relative;
 		auto hAlign = WorksheetElement::HorizontalAlignment::Left;
@@ -1636,7 +1636,7 @@ void OriginProjectParser::loadGraphLayer(const Origin::GraphLayer& layer,
 		// position
 		// determine the relative position to the graph
 		QSizeF relativePosition(t.clientRect.left / (double)graphSize.width(), t.clientRect.top / (double)graphSize.height());
-		// achor depending on rotation
+		// anchor depending on rotation
 		if (t.rotation > 45 && t.rotation <= 135) // left/bottom
 			relativePosition.setHeight(t.clientRect.bottom / (double)graphSize.height());
 		else if (t.rotation > 135 && t.rotation <= 225) { // right/bottom
@@ -1865,7 +1865,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 
 						DEBUG(Q_FUNC_INFO << ", legend curve string final = \"" << legendCurveString.toStdString() << "\"")
 
-						legendCurveString = legendCurveString.trimmed(); // remove leading and trailing whitspaces for curve name
+						legendCurveString = legendCurveString.trimmed(); // remove leading and trailing whitespaces for curve name
 						legendCurveString.remove(QRegularExpression(QStringLiteral("\\\\l\\(\\d+\\)"))); // remove left over "\l(X)" (TO)
 						if (!legendCurveString.isEmpty())
 							curveName = legendCurveString;
@@ -1890,7 +1890,7 @@ void OriginProjectParser::loadCurves(const Origin::GraphLayer& layer, CartesianP
 					}
 				} else { // error "curves"
 					DEBUG(Q_FUNC_INFO << ", ERROR CURVE. curve index = " << curveIndex)
-					// find corresponing curve to add error column
+					// find corresponding curve to add error column
 					// we use the previous curve if it has the same y column
 					if (!preview && plot->childCount<XYCurve>() > 0) { // curves not available in preview
 						auto childIndex = plot->childCount<XYCurve>() - 1; // last curve
@@ -2390,7 +2390,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 		DEBUG(Q_FUNC_INFO << ", axis title final = \"" << STDSTRING(titleText) << "\"");
 
-		// use axisFormat.fontSize to override the global font size for the hmtl string
+		// use axisFormat.fontSize to override the global font size for the html string
 		DEBUG(Q_FUNC_INFO << ", axis font size = " << axisFormat.label.fontSize)
 		QTextEdit te(titleText);
 		te.selectAll();
@@ -3443,7 +3443,7 @@ QString OriginProjectParser::parseOriginTags(const QString& str) const {
 	line.replace(QLatin1Char('\t'), QLatin1String("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"));
 
 	// In PCRE2 (which is what QRegularExpression uses) variable-length lookbehind is supposed to be
-	// exprimental in Perl 5.30; which means it doesn't work at the moment, i.e. using a variable-length
+	// experimental in Perl 5.30; which means it doesn't work at the moment, i.e. using a variable-length
 	// negative lookbehind isn't valid syntax from QRegularExpression POV.
 	// Ultimately we have to reverse the string and use a negative _lookahead_ instead.
 	// The goal is to temporatily replace '(' and ')' that don't denote tags; this is so that we

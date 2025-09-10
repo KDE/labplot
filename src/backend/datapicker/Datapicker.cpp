@@ -184,7 +184,7 @@ void Datapicker::setChildSelectedInView(int index, bool selected) {
 
 	--index; //-1 because of the first tab in the view being reserved for the plot image and curves
 
-	// select/deselect the data spreadhseets
+	// select/deselect the data spreadsheets
 	auto spreadsheets = children<const Spreadsheet>(ChildIndexFlag::Recursive);
 	const AbstractAspect* aspect = spreadsheets.at(index);
 	if (selected) {

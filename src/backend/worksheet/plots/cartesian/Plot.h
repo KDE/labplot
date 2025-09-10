@@ -77,7 +77,7 @@ public:
 
 	// TODO: make protected and use friend classes if access required!
 	/*!
-	 * recalculates the internal structures (additional data containers, drawing primitives, etc.) on data changes in the source data colums.
+	 * recalculates the internal structures (additional data containers, drawing primitives, etc.) on data changes in the source data columns.
 	 * these structures are used in the plot during the actual drawing of the plot on geometry changes.
 	 */
 	virtual void recalc() = 0;

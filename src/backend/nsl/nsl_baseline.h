@@ -12,7 +12,7 @@
 
 #include <cstdlib>
 
-/* remove mimimum base line from data */
+/* remove minimum base line from data */
 void nsl_baseline_remove_minimum(double* data, size_t n);
 /* remove maximum base line from data */
 void nsl_baseline_remove_maximum(double* data, size_t n);

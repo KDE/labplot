@@ -79,7 +79,7 @@ void nsl_baseline_remove_median(double* data, const size_t n) {
 	free(tmp_data);
 }
 
-/* do a linear interpolation using first and last point and substract that */
+/* do a linear interpolation using first and last point and subtract that */
 int nsl_baseline_remove_endpoints(const double* xdata, double* ydata, const size_t n) {
 	// not possible
 	if (xdata[0] == xdata[n - 1])
@@ -94,7 +94,7 @@ int nsl_baseline_remove_endpoints(const double* xdata, double* ydata, const size
 	return 0;
 }
 
-/* do a linear regression and substract that */
+/* do a linear regression and subtract that */
 int nsl_baseline_remove_linreg(double* xdata, double* ydata, const size_t n) {
 	double c0, c1, cov00, cov01, cov11, chisq;
 	gsl_fit_linear(xdata, 1, ydata, 1, n, &c0, &c1, &cov00, &cov01, &cov11, &chisq);

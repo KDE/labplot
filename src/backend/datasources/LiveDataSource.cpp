@@ -749,7 +749,7 @@ QString LiveDataSource::serialPortErrorEnumToString(QSerialPort::SerialPortError
 		msg = i18n("Device not available.");
 		break;
 	case QSerialPort::TimeoutError:
-		msg = i18n("Timeout occured.");
+		msg = i18n("Timeout occurred.");
 		break;
 	case QSerialPort::WriteError:
 	case QSerialPort::UnsupportedOperationError:

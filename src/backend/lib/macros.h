@@ -38,7 +38,7 @@ private:
 };
 
 /*
- * Cleanup class which can be used to automatically cleaning up after desctruction using a lambda
+ * Cleanup class which can be used to automatically cleaning up after destruction using a lambda
  * Example:
  *    CleanupNoArguments cleanup([](){
  *        // Cleanup code

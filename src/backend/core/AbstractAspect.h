@@ -63,7 +63,7 @@ enum class AspectType : quint64 {
 
 	HypothesisTest = 0x0420080,
 
-	// continious improvement plots
+	// continuous improvement plots
 	ProcessBehaviorChart = 0x0211000,
 	RunChart = 0x0211001,
 

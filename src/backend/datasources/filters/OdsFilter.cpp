@@ -275,7 +275,7 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 	size_t actualRows = ranges.last.row - ranges.first.row + 1;
 	size_t actualEndRow = (endRow == -1 ? ranges.last.row + 1 : endRow);
 	if ((size_t)startRow > actualRows)
-		startRow = 1; // start from the begining
+		startRow = 1; // start from the beginning
 	DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << " " << endRow)
 	DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " " << endColumn)
 	actualRows = std::min(actualRows - startRow, (size_t)(actualEndRow - startRow)) + 1;
@@ -283,7 +283,7 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 	size_t actualCols = ranges.last.column - ranges.first.column + 1;
 	size_t actualEndColumn = (endColumn == -1 ? ranges.last.column + 1 : endColumn);
 	if ((size_t)startColumn > actualCols)
-		startColumn = 1; // start from the begining
+		startColumn = 1; // start from the beginning
 	actualCols = std::min(actualCols - startColumn, (size_t)(actualEndColumn - startColumn)) + 1;
 
 	DEBUG(Q_FUNC_INFO << ", actual rows/cols = " << actualRows << " " << actualCols)
@@ -313,7 +313,7 @@ void OdsFilterPrivate::readCurrentSheet(const QString& fileName, AbstractDataSou
 				break;
 			case ixion::cell_t::formula: {
 				auto formula = model.get_formula_result(pos);
-				switch (formula.get_type()) { // conside formula type
+				switch (formula.get_type()) { // consider formula type
 				case ixion::formula_result::result_type::value:
 					columnModes[col] = AbstractColumn::ColumnMode::Double;
 					break;

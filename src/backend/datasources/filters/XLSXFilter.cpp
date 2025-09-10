@@ -263,7 +263,7 @@ XLSXFilterPrivate::~XLSXFilterPrivate() {
 
 // TODO
 //  alternating row colors?
-//  bold "header" - colum names
+//  bold "header" - column names
 void XLSXFilterPrivate::write(const QString& fileName, AbstractDataSource* dataSource) {
 #ifdef HAVE_QXLSX
 	if (!m_document || fileName.compare(m_fileName)) {
