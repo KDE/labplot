@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-09 00:41+0000\n"
-"PO-Revision-Date: 2025-09-08 23:42+0200\n"
+"PO-Revision-Date: 2025-09-09 09:47+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -7650,20 +7650,20 @@ msgstr "Standaardfout in gemiddeld verschil"
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:102
 #, kde-format
 msgid "Paired Two-Sample t-Test"
-msgstr ""
+msgstr "Gepaarde twee-monsters t-Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:500
 #: src/backend/statistics/HypothesisTest.cpp:1748
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:103
 #, kde-format
 msgid "Welch t-Test"
-msgstr ""
+msgstr "Welch t-Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:510
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:104
 #, kde-format
 msgid "One-Way ANOVA Test"
-msgstr ""
+msgstr "Eenrichtingsverkeer ANOVA Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:512
 #, kde-format
@@ -7971,10 +7971,9 @@ msgid "At least two columns are required."
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:616
-#, fuzzy, kde-format
-#| msgid "Column '%1' requires at least %L2 samples."
+#, kde-format
 msgid "Column '%1' requires at least %2 samples."
-msgstr "Kolom '%1' vereist minstens %L2 monsters."
+msgstr "Kolom '%1' vereist minstens %2 monsters."
 
 #: src/backend/statistics/HypothesisTest.cpp:620
 #, kde-format
@@ -8074,10 +8073,9 @@ msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:1429
 #: src/backend/statistics/HypothesisTest.cpp:1496
-#, fuzzy, kde-format
-#| msgid "Column '%1' must be of numeric type."
+#, kde-format
 msgid "Column '%1' must be of integer type."
-msgstr "Kolom '%1' moet van het type numeriek zijn."
+msgstr "Kolom '%1' moet van het type geheel getal zijn."
 
 #: src/backend/statistics/HypothesisTest.cpp:1468
 #, kde-format

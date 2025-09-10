@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-09 00:41+0000\n"
-"PO-Revision-Date: 2025-09-08 18:22+0200\n"
+"PO-Revision-Date: 2025-09-09 09:15+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -8055,10 +8055,9 @@ msgid "At least two columns are required."
 msgstr "Es requereixen almenys dues columnes."
 
 #: src/backend/statistics/HypothesisTest.cpp:616
-#, fuzzy, kde-format
-#| msgid "Column '%1' requires at least %L2 samples."
+#, kde-format
 msgid "Column '%1' requires at least %2 samples."
-msgstr "La columna «%1» requereix almenys %L2 mostres."
+msgstr "La columna «%1» requereix almenys %2 mostres."
 
 #: src/backend/statistics/HypothesisTest.cpp:620
 #, kde-format
@@ -8178,8 +8177,7 @@ msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:1429
 #: src/backend/statistics/HypothesisTest.cpp:1496
-#, fuzzy, kde-format
-#| msgid "Column '%1' must be of integer."
+#, kde-format
 msgid "Column '%1' must be of integer type."
 msgstr "La columna «%1» cal que sigui de tipus enter."
 

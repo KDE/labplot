@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-09 00:41+0000\n"
-"PO-Revision-Date: 2025-09-08 21:01+0200\n"
+"PO-Revision-Date: 2025-09-09 16:10+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -7697,12 +7697,12 @@ msgstr "Summa av kvadrater inom grupper"
 #: src/backend/statistics/HypothesisTest.cpp:518
 #, kde-format
 msgid "Mean Squares Between Groups"
-msgstr ""
+msgstr "Kvadratiskt medelvärde mellan grupper"
 
 #: src/backend/statistics/HypothesisTest.cpp:518
 #, kde-format
 msgid "Mean Squares Within Groups"
-msgstr ""
+msgstr "Kvadratiskt medelvärde inom grupper"
 
 #: src/backend/statistics/HypothesisTest.cpp:523
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:105
@@ -7765,7 +7765,7 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:538
 #, kde-format
 msgid "U"
-msgstr ""
+msgstr "U"
 
 #: src/backend/statistics/HypothesisTest.cpp:539
 #: src/backend/statistics/HypothesisTest.cpp:557
@@ -7809,7 +7809,7 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:591
 #, kde-format
 msgid "H"
-msgstr ""
+msgstr "H"
 
 #: src/backend/statistics/HypothesisTest.cpp:553
 #: src/backend/statistics/HypothesisTest.cpp:1764
@@ -7826,7 +7826,7 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:556
 #, kde-format
 msgid "W"
-msgstr ""
+msgstr "W"
 
 #: src/backend/statistics/HypothesisTest.cpp:557
 #, kde-format
@@ -7878,7 +7878,7 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:568
 #, kde-format
 msgid "Q"
-msgstr ""
+msgstr "Q"
 
 #: src/backend/statistics/HypothesisTest.cpp:573
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:112
@@ -7895,7 +7895,7 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:583
 #, kde-format
 msgid "Chi2"
-msgstr ""
+msgstr "Chi2"
 
 #: src/backend/statistics/HypothesisTest.cpp:581
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:111
@@ -7951,32 +7951,32 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:600
 #, kde-format
 msgid "N/A"
-msgstr ""
+msgstr "Inte tillgängligt"
 
 #: src/backend/statistics/HypothesisTest.cpp:604
 #, kde-format
 msgid "Test result is not available."
-msgstr ""
+msgstr "Testresultat är inte tillgängligt."
 
 #: src/backend/statistics/HypothesisTest.cpp:608
 #, kde-format
 msgid "Two columns are required for this test."
-msgstr ""
+msgstr "Två kolumner krävs för testen."
 
 #: src/backend/statistics/HypothesisTest.cpp:612
 #, kde-format
 msgid "At least two columns are required."
-msgstr ""
+msgstr "Åtminstone två kolumner krävs."
 
 #: src/backend/statistics/HypothesisTest.cpp:616
 #, kde-format
 msgid "Column '%1' requires at least %2 samples."
-msgstr ""
+msgstr "Kolumn '%1' kräver minst %2 samplingar."
 
 #: src/backend/statistics/HypothesisTest.cpp:620
 #, kde-format
 msgid "The size of each sample must be equal."
-msgstr ""
+msgstr "Storleken på varje samling måste vara lika."
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
 #: src/backend/statistics/HypothesisTest.cpp:624
@@ -7989,7 +7989,7 @@ msgstr "Medelvärde"
 #: src/backend/statistics/HypothesisTest.cpp:642
 #, kde-format
 msgid "No variable columns provided."
-msgstr ""
+msgstr "Inga variabla kolumner tillhandahållna."
 
 #: src/backend/statistics/HypothesisTest.cpp:887
 #, kde-format
@@ -8071,10 +8071,9 @@ msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:1429
 #: src/backend/statistics/HypothesisTest.cpp:1496
-#, fuzzy, kde-format
-#| msgid "Column '%1' must be of numeric type."
+#, kde-format
 msgid "Column '%1' must be of integer type."
-msgstr "Kolumn %1 måste vara numerisk."
+msgstr "Kolumn '%1' måste vara av en heltalstyp."
 
 #: src/backend/statistics/HypothesisTest.cpp:1468
 #, kde-format
@@ -8112,7 +8111,7 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:1553
 #, kde-format
 msgid "Three columns are required."
-msgstr ""
+msgstr "Tre kolumner krävs."
 
 #: src/backend/statistics/HypothesisTest.cpp:1562
 #, kde-format
@@ -19116,12 +19115,12 @@ msgstr "Analysera och rita upp data"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:679
 #, kde-format
 msgid "Statistical Analysis"
-msgstr ""
+msgstr "Statistisk analys"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:680
 #, kde-format
 msgid "Hypothesis Test"
-msgstr ""
+msgstr "Hypotestest"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:685
 #, kde-format
@@ -19141,7 +19140,7 @@ msgstr "Potensstege"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:953
 #, kde-format
 msgid "Hypothesis Test for %1"
-msgstr ""
+msgstr "Hypotestest för %1"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1180
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1566

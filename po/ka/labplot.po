@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-09 00:41+0000\n"
-"PO-Revision-Date: 2025-09-08 05:31+0200\n"
+"PO-Revision-Date: 2025-09-09 04:49+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -7976,10 +7976,9 @@ msgid "At least two columns are required."
 msgstr "საჭიროა, სულ ცოტა ორი სვეტი."
 
 #: src/backend/statistics/HypothesisTest.cpp:616
-#, fuzzy, kde-format
-#| msgid "Column '%1' requires at least %L2 samples."
+#, kde-format
 msgid "Column '%1' requires at least %2 samples."
-msgstr "სვეტს '%1', სულ ცოტა, %L2 სინჯი სჭირდება."
+msgstr "სვეტს '%1', სულ ცოტა, %2 სინჯი სჭირდება."
 
 #: src/backend/statistics/HypothesisTest.cpp:620
 #, kde-format
@@ -8025,7 +8024,7 @@ msgid ""
 "different. Reject the null Hypothesis"
 msgstr ""
 "მნიშვნელობის დონეზე %1 პოპულაციის საშუალოები მნიშვნელოვნად განსხვავდება. "
-"ნულოვანი ჰიპოთეზა უარყოფილი იქნება."
+"ნულოვანი ჰიპოთეზა უარყოფილი იქნება"
 
 #: src/backend/statistics/HypothesisTest.cpp:977
 #: src/backend/statistics/HypothesisTest.cpp:1045
@@ -8035,7 +8034,7 @@ msgid ""
 "different. Fail to reject the null Hypothesis"
 msgstr ""
 "მნიშვნელობის დონეზე %1 პოპულაციის საშუალოები მნიშვნელოვნად არ განსხვავდება. "
-"ნულოვანი ჰიპოთეზა უარყოფილი არ იქნება."
+"ნულოვანი ჰიპოთეზა უარყოფილი არ იქნება"
 
 #: src/backend/statistics/HypothesisTest.cpp:1098
 #: src/backend/statistics/HypothesisTest.cpp:1161
@@ -8045,7 +8044,7 @@ msgid ""
 "different. Reject the null Hypothesis"
 msgstr ""
 "მნიშვნელობის დონეზე %1 სულ ცოტა 1 ჯგუფის საშუალო მნიშვნელოვნად განსხვავდება. "
-"ნულოვანი ჰიპოთეზა უარყოფილი იქნება."
+"ნულოვანი ჰიპოთეზა უარყოფილი იქნება"
 
 #: src/backend/statistics/HypothesisTest.cpp:1101
 #: src/backend/statistics/HypothesisTest.cpp:1164
@@ -8055,7 +8054,7 @@ msgid ""
 "Fail to reject the null Hypothesis"
 msgstr ""
 "მნიშვნელობის დონეზე %1 სულ ცოტა 1 ჯგუფის საშუალო მნიშვნელოვნად არ "
-"განსხვავდება. ნულოვანი ჰიპოთეზა უარყოფილი არ იქნება."
+"განსხვავდება. ნულოვანი ჰიპოთეზა უარყოფილი არ იქნება"
 
 #: src/backend/statistics/HypothesisTest.cpp:1221
 #: src/backend/statistics/HypothesisTest.cpp:1279
@@ -8066,7 +8065,7 @@ msgid ""
 "significantly different. Reject the null Hypothesis"
 msgstr ""
 "მნიშვნელობის დონეზე %1 სულ ცოტა 1 ჯგუფის განაწილება მნიშვნელოვნად "
-"განსხვავდება. ნულოვანი ჰიპოთეზა უარყოფილი იქნება."
+"განსხვავდება. ნულოვანი ჰიპოთეზა უარყოფილი იქნება"
 
 #: src/backend/statistics/HypothesisTest.cpp:1223
 #: src/backend/statistics/HypothesisTest.cpp:1281
@@ -8077,7 +8076,7 @@ msgid ""
 "distributions. Fail to reject the null Hypothesis"
 msgstr ""
 "მნიშვნელობის დონეზე %1 ჯგუფების განაწილება მნიშვნელოვნად არ განსხვავდება. "
-"ნულოვანი ჰიპოთეზა უარყოფილი არ იქნება."
+"ნულოვანი ჰიპოთეზა უარყოფილი არ იქნება"
 
 #: src/backend/statistics/HypothesisTest.cpp:1401
 #, kde-format
@@ -8086,7 +8085,7 @@ msgid ""
 "Reject the null Hypothesis"
 msgstr ""
 "მნიშვნელობის დონეზე %1 სულ ცოტა 1 ჯგუფი მნიშვნელოვნად განსხვავდება. ნულოვანი "
-"ჰიპოთეზა უარყოფილი იქნება."
+"ჰიპოთეზა უარყოფილი იქნება"
 
 #: src/backend/statistics/HypothesisTest.cpp:1403
 #, kde-format
@@ -8095,14 +8094,13 @@ msgid ""
 "to reject the null Hypothesis"
 msgstr ""
 "მნიშვნელობის დონეზე %1 ჯგუფები მნიშვნელოვნად არ განსხვავდება. ნულოვანი "
-"ჰიპოთეზა უარყოფილი არ იქნება."
+"ჰიპოთეზა უარყოფილი არ იქნება"
 
 #: src/backend/statistics/HypothesisTest.cpp:1429
 #: src/backend/statistics/HypothesisTest.cpp:1496
-#, fuzzy, kde-format
-#| msgid "Column '%1' must be of integer."
+#, kde-format
 msgid "Column '%1' must be of integer type."
-msgstr "სვეტი '%1' მთელი რიცხვი უნდა იყოს."
+msgstr "სვეტი '%1' მთელი რიცხვის ტიპის უნდა იყოს."
 
 #: src/backend/statistics/HypothesisTest.cpp:1468
 #, kde-format
