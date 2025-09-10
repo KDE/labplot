@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-09 00:41+0000\n"
-"PO-Revision-Date: 2025-09-08 22:27+0300\n"
+"PO-Revision-Date: 2025-09-09 15:06+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -8046,10 +8046,9 @@ msgid "At least two columns are required."
 msgstr "Потрібно принаймні два стовпчики."
 
 #: src/backend/statistics/HypothesisTest.cpp:616
-#, fuzzy, kde-format
-#| msgid "Column '%1' requires at least %L2 samples."
+#, kde-format
 msgid "Column '%1' requires at least %2 samples."
-msgstr "Для стовпчика «%1» потрібно принаймні %L2 вибірок."
+msgstr "Для стовпчика «%1» потрібно принаймні %2 вибірок."
 
 #: src/backend/statistics/HypothesisTest.cpp:620
 #, kde-format
@@ -8169,8 +8168,7 @@ msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:1429
 #: src/backend/statistics/HypothesisTest.cpp:1496
-#, fuzzy, kde-format
-#| msgid "Column '%1' must be of integer."
+#, kde-format
 msgid "Column '%1' must be of integer type."
 msgstr "Значенням у стовпчику «%1» має бути ціле число."
 

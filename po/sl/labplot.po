@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-09 00:41+0000\n"
-"PO-Revision-Date: 2025-09-08 10:57+0200\n"
+"PO-Revision-Date: 2025-09-09 09:12+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Poedit 3.7\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -7490,10 +7490,10 @@ msgstr "Stolpec"
 #, kde-format
 msgid "One column is required."
 msgid_plural "%1 columns are required."
-msgstr[0] "Zahtevano je %1 stolpcev"
-msgstr[1] "Zahtevan je %1 stolpec"
-msgstr[2] "Zahtevana sta %1 stolpca"
-msgstr[3] "Zahtevani so %1 stolpci"
+msgstr[0] "Zahtevano je %1 stolpcev."
+msgstr[1] "Zahtevan je %1 stolpec."
+msgstr[2] "Zahtevana sta %1 stolpca."
+msgstr[3] "Zahtevani so %1 stolpci."
 
 #: src/backend/statistics/HypothesisTest.cpp:56
 #, kde-format
@@ -8012,10 +8012,9 @@ msgid "At least two columns are required."
 msgstr "Zahtevana sta vsaj dva stolpca."
 
 #: src/backend/statistics/HypothesisTest.cpp:616
-#, fuzzy, kde-format
-#| msgid "Column '%1' requires at least %L2 samples."
+#, kde-format
 msgid "Column '%1' requires at least %2 samples."
-msgstr "Stolpec '%1' zahteva vsaj %L2 vzorcev."
+msgstr "Stolpec '%1' zahteva vsaj %2 vzorcev."
 
 #: src/backend/statistics/HypothesisTest.cpp:620
 #, kde-format
@@ -8061,7 +8060,7 @@ msgid ""
 "different. Reject the null Hypothesis"
 msgstr ""
 "Pri stopnji značilnosti %1 se povprečja populacije bistveno razlikujejo. "
-"Zavrnite ničelno hipotezo."
+"Zavrnite ničelno hipotezo"
 
 #: src/backend/statistics/HypothesisTest.cpp:977
 #: src/backend/statistics/HypothesisTest.cpp:1045
@@ -8071,7 +8070,7 @@ msgid ""
 "different. Fail to reject the null Hypothesis"
 msgstr ""
 "Pri stopnji značilnosti %1 se povprečja populacije bistveno ne razlikujejo. "
-"Ničelne hipoteze ni mogoče zavrniti."
+"Ničelne hipoteze ni mogoče zavrniti"
 
 #: src/backend/statistics/HypothesisTest.cpp:1098
 #: src/backend/statistics/HypothesisTest.cpp:1161
@@ -8081,7 +8080,7 @@ msgid ""
 "different. Reject the null Hypothesis"
 msgstr ""
 "Pri stopnji značilnosti %1 se vsaj eno povprečje skupine bistveno razlikuje. "
-"Zavrnite ničelno hipotezo."
+"Zavrnite ničelno hipotezo"
 
 #: src/backend/statistics/HypothesisTest.cpp:1101
 #: src/backend/statistics/HypothesisTest.cpp:1164
@@ -8091,7 +8090,7 @@ msgid ""
 "Fail to reject the null Hypothesis"
 msgstr ""
 "Pri stopnji značilnosti %1 ni bistvenih razlik med povprečji skupin. Ničelne "
-"hipoteze ni mogoče zavrniti."
+"hipoteze ni mogoče zavrniti"
 
 #: src/backend/statistics/HypothesisTest.cpp:1221
 #: src/backend/statistics/HypothesisTest.cpp:1279
@@ -8102,7 +8101,7 @@ msgid ""
 "significantly different. Reject the null Hypothesis"
 msgstr ""
 "Pri stopnji značilnosti %1 se vsaj ena porazdelitev skupine bistveno "
-"razlikuje. Zavrnite ničelno hipotezo."
+"razlikuje. Zavrnite ničelno hipotezo"
 
 #: src/backend/statistics/HypothesisTest.cpp:1223
 #: src/backend/statistics/HypothesisTest.cpp:1281
@@ -8113,7 +8112,7 @@ msgid ""
 "distributions. Fail to reject the null Hypothesis"
 msgstr ""
 "Pri stopnji značilnosti %1 ni bistvene razlike med porazdelitvami skupin. "
-"Ničelne hipoteze ni mogoče zavrniti."
+"Ničelne hipoteze ni mogoče zavrniti"
 
 #: src/backend/statistics/HypothesisTest.cpp:1401
 #, kde-format
@@ -8122,7 +8121,7 @@ msgid ""
 "Reject the null Hypothesis"
 msgstr ""
 "Pri stopnji značilnosti %1 se vsaj ena skupina bistveno razlikuje. Zavrnite "
-"ničelno hipotezo."
+"ničelno hipotezo"
 
 #: src/backend/statistics/HypothesisTest.cpp:1403
 #, kde-format
@@ -8131,14 +8130,13 @@ msgid ""
 "to reject the null Hypothesis"
 msgstr ""
 "Pri stopnji značilnosti %1 ni bistvene razlike med skupinama. Ničelne "
-"hipoteze ni mogoče zavrniti."
+"hipoteze ni mogoče zavrniti"
 
 #: src/backend/statistics/HypothesisTest.cpp:1429
 #: src/backend/statistics/HypothesisTest.cpp:1496
-#, fuzzy, kde-format
-#| msgid "Column '%1' must be of integer."
+#, kde-format
 msgid "Column '%1' must be of integer type."
-msgstr "Stolpec '%1' mora biti celo število."
+msgstr "Stolpec '%1' mora biti celo-številski."
 
 #: src/backend/statistics/HypothesisTest.cpp:1468
 #, kde-format
@@ -8147,7 +8145,7 @@ msgid ""
 "expected frequency distribution. Reject the null Hypothesis"
 msgstr ""
 "Pri stopnji značilnosti %1 opazovane frekvence ne sledijo pričakovani "
-"porazdelitvi frekvenc. Zavrnite ničelno hipotezo."
+"porazdelitvi frekvenc. Zavrnite ničelno hipotezo"
 
 #: src/backend/statistics/HypothesisTest.cpp:1472
 #, kde-format
@@ -8156,7 +8154,7 @@ msgid ""
 "frequency distribution. Fail to reject the null Hypothesis"
 msgstr ""
 "Pri stopnji značilnosti %1 opazovane frekvence sledijo pričakovani "
-"porazdelitvi frekvenc. Ničelne hipoteze ni mogoče zavrniti."
+"porazdelitvi frekvenc. Ničelne hipoteze ni mogoče zavrniti"
 
 #: src/backend/statistics/HypothesisTest.cpp:1516
 #, kde-format
@@ -8170,7 +8168,7 @@ msgid ""
 "Reject the null Hypothesis"
 msgstr ""
 "Pri stopnji značilnosti %1 sta obe kategorični spremenljivki odvisni. "
-"Zavrnite ničelno hipotezo."
+"Zavrnite ničelno hipotezo"
 
 #: src/backend/statistics/HypothesisTest.cpp:1535
 #, kde-format
@@ -8179,7 +8177,7 @@ msgid ""
 "Fail to reject the null Hypothesis"
 msgstr ""
 "Pri stopnji značilnosti %1 sta obe kategorični spremenljivki neodvisni. "
-"Ničelne hipoteze ni mogoče zavrniti."
+"Ničelne hipoteze ni mogoče zavrniti"
 
 #: src/backend/statistics/HypothesisTest.cpp:1553
 #, kde-format
@@ -8233,7 +8231,7 @@ msgid ""
 "different. Reject the null Hypothesis"
 msgstr ""
 "Pri stopnji značilnosti %1 se krivulje preživetja bistveno razlikujejo. "
-"Zavrnite ničelno hipotezo."
+"Zavrnite ničelno hipotezo"
 
 #: src/backend/statistics/HypothesisTest.cpp:1640
 #, kde-format
@@ -8242,7 +8240,7 @@ msgid ""
 "curves. Fail to reject the null Hypothesis"
 msgstr ""
 "Pri stopnji značilnosti %1 ni pomembne razlike med krivuljami preživetja. "
-"Ničelne hipoteze ni mogoče zavrniti."
+"Ničelne hipoteze ni mogoče zavrniti"
 
 #: src/backend/statistics/HypothesisTest.cpp:1752
 #, kde-format
