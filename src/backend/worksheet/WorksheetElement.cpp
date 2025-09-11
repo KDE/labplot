@@ -62,7 +62,7 @@ void WorksheetElement::finalizeAdd() {
 	DEBUG(Q_FUNC_INFO)
 	Q_D(WorksheetElement);
 	if (!d->m_plot) {
-		// determine the plot parent which is not neccessarily the parent aspect like for
+		// determine the plot parent which is not necessarily the parent aspect like for
 		// * child CustomPoint in InfoeElement
 		// * child XYCurves in QQPlot
 		// * etc.
@@ -168,7 +168,7 @@ bool WorksheetElementPrivate::swapVisible(bool on) {
 
 	// When making a graphics item invisible, it gets deselected in the scene.
 	// In this case we don't want to deselect the item in the project explorer.
-	// We need to supress the deselection in the view.
+	// We need to suppress the deselection in the view.
 	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
 	if (worksheet) {
 		worksheet->suppressSelectionChangedEvent(true);
@@ -422,7 +422,7 @@ QRectF WorksheetElement::parentRect() const {
  * \param parentPos Element position in parent coordinates
  * \param parentRect Parent data rect
  * \param rect element's rect
- * \param position contains the alignement of the element to the parent
+ * \param position contains the alignment of the element to the parent
  * \return distance between the parent position to the element
  */
 QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, PositionWrapper position) const {
@@ -955,7 +955,7 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 void WorksheetElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	// when moving the element with the mouse (left button pressed), the move event doesn't have
 	// the information about the pressed button anymore (NoButton) that is needed in mouseMoveEvent()
-	// to decide if the element move was started or not. So, we check the pressed buttong here.
+	// to decide if the element move was started or not. So, we check the pressed button here.
 	if (event->button() == Qt::LeftButton)
 		m_leftButtonPressed = true;
 

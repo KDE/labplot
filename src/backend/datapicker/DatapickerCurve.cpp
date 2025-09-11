@@ -235,7 +235,7 @@ void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 	}
 	}
 
-	// the default spreadsheet can have arbitrary number of colums as per user's default template.
+	// the default spreadsheet can have arbitrary number of columns as per user's default template.
 	// make sure we have the columns for x and y only
 	if (m_datasheet->columnCount() < 1)
 		appendColumn(xLabel);

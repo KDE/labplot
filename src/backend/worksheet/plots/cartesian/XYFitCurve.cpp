@@ -2691,7 +2691,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	fitResult.iterations = iter;
 	fitResult.dof = n - (np - nf); // samples - (parameter - fixed parameter)
 
-	// gsl_blas_dnrm2() - computes the Euclidian norm (||r||_2 = \sqrt {\sum r_i^2}) of the vector with the elements weight[i]*(Yi - y[i])
+	// gsl_blas_dnrm2() - computes the Euclidean norm (||r||_2 = \sqrt {\sum r_i^2}) of the vector with the elements weight[i]*(Yi - y[i])
 	// gsl_blas_dasum() - computes the absolute sum \sum |r_i| of the elements of the vector with the elements weight[i]*(Yi - y[i])
 	fitResult.sse = gsl_pow_2(gsl_blas_dnrm2(s->f));
 	fitResult.mae = gsl_blas_dasum(s->f) / n;

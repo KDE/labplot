@@ -341,7 +341,7 @@ void SpreadsheetModel::handleAspectsInserted(int first, int last) {
 		connect(col, &Column::formatChanged, this, &SpreadsheetModel::handleDataChange);
 		connect(col, &Column::modeChanged, this, &SpreadsheetModel::handleModeChange);
 		connect(col, &Column::maskingChanged, this, &SpreadsheetModel::handleDataChange);
-		connect(col, &Column::formulaChanged, this, &SpreadsheetModel::handlePlotDesignationChange); // we can re-use the same slot to update the header here
+		connect(col, &Column::formulaChanged, this, &SpreadsheetModel::handlePlotDesignationChange); // we can reuse the same slot to update the header here
 		connect(col->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &SpreadsheetModel::handleDigitsChange);
 	}
 

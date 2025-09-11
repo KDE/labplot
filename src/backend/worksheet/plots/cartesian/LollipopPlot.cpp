@@ -608,7 +608,7 @@ void LollipopPlotPrivate::verticalPlot(int columnIndex) {
 	if (!column)
 		return;
 
-	QVector<QLineF> barLines; // lines for all bars for one colum in scene coordinates
+	QVector<QLineF> barLines; // lines for all bars for one column in scene coordinates
 	QVector<QPointF> symbolPoints;
 
 	const double barGap = m_groupWidth * 0.1; // gap between two bars within a group
@@ -648,7 +648,7 @@ void LollipopPlotPrivate::horizontalPlot(int columnIndex) {
 	if (!column)
 		return;
 
-	QVector<QLineF> barLines; // lines for all bars for one colum in scene coordinates
+	QVector<QLineF> barLines; // lines for all bars for one column in scene coordinates
 	QVector<QPointF> symbolPoints;
 
 	const double barGap = m_groupWidth * 0.1; // gap between two bars within a group

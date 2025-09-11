@@ -17,7 +17,7 @@ If you're reading this on GitHub, please be aware this is just a mirror. The mai
 
 # Project Pages:
 * Visit our [Homepage](https://labplot.kde.org) for more details.
-* The most current stable version as well as nightly builds are avaible in the [download section](https://labplot.kde.org/download/) of our homepage.
+* The most current stable version as well as nightly builds are available in the [download section](https://labplot.kde.org/download/) of our homepage.
 * If you're interested in following the development of the project or would like to contribute,
 visit https://labplot.kde.org/contribute/.
 * For more screenshots, see the [gallery](https://labplot.kde.org/gallery/) on our homepage.
@@ -46,7 +46,7 @@ See also: https://guides.libraries.uc.edu/citing/code
 
 
 # Donate
-We provide LabPlot for free. If you productively use LabPlot and want to financially support its developement in future, please consider donating via [Liberapay](https://liberapay.com/LabPlot/donate)
+We provide LabPlot for free. If you productively use LabPlot and want to financially support its future development, please consider donating via [Liberapay](https://liberapay.com/LabPlot/donate)
 
 
 ## Funding

@@ -777,7 +777,7 @@ void AbstractAspect::duplicate() {
 }
 
 /*!
- * in case the clipboard containts a LabPlot's specific copy&paste content,
+ * in case the clipboard contains LabPlot's specific copy&paste content,
  * this function deserializes the XML string and adds the created aspect as
  * a child to the current aspect ("paste").
  */
@@ -853,9 +853,9 @@ void AbstractAspect::paste(bool duplicate, int index) {
 
 /*!
  * helper function determining whether the current content of the clipboard
- * contants the labplot specific copy&paste XML content. In case a valid content
+ * contains the labplot specific copy&paste XML content. In case valid content
  * is available, the aspect type of the object to be pasted is returned.
- * AspectType::AbstractAspect is returned otherwise.
+ * otherwise, AspectType::AbstractAspect is returned.
  */
 AspectType AbstractAspect::clipboardAspectType(QString& name) {
 	AspectType type = AspectType::AbstractAspect;

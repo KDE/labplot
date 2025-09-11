@@ -804,7 +804,7 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode, voi
 }
 
 /*!
- * initializes the interal vector for data. This is where the actual allocation on the heap is happening.
+ * initializes the interval vector for data. This is where the actual allocation on the heap is happening.
  * If \c resize is set to \false, the vector is not resized after its creation. This should be used
  * if there is already a vector created somewhere and the content of the column is going to be replaced
  * with the existing content where the memory was already allocated.
@@ -2307,7 +2307,7 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
 		return;
 
 	// avoid circular dependencies - the current column cannot be part of the variable columns.
-	// this should't actually happen because of the checks done when the formula is defined,
+	// this shouldn't actually happen because of the checks done when the formula is defined,
 	// but in case we have bugs somewhere or somebody manipulated the project xml file we add
 	// a sanity check to avoid recursive calls here and crash because of the stack overflow.
 	if (column == q)
@@ -2325,7 +2325,7 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
 
 /*!
  * helper function used in \c Column::load() to set parameters read from the xml file.
- * \param variableColumnPaths is used to restore the pointers to columns from pathes
+ * \param variableColumnPaths is used to restore the pointers to columns from paths
  * after the project was loaded in Project::load().
  */
 void ColumnPrivate::setFormula(const QString& formula,
@@ -2387,7 +2387,7 @@ struct PayloadColumn : public Parsing::Payload {
 		return NAN;                                                                                                                                            \
 	}
 
-// Constant functions, which return always the same value independet of the row index
+// Constant functions, which always return the same value independent of the row index
 COLUMN_FUNCTION(Size, statistics().size)
 COLUMN_FUNCTION(Min, minimum())
 COLUMN_FUNCTION(Max, maximum())

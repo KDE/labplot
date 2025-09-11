@@ -571,7 +571,7 @@ STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetJitteringEnabled, bool, jitteringEnabled, re
 void BoxPlot::setJitteringEnabled(bool enabled) {
 	Q_D(BoxPlot);
 	if (enabled != d->jitteringEnabled)
-		exec(new BoxPlotSetJitteringEnabledCmd(d, enabled, ki18n("%1: jitterring changed")));
+		exec(new BoxPlotSetJitteringEnabledCmd(d, enabled, ki18n("%1: jittering changed")));
 }
 
 // margin plots

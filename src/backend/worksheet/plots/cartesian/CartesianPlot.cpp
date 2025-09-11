@@ -161,7 +161,7 @@ void CartesianPlot::init(bool loading) {
 	connect(this, &AbstractAspect::childAspectAdded, this, &CartesianPlot::childAdded);
 	connect(this, &AbstractAspect::childAspectRemoved, this, &CartesianPlot::childRemoved);
 
-	// if not loading, initialize the default properties (read in load() otherweise)
+	// if not loading, initialize the default properties (read in load() otherwise)
 	if (loading)
 		return;
 
@@ -1889,7 +1889,7 @@ void CartesianPlot::addPlot(QAction* action) {
 		addChild(new LollipopPlot(i18n("Lollipop Plot")));
 		break;
 
-	// continious improvement plots
+	// continuous improvement plots
 	case Plot::PlotType::ProcessBehaviorChart:
 		addChild(new ProcessBehaviorChart(i18n("Process Behavior Chart")));
 		break;
@@ -2414,7 +2414,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		DEBUG(Q_FUNC_INFO << ", CURVE")
 		// x data
 		connect(curve, &XYCurve::xColumnChanged, this, [this, curve](const AbstractColumn* column) {
-			if (curveTotalCount() == 1) // first curve addded
+			if (curveTotalCount() == 1) // first curve added
 				checkAxisFormat(curve->coordinateSystemIndex(), column, Axis::Orientation::Horizontal);
 		});
 		connect(curve, &XYCurve::xDataChanged, [this, curve]() {
@@ -2673,7 +2673,7 @@ void CartesianPlot::childHovered() {
 		if (isHovered())
 			setHover(false);
 		else
-			d->update(); // realy needed?
+			d->update(); // really needed?
 	}
 	if (!curveSender) {
 		for (auto curve : children<XYCurve>())
@@ -3243,7 +3243,7 @@ void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in, const dou
  * helper function called in other shift*() functions
  * and doing the actual change of the data ranges.
  * @param x if set to \true the x-range is modified, the y-range for \c false
- * @param leftOrDown the "shift left" for x or "shift dows" for y is performed if set to \c \true,
+ * @param leftOrDown the "shift left" for x or "shift down" for y is performed if set to \c \true,
  * "shift right" or "shift up" for \c false
  */
 void CartesianPlot::shift(int index, const Dimension dim, bool leftOrDown) {
@@ -3597,7 +3597,7 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 }
 
 /*
- * calculate x and y scales from scence range and logical range (x/y range) for all coordinate systems
+ * calculate x and y scales from scene range and logical range (x/y range) for all coordinate systems
  */
 void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 	DEBUG(Q_FUNC_INFO << ", SCALES x/y index = " << xIndex << "/" << yIndex)
@@ -5082,7 +5082,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 			// the file can be corrupted, either because of bugs like in
 			// https://invent.kde.org/education/labplot/-/issues/598, https://invent.kde.org/education/labplot/-/issues/869
-			// or because it was manually compromized.
+			// or because it was manually compromised.
 			// In order not to crash because of the wrong indices, add a safety check here.
 			// TODO: check the ranges and the coordinate system to make sure they're available.
 			if (d->defaultCoordinateSystemIndex > m_coordinateSystems.size() - 1)

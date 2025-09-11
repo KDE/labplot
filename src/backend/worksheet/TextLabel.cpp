@@ -1210,7 +1210,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 
 	// starting with XML version 10, the background color used in the html text is extracted
 	// to fill the complete shape of the label and is also saved. For older projects we need
-	// to extract it from hmtl here if available.
+	// to extract it from html here if available.
 	if (d->textWrapper.mode == TextLabel::Mode::Text && Project::xmlVersion() < 10) {
 		if (d->textWrapper.text.indexOf(QStringLiteral("background-color:#")) != -1) {
 			QTextEdit te;

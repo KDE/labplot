@@ -46,7 +46,7 @@ CURVE_COLUMN_CONNECT(XYCurve, Values, values, recalc)
  * \class XYCurve
  * \brief This class implements the visualization of a 2D/xy curve.
  *
- * The visualization of the curve can be parametrized via varios parameters and can be used
+ * The visualization of the curve can be parametrized via various parameters and can be used
  * to achieve the visualizations that are commonly named as line plot, scatter plot, error bar plot,
  * line+symbol plot, rug plot, etc. or any combinations of them.
  *
