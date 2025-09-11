@@ -2,9 +2,6 @@
     <load-typesystem name="typesystem_widgets.xml" generate="no"/>
     <load-typesystem name="typesystem_core_common.xml" generate="no"/>
 
-    <!-- manually declared types that shiboken may fail to see -->
-    <container-type name="QVector" type="list" />
-
     <!-- Global -->
     <enum-type name="AspectType">
         <reject-enum-value name="DatapickerCurve"/>
