@@ -22,6 +22,8 @@ set(APPLE_SUPPRESS_X11_WARNING ON)
 
 find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ ${ECM_MODULE_PATH})
+# used by modern fnd_package (<Pkg>Config.cmake)
+#set(CMAKE_PREFIX_PATH ${CMAKE_MODULE_PATH})
 
 include(KDEInstallDirs)
 include(KDECMakeSettings)

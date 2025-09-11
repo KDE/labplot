@@ -3,7 +3,7 @@
     "branch": "master",
     "runtime": "org.kde.Platform",
     "runtime-version": "6.9",
-    "base": "io.qt.qtwebengine.BaseApp",
+    "base": "io.qt.PySide.BaseApp",
     "base-version": "6.9",
     "sdk": "org.kde.Sdk",
     "command": "labplot",
@@ -40,13 +40,13 @@
         "/share/man"
     ],
     "modules": [
-        {
-            "name": "python-modules",
-            "buildsystem": "simple",
-            "build-commands": [
-                "pip3 install --prefix=/app PySide6"
-            ]
-        },
+	{
+	    "name": "install-typesystems",
+	    "buildsystem": "simple",
+	    "build-commands": [
+		    "ln -s /app/lib/python3.12/site-packages/PySide6 /app/share/PySide6"
+	    ]
+	},
         {
             "name": "eigen",
             "buildsystem": "cmake-ninja",
@@ -350,7 +350,16 @@
         {
             "name": "labplot",
             "buildsystem": "cmake-ninja",
-            "config-opts": [ "-DQt6Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt6Mqtt", "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF", "-DENABLE_TESTS=OFF"],
+	    "build-options": {
+		    "env": {
+			    "LLVM_INSTALL_DIR": "/usr/lib/sdk/llvm18"
+		    }
+	    },
+            "config-opts": [
+		    "-DQt6Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt6Mqtt",
+		    "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF",
+		    "-DENABLE_TESTS=OFF"
+	    ],
 	    "sources": [
                 {
                     "type": "dir",
