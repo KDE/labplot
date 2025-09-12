@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:41+0000\n"
+"POT-Creation-Date: 2025-09-12 00:39+0000\n"
 "PO-Revision-Date: 2025-07-13 15:35+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -2128,8 +2128,9 @@ msgid "Compression: %1"
 msgstr "Konpresioa: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, kde-format
-msgid "Endianess: %1"
+#, fuzzy, kde-format
+#| msgid "Endianess: %1"
+msgid "Endianness: %1"
 msgstr "Byte-ordena: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
@@ -2354,8 +2355,9 @@ msgid "Device not available."
 msgstr "Gailua ez dago erabilgarri."
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, kde-format
-msgid "Timeout occured."
+#, fuzzy, kde-format
+#| msgid "Timeout occured."
+msgid "Timeout occurred."
 msgstr "Denbora-muga gertatu da."
 
 #: src/backend/datasources/LiveDataSource.cpp:757
@@ -8878,7 +8880,7 @@ msgstr "%1: ezarri %2 errenkadako balioa"
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
 #, fuzzy, kde-format
 #| msgid "%1: set formula"
-msgid "%1: jitterring changed"
+msgid "%1: jittering changed"
 msgstr "%1: ezarri formula"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582

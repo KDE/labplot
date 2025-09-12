@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:41+0000\n"
+"POT-Creation-Date: 2025-09-12 00:39+0000\n"
 "PO-Revision-Date: 2024-11-15 10:08+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -2307,7 +2307,7 @@ msgstr "Näytä asetukset"
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
 #, fuzzy, kde-format
 #| msgid "Images"
-msgid "Endianess: %1"
+msgid "Endianness: %1"
 msgstr "Kuvat"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
@@ -2564,7 +2564,7 @@ msgstr "Valittu muuttujan nimi"
 #: src/backend/datasources/LiveDataSource.cpp:752
 #, fuzzy, kde-format
 #| msgid "An error occurred."
-msgid "Timeout occured."
+msgid "Timeout occurred."
 msgstr "Sattui virhe."
 
 #: src/backend/datasources/LiveDataSource.cpp:757
@@ -9392,7 +9392,7 @@ msgstr "Tietotyyppi:"
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
 #, fuzzy, kde-format
 #| msgid "%1: set creation time"
-msgid "%1: jitterring changed"
+msgid "%1: jittering changed"
 msgstr "%1: aseta luontiaika"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582

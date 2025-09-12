@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:41+0000\n"
+"POT-Creation-Date: 2025-09-12 00:39+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -2295,7 +2295,7 @@ msgstr "Datatilvalg"
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
 #, fuzzy, kde-format
 #| msgid "Images"
-msgid "Endianess: %1"
+msgid "Endianness: %1"
 msgstr "Billeder"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
@@ -2547,7 +2547,7 @@ msgstr "%1: Klip markerede celler"
 
 #: src/backend/datasources/LiveDataSource.cpp:752
 #, kde-format
-msgid "Timeout occured."
+msgid "Timeout occurred."
 msgstr ""
 
 #: src/backend/datasources/LiveDataSource.cpp:757
@@ -9342,7 +9342,7 @@ msgstr "Data, -"
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
 #, fuzzy, kde-format
 #| msgid "Changed"
-msgid "%1: jitterring changed"
+msgid "%1: jittering changed"
 msgstr "Ændret"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582

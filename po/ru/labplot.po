@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:41+0000\n"
+"POT-Creation-Date: 2025-09-12 00:39+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -2185,8 +2185,9 @@ msgid "Compression: %1"
 msgstr "Сжатие: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, kde-format
-msgid "Endianess: %1"
+#, fuzzy, kde-format
+#| msgid "Endianess: %1"
+msgid "Endianness: %1"
 msgstr "Порядок следования байтов: %1"
 
 # BUGME: please add colon (:) to the label in front of text edit --aspotashev
@@ -2441,7 +2442,7 @@ msgstr "Удалить переменную"
 #: src/backend/datasources/LiveDataSource.cpp:752
 #, fuzzy, kde-format
 #| msgid "An error occurred."
-msgid "Timeout occured."
+msgid "Timeout occurred."
 msgstr "Произошла ошибка."
 
 #: src/backend/datasources/LiveDataSource.cpp:757
@@ -9162,8 +9163,9 @@ msgid "%1: set whiskers cap size"
 msgstr "%1: задание размера конечного маркера усов"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
-#, kde-format
-msgid "%1: jitterring changed"
+#, fuzzy, kde-format
+#| msgid "%1: jitterring changed"
+msgid "%1: jittering changed"
 msgstr "%1: изменение случайного шума"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582

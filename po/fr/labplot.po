@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:41+0000\n"
+"POT-Creation-Date: 2025-09-12 00:39+0000\n"
 "PO-Revision-Date: 2025-08-29 13:29+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -2160,8 +2160,9 @@ msgid "Compression: %1"
 msgstr "Compression : %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, kde-format
-msgid "Endianess: %1"
+#, fuzzy, kde-format
+#| msgid "Endianess: %1"
+msgid "Endianness: %1"
 msgstr "Boutisme : %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
@@ -2389,8 +2390,9 @@ msgid "Device not available."
 msgstr "Le périphérique est indisponible"
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, kde-format
-msgid "Timeout occured."
+#, fuzzy, kde-format
+#| msgid "Timeout occured."
+msgid "Timeout occurred."
 msgstr "Le délai maximum d'attente a été atteint."
 
 #: src/backend/datasources/LiveDataSource.cpp:757
@@ -8913,8 +8915,9 @@ msgid "%1: set whiskers cap size"
 msgstr "%1 : définir la taille du sommet des moustaches"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
-#, kde-format
-msgid "%1: jitterring changed"
+#, fuzzy, kde-format
+#| msgid "%1: jitterring changed"
+msgid "%1: jittering changed"
 msgstr "%1 : coefficient d'instabilité modifié"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582

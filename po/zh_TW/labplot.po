@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:41+0000\n"
+"POT-Creation-Date: 2025-09-12 00:39+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -2193,7 +2193,7 @@ msgstr "顯示選項(&H)"
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
 #, fuzzy, kde-format
 #| msgid "Images"
-msgid "Endianess: %1"
+msgid "Endianness: %1"
 msgstr "影像"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
@@ -2425,7 +2425,7 @@ msgstr "全部選取"
 
 #: src/backend/datasources/LiveDataSource.cpp:752
 #, kde-format
-msgid "Timeout occured."
+msgid "Timeout occurred."
 msgstr ""
 
 #: src/backend/datasources/LiveDataSource.cpp:757
@@ -9056,7 +9056,7 @@ msgstr "資料"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
 #, fuzzy, kde-format
-msgid "%1: jitterring changed"
+msgid "%1: jittering changed"
 msgstr "設定背景影像..."
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582

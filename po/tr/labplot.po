@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:41+0000\n"
+"POT-Creation-Date: 2025-09-12 00:39+0000\n"
 "PO-Revision-Date: 2025-09-08 11:18+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -2130,8 +2130,9 @@ msgid "Compression: %1"
 msgstr "Sıkıştırma: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, kde-format
-msgid "Endianess: %1"
+#, fuzzy, kde-format
+#| msgid "Endianess: %1"
+msgid "Endianness: %1"
 msgstr "Son hanelilik: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
@@ -2355,8 +2356,9 @@ msgid "Device not available."
 msgstr "Aygıt kullanılabilir değil."
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, kde-format
-msgid "Timeout occured."
+#, fuzzy, kde-format
+#| msgid "Timeout occured."
+msgid "Timeout occurred."
 msgstr "Zaman aşımı oluştu."
 
 #: src/backend/datasources/LiveDataSource.cpp:757
@@ -8842,8 +8844,9 @@ msgid "%1: set whiskers cap size"
 msgstr "%1: Kılların kap boyutunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
-#, kde-format
-msgid "%1: jitterring changed"
+#, fuzzy, kde-format
+#| msgid "%1: jitterring changed"
+msgid "%1: jittering changed"
 msgstr "%1: Titremeler değişti"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:41+0000\n"
+"POT-Creation-Date: 2025-09-12 00:39+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -2220,9 +2220,10 @@ msgid "Compression: %1"
 msgstr "Τύπος αποθήκευσης"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, kde-format
-msgid "Endianess: %1"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "End column:"
+msgid "Endianness: %1"
+msgstr "Στήλη τέλους:"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
 #, fuzzy, kde-format
@@ -2469,7 +2470,7 @@ msgstr "Διακύμανση"
 
 #: src/backend/datasources/LiveDataSource.cpp:752
 #, kde-format
-msgid "Timeout occured."
+msgid "Timeout occurred."
 msgstr ""
 
 #: src/backend/datasources/LiveDataSource.cpp:757
@@ -9100,7 +9101,7 @@ msgstr "%1: αλλαγή τύπου στήλης"
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
 #, fuzzy, kde-format
 #| msgid "%1: set formula"
-msgid "%1: jitterring changed"
+msgid "%1: jittering changed"
 msgstr "%1: ορισμός τύπου"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582

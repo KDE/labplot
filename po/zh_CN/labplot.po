@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:41+0000\n"
+"POT-Creation-Date: 2025-09-12 00:39+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -2110,7 +2110,7 @@ msgstr ""
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
 #, kde-format
-msgid "Endianess: %1"
+msgid "Endianness: %1"
 msgstr ""
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
@@ -2334,9 +2334,10 @@ msgid "Device not available."
 msgstr ""
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, kde-format
-msgid "Timeout occured."
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "An error occurred."
+msgid "Timeout occurred."
+msgstr "发生了错误。"
 
 #: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format
@@ -8763,7 +8764,7 @@ msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
 #, kde-format
-msgid "%1: jitterring changed"
+msgid "%1: jittering changed"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582

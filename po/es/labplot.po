@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:41+0000\n"
-"PO-Revision-Date: 2025-09-10 02:01+0200\n"
+"POT-Creation-Date: 2025-09-12 00:39+0000\n"
+"PO-Revision-Date: 2025-09-11 12:07+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -2140,8 +2140,9 @@ msgid "Compression: %1"
 msgstr "Compresión: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, kde-format
-msgid "Endianess: %1"
+#, fuzzy, kde-format
+#| msgid "Endianess: %1"
+msgid "Endianness: %1"
 msgstr "«Endianness»: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
@@ -2365,8 +2366,9 @@ msgid "Device not available."
 msgstr "Dispositivo no disponible."
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, kde-format
-msgid "Timeout occured."
+#, fuzzy, kde-format
+#| msgid "Timeout occured."
+msgid "Timeout occurred."
 msgstr "Se ha agotado el tiempo de espera."
 
 #: src/backend/datasources/LiveDataSource.cpp:757
@@ -7729,23 +7731,22 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:527
 #, kde-format
 msgid "Degrees of Freedom Treatment"
-msgstr ""
+msgstr "Tratamiento de grados de libertad"
 
 #: src/backend/statistics/HypothesisTest.cpp:528
 #, kde-format
 msgid "Degrees of Freedom Residuals"
-msgstr ""
+msgstr "Residuos de grados de libertad"
 
 #: src/backend/statistics/HypothesisTest.cpp:528
 #, kde-format
 msgid "Sum of Squares Treatment"
-msgstr ""
+msgstr "Tratamiento de suma de cuadrados"
 
 #: src/backend/statistics/HypothesisTest.cpp:529
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Residuals"
-msgstr "Suma de residuos cuadrados"
+msgstr "Residuos de suma de cuadrados"
 
 #: src/backend/statistics/HypothesisTest.cpp:530
 #, kde-format
@@ -7933,10 +7934,9 @@ msgid "Log-Rank Test Statistics"
 msgstr "Estadísticas de la prueba de Mantel-Cox"
 
 #: src/backend/statistics/HypothesisTest.cpp:593
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Event Count 1"
-msgstr "Número de hojas: %1"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:593
 #, kde-format
@@ -8864,8 +8864,9 @@ msgid "%1: set whiskers cap size"
 msgstr "%1: definir tamaño del remate de los bigotes"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
-#, kde-format
-msgid "%1: jitterring changed"
+#, fuzzy, kde-format
+#| msgid "%1: jitterring changed"
+msgid "%1: jittering changed"
 msgstr "%1: la fluctuación ha cambiado"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582

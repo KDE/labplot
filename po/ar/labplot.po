@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-09 00:41+0000\n"
+"POT-Creation-Date: 2025-09-12 00:39+0000\n"
 "PO-Revision-Date: 2025-08-04 14:28+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -2170,9 +2170,10 @@ msgid "Compression: %1"
 msgstr "الضغط: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, kde-format
-msgid "Endianess: %1"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "Date and Time"
+msgid "Endianness: %1"
+msgstr "التاريخ والوقت"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
 #, kde-format
@@ -2414,7 +2415,7 @@ msgstr ""
 #: src/backend/datasources/LiveDataSource.cpp:752
 #, fuzzy, kde-format
 #| msgid "An error occurred."
-msgid "Timeout occured."
+msgid "Timeout occurred."
 msgstr "حدث خطأ."
 
 #: src/backend/datasources/LiveDataSource.cpp:757
@@ -9078,9 +9079,10 @@ msgid "%1: set whiskers cap size"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
-#, kde-format
-msgid "%1: jitterring changed"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "%1: set range"
+msgid "%1: jittering changed"
+msgstr "%1: عين المدى"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:518
