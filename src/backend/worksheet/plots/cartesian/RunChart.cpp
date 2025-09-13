@@ -108,7 +108,7 @@ void RunChart::init() {
 	// so we have the same name shown on the undo stack
 	connect(this, &AbstractAspect::aspectDescriptionChanged, this, &RunChart::renameInternalCurves);
 
-	// propage the visual changes to the parent
+	// propagate the visual changes to the parent
 	connect(d->centerCurve, &XYCurve::changed, this, &RunChart::changed);
 	connect(d->dataCurve, &XYCurve::changed, this, &RunChart::changed);
 }
@@ -346,7 +346,7 @@ void RunChartPrivate::recalc() {
 		return;
 	}
 
-	// supress retransforms in all internal curves while modifying the data,
+	// suppress retransforms in all internal curves while modifying the data,
 	// everything will be retransformend at the very end
 	dataCurve->setSuppressRetransform(true);
 	centerCurve->setSuppressRetransform(true);

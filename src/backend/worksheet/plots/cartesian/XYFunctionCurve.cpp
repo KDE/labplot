@@ -226,7 +226,7 @@ void XYFunctionCurvePrivate::connectCurve(const XYCurve* curve) {
 		return;
 
 	// avoid circular dependencies - the current curve cannot be part of the variable curve.
-	// this should't actually happen because of the checks done when the function is defined,
+	// this shouldn't actually happen because of the checks done when the function is defined,
 	// but in case we have bugs somewhere or somebody manipulated the project xml file we add
 	// a sanity check to avoid recursive calls here and crash because of the stack overflow.
 	if (curve == q)

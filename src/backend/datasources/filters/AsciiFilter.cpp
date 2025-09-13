@@ -947,7 +947,7 @@ size_t AsciiFilterPrivate::determineColumns(const QStringView& line,
 											bool separatorSingleCharacter,
 											const QChar separatorCharacter,
 											QVector<QStringView>& columnValues) {
-	// Simlified
+	// Simplified
 	if (properties.simplifyWhitespaces)
 		return 0;
 
@@ -1381,7 +1381,7 @@ Status AsciiFilterPrivate::setLastError(Status status) {
 /*!
  * returns \true if the the data coming from the device is UTF-16 encoded, returns \c false otherwise.
  * In case the device couldn't be opened or the number of the available bytes is not sufficient to determine the encoding,
- * \c false is returned and the caller needs to hanlde these error cases properly.
+ * \c false is returned and the caller needs to handle these error cases properly.
  */
 bool AsciiFilterPrivate::isUTF16(QIODevice& device) {
 	if (!device.isOpen()) {

@@ -1,7 +1,7 @@
 /*
 	File                 : nsl_peak.cpp
 	Project              : LabPlot
-	Description          : NSL peak detection and releated methods
+	Description          : NSL peak detection and related methods
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later

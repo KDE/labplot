@@ -416,7 +416,7 @@ void ReferenceRangePrivate::updatePositionLimit() {
 
 /*!
  * called when the user moves the graphics item with the mouse and the scene position of the item is changed.
- * Here we update the logical coordinates for the start and end points based on the new valud for the logical
+ * Here we update the logical coordinates for the start and end points based on the new value for the logical
  * position \c newPosition of the item's center and notify the dock widget.
  */
 // TODO: make this undo/redo-able

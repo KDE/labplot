@@ -15,7 +15,7 @@ E.g., use override for virtual funcsion:
 clan-tidy can also execute clang-analyzer checks, e.g.
 * clang-tidy my_file.cpp -checks=-*,clang-analyzer-*,-clang-analyzer-cplusplus*
 
-To apply the fixes direcly on the file, add 'fix' parameter:
+To apply the fixes directly on the file, add 'fix' parameter:
 * clang-tidy.py my_file.cpp -header-filter='.*' -checks='-*,modernize-use-nullptr' -fix
 
 To apply clang-tidy to many files, use the run-clang-tidy.py script in this folder (current version under run-clang-tidy.py -header-filter='.*' -checks='-*,modernize-use-nullptr' -fix), execute in src/:

@@ -62,7 +62,7 @@ void QQPlot::init() {
 
 	KConfig config;
 	KConfigGroup group = config.group(QStringLiteral("QQPlot"));
-	// reference curve - line conneting two central quantiles Q1 and Q3
+	// reference curve - line connecting two central quantiles Q1 and Q3
 	d->referenceCurve = new XYCurve(QStringLiteral("reference"));
 	d->referenceCurve->setName(name(), AbstractAspect::NameHandling::UniqueNotRequired);
 	d->referenceCurve->setHidden(true);
@@ -122,7 +122,7 @@ void QQPlot::init() {
 		d->percentilesCurve->setUndoAware(true);
 	});
 
-	// propage the visual changes to the parent
+	// propagate the visual changes to the parent
 	connect(d->referenceCurve, &XYCurve::changed, this, &QQPlot::changed);
 	connect(d->percentilesCurve, &XYCurve::changed, this, &QQPlot::changed);
 }

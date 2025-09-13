@@ -110,6 +110,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/dockwidgets/XYConvolutionCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/XYCorrelationCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/HypothesisTestDock.cpp
     ${FRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
     ${FRONTEND_DIR}/matrix/MatrixView.cpp
     ${FRONTEND_DIR}/note/NoteView.cpp
@@ -146,6 +147,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/worksheet/SlidingPanel.cpp
     ${FRONTEND_DIR}/worksheet/WorksheetPreviewWidget.cpp
     ${FRONTEND_DIR}/worksheet/WorksheetView.cpp
+    ${FRONTEND_DIR}/statistics/HypothesisTestView.cpp
     ${FRONTEND_DIR}/widgets/BackgroundWidget.cpp
     ${FRONTEND_DIR}/widgets/ConstantsWidget.cpp
     ${FRONTEND_DIR}/widgets/ThemesComboBox.cpp
@@ -285,6 +287,7 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui
     ${FRONTEND_DIR}/ui/dockwidgets/valuewidget.ui
     ${FRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/hypothesistestdock.ui
     ${FRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
     ${FRONTEND_DIR}/ui/spreadsheet/plotdatawidget.ui
     ${FRONTEND_DIR}/ui/spreadsheet/equidistantvalueswidget.ui
@@ -476,6 +479,7 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYConvolutionCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
+    ${BACKEND_DIR}/statistics/HypothesisTest.cpp
 )
 
 if(ENABLE_SCRIPTING)
@@ -619,6 +623,7 @@ target_link_libraries(labplotnsllib
 )
 target_link_libraries(labplotbackendlib
     Qt${QT_MAJOR_VERSION}::Core
+    Qt${QT_MAJOR_VERSION}::Concurrent   # QConcurrent
     Qt${QT_MAJOR_VERSION}::Gui    # QColor
     Qt${QT_MAJOR_VERSION}::Widgets    # QApplication
     Qt${QT_MAJOR_VERSION}::Network    # QLocalSocket

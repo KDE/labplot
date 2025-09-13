@@ -111,7 +111,7 @@ void KDEPlot::init() {
 		d->rugCurve->setUndoAware(true);
 	});
 
-	// propage the visual changes to the parent
+	// propagate the visual changes to the parent
 	connect(d->estimationCurve, &XYCurve::changed, this, &KDEPlot::changed);
 	connect(d->rugCurve, &XYCurve::changed, this, &KDEPlot::changed);
 
@@ -228,7 +228,7 @@ QColor KDEPlot::color() const {
 	return d->estimationCurve->color();
 }
 /*!
- * returns the the number of equaly spaced points at which the density is to be evaluated,
+ * returns the the number of equally spaced points at which the density is to be evaluated,
  * which also corresponds to the number of data points in the xy-curve used internally.
  */
 int KDEPlot::gridPointsCount() const {
@@ -350,7 +350,7 @@ void KDEPlotPrivate::recalc() {
 	copyValidData(data);
 
 	// calculate the estimation curve for the number
-	// of equaly spaced points determined by gridPoints
+	// of equally spaced points determined by gridPoints
 	QVector<double> xData;
 	QVector<double> yData;
 	xData.resize(gridPointsCount);

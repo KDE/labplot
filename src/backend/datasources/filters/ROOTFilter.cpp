@@ -756,7 +756,7 @@ ROOTData::ROOTData(const std::string& filename)
 				for (auto& tpos : it->second.content) {
 					auto jt = treekeys.find(tpos);
 					if (jt != treekeys.end() && jt->second.name == buffer.name && jt->second.cycle < buffer.cycle) {
-						// override key with lower cylce number
+						// override key with lower cycle number
 						tpos = pos;
 						treekeys.erase(jt);
 						keyreplaced = true;

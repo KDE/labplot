@@ -21,7 +21,7 @@
  * \fn bool Plot::hasData()
  * \brief returns \c true if a valid data column is set, returns \c false otherwise.
  * Used in CartesianPlot to determine whether the curve needs to be taken into account
- * when caclulating the data ranges of the plot area.
+ * when calculating the data ranges of the plot area.
  */
 
 Plot::Plot(const QString& name, PlotPrivate* dd, AspectType type)

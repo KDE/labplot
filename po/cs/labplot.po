@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-28 00:38+0000\n"
+"POT-Creation-Date: 2025-09-12 00:39+0000\n"
 "PO-Revision-Date: 2024-10-18 15:55+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -51,7 +51,7 @@ msgstr "Přejmenovat"
 
 #: src/backend/core/AbstractAspect.cpp:411
 #: src/backend/spreadsheet/Spreadsheet.cpp:719
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:488
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:489
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
 #: src/frontend/worksheet/WorksheetView.cpp:143
 #, kde-format
@@ -342,13 +342,13 @@ msgid "%1: unmask cells"
 msgstr ""
 
 #: src/backend/core/abstractcolumncommands.cpp:239
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2582
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2610
 #, kde-format
 msgid "%1: set heatmap format"
 msgstr ""
 
 #: src/backend/core/abstractcolumncommands.cpp:265
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2600
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2628
 #, kde-format
 msgid "%1: remove heatmap format"
 msgstr ""
@@ -410,11 +410,12 @@ msgid "incompatible filter type"
 msgstr "nekompatibilní typ filtru"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:154 src/backend/core/Project.cpp:721
+#: src/backend/core/Folder.cpp:157 src/backend/core/Project.cpp:724
 #: src/backend/datasources/MQTTClient.cpp:1366
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:272
 #: src/backend/lib/XmlStreamReader.cpp:104
+#: src/backend/statistics/HypothesisTest.cpp:1726
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1910
 #, kde-format
 msgid "unknown element '%1'"
@@ -437,6 +438,7 @@ msgstr "%1: Přejmenovat na %2"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/backend/core/AspectTreeModel.cpp:165
+#: src/backend/statistics/HypothesisTest.cpp:624
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/frontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:104
@@ -595,7 +597,7 @@ msgid "%1: change cell values"
 msgstr "%1: změnit hodnoty buněk"
 
 #: src/backend/core/column/columncommands.cpp:529
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2756
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2784
 #, kde-format
 msgid "%1: set plot designation"
 msgstr ""
@@ -665,7 +667,7 @@ msgstr ""
 msgid "set decimal digits to %1"
 msgstr ""
 
-#: src/backend/core/Folder.cpp:376
+#: src/backend/core/Folder.cpp:388
 #, kde-format
 msgid "unknown element '%1' found"
 msgstr ""
@@ -677,53 +679,53 @@ msgid "Not yet loaded."
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbProject)
-#: src/backend/core/Project.cpp:185
+#: src/backend/core/Project.cpp:188
 #: src/frontend/ui/datasources/importprojectwidget.ui:17
 #, kde-format
 msgid "Project"
 msgstr "Projekt"
 
-#: src/backend/core/Project.cpp:302
+#: src/backend/core/Project.cpp:305
 #, kde-format
 msgid "%1: set author"
 msgstr "%1: zadat autora"
 
-#: src/backend/core/Project.cpp:309
+#: src/backend/core/Project.cpp:312
 #, kde-format
 msgid "%1: save dock state changed"
 msgstr ""
 
-#: src/backend/core/Project.cpp:316
+#: src/backend/core/Project.cpp:319
 #, kde-format
 msgid "%1: save calculation changed"
 msgstr ""
 
-#: src/backend/core/Project.cpp:565 src/backend/core/Project.cpp:595
+#: src/backend/core/Project.cpp:568 src/backend/core/Project.cpp:598
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Bohužel, soubor nelze otevřít pro čtení."
 
-#: src/backend/core/Project.cpp:576 src/backend/core/Project.cpp:602
+#: src/backend/core/Project.cpp:579 src/backend/core/Project.cpp:605
 #, kde-format
 msgid "The project file is empty."
 msgstr ""
 
-#: src/backend/core/Project.cpp:576 src/backend/core/Project.cpp:602
+#: src/backend/core/Project.cpp:579 src/backend/core/Project.cpp:605
 #, kde-format
 msgid "Error opening project"
 msgstr ""
 
-#: src/backend/core/Project.cpp:621
+#: src/backend/core/Project.cpp:624
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr ""
 
-#: src/backend/core/Project.cpp:622
+#: src/backend/core/Project.cpp:625
 #, kde-format
 msgid "Error when opening the project"
 msgstr ""
 
-#: src/backend/core/Project.cpp:642
+#: src/backend/core/Project.cpp:645
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -735,43 +737,43 @@ msgid ""
 "Do you want to continue?"
 msgstr ""
 
-#: src/backend/core/Project.cpp:648
+#: src/backend/core/Project.cpp:651
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr ""
 
-#: src/backend/core/Project.cpp:678
+#: src/backend/core/Project.cpp:681
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr ""
 
-#: src/backend/core/Project.cpp:728
+#: src/backend/core/Project.cpp:731
 #, kde-format
 msgid "no project element found"
 msgstr ""
 
-#: src/backend/core/Project.cpp:730
+#: src/backend/core/Project.cpp:733
 #, kde-format
 msgid "no valid XML document found"
 msgstr ""
 
-#: src/backend/core/Project.cpp:780 src/backend/core/Project.cpp:786
-#: src/backend/core/Project.cpp:837
+#: src/backend/core/Project.cpp:783 src/backend/core/Project.cpp:789
+#: src/backend/core/Project.cpp:840
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "Nepodařilo se otevřít soubor '%1'."
 
-#: src/backend/core/Project.cpp:843
+#: src/backend/core/Project.cpp:846
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr ""
 
-#: src/backend/core/Project.cpp:846
+#: src/backend/core/Project.cpp:849
 #, kde-format
 msgid "Failed to open project"
 msgstr ""
 
-#: src/backend/core/Project.cpp:1294
+#: src/backend/core/Project.cpp:1333
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr ""
@@ -2063,10 +2065,10 @@ msgstr "Klíč"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:412
 #: src/frontend/matrix/MatrixView.cpp:620
 #: src/frontend/spreadsheet/FlattenColumnsDialog.cpp:188
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2484
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2505
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2523
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2540
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2512
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2533
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2551
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2568
 #: src/frontend/ui/dockwidgets/columndock.ui:182
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:65
 #, kde-format
@@ -2114,8 +2116,9 @@ msgid "Compression: %1"
 msgstr "Komprese: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, kde-format
-msgid "Endianess: %1"
+#, fuzzy, kde-format
+#| msgid "Endianess: %1"
+msgid "Endianness: %1"
 msgstr "Endianita: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
@@ -2339,8 +2342,9 @@ msgid "Device not available."
 msgstr "Zařízení není dostupné."
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, kde-format
-msgid "Timeout occured."
+#, fuzzy, kde-format
+#| msgid "Timeout occured."
+msgid "Timeout occurred."
 msgstr "Vypršel časový limit."
 
 #: src/backend/datasources/LiveDataSource.cpp:757
@@ -2553,7 +2557,7 @@ msgstr "Stefan-Boltzmannova konstanta"
 #: src/backend/gsl/constants.cpp:83
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:476
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:160
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:535
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:536
 #, kde-format
 msgid "Gauss"
 msgstr ""
@@ -3552,6 +3556,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:257
+#: src/backend/statistics/HypothesisTest.cpp:624
 #: src/frontend/ui/dockwidgets/imagedock.ui:492
 #, kde-format
 msgid "Size"
@@ -3598,6 +3603,7 @@ msgstr "Aritmetický průměr"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:261
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
+#: src/backend/statistics/HypothesisTest.cpp:624
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
@@ -3623,6 +3629,7 @@ msgstr "Směrodatná odchylka"
 #. i18n: ectx: property (text), widget (QCheckBox, cbVariance)
 #: src/backend/gsl/functions.cpp:263
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:81
+#: src/backend/statistics/HypothesisTest.cpp:624
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:80
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:165
 #: src/frontend/ui/mqttwillsettingswidget.ui:108
@@ -3754,6 +3761,7 @@ msgstr "Medián absolutní odchylky"
 #. i18n: ectx: property (text), widget (QCheckBox, cbSkewness)
 #: src/backend/gsl/functions.cpp:281
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:86
+#: src/backend/statistics/HypothesisTest.cpp:624
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:89
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:242
 #: src/frontend/ui/mqttwillsettingswidget.ui:163
@@ -3765,6 +3773,7 @@ msgstr "Zkosení"
 #. i18n: ectx: property (text), widget (QCheckBox, cbKurtosis)
 #: src/backend/gsl/functions.cpp:282
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:87
+#: src/backend/statistics/HypothesisTest.cpp:624
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:90
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:249
 #: src/frontend/ui/mqttwillsettingswidget.ui:174
@@ -5937,7 +5946,7 @@ msgstr ""
 
 #: src/backend/lib/Range.h:57 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:456
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:520
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:521
 #, kde-format
 msgid "Linear"
 msgstr "Lineární"
@@ -5989,13 +5998,13 @@ msgid "unexpected end of document"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3764
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3791
 #, kde-format
 msgid "FITS image"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:143
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3764
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3791
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -6143,6 +6152,7 @@ msgid "Text file (*.txt)"
 msgstr "Textový soubor (*.txt)"
 
 #: src/backend/note/Note.cpp:101 src/backend/script/Script.cpp:81
+#: src/backend/statistics/HypothesisTest.cpp:143
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:403
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:308
 #, kde-format
@@ -6371,7 +6381,7 @@ msgstr "Imaginární část"
 
 #: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:460
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:523
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:524
 #, kde-format
 msgid "Power"
 msgstr "Mocnina"
@@ -6535,14 +6545,14 @@ msgstr ""
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:172
 #: src/frontend/dockwidgets/WorksheetDock.cpp:265
 #: src/frontend/dockwidgets/XYInterpolationCurveDock.cpp:81
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:550
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:551
 #, kde-format
 msgid "Custom"
 msgstr "Vlastní"
 
 #: src/backend/nsl/nsl_fit.c:26 src/backend/nsl/nsl_interp.c:22
 #: src/backend/nsl/nsl_sf_stats.c:15
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:558
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:559
 #, kde-format
 msgid "Exponential"
 msgstr "Exponenciální"
@@ -6553,7 +6563,7 @@ msgid "Polynomial"
 msgstr ""
 
 #: src/backend/nsl/nsl_fit.c:26
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:532
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:533
 #, kde-format
 msgid "Inverse Exponential"
 msgstr ""
@@ -6570,8 +6580,8 @@ msgstr ""
 
 #: src/backend/nsl/nsl_fit.c:31
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:480
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:538
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:564
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:539
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:565
 #, kde-format
 msgid "Cauchy-Lorentz"
 msgstr ""
@@ -6603,7 +6613,7 @@ msgstr ""
 
 #: src/backend/nsl/nsl_fit.c:45
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:488
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:544
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:545
 #, kde-format
 msgid "Hyperbolic Tangent"
 msgstr "Hyperbolický tangens"
@@ -6783,7 +6793,7 @@ msgid "Integral"
 msgstr "Integrál"
 
 #: src/backend/nsl/nsl_sf_stats.c:13
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:555
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:556
 #, kde-format
 msgid "Gaussian (Normal)"
 msgstr ""
@@ -6794,7 +6804,7 @@ msgid "Gaussian Tail"
 msgstr ""
 
 #: src/backend/nsl/nsl_sf_stats.c:16
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:561
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:562
 #, kde-format
 msgid "Laplace"
 msgstr "Laplaceův"
@@ -6895,7 +6905,7 @@ msgid "Gumbel Type-2"
 msgstr ""
 
 #: src/backend/nsl/nsl_sf_stats.c:36
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:570
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:571
 #, kde-format
 msgid "Poisson"
 msgstr "Poissonovo"
@@ -6906,7 +6916,7 @@ msgid "Bernoulli"
 msgstr ""
 
 #: src/backend/nsl/nsl_sf_stats.c:38 src/backend/nsl/nsl_smooth.c:25
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:573
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:574
 #, kde-format
 msgid "Binomial"
 msgstr ""
@@ -7400,6 +7410,779 @@ msgstr ""
 #, kde-format
 msgid "Column"
 msgstr "Sloupec"
+
+#: src/backend/statistics/HypothesisTest.cpp:54
+#, kde-format
+msgid "One column is required."
+msgid_plural "%1 columns are required."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: src/backend/statistics/HypothesisTest.cpp:56
+#, kde-format
+msgid "At least %1 and at most %2 columns are required."
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:64
+#, kde-format
+msgid "Column '%1' must be of numeric type."
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:143
+#: src/frontend/worksheet/ExportWorksheetDialog.cpp:235
+#, kde-format
+msgid "Portable Data Format (*.pdf *.PDF)"
+msgstr "Portable Data Format (*.pdf *.PDF)"
+
+#: src/backend/statistics/HypothesisTest.cpp:169
+#, kde-format
+msgctxt "@title:window"
+msgid "Hypothesis Test"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:472
+#: src/backend/statistics/HypothesisTest.cpp:1736
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:100
+#, kde-format
+msgid "One-Sample t-Test"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:472
+#: src/backend/statistics/HypothesisTest.cpp:481
+#: src/backend/statistics/HypothesisTest.cpp:491
+#: src/backend/statistics/HypothesisTest.cpp:500
+#: src/backend/statistics/HypothesisTest.cpp:510
+#: src/backend/statistics/HypothesisTest.cpp:523
+#: src/backend/statistics/HypothesisTest.cpp:535
+#: src/backend/statistics/HypothesisTest.cpp:545
+#: src/backend/statistics/HypothesisTest.cpp:553
+#: src/backend/statistics/HypothesisTest.cpp:565
+#: src/backend/statistics/HypothesisTest.cpp:573
+#: src/backend/statistics/HypothesisTest.cpp:581
+#: src/backend/statistics/HypothesisTest.cpp:589
+#, kde-format
+msgid "Null Hypothesis"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:473
+#: src/backend/statistics/HypothesisTest.cpp:482
+#: src/backend/statistics/HypothesisTest.cpp:492
+#: src/backend/statistics/HypothesisTest.cpp:501
+#: src/backend/statistics/HypothesisTest.cpp:511
+#: src/backend/statistics/HypothesisTest.cpp:524
+#: src/backend/statistics/HypothesisTest.cpp:536
+#: src/backend/statistics/HypothesisTest.cpp:546
+#: src/backend/statistics/HypothesisTest.cpp:554
+#: src/backend/statistics/HypothesisTest.cpp:566
+#: src/backend/statistics/HypothesisTest.cpp:574
+#: src/backend/statistics/HypothesisTest.cpp:582
+#: src/backend/statistics/HypothesisTest.cpp:590
+#, kde-format
+msgid "Alternate Hypothesis"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:473
+#: src/backend/statistics/HypothesisTest.cpp:482
+#: src/backend/statistics/HypothesisTest.cpp:492
+#: src/backend/statistics/HypothesisTest.cpp:501
+#: src/backend/statistics/HypothesisTest.cpp:511
+#: src/backend/statistics/HypothesisTest.cpp:524
+#: src/backend/statistics/HypothesisTest.cpp:536
+#: src/backend/statistics/HypothesisTest.cpp:546
+#: src/backend/statistics/HypothesisTest.cpp:554
+#: src/backend/statistics/HypothesisTest.cpp:566
+#: src/backend/statistics/HypothesisTest.cpp:574
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Descriptive Statistics"
+msgstr "Statistika"
+
+#: src/backend/statistics/HypothesisTest.cpp:474
+#: src/backend/statistics/HypothesisTest.cpp:483
+#: src/backend/statistics/HypothesisTest.cpp:493
+#: src/backend/statistics/HypothesisTest.cpp:502
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "t-Test Statistics"
+msgstr "Statistika"
+
+#: src/backend/statistics/HypothesisTest.cpp:474
+#: src/backend/statistics/HypothesisTest.cpp:483
+#: src/backend/statistics/HypothesisTest.cpp:493
+#: src/backend/statistics/HypothesisTest.cpp:502
+#: src/backend/statistics/HypothesisTest.cpp:512
+#: src/backend/statistics/HypothesisTest.cpp:525
+#: src/backend/statistics/HypothesisTest.cpp:537
+#: src/backend/statistics/HypothesisTest.cpp:547
+#: src/backend/statistics/HypothesisTest.cpp:555
+#: src/backend/statistics/HypothesisTest.cpp:567
+#: src/backend/statistics/HypothesisTest.cpp:575
+#: src/backend/statistics/HypothesisTest.cpp:583
+#: src/backend/statistics/HypothesisTest.cpp:591
+#, kde-format
+msgid "Significance Level"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:475
+#: src/backend/statistics/HypothesisTest.cpp:484
+#: src/backend/statistics/HypothesisTest.cpp:494
+#: src/backend/statistics/HypothesisTest.cpp:503
+#, fuzzy, kde-format
+#| msgid "Value"
+msgid "t-Value"
+msgstr "Hodnota"
+
+#: src/backend/statistics/HypothesisTest.cpp:475
+#: src/backend/statistics/HypothesisTest.cpp:484
+#: src/backend/statistics/HypothesisTest.cpp:494
+#: src/backend/statistics/HypothesisTest.cpp:503
+#: src/backend/statistics/HypothesisTest.cpp:513
+#: src/backend/statistics/HypothesisTest.cpp:526
+#: src/backend/statistics/HypothesisTest.cpp:538
+#: src/backend/statistics/HypothesisTest.cpp:548
+#: src/backend/statistics/HypothesisTest.cpp:556
+#: src/backend/statistics/HypothesisTest.cpp:568
+#: src/backend/statistics/HypothesisTest.cpp:576
+#: src/backend/statistics/HypothesisTest.cpp:584
+#: src/backend/statistics/HypothesisTest.cpp:592
+#, fuzzy, kde-format
+#| msgid "Value"
+msgid "p-Value"
+msgstr "Hodnota"
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
+#: src/backend/statistics/HypothesisTest.cpp:476
+#: src/backend/statistics/HypothesisTest.cpp:485
+#: src/backend/statistics/HypothesisTest.cpp:495
+#: src/backend/statistics/HypothesisTest.cpp:504
+#: src/backend/statistics/HypothesisTest.cpp:549
+#: src/backend/statistics/HypothesisTest.cpp:569
+#: src/backend/statistics/HypothesisTest.cpp:577
+#: src/backend/statistics/HypothesisTest.cpp:584
+#: src/backend/statistics/HypothesisTest.cpp:592
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1182
+#, kde-format
+msgid "Degrees of Freedom"
+msgstr "Stupňů volnosti"
+
+#: src/backend/statistics/HypothesisTest.cpp:476
+#, fuzzy, kde-format
+#| msgid "Test"
+msgid "Test Mean"
+msgstr "Test"
+
+#: src/backend/statistics/HypothesisTest.cpp:477
+#: src/backend/statistics/HypothesisTest.cpp:486
+#: src/backend/statistics/HypothesisTest.cpp:495
+#: src/backend/statistics/HypothesisTest.cpp:504
+#, fuzzy, kde-format
+#| msgid "Difference"
+msgid "Mean Difference"
+msgstr "Rozdíl"
+
+#: src/backend/statistics/HypothesisTest.cpp:477
+#: src/backend/statistics/HypothesisTest.cpp:487
+#: src/backend/statistics/HypothesisTest.cpp:496
+#: src/backend/statistics/HypothesisTest.cpp:505
+#: src/backend/statistics/HypothesisTest.cpp:519
+#: src/backend/statistics/HypothesisTest.cpp:531
+#: src/backend/statistics/HypothesisTest.cpp:541
+#: src/backend/statistics/HypothesisTest.cpp:549
+#: src/backend/statistics/HypothesisTest.cpp:561
+#: src/backend/statistics/HypothesisTest.cpp:569
+#: src/backend/statistics/HypothesisTest.cpp:577
+#: src/backend/statistics/HypothesisTest.cpp:585
+#: src/backend/statistics/HypothesisTest.cpp:596
+#, fuzzy, kde-format
+#| msgid "Statistical"
+msgid "Statistical Conclusion"
+msgstr "Statistické"
+
+#: src/backend/statistics/HypothesisTest.cpp:481
+#: src/backend/statistics/HypothesisTest.cpp:1740
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:101
+#, kde-format
+msgid "Independent Two-Sample t-Test"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:485
+#, fuzzy, kde-format
+#| msgid "Variance"
+msgid "Pooled Variance"
+msgstr "Rozptyl"
+
+#: src/backend/statistics/HypothesisTest.cpp:486
+#: src/backend/statistics/HypothesisTest.cpp:505
+#, kde-format
+msgid "Mean Difference Standard Error"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:491
+#: src/backend/statistics/HypothesisTest.cpp:1744
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:102
+#, kde-format
+msgid "Paired Two-Sample t-Test"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:500
+#: src/backend/statistics/HypothesisTest.cpp:1748
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:103
+#, kde-format
+msgid "Welch t-Test"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:510
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:104
+#, kde-format
+msgid "One-Way ANOVA Test"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:512
+#, kde-format
+msgid "One-Way ANOVA Test Statistics"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:513
+#: src/backend/statistics/HypothesisTest.cpp:526
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "F-Statistic"
+msgstr "Statistika"
+
+#: src/backend/statistics/HypothesisTest.cpp:514
+#, fuzzy, kde-format
+#| msgid "Degrees of Freedom"
+msgid "Degrees of Freedom Between Groups"
+msgstr "Stupňů volnosti"
+
+#: src/backend/statistics/HypothesisTest.cpp:515
+#, fuzzy, kde-format
+#| msgid "Degrees of Freedom"
+msgid "Degrees of Freedom Within Groups"
+msgstr "Stupňů volnosti"
+
+#: src/backend/statistics/HypothesisTest.cpp:516
+#, kde-format
+msgid "Sum of Squares Between Groups"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:517
+#, kde-format
+msgid "Sum of Squares Within Groups"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:518
+#, kde-format
+msgid "Mean Squares Between Groups"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:518
+#, kde-format
+msgid "Mean Squares Within Groups"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:523
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:105
+#, kde-format
+msgid "One-Way ANOVA with Repeated Measures Test"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:525
+#, kde-format
+msgid "One-Way ANOVA with Repeated Measures Test Statistics"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:527
+#, fuzzy, kde-format
+#| msgid "Degrees of Freedom"
+msgid "Degrees of Freedom Treatment"
+msgstr "Stupňů volnosti"
+
+#: src/backend/statistics/HypothesisTest.cpp:528
+#, fuzzy, kde-format
+#| msgid "Degrees of Freedom"
+msgid "Degrees of Freedom Residuals"
+msgstr "Stupňů volnosti"
+
+#: src/backend/statistics/HypothesisTest.cpp:528
+#, kde-format
+msgid "Sum of Squares Treatment"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:529
+#, kde-format
+msgid "Sum of Squares Residuals"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:530
+#, kde-format
+msgid "Sum of Squares Within Subjects"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:530
+#, kde-format
+msgid "Mean Squares Treatment"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:531
+#, kde-format
+msgid "Mean Squares Residuals"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:535
+#: src/backend/statistics/HypothesisTest.cpp:1760
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:106
+#, kde-format
+msgid "Mann-Whitney U Test"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:537
+#, kde-format
+msgid "Mann-Whitney U Test Statistics"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:538
+#, fuzzy, kde-format
+#| msgid "Up"
+msgid "U"
+msgstr "Nahoru"
+
+#: src/backend/statistics/HypothesisTest.cpp:539
+#: src/backend/statistics/HypothesisTest.cpp:557
+#, fuzzy, kde-format
+#| msgid "Value"
+msgid "z-Value"
+msgstr "Hodnota"
+
+#: src/backend/statistics/HypothesisTest.cpp:539
+#, kde-format
+msgid "Rank Sum 1"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:540
+#, fuzzy, kde-format
+#| msgid "Mean = 0"
+msgid "Mean Rank 1"
+msgstr "Střední hodnota = 0"
+
+#: src/backend/statistics/HypothesisTest.cpp:540
+#, kde-format
+msgid "Rank Sum 2"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:541
+#, fuzzy, kde-format
+#| msgid "Mean = 0"
+msgid "Mean Rank 2"
+msgstr "Střední hodnota = 0"
+
+#: src/backend/statistics/HypothesisTest.cpp:545
+#: src/backend/statistics/HypothesisTest.cpp:1768
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:108
+#, kde-format
+msgid "Kruskal-Wallis Test"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:547
+#, kde-format
+msgid "Kruskal-Wallis Test Statistics"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:548
+#: src/backend/statistics/HypothesisTest.cpp:591
+#, kde-format
+msgid "H"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:553
+#: src/backend/statistics/HypothesisTest.cpp:1764
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:107
+#, kde-format
+msgid "Wilcoxon Signed Rank Test"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:555
+#, kde-format
+msgid "Wilcoxon Signed Rank Test Statistics"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:556
+#, kde-format
+msgid "W"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:557
+#, kde-format
+msgid "Positive Rank Sum"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:558
+#, fuzzy, kde-format
+#| msgid "Positive Lookahead"
+msgid "Positive Rank Mean"
+msgstr "Pozitivní vyhlížení"
+
+#: src/backend/statistics/HypothesisTest.cpp:558
+#, kde-format
+msgid "Positive Rank Count"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:559
+#, kde-format
+msgid "Negative Rank Sum"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:559
+#, fuzzy, kde-format
+#| msgid "Negative lookahead"
+msgid "Negative Rank Mean"
+msgstr "Zpětně předvídavý"
+
+#: src/backend/statistics/HypothesisTest.cpp:560
+#, kde-format
+msgid "Negative Rank Count"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:560
+#, fuzzy, kde-format
+#| msgid "Count"
+msgid "Tie Count"
+msgstr "Počet"
+
+#: src/backend/statistics/HypothesisTest.cpp:565
+#: src/backend/statistics/HypothesisTest.cpp:1772
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:109
+#, kde-format
+msgid "Friedman Test"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:567
+#, fuzzy, kde-format
+#| msgid "Column Statistics"
+msgid "Friedman Test Statistics"
+msgstr "Statistika sloupce"
+
+#: src/backend/statistics/HypothesisTest.cpp:568
+#, fuzzy, kde-format
+#| msgid "Qt"
+msgid "Q"
+msgstr "Qt"
+
+#: src/backend/statistics/HypothesisTest.cpp:573
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:112
+#, kde-format
+msgid "Chi-Square Goodness of Fit Test"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:575
+#, kde-format
+msgid "Chi-Square Goodness of Fit Test Statistics"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:576
+#: src/backend/statistics/HypothesisTest.cpp:583
+#, kde-format
+msgid "Chi2"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:581
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:111
+#, kde-format
+msgid "Chi-Square Independence Test"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:582
+#, kde-format
+msgid "Chi-Square Independence Test Statistics"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:589
+#, kde-format
+msgid "Log-Rank Test"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:590
+#, fuzzy, kde-format
+#| msgid "Column Statistics"
+msgid "Log-Rank Test Statistics"
+msgstr "Statistika sloupce"
+
+#: src/backend/statistics/HypothesisTest.cpp:593
+#, kde-format
+msgid "Event Count 1"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:593
+#, kde-format
+msgid "Censored Count 1"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:594
+#, kde-format
+msgid "Total Count 1"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:594
+#, kde-format
+msgid "Event Count 2"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:595
+#, kde-format
+msgid "Censored Count 2"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:595
+#, kde-format
+msgid "Total Count 2"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:600
+#, kde-format
+msgid "N/A"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:604
+#, fuzzy, kde-format
+#| msgid "Device not available."
+msgid "Test result is not available."
+msgstr "Zařízení není dostupné."
+
+#: src/backend/statistics/HypothesisTest.cpp:608
+#, kde-format
+msgid "Two columns are required for this test."
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:612
+#, kde-format
+msgid "At least two columns are required."
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:616
+#, kde-format
+msgid "Column '%1' requires at least %2 samples."
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:620
+#, kde-format
+msgid "The size of each sample must be equal."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QRadioButton, rbMean)
+#: src/backend/statistics/HypothesisTest.cpp:624
+#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:136
+#: src/frontend/ui/dockwidgets/boxplotdock.ui:525
+#, kde-format
+msgid "Mean"
+msgstr "Střední hodnota"
+
+#: src/backend/statistics/HypothesisTest.cpp:642
+#, kde-format
+msgid "No variable columns provided."
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:887
+#, kde-format
+msgid ""
+"At the significance level %1, the population mean is significantly different "
+"from %2. Reject the null hypothesis."
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:891
+#, kde-format
+msgid ""
+"At the significance level %1, the population mean is not significantly "
+"different from %2. Fail to reject the null hypothesis."
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:975
+#: src/backend/statistics/HypothesisTest.cpp:1043
+#, kde-format
+msgid ""
+"At the significance level %1, the population means are significantly "
+"different. Reject the null Hypothesis"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:977
+#: src/backend/statistics/HypothesisTest.cpp:1045
+#, kde-format
+msgid ""
+"At the significance level %1, the population means are not significantly "
+"different. Fail to reject the null Hypothesis"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1098
+#: src/backend/statistics/HypothesisTest.cpp:1161
+#, kde-format
+msgid ""
+"At the significance level %1, at least one group mean is significantly "
+"different. Reject the null Hypothesis"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1101
+#: src/backend/statistics/HypothesisTest.cpp:1164
+#, kde-format
+msgid ""
+"At the significance level %1, no significant difference between group means. "
+"Fail to reject the null Hypothesis"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1221
+#: src/backend/statistics/HypothesisTest.cpp:1279
+#: src/backend/statistics/HypothesisTest.cpp:1338
+#, kde-format
+msgid ""
+"At the significance level %1, at least one group distribution is "
+"significantly different. Reject the null Hypothesis"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1223
+#: src/backend/statistics/HypothesisTest.cpp:1281
+#: src/backend/statistics/HypothesisTest.cpp:1340
+#, kde-format
+msgid ""
+"At the significance level %1, no significant difference between group "
+"distributions. Fail to reject the null Hypothesis"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1401
+#, kde-format
+msgid ""
+"At the significance level %1, at least one group is significantly different. "
+"Reject the null Hypothesis"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1403
+#, kde-format
+msgid ""
+"At the significance level %1, no significant difference between groups. Fail "
+"to reject the null Hypothesis"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1429
+#: src/backend/statistics/HypothesisTest.cpp:1496
+#, kde-format
+msgid "Column '%1' must be of integer type."
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1468
+#, kde-format
+msgid ""
+"At the significance level %1, the observed frequencies do not follow the "
+"expected frequency distribution. Reject the null Hypothesis"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1472
+#, kde-format
+msgid ""
+"At the significance level %1, the observed frequencies follow the expected "
+"frequency distribution. Fail to reject the null Hypothesis"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1516
+#, kde-format
+msgid "The size of each column in the contingency table must be equal."
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1532
+#, kde-format
+msgid ""
+"At the significance level %1, both categorical variables are dependent. "
+"Reject the null Hypothesis"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1535
+#, kde-format
+msgid ""
+"At the significance level %1, both categorical variables are independent. "
+"Fail to reject the null Hypothesis"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1553
+#, kde-format
+msgid "Three columns are required."
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1562
+#, kde-format
+msgid "Status column should be of integer type."
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1567
+#, kde-format
+msgid "Group column should be of integer type."
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1572
+#, kde-format
+msgid "Time, Status and Group columns should have equal size."
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1591
+#, kde-format
+msgid "Status column values must be either 0 or 1."
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1596
+#, kde-format
+msgid "Group column values must be either 0 or 1."
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1612
+#, kde-format
+msgid "Time, Status and Group columns should have equal number of values."
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1620
+#, kde-format
+msgid "Group 1 requires at least %1 samples."
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1625
+#, kde-format
+msgid "Group 2 requires at least %1 samples."
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1637
+#, kde-format
+msgid ""
+"At the significance level %1, the survival curves are significantly "
+"different. Reject the null Hypothesis"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1640
+#, kde-format
+msgid ""
+"At the significance level %1, no significant difference between survival "
+"curves. Fail to reject the null Hypothesis"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1752
+#, kde-format
+msgid "One-Way ANOVA"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1756
+#, kde-format
+msgid "One-Way ANOVA with Repeated Measures"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1776
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:110
+#, kde-format
+msgid "Logrank Test"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1780
+#, kde-format
+msgid "Chi-square Independence Test"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:1784
+#, kde-format
+msgid "Chi-square Goodness of Fit Test"
+msgstr ""
 
 #: src/backend/worksheet/Background.cpp:202
 #, kde-format
@@ -8021,9 +8804,10 @@ msgid "%1: set whiskers cap size"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
-#, kde-format
-msgid "%1: jitterring changed"
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "%1: border type changed"
+msgid "%1: jittering changed"
+msgstr "%1: změněn typ okraje"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:518
@@ -8098,7 +8882,7 @@ msgstr "Integrace"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:415
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:452
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2059
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:513
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:514
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:72
 #, kde-format
 msgid "Smooth"
@@ -8107,7 +8891,7 @@ msgstr "Hladké"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:416
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:635
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2078
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:627
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:630
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit"
@@ -8116,7 +8900,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:417
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:500
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2118
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:515
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:516
 #, kde-format
 msgid "Fourier Filter"
 msgstr ""
@@ -8168,19 +8952,19 @@ msgid ""
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:449
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:505
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:506
 #, kde-format
 msgid "Differentiate"
 msgstr "Derivovat"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:450
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:508
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:509
 #, kde-format
 msgid "Integrate"
 msgstr "Integrovat"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:451
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:511
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:512
 #, kde-format
 msgid "Interpolate"
 msgstr "Interpolovat"
@@ -8191,13 +8975,13 @@ msgid "Convolute/Deconvolute"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:464
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:526
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:527
 #, kde-format
 msgid "Exponential (degree 1)"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:468
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:529
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:530
 #, kde-format
 msgid "Exponential (degree 2)"
 msgstr ""
@@ -8208,13 +8992,13 @@ msgid "Inverse exponential"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:484
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:541
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:542
 #, kde-format
 msgid "Arc Tangent"
 msgstr "Arkustangens"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:492
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:547
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:548
 #, kde-format
 msgid "Error Function"
 msgstr "Chybová funkce"
@@ -10821,73 +11605,73 @@ msgid "Shift Down Y"
 msgstr ""
 
 #: src/frontend/ActionsManager.cpp:680
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:491
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:492
 #, kde-format
 msgid "Insert Row Above"
 msgstr "Vložit řádek výše"
 
 #: src/frontend/ActionsManager.cpp:683
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:492
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:493
 #, kde-format
 msgid "Insert Row Below"
 msgstr "Vložit řádek pod"
 
 #: src/frontend/ActionsManager.cpp:686
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:495
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:496
 #, kde-format
 msgid "Remo&ve Selected Row(s)"
 msgstr ""
 
 #: src/frontend/ActionsManager.cpp:690
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:344
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:345
 #, kde-format
 msgid "Insert Column Left"
 msgstr "Vložit sloupec vlevo"
 
 #: src/frontend/ActionsManager.cpp:693
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:345
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:346
 #, kde-format
 msgid "Insert Column Right"
 msgstr "Vložit sloupec vpravo"
 
 #: src/frontend/ActionsManager.cpp:696
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:348
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:349
 #, kde-format
 msgid "Delete Selected Column(s)"
 msgstr ""
 
 #: src/frontend/ActionsManager.cpp:700
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:478
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:479
 #, kde-format
 msgid "&Sort..."
 msgstr "&Seřadit..."
 
 #: src/frontend/ActionsManager.cpp:701
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:479
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:480
 #, kde-format
 msgid "Sort multiple columns together"
 msgstr ""
 
 #: src/frontend/ActionsManager.cpp:704
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:480
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:481
 #, kde-format
 msgid "Sort &Ascending"
 msgstr ""
 
 #: src/frontend/ActionsManager.cpp:705
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:481
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:482
 #, kde-format
 msgid "Sort the selected columns separately in ascending order"
 msgstr ""
 
 #: src/frontend/ActionsManager.cpp:708
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:482
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:483
 #, kde-format
 msgid "Sort &Descending"
 msgstr ""
 
 #: src/frontend/ActionsManager.cpp:709
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:483
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:484
 #, kde-format
 msgid "Sort the selected columns separately in descending order"
 msgstr ""
@@ -11184,16 +11968,16 @@ msgid "Curve"
 msgstr "Křivka"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:886
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4011
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4065
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4038
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4092
 #: src/frontend/worksheet/WorksheetView.cpp:2150
 #, kde-format
 msgid "Failed to export"
 msgstr "Export selhal"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:886
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4011
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4065
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4038
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4092
 #: src/frontend/worksheet/WorksheetView.cpp:2150
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -13160,13 +13944,17 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
+#. i18n: ectx: property (text), widget (QLabel, lVariables)
 #: src/frontend/dockwidgets/BarPlotDock.cpp:339
 #: src/frontend/dockwidgets/BarPlotDock.cpp:365
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:369
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:394
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:337
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:367
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:321
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:347
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:423
+#: src/frontend/ui/dockwidgets/hypothesistestdock.ui:441
 #: src/frontend/ui/dockwidgets/matrixdock.ui:117
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:148
 #: src/frontend/ui/dockwidgets/worksheetdock.ui:422
@@ -13181,6 +13969,8 @@ msgstr "Sloupce:"
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
 #: src/frontend/dockwidgets/BarPlotDock.cpp:367
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:398
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:339
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:369
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:349
 #: src/frontend/spreadsheet/GoToDialog.cpp:49
 #: src/frontend/ui/dockwidgets/axisdock.ui:808
@@ -13710,6 +14500,36 @@ msgstr ""
 #: src/frontend/dockwidgets/HistogramDock.cpp:578
 #, kde-format
 msgid "%1 histograms: template \"%2\" loaded"
+msgstr ""
+
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:116
+#, kde-format
+msgid ""
+"<ul><li><b>One-Sample t-Test</b> - tests if a sample mean differs "
+"significantly from a known population mean</li><li><b>Independent Two-Sample "
+"t-Test</b> - tests if two independent samples have the same mean</"
+"li><li><b>Paired Two-Sample t-Test</b> - tests if the mean difference "
+"between two related samples is zero</li><li><b>Welch t-Test</b> - tests if "
+"two independent samples with unequal variances have the same mean</"
+"li><li><b>One-Way ANOVA Test</b> - tests if three or more independent "
+"samples have the same mean</li><li><b>One-Way ANOVA with Repeated Measures "
+"Test</b> - tests if three or more related/repeated measurements have the "
+"same mean</li><li><b>Mann-Whitney U Test</b> - tests differences in medians "
+"between two independent groups</li><li><b>Wilcoxon Signed Rank Test</b> - "
+"tests if the median difference between two related samples is zero</"
+"li><li><b>Kruskal-Wallis Test</b> - tests differences in medians among three "
+"or more independent groups</li><li><b>Friedman Test</b> - tests differences "
+"in medians among three or more related/repeated measurements</"
+"li><li><b>Logrank Test</b> - tests differences in survival distributions "
+"between two or more groups</li><li><b>Chi-Square Independence Test</b> - "
+"tests if two categorical variables are independent of each other</"
+"li><li><b>Chi-Square Goodness of Fit Test</b> - tests if observed data "
+"follows a specified theoretical distribution</li></ul>"
+msgstr ""
+
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:297
+#, kde-format
+msgid "Selected test requires at least %1 and at most %2 non-empty variables."
 msgstr ""
 
 #: src/frontend/dockwidgets/InfoElementDock.cpp:227
@@ -14787,61 +15607,69 @@ msgid "Properties: Data Extractor"
 msgstr "Vlastnosti: Extraktor dat"
 
 #: src/frontend/GuiObserver.cpp:436
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Properties: Notes"
+msgctxt "@title:window"
+msgid "Properties: Hypothesis Test"
+msgstr "Vlastnosti: Poznámky"
+
+#: src/frontend/GuiObserver.cpp:441
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Project"
 msgstr "Vlastnosti: Projekt"
 
-#: src/frontend/GuiObserver.cpp:446
+#: src/frontend/GuiObserver.cpp:451
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Notebook"
 msgstr "%1 Poznámkový blok"
 
-#: src/frontend/GuiObserver.cpp:448
+#: src/frontend/GuiObserver.cpp:453
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notebook"
 msgstr "Vlastnosti: Poznámkový blok"
 
-#: src/frontend/GuiObserver.cpp:454
+#: src/frontend/GuiObserver.cpp:459
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notes"
 msgstr "Vlastnosti: Poznámky"
 
-#: src/frontend/GuiObserver.cpp:459
+#: src/frontend/GuiObserver.cpp:464
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Info Element"
 msgstr ""
 
-#: src/frontend/GuiObserver.cpp:466 src/frontend/GuiObserver.cpp:473
-#: src/frontend/GuiObserver.cpp:480
+#: src/frontend/GuiObserver.cpp:471 src/frontend/GuiObserver.cpp:478
+#: src/frontend/GuiObserver.cpp:485
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
 msgstr "Vlastnosti: Zdroj dat MQTT"
 
-#: src/frontend/GuiObserver.cpp:486
+#: src/frontend/GuiObserver.cpp:491
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
 msgstr "Vlastnosti: Zdroj měnících se dat"
 
-#: src/frontend/GuiObserver.cpp:500
+#: src/frontend/GuiObserver.cpp:505
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Folder"
 msgstr "Vlastnosti: Složka"
 
-#: src/frontend/GuiObserver.cpp:507
+#: src/frontend/GuiObserver.cpp:512
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Workbook"
 msgstr ""
 
-#: src/frontend/GuiObserver.cpp:513
+#: src/frontend/GuiObserver.cpp:518
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Script"
@@ -15101,6 +15929,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/columndock.ui:17
 #: src/frontend/ui/dockwidgets/custompointdock.ui:267
 #: src/frontend/ui/dockwidgets/histogramdock.ui:37
+#: src/frontend/ui/dockwidgets/hypothesistestdock.ui:70
 #: src/frontend/ui/dockwidgets/imagedock.ui:377
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:83
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:180
@@ -15588,8 +16417,8 @@ msgid "%1 printed"
 msgstr "%1 vytisknuto"
 
 #: src/frontend/MainWin.cpp:1220
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3732
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3733
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3759
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3760
 #, kde-format
 msgid "%1"
 msgstr "%1"
@@ -15667,19 +16496,19 @@ msgid "%1: fill matrix with function values"
 msgstr ""
 
 #: src/frontend/matrix/MatrixView.cpp:121
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:305
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:306
 #, kde-format
 msgid "Cu&t"
 msgstr "Vyjmou&t"
 
 #: src/frontend/matrix/MatrixView.cpp:122
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:306
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:307
 #, kde-format
 msgid "&Copy"
 msgstr "&Kopírovat"
 
 #: src/frontend/matrix/MatrixView.cpp:123
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:307
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:308
 #, kde-format
 msgid "Past&e"
 msgstr "Vlož&it"
@@ -15691,7 +16520,7 @@ msgstr "Smazat výbě&r"
 
 #. i18n: ectx: property (text), widget (QPushButton, bSelectAll)
 #: src/frontend/matrix/MatrixView.cpp:125
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:312
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:313
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:288
 #: src/frontend/worksheet/WorksheetView.cpp:139
 #, kde-format
@@ -15699,25 +16528,25 @@ msgid "Select All"
 msgstr "Vybrat vše"
 
 #: src/frontend/matrix/MatrixView.cpp:137
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:321
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:322
 #, kde-format
 msgid "Function Values"
 msgstr ""
 
 #: src/frontend/matrix/MatrixView.cpp:138
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:322
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:323
 #, kde-format
 msgid "Const Values"
 msgstr "Hodnoty konstant"
 
 #: src/frontend/matrix/MatrixView.cpp:139
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:349
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:350
 #, kde-format
 msgid "Clear Content"
 msgstr ""
 
 #: src/frontend/matrix/MatrixView.cpp:140
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:333
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:334
 #, kde-format
 msgid "&Go to Cell..."
 msgstr "Přejít na b&uňku..."
@@ -15804,20 +16633,20 @@ msgid "Clea&r Rows"
 msgstr ""
 
 #: src/frontend/matrix/MatrixView.cpp:246
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:583
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:586
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:85
 #, kde-format
 msgid "Selection"
 msgstr "Výběr"
 
 #: src/frontend/matrix/MatrixView.cpp:268
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:693
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:703
 #, kde-format
 msgid "Generate Data"
 msgstr "Generovat data"
 
 #: src/frontend/matrix/MatrixView.cpp:273
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:708
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:718
 #, kde-format
 msgid "Manipulate Data"
 msgstr ""
@@ -15866,7 +16695,7 @@ msgid "%1: cut selected cell(s)"
 msgstr ""
 
 #: src/frontend/matrix/MatrixView.cpp:690
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1800
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1828
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: vložit ze schránky"
@@ -15991,7 +16820,7 @@ msgid "Assistants"
 msgstr "Asistenti"
 
 #: src/frontend/notebook/NotebookView.cpp:285
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:613
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:616
 #, kde-format
 msgid "Plot Data"
 msgstr "Zobrazit graf"
@@ -16132,7 +16961,7 @@ msgid "Search/Filter Options"
 msgstr ""
 
 #: src/frontend/ProjectExplorer.cpp:248 src/frontend/ProjectExplorer.cpp:396
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1056
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1081
 #, kde-format
 msgid "Columns"
 msgstr "Sloupce"
@@ -16608,13 +17437,6 @@ msgstr ""
 msgid "&Divide"
 msgstr "&Dělit"
 
-#. i18n: ectx: property (text), widget (QRadioButton, rbMean)
-#: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:136
-#: src/frontend/ui/dockwidgets/boxplotdock.ui:525
-#, kde-format
-msgid "Mean"
-msgstr "Střední hodnota"
-
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:139
 #, kde-format
 msgid "Custom Value"
@@ -16840,7 +17662,7 @@ msgid "Does Not Contain"
 msgstr "Neobsahuje"
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:74
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:308
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:309
 #, kde-format
 msgid "&Mask"
 msgstr "&Maska"
@@ -17656,17 +18478,17 @@ msgstr ""
 msgid "Sort"
 msgstr "Seřadit"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:309
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:310
 #, kde-format
 msgid "&Unmask"
 msgstr "&Odmaskovat"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:310
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:311
 #, kde-format
 msgid "&Reverse"
 msgstr "Ob&rátit směr"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:311
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:312
 #, kde-format
 msgid "Clea&r Content"
 msgstr ""
@@ -17674,330 +18496,346 @@ msgstr ""
 #. i18n("Assign &Formula"), this);
 #. action_recalculate = new QAction(QIcon::fromTheme(QString()), i18n("Recalculate"), this);
 #. action_fill_sel_row_numbers = new QAction(QIcon::fromTheme(QString()), i18n("Row Numbers"), this);
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:317
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:318
 #, kde-format
 msgid "Row Numbers"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:318
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:319
 #, kde-format
 msgid "Uniform Random Values"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:319
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:320
 #, kde-format
 msgid "Random Values"
 msgstr "Náhodné hodnoty"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:320
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:321
 #, kde-format
 msgid "Equidistant Values"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:324
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:325
 #, kde-format
 msgid "Sample Values"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:325
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:326
 #, kde-format
 msgid "Flatten Columns"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:328
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1157
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1542
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:329
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1182
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1568
 #, kde-format
 msgid "Show Comments"
 msgstr "Zobrazit komentáře"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:329
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1168
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1547
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:330
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1193
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1573
 #, kde-format
 msgid "Show Sparklines"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:331
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:332
 #, kde-format
 msgid "Clear Spreadsheet"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:332
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:333
 #, kde-format
 msgid "Clear Masks"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:334
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:335
 #, kde-format
 msgid "&Search"
 msgstr "&Hledat"
 
 #. i18n: ectx: property (text), widget (QPushButton, bReplaceNext)
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:336
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:337
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:225
 #, kde-format
 msgid "&Replace"
 msgstr "Nah&radit"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:338
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:484
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:339
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:485
 #, kde-format
 msgid "Column Statistics..."
 msgstr "Statistika sloupce..."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:340
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:341
 #, kde-format
 msgid "Column Statistics Spreadsheet"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:346
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:347
 #, kde-format
 msgid "Insert Multiple Columns Left"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:347
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:348
 #, kde-format
 msgid "Insert Multiple Columns Right"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:350
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1632
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:351
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1658
 #, kde-format
 msgid "Freeze Column"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:385
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:386
 #, kde-format
 msgid "Add"
 msgstr "Přidat"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:387
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:388
 #, kde-format
 msgid "Subtract"
 msgstr "Odečíst"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:389
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:390
 #, kde-format
 msgid "Multiply"
 msgstr "Násobit"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:391
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:392
 #, kde-format
 msgid "Divide"
 msgstr "Dělit"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:393
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:394
 #, kde-format
 msgid "Drop Values"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:394
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:395
 #, kde-format
 msgid "Mask Values"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:396
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:397
 #, kde-format
 msgid "Reverse"
 msgstr "Opačné"
 
 #. i18n("Join"), this);
 #. algorithms - baseline subtraction, outliar removal, etc.
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:400
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:401
 #, kde-format
 msgid "Subtract Baseline"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:406
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:407
 #, kde-format
 msgid "Divide by Sum"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:409
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:410
 #, kde-format
 msgid "Divide by Min"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:412
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:413
 #, kde-format
 msgid "Divide by Max"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:415
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:416
 #, kde-format
 msgid "Divide by Count"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:418
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:419
 #, kde-format
 msgid "Divide by Mean"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:421
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:422
 #, kde-format
 msgid "Divide by Median"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:424
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:425
 #, kde-format
 msgid "Divide by Mode"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:427
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:428
 #, kde-format
 msgid "Divide by Range"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:430
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:431
 #, kde-format
 msgid "Divide by SD"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:433
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:434
 #, kde-format
 msgid "Divide by MAD"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:436
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:437
 #, kde-format
 msgid "Divide by IQR"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:439
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:440
 #, kde-format
 msgid "(x-Mean)/SD"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:442
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:443
 #, kde-format
 msgid "(x-Median)/MAD"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:445
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:446
 #, kde-format
 msgid "(x-Median)/IQR"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:448
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:449
 #, kde-format
 msgid "Rescale to [a, b]"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:487
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:488
 #, kde-format
 msgid "Heatmap"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:493
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:494
 #, kde-format
 msgid "Insert Multiple Rows Above"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:494
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:495
 #, kde-format
 msgid "Insert Multiple Rows Below"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:496
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:497
 #, kde-format
 msgid "Delete Rows With Missing Values"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:497
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:498
 #, kde-format
 msgid "Mask Rows With Missing Values"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:498
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:499
 #, kde-format
 msgid "Row Statisti&cs"
 msgstr "Statis&tika řady"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:502
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:503
 #, kde-format
 msgid "Reduce Data"
 msgstr "Redukovat data"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:567
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:568
 #, kde-format
 msgid "Log-normal"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:617
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:620
 #, kde-format
 msgid "Conditional Formatting"
 msgstr "Podmíněné formátování"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:646
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:649
 #, kde-format
 msgctxt "Curve fitting"
 msgid "Fit Distribution"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:660
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:663
 #, kde-format
 msgid "Analyze and Plot Data"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:675
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:679
+#, fuzzy, kde-format
+#| msgid "Statistical"
+msgid "Statistical Analysis"
+msgstr "Statistické"
+
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:680
+#, kde-format
+msgid "Hypothesis Test"
+msgstr ""
+
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:685
 #, kde-format
 msgid "Set Column As"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:744
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:754
 #, kde-format
 msgid "Normalize"
 msgstr "Normalizovat"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:767
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:777
 #, kde-format
 msgid "Ladder of Powers"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1155
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1540
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:953
+#, kde-format
+msgid "Hypothesis Test for %1"
+msgstr ""
+
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1180
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1566
 #, kde-format
 msgid "Hide Comments"
 msgstr "Skrýt komentáře"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1166
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1545
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1191
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1571
 #, kde-format
 msgid "Hide Sparklines"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1636
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1662
 #, kde-format
 msgid "Unfreeze Column"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:1719
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:1747
 #, kde-format
 msgid "%1: cut selected cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2034
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2062
 #, kde-format
 msgid "Not enough memory to finalize this operation."
 msgstr "Pro dokončení této operace není dostatek paměti."
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2048
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2076
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2080
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2108
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2238
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2266
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2303
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2331
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
@@ -18005,42 +18843,42 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2347
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2375
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2473
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2501
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2483
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2505
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2523
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2540
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2511
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2533
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2551
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2568
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2620
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2658
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2648
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2686
 #, kde-format
 msgid "Insert empty columns"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2621
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2659
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2649
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2687
 #, kde-format
 msgid "Enter the number of columns to insert"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2692
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2720
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2789
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2817
 #, kde-format
 msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
@@ -18048,149 +18886,149 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2862
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2890
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
 "because of this. "
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2896
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2924
 #, kde-format
 msgid "%1: normalize columns"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2916
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2944
 #, kde-format
 msgid "Sum = 0"
 msgstr "Celkem = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2927
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2955
 #, kde-format
 msgid "Min = 0"
 msgstr "Min = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2938
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2966
 #, kde-format
 msgid "Max = 0"
 msgstr "Max = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2949
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2977
 #, kde-format
 msgid "Count = 0"
 msgstr "Počet = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2960
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2988
 #, kde-format
 msgid "Mean = 0"
 msgstr "Střední hodnota = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2971
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:2999
 #, kde-format
 msgid "Median = 0"
 msgstr "Medián = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2983
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3011
 #, kde-format
 msgid "Mode = 0"
 msgstr "Režim = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2985
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3013
 #, kde-format
 msgid "'Mode not defined'"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:2996
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3024
 #, kde-format
 msgid "Range = 0"
 msgstr "Rozsah = 0"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3007
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3041
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3035
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3069
 #, kde-format
 msgid "SD = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3018
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3053
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3046
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3081
 #, kde-format
 msgid "MAD = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3029
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3065
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3057
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3093
 #, kde-format
 msgid "IQR = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3077
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3105
 #, kde-format
 msgid "Max - Min = 0"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3096
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3124
 #, kde-format
 msgid "Normalization not possible"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3108
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3136
 #, kde-format
 msgid "%1: power transform columns"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3226
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3254
 #, kde-format
 msgid "%1: column statistics"
 msgstr "%1: statistika sloupce"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3257
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3285
 #, kde-format
 msgid "Selection in %1"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3300
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3328
 #, kde-format
 msgid "%1: row statistics"
 msgstr "%1: statistika řady"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3310
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3338
 #, kde-format
 msgid "Row %1"
 msgstr "Řádek %1"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3335
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3371
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3363
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3399
 #, kde-format
 msgid "Insert multiple rows"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3336
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3372
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3364
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3400
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3407
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3435
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: odstranit vybrané řádky"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3443
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3471
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3698
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3726
 #, kde-format
 msgid "Selected 1: %1 rows, %2 columns"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3708
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3735
 #, kde-format
 msgid "Selected: %1 cells"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3727
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3754
 #, kde-format
 msgid "row"
 msgid_plural "rows"
@@ -18198,7 +19036,7 @@ msgstr[0] "řádek"
 msgstr[1] "řádky"
 msgstr[2] "řádky"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3728
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3755
 #, kde-format
 msgid "column"
 msgid_plural "columns"
@@ -18206,68 +19044,68 @@ msgstr[0] "sloupec"
 msgstr[1] "sloupce"
 msgstr[2] "sloupce"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3729
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3756
 #, kde-format
 msgid "cells"
 msgstr "buňky"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3730
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3757
 #, kde-format
 msgid "masked value"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3730
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3757
 #, kde-format
 msgid "masked values"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3731
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3758
 #, kde-format
 msgid "missing value"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3731
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3758
 #, kde-format
 msgid "missing values"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3732
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3759
 #, kde-format
 msgid " , "
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3733
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3760
 #, kde-format
 msgid ", "
 msgstr ", "
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3737
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3764
 #, kde-format
 msgid "Selected: %1 %2, %3 %4%5 %6 %7 %8"
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3747
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3774
 #, kde-format
 msgid "Selected: %1 %2%3 %4 %5 %6"
 msgstr "Vybráno: %1 %2%3 %4 %5 %6"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:3828
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:3855
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Vytisknout sešit"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4442
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4469
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4474
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4501
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr ""
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:4529
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:4556
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr ""
@@ -18538,6 +19376,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/columndock.ui:53
 #: src/frontend/ui/dockwidgets/custompointdock.ui:208
 #: src/frontend/ui/dockwidgets/histogramdock.ui:27
+#: src/frontend/ui/dockwidgets/hypothesistestdock.ui:334
 #: src/frontend/ui/dockwidgets/imagedock.ui:357
 #: src/frontend/ui/dockwidgets/infoelementdock.ui:147
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:149
@@ -19342,6 +20181,7 @@ msgstr "Vytvořit index sloupce"
 #. i18n: ectx: property (windowTitle), widget (QWidget, BackgroundWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KDEPlotDock)
 #. i18n: ectx: property (windowTitle), widget (QWidget, RunChartDock)
+#. i18n: ectx: property (windowTitle), widget (QWidget, HypothesisTestDock)
 #. i18n: ectx: property (windowTitle), widget (QWidget, ValueWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, StatisticsSpreadsheetDock)
 #. i18n: ectx: property (windowTitle), widget (QWidget, ProcessBehaviorChartDock)
@@ -19356,6 +20196,7 @@ msgstr "Vytvořit index sloupce"
 #: src/frontend/ui/datasources/xlsxoptionswidget.ui:14
 #: src/frontend/ui/dockwidgets/backgroundwidget.ui:14
 #: src/frontend/ui/dockwidgets/errorbarwidget.ui:14
+#: src/frontend/ui/dockwidgets/hypothesistestdock.ui:14
 #: src/frontend/ui/dockwidgets/kdeplotdock.ui:14
 #: src/frontend/ui/dockwidgets/linewidget.ui:14
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:14
@@ -21382,6 +22223,62 @@ msgstr ""
 msgid "Shape"
 msgstr "Tvar"
 
+#. i18n: ectx: property (text), widget (QLabel, lTestMean)
+#: src/frontend/ui/dockwidgets/hypothesistestdock.ui:20
+#, kde-format
+msgid "Test Mean μ₀: "
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lSignificanceLevel)
+#: src/frontend/ui/dockwidgets/hypothesistestdock.ui:50
+#, kde-format
+msgid "Significance Level α:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
+#: src/frontend/ui/dockwidgets/hypothesistestdock.ui:95
+#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:241
+#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:320
+#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:17
+#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:412
+#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:182
+#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:354
+#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:122
+#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:295
+#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:281
+#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:123
+#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:563
+#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:229
+#, kde-format
+msgid "Recalculate"
+msgstr "Přepočítat"
+
+#. i18n: ectx: property (text), widget (QLabel, lH0)
+#: src/frontend/ui/dockwidgets/hypothesistestdock.ui:104
+#, kde-format
+msgid "Null:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lH1)
+#: src/frontend/ui/dockwidgets/hypothesistestdock.ui:114
+#, fuzzy, kde-format
+#| msgid "Username:"
+msgid "Alternate:"
+msgstr "Uživatelské jméno:"
+
+#. i18n: ectx: property (text), widget (QLabel, lHypothesis)
+#: src/frontend/ui/dockwidgets/hypothesistestdock.ui:269
+#, kde-format
+msgid "Hypothesis"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lTest)
+#: src/frontend/ui/dockwidgets/hypothesistestdock.ui:289
+#, fuzzy, kde-format
+#| msgid "Test"
+msgid "Test:"
+msgstr "Test"
+
 #. i18n: ectx: property (text), widget (QLabel, lPositionY)
 #: src/frontend/ui/dockwidgets/imagedock.ui:136
 #, kde-format
@@ -21957,23 +22854,6 @@ msgstr ""
 msgid "Y-Data Response:"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
-#: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:241
-#: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:320
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:17
-#: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:412
-#: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:182
-#: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:354
-#: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:122
-#: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:295
-#: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:281
-#: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:123
-#: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:563
-#: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:229
-#, kde-format
-msgid "Recalculate"
-msgstr "Přepočítat"
-
 #. i18n: ectx: property (text), widget (QLabel, lYColumn)
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:248
 #, kde-format
@@ -22472,12 +23352,6 @@ msgstr "Tolerance"
 #, kde-format
 msgid "Calculation time"
 msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1182
-#, kde-format
-msgid "Degrees of Freedom"
-msgstr "Stupňů volnosti"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1202
@@ -24581,11 +25455,6 @@ msgstr "%1 (plocha)"
 msgctxt "@title:window"
 msgid "Export Worksheet"
 msgstr "Exportovat pracovní list"
-
-#: src/frontend/worksheet/ExportWorksheetDialog.cpp:235
-#, kde-format
-msgid "Portable Data Format (*.pdf *.PDF)"
-msgstr "Portable Data Format (*.pdf *.PDF)"
 
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:237
 #, kde-format

@@ -1376,7 +1376,7 @@ void Worksheet::curveDataChanged(const XYCurve* curve) {
 }
 
 /*!
- * Updates the background of the cuves entry in the treeview
+ * Updates the background of the curves entry in the treeview
  * @param pen Pen of the curve
  * @param curveName Curve name to find in treemodel
  */
