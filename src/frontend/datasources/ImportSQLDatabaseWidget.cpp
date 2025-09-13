@@ -677,7 +677,7 @@ void ImportSQLDatabaseWidget::setValid() {
 }
 
 // ##############################################################################
-// ###################### heper functions for unit tests  #######################
+// ###################### helper functions for unit tests #######################
 // ##############################################################################
 void ImportSQLDatabaseWidget::setCustomQuery(bool custom) {
 	if (custom)

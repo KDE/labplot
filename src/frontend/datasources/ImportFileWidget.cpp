@@ -542,7 +542,7 @@ void ImportFileWidget::initSlots() {
 }
 
 /*!
- * \brief Called when the current target data containter was changed in ImportDilaog
+ * \brief Called when the current target data container was changed in ImportDilaog
  */
 void ImportFileWidget::dataContainerChanged(AbstractAspect* aspect) {
 	m_targetContainer = aspect;
@@ -632,7 +632,7 @@ QString ImportFileWidget::dbcFileName() const {
 QString ImportFileWidget::selectedObject() const {
 	DEBUG(Q_FUNC_INFO)
 
-	// retunr the name of the currently selected directory if importing a directory
+	// return the name of the currently selected directory if importing a directory
 	if (m_importDir) {
 		QString name = path();
 		// strip away the path if existing
@@ -1197,7 +1197,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		}
 		for (int i = 0; i < ui.cbFileType->count(); ++i) {
 			if (static_cast<AbstractFileFilter::FileType>(ui.cbFileType->itemData(i).toInt()) == fileType) {
-				// enable item if exlusive
+				// enable item if exclusive
 				if (AbstractFileFilter::exclusiveFileType(fileType)) {
 					auto* item = model->item(i);
 					if (item)
@@ -1305,7 +1305,7 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 	Q_EMIT error(QString()); // clear the potential error message that was shown for the previous file type
 	initOptionsWidget();
 
-	// enable the options widgets, should be avaible for all types where there is no "automatic" vs "custom",
+	// enable the options widgets, should be available for all types where there is no "automatic" vs "custom",
 	// will be disabled for "automatic" for the relevant data types
 	ui.swOptions->setEnabled(true);
 
@@ -2801,7 +2801,7 @@ void ImportFileWidget::unsubscribeTopic(const QString& topicName, QVector<QTreeW
 
 	for (int i = 0; i < m_mqttSubscriptions.count(); ++i) {
 		if (m_mqttSubscriptions[i]->topic().filter() == topicName) {
-			// explicitly disconnect from the signal, callling QMqttClient::unsubscribe() below is not enough
+			// explicitly disconnect from the signal, calling QMqttClient::unsubscribe() below is not enough
 			disconnect(m_mqttSubscriptions.at(i), &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
 			m_mqttSubscriptions.remove(i);
 			break;

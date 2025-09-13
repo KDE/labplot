@@ -309,7 +309,7 @@ bool TreeViewComboBox::isTopLevel(const AbstractAspect* aspect) const {
 	const auto& selectableTypes = m_model->selectableAspects();
 	for (AspectType type : m_topLevelClasses) {
 		if (aspect->type() == type) {
-			// curent aspect is a top level aspect,
+			// current aspect is a top level aspect,
 			// check whether its selectable
 			if (selectableTypes.indexOf(type) != -1)
 				return true;

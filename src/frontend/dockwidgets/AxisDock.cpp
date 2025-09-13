@@ -452,7 +452,7 @@ void AxisDock::initConnections() {
 }
 
 /*
- * updates the locale in the widgets. called when the application settins are changed.
+ * updates the locale in the widgets. called when the application settings are changed.
  */
 void AxisDock::updateLocale() {
 	const auto numberLocale = QLocale();
@@ -2176,7 +2176,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	// BOOKMARK(axis title): Title
 	auto axisTitleGroup = config.group(QStringLiteral("AxisTitle"));
 	labelWidget->saveConfig(axisTitleGroup);
-	// addtionally save rotation for x and y seperately to allow independent values
+	// additionally save rotation for x and y separately to allow independent values
 	if (orientation == Axis::Orientation::Horizontal)
 		axisTitleGroup.writeEntry(QStringLiteral("RotationX"), labelWidget->ui.sbRotation->value());
 	else {

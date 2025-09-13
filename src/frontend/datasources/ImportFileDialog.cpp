@@ -56,7 +56,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	// dialog buttons
 	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Reset | QDialogButtonBox::Cancel);
 	okButton = buttonBox->button(QDialogButtonBox::Ok);
-	m_optionsButton = buttonBox->button(QDialogButtonBox::Reset); // we highjack the default "Reset" button and use if for showing/hiding the options
+	m_optionsButton = buttonBox->button(QDialogButtonBox::Reset); // we hijack the default "Reset" button and use if for showing/hiding the options
 	okButton->setEnabled(false); // ok is only available if a valid container was selected
 	vLayout->addWidget(buttonBox);
 
@@ -181,8 +181,8 @@ bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	progressBar->setRange(0, 100);
 	const auto& path = m_importFileWidget->path();
 	auto* filter = m_importFileWidget->currentFileFilter();
-	filter->setLastError(QString()); // clear the previos error, if any available
-	filter->clearLastWarnings(); // clear the previos warnings, if any available
+	filter->setLastError(QString()); // clear the previous error, if any available
+	filter->clearLastWarnings(); // clear the previous warnings, if any available
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
 

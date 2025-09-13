@@ -1,7 +1,7 @@
 /*
 	File                 : DropValuesDialog.cpp
 	Project              : LabPlot
-	Description          : Dialog for droping and masking values in columns
+	Description          : Dialog for dropping and masking values in columns
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later

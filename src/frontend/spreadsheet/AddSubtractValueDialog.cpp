@@ -84,7 +84,7 @@ AddSubtractValueDialog::~AddSubtractValueDialog() {
 }
 
 void AddSubtractValueDialog::init() {
-	// initilize the line edits with the values based on the values in the data container
+	// initialize the line edits with the values based on the values in the data container
 	if (m_spreadsheet)
 		initValuesSpreadsheet();
 	else
@@ -745,7 +745,7 @@ void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
 	// in case the result was already calculated for the first column for the preview,
 	// no need to calculate it again, re-use the already available result
 	if (colIndex == 0 && !m_previewDirty) {
-		// for the baseline subraction the mode has to be Double, set it if not the case yet
+		// for the baseline subtraction the mode has to be Double, set it if not the case yet
 		if (m_operation == SubtractBaseline && col->columnMode() != AbstractColumn::ColumnMode::Double)
 			col->setColumnMode(AbstractColumn::ColumnMode::Double);
 		col->copy(m_yColumnResult);

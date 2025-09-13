@@ -696,9 +696,9 @@
        <item row="7" column="4">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QCheckBox" name="cbFileEmbedd">
+          <widget class="QCheckBox" name="cbFileEmbed">
            <property name="text">
-            <string>Embedd</string>
+            <string>Embed</string>
            </property>
           </widget>
          </item>

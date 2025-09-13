@@ -362,7 +362,7 @@ void DatabaseManagerWidget::deleteConnection() {
 		m_initializing = false;
 	}
 
-	// show the connection for the item that was automatically selected afte the deletion
+	// show the connection for the item that was automatically selected after the deletion
 	connectionChanged(ui.lwConnections->currentRow());
 
 	// disable widgets if there're no connections anymore

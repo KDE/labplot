@@ -1867,7 +1867,7 @@ void SpreadsheetView::pasteIntoSelection() {
 
 		input_rows.clear(); // not needed anymore, release memory
 
-		// when pasting DateTime data in the format 'yyyy-MM-dd hh:mm:ss' and similar, it get's split above because of the space separator.
+		// when pasting DateTime data in the format 'yyyy-MM-dd hh:mm:ss' and similar, it gets split above because of the space separator.
 		// here we check whether we have such a situation and merge the first two columns to get the proper value,
 		// for example "2018-03-21 10:00:00" and not "2018-03-21" and "10:00:00"
 		if (!cellTexts.isEmpty() && cellTexts.constFirst().size() > 1) {
@@ -1884,7 +1884,7 @@ void SpreadsheetView::pasteIntoSelection() {
 				const QString newCell = firstCell + QLatin1Char(' ') + secondCell;
 				const auto newMode = AbstractFileFilter::columnMode(newCell, dateTimeFormat, numberLocale);
 				if (newMode == AbstractColumn::ColumnMode::DateTime) {
-					// merge the first two colums
+					// merge the first two columns
 					for (auto& row : cellTexts) {
 						row[1] = row.at(0) + QLatin1Char(' ') + row.at(1);
 						row.takeFirst();
@@ -2638,7 +2638,7 @@ void SpreadsheetView::insertColumnLeft() {
 }
 
 /*!
-  Insert multiple empty columns left to the firt selected column
+  Insert multiple empty columns left to the first selected column
 */
 void SpreadsheetView::insertColumnsLeft() {
 	bool ok = false;
@@ -2766,7 +2766,7 @@ void SpreadsheetView::toggleFreezeColumn() {
 
 		updateFrozenTableGeometry();
 
-		// synchronize the sroll bars across the main and the frozen views
+		// synchronize the scroll bars across the main and the frozen views
 		connect(m_frozenTableView->verticalScrollBar(), &QAbstractSlider::valueChanged, m_tableView->verticalScrollBar(), &QAbstractSlider::setValue);
 		connect(m_tableView->verticalScrollBar(), &QAbstractSlider::valueChanged, m_frozenTableView->verticalScrollBar(), &QAbstractSlider::setValue);
 	}
@@ -3254,7 +3254,7 @@ void SpreadsheetView::showColumnStatistics(bool forAll) {
 
 	// Column statistics can be shown for:
 	// * all columns in the spreadsheet - called via the action_statistics_all_columns or when one single cell is selected (=no selection)
-	// * all selected columns in the speadsheet - called via the context menu of the header
+	// * all selected columns in the spreadsheet - called via the context menu of the header
 	// * selected column cells - called via the context menu in the spreadsheet with multiple selected cells
 	const auto& indexes = m_tableView->selectionModel()->selectedIndexes();
 	if (forAll || indexes.size() <= 1) {
@@ -3270,7 +3270,7 @@ void SpreadsheetView::showColumnStatistics(bool forAll) {
 		if (columns.isEmpty()) {
 			const auto& children = m_spreadsheet->children<Column>();
 			Column* targetColumn{nullptr};
-			QMap<int, int> columnMappings; // key = child column index in the spreadsheet, value = column index in the vector of new colums
+			QMap<int, int> columnMappings; // key = child column index in the spreadsheet, value = column index in the vector of new columns
 			QMap<int, int> rowMappings; // key = child column index in the spreadsheet, value = last row index
 			for (const auto& index : indexes) {
 				int col = index.column();
@@ -3662,7 +3662,7 @@ void SpreadsheetView::selectAll() {
 }
 
 /*!
-  selects the column \c column in the speadsheet view .
+  selects the column \c column in the spreadsheet view.
 */
 void SpreadsheetView::selectColumn(int column) {
 	const auto& index = m_model->index(0, column);
@@ -3674,7 +3674,7 @@ void SpreadsheetView::selectColumn(int column) {
 }
 
 /*!
-  deselects the column \c column in the speadsheet view .
+  deselects the column \c column in the spreadsheet view.
 */
 void SpreadsheetView::deselectColumn(int column) {
 	QItemSelection selection(m_model->index(0, column), m_model->index(m_spreadsheet->rowCount() - 1, column));
@@ -3684,7 +3684,7 @@ void SpreadsheetView::deselectColumn(int column) {
 }
 
 /*!
-  called when a column in the speadsheet view was clicked (click in the header).
+  called when a column in the spreadsheet view was clicked (click in the header).
   Propagates the selection of the column to the \c Spreadsheet object
   (a click in the header always selects the column).
 */
@@ -3701,7 +3701,7 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 
-	// reset the column that was previosly selected from the context menu, if any
+	// reset the column that was previously selected from the context menu, if any
 	m_selectedColumnFromContextMenu = -1;
 
 	// determine the columns that were fully selected or deselected in the spreadsheet to also select/deselect them in the project explorer
@@ -4009,7 +4009,7 @@ int SpreadsheetView::maxRowToExport() const {
 			// TODO:
 			// integer column found. Since empty integer cells are equal to 0
 			// at the moment, we need to export the whole column.
-			// this logic needs to be adjusted once we're able to descriminate
+			// this logic needs to be adjusted once we're able to discriminate
 			// between empty and 0 values for integer columns
 			maxRow = m_spreadsheet->rowCount() - 1;
 			break;

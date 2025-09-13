@@ -661,7 +661,7 @@ void DatapickerImageView::changeZoom(QAction* action) {
 	}
 	}
 
-	// change and set angle if tranform reset
+	// change and set angle if transform reset
 	changeRotationAngle();
 }
 

@@ -360,7 +360,7 @@ void MatrixView::adjustHeaders() {
 	disconnect(v_header, &QHeaderView::sectionResized, this, &MatrixView::handleVerticalSectionResized);
 	disconnect(h_header, &QHeaderView::sectionResized, this, &MatrixView::handleHorizontalSectionResized);
 
-	// resize columns to the saved sizes or to fit the contents if the widht is 0
+	// resize columns to the saved sizes or to fit the contents if the width is 0
 	int cols = m_matrix->columnCount();
 	for (int i = 0; i < cols; i++) {
 		if (m_matrix->columnWidth(i) == 0)

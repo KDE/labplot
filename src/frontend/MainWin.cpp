@@ -1887,7 +1887,7 @@ void MainWin::importFileDialog(const QString& fileName) {
 void MainWin::importDirDialog(const QString& dir) {
 	auto* dlg = new ImportFileDialog(this, false /* live source */, dir, true /* import directory */);
 
-	// when importing a directory, the data is imported into multipe spreadsheet or matrix objects that are
+	// when importing a directory, the data is imported into multiple spreadsheet or matrix objects that are
 	// created as children of the current parent folder/project or workbook.
 	// select the current folder or workbook or use the parent folder of the current aspec if none of them is selected
 	AbstractAspect* targetAspect = nullptr;

@@ -405,7 +405,7 @@ void FITSHeaderEditWidget::removeKeyword() {
 }
 
 /*!
- * \brief Trigggered when an item was updated by the user in the tablewidget
+ * \brief Triggered when an item was updated by the user in the tablewidget
  * \param item the item which was updated
  */
 void FITSHeaderEditWidget::updateKeyword(QTableWidgetItem* item) {

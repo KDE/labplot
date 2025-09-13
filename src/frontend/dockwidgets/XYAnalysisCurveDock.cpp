@@ -220,9 +220,9 @@ void XYAnalysisCurveDock::enableRecalculate() const {
 	m_recalculateButton->setEnabled(hasSourceData);
 }
 
-//*************************************************************
-//***** SLOTs for changes triggered in the analyis curve ******
-//*************************************************************
+//**************************************************************
+//***** SLOTs for changes triggered in the analysis curve ******
+//**************************************************************
 void XYAnalysisCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	CONDITIONAL_LOCK_RETURN;
 	cbDataSourceType->setCurrentIndex(static_cast<int>(type));

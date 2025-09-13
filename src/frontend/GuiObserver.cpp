@@ -535,7 +535,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 
 /*!
 	handles the selection of a hidden aspect \c aspect in the view (relevant for WorksheetView only at the moment).
-	Currently, a hidden aspect can only be a plot title lable or an axis label.
+	Currently, a hidden aspect can only be a plot title label or an axis label.
 	-> Activate the corresponding DockWidget and make the title tab current.
  */
 void GuiObserver::hiddenAspectSelected(const AbstractAspect* aspect) {

@@ -247,7 +247,7 @@ void BarPlotDock::setDataColumns() const {
 }
 
 /*
- * updates the locale in the widgets. called when the application settins are changed.
+ * updates the locale in the widgets. called when the application settings are changed.
  */
 void BarPlotDock::updateLocale() {
 	lineWidget->updateLocale();
@@ -336,7 +336,7 @@ void BarPlotDock::addDataColumn() {
 void BarPlotDock::removeDataColumn() {
 	auto* sender = static_cast<QPushButton*>(QObject::sender());
 	if (sender) {
-		// remove button was clicked, determin which one and
+		// remove button was clicked, determine which one and
 		// delete it together with the corresponding combobox
 		for (int i = 0; i < m_removeButtons.count(); ++i) {
 			if (sender == m_removeButtons.at(i)) {

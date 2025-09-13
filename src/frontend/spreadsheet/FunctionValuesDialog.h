@@ -51,7 +51,7 @@ private:
 
 private Q_SLOTS:
 	void generate(); // calculate and set values from function
-	void checkValues(); // check user input and enable/diable Ok-button accordingly
+	void checkValues(); // check user input and enable/disable Ok-button accordingly
 	void loadFunction();
 	void saveFunction();
 	void showConstants(); // select predefined constant

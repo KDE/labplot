@@ -138,7 +138,7 @@ void QQPlotDock::setPlots(QList<QQPlot*> list) {
 }
 
 /*
- * updates the locale in the widgets. called when the application settins are changed.
+ * updates the locale in the widgets. called when the application settings are changed.
  */
 void QQPlotDock::updateLocale() {
 	lineWidget->updateLocale();
