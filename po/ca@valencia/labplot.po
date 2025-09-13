@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-12 00:39+0000\n"
-"PO-Revision-Date: 2025-09-09 09:15+0200\n"
+"PO-Revision-Date: 2025-09-12 10:44+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -2154,10 +2154,9 @@ msgid "Compression: %1"
 msgstr "Compressió: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, fuzzy, kde-format
-#| msgid "Endianess: %1"
+#, kde-format
 msgid "Endianness: %1"
-msgstr "Endianess: %1"
+msgstr "Codificació «endian»: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
 #, kde-format
@@ -2380,10 +2379,9 @@ msgid "Device not available."
 msgstr "El dispositiu no està disponible."
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, fuzzy, kde-format
-#| msgid "Timeout occured."
+#, kde-format
 msgid "Timeout occurred."
-msgstr "Ha vençut el temps d'espera."
+msgstr "S'ha excedit el temps."
 
 #: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format
@@ -8944,8 +8942,7 @@ msgid "%1: set whiskers cap size"
 msgstr "%1: establix la mida de l'extrem dels bigots"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
-#, fuzzy, kde-format
-#| msgid "%1: jitterring changed"
+#, kde-format
 msgid "%1: jittering changed"
 msgstr "%1: s'ha canviat «jitter»"
 
@@ -16907,7 +16904,7 @@ msgstr "S'ha obert el projecte amb èxit (en %1 segons)."
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
-msgstr "Guarda el projecte com a"
+msgstr "Anomeneu i guardeu el projecte"
 
 #: src/frontend/MainWin.cpp:959
 #, kde-format

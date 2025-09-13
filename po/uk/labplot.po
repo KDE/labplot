@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-12 00:39+0000\n"
-"PO-Revision-Date: 2025-09-09 15:06+0300\n"
+"PO-Revision-Date: 2025-09-12 16:36+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -2144,8 +2144,7 @@ msgid "Compression: %1"
 msgstr "Стиснення: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, fuzzy, kde-format
-#| msgid "Endianess: %1"
+#, kde-format
 msgid "Endianness: %1"
 msgstr "Порядок байтів: %1"
 
@@ -2373,8 +2372,7 @@ msgid "Device not available."
 msgstr "Пристрій недоступний."
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, fuzzy, kde-format
-#| msgid "Timeout occured."
+#, kde-format
 msgid "Timeout occurred."
 msgstr "Перевищено час очікування на дані."
 
@@ -8925,8 +8923,7 @@ msgid "%1: set whiskers cap size"
 msgstr "%1: встановити розмір кінчика для вусів"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
-#, fuzzy, kde-format
-#| msgid "%1: jitterring changed"
+#, kde-format
 msgid "%1: jittering changed"
 msgstr "%1: змінено тремтіння"
 

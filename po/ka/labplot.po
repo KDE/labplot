@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-12 00:39+0000\n"
-"PO-Revision-Date: 2025-09-09 04:49+0200\n"
+"PO-Revision-Date: 2025-09-12 05:26+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2133,10 +2133,9 @@ msgid "Compression: %1"
 msgstr "შეკუმშვა: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, fuzzy, kde-format
-#| msgid "Endianess: %1"
+#, kde-format
 msgid "Endianness: %1"
-msgstr "ბოლოიანობა: %1"
+msgstr "ბიტური რიგი: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
 #, kde-format
@@ -2359,8 +2358,7 @@ msgid "Device not available."
 msgstr "მოწყობილობა ხელმისაწვდომი არაა."
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, fuzzy, kde-format
-#| msgid "Timeout occured."
+#, kde-format
 msgid "Timeout occurred."
 msgstr "მოლოდინის დრო ამოიწურა."
 
@@ -8855,10 +8853,9 @@ msgid "%1: set whiskers cap size"
 msgstr "%1: ულვაშის ბოლოს მარკერების ზომის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
-#, fuzzy, kde-format
-#| msgid "%1: jitterring changed"
+#, kde-format
 msgid "%1: jittering changed"
-msgstr "%1: შემთხვევითი ხმაური შეიცვალა"
+msgstr "%1: რყევა შეიცვალა"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:518
@@ -22045,7 +22042,7 @@ msgstr "ულვაშები დასასრ"
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:586
 #, kde-format
 msgid "Jitter"
-msgstr "თრთოლა"
+msgstr "რყევა"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabWhiskers)
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:629

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-12 00:39+0000\n"
-"PO-Revision-Date: 2025-09-09 09:12+0200\n"
+"PO-Revision-Date: 2025-09-12 06:45+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -2138,10 +2138,9 @@ msgid "Compression: %1"
 msgstr "Stisnjeno: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, fuzzy, kde-format
-#| msgid "Endianess: %1"
+#, kde-format
 msgid "Endianness: %1"
-msgstr "Pravilo konca: %1"
+msgstr "Pravilo Endian: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
 #, kde-format
@@ -2364,10 +2363,9 @@ msgid "Device not available."
 msgstr "Naprava ni na voljo."
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, fuzzy, kde-format
-#| msgid "Timeout occured."
+#, kde-format
 msgid "Timeout occurred."
-msgstr "Prišlo je do časovne omejitve."
+msgstr "Bila je časovna omejitev."
 
 #: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format
@@ -8890,10 +8888,9 @@ msgid "%1: set whiskers cap size"
 msgstr "%1: nastavite velikost konca brkov"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
-#, fuzzy, kde-format
-#| msgid "%1: jitterring changed"
+#, kde-format
 msgid "%1: jittering changed"
-msgstr "%1: spremenjeno stresanje"
+msgstr "%1: stresanje spremenjeno"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:518

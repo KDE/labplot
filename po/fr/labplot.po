@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-12 00:39+0000\n"
-"PO-Revision-Date: 2025-08-29 13:29+0200\n"
+"PO-Revision-Date: 2025-09-10 16:04+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -7507,18 +7507,18 @@ msgstr "Colonne"
 #, kde-format
 msgid "One column is required."
 msgid_plural "%1 columns are required."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Une colonne est nécessaire."
+msgstr[1] "%1 colonnes sont nécessaires."
 
 #: src/backend/statistics/HypothesisTest.cpp:56
 #, kde-format
 msgid "At least %1 and at most %2 columns are required."
-msgstr ""
+msgstr "Au moins %1 colonnes et au plus %2 colonnes sont requises."
 
 #: src/backend/statistics/HypothesisTest.cpp:64
 #, kde-format
 msgid "Column '%1' must be of numeric type."
-msgstr ""
+msgstr "La colonne « %1 » doit être de type numérique."
 
 #: src/backend/statistics/HypothesisTest.cpp:143
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:235
@@ -7530,7 +7530,7 @@ msgstr "Portable Data Format (*.pdf *.PDF)"
 #, kde-format
 msgctxt "@title:window"
 msgid "Hypothesis Test"
-msgstr ""
+msgstr "Test d'hypothèses"
 
 #: src/backend/statistics/HypothesisTest.cpp:472
 #: src/backend/statistics/HypothesisTest.cpp:1736
@@ -7555,7 +7555,7 @@ msgstr "Échantillonner les quantiles"
 #: src/backend/statistics/HypothesisTest.cpp:589
 #, kde-format
 msgid "Null Hypothesis"
-msgstr ""
+msgstr "Hypothèse nulle"
 
 #: src/backend/statistics/HypothesisTest.cpp:473
 #: src/backend/statistics/HypothesisTest.cpp:482
@@ -7572,7 +7572,7 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:590
 #, kde-format
 msgid "Alternate Hypothesis"
-msgstr ""
+msgstr "Hypothèse alternative"
 
 #: src/backend/statistics/HypothesisTest.cpp:473
 #: src/backend/statistics/HypothesisTest.cpp:482
@@ -7585,10 +7585,9 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:554
 #: src/backend/statistics/HypothesisTest.cpp:566
 #: src/backend/statistics/HypothesisTest.cpp:574
-#, fuzzy, kde-format
-#| msgid "t Statistic"
+#, kde-format
 msgid "Descriptive Statistics"
-msgstr "Statistiques T"
+msgstr "Statistiques descriptives"
 
 #: src/backend/statistics/HypothesisTest.cpp:474
 #: src/backend/statistics/HypothesisTest.cpp:483
@@ -7614,16 +7613,15 @@ msgstr "Statistiques T"
 #: src/backend/statistics/HypothesisTest.cpp:591
 #, kde-format
 msgid "Significance Level"
-msgstr ""
+msgstr "Niveau de pertinence"
 
 #: src/backend/statistics/HypothesisTest.cpp:475
 #: src/backend/statistics/HypothesisTest.cpp:484
 #: src/backend/statistics/HypothesisTest.cpp:494
 #: src/backend/statistics/HypothesisTest.cpp:503
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "t-Value"
-msgstr "Valeur"
+msgstr "T-Valeur"
 
 #: src/backend/statistics/HypothesisTest.cpp:475
 #: src/backend/statistics/HypothesisTest.cpp:484
@@ -7638,10 +7636,9 @@ msgstr "Valeur"
 #: src/backend/statistics/HypothesisTest.cpp:576
 #: src/backend/statistics/HypothesisTest.cpp:584
 #: src/backend/statistics/HypothesisTest.cpp:592
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "p-Value"
-msgstr "Valeur"
+msgstr "P-Valeur"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #: src/backend/statistics/HypothesisTest.cpp:476
@@ -7659,19 +7656,17 @@ msgid "Degrees of Freedom"
 msgstr "Degrés de liberté"
 
 #: src/backend/statistics/HypothesisTest.cpp:476
-#, fuzzy, kde-format
-#| msgid "Test"
+#, kde-format
 msgid "Test Mean"
-msgstr "Test"
+msgstr "Tester la moyenne"
 
 #: src/backend/statistics/HypothesisTest.cpp:477
 #: src/backend/statistics/HypothesisTest.cpp:486
 #: src/backend/statistics/HypothesisTest.cpp:495
 #: src/backend/statistics/HypothesisTest.cpp:504
-#, fuzzy, kde-format
-#| msgid "Difference"
+#, kde-format
 msgid "Mean Difference"
-msgstr "Différence"
+msgstr "Différence de  moyenne"
 
 #: src/backend/statistics/HypothesisTest.cpp:477
 #: src/backend/statistics/HypothesisTest.cpp:487
@@ -7686,10 +7681,9 @@ msgstr "Différence"
 #: src/backend/statistics/HypothesisTest.cpp:577
 #: src/backend/statistics/HypothesisTest.cpp:585
 #: src/backend/statistics/HypothesisTest.cpp:596
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Conclusion"
-msgstr "Tracés de statistiques"
+msgstr "Conclusion statistique"
 
 #: src/backend/statistics/HypothesisTest.cpp:481
 #: src/backend/statistics/HypothesisTest.cpp:1740
@@ -7743,16 +7737,14 @@ msgid "F-Statistic"
 msgstr "Statistiques"
 
 #: src/backend/statistics/HypothesisTest.cpp:514
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees of Freedom Between Groups"
-msgstr "Degrés de liberté"
+msgstr "Degrés de liberté entre les groupes"
 
 #: src/backend/statistics/HypothesisTest.cpp:515
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees of Freedom Within Groups"
-msgstr "Degrés de liberté"
+msgstr "Degrés de liberté dans les groupes"
 
 #: src/backend/statistics/HypothesisTest.cpp:516
 #, fuzzy, kde-format
@@ -7767,16 +7759,14 @@ msgid "Sum of Squares Within Groups"
 msgstr "Somme des carrés des erreurs"
 
 #: src/backend/statistics/HypothesisTest.cpp:518
-#, fuzzy, kde-format
-#| msgid "mean squared error"
+#, kde-format
 msgid "Mean Squares Between Groups"
-msgstr "erreur quadratique moyenne"
+msgstr "Moyenne quadratique entre les groupes"
 
 #: src/backend/statistics/HypothesisTest.cpp:518
-#, fuzzy, kde-format
-#| msgid "mean squared error"
+#, kde-format
 msgid "Mean Squares Within Groups"
-msgstr "erreur quadratique moyenne"
+msgstr "Moyenne quadratique dans les groupes"
 
 #: src/backend/statistics/HypothesisTest.cpp:523
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:105
@@ -7790,16 +7780,14 @@ msgid "One-Way ANOVA with Repeated Measures Test Statistics"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:527
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees of Freedom Treatment"
-msgstr "Degrés de liberté"
+msgstr "Degrés de traitement de la liberté"
 
 #: src/backend/statistics/HypothesisTest.cpp:528
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees of Freedom Residuals"
-msgstr "Degrés de liberté"
+msgstr "Degrés des résiduels de la liberté"
 
 #: src/backend/statistics/HypothesisTest.cpp:528
 #, fuzzy, kde-format
@@ -7819,16 +7807,14 @@ msgid "Sum of Squares Within Subjects"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:530
-#, fuzzy, kde-format
-#| msgid "mean squared error"
+#, kde-format
 msgid "Mean Squares Treatment"
-msgstr "erreur quadratique moyenne"
+msgstr "Traitement quadratique moyen"
 
 #: src/backend/statistics/HypothesisTest.cpp:531
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Mean Squares Residuals"
-msgstr "Somme des carrés des erreurs"
+msgstr "Résiduels de quadratique moyen"
 
 #: src/backend/statistics/HypothesisTest.cpp:535
 #: src/backend/statistics/HypothesisTest.cpp:1760
@@ -7843,17 +7829,15 @@ msgid "Mann-Whitney U Test Statistics"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:538
-#, fuzzy, kde-format
-#| msgid "Up"
+#, kde-format
 msgid "U"
-msgstr "Haut"
+msgstr "U"
 
 #: src/backend/statistics/HypothesisTest.cpp:539
 #: src/backend/statistics/HypothesisTest.cpp:557
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "z-Value"
-msgstr "Valeur"
+msgstr "Z-Valeur"
 
 #: src/backend/statistics/HypothesisTest.cpp:539
 #, kde-format
@@ -7882,19 +7866,18 @@ msgstr "Moyenne = 0"
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:108
 #, kde-format
 msgid "Kruskal-Wallis Test"
-msgstr ""
+msgstr "Test de Kruskal-Wallis"
 
 #: src/backend/statistics/HypothesisTest.cpp:547
-#, fuzzy, kde-format
-#| msgid "Will statistics:"
+#, kde-format
 msgid "Kruskal-Wallis Test Statistics"
-msgstr "Demander des statistiques : "
+msgstr "Statistiques du test de Kruskal-Wallis"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
 #: src/backend/statistics/HypothesisTest.cpp:591
 #, kde-format
 msgid "H"
-msgstr ""
+msgstr "H"
 
 #: src/backend/statistics/HypothesisTest.cpp:553
 #: src/backend/statistics/HypothesisTest.cpp:1764
@@ -7911,12 +7894,12 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:556
 #, kde-format
 msgid "W"
-msgstr ""
+msgstr "W"
 
 #: src/backend/statistics/HypothesisTest.cpp:557
 #, kde-format
 msgid "Positive Rank Sum"
-msgstr ""
+msgstr "Somme de rang positif"
 
 #: src/backend/statistics/HypothesisTest.cpp:558
 #, fuzzy, kde-format
@@ -7930,10 +7913,9 @@ msgid "Positive Rank Count"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:559
-#, fuzzy, kde-format
-#| msgid "Negative Binomial"
+#, kde-format
 msgid "Negative Rank Sum"
-msgstr "Distribution binomiale négative"
+msgstr "Somme de rang négatif"
 
 #: src/backend/statistics/HypothesisTest.cpp:559
 #, fuzzy, kde-format
@@ -7961,16 +7943,14 @@ msgid "Friedman Test"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:567
-#, fuzzy, kde-format
-#| msgid "Variable Statistics..."
+#, kde-format
 msgid "Friedman Test Statistics"
-msgstr "Statistiques variables..."
+msgstr "Statistiques de test de Friedman..."
 
 #: src/backend/statistics/HypothesisTest.cpp:568
-#, fuzzy, kde-format
-#| msgid "Qt"
+#, kde-format
 msgid "Q"
-msgstr "Qt"
+msgstr "Q"
 
 #: src/backend/statistics/HypothesisTest.cpp:573
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:112
@@ -7988,13 +7968,13 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:583
 #, kde-format
 msgid "Chi2"
-msgstr ""
+msgstr "Chi2"
 
 #: src/backend/statistics/HypothesisTest.cpp:581
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:111
 #, kde-format
 msgid "Chi-Square Independence Test"
-msgstr ""
+msgstr "Test d'indépendance en Chi-carré"
 
 #: src/backend/statistics/HypothesisTest.cpp:582
 #, kde-format
@@ -8013,10 +7993,9 @@ msgid "Log-Rank Test Statistics"
 msgstr "Statistiques de la colonne"
 
 #: src/backend/statistics/HypothesisTest.cpp:593
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Event Count 1"
-msgstr "Compteur de feuilles : %1"
+msgstr "Compteur d'évènements 1"
 
 #: src/backend/statistics/HypothesisTest.cpp:593
 #, kde-format
@@ -8026,13 +8005,12 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:594
 #, kde-format
 msgid "Total Count 1"
-msgstr ""
+msgstr "Compteur total 1"
 
 #: src/backend/statistics/HypothesisTest.cpp:594
-#, fuzzy, kde-format
-#| msgid "Set Column As"
+#, kde-format
 msgid "Event Count 2"
-msgstr "Définir la colonne comme"
+msgstr "Compteur d'évènements 2"
 
 #: src/backend/statistics/HypothesisTest.cpp:595
 #, kde-format
@@ -8042,39 +8020,37 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:595
 #, kde-format
 msgid "Total Count 2"
-msgstr ""
+msgstr "Compteur total 2"
 
 #: src/backend/statistics/HypothesisTest.cpp:600
 #, kde-format
 msgid "N/A"
-msgstr ""
+msgstr "N / D"
 
 #: src/backend/statistics/HypothesisTest.cpp:604
-#, fuzzy, kde-format
-#| msgid "Device not available."
+#, kde-format
 msgid "Test result is not available."
-msgstr "Le périphérique est indisponible"
+msgstr "Le résultat du test est indisponible."
 
 #: src/backend/statistics/HypothesisTest.cpp:608
 #, kde-format
 msgid "Two columns are required for this test."
-msgstr ""
+msgstr "Deux colonnes sont requises pour ce test."
 
 #: src/backend/statistics/HypothesisTest.cpp:612
 #, kde-format
 msgid "At least two columns are required."
-msgstr ""
+msgstr "Au moins deux colonnes sont requises."
 
 #: src/backend/statistics/HypothesisTest.cpp:616
-#, fuzzy, kde-format
-#| msgid "Plugin '%1' is not a %2 plugin."
+#, kde-format
 msgid "Column '%1' requires at least %2 samples."
-msgstr "Le module externe « %1 » n'est pas un module pour %2."
+msgstr "La colonne « %1 » nécessite au moins %2 échantillons."
 
 #: src/backend/statistics/HypothesisTest.cpp:620
 #, kde-format
 msgid "The size of each sample must be equal."
-msgstr ""
+msgstr "La taille de chaque échantillon doit être égale."
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
 #: src/backend/statistics/HypothesisTest.cpp:624
@@ -8085,10 +8061,9 @@ msgid "Mean"
 msgstr "Moyenne"
 
 #: src/backend/statistics/HypothesisTest.cpp:642
-#, fuzzy, kde-format
-#| msgid "No variable selected."
+#, kde-format
 msgid "No variable columns provided."
-msgstr "Aucune variable sélectionnée."
+msgstr "Aucune colonne de variables n'a été fournie."
 
 #: src/backend/statistics/HypothesisTest.cpp:887
 #, kde-format
@@ -8172,7 +8147,7 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:1496
 #, kde-format
 msgid "Column '%1' must be of integer type."
-msgstr ""
+msgstr "La colonne « %1 » doit être de type entier."
 
 #: src/backend/statistics/HypothesisTest.cpp:1468
 #, kde-format
@@ -8191,7 +8166,7 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:1516
 #, kde-format
 msgid "The size of each column in the contingency table must be equal."
-msgstr ""
+msgstr "La taille de chaque colonne dans le tableau d'aléas doit être égale."
 
 #: src/backend/statistics/HypothesisTest.cpp:1532
 #, kde-format
@@ -8210,47 +8185,50 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:1553
 #, kde-format
 msgid "Three columns are required."
-msgstr ""
+msgstr "Trois colonnes sont nécessaires."
 
 #: src/backend/statistics/HypothesisTest.cpp:1562
 #, kde-format
 msgid "Status column should be of integer type."
-msgstr ""
+msgstr "La colonne d'état doit être de type entier."
 
 #: src/backend/statistics/HypothesisTest.cpp:1567
 #, kde-format
 msgid "Group column should be of integer type."
-msgstr ""
+msgstr "La colonne de groupe doit être de type entier."
 
 #: src/backend/statistics/HypothesisTest.cpp:1572
 #, kde-format
 msgid "Time, Status and Group columns should have equal size."
 msgstr ""
+"Les colonnes « Heure », « État » et « Groupe » doivent avoir la même taille."
 
 #: src/backend/statistics/HypothesisTest.cpp:1591
 #, kde-format
 msgid "Status column values must be either 0 or 1."
-msgstr ""
+msgstr "Les valeurs de la colonne d'état doivent être 0 ou 1."
 
 #: src/backend/statistics/HypothesisTest.cpp:1596
 #, kde-format
 msgid "Group column values must be either 0 or 1."
-msgstr ""
+msgstr "Les valeurs de la colonne de groupe doivent être 0 ou 1."
 
 #: src/backend/statistics/HypothesisTest.cpp:1612
 #, kde-format
 msgid "Time, Status and Group columns should have equal number of values."
 msgstr ""
+"Les colonnes « Heure », « État » et « Groupe » doivent posséder un nombre "
+"égal de valeurs."
 
 #: src/backend/statistics/HypothesisTest.cpp:1620
 #, kde-format
 msgid "Group 1 requires at least %1 samples."
-msgstr ""
+msgstr "Le groupe 1 nécessite au moins %1 échantillons."
 
 #: src/backend/statistics/HypothesisTest.cpp:1625
 #, kde-format
 msgid "Group 2 requires at least %1 samples."
-msgstr ""
+msgstr "Le groupe 2 nécessite au moins %1 échantillons."
 
 #: src/backend/statistics/HypothesisTest.cpp:1637
 #, kde-format
@@ -8285,7 +8263,7 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:1780
 #, kde-format
 msgid "Chi-square Independence Test"
-msgstr ""
+msgstr "Test d'indépendance Chi-carré"
 
 #: src/backend/statistics/HypothesisTest.cpp:1784
 #, fuzzy, kde-format
@@ -14950,6 +14928,8 @@ msgstr ""
 #, kde-format
 msgid "Selected test requires at least %1 and at most %2 non-empty variables."
 msgstr ""
+"Le test sélectionné nécessite au moins %1 variables et au plus %2 variables "
+"non vides."
 
 #: src/frontend/dockwidgets/InfoElementDock.cpp:227
 #, kde-format
@@ -16092,12 +16072,10 @@ msgid "Properties: Data Extractor"
 msgstr "Propriétés : extracteur de données"
 
 #: src/frontend/GuiObserver.cpp:436
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Notes"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hypothesis Test"
-msgstr "Propriétés : notes"
+msgstr "Propriétés : test d'hypothèses"
 
 #: src/frontend/GuiObserver.cpp:441
 #, kde-format
@@ -19349,15 +19327,14 @@ msgid "Analyze and Plot Data"
 msgstr "Analyser et tracer les données"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:679
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Analysis"
-msgstr "Tracés de statistiques"
+msgstr "Analyse statistique"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:680
 #, kde-format
 msgid "Hypothesis Test"
-msgstr ""
+msgstr "Test d'hypothèses"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:685
 #, kde-format
@@ -19377,7 +19354,7 @@ msgstr "Échelle de puissance"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:953
 #, kde-format
 msgid "Hypothesis Test for %1"
-msgstr ""
+msgstr "Test d'hypothèse pour %1"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1180
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1566
@@ -22831,13 +22808,13 @@ msgstr "Forme"
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:20
 #, kde-format
 msgid "Test Mean μ₀: "
-msgstr ""
+msgstr "Moyenne de test μ₀ :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSignificanceLevel)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:50
 #, kde-format
 msgid "Significance Level α:"
-msgstr ""
+msgstr "Niveau de pertinence α :"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:95
@@ -22861,7 +22838,7 @@ msgstr "Recalculer"
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:104
 #, kde-format
 msgid "Null:"
-msgstr ""
+msgstr "NUL :"
 
 #. i18n: ectx: property (text), widget (QLabel, lH1)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:114
@@ -22878,10 +22855,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lTest)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:289
-#, fuzzy, kde-format
-#| msgid "Test"
+#, kde-format
 msgid "Test:"
-msgstr "Test"
+msgstr "Test :"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionY)
 #: src/frontend/ui/dockwidgets/imagedock.ui:136

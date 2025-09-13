@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-12 00:39+0000\n"
-"PO-Revision-Date: 2025-09-09 08:24-0300\n"
+"PO-Revision-Date: 2025-09-12 06:50-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -2134,10 +2134,9 @@ msgid "Compression: %1"
 msgstr "Compressão: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, fuzzy, kde-format
-#| msgid "Endianess: %1"
+#, kde-format
 msgid "Endianness: %1"
-msgstr "Endianess: %1"
+msgstr "Endianismo: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
 #, kde-format
@@ -2268,7 +2267,7 @@ msgstr "Tamanho do arquivo descompactado: %1 bytes"
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:180
 #, kde-format
 msgid "Big Endian not supported. CAN id: %1."
-msgstr "Big Endian não suportado. ID CAN: %1."
+msgstr "Grande Endian não suportado. ID CAN: %1."
 
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:183
 #, kde-format
@@ -2361,8 +2360,7 @@ msgid "Device not available."
 msgstr "O dispositivo não está disponível."
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, fuzzy, kde-format
-#| msgid "Timeout occured."
+#, kde-format
 msgid "Timeout occurred."
 msgstr "Tempo limite atingido."
 
@@ -8865,10 +8863,9 @@ msgid "%1: set whiskers cap size"
 msgstr "%1: definir o tamanho do extremo dos bigodes"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
-#, fuzzy, kde-format
-#| msgid "%1: jitterring changed"
+#, kde-format
 msgid "%1: jittering changed"
-msgstr "%1: jitterring alterado"
+msgstr "%1: tremulação alterada"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:518
@@ -12258,12 +12255,12 @@ msgstr "Tipo de dados não encontrado: %1"
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:29
 #, kde-format
 msgid "Little endian"
-msgstr "Little endian"
+msgstr "Pequeno endian"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:30
 #, kde-format
 msgid "Big endian"
-msgstr "Big endian"
+msgstr "Grande endian"
 
 #: src/frontend/datasources/BinaryOptionsWidget.cpp:32
 #, kde-format
@@ -22090,7 +22087,7 @@ msgstr "Final do bigode"
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:586
 #, kde-format
 msgid "Jitter"
-msgstr "Desvio"
+msgstr "Tremulação"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabWhiskers)
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:629

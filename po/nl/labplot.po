@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-12 00:39+0000\n"
-"PO-Revision-Date: 2025-09-09 09:47+0200\n"
+"PO-Revision-Date: 2025-09-12 12:36+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -2128,10 +2128,9 @@ msgid "Compression: %1"
 msgstr "Compressie: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, fuzzy, kde-format
-#| msgid "Endianess: %1"
+#, kde-format
 msgid "Endianness: %1"
-msgstr "Endian: %1"
+msgstr "Volgorde bytes: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
 #, kde-format
@@ -2354,8 +2353,7 @@ msgid "Device not available."
 msgstr "Apparaat is niet beschikbaar."
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, fuzzy, kde-format
-#| msgid "Timeout occured."
+#, kde-format
 msgid "Timeout occurred."
 msgstr "Tijdslimiet is overschreden."
 
@@ -7670,7 +7668,7 @@ msgstr "Eenrichtingsverkeer ANOVA Test"
 #: src/backend/statistics/HypothesisTest.cpp:512
 #, kde-format
 msgid "One-Way ANOVA Test Statistics"
-msgstr ""
+msgstr "Statistieken van eenrichtingsverkeer ANOVA Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:513
 #: src/backend/statistics/HypothesisTest.cpp:526
@@ -7712,12 +7710,14 @@ msgstr "Kwadratisch gemiddelde binnen groepen"
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:105
 #, kde-format
 msgid "One-Way ANOVA with Repeated Measures Test"
-msgstr ""
+msgstr "Eenrichtingsverkeer ANOVA Test met herhaalde test van metingen"
 
 #: src/backend/statistics/HypothesisTest.cpp:525
 #, kde-format
 msgid "One-Way ANOVA with Repeated Measures Test Statistics"
 msgstr ""
+"Statistieken van eenrichtingsverkeer ANOVA Test met herhaalde test van "
+"metingen"
 
 #: src/backend/statistics/HypothesisTest.cpp:527
 #, kde-format
@@ -7742,7 +7742,7 @@ msgstr "Som van kwadraten van restwaarden"
 #: src/backend/statistics/HypothesisTest.cpp:530
 #, kde-format
 msgid "Sum of Squares Within Subjects"
-msgstr ""
+msgstr "Som van kwadraten binnen onderwerpen"
 
 #: src/backend/statistics/HypothesisTest.cpp:530
 #, kde-format
@@ -7759,12 +7759,12 @@ msgstr "Gemiddelde kwadraten van restwaarden"
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:106
 #, kde-format
 msgid "Mann-Whitney U Test"
-msgstr ""
+msgstr "Mann-Whitney U-toets"
 
 #: src/backend/statistics/HypothesisTest.cpp:537
 #, kde-format
 msgid "Mann-Whitney U Test Statistics"
-msgstr ""
+msgstr "Statistieken van Mann-Whitney U-toets"
 
 #: src/backend/statistics/HypothesisTest.cpp:538
 #, kde-format
@@ -7780,7 +7780,7 @@ msgstr "z-Waarde"
 #: src/backend/statistics/HypothesisTest.cpp:539
 #, kde-format
 msgid "Rank Sum 1"
-msgstr ""
+msgstr "Rangordesom 1"
 
 #: src/backend/statistics/HypothesisTest.cpp:540
 #, kde-format
@@ -7790,7 +7790,7 @@ msgstr "Gemiddelde Rangorde 1"
 #: src/backend/statistics/HypothesisTest.cpp:540
 #, kde-format
 msgid "Rank Sum 2"
-msgstr ""
+msgstr "Rangordesom 2"
 
 #: src/backend/statistics/HypothesisTest.cpp:541
 #, kde-format
@@ -7802,7 +7802,7 @@ msgstr "Gemiddelde Rangorde 2"
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:108
 #, kde-format
 msgid "Kruskal-Wallis Test"
-msgstr ""
+msgstr "Kruskal-Wallis-toets"
 
 #: src/backend/statistics/HypothesisTest.cpp:547
 #, kde-format
@@ -7820,12 +7820,12 @@ msgstr "H"
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:107
 #, kde-format
 msgid "Wilcoxon Signed Rank Test"
-msgstr ""
+msgstr "Wilcoxon van teken voorziene rangordetoets"
 
 #: src/backend/statistics/HypothesisTest.cpp:555
 #, kde-format
 msgid "Wilcoxon Signed Rank Test Statistics"
-msgstr ""
+msgstr "Statistieken van Wilcoxon van teken voorziene rangordetoets"
 
 #: src/backend/statistics/HypothesisTest.cpp:556
 #, kde-format
@@ -7835,7 +7835,7 @@ msgstr "W"
 #: src/backend/statistics/HypothesisTest.cpp:557
 #, kde-format
 msgid "Positive Rank Sum"
-msgstr ""
+msgstr "Positieve rangordesom"
 
 #: src/backend/statistics/HypothesisTest.cpp:558
 #, kde-format
@@ -7845,7 +7845,7 @@ msgstr "Gemiddelde van positieve rangorde"
 #: src/backend/statistics/HypothesisTest.cpp:558
 #, kde-format
 msgid "Positive Rank Count"
-msgstr ""
+msgstr "Positieve rangorde aantal"
 
 #: src/backend/statistics/HypothesisTest.cpp:559
 #, kde-format
@@ -7872,7 +7872,7 @@ msgstr "Aantal koorden"
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:109
 #, kde-format
 msgid "Friedman Test"
-msgstr ""
+msgstr "Friedman-toets"
 
 #: src/backend/statistics/HypothesisTest.cpp:567
 #, kde-format
@@ -7893,7 +7893,7 @@ msgstr "Kwaliteit van chi-kwadraat van fit-test"
 #: src/backend/statistics/HypothesisTest.cpp:575
 #, kde-format
 msgid "Chi-Square Goodness of Fit Test Statistics"
-msgstr ""
+msgstr "Statistieken van kwaliteit van chi-kwadraat van fit-test"
 
 #: src/backend/statistics/HypothesisTest.cpp:576
 #: src/backend/statistics/HypothesisTest.cpp:583
@@ -7905,17 +7905,17 @@ msgstr "Chi2"
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:111
 #, kde-format
 msgid "Chi-Square Independence Test"
-msgstr ""
+msgstr "Chi-kwadraat onafhankelijkheidstoets"
 
 #: src/backend/statistics/HypothesisTest.cpp:582
 #, kde-format
 msgid "Chi-Square Independence Test Statistics"
-msgstr ""
+msgstr "Statistieken van chi-kwadraat onafhankelijkheidstoets"
 
 #: src/backend/statistics/HypothesisTest.cpp:589
 #, kde-format
 msgid "Log-Rank Test"
-msgstr ""
+msgstr "Log-rangordetest"
 
 #: src/backend/statistics/HypothesisTest.cpp:590
 #, kde-format
@@ -7930,12 +7930,12 @@ msgstr "Aantal gebeurtenissen 1"
 #: src/backend/statistics/HypothesisTest.cpp:593
 #, kde-format
 msgid "Censored Count 1"
-msgstr ""
+msgstr "Gecensureerd aantal 1"
 
 #: src/backend/statistics/HypothesisTest.cpp:594
 #, kde-format
 msgid "Total Count 1"
-msgstr ""
+msgstr "Totaal aantal 1"
 
 #: src/backend/statistics/HypothesisTest.cpp:594
 #, kde-format
@@ -7945,12 +7945,12 @@ msgstr "Aantal gebeurtenissen 2"
 #: src/backend/statistics/HypothesisTest.cpp:595
 #, kde-format
 msgid "Censored Count 2"
-msgstr ""
+msgstr "Gecensureerd aantal 2"
 
 #: src/backend/statistics/HypothesisTest.cpp:595
 #, kde-format
 msgid "Total Count 2"
-msgstr ""
+msgstr "Totaal aantal 2"
 
 #: src/backend/statistics/HypothesisTest.cpp:600
 #, kde-format
@@ -7960,17 +7960,17 @@ msgstr "N.v.t."
 #: src/backend/statistics/HypothesisTest.cpp:604
 #, kde-format
 msgid "Test result is not available."
-msgstr "Testresultaat is niet beschikbaar."
+msgstr "Toetsresultaat is niet beschikbaar."
 
 #: src/backend/statistics/HypothesisTest.cpp:608
 #, kde-format
 msgid "Two columns are required for this test."
-msgstr ""
+msgstr "Er zijn twee kolommen vereist voor deze toets."
 
 #: src/backend/statistics/HypothesisTest.cpp:612
 #, kde-format
 msgid "At least two columns are required."
-msgstr ""
+msgstr "Er zijn minstens twee kolommen vereist."
 
 #: src/backend/statistics/HypothesisTest.cpp:616
 #, kde-format
@@ -7980,7 +7980,7 @@ msgstr "Kolom '%1' vereist minstens %2 monsters."
 #: src/backend/statistics/HypothesisTest.cpp:620
 #, kde-format
 msgid "The size of each sample must be equal."
-msgstr ""
+msgstr "De grootte van elke bemonstering moet gelijk zijn."
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
 #: src/backend/statistics/HypothesisTest.cpp:624
@@ -8001,6 +8001,8 @@ msgid ""
 "At the significance level %1, the population mean is significantly different "
 "from %2. Reject the null hypothesis."
 msgstr ""
+"Op het significantieniveau %1, is het gemiddelde van de populatie "
+"significant verschillend van %2. Wijs de nul-hypothese af."
 
 #: src/backend/statistics/HypothesisTest.cpp:891
 #, kde-format
@@ -8008,6 +8010,8 @@ msgid ""
 "At the significance level %1, the population mean is not significantly "
 "different from %2. Fail to reject the null hypothesis."
 msgstr ""
+"Op het significantieniveau %1, is het gemiddelde van de populatie niet "
+"significant verschillend van %2. Wijs de nul-hypothese niet af."
 
 #: src/backend/statistics/HypothesisTest.cpp:975
 #: src/backend/statistics/HypothesisTest.cpp:1043
@@ -8016,6 +8020,8 @@ msgid ""
 "At the significance level %1, the population means are significantly "
 "different. Reject the null Hypothesis"
 msgstr ""
+"Op het significantieniveau %1, zijn de gemiddelden van de populatie "
+"significant verschillend. Wijs de nul-hypothese af"
 
 #: src/backend/statistics/HypothesisTest.cpp:977
 #: src/backend/statistics/HypothesisTest.cpp:1045
@@ -8024,6 +8030,8 @@ msgid ""
 "At the significance level %1, the population means are not significantly "
 "different. Fail to reject the null Hypothesis"
 msgstr ""
+"Op het significantieniveau %1, zijn de gemiddelden van de populatie niet "
+"significant verschillend. Wijs de nul-hypothese niet af"
 
 #: src/backend/statistics/HypothesisTest.cpp:1098
 #: src/backend/statistics/HypothesisTest.cpp:1161
@@ -8032,6 +8040,8 @@ msgid ""
 "At the significance level %1, at least one group mean is significantly "
 "different. Reject the null Hypothesis"
 msgstr ""
+"Op het significantieniveau %1, is minstens het gemiddelde van één groep "
+"significant verschillend. Wijs de nul-hypothese af"
 
 #: src/backend/statistics/HypothesisTest.cpp:1101
 #: src/backend/statistics/HypothesisTest.cpp:1164
@@ -8817,8 +8827,7 @@ msgid "%1: set whiskers cap size"
 msgstr "%1: set whiskers \"cap\"-grootte instellen"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
-#, fuzzy, kde-format
-#| msgid "%1: jitterring changed"
+#, kde-format
 msgid "%1: jittering changed"
 msgstr "%1: jitter gewijzigd"
 

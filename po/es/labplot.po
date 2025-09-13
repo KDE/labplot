@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-12 00:39+0000\n"
-"PO-Revision-Date: 2025-09-11 12:07+0100\n"
+"PO-Revision-Date: 2025-09-12 12:50+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -2140,10 +2140,9 @@ msgid "Compression: %1"
 msgstr "Compresión: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, fuzzy, kde-format
-#| msgid "Endianess: %1"
+#, kde-format
 msgid "Endianness: %1"
-msgstr "«Endianness»: %1"
+msgstr "Endianidad: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
 #, kde-format
@@ -2366,8 +2365,7 @@ msgid "Device not available."
 msgstr "Dispositivo no disponible."
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, fuzzy, kde-format
-#| msgid "Timeout occured."
+#, kde-format
 msgid "Timeout occurred."
 msgstr "Se ha agotado el tiempo de espera."
 
@@ -7746,7 +7744,7 @@ msgstr "Tratamiento de suma de cuadrados"
 #: src/backend/statistics/HypothesisTest.cpp:529
 #, kde-format
 msgid "Sum of Squares Residuals"
-msgstr "Residuos de suma de cuadrados"
+msgstr "Suma residual de cuadrados"
 
 #: src/backend/statistics/HypothesisTest.cpp:530
 #, kde-format
@@ -7759,10 +7757,9 @@ msgid "Mean Squares Treatment"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:531
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Mean Squares Residuals"
-msgstr "Suma de residuos cuadrados"
+msgstr "Media residual de cuadrados"
 
 #: src/backend/statistics/HypothesisTest.cpp:535
 #: src/backend/statistics/HypothesisTest.cpp:1760
@@ -7936,7 +7933,7 @@ msgstr "Estadísticas de la prueba de Mantel-Cox"
 #: src/backend/statistics/HypothesisTest.cpp:593
 #, kde-format
 msgid "Event Count 1"
-msgstr ""
+msgstr "Contador de eventos 1"
 
 #: src/backend/statistics/HypothesisTest.cpp:593
 #, kde-format
@@ -7946,13 +7943,12 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:594
 #, kde-format
 msgid "Total Count 1"
-msgstr ""
+msgstr "Contador total 1"
 
 #: src/backend/statistics/HypothesisTest.cpp:594
-#, fuzzy, kde-format
-#| msgid "Set Column As"
+#, kde-format
 msgid "Event Count 2"
-msgstr "Definir columna como"
+msgstr "Contador de eventos 2"
 
 #: src/backend/statistics/HypothesisTest.cpp:595
 #, kde-format
@@ -7962,7 +7958,7 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:595
 #, kde-format
 msgid "Total Count 2"
-msgstr ""
+msgstr "Contador total 1"
 
 #: src/backend/statistics/HypothesisTest.cpp:600
 #, kde-format
@@ -8864,8 +8860,7 @@ msgid "%1: set whiskers cap size"
 msgstr "%1: definir tamaño del remate de los bigotes"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
-#, fuzzy, kde-format
-#| msgid "%1: jitterring changed"
+#, kde-format
 msgid "%1: jittering changed"
 msgstr "%1: la fluctuación ha cambiado"
 
@@ -10582,7 +10577,7 @@ msgstr "BONDAD DE AJUSTE"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:986
 #, kde-format
 msgid "Sum of squared residuals"
-msgstr "Suma de residuos cuadrados"
+msgstr "Suma residual de cuadrados"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1955
 #, kde-format
@@ -12298,10 +12293,10 @@ msgid ""
 "Intel x86 processors.</td></tr><tr><td>big endian</td><td>typical byte order "
 "on Mainframes (IBM) and SPARC/PowerPC/Motorola processors.</td></tr></table>"
 msgstr ""
-"<table><tr><td>little endian</td><td>orden de octetos típicos («endianness») "
-"en procesadores Intel x86.</td></tr><tr><td>big endian</td><td>orden de "
-"octetos típico en grandes sistemas (IBM) y procesadores SPARC/PowerPC/"
-"Motorola.</td></tr></table>"
+"<table><tr><td>little endian</td><td>orden de octetos típicos («endianness» "
+"o endianidad) en procesadores Intel x86.</td></tr><tr><td>big endian</"
+"td><td>orden de octetos típico en grandes sistemas (IBM) y procesadores "
+"SPARC/PowerPC/Motorola.</td></tr></table>"
 
 #: src/frontend/datasources/CANOptionsWidget.cpp:13
 #, kde-format
@@ -14866,6 +14861,30 @@ msgid ""
 "li><li><b>Chi-Square Goodness of Fit Test</b> - tests if observed data "
 "follows a specified theoretical distribution</li></ul>"
 msgstr ""
+"<ul><li><b>Prueba t de una muestra:</b> comprueba si la media de una muestra "
+"difiere significativamente de una media de población conocida.</"
+"li><li><b>Prueba t de dos muestras independientes:</b> comprueba si dos "
+"muestras independientes tienen la misma media.</li><li><b>Prueba t de dos "
+"muestras apareadas:</b> comprueba si la diferencia media entre dos muestras "
+"relacionadas es cero.</li><li><b>Prueba t de Welch:</b> comprueba si dos "
+"muestras independientes con varianzas desiguales tienen la misma media.</"
+"li><li><b>Prueba de análisis de varianza de un factor:</b> comprueba si tres "
+"o más muestras independientes tienen la misma media.</li><li><b>Prueba de "
+"análisis de varianza de un factor con medidas repetidas:</b> comprueba si "
+"tres o más medidas relacionadas/repetidas tienen la misma media.</"
+"li><li><b>Prueba U de Mann-Whitney:</b> comprueba las diferencias de "
+"medianas entre dos grupos independientes.</li><li><b>Prueba de rangos con "
+"signo de Wilcoxon:</b> comprueba si la diferencia media entre dos muestras "
+"relacionadas es cero.</li><li><b>Prueba de Kruskal-Wallis:</b> comprueba las "
+"diferencias de medianas entre tres o más grupos independientes.</"
+"li><li><b>Prueba de Friedman:</b> comprueba las diferencias de medianas "
+"entre tres o más medidas relacionadas/repetidas.</li><li><b>Prueba de Mantel-"
+"Cox (o logrank):</b> comprueba las diferencias de distribuciones de "
+"supervivencia entre dos o más grupos.</li><li><b>Prueba ji cuadrado de "
+"independencia:</b> comprueba si dos variables categóricas son independientes "
+"entre sí.</li><li><b>Prueba ji cuadrado de bondad de ajuste:</b> comprueba "
+"si los datos observados siguen una determinada distribución teórica.</li></"
+"ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:297
 #, kde-format

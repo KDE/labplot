@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-12 00:39+0000\n"
-"PO-Revision-Date: 2025-09-08 11:18+0300\n"
+"PO-Revision-Date: 2025-09-12 10:20+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -2130,8 +2130,7 @@ msgid "Compression: %1"
 msgstr "Sıkıştırma: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, fuzzy, kde-format
-#| msgid "Endianess: %1"
+#, kde-format
 msgid "Endianness: %1"
 msgstr "Son hanelilik: %1"
 
@@ -2356,8 +2355,7 @@ msgid "Device not available."
 msgstr "Aygıt kullanılabilir değil."
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, fuzzy, kde-format
-#| msgid "Timeout occured."
+#, kde-format
 msgid "Timeout occurred."
 msgstr "Zaman aşımı oluştu."
 
@@ -2997,7 +2995,7 @@ msgstr "1 Curie’nin faaliyeti"
 #: src/backend/gsl/constants.cpp:191
 #, kde-format
 msgid "Exposure of 1 roentgen"
-msgstr "1 roentjen maruziyeti"
+msgstr "1 röntgenlik maruziyet"
 
 #: src/backend/gsl/constants.cpp:192
 #, kde-format
@@ -7967,10 +7965,9 @@ msgid "At least two columns are required."
 msgstr "En az iki sütun gerekiyor."
 
 #: src/backend/statistics/HypothesisTest.cpp:616
-#, fuzzy, kde-format
-#| msgid "Column '%1' requires at least %L2 samples."
+#, kde-format
 msgid "Column '%1' requires at least %2 samples."
-msgstr "“%1” sütunu en az %L2 örneklem gerektiriyor."
+msgstr "“%1” sütunu en az %2 örneklem gerektiriyor."
 
 #: src/backend/statistics/HypothesisTest.cpp:620
 #, kde-format
@@ -8089,8 +8086,7 @@ msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:1429
 #: src/backend/statistics/HypothesisTest.cpp:1496
-#, fuzzy, kde-format
-#| msgid "Column '%1' must be of integer."
+#, kde-format
 msgid "Column '%1' must be of integer type."
 msgstr "“%1” sütunu tamsayı türünde olmalı."
 
@@ -8844,8 +8840,7 @@ msgid "%1: set whiskers cap size"
 msgstr "%1: Kılların kap boyutunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
-#, fuzzy, kde-format
-#| msgid "%1: jitterring changed"
+#, kde-format
 msgid "%1: jittering changed"
 msgstr "%1: Titremeler değişti"
 
