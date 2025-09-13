@@ -337,7 +337,7 @@ QString PivotTablePrivate::createSQLQuery() const {
 		}
 	}
 
-	qDebug()<< query;
+	QDEBUG(query);
 	return query;
 }
 
@@ -521,7 +521,7 @@ void PivotTablePrivate::populateDataModels(QSqlQuery sqlQuery) {
 				horizontalHeaderModel->setSpan(i, start_span[i], 1, span);
 		}
 
-		horizontalHeaderModel->setSpan(0,1,columns.count(),0);
+		horizontalHeaderModel->setSpan(0, 1, columns.count(), 0);
 	} else {
 	}
 }

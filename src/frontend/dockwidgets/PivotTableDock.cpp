@@ -34,7 +34,7 @@ PivotTableDock::PivotTableDock(QWidget* parent) : BaseDock(parent) {
 	setBaseWidgets(ui.leName, ui.teComment);
 
 	cbSpreadsheet = new TreeViewComboBox;
-	ui.gridLayout->addWidget(cbSpreadsheet, 5, 2, 1, 1);
+	ui.gridLayout_6->addWidget(cbSpreadsheet, 5, 2, 1, 1);
 
 	QList<AspectType> list{AspectType::Folder,
 						   AspectType::Workbook,
