@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-14 02:47+0000\n"
-"PO-Revision-Date: 2025-09-10 01:34+0100\n"
+"PO-Revision-Date: 2025-09-12 12:50+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -9821,7 +9821,7 @@ msgstr "BONDAD DE AJUSTE"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:960
 #, kde-format
 msgid "Sum of squared residuals"
-msgstr "Suma de residuos cuadrados"
+msgstr "Suma residual de cuadrados"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1955
 #, kde-format
@@ -10953,10 +10953,10 @@ msgid ""
 "Intel x86 processors.</td></tr><tr><td>big endian</td><td>typical byte order "
 "on Mainframes (IBM) and SPARC/PowerPC/Motorola processors.</td></tr></table>"
 msgstr ""
-"<table><tr><td>little endian</td><td>orden de octetos típicos («endianness») "
-"en procesadores Intel x86.</td></tr><tr><td>big endian</td><td>orden de "
-"octetos típico en grandes sistemas (IBM) y procesadores SPARC/PowerPC/"
-"Motorola.</td></tr></table>"
+"<table><tr><td>little endian</td><td>orden de octetos típicos («endianness» "
+"o endianidad) en procesadores Intel x86.</td></tr><tr><td>big endian</"
+"td><td>orden de octetos típico en grandes sistemas (IBM) y procesadores "
+"SPARC/PowerPC/Motorola.</td></tr></table>"
 
 #: src/frontend/datasources/CANOptionsWidget.cpp:13
 #, kde-format
