@@ -34,7 +34,7 @@ PivotTableDock::PivotTableDock(QWidget* parent) : BaseDock(parent) {
 	setBaseWidgets(ui.leName, ui.teComment);
 
 	cbSpreadsheet = new TreeViewComboBox;
-	ui.gridLayout->addWidget(cbSpreadsheet, 6, 2, 1, 2);
+	ui.gridLayout->addWidget(cbSpreadsheet, 5, 2, 1, 1);
 
 	QList<AspectType> list{AspectType::Folder,
 						   AspectType::Workbook,
@@ -52,6 +52,7 @@ PivotTableDock::PivotTableDock(QWidget* parent) : BaseDock(parent) {
 	ui.bRemoveColumn->setIcon(style->standardIcon(QStyle::SP_ArrowLeft));
 	ui.bDatabaseManager->setIcon(QIcon::fromTheme(QLatin1String("network-server-database")));
 	ui.bAddValue->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+	ui.bAddFilter->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 
 	//add/remove buttons only enabled if something was selected
 	ui.bAddRow->setEnabled(false);
