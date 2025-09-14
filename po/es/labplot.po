@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-12 00:39+0000\n"
-"PO-Revision-Date: 2025-09-12 12:50+0100\n"
+"PO-Revision-Date: 2025-09-13 11:52+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #: src/backend/core/AbstractAspect.cpp:234
 #, kde-format
@@ -7607,7 +7607,7 @@ msgstr "Grados de libertad"
 #: src/backend/statistics/HypothesisTest.cpp:476
 #, kde-format
 msgid "Test Mean"
-msgstr "Probar la media"
+msgstr "Media de la prueba"
 
 #: src/backend/statistics/HypothesisTest.cpp:477
 #: src/backend/statistics/HypothesisTest.cpp:486
@@ -7749,12 +7749,12 @@ msgstr "Suma residual de cuadrados"
 #: src/backend/statistics/HypothesisTest.cpp:530
 #, kde-format
 msgid "Sum of Squares Within Subjects"
-msgstr ""
+msgstr "Suma de cuadrados entre sujetos"
 
 #: src/backend/statistics/HypothesisTest.cpp:530
 #, kde-format
 msgid "Mean Squares Treatment"
-msgstr ""
+msgstr "Tratamiento de media de cuadrados"
 
 #: src/backend/statistics/HypothesisTest.cpp:531
 #, kde-format
@@ -7870,10 +7870,9 @@ msgid "Negative Rank Count"
 msgstr "Contador de rangos negativos"
 
 #: src/backend/statistics/HypothesisTest.cpp:560
-#, fuzzy, kde-format
-#| msgid "Bin Count:"
+#, kde-format
 msgid "Tie Count"
-msgstr "Contador de intervalos:"
+msgstr "Contador de empates"
 
 #: src/backend/statistics/HypothesisTest.cpp:565
 #: src/backend/statistics/HypothesisTest.cpp:1772
@@ -7938,7 +7937,7 @@ msgstr "Contador de eventos 1"
 #: src/backend/statistics/HypothesisTest.cpp:593
 #, kde-format
 msgid "Censored Count 1"
-msgstr ""
+msgstr "Contador de censurados 1"
 
 #: src/backend/statistics/HypothesisTest.cpp:594
 #, kde-format
@@ -7953,7 +7952,7 @@ msgstr "Contador de eventos 2"
 #: src/backend/statistics/HypothesisTest.cpp:595
 #, kde-format
 msgid "Censored Count 2"
-msgstr ""
+msgstr "Contador de censurados 2"
 
 #: src/backend/statistics/HypothesisTest.cpp:595
 #, kde-format
@@ -22749,7 +22748,7 @@ msgstr "Forma"
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:20
 #, kde-format
 msgid "Test Mean μ₀: "
-msgstr ""
+msgstr "Media de la prueba μ₀: "
 
 #. i18n: ectx: property (text), widget (QLabel, lSignificanceLevel)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:50
