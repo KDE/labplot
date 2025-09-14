@@ -1030,7 +1030,7 @@ void SpinBoxTest::numberSpinBoxFeedbackCursorPosition2() {
 	CartesianPlotDock d(nullptr);
 
 	d.setPlots({p});
-	d.setPlots({p}); // Important to do it a second time to see that the connections are cleared bevore connecting again
+	d.setPlots({p}); // Important to do it a second time to see that the connections are cleared before connecting again
 
 	QCOMPARE(d.ui.sbPaddingHorizontal->lineEdit()->text(), QStringLiteral("1.5 cm"));
 	d.ui.sbPaddingHorizontal->lineEdit()->setCursorPosition(3);

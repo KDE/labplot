@@ -314,7 +314,7 @@ void AxisTest::majorTicksStartValue() {
 
 	QCOMPARE(xAxis->majorTicksStartType(), Axis::TicksStartType::Offset);
 
-	// by default the offset is zero, so we are starting again from the begining
+	// by default the offset is zero, so we are starting again from the beginning
 	{
 		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
 		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
