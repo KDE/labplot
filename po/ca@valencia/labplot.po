@@ -15592,7 +15592,7 @@ msgstr "S'ha obert el projecte amb èxit (en %1 segons)."
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
-msgstr "Guarda el projecte com a"
+msgstr "Anomeneu i guardeu el projecte"
 
 #: src/frontend/MainWin.cpp:1741
 #, kde-format
