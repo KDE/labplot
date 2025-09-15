@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-12 00:39+0000\n"
-"PO-Revision-Date: 2025-09-12 12:36+0200\n"
+"PO-Revision-Date: 2025-09-14 15:01+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #: src/backend/core/AbstractAspect.cpp:234
 #, kde-format
@@ -8050,6 +8050,8 @@ msgid ""
 "At the significance level %1, no significant difference between group means. "
 "Fail to reject the null Hypothesis"
 msgstr ""
+"Op het significantieniveau %1 is er geen significant verschil tussen "
+"groepsgemiddelde. De nul-hypothese niet afwijzen"
 
 #: src/backend/statistics/HypothesisTest.cpp:1221
 #: src/backend/statistics/HypothesisTest.cpp:1279
@@ -8059,6 +8061,8 @@ msgid ""
 "At the significance level %1, at least one group distribution is "
 "significantly different. Reject the null Hypothesis"
 msgstr ""
+"Op het significantieniveau %1, is minstens één groepsverdeling significant "
+"verschillend. Wijs de nul-hypothese af"
 
 #: src/backend/statistics/HypothesisTest.cpp:1223
 #: src/backend/statistics/HypothesisTest.cpp:1281
@@ -8068,6 +8072,8 @@ msgid ""
 "At the significance level %1, no significant difference between group "
 "distributions. Fail to reject the null Hypothesis"
 msgstr ""
+"Op het significantieniveau %1 is er geen significant verschil tussen "
+"groepsverdelingen. De nul-hypothese niet afwijzen"
 
 #: src/backend/statistics/HypothesisTest.cpp:1401
 #, kde-format
@@ -8075,6 +8081,8 @@ msgid ""
 "At the significance level %1, at least one group is significantly different. "
 "Reject the null Hypothesis"
 msgstr ""
+"Op het significantieniveau %1, is minstens één groep significant "
+"verschillend. Wijs de nul-hypothese af"
 
 #: src/backend/statistics/HypothesisTest.cpp:1403
 #, kde-format
@@ -8082,6 +8090,8 @@ msgid ""
 "At the significance level %1, no significant difference between groups. Fail "
 "to reject the null Hypothesis"
 msgstr ""
+"Op het significantieniveau %1 is er geen significant verschil tussen "
+"groepen. De nul-hypothese niet afwijzen"
 
 #: src/backend/statistics/HypothesisTest.cpp:1429
 #: src/backend/statistics/HypothesisTest.cpp:1496
@@ -8095,6 +8105,8 @@ msgid ""
 "At the significance level %1, the observed frequencies do not follow the "
 "expected frequency distribution. Reject the null Hypothesis"
 msgstr ""
+"Op het significantieniveau %1 volgen de waargenomen frequenties niet de "
+"verwachte frequentieverdeling. De nul-hypothese afwijzen"
 
 #: src/backend/statistics/HypothesisTest.cpp:1472
 #, kde-format
@@ -8102,11 +8114,13 @@ msgid ""
 "At the significance level %1, the observed frequencies follow the expected "
 "frequency distribution. Fail to reject the null Hypothesis"
 msgstr ""
+"Op het significantieniveau %1 volgen de waargenomen frequenties de verwachte "
+"frequentieverdeling. De nul-hypothese niet afwijzen"
 
 #: src/backend/statistics/HypothesisTest.cpp:1516
 #, kde-format
 msgid "The size of each column in the contingency table must be equal."
-msgstr ""
+msgstr "De grootte van elke kolom in de contingentietabel moet gelijk zijn."
 
 #: src/backend/statistics/HypothesisTest.cpp:1532
 #, kde-format
@@ -8114,6 +8128,8 @@ msgid ""
 "At the significance level %1, both categorical variables are dependent. "
 "Reject the null Hypothesis"
 msgstr ""
+"Op het significantieniveau %1 zijn beide categoriale variabelen afhankelijk "
+"van elkaar. De nul-hypothese afwijzen"
 
 #: src/backend/statistics/HypothesisTest.cpp:1535
 #, kde-format
@@ -8121,51 +8137,56 @@ msgid ""
 "At the significance level %1, both categorical variables are independent. "
 "Fail to reject the null Hypothesis"
 msgstr ""
+"Op het significantieniveau %1 zijn beide categoriale variabelen "
+"onafhankelijk van elkaar. De nul-hypothese niet afwijzen"
 
 #: src/backend/statistics/HypothesisTest.cpp:1553
 #, kde-format
 msgid "Three columns are required."
-msgstr ""
+msgstr "Drie kolommen zijn vereist."
 
 #: src/backend/statistics/HypothesisTest.cpp:1562
 #, kde-format
 msgid "Status column should be of integer type."
-msgstr ""
+msgstr "Statuskolom zou van het type geheel getal moeten zijn."
 
 #: src/backend/statistics/HypothesisTest.cpp:1567
 #, kde-format
 msgid "Group column should be of integer type."
-msgstr ""
+msgstr "Groepskolom zou van het type geheel getal moeten zijn."
 
 #: src/backend/statistics/HypothesisTest.cpp:1572
 #, kde-format
 msgid "Time, Status and Group columns should have equal size."
 msgstr ""
+"Tijd-, Status- en Groepskolommen zouden gelijke grootten moeten hebben."
 
 #: src/backend/statistics/HypothesisTest.cpp:1591
 #, kde-format
 msgid "Status column values must be either 0 or 1."
-msgstr ""
+msgstr "Statuskolomwaarden moeten 0 of 1 zijn."
 
 #: src/backend/statistics/HypothesisTest.cpp:1596
 #, kde-format
 msgid "Group column values must be either 0 or 1."
-msgstr ""
+msgstr "Groepskolomwaarden moeten 0 of 1 zijn."
 
 #: src/backend/statistics/HypothesisTest.cpp:1612
 #, kde-format
 msgid "Time, Status and Group columns should have equal number of values."
 msgstr ""
+"Tijd-, Status- en Groepskolommen zouden een gelijk aantal waarden moeten "
+"hebben."
 
 #: src/backend/statistics/HypothesisTest.cpp:1620
 #, kde-format
 msgid "Group 1 requires at least %1 samples."
-msgstr ""
+msgstr "Groep 1 vereist minstens %1 monsters."
 
 #: src/backend/statistics/HypothesisTest.cpp:1625
 #, kde-format
 msgid "Group 2 requires at least %1 samples."
-msgstr ""
+msgstr "Groep 2 vereist minstens %1 monsters."
 
 #: src/backend/statistics/HypothesisTest.cpp:1637
 #, kde-format
@@ -8173,6 +8194,8 @@ msgid ""
 "At the significance level %1, the survival curves are significantly "
 "different. Reject the null Hypothesis"
 msgstr ""
+"Op het significantieniveau %1, zijn de overlevingskrommen verschillend. Wijs "
+"de nul-hypothese af"
 
 #: src/backend/statistics/HypothesisTest.cpp:1640
 #, kde-format
@@ -8180,27 +8203,29 @@ msgid ""
 "At the significance level %1, no significant difference between survival "
 "curves. Fail to reject the null Hypothesis"
 msgstr ""
+"Op het significantieniveau %1 is er geen significant verschil tussen "
+"overlevingskrommen. De nul-hypothese niet afwijzen"
 
 #: src/backend/statistics/HypothesisTest.cpp:1752
 #, kde-format
 msgid "One-Way ANOVA"
-msgstr ""
+msgstr "Eenrichtingsverkeer ANOVA"
 
 #: src/backend/statistics/HypothesisTest.cpp:1756
 #, kde-format
 msgid "One-Way ANOVA with Repeated Measures"
-msgstr ""
+msgstr "Eenrichtingsverkeer ANOVA met herhaalde metingen"
 
 #: src/backend/statistics/HypothesisTest.cpp:1776
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:110
 #, kde-format
 msgid "Logrank Test"
-msgstr ""
+msgstr "Test Logrank"
 
 #: src/backend/statistics/HypothesisTest.cpp:1780
 #, kde-format
 msgid "Chi-square Independence Test"
-msgstr ""
+msgstr "Chi-kwadraat onafhankelijkheidstoets"
 
 #: src/backend/statistics/HypothesisTest.cpp:1784
 #, kde-format
@@ -14802,11 +14827,34 @@ msgid ""
 "li><li><b>Chi-Square Goodness of Fit Test</b> - tests if observed data "
 "follows a specified theoretical distribution</li></ul>"
 msgstr ""
+"<ul><li><b>Eén-monster t-Test</b> - test of een gemiddelde van een monster "
+"significant verschilt van een bekend gemiddelde van een populatie</"
+"li><li><b>Onafhankelijke twee-monsters t-Test</b> - test of twee "
+"onafhankelijke monsters hetzelfde gemiddelde hebben</li><li><b>Gepaarde twee-"
+"monsters t-Test</b> - test of het gemiddelde verschil tussen twee "
+"gerelateerde monsters nul is</li><li><b>Welch t-Test</b> - test of twee "
+"onafhankelijke monsters met gelijke variantie hetzelfde gemiddelde hebben</"
+"li><li><b>Eenrichtingsweg ANOVA Test</b> - test of drie of meer "
+"onafhankelijke monsters hetzelfde gemiddelde hebben</"
+"li><li><b>Eenrichtingsweg ANOVA met Herhaalde metingen test</b> - test of "
+"drie of meer gerelateerde/herhaalde metingen hetzelfde gemiddelde hebben</"
+"li><li><b>Mann-Whitney U-test</b> - test verschillen in medianen tussen twee "
+"onafhankelijke groepen</li><li><b>Wilcoxon van-teken-voorziene rang-test</b> "
+"- test of het mediaan verschil tussen twee gerelateerde monsters nul is</"
+"li><li><b>Kruskal-Wallis test</b> - test verschil in medianen tussen drie of "
+"meer onafhankelijke groepen</li><li><b>Friedman test</b> - test verschillen "
+"in medianen tussen drie of meer gerelateerde/herhaalde metingen</"
+"li><li><b>Logrank test</b> - test verschillen in overlevingsdistributies "
+"tussen twee of meer groepen</li><li><b>Chi-kwadraat onafhankelijkheid test</"
+"b> - test of twee categoriale variabelen onafhankelijk zijn van elkaar</"
+"li><li><b>Chi-kwadraat kwaliteit van fit test</b> - test of waargenomen "
+"gegevens een gespecificeerde theoretische distributie volgen</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:297
 #, kde-format
 msgid "Selected test requires at least %1 and at most %2 non-empty variables."
 msgstr ""
+"Geselecteerde test vereist minstens %1 en maximaal %2 niet-lege variabelen."
 
 #: src/frontend/dockwidgets/InfoElementDock.cpp:227
 #, kde-format
@@ -19199,7 +19247,7 @@ msgstr "Ladder van machten"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:953
 #, kde-format
 msgid "Hypothesis Test for %1"
-msgstr ""
+msgstr "Hypothese test voor %1"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1180
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1566
@@ -22645,13 +22693,13 @@ msgstr "Vorm"
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:20
 #, kde-format
 msgid "Test Mean μ₀: "
-msgstr ""
+msgstr "Testgemiddelde μ₀: "
 
 #. i18n: ectx: property (text), widget (QLabel, lSignificanceLevel)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:50
 #, kde-format
 msgid "Significance Level α:"
-msgstr ""
+msgstr "Significantieniveau α:"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:95
