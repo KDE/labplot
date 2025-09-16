@@ -342,8 +342,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/orcus/orcus/-/archive/0.20.2/orcus-0.20.2.tar.bz2",
-                    "sha256": "46cdeefef6bbf800e2e776630930fea6363107ac71460824ba54e37047eb85b8"
+                    "url": "https://gitlab.com/orcus/orcus/-/archive/0.21.0/orcus-0.21.0.tar.bz2",
+                    "sha256": "3555660197d6d38d720643f430804bb0f95a484c1fe6c28c00808ae67f978d15"
                 }
             ]
         },
