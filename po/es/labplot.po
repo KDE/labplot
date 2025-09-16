@@ -14153,12 +14153,12 @@ msgstr "No se dispone de fuentes de datos."
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1427
 #, kde-format
 msgid "%1 % lower confidence level"
-msgstr "Nivel de confianza inferior al %1%"
+msgstr "Nivel de confianza inferior al %1 %"
 
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:1428
 #, kde-format
 msgid "%1 % upper confidence level"
-msgstr "Nivel de confianza superior al %1%"
+msgstr "Nivel de confianza superior al %1 %"
 
 #. i18n: ectx: property (text), widget (QLabel, lCutoff)
 #: src/frontend/dockwidgets/XYFourierFilterCurveDock.cpp:289

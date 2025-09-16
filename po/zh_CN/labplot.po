@@ -14964,7 +14964,7 @@ msgstr "全部(&A)"
 #: src/frontend/MainWin.cpp:831
 #, kde-format
 msgid "Show Memory Usage"
-msgstr "显示内存使用情况"
+msgstr "显示内存使用率"
 
 #: src/frontend/MainWin.cpp:839
 #, kde-format
