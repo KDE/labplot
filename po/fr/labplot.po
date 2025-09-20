@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-12 00:39+0000\n"
-"PO-Revision-Date: 2025-09-10 16:04+0200\n"
+"PO-Revision-Date: 2025-09-17 15:37+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.08.1\n"
 "X-Text-Markup: kde4\n"
 
 #: src/backend/core/AbstractAspect.cpp:234
@@ -2160,8 +2160,7 @@ msgid "Compression: %1"
 msgstr "Compression : %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, fuzzy, kde-format
-#| msgid "Endianess: %1"
+#, kde-format
 msgid "Endianness: %1"
 msgstr "Boutisme : %1"
 
@@ -2390,8 +2389,7 @@ msgid "Device not available."
 msgstr "Le périphérique est indisponible"
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, fuzzy, kde-format
-#| msgid "Timeout occured."
+#, kde-format
 msgid "Timeout occurred."
 msgstr "Le délai maximum d'attente a été atteint."
 
@@ -7535,10 +7533,9 @@ msgstr "Test d'hypothèses"
 #: src/backend/statistics/HypothesisTest.cpp:472
 #: src/backend/statistics/HypothesisTest.cpp:1736
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:100
-#, fuzzy, kde-format
-#| msgid "Sample Quantiles"
+#, kde-format
 msgid "One-Sample t-Test"
-msgstr "Échantillonner les quantiles"
+msgstr "t-Test à un échantillon"
 
 #: src/backend/statistics/HypothesisTest.cpp:472
 #: src/backend/statistics/HypothesisTest.cpp:481
@@ -7593,10 +7590,9 @@ msgstr "Statistiques descriptives"
 #: src/backend/statistics/HypothesisTest.cpp:483
 #: src/backend/statistics/HypothesisTest.cpp:493
 #: src/backend/statistics/HypothesisTest.cpp:502
-#, fuzzy, kde-format
-#| msgid "t Statistic"
+#, kde-format
 msgid "t-Test Statistics"
-msgstr "Statistiques T"
+msgstr "Statistiques de t-Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:474
 #: src/backend/statistics/HypothesisTest.cpp:483
@@ -7690,51 +7686,49 @@ msgstr "Conclusion statistique"
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:101
 #, kde-format
 msgid "Independent Two-Sample t-Test"
-msgstr ""
+msgstr "t-Test indépendant à deux échantillons"
 
 #: src/backend/statistics/HypothesisTest.cpp:485
-#, fuzzy, kde-format
-#| msgid "Variance"
+#, kde-format
 msgid "Pooled Variance"
-msgstr "Variance"
+msgstr "Variance regroupée"
 
 #: src/backend/statistics/HypothesisTest.cpp:486
 #: src/backend/statistics/HypothesisTest.cpp:505
 #, kde-format
 msgid "Mean Difference Standard Error"
-msgstr ""
+msgstr "Erreur type de différence moyenne"
 
 #: src/backend/statistics/HypothesisTest.cpp:491
 #: src/backend/statistics/HypothesisTest.cpp:1744
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:102
 #, kde-format
 msgid "Paired Two-Sample t-Test"
-msgstr ""
+msgstr "t-Test à deux d'échantillons appariés"
 
 #: src/backend/statistics/HypothesisTest.cpp:500
 #: src/backend/statistics/HypothesisTest.cpp:1748
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:103
 #, kde-format
 msgid "Welch t-Test"
-msgstr ""
+msgstr "t-Test de Welch"
 
 #: src/backend/statistics/HypothesisTest.cpp:510
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:104
 #, kde-format
 msgid "One-Way ANOVA Test"
-msgstr ""
+msgstr "Test ANOVA unidirectionnel"
 
 #: src/backend/statistics/HypothesisTest.cpp:512
 #, kde-format
 msgid "One-Way ANOVA Test Statistics"
-msgstr ""
+msgstr "Statistiques de test ANOVA unidirectionnel"
 
 #: src/backend/statistics/HypothesisTest.cpp:513
 #: src/backend/statistics/HypothesisTest.cpp:526
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "F-Statistic"
-msgstr "Statistiques"
+msgstr "F-Statistiques"
 
 #: src/backend/statistics/HypothesisTest.cpp:514
 #, kde-format
@@ -7747,16 +7741,14 @@ msgid "Degrees of Freedom Within Groups"
 msgstr "Degrés de liberté dans les groupes"
 
 #: src/backend/statistics/HypothesisTest.cpp:516
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Between Groups"
-msgstr "Somme des carrés des erreurs"
+msgstr "Somme des carrés entre les groupes"
 
 #: src/backend/statistics/HypothesisTest.cpp:517
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Within Groups"
-msgstr "Somme des carrés des erreurs"
+msgstr "Somme des carrés dans les groupes"
 
 #: src/backend/statistics/HypothesisTest.cpp:518
 #, kde-format
@@ -7772,12 +7764,12 @@ msgstr "Moyenne quadratique dans les groupes"
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:105
 #, kde-format
 msgid "One-Way ANOVA with Repeated Measures Test"
-msgstr ""
+msgstr "ANOVA unidirectionnelle avec test de mesures répétées"
 
 #: src/backend/statistics/HypothesisTest.cpp:525
 #, kde-format
 msgid "One-Way ANOVA with Repeated Measures Test Statistics"
-msgstr ""
+msgstr "ANOVA unidirectionnel avec statistiques de tests répétés de mesures"
 
 #: src/backend/statistics/HypothesisTest.cpp:527
 #, kde-format
@@ -7790,21 +7782,19 @@ msgid "Degrees of Freedom Residuals"
 msgstr "Degrés des résiduels de la liberté"
 
 #: src/backend/statistics/HypothesisTest.cpp:528
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Treatment"
-msgstr "Somme des carrés des erreurs"
+msgstr "Somme du traitement des carrés"
 
 #: src/backend/statistics/HypothesisTest.cpp:529
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Residuals"
-msgstr "Somme des carrés des erreurs"
+msgstr "Somme des résiduels des carrés"
 
 #: src/backend/statistics/HypothesisTest.cpp:530
 #, kde-format
 msgid "Sum of Squares Within Subjects"
-msgstr ""
+msgstr "Somme des carrés dans les sujets"
 
 #: src/backend/statistics/HypothesisTest.cpp:530
 #, kde-format
@@ -7821,12 +7811,12 @@ msgstr "Résiduels de quadratique moyen"
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:106
 #, kde-format
 msgid "Mann-Whitney U Test"
-msgstr ""
+msgstr "Test U de Mann-Whitney"
 
 #: src/backend/statistics/HypothesisTest.cpp:537
 #, kde-format
 msgid "Mann-Whitney U Test Statistics"
-msgstr ""
+msgstr "Statistiques du test U de Mann-Whitney"
 
 #: src/backend/statistics/HypothesisTest.cpp:538
 #, kde-format
@@ -7842,24 +7832,22 @@ msgstr "Z-Valeur"
 #: src/backend/statistics/HypothesisTest.cpp:539
 #, kde-format
 msgid "Rank Sum 1"
-msgstr ""
+msgstr "Somme de rang 1"
 
 #: src/backend/statistics/HypothesisTest.cpp:540
-#, fuzzy, kde-format
-#| msgid "Mean = 0"
+#, kde-format
 msgid "Mean Rank 1"
-msgstr "Moyenne = 0"
+msgstr "Rang de moyenne 1"
 
 #: src/backend/statistics/HypothesisTest.cpp:540
 #, kde-format
 msgid "Rank Sum 2"
-msgstr ""
+msgstr "Somme de rang 2"
 
 #: src/backend/statistics/HypothesisTest.cpp:541
-#, fuzzy, kde-format
-#| msgid "Mean = 0"
+#, kde-format
 msgid "Mean Rank 2"
-msgstr "Moyenne = 0"
+msgstr "Rang de moyenne 2"
 
 #: src/backend/statistics/HypothesisTest.cpp:545
 #: src/backend/statistics/HypothesisTest.cpp:1768
@@ -7884,12 +7872,12 @@ msgstr "H"
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:107
 #, kde-format
 msgid "Wilcoxon Signed Rank Test"
-msgstr ""
+msgstr "Test de rang signé de Wilcoxon"
 
 #: src/backend/statistics/HypothesisTest.cpp:555
 #, kde-format
 msgid "Wilcoxon Signed Rank Test Statistics"
-msgstr ""
+msgstr "Statistiques de test de rang signé de Wilcoxon"
 
 #: src/backend/statistics/HypothesisTest.cpp:556
 #, kde-format
@@ -7902,15 +7890,14 @@ msgid "Positive Rank Sum"
 msgstr "Somme de rang positif"
 
 #: src/backend/statistics/HypothesisTest.cpp:558
-#, fuzzy, kde-format
-#| msgid "Positive Lookahead"
+#, kde-format
 msgid "Positive Rank Mean"
-msgstr "Prédiction positive"
+msgstr "Moyenne de rang positif"
 
 #: src/backend/statistics/HypothesisTest.cpp:558
 #, kde-format
 msgid "Positive Rank Count"
-msgstr ""
+msgstr "Compteur de rang positif"
 
 #: src/backend/statistics/HypothesisTest.cpp:559
 #, kde-format
@@ -7918,29 +7905,26 @@ msgid "Negative Rank Sum"
 msgstr "Somme de rang négatif"
 
 #: src/backend/statistics/HypothesisTest.cpp:559
-#, fuzzy, kde-format
-#| msgid "Negative lookahead"
+#, kde-format
 msgid "Negative Rank Mean"
-msgstr "Prédiction négative"
+msgstr "Moyenne de rang négatif"
 
 #: src/backend/statistics/HypothesisTest.cpp:560
-#, fuzzy, kde-format
-#| msgid "Nonnegative square root"
+#, kde-format
 msgid "Negative Rank Count"
-msgstr "Racine carré non négative"
+msgstr "Compteur de rang négatif"
 
 #: src/backend/statistics/HypothesisTest.cpp:560
-#, fuzzy, kde-format
-#| msgid "Bin Count:"
+#, kde-format
 msgid "Tie Count"
-msgstr "Compteur de cellules :"
+msgstr "Compteur de liaison"
 
 #: src/backend/statistics/HypothesisTest.cpp:565
 #: src/backend/statistics/HypothesisTest.cpp:1772
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:109
 #, kde-format
 msgid "Friedman Test"
-msgstr ""
+msgstr "Test de Friedman"
 
 #: src/backend/statistics/HypothesisTest.cpp:567
 #, kde-format
@@ -7954,15 +7938,14 @@ msgstr "Q"
 
 #: src/backend/statistics/HypothesisTest.cpp:573
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:112
-#, fuzzy, kde-format
-#| msgid "Goodness of fit"
+#, kde-format
 msgid "Chi-Square Goodness of Fit Test"
-msgstr "Qualité de l'ajustement"
+msgstr "Qualité en Chi-carré du test d’ajustement"
 
 #: src/backend/statistics/HypothesisTest.cpp:575
 #, kde-format
 msgid "Chi-Square Goodness of Fit Test Statistics"
-msgstr ""
+msgstr "Qualité en Chi-carré des statistiques de test d'ajustement"
 
 #: src/backend/statistics/HypothesisTest.cpp:576
 #: src/backend/statistics/HypothesisTest.cpp:583
@@ -7979,18 +7962,17 @@ msgstr "Test d'indépendance en Chi-carré"
 #: src/backend/statistics/HypothesisTest.cpp:582
 #, kde-format
 msgid "Chi-Square Independence Test Statistics"
-msgstr ""
+msgstr "Statistiques de test d'indépendance en Chi-carré"
 
 #: src/backend/statistics/HypothesisTest.cpp:589
 #, kde-format
 msgid "Log-Rank Test"
-msgstr ""
+msgstr "Test de rang logarithmique"
 
 #: src/backend/statistics/HypothesisTest.cpp:590
-#, fuzzy, kde-format
-#| msgid "Column Statistics"
+#, kde-format
 msgid "Log-Rank Test Statistics"
-msgstr "Statistiques de la colonne"
+msgstr "Statistiques du test de rang logarithmique"
 
 #: src/backend/statistics/HypothesisTest.cpp:593
 #, kde-format
@@ -8000,7 +7982,7 @@ msgstr "Compteur d'évènements 1"
 #: src/backend/statistics/HypothesisTest.cpp:593
 #, kde-format
 msgid "Censored Count 1"
-msgstr ""
+msgstr "Compteur de suppression 1"
 
 #: src/backend/statistics/HypothesisTest.cpp:594
 #, kde-format
@@ -8015,7 +7997,7 @@ msgstr "Compteur d'évènements 2"
 #: src/backend/statistics/HypothesisTest.cpp:595
 #, kde-format
 msgid "Censored Count 2"
-msgstr ""
+msgstr "Compteur de suppression 2"
 
 #: src/backend/statistics/HypothesisTest.cpp:595
 #, kde-format
@@ -8071,6 +8053,8 @@ msgid ""
 "At the significance level %1, the population mean is significantly different "
 "from %2. Reject the null hypothesis."
 msgstr ""
+"Au niveau de signification %1, la moyenne de la population est "
+"significativement différente de %2. Rejeter l'hypothèse nulle."
 
 #: src/backend/statistics/HypothesisTest.cpp:891
 #, kde-format
@@ -8078,6 +8062,8 @@ msgid ""
 "At the significance level %1, the population mean is not significantly "
 "different from %2. Fail to reject the null hypothesis."
 msgstr ""
+"Au niveau de signification %1, la moyenne de la population n'est pas "
+"significativement différente de %2. Ne pas rejeter l'hypothèse nulle."
 
 #: src/backend/statistics/HypothesisTest.cpp:975
 #: src/backend/statistics/HypothesisTest.cpp:1043
@@ -8086,6 +8072,8 @@ msgid ""
 "At the significance level %1, the population means are significantly "
 "different. Reject the null Hypothesis"
 msgstr ""
+"Au niveau de signification %1, les moyennes de population sont "
+"significativement différentes. Rejeter l'hypothèse nulle"
 
 #: src/backend/statistics/HypothesisTest.cpp:977
 #: src/backend/statistics/HypothesisTest.cpp:1045
@@ -8094,6 +8082,8 @@ msgid ""
 "At the significance level %1, the population means are not significantly "
 "different. Fail to reject the null Hypothesis"
 msgstr ""
+"Au niveau de signification %1, les moyennes de population ne sont pas "
+"significativement différentes. Ne pas rejeter l'hypothèse nulle"
 
 #: src/backend/statistics/HypothesisTest.cpp:1098
 #: src/backend/statistics/HypothesisTest.cpp:1161
@@ -8102,6 +8092,8 @@ msgid ""
 "At the significance level %1, at least one group mean is significantly "
 "different. Reject the null Hypothesis"
 msgstr ""
+"Au niveau de signification %1, au moins une moyenne de groupe est "
+"significativement différente. Rejeter l'hypothèse nulle"
 
 #: src/backend/statistics/HypothesisTest.cpp:1101
 #: src/backend/statistics/HypothesisTest.cpp:1164
@@ -8110,6 +8102,8 @@ msgid ""
 "At the significance level %1, no significant difference between group means. "
 "Fail to reject the null Hypothesis"
 msgstr ""
+"Au niveau de signification %1, aucune différence significative entre les "
+"moyennes de groupe. Ne pas rejeter l'hypothèse nulle"
 
 #: src/backend/statistics/HypothesisTest.cpp:1221
 #: src/backend/statistics/HypothesisTest.cpp:1279
@@ -8119,6 +8113,8 @@ msgid ""
 "At the significance level %1, at least one group distribution is "
 "significantly different. Reject the null Hypothesis"
 msgstr ""
+"Au niveau de signification %1, au moins une distribution de groupe est "
+"significativement différente. Rejeter l'hypothèse nulle"
 
 #: src/backend/statistics/HypothesisTest.cpp:1223
 #: src/backend/statistics/HypothesisTest.cpp:1281
@@ -8128,6 +8124,8 @@ msgid ""
 "At the significance level %1, no significant difference between group "
 "distributions. Fail to reject the null Hypothesis"
 msgstr ""
+"Au niveau de signification %1, aucune différence significative entre les "
+"distributions de groupe. Ne pas rejeter l'hypothèse nulle"
 
 #: src/backend/statistics/HypothesisTest.cpp:1401
 #, kde-format
@@ -8135,6 +8133,8 @@ msgid ""
 "At the significance level %1, at least one group is significantly different. "
 "Reject the null Hypothesis"
 msgstr ""
+"Au niveau de signification %1, au moins un groupe est significativement "
+"différent. Rejeter l'hypothèse nulle"
 
 #: src/backend/statistics/HypothesisTest.cpp:1403
 #, kde-format
@@ -8142,6 +8142,8 @@ msgid ""
 "At the significance level %1, no significant difference between groups. Fail "
 "to reject the null Hypothesis"
 msgstr ""
+"Au niveau de signification %1, aucune différence significative entre les "
+"groupes. Ne pas rejeter l'hypothèse nulle"
 
 #: src/backend/statistics/HypothesisTest.cpp:1429
 #: src/backend/statistics/HypothesisTest.cpp:1496
@@ -8155,6 +8157,8 @@ msgid ""
 "At the significance level %1, the observed frequencies do not follow the "
 "expected frequency distribution. Reject the null Hypothesis"
 msgstr ""
+"Au niveau de signification %1, les fréquences observées ne suivent pas la "
+"distribution de fréquence attendue. Rejeter l'hypothèse nulle"
 
 #: src/backend/statistics/HypothesisTest.cpp:1472
 #, kde-format
@@ -8162,6 +8166,8 @@ msgid ""
 "At the significance level %1, the observed frequencies follow the expected "
 "frequency distribution. Fail to reject the null Hypothesis"
 msgstr ""
+"Au niveau de signification %1, les fréquences observées suivent la "
+"distribution de fréquence attendue. Ne pas rejeter l'hypothèse nulle"
 
 #: src/backend/statistics/HypothesisTest.cpp:1516
 #, kde-format
@@ -8174,6 +8180,8 @@ msgid ""
 "At the significance level %1, both categorical variables are dependent. "
 "Reject the null Hypothesis"
 msgstr ""
+"Au niveau de signification %1, toutes les variables catégorielles sont "
+"dépendantes. Rejeter l'hypothèse nulle"
 
 #: src/backend/statistics/HypothesisTest.cpp:1535
 #, kde-format
@@ -8181,6 +8189,8 @@ msgid ""
 "At the significance level %1, both categorical variables are independent. "
 "Fail to reject the null Hypothesis"
 msgstr ""
+"Au niveau de signification %1, toutes les variables catégorielles sont "
+"indépendantes. Ne pas rejeter l'hypothèse nulle"
 
 #: src/backend/statistics/HypothesisTest.cpp:1553
 #, kde-format
@@ -8236,6 +8246,8 @@ msgid ""
 "At the significance level %1, the survival curves are significantly "
 "different. Reject the null Hypothesis"
 msgstr ""
+"Au niveau de signification %1, les courbes de survie sont significativement "
+"différentes. Rejeter l'hypothèse nulle"
 
 #: src/backend/statistics/HypothesisTest.cpp:1640
 #, kde-format
@@ -8243,22 +8255,24 @@ msgid ""
 "At the significance level %1, no significant difference between survival "
 "curves. Fail to reject the null Hypothesis"
 msgstr ""
+"Au niveau de signification %1, aucune différence significative entre les "
+"courbes de survie. Ne pas rejeter l'hypothèse nulle"
 
 #: src/backend/statistics/HypothesisTest.cpp:1752
 #, kde-format
 msgid "One-Way ANOVA"
-msgstr ""
+msgstr "ANOVA unidirectionnel"
 
 #: src/backend/statistics/HypothesisTest.cpp:1756
 #, kde-format
 msgid "One-Way ANOVA with Repeated Measures"
-msgstr ""
+msgstr "ANOVA unidirectionnel avec mesures répétées"
 
 #: src/backend/statistics/HypothesisTest.cpp:1776
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:110
 #, kde-format
 msgid "Logrank Test"
-msgstr ""
+msgstr "Test de rang logarithmique"
 
 #: src/backend/statistics/HypothesisTest.cpp:1780
 #, kde-format
@@ -8266,10 +8280,9 @@ msgid "Chi-square Independence Test"
 msgstr "Test d'indépendance Chi-carré"
 
 #: src/backend/statistics/HypothesisTest.cpp:1784
-#, fuzzy, kde-format
-#| msgid "Goodness of fit"
+#, kde-format
 msgid "Chi-square Goodness of Fit Test"
-msgstr "Qualité de l'ajustement"
+msgstr "Qualité en Chi-carré du test d’ajustement"
 
 #: src/backend/worksheet/Background.cpp:202
 #, kde-format
@@ -8893,8 +8906,7 @@ msgid "%1: set whiskers cap size"
 msgstr "%1 : définir la taille du sommet des moustaches"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
-#, fuzzy, kde-format
-#| msgid "%1: jitterring changed"
+#, kde-format
 msgid "%1: jittering changed"
 msgstr "%1 : coefficient d'instabilité modifié"
 
@@ -14923,6 +14935,29 @@ msgid ""
 "li><li><b>Chi-Square Goodness of Fit Test</b> - tests if observed data "
 "follows a specified theoretical distribution</li></ul>"
 msgstr ""
+"<ul><li><b>t-Test sur un échantillon</b> - teste si une moyenne "
+"d’échantillon diffère significativement à partir d’une moyenne de population "
+"connue,</li><li><b>t-Test sur deux échantillons indépendants</b> - teste si "
+"deux échantillons indépendants ont le même moyenne,</li><li><b>t-Test avec "
+"deux échantillons appairés</b> - teste si la différence moyenne entre deux "
+"échantillons liés est zéro,</li><li><b>t-Testlch</b> - tests si deux "
+"échantillons indépendants avec des variances inégales ont la même moyenne,</"
+"li><li><b>Test unidirectionnel ANOVA</b> - teste si trois ou plus "
+"échantillons indépendants ont la même moyenne,</li><li><b>Test "
+"unidirectionnel ANOVA avec mesures répétées </b> - teste si trois mesures ou "
+"plus liées / répétées ont la même moyenne,</li><li><b>Test U de Mann-"
+"Whitney</b> - teste les différences dans les médianes entre deux groupes "
+"indépendants,</li><li><b>Test de rang signé de Wilcoxon </b> - teste si la "
+"différence médiane entre deux échantillons liés est zéro,</li><li><b>Test de "
+"Kruskal-Wallis</b> - teste les différences de médianes parmi trois groupes "
+"indépendants ou plus,</li><li><b>Test de Friedman</b> - teste les "
+"différences entre les médianes entre trois mesures  liés/répétées, </"
+"li><li><b>Test de rang logarithmique</b> - teste les différences de butions "
+"de survie entre deux ou plusieurs groupes,</li><li><b>Test d'indépendance en "
+"Chi-Carré</b> - teste si deux variables catégorielles sont indépendantes "
+"l'une de l'autre,</li><li><b>Test de qualité de l’ajustement en Chi carré</"
+"b> - teste si les données observées suivent une distribution théorique "
+"spécifiée.</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:297
 #, kde-format
@@ -22842,16 +22877,15 @@ msgstr "NUL :"
 
 #. i18n: ectx: property (text), widget (QLabel, lH1)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:114
-#, fuzzy, kde-format
-#| msgid "Filter name:"
+#, kde-format
 msgid "Alternate:"
-msgstr "Nom de filtre :"
+msgstr "Alternative :"
 
 #. i18n: ectx: property (text), widget (QLabel, lHypothesis)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:269
 #, kde-format
 msgid "Hypothesis"
-msgstr ""
+msgstr "Hypothèse"
 
 #. i18n: ectx: property (text), widget (QLabel, lTest)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:289
