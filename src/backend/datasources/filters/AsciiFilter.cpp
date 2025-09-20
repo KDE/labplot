@@ -10,8 +10,8 @@
 
 #include "AsciiFilter.h"
 #include "AsciiFilterPrivate.h"
-#include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/filters/FilterStatus.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/hostprocess.h"

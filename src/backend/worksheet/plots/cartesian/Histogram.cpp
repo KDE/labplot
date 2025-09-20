@@ -11,9 +11,9 @@
 
 #include "Histogram.h"
 #include "HistogramPrivate.h"
-#include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
+#include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macrosCurve.h"

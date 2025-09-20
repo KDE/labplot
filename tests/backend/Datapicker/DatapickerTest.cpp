@@ -10,8 +10,8 @@
 */
 
 #include "DatapickerTest.h"
-#include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/datapicker/DatapickerCurve.h"
 #include "backend/datapicker/DatapickerCurvePrivate.h"

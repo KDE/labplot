@@ -10,8 +10,8 @@
 */
 
 #include "SpreadsheetTest.h"
-#include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/Project.h"
+#include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/datasources/filters/VectorBLFFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"

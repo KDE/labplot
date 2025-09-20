@@ -10,8 +10,8 @@
 */
 
 #include "backend/spreadsheet/SpreadsheetModel.h"
-#include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/Settings.h"
+#include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
