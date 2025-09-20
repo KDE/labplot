@@ -9,6 +9,7 @@
 */
 
 #include "SpiceFilterTest.h"
+#include "backend/core/column/Column.h"
 #include "src/backend/datasources/filters/SpiceFilter.h"
 #include "src/backend/spreadsheet/Spreadsheet.h"
 

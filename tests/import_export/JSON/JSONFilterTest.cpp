@@ -9,6 +9,7 @@
 */
 
 #include "JSONFilterTest.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/filters/JsonFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 

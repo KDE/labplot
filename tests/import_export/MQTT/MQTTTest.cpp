@@ -12,6 +12,7 @@
 #include "MQTTTest.h"
 
 #ifdef HAVE_MQTT
+#include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
 #include "backend/datasources/MQTTClient.h"
 #include "backend/datasources/MQTTSubscription.h"

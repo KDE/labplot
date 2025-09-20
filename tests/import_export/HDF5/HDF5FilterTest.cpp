@@ -8,6 +8,7 @@
 */
 
 #include "HDF5FilterTest.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/filters/HDF5Filter.h"
 #include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"

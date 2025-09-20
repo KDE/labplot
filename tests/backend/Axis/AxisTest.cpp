@@ -11,6 +11,7 @@
 
 #include "AxisTest.h"
 #include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"

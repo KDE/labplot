@@ -9,6 +9,7 @@
 */
 
 #include "XLSXFilterTest.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/filters/XLSXFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 

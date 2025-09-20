@@ -13,6 +13,7 @@
 #ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
 #endif
+#include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
 #include "backend/matrix/Matrix.h"

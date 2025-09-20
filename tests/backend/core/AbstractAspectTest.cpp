@@ -11,6 +11,7 @@
 
 #include "AbstractAspectTest.h"
 #include "backend/core/AspectTreeModel.h"
+#include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"

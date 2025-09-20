@@ -8,6 +8,7 @@
 */
 
 #include "ImportSqlDatabaseTest.h"
+#include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/datasources/ImportSQLDatabaseWidget.h"
 #include "frontend/spreadsheet/SpreadsheetView.h"

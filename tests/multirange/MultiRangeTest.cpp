@@ -11,6 +11,7 @@
 
 #include "MultiRangeTest.h"
 #include "MultiRangeTest_macros.h"
+#include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 
 // ##############################################################################

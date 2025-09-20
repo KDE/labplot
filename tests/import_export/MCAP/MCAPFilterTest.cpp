@@ -9,6 +9,7 @@
 */
 
 #include "MCAPFilterTest.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/filters/McapFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
