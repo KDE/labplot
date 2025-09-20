@@ -25,7 +25,6 @@
 
 #include <KConfigGroup>
 #include <KMessageBox>
-
 #include <KWindowConfig>
 
 #ifdef HAVE_KUSERFEEDBACK

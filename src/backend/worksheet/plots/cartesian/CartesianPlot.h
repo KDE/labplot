@@ -15,10 +15,10 @@
 #include "backend/lib/Range.h"
 #include "backend/worksheet/plots/AbstractPlot.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
 #include "backend/nsl/nsl_sf_stats.h"
 
+class CartesianCoordinateSystem;
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
 class CartesianPlotDock;
@@ -217,7 +217,7 @@ private:
 	void setColorPalette(const KConfig&);
 	const XYCurve* currentCurve() const;
 	void zoom(int index, const Dimension, bool in, const double relPosSceneRange);
-	void checkAxisFormat(const int cSystemIndex, const AbstractColumn*, Axis::Orientation);
+	void checkAxisFormat(const int cSystemIndex, const AbstractColumn*, WorksheetElement::Orientation);
 	void calculateDataRange(const Dimension, const int index, bool completeRange = true);
 	int curveTotalCount() const;
 

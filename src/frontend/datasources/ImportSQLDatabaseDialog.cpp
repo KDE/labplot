@@ -23,7 +23,6 @@
 #include <QStatusBar>
 #include <QWindow>
 
-#include <KLocalizedString>
 #include <KWindowConfig>
 
 /*!

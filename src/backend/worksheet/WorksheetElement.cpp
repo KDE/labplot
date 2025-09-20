@@ -11,16 +11,12 @@
 */
 
 #include "backend/worksheet/WorksheetElement.h"
-#include "backend/core/AspectPrivate.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/WorksheetElementPrivate.h"
-#include "plots/AbstractPlot.h"
 #include "plots/PlotArea.h"
-#include "plots/cartesian/CartesianCoordinateSystem.h"
 #include "plots/cartesian/Plot.h"
 
 #include <KLocalizedString>

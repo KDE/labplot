@@ -11,7 +11,6 @@
 #include "MainWin.h"
 
 #include "backend/core/AspectTreeModel.h"
-#include "backend/core/Folder.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/core/Workbook.h"
@@ -26,9 +25,7 @@
 #endif
 #include "backend/datapicker/Datapicker.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "backend/lib/macros.h"
 #include "backend/note/Note.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #ifdef HAVE_SCRIPTING
 #include "backend/script/Script.h"
 #endif
@@ -56,7 +53,6 @@
 #include "frontend/widgets/LabelWidget.h"
 #include "frontend/worksheet/WorksheetPreviewWidget.h"
 #include "frontend/worksheet/WorksheetView.h"
-#include "frontend/widgets/toggleactionmenu.h"
 
 #ifdef HAVE_KUSERFEEDBACK
 #include <KUserFeedback/ApplicationVersionSource>
@@ -75,7 +71,6 @@
 #include <QElapsedTimer>
 #include <QFileDialog>
 #include <QMenu>
-
 #include <QMimeData>
 #include <QStackedWidget>
 #include <QStatusBar>
@@ -90,12 +85,9 @@
 
 #include <KColorSchemeManager>
 #include <KCompressionDevice>
-#include <KConfigGroup>
-#include <KLocalizedString>
 #include <KMessageBox>
 #include <KRecentFilesAction>
 #include <KToolBar>
-#include <kxmlguifactory.h>
 #ifdef HAVE_SCRIPTING
 #include <KTextEditor/Editor>
 #include <KTextEditor/Document>

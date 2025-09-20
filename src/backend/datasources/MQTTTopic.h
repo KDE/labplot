@@ -15,6 +15,7 @@
 
 #include <QMqttMessage>
 
+class QAction;
 class MQTTSubscription;
 class MQTTClient;
 class AsciiFilter;

@@ -3,7 +3,7 @@
 	Project		: LabPlot
 	Description	: Represents live data source
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
@@ -11,6 +11,7 @@
 */
 
 #include "backend/datasources/LiveDataSource.h"
+#include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/filters/BinaryFilter.h"
@@ -19,7 +20,6 @@
 #include "backend/datasources/filters/SpiceFilter.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/trace.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "frontend/spreadsheet/PlotDataDialog.h"
 #include "frontend/spreadsheet/SpreadsheetView.h"
 

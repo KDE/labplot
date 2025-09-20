@@ -10,6 +10,7 @@
 */
 
 #include "DatapickerCurve.h"
+#include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/datapicker/DatapickerCurvePrivate.h"
@@ -17,15 +18,12 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/Symbol.h"
 
 #include <QIcon>
 #include <QVector3D>
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocalizedString>
 
 /**
  * \class DatapickerCurve

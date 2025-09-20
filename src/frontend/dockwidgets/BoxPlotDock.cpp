@@ -10,18 +10,13 @@
 #include "BoxPlotDock.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/macros.h"
-#include "backend/worksheet/Worksheet.h"
-#include "frontend/GuiTools.h"
 #include "frontend/TemplateHandler.h"
 #include "frontend/widgets/BackgroundWidget.h"
 #include "frontend/widgets/LineWidget.h"
 #include "frontend/widgets/SymbolWidget.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
-#include <QPushButton>
-
 #include <KConfig>
-#include <KLocalizedString>
 
 BoxPlotDock::BoxPlotDock(QWidget* parent)
 	: BaseDock(parent) {

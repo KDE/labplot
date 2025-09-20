@@ -18,8 +18,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "frontend/GuiTools.h"
 #include "frontend/datapicker/DatapickerImageView.h"
 #include "frontend/worksheet/ExportWorksheetDialog.h"
 
@@ -35,9 +34,6 @@
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocalizedString>
-
-#include <frontend/GuiTools.h>
 
 void DatapickerImage::ReferencePoints::clearPoints() {
 	scenePos[0] = QPointF(std::nan("0"), std::nan("0"));

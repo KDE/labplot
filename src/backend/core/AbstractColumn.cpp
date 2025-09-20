@@ -15,13 +15,10 @@
 #include "backend/core/abstractcolumncommands.h"
 #include "backend/lib/XmlStreamReader.h"
 
-#include <KConfigGroup>
 #include <KLocalizedString>
 
 #include <QDateTime>
 #include <QIcon>
-
-#include <cmath>
 
 /**
  * \class AbstractColumn

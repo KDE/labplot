@@ -11,6 +11,7 @@
 
 #include "Histogram.h"
 #include "HistogramPrivate.h"
+#include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"

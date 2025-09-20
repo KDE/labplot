@@ -15,10 +15,8 @@
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
-#include "frontend/GuiTools.h"
 #include "frontend/TemplateHandler.h"
 #include "frontend/widgets/BackgroundWidget.h"
 #include "frontend/widgets/ErrorBarWidget.h"
@@ -26,11 +24,6 @@
 #include "frontend/widgets/SymbolWidget.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 #include "frontend/widgets/ValueWidget.h"
-
-#include <QCompleter>
-
-#include <KConfig>
-#include <KLocalizedString>
 
 /*!
   \class HistogramDock

@@ -9,7 +9,7 @@
 
 #include "FlattenColumnsDialog.h"
 #include "backend/core/Settings.h"
-#include "backend/core/column/Column.h"
+#include "backend/core/column/ColumnStringIO.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 

@@ -15,7 +15,6 @@
 #include "ui_barplotdock.h"
 
 class BackgroundWidget;
-class BarPlot;
 class ErrorBarWidget;
 class LineWidget;
 class TreeViewComboBox;

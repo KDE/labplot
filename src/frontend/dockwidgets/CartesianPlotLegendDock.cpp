@@ -16,8 +16,6 @@
 #include "frontend/widgets/LabelWidget.h"
 #include "frontend/widgets/LineWidget.h"
 
-#include <KLocalizedString>
-
 #include <gsl/gsl_const_cgs.h>
 
 /*!

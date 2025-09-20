@@ -9,10 +9,7 @@
 */
 
 #include "AxisDock.h"
-#include "backend/core/column/Column.h"
-#include "backend/lib/macros.h"
-#include "backend/worksheet/Worksheet.h"
-#include "frontend/GuiTools.h"
+#include "backend/core/AbstractColumn.h"
 #include "frontend/TemplateHandler.h"
 #include "frontend/widgets/DateTimeSpinBox.h"
 #include "frontend/widgets/LabelWidget.h"
@@ -24,7 +21,6 @@
 
 #include <QPainter>
 
-#include "backend/nsl/nsl_math.h"
 #include <gsl/gsl_math.h>
 
 namespace {

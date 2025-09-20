@@ -10,6 +10,7 @@
 #ifndef ASPECTFACTORY_H
 
 #include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"

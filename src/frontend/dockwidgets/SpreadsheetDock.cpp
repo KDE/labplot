@@ -10,16 +10,11 @@
 */
 
 #include "SpreadsheetDock.h"
-#include "backend/core/Project.h"
-#include "backend/datapicker/DatapickerCurve.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "frontend/spreadsheet/SpreadsheetView.h"
 #include "frontend/TemplateHandler.h"
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocalizedString>
-#include <QDir>
 
 /*!
  \class SpreadsheetDock
@@ -74,7 +69,7 @@ void SpreadsheetDock::setSpreadsheets(const QList<Spreadsheet*> list) {
 	// check whether we have non-editable columns:
 	bool nonEditable = false;
 	for (auto* s : m_spreadsheetList) {
-		if (dynamic_cast<DatapickerCurve*>(s->parentAspect())) {
+		if (s->parentAspect()->type() == AspectType::DatapickerCurve) {
 			nonEditable = true;
 			break;
 		}

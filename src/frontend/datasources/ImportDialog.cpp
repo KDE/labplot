@@ -11,12 +11,8 @@
 #include "ImportDialog.h"
 #include "backend/core/AspectFactory.h"
 #include "backend/core/AspectTreeModel.h"
-#include "backend/core/Project.h"
 #include "backend/core/Settings.h"
-#include "backend/core/Workbook.h"
 #include "backend/lib/macros.h"
-#include "backend/matrix/Matrix.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/MainWin.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
@@ -31,8 +27,6 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-#include <KConfigGroup>
-#include <KLocalizedString>
 #include <KMessageWidget>
 
 /*!

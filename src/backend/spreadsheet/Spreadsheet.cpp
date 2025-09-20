@@ -14,14 +14,11 @@
 #include "SpreadsheetModel.h"
 #include "SpreadsheetPrivate.h"
 #include "StatisticsSpreadsheet.h"
-#include "backend/core/AbstractAspect.h"
-#include "backend/core/AspectPrivate.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
@@ -29,15 +26,10 @@
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocalizedString>
 
-#include <QIcon>
 #include <QMenu>
 #include <QTimer>
-#include <QUndoCommand>
 #include <QXmlStreamWriter>
-
-#include <algorithm>
 
 /*!
   \class Spreadsheet

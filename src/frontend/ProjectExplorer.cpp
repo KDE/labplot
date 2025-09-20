@@ -10,7 +10,6 @@
 */
 
 #include "ProjectExplorer.h"
-#include "backend/core/AbstractPart.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
@@ -35,7 +34,6 @@
 #include <QContextMenuEvent>
 #include <QDrag>
 #include <QHeaderView>
-#include <QLabel>
 #include <QLineEdit>
 #include <QMenu>
 #include <QMimeData>

@@ -9,7 +9,6 @@
 */
 
 #include "WorksheetView.h"
-#include "backend/core/AbstractAspect.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
@@ -22,7 +21,6 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h" //TODO: needed for the icon only, remove later once we have a breeze icon
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
-#include "frontend/widgets/toggleactionmenu.h"
 #ifndef SDK
 #include "frontend/PlotTemplateDialog.h"
 #include "frontend/core/ContentDockWidget.h"
@@ -32,7 +30,6 @@
 #include "frontend/worksheet/PresenterWidget.h"
 #endif
 #include <frontend/GuiTools.h>
-#include <frontend/widgets/toggleactionmenu.h>
 #ifdef Q_OS_MAC
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif
@@ -48,7 +45,6 @@
 #include <QGraphicsOpacityEffect>
 #include <QGraphicsPixmapItem>
 #include <QImage>
-#include <QMdiArea>
 #include <QMenu>
 #include <QMimeData>
 #include <QPrinter>
@@ -61,8 +57,6 @@
 #ifdef HAVE_QTSVG
 #include <QSvgGenerator>
 #endif
-
-#include <limits>
 
 #include <gsl/gsl_const_cgs.h>
 

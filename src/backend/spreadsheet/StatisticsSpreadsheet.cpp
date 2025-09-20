@@ -3,11 +3,12 @@
 	Project              : LabPlot
 	Description          : Aspect providing a spreadsheet table with column logic
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "StatisticsSpreadsheet.h"
 #include "SpreadsheetModel.h"
+#include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 

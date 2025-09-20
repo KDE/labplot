@@ -16,7 +16,6 @@
 #include "ui_projectdock.h"
 
 class Project;
-class KConfig;
 
 class ProjectDock : public BaseDock {
 	Q_OBJECT

@@ -12,6 +12,7 @@
 
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectTreeModel.h"
+#include "backend/core/column/Column.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
@@ -43,6 +44,7 @@
 #include "frontend/dockwidgets/CursorDock.h"
 #include "frontend/dockwidgets/CustomPointDock.h"
 #include "frontend/dockwidgets/HistogramDock.h"
+#include "frontend/dockwidgets/HypothesisTestDock.h"
 #include "frontend/dockwidgets/ImageDock.h"
 #include "frontend/dockwidgets/InfoElementDock.h"
 #include "frontend/dockwidgets/KDEPlotDock.h"

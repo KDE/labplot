@@ -9,6 +9,7 @@
 */
 
 #include "SearchReplaceWidget.h"
+#include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/Settings.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"

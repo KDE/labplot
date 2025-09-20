@@ -16,14 +16,12 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h" // for CartesianPlot::MouseMode enum
 
 #include <KXmlGuiWindow>
-#include <QStringLiteral>
 #include <QTimer>
 #include <QPointer>
 
 class AbstractAspect;
 class ActionsManager;
 class AspectTreeModel;
-class Folder;
 class ProjectExplorer;
 class Project;
 class Worksheet;
@@ -39,8 +37,6 @@ class QDockWidget;
 class QDragEnterEvent;
 class QDropEvent;
 class QStackedWidget;
-class QToolButton;
-// class QQuickWidget;
 
 class KColorSchemeManager;
 

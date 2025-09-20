@@ -11,6 +11,7 @@
 
 #include "SpreadsheetView.h"
 #include "SpreadsheetItemDelegate.h"
+#include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
@@ -48,8 +49,6 @@
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif
 
-#include <KConfigGroup>
-#include <KLocalizedString>
 #include <KMessageBox>
 
 #include <QActionGroup>
@@ -73,7 +72,6 @@
 #include <QTextStream>
 #include <QTimer>
 #include <QToolBar>
-#include <QVBoxLayout>
 
 #include <algorithm> //for std::reverse
 

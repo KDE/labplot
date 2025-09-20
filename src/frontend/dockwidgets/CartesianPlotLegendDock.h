@@ -16,6 +16,7 @@
 #include "ui_cartesianplotlegenddock.h"
 
 class BackgroundWidget;
+class CartesianPlotLegend;
 class LabelWidget;
 class LineWidget;
 class KConfig;

@@ -14,11 +14,6 @@
 #include "backend/core/Settings.h"
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/lib/macros.h"
-#include "frontend/GuiTools.h"
-
-#include <KConfig>
-#include <KConfigGroup>
-#include <KLocalizedString>
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 #include <KSyntaxHighlighting/Definition>
@@ -32,8 +27,6 @@
 #include <QSqlRecord>
 #include <QStandardItem>
 #include <QTimer>
-
-#include <cmath>
 
 ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent)
 	: QWidget(parent) {

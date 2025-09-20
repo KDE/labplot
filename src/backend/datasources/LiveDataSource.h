@@ -4,7 +4,7 @@
 	Description          : File data source
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2017 Fabian Kristof <fkristofszabolcs@gmail.com>
-	SPDX-FileCopyrightText: 2017-2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -15,14 +15,10 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <QLocalSocket>
-#include <QMap>
-#include <QTimer>
-#include <QVector>
 #ifdef HAVE_QTSERIALPORT
 #include <QSerialPort>
 #endif
 
-class QString;
 class AbstractFileFilter;
 class QFileSystemWatcher;
 class QAction;

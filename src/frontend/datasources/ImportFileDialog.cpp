@@ -11,7 +11,6 @@
 #include "ImportFileDialog.h"
 #include "ImportFileWidget.h"
 #include "ImportWarningsDialog.h"
-#include "backend/core/AspectTreeModel.h"
 #include "backend/core/Settings.h"
 #include "backend/core/Workbook.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"

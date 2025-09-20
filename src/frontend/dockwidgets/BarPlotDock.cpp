@@ -12,17 +12,11 @@
 #include "backend/core/Settings.h"
 #include "backend/lib/macros.h"
 #include "frontend/widgets/TreeViewComboBox.h"
-#include "frontend/GuiTools.h"
 #include "frontend/TemplateHandler.h"
 #include "frontend/widgets/BackgroundWidget.h"
 #include "frontend/widgets/ErrorBarWidget.h"
 #include "frontend/widgets/LineWidget.h"
 #include "frontend/widgets/ValueWidget.h"
-
-#include <QPushButton>
-
-#include <KConfig>
-#include <KLocalizedString>
 
 BarPlotDock::BarPlotDock(QWidget* parent)
 	: BaseDock(parent) {

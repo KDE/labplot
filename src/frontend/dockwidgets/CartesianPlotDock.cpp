@@ -10,10 +10,9 @@
 */
 
 #include "CartesianPlotDock.h"
+#include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
-#include "backend/core/column/Column.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
 
 #include "frontend/GuiTools.h"
 #include "frontend/PlotTemplateDialog.h"
@@ -26,10 +25,8 @@
 
 #include <KIconLoader>
 #include <KMessageBox>
-#include <kcoreaddons_version.h>
 
 #include <QButtonGroup>
-#include <QDebug>
 #include <QFileDialog>
 #include <QIntValidator>
 #include <QPainter>

@@ -21,7 +21,6 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
-#include "backend/lib/trace.h"
 
 #include <KStandardAction>
 #include <QClipboard>

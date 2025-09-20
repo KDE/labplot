@@ -14,8 +14,6 @@
 #include "frontend/GuiTools.h"
 #include "ui_exportspreadsheetwidget.h"
 
-#include <KConfigGroup>
-#include <KLocalizedString>
 #include <KMessageBox>
 #include <KWindowConfig>
 

@@ -13,7 +13,6 @@
 #ifndef SDK
 #include "backend/notebook/Notebook.h"
 #endif
-#include "backend/core/AbstractSimpleFilter.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/ColumnPrivate.h"
 #include "backend/core/column/ColumnStringIO.h"
@@ -29,19 +28,12 @@
 #include "backend/worksheet/plots/cartesian/Plot.h"
 #include "frontend/spreadsheet/SpreadsheetView.h"
 
-#include <KLocalizedString>
-
 #include <QActionGroup>
 #include <QClipboard>
-#include <QFont>
-#include <QFontMetrics>
 #include <QIcon>
 #include <QMenu>
 #include <QMimeData>
 #include <QThreadPool>
-
-#include <array>
-#include <functional>
 
 /**
  * \class Column
