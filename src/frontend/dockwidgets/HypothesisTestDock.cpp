@@ -13,6 +13,7 @@
 #include "HypothesisTestDock.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/column/Column.h"
+#include "backend/statistics/HypothesisTest.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
 #include <KLocalizedString>
@@ -97,37 +98,51 @@ void HypothesisTestDock::retranslateUi() {
 	ui.retranslateUi(this);
 
 	ui.cbTest->clear();
-	ui.cbTest->addItem(i18n("One-Sample t-Test"), static_cast<int>(HypothesisTest::Test::t_test_one_sample));
-	ui.cbTest->addItem(i18n("Independent Two-Sample t-Test"), static_cast<int>(HypothesisTest::Test::t_test_two_sample));
-	ui.cbTest->addItem(i18n("Paired Two-Sample t-Test"), static_cast<int>(HypothesisTest::Test::t_test_two_sample_paired));
-	ui.cbTest->addItem(i18n("Welch t-Test"), static_cast<int>(HypothesisTest::Test::t_test_welch));
-	ui.cbTest->addItem(i18n("One-Way ANOVA Test"), static_cast<int>(HypothesisTest::Test::one_way_anova));
-	ui.cbTest->addItem(i18n("One-Way ANOVA with Repeated Measures Test"), static_cast<int>(HypothesisTest::Test::one_way_anova_repeated));
-	ui.cbTest->addItem(i18n("Mann-Whitney U Test"), static_cast<int>(HypothesisTest::Test::mann_whitney_u_test));
-	ui.cbTest->addItem(i18n("Wilcoxon Signed Rank Test"), static_cast<int>(HypothesisTest::Test::wilcoxon_test));
-	ui.cbTest->addItem(i18n("Kruskal-Wallis Test"), static_cast<int>(HypothesisTest::Test::kruskal_wallis_test));
-	ui.cbTest->addItem(i18n("Friedman Test"), static_cast<int>(HypothesisTest::Test::friedman_test));
-	ui.cbTest->addItem(i18n("Logrank Test"), static_cast<int>(HypothesisTest::Test::log_rank_test));
-	ui.cbTest->addItem(i18n("Chi-Square Independence Test"), static_cast<int>(HypothesisTest::Test::chisq_independence));
-	ui.cbTest->addItem(i18n("Chi-Square Goodness of Fit Test"), static_cast<int>(HypothesisTest::Test::chisq_goodness_of_fit));
+	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::t_test_one_sample), static_cast<int>(HypothesisTest::Test::t_test_one_sample));
+	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::t_test_two_sample), static_cast<int>(HypothesisTest::Test::t_test_two_sample));
+	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::t_test_two_sample_paired), static_cast<int>(HypothesisTest::Test::t_test_two_sample_paired));
+	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::t_test_welch), static_cast<int>(HypothesisTest::Test::t_test_welch));
+	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::one_way_anova), static_cast<int>(HypothesisTest::Test::one_way_anova));
+	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::one_way_anova_repeated), static_cast<int>(HypothesisTest::Test::one_way_anova_repeated));
+	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::mann_whitney_u_test), static_cast<int>(HypothesisTest::Test::mann_whitney_u_test));
+	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::wilcoxon_test), static_cast<int>(HypothesisTest::Test::wilcoxon_test));
+	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::kruskal_wallis_test), static_cast<int>(HypothesisTest::Test::kruskal_wallis_test));
+	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::friedman_test), static_cast<int>(HypothesisTest::Test::friedman_test));
+	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::log_rank_test), static_cast<int>(HypothesisTest::Test::log_rank_test));
+	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::chisq_independence), static_cast<int>(HypothesisTest::Test::chisq_independence));
+	ui.cbTest->addItem(HypothesisTest::testName(HypothesisTest::Test::chisq_goodness_of_fit), static_cast<int>(HypothesisTest::Test::chisq_goodness_of_fit));
 
 	// tooltip texts
 	QString info = i18n(
 		"<ul>"
-		"<li><b>One-Sample t-Test</b> - tests if a sample mean differs significantly from a known population mean</li>"
-		"<li><b>Independent Two-Sample t-Test</b> - tests if two independent samples have the same mean</li>"
-		"<li><b>Paired Two-Sample t-Test</b> - tests if the mean difference between two related samples is zero</li>"
-		"<li><b>Welch t-Test</b> - tests if two independent samples with unequal variances have the same mean</li>"
-		"<li><b>One-Way ANOVA Test</b> - tests if three or more independent samples have the same mean</li>"
-		"<li><b>One-Way ANOVA with Repeated Measures Test</b> - tests if three or more related/repeated measurements have the same mean</li>"
-		"<li><b>Mann-Whitney U Test</b> - tests differences in medians between two independent groups</li>"
-		"<li><b>Wilcoxon Signed Rank Test</b> - tests if the median difference between two related samples is zero</li>"
-		"<li><b>Kruskal-Wallis Test</b> - tests differences in medians among three or more independent groups</li>"
-		"<li><b>Friedman Test</b> - tests differences in medians among three or more related/repeated measurements</li>"
-		"<li><b>Logrank Test</b> - tests differences in survival distributions between two or more groups</li>"
-		"<li><b>Chi-Square Independence Test</b> - tests if two categorical variables are independent of each other</li>"
-		"<li><b>Chi-Square Goodness of Fit Test</b> - tests if observed data follows a specified theoretical distribution</li>"
-		"</ul>"
+		"<li><b>%1</b> - tests if a sample mean differs significantly from a known population mean</li>"
+		"<li><b>%2</b> - tests if two independent samples have the same mean</li>"
+		"<li><b>%3</b> - tests if the mean difference between two related samples is zero</li>"
+		"<li><b>%4</b> - tests if two independent samples with unequal variances have the same mean</li>"
+		"<li><b>%5</b> - tests if three or more independent samples have the same mean</li>"
+		"<li><b>%6</b> - tests if three or more related/repeated measurements have the same mean</li>",
+		HypothesisTest::testName(HypothesisTest::Test::t_test_one_sample),
+		HypothesisTest::testName(HypothesisTest::Test::t_test_two_sample),
+		HypothesisTest::testName(HypothesisTest::Test::t_test_two_sample_paired),
+		HypothesisTest::testName(HypothesisTest::Test::t_test_welch),
+		HypothesisTest::testName(HypothesisTest::Test::one_way_anova),
+		HypothesisTest::testName(HypothesisTest::Test::one_way_anova_repeated)
+	) + i18n(
+		"<li><b>%1</b> - tests differences in medians between two independent groups</li>"
+		"<li><b>%2</b> - tests if the median difference between two related samples is zero</li>"
+		"<li><b>%3</b> - tests differences in medians among three or more independent groups</li>"
+		"<li><b>%4</b> - tests differences in medians among three or more related/repeated measurements</li>"
+		"<li><b>%5</b> - tests differences in survival distributions between two or more groups</li>"
+		"<li><b>%6</b> - tests if two categorical variables are independent of each other</li>"
+		"<li><b>%7</b> - tests if observed data follows a specified theoretical distribution</li>"
+		"</ul>",
+		HypothesisTest::testName(HypothesisTest::Test::mann_whitney_u_test),
+		HypothesisTest::testName(HypothesisTest::Test::wilcoxon_test),
+		HypothesisTest::testName(HypothesisTest::Test::kruskal_wallis_test),
+		HypothesisTest::testName(HypothesisTest::Test::friedman_test),
+		HypothesisTest::testName(HypothesisTest::Test::log_rank_test),
+		HypothesisTest::testName(HypothesisTest::Test::chisq_independence),
+		HypothesisTest::testName(HypothesisTest::Test::chisq_goodness_of_fit)
 	);
 
 	ui.lTest->setToolTip(info);

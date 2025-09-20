@@ -303,6 +303,39 @@ int HypothesisTest::hypothesisCount(Test test) {
 	return 0;
 }
 
+QString HypothesisTest::testName(Test test) {
+	switch (test) {
+	case Test::t_test_one_sample:
+		return i18n("One-Sample t-Test");
+	case Test::t_test_two_sample:
+		return i18n("Independent Two-Sample t-Test");
+	case Test::t_test_two_sample_paired:
+		return i18n("Paired Two-Sample t-Test");
+	case Test::mann_whitney_u_test:
+		return i18n("Mann-Whitney U Test");
+	case Test::t_test_welch:
+		return i18n("Welch t-Test");
+	case Test::wilcoxon_test:
+		return i18n("Wilcoxon Signed Rank Test");
+	case Test::one_way_anova:
+		return i18n("One-Way ANOVA Test");
+	case Test::kruskal_wallis_test:
+		return i18n("Kruskal-Wallis Test");
+	case Test::log_rank_test:
+		return i18n("Log-Rank Test");
+	case Test::friedman_test:
+		return i18n("Friedman Test");
+	case Test::chisq_independence:
+		return i18n("Chi-Square Independence Test");
+	case Test::chisq_goodness_of_fit:
+		return i18n("Chi-Square Goodness of Fit Test");
+	case Test::one_way_anova_repeated:
+		return i18n("One-Way ANOVA with Repeated Measures Test");
+	}
+
+	return {};
+}
+
 size_t HypothesisTestPrivate::minSampleCount(HypothesisTest::Test test) {
 	switch (test) {
 	case HypothesisTest::Test::t_test_one_sample:
@@ -468,134 +501,6 @@ QString HypothesisTestPrivate::addResultTable(const QVector<QVector<QString>>& d
 	return html;
 }
 
-QString HypothesisTestPrivate::oneSampleTTestResultTemplate() {
-	return addResultTitle(i18n("One-Sample t-Test")) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
-		+ addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("%2")) + addResultSection(i18n("Descriptive Statistics")) + QStringLiteral("%3")
-		+ addResultSection(i18n("t-Test Statistics")) + addResultLine(i18n("Significance Level"), QStringLiteral("%L4"))
-		+ addResultLine(i18n("t-Value"), QStringLiteral("%L5")) + addResultLine(i18n("p-Value"), QStringLiteral("%L6"))
-		+ addResultLine(i18n("Test Mean"), QStringLiteral("%L7")) + addResultLine(i18n("Degrees of Freedom"), QStringLiteral("%L8"))
-		+ addResultLine(i18n("Mean Difference"), QStringLiteral("%L9")) + addResultSection(i18n("Statistical Conclusion")) + QStringLiteral("%10");
-}
-
-QString HypothesisTestPrivate::independentTwoSampleTTestResultTemplate() {
-	return addResultTitle(i18n("Independent Two-Sample t-Test")) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
-		+ addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("%2")) + addResultSection(i18n("Descriptive Statistics")) + QStringLiteral("%3")
-		+ addResultSection(i18n("t-Test Statistics")) + addResultLine(i18n("Significance Level"), QStringLiteral("%L4"))
-		+ addResultLine(i18n("t-Value"), QStringLiteral("%L5")) + addResultLine(i18n("p-Value"), QStringLiteral("%L6"))
-		+ addResultLine(i18n("Degrees of Freedom"), QStringLiteral("%L7")) + addResultLine(i18n("Pooled Variance"), QStringLiteral("%L8"))
-		+ addResultLine(i18n("Mean Difference"), QStringLiteral("%L9")) + addResultLine(i18n("Mean Difference Standard Error"), QStringLiteral("%L10"))
-		+ addResultSection(i18n("Statistical Conclusion")) + QStringLiteral("%11");
-}
-
-QString HypothesisTestPrivate::pairedTwoSampleTTestResultTemplate() {
-	return addResultTitle(i18n("Paired Two-Sample t-Test")) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
-		+ addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("%2")) + addResultSection(i18n("Descriptive Statistics")) + QStringLiteral("%3")
-		+ addResultSection(i18n("t-Test Statistics")) + addResultLine(i18n("Significance Level"), QStringLiteral("%L4"))
-		+ addResultLine(i18n("t-Value"), QStringLiteral("%L5")) + addResultLine(i18n("p-Value"), QStringLiteral("%L6"))
-		+ addResultLine(i18n("Degrees of Freedom"), QStringLiteral("%L7")) + addResultLine(i18n("Mean Difference"), QStringLiteral("%L8"))
-		+ addResultSection(i18n("Statistical Conclusion")) + QStringLiteral("%9");
-}
-
-QString HypothesisTestPrivate::welchTTestResultTemplate() {
-	return addResultTitle(i18n("Welch t-Test")) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
-		+ addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("%2")) + addResultSection(i18n("Descriptive Statistics")) + QStringLiteral("%3")
-		+ addResultSection(i18n("t-Test Statistics")) + addResultLine(i18n("Significance Level"), QStringLiteral("%L4"))
-		+ addResultLine(i18n("t-Value"), QStringLiteral("%L5")) + addResultLine(i18n("p-Value"), QStringLiteral("%L6"))
-		+ addResultLine(i18n("Degrees of Freedom"), QStringLiteral("%L7")) + addResultLine(i18n("Mean Difference"), QStringLiteral("%L8"))
-		+ addResultLine(i18n("Mean Difference Standard Error"), QStringLiteral("%L9")) + addResultSection(i18n("Statistical Conclusion"))
-		+ QStringLiteral("%10");
-}
-
-QString HypothesisTestPrivate::oneWayANOVAResultTemplate() {
-	return addResultTitle(i18n("One-Way ANOVA Test")) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
-		+ addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("%2")) + addResultSection(i18n("Descriptive Statistics")) + QStringLiteral("%3")
-		+ addResultSection(i18n("One-Way ANOVA Test Statistics")) + addResultLine(i18n("Significance Level"), QStringLiteral("%L4"))
-		+ addResultLine(i18n("F-Statistic"), QStringLiteral("%L5")) + addResultLine(i18n("p-Value"), QStringLiteral("%L6"))
-		+ addResultLine(i18n("Degrees of Freedom Between Groups"), QStringLiteral("%L7"))
-		+ addResultLine(i18n("Degrees of Freedom Within Groups"), QStringLiteral("%L8"))
-		+ addResultLine(i18n("Sum of Squares Between Groups"), QStringLiteral("%L9"))
-		+ addResultLine(i18n("Sum of Squares Within Groups"), QStringLiteral("%L10"))
-		+ addResultLine(i18n("Mean Squares Between Groups"), QStringLiteral("%L11")) + addResultLine(i18n("Mean Squares Within Groups"), QStringLiteral("%L12"))
-		+ addResultSection(i18n("Statistical Conclusion")) + QStringLiteral("%13");
-}
-
-QString HypothesisTestPrivate::oneWayANOVARepeatedResultTemplate() {
-	return addResultTitle(i18n("One-Way ANOVA with Repeated Measures Test")) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
-		+ addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("%2")) + addResultSection(i18n("Descriptive Statistics")) + QStringLiteral("%3")
-		+ addResultSection(i18n("One-Way ANOVA with Repeated Measures Test Statistics")) + addResultLine(i18n("Significance Level"), QStringLiteral("%L4"))
-		+ addResultLine(i18n("F-Statistic"), QStringLiteral("%L5")) + addResultLine(i18n("p-Value"), QStringLiteral("%L6"))
-		+ addResultLine(i18n("Degrees of Freedom Treatment"), QStringLiteral("%L7"))
-		+ addResultLine(i18n("Degrees of Freedom Residuals"), QStringLiteral("%L8")) + addResultLine(i18n("Sum of Squares Treatment"), QStringLiteral("%L9"))
-		+ addResultLine(i18n("Sum of Squares Residuals"), QStringLiteral("%L10"))
-		+ addResultLine(i18n("Sum of Squares Within Subjects"), QStringLiteral("%L11")) + addResultLine(i18n("Mean Squares Treatment"), QStringLiteral("%L12"))
-		+ addResultLine(i18n("Mean Squares Residuals"), QStringLiteral("%L13")) + addResultSection(i18n("Statistical Conclusion")) + QStringLiteral("%14");
-}
-
-QString HypothesisTestPrivate::mannWhitneyUTestResultTemplate() {
-	return addResultTitle(i18n("Mann-Whitney U Test")) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
-		+ addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("%2")) + addResultSection(i18n("Descriptive Statistics")) + QStringLiteral("%3")
-		+ addResultSection(i18n("Mann-Whitney U Test Statistics")) + addResultLine(i18n("Significance Level"), QStringLiteral("%L4"))
-		+ addResultLine(i18n("U"), QStringLiteral("%L5")) + addResultLine(i18n("p-Value"), QStringLiteral("%L6"))
-		+ addResultLine(i18n("z-Value"), QStringLiteral("%L7")) + addResultLine(i18n("Rank Sum 1"), QStringLiteral("%L8"))
-		+ addResultLine(i18n("Mean Rank 1"), QStringLiteral("%L9")) + addResultLine(i18n("Rank Sum 2"), QStringLiteral("%L10"))
-		+ addResultLine(i18n("Mean Rank 2"), QStringLiteral("%L11")) + addResultSection(i18n("Statistical Conclusion")) + QStringLiteral("%12");
-}
-
-QString HypothesisTestPrivate::kruskalWallisTestResultTemplate() {
-	return addResultTitle(i18n("Kruskal-Wallis Test")) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
-		+ addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("%2")) + addResultSection(i18n("Descriptive Statistics")) + QStringLiteral("%3")
-		+ addResultSection(i18n("Kruskal-Wallis Test Statistics")) + addResultLine(i18n("Significance Level"), QStringLiteral("%L4"))
-		+ addResultLine(i18n("H"), QStringLiteral("%L5")) + addResultLine(i18n("p-Value"), QStringLiteral("%L6"))
-		+ addResultLine(i18n("Degrees of Freedom"), QStringLiteral("%L7")) + addResultSection(i18n("Statistical Conclusion")) + QStringLiteral("%8");
-}
-
-QString HypothesisTestPrivate::wilcoxonTestResultTemplate() {
-	return addResultTitle(i18n("Wilcoxon Signed Rank Test")) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
-		+ addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("%2")) + addResultSection(i18n("Descriptive Statistics")) + QStringLiteral("%3")
-		+ addResultSection(i18n("Wilcoxon Signed Rank Test Statistics")) + addResultLine(i18n("Significance Level"), QStringLiteral("%L4"))
-		+ addResultLine(i18n("W"), QStringLiteral("%L5")) + addResultLine(i18n("p-Value"), QStringLiteral("%L6"))
-		+ addResultLine(i18n("z-Value"), QStringLiteral("%L7")) + addResultLine(i18n("Positive Rank Sum"), QStringLiteral("%L8"))
-		+ addResultLine(i18n("Positive Rank Mean"), QStringLiteral("%L9")) + addResultLine(i18n("Positive Rank Count"), QStringLiteral("%L10"))
-		+ addResultLine(i18n("Negative Rank Sum"), QStringLiteral("%L11")) + addResultLine(i18n("Negative Rank Mean"), QStringLiteral("%L12"))
-		+ addResultLine(i18n("Negative Rank Count"), QStringLiteral("%L13")) + addResultLine(i18n("Tie Count"), QStringLiteral("%L14"))
-		+ addResultSection(i18n("Statistical Conclusion")) + QStringLiteral("%15");
-}
-
-QString HypothesisTestPrivate::friedmanTestResultTemplate() {
-	return addResultTitle(i18n("Friedman Test")) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
-		+ addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("%2")) + addResultSection(i18n("Descriptive Statistics")) + QStringLiteral("%3")
-		+ addResultSection(i18n("Friedman Test Statistics")) + addResultLine(i18n("Significance Level"), QStringLiteral("%L4"))
-		+ addResultLine(i18n("Q"), QStringLiteral("%L5")) + addResultLine(i18n("p-Value"), QStringLiteral("%L6"))
-		+ addResultLine(i18n("Degrees of Freedom"), QStringLiteral("%L7")) + addResultSection(i18n("Statistical Conclusion")) + QStringLiteral("%8");
-}
-
-QString HypothesisTestPrivate::chisqGoodnessOfFitTestResultTemplate() {
-	return addResultTitle(i18n("Chi-Square Goodness of Fit Test")) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
-		+ addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("%2")) + addResultSection(i18n("Descriptive Statistics")) + QStringLiteral("%3")
-		+ addResultSection(i18n("Chi-Square Goodness of Fit Test Statistics")) + addResultLine(i18n("Significance Level"), QStringLiteral("%L4"))
-		+ addResultLine(i18n("Chi2"), QStringLiteral("%L5")) + addResultLine(i18n("p-Value"), QStringLiteral("%L6"))
-		+ addResultLine(i18n("Degrees of Freedom"), QStringLiteral("%L7")) + addResultSection(i18n("Statistical Conclusion")) + QStringLiteral("%8");
-}
-
-QString HypothesisTestPrivate::chisqIndependenceTestResultTemplate() {
-	return addResultTitle(i18n("Chi-Square Independence Test")) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
-		+ addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("%2")) + addResultSection(i18n("Chi-Square Independence Test Statistics"))
-		+ addResultLine(i18n("Significance Level"), QStringLiteral("%L3")) + addResultLine(i18n("Chi2"), QStringLiteral("%L4"))
-		+ addResultLine(i18n("p-Value"), QStringLiteral("%L5")) + addResultLine(i18n("Degrees of Freedom"), QStringLiteral("%L6"))
-		+ addResultSection(i18n("Statistical Conclusion")) + QStringLiteral("%7");
-}
-
-QString HypothesisTestPrivate::logRankTestResultTemplate() {
-	return addResultTitle(i18n("Log-Rank Test")) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
-		+ addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("%2")) + addResultSection(i18n("Log-Rank Test Statistics"))
-		+ addResultLine(i18n("Significance Level"), QStringLiteral("%L3")) + addResultLine(i18n("H"), QStringLiteral("%L4"))
-		+ addResultLine(i18n("p-Value"), QStringLiteral("%L5")) + addResultLine(i18n("Degrees of Freedom"), QStringLiteral("%L6"))
-		+ addResultLine(i18n("Event Count 1"), QStringLiteral("%L7")) + addResultLine(i18n("Censored Count 1"), QStringLiteral("%L8"))
-		+ addResultLine(i18n("Total Count 1"), QStringLiteral("%L9")) + addResultLine(i18n("Event Count 2"), QStringLiteral("%L10"))
-		+ addResultLine(i18n("Censored Count 2"), QStringLiteral("%L11")) + addResultLine(i18n("Total Count 2"), QStringLiteral("%L12"))
-		+ addResultSection(i18n("Statistical Conclusion")) + QStringLiteral("%13");
-}
-
 QString HypothesisTestPrivate::notAvailable() {
 	return i18n("N/A");
 }
@@ -629,6 +534,81 @@ QString HypothesisTestPrivate::emptyResultColumnStatistics() {
 		QVector<QVector<QString>>{columnStatisticsHeaders(),
 								  {notAvailable(), notAvailable(), notAvailable(), notAvailable(), notAvailable(), notAvailable(), notAvailable()}},
 		true);
+}
+
+QString HypothesisTestPrivate::resultTemplate(HypothesisTest::Test test) {
+	bool hasDescriptiveStatistics = (test != HypothesisTest::Test::chisq_independence) && (test != HypothesisTest::Test::log_rank_test);
+	bool hasDegreesOfFreedom = (test != HypothesisTest::Test::mann_whitney_u_test) && (test != HypothesisTest::Test::wilcoxon_test);
+
+	QString result;
+	result += (addResultTitle(HypothesisTest::testName(test)) + addResultLine(i18n("Null Hypothesis"), QStringLiteral("%1"))
+			   + addResultLine(i18n("Alternate Hypothesis"), QStringLiteral("%2")));
+	if (hasDescriptiveStatistics)
+		result += (addResultSection(i18n("Descriptive Statistics")) + QStringLiteral("%3"));
+	result += (addResultSection(i18n("Test Statistics")) + addResultLine(i18n("Significance Level"), QStringLiteral("%L4"))
+			   + addResultLine(i18n("p-Value"), QStringLiteral("%L5")));
+	if (hasDegreesOfFreedom) {
+		if (test == HypothesisTest::Test::one_way_anova) {
+			result += (addResultLine(i18n("Degrees of Freedom Between Groups"), QStringLiteral("%L6"))
+					   + addResultLine(i18n("Degrees of Freedom Within Groups"), QStringLiteral("%L7")));
+		} else if (test == HypothesisTest::Test::one_way_anova_repeated) {
+			result += (addResultLine(i18n("Degrees of Freedom Treatment"), QStringLiteral("%L6"))
+					   + addResultLine(i18n("Degrees of Freedom Residuals"), QStringLiteral("%L7")));
+		} else {
+			result += addResultLine(i18n("Degrees of Freedom"), QStringLiteral("%L6"));
+		}
+	}
+
+	if (test == HypothesisTest::Test::t_test_one_sample) {
+		result += (addResultLine(i18n("t-Value"), QStringLiteral("%L20")) + addResultLine(i18n("Test Mean"), QStringLiteral("%L21"))
+				   + addResultLine(i18n("Mean Difference"), QStringLiteral("%L22")));
+	} else if (test == HypothesisTest::Test::t_test_two_sample) {
+		result +=
+			(addResultLine(i18n("t-Value"), QStringLiteral("%L20")) + addResultLine(i18n("Pooled Variance"), QStringLiteral("%L21"))
+			 + addResultLine(i18n("Mean Difference"), QStringLiteral("%L22")) + addResultLine(i18n("Mean Difference Standard Error"), QStringLiteral("%L23")));
+	} else if (test == HypothesisTest::Test::t_test_two_sample_paired) {
+		result += (addResultLine(i18n("t-Value"), QStringLiteral("%L20")) + addResultLine(i18n("Mean Difference"), QStringLiteral("%L21")));
+	} else if (test == HypothesisTest::Test::t_test_welch) {
+		result += (addResultLine(i18n("t-Value"), QStringLiteral("%L20")) + addResultLine(i18n("Mean Difference"), QStringLiteral("%L21"))
+				   + addResultLine(i18n("Mean Difference Standard Error"), QStringLiteral("%L22")));
+	} else if (test == HypothesisTest::Test::one_way_anova) {
+		result += (addResultLine(i18n("F-Statistic"), QStringLiteral("%L20")) + addResultLine(i18n("Sum of Squares Between Groups"), QStringLiteral("%L21"))
+				   + addResultLine(i18n("Sum of Squares Within Groups"), QStringLiteral("%L22"))
+				   + addResultLine(i18n("Mean Squares Between Groups"), QStringLiteral("%L23"))
+				   + addResultLine(i18n("Mean Squares Within Groups"), QStringLiteral("%L24")));
+	} else if (test == HypothesisTest::Test::one_way_anova_repeated) {
+		result +=
+			(addResultLine(i18n("F-Statistic"), QStringLiteral("%L20")) + addResultLine(i18n("Sum of Squares Treatment"), QStringLiteral("%L21"))
+			 + addResultLine(i18n("Sum of Squares Residuals"), QStringLiteral("%L22"))
+			 + addResultLine(i18n("Sum of Squares Within Subjects"), QStringLiteral("%L23"))
+			 + addResultLine(i18n("Mean Squares Treatment"), QStringLiteral("%L24")) + addResultLine(i18n("Mean Squares Residuals"), QStringLiteral("%L25")));
+	} else if (test == HypothesisTest::Test::mann_whitney_u_test) {
+		result += (addResultLine(i18n("U"), QStringLiteral("%L20")) + addResultLine(i18n("z-Value"), QStringLiteral("%L21"))
+				   + addResultLine(i18n("Rank Sum 1"), QStringLiteral("%L22")) + addResultLine(i18n("Mean Rank 1"), QStringLiteral("%L23"))
+				   + addResultLine(i18n("Rank Sum 2"), QStringLiteral("%L24")) + addResultLine(i18n("Mean Rank 2"), QStringLiteral("%L25")));
+	} else if (test == HypothesisTest::Test::wilcoxon_test) {
+		result += (addResultLine(i18n("W"), QStringLiteral("%L20")) + addResultLine(i18n("z-Value"), QStringLiteral("%L21"))
+				   + addResultLine(i18n("Positive Rank Sum"), QStringLiteral("%L22")) + addResultLine(i18n("Positive Rank Mean"), QStringLiteral("%L23"))
+				   + addResultLine(i18n("Positive Rank Count"), QStringLiteral("%L24")) + addResultLine(i18n("Negative Rank Sum"), QStringLiteral("%L25"))
+				   + addResultLine(i18n("Negative Rank Mean"), QStringLiteral("%L26")) + addResultLine(i18n("Negative Rank Count"), QStringLiteral("%L27"))
+				   + addResultLine(i18n("Tie Count"), QStringLiteral("%L28")));
+	} else if (test == HypothesisTest::Test::kruskal_wallis_test) {
+		result += addResultLine(i18n("H"), QStringLiteral("%L20"));
+	} else if (test == HypothesisTest::Test::friedman_test) {
+		result += addResultLine(i18n("Q"), QStringLiteral("%L20"));
+	} else if (test == HypothesisTest::Test::chisq_goodness_of_fit) {
+		result += addResultLine(i18n("Chi2"), QStringLiteral("%L20"));
+	} else if (test == HypothesisTest::Test::chisq_independence) {
+		result += addResultLine(i18n("Chi2"), QStringLiteral("%L20"));
+	} else if (test == HypothesisTest::Test::log_rank_test) {
+		result += (addResultLine(i18n("H"), QStringLiteral("%L20")) + addResultLine(i18n("Event Count 1"), QStringLiteral("%L21"))
+				   + addResultLine(i18n("Censored Count 1"), QStringLiteral("%L22")) + addResultLine(i18n("Total Count 1"), QStringLiteral("%L23"))
+				   + addResultLine(i18n("Event Count 2"), QStringLiteral("%L24")) + addResultLine(i18n("Censored Count 2"), QStringLiteral("%L25"))
+				   + addResultLine(i18n("Total Count 2"), QStringLiteral("%L26")));
+	}
+
+	result += addResultSection(i18n("Statistical Conclusion")) + QStringLiteral("%99");
+	return result;
 }
 
 // ##############################################################################
@@ -695,7 +675,7 @@ void HypothesisTestPrivate::resetResult() {
 	result.clear(); // clear the previous result
 
 	if (test == HypothesisTest::Test::t_test_one_sample) {
-		result = oneSampleTTestResultTemplate()
+		result = resultTemplate(test)
 					 .arg(notAvailable())
 					 .arg(notAvailable())
 					 .arg(emptyResultColumnStatistics())
@@ -707,7 +687,7 @@ void HypothesisTestPrivate::resetResult() {
 					 .arg(notAvailable())
 					 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::t_test_two_sample) {
-		result = independentTwoSampleTTestResultTemplate()
+		result = resultTemplate(test)
 					 .arg(notAvailable())
 					 .arg(notAvailable())
 					 .arg(emptyResultColumnStatistics())
@@ -720,7 +700,7 @@ void HypothesisTestPrivate::resetResult() {
 					 .arg(notAvailable())
 					 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::t_test_two_sample_paired) {
-		result = pairedTwoSampleTTestResultTemplate()
+		result = resultTemplate(test)
 					 .arg(notAvailable())
 					 .arg(notAvailable())
 					 .arg(emptyResultColumnStatistics())
@@ -731,7 +711,7 @@ void HypothesisTestPrivate::resetResult() {
 					 .arg(notAvailable())
 					 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::t_test_welch) {
-		result = welchTTestResultTemplate()
+		result = resultTemplate(test)
 					 .arg(notAvailable())
 					 .arg(notAvailable())
 					 .arg(emptyResultColumnStatistics())
@@ -743,7 +723,7 @@ void HypothesisTestPrivate::resetResult() {
 					 .arg(notAvailable())
 					 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::one_way_anova) {
-		result = oneWayANOVAResultTemplate()
+		result = resultTemplate(test)
 					 .arg(notAvailable())
 					 .arg(notAvailable())
 					 .arg(emptyResultColumnStatistics())
@@ -758,7 +738,7 @@ void HypothesisTestPrivate::resetResult() {
 					 .arg(notAvailable())
 					 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::one_way_anova_repeated) {
-		result = oneWayANOVARepeatedResultTemplate()
+		result = resultTemplate(test)
 					 .arg(notAvailable())
 					 .arg(notAvailable())
 					 .arg(emptyResultColumnStatistics())
@@ -774,7 +754,7 @@ void HypothesisTestPrivate::resetResult() {
 					 .arg(notAvailable())
 					 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::mann_whitney_u_test) {
-		result = mannWhitneyUTestResultTemplate()
+		result = resultTemplate(test)
 					 .arg(notAvailable())
 					 .arg(notAvailable())
 					 .arg(emptyResultColumnStatistics())
@@ -788,7 +768,7 @@ void HypothesisTestPrivate::resetResult() {
 					 .arg(notAvailable())
 					 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::kruskal_wallis_test) {
-		result = kruskalWallisTestResultTemplate()
+		result = resultTemplate(test)
 					 .arg(notAvailable())
 					 .arg(notAvailable())
 					 .arg(emptyResultColumnStatistics())
@@ -798,7 +778,7 @@ void HypothesisTestPrivate::resetResult() {
 					 .arg(notAvailable())
 					 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::wilcoxon_test) {
-		result = wilcoxonTestResultTemplate()
+		result = resultTemplate(test)
 					 .arg(notAvailable())
 					 .arg(notAvailable())
 					 .arg(emptyResultColumnStatistics())
@@ -815,7 +795,7 @@ void HypothesisTestPrivate::resetResult() {
 					 .arg(notAvailable())
 					 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::friedman_test) {
-		result = friedmanTestResultTemplate()
+		result = resultTemplate(test)
 					 .arg(notAvailable())
 					 .arg(notAvailable())
 					 .arg(emptyResultColumnStatistics())
@@ -825,7 +805,7 @@ void HypothesisTestPrivate::resetResult() {
 					 .arg(notAvailable())
 					 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::chisq_goodness_of_fit) {
-		result = chisqGoodnessOfFitTestResultTemplate()
+		result = resultTemplate(test)
 					 .arg(notAvailable())
 					 .arg(notAvailable())
 					 .arg(emptyResultColumnStatistics())
@@ -835,7 +815,7 @@ void HypothesisTestPrivate::resetResult() {
 					 .arg(notAvailable())
 					 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::chisq_independence) {
-		result = chisqIndependenceTestResultTemplate()
+		result = resultTemplate(test)
 					 .arg(notAvailable())
 					 .arg(notAvailable())
 					 .arg(notAvailable())
@@ -844,7 +824,7 @@ void HypothesisTestPrivate::resetResult() {
 					 .arg(notAvailable())
 					 .arg(testResultNotAvailable());
 	} else if (test == HypothesisTest::Test::log_rank_test) {
-		result = logRankTestResultTemplate()
+		result = resultTemplate(test)
 					 .arg(notAvailable())
 					 .arg(notAvailable())
 					 .arg(notAvailable())
@@ -895,15 +875,15 @@ void HypothesisTestPrivate::performOneSampleTTest() {
 		conclusion = testResultNotAvailable();
 
 	// present results
-	this->result = oneSampleTTestResultTemplate()
+	this->result = resultTemplate(test)
 					   .arg(nullHypothesisText)
 					   .arg(alternateHypothesisText)
 					   .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col})))
 					   .arg(significanceLevel)
-					   .arg(result.t)
 					   .arg(result.p)
-					   .arg(testMean)
 					   .arg(result.df)
+					   .arg(result.t)
+					   .arg(testMean)
 					   .arg(result.mean_difference)
 					   .arg(conclusion);
 }
@@ -980,25 +960,25 @@ void HypothesisTestPrivate::performTwoSampleTTest(bool paired) {
 		conclusion = testResultNotAvailable();
 
 	if (paired) {
-		this->result = pairedTwoSampleTTestResultTemplate()
+		this->result = resultTemplate(test)
 						   .arg(nullHypothesisText)
 						   .arg(alternateHypothesisText)
 						   .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col1, col2})))
 						   .arg(significanceLevel)
-						   .arg(t)
 						   .arg(p)
 						   .arg(df)
+						   .arg(t)
 						   .arg(meanDifference)
 						   .arg(conclusion);
 	} else {
-		this->result = independentTwoSampleTTestResultTemplate()
+		this->result = resultTemplate(test)
 						   .arg(nullHypothesisText)
 						   .arg(alternateHypothesisText)
 						   .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col1, col2})))
 						   .arg(significanceLevel)
-						   .arg(t)
 						   .arg(p)
 						   .arg(df)
+						   .arg(t)
 						   .arg(pooledVariance)
 						   .arg(meanDifference)
 						   .arg(meanDifferenceStandardError)
@@ -1047,14 +1027,14 @@ void HypothesisTestPrivate::performWelchTTest() {
 	} else
 		conclusion = testResultNotAvailable();
 
-	this->result = welchTTestResultTemplate()
+	this->result = resultTemplate(test)
 					   .arg(nullHypothesisText)
 					   .arg(alternateHypothesisText)
 					   .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col1, col2})))
 					   .arg(significanceLevel)
-					   .arg(result.t)
 					   .arg(result.p)
 					   .arg(result.df)
+					   .arg(result.t)
 					   .arg(result.mean_difference)
 					   .arg(result.mean_difference_standard_error)
 					   .arg(conclusion);
@@ -1103,15 +1083,15 @@ void HypothesisTestPrivate::performOneWayANOVATest() {
 		conclusion = testResultNotAvailable();
 	}
 
-	this->result = oneWayANOVAResultTemplate()
+	this->result = resultTemplate(test)
 					   .arg(nullHypothesisText)
 					   .arg(alternateHypothesisText)
 					   .arg(addResultColumnStatistics(dataColumns))
 					   .arg(significanceLevel)
-					   .arg(result.F)
 					   .arg(result.p)
 					   .arg(result.df_between_groups)
 					   .arg(result.df_within_groups)
+					   .arg(result.F)
 					   .arg(result.ss_between_groups)
 					   .arg(result.ss_within_groups)
 					   .arg(result.ms_between_groups)
@@ -1166,15 +1146,15 @@ void HypothesisTestPrivate::performOneWayANOVARepeatedTest() {
 		conclusion = testResultNotAvailable();
 	}
 
-	this->result = oneWayANOVARepeatedResultTemplate()
+	this->result = resultTemplate(test)
 					   .arg(nullHypothesisText)
 					   .arg(alternateHypothesisText)
 					   .arg(addResultColumnStatistics(dataColumns))
 					   .arg(significanceLevel)
-					   .arg(result.F)
 					   .arg(result.p)
 					   .arg(result.df_treatment)
 					   .arg(result.df_residuals)
+					   .arg(result.F)
 					   .arg(result.ss_treatment)
 					   .arg(result.ss_residuals)
 					   .arg(result.ss_within_subjects)
@@ -1226,13 +1206,13 @@ void HypothesisTestPrivate::performMannWhitneyUTest() {
 		conclusion = testResultNotAvailable();
 	}
 
-	this->result = mannWhitneyUTestResultTemplate()
+	this->result = resultTemplate(test)
 					   .arg(nullHypothesisText)
 					   .arg(alternateHypothesisText)
 					   .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col1, col2})))
 					   .arg(significanceLevel)
-					   .arg(result.U)
 					   .arg(result.p)
+					   .arg(result.U)
 					   .arg(result.z)
 					   .arg(result.rank_sum1)
 					   .arg(result.mean_rank1)
@@ -1284,14 +1264,14 @@ void HypothesisTestPrivate::performKruskalWallisTest() {
 		conclusion = testResultNotAvailable();
 	}
 
-	this->result = kruskalWallisTestResultTemplate()
+	this->result = resultTemplate(test)
 					   .arg(nullHypothesisText)
 					   .arg(alternateHypothesisText)
 					   .arg(addResultColumnStatistics(dataColumns))
 					   .arg(significanceLevel)
-					   .arg(result.H)
 					   .arg(result.p)
 					   .arg(result.df)
+					   .arg(result.H)
 					   .arg(conclusion);
 }
 
@@ -1343,13 +1323,13 @@ void HypothesisTestPrivate::performWilcoxonTest() {
 		conclusion = testResultNotAvailable();
 	}
 
-	this->result = wilcoxonTestResultTemplate()
+	this->result = resultTemplate(test)
 					   .arg(nullHypothesisText)
 					   .arg(alternateHypothesisText)
 					   .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({col1, col2})))
 					   .arg(significanceLevel)
-					   .arg(result.W)
 					   .arg(result.p)
+					   .arg(result.W)
 					   .arg(result.z)
 					   .arg(result.positive_rank_sum)
 					   .arg(result.positive_rank_mean)
@@ -1405,14 +1385,14 @@ void HypothesisTestPrivate::performFriedmanTest() {
 		conclusion = testResultNotAvailable();
 	}
 
-	this->result = friedmanTestResultTemplate()
+	this->result = resultTemplate(test)
 					   .arg(nullHypothesisText)
 					   .arg(alternateHypothesisText)
 					   .arg(addResultColumnStatistics(dataColumns))
 					   .arg(significanceLevel)
-					   .arg(result.Q)
 					   .arg(result.p)
 					   .arg(result.df)
+					   .arg(result.Q)
 					   .arg(conclusion);
 }
 
@@ -1474,14 +1454,14 @@ void HypothesisTestPrivate::performChisqGoodnessOfFitTest() {
 	} else
 		conclusion = testResultNotAvailable();
 
-	this->result = chisqGoodnessOfFitTestResultTemplate()
+	this->result = resultTemplate(test)
 					   .arg(nullHypothesisText)
 					   .arg(nullHypothesisText)
 					   .arg(addResultColumnStatistics(QVector<const AbstractColumn*>({observed, expected})))
 					   .arg(significanceLevel)
-					   .arg(result.x2)
 					   .arg(result.p)
 					   .arg(result.df)
+					   .arg(result.x2)
 					   .arg(conclusion);
 }
 
@@ -1537,13 +1517,13 @@ void HypothesisTestPrivate::performChisqIndependenceTest() {
 		conclusion = testResultNotAvailable();
 	}
 
-	this->result = chisqIndependenceTestResultTemplate()
+	this->result = resultTemplate(test)
 					   .arg(nullHypothesisText)
 					   .arg(alternateHypothesisText)
 					   .arg(significanceLevel)
-					   .arg(result.x2)
 					   .arg(result.p)
 					   .arg(result.df)
+					   .arg(result.x2)
 					   .arg(conclusion);
 }
 
@@ -1642,13 +1622,13 @@ void HypothesisTestPrivate::performLogRankTest() {
 		conclusion = testResultNotAvailable();
 	}
 
-	this->result = logRankTestResultTemplate()
+	this->result = resultTemplate(test)
 					   .arg(nullHypothesisText)
 					   .arg(alternateHypothesisText)
 					   .arg(significanceLevel)
-					   .arg(result.H)
 					   .arg(result.p)
 					   .arg(result.df)
+					   .arg(result.H)
 					   .arg(result.event_count1)
 					   .arg(result.censored_count1)
 					   .arg(result.total_count1)
@@ -1733,55 +1713,55 @@ bool HypothesisTest::load(XmlStreamReader* reader, bool preview) {
 }
 
 void HypothesisTest::fillAddNewHypothesisTest(QMenu* menu, QActionGroup* actionGroup) {
-	auto* action = new QAction(i18n("One-Sample t-Test"), actionGroup);
+	auto* action = new QAction(testName(Test::t_test_one_sample), actionGroup);
 	action->setData(static_cast<int>(Test::t_test_one_sample));
 	menu->addAction(action);
 
-	action = new QAction(i18n("Independent Two-Sample t-Test"), actionGroup);
+	action = new QAction(testName(Test::t_test_two_sample), actionGroup);
 	action->setData(static_cast<int>(Test::t_test_two_sample));
 	menu->addAction(action);
 
-	action = new QAction(i18n("Paired Two-Sample t-Test"), actionGroup);
+	action = new QAction(testName(Test::t_test_two_sample_paired), actionGroup);
 	action->setData(static_cast<int>(Test::t_test_two_sample_paired));
 	menu->addAction(action);
 
-	action = new QAction(i18n("Welch t-Test"), actionGroup);
+	action = new QAction(testName(Test::t_test_welch), actionGroup);
 	action->setData(static_cast<int>(Test::t_test_welch));
 	menu->addAction(action);
 
-	action = new QAction(i18n("One-Way ANOVA"), actionGroup);
+	action = new QAction(testName(Test::one_way_anova), actionGroup);
 	action->setData(static_cast<int>(Test::one_way_anova));
 	menu->addAction(action);
 
-	action = new QAction(i18n("One-Way ANOVA with Repeated Measures"), actionGroup);
+	action = new QAction(testName(Test::one_way_anova_repeated), actionGroup);
 	action->setData(static_cast<int>(Test::one_way_anova_repeated));
 	menu->addAction(action);
 
-	action = new QAction(i18n("Mann-Whitney U Test"), actionGroup);
+	action = new QAction(testName(Test::mann_whitney_u_test), actionGroup);
 	action->setData(static_cast<int>(Test::mann_whitney_u_test));
 	menu->addAction(action);
 
-	action = new QAction(i18n("Wilcoxon Signed Rank Test"), actionGroup);
+	action = new QAction(testName(Test::wilcoxon_test), actionGroup);
 	action->setData(static_cast<int>(Test::wilcoxon_test));
 	menu->addAction(action);
 
-	action = new QAction(i18n("Kruskal-Wallis Test"), actionGroup);
+	action = new QAction(testName(Test::kruskal_wallis_test), actionGroup);
 	action->setData(static_cast<int>(Test::kruskal_wallis_test));
 	menu->addAction(action);
 
-	action = new QAction(i18n("Friedman Test"), actionGroup);
+	action = new QAction(testName(Test::friedman_test), actionGroup);
 	action->setData(static_cast<int>(Test::friedman_test));
 	menu->addAction(action);
 
-	action = new QAction(i18n("Logrank Test"), actionGroup);
+	action = new QAction(testName(Test::log_rank_test), actionGroup);
 	action->setData(static_cast<int>(Test::log_rank_test));
 	menu->addAction(action);
 
-	action = new QAction(i18n("Chi-square Independence Test"), actionGroup);
+	action = new QAction(testName(Test::chisq_independence), actionGroup);
 	action->setData(static_cast<int>(Test::chisq_independence));
 	menu->addAction(action);
 
-	action = new QAction(i18n("Chi-square Goodness of Fit Test"), actionGroup);
+	action = new QAction(testName(Test::chisq_goodness_of_fit), actionGroup);
 	action->setData(static_cast<int>(Test::chisq_goodness_of_fit));
 	menu->addAction(action);
 }
