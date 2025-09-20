@@ -22,8 +22,8 @@
 #include <KCompressionDevice>
 #include <KLocalizedString>
 
-#include <QFile>
 #include <QDateTime>
+#include <QFile>
 #ifdef HAVE_QTSERIALPORT
 #include <QSerialPort>
 #endif
