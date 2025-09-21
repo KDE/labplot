@@ -992,9 +992,9 @@ void ColumnTest::loadTextFromProject() {
 						 QStringLiteral("third value"),
 						 QStringLiteral("fourth value"),
 						 QStringLiteral("fifth value"),
-						 QStringLiteral("sixth value"),
-						 QStringLiteral("seventh value"),
-						 QStringLiteral("eighth value"),
+						 QStringLiteral("sixt value"),
+						 QStringLiteral("sevent value"),
+						 QStringLiteral("eigth value"),
 						 QStringLiteral("ninth value"),
 						 QStringLiteral("tenth value")};
 	for (int i = 0; i < 10; i++) {
