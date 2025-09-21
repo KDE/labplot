@@ -153,7 +153,7 @@ void ImportSqlDatabaseTest::testFullTableCustomRowRange() {
 
 	// last row in the spreadsheet
 	QCOMPARE(spreadsheet.column(0)->integerAt(10), 20);
-	QCOMPARE(spreadsheet.column(1)->textAt(10), QLatin1String("The Best Of Buddy Guy - The Millennium Collection"));
+	QCOMPARE(spreadsheet.column(1)->textAt(10), QLatin1String("The Best Of Buddy Guy - The Millenium Collection"));
 	QCOMPARE(spreadsheet.column(2)->integerAt(10), 15);
 }
 
@@ -282,7 +282,7 @@ void ImportSqlDatabaseTest::testFullTableCustomRowColumnRange() {
 	QCOMPARE(spreadsheet.column(0)->textAt(0), QLatin1String("Audioslave"));
 
 	// last row in the spreadsheet
-	QCOMPARE(spreadsheet.column(0)->textAt(10), QLatin1String("The Best Of Buddy Guy - The Millennium Collection"));
+	QCOMPARE(spreadsheet.column(0)->textAt(10), QLatin1String("The Best Of Buddy Guy - The Millenium Collection"));
 }
 
 // ##############################################################################
