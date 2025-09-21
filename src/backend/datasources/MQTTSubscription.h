@@ -16,6 +16,7 @@
 class MQTTClient;
 class MQTTTopic;
 class QString;
+class QMqttMessage;
 
 class MQTTSubscription : public Folder {
 	Q_OBJECT
@@ -28,7 +29,7 @@ public:
 	QString subscriptionName() const;
 	const QVector<MQTTTopic*> topics() const;
 	MQTTClient* mqttClient() const;
-	void messageArrived(const QString&, const QString&);
+	void messageArrived(const QMqttMessage& msg);
 
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;

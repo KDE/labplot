@@ -1,5 +1,5 @@
-add_executable (NSLFitTest NSLFitTest.cpp)
+add_executable(NSLFitTest NSLFitTest.cpp)
 
-target_link_libraries(NSLFitTest labplot2lib labplot2test)
+target_link_libraries(NSLFitTest ${LIBCERF_LIBRARIES} labplottest)
 
 add_test(NAME NSLFitTest COMMAND NSLFitTest)

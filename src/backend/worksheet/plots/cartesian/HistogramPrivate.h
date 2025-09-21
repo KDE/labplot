@@ -4,7 +4,7 @@
 	Description          : Private members of Histogram
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2018-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -25,11 +25,8 @@ public:
 	explicit HistogramPrivate(Histogram* owner);
 	~HistogramPrivate() override;
 
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
-
 	void retransform() override;
-	void recalcHistogram();
+	void recalc();
 	void updateType();
 	void updateOrientation();
 	void updateLines();
@@ -43,9 +40,6 @@ public:
 	void updatePixmap();
 	void recalcShapeAndBoundingRect() override;
 
-	bool activatePlot(QPointF mouseScenePos, double maxDist);
-	void setHover(bool on);
-
 	double xMinimum() const;
 	double xMaximum() const;
 	double yMinimum() const;
@@ -57,13 +51,11 @@ public:
 
 	double getMaximumOccuranceofHistogram() const;
 
-	bool m_suppressRecalc{false};
-
 	// General
 	const AbstractColumn* dataColumn{nullptr};
 	QString dataColumnPath;
 	Histogram::Type type{Histogram::Ordinary};
-	Histogram::Orientation orientation{Histogram::Vertical};
+	Histogram::Orientation orientation{Histogram::Orientation::Vertical};
 	Histogram::Normalization normalization{Histogram::Count};
 	Histogram::BinningMethod binningMethod{Histogram::SquareRoot};
 	int totalCount{0};
@@ -77,14 +69,7 @@ public:
 	Symbol* symbol{nullptr};
 	Background* background{nullptr};
 	Value* value{nullptr};
-
-	// error bars
-	Histogram::ErrorType errorType{Histogram::NoError};
-	const AbstractColumn* errorPlusColumn{nullptr};
-	QString errorPlusColumnPath;
-	const AbstractColumn* errorMinusColumn{nullptr};
-	QString errorMinusColumnPath;
-	Line* errorBarsLine{nullptr};
+	ErrorBar* errorBar{nullptr};
 
 	// rug
 	bool rugEnabled{false};
@@ -97,8 +82,6 @@ public:
 	QPainterPath symbolsPath;
 	QPainterPath valuesPath;
 	QPainterPath errorBarsPath;
-	QRectF boundingRectangle;
-	QPainterPath curveShape;
 	// TODO: use Qt container
 	// TODO: add m_
 	QVector<QLineF> lines;
@@ -115,20 +98,10 @@ public:
 private:
 	gsl_histogram* m_histogram{nullptr};
 	size_t m_bins{0};
-	bool m_hovered{false};
-	QPixmap m_pixmap;
-	QImage m_hoverEffectImage;
-	QImage m_selectionEffectImage;
-	bool m_hoverEffectImageIsDirty{false};
-	bool m_selectionEffectImageIsDirty{false};
 	Column* m_binsColumn{nullptr}; // bin positions/edges
 	Column* m_binValuesColumn{nullptr}; // bin values
 	Column* m_binPDValuesColumn{nullptr}; // bin values in the probability density normalization
-
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void histogramValue(double& value, int bin) const;

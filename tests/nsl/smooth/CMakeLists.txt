@@ -1,5 +1,5 @@
-add_executable (NSLSmoothTest NSLSmoothTest.cpp)
+add_executable(NSLSmoothTest NSLSmoothTest.cpp)
 
-target_link_libraries(NSLSmoothTest labplot2lib labplot2test)
+target_link_libraries(NSLSmoothTest labplottest)
 
 add_test(NAME NSLSmoothTest COMMAND NSLSmoothTest)

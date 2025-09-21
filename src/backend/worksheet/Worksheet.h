@@ -40,8 +40,15 @@ public:
 
 	enum class Unit { Millimeter, Centimeter, Inch, Point };
 	enum class Layout { NoLayout, VerticalLayout, HorizontalLayout, GridLayout };
-	enum class CartesianPlotActionMode { ApplyActionToSelection, ApplyActionToAll, ApplyActionToAllX, ApplyActionToAllY };
+	enum class CartesianPlotActionMode {
+		ApplyActionToSelection, // Apply to only the selected plot
+		ApplyActionToAll, // Apply action to all plots for all dimensions
+		ApplyActionToAllX, // Apply action to all plots, but only for the x ranges
+		ApplyActionToAllY // Apply action to all plots, but only for the y ranges
+	};
 	enum class ZoomFit { None, Fit, FitToHeight, FitToWidth, FitToSelection };
+	enum class ExportFormat { PDF, SVG, PNG, JPG, BMP, PPM, XBM, XPM };
+	enum class ExportArea { BoundingBox, Selection, Worksheet };
 
 	static double convertToSceneUnits(const double value, const Worksheet::Unit unit);
 	static double convertFromSceneUnits(const double value, const Worksheet::Unit unit);
@@ -54,7 +61,13 @@ public:
 	WorksheetElement* currentSelection();
 	QVector<AspectType> pasteTypes() const override;
 
+	bool exportToFile(const QString&,
+					  const ExportFormat,
+					  const ExportArea area = ExportArea::Worksheet,
+					  const bool background = true,
+					  const int resolution = 100) const;
 	bool exportView() const override;
+	bool exportView(QPixmap&) const;
 	bool printView() override;
 	bool printPreview() const override;
 
@@ -67,7 +80,6 @@ public:
 	double zoomFactor() const;
 	void update();
 	void setPrinting(bool) const;
-	void setThemeName(const QString&);
 
 	void setItemSelectedInView(const QGraphicsItem*, const bool);
 	void setSelectedInView(const bool);
@@ -75,13 +87,13 @@ public:
 	void setIsClosing();
 	void suppressSelectionChangedEvent(bool);
 
-	CartesianPlotActionMode cartesianPlotActionMode();
+	CartesianPlotActionMode cartesianPlotActionMode() const;
 	void setCartesianPlotActionMode(CartesianPlotActionMode mode);
-	CartesianPlotActionMode cartesianPlotCursorMode();
+	CartesianPlotActionMode cartesianPlotCursorMode() const;
 	void setCartesianPlotCursorMode(CartesianPlotActionMode mode);
 	void setInteractive(bool);
-	void setPlotsLocked(bool);
-	bool plotsLocked();
+	void setPlotsInteractive(bool);
+	bool plotsInteractive() const;
 	int plotCount();
 	CartesianPlot* plot(int index);
 	TreeModel* cursorModel();
@@ -116,7 +128,7 @@ public:
 public Q_SLOTS:
 	void setTheme(const QString&);
 	void cartesianPlotAxisShift(int delta, Dimension dim, int index);
-	void cartesianPlotWheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
+	void cartesianPlotWheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
 	void cartesianPlotMousePressZoomSelectionMode(QPointF logicPos);
 	void cartesianPlotMousePressCursorMode(int cursorNumber, QPointF logicPos);
 	void cartesianPlotMouseMoveZoomSelectionMode(QPointF logicPos);
@@ -128,11 +140,9 @@ public Q_SLOTS:
 	void cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode);
 
 	// slots needed by the cursor
-	void updateCurveBackground(const QPen&, const QString& curveName);
+	void updateCurveBackground(QColor, const QString& curveName);
 	void updateCompleteCursorTreeModel();
 	void cursorPosChanged(int cursorNumber, double xPos);
-	void curveAdded(const XYCurve* curve);
-	void curveRemoved(const XYCurve* curve);
 	void curveDataChanged(const XYCurve* curve);
 
 private:
@@ -140,7 +150,8 @@ private:
 	WorksheetElement* aspectFromGraphicsItem(const WorksheetElement*, const QGraphicsItem*) const;
 	void loadTheme(const QString&);
 
-	WorksheetPrivate* const d;
+	Q_DECLARE_PRIVATE(Worksheet)
+	WorksheetPrivate* const d_ptr;
 	mutable WorksheetView* m_view{nullptr};
 	friend class WorksheetPrivate;
 
@@ -148,6 +159,7 @@ private Q_SLOTS:
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
+	void handleAspectMoved();
 
 	void childSelected(const AbstractAspect*) override;
 	void childDeselected(const AbstractAspect*) override;
@@ -176,7 +188,10 @@ Q_SIGNALS:
 	void layoutRowCountChanged(int);
 	void layoutColumnCountChanged(int);
 
+	void changed();
 	void themeChanged(const QString&);
+
+	friend class WorksheetTest;
 };
 
 #endif

@@ -1,5 +1,7 @@
-add_executable (MultiRangeTest MultiRangeTest.cpp)
+option(ENABLE_TEST_MULTIRANGE "Enable Multirange Tests" ON)
 
-target_link_libraries(MultiRangeTest labplot2lib labplot2test)
-
-add_test(NAME MultiRangeTest COMMAND MultiRangeTest)
+if(ENABLE_TEST_MULTIRANGE)
+    add_executable (MultiRangeTest MultiRangeTest.cpp)
+    target_link_libraries(MultiRangeTest labplotbackendlib labplotlib labplottest)
+    add_test(NAME MultiRangeTest COMMAND MultiRangeTest)
+endif()

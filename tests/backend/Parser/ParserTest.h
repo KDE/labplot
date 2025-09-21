@@ -18,12 +18,18 @@ class ParserTest : public CommonTest {
 
 private Q_SLOTS:
 	void testBasics();
+	void testFunction0Arguments();
+	void testFunction1Argument();
+	void testFunction2Arguments();
+	void testFunction3Arguments();
 	void testErrors();
 	void testVariables();
 	void testLocale();
 
 	void testPerformance1();
 	void testPerformance2();
+
+	void testRangeParsing();
 };
 
 #endif

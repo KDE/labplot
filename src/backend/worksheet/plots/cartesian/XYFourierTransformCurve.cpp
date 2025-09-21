@@ -8,13 +8,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYFourierTransformCurve
-  \brief A xy-curve defined by a Fourier transform
-
-  \ingroup worksheet
-*/
-
 #include "XYFourierTransformCurve.h"
 #include "XYFourierTransformCurvePrivate.h"
 #include "backend/core/AbstractColumn.h"
@@ -34,6 +27,11 @@ extern "C" {
 #include <QIcon>
 #include <QThreadPool>
 
+/*!
+ * \class XYFourierTransformCurve
+ * \brief A xy-curve defined by a Fourier transform.
+ * \ingroup CartesianAnalysisPlots
+ */
 XYFourierTransformCurve::XYFourierTransformCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYFourierTransformCurvePrivate(this), AspectType::XYFourierTransformCurve) {
 }
@@ -45,11 +43,6 @@ XYFourierTransformCurve::XYFourierTransformCurve(const QString& name, XYFourierT
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 XYFourierTransformCurve::~XYFourierTransformCurve() = default;
-
-void XYFourierTransformCurve::recalculate() {
-	Q_D(XYFourierTransformCurve);
-	d->recalculate();
-}
 
 /*!
 	Returns an icon to be used in the project explorer.
@@ -100,8 +93,12 @@ bool XYFourierTransformCurvePrivate::recalculateSpecific(const AbstractColumn* t
 	// copy all valid data point for the transform to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
-	const double xmin = transformData.xRange.first();
-	const double xmax = transformData.xRange.last();
+	double xmin = transformData.xRange.first();
+	double xmax = transformData.xRange.last();
+	if (transformData.autoRange) {
+		xmin = q->xDataColumn()->minimum();
+		xmax = q->xDataColumn()->maximum();
+	}
 
 	int rowCount = std::min(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
 	for (int row = 0; row < rowCount; ++row) {
@@ -150,6 +147,7 @@ bool XYFourierTransformCurvePrivate::recalculateSpecific(const AbstractColumn* t
 
 	///////////////////////////////////////////////////////////
 	// transform with window
+	gsl_set_error_handler_off();
 	int status = nsl_dft_transform_window(ydata, 1, n, twoSided, type, windowType);
 
 	unsigned int N = n;
@@ -255,7 +253,6 @@ void XYFourierTransformCurve::save(QXmlStreamWriter* writer) const {
 bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYFourierTransformCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -297,6 +294,10 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
@@ -319,7 +320,7 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
-		recalcLogicalPoints();
+		recalc();
 	}
 
 	return true;

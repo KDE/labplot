@@ -21,19 +21,10 @@ public:
 	explicit QQPlotPrivate(QQPlot* owner);
 	~QQPlotPrivate() override;
 
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
-
 	void retransform() override;
 	void recalc();
 	void updateDistribution();
 	void recalcShapeAndBoundingRect() override;
-
-	void setHover(bool on);
-	bool activateCurve(QPointF mouseScenePos, double maxDist);
-
-	QPainterPath curveShape;
-	bool m_suppressRecalc{false};
 
 	XYCurve* referenceCurve{nullptr};
 	Column* xReferenceColumn{nullptr};
@@ -55,13 +46,6 @@ public:
 	QQPlot* const q;
 
 private:
-	bool m_hovered{false};
-	QPixmap m_pixmap;
-	QImage m_hoverEffectImage;
-	QImage m_selectionEffectImage;
-	bool m_hoverEffectImageIsDirty{false};
-	bool m_selectionEffectImageIsDirty{false};
-
 	void copyValidData(QVector<double>&) const;
 };
 

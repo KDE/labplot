@@ -14,17 +14,16 @@
 #include "WorksheetElement.h"
 #include "WorksheetPrivate.h"
 #include "backend/core/Project.h"
+#include "backend/core/Settings.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/TreeModel.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include "commonfrontend/worksheet/WorksheetView.h"
-#include "kdefrontend/ThemeHandler.h"
-#include "kdefrontend/worksheet/ExportWorksheetDialog.h"
+#include "frontend/ThemeHandler.h"
+#include "frontend/worksheet/ExportWorksheetDialog.h"
+#include "frontend/worksheet/WorksheetView.h"
 
 #ifndef SDK
 #include <QPrintDialog>
@@ -40,7 +39,10 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
+
+namespace {
+constexpr auto CURSOR_UUID_EDIT_ROLE = Qt::UserRole;
+}
 
 /**
  * \class Worksheet
@@ -49,59 +51,62 @@
  * The worksheet is, besides the data containers \c Spreadsheet and \c Matrix, another central part of the application
  * and provides an area for showing and grouping together different kinds of worksheet objects - plots, labels &etc;
  *
- * * \ingroup worksheet
+ * \ingroup worksheet
  */
 Worksheet::Worksheet(const QString& name, bool loading)
 	: AbstractPart(name, AspectType::Worksheet)
-	, d(new WorksheetPrivate(this)) {
-	connect(this, &Worksheet::childAspectAdded, this, &Worksheet::handleAspectAdded);
-	connect(this, &Worksheet::childAspectAboutToBeRemoved, this, &Worksheet::handleAspectAboutToBeRemoved);
-	connect(this, &Worksheet::childAspectRemoved, this, &Worksheet::handleAspectRemoved);
-
-	d->background = new Background(QString());
+	, d_ptr(new WorksheetPrivate(this)) {
+	Q_D(Worksheet);
+	d->background = new Background(QStringLiteral("background"));
 	addChild(d->background);
 	d->background->setHidden(true);
 	connect(d->background, &Background::updateRequested, [=] {
 		d->update();
 	});
 
+	connect(this, &Worksheet::childAspectAdded, this, &Worksheet::handleAspectAdded);
+	connect(this, &Worksheet::childAspectAboutToBeRemoved, this, &Worksheet::handleAspectAboutToBeRemoved);
+	connect(this, &Worksheet::childAspectRemoved, this, &Worksheet::handleAspectRemoved);
+	connect(this, &Worksheet::childAspectMoved, this, &Worksheet::handleAspectMoved);
+
 	if (!loading)
 		init();
 }
 
 Worksheet::~Worksheet() {
-	delete d;
+	delete d_ptr;
 }
 
 void Worksheet::init() {
+	Q_D(Worksheet);
 	KConfig config;
-	KConfigGroup group = config.group("Worksheet");
+	auto group = config.group(QStringLiteral("Worksheet"));
 
 	// size
-	d->scaleContent = group.readEntry("ScaleContent", false);
-	d->useViewSize = group.readEntry("UseViewSize", false);
+	d->scaleContent = group.readEntry(QStringLiteral("ScaleContent"), false);
+	d->useViewSize = group.readEntry(QStringLiteral("UseViewSize"), false);
 	d->pageRect.setX(0);
 	d->pageRect.setY(0);
-	d->pageRect.setWidth(group.readEntry("Width", 1000));
-	d->pageRect.setHeight(group.readEntry("Height", 1000));
+	d->pageRect.setWidth(group.readEntry(QStringLiteral("Width"), 1000));
+	d->pageRect.setHeight(group.readEntry(QStringLiteral("Height"), 1000));
 	d->m_scene->setSceneRect(d->pageRect);
 
 	// background
 	d->background->init(group);
 
 	// layout
-	d->layout = (Layout)group.readEntry("Layout", static_cast<int>(Layout::VerticalLayout));
-	d->layoutTopMargin = group.readEntry("LayoutTopMargin", convertToSceneUnits(0.5, Unit::Centimeter));
-	d->layoutBottomMargin = group.readEntry("LayoutBottomMargin", convertToSceneUnits(0.5, Unit::Centimeter));
-	d->layoutLeftMargin = group.readEntry("LayoutLeftMargin", convertToSceneUnits(0.5, Unit::Centimeter));
-	d->layoutRightMargin = group.readEntry("LayoutRightMargin", convertToSceneUnits(0.5, Unit::Centimeter));
-	d->layoutVerticalSpacing = group.readEntry("LayoutVerticalSpacing", convertToSceneUnits(0.5, Unit::Centimeter));
-	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", convertToSceneUnits(0.5, Unit::Centimeter));
-	d->layoutRowCount = group.readEntry("LayoutRowCount", 2);
-	d->layoutColumnCount = group.readEntry("LayoutColumnCount", 2);
+	d->layout = (Layout)group.readEntry(QStringLiteral("Layout"), static_cast<int>(Layout::VerticalLayout));
+	d->layoutTopMargin = group.readEntry(QStringLiteral("LayoutTopMargin"), convertToSceneUnits(0., Unit::Centimeter));
+	d->layoutBottomMargin = group.readEntry(QStringLiteral("LayoutBottomMargin"), convertToSceneUnits(0., Unit::Centimeter));
+	d->layoutLeftMargin = group.readEntry(QStringLiteral("LayoutLeftMargin"), convertToSceneUnits(0., Unit::Centimeter));
+	d->layoutRightMargin = group.readEntry(QStringLiteral("LayoutRightMargin"), convertToSceneUnits(0., Unit::Centimeter));
+	d->layoutVerticalSpacing = group.readEntry(QStringLiteral("LayoutVerticalSpacing"), convertToSceneUnits(0., Unit::Centimeter));
+	d->layoutHorizontalSpacing = group.readEntry(QStringLiteral("LayoutHorizontalSpacing"), convertToSceneUnits(0., Unit::Centimeter));
+	d->layoutRowCount = group.readEntry(QStringLiteral("LayoutRowCount"), 2);
+	d->layoutColumnCount = group.readEntry(QStringLiteral("LayoutColumnCount"), 2);
 
 	// default theme
-	KConfigGroup settings = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
+	auto settings = Settings::group(QStringLiteral("Settings_Worksheet"));
 	d->theme = settings.readEntry(QStringLiteral("Theme"), QString());
 	loadTheme(d->theme);
 }
@@ -170,6 +175,10 @@ QWidget* Worksheet::view() const {
 		connect(m_view, &WorksheetView::propertiesExplorerRequested, this, &Worksheet::propertiesExplorerRequested);
 		connect(this, &Worksheet::cartesianPlotMouseModeChanged, m_view, &WorksheetView::cartesianPlotMouseModeChangedSlot);
 		connect(this, &Worksheet::childContextMenuRequested, m_view, &WorksheetView::childContextMenuRequested);
+		connect(this, &Worksheet::viewAboutToBeDeleted, [this]() {
+			m_view = nullptr;
+		});
+		Q_EMIT const_cast<Worksheet*>(this)->changed();
 	}
 	return m_partView;
 }
@@ -193,6 +202,10 @@ QVector<AspectType> Worksheet::pasteTypes() const {
 	return QVector<AspectType>{AspectType::CartesianPlot, AspectType::TextLabel, AspectType::Image};
 }
 
+bool Worksheet::exportToFile(const QString& path, const ExportFormat format, const ExportArea area, const bool background, int resolution) const {
+	return static_cast<WorksheetView*>(view())->exportToFile(path, format, area, background, resolution);
+}
+
 bool Worksheet::exportView() const {
 #ifndef SDK
 	auto* dlg = new ExportWorksheetDialog(m_view);
@@ -201,8 +214,8 @@ bool Worksheet::exportView() const {
 	bool ret;
 	if ((ret = (dlg->exec() == QDialog::Accepted))) {
 		QString path = dlg->path();
-		const WorksheetView::ExportFormat format = dlg->exportFormat();
-		const WorksheetView::ExportArea area = dlg->exportArea();
+		const auto format = dlg->exportFormat();
+		const auto area = dlg->exportArea();
 		const bool background = dlg->exportBackground();
 		const int resolution = dlg->exportResolution();
 
@@ -217,8 +230,17 @@ bool Worksheet::exportView() const {
 #endif
 }
 
+bool Worksheet::exportView(QPixmap& pixmap) const {
+	if (!m_view)
+		return false;
+
+	m_view->exportToPixmap(pixmap);
+	return true;
+}
+
 bool Worksheet::printView() {
 #ifndef SDK
+	setPrinting(true);
 	QPrinter printer;
 	auto* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18nc("@title:window", "Print Worksheet"));
@@ -227,6 +249,7 @@ bool Worksheet::printView() {
 		m_view->print(&printer);
 
 	delete dlg;
+	setPrinting(false);
 	return ret;
 #else
 	return true;
@@ -235,9 +258,12 @@ bool Worksheet::printView() {
 
 bool Worksheet::printPreview() const {
 #ifndef SDK
+	setPrinting(true);
 	auto* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &WorksheetView::print);
-	return dlg->exec();
+	const auto r = dlg->exec();
+	setPrinting(false);
+	return r;
 #else
 	return true;
 #endif
@@ -245,6 +271,7 @@ bool Worksheet::printPreview() const {
 
 void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	DEBUG(Q_FUNC_INFO)
+	Q_D(Worksheet);
 	const auto* addedElement = dynamic_cast<const WorksheetElement*>(aspect);
 	if (!addedElement)
 		return;
@@ -258,6 +285,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	d->m_scene->addItem(item);
 
 	connect(aspect, &AbstractAspect::contextMenuRequested, this, &Worksheet::childContextMenuRequested);
+	connect(addedElement, &WorksheetElement::changed, this, &Worksheet::changed);
 
 	// for containers, connect to visilibity changes and update the layout accordingly
 	if (dynamic_cast<const WorksheetElementContainer*>(addedElement))
@@ -280,26 +308,37 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		connect(plot, &CartesianPlot::mouseHoverOutsideDataRectSignal, this, &Worksheet::cartesianPlotMouseHoverOutsideDataRect);
 		connect(plot, &CartesianPlot::aspectDescriptionChanged, this, &Worksheet::updateCompleteCursorTreeModel);
 		connect(plot, &CartesianPlot::curveNameChanged, this, &Worksheet::updateCompleteCursorTreeModel);
-		connect(plot, &CartesianPlot::curveRemoved, this, &Worksheet::curveRemoved);
-		connect(plot, &CartesianPlot::curveAdded, this, &Worksheet::curveAdded);
+		connect(plot, &CartesianPlot::curveRemoved, this, &Worksheet::updateCompleteCursorTreeModel);
+		connect(plot, &CartesianPlot::curveAdded, this, &Worksheet::updateCompleteCursorTreeModel);
 		connect(plot, &CartesianPlot::visibleChanged, this, &Worksheet::updateCompleteCursorTreeModel);
 		connect(plot, &CartesianPlot::curveVisibilityChangedSignal, this, &Worksheet::updateCompleteCursorTreeModel);
 		connect(plot, &CartesianPlot::curveDataChanged, this, &Worksheet::curveDataChanged);
-		connect(plot, static_cast<void (CartesianPlot::*)(QPen, QString)>(&CartesianPlot::curveLinePenChanged), this, &Worksheet::updateCurveBackground);
+		connect(plot,
+				static_cast<void (CartesianPlot::*)(const QColor&, const QString&)>(&CartesianPlot::plotColorChanged),
+				this,
+				&Worksheet::updateCurveBackground);
 		connect(plot, &CartesianPlot::mouseModeChanged, this, &Worksheet::cartesianPlotMouseModeChangedSlot);
 		auto* p = const_cast<CartesianPlot*>(plot);
-		p->setLocked(d->plotsLocked);
+		p->setInteractive(d->plotsInteractive);
 
 		cursorModelPlotAdded(p->name());
 	}
 	qreal zVal = 0;
-	for (auto* child : children<WorksheetElement>(ChildIndexFlag::IncludeHidden))
+	const auto& children = this->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
+	for (auto* child : children)
 		child->graphicsItem()->setZValue(zVal++);
 
-	// if a theme was selected in the worksheet, apply this theme for newly added children
-	if (!d->theme.isEmpty() && !isLoading() && !pasted() && !aspect->pasted()) {
+	// if a theme was selected in the worksheet, apply this theme for newly added children,
+	// no need to put these changes onto the undo stack, temporarily deactivate the undo awareness
+	// for the project globally so it's ignored for all elements below when applying the theme recursively.
+	if (!d->theme.isEmpty() && !isLoading() && !isPasted() && !aspect->isPasted()) {
 		KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
+		// const_cast<WorksheetElement*>(addedElement)->setUndoAware(false, true);
+		if (project())
+			project()->setUndoAware(false);
 		const_cast<WorksheetElement*>(addedElement)->loadThemeConfig(config);
+		if (project())
+			project()->setUndoAware(true);
 	}
 
 	// recalculate the layout if enabled, set the currently added plot resizable otherwise
@@ -309,7 +348,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		else {
 			if (plot) {
 				// make other plots non-resizable
-				const auto& containers = children<WorksheetElementContainer>();
+				const auto& containers = this->children<WorksheetElementContainer>();
 				for (auto* container : containers)
 					container->setResizeEnabled(false);
 
@@ -321,9 +360,10 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 }
 
 void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
+	Q_D(Worksheet);
 	const auto* removedElement = qobject_cast<const WorksheetElement*>(aspect);
 	if (removedElement) {
-		QGraphicsItem* item = removedElement->graphicsItem();
+		auto* item = removedElement->graphicsItem();
 		// TODO: disabled until Origin project import is fixed
 		if (item->scene() == d->m_scene)
 			d->m_scene->removeItem(item);
@@ -331,6 +371,7 @@ void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 }
 
 void Worksheet::handleAspectRemoved(const AbstractAspect* /*parent*/, const AbstractAspect* /*before*/, const AbstractAspect* child) {
+	Q_D(Worksheet);
 	if (d->layout != Worksheet::Layout::NoLayout)
 		d->updateLayout(false);
 	auto* plot = dynamic_cast<const CartesianPlot*>(child);
@@ -338,11 +379,27 @@ void Worksheet::handleAspectRemoved(const AbstractAspect* /*parent*/, const Abst
 		cursorModelPlotRemoved(plot->name());
 }
 
+/*!
+ * called when one of the children was moved, re-adjusts the Z-values for all children.
+ */
+void Worksheet::handleAspectMoved() {
+	qreal zVal = 0;
+	const auto& children = this->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
+	for (auto* child : children)
+		child->graphicsItem()->setZValue(zVal++);
+
+	Q_D(Worksheet);
+	if (d->layout != Worksheet::Layout::NoLayout)
+		d->updateLayout(false);
+}
+
 QGraphicsScene* Worksheet::scene() const {
+	Q_D(const Worksheet);
 	return d->m_scene;
 }
 
 QRectF Worksheet::pageRect() const {
+	Q_D(const Worksheet);
 	return d->m_scene->sceneRect();
 }
 
@@ -378,7 +435,7 @@ void Worksheet::childDeselected(const AbstractAspect* aspect) {
  *  The signal is handled in \c AspectTreeModel and forwarded to the tree view in \c ProjectExplorer.
  * This function is called in \c WorksheetView upon selection changes.
  */
-void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b) {
+void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool selected) {
 	// determine the corresponding aspect
 	AbstractAspect* aspect(nullptr);
 	for (const auto* child : children<WorksheetElement>(ChildIndexFlag::IncludeHidden)) {
@@ -391,41 +448,43 @@ void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b) {
 		return;
 
 	// forward selection/deselection to AbstractTreeModel
-	if (b)
+	if (selected)
 		Q_EMIT childAspectSelectedInView(aspect);
 	else
 		Q_EMIT childAspectDeselectedInView(aspect);
 
 	// handle the resize items on selection changes
-	if (layout() == Worksheet::Layout::NoLayout) {
-		// only one selected plot can be made resizable
-		if (b) {
-			const auto& items = m_view->selectedItems();
-			if (items.size() == 1) {
-				// only one object is selected.
-				// make it resiable if its a container
-				auto* container = dynamic_cast<WorksheetElementContainer*>(aspect);
-				if (container)
-					container->setResizeEnabled(true);
-			} else if (items.size() > 1) {
-				// multiple objects are selected, make all containers non-resizable
-				const auto& elements = children<WorksheetElement>();
-				for (auto* element : elements) {
-					auto* container = dynamic_cast<WorksheetElementContainer*>(element);
-					if (container)
-						container->setResizeEnabled(false);
-				}
-			}
-		} else {
+	if (selected && m_view) {
+		const auto& items = m_view->selectedItems();
+		if (items.size() == 1) {
+			// only one object is selected, make it resiable if it's a container and
+			// 1. a child of a worksheet without any active layout
+			// 2. a child of another container ("inset plot")
 			auto* container = dynamic_cast<WorksheetElementContainer*>(aspect);
-			if (container)
-				container->setResizeEnabled(false);
+			if (container) {
+				if (container->parentAspect() == this && layout() != Worksheet::Layout::NoLayout)
+					container->setResizeEnabled(false);
+				else
+					container->setResizeEnabled(true);
+			}
+		} else if (items.size() > 1) {
+			// multiple objects are selected, make all containers non-resizable
+			const auto& elements = children<WorksheetElement>();
+			for (auto* element : elements) {
+				auto* container = dynamic_cast<WorksheetElementContainer*>(element);
+				if (container)
+					container->setResizeEnabled(false);
+			}
 		}
+	} else {
+		auto* container = dynamic_cast<WorksheetElementContainer*>(aspect);
+		if (container)
+			container->setResizeEnabled(false);
 	}
 }
 
 /*!
- * helper function:  checks whether \c aspect or one of its children has the \c GraphicsItem \c item
+ * helper function: checks whether \c aspect or one of its children has the \c GraphicsItem \c item
  * Returns a pointer to \c WorksheetElement having this item.
  */
 WorksheetElement* Worksheet::aspectFromGraphicsItem(const WorksheetElement* parent, const QGraphicsItem* item) const {
@@ -504,42 +563,51 @@ CartesianPlot* Worksheet::plot(int index) {
 }
 
 TreeModel* Worksheet::cursorModel() {
+	Q_D(const Worksheet);
 	return d->cursorData;
 }
 
 void Worksheet::update() {
 	Q_EMIT requestUpdate();
+	Q_EMIT changed();
 }
 
 void Worksheet::setSuppressLayoutUpdate(bool value) {
+	Q_D(Worksheet);
 	d->suppressLayoutUpdate = value;
 }
 
 void Worksheet::updateLayout() {
+	Q_D(Worksheet);
 	d->updateLayout();
 }
 
-Worksheet::CartesianPlotActionMode Worksheet::cartesianPlotActionMode() {
+Worksheet::CartesianPlotActionMode Worksheet::cartesianPlotActionMode() const {
+	Q_D(const Worksheet);
 	return d->cartesianPlotActionMode;
 }
 
-Worksheet::CartesianPlotActionMode Worksheet::cartesianPlotCursorMode() {
+Worksheet::CartesianPlotActionMode Worksheet::cartesianPlotCursorMode() const {
+	Q_D(const Worksheet);
 	return d->cartesianPlotCursorMode;
 }
 
-bool Worksheet::plotsLocked() {
-	return d->plotsLocked;
+bool Worksheet::plotsInteractive() const {
+	Q_D(const Worksheet);
+	return d->plotsInteractive;
 }
 
 void Worksheet::setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode mode) {
+	Q_D(Worksheet);
 	if (d->cartesianPlotActionMode == mode)
 		return;
 
 	d->cartesianPlotActionMode = mode;
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Worksheet::setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mode) {
+	Q_D(Worksheet);
 	if (d->cartesianPlotCursorMode == mode)
 		return;
 
@@ -558,7 +626,7 @@ void Worksheet::setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mo
 		d->suppressCursorPosChanged = false;
 	}
 	updateCompleteCursorTreeModel();
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Worksheet::setInteractive(bool value) {
@@ -567,16 +635,17 @@ void Worksheet::setInteractive(bool value) {
 	m_view->setInteractive(value);
 }
 
-void Worksheet::setPlotsLocked(bool lock) {
-	if (d->plotsLocked == lock)
+void Worksheet::setPlotsInteractive(bool interactive) {
+	Q_D(Worksheet);
+	if (d->plotsInteractive == interactive)
 		return;
 
-	d->plotsLocked = lock;
+	d->plotsInteractive = interactive;
 
 	for (auto* plot : children<CartesianPlot>())
-		plot->setLocked(lock);
+		plot->setInteractive(interactive);
 
-	project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void Worksheet::registerShortcuts() {
@@ -603,6 +672,7 @@ BASIC_D_READER_IMPL(Worksheet, Worksheet::ZoomFit, zoomFit, zoomFit)
 
 // background
 Background* Worksheet::background() const {
+	Q_D(const Worksheet);
 	return d->background;
 }
 
@@ -622,16 +692,19 @@ BASIC_D_READER_IMPL(Worksheet, QString, theme, theme)
 /* ============================ setter methods and undo commands for general options  ===================== */
 STD_SETTER_CMD_IMPL_S(Worksheet, SetUseViewSize, bool, useViewSize)
 void Worksheet::setUseViewSize(bool useViewSize) {
+	Q_D(Worksheet);
 	if (useViewSize != d->useViewSize)
 		exec(new WorksheetSetUseViewSizeCmd(d, useViewSize, ki18n("%1: change size type")));
 }
 
 void Worksheet::setZoomFit(ZoomFit zoomFit) {
+	Q_D(Worksheet);
 	d->zoomFit = zoomFit; // No need to undo
 }
 
 STD_SETTER_CMD_IMPL_S(Worksheet, SetScaleContent, bool, scaleContent)
 void Worksheet::setScaleContent(bool scaleContent) {
+	Q_D(Worksheet);
 	if (scaleContent != d->scaleContent)
 		exec(new WorksheetSetScaleContentCmd(d, scaleContent, ki18n("%1: change \"rescale the content\" property")));
 }
@@ -639,6 +712,7 @@ void Worksheet::setScaleContent(bool scaleContent) {
 /* ============================ setter methods and undo commands  for layout options  ================= */
 STD_SETTER_CMD_IMPL_F_S(Worksheet, SetLayout, Worksheet::Layout, layout, updateLayout)
 void Worksheet::setLayout(Worksheet::Layout layout) {
+	Q_D(Worksheet);
 	if (layout != d->layout) {
 		beginMacro(i18n("%1: set layout", name()));
 		exec(new WorksheetSetLayoutCmd(d, layout, ki18n("%1: set layout")));
@@ -648,6 +722,7 @@ void Worksheet::setLayout(Worksheet::Layout layout) {
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutTopMargin, double, layoutTopMargin, updateLayout)
 void Worksheet::setLayoutTopMargin(double margin) {
+	Q_D(Worksheet);
 	if (margin != d->layoutTopMargin) {
 		beginMacro(i18n("%1: set layout top margin", name()));
 		exec(new WorksheetSetLayoutTopMarginCmd(d, margin, ki18n("%1: set layout top margin")));
@@ -657,6 +732,7 @@ void Worksheet::setLayoutTopMargin(double margin) {
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutBottomMargin, double, layoutBottomMargin, updateLayout)
 void Worksheet::setLayoutBottomMargin(double margin) {
+	Q_D(Worksheet);
 	if (margin != d->layoutBottomMargin) {
 		beginMacro(i18n("%1: set layout bottom margin", name()));
 		exec(new WorksheetSetLayoutBottomMarginCmd(d, margin, ki18n("%1: set layout bottom margin")));
@@ -666,6 +742,7 @@ void Worksheet::setLayoutBottomMargin(double margin) {
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutLeftMargin, double, layoutLeftMargin, updateLayout)
 void Worksheet::setLayoutLeftMargin(double margin) {
+	Q_D(Worksheet);
 	if (margin != d->layoutLeftMargin) {
 		beginMacro(i18n("%1: set layout left margin", name()));
 		exec(new WorksheetSetLayoutLeftMarginCmd(d, margin, ki18n("%1: set layout left margin")));
@@ -675,6 +752,7 @@ void Worksheet::setLayoutLeftMargin(double margin) {
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutRightMargin, double, layoutRightMargin, updateLayout)
 void Worksheet::setLayoutRightMargin(double margin) {
+	Q_D(Worksheet);
 	if (margin != d->layoutRightMargin) {
 		beginMacro(i18n("%1: set layout right margin", name()));
 		exec(new WorksheetSetLayoutRightMarginCmd(d, margin, ki18n("%1: set layout right margin")));
@@ -684,6 +762,7 @@ void Worksheet::setLayoutRightMargin(double margin) {
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutVerticalSpacing, double, layoutVerticalSpacing, updateLayout)
 void Worksheet::setLayoutVerticalSpacing(double spacing) {
+	Q_D(Worksheet);
 	if (spacing != d->layoutVerticalSpacing) {
 		beginMacro(i18n("%1: set layout vertical spacing", name()));
 		exec(new WorksheetSetLayoutVerticalSpacingCmd(d, spacing, ki18n("%1: set layout vertical spacing")));
@@ -693,6 +772,7 @@ void Worksheet::setLayoutVerticalSpacing(double spacing) {
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutHorizontalSpacing, double, layoutHorizontalSpacing, updateLayout)
 void Worksheet::setLayoutHorizontalSpacing(double spacing) {
+	Q_D(Worksheet);
 	if (spacing != d->layoutHorizontalSpacing) {
 		beginMacro(i18n("%1: set layout horizontal spacing", name()));
 		exec(new WorksheetSetLayoutHorizontalSpacingCmd(d, spacing, ki18n("%1: set layout horizontal spacing")));
@@ -702,6 +782,7 @@ void Worksheet::setLayoutHorizontalSpacing(double spacing) {
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutRowCount, int, layoutRowCount, updateLayout)
 void Worksheet::setLayoutRowCount(int count) {
+	Q_D(Worksheet);
 	if (count != d->layoutRowCount) {
 		beginMacro(i18n("%1: set layout row count", name()));
 		exec(new WorksheetSetLayoutRowCountCmd(d, count, ki18n("%1: set layout row count")));
@@ -711,6 +792,7 @@ void Worksheet::setLayoutRowCount(int count) {
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutColumnCount, int, layoutColumnCount, updateLayout)
 void Worksheet::setLayoutColumnCount(int count) {
+	Q_D(Worksheet);
 	if (count != d->layoutColumnCount) {
 		beginMacro(i18n("%1: set layout column count", name()));
 		exec(new WorksheetSetLayoutColumnCountCmd(d, count, ki18n("%1: set layout column count")));
@@ -734,6 +816,7 @@ public:
 };
 
 void Worksheet::setPageRect(const QRectF& rect) {
+	Q_D(Worksheet);
 	// don't allow any rectangulars of width/height equal to zero
 	if (qFuzzyCompare(rect.width(), 0.) || qFuzzyCompare(rect.height(), 0.)) {
 		Q_EMIT pageRectChanged(d->pageRect);
@@ -757,10 +840,16 @@ void Worksheet::setPrinting(bool on) const {
 	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* elem : elements)
 		elem->setPrinting(on);
+
+	// disable the line optimization in XYCurve to get a better result, re-enable it after printing
+	const auto& curves = children<XYCurve>((AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden));
+	for (auto* child : curves)
+		child->enableLineOptimization(!on);
 }
 
 STD_SETTER_CMD_IMPL_S(Worksheet, SetTheme, QString, theme)
 void Worksheet::setTheme(const QString& theme) {
+	Q_D(Worksheet);
 	QString info;
 	if (!theme.isEmpty())
 		info = i18n("%1: load theme %2", name(), theme);
@@ -954,34 +1043,34 @@ void Worksheet::cartesianPlotAxisShift(int delta, Dimension dim, int index) {
 	}
 }
 
-void Worksheet::cartesianPlotWheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+void Worksheet::cartesianPlotWheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
 	const auto& plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 	const auto cursorMode = cartesianPlotActionMode();
 	if (considerDimension) {
 		if ((dim == Dimension::X && (cursorMode == CartesianPlotActionMode::ApplyActionToAllX || cursorMode == CartesianPlotActionMode::ApplyActionToAll))
 			|| (dim == Dimension::Y && (cursorMode == CartesianPlotActionMode::ApplyActionToAllY || cursorMode == CartesianPlotActionMode::ApplyActionToAll))) {
 			for (auto* plot : plots)
-				plot->wheelEvent(delta, -1, -1, considerDimension, dim);
+				plot->wheelEvent(sceneRelPos, delta, -1, -1, considerDimension, dim);
 		} else {
 			auto* plot = static_cast<CartesianPlot*>(QObject::sender());
-			plot->wheelEvent(delta, xIndex, yIndex, considerDimension, dim);
+			plot->wheelEvent(sceneRelPos, delta, xIndex, yIndex, considerDimension, dim);
 		}
 
 	} else {
 		switch (cursorMode) {
 		case CartesianPlotActionMode::ApplyActionToAll: {
 			for (auto* plot : plots)
-				plot->wheelEvent(delta, -1, -1, considerDimension, dim);
+				plot->wheelEvent(sceneRelPos, delta, -1, -1, considerDimension, dim);
 			break;
 		}
 		case CartesianPlotActionMode::ApplyActionToAllX: {
 			auto* plot = static_cast<CartesianPlot*>(QObject::sender());
-			plot->wheelEvent(delta, -1, yIndex, considerDimension, dim);
+			plot->wheelEvent(sceneRelPos, delta, -1, yIndex, considerDimension, dim);
 			for (auto* p : plots) {
 				if (p != plot) {
 					// The yIndex must not be available in the other plots
 					// yIndex does not matter, because considerDimension is true
-					p->wheelEvent(delta, -1, -1, true, Dimension::X);
+					p->wheelEvent(sceneRelPos, delta, -1, -1, true, Dimension::X);
 				}
 			}
 			break;
@@ -989,19 +1078,19 @@ void Worksheet::cartesianPlotWheelEvent(int delta, int xIndex, int yIndex, bool 
 		case CartesianPlotActionMode::ApplyActionToAllY: {
 			auto* plot = static_cast<CartesianPlot*>(QObject::sender());
 			// wheelEvent on all y in that plot
-			plot->wheelEvent(delta, xIndex, -1, considerDimension, dim);
+			plot->wheelEvent(sceneRelPos, delta, xIndex, -1, considerDimension, dim);
 			for (auto* p : plots) {
 				if (p != plot) {
 					// The xIndex must not be available in the other plots
 					// xIndex does not matter, because considerDimension is true
-					p->wheelEvent(delta, -1, -1, true, Dimension::Y);
+					p->wheelEvent(sceneRelPos, delta, -1, -1, true, Dimension::Y);
 				}
 			}
 			break;
 		}
 		case CartesianPlotActionMode::ApplyActionToSelection: {
 			auto* plot = static_cast<CartesianPlot*>(QObject::sender());
-			plot->wheelEvent(delta, xIndex, yIndex, considerDimension, dim);
+			plot->wheelEvent(sceneRelPos, delta, xIndex, yIndex, considerDimension, dim);
 			break;
 		}
 		}
@@ -1084,6 +1173,7 @@ QString dateTimeDiffToString(const QDateTime& dt0, const QDateTime& dt1) {
  * the children() function. It's not checked if the names are the same
  */
 void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
+	Q_D(const Worksheet);
 	if (d->suppressCursorPosChanged)
 		return;
 
@@ -1091,14 +1181,13 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 	if (!sender)
 		return;
 
-	TreeModel* treeModel = cursorModel();
+	auto* treeModel = cursorModel();
 
 	// if ApplyActionToSelection, each plot has it's own x value
 	bool isDatetime = sender->xRangeFormatDefault() == RangeT::Format::DateTime;
 	if (cartesianPlotCursorMode() == CartesianPlotActionMode::ApplyActionToAll) {
 		// x values
-		int rowPlot = 1;
-		QModelIndex xName = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME));
+		auto xName = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME));
 		treeModel->setData(xName, QVariant(QStringLiteral("X")));
 		double valueCursor[2];
 		QDateTime datetime[2];
@@ -1106,7 +1195,7 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 			QVariant data;
 			valueCursor[i] = sender->cursorPos(i);
 			if (isDatetime) {
-				datetime[i] = QDateTime::fromMSecsSinceEpoch(valueCursor[i], Qt::UTC);
+				datetime[i] = QDateTime::fromMSecsSinceEpoch(valueCursor[i], QTimeZone::UTC);
 				data = datetime[i].toString(sender->rangeDateTimeFormat(Dimension::X));
 			} else
 				data = QVariant(valueCursor[i]);
@@ -1118,89 +1207,99 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 			treeModel->setTreeData(QVariant(valueCursor[1] - valueCursor[0]), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF));
 
 		// y values
-		for (int i = 0; i < plotCount(); i++) { // i=0 is the x Axis
-
-			auto* p = plot(i);
-			if (!p || !p->isVisible())
-				continue;
-
-			QModelIndex plotIndex = treeModel->index(rowPlot, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME));
-
-			// curves
-			int rowCurve = 0;
-			for (int j = 0; j < p->curveCount(); j++) {
-				// assumption: index of signals in model is the same than the index of the signal in the plot
-				bool valueFound;
-
-				const XYCurve* curve = p->getCurve(j);
-				if (!curve->isVisible())
+		const auto& plots = children<CartesianPlot>();
+		const auto plotCount = treeModel->rowCount();
+		for (int plotRow = 0; plotRow < plotCount; plotRow++) {
+			const auto& plotModelIndex = treeModel->index(plotRow + 1, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME));
+			const auto& searchingPlotUuid = treeModel->data(plotModelIndex, CURSOR_UUID_EDIT_ROLE);
+			for (const auto* plot : plots) {
+				if (plot->uuid() != searchingPlotUuid)
 					continue;
 
-				double value = curve->y(xPos, valueFound);
-				if (cursorNumber == 0) {
-					treeModel->setTreeData(QVariant(value), rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0), plotIndex);
-					double valueCursor1 = treeModel->treeData(rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR1), plotIndex).toDouble();
-					treeModel->setTreeData(QVariant(valueCursor1 - value),
-										   rowCurve,
-										   static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF),
-										   plotIndex);
-				} else {
-					treeModel->setTreeData(QVariant(value), rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR1), plotIndex);
-					double valueCursor0 = treeModel->treeData(rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0), plotIndex).toDouble();
-					treeModel->setTreeData(QVariant(value - valueCursor0),
-										   rowCurve,
-										   static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF),
-										   plotIndex);
+				const auto& curves = plot->children<XYCurve>();
+				const auto numCurves = treeModel->rowCount(plotModelIndex);
+				for (int curveRow = 0; curveRow < numCurves; curveRow++) {
+					const auto& curveModelIndex = treeModel->index(curveRow, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotModelIndex);
+					const auto& searchingCurveUuid = treeModel->data(curveModelIndex, CURSOR_UUID_EDIT_ROLE);
+					for (const auto* curve : curves) {
+						if (curve->uuid() != searchingCurveUuid)
+							continue;
+
+						bool valueFound = true;
+						double value = curve->y(xPos, valueFound);
+						if (cursorNumber == 0) {
+							treeModel->setTreeData(QVariant(value), curveRow, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0), plotModelIndex);
+							double valueCursor1 =
+								treeModel->treeData(curveRow, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR1), plotModelIndex).toDouble();
+							treeModel->setTreeData(QVariant(valueCursor1 - value),
+												   curveRow,
+												   static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF),
+												   plotModelIndex);
+						} else {
+							treeModel->setTreeData(QVariant(value), curveRow, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR1), plotModelIndex);
+							double valueCursor0 =
+								treeModel->treeData(curveRow, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0), plotModelIndex).toDouble();
+							treeModel->setTreeData(QVariant(value - valueCursor0),
+												   curveRow,
+												   static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF),
+												   plotModelIndex);
+						}
+						break;
+					}
 				}
-				rowCurve++;
+				break;
 			}
-			rowPlot++;
 		}
 	} else { // apply to selection
 		// assumption: plot is visible
 		int rowCount = treeModel->rowCount();
 		for (int i = 0; i < rowCount; i++) {
-			QModelIndex plotIndex = treeModel->index(i, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME));
-			if (plotIndex.data().toString().compare(sender->name()) != 0)
+			auto plotModelIndex = treeModel->index(i, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME));
+			if (plotModelIndex.data(CURSOR_UUID_EDIT_ROLE) != sender->uuid())
 				continue;
 
 			// x values (first row always exist)
-			treeModel->setTreeData(QVariant(QStringLiteral("X")), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotIndex);
+			treeModel->setTreeData(QVariant(QStringLiteral("X")), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotModelIndex);
 			double valueCursor[2];
 			for (int i = 0; i < 2; i++) { // need both cursors to calculate diff
 				valueCursor[i] = sender->cursorPos(i);
-				treeModel->setTreeData(QVariant(valueCursor[i]), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0) + i, plotIndex);
+				treeModel->setTreeData(QVariant(valueCursor[i]), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0) + i, plotModelIndex);
 			}
-			treeModel->setTreeData(QVariant(valueCursor[1] - valueCursor[0]), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), plotIndex);
+			treeModel->setTreeData(QVariant(valueCursor[1] - valueCursor[0]),
+								   0,
+								   static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF),
+								   plotModelIndex);
 
 			// y values
-			int rowCurve = 1; // first is x value
-			for (int j = 0; j < sender->curveCount(); j++) { // j=0 are the x values
+			const auto numCurves = treeModel->rowCount(plotModelIndex);
+			const auto& curves = sender->children<XYCurve>();
+			for (int rowCurve = 1; rowCurve < numCurves; rowCurve++) { // First is the x value
+				const auto& curveModelIndex = treeModel->index(rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotModelIndex);
+				const auto& searchingCurveUuid = treeModel->data(curveModelIndex, CURSOR_UUID_EDIT_ROLE);
+				for (const auto* curve : curves) {
+					if (curve->uuid() != searchingCurveUuid)
+						continue;
 
-				const XYCurve* curve = sender->getCurve(j); // -1 because we start with 1 for the x axis
-				if (!curve->isVisible())
-					continue;
-
-				// assumption: index of signals in model is the same than the index of the signal in the plot
-				bool valueFound;
-
-				double value = curve->y(xPos, valueFound);
-				if (cursorNumber == 0) {
-					treeModel->setTreeData(QVariant(value), rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0), plotIndex);
-					double valueCursor1 = treeModel->treeData(rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR1), plotIndex).toDouble();
-					treeModel->setTreeData(QVariant(valueCursor1 - value),
-										   rowCurve,
-										   static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF),
-										   plotIndex);
-				} else {
-					treeModel->setTreeData(QVariant(value), rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR1), plotIndex);
-					double valueCursor0 = treeModel->treeData(rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0), plotIndex).toDouble();
-					treeModel->setTreeData(QVariant(value - valueCursor0),
-										   rowCurve,
-										   static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF),
-										   plotIndex);
+					bool valueFound = true;
+					double value = curve->y(xPos, valueFound);
+					if (cursorNumber == 0) {
+						treeModel->setTreeData(QVariant(value), rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0), plotModelIndex);
+						double valueCursor1 =
+							treeModel->treeData(rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR1), plotModelIndex).toDouble();
+						treeModel->setTreeData(QVariant(valueCursor1 - value),
+											   rowCurve,
+											   static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF),
+											   plotModelIndex);
+					} else {
+						treeModel->setTreeData(QVariant(value), rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR1), plotModelIndex);
+						double valueCursor0 =
+							treeModel->treeData(rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0), plotModelIndex).toDouble();
+						treeModel->setTreeData(QVariant(value - valueCursor0),
+											   rowCurve,
+											   static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF),
+											   plotModelIndex);
+					}
 				}
-				rowCurve++;
 			}
 		}
 	}
@@ -1231,6 +1330,7 @@ void Worksheet::cursorModelPlotRemoved(const QString& name) {
 }
 
 void Worksheet::cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode mode) {
+	Q_D(Worksheet);
 	if (d->updateCompleteCursorModel) {
 		updateCompleteCursorTreeModel();
 		d->updateCompleteCursorModel = false;
@@ -1244,99 +1344,31 @@ void Worksheet::curveDataChanged(const XYCurve* curve) {
 	if (!plot || !curve)
 		return;
 
-	TreeModel* treeModel = cursorModel();
+	auto* treeModel = cursorModel();
 	int rowCount = treeModel->rowCount();
 
-	for (int i = 0; i < rowCount; i++) {
-		QModelIndex plotIndex = treeModel->index(i, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME));
-		if (plotIndex.data().toString().compare(plot->name()) != 0)
+	for (int row = 0; row < rowCount; row++) {
+		auto plotModelIndex = treeModel->index(row, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME));
+		if (plotModelIndex.data(CURSOR_UUID_EDIT_ROLE) != plot->uuid())
 			continue;
 
-		for (int j = 0; j < plot->curveCount(); j++) {
-			if (plot->getCurve(j)->name().compare(curve->name()) != 0)
+		const auto curveCount = treeModel->rowCount(plotModelIndex);
+		for (int curveRow = 0; curveRow < curveCount; curveRow++) {
+			const auto& curveModelIndex = treeModel->index(curveRow, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotModelIndex);
+			if (curveModelIndex.data(CURSOR_UUID_EDIT_ROLE) != curve->uuid())
 				continue;
 
-			treeModel->setTreeData(QVariant(curve->name()), j, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotIndex);
+			treeModel->setTreeData(QVariant(curve->name()), curveRow, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotModelIndex);
 
 			bool valueFound;
 			double valueCursor0 = curve->y(plot->cursorPos(0), valueFound);
-			treeModel->setTreeData(QVariant(valueCursor0), j, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0), plotIndex);
-
+			treeModel->setTreeData(QVariant(valueCursor0), curveRow, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0), plotModelIndex);
 			double valueCursor1 = curve->y(plot->cursorPos(1), valueFound);
-			treeModel->setTreeData(QVariant(valueCursor1), j, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR1), plotIndex);
-
-			treeModel->setTreeData(QVariant(valueCursor1 - valueCursor0), j, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), plotIndex);
-			break;
-		}
-		break;
-	}
-}
-
-void Worksheet::curveAdded(const XYCurve* curve) {
-	auto* plot = dynamic_cast<CartesianPlot*>(QObject::sender());
-	if (!plot)
-		return;
-
-	TreeModel* treeModel = cursorModel();
-	int rowCount = treeModel->rowCount();
-
-	int i = 0;
-	// first row is the x axis when applied to all plots. Starting at the second row
-	if (cartesianPlotCursorMode() == CartesianPlotActionMode::ApplyActionToAll)
-		i = 1;
-
-	for (; i < rowCount; i++) {
-		QModelIndex plotIndex = treeModel->index(i, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME));
-		if (plotIndex.data().toString().compare(plot->name()) != 0)
-			continue;
-		int row = 0;
-		for (int j = 0; j < plot->curveCount(); j++) {
-			if (plot->getCurve(j)->name().compare(curve->name()) != 0) {
-				if (plot->getCurve(j)->isVisible())
-					row++;
-				continue;
-			}
-
-			treeModel->insertRow(row, plotIndex);
-
-			treeModel->setTreeData(QVariant(curve->name()), row, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotIndex);
-			QColor curveColor = curve->line()->pen().color();
-			curveColor.setAlpha(50);
-			treeModel->setTreeData(QVariant(curveColor), row, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotIndex, Qt::BackgroundRole);
-			bool valueFound;
-			double valueCursor0 = curve->y(plot->cursorPos(0), valueFound);
-			treeModel->setTreeData(QVariant(valueCursor0), row, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0), plotIndex);
-
-			double valueCursor1 = curve->y(plot->cursorPos(1), valueFound);
-			treeModel->setTreeData(QVariant(valueCursor1), row, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR1), plotIndex);
-
-			treeModel->setTreeData(QVariant(valueCursor1 - valueCursor0), row, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), plotIndex);
-			break;
-		}
-		break;
-	}
-}
-
-void Worksheet::curveRemoved(const XYCurve* curve) {
-	auto* plot = dynamic_cast<CartesianPlot*>(QObject::sender());
-	if (!plot)
-		return;
-
-	TreeModel* treeModel = cursorModel();
-	int rowCount = treeModel->rowCount();
-
-	for (int i = 0; i < rowCount; i++) {
-		QModelIndex plotIndex = treeModel->index(i, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME));
-		if (plotIndex.data().toString().compare(plot->name()) != 0)
-			continue;
-
-		int curveCount = treeModel->rowCount(plotIndex);
-		for (int j = 0; j < curveCount; j++) {
-			QModelIndex curveIndex = treeModel->index(j, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotIndex);
-
-			if (curveIndex.data().toString().compare(curve->name()) != 0)
-				continue;
-			treeModel->removeRow(j, plotIndex);
+			treeModel->setTreeData(QVariant(valueCursor1), curveRow, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR1), plotModelIndex);
+			treeModel->setTreeData(QVariant(valueCursor1 - valueCursor0),
+								   curveRow,
+								   static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF),
+								   plotModelIndex);
 			break;
 		}
 		break;
@@ -1344,11 +1376,12 @@ void Worksheet::curveRemoved(const XYCurve* curve) {
 }
 
 /*!
- * Updates the background of the cuves entry in the treeview
+ * Updates the background of the curves entry in the treeview
  * @param pen Pen of the curve
  * @param curveName Curve name to find in treemodel
  */
-void Worksheet::updateCurveBackground(const QPen& pen, const QString& curveName) {
+void Worksheet::updateCurveBackground(QColor color, const QString& curveName) {
+	Q_D(const Worksheet);
 	const auto* plot = static_cast<const CartesianPlot*>(QObject::sender());
 	auto* treeModel = cursorModel();
 	int rowCount = treeModel->rowCount();
@@ -1365,9 +1398,8 @@ void Worksheet::updateCurveBackground(const QPen& pen, const QString& curveName)
 			if (curveIndex.data().toString().compare(curveName) != 0)
 				continue;
 
-			QColor curveColor = pen.color();
-			curveColor.setAlpha(50);
-			treeModel->setTreeData(QVariant(curveColor), j, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotIndex, Qt::BackgroundRole);
+			color.setAlpha(d->cursorTreeModelCurveBackgroundAlpha);
+			treeModel->setTreeData(QVariant(color), j, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotIndex, Qt::BackgroundRole);
 			return;
 		}
 		return;
@@ -1379,6 +1411,7 @@ void Worksheet::updateCurveBackground(const QPen& pen, const QString& curveName)
  * If the plot or the curve are not available, the plot/curve is not in the treemodel!
  */
 void Worksheet::updateCompleteCursorTreeModel() {
+	Q_D(const Worksheet);
 	if (isLoading())
 		return;
 
@@ -1415,44 +1448,46 @@ void Worksheet::updateCompleteCursorTreeModel() {
 	}
 
 	// set plot name, y value, background
-	for (int i = 0; i < pc; i++) {
-		auto* p = plot(i);
-		QModelIndex plotName;
+	int plotIndex = 0;
+	for (const auto* p : children<CartesianPlot>()) {
+		QModelIndex plotNameModelIndex;
 		int addOne = 0;
 
 		if (!p || !p->isVisible())
 			continue;
 
 		// add new entry for the plot
-		treeModel->insertRows(treeModel->rowCount(), 1); //, treeModel->index(0, 0));
+		treeModel->insertRows(treeModel->rowCount(), 1);
 
 		// add plot name and X row if needed
 		if (cartesianPlotCursorMode() == CartesianPlotActionMode::ApplyActionToAll) {
-			plotName = treeModel->index(i + 1, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME)); // plus one because first row are the x values
-			treeModel->setData(plotName, QVariant(p->name()));
+			plotNameModelIndex =
+				treeModel->index(plotIndex + 1, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME)); // plus one because first row are the x values
+			treeModel->setData(plotNameModelIndex, QVariant(p->name()));
+			treeModel->setData(plotNameModelIndex, QVariant(p->uuid()), CURSOR_UUID_EDIT_ROLE);
 		} else {
 			addOne = 1;
-			plotName = treeModel->index(i, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME));
-			treeModel->setData(plotName, QVariant(p->name()));
-			treeModel->insertRows(0, 1, plotName); // one, because the first row are the x values
+			plotNameModelIndex = treeModel->index(plotIndex, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME));
+			treeModel->setData(plotNameModelIndex, QVariant(p->name()));
+			treeModel->setData(plotNameModelIndex, QVariant(p->uuid()), CURSOR_UUID_EDIT_ROLE);
+			treeModel->insertRows(0, 1, plotNameModelIndex); // one, because the first row are the x values
 
-			QModelIndex xName = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotName);
+			QModelIndex xName = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotNameModelIndex);
 			treeModel->setData(xName, QVariant(QStringLiteral("X")));
 			double valueCursor[2];
-			for (int i = 0; i < 2; i++) {
-				valueCursor[i] = p->cursorPos(i);
-				QModelIndex cursor = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0) + i, plotName);
+			for (int cursorPos = 0; cursorPos < 2; cursorPos++) {
+				valueCursor[cursorPos] = p->cursorPos(cursorPos);
+				QModelIndex cursor = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0) + cursorPos, plotNameModelIndex);
 
-				treeModel->setData(cursor, QVariant(valueCursor[i]));
+				treeModel->setData(cursor, QVariant(valueCursor[cursorPos]));
 			}
-			QModelIndex diff = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), plotName);
+			QModelIndex diff = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), plotNameModelIndex);
 			treeModel->setData(diff, QVariant(valueCursor[1] - valueCursor[0]));
 		}
 
 		int rowCurve = addOne;
-		for (int j = 0; j < p->curveCount(); j++) {
+		for (const auto* curve : p->children<XYCurve>()) {
 			double cursorValue[2] = {NAN, NAN};
-			const XYCurve* curve = p->getCurve(j);
 
 			if (!curve->isVisible())
 				continue;
@@ -1462,19 +1497,25 @@ void Worksheet::updateCompleteCursorTreeModel() {
 				bool valueFound;
 				cursorValue[k] = curve->y(xPos, valueFound);
 			}
-			treeModel->insertRows(rowCurve, 1, plotName);
+			treeModel->insertRows(rowCurve, 1, plotNameModelIndex);
 			QColor curveColor = curve->line()->pen().color();
-			curveColor.setAlpha(50);
-			treeModel->setTreeData(QVariant(curveColor), rowCurve, 0, plotName, Qt::BackgroundRole);
-			treeModel->setTreeData(QVariant(curve->name()), rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotName);
-			treeModel->setTreeData(QVariant(cursorValue[0]), rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0), plotName);
-			treeModel->setTreeData(QVariant(cursorValue[1]), rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR1), plotName);
+			curveColor.setAlpha(d->cursorTreeModelCurveBackgroundAlpha);
+			treeModel->setTreeData(QVariant(curveColor), rowCurve, 0, plotNameModelIndex, Qt::BackgroundRole);
+			treeModel->setTreeData(QVariant(curve->name()), rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotNameModelIndex);
+			treeModel->setTreeData(QVariant(curve->uuid()),
+								   rowCurve,
+								   static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME),
+								   plotNameModelIndex,
+								   CURSOR_UUID_EDIT_ROLE);
+			treeModel->setTreeData(QVariant(cursorValue[0]), rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0), plotNameModelIndex);
+			treeModel->setTreeData(QVariant(cursorValue[1]), rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR1), plotNameModelIndex);
 			treeModel->setTreeData(QVariant(cursorValue[1] - cursorValue[0]),
 								   rowCurve,
 								   static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF),
-								   plotName);
+								   plotNameModelIndex);
 			rowCurve++;
 		}
+		plotIndex++;
 	}
 }
 
@@ -1532,6 +1573,7 @@ void WorksheetPrivate::update() {
 
 WorksheetPrivate::~WorksheetPrivate() {
 	delete m_scene;
+	delete cursorData;
 }
 
 void WorksheetPrivate::updateLayout(bool undoable) {
@@ -1615,6 +1657,8 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 			}
 		}
 	}
+
+	Q_EMIT q->changed();
 }
 
 void WorksheetPrivate::setContainerRect(WorksheetElementContainer* elem, double x, double y, double h, double w, bool undoable) {
@@ -1642,6 +1686,7 @@ void WorksheetPrivate::setContainerRect(WorksheetElementContainer* elem, double 
 
 //! Save as XML
 void Worksheet::save(QXmlStreamWriter* writer) const {
+	Q_D(const Worksheet);
 	writer->writeStartElement(QStringLiteral("worksheet"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
@@ -1682,7 +1727,7 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 
 	// cartesian properties
 	writer->writeStartElement(QStringLiteral("plotProperties"));
-	writer->writeAttribute(QStringLiteral("plotsLocked"), QString::number(d->plotsLocked));
+	writer->writeAttribute(QStringLiteral("plotInteractive"), QString::number(d->plotsInteractive));
 	writer->writeAttribute(QStringLiteral("cartesianPlotActionMode"), QString::number(static_cast<int>(d->cartesianPlotActionMode)));
 	writer->writeAttribute(QStringLiteral("cartesianPlotCursorMode"), QString::number(static_cast<int>(d->cartesianPlotCursorMode)));
 	writer->writeEndElement();
@@ -1699,10 +1744,11 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
+	Q_D(Worksheet);
+
 	// clear the theme that was potentially set in init() in order to correctly load here the worksheets without any theme used
 	d->theme.clear();
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -1725,25 +1771,25 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("x")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("x"));
 			else
 				d->pageRect.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("y")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("y")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("y"));
 			else
 				d->pageRect.setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("width")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("width"));
 			else
 				d->pageRect.setWidth(str.toDouble());
 
 			str = attribs.value(QStringLiteral("height")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("height")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("height"));
 			else
 				d->pageRect.setHeight(str.toDouble());
 
@@ -1766,11 +1812,20 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 		else if (!preview && reader->name() == QLatin1String("plotProperties")) {
 			attribs = reader->attributes();
 
-			READ_INT_VALUE("plotsLocked", plotsLocked, bool);
+			str = attribs.value(QStringLiteral("plotInteractive")).toString();
+			if (str.isEmpty()) {
+				str = attribs.value(QStringLiteral("plotLocked")).toString();
+				if (str.isEmpty())
+					reader->raiseMissingAttributeWarning(QStringLiteral("plotLocked"));
+				else
+					d->plotsInteractive = !static_cast<bool>(str.toInt());
+			} else
+				d->plotsInteractive = static_cast<bool>(str.toInt());
+
 			READ_INT_VALUE("cartesianPlotActionMode", cartesianPlotActionMode, Worksheet::CartesianPlotActionMode);
 			READ_INT_VALUE("cartesianPlotCursorMode", cartesianPlotCursorMode, Worksheet::CartesianPlotActionMode);
 		} else if (reader->name() == QLatin1String("cartesianPlot")) {
-			auto* plot = new CartesianPlot(QString());
+			auto* plot = new CartesianPlot(QString(), true);
 			plot->setIsLoading(true);
 			if (!plot->load(reader, preview)) {
 				delete plot;
@@ -1794,8 +1849,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			} else
 				addChildFast(image);
 		} else { // unknown element
-			if (!preview)
-				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}
@@ -1814,6 +1868,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 // #########################  Theme management ##################################
 // ##############################################################################
 void Worksheet::loadTheme(const QString& theme) {
+	Q_D(Worksheet);
 	KConfigGroup group;
 	KConfig* config = nullptr;
 	if (!theme.isEmpty()) {
@@ -1821,7 +1876,7 @@ void Worksheet::loadTheme(const QString& theme) {
 		config = new KConfig(ThemeHandler::themeFilePath(theme), KConfig::SimpleConfig);
 
 		// apply the same background color for Worksheet as for the CartesianPlot
-		group = config->group("CartesianPlot");
+		group = config->group(QStringLiteral("CartesianPlot"));
 
 		// load the theme for all the children
 		const auto& children = this->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
@@ -1830,7 +1885,7 @@ void Worksheet::loadTheme(const QString& theme) {
 	} else {
 		// load default values
 		config = new KConfig();
-		group = config->group("Worksheet");
+		group = config->group(QStringLiteral("Worksheet"));
 	}
 
 	// load background properties
@@ -1842,4 +1897,6 @@ void Worksheet::loadTheme(const QString& theme) {
 		child->loadThemeConfig(*config);
 
 	delete config;
+
+	Q_EMIT changed();
 }

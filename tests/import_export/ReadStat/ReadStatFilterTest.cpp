@@ -3,11 +3,12 @@
 	Project              : LabPlot
 	Description          : Tests for the ReadStat I/O-filter.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2021-2023 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ReadStatFilterTest.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/filters/ReadStatFilter.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"

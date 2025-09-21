@@ -18,13 +18,11 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/Symbol.h"
-#include "commonfrontend/datapicker/DatapickerImageView.h"
-#include "kdefrontend/worksheet/ExportWorksheetDialog.h"
+#include "frontend/GuiTools.h"
+#include "frontend/datapicker/DatapickerImageView.h"
+#include "frontend/worksheet/ExportWorksheetDialog.h"
 
 #include <QBuffer>
-#include <QDesktopWidget>
 #include <QDir>
 #include <QFileInfo>
 #include <QGraphicsScene>
@@ -32,10 +30,16 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
+#include <QScreen>
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocalizedString>
+
+void DatapickerImage::ReferencePoints::clearPoints() {
+	scenePos[0] = QPointF(std::nan("0"), std::nan("0"));
+	scenePos[1] = QPointF(std::nan("0"), std::nan("0"));
+	scenePos[2] = QPointF(std::nan("0"), std::nan("0"));
+}
 
 /**
  * \class DatapickerImage
@@ -52,8 +56,11 @@ DatapickerImage::DatapickerImage(const QString& name, bool loading)
 	, saturationBins(new int[ImageEditor::colorAttributeMax(ColorAttributes::Saturation) + 1])
 	, valueBins(new int[ImageEditor::colorAttributeMax(ColorAttributes::Value) + 1])
 	, intensityBins(new int[ImageEditor::colorAttributeMax(ColorAttributes::Intensity) + 1])
-	, d(new DatapickerImagePrivate(this))
+	, d_ptr(new DatapickerImagePrivate(this))
 	, m_segments(new Segments(this)) {
+	Q_D(DatapickerImage);
+	connect(this, &AbstractAspect::childAspectAdded, this, &DatapickerImage::childAdded);
+	connect(this, &AbstractAspect::childAspectAboutToBeRemoved, this, &DatapickerImage::childRemoved);
 	if (!loading)
 		init();
 	else {
@@ -76,33 +83,34 @@ DatapickerImage::~DatapickerImage() {
 	delete[] intensityBins;
 	delete[] foregroundBins;
 	delete m_segments;
-	delete d;
+	delete d_ptr;
 }
 
 void DatapickerImage::init() {
+	Q_D(DatapickerImage);
 	KConfig config;
-	KConfigGroup group = config.group("DatapickerImage");
+	KConfigGroup group = config.group(QStringLiteral("DatapickerImage"));
 
 	// general properties
-	d->fileName = group.readEntry("FileName", QString());
-	d->rotationAngle = group.readEntry("RotationAngle", 0.0);
-	d->minSegmentLength = group.readEntry("MinSegmentLength", 30);
-	d->pointSeparation = group.readEntry("PointSeparation", 30);
-	d->axisPoints.type = static_cast<GraphType>(group.readEntry("GraphType", static_cast<int>(GraphType::Linear)));
-	d->axisPoints.ternaryScale = group.readEntry("TernaryScale", 1);
+	d->fileName = group.readEntry(QStringLiteral("FileName"), QString());
+	d->rotationAngle = group.readEntry(QStringLiteral("RotationAngle"), 0.0);
+	d->minSegmentLength = group.readEntry(QStringLiteral("MinSegmentLength"), 30);
+	d->pointSeparation = group.readEntry(QStringLiteral("PointSeparation"), 30);
+	d->axisPoints.type = static_cast<GraphType>(group.readEntry(QStringLiteral("GraphType"), static_cast<int>(GraphType::Linear)));
+	d->axisPoints.ternaryScale = group.readEntry(QStringLiteral("TernaryScale"), 1);
 
 	// edit image settings
 	d->plotImageType = DatapickerImage::PlotImageType::OriginalImage;
-	d->settings.foregroundThresholdHigh = group.readEntry("ForegroundThresholdHigh", d->settings.foregroundThresholdHigh);
-	d->settings.foregroundThresholdLow = group.readEntry("ForegroundThresholdLow", d->settings.foregroundThresholdLow);
-	d->settings.hueThresholdHigh = group.readEntry("HueThresholdHigh", d->settings.hueThresholdHigh);
-	d->settings.hueThresholdLow = group.readEntry("HueThresholdLow", d->settings.hueThresholdLow);
-	d->settings.intensityThresholdHigh = group.readEntry("IntensityThresholdHigh", d->settings.intensityThresholdHigh);
-	d->settings.intensityThresholdLow = group.readEntry("IntensityThresholdLow", d->settings.intensityThresholdLow);
-	d->settings.saturationThresholdHigh = group.readEntry("SaturationThresholdHigh", d->settings.saturationThresholdHigh);
-	d->settings.saturationThresholdLow = group.readEntry("SaturationThresholdLow", d->settings.saturationThresholdLow);
-	d->settings.valueThresholdHigh = group.readEntry("ValueThresholdHigh", d->settings.valueThresholdHigh);
-	d->settings.valueThresholdLow = group.readEntry("ValueThresholdLow", d->settings.valueThresholdLow);
+	d->settings.foregroundThresholdHigh = group.readEntry(QStringLiteral("ForegroundThresholdHigh"), d->settings.foregroundThresholdHigh);
+	d->settings.foregroundThresholdLow = group.readEntry(QStringLiteral("ForegroundThresholdLow"), d->settings.foregroundThresholdLow);
+	d->settings.hueThresholdHigh = group.readEntry(QStringLiteral("HueThresholdHigh"), d->settings.hueThresholdHigh);
+	d->settings.hueThresholdLow = group.readEntry(QStringLiteral("HueThresholdLow"), d->settings.hueThresholdLow);
+	d->settings.intensityThresholdHigh = group.readEntry(QStringLiteral("IntensityThresholdHigh"), d->settings.intensityThresholdHigh);
+	d->settings.intensityThresholdLow = group.readEntry(QStringLiteral("IntensityThresholdLow"), d->settings.intensityThresholdLow);
+	d->settings.saturationThresholdHigh = group.readEntry(QStringLiteral("SaturationThresholdHigh"), d->settings.saturationThresholdHigh);
+	d->settings.saturationThresholdLow = group.readEntry(QStringLiteral("SaturationThresholdLow"), d->settings.saturationThresholdLow);
+	d->settings.valueThresholdHigh = group.readEntry(QStringLiteral("ValueThresholdHigh"), d->settings.valueThresholdHigh);
+	d->settings.valueThresholdLow = group.readEntry(QStringLiteral("ValueThresholdLow"), d->settings.valueThresholdLow);
 
 	// reference point symbol properties
 	d->symbol = new Symbol(QString());
@@ -115,7 +123,8 @@ void DatapickerImage::init() {
 		d->retransform();
 	});
 	d->symbol->init(group);
-	d->pointVisibility = group.readEntry("PointVisibility", true);
+
+	d->pointVisibility = group.readEntry(QStringLiteral("PointVisibility"), true);
 }
 
 /*!
@@ -206,14 +215,17 @@ void DatapickerImage::setSegmentsHoverEvent(const bool on) {
 }
 
 QGraphicsScene* DatapickerImage::scene() const {
+	Q_D(const DatapickerImage);
 	return d->m_scene;
 }
 
 QRectF DatapickerImage::pageRect() const {
+	Q_D(const DatapickerImage);
 	return d->m_scene->sceneRect();
 }
 
 void DatapickerImage::setPlotImageType(const DatapickerImage::PlotImageType type) {
+	Q_D(DatapickerImage);
 	d->plotImageType = type;
 	if (d->plotImageType == DatapickerImage::PlotImageType::ProcessedImage)
 		d->discretize();
@@ -221,11 +233,12 @@ void DatapickerImage::setPlotImageType(const DatapickerImage::PlotImageType type
 	Q_EMIT requestUpdate();
 }
 
-int DatapickerImage::currentSelectedReferencePoint() {
+int DatapickerImage::currentSelectedReferencePoint() const {
 	return m_currentRefPoint;
 }
 
-DatapickerImage::PlotImageType DatapickerImage::plotImageType() {
+DatapickerImage::PlotImageType DatapickerImage::plotImageType() const {
+	Q_D(const DatapickerImage);
 	return d->plotImageType;
 }
 
@@ -300,6 +313,7 @@ void DatapickerImage::setImage(const QString& fileName, bool embedded) {
 }
 
 void DatapickerImage::setImage(const QImage& image, const QString& filename, bool embedded) {
+	Q_D(DatapickerImage);
 	if (image != originalPlotImage || filename != fileName() || embedded != this->embedded())
 		exec(new DatapickerImageSetOriginalImageCmd(d, image, filename, embedded, ki18n("%1: upload image")));
 }
@@ -317,7 +331,7 @@ BASIC_D_READER_IMPL(DatapickerImage, int, minSegmentLength, minSegmentLength)
 
 // symbols
 Symbol* DatapickerImage::symbol() const {
-	// 	Q_D(const DatapickerImage);
+	Q_D(const DatapickerImage);
 	return d->symbol;
 }
 
@@ -348,11 +362,12 @@ public:
 			// setting relative is only possible if the image is not embedded!
 			m_target->q->setImage(filename, false);
 		}
-		emit m_target->q->relativeFilePathChanged(m_target->*m_field);
+		Q_EMIT m_target->q->relativeFilePathChanged(m_target->*m_field);
 	}
 };
 
 void DatapickerImage::setRelativeFilePath(bool relative) {
+	Q_D(DatapickerImage);
 	if (relative != d->isRelativeFilePath) {
 		beginMacro(i18n("%1: upload new image", name()));
 		exec(new DatapickerImageSetRelativeFilePathCmd(d, relative, ki18n("%1: upload image")));
@@ -361,6 +376,7 @@ void DatapickerImage::setRelativeFilePath(bool relative) {
 }
 
 void DatapickerImage::setEmbedded(bool embedded) {
+	Q_D(DatapickerImage);
 	if (embedded != d->embedded) {
 		if (embedded)
 			setImage(originalPlotImage, fileName(), true);
@@ -371,24 +387,28 @@ void DatapickerImage::setEmbedded(bool embedded) {
 
 STD_SETTER_CMD_IMPL_S(DatapickerImage, SetRotationAngle, float, rotationAngle)
 void DatapickerImage::setRotationAngle(float angle) {
+	Q_D(DatapickerImage);
 	if (angle != d->rotationAngle)
 		exec(new DatapickerImageSetRotationAngleCmd(d, angle, ki18n("%1: set rotation angle")));
 }
 
 STD_SETTER_CMD_IMPL_S(DatapickerImage, SetAxisPoints, DatapickerImage::ReferencePoints, axisPoints)
 void DatapickerImage::setAxisPoints(const DatapickerImage::ReferencePoints& points) {
+	Q_D(DatapickerImage);
 	if (memcmp(&points, &d->axisPoints, sizeof(points)) != 0) // valgrind: Conditional jump or move depends on uninitialised value(s)
 		exec(new DatapickerImageSetAxisPointsCmd(d, points, ki18n("%1: set Axis points")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetSettings, DatapickerImage::EditorSettings, settings, discretize)
 void DatapickerImage::setSettings(const DatapickerImage::EditorSettings& editorSettings) {
+	Q_D(DatapickerImage);
 	if (memcmp(&editorSettings, &d->settings, sizeof(editorSettings)) != 0)
 		exec(new DatapickerImageSetSettingsCmd(d, editorSettings, ki18n("%1: set editor settings")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetMinSegmentLength, int, minSegmentLength, makeSegments)
 void DatapickerImage::setminSegmentLength(const int value) {
+	Q_D(DatapickerImage);
 	if (d->minSegmentLength != value)
 		exec(new DatapickerImageSetMinSegmentLengthCmd(d, value, ki18n("%1: set minimum segment length")));
 	;
@@ -396,6 +416,7 @@ void DatapickerImage::setminSegmentLength(const int value) {
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetPointVisibility, bool, pointVisibility, retransform)
 void DatapickerImage::setPointVisibility(const bool on) {
+	Q_D(DatapickerImage);
 	if (on != d->pointVisibility)
 		exec(new DatapickerImageSetPointVisibilityCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
 }
@@ -406,7 +427,22 @@ void DatapickerImage::setPrinting(bool on) const {
 		point->setPrinting(on);
 }
 
+void DatapickerImage::clearReferencePoints() {
+	Q_D(DatapickerImage);
+	const auto& points = children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
+	if (!points.isEmpty()) {
+		beginMacro(i18n("%1: remove all axis points", name()));
+
+		for (auto* point : points)
+			point->remove();
+		endMacro();
+		d->axisPoints.clearPoints();
+		Q_EMIT axisPointsRemoved();
+	}
+}
+
 void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
+	Q_D(DatapickerImage);
 	if (d->plotPointsType == pointsType)
 		return;
 
@@ -414,14 +450,7 @@ void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
 
 	if (pointsType == DatapickerImage::PointsType::AxisPoints) {
 		// clear image
-		auto points = children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
-		if (!points.isEmpty()) {
-			beginMacro(i18n("%1: remove all axis points", name()));
-
-			for (auto* point : points)
-				point->remove();
-			endMacro();
-		}
+		clearReferencePoints();
 		m_segments->setSegmentsVisible(false);
 	} else if (pointsType == DatapickerImage::PointsType::CurvePoints) {
 		m_segments->setSegmentsVisible(false);
@@ -442,19 +471,52 @@ void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
 }
 
 void DatapickerImage::setPointSeparation(const int value) {
+	Q_D(DatapickerImage);
 	d->pointSeparation = value;
 }
 
 void DatapickerImage::referencePointSelected(const DatapickerPoint* point) {
-	const auto points = children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	const auto& points = children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (int i = 0; i < points.count(); i++) {
 		if (points.at(i) == point) {
 			m_currentRefPoint = i;
-			emit referencePointSelected(i);
+			Q_EMIT referencePointSelected(i);
 			return;
 		}
 	}
 	m_currentRefPoint = -1;
+}
+
+void DatapickerImage::childAdded(const AbstractAspect* child) {
+	const auto* point = dynamic_cast<const DatapickerPoint*>(child);
+	if (point) {
+		connect(point, &DatapickerPoint::dataChanged, this, &DatapickerImage::datapickerPointChanged);
+		connect(point, &DatapickerPoint::pointSelected, this, QOverload<const DatapickerPoint*>::of(&DatapickerImage::referencePointSelected));
+	}
+}
+
+void DatapickerImage::childRemoved(const AbstractAspect* child) {
+	const auto* point = dynamic_cast<const DatapickerPoint*>(child);
+	if (point)
+		disconnect(point, nullptr, this, nullptr);
+}
+
+bool DatapickerImage::addChild(AbstractAspect* child) {
+	if (dynamic_cast<DatapickerPoint*>(child) && children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden).count() >= 3)
+		return false;
+
+	return AbstractAspect::addChild(child);
+}
+
+void DatapickerImage::datapickerPointChanged(const DatapickerPoint* point) {
+	const auto index = indexOfChild<DatapickerPoint>(point, AbstractAspect::ChildIndexFlag::IncludeHidden);
+	assert(index < 3);
+	if (index >= 0 && index < 3) {
+		auto axisPoints = this->axisPoints();
+		axisPoints.scenePos[index].setX(point->position().x());
+		axisPoints.scenePos[index].setY(point->position().y());
+		setAxisPoints(axisPoints);
+	}
 }
 
 // ##############################################################################
@@ -473,7 +535,8 @@ QString DatapickerImagePrivate::name() const {
 void DatapickerImagePrivate::retransform() {
 	if (q->isLoading())
 		return;
-	auto points = q->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+
+	const auto& points = q->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* point : points)
 		point->retransform();
 }
@@ -498,8 +561,9 @@ bool DatapickerImagePrivate::uploadImage() {
 		discretize();
 
 		// resize the screen
-		double w = Worksheet::convertToSceneUnits(q->originalPlotImage.width(), Worksheet::Unit::Inch) / QApplication::desktop()->physicalDpiX();
-		double h = Worksheet::convertToSceneUnits(q->originalPlotImage.height(), Worksheet::Unit::Inch) / QApplication::desktop()->physicalDpiX();
+		const auto dpi = (m_scene && !m_scene->views().isEmpty()) ? GuiTools::dpi(m_scene->views().first()) : GuiTools::dpi(nullptr);
+		double w = Worksheet::convertToSceneUnits(q->originalPlotImage.width(), Worksheet::Unit::Inch) / dpi.first;
+		double h = Worksheet::convertToSceneUnits(q->originalPlotImage.height(), Worksheet::Unit::Inch) / dpi.second;
 		m_scene->setSceneRect(0, 0, w, h);
 		q->isLoaded = true;
 	}
@@ -560,6 +624,7 @@ void DatapickerImagePrivate::updateImage() {
 
 //! Save as XML
 void DatapickerImage::save(QXmlStreamWriter* writer) const {
+	Q_D(const DatapickerImage);
 	writer->writeStartElement(QStringLiteral("datapickerImage"));
 	writeBasicAttributes(writer);
 
@@ -636,7 +701,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
+	Q_D(DatapickerImage);
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -669,91 +734,91 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("axisPointLogicalX1")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointLogicalX1")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointLogicalX1"));
 			else
 				d->axisPoints.logicalPos[0].setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointLogicalY1")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointLogicalY1")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointLogicalY1"));
 			else
 				d->axisPoints.logicalPos[0].setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointLogicalZ1")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointLogicalZ1")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointLogicalZ1"));
 			else
 				d->axisPoints.logicalPos[0].setZ(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointLogicalX2")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointLogicalX2")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointLogicalX2"));
 			else
 				d->axisPoints.logicalPos[1].setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointLogicalY2")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointLogicalY2")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointLogicalY2"));
 			else
 				d->axisPoints.logicalPos[1].setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointLogicalZ2")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointLogicalZ2")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointLogicalZ2"));
 			else
 				d->axisPoints.logicalPos[1].setZ(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointLogicalX3")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointLogicalX3")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointLogicalX3"));
 			else
 				d->axisPoints.logicalPos[2].setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointLogicalY3")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointLogicalY3")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointLogicalY3"));
 			else
 				d->axisPoints.logicalPos[2].setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointLogicalZ3")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointLogicalZ3")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointLogicalZ3"));
 			else
 				d->axisPoints.logicalPos[2].setZ(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointSceneX1")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointSceneX1")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointSceneX1"));
 			else
 				d->axisPoints.scenePos[0].setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointSceneY1")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointSceneY1")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointSceneY1"));
 			else
 				d->axisPoints.scenePos[0].setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointSceneX2")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointSceneX2")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointSceneX2"));
 			else
 				d->axisPoints.scenePos[1].setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointSceneY2")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointSceneY2")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointSceneY2"));
 			else
 				d->axisPoints.scenePos[1].setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointSceneX3")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointSceneX3")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointSceneX3"));
 			else
 				d->axisPoints.scenePos[2].setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("axisPointSceneY3")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("axisPointSceneY3")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("axisPointSceneY3"));
 			else
 				d->axisPoints.scenePos[2].setY(str.toDouble());
 
@@ -782,25 +847,25 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("pointRotationAngle")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("pointRotationAngle")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("pointRotationAngle"));
 			else
 				d->symbol->setRotationAngle(str.toDouble());
 
 			str = attribs.value(QStringLiteral("pointOpacity")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("pointOpacity")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("pointOpacity"));
 			else
 				d->symbol->setOpacity(str.toDouble());
 
 			str = attribs.value(QStringLiteral("pointSize")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("pointSize")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("pointSize"));
 			else
 				d->symbol->setSize(str.toDouble());
 
 			str = attribs.value(QStringLiteral("pointStyle")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("pointStyle")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("pointStyle"));
 			else
 				d->symbol->setStyle(static_cast<Symbol::Style>(str.toInt()));
 
@@ -808,26 +873,26 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			QBrush brush;
 			str = attribs.value(QStringLiteral("brush_style")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_style")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("brush_style"));
 			else
 				brush.setStyle(static_cast<Qt::BrushStyle>(str.toInt()));
 
 			QColor color;
 			str = attribs.value(QStringLiteral("brush_color_r")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_r")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("brush_color_r"));
 			else
 				color.setRed(str.toInt());
 
 			str = attribs.value(QStringLiteral("brush_color_g")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_g")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("brush_color_g"));
 			else
 				color.setGreen(str.toInt());
 
 			str = attribs.value(QStringLiteral("brush_color_b")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_b")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("brush_color_b"));
 			else
 				color.setBlue(str.toInt());
 
@@ -838,25 +903,25 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			QPen pen;
 			str = attribs.value(QStringLiteral("style")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("style")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("style"));
 			else
 				pen.setStyle(static_cast<Qt::PenStyle>(str.toInt()));
 
 			str = attribs.value(QStringLiteral("color_r")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_r")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("color_r"));
 			else
 				color.setRed(str.toInt());
 
 			str = attribs.value(QStringLiteral("color_g")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_g")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("color_g"));
 			else
 				color.setGreen(str.toInt());
 
 			str = attribs.value(QStringLiteral("color_b")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_b")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("color_b"));
 			else
 				color.setBlue(str.toInt());
 
@@ -864,7 +929,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("width")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("width"));
 			else
 				pen.setWidthF(str.toDouble());
 
@@ -884,7 +949,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 				addChild(datapickerPoint);
 			}
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}

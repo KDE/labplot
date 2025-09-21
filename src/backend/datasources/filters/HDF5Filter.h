@@ -11,11 +11,15 @@
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-class QStringList;
 class QTreeWidgetItem;
 class HDF5FilterPrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT HDF5Filter : public AbstractFileFilter {
+#else
 class HDF5Filter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
 
 public:
@@ -26,17 +30,9 @@ public:
 	static QString fileDDLString(const QString&);
 
 	int parse(const QString& fileName, QTreeWidgetItem* rootItem);
-	void
-	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
-	QVector<QStringList> readCurrentDataSet(const QString& fileName,
-											AbstractDataSource*,
-											bool& ok,
-											AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace,
-											int lines = -1);
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
+	QVector<QStringList> readCurrentDataSet(const QString& fileName, AbstractDataSource*, bool& ok, ImportMode = ImportMode::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*) override;
-
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
 
 	void setCurrentDataSetName(const QString&);
 	const QString currentDataSetName() const;

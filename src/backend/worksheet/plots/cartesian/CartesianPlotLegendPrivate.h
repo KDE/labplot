@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of CartesianPlotLegend
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -17,11 +17,6 @@
 class Background;
 class CartesianPlotLegend;
 class Line;
-class XYCurve;
-
-class QBrush;
-class QGraphicsSceneContextMenuEvent;
-class QKeyEvent;
 
 class CartesianPlotLegendPrivate : public WorksheetElementPrivate {
 public:
@@ -34,14 +29,11 @@ public:
 
 	// QGraphicsItem's virtual functions
 	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
+	virtual QPainterPath shape() const override;
 	virtual void recalcShapeAndBoundingRect() override;
 
-	bool m_hovered{false};
-
-	QRectF rect;
 	QFont labelFont;
+	bool usePlotColor{true};
 	QColor labelColor;
 	bool labelColumnMajor{true};
 	qreal lineSymbolWidth{Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)}; // the width of line+symbol
@@ -68,14 +60,10 @@ public:
 	int layoutColumnCount{1};
 
 private:
-	QList<WorksheetElement*> m_curves; // list containing all visible curves
+	QList<Plot*> m_plots; // list containing all visible plots/curves
 	QStringList m_names;
 
 	bool translatePainter(QPainter*, int& row, int& col, int height);
-
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 };
 
 #endif

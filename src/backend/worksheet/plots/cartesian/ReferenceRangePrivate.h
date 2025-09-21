@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Reference range on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2024 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -23,12 +23,9 @@ public:
 	void retransform() override;
 	void recalcShapeAndBoundingRect() override;
 	void updateOrientation();
+	void updatePositionLimit();
 
-	bool m_hovered{false};
 	bool m_visible{true}; // point inside the plot (visible) or not
-
-	QRectF boundingRectangle;
-	QPainterPath rangeShape;
 
 	ReferenceRange::Orientation orientation{ReferenceRange::Orientation::Horizontal};
 	QPointF positionLogicalStart;
@@ -39,19 +36,12 @@ public:
 	Background* background{nullptr};
 
 	// reimplemented from QGraphicsItem
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
-	void drawFilling(QPainter*) const;
 	QPointF recalculateRect();
 
 	ReferenceRange* const q;
 
 private:
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
-
 	bool m_bottomClipped{false};
 	bool m_topClipped{false};
 	bool m_leftClipped{false};

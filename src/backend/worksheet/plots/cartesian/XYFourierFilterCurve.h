@@ -18,12 +18,17 @@ extern "C" {
 
 class XYFourierFilterCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYFourierFilterCurve : public XYAnalysisCurve {
+#else
 class XYFourierFilterCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:
 	struct FilterData {
-		FilterData(){};
+		FilterData() { };
 
 		nsl_filter_type type{nsl_filter_type_low_pass};
 		nsl_filter_form form{nsl_filter_form_ideal};
@@ -37,13 +42,12 @@ public:
 		QVector<double> xRange{0., 0.}; // x range for integration
 	};
 	struct FilterResult : XYAnalysisCurve::Result {
-		FilterResult(){};
+		FilterResult() { };
 	};
 
 	explicit XYFourierFilterCurve(const QString& name);
 	~XYFourierFilterCurve() override;
 
-	void recalculate() override;
 	virtual const XYAnalysisCurve::Result& result() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;

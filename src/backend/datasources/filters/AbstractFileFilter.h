@@ -3,8 +3,8 @@
 	Project              : LabPlot
 	Description          : file I/O-filter related interface
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2018 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2009-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -15,20 +15,26 @@
 #include "backend/core/AbstractColumn.h"
 #include <QLocale>
 #include <QObject>
-#include <memory> // smart pointer
+#include <memory> // unique_ptr
 
 class AbstractDataSource;
 class XmlStreamReader;
 class QXmlStreamWriter;
+class KConfig;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT AbstractFileFilter : public QObject {
+#else
 class AbstractFileFilter : public QObject {
+#endif
 	Q_OBJECT
-	Q_ENUMS(FileType)
-	Q_ENUMS(ImportMode)
 
 public:
-	enum class FileType { Ascii, Binary, Excel, Image, HDF5, NETCDF, FITS, JSON, ROOT, Spice, READSTAT, MATIO, VECTOR_BLF };
+	enum class FileType { Ascii, Binary, XLSX, Ods, Image, HDF5, NETCDF, FITS, JSON, ROOT, Spice, READSTAT, MATIO, VECTOR_BLF, MCAP };
+	Q_ENUM(FileType)
 	enum class ImportMode { Append, Prepend, Replace };
+	Q_ENUM(ImportMode)
 
 	explicit AbstractFileFilter(FileType type)
 		: m_type(type) {
@@ -37,20 +43,37 @@ public:
 
 	static bool isNan(const QString&);
 	static AbstractColumn::ColumnMode columnMode(const QString& valueString, QString& dateTimeFormat, QLocale::Language);
-	static AbstractColumn::ColumnMode columnMode(const QString& valueString, QString& dateTimeFormat, const QLocale& = QLocale());
+	static AbstractColumn::ColumnMode columnMode(const QString& valueString,
+												 QString& dateTimeFormat,
+												 const QLocale& = QLocale(),
+												 bool intAsDouble = false,
+												 int baseYear = QLocale::DefaultTwoDigitBaseYear);
 	static QString dateTimeFormat(const QString& valueString);
 	static QStringList numberFormats();
-	static AbstractFileFilter::FileType fileType(const QString&);
-	static QStringList fileTypes();
+	static bool exclusiveFileType(FileType);
+	static FileType fileType(const QString&);
+	// static QStringList fileTypes();
+	static QString convertFromNumberToColumn(int n);
+	int previewPrecision() const;
+	void setPreviewPrecision(int);
 
 	virtual void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) = 0;
+	/*!
+	 * Writing the content of the datasource to the file with filename \p fileName
+	 * \brief write
+	 * \param fileName
+	 */
 	virtual void write(const QString& fileName, AbstractDataSource*) = 0;
 
-	virtual QStringList lastErrors();
+	QString lastError() const;
+	void setLastError(const QString&);
+	void clearLastError();
 
-	virtual void loadFilterSettings(const QString& filterName) = 0;
-	virtual void saveFilterSettings(const QString& filterName) const = 0;
+	QStringList lastWarnings() const;
+	void addWarning(const QString&);
+	void clearLastWarnings();
 
+	// save/load in the project XML
 	virtual void save(QXmlStreamWriter*) const = 0;
 	virtual bool load(XmlStreamReader*) = 0;
 
@@ -63,6 +86,9 @@ Q_SIGNALS:
 
 protected:
 	const FileType m_type;
+	QString m_lastError;
+	QStringList m_lastWarnings;
+	int m_previewPrecision{6};
 };
 
 #endif

@@ -20,8 +20,6 @@
 #include <string>
 #include <vector>
 
-class QString;
-class QStringList;
 class AbstractDataSource;
 class AbstractColumn;
 
@@ -212,8 +210,7 @@ private:
 	static ContentType leafType(char type);
 	/// Get function to read a buffer of the specified type
 	template<class T>
-	T (*readType(ContentType type, bool sign = true) const)
-	(char*&);
+	T (*readType(ContentType type, bool sign = true) const)(char*&);
 
 	/// Get the number of bins contained in a histogram
 	void readNBins(KeyBuffer& buffer);
@@ -252,7 +249,7 @@ private:
 
 class ROOTFilterPrivate {
 public:
-	ROOTFilterPrivate();
+	ROOTFilterPrivate(ROOTFilter*);
 	/**
 	 * @brief Read data from the currently selected histogram
 	 *
@@ -284,6 +281,8 @@ public:
 	int endRow = -1;
 	/// Columns to read
 	QVector<QStringList> columns;
+
+	ROOTFilter* const q;
 
 private:
 	enum class FileType { Invalid = 0, Hist, Tree };

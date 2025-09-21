@@ -128,7 +128,7 @@ public:
 		for (int c = 0; c < list->size(); c++) {
 			if (list->at(c).touches(i) || list->at(c).intersects(i)) {
 				Interval<T> result = merge(list->takeAt(c), i);
-				mergeIntervalIntoList(list, result);
+				mergeIntervalIntoList(list, std::move(result));
 				return;
 			}
 		}
@@ -169,9 +169,9 @@ public:
 		QVector<Interval<T>>*tmp1, *tmp2;
 		tmp1 = new QVector<Interval<T>>();
 		*tmp1 << *static_cast<Interval<T>*>(this);
-		foreach (Interval<T> i, subtrahend) {
+		for (const auto& i : subtrahend) {
 			tmp2 = new QVector<Interval<T>>();
-			foreach (Interval<T> j, *tmp1)
+			for (const auto& j : *tmp1)
 				*tmp2 << subtract(j, i);
 			delete tmp1;
 			tmp1 = tmp2;

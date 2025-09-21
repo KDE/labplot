@@ -56,7 +56,6 @@
 
 namespace ads
 {
-static const char* const LocationProperty = "Location";
 using tTabLabel = CElidingLabel;
 
 /**
@@ -225,7 +224,7 @@ struct DockWidgetTabPrivate
 		QMenu* Menu)
 	{
 		auto Action = Menu->addAction(Title);
-		Action->setProperty("Location", Location);
+		Action->setProperty(internal::LocationProperty, Location);
 		QObject::connect(Action, &QAction::triggered, _this, &CDockWidgetTab::onAutoHideToActionClicked);
 		return Action;
 	}
@@ -245,7 +244,14 @@ DockWidgetTabPrivate::DockWidgetTabPrivate(CDockWidgetTab* _public) :
 void DockWidgetTabPrivate::createLayout()
 {
 	TitleLabel = new tTabLabel();
-	TitleLabel->setElideMode(Qt::ElideRight);
+	if (CDockManager::testConfigFlag(CDockManager::DisableTabTextEliding))
+	{
+		TitleLabel->setElideMode(Qt::ElideNone);
+	}
+	else
+	{
+		TitleLabel->setElideMode(Qt::ElideRight);
+	}
 	TitleLabel->setText(DockWidget->windowTitle());
 	TitleLabel->setObjectName("dockWidgetTabLabel");
 	TitleLabel->setAlignment(Qt::AlignCenter);
@@ -376,6 +382,7 @@ void CDockWidgetTab::mousePressEvent(QMouseEvent* ev)
         d->DragState = DraggingMousePressed;
         if (CDockManager::testConfigFlag(CDockManager::FocusHighlighting))
         {
+        	d->focusController()->setDockWidgetTabPressed(true);
         	d->focusController()->setDockWidgetTabFocused(this);
         }
         Q_EMIT clicked();
@@ -412,7 +419,13 @@ void CDockWidgetTab::mouseReleaseEvent(QMouseEvent* ev)
 			 d->FloatingWidget->finishDragging();
 			 break;
 
-		default:; // do nothing
+		default:
+			break;
+		}
+
+		if (CDockManager::testConfigFlag(CDockManager::FocusHighlighting))
+		{
+			d->focusController()->setDockWidgetTabPressed(false);
 		}
 	} 
 	else if (ev->button() == Qt::MiddleButton)
@@ -493,7 +506,7 @@ void CDockWidgetTab::mouseMoveEvent(QMouseEvent* ev)
     else if (d->DockArea->openDockWidgetsCount() > 1
      && (internal::globalPositionOf(ev) - d->GlobalDragStartMousePosition).manhattanLength() >= QApplication::startDragDistance()) // Wait a few pixels before start moving
 	{
-    	// If we start dragging the tab, we save its inital position to
+    	// If we start dragging the tab, we save its initial position to
     	// restore it later
     	if (DraggingTab != d->DragState)
     	{
@@ -516,26 +529,34 @@ void CDockWidgetTab::contextMenuEvent(QContextMenuEvent* ev)
 		return;
 	}
 
+    auto Menu = buildContextMenu(nullptr);
 	d->saveDragStartMousePosition(ev->globalPos());
+	Menu->exec(ev->globalPos());
+}
 
+QMenu* CDockWidgetTab::buildContextMenu(QMenu *Menu)
+{
+    if (Menu == nullptr) {
+        Menu = new QMenu(this);
+    }
+    
     const bool isFloatable = d->DockWidget->features().testFlag(CDockWidget::DockWidgetFloatable);
     const bool isNotOnlyTabInContainer =  !d->DockArea->dockContainer()->hasTopLevelDockWidget();
     const bool isTopLevelArea = d->DockArea->isTopLevelArea();
     const bool isDetachable = isFloatable && isNotOnlyTabInContainer;
 	QAction* Action;
-	QMenu Menu(this);
 
     if (!isTopLevelArea)
     {
-		Action = Menu.addAction(tr("Detach"), this, SLOT(detachDockWidget()));
+		Action = Menu->addAction(tr("Detach"), this, SLOT(detachDockWidget()));
 		Action->setEnabled(isDetachable);
 		if (CDockManager::testAutoHideConfigFlag(CDockManager::AutoHideFeatureEnabled))
 		{
-			Action = Menu.addAction(tr("Pin"), this, SLOT(autoHideDockWidget()));
+			Action = Menu->addAction(tr("Pin"), this, SLOT(autoHideDockWidget()));
 			auto IsPinnable = d->DockWidget->features().testFlag(CDockWidget::DockWidgetPinnable);
 			Action->setEnabled(IsPinnable);
 
-			auto menu = Menu.addMenu(tr("Pin To..."));
+			auto menu = Menu->addMenu(tr("Pin To..."));
 			menu->setEnabled(IsPinnable);
 			d->createAutoHideToAction(tr("Top"), SideBarTop, menu);
 			d->createAutoHideToAction(tr("Left"), SideBarLeft, menu);
@@ -544,17 +565,16 @@ void CDockWidgetTab::contextMenuEvent(QContextMenuEvent* ev)
 		}
     }
 
-	Menu.addSeparator();
-	Action = Menu.addAction(tr("Close"), this, SIGNAL(closeRequested()));
+	Menu->addSeparator();
+	Action = Menu->addAction(tr("Close"), this, SIGNAL(closeRequested()));
 	Action->setEnabled(isClosable());
 	if (d->DockArea->openDockWidgetsCount() > 1)
 	{
-		Action = Menu.addAction(tr("Close Others"), this, SIGNAL(closeOtherTabsRequested()));
+		Action = Menu->addAction(tr("Close Others"), this, SIGNAL(closeOtherTabsRequested()));
 	}
-	Menu.exec(ev->globalPos());
+
+    return Menu;
 }
-
-
 //============================================================================
 bool CDockWidgetTab::isActiveTab() const
 {
@@ -566,6 +586,14 @@ bool CDockWidgetTab::isActiveTab() const
 void CDockWidgetTab::setActiveTab(bool active)
 {
     d->updateCloseButtonVisibility(active);
+
+	if(CDockManager::testConfigFlag(CDockManager::ShowTabTextOnlyForActiveTab) && !d->Icon.isNull())
+	{
+		if(active)
+			d->TitleLabel->setVisible(true);
+		else
+			d->TitleLabel->setVisible(false);
+	}
 
 	// Focus related stuff
 	if (CDockManager::testConfigFlag(CDockManager::FocusHighlighting) && !d->DockWidget->dockManager()->isRestoringState())
@@ -671,7 +699,7 @@ QString CDockWidgetTab::text() const
 //============================================================================
 void CDockWidgetTab::mouseDoubleClickEvent(QMouseEvent *event)
 {
-	if (event->button() == Qt::LeftButton) 
+	if (event->button() == Qt::LeftButton && CDockManager::testConfigFlag(CDockManager::DoubleClickUndocksWidget))
 	{
 		// If this is the last dock area in a dock container it does not make
 		// sense to move it to a new floating widget and leave this one
@@ -742,7 +770,7 @@ void CDockWidgetTab::autoHideDockWidget()
 //===========================================================================
 void CDockWidgetTab::onAutoHideToActionClicked()
 {
-	int Location = sender()->property(LocationProperty).toInt();
+	int Location = sender()->property(internal::LocationProperty).toInt();
 	d->DockWidget->toggleAutoHide((SideBarLocation)Location);
 }
 
@@ -765,6 +793,13 @@ bool CDockWidgetTab::event(QEvent *e)
 		d->updateIcon();
 	}
 	return Super::event(e);
+}
+
+
+//============================================================================
+eDragState CDockWidgetTab::dragState() const
+{
+	return d->DragState;
 }
 
 
@@ -802,6 +837,7 @@ void CDockWidgetTab::setIconSize(const QSize& Size)
 	d->IconSize = Size;
 	d->updateIcon();
 }
+
 } // namespace ads
 //---------------------------------------------------------------------------
 // EOF DockWidgetTab.cpp

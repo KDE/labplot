@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Value
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -17,9 +17,11 @@
 #include "Value.h"
 #include "ValuePrivate.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 #include <QPainter>
 
@@ -47,7 +49,7 @@ void Value::init(const KConfigGroup& group) {
 	d->suffix = group.readEntry("ValueSuffix", "");
 	auto defaultFont = QFont();
 	d->font = group.readEntry("ValueFont", QFont());
-	d->font.setPixelSize(Worksheet::convertToSceneUnits(defaultFont.pointSizeF(), Worksheet::Unit::Point));
+	d->font.setPointSizeF(Worksheet::convertToSceneUnits(defaultFont.pointSizeF(), Worksheet::Unit::Point));
 	d->color = group.readEntry("ValueColor", QColor(Qt::black));
 }
 
@@ -84,6 +86,11 @@ QString& Value::columnPath() const {
 	D(Value);
 	return d->columnPath;
 }
+void Value::setColumnPath(const QString& path) {
+	D(Value);
+	d->columnPath = path;
+}
+
 BASIC_SHARED_D_READER_IMPL(Value, Value::Position, position, position)
 BASIC_SHARED_D_READER_IMPL(Value, bool, centerPositionAvailable, centerPositionAvailable)
 BASIC_SHARED_D_READER_IMPL(Value, double, distance, distance)
@@ -257,7 +264,6 @@ bool Value::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	Q_D(Value);
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QString str;
 
 	auto attribs = reader->attributes();
@@ -271,7 +277,7 @@ bool Value::load(XmlStreamReader* reader, bool preview) {
 
 	str = attribs.value(QStringLiteral("numericFormat")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs(QStringLiteral("numericFormat")).toString());
+		reader->raiseMissingAttributeWarning(QStringLiteral("numericFormat"));
 	else
 		d->numericFormat = *(str.toLatin1().data());
 

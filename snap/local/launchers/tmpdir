@@ -1,0 +1,5 @@
+
+#!/bin/bash
+
+# Set TMPDIR
+export TMPDIR=$SNAP_USER_DATA/labplot.tmp

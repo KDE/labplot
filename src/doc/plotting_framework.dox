@@ -135,7 +135,7 @@ somebody needs inspirations' https://en.wikipedia.org/wiki/List_of_graphing_soft
 -    Veusz is designed to produce publication-ready Postscript/PDF output. It is written in Python and actively maintained.
 -    DISLIN is a data display library with an imperative interface. Actively maintained.
 -    kst claims to be the fastest real-time large-dataset viewing and plotting tool. May be at some stage it is worth to look into the code of this project.
--    ROOT is used a lot by experimentalists in hight energy physics, although several attributes of its design are generally considered less than ideal
+-    ROOT is used a lot by experimentalists in high energy physics, although several attributes of its design are generally considered less than ideal
 -    matplotlib is an object-oriented plotting framework with a matlab-style interface on top. Written in Python.
 -    Descartes seems to have been maintained only for a few months in 2005, but may provide some inspiration. Being able to superimpose images and plots (with manually tuned parameters) as in the screenshot on the home page would be nice.
 -    KMatplot describes itself as 'gnuplot-like', but is really quite close to what we're trying to do (even with 2D and 3D plots integrated on one worksheet). Last version from 2002, so probably dead. Definitely worth a look, though.

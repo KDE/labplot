@@ -15,12 +15,21 @@
 #include <gsl/gsl_fit.h>
 #include <gsl/gsl_statistics_double.h>
 
+// macOS builds on gitlab CI complain about missing Eigen/Sparse while having Eigen3	-> disable EIGEN3 on macOS for the moment
+#if defined(Q_OS_MACOS)
+#undef HAVE_EIGEN3
+#endif
+
 #ifdef HAVE_EIGEN3
+#ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
+#endif
 #include <Eigen/Sparse>
 #include <Eigen/SparseCholesky>
+#ifdef __GNUC__
 #pragma GCC diagnostic pop
+#endif
 #else // GSL
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_sort.h>
@@ -70,8 +79,8 @@ void nsl_baseline_remove_median(double* data, const size_t n) {
 	free(tmp_data);
 }
 
-/* do a linear interpolation using first and last point and substract that */
-int nsl_baseline_remove_endpoints(double* xdata, double* ydata, const size_t n) {
+/* do a linear interpolation using first and last point and subtract that */
+int nsl_baseline_remove_endpoints(const double* xdata, double* ydata, const size_t n) {
 	// not possible
 	if (xdata[0] == xdata[n - 1])
 		return -1;
@@ -85,7 +94,7 @@ int nsl_baseline_remove_endpoints(double* xdata, double* ydata, const size_t n) 
 	return 0;
 }
 
-/* do a linear regression and substract that */
+/* do a linear regression and subtract that */
 int nsl_baseline_remove_linreg(double* xdata, double* ydata, const size_t n) {
 	double c0, c1, cov00, cov01, cov11, chisq;
 	gsl_fit_linear(xdata, 1, ydata, 1, n, &c0, &c1, &cov00, &cov01, &cov11, &chisq);
@@ -445,7 +454,7 @@ double nsl_baseline_remove_arpls(double* data, const size_t n, double p, double 
 
 #ifdef HAVE_EIGEN3
 	return nsl_baseline_remove_arpls_Eigen3(data, n, p, lambda, niter);
-#endif
-
+#else
 	return nsl_baseline_remove_arpls_GSL(data, n, p, lambda, niter);
+#endif
 }

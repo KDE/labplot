@@ -1,0 +1,144 @@
+diff -ruNa a/src/bin/readstat.c b/src/bin/readstat.c
+--- a/src/bin/readstat.c	2023-02-20 20:09:24.000000000 +0100
++++ b/src/bin/readstat.c	2024-04-06 11:20:07.320272917 +0200
+@@ -154,7 +154,7 @@
+     return error;
+ }
+ 
+-static void print_version() {
++static void print_version(void) {
+     fprintf(stdout, "ReadStat version " READSTAT_VERSION "\n");
+ }
+ 
+@@ -397,8 +397,6 @@
+         module->finish(rs_ctx->module_ctx);
+     }
+ 
+-    free(rs_ctx);
+-
+     if (error != READSTAT_OK) {
+         if (file_exists) {
+             fprintf(stderr, "Error opening %s: File exists (Use -f to overwrite)\n", output_filename);
+@@ -406,9 +404,14 @@
+             fprintf(stderr, "Error processing %s: %s\n", rs_ctx->error_filename, readstat_error_message(error));
+             unlink(output_filename);
+         }
++
++        free(rs_ctx);
++
+         return 1;
+     }
+ 
++    free(rs_ctx);
++
+     return 0;
+ }
+ 
+diff -ruNa a/src/readstat_bits.c b/src/readstat_bits.c
+--- a/src/readstat_bits.c	2023-02-20 20:09:24.000000000 +0100
++++ b/src/readstat_bits.c	2024-04-06 11:22:33.519655224 +0200
+@@ -8,7 +8,7 @@
+ 
+ #include "readstat_bits.h"
+ 
+-int machine_is_little_endian() {
++int machine_is_little_endian(void) {
+     int test_byte_order = 1;
+     return ((char *)&test_byte_order)[0];
+ }
+diff -ruNa a/src/readstat_parser.c b/src/readstat_parser.c
+--- a/src/readstat_parser.c	2023-02-20 20:09:24.000000000 +0100
++++ b/src/readstat_parser.c	2024-04-06 11:24:43.731105094 +0200
+@@ -3,7 +3,7 @@
+ #include "readstat.h"
+ #include "readstat_io_unistd.h"
+ 
+-readstat_parser_t *readstat_parser_init() {
++readstat_parser_t *readstat_parser_init(void) {
+     readstat_parser_t *parser = calloc(1, sizeof(readstat_parser_t));
+     parser->io = calloc(1, sizeof(readstat_io_t));
+     if (unistd_io_init(parser) != READSTAT_OK) {
+diff -ruNa a/src/readstat_variable.c b/src/readstat_variable.c
+--- a/src/readstat_variable.c	2023-02-20 20:09:24.000000000 +0100
++++ b/src/readstat_variable.c	2024-04-06 11:26:29.602657794 +0200
+@@ -5,7 +5,7 @@
+ static readstat_value_t make_blank_value(void);
+ static readstat_value_t make_double_value(double dval);
+ 
+-static readstat_value_t make_blank_value() {
++static readstat_value_t make_blank_value(void) {
+     readstat_value_t value = { .is_system_missing = 1, .v = { .double_value = NAN }, .type = READSTAT_TYPE_DOUBLE };
+     return value;
+ }
+diff -ruNa a/src/readstat_writer.c b/src/readstat_writer.c
+--- a/src/readstat_writer.c	2023-02-20 20:09:24.000000000 +0100
++++ b/src/readstat_writer.c	2024-04-06 11:27:59.062279827 +0200
+@@ -35,7 +35,7 @@
+     return ref;
+ }
+ 
+-readstat_writer_t *readstat_writer_init() {
++readstat_writer_t *readstat_writer_init(void) {
+     readstat_writer_t *writer = calloc(1, sizeof(readstat_writer_t));
+ 
+     writer->variables = calloc(VARIABLES_INITIAL_CAPACITY, sizeof(readstat_variable_t *));
+diff -ruNa a/src/sas/ieee.c b/src/sas/ieee.c
+--- a/src/sas/ieee.c	2023-02-20 20:09:24.000000000 +0100
++++ b/src/sas/ieee.c	2024-04-06 11:31:20.949537770 +0200
+@@ -96,7 +96,7 @@
+     return(0);
+ }
+ 
+-int get_native() {
++int get_native(void) {
+     static unsigned char float_reps[][8] = {
+         {0x41,0x10,0x00,0x00,0x00,0x00,0x00,0x00},
+         {0x3f,0xf0,0x00,0x00,0x00,0x00,0x00,0x00},
+diff -ruNa a/src/sas/readstat_sas.c b/src/sas/readstat_sas.c
+--- a/src/sas/readstat_sas.c	2023-02-20 20:09:24.000000000 +0100
++++ b/src/sas/readstat_sas.c	2024-04-06 11:33:09.321196712 +0200
+@@ -120,7 +120,7 @@
+     { .code = 248,   .name = "SHIFT_JISX0213" },
+ };
+ 
+-static time_t sas_epoch() {
++static time_t sas_epoch(void) {
+     return - 3653 * 86400; // seconds between 01-01-1960 and 01-01-1970
+ }
+ 
+diff -ruNa a/src/sas/readstat_xport_read.c b/src/sas/readstat_xport_read.c
+--- a/src/sas/readstat_xport_read.c	2023-02-20 20:09:24.000000000 +0100
++++ b/src/sas/readstat_xport_read.c	2024-04-06 11:35:14.892801523 +0200
+@@ -45,7 +45,7 @@
+     return io->update(ctx->file_size, ctx->handle.progress, ctx->user_ctx, io->io_ctx);
+ }
+ 
+-static xport_ctx_t *xport_ctx_init() {
++static xport_ctx_t *xport_ctx_init(void) {
+     xport_ctx_t *ctx = calloc(1, sizeof(xport_ctx_t));
+     return ctx;
+ }
+diff -ruNa a/src/spss/readstat_por.c b/src/spss/readstat_por.c
+--- a/src/spss/readstat_por.c	2023-02-20 20:09:24.000000000 +0100
++++ b/src/spss/readstat_por.c	2024-04-06 11:36:45.140517496 +0200
+@@ -64,7 +64,7 @@
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 0, 0 };
+ 
+-por_ctx_t *por_ctx_init() {
++por_ctx_t *por_ctx_init(void) {
+     por_ctx_t *ctx = calloc(1, sizeof(por_ctx_t));
+ 
+     ctx->space = ' ';
+diff -ruNa a/src/spss/readstat_por_write.c b/src/spss/readstat_por_write.c
+--- a/src/spss/readstat_por_write.c	2023-02-20 20:09:24.000000000 +0100
++++ b/src/spss/readstat_por_write.c	2024-04-06 11:38:14.468236368 +0200
+@@ -167,7 +167,7 @@
+     return por_write_string_field_n(writer, ctx, string, strlen(string));
+ }
+ 
+-static por_write_ctx_t *por_write_ctx_init() {
++static por_write_ctx_t *por_write_ctx_init(void) {
+     por_write_ctx_t *ctx = calloc(1, sizeof(por_write_ctx_t));
+     uint16_t max_unicode = 0;
+     int i;

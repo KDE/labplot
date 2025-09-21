@@ -37,7 +37,7 @@ public:
 	QVector<QStringList> preview(QIODevice& device, int lines);
 	QVector<QStringList> preview(int lines);
 
-	const JsonFilter* q;
+	JsonFilter* const q;
 	QJsonModel* model{nullptr};
 
 	JsonFilter::DataContainerType containerType{JsonFilter::DataContainerType::Object};

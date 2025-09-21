@@ -20,6 +20,7 @@ sc-apps-labplot-format-text-symbol.svg
 sc-apps-labplot-forward.svg
 sc-apps-labplot-json-array.svg
 sc-apps-labplot-json-object.svg
+sc-apps-labplot-kaggle.svg
 sc-apps-labplot-matrix-new.svg
 sc-apps-labplot-matrix.svg
 sc-apps-labplot-maximize.svg
@@ -55,5 +56,5 @@ sc-apps-labplot-zoom-select.svg
 sc-apps-labplot-zoom-select-x.svg
 sc-apps-labplot-zoom-select-y.svg
 sc-apps-labplot-zoom.svg
-DESTINATION ${KDE_INSTALL_ICONDIR}/
+DESTINATION ${KDE_INSTALL_ICONDIR}
 THEME hicolor)

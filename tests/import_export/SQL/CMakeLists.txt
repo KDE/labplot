@@ -1,0 +1,5 @@
+add_executable(ImportSqlDatabaseTest ImportSqlDatabaseTest.cpp)
+
+target_link_libraries(ImportSqlDatabaseTest labplotmetatest)
+
+add_test(NAME ImportSqlDatabaseTest COMMAND ImportSqlDatabaseTest)

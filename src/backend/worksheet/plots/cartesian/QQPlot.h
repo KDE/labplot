@@ -11,16 +11,8 @@
 #define QQPLOT_H
 
 #include "Plot.h"
-#include "backend/lib/Range.h"
-#include "backend/lib/macros.h"
 #include "backend/nsl/nsl_sf_stats.h"
-#include "backend/worksheet/WorksheetElement.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
-#include <QFont>
-#include <QPen>
-
-class AbstractColumn;
 class Background;
 class Line;
 class Symbol;
@@ -43,17 +35,12 @@ public:
 	void finalizeAdd() override;
 
 	QIcon icon() const override;
-	QMenu* createContextMenu() override;
-	QGraphicsItem* graphicsItem() const override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
 	void loadThemeConfig(const KConfig&) override;
 	void saveThemeConfig(const KConfig&) override;
-
-	bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
-	void setHover(bool on) override;
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
 	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
@@ -63,7 +50,7 @@ public:
 	Symbol* symbol() const;
 
 	void retransform() override;
-	void recalc();
+	void recalc() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 	void setVisible(bool) override;
 
@@ -71,12 +58,14 @@ public:
 	double minimum(CartesianCoordinateSystem::Dimension) const override;
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
+	bool usingColumn(const AbstractColumn*, bool indirect) const override;
+	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
+	QColor color() const override;
 
 	typedef QQPlotPrivate Private;
 
 private Q_SLOTS:
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
-	void dataColumnNameChanged();
 
 protected:
 	QQPlot(const QString& name, QQPlotPrivate* dd);
@@ -84,10 +73,8 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(QQPlot)
 	void init();
-	void initActions();
 	void connectDataColumn(const AbstractColumn*);
 
-	QAction* visibilityAction{nullptr};
 	QAction* navigateToAction{nullptr};
 	bool m_menusInitialized{false};
 
@@ -95,7 +82,6 @@ Q_SIGNALS:
 	void linesUpdated(const QQPlot*, const QVector<QLineF>&);
 
 	// General-Tab
-	void dataChanged(); // emitted when the actual curve data to be plotted was changed to re-adjust the plot
 	void dataDataChanged();
 	void dataColumnChanged(const AbstractColumn*);
 	void distributionChanged(nsl_sf_stats_distribution);

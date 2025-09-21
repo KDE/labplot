@@ -226,15 +226,14 @@ void MatioFilter::parse(const QString& fileName) {
 /*!
   reads the content of the current variable from file \c fileName.
 */
-QVector<QStringList>
-MatioFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
+QVector<QStringList> MatioFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, ImportMode importMode, int lines) {
 	return d->readCurrentVar(fileName, dataSource, importMode, (size_t)lines);
 }
 
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
 */
-void MatioFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+void MatioFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, ImportMode mode) {
 	d->readDataFromFile(fileName, dataSource, mode);
 }
 
@@ -244,19 +243,6 @@ writes the content of the data source \c dataSource to the file \c fileName.
 void MatioFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
 	d->write(fileName, dataSource);
 	// 	emit()
-}
-
-///////////////////////////////////////////////////////////////////////
-/*!
-  loads the predefined filter settings for \c filterName
-*/
-void MatioFilter::loadFilterSettings(const QString& /*filterName*/) {
-}
-
-/*!
-  saves the current settings as a new filter with the name \c filterName
-*/
-void MatioFilter::saveFilterSettings(const QString& /*filterName*/) const {
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -342,7 +328,7 @@ QString MatioFilter::fileInfoString(const QString& fileName) {
 	info += QLatin1String("<br>");
 
 	size_t n;
-	char** dir = Mat_GetDir(matfp, &n);
+	auto* dir = Mat_GetDir(matfp, &n);
 	info += i18n("Number of variables: ") + QString::number(n);
 	info += QStringLiteral("<br>");
 	if (dir && n < 10) { // only show variable info when there are not too many
@@ -550,7 +536,7 @@ void MatioFilterPrivate::parse(const QString& fileName) {
 	}
 
 	// get names of all vars
-	char** dir = Mat_GetDir(matfp, &varCount);
+	auto* dir = Mat_GetDir(matfp, &varCount);
 	DEBUG(Q_FUNC_INFO << ", found " << varCount << " vars")
 
 	varsInfo.clear();
@@ -608,12 +594,12 @@ void MatioFilterPrivate::parse(const QString& fileName) {
 	(Not used for preview)
 	Uses the settings defined in the data source.
 */
-void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
-	QVector<QStringList> dataStrings;
 
 	if (currentVarName.isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", no variable selected");
+		q->setLastError(i18n("No valid variable selected."));
 		return;
 	}
 
@@ -625,8 +611,8 @@ void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 #endif
 	for (const auto& var : selectedVarNames) {
 		currentVarName = var;
-		readCurrentVar(fileName, dataSource, mode);
-		mode = AbstractFileFilter::ImportMode::Append; // append other vars
+		readCurrentVar(fileName, dataSource, importMode);
+		importMode = AbstractFileFilter::ImportMode::Append; // append other vars
 	}
 #ifdef HAVE_MATIO
 	if (matfp) { // only if opened
@@ -640,24 +626,27 @@ void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	reads the content of the current variable in the file \c fileName to a string (for preview) or to the data source.
 */
 QVector<QStringList>
-MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, size_t lines) {
+MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, size_t lines) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
-	QVector<QStringList> dataStrings;
 
 	if (currentVarName.isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: current var name is empty!")
-		return dataStrings << (QStringList() << i18n("No variable selected"));
+		q->setLastError(i18n("No valid variable selected."));
+		return {};
 	}
 	DEBUG(Q_FUNC_INFO << ", current variable: " << STDSTRING(currentVarName));
 
+	QVector<QStringList> dataStrings;
 #ifdef HAVE_MATIO
 	bool openedFile = false;
 	if (!matfp) { // file not open
 		matfp = Mat_Open(qPrintable(fileName), MAT_ACC_RDONLY);
 		openedFile = true;
 	}
-	if (!matfp) // open failed
-		return dataStrings << (QStringList() << i18n("File not found"));
+	if (!matfp) { // open failed
+		q->setLastError(i18n("Failed to open the file."));
+		return {};
+	}
 
 	// read info and data
 	matvar_t* var = Mat_VarReadNext(matfp); // try next first (faster)
@@ -665,10 +654,15 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 		var = Mat_VarRead(matfp, qPrintable(currentVarName));
 	// else
 	//	DEBUG(Q_FUNC_INFO << ", was NEXT!")
-	if (!var)
-		return dataStrings << (QStringList() << i18n("Variable not found"));
-	if (!var->data)
-		return dataStrings << (QStringList() << i18n("Variable contains no data"));
+	if (!var) {
+		q->setLastError(i18n("Selected variable not found."));
+		return {};
+	}
+
+	if (!var->data) {
+		q->setLastError(i18n("No valid variable selected."));
+		return {};
+	}
 
 	// DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << '/' << endRow)
 	// DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << '/' << endColumn)
@@ -879,19 +873,25 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 			break;
 		}
 		case MAT_C_OBJECT: // not available (not supported by matio yet)
-			DEBUG(Q_FUNC_INFO << ", found OBJECT. name = " << var->name << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
-			return dataStrings << (QStringList() << i18n("Not implemented yet"));
 		case MAT_C_FUNCTION: // not available (not supported by matio yet)
 			DEBUG(Q_FUNC_INFO << ", found FUNCTION. name = " << var->name << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
 			QDEBUG(Q_FUNC_INFO << ", data: " << (const char*)var->data)
-			return dataStrings << (QStringList() << i18n("Not implemented yet"));
+			[[fallthrough]];
 		case MAT_C_OPAQUE:
-			return dataStrings << (QStringList() << i18n("Not implemented yet"));
+			q->setLastError(i18n("Support for this variable type not implemented yet."));
+			return dataStrings;
 		}
 
 		// prepare import
-		if (dataSource)
-			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
+		if (dataSource) {
+			bool ok = false;
+			columnOffset = dataSource->prepareImport(dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes, ok);
+			if (!ok) {
+				q->setLastError(i18n("Not enough memory."));
+				return QVector<QStringList>{};
+			}
+		}
+
 		DEBUG(Q_FUNC_INFO << ", column offset = " << columnOffset)
 
 		// B: read data
@@ -964,7 +964,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 								}
 								if (i == 0) { // first line
 									if (cell->data_type == MAT_T_UINT16 || cell->data_type == MAT_T_INT16) // valgrind: invalid read of size 2
-										static_cast<QVector<QString>*>(dataContainer[j])->operator[](0) = QString::fromUtf16((const mat_uint16_t*)cell->data);
+										static_cast<QVector<QString>*>(dataContainer[j])->operator[](0) = QString::fromUtf16((const char16_t*)cell->data);
 									else if (cell->data_type == MAT_T_UTF8)
 										static_cast<QVector<QString>*>(dataContainer[j])->operator[](0) = QString::fromUtf8((const char*)cell->data);
 									else
@@ -973,7 +973,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 							} else { // preview
 								if (i == 0) { // first line
 									if (cell->data_type == MAT_T_UINT16 || cell->data_type == MAT_T_INT16)
-										row << QString::fromUtf16((const mat_uint16_t*)cell->data);
+										row << QString::fromUtf16((const char16_t*)cell->data);
 									else if (cell->data_type == MAT_T_UTF8)
 										row << QString::fromUtf8((const char*)cell->data);
 									else
@@ -1162,13 +1162,14 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 						break;
 					}
 
-					if (fields[i]->rank == 2)
+					if (fields[i]->rank == 2) {
 						DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")")
-					else
+					} else {
 						DEBUG(Q_FUNC_INFO << "  rank = " << fields[i]->rank)
+					}
 
 					if (fields[i]->data_type == MAT_T_UINT16 || fields[i]->data_type == MAT_T_INT16) {
-						auto* data = (mat_uint16_t*)fields[i]->data;
+						auto* data = (char16_t*)fields[i]->data;
 
 						QString s = QString::fromUtf16(data);
 						DEBUG(Q_FUNC_INFO << ", UTF16 data: \"" << STDSTRING(s) << "\"")
@@ -1223,8 +1224,10 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 			break;
 		}
 	}
-	if (var->rank > 2) // TODO
-		return dataStrings << (QStringList() << i18n("Not implemented yet"));
+	if (var->rank > 2) { // TODO
+		q->setLastError(i18n("Variables with rank greater than 2 not supported yet."));
+		return dataStrings;
+	}
 
 	Mat_VarFree(var);
 	if (openedFile) {
@@ -1233,11 +1236,11 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 	}
 
 	if (dataSource)
-		dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), mode);
+		dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), importMode);
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(dataSource)
-	Q_UNUSED(mode)
+	Q_UNUSED(importMode)
 	Q_UNUSED(lines)
 #endif
 
@@ -1267,7 +1270,5 @@ void MatioFilter::save(QXmlStreamWriter* writer) const {
   Loads from XML.
 */
 bool MatioFilter::load(XmlStreamReader*) {
-	// 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
-	// 	QXmlStreamAttributes attribs = reader->attributes();
 	return true;
 }

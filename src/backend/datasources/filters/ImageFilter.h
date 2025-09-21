@@ -12,14 +12,18 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 class ImageFilterPrivate;
-class QStringList;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT ImageFilter : public AbstractFileFilter {
+#else
 class ImageFilter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
-	Q_ENUMS(ImportFormat)
 
 public:
 	enum class ImportFormat { MATRIX, XYZ, XYRGB };
+	Q_ENUM(ImportFormat)
 
 	ImageFilter();
 	~ImageFilter() override;
@@ -27,12 +31,8 @@ public:
 	static QStringList importFormats();
 	static QString fileInfoString(const QString&);
 
-	void
-	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
-
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
 
 	void setImportFormat(const ImageFilter::ImportFormat);
 	ImageFilter::ImportFormat importFormat() const;

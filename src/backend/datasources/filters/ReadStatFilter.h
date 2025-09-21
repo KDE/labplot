@@ -10,35 +10,26 @@
 #define READSTATFILTER_H
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
-// #include <QTreeWidgetItem>
 
-#ifdef HAVE_READSTAT
-#include <readstat.h>
-#endif
-
-// class QStringList;
 class ReadStatFilterPrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT ReadStatFilter : public AbstractFileFilter {
+#else
 class ReadStatFilter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
 
 public:
 	ReadStatFilter();
 	~ReadStatFilter() override;
 
-#ifdef HAVE_READSTAT
-	static int getMetaData(readstat_metadata_t*, void*);
-#endif
-
 	static QString fileInfoString(const QString&);
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
-	void
-	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
-
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
 
 	QStringList vectorNames() const;
 	QVector<AbstractColumn::ColumnMode> columnModes() const;

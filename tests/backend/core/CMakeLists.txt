@@ -1,5 +1,9 @@
-add_executable (AbstractAspectTest AbstractAspectTest.cpp)
+option(ENABLE_TEST_BACKEND_CORE "Enable Core Tests" ON)
 
-target_link_libraries(AbstractAspectTest labplot2lib labplot2test)
+if(ENABLE_TEST_BACKEND_CORE)
+    add_executable (AbstractAspectTest AbstractAspectTest.cpp)
 
-add_test(NAME AbstractAspectTest COMMAND AbstractAspectTest)
+    target_link_libraries(AbstractAspectTest labplotbackendlib labplotlib labplottest)
+
+    add_test(NAME AbstractAspectTest COMMAND AbstractAspectTest)
+endif()

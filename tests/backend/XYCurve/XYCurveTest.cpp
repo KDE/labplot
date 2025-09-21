@@ -10,13 +10,19 @@
 
 #include "XYCurveTest.h"
 
+#include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
+#include "backend/lib/Range.h"
+#include "backend/lib/trace.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 
-#include "backend/core/Project.h"
-#include "backend/lib/trace.h"
-
 #include <QFile>
+#include <QUndoStack>
 
 #define GET_CURVE_PRIVATE(plot, child_index, column_name, curve_variable_name)                                                                                 \
 	auto* curve_variable_name = plot->child<XYCurve>(child_index);                                                                                             \
@@ -120,6 +126,36 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector_add4_dont_copy_l
 
 #define doublesToString(v1, v2, v3, v4) QString::number(v1) + "," + QString::number(v2) + "," + QString::number(v3) + "," + QString::number(v4)
 #define lineToString(line) doublesToString(line.p1().x(), line.p1().y(), line.p2().x(), line.p2().y())
+
+void XYCurveTest::setColumn() {
+	Project project;
+	auto* curve = new XYCurve(QStringLiteral("Curve"));
+	project.addChild(curve);
+
+	auto* c1 = new Column(QStringLiteral("C1"));
+	project.addChild(c1);
+	auto* c2 = new Column(QStringLiteral("C2"));
+	project.addChild(c2);
+
+	int counter = 0;
+	connect(curve, &XYCurve::xColumnChanged, [&counter] {
+		++counter;
+	});
+	curve->setXColumn(c1);
+	QCOMPARE(curve->xColumn(), c1);
+	QCOMPARE(counter, 1);
+	curve->setXColumn(c2);
+	QCOMPARE(curve->xColumn(), c2);
+	QCOMPARE(counter, 2);
+
+	curve->undoStack()->undo();
+	QCOMPARE(curve->xColumn(), c1);
+	QCOMPARE(counter, 3);
+
+	curve->undoStack()->redo();
+	QCOMPARE(curve->xColumn(), c2);
+	QCOMPARE(counter, 4);
+}
 
 void XYCurveTest::addUniqueLineTest01() {
 	//	// For performance Testing only
@@ -683,7 +719,7 @@ void addUniqueLine01(QPointF p, double& minY, double& maxY, QPointF& lastPoint, 
 			if (maxY != minY)
 				lines.append(QLineF(lastPoint.x(), minY, lastPoint.x(), maxY));
 			lines.append(QLineF(lastPoint, p));
-		} else if (!isnan(lastPoint.x()) && !isnan(lastPoint.y()))
+		} else if (!std::isnan(lastPoint.x()) && !std::isnan(lastPoint.y()))
 			lines.append(QLineF(lastPoint, p));
 		prevPixelDiffZero = false;
 		minY = p.y();
@@ -709,7 +745,7 @@ void addUniqueLine_double_vector(double* p,
 			if (maxY != minY)
 				lines.append(QLineF(lastPoint.x(), minY, lastPoint.x(), maxY));
 			lines.append(QLineF(lastPoint, QPointF(p[0], p[1])));
-		} else if (!isnan(lastPoint.x()) && !isnan(lastPoint.y()))
+		} else if (!std::isnan(lastPoint.x()) && !std::isnan(lastPoint.y()))
 			lines.append(QLineF(lastPoint, QPointF(p[0], p[1])));
 		prevPixelDiffZero = false;
 		minY = p[1];
@@ -737,7 +773,7 @@ void addUniqueLine_double_vector_last_point_vector(double* p,
 			if (maxY != minY)
 				lines.append(QLineF(lastPoint[0], minY, lastPoint[0], maxY));
 			lines.append(QLineF(QPointF(lastPoint[0], lastPoint[1]), QPointF(p[0], p[1])));
-		} else if (!isnan(lastPoint[0]) && !isnan(lastPoint[1]))
+		} else if (!std::isnan(lastPoint[0]) && !std::isnan(lastPoint[1]))
 			lines.append(QLineF(QPointF(lastPoint[0], lastPoint[1]), QPointF(p[0], p[1])));
 		prevPixelDiffZero = false;
 		minY = p[1];
@@ -779,7 +815,7 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector(double* p,
 			numberLines++;
 			// lines.append(QLineF(QPointF(lastPoint[0], lastPoint[1]), QPointF(p[0],
 			// p[1])));
-		} else if (!isnan(lastPoint[0]) && !isnan(lastPoint[1])) {
+		} else if (!std::isnan(lastPoint[0]) && !std::isnan(lastPoint[1])) {
 			// lines.append(QLineF(QPointF(lastPoint[0], lastPoint[1]), QPointF(p[0],
 			// p[1])));
 			lines[4 * numberLines] = lastPoint[0];
@@ -828,7 +864,7 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector_add4(double* p,
 			numberLines += 4;
 			// lines.append(QLineF(QPointF(lastPoint[0], lastPoint[1]), QPointF(p[0],
 			// p[1])));
-		} else if (!isnan(lastPoint[0]) && !isnan(lastPoint[1])) {
+		} else if (!std::isnan(lastPoint[0]) && !std::isnan(lastPoint[1])) {
 			// lines.append(QLineF(QPointF(lastPoint[0], lastPoint[1]), QPointF(p[0],
 			// p[1])));
 			lines[numberLines] = lastPoint[0];
@@ -876,7 +912,7 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector_add4_dont_copy_l
 			numberLines += 4;
 			// lines.append(QLineF(QPointF(lastPoint[0], lastPoint[1]), QPointF(p[0],
 			// p[1])));
-		} else if (!isnan((*lastPoint)[0]) && !isnan((*lastPoint)[1])) {
+		} else if (!std::isnan((*lastPoint)[0]) && !std::isnan((*lastPoint)[1])) {
 			// lines.append(QLineF(QPointF(lastPoint[0], lastPoint[1]), QPointF(p[0],
 			// p[1])));
 			lines[numberLines] = (*lastPoint)[0];
@@ -1943,6 +1979,464 @@ void XYCurveTest::updateLinesLog10() {
 }
 
 // TODO: create tests for Splines
+
+void XYCurveTest::scatterStrictMonotonicIncreasing() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
+	plot->setNiceExtend(false);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+
+	const auto& columns = sheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+	Column* xColumn = columns.at(0);
+	Column* yColumn = columns.at(1);
+
+	const QVector<double> xValues = {
+		1.,
+		2.,
+		3.,
+		4.,
+		5.,
+	};
+
+	const QVector<double> yValues = {
+		0.,
+		4.,
+		6.,
+		8.,
+		10.,
+	};
+
+	xColumn->replaceValues(-1, xValues);
+	yColumn->replaceValues(-1, yValues);
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	curve->setLineType(XYCurve::LineType::NoLine);
+	curve->symbol()->setStyle(Symbol::Style::Circle);
+	plot->addChild(curve);
+	curve->setXColumn(xColumn);
+
+	int callCounter = 0;
+	connect(curve,
+			&XYCurve::pointsUpdated,
+			[&callCounter, xValues, yValues](const XYCurve*, const int startIndex, const int endIndex, const QVector<QPointF>& logicalPoints) {
+				QCOMPARE(startIndex, 0);
+				QCOMPARE(endIndex, 4);
+
+				QCOMPARE(xValues.size(), yValues.size());
+				QCOMPARE(logicalPoints.size(), xValues.size());
+
+				for (int i = 0; i < xValues.size(); i++) {
+					QCOMPARE(logicalPoints.at(i).x(), xValues.at(i));
+					QCOMPARE(logicalPoints.at(i).y(), yValues.at(i));
+				}
+
+				callCounter++;
+			});
+	curve->setYColumn(yColumn);
+
+	CHECK_RANGE(plot, curve, Dimension::X, 1., 5.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 10.);
+
+	QCOMPARE(callCounter, 1);
+}
+void XYCurveTest::scatterMonotonicIncreasing() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
+	plot->setNiceExtend(false);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+
+	const auto& columns = sheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+	Column* xColumn = columns.at(0);
+	Column* yColumn = columns.at(1);
+
+	const QVector<double> xValues = {
+		1.,
+		1.,
+		1.,
+		2.,
+		3.,
+		4.,
+		5.,
+		5.,
+		5.,
+	};
+
+	const QVector<double> yValues = {
+		0.,
+		4.,
+		6.,
+		8.,
+		10.,
+		0.,
+		4.,
+		6.,
+		8.,
+	};
+
+	xColumn->replaceValues(-1, xValues);
+	yColumn->replaceValues(-1, yValues);
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	curve->setLineType(XYCurve::LineType::NoLine);
+	curve->symbol()->setStyle(Symbol::Style::Circle);
+	plot->addChild(curve);
+	curve->setXColumn(xColumn);
+
+	int callCounter = 0;
+	connect(curve,
+			&XYCurve::pointsUpdated,
+			[&callCounter, xValues, yValues](const XYCurve*, const int startIndex, const int endIndex, const QVector<QPointF>& logicalPoints) {
+				QCOMPARE(startIndex, 0);
+				QCOMPARE(endIndex, 8);
+
+				QCOMPARE(xValues.size(), yValues.size());
+				QCOMPARE(logicalPoints.size(), xValues.size());
+
+				for (int i = 0; i < xValues.size(); i++) {
+					QCOMPARE(logicalPoints.at(i).x(), xValues.at(i));
+					QCOMPARE(logicalPoints.at(i).y(), yValues.at(i));
+				}
+
+				callCounter++;
+			});
+	curve->setYColumn(yColumn);
+
+	CHECK_RANGE(plot, curve, Dimension::X, 1., 5.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 10.);
+
+	QCOMPARE(callCounter, 1);
+}
+
+void XYCurveTest::scatterMonotonicIncreasingPlotRangeDecreasing() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
+	plot->setNiceExtend(false);
+
+	plot->enableAutoScale(Dimension::X, 0, false, false); // Disable autoscaling
+	Range<double> range = plot->range(Dimension::X, 0);
+	range.setStart(6.);
+	range.setEnd(0.);
+	plot->setRange(Dimension::X, 0, range);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+
+	const auto& columns = sheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+	Column* xColumn = columns.at(0);
+	Column* yColumn = columns.at(1);
+
+	const QVector<double> xValues = {
+		1.,
+		1.,
+		1.,
+		2.,
+		3.,
+		4.,
+		5.,
+		5.,
+		5.,
+	};
+
+	const QVector<double> yValues = {
+		0.,
+		4.,
+		6.,
+		8.,
+		10.,
+		0.,
+		4.,
+		6.,
+		8.,
+	};
+
+	xColumn->replaceValues(-1, xValues);
+	yColumn->replaceValues(-1, yValues);
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	curve->setLineType(XYCurve::LineType::NoLine);
+	curve->symbol()->setStyle(Symbol::Style::Circle);
+	plot->addChild(curve);
+	curve->setXColumn(xColumn);
+
+	int callCounter = 0;
+	connect(curve,
+			&XYCurve::pointsUpdated,
+			[&callCounter, xValues, yValues](const XYCurve*, const int startIndex, const int endIndex, const QVector<QPointF>& logicalPoints) {
+				QCOMPARE(startIndex, 0);
+				QCOMPARE(endIndex, 8);
+
+				QCOMPARE(xValues.size(), yValues.size());
+				QCOMPARE(logicalPoints.size(), xValues.size());
+
+				for (int i = 0; i < xValues.size(); i++) {
+					QCOMPARE(logicalPoints.at(i).x(), xValues.at(i));
+					QCOMPARE(logicalPoints.at(i).y(), yValues.at(i));
+				}
+
+				callCounter++;
+			});
+	curve->setYColumn(yColumn);
+
+	CHECK_RANGE(plot, curve, Dimension::X, 6., 0.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 10.);
+
+	QCOMPARE(callCounter, 1);
+}
+
+void XYCurveTest::scatterMonotonicDecreasing() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
+	plot->setNiceExtend(false);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+
+	const auto& columns = sheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+	Column* xColumn = columns.at(0);
+	Column* yColumn = columns.at(1);
+
+	// decreasing
+	const QVector<double> xValues = {
+		5.,
+		5.,
+		5.,
+		4.,
+		3.,
+		2.,
+		1.,
+		1.,
+		1.,
+	};
+
+	const QVector<double> yValues = {
+		0.,
+		4.,
+		6.,
+		8.,
+		10.,
+		0.,
+		4.,
+		6.,
+		8.,
+	};
+
+	xColumn->replaceValues(-1, xValues);
+	yColumn->replaceValues(-1, yValues);
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	curve->setLineType(XYCurve::LineType::NoLine);
+	curve->symbol()->setStyle(Symbol::Style::Circle);
+	plot->addChild(curve);
+	curve->setXColumn(xColumn);
+
+	int callCounter = 0;
+	connect(curve,
+			&XYCurve::pointsUpdated,
+			[&callCounter, xValues, yValues](const XYCurve*, const int startIndex, const int endIndex, const QVector<QPointF>& logicalPoints) {
+				QCOMPARE(startIndex, 0);
+				QCOMPARE(endIndex, 8);
+
+				QCOMPARE(xValues.size(), yValues.size());
+				QCOMPARE(logicalPoints.size(), xValues.size());
+
+				for (int i = 0; i < xValues.size(); i++) {
+					QCOMPARE(logicalPoints.at(i).x(), xValues.at(i));
+					QCOMPARE(logicalPoints.at(i).y(), yValues.at(i));
+				}
+
+				callCounter++;
+			});
+	curve->setYColumn(yColumn);
+
+	CHECK_RANGE(plot, curve, Dimension::X, 1., 5.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 10.);
+
+	QCOMPARE(callCounter, 1);
+}
+
+void XYCurveTest::lineMonotonicIncreasing() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
+	plot->setNiceExtend(false);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+
+	const auto& columns = sheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+	Column* xColumn = columns.at(0);
+	Column* yColumn = columns.at(1);
+
+	const QVector<double> xValues = {
+		1.,
+		1.,
+		1.,
+		2.,
+		3.,
+		4.,
+		5.,
+		5.,
+		5.,
+	};
+
+	const QVector<double> yValues = {
+		0.,
+		4.,
+		6.,
+		8.,
+		10.,
+		0.,
+		4.,
+		6.,
+		8.,
+	};
+
+	xColumn->replaceValues(-1, xValues);
+	yColumn->replaceValues(-1, yValues);
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	plot->addChild(curve);
+	curve->setXColumn(xColumn);
+
+	int callCounter = 0;
+	connect(curve, &XYCurve::linesUpdated, [&callCounter, xValues, yValues](const XYCurve*, const QVector<QLineF>& lines) {
+		QCOMPARE(xValues.size(), yValues.size());
+
+		VALUES_EQUAL(lines.first().x1(), 1.);
+		VALUES_EQUAL(lines.first().y1(), 0.);
+
+		VALUES_EQUAL(lines.last().x2(), 5.);
+		VALUES_EQUAL(lines.last().y2(), 8.);
+
+		callCounter++;
+	});
+	curve->setYColumn(yColumn);
+
+	CHECK_RANGE(plot, curve, Dimension::X, 1., 5.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 10.);
+
+	QCOMPARE(callCounter, 1);
+}
+
+void XYCurveTest::lineMonotonicIncreasingPlotRangeDecreasing() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
+	plot->setNiceExtend(false);
+
+	plot->enableAutoScale(Dimension::X, 0, false, false); // Disable autoscaling
+	Range<double> range = plot->range(Dimension::X, 0);
+	range.setStart(6.);
+	range.setEnd(0.);
+	plot->setRange(Dimension::X, 0, range);
+
+	auto* sheet = new Spreadsheet(QStringLiteral("data"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(2);
+
+	const auto& columns = sheet->children<Column>();
+	QCOMPARE(columns.count(), 2);
+	Column* xColumn = columns.at(0);
+	Column* yColumn = columns.at(1);
+
+	const QVector<double> xValues = {
+		1.,
+		1.,
+		1.,
+		2.,
+		3.,
+		4.,
+		5.,
+		5.,
+		5.,
+	};
+
+	const QVector<double> yValues = {
+		0.,
+		4.,
+		6.,
+		8.,
+		10.,
+		0.,
+		4.,
+		6.,
+		8.,
+	};
+
+	xColumn->replaceValues(-1, xValues);
+	yColumn->replaceValues(-1, yValues);
+
+	auto* curve = new XYCurve(QStringLiteral("curve"));
+	plot->addChild(curve);
+	curve->setXColumn(xColumn);
+
+	int callCounter = 0;
+	connect(curve, &XYCurve::linesUpdated, [&callCounter, xValues, yValues](const XYCurve*, const QVector<QLineF>& lines) {
+		QCOMPARE(xValues.size(), yValues.size());
+
+		VALUES_EQUAL(lines.first().x1(), 1.);
+		VALUES_EQUAL(lines.first().y1(), 0.);
+
+		VALUES_EQUAL(lines.last().x2(), 5.);
+		VALUES_EQUAL(lines.last().y2(), 8.);
+
+		callCounter++;
+	});
+	curve->setYColumn(yColumn);
+
+	CHECK_RANGE(plot, curve, Dimension::X, 6., 0.);
+	CHECK_RANGE(plot, curve, Dimension::Y, 0., 10.);
+
+	QCOMPARE(callCounter, 1);
+}
 
 // ############################################################################
 //  Hover tests

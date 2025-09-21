@@ -60,7 +60,7 @@ DateTime2StringFilterSetFormatCmd::DateTime2StringFilterSetFormatCmd(DateTime2St
 void DateTime2StringFilterSetFormatCmd::redo() {
 	QString tmp = m_target->m_format;
 	m_target->m_format = m_other_format;
-	m_other_format = tmp;
+	m_other_format = std::move(tmp);
 	Q_EMIT m_target->formatChanged();
 }
 

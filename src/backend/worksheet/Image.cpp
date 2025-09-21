@@ -29,12 +29,13 @@
 
 /**
  * \class Image
- * \brief A label supporting rendering of html- and tex-formatted texts.
+ * \brief Worksheet element to draw images.
  *
- * The label is aligned relative to the specified position.
+ * The image can be added to \c Worksheet or to \c CartesianPlot and is aligned relative to the specified position.
  * The position can be either specified by providing the x- and y- coordinates
  * in parent's coordinate system, or by specifying one of the predefined position
  * flags (\c HorizontalPosition, \c VerticalPosition).
+ * \ingroup worksheet
  */
 
 Image::Image(const QString& name)
@@ -51,23 +52,27 @@ void Image::init() {
 	Q_D(Image);
 
 	KConfig config;
-	KConfigGroup group = config.group("Image");
+	KConfigGroup group = config.group(QStringLiteral("Image"));
 
-	d->embedded = group.readEntry("embedded", true);
-	d->opacity = group.readEntry("opacity", d->opacity);
+	d->embedded = group.readEntry(QStringLiteral("embedded"), true);
+	d->opacity = group.readEntry(QStringLiteral("opacity"), d->opacity);
 
 	// geometry
-	d->position.point.setX(group.readEntry("PositionXValue", 0.));
-	d->position.point.setY(group.readEntry("PositionYValue", 0.));
-	d->position.horizontalPosition = (WorksheetElement::HorizontalPosition)group.readEntry("PositionX", (int)WorksheetElement::HorizontalPosition::Center);
-	d->position.verticalPosition = (WorksheetElement::VerticalPosition)group.readEntry("PositionY", (int)WorksheetElement::VerticalPosition::Center);
-	d->horizontalAlignment = (WorksheetElement::HorizontalAlignment)group.readEntry("HorizontalAlignment", (int)WorksheetElement::HorizontalAlignment::Center);
-	d->verticalAlignment = (WorksheetElement::VerticalAlignment)group.readEntry("VerticalAlignment", (int)WorksheetElement::VerticalAlignment::Center);
-	d->setRotation(group.readEntry("Rotation", d->rotation()));
+	d->position.point.setX(group.readEntry(QStringLiteral("PositionXValue"), 0.));
+	d->position.point.setY(group.readEntry(QStringLiteral("PositionYValue"), 0.));
+	d->position.horizontalPosition =
+		(WorksheetElement::HorizontalPosition)group.readEntry(QStringLiteral("PositionX"), (int)WorksheetElement::HorizontalPosition::Center);
+	d->position.verticalPosition =
+		(WorksheetElement::VerticalPosition)group.readEntry(QStringLiteral("PositionY"), (int)WorksheetElement::VerticalPosition::Center);
+	d->horizontalAlignment =
+		(WorksheetElement::HorizontalAlignment)group.readEntry(QStringLiteral("HorizontalAlignment"), (int)WorksheetElement::HorizontalAlignment::Center);
+	d->verticalAlignment =
+		(WorksheetElement::VerticalAlignment)group.readEntry(QStringLiteral("VerticalAlignment"), (int)WorksheetElement::VerticalAlignment::Center);
+	d->setRotation(group.readEntry(QStringLiteral("Rotation"), d->rotation()));
 
 	// border
 	d->borderLine = new Line(QString());
-	d->borderLine->setPrefix(QLatin1String("Border"));
+	d->borderLine->setPrefix(QStringLiteral("Border"));
 	d->borderLine->setHidden(true);
 	addChild(d->borderLine);
 	d->borderLine->init(group);
@@ -82,10 +87,6 @@ void Image::init() {
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 Image::~Image() = default;
-
-QGraphicsItem* Image::graphicsItem() const {
-	return d_ptr;
-}
 
 void Image::setParentGraphicsItem(QGraphicsItem* item) {
 	Q_D(Image);
@@ -114,23 +115,6 @@ void Image::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, b
 */
 QIcon Image::icon() const {
 	return QIcon::fromTheme(QStringLiteral("viewimage"));
-}
-
-QMenu* Image::createContextMenu() {
-	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-
-	if (!visibilityAction) {
-		visibilityAction = new QAction(i18n("Visible"), this);
-		visibilityAction->setCheckable(true);
-		connect(visibilityAction, &QAction::triggered, this, &Image::changeVisibility);
-	}
-
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
-	menu->insertSeparator(firstAction);
-
-	return menu;
 }
 
 /* ============================ getter methods ================= */
@@ -168,22 +152,18 @@ void Image::setOpacity(qreal opacity) {
 		exec(new ImageSetOpacityCmd(d, opacity, ki18n("%1: set border opacity")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Image, SetWidth, int, width, retransform)
+STD_SETTER_CMD_IMPL_F_S(Image, SetWidth, int, width, scaleImage)
 void Image::setWidth(int width) {
 	Q_D(Image);
-	if (width != d->width) {
+	if (width != d->width)
 		exec(new ImageSetWidthCmd(d, width, ki18n("%1: set width")));
-		d->scaleImage();
-	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(Image, SetHeight, int, height, retransform)
+STD_SETTER_CMD_IMPL_F_S(Image, SetHeight, int, height, scaleImage)
 void Image::setHeight(int height) {
 	Q_D(Image);
-	if (height != d->height) {
+	if (height != d->height)
 		exec(new ImageSetHeightCmd(d, height, ki18n("%1: set height")));
-		d->scaleImage();
-	}
 }
 
 STD_SETTER_CMD_IMPL_S(Image, SetKeepRatio, bool, keepRatio)
@@ -221,15 +201,13 @@ void ImagePrivate::retransform() {
 
 	int w = imageScaled.width();
 	int h = imageScaled.height();
-	boundingRectangle.setX(-w / 2);
-	boundingRectangle.setY(-h / 2);
-	boundingRectangle.setWidth(w);
-	boundingRectangle.setHeight(h);
+	m_boundingRectangle.setX(-w / 2);
+	m_boundingRectangle.setY(-h / 2);
+	m_boundingRectangle.setWidth(w);
+	m_boundingRectangle.setHeight(h);
 
 	updatePosition(); // needed, because CartesianPlot calls retransform if some operations are done
 	updateBorder();
-
-	Q_EMIT q->changed();
 }
 
 void ImagePrivate::updateImage() {
@@ -278,7 +256,7 @@ void ImagePrivate::scaleImage() {
 
 void ImagePrivate::updateBorder() {
 	borderShapePath = QPainterPath();
-	borderShapePath.addRect(boundingRectangle);
+	borderShapePath.addRect(m_boundingRectangle);
 	recalcShapeAndBoundingRect();
 }
 
@@ -302,14 +280,14 @@ QPainterPath ImagePrivate::shape() const {
 void ImagePrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	QMatrix matrix;
+	QTransform matrix;
 	imageShape = QPainterPath();
 	if (borderLine->pen().style() != Qt::NoPen) {
 		imageShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderLine->pen()));
 		transformedBoundingRectangle = matrix.mapRect(imageShape.boundingRect());
 	} else {
-		imageShape.addRect(boundingRectangle);
-		transformedBoundingRectangle = matrix.mapRect(boundingRectangle);
+		imageShape.addRect(m_boundingRectangle);
+		transformedBoundingRectangle = matrix.mapRect(m_boundingRectangle);
 	}
 
 	imageShape = matrix.map(imageShape);
@@ -322,7 +300,7 @@ void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*op
 
 	// draw the image
 	painter->setOpacity(opacity);
-	painter->drawImage(boundingRectangle.topLeft(), imageScaled, imageScaled.rect());
+	painter->drawImage(m_boundingRectangle.topLeft(), imageScaled, imageScaled.rect());
 	painter->restore();
 
 	// draw the border
@@ -350,26 +328,6 @@ void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*op
 			painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth));
 
 		painter->drawRect(rect);
-	}
-}
-
-void ImagePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
-}
-
-void ImagePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
-}
-
-void ImagePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
 	}
 }
 
@@ -427,7 +385,6 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 		return false;
 
 	Q_D(Image);
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -462,7 +419,7 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("border")) {
 			d->borderLine->load(reader, preview);
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}
@@ -482,12 +439,12 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 // ##############################################################################
 void Image::loadThemeConfig(const KConfig& config) {
 	Q_D(Image);
-	const auto& group = config.group("CartesianPlot");
+	const auto& group = config.group(QStringLiteral("CartesianPlot"));
 	d->borderLine->loadThemeConfig(group);
 }
 
 void Image::saveThemeConfig(const KConfig& config) {
 	Q_D(Image);
-	KConfigGroup group = config.group("Image");
+	KConfigGroup group = config.group(QStringLiteral("Image"));
 	d->borderLine->saveThemeConfig(group);
 }

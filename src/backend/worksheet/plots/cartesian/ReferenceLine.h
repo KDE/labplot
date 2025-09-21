@@ -3,31 +3,33 @@
 	Project              : LabPlot
 	Description          : Reference line on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef REFERENCELINE_H
 #define REFERENCELINE_H
 
-#include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 
-class CartesianPlot;
 class Line;
 class ReferenceLinePrivate;
 class QActionGroup;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT ReferenceLine : public WorksheetElement {
+#else
 class ReferenceLine : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:
-	explicit ReferenceLine(CartesianPlot*, const QString&);
+	explicit ReferenceLine(CartesianPlot*, const QString&, bool loading = false);
 	~ReferenceLine() override;
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
-	QGraphicsItem* graphicsItem() const override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -46,11 +48,10 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(ReferenceLine)
-	void init();
+	void init(bool loading);
 	void initActions();
 	void initMenus();
 
-	QAction* visibilityAction{nullptr};
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
 
@@ -67,11 +68,12 @@ private Q_SLOTS:
 	void orientationChangedSlot(QAction*);
 	void lineStyleChanged(QAction*);
 	void lineColorChanged(QAction*);
-	void visibilityChangedSlot();
 
 Q_SIGNALS:
 	friend class ReferenceLineSetPositionCmd;
 	void orientationChanged(Orientation);
+
+	friend class WorksheetElementTest;
 };
 
 #endif

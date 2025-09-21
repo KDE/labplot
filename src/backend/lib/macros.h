@@ -5,15 +5,12 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2013-2015 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2016-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef MACROS_H
 #define MACROS_H
-
-#include <KConfigGroup>
-#include <KSharedConfig>
 
 #include <QApplication>
 #include <QMetaEnum>
@@ -21,30 +18,15 @@
 #include "macrosWarningStyle.h"
 
 // C++ style warning (works on Windows)
-#include <iomanip>
-#include <iostream>
-#define WARN(x)                                                                                                                                                \
-	std::cout << std::dec << std::setprecision(std::numeric_limits<double>::digits10 + 1) << std::boolalpha << x                                               \
-			  << std::resetiosflags(std::ios_base::boolalpha) << std::setprecision(-1) << std::endl;
-
-#ifndef NDEBUG
-#include <QDebug>
-#define QDEBUG(x) qDebug() << x;
-#define DEBUG(x) WARN(x)
-#else
-#define QDEBUG(x)                                                                                                                                              \
-	{ }
-#define DEBUG(x)                                                                                                                                               \
-	{ }
-#endif
-
-#define DEBUG_TEXTLABEL_BOUNDING_RECT 0
-#define DEBUG_TEXTLABEL_GLUEPOINTS 0
-#define DEBUG_AXIS_BOUNDING_RECT 0
+#include "Debug.h"
 
 struct Lock {
 	inline explicit Lock(bool& variable)
-		: variable(variable = true) {
+		: variable(variable) {
+		// Make sure it is not already locked
+		// somewhere else
+		assert(!variable);
+		this->variable = true;
 	}
 
 	inline ~Lock() {
@@ -53,6 +35,27 @@ struct Lock {
 
 private:
 	bool& variable;
+};
+
+/*
+ * Cleanup class which can be used to automatically cleaning up after destruction using a lambda
+ * Example:
+ *    CleanupNoArguments cleanup([](){
+ *        // Cleanup code
+ *	  })
+ */
+template<typename T>
+class CleanupNoArguments {
+public:
+	CleanupNoArguments(T cleanupFunction)
+		: m_cleanupFunction(cleanupFunction) {
+	}
+	~CleanupNoArguments() {
+		m_cleanupFunction();
+	}
+
+private:
+	T m_cleanupFunction;
 };
 
 /*!
@@ -71,22 +74,27 @@ private:
 	CONDITIONAL_RETURN_NO_LOCK                                                                                                                                 \
 	const Lock lock(m_initializing);
 
-#if QT_VERSION < 0x050700
-template<class T>
-constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
-	return t;
-}
-#endif
+// Automatically reset cursor when going out of scope
+#define WAIT_CURSOR_AUTO_RESET                                                                                                                                 \
+	WAIT_CURSOR;                                                                                                                                               \
+	CleanupNoArguments cleanup([]() {                                                                                                                          \
+		RESET_CURSOR;                                                                                                                                          \
+	});
 
 #define WAIT_CURSOR QApplication::setOverrideCursor(QCursor(Qt::WaitCursor))
 #define RESET_CURSOR QApplication::restoreOverrideCursor()
 
+#define STRING(x) #x
 #ifdef HAVE_WINDOWS
 #define STDSTRING(qstr) qstr.toUtf8().constData()
 #else
 #define STDSTRING(qstr) qstr.toStdString()
 #endif
 #define UTF8_QSTRING(str) QString::fromUtf8(str)
+
+#define SPACE QLatin1Char(' ')
+#define TAB QStringLiteral("\t")
+#define NEWLINE QStringLiteral("\n")
 
 #define CHECK(expr)                                                                                                                                            \
 	if (!(expr)) {                                                                                                                                             \
@@ -166,6 +174,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 // replaces CLASS_D_READER_IMPL
 #define BASIC_D_READER_IMPL(classname, type, method, var)                                                                                                      \
 	type classname::method() const {                                                                                                                           \
+		Q_D(const classname);                                                                                                                                  \
 		return d->var;                                                                                                                                         \
 	}
 // replaces CLASS_SHARED_D_READER_IMPL
@@ -177,12 +186,14 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 
 #define BASIC_D_ACCESSOR_IMPL(classname, type, method, Method, var)                                                                                            \
 	void classname::set##Method(const type value) {                                                                                                            \
+		Q_D(classname);                                                                                                                                        \
 		d->var = value;                                                                                                                                        \
 	}                                                                                                                                                          \
 	BASIC_D_READER_IMPL(classname, type, method, var)
 
 #define CLASS_D_ACCESSOR_IMPL(classname, type, method, Method, var)                                                                                            \
 	void classname::set##Method(const type& value) {                                                                                                           \
+		Q_D(classname);                                                                                                                                        \
 		d->var = value;                                                                                                                                        \
 	}                                                                                                                                                          \
 	BASIC_D_READER_IMPL(classname, type, method, var)
@@ -255,7 +266,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description, parent) {                    \
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
-			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
+			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                       \
 		}                                                                                                                                                      \
 	};
 
@@ -268,7 +279,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
-			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
+			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                       \
 		}                                                                                                                                                      \
 	};
 
@@ -281,8 +292,8 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
-			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
-			emit m_target->q->custom_signal();                                                                                                                 \
+			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                       \
+			Q_EMIT m_target->q->custom_signal();                                                                                                               \
 		}                                                                                                                                                      \
 	};
 
@@ -295,10 +306,10 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
-			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
+			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                       \
 		}                                                                                                                                                      \
 		virtual void finalizeUndo() override {                                                                                                                 \
-			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
+			Q_EMIT m_target->q->field_name##Changed(m_target->*m_field);                                                                                       \
 		}                                                                                                                                                      \
 	};
 
@@ -396,7 +407,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		}                                                                                                                                                      \
 		void finalize() {                                                                                                                                      \
 			m_target->finalize_method();                                                                                                                       \
-			emit m_target->q->field_name##Changed(m_target->field_name());                                                                                     \
+			Q_EMIT m_target->q->field_name##Changed(m_target->field_name());                                                                                   \
 		}                                                                                                                                                      \
                                                                                                                                                                \
 	private:                                                                                                                                                   \
@@ -427,19 +438,19 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 	{                                                                                                                                                          \
 		str = attribs.value(QStringLiteral("color_r")).toString();                                                                                             \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_r")).toString());                                                                 \
+			reader->raiseMissingAttributeWarning(QStringLiteral("color_r"));                                                                                   \
 		else                                                                                                                                                   \
 			color.setRed(str.toInt());                                                                                                                         \
                                                                                                                                                                \
 		str = attribs.value(QStringLiteral("color_g")).toString();                                                                                             \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_g")).toString());                                                                 \
+			reader->raiseMissingAttributeWarning(QStringLiteral("color_g"));                                                                                   \
 		else                                                                                                                                                   \
 			color.setGreen(str.toInt());                                                                                                                       \
                                                                                                                                                                \
 		str = attribs.value(QStringLiteral("color_b")).toString();                                                                                             \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_b")).toString());                                                                 \
+			reader->raiseMissingAttributeWarning(QStringLiteral("color_b"));                                                                                   \
 		else                                                                                                                                                   \
 			color.setBlue(str.toInt());                                                                                                                        \
 	}
@@ -448,19 +459,19 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 	{                                                                                                                                                          \
 		str = attribs.value(QStringLiteral(label "_r")).toString();                                                                                            \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral(label "_r")).toString());                                                                \
+			reader->raiseMissingAttributeWarning(QStringLiteral(label "_r"));                                                                                  \
 		else                                                                                                                                                   \
 			color.setRed(str.toInt());                                                                                                                         \
                                                                                                                                                                \
 		str = attribs.value(QStringLiteral(label "_g")).toString();                                                                                            \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral(label "_g")).toString());                                                                \
+			reader->raiseMissingAttributeWarning(QStringLiteral(label "_g"));                                                                                  \
 		else                                                                                                                                                   \
 			color.setGreen(str.toInt());                                                                                                                       \
                                                                                                                                                                \
 		str = attribs.value(QStringLiteral(label "_b")).toString();                                                                                            \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral(label "_b")).toString());                                                                \
+			reader->raiseMissingAttributeWarning(QStringLiteral(label "_b"));                                                                                  \
 		else                                                                                                                                                   \
 			color.setBlue(str.toInt());                                                                                                                        \
 	}
@@ -478,26 +489,26 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 	{                                                                                                                                                          \
 		str = attribs.value(QStringLiteral("style")).toString();                                                                                               \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral("style")).toString());                                                                   \
+			reader->raiseMissingAttributeWarning(QStringLiteral("style"));                                                                                     \
 		else                                                                                                                                                   \
 			pen.setStyle(static_cast<Qt::PenStyle>(str.toInt()));                                                                                              \
                                                                                                                                                                \
 		QColor color;                                                                                                                                          \
 		str = attribs.value(QStringLiteral("color_r")).toString();                                                                                             \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_r")).toString());                                                                 \
+			reader->raiseMissingAttributeWarning(QStringLiteral("color_r"));                                                                                   \
 		else                                                                                                                                                   \
 			color.setRed(str.toInt());                                                                                                                         \
                                                                                                                                                                \
 		str = attribs.value(QStringLiteral("color_g")).toString();                                                                                             \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_g")).toString());                                                                 \
+			reader->raiseMissingAttributeWarning(QStringLiteral("color_g"));                                                                                   \
 		else                                                                                                                                                   \
 			color.setGreen(str.toInt());                                                                                                                       \
                                                                                                                                                                \
 		str = attribs.value(QStringLiteral("color_b")).toString();                                                                                             \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_b")).toString());                                                                 \
+			reader->raiseMissingAttributeWarning(QStringLiteral("color_b"));                                                                                   \
 		else                                                                                                                                                   \
 			color.setBlue(str.toInt());                                                                                                                        \
                                                                                                                                                                \
@@ -505,7 +516,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
                                                                                                                                                                \
 		str = attribs.value(QStringLiteral("width")).toString();                                                                                               \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());                                                                   \
+			reader->raiseMissingAttributeWarning(QStringLiteral("width"));                                                                                     \
 		else                                                                                                                                                   \
 			pen.setWidthF(str.toDouble());                                                                                                                     \
 	}
@@ -515,46 +526,74 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 	{                                                                                                                                                          \
 		writer->writeAttribute(QStringLiteral("fontFamily"), font.family());                                                                                   \
 		writer->writeAttribute(QStringLiteral("fontSize"), QString::number(font.pixelSize()));                                                                 \
-		writer->writeAttribute(QStringLiteral("fontPointSize"), QString::number(font.pointSize()));                                                            \
+		writer->writeAttribute(QStringLiteral("fontPointSize"), QString::number(font.pointSizeF()));                                                           \
 		writer->writeAttribute(QStringLiteral("fontWeight"), QString::number(font.weight()));                                                                  \
 		writer->writeAttribute(QStringLiteral("fontItalic"), QString::number(font.italic()));                                                                  \
 	}
 
+#define MAP_LEGACY_FONT_WEIGHT(legacyWeight)                                                                                                                   \
+	((legacyWeight) <= 0		? QFont::Thin                                                                                                                  \
+		 : (legacyWeight) <= 12 ? QFont::ExtraLight                                                                                                            \
+		 : (legacyWeight) <= 25 ? QFont::Light                                                                                                                 \
+		 : (legacyWeight) <= 50 ? QFont::Normal                                                                                                                \
+		 : (legacyWeight) <= 63 ? QFont::Medium                                                                                                                \
+		 : (legacyWeight) <= 75 ? QFont::DemiBold                                                                                                              \
+		 : (legacyWeight) <= 87 ? QFont::Bold                                                                                                                  \
+		 : (legacyWeight) <= 95 ? QFont::ExtraBold                                                                                                             \
+								: QFont::Black)
+
+// uses font.setLegacyWeight(int)
+// "MS Shell Dlg 2" is a logical font on Windows (mapped to Tahoma) not used in Qt6 anymore
 #define READ_QFONT(font)                                                                                                                                       \
 	{                                                                                                                                                          \
 		str = attribs.value(QStringLiteral("fontFamily")).toString();                                                                                          \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral("fontFamily")).toString());                                                              \
-		else                                                                                                                                                   \
+			reader->raiseMissingAttributeWarning(QStringLiteral("fontFamily"));                                                                                \
+		else {                                                                                                                                                 \
+			if (str == QStringLiteral("MS Shell Dlg 2")) {                                                                                                     \
+				if (QSysInfo::productType() == QStringLiteral("windows"))                                                                                      \
+					str = QStringLiteral("Tahoma");                                                                                                            \
+				else                                                                                                                                           \
+					str = QStringLiteral("Sans Serif");                                                                                                        \
+			}                                                                                                                                                  \
 			font.setFamily(str);                                                                                                                               \
+		}                                                                                                                                                      \
                                                                                                                                                                \
 		str = attribs.value(QStringLiteral("fontSize")).toString();                                                                                            \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral("fontSize")).toString());                                                                \
+			reader->raiseMissingAttributeWarning(QStringLiteral("fontSize"));                                                                                  \
 		else {                                                                                                                                                 \
 			int size = str.toInt();                                                                                                                            \
-			if (size != -1)                                                                                                                                    \
-				font.setPixelSize(size);                                                                                                                       \
+			if (size > 0) {                                                                                                                                    \
+				QFont tempFont;                                                                                                                                \
+				tempFont.setPixelSize(size);                                                                                                                   \
+				font.setPointSizeF(QFontInfo(tempFont).pointSizeF());                                                                                          \
+			} else {                                                                                                                                           \
+				reader->raiseWarning(QStringLiteral("Invalid font size: %1").arg(size));                                                                       \
+			}                                                                                                                                                  \
 		}                                                                                                                                                      \
                                                                                                                                                                \
 		str = attribs.value(QStringLiteral("fontPointSize")).toString();                                                                                       \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral("fontPointSize")).toString());                                                           \
+			reader->raiseMissingAttributeWarning(QStringLiteral("fontPointSize"));                                                                             \
 		else {                                                                                                                                                 \
-			int size = str.toInt();                                                                                                                            \
+			int size = str.toDouble();                                                                                                                         \
 			if (size != -1)                                                                                                                                    \
-				font.setPointSize(size);                                                                                                                       \
+				font.setPointSizeF(size);                                                                                                                      \
 		}                                                                                                                                                      \
                                                                                                                                                                \
 		str = attribs.value(QStringLiteral("fontWeight")).toString();                                                                                          \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral("fontWeight")).toString());                                                              \
-		else                                                                                                                                                   \
-			font.setWeight(str.toInt());                                                                                                                       \
-                                                                                                                                                               \
+			reader->raiseMissingAttributeWarning(QStringLiteral("fontWeight"));                                                                                \
+		else {                                                                                                                                                 \
+			if (Project::xmlVersion() < 13)                                                                                                                    \
+				font.setWeight(MAP_LEGACY_FONT_WEIGHT(str.toInt()));                                                                                           \
+			else                                                                                                                                               \
+				font.setWeight(static_cast<QFont::Weight>(str.toInt()));                                                                                       \
+		}                                                                                                                                                      \
 		str = attribs.value(QStringLiteral("fontItalic")).toString();                                                                                          \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral("fontItalic")).toString());                                                              \
+			reader->raiseMissingAttributeWarning(QStringLiteral("fontItalic"));                                                                                \
 		else                                                                                                                                                   \
 			font.setItalic(str.toInt());                                                                                                                       \
 	}
@@ -572,26 +611,26 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 	{                                                                                                                                                          \
 		str = attribs.value(QStringLiteral("brush_style")).toString();                                                                                         \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_style")).toString());                                                             \
+			reader->raiseMissingAttributeWarning(QStringLiteral("brush_style"));                                                                               \
 		else                                                                                                                                                   \
 			brush.setStyle(static_cast<Qt::BrushStyle>(str.toInt()));                                                                                          \
                                                                                                                                                                \
 		QColor color;                                                                                                                                          \
 		str = attribs.value(QStringLiteral("brush_color_r")).toString();                                                                                       \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_r")).toString());                                                           \
+			reader->raiseMissingAttributeWarning(QStringLiteral("brush_color_r"));                                                                             \
 		else                                                                                                                                                   \
 			color.setRed(str.toInt());                                                                                                                         \
                                                                                                                                                                \
 		str = attribs.value(QStringLiteral("brush_color_g")).toString();                                                                                       \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_g")).toString());                                                           \
+			reader->raiseMissingAttributeWarning(QStringLiteral("brush_color_g"));                                                                             \
 		else                                                                                                                                                   \
 			color.setGreen(str.toInt());                                                                                                                       \
                                                                                                                                                                \
 		str = attribs.value(QStringLiteral("brush_color_b")).toString();                                                                                       \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_b")).toString());                                                           \
+			reader->raiseMissingAttributeWarning(QStringLiteral("brush_color_b"));                                                                             \
 		else                                                                                                                                                   \
 			color.setBlue(str.toInt());                                                                                                                        \
                                                                                                                                                                \
@@ -599,11 +638,27 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 	}
 
 // Column
+
+// if the data columns are valid, write their current paths.
+// if not, write the last used paths so the columns can be restored later
+// when the columns with the same path are added again to the project
 #define WRITE_COLUMN(column, columnName)                                                                                                                       \
 	if (column) {                                                                                                                                              \
 		writer->writeAttribute(QStringLiteral(#columnName), column->path());                                                                                   \
 	} else {                                                                                                                                                   \
-		writer->writeAttribute(QStringLiteral(#columnName), QString());                                                                                        \
+		writer->writeAttribute(QStringLiteral(#columnName), column##Path);                                                                                     \
+	}
+
+#define WRITE_COLUMNS(columns, paths)                                                                                                                          \
+	int index = 0;                                                                                                                                             \
+	for (auto* column : columns) {                                                                                                                             \
+		writer->writeStartElement(QStringLiteral("column"));                                                                                                   \
+		if (column)                                                                                                                                            \
+			writer->writeAttribute(QStringLiteral("path"), column->path());                                                                                    \
+		else                                                                                                                                                   \
+			writer->writeAttribute(QStringLiteral("path"), paths.at(index));                                                                                   \
+		writer->writeEndElement();                                                                                                                             \
+		++index;                                                                                                                                               \
 	}
 
 // column names can be empty in case no columns were used before save
@@ -618,7 +673,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 	{                                                                                                                                                          \
 		str = attribs.value(QStringLiteral(name)).toString();                                                                                                  \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral(name)).toString());                                                                      \
+			reader->raiseMissingAttributeWarning(QStringLiteral(name));                                                                                        \
 		else                                                                                                                                                   \
 			var = static_cast<type>(str.toInt());                                                                                                              \
 	}
@@ -629,7 +684,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 	{                                                                                                                                                          \
 		str = attribs.value(QStringLiteral(name)).toString();                                                                                                  \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral(name)).toString());                                                                      \
+			reader->raiseMissingAttributeWarning(QStringLiteral(name));                                                                                        \
 		else                                                                                                                                                   \
 			d->var = str.toDouble();                                                                                                                           \
 	}
@@ -638,7 +693,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 	{                                                                                                                                                          \
 		str = attribs.value(QStringLiteral(name)).toString();                                                                                                  \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(QStringLiteral(name)).toString());                                                                      \
+			reader->raiseMissingAttributeWarning(QStringLiteral(name));                                                                                        \
 		else                                                                                                                                                   \
 			d->set##Var(str.toDouble());                                                                                                                       \
 	}
@@ -649,7 +704,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 // used in Project::load()
 #define RESTORE_COLUMN_POINTER(obj, col, Col)                                                                                                                  \
 	if (!obj->col##Path().isEmpty()) {                                                                                                                         \
-		for (Column * column : columns) {                                                                                                                      \
+		for (auto* column : columns) {                                                                                                                         \
 			if (!column)                                                                                                                                       \
 				continue;                                                                                                                                      \
 			if (column->path() == obj->col##Path()) {                                                                                                          \
@@ -674,7 +729,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 
 #define RESTORE_POINTER(obj, name, Name, Type, list)                                                                                                           \
 	if (!obj->name##Path().isEmpty()) {                                                                                                                        \
-		for (AbstractAspect * aspect : list) {                                                                                                                 \
+		for (auto* aspect : list) {                                                                                                                            \
 			if (aspect->path() == obj->name##Path()) {                                                                                                         \
 				auto a = dynamic_cast<Type*>(aspect);                                                                                                          \
 				if (!a)                                                                                                                                        \

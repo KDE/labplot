@@ -7,19 +7,11 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYConvolutionCurve
-  \brief A xy-curve defined by a convolution
-
-  \ingroup worksheet
-*/
-
 #include "XYConvolutionCurve.h"
 #include "XYConvolutionCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 
 #include <KLocalizedString>
 #include <QElapsedTimer>
@@ -28,6 +20,11 @@
 
 #include <gsl/gsl_math.h>
 
+/*!
+ * \class XYConvolutionCurve
+ * \brief A xy-curve defined by a convolution.
+ * \ingroup CartesianAnalysisPlots
+ */
 XYConvolutionCurve::XYConvolutionCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYConvolutionCurvePrivate(this), AspectType::XYConvolutionCurve) {
 }
@@ -39,11 +36,6 @@ XYConvolutionCurve::XYConvolutionCurve(const QString& name, XYConvolutionCurvePr
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 XYConvolutionCurve::~XYConvolutionCurve() = default;
-
-void XYConvolutionCurve::recalculate() {
-	Q_D(XYConvolutionCurve);
-	d->recalculate();
-}
 
 const XYAnalysisCurve::Result& XYConvolutionCurve::result() const {
 	Q_D(const XYConvolutionCurve);
@@ -276,10 +268,8 @@ void XYConvolutionCurve::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
-	DEBUG("XYConvolutionCurve::load()");
 	Q_D(XYConvolutionCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -323,6 +313,10 @@ bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
@@ -345,7 +339,7 @@ bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
-		recalcLogicalPoints();
+		recalc();
 	}
 
 	return true;

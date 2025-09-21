@@ -12,11 +12,15 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-class QStringList;
 class SpiceFilterPrivate;
 
 // NgSpice/LtSpice Filter
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT SpiceFilter : public AbstractFileFilter {
+#else
 class SpiceFilter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
 
 public:
@@ -27,12 +31,8 @@ public:
 	static QString fileInfoString(const QString&);
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
-	void
-	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
-
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
 
 	QStringList vectorNames() const;
 	QVector<AbstractColumn::ColumnMode> columnModes();
@@ -42,6 +42,7 @@ public:
 	void setEndRow(const int);
 	int endRow() const;
 
+// remove condition to fix LTO warnings
 #ifdef SPICEFILTERTEST_EN
 	void setReaderBulkLineCount(int count) {
 		mBulkLineCount = count;

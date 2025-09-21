@@ -1,5 +1,5 @@
-add_executable (ReadStatFilterTest ReadStatFilterTest.cpp)
+add_executable(ReadStatFilterTest ReadStatFilterTest.cpp)
 
-target_link_libraries(ReadStatFilterTest labplot2lib labplot2test)
+target_link_libraries(ReadStatFilterTest labplotmetatest)
 
 add_test(NAME ReadStatFilterTest COMMAND ReadStatFilterTest)

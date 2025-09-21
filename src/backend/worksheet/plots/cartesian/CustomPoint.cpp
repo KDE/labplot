@@ -4,7 +4,7 @@
 	Description          : Custom user-defined point on the plot
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -15,11 +15,6 @@
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/PlotArea.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
 #include <QGraphicsSceneMouseEvent>
@@ -30,46 +25,38 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-using Dimension = CartesianCoordinateSystem::Dimension;
+namespace {
+namespace XML {
+constexpr auto name = "customPoint";
+}
+}
 
 /**
  * \class CustomPoint
- * \brief A customizable point.
+ * \brief This class implements a customizable a symbol that can be placed at a custom position on the plot
+ * to highlight certain aspects of the visualized data.
  *
- * The position can be either specified by mouse events or by providing the
- * x- and y- coordinates in parent's coordinate system
+ * The custom position can be either specified by moving the point with the mouse or by providing the
+ * x- and y- coordinates manually. The coordinates can either be provided relatively to plot's coordinate system
+ * or relatively to the global coordinate system of the plot (values in cm, (0,0) in the middle of the parent area).
  */
 
-CustomPoint::CustomPoint(CartesianPlot* plot, const QString& name)
+CustomPoint::CustomPoint(CartesianPlot* plot, const QString& name, bool loading)
 	: WorksheetElement(name, new CustomPointPrivate(this), AspectType::CustomPoint) {
-	m_plot = plot;
-	DEBUG(Q_FUNC_INFO << ", cSystem index = " << m_cSystemIndex)
-	DEBUG(Q_FUNC_INFO << ", plot cSystem count = " << m_plot->coordinateSystemCount())
-	cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
+	Q_D(CustomPoint);
+	d->m_plot = plot;
 
-	init();
+	init(loading);
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 CustomPoint::~CustomPoint() = default;
 
-void CustomPoint::init() {
+void CustomPoint::init(bool loading) {
 	Q_D(CustomPoint);
 
-	// default position
-	if (plot()) {
-		d->coordinateBindingEnabled = true; // By default on
-		auto cs = plot()->coordinateSystem(plot()->defaultCoordinateSystemIndex());
-		const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
-		const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
-		DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
-		d->positionLogical = QPointF(x, y);
-	} else
-		d->position.point = QPointF(0, 0);
-	d->updatePosition(); // To update also scene coordinates
-
-	// initialize the symbol
+	// create the symbol
 	d->symbol = new Symbol(QString());
 	addChild(d->symbol);
 	d->symbol->setHidden(true);
@@ -78,17 +65,26 @@ void CustomPoint::init() {
 	});
 	connect(d->symbol, &Symbol::updatePixmapRequested, [=] {
 		d->update();
+		Q_EMIT changed();
 	});
-	KConfig config;
-	d->symbol->init(config.group("CustomPoint"));
 
-	initActions();
-}
+	// init the properties
+	if (!loading) {
+		KConfig config;
+		d->symbol->init(config.group(QStringLiteral("CustomPoint")));
 
-void CustomPoint::initActions() {
-	visibilityAction = new QAction(i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &CustomPoint::changeVisibility);
+		// default position
+		if (plot()) {
+			d->coordinateBindingEnabled = true; // By default on
+			auto cs = plot()->coordinateSystem(plot()->defaultCoordinateSystemIndex());
+			const auto x = d->m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
+			const auto y = d->m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
+			DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
+			d->positionLogical = QPointF(x, y);
+		} else
+			d->position.point = QPointF(0, 0);
+		d->updatePosition(); // To update also scene coordinates
+	}
 }
 
 /*!
@@ -104,17 +100,8 @@ QMenu* CustomPoint::createContextMenu() {
 	if (parentAspect()->type() == AspectType::InfoElement)
 		return nullptr;
 
-	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
-	menu->insertSeparator(firstAction);
-
-	return menu;
-}
-
-QGraphicsItem* CustomPoint::graphicsItem() const {
-	return d_ptr;
+	return WorksheetElement::createContextMenu();
+	;
 }
 
 void CustomPoint::retransform() {
@@ -126,14 +113,13 @@ void CustomPoint::retransform() {
 void CustomPoint::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
 }
 
+QString CustomPoint::xmlName() {
+	return QLatin1String(XML::name);
+}
+
 Symbol* CustomPoint::symbol() const {
 	Q_D(const CustomPoint);
 	return d->symbol;
-}
-
-void CustomPoint::setParentGraphicsItem(QGraphicsItem* item) {
-	Q_D(CustomPoint);
-	d->setParentItem(item);
 }
 
 // ##############################################################################
@@ -150,7 +136,7 @@ CustomPointPrivate::CustomPointPrivate(CustomPoint* owner)
 }
 
 const CartesianPlot* CustomPointPrivate::plot() {
-	return q->m_plot;
+	return m_plot;
 }
 
 /*!
@@ -166,19 +152,12 @@ void CustomPointPrivate::retransform() {
 }
 
 /*!
-	Returns the shape of this item as a QPainterPath in local coordinates.
-*/
-QPainterPath CustomPointPrivate::shape() const {
-	return pointShape;
-}
-
-/*!
   recalculates the outer bounds and the shape of the item.
 */
 void CustomPointPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	pointShape = QPainterPath();
+	m_shape = QPainterPath();
 	if (insidePlot && symbol->style() != Symbol::Style::NoSymbols) {
 		QPainterPath path = Symbol::stylePath(symbol->style());
 
@@ -192,9 +171,11 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 			path = trafo.map(path);
 		}
 
-		pointShape.addPath(WorksheetElement::shapeFromPath(trafo.map(path), symbol->pen()));
-		boundingRectangle = pointShape.boundingRect();
+		m_shape.addPath(WorksheetElement::shapeFromPath(trafo.map(path), symbol->pen()));
+		m_boundingRectangle = m_shape.boundingRect();
 	}
+
+	Q_EMIT q->changed();
 }
 
 void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
@@ -205,17 +186,17 @@ void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem
 		painter->setOpacity(symbol->opacity());
 		painter->setPen(symbol->pen());
 		painter->setBrush(symbol->brush());
-		painter->drawPath(pointShape);
+		painter->drawPath(m_shape);
 	}
 
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(pointShape);
+		painter->drawPath(m_shape);
 	}
 
 	if (isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(pointShape);
+		painter->drawPath(m_shape);
 	}
 }
 
@@ -226,26 +207,6 @@ void CustomPointPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 		return;
 
 	WorksheetElementPrivate::mouseReleaseEvent(event);
-}
-
-void CustomPointPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
-}
-
-void CustomPointPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
-}
-
-void CustomPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
-	}
 }
 
 // ##############################################################################
@@ -276,13 +237,9 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
-	QXmlStreamAttributes attribs;
-	QString str;
-
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == QLatin1String("customPoint"))
+		if (reader->isEndElement() && reader->name() == QLatin1String(XML::name))
 			break;
 
 		if (!reader->isStartElement())
@@ -302,7 +259,7 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("symbol")) {
 			d->symbol->load(reader, preview);
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}

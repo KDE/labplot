@@ -1,12 +1,16 @@
-# Currently no test is implemented so disable it for now and keep it
-#add_executable (GSLTest GSLTest.cpp)
+option(ENABLE_TEST_BACKEND_GSL "Enable GSL Tests" ON)
 
-#target_link_libraries(GSLTest labplot2lib labplot2test)
+if(ENABLE_TEST_BACKEND_GSL)
+    # Currently no test is implemented so disable it for now and keep it
+    #add_executable(GSLTest GSLTest.cpp)
 
-#add_test(NAME GSLTest COMMAND GSLTest)
+    #target_link_libraries(GSLTest labplotlib labplottest)
 
-add_executable (ExpressionParserTest ExpressionParserTest.cpp)
+    #add_test(NAME GSLTest COMMAND GSLTest)
 
-target_link_libraries(ExpressionParserTest labplot2lib labplot2test)
+    add_executable(ExpressionParserTest ExpressionParserTest.cpp)
 
-add_test(NAME ExpressionParserTest COMMAND ExpressionParserTest)
+    target_link_libraries(ExpressionParserTest labplottest labplotbackendlib)
+
+    add_test(NAME ExpressionParserTest COMMAND ExpressionParserTest)
+endif()

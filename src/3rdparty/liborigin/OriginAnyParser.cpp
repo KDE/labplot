@@ -3,7 +3,7 @@
     OriginAnyParser.cpp
 
     SPDX-FileCopyrightText: 2017 Miquel Garriga <gbmiquel@gmail.com>
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2021-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -121,7 +121,7 @@ bool OriginAnyParser::parse()
     }
     if (parseError > 1)
         return false;
-    LOG_PRINT(logfile, " ... done. Data sets: %d\n", dataset_list_size)
+    LOG_PRINT(logfile, " ... done. Data sets: %u\n", dataset_list_size)
     curpos = file.tellg();
     LOG_PRINT(logfile, "Now at %" PRId64 " [0x%" PRIx64 "], file size %" PRId64 "\n", curpos,
               curpos, d_file_size)
@@ -145,7 +145,7 @@ bool OriginAnyParser::parse()
             break;
         window_list_size++;
     }
-    LOG_PRINT(logfile, " ... done. Windows: %d\n", window_list_size)
+    LOG_PRINT(logfile, " ... done. Windows: %u\n", window_list_size)
     curpos = file.tellg();
     LOG_PRINT(logfile, "Now at %" PRId64 " [0x%" PRIx64 "], file size %" PRId64 "\n", curpos,
               curpos, d_file_size)
@@ -159,7 +159,7 @@ bool OriginAnyParser::parse()
             break;
         parameter_list_size++;
     }
-    LOG_PRINT(logfile, " ... done. Parameters: %d\n", parameter_list_size)
+    LOG_PRINT(logfile, " ... done. Parameters: %u\n", parameter_list_size)
     curpos = file.tellg();
     LOG_PRINT(logfile, "Now at %" PRId64 " [0x%" PRIx64 "], file size %" PRId64 "\n", curpos,
               curpos, d_file_size)
@@ -177,7 +177,7 @@ bool OriginAnyParser::parse()
                 break;
             note_list_size++;
         }
-        LOG_PRINT(logfile, " ... done. Note windows: %d\n", note_list_size)
+        LOG_PRINT(logfile, " ... done. Note windows: %u\n", note_list_size)
         curpos = file.tellg();
         LOG_PRINT(logfile, "Now at %" PRId64 " [0x%" PRIx64 "], file size %" PRId64 "\n", curpos,
                   curpos, d_file_size)
@@ -243,9 +243,9 @@ unsigned int OriginAnyParser::readObjectSize()
 
 string OriginAnyParser::readObjectAsString(unsigned int size)
 {
-    char c;
     // read a size-byte blob of data followed by '\n'
     if (size > 0) {
+        char c;
         // get a string large enough to hold the result, initialize it to all 0's
         string blob = string(size, '\0');
         // read data into that string
@@ -287,6 +287,7 @@ void OriginAnyParser::readFileVersion()
 
 void OriginAnyParser::readGlobalHeader()
 {
+    LOG_PRINT(logfile, "readGlobalHeader()\n")
     // get global header size
     unsigned int gh_size = 0, gh_endmark = 0;
     gh_size = readObjectSize();
@@ -329,6 +330,7 @@ void OriginAnyParser::readGlobalHeader()
 
 bool OriginAnyParser::readDataSetElement()
 {
+    LOG_PRINT(logfile, "readDataSetElement()\n")
     /* get info and values of a DataSet (worksheet column, matrix sheet, ...)
      * return true if a DataSet is found, otherwise return false */
     unsigned int dse_header_size = 0, dse_data_size = 0, dse_mask_size = 0;
@@ -392,6 +394,7 @@ bool OriginAnyParser::readDataSetElement()
 
 bool OriginAnyParser::readWindowElement()
 {
+    LOG_PRINT(logfile, "readWindowElement()\n")
     /* get general info and details of a window
      * return true if a Window is found, otherwise return false */
     unsigned int wde_header_size = 0;
@@ -449,7 +452,7 @@ bool OriginAnyParser::readWindowElement()
             break;
         layer_list_size++;
     }
-    LOG_PRINT(logfile, " ... done. Layers: %d\n", layer_list_size)
+    LOG_PRINT(logfile, " ... done. Layers: %u\n", layer_list_size)
     curpos = file.tellg();
     LOG_PRINT(logfile, "window ends at %" PRId64 " [0x%" PRIx64 "]\n", curpos, curpos)
 
@@ -458,6 +461,7 @@ bool OriginAnyParser::readWindowElement()
 
 bool OriginAnyParser::readLayerElement()
 {
+    LOG_PRINT(logfile, "readLayerElement()\n")
     /* get general info and details of a layer
      * return true if a Layer is found, otherwise return false */
     unsigned int lye_header_size = 0;
@@ -490,7 +494,7 @@ bool OriginAnyParser::readLayerElement()
      */
     annotation_list_size = readAnnotationList();
     if (annotation_list_size > 0) {
-        LOG_PRINT(logfile, "   ... done. Annotations: %d\n", annotation_list_size)
+        LOG_PRINT(logfile, "   ... done. Annotations: %u\n", annotation_list_size)
     }
 
     // get curve list
@@ -502,7 +506,7 @@ bool OriginAnyParser::readLayerElement()
             break;
         curve_list_size++;
     }
-    LOG_PRINT(logfile, "   ... done. Curves: %d\n", curve_list_size)
+    LOG_PRINT(logfile, "   ... done. Curves: %u\n", curve_list_size)
 
     // get axisbreak list
     unsigned int axisbreak_list_size = 0;
@@ -513,7 +517,7 @@ bool OriginAnyParser::readLayerElement()
             break;
         axisbreak_list_size++;
     }
-    LOG_PRINT(logfile, "   ... done. Axis breaks: %d\n", axisbreak_list_size)
+    LOG_PRINT(logfile, "   ... done. Axis breaks: %u\n", axisbreak_list_size)
 
     // get x axisparameter list
     unsigned int axispar_x_list_size = 0;
@@ -524,7 +528,7 @@ bool OriginAnyParser::readLayerElement()
             break;
         axispar_x_list_size++;
     }
-    LOG_PRINT(logfile, "   ... done. x-Axis parameters: %d\n", axispar_x_list_size)
+    LOG_PRINT(logfile, "   ... done. x-Axis parameters: %u\n", axispar_x_list_size)
 
     // get y axisparameter list
     unsigned int axispar_y_list_size = 0;
@@ -535,7 +539,7 @@ bool OriginAnyParser::readLayerElement()
             break;
         axispar_y_list_size++;
     }
-    LOG_PRINT(logfile, "   ... done. y-Axis parameters: %d\n", axispar_y_list_size)
+    LOG_PRINT(logfile, "   ... done. y-Axis parameters: %u\n", axispar_y_list_size)
 
     // get z axisparameter list
     unsigned int axispar_z_list_size = 0;
@@ -546,7 +550,7 @@ bool OriginAnyParser::readLayerElement()
             break;
         axispar_z_list_size++;
     }
-    LOG_PRINT(logfile, "   ... done. z-Axis parameters: %d\n", axispar_z_list_size)
+    LOG_PRINT(logfile, "   ... done. z-Axis parameters: %u\n", axispar_z_list_size)
 
     curpos = file.tellg();
     LOG_PRINT(logfile, "  layer ends at %" PRId64 " [0x%" PRIx64 "]\n", curpos, curpos)
@@ -556,6 +560,7 @@ bool OriginAnyParser::readLayerElement()
 
 unsigned int OriginAnyParser::readAnnotationList()
 {
+    LOG_PRINT(logfile, "readAnnotationList()\n")
     /* Purpose of this function is to allow recursive call for groups of annotation elements. */
     unsigned int annotation_list_size = 0;
 
@@ -569,6 +574,7 @@ unsigned int OriginAnyParser::readAnnotationList()
 
 bool OriginAnyParser::readAnnotationElement()
 {
+    LOG_PRINT(logfile, "readAnnotationElement()\n")
     /* get general info and details of an Annotation
      * return true if an Annotation is found, otherwise return false */
     unsigned int ane_header_size = 0;
@@ -664,6 +670,7 @@ bool OriginAnyParser::readAnnotationElement()
 
 bool OriginAnyParser::readCurveElement()
 {
+    LOG_PRINT(logfile, "readCurveElement()\n")
     /* get general info and details of a Curve
      * return true if a Curve is found, otherwise return false */
     unsigned int cve_header_size = 0, cve_data_size = 0;
@@ -709,6 +716,7 @@ bool OriginAnyParser::readCurveElement()
 
 bool OriginAnyParser::readAxisBreakElement()
 {
+    LOG_PRINT(logfile, "readAxisBreakElement()\n")
     /* get info of Axis breaks
      * return true if an Axis break, otherwise return false */
     unsigned int abe_data_size = 0;
@@ -736,6 +744,7 @@ bool OriginAnyParser::readAxisBreakElement()
 
 bool OriginAnyParser::readAxisParameterElement(unsigned int naxis)
 {
+    LOG_PRINT(logfile, "readAxisParameterElement()\n")
     /* get info of Axis parameters for naxis-axis (x,y,z) = (1,2,3)
      * return true if an Axis break is found, otherwise return false */
     unsigned int ape_data_size = 0;
@@ -763,6 +772,7 @@ bool OriginAnyParser::readAxisParameterElement(unsigned int naxis)
 
 bool OriginAnyParser::readParameterElement()
 {
+    LOG_PRINT(logfile, "readParameterElement()\n")
     // get parameter name
     string par_name;
     char c;
@@ -794,6 +804,7 @@ bool OriginAnyParser::readParameterElement()
 
 bool OriginAnyParser::readNoteElement()
 {
+    LOG_PRINT(logfile, "readNoteElement()\n")
     /* get info of Note windows, including "Results Log"
      * return true if a Note window is found, otherwise return false */
     unsigned int nwe_header_size = 0, nwe_label_size = 0, nwe_contents_size = 0;
@@ -846,6 +857,7 @@ bool OriginAnyParser::readNoteElement()
 
 void OriginAnyParser::readProjectTree()
 {
+    LOG_PRINT(logfile, "readProjectTree()\n")
     unsigned int pte_depth = 0;
 
     // first preamble size and data (usually 4)
@@ -861,7 +873,7 @@ void OriginAnyParser::readProjectTree()
             projectTree.insert(projectTree.begin(), ProjectNode("", ProjectNode::Folder)),
             pte_depth);
     if (rootfolder > 0) {
-        LOG_PRINT(logfile, "Number of files at root: %d\n", rootfolder)
+        LOG_PRINT(logfile, "Number of files at root: %u\n", rootfolder)
     }
 
     // epilogue (should be zero)
@@ -880,6 +892,7 @@ void OriginAnyParser::readProjectTree()
 
 unsigned int OriginAnyParser::readFolderTree(tree<ProjectNode>::iterator parent, unsigned int depth)
 {
+    LOG_PRINT(logfile, "readFolderTree()\n")
     unsigned int fle_header_size = 0, fle_eofh_size = 0, fle_name_size = 0, fle_prop_size = 0;
 
     // folder header size, data, end mark
@@ -921,7 +934,7 @@ unsigned int OriginAnyParser::readFolderTree(tree<ProjectNode>::iterator parent,
     stmp.str(fle_nfiles);
     unsigned int number_of_files = 0;
     GET_INT(stmp, number_of_files)
-    LOG_PRINT(logfile, "%d\n", number_of_files)
+    LOG_PRINT(logfile, "%u\n", number_of_files)
 
     for (unsigned int i = 0; i < number_of_files; i++) {
         readProjectLeaf(current_folder);
@@ -938,13 +951,13 @@ unsigned int OriginAnyParser::readFolderTree(tree<ProjectNode>::iterator parent,
     stmp.str(fle_nfolders);
     unsigned int number_of_folders = 0;
     GET_INT(stmp, number_of_folders)
-    LOG_PRINT(logfile, "%d\n", number_of_folders)
+    LOG_PRINT(logfile, "%u\n", number_of_folders)
 
     for (unsigned int i = 0; i < number_of_folders; i++) {
         depth++;
         unsigned int files_in_subfolder = readFolderTree(current_folder, depth);
         if (files_in_subfolder > 0) {
-            LOG_PRINT(logfile, "Number of files in subfolder: %d\n", files_in_subfolder)
+            LOG_PRINT(logfile, "Number of files in subfolder: %u\n", files_in_subfolder)
         }
         depth--;
     }
@@ -978,6 +991,7 @@ void OriginAnyParser::readProjectLeaf(tree<ProjectNode>::iterator current_folder
 
 void OriginAnyParser::readAttachmentList()
 {
+    LOG_PRINT(logfile, "readAttachmentList()\n")
     /* Attachments are divided in two groups (which can be empty)
      first group is preceded by two integers: 4096 (0x1000) and number_of_attachments followed as
      usual by a '\n' mark second group is a series of (header, name, data) triplets without the '\n'
@@ -1009,7 +1023,7 @@ void OriginAnyParser::readAttachmentList()
         unsigned int att_mark = 0, number_of_atts = 0, iattno = 0, att_data_size = 0;
         GET_INT(stmp, att_mark) // should be 4096
         GET_INT(stmp, number_of_atts)
-        LOG_PRINT(logfile, " with %d attachments.\n", number_of_atts)
+        LOG_PRINT(logfile, " with %u attachments.\n", number_of_atts)
 
         for (unsigned int i = 0; i < number_of_atts; i++) {
             /* Header is a group of 7 integers followed by \n
@@ -1137,12 +1151,9 @@ bool OriginAnyParser::getColumnInfoAndData(const string &col_header, unsigned in
         LOG_PRINT(logfile, "  NOTE: alternative signature determination\n")
         signature = col_header[0x18];
     }
-    LOG_PRINT(logfile, "  signature %d [0x%X], valuesize %d size %d ", signature, signature,
+    LOG_PRINT(logfile, "  signature %d [0x%X], valuesize %d size %u ", signature, signature,
               valuesize, col_data_size)
 
-    size_t current_col = 1; //, nr = 0, nbytes = 0;
-    static unsigned int col_index = 0;
-    unsigned int current_sheet = 0;
     vector<Origin::SpreadSheet>::difference_type spread = 0;
 
     if (column_name.empty()) { // Matrix or function
@@ -1189,13 +1200,15 @@ bool OriginAnyParser::getColumnInfoAndData(const string &col_header, unsigned in
             getMatrixValues(col_data, col_data_size, data_type, data_type_u, valuesize, mIndex);
         }
     } else {
+        size_t current_col = 1; //, nr = 0, nbytes = 0;
+        static unsigned int col_index = 0;
+        unsigned int current_sheet = 0;
+
         if (spreadSheets.size() == 0 || findSpreadByName(name) == -1) {
             LOG_PRINT(logfile, "\n  NEW SPREADSHEET\n");
-            current_col = 1;
             spreadSheets.push_back(SpreadSheet(name));
             spread = spreadSheets.size() - 1;
             spreadSheets.back().maxRows = 0;
-            current_sheet = 0;
         } else {
             spread = findSpreadByName(name);
             current_col = spreadSheets[spread].columns.size();
@@ -1216,18 +1229,17 @@ bool OriginAnyParser::getColumnInfoAndData(const string &col_header, unsigned in
             if (sheet > 1) {
                 spreadSheets[spread].columns.back().name = column_name;
 
-                if (current_sheet != (sheet - 1))
-                    current_sheet = sheet - 1;
+                current_sheet = sheet - 1;
 
                 spreadSheets[spread].columns.back().sheet = current_sheet;
                 if (spreadSheets[spread].sheets < sheet)
                     spreadSheets[spread].sheets = sheet;
             }
         }
-        LOG_PRINT(logfile, "  data index %d, valuesize %d, ", objectIndex, valuesize)
+        LOG_PRINT(logfile, "  data index %u, valuesize %d, ", objectIndex, valuesize)
 
         unsigned int nr = col_data_size / valuesize;
-        LOG_PRINT(logfile, "n. of rows = %d\n\n", nr)
+        LOG_PRINT(logfile, "n. of rows = %u\n\n", nr)
 
         spreadSheets[spread].maxRows < nr ? spreadSheets[spread].maxRows = nr : 0;
         stmp.str(col_data);
@@ -1262,7 +1274,7 @@ bool OriginAnyParser::getColumnInfoAndData(const string &col_header, unsigned in
                     if (svaltmp.find(0x0E)
                         != string::npos) { // try find non-printable symbol - garbage test
                         svaltmp = string();
-                        LOG_PRINT(logfile, "Non printable symbol found, place 1 for i=%d\n", i)
+                        LOG_PRINT(logfile, "Non printable symbol found, place 1 for i=%u\n", i)
                     }
                     if ((i < 5) || (i > (nr - 5))) {
                         LOG_PRINT(logfile, "\"%s\" ", svaltmp.c_str())
@@ -1278,7 +1290,7 @@ bool OriginAnyParser::getColumnInfoAndData(const string &col_header, unsigned in
                 if (svaltmp.find(0x0E)
                     != string::npos) { // try find non-printable symbol - garbage test
                     svaltmp = string();
-                    LOG_PRINT(logfile, "Non printable symbol found, place 2 for i=%d\n", i)
+                    LOG_PRINT(logfile, "Non printable symbol found, place 2 for i=%u\n", i)
                 }
                 if ((i < 5) || (i > (nr - 5))) {
                     LOG_PRINT(logfile, "\"%s\" ", svaltmp.c_str())
@@ -1387,6 +1399,7 @@ void OriginAnyParser::getMatrixValues(const string &col_data, unsigned int col_d
 void OriginAnyParser::getWindowProperties(Origin::Window &window, const string &wde_header,
                                           unsigned int wde_header_size)
 {
+    LOG_PRINT(logfile, "getWindowProperties()\n")
     window.objectID = objectIndex;
     ++objectIndex;
 
@@ -1432,10 +1445,10 @@ void OriginAnyParser::getWindowProperties(Origin::Window &window, const string &
 
     window.hidden = ((c & 0x08) != 0);
     if (window.hidden) {
-        LOG_PRINT(logfile, "			WINDOW %d NAME : %s	is hidden\n", objectIndex,
+        LOG_PRINT(logfile, "			WINDOW %u NAME : %s	is hidden\n", objectIndex,
                   window.name.c_str());
     } else {
-        LOG_PRINT(logfile, "			WINDOW %d NAME : %s	is not hidden\n",
+        LOG_PRINT(logfile, "			WINDOW %u NAME : %s	is not hidden\n",
                   objectIndex, window.name.c_str());
     }
 
@@ -1458,7 +1471,7 @@ void OriginAnyParser::getWindowProperties(Origin::Window &window, const string &
     if (wde_header_size > 0xC3) {
         window.label = wde_header.substr(0xC3).c_str();
         window.label = window.label.substr(0, window.label.find("@${"));
-        LOG_PRINT(logfile, "			WINDOW %d LABEL: %s\n", objectIndex,
+        LOG_PRINT(logfile, "			WINDOW %u LABEL: %s\n", objectIndex,
                   window.label.c_str());
     }
 
@@ -1475,8 +1488,8 @@ void OriginAnyParser::getWindowProperties(Origin::Window &window, const string &
         GET_SHORT(stmp, graphs[igraph].width)
         GET_SHORT(stmp, graphs[igraph].height)
 
-        unsigned char c = wde_header[0x38];
-        graphs[igraph].connectMissingData = ((c & 0x40) != 0);
+        unsigned char co = wde_header[0x38];
+        graphs[igraph].connectMissingData = ((co & 0x40) != 0);
 
         string templateName = wde_header.substr(0x45, 20).c_str();
         graphs[igraph].templateName = templateName;
@@ -1487,6 +1500,7 @@ void OriginAnyParser::getWindowProperties(Origin::Window &window, const string &
 
 void OriginAnyParser::getLayerProperties(const string &lye_header, unsigned int lye_header_size)
 {
+    LOG_PRINT(logfile, "getLayerProperties()\n")
     istringstream stmp;
 
     if (ispread != -1) { // spreadsheet
@@ -1634,14 +1648,34 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
                                               const string &andt2, unsigned int andt2sz,
                                               const string &andt3, unsigned int andt3sz)
 {
+    LOG_PRINT(logfile, "getAnnotationProperties()\n")
+
+    /*    LOG_PRINT(logfile, "anhd =")
+        for (unsigned int i = 0; i < anhdsz; i++)
+            LOG_PRINT(logfile, " %02x", anhd[i] & 0xFF);
+        LOG_PRINT(logfile, "\n")
+        LOG_PRINT(logfile, "andt1 =")
+        for (unsigned int i = 0; i < andt1sz; i++)
+            LOG_PRINT(logfile, " %02x", andt1[i] & 0xFF);
+        LOG_PRINT(logfile, "\n")
+        LOG_PRINT(logfile, "andt2 =")
+        for (unsigned int i = 0; i < andt2sz; i++)
+            LOG_PRINT(logfile, " %02x", andt2[i] & 0xFF);
+        LOG_PRINT(logfile, "\n")
+        LOG_PRINT(logfile, "andt3 =")
+        for (unsigned int i = 0; i < andt3sz; i++)
+            LOG_PRINT(logfile, " %02x", andt3[i] & 0xFF);
+        LOG_PRINT(logfile, "\n")
+    */
     istringstream stmp;
     (void)anhdsz;
     (void)andt3;
     (void)andt3sz;
 
+    string sec_name = anhd.substr(0x46, 41).c_str();
+
     if (ispread != -1) {
 
-        string sec_name = anhd.substr(0x46, 41).c_str();
         int col_index = findColumnByName((int)ispread, sec_name);
         if (col_index != -1) { // check if it is a formula
             spreadSheets[ispread].columns[col_index].command = andt1.c_str();
@@ -1652,7 +1686,6 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
     } else if (imatrix != -1) {
 
         MatrixSheet &sheet = matrixes[imatrix].sheets[ilayer];
-        string sec_name = anhd.substr(0x46, 41).c_str();
 
         stmp.str(andt1.c_str());
         if (sec_name == "MV") {
@@ -1673,7 +1706,6 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
 
     } else if (iexcel != -1) {
 
-        string sec_name = anhd.substr(0x46, 41).c_str();
         vector<Origin::SpreadColumn>::difference_type col_index =
                 findExcelColumnByName(iexcel, ilayer, sec_name);
         if (col_index != -1) { // check if it is a formula
@@ -1683,7 +1715,6 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
     } else {
 
         GraphLayer &glayer = graphs[igraph].layers[ilayer];
-        string sec_name = anhd.substr(0x46, 41).c_str();
 
         Rect r;
         stmp.str(anhd.substr(0x03));
@@ -1693,6 +1724,11 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
         GET_SHORT(stmp, r.bottom)
 
         unsigned char attach = anhd[0x28];
+        LOG_PRINT(logfile, "attach = %02x\n", attach)
+        bool shown = true; // axis title shown: attach = 0x22
+        if (attach == 0x32)
+            shown = false;
+
         if (attach >= (unsigned char)Attach::End_)
             attach = Attach::Frame;
         unsigned char border = anhd[0x29];
@@ -1797,24 +1833,26 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
                 end.y = (y1 == y2) ? r.top + 0.5 * r.height()
                                    : r.top + (y2 - miny) / dy * r.height();
             }
-            unsigned char arrows = andt1[0x11];
-            switch (arrows) {
-            case 0:
-                begin.shapeType = 0;
-                end.shapeType = 0;
-                break;
-            case 1:
-                begin.shapeType = 1;
-                end.shapeType = 0;
-                break;
-            case 2:
-                begin.shapeType = 0;
-                end.shapeType = 1;
-                break;
-            case 3:
-                begin.shapeType = 1;
-                end.shapeType = 1;
-                break;
+            if (andt1sz > 0x11) {
+                unsigned char arrows = andt1[0x11];
+                switch (arrows) {
+                case 0:
+                    begin.shapeType = 0;
+                    end.shapeType = 0;
+                    break;
+                case 1:
+                    begin.shapeType = 1;
+                    end.shapeType = 0;
+                    break;
+                case 2:
+                    begin.shapeType = 0;
+                    end.shapeType = 1;
+                    break;
+                case 3:
+                    begin.shapeType = 1;
+                    end.shapeType = 1;
+                    break;
+                }
             }
             if (andt1sz > 0x77) {
                 begin.shapeType = andt1[0x60];
@@ -1834,14 +1872,21 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
             }
         }
         // text properties
-        short rotation;
-        stmp.str(andt1.substr(0x02));
-        GET_SHORT(stmp, rotation)
-        unsigned char fontSize = andt1[0x4];
-        unsigned char tab = andt1[0x0A];
+        short rotation = 0;
+        unsigned char fontSize = 12;
+        if (andt1sz > 0x04) {
+            stmp.str(andt1.substr(0x02));
+            GET_SHORT(stmp, rotation)
+            fontSize = andt1[0x4];
+        }
+        unsigned char tab = 8;
+        if (andt1sz > 0x0A)
+            tab = andt1[0x0A];
 
         // line properties
-        unsigned char lineStyle = andt1[0x12];
+        unsigned char lineStyle = 0;
+        if (andt1sz > 0x12)
+            lineStyle = andt1[0x12];
         unsigned short w1 = 0;
         if (andt1sz > 0x14) {
             stmp.str(andt1.substr(0x13));
@@ -1850,14 +1895,15 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
         double width = (double)w1 / 500.0;
 
         Figure figure;
-        if (andt1.size() > 4) {
+        if (andt1sz > 0x06) {
             stmp.str(andt1.substr(0x05));
             GET_SHORT(stmp, w1)
             figure.width = (double)w1 / 500.0;
         }
-        figure.style = andt1[0x08];
+        if (andt1sz > 0x08)
+            figure.style = andt1[0x08];
 
-        if (andt1sz > 0x4D) {
+        if (andt1sz > 0x4E) {
             figure.fillAreaColor = getColor(andt1.substr(0x42, 4));
             stmp.str(andt1.substr(0x46));
             GET_SHORT(stmp, w1)
@@ -1865,7 +1911,7 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
             figure.fillAreaPatternColor = getColor(andt1.substr(0x4A, 4));
             figure.fillAreaPattern = andt1[0x4E];
         }
-        if (andt1sz > 0x56) {
+        if (andt1sz > 0x57) {
             unsigned char h = andt1[0x57];
             figure.useBorderColor = (h == 0x10);
         }
@@ -1873,39 +1919,39 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
         if (sec_name == "XB") {
             string text = andt2.c_str();
             glayer.xAxis.position = GraphAxis::Bottom;
-            glayer.xAxis.formatAxis[0].label =
-                    TextBox(text, r, color, fontSize, rotation / 10, tab,
-                            (BorderType)(border >= 0x80 ? border - 0x80 : None), (Attach)attach);
+            glayer.xAxis.formatAxis[0].label = TextBox(
+                    text, r, color, fontSize, rotation / 10, tab,
+                    (BorderType)(border >= 0x80 ? border - 0x80 : None), (Attach)attach, shown);
         } else if (sec_name == "XT") {
             string text = andt2.c_str();
             glayer.xAxis.position = GraphAxis::Top;
-            glayer.xAxis.formatAxis[1].label =
-                    TextBox(text, r, color, fontSize, rotation / 10, tab,
-                            (BorderType)(border >= 0x80 ? border - 0x80 : None), (Attach)attach);
+            glayer.xAxis.formatAxis[1].label = TextBox(
+                    text, r, color, fontSize, rotation / 10, tab,
+                    (BorderType)(border >= 0x80 ? border - 0x80 : None), (Attach)attach, shown);
         } else if (sec_name == "YL") {
             string text = andt2.c_str();
             glayer.yAxis.position = GraphAxis::Left;
-            glayer.yAxis.formatAxis[0].label =
-                    TextBox(text, r, color, fontSize, rotation / 10, tab,
-                            (BorderType)(border >= 0x80 ? border - 0x80 : None), (Attach)attach);
+            glayer.yAxis.formatAxis[0].label = TextBox(
+                    text, r, color, fontSize, rotation / 10, tab,
+                    (BorderType)(border >= 0x80 ? border - 0x80 : None), (Attach)attach, shown);
         } else if (sec_name == "YR") {
             string text = andt2.c_str();
             glayer.yAxis.position = GraphAxis::Right;
-            glayer.yAxis.formatAxis[1].label =
-                    TextBox(text, r, color, fontSize, rotation / 10, tab,
-                            (BorderType)(border >= 0x80 ? border - 0x80 : None), (Attach)attach);
+            glayer.yAxis.formatAxis[1].label = TextBox(
+                    text, r, color, fontSize, rotation / 10, tab,
+                    (BorderType)(border >= 0x80 ? border - 0x80 : None), (Attach)attach, shown);
         } else if (sec_name == "ZF") {
             string text = andt2.c_str();
             glayer.zAxis.position = GraphAxis::Front;
-            glayer.zAxis.formatAxis[0].label =
-                    TextBox(text, r, color, fontSize, rotation / 10, tab,
-                            (BorderType)(border >= 0x80 ? border - 0x80 : None), (Attach)attach);
+            glayer.zAxis.formatAxis[0].label = TextBox(
+                    text, r, color, fontSize, rotation / 10, tab,
+                    (BorderType)(border >= 0x80 ? border - 0x80 : None), (Attach)attach, shown);
         } else if (sec_name == "ZB") {
             string text = andt2.c_str();
             glayer.zAxis.position = GraphAxis::Back;
-            glayer.zAxis.formatAxis[1].label =
-                    TextBox(text, r, color, fontSize, rotation / 10, tab,
-                            (BorderType)(border >= 0x80 ? border - 0x80 : None), (Attach)attach);
+            glayer.zAxis.formatAxis[1].label = TextBox(
+                    text, r, color, fontSize, rotation / 10, tab,
+                    (BorderType)(border >= 0x80 ? border - 0x80 : None), (Attach)attach, shown);
         } else if (sec_name == "3D") {
             stmp.str(andt2);
             GET_DOUBLE(stmp, glayer.zAxis.min)
@@ -1929,7 +1975,7 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
             glayer.zLength /= 23.0;
 
             glayer.orthographic3D = (andt2[0x240] != 0);
-        } else if (sec_name == "Legend") {
+        } else if ((sec_name == "Legend") || (sec_name == "legend")) {
             string text = andt2.c_str();
             glayer.legend =
                     TextBox(text, r, color, fontSize, rotation / 10, tab,
@@ -1972,18 +2018,18 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
             double start;
             GET_DOUBLE(stmp, start)
             stmp.str(andt1.substr(0x1A));
-            double width;
-            GET_DOUBLE(stmp, width)
-            glayer.vLine = start + 0.5 * width;
+            double vLineWidth;
+            GET_DOUBLE(stmp, vLineWidth)
+            glayer.vLine = start + 0.5 * vLineWidth;
             glayer.imageProfileTool = 2;
         } else if (sec_name == "HLine") {
             stmp.str(andt1.substr(0x12));
             double start;
             GET_DOUBLE(stmp, start)
             stmp.str(andt1.substr(0x22));
-            double width;
-            GET_DOUBLE(stmp, width)
-            glayer.hLine = start + 0.5 * width;
+            double hLineWidth;
+            GET_DOUBLE(stmp, hLineWidth)
+            glayer.hLine = start + 0.5 * hLineWidth;
             glayer.imageProfileTool = 2;
         } else if (sec_name == "vline") {
             stmp.str(andt1.substr(0x20));
@@ -2104,6 +2150,7 @@ void OriginAnyParser::getAnnotationProperties(const string &anhd, unsigned int a
 void OriginAnyParser::getCurveProperties(const string &cvehd, unsigned int cvehdsz,
                                          const string &cvedt, unsigned int cvedtsz)
 {
+    LOG_PRINT(logfile, "getCurveProperties()\n")
     istringstream stmp;
 
     if (ispread != -1) { // spreadsheet: curves are columns
@@ -2119,8 +2166,7 @@ void OriginAnyParser::getCurveProperties(const string &cvehd, unsigned int cvehd
         }
         int col_index = findColumnByName((int)ispread, name);
         if (col_index != -1) {
-            if (spreadSheets[ispread].columns[col_index].name != name)
-                spreadSheets[ispread].columns[col_index].name = name;
+            spreadSheets[ispread].columns[col_index].name = name;
 
             SpreadColumn::ColumnType type;
             switch (c) {
@@ -2655,7 +2701,7 @@ void OriginAnyParser::getCurveProperties(const string &cvehd, unsigned int cvehd
             h = cvehd[0x136];
             curve.symbolThickness = (h == 255 ? 1 : h);
             curve.pointOffset = cvehd[0x137];
-            h = cvehd[0x138];
+            // h = cvehd[0x138];
             curve.symbolFillTransparency = cvehd[0x139];
 
             h = cvehd[0x143];
@@ -2666,6 +2712,7 @@ void OriginAnyParser::getCurveProperties(const string &cvehd, unsigned int cvehd
 
 void OriginAnyParser::getAxisBreakProperties(const string &abdata, unsigned int abdatasz)
 {
+    LOG_PRINT(logfile, "getAxisBreakProperties()\n")
     istringstream stmp;
     (void)abdatasz;
 
@@ -2710,10 +2757,11 @@ void OriginAnyParser::getAxisBreakProperties(const string &abdata, unsigned int 
 void OriginAnyParser::getAxisParameterProperties(const string &apdata, unsigned int apdatasz,
                                                  int naxis)
 {
+    LOG_PRINT(logfile, "getAxisParameterProperties()\n")
     istringstream stmp;
-    static int iaxispar = 0;
 
     if (igraph != -1) {
+        static int iaxispar = 0;
         unsigned char h = 0;
         unsigned short w = 0;
 
@@ -2939,7 +2987,7 @@ void OriginAnyParser::getNoteProperties(const string &nwehd, unsigned int nwehds
                                         const string &nwelb, unsigned int nwelbsz,
                                         const string &nwect, unsigned int nwectsz)
 {
-    LOG_PRINT(logfile, "OriginAnyParser::getNoteProperties()");
+    LOG_PRINT(logfile, "getNoteProperties()\n");
     istringstream stmp;
     (void)nwehdsz;
     (void)nwelbsz;
@@ -3039,15 +3087,14 @@ void OriginAnyParser::getColorMap(ColorMap &cmap, const string &cmapdata, unsign
     unsigned int minDataSize = cmoffset + 0x114 + (colorMapSize + 2) * 0x38;
     if (minDataSize > cmapdatasz) {
         LOG_PRINT(logfile,
-                  "WARNING: Too few data while getting ColorMap. Needed: at least %d bytes. Have: "
-                  "%d bytes.\n",
+                  "WARNING: Too few data while getting ColorMap. Needed: at least %u bytes. Have: "
+                  "%u bytes.\n",
                   minDataSize, cmapdatasz)
         return;
     }
 
-    unsigned int lvl_offset = 0;
     for (unsigned int i = 0; i < colorMapSize + 3; ++i) {
-        lvl_offset = cmoffset + 0x114 + i * 0x38;
+        unsigned int lvl_offset = cmoffset + 0x114 + i * 0x38;
         ColorMapLevel level;
 
         level.fillPattern = cmapdata[lvl_offset];
@@ -3158,7 +3205,7 @@ void OriginAnyParser::getZcolorsMap(ColorMap &colorMap, const string &cmapdata,
 void OriginAnyParser::getProjectLeafProperties(tree<ProjectNode>::iterator current_folder,
                                                const string &ptldt, unsigned int ptldtsz)
 {
-    LOG_PRINT(logfile, "OriginAnyParser::getProjectLeafProperties()\n");
+    LOG_PRINT(logfile, "getProjectLeafProperties()\n");
     istringstream stmp;
     (void)ptldtsz;
 
@@ -3167,10 +3214,10 @@ void OriginAnyParser::getProjectLeafProperties(tree<ProjectNode>::iterator curre
     GET_INT(stmp, file_type);
     GET_INT(stmp, file_object_id);
 
-    LOG_PRINT(logfile, "file_type=%d file_object_id=%d\n", file_type, file_object_id);
+    LOG_PRINT(logfile, "file_type=%u file_object_id=%u\n", file_type, file_object_id);
     if (file_type == 0x100000) { // Note window
         LOG_PRINT(logfile, "notes.size()=%d\n", (int)notes.size());
-        if ((file_object_id <= notes.size()) && (notes.size() > 0)) {
+        if ((file_object_id < notes.size()) && (notes.size() > 0)) {
             projectTree.append_child(current_folder,
                                      ProjectNode(notes[file_object_id].name, ProjectNode::Note));
         }

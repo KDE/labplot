@@ -1,6 +1,6 @@
 <!-- This is a comment. They are not shown in the final issue and are only informative. You can remove them or ignore them -->
 
-<!-- IMPORTANT: For feature requests choose the featureRrequest template from the template drop down menu just above this text field! -->
+<!-- IMPORTANT: For feature requests choose the featureRequest template from the template drop down menu just above this text field! -->
 
 Requirements
 ============
@@ -23,9 +23,9 @@ Observed
 <!-- Write down what you observed-->
 
 
-Labplot Version
+LabPlot Version
 ------------------
-<!-- Add text from the labplot executable between the ``` ``` block below: Help -> About Labplot -->
+<!-- Add text from the labplot executable between the ``` ``` block below: Help -> About LabPlot -->
 ```
 
 

@@ -93,5 +93,10 @@
 		"name" : "ColorCET (Rainbow)",
 		"description": "These colour maps avoid points of locally high colour contrast leading to the perception of false anomalies in your data when there are none. The colour maps have been designed to avoid this phenomenon by having uniform perceptual contrast over their whole range (<a href=\"https://colorcet.com/\">source</a>).<br><br><b>Rainbow</b> colour maps are widely used but often misused. It is suggested that they be avoided because they have reversals in the lightness gradient at yellow and red which can upset a viewer's perceptual ordering of the colours in the colour map. However, they are attractive and perhaps can have a legitimate use where the main aim is to differentiate data values rather than communicate a data ordering. I believe the rainbow colour maps presented here have minimal badness though they do have localised perceptual flat spots at yellow and red.",
 		"url" : "https://colorcet.com/"
+	},
+	{
+		"name" : "Dracula (Categorical)",
+		"description": "These color maps are not scientific in any way and are only meant for categorical highlighting to match the Dracula worksheet and application themes.",
+		"url" : "https://draculatheme.com/"
 	}
 ]

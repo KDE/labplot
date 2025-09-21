@@ -4,7 +4,7 @@
 	Description          : Worksheet element container - parent of multiple elements.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -16,14 +16,17 @@
 class WorksheetElementContainerPrivate;
 class ResizeItem;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT WorksheetElementContainer : public WorksheetElement {
+#else
 class WorksheetElementContainer : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:
 	WorksheetElementContainer(const QString&, AspectType);
 	~WorksheetElementContainer() override;
-
-	QGraphicsItem* graphicsItem() const override;
 
 	void setVisible(bool) override;
 	bool isFullyVisible() const override;
@@ -40,15 +43,19 @@ public:
 
 public Q_SLOTS:
 	virtual void retransform() override;
+
+private Q_SLOTS:
 	void childHovered();
 	void childUnhovered();
+	void childChanged();
 
 protected:
 	WorksheetElementContainer(const QString&, WorksheetElementContainerPrivate*, AspectType);
 	ResizeItem* m_resizeItem{nullptr};
+	virtual void handleAspectAdded(const AbstractAspect*);
 
 protected Q_SLOTS:
-	virtual void handleAspectAdded(const AbstractAspect*);
+	virtual void handleAspectMoved();
 
 private:
 	Q_DECLARE_PRIVATE(WorksheetElementContainer)

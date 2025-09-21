@@ -18,6 +18,7 @@ class CartesianCoordinateSystem;
 class Line;
 class Symbol;
 class Value;
+class KConfigGroup;
 
 typedef QVector<QPointF> Points;
 
@@ -34,15 +35,6 @@ public:
 	Line* addLine(const KConfigGroup&);
 	Symbol* addSymbol(const KConfigGroup&);
 	void addValue(const KConfigGroup&);
-
-	bool m_suppressRecalc{false};
-
-	// reimplemented from QGraphicsItem
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
-
-	bool activatePlot(QPointF mouseScenePos, double maxDist);
-	void setHover(bool on);
 
 	LollipopPlot* const q;
 
@@ -64,9 +56,6 @@ public:
 	Value* value{nullptr};
 
 private:
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void recalc(int);
@@ -74,11 +63,6 @@ private:
 	void horizontalPlot(int);
 
 	void draw(QPainter*);
-
-	bool m_hovered{false};
-
-	QRectF m_boundingRectangle;
-	QPainterPath m_shape;
 
 	QVector<QVector<QLineF>> m_barLines; // QVector<QLineF> contains the lines for each data column
 	QVector<QVector<QPointF>> m_symbolPoints; // QVector<QPointF> contains the positions of symbols for each data column
@@ -90,13 +74,6 @@ private:
 
 	double m_groupWidth{1.0}; // width of a bar group
 	double m_groupGap{0.0}; // gap around a group of bars
-
-	QPixmap m_pixmap;
-	QImage m_hoverEffectImage;
-	QImage m_selectionEffectImage;
-
-	bool m_hoverEffectImageIsDirty{false};
-	bool m_selectionEffectImageIsDirty{false};
 };
 
 #endif

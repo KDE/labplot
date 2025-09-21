@@ -4,20 +4,19 @@
 	Description          : Tests for the ascii filter
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef SPICEFILTERTEST_H
 #define SPICEFILTERTEST_H
 
-#include <QtTest>
+#include "../../CommonMetaTest.h"
 
-class SpiceFilterTest : public QObject {
+class SpiceFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
-
 	void NgSpiceAsciiFileToBinaryFilter();
 	void NgSpiceBinaryFileToAsciiFilter();
 

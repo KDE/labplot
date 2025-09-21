@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : NSL math functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2018-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2018-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -46,7 +46,7 @@ bool nsl_math_definitely_less_than_eps(double a, double b, double epsilon) {
 double nsl_math_frexp10(double x, int* e) {
 	int expo = 0;
 	if (x != 0)
-		expo = floor(log10(fabs(x)));
+		expo = (int)floor(log10(fabs(x)));
 
 	if (e != NULL)
 		*e = expo;
@@ -94,7 +94,7 @@ double nsl_math_places(double value, int n, int method) {
 		return value;
 	}
 
-	double scale = gsl_pow_int(10., n);
+	double scale = n == 1 ? 10. : gsl_pow_int(10., n);
 	double scaled_value = value * scale;
 	if (fabs(scaled_value) > 1.e16)
 		return value;
@@ -158,4 +158,38 @@ double nsl_math_round_basex(double value, int p, double base) {
 	*/
 
 	return round(scaled_value) / scale * power_of_x;
+}
+
+double nsl_math_round_multiple(double value, double m) {
+	return nsl_math_multiple(value, m, Round);
+}
+double nsl_math_floor_multiple(double value, double m) {
+	return nsl_math_multiple(value, m, Floor);
+}
+double nsl_math_ceil_multiple(double value, double m) {
+	return nsl_math_multiple(value, m, Ceil);
+}
+double nsl_math_trunc_multiple(double value, double m) {
+	return nsl_math_multiple(value, m, Trunc);
+}
+
+double nsl_math_multiple(double value, double multiple, round_method method) {
+	// no need to round
+	if (value == 0. || multiple == 0. || isnan(value) || isnan(multiple) || isinf(value) || isinf(multiple)) {
+		/*		printf("nsl_math_multiple(): not changed : %.19g\n", value); */
+		return value;
+	}
+
+	switch (method) {
+	case Round:
+		return multiple * round(value / multiple);
+	case Floor:
+		return multiple * floor(value / multiple);
+	case Ceil:
+		return multiple * ceil(value / multiple);
+	case Trunc:
+		return multiple * trunc(value / multiple);
+	}
+
+	return value;
 }

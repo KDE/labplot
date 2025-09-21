@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: 2013-2021 Tobias Lorenz <tobias.lorenz@gmx.net>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+FROM debian:testing
+
+# dependencies, build tools, static test, dynamic test, documentation
+RUN apt-get update \
+  && apt-get install --yes \
+    zlib1g-dev \
+    cmake gcc g++ \
+    cccc cppcheck \
+    lcov \
+    doxygen graphviz libboost-system-dev libboost-filesystem-dev libboost-test-dev \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*

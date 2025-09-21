@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Cartesian plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2017-2018 Garvit Khatri <garvitdelhi@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -11,76 +11,112 @@
 
 #include "CartesianPlot.h"
 #include "CartesianPlotPrivate.h"
-#include "Histogram.h"
-#include "XYConvolutionCurve.h"
-#include "XYCorrelationCurve.h"
-#include "XYCurve.h"
-#include "XYDataReductionCurve.h"
-#include "XYDifferentiationCurve.h"
-#include "XYEquationCurve.h"
-#include "XYFitCurve.h"
-#include "XYFourierFilterCurve.h"
-#include "XYFourierTransformCurve.h"
-#include "XYHilbertTransformCurve.h"
-#include "XYIntegrationCurve.h"
-#include "XYInterpolationCurve.h"
-#include "XYSmoothCurve.h"
+
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
+#include "backend/worksheet/DefaultColorTheme.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
-#include "backend/worksheet/plots/cartesian/BarPlot.h"
-#include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
-#include "backend/worksheet/plots/cartesian/LollipopPlot.h"
-#include "backend/worksheet/plots/cartesian/QQPlot.h"
+#include "backend/worksheet/plots/cartesian/ErrorBar.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
-#include "kdefrontend/ThemeHandler.h"
-#include "kdefrontend/widgets/ThemesWidget.h"
+#include "backend/worksheet/plots/cartesian/plots.h"
+#include "frontend/ThemeHandler.h"
+#include "frontend/widgets/ThemesWidget.h"
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-#include <QDir>
+#include <QActionGroup>
 #include <QIcon>
 #include <QKeyEvent>
 #include <QMenu>
 #include <QPainter>
 #include <QWidgetAction>
 
-using Dimension = CartesianCoordinateSystem::Dimension;
+namespace {
+enum Action {
+	New = 0x1000,
+	NewTextLabel = 0x1001,
+	NewCustomPoint = 0x1002,
+	NewReferenceRange = 0x1003,
+	NewReferenceLine = 0x1004,
+	NewImage = 0x1005,
+
+	NavigateNextCurve = 0x2001,
+	NavigatePrevCurve = 0x2002,
+
+	Move = 0x4000,
+	MoveLeft = 0x4001,
+	MoveRight = 0x4002,
+	MoveUp = 0x4003,
+	MoveDown = 0x4004,
+
+	Abort = 0x8000,
+};
+
+Action evaluateKeys(int key, Qt::KeyboardModifiers) {
+	if (key == Qt::Key_N)
+		return Action::NavigateNextCurve;
+	else if (key == Qt::Key_P)
+		return Action::NavigatePrevCurve;
+	else if (key == Qt::Key_T)
+		return Action::NewTextLabel;
+	else if (key == Qt::Key_R)
+		return Action::NewReferenceRange;
+	else if (key == Qt::Key_L)
+		return Action::NewReferenceLine;
+	else if (key == Qt::Key_I)
+		return Action::NewImage;
+	else if (key == Qt::Key_M)
+		return Action::NewCustomPoint;
+	else if (key == Qt::Key_Escape)
+		return Action::Abort;
+	else if (key == Qt::Key_Left)
+		return Action::MoveLeft;
+	else if (key == Qt::Key_Right)
+		return Action::MoveRight;
+	else if (key == Qt::Key_Up)
+		return Action::MoveUp;
+	else if (key == Qt::Key_Down)
+		return Action::MoveDown;
+	return Action::Abort;
+}
+}
 
 /**
  * \class CartesianPlot
- * \brief A xy-plot.
+ * \brief This class implements the cartesian plot and the actual plot area that is visualized on the \c Worksheet.
+ *
+ * The definition of the cartesian coordinate systems as well as of the to be plotted data ranges is done in this class.
+ *
+ * \ingroup CartesianPlotArea
  */
-CartesianPlot::CartesianPlot(const QString& name)
+CartesianPlot::CartesianPlot(const QString& name, bool loading)
 	: AbstractPlot(name, new CartesianPlotPrivate(this), AspectType::CartesianPlot) {
-	init();
+	init(loading);
 }
 
 CartesianPlot::CartesianPlot(const QString& name, CartesianPlotPrivate* dd)
 	: AbstractPlot(name, dd, AspectType::CartesianPlot) {
-	init();
+	init(false);
 }
 
 CartesianPlot::~CartesianPlot() {
 	if (m_menusInitialized) {
 		delete m_addNewMenu;
+		delete dataAnalysisMenu;
 		delete themeMenu;
 	}
 
@@ -96,9 +132,10 @@ CartesianPlot::~CartesianPlot() {
 /*!
 	initializes all member variables of \c CartesianPlot
 */
-void CartesianPlot::init() {
-	m_coordinateSystems.append(new CartesianCoordinateSystem(this));
+void CartesianPlot::init(bool loading) {
+	// initialize the children objects
 	m_plotArea = new PlotArea(name() + QStringLiteral(" plot area"), this);
+	connect(m_plotArea, &WorksheetElement::changed, this, &WorksheetElement::changed);
 	addChildFast(m_plotArea);
 
 	// title
@@ -107,22 +144,13 @@ void CartesianPlot::init() {
 	m_title->setHidden(true);
 	m_title->setParentGraphicsItem(m_plotArea->graphicsItem());
 
-	// offset between the plot area and the area defining the coordinate system, in scene units.
 	Q_D(CartesianPlot);
-	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
-	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
-	d->rightPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
-	d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
-	d->symmetricPadding = true;
 
 	// cursor line
 	d->cursorLine = new Line(QString());
 	d->cursorLine->setPrefix(QLatin1String("Cursor"));
 	d->cursorLine->setHidden(true);
 	addChild(d->cursorLine);
-	d->cursorLine->setStyle(Qt::SolidLine);
-	d->cursorLine->setColor(Qt::red); // TODO: use theme specific initial settings
-	d->cursorLine->setWidth(Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point));
 	connect(d->cursorLine, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
@@ -133,11 +161,23 @@ void CartesianPlot::init() {
 	connect(this, &AbstractAspect::childAspectAdded, this, &CartesianPlot::childAdded);
 	connect(this, &AbstractAspect::childAspectRemoved, this, &CartesianPlot::childRemoved);
 
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, true);
+	// if not loading, initialize the default properties (read in load() otherwise)
+	if (loading)
+		return;
+
+	m_coordinateSystems << new CartesianCoordinateSystem(this);
+
+	// TODO: load from KConfigGroup
+
+	// offset between the plot area and the area defining the coordinate system, in scene units.
+	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->rightPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+	d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+
+	d->cursorLine->setStyle(Qt::SolidLine);
+	d->cursorLine->setColor(Qt::red); // TODO: use theme specific initial settings
+	d->cursorLine->setWidth(Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point));
 
 	// theme is not set at this point, initialize the color palette with default colors
 	this->setColorPalette(KConfig());
@@ -155,6 +195,8 @@ void CartesianPlot::setType(Type type) {
 	switch (type) {
 	case Type::FourAxes: {
 		// Axes
+
+		// x1
 		Axis* axis = new Axis(QLatin1String("x"), Axis::Orientation::Horizontal);
 		axis->setDefault(true);
 		axis->setSuppressRetransform(true);
@@ -164,24 +206,26 @@ void CartesianPlot::setType(Type type) {
 		axis->setMajorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksNumber(1);
+		axis->minorGridLine()->setStyle(Qt::NoPen);
 		axis->setSuppressRetransform(false);
 
+		// x2
 		axis = new Axis(QLatin1String("x2"), Axis::Orientation::Horizontal);
 		axis->title()->setText(QString());
 		axis->setDefault(true);
 		axis->setSuppressRetransform(true);
-
 		addChild(axis);
 		axis->setPosition(Axis::Position::Top);
 		axis->setRange(0., 1.);
-		axis->setMajorTicksDirection(Axis::ticksIn);
-		axis->setMinorTicksDirection(Axis::ticksIn);
+		axis->setMajorTicksDirection(Axis::noTicks);
+		axis->setMinorTicksDirection(Axis::noTicks);
 		axis->setMinorTicksNumber(1);
 		axis->majorGridLine()->setStyle(Qt::NoPen);
 		axis->minorGridLine()->setStyle(Qt::NoPen);
 		axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 		axis->setSuppressRetransform(false);
 
+		// y1
 		axis = new Axis(QLatin1String("y"), Axis::Orientation::Vertical);
 		axis->setDefault(true);
 		axis->setSuppressRetransform(true);
@@ -191,8 +235,10 @@ void CartesianPlot::setType(Type type) {
 		axis->setMajorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksNumber(1);
+		axis->minorGridLine()->setStyle(Qt::NoPen);
 		axis->setSuppressRetransform(false);
 
+		// y2
 		axis = new Axis(QLatin1String("y2"), Axis::Orientation::Vertical);
 		axis->title()->setText(QString());
 		axis->setDefault(true);
@@ -200,13 +246,18 @@ void CartesianPlot::setType(Type type) {
 		addChild(axis);
 		axis->setPosition(Axis::Position::Right);
 		axis->setRange(0., 1.);
-		axis->setMajorTicksDirection(Axis::ticksIn);
-		axis->setMinorTicksDirection(Axis::ticksIn);
+		axis->setMajorTicksDirection(Axis::noTicks);
+		axis->setMinorTicksDirection(Axis::noTicks);
 		axis->setMinorTicksNumber(1);
 		axis->majorGridLine()->setStyle(Qt::NoPen);
 		axis->minorGridLine()->setStyle(Qt::NoPen);
 		axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 		axis->setSuppressRetransform(false);
+
+		d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+		d->verticalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->rightPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 
 		break;
 	}
@@ -234,6 +285,11 @@ void CartesianPlot::setType(Type type) {
 		axis->setMinorTicksNumber(1);
 		axis->setArrowType(Axis::ArrowType::FilledSmall);
 		axis->setSuppressRetransform(false);
+
+		d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
+		d->verticalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->rightPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 
 		break;
 	}
@@ -271,6 +327,11 @@ void CartesianPlot::setType(Type type) {
 		axis->setMinorTicksNumber(1);
 		axis->setArrowType(Axis::ArrowType::FilledSmall);
 		axis->setSuppressRetransform(false);
+
+		d->horizontalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->verticalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->rightPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->bottomPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
 
 		break;
 	}
@@ -313,6 +374,11 @@ void CartesianPlot::setType(Type type) {
 		axis->setArrowType(Axis::ArrowType::FilledSmall);
 		axis->setSuppressRetransform(false);
 
+		d->horizontalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->verticalPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->rightPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+		d->bottomPadding = Worksheet::convertToSceneUnits(0.5, Worksheet::Unit::Centimeter);
+
 		break;
 	}
 	}
@@ -341,72 +407,19 @@ CartesianPlot::Type CartesianPlot::type() const {
 }
 
 void CartesianPlot::initActions() {
-	//"add new" actions
-	addCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("xy-curve"), this);
-	addEquationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("xy-curve from a Formula"), this);
-
-	// statistical plots
-	addHistogramAction = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), this);
-	addBoxPlotAction = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), this);
-	addQQPlotAction = new QAction(i18n("Q-Q Plot"), this);
-
-	// bar plots
-	addBarPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), this);
-	addLollipopPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Lollipop Plot"), this);
-
 	// analysis curves, no icons yet
 	addDataReductionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Reduction"), this);
 	addDifferentiationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiation"), this);
 	addIntegrationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integration"), this);
 	addInterpolationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolation"), this);
 	addSmoothCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve")), i18n("Smooth"), this);
-	addFitCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit"), this);
+	addFitCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18nc("Curve fitting", "Fit"), this);
 	addFourierFilterCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve")), i18n("Fourier Filter"), this);
 	addFourierTransformCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve")), i18n("Fourier Transform"), this);
 	addHilbertTransformCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Hilbert Transform"), this);
 	addConvolutionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("(De-)Convolution"), this);
 	addCorrelationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto-/Cross-Correlation"), this);
 
-	addLegendAction = new QAction(QIcon::fromTheme(QStringLiteral("text-field")), i18n("Legend"), this);
-	if (children<CartesianPlotLegend>().size() > 0)
-		addLegendAction->setEnabled(false); // only one legend is allowed -> disable the action
-
-	addHorizontalAxisAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-horizontal")), i18n("Horizontal Axis"), this);
-	addVerticalAxisAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-vertical")), i18n("Vertical Axis"), this);
-	addTextLabelAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Text"), this);
-	addImageAction = new QAction(QIcon::fromTheme(QStringLiteral("viewimage")), i18n("Image"), this);
-	addInfoElementAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Info Element"), this);
-	addCustomPointAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-cross")), i18n("Custom Point"), this);
-	addReferenceLineAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-line")), i18n("Reference Line"), this);
-	addReferenceRangeAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-rectangle")), i18n("Reference Range"), this);
-
-	connect(addCurveAction, &QAction::triggered, this, [=]() {
-		addChild(new XYCurve(QStringLiteral("xy-curve")));
-	});
-	connect(addEquationCurveAction, &QAction::triggered, this, [=]() {
-		addChild(new XYEquationCurve(QStringLiteral("f(x)")));
-	});
-
-	// bar plots
-	connect(addBarPlotAction, &QAction::triggered, this, [=]() {
-		addChild(new BarPlot(i18n("Bar Plot")));
-	});
-	connect(addLollipopPlotAction, &QAction::triggered, this, [=]() {
-		addChild(new LollipopPlot(i18n("Lollipop Plot")));
-	});
-
-	// statistical plots
-	connect(addBoxPlotAction, &QAction::triggered, this, [=]() {
-		addChild(new BoxPlot(i18n("Box Plot")));
-	});
-	connect(addHistogramAction, &QAction::triggered, this, [=]() {
-		addChild(new Histogram(i18n("Histogram")));
-	});
-	connect(addQQPlotAction, &QAction::triggered, this, [=]() {
-		addChild(new QQPlot(i18n("Q-Q Plot")));
-	});
-
-	// analysis curves
 	connect(addDataReductionCurveAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
 	connect(addDifferentiationCurveAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
 	connect(addIntegrationCurveAction, &QAction::triggered, this, &CartesianPlot::addIntegrationCurve);
@@ -427,18 +440,11 @@ void CartesianPlot::initActions() {
 		addChild(new XYCorrelationCurve(i18n("Auto-/Cross-Correlation")));
 	});
 
-	connect(addLegendAction, &QAction::triggered, this, static_cast<void (CartesianPlot::*)()>(&CartesianPlot::addLegend));
-	connect(addHorizontalAxisAction, &QAction::triggered, this, &CartesianPlot::addHorizontalAxis);
-	connect(addVerticalAxisAction, &QAction::triggered, this, &CartesianPlot::addVerticalAxis);
-	connect(addTextLabelAction, &QAction::triggered, this, &CartesianPlot::addTextLabel);
-	connect(addImageAction, &QAction::triggered, this, &CartesianPlot::addImage);
-	connect(addInfoElementAction, &QAction::triggered, this, &CartesianPlot::addInfoElement);
-	connect(addCustomPointAction, &QAction::triggered, this, &CartesianPlot::addCustomPoint);
-	connect(addReferenceLineAction, &QAction::triggered, this, &CartesianPlot::addReferenceLine);
-	connect(addReferenceRangeAction, &QAction::triggered, this, &CartesianPlot::addReferenceRange);
+	addFunctionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("Function"), this);
+	addFunctionCurveAction->setToolTip(i18n("Add a new xy-curve that is defined as a function of other xy-curves (scaled, shifted, etc.)"));
+	connect(addFunctionCurveAction, &QAction::triggered, this, &CartesianPlot::addFunctionCurve);
 
-	// Analysis menu actions
-	// 	addDataOperationAction = new QAction(i18n("Data Operation"), this);
+	// Analysis menu actions, used in the spreadsheet
 	addDataReductionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Reduction"), this);
 	addDifferentiationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiate"), this);
 	addIntegrationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integrate"), this);
@@ -516,10 +522,51 @@ void CartesianPlot::initActions() {
 		addChild(new XYHilbertTransformCurve(i18n("Hilbert Transform")));
 	});
 
-	// visibility action
-	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &CartesianPlot::changeVisibility);
+	// other objects
+	addLegendAction = new QAction(QIcon::fromTheme(QStringLiteral("text-field")), i18n("Legend"), this);
+	if (children<CartesianPlotLegend>().size() > 0)
+		addLegendAction->setEnabled(false); // only one legend is allowed -> disable the action
+
+	addHorizontalAxisAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-horizontal")), i18n("Horizontal Axis"), this);
+	addVerticalAxisAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-vertical")), i18n("Vertical Axis"), this);
+	addTextLabelAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Text"), this);
+	addImageAction = new QAction(QIcon::fromTheme(QStringLiteral("viewimage")), i18n("Image"), this);
+	addInfoElementAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Info Element"), this);
+	addCustomPointAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-cross")), i18n("Custom Point"), this);
+	addReferenceLineAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-line")), i18n("Reference Line"), this);
+	addReferenceRangeAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-rectangle")), i18n("Reference Range"), this);
+
+	// inset plot action, use the proper icon for the current plot type
+	QIcon icon;
+	Q_D(CartesianPlot);
+	switch (d->type) {
+	case Type::FourAxes:
+		icon = QIcon::fromTheme(QStringLiteral("labplot-xy-plot-four-axes"));
+		break;
+	case Type::TwoAxes:
+		icon = QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes"));
+		break;
+	case Type::TwoAxesCentered:
+		icon = QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered"));
+		break;
+	case Type::TwoAxesCenteredZero:
+		icon = QIcon::fromTheme(QStringLiteral("labplot-xy-plot-two-axes-centered-origin"));
+		break;
+	}
+	addInsetPlotAction = new QAction(icon, i18n("Inset Plot Area"), this);
+	addInsetPlotWithDataAction = new QAction(icon, i18n("Inset Plot Area with Data"), this);
+
+	connect(addLegendAction, &QAction::triggered, this, static_cast<void (CartesianPlot::*)()>(&CartesianPlot::addLegend));
+	connect(addHorizontalAxisAction, &QAction::triggered, this, &CartesianPlot::addHorizontalAxis);
+	connect(addVerticalAxisAction, &QAction::triggered, this, &CartesianPlot::addVerticalAxis);
+	connect(addTextLabelAction, &QAction::triggered, this, &CartesianPlot::addTextLabel);
+	connect(addImageAction, &QAction::triggered, this, &CartesianPlot::addImage);
+	connect(addInfoElementAction, &QAction::triggered, this, &CartesianPlot::addInfoElement);
+	connect(addCustomPointAction, &QAction::triggered, this, &CartesianPlot::addCustomPoint);
+	connect(addReferenceLineAction, &QAction::triggered, this, &CartesianPlot::addReferenceLine);
+	connect(addReferenceRangeAction, &QAction::triggered, this, &CartesianPlot::addReferenceRange);
+	connect(addInsetPlotAction, &QAction::triggered, this, &CartesianPlot::addInsetPlot);
+	connect(addInsetPlotWithDataAction, &QAction::triggered, this, &CartesianPlot::addInsetPlotWithData);
 }
 
 void CartesianPlot::initMenus() {
@@ -527,23 +574,22 @@ void CartesianPlot::initMenus() {
 
 	m_addNewMenu = new QMenu(i18n("Add New"));
 	m_addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
-	m_addNewMenu->addAction(addCurveAction);
-	m_addNewMenu->addAction(addEquationCurveAction);
+	auto* actionGroup = new QActionGroup(this);
+	connect(actionGroup, &QActionGroup::triggered, this, &CartesianPlot::addPlot);
 
-	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"));
-	addNewStatisticalPlotsMenu->addAction(addHistogramAction);
-	addNewStatisticalPlotsMenu->addAction(addBoxPlotAction);
-	addNewStatisticalPlotsMenu->addAction(addQQPlotAction);
-	m_addNewMenu->addMenu(addNewStatisticalPlotsMenu);
+	// add all available plot types
+	CartesianPlot::fillAddNewPlotMenu(m_addNewMenu, actionGroup);
 
-	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"));
-	addNewBarPlotsMenu->addAction(addBarPlotAction);
-	addNewBarPlotsMenu->addAction(addLollipopPlotAction);
-	m_addNewMenu->addMenu(addNewBarPlotsMenu);
-
+	// formula plot
+	auto* action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("Formula Plot"), actionGroup);
+	action->setToolTip(i18n("Add a new xy-plot that is defined via a mathematical expression."));
+	action->setData(static_cast<int>(Plot::PlotType::Formula));
+	m_addNewMenu->addSeparator();
+	m_addNewMenu->addAction(action);
 	m_addNewMenu->addSeparator();
 
-	addNewAnalysisMenu = new QMenu(i18n("Analysis Curve"));
+	// analysis curves
+	addNewAnalysisMenu = new QMenu(i18n("Analysis Plots"), m_addNewMenu);
 	addNewAnalysisMenu->addAction(addFitCurveAction);
 	addNewAnalysisMenu->addSeparator();
 	addNewAnalysisMenu->addAction(addDifferentiationCurveAction);
@@ -560,6 +606,8 @@ void CartesianPlot::initMenus() {
 	addNewAnalysisMenu->addAction(addCorrelationCurveAction);
 	addNewAnalysisMenu->addSeparator();
 	addNewAnalysisMenu->addAction(addDataReductionCurveAction);
+	addNewAnalysisMenu->addSeparator();
+	addNewAnalysisMenu->addAction(addFunctionCurveAction);
 	m_addNewMenu->addMenu(addNewAnalysisMenu);
 
 	m_addNewMenu->addSeparator();
@@ -575,15 +623,16 @@ void CartesianPlot::initMenus() {
 	m_addNewMenu->addAction(addCustomPointAction);
 	m_addNewMenu->addAction(addReferenceLineAction);
 	m_addNewMenu->addAction(addReferenceRangeAction);
+	if (parentAspect()->type() != AspectType::CartesianPlot) { // don't allow to add an inset plot if it's already an inset plot
+		m_addNewMenu->addSeparator();
+		m_addNewMenu->addAction(addInsetPlotAction);
+		m_addNewMenu->addAction(addInsetPlotWithDataAction);
+	}
 
-	// Data manipulation menu
-	// 	QMenu* dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
-	// 	dataManipulationMenu->setIcon(QIcon::fromTheme(QStringLiteral("zoom-draw")));
-	// 	dataManipulationMenu->addAction(addDataOperationAction);
-	// 	dataManipulationMenu->addAction(addDataReductionAction);
+	// analysis menu, used in the context menu of XYCurve to allow direct application of analysis functions on the curves
+	dataAnalysisMenu = new QMenu(i18n("Analysis"));
 
-	// Data fit menu
-	QMenu* dataFitMenu = new QMenu(i18n("Fit"));
+	QMenu* dataFitMenu = new QMenu(i18nc("Curve fitting", "Fit"), dataAnalysisMenu);
 	dataFitMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")));
 	dataFitMenu->addAction(addFitActions.at(0));
 	dataFitMenu->addAction(addFitActions.at(1));
@@ -599,10 +648,9 @@ void CartesianPlot::initMenus() {
 	dataFitMenu->addAction(addFitActions.at(9));
 	dataFitMenu->addSeparator();
 	dataFitMenu->addAction(addFitActions.at(10));
-
-	// analysis menu
-	dataAnalysisMenu = new QMenu(i18n("Analysis"));
 	dataAnalysisMenu->addMenu(dataFitMenu);
+
+	// TODO: re-use addNewAnalysisMenu?
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addDifferentiationAction);
 	dataAnalysisMenu->addAction(addIntegrationAction);
@@ -617,8 +665,10 @@ void CartesianPlot::initMenus() {
 	dataAnalysisMenu->addAction(addConvolutionAction);
 	dataAnalysisMenu->addAction(addCorrelationAction);
 	dataAnalysisMenu->addSeparator();
-	// 	dataAnalysisMenu->insertMenu(nullptr, dataManipulationMenu);
+	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addDataReductionAction);
+	dataAnalysisMenu->addSeparator();
+	dataAnalysisMenu->addAction(addFunctionCurveAction);
 
 	// theme menu
 	themeMenu = new QMenu(i18n("Theme"));
@@ -629,7 +679,7 @@ void CartesianPlot::initMenus() {
 			return;
 		auto* themeWidget = new ThemesWidget(nullptr);
 		themeWidget->setFixedMode();
-		connect(themeWidget, &ThemesWidget::themeSelected, this, &CartesianPlot::loadTheme);
+		connect(themeWidget, &ThemesWidget::themeSelected, this, &CartesianPlot::setTheme);
 		connect(themeWidget, &ThemesWidget::themeSelected, themeMenu, &QMenu::close);
 
 		auto* widgetAction = new QWidgetAction(this);
@@ -641,6 +691,110 @@ void CartesianPlot::initMenus() {
 	m_menusInitialized = true;
 }
 
+void CartesianPlot::fillAddNewPlotMenu(QMenu* addNewPlotMenu, QActionGroup* actionGroup) {
+	// line plots
+	auto* menu = new QMenu(i18n("Line Plots"), addNewPlotMenu);
+
+	auto* action = new QAction(XYCurve::staticIcon(XYCurve::PlotType::Line), i18n("Line"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::Line));
+	menu->addAction(action);
+
+	action = new QAction(XYCurve::staticIcon(XYCurve::PlotType::LineHorizontalStep), i18n("Horizontal Step"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::LineHorizontalStep));
+	menu->addAction(action);
+
+	action = new QAction(XYCurve::staticIcon(XYCurve::PlotType::LineVerticalStep), i18n("Vertical Step"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::LineVerticalStep));
+	menu->addAction(action);
+
+	action = new QAction(XYCurve::staticIcon(XYCurve::PlotType::LineSpline), i18n("Spline Interpolated"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::LineSpline));
+	menu->addAction(action);
+
+	addNewPlotMenu->addMenu(menu);
+
+	// scatter plots
+	menu = new QMenu(i18n("Scatter Plots"), addNewPlotMenu);
+
+	action = new QAction(XYCurve::staticIcon(XYCurve::PlotType::Scatter), i18n("Scatter"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::Scatter));
+	menu->addAction(action);
+
+	action = new QAction(XYCurve::staticIcon(XYCurve::PlotType::ScatterYError), i18n("Y Error"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::ScatterYError));
+	menu->addAction(action);
+
+	action = new QAction(XYCurve::staticIcon(XYCurve::PlotType::ScatterXYError), i18n("XY Error"), actionGroup);
+	action->setData(static_cast<int>(XYCurve::PlotType::ScatterXYError));
+	menu->addAction(action);
+
+	addNewPlotMenu->addMenu(menu);
+
+	// line + symbol plots
+	menu = new QMenu(i18n("Line and Symbol Plots"), addNewPlotMenu);
+
+	action = new QAction(XYCurve::staticIcon(XYCurve::PlotType::LineSymbol), i18n("Line + Symbol"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::LineSymbol));
+	menu->addAction(action);
+
+	action = new QAction(XYCurve::staticIcon(XYCurve::PlotType::LineSymbol2PointSegment), i18n("2 Point Segment"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::LineSymbol2PointSegment));
+	menu->addAction(action);
+
+	action = new QAction(XYCurve::staticIcon(XYCurve::PlotType::LineSymbol3PointSegment), i18n("3 Point Segment"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::LineSymbol3PointSegment));
+	menu->addAction(action);
+	addNewPlotMenu->addMenu(menu);
+
+	// statistical plots
+	menu->addSeparator();
+	auto* addNewStatisticalPlotsMenu = new QMenu(i18n("Statistical Plots"), addNewPlotMenu);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::Histogram));
+	addNewStatisticalPlotsMenu->addAction(action);
+
+	action = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::BoxPlot));
+	addNewStatisticalPlotsMenu->addAction(action);
+
+	action = new QAction(i18n("Q-Q Plot"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::QQPlot));
+	addNewStatisticalPlotsMenu->addAction(action);
+
+	action = new QAction(i18n("KDE Plot"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::KDEPlot));
+	addNewStatisticalPlotsMenu->addAction(action);
+
+	addNewPlotMenu->addMenu(addNewStatisticalPlotsMenu);
+
+	// // bar plots
+	auto* addNewBarPlotsMenu = new QMenu(i18n("Bar Plots"), addNewPlotMenu);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::BarPlot));
+	addNewBarPlotsMenu->addAction(action);
+
+	action = new QAction(LollipopPlot::staticIcon(), i18n("Lollipop Plot"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::LollipopPlot));
+	addNewBarPlotsMenu->addAction(action);
+
+	addNewPlotMenu->addMenu(addNewBarPlotsMenu);
+
+	// continuous improvement plots
+	auto* addNewCIPlotsMenu = new QMenu(i18n("Continual Improvement Plots"), addNewPlotMenu);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Run Chart"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::RunChart));
+	addNewCIPlotsMenu->addAction(action);
+
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Process Behavior Chart"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::ProcessBehaviorChart));
+	addNewCIPlotsMenu->addAction(action);
+
+	addNewPlotMenu->addMenu(addNewCIPlotsMenu);
+}
+
 QMenu* CartesianPlot::createContextMenu() {
 	if (!m_menusInitialized)
 		initMenus();
@@ -648,20 +802,16 @@ QMenu* CartesianPlot::createContextMenu() {
 	QMenu* menu = WorksheetElement::createContextMenu();
 	// seems to be a bug, because the tooltips are not shown
 	menu->setToolTipsVisible(true);
-	QAction* firstAction = menu->actions().at(1);
+	QAction* visibilityAction = this->visibilityAction();
 
-	menu->insertMenu(firstAction, m_addNewMenu);
-	menu->insertSeparator(firstAction);
-	menu->insertMenu(firstAction, themeMenu);
-	menu->insertSeparator(firstAction);
-
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
-	menu->insertSeparator(firstAction);
+	menu->insertMenu(visibilityAction, m_addNewMenu);
+	menu->insertSeparator(visibilityAction);
+	menu->insertMenu(visibilityAction, themeMenu);
+	menu->insertSeparator(visibilityAction);
 
 	if (children<XYCurve>().isEmpty()) {
 		addInfoElementAction->setEnabled(false);
-		addInfoElementAction->setToolTip(QStringLiteral("No curve inside plot."));
+		addInfoElementAction->setToolTip(i18n("No curves inside the plot area."));
 	} else {
 		addInfoElementAction->setEnabled(true);
 		addInfoElementAction->setToolTip(QString());
@@ -707,6 +857,7 @@ QVector<AbstractAspect*> CartesianPlot::dependsOn() const {
 	// aspects which the plotted data in the worksheet depends on (spreadsheets and later matrices)
 	QVector<AbstractAspect*> aspects;
 
+	// TODO: handle other plot types
 	for (const auto* curve : children<XYCurve>()) {
 		if (curve->xColumn() && curve->xColumn()->parentAspect()->type() == AspectType::Spreadsheet)
 			aspects << curve->xColumn()->parentAspect();
@@ -719,13 +870,19 @@ QVector<AbstractAspect*> CartesianPlot::dependsOn() const {
 }
 
 QVector<AspectType> CartesianPlot::pasteTypes() const {
-	QVector<AspectType> types{AspectType::XYCurve,
+	QVector<AspectType> types{AspectType::CartesianPlot,
+							  AspectType::XYCurve,
 							  AspectType::Histogram,
 							  AspectType::BarPlot,
 							  AspectType::LollipopPlot,
 							  AspectType::BoxPlot,
+							  AspectType::KDEPlot,
+							  AspectType::QQPlot,
+							  AspectType::RunChart,
+							  AspectType::ProcessBehaviorChart,
 							  AspectType::Axis,
 							  AspectType::XYEquationCurve,
+							  AspectType::XYFunctionCurve,
 							  AspectType::XYConvolutionCurve,
 							  AspectType::XYCorrelationCurve,
 							  AspectType::XYDataReductionCurve,
@@ -869,7 +1026,7 @@ void CartesianPlot::processDropEvent(const QVector<quintptr>& vec) {
 
 	// determine the first column with "x plot designation" as the x-data column for all curves to be created
 	const AbstractColumn* xColumn = nullptr;
-	for (const auto* column : qAsConst(columns)) {
+	for (const auto* column : std::as_const(columns)) {
 		if (column->plotDesignation() == AbstractColumn::PlotDesignation::X) {
 			xColumn = column;
 			break;
@@ -889,7 +1046,7 @@ void CartesianPlot::processDropEvent(const QVector<quintptr>& vec) {
 
 	// create curves
 	bool curvesAdded = false;
-	for (const auto* column : qAsConst(columns)) {
+	for (const auto* column : std::as_const(columns)) {
 		if (column == xColumn)
 			continue;
 
@@ -913,10 +1070,6 @@ bool CartesianPlot::isPanningActive() const {
 	return d->panningStarted;
 }
 
-bool CartesianPlot::isHovered() const {
-	Q_D(const CartesianPlot);
-	return d->m_hovered;
-}
 bool CartesianPlot::isPrinted() const {
 	Q_D(const CartesianPlot);
 	return d->m_printing;
@@ -1022,7 +1175,7 @@ public:
 	}
 
 	void redo() override {
-		if (m_initilized) {
+		if (m_initialized) {
 			qSwap(m_private->rect, m_rect);
 			m_private->retransform();
 			Q_EMIT m_private->q->rectChanged(m_private->rect);
@@ -1030,7 +1183,7 @@ public:
 			// this function is called for the first time,
 			// nothing to do, we just need to remember what the previous rect was
 			// which has happened already in the constructor.
-			m_initilized = true;
+			m_initialized = true;
 		}
 	}
 
@@ -1041,7 +1194,7 @@ public:
 private:
 	CartesianPlotPrivate* m_private;
 	QRectF m_rect;
-	bool m_initilized{false};
+	bool m_initialized{false};
 };
 
 void CartesianPlot::setPrevRect(const QRectF& prevRect) {
@@ -1142,8 +1295,7 @@ void CartesianPlot::setRangeFormat(const Dimension dim, const int index, const R
 	}
 	if (format != rangeFormat(dim, index)) {
 		exec(new CartesianPlotSetRangeFormatIndexCmd(d, dim, format, index));
-		if (project())
-			project()->setChanged(true);
+		setProjectChanged(true);
 	}
 }
 
@@ -1227,8 +1379,7 @@ void CartesianPlot::enableAutoScale(const Dimension dim, int index, const bool e
 		DEBUG(Q_FUNC_INFO << ", x range " << index << " enable auto scale: " << enable)
 		// TODO: maybe using the first and then adding the first one as parent to the next undo command
 		exec(new CartesianPlotEnableAutoScaleIndexCmd(d, dim, enable, index, fullRange));
-		if (project())
-			project()->setChanged(true);
+		setProjectChanged(true);
 	}
 }
 
@@ -1260,7 +1411,7 @@ public:
 	}
 	void redo() override {
 		m_target->setRangeDirty(m_dimension, m_index, true);
-		auto tmp = m_target->rangeConst(m_dimension, m_index);
+		const auto& tmp = m_target->rangeConst(m_dimension, m_index);
 		m_target->setRange(m_dimension, m_index, m_otherValue);
 		m_otherValue = tmp;
 		finalize();
@@ -1301,7 +1452,7 @@ void CartesianPlot::setRange(const Dimension dim, const int index, const Range<d
 
 	if (range.start() == range.end()) {
 		// User entered invalid range
-		emit rangeChanged(dim, index, this->range(dim, index)); // Feedback
+		Q_EMIT rangeChanged(dim, index, this->range(dim, index)); // Feedback
 		return;
 	}
 
@@ -1352,26 +1503,22 @@ void CartesianPlot::setRangeDirty(const Dimension dim, int index, bool dirty) {
 void CartesianPlot::addXRange() {
 	Q_D(CartesianPlot);
 	d->xRanges.append(CartesianPlot::Private::RichRange());
-	if (project())
-		project()->setChanged(true);
+	setProjectChanged(true);
 }
 void CartesianPlot::addYRange() {
 	Q_D(CartesianPlot);
 	d->yRanges.append(CartesianPlot::Private::RichRange());
-	if (project())
-		project()->setChanged(true);
+	setProjectChanged(true);
 }
 void CartesianPlot::addXRange(const Range<double>& range) {
 	Q_D(CartesianPlot);
 	d->xRanges.append(CartesianPlot::Private::RichRange(range));
-	if (project())
-		project()->setChanged(true);
+	setProjectChanged(true);
 }
 void CartesianPlot::addYRange(const Range<double>& range) {
 	Q_D(CartesianPlot);
 	d->yRanges.append(CartesianPlot::Private::RichRange(range));
-	if (project())
-		project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void CartesianPlot::removeRange(const Dimension dim, int index) {
@@ -1390,8 +1537,7 @@ void CartesianPlot::removeRange(const Dimension dim, int index) {
 		break;
 	}
 
-	if (project())
-		project()->setChanged(true);
+	setProjectChanged(true);
 }
 
 void CartesianPlot::setMin(const Dimension dim, int index, double value) {
@@ -1483,9 +1629,18 @@ void CartesianPlot::setRangeScale(const Dimension dim, const int index, const Ra
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
 	}
-	exec(new CartesianPlotSetScaleIndexCmd(d, dim, scale, index));
-	if (project())
-		project()->setChanged(true);
+
+	auto newRange = range(Dimension::X, index);
+	newRange.setScale(scale);
+	auto r = d->checkRange(newRange);
+	if (index >= 0 && index < rangeCount(dim) && r.finite() && r != d->rangeConst(dim, index)) {
+		if (r == newRange) {
+			exec(new CartesianPlotSetScaleIndexCmd(d, dim, scale, index));
+			if (project())
+				setProjectChanged(true);
+		} else
+			setRange(dim, index, r);
+	}
 }
 
 void CartesianPlot::setXRangeScale(const int index, const RangeT::Scale scale) {
@@ -1520,7 +1675,7 @@ void CartesianPlot::addCoordinateSystem() {
 void CartesianPlot::addCoordinateSystem(CartesianCoordinateSystem* s) {
 	m_coordinateSystems.append(s);
 	if (project())
-		project()->setChanged(true);
+		setProjectChanged(true);
 }
 void CartesianPlot::removeCoordinateSystem(int index) {
 	if (index < 0 || index > coordinateSystemCount()) {
@@ -1531,7 +1686,7 @@ void CartesianPlot::removeCoordinateSystem(int index) {
 	// TODO: deleting cSystem?
 	m_coordinateSystems.remove(index);
 	if (project())
-		project()->setChanged(true);
+		setProjectChanged(true);
 }
 
 STD_SETTER_CMD_IMPL_S(CartesianPlot, SetDefaultCoordinateSystemIndex, int, defaultCoordinateSystemIndex)
@@ -1562,7 +1717,7 @@ void CartesianPlot::setXRangeBreakingEnabled(bool enabled) {
 	if (enabled != d->xRangeBreakingEnabled) {
 		exec(new CartesianPlotSetXRangeBreakingEnabledCmd(d, enabled, ki18n("%1: x-range breaking enabled")));
 		retransformScales(); // TODO: replace by retransformScale(Dimension::X, ) with the corresponding index!
-		WorksheetElementContainer::retransform(); // retransformScales does not contain any retransfrom() anymore
+		WorksheetElementContainer::retransform(); // retransformScales does not contain any retransform() anymore
 	}
 }
 
@@ -1571,7 +1726,7 @@ void CartesianPlot::setXRangeBreaks(const RangeBreaks& breakings) {
 	Q_D(CartesianPlot);
 	exec(new CartesianPlotSetXRangeBreaksCmd(d, breakings, ki18n("%1: x-range breaks changed")));
 	retransformScales(); // TODO: replace by retransformScale(Dimension::X, ) with the corresponding index!
-	WorksheetElementContainer::retransform(); // retransformScales does not contain any retransfrom() anymore
+	WorksheetElementContainer::retransform(); // retransformScales does not contain any retransform() anymore
 }
 
 STD_SETTER_CMD_IMPL_S(CartesianPlot, SetYRangeBreakingEnabled, bool, yRangeBreakingEnabled)
@@ -1580,7 +1735,7 @@ void CartesianPlot::setYRangeBreakingEnabled(bool enabled) {
 	if (enabled != d->yRangeBreakingEnabled) {
 		exec(new CartesianPlotSetYRangeBreakingEnabledCmd(d, enabled, ki18n("%1: y-range breaking enabled")));
 		retransformScales(); // TODO: replace by retransformScale(Dimension::Y, ) with the corresponding index!
-		WorksheetElementContainer::retransform(); // retransformScales does not contain any retransfrom() anymore
+		WorksheetElementContainer::retransform(); // retransformScales does not contain any retransform() anymore
 	}
 }
 
@@ -1589,7 +1744,7 @@ void CartesianPlot::setYRangeBreaks(const RangeBreaks& breaks) {
 	Q_D(CartesianPlot);
 	exec(new CartesianPlotSetYRangeBreaksCmd(d, breaks, ki18n("%1: y-range breaks changed")));
 	retransformScales(); // TODO: replace by retransformScale(Dimension::Y, ) with the corresponding index!
-	WorksheetElementContainer::retransform(); // retransformScales does not contain any retransfrom() anymore
+	WorksheetElementContainer::retransform(); // retransformScales does not contain any retransform() anymore
 }
 
 // cursor
@@ -1641,6 +1796,109 @@ void CartesianPlot::retransform() {
 // ################################################################
 // ########################## Slots ###############################
 // ################################################################
+void CartesianPlot::addPlot(QAction* action) {
+	const auto type = static_cast<Plot::PlotType>(action->data().toInt());
+
+	switch (type) {
+	// basic plots
+	case Plot::PlotType::Line: {
+		auto* plot = new XYCurve(i18n("Plot"));
+		plot->setPlotType(Plot::PlotType::Line);
+		addChild(plot);
+		break;
+	}
+	case Plot::PlotType::LineHorizontalStep: {
+		auto* plot = new XYCurve(i18n("Plot"));
+		plot->setPlotType(Plot::PlotType::LineHorizontalStep);
+		addChild(plot);
+		break;
+	}
+	case Plot::PlotType::LineVerticalStep: {
+		auto* plot = new XYCurve(i18n("Plot"));
+		plot->setPlotType(Plot::PlotType::LineVerticalStep);
+		addChild(plot);
+		break;
+	}
+	case Plot::PlotType::LineSpline: {
+		auto* plot = new XYCurve(i18n("Plot"));
+		plot->setPlotType(Plot::PlotType::LineSpline);
+		addChild(plot);
+		break;
+	}
+	case Plot::PlotType::Scatter: {
+		auto* plot = new XYCurve(i18n("Plot"));
+		plot->setPlotType(Plot::PlotType::Scatter);
+		addChild(plot);
+		break;
+	}
+	case Plot::PlotType::ScatterYError: {
+		auto* plot = new XYCurve(i18n("Plot"));
+		plot->setPlotType(Plot::PlotType::ScatterYError);
+		addChild(plot);
+		break;
+	}
+	case Plot::PlotType::ScatterXYError: {
+		auto* plot = new XYCurve(i18n("Plot"));
+		plot->setPlotType(Plot::PlotType::ScatterXYError);
+		addChild(plot);
+		break;
+	}
+	case Plot::PlotType::LineSymbol: {
+		auto* plot = new XYCurve(i18n("Plot"));
+		plot->setPlotType(Plot::PlotType::LineSymbol);
+		addChild(plot);
+		break;
+	}
+	case Plot::PlotType::LineSymbol2PointSegment: {
+		auto* plot = new XYCurve(i18n("Plot"));
+		plot->setPlotType(Plot::PlotType::LineSymbol2PointSegment);
+		addChild(plot);
+		break;
+	}
+	case Plot::PlotType::LineSymbol3PointSegment: {
+		auto* plot = new XYCurve(i18n("Plot"));
+		plot->setPlotType(Plot::PlotType::LineSymbol3PointSegment);
+		addChild(plot);
+		break;
+	}
+
+	// formula
+	case Plot::PlotType::Formula:
+		addChild(new XYEquationCurve(QStringLiteral("f(x)")));
+		break;
+
+	// statistical plots
+	case Plot::PlotType::BoxPlot:
+		addChild(new BoxPlot(i18n("Box Plot")));
+		break;
+	case Plot::PlotType::Histogram:
+		addChild(new Histogram(i18n("Histogram")));
+		break;
+	case Plot::PlotType::QQPlot:
+		addChild(new QQPlot(i18n("Q-Q Plot")));
+		break;
+	case Plot::PlotType::KDEPlot:
+		addChild(new KDEPlot(i18n("KDE Plot")));
+		break;
+
+	// bar plots
+	case Plot::PlotType::BarPlot:
+		addChild(new BarPlot(i18n("Bar Plot")));
+		break;
+	case Plot::PlotType::LollipopPlot:
+		addChild(new LollipopPlot(i18n("Lollipop Plot")));
+		break;
+
+	// continuous improvement plots
+	case Plot::PlotType::ProcessBehaviorChart:
+		addChild(new ProcessBehaviorChart(i18n("Process Behavior Chart")));
+		break;
+	case Plot::PlotType::RunChart:
+		addChild(new RunChart(i18n("Run Chart")));
+		break;
+	}
+}
+
 void CartesianPlot::addHorizontalAxis() {
 	DEBUG(Q_FUNC_INFO)
 	Axis* axis = new Axis(QStringLiteral("x-axis"), Axis::Orientation::Horizontal);
@@ -1817,11 +2075,11 @@ void CartesianPlot::addSmoothCurve() {
 }
 
 void CartesianPlot::addFitCurve() {
-	auto* curve = new XYFitCurve(i18n("Fit"));
+	auto* curve = new XYFitCurve(i18nc("Curve fitting", "Fit"));
 	const auto* curCurve = currentCurve();
 	if (curCurve) {
 		beginMacro(i18n("%1: fit to '%2'", name(), curCurve->name()));
-		curve->setName(i18n("Fit to '%1'", curCurve->name()));
+		curve->setName(i18nc("Curve fitting", "Fit to '%1'", curCurve->name()));
 		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 		curve->setDataSourceCurve(curCurve);
 
@@ -1830,17 +2088,15 @@ void CartesianPlot::addFitCurve() {
 		if (action) {
 			auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
 			curve->initFitData(type);
-		} else {
+		} else
 			DEBUG(Q_FUNC_INFO << "WARNING: no action found!")
-		}
-		curve->initStartValues(curCurve);
 
 		// fit with weights for y if the curve has error bars for y
-		if (curCurve->yErrorType() == XYCurve::ErrorType::Symmetric && curCurve->yErrorPlusColumn()) {
+		if (curCurve->errorBar()->yErrorType() == ErrorBar::ErrorType::Symmetric && curCurve->errorBar()->yPlusColumn()) {
 			auto fitData = curve->fitData();
 			fitData.yWeightsType = nsl_fit_weight_instrumental;
 			curve->setFitData(fitData);
-			curve->setYErrorColumn(curCurve->yErrorPlusColumn());
+			curve->errorBar()->setYPlusColumn(curCurve->errorBar()->yPlusColumn());
 		}
 
 		curve->recalculate();
@@ -1851,6 +2107,7 @@ void CartesianPlot::addFitCurve() {
 		curve->retransform();
 	} else {
 		beginMacro(i18n("%1: add fit curve", name()));
+		curve->initFitData(XYAnalysisCurve::AnalysisAction::FitLinear); // TODO: should happen directly in the constructor of XYFitCurve
 		this->addChild(curve);
 	}
 
@@ -1870,6 +2127,20 @@ void CartesianPlot::addFourierFilterCurve() {
 	}
 	this->addChild(curve);
 
+	endMacro();
+}
+
+void CartesianPlot::addFunctionCurve() {
+	auto* curve = new XYFunctionCurve(i18n("Function"));
+	const auto* curCurve = currentCurve();
+	if (curCurve) {
+		beginMacro(i18n("%1: add function of '%2'", name(), curCurve->name()));
+		curve->setName(i18n("Function of '%1'", curCurve->name()));
+		curve->setFunction(QString(), {QStringLiteral("x")}, {curCurve});
+	} else
+		beginMacro(i18n("%1: add function curve", name()));
+
+	this->addChild(curve);
 	endMacro();
 }
 
@@ -1990,6 +2261,52 @@ void CartesianPlot::addReferenceLine() {
 	line->retransform();
 }
 
+/*!
+ * adds an empty default plot area as a child ("inset plot"),
+ * the child only inherits the type (four axes, etc.)
+ * and the theme of the parent plot area.
+ */
+void CartesianPlot::addInsetPlot() {
+	beginMacro(i18n("%1: add inset plot", name()));
+	auto* insetPlot = new CartesianPlot(i18n("Inset Plot Area"));
+	Q_D(const CartesianPlot);
+	insetPlot->setType(d->type);
+	resizeInsetPlot(insetPlot);
+	addChild(insetPlot);
+	endMacro();
+}
+
+/*!
+ * adds a copy of the plot area as a child to it, the child inherits all properties
+ * of the parent plot area including the visualization of the data
+ */
+void CartesianPlot::addInsetPlotWithData() {
+	beginMacro(i18n("%1: add inset plot with data", name()));
+
+	// add a copy of the current plot as a child
+	copy();
+	paste(true);
+
+	// rename and resize the new child plot
+	const auto& plots = children<CartesianPlot>();
+	auto* insetPlot = plots.last();
+	insetPlot->setName(i18n("Inset Plot Area"));
+	resizeInsetPlot(insetPlot);
+	endMacro();
+}
+
+/*!
+ * sets the size of the inset plot to 30% of the parent plot's size
+ * and allows to resize it with the mouse (not controlled by worksheet's layout)
+ */
+void CartesianPlot::resizeInsetPlot(CartesianPlot* insetPlot) {
+	auto insetRect = rect();
+	insetRect.setWidth(insetRect.width() * 0.3);
+	insetRect.setHeight(insetRect.height() * 0.3);
+	insetPlot->setRect(insetRect);
+	insetPlot->setResizeEnabled(true);
+}
+
 void CartesianPlot::addReferenceRange() {
 	auto* range = new ReferenceRange(this, i18n("Reference Range"));
 	range->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
@@ -2004,7 +2321,7 @@ void CartesianPlot::addReferenceRange() {
 	range->retransform();
 }
 
-int CartesianPlot::curveCount() {
+int CartesianPlot::curveCount() const {
 	return children<XYCurve>().size();
 }
 
@@ -2012,11 +2329,11 @@ int CartesianPlot::curveTotalCount() const {
 	return children<Plot>().size();
 }
 
-const XYCurve* CartesianPlot::getCurve(int index) {
+const XYCurve* CartesianPlot::getCurve(int index) const {
 	return children<XYCurve>().at(index);
 }
 
-double CartesianPlot::cursorPos(int cursorNumber) {
+double CartesianPlot::cursorPos(int cursorNumber) const {
 	Q_D(const CartesianPlot);
 	return (cursorNumber == 0 ? d->cursor0Pos.x() : d->cursor1Pos.x());
 }
@@ -2028,12 +2345,15 @@ double CartesianPlot::cursorPos(int cursorNumber) {
  */
 int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 	int index = 0;
-	const auto& children = this->children<WorksheetElement>();
-	for (auto* child : children) {
-		if (child == curve)
+	const auto& plots = this->children<Plot>();
+	for (auto* plot : plots) {
+		if (plot == curve)
 			break;
 
-		if (dynamic_cast<const Plot*>(child))
+		++index;
+
+		// for the process behavior and run charts two colors are used - for the data and for the control line(s)
+		if (plot->type() == AspectType::ProcessBehaviorChart || plot->type() == AspectType::RunChart)
 			++index;
 	}
 
@@ -2055,7 +2375,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	if (plot) {
 		connect(plot, &WorksheetElement::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
 		connect(plot, &WorksheetElement::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
-		connect(plot, &Plot::updateLegendRequested, this, &CartesianPlot::updateLegend);
+		connect(plot, &Plot::legendVisibleChanged, this, &CartesianPlot::updateLegend);
+		connect(plot, &Plot::appearanceChanged, this, &CartesianPlot::updateLegend);
+		connect(plot, &Plot::appearanceChanged, this, QOverload<>::of(&CartesianPlot::plotColorChanged)); // forward to Worksheet to update CursorDock
 
 		connect(plot, &Plot::dataChanged, [this, elem] {
 			this->dataChanged(const_cast<WorksheetElement*>(elem));
@@ -2069,6 +2391,15 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			checkRanges = true;
 			updateLegend();
 		}
+	} else {
+		// hover events for plots are handled here in CartesianPlot, for other elements in WorksheetElement.
+		// in case a non-plot element like axis, etc. was hovered, unhover the plots
+		connect(elem, &WorksheetElement::hoveredChanged, [=](bool on) {
+			if (on) {
+				for (auto* plot : children<Plot>())
+					plot->setHover(false);
+			}
+		});
 	}
 
 	const auto* curve = dynamic_cast<const XYCurve*>(child);
@@ -2083,19 +2414,19 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		DEBUG(Q_FUNC_INFO << ", CURVE")
 		// x data
 		connect(curve, &XYCurve::xColumnChanged, this, [this, curve](const AbstractColumn* column) {
-			if (curveTotalCount() == 1) // first curve addded
+			if (curveTotalCount() == 1) // first curve added
 				checkAxisFormat(curve->coordinateSystemIndex(), column, Axis::Orientation::Horizontal);
 		});
 		connect(curve, &XYCurve::xDataChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
-		connect(curve, &XYCurve::xErrorTypeChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::xErrorTypeChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
-		connect(curve, &XYCurve::xErrorPlusColumnChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::xPlusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
-		connect(curve, &XYCurve::xErrorMinusColumnChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::xMinusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
 		});
 
@@ -2107,19 +2438,18 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::yDataChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
-		connect(curve, &XYCurve::yErrorTypeChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::yErrorTypeChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
-		connect(curve, &XYCurve::yErrorPlusColumnChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::yPlusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
-		connect(curve, &XYCurve::yErrorMinusColumnChanged, [this, curve]() {
+		connect(curve->errorBar(), &ErrorBar::yMinusColumnChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
 		});
 
 		// update the legend on line and symbol properties changes
 		connect(curve, &XYCurve::aspectDescriptionChanged, this, &CartesianPlot::curveNameChanged);
-		connect(curve, &XYCurve::legendVisibleChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::lineTypeChanged, this, &CartesianPlot::updateLegend);
 
 		// in case the first curve is added, check whether we start plotting datetime data
@@ -2146,24 +2476,29 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	} else if (barPlot) {
 		DEBUG(Q_FUNC_INFO << ", BAR PLOT")
 		connect(barPlot, &BarPlot::dataColumnsChanged, this, &CartesianPlot::updateLegend);
+		connect(barPlot, &BarPlot::xDataChanged, [this, barPlot]() {
+			this->dataChanged(const_cast<BarPlot*>(barPlot), Dimension::X);
+		});
 	} else if (lollipopPlot) {
 		DEBUG(Q_FUNC_INFO << ", LOLLIPOP PLOT")
 		connect(lollipopPlot, &LollipopPlot::dataColumnsChanged, this, &CartesianPlot::updateLegend);
+		connect(lollipopPlot, &LollipopPlot::xDataChanged, [this, lollipopPlot]() {
+			this->dataChanged(const_cast<LollipopPlot*>(lollipopPlot), Dimension::X);
+		});
 	} else if (axis) {
 		connect(axis, &Axis::shiftSignal, this, &CartesianPlot::axisShiftSignal);
 	} else {
-		const auto* infoElement = dynamic_cast<const InfoElement*>(child);
-		if (infoElement)
-			connect(this, &CartesianPlot::curveRemoved, infoElement, &InfoElement::removeCurve);
-
 		// if an element is hovered, the curves which are handled manually in this class
 		// must be unhovered
 		if (elem)
 			connect(elem, &WorksheetElement::hovered, this, &CartesianPlot::childHovered);
 	}
 
+	if (isLoading())
+		return;
+
 	auto rangeChanged = false;
-	if (!isLoading() && checkRanges && INRANGE(cSystemIndex, 0, m_coordinateSystems.count())) {
+	if (checkRanges && INRANGE(cSystemIndex, 0, m_coordinateSystems.count())) {
 		auto xIndex = coordinateSystem(cSystemIndex)->index(Dimension::X);
 		auto yIndex = coordinateSystem(cSystemIndex)->index(Dimension::Y);
 		setRangeDirty(Dimension::X, xIndex, true);
@@ -2180,7 +2515,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			WorksheetElementContainer::retransform();
 	}
 
-	if (!isLoading() && !this->pasted() && !child->pasted() && !child->isMoved()) {
+	if (!isLoading() && !isPasted() && !child->isPasted() && !child->isMoved()) {
 		// new child was added which might change the ranges and the axis tick labels.
 		// adjust the plot area padding if the axis label is outside of the plot area
 		if (rangeChanged) {
@@ -2203,7 +2538,11 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 		// if a theme was selected, apply the theme settings for newly added children,
 		// load default theme settings otherwise.
-		// TODO			const_cast<WorksheetElement*>(elem)->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
+		// no need to put these changes onto the undo stack, temporarily deactivate the undo awareness
+		// for the project globally so it's ignored for all elements below when applying the theme recursively.
+		if (project())
+			project()->setUndoAware(false);
+
 		if (!d->theme.isEmpty()) {
 			KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
 			const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
@@ -2211,6 +2550,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			KConfig config;
 			const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
 		}
+
+		if (project())
+			project()->setUndoAware(true);
 	}
 }
 
@@ -2328,9 +2670,10 @@ void CartesianPlot::childHovered() {
 	Q_D(CartesianPlot);
 	bool curveSender = qobject_cast<XYCurve*>(QObject::sender()) != nullptr;
 	if (!d->isSelected()) {
-		if (d->m_hovered)
-			d->m_hovered = false;
-		d->update();
+		if (isHovered())
+			setHover(false);
+		else
+			d->update(); // really needed?
 	}
 	if (!curveSender) {
 		for (auto curve : children<XYCurve>())
@@ -2385,12 +2728,12 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender
 		if (sender)
 			sender->retransform();
 		else {
-			// no sender available, the function was called directly in the file filter (live data source got new data)
-			// or in Project::load() -> retransform all available curves since we don't know which curves are affected.
+			// no sender available, the function was called directly in the file filter (live data source got new data) or in Project::load()-.
+			// -> recalculate the internal structures in all plots and retransform them since we don't know which plots are affected.
 			// TODO: this logic can be very expensive
-			for (auto* child : children<XYCurve>()) {
-				child->recalcLogicalPoints();
-				child->retransform();
+			for (auto* plot : children<Plot>()) {
+				plot->recalc();
+				plot->retransform();
 			}
 		}
 	}
@@ -2422,7 +2765,7 @@ void CartesianPlot::dataChanged(WorksheetElement* element) {
 	called when in one of the curves the data in one direction was changed.
 	Autoscales the coordinate system and the x/y-axes, when "auto-scale" is active.
 */
-void CartesianPlot::dataChanged(XYCurve* curve, const Dimension dim) {
+void CartesianPlot::dataChanged(Plot* curve, const Dimension dim) {
 	DEBUG(Q_FUNC_INFO)
 	if (project() && project()->isLoading())
 		return;
@@ -2473,17 +2816,20 @@ void CartesianPlot::dataChanged(XYCurve* curve, const Dimension dim) {
 		curve->retransform();
 	}
 
-	// in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
-	if (children<XYCurve>().size() == 1) {
-		const auto* col = curve->column(dim);
-		const auto rangeFormat{range(dim, index).format()};
-		if (col && col->columnMode() == AbstractColumn::ColumnMode::DateTime && rangeFormat != RangeT::Format::DateTime) {
-			setUndoAware(false);
-			setRangeFormat(dim, index, RangeT::Format::DateTime);
-			setUndoAware(true);
+	auto* c = dynamic_cast<XYCurve*>(curve);
+	if (c) {
+		// in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
+		if (children<XYCurve>().size() == 1) {
+			const auto* col = c->column(dim);
+			const auto rangeFormat{range(dim, index).format()};
+			if (col && col->columnMode() == AbstractColumn::ColumnMode::DateTime && rangeFormat != RangeT::Format::DateTime) {
+				setUndoAware(false);
+				setRangeFormat(dim, index, RangeT::Format::DateTime);
+				setUndoAware(true);
+			}
 		}
+		Q_EMIT curveDataChanged(c);
 	}
-	Q_EMIT curveDataChanged(curve);
 }
 
 void CartesianPlot::curveVisibilityChanged() {
@@ -2505,9 +2851,9 @@ void CartesianPlot::curveVisibilityChanged() {
 	Q_EMIT curveVisibilityChangedSignal();
 }
 
-void CartesianPlot::curveLinePenChanged(QPen pen) {
-	const auto* curve = qobject_cast<const XYCurve*>(QObject::sender());
-	Q_EMIT curveLinePenChanged(pen, curve->name());
+void CartesianPlot::plotColorChanged() {
+	const auto* curve = qobject_cast<const Plot*>(QObject::sender());
+	Q_EMIT plotColorChanged(curve->color(), curve->name());
 }
 
 void CartesianPlot::setMouseMode(MouseMode mouseMode) {
@@ -2550,7 +2896,7 @@ void CartesianPlot::setMouseMode(MouseMode mouseMode) {
 	Q_EMIT mouseModeChanged(mouseMode);
 }
 
-BASIC_SHARED_D_ACCESSOR_IMPL(CartesianPlot, bool, isLocked, Locked, locked)
+BASIC_SHARED_D_ACCESSOR_IMPL(CartesianPlot, bool, isInteractive, Interactive, interactive)
 
 // auto scale x axis 'index' when auto scale is enabled (index == -1: all x axes)
 bool CartesianPlot::scaleAuto(const Dimension dim, int index, bool fullRange, bool suppressRetransformScale) {
@@ -2630,6 +2976,8 @@ bool CartesianPlot::scaleAuto(const Dimension dim, int index, bool fullRange, bo
 				r.setRange(-0.1, 0.1);
 		} else
 			r.extend(r.size() * d->autoScaleOffsetFactor);
+
+		Q_EMIT rangeChanged(dim, index, r);
 
 		if (!suppressRetransformScale)
 			d->retransformScale(dim, index);
@@ -2726,13 +3074,30 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 			DEBUG(Q_FUNC_INFO << ", index range = " << indexRange.toStdString())
 
 			curve->minMax(dim, indexRange, range, true);
+		} else if (plot->type() == AspectType::KDEPlot) {
+			const int minIndex = 0;
+			const int maxIndex = static_cast<const KDEPlot*>(plot)->gridPointsCount() - 1;
+			Range<int> indexRange{minIndex, maxIndex};
+			plot->minMax(dim, indexRange, range, true);
 		} else if (plot->type() == AspectType::QQPlot) {
-			Range<int> indexRange{0, 99};
+			Range<int> indexRange{0, 99}; // 100 percentile values are calculated, max index is 99
+			plot->minMax(dim, indexRange, range, true);
+		} else if (plot->type() == AspectType::ProcessBehaviorChart) {
+			const int maxIndex = static_cast<const ProcessBehaviorChart*>(plot)->xIndexCount() - 1;
+			Range<int> indexRange{0, maxIndex};
+			plot->minMax(dim, indexRange, range, true);
+		} else if (plot->type() == AspectType::RunChart) {
+			const int maxIndex = static_cast<const RunChart*>(plot)->xIndexCount() - 1;
+			Range<int> indexRange{0, maxIndex};
 			plot->minMax(dim, indexRange, range, true);
 		} else {
 			range.setStart(plot->minimum(dim));
 			range.setEnd(plot->maximum(dim));
 		}
+
+		// check ranges for nonlinear scales
+		if (range.scale() != RangeT::Scale::Linear)
+			range = d->checkRange(range);
 
 		if (range.start() < d->dataRange(dim, index).start())
 			d->dataRange(dim, index).start() = range.start();
@@ -2745,10 +3110,6 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 
 	// data range is used to nice extend, so set correct scale
 	d->dataRange(dim, index).setScale(range.scale());
-
-	// check ranges for nonlinear scales
-	if (d->dataRange(dim, index).scale() != RangeT::Scale::Linear)
-		d->dataRange(dim, index) = d->checkRange(d->dataRange(dim, index));
 
 	DEBUG(Q_FUNC_INFO << ", data " << CartesianCoordinateSystem::dimensionToString(dim).toStdString()
 					  << " range = " << d->dataRange(dim, index).toStdString(false))
@@ -2765,30 +3126,30 @@ void CartesianPlot::retransformScale(Dimension dim, int index) {
 
 // zoom
 
-void CartesianPlot::zoomIn(int xIndex, int yIndex) {
+void CartesianPlot::zoomIn(int xIndex, int yIndex, const QPointF& sceneRelPos) {
 	setUndoAware(false);
 	enableAutoScale(Dimension::X, xIndex, false);
 	enableAutoScale(Dimension::Y, yIndex, false);
 	setUndoAware(true);
 	setRangeDirty(Dimension::X, xIndex, true);
 	setRangeDirty(Dimension::Y, yIndex, true);
-	zoom(xIndex, Dimension::X, true); // zoom in x
-	zoom(yIndex, Dimension::Y, true); // zoom in y
+	zoom(xIndex, Dimension::X, true, sceneRelPos.x()); // zoom in x
+	zoom(yIndex, Dimension::Y, true, sceneRelPos.y()); // zoom in y
 
 	Q_D(CartesianPlot);
 	d->retransformScales(xIndex, yIndex);
 	WorksheetElementContainer::retransform();
 }
 
-void CartesianPlot::zoomOut(int xIndex, int yIndex) {
+void CartesianPlot::zoomOut(int xIndex, int yIndex, const QPointF& sceneRelPos) {
 	setUndoAware(false);
 	enableAutoScale(Dimension::X, xIndex, false);
 	enableAutoScale(Dimension::Y, yIndex, false);
 	setUndoAware(true);
 	setRangeDirty(Dimension::X, xIndex, true);
 	setRangeDirty(Dimension::Y, yIndex, true);
-	zoom(xIndex, Dimension::X, false); // zoom out x
-	zoom(yIndex, Dimension::Y, false); // zoom out y
+	zoom(xIndex, Dimension::X, false, sceneRelPos.x()); // zoom out x
+	zoom(yIndex, Dimension::Y, false, sceneRelPos.y()); // zoom out y
 
 	Q_D(CartesianPlot);
 	d->retransformScales(xIndex, yIndex);
@@ -2811,7 +3172,7 @@ void CartesianPlot::zoomOutY(int index) {
 	zoomInOut(index, Dimension::Y, false);
 }
 
-void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool zoomIn) {
+void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool zoomIn, const double relScenePosRange) {
 	Dimension dim_other = Dimension::Y;
 	if (dim == Dimension::Y)
 		dim_other = Dimension::X;
@@ -2820,7 +3181,7 @@ void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool z
 	enableAutoScale(dim, index, false);
 	setUndoAware(true);
 	setRangeDirty(dim_other, index, true);
-	zoom(index, dim, zoomIn);
+	zoom(index, dim, zoomIn, relScenePosRange);
 
 	bool retrans = false;
 	for (int i = 0; i < m_coordinateSystems.count(); i++) {
@@ -2852,7 +3213,7 @@ void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool z
  * @param x if set to \true the x-range is modified, the y-range for \c false
  * @param in the "zoom in" is performed if set to \c \true, "zoom out" for \c false
  */
-void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in) {
+void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in, const double relPosSceneRange) {
 	Q_D(CartesianPlot);
 
 	Range<double> range;
@@ -2862,7 +3223,7 @@ void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in) {
 			int idx = coordinateSystem(i)->index(dim);
 			if (zoomedIndices.contains(idx))
 				continue;
-			zoom(idx, dim, zoom_in);
+			zoom(idx, dim, zoom_in, relPosSceneRange);
 			zoomedIndices.append(idx);
 		}
 		return;
@@ -2872,66 +3233,7 @@ void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in) {
 	double factor = m_zoomFactor;
 	if (zoom_in)
 		factor = 1. / factor;
-
-	const double start{range.start()}, end{range.end()};
-	switch (range.scale()) {
-	case RangeT::Scale::Linear: {
-		range.extend(range.size() * (factor - 1.) / 2.);
-		break;
-	}
-	case RangeT::Scale::Log10: {
-		if (start == 0 || end / start <= 0)
-			break;
-		const double diff = log10(end / start) * (factor - 1.);
-		const double extend = pow(10, diff / 2.);
-		range.end() *= extend;
-		range.start() /= extend;
-		break;
-	}
-	case RangeT::Scale::Log2: {
-		if (start == 0 || end / start <= 0)
-			break;
-		const double diff = log2(end / start) * (factor - 1.);
-		const double extend = exp2(diff / 2.);
-		range.end() *= extend;
-		range.start() /= extend;
-		break;
-	}
-	case RangeT::Scale::Ln: {
-		if (start == 0 || end / start <= 0)
-			break;
-		const double diff = log(end / start) * (factor - 1.);
-		const double extend = exp(diff / 2.);
-		range.end() *= extend;
-		range.start() /= extend;
-		break;
-	}
-	case RangeT::Scale::Sqrt: {
-		if (start < 0 || end < 0)
-			break;
-		const double diff = (sqrt(end) - sqrt(start)) * (factor - 1.);
-		range.extend(diff * diff / 4.);
-		break;
-	}
-	case RangeT::Scale::Square: {
-		const double diff = (end * end - start * start) * (factor - 1.);
-		range.extend(sqrt(std::abs(diff / 2.)));
-		break;
-	}
-	case RangeT::Scale::Inverse: {
-		const double diff = (1. / start - 1. / end) * (factor - 1.);
-		range.extend(1. / std::abs(diff / 2.));
-		break;
-	}
-	}
-
-	// make nice again
-	if (d->niceExtend) {
-		if (zoom_in)
-			range.niceShrink();
-		else
-			range.niceExtend();
-	}
+	range.zoom(factor, d->niceExtend, relPosSceneRange);
 
 	if (range.finite())
 		d->setRange(dim, index, range);
@@ -2941,7 +3243,7 @@ void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in) {
  * helper function called in other shift*() functions
  * and doing the actual change of the data ranges.
  * @param x if set to \true the x-range is modified, the y-range for \c false
- * @param leftOrDown the "shift left" for x or "shift dows" for y is performed if set to \c \true,
+ * @param leftOrDown the "shift left" for x or "shift down" for y is performed if set to \c \true,
  * "shift right" or "shift up" for \c false
  */
 void CartesianPlot::shift(int index, const Dimension dim, bool leftOrDown) {
@@ -3065,9 +3367,9 @@ void CartesianPlot::cursor() {
 	d->retransformScales(-1, -1); // TODO: needed to retransform all scales?
 }
 
-void CartesianPlot::wheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+void CartesianPlot::wheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
 	Q_D(CartesianPlot);
-	d->wheelEvent(delta, xIndex, yIndex, considerDimension, dim);
+	d->wheelEvent(sceneRelPos, delta, xIndex, yIndex, considerDimension, dim);
 }
 
 void CartesianPlot::mousePressZoomSelectionMode(QPointF logicPos, int cSystemIndex) {
@@ -3114,6 +3416,12 @@ void CartesianPlot::mouseHoverOutsideDataRect() {
 CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot)
 	: AbstractPlotPrivate(plot)
 	, q(plot) {
+	setFlag(QGraphicsItem::ItemIsMovable, true);
+	setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
+	setFlag(QGraphicsItem::ItemIsSelectable, true);
+	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+	setFlag(QGraphicsItem::ItemIsFocusable, true);
+
 	m_cursor0Text.prepare();
 	m_cursor1Text.prepare();
 }
@@ -3137,13 +3445,16 @@ void CartesianPlotPrivate::retransform() {
 		return;
 
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
+
 	prepareGeometryChange();
 	setPos(rect.x() + rect.width() / 2, rect.y() + rect.height() / 2);
-
 	updateDataRect();
 
 	// plotArea position is always (0, 0) in parent's coordinates, don't need to update here
-	q->plotArea()->setRect(rect);
+	if (q->parentAspect() && q->parentAspect()->type() == AspectType::CartesianPlot)
+		q->plotArea()->setRect(mapRectToParent(rect));
+	else
+		q->plotArea()->setRect(mapRectFromScene(rect));
 
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
 
@@ -3168,7 +3479,7 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 	// we have to recalculate the data range and auto scale in case of scale changes
 	if (range(dim, index).scale() != dataRange(dim, index).scale() && autoScale(dim, index)) {
 		q->calculateDataRange(dim, index);
-		q->scaleAuto(dim, index);
+		q->scaleAuto(dim, index, true, true);
 	}
 	auto r = range(dim, index);
 	QDEBUG(Q_FUNC_INFO << CartesianCoordinateSystem::dimensionToString(dim) << "range =" << r.toString() << ", scale =" << r.scale()
@@ -3205,7 +3516,7 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 			double sceneEndLast = plotSceneRange.start();
 			double logicalEndLast = r.start();
 			auto rbs = rangeBreaks(dim);
-			for (const auto& rb : qAsConst(rbs.list)) {
+			for (const auto& rb : std::as_const(rbs.list)) {
 				if (!rb.isValid())
 					break;
 
@@ -3235,7 +3546,7 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 	}
 
 	if (scaleChanged)
-		emit q->scaleRetransformed(q, dim, index);
+		Q_EMIT q->scaleRetransformed(q, dim, index);
 
 	// Set ranges in the axis
 	for (int i = 0; i < q->rangeCount(dim); i++) {
@@ -3257,6 +3568,9 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 		for (auto* axis : q->children<Axis>()) {
 			QDEBUG(Q_FUNC_INFO << ", auto-scale axis" << axis->name() << "of scale" << axis->scale())
 			// use ranges of axis
+			auto r = axis->range();
+			r.setScale(rangep.range.scale());
+
 			int axisIndex = q->coordinateSystem(axis->coordinateSystemIndex())->index(dim);
 			if (axis->rangeType() != Axis::RangeType::Auto || axisIndex != i)
 				continue;
@@ -3264,20 +3578,16 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 				|| (dim == Dimension::X && axis->orientation() != Axis::Orientation::Horizontal))
 				continue;
 
-			if (!qFuzzyIsNull(deltaMax)) {
-				axis->setUndoAware(false);
-				axis->setSuppressRetransform(true);
-				axis->setEnd(rangep.range.end());
-				axis->setUndoAware(true);
-				axis->setSuppressRetransform(false);
-			}
-			if (!qFuzzyIsNull(deltaMin)) {
-				axis->setUndoAware(false);
-				axis->setSuppressRetransform(true);
-				axis->setStart(rangep.range.start());
-				axis->setUndoAware(true);
-				axis->setSuppressRetransform(false);
-			}
+			if (!qFuzzyIsNull(deltaMax))
+				r.setEnd(rangep.range.end());
+			if (!qFuzzyIsNull(deltaMin))
+				r.setStart(rangep.range.start());
+
+			axis->setUndoAware(false);
+			axis->setSuppressRetransform(true);
+			axis->setRange(r);
+			axis->setUndoAware(true);
+			axis->setSuppressRetransform(false);
 			// TODO;
 			// 			if (axis->position() == Axis::Position::Centered && deltaYMin != 0) {
 			// 				axis->setOffset(axis->offset() + deltaYMin, false);
@@ -3287,7 +3597,7 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 }
 
 /*
- * calculate x and y scales from scence range and logical range (x/y range) for all coordinate systems
+ * calculate x and y scales from scene range and logical range (x/y range) for all coordinate systems
  */
 void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 	DEBUG(Q_FUNC_INFO << ", SCALES x/y index = " << xIndex << "/" << yIndex)
@@ -3305,11 +3615,20 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 }
 
 /*
- * calculates the rectangular of the are showing the actual data (plot's rect minus padding),
+ * calculates the rectangular of the area showing the actual data (plot's rect minus padding),
  * in plot's coordinates.
  */
 void CartesianPlotPrivate::updateDataRect() {
+	// map the rectangle rect, which is in scene coordinates, to this item's coordinate system
 	dataRect = mapRectFromScene(rect);
+
+	// for plot in a plot, transfer x and y coordinates
+	if (q->parentAspect() && q->parentAspect()->type() == AspectType::CartesianPlot) {
+		dataRect.setX(-rect.width() / 2);
+		dataRect.setY(-rect.height() / 2);
+		dataRect.setWidth(rect.width());
+		dataRect.setHeight(rect.height());
+	}
 
 	double paddingLeft = horizontalPadding;
 	double paddingRight = rightPadding;
@@ -3345,6 +3664,12 @@ QVector<AbstractCoordinateSystem*> CartesianPlotPrivate::coordinateSystems() con
 	return q->m_coordinateSystems;
 }
 
+/*!
+ * \brief CartesianPlotPrivate::rangeChanged
+ * This function will be called if the range shall be updated, because some other parameters (like the datarange type, datarange points)
+ * changed. In this case the ranges must be updated if autoscale is turned on
+ * At the end signals for all ranges are send out that they changed.
+ */
 void CartesianPlotPrivate::rangeChanged() {
 	DEBUG(Q_FUNC_INFO)
 	for (const auto* cSystem : q->m_coordinateSystems) {
@@ -3458,7 +3783,7 @@ Range<double> CartesianPlotPrivate::checkRange(const Range<double>& range) {
  * check for negative values in the range when non-linear scalings are used
  */
 void CartesianPlotPrivate::checkRange(Dimension dim, int index) {
-	const auto range = ranges(dim).at(index).range;
+	const auto& range = ranges(dim).at(index).range;
 	DEBUG(Q_FUNC_INFO << ", " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << " range " << index + 1 << " : " << range.toStdString()
 					  << ", scale = " << ENUM_TO_STRING(RangeT, Scale, range.scale()))
 
@@ -3532,7 +3857,11 @@ void CartesianPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* even
 	logicalPos = cSystem->mapSceneToLogical(scenePos, AbstractCoordinateSystem::MappingFlag::Limit);
 	calledFromContextMenu = true;
 	auto* menu = q->createContextMenu();
-	emit q->contextMenuRequested(q->AbstractAspect::type(), menu);
+	if (q->parentAspect()->type() == AspectType::CartesianPlot)
+		Q_EMIT q->parentAspect()->contextMenuRequested(q->AbstractAspect::type(),
+													   menu); // for inset plots emit the signal for the parent to handle it in Worksheet
+	else
+		Q_EMIT q->contextMenuRequested(q->AbstractAspect::type(), menu);
 }
 
 /*!
@@ -3552,7 +3881,7 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	if (index >= 0)
 		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems.at(index));
 	if (mouseMode == CartesianPlot::MouseMode::Selection) {
-		if (!locked && dataRect.contains(event->pos())) {
+		if (interactive && dataRect.contains(event->pos())) {
 			panningStarted = true;
 			m_panningStart = event->pos();
 			setCursor(Qt::ClosedHandCursor);
@@ -3906,9 +4235,9 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos, int cS
 	int xIndex = cSystem->index(Dimension::X);
 	int yIndex = cSystem->index(Dimension::Y);
 
-	const auto xRangeFormat{range(Dimension::X, xIndex).format()};
-	const auto yRangeFormat{range(Dimension::Y, yIndex).format()};
-	const auto xRangeDateTimeFormat{range(Dimension::X, xIndex).dateTimeFormat()};
+	const auto& xRangeFormat{range(Dimension::X, xIndex).format()};
+	const auto& yRangeFormat{range(Dimension::Y, yIndex).format()};
+	const auto& xRangeDateTimeFormat{range(Dimension::X, xIndex).dateTimeFormat()};
 	if (!cSystem->isValid())
 		return;
 	const QPointF logicalStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
@@ -3921,16 +4250,16 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos, int cS
 			info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x() - logicalStart.x());
 		else
 			info = i18n("from x=%1 to x=%2",
-						QDateTime::fromMSecsSinceEpoch(logicalStart.x(), Qt::UTC).toString(xRangeDateTimeFormat),
-						QDateTime::fromMSecsSinceEpoch(logicalEnd.x(), Qt::UTC).toString(xRangeDateTimeFormat));
+						QDateTime::fromMSecsSinceEpoch(logicalStart.x(), QTimeZone::UTC).toString(xRangeDateTimeFormat),
+						QDateTime::fromMSecsSinceEpoch(logicalEnd.x(), QTimeZone::UTC).toString(xRangeDateTimeFormat));
 
 		info += QLatin1String(", ");
 		if (yRangeFormat == RangeT::Format::Numeric)
 			info += QString::fromUtf8("Δy=") + QString::number(logicalEnd.y() - logicalStart.y());
 		else
 			info += i18n("from y=%1 to y=%2",
-						 QDateTime::fromMSecsSinceEpoch(logicalStart.y(), Qt::UTC).toString(xRangeDateTimeFormat),
-						 QDateTime::fromMSecsSinceEpoch(logicalEnd.y(), Qt::UTC).toString(xRangeDateTimeFormat));
+						 QDateTime::fromMSecsSinceEpoch(logicalStart.y(), QTimeZone::UTC).toString(xRangeDateTimeFormat),
+						 QDateTime::fromMSecsSinceEpoch(logicalEnd.y(), QTimeZone::UTC).toString(xRangeDateTimeFormat));
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelection) {
 		logicalPos.setY(range(Dimension::Y, yIndex).start()); // must be done, because the other plots can have other ranges, value must be in the scenes
 		bool visible;
@@ -3942,8 +4271,8 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos, int cS
 			info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x() - logicalStart.x());
 		else
 			info = i18n("from x=%1 to x=%2",
-						QDateTime::fromMSecsSinceEpoch(logicalStart.x(), Qt::UTC).toString(xRangeDateTimeFormat),
-						QDateTime::fromMSecsSinceEpoch(logicalEnd.x(), Qt::UTC).toString(xRangeDateTimeFormat));
+						QDateTime::fromMSecsSinceEpoch(logicalStart.x(), QTimeZone::UTC).toString(xRangeDateTimeFormat),
+						QDateTime::fromMSecsSinceEpoch(logicalEnd.x(), QTimeZone::UTC).toString(xRangeDateTimeFormat));
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
 		m_selectionEnd.setX(dataRect.right());
 		logicalPos.setX(range(Dimension::X, xIndex).start()); // must be done, because the other plots can have other ranges, value must be in the scenes
@@ -3955,16 +4284,16 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos, int cS
 			info = QString::fromUtf8("Δy=") + QString::number(logicalEnd.y() - logicalStart.y());
 		else
 			info = i18n("from y=%1 to y=%2",
-						QDateTime::fromMSecsSinceEpoch(logicalStart.y(), Qt::UTC).toString(xRangeDateTimeFormat),
-						QDateTime::fromMSecsSinceEpoch(logicalEnd.y(), Qt::UTC).toString(xRangeDateTimeFormat));
+						QDateTime::fromMSecsSinceEpoch(logicalStart.y(), QTimeZone::UTC).toString(xRangeDateTimeFormat),
+						QDateTime::fromMSecsSinceEpoch(logicalEnd.y(), QTimeZone::UTC).toString(xRangeDateTimeFormat));
 	}
 	q->info(info);
 	update();
 }
 
 void CartesianPlotPrivate::mouseMoveCursorMode(int cursorNumber, QPointF logicalPos) {
-	const auto xRangeFormat{range(Dimension::X).format()};
-	const auto xRangeDateTimeFormat{range(Dimension::X).dateTimeFormat()};
+	const auto& xRangeFormat{range(Dimension::X).format()};
+	const auto& xRangeDateTimeFormat{range(Dimension::X).dateTimeFormat()};
 
 	QPointF p1(logicalPos.x(), 0);
 	cursorNumber == 0 ? cursor0Pos = p1 : cursor1Pos = p1;
@@ -3973,7 +4302,7 @@ void CartesianPlotPrivate::mouseMoveCursorMode(int cursorNumber, QPointF logical
 	if (xRangeFormat == RangeT::Format::Numeric)
 		info = QString::fromUtf8("x=") + QString::number(logicalPos.x());
 	else
-		info = i18n("x=%1", QDateTime::fromMSecsSinceEpoch(logicalPos.x(), Qt::UTC).toString(xRangeDateTimeFormat));
+		info = i18n("x=%1", QDateTime::fromMSecsSinceEpoch(logicalPos.x(), QTimeZone::UTC).toString(xRangeDateTimeFormat));
 	q->info(info);
 	update();
 }
@@ -4004,6 +4333,7 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 		suppressRetransform = false;
 
 		QGraphicsItem::mouseReleaseEvent(event);
+		Q_EMIT q->changed(); // notify about the position change
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomSelection || mouseMode == CartesianPlot::MouseMode::ZoomXSelection
 			   || mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
 		Q_EMIT q->mouseReleaseZoomSelectionModeSignal();
@@ -4078,7 +4408,7 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool 
 }
 
 void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
-	if (locked)
+	if (!interactive)
 		return;
 
 	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
@@ -4089,6 +4419,20 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 		yIndex = coordinateSystem(cSystemIndex)->index(Dimension::Y);
 	}
 
+	const auto pos = event->pos();
+	const auto posLogical = coordinateSystem(0)->mapLogicalToScene({pos});
+	const double xSceneRelPos = (pos.x() - dataRect.left()) / dataRect.width();
+	// if (xSceneRelPos < 0)
+	// 	xSceneRelPos = 0;
+	// if (xSceneRelPos > 1)
+	//	xSceneRelPos = 1;
+	const double ySceneRelPos = (dataRect.bottom() - pos.y()) / dataRect.height();
+	// if (ySceneRelPos < 0)
+	//	ySceneRelPos = 0;
+	// if (ySceneRelPos > 1)
+	//	ySceneRelPos = 1;
+	const QPointF sceneRelPos(xSceneRelPos, ySceneRelPos);
+
 	bool considerDimension = false;
 	Dimension dim = Dimension::X;
 	if (w && w->type() == AspectType::Axis) {
@@ -4098,61 +4442,82 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 			dim = Dimension::Y;
 	}
 
-	emit q->wheelEventSignal(event->delta(), xIndex, yIndex, considerDimension, dim);
+	Q_EMIT q->wheelEventSignal(sceneRelPos, event->delta(), xIndex, yIndex, considerDimension, dim);
 }
 
-void CartesianPlotPrivate::wheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+void CartesianPlotPrivate::wheelEvent(const QPointF& sceneRelPos, int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
 	if (considerDimension) {
 		// Only one dimension
 		switch (dim) {
 		case Dimension::X:
-			q->zoomInOut(xIndex, dim, delta > 0);
+			q->zoomInOut(xIndex, dim, delta > 0, sceneRelPos.x());
 			break;
 		case Dimension::Y:
-			q->zoomInOut(yIndex, dim, delta > 0);
+			q->zoomInOut(yIndex, dim, delta > 0, sceneRelPos.y());
 			break;
 		}
 		return;
 	}
 
 	if (delta > 0)
-		q->zoomIn(xIndex, yIndex);
+		q->zoomIn(xIndex, yIndex, sceneRelPos);
 	else
-		q->zoomOut(xIndex, yIndex);
+		q->zoomOut(xIndex, yIndex, sceneRelPos);
 }
 
 void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
-	auto key = event->key();
-	if (key == Qt::Key_Escape) {
+	const auto key = event->key();
+	// const bool ctrl = event->modifiers() & Qt::KeyboardModifier::ControlModifier;
+	//	const bool shift = event->modifiers() & Qt::KeyboardModifier::ShiftModifier;
+	//	const bool alt = event->modifiers() & Qt::KeyboardModifier::AltModifier;
+	Action a = evaluateKeys(key, event->modifiers());
+
+	if (a == Action::Abort) {
 		m_selectionBandIsShown = false;
-	} else if (key == Qt::Key_Left || key == Qt::Key_Right || key == Qt::Key_Up || key == Qt::Key_Down) {
+	} else if (a & Action::Move) {
 		const auto* worksheet = static_cast<const Worksheet*>(q->parentAspect());
 		if (worksheet->layout() == Worksheet::Layout::NoLayout) {
 			// no layout is active -> use arrow keys to move the plot on the worksheet
 			const int delta = 5;
 			QRectF rect = q->rect();
 
-			if (key == Qt::Key_Left) {
+			if (a == Action::MoveLeft) {
 				rect.setX(rect.x() - delta);
 				rect.setWidth(rect.width() - delta);
-			} else if (key == Qt::Key_Right) {
+			} else if (a == Action::MoveRight) {
 				rect.setX(rect.x() + delta);
 				rect.setWidth(rect.width() + delta);
-			} else if (key == Qt::Key_Up) {
+			} else if (a == Action::MoveUp) {
 				rect.setY(rect.y() - delta);
 				rect.setHeight(rect.height() - delta);
-			} else if (key == Qt::Key_Down) {
+			} else if (a == Action::MoveDown) {
 				rect.setY(rect.y() + delta);
 				rect.setHeight(rect.height() + delta);
 			}
 
 			q->setRect(rect);
 		}
-	} else if (key == Qt::Key_N) // (key == Qt::Key_Tab)
+	} else if (a == Action::NavigateNextCurve) // (key == Qt::Key_Tab)
 		navigateNextPrevCurve();
-	else if (key == Qt::Key_P) // (key == Qt::SHIFT + Qt::Key_Tab)
+	else if (a == Action::NavigatePrevCurve) // (key == Qt::SHIFT + Qt::Key_Tab)
 		navigateNextPrevCurve(false /*next*/);
-
+	else if (a & Action::New) {
+		const auto* cSystem{defaultCoordinateSystem()};
+		if (cSystem->isValid()) {
+			logicalPos = cSystem->mapSceneToLogical(scenePos, AbstractCoordinateSystem::MappingFlag::Limit);
+			calledFromContextMenu = true;
+		}
+		if (a == Action::NewTextLabel)
+			q->addTextLabel();
+		else if (a == Action::NewReferenceLine)
+			q->addReferenceLine();
+		else if (a == Action::NewReferenceRange)
+			q->addReferenceRange();
+		else if (a == Action::NewCustomPoint)
+			q->addCustomPoint();
+		else if (a == Action::NewImage)
+			q->addImage();
+	}
 	QGraphicsItem::keyPressEvent(event);
 }
 
@@ -4208,6 +4573,7 @@ void CartesianPlotPrivate::navigateNextPrevCurve(bool next) const {
 
 void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	QPointF point = event->pos();
+	scenePos = point;
 	QString info;
 	const auto* cSystem{defaultCoordinateSystem()};
 	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
@@ -4222,10 +4588,10 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 		yIndex = cSystem->index(Dimension::Y);
 	}
 
-	const auto xRangeFormat{range(Dimension::X, xIndex).format()};
-	const auto yRangeFormat{range(Dimension::Y, yIndex).format()};
-	const auto xRangeDateTimeFormat{range(Dimension::X, xIndex).dateTimeFormat()};
-	const auto yRangeDateTimeFormat{range(Dimension::Y, yIndex).dateTimeFormat()};
+	const auto& xRangeFormat{range(Dimension::X, xIndex).format()};
+	const auto& yRangeFormat{range(Dimension::Y, yIndex).format()};
+	const auto& xRangeDateTimeFormat{range(Dimension::X, xIndex).dateTimeFormat()};
+	const auto& yRangeDateTimeFormat{range(Dimension::Y, yIndex).dateTimeFormat()};
 	if (dataRect.contains(point)) {
 		if (!cSystem->isValid())
 			return;
@@ -4237,13 +4603,13 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			if (xRangeFormat == RangeT::Format::Numeric)
 				info += QString::number(logicalPoint.x());
 			else
-				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x(), Qt::UTC).toString(xRangeDateTimeFormat);
+				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x(), QTimeZone::UTC).toString(xRangeDateTimeFormat);
 
 			info += QStringLiteral(", y=");
 			if (yRangeFormat == RangeT::Format::Numeric)
 				info += QString::number(logicalPoint.y());
 			else
-				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.y(), Qt::UTC).toString(yRangeDateTimeFormat);
+				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.y(), QTimeZone::UTC).toString(yRangeDateTimeFormat);
 		}
 
 		if (mouseMode == CartesianPlot::MouseMode::ZoomSelection && !m_selectionBandIsShown) {
@@ -4253,14 +4619,14 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			if (xRangeFormat == RangeT::Format::Numeric)
 				info += QString::number(logicalPoint.x());
 			else
-				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x(), Qt::UTC).toString(xRangeDateTimeFormat);
+				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x(), QTimeZone::UTC).toString(xRangeDateTimeFormat);
 			Q_EMIT q->mouseHoverZoomSelectionModeSignal(logicalPoint);
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection && !m_selectionBandIsShown) {
 			info = QStringLiteral("y=");
 			if (yRangeFormat == RangeT::Format::Numeric)
 				info += QString::number(logicalPoint.y());
 			else
-				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.y(), Qt::UTC).toString(yRangeDateTimeFormat);
+				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.y(), QTimeZone::UTC).toString(yRangeDateTimeFormat);
 			Q_EMIT q->mouseHoverZoomSelectionModeSignal(logicalPoint);
 		} else if (mouseMode == CartesianPlot::MouseMode::Selection) {
 			// hover the nearest curve to the mousepointer
@@ -4269,12 +4635,12 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			bool hovered = false;
 			const auto& curves = q->children<Plot>();
 			for (int i = curves.count() - 1; i >= 0; i--) { // because the last curve is above the other curves
-				auto* curve = curves[i];
+				auto* curve = curves.at(i);
 				if (hovered) { // if a curve is already hovered, disable hover for the rest
 					curve->setHover(false);
 					continue;
 				}
-				if (curve->activatePlot(event->pos())) {
+				if (curve->activatePlot(event->pos()) && !curve->isLocked()) {
 					curve->setHover(true);
 					hovered = true;
 					continue;
@@ -4289,7 +4655,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			if (yRangeFormat == RangeT::Format::Numeric)
 				info += QString::number(logicalPoint.x());
 			else
-				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x(), Qt::UTC).toString(xRangeDateTimeFormat);
+				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x(), QTimeZone::UTC).toString(xRangeDateTimeFormat);
 
 			double cursorPenWidth2 = cursorLine->pen().width() / 2.;
 			if (cursorPenWidth2 < 10.)
@@ -4322,8 +4688,8 @@ void CartesianPlotPrivate::mouseHoverOutsideDataRect() {
 }
 
 void CartesianPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
-	for (auto* curve : q->children<XYCurve>())
-		curve->setHover(false);
+	for (auto* plot : q->children<Plot>())
+		plot->setHover(false);
 
 	m_hovered = false;
 	QGraphicsItem::hoverLeaveEvent(event);
@@ -4449,23 +4815,6 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 
 		painter->restore();
 	}
-
-	const bool selected = isSelected();
-	const bool hovered = (m_hovered && !selected);
-	if ((hovered || selected) && !m_printing) {
-		static double penWidth = 2.; // why static?
-		const QRectF& br = q->m_plotArea->graphicsItem()->boundingRect();
-		const qreal width = br.width();
-		const qreal height = br.height();
-		const QRectF rect = QRectF(-width / 2 + penWidth / 2, -height / 2 + penWidth / 2, width - penWidth, height - penWidth);
-
-		if (hovered)
-			painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth));
-		else
-			painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth));
-
-		painter->drawRect(rect);
-	}
 }
 
 // ##############################################################################
@@ -4499,8 +4848,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeEndElement();
 
-	// coordinate system and padding
-	// new style
+	// x-ranges
 	writer->writeStartElement(QStringLiteral("xRanges"));
 	for (const auto& range : d->xRanges) {
 		writer->writeStartElement(QStringLiteral("xRange"));
@@ -4513,6 +4861,8 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 		writer->writeEndElement();
 	}
 	writer->writeEndElement();
+
+	// y-ranges
 	writer->writeStartElement(QStringLiteral("yRanges"));
 	for (const auto& range : d->yRanges) {
 		writer->writeStartElement(QStringLiteral("yRange"));
@@ -4525,39 +4875,27 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 		writer->writeEndElement();
 	}
 	writer->writeEndElement();
+
+	// coordinate systems, data range settings and padding
 	writer->writeStartElement(QStringLiteral("coordinateSystems"));
 	writer->writeAttribute(QStringLiteral("defaultCoordinateSystem"), QString::number(defaultCoordinateSystemIndex()));
-	// padding
 	writer->writeAttribute(QStringLiteral("horizontalPadding"), QString::number(d->horizontalPadding));
 	writer->writeAttribute(QStringLiteral("verticalPadding"), QString::number(d->verticalPadding));
 	writer->writeAttribute(QStringLiteral("rightPadding"), QString::number(d->rightPadding));
 	writer->writeAttribute(QStringLiteral("bottomPadding"), QString::number(d->bottomPadding));
 	writer->writeAttribute(QStringLiteral("symmetricPadding"), QString::number(d->symmetricPadding));
+	writer->writeAttribute(QStringLiteral("rangeType"), QString::number(static_cast<int>(d->rangeType)));
+	writer->writeAttribute(QStringLiteral("rangeFirstValues"), QString::number(d->rangeFirstValues));
+	writer->writeAttribute(QStringLiteral("rangeLastValues"), QString::number(d->rangeLastValues));
 	writer->writeAttribute(QStringLiteral("niceExtend"), QString::number(d->niceExtend));
 	for (const auto& cSystem : m_coordinateSystems) {
 		writer->writeStartElement(QStringLiteral("coordinateSystem"));
+		writer->writeAttribute(QStringLiteral("name"), cSystem->name());
 		writer->writeAttribute(QStringLiteral("xIndex"), QString::number(static_cast<CartesianCoordinateSystem*>(cSystem)->index(Dimension::X)));
 		writer->writeAttribute(QStringLiteral("yIndex"), QString::number(static_cast<CartesianCoordinateSystem*>(cSystem)->index(Dimension::Y)));
 		writer->writeEndElement();
 	}
 	writer->writeEndElement();
-	// OLD style (pre 2.9.0)
-	//	writer->writeStartElement( QStringLiteral("coordinateSystem") );
-	//	writer->writeAttribute( QStringLiteral("autoScaleX"), QString::number(d->autoScaleX) );
-	//	writer->writeAttribute( QStringLiteral("autoScaleY"), QString::number(d->autoScaleY) );
-	//	writer->writeAttribute( QStringLiteral("xMin"), QString::number(d->range(Dimension::X, 0).start(), 'g', 16));
-	//	writer->writeAttribute( QStringLiteral("xMax"), QString::number(d->range(Dimension::X, 0).end(), 'g', 16) );
-	//	writer->writeAttribute( QStringLiteral("yMin"), QString::number(d->yRange.range.start(), 'g', 16) );
-	//	writer->writeAttribute( QStringLiteral("yMax"), QString::number(d->yRange.range.end(), 'g', 16) );
-	//	writer->writeAttribute( QStringLiteral("xScale"), QString::number(static_cast<int>(d->range(Dimension::X, 0).scale())) );
-	//	writer->writeAttribute( QStringLiteral("yScale"), QString::number(static_cast<int>(d->yScale)) );
-	//	writer->writeAttribute( QStringLiteral("xRangeFormat"), QString::number(static_cast<int>(xRangeFormat(0))) );
-	//	writer->writeAttribute( QStringLiteral("yRangeFormat"), QString::number(static_cast<int>(d->yRangeFormat)) );
-	//	writer->writeAttribute( QStringLiteral("horizontalPadding"), QString::number(d->horizontalPadding) );
-	//	writer->writeAttribute( QStringLiteral("verticalPadding"), QString::number(d->verticalPadding) );
-	//	writer->writeAttribute( QStringLiteral("rightPadding"), QString::number(d->rightPadding) );
-	//	writer->writeAttribute( QStringLiteral("bottomPadding"), QString::number(d->bottomPadding) );
-	//	writer->writeAttribute( QStringLiteral("symmetricPadding"), QString::number(d->symmetricPadding));
 
 	// x-scale breaks
 	if (d->xRangeBreakingEnabled || !d->xRangeBreaks.list.isEmpty()) {
@@ -4604,7 +4942,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 	bool titleLabelRead = false;
@@ -4631,31 +4968,31 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 			str = attribs.value(QStringLiteral("x")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("x"));
 			else
 				d->rect.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("y")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("y")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("y"));
 			else
 				d->rect.setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("width")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("width"));
 			else
 				d->rect.setWidth(str.toDouble());
 
 			str = attribs.value(QStringLiteral("height")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("height")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("height"));
 			else
 				d->rect.setHeight(str.toDouble());
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 			else
 				d->setVisible(str.toInt());
 		} else if (!preview && reader->name() == QLatin1String("xRanges")) {
@@ -4668,32 +5005,32 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			str = attribs.value(QStringLiteral("autoScale")).toString();
 			QDEBUG(Q_FUNC_INFO << ", str =" << str << ", value = " << str.toInt())
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("autoScale")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("autoScale"));
 			else
 				range.setAutoScale(str.toInt());
 			str = attribs.value(QStringLiteral("start")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("start")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("start"));
 			else
 				range.setStart(str.toDouble());
 			str = attribs.value(QStringLiteral("end")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("end")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("end"));
 			else
 				range.setEnd(str.toDouble());
 			str = attribs.value(QStringLiteral("scale")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("scale")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("scale"));
 			else
 				range.setScale(static_cast<RangeT::Scale>(str.toInt()));
 			str = attribs.value(QStringLiteral("format")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("format")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("format"));
 			else
 				range.setFormat(static_cast<RangeT::Format>(str.toInt()));
 			str = attribs.value(QStringLiteral("dateTimeFormat")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("dateTimeFormat")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("dateTimeFormat"));
 			else
 				range.setDateTimeFormat(str);
 
@@ -4708,32 +5045,32 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			Range<double> range;
 			str = attribs.value(QStringLiteral("autoScale")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("autoScale")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("autoScale"));
 			else
 				range.setAutoScale(str.toInt());
 			str = attribs.value(QStringLiteral("start")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("start")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("start"));
 			else
 				range.setStart(str.toDouble());
 			str = attribs.value(QStringLiteral("end")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("end")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("end"));
 			else
 				range.setEnd(str.toDouble());
 			str = attribs.value(QStringLiteral("scale")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("scale")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("scale"));
 			else
 				range.setScale(static_cast<RangeT::Scale>(str.toInt()));
 			str = attribs.value(QStringLiteral("format")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("format")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("format"));
 			else
 				range.setFormat(static_cast<RangeT::Format>(str.toInt()));
 			str = attribs.value(QStringLiteral("dateTimeFormat")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("dateTimeFormat")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("dateTimeFormat"));
 			else
 				range.setDateTimeFormat(str);
 
@@ -4743,6 +5080,14 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("defaultCoordinateSystem", defaultCoordinateSystemIndex, int);
 			DEBUG(Q_FUNC_INFO << ", got default cSystem index = " << d->defaultCoordinateSystemIndex)
 
+			// the file can be corrupted, either because of bugs like in
+			// https://invent.kde.org/education/labplot/-/issues/598, https://invent.kde.org/education/labplot/-/issues/869
+			// or because it was manually compromised.
+			// In order not to crash because of the wrong indices, add a safety check here.
+			// TODO: check the ranges and the coordinate system to make sure they're available.
+			if (d->defaultCoordinateSystemIndex > m_coordinateSystems.size() - 1)
+				d->defaultCoordinateSystemIndex = 0;
+
 			READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
 			READ_DOUBLE_VALUE("verticalPadding", verticalPadding);
 			READ_DOUBLE_VALUE("rightPadding", rightPadding);
@@ -4750,53 +5095,57 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("symmetricPadding", symmetricPadding, bool);
 			hasCoordinateSystems = true;
 
-			m_coordinateSystems.clear();
+			READ_INT_VALUE("rangeType", rangeType, CartesianPlot::RangeType);
+			READ_INT_VALUE("rangeFirstValues", rangeFirstValues, int);
+			READ_INT_VALUE("rangeLastValues", rangeLastValues, int);
 
 			if (Project::xmlVersion() < 7) {
 				d->niceExtend = true;
 			} else {
 				str = attribs.value(QStringLiteral("niceExtend")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("niceExtend")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("niceExtend"));
 				else
 					d->niceExtend = str.toInt();
 			}
-
 		} else if (!preview && reader->name() == QLatin1String("coordinateSystem")) {
 			attribs = reader->attributes();
 			// new style
 			str = attribs.value(QStringLiteral("xIndex")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("xIndex")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("xIndex"));
 			else {
-				CartesianCoordinateSystem* cSystem{new CartesianCoordinateSystem(this)};
+				auto* cSystem = new CartesianCoordinateSystem(this);
 				cSystem->setIndex(Dimension::X, str.toInt());
 
 				str = attribs.value(QStringLiteral("yIndex")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("yIndex")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("yIndex"));
 				else
 					cSystem->setIndex(Dimension::Y, str.toInt());
 
 				addCoordinateSystem(cSystem);
+
+				str = attribs.value(QStringLiteral("name")).toString();
+				cSystem->setName(str);
 			}
 
 			// old style (pre 2.9.0, to read old projects)
 			if (!hasCoordinateSystems) {
 				str = attribs.value(QStringLiteral("autoScaleX")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("autoScaleX")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("autoScaleX"));
 				else
 					d->xRanges[0].range.setAutoScale(str.toInt());
 				str = attribs.value(QStringLiteral("autoScaleY")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("autoScaleY")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("autoScaleY"));
 				else
 					d->yRanges[0].range.setAutoScale(str.toInt());
 
 				str = attribs.value(QStringLiteral("xMin")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("xMin")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("xMin"));
 				else {
 					d->xRanges[0].range.start() = str.toDouble();
 					d->xRanges[0].prev.start() = d->range(Dimension::X, 0).start();
@@ -4804,7 +5153,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 				str = attribs.value(QStringLiteral("xMax")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("xMax")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("xMax"));
 				else {
 					d->xRanges[0].range.end() = str.toDouble();
 					d->xRanges[0].prev.end() = d->range(Dimension::X, 0).end();
@@ -4812,7 +5161,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 				str = attribs.value(QStringLiteral("yMin")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("yMin")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("yMin"));
 				else {
 					d->yRanges[0].range.start() = str.toDouble();
 					d->yRanges[0].prev.start() = range(Dimension::Y, 0).start();
@@ -4820,7 +5169,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 				str = attribs.value(QStringLiteral("yMax")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("yMax")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("yMax"));
 				else {
 					d->yRanges[0].range.end() = str.toDouble();
 					d->yRanges[0].prev.end() = range(Dimension::Y, 0).end();
@@ -4828,7 +5177,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 				str = attribs.value(QStringLiteral("xScale")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("xScale")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("xScale"));
 				else {
 					int scale{str.toInt()};
 					// convert old scale
@@ -4838,7 +5187,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				}
 				str = attribs.value(QStringLiteral("yScale")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("yScale")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("yScale"));
 				else {
 					int scale{str.toInt()};
 					// convert old scale
@@ -4849,12 +5198,12 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 				str = attribs.value(QStringLiteral("xRangeFormat")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("xRangeFormat")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("xRangeFormat"));
 				else
 					d->xRanges[0].range.format() = static_cast<RangeT::Format>(str.toInt());
 				str = attribs.value(QStringLiteral("yRangeFormat")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs(QStringLiteral("yRangeFormat")).toString());
+					reader->raiseMissingAttributeWarning(QStringLiteral("yRangeFormat"));
 				else
 					d->yRanges[0].range.format() = static_cast<RangeT::Format>(str.toInt());
 
@@ -4865,6 +5214,11 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				str = attribs.value(QStringLiteral("yRangeDateTimeFormat")).toString();
 				if (!str.isEmpty())
 					d->yRanges[0].range.setDateTimeFormat(str);
+
+				auto* cSystem = new CartesianCoordinateSystem(this);
+				cSystem->setIndex(Dimension::X, 0);
+				cSystem->setIndex(Dimension::Y, 0);
+				addCoordinateSystem(cSystem);
 
 				READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
 				READ_DOUBLE_VALUE("verticalPadding", verticalPadding);
@@ -4884,25 +5238,25 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			RangeBreak b;
 			str = attribs.value(QStringLiteral("start")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("start")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("start"));
 			else
 				b.range.start() = str.toDouble();
 
 			str = attribs.value(QStringLiteral("end")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("end")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("end"));
 			else
 				b.range.end() = str.toDouble();
 
 			str = attribs.value(QStringLiteral("position")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("position")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("position"));
 			else
 				b.position = str.toDouble();
 
 			str = attribs.value(QStringLiteral("style")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("style")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("style"));
 			else
 				b.style = CartesianPlot::RangeBreakStyle(str.toInt());
 
@@ -4919,25 +5273,25 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			RangeBreak b;
 			str = attribs.value(QStringLiteral("start")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("start")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("start"));
 			else
 				b.range.start() = str.toDouble();
 
 			str = attribs.value(QStringLiteral("end")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("end")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("end"));
 			else
 				b.range.end() = str.toDouble();
 
 			str = attribs.value(QStringLiteral("position")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("position")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("position"));
 			else
 				b.position = str.toDouble();
 
 			str = attribs.value(QStringLiteral("style")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("style")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("style"));
 			else
 				b.style = CartesianPlot::RangeBreakStyle(str.toInt());
 
@@ -4967,11 +5321,12 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("image")) {
 			auto* image = new Image(QString());
 			image->setIsLoading(true);
-			if (!image->load(reader, preview)) {
+			if (image->load(reader, preview))
+				addChildFast(image);
+			else {
 				delete image;
 				return false;
-			} else
-				addChildFast(image);
+			}
 		} else if (!preview && reader->name() == QLatin1String("infoElement")) {
 			auto* marker = new InfoElement(QStringLiteral("Marker"), this);
 			marker->setIsLoading(true);
@@ -4986,7 +5341,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			m_plotArea->setIsLoading(true);
 			m_plotArea->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("axis")) {
-			auto* axis = new Axis(QString());
+			auto* axis = new Axis(QString(), Axis::Orientation::Horizontal, true);
 			axis->setIsLoading(true);
 			if (axis->load(reader, preview))
 				addChildFast(axis);
@@ -4995,12 +5350,12 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyCurve")) {
-			auto* curve = new XYCurve(QString());
+			auto* curve = new XYCurve(QString(), AspectType::XYCurve, true);
 			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyEquationCurve")) {
@@ -5009,7 +5364,16 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
+				return false;
+			}
+		} else if (reader->name() == XYFunctionCurve::saveName) {
+			auto* curve = new XYFunctionCurve(QString());
+			curve->setIsLoading(true);
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyDataReductionCurve")) {
@@ -5018,7 +5382,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyDifferentiationCurve")) {
@@ -5027,7 +5391,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyIntegrationCurve")) {
@@ -5036,7 +5400,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyInterpolationCurve")) {
@@ -5045,7 +5409,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xySmoothCurve")) {
@@ -5054,7 +5418,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyFitCurve")) {
@@ -5063,7 +5427,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyFourierFilterCurve")) {
@@ -5072,7 +5436,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyFourierTransformCurve")) {
@@ -5081,7 +5445,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyHilbertTransformCurve")) {
@@ -5090,7 +5454,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyConvolutionCurve")) {
@@ -5099,7 +5463,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("xyCorrelationCurve")) {
@@ -5108,7 +5472,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
-				removeChild(curve);
+				delete curve;
 				return false;
 			}
 		} else if (!preview && reader->name() == QLatin1String("cartesianPlotLegend")) {
@@ -5121,7 +5485,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (!preview && reader->name() == QLatin1String("customPoint")) {
-			auto* point = new CustomPoint(this, QString());
+			auto* point = new CustomPoint(this, QString(), true);
 			point->setIsLoading(true);
 			if (point->load(reader, preview))
 				addChildFast(point);
@@ -5130,7 +5494,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (!preview && reader->name() == QLatin1String("referenceLine")) {
-			auto* line = new ReferenceLine(this, QString());
+			auto* line = new ReferenceLine(this, QString(), true);
 			line->setIsLoading(true);
 			if (line->load(reader, preview))
 				addChildFast(line);
@@ -5139,7 +5503,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (!preview && reader->name() == QLatin1String("referenceRange")) {
-			auto* range = new ReferenceRange(this, QString());
+			auto* range = new ReferenceRange(this, QString(), true);
 			range->setIsLoading(true);
 			if (range->load(reader, preview))
 				addChildFast(range);
@@ -5148,12 +5512,12 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("boxPlot")) {
-			auto* boxPlot = new BoxPlot(QStringLiteral("BoxPlot"));
+			auto* boxPlot = new BoxPlot(QStringLiteral("BoxPlot"), true);
 			boxPlot->setIsLoading(true);
 			if (boxPlot->load(reader, preview))
 				addChildFast(boxPlot);
 			else {
-				removeChild(boxPlot);
+				delete boxPlot;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("barPlot")) {
@@ -5162,7 +5526,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (barPlot->load(reader, preview))
 				addChildFast(barPlot);
 			else {
-				removeChild(barPlot);
+				delete barPlot;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("lollipopPlot")) {
@@ -5171,16 +5535,16 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (plot->load(reader, preview))
 				addChildFast(plot);
 			else {
-				removeChild(plot);
+				delete plot;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("Histogram")) {
-			auto* hist = new Histogram(QStringLiteral("Histogram"));
+			auto* hist = new Histogram(QStringLiteral("Histogram"), true);
 			hist->setIsLoading(true);
 			if (hist->load(reader, preview))
 				addChildFast(hist);
 			else {
-				removeChild(hist);
+				delete hist;
 				return false;
 			}
 		} else if (reader->name() == QLatin1String("QQPlot")) {
@@ -5189,23 +5553,45 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (plot->load(reader, preview))
 				addChildFast(plot);
 			else {
-				removeChild(plot);
+				delete plot;
 				return false;
 			}
+		} else if (reader->name() == QLatin1String("KDEPlot")) {
+			auto* plot = new KDEPlot(QStringLiteral("KDE Plot"));
+			plot->setIsLoading(true);
+			if (plot->load(reader, preview))
+				addChildFast(plot);
+			else
+				return false;
+		} else if (reader->name() == QLatin1String("ProcessBehaviorChart")) {
+			auto* plot = new ProcessBehaviorChart(QStringLiteral("Process Behavior Chart"), true);
+			plot->setIsLoading(true);
+			if (plot->load(reader, preview))
+				addChildFast(plot);
+			else
+				return false;
+		} else if (reader->name() == QLatin1String("RunChart")) {
+			auto* plot = new RunChart(QStringLiteral("Run Chart"));
+			plot->setIsLoading(true);
+			if (plot->load(reader, preview))
+				addChildFast(plot);
+			else
+				return false;
+		} else if (reader->name() == QLatin1String("cartesianPlot")) {
+			auto* plot = new CartesianPlot(QString(), true);
+			plot->setIsLoading(true);
+			if (!plot->load(reader, preview)) {
+				delete plot;
+				return false;
+			} else
+				addChildFast(plot);
 		} else { // unknown element
 			if (!preview)
-				reader->raiseWarning(i18n("unknown cartesianPlot element '%1'", reader->name().toString()));
+				reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}
 	}
-
-	// the file can be corrupted, either because of bugs like in
-	// https://invent.kde.org/education/labplot/-/issues/598 or because it was manually compromized.
-	// In order not to crash because of the wrong indices, add a safety check here.
-	// TODO: check the ranges and the coordinate system to make sure they're available.
-	if (d->defaultCoordinateSystemIndex > m_coordinateSystems.size() - 1)
-		d->defaultCoordinateSystemIndex = 0;
 
 	if (preview)
 		return true;
@@ -5240,7 +5626,7 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 	Q_D(CartesianPlot);
 
 	QString theme = QString();
-	if (config.hasGroup(QLatin1String("Theme"))) {
+	if (config.hasGroup(QStringLiteral("Theme"))) {
 		theme = config.name();
 
 		// theme path is saved with UNIX dir separator
@@ -5265,6 +5651,8 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 		child->loadThemeConfig(config);
 
 	d->update(this->rect());
+
+	Q_EMIT changed();
 }
 
 void CartesianPlot::saveTheme(KConfig& config) {
@@ -5283,42 +5671,25 @@ void CartesianPlot::saveTheme(KConfig& config) {
 
 // Generating colors from 5-color theme palette
 void CartesianPlot::setColorPalette(const KConfig& config) {
-	if (config.hasGroup(QLatin1String("Theme"))) {
-		KConfigGroup group = config.group(QLatin1String("Theme"));
+	if (config.hasGroup(QStringLiteral("Theme"))) {
+		KConfigGroup group = config.group(QStringLiteral("Theme"));
 
 		// read the five colors defining the palette
 		m_themeColorPalette.clear();
-		m_themeColorPalette.append(group.readEntry("ThemePaletteColor1", QColor()));
-		m_themeColorPalette.append(group.readEntry("ThemePaletteColor2", QColor()));
-		m_themeColorPalette.append(group.readEntry("ThemePaletteColor3", QColor()));
-		m_themeColorPalette.append(group.readEntry("ThemePaletteColor4", QColor()));
-		m_themeColorPalette.append(group.readEntry("ThemePaletteColor5", QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor1"), QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor2"), QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor3"), QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor4"), QColor()));
+		m_themeColorPalette.append(group.readEntry(QStringLiteral("ThemePaletteColor5"), QColor()));
 	} else {
 		// no theme is available, provide "default colors"
-		m_themeColorPalette.clear();
-
-		m_themeColorPalette.append(QColor(28, 113, 216));
-		m_themeColorPalette.append(QColor(255, 120, 0));
-		m_themeColorPalette.append(QColor(224, 27, 36));
-		m_themeColorPalette.append(QColor(46, 194, 126));
-		m_themeColorPalette.append(QColor(246, 211, 45));
-		m_themeColorPalette.append(QColor(143, 19, 178));
-		m_themeColorPalette.append(QColor(0, 255, 255));
-		m_themeColorPalette.append(QColor(235, 26, 209));
-		m_themeColorPalette.append(QColor(41, 221, 37));
-		m_themeColorPalette.append(QColor(33, 6, 227));
-		m_themeColorPalette.append(QColor(14, 136, 22));
-		m_themeColorPalette.append(QColor(147, 97, 22));
-		m_themeColorPalette.append(QColor(85, 85, 91));
-		m_themeColorPalette.append(QColor(156, 4, 4));
-		// TODO: maybe removing black?
-		m_themeColorPalette.append(QColor(0, 0, 0));
+		m_themeColorPalette = defaultColorPalette;
 	}
 
 	// use the color of the axis lines as the color for the different mouse cursor lines
 	Q_D(CartesianPlot);
-	const KConfigGroup& group = config.group("Axis");
-	const QColor& color = group.readEntry("LineColor", QColor(Qt::black));
+	const KConfigGroup& group = config.group(QStringLiteral("Axis"));
+	const QColor& color = group.readEntry(QStringLiteral("LineColor"), QColor(Qt::black));
 	d->zoomSelectPen.setColor(color);
 	d->crossHairPen.setColor(color);
 }
@@ -5330,4 +5701,12 @@ const QList<QColor>& CartesianPlot::themeColorPalette() const {
 const QColor CartesianPlot::themeColorPalette(int index) const {
 	const int i = index % m_themeColorPalette.count();
 	return m_themeColorPalette.at(i);
+}
+
+void CartesianPlot::setXRange(int index, const Range<double>& range) {
+	setRange(Dimension::X, index, range);
+}
+
+void CartesianPlot::setYRange(int index, const Range<double>& range) {
+	setRange(Dimension::Y, index, range);
 }

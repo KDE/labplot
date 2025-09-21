@@ -5,22 +5,20 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AbstractColumnPrivate.h"
+#include "backend/core/Settings.h"
 #include "backend/core/abstractcolumncommands.h"
-#include "backend/lib/SignallingUndoCommand.h"
 #include "backend/lib/XmlStreamReader.h"
 
-#include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
+
 #include <QDateTime>
 #include <QIcon>
-
-#include <cmath>
 
 /**
  * \class AbstractColumn
@@ -71,6 +69,7 @@ AbstractColumn::AbstractColumn(const QString& name, AspectType type)
 
 AbstractColumn::~AbstractColumn() {
 	Q_EMIT aboutToBeDestroyed(this);
+	delete d->m_heatmapFormat;
 	delete d;
 }
 
@@ -116,9 +115,13 @@ QStringList AbstractColumn::dateTimeFormats() {
 	QStringList dateTimes = dateFormats();
 	dateTimes << timeFormats();
 	// any combination of date and times
-	for (const auto& d : dateFormats())
-		for (const auto& t : timeFormats())
+	for (const auto& d : dateFormats()) {
+		dateTimes << d;
+		for (const auto& t : timeFormats()) {
+			dateTimes << t;
 			dateTimes << d + QLatin1Char(' ') + t;
+		}
+	}
 
 	return dateTimes;
 }
@@ -151,7 +154,7 @@ QString AbstractColumn::timeUnitString(TimeUnit unit) {
 QString AbstractColumn::plotDesignationString(PlotDesignation d, bool withBrackets) {
 	QString s;
 
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	const KConfigGroup group = Settings::group(QStringLiteral("Settings_General"));
 	switch (d) {
 	case PlotDesignation::NoDesignation:
 		s = i18n("None");
@@ -314,94 +317,30 @@ bool AbstractColumn::copy(const AbstractColumn* /*source*/, int /*source_start*/
  * \brief Return the number of available data rows
  */
 
-class ColumnSetRowsCountCmd : public QUndoCommand {
-public:
-	ColumnSetRowsCountCmd(AbstractColumn* column, bool insert, int first, int count, QUndoCommand* parent)
-		: QUndoCommand(parent)
-		, m_column(column)
-		, m_insert(insert)
-		, m_first(first)
-		, m_count(count) {
-		if (insert)
-			setText(i18np("%1: insert 1 row", "%1: insert %2 rows", m_column->name(), count));
-		else
-			setText(i18np("%1: remove 1 row", "%1: remove %2 rows", m_column->name(), count));
-	}
-
-	virtual void redo() override {
-		if (m_insert)
-			Q_EMIT m_column->rowsAboutToBeInserted(m_column, m_first, m_count);
-		else
-			Q_EMIT m_column->rowsAboutToBeRemoved(m_column, m_first, m_count);
-
-		QUndoCommand::redo();
-
-		if (m_insert)
-			Q_EMIT m_column->rowsInserted(m_column, m_first, m_count);
-		else
-			Q_EMIT m_column->rowsRemoved(m_column, m_first, m_count);
-	}
-
-	virtual void undo() override {
-		if (m_insert)
-			Q_EMIT m_column->rowsAboutToBeRemoved(m_column, m_first, m_count);
-		else
-			Q_EMIT m_column->rowsAboutToBeInserted(m_column, m_first, m_count);
-		QUndoCommand::undo();
-
-		if (m_insert)
-			Q_EMIT m_column->rowsRemoved(m_column, m_first, m_count);
-		else
-			Q_EMIT m_column->rowsInserted(m_column, m_first, m_count);
-	}
-
-private:
-	AbstractColumn* m_column;
-	bool m_insert;
-	int m_first;
-	int m_count;
-};
-
 /**
  * \brief Insert some empty (or initialized with invalid values) rows
  */
-void AbstractColumn::insertRows(int before, int count, QUndoCommand* parent) {
-	bool execute = false;
-	auto* command = new ColumnSetRowsCountCmd(this, true, before, count, parent);
-	if (!parent) {
-		execute = true;
-		parent = command;
-	}
-
-	handleRowInsertion(before, count, parent);
-
-	if (execute)
-		exec(parent);
+void AbstractColumn::insertRows(int before, int count) {
+	beginMacro(i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count));
+	handleRowInsertion(before, count);
+	endMacro();
 }
 
-void AbstractColumn::handleRowInsertion(int before, int count, QUndoCommand* parent) {
-	new AbstractColumnInsertRowsCmd(this, before, count, parent);
+void AbstractColumn::handleRowInsertion(int before, int count) {
+	new AbstractColumnInsertRowsCmd(this, before, count);
 }
 
 /**
  * \brief Remove 'count' rows starting from row 'first'
  */
-void AbstractColumn::removeRows(int first, int count, QUndoCommand* parent) {
-	bool execute = false;
-	auto* command = new ColumnSetRowsCountCmd(this, false, first, count, parent);
-	if (!parent) {
-		execute = true;
-		parent = command;
-	}
-
-	handleRowRemoval(first, count, parent);
-
-	if (execute)
-		exec(parent);
+void AbstractColumn::removeRows(int first, int count) {
+	beginMacro(i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count));
+	handleRowRemoval(first, count);
+	endMacro();
 }
 
-void AbstractColumn::handleRowRemoval(int first, int count, QUndoCommand* parent) {
-	new AbstractColumnRemoveRowsCmd(this, first, count, parent);
+void AbstractColumn::handleRowRemoval(int first, int count) {
+	new AbstractColumnRemoveRowsCmd(this, first, count);
 }
 
 /**
@@ -428,7 +367,7 @@ bool AbstractColumn::isPlottable() const {
 /**
  * \brief Clear the whole column
  */
-void AbstractColumn::clear(QUndoCommand*) {
+void AbstractColumn::clear() {
 }
 
 /**
@@ -436,10 +375,8 @@ void AbstractColumn::clear(QUndoCommand*) {
  */
 bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
-	case ColumnMode::Double: {
-		double value = valueAt(row);
-		return std::isfinite(value);
-	}
+	case ColumnMode::Double:
+		return std::isfinite(doubleAt(row));
 	case ColumnMode::Integer: // there is no invalid integer
 	case ColumnMode::BigInt:
 		return true;
@@ -484,7 +421,7 @@ QVector<Interval<int>> AbstractColumn::maskedIntervals() const {
  * \brief Clear all masking information
  */
 void AbstractColumn::clearMasks() {
-	exec(new AbstractColumnClearMasksCmd(d), "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*, this));
+	exec(new AbstractColumnClearMasksCmd(d), "maskingAboutToChange", "maskingChanged", QArgument<const AbstractColumn*>("const AbstractColumn*", this));
 }
 
 /**
@@ -494,7 +431,7 @@ void AbstractColumn::clearMasks() {
  * \param mask true: mask, false: unmask
  */
 void AbstractColumn::setMasked(const Interval<int>& i, bool mask) {
-	exec(new AbstractColumnSetMaskedCmd(d, i, mask), "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*, this));
+	exec(new AbstractColumnSetMaskedCmd(d, i, mask), "maskingAboutToChange", "maskingChanged", QArgument<const AbstractColumn*>("const AbstractColumn*", this));
 }
 
 /**
@@ -573,6 +510,40 @@ void AbstractColumn::setHeatmapFormat(const AbstractColumn::HeatmapFormat& forma
 
 void AbstractColumn::removeFormat() {
 	exec(new AbstractColumnRemoveHeatmapFormatCmd(d));
+}
+
+/*!
+ * resets the connections for the dependent objects like plots and formulas in other columns
+ * to the dataChanged signal in the current column.
+ */
+void AbstractColumn::reset() {
+	// don't disconnect from all signals since we'd loose all connections done in AbstractAspect::connectChild().
+	// disconnect from the dataChanged signal only, the reconnect is triggered in Project::descriptionChanged().
+	Q_EMIT aboutToReset(this);
+	disconnect(this, &AbstractColumn::dataChanged, nullptr, nullptr);
+}
+
+/*!
+ * invalidates the internal properties of the columns and emits the signal \c dataChanged().
+ *
+ * call this function if the data of the column was changed directly via the data()-pointer
+ * and not via the setValueAt() or when multiple cells are being notified and the signal \c dataChanged()
+ * is suppressed for performance reasons and this function needs to be called after all cells were modified.
+ */
+void AbstractColumn::setChanged() {
+	invalidateProperties();
+	if (!d->m_suppressDataChangedSignal)
+		Q_EMIT dataChanged(this);
+}
+
+/*!
+ * suppresses the \c dataChanged signal if \c value is \c true, enables it otherwise.
+ *
+ * used when multiple cells are being modified and the signal needs to be suppressed for performance reasons,
+ * \sa setChanged().
+ */
+void AbstractColumn::setSuppressDataChangedSignal(bool value) {
+	d->m_suppressDataChangedSignal = value;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -789,7 +760,7 @@ bool AbstractColumn::indicesMinMax(double /*v1*/, double /*v2*/, int& /*start*/,
 	return false;
 }
 
-int AbstractColumn::indexForValue(double /*x*/) const {
+int AbstractColumn::indexForValue(double /*x*/, bool /* smaller */) const {
 	return 0;
 }
 

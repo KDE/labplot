@@ -19,12 +19,17 @@ extern "C" {
 
 class XYDataReductionCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYDataReductionCurve : public XYAnalysisCurve {
+#else
 class XYDataReductionCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:
 	struct DataReductionData {
-		DataReductionData(){};
+		DataReductionData() { };
 
 		nsl_geom_linesim_type type{nsl_geom_linesim_type_douglas_peucker_variant}; // type of simplification
 		bool autoTolerance{true}; // automatic tolerance
@@ -36,7 +41,7 @@ public:
 		QVector<double> xRange{0., 0.}; // x range for integration
 	};
 	struct DataReductionResult : public XYAnalysisCurve::Result {
-		DataReductionResult(){};
+		DataReductionResult() { };
 
 		size_t npoints{0};
 		double posError{0};
@@ -46,7 +51,6 @@ public:
 	explicit XYDataReductionCurve(const QString& name);
 	~XYDataReductionCurve() override;
 
-	void recalculate() override;
 	const XYAnalysisCurve::Result& result() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;

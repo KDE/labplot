@@ -4,7 +4,7 @@
 	Description          : Graphic Item for coordinate points of Datapicker
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2024 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -58,7 +58,7 @@ void ErrorBarItem::setPosition(QPointF position) {
 }
 
 void ErrorBarItem::setRectSize(qreal size) {
-	QMatrix matrix;
+	QTransform matrix;
 	matrix.scale(size, size);
 	setRect(matrix.mapRect(m_rect));
 }
@@ -125,18 +125,23 @@ DatapickerPoint::DatapickerPoint(const QString& name, DatapickerPointPrivate* dd
 // and is deleted during the cleanup in QGraphicsScene
 DatapickerPoint::~DatapickerPoint() = default;
 
+void DatapickerPoint::finalizeAdd() {
+	// after the parent (image or curve) was set, update the properties (symbol, etc.) from the parent
+	Q_D(DatapickerPoint);
+	d->updateProperties();
+}
+
 void DatapickerPoint::init() {
 	Q_D(DatapickerPoint);
 
 	KConfig config;
-	KConfigGroup group;
-	group = config.group("DatapickerPoint");
-	d->position.setX(group.readEntry("PositionXValue", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)));
-	d->position.setY(group.readEntry("PositionYValue", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)));
-	d->plusDeltaXPos = group.readEntry("PlusDeltaXPos", QPointF(30, 0));
-	d->minusDeltaXPos = group.readEntry("MinusDeltaXPos", QPointF(-30, 0));
-	d->plusDeltaYPos = group.readEntry("PlusDeltaYPos", QPointF(0, -30));
-	d->minusDeltaYPos = group.readEntry("MinusDeltaYPos", QPointF(0, 30));
+	KConfigGroup group = config.group(QStringLiteral("DatapickerPoint"));
+	d->position.setX(group.readEntry(QStringLiteral("PositionXValue"), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)));
+	d->position.setY(group.readEntry(QStringLiteral("PositionYValue"), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)));
+	d->plusDeltaXPos = group.readEntry(QStringLiteral("PlusDeltaXPos"), QPointF(30, 0));
+	d->minusDeltaXPos = group.readEntry(QStringLiteral("MinusDeltaXPos"), QPointF(-30, 0));
+	d->plusDeltaYPos = group.readEntry(QStringLiteral("PlusDeltaYPos"), QPointF(0, -30));
+	d->minusDeltaYPos = group.readEntry(QStringLiteral("MinusDeltaYPos"), QPointF(0, 30));
 }
 
 void DatapickerPoint::initErrorBar(DatapickerCurve::Errors errors) {
@@ -213,7 +218,7 @@ void DatapickerPoint::setPosition(QPointF pos) {
 		exec(new DatapickerPointSetPositionCmd(d, pos, ki18n("%1: set position")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaXPos, QPointF, plusDeltaXPos, updatePoint)
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaXPos, QPointF, plusDeltaXPos, update)
 void DatapickerPoint::setPlusDeltaXPos(QPointF pos) {
 	Q_D(DatapickerPoint);
 	if (pos != d->plusDeltaXPos) {
@@ -231,7 +236,7 @@ void DatapickerPoint::setPlusDeltaXPos(QPointF pos) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaXPos, QPointF, minusDeltaXPos, updatePoint)
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaXPos, QPointF, minusDeltaXPos, update)
 void DatapickerPoint::setMinusDeltaXPos(QPointF pos) {
 	Q_D(DatapickerPoint);
 	if (pos != d->minusDeltaXPos) {
@@ -249,7 +254,7 @@ void DatapickerPoint::setMinusDeltaXPos(QPointF pos) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaYPos, QPointF, plusDeltaYPos, updatePoint)
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetPlusDeltaYPos, QPointF, plusDeltaYPos, update)
 void DatapickerPoint::setPlusDeltaYPos(QPointF pos) {
 	Q_D(DatapickerPoint);
 	if (pos != d->plusDeltaYPos) {
@@ -267,7 +272,7 @@ void DatapickerPoint::setPlusDeltaYPos(QPointF pos) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaYPos, QPointF, minusDeltaYPos, updatePoint)
+STD_SETTER_CMD_IMPL_F_S(DatapickerPoint, SetMinusDeltaYPos, QPointF, minusDeltaYPos, update)
 void DatapickerPoint::setMinusDeltaYPos(QPointF pos) {
 	Q_D(DatapickerPoint);
 	if (pos != d->minusDeltaYPos) {
@@ -323,14 +328,14 @@ void DatapickerPointPrivate::retransform() {
 		return;
 
 	setPos(position);
-	updatePoint();
-
-	updatePropeties();
-
-	QPainterPath path = Symbol::stylePath(pointStyle);
-	boundingRectangle = path.boundingRect();
+	update();
+	updateProperties();
 	recalcShapeAndBoundingRect();
 	retransformErrorBar();
+}
+
+void DatapickerPointPrivate::update() const {
+	Q_EMIT q->dataChanged(q);
 }
 
 /*!
@@ -346,33 +351,14 @@ void DatapickerPointPrivate::retransformErrorBar() {
 	}
 }
 
-/*!
-  update datasheet on any change in position of Datapicker-Point or it's error-bar.
-*/
-void DatapickerPointPrivate::updatePoint() {
-	auto* curve = dynamic_cast<DatapickerCurve*>(q->parentAspect());
-	if (curve)
-		curve->updatePoint(q);
-}
-
-void DatapickerPointPrivate::updatePropeties() {
+void DatapickerPointPrivate::updateProperties() {
 	auto* curve = dynamic_cast<DatapickerCurve*>(q->parentAspect());
 	auto* image = dynamic_cast<DatapickerImage*>(q->parentAspect());
 	if (image) {
-		rotationAngle = image->symbol()->rotationAngle();
-		pointStyle = image->symbol()->style();
-		brush = image->symbol()->brush();
-		pen = image->symbol()->pen();
-		opacity = image->symbol()->opacity();
-		size = image->symbol()->size();
+		symbol = image->symbol();
 		setVisible(image->pointVisibility());
 	} else if (curve) {
-		rotationAngle = curve->symbol()->rotationAngle();
-		pointStyle = curve->symbol()->style();
-		brush = curve->symbol()->brush();
-		pen = curve->symbol()->pen();
-		opacity = curve->symbol()->opacity();
-		size = curve->symbol()->size();
+		symbol = curve->symbol();
 		errorBarBrush = curve->pointErrorBarBrush();
 		errorBarPen = curve->pointErrorBarPen();
 		errorBarSize = curve->pointErrorBarSize();
@@ -384,14 +370,14 @@ void DatapickerPointPrivate::updatePropeties() {
 	Returns the outer bounds of the item as a rectangle.
  */
 QRectF DatapickerPointPrivate::boundingRect() const {
-	return transformedBoundingRectangle;
+	return m_boundingRectangle;
 }
 
 /*!
 	Returns the shape of this item as a QPainterPath in local coordinates.
 */
 QPainterPath DatapickerPointPrivate::shape() const {
-	return itemShape;
+	return m_shape;
 }
 
 /*!
@@ -400,13 +386,19 @@ QPainterPath DatapickerPointPrivate::shape() const {
 void DatapickerPointPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
-	QMatrix matrix;
-	matrix.scale(size, size);
-	matrix.rotate(-rotationAngle);
-	transformedBoundingRectangle = matrix.mapRect(boundingRectangle);
-	itemShape = QPainterPath();
-	itemShape.addRect(transformedBoundingRectangle);
-	itemShape = WorksheetElement::shapeFromPath(itemShape, pen);
+	QPainterPath path = Symbol::stylePath(symbol->style());
+	QTransform trafo;
+	trafo.scale(symbol->size(), symbol->size());
+	path = trafo.map(path);
+	trafo.reset();
+
+	if (symbol->rotationAngle() != 0.) {
+		trafo.rotate(symbol->rotationAngle());
+		path = trafo.map(path);
+	}
+
+	m_shape.addPath(WorksheetElement::shapeFromPath(trafo.map(path), symbol->pen()));
+	m_boundingRectangle = m_shape.boundingRect();
 }
 
 void DatapickerPointPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
@@ -424,34 +416,20 @@ void DatapickerPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 
 QVariant DatapickerPointPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value) {
 	if (change == QGraphicsItem::GraphicsItemChange::ItemSelectedHasChanged && value.toBool())
-		emit q->pointSelected(q);
+		Q_EMIT q->pointSelected(q);
 	else if (change == QGraphicsItem::GraphicsItemChange::ItemPositionChange)
-		emit q->positionChanged(value.toPointF());
+		Q_EMIT q->positionChanged(value.toPointF());
 	return QGraphicsItem::itemChange(change, value);
 }
 
 void DatapickerPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
-	QPainterPath path = Symbol::stylePath(pointStyle);
-	QTransform trafo;
-	trafo.scale(size, size);
-	path = trafo.map(path);
-	trafo.reset();
-	if (rotationAngle != 0) {
-		trafo.rotate(-rotationAngle);
-		path = trafo.map(path);
-	}
-	painter->save();
-	painter->setPen(pen);
-	painter->setBrush(brush);
-	painter->setOpacity(opacity);
-	painter->drawPath(path);
-	painter->restore();
+	symbol->draw(painter, QPointF(0., 0.));
 
 	if (isSelected() && !m_printing) {
 		// TODO: move the initialization of QPen to a parent class later so we don't
 		// need to create it in every paint() call.
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 1, Qt::SolidLine));
-		painter->drawPath(itemShape);
+		painter->drawPath(m_shape);
 	}
 }
 
@@ -499,89 +477,87 @@ bool DatapickerPoint::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == QLatin1String("datapickerPoint"))
+		if (reader->isEndElement() && reader->name() == QStringLiteral("datapickerPoint"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (!preview && reader->name() == QLatin1String("geometry")) {
+		if (!preview && reader->name() == QStringLiteral("geometry")) {
 			attribs = reader->attributes();
 
 			str = attribs.value(QStringLiteral("x")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("x"));
 			else
 				d->position.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("y")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("y")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("y"));
 			else
 				d->position.setY(str.toDouble());
-		} else if (!preview && reader->name() == QLatin1String("errorBar")) {
+		} else if (!preview && reader->name() == QStringLiteral("errorBar")) {
 			attribs = reader->attributes();
 
 			str = attribs.value(QStringLiteral("plusDeltaXPos_x")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("plusDeltaXPos_x")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("plusDeltaXPos_x"));
 			else
 				d->plusDeltaXPos.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("plusDeltaXPos_y")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("plusDeltaXPos_y")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("plusDeltaXPos_y"));
 			else
 				d->plusDeltaXPos.setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("minusDeltaXPos_x")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("minusDeltaXPos_x")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("minusDeltaXPos_x"));
 			else
 				d->minusDeltaXPos.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("minusDeltaXPos_y")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("minusDeltaXPos_y")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("minusDeltaXPos_y"));
 			else
 				d->minusDeltaXPos.setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("plusDeltaYPos_x")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("plusDeltaYPos_x")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("plusDeltaYPos_x"));
 			else
 				d->plusDeltaYPos.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("plusDeltaYPos_y")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("plusDeltaYPos_y")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("plusDeltaYPos_y"));
 			else
 				d->plusDeltaYPos.setY(str.toDouble());
 
 			str = attribs.value(QStringLiteral("minusDeltaYPos_x")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("minusDeltaYPos_x")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("minusDeltaYPos_x"));
 			else
 				d->minusDeltaYPos.setX(str.toDouble());
 
 			str = attribs.value(QStringLiteral("minusDeltaYPos_y")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("minusDeltaYPos_y")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("minusDeltaYPos_y"));
 			else
 				d->minusDeltaYPos.setY(str.toDouble());
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}
 	}
 
-	retransform();
 	return true;
 }

@@ -6,7 +6,7 @@ NSL is written in plain C.
 
 Tests can be found in labplot/tests/nsl/
 
-Some releated links:
+Some related links:
 
 https://www.gnu.org/software/gsl/design/gsl-design.html
 https://www.gnu.org/prep/standards/standards.html

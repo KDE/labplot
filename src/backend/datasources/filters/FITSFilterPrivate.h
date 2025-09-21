@@ -4,6 +4,8 @@
 	Description          : FITS I/O-filter
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-FileCopyrightText: 2025 Stefan Gerlach <stefan.gerlach@uni.kn>
+
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -42,8 +44,9 @@ public:
 					 const QList<FITSFilter::Keyword>& keys = QList<FITSFilter::Keyword>());
 	void parseExtensions(const QString& fileName, QTreeWidget*, bool checkPrimary = false);
 
-	const FITSFilter* q;
+	FITSFilter* const q;
 
+	QString currentExtensionName;
 	int startRow{1};
 	int endRow{-1};
 	int startColumn{1};

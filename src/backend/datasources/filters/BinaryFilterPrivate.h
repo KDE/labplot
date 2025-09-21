@@ -28,7 +28,7 @@ public:
 	void write(const QString& fileName, AbstractDataSource*);
 	QVector<QStringList> preview(const QString& fileName, int lines);
 
-	const BinaryFilter* q;
+	BinaryFilter* const q;
 
 	size_t vectors{2};
 	BinaryFilter::DataType dataType{BinaryFilter::DataType::INT8};

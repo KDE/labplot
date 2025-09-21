@@ -4,26 +4,31 @@
 	Description          : Text label supporting reach text and latex formatting
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef TEXTLABEL_H
 #define TEXTLABEL_H
 
-#include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "tools/TeXRenderer.h"
 
 #include <QTextEdit>
 
+class Line;
 class QBrush;
 class QFont;
 class TextLabelPrivate;
 class CartesianPlot;
 class QPen;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT TextLabel : public WorksheetElement {
+#else
 class TextLabel : public WorksheetElement {
+#endif
 	Q_OBJECT
 
 public:
@@ -44,7 +49,6 @@ public:
 		RightPointingRectangle
 	};
 
-	// The text is always in HMTL format
 	struct TextWrapper {
 		TextWrapper() = default;
 		TextWrapper(const QString& text, TextLabel::Mode mode, bool html)
@@ -81,9 +85,19 @@ public:
 			return text.startsWith(QStringLiteral("<!DOCTYPE HTML"));
 		}
 
-		QString text;
+		bool operator!=(const TextWrapper& other) const {
+			return (text != other.text || mode != other.mode || allowPlaceholder != other.allowPlaceholder
+					|| ((allowPlaceholder || other.allowPlaceholder) && textPlaceholder != other.textPlaceholder));
+		}
+
+		bool operator==(const TextWrapper& other) const {
+			return (text == other.text && mode == other.mode && allowPlaceholder == other.allowPlaceholder
+					&& ((allowPlaceholder || other.allowPlaceholder) && textPlaceholder == other.textPlaceholder));
+		}
+
+		QString text; // actual text. Contains font and color/bg color in Text mode
 		TextLabel::Mode mode{TextLabel::Mode::Text};
-		/*! Determines if the Textlabe can have a placeholder or not.
+		/*! Determines if the Textlabel can have a placeholder or not.
 		 * Depending on this variable in the LabelWidget between
 		 * the text and the placeholder text can be switched
 		 */
@@ -95,11 +109,7 @@ public:
 	TextLabel(const QString& name, CartesianPlot*, Type = Type::General);
 	~TextLabel() override;
 
-	Type type() const;
 	QIcon icon() const override;
-	QMenu* createContextMenu() override;
-	QGraphicsItem* graphicsItem() const override;
-	void setParentGraphicsItem(QGraphicsItem*);
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -107,26 +117,21 @@ public:
 	void saveThemeConfig(const KConfig&) override;
 
 	CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text)
+	void setFont(const QFont&);
 	BASIC_D_ACCESSOR_DECL(QColor, fontColor, FontColor)
 	BASIC_D_ACCESSOR_DECL(QColor, backgroundColor, BackgroundColor)
-	CLASS_D_ACCESSOR_DECL(TextWrapper, textPlaceholder, PlaceholderText)
-	BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor)
-	BASIC_D_ACCESSOR_DECL(QColor, teXBackgroundColor, TeXBackgroundColor)
+	void setPlaceholderText(const TextWrapper& value);
 	CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont)
 
 	BASIC_D_ACCESSOR_DECL(BorderShape, borderShape, BorderShape)
-	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
-	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
+	Line* borderLine() const;
 
 	void setZoomFactor(double);
 	QRectF size();
 	QPointF findNearestGluePoint(QPointF scenePoint);
 	int gluePointCount();
 	struct GluePoint {
-#if (QT_VERSION < QT_VERSION_CHECK(5, 13, 0)) // we need a default constructor for QVector
-		GluePoint() = default;
-#endif
-		GluePoint(QPointF point, QString name)
+		GluePoint(QPointF point, const QString& name)
 			: point(point)
 			, name(name) {
 		}
@@ -152,7 +157,6 @@ private:
 	void init();
 
 	Type m_type;
-	QAction* visibilityAction{nullptr};
 
 Q_SIGNALS:
 	void textWrapperChanged(const TextLabel::TextWrapper&);
@@ -160,11 +164,7 @@ Q_SIGNALS:
 	void teXFontChanged(const QFont);
 	void fontColorChanged(const QColor);
 	void backgroundColorChanged(const QColor);
-
 	void borderShapeChanged(TextLabel::BorderShape);
-	void borderPenChanged(QPen&);
-	void borderOpacityChanged(float);
-
 	void teXImageUpdated(const TeXRenderer::Result&);
 };
 

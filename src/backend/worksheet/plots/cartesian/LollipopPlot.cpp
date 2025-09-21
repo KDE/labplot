@@ -3,35 +3,42 @@
 	Project              : LabPlot
 	Description          : Lollipop Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2023-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "LollipopPlot.h"
 #include "LollipopPlotPrivate.h"
+#include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macrosCurve.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
+#include "frontend/GuiTools.h"
 #include "tools/ImageTools.h"
 
+#include <KLocalizedString>
+
+#include <QActionGroup>
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QPainter>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KLocalizedString>
-
-/**
+/*!
  * \class LollipopPlot
- * \brief Lollipop Plot
+ * \brief This class implements the lollipop plot that is used to visualize categorical data.
+
+ * This visualization type is very similar to the bar plot with the difference that lines and symbols instead of baras are used.
+ * The implementation supports the visualization of multiple data sets (column) at the same time with different ways to order them
+ * and to modify their properties separately.
+ *
+ * \ingroup CartesianPlots
  */
+CURVE_COLUMN_CONNECT(LollipopPlot, X, x, recalc)
 
 LollipopPlot::LollipopPlot(const QString& name)
 	: Plot(name, new LollipopPlotPrivate(this), AspectType::LollipopPlot) {
@@ -51,10 +58,10 @@ void LollipopPlot::init() {
 	Q_D(LollipopPlot);
 
 	KConfig config;
-	const auto& group = config.group("LollipopPlot");
+	const auto& group = config.group(QStringLiteral("LollipopPlot"));
 
 	// general
-	d->orientation = (LollipopPlot::Orientation)group.readEntry("Orientation", (int)LollipopPlot::Orientation::Vertical);
+	d->orientation = (LollipopPlot::Orientation)group.readEntry(QStringLiteral("Orientation"), (int)LollipopPlot::Orientation::Vertical);
 
 	// initial line, symbol and value objects that will be available even if not data column was set yet
 	d->addLine(group);
@@ -66,23 +73,40 @@ void LollipopPlot::init() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon LollipopPlot::icon() const {
-	return QIcon::fromTheme(QLatin1String("office-chart-bar"));
+	return LollipopPlot::staticIcon();
+}
+
+QIcon LollipopPlot::staticIcon() {
+	int iconSize = 20;
+	QPixmap pm(iconSize, iconSize);
+	pm.fill(Qt::transparent);
+
+	QPen pen(Qt::SolidLine);
+	pen.setColor(GuiTools::isDarkMode() ? Qt::white : Qt::black);
+	pen.setWidthF(0.0);
+
+	QPainter pa;
+	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setPen(pen);
+	pa.setBrush(pen.color());
+	pa.drawLine(10, 6, 10, 14);
+	pa.drawEllipse(8, 4, 4, 4);
+	pa.end();
+
+	return {pm};
 }
 
 void LollipopPlot::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
-	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &LollipopPlot::visibilityChangedSlot);
-
 	// Orientation
 	auto* orientationActionGroup = new QActionGroup(this);
 	orientationActionGroup->setExclusive(true);
 	connect(orientationActionGroup, &QActionGroup::triggered, this, &LollipopPlot::orientationChangedSlot);
 
-	orientationHorizontalAction = new QAction(QIcon::fromTheme(QLatin1String("transform-move-horizontal")), i18n("Horizontal"), orientationActionGroup);
+	orientationHorizontalAction = new QAction(QIcon::fromTheme(QStringLiteral("transform-move-horizontal")), i18n("Horizontal"), orientationActionGroup);
 	orientationHorizontalAction->setCheckable(true);
 
-	orientationVerticalAction = new QAction(QIcon::fromTheme(QLatin1String("transform-move-vertical")), i18n("Vertical"), orientationActionGroup);
+	orientationVerticalAction = new QAction(QIcon::fromTheme(QStringLiteral("transform-move-vertical")), i18n("Vertical"), orientationActionGroup);
 	orientationVerticalAction->setCheckable(true);
 }
 
@@ -91,7 +115,7 @@ void LollipopPlot::initMenus() {
 
 	// Orientation
 	orientationMenu = new QMenu(i18n("Orientation"));
-	orientationMenu->setIcon(QIcon::fromTheme(QLatin1String("draw-cross")));
+	orientationMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-cross")));
 	orientationMenu->addAction(orientationHorizontalAction);
 	orientationMenu->addAction(orientationVerticalAction);
 }
@@ -101,11 +125,7 @@ QMenu* LollipopPlot::createContextMenu() {
 		initMenus();
 
 	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
-
-	// Visibility
-	visibilityAction->setChecked(isVisible());
-	menu->insertAction(firstAction, visibilityAction);
+	QAction* visibilityAction = this->visibilityAction();
 
 	// Orientation
 	Q_D(const LollipopPlot);
@@ -113,14 +133,10 @@ QMenu* LollipopPlot::createContextMenu() {
 		orientationHorizontalAction->setChecked(true);
 	else
 		orientationVerticalAction->setChecked(true);
-	menu->insertMenu(firstAction, orientationMenu);
-	menu->insertSeparator(firstAction);
+	menu->insertMenu(visibilityAction, orientationMenu);
+	menu->insertSeparator(visibilityAction);
 
 	return menu;
-}
-
-QGraphicsItem* LollipopPlot::graphicsItem() const {
-	return d_ptr;
 }
 
 void LollipopPlot::retransform() {
@@ -136,14 +152,9 @@ void LollipopPlot::recalc() {
 void LollipopPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
 }
 
-bool LollipopPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
+void LollipopPlot::updateLocale() {
 	Q_D(LollipopPlot);
-	return d->activatePlot(mouseScenePos, maxDist);
-}
-
-void LollipopPlot::setHover(bool on) {
-	Q_D(LollipopPlot);
-	d->setHover(on);
+	d->updateValues();
 }
 
 /* ============================ getter methods ================= */
@@ -151,11 +162,7 @@ void LollipopPlot::setHover(bool on) {
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, LollipopPlot::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(LollipopPlot, const AbstractColumn*, xColumn, xColumn)
-
-QString& LollipopPlot::xColumnPath() const {
-	D(LollipopPlot);
-	return d->xColumnPath;
-}
+BASIC_SHARED_D_READER_IMPL(LollipopPlot, QString, xColumnPath, xColumnPath)
 
 Line* LollipopPlot::lineAt(int index) const {
 	Q_D(const LollipopPlot);
@@ -205,6 +212,65 @@ bool LollipopPlot::hasData() const {
 	return !d->dataColumns.isEmpty();
 }
 
+bool LollipopPlot::usingColumn(const AbstractColumn* column, bool) const {
+	Q_D(const LollipopPlot);
+
+	if (d->xColumn == column)
+		return true;
+
+	for (auto* c : d->dataColumns) {
+		if (c == column)
+			return true;
+	}
+
+	return false;
+}
+
+void LollipopPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
+	Q_D(const LollipopPlot);
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
+	if (!column)
+		return;
+
+	auto dataColumns = d->dataColumns;
+	bool changed = false;
+
+	for (int i = 0; i < d->dataColumnPaths.count(); ++i) {
+		const auto& path = d->dataColumnPaths.at(i);
+		if (path == aspectPath) {
+			dataColumns[i] = column;
+			changed = true;
+		}
+	}
+
+	if (changed) {
+		setUndoAware(false);
+		setDataColumns(dataColumns);
+		setUndoAware(true);
+	}
+}
+
+QColor LollipopPlot::color() const {
+	return colorAt(0);
+}
+
+QColor LollipopPlot::colorAt(int index) const {
+	Q_D(const LollipopPlot);
+	if (index >= d->lines.size())
+		return QColor();
+
+	const auto* line = d->lines.at(index);
+	if (line->style() != Qt::PenStyle::NoPen)
+		return line->pen().color();
+	else {
+		const auto* symbol = d->symbols.at(index);
+		if (symbol->style() != Symbol::Style::NoSymbols)
+			return symbol->pen().color();
+		else
+			return QColor();
+	}
+}
+
 // values
 Value* LollipopPlot::value() const {
 	Q_D(const LollipopPlot);
@@ -212,43 +278,26 @@ Value* LollipopPlot::value() const {
 }
 
 /* ============================ setter methods and undo commands ================= */
+CURVE_COLUMN_CONNECT(LollipopPlot, Data, data, recalc)
 
 // General
-STD_SETTER_CMD_IMPL_F_S(LollipopPlot, SetXColumn, const AbstractColumn*, xColumn, recalc)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(LollipopPlot, X, x, recalc)
 void LollipopPlot::setXColumn(const AbstractColumn* column) {
 	Q_D(LollipopPlot);
-	if (column != d->xColumn) {
+	if (column != d->xColumn)
 		exec(new LollipopPlotSetXColumnCmd(d, column, ki18n("%1: set x column")));
-
-		if (column) {
-			// update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::recalc);
-			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &LollipopPlot::dataColumnAboutToBeRemoved);
-
-			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::dataChanged);
-			// TODO: add disconnect in the undo-function
-		}
-	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(LollipopPlot, SetDataColumns, QVector<const AbstractColumn*>, dataColumns, recalc)
+void LollipopPlot::setXColumnPath(const QString& path) {
+	Q_D(LollipopPlot);
+	d->xColumnPath = path;
+}
+
+CURVE_COLUMN_LIST_SETTER_CMD_IMPL_F_S(LollipopPlot, Data, data, recalc)
 void LollipopPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 	Q_D(LollipopPlot);
-	if (columns != d->dataColumns) {
+	if (columns != d->dataColumns)
 		exec(new LollipopPlotSetDataColumnsCmd(d, columns, ki18n("%1: set data columns")));
-
-		for (auto* column : columns) {
-			if (!column)
-				continue;
-
-			// update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::recalc);
-			connect(column->parentAspect(), &AbstractAspect::childAspectAboutToBeRemoved, this, &LollipopPlot::dataColumnAboutToBeRemoved);
-			// TODO: add disconnect in the undo-function
-
-			connect(column, &AbstractColumn::dataChanged, this, &LollipopPlot::dataChanged);
-		}
-	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(LollipopPlot, SetOrientation, LollipopPlot::Orientation, orientation, recalc)
@@ -261,13 +310,24 @@ void LollipopPlot::setOrientation(LollipopPlot::Orientation orientation) {
 // ##############################################################################
 // #################################  SLOTS  ####################################
 // ##############################################################################
+void LollipopPlot::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
+	Q_D(LollipopPlot);
+	if (aspect == d->xColumn) {
+		d->xColumn = nullptr;
+		d->recalc();
+		Q_EMIT dataChanged();
+		Q_EMIT changed();
+	}
+}
 
 void LollipopPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(LollipopPlot);
 	for (int i = 0; i < d->dataColumns.size(); ++i) {
 		if (aspect == d->dataColumns.at(i)) {
 			d->dataColumns[i] = nullptr;
-			d->retransform();
+			d->recalc();
+			Q_EMIT dataChanged();
+			Q_EMIT changed();
 			break;
 		}
 	}
@@ -283,11 +343,6 @@ void LollipopPlot::orientationChangedSlot(QAction* action) {
 		this->setOrientation(Axis::Orientation::Vertical);
 }
 
-void LollipopPlot::visibilityChangedSlot() {
-	Q_D(const LollipopPlot);
-	this->setVisible(!d->isVisible());
-}
-
 // ##############################################################################
 // ####################### Private implementation ###############################
 // ##############################################################################
@@ -296,22 +351,6 @@ LollipopPlotPrivate::LollipopPlotPrivate(LollipopPlot* owner)
 	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(false);
-}
-
-bool LollipopPlotPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
-	if (!isVisible())
-		return false;
-
-	return shape().contains(mouseScenePos);
-}
-
-void LollipopPlotPrivate::setHover(bool on) {
-	if (on == m_hovered)
-		return; // don't update if state not changed
-
-	m_hovered = on;
-	on ? Q_EMIT q->hovered() : Q_EMIT q->unhovered();
-	update();
 }
 
 Line* LollipopPlotPrivate::addLine(const KConfigGroup& group) {
@@ -323,12 +362,12 @@ Line* LollipopPlotPrivate::addLine(const KConfigGroup& group) {
 
 	q->connect(line, &Line::updatePixmapRequested, [=] {
 		updatePixmap();
-		Q_EMIT q->updateLegendRequested();
+		Q_EMIT q->appearanceChanged();
 	});
 
 	q->connect(line, &Line::updateRequested, [=] {
 		recalcShapeAndBoundingRect();
-		Q_EMIT q->updateLegendRequested();
+		Q_EMIT q->appearanceChanged();
 	});
 
 	lines << line;
@@ -346,7 +385,12 @@ Symbol* LollipopPlotPrivate::addSymbol(const KConfigGroup& group) {
 
 	q->connect(symbol, &Symbol::updateRequested, [=] {
 		updatePixmap();
-		Q_EMIT q->updateLegendRequested();
+		Q_EMIT q->appearanceChanged();
+	});
+
+	q->connect(symbol, &Symbol::updatePixmapRequested, [=] {
+		updatePixmap();
+		Q_EMIT q->appearanceChanged();
 	});
 
 	symbols << symbol;
@@ -358,6 +402,7 @@ void LollipopPlotPrivate::addValue(const KConfigGroup& group) {
 	value = new Value(QString());
 	q->addChild(value);
 	value->setHidden(true);
+	value->setcenterPositionAvailable(true);
 	if (!q->isLoading())
 		value->init(group);
 
@@ -422,6 +467,11 @@ void LollipopPlotPrivate::recalc() {
 	m_symbolPoints.clear();
 	m_symbolPoints.resize(newSize);
 
+	const double xMinOld = xMin;
+	const double xMaxOld = xMax;
+	const double yMinOld = yMin;
+	const double yMaxOld = yMax;
+
 	// bar properties
 	int diff = newSize - lines.size();
 	if (diff > 0) {
@@ -452,7 +502,9 @@ void LollipopPlotPrivate::recalc() {
 	// values in the provided datasets
 	int barGroupsCount = 0;
 	int columnIndex = 0;
-	for (auto* column : qAsConst(dataColumns)) {
+	for (auto* column : std::as_const(dataColumns)) {
+		if (!column)
+			continue;
 		int size = static_cast<const Column*>(column)->statistics().size;
 		m_barLines[columnIndex].resize(size);
 		m_symbolPoints[columnIndex].resize(size);
@@ -486,6 +538,9 @@ void LollipopPlotPrivate::recalc() {
 		yMin = 0;
 		yMax = -INFINITY;
 		for (auto* column : dataColumns) {
+			if (!column)
+				continue;
+
 			double max = column->maximum();
 			if (max > yMax)
 				yMax = max;
@@ -535,18 +590,25 @@ void LollipopPlotPrivate::recalc() {
 
 	m_groupGap = m_groupWidth * 0.1; // gap around a group - the gap between two neighbour groups is 2*m_groupGap
 
-	// the size of the bar plots changed because of the actual
-	// data changes or because of new bar plot settings.
-	// Q_EMIT dataChanged() in order to recalculate everything
-	// in the parent plot with the new size/shape of the boxplot
-	Q_EMIT q->dataChanged();
+	// if the size of the plot has changed because of the actual
+	// data changes or because of new boxplot settings, emit dataChanged()
+	// in order to recalculate the data ranges in the parent plot area
+	// and to retransform all its children.
+	// Just call retransform() to update the plot only if the ranges didn't change.
+	if (xMin != xMinOld || xMax != xMaxOld || yMin != yMinOld || yMax != yMaxOld)
+		Q_EMIT q->dataChanged();
+	else
+		retransform();
 }
 
 void LollipopPlotPrivate::verticalPlot(int columnIndex) {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	const auto* column = static_cast<const Column*>(dataColumns.at(columnIndex));
-	QVector<QLineF> barLines; // lines for all bars for one colum in scene coordinates
+	if (!column)
+		return;
+
+	QVector<QLineF> barLines; // lines for all bars for one column in scene coordinates
 	QVector<QPointF> symbolPoints;
 
 	const double barGap = m_groupWidth * 0.1; // gap between two bars within a group
@@ -561,15 +623,16 @@ void LollipopPlotPrivate::verticalPlot(int columnIndex) {
 		const double value = column->valueAt(i);
 		double x;
 
+		// translate to the beginning of the group
 		if (xColumn)
-			x = xColumn->valueAt(i);
+			x = xColumn->valueAt(i) - m_groupWidth / 2;
 		else
-			x = m_groupGap
-				+ valueIndex * m_groupWidth; // translate to the beginning of the group - 1st group is placed between 0 and 1, 2nd between 1 and 2, etc.
+			x = valueIndex * m_groupWidth; // for m_groupWidth = 1, 1st group is placed between 0 and 1, 2nd between 1 and 2, etc.
 
-		x += (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
+		x += m_groupGap + (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
 
 		symbolPoints << QPointF(x + width / 2, value);
+		m_valuesPointsLogical << QPointF(x + width / 2, value);
 		barLines << QLineF(x + width / 2, 0, x + width / 2, value);
 		++valueIndex;
 	}
@@ -582,7 +645,10 @@ void LollipopPlotPrivate::horizontalPlot(int columnIndex) {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	const auto* column = static_cast<const Column*>(dataColumns.at(columnIndex));
-	QVector<QLineF> barLines; // lines for all bars for one colum in scene coordinates
+	if (!column)
+		return;
+
+	QVector<QLineF> barLines; // lines for all bars for one column in scene coordinates
 	QVector<QPointF> symbolPoints;
 
 	const double barGap = m_groupWidth * 0.1; // gap between two bars within a group
@@ -629,6 +695,7 @@ void LollipopPlotPrivate::updateValues() {
 	q->cSystem->mapLogicalToScene(m_valuesPointsLogical, pointsScene, visiblePoints);
 	const auto& prefix = value->prefix();
 	const auto& suffix = value->suffix();
+	const auto numberLocale = QLocale();
 	if (value->type() == Value::BinEntries) {
 		for (int i = 0; i < m_valuesPointsLogical.count(); ++i) {
 			if (!visiblePoints[i])
@@ -636,9 +703,9 @@ void LollipopPlotPrivate::updateValues() {
 
 			auto& point = m_valuesPointsLogical.at(i);
 			if (orientation == LollipopPlot::Orientation::Vertical)
-				m_valuesStrings << prefix + QString::number(point.y()) + suffix;
+				m_valuesStrings << prefix + numberToString(point.y(), numberLocale) + suffix;
 			else
-				m_valuesStrings << prefix + QString::number(point.x()) + suffix;
+				m_valuesStrings << prefix + numberToString(point.x(), numberLocale) + suffix;
 		}
 	} else if (value->type() == Value::CustomColumn) {
 		const auto* valuesColumn = value->column();
@@ -647,7 +714,7 @@ void LollipopPlotPrivate::updateValues() {
 			return;
 		}
 
-		const int endRow = std::min(m_valuesPointsLogical.size(), valuesColumn->rowCount());
+		const int endRow = std::min(m_valuesPointsLogical.size(), static_cast<qsizetype>(valuesColumn->rowCount()));
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!valuesColumn->isValid(i) || valuesColumn->isMasked(i))
@@ -655,11 +722,11 @@ void LollipopPlotPrivate::updateValues() {
 
 			switch (xColMode) {
 			case AbstractColumn::ColumnMode::Double:
-				m_valuesStrings << prefix + QString::number(valuesColumn->valueAt(i), value->numericFormat(), value->precision()) + suffix;
+				m_valuesStrings << prefix + numberToString(valuesColumn->valueAt(i), numberLocale, value->numericFormat(), value->precision()) + suffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
-				m_valuesStrings << prefix + QString::number(valuesColumn->valueAt(i)) + suffix;
+				m_valuesStrings << prefix + numberToString(valuesColumn->valueAt(i), numberLocale) + suffix;
 				break;
 			case AbstractColumn::ColumnMode::Text:
 				m_valuesStrings << prefix + valuesColumn->textAt(i) + suffix;
@@ -717,6 +784,22 @@ void LollipopPlotPrivate::updateValues() {
 				m_valuesPoints << QPointF(pointsScene.at(i).x(), pointsScene.at(i).y() + offset);
 		}
 		break;
+	case Value::Center:
+		QVector<qreal> listBarWidth;
+		for (const auto& columnBarLines : m_barLines) // loop over the different data columns
+			for (const auto& line : columnBarLines)
+				listBarWidth.append(line.length());
+
+		for (int i = 0; i < m_valuesStrings.size(); i++) {
+			w = fm.boundingRect(m_valuesStrings.at(i)).width();
+			const auto& point = pointsScene.at(i);
+			if (orientation == LollipopPlot::Orientation::Vertical)
+				m_valuesPoints << QPointF(point.x() - w / 2,
+										  point.y() + listBarWidth.at(i) / 2 + offset - Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point));
+			else
+				m_valuesPoints << QPointF(point.x() - listBarWidth.at(i) / 2 - offset + h / 2 - w / 2, point.y() + h / 2);
+		}
+		break;
 	}
 
 	QTransform trafo;
@@ -735,20 +818,6 @@ void LollipopPlotPrivate::updateValues() {
 	}
 
 	recalcShapeAndBoundingRect();
-}
-
-/*!
-	Returns the outer bounds of the item as a rectangle.
- */
-QRectF LollipopPlotPrivate::boundingRect() const {
-	return m_boundingRectangle;
-}
-
-/*!
-	Returns the shape of this item as a QPainterPath in local coordinates.
-*/
-QPainterPath LollipopPlotPrivate::shape() const {
-	return m_shape;
 }
 
 /*!
@@ -783,7 +852,7 @@ void LollipopPlotPrivate::recalcShapeAndBoundingRect() {
 
 		const auto* symbol = symbols.at(index);
 		if (symbol->style() != Symbol::Style::NoSymbols) {
-			auto path = Symbol::stylePath(symbol->style());
+			auto path = WorksheetElement::shapeFromPath(Symbol::stylePath(symbol->style()), symbol->pen());
 
 			QTransform trafo;
 			trafo.scale(symbol->size(), symbol->size());
@@ -815,24 +884,23 @@ void LollipopPlotPrivate::recalcShapeAndBoundingRect() {
 
 void LollipopPlotPrivate::updatePixmap() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
-	QPixmap pixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
+	m_pixmap = QPixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
 	if (m_boundingRectangle.width() == 0. || m_boundingRectangle.height() == 0.) {
-		m_pixmap = pixmap;
 		m_hoverEffectImageIsDirty = true;
 		m_selectionEffectImageIsDirty = true;
 		return;
 	}
-	pixmap.fill(Qt::transparent);
-	QPainter painter(&pixmap);
-	painter.setRenderHint(QPainter::Antialiasing, true);
+	m_pixmap.fill(Qt::transparent);
+	QPainter painter(&m_pixmap);
+	painter.setRenderHint(QPainter::Antialiasing);
 	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
 	painter.end();
 
-	m_pixmap = pixmap;
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
+	Q_EMIT q->changed();
 	update();
 }
 
@@ -872,12 +940,16 @@ void LollipopPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIte
 
 	painter->setPen(Qt::NoPen);
 	painter->setBrush(Qt::NoBrush);
-	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+	painter->setRenderHint(QPainter::SmoothPixmapTransform);
 
-	if (KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true))
+	if (!q->isPrinting() && Settings::group(QStringLiteral("Settings_Worksheet")).readEntry<bool>("DoubleBuffering", true))
 		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
+
+	// no need to handle the selection/hover effect if the cached pixmap is empty
+	if (m_pixmap.isNull())
+		return;
 
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		if (m_hoverEffectImageIsDirty) {
@@ -912,26 +984,6 @@ void LollipopPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIte
 	}
 }
 
-void LollipopPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	q->createContextMenu()->exec(event->screenPos());
-}
-
-void LollipopPlotPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
-	if (!isSelected()) {
-		m_hovered = true;
-		Q_EMIT q->hovered();
-		update();
-	}
-}
-
-void LollipopPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
-	if (m_hovered) {
-		m_hovered = false;
-		Q_EMIT q->unhovered();
-		update();
-	}
-}
-
 // ##############################################################################
 // ##################  Serialization/Deserialization  ###########################
 // ##############################################################################
@@ -951,16 +1003,10 @@ void LollipopPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("xMax"), QString::number(d->xMax));
 	writer->writeAttribute(QStringLiteral("yMin"), QString::number(d->yMin));
 	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
+	writer->writeAttribute(QStringLiteral("legendVisible"), QString::number(d->legendVisible));
 	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
-
-	if (d->xColumn)
-		writer->writeAttribute(QStringLiteral("xColumn"), d->xColumn->path());
-
-	for (auto* column : d->dataColumns) {
-		writer->writeStartElement(QStringLiteral("column"));
-		writer->writeAttribute(QStringLiteral("path"), column->path());
-		writer->writeEndElement();
-	}
+	WRITE_COLUMN(d->xColumn, xColumn);
+	WRITE_COLUMNS(d->dataColumns, d->dataColumnPaths);
 	writer->writeEndElement();
 
 	// lines
@@ -984,7 +1030,6 @@ bool LollipopPlot::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 	bool firstLineRead = false;
@@ -1012,10 +1057,11 @@ bool LollipopPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("yMin", yMin);
 			READ_DOUBLE_VALUE("yMax", yMax);
 			READ_COLUMN(xColumn);
+			READ_INT_VALUE("legendVisible", legendVisible, bool);
 
 			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+				reader->raiseMissingAttributeWarning(QStringLiteral("visible"));
 			else
 				d->setVisible(str.toInt());
 		} else if (reader->name() == QLatin1String("column")) {
@@ -1024,7 +1070,6 @@ bool LollipopPlot::load(XmlStreamReader* reader, bool preview) {
 			str = attribs.value(QStringLiteral("path")).toString();
 			if (!str.isEmpty())
 				d->dataColumnPaths << str;
-			// 			READ_COLUMN(dataColumn);
 		} else if (!preview && reader->name() == QLatin1String("line")) {
 			if (!firstLineRead) {
 				auto* line = d->lines.at(0);
@@ -1046,7 +1091,7 @@ bool LollipopPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("values")) {
 			d->value->load(reader, preview);
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			reader->raiseUnknownElementWarning();
 			if (!reader->skipToEndElement())
 				return false;
 		}
@@ -1062,33 +1107,33 @@ bool LollipopPlot::load(XmlStreamReader* reader, bool preview) {
 // ##############################################################################
 void LollipopPlot::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
-	if (config.hasGroup(QLatin1String("Theme")))
-		group = config.group("XYCurve"); // when loading from the theme config, use the same properties as for XYCurve
+	if (config.hasGroup(QStringLiteral("Theme")))
+		group = config.group(QStringLiteral("XYCurve")); // when loading from the theme config, use the same properties as for XYCurve
 	else
-		group = config.group("LollipopPlot");
+		group = config.group(QStringLiteral("LollipopPlot"));
 
-	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	Q_D(LollipopPlot);
+	const auto* plot = d->m_plot;
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
-	Q_D(LollipopPlot);
-	d->m_suppressRecalc = true;
+	d->suppressRecalc = true;
 
-	// lines
-	for (int i = 0; i < d->lines.count(); ++i) {
+	for (int i = 0; i < d->dataColumns.count(); ++i) {
+		const auto& color = plot->themeColorPalette(i);
+
+		// lines
 		auto* line = d->lines.at(i);
-		line->loadThemeConfig(group, plot->themeColorPalette(i));
-	}
+		line->loadThemeConfig(group, color);
 
-	// symbols
-	for (int i = 0; i < d->symbols.count(); ++i) {
+		// symbols
 		auto* symbol = d->symbols.at(i);
-		symbol->loadThemeConfig(group, plot->themeColorPalette(i));
+		symbol->loadThemeConfig(group, color);
 	}
 
 	// values
 	d->value->loadThemeConfig(group, themeColor);
 
-	d->m_suppressRecalc = false;
+	d->suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }

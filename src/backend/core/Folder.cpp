@@ -19,7 +19,7 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/note/Note.h"
 #ifdef HAVE_CANTOR_LIBS
-#include "backend/cantorWorksheet/CantorWorksheet.h"
+#include "backend/notebook/Notebook.h"
 #endif
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
@@ -27,7 +27,13 @@
 #endif
 
 #include "backend/lib/XmlStreamReader.h"
+#ifdef HAVE_SCRIPTING
+#include "backend/script/Script.h"
+#endif
 #include "backend/spreadsheet/Spreadsheet.h"
+#ifndef SDK
+#include "backend/statistics/HypothesisTest.h"
+#endif
 #include "backend/worksheet/Worksheet.h"
 
 #include <KLocalizedString>
@@ -79,7 +85,7 @@ QVector<AspectType> Folder::pasteTypes() const {
 							   AspectType::Datapicker,
 							   AspectType::LiveDataSource,
 							   AspectType::Note,
-							   AspectType::CantorWorksheet};
+							   AspectType::Notebook};
 }
 
 QVector<AspectType> Folder::dropableOn() const {
@@ -194,6 +200,12 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
+	QString notebookXmlName;
+	if (Project::xmlVersion() < 14)
+		notebookXmlName = QLatin1String("cantorWorksheet");
+	else
+		notebookXmlName = QLatin1String("notebook");
+
 	QString element_name = reader->name().toString();
 	if (element_name == QLatin1String("folder")) {
 		auto* folder = new Folder(QString());
@@ -216,7 +228,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 
 			// remove the path of the current child folder
 			QStringList pathesToLoadNew;
-			for (const auto& path : qAsConst(m_pathesToLoad)) {
+			for (const auto& path : std::as_const(m_pathesToLoad)) {
 				if (path.startsWith(curFolderPath))
 					pathesToLoadNew << path.right(path.length() - curFolderPath.length());
 			}
@@ -265,12 +277,12 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		}
 		addChildFast(worksheet);
 		worksheet->setIsLoading(false);
-	} else if (element_name == QLatin1String("cantorWorksheet")) {
+	} else if (element_name == notebookXmlName) {
 #ifdef HAVE_CANTOR_LIBS
 #ifndef SDK
-		auto* cantorWorksheet = new CantorWorksheet(QLatin1String("null"), true);
-		if (!cantorWorksheet->load(reader, preview)) {
-			delete cantorWorksheet;
+		auto* notebook = new Notebook(QLatin1String("null"), true);
+		if (!notebook->load(reader, preview)) {
+			delete notebook;
 
 			// if we only failed to load because of the missing CAS, don't return with false here.
 			// in this case we continue loading the project and show a warning about missing CAS at the end.
@@ -281,18 +293,18 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 				// element in XML and continue loading the project.
 				while (!reader->atEnd()) {
 					reader->readNext();
-					if (reader->isEndElement() && reader->name() == QLatin1String("cantorWorksheet"))
+					if (reader->isEndElement() && reader->name() == notebookXmlName)
 						break;
 				}
 			}
 		} else
-			addChildFast(cantorWorksheet);
+			addChildFast(notebook);
 #endif
 #else
 		if (!preview) {
 			while (!reader->atEnd()) {
 				reader->readNext();
-				if (reader->isEndElement() && reader->name() == QLatin1String("cantorWorksheet"))
+				if (reader->isEndElement() && reader->name() == notebookXmlName)
 					break;
 
 				if (!reader->isStartElement())
@@ -302,8 +314,10 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 					const QString& backendName = reader->attributes().value(QStringLiteral("backend_name")).toString().trimmed();
 					if (!backendName.isEmpty())
 						reader->raiseMissingCASWarning(backendName);
-				} else
-					reader->skipToEndElement();
+				} else {
+					if (!reader->skipToEndElement())
+						return false;
+				}
 			}
 		}
 #endif
@@ -345,6 +359,30 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 			return false;
 		}
 		addChildFast(note);
+#endif
+	} else if (element_name == QLatin1String("script")) {
+#ifndef SDK
+#ifdef HAVE_SCRIPTING
+		QString runtime = Script::readRuntime(reader);
+		if (runtime.isEmpty())
+			return false;
+
+		Script* script = new Script(QString(), runtime);
+		if (!script->load(reader, preview)) {
+			delete script;
+			return false;
+		}
+		addChildFast(script);
+#endif
+#endif
+	} else if (element_name == QLatin1String("hypothesisTest")) {
+#ifndef SDK
+		auto* test = new HypothesisTest(QString());
+		if (!test->load(reader, preview)) {
+			delete test;
+			return false;
+		}
+		addChildFast(test);
 #endif
 	} else {
 		reader->raiseWarning(i18n("unknown element '%1' found", element_name));

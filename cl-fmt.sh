@@ -8,7 +8,7 @@ FOLDERS=("src/backend" "src/commonfrontend" "src/kdefrontend" "src/tools" "tests
 # Some distros just call it clang-format. Others (e.g. Ubuntu) are insistent
 # that the version number be part of the command. We prefer clang-format-13 if
 # that's present, otherwise we check clang-format 
-for clangfmt in clang-format{-13,}; do
+for clangfmt in clang-format{-19,}; do
     if which "$clangfmt" &>/dev/null; then
         echo "$($clangfmt --version)"
         FMT="$clangfmt"
@@ -18,7 +18,7 @@ done
 
 # Check if we found a working clang-format
 if [ -z "$FMT" ]; then
-    echo "failed to find clang-format. Please install clang-format version 13 or above"
+    echo "failed to find clang-format. Please install clang-format version 19 or above"
     exit 1
 fi
 

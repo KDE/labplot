@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Aspect providing a spreadsheet table with column logic
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2006-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -11,17 +11,22 @@
 #ifndef SPREADSHEET_H
 #define SPREADSHEET_H
 
-#include "backend/core/column/ColumnStringIO.h"
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/lib/macros.h"
 
 class AbstractFileFilter;
+class Column;
 class SpreadsheetView;
 class SpreadsheetModel;
 class SpreadsheetPrivate;
 class StatisticsSpreadsheet;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Spreadsheet : public AbstractDataSource {
+#else
 class Spreadsheet : public AbstractDataSource {
+#endif
 	Q_OBJECT
 
 public:
@@ -31,6 +36,7 @@ public:
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	void fillColumnContextMenu(QMenu*, Column*);
+	void fillColumnsContextMenu(QMenu*);
 	QWidget* view() const override;
 	StatisticsSpreadsheet* statisticsSpreadsheet() const;
 
@@ -53,16 +59,16 @@ public:
 	Column* column(const QString&) const;
 	int rowCount() const; // TODO: should be size_t?
 
-	void removeRows(int first, int count, QUndoCommand* parent = nullptr);
-	void insertRows(int before, int count, QUndoCommand* parent = nullptr);
-	void removeColumns(int first, int count, QUndoCommand* parent = nullptr);
-	void insertColumns(int before, int count, QUndoCommand* parent = nullptr);
+	void removeRows(int first, int count);
+	void insertRows(int before, int count);
+	void removeColumns(int first, int count);
+	void insertColumns(int before, int count);
 
-	int colX(int col);
-	int colY(int col);
 	QString text(int row, int col) const;
 
-	void copy(Spreadsheet* other);
+	BASIC_D_ACCESSOR_DECL(bool, showComments, ShowComments)
+	BASIC_D_ACCESSOR_DECL(bool, showSparklines, ShowSparklines)
+	BASIC_D_ACCESSOR_DECL(bool, linking, Linking)
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -71,10 +77,10 @@ public:
 
 	// used from model to inform dock
 	void emitRowCountChanged() {
-		emit rowCountChanged(rowCount());
+		Q_EMIT rowCountChanged(rowCount());
 	}
 	void emitColumnCountChanged() {
-		emit columnCountChanged(columnCount());
+		Q_EMIT columnCountChanged(columnCount());
 	}
 
 	// data import
@@ -82,11 +88,12 @@ public:
 					  AbstractFileFilter::ImportMode,
 					  int rows,
 					  int cols,
-					  QStringList colNameList,
-					  QVector<AbstractColumn::ColumnMode>,
+					  const QStringList& colNameList,
+					  const QVector<AbstractColumn::ColumnMode>&,
+					  bool& ok,
 					  bool initializeContainer) override;
 	void finalizeImport(size_t columnOffset, size_t startColumn, size_t endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
-	int resize(AbstractFileFilter::ImportMode, QStringList colNameList, int cols);
+	int resize(AbstractFileFilter::ImportMode, const QStringList& colNameList, int cols);
 
 	struct Linking {
 		bool linking{false};
@@ -105,14 +112,15 @@ public:
 public Q_SLOTS:
 	void appendRows(int);
 	void appendRow();
+	void removeEmptyRows();
+	void maskEmptyRows();
 	void appendColumns(int);
 	void appendColumn();
 	void prependColumns(int);
 
-	void setColumnCount(int, QUndoCommand* parent = nullptr);
-	void setRowCount(int, QUndoCommand* parent = nullptr);
+	void setColumnCount(int);
+	void setRowCount(int);
 
-	BASIC_D_ACCESSOR_DECL(bool, linking, Linking)
 	const Spreadsheet* linkedSpreadsheet() const;
 	void setLinkedSpreadsheet(const Spreadsheet*, bool skipUndo = false);
 	QString linkedSpreadsheetPath() const;
@@ -129,6 +137,7 @@ public Q_SLOTS:
 private:
 	void init();
 	void initConnectionsLinking(const Spreadsheet* sender, const Spreadsheet* receiver);
+	QVector<int> rowsWithMissingValues() const;
 	Q_DECLARE_PRIVATE(Spreadsheet)
 
 	SpreadsheetPrivate* const d_ptr;
@@ -136,12 +145,15 @@ private:
 
 protected:
 	mutable SpreadsheetView* m_view{nullptr};
+	void setSuppressSetCommentFinalizeImport(bool);
 
 private Q_SLOTS:
 	void childSelected(const AbstractAspect*) override;
 	void childDeselected(const AbstractAspect*) override;
+	void initConnectionsRowCountChanges();
 	void linkedSpreadsheetDeleted();
 	void linkedSpreadsheetNewRowCount(int);
+	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*);
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
@@ -165,11 +177,14 @@ Q_SIGNALS:
 	void rowsAboutToBeRemoved(int first, int count);
 	void rowsRemoved(int newRowCount);
 
+	void showCommentsChanged(bool);
+	void showSparklinesChanged(bool);
 	void linkingChanged(bool);
 	void linkedSpreadsheetChanged(const Spreadsheet*);
 
 	friend class SpreadsheetSetLinkingCmd;
 	friend class SpreadsheetSetColumnCountCommand;
+	friend class Project; // handleAspectUpdated required
 };
 
 #endif

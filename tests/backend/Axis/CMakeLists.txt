@@ -1,5 +1,7 @@
-add_executable (AxisTest AxisTest.cpp)
+option(ENABLE_TEST_BACKEND_AXIS "Enable Axis Tests" ON)
 
-target_link_libraries(AxisTest labplot2lib labplot2test)
-
-add_test(NAME AxisTest COMMAND AxisTest)
+if(ENABLE_TEST_BACKEND_AXIS)
+    add_executable(AxisTest AxisTest.cpp)
+    target_link_libraries(AxisTest labplotbackendlib labplotlib labplottest)
+    add_test(NAME AxisTest COMMAND AxisTest)
+endif()

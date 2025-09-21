@@ -4,25 +4,16 @@
 	Description          : A xy-curve defined by an interpolation
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/*!
-  \class XYInterpolationCurve
-  \brief A xy-curve defined by an interpolation
-
-  \ingroup worksheet
-*/
-
 #include "XYInterpolationCurve.h"
-#include "CartesianCoordinateSystem.h"
 #include "XYInterpolationCurvePrivate.h"
 #include "backend/core/column/Column.h"
 #include "backend/gsl/errors.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macros.h"
 
 extern "C" {
 #include "backend/nsl/nsl_diff.h"
@@ -35,6 +26,11 @@ extern "C" {
 #include <QIcon>
 #include <QThreadPool>
 
+/*!
+ * \class XYInterpolationCurve
+ * \brief A xy-curve defined by an interpolation.
+ * \ingroup CartesianAnalysisPlots
+ */
 XYInterpolationCurve::XYInterpolationCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYInterpolationCurvePrivate(this), AspectType::XYInterpolationCurve) {
 }
@@ -46,11 +42,6 @@ XYInterpolationCurve::XYInterpolationCurve(const QString& name, XYInterpolationC
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
 // and is deleted during the cleanup in QGraphicsScene
 XYInterpolationCurve::~XYInterpolationCurve() = default;
-
-void XYInterpolationCurve::recalculate() {
-	Q_D(XYInterpolationCurve);
-	d->recalculate();
-}
 
 /*!
 	Returns an icon to be used in the project explorer.
@@ -172,6 +163,7 @@ bool XYInterpolationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 	///////////////////////////////////////////////////////////
 	int status = 0;
 
+	gsl_set_error_handler_off();
 	gsl_interp_accel* acc = gsl_interp_accel_alloc();
 	gsl_spline* spline = nullptr;
 	switch (type) {
@@ -219,6 +211,16 @@ bool XYInterpolationCurvePrivate::recalculateSpecific(const AbstractColumn* tmpX
 
 		double x = xmin + i * (xmax - xmin) / (npoints - 1);
 		(*xVector)[(int)i] = x;
+
+		// make sure the value for x determined above is within the ranges to avoid subtle issues
+		// related to the representation of float numbers
+		if (i == 0 && x < xmin) {
+			x = xmin;
+			(*xVector)[(int)i] = xmin;
+		} else if (i == npoints - 1 && x > xmax) {
+			x = xmax;
+			(*xVector)[(int)i] = x;
+		}
 
 		// find index a,b for interval [x[a],x[b]] around x[i] using bisection
 		if (type == nsl_interp_type_cosine || type == nsl_interp_type_exponential || type == nsl_interp_type_pch) {
@@ -426,7 +428,6 @@ void XYInterpolationCurve::save(QXmlStreamWriter* writer) const {
 bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 	Q_D(XYInterpolationCurve);
 
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
 
@@ -470,6 +471,10 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
+		} else { // unknown element
+			reader->raiseUnknownElementWarning();
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 
@@ -492,7 +497,7 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
-		recalcLogicalPoints();
+		recalc();
 	}
 
 	return true;

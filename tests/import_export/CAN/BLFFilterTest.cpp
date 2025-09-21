@@ -9,6 +9,7 @@
 */
 
 #include "BLFFilterTest.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/filters/CANFilterPrivate.h"
 #include "backend/datasources/filters/VectorBLFFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -209,7 +210,7 @@ BO_ 565 MSG2: 8 Vector__XXX
 
 	{
 		const auto* c = s.column(0);
-		QCOMPARE(c->name(), QStringLiteral("Time_s"));
+		QCOMPARE(c->name(), i18n("Time_s"));
 		QCOMPARE(c->rowCount(), 6);
 
 		QVector<double> refData{5e-9, 6e-9, 8e-9, 10e-9, 12e-9, 14e-9};
@@ -322,7 +323,7 @@ BO_ 123 MSG2: 8 Vector__XXX
 	{
 		// Time
 		const auto* c = s.column(0);
-		QCOMPARE(c->name(), QStringLiteral("Time_s"));
+		QCOMPARE(c->name(), i18n("Time_s"));
 		QCOMPARE(c->rowCount(), 6);
 
 		QVector<double> refData{5e-9, 6e-9, 8e-9, 10e-9, 12e-9, 14e-9};
@@ -426,7 +427,7 @@ BO_ 123 MSG2: 8 Vector__XXX
 	{
 		// Time
 		const auto* c = s.column(0);
-		QCOMPARE(c->name(), QStringLiteral("Time_ns"));
+		QCOMPARE(c->name(), i18n("Time_ns"));
 		QCOMPARE(c->rowCount(), 6);
 
 		QVector<double> refData{5, 6, 8, 10, 12, 14};
@@ -594,7 +595,7 @@ BO_ 541 MSG2: 8 Vector__XXX
 	{
 		// Time
 		const auto* c = s.column(0);
-		QCOMPARE(c->name(), QStringLiteral("Time_s"));
+		QCOMPARE(c->name(), i18n("Time_s"));
 		QCOMPARE(c->rowCount(), 5);
 
 		QVector<double> refData{5e-9, 10e-9, 15e-9, 20e-9, 25e-9};
@@ -795,7 +796,7 @@ BO_ 541 MSG2: 8 Vector__XXX
 	{
 		// Time
 		const auto* c = s.column(0);
-		QCOMPARE(c->name(), QStringLiteral("Time_s"));
+		QCOMPARE(c->name(), i18n("Time_s"));
 		QCOMPARE(c->rowCount(), 5);
 
 		QVector<double> refData{5e-9, 10e-9, 15e-9, 20e-9, 25e-9};

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<gui name="LabPlot" version="2">
+
+<ToolBar name="main_toolbar">
+<text>Project Toolbar</text>
+<Action name="toggle_project_explorer_dock"/>
+<Action name="toggle_properties_explorer_dock"/>
+<Action name="toggle_worksheet_preview_dock"/>
+<Separator/>
+<Action name="new_folder" />
+<Action name="new_workbook" />
+<Action name="new_spreadsheet" />
+<Action name="new_matrix" />
+<Action name="new_worksheet" />
+<Action name="new_notes" />
+<Action name="new_datapicker" />
+<Action name="new_live_datasource" />
+<Action name="new_script" />
+<Action name="new_notebook" />
+<Separator/>
+<Action name="import" />
+<Action name="export" />
+</ToolBar>
+
+<ToolBar name="worksheet_toolbar">
+	<text>Worksheet Toolbar</text>
+	<Action name="worksheet_new_plot_area"/>
+	<Action name="worksheet_new_image"/>
+	<Action name="worksheet_new_text_label"/>
+	<Separator/>
+	<Action name="worksheet_vertical_layout"/>
+	<Action name="worksheet_horizontal_layout"/>
+	<Action name="worksheet_grid_layout"/>
+	<Action name="worksheet_break_layout"/>
+	<Separator/>
+	<Action name="worksheet_select_mode"/>
+	<Action name="worksheet_navigate_mode"/>
+	<Action name="worksheet_zoom_select_mode"/>
+	<Separator/>
+	<Action name="worksheet_zoom"/>
+	<Action name="worksheet_magnification"/>
+</ToolBar>
+
+<ToolBar name="data_extractor_toolbar">
+	<text>Data Extractor Toolbar</text>
+	<Action name="data_extractor_set_reference_points"/>
+	<Action name="data_extractor_set_curve_points"/>
+	<Action name="data_extractor_set_segments"/>
+	<Action name="data_extractor_navigate_mode"/>
+	<Action name="data_extractor_zoom_select_mode"/>
+	<Separator/>
+	<Action name="data_extractor_add_curve"/>
+	<Separator/>
+	<Action name="data_extractor_shift_right"/>
+	<Action name="data_extractor_shift_left"/>
+	<Action name="data_extractor_shift_up"/>
+	<Action name="data_extractor_shift_down"/>
+	<Separator/>
+	<Action name="data_extractor_zoom"/>
+	<Action name="data_extractor_magnification"/>
+</ToolBar>
+
+<ToolBar name="spreadsheet_toolbar">
+	<text>Spreadsheet Toolbar</text>
+	<Action name="spreadsheet_insert_row_above"/>
+	<Action name="spreadsheet_insert_row_below"/>
+	<Action name="spreadsheet_remove_rows"/>
+	<Separator/>
+	<Action name="spreadsheet_insert_column_left"/>
+	<Action name="spreadsheet_insert_column_right"/>
+	<Action name="spreadsheet_remove_columns"/>
+	<Separator/>
+	<Action name="spreadsheet_sort"/>
+	<Action name="spreadsheet_sort_asc"/>
+	<Action name="spreadsheet_sort_desc"/>
+</ToolBar>
+
+<ToolBar name="notebook_toolbar">
+	<text>Notebook Toolbar</text>
+	<Action name="notebook_evaluate"/>
+	<Action name="notebook_find"/>
+	<Action name="notebook_zoom_in"/>
+	<Action name="notebook_zoom_out"/>
+	<Separator/>
+	<Action name="notebook_restart"/>
+</ToolBar>
+
+<ToolBar name="script_toolbar">
+	<text>Script Toolbar</text>
+	<Action name="script_run"/>
+	<Separator/>
+	<Action name="script_clear"/>
+</ToolBar>
+
+<ToolBar name="cartesian_plot_toolbar" position="left">
+	<text>Plot Area Toolbar</text>
+	<Action name="plot_area_add_new"/>
+	<Separator/>
+	<Action name="plot_area_select_mode"/>
+	<Action name="plot_area_crosshair_mode"/>
+	<Action name="plot_area_zoom_select_mode"/>
+	<Action name="plot_area_zoom_x_select_mode"/>
+	<Action name="plot_area_zoom_y_select_mode"/>
+	<Action name="plot_area_cursor_mode"/>
+	<Separator/>
+	<Action name="plot_area_scale_auto"/>
+	<Action name="plot_area_scale_auto_x"/>
+	<Action name="plot_area_scale_auto_y"/>
+	<Separator/>
+	<Action name="plot_area_zoom_in"/>
+	<Action name="plot_area_zoom_out"/>
+	<Action name="plot_area_zoom_in_x"/>
+	<Action name="plot_area_zoom_out_x"/>
+	<Action name="plot_area_zoom_in_y"/>
+	<Action name="plot_area_zoom_out_y"/>
+	<Separator/>
+	<Action name="plot_area_shift_left"/>
+	<Action name="plot_area_shift_right"/>
+	<Action name="plot_area_shift_up"/>
+	<Action name="plot_area_shift_down"/>
+</ToolBar>
+
+<MenuBar>
+<Menu name="file" ><text>&amp;File</text>
+<Action name="file_example_open" />
+<Menu name="new"><text>&amp;Add New</text>
+	<Action name="new_folder" />
+	<Action name="new_workbook" />
+	<Action name="new_spreadsheet" />
+	<Action name="new_matrix" />
+	<Action name="new_worksheet" />
+	<Action name="new_notes" />
+	<Action name="new_datapicker" />
+	<Action name="new_live_datasource" />
+	<Separator/>
+	<Menu name="new_notebook"><text>&amp;Notebook</text>
+	    <ActionList name="backends_list" />
+		<Separator/>
+		<Action name="configure_cas" />
+	</Menu>
+	<Separator/>
+	<Menu name="new_script"><text>&amp;Script</text>
+		<ActionList name="scripts_list" />
+	</Menu>
+</Menu>
+<Separator/>
+<Menu name="import"><text>Import</text>
+	<Action name="import_file" />
+	<Action name="import_dir" />
+	<Action name="import_sql" />
+	<Action name="import_dataset_datasource" />
+	<Action name="import_dataset_kaggle" />
+	<Separator/>
+	<Action name="import_labplot" />
+	<Action name="import_opj" />
+</Menu>
+<Action name="export" />
+<Separator/>
+<Action name="share" />
+</Menu>
+<Menu name="edit"><text>&amp;Edit</text>
+	<Action name="undo" />
+	<Action name="redo" />
+	<Action name="history" />
+</Menu>
+<Menu name="spreadsheet"><text>&amp;Spreadsheet</text></Menu>
+<Menu name="matrix"><text>&amp;Matrix</text></Menu>
+<Menu name="worksheet"><text>&amp;Worksheet</text></Menu>
+<Menu name="notebook"><text>&amp;Notebook</text></Menu>
+<Menu name="data_extractor"><text>&amp;Data Extractor</text></Menu>
+<!-- <Menu name="drawing"><text>&amp;Drawing</text></Menu> -->
+<Menu name="script"><text>&amp;Script</text></Menu>
+<Menu name="tools"><text>&amp;Tools</text>
+	<Action name="color_maps" />
+	<Action name="edit_fits" />
+</Menu>
+<Menu name="windows"><text>&amp;Windows</text>
+<Action name="close window" />
+<Action name="close all windows" />
+<Separator/>
+<Action name="tile windows" />
+<Action name="cascade windows" />
+<Separator/>
+<Action name="next window" />
+<Action name="previous window" />
+</Menu>
+</MenuBar>
+</gui>

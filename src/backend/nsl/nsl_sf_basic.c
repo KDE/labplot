@@ -3,11 +3,12 @@
 	Project              : LabPlot
 	Description          : NSL special basic functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2018-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "nsl_sf_basic.h"
+#include "nsl_randist.h"
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_sf.h>
@@ -81,7 +82,7 @@ double nsl_sf_exp10(double x) {
 	const gsl_rng_type* T = gsl_rng_default;                                                                                                                   \
 	gsl_rng* r = gsl_rng_alloc(T);                                                                                                                             \
 	gsl_rng_set(r, rand()); /*seed*/
-
+/* GSL RNGs */
 double nsl_sf_ran_gaussian(double sigma) {
 	SETUP_GSL_RNG
 	return gsl_ran_gaussian_ziggurat(r, sigma);
@@ -134,7 +135,6 @@ double nsl_sf_ran_logistic(double a) {
 	SETUP_GSL_RNG
 	return gsl_ran_logistic(r, a);
 }
-
 double nsl_sf_ran_poisson(double mu) {
 	SETUP_GSL_RNG
 	return (double)gsl_ran_poisson(r, mu);
@@ -146,6 +146,12 @@ double nsl_sf_ran_bernoulli(double p) {
 double nsl_sf_ran_binomial(double p, double n) {
 	SETUP_GSL_RNG
 	return (double)gsl_ran_binomial(r, p, (unsigned int)round(n));
+}
+
+/* NSL RNGs */
+double nsl_sf_ran_triangular(double min, double max, double mode) {
+	SETUP_GSL_RNG
+	return nsl_ran_triangular(r, min, max, mode);
 }
 
 /*
@@ -630,4 +636,38 @@ double nsl_sf_hypergeometric(double k, double n1, double n2, double t) {
 }
 double nsl_sf_logarithmic(double k, double p) {
 	return gsl_ran_logarithmic_pdf((unsigned int)round(k), p);
+}
+
+double nsl_sf_triangular(double x, double min, double max, double mode) {
+	if (x <= min || x >= max || mode < min || mode > max)
+		return 0.;
+
+	if (x <= mode)
+		return 2. * (x - min) / (max - min) / (mode - min);
+	else
+		return 2. * (max - x) / (max - min) / (max - mode);
+}
+double nsl_sf_triangular_P(double x, double min, double max, double mode) {
+	if (x <= min)
+		return 0.;
+	if (x >= max)
+		return 1.;
+
+	if (x <= mode)
+		return gsl_pow_2(x - min) / (max - min) / (mode - min);
+	else
+		return 1. - gsl_pow_2(max - x) / (max - min) / (max - mode);
+}
+double nsl_sf_triangular_Q(double x, double min, double max, double mode) {
+	return 1. - nsl_sf_triangular_P(x, min, max, mode);
+}
+double nsl_sf_triangular_Quantile(double p, double min, double max, double mode) {
+	if (p < 0 || p > 1)
+		return 0.;
+
+	/* see https://search.r-project.org/CRAN/refmans/EnvStats/html/Triangular.html */
+	if (p <= nsl_sf_triangular_P(mode, min, max, mode))
+		return min + sqrt((max - min) * (mode - min) * p);
+	else
+		return max - sqrt((max - min) * (max - mode) * (1. - p));
 }

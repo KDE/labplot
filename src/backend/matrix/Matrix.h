@@ -18,14 +18,21 @@
 
 class MatrixPrivate;
 class MatrixModel;
+#ifndef SDK
 class MatrixView;
+#endif
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Matrix : public AbstractDataSource {
+#else
 class Matrix : public AbstractDataSource {
+#endif
 	Q_OBJECT
-	Q_ENUMS(HeaderFormat)
 
 public:
 	enum class HeaderFormat { HeaderRowsColumns, HeaderValues, HeaderRowsColumnsValues };
+	Q_ENUM(HeaderFormat)
 
 	explicit Matrix(const QString& name, bool loading = false, const AbstractColumn::ColumnMode = AbstractColumn::ColumnMode::Double);
 	Matrix(int rows, int cols, const QString& name, const AbstractColumn::ColumnMode = AbstractColumn::ColumnMode::Double);
@@ -34,6 +41,7 @@ public:
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	QWidget* view() const override;
+	void updateLocale();
 
 	bool exportView() const override;
 	bool printView() override;
@@ -44,7 +52,7 @@ public:
 
 	QVector<AspectType> dropableOn() const override;
 
-	BASIC_D_ACCESSOR_DECL(AbstractColumn::ColumnMode, mode, Mode)
+	AbstractColumn::ColumnMode mode() const;
 	BASIC_D_ACCESSOR_DECL(int, rowCount, RowCount)
 	BASIC_D_ACCESSOR_DECL(int, columnCount, ColumnCount)
 	BASIC_D_ACCESSOR_DECL(char, numericFormat, NumericFormat)
@@ -94,8 +102,6 @@ public:
 	template<typename T>
 	void setRowCells(int row, int first_column, int last_column, const QVector<T>& values);
 
-	void copy(Matrix* other);
-
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
@@ -103,8 +109,9 @@ public:
 					  AbstractFileFilter::ImportMode,
 					  int rows,
 					  int cols,
-					  QStringList colNameList,
-					  QVector<AbstractColumn::ColumnMode>,
+					  const QStringList& colNameList,
+					  const QVector<AbstractColumn::ColumnMode>&,
+					  bool& ok,
 					  bool initializeDataContainer) override;
 	void finalizeImport(size_t columnOffset, size_t startColumn, size_t endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
 
@@ -118,7 +125,6 @@ public Q_SLOTS:
 
 	void addColumns();
 	void addRows();
-	void duplicate();
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
@@ -146,12 +152,15 @@ Q_SIGNALS:
 	void headerFormatChanged(Matrix::HeaderFormat);
 
 private:
-	void init();
+	void init(int rows, int cols);
 
-	MatrixPrivate* const d;
+	Q_DECLARE_PRIVATE(Matrix)
+	MatrixPrivate* const d_ptr;
+
 	mutable MatrixModel* m_model{nullptr};
+#ifndef SDK
 	mutable MatrixView* m_view{nullptr};
-
+#endif
 	friend class MatrixPrivate;
 };
 

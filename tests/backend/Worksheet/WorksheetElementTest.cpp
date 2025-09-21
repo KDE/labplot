@@ -17,11 +17,19 @@
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/TextLabelPrivate.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "backend/worksheet/plots/cartesian/ReferenceLine.h"
+#include "backend/worksheet/plots/cartesian/ReferenceLinePrivate.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRangePrivate.h"
-#include "kdefrontend/dockwidgets/CustomPointDock.h"
-#include "kdefrontend/dockwidgets/ImageDock.h"
-#include "kdefrontend/widgets/LabelWidget.h"
+#include "frontend/ProjectExplorer.h"
+#include "frontend/dockwidgets/CustomPointDock.h"
+#include "frontend/dockwidgets/ImageDock.h"
+#include "frontend/widgets/LabelWidget.h"
+
+#include <QAction>
+#include <QItemSelectionModel>
+#include <QMenu>
+#include <QTreeView>
 
 #define ALL_WORKSHEETELEMENT_TESTS(WorksheetElementType, DockType, dockSetElementsMethodName)                                                                  \
 	WORKSHEETELEMENT_TEST(WorksheetElementType, WORKSHEETELEMENT_SETPOSITIONLOGICAL, DockType, dockSetElementsMethodName)                                      \
@@ -76,6 +84,57 @@
 ALL_WORKSHEETELEMENT_TESTS(CustomPoint, CustomPointDock, setPoints)
 ALL_WORKSHEETELEMENT_TESTS2(TextLabel, LabelWidget, setLabels)
 ALL_WORKSHEETELEMENT_TESTS2(Image, ImageDock, setImages)
+
+/*!
+ * \brief create and add a new ReferenceRange, undo and redo this step
+ */
+void WorksheetElementTest::testReferenceRangeInit() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(plot);
+
+	auto* range = new ReferenceRange(plot, QStringLiteral("range"));
+	plot->addChild(range);
+
+	auto children = plot->children<ReferenceRange>();
+
+	QCOMPARE(children.size(), 1);
+
+	project.undoStack()->undo();
+	children = plot->children<ReferenceRange>();
+	QCOMPARE(children.size(), 0);
+
+	project.undoStack()->redo();
+	children = plot->children<ReferenceRange>();
+	QCOMPARE(children.size(), 1);
+}
+
+/*!
+ * \brief create and add a new ReferenceRange, duplicate it and check the number of children
+ */
+void WorksheetElementTest::testReferenceRangeDuplicate() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(plot);
+
+	auto* range = new ReferenceRange(plot, QStringLiteral("range"));
+	plot->addChild(range);
+
+	range->duplicate();
+
+	auto children = plot->children<ReferenceRange>();
+	QCOMPARE(children.size(), 2);
+
+	project.undoStack()->undo();
+	children = plot->children<ReferenceRange>();
+	QCOMPARE(children.size(), 1);
+}
 
 void WorksheetElementTest::referenceRangeXMouseMove() {
 	SETUP_PROJECT
@@ -349,7 +408,7 @@ void WorksheetElementTest::referenceRangeSaveLoad() {
 		pp.point = QPointF(0, 0);
 		referenceRange->setPosition(pp);
 		referenceRange->setCoordinateBindingEnabled(true);
-		SAVE_PROJECT("testReferenceRangeSaveLoad")
+		SAVE_PROJECT("testReferenceRangeSaveLoad");
 	}
 
 	{
@@ -369,6 +428,723 @@ void WorksheetElementTest::referenceRangeSaveLoad() {
 		QCOMPARE(referenceRange->positionLogicalEnd().y(), 0.55);
 		CHECK_REFERENCERANGE_RECT(referenceRange, 0., 0.55, 1., 0.45);
 	}
+}
+
+/*!
+ * \brief create and add a new ReferenceLine, undo and redo this step
+ */
+void WorksheetElementTest::testReferenceLineInit() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(plot);
+
+	auto* line = new ReferenceLine(plot, QStringLiteral("line"));
+	plot->addChild(line);
+
+	auto children = plot->children<ReferenceLine>();
+
+	QCOMPARE(children.size(), 1);
+
+	project.undoStack()->undo();
+	children = plot->children<ReferenceLine>();
+	QCOMPARE(children.size(), 0);
+
+	project.undoStack()->redo();
+	children = plot->children<ReferenceLine>();
+	QCOMPARE(children.size(), 1);
+}
+
+/*!
+ * \brief create and add a new ReferenceLine, duplicate it and check the number of children
+ */
+void WorksheetElementTest::testReferenceLineDuplicate() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
+	project.addChild(ws);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	ws->addChild(plot);
+
+	auto* line = new ReferenceLine(plot, QStringLiteral("line"));
+	plot->addChild(line);
+
+	line->duplicate();
+
+	auto children = plot->children<ReferenceLine>();
+	QCOMPARE(children.size(), 2);
+
+	project.undoStack()->undo();
+	children = plot->children<ReferenceLine>();
+	QCOMPARE(children.size(), 1);
+}
+
+void WorksheetElementTest::referenceLineLinearScaling() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(true);
+
+	const auto& axes = plot->children<Axis>();
+	QCOMPARE(axes.length(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* xAxis = axes.at(0);
+
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0., 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
+
+	plot->setRangeScale(Dimension::X, 0, RangeT::Scale::Linear);
+
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0., 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
+
+	auto* referenceLine = new ReferenceLine(plot, QStringLiteral("TestLine"));
+	referenceLine->setOrientation(ReferenceLine::Orientation::Horizontal);
+	plot->addChild(referenceLine);
+	referenceLine->retransform();
+
+	const auto& rect = plot->dataRect();
+
+	QCOMPARE(qAbs(referenceLine->d_func()->length), rect.width());
+	QCOMPARE(referenceLine->d_func()->pos().x(), rect.center().x());
+}
+
+void WorksheetElementTest::referenceLineLog10Scaling() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(true);
+
+	const auto& axes = plot->children<Axis>();
+	QCOMPARE(axes.length(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* xAxis = axes.at(0);
+
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0., 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
+
+	plot->setRangeScale(Dimension::X, 0, RangeT::Scale::Log10);
+
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0.01, 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
+
+	auto* referenceLine = new ReferenceLine(plot, QStringLiteral("TestLine"));
+	referenceLine->setOrientation(ReferenceLine::Orientation::Horizontal);
+	plot->addChild(referenceLine);
+	referenceLine->retransform();
+
+	const auto& rect = plot->dataRect();
+
+	QCOMPARE(qAbs(referenceLine->d_func()->length), rect.width());
+	QCOMPARE(referenceLine->d_func()->pos().x(), rect.center().x());
+}
+
+void WorksheetElementTest::referenceLineSquareScaling() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(true);
+
+	const auto& axes = plot->children<Axis>();
+	QCOMPARE(axes.length(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* xAxis = axes.at(0);
+
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0., 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
+
+	plot->setRangeScale(Dimension::X, 0, RangeT::Scale::Square);
+
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0.01, 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
+
+	auto* referenceLine = new ReferenceLine(plot, QStringLiteral("TestLine"));
+	referenceLine->setOrientation(ReferenceLine::Orientation::Horizontal);
+	plot->addChild(referenceLine);
+	referenceLine->retransform();
+
+	const auto& rect = plot->dataRect();
+
+	QCOMPARE(qAbs(referenceLine->d_func()->length), rect.width());
+	QCOMPARE(referenceLine->d_func()->pos().x(), rect.center().x());
+}
+
+void WorksheetElementTest::referenceLineSqrtScaling() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(true);
+
+	const auto& axes = plot->children<Axis>();
+	QCOMPARE(axes.length(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* xAxis = axes.at(0);
+
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0., 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
+
+	plot->setRangeScale(Dimension::X, 0, RangeT::Scale::Sqrt);
+
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0., 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
+
+	auto* referenceLine = new ReferenceLine(plot, QStringLiteral("TestLine"));
+	referenceLine->setOrientation(ReferenceLine::Orientation::Horizontal);
+	plot->addChild(referenceLine);
+	referenceLine->retransform();
+
+	const auto& rect = plot->dataRect();
+
+	QCOMPARE(qAbs(referenceLine->d_func()->length), rect.width());
+	QCOMPARE(referenceLine->d_func()->pos().x(), rect.center().x());
+}
+
+void WorksheetElementTest::referenceLineInverseScaling() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(true);
+
+	const auto& axes = plot->children<Axis>();
+	QCOMPARE(axes.length(), 2);
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
+	auto* xAxis = axes.at(0);
+
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0., 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
+
+	plot->setRangeScale(Dimension::X, 0, RangeT::Scale::Sqrt);
+
+	CHECK_RANGE(plot, xAxis, Dimension::X, 0.0, 1.);
+	CHECK_RANGE(plot, xAxis, Dimension::Y, 0., 1.);
+
+	auto* referenceLine = new ReferenceLine(plot, QStringLiteral("TestLine"));
+	referenceLine->setOrientation(ReferenceLine::Orientation::Horizontal);
+	plot->addChild(referenceLine);
+	referenceLine->retransform();
+
+	const auto& rect = plot->dataRect();
+
+	QCOMPARE(qAbs(referenceLine->d_func()->length), rect.width());
+	QCOMPARE(referenceLine->d_func()->pos().x(), rect.center().x());
+}
+
+#define DEBUG_ELEMENT_NAMES(aspectVector)                                                                                                                      \
+	do {                                                                                                                                                       \
+		int index = 0;                                                                                                                                         \
+		for (const auto& a : std::as_const(aspectVector)) {                                                                                                    \
+			DEBUG(std::string("Index: ") << index << " , name: " << a->name().toStdString());                                                                  \
+			index++;                                                                                                                                           \
+		}                                                                                                                                                      \
+	} while (false)
+
+void WorksheetElementTest::moveElementBefore() {
+	Project project;
+
+	AspectTreeModel treemodel(&project, this);
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* lFirst = new TextLabel(QStringLiteral("first"));
+	ws->addChild(lFirst);
+
+	auto* lSecond = new TextLabel(QStringLiteral("second"));
+	ws->addChild(lSecond);
+
+	auto* lThird = new TextLabel(QStringLiteral("third"));
+	ws->addChild(lThird);
+
+	auto children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+
+	// First is background
+	QCOMPARE(children.at(1)->name(), lFirst->name());
+	QCOMPARE(children.at(2)->name(), lSecond->name());
+	QCOMPARE(children.at(3)->name(), lThird->name());
+
+	QAction action;
+	action.setData(2); // behind lSecond
+	lThird->execMoveBehind(&action);
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lFirst->name());
+	QCOMPARE(children.at(2)->name(), lThird->name());
+	QCOMPARE(children.at(3)->name(), lSecond->name());
+
+	lThird->undoStack()->undo();
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lFirst->name());
+	QCOMPARE(children.at(2)->name(), lSecond->name());
+	QCOMPARE(children.at(3)->name(), lThird->name());
+
+	action.setData(1);
+	lThird->execMoveBehind(&action);
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lThird->name());
+	QCOMPARE(children.at(2)->name(), lFirst->name());
+	QCOMPARE(children.at(3)->name(), lSecond->name());
+
+	action.setData(1);
+	lSecond->execMoveBehind(&action);
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lSecond->name());
+	QCOMPARE(children.at(2)->name(), lThird->name());
+	QCOMPARE(children.at(3)->name(), lFirst->name());
+
+	lSecond->undoStack()->undo();
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lThird->name());
+	QCOMPARE(children.at(2)->name(), lFirst->name());
+	QCOMPARE(children.at(3)->name(), lSecond->name());
+
+	lSecond->undoStack()->redo();
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lSecond->name());
+	QCOMPARE(children.at(2)->name(), lThird->name());
+	QCOMPARE(children.at(3)->name(), lFirst->name());
+}
+
+void WorksheetElementTest::moveElementAfter() {
+	Project project;
+
+	AspectTreeModel treemodel(&project, this);
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* lFirst = new TextLabel(QStringLiteral("first"));
+	ws->addChild(lFirst);
+
+	auto* lSecond = new TextLabel(QStringLiteral("second"));
+	ws->addChild(lSecond);
+
+	auto* lThird = new TextLabel(QStringLiteral("third"));
+	ws->addChild(lThird);
+
+	auto children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+
+	// First is background
+	QCOMPARE(children.at(1)->name(), lFirst->name());
+	QCOMPARE(children.at(2)->name(), lSecond->name());
+	QCOMPARE(children.at(3)->name(), lThird->name());
+
+	QAction action;
+	action.setData(3);
+	lFirst->execMoveInFrontOf(&action);
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lSecond->name());
+	QCOMPARE(children.at(2)->name(), lThird->name());
+	QCOMPARE(children.at(3)->name(), lFirst->name());
+
+	lThird->undoStack()->undo();
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lFirst->name());
+	QCOMPARE(children.at(2)->name(), lSecond->name());
+	QCOMPARE(children.at(3)->name(), lThird->name());
+
+	action.setData(400); // higher than maximum, it will be limited automatically
+	lFirst->execMoveInFrontOf(&action);
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lSecond->name());
+	QCOMPARE(children.at(2)->name(), lThird->name());
+	QCOMPARE(children.at(3)->name(), lFirst->name());
+
+	action.setData(2); // in front of lThird
+	lSecond->execMoveInFrontOf(&action);
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lThird->name());
+	QCOMPARE(children.at(2)->name(), lSecond->name());
+	QCOMPARE(children.at(3)->name(), lFirst->name());
+
+	lSecond->undoStack()->undo();
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lSecond->name());
+	QCOMPARE(children.at(2)->name(), lThird->name());
+	QCOMPARE(children.at(3)->name(), lFirst->name());
+
+	lSecond->undoStack()->redo();
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(children.at(1)->name(), lThird->name());
+	QCOMPARE(children.at(2)->name(), lSecond->name());
+	QCOMPARE(children.at(3)->name(), lFirst->name());
+}
+
+void WorksheetElementTest::prepareDrawingMenu() {
+	Project project;
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* lFirst = new TextLabel(QStringLiteral("first"));
+	ws->addChild(lFirst);
+
+	auto* lSecond = new TextLabel(QStringLiteral("second"));
+	ws->addChild(lSecond);
+
+	auto* lThird = new TextLabel(QStringLiteral("third"));
+	ws->addChild(lThird);
+
+	auto children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+
+	// First is background
+	QCOMPARE(children.at(1)->name(), lFirst->name());
+	QCOMPARE(children.at(2)->name(), lSecond->name());
+	QCOMPARE(children.at(3)->name(), lThird->name());
+
+	QAction action;
+	action.setData(1);
+	lThird->execMoveBehind(&action);
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	// DEBUG_ELEMENT_NAMES(children);
+	lThird->createContextMenu();
+	lThird->prepareDrawingOrderMenu();
+	QCOMPARE(lThird->m_moveBehindMenu->actions().count(), 0);
+
+	QCOMPARE(lThird->m_moveInFrontOfMenu->actions().count(), 2);
+}
+
+void WorksheetElementTest::moveTreeModelInteraction() {
+	Project project;
+	AspectTreeModel aspectTreeModel(&project, this);
+
+	std::unique_ptr<ProjectExplorer> projectExplorer = std::make_unique<ProjectExplorer>(nullptr);
+	projectExplorer->setModel(&aspectTreeModel);
+	projectExplorer->setProject(&project);
+	projectExplorer->setCurrentAspect(&project);
+
+	auto* ws = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(ws);
+
+	auto* lFirst = new TextLabel(QStringLiteral("first"));
+	ws->addChild(lFirst);
+
+	auto* lSecond = new TextLabel(QStringLiteral("second"));
+	ws->addChild(lSecond);
+
+	auto* lThird = new TextLabel(QStringLiteral("third"));
+	ws->addChild(lThird);
+
+	auto children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+
+	// First is background
+	QCOMPARE(children.at(1)->name(), lFirst->name());
+	QCOMPARE(children.at(2)->name(), lSecond->name());
+	QCOMPARE(children.at(3)->name(), lThird->name());
+
+	QAction action;
+	action.setData(1);
+	lThird->execMoveBehind(&action);
+
+	ws->setItemSelectedInView(lFirst->graphicsItem(), false);
+	ws->setItemSelectedInView(lThird->graphicsItem(), true);
+	const auto& indices = projectExplorer->m_treeView->selectionModel()->selectedIndexes();
+	QCOMPARE(indices.length(), 4);
+	const auto& aspectIndex = indices.at(0);
+	const auto* selectedAspect = static_cast<AbstractAspect*>(aspectIndex.internalPointer());
+	QCOMPARE(selectedAspect->name(), lThird->name()); // The selectionModel() got updated correctly
+
+	children = ws->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	// DEBUG_ELEMENT_NAMES(children);
+	lThird->createContextMenu();
+	lThird->prepareDrawingOrderMenu();
+	QCOMPARE(lThird->m_moveBehindMenu->actions().count(), 0);
+	QCOMPARE(lThird->m_moveInFrontOfMenu->actions().count(), 2);
+}
+
+// relative positioning
+
+void WorksheetElementTest::mouseMoveRelative() {
+	// WORKSHEETELEMENT_TEST()
+	SETUP_PROJECT
+	auto* element = new TextLabel(QStringLiteral("element"));
+	p->addChild(element);
+	auto* dock = new LabelWidget(nullptr);
+	// MACRO_NAME(element, dockSetElementsMethodName);
+	dock->setLabels({element});
+
+	// #define WORKSHEETELEMENT_MOUSE_MOVE(element, dockSetElementsMethodName)
+	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	auto pp = element->position();
+	pp.point = QPointF(0, 0);
+
+	element->setPosition(pp);
+	element->setCoordinateBindingEnabled(false);
+
+	QCOMPARE(element->horizontalAlignment(), AbstractPlot::HorizontalAlignment::Center);
+	QCOMPARE(element->verticalAlignment(), AbstractPlot::VerticalAlignment::Center);
+
+	pp = element->position();
+	pp.horizontalPosition = AbstractPlot::HorizontalPosition::Relative;
+	pp.verticalPosition = AbstractPlot::VerticalPosition::Relative;
+	element->setPosition(pp);
+
+	QCOMPARE(element->positionLogical().x(), 0.0);
+	QCOMPARE(element->positionLogical().y(), 1.0);
+	QCOMPARE(dock->ui.sbPositionX->value(), 0.0);
+	QCOMPARE(dock->ui.sbPositionY->value(), 0.0);
+
+	/* Simulate mouse move */
+	element->d_ptr->setPos(QPointF(25, -10)); /* itemChange() will be called (negative value is up) */
+	QCOMPARE(element->positionLogical().x(), 0.0); /* 25/50 * 0.5 + 0.5 */
+	QCOMPARE(element->positionLogical().y(), 1.0);
+
+	QCOMPARE(dock->ui.sbPositionX->value(), 0.75 * 100.0);
+	QCOMPARE(dock->ui.sbPositionY->value(), 0.4 * 100.0);
+}
+
+void WorksheetElementTest::mouseMoveRelativeWithBinding() {
+	// WORKSHEETELEMENT_TEST()
+	SETUP_PROJECT
+	auto* element = new TextLabel(QStringLiteral("element"));
+	p->addChild(element);
+	auto* dock = new LabelWidget(nullptr);
+	// MACRO_NAME(element, dockSetElementsMethodName);
+	dock->setLabels({element});
+
+	// #define WORKSHEETELEMENT_MOUSE_MOVE(element, dockSetElementsMethodName)
+	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	auto pp = element->position();
+	pp.point = QPointF(0, 0);
+
+	element->setPosition(pp);
+	element->setCoordinateBindingEnabled(true);
+
+	QCOMPARE(element->positionLogical().x(), 0.5);
+	QCOMPARE(element->positionLogical().y(), 0.5);
+
+	QCOMPARE(element->horizontalAlignment(), AbstractPlot::HorizontalAlignment::Center);
+	QCOMPARE(element->verticalAlignment(), AbstractPlot::VerticalAlignment::Center);
+
+	pp = element->position();
+	pp.horizontalPosition = AbstractPlot::HorizontalPosition::Relative;
+	pp.verticalPosition = AbstractPlot::VerticalPosition::Relative;
+	QCOMPARE(dock->ui.sbPositionX->value(), 0.0);
+	QCOMPARE(dock->ui.sbPositionY->value(), 0.0);
+	element->setPosition(pp);
+
+	QCOMPARE(element->positionLogical().x(), 0.5);
+	QCOMPARE(element->positionLogical().y(), 0.5);
+	QCOMPARE(dock->ui.sbPositionX->value(), 5000.0);
+	QCOMPARE(dock->ui.sbPositionY->value(), -5000.0);
+
+	/* Simulate mouse move */
+	element->d_ptr->setPos(QPointF(25, -10)); /* itemChange() will be called (negative value is up) */
+	QCOMPARE(element->positionLogical().x(), 0.75); /* 25/50 * 0.5 + 0.5 */
+	QCOMPARE(element->positionLogical().y(), 0.6);
+
+	// TODO
+	// QCOMPARE(dock->ui.sbPositionX->value(), 0.75 * 100.0);
+	// QCOMPARE(dock->ui.sbPositionY->value(), 0.6 * 100.0);
+	QCOMPARE(dock->ui.sbPositionX->value(), 5000.0);
+	QCOMPARE(dock->ui.sbPositionY->value(), -5000.0);
+}
+
+void WorksheetElementTest::positionRelative() {
+	// WORKSHEETELEMENT_TEST()
+	SETUP_PROJECT
+	auto* element = new TextLabel(QStringLiteral("element"));
+	p->addChild(element);
+	auto* dock = new LabelWidget(nullptr);
+	// MACRO_NAME(element, dockSetElementsMethodName);
+	dock->setLabels({element});
+
+	// #define WORKSHEETELEMENT_MOUSE_MOVE(element, dockSetElementsMethodName)
+	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	auto pp = element->position();
+	pp.point = QPointF(0, 0);
+	element->setPosition(pp);
+	element->setCoordinateBindingEnabled(false);
+
+	QCOMPARE(element->positionLogical().x(), 0.0);
+	QCOMPARE(element->positionLogical().y(), 0.0);
+
+	QCOMPARE(element->horizontalAlignment(), AbstractPlot::HorizontalAlignment::Center);
+	QCOMPARE(element->verticalAlignment(), AbstractPlot::VerticalAlignment::Center);
+
+	pp = element->position();
+	pp.horizontalPosition = AbstractPlot::HorizontalPosition::Relative;
+	pp.verticalPosition = AbstractPlot::VerticalPosition::Relative;
+	pp.point = QPointF(0.2, 0.8); // 20% and 80%
+	element->setPosition(pp);
+
+	QCOMPARE(element->positionLogical().x(), 0.2);
+	// TODO
+	// QCOMPARE(element->positionLogical().y(), 0.8);
+	QCOMPARE(element->positionLogical().y(), 0.2);
+
+	QCOMPARE(dock->ui.sbPositionX->value(), 0.2 * 100.0);
+	QCOMPARE(dock->ui.sbPositionY->value(), 0.8 * 100.0);
+}
+
+void WorksheetElementTest::positionRelativeWithBinding() {
+	// WORKSHEETELEMENT_TEST()
+	SETUP_PROJECT
+	auto* element = new TextLabel(QStringLiteral("element"));
+	p->addChild(element);
+	auto* dock = new LabelWidget(nullptr);
+	// MACRO_NAME(element, dockSetElementsMethodName);
+	dock->setLabels({element});
+
+	// #define WORKSHEETELEMENT_MOUSE_MOVE(element, dockSetElementsMethodName)
+	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	auto pp = element->position();
+	pp.point = QPointF(0, 0);
+	element->setPosition(pp);
+	element->setCoordinateBindingEnabled(true);
+
+	QCOMPARE(element->positionLogical().x(), 0.5);
+	QCOMPARE(element->positionLogical().y(), 0.5);
+
+	QCOMPARE(element->horizontalAlignment(), AbstractPlot::HorizontalAlignment::Center);
+	QCOMPARE(element->verticalAlignment(), AbstractPlot::VerticalAlignment::Center);
+
+	pp = element->position();
+	pp.horizontalPosition = AbstractPlot::HorizontalPosition::Relative;
+	pp.verticalPosition = AbstractPlot::VerticalPosition::Relative;
+	pp.point = QPointF(0.2, 0.8); // 20% and 80%
+	element->setPosition(pp);
+
+	// TODO
+	// QCOMPARE(element->positionLogical().x(), 0.2);
+	// QCOMPARE(element->positionLogical().y(), 0.8);
+	QCOMPARE(element->positionLogical().x(), 0.5);
+	QCOMPARE(element->positionLogical().y(), 0.5);
+
+	// TODO
+	// QCOMPARE(dock->ui.sbPositionX->value(), 0.2 * 100.0);
+	// QCOMPARE(dock->ui.sbPositionY->value(), 0.8 * 100.0);
+	QCOMPARE(dock->ui.sbPositionX->value(), 3000.0);
+	QCOMPARE(dock->ui.sbPositionY->value(), 3000.0);
+}
+
+void WorksheetElementTest::positionRelativeDock() {
+	// WORKSHEETELEMENT_TEST()
+	SETUP_PROJECT
+	auto* element = new TextLabel(QStringLiteral("element"));
+	p->addChild(element);
+	auto* dock = new LabelWidget(nullptr);
+	// MACRO_NAME(element, dockSetElementsMethodName);
+	dock->setLabels({element});
+
+	// #define WORKSHEETELEMENT_MOUSE_MOVE(element, dockSetElementsMethodName)
+	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	auto pp = element->position();
+	pp.point = QPointF(0, 0);
+	element->setPosition(pp);
+	element->setCoordinateBindingEnabled(false);
+
+	QCOMPARE(element->positionLogical().x(), 0.0);
+	QCOMPARE(element->positionLogical().y(), 0.0);
+
+	QCOMPARE(element->horizontalAlignment(), AbstractPlot::HorizontalAlignment::Center);
+	QCOMPARE(element->verticalAlignment(), AbstractPlot::VerticalAlignment::Center);
+
+	pp = element->position();
+	pp.horizontalPosition = AbstractPlot::HorizontalPosition::Relative;
+	pp.verticalPosition = AbstractPlot::VerticalPosition::Relative;
+	// element->setPositionHorizontal(AbstractPlot::HorizontalAlignment::Relative);
+	// element->setPositionVertical(AbstractPlot::VerticalAlignment::Relative);
+
+	// Set values in dock
+	dock->ui.sbPositionX->setValue(20);
+	dock->ui.sbPositionY->setValue(80);
+
+	// TODO
+	// QCOMPARE(element->positionLogical().x(), 0.2);
+	// QCOMPARE(element->positionLogical().y(), 0.8);
+	QCOMPARE(element->positionLogical().x(), 20.5);
+	QCOMPARE(element->positionLogical().y(), 80.5);
+
+	QCOMPARE(dock->ui.sbPositionX->value(), 0.2 * 100.0);
+	QCOMPARE(dock->ui.sbPositionY->value(), 0.8 * 100.0);
+}
+
+void WorksheetElementTest::positionRelativeDockWithBinding() {
+	// WORKSHEETELEMENT_TEST()
+	SETUP_PROJECT
+	auto* element = new TextLabel(QStringLiteral("element"));
+	p->addChild(element);
+	auto* dock = new LabelWidget(nullptr);
+	// MACRO_NAME(element, dockSetElementsMethodName);
+	dock->setLabels({element});
+
+	// #define WORKSHEETELEMENT_MOUSE_MOVE(element, dockSetElementsMethodName)
+	element->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	auto pp = element->position();
+	pp.point = QPointF(0, 0);
+	element->setPosition(pp);
+	element->setCoordinateBindingEnabled(true);
+
+	QCOMPARE(element->positionLogical().x(), 0.5);
+	QCOMPARE(element->positionLogical().y(), 0.5);
+
+	QCOMPARE(element->horizontalAlignment(), AbstractPlot::HorizontalAlignment::Center);
+	QCOMPARE(element->verticalAlignment(), AbstractPlot::VerticalAlignment::Center);
+
+	pp = element->position();
+	pp.horizontalPosition = AbstractPlot::HorizontalPosition::Relative;
+	pp.verticalPosition = AbstractPlot::VerticalPosition::Relative;
+	// element->setPositionHorizontal(AbstractPlot::HorizontalAlignment::Relative);
+	// element->setPositionVertical(AbstractPlot::VerticalAlignment::Relative);
+
+	// Set values in dock
+	dock->ui.sbPositionX->setValue(20);
+	dock->ui.sbPositionY->setValue(80);
+
+	// TODO
+	// QCOMPARE(element->positionLogical().x(), 0.2);
+	// QCOMPARE(element->positionLogical().y(), 0.8);
+	QCOMPARE(element->positionLogical().x(), 0.5);
+	QCOMPARE(element->positionLogical().y(), 0.5);
+
+	// TODO
+	// QCOMPARE(dock->ui.sbPositionX->value(), 0.2 * 100.0);
+	// QCOMPARE(dock->ui.sbPositionY->value(), 0.8 * 100.0);
+	QCOMPARE(dock->ui.sbPositionX->value(), 0.0);
+	QCOMPARE(dock->ui.sbPositionY->value(), 0.0);
 }
 
 // TODO: create test with reference range with nonlinear ranges!

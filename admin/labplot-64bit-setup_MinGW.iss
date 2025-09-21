@@ -140,9 +140,6 @@ Source: "{#CraftRoot}\bin\libmysql.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "C:\Program Files\cfitsio\cfitsio.dll"; DestDir: "{app}";Flags: ignoreversion
 
 Source: "{#CraftRoot}\bin\data\labplot2\*"; Excludes: "splash.png,\pics,\themes,\colorschemes"; DestDir: "{app}\labplot2"; Flags: recursesubdirs ignoreversion
-Source: "{#CraftRoot}\bin\data\kxmlgui5\labplot2\labplot2ui.rc"; DestDir: "{app}\labplot2"; Flags: ignoreversion
-; TODO check if needed:
-Source: "{#CraftRoot}\bin\data\kxmlgui5\labplot2\labplot2ui.rc"; DestDir: "{app}\kxmlgui5\labplot2"; Flags: ignoreversion
 Source: "{#CraftRoot}\bin\data\labplot2\pics\*"; DestDir: "{app}\data\pics"; Flags: recursesubdirs ignoreversion
 Source: "{#CraftRoot}\bin\data\labplot2\themes\*"; DestDir: "{app}\data\themes"; Flags: recursesubdirs ignoreversion
 Source: "{#CraftRoot}\bin\data\labplot2\color-schemes\*"; DestDir: "{app}\data\color-schemes"; Flags: recursesubdirs ignoreversion

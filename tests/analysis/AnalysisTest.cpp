@@ -9,4 +9,3 @@
 */
 
 #include "AnalysisTest.h"
-#include "backend/core/column/Column.h"

@@ -4,14 +4,15 @@ Description
 
 
 Conformity
-==================
+==========
 
 - [ ] [Changelog entry](https://invent.kde.org/education/labplot/-/blob/master/ChangeLog)
+- [ ] Unit tests
+- [ ] Update INSTALL
 - [ ] Downport
-- [ ] Unittests
-- Fixed Bugs: <!-- Add here the bugs you fixed !-->
+- Fixes: <!-- Add here the bugs you fixed. You can add multiple by separating them by a comma !-->
 <!-- - [ ] [Dokumentation] (TODO) !-->
 
-If external dependencies are removed
-==================
+When external dependencies are removed
+======================================
 - [ ] Reporting to ...

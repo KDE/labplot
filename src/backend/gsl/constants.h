@@ -12,11 +12,14 @@
 #define GSL_CONSTANTS_H
 
 #include <QString>
+#include <functional>
+
+namespace Parsing {
 
 enum class ConstantGroups;
 
 struct cons {
-	QString description;
+	std::function<QString(void)> description;
 	const char* name;
 	double value;
 	const char* unit;
@@ -27,6 +30,7 @@ extern struct cons _constants[];
 extern const int _number_constants;
 
 enum class ConstantGroups : int {
+	ProgrammingConstants,
 	MathematicalConstants,
 	FundamentalConstants,
 	AstronomyAndAstrophysics,
@@ -49,5 +53,7 @@ enum class ConstantGroups : int {
 };
 
 QString constantGroupsToString(ConstantGroups group);
+
+} // namespace Parsing
 
 #endif /* CONSTANTS_H */

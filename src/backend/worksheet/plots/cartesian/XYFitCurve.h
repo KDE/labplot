@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : A xy-curve defined by a fit model
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -52,8 +52,8 @@ public:
 		double eps{1.e-4};
 		size_t evaluatedPoints{1000};
 		bool useDataErrors{true}; // use given data errors when fitting (default)
-		bool useResults{true}; // use results as new start values (default)
-		bool previewEnabled{true}; // preview fit function with given start parameters
+		bool useResults{false}; // use results as new start values (default)
+		bool previewEnabled{false}; // preview fit function with given start parameters
 		double confidenceInterval{95.}; // confidence interval for fit result
 
 		bool autoRange{true}; // use all data points? (default)
@@ -102,11 +102,9 @@ public:
 	POINTER_D_ACCESSOR_DECL(const Histogram, dataSourceHistogram, DataSourceHistogram)
 	const QString& dataSourceHistogramPath() const;
 
-	void recalculate() override;
 	void evaluate(bool preview);
 	virtual const XYAnalysisCurve::Result& result() const override;
-	void initStartValues(const XYCurve*);
-	void initStartValues(XYFitCurve::FitData&, const XYCurve*);
+	void initStartValues(XYFitCurve::FitData&);
 	void initFitData(XYAnalysisCurve::AnalysisAction);
 	static void initFitData(XYFitCurve::FitData&);
 	void clearFitResult();
@@ -128,6 +126,7 @@ public:
 
 protected:
 	XYFitCurve(const QString& name, XYFitCurvePrivate* dd);
+	virtual void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
 
 private:
 	Q_DECLARE_PRIVATE(XYFitCurve)

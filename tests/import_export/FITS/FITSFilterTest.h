@@ -3,22 +3,28 @@
 	Project              : LabPlot
 	Description          : Tests for the FITS filter
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef FITSFILTERTEST_H
 #define FITSFILTERTEST_H
 
-#include "../../CommonTest.h"
-#include <QtTest>
+#include "../../CommonMetaTest.h"
 
-class FITSFilterTest : public CommonTest {
+class FITSFilterTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void importFile1();
-	void importFile2();
+	void importFileWFPC2A();
+	void importFileWFPC2u();
+	void importFileUITfuv();
+	void importFileIUElwp();
+	void importFileHRSz0y();
+	void importFileFOSy19();
+
+	void importExported();
+	void exportImport();
 
 	void benchDoubleImport_data();
 	// this is called multiple times (warm-up of BENCHMARK)

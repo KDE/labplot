@@ -21,6 +21,7 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Worksheet.h"
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 
 #include <QFont>
@@ -108,7 +109,7 @@ void Symbol::init(const KConfigGroup& group) {
 	QColor defaultBorderColor(Qt::black);
 	double defaultBorderWidth = Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point);
 
-	auto type = parentAspect()->type();
+	const auto type = parentAspect()->type();
 	if (type == AspectType::CustomPoint || type == AspectType::LollipopPlot)
 		defaultStyle = Symbol::Style::Circle;
 	else if (type == AspectType::DatapickerImage || type == AspectType::DatapickerCurve) {
@@ -245,7 +246,6 @@ bool Symbol::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	Q_D(Symbol);
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QString str;
 	const auto& attribs = reader->attributes();
 	READ_INT_VALUE("symbolsStyle", style, Symbol::Style);
@@ -899,7 +899,7 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 	return path;
 }
 
-void Symbol::draw(QPainter* painter, QPointF point) {
+void Symbol::draw(QPainter* painter, QPointF point) const {
 	Q_D(const Symbol);
 	if (d->style == Symbol::Style::NoSymbols)
 		return;
@@ -920,7 +920,7 @@ void Symbol::draw(QPainter* painter, QPointF point) {
 	painter->drawPath(trafo.map(path));
 }
 
-void Symbol::draw(QPainter* painter, const QVector<QPointF>& points) {
+void Symbol::draw(QPainter* painter, const QVector<QPointF>& points) const {
 	Q_D(const Symbol);
 	if (d->style == Symbol::Style::NoSymbols || points.isEmpty())
 		return;

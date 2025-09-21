@@ -1,5 +1,5 @@
 #include "NumberSpinBoxPlugin.h"
-#include "../../commonfrontend/widgets/NumberSpinBox.h"
+#include "../../frontend/widgets/NumberSpinBox.h"
 
 NumberSpinBoxPlugin::NumberSpinBoxPlugin(QObject *parent)
     : QObject(parent) {

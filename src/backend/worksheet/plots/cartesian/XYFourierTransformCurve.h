@@ -19,14 +19,19 @@ extern "C" {
 
 class XYFourierTransformCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYFourierTransformCurve : public XYAnalysisCurve {
+#else
 class XYFourierTransformCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:
 	struct TransformData {
-		TransformData(){};
+		TransformData() { };
 
-		nsl_dft_result_type type{nsl_dft_result_magnitude};
+		nsl_dft_result_type type{nsl_dft_result_amplitude};
 		bool twoSided{false};
 		bool shifted{false};
 		nsl_dft_xscale xScale{nsl_dft_xscale_frequency};
@@ -39,7 +44,6 @@ public:
 	explicit XYFourierTransformCurve(const QString& name);
 	~XYFourierTransformCurve() override;
 
-	void recalculate() override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

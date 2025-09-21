@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of XYCurve
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2023 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -13,7 +13,6 @@
 #define XYCURVEPRIVATE_H
 
 #include "backend/worksheet/plots/cartesian/PlotPrivate.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include <vector>
 
 class Background;
@@ -26,12 +25,9 @@ class XYCurvePrivate : public PlotPrivate {
 public:
 	explicit XYCurvePrivate(XYCurve*);
 
-	QRectF boundingRect() const override;
-	QPainterPath shape() const override;
-
 	void retransform() override;
-	void recalcLogicalPoints();
-	void updateLines();
+	void recalc();
+	void updateLines(bool performanceOptimization = true);
 	void addLine(QPointF p,
 				 double& x,
 				 double& minY,
@@ -41,7 +37,8 @@ public:
 				 int numberOfPixelX,
 				 double minDiffX,
 				 RangeT::Scale scale,
-				 bool& prevPixelDiffZero); // for any x scale
+				 bool& prevPixelDiffZero,
+				 bool performanceOptimization); // for any x scale
 	static void addUniqueLine(QPointF p,
 							  double& minY,
 							  double& maxY,
@@ -58,8 +55,7 @@ public:
 	void recalcShapeAndBoundingRect() override;
 	void updatePixmap();
 
-	bool activatePlot(QPointF mouseScenePos, double maxDist);
-	void setHover(bool on);
+	virtual bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
 	bool pointLiesNearLine(const QPointF p1, const QPointF p2, const QPointF pos, const double maxDist) const;
 	bool
 	pointLiesNearCurve(const QPointF mouseScenePos, const QPointF curvePosPrevScene, const QPointF curvePosScene, const int index, const double maxDist) const;
@@ -71,8 +67,6 @@ public:
 	QString xColumnPath;
 	QString yColumnPath;
 	bool sourceDataChangedSinceLastRecalc{false};
-
-	bool legendVisible{true};
 
 	// line
 	XYCurve::LineType lineType{XYCurve::LineType::Line};
@@ -113,19 +107,7 @@ public:
 	Background* background{nullptr};
 
 	// error bars
-	XYCurve::ErrorType xErrorType{XYCurve::ErrorType::NoError};
-	const AbstractColumn* xErrorPlusColumn{nullptr};
-	QString xErrorPlusColumnPath;
-	const AbstractColumn* xErrorMinusColumn{nullptr};
-	QString xErrorMinusColumnPath;
-
-	XYCurve::ErrorType yErrorType{XYCurve::ErrorType::NoError};
-	const AbstractColumn* yErrorPlusColumn{nullptr};
-	QString yErrorPlusColumnPath;
-	const AbstractColumn* yErrorMinusColumn{nullptr};
-	QString yErrorMinusColumnPath;
-
-	Line* errorBarsLine{nullptr};
+	ErrorBar* errorBar{nullptr};
 
 	XYCurve* const q;
 	friend class XYCurve;
@@ -135,9 +117,8 @@ public:
 
 private:
 	CartesianPlot* plot() const {
-		return q->m_plot;
+		return m_plot;
 	} // convenience method
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
@@ -152,7 +133,6 @@ private:
 	QPainterPath valuesPath;
 	QPainterPath errorBarsPath;
 	QPainterPath symbolsPath;
-	QPainterPath curveShape;
 	QVector<QLineF> m_lines;
 	QVector<QPointF> m_logicalPoints; // points in logical coordinates
 	QVector<QPointF> m_scenePoints; // points in scene coordinates
@@ -165,17 +145,11 @@ private:
 	std::vector<int> validPointsIndicesLogical; // original indices in the source columns for valid and non-masked values (size of m_logicalPoints)
 	std::vector<bool> connectedPointsLogical; // true for points connected with the consecutive point (size of m_logicalPoints)
 
-	QPixmap m_pixmap;
-	QImage m_hoverEffectImage;
-	QImage m_selectionEffectImage;
-	bool m_hoverEffectImageIsDirty{false};
-	bool m_selectionEffectImageIsDirty{false};
-	bool m_hovered{false};
-	bool m_suppressRecalc{false};
 	QPointF mousePos;
 
 	friend class RetransformTest;
 	friend class XYCurveTest;
+	friend class XYFunctionCurveTest;
 };
 
 #endif

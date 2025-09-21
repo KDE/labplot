@@ -1,22 +1,33 @@
 {
-    "id": "org.kde.labplot2",
+    "id": "org.kde.labplot",
     "branch": "master",
     "runtime": "org.kde.Platform",
-    "runtime-version": "5.15-22.08",
-    "base": "io.qt.qtwebengine.BaseApp",
-    "base-version": "5.15-22.08",
+    "runtime-version": "6.9",
+    "base": "io.qt.PySide.BaseApp",
+    "base-version": "6.9",
     "sdk": "org.kde.Sdk",
-    "command": "labplot2",
+    "command": "labplot",
     "tags": ["nightly"],
     "desktop-file-name-suffix": " (Nightly)",
     "finish-args": [
         "--share=network",
         "--share=ipc",
         "--socket=x11",
-        "--socket=wayland",
+	"--socket=cups",
+	"--socket=session-bus",
+        "--device=dri",
         "--filesystem=host",
-        "--filesystem=/tmp"
+        "--filesystem=/tmp",
+        "--filesystem=xdg-documents",
+        "--system-talk-name=org.freedesktop.UDisks2",
+        "--talk-name=org.freedesktop.Flatpak"
     ],
+    "build-args": [
+        "--share=network"
+    ],
+    "extensions": {
+        "org.freedesktop.Sdk.Extension.python3": {}
+    },
     "cleanup": [
         "/include",
         "/lib/cmake",
@@ -29,7 +40,14 @@
         "/share/man"
     ],
     "modules": [
-       {
+	{
+	    "name": "install-typesystems",
+	    "buildsystem": "simple",
+	    "build-commands": [
+		    "ln -s /app/lib/python3.12/site-packages/PySide6 /app/share/PySide6"
+	    ]
+	},
+        {
             "name": "eigen",
             "buildsystem": "cmake-ninja",
             "builddir": true,
@@ -37,35 +55,44 @@
                 {
                     "type": "archive",
                     "url": "https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2",
-                    "sha256": "b4c198460eba6f28d34894e3a5710998818515104d6e74e5cc331ce31e46e626",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 666,
-                        "stable-only": true,
-                        "url-template": "https://gitlab.com/libeigen/eigen/-/archive/$version/eigen-$version.tar.bz2"
-                    }
+                    "sha256": "b4c198460eba6f28d34894e3a5710998818515104d6e74e5cc331ce31e46e626"
                 }
             ]
         },
         {
             "name": "poppler",
-            "config-opts": [ "-DENABLE_TESTING=OFF", "-DENABLE_UNSTABLE_API_ABI_HEADERS=ON", "-DENABLE_CPP=OFF", "-DENABLE_GLIB=OFF", "-DENABLE_GOBJECT_INTROSPECTION=OFF", "-DENABLE_UTILS=OFF" ],
+            "config-opts": [
+                "-DENABLE_TESTING=OFF",
+                "-DENABLE_UNSTABLE_API_ABI_HEADERS=ON",
+                "-DENABLE_CPP=OFF",
+                "-DENABLE_GLIB=OFF",
+                "-DENABLE_GOBJECT_INTROSPECTION=OFF",
+                "-DENABLE_UTILS=OFF",
+                "-DENABLE_QT5=OFF",
+                "-DENABLE_QT6=ON"
+            ],
             "buildsystem": "cmake-ninja",
             "builddir": true,
-            "sources": [ { "type": "git", "url": "git://anongit.freedesktop.org/poppler/poppler.git", "branch": "master" } ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://poppler.freedesktop.org/poppler-25.09.1.tar.xz",
+                    "sha256": "0c1091d01d3dd1664a13816861e812d02b29201e96665454b81b52d261fad658"
+                }
+            ],
             "modules": [
                 {
                     "name": "boost",
                     "buildsystem": "simple",
                     "build-commands": [
-                        "./bootstrap.sh --prefix=/app --with-libraries=system",
+                        "./bootstrap.sh --prefix=/app --with-libraries=system,iostreams,program_options,filesystem,date_time",
                         "./b2 -j $FLATPAK_BUILDER_N_JOBS install"
                     ],
                     "sources": [
                         {
                             "type": "archive",
-                            "url": "https://boostorg.jfrog.io/artifactory/main/release/1.78.0/source/boost_1_78_0.tar.bz2",
-                            "sha256": "8681f175d4bdb26c52222665793eef08490d7758529330f98d3b29dd0735bccc"
+                            "url": "https://archives.boost.io/release/1.88.0/source/boost_1_88_0.tar.bz2",
+                            "sha256": "46d9d2c06637b219270877c9e16155cbd015b6dc84349af064c088e9b5b12f7b"
                         }
                     ]
                 },
@@ -75,13 +102,9 @@
                     "builddir": true,
                     "sources": [
                         {
-                            "type": "git",
-                            "url": "https://github.com/uclouvain/openjpeg.git",
-                            "tag": "v2.4.0",
-                            "x-checker-data": {
-                                "type": "git",
-                                "tag-pattern": "^v([\\d.]+)$"
-                            }
+                            "type": "archive",
+                            "url": "https://github.com/uclouvain/openjpeg/archive/v2.5.3.tar.gz",
+                            "sha256": "368fe0468228e767433c9ebdea82ad9d801a3ad1e4234421f352c8b06e7aa707"
                         }
                     ],
                     "cleanup": [ "/bin", "/include", "/lib/openjpeg-*", "/lib/pkgconfig" ]
@@ -92,31 +115,52 @@
         {
             "name": "analitza",
             "buildsystem": "cmake-ninja",
-            "sources": [ { "type": "git", "url": "https://invent.kde.org/kde/analitza.git" } ]
+            "sources": [
+		    {
+			    "type": "archive",
+			    "url": "https://download.kde.org/stable/release-service/25.08.0/src/analitza-25.08.0.tar.xz",
+			    "sha256": "8d477f0af14bb9f7c15033a9d78987a7067135affc47f19eddda82e76c36d34b"
+		    }
+	    ]
+        },
+        {
+            "name": "cantor",
+            "buildsystem": "cmake-ninja",
+            "sources": [
+		    {
+			    "type": "archive",
+			    "url": "https://download.kde.org/stable/release-service/25.08.0/src/cantor-25.08.0.tar.xz",
+			    "sha256": "5c98fa36bac3500a57d07813a101be709c58aa0ab755d4c9c9fa2b3f8836238d"
+		    }
+	    ]
         },
         {
             "name": "gsl",
             "sources": [
                 {
                     "type": "archive",
-                    "url": "http://ftp.gnu.org/gnu/gsl/gsl-2.7.1.tar.gz",
-                    "sha256": "dcb0fbd43048832b757ff9942691a8dd70026d5da0ff85601e52687f6deeb34b",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 1267,
-                        "stable-only": true,
-                        "url-template": "http://ftp.gnu.org/gnu/gsl/gsl-$version.tar.gz"
-                    }
+                    "url": "http://ftpmirror.gnu.org/gnu/gsl/gsl-2.8.tar.gz",
+                    "sha256": "6a99eeed15632c6354895b1dd542ed5a855c0f15d9ad1326c6fe2b2c9e423190"
                 }
             ]
         },
         {
             "name": "hdf5",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DBUILD_TESTING=OFF",
+                "-DHDF5_BUILD_TOOLS=OFF"
+	    ],
+            "cleanup": [
+                "/share/hdf5_examples"
+            ],
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.8/src/hdf5-1.10.8.tar.gz",
-                    "sha256": "d341b80d380dd763753a0ebe22915e11e87aac4e44a084a850646ff934d19c80"
+                    "url": "https://support.hdfgroup.org/releases/hdf5/v1_14/v1_14_6/downloads/hdf5-1.14.6.tar.gz",
+                    "sha256": "e4defbac30f50d64e1556374aa49e574417c9e72c6b1de7a4ff88c4b1bea6e9b",
+		    "strip-components": 2
                 }
             ]
         },
@@ -125,14 +169,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/Unidata/netcdf-c/archive/v4.8.1.tar.gz",
-                    "sha256": "bc018cc30d5da402622bf76462480664c6668b55eb16ba205a0dfb8647161dd0",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 10354,
-                        "stable-only": true,
-                        "url-template": "https://github.com/Unidata/netcdf-c/archive/v$version.tar.gz"
-                    }
+                    "url": "https://github.com/Unidata/netcdf-c/archive/v4.9.3.tar.gz",
+                    "sha256": "990f46d49525d6ab5dc4249f8684c6deeaf54de6fec63a187e9fb382cc0ffdff"
                 }
             ]
         },
@@ -141,14 +179,9 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "http://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.1.0.tar.gz",
-                    "sha256": "b367c695d2831958e7166921c3b356d5dfa51b1ecee505b97416ba39d1b6c17a",
-                    "x-checker-data": {
-                        "type": "html",
-                        "url": "http://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/",
-                        "version-pattern": "cfitsio-([\\d\\.-]+)\\.tar\\.gz",
-                        "url-template": "http://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-$version.tar.gz"
-                    }
+                    "url": "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.6.2.tar.gz",
+                    "sha256": "66fd078cc0bea896b0d44b120d46d6805421a5361d3a5ad84d9f397b1b5de2cb",
+		    "disable-http-decompression": true
                 }
             ]
         },
@@ -159,38 +192,33 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v2.0/libcerf-v2.0.tar.gz",
-                    "sha256": "c86e8b1ea18ac7747582e83dba6f42f0faea1deb5005b7ffb2e508e36b579716",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 20199,
-                        "stable-only": true,
-                        "url-template": "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v$version/libcerf-v$version.tar.gz"
-                    }
+                    "url": "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v3.2/libcerf-v3.2.tar.gz",
+                    "sha256": "ea8d110d73ec24a643042ca3940461ccbb1b6541e21310ecb70ab4e4dc144aef"
                 }
             ]
         },
         {
             "name": "qtmqtt",
-	    "buildsystem": "qmake",
+	    "buildsystem": "cmake-ninja",
 	    "builddir": true,
-	    "make-install-args": ["INSTALL_ROOT=/app/qtmqtt"],
-	    "sources": [ { "type": "git", "url": "https://github.com/qt/qtmqtt.git", "tag": "v5.15.2" } ]
+	    "sources": [
+		{
+                    "type": "archive",
+		    "url": "https://github.com/qt/qtmqtt/archive/refs/tags/v6.9.0.tar.gz",
+		    "sha256": "7cdec84ca17ad2bd9d47418ca98820705a7798895a2315b5c20c46528a29547e"
+		}
+	    ]
 	},
         {
             "name": "kuserfeedback",
 	    "buildsystem": "cmake-ninja",
+	    "config-opts": [ "-DBUILD_TESTING=OFF", "-DENABLE_DOCS=OFF" ],
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://download.kde.org/stable/kuserfeedback/kuserfeedback-1.2.0.tar.xz",
-                    "sha256": "76aac922b153249b274680a6f4c72c238ef14e3df04bad00cb64158b1063f264",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 138221,
-                        "stable-only": true,
-                        "url-template": "https://download.kde.org/stable/kuserfeedback/kuserfeedback-$version.tar.xz"
-                    }
+                    "url": "https://download.kde.org/stable/frameworks/6.13/kuserfeedback-6.13.0.tar.xz",
+                    "sha256": "48c186482fe7a6f1017a7e50b3a16fd7c10c10f7f963c00f32c61bb073404b9a",
+		    "_comment": "requires minimum ecm version provided by runtime"
                 }
             ]
         },
@@ -201,6 +229,10 @@
                     "type": "archive",
                     "url": "https://github.com/WizardMac/ReadStat/archive/v1.1.9.tar.gz",
                     "sha256": "89af7c785a7ae3d9a7af6e64a69028829a429f66a14b1b913be22816dc07ddca"
+                },
+		{
+                    "type": "patch",
+                    "path": "admin/patches/readstat-1.1.9.patch"
                 }
             ]
         },
@@ -209,7 +241,7 @@
             "buildsystem": "cmake-ninja",
             "config-opts": [
                 "-DADS_VERSION=4.0.3",
-                "-DQT_VERSION_MAJOR=5"
+                "-DQT_VERSION_MAJOR=6"
             ],
             "sources": [
                 {
@@ -230,14 +262,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/Orc/discount/archive/v2.2.7c.tar.gz",
-                    "sha256": "5c5139f1f88e83de86169bee3fde4ebd0e1b0798643dc9065b73dc19dbce07b3",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 12139,
-                        "stable-only": true,
-                        "url-template": "https://github.com/Orc/discount/archive/v$version.tar.gz"
-                    }
+                    "url": "https://github.com/Orc/discount/archive/v3.0.0d.tar.gz",
+                    "sha256": "0ed8cc27ac5d46dc6a8beedd5e5673ac8b466a6474bdb7d35f37c815f670385f"
                 }
             ]
         },
@@ -246,14 +272,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/tbeu/matio/archive/v1.5.23.tar.gz",
-                    "sha256": "5f25c53e698d06b3119e3a4d0536e1da89983dbb7b0a845270663be02ec95978",
-                    "x-checker-data": {
-                        "type": "anitya",
-                        "project-id": 1893,
-                        "stable-only": true,
-                        "url-template": "https://github.com/tbeu/matio/archive/v$version.tar.gz"
-                    }
+                    "url": "https://github.com/tbeu/matio/archive/v1.5.28.tar.gz",
+                    "sha256": "04d14160a637ea822593c336b231227372179f650250c98024a8a2b744afef25"
                 }
             ]
         },
@@ -272,14 +292,17 @@
             "name": "dbc_parser_cpp",
             "buildsystem": "cmake-ninja",
             "config-opts": [
-                "-DENABLE_TESTS=OFF",
-                "-DBUILD_DOCUMENTATION=OFF"
+                "-DDBC_ENABLE_TESTS=OFF"
             ],
             "sources": [
                 {
                     "type": "git",
                     "url": "https://github.com/LinuxDevon/dbc_parser_cpp.git",
-                    "tag": "0f3b22b3fe124976a86a85fcd1bfdd55c20ca428"
+                    "tag": "cc4e80c7b6e1f7a13cc47b45f226756f823888e2"
+                },
+		{
+                    "type": "patch",
+                    "path": "admin/patches/dbc_parser_cpp.patch"
                 }
             ]
         },
@@ -290,14 +313,53 @@
                 {
                     "type": "git",
                     "url": "https://github.com/Murmele/vector_blf.git",
-                    "tag": "b7a419c4d8edbf495ab309b57a380a2444ee2730"
+                    "tag": "2c1a8e649328f2e06ce4d45c6223628bc39fd178"
+                }
+            ]
+        },
+        {
+            "name": "mdds",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://gitlab.com/api/v4/projects/mdds%2Fmdds/packages/generic/source/3.1.0/mdds-3.1.0.tar.xz",
+                    "sha256": "ca295f4c86968a7eb1f5d503ff7ae180e6605210cfb26d01658be42048c0924c"
+                }
+            ]
+        },
+        {
+            "name": "ixion",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://gitlab.com/ixion/ixion/-/archive/0.20.0/ixion-0.20.0.tar.bz2",
+                    "sha256": "39e54cd486fed458c2a6e83a5e658d4c2e818862355b33645bb1342449428463"
+                }
+            ]
+        },
+        {
+            "name": "orcus",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://gitlab.com/orcus/orcus/-/archive/0.21.0/orcus-0.21.0.tar.bz2",
+                    "sha256": "3555660197d6d38d720643f430804bb0f95a484c1fe6c28c00808ae67f978d15"
                 }
             ]
         },
         {
             "name": "labplot",
             "buildsystem": "cmake-ninja",
-            "config-opts": [ "-DQt5Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt5Mqtt", "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF"],
+	    "build-options": {
+		    "env": {
+			    "LLVM_INSTALL_DIR": "/usr/lib/sdk/llvm18"
+		    }
+	    },
+            "config-opts": [
+		    "-DQt6Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt6Mqtt",
+		    "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF",
+		    "-DENABLE_TESTS=OFF"
+	    ],
 	    "sources": [
                 {
                     "type": "dir",

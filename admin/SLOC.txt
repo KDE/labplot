@@ -6,6 +6,66 @@ SLOCCount comes with ABSOLUTELY NO WARRANTY, and you are welcome to
 redistribute it under certain conditions as specified by the GNU GPL license;
 see the documentation for details.
 
+-----2.12-----
+SLOC    Directory       SLOC-by-Language (Sorted)
+94017   backend         cpp=87439,ansic=6324,yacc=237,python=17
+64342   frontend        cpp=64342
+48786   3rdparty        cpp=48785,sh=1
+727     tools           cpp=727
+82      Plugins         cpp=82
+20      top_dir         sh=20
+0       api             (none)
+0       doc             (none)
+
+
+Totals grouped by language (dominant language first):
+cpp:         201375 (96.83%)
+ansic:         6324 (3.04%)
+yacc:           237 (0.11%)
+sh:              21 (0.01%)
+python:          17 (0.01%)
+
+
+* Total Physical Source Lines of Code (SLOC)                = 207,974
+* Development Effort Estimate, Person-Years (Person-Months) = 54.32 (651.81)
+  (Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05))
+* Schedule Estimate, Years (Months)                         = 2.44 (29.33)
+  (Basic COCOMO model, Months = 2.5 * (person-months**0.38))
+* Estimated Average Number of Developers (Effort/Schedule)  = 22.22
+* Total Estimated Cost to Develop                           = $ 7,337,551
+  (average salary = $56,286/year, overhead = 2.40).
+
+
+-----2.11-----
+SLOC    Directory       SLOC-by-Language (Sorted)
+88780   backend         cpp=83084,ansic=5442,yacc=237,python=17
+48595   kdefrontend     cpp=48595
+33923   3rdparty        cpp=33922,sh=1
+13016   commonfrontend  cpp=13016
+724     tools           cpp=724
+82      Plugins         cpp=82
+20      top_dir         sh=20
+0       doc             (none)
+
+
+Totals grouped by language (dominant language first):
+cpp:         179423 (96.91%)
+ansic:         5442 (2.94%)
+yacc:           237 (0.13%)
+sh:              21 (0.01%)
+python:          17 (0.01%)
+
+
+* Total Physical Source Lines of Code (SLOC)                = 185,140
+* Development Effort Estimate, Person-Years (Person-Months) = 48.07 (576.88)
+  (Basic COCOMO model, Person-Months = 2.4 * (KSLOC**1.05))
+* Schedule Estimate, Years (Months)                         = 2.33 (28.00)
+  (Basic COCOMO model, Months = 2.5 * (person-months**0.38))
+* Estimated Average Number of Developers (Effort/Schedule)  = 20.60
+* Total Estimated Cost to Develop                           = $ 6,494,069
+  (average salary = $56,286/year, overhead = 2.40).
+
+
 -----2.10-----
 SLOC    Directory       SLOC-by-Language (Sorted)
 81675   backend         cpp=75739,ansic=5379,yacc=540,python=17

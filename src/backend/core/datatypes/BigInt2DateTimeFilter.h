@@ -14,6 +14,7 @@
 
 #include "../AbstractSimpleFilter.h"
 #include <QDateTime>
+#include <QTimeZone>
 
 //! Conversion filter bigint -> QDateTime, interpreting the input numbers as Julian days.
 class BigInt2DateTimeFilter : public AbstractSimpleFilter {
@@ -21,7 +22,7 @@ class BigInt2DateTimeFilter : public AbstractSimpleFilter {
 
 public:
 	QDateTime dateTimeAt(int row) const override {
-		QDateTime dt = QDateTime::fromSecsSinceEpoch(0, Qt::UTC);
+		QDateTime dt = QDateTime::fromSecsSinceEpoch(0, QTimeZone::UTC);
 		qint64 inputValue = m_inputs.value(0)->bigIntAt(row);
 		return dt.addMSecs(inputValue); // TODO: select unit (ms, s, min, hour, days)
 	}

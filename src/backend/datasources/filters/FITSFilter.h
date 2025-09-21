@@ -4,6 +4,7 @@
 	Description          : FITS I/O-filter
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-FileCopyrightText: 2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef FITSFILTER_H
@@ -11,29 +12,36 @@
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-#include <KI18n/KLocalizedString>
-
-#include <QTableWidget>
-#include <QTreeWidget>
-
-class QStringList;
-class QXmlStreamReader;
+class QTableWidget;
+class QTreeWidget;
 class FITSFilterPrivate;
-class FITSHeaderEditWidget;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT FITSFilter : public AbstractFileFilter {
+#else
 class FITSFilter : public AbstractFileFilter {
+#endif
 	Q_OBJECT
 
 public:
 	FITSFilter();
 	~FITSFilter() override;
 
-	void
-	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	static QString fileInfoString(const QString&);
+	static QStringList standardKeywords();
+	static QStringList mandatoryImageExtensionKeywords();
+	static QStringList mandatoryTableExtensionKeywords();
+	static QStringList units();
+
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 	QVector<QStringList> readChdu(const QString& fileName, bool* okToMatrix = nullptr, int lines = -1);
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*) override;
+
+	void setCurrentExtensionName(const QString&);
+	const QString currentExtensionName() const;
 
 	struct KeywordUpdate {
 		KeywordUpdate()
@@ -70,7 +78,6 @@ public:
 		KeywordUpdate updates;
 	};
 
-	static QString fileInfoString(const QString&);
 	void updateKeywords(const QString& fileName, const QList<Keyword>& originals, const QVector<Keyword>& updates);
 	void addNewKeyword(const QString& filename, const QList<Keyword>& keywords);
 	void addKeywordUnit(const QString& fileName, const QList<Keyword>& keywords);
@@ -79,14 +86,6 @@ public:
 	void parseHeader(const QString& fileName, QTableWidget* headerEditTable, bool readKeys = true, const QList<Keyword>& keys = QList<Keyword>());
 	void parseExtensions(const QString& fileName, QTreeWidget* tw, bool checkPrimary = false);
 	QList<Keyword> chduKeywords(const QString& fileName);
-
-	static QStringList standardKeywords();
-	static QStringList mandatoryImageExtensionKeywords();
-	static QStringList mandatoryTableExtensionKeywords();
-	static QStringList units();
-
-	void loadFilterSettings(const QString&) override;
-	void saveFilterSettings(const QString&) const override;
 
 	void setStartRow(const int);
 	int startRow() const;

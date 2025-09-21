@@ -12,7 +12,6 @@
 
 #include <QSyntaxHighlighter>
 
-class QStringList;
 class KTextEdit;
 
 class EquationHighlighter : public QSyntaxHighlighter {

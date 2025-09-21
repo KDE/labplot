@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for the Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020-2023 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -12,11 +12,11 @@
 #ifndef SPREADSHEETTEST_H
 #define SPREADSHEETTEST_H
 
-#include "../CommonTest.h"
+#include "../CommonMetaTest.h"
 
 class Spreadsheet;
 
-class SpreadsheetTest : public CommonTest {
+class SpreadsheetTest : public CommonMetaTest {
 	Q_OBJECT
 
 private Q_SLOTS:
@@ -30,10 +30,13 @@ private Q_SLOTS:
 	void testCopyPasteColumnMode04();
 	void testCopyPasteColumnMode05();
 	void testCopyPasteColumnMode06();
+	void testCopyPasteColumnMode07();
 
 	// handling of spreadsheet size changes
 	void testCopyPasteSizeChange00();
 	void testCopyPasteSizeChange01();
+
+	void testCopyPasteUtf8();
 
 	// sorting
 	void testSortSingleNumeric1();
@@ -61,6 +64,10 @@ private Q_SLOTS:
 	void testSortPerformanceNumeric1();
 	void testSortPerformanceNumeric2();
 
+	// drop/mask
+	void testRemoveRowsWithMissingValues();
+	void testMaskRowsWithMissingValues();
+
 	// flattening
 	void testFlatten00();
 	void testFlatten01();
@@ -74,8 +81,10 @@ private Q_SLOTS:
 	void testSearchExtended01();
 	void testSearchExtended02();
 	void testSearchExtended03();
-
 	void testSearchFindAll();
+
+	void testSearchReplaceNumeric();
+	void testSearchReplaceText();
 	void testSearchReplaceAll();
 
 	// size changes
@@ -83,6 +92,9 @@ private Q_SLOTS:
 	void testRemoveRows();
 	void testInsertColumns();
 	void testRemoveColumns();
+
+	void testInsertRowsBegin(); // insert row at the beginning
+	void testRemoveRowsBegin(); // remove first row
 
 	void testInsertRowsSuppressUpdate();
 	void testInsertColumnsSuppressUpdate();
@@ -92,7 +104,10 @@ private Q_SLOTS:
 	void testLinkSpreadsheetAddRow();
 	void testLinkSpreadsheetRemoveRow();
 	void testLinkSpreadsheetRecalculate();
+	void testLinkSpreadsheetRecalculateRowCountChange();
 	void testLinkSpreadsheetSaveLoad();
+	void testLinkSpreadsheetsModelDockUpdateCheckInsertRows();
+	void testLinkSpreadsheetsModelDockUpdateCheckRemoveRows();
 
 	// statistics spreadsheet
 	void testStatisticsSpreadsheetToggle();
@@ -105,6 +120,8 @@ private Q_SLOTS:
 #endif // HAVE_VECTOR_BLF
 
 	void testNaming();
+
+	void testClearColumns();
 
 private:
 	Spreadsheet* createSearchReplaceSpreadsheet();

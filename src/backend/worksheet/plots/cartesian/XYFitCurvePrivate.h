@@ -11,6 +11,7 @@
 #ifndef XYFITCURVEPRIVATE_H
 #define XYFITCURVEPRIVATE_H
 
+#include "backend/note/Note.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 
@@ -26,8 +27,9 @@ public:
 	~XYFitCurvePrivate() override;
 
 	virtual bool recalculateSpecific(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) override;
-	virtual void prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) override;
+	virtual void prepareTmpDataColumn(const AbstractColumn** tmpXDataColumn, const AbstractColumn** tmpYDataColumn) const override;
 	virtual void resetResults() override;
+	void updateResultsNote();
 	void runLevenbergMarquardt(const AbstractColumn* xcol, const AbstractColumn* ycol, Range<double> xRange);
 	void runMaximumLikelihood(const AbstractColumn* xcol, double normalization);
 	bool evaluate(bool preview = false);
@@ -45,6 +47,7 @@ public:
 
 	Column* residualsColumn{nullptr};
 	QVector<double>* residualsVector{nullptr};
+	Note* resultsNote{nullptr};
 
 	XYFitCurve* const q;
 
