@@ -1,5 +1,5 @@
-# Translation of labplot2.po to Spanish
-# Copyright (C) 2014-2025 This_file_is_part_of_KDE
+# Spanish translations for labplot2.po package.
+# Copyright (C) 2014-2025 This file is copyright:
 # This file is distributed under the same license as the labplot package.
 #
 # SPDX-FileCopyrightText: 2014, 2015, 2017, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Eloy Cuadra <ecuadra@eloihr.net>
@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-16 03:05+0000\n"
-"PO-Revision-Date: 2025-02-04 01:31+0100\n"
+"PO-Revision-Date: 2025-09-21 00:59+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.12.1\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -393,12 +393,12 @@ msgstr "Importar datos"
 #: src/kdefrontend/MainWin.cpp:674
 #, kde-format
 msgid "From File..."
-msgstr "Desde archivo..."
+msgstr "Desde archivo…"
 
 #: src/backend/core/AbstractPart.cpp:118 src/kdefrontend/MainWin.cpp:681
 #, kde-format
 msgid "From SQL Database..."
-msgstr "Desde base de datos SQL..."
+msgstr "Desde base de datos SQL…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
 #: src/backend/core/AbstractPart.cpp:127
@@ -9810,7 +9810,7 @@ msgstr "Trazar datos"
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:291
 #, kde-format
 msgid "Variable Statistics..."
-msgstr "Estadísticas de variables..."
+msgstr "Estadísticas de variables…"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:338
 #, kde-format
@@ -9820,7 +9820,7 @@ msgstr "Interrumpir"
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:340
 #, kde-format
 msgid "Calculating..."
-msgstr "Calculando..."
+msgstr "Calculando…"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:344
 #, kde-format
@@ -10058,7 +10058,7 @@ msgstr "Borrar contenido"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:331
 #, kde-format
 msgid "&Go to Cell..."
-msgstr "&Ir a la celda..."
+msgstr "&Ir a la celda…"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:142
 #, kde-format
@@ -10459,7 +10459,7 @@ msgstr "&Sustituir"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:482
 #, kde-format
 msgid "Column Statistics..."
-msgstr "Estadísticas de columnas..."
+msgstr "Estadísticas de columnas…"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:338
 #, kde-format
@@ -10617,7 +10617,7 @@ msgstr "Reescalar a [a, b]"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:476
 #, kde-format
 msgid "&Sort..."
-msgstr "&Ordenar..."
+msgstr "&Ordenar…"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:477
 #, kde-format
@@ -11435,7 +11435,7 @@ msgstr "Introduzca la palabra clave que desea buscar"
 #: src/kdefrontend/examples/ExamplesWidget.cpp:54
 #, kde-format
 msgid "Search..."
-msgstr "Buscar..."
+msgstr "Buscar…"
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:32
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:49
@@ -13312,7 +13312,7 @@ msgstr "Apilado"
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:54
 #, kde-format
 msgid "Stacked 100%"
-msgstr "Apilado 100%"
+msgstr "Apilado 100 %"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:60
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:74
@@ -14385,12 +14385,12 @@ msgstr "No se dispone de fuentes de datos."
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1410
 #, kde-format
 msgid "%1 % lower confidence level"
-msgstr "Nivel de confianza inferior al %1%"
+msgstr "Nivel de confianza inferior al %1 %"
 
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1411
 #, kde-format
 msgid "%1 % upper confidence level"
-msgstr "Nivel de confianza superior al %1%"
+msgstr "Nivel de confianza superior al %1 %"
 
 #. i18n: ectx: property (text), widget (QLabel, lCutoff)
 #: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:289
@@ -15453,7 +15453,7 @@ msgstr "Crea una nueva carpeta para coleccionar hojas y otros elementos"
 #: src/kdefrontend/MainWin.cpp:659
 #, kde-format
 msgid "Live Data Source..."
-msgstr "Fuente de datos en vivo..."
+msgstr "Fuente de datos en vivo…"
 
 #: src/kdefrontend/MainWin.cpp:660
 #, kde-format
@@ -15475,7 +15475,7 @@ msgstr "Importar datos desde base de datos SQL"
 #: src/kdefrontend/MainWin.cpp:686
 #, kde-format
 msgid "From Dataset Collection..."
-msgstr "De la colección de conjuntos de datos..."
+msgstr "De la colección de conjuntos de datos…"
 
 #: src/kdefrontend/MainWin.cpp:687
 #, kde-format
@@ -15485,7 +15485,7 @@ msgstr "Importa datos de un conjunto de datos en línea"
 #: src/kdefrontend/MainWin.cpp:691
 #, kde-format
 msgid "LabPlot Project..."
-msgstr "Proyecto de LabPlot..."
+msgstr "Proyecto de LabPlot…"
 
 #: src/kdefrontend/MainWin.cpp:692
 #, kde-format
@@ -15495,7 +15495,7 @@ msgstr "Importar un royecto desde un archivo de proyecto de LabPlot (.lml)"
 #: src/kdefrontend/MainWin.cpp:697
 #, kde-format
 msgid "Origin Project (OPJ)..."
-msgstr "Proyecto de Origin (OPJ)..."
+msgstr "Proyecto de Origin (OPJ)…"
 
 #: src/kdefrontend/MainWin.cpp:698
 #, kde-format
@@ -15506,7 +15506,7 @@ msgstr ""
 #: src/kdefrontend/MainWin.cpp:703
 #, kde-format
 msgid "Export..."
-msgstr "Exportar..."
+msgstr "Exportar…"
 
 #: src/kdefrontend/MainWin.cpp:704
 #, kde-format
@@ -15532,7 +15532,7 @@ msgstr "Abrir el diálogo para explorar los mapas de color disponibles."
 #: src/kdefrontend/MainWin.cpp:725
 #, kde-format
 msgid "FITS Metadata Editor..."
-msgstr "Editor de metadatos FITS..."
+msgstr "Editor de metadatos FITS…"
 
 #: src/kdefrontend/MainWin.cpp:726
 #, kde-format
@@ -15542,7 +15542,7 @@ msgstr "Abrir un editor para editar metadatos FITS"
 #: src/kdefrontend/MainWin.cpp:735
 #, kde-format
 msgid "Undo/Redo History..."
-msgstr "Historial de deshacer/rehacer..."
+msgstr "Historial de deshacer/rehacer…"
 
 #: src/kdefrontend/MainWin.cpp:755
 #, kde-format
@@ -15617,7 +15617,7 @@ msgstr "Vista previa de la hoja de trabajo"
 #: src/kdefrontend/MainWin.cpp:848
 #, kde-format
 msgid "Configure CAS..."
-msgstr "Configurar CAS..."
+msgstr "Configurar CAS…"
 
 #: src/kdefrontend/MainWin.cpp:849
 #, kde-format
@@ -15721,7 +15721,7 @@ msgstr "No se ha podido leer el archivo de proyecto %1."
 #: src/kdefrontend/MainWin.cpp:1546
 #, kde-format
 msgid "Loading %1..."
-msgstr "Cargando %1..."
+msgstr "Cargando %1…"
 
 #: src/kdefrontend/MainWin.cpp:1579
 #, kde-format
@@ -17237,7 +17237,7 @@ msgstr[1] "%1 sustituciones realizadas"
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1460
 #, kde-format
 msgid "Add..."
-msgstr "Añadir..."
+msgstr "Añadir…"
 
 #: src/kdefrontend/spreadsheet/SearchReplaceWidget.cpp:1538
 #, kde-format
@@ -20036,7 +20036,7 @@ msgstr "Eliminar el intervalo de X seleccionado"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:424
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #. i18n: ectx: property (text), widget (QLabel, lRangeType)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:297
@@ -21736,7 +21736,7 @@ msgstr "Clave:"
 #: src/kdefrontend/ui/fitsheadereditwidget.ui:56
 #, kde-format
 msgid "Open File..."
-msgstr "Abrir archivo..."
+msgstr "Abrir archivo…"
 
 #. i18n: ectx: property (text), widget (QPushButton, bClose)
 #: src/kdefrontend/ui/fitsheadereditwidget.ui:63
@@ -23748,788 +23748,3 @@ msgstr "el proceso «convert» ha fallado, código de salida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No se puede abrir el archivo:"
-
-#~ msgid "%1: move down"
-#~ msgstr "%1: mover hacia abajo"
-
-#~ msgid "&Restore"
-#~ msgstr "&Restaurar"
-
-#~ msgid "Mi&nimize"
-#~ msgstr "Mi&nimizar"
-
-#~ msgid "Ma&ximize"
-#~ msgstr "Ma&ximizar"
-
-#~ msgid "XY-Curves"
-#~ msgstr "Curvas-XY"
-
-#~ msgid "Excel"
-#~ msgstr "Excel"
-
-#~ msgid "ROOT (CERN) Histograms"
-#~ msgstr "Histogramas ROOT (CERN)"
-
-#~ msgid "could not open device"
-#~ msgstr "no se ha podido abrir el dispositivo"
-
-#~ msgid "Variable contains no data"
-#~ msgstr "La variable no contiene datos"
-
-#~ msgid "Not implemented yet"
-#~ msgstr "No implementado todavía"
-
-#~ msgid "Invalid dbc file"
-#~ msgstr "Archivo dbc no válido"
-
-#~ msgid "Dawson integral"
-#~ msgstr "Integral de Dawson"
-
-#~ msgid "cumulative distribution function P"
-#~ msgstr "función de distribución acumulativa P"
-
-#~ msgid "%1: copy %2"
-#~ msgstr "%1: copiar %2"
-
-#~ msgid "unknown cartesianPlot element '%1'"
-#~ msgstr "elemento cartesianPlot desconocido «%1»"
-
-#~ msgid "%1: set x-error column"
-#~ msgstr "%1: definir columna de error x"
-
-#~ msgid "%1: y-error type changed"
-#~ msgstr "%1: tipo de error y cambiado"
-
-#~ msgid "%1: set y-error column"
-#~ msgstr "%1: definir columna de error y"
-
-#~ msgid "%1: move behind %2."
-#~ msgstr "%1: mover detrás de %2."
-
-#~ msgid "%1: move in front of %2."
-#~ msgstr "%1: mover delante de %2."
-
-#~ msgid "Remove Columns"
-#~ msgstr "Eliminar columnas"
-
-#~ msgid "Drop"
-#~ msgstr "Soltar"
-
-#~ msgid "Mask"
-#~ msgstr "Enmascarar"
-
-#~ msgid "Remove"
-#~ msgstr "Eliminar"
-
-#~ msgid "xy-Curve"
-#~ msgstr "Curva-xy"
-
-#~ msgid "%1: clear selected rows"
-#~ msgstr "%1: borrar filas seleccionadas"
-
-#~ msgid "End Search"
-#~ msgstr "Terminar la búsqueda"
-
-#~ msgid "xy-Curve from a Formula"
-#~ msgstr "Curva-xy de una fórmula"
-
-#~ msgid "Data Operation"
-#~ msgstr "Operación de datos"
-
-#~ msgid "Auto/Cross Correlation"
-#~ msgstr "Correlación auto/cruzada"
-
-#~ msgid "Data Manipulation"
-#~ msgstr "Manipulación de datos"
-
-#~ msgid "%1: Add curve to %2 plots"
-#~ msgstr "%1: Añadir curva a %2 gráficos"
-
-#~ msgid "Add %1"
-#~ msgstr "Añadir %1"
-
-#~ msgid "%1 name:"
-#~ msgstr "Nombre de %1:"
-
-#~ msgid "No data to import."
-#~ msgstr "Ningún dato que importar."
-
-#~ msgid "No Data"
-#~ msgstr "Ningún dato"
-
-#~ msgid "Save Filter Settings as"
-#~ msgstr "Guardar las preferencias del filtro como"
-
-#~ msgid "Filter name:"
-#~ msgstr "Nombre del filtro:"
-
-#~ msgid "new filter"
-#~ msgstr "nuevo filtro"
-
-#~ msgid "%1 CustomPoints: visibility changed"
-#~ msgstr "%1 puntos personalizados: visibilidad cambiada"
-
-#~ msgid "test"
-#~ msgstr "prueba"
-
-#~ msgctxt "@title:window"
-#~ msgid "Spreadsheet"
-#~ msgstr "Hoja de cálculo"
-
-#~ msgctxt "@title:window"
-#~ msgid "Column"
-#~ msgstr "Columna"
-
-#~ msgctxt "@title:window"
-#~ msgid "Matrix"
-#~ msgstr "Matriz"
-
-#~ msgctxt "@title:window"
-#~ msgid "Plot Area"
-#~ msgstr "Área del gráfico"
-
-#~ msgctxt "@title:window"
-#~ msgid "Legend"
-#~ msgstr "Leyenda"
-
-#~ msgctxt "@title:window"
-#~ msgid "Axis"
-#~ msgstr "Eje"
-
-#~ msgctxt "@title:window"
-#~ msgid "XY-Curve"
-#~ msgstr "Curva XY"
-
-#~ msgctxt "@title:window"
-#~ msgid "Data Reduction"
-#~ msgstr "Reducción de datos"
-
-#~ msgctxt "@title:window"
-#~ msgid "Differentiation"
-#~ msgstr "Diferenciación"
-
-#~ msgctxt "@title:window"
-#~ msgid "Integration"
-#~ msgstr "Integración"
-
-#~ msgctxt "@title:window"
-#~ msgid "Interpolation"
-#~ msgstr "Interpolación"
-
-#~ msgctxt "@title:window"
-#~ msgid "Smoothing"
-#~ msgstr "Difuminado"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fit"
-#~ msgstr "Ajuste"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fourier Transform"
-#~ msgstr "Transformada de Fourier"
-
-#~ msgctxt "@title:window"
-#~ msgid "Hilbert Transform"
-#~ msgstr "Transformada de Hilbert"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fourier Filter"
-#~ msgstr "Filtro de Fourier"
-
-#~ msgctxt "@title:window"
-#~ msgid "Convolution/Deconvolution"
-#~ msgstr "Convolución/Deconvolución"
-
-#~ msgctxt "@title:window"
-#~ msgid "Auto-/Cross-Correlation"
-#~ msgstr "Correlación Auto-/Cruzada"
-
-#~ msgctxt "@title:window"
-#~ msgid "Histogram"
-#~ msgstr "Histograma"
-
-#~ msgctxt "@title:window"
-#~ msgid "Bar Plot"
-#~ msgstr "Diagrama de barras"
-
-#~ msgctxt "@title:window"
-#~ msgid "Box Plot"
-#~ msgstr "Diagrama de caja"
-
-#~ msgctxt "@title:window"
-#~ msgid "Text Label"
-#~ msgstr "Etiqueta de texto"
-
-#~ msgctxt "@title:window"
-#~ msgid "Image"
-#~ msgstr "Imagen"
-
-#~ msgctxt "@title:window"
-#~ msgid "Custom Point"
-#~ msgstr "Punto personalizado"
-
-#~ msgctxt "@title:window"
-#~ msgid "Reference Line"
-#~ msgstr "Línea de referencia"
-
-#~ msgctxt "@title:window"
-#~ msgid "Project"
-#~ msgstr "Proyecto"
-
-#~ msgctxt "@title:window"
-#~ msgid "Notebook"
-#~ msgstr "Bloc de notas"
-
-#~ msgctxt "@title:window"
-#~ msgid "Notes"
-#~ msgstr "Notas"
-
-#~ msgctxt "@title:window"
-#~ msgid "Info Element"
-#~ msgstr "Elemento informativo"
-
-#~ msgctxt "@title:window"
-#~ msgid "Folder"
-#~ msgstr "Carpeta"
-
-#~ msgctxt "@title:window"
-#~ msgid "Workbook"
-#~ msgstr "Libro de trabajo"
-
-#~ msgid "CartesianPlot"
-#~ msgstr "Gráfico cartesiano"
-
-#~ msgid "&Analysis"
-#~ msgstr "&Análisis"
-
-#~ msgid "GUI configuration file not found"
-#~ msgstr "Archivo de configuración de la interfaz gráfica no encontrado"
-
-#~ msgid "%1 file was not found. Please check your installation."
-#~ msgstr ""
-#~ "El archivo %1 no se ha encontrado. Por favor, compruebe su instalación."
-
-#~ msgid "&Tile"
-#~ msgstr "&Mosaico"
-
-#~ msgid "Tile the windows"
-#~ msgstr "Mostrar las ventanas en mosaico"
-
-#~ msgid "&Cascade"
-#~ msgstr "&Cascada"
-
-#~ msgid "Cascade the windows"
-#~ msgstr "Mostrar las ventanas en cascada"
-
-#~ msgid "Do Nothing"
-#~ msgstr "No hacer nada"
-
-#~ msgid "Create New Project with Worksheet"
-#~ msgstr "Crear nuevo proyecto con hoja de trabajo"
-
-#~ msgid "Create New Project with Spreadsheet"
-#~ msgstr "Crear nuevo proyecto con hoja de cálculo"
-
-#~ msgid "Sub-window View"
-#~ msgstr "Vista de subventanas"
-
-#~ msgid "Tabbed View"
-#~ msgstr "Vista en pestañas"
-
-#~ msgid "Show Windows of the Current Folder Only"
-#~ msgstr "Mostrar solo ventanas de la carpeta actual"
-
-#~ msgid "Show Windows of the Current Folder and its Subfolders Only"
-#~ msgstr "Mostrar solo ventanas de la carpeta actual y sus subcarpetas"
-
-#~ msgid "Show all Windows"
-#~ msgstr "Mostrar todas las ventanas"
-
-#~ msgctxt "@title:window"
-#~ msgid "Equidistant Values"
-#~ msgstr "Valores equidistantes"
-
-#~ msgid "Add Histogram to"
-#~ msgstr "Añadir histograma a"
-
-#~ msgid "Add Box Plot to"
-#~ msgstr "Añadir diagrama de caja a"
-
-#~ msgid "Add Bar Plot to"
-#~ msgstr "Añadir diagrama de barras a"
-
-#~ msgid "All histograms in one plot area"
-#~ msgstr "Todos los histogramas en un área de gráfico"
-
-#~ msgid "One plot area per histogram"
-#~ msgstr "Un área de gráfico por histograma"
-
-#~ msgid "Add Histograms to"
-#~ msgstr "Añadir histogramas a"
-
-#~ msgid "All box plots in one plot area"
-#~ msgstr "Todos los diagramas de caja en un área de gráfico"
-
-#~ msgid "One plot area per box plot"
-#~ msgstr "Un área de gráfico por diagrama de caja"
-
-#~ msgid "Add Box Plots to"
-#~ msgstr "Añadir diagramas de caja a"
-
-#~ msgid "All bar plots in one plot area"
-#~ msgstr "Todos los diagramas de barras en un área de gráfico"
-
-#~ msgid "One plot area per bar plot"
-#~ msgstr "Un área de gráfico por diagrama de barras"
-
-#~ msgid "Add Bar Plots to"
-#~ msgstr "Añadir diagramas de barras a"
-
-#~ msgid "new plot in an existing worksheet"
-#~ msgstr "nuevo gráfico en hoja de trabajo que ya existe"
-
-#~ msgid "new plot in a new worksheet"
-#~ msgstr "nuevo gráfico en hoja de trabajo nueva"
-
-#~ msgid "new plots in an existing worksheet"
-#~ msgstr "nuevos gráficos en hoja de trabajo que ya existe"
-
-#~ msgid "new plots in a new worksheet"
-#~ msgstr "nuevos gráficos en hoja de trabajo nueva"
-
-#~ msgid "Point Separation:"
-#~ msgstr "Separación de punto:"
-
-#~ msgid "Reference Points"
-#~ msgstr "Puntos de referencia"
-
-#~ msgid "Parse Errors"
-#~ msgstr "Errores de análisis"
-
-#~ msgid "Save the current filter settings"
-#~ msgstr "Guardar las preferencias del filtro actual"
-
-#~ msgid "Manage filters"
-#~ msgstr "Gestionar filtros"
-
-#~ msgid "Column Comments:"
-#~ msgstr "Comentarios de columnas:"
-
-#~ msgid "number should be bigger than number of data points"
-#~ msgstr "el número debería ser mayor que el número de puntos de datos"
-
-#~ msgid "Tab position:"
-#~ msgstr "Posición de las pestañas:"
-
-#~ msgid "Interface:"
-#~ msgstr "Interfaz:"
-
-#~ msgid "Sub-window visibility:"
-#~ msgstr "Visibilidad de subventanas:"
-
-#~ msgid "auto update"
-#~ msgstr "actualizar automáticamente"
-
-#~ msgid "Sort columns:"
-#~ msgstr "Ordenar columnas:"
-
-#~ msgid "Separately"
-#~ msgstr "De forma separada"
-
-#~ msgid "Together"
-#~ msgstr "De forma conjunta"
-
-#~ msgid "Leading column:"
-#~ msgstr "Columna inicial:"
-
-#~ msgid "Specify the name of the file to import."
-#~ msgstr "Indique el nombre del archivo a importar."
-
-#~ msgid "auto"
-#~ msgstr "auto"
-
-#~ msgid "maximum"
-#~ msgstr "máximo"
-
-#~ msgid "imaginary part"
-#~ msgstr "parte imaginaria"
-
-#~ msgid "linear"
-#~ msgstr "lineal"
-
-#~ msgid "polynomial"
-#~ msgstr "polinomial"
-
-#~ msgid "cubic spline (natural)"
-#~ msgstr "spline cúbica (natural)"
-
-#~ msgid "cubic spline (periodic)"
-#~ msgstr "spline cúbica (periódica)"
-
-#~ msgid "cosine"
-#~ msgstr "coseno"
-
-#~ msgid "Akima-spline (natural)"
-#~ msgstr "spline de Akima (natural)"
-
-#~ msgid "Akima-spline (periodic)"
-#~ msgstr "spline de Akima (periódica)"
-
-#~ msgid "exponential"
-#~ msgstr "exponencial"
-
-#~ msgid "function"
-#~ msgstr "función"
-
-#~ msgid "derivative"
-#~ msgstr "derivada"
-
-#~ msgid "constant"
-#~ msgstr "constante"
-
-#~ msgid "binomial"
-#~ msgstr "binomial"
-
-#~ msgid "%1: set vertical line style"
-#~ msgstr "%1: definir estilo de línea vertical"
-
-#~ msgid "%1: set vertical line opacity"
-#~ msgstr "%1: definir opacidad de línea vertical"
-
-#~ msgid "%1: set connection line style"
-#~ msgstr "%1: definir estilo de línea de conexión"
-
-#~ msgid "%1: set connection line opacity"
-#~ msgstr "%1: definir opacidad de línea de conexión"
-
-#~ msgid "%1: set major ticks style"
-#~ msgstr "%1: definir estilo de las marcas mayores"
-
-#~ msgid "%1: set major ticks opacity"
-#~ msgstr "%1: definir opacidad de las marcas mayores"
-
-#~ msgid "%1: set minor ticks style"
-#~ msgstr "%1: definir estilo de las marcas menores"
-
-#~ msgid "%1: set minor ticks opacity"
-#~ msgstr "%1: definir opacidad de las marcas menores"
-
-#~ msgid "%1: set major grid style"
-#~ msgstr "%1: definir estilo de la rejilla mayor"
-
-#~ msgid "%1: set major grid opacity"
-#~ msgstr "%1: definir opacidad de la rejilla mayor"
-
-#~ msgid "%1: set minor grid style"
-#~ msgstr "%1: definir estilo de la rejilla menor"
-
-#~ msgid "%1: set minor grid opacity"
-#~ msgstr "%1: definir opacidad de la rejilla menor"
-
-#~ msgid "%1: filling type changed"
-#~ msgstr "%1: tipo de relleno cambiado"
-
-#~ msgid "%1: filling color style changed"
-#~ msgstr "%1: estilo de color de relleno cambiado"
-
-#~ msgid "%1: filling image style changed"
-#~ msgstr "%1: estilo de imagen de relleno cambiado"
-
-#~ msgid "%1: filling brush style changed"
-#~ msgstr "%1: estilo de brocha de relleno cambiado"
-
-#~ msgid "%1: set filling first color"
-#~ msgstr "%1: definir primer color de relleno"
-
-#~ msgid "%1: set filling second color"
-#~ msgstr "%1: definir segundo color de relleno"
-
-#~ msgid "%1: set filling image"
-#~ msgstr "%1: definir imagen de relleno"
-
-#~ msgid "%1: set filling opacity"
-#~ msgstr "%1: definir opacidad del relleno"
-
-#~ msgid "%1: set border pen"
-#~ msgstr "%1: definir trazo del borde"
-
-#~ msgid "%1: set median line pen"
-#~ msgstr "%1: definir trazo de línea mediana"
-
-#~ msgid "%1: set median line opacity"
-#~ msgstr "%1: definir opacidad de línea mediana"
-
-#~ msgid "%1: set whiskers pen"
-#~ msgstr "%1: definir trazo de los bigotes"
-
-#~ msgid "%1: set whiskers opacity"
-#~ msgstr "%1: definir opacidad de los bigotes"
-
-#~ msgid "%1: set whiskers cap pen"
-#~ msgstr "%1: definir trazo del remate de los bigotes"
-
-#~ msgid "%1: set whiskers cap opacity"
-#~ msgstr "%1: definir opacidad del remate de los bigotes"
-
-#~ msgid "%1: change y-range %2 format"
-#~ msgstr "%1: cambiar el formato %2 del intervalo de Y"
-
-#~ msgid "%1: change y-range %2 auto scaling"
-#~ msgstr "%1: cambiar escalado automático %2 del intervalo de Y"
-
-#~ msgid "%1: set opacity"
-#~ msgstr "%1: definir opacidad"
-
-#~ msgid "%1: set border style"
-#~ msgstr "%1: definir estilo del borde"
-
-#~ msgid "%1: set error bar style"
-#~ msgstr "%1: definir estilo de la barra de errores"
-
-#~ msgid "%1: set error bar opacity"
-#~ msgstr "%1: definir opacidad de la barra de errores"
-
-#~ msgid "%1: set drop line style"
-#~ msgstr "%1: definir el estilo de la línea de proyección"
-
-#~ msgid "%1: set drop line opacity"
-#~ msgstr "%1: definir la opacidad de la línea de proyección"
-
-#~ msgid "%1: set plot area opacity"
-#~ msgstr "%1: definir opacidad del área de gráficos"
-
-#~ msgid "%1: set plot area border"
-#~ msgstr "%1: definir borde del área de gráficos"
-
-#~ msgid "%1: set plot area border opacity"
-#~ msgstr "%1: definir opacidad del borde del área de gráficos"
-
-#~ msgid "Clear Matrix"
-#~ msgstr "Borrar matriz"
-
-#~ msgid ""
-#~ "Normalization of the column <i>%1</i> was not possible because of %2."
-#~ msgstr ""
-#~ "La normalización de la columna <i>%1</i> no ha sido posible debido a %2."
-
-#~ msgid "Select y-Region and Zoom In"
-#~ msgstr "Seleccionar región de Y y ampliar"
-
-#~ msgid "Hilbert-Transform"
-#~ msgstr "Transformada de Hilbert"
-
-#~ msgid "xy-plot"
-#~ msgstr "gráfico xy"
-
-#~ msgid "Cartesian Plot"
-#~ msgstr "Gráfico cartesiano"
-
-#~ msgid "Created: %1"
-#~ msgstr "Creado: %1"
-
-#~ msgid ""
-#~ "The axes lower limit has a non-positive value. Default minimal value will "
-#~ "be used."
-#~ msgstr ""
-#~ "El límite inferior de los ejes tiene valor no positivo. Se usará el valor "
-#~ "mínimo por omisión."
-
-#~ msgid "Wrong lower limit value"
-#~ msgstr "Valor incorrecto del límite inferior"
-
-#~ msgid ""
-#~ "The axes lower limit has a negative value. Default minimal value will be "
-#~ "used."
-#~ msgstr ""
-#~ "El límite inferior de los ejes tiene valor negativo. Se usará el valor "
-#~ "mínimo por omisión."
-
-#~ msgid "NoPen"
-#~ msgstr "Ningún lápiz"
-
-#~ msgid "SolidLine"
-#~ msgstr "Línea sólida"
-
-#~ msgid "DashLine"
-#~ msgstr "Línea de rayas"
-
-#~ msgid "DotLine"
-#~ msgstr "Línea de puntos"
-
-#~ msgid "DashDotLine"
-#~ msgstr "Línea de punto-raya"
-
-#~ msgid "DashDotDotLine"
-#~ msgstr "Línea de raya-punto-punto"
-
-#~ msgid "Y-Ranges:"
-#~ msgstr "Intervalos de Y:"
-
-#~ msgid "Y range %1 is used in plot range %2. "
-#~ msgstr "El intervalo de Y %1 se usa en el intervalo del gráfico %2. "
-
-#~ msgid "Horizontal Linear Gradient"
-#~ msgstr "Gradiente lineal horizontal"
-
-#~ msgid "Vertical Linear Gradient"
-#~ msgstr "Gradiente lineal vertical"
-
-#~ msgid "Diagonal Linear Gradient (Start From Top Left)"
-#~ msgstr "Gradiente lineal diagonal (empezar desde arriba a la izquierda)"
-
-#~ msgid "Diagonal Linear Gradient (Start From Bottom Left)"
-#~ msgstr "Gradiente lineal diagonal (empezar desde abajo a la izquierda)"
-
-#~ msgid "Data, +"
-#~ msgstr "Datos, +"
-
-#~ msgctxt "@title:window"
-#~ msgid "Cartesian Plot"
-#~ msgstr "Gráfico cartesiano"
-
-#~ msgctxt "@title:window"
-#~ msgid "xy-Curve"
-#~ msgstr "Curva-xy"
-
-#~ msgctxt "@title:window"
-#~ msgid "xy-Equation"
-#~ msgstr "Ecuación-xy"
-
-#~ msgctxt "@title:window"
-#~ msgid "Histogram Properties"
-#~ msgstr "Propiedades del histograma"
-
-#~ msgid "Add the specified value to column values"
-#~ msgstr "Añadir el valor especificado a a columnas de valores"
-
-#~ msgid "Subtract the specified value from column values"
-#~ msgstr "Restar el valor especificado desde columnas de valores"
-
-#~ msgid "Multiply column values by the specified value"
-#~ msgstr "Multiplicar valores de la columna por el vlor especificado"
-
-#~ msgid "Divide column values by the specified value"
-#~ msgstr "Dividir valores de la columna por el valor especificado"
-
-#~ msgid "Add the specified value to matrix values"
-#~ msgstr "Añadir el valor especificado a la matriz de valores"
-
-#~ msgid "Subtract the specified value from matrix values"
-#~ msgstr "Restar el valor especificado desde la matriz de valores"
-
-#~ msgid "Multiply matrix values by the specified value"
-#~ msgstr "Multiplicar valores de la matriz por el vlor especificado"
-
-#~ msgid "Divide matrix values by the specified value"
-#~ msgstr "Dividir valores de la matriz por el valor especificado"
-
-#~ msgid "Add Curve to"
-#~ msgstr "Añadir curva a"
-
-#~ msgid "Box Plot Data"
-#~ msgstr "Datos del diagrama de caja"
-
-#~ msgid "Histogram Placement"
-#~ msgstr "Ubicación del histograma"
-
-#~ msgid "Plot - %1"
-#~ msgstr "Gráfico - %1"
-
-#~ msgid "Plot %1"
-#~ msgstr "Trazar %1"
-
-#~ msgid "Error bars"
-#~ msgstr "Barras de error"
-
-#~ msgid "Tick Column:"
-#~ msgstr "Columna de marca:"
-
-#~ msgid "Tick Type:"
-#~ msgstr "Tipo de marca:"
-
-#~ msgid "spacing between major ticks"
-#~ msgstr "espacio entre marcas principales"
-
-#~ msgid "Font"
-#~ msgstr "Tipo de letra"
-
-#~ msgid "y-Range"
-#~ msgstr "Intervalo-y"
-
-#~ msgid "x-Range"
-#~ msgstr "Intervalo-x"
-
-#~ msgid "Top margin:"
-#~ msgstr "Margen superior:"
-
-#~ msgid "Bottom margin:"
-#~ msgstr "Margen inferior:"
-
-#~ msgid "Hor. spacing:"
-#~ msgstr "Espaciado horizontal:"
-
-#~ msgid "Ver. spacing:"
-#~ msgstr "Espaciado vertical:"
-
-#~ msgid "Margin"
-#~ msgstr "Margen"
-
-#~ msgid "cm"
-#~ msgstr "cm"
-
-#~ msgid "x-Start:"
-#~ msgstr "Inicio-x:"
-
-#~ msgid "x-End:"
-#~ msgstr "Fin-x:"
-
-#~ msgid "x-Range:"
-#~ msgstr "Intervalo-x:"
-
-#~ msgid "Plot ranges:"
-#~ msgstr "Intervalos de gráficos:"
-
-#~ msgid "x-error"
-#~ msgstr "error x"
-
-#~ msgid "Error type:"
-#~ msgstr "Tipo de error:"
-
-#~ msgid "y-error"
-#~ msgstr "error y"
-
-#~ msgid "x-data:"
-#~ msgstr "datos-x:"
-
-#~ msgid "y-data:"
-#~ msgstr "datos-y:"
-
-#~ msgid "y-Data:"
-#~ msgstr "Datos-y:"
-
-#~ msgid "Advanced"
-#~ msgstr "Avanzado"
-
-#~ msgid "y-Weight:"
-#~ msgstr "Peso-y:"
-
-#~ msgid "Font color:"
-#~ msgstr "Color del texto:"
-
-#~ msgid "Drop values:"
-#~ msgstr "Soltar valores:"
-
-#~ msgid "X-data:"
-#~ msgstr "Datos-X:"
-
-#~ msgid "Y-data:"
-#~ msgstr "Datos-y:"
-
-#~ msgid "&All curves in one plot"
-#~ msgstr "Tod&as las curvas en un gráfico"
-
-#~ msgid "One p&lot per curve"
-#~ msgstr "Un gráfico &por curva"
-
-#~ msgid "Add Curves to"
-#~ msgstr "Añadir curvas a"
