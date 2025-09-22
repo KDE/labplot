@@ -213,8 +213,8 @@ template<class target_class, typename structType, typename value_type>
 class StructSetterCmd : public QUndoCommand {
 public:
 	StructSetterCmd(target_class* target,
-					structType target_class::*structField,
-					value_type structType::*field,
+					structType target_class::* structField,
+					value_type structType::* field,
 					value_type newValue,
 					const KLocalizedString& description,
 					QUndoCommand* parent = nullptr)

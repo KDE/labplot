@@ -1909,9 +1909,9 @@ void CartesianPlot::addPlot(QAction* action) {
 		addChild(new RunChart(i18n("Run Chart")));
 		break;
 
-    case Plot::PlotType::Heatmap:
-        addChild(new Heatmap(i18n("Heatmap")));
-        break;
+	case Plot::PlotType::Heatmap:
+		addChild(new Heatmap(i18n("Heatmap")));
+		break;
 	}
 }
 
