@@ -5711,11 +5711,3 @@ const QColor CartesianPlot::themeColorPalette(int index) const {
 	const int i = index % m_themeColorPalette.count();
 	return m_themeColorPalette.at(i);
 }
-
-void CartesianPlot::setXRange(int index, const Range<double>& range) {
-	setRange(Dimension::X, index, range);
-}
-
-void CartesianPlot::setYRange(int index, const Range<double>& range) {
-	setRange(Dimension::Y, index, range);
-}
