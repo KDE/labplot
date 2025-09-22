@@ -113,7 +113,7 @@
 		}                                                                                                                                                      \
 		void undo() override {                                                                                                                                 \
 			redo();                                                                                                                                            \
-		}																																					   \
+		}                                                                                                                                                      \
 	};
 
 

@@ -1378,12 +1378,12 @@ void HeatmapTest::testRepresentationSpreadsheetCompletelyOutOfRange() {
 	yColumn->setValueAt(10, 90.0); // Testing Duplicates
 	xColumn->setValueAt(11, 6.5); // Testing Duplicates
 
-		   // |-----|-----|-----|-----|-----|
-		   // |  X  |     |     |     |  X  |
-		   // |     |  X  |     |  X  |     |
-		   // |     |     | XX  |     |     |
-		   // |     |  X  |     | XX  |     |
-		   // |  X  |     |     |     | XX  |
+	// |-----|-----|-----|-----|-----|
+	// |  X  |     |     |     |  X  |
+	// |     |  X  |     |  X  |     |
+	// |     |     | XX  |     |     |
+	// |     |  X  |     | XX  |     |
+	// |  X  |     |     |     | XX  |
 
 	int valueDrawnCounter = 0;
 	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
@@ -1396,7 +1396,7 @@ void HeatmapTest::testRepresentationSpreadsheetCompletelyOutOfRange() {
 			COMPARE_VALUES(8.0, 0.0, 10.0, 20.0, 1.0);
 			break;
 
-				   // Row 1
+		// Row 1
 		case 2:
 			COMPARE_VALUES(2.0, 20.0, 4.0, 40.0, 1.0);
 			break;
@@ -1404,12 +1404,12 @@ void HeatmapTest::testRepresentationSpreadsheetCompletelyOutOfRange() {
 			COMPARE_VALUES(6.0, 20.0, 8.0, 40.0, 1.0);
 			break;
 
-				   // Row 2
+		// Row 2
 		case 4:
 			COMPARE_VALUES(4.0, 40.0, 6.0, 60.0, 2.0);
 			break;
 
-				   // Row 3
+		// Row 3
 		case 5:
 			COMPARE_VALUES(2.0, 60.0, 4.0, 80.0, 1.0);
 			break;
@@ -1417,7 +1417,7 @@ void HeatmapTest::testRepresentationSpreadsheetCompletelyOutOfRange() {
 			COMPARE_VALUES(6.0, 60.0, 8.0, 80.0, 2.0);
 			break;
 
-				   // Row 4
+		// Row 4
 		case 7:
 			COMPARE_VALUES(0.0, 80.0, 2.0, 100.0, 1.0);
 			break;
@@ -1444,7 +1444,7 @@ void HeatmapTest::testRepresentationSpreadsheetCompletelyOutOfRange() {
 		plot->setXRange(0, range);  // Heatmap is not in this range
 	}
 
-		   // first are cut away completely, second row/column is half
+	// first are cut away completely, second row/column is half
 	valueDrawnCounter = 0;
 	connect(hm, &Heatmap::valueDrawn, [this, &valueDrawnCounter](double xPosStart, double yPosStart, double xPosEnd, double yPosEnd, double value) {
 		valueDrawnCounter++;
@@ -1454,7 +1454,7 @@ void HeatmapTest::testRepresentationSpreadsheetCompletelyOutOfRange() {
 		range.setAutoScale(false);
 		range.setStart(200.);
 		range.setEnd(2000.);
-		plot->setYRange(0, range);  // Heatmap is not in this range
+		plot->setYRange(0, range); // Heatmap is not in this range
 	}
 	QCOMPARE(valueDrawnCounter, 0);
 }
@@ -1660,7 +1660,6 @@ void HeatmapTest::testColorManual() {
 	// |     |     | XX  |     |     |   60  Y
 	// |     |  X  |     | XX  |     |   80
 	// |  X  |     |     |     | XX  |   100
-
 
 	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).start(), 0);
 	QCOMPARE(plot->range(Dimension::X, hm->coordinateSystemIndex()).end(), 10);
@@ -2321,7 +2320,7 @@ void HeatmapTest::testMatrixNumBins() {
 		QCOMPARE(xPosEnd, 10.);
 		QCOMPARE(yPosEnd, 100.);
 		QCOMPARE(value, 25.); // Last value is used currently
-		valueDrawnCounter ++;
+		valueDrawnCounter++;
 	});
 	matrix->setCell(4, 4, 25.0); // Set last cell to trigger a redraw of the heatmap
 	QCOMPARE(valueDrawnCounter, 1);

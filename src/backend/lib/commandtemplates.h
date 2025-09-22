@@ -242,9 +242,9 @@ public:
 	}
 
 protected:
-	structType target_class::*m_structField;
+	structType target_class::* m_structField;
 	target_class* m_target;
-	value_type structType::*m_field;
+	value_type structType::* m_field;
 	value_type m_value;
 };
 

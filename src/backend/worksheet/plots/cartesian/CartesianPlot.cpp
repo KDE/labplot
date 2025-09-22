@@ -794,9 +794,9 @@ void CartesianPlot::fillAddNewPlotMenu(QMenu* addNewPlotMenu, QActionGroup* acti
 
 	addNewPlotMenu->addMenu(addNewCIPlotsMenu);
 
-    action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-heatmap")), i18n("Heatmap"), actionGroup);
-    action->setData(static_cast<int>(Plot::PlotType::Heatmap));
-    addNewPlotMenu->addAction(action);
+	action = new QAction(QIcon::fromTheme(QStringLiteral("labplot-heatmap")), i18n("Heatmap"), actionGroup);
+	action->setData(static_cast<int>(Plot::PlotType::Heatmap));
+	addNewPlotMenu->addAction(action);
 }
 
 QMenu* CartesianPlot::createContextMenu() {
