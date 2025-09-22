@@ -116,7 +116,6 @@
 		}                                                                                                                                                      \
 	};
 
-
 #define HEATMAP_COLUMN_SETTER_CMD_IMPL_S(class_name, Prefix, prefix)                                                                                           \
 	class class_name##Set##Prefix##ColumnCmd : public StandardSetterCmd<class_name::Private, const AbstractColumn*> {                                          \
 	public:                                                                                                                                                    \

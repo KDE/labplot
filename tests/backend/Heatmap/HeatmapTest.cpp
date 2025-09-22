@@ -1441,7 +1441,7 @@ void HeatmapTest::testRepresentationSpreadsheetCompletelyOutOfRange() {
 		range.setAutoScale(false);
 		range.setStart(-3.);
 		range.setEnd(-2.);
-		plot->setXRange(0, range);  // Heatmap is not in this range
+		plot->setXRange(0, range); // Heatmap is not in this range
 	}
 
 	// first are cut away completely, second row/column is half
