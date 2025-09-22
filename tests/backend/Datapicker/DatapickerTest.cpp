@@ -311,10 +311,10 @@ void DatapickerTest::mapPolarInRadiansToCartesian() {
 	VALUES_EQUAL(t.x[0], 1.);
 	VALUES_EQUAL(t.y[0], 0.);
 
-	// TODO: VALUES_EQUAL doesn't work for the next comparions since the precision 1.e-7 is too high for the numerical error involved here.
+	// TODO: VALUES_EQUAL doesn't work for the next comparisons since the precision 1.e-7 is too high for the numerical error involved here.
 	// to improve the precision we need to get rid of QVector3D using floats internally and to switch to doubles. For now, just use a somewhat
 	// lower precision here since it's not essential.
-	// VALUES_EQUAL(t.x[1], -1.5145383137996); // precision seems to be not correct. Referece value is correct
+	// VALUES_EQUAL(t.x[1], -1.5145383137996); // precision seems to be not correct. Reference value is correct
 	double v1 = t.x[1];
 	double ref = -1.5145383137996;
 	QVERIFY2(nsl_math_approximately_equal_eps(v1, ref, 1.e-5) == true,
@@ -761,7 +761,7 @@ void DatapickerTest::logarithmic10XYMapping() {
 
 /*!
  * check the correctness of the data points after one of the reference points was moved on the scene.
- * In real this is not possible, because it is not implemented, but neverthless it shall be shown
+ * In real this is not possible, because it is not implemented, but nevertheless it shall be shown
  * that when moving reference points, the curves will be updated
  */
 void DatapickerTest::referenceMove() {
@@ -1669,7 +1669,7 @@ void DatapickerTest::datapickerImageLoadImageEmbeddRelative() {
 		w.setImages({image});
 
 		QCOMPARE(w.ui.cbFileEmbedd->isEnabled(), true); // image is valid because embedded
-		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // image is valid, but embedd is turned on
+		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), false); // image is valid, but embed is turned on
 		QCOMPARE(w.ui.cbFileEmbedd->isChecked(), true);
 		QCOMPARE(w.ui.cbFileRelativePath->isChecked(), true);
 

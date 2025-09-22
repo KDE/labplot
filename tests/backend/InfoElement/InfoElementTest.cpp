@@ -1,3 +1,4 @@
+
 /*
 	File                 : InfoElementTest.cpp
 	Project              : LabPlot
@@ -170,7 +171,7 @@ void InfoElementTest::removeCurve() {
 	// project.undoStack()->undo();
 
 	// QCOMPARE(ie->connectionLineCurveName(), curve2->name()); // first curve shall be connected again
-	// // QCOMPARE(ie->connectionLineCurveName(), curve->name()); // Not implememented yet, quite difficult
+	// // QCOMPARE(ie->connectionLineCurveName(), curve->name()); // Not implemented yet, quite difficult
 	// {
 	// 	const auto points = ie->children<CustomPoint>();
 	// 	QCOMPARE(points.count(), 2);

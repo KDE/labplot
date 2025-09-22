@@ -203,7 +203,7 @@ void BarPlotTest::testRange05() {
 }
 
 /*!
- * \brief lollipop plot wiht one dataset, horizontal
+ * \brief lollipop plot with one dataset, horizontal
  */
 void BarPlotTest::testRangeLollipopPlot01() {
 	Project project;
@@ -235,7 +235,7 @@ void BarPlotTest::testRangeLollipopPlot01() {
 }
 
 /*!
- * \brief lollipop plot wiht one dataset, vertical
+ * \brief lollipop plot with one dataset, vertical
  */
 void BarPlotTest::testRangeLollipopPlot02() {
 	Project project;

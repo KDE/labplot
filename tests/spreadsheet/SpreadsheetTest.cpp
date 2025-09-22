@@ -2517,7 +2517,7 @@ void SpreadsheetTest::testInsertColumns() {
 	QCOMPARE(columnsAboutToBeRemovedCounter, 3); // 3 columns removed in undo()
 	QCOMPARE(columnsRemovedCounter, 3); // same as for columnsAboutToBeRemovedCounter
 
-	// TODO: improve Spreadsheet::insertColumns() to reduce the number of emits and acitvate the checks below
+	// TODO: improve Spreadsheet::insertColumns() to reduce the number of emits and activate the checks below
 	/*
 	QCOMPARE(columnsAboutToBeInsertedCounter, 2); // set and redo()
 	QCOMPARE(columnsInsertedCounter, 2); // set and redo()
@@ -3184,7 +3184,7 @@ void SpreadsheetTest::testStatisticsSpreadsheetToggle() {
 }
 
 /*!
- * change the statistics metrics and check the presense of the corresponding columns
+ * change the statistics metrics and check the presence of the corresponding columns
  */
 void SpreadsheetTest::testStatisticsSpreadsheetChangeMetrics() {
 	Project project;
@@ -3237,7 +3237,7 @@ void SpreadsheetTest::testStatisticsSpreadsheetChildIndex() {
 
 	// check also the position when adding new columns via the actions in the view that also
 	// take the current selected column into account and have more logic for "append left to"
-	// and "append right to" - ensure no columns are added after the statistics spreadhseet
+	// and "append right to" - ensure no columns are added after the statistics spreadsheet
 	auto* view = static_cast<SpreadsheetView*>(sheet->view());
 
 	// insert a new column right to the last selected column, it should be placed in front of the statistics spreadsheet
@@ -3248,8 +3248,8 @@ void SpreadsheetTest::testStatisticsSpreadsheetChildIndex() {
 
 /*!
  * check the position of the statistics spreadsheet in the list of children of the parent
- * spreadsheet after an undo and redo of a column appen, it should always be put at the last position,
- * and also check  the handling of added and removed childrend in the model in the presense of the
+ * spreadsheet after an undo and redo of a column append, it should always be put at the last position,
+ * and also check the handling of added and removed childrend in the model in the presence of the
  * statistics spreadsheet.
  */
 void SpreadsheetTest::testStatisticsSpreadsheetChildIndexAfterUndoRedo() {

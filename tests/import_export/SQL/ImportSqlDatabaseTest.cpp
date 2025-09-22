@@ -92,7 +92,7 @@ void ImportSqlDatabaseTest::testFullTableAppend() {
 }
 
 /*!
- * read the full table import in the prepand mode
+ * read the full table import in the prepend mode
  */
 void ImportSqlDatabaseTest::testFullTablePrepend() {
 	// prepare the target spreadsheet

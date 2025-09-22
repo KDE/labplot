@@ -344,7 +344,7 @@ void StatisticalPlotsTest::testQQPlotDuplicate() {
 }
 
 /*!
- * \brief create QQPlot for 100 normaly distributed values and check the plot ranges.
+ * \brief create QQPlot for 100 normally distributed values and check the plot ranges.
  */
 void StatisticalPlotsTest::testQQPlotRange() {
 	// prepare the data
