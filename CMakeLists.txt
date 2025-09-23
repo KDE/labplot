@@ -215,7 +215,6 @@ else()
     message(STATUS "UNKNOWN C++ compiler, adding compile flags")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS}")
 endif()
-message(STATUS "CXXFLAGS =${CMAKE_CXX_FLAGS}")
 
 ##########################################################
 
@@ -333,6 +332,17 @@ if(WIN32)
 option(ENABLE_PYTHON_SCRIPTING "Build with Python scripting support" OFF)
 else()
 option(ENABLE_PYTHON_SCRIPTING "Build with Python scripting support" ON)
+endif()
+
+#################################################
+if(ENABLE_REPRODUCIBLE)
+    add_definitions(-DREPRODUCIBLE_BUILD)
+    message(STATUS "Reproducable build ENABLED")
+else()
+    if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-date-time")
+    endif()
+    message(STATUS "Reproducable build DISABLED")
 endif()
 
 ### OS macros ####################################
@@ -764,13 +774,7 @@ else()
     set(ENABLE_SCRIPTING OFF) # no scripting runtime is enabled
 endif()
 
-#################################################
-if(ENABLE_REPRODUCIBLE)
-    add_definitions(-DREPRODUCIBLE_BUILD)
-    message(STATUS "Reproducable build ENABLED")
-else()
-    message(STATUS "Reproducable build DISABLED")
-endif()
+message(STATUS "CXXFLAGS =${CMAKE_CXX_FLAGS}")
 #################################################
 #################################################
 include(CheckFunctionExists)
