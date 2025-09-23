@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-21 00:38+0000\n"
+"POT-Creation-Date: 2025-09-23 00:38+0000\n"
 "PO-Revision-Date: 2024-10-18 15:55+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -415,7 +415,7 @@ msgstr "nekompatibilní typ filtru"
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:273
 #: src/backend/lib/XmlStreamReader.cpp:104
-#: src/backend/statistics/HypothesisTest.cpp:1726
+#: src/backend/statistics/HypothesisTest.cpp:1706
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1910
 #, kde-format
 msgid "unknown element '%1'"
@@ -438,7 +438,7 @@ msgstr "%1: Přejmenovat na %2"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/backend/core/AspectTreeModel.cpp:165
-#: src/backend/statistics/HypothesisTest.cpp:624
+#: src/backend/statistics/HypothesisTest.cpp:529
 #: src/frontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/frontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:104
@@ -3556,7 +3556,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/functions.cpp:257
-#: src/backend/statistics/HypothesisTest.cpp:624
+#: src/backend/statistics/HypothesisTest.cpp:529
 #: src/frontend/ui/dockwidgets/imagedock.ui:492
 #, kde-format
 msgid "Size"
@@ -3603,7 +3603,7 @@ msgstr "Aritmetický průměr"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:261
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:71
-#: src/backend/statistics/HypothesisTest.cpp:624
+#: src/backend/statistics/HypothesisTest.cpp:529
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:135
@@ -3629,7 +3629,7 @@ msgstr "Směrodatná odchylka"
 #. i18n: ectx: property (text), widget (QCheckBox, cbVariance)
 #: src/backend/gsl/functions.cpp:263
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:82
-#: src/backend/statistics/HypothesisTest.cpp:624
+#: src/backend/statistics/HypothesisTest.cpp:529
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:80
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:165
 #: src/frontend/ui/mqttwillsettingswidget.ui:108
@@ -3761,7 +3761,7 @@ msgstr "Medián absolutní odchylky"
 #. i18n: ectx: property (text), widget (QCheckBox, cbSkewness)
 #: src/backend/gsl/functions.cpp:281
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:87
-#: src/backend/statistics/HypothesisTest.cpp:624
+#: src/backend/statistics/HypothesisTest.cpp:529
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:89
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:242
 #: src/frontend/ui/mqttwillsettingswidget.ui:163
@@ -3773,7 +3773,7 @@ msgstr "Zkosení"
 #. i18n: ectx: property (text), widget (QCheckBox, cbKurtosis)
 #: src/backend/gsl/functions.cpp:282
 #: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:88
-#: src/backend/statistics/HypothesisTest.cpp:624
+#: src/backend/statistics/HypothesisTest.cpp:529
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:90
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:249
 #: src/frontend/ui/mqttwillsettingswidget.ui:174
@@ -7441,747 +7441,573 @@ msgctxt "@title:window"
 msgid "Hypothesis Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:472
-#: src/backend/statistics/HypothesisTest.cpp:1736
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:100
+#: src/backend/statistics/HypothesisTest.cpp:309
 #, kde-format
 msgid "One-Sample t-Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:472
-#: src/backend/statistics/HypothesisTest.cpp:481
-#: src/backend/statistics/HypothesisTest.cpp:491
-#: src/backend/statistics/HypothesisTest.cpp:500
-#: src/backend/statistics/HypothesisTest.cpp:510
-#: src/backend/statistics/HypothesisTest.cpp:523
-#: src/backend/statistics/HypothesisTest.cpp:535
-#: src/backend/statistics/HypothesisTest.cpp:545
-#: src/backend/statistics/HypothesisTest.cpp:553
-#: src/backend/statistics/HypothesisTest.cpp:565
-#: src/backend/statistics/HypothesisTest.cpp:573
-#: src/backend/statistics/HypothesisTest.cpp:581
-#: src/backend/statistics/HypothesisTest.cpp:589
-#, kde-format
-msgid "Null Hypothesis"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:473
-#: src/backend/statistics/HypothesisTest.cpp:482
-#: src/backend/statistics/HypothesisTest.cpp:492
-#: src/backend/statistics/HypothesisTest.cpp:501
-#: src/backend/statistics/HypothesisTest.cpp:511
-#: src/backend/statistics/HypothesisTest.cpp:524
-#: src/backend/statistics/HypothesisTest.cpp:536
-#: src/backend/statistics/HypothesisTest.cpp:546
-#: src/backend/statistics/HypothesisTest.cpp:554
-#: src/backend/statistics/HypothesisTest.cpp:566
-#: src/backend/statistics/HypothesisTest.cpp:574
-#: src/backend/statistics/HypothesisTest.cpp:582
-#: src/backend/statistics/HypothesisTest.cpp:590
-#, kde-format
-msgid "Alternate Hypothesis"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:473
-#: src/backend/statistics/HypothesisTest.cpp:482
-#: src/backend/statistics/HypothesisTest.cpp:492
-#: src/backend/statistics/HypothesisTest.cpp:501
-#: src/backend/statistics/HypothesisTest.cpp:511
-#: src/backend/statistics/HypothesisTest.cpp:524
-#: src/backend/statistics/HypothesisTest.cpp:536
-#: src/backend/statistics/HypothesisTest.cpp:546
-#: src/backend/statistics/HypothesisTest.cpp:554
-#: src/backend/statistics/HypothesisTest.cpp:566
-#: src/backend/statistics/HypothesisTest.cpp:574
-#, fuzzy, kde-format
-#| msgid "Statistics"
-msgid "Descriptive Statistics"
-msgstr "Statistika"
-
-#: src/backend/statistics/HypothesisTest.cpp:474
-#: src/backend/statistics/HypothesisTest.cpp:483
-#: src/backend/statistics/HypothesisTest.cpp:493
-#: src/backend/statistics/HypothesisTest.cpp:502
-#, fuzzy, kde-format
-#| msgid "Statistics"
-msgid "t-Test Statistics"
-msgstr "Statistika"
-
-#: src/backend/statistics/HypothesisTest.cpp:474
-#: src/backend/statistics/HypothesisTest.cpp:483
-#: src/backend/statistics/HypothesisTest.cpp:493
-#: src/backend/statistics/HypothesisTest.cpp:502
-#: src/backend/statistics/HypothesisTest.cpp:512
-#: src/backend/statistics/HypothesisTest.cpp:525
-#: src/backend/statistics/HypothesisTest.cpp:537
-#: src/backend/statistics/HypothesisTest.cpp:547
-#: src/backend/statistics/HypothesisTest.cpp:555
-#: src/backend/statistics/HypothesisTest.cpp:567
-#: src/backend/statistics/HypothesisTest.cpp:575
-#: src/backend/statistics/HypothesisTest.cpp:583
-#: src/backend/statistics/HypothesisTest.cpp:591
-#, kde-format
-msgid "Significance Level"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:475
-#: src/backend/statistics/HypothesisTest.cpp:484
-#: src/backend/statistics/HypothesisTest.cpp:494
-#: src/backend/statistics/HypothesisTest.cpp:503
-#, fuzzy, kde-format
-#| msgid "Value"
-msgid "t-Value"
-msgstr "Hodnota"
-
-#: src/backend/statistics/HypothesisTest.cpp:475
-#: src/backend/statistics/HypothesisTest.cpp:484
-#: src/backend/statistics/HypothesisTest.cpp:494
-#: src/backend/statistics/HypothesisTest.cpp:503
-#: src/backend/statistics/HypothesisTest.cpp:513
-#: src/backend/statistics/HypothesisTest.cpp:526
-#: src/backend/statistics/HypothesisTest.cpp:538
-#: src/backend/statistics/HypothesisTest.cpp:548
-#: src/backend/statistics/HypothesisTest.cpp:556
-#: src/backend/statistics/HypothesisTest.cpp:568
-#: src/backend/statistics/HypothesisTest.cpp:576
-#: src/backend/statistics/HypothesisTest.cpp:584
-#: src/backend/statistics/HypothesisTest.cpp:592
-#, fuzzy, kde-format
-#| msgid "Value"
-msgid "p-Value"
-msgstr "Hodnota"
-
-#. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
-#: src/backend/statistics/HypothesisTest.cpp:476
-#: src/backend/statistics/HypothesisTest.cpp:485
-#: src/backend/statistics/HypothesisTest.cpp:495
-#: src/backend/statistics/HypothesisTest.cpp:504
-#: src/backend/statistics/HypothesisTest.cpp:549
-#: src/backend/statistics/HypothesisTest.cpp:569
-#: src/backend/statistics/HypothesisTest.cpp:577
-#: src/backend/statistics/HypothesisTest.cpp:584
-#: src/backend/statistics/HypothesisTest.cpp:592
-#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1182
-#, kde-format
-msgid "Degrees of Freedom"
-msgstr "Stupňů volnosti"
-
-#: src/backend/statistics/HypothesisTest.cpp:476
-#, fuzzy, kde-format
-#| msgid "Test"
-msgid "Test Mean"
-msgstr "Test"
-
-#: src/backend/statistics/HypothesisTest.cpp:477
-#: src/backend/statistics/HypothesisTest.cpp:486
-#: src/backend/statistics/HypothesisTest.cpp:495
-#: src/backend/statistics/HypothesisTest.cpp:504
-#, fuzzy, kde-format
-#| msgid "Difference"
-msgid "Mean Difference"
-msgstr "Rozdíl"
-
-#: src/backend/statistics/HypothesisTest.cpp:477
-#: src/backend/statistics/HypothesisTest.cpp:487
-#: src/backend/statistics/HypothesisTest.cpp:496
-#: src/backend/statistics/HypothesisTest.cpp:505
-#: src/backend/statistics/HypothesisTest.cpp:519
-#: src/backend/statistics/HypothesisTest.cpp:531
-#: src/backend/statistics/HypothesisTest.cpp:541
-#: src/backend/statistics/HypothesisTest.cpp:549
-#: src/backend/statistics/HypothesisTest.cpp:561
-#: src/backend/statistics/HypothesisTest.cpp:569
-#: src/backend/statistics/HypothesisTest.cpp:577
-#: src/backend/statistics/HypothesisTest.cpp:585
-#: src/backend/statistics/HypothesisTest.cpp:596
-#, fuzzy, kde-format
-#| msgid "Statistical"
-msgid "Statistical Conclusion"
-msgstr "Statistické"
-
-#: src/backend/statistics/HypothesisTest.cpp:481
-#: src/backend/statistics/HypothesisTest.cpp:1740
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:101
+#: src/backend/statistics/HypothesisTest.cpp:311
 #, kde-format
 msgid "Independent Two-Sample t-Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:485
-#, fuzzy, kde-format
-#| msgid "Variance"
-msgid "Pooled Variance"
-msgstr "Rozptyl"
-
-#: src/backend/statistics/HypothesisTest.cpp:486
-#: src/backend/statistics/HypothesisTest.cpp:505
-#, kde-format
-msgid "Mean Difference Standard Error"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:491
-#: src/backend/statistics/HypothesisTest.cpp:1744
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:102
+#: src/backend/statistics/HypothesisTest.cpp:313
 #, kde-format
 msgid "Paired Two-Sample t-Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:500
-#: src/backend/statistics/HypothesisTest.cpp:1748
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:103
-#, kde-format
-msgid "Welch t-Test"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:510
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:104
-#, kde-format
-msgid "One-Way ANOVA Test"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:512
-#, kde-format
-msgid "One-Way ANOVA Test Statistics"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:513
-#: src/backend/statistics/HypothesisTest.cpp:526
-#, fuzzy, kde-format
-#| msgid "Statistics"
-msgid "F-Statistic"
-msgstr "Statistika"
-
-#: src/backend/statistics/HypothesisTest.cpp:514
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
-msgid "Degrees of Freedom Between Groups"
-msgstr "Stupňů volnosti"
-
-#: src/backend/statistics/HypothesisTest.cpp:515
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
-msgid "Degrees of Freedom Within Groups"
-msgstr "Stupňů volnosti"
-
-#: src/backend/statistics/HypothesisTest.cpp:516
-#, kde-format
-msgid "Sum of Squares Between Groups"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:517
-#, kde-format
-msgid "Sum of Squares Within Groups"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:518
-#, kde-format
-msgid "Mean Squares Between Groups"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:518
-#, kde-format
-msgid "Mean Squares Within Groups"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:523
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:105
-#, kde-format
-msgid "One-Way ANOVA with Repeated Measures Test"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:525
-#, kde-format
-msgid "One-Way ANOVA with Repeated Measures Test Statistics"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:527
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
-msgid "Degrees of Freedom Treatment"
-msgstr "Stupňů volnosti"
-
-#: src/backend/statistics/HypothesisTest.cpp:528
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
-msgid "Degrees of Freedom Residuals"
-msgstr "Stupňů volnosti"
-
-#: src/backend/statistics/HypothesisTest.cpp:528
-#, kde-format
-msgid "Sum of Squares Treatment"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:529
-#, kde-format
-msgid "Sum of Squares Residuals"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:530
-#, kde-format
-msgid "Sum of Squares Within Subjects"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:530
-#, kde-format
-msgid "Mean Squares Treatment"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:531
-#, kde-format
-msgid "Mean Squares Residuals"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:535
-#: src/backend/statistics/HypothesisTest.cpp:1760
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:106
+#: src/backend/statistics/HypothesisTest.cpp:315
 #, kde-format
 msgid "Mann-Whitney U Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:537
+#: src/backend/statistics/HypothesisTest.cpp:317
 #, kde-format
-msgid "Mann-Whitney U Test Statistics"
+msgid "Welch t-Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:538
-#, fuzzy, kde-format
-#| msgid "Up"
-msgid "U"
-msgstr "Nahoru"
-
-#: src/backend/statistics/HypothesisTest.cpp:539
-#: src/backend/statistics/HypothesisTest.cpp:557
-#, fuzzy, kde-format
-#| msgid "Value"
-msgid "z-Value"
-msgstr "Hodnota"
-
-#: src/backend/statistics/HypothesisTest.cpp:539
-#, kde-format
-msgid "Rank Sum 1"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:540
-#, fuzzy, kde-format
-#| msgid "Mean = 0"
-msgid "Mean Rank 1"
-msgstr "Střední hodnota = 0"
-
-#: src/backend/statistics/HypothesisTest.cpp:540
-#, kde-format
-msgid "Rank Sum 2"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:541
-#, fuzzy, kde-format
-#| msgid "Mean = 0"
-msgid "Mean Rank 2"
-msgstr "Střední hodnota = 0"
-
-#: src/backend/statistics/HypothesisTest.cpp:545
-#: src/backend/statistics/HypothesisTest.cpp:1768
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:108
-#, kde-format
-msgid "Kruskal-Wallis Test"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:547
-#, kde-format
-msgid "Kruskal-Wallis Test Statistics"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:548
-#: src/backend/statistics/HypothesisTest.cpp:591
-#, kde-format
-msgid "H"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:553
-#: src/backend/statistics/HypothesisTest.cpp:1764
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:107
+#: src/backend/statistics/HypothesisTest.cpp:319
 #, kde-format
 msgid "Wilcoxon Signed Rank Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:555
+#: src/backend/statistics/HypothesisTest.cpp:321
 #, kde-format
-msgid "Wilcoxon Signed Rank Test Statistics"
+msgid "One-Way ANOVA Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:556
+#: src/backend/statistics/HypothesisTest.cpp:323
 #, kde-format
-msgid "W"
+msgid "Kruskal-Wallis Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:557
-#, kde-format
-msgid "Positive Rank Sum"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:558
-#, fuzzy, kde-format
-#| msgid "Positive Lookahead"
-msgid "Positive Rank Mean"
-msgstr "Pozitivní vyhlížení"
-
-#: src/backend/statistics/HypothesisTest.cpp:558
-#, kde-format
-msgid "Positive Rank Count"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:559
-#, kde-format
-msgid "Negative Rank Sum"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:559
-#, fuzzy, kde-format
-#| msgid "Negative lookahead"
-msgid "Negative Rank Mean"
-msgstr "Zpětně předvídavý"
-
-#: src/backend/statistics/HypothesisTest.cpp:560
-#, kde-format
-msgid "Negative Rank Count"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:560
-#, fuzzy, kde-format
-#| msgid "Count"
-msgid "Tie Count"
-msgstr "Počet"
-
-#: src/backend/statistics/HypothesisTest.cpp:565
-#: src/backend/statistics/HypothesisTest.cpp:1772
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:109
-#, kde-format
-msgid "Friedman Test"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:567
-#, fuzzy, kde-format
-#| msgid "Column Statistics"
-msgid "Friedman Test Statistics"
-msgstr "Statistika sloupce"
-
-#: src/backend/statistics/HypothesisTest.cpp:568
-#, fuzzy, kde-format
-#| msgid "Qt"
-msgid "Q"
-msgstr "Qt"
-
-#: src/backend/statistics/HypothesisTest.cpp:573
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:112
-#, kde-format
-msgid "Chi-Square Goodness of Fit Test"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:575
-#, kde-format
-msgid "Chi-Square Goodness of Fit Test Statistics"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:576
-#: src/backend/statistics/HypothesisTest.cpp:583
-#, kde-format
-msgid "Chi2"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:581
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:111
-#, kde-format
-msgid "Chi-Square Independence Test"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:582
-#, kde-format
-msgid "Chi-Square Independence Test Statistics"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:589
+#: src/backend/statistics/HypothesisTest.cpp:325
 #, kde-format
 msgid "Log-Rank Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:590
-#, fuzzy, kde-format
-#| msgid "Column Statistics"
-msgid "Log-Rank Test Statistics"
-msgstr "Statistika sloupce"
-
-#: src/backend/statistics/HypothesisTest.cpp:593
+#: src/backend/statistics/HypothesisTest.cpp:327
 #, kde-format
-msgid "Event Count 1"
+msgid "Friedman Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:593
+#: src/backend/statistics/HypothesisTest.cpp:329
 #, kde-format
-msgid "Censored Count 1"
+msgid "Chi-Square Independence Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:594
+#: src/backend/statistics/HypothesisTest.cpp:331
 #, kde-format
-msgid "Total Count 1"
+msgid "Chi-Square Goodness of Fit Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:594
+#: src/backend/statistics/HypothesisTest.cpp:333
 #, kde-format
-msgid "Event Count 2"
+msgid "One-Way ANOVA with Repeated Measures Test"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:595
-#, kde-format
-msgid "Censored Count 2"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:595
-#, kde-format
-msgid "Total Count 2"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:600
+#: src/backend/statistics/HypothesisTest.cpp:505
 #, kde-format
 msgid "N/A"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:604
+#: src/backend/statistics/HypothesisTest.cpp:509
 #, fuzzy, kde-format
 #| msgid "Device not available."
 msgid "Test result is not available."
 msgstr "Zařízení není dostupné."
 
-#: src/backend/statistics/HypothesisTest.cpp:608
+#: src/backend/statistics/HypothesisTest.cpp:513
 #, kde-format
 msgid "Two columns are required for this test."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:612
+#: src/backend/statistics/HypothesisTest.cpp:517
 #, kde-format
 msgid "At least two columns are required."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:616
+#: src/backend/statistics/HypothesisTest.cpp:521
 #, kde-format
 msgid "Column '%1' requires at least %2 samples."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:620
+#: src/backend/statistics/HypothesisTest.cpp:525
 #, kde-format
 msgid "The size of each sample must be equal."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
-#: src/backend/statistics/HypothesisTest.cpp:624
+#: src/backend/statistics/HypothesisTest.cpp:529
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:136
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:525
 #, kde-format
 msgid "Mean"
 msgstr "Střední hodnota"
 
-#: src/backend/statistics/HypothesisTest.cpp:642
+#: src/backend/statistics/HypothesisTest.cpp:544
+#, kde-format
+msgid "Null Hypothesis"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:545
+#, kde-format
+msgid "Alternate Hypothesis"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:547
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Descriptive Statistics"
+msgstr "Statistika"
+
+#: src/backend/statistics/HypothesisTest.cpp:548
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Test Statistics"
+msgstr "Statistika"
+
+#: src/backend/statistics/HypothesisTest.cpp:548
+#, kde-format
+msgid "Significance Level"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:549
+#, fuzzy, kde-format
+#| msgid "Value"
+msgid "p-Value"
+msgstr "Hodnota"
+
+#: src/backend/statistics/HypothesisTest.cpp:552
+#, fuzzy, kde-format
+#| msgid "Degrees of Freedom"
+msgid "Degrees of Freedom Between Groups"
+msgstr "Stupňů volnosti"
+
+#: src/backend/statistics/HypothesisTest.cpp:553
+#, fuzzy, kde-format
+#| msgid "Degrees of Freedom"
+msgid "Degrees of Freedom Within Groups"
+msgstr "Stupňů volnosti"
+
+#: src/backend/statistics/HypothesisTest.cpp:555
+#, fuzzy, kde-format
+#| msgid "Degrees of Freedom"
+msgid "Degrees of Freedom Treatment"
+msgstr "Stupňů volnosti"
+
+#: src/backend/statistics/HypothesisTest.cpp:556
+#, fuzzy, kde-format
+#| msgid "Degrees of Freedom"
+msgid "Degrees of Freedom Residuals"
+msgstr "Stupňů volnosti"
+
+#. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
+#: src/backend/statistics/HypothesisTest.cpp:558
+#: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1182
+#, kde-format
+msgid "Degrees of Freedom"
+msgstr "Stupňů volnosti"
+
+#: src/backend/statistics/HypothesisTest.cpp:563
+#: src/backend/statistics/HypothesisTest.cpp:567
+#: src/backend/statistics/HypothesisTest.cpp:570
+#: src/backend/statistics/HypothesisTest.cpp:572
+#, fuzzy, kde-format
+#| msgid "Value"
+msgid "t-Value"
+msgstr "Hodnota"
+
+#: src/backend/statistics/HypothesisTest.cpp:563
+#, fuzzy, kde-format
+#| msgid "Test"
+msgid "Test Mean"
+msgstr "Test"
+
+#: src/backend/statistics/HypothesisTest.cpp:564
+#: src/backend/statistics/HypothesisTest.cpp:568
+#: src/backend/statistics/HypothesisTest.cpp:570
+#: src/backend/statistics/HypothesisTest.cpp:572
+#, fuzzy, kde-format
+#| msgid "Difference"
+msgid "Mean Difference"
+msgstr "Rozdíl"
+
+#: src/backend/statistics/HypothesisTest.cpp:567
+#, fuzzy, kde-format
+#| msgid "Variance"
+msgid "Pooled Variance"
+msgstr "Rozptyl"
+
+#: src/backend/statistics/HypothesisTest.cpp:568
+#: src/backend/statistics/HypothesisTest.cpp:573
+#, kde-format
+msgid "Mean Difference Standard Error"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:575
+#: src/backend/statistics/HypothesisTest.cpp:581
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "F-Statistic"
+msgstr "Statistika"
+
+#: src/backend/statistics/HypothesisTest.cpp:575
+#, kde-format
+msgid "Sum of Squares Between Groups"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:576
+#, kde-format
+msgid "Sum of Squares Within Groups"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:577
+#, kde-format
+msgid "Mean Squares Between Groups"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:578
+#, kde-format
+msgid "Mean Squares Within Groups"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:581
+#, kde-format
+msgid "Sum of Squares Treatment"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:582
+#, kde-format
+msgid "Sum of Squares Residuals"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:583
+#, kde-format
+msgid "Sum of Squares Within Subjects"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:584
+#, kde-format
+msgid "Mean Squares Treatment"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:584
+#, kde-format
+msgid "Mean Squares Residuals"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:586
+#, fuzzy, kde-format
+#| msgid "Up"
+msgid "U"
+msgstr "Nahoru"
+
+#: src/backend/statistics/HypothesisTest.cpp:586
+#: src/backend/statistics/HypothesisTest.cpp:590
+#, fuzzy, kde-format
+#| msgid "Value"
+msgid "z-Value"
+msgstr "Hodnota"
+
+#: src/backend/statistics/HypothesisTest.cpp:587
+#, kde-format
+msgid "Rank Sum 1"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:587
+#, fuzzy, kde-format
+#| msgid "Mean = 0"
+msgid "Mean Rank 1"
+msgstr "Střední hodnota = 0"
+
+#: src/backend/statistics/HypothesisTest.cpp:588
+#, kde-format
+msgid "Rank Sum 2"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:588
+#, fuzzy, kde-format
+#| msgid "Mean = 0"
+msgid "Mean Rank 2"
+msgstr "Střední hodnota = 0"
+
+#: src/backend/statistics/HypothesisTest.cpp:590
+#, kde-format
+msgid "W"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:591
+#, kde-format
+msgid "Positive Rank Sum"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:591
+#, fuzzy, kde-format
+#| msgid "Positive Lookahead"
+msgid "Positive Rank Mean"
+msgstr "Pozitivní vyhlížení"
+
+#: src/backend/statistics/HypothesisTest.cpp:592
+#, kde-format
+msgid "Positive Rank Count"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:592
+#, kde-format
+msgid "Negative Rank Sum"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:593
+#, fuzzy, kde-format
+#| msgid "Negative lookahead"
+msgid "Negative Rank Mean"
+msgstr "Zpětně předvídavý"
+
+#: src/backend/statistics/HypothesisTest.cpp:593
+#, kde-format
+msgid "Negative Rank Count"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:594
+#, fuzzy, kde-format
+#| msgid "Count"
+msgid "Tie Count"
+msgstr "Počet"
+
+#: src/backend/statistics/HypothesisTest.cpp:596
+#: src/backend/statistics/HypothesisTest.cpp:604
+#, kde-format
+msgid "H"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:598
+#, fuzzy, kde-format
+#| msgid "Qt"
+msgid "Q"
+msgstr "Qt"
+
+#: src/backend/statistics/HypothesisTest.cpp:600
+#: src/backend/statistics/HypothesisTest.cpp:602
+#, kde-format
+msgid "Chi2"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:604
+#, kde-format
+msgid "Event Count 1"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:605
+#, kde-format
+msgid "Censored Count 1"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:605
+#, kde-format
+msgid "Total Count 1"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:606
+#, kde-format
+msgid "Event Count 2"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:606
+#, kde-format
+msgid "Censored Count 2"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:607
+#, kde-format
+msgid "Total Count 2"
+msgstr ""
+
+#: src/backend/statistics/HypothesisTest.cpp:610
+#, fuzzy, kde-format
+#| msgid "Statistical"
+msgid "Statistical Conclusion"
+msgstr "Statistické"
+
+#: src/backend/statistics/HypothesisTest.cpp:622
 #, kde-format
 msgid "No variable columns provided."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:887
+#: src/backend/statistics/HypothesisTest.cpp:867
 #, kde-format
 msgid ""
 "At the significance level %1, the population mean is significantly different "
 "from %2. Reject the null hypothesis."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:891
+#: src/backend/statistics/HypothesisTest.cpp:871
 #, kde-format
 msgid ""
 "At the significance level %1, the population mean is not significantly "
 "different from %2. Fail to reject the null hypothesis."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:975
-#: src/backend/statistics/HypothesisTest.cpp:1043
+#: src/backend/statistics/HypothesisTest.cpp:955
+#: src/backend/statistics/HypothesisTest.cpp:1023
 #, kde-format
 msgid ""
 "At the significance level %1, the population means are significantly "
 "different. Reject the null Hypothesis"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:977
-#: src/backend/statistics/HypothesisTest.cpp:1045
+#: src/backend/statistics/HypothesisTest.cpp:957
+#: src/backend/statistics/HypothesisTest.cpp:1025
 #, kde-format
 msgid ""
 "At the significance level %1, the population means are not significantly "
 "different. Fail to reject the null Hypothesis"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1098
-#: src/backend/statistics/HypothesisTest.cpp:1161
+#: src/backend/statistics/HypothesisTest.cpp:1078
+#: src/backend/statistics/HypothesisTest.cpp:1141
 #, kde-format
 msgid ""
 "At the significance level %1, at least one group mean is significantly "
 "different. Reject the null Hypothesis"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1101
-#: src/backend/statistics/HypothesisTest.cpp:1164
+#: src/backend/statistics/HypothesisTest.cpp:1081
+#: src/backend/statistics/HypothesisTest.cpp:1144
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group means. "
 "Fail to reject the null Hypothesis"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1221
-#: src/backend/statistics/HypothesisTest.cpp:1279
-#: src/backend/statistics/HypothesisTest.cpp:1338
+#: src/backend/statistics/HypothesisTest.cpp:1201
+#: src/backend/statistics/HypothesisTest.cpp:1259
+#: src/backend/statistics/HypothesisTest.cpp:1318
 #, kde-format
 msgid ""
 "At the significance level %1, at least one group distribution is "
 "significantly different. Reject the null Hypothesis"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1223
-#: src/backend/statistics/HypothesisTest.cpp:1281
-#: src/backend/statistics/HypothesisTest.cpp:1340
+#: src/backend/statistics/HypothesisTest.cpp:1203
+#: src/backend/statistics/HypothesisTest.cpp:1261
+#: src/backend/statistics/HypothesisTest.cpp:1320
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between group "
 "distributions. Fail to reject the null Hypothesis"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1401
+#: src/backend/statistics/HypothesisTest.cpp:1381
 #, kde-format
 msgid ""
 "At the significance level %1, at least one group is significantly different. "
 "Reject the null Hypothesis"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1403
+#: src/backend/statistics/HypothesisTest.cpp:1383
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between groups. Fail "
 "to reject the null Hypothesis"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1429
-#: src/backend/statistics/HypothesisTest.cpp:1496
+#: src/backend/statistics/HypothesisTest.cpp:1409
+#: src/backend/statistics/HypothesisTest.cpp:1476
 #, kde-format
 msgid "Column '%1' must be of integer type."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1468
+#: src/backend/statistics/HypothesisTest.cpp:1448
 #, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies do not follow the "
 "expected frequency distribution. Reject the null Hypothesis"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1472
+#: src/backend/statistics/HypothesisTest.cpp:1452
 #, kde-format
 msgid ""
 "At the significance level %1, the observed frequencies follow the expected "
 "frequency distribution. Fail to reject the null Hypothesis"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1516
+#: src/backend/statistics/HypothesisTest.cpp:1496
 #, kde-format
 msgid "The size of each column in the contingency table must be equal."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1532
+#: src/backend/statistics/HypothesisTest.cpp:1512
 #, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are dependent. "
 "Reject the null Hypothesis"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1535
+#: src/backend/statistics/HypothesisTest.cpp:1515
 #, kde-format
 msgid ""
 "At the significance level %1, both categorical variables are independent. "
 "Fail to reject the null Hypothesis"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1553
+#: src/backend/statistics/HypothesisTest.cpp:1533
 #, kde-format
 msgid "Three columns are required."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1562
+#: src/backend/statistics/HypothesisTest.cpp:1542
 #, kde-format
 msgid "Status column should be of integer type."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1567
+#: src/backend/statistics/HypothesisTest.cpp:1547
 #, kde-format
 msgid "Group column should be of integer type."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1572
+#: src/backend/statistics/HypothesisTest.cpp:1552
 #, kde-format
 msgid "Time, Status and Group columns should have equal size."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1591
+#: src/backend/statistics/HypothesisTest.cpp:1571
 #, kde-format
 msgid "Status column values must be either 0 or 1."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1596
+#: src/backend/statistics/HypothesisTest.cpp:1576
 #, kde-format
 msgid "Group column values must be either 0 or 1."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1612
+#: src/backend/statistics/HypothesisTest.cpp:1592
 #, kde-format
 msgid "Time, Status and Group columns should have equal number of values."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1620
+#: src/backend/statistics/HypothesisTest.cpp:1600
 #, kde-format
 msgid "Group 1 requires at least %1 samples."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1625
+#: src/backend/statistics/HypothesisTest.cpp:1605
 #, kde-format
 msgid "Group 2 requires at least %1 samples."
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1637
+#: src/backend/statistics/HypothesisTest.cpp:1617
 #, kde-format
 msgid ""
 "At the significance level %1, the survival curves are significantly "
 "different. Reject the null Hypothesis"
 msgstr ""
 
-#: src/backend/statistics/HypothesisTest.cpp:1640
+#: src/backend/statistics/HypothesisTest.cpp:1620
 #, kde-format
 msgid ""
 "At the significance level %1, no significant difference between survival "
 "curves. Fail to reject the null Hypothesis"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:1752
-#, kde-format
-msgid "One-Way ANOVA"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:1756
-#, kde-format
-msgid "One-Way ANOVA with Repeated Measures"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:1776
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:110
-#, kde-format
-msgid "Logrank Test"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:1780
-#, kde-format
-msgid "Chi-square Independence Test"
-msgstr ""
-
-#: src/backend/statistics/HypothesisTest.cpp:1784
-#, kde-format
-msgid "Chi-square Goodness of Fit Test"
 msgstr ""
 
 #: src/backend/worksheet/Background.cpp:202
@@ -13949,8 +13775,8 @@ msgstr ""
 #: src/frontend/dockwidgets/BarPlotDock.cpp:359
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:364
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:389
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:337
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:367
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:352
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:382
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:321
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:347
 #: src/frontend/ui/dockwidgets/cartesianplotlegenddock.ui:423
@@ -13969,8 +13795,8 @@ msgstr "Sloupce:"
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
 #: src/frontend/dockwidgets/BarPlotDock.cpp:361
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:393
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:339
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:369
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:354
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:384
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:349
 #: src/frontend/spreadsheet/GoToDialog.cpp:49
 #: src/frontend/ui/dockwidgets/axisdock.ui:808
@@ -14502,32 +14328,33 @@ msgstr ""
 msgid "%1 histograms: template \"%2\" loaded"
 msgstr ""
 
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:116
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:117
 #, kde-format
 msgid ""
-"<ul><li><b>One-Sample t-Test</b> - tests if a sample mean differs "
-"significantly from a known population mean</li><li><b>Independent Two-Sample "
-"t-Test</b> - tests if two independent samples have the same mean</"
-"li><li><b>Paired Two-Sample t-Test</b> - tests if the mean difference "
-"between two related samples is zero</li><li><b>Welch t-Test</b> - tests if "
-"two independent samples with unequal variances have the same mean</"
-"li><li><b>One-Way ANOVA Test</b> - tests if three or more independent "
-"samples have the same mean</li><li><b>One-Way ANOVA with Repeated Measures "
-"Test</b> - tests if three or more related/repeated measurements have the "
-"same mean</li><li><b>Mann-Whitney U Test</b> - tests differences in medians "
-"between two independent groups</li><li><b>Wilcoxon Signed Rank Test</b> - "
-"tests if the median difference between two related samples is zero</"
-"li><li><b>Kruskal-Wallis Test</b> - tests differences in medians among three "
-"or more independent groups</li><li><b>Friedman Test</b> - tests differences "
-"in medians among three or more related/repeated measurements</"
-"li><li><b>Logrank Test</b> - tests differences in survival distributions "
-"between two or more groups</li><li><b>Chi-Square Independence Test</b> - "
-"tests if two categorical variables are independent of each other</"
-"li><li><b>Chi-Square Goodness of Fit Test</b> - tests if observed data "
-"follows a specified theoretical distribution</li></ul>"
+"<ul><li><b>%1</b> - tests if a sample mean differs significantly from a "
+"known population mean</li><li><b>%2</b> - tests if two independent samples "
+"have the same mean</li><li><b>%3</b> - tests if the mean difference between "
+"two related samples is zero</li><li><b>%4</b> - tests if two independent "
+"samples with unequal variances have the same mean</li><li><b>%5</b> - tests "
+"if three or more independent samples have the same mean</li><li><b>%6</b> - "
+"tests if three or more related/repeated measurements have the same mean</li>"
 msgstr ""
 
-#: src/frontend/dockwidgets/HypothesisTestDock.cpp:297
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:131
+#, kde-format
+msgid ""
+"<li><b>%1</b> - tests differences in medians between two independent groups</"
+"li><li><b>%2</b> - tests if the median difference between two related "
+"samples is zero</li><li><b>%3</b> - tests differences in medians among three "
+"or more independent groups</li><li><b>%4</b> - tests differences in medians "
+"among three or more related/repeated measurements</li><li><b>%5</b> - tests "
+"differences in survival distributions between two or more groups</li><li><b>"
+"%6</b> - tests if two categorical variables are independent of each other</"
+"li><li><b>%7</b> - tests if observed data follows a specified theoretical "
+"distribution</li></ul>"
+msgstr ""
+
+#: src/frontend/dockwidgets/HypothesisTestDock.cpp:312
 #, kde-format
 msgid "Selected test requires at least %1 and at most %2 non-empty variables."
 msgstr ""
@@ -17762,22 +17589,22 @@ msgstr ""
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:257
 #, kde-format
-msgid "Invalid end value, must be bigger than the start value"
+msgid "Invalid end value, must be greater than the start value"
 msgstr ""
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:300
 #, kde-format
-msgid "The number of values to be generated must be bigger than one"
+msgid "The number of values to be generated must be greater than one"
 msgstr ""
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:317
 #, kde-format
-msgid "Invalid numeric increment value, must be bigger than zero"
+msgid "Invalid numeric increment value, must be greater than zero"
 msgstr ""
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:326
 #, kde-format
-msgid "Invalid Date&Time increment value, must be bigger than zero"
+msgid "Invalid Date&Time increment value, must be greater than zero"
 msgstr ""
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:487
@@ -19883,8 +19710,9 @@ msgstr "Obrázek:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/frontend/ui/datapickerimagewidget.ui:701
-#, kde-format
-msgid "Embedd"
+#, fuzzy, kde-format
+#| msgid "Embedd"
+msgid "Embed"
 msgstr "Vložit"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileRelativePath)
@@ -25738,3 +25566,13 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Nelze otevřít soubor:"
+
+#, fuzzy
+#~| msgid "Column Statistics"
+#~ msgid "Friedman Test Statistics"
+#~ msgstr "Statistika sloupce"
+
+#, fuzzy
+#~| msgid "Column Statistics"
+#~ msgid "Log-Rank Test Statistics"
+#~ msgstr "Statistika sloupce"
