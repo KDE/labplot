@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-23 00:38+0000\n"
-"PO-Revision-Date: 2025-09-12 10:44+0200\n"
+"PO-Revision-Date: 2025-09-23 11:57+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: src/backend/core/AbstractAspect.cpp:233
 #, kde-format
@@ -7679,10 +7679,9 @@ msgid "Descriptive Statistics"
 msgstr "Estadístiques descriptives"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
-#, fuzzy, kde-format
-#| msgid "t-Test Statistics"
+#, kde-format
 msgid "Test Statistics"
-msgstr "Estadístiques de la prova t"
+msgstr "Estadístiques de proves"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
 #, kde-format
@@ -14777,6 +14776,14 @@ msgid ""
 "if three or more independent samples have the same mean</li><li><b>%6</b> - "
 "tests if three or more related/repeated measurements have the same mean</li>"
 msgstr ""
+"<ul><li><b>%1</b>: prova si la mitjana d'una mostra difereix de la mitjana "
+"coneguda d'una població</li><li><b>%2</b>: prova si dues mostres "
+"independents tenen la mateixa mitjana</li><li><b>%3</b>: prova si la "
+"diferència de les mitjanes entre dues mostres relacionades és zero</"
+"li><li><b>%4</b>>: prova si dues mostres independents amb variances "
+"desiguals tenen la mateixa mitjana</li><li><b>%5</b>: prova si tres o més "
+"mostres independents tenen la mateixa mitjana</li><li><b>%6</b>: prova si "
+"tres o més mesures relacionades/repetides tenen la mateixa mitjana</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:131
 #, kde-format
@@ -14791,6 +14798,15 @@ msgid ""
 "li><li><b>%7</b> - tests if observed data follows a specified theoretical "
 "distribution</li></ul>"
 msgstr ""
+"<li><b>%1</b> prova les diferències de les mitjanes entre dos grups "
+"independents</li><li><b>%2</b>: prova si la diferència de les mitjanes entre "
+"dues mostres relacionades és zero</li><li><b>%3</b>: prova la diferència de "
+"les mitjanes entre tres o més grups independents</li><li><b>%4</b>: prova la "
+"diferència de les mitjanes entre tres o més mesures relacionades/repetides</"
+"li><li><b>%5</b>: prova les diferències a les distribucions de supervivència "
+"entre dos o més grups</li><li><b>%6</b>: prova si dues variables "
+"categòriques són independents entre elles</li><li><b>%7</b>: prova si les "
+"dades observades segueixen una distribució teòrica específica</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:312
 #, kde-format
@@ -18153,26 +18169,22 @@ msgid "Invalid start value"
 msgstr "Valor inicial no vàlid"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:257
-#, fuzzy, kde-format
-#| msgid "Invalid end value, must be bigger than the start value"
+#, kde-format
 msgid "Invalid end value, must be greater than the start value"
 msgstr "Valor final no vàlid, cal que sigui més gran que el valor inicial"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:300
-#, fuzzy, kde-format
-#| msgid "The number of values to be generated must be bigger than one"
+#, kde-format
 msgid "The number of values to be generated must be greater than one"
 msgstr "El nombre de valors a generar cal que sigui superior a 1"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:317
-#, fuzzy, kde-format
-#| msgid "Invalid numeric increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid numeric increment value, must be greater than zero"
 msgstr "Valor de l'increment numèric no vàlid, cal que sigui més gran que 0"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:326
-#, fuzzy, kde-format
-#| msgid "Invalid Date&Time increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid Date&Time increment value, must be greater than zero"
 msgstr ""
 "Valor de l'increment de datahora no vàlid, cal que sigui més gran que 0"
@@ -20315,10 +20327,9 @@ msgstr "Imatge:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/frontend/ui/datapickerimagewidget.ui:701
-#, fuzzy, kde-format
-#| msgid "Embedd"
+#, kde-format
 msgid "Embed"
-msgstr "Incrustada"
+msgstr "Incrusta"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileRelativePath)
 #: src/frontend/ui/datapickerimagewidget.ui:708

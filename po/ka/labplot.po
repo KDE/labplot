@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-23 00:38+0000\n"
-"PO-Revision-Date: 2025-09-12 05:26+0200\n"
+"PO-Revision-Date: 2025-09-23 04:06+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -7600,10 +7600,9 @@ msgid "Descriptive Statistics"
 msgstr "აღწერითი სტატისტიკა"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
-#, fuzzy, kde-format
-#| msgid "t-Test Statistics"
+#, kde-format
 msgid "Test Statistics"
-msgstr "t-შემოწმების სტატისტიკა"
+msgstr "შემოწმების სტატისტიკა"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
 #, kde-format
@@ -14635,6 +14634,14 @@ msgid ""
 "if three or more independent samples have the same mean</li><li><b>%6</b> - "
 "tests if three or more related/repeated measurements have the same mean</li>"
 msgstr ""
+"<ul><li><b>%1</b> - ამოწმებს, განსხვავდება თუ არა საგრძნობლად სინჯი ცნობილი "
+"პოპულაციის საშუალოსგან</li><li><b>%2</b> - ამოწმებს, აქვს თუ არა ორ "
+"დამოუკიდებელ სინჯს ტოლი საშუალო</li><li><b>%3</b> - ამოწმებს, არის თუ არა "
+"ორი დაკავშირებული სინჯის საშუალო სხვაობა ნულის ტოლი</li><li><b>%4</b> - "
+"ამოწმებს ორ დამოუკიდებელ სინჯს, რომლებსაც არატოლი სხვაობა აქვთ, აქვთ თუ არა "
+"ტოლი საშუალო</li><li><b>%5</b> - ამოწმებს, აქვს თუ არა სამ ან მეტ "
+"დამოუკიდებელ სინჯს ტოლი საშუალო</li><li><b>%6</b> - ამოწმებს, აქვს თუ არა "
+"სამ ან მეტ დაკავშირებულ/გამეორებულ გაზომილ მნიშვნელობას ტოლი საშუალო</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:131
 #, kde-format
@@ -14649,6 +14656,15 @@ msgid ""
 "li><li><b>%7</b> - tests if observed data follows a specified theoretical "
 "distribution</li></ul>"
 msgstr ""
+"<li><b>%1</b> - ამოწმებს ორი დამოუკიდებელი ჯგუფის სხვაობას მედიანებში</"
+"li><li><b>%2</b> - ამოწმებს, არის თუ არა ორი დაკავშირებული სინჯის მედიანური "
+"სხვაობა ნულის ტოლი</li><li><b>%3</b> - ამოწმებს სხვაობას მედიანებში სამი ან "
+"მეტი დამოუკიდებელი ჯგუფისთვის</li><li><b>%4</b> - ამოწმებს სხვაობას "
+"მედიანებში სამი ან მეტი დამოკავშირებული/გამეორებული გაზომვისთვის</li><li><b>"
+"%5</b> - ამოწმებს სხვაობას გადარჩენის განაწილებებს შორის ორი ან მეტი "
+"ჯგუფისთვის</li><li><b>%6</b> - ამოწმებს არის თუ არა ორი კატეგორიული ცვლადი "
+"დამოუკიდებელი ერთმანეთისგან</li><li><b>%7</b> - ამოწმებს, მიჰყვება, თუ არა "
+"დაკვირვებული მონაცემები მითითებულ თეორიულ განაწილებას</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:312
 #, kde-format
@@ -17980,26 +17996,22 @@ msgid "Invalid start value"
 msgstr "დაწყების არასწორი მნიშვნელობა"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:257
-#, fuzzy, kde-format
-#| msgid "Invalid end value, must be bigger than the start value"
+#, kde-format
 msgid "Invalid end value, must be greater than the start value"
 msgstr "არასწორი ბოლო მნიშვნელობა. უნდა იყოს საწყის მნიშვნელობაზე დიდი"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:300
-#, fuzzy, kde-format
-#| msgid "The number of values to be generated must be bigger than one"
+#, kde-format
 msgid "The number of values to be generated must be greater than one"
 msgstr "გენერირებული მნიშვნელობები რაოდენობა ერთზე მეტი უნდა იყოს"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:317
-#, fuzzy, kde-format
-#| msgid "Invalid numeric increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid numeric increment value, must be greater than zero"
 msgstr "არასწორი რიცხვითი ზრდის მნიშვნელობა. ნულზე მეტი უნდა იყოს"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:326
-#, fuzzy, kde-format
-#| msgid "Invalid Date&Time increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid Date&Time increment value, must be greater than zero"
 msgstr "არასწორი თარიღისა და დროის ზრდის მნიშვნელობა. ნულზე მეტი უნდა იყოს"
 
@@ -20121,10 +20133,9 @@ msgstr "გამოსახულება:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/frontend/ui/datapickerimagewidget.ui:701
-#, fuzzy, kde-format
-#| msgid "Embedd"
+#, kde-format
 msgid "Embed"
-msgstr "ჩადგმული"
+msgstr "ჩაშენება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileRelativePath)
 #: src/frontend/ui/datapickerimagewidget.ui:708

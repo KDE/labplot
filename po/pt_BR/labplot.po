@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-23 00:38+0000\n"
-"PO-Revision-Date: 2025-09-12 06:50-0300\n"
+"PO-Revision-Date: 2025-09-23 07:31-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #: src/backend/core/AbstractAspect.cpp:233
 #, kde-format
@@ -7610,10 +7610,9 @@ msgid "Descriptive Statistics"
 msgstr "Estatísticas descritivas"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
-#, fuzzy, kde-format
-#| msgid "t-Test Statistics"
+#, kde-format
 msgid "Test Statistics"
-msgstr "Estatísticas do Teste-t"
+msgstr "Estatísticas do Teste"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
 #, kde-format
@@ -14660,6 +14659,14 @@ msgid ""
 "if three or more independent samples have the same mean</li><li><b>%6</b> - "
 "tests if three or more related/repeated measurements have the same mean</li>"
 msgstr ""
+"<ul><li><b>%1</b> - testa se a média de uma amostra difere "
+"significativamente de uma média populacional conhecida</li><li><b>%2</b> - "
+"testa se duas amostras independentes têm a mesma média</li><li><b>%3</b> - "
+"testa se a diferença média entre duas amostras relacionadas é zero</"
+"li><li><b>%4</b> - testa se duas amostras independentes com variâncias "
+"desiguais têm a mesma média</li><li><b>%5</b> - testa se três ou mais "
+"amostras independentes têm a mesma média</li><li><b>%6</b> - testa se três "
+"ou mais medições relacionadas/repetidas têm a mesma média</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:131
 #, kde-format
@@ -14674,6 +14681,15 @@ msgid ""
 "li><li><b>%7</b> - tests if observed data follows a specified theoretical "
 "distribution</li></ul>"
 msgstr ""
+"<li><b>%1</b> - testa diferenças nas medianas entre dois grupos "
+"independentes</li><li><b>%2</b> - testa se a diferença mediana entre duas "
+"amostras relacionadas é zero</li><li><b>%3</b> - testa diferenças nas "
+"medianas entre três ou mais grupos independentes</li><li><b>%4</b> - testa "
+"diferenças nas medianas entre três ou mais medições relacionadas/repetidas</"
+"li><li><b>%5</b> - testa diferenças nas distribuições de sobrevivência entre "
+"dois ou mais grupos</li><li><b>%6</b> - testa se duas variáveis ​​categóricas "
+"são independentes uma da outra</li><li><b>%7</b> - testa se os dados "
+"observados seguem uma distribuição teórica especificada</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:312
 #, kde-format
@@ -18021,26 +18037,22 @@ msgid "Invalid start value"
 msgstr "Valor inicial inválido"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:257
-#, fuzzy, kde-format
-#| msgid "Invalid end value, must be bigger than the start value"
+#, kde-format
 msgid "Invalid end value, must be greater than the start value"
 msgstr "Valor final inválido, deve ser maior que o valor inicial"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:300
-#, fuzzy, kde-format
-#| msgid "The number of values to be generated must be bigger than one"
+#, kde-format
 msgid "The number of values to be generated must be greater than one"
 msgstr "O número de valores a serem gerados deve ser maior que um"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:317
-#, fuzzy, kde-format
-#| msgid "Invalid numeric increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid numeric increment value, must be greater than zero"
 msgstr "Valor de incremento numérico inválido, deve ser maior que zero"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:326
-#, fuzzy, kde-format
-#| msgid "Invalid Date&Time increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid Date&Time increment value, must be greater than zero"
 msgstr "Valor de incremento de data e hora inválido, deve ser maior que zero"
 
@@ -20166,8 +20178,7 @@ msgstr "Imagem:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/frontend/ui/datapickerimagewidget.ui:701
-#, fuzzy, kde-format
-#| msgid "Embedd"
+#, kde-format
 msgid "Embed"
 msgstr "Embutido"
 
