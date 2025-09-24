@@ -500,7 +500,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 	plot->setHorizontalPadding(Worksheet::convertToSceneUnits(2, Worksheet::Unit::Centimeter));
 	plot->setRightPadding(Worksheet::convertToSceneUnits(3.2, Worksheet::Unit::Centimeter));
 
-	// add second range for the cumulative percentage of the total number of occurences
+	// add second range for the cumulative percentage of the total number of occurrences
 	plot->addYRange(Range<double>(0, 100)); // add second y range
 	plot->addCoordinateSystem(); // add cs for second y range
 	plot->setCoordinateSystemRangeIndex(plot->coordinateSystemCount() - 1, Dimension::Y, 1); // specify new y range for new cs
@@ -563,7 +563,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 		data << pair.second;
 	}
 
-	// calculate the cummulative values
+	// calculate the cumulative values
 	int sum = 0;
 	row = 0;
 	for (auto value : data) {
@@ -589,7 +589,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 	// add cumulated percentage curve
 	auto* curve = new XYCurve(QStringLiteral("curve"));
 	plot->addChild(curve);
-	curve->setCoordinateSystemIndex(1); // asign to the second y-range going from 0 to 100%
+	curve->setCoordinateSystemIndex(1); // assign to the second y-range going from 0 to 100%
 	curve->setXColumn(xColumn);
 	curve->setYColumn(yColumn);
 	curve->line()->setStyle(Qt::SolidLine);
@@ -626,7 +626,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 				firstYAxis = true;
 			} else {
 				axis->title()->setText(i18n("Cumulative Percentage"));
-				// TODO: work with the same offset as for the first axis after https://invent.kde.org/education/labplot/-/issues/368 was adressed
+				// TODO: work with the same offset as for the first axis after https://invent.kde.org/education/labplot/-/issues/368 was addressed
 				axis->setTitleOffsetX(Worksheet::convertToSceneUnits(1.8, Worksheet::Unit::Centimeter));
 			}
 		}

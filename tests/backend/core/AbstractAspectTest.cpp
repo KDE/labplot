@@ -12,6 +12,7 @@
 #include "AbstractAspectTest.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -394,7 +395,7 @@ void AbstractAspectTest::saveLoad() {
 
 		if (childrenProject1.at(i)->path().contains(i18n("Project") + QStringLiteral("/Worksheet/plot/f(x)/x"))
 			|| childrenProject1.at(i)->path().contains(i18n("Project") + QStringLiteral("/Worksheet/plot/f(x)/y")))
-			continue; // The columns of the quation curve are not saved
+			continue; // The columns of the equation curve are not saved
 		QVERIFY(childrenProject1.at(i)->uuid() == childrenProject2.at(i)->uuid());
 	}
 }
@@ -445,7 +446,7 @@ void AbstractAspectTest::moveDown() {
 	QCOMPARE(project.child<AbstractAspect>(0), worksheet);
 	QCOMPARE(project.child<AbstractAspect>(1), spreadsheet);
 
-	// move the worksheet behing the speadsheet and check the order again
+	// move the worksheet behind the spreadsheet and check the order again
 	worksheet->moveDown();
 	QCOMPARE(project.child<AbstractAspect>(0), spreadsheet);
 	QCOMPARE(project.child<AbstractAspect>(1), worksheet);

@@ -13,11 +13,8 @@
 #include "frontend/GuiTools.h"
 #include "ui_exportworksheetwidget.h"
 
-#include <KLocalizedString>
 #include <KMessageBox>
-
 #include <KWindowConfig>
-#include <kcoreaddons_version.h>
 
 #include <QCompleter>
 #include <QDialogButtonBox>

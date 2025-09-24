@@ -15,6 +15,7 @@
 #endif
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
+#include "backend/core/column/Column.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Line.h"

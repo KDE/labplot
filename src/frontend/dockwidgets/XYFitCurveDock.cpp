@@ -517,7 +517,7 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	// set model dependent start values from new data
 	DEBUG(Q_FUNC_INFO)
 	static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData);
-	// udpate parameter widget
+	// update parameter widget
 	fitParametersWidget->setFitData(&m_fitData);
 	enableRecalculate(); // update preview
 	showFitResult(); // show result of preview
@@ -978,7 +978,7 @@ void XYFitCurveDock::updateModelEquation() {
 		// invalidate result
 		m_fitCurve->clearFitResult();
 		static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData);
-		// udpate parameter widget
+		// update parameter widget
 		fitParametersWidget->setFitData(&m_fitData);
 		if (m_messageWidget && m_messageWidget->isVisible()) {
 			DEBUG(Q_FUNC_INFO << ", close message")

@@ -16,8 +16,6 @@
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
 #include "backend/worksheet/plots/PlotArea.h"
 
-#include <KLocalizedString>
-
 /**
  * \class AbstractPlot
  * \brief Second level container in a Worksheet for logical grouping

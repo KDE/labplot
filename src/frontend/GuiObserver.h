@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : GUI observer
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -11,8 +11,6 @@
 #define GUIOBSERVER_H
 
 #include <QObject>
-
-#include <frontend/dockwidgets/HypothesisTestDock.h>
 
 class MainWin;
 class AbstractAspect;
@@ -30,6 +28,7 @@ class BoxPlotDock;
 class KDEPlotDock;
 class QQPlotDock;
 class ProcessBehaviorChartDock;
+class HypothesisTestDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
 class ReferenceLineDock;

@@ -14,11 +14,9 @@
 #include "backend/datapicker/DatapickerImage.h"
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/Transform.h"
-#include <frontend/GuiTools.h>
+#include "frontend/GuiTools.h"
 #include "frontend/datapicker/DatapickerImageView.h"
 #include "frontend/widgets/toggleactionmenu.h"
-
-#include <KLocalizedString>
 
 #include <QActionGroup>
 #include <QClipboard>
@@ -663,7 +661,7 @@ void DatapickerImageView::changeZoom(QAction* action) {
 	}
 	}
 
-	// change and set angle if tranform reset
+	// change and set angle if transform reset
 	changeRotationAngle();
 }
 

@@ -17,8 +17,9 @@
 #include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
+#include <QBrush>
+
 class DatapickerPoint;
-class QAction;
 class DatapickerCurvePrivate;
 class Column;
 class Spreadsheet;

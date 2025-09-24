@@ -11,11 +11,11 @@
 #ifndef SPREADSHEET_H
 #define SPREADSHEET_H
 
-#include "backend/core/column/ColumnStringIO.h"
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/lib/macros.h"
 
 class AbstractFileFilter;
+class Column;
 class SpreadsheetView;
 class SpreadsheetModel;
 class SpreadsheetPrivate;

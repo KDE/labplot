@@ -3,6 +3,7 @@
 
 #include "Spreadsheet.h"
 
+class CartesianPlot;
 class StatisticsSpreadsheet;
 
 class SpreadsheetPrivate : public QObject {

@@ -105,7 +105,7 @@ void ActionsManager::init() {
 	auto* factory = m_mainWindow->factory();
 
 	// in case we're starting for the first time, put all toolbars into the IconOnly mode
-	// and maximize the main window. The occurence of LabPlot's own section "MainWin"
+	// and maximize the main window. The occurrence of LabPlot's own section "MainWin"
 	// indicates whether this is the first start or not
 	groupMain = Settings::group(QStringLiteral("MainWin"));
 	if (!groupMain.exists()) {

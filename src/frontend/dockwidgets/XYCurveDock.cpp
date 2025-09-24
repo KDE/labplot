@@ -12,11 +12,8 @@
 #include "XYCurveDock.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
-#include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "frontend/GuiTools.h"
 #include "frontend/TemplateHandler.h"
 #include "frontend/widgets/BackgroundWidget.h"
@@ -26,10 +23,6 @@
 #include "frontend/widgets/TreeViewComboBox.h"
 
 #include <QPainter>
-
-#include <KConfig>
-#include <KConfigGroup>
-#include <KLocalizedString>
 
 /*!
   \class XYCurveDock
@@ -642,7 +635,7 @@ void XYCurveDock::valuesColumnChanged(const QModelIndex& index) {
 
 	CONDITIONAL_LOCK_RETURN;
 
-	auto* column = static_cast<Column*>(index.internalPointer());
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 	for (auto* curve : m_curvesList)
 		curve->setValuesColumn(column);
 }
@@ -677,7 +670,7 @@ void XYCurveDock::updateValuesWidgets() {
 		ui.lValuesColumn->show();
 		cbValuesColumn->show();
 
-		auto* column = static_cast<Column*>(cbValuesColumn->currentModelIndex().internalPointer());
+		auto* column = static_cast<AbstractColumn*>(cbValuesColumn->currentModelIndex().internalPointer());
 		if (column) {
 			if (column->columnMode() == AbstractColumn::ColumnMode::Double)
 				hasNumeric = true;

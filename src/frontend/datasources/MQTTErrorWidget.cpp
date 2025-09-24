@@ -71,7 +71,7 @@ MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, MQTTClient* cli
 }
 
 /*!
- *\brief Try to reconnect in MQTTClient after reseting options that might cause the error
+ *\brief Try to reconnect in MQTTClient after resetting options that might cause the error
  */
 void MQTTErrorWidget::tryToReconnect() {
 	bool ok = false;

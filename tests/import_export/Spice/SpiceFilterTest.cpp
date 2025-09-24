@@ -9,6 +9,7 @@
 */
 
 #include "SpiceFilterTest.h"
+#include "backend/core/column/Column.h"
 #include "src/backend/datasources/filters/SpiceFilter.h"
 #include "src/backend/spreadsheet/Spreadsheet.h"
 
@@ -489,7 +490,7 @@ void SpiceFilterTest::LtSpiceTranBinary() {
 
 	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
 
-	// Because the read data are floats, a float comparsion must be done, because
+	// Because the read data are floats, a float comparison must be done, because
 	// comparing float and double will not work properly
 	COMPARE_ROW_VALUES_FLOAT(sheet, refData, refDataRowCount, refColumnCount);
 }
@@ -558,7 +559,7 @@ void SpiceFilterTest::LtSpiceWakeup() {
 
 	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
 
-	// Because the read data are floats, a float comparsion must be done, because
+	// Because the read data are floats, a float comparison must be done, because
 	// comparing float and double will not work properly
 	COMPARE_ROW_VALUES_FLOAT(sheet, refData, refDataRowCount, refColumnCount);
 }
@@ -593,7 +594,7 @@ void SpiceFilterTest::DCTransfer() {
 
 	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
 
-	// Because the read data are floats, a float comparsion must be done, because
+	// Because the read data are floats, a float comparison must be done, because
 	// comparing float and double will not work properly
 	COMPARE_ROW_VALUES_FLOAT(sheet, refData, refDataRowCount, refColumnCount);
 }
@@ -633,7 +634,7 @@ void SpiceFilterTest::FFT_From_TransientAnalysis() {
 
 	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
 
-	// Because the read data are floats, a float comparsion must be done, because
+	// Because the read data are floats, a float comparison must be done, because
 	// comparing float and double will not work properly
 	COMPARE_ROW_VALUES_FLOAT(sheet, refData, refDataRowCount, refColumnCount);
 }

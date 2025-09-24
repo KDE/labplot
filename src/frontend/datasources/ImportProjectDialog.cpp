@@ -231,13 +231,13 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 
 	const auto& indexes = ui.tvPreview->selectionModel()->selectedIndexes();
 
-	// convert the model indexes to string pathes:
+	// convert the model indexes to string paths:
 	QStringList selectedPathes;
 	for (int i = 0; i < indexes.size() / 4; ++i) {
 		const auto& index = indexes.at(i * 4);
 		const auto* aspect = static_cast<const AbstractAspect*>(index.internalPointer());
 
-		// path of the current aspect and the pathes of all aspects it depends on
+		// path of the current aspect and the paths of all aspects it depends on
 		selectedPathes << aspect->path();
 		QDEBUG(" aspect path: " << aspect->path());
 		for (const auto* depAspect : aspect->dependsOn())

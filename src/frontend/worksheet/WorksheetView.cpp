@@ -9,7 +9,6 @@
 */
 
 #include "WorksheetView.h"
-#include "backend/core/AbstractAspect.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
@@ -32,7 +31,6 @@
 #include "frontend/worksheet/PresenterWidget.h"
 #endif
 #include <frontend/GuiTools.h>
-#include <frontend/widgets/toggleactionmenu.h>
 #ifdef Q_OS_MAC
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif
@@ -48,7 +46,6 @@
 #include <QGraphicsOpacityEffect>
 #include <QGraphicsPixmapItem>
 #include <QImage>
-#include <QMdiArea>
 #include <QMenu>
 #include <QMimeData>
 #include <QPrinter>
@@ -61,8 +58,6 @@
 #ifdef HAVE_QTSVG
 #include <QSvgGenerator>
 #endif
-
-#include <limits>
 
 #include <gsl/gsl_const_cgs.h>
 
@@ -249,8 +244,8 @@ void WorksheetView::initActions() {
 	// Layout actions
 	// TODO: the icons labplot-editvlayout and labplot-edithlayout are confusing for the user.
 	// the orientation is visualized as a horizontal or vertical line on the icon, but the user
-	// percieves the two objects (resembles plots on the worksheet) separated by this line much stronger than the line itself.
-	// with this, the two objects separated by a vertical line are perceived to be layed out in a _horizontal_ order and the
+	// perceives the two objects (resembles plots on the worksheet) separated by this line much stronger than the line itself.
+	// with this, the two objects separated by a vertical line are perceived to be laid out in a _horizontal_ order and the
 	// same for the vertical line. Because of this we change the icons here. We can rename the icons later in the breeze icon set.
 	verticalLayoutAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-edithlayout")), i18n("Vertical Layout"), layoutActionGroup);
 	verticalLayoutAction->setData(static_cast<int>(Worksheet::Layout::VerticalLayout));
@@ -1042,7 +1037,7 @@ void WorksheetView::keyPressEvent(QKeyEvent* event) {
 	// determine the currently selected aspect
 	AbstractAspect* aspect = nullptr;
 	if (m_selectedItems.count() == 1) {
-		// at the moment we allow to copy/paste/duplicate one single selcted object only
+		// at the moment we allow to copy/paste/duplicate one single selected object only
 		const auto children = m_worksheet->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
 		const auto* item = m_selectedItems.constFirst();
 		for (auto* child : children) {
@@ -1647,7 +1642,7 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot, const
 	/* Action to All: action is applied to all ranges in all dimensions
 	 *	- Applied to all plots and all ranges
 	 * Action to X: action is applied to all x ranges
-	 *	- x zoom selection: zooming into all x ranges of all plots (Normaly all plots will have the same x ranges so it makes sense
+	 *	- x zoom selection: zooming into all x ranges of all plots (Normally all plots will have the same x ranges so it makes sense
 	 *  - y zoom selection: makes no sense. disable
 	 * Action to Y: action is applied to all y ranges
 	 *  - x zoom selection: makes no sense. disable

@@ -11,7 +11,6 @@
 
 #include "WorksheetDock.h"
 #include "backend/core/Settings.h"
-#include "frontend/GuiTools.h"
 #include "frontend/TemplateHandler.h"
 #include "frontend/ThemeHandler.h"
 #include "frontend/widgets/BackgroundWidget.h"

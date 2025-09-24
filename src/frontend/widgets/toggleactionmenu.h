@@ -109,7 +109,7 @@ protected:
      * Updates the event filter, which listens to QMenu’s QActionEvent.
      *
      * This is connected to QAction::changed().
-     * That signal is emmited when the menu changes, but that’s not documented.
+     * That signal is emitted when the menu changes, but that’s not documented.
      */
     void slotMenuChanged();
 

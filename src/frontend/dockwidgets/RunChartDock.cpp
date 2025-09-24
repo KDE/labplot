@@ -153,7 +153,7 @@ void RunChartDock::retranslateUi() {
 }
 
 /*
- * updates the locale in the widgets. called when the application settins are changed.
+ * updates the locale in the widgets. called when the application settings are changed.
  */
 void RunChartDock::updateLocale() {
 	dataLineWidget->updateLocale();

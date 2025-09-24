@@ -11,17 +11,19 @@
 #include "AsciiFilter.h"
 #include "AsciiFilterPrivate.h"
 #include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/filters/FilterStatus.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/hostprocess.h"
 #include "backend/lib/trace.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+
 #include <KCompressionDevice>
 #include <KLocalizedString>
-#include <QFile>
 
 #include <QDateTime>
+#include <QFile>
 #ifdef HAVE_QTSERIALPORT
 #include <QSerialPort>
 #endif

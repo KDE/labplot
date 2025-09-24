@@ -85,7 +85,7 @@ private Q_SLOTS:
 	void testSpaceSeparator();
 	void testSpaceSeparatorSimplifyWhiteSpace();
 
-	// qouted strings
+	// quoted strings
 	void testQuotedStrings00();
 	void testQuotedStrings01();
 	void testQuotedStrings02();

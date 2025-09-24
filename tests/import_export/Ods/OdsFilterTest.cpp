@@ -10,6 +10,7 @@
 
 #include "OdsFilterTest.h"
 #include "backend/core/Workbook.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/filters/OdsFilter.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"

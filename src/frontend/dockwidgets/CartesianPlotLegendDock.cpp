@@ -16,8 +16,6 @@
 #include "frontend/widgets/LabelWidget.h"
 #include "frontend/widgets/LineWidget.h"
 
-#include <KLocalizedString>
-
 #include <gsl/gsl_const_cgs.h>
 
 /*!
@@ -171,7 +169,7 @@ void CartesianPlotLegendDock::activateTitleTab() const {
 }
 
 /*
- * updates the locale in the widgets. called when the application settins are changed.
+ * updates the locale in the widgets. called when the application settings are changed.
  */
 void CartesianPlotLegendDock::updateLocale() {
 	const auto numberLocale = QLocale();

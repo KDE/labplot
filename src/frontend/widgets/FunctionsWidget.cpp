@@ -54,7 +54,7 @@ FunctionsWidget::FunctionsWidget(QWidget* parent)
 		this->groupChanged(0);
 	});
 
-	// set the minimum size to show the longest funciton description without any horizontal scroll bar
+	// set the minimum size to show the longest function description without any horizontal scroll bar
 	const QStringList& names = m_expressionParser->functionsDescriptions();
 	QString maxName;
 	int maxLength = 0;

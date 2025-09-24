@@ -67,20 +67,6 @@ private:
 	template<typename T>
 	static T** toArrayOfArrays(const QVector<QVector<T>>& data);
 
-	static QString oneSampleTTestResultTemplate();
-	static QString independentTwoSampleTTestResultTemplate();
-	static QString pairedTwoSampleTTestResultTemplate();
-	static QString welchTTestResultTemplate();
-	static QString oneWayANOVAResultTemplate();
-	static QString oneWayANOVARepeatedResultTemplate();
-	static QString mannWhitneyUTestResultTemplate();
-	static QString kruskalWallisTestResultTemplate();
-	static QString wilcoxonTestResultTemplate();
-	static QString friedmanTestResultTemplate();
-	static QString chisqGoodnessOfFitTestResultTemplate();
-	static QString chisqIndependenceTestResultTemplate();
-	static QString logRankTestResultTemplate();
-
 	static QString notAvailable();
 	static QString testResultNotAvailable();
 	static QString twoColumnsRequired();
@@ -89,6 +75,7 @@ private:
 	static QString samplesMustBeEqualSize();
 	static QVector<QString> columnStatisticsHeaders();
 	static QString emptyResultColumnStatistics();
+	static QString resultTemplate(HypothesisTest::Test);
 };
 
 #endif

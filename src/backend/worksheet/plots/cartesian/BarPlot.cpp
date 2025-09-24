@@ -9,7 +9,6 @@
 
 #include "BarPlot.h"
 #include "BarPlotPrivate.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -24,7 +23,6 @@
 #include "tools/ImageTools.h"
 
 #include <QActionGroup>
-#include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 #include <QPainter>
 

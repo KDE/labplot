@@ -9,6 +9,7 @@
 */
 
 #include "ROOTFilterTest.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 

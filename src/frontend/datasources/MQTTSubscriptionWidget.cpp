@@ -412,7 +412,7 @@ void MQTTSubscriptionWidget::updateSubscriptionTree(const QVector<QString>& mqtt
  *\brief Adds to a # wildcard containing topic, every topic present in twTopics that the former topic contains
  *
  * \param topic pointer to the TreeWidgetItem which was selected before subscribing
- * \param subscription pointer to the TreeWidgetItem which represents the new subscirption,
+ * \param subscription pointer to the TreeWidgetItem which represents the new subscription,
  *		  we add all of the children to this item
  */
 void MQTTSubscriptionWidget::addSubscriptionChildren(QTreeWidgetItem* topic, QTreeWidgetItem* subscription) {
@@ -731,7 +731,7 @@ void MQTTSubscriptionWidget::mqttSubscribe() {
 		bool foundSuperior = false;
 
 		for (int i = 0; i < ui.twSubscriptions->topLevelItemCount(); ++i) {
-			// if the new subscirptions contains an already existing one, we remove the inferior one
+			// if the new subscriptions contains an already existing one, we remove the inferior one
 			if (checkTopicContains(name, ui.twSubscriptions->topLevelItem(i)->text(0)) && name != ui.twSubscriptions->topLevelItem(i)->text(0)) {
 				if (m_parent == MQTTParentWidget::ImportFileWidget)
 					unsubscribeFromTopic(ui.twSubscriptions->topLevelItem(i)->text(0));

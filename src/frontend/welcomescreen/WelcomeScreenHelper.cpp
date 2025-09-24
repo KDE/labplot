@@ -143,7 +143,7 @@ QVariant WelcomeScreenHelper::datasetName() {
 }
 
 /**
- * @brief Returns the dataset's descripton.
+ * @brief Returns the dataset's description.
  */
 QVariant WelcomeScreenHelper::datasetDescription() {
 	return QVariant(m_spreadsheet->comment());

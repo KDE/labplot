@@ -18,7 +18,7 @@
 
 ///////////////////////// macros ///////////
 
-// Comparing two values. First a direct comparsion will be done, because for std::nan nsl_math_aproximately_equal does not work
+// Comparing two values. First a direct comparison will be done, because for std::nan nsl_math_aproximately_equal does not work
 #define VALUES_EQUAL(v1, ref)                                                                                                                                  \
 	QVERIFY2(v1 == ref ? true : (std::isnan(ref) ? std::isnan(v1) : nsl_math_approximately_equal(v1, ref) == true),                                            \
 			 qPrintable(QStringLiteral("v1:%1, ref:%2").arg((double)v1, 0, 'g', 15, QLatin1Char(' ')).arg((double)ref, 0, 'g', 15, QLatin1Char(' '))))
@@ -118,7 +118,7 @@
 
 /*!
  * Save content \p content in a temporary file. The filename is used to identify the file during debugging
- * The filename is stored in the variable savePath wich must be of type QString.
+ * The filename is stored in the variable savePath which must be of type QString.
  * content is the content of the file and is expected that it is a QStringList. The elements of this list
  * don't need a new line character \n at the end because it will be appended already in this macro it self
  */
@@ -167,7 +167,7 @@ protected:
 	 * \param sender
 	 * \param signal
 	 * \param timeout_ms
-	 * \return true if the signal was received, false if a timeout occured
+	 * \return true if the signal was received, false if a timeout occurred
 	 */
 	template<typename Sender, typename Signal>
 	bool waitForSignal(Sender* sender, Signal signal, int timeout_ms = 2000) {

@@ -9,6 +9,7 @@
 */
 
 #include "BLFFilterTest.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/filters/CANFilterPrivate.h"
 #include "backend/datasources/filters/VectorBLFFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"

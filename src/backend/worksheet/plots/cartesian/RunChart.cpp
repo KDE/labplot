@@ -21,15 +21,10 @@ extern "C" {
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
-#include <QMenu>
-#include <QPainter>
+#include <QIcon>
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocalizedString>
-#include <KSharedConfig>
-
-#include <gsl/gsl_statistics.h>
 
 CURVE_COLUMN_CONNECT(RunChart, Data, data, recalc)
 

@@ -74,7 +74,7 @@ void GuiTools::updatePenStyles(QComboBox* comboBox, const QColor& color) {
 	comboBox->setIconSize(QSize(w, h));
 
 	// loop over six possible Qt-PenStyles, draw on the pixmap and insert it
-	// TODO: avoid copy-paste in all finctions!
+	// TODO: avoid copy-paste in all functions!
 	static std::array<QString, 6> list =
 		{i18n("No Line"), i18n("Solid Line"), i18n("Dash Line"), i18n("Dot Line"), i18n("Dash-dot Line"), i18n("Dash-dot-dot Line")};
 	for (int i = 0; i < 6; i++) {

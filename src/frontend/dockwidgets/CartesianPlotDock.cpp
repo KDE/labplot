@@ -10,10 +10,9 @@
 */
 
 #include "CartesianPlotDock.h"
+#include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
-#include "backend/core/column/Column.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
 
 #include "frontend/GuiTools.h"
 #include "frontend/PlotTemplateDialog.h"
@@ -26,10 +25,8 @@
 
 #include <KIconLoader>
 #include <KMessageBox>
-#include <kcoreaddons_version.h>
 
 #include <QButtonGroup>
-#include <QDebug>
 #include <QFileDialog>
 #include <QIntValidator>
 #include <QPainter>
@@ -81,7 +78,7 @@ protected:
 				else                                                                                                                                           \
 					DEBUG("ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " ( rangeIndex:" << rangeIndex                        \
 																	   << ", Column: " << Column                                                               \
-																	   << "). Wether the object does not exist or the cellWidget has differnt type");          \
+																	   << "). Whether the object does not exist or the cellWidget has different type");        \
 			}                                                                                                                                                  \
 		} else {                                                                                                                                               \
 			auto obj = qobject_cast<castObject*>(treewidget->cellWidget(rangeIndex, Column));                                                                  \
@@ -89,7 +86,7 @@ protected:
 				obj->function;                                                                                                                                 \
 			else                                                                                                                                               \
 				DEBUG("ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " (rangeIndex:" << rangeIndex << ", Column: " << Column   \
-																   << "). Wether the object does not exist or the cellWidget has differnt type");              \
+																   << "). Whether the object does not exist or the cellWidget has different type");            \
 		}                                                                                                                                                      \
 	}
 

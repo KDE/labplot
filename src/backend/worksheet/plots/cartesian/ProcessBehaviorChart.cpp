@@ -19,13 +19,10 @@ extern "C" {
 }
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Line.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KLocalizedString>
-#include <KSharedConfig>
 
 #include <gsl/gsl_statistics.h>
 

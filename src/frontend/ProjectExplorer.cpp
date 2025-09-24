@@ -10,7 +10,6 @@
 */
 
 #include "ProjectExplorer.h"
-#include "backend/core/AbstractPart.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
@@ -35,7 +34,6 @@
 #include <QContextMenuEvent>
 #include <QDrag>
 #include <QHeaderView>
-#include <QLabel>
 #include <QLineEdit>
 #include <QMenu>
 #include <QMimeData>
@@ -153,7 +151,7 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 
 	// for the current selection determine the selected aspects
 	const auto& items = m_treeView->selectionModel()->selectedIndexes();
-	const int selectedAspectsCount = items.size() / 4; // 4 columns in the tree view, devide by 4 to get the number of rows/aspects
+	const int selectedAspectsCount = items.size() / 4; // 4 columns in the tree view, divide by 4 to get the number of rows/aspects
 	QVector<AbstractAspect*> selectedAspects;
 	for (int i = 0; i < selectedAspectsCount; ++i) {
 		const auto& index = items.at(i * 4);
@@ -492,7 +490,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 			if (!index.isValid())
 				return false;
 
-			// accept only the events when the aspect being dragged is dropable onto the aspect under the cursor
+			// accept only the events when the aspect being dragged is droppable onto the aspect under the cursor
 			// and the aspect under the cursor is not already the parent of the dragged aspect
 			auto* destinationAspect = static_cast<AbstractAspect*>(index.internalPointer());
 			bool accept = sourceAspect->dropableOn().indexOf(destinationAspect->type()) != -1 && sourceAspect->parentAspect() != destinationAspect;
@@ -549,7 +547,7 @@ void ProjectExplorer::keyPressEvent(QKeyEvent* event) {
 				showErrorMessage(msg);
 			}
 		} else {
-			// no name is available, we are copy&pasting the content of a columm ("the data") and not the column itself
+			// no name is available, we are copy&pasting the content of a column ("the data") and not the column itself
 			const auto* mimeData = QApplication::clipboard()->mimeData();
 			if (!mimeData->hasFormat(QStringLiteral("text/plain")))
 				return;
@@ -673,7 +671,7 @@ void ProjectExplorer::toggleColumn(int index) {
 		showAllColumnsAction->setChecked(false);
 
 		// if there is only one checked column-action, deactivated it.
-		// It should't be possible to hide all columns
+		// It shouldn't be possible to hide all columns
 		if (checked == 1) {
 			int i = 0;
 			while (!list_showColumnActions.at(i)->isChecked())

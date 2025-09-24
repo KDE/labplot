@@ -11,10 +11,10 @@
 #define SETTINGSDIALOG_H
 
 #include "backend/core/Settings.h"
-#include <QLocale>
 #include <KPageDialog>
 
 class QAbstractButton;
+class QLocale;
 class SettingsGeneralPage;
 class SettingsSpreadsheetPage;
 class SettingsWorksheetPage;

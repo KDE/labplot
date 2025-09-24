@@ -10,8 +10,7 @@
 */
 
 #include "ColumnDock.h"
-#include "backend/core/AbstractFilter.h"
-#include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/core/datatypes/SimpleCopyThroughFilter.h"

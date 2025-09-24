@@ -17,14 +17,13 @@
 #include "frontend/dockwidgets/BaseDock.h"
 #include "ui_cartesianplotdock.h"
 
-#include <KConfig>
-
 template<class T>
 class QList;
 class BackgroundWidget;
 class LabelWidget;
 class LineWidget;
 class ThemeHandler;
+class KConfig;
 
 class CartesianPlotDock : public BaseDock {
 	Q_OBJECT

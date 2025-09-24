@@ -274,7 +274,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 		QStringLiteral("Project/Worksheet/xy-plot/cos"),
 		QStringLiteral("Project/Worksheet/xy-plot/tan"),
 		QStringLiteral("Project/Worksheet/xy-plot/y-axis"),
-		// not neccesary to retransform legend, but is difficult to
+		// not necessary to retransform legend, but is difficult to
 		// distinguish so let it in, because it does not cost that much performance
 		QStringLiteral("Project/Worksheet/xy-plot/legend"),
 		QStringLiteral("Project/Worksheet/xy-plot/plotText"),
@@ -1013,7 +1013,7 @@ void RetransformTest::TestImportCSVInvalidateCurve() {
 	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
 	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
 
-	// the curve that lost the column assignemnt should be retransformed
+	// the curve that lost the column assignment should be retransformed
 	QCOMPARE(c.elementLogCount(false), 1);
 	QCOMPARE(c.callCount(i18n("Project") + QStringLiteral("/plot/curve")), 1);
 }
@@ -2134,7 +2134,7 @@ int RetransformCallCounter::callCount(const QString& path) {
  * \brief RetransformCallCounter::callCount
  * Returns the number of retransform called for a specific object. This counter contains
  * all retransforms from the beginning when the object was created and not yet connected
- * to the RetransformCallCounter object. This is usefull when checking the retransform
+ * to the RetransformCallCounter object. This is useful when checking the retransform
  * counts during loading of a project or during creation of an aspect
  * \param aspect
  * \return

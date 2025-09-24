@@ -66,7 +66,7 @@ ProcessBehaviorChartDock::ProcessBehaviorChartDock(QWidget* parent)
 	dataSymbolWidget = new SymbolWidget(ui.tabDataLine);
 	hBoxLayout->insertWidget(3, dataSymbolWidget);
 
-	// Tab "Contol Limit Lines"
+	// Tab "Control Limit Lines"
 	hBoxLayout = static_cast<QHBoxLayout*>(ui.tabControlLimitLines->layout());
 	centerLineWidget = new LineWidget(ui.tabControlLimitLines);
 	hBoxLayout->insertWidget(1, centerLineWidget);
@@ -295,7 +295,7 @@ void ProcessBehaviorChartDock::retranslateUi() {
 }
 
 /*
- * updates the locale in the widgets. called when the application settins are changed.
+ * updates the locale in the widgets. called when the application settings are changed.
  */
 void ProcessBehaviorChartDock::updateLocale() {
 	const auto numberLocale = QLocale();
@@ -491,7 +491,7 @@ void ProcessBehaviorChartDock::upperLimitSpecificationChanged() {
 }
 /*!
  * toggle the properties for the lower limit line if the lower limit is not available,
- * called every time the chart is re-calculated since the precense of the lower limit
+ * called every time the chart is re-calculated since the presence of the lower limit
  * is depending on multiple factors and on the current result for the control limits.
  */
 void ProcessBehaviorChartDock::updateLowerLimitWidgets() {

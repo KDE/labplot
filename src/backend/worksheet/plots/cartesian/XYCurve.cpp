@@ -12,6 +12,7 @@
 #include "XYCurvePrivate.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
+#include "backend/core/column/Column.h"
 #include "backend/gsl/errors.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -22,8 +23,6 @@
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "tools/ImageTools.h"
-
-#include <KLocalizedString>
 
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>

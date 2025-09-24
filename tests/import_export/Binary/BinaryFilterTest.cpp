@@ -9,6 +9,7 @@
 */
 
 #include "BinaryFilterTest.h"
+#include "backend/core/column/Column.h"
 #include "backend/datasources/filters/BinaryFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 

@@ -14,8 +14,6 @@
 #include "frontend/dockwidgets/BaseDock.h"
 #include "ui_boxplotdock.h"
 
-class AspectTreeModel;
-class BoxPlot;
 class BackgroundWidget;
 class LineWidget;
 class SymbolWidget;

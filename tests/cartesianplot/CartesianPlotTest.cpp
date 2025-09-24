@@ -13,6 +13,7 @@
 
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
+#include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -960,8 +961,8 @@ void CartesianPlotTest::invalidcSystem() {
 	{
 		// plot->setRange(Dimension::Y, 1, range); // does not work
 		// Implementation of setRange() must be used, because setRange() uses check to check if
-		// the range is valid, which it isn't in this test. To test neverthless and not removing a test
-		// use directly the implementation
+		// the range is valid, which it isn't in this test. To test nevertheless and not removing a test,
+		// use the implementation directly
 		int index = 1;
 		auto dimension = Dimension::Y;
 		auto otherValue = range;

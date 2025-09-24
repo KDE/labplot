@@ -16,6 +16,7 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/pivot/PivotTable.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/core/column/Column.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
@@ -47,6 +48,7 @@
 #include "frontend/dockwidgets/CursorDock.h"
 #include "frontend/dockwidgets/CustomPointDock.h"
 #include "frontend/dockwidgets/HistogramDock.h"
+#include "frontend/dockwidgets/HypothesisTestDock.h"
 #include "frontend/dockwidgets/ImageDock.h"
 #include "frontend/dockwidgets/InfoElementDock.h"
 #include "frontend/dockwidgets/KDEPlotDock.h"
@@ -543,7 +545,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 
 /*!
 	handles the selection of a hidden aspect \c aspect in the view (relevant for WorksheetView only at the moment).
-	Currently, a hidden aspect can only be a plot title lable or an axis label.
+	Currently, a hidden aspect can only be a plot title label or an axis label.
 	-> Activate the corresponding DockWidget and make the title tab current.
  */
 void GuiObserver::hiddenAspectSelected(const AbstractAspect* aspect) {

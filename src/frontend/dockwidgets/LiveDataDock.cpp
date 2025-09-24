@@ -533,7 +533,7 @@ void LiveDataDock::pauseContinueReading() {
  *\brief called when use will message checkbox's state is changed in the will settings widget,
  * Sets the mqttUseWill according to state for the m_mqttClient
  *
- * \param state the state of the checbox
+ * \param state the state of the checkbox
  */
 void LiveDataDock::useWillMessage(bool use) {
 	if (use) {
@@ -560,7 +560,7 @@ void LiveDataDock::willQoSChanged(int QoS) {
  *\brief called when will message's retain flag is changed in the will settings widget
  * sets the retain flag for the will message in in m_mqttClient
  *
- * \param state the state of the will retain chechbox
+ * \param state the state of the will retain checkbox
  */
 void LiveDataDock::willRetainChanged(bool useWillRetainMessages) {
 	if (useWillRetainMessages)

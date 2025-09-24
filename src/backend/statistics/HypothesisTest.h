@@ -81,6 +81,7 @@ public:
 	static QPair<int, int> variableCount(Test);
 	static int hypothesisCount(Test);
 	static QVector<QPair<QString, QString>> hypothesisText(Test);
+	static QString testName(Test);
 
 	static void fillAddNewHypothesisTest(QMenu*, QActionGroup*);
 	typedef HypothesisTestPrivate Private;

@@ -10,6 +10,7 @@
 */
 
 #include "SpreadsheetFormulaTest.h"
+#include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/spreadsheet/SpreadsheetView.h"

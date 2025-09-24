@@ -73,7 +73,7 @@ void BatchEditValueLabelsDialog::setColumns(const QList<Column*>& columns) {
 
 	m_column = m_columns.first();
 
-	// show the available value labels for the first columm
+	// show the available value labels for the first column
 	if (m_column->valueLabelsInitialized()) {
 		QString text;
 

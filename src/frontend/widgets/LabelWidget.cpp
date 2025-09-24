@@ -1507,7 +1507,7 @@ void LabelWidget::updateMode(TextLabel::Mode mode) {
 	ui.kfontRequester->setVisible(!plain);
 
 	if (plain) {
-		// reset all applied formattings when switching from html to tex mode
+		// reset all applied formatting when switching from html to tex mode
 		QTextCursor cursor = ui.teLabel->textCursor();
 		int position = cursor.position();
 		ui.teLabel->selectAll();

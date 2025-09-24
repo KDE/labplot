@@ -9,6 +9,7 @@
 */
 
 #include "SearchReplaceWidget.h"
+#include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/Settings.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
@@ -393,7 +394,7 @@ void SearchReplaceWidget::setReplaceText(const QString& text) {
 // ************************* SLOTs **************************
 // **********************************************************
 void SearchReplaceWidget::cancel() {
-	m_spreadsheet->model()->setSearchText(QString()); // clear the global search text that was potentialy set during "find all"
+	m_spreadsheet->model()->setSearchText(QString()); // clear the global search text that was potentially set during "find all"
 	showMessage(QString());
 	close();
 }
@@ -587,7 +588,7 @@ void SearchReplaceWidget::switchFindReplace() {
 /*!
  * search the next cell in the column-major order that matches
  * to the specified pattern. The search is done ignoring the data type
- * and iterpreting everything as text. Used in the "simple search"-mode.
+ * and interpreting everything as text. Used in the "simple search"-mode.
  */
 bool SearchReplaceWidget::findNextSimple(bool proceed) {
 	const QString& pattern = uiSearch.cbFind->currentText();
@@ -627,7 +628,7 @@ bool SearchReplaceWidget::findNextSimple(bool proceed) {
 	bool startRow = true;
 
 	// search in the column-major order ignoring the data type
-	// and iterpreting everything as text
+	// and interpreting everything as text
 	for (int col = 0; col < colCount; ++col) {
 		if (startCol && col < curCol)
 			continue;
@@ -659,7 +660,7 @@ bool SearchReplaceWidget::findNextSimple(bool proceed) {
 /*!
  * search the previous cell in the column-major order that matches
  * to the specified pattern. The search is done ignoring the data type
- * and iterpreting everything as text. Used in the "simple search"-mode.
+ * and interpreting everything as text. Used in the "simple search"-mode.
  */
 bool SearchReplaceWidget::findPreviousSimple(bool proceed) {
 	const QString& pattern = uiSearch.cbFind->currentText();
