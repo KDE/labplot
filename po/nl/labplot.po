@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-23 00:38+0000\n"
-"PO-Revision-Date: 2025-09-14 15:01+0200\n"
+"PO-Revision-Date: 2025-09-23 18:59+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -7595,10 +7595,9 @@ msgid "Descriptive Statistics"
 msgstr "Beschrijvende statistiek"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
-#, fuzzy, kde-format
-#| msgid "t-Test Statistics"
+#, kde-format
 msgid "Test Statistics"
-msgstr "t-Test statistieken"
+msgstr "Teststatistieken"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
 #, kde-format
@@ -14641,6 +14640,15 @@ msgid ""
 "if three or more independent samples have the same mean</li><li><b>%6</b> - "
 "tests if three or more related/repeated measurements have the same mean</li>"
 msgstr ""
+"<ul><li><b>%1</b> - test of een gemiddeld sample aanzienlijk verschilt van "
+"een bekend gemiddelde van een populatie</li><li><b>%2</b> - test of twee "
+"onafhankelijke samples hetzelfde gemiddelde hebben</li><li><b>%3</b> - test "
+"of het gemiddelde verschil tussen twee gerelateerde samples nul is</"
+"li><li><b>%4</b> - test of twee onafhankelijke samples met ongelijke "
+"variantie hetzelfde gemiddelde hebben</li><li><b>%5</b> - test of drie of "
+"meer onafhankelijke samples hetzelfde gemiddelde hebben</li><li><b>%6</b> - "
+"test of drie of meer gerelateerde/herhaalde metingen hetzelfde gemiddelde "
+"hebben</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:131
 #, kde-format
@@ -14655,6 +14663,15 @@ msgid ""
 "li><li><b>%7</b> - tests if observed data follows a specified theoretical "
 "distribution</li></ul>"
 msgstr ""
+"<li><b>%1</b> - test verschillen in medianen tussen twee onafhankelijke "
+"groepen</li><li><b>%2</b> - test of het mediane verschil tussen twee "
+"gerelateerde samples nul is</li><li><b>%3</b> - test verschillen in medianen "
+"onder drie of meer onafhankelijke groepen</li><li><b>%4</b> - test "
+"verschillen in medianen onder drie of meer gerelateerde/herhaalde metingen</"
+"li><li><b>%5</b> - test verschillen in overlevingsdistributies tussen twee "
+"of meer groepen</li><li><b>%6</b> - test of twee categoriale variabelen "
+"onafhankelijk zijn van elkaar</li><li><b>%7</b> - test of waargenomen "
+"gegevens een gespecificeerd theoretische distributie volgt</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:312
 #, kde-format
@@ -18001,26 +18018,22 @@ msgid "Invalid start value"
 msgstr "Ongeldige startwaarde"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:257
-#, fuzzy, kde-format
-#| msgid "Invalid end value, must be bigger than the start value"
+#, kde-format
 msgid "Invalid end value, must be greater than the start value"
 msgstr "Ongeldige eindwaarde, moet groter zijn dan de startwaarde"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:300
-#, fuzzy, kde-format
-#| msgid "The number of values to be generated must be bigger than one"
+#, kde-format
 msgid "The number of values to be generated must be greater than one"
 msgstr "Het aantal te genereren waarden moet groter zijn dan één"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:317
-#, fuzzy, kde-format
-#| msgid "Invalid numeric increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid numeric increment value, must be greater than zero"
 msgstr "Ongeldige waarde van increment, moet groter zijn dan nul"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:326
-#, fuzzy, kde-format
-#| msgid "Invalid Date&Time increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid Date&Time increment value, must be greater than zero"
 msgstr ""
 "Ongeldige waarde van increment van datum&tijd, moet groter zijn dan nul"
@@ -20147,8 +20160,7 @@ msgstr "Afbeelding:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/frontend/ui/datapickerimagewidget.ui:701
-#, fuzzy, kde-format
-#| msgid "Embedd"
+#, kde-format
 msgid "Embed"
 msgstr "Inbedden"
 

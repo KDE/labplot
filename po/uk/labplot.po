@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-23 00:38+0000\n"
-"PO-Revision-Date: 2025-09-12 16:36+0300\n"
+"PO-Revision-Date: 2025-09-23 09:48+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -7668,10 +7668,9 @@ msgid "Descriptive Statistics"
 msgstr "Описова статистика"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
-#, fuzzy, kde-format
-#| msgid "t-Test Statistics"
+#, kde-format
 msgid "Test Statistics"
-msgstr "Статистика t-тестування"
+msgstr "Критерії перевірки"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
 #, kde-format
@@ -14715,6 +14714,15 @@ msgid ""
 "if three or more independent samples have the same mean</li><li><b>%6</b> - "
 "tests if three or more related/repeated measurements have the same mean</li>"
 msgstr ""
+"<ul><li><b>%1</b> – перевіряє, чи середнє значення вибірки суттєво "
+"відрізняється від відомого середнього значення генеральної сукупності</"
+"li><li><b>%2</b> – перевіряє, чи дві незалежні вибірки мають однакове "
+"середнє значення</li><li><b>%3</b> – перевіряє, чи різниця середніх значень "
+"між двома пов'язаними вибірками дорівнює нулю</li><li><b>%4</b> – перевіряє, "
+"чи дві незалежні вибірки з нерівними дисперсіями мають однакове середнє "
+"значення</li><li><b>%5</b> – перевіряє, чи три або більше незалежних вибірок "
+"мають однакове середнє значення</li><li><b>%6</b> – перевіряє, чи три або "
+"більше пов'язаних/повторних вимірювань мають однакове середнє значення</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:131
 #, kde-format
@@ -14729,6 +14737,16 @@ msgid ""
 "li><li><b>%7</b> - tests if observed data follows a specified theoretical "
 "distribution</li></ul>"
 msgstr ""
+"<li><b>%1</b> – перевіряє відмінності в медіанах між двома незалежними "
+"групами</li><li><b>%2</b> – перевіряє, чи дорівнює нулю різниця медіан між "
+"двома пов'язаними вибірками</li><li><b>%3</b> – перевіряє відмінності в "
+"медіанах між трьома або більше незалежними групами</li><li><b>%4</b> – "
+"перевіряє відмінності в медіанах між трьома або більше пов'язаними/"
+"повторними вимірюваннями</li><li><b>%5</b> – перевіряє відмінності в "
+"розподілах виживання між двома або більше групами</li><li><b>%6</b> – "
+"перевіряє, чи дві категоріальні змінні незалежні одна від одної</li><li><b>"
+"%7</b> – перевіряє, чи спостережувані дані відповідають заданому "
+"теоретичному розподілу</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:312
 #, kde-format
@@ -18074,26 +18092,22 @@ msgid "Invalid start value"
 msgstr "Некоректне початкове значення"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:257
-#, fuzzy, kde-format
-#| msgid "Invalid end value, must be bigger than the start value"
+#, kde-format
 msgid "Invalid end value, must be greater than the start value"
 msgstr "Некоректне кінцеве значення — має бути більшим за початкове"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:300
-#, fuzzy, kde-format
-#| msgid "The number of values to be generated must be bigger than one"
+#, kde-format
 msgid "The number of values to be generated must be greater than one"
 msgstr "Кількість породжених значень має перевищувати одиницю"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:317
-#, fuzzy, kde-format
-#| msgid "Invalid numeric increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid numeric increment value, must be greater than zero"
 msgstr "Некоректне числове значення кроку — має бути більшим за нуль"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:326
-#, fuzzy, kde-format
-#| msgid "Invalid Date&Time increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid Date&Time increment value, must be greater than zero"
 msgstr "Некоректне часове значення кроку — має бути більшим за нуль"
 
@@ -20242,8 +20256,7 @@ msgstr "Зображення:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/frontend/ui/datapickerimagewidget.ui:701
-#, fuzzy, kde-format
-#| msgid "Embedd"
+#, kde-format
 msgid "Embed"
 msgstr "Вбудувати"
 
