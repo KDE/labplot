@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-23 00:38+0000\n"
-"PO-Revision-Date: 2025-09-12 10:20+0300\n"
+"PO-Revision-Date: 2025-09-24 09:25+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.08.1\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #: src/backend/core/AbstractAspect.cpp:233
@@ -7589,10 +7589,9 @@ msgid "Descriptive Statistics"
 msgstr "Açıklamalı İstatistikler"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
-#, fuzzy, kde-format
-#| msgid "t-Test Statistics"
+#, kde-format
 msgid "Test Statistics"
-msgstr "t Testi İstatistikleri"
+msgstr "Metin İstatistikleri"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
 #, kde-format
@@ -14604,6 +14603,15 @@ msgid ""
 "if three or more independent samples have the same mean</li><li><b>%6</b> - "
 "tests if three or more related/repeated measurements have the same mean</li>"
 msgstr ""
+"<ul><li><b>%1</b> — örnek bir ortalamanın bilinen nüfus ortalamasından "
+"önemli ölçüde farklı olup olmadığını sınar</li><li><b>%2</b> — iki bağımsız "
+"örneklemin ayrı ortalamaya sahip olup olmadığını sınar</li><li><b>%3</b> — "
+"iki ilgili örneklem arasındaki ana farkın sıfır olup olmadığını sınar</"
+"li><li><b>%4</b> — eşit olmayan varyanslara sahip iki bağımsız örneklemin "
+"aynı ortalamaya sahip olup olmadığını sınar</li><li><b>%5</b> — üç veya daha "
+"fazla bağımsız örneklemin aynı ortalamaya sahip olup olmadığını sınar</"
+"li><li><b>%6</b> — üc veya daha fazla ilgili/yinelenmiş ölçülerin aynı "
+"ortalamaya sahip olup olmadığını sınar</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:131
 #, kde-format
@@ -14618,6 +14626,16 @@ msgid ""
 "li><li><b>%7</b> - tests if observed data follows a specified theoretical "
 "distribution</li></ul>"
 msgstr ""
+"<li><b>%1</b> — iki bağımsız grup arasındaki ortancalardaki farkı sınar</"
+"li><li><b>%2</b> — iki ilişkili örnek arasındaki ortanca farkın sıfır olup "
+"olmadığını sınar</li><li><b>%3</b> — üç veya daha fazla bağımsız grup "
+"arasında ortancalar arasındaki farkı sınar</li><li><b>%4</b> — üç veya daha "
+"fazla ilişkili/yinelenmiş ölçüler arasındaki ortanca farkını sınar</"
+"li><li><b>%5</b> — iki veya daha fazla grup arasındaki hayatta kalma "
+"dağılımlarındaki farkı sınar</li><li><b>%6</b> — iki kategorik değişkenin "
+"birbirlerinden farklı olup olmadıklarını sınar</li><li><b>%7</b> — "
+"gözlemlenen verinin belirli bir kuramsal dağılımı izleyip izlemediğini "
+"sınar</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:312
 #, kde-format
@@ -17949,26 +17967,22 @@ msgid "Invalid start value"
 msgstr "Geçersiz başlangıç değeri"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:257
-#, fuzzy, kde-format
-#| msgid "Invalid end value, must be bigger than the start value"
+#, kde-format
 msgid "Invalid end value, must be greater than the start value"
 msgstr "Geçersiz bitiş değeri; başlangıç değerinden büyük olmalıdır"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:300
-#, fuzzy, kde-format
-#| msgid "The number of values to be generated must be bigger than one"
+#, kde-format
 msgid "The number of values to be generated must be greater than one"
 msgstr "Üretilecek değerlerin sayısı 1’den büyük olmalıdır"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:317
-#, fuzzy, kde-format
-#| msgid "Invalid numeric increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid numeric increment value, must be greater than zero"
 msgstr "Geçersiz sayısal artış değeri; 0’dan büyük olmalıdır"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:326
-#, fuzzy, kde-format
-#| msgid "Invalid Date&Time increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid Date&Time increment value, must be greater than zero"
 msgstr "Geçersiz Tarih/Zaman artış değeri; 0’dan büyük olmalıdır"
 
@@ -20090,8 +20104,7 @@ msgstr "Görsel:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/frontend/ui/datapickerimagewidget.ui:701
-#, fuzzy, kde-format
-#| msgid "Embedd"
+#, kde-format
 msgid "Embed"
 msgstr "Gömülü"
 
