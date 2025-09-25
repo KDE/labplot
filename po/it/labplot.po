@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-23 00:38+0000\n"
-"PO-Revision-Date: 2025-08-03 17:23+0200\n"
+"PO-Revision-Date: 2025-09-23 18:50+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #: src/backend/core/AbstractAspect.cpp:233
 #, kde-format
@@ -2139,10 +2139,9 @@ msgid "Compression: %1"
 msgstr "Compressione: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, fuzzy, kde-format
-#| msgid "Endianess: %1"
+#, kde-format
 msgid "Endianness: %1"
-msgstr "Endianità: %1"
+msgstr "Ordine dei byte: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
 #, kde-format
@@ -2365,10 +2364,9 @@ msgid "Device not available."
 msgstr "Il dispositivo non disponibile."
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, fuzzy, kde-format
-#| msgid "Timeout occured."
+#, kde-format
 msgid "Timeout occurred."
-msgstr "Si è verificato un timeout."
+msgstr "Tempo scaduto."
 
 #: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format
@@ -7473,18 +7471,18 @@ msgstr "Colonna"
 #, kde-format
 msgid "One column is required."
 msgid_plural "%1 columns are required."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "È richiesta una colonna."
+msgstr[1] "Sono richieste %1 colonne."
 
 #: src/backend/statistics/HypothesisTest.cpp:56
 #, kde-format
 msgid "At least %1 and at most %2 columns are required."
-msgstr ""
+msgstr "Sono richieste almeno %1 e al più %2 colonne."
 
 #: src/backend/statistics/HypothesisTest.cpp:64
 #, kde-format
 msgid "Column '%1' must be of numeric type."
-msgstr ""
+msgstr "La colonna %1 deve essere di tipo numerico."
 
 #: src/backend/statistics/HypothesisTest.cpp:143
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:232
@@ -7517,17 +7515,17 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:315
 #, kde-format
 msgid "Mann-Whitney U Test"
-msgstr ""
+msgstr "Test U di Mann-Whitney"
 
 #: src/backend/statistics/HypothesisTest.cpp:317
 #, kde-format
 msgid "Welch t-Test"
-msgstr ""
+msgstr "Test T di Welch"
 
 #: src/backend/statistics/HypothesisTest.cpp:319
 #, kde-format
 msgid "Wilcoxon Signed Rank Test"
-msgstr ""
+msgstr "Test dei ranghi con segno di Wilcoxon"
 
 #: src/backend/statistics/HypothesisTest.cpp:321
 #, kde-format
@@ -7537,17 +7535,17 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:323
 #, kde-format
 msgid "Kruskal-Wallis Test"
-msgstr ""
+msgstr "Test di Kruskal-Wallis"
 
 #: src/backend/statistics/HypothesisTest.cpp:325
 #, kde-format
 msgid "Log-Rank Test"
-msgstr ""
+msgstr "Test dei ranghi logaritmici"
 
 #: src/backend/statistics/HypothesisTest.cpp:327
 #, kde-format
 msgid "Friedman Test"
-msgstr ""
+msgstr "Test di Friedman"
 
 #: src/backend/statistics/HypothesisTest.cpp:329
 #, kde-format
@@ -7568,33 +7566,32 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:505
 #, kde-format
 msgid "N/A"
-msgstr ""
+msgstr "N/D"
 
 #: src/backend/statistics/HypothesisTest.cpp:509
-#, fuzzy, kde-format
-#| msgid "Device not available."
+#, kde-format
 msgid "Test result is not available."
-msgstr "Il dispositivo non disponibile."
+msgstr "I risultati del test non sono disponibili."
 
 #: src/backend/statistics/HypothesisTest.cpp:513
 #, kde-format
 msgid "Two columns are required for this test."
-msgstr ""
+msgstr "Sono richieste due colonne per questo test."
 
 #: src/backend/statistics/HypothesisTest.cpp:517
 #, kde-format
 msgid "At least two columns are required."
-msgstr ""
+msgstr "Sono richieste almeno due colonne."
 
 #: src/backend/statistics/HypothesisTest.cpp:521
 #, kde-format
 msgid "Column '%1' requires at least %2 samples."
-msgstr ""
+msgstr "La colonna «%1» richiede almeno %2 campioni."
 
 #: src/backend/statistics/HypothesisTest.cpp:525
 #, kde-format
 msgid "The size of each sample must be equal."
-msgstr ""
+msgstr "La dimensione di ciascun campione deve essere uguale."
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
 #: src/backend/statistics/HypothesisTest.cpp:529
@@ -7607,18 +7604,17 @@ msgstr "Media"
 #: src/backend/statistics/HypothesisTest.cpp:544
 #, kde-format
 msgid "Null Hypothesis"
-msgstr ""
+msgstr "Ipotesi nulla"
 
 #: src/backend/statistics/HypothesisTest.cpp:545
 #, kde-format
 msgid "Alternate Hypothesis"
-msgstr ""
+msgstr "Ipotesi alternativa"
 
 #: src/backend/statistics/HypothesisTest.cpp:547
-#, fuzzy, kde-format
-#| msgid "t Statistic"
+#, kde-format
 msgid "Descriptive Statistics"
-msgstr "Statistiche t"
+msgstr "Statistica descrittiva"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
 #, fuzzy, kde-format
@@ -7629,31 +7625,27 @@ msgstr "Statistiche t"
 #: src/backend/statistics/HypothesisTest.cpp:548
 #, kde-format
 msgid "Significance Level"
-msgstr ""
+msgstr "Livello di significatività"
 
 #: src/backend/statistics/HypothesisTest.cpp:549
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "p-Value"
-msgstr "Valore"
+msgstr "P(valore)"
 
 #: src/backend/statistics/HypothesisTest.cpp:552
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees of Freedom Between Groups"
-msgstr "Gradi di libertà"
+msgstr "Gradi di libertà tra i gruppi"
 
 #: src/backend/statistics/HypothesisTest.cpp:553
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees of Freedom Within Groups"
-msgstr "Gradi di libertà"
+msgstr "Gradi di libertà all'interno dei gruppi"
 
 #: src/backend/statistics/HypothesisTest.cpp:555
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees of Freedom Treatment"
-msgstr "Gradi di libertà"
+msgstr "Trattamento dei gradi di libertà"
 
 #: src/backend/statistics/HypothesisTest.cpp:556
 #, fuzzy, kde-format
@@ -7672,10 +7664,9 @@ msgstr "Gradi di libertà"
 #: src/backend/statistics/HypothesisTest.cpp:567
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/backend/statistics/HypothesisTest.cpp:572
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "t-Value"
-msgstr "Valore"
+msgstr "T(valore)"
 
 #: src/backend/statistics/HypothesisTest.cpp:563
 #, fuzzy, kde-format
@@ -7687,16 +7678,14 @@ msgstr "Prova"
 #: src/backend/statistics/HypothesisTest.cpp:568
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/backend/statistics/HypothesisTest.cpp:572
-#, fuzzy, kde-format
-#| msgid "Difference"
+#, kde-format
 msgid "Mean Difference"
-msgstr "Differenza"
+msgstr "Differenza media"
 
 #: src/backend/statistics/HypothesisTest.cpp:567
-#, fuzzy, kde-format
-#| msgid "Variance"
+#, kde-format
 msgid "Pooled Variance"
-msgstr "Varianza"
+msgstr "Varianza aggregata"
 
 #: src/backend/statistics/HypothesisTest.cpp:568
 #: src/backend/statistics/HypothesisTest.cpp:573
@@ -7706,22 +7695,19 @@ msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:575
 #: src/backend/statistics/HypothesisTest.cpp:581
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "F-Statistic"
-msgstr "Statistiche"
+msgstr "Statistiche F"
 
 #: src/backend/statistics/HypothesisTest.cpp:575
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Between Groups"
-msgstr "Somma dei quadrati residui"
+msgstr "Somma dei quadrati tra i gruppi"
 
 #: src/backend/statistics/HypothesisTest.cpp:576
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Within Groups"
-msgstr "Somma dei quadrati residui"
+msgstr "Somma dei quadrati all'interno dei gruppi"
 
 #: src/backend/statistics/HypothesisTest.cpp:577
 #, fuzzy, kde-format
@@ -7765,17 +7751,15 @@ msgid "Mean Squares Residuals"
 msgstr "Somma dei quadrati residui"
 
 #: src/backend/statistics/HypothesisTest.cpp:586
-#, fuzzy, kde-format
-#| msgid "Up"
+#, kde-format
 msgid "U"
-msgstr "Su"
+msgstr "U"
 
 #: src/backend/statistics/HypothesisTest.cpp:586
 #: src/backend/statistics/HypothesisTest.cpp:590
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "z-Value"
-msgstr "Valore"
+msgstr "Valore z"
 
 #: src/backend/statistics/HypothesisTest.cpp:587
 #, kde-format
@@ -7802,7 +7786,7 @@ msgstr "Media = 0"
 #: src/backend/statistics/HypothesisTest.cpp:590
 #, kde-format
 msgid "W"
-msgstr ""
+msgstr "W"
 
 #: src/backend/statistics/HypothesisTest.cpp:591
 #, kde-format
@@ -7848,19 +7832,18 @@ msgstr "Conteggio del contenitore:"
 #: src/backend/statistics/HypothesisTest.cpp:604
 #, kde-format
 msgid "H"
-msgstr ""
+msgstr "H"
 
 #: src/backend/statistics/HypothesisTest.cpp:598
-#, fuzzy, kde-format
-#| msgid "Qt"
+#, kde-format
 msgid "Q"
-msgstr "Qt"
+msgstr "Q"
 
 #: src/backend/statistics/HypothesisTest.cpp:600
 #: src/backend/statistics/HypothesisTest.cpp:602
 #, kde-format
 msgid "Chi2"
-msgstr ""
+msgstr "Chi2"
 
 #: src/backend/statistics/HypothesisTest.cpp:604
 #, fuzzy, kde-format
@@ -7876,7 +7859,7 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:605
 #, kde-format
 msgid "Total Count 1"
-msgstr ""
+msgstr "Conteggio totale 1"
 
 #: src/backend/statistics/HypothesisTest.cpp:606
 #, fuzzy, kde-format
@@ -7892,19 +7875,17 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:607
 #, kde-format
 msgid "Total Count 2"
-msgstr ""
+msgstr "Conteggio totale 2"
 
 #: src/backend/statistics/HypothesisTest.cpp:610
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Conclusion"
-msgstr "Grafici statistici"
+msgstr "Conclusione statistica"
 
 #: src/backend/statistics/HypothesisTest.cpp:622
-#, fuzzy, kde-format
-#| msgid "No variable selected."
+#, kde-format
 msgid "No variable columns provided."
-msgstr "Nessuna variabile selezionata."
+msgstr "Non è stata fornita nessuna colonna di variabili."
 
 #: src/backend/statistics/HypothesisTest.cpp:867
 #, kde-format
@@ -7988,7 +7969,7 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:1476
 #, kde-format
 msgid "Column '%1' must be of integer type."
-msgstr ""
+msgstr "La colonna «%1» deve essere di tipo intero."
 
 #: src/backend/statistics/HypothesisTest.cpp:1448
 #, kde-format
@@ -8008,6 +7989,8 @@ msgstr ""
 #, kde-format
 msgid "The size of each column in the contingency table must be equal."
 msgstr ""
+"Le dimensioni di ciascuna colonna nella tabella di contingenza devono essere "
+"uguali."
 
 #: src/backend/statistics/HypothesisTest.cpp:1512
 #, kde-format
@@ -8026,47 +8009,48 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:1533
 #, kde-format
 msgid "Three columns are required."
-msgstr ""
+msgstr "Sono richieste tre colonne."
 
 #: src/backend/statistics/HypothesisTest.cpp:1542
 #, kde-format
 msgid "Status column should be of integer type."
-msgstr ""
+msgstr "La colonna Stato deve essere di tipo intero."
 
 #: src/backend/statistics/HypothesisTest.cpp:1547
 #, kde-format
 msgid "Group column should be of integer type."
-msgstr ""
+msgstr "La colonna Gruppo deve essere di tipo intero."
 
 #: src/backend/statistics/HypothesisTest.cpp:1552
 #, kde-format
 msgid "Time, Status and Group columns should have equal size."
-msgstr ""
+msgstr "Le colonne Tempo, Stato e Gruppo devono avere dimensione uguale."
 
 #: src/backend/statistics/HypothesisTest.cpp:1571
 #, kde-format
 msgid "Status column values must be either 0 or 1."
-msgstr ""
+msgstr "I valori della colonna Stato devono essere 0 o 1."
 
 #: src/backend/statistics/HypothesisTest.cpp:1576
 #, kde-format
 msgid "Group column values must be either 0 or 1."
-msgstr ""
+msgstr "I valori della colonna Gruppo devono essere 0 o 1."
 
 #: src/backend/statistics/HypothesisTest.cpp:1592
 #, kde-format
 msgid "Time, Status and Group columns should have equal number of values."
 msgstr ""
+"Le colonne Tempo, Stato e Gruppo devono avere un numero di valori uguale."
 
 #: src/backend/statistics/HypothesisTest.cpp:1600
 #, kde-format
 msgid "Group 1 requires at least %1 samples."
-msgstr ""
+msgstr "Il gruppo 1 richiede almeno %1 campioni."
 
 #: src/backend/statistics/HypothesisTest.cpp:1605
 #, kde-format
 msgid "Group 2 requires at least %1 samples."
-msgstr ""
+msgstr "Il gruppo 2 richiede almeno %1 campioni."
 
 #: src/backend/statistics/HypothesisTest.cpp:1617
 #, kde-format
@@ -10455,7 +10439,7 @@ msgstr "Regola il coefficiente di determinazione"
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:208
 #, kde-format
 msgid "Test"
-msgstr "Prova"
+msgstr "Test"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1960
 #, kde-format
@@ -11153,15 +11137,14 @@ msgid "Import data from a regular file"
 msgstr "Importa dati da un file"
 
 #: src/frontend/ActionsManager.cpp:269
-#, fuzzy, kde-format
-#| msgid "From File..."
+#, kde-format
 msgid "From Directory..."
-msgstr "Da file..."
+msgstr "Dalla cartella..."
 
 #: src/frontend/ActionsManager.cpp:271
 #, kde-format
 msgid "Import multiple files from a directory"
-msgstr ""
+msgstr "Importa più file da una cartella"
 
 #: src/frontend/ActionsManager.cpp:276
 #, kde-format
@@ -12441,8 +12424,7 @@ msgid "Matrix name:"
 msgstr "Nome della matrice:"
 
 #: src/frontend/datasources/ImportDialog.cpp:148
-#, fuzzy, kde-format
-#| msgid "Add new folder"
+#, kde-format
 msgid "Add a new Folder"
 msgstr "Aggiungi una nuova cartella"
 
@@ -12453,10 +12435,9 @@ msgid "Folder name:"
 msgstr "Nome della cartella:"
 
 #: src/frontend/datasources/ImportDialog.cpp:181
-#, fuzzy, kde-format
-#| msgid "Folder"
+#, kde-format
 msgid "New Folder"
-msgstr "Cartella"
+msgstr "Nuova cartella"
 
 #: src/frontend/datasources/ImportDialog.cpp:185
 #: src/frontend/datasources/ImportDialog.cpp:189
@@ -12530,16 +12511,14 @@ msgid "File %1 imported in %2 seconds."
 msgstr "File %1 importato in %2 secondi."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:202
-#, fuzzy, kde-format
-#| msgid "The project file %1 doesn't exist."
+#, kde-format
 msgid "The directory %1 doesn't exist."
-msgstr "Il file di progetto %1 non esiste."
+msgstr "La cartella %1 non esiste."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:233
-#, fuzzy, kde-format
-#| msgid "File %1 imported in %2 seconds."
+#, kde-format
 msgid "%1 files imported in %2 seconds."
-msgstr "File %1 importato in %2 secondi."
+msgstr "%1 file importati in %2 secondi."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:407
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:151
@@ -12822,12 +12801,10 @@ msgstr ""
 "porzioni dei dati"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1054
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the File Data Source"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Directory Data Source"
-msgstr "Seleziona la fonte dati file"
+msgstr "Seleziona la fonte dati della cartella"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1056
 #, kde-format
@@ -13017,16 +12994,14 @@ msgid "Could not open file %1 for reading."
 msgstr "Impossibile aprire il file %1 in lettura."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1789
-#, fuzzy, kde-format
-#| msgid "Number of records: %1"
+#, kde-format
 msgid "Number of sub-directories: %1"
-msgstr "Numero di record: %1"
+msgstr "Numero di sotto-cartelle: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1792
-#, fuzzy, kde-format
-#| msgid "Couldn't read the project file %1."
+#, kde-format
 msgid "Couldn't read the directory %1."
-msgstr "Impossibile leggere il file di progetto %1."
+msgstr "Impossibile leggere la cartella %1."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1881
 #, kde-format
@@ -14710,6 +14685,7 @@ msgstr ""
 #, kde-format
 msgid "Selected test requires at least %1 and at most %2 non-empty variables."
 msgstr ""
+"Il test selezionato richiede almeno %1 e al più %2 variabili non vuote."
 
 #: src/frontend/dockwidgets/InfoElementDock.cpp:227
 #, kde-format
@@ -19090,10 +19066,9 @@ msgid "Analyze and Plot Data"
 msgstr "Analizza e traccia i dati"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:677
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Analysis"
-msgstr "Grafici statistici"
+msgstr "Analisi statistica"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:678
 #, kde-format
@@ -20208,10 +20183,9 @@ msgstr "Immagine:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/frontend/ui/datapickerimagewidget.ui:701
-#, fuzzy, kde-format
-#| msgid "Embedd"
+#, kde-format
 msgid "Embed"
-msgstr "Incorporato"
+msgstr "Incorpora"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileRelativePath)
 #: src/frontend/ui/datapickerimagewidget.ui:708
@@ -22601,23 +22575,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lH1)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:114
-#, fuzzy, kde-format
-#| msgid "Filter name:"
+#, kde-format
 msgid "Alternate:"
-msgstr "Nome del filtro:"
+msgstr "Alternativa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHypothesis)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:269
 #, kde-format
 msgid "Hypothesis"
-msgstr ""
+msgstr "Ipotesi"
 
 #. i18n: ectx: property (text), widget (QLabel, lTest)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:289
-#, fuzzy, kde-format
-#| msgid "Test"
+#, kde-format
 msgid "Test:"
-msgstr "Prova"
+msgstr "Test:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionY)
 #: src/frontend/ui/dockwidgets/imagedock.ui:136
@@ -23636,7 +23608,7 @@ msgstr "Radice dell'errore quadratico medio (RMSD, SD)"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1046
 #, kde-format
 msgid "F test"
-msgstr "Prova F"
+msgstr "Test F"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1056
