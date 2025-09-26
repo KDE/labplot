@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-23 00:38+0000\n"
-"PO-Revision-Date: 2025-09-12 10:44+0200\n"
+"PO-Revision-Date: 2025-09-23 11:57+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #: src/backend/core/AbstractAspect.cpp:233
 #, kde-format
@@ -7681,10 +7681,9 @@ msgid "Descriptive Statistics"
 msgstr "Estadístiques descriptives"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
-#, fuzzy, kde-format
-#| msgid "t-Test Statistics"
+#, kde-format
 msgid "Test Statistics"
-msgstr "Estadístiques de la prova t"
+msgstr "Estadístiques de proves"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
 #, kde-format
@@ -14775,6 +14774,14 @@ msgid ""
 "if three or more independent samples have the same mean</li><li><b>%6</b> - "
 "tests if three or more related/repeated measurements have the same mean</li>"
 msgstr ""
+"<ul><li><b>%1</b>: prova si la mitjana d'una mostra diferix de la mitjana "
+"coneguda d'una població</li><li><b>%2</b>: prova si dues mostres "
+"independents tenen la mateixa mitjana</li><li><b>%3</b>: prova si la "
+"diferència de les mitjanes entre dues mostres relacionades és zero</"
+"li><li><b>%4</b>>: prova si dues mostres independents amb variances "
+"desiguals tenen la mateixa mitjana</li><li><b>%5</b>: prova si tres o més "
+"mostres independents tenen la mateixa mitjana</li><li><b>%6</b>: prova si "
+"tres o més mesures relacionades/repetides tenen la mateixa mitjana</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:131
 #, kde-format
@@ -14789,6 +14796,15 @@ msgid ""
 "li><li><b>%7</b> - tests if observed data follows a specified theoretical "
 "distribution</li></ul>"
 msgstr ""
+"<li><b>%1</b> prova les diferències de les mitjanes entre dos grups "
+"independents</li><li><b>%2</b>: prova si la diferència de les mitjanes entre "
+"dues mostres relacionades és zero</li><li><b>%3</b>: prova la diferència de "
+"les mitjanes entre tres o més grups independents</li><li><b>%4</b>: prova la "
+"diferència de les mitjanes entre tres o més mesures relacionades/repetides</"
+"li><li><b>%5</b>: prova les diferències a les distribucions de supervivència "
+"entre dos o més grups</li><li><b>%6</b>: prova si dues variables "
+"categòriques són independents entre elles</li><li><b>%7</b>: prova si les "
+"dades observades seguixen una distribució teòrica específica</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:312
 #, kde-format
@@ -18154,26 +18170,22 @@ msgid "Invalid start value"
 msgstr "Valor inicial no vàlid"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:257
-#, fuzzy, kde-format
-#| msgid "Invalid end value, must be bigger than the start value"
+#, kde-format
 msgid "Invalid end value, must be greater than the start value"
 msgstr "Valor final no vàlid, cal que siga més gran que el valor inicial"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:300
-#, fuzzy, kde-format
-#| msgid "The number of values to be generated must be bigger than one"
+#, kde-format
 msgid "The number of values to be generated must be greater than one"
 msgstr "El nombre de valors que s'han de generar cal que siga més gran que 1"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:317
-#, fuzzy, kde-format
-#| msgid "Invalid numeric increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid numeric increment value, must be greater than zero"
 msgstr "Valor de l'increment numèric no vàlid, cal que siga més gran que 0"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:326
-#, fuzzy, kde-format
-#| msgid "Invalid Date&Time increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid Date&Time increment value, must be greater than zero"
 msgstr ""
 "Valor de l'increment de «data i hora» no vàlid, cal que siga més gran que 0"
@@ -20316,10 +20328,9 @@ msgstr "Imatge:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/frontend/ui/datapickerimagewidget.ui:701
-#, fuzzy, kde-format
-#| msgid "Embedd"
+#, kde-format
 msgid "Embed"
-msgstr "Incrustada"
+msgstr "Incrusta"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileRelativePath)
 #: src/frontend/ui/datapickerimagewidget.ui:708
@@ -26258,93 +26269,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "One-Way ANOVA Test Statistics"
-#~ msgstr "Estadístiques de la prova ANOVA unidireccional"
-
-#~ msgid "One-Way ANOVA with Repeated Measures Test Statistics"
-#~ msgstr ""
-#~ "Estadístiques de la prova ANOVA unidireccional amb mesures repetides"
-
-#~ msgid "Mann-Whitney U Test Statistics"
-#~ msgstr "Estadístiques de la prova U de Mann-Whitney"
-
-#~ msgid "Kruskal-Wallis Test Statistics"
-#~ msgstr "Estadístiques de la prova de Kruskal-Wallis"
-
-#~ msgid "Wilcoxon Signed Rank Test Statistics"
-#~ msgstr "Estadístiques de la prova d'interval amb signe de Wilcoxon"
-
-#~ msgid "Friedman Test Statistics"
-#~ msgstr "Estadístiques de la prova de Friedman"
-
-#~ msgid "Chi-Square Goodness of Fit Test Statistics"
-#~ msgstr "Estadístiques de la prova khi quadrat de qualitat de l'ajust"
-
-#~ msgid "Chi-Square Independence Test Statistics"
-#~ msgstr "Estadístiques de la prova d'independència Khi quadrat"
-
-#~ msgid "Log-Rank Test Statistics"
-#~ msgstr "Estadístiques de la prova d'interval logarítmic"
-
-#~ msgid "One-Way ANOVA"
-#~ msgstr "ANOVA unidireccional"
-
-#~ msgid "One-Way ANOVA with Repeated Measures"
-#~ msgstr "ANOVA unidireccional amb mesures repetides"
-
-#~ msgid "Logrank Test"
-#~ msgstr "Prova d'interval logarítmic"
-
-#~ msgid "Chi-square Independence Test"
-#~ msgstr "Prova d'independència Khi quadrat"
-
-#~ msgid "Chi-square Goodness of Fit Test"
-#~ msgstr "Prova khi quadrat de qualitat de l'ajust"
-
-#~ msgid ""
-#~ "<ul><li><b>One-Sample t-Test</b> - tests if a sample mean differs "
-#~ "significantly from a known population mean</li><li><b>Independent Two-"
-#~ "Sample t-Test</b> - tests if two independent samples have the same mean</"
-#~ "li><li><b>Paired Two-Sample t-Test</b> - tests if the mean difference "
-#~ "between two related samples is zero</li><li><b>Welch t-Test</b> - tests "
-#~ "if two independent samples with unequal variances have the same mean</"
-#~ "li><li><b>One-Way ANOVA Test</b> - tests if three or more independent "
-#~ "samples have the same mean</li><li><b>One-Way ANOVA with Repeated "
-#~ "Measures Test</b> - tests if three or more related/repeated measurements "
-#~ "have the same mean</li><li><b>Mann-Whitney U Test</b> - tests differences "
-#~ "in medians between two independent groups</li><li><b>Wilcoxon Signed Rank "
-#~ "Test</b> - tests if the median difference between two related samples is "
-#~ "zero</li><li><b>Kruskal-Wallis Test</b> - tests differences in medians "
-#~ "among three or more independent groups</li><li><b>Friedman Test</b> - "
-#~ "tests differences in medians among three or more related/repeated "
-#~ "measurements</li><li><b>Logrank Test</b> - tests differences in survival "
-#~ "distributions between two or more groups</li><li><b>Chi-Square "
-#~ "Independence Test</b> - tests if two categorical variables are "
-#~ "independent of each other</li><li><b>Chi-Square Goodness of Fit Test</b> "
-#~ "- tests if observed data follows a specified theoretical distribution</"
-#~ "li></ul>"
-#~ msgstr ""
-#~ "<ul><li><b>Prova t d'una mostra</b>: prova si la mitjana d'una mostra "
-#~ "diferix significativament de la mitjana d'una població coneguda</"
-#~ "li><li><b>Prova t de dues mostres independents</b>: prova si dues mostres "
-#~ "independents tenen la mateixa mitjana</li><li><b>Prova t de dues mostres "
-#~ "aparellades</b>prova si la diferència de mitjanes entre dues mostres "
-#~ "relacionades és zero</li><li><b>Prova t de Welch</b>: prova si dues "
-#~ "mostres independents amb variàncies desiguals tenen la mateixa mitjana</"
-#~ "li><li><b>Prova ANOVA unidireccional</b>: prova si tres o més mostres "
-#~ "independents tenen la mateixa mitjana</li><li><b>Prova ANOVA "
-#~ "unidireccional amb mesures repetides</b>: prova si tres mesures o més "
-#~ "relacionades/repetides tenen la mateixa mitjana</li><li><b>Prova U de "
-#~ "Mann-Whitney</b>: prova les diferències de les medianes entre dos grups "
-#~ "independents</li><li><b>Prova d'interval amb signe de Wilcoxon</b>: prova "
-#~ "si la diferència de les medianes entre dues mostres relacionades és zero</"
-#~ "li><li><b>Prova de Kruskal-Wallis</b>: prova les diferències en les "
-#~ "medianes entre tres o més grups independents</li><li><b>Prova de "
-#~ "Friedman</b>: prova les diferències en les medianes entre tres o més "
-#~ "mesures relacionades/repetides</li><li><b>Prova d'interval logarítmic</"
-#~ "b>: prova les diferències en les distribucions de supervivència entre dos "
-#~ "o més grups</li><li><b>Prova d'independència Khi quadrat</b>: prova si "
-#~ "dues variables categòriques són independents entre elles</li><li><b>Prova "
-#~ "khi quadrat de qualitat de l'ajust</b>: prova si les dades observades "
-#~ "seguixen una distribució teòrica especificada</li></ul>"
