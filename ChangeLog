@@ -11,10 +11,12 @@ New features:
 		* Improved axis ticks location. They don't need to be always placed at the edges of the axis if does not look nicely (!700)
 		* Allow to position the center and limit lines in the process behavior chart based on user-defined specifications
 	* [import]
-		* import directories - import multiple files in a directory in one single step
+		* Import directories - import multiple files in a directory in one single step
+		* Allow to import arrays in JSON files that contain plain data only
 
 Performance improvements:
 		* Improved drawing performance (!731)
+		* Improved the performance of importing JSON files with a large number of elements
 
 
 -----2.12.1 (2025-08-15) -----

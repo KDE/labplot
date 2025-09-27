@@ -4,7 +4,7 @@
 	Description          : JSON I/O-filter.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2018 Andrey Cygankov <craftplace.ms@gmail.com>
-	SPDX-FileCopyrightText: 2018-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -17,7 +17,6 @@
 #include <QJsonValue>
 
 class QIODevice;
-class QJsonDocument;
 class QJsonModel;
 class JsonFilterPrivate;
 
@@ -39,9 +38,7 @@ public:
 	static QStringList dataRowTypes();
 	static QString fileInfoString(const QString&);
 
-	// read data from any device
 	void readDataFromDevice(QIODevice& device, AbstractDataSource*, ImportMode = ImportMode::Replace, int lines = -1);
-	// overloaded function to read from file
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 
