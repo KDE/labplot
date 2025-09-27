@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-23 00:38+0000\n"
-"PO-Revision-Date: 2025-09-14 20:21+0200\n"
+"PO-Revision-Date: 2025-09-26 14:03+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -7593,10 +7593,9 @@ msgid "Descriptive Statistics"
 msgstr "Beskrivande statistik"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
-#, fuzzy, kde-format
-#| msgid "t-Test Statistics"
+#, kde-format
 msgid "Test Statistics"
-msgstr "t-test statistik"
+msgstr "Teststatistik"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
 #, kde-format
@@ -14609,6 +14608,14 @@ msgid ""
 "if three or more independent samples have the same mean</li><li><b>%6</b> - "
 "tests if three or more related/repeated measurements have the same mean</li>"
 msgstr ""
+"<ul><li><b>%1</b>: testar om ett samplingsmedelvärde skiljer sig signifikant "
+"från ett känt populationsmedelvärde</li><li><b>%2</b> - testar om två "
+"oberoende samplingar har samma medelvärde</li><li><b>%3</b> - testar om "
+"skillnaden i medelvärde mellan två relaterade samplingar är noll</li><li><b>"
+"%4</b> - testar om två oberoende samplingar med olika varians har samma "
+"medelvärde</li><li><b>%5</b> - testar om tre eller fler oberoende samplingar "
+"har samma medelvärde</li><li><b>%6</b> - testar om tre eller fler relaterade/"
+"upprepade mätningar har samma medelvärde</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:131
 #, kde-format
@@ -14623,6 +14630,15 @@ msgid ""
 "li><li><b>%7</b> - tests if observed data follows a specified theoretical "
 "distribution</li></ul>"
 msgstr ""
+"<li><b>%1</b>: testar skillnader i medianvärden mellan två oberoende "
+"grupper</li><li><b>%2</b> - testar om medianskillnaden mellan två relaterade "
+"samplingar är noll</li><li><b>%3</b> - testar skillnader i medianvärden "
+"mellan tre eller fler oberoende grupper</li><li><b>%4</b> - testar "
+"skillnader i medianvärden mellan tre eller fler relaterade/upprepade "
+"mätningar</li><li><b>%5</b> - testar skillnader i överlevnadsfördelningar "
+"mellan två eller fler grupper</li><li><b>%6</b> - testar om två kategoriska "
+"variabler är oberoende av varandra</li><li><b>%7</b> - testar om observerade "
+"data följer en specificerad teoretisk fördelning</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:312
 #, kde-format
@@ -17954,26 +17970,22 @@ msgid "Invalid start value"
 msgstr "Ogiltigt startvärde"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:257
-#, fuzzy, kde-format
-#| msgid "Invalid end value, must be bigger than the start value"
+#, kde-format
 msgid "Invalid end value, must be greater than the start value"
 msgstr "Ogiltigt slutvärde, det måste vara större än startvärdet"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:300
-#, fuzzy, kde-format
-#| msgid "The number of values to be generated must be bigger than one"
+#, kde-format
 msgid "The number of values to be generated must be greater than one"
 msgstr "Antal värden som ska genereras måste vara större än ett"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:317
-#, fuzzy, kde-format
-#| msgid "Invalid numeric increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid numeric increment value, must be greater than zero"
 msgstr "Ogiltigt numeriskt ökningsvärde, det måste vara större än noll"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:326
-#, fuzzy, kde-format
-#| msgid "Invalid Date&Time increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid Date&Time increment value, must be greater than zero"
 msgstr "Ogiltigt datum- och tidsökningsvärde, det måste vara större än noll"
 
@@ -20095,8 +20107,7 @@ msgstr "Bild:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/frontend/ui/datapickerimagewidget.ui:701
-#, fuzzy, kde-format
-#| msgid "Embedd"
+#, kde-format
 msgid "Embed"
 msgstr "Inbädda"
 
