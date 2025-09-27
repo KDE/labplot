@@ -377,7 +377,7 @@ int JsonFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 /*!
  * determines the relevant part of the full JSON document to be read and its structure.
  * returns \c true if successful, \c false otherwise.
-*/
+ */
 bool JsonFilterPrivate::prepareDocumentToRead() {
 	PERFTRACE(QStringLiteral("Prepare the JSON document to read"));
 
