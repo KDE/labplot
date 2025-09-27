@@ -241,29 +241,19 @@ bool JsonFilterPrivate::parseColumnModes(const QJsonValue& row, const QString& r
 	// determine the column modes and names
 	for (int i = startColumn - 1; i < endColumn; ++i) {
 		QJsonValue columnValue;
-		switch (rowType) {
-		case QJsonValue::Array: {
+		if (row.isArray()) {
 			columnValue = *(row.toArray().begin() + i);
 			vectorNames << i18n("Column %1", QString::number(i + 1));
-			break;
-		}
-		case QJsonValue::Object: {
+		} else if (row.isObject()) {
 			const auto& keys = row.toObject().keys();
 			if (i >= keys.count())
 				return false;
 			QString key = keys.at(i);
 			vectorNames << key;
 			columnValue = row.toObject().value(key);
-			break;
-		}
-		case QJsonValue::Double:
-		case QJsonValue::String:
-		case QJsonValue::Bool:
-		case QJsonValue::Null:
-		case QJsonValue::Undefined:
+		} else {
 			columnValue = row;
 			vectorNames << rowName;
-			break;
 		}
 
 		switch (columnValue.type()) {
@@ -381,7 +371,7 @@ int JsonFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 bool JsonFilterPrivate::prepareDocumentToRead() {
 	PERFTRACE(QStringLiteral("Prepare the JSON document to read"));
 
-	QString firstRowName; // the name of the first select row in the document model
+	QString firstRowName; // the name of the first selected row in the JSON model
 	if (modelRows.isEmpty())
 		m_preparedDoc = m_doc;
 	else {
@@ -425,7 +415,7 @@ bool JsonFilterPrivate::prepareDocumentToRead() {
 
 	int countRows = 0;
 	int countCols = -1;
-	QJsonValue firstRow;
+	QJsonValue firstRow; // first row/element within the selected index in the JSON model
 	importObjectNames = (importObjectNames && (rowType == QJsonValue::Object));
 
 	switch (containerType) {
@@ -560,21 +550,12 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 
 		for (int n = 0; n < m_actualCols - colOffset; ++n) {
 			QJsonValue value;
-			switch (rowType) {
-			case QJsonValue::Array:
+			if (row.isArray())
 				value = *(row.toArray().begin() + n + startColumn - 1);
-				break;
-			case QJsonValue::Object:
+			else if (row.isObject())
 				value = *(row.toObject().begin() + n + startColumn - 1);
-				break;
-			case QJsonValue::Double:
-			case QJsonValue::String:
-			case QJsonValue::Bool:
-			case QJsonValue::Null:
-			case QJsonValue::Undefined:
+			else
 				value = row;
-				break;
-			}
 
 			switch (value.type()) {
 			case QJsonValue::Double:
@@ -682,21 +663,12 @@ QVector<QStringList> JsonFilterPrivate::preview(int lines) {
 
 		for (int n = startColumn - 1; n < endColumn; ++n) {
 			QJsonValue value;
-			switch (rowType) {
-			case QJsonValue::Object:
+			if (row.isObject())
 				value = *(row.toObject().begin() + n);
-				break;
-			case QJsonValue::Array:
+			else if (row.isArray())
 				value = *(row.toArray().begin() + n);
-				break;
-			case QJsonValue::Double:
-			case QJsonValue::String:
-			case QJsonValue::Bool:
-			case QJsonValue::Null:
-			case QJsonValue::Undefined:
+			else
 				value = row;
-				break;
-			}
 
 			switch (value.type()) {
 			case QJsonValue::Double:
