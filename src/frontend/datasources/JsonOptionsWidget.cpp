@@ -58,8 +58,6 @@ void JsonOptionsWidget::applyFilterSettings(JsonFilter* filter, const QModelInde
 	filter->setNaNValueToZero(ui.chbConvertNaNToZero->isChecked());
 	filter->setImportObjectNames(ui.chbImportObjectNames->isChecked());
 
-	// TODO: change this after implementation other row types
-	filter->setDataRowType(QJsonValue::Array);
 	if (!index.isValid())
 		return;
 	auto* item = static_cast<QJsonTreeItem*>(index.internalPointer());
@@ -77,7 +75,7 @@ void JsonOptionsWidget::loadSettings() const {
 	KConfigGroup conf = Settings::group(QStringLiteral("ImportJson"));
 
 	const auto decimalSeparator = QLocale().decimalPoint();
-	int index = (decimalSeparator == QLatin1Char('.')) ? 0 : 1;
+	const int index = (decimalSeparator == QLatin1Char('.')) ? 0 : 1;
 	ui.cbDecimalSeparator->setCurrentIndex(conf.readEntry("DecimalSeparator", index));
 
 	ui.cbDateTimeFormat->setCurrentItem(conf.readEntry("DateTimeFormat", "yyyy-MM-dd hh:mm:ss.zzz"));
