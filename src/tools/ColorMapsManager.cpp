@@ -101,7 +101,7 @@ void ColorMapsManager::render(QPixmap& pixmap, const QString& name) {
 			colorMapNames(name);
 	}
 
-	// convert from the string RGB represetation to QColor
+	// convert from the string RGB representation to QColor
 	m_colormap.clear();
 	for (auto& rgb : m_colors[name]) {
 		QStringList rgbValues = rgb.split(QLatin1Char(','));
