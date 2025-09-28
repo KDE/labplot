@@ -77,7 +77,7 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent)
 		m_okButton->setText(i18n("&Drop"));
 		m_okButton->setToolTip(i18n("Drop values in the specified region"));
 		setWindowTitle(i18nc("@title:window", "Drop Values"));
-		ui.chbDeleteRows->setToolTip(i18n("Delete the entire rows in the spreadsheet if the condition is met"));
+		ui.chbDeleteRows->setToolTip(i18n("Delete entire rows in the spreadsheet if the condition is met."));
 	}
 
 	connect(ui.cbOperator, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DropValuesDialog::operatorChanged);
