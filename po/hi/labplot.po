@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-23 00:38+0000\n"
+"POT-Creation-Date: 2025-09-28 00:39+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -1065,6 +1065,112 @@ msgstr ""
 "फ़ाइल %1 को लिखने के लिए नहीं खोला जा सका.\n"
 "%2"
 
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:123
+#, kde-format
+msgid ""
+"This option determines how the imported strings have to be converted to "
+"numbers."
+msgstr ""
+"यह विकल्प निर्धारित करता है कि आयातित स्ट्रिंग्स को संख्याओं में कैसे परिवर्तित किया जाए।"
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:128
+#, kde-format
+msgid ""
+"When point character is used for the decimal separator, the valid number "
+"representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
+"ul>For comma as the decimal separator, the valid number representations are:"
+"<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
+msgstr ""
+"जब दशमलव विभाजक के लिए बिंदु वर्ण का उपयोग किया जाता है, तो वैध संख्या निरूपण निम्न हैं:"
+"<ul><li> 1234.56</li><li> 1,234.56</li><li> वगैरह।</li></ul> दशमलव विभाजक के "
+"रूप में अल्पविराम के लिए, वैध संख्या निरूपण हैं:<ul><li> 1234,56</li><li> 1.234,56</"
+"li><li> वगैरह।</li></ul>"
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:144
+#, kde-format
+msgid ""
+"This option determines how the imported strings have to be converted to "
+"calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
+"and to time."
+msgstr ""
+"यह विकल्प निर्धारित करता है कि आयातित स्ट्रिंग्स को कैलेंडर तिथि, अर्थात् ग्रेगोरियन कैलेंडर "
+"में वर्ष, माह और दिन संख्याओं और समय में कैसे परिवर्तित किया जाए।"
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:150
+#, kde-format
+msgid ""
+"Expressions that may be used for the date part of format string:"
+"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
+"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
+"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
+"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
+"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
+"td><td>the month as number without a leading zero (1 to 12).</td></"
+"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
+"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
+"to 'Dec'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
+"'December'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
+"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
+"negative, a minus sign is prepended in addition.</td></tr></"
+"table><br><br>Expressions that may be used for the time part of the format "
+"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
+"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
+"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
+"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
+"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
+"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
+"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
+"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
+"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
+"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
+"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
+"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
+"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
+"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
+"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
+"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
+"Sunday</td></tr></table><br><br>In case the provided expression is empty, "
+"the format will be auto-detected."
+msgstr ""
+"प्रारूप स्ट्रिंग के दिनांक भाग के लिए उपयोग की जा सकने वाली अभिव्यक्तियाँ:"
+"<table><tr><td> डी</td><td> दिन को बिना किसी शून्य के संख्या के रूप में (1 से 31 तक)।</"
+"td></tr><tr><td> डीडी</td><td> दिन को शून्य से शुरू करके संख्या के रूप में लिखना (01 से "
+"31 तक)।</td></tr><tr><td> डीडीडी</td><td> संक्षिप्त स्थानीयकृत दिन का नाम (जैसे "
+"&#39;सोम&#39; से &#39;रवि&#39;)। नाम को स्थानीयकृत करने के लिए सिस्टम लोकेल का "
+"उपयोग करता है।</td></tr><tr><td> dddd</td><td> लंबा स्थानीयकृत दिन का नाम (जैसे "
+"&#39;सोमवार&#39; से &#39;रविवार&#39;)। नाम को स्थानीयकृत करने के लिए सिस्टम लोकेल "
+"का उपयोग करता है।</td></tr><tr><td> एम</td><td> महीने को बिना किसी शून्य के संख्या "
+"के रूप में (1 से 12 तक)।</td></tr><tr><td> मिमी</td><td> माह को शून्य से प्रारम्भिक "
+"संख्या के रूप में लिखें (01 से 12 तक)।</td></tr><tr><td> एमएमएम</td><td> संक्षिप्त "
+"स्थानीयकृत महीने का नाम (जैसे &#39;जनवरी&#39; से &#39;दिसंबर&#39;)। नाम को स्थानीयकृत "
+"करने के लिए सिस्टम लोकेल का उपयोग करता है।</td></tr><tr><td> एमएमएम</td><td> लंबे "
+"स्थानीयकृत महीने का नाम (जैसे &#39;जनवरी&#39; से &#39;दिसंबर&#39;)। नाम को स्थानीयकृत "
+"करने के लिए सिस्टम लोकेल का उपयोग करता है।</td></tr><tr><td> वर्ष</td><td> वर्ष को "
+"दो अंकों की संख्या (00 से 99) के रूप में दर्शाया जाता है।</td></tr><tr><td> वर्ष</"
+"td><td> वर्ष को चार अंकों की संख्या के रूप में लिखें। यदि वर्ष ऋणात्मक है, तो जोड़ में ऋण "
+"चिह्न जोड़ा जाता है।</td></tr></table><br><br> प्रारूप स्ट्रिंग के समय भाग के लिए "
+"उपयोग की जा सकने वाली अभिव्यक्तियाँ:<table><tr><td> एच</td><td> बिना किसी शून्य के "
+"घंटा (0 से 23 या 1 से 12 यदि AM/PM प्रदर्शित हो)</td></tr><tr><td> एचएच</td><td> "
+"अग्रणी शून्य वाला घंटा (00 से 23 या 01 से 12 यदि AM/PM प्रदर्शित हो)</td></"
+"tr><tr><td> एच</td><td> बिना किसी शून्य के घंटा (0 से 23 तक, यहां तक कि AM/PM "
+"प्रदर्शन के साथ भी)</td></tr><tr><td> एचएच</td><td> अग्रणी शून्य वाला घंटा (00 से 23 "
+"तक, यहां तक कि AM/PM प्रदर्शन के साथ भी)</td></tr><tr><td> एम</td><td> बिना किसी "
+"शून्य के मिनट (0 से 59 तक)</td></tr><tr><td> मिमी</td><td> शून्य से शुरू होने वाला "
+"मिनट (00 से 59 तक)</td></tr><tr><td> एस</td><td> बिना किसी शून्य के दूसरा (0 से 59 "
+"तक)</td></tr><tr><td> एस एस</td><td> दूसरा शून्य से आगे (00 से 59 तक)</td></"
+"tr><tr><td> जेड</td><td> बिना शून्य के मिलीसेकंड (0 से 999 तक)</td></tr><tr><td> "
+"ज़ज़्ज़</td><td> अग्रणी शून्य के साथ मिलीसेकंड (000 से 999 तक)</td></tr><tr><td> एपी या "
+"ए</td><td> AM/PM समय के रूप में व्याख्या करें। AP या तो &#39;AM&#39; या &#39;PM&#39; "
+"होना चाहिए।</td></tr><tr><td> एपी या ए</td><td> इसे AM/PM समय के रूप में समझें। ap "
+"या तो &#39;am&#39; या &#39;pm&#39; होना चाहिए।</td></tr></table><br><br> "
+"उदाहरण हैं:<table><tr><td> dd.MM.वर्ष</td><td> 20.07.1969</td></tr><tr><td> ddd "
+"MMMM d वर्ष</td><td> रवि जुलाई 20 69</td></tr><tr><td> &#39;वह दिन है&#39; "
+"dddd</td><td> दिन रविवार है</td></tr></table><br><br> यदि प्रदान की गई "
+"अभिव्यक्ति रिक्त है, तो प्रारूप का स्वतः पता लगा लिया जाएगा।"
+
 #: src/backend/datasources/filters/AsciiFilter.cpp:223
 #, kde-format
 msgid "Number of columns: %1"
@@ -1077,7 +1183,7 @@ msgstr "पंक्तियों की संख्या: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:467
 #: src/backend/datasources/filters/AsciiFilter.cpp:1252
-#: src/backend/datasources/filters/JsonFilter.cpp:284
+#: src/backend/datasources/filters/JsonFilter.cpp:246
 #, kde-format
 msgid "Column %1"
 msgstr "स्तंभ %1"
@@ -1115,7 +1221,7 @@ msgid "Int64"
 msgstr "इंट64"
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:273
-#: src/backend/datasources/filters/JsonFilter.cpp:386
+#: src/backend/datasources/filters/JsonFilter.cpp:343
 #: src/backend/datasources/filters/SpiceFilter.cpp:127
 #: src/backend/datasources/filters/SpiceFilter.cpp:183
 #, kde-format
@@ -1143,7 +1249,7 @@ msgstr "डिवाइस/फ़ाइल खोलने में विफ�
 #: src/backend/datasources/filters/HDF5Filter.cpp:1809
 #: src/backend/datasources/filters/HDF5Filter.cpp:1965
 #: src/backend/datasources/filters/ImageFilter.cpp:165
-#: src/backend/datasources/filters/JsonFilter.cpp:540
+#: src/backend/datasources/filters/JsonFilter.cpp:516
 #: src/backend/datasources/filters/MatioFilter.cpp:890
 #: src/backend/datasources/filters/NetCDFFilter.cpp:758
 #: src/backend/datasources/filters/NetCDFFilter.cpp:869
@@ -1580,64 +1686,64 @@ msgid_plural "numerical data, %1 elements"
 msgstr[0] "संख्यात्मक डेटा, %1 तत्व"
 msgstr[1] "संख्यात्मक डेटा, %1 तत्व"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:189
+#: src/backend/datasources/filters/JsonFilter.cpp:181
 #, kde-format
 msgid "Open device failed"
 msgstr "डिवाइस खोलना विफल"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:192
+#: src/backend/datasources/filters/JsonFilter.cpp:184
 #, kde-format
 msgid "Empty file"
 msgstr "खाली फ़ाइल"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:198
+#: src/backend/datasources/filters/JsonFilter.cpp:190
 #, kde-format
 msgid "Parse error: %1 at offset %2"
 msgstr "पार्स त्रुटि: %1 ऑफसेट %2 पर"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:201
+#: src/backend/datasources/filters/JsonFilter.cpp:193
 #, kde-format
 msgid "Valid JSON document"
 msgstr "मान्य JSON दस्तावेज़"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:261
+#: src/backend/datasources/filters/JsonFilter.cpp:224
 #: src/backend/datasources/filters/McapFilter.cpp:287
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:305
 #, kde-format
 msgid "index"
 msgstr "अनुक्रमणिका"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:269
+#: src/backend/datasources/filters/JsonFilter.cpp:232
 #, kde-format
 msgid "timestamp"
 msgstr "TIMESTAMP"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:271
+#: src/backend/datasources/filters/JsonFilter.cpp:234
 #, kde-format
 msgid "month"
 msgstr "महीना"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:273
+#: src/backend/datasources/filters/JsonFilter.cpp:236
 #, kde-format
 msgid "day"
 msgstr "दिन"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:275
+#: src/backend/datasources/filters/JsonFilter.cpp:238
 #, kde-format
 msgid "name"
 msgstr "नाम"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:391
+#: src/backend/datasources/filters/JsonFilter.cpp:348
 #, kde-format
 msgid "Device/file is empty."
 msgstr "डिवाइस/फ़ाइल रिक्त है."
 
-#: src/backend/datasources/filters/JsonFilter.cpp:399
+#: src/backend/datasources/filters/JsonFilter.cpp:356
 #, kde-format
 msgid "JSON format error or document empty."
 msgstr "JSON प्रारूप त्रुटि या दस्तावेज़ रिक्त."
 
-#: src/backend/datasources/filters/JsonFilter.cpp:522
+#: src/backend/datasources/filters/JsonFilter.cpp:499
 #, kde-format
 msgid "Empty file or invalid JSON document."
 msgstr "रिक्त फ़ाइल या अमान्य JSON दस्तावेज़."
@@ -11894,119 +12000,7 @@ msgstr "बिंदु '।'"
 msgid "Comma ','"
 msgstr "अल्पविराम ','"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:36
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:46
-#: src/frontend/datasources/JsonOptionsWidget.cpp:118
-#, kde-format
-msgid ""
-"This option determines how the imported strings have to be converted to "
-"numbers."
-msgstr ""
-"यह विकल्प निर्धारित करता है कि आयातित स्ट्रिंग्स को संख्याओं में कैसे परिवर्तित किया जाए।"
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:38
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:48
-#, kde-format
-msgid ""
-"When point character is used for the decimal separator, the valid number "
-"representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
-"ul>For comma as the decimal separator, the valid number representations are:"
-"<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
-msgstr ""
-"जब दशमलव विभाजक के लिए बिंदु वर्ण का उपयोग किया जाता है, तो वैध संख्या निरूपण निम्न हैं:"
-"<ul><li> 1234.56</li><li> 1,234.56</li><li> वगैरह।</li></ul> दशमलव विभाजक के "
-"रूप में अल्पविराम के लिए, वैध संख्या निरूपण हैं:<ul><li> 1234,56</li><li> 1.234,56</"
-"li><li> वगैरह।</li></ul>"
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:60
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:67
-#: src/frontend/datasources/JsonOptionsWidget.cpp:141
-#, kde-format
-msgid ""
-"This option determines how the imported strings have to be converted to "
-"calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
-"and to time."
-msgstr ""
-"यह विकल्प निर्धारित करता है कि आयातित स्ट्रिंग्स को कैलेंडर तिथि, अर्थात् ग्रेगोरियन कैलेंडर "
-"में वर्ष, माह और दिन संख्याओं और समय में कैसे परिवर्तित किया जाए।"
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:63
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:70
-#, kde-format
-msgid ""
-"Expressions that may be used for the date part of format string:"
-"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
-"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
-"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
-"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
-"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
-"td><td>the month as number without a leading zero (1 to 12).</td></"
-"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
-"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
-"to 'Dec'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
-"'December'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
-"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
-"negative, a minus sign is prepended in addition.</td></tr></"
-"table><br><br>Expressions that may be used for the time part of the format "
-"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
-"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
-"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
-"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
-"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
-"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
-"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
-"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
-"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
-"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
-"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
-"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
-"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
-"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
-"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
-"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
-"Sunday</td></tr></table><br><br>In case the provided expression is empty, "
-"the format will be auto-detected."
-msgstr ""
-"प्रारूप स्ट्रिंग के दिनांक भाग के लिए उपयोग की जा सकने वाली अभिव्यक्तियाँ:"
-"<table><tr><td> डी</td><td> दिन को बिना किसी शून्य के संख्या के रूप में (1 से 31 तक)।</"
-"td></tr><tr><td> डीडी</td><td> दिन को शून्य से शुरू करके संख्या के रूप में लिखना (01 से "
-"31 तक)।</td></tr><tr><td> डीडीडी</td><td> संक्षिप्त स्थानीयकृत दिन का नाम (जैसे "
-"&#39;सोम&#39; से &#39;रवि&#39;)। नाम को स्थानीयकृत करने के लिए सिस्टम लोकेल का "
-"उपयोग करता है।</td></tr><tr><td> dddd</td><td> लंबा स्थानीयकृत दिन का नाम (जैसे "
-"&#39;सोमवार&#39; से &#39;रविवार&#39;)। नाम को स्थानीयकृत करने के लिए सिस्टम लोकेल "
-"का उपयोग करता है।</td></tr><tr><td> एम</td><td> महीने को बिना किसी शून्य के संख्या "
-"के रूप में (1 से 12 तक)।</td></tr><tr><td> मिमी</td><td> माह को शून्य से प्रारम्भिक "
-"संख्या के रूप में लिखें (01 से 12 तक)।</td></tr><tr><td> एमएमएम</td><td> संक्षिप्त "
-"स्थानीयकृत महीने का नाम (जैसे &#39;जनवरी&#39; से &#39;दिसंबर&#39;)। नाम को स्थानीयकृत "
-"करने के लिए सिस्टम लोकेल का उपयोग करता है।</td></tr><tr><td> एमएमएम</td><td> लंबे "
-"स्थानीयकृत महीने का नाम (जैसे &#39;जनवरी&#39; से &#39;दिसंबर&#39;)। नाम को स्थानीयकृत "
-"करने के लिए सिस्टम लोकेल का उपयोग करता है।</td></tr><tr><td> वर्ष</td><td> वर्ष को "
-"दो अंकों की संख्या (00 से 99) के रूप में दर्शाया जाता है।</td></tr><tr><td> वर्ष</"
-"td><td> वर्ष को चार अंकों की संख्या के रूप में लिखें। यदि वर्ष ऋणात्मक है, तो जोड़ में ऋण "
-"चिह्न जोड़ा जाता है।</td></tr></table><br><br> प्रारूप स्ट्रिंग के समय भाग के लिए "
-"उपयोग की जा सकने वाली अभिव्यक्तियाँ:<table><tr><td> एच</td><td> बिना किसी शून्य के "
-"घंटा (0 से 23 या 1 से 12 यदि AM/PM प्रदर्शित हो)</td></tr><tr><td> एचएच</td><td> "
-"अग्रणी शून्य वाला घंटा (00 से 23 या 01 से 12 यदि AM/PM प्रदर्शित हो)</td></"
-"tr><tr><td> एच</td><td> बिना किसी शून्य के घंटा (0 से 23 तक, यहां तक कि AM/PM "
-"प्रदर्शन के साथ भी)</td></tr><tr><td> एचएच</td><td> अग्रणी शून्य वाला घंटा (00 से 23 "
-"तक, यहां तक कि AM/PM प्रदर्शन के साथ भी)</td></tr><tr><td> एम</td><td> बिना किसी "
-"शून्य के मिनट (0 से 59 तक)</td></tr><tr><td> मिमी</td><td> शून्य से शुरू होने वाला "
-"मिनट (00 से 59 तक)</td></tr><tr><td> एस</td><td> बिना किसी शून्य के दूसरा (0 से 59 "
-"तक)</td></tr><tr><td> एस एस</td><td> दूसरा शून्य से आगे (00 से 59 तक)</td></"
-"tr><tr><td> जेड</td><td> बिना शून्य के मिलीसेकंड (0 से 999 तक)</td></tr><tr><td> "
-"ज़ज़्ज़</td><td> अग्रणी शून्य के साथ मिलीसेकंड (000 से 999 तक)</td></tr><tr><td> एपी या "
-"ए</td><td> AM/PM समय के रूप में व्याख्या करें। AP या तो &#39;AM&#39; या &#39;PM&#39; "
-"होना चाहिए।</td></tr><tr><td> एपी या ए</td><td> इसे AM/PM समय के रूप में समझें। ap "
-"या तो &#39;am&#39; या &#39;pm&#39; होना चाहिए।</td></tr></table><br><br> "
-"उदाहरण हैं:<table><tr><td> dd.MM.वर्ष</td><td> 20.07.1969</td></tr><tr><td> ddd "
-"MMMM d वर्ष</td><td> रवि जुलाई 20 69</td></tr><tr><td> &#39;वह दिन है&#39; "
-"dddd</td><td> दिन रविवार है</td></tr></table><br><br> यदि प्रदान की गई "
-"अभिव्यक्ति रिक्त है, तो प्रारूप का स्वतः पता लगा लिया जाएगा।"
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:105
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:53
 #, kde-format
 msgid ""
 "If checked, the specified line in the file will be used to determine the "
@@ -12015,23 +12009,23 @@ msgstr ""
 "यदि चेक किया गया है, तो फ़ाइल में निर्दिष्ट पंक्ति का उपयोग कॉलम नाम निर्धारित करने के "
 "लिए किया जाएगा।"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:108
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:56
 #, kde-format
 msgid "Line in the file that should be used to determine the column names."
 msgstr "फ़ाइल में वह पंक्ति जिसका उपयोग स्तंभ नाम निर्धारित करने के लिए किया जाना चाहिए."
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:111
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:59
 #, kde-format
 msgid "Custom column names, comma separated. E.g. \"x, y\""
 msgstr "कस्टम कॉलम नाम, अल्पविराम से अलग किए गए। उदाहरणार्थ \"x, y\""
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:115
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:63
 #, fuzzy, kde-format
 #| msgid "Custom column modes, comma separated"
 msgid "Custom column data types, comma separated"
 msgstr "कस्टम कॉलम मोड, अल्पविराम से अलग"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:122
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:70
 #, fuzzy, kde-format
 #| msgid ""
 #| "If not empty, the number of columns must match the number of column names "
@@ -12066,12 +12060,12 @@ msgstr ""
 "दिनांक-समय, अन्यथा स्वचालित रूप से निर्धारित किया जाता है।</td></tr><tr><td> %5</"
 "td><td> एक पाठ.</td></tr></table>"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:138
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:86
 #, kde-format
 msgid "%1 or %2"
 msgstr "%1 या %2"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:249
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:197
 #, kde-format
 msgid "Datatype not found: %1"
 msgstr "डेटाटाइप नहीं मिला: %1"
@@ -13352,129 +13346,39 @@ msgstr "कस्टम क्वेरी"
 msgid "Manage connections"
 msgstr "संबंधों का प्रबंधन"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:244
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:192
 #, kde-format
 msgid ""
 "Couldn't find the database file '%1'. Please check the connection settings."
 msgstr "डेटाबेस फ़ाइल '%1' नहीं मिल सकी। कृपया कनेक्शन सेटिंग जांचें।"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:265
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:213
 #, kde-format
 msgid ""
 "Failed to connect to the database '%1'. Please check the connection settings."
 msgstr "डेटाबेस '%1' से कनेक्ट करने में विफल। कृपया कनेक्शन सेटिंग जांचें।"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:323
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:325
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:271
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:273
 #, kde-format
 msgid "Failed to execute the query for the preview"
 msgstr "पूर्वावलोकन के लिए क्वेरी निष्पादित करने में विफल"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:399
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:347
 #, kde-format
 msgid "Refresh the data preview of the selected table"
 msgstr "चयनित तालिका का डेटा पूर्वावलोकन ताज़ा करें"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:405
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:353
 #, kde-format
 msgid "Execute the query and preview its result"
 msgstr "क्वेरी निष्पादित करें और उसके परिणाम का पूर्वावलोकन करें"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:526
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:528
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:474
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:476
 #, kde-format
 msgid "Failed to execute the query"
 msgstr "क्वेरी निष्पादित करने में विफल"
-
-#: src/frontend/datasources/JsonOptionsWidget.cpp:120
-#, kde-format
-msgid ""
-"For 'C Format', a period is used for the decimal point character and comma "
-"is used for the thousands group separator. Valid number representations are:"
-"<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></ul>When using 'System "
-"locale', the system settings will be used. E.g., for the German local the "
-"valid number representations are:<ul><li>1234,56</li><li>1.234,56</"
-"li><li>etc.</li></ul>"
-msgstr ""
-"&#39;सी फ़ॉर्मेट&#39; के लिए, दशमलव बिंदु वर्ण के लिए अवधि का उपयोग किया जाता है और "
-"हज़ारों समूह विभाजक के लिए अल्पविराम का उपयोग किया जाता है। मान्य संख्या प्रतिनिधित्व हैं:"
-"<ul><li> 1234.56</li><li> 1,234.56</li><li> वगैरह।</li></ul> &#39;सिस्टम "
-"लोकेल&#39; का उपयोग करते समय, सिस्टम सेटिंग्स का उपयोग किया जाएगा। उदाहरण के लिए, "
-"जर्मन लोकल के लिए मान्य संख्या प्रतिनिधित्व हैं:<ul><li> 1234,56</li><li> 1.234,56</"
-"li><li> वगैरह।</li></ul>"
-
-#: src/frontend/datasources/JsonOptionsWidget.cpp:144
-#, kde-format
-msgid ""
-"Expressions that may be used for the date part of format string:"
-"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
-"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
-"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
-"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
-"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
-"td><td>the month as number without a leading zero (1 to 12).</td></"
-"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
-"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
-"to 'Dec'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
-"'December'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
-"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
-"negative, a minus sign is prepended in addition.</td></tr></"
-"table><br><br>Expressions that may be used for the time part of the format "
-"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
-"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
-"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
-"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
-"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
-"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
-"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
-"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
-"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
-"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
-"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
-"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
-"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
-"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
-"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
-"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
-"Sunday</td></tr></table>"
-msgstr ""
-"प्रारूप स्ट्रिंग के दिनांक भाग के लिए उपयोग की जा सकने वाली अभिव्यक्तियाँ:"
-"<table><tr><td> डी</td><td> दिन को बिना किसी शून्य के संख्या के रूप में (1 से 31 तक)।</"
-"td></tr><tr><td> डीडी</td><td> दिन को शून्य से शुरू करके संख्या के रूप में लिखना (01 से "
-"31 तक)।</td></tr><tr><td> डीडीडी</td><td> संक्षिप्त स्थानीयकृत दिन का नाम (जैसे "
-"&#39;सोम&#39; से &#39;रवि&#39;)। नाम को स्थानीयकृत करने के लिए सिस्टम लोकेल का "
-"उपयोग करता है।</td></tr><tr><td> dddd</td><td> लंबा स्थानीयकृत दिन का नाम (जैसे "
-"&#39;सोमवार&#39; से &#39;रविवार&#39;)। नाम को स्थानीयकृत करने के लिए सिस्टम लोकेल "
-"का उपयोग करता है।</td></tr><tr><td> एम</td><td> महीने को बिना किसी शून्य के संख्या "
-"के रूप में (1 से 12 तक)।</td></tr><tr><td> मिमी</td><td> माह को शून्य से प्रारम्भिक "
-"संख्या के रूप में लिखें (01 से 12 तक)।</td></tr><tr><td> एमएमएम</td><td> संक्षिप्त "
-"स्थानीयकृत महीने का नाम (जैसे &#39;जनवरी&#39; से &#39;दिसंबर&#39;)। नाम को स्थानीयकृत "
-"करने के लिए सिस्टम लोकेल का उपयोग करता है।</td></tr><tr><td> एमएमएम</td><td> लंबे "
-"स्थानीयकृत महीने का नाम (जैसे &#39;जनवरी&#39; से &#39;दिसंबर&#39;)। नाम को स्थानीयकृत "
-"करने के लिए सिस्टम लोकेल का उपयोग करता है।</td></tr><tr><td> वर्ष</td><td> वर्ष को "
-"दो अंकों की संख्या (00 से 99) के रूप में दर्शाया जाता है।</td></tr><tr><td> वर्ष</"
-"td><td> वर्ष को चार अंकों की संख्या के रूप में लिखें। यदि वर्ष ऋणात्मक है, तो जोड़ में ऋण "
-"चिह्न जोड़ा जाता है।</td></tr></table><br><br> प्रारूप स्ट्रिंग के समय भाग के लिए "
-"उपयोग की जा सकने वाली अभिव्यक्तियाँ:<table><tr><td> एच</td><td> बिना किसी शून्य के "
-"घंटा (0 से 23 या 1 से 12 यदि AM/PM प्रदर्शित हो)</td></tr><tr><td> एचएच</td><td> "
-"अग्रणी शून्य वाला घंटा (00 से 23 या 01 से 12 यदि AM/PM प्रदर्शित हो)</td></"
-"tr><tr><td> एच</td><td> बिना किसी शून्य के घंटा (0 से 23 तक, यहां तक कि AM/PM "
-"प्रदर्शन के साथ भी)</td></tr><tr><td> एचएच</td><td> अग्रणी शून्य वाला घंटा (00 से "
-"23, यहां तक कि AM/PM प्रदर्शन के साथ भी)</td></tr><tr><td> एम</td><td> बिना किसी "
-"शून्य के मिनट (0 से 59 तक)</td></tr><tr><td> मिमी</td><td> शून्य से शुरू होने वाला "
-"मिनट (00 से 59 तक)</td></tr><tr><td> एस</td><td> बिना किसी शून्य के दूसरा (0 से 59 "
-"तक)</td></tr><tr><td> एस एस</td><td> दूसरा शून्य से आगे (00 से 59 तक)</td></"
-"tr><tr><td> जेड</td><td> बिना शून्य के मिलीसेकंड (0 से 999 तक)</td></tr><tr><td> "
-"ज़ज़्ज़</td><td> अग्रणी शून्य के साथ मिलीसेकंड (000 से 999 तक)</td></tr><tr><td> एपी या "
-"ए</td><td> AM/PM समय के रूप में व्याख्या करें। AP या तो &#39;AM&#39; या &#39;PM&#39; "
-"होना चाहिए।</td></tr><tr><td> एपी या ए</td><td> इसे AM/PM समय के रूप में समझें। ap "
-"या तो &#39;am&#39; या &#39;pm&#39; होना चाहिए।</td></tr></table><br><br> "
-"उदाहरण हैं:<table><tr><td> dd.MM.वर्ष</td><td> 20.07.1969</td></tr><tr><td> ddd "
-"MMMM d वर्ष</td><td> रवि जुलाई 20 69</td></tr><tr><td> &#39;वह दिन है&#39; "
-"dddd</td><td> दिन रविवार है</td></tr></table>"
 
 #: src/frontend/datasources/MQTTConnectionManagerDialog.cpp:33
 #, kde-format
@@ -26003,6 +25907,94 @@ msgstr "रूपांतरण प्रक्रिया विफल, न�
 #, kde-format
 msgid "Unable to open file:"
 msgstr "फाइल खोलने में असमर्थ:"
+
+#~ msgid ""
+#~ "For 'C Format', a period is used for the decimal point character and "
+#~ "comma is used for the thousands group separator. Valid number "
+#~ "representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
+#~ "ul>When using 'System locale', the system settings will be used. E.g., "
+#~ "for the German local the valid number representations are:"
+#~ "<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
+#~ msgstr ""
+#~ "&#39;सी फ़ॉर्मेट&#39; के लिए, दशमलव बिंदु वर्ण के लिए अवधि का उपयोग किया जाता है "
+#~ "और हज़ारों समूह विभाजक के लिए अल्पविराम का उपयोग किया जाता है। मान्य संख्या "
+#~ "प्रतिनिधित्व हैं:<ul><li> 1234.56</li><li> 1,234.56</li><li> वगैरह।</li></ul> "
+#~ "&#39;सिस्टम लोकेल&#39; का उपयोग करते समय, सिस्टम सेटिंग्स का उपयोग किया जाएगा। "
+#~ "उदाहरण के लिए, जर्मन लोकल के लिए मान्य संख्या प्रतिनिधित्व हैं:<ul><li> 1234,56</"
+#~ "li><li> 1.234,56</li><li> वगैरह।</li></ul>"
+
+#~ msgid ""
+#~ "Expressions that may be used for the date part of format string:"
+#~ "<table><tr><td>d</td><td>the day as number without a leading zero (1 to "
+#~ "31).</td></tr><tr><td>dd</td><td>the day as number with a leading zero "
+#~ "(01 to 31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day "
+#~ "name (e.g. 'Mon' to 'Sun'). Uses the system locale to localize the name.</"
+#~ "td></tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' "
+#~ "to 'Sunday'). Uses the system locale to localize the name.</td></"
+#~ "tr><tr><td>M</td><td>the month as number without a leading zero (1 to 12)."
+#~ "</td></tr><tr><td>MM</td><td>the month as number with a leading zero (01 "
+#~ "to 12).</td></tr><tr><td>MMM</td><td>the abbreviated localized month name "
+#~ "(e.g. 'Jan' to 'Dec'). Uses the system locale to localize the name.</td></"
+#~ "tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
+#~ "'December'). Uses the system locale to localize the name.</td></"
+#~ "tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
+#~ "tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
+#~ "negative, a minus sign is prepended in addition.</td></tr></"
+#~ "table><br><br>Expressions that may be used for the time part of the "
+#~ "format string:<table><tr><td>h</td><td>the hour without a leading zero (0 "
+#~ "to 23 or 1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour "
+#~ "with a leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></"
+#~ "tr><tr><td>H</td><td>the hour without a leading zero (0 to 23, even with "
+#~ "AM/PM display)</td></tr><tr><td>HH</td><td>the hour with a leading zero "
+#~ "(00 to 23, even with AM/PM display)</td></tr><tr><td>m</td><td>the minute "
+#~ "without a leading zero (0 to 59)</td></tr><tr><td>mm</td><td>the minute "
+#~ "with a leading zero (00 to 59)</td></tr><tr><td>s</td><td>the second "
+#~ "without a leading zero (0 to 59)</td></tr><tr><td>ss</td><td>the second "
+#~ "with a leading zero (00 to 59)</td></tr><tr><td>z</td><td>the "
+#~ "milliseconds without leading zeroes (0 to 999)</td></tr><tr><td>zzz</"
+#~ "td><td>the milliseconds with leading zeroes (000 to 999)</td></"
+#~ "tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be either "
+#~ "'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
+#~ "time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples "
+#~ "are:<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd "
+#~ "MMMM d yy</td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</"
+#~ "td><td>The day is Sunday</td></tr></table>"
+#~ msgstr ""
+#~ "प्रारूप स्ट्रिंग के दिनांक भाग के लिए उपयोग की जा सकने वाली अभिव्यक्तियाँ:"
+#~ "<table><tr><td> डी</td><td> दिन को बिना किसी शून्य के संख्या के रूप में (1 से 31 "
+#~ "तक)।</td></tr><tr><td> डीडी</td><td> दिन को शून्य से शुरू करके संख्या के रूप में "
+#~ "लिखना (01 से 31 तक)।</td></tr><tr><td> डीडीडी</td><td> संक्षिप्त स्थानीयकृत दिन "
+#~ "का नाम (जैसे &#39;सोम&#39; से &#39;रवि&#39;)। नाम को स्थानीयकृत करने के लिए "
+#~ "सिस्टम लोकेल का उपयोग करता है।</td></tr><tr><td> dddd</td><td> लंबा स्थानीयकृत "
+#~ "दिन का नाम (जैसे &#39;सोमवार&#39; से &#39;रविवार&#39;)। नाम को स्थानीयकृत करने "
+#~ "के लिए सिस्टम लोकेल का उपयोग करता है।</td></tr><tr><td> एम</td><td> महीने को "
+#~ "बिना किसी शून्य के संख्या के रूप में (1 से 12 तक)।</td></tr><tr><td> मिमी</td><td> "
+#~ "माह को शून्य से प्रारम्भिक संख्या के रूप में लिखें (01 से 12 तक)।</td></tr><tr><td> "
+#~ "एमएमएम</td><td> संक्षिप्त स्थानीयकृत महीने का नाम (जैसे &#39;जनवरी&#39; से &#39;"
+#~ "दिसंबर&#39;)। नाम को स्थानीयकृत करने के लिए सिस्टम लोकेल का उपयोग करता है।</td></"
+#~ "tr><tr><td> एमएमएम</td><td> लंबे स्थानीयकृत महीने का नाम (जैसे &#39;जनवरी&#39; से "
+#~ "&#39;दिसंबर&#39;)। नाम को स्थानीयकृत करने के लिए सिस्टम लोकेल का उपयोग करता है।</"
+#~ "td></tr><tr><td> वर्ष</td><td> वर्ष को दो अंकों की संख्या (00 से 99) के रूप में "
+#~ "दर्शाया जाता है।</td></tr><tr><td> वर्ष</td><td> वर्ष को चार अंकों की संख्या के रूप "
+#~ "में लिखें। यदि वर्ष ऋणात्मक है, तो जोड़ में ऋण चिह्न जोड़ा जाता है।</td></tr></"
+#~ "table><br><br> प्रारूप स्ट्रिंग के समय भाग के लिए उपयोग की जा सकने वाली "
+#~ "अभिव्यक्तियाँ:<table><tr><td> एच</td><td> बिना किसी शून्य के घंटा (0 से 23 या 1 से "
+#~ "12 यदि AM/PM प्रदर्शित हो)</td></tr><tr><td> एचएच</td><td> अग्रणी शून्य वाला "
+#~ "घंटा (00 से 23 या 01 से 12 यदि AM/PM प्रदर्शित हो)</td></tr><tr><td> एच</"
+#~ "td><td> बिना किसी शून्य के घंटा (0 से 23 तक, यहां तक कि AM/PM प्रदर्शन के साथ भी)</"
+#~ "td></tr><tr><td> एचएच</td><td> अग्रणी शून्य वाला घंटा (00 से 23, यहां तक कि AM/"
+#~ "PM प्रदर्शन के साथ भी)</td></tr><tr><td> एम</td><td> बिना किसी शून्य के मिनट (0 "
+#~ "से 59 तक)</td></tr><tr><td> मिमी</td><td> शून्य से शुरू होने वाला मिनट (00 से 59 "
+#~ "तक)</td></tr><tr><td> एस</td><td> बिना किसी शून्य के दूसरा (0 से 59 तक)</td></"
+#~ "tr><tr><td> एस एस</td><td> दूसरा शून्य से आगे (00 से 59 तक)</td></tr><tr><td> "
+#~ "जेड</td><td> बिना शून्य के मिलीसेकंड (0 से 999 तक)</td></tr><tr><td> ज़ज़्ज़</"
+#~ "td><td> अग्रणी शून्य के साथ मिलीसेकंड (000 से 999 तक)</td></tr><tr><td> एपी या "
+#~ "ए</td><td> AM/PM समय के रूप में व्याख्या करें। AP या तो &#39;AM&#39; या &#39;"
+#~ "PM&#39; होना चाहिए।</td></tr><tr><td> एपी या ए</td><td> इसे AM/PM समय के रूप "
+#~ "में समझें। ap या तो &#39;am&#39; या &#39;pm&#39; होना चाहिए।</td></tr></"
+#~ "table><br><br> उदाहरण हैं:<table><tr><td> dd.MM.वर्ष</td><td> 20.07.1969</"
+#~ "td></tr><tr><td> ddd MMMM d वर्ष</td><td> रवि जुलाई 20 69</td></tr><tr><td> "
+#~ "&#39;वह दिन है&#39; dddd</td><td> दिन रविवार है</td></tr></table>"
 
 #, fuzzy
 #~| msgid "Will statistics:"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-23 00:38+0000\n"
+"POT-Creation-Date: 2025-09-28 00:39+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -1134,6 +1134,115 @@ msgid ""
 "%2"
 msgstr "Não foi possível aceder ao ficheiro '%1' para escrita."
 
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:123
+#, kde-format
+msgid ""
+"This option determines how the imported strings have to be converted to "
+"numbers."
+msgstr ""
+"Esta opção define como é que os textos importados deverão ser convertidos "
+"para números."
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:128
+#, kde-format
+msgid ""
+"When point character is used for the decimal separator, the valid number "
+"representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
+"ul>For comma as the decimal separator, the valid number representations are:"
+"<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
+msgstr ""
+"Quando é usado o ponto como separador decimal, as representações válidas de "
+"números são:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></ul>No caso "
+"da vírgula como separador decimal, as representações válidas dos números são:"
+"<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:144
+#, kde-format
+msgid ""
+"This option determines how the imported strings have to be converted to "
+"calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
+"and to time."
+msgstr ""
+"Esta opção define como é que os textos importados deverão ser convertidos "
+"para datas do calendário, i.e., os números do ano, mês  e dia no calendário "
+"Gregoriano, bem como as horas."
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:150
+#, kde-format
+msgid ""
+"Expressions that may be used for the date part of format string:"
+"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
+"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
+"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
+"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
+"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
+"td><td>the month as number without a leading zero (1 to 12).</td></"
+"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
+"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
+"to 'Dec'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
+"'December'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
+"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
+"negative, a minus sign is prepended in addition.</td></tr></"
+"table><br><br>Expressions that may be used for the time part of the format "
+"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
+"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
+"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
+"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
+"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
+"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
+"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
+"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
+"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
+"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
+"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
+"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
+"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
+"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
+"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
+"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
+"Sunday</td></tr></table><br><br>In case the provided expression is empty, "
+"the format will be auto-detected."
+msgstr ""
+"As expressões que poderão ser usadas para a componente da data do texto do "
+"formato:<table><tr><td>d</td><td>o dia como um número sem o zero inicial (1 "
+"a 31).</td></tr><tr><td>dd</td><td>o dia como um número com um zero inicial "
+"(01 a 31).</td></tr><tr><td>ddd</td><td>o nome do dia abreviado no formato "
+"local (p.ex. 'Seg' até 'Dom'). Usa a região do sistema para localizar o nome."
+"</td></tr><tr><td>dddd</td><td>o nome do dia por extenso no formato local (p."
+"ex. 'Segunda' a 'Domingo'). Usa a região do sistema para localizar o nome.</"
+"td></tr><tr><td>M</td><td>o mês como um número sem o zero inicial (1 a 12).</"
+"td></tr><tr><td>MM</td><td>o mês como um número com o zero inicial (01 a 12)."
+"</td></tr><tr><td>MMM</td><td>o nome do mês abreviado no formato local (p."
+"ex. 'Jan' a 'Dez'). Usa a região do sistema para localizar o nome.</td></"
+"tr><tr><td>MMMM</td><td>o nome do mês por extenso no formato local (p.ex., "
+"'Janeiro' a 'Dezembro'). Usa a região do sistema para localizar o nome.</"
+"td></tr><tr><td>yy</td><td>o ano como um número de dois algarismos (00 a 99)."
+"</td></tr><tr><td>yyyy</td><td>o ano como um número de quatro algarismos. Se "
+"o ano for negativo, é antecedido um sinal de menos ao valor.</td></tr></"
+"table><br><br>As expressões que poderão ser usadas para a componente de hora "
+"no texto do formato:<table><tr><td>h</td><td>a hora sem o zero inicial (0 a "
+"23 ou 1 a 12, no caso do formato AM/PM)</td></tr><tr><td>hh</td><td>a hora "
+"com o zero inicial (00 a 23 ou 01 a 12, no caso do formato AM/PM)</td></"
+"tr><tr><td>H</td><td>a hora sem o zero inicial (0 a 23, mesmo no formato AM/"
+"PM)</td></tr><tr><td>HH</td><td>a hora com o zero inicial (00 a 23, mesmo no "
+"formato AM/PM)</td></tr><tr><td>m</td><td>o minuto sem o zero inicial (0 a "
+"59)</td></tr><tr><td>mm</td><td>o minuto com o zero inicial (00 a 59)</td></"
+"tr><tr><td>s</td><td>o segundo sem o zero inicial (0 a 59)</td></"
+"tr><tr><td>ss</td><td>o segundo com o zero inicial (00 a 59)</td></"
+"tr><tr><td>z</td><td>os milisegundos sem os zeros iniciais (0 a 999)</td></"
+"tr><tr><td>zzz</td><td>os milisegundos com os zeros iniciais (000 a 999)</"
+"td></tr><tr><td>AP ou A</td><td>interpretar como uma hora no formato AM/PM. "
+"O AP deverá ser igual a 'AM' ou 'PM'.</td></tr><tr><td>ap ou a</"
+"td><td>Interpretar como uma hora no formato AM/PM. O ap deverá ser igual a "
+"'am' ou 'pm'.</td></tr></table><br><br>Alguns exemplos:<table><tr><td>dd.MM."
+"yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</td><td>Dom Julho 20 "
+"69</td></tr><tr><td>'O dia é' dddd</td><td>O dia é Domingo</td></tr></"
+"table>No caso de a expressão indicada estar vazia, o formato será detectado "
+"automaticamente."
+
 #: src/backend/datasources/filters/AsciiFilter.cpp:223
 #, kde-format
 msgid "Number of columns: %1"
@@ -1146,7 +1255,7 @@ msgstr "Número de linhas: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:467
 #: src/backend/datasources/filters/AsciiFilter.cpp:1252
-#: src/backend/datasources/filters/JsonFilter.cpp:284
+#: src/backend/datasources/filters/JsonFilter.cpp:246
 #, kde-format
 msgid "Column %1"
 msgstr "Coluna %1"
@@ -1185,7 +1294,7 @@ msgid "Int64"
 msgstr "Int64"
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:273
-#: src/backend/datasources/filters/JsonFilter.cpp:386
+#: src/backend/datasources/filters/JsonFilter.cpp:343
 #: src/backend/datasources/filters/SpiceFilter.cpp:127
 #: src/backend/datasources/filters/SpiceFilter.cpp:183
 #, fuzzy, kde-format
@@ -1216,7 +1325,7 @@ msgstr "Não foi possível aceder ao dispositivo."
 #: src/backend/datasources/filters/HDF5Filter.cpp:1809
 #: src/backend/datasources/filters/HDF5Filter.cpp:1965
 #: src/backend/datasources/filters/ImageFilter.cpp:165
-#: src/backend/datasources/filters/JsonFilter.cpp:540
+#: src/backend/datasources/filters/JsonFilter.cpp:516
 #: src/backend/datasources/filters/MatioFilter.cpp:890
 #: src/backend/datasources/filters/NetCDFFilter.cpp:758
 #: src/backend/datasources/filters/NetCDFFilter.cpp:869
@@ -1661,65 +1770,65 @@ msgid_plural "numerical data, %1 elements"
 msgstr[0] "dados numéricos, %1 elemento"
 msgstr[1] "dados numéricos, %1 elementos"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:189
+#: src/backend/datasources/filters/JsonFilter.cpp:181
 #, kde-format
 msgid "Open device failed"
 msgstr "Não foi possível abrir o ficheiro"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:192
+#: src/backend/datasources/filters/JsonFilter.cpp:184
 #, kde-format
 msgid "Empty file"
 msgstr "Ficheiro vazio"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:198
+#: src/backend/datasources/filters/JsonFilter.cpp:190
 #, kde-format
 msgid "Parse error: %1 at offset %2"
 msgstr "Erro de processamento: %1 na posição %2"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:201
+#: src/backend/datasources/filters/JsonFilter.cpp:193
 #, kde-format
 msgid "Valid JSON document"
 msgstr "Documento em JSON válido"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:261
+#: src/backend/datasources/filters/JsonFilter.cpp:224
 #: src/backend/datasources/filters/McapFilter.cpp:287
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:305
 #, kde-format
 msgid "index"
 msgstr "índice"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:269
+#: src/backend/datasources/filters/JsonFilter.cpp:232
 #, kde-format
 msgid "timestamp"
 msgstr "hora"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:271
+#: src/backend/datasources/filters/JsonFilter.cpp:234
 #, kde-format
 msgid "month"
 msgstr "mês"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:273
+#: src/backend/datasources/filters/JsonFilter.cpp:236
 #, kde-format
 msgid "day"
 msgstr "dia"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:275
+#: src/backend/datasources/filters/JsonFilter.cpp:238
 #, kde-format
 msgid "name"
 msgstr "nome"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:391
+#: src/backend/datasources/filters/JsonFilter.cpp:348
 #, fuzzy, kde-format
 #| msgid "The project file is empty."
 msgid "Device/file is empty."
 msgstr "O ficheiro do projecto está vazio."
 
-#: src/backend/datasources/filters/JsonFilter.cpp:399
+#: src/backend/datasources/filters/JsonFilter.cpp:356
 #, kde-format
 msgid "JSON format error or document empty."
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:522
+#: src/backend/datasources/filters/JsonFilter.cpp:499
 #, fuzzy, kde-format
 #| msgid "Valid JSON document"
 msgid "Empty file or invalid JSON document."
@@ -12303,122 +12412,7 @@ msgstr "Ponto '.'"
 msgid "Comma ','"
 msgstr "Vírgula ','"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:36
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:46
-#: src/frontend/datasources/JsonOptionsWidget.cpp:118
-#, kde-format
-msgid ""
-"This option determines how the imported strings have to be converted to "
-"numbers."
-msgstr ""
-"Esta opção define como é que os textos importados deverão ser convertidos "
-"para números."
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:38
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:48
-#, kde-format
-msgid ""
-"When point character is used for the decimal separator, the valid number "
-"representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
-"ul>For comma as the decimal separator, the valid number representations are:"
-"<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
-msgstr ""
-"Quando é usado o ponto como separador decimal, as representações válidas de "
-"números são:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></ul>No caso "
-"da vírgula como separador decimal, as representações válidas dos números são:"
-"<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:60
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:67
-#: src/frontend/datasources/JsonOptionsWidget.cpp:141
-#, kde-format
-msgid ""
-"This option determines how the imported strings have to be converted to "
-"calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
-"and to time."
-msgstr ""
-"Esta opção define como é que os textos importados deverão ser convertidos "
-"para datas do calendário, i.e., os números do ano, mês  e dia no calendário "
-"Gregoriano, bem como as horas."
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:63
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:70
-#, kde-format
-msgid ""
-"Expressions that may be used for the date part of format string:"
-"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
-"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
-"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
-"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
-"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
-"td><td>the month as number without a leading zero (1 to 12).</td></"
-"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
-"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
-"to 'Dec'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
-"'December'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
-"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
-"negative, a minus sign is prepended in addition.</td></tr></"
-"table><br><br>Expressions that may be used for the time part of the format "
-"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
-"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
-"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
-"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
-"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
-"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
-"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
-"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
-"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
-"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
-"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
-"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
-"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
-"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
-"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
-"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
-"Sunday</td></tr></table><br><br>In case the provided expression is empty, "
-"the format will be auto-detected."
-msgstr ""
-"As expressões que poderão ser usadas para a componente da data do texto do "
-"formato:<table><tr><td>d</td><td>o dia como um número sem o zero inicial (1 "
-"a 31).</td></tr><tr><td>dd</td><td>o dia como um número com um zero inicial "
-"(01 a 31).</td></tr><tr><td>ddd</td><td>o nome do dia abreviado no formato "
-"local (p.ex. 'Seg' até 'Dom'). Usa a região do sistema para localizar o nome."
-"</td></tr><tr><td>dddd</td><td>o nome do dia por extenso no formato local (p."
-"ex. 'Segunda' a 'Domingo'). Usa a região do sistema para localizar o nome.</"
-"td></tr><tr><td>M</td><td>o mês como um número sem o zero inicial (1 a 12).</"
-"td></tr><tr><td>MM</td><td>o mês como um número com o zero inicial (01 a 12)."
-"</td></tr><tr><td>MMM</td><td>o nome do mês abreviado no formato local (p."
-"ex. 'Jan' a 'Dez'). Usa a região do sistema para localizar o nome.</td></"
-"tr><tr><td>MMMM</td><td>o nome do mês por extenso no formato local (p.ex., "
-"'Janeiro' a 'Dezembro'). Usa a região do sistema para localizar o nome.</"
-"td></tr><tr><td>yy</td><td>o ano como um número de dois algarismos (00 a 99)."
-"</td></tr><tr><td>yyyy</td><td>o ano como um número de quatro algarismos. Se "
-"o ano for negativo, é antecedido um sinal de menos ao valor.</td></tr></"
-"table><br><br>As expressões que poderão ser usadas para a componente de hora "
-"no texto do formato:<table><tr><td>h</td><td>a hora sem o zero inicial (0 a "
-"23 ou 1 a 12, no caso do formato AM/PM)</td></tr><tr><td>hh</td><td>a hora "
-"com o zero inicial (00 a 23 ou 01 a 12, no caso do formato AM/PM)</td></"
-"tr><tr><td>H</td><td>a hora sem o zero inicial (0 a 23, mesmo no formato AM/"
-"PM)</td></tr><tr><td>HH</td><td>a hora com o zero inicial (00 a 23, mesmo no "
-"formato AM/PM)</td></tr><tr><td>m</td><td>o minuto sem o zero inicial (0 a "
-"59)</td></tr><tr><td>mm</td><td>o minuto com o zero inicial (00 a 59)</td></"
-"tr><tr><td>s</td><td>o segundo sem o zero inicial (0 a 59)</td></"
-"tr><tr><td>ss</td><td>o segundo com o zero inicial (00 a 59)</td></"
-"tr><tr><td>z</td><td>os milisegundos sem os zeros iniciais (0 a 999)</td></"
-"tr><tr><td>zzz</td><td>os milisegundos com os zeros iniciais (000 a 999)</"
-"td></tr><tr><td>AP ou A</td><td>interpretar como uma hora no formato AM/PM. "
-"O AP deverá ser igual a 'AM' ou 'PM'.</td></tr><tr><td>ap ou a</"
-"td><td>Interpretar como uma hora no formato AM/PM. O ap deverá ser igual a "
-"'am' ou 'pm'.</td></tr></table><br><br>Alguns exemplos:<table><tr><td>dd.MM."
-"yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</td><td>Dom Julho 20 "
-"69</td></tr><tr><td>'O dia é' dddd</td><td>O dia é Domingo</td></tr></"
-"table>No caso de a expressão indicada estar vazia, o formato será detectado "
-"automaticamente."
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:105
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:53
 #, kde-format
 msgid ""
 "If checked, the specified line in the file will be used to determine the "
@@ -12427,25 +12421,25 @@ msgstr ""
 "Se estiver assinalado, a linha indicada no ficheiro será usada para "
 "determinar os nomes das colunas."
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:108
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:56
 #, kde-format
 msgid "Line in the file that should be used to determine the column names."
 msgstr ""
 "A linha no ficheiro que será usada para determinar os nomes das colunas."
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:111
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:59
 #, fuzzy, kde-format
 #| msgid "Custom column names, space separated. E.g. \"x y\""
 msgid "Custom column names, comma separated. E.g. \"x, y\""
 msgstr "Nomes de colunas personalizados, separados por espaços. P.ex., \"x y\""
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:115
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:63
 #, fuzzy, kde-format
 #| msgid "Custom column names, space separated. E.g. \"x y\""
 msgid "Custom column data types, comma separated"
 msgstr "Nomes de colunas personalizados, separados por espaços. P.ex., \"x y\""
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:122
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:70
 #, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
@@ -12460,12 +12454,12 @@ msgid ""
 "td></tr></table>"
 msgstr ""
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:138
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:86
 #, kde-format
 msgid "%1 or %2"
 msgstr ""
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:249
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:197
 #, fuzzy, kde-format
 #| msgid "rank %1 not supported yet"
 msgid "Datatype not found: %1"
@@ -13778,7 +13772,7 @@ msgstr "Pesquisa Personalizada"
 msgid "Manage connections"
 msgstr "Gerir as ligações"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:244
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:192
 #, kde-format
 msgid ""
 "Couldn't find the database file '%1'. Please check the connection settings."
@@ -13786,7 +13780,7 @@ msgstr ""
 "Não foi possível encontrar a base de dados '%1'. Verifique por favor a "
 "configuração da ligação."
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:265
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:213
 #, kde-format
 msgid ""
 "Failed to connect to the database '%1'. Please check the connection settings."
@@ -13794,119 +13788,29 @@ msgstr ""
 "Não foi possível ligar-se à base de dados '%1'. Verifique por favor a "
 "configuração da base de dados."
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:323
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:325
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:271
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:273
 #, fuzzy, kde-format
 #| msgid "Execute the query and preview its result"
 msgid "Failed to execute the query for the preview"
 msgstr "Executa a pesquisa e antevê o seu resultado"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:399
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:347
 #, kde-format
 msgid "Refresh the data preview of the selected table"
 msgstr "Actualizar a antevisão de dados da tabela seleccionada"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:405
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:353
 #, kde-format
 msgid "Execute the query and preview its result"
 msgstr "Executa a pesquisa e antevê o seu resultado"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:526
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:528
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:474
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:476
 #, fuzzy, kde-format
 #| msgid "Unable to Execute Query"
 msgid "Failed to execute the query"
 msgstr "Não Foi Possível Executar a Pesquisa"
-
-#: src/frontend/datasources/JsonOptionsWidget.cpp:120
-#, kde-format
-msgid ""
-"For 'C Format', a period is used for the decimal point character and comma "
-"is used for the thousands group separator. Valid number representations are:"
-"<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></ul>When using 'System "
-"locale', the system settings will be used. E.g., for the German local the "
-"valid number representations are:<ul><li>1234,56</li><li>1.234,56</"
-"li><li>etc.</li></ul>"
-msgstr ""
-"No 'Formato do C', é usado um ponto como separador decimal e uma vírgula "
-"para o separador dos milhares. <br/>Algumas representações válidas de "
-"números são: <br/><ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></ul><br/"
-"><br/>Ao usar a 'Localização do sistema', será usada a configuração do "
-"sistema. P.ex., para Portugal, algumas representações válidas de números são:"
-"<ul><li>1234,56</li><li>1 234,56</li><li>etc.</li></ul>"
-
-#: src/frontend/datasources/JsonOptionsWidget.cpp:144
-#, kde-format
-msgid ""
-"Expressions that may be used for the date part of format string:"
-"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
-"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
-"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
-"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
-"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
-"td><td>the month as number without a leading zero (1 to 12).</td></"
-"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
-"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
-"to 'Dec'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
-"'December'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
-"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
-"negative, a minus sign is prepended in addition.</td></tr></"
-"table><br><br>Expressions that may be used for the time part of the format "
-"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
-"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
-"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
-"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
-"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
-"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
-"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
-"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
-"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
-"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
-"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
-"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
-"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
-"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
-"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
-"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
-"Sunday</td></tr></table>"
-msgstr ""
-"As expressões que poderão ser usadas para a componente da data do texto do "
-"formato:<table><tr><td>d</td><td>o dia como um número sem o zero inicial (1 "
-"a 31).</td></tr><tr><td>dd</td><td>o dia como um número com um zero inicial "
-"(01 a 31).</td></tr><tr><td>ddd</td><td>o nome do dia abreviado no formato "
-"local (p.ex. 'Seg' até 'Dom'). Usa a região do sistema para localizar o nome."
-"</td></tr><tr><td>dddd</td><td>o nome do dia por extenso no formato local (p."
-"ex. 'Segunda' a 'Domingo'). Usa a região do sistema para localizar o nome.</"
-"td></tr><tr><td>M</td><td>o mês como um número sem o zero inicial (1 a 12).</"
-"td></tr><tr><td>MM</td><td>o mês como um número com o zero inicial (01 a 12)."
-"</td></tr><tr><td>MMM</td><td>o nome do mês abreviado no formato local (p."
-"ex. 'Jan' a 'Dez'). Usa a região do sistema para localizar o nome.</td></"
-"tr><tr><td>MMMM</td><td>o nome do mês por extenso no formato local (p.ex., "
-"'Janeiro' a 'Dezembro'). Usa a região do sistema para localizar o nome.</"
-"td></tr><tr><td>yy</td><td>o ano como um número de dois algarismos (00 a 99)."
-"</td></tr><tr><td>yyyy</td><td>o ano como um número de quatro algarismos. Se "
-"o ano for negativo, é antecedido um sinal de menos ao valor.</td></tr></"
-"table><br><br>As expressões que poderão ser usadas para a componente de hora "
-"no texto do formato:<table><tr><td>h</td><td>a hora sem o zero inicial (0 a "
-"23 ou 1 a 12, no caso do formato AM/PM)</td></tr><tr><td>hh</td><td>a hora "
-"com o zero inicial (00 a 23 ou 01 a 12, no caso do formato AM/PM)</td></"
-"tr><tr><td>H</td><td>a hora sem o zero inicial (0 a 23, mesmo no formato AM/"
-"PM)</td></tr><tr><td>HH</td><td>a hora com o zero inicial (00 a 23, mesmo no "
-"formato AM/PM)</td></tr><tr><td>m</td><td>o minuto sem o zero inicial (0 a "
-"59)</td></tr><tr><td>mm</td><td>o minuto com o zero inicial (00 a 59)</td></"
-"tr><tr><td>s</td><td>o segundo sem o zero inicial (0 a 59)</td></"
-"tr><tr><td>ss</td><td>o segundo com o zero inicial (00 a 59)</td></"
-"tr><tr><td>z</td><td>os milisegundos sem os zeros iniciais (0 a 999)</td></"
-"tr><tr><td>zzz</td><td>os milisegundos com os zeros iniciais (000 a 999)</"
-"td></tr><tr><td>AP ou A</td><td>interpretar como uma hora no formato AM/PM. "
-"O AP deverá ser igual a 'AM' ou 'PM'.</td></tr><tr><td>ap ou a</"
-"td><td>Interpretar como uma hora no formato AM/PM. O ap deverá ser igual a "
-"'am' ou 'pm'.</td></tr></table><br><br>Alguns exemplos:<table><tr><td>dd.MM."
-"yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</td><td>Dom Julho 20 "
-"69</td></tr><tr><td>'O dia é' dddd</td><td>O dia é Domingo</td></tr></table>"
 
 #: src/frontend/datasources/MQTTConnectionManagerDialog.cpp:33
 #, kde-format
@@ -26603,6 +26507,96 @@ msgstr "o processo de conversão falhou com o código de saída ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Não foi possível aceder ao ficheiro:"
+
+#~ msgid ""
+#~ "For 'C Format', a period is used for the decimal point character and "
+#~ "comma is used for the thousands group separator. Valid number "
+#~ "representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
+#~ "ul>When using 'System locale', the system settings will be used. E.g., "
+#~ "for the German local the valid number representations are:"
+#~ "<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
+#~ msgstr ""
+#~ "No 'Formato do C', é usado um ponto como separador decimal e uma vírgula "
+#~ "para o separador dos milhares. <br/>Algumas representações válidas de "
+#~ "números são: <br/><ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
+#~ "ul><br/><br/>Ao usar a 'Localização do sistema', será usada a "
+#~ "configuração do sistema. P.ex., para Portugal, algumas representações "
+#~ "válidas de números são:<ul><li>1234,56</li><li>1 234,56</li><li>etc.</"
+#~ "li></ul>"
+
+#~ msgid ""
+#~ "Expressions that may be used for the date part of format string:"
+#~ "<table><tr><td>d</td><td>the day as number without a leading zero (1 to "
+#~ "31).</td></tr><tr><td>dd</td><td>the day as number with a leading zero "
+#~ "(01 to 31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day "
+#~ "name (e.g. 'Mon' to 'Sun'). Uses the system locale to localize the name.</"
+#~ "td></tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' "
+#~ "to 'Sunday'). Uses the system locale to localize the name.</td></"
+#~ "tr><tr><td>M</td><td>the month as number without a leading zero (1 to 12)."
+#~ "</td></tr><tr><td>MM</td><td>the month as number with a leading zero (01 "
+#~ "to 12).</td></tr><tr><td>MMM</td><td>the abbreviated localized month name "
+#~ "(e.g. 'Jan' to 'Dec'). Uses the system locale to localize the name.</td></"
+#~ "tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
+#~ "'December'). Uses the system locale to localize the name.</td></"
+#~ "tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
+#~ "tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
+#~ "negative, a minus sign is prepended in addition.</td></tr></"
+#~ "table><br><br>Expressions that may be used for the time part of the "
+#~ "format string:<table><tr><td>h</td><td>the hour without a leading zero (0 "
+#~ "to 23 or 1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour "
+#~ "with a leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></"
+#~ "tr><tr><td>H</td><td>the hour without a leading zero (0 to 23, even with "
+#~ "AM/PM display)</td></tr><tr><td>HH</td><td>the hour with a leading zero "
+#~ "(00 to 23, even with AM/PM display)</td></tr><tr><td>m</td><td>the minute "
+#~ "without a leading zero (0 to 59)</td></tr><tr><td>mm</td><td>the minute "
+#~ "with a leading zero (00 to 59)</td></tr><tr><td>s</td><td>the second "
+#~ "without a leading zero (0 to 59)</td></tr><tr><td>ss</td><td>the second "
+#~ "with a leading zero (00 to 59)</td></tr><tr><td>z</td><td>the "
+#~ "milliseconds without leading zeroes (0 to 999)</td></tr><tr><td>zzz</"
+#~ "td><td>the milliseconds with leading zeroes (000 to 999)</td></"
+#~ "tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be either "
+#~ "'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
+#~ "time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples "
+#~ "are:<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd "
+#~ "MMMM d yy</td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</"
+#~ "td><td>The day is Sunday</td></tr></table>"
+#~ msgstr ""
+#~ "As expressões que poderão ser usadas para a componente da data do texto "
+#~ "do formato:<table><tr><td>d</td><td>o dia como um número sem o zero "
+#~ "inicial (1 a 31).</td></tr><tr><td>dd</td><td>o dia como um número com um "
+#~ "zero inicial (01 a 31).</td></tr><tr><td>ddd</td><td>o nome do dia "
+#~ "abreviado no formato local (p.ex. 'Seg' até 'Dom'). Usa a região do "
+#~ "sistema para localizar o nome.</td></tr><tr><td>dddd</td><td>o nome do "
+#~ "dia por extenso no formato local (p.ex. 'Segunda' a 'Domingo'). Usa a "
+#~ "região do sistema para localizar o nome.</td></tr><tr><td>M</td><td>o mês "
+#~ "como um número sem o zero inicial (1 a 12).</td></tr><tr><td>MM</td><td>o "
+#~ "mês como um número com o zero inicial (01 a 12).</td></tr><tr><td>MMM</"
+#~ "td><td>o nome do mês abreviado no formato local (p.ex. 'Jan' a 'Dez'). "
+#~ "Usa a região do sistema para localizar o nome.</td></tr><tr><td>MMMM</"
+#~ "td><td>o nome do mês por extenso no formato local (p.ex., 'Janeiro' a "
+#~ "'Dezembro'). Usa a região do sistema para localizar o nome.</td></"
+#~ "tr><tr><td>yy</td><td>o ano como um número de dois algarismos (00 a 99).</"
+#~ "td></tr><tr><td>yyyy</td><td>o ano como um número de quatro algarismos. "
+#~ "Se o ano for negativo, é antecedido um sinal de menos ao valor.</td></"
+#~ "tr></table><br><br>As expressões que poderão ser usadas para a componente "
+#~ "de hora no texto do formato:<table><tr><td>h</td><td>a hora sem o zero "
+#~ "inicial (0 a 23 ou 1 a 12, no caso do formato AM/PM)</td></tr><tr><td>hh</"
+#~ "td><td>a hora com o zero inicial (00 a 23 ou 01 a 12, no caso do formato "
+#~ "AM/PM)</td></tr><tr><td>H</td><td>a hora sem o zero inicial (0 a 23, "
+#~ "mesmo no formato AM/PM)</td></tr><tr><td>HH</td><td>a hora com o zero "
+#~ "inicial (00 a 23, mesmo no formato AM/PM)</td></tr><tr><td>m</td><td>o "
+#~ "minuto sem o zero inicial (0 a 59)</td></tr><tr><td>mm</td><td>o minuto "
+#~ "com o zero inicial (00 a 59)</td></tr><tr><td>s</td><td>o segundo sem o "
+#~ "zero inicial (0 a 59)</td></tr><tr><td>ss</td><td>o segundo com o zero "
+#~ "inicial (00 a 59)</td></tr><tr><td>z</td><td>os milisegundos sem os zeros "
+#~ "iniciais (0 a 999)</td></tr><tr><td>zzz</td><td>os milisegundos com os "
+#~ "zeros iniciais (000 a 999)</td></tr><tr><td>AP ou A</td><td>interpretar "
+#~ "como uma hora no formato AM/PM. O AP deverá ser igual a 'AM' ou 'PM'.</"
+#~ "td></tr><tr><td>ap ou a</td><td>Interpretar como uma hora no formato AM/"
+#~ "PM. O ap deverá ser igual a 'am' ou 'pm'.</td></tr></table><br><br>Alguns "
+#~ "exemplos:<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></"
+#~ "tr><tr><td>ddd MMMM d yy</td><td>Dom Julho 20 69</td></tr><tr><td>'O dia "
+#~ "é' dddd</td><td>O dia é Domingo</td></tr></table>"
 
 #, fuzzy
 #~| msgid "Will statistics:"
