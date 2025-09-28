@@ -13,6 +13,8 @@ New features:
 	* [import]
 		* Import directories - import multiple files in a directory in one single step
 		* Allow to import arrays in JSON files that contain plain data only
+	* [examples]
+		* Added "All" in the examples dialog to navigate and search in the example projects from _all_ collections
 
 Performance improvements:
 		* Improved drawing performance (!731)
