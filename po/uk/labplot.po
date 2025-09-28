@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-23 00:38+0000\n"
+"POT-Creation-Date: 2025-09-28 00:39+0000\n"
 "PO-Revision-Date: 2025-09-23 09:48+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -1072,6 +1072,116 @@ msgstr ""
 "Не вдалося відкрити файл %1 для запису даних.\n"
 "%2"
 
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:123
+#, kde-format
+msgid ""
+"This option determines how the imported strings have to be converted to "
+"numbers."
+msgstr ""
+"За допомогою цього параметра можна визначити спосіб перетворення "
+"імпортованих рядків на числа."
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:128
+#, kde-format
+msgid ""
+"When point character is used for the decimal separator, the valid number "
+"representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
+"ul>For comma as the decimal separator, the valid number representations are:"
+"<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
+msgstr ""
+"Якщо для відокремлення дробової частини використано крапку, коректними "
+"представленнями чисел будуть такі: <ul><li>1234.56</li><li>1,234.56</"
+"li><li>тощо.</li></ul>Якщо для відокремлення дробової частини використано "
+"кому, коректними будуть такі представлення: <ul><li>1234,56</"
+"li><li>1.234,56</li><li>тощо.</li></ul>"
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:144
+#, kde-format
+msgid ""
+"This option determines how the imported strings have to be converted to "
+"calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
+"and to time."
+msgstr ""
+"За допомогою цього параметра можна визначити спосіб перетворення "
+"імпортованих рядків на дати календаря, тобто числа року, місяця і дня у "
+"межах григоріанського календаря та значення часу."
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:150
+#, kde-format
+msgid ""
+"Expressions that may be used for the date part of format string:"
+"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
+"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
+"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
+"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
+"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
+"td><td>the month as number without a leading zero (1 to 12).</td></"
+"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
+"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
+"to 'Dec'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
+"'December'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
+"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
+"negative, a minus sign is prepended in addition.</td></tr></"
+"table><br><br>Expressions that may be used for the time part of the format "
+"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
+"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
+"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
+"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
+"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
+"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
+"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
+"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
+"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
+"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
+"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
+"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
+"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
+"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
+"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
+"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
+"Sunday</td></tr></table><br><br>In case the provided expression is empty, "
+"the format will be auto-detected."
+msgstr ""
+"Для дати можна скористатися такими виразами форматування:<table><tr><td>d</"
+"td><td>номер дня без початкового нуля (від 1 до 31).</td></tr><tr><td>dd</"
+"td><td>номер дня із початковим нулем (від 01 до 31).</td></tr><tr><td>ddd</"
+"td><td>скорочена перекладена назва дня (наприклад, від «пн» до «нд»). "
+"Використовує локаль системи для визначення назв.</td></tr><tr><td>dddd</"
+"td><td>локалізована назва дня повністю (наприклад, від «понеділок» до "
+"«неділя»). Використовує локаль системи для визначення назв.</td></"
+"tr><tr><td>M</td><td>номер місяця без початкового нуля (від 1 до 12).</td></"
+"tr><tr><td>MM</td><td>номер місяця із початковим нулем (від 01 до 12).</td></"
+"tr><tr><td>MMM</td><td>скорочена локалізована назва місяця (наприклад, від "
+"«січ» до «гру»). Використовує локаль системи для визначення назв.</td></"
+"tr><tr><td>MMMM</td><td>локалізована повна назва місяця (наприклад, від "
+"«січень» до «грудень»). Використовує локаль системи для визначення назв.</"
+"td></tr><tr><td>yy</td><td>рік у форматі двоцифрового запису (від 00 до 99)."
+"</td></tr><tr><td>yyyy</td><td>рік у форматі чотирицифрового запису. Якщо "
+"рік є від'ємним, до запису додається мінус.</td></tr></table><br><br>Вирази, "
+"якими можна скористатися для форматування рядка часу:<table><tr><td>h</"
+"td><td>години без початкового нуля (від 0 до 23 або від 1 до 12 у варіанті з "
+"AM/PM)</td></tr><tr><td>hh</td><td>години з початковим нулем (від 00 до 23 "
+"або від 01 до 12 у варіанті з AM/PM)</td></tr><tr><td>H</td><td>години без "
+"початкового нуля (від 0 до 23, навіть якщо працює варіант із AM/PM)</td></"
+"tr><tr><td>HH</td><td>години з початковим нулем (від 00 до 23, навіть якщо "
+"працює варіант із AM/PM)</td></tr><tr><td>m</td><td>хвилини без початкового "
+"нуля (від 0 до 59)</td></tr><tr><td>mm</td><td>хвилини з початковим нулем "
+"(від 00 до 59)</td></tr><tr><td>s</td><td>секунди без початкового нуля (від "
+"0 до 59)</td></tr><tr><td>ss</td><td>секунди з початковим нулем (від 00 до "
+"59)</td></tr><tr><td>z</td><td>мілісекунди без початкового нуля (від 0 до "
+"999)</td></tr><tr><td>zzz</td><td>мілісекунди із початковим нулем (від 000 "
+"до 999)</td></tr><tr><td>AP або A</td><td>використовувати формат часу із AM/"
+"PM. AP приймає значення «AM» або «PM».</td></tr><tr><td>ap або a</"
+"td><td>використовувати формат часу AM/PM. ap приймає значення «am» або «pm»."
+"</td></tr></table><br><br>Приклади:<table><tr><td>dd.MM.yyyy</"
+"td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</td><td>нд липень 20 69</"
+"td></tr><tr><td>'День' dddd</td><td>День неділя</td></tr></"
+"table><br><br>Якщо наданий вираз буде порожнім, формат буде визначено "
+"автоматично."
+
 #: src/backend/datasources/filters/AsciiFilter.cpp:223
 #, kde-format
 msgid "Number of columns: %1"
@@ -1084,7 +1194,7 @@ msgstr "Кількість рядків: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:467
 #: src/backend/datasources/filters/AsciiFilter.cpp:1252
-#: src/backend/datasources/filters/JsonFilter.cpp:284
+#: src/backend/datasources/filters/JsonFilter.cpp:246
 #, kde-format
 msgid "Column %1"
 msgstr "Стовпчик %1"
@@ -1122,7 +1232,7 @@ msgid "Int64"
 msgstr "Int64"
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:273
-#: src/backend/datasources/filters/JsonFilter.cpp:386
+#: src/backend/datasources/filters/JsonFilter.cpp:343
 #: src/backend/datasources/filters/SpiceFilter.cpp:127
 #: src/backend/datasources/filters/SpiceFilter.cpp:183
 #, kde-format
@@ -1150,7 +1260,7 @@ msgstr "Не вдалося відкрити пристрій або файл а
 #: src/backend/datasources/filters/HDF5Filter.cpp:1809
 #: src/backend/datasources/filters/HDF5Filter.cpp:1965
 #: src/backend/datasources/filters/ImageFilter.cpp:165
-#: src/backend/datasources/filters/JsonFilter.cpp:540
+#: src/backend/datasources/filters/JsonFilter.cpp:516
 #: src/backend/datasources/filters/MatioFilter.cpp:890
 #: src/backend/datasources/filters/NetCDFFilter.cpp:758
 #: src/backend/datasources/filters/NetCDFFilter.cpp:869
@@ -1599,64 +1709,64 @@ msgstr[1] "числові дані, %1 елементи"
 msgstr[2] "числові дані, %1 елементів"
 msgstr[3] "числові дані, один елемент"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:189
+#: src/backend/datasources/filters/JsonFilter.cpp:181
 #, kde-format
 msgid "Open device failed"
 msgstr "Не вдалося відрити пристрій"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:192
+#: src/backend/datasources/filters/JsonFilter.cpp:184
 #, kde-format
 msgid "Empty file"
 msgstr "Порожній файл"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:198
+#: src/backend/datasources/filters/JsonFilter.cpp:190
 #, kde-format
 msgid "Parse error: %1 at offset %2"
 msgstr "Помилка обробки %1 на позиції %2"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:201
+#: src/backend/datasources/filters/JsonFilter.cpp:193
 #, kde-format
 msgid "Valid JSON document"
 msgstr "Коректний документ JSON"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:261
+#: src/backend/datasources/filters/JsonFilter.cpp:224
 #: src/backend/datasources/filters/McapFilter.cpp:287
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:305
 #, kde-format
 msgid "index"
 msgstr "індекс"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:269
+#: src/backend/datasources/filters/JsonFilter.cpp:232
 #, kde-format
 msgid "timestamp"
 msgstr "часова позначка"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:271
+#: src/backend/datasources/filters/JsonFilter.cpp:234
 #, kde-format
 msgid "month"
 msgstr "місяць"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:273
+#: src/backend/datasources/filters/JsonFilter.cpp:236
 #, kde-format
 msgid "day"
 msgstr "день"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:275
+#: src/backend/datasources/filters/JsonFilter.cpp:238
 #, kde-format
 msgid "name"
 msgstr "назва"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:391
+#: src/backend/datasources/filters/JsonFilter.cpp:348
 #, kde-format
 msgid "Device/file is empty."
 msgstr "Пристрій або файл є порожнім."
 
-#: src/backend/datasources/filters/JsonFilter.cpp:399
+#: src/backend/datasources/filters/JsonFilter.cpp:356
 #, kde-format
 msgid "JSON format error or document empty."
 msgstr "Помилка форматування JSON або документ є порожнім."
 
-#: src/backend/datasources/filters/JsonFilter.cpp:522
+#: src/backend/datasources/filters/JsonFilter.cpp:499
 #, kde-format
 msgid "Empty file or invalid JSON document."
 msgstr "Порожній файл або некоректний документ JSON."
@@ -11958,123 +12068,7 @@ msgstr "Крапка («.»)"
 msgid "Comma ','"
 msgstr "Кома («,»)"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:36
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:46
-#: src/frontend/datasources/JsonOptionsWidget.cpp:118
-#, kde-format
-msgid ""
-"This option determines how the imported strings have to be converted to "
-"numbers."
-msgstr ""
-"За допомогою цього параметра можна визначити спосіб перетворення "
-"імпортованих рядків на числа."
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:38
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:48
-#, kde-format
-msgid ""
-"When point character is used for the decimal separator, the valid number "
-"representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
-"ul>For comma as the decimal separator, the valid number representations are:"
-"<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
-msgstr ""
-"Якщо для відокремлення дробової частини використано крапку, коректними "
-"представленнями чисел будуть такі: <ul><li>1234.56</li><li>1,234.56</"
-"li><li>тощо.</li></ul>Якщо для відокремлення дробової частини використано "
-"кому, коректними будуть такі представлення: <ul><li>1234,56</"
-"li><li>1.234,56</li><li>тощо.</li></ul>"
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:60
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:67
-#: src/frontend/datasources/JsonOptionsWidget.cpp:141
-#, kde-format
-msgid ""
-"This option determines how the imported strings have to be converted to "
-"calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
-"and to time."
-msgstr ""
-"За допомогою цього параметра можна визначити спосіб перетворення "
-"імпортованих рядків на дати календаря, тобто числа року, місяця і дня у "
-"межах григоріанського календаря та значення часу."
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:63
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:70
-#, kde-format
-msgid ""
-"Expressions that may be used for the date part of format string:"
-"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
-"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
-"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
-"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
-"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
-"td><td>the month as number without a leading zero (1 to 12).</td></"
-"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
-"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
-"to 'Dec'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
-"'December'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
-"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
-"negative, a minus sign is prepended in addition.</td></tr></"
-"table><br><br>Expressions that may be used for the time part of the format "
-"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
-"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
-"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
-"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
-"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
-"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
-"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
-"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
-"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
-"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
-"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
-"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
-"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
-"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
-"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
-"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
-"Sunday</td></tr></table><br><br>In case the provided expression is empty, "
-"the format will be auto-detected."
-msgstr ""
-"Для дати можна скористатися такими виразами форматування:<table><tr><td>d</"
-"td><td>номер дня без початкового нуля (від 1 до 31).</td></tr><tr><td>dd</"
-"td><td>номер дня із початковим нулем (від 01 до 31).</td></tr><tr><td>ddd</"
-"td><td>скорочена перекладена назва дня (наприклад, від «пн» до «нд»). "
-"Використовує локаль системи для визначення назв.</td></tr><tr><td>dddd</"
-"td><td>локалізована назва дня повністю (наприклад, від «понеділок» до "
-"«неділя»). Використовує локаль системи для визначення назв.</td></"
-"tr><tr><td>M</td><td>номер місяця без початкового нуля (від 1 до 12).</td></"
-"tr><tr><td>MM</td><td>номер місяця із початковим нулем (від 01 до 12).</td></"
-"tr><tr><td>MMM</td><td>скорочена локалізована назва місяця (наприклад, від "
-"«січ» до «гру»). Використовує локаль системи для визначення назв.</td></"
-"tr><tr><td>MMMM</td><td>локалізована повна назва місяця (наприклад, від "
-"«січень» до «грудень»). Використовує локаль системи для визначення назв.</"
-"td></tr><tr><td>yy</td><td>рік у форматі двоцифрового запису (від 00 до 99)."
-"</td></tr><tr><td>yyyy</td><td>рік у форматі чотирицифрового запису. Якщо "
-"рік є від'ємним, до запису додається мінус.</td></tr></table><br><br>Вирази, "
-"якими можна скористатися для форматування рядка часу:<table><tr><td>h</"
-"td><td>години без початкового нуля (від 0 до 23 або від 1 до 12 у варіанті з "
-"AM/PM)</td></tr><tr><td>hh</td><td>години з початковим нулем (від 00 до 23 "
-"або від 01 до 12 у варіанті з AM/PM)</td></tr><tr><td>H</td><td>години без "
-"початкового нуля (від 0 до 23, навіть якщо працює варіант із AM/PM)</td></"
-"tr><tr><td>HH</td><td>години з початковим нулем (від 00 до 23, навіть якщо "
-"працює варіант із AM/PM)</td></tr><tr><td>m</td><td>хвилини без початкового "
-"нуля (від 0 до 59)</td></tr><tr><td>mm</td><td>хвилини з початковим нулем "
-"(від 00 до 59)</td></tr><tr><td>s</td><td>секунди без початкового нуля (від "
-"0 до 59)</td></tr><tr><td>ss</td><td>секунди з початковим нулем (від 00 до "
-"59)</td></tr><tr><td>z</td><td>мілісекунди без початкового нуля (від 0 до "
-"999)</td></tr><tr><td>zzz</td><td>мілісекунди із початковим нулем (від 000 "
-"до 999)</td></tr><tr><td>AP або A</td><td>використовувати формат часу із AM/"
-"PM. AP приймає значення «AM» або «PM».</td></tr><tr><td>ap або a</"
-"td><td>використовувати формат часу AM/PM. ap приймає значення «am» або «pm»."
-"</td></tr></table><br><br>Приклади:<table><tr><td>dd.MM.yyyy</"
-"td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</td><td>нд липень 20 69</"
-"td></tr><tr><td>'День' dddd</td><td>День неділя</td></tr></"
-"table><br><br>Якщо наданий вираз буде порожнім, формат буде визначено "
-"автоматично."
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:105
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:53
 #, kde-format
 msgid ""
 "If checked, the specified line in the file will be used to determine the "
@@ -12083,22 +12077,22 @@ msgstr ""
 "Якщо позначено, для визначення назв стовпчиків буде використано вказаний "
 "рядок у файлі."
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:108
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:56
 #, kde-format
 msgid "Line in the file that should be used to determine the column names."
 msgstr "Рядок у файлі, яким слід скористатися для визначення назв стовпчиків."
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:111
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:59
 #, kde-format
 msgid "Custom column names, comma separated. E.g. \"x, y\""
 msgstr "Нетипові назви стовпчиків, відокремлені комами. Приклад: «x y»"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:115
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:63
 #, kde-format
 msgid "Custom column data types, comma separated"
 msgstr "Нестандартні типи даних стовпчиків, відокремлені комами"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:122
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:70
 #, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
@@ -12123,12 +12117,12 @@ msgstr ""
 "інакше буде визначено автоматично.</td></tr><tr><td>%5</td><td>Текст.</td></"
 "tr></table>"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:138
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:86
 #, kde-format
 msgid "%1 or %2"
 msgstr "%1 або %2"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:249
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:197
 #, kde-format
 msgid "Datatype not found: %1"
 msgstr "Не знайдено типу даних: %1"
@@ -13422,7 +13416,7 @@ msgstr "Нетиповий запит"
 msgid "Manage connections"
 msgstr "Керування з'єднаннями"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:244
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:192
 #, kde-format
 msgid ""
 "Couldn't find the database file '%1'. Please check the connection settings."
@@ -13430,7 +13424,7 @@ msgstr ""
 "Не вдалося знайти файл бази даних «%1». Будь ласка, перевірте параметри "
 "з'єднання."
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:265
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:213
 #, kde-format
 msgid ""
 "Failed to connect to the database '%1'. Please check the connection settings."
@@ -13438,117 +13432,27 @@ msgstr ""
 "Не вдалося встановити з'єднання із базою даних «%1». Будь ласка, перевірте "
 "параметри з'єднання."
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:323
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:325
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:271
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:273
 #, kde-format
 msgid "Failed to execute the query for the preview"
 msgstr "Не вдалося виконати запит для попереднього перегляду"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:399
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:347
 #, kde-format
 msgid "Refresh the data preview of the selected table"
 msgstr "Оновити попередній перегляд даних позначеної таблиці"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:405
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:353
 #, kde-format
 msgid "Execute the query and preview its result"
 msgstr "Виконати запит і показати попередній його результат"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:526
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:528
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:474
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:476
 #, kde-format
 msgid "Failed to execute the query"
 msgstr "Не вдалося виконати запит"
-
-#: src/frontend/datasources/JsonOptionsWidget.cpp:120
-#, kde-format
-msgid ""
-"For 'C Format', a period is used for the decimal point character and comma "
-"is used for the thousands group separator. Valid number representations are:"
-"<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></ul>When using 'System "
-"locale', the system settings will be used. E.g., for the German local the "
-"valid number representations are:<ul><li>1234,56</li><li>1.234,56</"
-"li><li>etc.</li></ul>"
-msgstr ""
-"Для варіанта «Формат C» буде використано крапку як символ відокремлення "
-"дробової частини і кому як символ відокремлення груп тисяч. Коректні "
-"представлення чисел: <ul><li>1234.56</li><li>1,234.56</li><li>тощо.</li></"
-"ul>Якщо використано варіант «Локаль системи», братимуться до уваги параметри "
-"системи. Наприклад для української локалі коректними представленнями будуть: "
-"<ul><li>1234,56</li><li>1.234,56</li><li>тощо.</li></ul>"
-
-#: src/frontend/datasources/JsonOptionsWidget.cpp:144
-#, kde-format
-msgid ""
-"Expressions that may be used for the date part of format string:"
-"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
-"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
-"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
-"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
-"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
-"td><td>the month as number without a leading zero (1 to 12).</td></"
-"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
-"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
-"to 'Dec'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
-"'December'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
-"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
-"negative, a minus sign is prepended in addition.</td></tr></"
-"table><br><br>Expressions that may be used for the time part of the format "
-"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
-"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
-"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
-"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
-"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
-"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
-"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
-"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
-"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
-"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
-"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
-"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
-"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
-"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
-"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
-"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
-"Sunday</td></tr></table>"
-msgstr ""
-"Для дати можна скористатися такими виразами форматування:<table><tr><td>d</"
-"td><td>номер дня без початкового нуля (від 1 до 31).</td></tr><tr><td>dd</"
-"td><td>номер дня із початковим нулем (від 01 до 31).</td></tr><tr><td>ddd</"
-"td><td>скорочена перекладена назва дня (наприклад, від «пн» до «нд»). "
-"Використовує локаль системи для визначення назв.</td></tr><tr><td>dddd</"
-"td><td>локалізована назва дня повністю (наприклад, від «понеділок» до "
-"«неділя»). Використовує локаль системи для визначення назв.</td></"
-"tr><tr><td>M</td><td>номер місяця без початкового нуля (від 1 до 12).</td></"
-"tr><tr><td>MM</td><td>номер місяця із початковим нулем (від 01 до 12).</td></"
-"tr><tr><td>MMM</td><td>скорочена локалізована назва місяця (наприклад, від "
-"«січ» до «гру»). Використовує локаль системи для визначення назв.</td></"
-"tr><tr><td>MMMM</td><td>локалізована повна назва місяця (наприклад, від "
-"«січень» до «грудень»). Використовує локаль системи для визначення назв.</"
-"td></tr><tr><td>yy</td><td>рік у форматі двоцифрового запису (від 00 до 99)."
-"</td></tr><tr><td>yyyy</td><td>рік у форматі чотирицифрового запису. Якщо "
-"рік є від'ємним, до запису додається мінус.</td></tr></table><br><br>Вирази, "
-"якими можна скористатися для форматування рядка часу:<table><tr><td>h</"
-"td><td>години без початкового нуля (від 0 до 23 або від 1 до 12 у варіанті з "
-"AM/PM)</td></tr><tr><td>hh</td><td>години з початковим нулем (від 00 до 23 "
-"або від 01 до 12 у варіанті з AM/PM)</td></tr><tr><td>H</td><td>години без "
-"початкового нуля (від 0 до 23, навіть якщо працює варіант із AM/PM)</td></"
-"tr><tr><td>HH</td><td>години з початковим нулем (від 00 до 23, навіть якщо "
-"працює варіант із AM/PM)</td></tr><tr><td>m</td><td>хвилини без початкового "
-"нуля (від 0 до 59)</td></tr><tr><td>mm</td><td>хвилини з початковим нулем "
-"(від 00 до 59)</td></tr><tr><td>s</td><td>секунди без початкового нуля (від "
-"0 до 59)</td></tr><tr><td>ss</td><td>секунди з початковим нулем (від 00 до "
-"59)</td></tr><tr><td>z</td><td>мілісекунди без початкового нуля (від 0 до "
-"999)</td></tr><tr><td>zzz</td><td>мілісекунди із початковим нулем (від 000 "
-"до 999)</td></tr><tr><td>AP або A</td><td>використовувати формат часу із AM/"
-"PM. AP приймає значення «AM» або «PM».</td></tr><tr><td>ap або a</"
-"td><td>використовувати формат часу AM/PM. ap приймає значення «am» або «pm»."
-"</td></tr></table><br><br>Приклади:<table><tr><td>dd.MM.yyyy</"
-"td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</td><td>нд липень 20 69</"
-"td></tr><tr><td>'День' dddd</td><td>День неділя</td></tr></table>"
 
 #: src/frontend/datasources/MQTTConnectionManagerDialog.cpp:33
 #, kde-format
@@ -26185,6 +26089,96 @@ msgstr "Не вдалося обробити convert, код виходу ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Не вдалося відкрити файл:"
+
+#~ msgid ""
+#~ "For 'C Format', a period is used for the decimal point character and "
+#~ "comma is used for the thousands group separator. Valid number "
+#~ "representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
+#~ "ul>When using 'System locale', the system settings will be used. E.g., "
+#~ "for the German local the valid number representations are:"
+#~ "<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
+#~ msgstr ""
+#~ "Для варіанта «Формат C» буде використано крапку як символ відокремлення "
+#~ "дробової частини і кому як символ відокремлення груп тисяч. Коректні "
+#~ "представлення чисел: <ul><li>1234.56</li><li>1,234.56</li><li>тощо.</li></"
+#~ "ul>Якщо використано варіант «Локаль системи», братимуться до уваги "
+#~ "параметри системи. Наприклад для української локалі коректними "
+#~ "представленнями будуть: <ul><li>1234,56</li><li>1.234,56</li><li>тощо.</"
+#~ "li></ul>"
+
+#~ msgid ""
+#~ "Expressions that may be used for the date part of format string:"
+#~ "<table><tr><td>d</td><td>the day as number without a leading zero (1 to "
+#~ "31).</td></tr><tr><td>dd</td><td>the day as number with a leading zero "
+#~ "(01 to 31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day "
+#~ "name (e.g. 'Mon' to 'Sun'). Uses the system locale to localize the name.</"
+#~ "td></tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' "
+#~ "to 'Sunday'). Uses the system locale to localize the name.</td></"
+#~ "tr><tr><td>M</td><td>the month as number without a leading zero (1 to 12)."
+#~ "</td></tr><tr><td>MM</td><td>the month as number with a leading zero (01 "
+#~ "to 12).</td></tr><tr><td>MMM</td><td>the abbreviated localized month name "
+#~ "(e.g. 'Jan' to 'Dec'). Uses the system locale to localize the name.</td></"
+#~ "tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
+#~ "'December'). Uses the system locale to localize the name.</td></"
+#~ "tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
+#~ "tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
+#~ "negative, a minus sign is prepended in addition.</td></tr></"
+#~ "table><br><br>Expressions that may be used for the time part of the "
+#~ "format string:<table><tr><td>h</td><td>the hour without a leading zero (0 "
+#~ "to 23 or 1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour "
+#~ "with a leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></"
+#~ "tr><tr><td>H</td><td>the hour without a leading zero (0 to 23, even with "
+#~ "AM/PM display)</td></tr><tr><td>HH</td><td>the hour with a leading zero "
+#~ "(00 to 23, even with AM/PM display)</td></tr><tr><td>m</td><td>the minute "
+#~ "without a leading zero (0 to 59)</td></tr><tr><td>mm</td><td>the minute "
+#~ "with a leading zero (00 to 59)</td></tr><tr><td>s</td><td>the second "
+#~ "without a leading zero (0 to 59)</td></tr><tr><td>ss</td><td>the second "
+#~ "with a leading zero (00 to 59)</td></tr><tr><td>z</td><td>the "
+#~ "milliseconds without leading zeroes (0 to 999)</td></tr><tr><td>zzz</"
+#~ "td><td>the milliseconds with leading zeroes (000 to 999)</td></"
+#~ "tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be either "
+#~ "'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
+#~ "time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples "
+#~ "are:<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd "
+#~ "MMMM d yy</td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</"
+#~ "td><td>The day is Sunday</td></tr></table>"
+#~ msgstr ""
+#~ "Для дати можна скористатися такими виразами форматування:"
+#~ "<table><tr><td>d</td><td>номер дня без початкового нуля (від 1 до 31).</"
+#~ "td></tr><tr><td>dd</td><td>номер дня із початковим нулем (від 01 до 31).</"
+#~ "td></tr><tr><td>ddd</td><td>скорочена перекладена назва дня (наприклад, "
+#~ "від «пн» до «нд»). Використовує локаль системи для визначення назв.</td></"
+#~ "tr><tr><td>dddd</td><td>локалізована назва дня повністю (наприклад, від "
+#~ "«понеділок» до «неділя»). Використовує локаль системи для визначення назв."
+#~ "</td></tr><tr><td>M</td><td>номер місяця без початкового нуля (від 1 до "
+#~ "12).</td></tr><tr><td>MM</td><td>номер місяця із початковим нулем (від 01 "
+#~ "до 12).</td></tr><tr><td>MMM</td><td>скорочена локалізована назва місяця "
+#~ "(наприклад, від «січ» до «гру»). Використовує локаль системи для "
+#~ "визначення назв.</td></tr><tr><td>MMMM</td><td>локалізована повна назва "
+#~ "місяця (наприклад, від «січень» до «грудень»). Використовує локаль "
+#~ "системи для визначення назв.</td></tr><tr><td>yy</td><td>рік у форматі "
+#~ "двоцифрового запису (від 00 до 99).</td></tr><tr><td>yyyy</td><td>рік у "
+#~ "форматі чотирицифрового запису. Якщо рік є від'ємним, до запису додається "
+#~ "мінус.</td></tr></table><br><br>Вирази, якими можна скористатися для "
+#~ "форматування рядка часу:<table><tr><td>h</td><td>години без початкового "
+#~ "нуля (від 0 до 23 або від 1 до 12 у варіанті з AM/PM)</td></"
+#~ "tr><tr><td>hh</td><td>години з початковим нулем (від 00 до 23 або від 01 "
+#~ "до 12 у варіанті з AM/PM)</td></tr><tr><td>H</td><td>години без "
+#~ "початкового нуля (від 0 до 23, навіть якщо працює варіант із AM/PM)</td></"
+#~ "tr><tr><td>HH</td><td>години з початковим нулем (від 00 до 23, навіть "
+#~ "якщо працює варіант із AM/PM)</td></tr><tr><td>m</td><td>хвилини без "
+#~ "початкового нуля (від 0 до 59)</td></tr><tr><td>mm</td><td>хвилини з "
+#~ "початковим нулем (від 00 до 59)</td></tr><tr><td>s</td><td>секунди без "
+#~ "початкового нуля (від 0 до 59)</td></tr><tr><td>ss</td><td>секунди з "
+#~ "початковим нулем (від 00 до 59)</td></tr><tr><td>z</td><td>мілісекунди "
+#~ "без початкового нуля (від 0 до 999)</td></tr><tr><td>zzz</"
+#~ "td><td>мілісекунди із початковим нулем (від 000 до 999)</td></"
+#~ "tr><tr><td>AP або A</td><td>використовувати формат часу із AM/PM. AP "
+#~ "приймає значення «AM» або «PM».</td></tr><tr><td>ap або a</"
+#~ "td><td>використовувати формат часу AM/PM. ap приймає значення «am» або "
+#~ "«pm».</td></tr></table><br><br>Приклади:<table><tr><td>dd.MM.yyyy</"
+#~ "td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</td><td>нд липень 20 69</"
+#~ "td></tr><tr><td>'День' dddd</td><td>День неділя</td></tr></table>"
 
 #~ msgid "One-Way ANOVA Test Statistics"
 #~ msgstr "Статистика тестування одновимірного дисперсійного аналізу"
