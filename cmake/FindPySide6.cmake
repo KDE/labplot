@@ -35,6 +35,11 @@ find_path(PySide6_INCLUDE_DIR
     PATHS /usr/include /usr/local/include ${PYSIDE_PYTHONPATH}/include ${CMAKE_INSTALL_PREFIX}/include
 )
 
+find_path(PySide6_TYPESYSTEMS
+   NAMES typesystem_widgets.xml
+   PATHS ${PYSIDE_PYTHONPATH}/typesystems
+)
+
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(PySide6 REQUIRED_VARS PySide6_PYTHONPATH)
 

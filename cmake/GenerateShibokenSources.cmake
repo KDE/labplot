@@ -124,6 +124,7 @@ function(generate_shiboken_sources)
         --typesystem-paths=${CMAKE_SOURCE_DIR}
         --typesystem-paths="${CMAKE_INSTALL_PREFIX}/share/PySide${QT_MAJOR_VERSION}/typesystems"
         --typesystem-paths=${PYSIDE_TYPESYSTEMS}
+	--typesystem-paths=${PySide6_TYPESYSTEMS}
         --output-directory=${CMAKE_CURRENT_BINARY_DIR})
 
     set(generated_sources_dependencies ${PB_WRAPPED_HEADER} ${PB_TYPESYSTEM})
