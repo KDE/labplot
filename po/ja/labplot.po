@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-28 00:39+0000\n"
+"POT-Creation-Date: 2025-09-29 00:39+0000\n"
 "PO-Revision-Date: 2014-02-22 22:22-0800\n"
 "Last-Translator: Japanese KDE translation team <kde-jp@kde.org>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -3992,8 +3992,8 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
 #: src/backend/gsl/functions.cpp:337 src/backend/lib/XmlStreamReader.cpp:58
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:74
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:220
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:73
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:217
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:354
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:412
 #, kde-format
@@ -11603,7 +11603,7 @@ msgid "Color Maps Browser"
 msgstr ""
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:39
-#: src/frontend/examples/ExamplesWidget.cpp:34
+#: src/frontend/examples/ExamplesWidget.cpp:31
 #, kde-format
 msgid "Switch between icon and list views"
 msgstr ""
@@ -11611,7 +11611,7 @@ msgstr ""
 #: src/frontend/colormaps/ColorMapsWidget.cpp:53
 #: src/frontend/datasources/ImportDatasetWidget.cpp:51
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:125
-#: src/frontend/examples/ExamplesWidget.cpp:51
+#: src/frontend/examples/ExamplesWidget.cpp:48
 #, kde-format
 msgid "Enter the keyword you want to search for"
 msgstr ""
@@ -11619,7 +11619,7 @@ msgstr ""
 #: src/frontend/colormaps/ColorMapsWidget.cpp:56
 #: src/frontend/datasources/ImportDatasetWidget.cpp:54
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:128
-#: src/frontend/examples/ExamplesWidget.cpp:54
+#: src/frontend/examples/ExamplesWidget.cpp:51
 #, kde-format
 msgid "Search..."
 msgstr ""
@@ -12067,6 +12067,7 @@ msgstr ""
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, sbKeepNValues)
 #: src/frontend/datasources/ImportDatasetWidget.cpp:161
 #: src/frontend/datasources/ImportDatasetWidget.cpp:230
+#: src/frontend/examples/ExamplesWidget.cpp:57
 #: src/frontend/ui/datasources/importfilewidget.ui:785
 #: src/frontend/ui/dockwidgets/livedatadock.ui:187
 #, kde-format
@@ -12074,7 +12075,7 @@ msgid "All"
 msgstr ""
 
 #: src/frontend/datasources/ImportDatasetWidget.cpp:168
-#: src/frontend/examples/ExamplesManager.cpp:175
+#: src/frontend/examples/ExamplesManager.cpp:192
 #: src/tools/ColorMapsManager.cpp:152
 #, kde-format
 msgid "File not found"
@@ -15061,7 +15062,7 @@ msgctxt "@title:window"
 msgid "Example Projects"
 msgstr ""
 
-#: src/frontend/examples/ExamplesManager.cpp:176
+#: src/frontend/examples/ExamplesManager.cpp:193
 #, kde-format
 msgid ""
 "Couldn't open the examples collections file %1. Please check your "
@@ -16825,8 +16826,8 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lMin)
 #. i18n: ectx: property (text), widget (QLabel, lMinDateTime)
 #: src/frontend/SettingsGeneralPage.cpp:26
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:54
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:241
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:53
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:238
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:317
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:405
 #, kde-format
@@ -17257,145 +17258,150 @@ msgstr ""
 msgid "Provide the list of value-label pairs like in the following example:"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:45
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:43
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:222
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:231
 #, kde-format
 msgid "Equal to"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:46
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:44
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:223
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:232
 #, kde-format
 msgid "Not Equal to"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:47
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:45
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:224
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:233
 #, kde-format
 msgid "Between (Incl. End Points)"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:48
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:46
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:225
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:234
 #, kde-format
 msgid "Between (Excl. End Points)"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:49
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:47
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:226
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:235
 #, kde-format
 msgid "Greater than"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:50
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:48
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:227
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:236
 #, kde-format
 msgid "Greater than or Equal to"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:51
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:49
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:228
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:237
 #, kde-format
 msgid "Less than"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:52
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:50
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:229
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:238
 #, kde-format
 msgid "Less than or Equal to"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:57
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:55
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:213
 #, kde-format
 msgid "Equal To"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:58
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:56
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:214
 #, kde-format
 msgid "Not Equal To"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:59
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:57
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:215
 #, kde-format
 msgid "Starts With"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:60
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:58
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:216
 #, kde-format
 msgid "Ends With"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:61
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:59
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:217
 #, kde-format
 msgid "Contains"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:62
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:60
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:218
 #, kde-format
 msgid "Does Not Contain"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:74
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:72
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:307
 #, kde-format
 msgid "&Mask"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:75
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:73
 #, kde-format
 msgid "Mask values in the specified region"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:76
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:74
 #, kde-format
 msgctxt "@title:window"
 msgid "Mask Values"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:78
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:77
 #, kde-format
 msgid "&Drop"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:79
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:78
 #, kde-format
 msgid "Drop values in the specified region"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:80
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:79
 #, kde-format
 msgctxt "@title:window"
 msgid "Drop Values"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:946
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:953
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:1003
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:1009
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:80
+#, kde-format
+msgid "Delete entire rows in the spreadsheet if the condition is met."
+msgstr ""
+
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1031
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1038
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1088
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1094
 #, kde-format
 msgid "Invalid numeric value."
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:968
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1053
 #, kde-format
 msgid "%1: mask values"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:1024
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1109
 #, kde-format
 msgid "%1: drop values"
 msgstr ""
@@ -23995,7 +24001,7 @@ msgid "End Time:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:47
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:46
 #, kde-format
 msgid "Numeric Values"
 msgstr ""
@@ -24003,17 +24009,17 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #. i18n: ectx: property (text), widget (QLabel, lConditionText)
 #. i18n: ectx: property (text), widget (QLabel, lConditionDateTime)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:67
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:128
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:234
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:66
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:127
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:231
 #, kde-format
 msgid "Condition:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMax)
 #. i18n: ectx: property (text), widget (QLabel, lMaxDateTime)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:81
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:227
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:80
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:224
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:334
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:398
 #, kde-format
@@ -24021,15 +24027,21 @@ msgid "max."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lText)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:144
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:142
 #, kde-format
 msgid "Text Values"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:203
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:200
 #, kde-format
 msgid "DateTime Values"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, chbDeleteRows)
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:274
+#, kde-format
+msgid "Delete Rows"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
