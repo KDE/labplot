@@ -58,7 +58,7 @@ if(PySide6_FOUND)
         )
 	if(PySide6_INCLUDE_DIR)
 	    set_target_properties(PySide6::pyside6 PROPERTIES
-		    INTERFACE_INCLUDE_DIRECTORIES ${PySide6_INCLUDE_DIR}
+		INTERFACE_INCLUDE_DIRECTORIES ${PySide6_INCLUDE_DIR}
             )
 	endif()
     endif()
