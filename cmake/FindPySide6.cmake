@@ -37,7 +37,7 @@ find_path(PySide6_INCLUDE_DIR
 
 find_path(PySide6_TYPESYSTEMS
    NAMES typesystem_widgets.xml
-   PATHS ${PYSIDE_PYTHONPATH}/typesystems
+   PATHS ${PYSIDE_PYTHONPATH}/typesystems ${CMAKE_INSTALL_PREFIX}/PySide6/typesystems /usr/share/PySide6/typesystems
 )
 
 include(FindPackageHandleStandardArgs)
