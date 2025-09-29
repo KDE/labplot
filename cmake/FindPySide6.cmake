@@ -30,6 +30,11 @@ find_library(PySide6_ABI3_LIBRARY
     PATHS "${PYSIDE_PYTHONPATH}" /usr/lib64 /usr/lib /app/lib
 )
 
+find_path(PySide6_INCLUDE_DIR
+    NAMES PySide6
+    PATHS /usr/include /usr/local/include ${PYSIDE_PYTHONPATH}/include ${CMAKE_INSTALL_PREFIX}/include
+)
+
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(PySide6 REQUIRED_VARS PySide6_PYTHONPATH)
 
@@ -46,9 +51,11 @@ if(PySide6_FOUND)
         set_target_properties(PySide6::pyside6 PROPERTIES
             INTERFACE_INCLUDE_DIRECTORIES "${PySide6_PYTHONPATH}"
         )
-        set_target_properties(PySide6::pyside6 PROPERTIES
-            INTERFACE_INCLUDE_DIRECTORIES "/usr/include/PySide6"
-        )
+	if(PySide6_INCLUDE_DIR)
+	    set_target_properties(PySide6::pyside6 PROPERTIES
+		    INTERFACE_INCLUDE_DIRECTORIES ${PySide6_INCLUDE_DIR}/PySide6
+            )
+	endif()
     endif()
 
     # Optionally, alias PySide6::PythonModule to PySide6::pyside6
