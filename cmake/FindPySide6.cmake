@@ -31,8 +31,8 @@ find_library(PySide6_ABI3_LIBRARY
 )
 
 find_path(PySide6_INCLUDE_DIR
-    NAMES PySide6
-    PATHS /usr/include /usr/local/include ${PYSIDE_PYTHONPATH}/include ${CMAKE_INSTALL_PREFIX}/include
+    NAMES pysideqobject.h
+    PATHS /usr/include/PySide6 /usr/local/include ${PYSIDE_PYTHONPATH}/include ${CMAKE_INSTALL_PREFIX}/include
 )
 
 find_path(PySide6_TYPESYSTEMS
@@ -58,7 +58,7 @@ if(PySide6_FOUND)
         )
 	if(PySide6_INCLUDE_DIR)
 	    set_target_properties(PySide6::pyside6 PROPERTIES
-		    INTERFACE_INCLUDE_DIRECTORIES ${PySide6_INCLUDE_DIR}/PySide6
+		    INTERFACE_INCLUDE_DIRECTORIES ${PySide6_INCLUDE_DIR}
             )
 	endif()
     endif()
