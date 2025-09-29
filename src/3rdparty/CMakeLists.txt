@@ -197,3 +197,7 @@ if(LOCAL_MCAP_DOWNLOAD)
 else ()
     target_include_directories(labplotbackendlib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/mcap/include)
 endif()
+
+if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
+    target_include_directories(labplotbackendlib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/shiboken6/include ${Python3_INCLUDE_DIRS})
+endif()

@@ -242,14 +242,19 @@ set(python_scripting_backend_sources
 get_target_property(pyside6_INCLUDE_DIRECTORIES PySide6::pyside6 INTERFACE_INCLUDE_DIRECTORIES)
 set(python_scripting_includes
     ${PYSIDE_PYTHONPATH}/include
+    ${PySide6_INCLUDE_DIRECTORIES}
     ${SHIBOKEN_PYTHON_INCLUDE_DIRS}
-    ${shiboken6_INCLUDE_DIRECTORIES}
-    ${pyside6_INCLUDE_DIRECTORIES}
+    ${Shiboken6_INCLUDE_DIRECTORIES}
+    ${PySide6_PYTHONPATH}/include/QtWidgets
+    ${PySide6_PYTHONPATH}/include/QtGui
+    ${PySide6_PYTHONPATH}/include/QtCore
 )
 set(python_scripting_link_libraries
     PySide6::pyside6
     Shiboken6::libshiboken
     ${Python3_LIBRARIES}
+    ${PySide6_ABI3_LIBRARY}
+    ${Shiboken6_ABI3_LIBRARY}
 )
 
 # Hide noisy warnings in shiboken scripting generated sources

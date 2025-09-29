@@ -261,6 +261,12 @@ ecm_generate_python_bindings(
     README ../../README.md
 )
 
+if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
+	target_include_directories(${bindings_library} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../src/3rdparty/shiboken6/include ${Python3_INCLUDE_DIRS} ${PySide6_PYTHONPATH}/include/QtWidgets ${PySide6_PYTHONPATH}/include/QtGui ${PySide6_PYTHONPATH}/include/QtCore)
+	target_link_libraries(${bindings_library} PRIVATE Shiboken6::libshiboken PySide6::pyside6)
+	target_link_libraries(${bindings_library} PRIVATE ${Shiboken6_ABI3_LIBRARY} ${PySide6_ABI3_LIBRARY})
+endif()
+
 target_link_libraries(${bindings_library} PRIVATE LabPlot::SDK)
 target_compile_definitions(${bindings_library} PRIVATE -DSDK)
 
