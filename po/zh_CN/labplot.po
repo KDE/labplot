@@ -2425,10 +2425,9 @@ msgid "Device not available."
 msgstr ""
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "Timeout occurred."
-msgstr "发生了错误。"
+msgstr ""
 
 #: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format
@@ -7493,10 +7492,9 @@ msgid "Hypothesis Test"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:309
-#, fuzzy, kde-format
-#| msgid "Sample Quantiles"
+#, kde-format
 msgid "One-Sample t-Test"
-msgstr "样本分位数"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:311
 #, kde-format
@@ -7607,16 +7605,14 @@ msgid "Alternate Hypothesis"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:547
-#, fuzzy, kde-format
-#| msgid "Variable Statistics..."
+#, kde-format
 msgid "Descriptive Statistics"
-msgstr "变量统计..."
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:548
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Test Statistics"
-msgstr "详情"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:548
 #, kde-format
@@ -7624,10 +7620,9 @@ msgid "Significance Level"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:549
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "p-Value"
-msgstr "值"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:552
 #, kde-format
@@ -7645,10 +7640,9 @@ msgid "Degrees of Freedom Treatment"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:556
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Degrees of Freedom Residuals"
-msgstr "平方残差和"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #: src/backend/statistics/HypothesisTest.cpp:558
@@ -7661,31 +7655,27 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:567
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/backend/statistics/HypothesisTest.cpp:572
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "t-Value"
-msgstr "值"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:563
-#, fuzzy, kde-format
-#| msgid "Test"
+#, kde-format
 msgid "Test Mean"
-msgstr "测试"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:564
 #: src/backend/statistics/HypothesisTest.cpp:568
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/backend/statistics/HypothesisTest.cpp:572
-#, fuzzy, kde-format
-#| msgid "Differentiate"
+#, kde-format
 msgid "Mean Difference"
-msgstr "微分"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:567
-#, fuzzy, kde-format
-#| msgid "Variance"
+#, kde-format
 msgid "Pooled Variance"
-msgstr "方差"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:568
 #: src/backend/statistics/HypothesisTest.cpp:573
@@ -7695,22 +7685,19 @@ msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:575
 #: src/backend/statistics/HypothesisTest.cpp:581
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "F-Statistic"
-msgstr "详情"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:575
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Between Groups"
-msgstr "平方残差和"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:576
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Within Groups"
-msgstr "平方残差和"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:577
 #, kde-format
@@ -7723,16 +7710,14 @@ msgid "Mean Squares Within Groups"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:581
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Treatment"
-msgstr "平方残差和"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:582
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Residuals"
-msgstr "平方残差和"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:583
 #, kde-format
@@ -7745,10 +7730,9 @@ msgid "Mean Squares Treatment"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:584
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Mean Squares Residuals"
-msgstr "平方残差和"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:586
 #, kde-format
@@ -7757,10 +7741,9 @@ msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:586
 #: src/backend/statistics/HypothesisTest.cpp:590
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "z-Value"
-msgstr "值"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:587
 #, kde-format
@@ -7813,16 +7796,14 @@ msgid "Negative Rank Mean"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:593
-#, fuzzy, kde-format
-#| msgid "Nonnegative square root"
+#, kde-format
 msgid "Negative Rank Count"
-msgstr "算术平方根"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:594
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgid "Tie Count"
-msgstr "数量"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:596
 #: src/backend/statistics/HypothesisTest.cpp:604
@@ -7842,10 +7823,9 @@ msgid "Chi2"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:604
-#, fuzzy, kde-format
-#| msgid "Set Column As"
+#, kde-format
 msgid "Event Count 1"
-msgstr "将列设置为"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:605
 #, kde-format
@@ -7858,10 +7838,9 @@ msgid "Total Count 1"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:606
-#, fuzzy, kde-format
-#| msgid "Set Column As"
+#, kde-format
 msgid "Event Count 2"
-msgstr "将列设置为"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:606
 #, kde-format
@@ -7874,10 +7853,9 @@ msgid "Total Count 2"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:610
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Conclusion"
-msgstr "统计图类"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:622
 #, kde-format
@@ -11257,7 +11235,7 @@ msgstr "全部(&A)"
 #: src/frontend/ActionsManager.cpp:435
 #, kde-format
 msgid "Show Memory Usage"
-msgstr "显示内存使用情况"
+msgstr "显示内存使用率"
 
 #: src/frontend/ActionsManager.cpp:443
 #, kde-format
@@ -15379,12 +15357,10 @@ msgid "Properties: Data Extractor"
 msgstr "属性：数据点提取器"
 
 #: src/frontend/GuiObserver.cpp:438
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Notes"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hypothesis Test"
-msgstr "属性：备注"
+msgstr ""
 
 #: src/frontend/GuiObserver.cpp:443
 #, kde-format
@@ -17545,28 +17521,24 @@ msgid "Invalid start value"
 msgstr "起始值无效"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:257
-#, fuzzy, kde-format
-#| msgid "Invalid end value, must be bigger than the start value"
+#, kde-format
 msgid "Invalid end value, must be greater than the start value"
-msgstr "结束值无效，必须大于起始值"
+msgstr ""
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:300
-#, fuzzy, kde-format
-#| msgid "The number of values to be generated must be bigger than one"
+#, kde-format
 msgid "The number of values to be generated must be greater than one"
-msgstr "要生成的数值数量必须大于一个"
+msgstr ""
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:317
-#, fuzzy, kde-format
-#| msgid "Invalid numeric increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid numeric increment value, must be greater than zero"
-msgstr "数值增量无效，必须大于零"
+msgstr ""
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:326
-#, fuzzy, kde-format
-#| msgid "Invalid Date&Time increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid Date&Time increment value, must be greater than zero"
-msgstr "日期时间增量无效，必须大于零"
+msgstr ""
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:487
 #, kde-format
@@ -18546,10 +18518,9 @@ msgid "Analyze and Plot Data"
 msgstr "数据分析并绘图"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:677
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Analysis"
-msgstr "统计图类"
+msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:678
 #, kde-format
@@ -22040,10 +22011,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lH1)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:114
-#, fuzzy, kde-format
-#| msgid "Username:"
+#, kde-format
 msgid "Alternate:"
-msgstr "用户名："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lHypothesis)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:269
@@ -22053,10 +22023,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lTest)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:289
-#, fuzzy, kde-format
-#| msgid "Test"
+#, kde-format
 msgid "Test:"
-msgstr "测试"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionY)
 #: src/frontend/ui/dockwidgets/imagedock.ui:136
@@ -24153,7 +24122,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, chbDeleteRows)
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:274
 #, fuzzy, kde-format
-#| msgid "Delete"
 msgid "Delete Rows"
 msgstr "删除"
 
@@ -25528,13 +25496,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
-
-#, fuzzy
-#~| msgid "Variable Statistics..."
-#~ msgid "Friedman Test Statistics"
-#~ msgstr "变量统计..."
-
-#, fuzzy
-#~| msgid "Column Statistics"
-#~ msgid "Log-Rank Test Statistics"
-#~ msgstr "列统计"

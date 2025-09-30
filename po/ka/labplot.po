@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-29 00:39+0000\n"
-"PO-Revision-Date: 2025-09-23 04:06+0200\n"
+"PO-Revision-Date: 2025-09-29 12:16+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -17837,7 +17837,7 @@ msgstr "მნიშვნელობის მოცილება"
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:80
 #, kde-format
 msgid "Delete entire rows in the spreadsheet if the condition is met."
-msgstr ""
+msgstr "სრული მწკრივების წაშლა ელცხრილში, თუ პირობა სრულდება."
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:1031
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:1038
@@ -24564,10 +24564,9 @@ msgstr "თარიღისა და დროის მნიშვნელ
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbDeleteRows)
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:274
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgid "Delete Rows"
-msgstr "წაშლა"
+msgstr "მწკრივების წაშლა"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:97

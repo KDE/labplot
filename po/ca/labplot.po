@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-29 00:39+0000\n"
-"PO-Revision-Date: 2025-09-23 11:57+0200\n"
+"PO-Revision-Date: 2025-09-29 10:13+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -18007,7 +18007,7 @@ msgstr "Valors de l'omissió"
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:80
 #, kde-format
 msgid "Delete entire rows in the spreadsheet if the condition is met."
-msgstr ""
+msgstr "Suprimeix files senceres al full de càlcul si es compleix la condició."
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:1031
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:1038
@@ -24768,10 +24768,9 @@ msgstr "Valors de DataHora"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbDeleteRows)
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:274
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgid "Delete Rows"
-msgstr "Suprimeix"
+msgstr "Suprimeix les files"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:97
