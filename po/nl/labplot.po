@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-29 00:39+0000\n"
-"PO-Revision-Date: 2025-09-23 18:59+0200\n"
+"PO-Revision-Date: 2025-09-29 10:47+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -17860,7 +17860,7 @@ msgstr "Waarden weglaten"
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:80
 #, kde-format
 msgid "Delete entire rows in the spreadsheet if the condition is met."
-msgstr ""
+msgstr "Verwijder gehele rijen in het rekenblad als de conditie waar is."
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:1031
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:1038
@@ -24591,10 +24591,9 @@ msgstr "Datum-tijdwaarden"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbDeleteRows)
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:274
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgid "Delete Rows"
-msgstr "Verwijderen"
+msgstr "Rijen verwijderen"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:97

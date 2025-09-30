@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-29 00:39+0000\n"
-"PO-Revision-Date: 2025-09-24 09:25+0300\n"
+"PO-Revision-Date: 2025-09-29 11:59+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17809,7 +17809,7 @@ msgstr "Değerleri Bırak"
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:80
 #, kde-format
 msgid "Delete entire rows in the spreadsheet if the condition is met."
-msgstr ""
+msgstr "Koşul sağlandıysa hesap tablosundaki tam satırları silin."
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:1031
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:1038
@@ -24533,10 +24533,9 @@ msgstr "Tarih ve zaman değerleri"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbDeleteRows)
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:274
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgid "Delete Rows"
-msgstr "Sil"
+msgstr "Satırları Sil"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:97
