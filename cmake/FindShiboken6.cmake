@@ -12,7 +12,7 @@
 # Find the executable
 find_program(Shiboken6_EXECUTABLE
     NAMES shiboken6
-    HINTS "${CMAKE_INSTALL_PREFIX}/bin" "${CMAKE_PREFIX_PATH}/bin"
+    HINTS "${CMAKE_INSTALL_PREFIX}/bin" "${CMAKE_PREFIX_PATH}/bin" /usr/bin /usr/local/bin /app/bin
 )
 
 # Find the library
@@ -44,6 +44,17 @@ if(Shiboken6_FOUND)
     # Dummy INTERFACE target for libshiboken
     if(NOT TARGET Shiboken6::libshiboken)
         add_library(Shiboken6::libshiboken INTERFACE IMPORTED)
+	if(Shiboken6_LIBRARY)
+                set_target_properties(Shiboken6::libshiboken PROPERTIES
+                IMPORTED_LOCATION "${Shiboken6_LIBRARY}"
+            )
+        endif()
+	if(Shiboken6_ABI3_LIBRARY)
+	    set_target_properties(Shiboken6::libshiboken PROPERTIES
+                IMPORTED_LOCATION "${Shiboken6_ABI3_LIBRARY}"
+            )
+        endif()
+
     endif()
 
     # Optionally, if you have include path for generated headers, add it:

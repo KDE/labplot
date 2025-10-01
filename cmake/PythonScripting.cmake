@@ -238,8 +238,7 @@ set(python_scripting_backend_sources
     ${BACKEND_DIR}/script/python/PythonScriptRuntime.cpp
     ${BACKEND_DIR}/script/python/PythonLogger.cpp
 )
-#get_target_property(shiboken6_INCLUDE_DIRECTORIES Shiboken6::libshiboken INTERFACE_INCLUDE_DIRECTORIES)
-get_target_property(pyside6_INCLUDE_DIRECTORIES PySide6::pyside6 INTERFACE_INCLUDE_DIRECTORIES)
+get_target_property(PySide6_INCLUDE_DIRECTORIES PySide6::pyside6 INTERFACE_INCLUDE_DIRECTORIES)
 set(python_scripting_includes
     ${PYSIDE_PYTHONPATH}/include
     ${PySide6_INCLUDE_DIRECTORIES}
@@ -249,12 +248,13 @@ set(python_scripting_includes
     ${PySide6_PYTHONPATH}/include/QtGui
     ${PySide6_PYTHONPATH}/include/QtCore
 )
+get_target_property(Shiboken6_LIBRARIES Shiboken6::libshiboken IMPORTED_LOCATION)
 set(python_scripting_link_libraries
     PySide6::pyside6
     Shiboken6::libshiboken
     ${Python3_LIBRARIES}
     ${PySide6_ABI3_LIBRARY}
-    ${Shiboken6_ABI3_LIBRARY}
+    ${Shiboken6_LIBRARIES}
 )
 
 # Hide noisy warnings in shiboken scripting generated sources
