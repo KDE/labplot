@@ -116,6 +116,7 @@ function(generate_shiboken_sources)
     make_path(PBC_INCLUDES ${PB_INCLUDES})
 
     # Set up the options to pass to shiboken.
+    message(STATUS "PySide6 typesystems: ${PYSIDE_TYPESYSTEMS}")
     set(shiboken_options --enable-pyside-extensions
         --keywords=scripting
         --clang-option=-DSCRIPTING
@@ -123,7 +124,7 @@ function(generate_shiboken_sources)
         --include-paths=${CMAKE_SOURCE_DIR}
         --typesystem-paths=${CMAKE_SOURCE_DIR}
         --typesystem-paths="${CMAKE_INSTALL_PREFIX}/share/PySide${QT_MAJOR_VERSION}/typesystems"
-        --typesystem-paths=${PYSIDE_TYPESYSTEMS}
+        --typesystem-paths="${PYSIDE_TYPESYSTEMS}"
         --output-directory=${CMAKE_CURRENT_BINARY_DIR})
 
     set(generated_sources_dependencies ${PB_WRAPPED_HEADER} ${PB_TYPESYSTEM})

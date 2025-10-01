@@ -15,16 +15,88 @@
 
 #include <KLocalizedString>
 
-void JSONFilterTest::testArrayImport() {
+/*!
+ * import an array with an additional column for the index
+ */
+void JSONFilterTest::testArrayImport01() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	JsonFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/measurements.json"));
+	filter.setCreateIndexEnabled(true);
+	filter.setDataRowType(QJsonValue::Array);
+	filter.setModelRows(QVector<int>{0, 3}); // select the 4th element which is "y
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.rowCount(), 5);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
+
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+
+	QCOMPARE(spreadsheet.column(0)->name(), i18n("index"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
+	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
+	QCOMPARE(spreadsheet.column(0)->integerAt(3), 4);
+	QCOMPARE(spreadsheet.column(0)->integerAt(4), 5);
+
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 0.1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 0.2);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), 0.3);
+	QCOMPARE(spreadsheet.column(1)->valueAt(3), 0.4);
+	QCOMPARE(spreadsheet.column(1)->valueAt(4), 0.5);
+}
+
+/*!
+ * import an array with row limits and with an additional column for the index
+ */
+void JSONFilterTest::testArrayImport02() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	JsonFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/measurements.json"));
+	filter.setCreateIndexEnabled(true);
+	filter.setDataRowType(QJsonValue::Array);
+	filter.setModelRows(QVector<int>{0, 3}); // select the 4th element which is "y
+	filter.setStartRow(2);
+	filter.setEndRow(3);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.rowCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
+
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+
+	QCOMPARE(spreadsheet.column(0)->name(), i18n("index"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("y"));
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
+
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 0.2);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 0.3);
+}
+
+/*!
+ * import an array of arrays with two values in each sub-array and with an additional column for the index
+ */
+void JSONFilterTest::testArrayImport03() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	JsonFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/array.json"));
-	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setCreateIndexEnabled(true);
 	filter.setDataRowType(QJsonValue::Array);
 	filter.setDateTimeFormat(QLatin1String("yyyy-MM-dd"));
-	filter.readDataFromFile(fileName, &spreadsheet, mode);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.columnCount(), 3);
 	QCOMPARE(spreadsheet.rowCount(), 3);
@@ -64,10 +136,9 @@ void JSONFilterTest::testObjectImport01() {
 	JsonFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/object.json"));
-	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setCreateIndexEnabled(true);
 	filter.setDataRowType(QJsonValue::Object);
-	filter.readDataFromFile(fileName, &spreadsheet, mode);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.columnCount(), 5);
 	QCOMPARE(spreadsheet.rowCount(), 3);
@@ -118,10 +189,9 @@ void JSONFilterTest::testObjectImport02() {
 	JsonFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/object.json"));
-	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setDataRowType(QJsonValue::Object);
 	filter.setImportObjectNames(true);
-	filter.readDataFromFile(fileName, &spreadsheet, mode);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.columnCount(), 5);
 	QCOMPARE(spreadsheet.rowCount(), 3);
@@ -215,7 +285,6 @@ void JSONFilterTest::testObjectImport04() {
 	JsonFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/intraday.json"));
-	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	QVector<int> rows{0, 1};
 	filter.setModelRows(rows);
 	filter.setDataRowType(QJsonValue::Object);
@@ -225,7 +294,7 @@ void JSONFilterTest::testObjectImport04() {
 	filter.setDateTimeFormat(dateTimeFormat);
 	filter.setStartRow(1);
 	filter.setEndRow(2);
-	filter.readDataFromFile(fileName, &spreadsheet, mode);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.columnCount(), 6);
 	QCOMPARE(spreadsheet.rowCount(), 2);

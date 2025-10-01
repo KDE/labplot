@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-23 00:38+0000\n"
+"POT-Creation-Date: 2025-09-29 00:39+0000\n"
 "PO-Revision-Date: 2014-06-30 02:02+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: lt\n"
@@ -1055,6 +1055,70 @@ msgid ""
 "%2"
 msgstr ""
 
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:123
+#, kde-format
+msgid ""
+"This option determines how the imported strings have to be converted to "
+"numbers."
+msgstr ""
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:128
+#, kde-format
+msgid ""
+"When point character is used for the decimal separator, the valid number "
+"representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
+"ul>For comma as the decimal separator, the valid number representations are:"
+"<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
+msgstr ""
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:144
+#, kde-format
+msgid ""
+"This option determines how the imported strings have to be converted to "
+"calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
+"and to time."
+msgstr ""
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:150
+#, kde-format
+msgid ""
+"Expressions that may be used for the date part of format string:"
+"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
+"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
+"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
+"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
+"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
+"td><td>the month as number without a leading zero (1 to 12).</td></"
+"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
+"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
+"to 'Dec'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
+"'December'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
+"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
+"negative, a minus sign is prepended in addition.</td></tr></"
+"table><br><br>Expressions that may be used for the time part of the format "
+"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
+"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
+"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
+"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
+"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
+"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
+"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
+"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
+"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
+"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
+"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
+"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
+"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
+"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
+"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
+"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
+"Sunday</td></tr></table><br><br>In case the provided expression is empty, "
+"the format will be auto-detected."
+msgstr ""
+
 #: src/backend/datasources/filters/AsciiFilter.cpp:223
 #, kde-format
 msgid "Number of columns: %1"
@@ -1067,7 +1131,7 @@ msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:467
 #: src/backend/datasources/filters/AsciiFilter.cpp:1252
-#: src/backend/datasources/filters/JsonFilter.cpp:284
+#: src/backend/datasources/filters/JsonFilter.cpp:246
 #, kde-format
 msgid "Column %1"
 msgstr ""
@@ -1105,7 +1169,7 @@ msgid "Int64"
 msgstr ""
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:273
-#: src/backend/datasources/filters/JsonFilter.cpp:386
+#: src/backend/datasources/filters/JsonFilter.cpp:343
 #: src/backend/datasources/filters/SpiceFilter.cpp:127
 #: src/backend/datasources/filters/SpiceFilter.cpp:183
 #, kde-format
@@ -1133,7 +1197,7 @@ msgstr ""
 #: src/backend/datasources/filters/HDF5Filter.cpp:1809
 #: src/backend/datasources/filters/HDF5Filter.cpp:1965
 #: src/backend/datasources/filters/ImageFilter.cpp:165
-#: src/backend/datasources/filters/JsonFilter.cpp:540
+#: src/backend/datasources/filters/JsonFilter.cpp:516
 #: src/backend/datasources/filters/MatioFilter.cpp:890
 #: src/backend/datasources/filters/NetCDFFilter.cpp:758
 #: src/backend/datasources/filters/NetCDFFilter.cpp:869
@@ -1571,64 +1635,64 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:189
+#: src/backend/datasources/filters/JsonFilter.cpp:181
 #, kde-format
 msgid "Open device failed"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:192
+#: src/backend/datasources/filters/JsonFilter.cpp:184
 #, kde-format
 msgid "Empty file"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:198
+#: src/backend/datasources/filters/JsonFilter.cpp:190
 #, kde-format
 msgid "Parse error: %1 at offset %2"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:201
+#: src/backend/datasources/filters/JsonFilter.cpp:193
 #, kde-format
 msgid "Valid JSON document"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:261
+#: src/backend/datasources/filters/JsonFilter.cpp:224
 #: src/backend/datasources/filters/McapFilter.cpp:287
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:305
 #, kde-format
 msgid "index"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:269
+#: src/backend/datasources/filters/JsonFilter.cpp:232
 #, kde-format
 msgid "timestamp"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:271
+#: src/backend/datasources/filters/JsonFilter.cpp:234
 #, kde-format
 msgid "month"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:273
+#: src/backend/datasources/filters/JsonFilter.cpp:236
 #, kde-format
 msgid "day"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:275
+#: src/backend/datasources/filters/JsonFilter.cpp:238
 #, kde-format
 msgid "name"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:391
+#: src/backend/datasources/filters/JsonFilter.cpp:348
 #, kde-format
 msgid "Device/file is empty."
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:399
+#: src/backend/datasources/filters/JsonFilter.cpp:356
 #, kde-format
 msgid "JSON format error or document empty."
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:522
+#: src/backend/datasources/filters/JsonFilter.cpp:499
 #, kde-format
 msgid "Empty file or invalid JSON document."
 msgstr ""
@@ -3938,8 +4002,8 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
 #: src/backend/gsl/functions.cpp:337 src/backend/lib/XmlStreamReader.cpp:58
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:74
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:220
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:73
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:217
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:354
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:412
 #, kde-format
@@ -11590,7 +11654,7 @@ msgid "Color Maps Browser"
 msgstr ""
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:39
-#: src/frontend/examples/ExamplesWidget.cpp:34
+#: src/frontend/examples/ExamplesWidget.cpp:31
 #, kde-format
 msgid "Switch between icon and list views"
 msgstr ""
@@ -11598,7 +11662,7 @@ msgstr ""
 #: src/frontend/colormaps/ColorMapsWidget.cpp:53
 #: src/frontend/datasources/ImportDatasetWidget.cpp:51
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:125
-#: src/frontend/examples/ExamplesWidget.cpp:51
+#: src/frontend/examples/ExamplesWidget.cpp:48
 #, kde-format
 msgid "Enter the keyword you want to search for"
 msgstr ""
@@ -11606,7 +11670,7 @@ msgstr ""
 #: src/frontend/colormaps/ColorMapsWidget.cpp:56
 #: src/frontend/datasources/ImportDatasetWidget.cpp:54
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:128
-#: src/frontend/examples/ExamplesWidget.cpp:54
+#: src/frontend/examples/ExamplesWidget.cpp:51
 #, kde-format
 msgid "Search..."
 msgstr ""
@@ -11806,99 +11870,29 @@ msgstr ""
 msgid "Comma ','"
 msgstr ""
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:36
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:46
-#: src/frontend/datasources/JsonOptionsWidget.cpp:118
-#, kde-format
-msgid ""
-"This option determines how the imported strings have to be converted to "
-"numbers."
-msgstr ""
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:38
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:48
-#, kde-format
-msgid ""
-"When point character is used for the decimal separator, the valid number "
-"representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
-"ul>For comma as the decimal separator, the valid number representations are:"
-"<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
-msgstr ""
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:60
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:67
-#: src/frontend/datasources/JsonOptionsWidget.cpp:141
-#, kde-format
-msgid ""
-"This option determines how the imported strings have to be converted to "
-"calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
-"and to time."
-msgstr ""
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:63
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:70
-#, kde-format
-msgid ""
-"Expressions that may be used for the date part of format string:"
-"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
-"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
-"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
-"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
-"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
-"td><td>the month as number without a leading zero (1 to 12).</td></"
-"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
-"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
-"to 'Dec'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
-"'December'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
-"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
-"negative, a minus sign is prepended in addition.</td></tr></"
-"table><br><br>Expressions that may be used for the time part of the format "
-"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
-"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
-"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
-"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
-"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
-"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
-"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
-"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
-"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
-"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
-"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
-"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
-"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
-"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
-"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
-"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
-"Sunday</td></tr></table><br><br>In case the provided expression is empty, "
-"the format will be auto-detected."
-msgstr ""
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:105
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:53
 #, kde-format
 msgid ""
 "If checked, the specified line in the file will be used to determine the "
 "column names."
 msgstr ""
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:108
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:56
 #, kde-format
 msgid "Line in the file that should be used to determine the column names."
 msgstr ""
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:111
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:59
 #, kde-format
 msgid "Custom column names, comma separated. E.g. \"x, y\""
 msgstr ""
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:115
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:63
 #, kde-format
 msgid "Custom column data types, comma separated"
 msgstr ""
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:122
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:70
 #, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
@@ -11913,12 +11907,12 @@ msgid ""
 "td></tr></table>"
 msgstr ""
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:138
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:86
 #, kde-format
 msgid "%1 or %2"
 msgstr ""
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:249
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:197
 #, kde-format
 msgid "Datatype not found: %1"
 msgstr ""
@@ -12124,6 +12118,7 @@ msgstr ""
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, sbKeepNValues)
 #: src/frontend/datasources/ImportDatasetWidget.cpp:161
 #: src/frontend/datasources/ImportDatasetWidget.cpp:230
+#: src/frontend/examples/ExamplesWidget.cpp:57
 #: src/frontend/ui/datasources/importfilewidget.ui:785
 #: src/frontend/ui/dockwidgets/livedatadock.ui:187
 #, kde-format
@@ -12131,7 +12126,7 @@ msgid "All"
 msgstr ""
 
 #: src/frontend/datasources/ImportDatasetWidget.cpp:168
-#: src/frontend/examples/ExamplesManager.cpp:175
+#: src/frontend/examples/ExamplesManager.cpp:192
 #: src/tools/ColorMapsManager.cpp:152
 #, kde-format
 msgid "File not found"
@@ -13137,88 +13132,38 @@ msgstr ""
 msgid "Manage connections"
 msgstr ""
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:244
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:192
 #, kde-format
 msgid ""
 "Couldn't find the database file '%1'. Please check the connection settings."
 msgstr ""
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:265
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:213
 #, kde-format
 msgid ""
 "Failed to connect to the database '%1'. Please check the connection settings."
 msgstr ""
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:323
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:325
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:271
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:273
 #, kde-format
 msgid "Failed to execute the query for the preview"
 msgstr ""
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:399
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:347
 #, kde-format
 msgid "Refresh the data preview of the selected table"
 msgstr ""
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:405
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:353
 #, kde-format
 msgid "Execute the query and preview its result"
 msgstr ""
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:526
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:528
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:474
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:476
 #, kde-format
 msgid "Failed to execute the query"
-msgstr ""
-
-#: src/frontend/datasources/JsonOptionsWidget.cpp:120
-#, kde-format
-msgid ""
-"For 'C Format', a period is used for the decimal point character and comma "
-"is used for the thousands group separator. Valid number representations are:"
-"<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></ul>When using 'System "
-"locale', the system settings will be used. E.g., for the German local the "
-"valid number representations are:<ul><li>1234,56</li><li>1.234,56</"
-"li><li>etc.</li></ul>"
-msgstr ""
-
-#: src/frontend/datasources/JsonOptionsWidget.cpp:144
-#, kde-format
-msgid ""
-"Expressions that may be used for the date part of format string:"
-"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
-"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
-"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
-"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
-"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
-"td><td>the month as number without a leading zero (1 to 12).</td></"
-"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
-"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
-"to 'Dec'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
-"'December'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
-"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
-"negative, a minus sign is prepended in addition.</td></tr></"
-"table><br><br>Expressions that may be used for the time part of the format "
-"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
-"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
-"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
-"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
-"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
-"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
-"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
-"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
-"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
-"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
-"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
-"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
-"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
-"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
-"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
-"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
-"Sunday</td></tr></table>"
 msgstr ""
 
 #: src/frontend/datasources/MQTTConnectionManagerDialog.cpp:33
@@ -15173,7 +15118,7 @@ msgctxt "@title:window"
 msgid "Example Projects"
 msgstr ""
 
-#: src/frontend/examples/ExamplesManager.cpp:176
+#: src/frontend/examples/ExamplesManager.cpp:193
 #, kde-format
 msgid ""
 "Couldn't open the examples collections file %1. Please check your "
@@ -16946,8 +16891,8 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lMin)
 #. i18n: ectx: property (text), widget (QLabel, lMinDateTime)
 #: src/frontend/SettingsGeneralPage.cpp:26
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:54
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:241
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:53
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:238
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:317
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:405
 #, kde-format
@@ -17378,145 +17323,150 @@ msgstr ""
 msgid "Provide the list of value-label pairs like in the following example:"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:45
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:43
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:222
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:231
 #, kde-format
 msgid "Equal to"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:46
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:44
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:223
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:232
 #, kde-format
 msgid "Not Equal to"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:47
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:45
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:224
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:233
 #, kde-format
 msgid "Between (Incl. End Points)"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:48
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:46
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:225
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:234
 #, kde-format
 msgid "Between (Excl. End Points)"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:49
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:47
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:226
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:235
 #, kde-format
 msgid "Greater than"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:50
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:48
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:227
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:236
 #, kde-format
 msgid "Greater than or Equal to"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:51
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:49
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:228
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:237
 #, kde-format
 msgid "Less than"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:52
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:50
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:229
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:238
 #, kde-format
 msgid "Less than or Equal to"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:57
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:55
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:213
 #, kde-format
 msgid "Equal To"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:58
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:56
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:214
 #, kde-format
 msgid "Not Equal To"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:59
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:57
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:215
 #, kde-format
 msgid "Starts With"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:60
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:58
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:216
 #, kde-format
 msgid "Ends With"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:61
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:59
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:217
 #, kde-format
 msgid "Contains"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:62
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:60
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:218
 #, kde-format
 msgid "Does Not Contain"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:74
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:72
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:307
 #, kde-format
 msgid "&Mask"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:75
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:73
 #, kde-format
 msgid "Mask values in the specified region"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:76
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:74
 #, kde-format
 msgctxt "@title:window"
 msgid "Mask Values"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:78
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:77
 #, kde-format
 msgid "&Drop"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:79
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:78
 #, kde-format
 msgid "Drop values in the specified region"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:80
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:79
 #, kde-format
 msgctxt "@title:window"
 msgid "Drop Values"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:946
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:953
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:1003
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:1009
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:80
+#, kde-format
+msgid "Delete entire rows in the spreadsheet if the condition is met."
+msgstr ""
+
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1031
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1038
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1088
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1094
 #, kde-format
 msgid "Invalid numeric value."
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:968
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1053
 #, kde-format
 msgid "%1: mask values"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:1024
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1109
 #, kde-format
 msgid "%1: drop values"
 msgstr ""
@@ -24143,7 +24093,7 @@ msgid "End Time:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:47
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:46
 #, kde-format
 msgid "Numeric Values"
 msgstr ""
@@ -24151,17 +24101,17 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #. i18n: ectx: property (text), widget (QLabel, lConditionText)
 #. i18n: ectx: property (text), widget (QLabel, lConditionDateTime)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:67
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:128
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:234
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:66
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:127
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:231
 #, kde-format
 msgid "Condition:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMax)
 #. i18n: ectx: property (text), widget (QLabel, lMaxDateTime)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:81
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:227
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:80
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:224
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:334
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:398
 #, kde-format
@@ -24169,15 +24119,21 @@ msgid "max."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lText)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:144
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:142
 #, kde-format
 msgid "Text Values"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:203
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:200
 #, kde-format
 msgid "DateTime Values"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, chbDeleteRows)
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:274
+#, kde-format
+msgid "Delete Rows"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)

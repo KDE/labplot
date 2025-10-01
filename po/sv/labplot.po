@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-23 00:38+0000\n"
-"PO-Revision-Date: 2025-09-14 20:21+0200\n"
+"POT-Creation-Date: 2025-09-29 00:39+0000\n"
+"PO-Revision-Date: 2025-09-26 14:03+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -1063,6 +1063,116 @@ msgstr ""
 "Kunde inte öppna filen '%1' för skrivning.\n"
 "%2"
 
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:123
+#, kde-format
+msgid ""
+"This option determines how the imported strings have to be converted to "
+"numbers."
+msgstr ""
+"Alternativet bestämmer hur importerade strängar ska konverteras till tal."
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:128
+#, kde-format
+msgid ""
+"When point character is used for the decimal separator, the valid number "
+"representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
+"ul>For comma as the decimal separator, the valid number representations are:"
+"<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
+msgstr ""
+"När en punkt används som decimaltecken är de giltiga "
+"sifferrepresentationerna: <ul><li>1234.56</li><li>1,234.56</li><li>etc.</"
+"li></ul>Med kommatecken som decimaltecken är de giltiga "
+"sifferrepresentationerna: <ul><li>1234,56</li><li>1.234,56</li><li>etc.</"
+"li></ul>"
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:144
+#, kde-format
+msgid ""
+"This option determines how the imported strings have to be converted to "
+"calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
+"and to time."
+msgstr ""
+"Alternativet bestämmer hur importerade strängar ska konverteras till "
+"kalenderdatum, dvs. år, månads- och dagnummer i den Gregorianska kalendern "
+"och till tid."
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:150
+#, kde-format
+msgid ""
+"Expressions that may be used for the date part of format string:"
+"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
+"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
+"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
+"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
+"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
+"td><td>the month as number without a leading zero (1 to 12).</td></"
+"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
+"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
+"to 'Dec'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
+"'December'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
+"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
+"negative, a minus sign is prepended in addition.</td></tr></"
+"table><br><br>Expressions that may be used for the time part of the format "
+"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
+"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
+"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
+"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
+"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
+"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
+"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
+"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
+"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
+"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
+"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
+"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
+"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
+"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
+"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
+"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
+"Sunday</td></tr></table><br><br>In case the provided expression is empty, "
+"the format will be auto-detected."
+msgstr ""
+"Uttryck som kan användas för datumdelen av formatsträngen:<table><tr><td>d</"
+"td><td>dagen som ett tal utan inledande nolla (1 till 31).</td></"
+"tr><tr><td>dd</td><td>dagen som ett tal med inledande nolla (01 till 31).</"
+"td></tr><tr><td>ddd</td><td>det förkortande lokala namnet på dagen (t.ex. "
+"'mån' till 'sön'). Använder systemets landsinställningar för att skapa det "
+"lokala namnet.</td></tr><tr><td>dddd</td><td>det långa lokala namnet på "
+"dagen (t.ex. 'måndag' till 'söndag'). Använder systemets landsinställningar "
+"för att skapa det lokala namnet.</td></tr><tr><td>M</td><td>månaden som ett "
+"tal utan inledande nolla (1 till 12).</td></tr><tr><td>MM</td><td>månaden "
+"som ett tal med inledande nolla (01 till 12).</td></tr><tr><td>MMM</"
+"td><td>det förkortande lokala namnet på månaden (t.ex. 'jan' to 'dec'). "
+"Använder systemets landsinställningar för att skapa det lokala namnet.</td></"
+"tr><tr><td>MMMM</td><td>det långa lokala namnet på månaden (t.ex. 'januari' "
+"till 'december'). Använder systemets landsinställningar för att skapa det "
+"lokala namnet.</td></tr><tr><td>yy</td><td>året som ett tal med två siffror "
+"(00 till 99).</td></tr><tr><td>yyyy</td><td>året som et tal med fyra "
+"siffror. Om året är negativt, läggs ett minustecken till först vid addition."
+"</td></tr></table><br><br>Uttryck som kan användas för tidsdelen av "
+"formatsträngen:<table><tr><td>h</td><td>timman utan inledande nolla (0 till "
+"23 eller 1 till 12 för visning med FM/EM)</td></tr><tr><td>hh</td><td>timman "
+"med inledande nolla (00 till 23 eller 01 till 12 för visning med FM/EM)</"
+"td></tr><tr><td>H</td><td>timman utan inledande nolla (0 till 23, även för "
+"visning med FM/EM)</td></tr><tr><td>HH</td><td>timman med inledande nolla "
+"(00 till 23, även för visning med FM/EM)</td></tr><tr><td>m</td><td>minuten "
+"utan inledande nolla (0 till 59)</td></tr><tr><td>mm</td><td>minuten med "
+"inledande nolla (00 till 59)</td></tr><tr><td>s</td><td>sekunden utan "
+"inledande nolla (0 till 59)</td></tr><tr><td>ss</td><td>sekunden med "
+"inledande nolla (00 till 59)</td></tr><tr><td>z</td><td>millisekunder utan "
+"inledande nollor (0 till 999)</td></tr><tr><td>zzz</td><td>millisekunder med "
+"inledande nollor (000 till 999)</td></tr><tr><td>AP eller A</td><td>Tolka "
+"som en FM/EM-tid. AP måste antingen vara 'AM' eller 'PM'.</td></"
+"tr><tr><td>ap eller a</td><td>Tolka som en FM/EM-tim. ap måste antingen vara "
+"'am' eller 'pm'.</td></tr></table><br><br>Exempel:<table><tr><td>dd.MM.yyyy</"
+"td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</td><td>sön juli 20 69</"
+"td></tr><tr><td>'Dagen är' dddd</td><td>Dagen är söndag</td></tr></"
+"table><br><br>Om uttrycket som tillhandahålls är tomt, detekteras formatet "
+"automatiskt."
+
 #: src/backend/datasources/filters/AsciiFilter.cpp:223
 #, kde-format
 msgid "Number of columns: %1"
@@ -1075,7 +1185,7 @@ msgstr "Antal rader: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:467
 #: src/backend/datasources/filters/AsciiFilter.cpp:1252
-#: src/backend/datasources/filters/JsonFilter.cpp:284
+#: src/backend/datasources/filters/JsonFilter.cpp:246
 #, kde-format
 msgid "Column %1"
 msgstr "Kolumn %1"
@@ -1113,7 +1223,7 @@ msgid "Int64"
 msgstr "Int64"
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:273
-#: src/backend/datasources/filters/JsonFilter.cpp:386
+#: src/backend/datasources/filters/JsonFilter.cpp:343
 #: src/backend/datasources/filters/SpiceFilter.cpp:127
 #: src/backend/datasources/filters/SpiceFilter.cpp:183
 #, kde-format
@@ -1141,7 +1251,7 @@ msgstr "Misslyckades öppna enheten/filen eller så är den tom."
 #: src/backend/datasources/filters/HDF5Filter.cpp:1809
 #: src/backend/datasources/filters/HDF5Filter.cpp:1965
 #: src/backend/datasources/filters/ImageFilter.cpp:165
-#: src/backend/datasources/filters/JsonFilter.cpp:540
+#: src/backend/datasources/filters/JsonFilter.cpp:516
 #: src/backend/datasources/filters/MatioFilter.cpp:890
 #: src/backend/datasources/filters/NetCDFFilter.cpp:758
 #: src/backend/datasources/filters/NetCDFFilter.cpp:869
@@ -1582,64 +1692,64 @@ msgid_plural "numerical data, %1 elements"
 msgstr[0] "numerisk data, %1 element"
 msgstr[1] "numerisk data, %1 element"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:189
+#: src/backend/datasources/filters/JsonFilter.cpp:181
 #, kde-format
 msgid "Open device failed"
 msgstr "Misslyckades öppna enhet"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:192
+#: src/backend/datasources/filters/JsonFilter.cpp:184
 #, kde-format
 msgid "Empty file"
 msgstr "Tom fil"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:198
+#: src/backend/datasources/filters/JsonFilter.cpp:190
 #, kde-format
 msgid "Parse error: %1 at offset %2"
 msgstr "Tolkningsfel: %1 på position %2"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:201
+#: src/backend/datasources/filters/JsonFilter.cpp:193
 #, kde-format
 msgid "Valid JSON document"
 msgstr "Giltigt JSON-dokument"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:261
+#: src/backend/datasources/filters/JsonFilter.cpp:224
 #: src/backend/datasources/filters/McapFilter.cpp:287
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:305
 #, kde-format
 msgid "index"
 msgstr "index"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:269
+#: src/backend/datasources/filters/JsonFilter.cpp:232
 #, kde-format
 msgid "timestamp"
 msgstr "tidsstämpel"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:271
+#: src/backend/datasources/filters/JsonFilter.cpp:234
 #, kde-format
 msgid "month"
 msgstr "månad"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:273
+#: src/backend/datasources/filters/JsonFilter.cpp:236
 #, kde-format
 msgid "day"
 msgstr "dag"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:275
+#: src/backend/datasources/filters/JsonFilter.cpp:238
 #, kde-format
 msgid "name"
 msgstr "namn"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:391
+#: src/backend/datasources/filters/JsonFilter.cpp:348
 #, kde-format
 msgid "Device/file is empty."
 msgstr "Enheten/filen är tom."
 
-#: src/backend/datasources/filters/JsonFilter.cpp:399
+#: src/backend/datasources/filters/JsonFilter.cpp:356
 #, kde-format
 msgid "JSON format error or document empty."
 msgstr "JSON-formatfel eller tomt dokument"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:522
+#: src/backend/datasources/filters/JsonFilter.cpp:499
 #, kde-format
 msgid "Empty file or invalid JSON document."
 msgstr "Tom fil eller ogiltigt JSON-dokument."
@@ -3949,8 +4059,8 @@ msgstr "om(villkor, om sant, om falskt)"
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
 #: src/backend/gsl/functions.cpp:337 src/backend/lib/XmlStreamReader.cpp:58
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:74
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:220
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:73
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:217
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:354
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:412
 #, kde-format
@@ -7593,10 +7703,9 @@ msgid "Descriptive Statistics"
 msgstr "Beskrivande statistik"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
-#, fuzzy, kde-format
-#| msgid "t-Test Statistics"
+#, kde-format
 msgid "Test Statistics"
-msgstr "t-test statistik"
+msgstr "Teststatistik"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
 #, kde-format
@@ -11662,7 +11771,7 @@ msgid "Color Maps Browser"
 msgstr "Färgavbildningsbläddrare"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:39
-#: src/frontend/examples/ExamplesWidget.cpp:34
+#: src/frontend/examples/ExamplesWidget.cpp:31
 #, kde-format
 msgid "Switch between icon and list views"
 msgstr "Byt mellan ikon- och listvy"
@@ -11670,7 +11779,7 @@ msgstr "Byt mellan ikon- och listvy"
 #: src/frontend/colormaps/ColorMapsWidget.cpp:53
 #: src/frontend/datasources/ImportDatasetWidget.cpp:51
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:125
-#: src/frontend/examples/ExamplesWidget.cpp:51
+#: src/frontend/examples/ExamplesWidget.cpp:48
 #, kde-format
 msgid "Enter the keyword you want to search for"
 msgstr "Ange nyckelordet som du vill söka efter"
@@ -11678,7 +11787,7 @@ msgstr "Ange nyckelordet som du vill söka efter"
 #: src/frontend/colormaps/ColorMapsWidget.cpp:56
 #: src/frontend/datasources/ImportDatasetWidget.cpp:54
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:128
-#: src/frontend/examples/ExamplesWidget.cpp:54
+#: src/frontend/examples/ExamplesWidget.cpp:51
 #, kde-format
 msgid "Search..."
 msgstr "Sök..."
@@ -11879,123 +11988,7 @@ msgstr "Punkt '.'"
 msgid "Comma ','"
 msgstr "Kommatecken ','"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:36
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:46
-#: src/frontend/datasources/JsonOptionsWidget.cpp:118
-#, kde-format
-msgid ""
-"This option determines how the imported strings have to be converted to "
-"numbers."
-msgstr ""
-"Alternativet bestämmer hur importerade strängar ska konverteras till tal."
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:38
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:48
-#, kde-format
-msgid ""
-"When point character is used for the decimal separator, the valid number "
-"representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
-"ul>For comma as the decimal separator, the valid number representations are:"
-"<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
-msgstr ""
-"När en punkt används som decimaltecken är de giltiga "
-"sifferrepresentationerna: <ul><li>1234.56</li><li>1,234.56</li><li>etc.</"
-"li></ul>Med kommatecken som decimaltecken är de giltiga "
-"sifferrepresentationerna: <ul><li>1234,56</li><li>1.234,56</li><li>etc.</"
-"li></ul>"
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:60
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:67
-#: src/frontend/datasources/JsonOptionsWidget.cpp:141
-#, kde-format
-msgid ""
-"This option determines how the imported strings have to be converted to "
-"calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
-"and to time."
-msgstr ""
-"Alternativet bestämmer hur importerade strängar ska konverteras till "
-"kalenderdatum, dvs. år, månads- och dagnummer i den Gregorianska kalendern "
-"och till tid."
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:63
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:70
-#, kde-format
-msgid ""
-"Expressions that may be used for the date part of format string:"
-"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
-"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
-"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
-"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
-"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
-"td><td>the month as number without a leading zero (1 to 12).</td></"
-"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
-"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
-"to 'Dec'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
-"'December'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
-"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
-"negative, a minus sign is prepended in addition.</td></tr></"
-"table><br><br>Expressions that may be used for the time part of the format "
-"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
-"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
-"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
-"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
-"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
-"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
-"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
-"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
-"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
-"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
-"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
-"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
-"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
-"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
-"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
-"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
-"Sunday</td></tr></table><br><br>In case the provided expression is empty, "
-"the format will be auto-detected."
-msgstr ""
-"Uttryck som kan användas för datumdelen av formatsträngen:<table><tr><td>d</"
-"td><td>dagen som ett tal utan inledande nolla (1 till 31).</td></"
-"tr><tr><td>dd</td><td>dagen som ett tal med inledande nolla (01 till 31).</"
-"td></tr><tr><td>ddd</td><td>det förkortande lokala namnet på dagen (t.ex. "
-"'mån' till 'sön'). Använder systemets landsinställningar för att skapa det "
-"lokala namnet.</td></tr><tr><td>dddd</td><td>det långa lokala namnet på "
-"dagen (t.ex. 'måndag' till 'söndag'). Använder systemets landsinställningar "
-"för att skapa det lokala namnet.</td></tr><tr><td>M</td><td>månaden som ett "
-"tal utan inledande nolla (1 till 12).</td></tr><tr><td>MM</td><td>månaden "
-"som ett tal med inledande nolla (01 till 12).</td></tr><tr><td>MMM</"
-"td><td>det förkortande lokala namnet på månaden (t.ex. 'jan' to 'dec'). "
-"Använder systemets landsinställningar för att skapa det lokala namnet.</td></"
-"tr><tr><td>MMMM</td><td>det långa lokala namnet på månaden (t.ex. 'januari' "
-"till 'december'). Använder systemets landsinställningar för att skapa det "
-"lokala namnet.</td></tr><tr><td>yy</td><td>året som ett tal med två siffror "
-"(00 till 99).</td></tr><tr><td>yyyy</td><td>året som et tal med fyra "
-"siffror. Om året är negativt, läggs ett minustecken till först vid addition."
-"</td></tr></table><br><br>Uttryck som kan användas för tidsdelen av "
-"formatsträngen:<table><tr><td>h</td><td>timman utan inledande nolla (0 till "
-"23 eller 1 till 12 för visning med FM/EM)</td></tr><tr><td>hh</td><td>timman "
-"med inledande nolla (00 till 23 eller 01 till 12 för visning med FM/EM)</"
-"td></tr><tr><td>H</td><td>timman utan inledande nolla (0 till 23, även för "
-"visning med FM/EM)</td></tr><tr><td>HH</td><td>timman med inledande nolla "
-"(00 till 23, även för visning med FM/EM)</td></tr><tr><td>m</td><td>minuten "
-"utan inledande nolla (0 till 59)</td></tr><tr><td>mm</td><td>minuten med "
-"inledande nolla (00 till 59)</td></tr><tr><td>s</td><td>sekunden utan "
-"inledande nolla (0 till 59)</td></tr><tr><td>ss</td><td>sekunden med "
-"inledande nolla (00 till 59)</td></tr><tr><td>z</td><td>millisekunder utan "
-"inledande nollor (0 till 999)</td></tr><tr><td>zzz</td><td>millisekunder med "
-"inledande nollor (000 till 999)</td></tr><tr><td>AP eller A</td><td>Tolka "
-"som en FM/EM-tid. AP måste antingen vara 'AM' eller 'PM'.</td></"
-"tr><tr><td>ap eller a</td><td>Tolka som en FM/EM-tim. ap måste antingen vara "
-"'am' eller 'pm'.</td></tr></table><br><br>Exempel:<table><tr><td>dd.MM.yyyy</"
-"td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</td><td>sön juli 20 69</"
-"td></tr><tr><td>'Dagen är' dddd</td><td>Dagen är söndag</td></tr></"
-"table><br><br>Om uttrycket som tillhandahålls är tomt, detekteras formatet "
-"automatiskt."
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:105
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:53
 #, kde-format
 msgid ""
 "If checked, the specified line in the file will be used to determine the "
@@ -12003,22 +11996,22 @@ msgid ""
 msgstr ""
 "Om markerad, används den angivna raden i filen för att bestämma kolumnnamnen."
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:108
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:56
 #, kde-format
 msgid "Line in the file that should be used to determine the column names."
 msgstr "Rad i filen som ska användas för att bestämma kolumnnamnen."
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:111
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:59
 #, kde-format
 msgid "Custom column names, comma separated. E.g. \"x, y\""
 msgstr "Egna kolumnnamn, åtskilda med kommatecken, t.ex. \"x, y\""
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:115
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:63
 #, kde-format
 msgid "Custom column data types, comma separated"
 msgstr "Egna kolumndatatyper, åtskilda med kommatecken"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:122
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:70
 #, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
@@ -12042,12 +12035,12 @@ msgstr ""
 "textrutan datetime om det inte är tomt, annars bestäms det automatiskt.</td> "
 "</tr><tr><td>%5</td><td>En text.</td></tr></table>"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:138
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:86
 #, kde-format
 msgid "%1 or %2"
 msgstr "%1 eller %2"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:249
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:197
 #, kde-format
 msgid "Datatype not found: %1"
 msgstr "Datatyp hittades inte: %1"
@@ -12261,6 +12254,7 @@ msgstr "Datamängd importerad på %1 sekunder."
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, sbKeepNValues)
 #: src/frontend/datasources/ImportDatasetWidget.cpp:161
 #: src/frontend/datasources/ImportDatasetWidget.cpp:230
+#: src/frontend/examples/ExamplesWidget.cpp:57
 #: src/frontend/ui/datasources/importfilewidget.ui:785
 #: src/frontend/ui/dockwidgets/livedatadock.ui:187
 #, kde-format
@@ -12268,7 +12262,7 @@ msgid "All"
 msgstr "Alla"
 
 #: src/frontend/datasources/ImportDatasetWidget.cpp:168
-#: src/frontend/examples/ExamplesManager.cpp:175
+#: src/frontend/examples/ExamplesManager.cpp:192
 #: src/tools/ColorMapsManager.cpp:152
 #, kde-format
 msgid "File not found"
@@ -13322,14 +13316,14 @@ msgstr "Egen fråga"
 msgid "Manage connections"
 msgstr "Hantera anslutningar"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:244
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:192
 #, kde-format
 msgid ""
 "Couldn't find the database file '%1'. Please check the connection settings."
 msgstr ""
 "Kunde inte hitta databasfilen '%1'. Kontrollera anslutningsinställningarna."
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:265
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:213
 #, kde-format
 msgid ""
 "Failed to connect to the database '%1'. Please check the connection settings."
@@ -13337,118 +13331,27 @@ msgstr ""
 "Misslyckades ansluta till databasen '%1'. Kontrollera "
 "anslutningsinställningarna."
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:323
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:325
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:271
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:273
 #, kde-format
 msgid "Failed to execute the query for the preview"
 msgstr "Misslyckades utföra förfrågan för förhandsgranskning"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:399
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:347
 #, kde-format
 msgid "Refresh the data preview of the selected table"
 msgstr "Uppdatera den markerade tabellens dataförhandsgranskning"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:405
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:353
 #, kde-format
 msgid "Execute the query and preview its result"
 msgstr "Utför förfrågan och förhandsgranska dess resultat"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:526
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:528
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:474
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:476
 #, kde-format
 msgid "Failed to execute the query"
 msgstr "Misslyckades utföra förfrågan"
-
-#: src/frontend/datasources/JsonOptionsWidget.cpp:120
-#, kde-format
-msgid ""
-"For 'C Format', a period is used for the decimal point character and comma "
-"is used for the thousands group separator. Valid number representations are:"
-"<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></ul>When using 'System "
-"locale', the system settings will be used. E.g., for the German local the "
-"valid number representations are:<ul><li>1234,56</li><li>1.234,56</"
-"li><li>etc.</li></ul>"
-msgstr ""
-"För 'C-format', används en punkt som decimaltecken, och komma används för "
-"att åtskilja grupper av tusental. Giltiga sifferrepresentationer av är: "
-"<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></ul>När 'systemets "
-"landsinställningar' väljes, används systeminställningarna, t.ex. för svenska "
-"landsinställningar är giltiga sifferrepresentationer:<ul><li>1234,56</"
-"li><li>1.234,56</li><li>etc.</li></ul>"
-
-#: src/frontend/datasources/JsonOptionsWidget.cpp:144
-#, kde-format
-msgid ""
-"Expressions that may be used for the date part of format string:"
-"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
-"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
-"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
-"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
-"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
-"td><td>the month as number without a leading zero (1 to 12).</td></"
-"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
-"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
-"to 'Dec'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
-"'December'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
-"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
-"negative, a minus sign is prepended in addition.</td></tr></"
-"table><br><br>Expressions that may be used for the time part of the format "
-"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
-"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
-"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
-"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
-"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
-"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
-"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
-"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
-"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
-"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
-"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
-"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
-"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
-"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
-"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
-"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
-"Sunday</td></tr></table>"
-msgstr ""
-"Uttryck som kan användas för datumdelen av formatsträngen:<table><tr><td>d</"
-"td><td>dagen som ett tal utan inledande nolla (1 till 31).</td></"
-"tr><tr><td>dd</td><td>dagen som ett tal med inledande nolla (01 till 31).</"
-"td></tr><tr><td>ddd</td><td>det förkortande lokala namnet på dagen (t.ex. "
-"'mån' till 'sön'). Använder systemets landsinställningar för att skapa det "
-"lokala namnet.</td></tr><tr><td>dddd</td><td>det långa lokala namnet på "
-"dagen (t.ex. 'måndag' till 'söndag'). Använder systemets landsinställningar "
-"för att skapa det lokala namnet.</td></tr><tr><td>M</td><td>månaden som ett "
-"tal utan inledande nolla (1 till 12).</td></tr><tr><td>MM</td><td>månaden "
-"som ett tal med inledande nolla (01 till 12).</td></tr><tr><td>MMM</"
-"td><td>det förkortande lokala namnet på månaden (t.ex. 'jan' to 'dec'). "
-"Använder systemets landsinställningar för att skapa det lokala namnet.</td></"
-"tr><tr><td>MMMM</td><td>det långa lokala namnet på månaden (t.ex. 'januari' "
-"till 'december'). Använder systemets landsinställningar för att skapa det "
-"lokala namnet.</td></tr><tr><td>yy</td><td>året som ett tal med två siffror "
-"(00 till 99).</td></tr><tr><td>yyyy</td><td>året som et tal med fyra "
-"siffror. Om året är negativt, läggs ett minustecken till först vid addition."
-"</td></tr></table><br><br>Uttryck som kan användas för tidsdelen av "
-"formatsträngen:<table><tr><td>h</td><td>timman utan inledande nolla (0 till "
-"23 eller 1 till 12 för visning med FM/EM)</td></tr><tr><td>hh</td><td>timman "
-"med inledande nolla (00 till 23 eller 01 till 12 för visning med FM/EM)</"
-"td></tr><tr><td>H</td><td>timman utan inledande nolla (0 till 23, även för "
-"visning med FM/EM)</td></tr><tr><td>HH</td><td>timman med inledande nolla "
-"(00 till 23, även för visning med FM/EM)</td></tr><tr><td>m</td><td>minuten "
-"utan inledande nolla (0 till 59)</td></tr><tr><td>mm</td><td>minuten med "
-"inledande nolla (00 till 59)</td></tr><tr><td>s</td><td>sekunden utan "
-"inledande nolla (0 till 59)</td></tr><tr><td>ss</td><td>sekunden med "
-"inledande nolla (00 till 59)</td></tr><tr><td>z</td><td>millisekunder utan "
-"inledande nollor (0 till 999)</td></tr><tr><td>zzz</td><td>millisekunder med "
-"inledande nollor (000 till 999)</td></tr><tr><td>AP eller A</td><td>Tolka "
-"som en FM/EM-tid. AP måste antingen vara 'AM' eller 'PM'.</td></"
-"tr><tr><td>ap eller a</td><td>Tolka som en FM/EM-tim. ap måste antingen vara "
-"'am' eller 'pm'.</td></tr></table><br><br>Exempel:<table><tr><td>dd.MM.yyyy</"
-"td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</td><td>sön juli 20 69</"
-"td></tr><tr><td>'Dagen är' dddd</td><td>Dagen är söndag</td></tr></table>"
 
 #: src/frontend/datasources/MQTTConnectionManagerDialog.cpp:33
 #, kde-format
@@ -14609,6 +14512,14 @@ msgid ""
 "if three or more independent samples have the same mean</li><li><b>%6</b> - "
 "tests if three or more related/repeated measurements have the same mean</li>"
 msgstr ""
+"<ul><li><b>%1</b>: testar om ett samplingsmedelvärde skiljer sig signifikant "
+"från ett känt populationsmedelvärde</li><li><b>%2</b> - testar om två "
+"oberoende samplingar har samma medelvärde</li><li><b>%3</b> - testar om "
+"skillnaden i medelvärde mellan två relaterade samplingar är noll</li><li><b>"
+"%4</b> - testar om två oberoende samplingar med olika varians har samma "
+"medelvärde</li><li><b>%5</b> - testar om tre eller fler oberoende samplingar "
+"har samma medelvärde</li><li><b>%6</b> - testar om tre eller fler relaterade/"
+"upprepade mätningar har samma medelvärde</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:131
 #, kde-format
@@ -14623,6 +14534,15 @@ msgid ""
 "li><li><b>%7</b> - tests if observed data follows a specified theoretical "
 "distribution</li></ul>"
 msgstr ""
+"<li><b>%1</b>: testar skillnader i medianvärden mellan två oberoende "
+"grupper</li><li><b>%2</b> - testar om medianskillnaden mellan två relaterade "
+"samplingar är noll</li><li><b>%3</b> - testar skillnader i medianvärden "
+"mellan tre eller fler oberoende grupper</li><li><b>%4</b> - testar "
+"skillnader i medianvärden mellan tre eller fler relaterade/upprepade "
+"mätningar</li><li><b>%5</b> - testar skillnader i överlevnadsfördelningar "
+"mellan två eller fler grupper</li><li><b>%6</b> - testar om två kategoriska "
+"variabler är oberoende av varandra</li><li><b>%7</b> - testar om observerade "
+"data följer en specificerad teoretisk fördelning</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:312
 #, kde-format
@@ -15512,7 +15432,7 @@ msgctxt "@title:window"
 msgid "Example Projects"
 msgstr "Exempelprojekt"
 
-#: src/frontend/examples/ExamplesManager.cpp:176
+#: src/frontend/examples/ExamplesManager.cpp:193
 #, kde-format
 msgid ""
 "Couldn't open the examples collections file %1. Please check your "
@@ -17299,8 +17219,8 @@ msgstr "Inställningar   [Ändrade]"
 #. i18n: ectx: property (text), widget (QLabel, lMin)
 #. i18n: ectx: property (text), widget (QLabel, lMinDateTime)
 #: src/frontend/SettingsGeneralPage.cpp:26
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:54
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:241
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:53
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:238
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:317
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:405
 #, kde-format
@@ -17762,145 +17682,150 @@ msgstr ""
 "Tillhandahåll listan med par av värden och beteckningar som i följande "
 "exempel:"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:45
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:43
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:222
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:231
 #, kde-format
 msgid "Equal to"
 msgstr "Lika med"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:46
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:44
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:223
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:232
 #, kde-format
 msgid "Not Equal to"
 msgstr "Inte lika med"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:47
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:45
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:224
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:233
 #, kde-format
 msgid "Between (Incl. End Points)"
 msgstr "Mellan (inkludera slutpunkter)"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:48
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:46
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:225
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:234
 #, kde-format
 msgid "Between (Excl. End Points)"
 msgstr "Mellan (uteslut slutpunkter)"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:49
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:47
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:226
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:235
 #, kde-format
 msgid "Greater than"
 msgstr "Större än"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:50
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:48
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:227
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:236
 #, kde-format
 msgid "Greater than or Equal to"
 msgstr "Större än eller lika med"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:51
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:49
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:228
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:237
 #, kde-format
 msgid "Less than"
 msgstr "Mindre än"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:52
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:50
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:229
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:238
 #, kde-format
 msgid "Less than or Equal to"
 msgstr "Mindre än eller lika med"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:57
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:55
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:213
 #, kde-format
 msgid "Equal To"
 msgstr "Lika med"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:58
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:56
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:214
 #, kde-format
 msgid "Not Equal To"
 msgstr "Inte lika med"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:59
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:57
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:215
 #, kde-format
 msgid "Starts With"
 msgstr "Börjar med"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:60
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:58
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:216
 #, kde-format
 msgid "Ends With"
 msgstr "Slutar med"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:61
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:59
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:217
 #, kde-format
 msgid "Contains"
 msgstr "Innehåller"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:62
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:60
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:218
 #, kde-format
 msgid "Does Not Contain"
 msgstr "Innehåller inte"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:74
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:72
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:307
 #, kde-format
 msgid "&Mask"
 msgstr "&Maskera"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:75
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:73
 #, kde-format
 msgid "Mask values in the specified region"
 msgstr "Maskera värden i det angivna området"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:76
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:74
 #, kde-format
 msgctxt "@title:window"
 msgid "Mask Values"
 msgstr "Maskera värden"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:78
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:77
 #, kde-format
 msgid "&Drop"
 msgstr "&Utelämna"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:79
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:78
 #, kde-format
 msgid "Drop values in the specified region"
 msgstr "Utelämna värden i det angivna området"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:80
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:79
 #, kde-format
 msgctxt "@title:window"
 msgid "Drop Values"
 msgstr "Utelämna värden"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:946
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:953
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:1003
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:1009
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:80
+#, kde-format
+msgid "Delete entire rows in the spreadsheet if the condition is met."
+msgstr ""
+
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1031
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1038
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1088
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1094
 #, kde-format
 msgid "Invalid numeric value."
 msgstr "Ogiltigt numeriskt värde."
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:968
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1053
 #, kde-format
 msgid "%1: mask values"
 msgstr "%1: maskera värden"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:1024
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1109
 #, kde-format
 msgid "%1: drop values"
 msgstr "%1: utelämna värden"
@@ -17954,26 +17879,22 @@ msgid "Invalid start value"
 msgstr "Ogiltigt startvärde"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:257
-#, fuzzy, kde-format
-#| msgid "Invalid end value, must be bigger than the start value"
+#, kde-format
 msgid "Invalid end value, must be greater than the start value"
 msgstr "Ogiltigt slutvärde, det måste vara större än startvärdet"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:300
-#, fuzzy, kde-format
-#| msgid "The number of values to be generated must be bigger than one"
+#, kde-format
 msgid "The number of values to be generated must be greater than one"
 msgstr "Antal värden som ska genereras måste vara större än ett"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:317
-#, fuzzy, kde-format
-#| msgid "Invalid numeric increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid numeric increment value, must be greater than zero"
 msgstr "Ogiltigt numeriskt ökningsvärde, det måste vara större än noll"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:326
-#, fuzzy, kde-format
-#| msgid "Invalid Date&Time increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid Date&Time increment value, must be greater than zero"
 msgstr "Ogiltigt datum- och tidsökningsvärde, det måste vara större än noll"
 
@@ -20095,8 +20016,7 @@ msgstr "Bild:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/frontend/ui/datapickerimagewidget.ui:701
-#, fuzzy, kde-format
-#| msgid "Embedd"
+#, kde-format
 msgid "Embed"
 msgstr "Inbädda"
 
@@ -24579,7 +24499,7 @@ msgid "End Time:"
 msgstr "Sluttid:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:47
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:46
 #, kde-format
 msgid "Numeric Values"
 msgstr "Numeriska värden"
@@ -24587,17 +24507,17 @@ msgstr "Numeriska värden"
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #. i18n: ectx: property (text), widget (QLabel, lConditionText)
 #. i18n: ectx: property (text), widget (QLabel, lConditionDateTime)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:67
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:128
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:234
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:66
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:127
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:231
 #, kde-format
 msgid "Condition:"
 msgstr "Villkor:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMax)
 #. i18n: ectx: property (text), widget (QLabel, lMaxDateTime)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:81
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:227
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:80
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:224
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:334
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:398
 #, kde-format
@@ -24605,16 +24525,23 @@ msgid "max."
 msgstr "max."
 
 #. i18n: ectx: property (text), widget (QLabel, lText)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:144
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:142
 #, kde-format
 msgid "Text Values"
 msgstr "Textvärden"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:203
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:200
 #, kde-format
 msgid "DateTime Values"
 msgstr "Datum- och tidvärden"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chbDeleteRows)
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:274
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgid "Delete Rows"
+msgstr "Ta bort"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:97
@@ -26017,6 +25944,96 @@ msgstr "convert-processen misslyckades, slutkod ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Kan inte öppna fil:"
+
+#~ msgid ""
+#~ "For 'C Format', a period is used for the decimal point character and "
+#~ "comma is used for the thousands group separator. Valid number "
+#~ "representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
+#~ "ul>When using 'System locale', the system settings will be used. E.g., "
+#~ "for the German local the valid number representations are:"
+#~ "<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
+#~ msgstr ""
+#~ "För 'C-format', används en punkt som decimaltecken, och komma används för "
+#~ "att åtskilja grupper av tusental. Giltiga sifferrepresentationer av är: "
+#~ "<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></ul>När 'systemets "
+#~ "landsinställningar' väljes, används systeminställningarna, t.ex. för "
+#~ "svenska landsinställningar är giltiga sifferrepresentationer:"
+#~ "<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
+
+#~ msgid ""
+#~ "Expressions that may be used for the date part of format string:"
+#~ "<table><tr><td>d</td><td>the day as number without a leading zero (1 to "
+#~ "31).</td></tr><tr><td>dd</td><td>the day as number with a leading zero "
+#~ "(01 to 31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day "
+#~ "name (e.g. 'Mon' to 'Sun'). Uses the system locale to localize the name.</"
+#~ "td></tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' "
+#~ "to 'Sunday'). Uses the system locale to localize the name.</td></"
+#~ "tr><tr><td>M</td><td>the month as number without a leading zero (1 to 12)."
+#~ "</td></tr><tr><td>MM</td><td>the month as number with a leading zero (01 "
+#~ "to 12).</td></tr><tr><td>MMM</td><td>the abbreviated localized month name "
+#~ "(e.g. 'Jan' to 'Dec'). Uses the system locale to localize the name.</td></"
+#~ "tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
+#~ "'December'). Uses the system locale to localize the name.</td></"
+#~ "tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
+#~ "tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
+#~ "negative, a minus sign is prepended in addition.</td></tr></"
+#~ "table><br><br>Expressions that may be used for the time part of the "
+#~ "format string:<table><tr><td>h</td><td>the hour without a leading zero (0 "
+#~ "to 23 or 1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour "
+#~ "with a leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></"
+#~ "tr><tr><td>H</td><td>the hour without a leading zero (0 to 23, even with "
+#~ "AM/PM display)</td></tr><tr><td>HH</td><td>the hour with a leading zero "
+#~ "(00 to 23, even with AM/PM display)</td></tr><tr><td>m</td><td>the minute "
+#~ "without a leading zero (0 to 59)</td></tr><tr><td>mm</td><td>the minute "
+#~ "with a leading zero (00 to 59)</td></tr><tr><td>s</td><td>the second "
+#~ "without a leading zero (0 to 59)</td></tr><tr><td>ss</td><td>the second "
+#~ "with a leading zero (00 to 59)</td></tr><tr><td>z</td><td>the "
+#~ "milliseconds without leading zeroes (0 to 999)</td></tr><tr><td>zzz</"
+#~ "td><td>the milliseconds with leading zeroes (000 to 999)</td></"
+#~ "tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be either "
+#~ "'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
+#~ "time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples "
+#~ "are:<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd "
+#~ "MMMM d yy</td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</"
+#~ "td><td>The day is Sunday</td></tr></table>"
+#~ msgstr ""
+#~ "Uttryck som kan användas för datumdelen av formatsträngen:"
+#~ "<table><tr><td>d</td><td>dagen som ett tal utan inledande nolla (1 till "
+#~ "31).</td></tr><tr><td>dd</td><td>dagen som ett tal med inledande nolla "
+#~ "(01 till 31).</td></tr><tr><td>ddd</td><td>det förkortande lokala namnet "
+#~ "på dagen (t.ex. 'mån' till 'sön'). Använder systemets landsinställningar "
+#~ "för att skapa det lokala namnet.</td></tr><tr><td>dddd</td><td>det långa "
+#~ "lokala namnet på dagen (t.ex. 'måndag' till 'söndag'). Använder systemets "
+#~ "landsinställningar för att skapa det lokala namnet.</td></tr><tr><td>M</"
+#~ "td><td>månaden som ett tal utan inledande nolla (1 till 12).</td></"
+#~ "tr><tr><td>MM</td><td>månaden som ett tal med inledande nolla (01 till "
+#~ "12).</td></tr><tr><td>MMM</td><td>det förkortande lokala namnet på "
+#~ "månaden (t.ex. 'jan' to 'dec'). Använder systemets landsinställningar för "
+#~ "att skapa det lokala namnet.</td></tr><tr><td>MMMM</td><td>det långa "
+#~ "lokala namnet på månaden (t.ex. 'januari' till 'december'). Använder "
+#~ "systemets landsinställningar för att skapa det lokala namnet.</td></"
+#~ "tr><tr><td>yy</td><td>året som ett tal med två siffror (00 till 99).</"
+#~ "td></tr><tr><td>yyyy</td><td>året som et tal med fyra siffror. Om året är "
+#~ "negativt, läggs ett minustecken till först vid addition.</td></tr></"
+#~ "table><br><br>Uttryck som kan användas för tidsdelen av formatsträngen:"
+#~ "<table><tr><td>h</td><td>timman utan inledande nolla (0 till 23 eller 1 "
+#~ "till 12 för visning med FM/EM)</td></tr><tr><td>hh</td><td>timman med "
+#~ "inledande nolla (00 till 23 eller 01 till 12 för visning med FM/EM)</td></"
+#~ "tr><tr><td>H</td><td>timman utan inledande nolla (0 till 23, även för "
+#~ "visning med FM/EM)</td></tr><tr><td>HH</td><td>timman med inledande nolla "
+#~ "(00 till 23, även för visning med FM/EM)</td></tr><tr><td>m</"
+#~ "td><td>minuten utan inledande nolla (0 till 59)</td></tr><tr><td>mm</"
+#~ "td><td>minuten med inledande nolla (00 till 59)</td></tr><tr><td>s</"
+#~ "td><td>sekunden utan inledande nolla (0 till 59)</td></tr><tr><td>ss</"
+#~ "td><td>sekunden med inledande nolla (00 till 59)</td></tr><tr><td>z</"
+#~ "td><td>millisekunder utan inledande nollor (0 till 999)</td></"
+#~ "tr><tr><td>zzz</td><td>millisekunder med inledande nollor (000 till 999)</"
+#~ "td></tr><tr><td>AP eller A</td><td>Tolka som en FM/EM-tid. AP måste "
+#~ "antingen vara 'AM' eller 'PM'.</td></tr><tr><td>ap eller a</td><td>Tolka "
+#~ "som en FM/EM-tim. ap måste antingen vara 'am' eller 'pm'.</td></tr></"
+#~ "table><br><br>Exempel:<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></"
+#~ "tr><tr><td>ddd MMMM d yy</td><td>sön juli 20 69</td></tr><tr><td>'Dagen "
+#~ "är' dddd</td><td>Dagen är söndag</td></tr></table>"
 
 #~ msgid "One-Way ANOVA Test Statistics"
 #~ msgstr "Envägs ANOVA-teststatistik"

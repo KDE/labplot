@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-23 00:38+0000\n"
-"PO-Revision-Date: 2025-08-03 17:23+0200\n"
+"POT-Creation-Date: 2025-09-29 00:39+0000\n"
+"PO-Revision-Date: 2025-09-23 18:50+0200\n"
 "Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #: src/backend/core/AbstractAspect.cpp:233
 #, kde-format
@@ -1066,6 +1066,120 @@ msgstr ""
 "Impossibile aprire il file %1 in scrittura.\n"
 "%2"
 
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:123
+#, kde-format
+msgid ""
+"This option determines how the imported strings have to be converted to "
+"numbers."
+msgstr ""
+"Questa opzione determina come le stringhe importate debbano essere "
+"convertite in numeri."
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:128
+#, kde-format
+msgid ""
+"When point character is used for the decimal separator, the valid number "
+"representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
+"ul>For comma as the decimal separator, the valid number representations are:"
+"<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
+msgstr ""
+"Quando il carattere punto viene usato come separatore dei decimali, le "
+"rappresentazioni dei numeri valide sono:<ul><li>1234.56</li><li>1,234.56</"
+"li><li>ecc.</li></ul>Quando si usa la virgola come separatore dei decimali, "
+"le rappresentazioni valide di numeri sono: <ul><li>1234,56</li><li>1.234,56</"
+"li><li>ecc.</li></ul>"
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:144
+#, kde-format
+msgid ""
+"This option determines how the imported strings have to be converted to "
+"calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
+"and to time."
+msgstr ""
+"Questa opzione determina come le stringhe importate debbano essere "
+"convertite in date, ad esempio anni, mesi e giorni nel calendario gregoriano "
+"e in ore."
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:150
+#, kde-format
+msgid ""
+"Expressions that may be used for the date part of format string:"
+"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
+"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
+"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
+"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
+"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
+"td><td>the month as number without a leading zero (1 to 12).</td></"
+"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
+"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
+"to 'Dec'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
+"'December'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
+"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
+"negative, a minus sign is prepended in addition.</td></tr></"
+"table><br><br>Expressions that may be used for the time part of the format "
+"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
+"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
+"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
+"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
+"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
+"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
+"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
+"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
+"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
+"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
+"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
+"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
+"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
+"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
+"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
+"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
+"Sunday</td></tr></table><br><br>In case the provided expression is empty, "
+"the format will be auto-detected."
+msgstr ""
+"Espressioni che possono essere usate per la parte data della stringa di "
+"formato:<table><tr><td>d</td><td>il giorno come numero senza lo zero "
+"iniziale (da 1 a 31).</td></tr><tr><td>dd</td><td>il giorno come numero con "
+"lo zero iniziale (da 01 a 31).</td></tr><tr><td>ddd</td><td>il nome "
+"abbreviato del giorno secondo le impostazioni localizzate (ad esempio da "
+"«lun» a «dom»). Usa le impostazioni localizzate del sistema per localizzare "
+"il nome.</td></tr><tr><td>dddd</td><td>il nome lungo localizzato del nome "
+"del giorno (ad esempio da «lunedì» a «domenica»). Usa le impostazioni "
+"localizzate del sistema per localizzare il nome.</td></tr><tr><td>M</"
+"td><td>il mese come numero senza lo zero iniziale (da 1 a 12).</td></"
+"tr><tr><td>MM</td><td>il mese come numero con lo zero iniziale (da 1 a 12).</"
+"td></tr><tr><td>MMM</td><td>il nome abbreviato del mese secondo le "
+"impostazioni localizzate (ad esempio da «gen» a «dic»). Usa le impostazioni "
+"localizzate del sistema per localizzare il nome.</td></tr><tr><td>MMMM</"
+"td><td>il nome lungo localizzato del nome del mese (ad esempio da «gennaio» "
+"a «dicembre»). Usa le impostazioni localizzate del sistema per localizzare "
+"il nome.</td></tr><tr><td>yy</td><td>l'anno come numero a due cifre (da 00 a "
+"99).</td></tr><tr><td>yyyy</td><td>l'anno come numero a quattro cifre. Se "
+"l'anno è negativo viene anteposto un segno meno nell'addizione.</td></tr></"
+"table><br><br>Espressioni che possono essere usate per la parte ora della "
+"stringa di formato:<table><tr><td>h</td><td>l'ora senza lo zero iniziale (da "
+"0 a 23, o da 1 a 12 se viene visualizzato anche AM/PM)</td></tr><tr><td>hh</"
+"td><td>l'ora con lo zero iniziale (da 00 a 23, o da 01 a 12 se viene "
+"visualizzato anche AM/PM)</td></tr><tr><td>H</td><td>l'ora senza lo zero "
+"iniziale (da 0 a 23, anche se viene visualizzato AM/PM)</td></tr><tr><td>HH</"
+"td><td>l'ora con lo zero iniziale (da 00 a 23, anche se viene visualizzato "
+"AM/PM)</td></tr><tr><td>m</td><td>il minuto senza lo zero iniziale (da 0 a "
+"59)</td></tr><tr><td>mm</td><td>il minuto con lo zero iniziale (da 0 a 59)</"
+"td></tr><tr><td>s</td><td>il secondo senza lo zero iniziale (da 0 a 59)</"
+"td></tr><tr><td>ss</td><td>il secondo con lo zero iniziale (da 0 a 59)</td></"
+"tr><tr><td>z</td><td>il millisecondo senza gli zeri iniziali (da 0 a 999)</"
+"td></tr><tr><td>zzz</td><td>il millisecondo con gli zeri iniziali (da 0 a "
+"999)</td></tr><tr><td>AP oppure A</td><td>interpretato come orario AM/PM. AP "
+"deve essere sia «AM» che «PM».</td></tr><tr><td>ap oppure a</"
+"td><td>interpretato come orario AM/PM. AP deve essere sia «am» che «pm».</"
+"td></tr></table><br><br>Sono esempi:<table><tr><td>dd.MM.yyyy</"
+"td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</td><td>dom 20 lug 69</td></"
+"tr><tr><td>«Questo giorno è» dddd</td><td>Questo giorno è domenica</td></"
+"tr></table><br><br>Nel caso in cui l'espressione fornita sia vuota, il "
+"formato verrà rilevato automaticamente."
+
 #: src/backend/datasources/filters/AsciiFilter.cpp:223
 #, kde-format
 msgid "Number of columns: %1"
@@ -1078,7 +1192,7 @@ msgstr "Numero di righe: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:467
 #: src/backend/datasources/filters/AsciiFilter.cpp:1252
-#: src/backend/datasources/filters/JsonFilter.cpp:284
+#: src/backend/datasources/filters/JsonFilter.cpp:246
 #, kde-format
 msgid "Column %1"
 msgstr "Colonna %1"
@@ -1116,7 +1230,7 @@ msgid "Int64"
 msgstr "Int64"
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:273
-#: src/backend/datasources/filters/JsonFilter.cpp:386
+#: src/backend/datasources/filters/JsonFilter.cpp:343
 #: src/backend/datasources/filters/SpiceFilter.cpp:127
 #: src/backend/datasources/filters/SpiceFilter.cpp:183
 #, kde-format
@@ -1144,7 +1258,7 @@ msgstr "Impossibile aprire il dispositivo o il file, oppure è vuoto."
 #: src/backend/datasources/filters/HDF5Filter.cpp:1809
 #: src/backend/datasources/filters/HDF5Filter.cpp:1965
 #: src/backend/datasources/filters/ImageFilter.cpp:165
-#: src/backend/datasources/filters/JsonFilter.cpp:540
+#: src/backend/datasources/filters/JsonFilter.cpp:516
 #: src/backend/datasources/filters/MatioFilter.cpp:890
 #: src/backend/datasources/filters/NetCDFFilter.cpp:758
 #: src/backend/datasources/filters/NetCDFFilter.cpp:869
@@ -1593,64 +1707,64 @@ msgid_plural "numerical data, %1 elements"
 msgstr[0] "dato numerico, %1 elemento"
 msgstr[1] "dato numerico, %1 elementi"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:189
+#: src/backend/datasources/filters/JsonFilter.cpp:181
 #, kde-format
 msgid "Open device failed"
 msgstr "Apertura del dispositivo non riuscita"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:192
+#: src/backend/datasources/filters/JsonFilter.cpp:184
 #, kde-format
 msgid "Empty file"
 msgstr "File vuoto"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:198
+#: src/backend/datasources/filters/JsonFilter.cpp:190
 #, kde-format
 msgid "Parse error: %1 at offset %2"
 msgstr "Errore di elaborazione: %1 allo scostamento %2"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:201
+#: src/backend/datasources/filters/JsonFilter.cpp:193
 #, kde-format
 msgid "Valid JSON document"
 msgstr "Documento JSON valido"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:261
+#: src/backend/datasources/filters/JsonFilter.cpp:224
 #: src/backend/datasources/filters/McapFilter.cpp:287
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:305
 #, kde-format
 msgid "index"
 msgstr "indice"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:269
+#: src/backend/datasources/filters/JsonFilter.cpp:232
 #, kde-format
 msgid "timestamp"
 msgstr "data e ora"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:271
+#: src/backend/datasources/filters/JsonFilter.cpp:234
 #, kde-format
 msgid "month"
 msgstr "mese"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:273
+#: src/backend/datasources/filters/JsonFilter.cpp:236
 #, kde-format
 msgid "day"
 msgstr "giorno"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:275
+#: src/backend/datasources/filters/JsonFilter.cpp:238
 #, kde-format
 msgid "name"
 msgstr "nome"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:391
+#: src/backend/datasources/filters/JsonFilter.cpp:348
 #, kde-format
 msgid "Device/file is empty."
 msgstr "Il dispositivo o il file è vuoto."
 
-#: src/backend/datasources/filters/JsonFilter.cpp:399
+#: src/backend/datasources/filters/JsonFilter.cpp:356
 #, kde-format
 msgid "JSON format error or document empty."
 msgstr "Errore nel formato JSON, oppure documento vuoto."
 
-#: src/backend/datasources/filters/JsonFilter.cpp:522
+#: src/backend/datasources/filters/JsonFilter.cpp:499
 #, kde-format
 msgid "Empty file or invalid JSON document."
 msgstr "File vuoto o documento JSON non valido."
@@ -2139,10 +2253,9 @@ msgid "Compression: %1"
 msgstr "Compressione: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, fuzzy, kde-format
-#| msgid "Endianess: %1"
+#, kde-format
 msgid "Endianness: %1"
-msgstr "Endianità: %1"
+msgstr "Ordine dei byte: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
 #, kde-format
@@ -2365,10 +2478,9 @@ msgid "Device not available."
 msgstr "Il dispositivo non disponibile."
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, fuzzy, kde-format
-#| msgid "Timeout occured."
+#, kde-format
 msgid "Timeout occurred."
-msgstr "Si è verificato un timeout."
+msgstr "Tempo scaduto."
 
 #: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format
@@ -3966,8 +4078,8 @@ msgstr "if(condition; ifTrue; ifFalse)"
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
 #: src/backend/gsl/functions.cpp:337 src/backend/lib/XmlStreamReader.cpp:58
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:74
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:220
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:73
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:217
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:354
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:412
 #, kde-format
@@ -7473,18 +7585,18 @@ msgstr "Colonna"
 #, kde-format
 msgid "One column is required."
 msgid_plural "%1 columns are required."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "È richiesta una colonna."
+msgstr[1] "Sono richieste %1 colonne."
 
 #: src/backend/statistics/HypothesisTest.cpp:56
 #, kde-format
 msgid "At least %1 and at most %2 columns are required."
-msgstr ""
+msgstr "Sono richieste almeno %1 e al più %2 colonne."
 
 #: src/backend/statistics/HypothesisTest.cpp:64
 #, kde-format
 msgid "Column '%1' must be of numeric type."
-msgstr ""
+msgstr "La colonna %1 deve essere di tipo numerico."
 
 #: src/backend/statistics/HypothesisTest.cpp:143
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:232
@@ -7517,17 +7629,17 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:315
 #, kde-format
 msgid "Mann-Whitney U Test"
-msgstr ""
+msgstr "Test U di Mann-Whitney"
 
 #: src/backend/statistics/HypothesisTest.cpp:317
 #, kde-format
 msgid "Welch t-Test"
-msgstr ""
+msgstr "Test T di Welch"
 
 #: src/backend/statistics/HypothesisTest.cpp:319
 #, kde-format
 msgid "Wilcoxon Signed Rank Test"
-msgstr ""
+msgstr "Test dei ranghi con segno di Wilcoxon"
 
 #: src/backend/statistics/HypothesisTest.cpp:321
 #, kde-format
@@ -7537,17 +7649,17 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:323
 #, kde-format
 msgid "Kruskal-Wallis Test"
-msgstr ""
+msgstr "Test di Kruskal-Wallis"
 
 #: src/backend/statistics/HypothesisTest.cpp:325
 #, kde-format
 msgid "Log-Rank Test"
-msgstr ""
+msgstr "Test dei ranghi logaritmici"
 
 #: src/backend/statistics/HypothesisTest.cpp:327
 #, kde-format
 msgid "Friedman Test"
-msgstr ""
+msgstr "Test di Friedman"
 
 #: src/backend/statistics/HypothesisTest.cpp:329
 #, kde-format
@@ -7568,33 +7680,32 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:505
 #, kde-format
 msgid "N/A"
-msgstr ""
+msgstr "N/D"
 
 #: src/backend/statistics/HypothesisTest.cpp:509
-#, fuzzy, kde-format
-#| msgid "Device not available."
+#, kde-format
 msgid "Test result is not available."
-msgstr "Il dispositivo non disponibile."
+msgstr "I risultati del test non sono disponibili."
 
 #: src/backend/statistics/HypothesisTest.cpp:513
 #, kde-format
 msgid "Two columns are required for this test."
-msgstr ""
+msgstr "Sono richieste due colonne per questo test."
 
 #: src/backend/statistics/HypothesisTest.cpp:517
 #, kde-format
 msgid "At least two columns are required."
-msgstr ""
+msgstr "Sono richieste almeno due colonne."
 
 #: src/backend/statistics/HypothesisTest.cpp:521
 #, kde-format
 msgid "Column '%1' requires at least %2 samples."
-msgstr ""
+msgstr "La colonna «%1» richiede almeno %2 campioni."
 
 #: src/backend/statistics/HypothesisTest.cpp:525
 #, kde-format
 msgid "The size of each sample must be equal."
-msgstr ""
+msgstr "La dimensione di ciascun campione deve essere uguale."
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
 #: src/backend/statistics/HypothesisTest.cpp:529
@@ -7607,18 +7718,17 @@ msgstr "Media"
 #: src/backend/statistics/HypothesisTest.cpp:544
 #, kde-format
 msgid "Null Hypothesis"
-msgstr ""
+msgstr "Ipotesi nulla"
 
 #: src/backend/statistics/HypothesisTest.cpp:545
 #, kde-format
 msgid "Alternate Hypothesis"
-msgstr ""
+msgstr "Ipotesi alternativa"
 
 #: src/backend/statistics/HypothesisTest.cpp:547
-#, fuzzy, kde-format
-#| msgid "t Statistic"
+#, kde-format
 msgid "Descriptive Statistics"
-msgstr "Statistiche t"
+msgstr "Statistica descrittiva"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
 #, fuzzy, kde-format
@@ -7629,31 +7739,27 @@ msgstr "Statistiche t"
 #: src/backend/statistics/HypothesisTest.cpp:548
 #, kde-format
 msgid "Significance Level"
-msgstr ""
+msgstr "Livello di significatività"
 
 #: src/backend/statistics/HypothesisTest.cpp:549
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "p-Value"
-msgstr "Valore"
+msgstr "P(valore)"
 
 #: src/backend/statistics/HypothesisTest.cpp:552
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees of Freedom Between Groups"
-msgstr "Gradi di libertà"
+msgstr "Gradi di libertà tra i gruppi"
 
 #: src/backend/statistics/HypothesisTest.cpp:553
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees of Freedom Within Groups"
-msgstr "Gradi di libertà"
+msgstr "Gradi di libertà all'interno dei gruppi"
 
 #: src/backend/statistics/HypothesisTest.cpp:555
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees of Freedom Treatment"
-msgstr "Gradi di libertà"
+msgstr "Trattamento dei gradi di libertà"
 
 #: src/backend/statistics/HypothesisTest.cpp:556
 #, fuzzy, kde-format
@@ -7672,10 +7778,9 @@ msgstr "Gradi di libertà"
 #: src/backend/statistics/HypothesisTest.cpp:567
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/backend/statistics/HypothesisTest.cpp:572
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "t-Value"
-msgstr "Valore"
+msgstr "T(valore)"
 
 #: src/backend/statistics/HypothesisTest.cpp:563
 #, fuzzy, kde-format
@@ -7687,16 +7792,14 @@ msgstr "Prova"
 #: src/backend/statistics/HypothesisTest.cpp:568
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/backend/statistics/HypothesisTest.cpp:572
-#, fuzzy, kde-format
-#| msgid "Difference"
+#, kde-format
 msgid "Mean Difference"
-msgstr "Differenza"
+msgstr "Differenza media"
 
 #: src/backend/statistics/HypothesisTest.cpp:567
-#, fuzzy, kde-format
-#| msgid "Variance"
+#, kde-format
 msgid "Pooled Variance"
-msgstr "Varianza"
+msgstr "Varianza aggregata"
 
 #: src/backend/statistics/HypothesisTest.cpp:568
 #: src/backend/statistics/HypothesisTest.cpp:573
@@ -7706,22 +7809,19 @@ msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:575
 #: src/backend/statistics/HypothesisTest.cpp:581
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "F-Statistic"
-msgstr "Statistiche"
+msgstr "Statistiche F"
 
 #: src/backend/statistics/HypothesisTest.cpp:575
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Between Groups"
-msgstr "Somma dei quadrati residui"
+msgstr "Somma dei quadrati tra i gruppi"
 
 #: src/backend/statistics/HypothesisTest.cpp:576
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Within Groups"
-msgstr "Somma dei quadrati residui"
+msgstr "Somma dei quadrati all'interno dei gruppi"
 
 #: src/backend/statistics/HypothesisTest.cpp:577
 #, fuzzy, kde-format
@@ -7765,17 +7865,15 @@ msgid "Mean Squares Residuals"
 msgstr "Somma dei quadrati residui"
 
 #: src/backend/statistics/HypothesisTest.cpp:586
-#, fuzzy, kde-format
-#| msgid "Up"
+#, kde-format
 msgid "U"
-msgstr "Su"
+msgstr "U"
 
 #: src/backend/statistics/HypothesisTest.cpp:586
 #: src/backend/statistics/HypothesisTest.cpp:590
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "z-Value"
-msgstr "Valore"
+msgstr "Valore z"
 
 #: src/backend/statistics/HypothesisTest.cpp:587
 #, kde-format
@@ -7802,7 +7900,7 @@ msgstr "Media = 0"
 #: src/backend/statistics/HypothesisTest.cpp:590
 #, kde-format
 msgid "W"
-msgstr ""
+msgstr "W"
 
 #: src/backend/statistics/HypothesisTest.cpp:591
 #, kde-format
@@ -7848,19 +7946,18 @@ msgstr "Conteggio del contenitore:"
 #: src/backend/statistics/HypothesisTest.cpp:604
 #, kde-format
 msgid "H"
-msgstr ""
+msgstr "H"
 
 #: src/backend/statistics/HypothesisTest.cpp:598
-#, fuzzy, kde-format
-#| msgid "Qt"
+#, kde-format
 msgid "Q"
-msgstr "Qt"
+msgstr "Q"
 
 #: src/backend/statistics/HypothesisTest.cpp:600
 #: src/backend/statistics/HypothesisTest.cpp:602
 #, kde-format
 msgid "Chi2"
-msgstr ""
+msgstr "Chi2"
 
 #: src/backend/statistics/HypothesisTest.cpp:604
 #, fuzzy, kde-format
@@ -7876,7 +7973,7 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:605
 #, kde-format
 msgid "Total Count 1"
-msgstr ""
+msgstr "Conteggio totale 1"
 
 #: src/backend/statistics/HypothesisTest.cpp:606
 #, fuzzy, kde-format
@@ -7892,19 +7989,17 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:607
 #, kde-format
 msgid "Total Count 2"
-msgstr ""
+msgstr "Conteggio totale 2"
 
 #: src/backend/statistics/HypothesisTest.cpp:610
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Conclusion"
-msgstr "Grafici statistici"
+msgstr "Conclusione statistica"
 
 #: src/backend/statistics/HypothesisTest.cpp:622
-#, fuzzy, kde-format
-#| msgid "No variable selected."
+#, kde-format
 msgid "No variable columns provided."
-msgstr "Nessuna variabile selezionata."
+msgstr "Non è stata fornita nessuna colonna di variabili."
 
 #: src/backend/statistics/HypothesisTest.cpp:867
 #, kde-format
@@ -7988,7 +8083,7 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:1476
 #, kde-format
 msgid "Column '%1' must be of integer type."
-msgstr ""
+msgstr "La colonna «%1» deve essere di tipo intero."
 
 #: src/backend/statistics/HypothesisTest.cpp:1448
 #, kde-format
@@ -8008,6 +8103,8 @@ msgstr ""
 #, kde-format
 msgid "The size of each column in the contingency table must be equal."
 msgstr ""
+"Le dimensioni di ciascuna colonna nella tabella di contingenza devono essere "
+"uguali."
 
 #: src/backend/statistics/HypothesisTest.cpp:1512
 #, kde-format
@@ -8026,47 +8123,48 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:1533
 #, kde-format
 msgid "Three columns are required."
-msgstr ""
+msgstr "Sono richieste tre colonne."
 
 #: src/backend/statistics/HypothesisTest.cpp:1542
 #, kde-format
 msgid "Status column should be of integer type."
-msgstr ""
+msgstr "La colonna Stato deve essere di tipo intero."
 
 #: src/backend/statistics/HypothesisTest.cpp:1547
 #, kde-format
 msgid "Group column should be of integer type."
-msgstr ""
+msgstr "La colonna Gruppo deve essere di tipo intero."
 
 #: src/backend/statistics/HypothesisTest.cpp:1552
 #, kde-format
 msgid "Time, Status and Group columns should have equal size."
-msgstr ""
+msgstr "Le colonne Tempo, Stato e Gruppo devono avere dimensione uguale."
 
 #: src/backend/statistics/HypothesisTest.cpp:1571
 #, kde-format
 msgid "Status column values must be either 0 or 1."
-msgstr ""
+msgstr "I valori della colonna Stato devono essere 0 o 1."
 
 #: src/backend/statistics/HypothesisTest.cpp:1576
 #, kde-format
 msgid "Group column values must be either 0 or 1."
-msgstr ""
+msgstr "I valori della colonna Gruppo devono essere 0 o 1."
 
 #: src/backend/statistics/HypothesisTest.cpp:1592
 #, kde-format
 msgid "Time, Status and Group columns should have equal number of values."
 msgstr ""
+"Le colonne Tempo, Stato e Gruppo devono avere un numero di valori uguale."
 
 #: src/backend/statistics/HypothesisTest.cpp:1600
 #, kde-format
 msgid "Group 1 requires at least %1 samples."
-msgstr ""
+msgstr "Il gruppo 1 richiede almeno %1 campioni."
 
 #: src/backend/statistics/HypothesisTest.cpp:1605
 #, kde-format
 msgid "Group 2 requires at least %1 samples."
-msgstr ""
+msgstr "Il gruppo 2 richiede almeno %1 campioni."
 
 #: src/backend/statistics/HypothesisTest.cpp:1617
 #, kde-format
@@ -10455,7 +10553,7 @@ msgstr "Regola il coefficiente di determinazione"
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:208
 #, kde-format
 msgid "Test"
-msgstr "Prova"
+msgstr "Test"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1960
 #, kde-format
@@ -11153,15 +11251,14 @@ msgid "Import data from a regular file"
 msgstr "Importa dati da un file"
 
 #: src/frontend/ActionsManager.cpp:269
-#, fuzzy, kde-format
-#| msgid "From File..."
+#, kde-format
 msgid "From Directory..."
-msgstr "Da file..."
+msgstr "Dalla cartella..."
 
 #: src/frontend/ActionsManager.cpp:271
 #, kde-format
 msgid "Import multiple files from a directory"
-msgstr ""
+msgstr "Importa più file da una cartella"
 
 #: src/frontend/ActionsManager.cpp:276
 #, kde-format
@@ -11702,7 +11799,7 @@ msgid "Color Maps Browser"
 msgstr "Browser di mappe di colori"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:39
-#: src/frontend/examples/ExamplesWidget.cpp:34
+#: src/frontend/examples/ExamplesWidget.cpp:31
 #, kde-format
 msgid "Switch between icon and list views"
 msgstr "Passa da visualizzazione a icone a quella a elenco"
@@ -11710,7 +11807,7 @@ msgstr "Passa da visualizzazione a icone a quella a elenco"
 #: src/frontend/colormaps/ColorMapsWidget.cpp:53
 #: src/frontend/datasources/ImportDatasetWidget.cpp:51
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:125
-#: src/frontend/examples/ExamplesWidget.cpp:51
+#: src/frontend/examples/ExamplesWidget.cpp:48
 #, kde-format
 msgid "Enter the keyword you want to search for"
 msgstr "Inserisci la parola chiave da cercare"
@@ -11718,7 +11815,7 @@ msgstr "Inserisci la parola chiave da cercare"
 #: src/frontend/colormaps/ColorMapsWidget.cpp:56
 #: src/frontend/datasources/ImportDatasetWidget.cpp:54
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:128
-#: src/frontend/examples/ExamplesWidget.cpp:54
+#: src/frontend/examples/ExamplesWidget.cpp:51
 #, kde-format
 msgid "Search..."
 msgstr "Cerca..."
@@ -11919,127 +12016,7 @@ msgstr "Punto «.»"
 msgid "Comma ','"
 msgstr "Virgola «,»"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:36
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:46
-#: src/frontend/datasources/JsonOptionsWidget.cpp:118
-#, kde-format
-msgid ""
-"This option determines how the imported strings have to be converted to "
-"numbers."
-msgstr ""
-"Questa opzione determina come le stringhe importate debbano essere "
-"convertite in numeri."
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:38
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:48
-#, kde-format
-msgid ""
-"When point character is used for the decimal separator, the valid number "
-"representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
-"ul>For comma as the decimal separator, the valid number representations are:"
-"<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
-msgstr ""
-"Quando il carattere punto viene usato come separatore dei decimali, le "
-"rappresentazioni dei numeri valide sono:<ul><li>1234.56</li><li>1,234.56</"
-"li><li>ecc.</li></ul>Quando si usa la virgola come separatore dei decimali, "
-"le rappresentazioni valide di numeri sono: <ul><li>1234,56</li><li>1.234,56</"
-"li><li>ecc.</li></ul>"
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:60
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:67
-#: src/frontend/datasources/JsonOptionsWidget.cpp:141
-#, kde-format
-msgid ""
-"This option determines how the imported strings have to be converted to "
-"calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
-"and to time."
-msgstr ""
-"Questa opzione determina come le stringhe importate debbano essere "
-"convertite in date, ad esempio anni, mesi e giorni nel calendario gregoriano "
-"e in ore."
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:63
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:70
-#, kde-format
-msgid ""
-"Expressions that may be used for the date part of format string:"
-"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
-"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
-"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
-"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
-"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
-"td><td>the month as number without a leading zero (1 to 12).</td></"
-"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
-"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
-"to 'Dec'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
-"'December'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
-"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
-"negative, a minus sign is prepended in addition.</td></tr></"
-"table><br><br>Expressions that may be used for the time part of the format "
-"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
-"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
-"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
-"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
-"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
-"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
-"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
-"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
-"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
-"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
-"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
-"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
-"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
-"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
-"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
-"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
-"Sunday</td></tr></table><br><br>In case the provided expression is empty, "
-"the format will be auto-detected."
-msgstr ""
-"Espressioni che possono essere usate per la parte data della stringa di "
-"formato:<table><tr><td>d</td><td>il giorno come numero senza lo zero "
-"iniziale (da 1 a 31).</td></tr><tr><td>dd</td><td>il giorno come numero con "
-"lo zero iniziale (da 01 a 31).</td></tr><tr><td>ddd</td><td>il nome "
-"abbreviato del giorno secondo le impostazioni localizzate (ad esempio da "
-"«lun» a «dom»). Usa le impostazioni localizzate del sistema per localizzare "
-"il nome.</td></tr><tr><td>dddd</td><td>il nome lungo localizzato del nome "
-"del giorno (ad esempio da «lunedì» a «domenica»). Usa le impostazioni "
-"localizzate del sistema per localizzare il nome.</td></tr><tr><td>M</"
-"td><td>il mese come numero senza lo zero iniziale (da 1 a 12).</td></"
-"tr><tr><td>MM</td><td>il mese come numero con lo zero iniziale (da 1 a 12).</"
-"td></tr><tr><td>MMM</td><td>il nome abbreviato del mese secondo le "
-"impostazioni localizzate (ad esempio da «gen» a «dic»). Usa le impostazioni "
-"localizzate del sistema per localizzare il nome.</td></tr><tr><td>MMMM</"
-"td><td>il nome lungo localizzato del nome del mese (ad esempio da «gennaio» "
-"a «dicembre»). Usa le impostazioni localizzate del sistema per localizzare "
-"il nome.</td></tr><tr><td>yy</td><td>l'anno come numero a due cifre (da 00 a "
-"99).</td></tr><tr><td>yyyy</td><td>l'anno come numero a quattro cifre. Se "
-"l'anno è negativo viene anteposto un segno meno nell'addizione.</td></tr></"
-"table><br><br>Espressioni che possono essere usate per la parte ora della "
-"stringa di formato:<table><tr><td>h</td><td>l'ora senza lo zero iniziale (da "
-"0 a 23, o da 1 a 12 se viene visualizzato anche AM/PM)</td></tr><tr><td>hh</"
-"td><td>l'ora con lo zero iniziale (da 00 a 23, o da 01 a 12 se viene "
-"visualizzato anche AM/PM)</td></tr><tr><td>H</td><td>l'ora senza lo zero "
-"iniziale (da 0 a 23, anche se viene visualizzato AM/PM)</td></tr><tr><td>HH</"
-"td><td>l'ora con lo zero iniziale (da 00 a 23, anche se viene visualizzato "
-"AM/PM)</td></tr><tr><td>m</td><td>il minuto senza lo zero iniziale (da 0 a "
-"59)</td></tr><tr><td>mm</td><td>il minuto con lo zero iniziale (da 0 a 59)</"
-"td></tr><tr><td>s</td><td>il secondo senza lo zero iniziale (da 0 a 59)</"
-"td></tr><tr><td>ss</td><td>il secondo con lo zero iniziale (da 0 a 59)</td></"
-"tr><tr><td>z</td><td>il millisecondo senza gli zeri iniziali (da 0 a 999)</"
-"td></tr><tr><td>zzz</td><td>il millisecondo con gli zeri iniziali (da 0 a "
-"999)</td></tr><tr><td>AP oppure A</td><td>interpretato come orario AM/PM. AP "
-"deve essere sia «AM» che «PM».</td></tr><tr><td>ap oppure a</"
-"td><td>interpretato come orario AM/PM. AP deve essere sia «am» che «pm».</"
-"td></tr></table><br><br>Sono esempi:<table><tr><td>dd.MM.yyyy</"
-"td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</td><td>dom 20 lug 69</td></"
-"tr><tr><td>«Questo giorno è» dddd</td><td>Questo giorno è domenica</td></"
-"tr></table><br><br>Nel caso in cui l'espressione fornita sia vuota, il "
-"formato verrà rilevato automaticamente."
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:105
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:53
 #, kde-format
 msgid ""
 "If checked, the specified line in the file will be used to determine the "
@@ -12048,25 +12025,25 @@ msgstr ""
 "Se spuntato, le righe specificate nel file verranno utilizzate per "
 "determinare i nomi delle colonne."
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:108
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:56
 #, kde-format
 msgid "Line in the file that should be used to determine the column names."
 msgstr ""
 "Righe nel file che dovrebbero essere utilizzate per determinare i nomi delle "
 "colonne."
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:111
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:59
 #, kde-format
 msgid "Custom column names, comma separated. E.g. \"x, y\""
 msgstr ""
 "Nomi delle colonne personalizzati, separati da virgole, ad esempio «x, y»"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:115
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:63
 #, kde-format
 msgid "Custom column data types, comma separated"
 msgstr "Tipi di dati di colonne personalizzate, separati da virgole"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:122
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:70
 #, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
@@ -12090,12 +12067,12 @@ msgstr ""
 "ora testuale se non vuoto, altrimenti viene determinato automaticamente.</"
 "td></tr><tr><td>%5</td><td>Un testo.</td></tr></table>"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:138
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:86
 #, kde-format
 msgid "%1 or %2"
 msgstr "%1 o %2"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:249
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:197
 #, kde-format
 msgid "Datatype not found: %1"
 msgstr "Tipo di dato non trovato %1"
@@ -12311,6 +12288,7 @@ msgstr "Insieme di dati importato in %1 secondi."
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, sbKeepNValues)
 #: src/frontend/datasources/ImportDatasetWidget.cpp:161
 #: src/frontend/datasources/ImportDatasetWidget.cpp:230
+#: src/frontend/examples/ExamplesWidget.cpp:57
 #: src/frontend/ui/datasources/importfilewidget.ui:785
 #: src/frontend/ui/dockwidgets/livedatadock.ui:187
 #, kde-format
@@ -12318,7 +12296,7 @@ msgid "All"
 msgstr "Tutto"
 
 #: src/frontend/datasources/ImportDatasetWidget.cpp:168
-#: src/frontend/examples/ExamplesManager.cpp:175
+#: src/frontend/examples/ExamplesManager.cpp:192
 #: src/tools/ColorMapsManager.cpp:152
 #, kde-format
 msgid "File not found"
@@ -12441,8 +12419,7 @@ msgid "Matrix name:"
 msgstr "Nome della matrice:"
 
 #: src/frontend/datasources/ImportDialog.cpp:148
-#, fuzzy, kde-format
-#| msgid "Add new folder"
+#, kde-format
 msgid "Add a new Folder"
 msgstr "Aggiungi una nuova cartella"
 
@@ -12453,10 +12430,9 @@ msgid "Folder name:"
 msgstr "Nome della cartella:"
 
 #: src/frontend/datasources/ImportDialog.cpp:181
-#, fuzzy, kde-format
-#| msgid "Folder"
+#, kde-format
 msgid "New Folder"
-msgstr "Cartella"
+msgstr "Nuova cartella"
 
 #: src/frontend/datasources/ImportDialog.cpp:185
 #: src/frontend/datasources/ImportDialog.cpp:189
@@ -12530,16 +12506,14 @@ msgid "File %1 imported in %2 seconds."
 msgstr "File %1 importato in %2 secondi."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:202
-#, fuzzy, kde-format
-#| msgid "The project file %1 doesn't exist."
+#, kde-format
 msgid "The directory %1 doesn't exist."
-msgstr "Il file di progetto %1 non esiste."
+msgstr "La cartella %1 non esiste."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:233
-#, fuzzy, kde-format
-#| msgid "File %1 imported in %2 seconds."
+#, kde-format
 msgid "%1 files imported in %2 seconds."
-msgstr "File %1 importato in %2 secondi."
+msgstr "%1 file importati in %2 secondi."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:407
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:151
@@ -12822,12 +12796,10 @@ msgstr ""
 "porzioni dei dati"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1054
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the File Data Source"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Directory Data Source"
-msgstr "Seleziona la fonte dati file"
+msgstr "Seleziona la fonte dati della cartella"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1056
 #, kde-format
@@ -13017,16 +12989,14 @@ msgid "Could not open file %1 for reading."
 msgstr "Impossibile aprire il file %1 in lettura."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1789
-#, fuzzy, kde-format
-#| msgid "Number of records: %1"
+#, kde-format
 msgid "Number of sub-directories: %1"
-msgstr "Numero di record: %1"
+msgstr "Numero di sotto-cartelle: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1792
-#, fuzzy, kde-format
-#| msgid "Couldn't read the project file %1."
+#, kde-format
 msgid "Couldn't read the directory %1."
-msgstr "Impossibile leggere il file di progetto %1."
+msgstr "Impossibile leggere la cartella %1."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1881
 #, kde-format
@@ -13390,7 +13360,7 @@ msgstr "Interrogazione personalizzata"
 msgid "Manage connections"
 msgstr "Gestisci le connessioni"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:244
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:192
 #, kde-format
 msgid ""
 "Couldn't find the database file '%1'. Please check the connection settings."
@@ -13398,7 +13368,7 @@ msgstr ""
 "Impossibile trovare il file della banca dati «%1». Controlla le impostazioni "
 "della connessione."
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:265
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:213
 #, kde-format
 msgid ""
 "Failed to connect to the database '%1'. Please check the connection settings."
@@ -13406,122 +13376,27 @@ msgstr ""
 "Impossibile connettersi con la banca dati «%1». Controlla le impostazioni "
 "della connessione."
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:323
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:325
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:271
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:273
 #, kde-format
 msgid "Failed to execute the query for the preview"
 msgstr "Impossibile eseguire l'interrogazione per l'anteprima"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:399
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:347
 #, kde-format
 msgid "Refresh the data preview of the selected table"
 msgstr "Aggiorna l'anteprima dei dati della tavola selezionata"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:405
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:353
 #, kde-format
 msgid "Execute the query and preview its result"
 msgstr "Esegui l'interrogazione e fai l'anteprima dei suoi risultati"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:526
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:528
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:474
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:476
 #, kde-format
 msgid "Failed to execute the query"
 msgstr "Impossibile eseguire l'interrogazione"
-
-#: src/frontend/datasources/JsonOptionsWidget.cpp:120
-#, kde-format
-msgid ""
-"For 'C Format', a period is used for the decimal point character and comma "
-"is used for the thousands group separator. Valid number representations are:"
-"<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></ul>When using 'System "
-"locale', the system settings will be used. E.g., for the German local the "
-"valid number representations are:<ul><li>1234,56</li><li>1.234,56</"
-"li><li>etc.</li></ul>"
-msgstr ""
-"Per il «formato C» viene usato un punto come punto decimale ed una virgola "
-"per separare il gruppo delle migliaia. Rappresentazioni valide di numeri "
-"sono:<ul><li>1234.56</li><li>1,234.56</li><li>ecc.</li></ul>Quando si usa la "
-"«localizzazione di sistema» verranno usate le impostazioni di sistema. Ad "
-"esempio per l'italiano delle rappresentazioni valide di numeri sono:"
-"<ul><li>1234,56</li><li>1.234,56</li><li>ecc.</li></ul>"
-
-#: src/frontend/datasources/JsonOptionsWidget.cpp:144
-#, kde-format
-msgid ""
-"Expressions that may be used for the date part of format string:"
-"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
-"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
-"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
-"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
-"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
-"td><td>the month as number without a leading zero (1 to 12).</td></"
-"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
-"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
-"to 'Dec'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
-"'December'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
-"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
-"negative, a minus sign is prepended in addition.</td></tr></"
-"table><br><br>Expressions that may be used for the time part of the format "
-"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
-"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
-"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
-"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
-"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
-"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
-"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
-"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
-"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
-"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
-"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
-"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
-"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
-"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
-"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
-"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
-"Sunday</td></tr></table>"
-msgstr ""
-"Espressioni che possono essere usate per la parte data della stringa di "
-"formato:<table><tr><td>d</td><td>il giorno come numero senza lo zero "
-"iniziale (da 1 a 31).</td></tr><tr><td>dd</td><td>il giorno come numero con "
-"lo zero iniziale (da 01 a 31).</td></tr><tr><td>ddd</td><td>il nome "
-"abbreviato del giorno secondo le impostazioni localizzate (ad esempio da "
-"«lun» a «dom»). Usa le impostazioni localizzate del sistema per localizzare "
-"il nome.</td></tr><tr><td>dddd</td><td>il nome lungo localizzato del nome "
-"del giorno (ad esempio da «lunedì» a «domenica»). Usa le impostazioni "
-"localizzate del sistema per localizzare il nome.</td></tr><tr><td>M</"
-"td><td>il mese come numero senza lo zero iniziale (da 1 a 12).</td></"
-"tr><tr><td>MM</td><td>il mese come numero con lo zero iniziale (da 1 a 12).</"
-"td></tr><tr><td>MMM</td><td>il nome abbreviato del mese secondo le "
-"impostazioni localizzate (ad esempio da «gen» a «dic»). Usa le impostazioni "
-"localizzate del sistema per localizzare il nome.</td></tr><tr><td>MMMM</"
-"td><td>il nome lungo localizzato del nome del mese (ad esempio da «gennaio» "
-"a «dicembre»). Usa le impostazioni localizzate del sistema per localizzare "
-"il nome.</td></tr><tr><td>yy</td><td>l'anno come numero a due cifre (da 00 a "
-"99).</td></tr><tr><td>yyyy</td><td>l'anno come numero a quattro cifre. Se "
-"l'anno è negativo viene anteposto un segno meno nell'addizione.</td></tr></"
-"table><br><br>Espressioni che possono essere usate per la parte ora della "
-"stringa di formato:<table><tr><td>h</td><td>l'ora senza lo zero iniziale (da "
-"0 a 23, o da 1 a 12 se viene visualizzato anche AM/PM)</td></tr><tr><td>hh</"
-"td><td>l'ora con lo zero iniziale (da 00 a 23, o da 01 a 12 se viene "
-"visualizzato anche AM/PM)</td></tr><tr><td>H</td><td>l'ora senza lo zero "
-"iniziale (da 0 a 23, anche se viene visualizzato AM/PM)</td></tr><tr><td>HH</"
-"td><td>l'ora con lo zero iniziale (da 00 a 23, anche se viene visualizzato "
-"AM/PM)</td></tr><tr><td>m</td><td>il minuto senza lo zero iniziale (da 0 a "
-"59)</td></tr><tr><td>mm</td><td>il minuto con lo zero iniziale (da 0 a 59)</"
-"td></tr><tr><td>s</td><td>il secondo senza lo zero iniziale (da 0 a 59)</"
-"td></tr><tr><td>ss</td><td>il secondo con lo zero iniziale (da 0 a 59)</td></"
-"tr><tr><td>z</td><td>il millisecondo senza gli zeri iniziali (da 0 a 999)</"
-"td></tr><tr><td>zzz</td><td>il millisecondo con gli zeri iniziali (da 0 a "
-"999)</td></tr><tr><td>AP oppure A</td><td>interpretato come orario AM/PM. AP "
-"deve essere sia «AM» che «PM».</td></tr><tr><td>ap oppure a</"
-"td><td>interpretato come orario AM/PM. AP deve essere sia «am» che «pm».</"
-"td></tr></table><br><br>Sono esempi:<table><tr><td>dd.MM.yyyy</"
-"td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</td><td>dom 20 lug 69</td></"
-"tr><tr><td>«Questo giorno è» dddd</td><td>Questo giorno è domenica</td></"
-"tr></table>"
 
 #: src/frontend/datasources/MQTTConnectionManagerDialog.cpp:33
 #, kde-format
@@ -14710,6 +14585,7 @@ msgstr ""
 #, kde-format
 msgid "Selected test requires at least %1 and at most %2 non-empty variables."
 msgstr ""
+"Il test selezionato richiede almeno %1 e al più %2 variabili non vuote."
 
 #: src/frontend/dockwidgets/InfoElementDock.cpp:227
 #, kde-format
@@ -15601,7 +15477,7 @@ msgctxt "@title:window"
 msgid "Example Projects"
 msgstr "Progetti di esempio"
 
-#: src/frontend/examples/ExamplesManager.cpp:176
+#: src/frontend/examples/ExamplesManager.cpp:193
 #, kde-format
 msgid ""
 "Couldn't open the examples collections file %1. Please check your "
@@ -17393,8 +17269,8 @@ msgstr "Preferenze    [Modificate]"
 #. i18n: ectx: property (text), widget (QLabel, lMin)
 #. i18n: ectx: property (text), widget (QLabel, lMinDateTime)
 #: src/frontend/SettingsGeneralPage.cpp:26
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:54
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:241
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:53
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:238
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:317
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:405
 #, kde-format
@@ -17869,145 +17745,150 @@ msgid "Provide the list of value-label pairs like in the following example:"
 msgstr ""
 "Fornisci una lista di coppie valore-etichetta come nel seguente esempio:"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:45
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:43
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:222
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:231
 #, kde-format
 msgid "Equal to"
 msgstr "Uguale a"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:46
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:44
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:223
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:232
 #, kde-format
 msgid "Not Equal to"
 msgstr "Diverso da"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:47
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:45
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:224
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:233
 #, kde-format
 msgid "Between (Incl. End Points)"
 msgstr "Compreso tra (punti finali incl.)"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:48
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:46
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:225
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:234
 #, kde-format
 msgid "Between (Excl. End Points)"
 msgstr "Compreso tra (punti finali escl.)"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:49
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:47
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:226
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:235
 #, kde-format
 msgid "Greater than"
 msgstr "Maggiore di"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:50
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:48
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:227
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:236
 #, kde-format
 msgid "Greater than or Equal to"
 msgstr "Maggiore o uguale a"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:51
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:49
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:228
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:237
 #, kde-format
 msgid "Less than"
 msgstr "Minore di"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:52
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:50
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:229
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:238
 #, kde-format
 msgid "Less than or Equal to"
 msgstr "Minore o uguale a"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:57
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:55
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:213
 #, kde-format
 msgid "Equal To"
 msgstr "Uguale a"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:58
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:56
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:214
 #, kde-format
 msgid "Not Equal To"
 msgstr "Diverso da"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:59
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:57
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:215
 #, kde-format
 msgid "Starts With"
 msgstr "Inizia con"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:60
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:58
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:216
 #, kde-format
 msgid "Ends With"
 msgstr "Finisce con"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:61
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:59
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:217
 #, kde-format
 msgid "Contains"
 msgstr "Contiene"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:62
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:60
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:218
 #, kde-format
 msgid "Does Not Contain"
 msgstr "Non contiene"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:74
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:72
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:307
 #, kde-format
 msgid "&Mask"
 msgstr "&Maschera"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:75
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:73
 #, kde-format
 msgid "Mask values in the specified region"
 msgstr "Maschera i valori della regione specifica"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:76
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:74
 #, kde-format
 msgctxt "@title:window"
 msgid "Mask Values"
 msgstr "Maschera i valori"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:78
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:77
 #, kde-format
 msgid "&Drop"
 msgstr "&Rilascia"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:79
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:78
 #, kde-format
 msgid "Drop values in the specified region"
 msgstr "Rilascia i valori nella regione specificata"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:80
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:79
 #, kde-format
 msgctxt "@title:window"
 msgid "Drop Values"
 msgstr "Rilascia i valori"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:946
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:953
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:1003
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:1009
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:80
+#, kde-format
+msgid "Delete entire rows in the spreadsheet if the condition is met."
+msgstr ""
+
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1031
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1038
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1088
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1094
 #, kde-format
 msgid "Invalid numeric value."
 msgstr "Valore numerico non valido."
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:968
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1053
 #, kde-format
 msgid "%1: mask values"
 msgstr "%1: maschera i valori"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:1024
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1109
 #, kde-format
 msgid "%1: drop values"
 msgstr "%1: rilascia i valori"
@@ -19090,10 +18971,9 @@ msgid "Analyze and Plot Data"
 msgstr "Analizza e traccia i dati"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:677
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Analysis"
-msgstr "Grafici statistici"
+msgstr "Analisi statistica"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:678
 #, kde-format
@@ -20208,10 +20088,9 @@ msgstr "Immagine:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/frontend/ui/datapickerimagewidget.ui:701
-#, fuzzy, kde-format
-#| msgid "Embedd"
+#, kde-format
 msgid "Embed"
-msgstr "Incorporato"
+msgstr "Incorpora"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileRelativePath)
 #: src/frontend/ui/datapickerimagewidget.ui:708
@@ -22601,23 +22480,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lH1)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:114
-#, fuzzy, kde-format
-#| msgid "Filter name:"
+#, kde-format
 msgid "Alternate:"
-msgstr "Nome del filtro:"
+msgstr "Alternativa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHypothesis)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:269
 #, kde-format
 msgid "Hypothesis"
-msgstr ""
+msgstr "Ipotesi"
 
 #. i18n: ectx: property (text), widget (QLabel, lTest)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:289
-#, fuzzy, kde-format
-#| msgid "Test"
+#, kde-format
 msgid "Test:"
-msgstr "Prova"
+msgstr "Test:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionY)
 #: src/frontend/ui/dockwidgets/imagedock.ui:136
@@ -23636,7 +23513,7 @@ msgstr "Radice dell'errore quadratico medio (RMSD, SD)"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1046
 #, kde-format
 msgid "F test"
-msgstr "Prova F"
+msgstr "Test F"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twGoodness)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1056
@@ -24698,7 +24575,7 @@ msgid "End Time:"
 msgstr "Ora di fine:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:47
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:46
 #, kde-format
 msgid "Numeric Values"
 msgstr "Valori numerici"
@@ -24706,17 +24583,17 @@ msgstr "Valori numerici"
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #. i18n: ectx: property (text), widget (QLabel, lConditionText)
 #. i18n: ectx: property (text), widget (QLabel, lConditionDateTime)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:67
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:128
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:234
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:66
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:127
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:231
 #, kde-format
 msgid "Condition:"
 msgstr "Condizione:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMax)
 #. i18n: ectx: property (text), widget (QLabel, lMaxDateTime)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:81
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:227
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:80
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:224
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:334
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:398
 #, kde-format
@@ -24724,16 +24601,23 @@ msgid "max."
 msgstr "max."
 
 #. i18n: ectx: property (text), widget (QLabel, lText)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:144
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:142
 #, kde-format
 msgid "Text Values"
 msgstr "Valori testuali"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:203
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:200
 #, kde-format
 msgid "DateTime Values"
 msgstr "Valori data e ora"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chbDeleteRows)
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:274
+#, fuzzy, kde-format
+#| msgid "Delete"
+msgid "Delete Rows"
+msgstr "Elimina"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:97
@@ -26143,6 +26027,99 @@ msgstr "processo convert non riuscito, codice di uscita ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Impossibile aprire il file:"
+
+#~ msgid ""
+#~ "For 'C Format', a period is used for the decimal point character and "
+#~ "comma is used for the thousands group separator. Valid number "
+#~ "representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
+#~ "ul>When using 'System locale', the system settings will be used. E.g., "
+#~ "for the German local the valid number representations are:"
+#~ "<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
+#~ msgstr ""
+#~ "Per il «formato C» viene usato un punto come punto decimale ed una "
+#~ "virgola per separare il gruppo delle migliaia. Rappresentazioni valide di "
+#~ "numeri sono:<ul><li>1234.56</li><li>1,234.56</li><li>ecc.</li></ul>Quando "
+#~ "si usa la «localizzazione di sistema» verranno usate le impostazioni di "
+#~ "sistema. Ad esempio per l'italiano delle rappresentazioni valide di "
+#~ "numeri sono:<ul><li>1234,56</li><li>1.234,56</li><li>ecc.</li></ul>"
+
+#~ msgid ""
+#~ "Expressions that may be used for the date part of format string:"
+#~ "<table><tr><td>d</td><td>the day as number without a leading zero (1 to "
+#~ "31).</td></tr><tr><td>dd</td><td>the day as number with a leading zero "
+#~ "(01 to 31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day "
+#~ "name (e.g. 'Mon' to 'Sun'). Uses the system locale to localize the name.</"
+#~ "td></tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' "
+#~ "to 'Sunday'). Uses the system locale to localize the name.</td></"
+#~ "tr><tr><td>M</td><td>the month as number without a leading zero (1 to 12)."
+#~ "</td></tr><tr><td>MM</td><td>the month as number with a leading zero (01 "
+#~ "to 12).</td></tr><tr><td>MMM</td><td>the abbreviated localized month name "
+#~ "(e.g. 'Jan' to 'Dec'). Uses the system locale to localize the name.</td></"
+#~ "tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
+#~ "'December'). Uses the system locale to localize the name.</td></"
+#~ "tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
+#~ "tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
+#~ "negative, a minus sign is prepended in addition.</td></tr></"
+#~ "table><br><br>Expressions that may be used for the time part of the "
+#~ "format string:<table><tr><td>h</td><td>the hour without a leading zero (0 "
+#~ "to 23 or 1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour "
+#~ "with a leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></"
+#~ "tr><tr><td>H</td><td>the hour without a leading zero (0 to 23, even with "
+#~ "AM/PM display)</td></tr><tr><td>HH</td><td>the hour with a leading zero "
+#~ "(00 to 23, even with AM/PM display)</td></tr><tr><td>m</td><td>the minute "
+#~ "without a leading zero (0 to 59)</td></tr><tr><td>mm</td><td>the minute "
+#~ "with a leading zero (00 to 59)</td></tr><tr><td>s</td><td>the second "
+#~ "without a leading zero (0 to 59)</td></tr><tr><td>ss</td><td>the second "
+#~ "with a leading zero (00 to 59)</td></tr><tr><td>z</td><td>the "
+#~ "milliseconds without leading zeroes (0 to 999)</td></tr><tr><td>zzz</"
+#~ "td><td>the milliseconds with leading zeroes (000 to 999)</td></"
+#~ "tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be either "
+#~ "'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
+#~ "time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples "
+#~ "are:<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd "
+#~ "MMMM d yy</td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</"
+#~ "td><td>The day is Sunday</td></tr></table>"
+#~ msgstr ""
+#~ "Espressioni che possono essere usate per la parte data della stringa di "
+#~ "formato:<table><tr><td>d</td><td>il giorno come numero senza lo zero "
+#~ "iniziale (da 1 a 31).</td></tr><tr><td>dd</td><td>il giorno come numero "
+#~ "con lo zero iniziale (da 01 a 31).</td></tr><tr><td>ddd</td><td>il nome "
+#~ "abbreviato del giorno secondo le impostazioni localizzate (ad esempio da "
+#~ "«lun» a «dom»). Usa le impostazioni localizzate del sistema per "
+#~ "localizzare il nome.</td></tr><tr><td>dddd</td><td>il nome lungo "
+#~ "localizzato del nome del giorno (ad esempio da «lunedì» a «domenica»). "
+#~ "Usa le impostazioni localizzate del sistema per localizzare il nome.</"
+#~ "td></tr><tr><td>M</td><td>il mese come numero senza lo zero iniziale (da "
+#~ "1 a 12).</td></tr><tr><td>MM</td><td>il mese come numero con lo zero "
+#~ "iniziale (da 1 a 12).</td></tr><tr><td>MMM</td><td>il nome abbreviato del "
+#~ "mese secondo le impostazioni localizzate (ad esempio da «gen» a «dic»). "
+#~ "Usa le impostazioni localizzate del sistema per localizzare il nome.</"
+#~ "td></tr><tr><td>MMMM</td><td>il nome lungo localizzato del nome del mese "
+#~ "(ad esempio da «gennaio» a «dicembre»). Usa le impostazioni localizzate "
+#~ "del sistema per localizzare il nome.</td></tr><tr><td>yy</td><td>l'anno "
+#~ "come numero a due cifre (da 00 a 99).</td></tr><tr><td>yyyy</"
+#~ "td><td>l'anno come numero a quattro cifre. Se l'anno è negativo viene "
+#~ "anteposto un segno meno nell'addizione.</td></tr></"
+#~ "table><br><br>Espressioni che possono essere usate per la parte ora della "
+#~ "stringa di formato:<table><tr><td>h</td><td>l'ora senza lo zero iniziale "
+#~ "(da 0 a 23, o da 1 a 12 se viene visualizzato anche AM/PM)</td></"
+#~ "tr><tr><td>hh</td><td>l'ora con lo zero iniziale (da 00 a 23, o da 01 a "
+#~ "12 se viene visualizzato anche AM/PM)</td></tr><tr><td>H</td><td>l'ora "
+#~ "senza lo zero iniziale (da 0 a 23, anche se viene visualizzato AM/PM)</"
+#~ "td></tr><tr><td>HH</td><td>l'ora con lo zero iniziale (da 00 a 23, anche "
+#~ "se viene visualizzato AM/PM)</td></tr><tr><td>m</td><td>il minuto senza "
+#~ "lo zero iniziale (da 0 a 59)</td></tr><tr><td>mm</td><td>il minuto con lo "
+#~ "zero iniziale (da 0 a 59)</td></tr><tr><td>s</td><td>il secondo senza lo "
+#~ "zero iniziale (da 0 a 59)</td></tr><tr><td>ss</td><td>il secondo con lo "
+#~ "zero iniziale (da 0 a 59)</td></tr><tr><td>z</td><td>il millisecondo "
+#~ "senza gli zeri iniziali (da 0 a 999)</td></tr><tr><td>zzz</td><td>il "
+#~ "millisecondo con gli zeri iniziali (da 0 a 999)</td></tr><tr><td>AP "
+#~ "oppure A</td><td>interpretato come orario AM/PM. AP deve essere sia «AM» "
+#~ "che «PM».</td></tr><tr><td>ap oppure a</td><td>interpretato come orario "
+#~ "AM/PM. AP deve essere sia «am» che «pm».</td></tr></table><br><br>Sono "
+#~ "esempi:<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd "
+#~ "MMMM d yy</td><td>dom 20 lug 69</td></tr><tr><td>«Questo giorno è» dddd</"
+#~ "td><td>Questo giorno è domenica</td></tr></table>"
 
 #, fuzzy
 #~| msgid "Will statistics:"

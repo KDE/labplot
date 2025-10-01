@@ -804,6 +804,8 @@ get_target_property(labplotbackendlib_INCLUDE_DIRECTORIES labplotbackendlib INCL
 get_target_property(labplotnsllib_INCLUDE_DIRECTORIES labplotnsllib INCLUDE_DIRECTORIES)
 get_target_property(KFi18n_INCLUDE_DIRECTORIES KF${KF_MAJOR_VERSION}::I18n INTERFACE_INCLUDE_DIRECTORIES)
 
+target_include_directories(labplotbackendlib PUBLIC /usr/include/shiboken6 ${Python3_INCLUDE_DIRS})
+
 generate_shiboken_sources(
     PACKAGE_NAME ${scripting_library}
     VERSION ${PROJECT_VERSION}

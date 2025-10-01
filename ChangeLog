@@ -8,15 +8,20 @@ New features:
 		* Save and load custom functions for fit, equation curve and function values
 	* [spreadsheet]
 		* Pivot table
+		* allow to drop entire rows in the spreadsheet if the condition was met in the "Drop Values Dialog" for the selected columns
 	* [worksheet]
 		* Inset plot areas - plot areas added as child of another plot area
 		* Improved axis ticks location. They don't need to be always placed at the edges of the axis if does not look nicely (!700)
 		* Allow to position the center and limit lines in the process behavior chart based on user-defined specifications
 	* [import]
-		* import directories - import multiple files in a directory in one single step
+		* Import directories - import multiple files in a directory in one single step
+		* Allow to import arrays in JSON files that contain plain data only
+	* [examples]
+		* Added "All" in the examples dialog to navigate and search in the example projects from _all_ collections
 
 Performance improvements:
 		* Improved drawing performance (!731)
+		* Improved the performance of importing JSON files with a large number of elements
 
 
 -----2.12.1 (2025-08-15) -----

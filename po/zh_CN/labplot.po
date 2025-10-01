@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-23 00:38+0000\n"
+"POT-Creation-Date: 2025-09-29 00:39+0000\n"
 "PO-Revision-Date: 2024-04-22 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -1050,6 +1050,97 @@ msgid ""
 "%2"
 msgstr ""
 
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:123
+#, kde-format
+msgid ""
+"This option determines how the imported strings have to be converted to "
+"numbers."
+msgstr "此选项决定导入的字符串如何转换为数字。"
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:128
+#, kde-format
+msgid ""
+"When point character is used for the decimal separator, the valid number "
+"representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
+"ul>For comma as the decimal separator, the valid number representations are:"
+"<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
+msgstr ""
+"当小数点分隔符使用圆点时，有效的数字表示有：<ul><li>1234.56</"
+"li><li>1,234.56</li><li>等等</li></ul>当小数点分隔符使用逗号时，有效的数字表"
+"示有：<ul><li>1234,56</li><li>1.234,56</li><li>等等</li></ul>"
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:144
+#, kde-format
+msgid ""
+"This option determines how the imported strings have to be converted to "
+"calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
+"and to time."
+msgstr "此选项决定导入的字符串如何转换为日期，包括公历的年、月、日及时间。"
+
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:150
+#, kde-format
+msgid ""
+"Expressions that may be used for the date part of format string:"
+"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
+"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
+"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
+"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
+"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
+"td><td>the month as number without a leading zero (1 to 12).</td></"
+"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
+"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
+"to 'Dec'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
+"'December'). Uses the system locale to localize the name.</td></"
+"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
+"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
+"negative, a minus sign is prepended in addition.</td></tr></"
+"table><br><br>Expressions that may be used for the time part of the format "
+"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
+"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
+"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
+"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
+"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
+"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
+"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
+"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
+"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
+"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
+"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
+"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
+"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
+"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
+"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
+"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
+"Sunday</td></tr></table><br><br>In case the provided expression is empty, "
+"the format will be auto-detected."
+msgstr ""
+"可用于日期部分的格式化字符串表达式有：<table><tr><td>d</td><td>日，无前导零 "
+"(1 到 31)</td></tr><tr><td>dd</td><td>日，有前导零 (01 到 31)</td></"
+"tr><tr><td>ddd</td><td>星期缩写 (如“一”“日”)，遵循系统的语言与区域设定</td></"
+"tr><tr><td>dddd</td><td>星期全称 (如“星期一”“星期日”)，遵循系统的语言与区域设"
+"定</td></tr><tr><td>M</td><td>月，无前导零 (1 到 12)</td></tr><tr><td>MM</"
+"td><td>月，有前导零 (01 到 12)</td></tr><tr><td>MMM</td><td>月份缩写 (如“一"
+"月”“十二月”)，遵循系统的语言与区域设定</td></tr><tr><td>MMMM</td><td>月份全"
+"称 (如“一月”“十二月”)，遵循系统的语言与区域设定</td></tr><tr><td>yy</td><td>"
+"年，末两位数 (00 到 99)</td></tr><tr><td>yyyy</td><td>年，四位数，支持公元前"
+"用负数表示</td></tr></table><br><br>可用于时间部分的格式化字符串表达式有："
+"<table><tr><td>h</td><td>时，无前导零 (在 24、12 小时制下分别为 0 到 23、1 "
+"到 12)</td></tr><tr><td>hh</td><td>时，有前导零 (在 24、12 小时制下分别为 00 "
+"到 23、01 到 12)</td></tr><tr><td>H</td><td>时，无前导零，强制使用 24 小时制 "
+"(0 到 23)</td></tr><tr><td>HH</td><td>时，有前导零，强制使用 24 小时制 (00 "
+"到 23)</td></tr><tr><td>m</td><td>分，无前导零 (0 到 59)</td></"
+"tr><tr><td>mm</td><td>分，有前导零 (00 到 59)</td></tr><tr><td>s</td><td>秒，"
+"无前导零 (0 到 59)</td></tr><tr><td>ss</td><td>秒，有前导零 (00 到 59)</td></"
+"tr><tr><td>z</td><td>毫秒，无前导零 (0 到 999)</td></tr><tr><td>zzz</td><td>"
+"毫秒，有前导零 (000 到 999)</td></tr><tr><td>AP 或 A</td><td>上下午，大写 (必"
+"须为 \"AM\" 或 \"PM\")</td></tr><tr><td>ap 或 a</td><td>上下午，小写 (必须为 "
+"\"am\" 或 \"pm\")</td></tr></table><br><br>例如 (在中文环境下)："
+"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
+"td><td>日 七月 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is 星"
+"期日</td></tr></table><br><br>留空可自动检测格式。"
+
 #: src/backend/datasources/filters/AsciiFilter.cpp:223
 #, kde-format
 msgid "Number of columns: %1"
@@ -1062,7 +1153,7 @@ msgstr "行数：%1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:467
 #: src/backend/datasources/filters/AsciiFilter.cpp:1252
-#: src/backend/datasources/filters/JsonFilter.cpp:284
+#: src/backend/datasources/filters/JsonFilter.cpp:246
 #, kde-format
 msgid "Column %1"
 msgstr ""
@@ -1100,7 +1191,7 @@ msgid "Int64"
 msgstr ""
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:273
-#: src/backend/datasources/filters/JsonFilter.cpp:386
+#: src/backend/datasources/filters/JsonFilter.cpp:343
 #: src/backend/datasources/filters/SpiceFilter.cpp:127
 #: src/backend/datasources/filters/SpiceFilter.cpp:183
 #, kde-format
@@ -1128,7 +1219,7 @@ msgstr ""
 #: src/backend/datasources/filters/HDF5Filter.cpp:1809
 #: src/backend/datasources/filters/HDF5Filter.cpp:1965
 #: src/backend/datasources/filters/ImageFilter.cpp:165
-#: src/backend/datasources/filters/JsonFilter.cpp:540
+#: src/backend/datasources/filters/JsonFilter.cpp:516
 #: src/backend/datasources/filters/MatioFilter.cpp:890
 #: src/backend/datasources/filters/NetCDFFilter.cpp:758
 #: src/backend/datasources/filters/NetCDFFilter.cpp:869
@@ -1564,64 +1655,64 @@ msgid "numerical data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:189
+#: src/backend/datasources/filters/JsonFilter.cpp:181
 #, kde-format
 msgid "Open device failed"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:192
+#: src/backend/datasources/filters/JsonFilter.cpp:184
 #, kde-format
 msgid "Empty file"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:198
+#: src/backend/datasources/filters/JsonFilter.cpp:190
 #, kde-format
 msgid "Parse error: %1 at offset %2"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:201
+#: src/backend/datasources/filters/JsonFilter.cpp:193
 #, kde-format
 msgid "Valid JSON document"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:261
+#: src/backend/datasources/filters/JsonFilter.cpp:224
 #: src/backend/datasources/filters/McapFilter.cpp:287
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:305
 #, kde-format
 msgid "index"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:269
+#: src/backend/datasources/filters/JsonFilter.cpp:232
 #, kde-format
 msgid "timestamp"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:271
+#: src/backend/datasources/filters/JsonFilter.cpp:234
 #, kde-format
 msgid "month"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:273
+#: src/backend/datasources/filters/JsonFilter.cpp:236
 #, kde-format
 msgid "day"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:275
+#: src/backend/datasources/filters/JsonFilter.cpp:238
 #, kde-format
 msgid "name"
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:391
+#: src/backend/datasources/filters/JsonFilter.cpp:348
 #, kde-format
 msgid "Device/file is empty."
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:399
+#: src/backend/datasources/filters/JsonFilter.cpp:356
 #, kde-format
 msgid "JSON format error or document empty."
 msgstr ""
 
-#: src/backend/datasources/filters/JsonFilter.cpp:522
+#: src/backend/datasources/filters/JsonFilter.cpp:499
 #, kde-format
 msgid "Empty file or invalid JSON document."
 msgstr ""
@@ -2334,10 +2425,9 @@ msgid "Device not available."
 msgstr ""
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, fuzzy, kde-format
-#| msgid "An error occurred."
+#, kde-format
 msgid "Timeout occurred."
-msgstr "发生了错误。"
+msgstr ""
 
 #: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format
@@ -3932,8 +4022,8 @@ msgstr "如果(条件; 条件为真时的值; 条件为假时的值)"
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
 #: src/backend/gsl/functions.cpp:337 src/backend/lib/XmlStreamReader.cpp:58
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:74
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:220
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:73
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:217
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:354
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:412
 #, kde-format
@@ -7402,10 +7492,9 @@ msgid "Hypothesis Test"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:309
-#, fuzzy, kde-format
-#| msgid "Sample Quantiles"
+#, kde-format
 msgid "One-Sample t-Test"
-msgstr "样本分位数"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:311
 #, kde-format
@@ -7516,16 +7605,14 @@ msgid "Alternate Hypothesis"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:547
-#, fuzzy, kde-format
-#| msgid "Variable Statistics..."
+#, kde-format
 msgid "Descriptive Statistics"
-msgstr "变量统计..."
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:548
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Test Statistics"
-msgstr "详情"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:548
 #, kde-format
@@ -7533,10 +7620,9 @@ msgid "Significance Level"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:549
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "p-Value"
-msgstr "值"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:552
 #, kde-format
@@ -7554,10 +7640,9 @@ msgid "Degrees of Freedom Treatment"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:556
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Degrees of Freedom Residuals"
-msgstr "平方残差和"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #: src/backend/statistics/HypothesisTest.cpp:558
@@ -7570,31 +7655,27 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:567
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/backend/statistics/HypothesisTest.cpp:572
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "t-Value"
-msgstr "值"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:563
-#, fuzzy, kde-format
-#| msgid "Test"
+#, kde-format
 msgid "Test Mean"
-msgstr "测试"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:564
 #: src/backend/statistics/HypothesisTest.cpp:568
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/backend/statistics/HypothesisTest.cpp:572
-#, fuzzy, kde-format
-#| msgid "Differentiate"
+#, kde-format
 msgid "Mean Difference"
-msgstr "微分"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:567
-#, fuzzy, kde-format
-#| msgid "Variance"
+#, kde-format
 msgid "Pooled Variance"
-msgstr "方差"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:568
 #: src/backend/statistics/HypothesisTest.cpp:573
@@ -7604,22 +7685,19 @@ msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:575
 #: src/backend/statistics/HypothesisTest.cpp:581
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "F-Statistic"
-msgstr "详情"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:575
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Between Groups"
-msgstr "平方残差和"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:576
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Within Groups"
-msgstr "平方残差和"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:577
 #, kde-format
@@ -7632,16 +7710,14 @@ msgid "Mean Squares Within Groups"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:581
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Treatment"
-msgstr "平方残差和"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:582
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Residuals"
-msgstr "平方残差和"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:583
 #, kde-format
@@ -7654,10 +7730,9 @@ msgid "Mean Squares Treatment"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:584
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Mean Squares Residuals"
-msgstr "平方残差和"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:586
 #, kde-format
@@ -7666,10 +7741,9 @@ msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:586
 #: src/backend/statistics/HypothesisTest.cpp:590
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "z-Value"
-msgstr "值"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:587
 #, kde-format
@@ -7722,16 +7796,14 @@ msgid "Negative Rank Mean"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:593
-#, fuzzy, kde-format
-#| msgid "Nonnegative square root"
+#, kde-format
 msgid "Negative Rank Count"
-msgstr "算术平方根"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:594
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgid "Tie Count"
-msgstr "数量"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:596
 #: src/backend/statistics/HypothesisTest.cpp:604
@@ -7751,10 +7823,9 @@ msgid "Chi2"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:604
-#, fuzzy, kde-format
-#| msgid "Set Column As"
+#, kde-format
 msgid "Event Count 1"
-msgstr "将列设置为"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:605
 #, kde-format
@@ -7767,10 +7838,9 @@ msgid "Total Count 1"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:606
-#, fuzzy, kde-format
-#| msgid "Set Column As"
+#, kde-format
 msgid "Event Count 2"
-msgstr "将列设置为"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:606
 #, kde-format
@@ -7783,10 +7853,9 @@ msgid "Total Count 2"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:610
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Conclusion"
-msgstr "统计图类"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:622
 #, kde-format
@@ -11166,7 +11235,7 @@ msgstr "全部(&A)"
 #: src/frontend/ActionsManager.cpp:435
 #, kde-format
 msgid "Show Memory Usage"
-msgstr "显示内存使用情况"
+msgstr "显示内存使用率"
 
 #: src/frontend/ActionsManager.cpp:443
 #, kde-format
@@ -11564,7 +11633,7 @@ msgid "Color Maps Browser"
 msgstr "浏览色阶"
 
 #: src/frontend/colormaps/ColorMapsWidget.cpp:39
-#: src/frontend/examples/ExamplesWidget.cpp:34
+#: src/frontend/examples/ExamplesWidget.cpp:31
 #, kde-format
 msgid "Switch between icon and list views"
 msgstr "在图标和列表视图之间切换"
@@ -11572,7 +11641,7 @@ msgstr "在图标和列表视图之间切换"
 #: src/frontend/colormaps/ColorMapsWidget.cpp:53
 #: src/frontend/datasources/ImportDatasetWidget.cpp:51
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:125
-#: src/frontend/examples/ExamplesWidget.cpp:51
+#: src/frontend/examples/ExamplesWidget.cpp:48
 #, kde-format
 msgid "Enter the keyword you want to search for"
 msgstr "输入您要搜索的关键字"
@@ -11580,7 +11649,7 @@ msgstr "输入您要搜索的关键字"
 #: src/frontend/colormaps/ColorMapsWidget.cpp:56
 #: src/frontend/datasources/ImportDatasetWidget.cpp:54
 #: src/frontend/datasources/ImportKaggleDatasetWidget.cpp:128
-#: src/frontend/examples/ExamplesWidget.cpp:54
+#: src/frontend/examples/ExamplesWidget.cpp:51
 #, kde-format
 msgid "Search..."
 msgstr "搜索..."
@@ -11780,126 +11849,29 @@ msgstr "圆点 '.'"
 msgid "Comma ','"
 msgstr "逗号 ','"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:36
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:46
-#: src/frontend/datasources/JsonOptionsWidget.cpp:118
-#, kde-format
-msgid ""
-"This option determines how the imported strings have to be converted to "
-"numbers."
-msgstr "此选项决定导入的字符串如何转换为数字。"
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:38
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:48
-#, kde-format
-msgid ""
-"When point character is used for the decimal separator, the valid number "
-"representations are:<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></"
-"ul>For comma as the decimal separator, the valid number representations are:"
-"<ul><li>1234,56</li><li>1.234,56</li><li>etc.</li></ul>"
-msgstr ""
-"当小数点分隔符使用圆点时，有效的数字表示有：<ul><li>1234.56</"
-"li><li>1,234.56</li><li>等等</li></ul>当小数点分隔符使用逗号时，有效的数字表"
-"示有：<ul><li>1234,56</li><li>1.234,56</li><li>等等</li></ul>"
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:60
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:67
-#: src/frontend/datasources/JsonOptionsWidget.cpp:141
-#, kde-format
-msgid ""
-"This option determines how the imported strings have to be converted to "
-"calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
-"and to time."
-msgstr "此选项决定导入的字符串如何转换为日期，包括公历的年、月、日及时间。"
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:63
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:70
-#, kde-format
-msgid ""
-"Expressions that may be used for the date part of format string:"
-"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
-"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
-"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
-"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
-"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
-"td><td>the month as number without a leading zero (1 to 12).</td></"
-"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
-"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
-"to 'Dec'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
-"'December'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
-"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
-"negative, a minus sign is prepended in addition.</td></tr></"
-"table><br><br>Expressions that may be used for the time part of the format "
-"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
-"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
-"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
-"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
-"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
-"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
-"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
-"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
-"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
-"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
-"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
-"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
-"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
-"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
-"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
-"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
-"Sunday</td></tr></table><br><br>In case the provided expression is empty, "
-"the format will be auto-detected."
-msgstr ""
-"可用于日期部分的格式化字符串表达式有：<table><tr><td>d</td><td>日，无前导零 "
-"(1 到 31)</td></tr><tr><td>dd</td><td>日，有前导零 (01 到 31)</td></"
-"tr><tr><td>ddd</td><td>星期缩写 (如“一”“日”)，遵循系统的语言与区域设定</td></"
-"tr><tr><td>dddd</td><td>星期全称 (如“星期一”“星期日”)，遵循系统的语言与区域设"
-"定</td></tr><tr><td>M</td><td>月，无前导零 (1 到 12)</td></tr><tr><td>MM</"
-"td><td>月，有前导零 (01 到 12)</td></tr><tr><td>MMM</td><td>月份缩写 (如“一"
-"月”“十二月”)，遵循系统的语言与区域设定</td></tr><tr><td>MMMM</td><td>月份全"
-"称 (如“一月”“十二月”)，遵循系统的语言与区域设定</td></tr><tr><td>yy</td><td>"
-"年，末两位数 (00 到 99)</td></tr><tr><td>yyyy</td><td>年，四位数，支持公元前"
-"用负数表示</td></tr></table><br><br>可用于时间部分的格式化字符串表达式有："
-"<table><tr><td>h</td><td>时，无前导零 (在 24、12 小时制下分别为 0 到 23、1 "
-"到 12)</td></tr><tr><td>hh</td><td>时，有前导零 (在 24、12 小时制下分别为 00 "
-"到 23、01 到 12)</td></tr><tr><td>H</td><td>时，无前导零，强制使用 24 小时制 "
-"(0 到 23)</td></tr><tr><td>HH</td><td>时，有前导零，强制使用 24 小时制 (00 "
-"到 23)</td></tr><tr><td>m</td><td>分，无前导零 (0 到 59)</td></"
-"tr><tr><td>mm</td><td>分，有前导零 (00 到 59)</td></tr><tr><td>s</td><td>秒，"
-"无前导零 (0 到 59)</td></tr><tr><td>ss</td><td>秒，有前导零 (00 到 59)</td></"
-"tr><tr><td>z</td><td>毫秒，无前导零 (0 到 999)</td></tr><tr><td>zzz</td><td>"
-"毫秒，有前导零 (000 到 999)</td></tr><tr><td>AP 或 A</td><td>上下午，大写 (必"
-"须为 \"AM\" 或 \"PM\")</td></tr><tr><td>ap 或 a</td><td>上下午，小写 (必须为 "
-"\"am\" 或 \"pm\")</td></tr></table><br><br>例如 (在中文环境下)："
-"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
-"td><td>日 七月 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is 星"
-"期日</td></tr></table><br><br>留空可自动检测格式。"
-
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:105
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:53
 #, kde-format
 msgid ""
 "If checked, the specified line in the file will be used to determine the "
 "column names."
 msgstr "如果选中，文件中的指定行将用于确定列名称。"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:108
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:56
 #, kde-format
 msgid "Line in the file that should be used to determine the column names."
 msgstr "文件中用于确定列名称的行号。"
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:111
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:59
 #, kde-format
 msgid "Custom column names, comma separated. E.g. \"x, y\""
 msgstr ""
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:115
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:63
 #, kde-format
 msgid "Custom column data types, comma separated"
 msgstr ""
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:122
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:70
 #, kde-format
 msgid ""
 "If not empty, the number of columns must match the number of column names if "
@@ -11914,12 +11886,12 @@ msgid ""
 "td></tr></table>"
 msgstr ""
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:138
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:86
 #, kde-format
 msgid "%1 or %2"
 msgstr ""
 
-#: src/frontend/datasources/AsciiOptionsWidget.cpp:249
+#: src/frontend/datasources/AsciiOptionsWidget.cpp:197
 #, kde-format
 msgid "Datatype not found: %1"
 msgstr ""
@@ -12128,6 +12100,7 @@ msgstr ""
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, sbKeepNValues)
 #: src/frontend/datasources/ImportDatasetWidget.cpp:161
 #: src/frontend/datasources/ImportDatasetWidget.cpp:230
+#: src/frontend/examples/ExamplesWidget.cpp:57
 #: src/frontend/ui/datasources/importfilewidget.ui:785
 #: src/frontend/ui/dockwidgets/livedatadock.ui:187
 #, kde-format
@@ -12135,7 +12108,7 @@ msgid "All"
 msgstr "全部"
 
 #: src/frontend/datasources/ImportDatasetWidget.cpp:168
-#: src/frontend/examples/ExamplesManager.cpp:175
+#: src/frontend/examples/ExamplesManager.cpp:192
 #: src/tools/ColorMapsManager.cpp:152
 #, kde-format
 msgid "File not found"
@@ -13147,88 +13120,38 @@ msgstr ""
 msgid "Manage connections"
 msgstr ""
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:244
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:192
 #, kde-format
 msgid ""
 "Couldn't find the database file '%1'. Please check the connection settings."
 msgstr ""
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:265
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:213
 #, kde-format
 msgid ""
 "Failed to connect to the database '%1'. Please check the connection settings."
 msgstr ""
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:323
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:325
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:271
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:273
 #, kde-format
 msgid "Failed to execute the query for the preview"
 msgstr ""
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:399
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:347
 #, kde-format
 msgid "Refresh the data preview of the selected table"
 msgstr ""
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:405
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:353
 #, kde-format
 msgid "Execute the query and preview its result"
 msgstr ""
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:526
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:528
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:474
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:476
 #, kde-format
 msgid "Failed to execute the query"
-msgstr ""
-
-#: src/frontend/datasources/JsonOptionsWidget.cpp:120
-#, kde-format
-msgid ""
-"For 'C Format', a period is used for the decimal point character and comma "
-"is used for the thousands group separator. Valid number representations are:"
-"<ul><li>1234.56</li><li>1,234.56</li><li>etc.</li></ul>When using 'System "
-"locale', the system settings will be used. E.g., for the German local the "
-"valid number representations are:<ul><li>1234,56</li><li>1.234,56</"
-"li><li>etc.</li></ul>"
-msgstr ""
-
-#: src/frontend/datasources/JsonOptionsWidget.cpp:144
-#, kde-format
-msgid ""
-"Expressions that may be used for the date part of format string:"
-"<table><tr><td>d</td><td>the day as number without a leading zero (1 to 31)."
-"</td></tr><tr><td>dd</td><td>the day as number with a leading zero (01 to "
-"31).</td></tr><tr><td>ddd</td><td>the abbreviated localized day name (e.g. "
-"'Mon' to 'Sun'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to "
-"'Sunday'). Uses the system locale to localize the name.</td></tr><tr><td>M</"
-"td><td>the month as number without a leading zero (1 to 12).</td></"
-"tr><tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</"
-"td></tr><tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' "
-"to 'Dec'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to "
-"'December'). Uses the system locale to localize the name.</td></"
-"tr><tr><td>yy</td><td>the year as two digit number (00 to 99).</td></"
-"tr><tr><td>yyyy</td><td>the year as four digit number. If the year is "
-"negative, a minus sign is prepended in addition.</td></tr></"
-"table><br><br>Expressions that may be used for the time part of the format "
-"string:<table><tr><td>h</td><td>the hour without a leading zero (0 to 23 or "
-"1 to 12 if AM/PM display)</td></tr><tr><td>hh</td><td>the hour with a "
-"leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr><tr><td>H</"
-"td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</"
-"td></tr><tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with "
-"AM/PM display)</td></tr><tr><td>m</td><td>the minute without a leading zero "
-"(0 to 59)</td></tr><tr><td>mm</td><td>the minute with a leading zero (00 to "
-"59)</td></tr><tr><td>s</td><td>the second without a leading zero (0 to 59)</"
-"td></tr><tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></"
-"tr><tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</"
-"td></tr><tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to "
-"999)</td></tr><tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be "
-"either 'AM' or 'PM'.</td></tr><tr><td>ap or a</td><td>Interpret as an AM/PM "
-"time. ap must be either 'am' or 'pm'.</td></tr></table><br><br>Examples are:"
-"<table><tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr><tr><td>ddd MMMM d yy</"
-"td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
-"Sunday</td></tr></table>"
 msgstr ""
 
 #: src/frontend/datasources/MQTTConnectionManagerDialog.cpp:33
@@ -15192,7 +15115,7 @@ msgctxt "@title:window"
 msgid "Example Projects"
 msgstr "示例工程"
 
-#: src/frontend/examples/ExamplesManager.cpp:176
+#: src/frontend/examples/ExamplesManager.cpp:193
 #, kde-format
 msgid ""
 "Couldn't open the examples collections file %1. Please check your "
@@ -15434,12 +15357,10 @@ msgid "Properties: Data Extractor"
 msgstr "属性：数据点提取器"
 
 #: src/frontend/GuiObserver.cpp:438
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Notes"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hypothesis Test"
-msgstr "属性：备注"
+msgstr ""
 
 #: src/frontend/GuiObserver.cpp:443
 #, kde-format
@@ -16960,8 +16881,8 @@ msgstr "首选项 [已修改]"
 #. i18n: ectx: property (text), widget (QLabel, lMin)
 #. i18n: ectx: property (text), widget (QLabel, lMinDateTime)
 #: src/frontend/SettingsGeneralPage.cpp:26
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:54
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:241
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:53
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:238
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:317
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:405
 #, kde-format
@@ -17403,145 +17324,150 @@ msgstr ""
 msgid "Provide the list of value-label pairs like in the following example:"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:45
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:43
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:222
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:231
 #, kde-format
 msgid "Equal to"
 msgstr "等于"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:46
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:44
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:223
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:232
 #, kde-format
 msgid "Not Equal to"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:47
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:45
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:224
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:233
 #, kde-format
 msgid "Between (Incl. End Points)"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:48
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:46
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:225
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:234
 #, kde-format
 msgid "Between (Excl. End Points)"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:49
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:47
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:226
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:235
 #, kde-format
 msgid "Greater than"
 msgstr "大于"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:50
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:48
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:227
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:236
 #, kde-format
 msgid "Greater than or Equal to"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:51
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:49
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:228
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:237
 #, kde-format
 msgid "Less than"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:52
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:50
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:229
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:238
 #, kde-format
 msgid "Less than or Equal to"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:57
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:55
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:213
 #, kde-format
 msgid "Equal To"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:58
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:56
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:214
 #, kde-format
 msgid "Not Equal To"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:59
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:57
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:215
 #, kde-format
 msgid "Starts With"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:60
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:58
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:216
 #, kde-format
 msgid "Ends With"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:61
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:59
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:217
 #, kde-format
 msgid "Contains"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:62
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:60
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:218
 #, kde-format
 msgid "Does Not Contain"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:74
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:72
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:307
 #, kde-format
 msgid "&Mask"
 msgstr "屏蔽(&M)"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:75
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:73
 #, kde-format
 msgid "Mask values in the specified region"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:76
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:74
 #, kde-format
 msgctxt "@title:window"
 msgid "Mask Values"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:78
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:77
 #, kde-format
 msgid "&Drop"
 msgstr "弃用(&D)"
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:79
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:78
 #, kde-format
 msgid "Drop values in the specified region"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:80
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:79
 #, kde-format
 msgctxt "@title:window"
 msgid "Drop Values"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:946
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:953
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:1003
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:1009
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:80
+#, kde-format
+msgid "Delete entire rows in the spreadsheet if the condition is met."
+msgstr ""
+
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1031
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1038
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1088
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1094
 #, kde-format
 msgid "Invalid numeric value."
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:968
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1053
 #, kde-format
 msgid "%1: mask values"
 msgstr ""
 
-#: src/frontend/spreadsheet/DropValuesDialog.cpp:1024
+#: src/frontend/spreadsheet/DropValuesDialog.cpp:1109
 #, kde-format
 msgid "%1: drop values"
 msgstr ""
@@ -17595,28 +17521,24 @@ msgid "Invalid start value"
 msgstr "起始值无效"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:257
-#, fuzzy, kde-format
-#| msgid "Invalid end value, must be bigger than the start value"
+#, kde-format
 msgid "Invalid end value, must be greater than the start value"
-msgstr "结束值无效，必须大于起始值"
+msgstr ""
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:300
-#, fuzzy, kde-format
-#| msgid "The number of values to be generated must be bigger than one"
+#, kde-format
 msgid "The number of values to be generated must be greater than one"
-msgstr "要生成的数值数量必须大于一个"
+msgstr ""
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:317
-#, fuzzy, kde-format
-#| msgid "Invalid numeric increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid numeric increment value, must be greater than zero"
-msgstr "数值增量无效，必须大于零"
+msgstr ""
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:326
-#, fuzzy, kde-format
-#| msgid "Invalid Date&Time increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid Date&Time increment value, must be greater than zero"
-msgstr "日期时间增量无效，必须大于零"
+msgstr ""
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:487
 #, kde-format
@@ -18596,10 +18518,9 @@ msgid "Analyze and Plot Data"
 msgstr "数据分析并绘图"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:677
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Analysis"
-msgstr "统计图类"
+msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:678
 #, kde-format
@@ -22090,10 +22011,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lH1)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:114
-#, fuzzy, kde-format
-#| msgid "Username:"
+#, kde-format
 msgid "Alternate:"
-msgstr "用户名："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lHypothesis)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:269
@@ -22103,10 +22023,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lTest)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:289
-#, fuzzy, kde-format
-#| msgid "Test"
+#, kde-format
 msgid "Test:"
-msgstr "测试"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionY)
 #: src/frontend/ui/dockwidgets/imagedock.ui:136
@@ -24163,7 +24082,7 @@ msgid "End Time:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:47
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:46
 #, kde-format
 msgid "Numeric Values"
 msgstr ""
@@ -24171,17 +24090,17 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #. i18n: ectx: property (text), widget (QLabel, lConditionText)
 #. i18n: ectx: property (text), widget (QLabel, lConditionDateTime)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:67
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:128
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:234
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:66
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:127
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:231
 #, kde-format
 msgid "Condition:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMax)
 #. i18n: ectx: property (text), widget (QLabel, lMaxDateTime)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:81
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:227
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:80
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:224
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:334
 #: src/frontend/ui/spreadsheet/searchreplacewidget.ui:398
 #, kde-format
@@ -24189,16 +24108,22 @@ msgid "max."
 msgstr "最大."
 
 #. i18n: ectx: property (text), widget (QLabel, lText)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:144
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:142
 #, kde-format
 msgid "Text Values"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:203
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:200
 #, kde-format
 msgid "DateTime Values"
 msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, chbDeleteRows)
+#: src/frontend/ui/spreadsheet/dropvalueswidget.ui:274
+#, fuzzy, kde-format
+msgid "Delete Rows"
+msgstr "删除"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:97
@@ -25571,13 +25496,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
-
-#, fuzzy
-#~| msgid "Variable Statistics..."
-#~ msgid "Friedman Test Statistics"
-#~ msgstr "变量统计..."
-
-#, fuzzy
-#~| msgid "Column Statistics"
-#~ msgid "Log-Rank Test Statistics"
-#~ msgstr "列统计"
