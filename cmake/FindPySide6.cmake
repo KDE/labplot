@@ -32,7 +32,7 @@ find_library(PySide6_ABI3_LIBRARY
 
 find_path(PySide6_INCLUDE_DIR
     NAMES pysideqobject.h
-    PATHS /usr/include/PySide6 /usr/local/include ${PYSIDE_PYTHONPATH}/include ${CMAKE_INSTALL_PREFIX}/include
+    PATHS ${PYSIDE_PYTHONPATH}/include ${CMAKE_INSTALL_PREFIX}/include /usr/include/PySide6 /usr/local/include
 )
 
 find_path(PYSIDE_TYPESYSTEMS
@@ -47,14 +47,14 @@ if(PySide6_FOUND)
     # INTERFACE target for Python modules
     if(NOT TARGET PySide6::PythonModule)
         add_library(PySide6::PythonModule INTERFACE IMPORTED)
-        target_include_directories(PySide6::PythonModule INTERFACE "${PySide6_PYTHONPATH}")
+	target_include_directories(PySide6::PythonModule INTERFACE "${PYSIDE_PYTHONPATH}")
     endif()
 
     # Create a "PySide6::pyside6" target as a dummy INTERFACE
     if(NOT TARGET PySide6::pyside6)
         add_library(PySide6::pyside6 INTERFACE IMPORTED)
         set_target_properties(PySide6::pyside6 PROPERTIES
-            INTERFACE_INCLUDE_DIRECTORIES "${PySide6_PYTHONPATH}"
+		INTERFACE_INCLUDE_DIRECTORIES "${PYSIDE_PYTHONPATH}"
         )
 	if(PySide6_INCLUDE_DIR)
 	    set_target_properties(PySide6::pyside6 PROPERTIES
