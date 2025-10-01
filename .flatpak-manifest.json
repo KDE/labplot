@@ -55,7 +55,7 @@
                 {
                     "type": "archive",
                     "url": "https://gitlab.com/libeigen/eigen/-/archive/5.0.0/eigen-5.0.0.tar.bz2",
-                    "sha256": "4b9875419e27f3bab28f28e8e07e0c1eaeb2852653c5d275738e8cdd476ffe73"
+                    "sha256": "bdca0ec740fb83be21fe038699923f4c589ead9ab904f4058a9c97752e60d50b"
                 }
             ]
         },
