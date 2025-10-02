@@ -23,7 +23,7 @@ find_library(Shiboken6_LIBRARY
 
 find_library(Shiboken6_ABI3_LIBRARY
     NAMES shiboken6.abi3 libshiboken6.abi3 libshiboken6.abi3.so.6.9
-    PATHS "${PYSIDE_PYTHONPATH}" /usr/lib64 /usr/lib /app/lib
+    PATHS "${PYSIDE_PYTHONPATH}/../shiboken6" /usr/lib64 /usr/lib /app/lib
 )
 
 include(FindPackageHandleStandardArgs)
