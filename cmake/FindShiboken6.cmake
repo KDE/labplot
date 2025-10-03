@@ -12,7 +12,7 @@
 # Find the executable
 find_program(Shiboken6_EXECUTABLE
     NAMES shiboken6
-    HINTS "${CMAKE_INSTALL_PREFIX}/bin" "${CMAKE_PREFIX_PATH}/bin" /usr/bin /usr/local/bin /app/bin
+    HINTS "${CMAKE_INSTALL_PREFIX}/bin" "${CMAKE_PREFIX_PATH}/bin" /usr/bin /usr/local/bin /app/bin  "${PYSIDE_PYTHONPATH}/../shiboken6_generator"
 )
 
 # Find the library
