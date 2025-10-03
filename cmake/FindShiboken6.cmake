@@ -28,7 +28,6 @@ find_library(Shiboken6_ABI3_LIBRARY
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Shiboken6
-#    REQUIRED_VARS Shiboken6_EXECUTABLE Shiboken6_LIBRARY
     REQUIRED_VARS Shiboken6_EXECUTABLE
 )
 
