@@ -3,6 +3,7 @@ Type=Application
 Exec=labplot %f
 Icon=labplot
 Name=LabPlot
+Name[ar]=معمل الرسم
 Name[ca]=LabPlot
 Name[ca@valencia]=LabPlot
 Name[cs]=LabPlot
