@@ -9,6 +9,7 @@
 
 #include "PivotTable.h"
 #include "PivotTablePrivate.h"
+#include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
@@ -523,6 +524,7 @@ void PivotTablePrivate::populateDataModels(QSqlQuery sqlQuery) {
 
 		horizontalHeaderModel->setSpan(0, 1, columns.count(), 0);
 	} else {
+
 	}
 }
 
@@ -562,8 +564,22 @@ void PivotTable::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("dataSourceSpreadsheet"), d->dataSourceSpreadsheet->path());
 	WRITE_STRING_LIST("rows", d->rows);
 	WRITE_STRING_LIST("columns", d->columns);
-	// WRITE_STRING_LIST("values", d->values);
-	writer->writeEndElement();
+
+	// values
+	writer->writeStartElement(QStringLiteral("values"));
+	for (const auto& value : d->values) {
+		writer->writeStartElement(QStringLiteral("value"));
+		writer->writeAttribute(QStringLiteral("name"), value.name);
+		writer->writeAttribute(QStringLiteral("aggregation"), QString::number(static_cast<int>(value.aggregation)));
+		writer->writeEndElement(); // value
+	}
+	writer->writeEndElement(); // values
+
+	// filters
+	// TODO
+
+	writer->writeEndElement(); // general
+	writer->writeEndElement(); // pivotTable
 }
 
 /*!
@@ -595,7 +611,19 @@ bool PivotTable::load(XmlStreamReader* reader, bool preview) {
 				d->dataSourceSpreadsheetPath = str;
 				READ_STRING_LIST("rows", d->rows);
 				READ_STRING_LIST("columns", d->columns);
-				// READ_STRING_LIST("values", d->values);
+			} else if (reader->name() == QStringLiteral("values")) {
+				d->values.clear(); // clear the initial values
+				continue;
+			} else if (reader->name() == QStringLiteral("value")) {
+				attribs = reader->attributes();
+				PivotTable::Value value;
+				value.name = attribs.value(QStringLiteral("name")).toString();
+				value.aggregation = static_cast<PivotTable::Aggregation>(attribs.value(QStringLiteral("aggregation")).toInt());
+				d->values << value;
+			} else if (reader->isStartElement()) { // unknown element
+				reader->raiseUnknownElementWarning();
+				if (!reader->skipToEndElement())
+					return false;
 			} else { // unknown element
 				reader->raiseUnknownElementWarning();
 				if (!reader->skipToEndElement())
