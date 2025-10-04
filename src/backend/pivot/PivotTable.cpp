@@ -539,7 +539,7 @@ void PivotTablePrivate::createDb() {
 			dimensions << col->name();
 	}
 
-	m_dbTableName = dataSourceSpreadsheet->uuid().toString(QUuid::Id128);
+	m_dbTableName = QLatin1String("pivot_") + dataSourceSpreadsheet->uuid().toString(QUuid::Id128);
 	if (!QSqlDatabase::database().tables().contains(m_dbTableName)) {
 		const bool rc = dataSourceSpreadsheet->exportToSQLite(QString(), m_dbTableName);
 		if (!rc)

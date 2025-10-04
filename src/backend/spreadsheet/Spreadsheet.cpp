@@ -28,6 +28,7 @@
 #include <KConfigGroup>
 #include <KMessageBox>
 
+#include <QFile>
 #include <QMenu>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -1809,6 +1810,7 @@ bool Spreadsheet::exportToSQLite(const QString& path, const QString& tableName) 
 	query += QLatin1Char(')');
 	QSqlQuery q;
 	if (!q.exec(query)) {
+		QDEBUG(Q_FUNC_INFO << ", create DB query = " << query);
 		RESET_CURSOR;
 		KMessageBox::error(nullptr, i18n("Failed to create table in the SQLite database %1.", path) + QLatin1Char('\n') + q.lastError().databaseText());
 		db.close();
@@ -1865,6 +1867,7 @@ bool Spreadsheet::exportToSQLite(const QString& path, const QString& tableName) 
 			// insert values for the current chunk of data
 			if (!q.exec(query)) {
 				RESET_CURSOR;
+				QDEBUG(Q_FUNC_INFO << ", insert query = " << query);
 				KMessageBox::error(nullptr, i18n("Failed to insert values into the table."));
 				QDEBUG(Q_FUNC_INFO << ", bulk insert error " << q.lastError().databaseText());
 				db.close();
