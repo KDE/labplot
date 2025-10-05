@@ -328,6 +328,21 @@ void PivotTableDock::loadFields() {
 }
 
 void PivotTableDock::loadValues() {
+	// clear the previous content
+	auto* gridLayout = static_cast<QGridLayout*>(ui.frameValues->layout());
+	for (auto* cb : m_valueNameComboBoxes)
+		gridLayout->removeWidget(cb);
+	m_valueNameComboBoxes.clear();
+
+	for (auto* cb : m_valueAggregationComboBoxes)
+		gridLayout->removeWidget(cb);
+	m_valueAggregationComboBoxes.clear();
+
+	for (auto* b : m_removeValueButtons)
+		gridLayout->removeWidget(b);
+	m_removeValueButtons.clear();
+
+	// show the values from the current pivot table
 	const auto& values = m_pivotTable->values();
 	for (const auto& value : values)
 		addValue(value.name, value.aggregation);
