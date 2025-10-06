@@ -524,7 +524,6 @@ void PivotTablePrivate::populateDataModels(QSqlQuery sqlQuery) {
 
 		horizontalHeaderModel->setSpan(0, 1, columns.count(), 0);
 	} else {
-
 	}
 }
 

@@ -33,6 +33,7 @@ set(FILTER_SOURCES
 
 set(DATA_CONTAINER_SOURCES
     ${BACKEND_DIR}/matrix/Matrix.cpp
+    ${BACKEND_DIR}/pivot/PivotTable.cpp
     ${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
 )
 
