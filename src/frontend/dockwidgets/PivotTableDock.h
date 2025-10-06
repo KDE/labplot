@@ -63,9 +63,11 @@ private Q_SLOTS:
 
 	void addRow();
 	void removeRow();
+	void rowsOrderChanged(const QModelIndex&, int, int, const QModelIndex&, int);
 
 	void addColumn();
 	void removeColumn();
+	void columnsOrderChanged(const QModelIndex&, int, int, const QModelIndex&, int);
 
 	void removeValue();
 

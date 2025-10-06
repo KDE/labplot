@@ -60,6 +60,18 @@ PivotTableDock::PivotTableDock(QWidget* parent) : BaseDock(parent) {
 	ui.bAddColumn->setEnabled(false);
 	ui.bRemoveColumn->setEnabled(false);
 
+	ui.lwRows->setDragEnabled(true);
+	ui.lwRows->setAcceptDrops(true);
+	ui.lwRows->setDropIndicatorShown(true);
+	ui.lwRows->setDefaultDropAction(Qt::MoveAction);
+	ui.lwRows->setDragDropMode(QAbstractItemView::InternalMove);
+
+	ui.lwColumns->setDragEnabled(true);
+	ui.lwColumns->setAcceptDrops(true);
+	ui.lwColumns->setDropIndicatorShown(true);
+	ui.lwColumns->setDefaultDropAction(Qt::MoveAction);
+	ui.lwColumns->setDragDropMode(QAbstractItemView::InternalMove);
+
 	retranslateUi();
 
 	//**********************************  Slots **********************************************
@@ -96,6 +108,9 @@ PivotTableDock::PivotTableDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.lwColumns, &QListWidget::itemSelectionChanged, this, [=]() {
 		ui.bRemoveColumn->setEnabled(!ui.lwColumns->selectedItems().isEmpty());
 	});
+
+	connect(ui.lwRows->model(), &QAbstractItemModel::rowsMoved, this, &PivotTableDock::rowsOrderChanged);
+	connect(ui.lwColumns->model(), &QAbstractItemModel::rowsMoved, this, &PivotTableDock::columnsOrderChanged);
 }
 
 void PivotTableDock::setPivotTable(PivotTable* pivotTable) {
@@ -182,6 +197,16 @@ void PivotTableDock::removeRow() {
 }
 
 /*!
+ * called when the order of fields put on rows was changed via drag&drop
+ */
+void PivotTableDock::rowsOrderChanged(const QModelIndex&, int, int, const QModelIndex&, int) {
+    QStringList newOrder;
+    for (int i = 0; i < ui.lwRows->count(); ++i)
+        newOrder << ui.lwRows->item(i)->text();
+    m_pivotTable->setRows(newOrder);
+}
+
+/*!
  * adds the selected field to the columns
  */
 void PivotTableDock::addColumn() {
@@ -199,6 +224,16 @@ void PivotTableDock::removeColumn() {
 	ui.lwColumns->takeItem(ui.lwColumns->currentRow());
 	m_pivotTable->removeFromColumns(field);
 	loadFields();
+}
+
+/*!
+ * called when the order of fields put on columns was changed via drag&drop
+ */
+void PivotTableDock::columnsOrderChanged(const QModelIndex&, int, int, const QModelIndex&, int) {
+    QStringList newOrder;
+    for (int i = 0; i < ui.lwColumns->count(); ++i)
+        newOrder << ui.lwColumns->item(i)->text();
+    m_pivotTable->setColumns(newOrder);
 }
 
 /*!

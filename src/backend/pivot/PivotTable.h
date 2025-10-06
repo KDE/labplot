@@ -19,7 +19,12 @@ class PivotTableView;
 class PivotTablePrivate;
 class Spreadsheet;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT PivotTable : public AbstractPart {
+#else
 class PivotTable : public AbstractPart {
+#endif
 	Q_OBJECT
 
 public:
@@ -52,10 +57,12 @@ public:
 	const QStringList& measures() const;
 
 	const QStringList& rows() const;
+	void setRows(const QStringList&);
 	void addToRows(const QString&);
 	void removeFromRows(const QString&);
 
 	const QStringList& columns() const;
+	void setColumns(const QStringList&);
 	void addToColumns(const QString&);
 	void removeFromColumns(const QString&);
 
@@ -84,6 +91,8 @@ private:
 
 Q_SIGNALS:
 	void changed();
+	void rowsChanged(const QStringList&);
+	void columnsChanged(const QStringList&);
 	void requestProjectContextMenu(QMenu*);
 	void dataSourceTypeChanged(PivotTable::DataSourceType);
 	void dataSourceSpreadsheetChanged(const Spreadsheet*);

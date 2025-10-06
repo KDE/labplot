@@ -100,6 +100,13 @@ const QStringList& PivotTable::rows() const {
 	return d->rows;
 }
 
+STD_SETTER_CMD_IMPL_F_S(PivotTable, SetRows, QStringList, rows, recalculate)
+void PivotTable::setRows(const QStringList& rows) {
+	Q_D(PivotTable);
+	if (rows != d->rows)
+		exec(new PivotTableSetRowsCmd(d, rows, ki18n("%1: set rows")));
+}
+
 void PivotTable::addToRows(const QString& field) {
 	Q_D(PivotTable);
 	d->addToRows(field);
@@ -113,6 +120,13 @@ void PivotTable::removeFromRows(const QString& field) {
 const QStringList& PivotTable::columns() const {
 	Q_D(const PivotTable);
 	return d->columns;
+}
+
+STD_SETTER_CMD_IMPL_F_S(PivotTable, SetColumns, QStringList, columns, recalculate)
+void PivotTable::setColumns(const QStringList& columns) {
+	Q_D(PivotTable);
+	if (columns != d->columns)
+		exec(new PivotTableSetColumnsCmd(d, columns, ki18n("%1: set columns")));
 }
 
 void PivotTable::addToColumns(const QString& dimension) {
@@ -150,11 +164,15 @@ bool PivotTable::printPreview() const {
   called at all. Aspects must not depend on the existence of a view for their operation.
 */
 QWidget* PivotTable::view() const {
+#ifndef SDK
 	if (!m_partView) {
 		m_view = new PivotTableView(const_cast<PivotTable*>(this));
 		m_partView = m_view;
 	}
 	return m_partView;
+#else
+	return nullptr;
+#endif
 }
 
 /*!
