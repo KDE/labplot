@@ -60,6 +60,7 @@ PivotTableDock::PivotTableDock(QWidget* parent) : BaseDock(parent) {
 	ui.bAddColumn->setEnabled(false);
 	ui.bRemoveColumn->setEnabled(false);
 
+	// allow drag&drop reordering of rows and columns
 	ui.lwRows->setDragEnabled(true);
 	ui.lwRows->setAcceptDrops(true);
 	ui.lwRows->setDropIndicatorShown(true);
@@ -99,18 +100,17 @@ PivotTableDock::PivotTableDock(QWidget* parent) : BaseDock(parent) {
 		ui.bAddColumn->setEnabled(enabled);
 	});
 
+	connect(ui.lwRows->model(), &QAbstractItemModel::rowsMoved, this, &PivotTableDock::rowsChanged);
 	connect(ui.lwRows, &QListWidget::doubleClicked, this,&PivotTableDock::removeRow);
 	connect(ui.lwRows, &QListWidget::itemSelectionChanged, this, [=]() {
 		ui.bRemoveRow->setEnabled(!ui.lwRows->selectedItems().isEmpty());
 	});
 
+	connect(ui.lwColumns->model(), &QAbstractItemModel::rowsMoved, this, &PivotTableDock::columnsChanged);
 	connect(ui.lwColumns, &QListWidget::doubleClicked, this,&PivotTableDock::removeColumn);
 	connect(ui.lwColumns, &QListWidget::itemSelectionChanged, this, [=]() {
 		ui.bRemoveColumn->setEnabled(!ui.lwColumns->selectedItems().isEmpty());
 	});
-
-	connect(ui.lwRows->model(), &QAbstractItemModel::rowsMoved, this, &PivotTableDock::rowsOrderChanged);
-	connect(ui.lwColumns->model(), &QAbstractItemModel::rowsMoved, this, &PivotTableDock::columnsOrderChanged);
 }
 
 void PivotTableDock::setPivotTable(PivotTable* pivotTable) {
@@ -126,7 +126,9 @@ void PivotTableDock::setPivotTable(PivotTable* pivotTable) {
 	load();
 
 	//undo functions
-	//TODO:
+	connect(m_pivotTable, &PivotTable::rowsChanged, this, &PivotTableDock::pivotRowsChanged);
+	connect(m_pivotTable, &PivotTable::columnsChanged, this, &PivotTableDock::pivotColumnsChanged);
+	connect(m_pivotTable, &PivotTable::valuesChanged, this, &PivotTableDock::pivotValuesChanged);
 }
 
 void PivotTableDock::retranslateUi() {
@@ -183,7 +185,7 @@ void PivotTableDock::addRow() {
 	QString field = ui.lwFields->currentItem()->text();
 	ui.lwRows->addItem(field);
 	ui.lwFields->takeItem(ui.lwFields->currentRow());
-	m_pivotTable->addToRows(field);
+	rowsChanged();
 }
 
 /*!
@@ -192,18 +194,18 @@ void PivotTableDock::addRow() {
 void PivotTableDock::removeRow() {
 	const QString& field = ui.lwRows->currentItem()->text();
 	ui.lwRows->takeItem(ui.lwRows->currentRow());
-	m_pivotTable->removeFromRows(field);
 	loadFields();
+	rowsChanged();
 }
 
 /*!
- * called when the order of fields put on rows was changed via drag&drop
+ * called when the selected rows changed (item added or removed or reordered)
  */
-void PivotTableDock::rowsOrderChanged(const QModelIndex&, int, int, const QModelIndex&, int) {
-    QStringList newOrder;
+void PivotTableDock::rowsChanged() {
+    QStringList rows;
     for (int i = 0; i < ui.lwRows->count(); ++i)
-        newOrder << ui.lwRows->item(i)->text();
-    m_pivotTable->setRows(newOrder);
+        rows << ui.lwRows->item(i)->text();
+    m_pivotTable->setRows(rows);
 }
 
 /*!
@@ -213,7 +215,7 @@ void PivotTableDock::addColumn() {
 	QString field = ui.lwFields->currentItem()->text();
 	ui.lwColumns->addItem(field);
 	ui.lwFields->takeItem(ui.lwFields->currentRow());
-	m_pivotTable->addToColumns(field);
+	columnsChanged();
 }
 
 /*!
@@ -222,18 +224,18 @@ void PivotTableDock::addColumn() {
 void PivotTableDock::removeColumn() {
 	const QString& field = ui.lwColumns->currentItem()->text();
 	ui.lwColumns->takeItem(ui.lwColumns->currentRow());
-	m_pivotTable->removeFromColumns(field);
 	loadFields();
+	columnsChanged();
 }
 
 /*!
- * called when the order of fields put on columns was changed via drag&drop
+ * called when the selected columns changed (item added or removed or reordered)
  */
-void PivotTableDock::columnsOrderChanged(const QModelIndex&, int, int, const QModelIndex&, int) {
-    QStringList newOrder;
+void PivotTableDock::columnsChanged() {
+	QStringList columns;
     for (int i = 0; i < ui.lwColumns->count(); ++i)
-        newOrder << ui.lwColumns->item(i)->text();
-    m_pivotTable->setColumns(newOrder);
+        columns << ui.lwColumns->item(i)->text();
+    m_pivotTable->setColumns(columns);
 }
 
 /*!
@@ -519,7 +521,30 @@ void PivotTableDock::tableChanged() {
 //*************************************************************
 //******** SLOTs for changes triggered in PivotTable **********
 //*************************************************************
+void PivotTableDock::pivotRowsChanged(const QStringList& rows) {
+	CONDITIONAL_LOCK_RETURN;
 
+	ui.lwRows->clear();
+	for (const auto& row : rows)
+		ui.lwRows->addItem(new QListWidgetItem(row));
+
+	loadFields();
+}
+
+void PivotTableDock::pivotColumnsChanged(const QStringList& columns) {
+	CONDITIONAL_LOCK_RETURN;
+
+	ui.lwColumns->clear();
+	for (const auto& column : columns)
+		ui.lwColumns->addItem(new QListWidgetItem(column));
+
+	loadFields();
+}
+
+void PivotTableDock::pivotValuesChanged(const QVector<PivotTable::Value>& values) {
+	CONDITIONAL_LOCK_RETURN;
+	loadValues();
+}
 
 //*************************************************************
 //******************** SETTINGS *******************************

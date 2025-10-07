@@ -21,18 +21,7 @@ public:
 	explicit PivotTablePrivate(PivotTable*);
 
 	QString name() const;
-
-	void addToRows(const QString&);
-	void removeFromRows(const QString&);
-
-	void addToColumns(const QString&);
-	void removeFromColumns(const QString&);
-
-	void addToValues(const QString&);
-	void removeFromValues(const QString&);
-
 	void recalculate();
-	void createDb();
 
 	PivotTable* const q;
 
@@ -61,6 +50,7 @@ private:
 	QString m_dbTableName;
 	// QMap<QString, QStringList> m_members;
 
+	void createDb();
 	QString createSQLQuery() const;
 	void populateDataModels(QSqlQuery);
 	QString headerText(PivotTable::Value value) const;

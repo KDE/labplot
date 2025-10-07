@@ -53,19 +53,10 @@ public:
 	HierarchicalHeaderModel* horizontalHeaderModel() const;
 	HierarchicalHeaderModel* verticalHeaderModel() const;
 
-	const QStringList& dimensions() const;
-	const QStringList& measures() const;
-
-	const QStringList& rows() const;
-	void setRows(const QStringList&);
-	void addToRows(const QString&);
-	void removeFromRows(const QString&);
-
-	const QStringList& columns() const;
-	void setColumns(const QStringList&);
-	void addToColumns(const QString&);
-	void removeFromColumns(const QString&);
-
+	CLASS_D_ACCESSOR_DECL(QStringList, dimensions, Dimensions)
+	CLASS_D_ACCESSOR_DECL(QStringList, measures, Measures)
+	CLASS_D_ACCESSOR_DECL(QStringList, rows, Rows)
+	CLASS_D_ACCESSOR_DECL(QStringList, columns, Columns)
 	BASIC_D_ACCESSOR_DECL(QVector<Value>, values, Values)
 
 	QIcon icon() const override;

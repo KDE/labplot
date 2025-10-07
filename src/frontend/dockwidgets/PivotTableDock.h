@@ -56,20 +56,22 @@ private Q_SLOTS:
 	void tableChanged();
 	void showDatabaseManager();
 
-	void valueNameChanged(int);
-	void valueAggregationChanged(int);
-
-	//SLOTs for changes triggered in PivotTable
-
 	void addRow();
 	void removeRow();
-	void rowsOrderChanged(const QModelIndex&, int, int, const QModelIndex&, int);
+	void rowsChanged();
 
 	void addColumn();
 	void removeColumn();
-	void columnsOrderChanged(const QModelIndex&, int, int, const QModelIndex&, int);
+	void columnsChanged();
 
+	void valueNameChanged(int);
+	void valueAggregationChanged(int);
 	void removeValue();
+
+	//SLOTs for changes triggered in PivotTable
+	void pivotRowsChanged(const QStringList&);
+	void pivotColumnsChanged(const QStringList&);
+	void pivotValuesChanged(const QVector<PivotTable::Value>&);
 
 Q_SIGNALS:
 	void info(const QString&);

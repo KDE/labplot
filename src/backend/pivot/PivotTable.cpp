@@ -68,6 +68,12 @@ HierarchicalHeaderModel* PivotTable::verticalHeaderModel() const {
 	return d->verticalHeaderModel;
 }
 
+BASIC_SHARED_D_READER_IMPL(PivotTable, QStringList, dimensions, dimensions)
+BASIC_SHARED_D_READER_IMPL(PivotTable, QStringList, measures, measures)
+BASIC_SHARED_D_READER_IMPL(PivotTable, QStringList, rows, rows)
+BASIC_SHARED_D_READER_IMPL(PivotTable, QStringList, columns, columns)
+BASIC_SHARED_D_READER_IMPL(PivotTable, QVector<PivotTable::Value>, values, values)
+
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
@@ -85,41 +91,11 @@ void PivotTable::setDataSourceSpreadsheet(const Spreadsheet* spreadsheet) {
 		exec(new PivotTableSetDataSourceSpreadsheetCmd(d, spreadsheet, ki18n("%1: data source spreadsheet changed")));
 }
 
-const QStringList& PivotTable::dimensions() const {
-	Q_D(const PivotTable);
-	return d->dimensions;
-}
-
-const QStringList& PivotTable::measures() const {
-	Q_D(const PivotTable);
-	return d->measures;
-}
-
-const QStringList& PivotTable::rows() const {
-	Q_D(const PivotTable);
-	return d->rows;
-}
-
 STD_SETTER_CMD_IMPL_F_S(PivotTable, SetRows, QStringList, rows, recalculate)
 void PivotTable::setRows(const QStringList& rows) {
 	Q_D(PivotTable);
 	if (rows != d->rows)
 		exec(new PivotTableSetRowsCmd(d, rows, ki18n("%1: set rows")));
-}
-
-void PivotTable::addToRows(const QString& field) {
-	Q_D(PivotTable);
-	d->addToRows(field);
-}
-
-void PivotTable::removeFromRows(const QString& field) {
-	Q_D(PivotTable);
-	d->removeFromRows(field);
-}
-
-const QStringList& PivotTable::columns() const {
-	Q_D(const PivotTable);
-	return d->columns;
 }
 
 STD_SETTER_CMD_IMPL_F_S(PivotTable, SetColumns, QStringList, columns, recalculate)
@@ -128,18 +104,6 @@ void PivotTable::setColumns(const QStringList& columns) {
 	if (columns != d->columns)
 		exec(new PivotTableSetColumnsCmd(d, columns, ki18n("%1: set columns")));
 }
-
-void PivotTable::addToColumns(const QString& dimension) {
-	Q_D(PivotTable);
-	d->addToColumns(dimension);
-}
-
-void PivotTable::removeFromColumns(const QString& field) {
-	Q_D(PivotTable);
-	d->removeFromColumns(field);
-}
-
-BASIC_SHARED_D_READER_IMPL(PivotTable, QVector<PivotTable::Value>, values, values)
 
 STD_SETTER_CMD_IMPL_F_S(PivotTable, SetValues, QVector<PivotTable::Value>, values, recalculate)
 void PivotTable::setValues(const QVector<Value> values) {
@@ -204,26 +168,6 @@ PivotTablePrivate::PivotTablePrivate(PivotTable* owner)
 
 QString PivotTablePrivate::name() const {
 	return q->name();
-}
-
-void PivotTablePrivate::addToRows(const QString& field) {
-	rows << field;
-	recalculate();
-}
-
-void PivotTablePrivate::removeFromRows(const QString& field) {
-	rows.removeOne(field);
-	recalculate();
-}
-
-void PivotTablePrivate::addToColumns(const QString& dimension) {
-	columns << dimension;
-	recalculate();
-}
-
-void PivotTablePrivate::removeFromColumns(const QString& field) {
-	columns.removeOne(field);
-	recalculate();
 }
 
 void PivotTablePrivate::recalculate() {
@@ -391,7 +335,7 @@ void PivotTablePrivate::populateDataModels(QSqlQuery sqlQuery) {
 	sqlQuery.previous(); // navigate in front of the first record so we also read it below in the whie loop
 
 	const int columnsCount = sqlQuery.record().count(); // total number of columns in the result set
-	const int firstValueIndex = rows.size() + columns.size(); // index of the first value column (the first column with a value, not a field name
+	const int firstValueIndex = rows.size() + columns.size(); // index of the first value column (the first column with a value, not a field name)
 	const int valuesCount = columnsCount - firstValueIndex; // number of value columns (the columns with values, not field names)
 	Q_ASSERT(valuesCount == values.size()); // the number of value columns must be equal to the number of values
 
