@@ -10,8 +10,7 @@ include:
 #      - /gitlab-templates/reuse-lint.yml
       - /gitlab-templates/clang-format.yml
       - /gitlab-templates/linux-qt6.yml
-# Fails finding ECM (2025-02-13)
-#      - /gitlab-templates/linux-qt6-next.yml
+      - /gitlab-templates/linux-qt6-next.yml
       - /gitlab-templates/windows-qt6.yml
       - /gitlab-templates/freebsd-qt6.yml
 ### DEPLOY
