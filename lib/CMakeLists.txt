@@ -168,6 +168,7 @@ set(SDK_DEPENDENCY_SOURCES
 )
 
 set(SDK_INTERNAL_SOURCES
+    ${FRONTEND_DIR}/pivot/HierarchicalHeaderView.cpp
     ${FRONTEND_DIR}/worksheet/WorksheetView.cpp
     ${BACKEND_DIR}/core/datatypes/Double2DateTimeFilter.h
     ${BACKEND_DIR}/core/datatypes/Double2DayOfWeekFilter.h
