@@ -2180,10 +2180,9 @@ msgid "Compression: %1"
 msgstr "Komprese: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, fuzzy, kde-format
-#| msgid "Endianess: %1"
+#, kde-format
 msgid "Endianness: %1"
-msgstr "Endianita: %1"
+msgstr ""
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:167
 #, kde-format
@@ -2406,10 +2405,9 @@ msgid "Device not available."
 msgstr "Zařízení není dostupné."
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, fuzzy, kde-format
-#| msgid "Timeout occured."
+#, kde-format
 msgid "Timeout occurred."
-msgstr "Vypršel časový limit."
+msgstr ""
 
 #: src/backend/datasources/LiveDataSource.cpp:757
 #, kde-format
@@ -7573,13 +7571,12 @@ msgstr ""
 #: src/backend/statistics/HypothesisTest.cpp:505
 #, kde-format
 msgid "N/A"
-msgstr ""
+msgstr "Nedostupné"
 
 #: src/backend/statistics/HypothesisTest.cpp:509
-#, fuzzy, kde-format
-#| msgid "Device not available."
+#, kde-format
 msgid "Test result is not available."
-msgstr "Zařízení není dostupné."
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:513
 #, kde-format
@@ -7620,16 +7617,14 @@ msgid "Alternate Hypothesis"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:547
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Descriptive Statistics"
-msgstr "Statistika"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:548
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Test Statistics"
-msgstr "Statistika"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:548
 #, kde-format
@@ -7637,34 +7632,29 @@ msgid "Significance Level"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:549
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "p-Value"
-msgstr "Hodnota"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:552
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees of Freedom Between Groups"
-msgstr "Stupňů volnosti"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:553
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees of Freedom Within Groups"
-msgstr "Stupňů volnosti"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:555
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees of Freedom Treatment"
-msgstr "Stupňů volnosti"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:556
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees of Freedom Residuals"
-msgstr "Stupňů volnosti"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #: src/backend/statistics/HypothesisTest.cpp:558
@@ -7677,31 +7667,27 @@ msgstr "Stupňů volnosti"
 #: src/backend/statistics/HypothesisTest.cpp:567
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/backend/statistics/HypothesisTest.cpp:572
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "t-Value"
-msgstr "Hodnota"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:563
-#, fuzzy, kde-format
-#| msgid "Test"
+#, kde-format
 msgid "Test Mean"
-msgstr "Test"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:564
 #: src/backend/statistics/HypothesisTest.cpp:568
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/backend/statistics/HypothesisTest.cpp:572
-#, fuzzy, kde-format
-#| msgid "Difference"
+#, kde-format
 msgid "Mean Difference"
-msgstr "Rozdíl"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:567
-#, fuzzy, kde-format
-#| msgid "Variance"
+#, kde-format
 msgid "Pooled Variance"
-msgstr "Rozptyl"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:568
 #: src/backend/statistics/HypothesisTest.cpp:573
@@ -7711,10 +7697,9 @@ msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:575
 #: src/backend/statistics/HypothesisTest.cpp:581
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "F-Statistic"
-msgstr "Statistika"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:575
 #, kde-format
@@ -7762,17 +7747,15 @@ msgid "Mean Squares Residuals"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:586
-#, fuzzy, kde-format
-#| msgid "Up"
+#, kde-format
 msgid "U"
-msgstr "Nahoru"
+msgstr "U"
 
 #: src/backend/statistics/HypothesisTest.cpp:586
 #: src/backend/statistics/HypothesisTest.cpp:590
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "z-Value"
-msgstr "Hodnota"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:587
 #, kde-format
@@ -7780,10 +7763,9 @@ msgid "Rank Sum 1"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:587
-#, fuzzy, kde-format
-#| msgid "Mean = 0"
+#, kde-format
 msgid "Mean Rank 1"
-msgstr "Střední hodnota = 0"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:588
 #, kde-format
@@ -7791,15 +7773,14 @@ msgid "Rank Sum 2"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:588
-#, fuzzy, kde-format
-#| msgid "Mean = 0"
+#, kde-format
 msgid "Mean Rank 2"
-msgstr "Střední hodnota = 0"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:590
 #, kde-format
 msgid "W"
-msgstr ""
+msgstr "Z"
 
 #: src/backend/statistics/HypothesisTest.cpp:591
 #, kde-format
@@ -7807,10 +7788,9 @@ msgid "Positive Rank Sum"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:591
-#, fuzzy, kde-format
-#| msgid "Positive Lookahead"
+#, kde-format
 msgid "Positive Rank Mean"
-msgstr "Pozitivní vyhlížení"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:592
 #, kde-format
@@ -7823,10 +7803,9 @@ msgid "Negative Rank Sum"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:593
-#, fuzzy, kde-format
-#| msgid "Negative lookahead"
+#, kde-format
 msgid "Negative Rank Mean"
-msgstr "Zpětně předvídavý"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:593
 #, kde-format
@@ -7834,22 +7813,20 @@ msgid "Negative Rank Count"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:594
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgid "Tie Count"
-msgstr "Počet"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:596
 #: src/backend/statistics/HypothesisTest.cpp:604
 #, kde-format
 msgid "H"
-msgstr ""
+msgstr "H"
 
 #: src/backend/statistics/HypothesisTest.cpp:598
-#, fuzzy, kde-format
-#| msgid "Qt"
+#, kde-format
 msgid "Q"
-msgstr "Qt"
+msgstr "Q"
 
 #: src/backend/statistics/HypothesisTest.cpp:600
 #: src/backend/statistics/HypothesisTest.cpp:602
@@ -7888,10 +7865,9 @@ msgid "Total Count 2"
 msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:610
-#, fuzzy, kde-format
-#| msgid "Statistical"
+#, kde-format
 msgid "Statistical Conclusion"
-msgstr "Statistické"
+msgstr ""
 
 #: src/backend/statistics/HypothesisTest.cpp:622
 #, kde-format
@@ -8694,10 +8670,9 @@ msgid "%1: set whiskers cap size"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
-#, fuzzy, kde-format
-#| msgid "%1: border type changed"
+#, kde-format
 msgid "%1: jittering changed"
-msgstr "%1: změněn typ okraje"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:582
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:519
@@ -15379,12 +15354,10 @@ msgid "Properties: Data Extractor"
 msgstr "Vlastnosti: Extraktor dat"
 
 #: src/frontend/GuiObserver.cpp:438
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Notes"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hypothesis Test"
-msgstr "Vlastnosti: Poznámky"
+msgstr ""
 
 #: src/frontend/GuiObserver.cpp:443
 #, kde-format
@@ -18540,10 +18513,9 @@ msgid "Analyze and Plot Data"
 msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:677
-#, fuzzy, kde-format
-#| msgid "Statistical"
+#, kde-format
 msgid "Statistical Analysis"
-msgstr "Statistické"
+msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:678
 #, kde-format
@@ -19660,10 +19632,9 @@ msgstr "Obrázek:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/frontend/ui/datapickerimagewidget.ui:701
-#, fuzzy, kde-format
-#| msgid "Embedd"
+#, kde-format
 msgid "Embed"
-msgstr "Vložit"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileRelativePath)
 #: src/frontend/ui/datapickerimagewidget.ui:708
@@ -22039,10 +22010,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lH1)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:114
-#, fuzzy, kde-format
-#| msgid "Username:"
+#, kde-format
 msgid "Alternate:"
-msgstr "Uživatelské jméno:"
+msgstr "Alternativní:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHypothesis)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:269
@@ -22052,10 +22022,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lTest)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:289
-#, fuzzy, kde-format
-#| msgid "Test"
+#, kde-format
 msgid "Test:"
-msgstr "Test"
+msgstr "Test:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionY)
 #: src/frontend/ui/dockwidgets/imagedock.ui:136
@@ -24147,10 +24116,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbDeleteRows)
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:274
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgid "Delete Rows"
-msgstr "Smazat"
+msgstr "Smazat řádky"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:97
@@ -25523,13 +25491,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Nelze otevřít soubor:"
-
-#, fuzzy
-#~| msgid "Column Statistics"
-#~ msgid "Friedman Test Statistics"
-#~ msgstr "Statistika sloupce"
-
-#, fuzzy
-#~| msgid "Column Statistics"
-#~ msgid "Log-Rank Test Statistics"
-#~ msgstr "Statistika sloupce"

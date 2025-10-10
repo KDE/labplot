@@ -116,7 +116,6 @@ function(generate_shiboken_sources)
     make_path(PBC_INCLUDES ${PB_INCLUDES})
 
     # Set up the options to pass to shiboken.
-    message(STATUS "PySide6 typesystems: ${PYSIDE_TYPESYSTEMS}")
     set(shiboken_options --enable-pyside-extensions
         --keywords=scripting
         --clang-option=-DSCRIPTING

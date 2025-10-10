@@ -215,7 +215,6 @@ else()
     message(STATUS "UNKNOWN C++ compiler, adding compile flags")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS}")
 endif()
-message(STATUS "CXXFLAGS =${CMAKE_CXX_FLAGS}")
 
 ##########################################################
 
@@ -333,6 +332,17 @@ if(WIN32)
 option(ENABLE_PYTHON_SCRIPTING "Build with Python scripting support" OFF)
 else()
 option(ENABLE_PYTHON_SCRIPTING "Build with Python scripting support" ON)
+endif()
+
+#################################################
+if(ENABLE_REPRODUCIBLE)
+    add_definitions(-DREPRODUCIBLE_BUILD)
+    message(STATUS "Reproducable build ENABLED")
+else()
+    if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-date-time")
+    endif()
+    message(STATUS "Reproducable build DISABLED")
 endif()
 
 ### OS macros ####################################
@@ -730,7 +740,8 @@ if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
     endif()
     find_package(Shiboken6 QUIET REQUIRED)
     if(Shiboken6_FOUND)
-	message(STATUS "Found Shiboken6: ${Shiboken6_EXECUTABLE}, ${SHIBOKEN_PYTHON_INCLUDE_DIRS}, ${Shiboken6_LIBRARY}, ${Shiboken6_ABI3_LIBRARY}")
+        get_target_property(Shiboken6_LIBRARIES Shiboken6::libshiboken IMPORTED_LOCATION)
+	message(STATUS "Found Shiboken6: ${Shiboken6_EXECUTABLE}, ${SHIBOKEN_PYTHON_INCLUDE_DIRS}, ${Shiboken6_LIBRARIES}")
     endif()
 endif()
 if(ENABLE_PYTHON_SDK)
@@ -771,13 +782,7 @@ else()
     set(ENABLE_SCRIPTING OFF) # no scripting runtime is enabled
 endif()
 
-#################################################
-if(ENABLE_REPRODUCIBLE)
-    add_definitions(-DREPRODUCIBLE_BUILD)
-    message(STATUS "Reproducable build ENABLED")
-else()
-    message(STATUS "Reproducable build DISABLED")
-endif()
+message(STATUS "CXXFLAGS =${CMAKE_CXX_FLAGS}")
 #################################################
 #################################################
 include(CheckFunctionExists)

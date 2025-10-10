@@ -39,14 +39,14 @@
         "/share/info",
         "/share/man"
     ],
+    "build-options": {
+        "append-path": "/usr/lib/sdk/llvm18/bin",
+        "append-ld-library-path": "/usr/lib/sdk/llvm18/lib"
+    },
+    "sdk-extensions": [
+        "org.freedesktop.Sdk.Extension.llvm18"
+    ],
     "modules": [
-	{
-	    "name": "install-typesystems",
-	    "buildsystem": "simple",
-	    "build-commands": [
-		    "ln -s /app/lib/python3.12/site-packages/PySide6 /app/share/PySide6"
-	    ]
-	},
         {
             "name": "eigen",
             "buildsystem": "cmake-ninja",
@@ -54,8 +54,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.bz2",
-                    "sha256": "b4c198460eba6f28d34894e3a5710998818515104d6e74e5cc331ce31e46e626"
+                    "url": "https://gitlab.com/libeigen/eigen/-/archive/5.0.0/eigen-5.0.0.tar.bz2",
+                    "sha256": "bdca0ec740fb83be21fe038699923f4c589ead9ab904f4058a9c97752e60d50b"
                 }
             ]
         },
@@ -76,8 +76,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-25.09.1.tar.xz",
-                    "sha256": "0c1091d01d3dd1664a13816861e812d02b29201e96665454b81b52d261fad658"
+                    "url": "https://poppler.freedesktop.org/poppler-25.10.0.tar.xz",
+                    "sha256": "6b5e9bb64dabb15787a14db1675291c7afaf9387438cc93a4fb7f6aec4ee6fe0"
                 }
             ],
             "modules": [
