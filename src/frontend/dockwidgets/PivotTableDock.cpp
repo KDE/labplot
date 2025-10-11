@@ -359,9 +359,21 @@ void PivotTableDock::valueAggregationChanged(int) {
  */
 void PivotTableDock::loadFields() {
 	ui.lwFields->clear();
-	for (auto dimension : m_pivotTable->dimensions())
+
+	// add dimensions (text columns)
+	for (const auto& dimension : m_pivotTable->dimensions())
 		if (!fieldSelected(dimension))
 			ui.lwFields->addItem(new QListWidgetItem(QIcon::fromTheme(QLatin1String("draw-text")), dimension));
+
+	 // add a separator item
+	auto* separatorItem = new QListWidgetItem(QLatin1String("----------------"));
+	separatorItem->setFlags(separatorItem->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsEnabled);
+	ui.lwFields->addItem(separatorItem);
+
+	// add measures (numeric columns)
+	for (const auto& measure : m_pivotTable->measures())
+		if (!fieldSelected(measure))
+			ui.lwFields->addItem(new QListWidgetItem(QIcon::fromTheme(QLatin1String("draw-number")), measure));
 }
 
 void PivotTableDock::loadValues() {
@@ -547,7 +559,7 @@ void PivotTableDock::pivotColumnsChanged(const QStringList& columns) {
 	loadFields();
 }
 
-void PivotTableDock::pivotValuesChanged(const QVector<PivotTable::Value>& values) {
+void PivotTableDock::pivotValuesChanged(const QVector<PivotTable::Value>&) {
 	CONDITIONAL_LOCK_RETURN;
 	loadValues();
 }

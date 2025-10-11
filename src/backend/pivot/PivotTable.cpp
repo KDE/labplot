@@ -486,6 +486,88 @@ void PivotTablePrivate::populateDataModels(QSqlQuery sqlQuery) {
 
 		horizontalHeaderModel->setSpan(0, 1, columns.count(), 0);
 	} else {
+		const int rowsCount = rows.count();
+		const int columnsCount = columns.count();
+
+		// resize the models
+		verticalHeaderModel->setColumnCount(rowsCount);
+		verticalHeaderModel->setRowCount(recordsCount);
+
+		horizontalHeaderModel->setColumnCount(recordsCount);
+		horizontalHeaderModel->setRowCount(columnsCount);
+
+		dataModel->setColumnCount(recordsCount);
+		dataModel->setRowCount(recordsCount);
+
+		// set the values
+		QVector<int> start_span_rows(rowsCount, 0);
+		QVector<int> end_span_rows(rowsCount, 0);
+		QVector<QString> last_value_rows(rowsCount, QString());
+
+		QVector<int> start_span_columns(columnsCount, 0);
+		QVector<int> end_span_columns(columnsCount, 0);
+		QVector<QString> last_value_columns(columnsCount, QString());
+
+		int row = 0;
+		int col = 0;
+		while (sqlQuery.next()) {
+			// rows
+			bool parent_header_changed_rows = false;
+			for (int i = 0; i < rowsCount; ++i) {
+				const auto& value = sqlQuery.value(i).toString();
+				if (row == 0 || value != last_value_rows[i] || parent_header_changed_rows) {
+					// set the span for the previous group if needed
+					if (row > 0 && end_span_rows[i] > start_span_rows[i]) {
+						int span = end_span_rows[i] - start_span_rows[i];
+						if (span > 1)
+							verticalHeaderModel->setSpan(start_span_rows[i], i, span, 1);
+					}
+					start_span_rows[i] = row;
+					parent_header_changed_rows = true;
+				}
+				verticalHeaderModel->setData(verticalHeaderModel->index(row, i), value, Qt::DisplayRole);
+				last_value_rows[i] = value;
+				end_span_rows[i] = row + 1;
+			}
+
+			// columns
+			bool parent_header_changed_columns = false;
+			for (int i = 0; i < columnsCount; ++i) {
+				const auto& value = sqlQuery.value(i + rowsCount).toString();
+				if (col == 0 || value != last_value_columns[i] || parent_header_changed_columns) {
+					// Set span for previous group if needed
+					if (col > 0 && end_span_columns[i] > start_span_columns[i]) {
+						int span = end_span_columns[i] - start_span_columns[i];
+						if (span > 1)
+							horizontalHeaderModel->setSpan(i, start_span_columns[i], 1, span);
+					}
+					start_span_columns[i] = col;
+					parent_header_changed_columns = true;
+				}
+				horizontalHeaderModel->setData(horizontalHeaderModel->index(i, col), value, Qt::DisplayRole);
+				last_value_columns[i] = value;
+				end_span_columns[i] = col + 1;
+			}
+
+			++row;
+			++col;
+		}
+
+		// finalize spans for the last group for rows
+		for (int i = 0; i < rowsCount; ++i) {
+			int span = end_span_rows[i] - start_span_rows[i];
+			if (span > 1)
+				verticalHeaderModel->setSpan(start_span_rows[i], i, span, 1);
+		}
+		verticalHeaderModel->setSpan(1, 0, 0, rowsCount);
+
+		// finalize spans for the last group for columns
+		for (int i = 0; i < columnsCount; ++i) {
+			int span = end_span_columns[i] - start_span_columns[i];
+			if (span > 1)
+				horizontalHeaderModel->setSpan(i, start_span_columns[i], 1, span);
+		}
+		horizontalHeaderModel->setSpan(0, 1, columnsCount, 0);
 	}
 }
 
