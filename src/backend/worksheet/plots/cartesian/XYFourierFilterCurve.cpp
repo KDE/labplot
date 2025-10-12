@@ -24,8 +24,8 @@ extern "C" {
 #include "backend/nsl/nsl_sf_poly.h"
 }
 
-#include <QElapsedTimer>
 #include <QDebug> // qWarning()
+#include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
 
