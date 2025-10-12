@@ -514,10 +514,15 @@ void ImportDatasetWidget::datasetChanged() {
 	if (!dataset.isEmpty()) {
 		m_datasetObject = loadDatasetObject();
 
-		if (m_datasetObject.contains(QLatin1String("description_url"))
-			&& QNetworkInformation::instance()->reachability() == QNetworkInformation::Reachability::Online) {
-			WAIT_CURSOR;
-			m_networkManager->get(QNetworkRequest(QUrl(m_datasetObject[QLatin1String("description_url")].toString())));
+		if (m_datasetObject.contains(QLatin1String("description_url"))) {
+			// check if QNetworkInformation is supported first
+			if (!QNetworkInformation::loadDefaultBackend()) {
+				WARN("QNetworkInformation is not supported on this platform or backend.");
+				return;
+			} else if (QNetworkInformation::instance()->reachability() == QNetworkInformation::Reachability::Online) {
+				WAIT_CURSOR;
+				m_networkManager->get(QNetworkRequest(QUrl(m_datasetObject[QLatin1String("description_url")].toString())));
+			}
 		} else {
 			m_datasetDescription = QStringLiteral("<b>") + i18n("Dataset") + QStringLiteral(":</b><br>");
 			m_datasetDescription += m_datasetObject[QLatin1String("name")].toString();
