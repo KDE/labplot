@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-29 00:39+0000\n"
+"POT-Creation-Date: 2025-10-13 00:38+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -10945,12 +10945,12 @@ msgctxt "Curve Fitting"
 msgid "Fit Results"
 msgstr "Αποτελέσματα:"
 
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:76
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:77
 #, kde-format
 msgid "%1: set filter options and perform the Fourier filter"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:166
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:167
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:122
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:123
 #, kde-format
@@ -12686,14 +12686,14 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/frontend/datasources/ImportDatasetWidget.cpp:522
+#: src/frontend/datasources/ImportDatasetWidget.cpp:527
 #, fuzzy, kde-format
 #| msgid "Data:"
 msgid "Dataset"
 msgstr "Δεδομένα:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDescription)
-#: src/frontend/datasources/ImportDatasetWidget.cpp:525
+#: src/frontend/datasources/ImportDatasetWidget.cpp:530
 #: src/frontend/ui/datasources/datasetmetadatamanagerwidget.ui:210
 #, fuzzy, kde-format
 #| msgid "Direction"
@@ -19941,7 +19941,7 @@ msgstr ""
 #: src/frontend/TemplateHandler.cpp:181
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:447
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:64
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:73
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:86
 #, kde-format
 msgid "Load"
 msgstr ""
@@ -19955,7 +19955,7 @@ msgstr ""
 #: src/frontend/TemplateHandler.cpp:183
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:460
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:77
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:86
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:99
 #, kde-format
 msgid "Save"
 msgstr ""
@@ -23931,7 +23931,7 @@ msgstr "x=f(t)"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:608
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:70
 #: src/frontend/ui/matrix/matrixfunctionwidget.ui:74
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:169
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:182
 #, kde-format
 msgid "Functions"
 msgstr "Συναρτήσεις"
@@ -23944,7 +23944,7 @@ msgstr "Συναρτήσεις"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:621
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:60
 #: src/frontend/ui/matrix/matrixfunctionwidget.ui:84
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:159
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:172
 #, kde-format
 msgid "Constants"
 msgstr "Σταθερές"
@@ -23965,7 +23965,7 @@ msgstr "τύπος εξίσωσης"
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbLoadFunction)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:444
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:61
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:70
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:83
 #, fuzzy, kde-format
 #| msgid "%1: set plot designation"
 msgid "Load a custom function"
@@ -23974,7 +23974,7 @@ msgstr "%1: ορισμός τίτλου γραφικής παράστασης"
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbSaveFunction)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:457
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:74
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:83
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:96
 #, fuzzy, kde-format
 #| msgid "%1: set plot designation"
 msgid "Save a custom function"
@@ -24367,7 +24367,7 @@ msgstr "Συναρτήσεις"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunction)
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:197
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:149
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:162
 #, kde-format
 msgid "f(x) = "
 msgstr "f(x) ="
@@ -25511,14 +25511,14 @@ msgid "Colors"
 msgstr "Χρωματικός χάρτης"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdate)
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:182
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:195
 #, fuzzy, kde-format
 #| msgid "%1: change cell values"
 msgid "auto update the values"
 msgstr "%1: αλλαγή τιμών σε κελιά"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoResize)
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:192
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:205
 #, fuzzy, kde-format
 #| msgid "Start column:"
 msgid "auto resize the column"

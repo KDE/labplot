@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-29 00:39+0000\n"
+"POT-Creation-Date: 2025-10-13 00:38+0000\n"
 "PO-Revision-Date: 2025-09-29 17:34+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -10605,12 +10605,12 @@ msgctxt "Curve Fitting"
 msgid "Fit Results"
 msgstr "Resultado del ajuste"
 
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:76
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:77
 #, kde-format
 msgid "%1: set filter options and perform the Fourier filter"
 msgstr "%1: definir las opciones de filtrado y ejecutar el filtro de Fourier"
 
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:166
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:167
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:122
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:123
 #, kde-format
@@ -12309,13 +12309,13 @@ msgstr ""
 "No se ha podido abrir el archivo de colecciones de conjuntos de datos %1. "
 "Compruebe su instalación."
 
-#: src/frontend/datasources/ImportDatasetWidget.cpp:522
+#: src/frontend/datasources/ImportDatasetWidget.cpp:527
 #, kde-format
 msgid "Dataset"
 msgstr "Conjunto de datos"
 
 #. i18n: ectx: property (text), widget (QLabel, lDescription)
-#: src/frontend/datasources/ImportDatasetWidget.cpp:525
+#: src/frontend/datasources/ImportDatasetWidget.cpp:530
 #: src/frontend/ui/datasources/datasetmetadatamanagerwidget.ui:210
 #, kde-format
 msgid "Description"
@@ -19423,7 +19423,7 @@ msgstr "Porcentaje acumulativo"
 #: src/frontend/TemplateHandler.cpp:181
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:447
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:64
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:73
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:86
 #, kde-format
 msgid "Load"
 msgstr "Cargar"
@@ -19437,7 +19437,7 @@ msgstr "Cargar propiedades desde una plantilla"
 #: src/frontend/TemplateHandler.cpp:183
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:460
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:77
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:86
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:99
 #, kde-format
 msgid "Save"
 msgstr "Guardar"
@@ -23250,7 +23250,7 @@ msgstr "x=f(t)"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:608
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:70
 #: src/frontend/ui/matrix/matrixfunctionwidget.ui:74
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:169
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:182
 #, kde-format
 msgid "Functions"
 msgstr "Funciones"
@@ -23263,7 +23263,7 @@ msgstr "Funciones"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:621
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:60
 #: src/frontend/ui/matrix/matrixfunctionwidget.ui:84
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:159
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:172
 #, kde-format
 msgid "Constants"
 msgstr "Constantes"
@@ -23283,7 +23283,7 @@ msgstr "Ecuación"
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbLoadFunction)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:444
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:61
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:70
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:83
 #, kde-format
 msgid "Load a custom function"
 msgstr "Cargar una función personalizada"
@@ -23291,7 +23291,7 @@ msgstr "Cargar una función personalizada"
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbSaveFunction)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:457
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:74
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:83
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:96
 #, kde-format
 msgid "Save a custom function"
 msgstr "Guardar una función personalizada"
@@ -23665,7 +23665,7 @@ msgstr "Función:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunction)
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:197
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:149
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:162
 #, kde-format
 msgid "f(x) = "
 msgstr "f(x) = "
@@ -24769,13 +24769,13 @@ msgid "Colors"
 msgstr "Colores"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdate)
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:182
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:195
 #, kde-format
 msgid "auto update the values"
 msgstr "actualizar automáticamente los valores"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoResize)
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:192
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:205
 #, kde-format
 msgid "auto resize the column"
 msgstr "cambio de tamaño automático de la columna"
