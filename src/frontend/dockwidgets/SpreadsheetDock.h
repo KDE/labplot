@@ -17,6 +17,7 @@
 
 class KConfig;
 class Spreadsheet;
+class TemplateHandler;
 
 class SpreadsheetDock : public BaseDock {
 	Q_OBJECT
@@ -30,6 +31,7 @@ private:
 	Ui::SpreadsheetDock ui;
 	QList<Spreadsheet*> m_spreadsheetList;
 	Spreadsheet* m_spreadsheet{nullptr};
+	TemplateHandler* m_templateHandler{nullptr};
 
 	void load();
 	void loadConfig(KConfig&);

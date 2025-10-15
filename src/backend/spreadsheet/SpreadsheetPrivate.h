@@ -14,6 +14,7 @@ public:
 
 public:
 	bool suppressSetCommentFinalizeImport{false};
+	bool readOnly{false};
 	bool showComments{false};
 	bool showSparklines{false};
 	Spreadsheet::Linking linking;
