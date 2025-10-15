@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description 	     : GUI observer
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2024 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2016 Garvit Khatri <garvitdelhi@gmail.com>
 
@@ -62,6 +62,7 @@
 #ifdef HAVE_SCRIPTING
 #include "frontend/dockwidgets/ScriptDock.h"
 #endif
+#include "frontend/dockwidgets/SeasonalDecompositionDock.h"
 #include "frontend/dockwidgets/StatisticsSpreadsheetDock.h"
 #include "frontend/dockwidgets/WorksheetDock.h"
 #include "frontend/dockwidgets/XYConvolutionCurveDock.h"
@@ -434,11 +435,21 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 			m_datapickerImageDock->setImages(std::move(list));
 		}
 		break;
+
+	// statistical analysis
 	case AspectType::HypothesisTest:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Hypothesis Test"));
 		raiseDock(m_hypothesisTestDock, m_mainWindow->stackedWidget);
 		m_hypothesisTestDock->setTest(static_cast<HypothesisTest*>(selectedAspects.first()));
 		break;
+
+	// time series analysis
+	case AspectType::SeasonalDecomposition:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Seasonal Decomposition"));
+		raiseDock(m_seasonalDecompositionDock, m_mainWindow->stackedWidget);
+		m_seasonalDecompositionDock->setDecompositions(castList<SeasonalDecomposition>(selectedAspects));
+		break;
+
 	case AspectType::Project:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Project"));
 		raiseDock(m_projectDock, m_mainWindow->stackedWidget);

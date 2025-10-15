@@ -61,8 +61,6 @@ enum class AspectType : quint64 {
 	QQPlot = 0x0210800,
 	KDEPlot = 0x0210802,
 
-	HypothesisTest = 0x0420080,
-
 	// continuous improvement plots
 	ProcessBehaviorChart = 0x0211000,
 	RunChart = 0x0211001,
@@ -113,6 +111,12 @@ enum class AspectType : quint64 {
 	Project = 0x2000001,
 	MQTTClient = 0x2000002,
 	MQTTSubscription = 0x2000004,
+
+	// statistical analysis
+	HypothesisTest = 0x0420080,
+
+	// time series analysis
+	SeasonalDecomposition = 0x0412100
 };
 
 #ifdef SDK
@@ -272,6 +276,9 @@ public:
 			return QStringLiteral("MQTTSubscription");
 		case AspectType::HypothesisTest:
 			return QStringLiteral("HypothesisTest");
+			break;
+		case AspectType::SeasonalDecomposition:
+			return QStringLiteral("SeasonalDecomposition");
 			break;
 		}
 
