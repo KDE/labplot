@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Folder in a project
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2025 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -34,6 +34,7 @@
 #ifndef SDK
 #include "backend/statistics/HypothesisTest.h"
 #endif
+#include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/Worksheet.h"
 
 #include <KLocalizedString>
@@ -384,6 +385,13 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		}
 		addChildFast(test);
 #endif
+	} else if (element_name == QLatin1String("seasonalDecomposition")) {
+		auto* decomp = new SeasonalDecomposition(QString());
+		if (!decomp->load(reader, preview)) {
+			delete decomp;
+			return false;
+		}
+		addChildFast(decomp);
 	} else {
 		reader->raiseWarning(i18n("unknown element '%1' found", element_name));
 		if (!reader->skipToEndElement())

@@ -19,6 +19,7 @@
 #ifndef SDK
 #include "backend/statistics/HypothesisTest.h"
 #endif
+#include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
@@ -1290,6 +1291,20 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		test->setDataColumns(std::move(dataColumns));
 	}
 #endif
+
+	// seasonal decompositions
+	QVector<SeasonalDecomposition*> decompositions;
+	if (hasChildren)
+		decompositions = aspect->children<SeasonalDecomposition>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::SeasonalDecomposition)
+		decompositions << static_cast<SeasonalDecomposition*>(aspect);
+
+	for (auto* decomposition : decompositions) {
+		if (!decomposition)
+			continue;
+		RESTORE_COLUMN_POINTER(decomposition, xColumn, XColumn);
+		RESTORE_COLUMN_POINTER(decomposition, yColumn, YColumn);
+	}
 
 	// if a column was calculated via a formula, restore the pointers to the variable columns defining the formula
 	for (auto* col : columns) {
