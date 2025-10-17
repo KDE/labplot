@@ -29,7 +29,7 @@ public:
 	explicit SeasonalDecomposition(const QString& name, const bool loading = false);
 	~SeasonalDecomposition() override;
 
-	enum class Method { LOESS };
+	enum class Method { STL, MSTL };
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)

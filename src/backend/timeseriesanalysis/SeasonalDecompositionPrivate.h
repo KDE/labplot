@@ -20,7 +20,6 @@ class Worksheet;
 class SeasonalDecompositionPrivate {
 public:
 	explicit SeasonalDecompositionPrivate(SeasonalDecomposition*);
-	// virtual ~SeasonalDecompositionPrivate();
 
 	QString name() const;
 	void recalc();
@@ -54,7 +53,12 @@ public:
 	Column* columnSeasonal{nullptr};
 	Column* columnResidual{nullptr};
 
-	SeasonalDecomposition::Method method{SeasonalDecomposition::Method::LOESS};
+	SeasonalDecomposition::Method method{SeasonalDecomposition::Method::STL};
+
+	// STL parameters
+
+	// MSTL parameters
+
 };
 
 #endif

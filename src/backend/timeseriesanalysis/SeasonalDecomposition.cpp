@@ -10,8 +10,8 @@
 
 #include "SeasonalDecomposition.h"
 #include "backend/core/column/Column.h"
-#include "backend/lib/macrosCurve.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/macrosCurve.h"
 #include "backend/nsl/stl.hpp"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/timeseriesanalysis/SeasonalDecompositionPrivate.h"
@@ -31,7 +31,6 @@ CURVE_COLUMN_CONNECT(SeasonalDecomposition, Y, y, recalc)
 SeasonalDecomposition::SeasonalDecomposition(const QString& name, const bool loading)
 	: AbstractPart(name, AspectType::SeasonalDecomposition)
 	, d_ptr(new SeasonalDecompositionPrivate(this)) {
-
 	if (!loading)
 		init();
 }
@@ -270,29 +269,40 @@ void SeasonalDecompositionPrivate::recalc() {
 			continue;
 
 		yDataVector.push_back(yColumn->valueAt(row));
-		++row;
 	}
 
-	const int period = 13; // TODO
-	auto result = stl::params().fit(yDataVector, period);
-
-	const auto size = result.seasonal.size();
-	QVector<double> trendData;
-	trendData.resize(size);
-	QVector<double> seasonalData;
-	seasonalData.resize(size);
-	QVector<double> residualData;
-	residualData.resize(size);
-
-	for (size_t i = 0; i < size; ++i) {
-		trendData[i] = result.trend[i];
-		seasonalData[i] = result.seasonal[i];
-		residualData[i] = result.remainder[i];
+	if (yDataVector.size() == 0) {
+		// no input data and no result available, clear the previous data shown in the result spreadsheet
+		resultSpreadsheet->setRowCount(0);
+		return;
 	}
 
-	columnTrend->setValues(trendData);
-	columnSeasonal->setValues(seasonalData);
-	columnResidual->setValues(residualData);
+	switch (method) {
+	case (SeasonalDecomposition::Method::STL):
+	case (SeasonalDecomposition::Method::MSTL): {
+		auto result = stl::params().seasonal_length(13).robust(true).fit(yDataVector, 13);
+
+		const auto size = result.seasonal.size();
+		QVector<double> trendData;
+		trendData.resize(size);
+		QVector<double> seasonalData;
+		seasonalData.resize(size);
+		QVector<double> residualData;
+		residualData.resize(size);
+
+		for (size_t i = 0; i < size; ++i) {
+			trendData[i] = result.trend[i];
+			seasonalData[i] = result.seasonal[i];
+			residualData[i] = result.remainder[i];
+		}
+
+		columnTrend->setValues(trendData);
+		columnSeasonal->setValues(seasonalData);
+		columnResidual->setValues(residualData);
+
+		break;
+	}
+	}
 }
 
 // ##############################################################################

@@ -206,6 +206,7 @@ QList<AspectType> TreeViewComboBox::plotColumnTopLevelClasses() {
 			AspectType::Datapicker,
 			AspectType::DatapickerCurve,
 			AspectType::Spreadsheet,
+			AspectType::SeasonalDecomposition,
 			AspectType::StatisticsSpreadsheet,
 			AspectType::LiveDataSource,
 			AspectType::Column,

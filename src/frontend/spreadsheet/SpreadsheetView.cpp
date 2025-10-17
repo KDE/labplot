@@ -2275,8 +2275,10 @@ void SpreadsheetView::addSeasonalDecomposition() {
 		auto* col = columns.constFirst();
 		if (col->plotDesignation() == AbstractColumn::PlotDesignation::X)
 			decomp->setXColumn(col);
-		else
+		else {
 			decomp->setYColumn(col);
+			decomp->setName(i18n("Seasonal Decomposition for %1", col->name()));
+		}
 	} else {
 		// more than one column were selected, identifiy the first X and the first Y columns in the selection.
 		AbstractColumn* colX{nullptr};
@@ -2284,8 +2286,10 @@ void SpreadsheetView::addSeasonalDecomposition() {
 		for (auto* col : columns) {
 			if (!colX && col->plotDesignation() == AbstractColumn::PlotDesignation::X)
 				colX = col;
-			else if (!colY && col->plotDesignation() == AbstractColumn::PlotDesignation::Y)
+			else if (!colY && col->plotDesignation() == AbstractColumn::PlotDesignation::Y) {
 				colY = col;
+				decomp->setName(i18n("Seasonal Decomposition for %1", col->name()));
+			}
 		}
 		decomp->setXColumn(colX);
 		decomp->setYColumn(colY);
