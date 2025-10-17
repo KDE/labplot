@@ -61,7 +61,6 @@ private:
 	void connectXColumn(const AbstractColumn*);
 	void connectYColumn(const AbstractColumn*);
 
-
 private Q_SLOTS:
 	void xColumnAboutToBeRemoved(const AbstractAspect*);
 	void yColumnAboutToBeRemoved(const AbstractAspect*);
