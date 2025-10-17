@@ -55,7 +55,7 @@ SeasonalDecompositionDock::SeasonalDecompositionDock(QWidget* parent)
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &SeasonalDecompositionDock::saveConfigAsTemplate);
 	connect(templateHandler, &TemplateHandler::info, this, &SeasonalDecompositionDock::info);
 
-	ui.gridLayout->addWidget(frame, 12, 0, 1, 3);
+	ui.gridLayout->addWidget(frame, 26, 0, 1, 3);
 }
 
 SeasonalDecompositionDock::~SeasonalDecompositionDock() = default;
@@ -107,16 +107,77 @@ void SeasonalDecompositionDock::retranslateUi() {
 
 	// method
 	ui.cbMethod->clear();
-	ui.cbMethod->addItem(i18n("Loess"), static_cast<int>(SeasonalDecomposition::Method::LOESS));
+	ui.cbMethod->addItem(QStringLiteral("STL"), static_cast<int>(SeasonalDecomposition::Method::STL));
+	ui.cbMethod->addItem(QStringLiteral("MSTL"), static_cast<int>(SeasonalDecomposition::Method::STL));
 
-	// tooltip texts
 	QString info = i18n(
-		"Method used to perform the seasonal-trend decomposition::"
+		"Method used to perform the seasonal-trend decomposition:"
 		"<ul>"
-		"<li>LOESS - Locally Estimated Scatterplot Smoothing</li>"
+		"<li>STL - Seasonal-trend decomposition based on LOESS (\"Locally Estimated Scatterplot Smoothing\")</li>"
+		"<li>MSTL - STL for multiple seasonalities</li>"
 		"</ul>");
 	ui.lMethod->setToolTip(info);
 	ui.cbMethod->setToolTip(info);
+
+	// STL parameters
+
+	// lengths
+	info = i18n("Length of the seasonal smoother, must be odd and at least 3.");
+	ui.lSTLSeasonalLength->setToolTip(info);
+	ui.sbSTLSeasonalLength->setToolTip(info);
+
+	info = i18n("Length of the trend smoother, must be odd and at least 3. For \"Auto\", uses the smallest odd integer greater than 1.5 * \"Period\" / (1 - 1.5 / \"Seasonal Length\").");
+	ui.lSTLTrendLength->setToolTip(info);
+	ui.sbSTLTrendLength->setToolTip(info);
+	ui.cbSTLTrendLengthAuto->setToolTip(i18n("If enabled, uses the smallest odd integer greater than 1.5 * \"Period\" / (1 - 1.5 / \"Seasonal Length\")"));
+
+	info = i18n("Length of the low-pass filter, must be odd and at least 3.");
+	ui.lSTLLowPassLength->setToolTip(info);
+	ui.sbSTLLowPassLength->setToolTip(info);
+	ui.cbSTLLowPassLengthAuto->setToolTip(i18n("If enabled, uses the smallest odd integer greater than \"Period\""));
+
+	// degrees
+	QString degree0 = i18n("0 - Constant");
+	QString degree1 = i18n("1 - Constant and Trend");
+	ui.cbSTLSeasonalDegree->clear();
+	ui.cbSTLSeasonalDegree->addItem(degree0);
+	ui.cbSTLSeasonalDegree->addItem(degree1);
+
+	ui.cbSTLTrendDegree->clear();
+	ui.cbSTLTrendDegree->addItem(degree0);
+	ui.cbSTLTrendDegree->addItem(degree1);
+
+	ui.cbSTLLowPassDegree->clear();
+	ui.cbSTLLowPassDegree->addItem(degree0);
+	ui.cbSTLLowPassDegree->addItem(degree1);
+
+	info = i18n("The degree of locally-fitted polynomial for the seasonal component.");
+	ui.lSTLSeasonalDegree->setToolTip(info);
+	ui.cbSTLSeasonalDegree->setToolTip(info);
+
+	info = i18n("The degree of locally-fitted polynomial for the trend component.");
+	ui.lSTLTrendDegree->setToolTip(info);
+	ui.cbSTLTrendDegree->setToolTip(info);
+
+	info = i18n("The degree of locally-fitted polynomial for the low-pass component.");
+	ui.lSTLLowPassDegree->setToolTip(info);
+	ui.cbSTLLowPassDegree->setToolTip(info);
+
+	// jumps
+	info = i18n("The number of jumps to include in the seasonal component.");
+	ui.lSTLSeasonalJump->setToolTip(info);
+	ui.sbSTLSeasonalJump->setToolTip(info);
+
+	info = i18n("The number of jumps to include in the trend component.");
+	ui.lSTLTrendJump->setToolTip(info);
+	ui.sbSTLTrendJump->setToolTip(info);
+
+	info = i18n("The number of jumps to include in the low-pass component.");
+	ui.lSTLLowPassJump->setToolTip(info);
+	ui.sbSTLLowPassJump->setToolTip(info);
+
+	// MSTL parameters
+	// TODO:
 }
 
 //*************************************************************
