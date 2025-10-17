@@ -115,6 +115,9 @@ public:
 	bool isPrinted() const;
 	bool isSelected() const;
 
+	Axis* horizontalAxis() const;
+	Axis* verticalAxis() const;
+
 	void addLegend(CartesianPlotLegend*);
 	int curveCount() const;
 	const XYCurve* getCurve(int index) const;

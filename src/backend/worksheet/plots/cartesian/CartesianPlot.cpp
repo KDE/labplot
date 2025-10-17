@@ -1899,6 +1899,38 @@ void CartesianPlot::addPlot(QAction* action) {
 	}
 }
 
+/*!
+ * returns the first horizontal axis on the plot area,
+ * usually used to set the axis title for the plot area and in case
+ * multiple axes of the same orientation are present.
+ */
+Axis* CartesianPlot::horizontalAxis() const {
+	const auto& axes = children(AspectType::Axis);
+	for (auto a : axes) {
+		auto axis = static_cast<Axis*>(a);
+		if (axis->orientation() == Axis::Orientation::Horizontal)
+			return axis;
+	}
+
+	return nullptr;
+}
+
+/*!
+ * returns the first horizontal axis on the plot area,
+ * usually used to set the axis title for the plot area and in case
+ * multiple axes of the same orientation are present.
+ */
+Axis* CartesianPlot::verticalAxis() const {
+	const auto& axes = children(AspectType::Axis);
+	for (auto a : axes) {
+		auto axis = static_cast<Axis*>(a);
+		if (axis->orientation() == Axis::Orientation::Vertical)
+			return axis;
+	}
+
+	return nullptr;
+}
+
 void CartesianPlot::addHorizontalAxis() {
 	DEBUG(Q_FUNC_INFO)
 	Axis* axis = new Axis(QStringLiteral("x-axis"), Axis::Orientation::Horizontal);
