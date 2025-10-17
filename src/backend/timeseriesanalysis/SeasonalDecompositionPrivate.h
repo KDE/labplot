@@ -32,7 +32,7 @@ public:
 	const AbstractColumn* yColumn{nullptr};
 	QString xColumnPath;
 	QString yColumnPath;
-	
+
 	// visualization
 	Worksheet* worksheet{nullptr};
 

@@ -9,16 +9,16 @@
  */
 
 #include "SeasonalDecomposition.h"
+#include "backend/core/column/Column.h"
 #include "backend/lib/macrosCurve.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "backend/core/column/Column.h"
+#include "backend/nsl/stl.hpp"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/timeseriesanalysis/SeasonalDecompositionPrivate.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/timeseriesanalysis/SeasonalDecompositionPrivate.h"
-#include "backend/nsl/stl.hpp"
 
 CURVE_COLUMN_CONNECT(SeasonalDecomposition, X, x, recalc)
 CURVE_COLUMN_CONNECT(SeasonalDecomposition, Y, y, recalc)
@@ -29,8 +29,8 @@ CURVE_COLUMN_CONNECT(SeasonalDecomposition, Y, y, recalc)
  * \ingroup backend
  */
 SeasonalDecomposition::SeasonalDecomposition(const QString& name, const bool loading)
-	: AbstractPart(name, AspectType::SeasonalDecomposition),
-	d_ptr(new SeasonalDecompositionPrivate(this)){
+	: AbstractPart(name, AspectType::SeasonalDecomposition)
+	, d_ptr(new SeasonalDecompositionPrivate(this)) {
 
 	if (!loading)
 		init();
@@ -66,6 +66,10 @@ void SeasonalDecomposition::init() {
 	// worksheet
 	d->worksheet = new Worksheet(i18n("Worksheet"));
 	d->worksheet->setFixed(true);
+	QRectF newRect = d->worksheet->pageRect();
+	double newHeight = Worksheet::convertToSceneUnits(20, Worksheet::Unit::Centimeter);
+	newRect.setHeight(round(newHeight));
+	d->worksheet->setPageRect(newRect);
 	addChild(d->worksheet);
 
 	// plot areas
@@ -250,6 +254,14 @@ void SeasonalDecompositionPrivate::recalc() {
 	if (!xColumn || !yColumn)
 		return;
 
+	// in case the y-column was changed, adjust the title of the plot the y-axes
+	const auto& name = yColumn->name();
+	plotAreaOriginal->title()->setText(name);
+	plotAreaOriginal->verticalAxis()->title()->setText(name);
+	plotAreaTrend->verticalAxis()->title()->setText(name);
+	plotAreaSeasonal->verticalAxis()->title()->setText(name);
+	plotAreaResidual->verticalAxis()->title()->setText(name);
+
 	// copy valid data into a temp vector
 	std::vector<double> yDataVector;
 	const int rowCount = std::min(xColumn->rowCount(), yColumn->rowCount());
@@ -277,7 +289,6 @@ void SeasonalDecompositionPrivate::recalc() {
 		seasonalData[i] = result.seasonal[i];
 		residualData[i] = result.remainder[i];
 	}
-
 
 	columnTrend->setValues(trendData);
 	columnSeasonal->setValues(seasonalData);

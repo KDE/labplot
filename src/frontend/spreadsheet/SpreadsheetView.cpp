@@ -2265,7 +2265,33 @@ void SpreadsheetView::plotDataDistributionFit(QAction* action) {
 }
 
 void SpreadsheetView::addSeasonalDecomposition() {
-	project()->addChild(new SeasonalDecomposition(i18n("Seasonal Decomposition")));
+	const auto& columns = selectedColumns(false);
+	if (columns.isEmpty())
+		return;
+
+	auto* decomp = new SeasonalDecomposition(i18n("Seasonal Decomposition"));
+
+	if (columns.size() == 1) {
+		auto* col = columns.constFirst();
+		if (col->plotDesignation() == AbstractColumn::PlotDesignation::X)
+			decomp->setXColumn(col);
+		else
+			decomp->setYColumn(col);
+	} else {
+		// more than one column were selected, identifiy the first X and the first Y columns in the selection.
+		AbstractColumn* colX{nullptr};
+		AbstractColumn* colY{nullptr};
+		for (auto* col : columns) {
+			if (!colX && col->plotDesignation() == AbstractColumn::PlotDesignation::X)
+				colX = col;
+			else if (!colY && col->plotDesignation() == AbstractColumn::PlotDesignation::Y)
+				colY = col;
+		}
+		decomp->setXColumn(colX);
+		decomp->setYColumn(colY);
+	}
+
+	project()->addChild(decomp);
 }
 
 void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
