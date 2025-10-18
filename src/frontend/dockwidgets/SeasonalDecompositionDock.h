@@ -49,11 +49,41 @@ private Q_SLOTS:
 	void yColumnChanged(const QModelIndex&);
 	void methodChanged(int);
 
-	// SLOTs for changes triggered in Histogram
+	// STL parameters
+	void stlPeriodChanged(int);
+	void stlRobustChanged(bool);
+	void stlSeasonalLengthChanged(int);
+	void stlTrendLengthChanged(int);
+	void stlTrendLengthAutoChanged(bool);
+	void stlLowPassLengthChanged(int);
+	void stlLowPassLengthAutoChanged(bool);
+	void stlSeasonalDegreeChanged(int);
+	void stlTrendDegreeChanged(int);
+	void stlLowPassDegreeChanged(int);
+	void stlSeasonalJumpChanged(int);
+	void stlTrendJumpChanged(int);
+	void stlLowPassJumpChanged(int);
+
+	// SLOTs for changes triggered in SeasonalDecomposition
 	// General-Tab
 	void decompositionXColumnChanged(const AbstractColumn*);
 	void decompositionYColumnChanged(const AbstractColumn*);
 	void decompositionMethodChanged(SeasonalDecomposition::Method);
+
+	// STL parameters
+	void decompositionSTLPeriodChanged(int);
+	void decompositionSTLRobustChanged(bool);
+	void decompositionSTLSeasonalLengthChanged(int);
+	void decompositionSTLTrendLengthChanged(int);
+	void decompositionSTLTrendLengthAutoChanged(bool);
+	void decompositionSTLLowPassLengthChanged(int);
+	void decompositionSTLLowPassLengthAutoChanged(bool);
+	void decompositionSTLSeasonalDegreeChanged(int);
+	void decompositionSTLTrendDegreeChanged(int);
+	void decompositionSTLLowPassDegreeChanged(int);
+	void decompositionSTLSeasonalJumpChanged(int);
+	void decompositionSTLTrendJumpChanged(int);
+	void decompositionSTLLowPassJumpChanged(int);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);
