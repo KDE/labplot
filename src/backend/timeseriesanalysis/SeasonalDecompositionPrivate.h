@@ -23,6 +23,7 @@ public:
 
 	QString name() const;
 	void recalc();
+	void recalcDecomposition();
 
 	SeasonalDecomposition* const q;
 
@@ -56,9 +57,24 @@ public:
 	SeasonalDecomposition::Method method{SeasonalDecomposition::Method::STL};
 
 	// STL parameters
+	int stlPeriod{7};
+	bool stlRobust{true};
+	int stlSeasonalLength{7};
+	int stlTrendLength{3};
+	bool stlTrendLengthAuto{true};
+	int stlLowPassLength{3};
+	bool stlLowPassLengthAuto{true};
+	int stlSeasonalDegree{1};
+	int stlTrendDegree{1};
+	int stlLowPassDegree{1};
+	int stlSeasonalJump{1};
+	int stlTrendJump{1};
+	int stlLowPassJump{1};
 
 	// MSTL parameters
 
+private:
+	std::vector<double> yDataVector; // valid values from the sources y-column, used in the calculation of the decomposition
 };
 
 #endif

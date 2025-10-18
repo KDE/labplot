@@ -37,6 +37,21 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, yColumnPath, YColumnPath)
 	BASIC_D_ACCESSOR_DECL(Method, method, Method)
 
+	// STL parameters
+	BASIC_D_ACCESSOR_DECL(int, stlPeriod, STLPeriod)
+	BASIC_D_ACCESSOR_DECL(bool, stlRobust, STLRobust)
+	BASIC_D_ACCESSOR_DECL(int, stlSeasonalLength, STLSeasonalLength)
+	BASIC_D_ACCESSOR_DECL(int, stlTrendLength, STLTrendLength)
+	BASIC_D_ACCESSOR_DECL(bool, stlTrendLengthAuto, STLTrendLengthAuto)
+	BASIC_D_ACCESSOR_DECL(int, stlLowPassLength, STLLowPassLength)
+	BASIC_D_ACCESSOR_DECL(bool, stlLowPassLengthAuto, STLLowPassLengthAuto)
+	BASIC_D_ACCESSOR_DECL(int, stlSeasonalDegree, STLSeasonalDegree)
+	BASIC_D_ACCESSOR_DECL(int, stlTrendDegree, STLTrendDegree)
+	BASIC_D_ACCESSOR_DECL(int, stlLowPassDegree, STLLowPassDegree)
+	BASIC_D_ACCESSOR_DECL(int, stlSeasonalJump, STLSeasonalJump)
+	BASIC_D_ACCESSOR_DECL(int, stlTrendJump, STLTrendJump)
+	BASIC_D_ACCESSOR_DECL(int, stlLowPassJump, STLLowPassJump)
+
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	QWidget* view() const override;
@@ -72,6 +87,21 @@ Q_SIGNALS:
 
 	void xColumnChanged(const AbstractColumn*);
 	void yColumnChanged(const AbstractColumn*);
+
+	// STL parameters signals
+	void stlPeriodChanged(int);
+	void stlRobustChanged(bool);
+	void stlSeasonalLengthChanged(int);
+	void stlTrendLengthChanged(int);
+	void stlTrendLengthAutoChanged(bool);
+	void stlLowPassLengthChanged(int);
+	void stlLowPassLengthAutoChanged(bool);
+	void stlSeasonalDegreeChanged(int);
+	void stlTrendDegreeChanged(int);
+	void stlLowPassDegreeChanged(int);
+	void stlSeasonalJumpChanged(int);
+	void stlTrendJumpChanged(int);
+	void stlLowPassJumpChanged(int);
 
 	friend class SeasonalDecompositionSetXColumnCmd;
 	friend class SeasonalDecompositionSetYColumnCmd;
