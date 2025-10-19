@@ -50,9 +50,9 @@ SeasonalDecompositionDock::SeasonalDecompositionDock(QWidget* parent)
 
 	connect(ui.sbSTLSeasonalLength, &QSpinBox::valueChanged, this, &SeasonalDecompositionDock::stlSeasonalLengthChanged);
 	connect(ui.sbSTLTrendLength, &QSpinBox::valueChanged, this, &SeasonalDecompositionDock::stlTrendLengthChanged);
-	connect(ui.cbSTLTrendLengthAuto, &QCheckBox::toggled, this, &SeasonalDecompositionDock::stlTrendLengthAutoChanged);
+	connect(ui.chbSTLTrendLengthAuto, &QCheckBox::toggled, this, &SeasonalDecompositionDock::stlTrendLengthAutoChanged);
 	connect(ui.sbSTLLowPassLength, &QSpinBox::valueChanged, this, &SeasonalDecompositionDock::stlLowPassLengthChanged);
-	connect(ui.cbSTLLowPassLengthAuto, &QCheckBox::toggled, this, &SeasonalDecompositionDock::stlLowPassLengthAutoChanged);
+	connect(ui.chbSTLLowPassLengthAuto, &QCheckBox::toggled, this, &SeasonalDecompositionDock::stlLowPassLengthAutoChanged);
 
 	connect(ui.cbSTLSeasonalDegree, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SeasonalDecompositionDock::stlSeasonalDegreeChanged);
 	connect(ui.cbSTLTrendDegree, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SeasonalDecompositionDock::stlTrendDegreeChanged);
@@ -115,6 +115,7 @@ void SeasonalDecompositionDock::setDecompositions(QList<SeasonalDecomposition*> 
 
 	// Slots
 	// General-tab
+	connect(m_decomposition, &SeasonalDecomposition::statusInfo, this, &SeasonalDecompositionDock::showStatusInfo);
 	connect(m_decomposition, &SeasonalDecomposition::xColumnChanged, this, &SeasonalDecompositionDock::decompositionXColumnChanged);
 	connect(m_decomposition, &SeasonalDecomposition::yColumnChanged, this, &SeasonalDecompositionDock::decompositionYColumnChanged);
 	connect(m_decomposition, &SeasonalDecomposition::methodChanged, this, &SeasonalDecompositionDock::decompositionMethodChanged);
@@ -154,6 +155,16 @@ void SeasonalDecompositionDock::retranslateUi() {
 
 	// STL parameters
 
+	// robust
+	info = i18n("If enabled, uses a data-dependent weighting function, more robust result if the data has outliers.");
+	ui.lSTLRobust->setToolTip(info);
+	ui.chbSTLRobust->setToolTip(info);
+
+	// period
+	info = i18n("Period of the seasonal component.");
+	ui.lSTLPeriod->setToolTip(info);
+	ui.sbSTLPeriod->setToolTip(info);
+
 	// lengths
 	info = i18n("Length of the seasonal smoother, must be odd and at least 3.");
 	ui.lSTLSeasonalLength->setToolTip(info);
@@ -162,12 +173,12 @@ void SeasonalDecompositionDock::retranslateUi() {
 	info = i18n("Length of the trend smoother, must be odd and at least 3.");
 	ui.lSTLTrendLength->setToolTip(info);
 	ui.sbSTLTrendLength->setToolTip(info);
-	ui.cbSTLTrendLengthAuto->setToolTip(i18n("If enabled, uses the smallest odd integer greater than 1.5 * \"Period\" / (1 - 1.5 / \"Seasonal Length\")"));
+	ui.chbSTLTrendLengthAuto->setToolTip(i18n("If enabled, uses the smallest odd integer greater than 1.5 * \"Period\" / (1 - 1.5 / \"Seasonal Length\")"));
 
 	info = i18n("Length of the low-pass filter, must be odd and at least 3.");
 	ui.lSTLLowPassLength->setToolTip(info);
 	ui.sbSTLLowPassLength->setToolTip(info);
-	ui.cbSTLLowPassLengthAuto->setToolTip(i18n("If enabled, uses the smallest odd integer greater than \"Period\""));
+	ui.chbSTLLowPassLengthAuto->setToolTip(i18n("If enabled, uses the smallest odd integer greater than \"Period\""));
 
 	// degrees
 	QString degree0 = i18n("0 - Constant");
@@ -364,7 +375,7 @@ void SeasonalDecompositionDock::decompositionSTLTrendLengthChanged(int length) {
 }
 void SeasonalDecompositionDock::decompositionSTLTrendLengthAutoChanged(bool autoLength) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.cbSTLTrendLengthAuto->setChecked(autoLength);
+	ui.chbSTLTrendLengthAuto->setChecked(autoLength);
 }
 void SeasonalDecompositionDock::decompositionSTLLowPassLengthChanged(int length) {
 	CONDITIONAL_LOCK_RETURN;
@@ -372,7 +383,7 @@ void SeasonalDecompositionDock::decompositionSTLLowPassLengthChanged(int length)
 }
 void SeasonalDecompositionDock::decompositionSTLLowPassLengthAutoChanged(bool autoLength) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.cbSTLLowPassLengthAuto->setChecked(autoLength);
+	ui.chbSTLLowPassLengthAuto->setChecked(autoLength);
 }
 void SeasonalDecompositionDock::decompositionSTLSeasonalDegreeChanged(int degree) {
 	CONDITIONAL_LOCK_RETURN;
@@ -398,6 +409,23 @@ void SeasonalDecompositionDock::decompositionSTLLowPassJumpChanged(int jump) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbSTLLowPassJump->setValue(jump);
 }
+
+void SeasonalDecompositionDock::showStatusInfo(const QString& info) {
+	if (info.isEmpty()) {
+		if (m_messageWidget && m_messageWidget->isVisible())
+			m_messageWidget->close();
+	} else {
+		if (!m_messageWidget) {
+			m_messageWidget = new KMessageWidget(this);
+			m_messageWidget->setMessageType(KMessageWidget::Warning);
+			ui.gridLayout->addWidget(m_messageWidget, 24, 0, 1, 3);
+		}
+		m_messageWidget->setText(info);
+		m_messageWidget->animatedShow();
+		QDEBUG(info);
+	}
+}
+
 //*************************************************************
 //************************* Settings **************************
 //*************************************************************
@@ -415,9 +443,9 @@ void SeasonalDecompositionDock::load() {
 
 	ui.sbSTLSeasonalLength->setValue(m_decomposition->stlSeasonalLength());
 	ui.sbSTLTrendLength->setValue(m_decomposition->stlTrendLength());
-	ui.cbSTLTrendLengthAuto->setChecked(m_decomposition->stlTrendLengthAuto());
+	ui.chbSTLTrendLengthAuto->setChecked(m_decomposition->stlTrendLengthAuto());
 	ui.sbSTLLowPassLength->setValue(m_decomposition->stlLowPassLength());
-	ui.cbSTLLowPassLengthAuto->setChecked(m_decomposition->stlLowPassLengthAuto());
+	ui.chbSTLLowPassLengthAuto->setChecked(m_decomposition->stlLowPassLengthAuto());
 
 	ui.cbSTLSeasonalDegree->setCurrentIndex(m_decomposition->stlSeasonalDegree());
 	ui.cbSTLTrendDegree->setCurrentIndex(m_decomposition->stlTrendDegree());
@@ -443,9 +471,9 @@ void SeasonalDecompositionDock::loadConfig(KConfig& config) {
 
 	ui.sbSTLSeasonalLength->setValue(group.readEntry("STLSeasonalLength", m_decomposition->stlSeasonalLength()));
 	ui.sbSTLTrendLength->setValue(group.readEntry("STLTrendLength", m_decomposition->stlTrendLength()));
-	ui.cbSTLTrendLengthAuto->setChecked(group.readEntry("STLTrendLengthAuto", m_decomposition->stlTrendLengthAuto()));
+	ui.chbSTLTrendLengthAuto->setChecked(group.readEntry("STLTrendLengthAuto", m_decomposition->stlTrendLengthAuto()));
 	ui.sbSTLLowPassLength->setValue(group.readEntry("STLLowPassLength", m_decomposition->stlLowPassLength()));
-	ui.cbSTLLowPassLengthAuto->setChecked(group.readEntry("STLLowPassLengthAuto", m_decomposition->stlLowPassLengthAuto()));
+	ui.chbSTLLowPassLengthAuto->setChecked(group.readEntry("STLLowPassLengthAuto", m_decomposition->stlLowPassLengthAuto()));
 
 	ui.cbSTLSeasonalDegree->setCurrentIndex(group.readEntry("STLSeasonalDegree", m_decomposition->stlSeasonalDegree()));
 	ui.cbSTLTrendDegree->setCurrentIndex(group.readEntry("STLTrendDegree", m_decomposition->stlTrendDegree()));

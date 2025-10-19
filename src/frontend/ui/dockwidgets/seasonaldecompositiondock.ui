@@ -117,7 +117,11 @@
     </widget>
    </item>
    <item row="10" column="2">
-    <widget class="QSpinBox" name="sbSTLPeriod"/>
+    <widget class="QSpinBox" name="sbSTLPeriod">
+     <property name="minimum">
+      <number>2</number>
+     </property>
+    </widget>
    </item>
    <item row="11" column="0">
     <widget class="QLabel" name="lSTLRobust">
@@ -145,6 +149,9 @@
      <property name="minimum">
       <number>3</number>
      </property>
+     <property name="singleStep">
+      <number>2</number>
+     </property>
     </widget>
    </item>
    <item row="14" column="2" rowspan="2">
@@ -160,10 +167,13 @@
        <property name="minimum">
         <number>3</number>
        </property>
+       <property name="singleStep">
+        <number>2</number>
+       </property>
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="cbSTLTrendLengthAuto">
+      <widget class="QCheckBox" name="chbSTLTrendLengthAuto">
        <property name="text">
         <string>Auto</string>
        </property>
@@ -184,10 +194,13 @@
        <property name="minimum">
         <number>3</number>
        </property>
+       <property name="singleStep">
+        <number>2</number>
+       </property>
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="cbSTLLowPassLengthAuto">
+      <widget class="QCheckBox" name="chbSTLLowPassLengthAuto">
        <property name="text">
         <string>Auto</string>
        </property>

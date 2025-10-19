@@ -15,6 +15,7 @@
 #include "frontend/dockwidgets/BaseDock.h"
 #include "ui_seasonaldecompositiondock.h"
 
+class KMessageWidget;
 class TreeViewComboBox;
 
 class SeasonalDecompositionDock : public BaseDock {
@@ -39,6 +40,7 @@ protected:
 	Ui::SeasonalDecompositionDock ui;
 	SeasonalDecomposition* m_decomposition{nullptr};
 	QList<SeasonalDecomposition*> m_decompositions;
+	KMessageWidget* m_messageWidget{nullptr};
 
 	virtual void setModel();
 
@@ -84,6 +86,8 @@ private Q_SLOTS:
 	void decompositionSTLSeasonalJumpChanged(int);
 	void decompositionSTLTrendJumpChanged(int);
 	void decompositionSTLLowPassJumpChanged(int);
+
+	void showStatusInfo(const QString&);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);

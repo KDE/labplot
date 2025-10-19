@@ -1005,6 +1005,7 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 		menu->insertMenu(firstAction, m_plotDataMenu);
 		menu->insertMenu(firstAction, m_analyzePlotMenu);
 		menu->insertMenu(firstAction, m_statisticalAnalysisMenu);
+		menu->insertMenu(firstAction, m_timeSeriesAnalysisMenu);
 		menu->insertSeparator(firstAction);
 	}
 	menu->insertMenu(firstAction, m_selectionMenu);
@@ -1051,6 +1052,7 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	menu->insertMenu(firstAction, m_plotDataMenu);
 	menu->insertMenu(firstAction, m_analyzePlotMenu);
 	menu->insertMenu(firstAction, m_statisticalAnalysisMenu);
+	menu->insertMenu(firstAction, m_timeSeriesAnalysisMenu);
 	menu->insertSeparator(firstAction);
 
 	if (numeric)

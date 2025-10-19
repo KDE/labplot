@@ -90,7 +90,9 @@ void SeasonalDecomposition::init() {
 	d->worksheet->setFixed(true);
 	QRectF newRect = d->worksheet->pageRect();
 	double newHeight = Worksheet::convertToSceneUnits(20, Worksheet::Unit::Centimeter);
+	double newWidth = Worksheet::convertToSceneUnits(15, Worksheet::Unit::Centimeter);
 	newRect.setHeight(round(newHeight));
+	newRect.setWidth(round(newWidth));
 	d->worksheet->setPageRect(newRect);
 	addChild(d->worksheet);
 
@@ -238,9 +240,9 @@ void SeasonalDecomposition::setMethod(Method method) {
 // STL parameters
 STD_SETTER_CMD_IMPL_F_S(SeasonalDecomposition, SetSTLPeriod, int, stlPeriod, recalcDecomposition)
 void SeasonalDecomposition::setSTLPeriod(int value) {
-    Q_D(SeasonalDecomposition);
-    if (value != d->stlPeriod)
-        exec(new SeasonalDecompositionSetSTLPeriodCmd(d, value, ki18n("%1: set STL period")));
+	Q_D(SeasonalDecomposition);
+	if (value != d->stlPeriod)
+		exec(new SeasonalDecompositionSetSTLPeriodCmd(d, value, ki18n("%1: set STL period")));
 }
 STD_SETTER_CMD_IMPL_F_S(SeasonalDecomposition, SetSTLRobust, bool, stlRobust, recalcDecomposition)
 void SeasonalDecomposition::setSTLRobust(bool value) {
@@ -378,7 +380,7 @@ void SeasonalDecompositionPrivate::recalc() {
 	if (!xColumn || !yColumn)
 		return;
 
-	// in case the y-column was changed, adjust the title of the plot the y-axes
+	// in case the y-column was changed, adjust the title of the plots and of the y-axes
 	const auto& name = yColumn->name();
 	plotAreaOriginal->title()->setText(name);
 	plotAreaOriginal->verticalAxis()->title()->setText(name);
@@ -396,27 +398,53 @@ void SeasonalDecompositionPrivate::recalc() {
 		yDataVector.push_back(yColumn->valueAt(row));
 	}
 
+	if (yDataVector.size() == 0) {
+		// no input data and no result available, clear the previous data shown in the result spreadsheet
+		resultSpreadsheet->setRowCount(0);
+		Q_EMIT q->statusInfo(i18n("No valid data provided."));
+		return;
+	}
+
 	recalcDecomposition();
 }
 
 /*!
  * called when one of the parameters influencing the result for the current decomposition method
- * was changed, recalculates the decomposition with the new parameters.
+ * was changed, recalculates the decomposition with the new set of parameters.
  */
 void SeasonalDecompositionPrivate::recalcDecomposition() {
+	Q_EMIT q->statusInfo(QString());
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
-
-	if (yDataVector.size() == 0) {
-		// no input data and no result available, clear the previous data shown in the result spreadsheet
-		resultSpreadsheet->setRowCount(0);
-		return;
-	}
 
 	switch (method) {
 	case (SeasonalDecomposition::Method::STL):
 	case (SeasonalDecomposition::Method::MSTL): {
-		auto result = stl::params().seasonal_length(stlSeasonalLength).robust(true).fit(yDataVector, stlPeriod);
+		// check if we have valid parameters first
+		if (stlSeasonalLength < 3 || stlSeasonalLength % 2 != 1) {
+			Q_EMIT q->statusInfo(i18n("Seasonal Length must be odd and at least 3."));
+			columnTrend->clear();
+			columnSeasonal->clear();
+			columnResidual->clear();
+			return;
+		}
 
+		if (stlTrendLength < 3 || stlTrendLength % 2 != 1) {
+			Q_EMIT q->statusInfo(i18n("Trend Length must be odd and at least 3."));
+			columnTrend->clear();
+			columnSeasonal->clear();
+			columnResidual->clear();
+			return;
+		}
+
+		if (stlLowPassLength < 3 || stlLowPassLength % 2 != 1) {
+			Q_EMIT q->statusInfo(i18n("Low-Pass Length must be odd and at least 3."));
+			columnTrend->clear();
+			columnSeasonal->clear();
+			columnResidual->clear();
+			return;
+		}
+
+		auto result = stl::params().seasonal_length(stlSeasonalLength).robust(true).fit(yDataVector, stlPeriod);
 		const auto size = result.seasonal.size();
 		QVector<double> trendData;
 		trendData.resize(size);
@@ -431,10 +459,12 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 			residualData[i] = result.remainder[i];
 		}
 
-		qDebug()<<seasonalData;
 		columnTrend->setValues(trendData);
+		columnTrend->setChanged();
 		columnSeasonal->setValues(seasonalData);
+		columnSeasonal->setChanged();
 		columnResidual->setValues(residualData);
+		columnResidual->setChanged();
 
 		break;
 	}
