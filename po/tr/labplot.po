@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-14 02:47+0000\n"
-"PO-Revision-Date: 2025-09-12 10:17+0300\n"
+"PO-Revision-Date: 2025-09-29 11:59+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.08.1\n"
 "X-POOTLE-MTIME: 1502201241.000000\n"
 
 #, kde-format
@@ -2260,7 +2260,8 @@ msgid "Compression: %1"
 msgstr "Sıkıştırma: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Endianness: %1"
 msgid "Endianess: %1"
 msgstr "Son hanelilik: %1"
 
@@ -2485,7 +2486,8 @@ msgid "Device not available."
 msgstr "Aygıt kullanılabilir değil."
 
 #: src/backend/datasources/LiveDataSource.cpp:749
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Timeout occurred."
 msgid "Timeout occured."
 msgstr "Zaman aşımı oluştu."
 
@@ -8132,7 +8134,8 @@ msgid "%1: set whiskers cap size"
 msgstr "%1: Kılların kap boyutunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: jittering changed"
 msgid "%1: jitterring changed"
 msgstr "%1: Titremeler değişti"
 
@@ -10672,9 +10675,10 @@ msgstr ""
 "Tüm kullanılabilir başvuru noktaları kaldırılacak. Sürdürmek istiyor musunuz?"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:692
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "%1: change position of selected points"
 msgid "%1: change position of selected DatapickerPoints."
-msgstr "%1: Seçili DatapickerPoints’in konumunu değiştirin."
+msgstr "%1: Seçili noktaların konumunu değiştir"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:745
 #, kde-format
@@ -16876,22 +16880,26 @@ msgid "Invalid start value"
 msgstr "Geçersiz başlangıç değeri"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:257
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Invalid end value, must be greater than the start value"
 msgid "Invalid end value, must be bigger than the start value"
 msgstr "Geçersiz bitiş değeri; başlangıç değerinden büyük olmalıdır"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:300
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "The number of values to be generated must be greater than one"
 msgid "The number of values to be generated must be bigger than one"
 msgstr "Üretilecek değerlerin sayısı 1’den büyük olmalıdır"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:317
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Invalid numeric increment value, must be greater than zero"
 msgid "Invalid numeric increment value, must be bigger than zero"
 msgstr "Geçersiz sayısal artış değeri; 0’dan büyük olmalıdır"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:326
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Invalid Date&Time increment value, must be greater than zero"
 msgid "Invalid Date&Time increment value, must be bigger than zero"
 msgstr "Geçersiz Tarih/Zaman artış değeri; 0’dan büyük olmalıdır"
 
@@ -19105,7 +19113,8 @@ msgstr "Görsel:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/frontend/ui/datapickerimagewidget.ui:701
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Embed"
 msgid "Embedd"
 msgstr "Gömülü"
 
@@ -21866,7 +21875,7 @@ msgstr "Merkeze Çizgi"
 #: src/frontend/ui/dockwidgets/scriptdock.ui:86
 #, kde-format
 msgid "Runtime:"
-msgstr ""
+msgstr "Çalışma zamanı:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
@@ -23220,19 +23229,25 @@ msgstr "GUM uyumlu"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:97
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Save projects in a uncompressed xml format that can "
+#| "be opened in LabPlot versions older than 2.9 and are useful for version "
+#| "controlled projects</p></body></html>"
 msgid ""
 "<html><head/><body><p>Save projects in a compatible format that can be "
 "opened in LabPlot versions older than 2.9.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Projeleri LabPlot’un 2.9 sürümünden önceki sürümlerle "
-"açılabilecek uyumlu bir biçimde kaydet.</p></body></html>"
+"<html><head/><body><p>Projeleri, LabPlot’un 2.9 sürümünden daha eski "
+"sürümlerde açılabilecek ve sürüm denetimi kullanan projelerde yararlı "
+"olabilecek bir XML biçiminde kaydedin.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:100
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Save in uncompressed format"
 msgid "Save in compatible format"
-msgstr "Uyumlu biçimde kaydet"
+msgstr "Sıkıştırılmamış biçimde kaydet"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumberOptions)
 #: src/frontend/ui/settingsgeneralpage.ui:107
@@ -25037,8 +25052,765 @@ msgstr "dönüştürme süreci başarısız, çıkış kodu ="
 msgid "Unable to open file:"
 msgstr "Dosya açılamadı:"
 
-#~ msgid "Close"
-#~ msgstr "Kapat"
+#~ msgid ""
+#~ "Invalid number of data columns. First row column count: %1. %2th row "
+#~ "column count >= %3. Check if the correct separator is used and the data "
+#~ "contains same number of columns."
+#~ msgstr ""
+#~ "Geçersiz veri sütunları sayısı. İlk satırdaki sütun sayısı: %1. %2. satır "
+#~ "≥ %3 sütun içeriyor. Doğru ayırıcının kullanıldığından ve verinin aynı "
+#~ "sayıda sütun içerdiğinden emin olun."
+
+#~ msgid "Python file (*.py)"
+#~ msgstr "Python dosyası (*.py)"
+
+#~ msgid "no script element found"
+#~ msgstr "Bulunan betik ögesi yok"
+
+#~ msgid "%1: run %2 script"
+#~ msgstr "%1: %2 betiğini çalıştır"
+
+#~ msgid "Script"
+#~ msgstr "Betik"
+
+#~ msgid "Failed to run the script."
+#~ msgstr "Betik çalıştırılamadı."
+
+#~ msgid "A script is already running."
+#~ msgstr "Bir betik halihazırda çalışıyor."
+
+#~ msgctxt "@title:column"
+#~ msgid "Name"
+#~ msgstr "Ad"
+
+#~ msgctxt "@title:column"
+#~ msgid "Value"
+#~ msgstr "Değer"
+
+#~ msgctxt "@title:column"
+#~ msgid "Type"
+#~ msgstr "Tür"
+
+#~ msgid "One column is required."
+#~ msgid_plural "%1 columns are required."
+#~ msgstr[0] "1 sütun gerekiyor."
+#~ msgstr[1] "%1 sütun gerekiyor."
+
+#~ msgid "At least %1 and at most %2 columns are required."
+#~ msgstr "En az %1 ve en çok %2 sütun gerekiyor."
+
+#~ msgid "Column '%1' must be of numeric type."
+#~ msgstr "“%1” sütunu sayısal bir türde olmalıdır."
+
+#~ msgctxt "@title:window"
+#~ msgid "Hypothesis Test"
+#~ msgstr "Hipotez Testi"
+
+#~ msgid "One-Sample t-Test"
+#~ msgstr "Tek Örneklem t Testi"
+
+#~ msgid "Independent Two-Sample t-Test"
+#~ msgstr "Bağımsız İki Örneklemli t Testi"
+
+#~ msgid "Paired Two-Sample t-Test"
+#~ msgstr "Eşli İki Örneklemli t Testi"
+
+#~ msgid "Mann-Whitney U Test"
+#~ msgstr "Mann-Whitney U Testi"
+
+#~ msgid "Welch t-Test"
+#~ msgstr "Welch t Testi"
+
+#~ msgid "Wilcoxon Signed Rank Test"
+#~ msgstr "Wilcoxon İmzalı Sıra Testi"
+
+#~ msgid "One-Way ANOVA Test"
+#~ msgstr "Tek Yönlü ANOVA Testi"
+
+#~ msgid "Kruskal-Wallis Test"
+#~ msgstr "Kruskal-Wallis Testi"
+
+#~ msgid "Log-Rank Test"
+#~ msgstr "Log Sıra Testi"
+
+#~ msgid "Friedman Test"
+#~ msgstr "Friedman Testi"
+
+#~ msgid "Chi-Square Independence Test"
+#~ msgstr "Ki Kare Bağımsızlık Testi"
+
+#~ msgid "Chi-Square Goodness of Fit Test"
+#~ msgstr "Uyum Testinin Ki Kare İyiliği"
+
+#~ msgid "One-Way ANOVA with Repeated Measures Test"
+#~ msgstr "Yinelenen Ölçüler Testiyle Tek Yönlü ANOVA"
+
+#~ msgid "N/A"
+#~ msgstr "Yok"
+
+#~ msgid "Test result is not available."
+#~ msgstr "Test sonucu kullanılabilir değil."
+
+#~ msgid "Two columns are required for this test."
+#~ msgstr "Bu test için iki sütun gerekiyor."
+
+#~ msgid "At least two columns are required."
+#~ msgstr "En az iki sütun gerekiyor."
+
+#~ msgid "Column '%1' requires at least %2 samples."
+#~ msgstr "“%1” sütunu en az %2 örneklem gerektiriyor."
+
+#~ msgid "The size of each sample must be equal."
+#~ msgstr "Her bir örneklemin büyüklüğü eşit olmalıdır."
+
+#~ msgid "Null Hypothesis"
+#~ msgstr "Sıfır Hipotezi"
+
+#~ msgid "Alternate Hypothesis"
+#~ msgstr "Alternatif Hipotez"
+
+#~ msgid "Descriptive Statistics"
+#~ msgstr "Açıklamalı İstatistikler"
+
+#~ msgid "Test Statistics"
+#~ msgstr "Metin İstatistikleri"
+
+#~ msgid "Significance Level"
+#~ msgstr "Önem Düzeyi"
+
+#~ msgid "p-Value"
+#~ msgstr "p Değeri"
+
+#~ msgid "Degrees of Freedom Between Groups"
+#~ msgstr "Gruplar Arasındaki Özgürlük Dereceleri"
+
+#~ msgid "Degrees of Freedom Within Groups"
+#~ msgstr "Gruplar İçindeki Özgürlük Dereceleri"
+
+#~ msgid "Degrees of Freedom Treatment"
+#~ msgstr "Özgürlük Dereceleri Davranışı"
+
+#~ msgid "Degrees of Freedom Residuals"
+#~ msgstr "Özgürlük Dereceleri Kalıntıları"
+
+#~ msgid "t-Value"
+#~ msgstr "t Değeri"
+
+#~ msgid "Test Mean"
+#~ msgstr "Test Ortalaması"
+
+#~ msgid "Mean Difference"
+#~ msgstr "Ortalama Fark"
+
+#~ msgid "Pooled Variance"
+#~ msgstr "Toplu Varyans"
+
+#~ msgid "Mean Difference Standard Error"
+#~ msgstr "Ortalama Fark Standart Hatası"
+
+#~ msgid "F-Statistic"
+#~ msgstr "F İstatistiği"
+
+#~ msgid "Sum of Squares Between Groups"
+#~ msgstr "Gruplar Arasındaki Karelerin Toplamı"
+
+#~ msgid "Sum of Squares Within Groups"
+#~ msgstr "Gruplar İçindeki Karelerin Toplamı"
+
+#~ msgid "Mean Squares Between Groups"
+#~ msgstr "Gruplar Arasındaki Ortalama Kareler"
+
+#~ msgid "Mean Squares Within Groups"
+#~ msgstr "Gruplar İçindeki Ortalama Kareler"
+
+#~ msgid "Sum of Squares Treatment"
+#~ msgstr "Kareler Toplamı Davranışı"
+
+#~ msgid "Sum of Squares Residuals"
+#~ msgstr "Kareler Toplamı Kalıntıları"
+
+#~ msgid "Sum of Squares Within Subjects"
+#~ msgstr "Özneler Arasındaki Kareler Toplama"
+
+#~ msgid "Mean Squares Treatment"
+#~ msgstr "Ortalama Kareler Davranışı"
+
+#~ msgid "Mean Squares Residuals"
+#~ msgstr "Ortalama Kareler Kalıntıları"
+
+#~ msgid "U"
+#~ msgstr "U"
+
+#~ msgid "z-Value"
+#~ msgstr "z Değeri"
+
+#~ msgid "Rank Sum 1"
+#~ msgstr "Sıra Toplamı 1"
+
+#~ msgid "Mean Rank 1"
+#~ msgstr "Ortalama Sıra 1"
+
+#~ msgid "Rank Sum 2"
+#~ msgstr "Sıra Toplamı 2"
+
+#~ msgid "Mean Rank 2"
+#~ msgstr "Ortalama Sıra 2"
+
+#~ msgid "W"
+#~ msgstr "W"
+
+#~ msgid "Positive Rank Sum"
+#~ msgstr "Pozitif Sıra Toplamı"
+
+#~ msgid "Positive Rank Mean"
+#~ msgstr "Pozitif Sıra Ortalaması"
+
+#~ msgid "Positive Rank Count"
+#~ msgstr "Pozitif Sıra Toplamı"
+
+#~ msgid "Negative Rank Sum"
+#~ msgstr "Negatif Sıra Toplamı"
+
+#~ msgid "Negative Rank Mean"
+#~ msgstr "Negatif Sıra Ortalaması"
+
+#~ msgid "Negative Rank Count"
+#~ msgstr "Negatif Sıra Toplamı"
+
+#~ msgid "Tie Count"
+#~ msgstr "Bağ Sayısı"
+
+#~ msgid "H"
+#~ msgstr "H"
+
+#~ msgid "Q"
+#~ msgstr "Q"
+
+#~ msgid "Chi2"
+#~ msgstr "Ki 2"
+
+#~ msgid "Event Count 1"
+#~ msgstr "Olay Sayısı 1"
+
+#~ msgid "Censored Count 1"
+#~ msgstr "Sansürlenmişler Sayısı 1"
+
+#~ msgid "Total Count 1"
+#~ msgstr "Toplam Sayı 1"
+
+#~ msgid "Event Count 2"
+#~ msgstr "Olay Sayısı 2"
+
+#~ msgid "Censored Count 2"
+#~ msgstr "Sansürlenmişler Sayısı 2"
+
+#~ msgid "Total Count 2"
+#~ msgstr "Toplam Sayı 2"
+
+#~ msgid "Statistical Conclusion"
+#~ msgstr "İstatistiksel Sonuç"
+
+#~ msgid "No variable columns provided."
+#~ msgstr "Sağlanan değişken sütunlar yok."
+
+#~ msgid ""
+#~ "At the significance level %1, the population mean is significantly "
+#~ "different from %2. Reject the null hypothesis."
+#~ msgstr ""
+#~ "%1 önem düzeyinde nüfus ortalaması %2 değerinden oldukça farklı. Sıfır "
+#~ "hipotezini reddedin."
+
+#~ msgid ""
+#~ "At the significance level %1, the population mean is not significantly "
+#~ "different from %2. Fail to reject the null hypothesis."
+#~ msgstr ""
+#~ "%1 önem düzeyinde nüfus ortalaması %2 değerinden pek farklı değil. Sıfır "
+#~ "hipotezini reddetme başarısız."
+
+#~ msgid ""
+#~ "At the significance level %1, the population means are significantly "
+#~ "different. Reject the null Hypothesis"
+#~ msgstr ""
+#~ "%1 önem düzeyinde nüfus ortalaması önemli ölçüde farklı. Sıfır hipotezini "
+#~ "reddedin."
+
+#~ msgid ""
+#~ "At the significance level %1, the population means are not significantly "
+#~ "different. Fail to reject the null Hypothesis"
+#~ msgstr ""
+#~ "%1 önem düzeyinde nüfus ortalamaları pek farklı değil. Sıfır hipotezini "
+#~ "reddetme başarısız."
+
+#~ msgid ""
+#~ "At the significance level %1, at least one group mean is significantly "
+#~ "different. Reject the null Hypothesis"
+#~ msgstr ""
+#~ "%1 önem düzeyinde en az bir grubun ortalaması oldukça farklı. Sıfır "
+#~ "hipotezini reddedin."
+
+#~ msgid ""
+#~ "At the significance level %1, no significant difference between group "
+#~ "means. Fail to reject the null Hypothesis"
+#~ msgstr ""
+#~ "%1 önem düzeyinde grup ortalamaları arasında önemli ölçüde bir fark yok. "
+#~ "Sıfır hipotezini reddetme başarısız."
+
+#~ msgid ""
+#~ "At the significance level %1, at least one group distribution is "
+#~ "significantly different. Reject the null Hypothesis"
+#~ msgstr ""
+#~ "%1 önem düzeyinde en az bir grup dağılımı oldukça farklı. Sıfır "
+#~ "hipotezini reddedin."
+
+#~ msgid ""
+#~ "At the significance level %1, no significant difference between group "
+#~ "distributions. Fail to reject the null Hypothesis"
+#~ msgstr ""
+#~ "%1 önem düzeyinde grup dağılımları arasında önemli ölçüde bir fark yok. "
+#~ "Sıfır hipotezini reddetme başarısız."
+
+#~ msgid ""
+#~ "At the significance level %1, at least one group is significantly "
+#~ "different. Reject the null Hypothesis"
+#~ msgstr ""
+#~ "%1 önem düzeyinde en az bir grup oldukça farklı. Sıfır hipotezini "
+#~ "reddedin."
+
+#~ msgid ""
+#~ "At the significance level %1, no significant difference between groups. "
+#~ "Fail to reject the null Hypothesis"
+#~ msgstr ""
+#~ "%1 önem düzeyinde gruplar arasında pek bir fark yok. Sıfır hipotezini "
+#~ "reddetme başarısız."
+
+#~ msgid "Column '%1' must be of integer type."
+#~ msgstr "“%1” sütunu tamsayı türünde olmalı."
+
+#~ msgid ""
+#~ "At the significance level %1, the observed frequencies do not follow the "
+#~ "expected frequency distribution. Reject the null Hypothesis"
+#~ msgstr ""
+#~ "%1 önem düzeyinde gözlenen sıklıklar beklenen sıklık dağılımını "
+#~ "izlemiyor. Sıfır hipotezini reddedin."
+
+#~ msgid ""
+#~ "At the significance level %1, the observed frequencies follow the "
+#~ "expected frequency distribution. Fail to reject the null Hypothesis"
+#~ msgstr ""
+#~ "%1 önem düzeyinde gözlenen sıklıklar beklenen sıklık dağılımını "
+#~ "izlemiyor. Sıfır hipotezini reddedin."
+
+#~ msgid "The size of each column in the contingency table must be equal."
+#~ msgstr "Olumsallık çizelgesendeki her bir sütunun boyutu eşit olmalı."
+
+#~ msgid ""
+#~ "At the significance level %1, both categorical variables are dependent. "
+#~ "Reject the null Hypothesis"
+#~ msgstr ""
+#~ "%1 önem düzeyinde her bir kategorik değişken birbirine bağımlı olmalıdır. "
+#~ "Sıfır hipotezini reddedin."
+
+#~ msgid ""
+#~ "At the significance level %1, both categorical variables are independent. "
+#~ "Fail to reject the null Hypothesis"
+#~ msgstr ""
+#~ "%1 önem düzeyinde her bir kategorik değişken bağımsızdır. Sıfır "
+#~ "hipotezini reddetme başarısız."
+
+#~ msgid "Three columns are required."
+#~ msgstr "Üç sütun gerekiyor."
+
+#~ msgid "Status column should be of integer type."
+#~ msgstr "Durum sütunu tamsayı türünde olmalıdır."
+
+#~ msgid "Group column should be of integer type."
+#~ msgstr "Grup sütunu tamsayı türünde olmalıdır."
+
+#~ msgid "Time, Status and Group columns should have equal size."
+#~ msgstr "Zaman, Durum ve Grup sütunlarının boyutu eşit olmalıdır."
+
+#~ msgid "Status column values must be either 0 or 1."
+#~ msgstr "Durum sütunu değerleri ya 0 ya da 1 olmalıdır."
+
+#~ msgid "Group column values must be either 0 or 1."
+#~ msgstr "Grup sütunu değerleri ya 0 ya da 1 olmalıdır."
+
+#~ msgid "Time, Status and Group columns should have equal number of values."
+#~ msgstr "Zaman, Durum ve Grup sütunlarında eşit sayıda değer olmalıdır."
+
+#~ msgid "Group 1 requires at least %1 samples."
+#~ msgstr "Grup 1, en az %1 örneklem gerektiriyor."
+
+#~ msgid "Group 2 requires at least %1 samples."
+#~ msgstr "Grup 2 en az %1 örneklem gerektiriyor."
+
+#~ msgid ""
+#~ "At the significance level %1, the survival curves are significantly "
+#~ "different. Reject the null Hypothesis"
+#~ msgstr ""
+#~ "%1 önem düzeyinde hayatta kalma eğrileri oldukça farklı. Sıfır hipotezini "
+#~ "reddedin."
+
+#~ msgid ""
+#~ "At the significance level %1, no significant difference between survival "
+#~ "curves. Fail to reject the null Hypothesis"
+#~ msgstr ""
+#~ "%1 önem düzeyinde hayatta kalma eğrileri arasında önemli ölçüde bir fark "
+#~ "yok. Sıfır hipotezini reddetme başarısız."
+
+#~ msgid "Inset Plot Area"
+#~ msgstr "Ek Çizim Alanı"
+
+#~ msgid "Inset Plot Area with Data"
+#~ msgstr "Veri İçeren Ek Çizim Alanı"
+
+#~ msgid "%1: add inset plot"
+#~ msgstr "%1: Ek çizim ekle"
+
+#~ msgid "%1: add inset plot with data"
+#~ msgstr "%1: Veri içeren ek çizim ekle"
+
+#~ msgid "%1: set limits type"
+#~ msgstr "%1: Sınırlar türünü ayarla"
+
+#~ msgid "%1: set center specification"
+#~ msgstr "%1: Merkez belirtimini ayarla"
+
+#~ msgid "%1: set upper limit specification"
+#~ msgstr "%1: Üst sınır belirtimini ayarla"
+
+#~ msgid "%1: set lower limit specification"
+#~ msgstr "%1: Alt sınır belirtimini ayarla"
+
+#~ msgid "Python scripting support"
+#~ msgstr "Python betik yazımı desteği"
+
+#~ msgid "Creates a new %1 script"
+#~ msgstr "Yeni bir %1 betiği oluşturur"
+
+#~ msgid "From Directory..."
+#~ msgstr "Dizinden…"
+
+#~ msgid "Import multiple files from a directory"
+#~ msgstr "Dizinden Birden Çok Dosya İçe Aktar"
+
+#~ msgctxt "@action"
+#~ msgid "New Plot Area"
+#~ msgstr "Yeni Çizim Alanı"
+
+#~ msgctxt "@action"
+#~ msgid "Zoom"
+#~ msgstr "Yakınlaştır"
+
+#~ msgctxt "@action"
+#~ msgid "Magnification"
+#~ msgstr "Büyütme"
+
+#~ msgctxt "@action"
+#~ msgid "Add New"
+#~ msgstr "Yeni Ekle"
+
+#~ msgid "Add a new Folder"
+#~ msgstr "Yeni Klasör Ekle"
+
+#~ msgid "New Folder"
+#~ msgstr "Yeni Klasör"
+
+#~ msgid "The directory %1 doesn't exist."
+#~ msgstr "%1 dizini yok."
+
+#~ msgid "%1 files imported in %2 seconds."
+#~ msgstr "%1 dosya %2 saniyede içe aktarıldı."
+
+#~ msgctxt "@title:window"
+#~ msgid "Select the Directory Data Source"
+#~ msgstr "Dizin Veri Kaynağını Seç"
+
+#~ msgid "Number of sub-directories: %1"
+#~ msgstr "Alt dizin sayısı: %1"
+
+#~ msgid "Couldn't read the directory %1."
+#~ msgstr "%1 dizini okunamadı."
+
+#~ msgid ""
+#~ "If enabled: Use the major tick number as base to determine the new number "
+#~ "of ticks for nice looking values. The number of ticks might be different "
+#~ "than the number previously set."
+#~ msgstr ""
+#~ "Etkinleştirilmişse: Güzel görünen değerler için yeni tık sayısını "
+#~ "belirlemek üzere majör tık sayısını taban olarak kullanın. Tıkların "
+#~ "sayısı, daha önceden ayarlanan sayıdan farklı olabilir."
+
+#~ msgid ""
+#~ "<ul><li><b>%1</b> - tests if a sample mean differs significantly from a "
+#~ "known population mean</li><li><b>%2</b> - tests if two independent "
+#~ "samples have the same mean</li><li><b>%3</b> - tests if the mean "
+#~ "difference between two related samples is zero</li><li><b>%4</b> - tests "
+#~ "if two independent samples with unequal variances have the same mean</"
+#~ "li><li><b>%5</b> - tests if three or more independent samples have the "
+#~ "same mean</li><li><b>%6</b> - tests if three or more related/repeated "
+#~ "measurements have the same mean</li>"
+#~ msgstr ""
+#~ "<ul><li><b>%1</b> — örnek bir ortalamanın bilinen nüfus ortalamasından "
+#~ "önemli ölçüde farklı olup olmadığını sınar</li><li><b>%2</b> — iki "
+#~ "bağımsız örneklemin ayrı ortalamaya sahip olup olmadığını sınar</"
+#~ "li><li><b>%3</b> — iki ilgili örneklem arasındaki ana farkın sıfır olup "
+#~ "olmadığını sınar</li><li><b>%4</b> — eşit olmayan varyanslara sahip iki "
+#~ "bağımsız örneklemin aynı ortalamaya sahip olup olmadığını sınar</"
+#~ "li><li><b>%5</b> — üç veya daha fazla bağımsız örneklemin aynı ortalamaya "
+#~ "sahip olup olmadığını sınar</li><li><b>%6</b> — üc veya daha fazla ilgili/"
+#~ "yinelenmiş ölçülerin aynı ortalamaya sahip olup olmadığını sınar</li>"
+
+#~ msgid ""
+#~ "<li><b>%1</b> - tests differences in medians between two independent "
+#~ "groups</li><li><b>%2</b> - tests if the median difference between two "
+#~ "related samples is zero</li><li><b>%3</b> - tests differences in medians "
+#~ "among three or more independent groups</li><li><b>%4</b> - tests "
+#~ "differences in medians among three or more related/repeated measurements</"
+#~ "li><li><b>%5</b> - tests differences in survival distributions between "
+#~ "two or more groups</li><li><b>%6</b> - tests if two categorical variables "
+#~ "are independent of each other</li><li><b>%7</b> - tests if observed data "
+#~ "follows a specified theoretical distribution</li></ul>"
+#~ msgstr ""
+#~ "<li><b>%1</b> — iki bağımsız grup arasındaki ortancalardaki farkı sınar</"
+#~ "li><li><b>%2</b> — iki ilişkili örnek arasındaki ortanca farkın sıfır "
+#~ "olup olmadığını sınar</li><li><b>%3</b> — üç veya daha fazla bağımsız "
+#~ "grup arasında ortancalar arasındaki farkı sınar</li><li><b>%4</b> — üç "
+#~ "veya daha fazla ilişkili/yinelenmiş ölçüler arasındaki ortanca farkını "
+#~ "sınar</li><li><b>%5</b> — iki veya daha fazla grup arasındaki hayatta "
+#~ "kalma dağılımlarındaki farkı sınar</li><li><b>%6</b> — iki kategorik "
+#~ "değişkenin birbirlerinden farklı olup olmadıklarını sınar</li><li><b>%7</"
+#~ "b> — gözlemlenen verinin belirli bir kuramsal dağılımı izleyip "
+#~ "izlemediğini sınar</li></ul>"
+
+#~ msgid ""
+#~ "Selected test requires at least %1 and at most %2 non-empty variables."
+#~ msgstr ""
+#~ "Seçili test en az %1 ve en çok %2 boş olmayan değişken gerektiriyor."
+
+#~ msgid "Statistical"
+#~ msgstr "İstatistiksel"
+
+#~ msgid "Specification"
+#~ msgstr "Belirtim"
+
+#~ msgid ""
+#~ "Determine which values to use for the center and limit lines:"
+#~ "<ul><li>Statistical - values are calculated based on the statistical "
+#~ "properties of the sample.</li><li>Specification - custom user-defined "
+#~ "values are used.</li></ul>"
+#~ msgstr ""
+#~ "Orta ve sınır çizgileri için hangi değerlerin kullanılacağını belirleyin:"
+#~ "<ul><li>İstatiksel — Değerler, örneklemin istatistiksel değerlerine göre "
+#~ "hesaplanırlar.</li><li>Belirtim — Özel kullanıcı tabanlı değerler "
+#~ "kullanılacaktır.</li></ul>"
+
+#~ msgid "Copy Name"
+#~ msgstr "Adı Kopyala"
+
+#~ msgid "Copy Value"
+#~ msgstr "Değeri Kopyala"
+
+#~ msgid "Copy Name and Value"
+#~ msgstr "Adı ve Değeri Kopyala"
+
+#~ msgid "Description:"
+#~ msgstr "Açıklama:"
+
+#~ msgid "User defined model"
+#~ msgstr "Kullanıcı tanımlı model"
+
+#~ msgctxt "@title:window"
+#~ msgid "Properties: Hypothesis Test"
+#~ msgstr "Özellikler: Hipotez Testi"
+
+#~ msgctxt "@title:window"
+#~ msgid "Properties: Script"
+#~ msgstr "Özellikler: Betik"
+
+#~ msgid "Select file to load function definition"
+#~ msgstr "İşlev Tanımı Dosyası Seç"
+
+#~ msgid "LabPlot Function Definition"
+#~ msgstr "LabPlot işlev tanımı"
+
+#~ msgid "Select file to save function definition"
+#~ msgstr "İşlev Tanımı Kayıt Yeri Seç"
+
+#~ msgid "Script Toolbar"
+#~ msgstr "Betik Araç Çubuğu"
+
+#~ msgid "Text Editor"
+#~ msgstr "Metin Düzenleyicisi"
+
+#~ msgid "If enabled spreadsheet and matrix data is saved in the project file"
+#~ msgstr ""
+#~ "Etkinleştirilmişse hesap tablosu ve matris verisi proje dosyasına "
+#~ "kaydedilir."
+
+#~ msgid "Delete entire rows in the spreadsheet if the condition is met."
+#~ msgstr "Koşul sağlandıysa hesap tablosundaki tam satırları silin."
+
+#~ msgid "Statistical Analysis"
+#~ msgstr "İstatistiksel Çözümleme"
+
+#~ msgid "Hypothesis Test"
+#~ msgstr "Hipotez Testi"
+
+#~ msgid "Hypothesis Test for %1"
+#~ msgstr "%1 için Hipotez Testi"
+
+#~ msgid "Test Mean μ₀: "
+#~ msgstr "Test ortalaması μ₀:"
+
+#~ msgid "Significance Level α:"
+#~ msgstr "Önem düzeyi α:"
+
+#~ msgid "Null:"
+#~ msgstr "Sıfır:"
+
+#~ msgid "Alternate:"
+#~ msgstr "Alternatif:"
+
+#~ msgid "Hypothesis"
+#~ msgstr "Hipotez"
+
+#~ msgid "Test:"
+#~ msgstr "Test:"
+
+#~ msgid "Upper Limit:"
+#~ msgstr "Üst sınır:"
+
+#~ msgid "Lower Limit:"
+#~ msgstr "Alt sınır:"
+
+#~ msgid "Center/Limits:"
+#~ msgstr "Merkez/sınırlar:"
+
+#~ msgid "Compress File:"
+#~ msgstr "Dosyayı sıkıştır:"
+
+#~ msgid "Save Data in File:"
+#~ msgstr "Veriyi dosyaya kaydet:"
+
+#~ msgid "Load a custom function"
+#~ msgstr "Özel bir işlev ekle"
+
+#~ msgid "Save a custom function"
+#~ msgstr "Özel bir işlevi kaydet"
+
+#~ msgid "Compression:"
+#~ msgstr "Sıkıştırma:"
+
+#~ msgid "Save Data in Project file:"
+#~ msgstr "Veriyi proje dosyasına kaydet:"
+
+#~ msgid "Delete Rows"
+#~ msgstr "Satırları Sil"
+
+#~ msgid "One-Way ANOVA Test Statistics"
+#~ msgstr "Tek Yönlü ANOVA Testi İstastistikleri"
+
+#~ msgid "One-Way ANOVA with Repeated Measures Test Statistics"
+#~ msgstr "Yinelenen Ölçüler Testi İstatistikleriyle Tek Yönlü ANOVA"
+
+#~ msgid "Mann-Whitney U Test Statistics"
+#~ msgstr "Mann-Whitney U Testi İstatistikleri"
+
+#~ msgid "Kruskal-Wallis Test Statistics"
+#~ msgstr "Krustal-Wallis Testi İstatistikleri"
+
+#~ msgid "Wilcoxon Signed Rank Test Statistics"
+#~ msgstr "Wilcoxon İmzalı Sıra Testi İstatistikleri"
+
+#~ msgid "Friedman Test Statistics"
+#~ msgstr "Friedman Testi İstatistikleri"
+
+#~ msgid "Chi-Square Goodness of Fit Test Statistics"
+#~ msgstr "Uyum Testi İstatistiklerinin Ki Kare İyiliği"
+
+#~ msgid "Chi-Square Independence Test Statistics"
+#~ msgstr "Ki Kare Bağımsızlık Testi İstatistikleri"
+
+#~ msgid "Log-Rank Test Statistics"
+#~ msgstr "Log Sıra Testi İstatistikleri"
+
+#~ msgid "One-Way ANOVA"
+#~ msgstr "Tek Yönlü ANOVA"
+
+#~ msgid "One-Way ANOVA with Repeated Measures"
+#~ msgstr "Yinelenen Ölçülerle Tek Yönlü ANOVA"
+
+#~ msgid "Logrank Test"
+#~ msgstr "Log Sıra Testi"
+
+#~ msgid "Chi-square Independence Test"
+#~ msgstr "Ki Kare Bağımsızlık Testi"
+
+#~ msgid "Chi-square Goodness of Fit Test"
+#~ msgstr "Uyum Testinin Ki Kare İyiliği"
+
+#~ msgid ""
+#~ "<ul><li><b>One-Sample t-Test</b> - tests if a sample mean differs "
+#~ "significantly from a known population mean</li><li><b>Independent Two-"
+#~ "Sample t-Test</b> - tests if two independent samples have the same mean</"
+#~ "li><li><b>Paired Two-Sample t-Test</b> - tests if the mean difference "
+#~ "between two related samples is zero</li><li><b>Welch t-Test</b> - tests "
+#~ "if two independent samples with unequal variances have the same mean</"
+#~ "li><li><b>One-Way ANOVA Test</b> - tests if three or more independent "
+#~ "samples have the same mean</li><li><b>One-Way ANOVA with Repeated "
+#~ "Measures Test</b> - tests if three or more related/repeated measurements "
+#~ "have the same mean</li><li><b>Mann-Whitney U Test</b> - tests differences "
+#~ "in medians between two independent groups</li><li><b>Wilcoxon Signed Rank "
+#~ "Test</b> - tests if the median difference between two related samples is "
+#~ "zero</li><li><b>Kruskal-Wallis Test</b> - tests differences in medians "
+#~ "among three or more independent groups</li><li><b>Friedman Test</b> - "
+#~ "tests differences in medians among three or more related/repeated "
+#~ "measurements</li><li><b>Logrank Test</b> - tests differences in survival "
+#~ "distributions between two or more groups</li><li><b>Chi-Square "
+#~ "Independence Test</b> - tests if two categorical variables are "
+#~ "independent of each other</li><li><b>Chi-Square Goodness of Fit Test</b> "
+#~ "- tests if observed data follows a specified theoretical distribution</"
+#~ "li></ul>"
+#~ msgstr ""
+#~ "<ul><li><b>Tek Örneklemli t Testi</b> - bir örneklem ortalamasının "
+#~ "bilinen bir nüfus ortalamasından önemli bir ölçüde farklı olup olmadığını "
+#~ "sınar</li><li><b>Bağımsız İki Örneklemli t Testi</b> - iki bağımsız "
+#~ "örneklemin aynı ortalamaya sahip olup olmadığını sınar</li><li><b>Eşli "
+#~ "İki Örneklemli t Testi</b> - iki ilgili örneklem arasındaki ortalama "
+#~ "farkın sıfır olup olmadığını sınar</li><li><b>Welch t Testi</b> - eşit "
+#~ "olmayan varyanslara sahip iki bağımsız örneklemin aynı ortalamaya sahip "
+#~ "olup olmadığını sınar</li><li><b>Tek Yönlü ANOVA Testi</b> - üç veya daha "
+#~ "fazla bağımsız örneklemin aynı ortalamaya sahip olup olmadığını sınar</"
+#~ "li><li><b>Yinelenen Ölçüler Testiyle Tek Yönlü ANOVA</b> - üç veya daha "
+#~ "çok ilgili/yinelenen ölçümün aynı ortalamaya sahip olup olmadığını sınar</"
+#~ "li><li><b>Mann-Whitney U Testi</b> - iki bağımsız grup arasındaki ortanca "
+#~ "değerlerdeki farkları sınar</li><li><b>Wilcoxon İmzalı Sıra Testi</b> - "
+#~ "iki ilgili örneklem arasındaki ortanca değer farkının sıfır olup "
+#~ "olmadığını sınar</li><li><b>Kruskal-Wallis Testi</b> - üç veya daha fazla "
+#~ "bağımsız grup arasındaki ortanca değerlerdeki farkları sınar</"
+#~ "li><li><b>Friedman Testi</b> - üç veya daha fazla ilgili/yinelenen "
+#~ "ölçümlerdeki ortanca değerler arasındaki farkları sınar</"
+#~ "li><li><b>Logrank Testi</b> - iki veya daha grup arasındaki hayatta kalma "
+#~ "dağılımlarındaki farkları sınar</li><li><b>Ki Kare Bağımsızlık Testi</b> "
+#~ "- iki kategorik değişkenin birbirinden bağımsız olup olmadığını sınar</"
+#~ "li><li><b>Uyum Testinin Ki Kare İyiliği</b> - gözlemlenen verinin belirli "
+#~ "bir kuramsal dağılımı izleyip izlemediğini sınar</li></ul>"
+
+#~ msgid "Column '%1' must be of type integer."
+#~ msgstr "“%1” sütunu tamsayı türünde olmalı."
+
+#~ msgid "Output Font:"
+#~ msgstr "Çıktı yazıtipi:"
+
+#~ msgid "Editor Font:"
+#~ msgstr "Düzenleyici yazıtipi:"
+
+#~ msgid "Editor Theme:"
+#~ msgstr "Düzenleyici teması:"
+
+#~ msgid "LabPlot Function Definition (*.lfd *.LFD)"
+#~ msgstr "LabPlot işlev tanımı (*.lfd *.LFD)"
 
 #~ msgid "%1: insert empty column"
 #~ msgid_plural "%1: insert empty columns"
@@ -25049,3 +25821,17 @@ msgstr "Dosya açılamadı:"
 #~ msgid_plural "%1: insert empty rows"
 #~ msgstr[0] "%1: Boş satır ekle"
 #~ msgstr[1] "%1: Boş satırlar ekle"
+
+#~ msgid "Close"
+#~ msgstr "Kapat"
+
+#~ msgid ""
+#~ "Please follow the instructions on <a href=\"https://www.kaggle.com/docs/"
+#~ "api\">\"How to Use Kaggle\"</a> to setup the Kaggle CLI tool."
+#~ msgstr ""
+#~ "Kaggle komut satırı aracı kurulumunu yapmak için <a href=\"https://www."
+#~ "kaggle.com/docs/api\">“How to Use Kaggle”</a> adresindeki yönergeleri "
+#~ "izleyin."
+
+#~ msgid "Show SparkLines"
+#~ msgstr "Kıvılcım Çizgilerini Göster"
