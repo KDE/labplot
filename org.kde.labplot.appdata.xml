@@ -29,6 +29,7 @@
   <name xml:lang="pt-BR">LabPlot</name>
   <name xml:lang="sl">LabPlot</name>
   <name xml:lang="sv">Labplot</name>
+  <name xml:lang="tr">LabPlot</name>
   <name xml:lang="uk">LabPlot</name>
   <name xml:lang="zh-CN">LabPlot</name>
   <summary>Visualize and analyze data</summary>
@@ -71,6 +72,7 @@
     <p xml:lang="pt-BR">O LabPlot é um software de visualização e análise de dados GRATUITO, de código aberto e multiplataforma acessível a todos.</p>
     <p xml:lang="sl">LabPlot je PROSTA, odprtokodna in večplatformska vizualizacija podatkov in programska oprema za analizo dostopna vsem.</p>
     <p xml:lang="sv">Labplot är FRI datavisualiserings- och analysprogramvara med öppen källkod för flera plattformar tillgänglig för vem som helst.</p>
+    <p xml:lang="tr">LabPlot herkese açık, ÜCRETSİZ, açık kaynaklı ve çok sayıda platform üzerinde çalışan bir veri görselleştirme ve çözümleme yazılımıdır.</p>
     <p xml:lang="uk">LabPlot є вільним, доступним для будь-кого програмним забезпеченням з відкритим кодом, яке працює на багатьох платформах і виконує візуалізацію та аналіз даних.</p>
     <p>
       LabPlot provides an easy way to create, manage and edit plots. It allows you to produce plots based on data from a spreadsheet or on data imported from external files. Plots can be exported to several pixmap and vector graphic formats.
@@ -94,6 +96,7 @@
     <p xml:lang="pt-BR">O LabPlot oferece uma forma simples de criar, gerenciar e editar gráficos. Permite-lhe produzir gráficos com base nos dados de uma planilha ou nos dados importados de arquivos externos. Os gráficos podem ser exportados para diferentes formatos de imagens rasterizadas e vetoriais.</p>
     <p xml:lang="sl">LabPlot omogoča preprost način ustvarjanja, upravljanja in urejanja grafikonov. Omogoča vamza izdelavo grafikonov na podlagi podatkov iz preglednice ali podatkov uvoženih izzunanje datoteke. Grafikone je mogoče izvoziti v več rastrskih in vektorskih formatov.</p>
     <p xml:lang="sv">Labplot tillhandahåller ett enkelt sätt att skapa, hantera och redigera diagram. Det låter dig skapa diagram baserat på data från ett kalkylark eller data importerad från externa filer. Diagram kan exporteras till flera olika punktavbildnings- och vektorgrafik-format.</p>
+    <p xml:lang="tr">LabPlot çizimler oluşturmanın, yönetmenin ve düzenlemenin kolay bir yolunu sunar. Bir elektronik tablodan veya başka dosyalardan içe aktarılan verilerden yola çıkarak çizimler üretebilirsiniz. Çizimler çeşitli piksel haritası ve vektör grafik biçimlerine dışa aktarılabilir.</p>
     <p xml:lang="uk">За допомогою LabPlot просто створювати креслення, керувати ними та редагувати креслення. За допомогою програми можна створювати креслення на основі електронної таблиці або даних, імпортованих із зовнішнього файла. Креслення можна експортувати у форматі растрового або векторного зображення.</p>
     <p xml:lang="zh-CN">LabPlot 提供了一种方便地创建、 管理和编辑图表的方式。它允许您基于电子表格的数据或从外部文件导入的数据来绘制图表。图表可以导出到多种格式的位图或矢量图形。</p>
   </description>
@@ -125,6 +128,7 @@
       <caption xml:lang="pt-BR">Visualização básica de dados</caption>
       <caption xml:lang="sl">Osnovne vizualizacije podatkov</caption>
       <caption xml:lang="sv">Grundläggande visualisering av data</caption>
+      <caption xml:lang="tr">Temel veri görselleştirmesi</caption>
       <caption xml:lang="uk">Базова візуалізація даних</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/01_basic_plots_linux.png</image>
     </screenshot>
@@ -149,6 +153,7 @@
       <caption xml:lang="pt-BR">Visualização básica de dados</caption>
       <caption xml:lang="sl">Osnovne vizualizacije podatkov</caption>
       <caption xml:lang="sv">Grundläggande visualisering av data</caption>
+      <caption xml:lang="tr">Temel veri görselleştirmesi</caption>
       <caption xml:lang="uk">Базова візуалізація даних</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/02_overview_linux.png</image>
     </screenshot>
@@ -172,6 +177,7 @@
       <caption xml:lang="pt-BR">Layout avançado de gráficos e imagens</caption>
       <caption xml:lang="sl">Napredna postavitev grafikonov in slik</caption>
       <caption xml:lang="sv">Avancerad layout av diagram och bilder</caption>
+      <caption xml:lang="tr">Çizimlerin ve görsellerin gelişmiş yerleşimi</caption>
       <caption xml:lang="uk">Розширені можливості з компонування креслень та зображень</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/03_space_debris_linux.png</image>
     </screenshot>
@@ -196,6 +202,7 @@
       <caption xml:lang="pt-BR">Temas</caption>
       <caption xml:lang="sl">Teme</caption>
       <caption xml:lang="sv">Teman</caption>
+      <caption xml:lang="tr">Temalama</caption>
       <caption xml:lang="uk">Теми</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/04_theming_linux.png</image>
     </screenshot>
@@ -219,6 +226,7 @@
       <caption xml:lang="pt-BR">Visualização de funções matemáticas</caption>
       <caption xml:lang="sl">Vizualizacija matematičnih funkcij</caption>
       <caption xml:lang="sv">Visualisering av matematiska funktioner</caption>
+      <caption xml:lang="tr">Matematiksel işlevlerin görselleştirilmesi</caption>
       <caption xml:lang="uk">Візуалізація математичних функцій</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/05_math_expression_linux.png</image>
     </screenshot>
@@ -242,6 +250,7 @@
       <caption xml:lang="pt-BR">Ajusta modelos predefinidos ou personalizados aos dados</caption>
       <caption xml:lang="sl">Prilagajanje vnaprej določenih modelov ali modelov po meri podatkom</caption>
       <caption xml:lang="sv">Anpassa data till fördefinierade eller egna modeller</caption>
+      <caption xml:lang="tr">Veriye önceden tanımlanmış veya özel modelleri uydurun</caption>
       <caption xml:lang="uk">Апроксимація попередньо визначеними або нетиповими моделями даних</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/06_fit_linux.png</image>
     </screenshot>
@@ -265,6 +274,7 @@
       <caption xml:lang="pt-BR">Suaviza os dados com a ajuda de vários métodos de suavização</caption>
       <caption xml:lang="sl">Zgladite podatke s pomočjo različnih metod glajenja</caption>
       <caption xml:lang="sv">Jämna ut data med hjälp av diverse utjämningsmetoder</caption>
+      <caption xml:lang="tr">Çeşitli pürüzsüzleştirme yöntemlerinin yardımıyla veriyi pürüzsüzleştirin</caption>
       <caption xml:lang="uk">Згладжування даних за допомогою різноманітних способів згладжування</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/07_smooth_linux.png</image>
     </screenshot>
@@ -288,6 +298,7 @@
       <caption xml:lang="pt-BR">Interface de notebook para sessões interativas em Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="sl">Prenosni vmesnik za interaktivne seje v Maxima, Octave, R, Sage, Scilab, Python, Julia itd.</caption>
       <caption xml:lang="sv">Anteckningsbok för interaktiva sessioner i Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
+      <caption xml:lang="tr">Maxima, Octave, R, Sage, Scilab, Python, Julia vb. içinde etkileşimli oturumlar için defter arayüzü</caption>
       <caption xml:lang="uk">Інтерфейс нотатника для інтерактивних сеансів Maxima, Octave, R, Sage, Scilab, Python, Julia тощо</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/08_maxima_tutorial_linux.png</image>
     </screenshot>
@@ -312,6 +323,7 @@
       <caption xml:lang="pt-BR">Análise de sinais</caption>
       <caption xml:lang="sl">Analiza signalov</caption>
       <caption xml:lang="sv">Signalanalys</caption>
+      <caption xml:lang="tr">Sinyal çözümlemesi</caption>
       <caption xml:lang="uk">Аналіз сигналів</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/09_morse_signal_linux.png</image>
     </screenshot>
@@ -335,6 +347,7 @@
       <caption xml:lang="pt-BR">Diagrama de Herzsprung-Russel no LabPlot</caption>
       <caption xml:lang="sl">Herzsprung-Russelovi diagrami v LabPlotu</caption>
       <caption xml:lang="sv">Herzsprung-Russel-diagram i Labplot</caption>
+      <caption xml:lang="tr">LabPlot’ta Herzsprung-Russel diyagramı</caption>
       <caption xml:lang="uk">Діаграма Герцшпрунга-Рассела у LabPlot</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/10_hrd_linux.png</image>
     </screenshot>
@@ -358,6 +371,7 @@
       <caption xml:lang="pt-BR">Visualização de dados calculados em uma sessão interativa do Maxima</caption>
       <caption xml:lang="sl">Vizualizacija podatkov izračunanih v interaktivni seji Maxima</caption>
       <caption xml:lang="sv">Visualisering av data beräknad i en interaktiv Maxima-session</caption>
+      <caption xml:lang="tr">Bir etkileşimli Maxima oturumunda hesaplanan verinin görselleştirilmesi</caption>
       <caption xml:lang="uk">Візуалізація даних, які обчислено у інтерактивному сеансі Maxima</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/11_maxima_Duffing_Oscillator_linux.png</image>
     </screenshot>
