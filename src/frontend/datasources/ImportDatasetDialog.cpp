@@ -34,7 +34,6 @@
  */
 ImportDatasetDialog::ImportDatasetDialog(MainWin* parent)
 	: ImportDialog(parent)
-	, m_mainWin(parent)
 	, m_importDatasetWidget(new ImportDatasetWidget(this)) {
 	vLayout->addWidget(m_importDatasetWidget);
 	connect(m_importDatasetWidget, &ImportDatasetWidget::datasetSelected, this, &ImportDatasetDialog::checkOkButton);

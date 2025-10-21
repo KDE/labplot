@@ -1047,7 +1047,7 @@ void SearchReplaceWidget::findAll() {
 		break;
 	case DataType::DateTime:
 		pattern1 = uiSearchReplace.dteValue1->text();
-		pattern1 = uiSearchReplace.dteValue2->text();
+		pattern2 = uiSearchReplace.dteValue2->text();
 		break;
 	}
 

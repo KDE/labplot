@@ -1663,14 +1663,13 @@ void LiveDataTest::testLoadSaveLiveDataLinkedFile_FileNotExists() {
 
 void LiveDataTest::testLoadSaveLiveDataLinkedFile_FileNotExistsRemoveLivedata() {
 	QString savePath;
-	QString importFilename;
 	{
 		// create a temp file and write some data into it
 		QTemporaryFile tempFile;
 		if (!tempFile.open())
 			QFAIL("failed to create the temp file for writing");
 
-		importFilename = tempFile.fileName();
+		QString importFilename = tempFile.fileName();
 		QFile file(importFilename);
 		if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
 			QFAIL("failed to open the temp file for writing");

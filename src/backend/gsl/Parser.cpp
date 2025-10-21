@@ -242,18 +242,16 @@ void delete_table(void) {
 }
 
 void clear_static_symbols() {
-	StaticSymbol* s;
 	while (!static_symbols.empty()) {
-		s = static_symbols.back();
+		StaticSymbol* s = static_symbols.back();
 		static_symbols.pop_back();
 		delete s;
 	}
 }
 
 void clear_variable_symbols() {
-	Symbol* s;
 	while (!variable_symbols.empty()) {
-		s = variable_symbols.back();
+		Symbol* s = variable_symbols.back();
 		variable_symbols.pop_back();
 		delete s;
 	}

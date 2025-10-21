@@ -231,8 +231,8 @@ public:
 		void* m_labels{nullptr}; // pointer to the container for the value labels(QMap<T, QString>)
 		struct Statistics {
 			bool available{false};
-			double minimum;
-			double maximum;
+			double minimum{-INFINITY};
+			double maximum{INFINITY};
 		};
 		Statistics m_statistics;
 	};
