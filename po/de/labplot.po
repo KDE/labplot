@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-13 00:38+0000\n"
+"POT-Creation-Date: 2025-10-22 00:39+0000\n"
 "PO-Revision-Date: 2025-07-07 10:03+0200\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -179,7 +179,7 @@ msgstr "Tage"
 #: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:274
 #: src/frontend/dockwidgets/AxisDock.cpp:290
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:282
-#: src/frontend/dockwidgets/XYCurveDock.cpp:477 src/frontend/GuiTools.cpp:159
+#: src/frontend/dockwidgets/XYCurveDock.cpp:476 src/frontend/GuiTools.cpp:159
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
 #: src/frontend/widgets/LineWidget.cpp:47
@@ -6876,12 +6876,12 @@ msgstr "Simpson (3-Punkt Regel)"
 msgid "Simpson's 3/8 (4-point)"
 msgstr "Simpson 3/8 (4-Punkt Regel)"
 
-#: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:485
+#: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:484
 #, kde-format
 msgid "Cubic Spline (Natural)"
 msgstr "Kubisches Spline (natürlich)"
 
-#: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:486
+#: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:485
 #, kde-format
 msgid "Cubic Spline (Periodic)"
 msgstr "Kubisches Spline (periodisch)"
@@ -8341,7 +8341,7 @@ msgstr "%1: Untere Auffüllung festlegen"
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:245
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:90
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:88
-#: src/frontend/dockwidgets/XYCurveDock.cpp:517
+#: src/frontend/dockwidgets/XYCurveDock.cpp:516
 #, kde-format
 msgid "Horizontal"
 msgstr "Waagerecht"
@@ -8361,7 +8361,7 @@ msgstr "Waagerecht"
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:246
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:91
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:89
-#: src/frontend/dockwidgets/XYCurveDock.cpp:516
+#: src/frontend/dockwidgets/XYCurveDock.cpp:515
 #, kde-format
 msgid "Vertical"
 msgstr "Senkrecht"
@@ -8385,7 +8385,7 @@ msgstr "Ausrichtung"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:317
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:698
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:124
-#: src/frontend/dockwidgets/XYCurveDock.cpp:478
+#: src/frontend/dockwidgets/XYCurveDock.cpp:477
 #: src/frontend/ui/dockwidgets/axisdock.ui:492
 #: src/frontend/ui/dockwidgets/axisdock.ui:632
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:684
@@ -12238,25 +12238,25 @@ msgstr "Eigenschaften"
 msgid "This option determines how the image is converted when importing."
 msgstr "Diese Option bestimmt, wie das Bild beim Importieren konvertiert wird."
 
-#: src/frontend/datasources/ImportDatasetDialog.cpp:56
+#: src/frontend/datasources/ImportDatasetDialog.cpp:55
 #, kde-format
 msgctxt "@title:window"
 msgid "Import from Dataset Collection"
 msgstr "Aus Datensatzsammlung importieren"
 
-#: src/frontend/datasources/ImportDatasetDialog.cpp:93
-#: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:86
+#: src/frontend/datasources/ImportDatasetDialog.cpp:92
+#: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:85
 #: src/frontend/welcomescreen/WelcomeScreenHelper.cpp:115
 #, kde-format
 msgid "Dataset%1"
 msgstr "Datensatz%1"
 
-#: src/frontend/datasources/ImportDatasetDialog.cpp:103
+#: src/frontend/datasources/ImportDatasetDialog.cpp:102
 #, kde-format
 msgid "Failed to connect within %1 seconds"
 msgstr "Verbinden innerhalb von %1 Sekunden fehlgeschlagen"
 
-#: src/frontend/datasources/ImportDatasetDialog.cpp:128
+#: src/frontend/datasources/ImportDatasetDialog.cpp:127
 #, kde-format
 msgid "Dataset imported in %1 seconds."
 msgstr "Datensatz in %1 Sekunden importiert."
@@ -13108,12 +13108,12 @@ msgstr "Ein Fehler ist aufgetreten."
 msgid "Connecting to '%1:%2' timed out."
 msgstr "Zeitüberschreitung bei der Verbindung zu „%1:%2“."
 
-#: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:37
+#: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:36
 #, kde-format
 msgid "Toggle Options"
 msgstr "Optionen an/aus"
 
-#: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:57
+#: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:56
 #, kde-format
 msgctxt "@title:window"
 msgid "Import from kaggle.com"
@@ -13702,7 +13702,7 @@ msgstr "Halb gefüllt, groß"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:129
 #: src/frontend/dockwidgets/ImageDock.cpp:181
 #: src/frontend/dockwidgets/ImageDock.cpp:191
-#: src/frontend/dockwidgets/XYCurveDock.cpp:511
+#: src/frontend/dockwidgets/XYCurveDock.cpp:510
 #: src/frontend/widgets/BackgroundWidget.cpp:118
 #: src/frontend/widgets/LabelWidget.cpp:485
 #: src/frontend/widgets/LabelWidget.cpp:497
@@ -13720,7 +13720,7 @@ msgstr "Links"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:131
 #: src/frontend/dockwidgets/ImageDock.cpp:183
 #: src/frontend/dockwidgets/ImageDock.cpp:193
-#: src/frontend/dockwidgets/XYCurveDock.cpp:512
+#: src/frontend/dockwidgets/XYCurveDock.cpp:511
 #: src/frontend/widgets/BackgroundWidget.cpp:119
 #: src/frontend/widgets/LabelWidget.cpp:487
 #: src/frontend/widgets/LabelWidget.cpp:499
@@ -13730,7 +13730,7 @@ msgid "Right"
 msgstr "Rechts"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:271
-#: src/frontend/dockwidgets/XYCurveDock.cpp:518
+#: src/frontend/dockwidgets/XYCurveDock.cpp:517
 #, kde-format
 msgid "Both"
 msgstr "Beide"
@@ -13882,7 +13882,7 @@ msgstr "%1-Achsen: Vorlage \"%2\" geladen"
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:230
 #: src/frontend/dockwidgets/WorksheetDock.cpp:608
-#: src/frontend/dockwidgets/XYCurveDock.cpp:1036
+#: src/frontend/dockwidgets/XYCurveDock.cpp:1035
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr "%1: Vorlage \"%2\" geladen"
@@ -14326,7 +14326,7 @@ msgstr "%1 Legenden für kartesische Plots: Die Vorlage \"%2\" wurde geladen"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:316
 #: src/frontend/dockwidgets/MatrixDock.cpp:81
-#: src/frontend/dockwidgets/XYCurveDock.cpp:493
+#: src/frontend/dockwidgets/XYCurveDock.cpp:492
 #: src/frontend/widgets/ValueWidget.cpp:41
 #, kde-format
 msgid "Decimal"
@@ -14334,7 +14334,7 @@ msgstr "Dezimal"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:317
 #: src/frontend/dockwidgets/MatrixDock.cpp:82
-#: src/frontend/dockwidgets/XYCurveDock.cpp:494
+#: src/frontend/dockwidgets/XYCurveDock.cpp:493
 #: src/frontend/widgets/ValueWidget.cpp:42
 #, kde-format
 msgid "Scientific (e)"
@@ -14342,21 +14342,21 @@ msgstr "Wissenschaftlich (e)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:318
 #: src/frontend/dockwidgets/MatrixDock.cpp:83
-#: src/frontend/dockwidgets/XYCurveDock.cpp:495
+#: src/frontend/dockwidgets/XYCurveDock.cpp:494
 #: src/frontend/widgets/ValueWidget.cpp:43
 #, kde-format
 msgid "Scientific (E)"
 msgstr "Wissenschaftlich (E)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:319
-#: src/frontend/dockwidgets/XYCurveDock.cpp:496
+#: src/frontend/dockwidgets/XYCurveDock.cpp:495
 #: src/frontend/widgets/ValueWidget.cpp:44
 #, kde-format
 msgid "Automatic (e)"
 msgstr "Automatisch (e)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:320
-#: src/frontend/dockwidgets/XYCurveDock.cpp:497
+#: src/frontend/dockwidgets/XYCurveDock.cpp:496
 #: src/frontend/widgets/ValueWidget.cpp:45
 #, kde-format
 msgid "Automatic (E)"
@@ -14605,7 +14605,7 @@ msgstr "Eigener Wert für die Bandbreite des Kernel"
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:799
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
-#: src/frontend/dockwidgets/XYCurveDock.cpp:1034
+#: src/frontend/dockwidgets/XYCurveDock.cpp:1033
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr "%1: XY-Kurven: Vorlage \"%2\" wurde geladen"
@@ -15016,74 +15016,74 @@ msgstr "Dekonvolutionsstatus:  %1"
 msgid "Correlation status: %1"
 msgstr "Korrelationsstatus:  %1"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:479
+#: src/frontend/dockwidgets/XYCurveDock.cpp:478
 #, kde-format
 msgid "Horiz. Start"
 msgstr "Horiz. Start"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:480
+#: src/frontend/dockwidgets/XYCurveDock.cpp:479
 #, kde-format
 msgid "Vert. Start"
 msgstr "Vert. Start"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:481
+#: src/frontend/dockwidgets/XYCurveDock.cpp:480
 #, kde-format
 msgid "Horiz. Midpoint"
 msgstr "Horiz. Mittelpunkt"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:482
+#: src/frontend/dockwidgets/XYCurveDock.cpp:481
 #, kde-format
 msgid "Vert. Midpoint"
 msgstr "Vert. Mittelpunkt"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:483
+#: src/frontend/dockwidgets/XYCurveDock.cpp:482
 #, kde-format
 msgid "2-segments"
 msgstr "2-Abschnitte"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:484
+#: src/frontend/dockwidgets/XYCurveDock.cpp:483
 #, kde-format
 msgid "3-segments"
 msgstr "3-Abschnitte"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:487
+#: src/frontend/dockwidgets/XYCurveDock.cpp:486
 #, kde-format
 msgid "Akima-spline (Natural)"
 msgstr "Akima-Spline (natürlich)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:488
+#: src/frontend/dockwidgets/XYCurveDock.cpp:487
 #, kde-format
 msgid "Akima-spline (Periodic)"
 msgstr "Akima-Spline (periodisch)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:501
+#: src/frontend/dockwidgets/XYCurveDock.cpp:500
 #: src/frontend/widgets/ValueWidget.cpp:31
 #, kde-format
 msgid "No Values"
 msgstr "Keine Werte"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:506
+#: src/frontend/dockwidgets/XYCurveDock.cpp:505
 #: src/frontend/widgets/ValueWidget.cpp:33
 #, kde-format
 msgid "Custom Column"
 msgstr "Benutzerdefinierte Spalte"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:509
+#: src/frontend/dockwidgets/XYCurveDock.cpp:508
 #: src/frontend/widgets/BackgroundWidget.cpp:115
 #: src/frontend/widgets/ValueWidget.cpp:35
 #, kde-format
 msgid "Above"
 msgstr "Über"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:510
+#: src/frontend/dockwidgets/XYCurveDock.cpp:509
 #: src/frontend/widgets/BackgroundWidget.cpp:116
 #: src/frontend/widgets/ValueWidget.cpp:36
 #, kde-format
 msgid "Below"
 msgstr "Unter"
 
+#: src/frontend/dockwidgets/XYCurveDock.cpp:520
 #: src/frontend/dockwidgets/XYCurveDock.cpp:521
-#: src/frontend/dockwidgets/XYCurveDock.cpp:522
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
@@ -15092,8 +15092,8 @@ msgstr ""
 "Wenn aktviert, werden benachbarte Punkte mit Linien verbunden, sogar bei "
 "Lücken (invaliden oder maskierten Werten)"
 
+#: src/frontend/dockwidgets/XYCurveDock.cpp:522
 #: src/frontend/dockwidgets/XYCurveDock.cpp:523
-#: src/frontend/dockwidgets/XYCurveDock.cpp:524
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
@@ -17482,25 +17482,25 @@ msgstr "Mittel (5cm x 5cm)"
 msgid "Big (7cm x 7cm)"
 msgstr "Groß (7cm x 7cm)"
 
-#: src/frontend/SettingsWorksheetPage.cpp:152
+#: src/frontend/SettingsWorksheetPage.cpp:151
 #, kde-format
 msgid ""
 "No LaTeX installation found or selected. LaTeX typesetting not possible."
 msgstr ""
 "Keine LaTeX-Installation gefunden oder ausgewählt. LaTeX-Satz nicht möglich."
 
-#: src/frontend/SettingsWorksheetPage.cpp:162
+#: src/frontend/SettingsWorksheetPage.cpp:161
 #, kde-format
 msgid "No 'convert' found. LaTeX typesetting not possible."
 msgstr "'convert' nicht gefunden. LaTeX-Satz nicht möglich."
 
-#: src/frontend/SettingsWorksheetPage.cpp:168
+#: src/frontend/SettingsWorksheetPage.cpp:167
 #, kde-format
 msgid "No 'dvips' found. LaTeX typesetting not possible."
 msgstr "'dvips' nicht gefunden. LaTeX-Satz nicht möglich."
 
-#: src/frontend/SettingsWorksheetPage.cpp:175
-#: src/frontend/SettingsWorksheetPage.cpp:181
+#: src/frontend/SettingsWorksheetPage.cpp:174
+#: src/frontend/SettingsWorksheetPage.cpp:180
 #, kde-format
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr "Ghostscript nicht gefunden. LaTeX-Satz nicht möglich."
