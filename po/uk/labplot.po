@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-13 00:38+0000\n"
+"POT-Creation-Date: 2025-10-22 00:39+0000\n"
 "PO-Revision-Date: 2025-09-29 15:51+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -178,7 +178,7 @@ msgstr "Дні"
 #: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:274
 #: src/frontend/dockwidgets/AxisDock.cpp:290
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:282
-#: src/frontend/dockwidgets/XYCurveDock.cpp:477 src/frontend/GuiTools.cpp:159
+#: src/frontend/dockwidgets/XYCurveDock.cpp:476 src/frontend/GuiTools.cpp:159
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
 #: src/frontend/widgets/LineWidget.cpp:47
@@ -6934,12 +6934,12 @@ msgstr "Сімпсона (триточкове)"
 msgid "Simpson's 3/8 (4-point)"
 msgstr "Сімпсона 3/8 (чотириточкове)"
 
-#: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:485
+#: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:484
 #, kde-format
 msgid "Cubic Spline (Natural)"
 msgstr "кубічний сплайн (природний)"
 
-#: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:486
+#: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:485
 #, kde-format
 msgid "Cubic Spline (Periodic)"
 msgstr "кубічний сплайн (періодичний)"
@@ -8416,7 +8416,7 @@ msgstr "%1: встановити нижню фаску"
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:245
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:90
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:88
-#: src/frontend/dockwidgets/XYCurveDock.cpp:517
+#: src/frontend/dockwidgets/XYCurveDock.cpp:516
 #, kde-format
 msgid "Horizontal"
 msgstr "Горизонтальне"
@@ -8436,7 +8436,7 @@ msgstr "Горизонтальне"
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:246
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:91
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:89
-#: src/frontend/dockwidgets/XYCurveDock.cpp:516
+#: src/frontend/dockwidgets/XYCurveDock.cpp:515
 #, kde-format
 msgid "Vertical"
 msgstr "Вертикальне"
@@ -8460,7 +8460,7 @@ msgstr "Орієнтація"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:317
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:698
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:124
-#: src/frontend/dockwidgets/XYCurveDock.cpp:478
+#: src/frontend/dockwidgets/XYCurveDock.cpp:477
 #: src/frontend/ui/dockwidgets/axisdock.ui:492
 #: src/frontend/ui/dockwidgets/axisdock.ui:632
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:684
@@ -12312,25 +12312,25 @@ msgstr ""
 "За допомогою цього параметра можна визначити спосіб перетворення зображення "
 "під час імпортування."
 
-#: src/frontend/datasources/ImportDatasetDialog.cpp:56
+#: src/frontend/datasources/ImportDatasetDialog.cpp:55
 #, kde-format
 msgctxt "@title:window"
 msgid "Import from Dataset Collection"
 msgstr "Імпортувати зі збірки наборів даних"
 
-#: src/frontend/datasources/ImportDatasetDialog.cpp:93
-#: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:86
+#: src/frontend/datasources/ImportDatasetDialog.cpp:92
+#: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:85
 #: src/frontend/welcomescreen/WelcomeScreenHelper.cpp:115
 #, kde-format
 msgid "Dataset%1"
 msgstr "Набір_даних%1"
 
-#: src/frontend/datasources/ImportDatasetDialog.cpp:103
+#: src/frontend/datasources/ImportDatasetDialog.cpp:102
 #, kde-format
 msgid "Failed to connect within %1 seconds"
 msgstr "Не вдалося встановити з'єднання протягом %1 секунд"
 
-#: src/frontend/datasources/ImportDatasetDialog.cpp:128
+#: src/frontend/datasources/ImportDatasetDialog.cpp:127
 #, kde-format
 msgid "Dataset imported in %1 seconds."
 msgstr "Набір даних імпортовано за %1 секунд."
@@ -13174,12 +13174,12 @@ msgstr "Сталася помилка."
 msgid "Connecting to '%1:%2' timed out."
 msgstr "Перевищено час очікування на встановлення з'єднання із «%1:%2»."
 
-#: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:37
+#: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:36
 #, kde-format
 msgid "Toggle Options"
 msgstr "Перемкнути параметри"
 
-#: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:57
+#: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:56
 #, kde-format
 msgctxt "@title:window"
 msgid "Import from kaggle.com"
@@ -13775,7 +13775,7 @@ msgstr "напівзаповнена, велика"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:129
 #: src/frontend/dockwidgets/ImageDock.cpp:181
 #: src/frontend/dockwidgets/ImageDock.cpp:191
-#: src/frontend/dockwidgets/XYCurveDock.cpp:511
+#: src/frontend/dockwidgets/XYCurveDock.cpp:510
 #: src/frontend/widgets/BackgroundWidget.cpp:118
 #: src/frontend/widgets/LabelWidget.cpp:485
 #: src/frontend/widgets/LabelWidget.cpp:497
@@ -13793,7 +13793,7 @@ msgstr "Ліворуч"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:131
 #: src/frontend/dockwidgets/ImageDock.cpp:183
 #: src/frontend/dockwidgets/ImageDock.cpp:193
-#: src/frontend/dockwidgets/XYCurveDock.cpp:512
+#: src/frontend/dockwidgets/XYCurveDock.cpp:511
 #: src/frontend/widgets/BackgroundWidget.cpp:119
 #: src/frontend/widgets/LabelWidget.cpp:487
 #: src/frontend/widgets/LabelWidget.cpp:499
@@ -13803,7 +13803,7 @@ msgid "Right"
 msgstr "Праворуч"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:271
-#: src/frontend/dockwidgets/XYCurveDock.cpp:518
+#: src/frontend/dockwidgets/XYCurveDock.cpp:517
 #, kde-format
 msgid "Both"
 msgstr "Обидва"
@@ -13955,7 +13955,7 @@ msgstr "Вісі %1: завантажено шаблон «%2»"
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:230
 #: src/frontend/dockwidgets/WorksheetDock.cpp:608
-#: src/frontend/dockwidgets/XYCurveDock.cpp:1036
+#: src/frontend/dockwidgets/XYCurveDock.cpp:1035
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr "%1: завантажено шаблон «%2»"
@@ -14403,7 +14403,7 @@ msgstr "Умовні позначення креслення %1: заванта�
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:316
 #: src/frontend/dockwidgets/MatrixDock.cpp:81
-#: src/frontend/dockwidgets/XYCurveDock.cpp:493
+#: src/frontend/dockwidgets/XYCurveDock.cpp:492
 #: src/frontend/widgets/ValueWidget.cpp:41
 #, kde-format
 msgid "Decimal"
@@ -14411,7 +14411,7 @@ msgstr "Десятковий"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:317
 #: src/frontend/dockwidgets/MatrixDock.cpp:82
-#: src/frontend/dockwidgets/XYCurveDock.cpp:494
+#: src/frontend/dockwidgets/XYCurveDock.cpp:493
 #: src/frontend/widgets/ValueWidget.cpp:42
 #, kde-format
 msgid "Scientific (e)"
@@ -14419,21 +14419,21 @@ msgstr "Інженерний запис (e)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:318
 #: src/frontend/dockwidgets/MatrixDock.cpp:83
-#: src/frontend/dockwidgets/XYCurveDock.cpp:495
+#: src/frontend/dockwidgets/XYCurveDock.cpp:494
 #: src/frontend/widgets/ValueWidget.cpp:43
 #, kde-format
 msgid "Scientific (E)"
 msgstr "Інженерний запис (E)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:319
-#: src/frontend/dockwidgets/XYCurveDock.cpp:496
+#: src/frontend/dockwidgets/XYCurveDock.cpp:495
 #: src/frontend/widgets/ValueWidget.cpp:44
 #, kde-format
 msgid "Automatic (e)"
 msgstr "Автоматично (e)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:320
-#: src/frontend/dockwidgets/XYCurveDock.cpp:497
+#: src/frontend/dockwidgets/XYCurveDock.cpp:496
 #: src/frontend/widgets/ValueWidget.cpp:45
 #, kde-format
 msgid "Automatic (E)"
@@ -14701,7 +14701,7 @@ msgstr "Нетипове значення ширини смуги ядра"
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:799
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
-#: src/frontend/dockwidgets/XYCurveDock.cpp:1034
+#: src/frontend/dockwidgets/XYCurveDock.cpp:1033
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr "xy-криві %1: завантажено шаблон «%2»"
@@ -15116,74 +15116,74 @@ msgstr "Стан розгортки: %1"
 msgid "Correlation status: %1"
 msgstr "Стан кореляції: %1"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:479
+#: src/frontend/dockwidgets/XYCurveDock.cpp:478
 #, kde-format
 msgid "Horiz. Start"
 msgstr "початок, гор."
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:480
+#: src/frontend/dockwidgets/XYCurveDock.cpp:479
 #, kde-format
 msgid "Vert. Start"
 msgstr "початок, верт."
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:481
+#: src/frontend/dockwidgets/XYCurveDock.cpp:480
 #, kde-format
 msgid "Horiz. Midpoint"
 msgstr "середня точка, гор."
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:482
+#: src/frontend/dockwidgets/XYCurveDock.cpp:481
 #, kde-format
 msgid "Vert. Midpoint"
 msgstr "середня точка, верт."
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:483
+#: src/frontend/dockwidgets/XYCurveDock.cpp:482
 #, kde-format
 msgid "2-segments"
 msgstr "двосегментні"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:484
+#: src/frontend/dockwidgets/XYCurveDock.cpp:483
 #, kde-format
 msgid "3-segments"
 msgstr "трисегментні"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:487
+#: src/frontend/dockwidgets/XYCurveDock.cpp:486
 #, kde-format
 msgid "Akima-spline (Natural)"
 msgstr "сплайн Акіма (природний)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:488
+#: src/frontend/dockwidgets/XYCurveDock.cpp:487
 #, kde-format
 msgid "Akima-spline (Periodic)"
 msgstr "сплайн Акіма (періодичний)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:501
+#: src/frontend/dockwidgets/XYCurveDock.cpp:500
 #: src/frontend/widgets/ValueWidget.cpp:31
 #, kde-format
 msgid "No Values"
 msgstr "без значень"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:506
+#: src/frontend/dockwidgets/XYCurveDock.cpp:505
 #: src/frontend/widgets/ValueWidget.cpp:33
 #, kde-format
 msgid "Custom Column"
 msgstr "Нетиповий стовпчик"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:509
+#: src/frontend/dockwidgets/XYCurveDock.cpp:508
 #: src/frontend/widgets/BackgroundWidget.cpp:115
 #: src/frontend/widgets/ValueWidget.cpp:35
 #, kde-format
 msgid "Above"
 msgstr "Вище"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:510
+#: src/frontend/dockwidgets/XYCurveDock.cpp:509
 #: src/frontend/widgets/BackgroundWidget.cpp:116
 #: src/frontend/widgets/ValueWidget.cpp:36
 #, kde-format
 msgid "Below"
 msgstr "Нижче"
 
+#: src/frontend/dockwidgets/XYCurveDock.cpp:520
 #: src/frontend/dockwidgets/XYCurveDock.cpp:521
-#: src/frontend/dockwidgets/XYCurveDock.cpp:522
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
@@ -15192,8 +15192,8 @@ msgstr ""
 "Якщо позначено, з'єднувати сусідні точки лініями, навіть якщо між ними є "
 "видимі прогалини (некоректні або замасковані дані)"
 
+#: src/frontend/dockwidgets/XYCurveDock.cpp:522
 #: src/frontend/dockwidgets/XYCurveDock.cpp:523
-#: src/frontend/dockwidgets/XYCurveDock.cpp:524
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
@@ -17586,7 +17586,7 @@ msgstr "середній (5см x 5см)"
 msgid "Big (7cm x 7cm)"
 msgstr "великий (7см x 7см)"
 
-#: src/frontend/SettingsWorksheetPage.cpp:152
+#: src/frontend/SettingsWorksheetPage.cpp:151
 #, kde-format
 msgid ""
 "No LaTeX installation found or selected. LaTeX typesetting not possible."
@@ -17594,18 +17594,18 @@ msgstr ""
 "Не знайдено або не вибрано встановленого дистрибутива LaTeX. Верстання "
 "формул у LaTeX неможливе."
 
-#: src/frontend/SettingsWorksheetPage.cpp:162
+#: src/frontend/SettingsWorksheetPage.cpp:161
 #, kde-format
 msgid "No 'convert' found. LaTeX typesetting not possible."
 msgstr "Не знайдено програми «convert». Верстання формул у LaTeX неможливе."
 
-#: src/frontend/SettingsWorksheetPage.cpp:168
+#: src/frontend/SettingsWorksheetPage.cpp:167
 #, kde-format
 msgid "No 'dvips' found. LaTeX typesetting not possible."
 msgstr "Не знайдено програми «dvips». Верстання формул у LaTeX неможливе."
 
-#: src/frontend/SettingsWorksheetPage.cpp:175
-#: src/frontend/SettingsWorksheetPage.cpp:181
+#: src/frontend/SettingsWorksheetPage.cpp:174
+#: src/frontend/SettingsWorksheetPage.cpp:180
 #, kde-format
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr "Не знайдено комплексу Ghostscript. Верстання формул у LaTeX неможливе."
