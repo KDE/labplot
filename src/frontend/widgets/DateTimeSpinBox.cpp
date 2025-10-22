@@ -159,7 +159,7 @@ bool DateTimeSpinBox::increaseValue(DateTimeSpinBox::Type type, int step) {
 		}
 		mDateTime.year += step;
 		return true;
-	} break;
+	}
 	case Type::month:
 		return changeValue(mDateTime.month, Type::year, step);
 		break;

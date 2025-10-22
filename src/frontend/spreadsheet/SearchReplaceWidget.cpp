@@ -1199,7 +1199,7 @@ bool SearchReplaceWidget::checkColumnRow(Column* column,
 										 Operator opNumeric,
 										 Operator opDateTime,
 										 const QString& pattern1,
-										 const QString pattern2,
+										 const QString& pattern2,
 										 Qt::CaseSensitivity cs) {
 	bool match = false;
 	switch (type) {

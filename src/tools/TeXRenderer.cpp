@@ -153,7 +153,7 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 		return imageFromPDF(file, engine, res);
 }
 
-bool TeXRenderer::executeLatexProcess(const QString engine,
+bool TeXRenderer::executeLatexProcess(const QString& engine,
 									  const QString& baseName,
 									  const QTemporaryFile& file,
 									  const QString& resultFileExtension,

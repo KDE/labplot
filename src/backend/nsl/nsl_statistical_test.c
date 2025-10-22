@@ -610,9 +610,9 @@ double* nsl_stats_logistic_regression(double** x, int* y, int N, int n_in, int i
 	result = (double*)malloc(sizeof(double) * (n_in + 1));
 
 	// TODO: W is uninitialized!
-	for (i = 0; i < n_in; i++) {
+	for (i = 0; i < n_in; i++)
 		W[i] = 0.0;
-	}
+
 	result[0] = b;
 
 	for (epoch = 0; epoch < iterations; epoch++) {

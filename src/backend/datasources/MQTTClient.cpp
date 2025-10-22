@@ -828,7 +828,7 @@ QString MQTTClient::statistics(const MQTTTopic* topic) const {
 
 	QVector<bool> willStatistics = topic->mqttClient()->willStatistics();
 	// Add every statistical data to the string, the flag of which is set true
-	for (int i = 0; i <= willStatistics.size(); i++) {
+	for (int i = 0; i < willStatistics.size(); i++) {
 		if (willStatistics[i]) {
 			switch (static_cast<MQTTClient::WillStatisticsType>(i)) {
 			case MQTTClient::WillStatisticsType::ArithmeticMean:

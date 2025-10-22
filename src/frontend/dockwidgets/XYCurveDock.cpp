@@ -380,7 +380,7 @@ void XYCurveDock::setCurves(QList<XYCurve*> list) {
 	setSymbols(list);
 }
 
-void XYCurveDock::setSymbols(QList<XYCurve*> curves) {
+void XYCurveDock::setSymbols(const QList<XYCurve*>& curves) {
 	// symbols
 	QList<Symbol*> symbols;
 	QList<Background*> backgrounds;
