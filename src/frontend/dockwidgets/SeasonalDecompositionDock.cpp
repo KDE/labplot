@@ -42,7 +42,7 @@ SeasonalDecompositionDock::SeasonalDecompositionDock(QWidget* parent)
 	// General
 	connect(cbXColumn, &TreeViewComboBox::currentModelIndexChanged, this, &SeasonalDecompositionDock::xColumnChanged);
 	connect(cbYColumn, &TreeViewComboBox::currentModelIndexChanged, this, &SeasonalDecompositionDock::yColumnChanged);
-	connect(ui.cbMethod, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SeasonalDecompositionDock::methodChanged);
+	connect(ui.cbMethod, &QComboBox::currentIndexChanged, this, &SeasonalDecompositionDock::methodChanged);
 
 	// STL parameters
 	connect(ui.sbSTLPeriod, &QSpinBox::valueChanged, this, &SeasonalDecompositionDock::stlPeriodChanged);
@@ -54,9 +54,9 @@ SeasonalDecompositionDock::SeasonalDecompositionDock(QWidget* parent)
 	connect(ui.sbSTLLowPassLength, &QSpinBox::valueChanged, this, &SeasonalDecompositionDock::stlLowPassLengthChanged);
 	connect(ui.chbSTLLowPassLengthAuto, &QCheckBox::toggled, this, &SeasonalDecompositionDock::stlLowPassLengthAutoChanged);
 
-	connect(ui.cbSTLSeasonalDegree, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SeasonalDecompositionDock::stlSeasonalDegreeChanged);
-	connect(ui.cbSTLTrendDegree, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SeasonalDecompositionDock::stlTrendDegreeChanged);
-	connect(ui.cbSTLLowPassDegree, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SeasonalDecompositionDock::stlLowPassDegreeChanged);
+	connect(ui.cbSTLSeasonalDegree, &QComboBox::currentIndexChanged, this, &SeasonalDecompositionDock::stlSeasonalDegreeChanged);
+	connect(ui.cbSTLTrendDegree, &QComboBox::currentIndexChanged, this, &SeasonalDecompositionDock::stlTrendDegreeChanged);
+	connect(ui.cbSTLLowPassDegree, &QComboBox::currentIndexChanged, this, &SeasonalDecompositionDock::stlLowPassDegreeChanged);
 
 	connect(ui.sbSTLSeasonalJump, &QSpinBox::valueChanged, this, &SeasonalDecompositionDock::stlSeasonalJumpChanged);
 	connect(ui.sbSTLTrendJump, &QSpinBox::valueChanged, this, &SeasonalDecompositionDock::stlTrendJumpChanged);
@@ -73,7 +73,7 @@ SeasonalDecompositionDock::SeasonalDecompositionDock(QWidget* parent)
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &SeasonalDecompositionDock::saveConfigAsTemplate);
 	connect(templateHandler, &TemplateHandler::info, this, &SeasonalDecompositionDock::info);
 
-	ui.gridLayout->addWidget(frame, 26, 0, 1, 3);
+	ui.gridLayout->addWidget(frame, 29, 0, 1, 3);
 }
 
 SeasonalDecompositionDock::~SeasonalDecompositionDock() = default;
@@ -142,7 +142,7 @@ void SeasonalDecompositionDock::retranslateUi() {
 	// method
 	ui.cbMethod->clear();
 	ui.cbMethod->addItem(QStringLiteral("STL"), static_cast<int>(SeasonalDecomposition::Method::STL));
-	ui.cbMethod->addItem(QStringLiteral("MSTL"), static_cast<int>(SeasonalDecomposition::Method::STL));
+	ui.cbMethod->addItem(QStringLiteral("MSTL"), static_cast<int>(SeasonalDecomposition::Method::MSTL));
 
 	QString info = i18n(
 		"Method used to perform the seasonal-trend decomposition:"
@@ -156,7 +156,7 @@ void SeasonalDecompositionDock::retranslateUi() {
 	// STL parameters
 
 	// robust
-	info = i18n("If enabled, uses a data-dependent weighting function, more robust result if the data has outliers.");
+	info = i18n("If enabled, uses a data-dependent weighting function to get more robust result if the data has outliers.");
 	ui.lSTLRobust->setToolTip(info);
 	ui.chbSTLRobust->setToolTip(info);
 
@@ -221,7 +221,21 @@ void SeasonalDecompositionDock::retranslateUi() {
 	ui.sbSTLLowPassJump->setToolTip(info);
 
 	// MSTL parameters
-	// TODO:
+	info = i18n("Periods of the seasonal components, coma-separated values. Examples:"
+		"<ul>"
+		"<li>24, 24*7  - for hourly data with daily and weekly seasonality</li>"
+		"<li>7, 365  - for daily data with weekly and yearly seasonality</li>"
+		"</ul>");
+	ui.lMSTLPeriods->setToolTip(info);
+	ui.leMSTLPeriods->setToolTip(info);
+
+	info = i18n("The lambda parameter for the Box-Cox transformation applied prior to decomposition.");
+	ui.lMSTLLambda->setToolTip(info);
+	ui.leMSTLLambda->setToolTip(info);
+
+	info = i18n("Number of iterations used to refine the seasonal component.");
+	ui.lMSTLIterations->setToolTip(info);
+	ui.sbMSTLIterations->setToolTip(info);
 }
 
 //*************************************************************
@@ -230,9 +244,22 @@ void SeasonalDecompositionDock::retranslateUi() {
 
 // "General"-tab
 void SeasonalDecompositionDock::methodChanged(int) {
+	const auto method = static_cast<SeasonalDecomposition::Method>(ui.cbMethod->currentData().toInt());
+
+	// show/hide the relevant parameter related widgets
+	// TODO: generalize later to more methods
+	bool mstl = (method == SeasonalDecomposition::Method::MSTL);
+	ui.lMSTLPeriods->setVisible(mstl);
+	ui.leMSTLPeriods->setVisible(mstl);
+	ui.lMSTLLambda->setVisible(mstl);
+	ui.leMSTLLambda->setVisible(mstl);
+	ui.lMSTLIterations->setVisible(mstl);
+	ui.sbMSTLIterations->setVisible(mstl);
+	ui.lSTLPeriod->setVisible(!mstl);
+	ui.sbSTLPeriod->setVisible(!mstl);
+
 	CONDITIONAL_LOCK_RETURN;
 
-	const auto method = static_cast<SeasonalDecomposition::Method>(ui.cbMethod->currentData().toInt());
 	for (auto* decomposition : m_decompositions)
 		decomposition->setMethod(method);
 }
@@ -418,7 +445,7 @@ void SeasonalDecompositionDock::showStatusInfo(const QString& info) {
 		if (!m_messageWidget) {
 			m_messageWidget = new KMessageWidget(this);
 			m_messageWidget->setMessageType(KMessageWidget::Warning);
-			ui.gridLayout->addWidget(m_messageWidget, 24, 0, 1, 3);
+			ui.gridLayout->addWidget(m_messageWidget, 27, 0, 1, 3);
 		}
 		m_messageWidget->setText(info);
 		m_messageWidget->animatedShow();

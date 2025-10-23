@@ -386,7 +386,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		addChildFast(test);
 #endif
 	} else if (element_name == QLatin1String("seasonalDecomposition")) {
-		auto* decomp = new SeasonalDecomposition(QString());
+		auto* decomp = new SeasonalDecomposition(QString(), true);
 		if (!decomp->load(reader, preview)) {
 			delete decomp;
 			return false;

@@ -444,7 +444,25 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 			return;
 		}
 
-		auto result = stl::params().seasonal_length(stlSeasonalLength).robust(true).fit(yDataVector, stlPeriod);
+		// set the parameters
+		auto parameters = stl::params().seasonal_length(stlSeasonalLength).robust(stlRobust);
+
+		// length
+		parameters = stl::params().seasonal_length(stlSeasonalLength);
+		if (!stlTrendLengthAuto)
+			parameters = parameters.trend_length(stlTrendLength);
+		if (!stlLowPassLengthAuto)
+			parameters = parameters.trend_length(stlLowPassLength);
+
+		// degrees
+		parameters = parameters.seasonal_degree(stlSeasonalDegree).trend_degree(stlTrendDegree).low_pass_degree(stlLowPassDegree);
+
+		// jumps
+
+		// perform the decomposition
+		auto result = parameters.fit(yDataVector, stlPeriod);
+
+		// copy the result data into the internal column vectors
 		const auto size = result.seasonal.size();
 		QVector<double> trendData;
 		trendData.resize(size);
@@ -514,7 +532,7 @@ void SeasonalDecomposition::save(QXmlStreamWriter* writer) const {
 }
 
 //! Load from XML
-bool SeasonalDecomposition::load(XmlStreamReader* reader, bool /* preview */) {
+bool SeasonalDecomposition::load(XmlStreamReader* reader, bool preview) {
 	Q_D(SeasonalDecomposition);
 
 	if (!readBasicAttributes(reader))
@@ -556,12 +574,67 @@ bool SeasonalDecomposition::load(XmlStreamReader* reader, bool /* preview */) {
 			READ_INT_VALUE("stlLowPassJump", stlLowPassJump, int);
 
 			// MSTL parameters
+		} else if (reader->name() == QLatin1String("spreadsheet")) {
+			d->resultSpreadsheet = new Spreadsheet(i18n("Result"), true);
+			d->resultSpreadsheet->setFixed(true);
+			d->resultSpreadsheet->setUndoAware(false);
+			if (!d->resultSpreadsheet->load(reader, preview))
+				return false;
+			addChildFast(d->resultSpreadsheet);
+		} else if (reader->name() == QLatin1String("worksheet")) {
+			d->worksheet = new Worksheet(i18n("Worksheet"), true);
+			d->worksheet->setFixed(true);
+			if (!d->worksheet->load(reader, preview))
+				return false;
+			addChildFast(d->worksheet);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement())
 				return false;
 		}
 	}
+
+	if (preview)
+		return true;
+
+	// after all children were read, set the internal pointers for columns, plot areas and curves
+
+	// columns
+	if (d->resultSpreadsheet->columnCount() < 3)
+		return false;
+	d->columnTrend = d->resultSpreadsheet->column(0);
+	d->columnSeasonal = d->resultSpreadsheet->column(1);
+	d->columnResidual = d->resultSpreadsheet->column(2);
+
+	// plot areas
+	auto plotAreas = d->worksheet->children<CartesianPlot>();
+	if (plotAreas.count() < 4)
+		return false;
+	d->plotAreaOriginal = plotAreas.at(0);
+	d->plotAreaTrend = plotAreas.at(1);
+	d->plotAreaSeasonal = plotAreas.at(2);
+	d->plotAreaResidual = plotAreas.at(3);
+
+	// curves
+	auto curves = d->plotAreaOriginal->children<XYCurve>();
+	if (curves.isEmpty())
+		return false;
+	d->curveOriginal = curves.constFirst();
+
+	curves = d->plotAreaTrend->children<XYCurve>();
+	if (curves.isEmpty())
+		return false;
+	d->curveTrend = curves.constFirst();
+
+	curves = d->plotAreaSeasonal->children<XYCurve>();
+	if (curves.isEmpty())
+		return false;
+	d->curveSeasonal = curves.constFirst();
+
+	curves = d->plotAreaResidual->children<XYCurve>();
+	if (curves.isEmpty())
+		return false;
+	d->curveResidual = curves.constFirst();
 
 	return true;
 }

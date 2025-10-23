@@ -64,7 +64,7 @@ public:
 	bool stlTrendLengthAuto{true};
 	int stlLowPassLength{3};
 	bool stlLowPassLengthAuto{true};
-	int stlSeasonalDegree{1};
+	int stlSeasonalDegree{0};
 	int stlTrendDegree{1};
 	int stlLowPassDegree{1};
 	int stlSeasonalJump{1};
@@ -72,6 +72,9 @@ public:
 	int stlLowPassJump{1};
 
 	// MSTL parameters
+	double mstlLamda{0.5};
+	int mstlIterations{2};
+	std::vector<int> mstlPeriods;
 
 private:
 	std::vector<double> yDataVector; // valid values from the sources y-column, used in the calculation of the decomposition

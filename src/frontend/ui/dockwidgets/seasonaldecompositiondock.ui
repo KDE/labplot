@@ -11,42 +11,6 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="lName">
-     <property name="text">
-      <string>Name:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <spacer name="horizontalSpacer_5">
-     <property name="orientation">
-      <enum>Qt::Orientation::Horizontal</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Policy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>10</width>
-       <height>23</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="2">
-    <widget class="TimedLineEdit" name="leName"/>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="lComment">
-     <property name="text">
-      <string>Comment:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="2">
     <widget class="ResizableTextEdit" name="teComment">
      <property name="tabChangesFocus">
@@ -54,97 +18,44 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="lData">
-     <property name="font">
-      <font>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Data</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="lXColumn">
-     <property name="text">
-      <string>X-Data:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="lYColumn">
-     <property name="text">
-      <string>Y-Data:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="lOptions">
-     <property name="font">
-      <font>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Options</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="lMethod">
-     <property name="text">
-      <string>Method:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="2">
-    <widget class="KComboBox" name="cbMethod">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="0">
+   <item row="13" column="0">
     <widget class="QLabel" name="lSTLPeriod">
      <property name="text">
       <string>Period:</string>
      </property>
     </widget>
    </item>
-   <item row="10" column="2">
-    <widget class="QSpinBox" name="sbSTLPeriod">
-     <property name="minimum">
-      <number>2</number>
+   <item row="24" column="0">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
-    </widget>
+     <property name="sizeType">
+      <enum>QSizePolicy::Policy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
    </item>
-   <item row="11" column="0">
-    <widget class="QLabel" name="lSTLRobust">
+   <item row="0" column="0">
+    <widget class="QLabel" name="lName">
      <property name="text">
-      <string>Robust:</string>
+      <string>Name:</string>
      </property>
     </widget>
    </item>
-   <item row="11" column="2">
-    <widget class="QCheckBox" name="chbSTLRobust">
+   <item row="19" column="0">
+    <widget class="QLabel" name="lSTLLowPassLength">
      <property name="text">
-      <string/>
+      <string>Low-Pass Length:</string>
      </property>
     </widget>
    </item>
-   <item row="13" column="0">
-    <widget class="QLabel" name="lSTLSeasonalLength">
-     <property name="text">
-      <string>Seasonal Length:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="13" column="2">
+   <item row="16" column="2">
     <widget class="QSpinBox" name="sbSTLSeasonalLength">
      <property name="minimum">
       <number>3</number>
@@ -154,34 +65,30 @@
      </property>
     </widget>
    </item>
-   <item row="14" column="2" rowspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QSpinBox" name="sbSTLTrendLength">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimum">
-        <number>3</number>
-       </property>
-       <property name="singleStep">
-        <number>2</number>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="chbSTLTrendLengthAuto">
-       <property name="text">
-        <string>Auto</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+   <item row="10" column="0">
+    <widget class="QLabel" name="lMSTLPeriods">
+     <property name="text">
+      <string>Periods:</string>
+     </property>
+    </widget>
    </item>
-   <item row="16" column="2">
+   <item row="9" column="0" colspan="2">
+    <spacer name="verticalSpacer_6">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Policy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="19" column="2">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QSpinBox" name="sbSTLLowPassLength">
@@ -208,67 +115,12 @@
      </item>
     </layout>
    </item>
-   <item row="18" column="2">
-    <widget class="QComboBox" name="cbSTLSeasonalDegree"/>
-   </item>
-   <item row="19" column="0">
-    <widget class="QLabel" name="lSTLTrendDegree">
-     <property name="text">
-      <string>Trend Degree:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="19" column="2">
-    <widget class="QComboBox" name="cbSTLTrendDegree"/>
-   </item>
-   <item row="20" column="2">
-    <widget class="QComboBox" name="cbSTLLowPassDegree"/>
-   </item>
-   <item row="22" column="0">
-    <widget class="QLabel" name="lSTLSeasonalJump">
-     <property name="text">
-      <string>Seasonal Jump:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="22" column="2">
-    <widget class="QSpinBox" name="sbSTLSeasonalJump"/>
-   </item>
-   <item row="23" column="0">
+   <item row="26" column="0">
     <widget class="QLabel" name="lSTLTrendJump">
      <property name="text">
       <string>Trend Jump:</string>
      </property>
     </widget>
-   </item>
-   <item row="23" column="2">
-    <widget class="QSpinBox" name="sbSTLTrendJump"/>
-   </item>
-   <item row="24" column="0">
-    <widget class="QLabel" name="lSTLLowPassJump">
-     <property name="text">
-      <string>Low-Pass Jump:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="24" column="2">
-    <widget class="QSpinBox" name="sbSTLLowPassJump"/>
-   </item>
-   <item row="2" column="0" colspan="2">
-    <spacer name="verticalSpacer_3">
-     <property name="orientation">
-      <enum>Qt::Orientation::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Policy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="6" column="0" colspan="2">
     <spacer name="verticalSpacer_4">
@@ -286,70 +138,35 @@
      </property>
     </spacer>
    </item>
-   <item row="9" column="0" colspan="2">
-    <spacer name="verticalSpacer_6">
-     <property name="orientation">
-      <enum>Qt::Orientation::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Policy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
+   <item row="22" column="2">
+    <widget class="QComboBox" name="cbSTLTrendDegree"/>
    </item>
-   <item row="12" column="0">
-    <spacer name="verticalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Orientation::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Policy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
+   <item row="0" column="2">
+    <widget class="TimedLineEdit" name="leName"/>
    </item>
-   <item row="17" column="0">
-    <spacer name="verticalSpacer_5">
-     <property name="orientation">
-      <enum>Qt::Orientation::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Policy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>38</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="18" column="0">
-    <widget class="QLabel" name="lSTLSeasonalDegree">
+   <item row="22" column="0">
+    <widget class="QLabel" name="lSTLTrendDegree">
      <property name="text">
-      <string>Seasonal Degree:</string>
+      <string>Trend Degree:</string>
      </property>
     </widget>
    </item>
-   <item row="20" column="0">
-    <widget class="QLabel" name="lSTLLowPassDegree">
+   <item row="27" column="0">
+    <widget class="QLabel" name="lSTLLowPassJump">
      <property name="text">
-      <string>Low-Pass Degree:</string>
+      <string>Low-Pass Jump:</string>
      </property>
     </widget>
    </item>
-   <item row="21" column="0">
-    <spacer name="verticalSpacer">
+   <item row="13" column="2">
+    <widget class="QSpinBox" name="sbSTLPeriod">
+     <property name="minimum">
+      <number>2</number>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2">
+    <spacer name="verticalSpacer_3">
      <property name="orientation">
       <enum>Qt::Orientation::Vertical</enum>
      </property>
@@ -365,6 +182,23 @@
     </spacer>
    </item>
    <item row="25" column="0">
+    <widget class="QLabel" name="lSTLSeasonalJump">
+     <property name="text">
+      <string>Seasonal Jump:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="lComment">
+     <property name="text">
+      <string>Comment:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="28" column="0">
     <spacer name="verticalSpacerGeneral">
      <property name="orientation">
       <enum>Qt::Orientation::Vertical</enum>
@@ -380,19 +214,219 @@
      </property>
     </spacer>
    </item>
-   <item row="16" column="0">
-    <widget class="QLabel" name="lSTLLowPassLength">
+   <item row="26" column="2">
+    <widget class="QSpinBox" name="sbSTLTrendJump"/>
+   </item>
+   <item row="20" column="0">
+    <spacer name="verticalSpacer_5">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Policy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>38</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="lOptions">
+     <property name="font">
+      <font>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="text">
-      <string>Low-Pass Length:</string>
+      <string>Options</string>
      </property>
     </widget>
    </item>
-   <item row="14" column="0" rowspan="2">
+   <item row="16" column="0">
+    <widget class="QLabel" name="lSTLSeasonalLength">
+     <property name="text">
+      <string>Seasonal Length:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="2" rowspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QSpinBox" name="sbSTLTrendLength">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimum">
+        <number>3</number>
+       </property>
+       <property name="singleStep">
+        <number>2</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="chbSTLTrendLengthAuto">
+       <property name="text">
+        <string>Auto</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="25" column="2">
+    <widget class="QSpinBox" name="sbSTLSeasonalJump"/>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="lData">
+     <property name="font">
+      <font>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Data</string>
+     </property>
+    </widget>
+   </item>
+   <item row="27" column="2">
+    <widget class="QSpinBox" name="sbSTLLowPassJump"/>
+   </item>
+   <item row="10" column="2">
+    <widget class="QLineEdit" name="leMSTLPeriods"/>
+   </item>
+   <item row="15" column="0">
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Policy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="21" column="0">
+    <widget class="QLabel" name="lSTLSeasonalDegree">
+     <property name="text">
+      <string>Seasonal Degree:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="0" rowspan="2">
     <widget class="QLabel" name="lSTLTrendLength">
      <property name="text">
       <string>Trend Length:</string>
      </property>
     </widget>
+   </item>
+   <item row="23" column="0">
+    <widget class="QLabel" name="lSTLLowPassDegree">
+     <property name="text">
+      <string>Low-Pass Degree:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="lXColumn">
+     <property name="text">
+      <string>X-Data:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="0">
+    <widget class="QLabel" name="lMSTLLambda">
+     <property name="text">
+      <string>Lambda:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0">
+    <widget class="QLabel" name="lMethod">
+     <property name="text">
+      <string>Method:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="0">
+    <widget class="QLabel" name="lSTLRobust">
+     <property name="text">
+      <string>Robust:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="lYColumn">
+     <property name="text">
+      <string>Y-Data:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <spacer name="horizontalSpacer_5">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Policy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>10</width>
+       <height>23</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="23" column="2">
+    <widget class="QComboBox" name="cbSTLLowPassDegree"/>
+   </item>
+   <item row="21" column="2">
+    <widget class="QComboBox" name="cbSTLSeasonalDegree"/>
+   </item>
+   <item row="14" column="2">
+    <widget class="QCheckBox" name="chbSTLRobust">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="2">
+    <widget class="KComboBox" name="cbMethod">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="0">
+    <widget class="QLabel" name="lMSTLIterations">
+     <property name="text">
+      <string>Iterations:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="2">
+    <widget class="QSpinBox" name="sbMSTLIterations">
+     <property name="minimum">
+      <number>2</number>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="2">
+    <widget class="QLineEdit" name="leMSTLLambda"/>
    </item>
   </layout>
  </widget>
