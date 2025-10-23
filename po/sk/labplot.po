@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-22 00:39+0000\n"
+"POT-Creation-Date: 2025-10-23 00:38+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -54,7 +54,7 @@ msgstr "Premenovať"
 #: src/backend/core/AbstractAspect.cpp:410
 #: src/backend/spreadsheet/Spreadsheet.cpp:711
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:487
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:270
 #: src/frontend/worksheet/WorksheetView.cpp:138
 #, kde-format
 msgid "Delete"
@@ -14086,25 +14086,25 @@ msgid ""
 "Failed to connect to the database '%1'. Please check the connection settings."
 msgstr ""
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:271
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:273
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:270
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:272
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to execute the query for the preview"
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:347
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:346
 #, kde-format
 msgid "Refresh the data preview of the selected table"
 msgstr ""
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:353
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:352
 #, kde-format
 msgid "Execute the query and preview its result"
 msgstr ""
 
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:472
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:474
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:476
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to execute the query"
@@ -14232,25 +14232,25 @@ msgid ""
 "- deliver at least once</li><li>2 - deliver exactly once</li></ul>"
 msgstr ""
 
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
 #: src/frontend/MainWin.cpp:2019
 #, fuzzy, kde-format
 msgid "Warning"
 msgstr "Upozornenie"
 
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #, kde-format
 msgid "You already subscribed to a topic containing this one"
 msgstr ""
 
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
 #, kde-format
 msgid "You already subscribed to this topic"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QTreeWidget, twTopics)
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:979
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:980
 #: src/frontend/ui/datasources/mqttsubscriptionwidget.ui:202
 #, fuzzy, kde-format
 #| msgid "variable"
@@ -26673,59 +26673,59 @@ msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 msgid "File already opened"
 msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:271
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
 #, fuzzy, kde-format
 #| msgid "Add new"
 msgid "Add New Keyword"
 msgstr "Pridať nový"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:272
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:269
 #, fuzzy, kde-format
 #| msgid "Remo&ve Rows"
 msgid "Remove Keyword"
 msgstr "Odstrániť riadky"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:274
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:271
 #, fuzzy, kde-format
 #| msgid "Add new"
 msgid "Add Unit"
 msgstr "Pridať nový"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:322
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:329
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:319
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:326
 #, kde-format
 msgid "Cannot add keyword, keyword already added"
 msgstr ""
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:322
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:329
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:336
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:319
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:326
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:333
 #, fuzzy, kde-format
 #| msgid "Add new"
 msgid "Cannot Add Keyword"
 msgstr "Pridať nový"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:336
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:333
 #, kde-format
 msgid "Cannot add mandatory keyword, they are already present"
 msgstr ""
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:380
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:377
 #, kde-format
 msgid "Are you sure you want to delete the keyword '%1'?"
 msgstr ""
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:381
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:378
 #, kde-format
 msgid "Confirm Deletion"
 msgstr "Potvrdiť vymazanie"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:401
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:398
 #, kde-format
 msgid "Cannot remove mandatory keyword."
 msgstr ""
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:401
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:398
 #, fuzzy, kde-format
 #| msgid "Remo&ve Rows"
 msgid "Removing Keyword"

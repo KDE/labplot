@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-22 00:39+0000\n"
+"POT-Creation-Date: 2025-10-23 00:38+0000\n"
 "PO-Revision-Date: 2025-09-29 15:42+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -57,7 +57,7 @@ msgstr "Preimenuj"
 #: src/backend/core/AbstractAspect.cpp:410
 #: src/backend/spreadsheet/Spreadsheet.cpp:711
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:487
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:270
 #: src/frontend/worksheet/WorksheetView.cpp:138
 #, kde-format
 msgid "Delete"
@@ -13383,24 +13383,24 @@ msgid ""
 msgstr ""
 "Povezava z zbirko podatkov »%1« ni uspela. Preverite nastavitve povezave."
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:271
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:273
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:270
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:272
 #, kde-format
 msgid "Failed to execute the query for the preview"
 msgstr "Poizvedbe za predogled ni bilo mogoče izvesti"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:347
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:346
 #, kde-format
 msgid "Refresh the data preview of the selected table"
 msgstr "Osveži predogled podatkov izbrane tabele"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:353
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:352
 #, kde-format
 msgid "Execute the query and preview its result"
 msgstr "Izvrši poizvedbo in pokaži njen rezultat"
 
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:472
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:474
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:476
 #, kde-format
 msgid "Failed to execute the query"
 msgstr "Ni bilo mogoče izvršiti poizvedbe"
@@ -13524,25 +13524,25 @@ msgstr ""
 "dostavo sporočila:<ul><li>0 - dostavi največ enkrat</li><li>1 - dostavi vsaj "
 "enkrat</li><li>2 - dostavi natanko enkrat</li></ul>"
 
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
 #: src/frontend/MainWin.cpp:2019
 #, kde-format
 msgid "Warning"
 msgstr "Opozorilo"
 
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #, kde-format
 msgid "You already subscribed to a topic containing this one"
 msgstr "Na temo, ki vsebuje to, ste že naročeni"
 
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
 #, kde-format
 msgid "You already subscribed to this topic"
 msgstr "Na to temo ste že naročeni"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, twTopics)
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:979
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:980
 #: src/frontend/ui/datasources/mqttsubscriptionwidget.ui:202
 #, kde-format
 msgid "Available"
@@ -25398,55 +25398,55 @@ msgstr "Datoteke ni mogoče odpreti, datoteka je že odprta."
 msgid "File already opened"
 msgstr "Datoteka je že odprta"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:271
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
 #, kde-format
 msgid "Add New Keyword"
 msgstr "Dodaj novo ključno besedo"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:272
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:269
 #, kde-format
 msgid "Remove Keyword"
 msgstr "Odstrani ključno besedo"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:274
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:271
 #, kde-format
 msgid "Add Unit"
 msgstr "Dodaj enoto"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:322
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:329
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:319
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:326
 #, kde-format
 msgid "Cannot add keyword, keyword already added"
 msgstr "Ključne besede ni mogoče dodati, ključna beseda je že dodana"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:322
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:329
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:336
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:319
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:326
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:333
 #, kde-format
 msgid "Cannot Add Keyword"
 msgstr "Ni mogoče dodati ključne besede"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:336
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:333
 #, kde-format
 msgid "Cannot add mandatory keyword, they are already present"
 msgstr "Obveznih ključnih besed ni mogoče dodati, so že prisotne"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:380
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:377
 #, kde-format
 msgid "Are you sure you want to delete the keyword '%1'?"
 msgstr "Ali ste prepričani, da želite izbrisati ključno besedo »%1«?"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:381
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:378
 #, kde-format
 msgid "Confirm Deletion"
 msgstr "Potrdi brisanje"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:401
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:398
 #, kde-format
 msgid "Cannot remove mandatory keyword."
 msgstr "Obvezne ključne besede ni mogoče odstraniti."
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:401
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:398
 #, kde-format
 msgid "Removing Keyword"
 msgstr "Odstranjevanje ključne besede"

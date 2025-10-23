@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-22 00:39+0000\n"
+"POT-Creation-Date: 2025-10-23 00:38+0000\n"
 "PO-Revision-Date: 2025-09-29 15:51+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -55,7 +55,7 @@ msgstr "Перейменувати"
 #: src/backend/core/AbstractAspect.cpp:410
 #: src/backend/spreadsheet/Spreadsheet.cpp:711
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:487
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:270
 #: src/frontend/worksheet/WorksheetView.cpp:138
 #, kde-format
 msgid "Delete"
@@ -13433,24 +13433,24 @@ msgstr ""
 "Не вдалося встановити з'єднання із базою даних «%1». Будь ласка, перевірте "
 "параметри з'єднання."
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:271
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:273
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:270
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:272
 #, kde-format
 msgid "Failed to execute the query for the preview"
 msgstr "Не вдалося виконати запит для попереднього перегляду"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:347
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:346
 #, kde-format
 msgid "Refresh the data preview of the selected table"
 msgstr "Оновити попередній перегляд даних позначеної таблиці"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:353
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:352
 #, kde-format
 msgid "Execute the query and preview its result"
 msgstr "Виконати запит і показати попередній його результат"
 
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:472
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:474
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:476
 #, kde-format
 msgid "Failed to execute the query"
 msgstr "Не вдалося виконати запит"
@@ -13573,25 +13573,25 @@ msgstr ""
 "одного разу</li><li>1 — доставлення принаймні одного разу</li><li>2 — "
 "доставлення точно одного разу</li></ul>"
 
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
 #: src/frontend/MainWin.cpp:2019
 #, kde-format
 msgid "Warning"
 msgstr "Попередження"
 
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #, kde-format
 msgid "You already subscribed to a topic containing this one"
 msgstr "Ви вже підписані на тему, яка містить вказану"
 
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
 #, kde-format
 msgid "You already subscribed to this topic"
 msgstr "Ви вже підписані на цю тему"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, twTopics)
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:979
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:980
 #: src/frontend/ui/datasources/mqttsubscriptionwidget.ui:202
 #, kde-format
 msgid "Available"
@@ -25482,55 +25482,55 @@ msgstr "Неможливо відкрити файл, адже його вже �
 msgid "File already opened"
 msgstr "Файл вже відкрито"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:271
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
 #, kde-format
 msgid "Add New Keyword"
 msgstr "Додати нове ключове слово"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:272
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:269
 #, kde-format
 msgid "Remove Keyword"
 msgstr "Вилучити ключове слово"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:274
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:271
 #, kde-format
 msgid "Add Unit"
 msgstr "Додати одиницю виміру"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:322
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:329
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:319
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:326
 #, kde-format
 msgid "Cannot add keyword, keyword already added"
 msgstr "Неможливо додати ключове слово. Таке ключове слово уже додано."
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:322
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:329
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:336
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:319
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:326
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:333
 #, kde-format
 msgid "Cannot Add Keyword"
 msgstr "Не вдалося додати ключове слово"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:336
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:333
 #, kde-format
 msgid "Cannot add mandatory keyword, they are already present"
 msgstr "Не можна додавати обов'язкові ключові слова. Ці слова уже додано."
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:380
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:377
 #, kde-format
 msgid "Are you sure you want to delete the keyword '%1'?"
 msgstr "Ви справді хочете вилучити ключове слово «%1»?"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:381
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:378
 #, kde-format
 msgid "Confirm Deletion"
 msgstr "Підтвердження вилучення"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:401
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:398
 #, kde-format
 msgid "Cannot remove mandatory keyword."
 msgstr "Не можна вилучати обов'язкові ключові слова."
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:401
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:398
 #, kde-format
 msgid "Removing Keyword"
 msgstr "Вилучаємо ключове слово"

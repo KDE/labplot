@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-10-22 00:39+0000\n"
+"POT-Creation-Date: 2025-10-23 00:38+0000\n"
 "PO-Revision-Date: 2025-09-29 06:14-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -56,7 +56,7 @@ msgstr "Renomear"
 #: src/backend/core/AbstractAspect.cpp:410
 #: src/backend/spreadsheet/Spreadsheet.cpp:711
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:487
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:270
 #: src/frontend/worksheet/WorksheetView.cpp:138
 #, kde-format
 msgid "Delete"
@@ -13371,24 +13371,24 @@ msgstr ""
 "Falha ao conectar ao banco de dados '%1'. Verifique as configurações de "
 "conexão."
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:271
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:273
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:270
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:272
 #, kde-format
 msgid "Failed to execute the query for the preview"
 msgstr "Falha ao executar a consulta para a visualização"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:347
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:346
 #, kde-format
 msgid "Refresh the data preview of the selected table"
 msgstr "Atualizar a visualização dos dados da tabela selecionada"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:353
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:352
 #, kde-format
 msgid "Execute the query and preview its result"
 msgstr "Executar a consulta e visualizar seu resultado"
 
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:472
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:474
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:476
 #, kde-format
 msgid "Failed to execute the query"
 msgstr "Falha ao executar a consulta"
@@ -13510,25 +13510,25 @@ msgstr ""
 "entrega da mensagem: <ul><li>0 - entregar no máximo uma vez</li><li>1 - "
 "entregar pelo menos uma vez</li><li>2 - entregar exatamente uma vez</li></ul>"
 
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
 #: src/frontend/MainWin.cpp:2019
 #, kde-format
 msgid "Warning"
 msgstr "Aviso"
 
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #, kde-format
 msgid "You already subscribed to a topic containing this one"
 msgstr "Você já se inscreveu em um tópico que contém este"
 
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
 #, kde-format
 msgid "You already subscribed to this topic"
 msgstr "Você já se inscreveu neste tópico"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, twTopics)
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:979
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:980
 #: src/frontend/ui/datasources/mqttsubscriptionwidget.ui:202
 #, kde-format
 msgid "Available"
@@ -25402,56 +25402,56 @@ msgstr "Não é possível abrir o arquivo, o arquivo já está aberto."
 msgid "File already opened"
 msgstr "O arquivo já está aberto"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:271
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
 #, kde-format
 msgid "Add New Keyword"
 msgstr "Adicionar nova palavra-chave"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:272
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:269
 #, kde-format
 msgid "Remove Keyword"
 msgstr "Remover palavra-chave"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:274
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:271
 #, kde-format
 msgid "Add Unit"
 msgstr "Adicionar unidade"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:322
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:329
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:319
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:326
 #, kde-format
 msgid "Cannot add keyword, keyword already added"
 msgstr "Não é possível adicionar palavra-chave, palavra-chave já adicionada"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:322
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:329
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:336
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:319
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:326
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:333
 #, kde-format
 msgid "Cannot Add Keyword"
 msgstr "Não é possível adicionar palavra-chave"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:336
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:333
 #, kde-format
 msgid "Cannot add mandatory keyword, they are already present"
 msgstr ""
 "Não é possível adicionar palavras-chave obrigatórias, elas já estão presentes"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:380
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:377
 #, kde-format
 msgid "Are you sure you want to delete the keyword '%1'?"
 msgstr "Deseja realmente excluir a palavra-chave '%1'?"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:381
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:378
 #, kde-format
 msgid "Confirm Deletion"
 msgstr "Confirmar exclusão"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:401
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:398
 #, kde-format
 msgid "Cannot remove mandatory keyword."
 msgstr "Não é possível remover a palavra-chave obrigatória."
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:401
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:398
 #, kde-format
 msgid "Removing Keyword"
 msgstr "Removendo palavra-chave"
