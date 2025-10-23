@@ -19,10 +19,10 @@
 #include <KMessageWidget>
 
 /*!
-  \class SeasonalDecompositionDock
-  \brief
-
-  \ingroup frontend
+ * \class SeasonalDecompositionDock
+ * \brief
+ *
+ * \ingroup frontend
 */
 SeasonalDecompositionDock::SeasonalDecompositionDock(QWidget* parent)
 	: BaseDock(parent) {
@@ -61,6 +61,11 @@ SeasonalDecompositionDock::SeasonalDecompositionDock(QWidget* parent)
 	connect(ui.sbSTLSeasonalJump, &QSpinBox::valueChanged, this, &SeasonalDecompositionDock::stlSeasonalJumpChanged);
 	connect(ui.sbSTLTrendJump, &QSpinBox::valueChanged, this, &SeasonalDecompositionDock::stlTrendJumpChanged);
 	connect(ui.sbSTLLowPassJump, &QSpinBox::valueChanged, this, &SeasonalDecompositionDock::stlLowPassJumpChanged);
+
+	// MSTL parameters
+	connect(ui.leMSTLPeriods, &TimedLineEdit::textEdited, this, &SeasonalDecompositionDock::mstlPeriodsChanged);
+	connect(ui.sbMSTLLambda, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &SeasonalDecompositionDock::mstlLambdaChanged);
+	connect(ui.sbMSTLIterations, &QSpinBox::valueChanged, this, &SeasonalDecompositionDock::mstlIterationsChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -134,6 +139,11 @@ void SeasonalDecompositionDock::setDecompositions(QList<SeasonalDecomposition*> 
 	connect(m_decomposition, &SeasonalDecomposition::stlSeasonalJumpChanged, this, &SeasonalDecompositionDock::decompositionSTLSeasonalJumpChanged);
 	connect(m_decomposition, &SeasonalDecomposition::stlTrendJumpChanged, this, &SeasonalDecompositionDock::decompositionSTLTrendJumpChanged);
 	connect(m_decomposition, &SeasonalDecomposition::stlLowPassJumpChanged, this, &SeasonalDecompositionDock::decompositionSTLLowPassJumpChanged);
+
+	// MSTL parameters
+	connect(m_decomposition, &SeasonalDecomposition::mstlPeriodsChanged, this, &SeasonalDecompositionDock::decompositionMSTLPeriodsChanged);
+	connect(m_decomposition, &SeasonalDecomposition::mstlLambdaChanged, this, &SeasonalDecompositionDock::decompositionMSTLLambdaChanged);
+	connect(m_decomposition, &SeasonalDecomposition::mstlIterationsChanged, this, &SeasonalDecompositionDock::decompositionMSTLIterationsChanged);
  }
 
 void SeasonalDecompositionDock::retranslateUi() {
@@ -223,7 +233,7 @@ void SeasonalDecompositionDock::retranslateUi() {
 	// MSTL parameters
 	info = i18n("Periods of the seasonal components, coma-separated values. Examples:"
 		"<ul>"
-		"<li>24, 24*7  - for hourly data with daily and weekly seasonality</li>"
+		"<li>24, 168  - for hourly data with daily (24h) and weekly (7 * 24h = 168h) seasonality</li>"
 		"<li>7, 365  - for daily data with weekly and yearly seasonality</li>"
 		"</ul>");
 	ui.lMSTLPeriods->setToolTip(info);
@@ -231,7 +241,7 @@ void SeasonalDecompositionDock::retranslateUi() {
 
 	info = i18n("The lambda parameter for the Box-Cox transformation applied prior to decomposition.");
 	ui.lMSTLLambda->setToolTip(info);
-	ui.leMSTLLambda->setToolTip(info);
+	ui.sbMSTLLambda->setToolTip(info);
 
 	info = i18n("Number of iterations used to refine the seasonal component.");
 	ui.lMSTLIterations->setToolTip(info);
@@ -252,7 +262,7 @@ void SeasonalDecompositionDock::methodChanged(int) {
 	ui.lMSTLPeriods->setVisible(mstl);
 	ui.leMSTLPeriods->setVisible(mstl);
 	ui.lMSTLLambda->setVisible(mstl);
-	ui.leMSTLLambda->setVisible(mstl);
+	ui.sbMSTLLambda->setVisible(mstl);
 	ui.lMSTLIterations->setVisible(mstl);
 	ui.sbMSTLIterations->setVisible(mstl);
 	ui.lSTLPeriod->setVisible(!mstl);
@@ -363,6 +373,27 @@ void SeasonalDecompositionDock::stlLowPassJumpChanged(int jump) {
 		decomposition->setSTLLowPassJump(jump);
 }
 
+// MSTL parameters
+void SeasonalDecompositionDock::mstlPeriodsChanged() {
+	CONDITIONAL_LOCK_RETURN;
+	std::vector<size_t> periods;
+	auto list = ui.leMSTLPeriods->text().split(QLatin1Char(','));
+	for (auto el : list)
+		periods.push_back(el.simplified().toInt());
+
+	for (auto* decomposition : m_decompositions)
+		decomposition->setMSTLPeriods(periods);
+}
+void SeasonalDecompositionDock::mstlLambdaChanged(double value) {
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* decomposition : m_decompositions)
+		decomposition->setMSTLLambda(value);
+}
+void SeasonalDecompositionDock::mstlIterationsChanged(int value) {
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* decomposition : m_decompositions)
+		decomposition->setMSTLIterations(value);
+}
 //*************************************************************
 //**** SLOTs for changes triggered in SeasonalDecomposition ***
 //*************************************************************
@@ -437,6 +468,32 @@ void SeasonalDecompositionDock::decompositionSTLLowPassJumpChanged(int jump) {
 	ui.sbSTLLowPassJump->setValue(jump);
 }
 
+// MTL parameters
+QString mstlPeriodsToString(const std::vector<size_t>& periods) {
+	QString text;
+	const auto locale = QLocale();
+	for (int period : periods) {
+		if (!text.isEmpty())
+			text += QLatin1String(", ");
+		text += locale.toString(period);
+	}
+
+	return text;
+}
+
+void SeasonalDecompositionDock::decompositionMSTLPeriodsChanged(const std::vector<size_t>& periods) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.leMSTLPeriods->setText(mstlPeriodsToString(periods));
+}
+void SeasonalDecompositionDock::decompositionMSTLLambdaChanged(double value) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.sbMSTLLambda->setValue(value);
+}
+void SeasonalDecompositionDock::decompositionMSTLIterationsChanged(int value) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.sbMSTLIterations->setValue(value);
+}
+
 void SeasonalDecompositionDock::showStatusInfo(const QString& info) {
 	if (info.isEmpty()) {
 		if (m_messageWidget && m_messageWidget->isVisible())
@@ -481,6 +538,11 @@ void SeasonalDecompositionDock::load() {
 	ui.sbSTLSeasonalJump->setValue(m_decomposition->stlSeasonalJump());
 	ui.sbSTLTrendJump->setValue(m_decomposition->stlTrendJump());
 	ui.sbSTLLowPassJump->setValue(m_decomposition->stlLowPassJump());
+
+	// MSTL parameters
+	ui.leMSTLPeriods->setText(mstlPeriodsToString(m_decomposition->mstlPeriods()));
+	ui.sbMSTLLambda->setValue(m_decomposition->mstlLambda());
+	ui.sbMSTLIterations->setValue(m_decomposition->mstlIterations());
 }
 
 void SeasonalDecompositionDock::loadConfig(KConfig& config) {
@@ -509,6 +571,11 @@ void SeasonalDecompositionDock::loadConfig(KConfig& config) {
 	ui.sbSTLSeasonalJump->setValue(group.readEntry("STLSeasonalJump", m_decomposition->stlSeasonalJump()));
 	ui.sbSTLTrendJump->setValue(group.readEntry("STLTrendJump", m_decomposition->stlTrendJump()));
 	ui.sbSTLLowPassJump->setValue(group.readEntry("STLLowPassJump", m_decomposition->stlLowPassJump()));
+
+	// MSTL parameters
+	ui.leMSTLPeriods->setText(group.readEntry("MSTLPeriods", mstlPeriodsToString(m_decomposition->mstlPeriods())));
+	ui.sbMSTLLambda->setValue(group.readEntry("MSTLLambda", m_decomposition->mstlLambda()));
+	ui.sbMSTLIterations->setValue(group.readEntry("MSTLIterations", m_decomposition->mstlIterations()));
 }
 
 void SeasonalDecompositionDock::loadConfigFromTemplate(KConfig& config) {
@@ -542,6 +609,11 @@ void SeasonalDecompositionDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("STLSeasonalJump", ui.sbSTLSeasonalJump->value());
 	group.writeEntry("STLTrendJump", ui.sbSTLTrendJump->value());
 	group.writeEntry("STLLowPassJump", ui.sbSTLLowPassJump->value());
+
+	// MSTL parameters
+	group.writeEntry("MSTLPeriods", ui.leMSTLPeriods->text());
+	group.writeEntry("MSTLLambda", ui.sbMSTLLambda->value());
+	group.writeEntry("MSTLIterations", ui.sbMSTLIterations->value());
 
 	config.sync();
 }

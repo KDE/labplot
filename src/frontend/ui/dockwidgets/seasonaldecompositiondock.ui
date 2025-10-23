@@ -298,7 +298,7 @@
     <widget class="QSpinBox" name="sbSTLLowPassJump"/>
    </item>
    <item row="10" column="2">
-    <widget class="QLineEdit" name="leMSTLPeriods"/>
+    <widget class="TimedLineEdit" name="leMSTLPeriods"/>
    </item>
    <item row="15" column="0">
     <spacer name="verticalSpacer_2">
@@ -426,7 +426,14 @@
     </widget>
    </item>
    <item row="11" column="2">
-    <widget class="QLineEdit" name="leMSTLLambda"/>
+    <widget class="NumberSpinBox" name="sbMSTLLambda" native="true">
+     <property name="maximum" stdset="0">
+      <double>1.000000000000000</double>
+     </property>
+     <property name="singleStep" stdset="0">
+      <double>0.100000000000000</double>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
@@ -446,11 +453,31 @@
    <extends>QLineEdit</extends>
    <header>frontend/widgets/TimedLineEdit.h</header>
   </customwidget>
+  <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>leName</tabstop>
   <tabstop>teComment</tabstop>
   <tabstop>cbMethod</tabstop>
+  <tabstop>leMSTLPeriods</tabstop>
+  <tabstop>sbMSTLIterations</tabstop>
+  <tabstop>sbSTLPeriod</tabstop>
+  <tabstop>chbSTLRobust</tabstop>
+  <tabstop>sbSTLSeasonalLength</tabstop>
+  <tabstop>sbSTLTrendLength</tabstop>
+  <tabstop>chbSTLTrendLengthAuto</tabstop>
+  <tabstop>sbSTLLowPassLength</tabstop>
+  <tabstop>chbSTLLowPassLengthAuto</tabstop>
+  <tabstop>cbSTLSeasonalDegree</tabstop>
+  <tabstop>cbSTLTrendDegree</tabstop>
+  <tabstop>cbSTLLowPassDegree</tabstop>
+  <tabstop>sbSTLSeasonalJump</tabstop>
+  <tabstop>sbSTLTrendJump</tabstop>
+  <tabstop>sbSTLLowPassJump</tabstop>
  </tabstops>
  <resources/>
  <connections/>

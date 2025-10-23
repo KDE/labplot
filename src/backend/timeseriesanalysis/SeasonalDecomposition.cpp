@@ -202,6 +202,9 @@ BASIC_SHARED_D_READER_IMPL(SeasonalDecomposition, int, stlTrendJump, stlTrendJum
 BASIC_SHARED_D_READER_IMPL(SeasonalDecomposition, int, stlLowPassJump, stlLowPassJump)
 
 // MSTL parameters
+BASIC_SHARED_D_READER_IMPL(SeasonalDecomposition, std::vector<size_t>, mstlPeriods, mstlPeriods)
+BASIC_SHARED_D_READER_IMPL(SeasonalDecomposition, double, mstlLambda, mstlLambda)
+BASIC_SHARED_D_READER_IMPL(SeasonalDecomposition, int, mstlIterations, mstlIterations)
 
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
@@ -317,6 +320,25 @@ void SeasonalDecomposition::setSTLLowPassJump(int value) {
 		exec(new SeasonalDecompositionSetSTLLowPassJumpCmd(d, value, ki18n("%1: set STL low pass jump")));
 }
 
+// MSTL parameters
+STD_SETTER_CMD_IMPL_F_S(SeasonalDecomposition, SetMSTLPeriods, std::vector<size_t>, mstlPeriods, recalcDecomposition)
+void SeasonalDecomposition::setMSTLPeriods(const std::vector<size_t>& periods) {
+	Q_D(SeasonalDecomposition);
+	if (periods!= d->mstlPeriods)
+		exec(new SeasonalDecompositionSetMSTLPeriodsCmd(d, periods, ki18n("%1: set periods for MSTL")));
+}
+STD_SETTER_CMD_IMPL_F_S(SeasonalDecomposition, SetMSTLLambda, double, mstlLambda, recalcDecomposition)
+void SeasonalDecomposition::setMSTLLambda(double lambda) {
+	Q_D(SeasonalDecomposition);
+	if (lambda != d->mstlLambda)
+		exec(new SeasonalDecompositionSetMSTLLambdaCmd(d, lambda, ki18n("%1: set Lambda for MSTL")));
+}
+STD_SETTER_CMD_IMPL_F_S(SeasonalDecomposition, SetMSTLIterations, int, mstlIterations, recalcDecomposition)
+void SeasonalDecomposition::setMSTLIterations(int iterations) {
+	Q_D(SeasonalDecomposition);
+	if (iterations != d->mstlIterations)
+		exec(new SeasonalDecompositionSetMSTLIterationsCmd(d, iterations, ki18n("%1: set iterations for MSTL")));
+}
 // ##############################################################################
 // #################################  SLOTS  ####################################
 // ##############################################################################
@@ -416,6 +438,10 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 	Q_EMIT q->statusInfo(QString());
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
+	QVector<double> trendData;
+	QVector<double> seasonalData;
+	QVector<double> residualData;
+
 	switch (method) {
 	case (SeasonalDecomposition::Method::STL):
 	case (SeasonalDecomposition::Method::MSTL): {
@@ -444,49 +470,62 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 			return;
 		}
 
-		// set the parameters
-		auto parameters = stl::params().seasonal_length(stlSeasonalLength).robust(stlRobust);
+		// set the STL parameters
+		auto stlParameters = stl::params().robust(stlRobust);
 
 		// length
-		parameters = stl::params().seasonal_length(stlSeasonalLength);
+		stlParameters = stl::params().seasonal_length(stlSeasonalLength);
 		if (!stlTrendLengthAuto)
-			parameters = parameters.trend_length(stlTrendLength);
+			stlParameters = stlParameters.trend_length(stlTrendLength);
 		if (!stlLowPassLengthAuto)
-			parameters = parameters.trend_length(stlLowPassLength);
+			stlParameters = stlParameters.low_pass_length(stlLowPassLength);
 
 		// degrees
-		parameters = parameters.seasonal_degree(stlSeasonalDegree).trend_degree(stlTrendDegree).low_pass_degree(stlLowPassDegree);
+		stlParameters = stlParameters.seasonal_degree(stlSeasonalDegree).trend_degree(stlTrendDegree).low_pass_degree(stlLowPassDegree);
 
 		// jumps
 
+		// set MSTL parameters, if MSTL is used
 		// perform the decomposition
-		auto result = parameters.fit(yDataVector, stlPeriod);
+		if (method == SeasonalDecomposition::Method::STL) {
+			auto result = stlParameters.fit(yDataVector, stlPeriod);
 
-		// copy the result data into the internal column vectors
-		const auto size = result.seasonal.size();
-		QVector<double> trendData;
-		trendData.resize(size);
-		QVector<double> seasonalData;
-		seasonalData.resize(size);
-		QVector<double> residualData;
-		residualData.resize(size);
+			// copy the result data into the internal column vectors
+			const auto size = result.seasonal.size();
+			trendData.resize(size);
+			seasonalData.resize(size);
+			residualData.resize(size);
+			for (size_t i = 0; i < size; ++i) {
+				trendData[i] = result.trend[i];
+				seasonalData[i] = result.seasonal[i];
+				residualData[i] = result.remainder[i];
+			}
+		}else {
+			auto mstlParameters = stl::mstl_params().stl_params(stlParameters).iterations(mstlIterations).lambda(mstlLambda);
+			auto result = stl::mstl_params().fit(yDataVector, mstlPeriods);
 
-		for (size_t i = 0; i < size; ++i) {
-			trendData[i] = result.trend[i];
-			seasonalData[i] = result.seasonal[i];
-			residualData[i] = result.remainder[i];
+			// copy the result data into the internal column vectors
+			const auto size = result.seasonal.size();
+			trendData.resize(size);
+			seasonalData.resize(size);
+			residualData.resize(size);
+			for (size_t i = 0; i < size; ++i) {
+				trendData[i] = result.trend[i];
+				// seasonalData[i] = result.seasonal[i];
+				residualData[i] = result.remainder[i];
+			}
 		}
-
-		columnTrend->setValues(trendData);
-		columnTrend->setChanged();
-		columnSeasonal->setValues(seasonalData);
-		columnSeasonal->setChanged();
-		columnResidual->setValues(residualData);
-		columnResidual->setChanged();
 
 		break;
 	}
 	}
+
+	columnTrend->setValues(trendData);
+	columnTrend->setChanged();
+	columnSeasonal->setValues(seasonalData);
+	columnSeasonal->setChanged();
+	columnResidual->setValues(residualData);
+	columnResidual->setChanged();
 }
 
 // ##############################################################################
@@ -522,6 +561,10 @@ void SeasonalDecomposition::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("stlLowPassJump"), QString::number(d->stlLowPassJump));
 
 	// MSTL parameters
+	writer->writeAttribute(QStringLiteral("mstlLambda"), QString::number(d->mstlLambda));
+	writer->writeAttribute(QStringLiteral("mstlIterations"), QString::number(d->mstlIterations));
+	// TODO: periods
+
 	writer->writeEndElement();
 
 	// serialize all children
@@ -574,6 +617,9 @@ bool SeasonalDecomposition::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("stlLowPassJump", stlLowPassJump, int);
 
 			// MSTL parameters
+			READ_DOUBLE_VALUE("mstlLambda", mstlLambda);
+			READ_INT_VALUE("mstlIterations", mstlIterations, int);
+			// TODO: periods
 		} else if (reader->name() == QLatin1String("spreadsheet")) {
 			d->resultSpreadsheet = new Spreadsheet(i18n("Result"), true);
 			d->resultSpreadsheet->setFixed(true);

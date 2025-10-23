@@ -72,9 +72,9 @@ public:
 	int stlLowPassJump{1};
 
 	// MSTL parameters
-	double mstlLamda{0.5};
+	std::vector<size_t> mstlPeriods{24, 168};
+	double mstlLambda{0.5};
 	int mstlIterations{2};
-	std::vector<int> mstlPeriods;
 
 private:
 	std::vector<double> yDataVector; // valid values from the sources y-column, used in the calculation of the decomposition

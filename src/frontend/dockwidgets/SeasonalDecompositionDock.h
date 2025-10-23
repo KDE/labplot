@@ -66,6 +66,11 @@ private Q_SLOTS:
 	void stlTrendJumpChanged(int);
 	void stlLowPassJumpChanged(int);
 
+	// MSTL parameters
+	void mstlPeriodsChanged();
+	void mstlLambdaChanged(double);
+	void mstlIterationsChanged(int);
+
 	// SLOTs for changes triggered in SeasonalDecomposition
 	// General-Tab
 	void decompositionXColumnChanged(const AbstractColumn*);
@@ -86,6 +91,11 @@ private Q_SLOTS:
 	void decompositionSTLSeasonalJumpChanged(int);
 	void decompositionSTLTrendJumpChanged(int);
 	void decompositionSTLLowPassJumpChanged(int);
+
+	// MSTL parameters
+	void decompositionMSTLPeriodsChanged(const std::vector<size_t>&);
+	void decompositionMSTLLambdaChanged(double);
+	void decompositionMSTLIterationsChanged(int);
 
 	void showStatusInfo(const QString&);
 

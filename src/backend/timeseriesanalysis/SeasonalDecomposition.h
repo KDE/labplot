@@ -52,6 +52,11 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, stlTrendJump, STLTrendJump)
 	BASIC_D_ACCESSOR_DECL(int, stlLowPassJump, STLLowPassJump)
 
+	// MSTL parameters
+	CLASS_D_ACCESSOR_DECL(std::vector<size_t>, mstlPeriods, MSTLPeriods)
+	BASIC_D_ACCESSOR_DECL(double, mstlLambda, MSTLLambda)
+	BASIC_D_ACCESSOR_DECL(int, mstlIterations, MSTLIterations)
+
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	QWidget* view() const override;
@@ -102,6 +107,11 @@ Q_SIGNALS:
 	void stlSeasonalJumpChanged(int);
 	void stlTrendJumpChanged(int);
 	void stlLowPassJumpChanged(int);
+
+	// MSTL parameters signals
+	void mstlPeriodsChanged(const std::vector<size_t>&);
+	void mstlLambdaChanged(double);
+	void mstlIterationsChanged(int);
 
 	friend class SeasonalDecompositionSetXColumnCmd;
 	friend class SeasonalDecompositionSetYColumnCmd;
