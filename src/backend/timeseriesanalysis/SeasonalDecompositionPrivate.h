@@ -59,17 +59,23 @@ public:
 	// STL parameters
 	int stlPeriod{7};
 	bool stlRobust{true};
+
 	int stlSeasonalLength{7};
 	int stlTrendLength{3};
 	bool stlTrendLengthAuto{true};
 	int stlLowPassLength{3};
 	bool stlLowPassLengthAuto{true};
+
 	int stlSeasonalDegree{0};
 	int stlTrendDegree{1};
 	int stlLowPassDegree{1};
+
 	int stlSeasonalJump{1};
+	bool stlSeasonalJumpAuto{true};
 	int stlTrendJump{1};
+	bool stlTrendJumpAuto{true};
 	int stlLowPassJump{1};
+	bool stlLowPassJumpAuto{true};
 
 	// MSTL parameters
 	std::vector<size_t> mstlPeriods{24, 168};
@@ -77,6 +83,7 @@ public:
 	int mstlIterations{2};
 
 private:
+	void reset(const QString&) const;
 	std::vector<double> yDataVector; // valid values from the sources y-column, used in the calculation of the decomposition
 };
 

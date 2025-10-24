@@ -54,17 +54,23 @@ private Q_SLOTS:
 	// STL parameters
 	void stlPeriodChanged(int);
 	void stlRobustChanged(bool);
+
 	void stlSeasonalLengthChanged(int);
 	void stlTrendLengthChanged(int);
 	void stlTrendLengthAutoChanged(bool);
 	void stlLowPassLengthChanged(int);
 	void stlLowPassLengthAutoChanged(bool);
+
 	void stlSeasonalDegreeChanged(int);
 	void stlTrendDegreeChanged(int);
 	void stlLowPassDegreeChanged(int);
+
 	void stlSeasonalJumpChanged(int);
+	void stlSeasonalJumpAutoChanged(bool);
 	void stlTrendJumpChanged(int);
+	void stlTrendJumpAutoChanged(bool);
 	void stlLowPassJumpChanged(int);
+	void stlLowPassJumpAutoChanged(bool);
 
 	// MSTL parameters
 	void mstlPeriodsChanged();
@@ -80,17 +86,23 @@ private Q_SLOTS:
 	// STL parameters
 	void decompositionSTLPeriodChanged(int);
 	void decompositionSTLRobustChanged(bool);
+
 	void decompositionSTLSeasonalLengthChanged(int);
 	void decompositionSTLTrendLengthChanged(int);
 	void decompositionSTLTrendLengthAutoChanged(bool);
 	void decompositionSTLLowPassLengthChanged(int);
 	void decompositionSTLLowPassLengthAutoChanged(bool);
+
 	void decompositionSTLSeasonalDegreeChanged(int);
 	void decompositionSTLTrendDegreeChanged(int);
 	void decompositionSTLLowPassDegreeChanged(int);
+
 	void decompositionSTLSeasonalJumpChanged(int);
+	void decompositionSTLSeasonalJumpAutoChanged(bool);
 	void decompositionSTLTrendJumpChanged(int);
+	void decompositionSTLTrendJumpAutoChanged(bool);
 	void decompositionSTLLowPassJumpChanged(int);
+	void decompositionSTLLowPassJumpAutoChanged(bool);
 
 	// MSTL parameters
 	void decompositionMSTLPeriodsChanged(const std::vector<size_t>&);

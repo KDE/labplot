@@ -59,8 +59,11 @@ SeasonalDecompositionDock::SeasonalDecompositionDock(QWidget* parent)
 	connect(ui.cbSTLLowPassDegree, &QComboBox::currentIndexChanged, this, &SeasonalDecompositionDock::stlLowPassDegreeChanged);
 
 	connect(ui.sbSTLSeasonalJump, &QSpinBox::valueChanged, this, &SeasonalDecompositionDock::stlSeasonalJumpChanged);
+	connect(ui.chbSTLSeasonalJumpAuto, &QCheckBox::toggled, this, &SeasonalDecompositionDock::stlSeasonalJumpAutoChanged);
 	connect(ui.sbSTLTrendJump, &QSpinBox::valueChanged, this, &SeasonalDecompositionDock::stlTrendJumpChanged);
+	connect(ui.chbSTLTrendJumpAuto, &QCheckBox::toggled, this, &SeasonalDecompositionDock::stlTrendJumpAutoChanged);
 	connect(ui.sbSTLLowPassJump, &QSpinBox::valueChanged, this, &SeasonalDecompositionDock::stlLowPassJumpChanged);
+	connect(ui.chbSTLLowPassJumpAuto, &QCheckBox::toggled, this, &SeasonalDecompositionDock::stlLowPassJumpAutoChanged);
 
 	// MSTL parameters
 	connect(ui.leMSTLPeriods, &TimedLineEdit::textEdited, this, &SeasonalDecompositionDock::mstlPeriodsChanged);
@@ -128,17 +131,23 @@ void SeasonalDecompositionDock::setDecompositions(QList<SeasonalDecomposition*> 
 	// STL parameters
 	connect(m_decomposition, &SeasonalDecomposition::stlPeriodChanged, this, &SeasonalDecompositionDock::decompositionSTLPeriodChanged);
 	connect(m_decomposition, &SeasonalDecomposition::stlRobustChanged, this, &SeasonalDecompositionDock::decompositionSTLRobustChanged);
+
 	connect(m_decomposition, &SeasonalDecomposition::stlSeasonalLengthChanged, this, &SeasonalDecompositionDock::decompositionSTLSeasonalLengthChanged);
 	connect(m_decomposition, &SeasonalDecomposition::stlTrendLengthChanged, this, &SeasonalDecompositionDock::decompositionSTLTrendLengthChanged);
 	connect(m_decomposition, &SeasonalDecomposition::stlTrendLengthAutoChanged, this, &SeasonalDecompositionDock::decompositionSTLTrendLengthAutoChanged);
 	connect(m_decomposition, &SeasonalDecomposition::stlLowPassLengthChanged, this, &SeasonalDecompositionDock::decompositionSTLLowPassLengthChanged);
 	connect(m_decomposition, &SeasonalDecomposition::stlLowPassLengthAutoChanged, this, &SeasonalDecompositionDock::decompositionSTLLowPassLengthAutoChanged);
+
 	connect(m_decomposition, &SeasonalDecomposition::stlSeasonalDegreeChanged, this, &SeasonalDecompositionDock::decompositionSTLSeasonalDegreeChanged);
 	connect(m_decomposition, &SeasonalDecomposition::stlTrendDegreeChanged, this, &SeasonalDecompositionDock::decompositionSTLTrendDegreeChanged);
 	connect(m_decomposition, &SeasonalDecomposition::stlLowPassDegreeChanged, this, &SeasonalDecompositionDock::decompositionSTLLowPassDegreeChanged);
+
 	connect(m_decomposition, &SeasonalDecomposition::stlSeasonalJumpChanged, this, &SeasonalDecompositionDock::decompositionSTLSeasonalJumpChanged);
+	connect(m_decomposition, &SeasonalDecomposition::stlSeasonalJumpAutoChanged, this, &SeasonalDecompositionDock::decompositionSTLSeasonalJumpAutoChanged);
 	connect(m_decomposition, &SeasonalDecomposition::stlTrendJumpChanged, this, &SeasonalDecompositionDock::decompositionSTLTrendJumpChanged);
+	connect(m_decomposition, &SeasonalDecomposition::stlTrendJumpAutoChanged, this, &SeasonalDecompositionDock::decompositionSTLTrendJumpAutoChanged);
 	connect(m_decomposition, &SeasonalDecomposition::stlLowPassJumpChanged, this, &SeasonalDecompositionDock::decompositionSTLLowPassJumpChanged);
+	connect(m_decomposition, &SeasonalDecomposition::stlLowPassJumpAutoChanged, this, &SeasonalDecompositionDock::decompositionSTLLowPassJumpAutoChanged);
 
 	// MSTL parameters
 	connect(m_decomposition, &SeasonalDecomposition::mstlPeriodsChanged, this, &SeasonalDecompositionDock::decompositionMSTLPeriodsChanged);
@@ -221,20 +230,23 @@ void SeasonalDecompositionDock::retranslateUi() {
 	info = i18n("The number of jumps to include in the seasonal component.");
 	ui.lSTLSeasonalJump->setToolTip(info);
 	ui.sbSTLSeasonalJump->setToolTip(info);
+	ui.chbSTLSeasonalJumpAuto->setToolTip(i18n("If enabled, uses \"Seasonal Length\" / 10"));
 
 	info = i18n("The number of jumps to include in the trend component.");
 	ui.lSTLTrendJump->setToolTip(info);
 	ui.sbSTLTrendJump->setToolTip(info);
+	ui.chbSTLTrendJumpAuto->setToolTip(i18n("If enabled, uses \"Trend Length\" / 10"));
 
 	info = i18n("The number of jumps to include in the low-pass component.");
 	ui.lSTLLowPassJump->setToolTip(info);
 	ui.sbSTLLowPassJump->setToolTip(info);
+	ui.chbSTLLowPassJumpAuto->setToolTip(i18n("If enabled, uses \"Low-Pass Length\" / 10"));
 
 	// MSTL parameters
 	info = i18n("Periods of the seasonal components, coma-separated values. Examples:"
 		"<ul>"
 		"<li>24, 168  - for hourly data with daily (24h) and weekly (7 * 24h = 168h) seasonality</li>"
-		"<li>7, 365  - for daily data with weekly and yearly seasonality</li>"
+		"<li>7, 365  - for daily data with weekly (7 days) and yearly (365 days) seasonality</li>"
 		"</ul>");
 	ui.lMSTLPeriods->setToolTip(info);
 	ui.leMSTLPeriods->setToolTip(info);
@@ -313,6 +325,7 @@ void SeasonalDecompositionDock::stlRobustChanged(bool checked) {
 	for (auto* decomposition : m_decompositions)
 		decomposition->setSTLRobust(checked);
 }
+
 void SeasonalDecompositionDock::stlSeasonalLengthChanged(int length) {
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* decomposition : m_decompositions)
@@ -325,7 +338,6 @@ void SeasonalDecompositionDock::stlTrendLengthChanged(int length) {
 }
 void SeasonalDecompositionDock::stlTrendLengthAutoChanged(bool value) {
 	ui.sbSTLTrendLength->setEnabled(!value);
-
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* decomposition : m_decompositions)
 		decomposition->setSTLTrendLengthAuto(value);
@@ -337,11 +349,11 @@ void SeasonalDecompositionDock::stlLowPassLengthChanged(int length) {
 }
 void SeasonalDecompositionDock::stlLowPassLengthAutoChanged(bool value) {
 	ui.sbSTLLowPassLength->setEnabled(!value);
-
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* decomposition : m_decompositions)
 		decomposition->setSTLLowPassLengthAuto(value);
 }
+
 void SeasonalDecompositionDock::stlSeasonalDegreeChanged(int degree) {
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* decomposition : m_decompositions)
@@ -357,20 +369,39 @@ void SeasonalDecompositionDock::stlLowPassDegreeChanged(int degree) {
 	for (auto* decomposition : m_decompositions)
 		decomposition->setSTLLowPassDegree(degree);
 }
+
 void SeasonalDecompositionDock::stlSeasonalJumpChanged(int jump) {
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* decomposition : m_decompositions)
 		decomposition->setSTLSeasonalJump(jump);
+}
+void SeasonalDecompositionDock::stlSeasonalJumpAutoChanged(bool value) {
+	ui.sbSTLSeasonalJump->setEnabled(!value);
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* decomposition : m_decompositions)
+		decomposition->setSTLSeasonalJumpAuto(value);
 }
 void SeasonalDecompositionDock::stlTrendJumpChanged(int jump) {
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* decomposition : m_decompositions)
 		decomposition->setSTLTrendJump(jump);
 }
+void SeasonalDecompositionDock::stlTrendJumpAutoChanged(bool value) {
+	ui.sbSTLTrendJump->setEnabled(!value);
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* decomposition : m_decompositions)
+		decomposition->setSTLTrendJumpAuto(value);
+}
 void SeasonalDecompositionDock::stlLowPassJumpChanged(int jump) {
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* decomposition : m_decompositions)
 		decomposition->setSTLLowPassJump(jump);
+}
+void SeasonalDecompositionDock::stlLowPassJumpAutoChanged(bool value) {
+	ui.sbSTLLowPassJump->setEnabled(!value);
+	CONDITIONAL_LOCK_RETURN;
+	for (auto* decomposition : m_decompositions)
+		decomposition->setSTLLowPassJumpAuto(value);
 }
 
 // MSTL parameters
@@ -419,10 +450,11 @@ void SeasonalDecompositionDock::decompositionSTLPeriodChanged(int value) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbSTLPeriod->setValue(value);
 }
-void SeasonalDecompositionDock::decompositionSTLRobustChanged(bool checked) {
+void SeasonalDecompositionDock::decompositionSTLRobustChanged(bool value) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.chbSTLRobust->setChecked(checked);
+	ui.chbSTLRobust->setChecked(value);
 }
+
 void SeasonalDecompositionDock::decompositionSTLSeasonalLengthChanged(int length) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbSTLSeasonalLength->setValue(length);
@@ -431,18 +463,19 @@ void SeasonalDecompositionDock::decompositionSTLTrendLengthChanged(int length) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbSTLTrendLength->setValue(length);
 }
-void SeasonalDecompositionDock::decompositionSTLTrendLengthAutoChanged(bool autoLength) {
+void SeasonalDecompositionDock::decompositionSTLTrendLengthAutoChanged(bool value) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.chbSTLTrendLengthAuto->setChecked(autoLength);
+	ui.chbSTLTrendLengthAuto->setChecked(value);
 }
 void SeasonalDecompositionDock::decompositionSTLLowPassLengthChanged(int length) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbSTLLowPassLength->setValue(length);
 }
-void SeasonalDecompositionDock::decompositionSTLLowPassLengthAutoChanged(bool autoLength) {
+void SeasonalDecompositionDock::decompositionSTLLowPassLengthAutoChanged(bool value) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.chbSTLLowPassLengthAuto->setChecked(autoLength);
+	ui.chbSTLLowPassLengthAuto->setChecked(value);
 }
+
 void SeasonalDecompositionDock::decompositionSTLSeasonalDegreeChanged(int degree) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbSTLSeasonalDegree->setCurrentIndex(degree);
@@ -455,17 +488,30 @@ void SeasonalDecompositionDock::decompositionSTLLowPassDegreeChanged(int degree)
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbSTLLowPassDegree->setCurrentIndex(degree);
 }
+
 void SeasonalDecompositionDock::decompositionSTLSeasonalJumpChanged(int jump) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbSTLSeasonalJump->setValue(jump);
+}
+void SeasonalDecompositionDock::decompositionSTLSeasonalJumpAutoChanged(bool value) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.chbSTLSeasonalJumpAuto->setChecked(value);
 }
 void SeasonalDecompositionDock::decompositionSTLTrendJumpChanged(int jump) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbSTLTrendJump->setValue(jump);
 }
+void SeasonalDecompositionDock::decompositionSTLTrendJumpAutoChanged(bool value) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.chbSTLTrendJumpAuto->setChecked(value);
+}
 void SeasonalDecompositionDock::decompositionSTLLowPassJumpChanged(int jump) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbSTLLowPassJump->setValue(jump);
+}
+void SeasonalDecompositionDock::decompositionSTLLowPassJumpAutoChanged(bool value) {
+	CONDITIONAL_LOCK_RETURN;
+	ui.chbSTLLowPassJumpAuto->setChecked(value);
 }
 
 // MTL parameters
@@ -536,8 +582,11 @@ void SeasonalDecompositionDock::load() {
 	ui.cbSTLLowPassDegree->setCurrentIndex(m_decomposition->stlLowPassDegree());
 
 	ui.sbSTLSeasonalJump->setValue(m_decomposition->stlSeasonalJump());
+	ui.chbSTLSeasonalJumpAuto->setChecked(m_decomposition->stlSeasonalJumpAuto());
 	ui.sbSTLTrendJump->setValue(m_decomposition->stlTrendJump());
+	ui.chbSTLTrendJumpAuto->setChecked(m_decomposition->stlTrendJumpAuto());
 	ui.sbSTLLowPassJump->setValue(m_decomposition->stlLowPassJump());
+	ui.chbSTLLowPassJumpAuto->setChecked(m_decomposition->stlLowPassJumpAuto());
 
 	// MSTL parameters
 	ui.leMSTLPeriods->setText(mstlPeriodsToString(m_decomposition->mstlPeriods()));
@@ -569,8 +618,11 @@ void SeasonalDecompositionDock::loadConfig(KConfig& config) {
 	ui.cbSTLLowPassDegree->setCurrentIndex(group.readEntry("STLLowPassDegree", m_decomposition->stlLowPassDegree()));
 
 	ui.sbSTLSeasonalJump->setValue(group.readEntry("STLSeasonalJump", m_decomposition->stlSeasonalJump()));
+	ui.chbSTLSeasonalJumpAuto->setChecked(group.readEntry("STLSeasonalJumpAuto", m_decomposition->stlSeasonalJumpAuto()));
 	ui.sbSTLTrendJump->setValue(group.readEntry("STLTrendJump", m_decomposition->stlTrendJump()));
+	ui.chbSTLTrendJumpAuto->setChecked(group.readEntry("STLTrendJumpAuto", m_decomposition->stlTrendJumpAuto()));
 	ui.sbSTLLowPassJump->setValue(group.readEntry("STLLowPassJump", m_decomposition->stlLowPassJump()));
+	ui.chbSTLLowPassJumpAuto->setChecked(group.readEntry("STLLowPassJumpAuto", m_decomposition->stlLowPassJumpAuto()));
 
 	// MSTL parameters
 	ui.leMSTLPeriods->setText(group.readEntry("MSTLPeriods", mstlPeriodsToString(m_decomposition->mstlPeriods())));
@@ -600,15 +652,20 @@ void SeasonalDecompositionDock::saveConfigAsTemplate(KConfig& config) {
 
 	group.writeEntry("STLSeasonalLength", ui.sbSTLSeasonalLength->value());
 	group.writeEntry("STLTrendLength", ui.sbSTLTrendLength->value());
+	group.writeEntry("STLTrendLengthAuto", ui.chbSTLTrendLengthAuto->isChecked());
 	group.writeEntry("STLLowPassLength", ui.sbSTLLowPassLength->value());
+	group.writeEntry("STLLowPassLengthAuto", ui.chbSTLLowPassLengthAuto->isChecked());
 
 	group.writeEntry("STLSeasonalDegree", ui.cbSTLSeasonalDegree->currentIndex());
 	group.writeEntry("STLTrendDegree", ui.cbSTLTrendDegree->currentIndex());
 	group.writeEntry("STLLowPassDegree", ui.cbSTLLowPassDegree->currentIndex());
 
 	group.writeEntry("STLSeasonalJump", ui.sbSTLSeasonalJump->value());
+	group.writeEntry("STLSeasonalJumpAuto", ui.chbSTLSeasonalJumpAuto->isChecked());
 	group.writeEntry("STLTrendJump", ui.sbSTLTrendJump->value());
+	group.writeEntry("STLTrendJumpAuto", ui.chbSTLSeasonalJumpAuto->isChecked());
 	group.writeEntry("STLLowPassJump", ui.sbSTLLowPassJump->value());
+	group.writeEntry("STLLowPassJumpAuto", ui.chbSTLLowPassJumpAuto->isChecked());
 
 	// MSTL parameters
 	group.writeEntry("MSTLPeriods", ui.leMSTLPeriods->text());

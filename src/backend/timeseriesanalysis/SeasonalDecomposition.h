@@ -49,8 +49,11 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, stlTrendDegree, STLTrendDegree)
 	BASIC_D_ACCESSOR_DECL(int, stlLowPassDegree, STLLowPassDegree)
 	BASIC_D_ACCESSOR_DECL(int, stlSeasonalJump, STLSeasonalJump)
+	BASIC_D_ACCESSOR_DECL(bool, stlSeasonalJumpAuto, STLSeasonalJumpAuto)
 	BASIC_D_ACCESSOR_DECL(int, stlTrendJump, STLTrendJump)
+	BASIC_D_ACCESSOR_DECL(bool, stlTrendJumpAuto, STLTrendJumpAuto)
 	BASIC_D_ACCESSOR_DECL(int, stlLowPassJump, STLLowPassJump)
+	BASIC_D_ACCESSOR_DECL(bool, stlLowPassJumpAuto, STLLowPassJumpAuto)
 
 	// MSTL parameters
 	CLASS_D_ACCESSOR_DECL(std::vector<size_t>, mstlPeriods, MSTLPeriods)
@@ -105,8 +108,11 @@ Q_SIGNALS:
 	void stlTrendDegreeChanged(int);
 	void stlLowPassDegreeChanged(int);
 	void stlSeasonalJumpChanged(int);
+	void stlSeasonalJumpAutoChanged(bool);
 	void stlTrendJumpChanged(int);
+	void stlTrendJumpAutoChanged(bool);
 	void stlLowPassJumpChanged(int);
+	void stlLowPassJumpAutoChanged(bool);
 
 	// MSTL parameters signals
 	void mstlPeriodsChanged(const std::vector<size_t>&);
