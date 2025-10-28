@@ -61,7 +61,6 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, mstlIterations, MSTLIterations)
 
 	QIcon icon() const override;
-	QMenu* createContextMenu() override;
 	QWidget* view() const override;
 
 	bool exportView() const override;

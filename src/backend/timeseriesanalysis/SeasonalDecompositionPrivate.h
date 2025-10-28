@@ -40,18 +40,21 @@ public:
 	CartesianPlot* plotAreaOriginal{nullptr};
 	CartesianPlot* plotAreaTrend{nullptr};
 	CartesianPlot* plotAreaSeasonal{nullptr};
+	QVector<CartesianPlot*> plotAreasSeasonal; // for MSTL multiple seasonal plots
 	CartesianPlot* plotAreaResidual{nullptr};
 
 	// curves
 	XYCurve* curveOriginal{nullptr};
 	XYCurve* curveTrend{nullptr};
 	XYCurve* curveSeasonal{nullptr};
+	QVector<XYCurve*> curvesSeasonal; // for MSTL multiple seasonal plots
 	XYCurve* curveResidual{nullptr};
 
 	// spreadsheet and columns to hold the result y-data
 	Spreadsheet* resultSpreadsheet{nullptr};
 	Column* columnTrend{nullptr};
 	Column* columnSeasonal{nullptr};
+	QVector<Column*> columnsSeasonal; // for MSTL multiple seasonal plots
 	Column* columnResidual{nullptr};
 
 	SeasonalDecomposition::Method method{SeasonalDecomposition::Method::STL};
@@ -83,6 +86,7 @@ public:
 	int mstlIterations{2};
 
 private:
+void adjustSeasonalComponents(const std::vector<size_t>&);
 	void reset(const QString&) const;
 	std::vector<double> yDataVector; // valid values from the sources y-column, used in the calculation of the decomposition
 };

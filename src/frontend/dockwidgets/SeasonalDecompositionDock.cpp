@@ -425,6 +425,7 @@ void SeasonalDecompositionDock::mstlIterationsChanged(int value) {
 	for (auto* decomposition : m_decompositions)
 		decomposition->setMSTLIterations(value);
 }
+
 //*************************************************************
 //**** SLOTs for changes triggered in SeasonalDecomposition ***
 //*************************************************************
@@ -514,7 +515,7 @@ void SeasonalDecompositionDock::decompositionSTLLowPassJumpAutoChanged(bool valu
 	ui.chbSTLLowPassJumpAuto->setChecked(value);
 }
 
-// MTL parameters
+// MSTL parameters
 QString mstlPeriodsToString(const std::vector<size_t>& periods) {
 	QString text;
 	const auto locale = QLocale();

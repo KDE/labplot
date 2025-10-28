@@ -70,7 +70,7 @@ void SeasonalDecomposition::init() {
 	d->resultSpreadsheet->setFixed(true);
 	d->resultSpreadsheet->setUndoAware(false);
 	d->resultSpreadsheet->setReadOnly(true);
-	d->resultSpreadsheet->setColumnCount(3);
+	d->resultSpreadsheet->setColumnCount(3); // 3 columns initially: Trend, Seasonal, Residual
 	addChildFast(d->resultSpreadsheet);
 
 	d->columnTrend = d->resultSpreadsheet->column(0);
@@ -139,6 +139,11 @@ void SeasonalDecomposition::init() {
 	d->curveResidual->setFixed(true);
 	d->curveResidual->setYColumn(d->columnResidual);
 	d->plotAreaResidual->addChild(d->curveResidual);
+
+	// for seasonal we create only one plot area and curve by default, others will be created when needed
+	d->plotAreasSeasonal << d->plotAreaSeasonal;
+	d->curvesSeasonal << d->curveSeasonal;
+	d->columnsSeasonal << d->columnSeasonal;
 }
 
 /*!
@@ -146,15 +151,6 @@ void SeasonalDecomposition::init() {
 */
 QIcon SeasonalDecomposition::icon() const {
 	return QIcon::fromTheme(QLatin1String("preferences-system-time"));
-}
-
-/*!
- * Returns a new context menu. The caller takes ownership of the menu.
- */
-QMenu* SeasonalDecomposition::createContextMenu() {
-	QMenu* menu = AbstractPart::createContextMenu();
-	// m_image->createContextMenu(menu);
-	return menu;
 }
 
 QWidget* SeasonalDecomposition::view() const {
@@ -360,6 +356,7 @@ void SeasonalDecomposition::setMSTLIterations(int iterations) {
 	if (iterations != d->mstlIterations)
 		exec(new SeasonalDecompositionSetMSTLIterationsCmd(d, iterations, ki18n("%1: set iterations for MSTL")));
 }
+
 // ##############################################################################
 // #################################  SLOTS  ####################################
 // ##############################################################################
@@ -406,18 +403,21 @@ void SeasonalDecompositionPrivate::recalc() {
 	// set the columns in the curves, no need to put this onto the undo stack
 	curveOriginal->setUndoAware(false);
 	curveTrend->setUndoAware(false);
-	curveSeasonal->setUndoAware(false);
+	for (auto* curve : curvesSeasonal)
+		curve->setUndoAware(false);
 	curveResidual->setUndoAware(false);
 
 	curveOriginal->setXColumn(xColumn);
 	curveOriginal->setYColumn(yColumn);
 	curveTrend->setXColumn(xColumn);
-	curveSeasonal->setXColumn(xColumn);
+	for (auto* curve : curvesSeasonal)
+		curve->setXColumn(xColumn);
 	curveResidual->setXColumn(xColumn);
 
 	curveOriginal->setUndoAware(true);
 	curveTrend->setUndoAware(true);
-	curveSeasonal->setUndoAware(true);
+	for (auto* curve : curvesSeasonal)
+		curve->setUndoAware(true);
 	curveResidual->setUndoAware(true);
 
 	if (!xColumn || !yColumn)
@@ -428,7 +428,8 @@ void SeasonalDecompositionPrivate::recalc() {
 	plotAreaOriginal->title()->setText(name);
 	plotAreaOriginal->verticalAxis()->title()->setText(name);
 	plotAreaTrend->verticalAxis()->title()->setText(name);
-	plotAreaSeasonal->verticalAxis()->title()->setText(name);
+	for (auto* plotArea : plotAreasSeasonal)
+		plotArea->verticalAxis()->title()->setText(name);
 	plotAreaResidual->verticalAxis()->title()->setText(name);
 
 	// copy valid data into a temp vector
@@ -457,10 +458,11 @@ void SeasonalDecompositionPrivate::recalc() {
  */
 void SeasonalDecompositionPrivate::recalcDecomposition() {
 	Q_EMIT q->statusInfo(QString());
+	WAIT_CURSOR;
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	QVector<double> trendData;
-	QVector<double> seasonalData;
+	QVector<QVector<double>> seasonalData; // vector of vectors for multiple seasonal components, for STL only one is used
 	QVector<double> residualData;
 
 	switch (method) {
@@ -500,24 +502,28 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 			stlParameters = stlParameters.seasonal_jump(stlSeasonalJump);
 		if (!stlTrendJumpAuto)
 			stlParameters = stlParameters.trend_jump(stlTrendJump);
-		if (!stlLowPassJump)
+		if (!stlLowPassJumpAuto)
 			stlParameters = stlParameters.low_pass_jump(stlLowPassJump);
 
-		// set MSTL parameters, if MSTL is used
-		// perform the decomposition
 		if (method == SeasonalDecomposition::Method::STL) {
+			adjustSeasonalComponents({static_cast<size_t>(stlPeriod)});
+
+			// perform the decomposition
 			auto result = stlParameters.fit(yDataVector, stlPeriod);
 
 			// copy the result data into the internal column vectors
-			const auto size = result.seasonal.size();
+			const auto size = result.trend.size();
+			QVector<double> seasonalDataSingle;
 			trendData.resize(size);
-			seasonalData.resize(size);
+			seasonalDataSingle.resize(size);
 			residualData.resize(size);
 			for (size_t i = 0; i < size; ++i) {
 				trendData[i] = result.trend[i];
-				seasonalData[i] = result.seasonal[i];
+				seasonalDataSingle[i] = result.seasonal[i];
 				residualData[i] = result.remainder[i];
 			}
+
+			seasonalData << seasonalDataSingle;
 		} else {
 			// check if we have valid MSTL parameters
 			for (size_t i = 0; i < mstlPeriods.size(); i++) {
@@ -532,18 +538,25 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 				return;
 			}
 
+			adjustSeasonalComponents(mstlPeriods);
+
+			// perform the decomposition
 			auto mstlParameters = stl::mstl_params().stl_params(stlParameters).iterations(mstlIterations).lambda(mstlLambda);
 			auto result = stl::mstl_params().fit(yDataVector, mstlPeriods);
 
 			// copy the result data into the internal column vectors
-			const auto size = result.seasonal.size();
+			const auto size = result.trend.size();
 			trendData.resize(size);
-			seasonalData.resize(size);
 			residualData.resize(size);
+			seasonalData.resize((int)columnsSeasonal.size());
+			for (int i = 0; i < (int)columnsSeasonal.size(); ++i)
+				seasonalData[i].resize(size);
+
 			for (size_t i = 0; i < size; ++i) {
 				trendData[i] = result.trend[i];
-				// seasonalData[i] = result.seasonal[i];
 				residualData[i] = result.remainder[i];
+				for (int j = 0; j < (int)columnsSeasonal.size(); ++j)
+					seasonalData[j][i] = result.seasonal.at(j)[i];
 			}
 		}
 
@@ -552,11 +565,88 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 	}
 
 	columnTrend->setValues(trendData);
-	columnTrend->setChanged();
-	columnSeasonal->setValues(seasonalData);
-	columnSeasonal->setChanged();
 	columnResidual->setValues(residualData);
-	columnResidual->setChanged();
+	for (int i = 0; i < (int)columnsSeasonal.size(); ++i)
+		columnsSeasonal[i]->setValues(seasonalData.at(i));
+
+	RESET_CURSOR;
+}
+
+/*!
+ * adjusts the size of the result spreadsheet and adds/removes new plot areas and curves for seasonal components.
+ * has to be called when the number of the seasonal components was changed.
+ */
+//
+void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<size_t>& periods) {
+	if (periods.size() == 1) {
+		if (plotAreasSeasonal.size() > 1) {
+			// adjust the result spreadsheet
+			resultSpreadsheet->setColumnCount(3); // 3 columns: trend, seasonal, residual
+			columnSeasonal->setName(i18n("Seasonal"));
+
+			// remove extra plot areas and curves
+			while (plotAreasSeasonal.size() > 1) {
+				auto* plotArea = plotAreasSeasonal.takeLast();
+				worksheet->setUndoAware(false);
+				worksheet->removeChild(plotArea);
+				worksheet->setUndoAware(true);
+				delete plotArea;
+				curvesSeasonal.takeLast();
+				columnsSeasonal.takeLast();
+			}
+		}
+	} else {
+		// adjust the result spreadsheet
+		resultSpreadsheet->setColumnCount(2 + mstlPeriods.size()); // trend, seasonal components, residual
+		columnsSeasonal.clear();
+		for (int i = 1; i< resultSpreadsheet->columnCount() - 1; i++) {
+			auto* column = resultSpreadsheet->column(i);
+			column->setUndoAware(false);
+			columnsSeasonal << column;
+		}
+
+		// add plot areas and curves if needed
+		if (plotAreasSeasonal.size() < (int)mstlPeriods.size()) {
+			while (plotAreasSeasonal.size() < (int)mstlPeriods.size()) {
+				auto* plotArea = new CartesianPlot(i18n("Seasonal"));
+				plotArea->setFixed(true);
+				plotArea->setType(CartesianPlot::Type::FourAxes);
+				plotArea->verticalAxis()->title()->setText(yColumn->name());
+				worksheet->insertChildBeforeFast(plotArea, plotAreaResidual);
+				plotAreasSeasonal << plotArea;
+
+				auto* curveSeasonal = new XYCurve(i18n("Seasonal"));
+				curveSeasonal->setFixed(true);
+				plotArea->addChild(curveSeasonal);
+				curvesSeasonal << curveSeasonal;
+			}
+		} else {
+			// remove extra plot areas and curves
+			while (plotAreasSeasonal.size() > (int)mstlPeriods.size()) {
+				auto* plotArea = plotAreasSeasonal.takeLast();
+				worksheet->setUndoAware(false);
+				worksheet->removeChild(plotArea);
+				worksheet->setUndoAware(true);
+				delete plotArea;
+				curvesSeasonal.takeLast();
+			}
+		}
+
+		// adjust the plot titles for seasonal components to reflect new periods
+		for (size_t i = 0; i < mstlPeriods.size(); i++) {
+			plotAreasSeasonal.at(i)->setUndoAware(false);
+			plotAreasSeasonal.at(i)->title()->setText(i18n("Seasonal Component (Period: %1)", mstlPeriods.at(i)));
+			plotAreasSeasonal.at(i)->setUndoAware(true);
+			columnsSeasonal.at(i)->setName(i18n("Seasonal, Period: %1", mstlPeriods.at(i)));
+			curvesSeasonal.at(i)->setYColumn(columnsSeasonal.at(i));
+			curvesSeasonal.at(i)->setXColumn(xColumn);
+		}
+	}
+
+	// the column with the residuals is always the last one, repoint it after spreadsheet size changes
+	columnResidual = resultSpreadsheet->column(resultSpreadsheet->columnCount() - 1);
+	columnResidual->setName(i18n("Residual"));
+	curveResidual->setYColumn(columnResidual);
 }
 
 void SeasonalDecompositionPrivate::reset(const QString& info) const {
@@ -569,6 +659,29 @@ void SeasonalDecompositionPrivate::reset(const QString& info) const {
 // ##############################################################################
 // ##################  Serialization/Deserialization  ###########################
 // ##############################################################################
+namespace {
+QString periodsToString(const std::vector<size_t>& periods) {
+	QString str;
+	for (const auto period : periods) {
+		if (!str.isEmpty())
+			str += QLatin1Char(',');
+		str += QString::number(period);
+	}
+	return str;
+}
+
+std::vector<size_t> stringToPeriods(const QString& str) {
+	std::vector<size_t> periods;
+	const auto list = str.split(QLatin1Char(','));
+	for (const auto& s : list) {
+		bool ok;
+		const auto period = s.trimmed().toULongLong(&ok);
+		if (ok)
+			periods.push_back(period);
+	}
+	return periods;
+}
+}
 
 //! Save as XML
 void SeasonalDecomposition::save(QXmlStreamWriter* writer) const {
@@ -607,7 +720,7 @@ void SeasonalDecomposition::save(QXmlStreamWriter* writer) const {
 	// MSTL parameters
 	writer->writeAttribute(QStringLiteral("mstlLambda"), QString::number(d->mstlLambda));
 	writer->writeAttribute(QStringLiteral("mstlIterations"), QString::number(d->mstlIterations));
-	// TODO: periods
+	writer->writeAttribute(QStringLiteral("mstlPeriods"), periodsToString(d->mstlPeriods));
 
 	writer->writeEndElement();
 
@@ -669,7 +782,7 @@ bool SeasonalDecomposition::load(XmlStreamReader* reader, bool preview) {
 			// MSTL parameters
 			READ_DOUBLE_VALUE("mstlLambda", mstlLambda);
 			READ_INT_VALUE("mstlIterations", mstlIterations, int);
-			// TODO: periods
+			d->mstlPeriods = stringToPeriods(attribs.value("mstlPeriods").toString());
 		} else if (reader->name() == QLatin1String("spreadsheet")) {
 			d->resultSpreadsheet = new Spreadsheet(i18n("Result"), true);
 			d->resultSpreadsheet->setFixed(true);
