@@ -86,7 +86,7 @@ public:
 	int mstlIterations{2};
 
 private:
-void adjustSeasonalComponents(const std::vector<size_t>&);
+	void adjustSeasonalComponents(const std::vector<size_t>&);
 	void reset(const QString&) const;
 	std::vector<double> yDataVector; // valid values from the sources y-column, used in the calculation of the decomposition
 };

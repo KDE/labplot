@@ -576,14 +576,9 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
  * adjusts the size of the result spreadsheet and adds/removes new plot areas and curves for seasonal components.
  * has to be called when the number of the seasonal components was changed.
  */
-//
 void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<size_t>& periods) {
 	if (periods.size() == 1) {
 		if (plotAreasSeasonal.size() > 1) {
-			// adjust the result spreadsheet
-			resultSpreadsheet->setColumnCount(3); // 3 columns: trend, seasonal, residual
-			columnSeasonal->setName(i18n("Seasonal"));
-
 			// remove extra plot areas and curves
 			while (plotAreasSeasonal.size() > 1) {
 				auto* plotArea = plotAreasSeasonal.takeLast();
@@ -594,12 +589,16 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 				curvesSeasonal.takeLast();
 				columnsSeasonal.takeLast();
 			}
+
+			// adjust the result spreadsheet
+			resultSpreadsheet->setColumnCount(3); // 3 columns: trend, seasonal, residual
+			columnSeasonal->setName(i18n("Seasonal"));
 		}
 	} else {
 		// adjust the result spreadsheet
 		resultSpreadsheet->setColumnCount(2 + mstlPeriods.size()); // trend, seasonal components, residual
 		columnsSeasonal.clear();
-		for (int i = 1; i< resultSpreadsheet->columnCount() - 1; i++) {
+		for (int i = 1; i < resultSpreadsheet->columnCount() - 1; i++) {
 			auto* column = resultSpreadsheet->column(i);
 			column->setUndoAware(false);
 			columnsSeasonal << column;
@@ -811,35 +810,48 @@ bool SeasonalDecomposition::load(XmlStreamReader* reader, bool preview) {
 	// columns
 	if (d->resultSpreadsheet->columnCount() < 3)
 		return false;
-	d->columnTrend = d->resultSpreadsheet->column(0);
-	d->columnSeasonal = d->resultSpreadsheet->column(1);
-	d->columnResidual = d->resultSpreadsheet->column(2);
+	d->columnTrend = d->resultSpreadsheet->column(0); // first column for trend
+	d->columnSeasonal = d->resultSpreadsheet->column(1); // second column for seasonal
+	for (int i = 2; i < d->resultSpreadsheet->columnCount() - 1; ++i) // more column for seasonal, if present
+		d->columnsSeasonal << d->resultSpreadsheet->column(i);
+	d->columnResidual = d->resultSpreadsheet->column(d->resultSpreadsheet->columnCount() - 1); // last column for residuals
 
 	// plot areas
 	auto plotAreas = d->worksheet->children<CartesianPlot>();
 	if (plotAreas.count() < 4)
 		return false;
-	d->plotAreaOriginal = plotAreas.at(0);
-	d->plotAreaTrend = plotAreas.at(1);
-	d->plotAreaSeasonal = plotAreas.at(2);
-	d->plotAreaResidual = plotAreas.at(3);
+	d->plotAreaOriginal = plotAreas.at(0); // first plot area for original
+	d->plotAreaTrend = plotAreas.at(1); // second plot area for trend
+	d->plotAreaSeasonal = plotAreas.at(2); // third plot area for seasonal
+	d->plotAreasSeasonal << d->plotAreaSeasonal;
+	for (int i = 3; i < plotAreas.count() - 1; ++i) // more plot areas for seasonal, if present
+		d->plotAreasSeasonal << plotAreas.at(i);
+	d->plotAreaResidual = plotAreas.at(plotAreas.count() - 1); // last plot area for residual
 
 	// curves
+
+	// original
 	auto curves = d->plotAreaOriginal->children<XYCurve>();
 	if (curves.isEmpty())
 		return false;
 	d->curveOriginal = curves.constFirst();
 
+	// trend
 	curves = d->plotAreaTrend->children<XYCurve>();
 	if (curves.isEmpty())
 		return false;
 	d->curveTrend = curves.constFirst();
 
-	curves = d->plotAreaSeasonal->children<XYCurve>();
-	if (curves.isEmpty())
-		return false;
-	d->curveSeasonal = curves.constFirst();
+	// seasonal
+	for (auto* plotArea : d->plotAreasSeasonal) {
+		curves = plotArea->children<XYCurve>();
+		if (curves.isEmpty())
+			return false;
+		d->curvesSeasonal << curves.constFirst();
+	}
+	d->curveSeasonal = d->curvesSeasonal.constFirst();
 
+	// residual
 	curves = d->plotAreaResidual->children<XYCurve>();
 	if (curves.isEmpty())
 		return false;
