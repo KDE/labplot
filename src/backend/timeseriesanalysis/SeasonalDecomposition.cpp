@@ -100,18 +100,21 @@ void SeasonalDecomposition::init() {
 	d->plotAreaOriginal = new CartesianPlot(i18n("Original"));
 	d->plotAreaOriginal->setFixed(true);
 	d->plotAreaOriginal->setType(CartesianPlot::Type::FourAxes);
+	d->plotAreaOriginal->horizontalAxis()->title()->setText(QString());
 	d->worksheet->addChild(d->plotAreaOriginal);
 
 	d->plotAreaTrend = new CartesianPlot(i18n("Trend"));
 	d->plotAreaTrend->setFixed(true);
 	d->plotAreaTrend->setType(CartesianPlot::Type::FourAxes);
 	d->plotAreaTrend->title()->setText(i18n("Trend Component"));
+	d->plotAreaTrend->horizontalAxis()->title()->setText(QString());
 	d->worksheet->addChild(d->plotAreaTrend);
 
 	d->plotAreaSeasonal = new CartesianPlot(i18n("Seasonal"));
 	d->plotAreaSeasonal->setFixed(true);
 	d->plotAreaSeasonal->setType(CartesianPlot::Type::FourAxes);
 	d->plotAreaSeasonal->title()->setText(i18n("Seasonal Component"));
+	d->plotAreaSeasonal->horizontalAxis()->title()->setText(QString());
 	d->worksheet->addChild(d->plotAreaSeasonal);
 
 	d->plotAreaResidual = new CartesianPlot(i18n("Residual"));
@@ -610,6 +613,7 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 				auto* plotArea = new CartesianPlot(i18n("Seasonal"));
 				plotArea->setFixed(true);
 				plotArea->setType(CartesianPlot::Type::FourAxes);
+				plotArea->horizontalAxis()->title()->setText(QString());
 				plotArea->verticalAxis()->title()->setText(yColumn->name());
 				worksheet->insertChildBeforeFast(plotArea, plotAreaResidual);
 				plotAreasSeasonal << plotArea;
