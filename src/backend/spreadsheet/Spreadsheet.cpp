@@ -1249,6 +1249,7 @@ void Spreadsheet::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	writer->writeStartElement(QLatin1String("general"));
+	writer->writeAttribute(QStringLiteral("readOnly"), QString::number(d->readOnly));
 	writer->writeAttribute(QStringLiteral("showComments"), QString::number(d->showComments));
 	writer->writeAttribute(QStringLiteral("showSparklines"), QString::number(d->showSparklines));
 	writer->writeEndElement();

@@ -946,6 +946,8 @@ bool AbstractAspect::readCommentElement(XmlStreamReader* reader) {
 void AbstractAspect::writeBasicAttributes(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QLatin1String("creation_time"), creationTime().toString(QLatin1String("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QLatin1String("name"), name());
+	writer->writeAttribute(QLatin1String("fixed"), QString::number(isFixed()));
+	writer->writeAttribute(QLatin1String("undoAware"), QString::number(isUndoAware()));
 	if (!d->m_suppressWriteUuid)
 		writer->writeAttribute(QLatin1String("uuid"), uuid().toString());
 }
@@ -962,7 +964,6 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 	QString str = attribs.value(QLatin1String("name")).toString();
 	if (str.isEmpty())
 		reader->raiseWarning(i18n("Attribute 'name' is missing or empty."));
-
 	d->m_name = str;
 
 	// creation time
@@ -978,10 +979,18 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 			d->m_creation_time = QDateTime::currentDateTime();
 	}
 
+	str = attribs.value(QLatin1String("fixed")).toString();
+	if (!str.isEmpty())
+		d->m_fixed = static_cast<bool>(str.toInt());
+
+	str = attribs.value(QLatin1String("undoAware")).toString();
+	if (!str.isEmpty())
+		d->m_undoAware = static_cast<bool>(str.toInt());
+
 	str = attribs.value(QLatin1String("uuid")).toString();
-	if (!str.isEmpty()) {
+	if (!str.isEmpty())
 		d->m_uuid = QUuid(str);
-	}
+
 	return true;
 }
 

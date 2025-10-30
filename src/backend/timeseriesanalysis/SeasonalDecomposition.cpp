@@ -788,14 +788,11 @@ bool SeasonalDecomposition::load(XmlStreamReader* reader, bool preview) {
 			d->mstlPeriods = stringToPeriods(attribs.value("mstlPeriods").toString());
 		} else if (reader->name() == QLatin1String("spreadsheet")) {
 			d->resultSpreadsheet = new Spreadsheet(i18n("Result"), true);
-			d->resultSpreadsheet->setFixed(true);
-			d->resultSpreadsheet->setUndoAware(false);
 			if (!d->resultSpreadsheet->load(reader, preview))
 				return false;
 			addChildFast(d->resultSpreadsheet);
 		} else if (reader->name() == QLatin1String("worksheet")) {
 			d->worksheet = new Worksheet(i18n("Worksheet"), true);
-			d->worksheet->setFixed(true);
 			if (!d->worksheet->load(reader, preview))
 				return false;
 			addChildFast(d->worksheet);
