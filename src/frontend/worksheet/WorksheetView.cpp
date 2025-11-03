@@ -1209,32 +1209,20 @@ void WorksheetView::changeZoom(QAction* action) {
 	zoomFitNoneAction->setChecked(true);
 	m_worksheet->setZoomFit(Worksheet::ZoomFit::None);
 
-	const auto* win = window();
-	if (win) {
-		const auto* handle = win->windowHandle();
-		if (handle) {
-			const auto* screen = handle->screen();
-			if (screen) {
-				m_zoomMode = static_cast<ZoomMode>(action->data().toInt());
-				switch (m_zoomMode) {
-				case ZoomMode::ZoomIn:
-					zoom(1);
-					break;
-				case ZoomMode::ZoomOut:
-					zoom(-1);
-					break;
-				case ZoomMode::ZoomOrigin: {
-					static const float hscale = GuiTools::dpi(this).first / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
-					static const float vscale = GuiTools::dpi(this).second / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
-					setTransform(QTransform::fromScale(hscale, vscale));
-				}
-				}
-			} else
-				qWarning() << "Screen is null.";
-		} else
-			qWarning() << "Window handle is null.";
-	} else
-		qWarning() << "Window is null.";
+	m_zoomMode = static_cast<ZoomMode>(action->data().toInt());
+	switch (m_zoomMode) {
+	case ZoomMode::ZoomIn:
+		zoom(1);
+		break;
+	case ZoomMode::ZoomOut:
+		zoom(-1);
+		break;
+	case ZoomMode::ZoomOrigin: {
+		static const float hscale = GuiTools::dpi(this).first / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+		static const float vscale = GuiTools::dpi(this).second / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+		setTransform(QTransform::fromScale(hscale, vscale));
+	}
+	}
 
 	updateLabelsZoom();
 }
