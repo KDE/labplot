@@ -117,8 +117,9 @@ WorksheetView::WorksheetView(Worksheet* worksheet)
 			if (!m_worksheet->isLoading()) {
 				float w = Worksheet::convertFromSceneUnits(sceneRect().width(), Worksheet::Unit::Inch);
 				float h = Worksheet::convertFromSceneUnits(sceneRect().height(), Worksheet::Unit::Inch);
-				w *= screen->physicalDotsPerInchX();
-				h *= screen->physicalDotsPerInchY();
+				auto dpi = GuiTools::dpi(this);
+				w *= dpi.first;
+				h *= dpi.second;
 				resize(w * 1.1, h * 1.1);
 			}
 			if (screen) {
@@ -2135,36 +2136,17 @@ bool WorksheetView::exportToFile(const QString& path,
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
 		// Adjust for DPI conversion
-		const auto* win = window(); // Store the window pointer
-		if (win) {
-			const auto* handle = win->windowHandle(); // Store the window handle pointer
-			if (handle) {
-				const auto* screen = handle->screen(); // Get the screen pointer
-				if (screen) {
-					// Calculate the width and height in pixels
-					w = w * screen->physicalDotsPerInchX() / 25.4;
-					h = h * screen->physicalDotsPerInchY() / 25.4;
+		w = w * GuiTools::dpi(this).first / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
+		h = h * GuiTools::dpi(this).second / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
 
-					generator.setSize(QSize(w, h));
-					QRectF targetRect(0, 0, w, h);
-					generator.setViewBox(targetRect);
+		generator.setSize(QSize(w, h));
+		QRectF targetRect(0, 0, w, h);
+		generator.setViewBox(targetRect);
 
-					QPainter painter;
-					painter.begin(&generator);
-					exportPaint(&painter, targetRect, sourceRect, background);
-					painter.end();
-				} else {
-					// Handle the case where screen is null
-					qWarning() << "Screen is null.";
-				}
-			} else {
-				// Handle the case where the window handle is null
-				qWarning() << "Window handle is null.";
-			}
-		} else {
-			// Handle the case where the window is null
-			qWarning() << "Window is null.";
-		}
+		QPainter painter;
+		painter.begin(&generator);
+		exportPaint(&painter, targetRect, sourceRect, background);
+		painter.end();
 #endif
 		break;
 	}
@@ -2239,32 +2221,20 @@ void WorksheetView::exportToPixmap(QPixmap& pixmap) {
 
 	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
-	const auto* win = window();
-	if (win) {
-		const auto* handle = win->windowHandle();
-		if (handle) {
-			const auto* screen = handle->screen();
-			if (screen) {
-				w = w * screen->physicalDotsPerInchX() / 25.4;
-				h = h * screen->physicalDotsPerInchY() / 25.4;
+	w = w * GuiTools::dpi(this).first / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
+	h = h * GuiTools::dpi(this).second / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
 
-				pixmap = QPixmap(w, h);
-				pixmap.fill(Qt::transparent);
+	pixmap = QPixmap(w, h);
+	pixmap.fill(Qt::transparent);
 
-				QRectF targetRect(0, 0, w, h);
-				QPainter painter;
-				painter.begin(&pixmap);
-				painter.setRenderHint(QPainter::Antialiasing);
+	QRectF targetRect(0, 0, w, h);
+	QPainter painter;
+	painter.begin(&pixmap);
+	painter.setRenderHint(QPainter::Antialiasing);
 
-				exportPaint(&painter, targetRect, sourceRect, true /* export background */, true /* export selection */);
+	exportPaint(&painter, targetRect, sourceRect, true /* export background */, true /* export selection */);
 
-				painter.end();
-			} else
-				qWarning() << "Screen is null.";
-		} else
-			qWarning() << "Window handle is null.";
-	} else
-		qWarning() << "Window is null.";
+	painter.end();
 }
 
 bool WorksheetView::eventFilter(QObject* /*watched*/, QEvent* event) {
@@ -2311,36 +2281,23 @@ void WorksheetView::exportToClipboard() {
 	}
 	int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
-	const auto* win = window(); // Store the window pointer
-	if (win) {
-		const auto* handle = win->windowHandle(); // Store the window handle pointer
-		if (handle) {
-			const auto* screen = handle->screen(); // Get the screen pointer
-			if (screen) {
-				// Calculate the width and height in pixels
-				w = w * screen->physicalDotsPerInchX() / 25.4;
-				h = h * screen->physicalDotsPerInchY() / 25.4;
+	// Calculate the width and height in pixels
+	w = w * GuiTools::dpi(this).first / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
+	h = h * GuiTools::dpi(this).second / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
 
-				// Create an image with the calculated size
-				QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
-				image.fill(Qt::transparent);
-				QRectF targetRect(0, 0, w, h);
+	// Create an image with the calculated size
+	QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
+	image.fill(Qt::transparent);
+	QRectF targetRect(0, 0, w, h);
 
-				// Use a QPainter to draw onto the image
-				QPainter painter;
-				painter.begin(&image);
-				painter.setRenderHint(QPainter::Antialiasing);
-				exportPaint(&painter, targetRect, sourceRect, true); // Export with background
-				painter.end();
-				// Set the image to the clipboard
-				QApplication::clipboard()->setImage(image, QClipboard::Clipboard);
-			} else
-				qWarning() << "Screen is null.";
-		} else
-			qWarning() << "Window handle is null.";
-
-	} else
-		qWarning() << "Window is null.";
+	// Use a QPainter to draw onto the image
+	QPainter painter;
+	painter.begin(&image);
+	painter.setRenderHint(QPainter::Antialiasing);
+	exportPaint(&painter, targetRect, sourceRect, true); // Export with background
+	painter.end();
+	// Set the image to the clipboard
+	QApplication::clipboard()->setImage(image, QClipboard::Clipboard);
 }
 
 void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool background, const bool selection) {
