@@ -108,31 +108,17 @@ WorksheetView::WorksheetView(Worksheet* worksheet)
 	});
 	connect(scene(), &QGraphicsScene::selectionChanged, this, &WorksheetView::selectionChanged);
 
-	// Resize the view to make the complete scene visible.
-	const auto* win = window();
-	if (win) {
-		const auto* handle = win->windowHandle();
-		if (handle) {
-			const auto* screen = handle->screen();
-			if (!m_worksheet->isLoading()) {
-				float w = Worksheet::convertFromSceneUnits(sceneRect().width(), Worksheet::Unit::Inch);
-				float h = Worksheet::convertFromSceneUnits(sceneRect().height(), Worksheet::Unit::Inch);
-				auto dpi = GuiTools::dpi(this);
-				w *= dpi.first;
-				h *= dpi.second;
-				resize(w * 1.1, h * 1.1);
-			}
-			if (screen) {
-				// Rescale to the original size
-				static const qreal hscale = screen->physicalDotsPerInchX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
-				static const qreal vscale = screen->physicalDotsPerInchY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
-				setTransform(QTransform::fromScale(hscale, vscale));
-			}
-		} else
-			qWarning() << "Window handle is null.";
-
-	} else
-		qWarning() << "Window is null.";
+	// resize the view to make the complete scene visible.
+	// no need to resize the view when the project is being opened,
+	// all views will be resized to the stored values at the end
+	if (!m_worksheet->isLoading()) {
+		float w = Worksheet::convertFromSceneUnits(sceneRect().width(), Worksheet::Unit::Inch);
+		float h = Worksheet::convertFromSceneUnits(sceneRect().height(), Worksheet::Unit::Inch);
+		auto dpi = GuiTools::dpi(this);
+		w *= dpi.first;
+		h *= dpi.second;
+		resize(w * 1.1, h * 1.1);
+	}
 
 	// rescale to the original size
 	static const qreal hscale = GuiTools::dpi(this).first / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
@@ -1181,28 +1167,13 @@ void WorksheetView::useViewSizeChanged(bool useViewSize) {
 }
 
 void WorksheetView::processResize() {
-	const auto* win = window();
-	if (win) {
-		const auto* handle = win->windowHandle();
-		if (handle) {
-			const auto* screen = handle->screen();
-			if (screen) {
-				if (size() != sceneRect().size()) {
-					static const float hscale = screen->physicalDotsPerInchX() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
-					static const float vscale = screen->physicalDotsPerInchY() / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
-
-					m_worksheet->setUndoAware(false);
-					m_worksheet->setPageRect(QRectF(0.0, 0.0, width() / hscale, height() / vscale));
-					m_worksheet->setUndoAware(true);
-				}
-			} else
-				qWarning() << "Screen is null.";
-
-		} else
-			qWarning() << "Window handle is null.";
-
-	} else
-		qWarning() << "Window is null.";
+	if (size() != sceneRect().size()) {
+		static const float hscale = GuiTools::dpi(this).first / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+		static const float vscale = GuiTools::dpi(this).second / (Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+		m_worksheet->setUndoAware(false);
+		m_worksheet->setPageRect(QRectF(0.0, 0.0, width() / hscale, height() / vscale));
+		m_worksheet->setUndoAware(true);
+	}
 }
 
 void WorksheetView::changeZoom(QAction* action) {
