@@ -11,6 +11,7 @@
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AspectTreeModel.h"
+#include "backend/matrix/Matrix.h"
 #include "backend/lib/macros.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
@@ -343,6 +344,27 @@ void TreeViewComboBox::setAspect(const AbstractAspect* aspect) {
 		setCurrentModelIndex(m_model->modelIndexOfAspect(aspect));
 	else
 		setCurrentModelIndex(QModelIndex());
+}
+
+void TreeViewComboBox::setMatrix(const Matrix* matrix, const QString& path) {
+	DEBUG(Q_FUNC_INFO)
+	setAspect(matrix);
+
+	// don't make the combobox red for initially created curves
+	if (!matrix && path.isEmpty()) {
+		setText(QString());
+		setInvalid(false);
+		return;
+	}
+
+	if (matrix) {
+		useCurrentIndexText(true);
+		setInvalid(false);
+	} else {
+		useCurrentIndexText(false);
+		setInvalid(true, i18n("The matrix \"%1\"\nis not available anymore. It will be automatically used once it is created again.", path));
+	}
+	setText(path.split(QLatin1Char('/')).last());
 }
 
 AbstractAspect* TreeViewComboBox::currentAspect() const {
