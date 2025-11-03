@@ -15,6 +15,7 @@
 class AbstractAspect;
 class AbstractColumn;
 class AspectTreeModel;
+class Matrix;
 class QGroupBox;
 class QLineEdit;
 class QTreeView;
@@ -32,6 +33,7 @@ public:
 	void setCurrentModelIndex(const QModelIndex&);
 	void setAspect(const AbstractAspect*);
 	void setAspect(const AbstractAspect* aspect, const QString& path);
+	void setMatrix(const Matrix*, const QString&);
 	AbstractAspect* currentAspect() const;
 	QModelIndex currentModelIndex() const;
 

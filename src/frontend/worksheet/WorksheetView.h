@@ -163,7 +163,7 @@ private:
 	QMenu* m_plotZoomMenu{nullptr};
 	QMenu* m_plotActionModeMenu{nullptr};
 	QMenu* m_plotCursorModeMenu{nullptr};
-	QToolButton* tbNewPlot{nullptr};
+	QMenu* m_addNew3DPlotMenu{nullptr};
 
 	// Actions
 	QAction* selectAllAction{nullptr};
@@ -191,6 +191,7 @@ private:
 	QAction* addCartesianPlotTemplateAction{nullptr};
 	QAction* addTextLabelAction{nullptr};
 	QAction* addImageAction{nullptr};
+	QAction* add3DPlotAction{nullptr};
 
 	QAction* verticalLayoutAction{nullptr};
 	QAction* horizontalLayoutAction{nullptr};

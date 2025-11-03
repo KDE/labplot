@@ -59,6 +59,12 @@ class ImageDock;
 class LabelWidget;
 class DatapickerImageWidget;
 class DatapickerCurveWidget;
+class Axis3DDock;
+class Bar3DPlotAreaDock;
+class Plot3DAreaDock;
+class Scatter3DPlotAreaDock;
+class Surface3DPlotAreaDock;
+
 #ifdef HAVE_SCRIPTING
 class ScriptDock;
 #endif
@@ -136,6 +142,20 @@ private:
 
 	// hypothesis test
 	HypothesisTestDock* m_hypothesisTestDock{nullptr};
+
+	// surface plot dock
+	Surface3DPlotAreaDock* m_surfacePlotDock{nullptr};
+
+	// 3d axis
+	Axis3DDock* m_axis3dDock{nullptr};
+
+	// scatter 3d dock
+	Scatter3DPlotAreaDock* m_scatter3DPlotDock{nullptr};
+
+	// bar 3d dock
+	Bar3DPlotAreaDock* m_bar3DPlotDock{nullptr};
+
+	Plot3DAreaDock* m_plot3DAreaDock{nullptr};
 
 #ifdef HAVE_SCRIPTING
 	ScriptDock* m_scriptDock{nullptr};
