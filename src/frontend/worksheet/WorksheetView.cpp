@@ -2132,7 +2132,9 @@ bool WorksheetView::exportToFile(const QString& path,
 		generator.setViewBox(targetRect);
 
 		QPainter painter;
-		painter.begin(&generator);
+		rc = painter.begin(&generator);
+		if (!rc)
+			return false;
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
 #endif
