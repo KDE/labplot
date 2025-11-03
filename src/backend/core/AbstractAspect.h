@@ -51,6 +51,21 @@ enum class AspectType : quint64 {
 	ReferenceRange = 0x0210060,
 	InfoElement = 0x0210080,
 
+	// 3D Basic Scene
+	Plot3DArea = 0x0210089,
+
+	// 3D Axis
+	Axis3D = 0x0210091,
+
+	// 3D plots
+	Surface3DPlot = 0x0210090,
+
+	// 3D Scatter
+	Scatter3DPlot = 0x0210092,
+
+	// 3D Bar
+	Bar3DPlot = 0x0210093,
+
 	// bar plots
 	BarPlot = 0x0210200,
 	LollipopPlot = 0x0210400,
@@ -133,6 +148,7 @@ public:
 	friend class AbstractAspectPrivate;
 
 	AbstractAspect(const QString& name, AspectType type);
+	AbstractAspect(AbstractAspectPrivate*, AspectType type);
 	~AbstractAspect() override;
 
 	enum class NameHandling {
@@ -228,6 +244,12 @@ public:
 			return QStringLiteral("RunChart");
 		case AspectType::AbstractPart:
 			return QStringLiteral("AbstractPart");
+		case AspectType::Axis3D:
+			return QStringLiteral("Axis3D");
+		case AspectType::Surface3DPlot:
+			return QStringLiteral("Surface Plot");
+		case AspectType::Scatter3DPlot:
+			return QStringLiteral("Scatter3DPlot");
 		case AspectType::AbstractDataSource:
 			return QStringLiteral("AbstractDataSource");
 		case AspectType::Matrix:

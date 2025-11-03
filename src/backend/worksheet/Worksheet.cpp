@@ -21,6 +21,7 @@
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/TreeModel.h"
+#include "backend/worksheet/plots/3d/Surface3DPlot.h"
 #include "frontend/ThemeHandler.h"
 #include "frontend/worksheet/ExportWorksheetDialog.h"
 #include "frontend/worksheet/WorksheetView.h"
@@ -39,6 +40,10 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
+#include <QGraphicsProxyWidget>
+
+#include <backend/worksheet/plots/3d/Bar3DPlot.h>
+#include <backend/worksheet/plots/3d/Scatter3DPlot.h>
 
 namespace {
 constexpr auto CURSOR_UUID_EDIT_ROLE = Qt::UserRole;
@@ -276,13 +281,66 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	if (!addedElement)
 		return;
 
-	if (aspect->parentAspect() != this)
-		return;
-
 	// add the GraphicsItem of the added child to the scene
-	DEBUG(Q_FUNC_INFO << ", ADDING child to SCENE")
-	auto* item = addedElement->graphicsItem();
-	d->m_scene->addItem(item);
+	// DEBUG(Q_FUNC_INFO << ", ADDING child to SCENE")
+	if (aspect->type() == AspectType::Surface3DPlot) {
+		const auto* addedElement = static_cast<const Surface3DPlot*>(aspect);
+		Q3DSurface* graph = addedElement->m_surface;
+		if (graph) {
+			QWidget* window = graph->window();
+			if (window) {
+				QGraphicsProxyWidget* proxy = d->m_scene->addWidget(window);
+				// Set the proxy size dynamically
+				QRectF sceneRect = d->m_scene->sceneRect();
+				double width = sceneRect.width() - d->layoutLeftMargin - d->layoutRightMargin;
+				double height = sceneRect.height() - d->layoutTopMargin - d->layoutBottomMargin;
+				proxy->resize(width, height);
+			}
+			graph->show();
+		}
+	} else if (aspect->type() == AspectType::Scatter3DPlot) {
+		const auto* addedElement = static_cast<const Scatter3DPlot*>(aspect);
+		Q3DScatter* graph = addedElement->m_scatter;
+		if (graph) {
+			QWidget* window = graph->window();
+			if (window) {
+				window->setFocusPolicy(Qt::StrongFocus);
+				QGraphicsProxyWidget* proxy = d->m_scene->addWidget(window);
+				proxy->setFocusPolicy(Qt::StrongFocus); // Ensure the proxy can gain focus
+				proxy->setAcceptHoverEvents(true);
+				proxy->setAcceptedMouseButtons(Qt::AllButtons);
+				// Set the proxy size dynamically
+				QRectF sceneRect = d->pageRect;
+				double width = sceneRect.width() - d->layoutLeftMargin - d->layoutRightMargin;
+				double height = sceneRect.height() - d->layoutTopMargin - d->layoutBottomMargin;
+				proxy->resize(width, height);
+			}
+			graph->show();
+		}
+	} else if (aspect->type() == AspectType::Bar3DPlot) {
+		const auto* addedElement = static_cast<const Bar3DPlot*>(aspect);
+		Q3DBars* graph = addedElement->m_bar;
+		if (graph) {
+			QWidget* window = graph->window();
+			if (window) {
+				window->setFocusPolicy(Qt::StrongFocus);
+				QGraphicsProxyWidget* proxy = d->m_scene->addWidget(window);
+				proxy->setFocusPolicy(Qt::StrongFocus); // Ensure the proxy can gain focus
+				proxy->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+				proxy->setAcceptHoverEvents(true);
+				proxy->setAcceptedMouseButtons(Qt::AllButtons);
+				// Set the proxy size dynamically
+				QRectF sceneRect = d->pageRect;
+				double width = sceneRect.width() - d->layoutLeftMargin - d->layoutRightMargin;
+				double height = sceneRect.height() - d->layoutTopMargin - d->layoutBottomMargin;
+				proxy->resize(width, height);
+			}
+			graph->show();
+		}
+	} else {
+		auto* item = addedElement->graphicsItem();
+		d->m_scene->addItem(item);
+	}
 
 	connect(aspect, &AbstractAspect::contextMenuRequested, this, &Worksheet::childContextMenuRequested);
 	connect(addedElement, &WorksheetElement::changed, this, &Worksheet::changed);

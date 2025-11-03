@@ -190,6 +190,11 @@ AbstractAspect::AbstractAspect(const QString& name, AspectType type)
 	, d(new AbstractAspectPrivate(this, name)) {
 }
 
+AbstractAspect::AbstractAspect(AbstractAspectPrivate* dd, AspectType type)
+	: m_type(type)
+	, d(dd) {
+}
+
 AbstractAspect::~AbstractAspect() {
 	delete d;
 }
@@ -210,9 +215,9 @@ void AbstractAspect::setSuppressWriteUuid(bool suppress) {
  * \brief AbstractAspect::setName
  * sets the name of the abstract aspect
  * \param value - the new value for the name that needs to be checked and made unique if it's not the case yet
- * \param autoUnique - if set to \true the new name is automatically made unique, the name is not changed and \c false is returned otherwise. default is \true.
- * \param skipAutoUnique - if set to \true, don't check for uniqueness, the caller has to guarantee the uniqueness. default is \false.
- * \return returns, if the new name is valid or not
+ * \param autoUnique - if set to \true the new name is automatically made unique, the name is not changed and \c false is returned otherwise. default is
+ * \true. \param skipAutoUnique - if set to \true, don't check for uniqueness, the caller has to guarantee the uniqueness. default is \false. \return
+ * returns, if the new name is valid or not
  */
 bool AbstractAspect::setName(const QString& value, NameHandling handling, QUndoCommand* /*parent*/) {
 	if (value.isEmpty())
@@ -1253,4 +1258,8 @@ int AbstractAspectPrivate::indexOfChild(const AbstractAspect* child) const {
 			return i;
 
 	return -1;
+}
+
+QString AbstractAspectPrivate::name() {
+	return m_name;
 }

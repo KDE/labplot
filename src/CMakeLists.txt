@@ -110,6 +110,11 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/dockwidgets/XYCorrelationCurveDock.cpp
     ${FRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
     ${FRONTEND_DIR}/dockwidgets/HypothesisTestDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/Surface3DPlotAreaDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/Axis3DDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/Scatter3DPlotAreaDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/Bar3DPlotAreaDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/Plot3DAreaDock.cpp
     ${FRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
     ${FRONTEND_DIR}/matrix/MatrixView.cpp
     ${FRONTEND_DIR}/note/NoteView.cpp
@@ -306,6 +311,11 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/fitsheadereditwidget.ui
     ${FRONTEND_DIR}/ui/fitsheadereditnewkeywordwidget.ui
     ${FRONTEND_DIR}/ui/fitsheadereditaddunitwidget.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/surface3dplotareadock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/axis3ddock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/scatter3dplotareadock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/bar3dplotareadock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/plot3dareadock.ui
 )
 
 if(ENABLE_SCRIPTING)
@@ -475,6 +485,13 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
     ${BACKEND_DIR}/statistics/HypothesisTest.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/Surface3DPlot.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/Axis3D.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/Scatter3DPlot.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/Bar3DPlot.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/Base3DArea.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/MouseInteractor.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/Plot3DArea.cpp
 )
 
 if(ENABLE_SCRIPTING)
@@ -609,11 +626,12 @@ endif()
 target_link_libraries(labplotnsllib
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Widgets    # QApplication
+    Qt${QT_MAJOR_VERSION}::Graphs	# For 3D Plots
     ${TURN_OFF_AS_NEEDED}
     ${GSL_LIBRARIES}
     ${ICONV_LIBRARIES}
     ${TURN_ON_AS_NEEDED}
-    ${LIBCERF_LIBRARIES}
+    ${LIBCERF_LIBRARIES}	
     ${FFTW3_LIBRARIES}
 )
 target_link_libraries(labplotbackendlib
@@ -624,6 +642,7 @@ target_link_libraries(labplotbackendlib
     Qt${QT_MAJOR_VERSION}::Network    # QLocalSocket
     Qt${QT_MAJOR_VERSION}::Xml    # QDomElement (Cantor)
     Qt${QT_MAJOR_VERSION}::PrintSupport    # QPrintDialog
+    Qt${QT_MAJOR_VERSION}::Graphs	# For 3D Plots
     KF${KF_MAJOR_VERSION}::ConfigCore    # KConfigGroup
     KF${KF_MAJOR_VERSION}::I18n
     KF${KF_MAJOR_VERSION}::ConfigWidgets    # KStandardAction
@@ -656,6 +675,8 @@ endif()
 target_link_libraries(labplotlib
     Qt${QT_MAJOR_VERSION}::Sql
     Qt${QT_MAJOR_VERSION}::PrintSupport    # QPrinter
+	Qt${QT_MAJOR_VERSION}::Graphs	# For 3D Plots
+        Qt${QT_MAJOR_VERSION}::Widgets	# For 3D Plots
 #     Qt${QT_MAJOR_VERSION}::Qml
 #     Qt${QT_MAJOR_VERSION}::Quick
 #     Qt${QT_MAJOR_VERSION}::QuickWidgets
