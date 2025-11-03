@@ -1279,22 +1279,8 @@ void WorksheetView::changeZoomFit(QAction* action) {
 
 double WorksheetView::zoomFactor() const {
 	double scale = transform().m11();
-	const auto* win = window();
-	if (win) {
-		const auto* handle = win->windowHandle();
-		if (handle) {
-			const auto* screen = handle->screen();
-			if (screen) {
-				scale *= Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch) / screen->physicalDotsPerInchX();
-			} else
-				qWarning() << "Screen is null.";
-		} else
-			qWarning() << "Window handle is null.";
-
-	} else
-		qWarning() << "Window is null.";
-
-	return scale; // Return the computed scale
+	scale *= Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch) / GuiTools::dpi(this).first;
+	return scale;
 }
 
 void WorksheetView::updateLabelsZoom() const {
