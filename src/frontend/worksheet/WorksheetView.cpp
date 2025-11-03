@@ -2170,8 +2170,7 @@ void WorksheetView::exportToPixmap(QPixmap& pixmap) {
 	int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
 	w = w * GuiTools::dpi(this).first / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
 	h = h * GuiTools::dpi(this).second / (GSL_CONST_CGS_INCH * Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
-
-	pixmap = QPixmap(w, h);
+	pixmap = pixmap.scaled(w, h);
 	pixmap.fill(Qt::transparent);
 
 	QRectF targetRect(0, 0, w, h);
