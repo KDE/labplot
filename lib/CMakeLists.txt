@@ -90,6 +90,13 @@ set(PLOT_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYIntegrationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYInterpolationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYSmoothCurve.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/Surface3DPlot.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/Axis3D.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/Scatter3DPlot.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/Bar3DPlot.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/Base3DArea.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/MouseInteractor.cpp
+    ${BACKEND_DIR}/worksheet/plots/3d/Plot3DArea.cpp
 )
 
 set(SDK_SOURCES
@@ -292,6 +299,7 @@ target_link_libraries(liblabplot
     Qt${QT_MAJOR_VERSION}::Gui
     Qt${QT_MAJOR_VERSION}::Widgets
 )
+	Qt${QT_MAJOR_VERSION}::Graphs
 
 if(WIN32)
 if(PSAPI)

@@ -48,6 +48,7 @@ find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONEN
 #     QuickWidgets
     PrintSupport
     Sql
+    Graphs
     Widgets
     Test
 )
@@ -58,7 +59,6 @@ if (Qt6Gui_VERSION VERSION_GREATER_EQUAL 6.10.0)
 else()
     find_package(Qt${QT_MAJOR_VERSION}Gui ${QT_MIN_VERSION} CONFIG REQUIRED Private)
 endif()
-
 find_package(KF${KF_MAJOR_VERSION} ${KF_MIN_VERSION} REQUIRED COMPONENTS
     Archive
     Completion
