@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-16 03:05+0000\n"
-"PO-Revision-Date: 2025-06-02 17:37+0200\n"
+"PO-Revision-Date: 2025-09-30 09:36+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -8001,7 +8001,7 @@ msgstr "Histogramme"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:146
 #, kde-format
 msgid "Box Plot"
-msgstr "Tracé en boîte"
+msgstr "Tracé en boite"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:434
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:493
@@ -11517,7 +11517,7 @@ msgid ""
 "This option determines how the imported strings have to be converted to "
 "numbers."
 msgstr ""
-"Cette option détermine comment convertir des chaînes importées en nombres."
+"Cette option détermine comment convertir des chaines importées en nombres."
 
 #: src/kdefrontend/datasources/AsciiOptionsWidget.cpp:38
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:55
@@ -11543,7 +11543,7 @@ msgid ""
 "calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
 "and to time."
 msgstr ""
-"Cette option détermine comment les chaînes importées doivent être converties "
+"Cette option détermine comment les chaines importées doivent être converties "
 "en dates d'agenda, par exemple, des numéros d'année, de mois ou de jour dans "
 "le calendrier grégorien et en heures."
 
@@ -11587,7 +11587,7 @@ msgid ""
 "Sunday</td></tr></table><br><br>In case the provided expression is empty, "
 "the format will be auto-detected."
 msgstr ""
-"Les expressions pouvant être utilisées pour la partie de date de la chaîne "
+"Les expressions pouvant être utilisées pour la partie de date de la chaine "
 "de formatage :<table><tr><td>d</td><td>Le jour sous la forme d'un nombre "
 "sans zéro au début (1 à 31).</td></tr><tr><td>jj</td><td>Le jour sous la "
 "forme d'un nombre avec un zéro au début (01-31).</td></tr><tr><td>jjj</"
@@ -11606,7 +11606,7 @@ msgstr ""
 "tr><tr><td>aaaa</td><td>L'année sous la forme d'un nombre à quatre chiffres. "
 "Si l'année est négative, un signe « - » est ajouté en préfixe. </td></tr> </"
 "table> <br> <br> Les expressions pouvant être utilisées pour la partie "
-"d'heure dans la chaîne de formatage : <table><tr><td>h</td><td>L'heure sans "
+"d'heure dans la chaine de formatage : <table><tr><td>h</td><td>L'heure sans "
 "zéro de début (0 à 23 ou 1 à 12 en cas d'affichage AM / PM).</td></"
 "tr><tr><td>hh</td><td>L'heure avec un zéro au début (00 à 23 ou 01 à 12 en "
 "cas d'affichage AM / PM).</td></tr><tr><td>h</td><td>L'heure sans zéro au "
@@ -12058,7 +12058,7 @@ msgstr "Fichier %1 importé en %2 secondes."
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:160
 #, kde-format
 msgid "Close the dialog and import the data."
-msgstr "Fermer la boîte de dialogue et importer les données."
+msgstr "Fermer la boite de dialogue et importer les données."
 
 #: src/kdefrontend/datasources/ImportFileDialog.cpp:367
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:154
@@ -12666,7 +12666,7 @@ msgstr "Les données du projet ont été importées en %1 secondes."
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:413
 #, kde-format
 msgid "Close the dialog and import the selected objects."
-msgstr "Fermer la boîte de dialogue et importer les objets sélectionnés."
+msgstr "Fermer la boite de dialogue et importer les objets sélectionnés."
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:415
 #, kde-format
@@ -12824,7 +12824,7 @@ msgid ""
 "td><td>Sun July 20 69</td></tr><tr><td>'The day is' dddd</td><td>The day is "
 "Sunday</td></tr></table>"
 msgstr ""
-"Les expressions pouvant être utilisées pour la partie de date de la chaîne "
+"Les expressions pouvant être utilisées pour la partie de date de la chaine "
 "de formatage :<table><tr><td>d</td><td>Le jour sous la forme d'un nombre "
 "sans zéro au début (1 à 31).</td></tr><tr><td>jj</td><td>Le jour sous la "
 "forme d'un nombre avec un zéro au début (01-31).</td></tr><tr><td>jjj</"
@@ -12843,7 +12843,7 @@ msgstr ""
 "tr><tr><td>aaaa</td><td>L'année sous la forme d'un nombre à quatre chiffres. "
 "Si l'année est négative, un signe moins est ajouté en préfixe. </td></tr> </"
 "table> <br> <br> Les expressions pouvant être utilisées pour la partie "
-"d'heure dans la chaîne de formatage : <table><tr><td>h</td><td>L'heure sans "
+"d'heure dans la chaine de formatage : <table><tr><td>h</td><td>L'heure sans "
 "zéro de début (0..23 ou 1..12 en cas d'affichage AM / PM).</td></"
 "tr><tr><td>hh</td><td>L'heure avec un zéro au début (00 à 23 ou 01 à 12 en "
 "cas d'affichage AM / PM).</td></tr><tr><td>h</td><td>L'heure sans zéro au "
@@ -13497,7 +13497,7 @@ msgid ""
 "If checked, the box width is made proportional to the square root of the "
 "number of data points."
 msgstr ""
-"Si cette option est sélectionnée, la largeur de la boîte est rendue "
+"Si cette option est sélectionnée, la largeur de la boite est rendue "
 "proportionnelle à la racine carrée du nombre de points de données."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:69
@@ -13505,7 +13505,7 @@ msgstr ""
 msgid "Parameter controlling the range of the inner fences of the box plot."
 msgstr ""
 "Paramètre contrôlant l'intervalle des barrières intérieures du tracé de la "
-"boîte."
+"boite."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:78
 #, kde-format
@@ -13514,7 +13514,7 @@ msgid ""
 "its default value."
 msgstr ""
 "Spécifier le facteur en pourcentage pour le contrôle de la largeur de la "
-"boîte, concernant sa valeur par défaut."
+"boite, concernant sa valeur par défaut."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:99
 #, kde-format
@@ -13573,7 +13573,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:726
 #, kde-format
 msgid "%1 box plots: template \"%2\" loaded"
-msgstr "%1 tracés en boîte : modèle « %2 » chargé"
+msgstr "%1 tracés en boite : modèle « %2 » chargé"
 
 #: src/kdefrontend/dockwidgets/CantorWorksheetDock.cpp:61
 #, kde-format
@@ -14722,7 +14722,7 @@ msgstr "Propriétés : tracé en guimauve"
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
-msgstr "Propriétés : tracé en boîte"
+msgstr "Propriétés : tracé en boite"
 
 #: src/kdefrontend/GuiObserver.cpp:376
 #, kde-format
@@ -15599,7 +15599,7 @@ msgstr "Navigateur de cartes de couleurs"
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr ""
-"Ouvrir une boîte de dialogue pour naviguer parmi les cartes disponibles de "
+"Ouvrir une boite de dialogue pour naviguer parmi les cartes disponibles de "
 "couleurs."
 
 #: src/kdefrontend/MainWin.cpp:725
@@ -16807,7 +16807,7 @@ msgstr "Exporter la sélection"
 msgid "This option determines how to convert numbers to strings."
 msgstr ""
 "Cette option détermine comment s'effectue la conversion des nombres en "
-"chaînes."
+"chaines."
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:104
 #, kde-format
@@ -17169,7 +17169,7 @@ msgstr "Une feuille de travail déjà existante doit être sélectionnée."
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:1089
 #, kde-format
 msgid "Close the dialog and plot the data."
-msgstr "Fermer la boîte de dialogue et tracer les données."
+msgstr "Fermer la boite de dialogue et tracer les données."
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:44
 #, kde-format
@@ -21229,7 +21229,7 @@ msgstr "Options d'adaptation avancées"
 #, kde-format
 msgid "Opens a dialog to change advanced fit options"
 msgstr ""
-"Ouvre une boîte de dialogue pour modifier les options avancées d'ajustement."
+"Ouvre une boite de dialogue pour modifier les options avancées d'ajustement."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbOptions)
 #. i18n: ectx: property (text), widget (QLabel, lOptions)
@@ -23756,12 +23756,12 @@ msgstr "X11 Bitmap (*.xpm *.XPM)"
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:369
 #, kde-format
 msgid "Export to file and close the dialog."
-msgstr "Exporter dans un fichier et ferme la boîte de dialogue."
+msgstr "Exporter dans un fichier et ferme la boite de dialogue."
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:372
 #, kde-format
 msgid "Export to clipboard and close the dialog."
-msgstr "Exporter vers le presse-papier et fermer la boîte de dialogue."
+msgstr "Exporter vers le presse-papier et fermer la boite de dialogue."
 
 #: src/kdefrontend/worksheet/GridDialog.cpp:36
 #, kde-format
