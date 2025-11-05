@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-14 02:47+0000\n"
-"PO-Revision-Date: 2025-07-07 10:03+0200\n"
+"PO-Revision-Date: 2025-11-02 00:27+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -13758,6 +13758,8 @@ msgstr "Berechnungszeit: %1 ms"
 #, kde-format
 msgid "Click this button or press Shift+Enter to recalculate the result."
 msgstr ""
+"Klicken Sie auf diese Schaltfläche oder drücken Sie Shift+Enter, um das "
+"Ergebnis neu zu berechnen."
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:75
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:400
