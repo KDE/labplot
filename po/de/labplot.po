@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-02 00:38+0000\n"
-"PO-Revision-Date: 2025-11-01 10:35+0100\n"
+"PO-Revision-Date: 2025-11-02 00:27+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -1272,6 +1272,9 @@ msgid ""
 "count >= %3. Check if the correct separator is used and the data contains "
 "same number of columns."
 msgstr ""
+"Ungültige Anzahl von Datenspalten. Spaltenanzahl in der ersten Zeile: %1. "
+"Spaltenanzahl in Zeile %2 ≥ %3. Überprüfen Sie, ob der richtige Trenner "
+"verwendet wird und ob die Daten die gleiche Anzahl von Spalten enthalten."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:239
 #, kde-format
@@ -7586,32 +7589,32 @@ msgstr "Ein-Stichproben-t-Test"
 #: src/backend/statistics/HypothesisTest.cpp:311
 #, kde-format
 msgid "Independent Two-Sample t-Test"
-msgstr ""
+msgstr "Unabhängiger Zwei-Stichproben-t-Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:313
 #, kde-format
 msgid "Paired Two-Sample t-Test"
-msgstr ""
+msgstr "Gepaarter Zwei-Stichproben-t-Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:315
 #, kde-format
 msgid "Mann-Whitney U Test"
-msgstr ""
+msgstr "Mann-Whitney-U-Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:317
 #, kde-format
 msgid "Welch t-Test"
-msgstr ""
+msgstr "Welch-t-Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:319
 #, kde-format
 msgid "Wilcoxon Signed Rank Test"
-msgstr ""
+msgstr "Wilcoxon-Vorzeichen-Rang-Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:321
 #, kde-format
 msgid "One-Way ANOVA Test"
-msgstr ""
+msgstr "Einfaktorielle ANOVA-Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:323
 #, kde-format
@@ -7621,7 +7624,7 @@ msgstr "Kruskal-Wallis Test"
 #: src/backend/statistics/HypothesisTest.cpp:325
 #, kde-format
 msgid "Log-Rank Test"
-msgstr ""
+msgstr "Log-Rank-Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:327
 #, kde-format
@@ -7631,7 +7634,7 @@ msgstr "Friedman Test"
 #: src/backend/statistics/HypothesisTest.cpp:329
 #, kde-format
 msgid "Chi-Square Independence Test"
-msgstr ""
+msgstr "Chi-Quadrat-Unabhängigkeitstest"
 
 #: src/backend/statistics/HypothesisTest.cpp:331
 #, kde-format
@@ -7641,12 +7644,12 @@ msgstr "Chi-Quadrat-Anpassungstest"
 #: src/backend/statistics/HypothesisTest.cpp:333
 #, kde-format
 msgid "One-Way ANOVA with Repeated Measures Test"
-msgstr ""
+msgstr "Einfaktorielle ANOVA mit Messwiederholungen"
 
 #: src/backend/statistics/HypothesisTest.cpp:505
 #, kde-format
 msgid "N/A"
-msgstr ""
+msgstr "k.A."
 
 #: src/backend/statistics/HypothesisTest.cpp:509
 #, kde-format
@@ -7656,22 +7659,22 @@ msgstr "Testergebnis nicht verfügbar."
 #: src/backend/statistics/HypothesisTest.cpp:513
 #, kde-format
 msgid "Two columns are required for this test."
-msgstr ""
+msgstr "Für diesen Test werden zwei Spalten benötigt."
 
 #: src/backend/statistics/HypothesisTest.cpp:517
 #, kde-format
 msgid "At least two columns are required."
-msgstr ""
+msgstr "Es werden mindestens zwei Spalten benötigt."
 
 #: src/backend/statistics/HypothesisTest.cpp:521
 #, kde-format
 msgid "Column '%1' requires at least %2 samples."
-msgstr ""
+msgstr "Spalte „%1“ benötigt mindestens %2 Stichproben."
 
 #: src/backend/statistics/HypothesisTest.cpp:525
 #, kde-format
 msgid "The size of each sample must be equal."
-msgstr ""
+msgstr "Die Größe jeder Stichprobe muss gleich sein."
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
 #: src/backend/statistics/HypothesisTest.cpp:529
@@ -7689,7 +7692,7 @@ msgstr "Nullhypothese"
 #: src/backend/statistics/HypothesisTest.cpp:545
 #, kde-format
 msgid "Alternate Hypothesis"
-msgstr ""
+msgstr "Alternativhypothese"
 
 #: src/backend/statistics/HypothesisTest.cpp:547
 #, kde-format
@@ -7704,7 +7707,7 @@ msgstr "Teststatistik"
 #: src/backend/statistics/HypothesisTest.cpp:548
 #, kde-format
 msgid "Significance Level"
-msgstr ""
+msgstr "Signifikanzniveau"
 
 #: src/backend/statistics/HypothesisTest.cpp:549
 #, kde-format
@@ -7768,7 +7771,7 @@ msgstr "Gepoolte Varianz"
 #: src/backend/statistics/HypothesisTest.cpp:573
 #, kde-format
 msgid "Mean Difference Standard Error"
-msgstr ""
+msgstr "Standardfehler der mittleren Differenz"
 
 #: src/backend/statistics/HypothesisTest.cpp:575
 #: src/backend/statistics/HypothesisTest.cpp:581
@@ -7787,16 +7790,14 @@ msgid "Sum of Squares Within Groups"
 msgstr "Summe der Quadrate in den Gruppen"
 
 #: src/backend/statistics/HypothesisTest.cpp:577
-#, fuzzy, kde-format
-#| msgid "Mean square error"
+#, kde-format
 msgid "Mean Squares Between Groups"
-msgstr "Mittlerer quadratischer Fehler"
+msgstr "Mittlere Quadrate zwischen den Gruppen"
 
 #: src/backend/statistics/HypothesisTest.cpp:578
-#, fuzzy, kde-format
-#| msgid "Mean square error"
+#, kde-format
 msgid "Mean Squares Within Groups"
-msgstr "Mittlerer quadratischer Fehler"
+msgstr "Mittlere Quadrate innerhalb der Gruppen"
 
 #: src/backend/statistics/HypothesisTest.cpp:581
 #, kde-format
@@ -7811,13 +7812,12 @@ msgstr "Summe der Quadrate Reste"
 #: src/backend/statistics/HypothesisTest.cpp:583
 #, kde-format
 msgid "Sum of Squares Within Subjects"
-msgstr ""
+msgstr "Quadratsumme innerhalb der Versuchspersonen"
 
 #: src/backend/statistics/HypothesisTest.cpp:584
-#, fuzzy, kde-format
-#| msgid "Mean square error"
+#, kde-format
 msgid "Mean Squares Treatment"
-msgstr "Mittlerer quadratischer Fehler"
+msgstr "Mittlere Quadrate der Behandlung"
 
 #: src/backend/statistics/HypothesisTest.cpp:584
 #, kde-format
@@ -7838,7 +7838,7 @@ msgstr "z-Wert"
 #: src/backend/statistics/HypothesisTest.cpp:587
 #, kde-format
 msgid "Rank Sum 1"
-msgstr ""
+msgstr "Rangsumme 1"
 
 #: src/backend/statistics/HypothesisTest.cpp:587
 #, kde-format
@@ -7848,7 +7848,7 @@ msgstr "Mittlerer Rank 1"
 #: src/backend/statistics/HypothesisTest.cpp:588
 #, kde-format
 msgid "Rank Sum 2"
-msgstr ""
+msgstr "Rangsumme 2"
 
 #: src/backend/statistics/HypothesisTest.cpp:588
 #, kde-format
@@ -7863,7 +7863,7 @@ msgstr "W"
 #: src/backend/statistics/HypothesisTest.cpp:591
 #, kde-format
 msgid "Positive Rank Sum"
-msgstr ""
+msgstr "Positive Rangsumme"
 
 #: src/backend/statistics/HypothesisTest.cpp:591
 #, kde-format
@@ -7873,7 +7873,7 @@ msgstr "Mittlerer positiver Rang"
 #: src/backend/statistics/HypothesisTest.cpp:592
 #, kde-format
 msgid "Positive Rank Count"
-msgstr ""
+msgstr "Positive Rangzahl"
 
 #: src/backend/statistics/HypothesisTest.cpp:592
 #, kde-format
@@ -7958,6 +7958,8 @@ msgid ""
 "At the significance level %1, the population mean is significantly different "
 "from %2. Reject the null hypothesis."
 msgstr ""
+"Auf dem Signifikanzniveau %1 ist der Populationsmittelwert signifikant von "
+"%2 verschieden. Die Nullhypothese wird verworfen."
 
 #: src/backend/statistics/HypothesisTest.cpp:871
 #, kde-format
@@ -7965,6 +7967,8 @@ msgid ""
 "At the significance level %1, the population mean is not significantly "
 "different from %2. Fail to reject the null hypothesis."
 msgstr ""
+"Auf dem Signifikanzniveau %1 ist der Populationsmittelwert nicht signifikant "
+"von %2 verschieden. Die Nullhypothese wird beibehalten."
 
 #: src/backend/statistics/HypothesisTest.cpp:955
 #: src/backend/statistics/HypothesisTest.cpp:1023
@@ -7973,6 +7977,8 @@ msgid ""
 "At the significance level %1, the population means are significantly "
 "different. Reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 sind die Populationsmittelwerte signifikant "
+"verschieden. Die Nullhypothese wird verworfen."
 
 #: src/backend/statistics/HypothesisTest.cpp:957
 #: src/backend/statistics/HypothesisTest.cpp:1025
@@ -7981,6 +7987,8 @@ msgid ""
 "At the significance level %1, the population means are not significantly "
 "different. Fail to reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 sind die Populationsmittelwerte nicht "
+"signifikant verschieden. Die Nullhypothese wird beibehalten."
 
 #: src/backend/statistics/HypothesisTest.cpp:1078
 #: src/backend/statistics/HypothesisTest.cpp:1141
@@ -7989,6 +7997,8 @@ msgid ""
 "At the significance level %1, at least one group mean is significantly "
 "different. Reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 ist mindestens ein Gruppenmittelwert "
+"signifikant verschieden. Die Nullhypothese wird verworfen."
 
 #: src/backend/statistics/HypothesisTest.cpp:1081
 #: src/backend/statistics/HypothesisTest.cpp:1144
@@ -7997,6 +8007,8 @@ msgid ""
 "At the significance level %1, no significant difference between group means. "
 "Fail to reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 besteht kein signifikanter Unterschied zwischen "
+"den Gruppenmittelwerten. Die Nullhypothese wird beibehalten."
 
 #: src/backend/statistics/HypothesisTest.cpp:1201
 #: src/backend/statistics/HypothesisTest.cpp:1259
@@ -8006,6 +8018,8 @@ msgid ""
 "At the significance level %1, at least one group distribution is "
 "significantly different. Reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 ist mindestens eine Gruppenverteilung "
+"signifikant unterschiedlich. Die Nullhypothese wird verworfen."
 
 #: src/backend/statistics/HypothesisTest.cpp:1203
 #: src/backend/statistics/HypothesisTest.cpp:1261
@@ -8015,6 +8029,8 @@ msgid ""
 "At the significance level %1, no significant difference between group "
 "distributions. Fail to reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 besteht kein signifikanter Unterschied zwischen "
+"den Gruppenverteilungen. Die Nullhypothese wird beibehalten."
 
 #: src/backend/statistics/HypothesisTest.cpp:1381
 #, kde-format
@@ -8022,6 +8038,8 @@ msgid ""
 "At the significance level %1, at least one group is significantly different. "
 "Reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 ist mindestens eine Gruppe signifikant "
+"unterschiedlich. Die Nullhypothese wird verworfen."
 
 #: src/backend/statistics/HypothesisTest.cpp:1383
 #, kde-format
@@ -8029,12 +8047,14 @@ msgid ""
 "At the significance level %1, no significant difference between groups. Fail "
 "to reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 besteht kein signifikanter Unterschied zwischen "
+"den Gruppen. Die Nullhypothese wird beibehalten."
 
 #: src/backend/statistics/HypothesisTest.cpp:1409
 #: src/backend/statistics/HypothesisTest.cpp:1476
 #, kde-format
 msgid "Column '%1' must be of integer type."
-msgstr ""
+msgstr "Spalte „%1“ muss vom Ganzzahltyp sein."
 
 #: src/backend/statistics/HypothesisTest.cpp:1448
 #, kde-format
@@ -8042,6 +8062,8 @@ msgid ""
 "At the significance level %1, the observed frequencies do not follow the "
 "expected frequency distribution. Reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 folgen die beobachteten Häufigkeiten nicht der "
+"erwarteten Häufigkeitsverteilung. Die Nullhypothese wird verworfen."
 
 #: src/backend/statistics/HypothesisTest.cpp:1452
 #, kde-format
@@ -8049,11 +8071,13 @@ msgid ""
 "At the significance level %1, the observed frequencies follow the expected "
 "frequency distribution. Fail to reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 folgen die beobachteten Häufigkeiten der "
+"erwarteten Häufigkeitsverteilung. Die Nullhypothese wird beibehalten."
 
 #: src/backend/statistics/HypothesisTest.cpp:1496
 #, kde-format
 msgid "The size of each column in the contingency table must be equal."
-msgstr ""
+msgstr "Die Größe jeder Spalte in der Kontingenztabelle muss gleich sein."
 
 #: src/backend/statistics/HypothesisTest.cpp:1512
 #, kde-format
@@ -8061,6 +8085,8 @@ msgid ""
 "At the significance level %1, both categorical variables are dependent. "
 "Reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 sind beide kategorialen Variablen abhängig. Die "
+"Nullhypothese wird verworfen."
 
 #: src/backend/statistics/HypothesisTest.cpp:1515
 #, kde-format
@@ -8068,6 +8094,8 @@ msgid ""
 "At the significance level %1, both categorical variables are independent. "
 "Fail to reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 sind beide kategorialen Variablen unabhängig. "
+"Die Nullhypothese wird beibehalten."
 
 #: src/backend/statistics/HypothesisTest.cpp:1533
 #, kde-format
@@ -8088,6 +8116,7 @@ msgstr "Die Gruppenspalte sollte vom Typ ganzzahlig sein."
 #, kde-format
 msgid "Time, Status and Group columns should have equal size."
 msgstr ""
+"Die Spalten „Time“, „Status“ und „Group“ müssen die gleiche Größe haben."
 
 #: src/backend/statistics/HypothesisTest.cpp:1571
 #, kde-format
@@ -8103,6 +8132,8 @@ msgstr "Werte der Gruppenspalte müssen 0 oder 1 sein."
 #, kde-format
 msgid "Time, Status and Group columns should have equal number of values."
 msgstr ""
+"Die Spalten „Time“, „Status“ und „Group“ müssen die gleiche Anzahl an Werten "
+"enthalten."
 
 #: src/backend/statistics/HypothesisTest.cpp:1600
 #, kde-format
@@ -8120,6 +8151,8 @@ msgid ""
 "At the significance level %1, the survival curves are significantly "
 "different. Reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 unterscheiden sich die Überlebenskurven "
+"signifikant. Die Nullhypothese wird verworfen."
 
 #: src/backend/statistics/HypothesisTest.cpp:1620
 #, kde-format
@@ -8127,6 +8160,8 @@ msgid ""
 "At the significance level %1, no significant difference between survival "
 "curves. Fail to reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 besteht kein signifikanter Unterschied zwischen "
+"den Überlebenskurven. Die Nullhypothese wird beibehalten."
 
 #: src/backend/worksheet/Background.cpp:202
 #, kde-format
@@ -14492,6 +14527,15 @@ msgid ""
 "if three or more independent samples have the same mean</li><li><b>%6</b> - "
 "tests if three or more related/repeated measurements have the same mean</li>"
 msgstr ""
+"<ul><li><b>%1</b> – prüft, ob sich der Mittelwert einer Stichprobe "
+"signifikant von einem bekannten Populationsmittelwert unterscheidet</li> "
+"<li><b>%2</b> – prüft, ob zwei unabhängige Stichproben denselben Mittelwert "
+"haben</li><li><b>%3</b> – prüft, ob die mittlere Differenz zwischen zwei "
+"abhängigen Stichproben null ist</li><li><b>%4</b> – prüft, ob zwei "
+"unabhängige Stichproben mit ungleichen Varianzen denselben Mittelwert haben</"
+"li><li><b>%5</b> – prüft, ob drei oder mehr unabhängige Stichproben "
+"denselben Mittelwert haben</li><li><b>%6</b> – prüft, ob drei oder mehr "
+"abhängige/ wiederholte Messungen denselben Mittelwert haben</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:131
 #, kde-format
@@ -14506,11 +14550,23 @@ msgid ""
 "li><li><b>%7</b> - tests if observed data follows a specified theoretical "
 "distribution</li></ul>"
 msgstr ""
+"<li><b>%1</b> – prüft Unterschiede der Mediane zwischen zwei unabhängigen "
+"Gruppen</li><li><b>%2</b> – prüft, ob die Median-Differenz zwischen zwei "
+"abhängigen Stichproben null ist</li><li><b>%3</b> – prüft Unterschiede der "
+"Mediane zwischen drei oder mehr unabhängigen Gruppen</li> <li><b>%4</b> – "
+"prüft Unterschiede der Mediane zwischen drei oder mehr abhängigen/"
+"wiederholten Messungen</li><li><b>%5</b> – prüft Unterschiede der "
+"Überlebensverteilungen zwischen zwei oder mehr Gruppen</li> <li><b>%6</b> – "
+"prüft, ob zwei kategoriale Variablen voneinander unabhängig sind</li><li><b>"
+"%7</b> – prüft, ob die beobachteten Daten einer bestimmten theoretischen "
+"Verteilung folgen</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:312
 #, kde-format
 msgid "Selected test requires at least %1 and at most %2 non-empty variables."
 msgstr ""
+"Der ausgewählte Test erfordert mindestens %1 und höchstens %2 nicht-leere "
+"Variablen."
 
 #: src/frontend/dockwidgets/InfoElementDock.cpp:227
 #, kde-format
@@ -14760,6 +14816,10 @@ msgid ""
 "properties of the sample.</li><li>Specification - custom user-defined values "
 "are used.</li></ul>"
 msgstr ""
+"Bestimmen Sie, welche Werte für die Mittel- und Grenzlinien verwendet werden "
+"sollen:<ul><li>Statistisch – die Werte werden auf Grundlage der "
+"statistischen Eigenschaften der Stichprobe berechnet.</li> <li>Spezifikation "
+"– es werden benutzerdefinierte Werte verwendet.</li></ul>"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:284
 #, kde-format
@@ -14924,6 +14984,8 @@ msgstr "Berechnungszeit: %1 ms"
 #, kde-format
 msgid "Click this button or press Shift+Enter to recalculate the result."
 msgstr ""
+"Klicken Sie auf diese Schaltfläche oder drücken Sie Shift+Enter, um das "
+"Ergebnis neu zu berechnen."
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:75
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:408
@@ -17368,6 +17430,8 @@ msgstr ""
 #, kde-format
 msgid "If enabled spreadsheet and matrix data is saved in the project file"
 msgstr ""
+"Wenn aktiviert, werden Tabellen- und Matrixdaten in der Projektdatei "
+"gespeichert."
 
 #: src/frontend/SettingsNotebookPage.cpp:30
 #, kde-format
@@ -17769,7 +17833,7 @@ msgstr "Werte überspringen"
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:80
 #, kde-format
 msgid "Delete entire rows in the spreadsheet if the condition is met."
-msgstr ""
+msgstr "Gesamte Zeilen in der Tabelle löschen, wenn die Bedingung erfüllt ist."
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:1031
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:1038
@@ -18888,7 +18952,7 @@ msgstr "Leiter von Potenzen"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:951
 #, kde-format
 msgid "Hypothesis Test for %1"
-msgstr ""
+msgstr "Hypothesentest für %1"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1178
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1564
@@ -22338,13 +22402,13 @@ msgstr "Form"
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:20
 #, kde-format
 msgid "Test Mean μ₀: "
-msgstr ""
+msgstr "Zu prüfender Mittelwert μ₀:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSignificanceLevel)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:50
 #, kde-format
 msgid "Significance Level α:"
-msgstr ""
+msgstr "Signifikanzniveau α:"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:95
