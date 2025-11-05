@@ -1,6 +1,7 @@
 #include "PythonScriptRuntime.h"
 #include "PythonLogger.h"
 
+#include <funcobject.h>
 #include <sbkconverter.h>
 #include <sbkmodule.h>
 
