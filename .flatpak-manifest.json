@@ -115,8 +115,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.08.2/src/analitza-25.08.2.tar.xz",
-			    "sha256": "d76e0ca2193c9903f2054612b4ccf6b4f3d4e15c5e577eff33ef5457f6ab7069"
+			    "url": "https://download.kde.org/stable/release-service/25.08.3/src/analitza-25.08.3.tar.xz",
+			    "sha256": "1abe741c3f189b3d8cb8cf34b516890fd64cf21ba75d0f558b3711956b83e4d1"
 		    }
 	    ]
         },
