@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-02 00:38+0000\n"
+"POT-Creation-Date: 2025-11-08 00:38+0000\n"
 "PO-Revision-Date: 2025-09-29 06:14-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -22443,8 +22443,9 @@ msgstr "Forma"
 
 #. i18n: ectx: property (text), widget (QLabel, lTestMean)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:20
-#, kde-format
-msgid "Test Mean μ₀: "
+#, fuzzy, kde-format
+#| msgid "Test Mean μ₀: "
+msgid "Test Mean μ₀:"
 msgstr "Média do teste μ₀: "
 
 #. i18n: ectx: property (text), widget (QLabel, lSignificanceLevel)
