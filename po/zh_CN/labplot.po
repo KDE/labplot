@@ -1084,7 +1084,7 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:209
 #, kde-format
 msgid "No new line detected"
-msgstr ""
+msgstr "没有检测到新行"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:211
 #, kde-format
@@ -1104,7 +1104,7 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:217
 #, kde-format
 msgid "Matrix: Unsupported column mode"
-msgstr ""
+msgstr "矩阵：不支持的列模式"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:219
 #, kde-format
@@ -1119,7 +1119,7 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:223
 #, kde-format
 msgid "Unsupported data source"
-msgstr ""
+msgstr "不支持的数据源"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:227
 #, kde-format
@@ -1154,7 +1154,7 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:239
 #, kde-format
 msgid "Serial device must be initialized before reading data from it"
-msgstr ""
+msgstr "读取数据前必须初始化串行设备"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:241
 #, kde-format
@@ -1184,7 +1184,7 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:251
 #, kde-format
 msgid "UTF16 encoding is not supported"
-msgstr ""
+msgstr "UTF16 编码不受支持"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:253
 #, kde-format
