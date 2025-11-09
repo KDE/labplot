@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-08 00:38+0000\n"
-"PO-Revision-Date: 2025-09-29 15:51+0300\n"
+"PO-Revision-Date: 2025-11-08 17:54+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -22522,10 +22522,9 @@ msgstr "Форма"
 
 #. i18n: ectx: property (text), widget (QLabel, lTestMean)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:20
-#, fuzzy, kde-format
-#| msgid "Test Mean μ₀: "
+#, kde-format
 msgid "Test Mean μ₀:"
-msgstr "Середнє μ₀: "
+msgstr "Середнє μ₀:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSignificanceLevel)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:50
