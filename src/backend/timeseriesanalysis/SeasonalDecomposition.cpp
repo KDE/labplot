@@ -161,6 +161,11 @@ QWidget* SeasonalDecomposition::view() const {
 	return d->worksheet->view();
 }
 
+ContentDockWidget* SeasonalDecomposition::dockWidget() const {
+	Q_D(const SeasonalDecomposition);
+	return d->worksheet->dockWidget();
+}
+
 bool SeasonalDecomposition::exportView() const {
 	Q_D(const SeasonalDecomposition);
 	return d->worksheet->exportView();

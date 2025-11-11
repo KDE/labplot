@@ -63,6 +63,10 @@ public:
 	QIcon icon() const override;
 	QWidget* view() const override;
 
+#ifndef SDK
+	ContentDockWidget* dockWidget() const override;
+#endif
+
 	bool exportView() const override;
 	bool printView() override;
 	bool printPreview() const override;
