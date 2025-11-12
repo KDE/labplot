@@ -109,7 +109,7 @@ private Q_SLOTS:
 	void decompositionMSTLLambdaChanged(double);
 	void decompositionMSTLIterationsChanged(int);
 
-	void showStatusInfo(const QString&);
+	void showStatusError(const QString&);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);

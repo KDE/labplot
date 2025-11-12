@@ -458,7 +458,7 @@ void SeasonalDecompositionPrivate::recalc() {
 	if (yDataVector.size() == 0) {
 		// no input data and no result available, clear the previous data shown in the result spreadsheet
 		resultSpreadsheet->setRowCount(0);
-		Q_EMIT q->statusInfo(i18n("No valid data provided."));
+		Q_EMIT q->statusError(i18n("No valid data provided."));
 		return;
 	}
 
@@ -470,7 +470,7 @@ void SeasonalDecompositionPrivate::recalc() {
  * was changed, recalculates the decomposition with the new set of parameters.
  */
 void SeasonalDecompositionPrivate::recalcDecomposition() {
-	Q_EMIT q->statusInfo(QString());
+	Q_EMIT q->statusError(QString());
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	QVector<double> trendData;
@@ -668,7 +668,7 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 }
 
 void SeasonalDecompositionPrivate::reset(const QString& info) const {
-	Q_EMIT q->statusInfo(info);
+	Q_EMIT q->statusError(info);
 	columnTrend->clear();
 	columnSeasonal->clear();
 	columnResidual->clear();

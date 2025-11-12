@@ -120,10 +120,11 @@ void SeasonalDecompositionDock::setDecompositions(QList<SeasonalDecomposition*> 
 	}
 
 	load(); // load the remaining properties
+	showStatusError(QString()); // remove the message from the previous decomposition, if available
 
 	// Slots
 	// General-tab
-	connect(m_decomposition, &SeasonalDecomposition::statusInfo, this, &SeasonalDecompositionDock::showStatusInfo);
+	connect(m_decomposition, &SeasonalDecomposition::statusError, this, &SeasonalDecompositionDock::showStatusError);
 	connect(m_decomposition, &SeasonalDecomposition::xColumnChanged, this, &SeasonalDecompositionDock::decompositionXColumnChanged);
 	connect(m_decomposition, &SeasonalDecomposition::yColumnChanged, this, &SeasonalDecompositionDock::decompositionYColumnChanged);
 	connect(m_decomposition, &SeasonalDecomposition::methodChanged, this, &SeasonalDecompositionDock::decompositionMethodChanged);
@@ -548,19 +549,19 @@ void SeasonalDecompositionDock::decompositionMSTLIterationsChanged(int value) {
 	ui.sbMSTLIterations->setValue(value);
 }
 
-void SeasonalDecompositionDock::showStatusInfo(const QString& info) {
-	if (info.isEmpty()) {
+void SeasonalDecompositionDock::showStatusError(const QString& error) {
+	if (error.isEmpty()) {
 		if (m_messageWidget && m_messageWidget->isVisible())
 			m_messageWidget->close();
 	} else {
 		if (!m_messageWidget) {
 			m_messageWidget = new KMessageWidget(this);
-			m_messageWidget->setMessageType(KMessageWidget::Warning);
+			m_messageWidget->setMessageType(KMessageWidget::Error);
 			ui.gridLayout->addWidget(m_messageWidget, 27, 0, 1, 3);
 		}
-		m_messageWidget->setText(info);
+		m_messageWidget->setText(error);
 		m_messageWidget->animatedShow();
-		QDEBUG(info);
+		QDEBUG(error);
 	}
 }
 
