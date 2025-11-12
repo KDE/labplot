@@ -180,7 +180,14 @@ void SeasonalDecompositionDock::retranslateUi() {
 	ui.chbSTLRobust->setToolTip(info);
 
 	// period
-	info = i18n("Period of the seasonal component.");
+	info = i18n("Period of the seasonal component. Examples:"
+		"<ul>"
+		"<li>24 - for hourly data with daily seasonality (24h)</li>"
+		"<li>168 - for hourly data with weekly seasonality (7 * 24h = 168h)</li>"
+		"<li>7 - for daily data with weekly seasonality (7 days)</li>"
+		"<li>365 - for daily data yearly (365 days) seasonality</li>"
+		"<li>12 - for monthly data with yearly seasonality (12 months)</li>"
+		"</ul>");
 	ui.lSTLPeriod->setToolTip(info);
 	ui.sbSTLPeriod->setToolTip(info);
 
@@ -192,12 +199,12 @@ void SeasonalDecompositionDock::retranslateUi() {
 	info = i18n("Length of the trend smoother, must be odd and at least 3.");
 	ui.lSTLTrendLength->setToolTip(info);
 	ui.sbSTLTrendLength->setToolTip(info);
-	ui.chbSTLTrendLengthAuto->setToolTip(i18n("If enabled, uses the smallest odd integer greater than 1.5 * \"Period\" / (1 - 1.5 / \"Seasonal Length\")"));
+	ui.chbSTLTrendLengthAuto->setToolTip(i18n("If enabled, uses the smallest odd integer greater than 1.5 * \"Period\" / (1 - 1.5 / \"Seasonal Length\")."));
 
 	info = i18n("Length of the low-pass filter, must be odd and at least 3.");
 	ui.lSTLLowPassLength->setToolTip(info);
 	ui.sbSTLLowPassLength->setToolTip(info);
-	ui.chbSTLLowPassLengthAuto->setToolTip(i18n("If enabled, uses the smallest odd integer greater than \"Period\""));
+	ui.chbSTLLowPassLengthAuto->setToolTip(i18n("If enabled, uses the smallest odd integer greater than \"Period\"."));
 
 	// degrees
 	QString degree0 = i18n("0 - Constant");
@@ -230,23 +237,23 @@ void SeasonalDecompositionDock::retranslateUi() {
 	info = i18n("The number of jumps to include in the seasonal component.");
 	ui.lSTLSeasonalJump->setToolTip(info);
 	ui.sbSTLSeasonalJump->setToolTip(info);
-	ui.chbSTLSeasonalJumpAuto->setToolTip(i18n("If enabled, uses \"Seasonal Length\" / 10"));
+	ui.chbSTLSeasonalJumpAuto->setToolTip(i18n("If enabled, uses \"Seasonal Length\" / 10."));
 
 	info = i18n("The number of jumps to include in the trend component.");
 	ui.lSTLTrendJump->setToolTip(info);
 	ui.sbSTLTrendJump->setToolTip(info);
-	ui.chbSTLTrendJumpAuto->setToolTip(i18n("If enabled, uses \"Trend Length\" / 10"));
+	ui.chbSTLTrendJumpAuto->setToolTip(i18n("If enabled, uses \"Trend Length\" / 10."));
 
 	info = i18n("The number of jumps to include in the low-pass component.");
 	ui.lSTLLowPassJump->setToolTip(info);
 	ui.sbSTLLowPassJump->setToolTip(info);
-	ui.chbSTLLowPassJumpAuto->setToolTip(i18n("If enabled, uses \"Low-Pass Length\" / 10"));
+	ui.chbSTLLowPassJumpAuto->setToolTip(i18n("If enabled, uses \"Low-Pass Length\" / 10."));
 
 	// MSTL parameters
 	info = i18n("Periods of the seasonal components, coma-separated values. Examples:"
 		"<ul>"
-		"<li>24, 168  - for hourly data with daily (24h) and weekly (7 * 24h = 168h) seasonality</li>"
-		"<li>7, 365  - for daily data with weekly (7 days) and yearly (365 days) seasonality</li>"
+		"<li>24, 168 - for hourly data with daily (24h) and weekly (7 * 24h = 168h) seasonality</li>"
+		"<li>7, 365 - for daily data with weekly (7 days) and yearly (365 days) seasonality</li>"
 		"</ul>");
 	ui.lMSTLPeriods->setToolTip(info);
 	ui.leMSTLPeriods->setToolTip(info);

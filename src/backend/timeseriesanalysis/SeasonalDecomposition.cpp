@@ -471,7 +471,6 @@ void SeasonalDecompositionPrivate::recalc() {
  */
 void SeasonalDecompositionPrivate::recalcDecomposition() {
 	Q_EMIT q->statusInfo(QString());
-	WAIT_CURSOR;
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	QVector<double> trendData;
@@ -519,6 +518,7 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 			stlParameters = stlParameters.low_pass_jump(stlLowPassJump);
 
 		if (method == SeasonalDecomposition::Method::STL) {
+			WAIT_CURSOR;
 			adjustSeasonalComponents({static_cast<size_t>(stlPeriod)});
 
 			// perform the decomposition
@@ -537,6 +537,7 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 			}
 
 			seasonalData << seasonalDataSingle;
+			RESET_CURSOR;
 		} else {
 			// check if we have valid MSTL parameters
 			for (size_t i = 0; i < mstlPeriods.size(); i++) {
@@ -551,6 +552,7 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 				return;
 			}
 
+			WAIT_CURSOR;
 			adjustSeasonalComponents(mstlPeriods);
 
 			// perform the decomposition
@@ -571,6 +573,8 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 				for (int j = 0; j < (int)columnsSeasonal.size(); ++j)
 					seasonalData[j][i] = result.seasonal.at(j)[i];
 			}
+
+			RESET_CURSOR;
 		}
 
 		break;
@@ -581,8 +585,6 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 	columnResidual->setValues(residualData);
 	for (int i = 0; i < (int)columnsSeasonal.size(); ++i)
 		columnsSeasonal[i]->setValues(seasonalData.at(i));
-
-	RESET_CURSOR;
 }
 
 /*!
@@ -590,7 +592,7 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
  * has to be called when the number of the seasonal components was changed.
  */
 void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<size_t>& periods) {
-	if (periods.size() == 1) {
+	if (periods.size() == 1) { // one single period, STL is being used
 		if (plotAreasSeasonal.size() > 1) {
 			// remove extra plot areas and curves
 			while (plotAreasSeasonal.size() > 1) {
@@ -607,41 +609,44 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 			resultSpreadsheet->setColumnCount(3); // 3 columns: trend, seasonal, residual
 			columnSeasonal->setName(i18n("Seasonal"));
 		}
-	} else {
+	} else { // multiple periods, MSTL is being used
 		// adjust the result spreadsheet
-		resultSpreadsheet->setColumnCount(2 + mstlPeriods.size()); // trend, seasonal components, residual
-		columnsSeasonal.clear();
-		for (int i = 1; i < resultSpreadsheet->columnCount() - 1; i++) {
-			auto* column = resultSpreadsheet->column(i);
-			column->setUndoAware(false);
-			columnsSeasonal << column;
-		}
-
-		// add plot areas and curves if needed
-		if (plotAreasSeasonal.size() < (int)mstlPeriods.size()) {
-			while (plotAreasSeasonal.size() < (int)mstlPeriods.size()) {
-				auto* plotArea = new CartesianPlot(i18n("Seasonal"));
-				plotArea->setFixed(true);
-				plotArea->setType(CartesianPlot::Type::FourAxes);
-				plotArea->horizontalAxis()->title()->setText(QString());
-				plotArea->verticalAxis()->title()->setText(yColumn->name());
-				worksheet->insertChildBeforeFast(plotArea, plotAreaResidual);
-				plotAreasSeasonal << plotArea;
-
-				auto* curveSeasonal = new XYCurve(i18n("Seasonal"));
-				curveSeasonal->setFixed(true);
-				plotArea->addChild(curveSeasonal);
-				curvesSeasonal << curveSeasonal;
+		const int columnCount = 2 + mstlPeriods.size();  // trend, residual + seasonal components
+		if (resultSpreadsheet->columnCount() != columnCount) {
+			resultSpreadsheet->setColumnCount(2 + mstlPeriods.size());
+			columnsSeasonal.clear();
+			for (int i = 1; i < resultSpreadsheet->columnCount() - 1; i++) {
+				auto* column = resultSpreadsheet->column(i);
+				column->setUndoAware(false);
+				columnsSeasonal << column;
 			}
-		} else {
-			// remove extra plot areas and curves
-			while (plotAreasSeasonal.size() > (int)mstlPeriods.size()) {
-				auto* plotArea = plotAreasSeasonal.takeLast();
-				worksheet->setUndoAware(false);
-				worksheet->removeChild(plotArea);
-				worksheet->setUndoAware(true);
-				delete plotArea;
-				curvesSeasonal.takeLast();
+
+			// add plot areas and curves if needed
+			if (plotAreasSeasonal.size() < (int)mstlPeriods.size()) {
+				while (plotAreasSeasonal.size() < (int)mstlPeriods.size()) {
+					auto* plotArea = new CartesianPlot(i18n("Seasonal"));
+					plotArea->setFixed(true);
+					plotArea->setType(CartesianPlot::Type::FourAxes);
+					plotArea->horizontalAxis()->title()->setText(QString());
+					plotArea->verticalAxis()->title()->setText(yColumn->name());
+					worksheet->insertChildBeforeFast(plotArea, plotAreaResidual);
+					plotAreasSeasonal << plotArea;
+
+					auto* curveSeasonal = new XYCurve(i18n("Seasonal"));
+					curveSeasonal->setFixed(true);
+					plotArea->addChild(curveSeasonal);
+					curvesSeasonal << curveSeasonal;
+				}
+			} else {
+				// remove extra plot areas and curves
+				while (plotAreasSeasonal.size() > (int)mstlPeriods.size()) {
+					auto* plotArea = plotAreasSeasonal.takeLast();
+					worksheet->setUndoAware(false);
+					worksheet->removeChild(plotArea);
+					worksheet->setUndoAware(true);
+					delete plotArea;
+					curvesSeasonal.takeLast();
+				}
 			}
 		}
 
