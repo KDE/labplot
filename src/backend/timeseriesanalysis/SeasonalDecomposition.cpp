@@ -9,6 +9,7 @@
  */
 
 #include "SeasonalDecomposition.h"
+#include "backend/core/Project.h"
 #include "backend/core/Settings.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -623,6 +624,7 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 
 			// add plot areas and curves if needed
 			if (plotAreasSeasonal.size() < (int)mstlPeriods.size()) {
+				q->project()->setSuppressAspectAddedSignal(true); // don't change the selection in the project explore when adding new children'
 				while (plotAreasSeasonal.size() < (int)mstlPeriods.size()) {
 					auto* plotArea = new CartesianPlot(i18n("Seasonal"));
 					plotArea->setFixed(true);
@@ -648,6 +650,8 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 					curvesSeasonal.takeLast();
 				}
 			}
+
+			q->project()->setSuppressAspectAddedSignal(false);
 		}
 
 		// adjust the plot titles for seasonal components to reflect new periods
