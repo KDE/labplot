@@ -21,6 +21,9 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#ifndef SDK
+#include "src/frontend/core/ContentDockWidget.h"
+#endif
 
 CURVE_COLUMN_CONNECT(SeasonalDecomposition, X, x, recalc)
 CURVE_COLUMN_CONNECT(SeasonalDecomposition, Y, y, recalc)
@@ -161,10 +164,12 @@ QWidget* SeasonalDecomposition::view() const {
 	return d->worksheet->view();
 }
 
+#ifndef SDK
 ContentDockWidget* SeasonalDecomposition::dockWidget() const {
 	Q_D(const SeasonalDecomposition);
 	return d->worksheet->dockWidget();
 }
+#endif
 
 bool SeasonalDecomposition::exportView() const {
 	Q_D(const SeasonalDecomposition);
