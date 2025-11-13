@@ -104,19 +104,16 @@ bool AbstractPart::viewCreated() const {
  * is closed (=deleted) in MainWindow. Makes sure that the view also gets deleted.
  */
 void AbstractPart::deleteView() const {
-	// if the parent is a Workbook or Datapicker, the actual view was already deleted when QTabWidget was deleted.
-	// here just set the pointer to 0.
-	auto* parent = parentAspect();
-	auto type = parent->type();
-	if (type == AspectType::Workbook || type == AspectType::Datapicker
-		|| (parent->parentAspect() && parent->parentAspect()->type() == AspectType::Datapicker)) {
-		m_partView = nullptr;
-		return;
-	}
-
 	if (m_partView) {
-		Q_EMIT viewAboutToBeDeleted();
-		delete m_partView;
+		Q_EMIT viewAboutToBeDeleted(); // Notify all parts so they can reset their pointers
+
+		// if the parent is a Workbook or Datapicker, the actual view was already deleted when QTabWidget was deleted.
+		// here just set the pointer to 0.
+		auto* parent = parentAspect();
+		auto type = parent->type();
+		if (type != AspectType::Workbook && type != AspectType::Datapicker
+			&& !(parent->parentAspect() && parent->parentAspect()->type() == AspectType::Datapicker))
+			delete m_partView;
 		m_partView = nullptr;
 	}
 }
