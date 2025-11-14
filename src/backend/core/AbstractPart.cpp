@@ -10,6 +10,8 @@
 
 #include "backend/core/AbstractPart.h"
 #include "backend/core/Settings.h"
+#include "backend/core/Workbook.h"
+#include "backend/datapicker/Datapicker.h"
 #ifndef SDK
 #include "frontend/core/ContentDockWidget.h"
 #include <DockManager.h>
@@ -51,6 +53,17 @@ AbstractPart::~AbstractPart() {
  * after that, a pointer to the pre-existing view is returned.
  */
 ContentDockWidget* AbstractPart::dockWidget() const {
+	// for aspects being children of a Workbook, we show workbook's window, otherwise the window of the selected part
+	const auto* workbook = dynamic_cast<const Workbook*>(parentAspect());
+	auto* datapicker = dynamic_cast<const Datapicker*>(parentAspect());
+	if (!datapicker)
+		datapicker = dynamic_cast<const Datapicker*>(parentAspect()->parentAspect());
+
+	if (workbook)
+		return workbook->dockWidget();
+	else if (datapicker)
+		return datapicker->dockWidget();
+
 	if (!m_dockWidget) {
 		m_dockWidget = new ContentDockWidget(const_cast<AbstractPart*>(this));
 		connect(m_dockWidget, &ads::CDockWidget::closed, [this] {

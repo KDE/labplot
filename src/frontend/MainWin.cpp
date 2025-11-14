@@ -1382,20 +1382,7 @@ void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) {
 	Q_ASSERT(m_dockManagerContent);
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
-		ContentDockWidget* win{nullptr};
-
-		// for aspects being children of a Workbook, we show workbook's window, otherwise the window of the selected part
-		const auto* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
-		auto* datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect());
-		if (!datapicker)
-			datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect()->parentAspect());
-
-		if (workbook)
-			win = workbook->dockWidget();
-		else if (datapicker)
-			win = datapicker->dockWidget();
-		else
-			win = part->dockWidget();
+		ContentDockWidget* win = part->dockWidget();
 
 		auto* dock = m_dockManagerContent->findDockWidget(win->objectName());
 		if (dock == nullptr) {
