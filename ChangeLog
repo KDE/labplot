@@ -25,6 +25,7 @@ Performance improvements:
 Bug fixes:
 	* Fix displayed locale of constants
 	* Rename of psi constant to psqi to avoid clash with psi function
+	* Fix crash when loading a project with a workbook as first child (!787)
 
 -----2.12.1 (2025-08-15) -----
 Bug fixes:
