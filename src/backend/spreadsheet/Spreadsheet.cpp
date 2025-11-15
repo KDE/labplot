@@ -1734,8 +1734,9 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 #endif
 
 	// row count most probably changed after the import, notify the dock widget.
-	// no need to notify about the column count change, this is already done by add/removeChild signals
 	Q_EMIT rowCountChanged(rowCount());
+	// need to notify about the column count change although this should already done by add/removeChild signals
+	Q_EMIT columnCountChanged(columnCount());
 
 	// DEBUG(Q_FUNC_INFO << " DONE");
 }
