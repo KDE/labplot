@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-08 00:38+0000\n"
+"POT-Creation-Date: 2025-11-15 00:38+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -389,25 +389,25 @@ msgctxt "default labels of filter input ports"
 msgid "In%1"
 msgstr "U %1"
 
-#: src/backend/core/AbstractPart.cpp:125
+#: src/backend/core/AbstractPart.cpp:135
 #, fuzzy, kde-format
 #| msgid "Import To"
 msgid "Import Data"
 msgstr "Uvezi u"
 
-#: src/backend/core/AbstractPart.cpp:126 src/frontend/ActionsManager.cpp:261
+#: src/backend/core/AbstractPart.cpp:136 src/frontend/ActionsManager.cpp:261
 #, fuzzy, kde-format
 #| msgid "image"
 msgid "From File..."
 msgstr "slika"
 
-#: src/backend/core/AbstractPart.cpp:128 src/frontend/ActionsManager.cpp:281
+#: src/backend/core/AbstractPart.cpp:138 src/frontend/ActionsManager.cpp:281
 #, kde-format
 msgid "From SQL Database..."
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:137
+#: src/backend/core/AbstractPart.cpp:147
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:328
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
@@ -416,23 +416,23 @@ msgstr ""
 msgid "Export"
 msgstr "Izvoz"
 
-#: src/backend/core/AbstractPart.cpp:138
+#: src/backend/core/AbstractPart.cpp:148
 #, kde-format
 msgid "Print"
 msgstr "Štampaj"
 
-#: src/backend/core/AbstractPart.cpp:139
+#: src/backend/core/AbstractPart.cpp:149
 #, kde-format
 msgid "Print Preview"
 msgstr "Pregled pred štampanje"
 
-#: src/backend/core/AbstractPart.cpp:147 src/frontend/ActionsManager.cpp:381
+#: src/backend/core/AbstractPart.cpp:157 src/frontend/ActionsManager.cpp:381
 #, fuzzy, kde-format
 #| msgid "Close &All"
 msgid "&Close"
 msgstr "Zatvori &sve"
 
-#: src/backend/core/AbstractPart.cpp:152 src/backend/core/AbstractPart.cpp:165
+#: src/backend/core/AbstractPart.cpp:162 src/backend/core/AbstractPart.cpp:175
 #, kde-format
 msgid "Show"
 msgstr "Prikaži"
@@ -12343,7 +12343,7 @@ msgid "Select Y-Region and Zoom In"
 msgstr "Označi x-područje i uvećaj"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1592
+#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1579
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1429
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
@@ -14425,7 +14425,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
-#: src/frontend/MainWin.cpp:2019
+#: src/frontend/MainWin.cpp:2006
 #, kde-format
 msgid "Warning"
 msgstr ""
@@ -17617,40 +17617,40 @@ msgstr ""
 msgid "%1"
 msgstr "1"
 
-#: src/frontend/MainWin.cpp:1915
+#: src/frontend/MainWin.cpp:1902
 #, fuzzy, kde-format
 #| msgid "File info"
 msgid "Kaggle CLI tool not found"
 msgstr "Info podatka"
 
-#: src/frontend/MainWin.cpp:1916
+#: src/frontend/MainWin.cpp:1903
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
 "again."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1982
+#: src/frontend/MainWin.cpp:1969
 #, kde-format
 msgid "%1 exported"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1989
+#: src/frontend/MainWin.cpp:1976
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2001
+#: src/frontend/MainWin.cpp:1988
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2019
+#: src/frontend/MainWin.cpp:2006
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2023
+#: src/frontend/MainWin.cpp:2010
 #, fuzzy, kde-format
 #| msgid "File data source"
 msgid "Live data source%1"

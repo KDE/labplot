@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-08 00:38+0000\n"
+"POT-Creation-Date: 2025-11-15 00:38+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -375,25 +375,25 @@ msgctxt "default labels of filter input ports"
 msgid "In%1"
 msgstr "In%1"
 
-#: src/backend/core/AbstractPart.cpp:125
+#: src/backend/core/AbstractPart.cpp:135
 #, fuzzy, kde-format
 #| msgid "Import"
 msgid "Import Data"
 msgstr "Εισαγωγή"
 
-#: src/backend/core/AbstractPart.cpp:126 src/frontend/ActionsManager.cpp:261
+#: src/backend/core/AbstractPart.cpp:136 src/frontend/ActionsManager.cpp:261
 #, fuzzy, kde-format
 #| msgid "Close File"
 msgid "From File..."
 msgstr "Κλείσιμο αρχείου"
 
-#: src/backend/core/AbstractPart.cpp:128 src/frontend/ActionsManager.cpp:281
+#: src/backend/core/AbstractPart.cpp:138 src/frontend/ActionsManager.cpp:281
 #, kde-format
 msgid "From SQL Database..."
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:137
+#: src/backend/core/AbstractPart.cpp:147
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:328
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
@@ -402,22 +402,22 @@ msgstr ""
 msgid "Export"
 msgstr "Εξαγωγή"
 
-#: src/backend/core/AbstractPart.cpp:138
+#: src/backend/core/AbstractPart.cpp:148
 #, kde-format
 msgid "Print"
 msgstr "Εκτύπωση"
 
-#: src/backend/core/AbstractPart.cpp:139
+#: src/backend/core/AbstractPart.cpp:149
 #, kde-format
 msgid "Print Preview"
 msgstr "Προεπισκόπηση εκτύπωσης"
 
-#: src/backend/core/AbstractPart.cpp:147 src/frontend/ActionsManager.cpp:381
+#: src/backend/core/AbstractPart.cpp:157 src/frontend/ActionsManager.cpp:381
 #, kde-format
 msgid "&Close"
 msgstr "&Κλείσιμο"
 
-#: src/backend/core/AbstractPart.cpp:152 src/backend/core/AbstractPart.cpp:165
+#: src/backend/core/AbstractPart.cpp:162 src/backend/core/AbstractPart.cpp:175
 #, kde-format
 msgid "Show"
 msgstr "Εμφάνιση"
@@ -11893,7 +11893,7 @@ msgid "Select Y-Region and Zoom In"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1592
+#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1579
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1429
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
@@ -13916,7 +13916,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
-#: src/frontend/MainWin.cpp:2019
+#: src/frontend/MainWin.cpp:2006
 #, kde-format
 msgid "Warning"
 msgstr ""
@@ -16982,40 +16982,40 @@ msgstr "Το %1 εκτυπώθηκε"
 msgid "%1"
 msgstr "10"
 
-#: src/frontend/MainWin.cpp:1915
+#: src/frontend/MainWin.cpp:1902
 #, fuzzy, kde-format
 #| msgid "Format Type"
 msgid "Kaggle CLI tool not found"
 msgstr "Τύπος αποθήκευσης"
 
-#: src/frontend/MainWin.cpp:1916
+#: src/frontend/MainWin.cpp:1903
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
 "again."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1982
+#: src/frontend/MainWin.cpp:1969
 #, kde-format
 msgid "%1 exported"
 msgstr "Το %1 εξήχθη"
 
-#: src/frontend/MainWin.cpp:1989
+#: src/frontend/MainWin.cpp:1976
 #, kde-format
 msgid "FITS files saved"
 msgstr "Τα αρχεία FITS αποθηκεύτηκαν"
 
-#: src/frontend/MainWin.cpp:2001
+#: src/frontend/MainWin.cpp:1988
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2019
+#: src/frontend/MainWin.cpp:2006
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2023
+#: src/frontend/MainWin.cpp:2010
 #, fuzzy, kde-format
 #| msgid "x-Range"
 msgid "Live data source%1"

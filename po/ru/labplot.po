@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-08 00:38+0000\n"
+"POT-Creation-Date: 2025-11-15 00:38+0000\n"
 "PO-Revision-Date: 2023-11-13 14:41+0300\n"
 "Last-Translator: Sergey Kazorin <translation-team@basealt.ru>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -366,24 +366,24 @@ msgid "In%1"
 msgstr "In%1"
 
 # BUGME: please add semantic ctxt --aspotashev
-#: src/backend/core/AbstractPart.cpp:125
+#: src/backend/core/AbstractPart.cpp:135
 #, kde-format
 msgid "Import Data"
 msgstr "Импорт данных"
 
-#: src/backend/core/AbstractPart.cpp:126 src/frontend/ActionsManager.cpp:261
+#: src/backend/core/AbstractPart.cpp:136 src/frontend/ActionsManager.cpp:261
 #, kde-format
 msgid "From File..."
 msgstr "Из файла…"
 
-#: src/backend/core/AbstractPart.cpp:128 src/frontend/ActionsManager.cpp:281
+#: src/backend/core/AbstractPart.cpp:138 src/frontend/ActionsManager.cpp:281
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Из базы данных SQL…"
 
 # BUGME: please split strings --aspotashev
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:137
+#: src/backend/core/AbstractPart.cpp:147
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:328
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
@@ -392,22 +392,22 @@ msgstr "Из базы данных SQL…"
 msgid "Export"
 msgstr "Экспорт"
 
-#: src/backend/core/AbstractPart.cpp:138
+#: src/backend/core/AbstractPart.cpp:148
 #, kde-format
 msgid "Print"
 msgstr "Печать"
 
-#: src/backend/core/AbstractPart.cpp:139
+#: src/backend/core/AbstractPart.cpp:149
 #, kde-format
 msgid "Print Preview"
 msgstr "Предварительный просмотр"
 
-#: src/backend/core/AbstractPart.cpp:147 src/frontend/ActionsManager.cpp:381
+#: src/backend/core/AbstractPart.cpp:157 src/frontend/ActionsManager.cpp:381
 #, kde-format
 msgid "&Close"
 msgstr "&Закрыть"
 
-#: src/backend/core/AbstractPart.cpp:152 src/backend/core/AbstractPart.cpp:165
+#: src/backend/core/AbstractPart.cpp:162 src/backend/core/AbstractPart.cpp:175
 #, kde-format
 msgid "Show"
 msgstr "Показать"
@@ -11958,7 +11958,7 @@ msgid "Select Y-Region and Zoom In"
 msgstr "Выделение и увеличение по Y"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1592
+#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1579
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1429
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
@@ -14021,7 +14021,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
-#: src/frontend/MainWin.cpp:2019
+#: src/frontend/MainWin.cpp:2006
 #, kde-format
 msgid "Warning"
 msgstr "Предупреждение"
@@ -17041,40 +17041,40 @@ msgstr "%1 напечатан"
 msgid "%1"
 msgstr "1"
 
-#: src/frontend/MainWin.cpp:1915
+#: src/frontend/MainWin.cpp:1902
 #, fuzzy, kde-format
 #| msgid "File not found"
 msgid "Kaggle CLI tool not found"
 msgstr "Файл не найден"
 
-#: src/frontend/MainWin.cpp:1916
+#: src/frontend/MainWin.cpp:1903
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
 "again."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1982
+#: src/frontend/MainWin.cpp:1969
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 экспортирован"
 
-#: src/frontend/MainWin.cpp:1989
+#: src/frontend/MainWin.cpp:1976
 #, kde-format
 msgid "FITS files saved"
 msgstr "Сохранены файлы FITS"
 
-#: src/frontend/MainWin.cpp:2001
+#: src/frontend/MainWin.cpp:1988
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Клиент MQTT %1"
 
-#: src/frontend/MainWin.cpp:2019
+#: src/frontend/MainWin.cpp:2006
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Клиент MQTT на этом хосте уже существует!"
 
-#: src/frontend/MainWin.cpp:2023
+#: src/frontend/MainWin.cpp:2010
 #, kde-format
 msgid "Live data source%1"
 msgstr "Источник передачи данных %1"

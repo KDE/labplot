@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-08 00:38+0000\n"
+"POT-Creation-Date: 2025-11-15 00:38+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -363,23 +363,23 @@ msgctxt "default labels of filter input ports"
 msgid "In%1"
 msgstr "於："
 
-#: src/backend/core/AbstractPart.cpp:125
+#: src/backend/core/AbstractPart.cpp:135
 #, fuzzy, kde-format
 msgid "Import Data"
 msgstr "匯入"
 
-#: src/backend/core/AbstractPart.cpp:126 src/frontend/ActionsManager.cpp:261
+#: src/backend/core/AbstractPart.cpp:136 src/frontend/ActionsManager.cpp:261
 #, fuzzy, kde-format
 msgid "From File..."
 msgstr "image"
 
-#: src/backend/core/AbstractPart.cpp:128 src/frontend/ActionsManager.cpp:281
+#: src/backend/core/AbstractPart.cpp:138 src/frontend/ActionsManager.cpp:281
 #, kde-format
 msgid "From SQL Database..."
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:137
+#: src/backend/core/AbstractPart.cpp:147
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:328
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
@@ -388,22 +388,22 @@ msgstr ""
 msgid "Export"
 msgstr "匯出"
 
-#: src/backend/core/AbstractPart.cpp:138
+#: src/backend/core/AbstractPart.cpp:148
 #, fuzzy, kde-format
 msgid "Print"
 msgstr "列印"
 
-#: src/backend/core/AbstractPart.cpp:139
+#: src/backend/core/AbstractPart.cpp:149
 #, fuzzy, kde-format
 msgid "Print Preview"
 msgstr "預覽列印"
 
-#: src/backend/core/AbstractPart.cpp:147 src/frontend/ActionsManager.cpp:381
+#: src/backend/core/AbstractPart.cpp:157 src/frontend/ActionsManager.cpp:381
 #, fuzzy, kde-format
 msgid "&Close"
 msgstr "全部關閉"
 
-#: src/backend/core/AbstractPart.cpp:152 src/backend/core/AbstractPart.cpp:165
+#: src/backend/core/AbstractPart.cpp:162 src/backend/core/AbstractPart.cpp:175
 #, kde-format
 msgid "Show"
 msgstr "顯示"
@@ -11764,7 +11764,7 @@ msgid "Select Y-Region and Zoom In"
 msgstr "全部選取"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1592
+#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1579
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1429
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
@@ -13729,7 +13729,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
-#: src/frontend/MainWin.cpp:2019
+#: src/frontend/MainWin.cpp:2006
 #, kde-format
 msgid "Warning"
 msgstr ""
@@ -16716,40 +16716,40 @@ msgstr ""
 msgid "%1"
 msgstr "A1"
 
-#: src/frontend/MainWin.cpp:1915
+#: src/frontend/MainWin.cpp:1902
 #, fuzzy, kde-format
 #| msgid "File not found"
 msgid "Kaggle CLI tool not found"
 msgstr "找不到檔案"
 
-#: src/frontend/MainWin.cpp:1916
+#: src/frontend/MainWin.cpp:1903
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
 "again."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1982
+#: src/frontend/MainWin.cpp:1969
 #, kde-format
 msgid "%1 exported"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1989
+#: src/frontend/MainWin.cpp:1976
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2001
+#: src/frontend/MainWin.cpp:1988
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2019
+#: src/frontend/MainWin.cpp:2006
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2023
+#: src/frontend/MainWin.cpp:2010
 #, kde-format
 msgid "Live data source%1"
 msgstr "即時資料來源%1"

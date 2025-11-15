@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-08 00:38+0000\n"
+"POT-Creation-Date: 2025-11-15 00:38+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -424,23 +424,23 @@ msgctxt "default labels of filter input ports"
 msgid "In%1"
 msgstr "Ent%1"
 
-#: src/backend/core/AbstractPart.cpp:125
+#: src/backend/core/AbstractPart.cpp:135
 #, kde-format
 msgid "Import Data"
 msgstr "Importar os Dados"
 
-#: src/backend/core/AbstractPart.cpp:126 src/frontend/ActionsManager.cpp:261
+#: src/backend/core/AbstractPart.cpp:136 src/frontend/ActionsManager.cpp:261
 #, kde-format
 msgid "From File..."
 msgstr "De Ficheiro..."
 
-#: src/backend/core/AbstractPart.cpp:128 src/frontend/ActionsManager.cpp:281
+#: src/backend/core/AbstractPart.cpp:138 src/frontend/ActionsManager.cpp:281
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Da Base de Dados SQL..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:137
+#: src/backend/core/AbstractPart.cpp:147
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:328
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
@@ -449,22 +449,22 @@ msgstr "Da Base de Dados SQL..."
 msgid "Export"
 msgstr "Exportar"
 
-#: src/backend/core/AbstractPart.cpp:138
+#: src/backend/core/AbstractPart.cpp:148
 #, kde-format
 msgid "Print"
 msgstr "Imprimir"
 
-#: src/backend/core/AbstractPart.cpp:139
+#: src/backend/core/AbstractPart.cpp:149
 #, kde-format
 msgid "Print Preview"
 msgstr "Antevisão da Impressão"
 
-#: src/backend/core/AbstractPart.cpp:147 src/frontend/ActionsManager.cpp:381
+#: src/backend/core/AbstractPart.cpp:157 src/frontend/ActionsManager.cpp:381
 #, kde-format
 msgid "&Close"
 msgstr "Fe&char"
 
-#: src/backend/core/AbstractPart.cpp:152 src/backend/core/AbstractPart.cpp:165
+#: src/backend/core/AbstractPart.cpp:162 src/backend/core/AbstractPart.cpp:175
 #, kde-format
 msgid "Show"
 msgstr "Mostrar"
@@ -11906,7 +11906,7 @@ msgid "Select Y-Region and Zoom In"
 msgstr "Seleccionar a Região em Y e Ampliar"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1592
+#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1579
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1429
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
@@ -13934,7 +13934,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
-#: src/frontend/MainWin.cpp:2019
+#: src/frontend/MainWin.cpp:2006
 #, kde-format
 msgid "Warning"
 msgstr "Aviso"
@@ -16941,40 +16941,40 @@ msgstr "%1 impresso"
 msgid "%1"
 msgstr "1"
 
-#: src/frontend/MainWin.cpp:1915
+#: src/frontend/MainWin.cpp:1902
 #, fuzzy, kde-format
 #| msgid "File not found"
 msgid "Kaggle CLI tool not found"
 msgstr "O ficheiro não foi encontrado"
 
-#: src/frontend/MainWin.cpp:1916
+#: src/frontend/MainWin.cpp:1903
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
 "again."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1982
+#: src/frontend/MainWin.cpp:1969
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exportado"
 
-#: src/frontend/MainWin.cpp:1989
+#: src/frontend/MainWin.cpp:1976
 #, kde-format
 msgid "FITS files saved"
 msgstr "Ficheiros FITS gravados"
 
-#: src/frontend/MainWin.cpp:2001
+#: src/frontend/MainWin.cpp:1988
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Cliente de MQTT%1"
 
-#: src/frontend/MainWin.cpp:2019
+#: src/frontend/MainWin.cpp:2006
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Já existe um MQTTClient para esta máquina!"
 
-#: src/frontend/MainWin.cpp:2023
+#: src/frontend/MainWin.cpp:2010
 #, kde-format
 msgid "Live data source%1"
 msgstr "Fonte de dados em directo %1"
