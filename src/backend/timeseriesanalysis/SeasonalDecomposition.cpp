@@ -80,14 +80,20 @@ void SeasonalDecomposition::init() {
 	d->columnTrend = d->resultSpreadsheet->column(0);
 	d->columnTrend->setUndoAware(false);
 	d->columnTrend->setName(i18n("Trend"));
+	d->columnTrend->setFixed(true);
+	d->columnTrend->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 
 	d->columnSeasonal = d->resultSpreadsheet->column(1);
 	d->columnSeasonal->setUndoAware(false);
 	d->columnSeasonal->setName(i18n("Seasonal"));
+	d->columnSeasonal->setFixed(true);
+	d->columnSeasonal->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 
 	d->columnResidual = d->resultSpreadsheet->column(2);
 	d->columnResidual->setUndoAware(false);
 	d->columnResidual->setName(i18n("Residual"));
+	d->columnResidual->setFixed(true);
+	d->columnResidual->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 
 	// worksheet
 	d->worksheet = new Worksheet(i18n("Worksheet"));
@@ -147,7 +153,9 @@ void SeasonalDecomposition::init() {
 	d->curveResidual->setYColumn(d->columnResidual);
 	d->plotAreaResidual->addChild(d->curveResidual);
 
-	// for seasonal we create only one plot area and curve by default, others will be created when needed
+	// for the seasonal component we create only one plot area and curve by default,
+	// for other algorithms that support multiple seasonal components like MSTL,
+	// additional plot areas, etc. will be created when needed.
 	d->plotAreasSeasonal << d->plotAreaSeasonal;
 	d->curvesSeasonal << d->curveSeasonal;
 	d->columnsSeasonal << d->columnSeasonal;
@@ -475,7 +483,7 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	QVector<double> trendData;
-	QVector<QVector<double>> seasonalData; // vector of vectors for multiple seasonal components, for STL only one is used
+	QVector<QVector<double>> seasonalData; // vector of vectors for multiple seasonal components, one element for methods supporting one single component only
 	QVector<double> residualData;
 
 	switch (method) {
@@ -585,7 +593,7 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 	columnTrend->setValues(trendData);
 	columnResidual->setValues(residualData);
 	for (int i = 0; i < (int)columnsSeasonal.size(); ++i)
-		columnsSeasonal[i]->setValues(seasonalData.at(i));
+		columnsSeasonal.at(i)->setValues(seasonalData.at(i));
 }
 
 /*!
@@ -612,19 +620,21 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 		}
 	} else { // multiple periods, MSTL is being used
 		// adjust the result spreadsheet
-		const int columnCount = 2 + mstlPeriods.size();  // trend, residual + seasonal components
+		const int columnCount = 2 + mstlPeriods.size(); // trend, residual + seasonal components
 		if (resultSpreadsheet->columnCount() != columnCount) {
 			resultSpreadsheet->setColumnCount(2 + mstlPeriods.size());
 			columnsSeasonal.clear();
 			for (int i = 1; i < resultSpreadsheet->columnCount() - 1; i++) {
 				auto* column = resultSpreadsheet->column(i);
 				column->setUndoAware(false);
+				column->setFixed(true);
+				column->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 				columnsSeasonal << column;
 			}
 
 			// add plot areas and curves if needed
 			if (plotAreasSeasonal.size() < (int)mstlPeriods.size()) {
-				q->project()->setSuppressAspectAddedSignal(true); // don't change the selection in the project explore when adding new children'
+				q->project()->setSuppressAspectAddedSignal(true); // don't change the selection in the project explorer when adding new children
 				while (plotAreasSeasonal.size() < (int)mstlPeriods.size()) {
 					auto* plotArea = new CartesianPlot(i18n("Seasonal"));
 					plotArea->setFixed(true);
