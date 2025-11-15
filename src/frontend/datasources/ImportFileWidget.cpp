@@ -389,7 +389,8 @@ void ImportFileWidget::loadSettings() {
 	fileTypeChanged(); // call it to load the filter templates for the current file type and to select the last used index in cbFilter below
 	if (automaticAllowed(currentSourceType())) {
 		ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", (int)FilterSettingsHandlingIndex::Automatic));
-	}
+	} else
+		ui.cbFilter->setCurrentIndex((int)FilterSettingsHandlingIndex::Custom);
 
 	filterChanged(ui.cbFilter->currentIndex());
 	updateTypeChanged(ui.cbUpdateType->currentIndex());
