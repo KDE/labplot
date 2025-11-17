@@ -1483,7 +1483,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, const QStringList& 
 			insertChildBefore(newColumn, firstColumn);
 		}
 	} else if (mode == AbstractFileFilter::ImportMode::Replace) {
-		// replace completely the previous content of the data source with the content to be imported.
+		// replace the previous content of the data source completely with the content to be imported
 		int columnsCount = childCount<Column>();
 
 		if (columnsCount > cols) {
@@ -1539,7 +1539,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 								 AbstractFileFilter::ImportMode columnImportMode) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	Q_D(Spreadsheet);
-	// DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn);
+	// DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn <<", row count = " << rowCount());
 
 	CleanupNoArguments cleanup([d]() {
 		d->m_usedInPlots.clear();
