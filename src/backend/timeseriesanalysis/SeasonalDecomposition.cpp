@@ -527,7 +527,7 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 			stlParameters = stlParameters.low_pass_jump(stlLowPassJump);
 
 		if (method == SeasonalDecomposition::Method::STL) {
-			WAIT_CURSOR;
+			WAIT_CURSOR_AUTO_RESET
 			adjustSeasonalComponents({static_cast<size_t>(stlPeriod)});
 
 			// perform the decomposition
@@ -546,7 +546,6 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 			}
 
 			seasonalData << seasonalDataSingle;
-			RESET_CURSOR;
 		} else {
 			// check if we have valid MSTL parameters
 			for (size_t i = 0; i < mstlPeriods.size(); i++) {
@@ -561,7 +560,7 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 				return;
 			}
 
-			WAIT_CURSOR;
+			WAIT_CURSOR_AUTO_RESET
 			adjustSeasonalComponents(mstlPeriods);
 
 			// perform the decomposition
@@ -582,8 +581,6 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 				for (int j = 0; j < (int)columnsSeasonal.size(); ++j)
 					seasonalData[j][i] = result.seasonal.at(j)[i];
 			}
-
-			RESET_CURSOR;
 		}
 
 		break;
