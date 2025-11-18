@@ -80,3 +80,5 @@ void DecompositionTest::testDecompositionMethodChange() {
 	plotAreas = w->children<CartesianPlot>();
 	QCOMPARE(plotAreas.size(), 4); // three components plus the original data
 }
+
+QTEST_MAIN(DecompositionTest)
