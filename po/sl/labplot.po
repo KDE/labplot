@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:48+0000\n"
+"POT-Creation-Date: 2025-11-18 00:40+0000\n"
 "PO-Revision-Date: 2025-11-08 07:00+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -1189,20 +1189,20 @@ msgid "Number of lines: %1"
 msgstr "Število vrstic: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:467
-#: src/backend/datasources/filters/AsciiFilter.cpp:1252
+#: src/backend/datasources/filters/AsciiFilter.cpp:1251
 #: src/backend/datasources/filters/JsonFilter.cpp:246
 #, kde-format
 msgid "Column %1"
 msgstr "Stolpec %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:541
-#: src/backend/datasources/filters/AsciiFilter.cpp:1275
+#: src/backend/datasources/filters/AsciiFilter.cpp:1274
 #, kde-format
 msgid "Timestamp"
 msgstr "Časovni žig"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:545
-#: src/backend/datasources/filters/AsciiFilter.cpp:1279
+#: src/backend/datasources/filters/AsciiFilter.cpp:1278
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1267,7 +1267,7 @@ msgstr "Odpiranje naprave ni uspelo ali je prazna."
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:334
-#: src/backend/datasources/filters/XLSXFilter.cpp:508
+#: src/backend/datasources/filters/XLSXFilter.cpp:512
 #, kde-format
 msgid "Not enough memory."
 msgstr "Ni dovolj pomnilnika."
@@ -2149,7 +2149,7 @@ msgid "Sheet count: %1"
 msgstr "Števec listov: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:225
-#: src/backend/datasources/filters/XLSXFilter.cpp:625
+#: src/backend/datasources/filters/XLSXFilter.cpp:629
 #, kde-format
 msgid "No sheet selected."
 msgstr "Ni izbrane preglednice podatkov."
@@ -2432,7 +2432,7 @@ msgstr "Čas_10µs"
 msgid "Sheets: "
 msgstr "Listi: "
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:629
+#: src/backend/datasources/filters/XLSXFilter.cpp:633
 #, kde-format
 msgid "Invalid region specified."
 msgstr "Navedena neveljavna regija."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:48+0000\n"
+"POT-Creation-Date: 2025-11-18 00:40+0000\n"
 "PO-Revision-Date: 2024-12-29 23:07+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -1181,20 +1181,20 @@ msgid "Number of lines: %1"
 msgstr "पङ्क्तयः संख्या : %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:467
-#: src/backend/datasources/filters/AsciiFilter.cpp:1252
+#: src/backend/datasources/filters/AsciiFilter.cpp:1251
 #: src/backend/datasources/filters/JsonFilter.cpp:246
 #, kde-format
 msgid "Column %1"
 msgstr "स्तम्भ %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:541
-#: src/backend/datasources/filters/AsciiFilter.cpp:1275
+#: src/backend/datasources/filters/AsciiFilter.cpp:1274
 #, kde-format
 msgid "Timestamp"
 msgstr "समयमुद्रिका"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:545
-#: src/backend/datasources/filters/AsciiFilter.cpp:1279
+#: src/backend/datasources/filters/AsciiFilter.cpp:1278
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1259,7 +1259,7 @@ msgstr "यन्त्रं/सञ्चिकां उद्घाटयि�
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:334
-#: src/backend/datasources/filters/XLSXFilter.cpp:508
+#: src/backend/datasources/filters/XLSXFilter.cpp:512
 #, kde-format
 msgid "Not enough memory."
 msgstr "न पर्याप्तं स्मृतिः।"
@@ -2136,7 +2136,7 @@ msgid "Sheet count: %1"
 msgstr "पत्रगणना: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:225
-#: src/backend/datasources/filters/XLSXFilter.cpp:625
+#: src/backend/datasources/filters/XLSXFilter.cpp:629
 #, kde-format
 msgid "No sheet selected."
 msgstr "न पत्रं चयनितम्।"
@@ -2420,7 +2420,7 @@ msgstr "काल_10μs"
 msgid "Sheets: "
 msgstr "पत्राणि : "
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:629
+#: src/backend/datasources/filters/XLSXFilter.cpp:633
 #, kde-format
 msgid "Invalid region specified."
 msgstr "अमान्यः प्रदेशः निर्दिष्टः ।"

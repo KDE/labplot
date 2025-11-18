@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:48+0000\n"
+"POT-Creation-Date: 2025-11-18 00:40+0000\n"
 "PO-Revision-Date: 2023-06-24 01:41+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -1254,20 +1254,20 @@ msgid "Number of lines: %1"
 msgstr "Número de linhas: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:467
-#: src/backend/datasources/filters/AsciiFilter.cpp:1252
+#: src/backend/datasources/filters/AsciiFilter.cpp:1251
 #: src/backend/datasources/filters/JsonFilter.cpp:246
 #, kde-format
 msgid "Column %1"
 msgstr "Coluna %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:541
-#: src/backend/datasources/filters/AsciiFilter.cpp:1275
+#: src/backend/datasources/filters/AsciiFilter.cpp:1274
 #, kde-format
 msgid "Timestamp"
 msgstr "Hora"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:545
-#: src/backend/datasources/filters/AsciiFilter.cpp:1279
+#: src/backend/datasources/filters/AsciiFilter.cpp:1278
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1336,7 +1336,7 @@ msgstr "Não foi possível aceder ao dispositivo."
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:334
-#: src/backend/datasources/filters/XLSXFilter.cpp:508
+#: src/backend/datasources/filters/XLSXFilter.cpp:512
 #, fuzzy, kde-format
 #| msgid "Number"
 msgid "Not enough memory."
@@ -2238,7 +2238,7 @@ msgid "Sheet count: %1"
 msgstr "Número de folhas: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:225
-#: src/backend/datasources/filters/XLSXFilter.cpp:625
+#: src/backend/datasources/filters/XLSXFilter.cpp:629
 #, fuzzy, kde-format
 #| msgid "No data set selected"
 msgid "No sheet selected."
@@ -2548,7 +2548,7 @@ msgstr "Tempo_10µs"
 msgid "Sheets: "
 msgstr "Folhas: "
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:629
+#: src/backend/datasources/filters/XLSXFilter.cpp:633
 #, fuzzy, kde-format
 #| msgid "Invalid tolerance specified"
 msgid "Invalid region specified."
