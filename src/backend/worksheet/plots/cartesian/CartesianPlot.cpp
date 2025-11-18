@@ -1456,7 +1456,7 @@ void CartesianPlot::setRange(const Dimension dim, const int index, const Range<d
 		return;
 	}
 
-	auto r = d->checkRange(range);
+	auto r = range.checkRange();
 	if (index >= 0 && index < rangeCount(dim) && r.finite() && r != d->rangeConst(dim, index)) {
 		exec(new CartesianPlotSetRangeIndexCmd(d, dim, r, index));
 	} else if (index < 0 || index >= rangeCount(dim))
@@ -1632,7 +1632,7 @@ void CartesianPlot::setRangeScale(const Dimension dim, const int index, const Ra
 
 	auto newRange = range(Dimension::X, index);
 	newRange.setScale(scale);
-	auto r = d->checkRange(newRange);
+	auto r = newRange.checkRange();
 	if (index >= 0 && index < rangeCount(dim) && r.finite() && r != d->rangeConst(dim, index)) {
 		if (r == newRange) {
 			exec(new CartesianPlotSetScaleIndexCmd(d, dim, scale, index));
@@ -3097,7 +3097,7 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 
 		// check ranges for nonlinear scales
 		if (range.scale() != RangeT::Scale::Linear)
-			range = d->checkRange(range);
+			range = range.checkRange();
 
 		if (range.start() < d->dataRange(dim, index).start())
 			d->dataRange(dim, index).start() = range.start();
@@ -3749,37 +3749,6 @@ bool CartesianPlotPrivate::rangeBreakingEnabled(const Dimension dim) {
 }
 
 /*!
- * helper function for checkXRange() and checkYRange()
- */
-Range<double> CartesianPlotPrivate::checkRange(const Range<double>& range) {
-	double start = range.start(), end = range.end();
-	const auto scale = range.scale();
-	if (scale == RangeT::Scale::Linear || (start > 0 && end > 0)) // nothing to do
-		return range;
-	if (start >= 0 && end >= 0 && scale == RangeT::Scale::Sqrt) // nothing to do
-		return range;
-	// TODO: check if start == end?
-
-	double min = 0.01, max = 1.;
-
-	if (scale == RangeT::Scale::Sqrt) {
-		if (start < 0)
-			start = 0.;
-	} else if (start <= 0)
-		start = min;
-	if (scale == RangeT::Scale::Sqrt) {
-		if (end < 0)
-			end = max;
-	} else if (end <= 0)
-		end = max;
-
-	auto newRange = range;
-	newRange.setStart(start);
-	newRange.setEnd(end);
-	return newRange;
-}
-
-/*!
  * check for negative values in the range when non-linear scalings are used
  */
 void CartesianPlotPrivate::checkRange(Dimension dim, int index) {
@@ -3787,7 +3756,7 @@ void CartesianPlotPrivate::checkRange(Dimension dim, int index) {
 	DEBUG(Q_FUNC_INFO << ", " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << " range " << index + 1 << " : " << range.toStdString()
 					  << ", scale = " << ENUM_TO_STRING(RangeT, Scale, range.scale()))
 
-	const auto newRange = checkRange(range);
+	const auto newRange = range.checkRange();
 
 	const double start = newRange.start(), end = newRange.end();
 	if (start != range.start()) {

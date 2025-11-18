@@ -618,6 +618,33 @@ public:
 		}
 	}
 
+	Range<T> CartesianPlotPrivate::checkRange() const {
+		double start = m_start, end = m_end;
+		if (m_scale == RangeT::Scale::Linear || (start > 0 && end > 0)) // nothing to do
+			return range;
+		if (start >= 0 && end >= 0 && m_scale == RangeT::Scale::Sqrt) // nothing to do
+			return range;
+		// TODO: check if start == end?
+
+		double min = 0.01, max = 1.;
+
+		if (m_scale == RangeT::Scale::Sqrt) {
+			if (start < 0)
+				start = 0.;
+		} else if (start <= 0)
+			start = min; // Log10, LogE, ...
+		if (m_scale == RangeT::Scale::Sqrt) {
+			if (end < 0)
+				end = max;
+		} else if (end <= 0)
+			end = max; // Log10, LogE, ...
+
+		auto newRange = *this;
+		newRange.setStart(start);
+		newRange.setEnd(end);
+		return newRange;
+	}
+
 private:
 	T m_start{0}; // start value
 	T m_end{1}; // end value
