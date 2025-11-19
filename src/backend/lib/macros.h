@@ -104,9 +104,9 @@ private:
 
 // Automatically reset cursor when going out of scope
 #define WAIT_CURSOR_AUTO_RESET                                                                                                                                 \
-	WAIT_CURSOR;                                                                                                                                               \
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));                                                                                                                                               \
 	CleanupNoArguments cleanup([]() {                                                                                                                          \
-		RESET_CURSOR;                                                                                                                                          \
+		QApplication::restoreOverrideCursor();                                                                                                                                          \
 	});
 
 #define WAIT_CURSOR QApplication::setOverrideCursor(QCursor(Qt::WaitCursor))

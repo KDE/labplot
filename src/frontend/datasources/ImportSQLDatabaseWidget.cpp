@@ -207,9 +207,8 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 		m_db.setPassword(group.readEntry("Password"));
 	}
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	if (!m_db.open()) {
-		RESET_CURSOR;
 		Q_EMIT error(i18n("Failed to connect to the database '%1'. Please check the connection settings.", ui.cbConnection->currentText())
 					 + QStringLiteral("\n\n") + m_db.lastError().databaseText());
 		setInvalid();
@@ -229,7 +228,6 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	ui.teQuery->setText(group.readEntry("Query"));
 
 	Q_EMIT error(QString());
-	RESET_CURSOR;
 }
 
 void ImportSQLDatabaseWidget::refreshPreview() {
@@ -238,7 +236,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 		return;
 	}
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	ui.twPreview->clear();
 	bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
 
@@ -252,20 +250,17 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	// execute the current query (select on a table or a custom query)
 	const QString& query = currentQuery(true);
 	if (query.isEmpty()) {
-		RESET_CURSOR;
 		setInvalid();
 		return;
 	}
 
 	QSqlQuery q;
 	if (!q.prepare(query)) {
-		RESET_CURSOR;
 		setInvalid();
 		return;
 	}
 	q.setForwardOnly(true);
 	if (!q.exec() || !q.isActive() || !q.next()) { // check if query was successful and got to first record
-		RESET_CURSOR;
 		if (!q.lastError().databaseText().isEmpty())
 			Q_EMIT error(i18n("Failed to execute the query for the preview") + QStringLiteral(" \n") + q.lastError().databaseText());
 		else
@@ -335,7 +330,6 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	}
 
 	Q_EMIT error(QString());
-	RESET_CURSOR;
 }
 
 void ImportSQLDatabaseWidget::importFromChanged(int index) {
@@ -465,9 +459,8 @@ bool ImportSQLDatabaseWidget::prepareAndExecute(QSqlQuery& q) {
 	if (!customQuery)
 		q.setForwardOnly(true);
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	if (!q.prepare(currentQuery()) || !q.exec() || !q.isActive()) {
-		RESET_CURSOR;
 		if (!q.lastError().databaseText().isEmpty())
 			Q_EMIT error(i18n("Failed to execute the query") + QStringLiteral(" \n") + q.lastError().databaseText());
 		else

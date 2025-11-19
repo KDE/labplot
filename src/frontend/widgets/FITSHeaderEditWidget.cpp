@@ -128,7 +128,7 @@ void FITSHeaderEditWidget::fillTable() {
  * \param col the column of the selected item
  */
 void FITSHeaderEditWidget::fillTableSlot(QTreeWidgetItem* item, int col) {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	const QString& itemText = item->text(col);
 	QString selectedExtension;
 	int extType = 0;
@@ -160,7 +160,6 @@ void FITSHeaderEditWidget::fillTableSlot(QTreeWidgetItem* item, int col) {
 			fillTable();
 		}
 	}
-	RESET_CURSOR;
 }
 
 /*!
@@ -182,7 +181,7 @@ void FITSHeaderEditWidget::openFile() {
 			conf.writeEntry("LastDir", newDir);
 	}
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	QTreeWidgetItem* root = ui->twExtensions->invisibleRootItem();
 	const int childCount = root->childCount();
 	bool opened = false;
@@ -209,7 +208,6 @@ void FITSHeaderEditWidget::openFile() {
 		KMessageBox::information(this, i18n("Cannot open file, file already opened."), i18n("File already opened"));
 	}
 	enableButtonAddUnit();
-	RESET_CURSOR;
 }
 
 /*!

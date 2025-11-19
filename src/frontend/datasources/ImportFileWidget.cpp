@@ -2266,10 +2266,7 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 		return;
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
-	WAIT_CURSOR;
-	CleanupNoArguments cleanup([] () {
-		RESET_CURSOR;
-	});
+	WAIT_CURSOR_AUTO_RESET;
 
 	if (auto filter = currentFileFilter()) {
 		switch (filter->type()) {
@@ -2660,10 +2657,7 @@ void ImportFileWidget::mqttConnectionChanged() {
 		return;
 	}
 
-	WAIT_CURSOR;
-	CleanupNoArguments cleanup([] () {
-		RESET_CURSOR;
-	});
+	WAIT_CURSOR_AUTO_RESET;
 	Q_EMIT error(QString());
 
 	// disconnected from the broker that was selected before

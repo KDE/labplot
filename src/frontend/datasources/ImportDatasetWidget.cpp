@@ -520,7 +520,7 @@ void ImportDatasetWidget::datasetChanged() {
 				WARN("QNetworkInformation is not supported on this platform or backend.");
 				return;
 			} else if (QNetworkInformation::instance()->reachability() == QNetworkInformation::Reachability::Online) {
-				WAIT_CURSOR;
+				WAIT_CURSOR_AUTO_RESET;
 				m_networkManager->get(QNetworkRequest(QUrl(m_datasetObject[QLatin1String("description_url")].toString())));
 			}
 		} else {

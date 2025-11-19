@@ -795,7 +795,8 @@ void AbstractAspect::paste(bool duplicate, int index) {
 	if (!xml.startsWith(QLatin1String("<?xml version=\"1.0\"?><!DOCTYPE LabPlotCopyPasteXML>")))
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	AbstractAspect* aspect = nullptr;
 	XmlStreamReader reader(xml);
 	while (!reader.atEnd()) {
@@ -852,7 +853,6 @@ void AbstractAspect::paste(bool duplicate, int index) {
 		aspect->setPasted(false);
 		endMacro();
 	}
-	RESET_CURSOR;
 }
 
 /*!

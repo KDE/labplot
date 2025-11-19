@@ -388,7 +388,7 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 }
 
 void PlotDataDialog::plot() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_parentAspect->project()->setSuppressAspectAddedSignal(true);
 	m_lastAddedCurve = nullptr;
 
@@ -477,7 +477,6 @@ void PlotDataDialog::plot() {
 
 		Q_EMIT m_parentAspect->project()->requestNavigateTo(path);
 	}
-	RESET_CURSOR;
 }
 
 Column* PlotDataDialog::columnFromName(const QString& name) const {
