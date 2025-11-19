@@ -602,7 +602,7 @@ void AddSubtractValueDialog::updatePreview() {
 		return;
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 
 	if (!m_project)
 		initPreview();
@@ -675,7 +675,6 @@ void AddSubtractValueDialog::updatePreview() {
 	}
 
 	m_previewDirty = false;
-	RESET_CURSOR;
 }
 
 // ##############################################################################
@@ -727,7 +726,7 @@ void AddSubtractValueDialog::generateForColumns() {
 		}
 	}
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	const auto& msg = getMessage(m_spreadsheet->name());
 	m_spreadsheet->beginMacro(msg);
 
@@ -738,7 +737,6 @@ void AddSubtractValueDialog::generateForColumns() {
 	}
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void AddSubtractValueDialog::generateForColumn(Column* col, int colIndex) {
@@ -915,7 +913,7 @@ void AddSubtractValueDialog::subtractBaseline(QVector<double>& newData) {
 void AddSubtractValueDialog::generateForMatrices() {
 	Q_ASSERT(m_matrix);
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 
 	QString msg = getMessage(m_matrix->name());
 	auto mode = m_matrix->mode();
@@ -972,7 +970,6 @@ void AddSubtractValueDialog::generateForMatrices() {
 		ok = setBigIntValue(value);
 
 		if (!ok) {
-			RESET_CURSOR;
 			KMessageBox::error(this, i18n("Wrong numeric value provided."));
 			return;
 		}
@@ -1016,7 +1013,6 @@ void AddSubtractValueDialog::generateForMatrices() {
 		ok = setDoubleValue(value);
 
 		if (!ok) {
-			RESET_CURSOR;
 			KMessageBox::error(this, i18n("Wrong numeric value provided."));
 			return;
 		}
@@ -1060,7 +1056,6 @@ void AddSubtractValueDialog::generateForMatrices() {
 		ok = setDateTimeValue(value);
 
 		if (!ok) {
-			RESET_CURSOR;
 			KMessageBox::error(this, i18n("Wrong numeric value provided."));
 			return;
 		}
@@ -1088,8 +1083,6 @@ void AddSubtractValueDialog::generateForMatrices() {
 	}
 
 	m_matrix->endMacro();
-
-	RESET_CURSOR;
 }
 
 bool AddSubtractValueDialog::setIntValue(int& value, int columnIndex) const {

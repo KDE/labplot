@@ -770,9 +770,8 @@ void MainWin::openProject(const QString& fileName) {
 	timer.start();
 	bool rc = false;
 	if (Project::isLabPlotProject(fileName)) {
-		WAIT_CURSOR;
+		WAIT_CURSOR_AUTO_RESET;
 		rc = m_project->load(fileName);
-		RESET_CURSOR;
 	}
 #ifdef HAVE_LIBORIGIN
 	else if (OriginProjectParser::isOriginProject(fileName)) {
@@ -794,18 +793,16 @@ void MainWin::openProject(const QString& fileName) {
 			parser.setGraphLayerAsPlotArea(graphLayersAsPlotArea);
 		}
 
-		WAIT_CURSOR;
+		WAIT_CURSOR_AUTO_RESET;
 		parser.importTo(m_project, QStringList()); // TODO: add return code
-		RESET_CURSOR;
 		rc = true;
 	}
 #endif
 
 #ifdef HAVE_CANTOR_LIBS
 	else if (fileName.endsWith(QLatin1String(".cws"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String(".ipynb"), Qt::CaseInsensitive)) {
-		WAIT_CURSOR;
+		WAIT_CURSOR_AUTO_RESET;
 		rc = m_project->loadNotebook(fileName);
-		RESET_CURSOR;
 	}
 #endif
 
@@ -979,7 +976,7 @@ bool MainWin::save(const QString& fileName) {
 		return false;
 	}
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	const QString& tempFileName = tempFile.fileName();
 	DEBUG("Using temporary file " << STDSTRING(tempFileName))
 	tempFile.close();
@@ -1069,12 +1066,10 @@ bool MainWin::save(const QString& fileName) {
 			if (m_autoSaveActive && !m_autoSaveTimer.isActive())
 				m_autoSaveTimer.start();
 		} else {
-			RESET_CURSOR;
 			KMessageBox::error(this, i18n("Couldn't save the file '%1'.", fileName));
 			ok = false;
 		}
 	} else {
-		RESET_CURSOR;
 		KMessageBox::error(this, i18n("Couldn't open the file '%1' for writing.", fileName));
 		ok = false;
 	}
@@ -1086,7 +1081,6 @@ bool MainWin::save(const QString& fileName) {
 	m_actionsManager->fillShareMenu();
 #endif
 
-	RESET_CURSOR;
 	return ok;
 }
 
@@ -1482,7 +1476,7 @@ void MainWin::createFolderContextMenu(const Folder*, QMenu* menu) const {
 }
 
 void MainWin::undo() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_project->undoStack()->undo();
 	m_actionsManager->m_redoAction->setEnabled(true);
 
@@ -1494,11 +1488,10 @@ void MainWin::undo() {
 	m_actionsManager->m_saveAction->setEnabled(changed);
 	m_project->setChanged(changed);
 	updateTitleBar();
-	RESET_CURSOR;
 }
 
 void MainWin::redo() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_project->undoStack()->redo();
 	m_actionsManager->m_undoAction->setEnabled(true);
 
@@ -1510,7 +1503,6 @@ void MainWin::redo() {
 	m_actionsManager->m_saveAction->setEnabled(changed);
 	m_project->setChanged(changed);
 	updateTitleBar();
-	RESET_CURSOR;
 }
 
 /*!
@@ -1676,7 +1668,7 @@ void MainWin::migrateSettings() {
 }
 
 void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	const auto group = Settings::group(QStringLiteral("Settings_General"));
 
 	// handle general settings
@@ -1803,8 +1795,6 @@ void MainWin::handleSettingsChanges(QList<Settings::Type> changes) {
 #else
 	Q_UNUSED(changes)
 #endif
-
-	RESET_CURSOR;
 }
 
 void MainWin::openDatasetExample() {

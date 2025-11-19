@@ -219,9 +219,8 @@ bool Worksheet::exportView() const {
 		const bool background = dlg->exportBackground();
 		const int resolution = dlg->exportResolution();
 
-		WAIT_CURSOR;
+		WAIT_CURSOR_AUTO_RESET;
 		m_view->exportToFile(path, format, area, background, resolution);
-		RESET_CURSOR;
 	}
 	delete dlg;
 	return ret;

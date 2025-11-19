@@ -288,12 +288,12 @@ void Spreadsheet::removeRows(int first, int count) {
 	if (count < 1 || first < 0 || first + count > rowCount())
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	beginMacro(i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count));
 	for (auto* col : children<Column>())
 		col->removeRows(first, count);
 	endMacro();
-	RESET_CURSOR;
 }
 
 /*!
@@ -305,12 +305,12 @@ void Spreadsheet::insertRows(int before, int count) {
 	if (count < 1 || before < 0 || before > rowCount())
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	beginMacro(i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count));
 	for (auto* col : children<Column>())
 		col->insertRows(before, count);
 	endMacro();
-	RESET_CURSOR;
 }
 
 /*!
@@ -336,14 +336,14 @@ void Spreadsheet::removeEmptyRows() {
 	if (rows.isEmpty())
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	beginMacro(i18n("%1: remove rows with missing values", name()));
 
 	for (int row = rows.count() - 1; row >= 0; --row)
 		removeRows(rows.at(row), 1);
 
 	endMacro();
-	RESET_CURSOR;
 }
 
 /*!
@@ -354,7 +354,8 @@ void Spreadsheet::maskEmptyRows() {
 	if (rows.isEmpty())
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	beginMacro(i18n("%1: mask rows with missing values", name()));
 
 	const auto& columns = children<Column>();
@@ -364,7 +365,6 @@ void Spreadsheet::maskEmptyRows() {
 	}
 
 	endMacro();
-	RESET_CURSOR;
 }
 
 /*!
@@ -609,7 +609,8 @@ void Spreadsheet::removeColumns(int first, int count) {
 	if (count < 1 || first < 0 || first + count > columnCount())
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	const int oldCount = columnCount();
 	beginMacro(i18np("%1: remove 1 column", "%1: remove %2 columns", name(), count));
 
@@ -620,7 +621,6 @@ void Spreadsheet::removeColumns(int first, int count) {
 
 	exec(new SpreadsheetSetColumnsCountCmd(this, oldCount, columnCount()));
 	endMacro();
-	RESET_CURSOR;
 }
 
 /*!
@@ -629,7 +629,8 @@ void Spreadsheet::removeColumns(int first, int count) {
  * @param before The column index before which the columns are inserted.
  */
 void Spreadsheet::insertColumns(int before, int count) {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	beginMacro(i18np("%1: insert 1 column", "%1: insert %2 columns", name(), count));
 	const int cols = columnCount();
 	const int rows = rowCount();
@@ -645,19 +646,18 @@ void Spreadsheet::insertColumns(int before, int count) {
 
 	exec(new SpreadsheetSetColumnsCountCmd(this, cols, columnCount()));
 	endMacro();
-	RESET_CURSOR;
 }
 
 /*!
  * Clears all values in the spreadsheet.
  */
 void Spreadsheet::clear() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	beginMacro(i18n("%1: clear", name()));
 	for (auto* col : children<Column>())
 		col->clear();
 	endMacro();
-	RESET_CURSOR;
 }
 
 /*!
@@ -674,7 +674,8 @@ void Spreadsheet::clear(const QVector<Column*>& columns) {
 	// 			col->setChanged();
 	// 		}
 	// 	} else {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	beginMacro(i18n("%1: clear selected columns", name()));
 	for (auto* col : columns) {
 		col->setSuppressDataChangedSignal(true);
@@ -683,19 +684,18 @@ void Spreadsheet::clear(const QVector<Column*>& columns) {
 		col->setChanged();
 	}
 	endMacro();
-	RESET_CURSOR;
 }
 
 /*!
  * Clears all masks in the spreadsheet.
  */
 void Spreadsheet::clearMasks() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	beginMacro(i18n("%1: clear all masks", name()));
 	for (auto* col : children<Column>())
 		col->clearMasks();
 	endMacro();
-	RESET_CURSOR;
 }
 
 /*!
@@ -797,7 +797,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 		}
 	};
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	beginMacro(i18n("%1: sort columns", name()));
 
 	if (!leading) { // sort separately
@@ -1114,7 +1114,6 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 	}
 
 	endMacro();
-	RESET_CURSOR;
 } // end of sortColumns()
 
 /*!

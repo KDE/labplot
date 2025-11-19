@@ -1049,7 +1049,7 @@ void DropValuesDialog::maskValues() const {
 	double value1DateTime = ui.dteValue1->dateTime().toMSecsSinceEpoch();
 	double value2DateTime = ui.dteValue2->dateTime().toMSecsSinceEpoch();
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: mask values", m_spreadsheet->name()));
 	for (auto* col : m_columns) {
 		if (col->isNumeric()) {
@@ -1073,7 +1073,6 @@ void DropValuesDialog::maskValues() const {
 	// 	QThreadPool::globalInstance()->waitForDone();
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void DropValuesDialog::dropValues() const {
@@ -1105,7 +1104,7 @@ void DropValuesDialog::dropValues() const {
 	double value1DateTime = ui.dteValue1->dateTime().toMSecsSinceEpoch();
 	double value2DateTime = ui.dteValue2->dateTime().toMSecsSinceEpoch();
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: drop values", m_spreadsheet->name()));
 
 	QSet<int> rows; // rows in which the values were dropped/deleted
@@ -1135,5 +1134,4 @@ void DropValuesDialog::dropValues() const {
 	}
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }

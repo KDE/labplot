@@ -444,7 +444,7 @@ void FunctionValuesDialog::variableColumnChanged(const QModelIndex& index) {
 void FunctionValuesDialog::generate() {
 	Q_ASSERT(m_spreadsheet);
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18np("%1: fill column with function values", "%1: fill columns with function values", m_spreadsheet->name(), m_columns.size()));
 
 	// determine variable names and data vectors of the specified columns
@@ -471,5 +471,4 @@ void FunctionValuesDialog::generate() {
 		col->updateFormula();
 	}
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
