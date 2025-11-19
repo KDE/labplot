@@ -3992,112 +3992,13 @@ bool CartesianPlotPrivate::translateRange(int xIndex, int yIndex, const QPointF&
 	bool translationX = false, translationY = false;
 	if (translateX && logicalStart.x() - logicalEnd.x() != 0) { // TODO: find better method
 		translationX = true;
-		double start{logicalStart.x()}, end{logicalEnd.x()};
-		switch (range(Dimension::X, xIndex).scale()) {
-		case RangeT::Scale::Linear: {
-			const double delta = (start - end);
-			range(Dimension::X, xIndex).translate(delta);
-			break;
-		}
-		case RangeT::Scale::Log10: {
-			if (end == 0 || start / end <= 0)
-				break;
-			const double delta = log10(start / end);
-			range(Dimension::X, xIndex) *= pow(10, delta);
-			break;
-		}
-		case RangeT::Scale::Log2: {
-			if (end == 0 || start / end <= 0)
-				break;
-			const double delta = log2(start / end);
-			range(Dimension::X, xIndex) *= exp2(delta);
-			break;
-		}
-		case RangeT::Scale::Ln: {
-			if (end == 0 || start / end <= 0)
-				break;
-			const double delta = log(start / end);
-			range(Dimension::X, xIndex) *= exp(delta);
-			break;
-		}
-		case RangeT::Scale::Sqrt: {
-			if (start < 0 || end < 0)
-				break;
-			const double delta = sqrt(start) - sqrt(end);
-			range(Dimension::X, xIndex).translate(delta * delta);
-			break;
-		}
-		case RangeT::Scale::Square: {
-			if (end <= start)
-				break;
-			const double delta = end * end - start * start;
-			range(Dimension::X, xIndex).translate(sqrt(delta));
-			break;
-		}
-		case RangeT::Scale::Inverse: {
-			if (start == 0. || end == 0. || end <= start)
-				break;
-			const double delta = 1. / start - 1. / end;
-			range(Dimension::X, xIndex).translate(1. / delta);
-			break;
-		}
-		}
+		range(Dimension::X, xIndex).translate(logicalStart.x(), logicalEnd.x());
 	}
 
 	if (translateY && logicalStart.y() - logicalEnd.y() != 0) {
 		translationY = true;
 		// handle the change in y
-		double start = logicalStart.y();
-		double end = logicalEnd.y();
-		switch (range(Dimension::Y, yIndex).scale()) {
-		case RangeT::Scale::Linear: {
-			const double deltaY = (start - end);
-			range(Dimension::Y, yIndex).translate(deltaY);
-			break;
-		}
-		case RangeT::Scale::Log10: {
-			if (end == 0 || start / end <= 0)
-				break;
-			const double deltaY = log10(start / end);
-			range(Dimension::Y, yIndex) *= pow(10, deltaY);
-			break;
-		}
-		case RangeT::Scale::Log2: {
-			if (end == 0 || start / end <= 0)
-				break;
-			const double deltaY = log2(start / end);
-			range(Dimension::Y, yIndex) *= exp2(deltaY);
-			break;
-		}
-		case RangeT::Scale::Ln: {
-			if (end == 0 || start / end <= 0)
-				break;
-			const double deltaY = log(start / end);
-			range(Dimension::Y, yIndex) *= exp(deltaY);
-			break;
-		}
-		case RangeT::Scale::Sqrt: {
-			if (start < 0 || end < 0)
-				break;
-			const double delta = sqrt(start) - sqrt(end);
-			range(Dimension::Y, yIndex).translate(delta * delta);
-			break;
-		}
-		case RangeT::Scale::Square: {
-			if (end <= start)
-				break;
-			const double delta = end * end - start * start;
-			range(Dimension::Y, yIndex).translate(sqrt(delta));
-			break;
-		}
-		case RangeT::Scale::Inverse: {
-			if (start == 0. || end == 0. || end <= start)
-				break;
-			const double delta = 1. / start - 1. / end;
-			range(Dimension::Y, yIndex).translate(1. / delta);
-			break;
-		}
-		}
+		range(Dimension::Y, yIndex).translate(logicalStart.y(), logicalEnd.y());
 	}
 
 	q->setUndoAware(false);
