@@ -1332,6 +1332,10 @@ void MainWin::handleAspectRemoved(const AbstractAspect* parent, const AbstractAs
 	//  - AbstractSimpleFilter
 	//  - columns in the data spreadsheet of a datapicker curve,
 	//    this can only happen when changing the error type and is done on the level of DatapickerImage
+
+	if (m_projectExplorer->currentAspect() != aspect)
+		return; // If the current aspect is not selected, there is no need to select the parent
+
 	if (!aspect->inherits(AspectType::AbstractFilter) && !(parent->parentAspect() && parent->parentAspect()->type() == AspectType::DatapickerCurve))
 		m_projectExplorer->setCurrentAspect(parent);
 }
