@@ -619,13 +619,13 @@ public:
 	}
 
 	Range<T> checkRange() const {
-		double start = m_start, end = m_end;
-		if (m_scale == RangeT::Scale::Linear || (start > 0 && end > 0)) // nothing to do
-			return range;
-		if (start >= 0 && end >= 0 && m_scale == RangeT::Scale::Sqrt) // nothing to do
-			return range;
+		if (m_scale == RangeT::Scale::Linear || (m_start > 0 && m_end > 0)) // nothing to do
+			return *this;
+		if (m_start >= 0 && m_end >= 0 && m_scale == RangeT::Scale::Sqrt) // nothing to do
+			return *this;
 		// TODO: check if start == end?
 
+		double start = m_start, end = m_end;
 		double min = 0.01, max = 1.;
 
 		if (m_scale == RangeT::Scale::Sqrt) {
