@@ -10,11 +10,11 @@
 
 #include "DecompositionTest.h"
 #include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/core/column/Column.h"
 
 #include <QUndoStack>
 
@@ -316,16 +316,22 @@ void DecompositionTest::testDecompositionMethodChange() {
 	project.addChild(decomposition);
 	decomposition->setXColumn(columns.at(0));
 	decomposition->setYColumn(columns.at(1));
-	QCOMPARE(decomposition->method(), SeasonalDecomposition::Method::STL);
-	QCOMPARE(decomposition->stlPeriod(), 12);
+
+	{
+		auto s = decomposition->children<Spreadsheet>();
+		QCOMPARE(s.size(), 1);
+		s.at(0)->view(); // To create the view, otherwise no spreadsheetview and model get not created
+	}
 
 	// the initial method is STL with three components: Trend, Seasonal, Residual
+	QCOMPARE(decomposition->method(), SeasonalDecomposition::Method::STL);
+	QCOMPARE(decomposition->stlPeriod(), 12);
 	const auto* w = decomposition->children<Worksheet>().constFirst();
 	auto plotAreas = w->children<CartesianPlot>();
 	QCOMPARE(plotAreas.size(), 4); // three components plus the origina data
 
 	// change to MSTL which has two seasonal components by default
-	decomposition->setMethod(SeasonalDecomposition::Method::MSTL);
+	decomposition->setMethod(SeasonalDecomposition::Method::MSTL); // shall not lead to a crash
 	plotAreas = w->children<CartesianPlot>();
 	QCOMPARE(plotAreas.size(), 5); // four components plus the original data
 
