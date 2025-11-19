@@ -59,6 +59,34 @@ private:
 };
 
 /*!
+ * \brief The AutoRestore class
+ * Cleanup class which passes during construction the value \p startValue to the function \p func and
+ * when the object goes out of scope function \p func is called with the inverted value of \p startValue
+ *
+ * @param startValue: Value which shall be passed in the constructor to the function \p func and in the
+ *					  destructor inverted
+ * @param func: function which shall be called in the constructor and the destructor of this object when it goes out of scope
+ *
+ * Example (Supressing AspectAdded signal as long as this object is in scope):
+ *	AutoRestore cleanup(true, [this](bool value) {q->project()->setSuppressAspectAddedSignal(value);});
+ */
+class AutoRestore {
+public:
+	AutoRestore(bool startValue, std::function<void(bool)> func)
+		: m_function(func)
+		, m_startValue(startValue) {
+		m_function(m_startValue);
+	}
+	~AutoRestore() {
+		m_function(!m_startValue);
+	}
+
+private:
+	std::function<void(bool)> m_function;
+	bool m_startValue;
+};
+
+/*!
  * Used for example for connections with NumberSpinbox because those are using
  * a feedback and so breaking the connection dock -> element -> dock is not desired
  */
