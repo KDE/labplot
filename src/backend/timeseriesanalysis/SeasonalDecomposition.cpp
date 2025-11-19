@@ -604,8 +604,10 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 			while (plotAreasSeasonal.size() > 1) {
 				auto plotArea = std::unique_ptr<CartesianPlot>(plotAreasSeasonal.takeLast());
 				curvesSeasonal.takeLast(); // Curve is a child of the plot area, so we don't have to explicitly delete it
-				columnsSeasonal.takeLast();// Curve is a child of the spreadsheet, so we don't have to explicitly delete it
-				AutoRestore cleanup(false, [this](bool value) {worksheet->setUndoAware(value);});
+				columnsSeasonal.takeLast(); // Curve is a child of the spreadsheet, so we don't have to explicitly delete it
+				AutoRestore cleanup(false, [this](bool value) {
+					worksheet->setUndoAware(value);
+				});
 				worksheet->removeChild(plotArea.get());
 			}
 
@@ -651,7 +653,9 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 				while (plotAreasSeasonal.size() > (int)mstlPeriods.size()) {
 					auto plotArea = std::unique_ptr<CartesianPlot>(plotAreasSeasonal.takeLast());
 					curvesSeasonal.takeLast(); // Curve is a child of the plot area, so we don't have to explicitly delete it
-					AutoRestore undo(false, [this](bool value) {worksheet->setUndoAware(value);});
+					AutoRestore undo(false, [this](bool value) {
+						worksheet->setUndoAware(value);
+					});
 					worksheet->removeChild(plotArea.get());
 				}
 			}
@@ -659,7 +663,9 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 
 		// adjust the plot titles for seasonal components to reflect new periods
 		for (size_t i = 0; i < mstlPeriods.size(); i++) {
-			AutoRestore undo(false, [this, i](bool value) {plotAreasSeasonal.at(i)->setUndoAware(value);});
+			AutoRestore undo(false, [this, i](bool value) {
+				plotAreasSeasonal.at(i)->setUndoAware(value);
+			});
 			plotAreasSeasonal.at(i)->title()->setText(i18n("Seasonal Component (Period: %1)", mstlPeriods.at(i)));
 			columnsSeasonal.at(i)->setName(i18n("Seasonal, Period: %1", mstlPeriods.at(i)));
 			curvesSeasonal.at(i)->setYColumn(columnsSeasonal.at(i));
