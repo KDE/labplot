@@ -618,7 +618,7 @@ public:
 		}
 	}
 
-	Range<T> CartesianPlotPrivate::checkRange() const {
+	Range<T> checkRange() const {
 		double start = m_start, end = m_end;
 		if (m_scale == RangeT::Scale::Linear || (start > 0 && end > 0)) // nothing to do
 			return range;
