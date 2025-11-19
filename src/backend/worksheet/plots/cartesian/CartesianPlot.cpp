@@ -3748,27 +3748,6 @@ bool CartesianPlotPrivate::rangeBreakingEnabled(const Dimension dim) {
 	return false;
 }
 
-/*!
- * check for negative values in the range when non-linear scalings are used
- */
-void CartesianPlotPrivate::checkRange(Dimension dim, int index) {
-	const auto& range = ranges(dim).at(index).range;
-	DEBUG(Q_FUNC_INFO << ", " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << " range " << index + 1 << " : " << range.toStdString()
-					  << ", scale = " << ENUM_TO_STRING(RangeT, Scale, range.scale()))
-
-	const auto newRange = range.checkRange();
-
-	const double start = newRange.start(), end = newRange.end();
-	if (start != range.start()) {
-		DEBUG(Q_FUNC_INFO << ", old/new start = " << range.start() << "/" << start)
-		q->setMin(dim, index, start);
-	}
-	if (end != range.end()) {
-		DEBUG(Q_FUNC_INFO << ", old/new end = " << range.end() << "/" << end)
-		q->setMax(dim, index, end);
-	}
-}
-
 CartesianScale* CartesianPlotPrivate::createScale(RangeT::Scale scale, const Range<double>& sceneRange, const Range<double>& logicalRange) {
 	QDEBUG(Q_FUNC_INFO << ", scale =" << scale << ", scene range : " << sceneRange.toString() << ", logical range : " << logicalRange.toString());
 
