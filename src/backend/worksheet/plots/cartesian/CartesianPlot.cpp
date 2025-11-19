@@ -3989,24 +3989,24 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 bool CartesianPlotPrivate::translateRange(int xIndex, int yIndex, const QPointF& logicalStart, const QPointF& logicalEnd, bool translateX, bool translateY) {
 	// handle the change in x
-	bool translationX = false, translationY = false;
+	bool translatedX = false, translatedY = false;
 	if (translateX && logicalStart.x() - logicalEnd.x() != 0) { // TODO: find better method
-		translationX = true;
+		translatedX = true;
 		range(Dimension::X, xIndex).translate(logicalStart.x(), logicalEnd.x());
 	}
 
 	if (translateY && logicalStart.y() - logicalEnd.y() != 0) {
-		translationY = true;
+		translatedY = true;
 		// handle the change in y
 		range(Dimension::Y, yIndex).translate(logicalStart.y(), logicalEnd.y());
 	}
 
 	q->setUndoAware(false);
-	if (translationX) {
+	if (translatedX) {
 		q->enableAutoScale(Dimension::X, xIndex, false);
 		retransformScale(Dimension::X, xIndex);
 	}
-	if (translationY) {
+	if (translatedY) {
 		q->enableAutoScale(Dimension::Y, yIndex, false);
 		retransformScale(Dimension::Y, yIndex);
 	}
@@ -4014,12 +4014,12 @@ bool CartesianPlotPrivate::translateRange(int xIndex, int yIndex, const QPointF&
 
 	// If x or y should not be translated, means, that it was done before
 	// so the ranges must get dirty.
-	if (translationX || translationY || !translateX || !translateY) {
+	if (translatedX || translatedY || !translateX || !translateY) {
 		q->setRangeDirty(Dimension::X, xIndex, true);
 		q->setRangeDirty(Dimension::Y, yIndex, true);
 	}
 
-	return translationX || translationY || !translateX || !translateY;
+	return translatedX || translatedY || !translateX || !translateY;
 }
 
 void CartesianPlotPrivate::mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd) {
