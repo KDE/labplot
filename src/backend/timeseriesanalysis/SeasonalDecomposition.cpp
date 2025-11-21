@@ -604,7 +604,7 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 			while (plotAreasSeasonal.size() > 1) {
 				auto plotArea = std::unique_ptr<CartesianPlot>(plotAreasSeasonal.takeLast());
 				curvesSeasonal.takeLast(); // Curve is a child of the plot area, so we don't have to explicitly delete it
-				columnsSeasonal.takeLast(); // Curve is a child of the spreadsheet, so we don't have to explicitly delete it
+				columnsSeasonal.takeLast(); // Column is a child of the spreadsheet, so we don't have to explicitly delete it
 				AutoRestore cleanup(false, [this](bool value) {
 					worksheet->setUndoAware(value);
 				});
