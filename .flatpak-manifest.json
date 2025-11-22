@@ -22,12 +22,6 @@
         "--system-talk-name=org.freedesktop.UDisks2",
         "--talk-name=org.freedesktop.Flatpak"
     ],
-    "build-args": [
-        "--share=network"
-    ],
-    "extensions": {
-        "org.freedesktop.Sdk.Extension.python3": {}
-    },
     "cleanup": [
         "/include",
         "/lib/cmake",
@@ -38,6 +32,9 @@
         "/share/aclocal",
         "/share/info",
         "/share/man"
+    ],
+    "cleanup-commands": [
+        "/app/cleanup-BaseApp.sh"
     ],
     "build-options": {
         "append-path": "/usr/lib/sdk/llvm18/bin",
@@ -177,8 +174,7 @@
                 {
                     "type": "archive",
                     "url": "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.6.2.tar.gz",
-                    "sha256": "66fd078cc0bea896b0d44b120d46d6805421a5361d3a5ad84d9f397b1b5de2cb",
-		    "disable-http-decompression": true
+                    "sha256": "66fd078cc0bea896b0d44b120d46d6805421a5361d3a5ad84d9f397b1b5de2cb"
                 }
             ]
         },
@@ -214,8 +210,7 @@
                 {
                     "type": "archive",
                     "url": "https://download.kde.org/stable/frameworks/6.13/kuserfeedback-6.13.0.tar.xz",
-                    "sha256": "48c186482fe7a6f1017a7e50b3a16fd7c10c10f7f963c00f32c61bb073404b9a",
-		    "_comment": "requires minimum ecm version provided by runtime"
+                    "sha256": "48c186482fe7a6f1017a7e50b3a16fd7c10c10f7f963c00f32c61bb073404b9a"
                 }
             ]
         },
@@ -355,9 +350,7 @@
             "config-opts": [
 		    "-DQt6Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt6Mqtt",
 		    "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF",
-		    "-DENABLE_TESTS=OFF",
-		    "-DENABLE_PYTHON_SDK=OFF",
-		    "-DENABLE_PYTHON_SCRIPTING=OFF"
+		    "-DENABLE_TESTS=OFF"
 	    ],
 	    "sources": [
                 {
