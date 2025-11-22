@@ -509,7 +509,7 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 		auto stlParameters = stl::params().robust(stlRobust);
 
 		// length
-		stlParameters = stl::params().seasonal_length(stlSeasonalLength);
+		stlParameters = stlParameters.seasonal_length(stlSeasonalLength);
 		if (!stlTrendLengthAuto)
 			stlParameters = stlParameters.trend_length(stlTrendLength);
 		if (!stlLowPassLengthAuto)
@@ -565,7 +565,7 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 
 			// perform the decomposition
 			auto mstlParameters = stl::mstl_params().stl_params(stlParameters).iterations(mstlIterations).lambda(mstlLambda);
-			auto result = stl::mstl_params().fit(yDataVector, mstlPeriods);
+			auto result = mstlParameters.fit(yDataVector, mstlPeriods);
 
 			// copy the result data into the internal column vectors
 			const auto size = result.trend.size();
