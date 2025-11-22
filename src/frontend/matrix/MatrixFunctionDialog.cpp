@@ -192,7 +192,7 @@ private:
 };
 
 void MatrixFunctionDialog::generate() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 
 	m_matrix->beginMacro(i18n("%1: fill matrix with function values", m_matrix->name()));
 
@@ -260,5 +260,4 @@ void MatrixFunctionDialog::generate() {
 	m_matrix->setData(new_data);
 
 	m_matrix->endMacro();
-	RESET_CURSOR;
 }

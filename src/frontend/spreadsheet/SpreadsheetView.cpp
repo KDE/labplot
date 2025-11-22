@@ -1750,12 +1750,11 @@ void SpreadsheetView::cutSelection() {
 	if (firstSelectedRow() < 0)
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: cut selected cells", m_spreadsheet->name()));
 	copySelection();
 	clearSelectedCells();
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::copySelection() {
@@ -1775,7 +1774,7 @@ void SpreadsheetView::copySelection() {
 	const int cols = last_col - first_col + 1;
 	const int rows = last_row - first_row + 1;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	QString output_str;
 
 	QVector<Column*> columns;
@@ -1810,7 +1809,6 @@ void SpreadsheetView::copySelection() {
 	}
 
 	QApplication::clipboard()->setText(output_str);
-	RESET_CURSOR;
 }
 /*
 bool determineLocale(const QString& value, QLocale& locale) {
@@ -1831,7 +1829,6 @@ void SpreadsheetView::pasteIntoSelection() {
 		return;
 
 	PERFTRACE(QStringLiteral("paste selected cells"));
-	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: paste from clipboard", m_spreadsheet->name()));
 
 	int first_col = firstSelectedColumn();
@@ -1843,6 +1840,8 @@ void SpreadsheetView::pasteIntoSelection() {
 	QVector<QStringList> cellTexts;
 
 	try {
+		WAIT_CURSOR_AUTO_RESET;
+
 		QString input_str = QString::fromUtf8(mime_data->data(QStringLiteral("text/plain"))).trimmed();
 		QString separator;
 		if (input_str.indexOf(QLatin1String("\r\n")) != -1)
@@ -2065,12 +2064,10 @@ void SpreadsheetView::pasteIntoSelection() {
 	} catch (std::bad_alloc&) {
 		cellTexts.clear();
 		m_spreadsheet->endMacro();
-		RESET_CURSOR;
 		KMessageBox::error(this, i18n("Not enough memory to finalize this operation."));
 	}
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::maskSelection() {
@@ -2079,7 +2076,7 @@ void SpreadsheetView::maskSelection() {
 		return;
 	int last = lastSelectedRow();
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: mask selected cells", m_spreadsheet->name()));
 
 	// suppress the data changed signal in all selected columns, will be emitted once per column at the end
@@ -2102,7 +2099,6 @@ void SpreadsheetView::maskSelection() {
 	action_clear_masks->setEnabled(true);
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::unmaskSelection() {
@@ -2111,7 +2107,7 @@ void SpreadsheetView::unmaskSelection() {
 		return;
 	int last = lastSelectedRow();
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: unmask selected cells", m_spreadsheet->name()));
 
 	// suppress the data changed signal in all selected columns, will be emitted once per column at the end
@@ -2131,7 +2127,6 @@ void SpreadsheetView::unmaskSelection() {
 	}
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::reverseSelection() {
@@ -2269,7 +2264,7 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 		return;
 	int last = lastSelectedRow();
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: fill cells with row numbers", m_spreadsheet->name()));
 	for (auto* col_ptr : columns) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
@@ -2326,7 +2321,6 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 		col_ptr->setChanged();
 	}
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::fillWithRowNumbers() {
@@ -2334,7 +2328,7 @@ void SpreadsheetView::fillWithRowNumbers() {
 	if (columns.isEmpty())
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18np("%1: fill column with row numbers", "%1: fill columns with row numbers", m_spreadsheet->name(), columns.count()));
 
 	const int rows = m_spreadsheet->rowCount();
@@ -2364,7 +2358,6 @@ void SpreadsheetView::fillWithRowNumbers() {
 	}
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 // TODO: this function is not used currently.
@@ -2378,7 +2371,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 	if (first < 0)
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: fill cells with random values", m_spreadsheet->name()));
 	QRandomGenerator rng(QTime::currentTime().msec());
 	for (auto* col_ptr : columns) {
@@ -2447,7 +2440,6 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 		col_ptr->setChanged();
 	}
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::fillWithRandomValues() {
@@ -2523,7 +2515,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 													  6,
 													  &doubleOk);
 			if (doubleOk) {
-				WAIT_CURSOR;
+				WAIT_CURSOR_AUTO_RESET;
 				QVector<double> results(last - first + 1);
 				for (int row = first; row <= last; row++) {
 					if (isCellSelected(row, col))
@@ -2532,14 +2524,13 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 						results[row - first] = col_ptr->valueAt(row);
 				}
 				col_ptr->replaceValues(first, results);
-				RESET_CURSOR;
 			}
 			break;
 		case AbstractColumn::ColumnMode::Integer:
 			if (!intOk)
 				intValue = QInputDialog::getInt(this, i18n("Fill the selection with constant value"), i18n("Value"), 0, -2147483647, 2147483647, 1, &intOk);
 			if (intOk) {
-				WAIT_CURSOR;
+				WAIT_CURSOR_AUTO_RESET;
 				QVector<int> results(last - first + 1);
 				for (int row = first; row <= last; row++) {
 					if (isCellSelected(row, col))
@@ -2548,7 +2539,6 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 						results[row - first] = col_ptr->integerAt(row);
 				}
 				col_ptr->replaceInteger(first, results);
-				RESET_CURSOR;
 			}
 			break;
 		case AbstractColumn::ColumnMode::BigInt:
@@ -2557,7 +2547,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 				bigIntValue =
 					QInputDialog::getInt(this, i18n("Fill the selection with constant value"), i18n("Value"), 0, -2147483647, 2147483647, 1, &bigIntOk);
 			if (bigIntOk) {
-				WAIT_CURSOR;
+				WAIT_CURSOR_AUTO_RESET;
 				QVector<qint64> results(last - first + 1);
 				for (int row = first; row <= last; row++) {
 					if (isCellSelected(row, col))
@@ -2566,7 +2556,6 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 						results[row - first] = col_ptr->bigIntAt(row);
 				}
 				col_ptr->replaceBigInt(first, results);
-				RESET_CURSOR;
 			}
 			break;
 		case AbstractColumn::ColumnMode::Text:
@@ -2574,7 +2563,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 				stringValue =
 					QInputDialog::getText(this, i18n("Fill the selection with constant value"), i18n("Value"), QLineEdit::Normal, QString(), &stringOk);
 			if (stringOk && !stringValue.isEmpty()) {
-				WAIT_CURSOR;
+				WAIT_CURSOR_AUTO_RESET;
 				QVector<QString> results;
 				for (int row = first; row <= last; row++) {
 					if (isCellSelected(row, col))
@@ -2583,7 +2572,6 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 						results << col_ptr->textAt(row);
 				}
 				col_ptr->replaceTexts(first, results);
-				RESET_CURSOR;
 			}
 			break;
 		// TODO: handle other modes
@@ -2723,14 +2711,13 @@ void SpreadsheetView::insertColumnsRight(int count) {
 }
 
 void SpreadsheetView::removeSelectedColumns() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: remove selected columns", m_spreadsheet->name()));
 
 	for (auto* column : selectedColumns())
 		m_spreadsheet->removeChild(column);
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::clearSelectedColumns() {
@@ -2820,7 +2807,7 @@ void SpreadsheetView::reverseColumns() {
 	if (columns.isEmpty())
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18np("%1: reverse column", "%1: reverse columns", m_spreadsheet->name(), columns.size()));
 	for (auto* col : columns) {
 		if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
@@ -2852,7 +2839,6 @@ void SpreadsheetView::reverseColumns() {
 		}
 	}
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::dropColumnValues() {
@@ -2925,201 +2911,203 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 		delete dlg;
 	}
 
-	WAIT_CURSOR;
+
 	QStringList messages;
-	auto* message = "Normalization of the column <i>%1</i> was not possible because of %2.";
-	m_spreadsheet->beginMacro(i18n("%1: normalize columns", m_spreadsheet->name()));
+	{
+		WAIT_CURSOR_AUTO_RESET;
+		auto* message = "Normalization of the column <i>%1</i> was not possible because of %2.";
+		m_spreadsheet->beginMacro(i18n("%1: normalize columns", m_spreadsheet->name()));
 
-	for (auto* col : columns) {
-		if (col->columnMode() != AbstractColumn::ColumnMode::Double && col->columnMode() != AbstractColumn::ColumnMode::Integer
-			&& col->columnMode() != AbstractColumn::ColumnMode::BigInt)
-			continue;
+		for (auto* col : columns) {
+			if (col->columnMode() != AbstractColumn::ColumnMode::Double && col->columnMode() != AbstractColumn::ColumnMode::Integer
+				&& col->columnMode() != AbstractColumn::ColumnMode::BigInt)
+				continue;
 
-		if (col->columnMode() == AbstractColumn::ColumnMode::Integer || col->columnMode() == AbstractColumn::ColumnMode::BigInt)
-			col->setColumnMode(AbstractColumn::ColumnMode::Double);
+			if (col->columnMode() == AbstractColumn::ColumnMode::Integer || col->columnMode() == AbstractColumn::ColumnMode::BigInt)
+				col->setColumnMode(AbstractColumn::ColumnMode::Double);
 
-		auto* data = static_cast<QVector<double>*>(col->data());
-		QVector<double> new_data(col->rowCount());
+			auto* data = static_cast<QVector<double>*>(col->data());
+			QVector<double> new_data(col->rowCount());
 
-		switch (method) {
-		case DivideBySum: {
-			double sum = std::accumulate(data->begin(), data->end(), 0);
-			if (sum != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / sum;
-			} else {
-				messages << i18n(message, col->name(), i18n("Sum = 0"));
-				continue;
+			switch (method) {
+			case DivideBySum: {
+				double sum = std::accumulate(data->begin(), data->end(), 0);
+				if (sum != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = data->operator[](i) / sum;
+				} else {
+					messages << i18n(message, col->name(), i18n("Sum = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case DivideByMin: {
-			double min = col->minimum();
-			if (min != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / min;
-			} else {
-				messages << i18n(message, col->name(), i18n("Min = 0"));
-				continue;
+			case DivideByMin: {
+				double min = col->minimum();
+				if (min != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = data->operator[](i) / min;
+				} else {
+					messages << i18n(message, col->name(), i18n("Min = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case DivideByMax: {
-			double max = col->maximum();
-			if (max != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / max;
-			} else {
-				messages << i18n(message, col->name(), i18n("Max = 0"));
-				continue;
+			case DivideByMax: {
+				double max = col->maximum();
+				if (max != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = data->operator[](i) / max;
+				} else {
+					messages << i18n(message, col->name(), i18n("Max = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case DivideByCount: {
-			int count = data->size();
-			if (count != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / count;
-			} else {
-				messages << i18n(message, col->name(), i18n("Count = 0"));
-				continue;
+			case DivideByCount: {
+				int count = data->size();
+				if (count != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = data->operator[](i) / count;
+				} else {
+					messages << i18n(message, col->name(), i18n("Count = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case DivideByMean: {
-			double mean = col->statistics().arithmeticMean;
-			if (mean != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / mean;
-			} else {
-				messages << i18n(message, col->name(), i18n("Mean = 0"));
-				continue;
+			case DivideByMean: {
+				double mean = col->statistics().arithmeticMean;
+				if (mean != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = data->operator[](i) / mean;
+				} else {
+					messages << i18n(message, col->name(), i18n("Mean = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case DivideByMedian: {
-			double median = col->statistics().median;
-			if (median != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / median;
-			} else {
-				messages << i18n(message, col->name(), i18n("Median = 0"));
-				continue;
+			case DivideByMedian: {
+				double median = col->statistics().median;
+				if (median != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = data->operator[](i) / median;
+				} else {
+					messages << i18n(message, col->name(), i18n("Median = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case DivideByMode: {
-			double mode = col->statistics().mode;
-			if (mode != 0.0 && !std::isnan(mode)) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / mode;
-			} else {
-				if (mode == 0.0)
-					messages << i18n(message, col->name(), i18n("Mode = 0"));
-				else
-					messages << i18n(message, col->name(), i18n("'Mode not defined'"));
-				continue;
+			case DivideByMode: {
+				double mode = col->statistics().mode;
+				if (mode != 0.0 && !std::isnan(mode)) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = data->operator[](i) / mode;
+				} else {
+					if (mode == 0.0)
+						messages << i18n(message, col->name(), i18n("Mode = 0"));
+					else
+						messages << i18n(message, col->name(), i18n("'Mode not defined'"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case DivideByRange: {
-			double range = col->statistics().maximum - col->statistics().minimum;
-			if (range != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / range;
-			} else {
-				messages << i18n(message, col->name(), i18n("Range = 0"));
-				continue;
+			case DivideByRange: {
+				double range = col->statistics().maximum - col->statistics().minimum;
+				if (range != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = data->operator[](i) / range;
+				} else {
+					messages << i18n(message, col->name(), i18n("Range = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case DivideBySD: {
-			double std = col->statistics().standardDeviation;
-			if (std != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / std;
-			} else {
-				messages << i18n(message, col->name(), i18n("SD = 0"));
-				continue;
+			case DivideBySD: {
+				double std = col->statistics().standardDeviation;
+				if (std != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = data->operator[](i) / std;
+				} else {
+					messages << i18n(message, col->name(), i18n("SD = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case DivideByMAD: {
-			double mad = col->statistics().medianDeviation;
-			if (mad != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / mad;
-			} else {
-				messages << i18n(message, col->name(), i18n("MAD = 0"));
-				continue;
+			case DivideByMAD: {
+				double mad = col->statistics().medianDeviation;
+				if (mad != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = data->operator[](i) / mad;
+				} else {
+					messages << i18n(message, col->name(), i18n("MAD = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case DivideByIQR: {
-			double iqr = col->statistics().iqr;
-			if (iqr != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = data->operator[](i) / iqr;
-			} else {
-				messages << i18n(message, col->name(), i18n("IQR = 0"));
-				continue;
+			case DivideByIQR: {
+				double iqr = col->statistics().iqr;
+				if (iqr != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = data->operator[](i) / iqr;
+				} else {
+					messages << i18n(message, col->name(), i18n("IQR = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case ZScoreSD: {
-			double mean = col->statistics().arithmeticMean;
-			double std = col->statistics().standardDeviation;
-			if (std != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = (data->operator[](i) - mean) / std;
-			} else {
-				messages << i18n(message, col->name(), i18n("SD = 0"));
-				continue;
+			case ZScoreSD: {
+				double mean = col->statistics().arithmeticMean;
+				double std = col->statistics().standardDeviation;
+				if (std != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = (data->operator[](i) - mean) / std;
+				} else {
+					messages << i18n(message, col->name(), i18n("SD = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case ZScoreMAD: {
-			double median = col->statistics().median;
-			double mad = col->statistics().medianDeviation;
-			if (mad != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = (data->operator[](i) - median) / mad;
-			} else {
-				messages << i18n(message, col->name(), i18n("MAD = 0"));
-				continue;
+			case ZScoreMAD: {
+				double median = col->statistics().median;
+				double mad = col->statistics().medianDeviation;
+				if (mad != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = (data->operator[](i) - median) / mad;
+				} else {
+					messages << i18n(message, col->name(), i18n("MAD = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case ZScoreIQR: {
-			double median = col->statistics().median;
-			double iqr = col->statistics().thirdQuartile - col->statistics().firstQuartile;
-			if (iqr != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = (data->operator[](i) - median) / iqr;
-			} else {
-				messages << i18n(message, col->name(), i18n("IQR = 0"));
-				continue;
+			case ZScoreIQR: {
+				double median = col->statistics().median;
+				double iqr = col->statistics().thirdQuartile - col->statistics().firstQuartile;
+				if (iqr != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = (data->operator[](i) - median) / iqr;
+				} else {
+					messages << i18n(message, col->name(), i18n("IQR = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		case Rescale: {
-			double min = col->statistics().minimum;
-			double max = col->statistics().maximum;
-			if (max - min != 0.0) {
-				for (int i = 0; i < col->rowCount(); ++i)
-					new_data[i] = rescaleIntervalMin + (data->operator[](i) - min) / (max - min) * (rescaleIntervalMax - rescaleIntervalMin);
-			} else {
-				messages << i18n(message, col->name(), i18n("Max - Min = 0"));
-				continue;
+			case Rescale: {
+				double min = col->statistics().minimum;
+				double max = col->statistics().maximum;
+				if (max - min != 0.0) {
+					for (int i = 0; i < col->rowCount(); ++i)
+						new_data[i] = rescaleIntervalMin + (data->operator[](i) - min) / (max - min) * (rescaleIntervalMax - rescaleIntervalMin);
+				} else {
+					messages << i18n(message, col->name(), i18n("Max - Min = 0"));
+					continue;
+				}
+				break;
 			}
-			break;
-		}
-		}
+			}
 
-		col->setValues(new_data);
+			col->setValues(new_data);
+		}
+		m_spreadsheet->endMacro();
 	}
-	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 
 	if (!messages.isEmpty()) {
 		QString info;
@@ -3139,7 +3127,7 @@ void SpreadsheetView::powerTransformSelectedColumns(QAction* action) {
 
 	auto power = static_cast<TukeyLadderPower>(action->data().toInt());
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: power transform columns", m_spreadsheet->name()));
 
 	for (auto* col : columns) {
@@ -3224,13 +3212,12 @@ void SpreadsheetView::powerTransformSelectedColumns(QAction* action) {
 	}
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 // TODO: either make this complete (support all column modes and normalization methods) or remove this code completely.
 /*
 void SpreadsheetView::normalizeSelection() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: normalize selection", m_spreadsheet->name()));
 	double max = 0.0;
 	for (int col = firstSelectedColumn(); col <= lastSelectedColumn(); col++)
@@ -3250,7 +3237,6 @@ void SpreadsheetView::normalizeSelection() {
 				}
 	}
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }*/
 
 void SpreadsheetView::showAllColumnsStatistics() {
@@ -3437,7 +3423,7 @@ void SpreadsheetView::removeSelectedRows() {
 	if (firstSelectedRow() < 0)
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	const auto& columns = m_spreadsheet->children<Column>();
 	m_spreadsheet->beginMacro(i18n("%1: remove selected rows", m_spreadsheet->name()));
 	// suppress the dataChanged signal, will be emitted at the end after all rows were removed
@@ -3455,7 +3441,6 @@ void SpreadsheetView::removeSelectedRows() {
 	}
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::clearSelectedCells() {
@@ -3474,7 +3459,7 @@ void SpreadsheetView::clearSelectedCells() {
 	if (empty)
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: clear selected cells", m_spreadsheet->name()));
 	for (auto* column : columns) {
 		column->setSuppressDataChangedSignal(true);
@@ -3497,7 +3482,6 @@ void SpreadsheetView::clearSelectedCells() {
 		column->setChanged();
 	}
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::goToCell() {
@@ -3809,7 +3793,7 @@ bool SpreadsheetView::exportView() {
 	if ((ret = dlg->exec()) == QDialog::Accepted) {
 		const QString path = dlg->path();
 		const bool exportHeader = dlg->exportHeader();
-		WAIT_CURSOR;
+		WAIT_CURSOR_AUTO_RESET;
 		switch (dlg->format()) {
 		case ExportSpreadsheetDialog::Format::ASCII: {
 			const QString separator = dlg->separator();
@@ -3848,8 +3832,6 @@ bool SpreadsheetView::exportView() {
 			break;
 		}
 		}
-
-		RESET_CURSOR;
 	}
 	delete dlg;
 
@@ -3879,7 +3861,7 @@ bool SpreadsheetView::printPreview() {
   prints the complete spreadsheet to \c printer.
  */
 void SpreadsheetView::print(QPrinter* printer) const {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	QPainter painter(printer);
 
 	const int dpiy = printer->logicalDpiY();
@@ -3994,16 +3976,16 @@ void SpreadsheetView::print(QPrinter* printer) const {
 			}
 		}
 	}
-	RESET_CURSOR;
 }
 
 void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader, const QString& separator, QLocale::Language language) const {
 	QFile file(path);
 	if (!file.open(QFile::WriteOnly | QFile::Truncate)) {
-		RESET_CURSOR;
 		QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
 		return;
 	}
+
+	WAIT_CURSOR_AUTO_RESET;
 
 	PERFTRACE(QStringLiteral("export spreadsheet to file"));
 	QTextStream out(&file);
@@ -4054,10 +4036,11 @@ void SpreadsheetView::exportToLaTeX(const QString& path,
 									const bool exportEntire) const {
 	QFile file(path);
 	if (!file.open(QFile::WriteOnly | QFile::Truncate)) {
-		RESET_CURSOR;
 		QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
 		return;
 	}
+
+	WAIT_CURSOR_AUTO_RESET;
 
 	QList<Column*> toExport;
 	int cols;

@@ -31,15 +31,13 @@ public:
 	}
 
 	virtual void redo() override {
-		WAIT_CURSOR;
+		WAIT_CURSOR_AUTO_RESET;
 		QUndoCommand::redo();
-		RESET_CURSOR;
 	}
 
 	virtual void undo() override {
-		WAIT_CURSOR;
+		WAIT_CURSOR_AUTO_RESET;
 		QUndoCommand::undo();
-		RESET_CURSOR;
 	}
 };
 

@@ -450,7 +450,7 @@ void RandomValuesDialog::checkValues() {
 void RandomValuesDialog::generate() {
 	Q_ASSERT(m_spreadsheet);
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	const int rows = m_spreadsheet->rowCount();
 	QVector<double> data;
 	QVector<int> data_int;
@@ -1188,7 +1188,6 @@ void RandomValuesDialog::generate() {
 		col->setChanged();
 	}
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 
 	gsl_rng_free(r);
 }
