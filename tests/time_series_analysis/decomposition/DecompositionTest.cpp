@@ -15,6 +15,8 @@
 #include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/WorksheetElementPrivate.h"
 
 #include <QUndoStack>
 
@@ -339,6 +341,47 @@ void DecompositionTest::testDecompositionMethodChange() {
 	decomposition->setMethod(SeasonalDecomposition::Method::STL);
 	plotAreas = w->children<CartesianPlot>();
 	QCOMPARE(plotAreas.size(), 4); // three components plus the original data
+}
+
+void DecompositionTest::testDecompositionPeriodChange() {
+	Project project;
+
+	auto* spreadsheet = new Spreadsheet(QStringLiteral("Test"));
+	project.addChild(spreadsheet);
+	spreadsheet->setColumnCount(2);
+	auto columns = spreadsheet->children<Column>();
+	QCOMPARE(columns.size(), 2);
+
+	columns.at(0)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	columns.at(0)->setIntegers(x);
+
+	columns.at(1)->setColumnMode(AbstractColumn::ColumnMode::Double);
+	columns.at(1)->setValues(y);
+
+	auto* decomposition = new SeasonalDecomposition(QStringLiteral("decomposition"));
+	project.addChild(decomposition);
+	decomposition->setXColumn(columns.at(0));
+	decomposition->setYColumn(columns.at(1));
+
+	{
+		auto s = decomposition->children<Spreadsheet>();
+		QCOMPARE(s.size(), 1);
+		s.at(0)->view(); // To create the view, otherwise no spreadsheetview and model get not created
+	}
+
+		   // the initial method is STL with three components: Trend, Seasonal, Residual
+	QCOMPARE(decomposition->method(), SeasonalDecomposition::Method::STL);
+	QCOMPARE(decomposition->stlPeriod(), 12);
+
+	for (const auto* c: project.children(AspectType::WorksheetElement, AbstractAspect::ChildIndexFlag::Recursive)) {
+		QCOMPARE(static_cast<const WorksheetElement*>(c)->d_ptr->suppressRetransform, false);
+	}
+
+	decomposition->setSTLPeriod(15);
+
+	for (const auto* c: project.children(AspectType::WorksheetElement, AbstractAspect::ChildIndexFlag::Recursive)) {
+		QCOMPARE(static_cast<const WorksheetElement*>(c)->d_ptr->suppressRetransform, false);
+	}
 }
 
 QTEST_MAIN(DecompositionTest)

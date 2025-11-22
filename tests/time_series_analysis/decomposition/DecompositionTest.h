@@ -19,5 +19,6 @@ private Q_SLOTS:
 	void testDecompositionInit();
 	void testDecompositionDuplicate();
 	void testDecompositionMethodChange();
+	void testDecompositionPeriodChange();
 };
 #endif

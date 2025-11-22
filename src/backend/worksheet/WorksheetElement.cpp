@@ -982,7 +982,7 @@ void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 	QDEBUG(Q_FUNC_INFO << ", new position (relative) =" << point)
 
 	if (point != position.point) { // position was changed
-		suppressRetransform = true;
+		Lock lock(suppressRetransform, true);
 		auto tempPosition = position;
 		tempPosition.point = point;
 		// switch to relative
@@ -990,7 +990,6 @@ void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 		tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Relative;
 		q->setPosition(tempPosition);
 		updatePosition(); // to update the logical position if available
-		suppressRetransform = false;
 	}
 
 	m_moveStarted = false;
