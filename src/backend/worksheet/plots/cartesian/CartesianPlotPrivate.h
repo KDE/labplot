@@ -250,8 +250,6 @@ public:
 		}
 	}
 
-	void checkRange(Dimension, int index);
-	Range<double> checkRange(const Range<double>&);
 	CartesianPlot::RangeBreaks rangeBreaks(Dimension);
 	bool rangeBreakingEnabled(Dimension);
 

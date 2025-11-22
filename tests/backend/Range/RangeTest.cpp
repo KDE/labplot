@@ -298,4 +298,13 @@ void RangeTest::zoomInOutDecreasingLinearRangeNotCenter() {
 	QCOMPARE(range.end(), 0.);
 }
 
+void RangeTest::checkRangeLog() {
+	Range<double> range(0., 100., RangeT::Format::Numeric, RangeT::Scale::Linear);
+	range.setScale(RangeT::Scale::Log10);
+	const auto r = range.checkRange();
+	QCOMPARE(r.scale(), RangeT::Scale::Log10);
+	QVERIFY(r.start() > 0.); // Zero is not valid for the logarithmic range, so set start value to a different value
+	QCOMPARE(r.end(), 100.);
+}
+
 QTEST_MAIN(RangeTest)

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-08 00:38+0000\n"
+"POT-Creation-Date: 2025-11-18 00:40+0000\n"
 "PO-Revision-Date: 2024-04-17 05:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -363,23 +363,23 @@ msgctxt "default labels of filter input ports"
 msgid "In%1"
 msgstr "於："
 
-#: src/backend/core/AbstractPart.cpp:125
+#: src/backend/core/AbstractPart.cpp:135
 #, fuzzy, kde-format
 msgid "Import Data"
 msgstr "匯入"
 
-#: src/backend/core/AbstractPart.cpp:126 src/frontend/ActionsManager.cpp:261
+#: src/backend/core/AbstractPart.cpp:136 src/frontend/ActionsManager.cpp:261
 #, fuzzy, kde-format
 msgid "From File..."
 msgstr "image"
 
-#: src/backend/core/AbstractPart.cpp:128 src/frontend/ActionsManager.cpp:281
+#: src/backend/core/AbstractPart.cpp:138 src/frontend/ActionsManager.cpp:281
 #, kde-format
 msgid "From SQL Database..."
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:137
+#: src/backend/core/AbstractPart.cpp:147
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:328
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
@@ -388,22 +388,22 @@ msgstr ""
 msgid "Export"
 msgstr "匯出"
 
-#: src/backend/core/AbstractPart.cpp:138
+#: src/backend/core/AbstractPart.cpp:148
 #, fuzzy, kde-format
 msgid "Print"
 msgstr "列印"
 
-#: src/backend/core/AbstractPart.cpp:139
+#: src/backend/core/AbstractPart.cpp:149
 #, fuzzy, kde-format
 msgid "Print Preview"
 msgstr "預覽列印"
 
-#: src/backend/core/AbstractPart.cpp:147 src/frontend/ActionsManager.cpp:381
+#: src/backend/core/AbstractPart.cpp:157 src/frontend/ActionsManager.cpp:381
 #, fuzzy, kde-format
 msgid "&Close"
 msgstr "全部關閉"
 
-#: src/backend/core/AbstractPart.cpp:152 src/backend/core/AbstractPart.cpp:165
+#: src/backend/core/AbstractPart.cpp:162 src/backend/core/AbstractPart.cpp:175
 #, kde-format
 msgid "Show"
 msgstr "顯示"
@@ -486,7 +486,7 @@ msgid "%1   (no values)"
 msgstr "數值"
 
 #: src/backend/core/AspectTreeModel.cpp:236
-#: src/frontend/datasources/ImportFileWidget.cpp:1697
+#: src/frontend/datasources/ImportFileWidget.cpp:1698
 #, fuzzy, kde-format
 msgid "Size: %1"
 msgstr "大小"
@@ -1167,7 +1167,7 @@ msgid "Number of lines: %1"
 msgstr "行數："
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:467
-#: src/backend/datasources/filters/AsciiFilter.cpp:1252
+#: src/backend/datasources/filters/AsciiFilter.cpp:1251
 #: src/backend/datasources/filters/JsonFilter.cpp:246
 #, fuzzy, kde-format
 #| msgid "Column"
@@ -1175,13 +1175,13 @@ msgid "Column %1"
 msgstr "欄"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:541
-#: src/backend/datasources/filters/AsciiFilter.cpp:1275
+#: src/backend/datasources/filters/AsciiFilter.cpp:1274
 #, kde-format
 msgid "Timestamp"
 msgstr ""
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:545
-#: src/backend/datasources/filters/AsciiFilter.cpp:1279
+#: src/backend/datasources/filters/AsciiFilter.cpp:1278
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1249,7 +1249,7 @@ msgstr "開啟失敗"
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:334
-#: src/backend/datasources/filters/XLSXFilter.cpp:508
+#: src/backend/datasources/filters/XLSXFilter.cpp:512
 #, fuzzy, kde-format
 msgid "Not enough memory."
 msgstr "數字"
@@ -1367,7 +1367,7 @@ msgid "Free space: %1 bytes"
 msgstr ""
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:199
-#: src/frontend/datasources/ImportFileWidget.cpp:1788
+#: src/frontend/datasources/ImportFileWidget.cpp:1789
 #, fuzzy, kde-format
 msgid "Number of files: %1"
 msgstr "行數："
@@ -1566,7 +1566,7 @@ msgstr "檔案資訊"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/frontend/datasources/ImportFileWidget.cpp:1672
+#: src/frontend/datasources/ImportFileWidget.cpp:1673
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr ""
@@ -2157,7 +2157,7 @@ msgid "Sheet count: %1"
 msgstr ""
 
 #: src/backend/datasources/filters/OdsFilter.cpp:225
-#: src/backend/datasources/filters/XLSXFilter.cpp:625
+#: src/backend/datasources/filters/XLSXFilter.cpp:629
 #, fuzzy, kde-format
 msgid "No sheet selected."
 msgstr "清除選擇"
@@ -2451,7 +2451,7 @@ msgstr ""
 msgid "Sheets: "
 msgstr ""
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:629
+#: src/backend/datasources/filters/XLSXFilter.cpp:633
 #, kde-format
 msgid "Invalid region specified."
 msgstr ""
@@ -6831,7 +6831,7 @@ msgstr "方向"
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:496
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
-#: src/frontend/datasources/ImportFileWidget.cpp:1418
+#: src/frontend/datasources/ImportFileWidget.cpp:1419
 #: src/frontend/dockwidgets/AxisDock.cpp:233
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:172
 #: src/frontend/dockwidgets/WorksheetDock.cpp:264
@@ -11764,7 +11764,7 @@ msgid "Select Y-Region and Zoom In"
 msgstr "全部選取"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1592
+#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1579
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1429
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
@@ -13020,7 +13020,7 @@ msgid ""
 "The number of rows is calculated from the values of the data portion tab"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1054
+#: src/frontend/datasources/ImportFileWidget.cpp:1055
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Select the File Data Source"
@@ -13028,37 +13028,37 @@ msgctxt "@title:window"
 msgid "Select the Directory Data Source"
 msgstr "選擇檔案資料來源"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1056
+#: src/frontend/datasources/ImportFileWidget.cpp:1057
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "選擇檔案資料來源"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1086
+#: src/frontend/datasources/ImportFileWidget.cpp:1087
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "選擇 DBC 檔案"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1086
+#: src/frontend/datasources/ImportFileWidget.cpp:1087
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1173
+#: src/frontend/datasources/ImportFileWidget.cpp:1174
 #, kde-format
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1176
+#: src/frontend/datasources/ImportFileWidget.cpp:1177
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/frontend/datasources/ImportFileWidget.cpp:1324
+#: src/frontend/datasources/ImportFileWidget.cpp:1325
 #: src/frontend/ui/datasources/importfilewidget.ui:416
 #, fuzzy, kde-format
 msgid "Data Format"
@@ -13066,7 +13066,7 @@ msgstr "資料格式"
 
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/frontend/datasources/ImportFileWidget.cpp:1325
+#: src/frontend/datasources/ImportFileWidget.cpp:1326
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
 #: src/frontend/ui/settingsworksheetpage.ui:134
@@ -13075,279 +13075,279 @@ msgid "Preview"
 msgstr "預覽"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/frontend/datasources/ImportFileWidget.cpp:1327
+#: src/frontend/datasources/ImportFileWidget.cpp:1328
 #: src/frontend/ui/datasources/importfilewidget.ui:582
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1370
+#: src/frontend/datasources/ImportFileWidget.cpp:1371
 #, fuzzy, kde-format
 msgid "Data format && preview"
 msgstr "資料格式"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1417
+#: src/frontend/datasources/ImportFileWidget.cpp:1418
 #, kde-format
 msgid "Automatic"
 msgstr "自動"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1664
+#: src/frontend/datasources/ImportFileWidget.cpp:1665
 #, fuzzy, kde-format
 msgid "file command not found"
 msgstr "檔案資訊"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1675
+#: src/frontend/datasources/ImportFileWidget.cpp:1676
 #, fuzzy, kde-format
 msgid "cannot open"
 msgstr "無法開啟 %1：%2"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1680
+#: src/frontend/datasources/ImportFileWidget.cpp:1681
 #, fuzzy, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "檔案型態"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1685
-#: src/frontend/datasources/ImportFileWidget.cpp:1773
+#: src/frontend/datasources/ImportFileWidget.cpp:1686
+#: src/frontend/datasources/ImportFileWidget.cpp:1774
 #, fuzzy, kde-format
 msgid "General:"
 msgstr "一般"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1687
 #: src/frontend/datasources/ImportFileWidget.cpp:1688
 #: src/frontend/datasources/ImportFileWidget.cpp:1689
-#: src/frontend/datasources/ImportFileWidget.cpp:1775
+#: src/frontend/datasources/ImportFileWidget.cpp:1690
 #: src/frontend/datasources/ImportFileWidget.cpp:1776
 #: src/frontend/datasources/ImportFileWidget.cpp:1777
+#: src/frontend/datasources/ImportFileWidget.cpp:1778
 #, kde-format
 msgid "yes"
 msgstr "是"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1687
 #: src/frontend/datasources/ImportFileWidget.cpp:1688
 #: src/frontend/datasources/ImportFileWidget.cpp:1689
-#: src/frontend/datasources/ImportFileWidget.cpp:1775
+#: src/frontend/datasources/ImportFileWidget.cpp:1690
 #: src/frontend/datasources/ImportFileWidget.cpp:1776
 #: src/frontend/datasources/ImportFileWidget.cpp:1777
+#: src/frontend/datasources/ImportFileWidget.cpp:1778
 #, kde-format
 msgid "no"
 msgstr "否"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1687
-#: src/frontend/datasources/ImportFileWidget.cpp:1775
+#: src/frontend/datasources/ImportFileWidget.cpp:1688
+#: src/frontend/datasources/ImportFileWidget.cpp:1776
 #, fuzzy, kde-format
 msgid "Readable: %1"
 msgstr "可讀取："
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1688
-#: src/frontend/datasources/ImportFileWidget.cpp:1776
+#: src/frontend/datasources/ImportFileWidget.cpp:1689
+#: src/frontend/datasources/ImportFileWidget.cpp:1777
 #, fuzzy, kde-format
 msgid "Writable: %1"
 msgstr "可寫入："
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1689
-#: src/frontend/datasources/ImportFileWidget.cpp:1777
+#: src/frontend/datasources/ImportFileWidget.cpp:1690
+#: src/frontend/datasources/ImportFileWidget.cpp:1778
 #, fuzzy, kde-format
 msgid "Executable: %1"
 msgstr "執行檔："
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1691
-#: src/frontend/datasources/ImportFileWidget.cpp:1779
+#: src/frontend/datasources/ImportFileWidget.cpp:1692
+#: src/frontend/datasources/ImportFileWidget.cpp:1780
 #, kde-format
 msgid "Birth time: %1"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1692
-#: src/frontend/datasources/ImportFileWidget.cpp:1780
+#: src/frontend/datasources/ImportFileWidget.cpp:1693
+#: src/frontend/datasources/ImportFileWidget.cpp:1781
 #, fuzzy, kde-format
 #| msgid "Last modified: %1"
 msgid "Last metadata changed: %1"
 msgstr "最後變更：%1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1693
-#: src/frontend/datasources/ImportFileWidget.cpp:1781
+#: src/frontend/datasources/ImportFileWidget.cpp:1694
+#: src/frontend/datasources/ImportFileWidget.cpp:1782
 #, kde-format
 msgid "Last modified: %1"
 msgstr "最後變更：%1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1694
-#: src/frontend/datasources/ImportFileWidget.cpp:1782
+#: src/frontend/datasources/ImportFileWidget.cpp:1695
+#: src/frontend/datasources/ImportFileWidget.cpp:1783
 #, kde-format
 msgid "Last read: %1"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1695
-#: src/frontend/datasources/ImportFileWidget.cpp:1783
+#: src/frontend/datasources/ImportFileWidget.cpp:1696
+#: src/frontend/datasources/ImportFileWidget.cpp:1784
 #, kde-format
 msgid "Owner: %1"
 msgstr "擁有者：%1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1696
-#: src/frontend/datasources/ImportFileWidget.cpp:1784
+#: src/frontend/datasources/ImportFileWidget.cpp:1697
+#: src/frontend/datasources/ImportFileWidget.cpp:1785
 #, kde-format
 msgid "Group: %1"
 msgstr "群組：%1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1697
+#: src/frontend/datasources/ImportFileWidget.cpp:1698
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1700
-#: src/frontend/datasources/ImportFileWidget.cpp:1787
+#: src/frontend/datasources/ImportFileWidget.cpp:1701
+#: src/frontend/datasources/ImportFileWidget.cpp:1788
 #, kde-format
 msgid "Summary:"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1723
-#: src/frontend/datasources/ImportFileWidget.cpp:1728
+#: src/frontend/datasources/ImportFileWidget.cpp:1724
+#: src/frontend/datasources/ImportFileWidget.cpp:1729
 #, fuzzy, kde-format
 msgid "Content:"
 msgstr "密度"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1759
+#: src/frontend/datasources/ImportFileWidget.cpp:1760
 #, fuzzy, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "無法開啟檔案 %1 以讀取"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1789
+#: src/frontend/datasources/ImportFileWidget.cpp:1790
 #, fuzzy, kde-format
 msgid "Number of sub-directories: %1"
 msgstr "欄數："
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1792
+#: src/frontend/datasources/ImportFileWidget.cpp:1793
 #, fuzzy, kde-format
 msgid "Couldn't read the directory %1."
 msgstr "無法開啟檔案 %1 以讀取"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1881
+#: src/frontend/datasources/ImportFileWidget.cpp:1882
 #, kde-format
 msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
 "be larger than 'Start Row' or -1"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1892
+#: src/frontend/datasources/ImportFileWidget.cpp:1893
 #, fuzzy, kde-format
 msgid "Initialization failed: %1"
 msgstr "連線"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1917
+#: src/frontend/datasources/ImportFileWidget.cpp:1918
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to connect to the local socket: %1"
 msgstr "開啟失敗"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1934
+#: src/frontend/datasources/ImportFileWidget.cpp:1935
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to connect to the TCP socket. %1"
 msgstr "開啟失敗"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1940
-#: src/frontend/datasources/ImportFileWidget.cpp:1969
+#: src/frontend/datasources/ImportFileWidget.cpp:1941
+#: src/frontend/datasources/ImportFileWidget.cpp:1970
 #, kde-format
 msgid "Socket operation timed out."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1954
+#: src/frontend/datasources/ImportFileWidget.cpp:1955
 #, kde-format
 msgid "Not ready for read after 2s:"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1973
+#: src/frontend/datasources/ImportFileWidget.cpp:1974
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Unable to bind: "
 msgstr "開啟失敗"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1990
+#: src/frontend/datasources/ImportFileWidget.cpp:1991
 #, fuzzy, kde-format
 #| msgid "Created: %1"
 msgid "Parse Error: %1"
 msgstr "建立時間：%1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1992
+#: src/frontend/datasources/ImportFileWidget.cpp:1993
 #, kde-format
 msgid "Not ready for read after 2 sec"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1996
+#: src/frontend/datasources/ImportFileWidget.cpp:1997
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to open serial port. error: %1"
 msgstr "開啟失敗"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2015
+#: src/frontend/datasources/ImportFileWidget.cpp:2016
 #, fuzzy, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "清除選擇"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2280
+#: src/frontend/datasources/ImportFileWidget.cpp:2281
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2338
+#: src/frontend/datasources/ImportFileWidget.cpp:2339
 #, kde-format
 msgid "Parsing ODS file %1 failed."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2746
+#: src/frontend/datasources/ImportFileWidget.cpp:2747
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2754
+#: src/frontend/datasources/ImportFileWidget.cpp:2755
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to connect to '%1'. Error %2."
 msgstr "開啟失敗"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2776
+#: src/frontend/datasources/ImportFileWidget.cpp:2777
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2842
+#: src/frontend/datasources/ImportFileWidget.cpp:2843
 #, fuzzy, kde-format
 #| msgid "Variance"
 msgid "Available (%1)"
 msgstr "變異數"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2946
+#: src/frontend/datasources/ImportFileWidget.cpp:2947
 #, kde-format
 msgid "Wrong username or password"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2949
+#: src/frontend/datasources/ImportFileWidget.cpp:2950
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2953
+#: src/frontend/datasources/ImportFileWidget.cpp:2954
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2956
+#: src/frontend/datasources/ImportFileWidget.cpp:2957
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2959
+#: src/frontend/datasources/ImportFileWidget.cpp:2960
 #, kde-format
 msgid "An unknown error occurred."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2965
-#: src/frontend/datasources/ImportFileWidget.cpp:2968
+#: src/frontend/datasources/ImportFileWidget.cpp:2966
+#: src/frontend/datasources/ImportFileWidget.cpp:2969
 #, kde-format
 msgid "An error occurred."
 msgstr ""
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2982
+#: src/frontend/datasources/ImportFileWidget.cpp:2983
 #, fuzzy, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "連線"
@@ -13729,7 +13729,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
-#: src/frontend/MainWin.cpp:2019
+#: src/frontend/MainWin.cpp:2006
 #, kde-format
 msgid "Warning"
 msgstr ""
@@ -16716,40 +16716,40 @@ msgstr ""
 msgid "%1"
 msgstr "A1"
 
-#: src/frontend/MainWin.cpp:1915
+#: src/frontend/MainWin.cpp:1902
 #, fuzzy, kde-format
 #| msgid "File not found"
 msgid "Kaggle CLI tool not found"
 msgstr "找不到檔案"
 
-#: src/frontend/MainWin.cpp:1916
+#: src/frontend/MainWin.cpp:1903
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
 "again."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1982
+#: src/frontend/MainWin.cpp:1969
 #, kde-format
 msgid "%1 exported"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1989
+#: src/frontend/MainWin.cpp:1976
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2001
+#: src/frontend/MainWin.cpp:1988
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2019
+#: src/frontend/MainWin.cpp:2006
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr ""
 
-#: src/frontend/MainWin.cpp:2023
+#: src/frontend/MainWin.cpp:2010
 #, kde-format
 msgid "Live data source%1"
 msgstr "即時資料來源%1"
