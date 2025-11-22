@@ -55,7 +55,7 @@ protected:
 	void initTabs();
 	static QList<AspectType> defaultColumnTopLevelClasses();
 	void setModel();
-	void setSymbols(QList<XYCurve*>);
+	void setSymbols(const QList<XYCurve*>&);
 
 	Ui::XYCurveDock ui;
 	LineWidget* lineWidget{nullptr};

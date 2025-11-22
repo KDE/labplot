@@ -1,16 +1,15 @@
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
-# Burkhard Lück <lueck@hube-lueck.de>, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
-# Frederik Schwarzer <schwarzer@kde.org>, 2014, 2016, 2020, 2022, 2023.
+# Copyright (C) 2025 This_file_is_part_of_KDE
+# This file is distributed under the same license as the labplot package.
+# SPDX-FileCopyrightText: 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2014, 2016, 2020, 2022, 2023 Frederik Schwarzer <schwarzer@kde.org>
 # SPDX-FileCopyrightText: 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Stefan Gerlach <stefan.gerlach@uni.kn>
-# Frank Steinmetzger <dev-kde@felsenfleischer.de>, 2023.
-#
+# SPDX-FileCopyrightText: 2023 Frank Steinmetzger <dev-kde@felsenfleischer.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-29 00:39+0000\n"
-"PO-Revision-Date: 2025-07-07 10:03+0200\n"
+"POT-Creation-Date: 2025-11-18 00:40+0000\n"
+"PO-Revision-Date: 2025-11-02 00:27+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -18,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Lokalize 25.08.2\n"
 
 #: src/backend/core/AbstractAspect.cpp:233
 #, kde-format
@@ -56,7 +55,7 @@ msgstr "Umbenennen"
 #: src/backend/core/AbstractAspect.cpp:410
 #: src/backend/spreadsheet/Spreadsheet.cpp:711
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:487
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:273
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:270
 #: src/frontend/worksheet/WorksheetView.cpp:138
 #, kde-format
 msgid "Delete"
@@ -180,7 +179,7 @@ msgstr "Tage"
 #: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:274
 #: src/frontend/dockwidgets/AxisDock.cpp:290
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:282
-#: src/frontend/dockwidgets/XYCurveDock.cpp:477 src/frontend/GuiTools.cpp:159
+#: src/frontend/dockwidgets/XYCurveDock.cpp:476 src/frontend/GuiTools.cpp:159
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
 #: src/frontend/widgets/LineWidget.cpp:47
@@ -362,23 +361,23 @@ msgctxt "default labels of filter input ports"
 msgid "In%1"
 msgstr "Ein%1"
 
-#: src/backend/core/AbstractPart.cpp:125
+#: src/backend/core/AbstractPart.cpp:135
 #, kde-format
 msgid "Import Data"
 msgstr "Daten importieren"
 
-#: src/backend/core/AbstractPart.cpp:126 src/frontend/ActionsManager.cpp:261
+#: src/backend/core/AbstractPart.cpp:136 src/frontend/ActionsManager.cpp:261
 #, kde-format
 msgid "From File..."
 msgstr "Aus Datei..."
 
-#: src/backend/core/AbstractPart.cpp:128 src/frontend/ActionsManager.cpp:281
+#: src/backend/core/AbstractPart.cpp:138 src/frontend/ActionsManager.cpp:281
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Aus SQL-Datenbank..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:137
+#: src/backend/core/AbstractPart.cpp:147
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:328
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
@@ -387,22 +386,22 @@ msgstr "Aus SQL-Datenbank..."
 msgid "Export"
 msgstr "Exportieren"
 
-#: src/backend/core/AbstractPart.cpp:138
+#: src/backend/core/AbstractPart.cpp:148
 #, kde-format
 msgid "Print"
 msgstr "Drucken"
 
-#: src/backend/core/AbstractPart.cpp:139
+#: src/backend/core/AbstractPart.cpp:149
 #, kde-format
 msgid "Print Preview"
 msgstr "Druckvorschau"
 
-#: src/backend/core/AbstractPart.cpp:147 src/frontend/ActionsManager.cpp:381
+#: src/backend/core/AbstractPart.cpp:157 src/frontend/ActionsManager.cpp:381
 #, kde-format
 msgid "&Close"
 msgstr "S&chließen"
 
-#: src/backend/core/AbstractPart.cpp:152 src/backend/core/AbstractPart.cpp:165
+#: src/backend/core/AbstractPart.cpp:162 src/backend/core/AbstractPart.cpp:175
 #, kde-format
 msgid "Show"
 msgstr "Anzeigen"
@@ -485,7 +484,7 @@ msgid "%1   (no values)"
 msgstr "%1  (Keine Werte)"
 
 #: src/backend/core/AspectTreeModel.cpp:236
-#: src/frontend/datasources/ImportFileWidget.cpp:1697
+#: src/frontend/datasources/ImportFileWidget.cpp:1698
 #, kde-format
 msgid "Size: %1"
 msgstr "Größe: %1"
@@ -1170,20 +1169,20 @@ msgid "Number of lines: %1"
 msgstr "Anzahl der Zeilen: %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:467
-#: src/backend/datasources/filters/AsciiFilter.cpp:1252
+#: src/backend/datasources/filters/AsciiFilter.cpp:1251
 #: src/backend/datasources/filters/JsonFilter.cpp:246
 #, kde-format
 msgid "Column %1"
 msgstr "Spalte %1"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:541
-#: src/backend/datasources/filters/AsciiFilter.cpp:1275
+#: src/backend/datasources/filters/AsciiFilter.cpp:1274
 #, kde-format
 msgid "Timestamp"
 msgstr "Zeitstempel"
 
 #: src/backend/datasources/filters/AsciiFilter.cpp:545
-#: src/backend/datasources/filters/AsciiFilter.cpp:1279
+#: src/backend/datasources/filters/AsciiFilter.cpp:1278
 #: src/backend/datasources/filters/BinaryFilter.cpp:293
 #: src/backend/datasources/filters/BinaryFilter.cpp:436
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -1248,7 +1247,7 @@ msgstr "Fehler beim Öffnen des Geräts/der Datei oder leer."
 #: src/backend/datasources/filters/ROOTFilter.cpp:305
 #: src/backend/datasources/filters/SpiceFilter.cpp:206
 #: src/backend/datasources/filters/VectorBLFFilter.cpp:334
-#: src/backend/datasources/filters/XLSXFilter.cpp:508
+#: src/backend/datasources/filters/XLSXFilter.cpp:512
 #, kde-format
 msgid "Not enough memory."
 msgstr "Nicht genug Speicher."
@@ -1273,6 +1272,9 @@ msgid ""
 "count >= %3. Check if the correct separator is used and the data contains "
 "same number of columns."
 msgstr ""
+"Ungültige Anzahl von Datenspalten. Spaltenanzahl in der ersten Zeile: %1. "
+"Spaltenanzahl in Zeile %2 ≥ %3. Überprüfen Sie, ob der richtige Trenner "
+"verwendet wird und ob die Daten die gleiche Anzahl von Spalten enthalten."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:239
 #, kde-format
@@ -1360,7 +1362,7 @@ msgid "Free space: %1 bytes"
 msgstr "Freier Speicher: %1 Bytes"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:199
-#: src/frontend/datasources/ImportFileWidget.cpp:1788
+#: src/frontend/datasources/ImportFileWidget.cpp:1789
 #, kde-format
 msgid "Number of files: %1"
 msgstr "Anzahl der Dateien: %1"
@@ -1559,7 +1561,7 @@ msgstr "h5dump Kommando nicht gefunden."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:358
 #: src/backend/datasources/filters/NetCDFFilter.cpp:268
-#: src/frontend/datasources/ImportFileWidget.cpp:1672
+#: src/frontend/datasources/ImportFileWidget.cpp:1673
 #, kde-format
 msgid "Reading from file %1 failed."
 msgstr "Leasen aus Datei %1 fehlgeschlagen."
@@ -2125,7 +2127,7 @@ msgid "Sheet count: %1"
 msgstr "Anzahl Blätter: %1"
 
 #: src/backend/datasources/filters/OdsFilter.cpp:225
-#: src/backend/datasources/filters/XLSXFilter.cpp:625
+#: src/backend/datasources/filters/XLSXFilter.cpp:629
 #, kde-format
 msgid "No sheet selected."
 msgstr "Kein Blatt ausgewählt."
@@ -2219,8 +2221,7 @@ msgid "Compression: %1"
 msgstr "Komprimierung: %1"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:165
-#, fuzzy, kde-format
-#| msgid "Endianess: %1"
+#, kde-format
 msgid "Endianness: %1"
 msgstr "Byte-Reihenfolge: %1"
 
@@ -2410,7 +2411,7 @@ msgstr "Zeit_10µs"
 msgid "Sheets: "
 msgstr "Blätter:"
 
-#: src/backend/datasources/filters/XLSXFilter.cpp:629
+#: src/backend/datasources/filters/XLSXFilter.cpp:633
 #, kde-format
 msgid "Invalid region specified."
 msgstr "Ungültiger Bereich angegeben."
@@ -2446,8 +2447,7 @@ msgid "Device not available."
 msgstr "Gerät nicht verfügbar."
 
 #: src/backend/datasources/LiveDataSource.cpp:752
-#, fuzzy, kde-format
-#| msgid "Timeout occured."
+#, kde-format
 msgid "Timeout occurred."
 msgstr "Zeitüberschreitung aufgetreten."
 
@@ -3669,7 +3669,7 @@ msgstr "Größe"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinimum)
 #: src/backend/gsl/functions.cpp:258
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:63
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:133
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:65
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:103
@@ -3682,7 +3682,7 @@ msgstr "Minimum"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMaximum)
 #: src/backend/gsl/functions.cpp:259 src/backend/nsl/nsl_conv.c:23
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:63
 #: src/frontend/spreadsheet/AddSubtractValueDialog.cpp:134
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:66
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:104
@@ -3706,7 +3706,7 @@ msgstr "Arithmetisches Mittel"
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #. i18n: ectx: property (text), widget (QCheckBox, cbMedian)
 #: src/backend/gsl/functions.cpp:261
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:71
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
 #: src/backend/statistics/HypothesisTest.cpp:529
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:231
 #: src/frontend/dockwidgets/RunChartDock.cpp:147
@@ -3732,7 +3732,7 @@ msgstr "Standardabweichung"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbVariance)
 #: src/backend/gsl/functions.cpp:263
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:82
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:81
 #: src/backend/statistics/HypothesisTest.cpp:529
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:80
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:165
@@ -3773,7 +3773,7 @@ msgstr "Kontraharmonisches Mittel"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbMode)
 #: src/backend/gsl/functions.cpp:267
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:69
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:68
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:71
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:94
 #, kde-format
@@ -3833,7 +3833,7 @@ msgstr "99 Perzentilwert"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbTrimean)
 #: src/backend/gsl/functions.cpp:277
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:80
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:79
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:75
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:122
 #, kde-format
@@ -3864,7 +3864,7 @@ msgstr "Median der absoluten Abweichung"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbSkewness)
 #: src/backend/gsl/functions.cpp:281
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:87
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:86
 #: src/backend/statistics/HypothesisTest.cpp:529
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:89
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:242
@@ -3876,7 +3876,7 @@ msgstr "Schiefe"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbKurtosis)
 #: src/backend/gsl/functions.cpp:282
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:88
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:87
 #: src/backend/statistics/HypothesisTest.cpp:529
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:90
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:249
@@ -3888,7 +3888,7 @@ msgstr "Wölbung"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QCheckBox, cbEntropy)
 #: src/backend/gsl/functions.cpp:283
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:89
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:88
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:91
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:256
 #: src/frontend/ui/mqttwillsettingswidget.ui:185
@@ -6690,7 +6690,7 @@ msgstr "Statistik (Verteilungen)"
 #: src/backend/nsl/nsl_fit.c:24
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:496
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1870
-#: src/frontend/datasources/ImportFileWidget.cpp:1418
+#: src/frontend/datasources/ImportFileWidget.cpp:1419
 #: src/frontend/dockwidgets/AxisDock.cpp:233
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:172
 #: src/frontend/dockwidgets/WorksheetDock.cpp:264
@@ -6877,12 +6877,12 @@ msgstr "Simpson (3-Punkt Regel)"
 msgid "Simpson's 3/8 (4-point)"
 msgstr "Simpson 3/8 (4-Punkt Regel)"
 
-#: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:485
+#: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:484
 #, kde-format
 msgid "Cubic Spline (Natural)"
 msgstr "Kubisches Spline (natürlich)"
 
-#: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:486
+#: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:485
 #, kde-format
 msgid "Cubic Spline (Periodic)"
 msgstr "Kubisches Spline (periodisch)"
@@ -7434,7 +7434,7 @@ msgid "invalid cell (ignored in all operations)"
 msgstr "Ungültige Zelle (wird in allen Operationen ignoriert)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCount)
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:62
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:61
 #: src/frontend/dockwidgets/HistogramDock.cpp:266
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:64
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:96
@@ -7444,96 +7444,96 @@ msgstr "Ungültige Zelle (wird in allen Operationen ignoriert)"
 msgid "Count"
 msgstr "Anzahl"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:64
 #, kde-format
 msgid "ArithmeticMean"
 msgstr "Arithmetisches Mittel"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:66
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:65
 #, kde-format
 msgid "GeometricMean"
 msgstr "Geometrisches Mittel"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:67
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:66
 #, kde-format
 msgid "HarmonicMean"
 msgstr "Harmonisches Mittel"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:68
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:67
 #, kde-format
 msgid "ContraharmonicMean"
 msgstr "Kontraharmonisches Mittel"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:70
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:69
 #, kde-format
 msgid "FirstQuartile"
 msgstr "Erstes Quartil"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:71
 #, kde-format
 msgid "ThirdQuartile"
 msgstr "Drittes Quartil"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:73
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:72
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:85
 #, kde-format
 msgid "Interquartile Range"
 msgstr "Interquatilbereich"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:74
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:73
 #, kde-format
 msgid "Percentile1"
 msgstr "Perzentile1"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:75
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:74
 #, kde-format
 msgid "Percentile5"
 msgstr "Perzentile5"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:76
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:75
 #, kde-format
 msgid "Percentile10"
 msgstr "Perzentile10"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:77
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:76
 #, kde-format
 msgid "Percentile90"
 msgstr "Perzentile90"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:78
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:77
 #, kde-format
 msgid "Percentile95"
 msgstr "Perzentile95"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:79
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:78
 #, kde-format
 msgid "Percentile99"
 msgstr "Perzentile99"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbRange)
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:81
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:80
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:79
 #: src/frontend/ui/dockwidgets/statisticsspreadsheetdock.ui:158
 #, kde-format
 msgid "Range"
 msgstr "Bereich"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:83
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:82
 #, kde-format
 msgid "StandardDeviation"
 msgstr "Standardabweichung"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:84
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:83
 #, kde-format
 msgid "MeanDeviation"
 msgstr "MittlereAbweichung"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:85
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:84
 #, kde-format
 msgid "MeanDeviationAroundMedian"
 msgstr "MittlereAbweichungvomMedian"
 
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:86
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:85
 #, kde-format
 msgid "MedianDeviation"
 msgstr "MedianAbweichung"
@@ -7542,7 +7542,7 @@ msgstr "MedianAbweichung"
 #. i18n: ectx: property (text), widget (QLabel, lNumberSymbol)
 #. i18n: ectx: property (text), widget (QLabel, lNumber)
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarsNumber)
-#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:173
+#: src/backend/spreadsheet/StatisticsSpreadsheet.cpp:171
 #: src/frontend/ui/dockwidgets/barplotdock.ui:300
 #: src/frontend/ui/dockwidgets/barplotdock.ui:460
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:380
@@ -7556,18 +7556,18 @@ msgstr "Spalte"
 #, kde-format
 msgid "One column is required."
 msgid_plural "%1 columns are required."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Eine Spalte wird benötigt."
+msgstr[1] "%1 Spalten werden benötigt."
 
 #: src/backend/statistics/HypothesisTest.cpp:56
 #, kde-format
 msgid "At least %1 and at most %2 columns are required."
-msgstr ""
+msgstr "Mindestens %1 und maximal %2 Spalten werden benötigt."
 
 #: src/backend/statistics/HypothesisTest.cpp:64
 #, kde-format
 msgid "Column '%1' must be of numeric type."
-msgstr ""
+msgstr "Spalte '%1' muss vom Typ Numerisch sein."
 
 #: src/backend/statistics/HypothesisTest.cpp:143
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:232
@@ -7579,105 +7579,102 @@ msgstr "Portables Datenformat (*.pdf *.PDF)"
 #, kde-format
 msgctxt "@title:window"
 msgid "Hypothesis Test"
-msgstr ""
+msgstr "Hypothesentest"
 
 #: src/backend/statistics/HypothesisTest.cpp:309
-#, fuzzy, kde-format
-#| msgid "Sample rate: "
+#, kde-format
 msgid "One-Sample t-Test"
-msgstr "Abtastrate: "
+msgstr "Ein-Stichproben-t-Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:311
 #, kde-format
 msgid "Independent Two-Sample t-Test"
-msgstr ""
+msgstr "Unabhängiger Zwei-Stichproben-t-Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:313
 #, kde-format
 msgid "Paired Two-Sample t-Test"
-msgstr ""
+msgstr "Gepaarter Zwei-Stichproben-t-Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:315
 #, kde-format
 msgid "Mann-Whitney U Test"
-msgstr ""
+msgstr "Mann-Whitney-U-Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:317
 #, kde-format
 msgid "Welch t-Test"
-msgstr ""
+msgstr "Welch-t-Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:319
 #, kde-format
 msgid "Wilcoxon Signed Rank Test"
-msgstr ""
+msgstr "Wilcoxon-Vorzeichen-Rang-Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:321
 #, kde-format
 msgid "One-Way ANOVA Test"
-msgstr ""
+msgstr "Einfaktorielle ANOVA-Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:323
 #, kde-format
 msgid "Kruskal-Wallis Test"
-msgstr ""
+msgstr "Kruskal-Wallis Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:325
 #, kde-format
 msgid "Log-Rank Test"
-msgstr ""
+msgstr "Log-Rank-Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:327
 #, kde-format
 msgid "Friedman Test"
-msgstr ""
+msgstr "Friedman Test"
 
 #: src/backend/statistics/HypothesisTest.cpp:329
 #, kde-format
 msgid "Chi-Square Independence Test"
-msgstr ""
+msgstr "Chi-Quadrat-Unabhängigkeitstest"
 
 #: src/backend/statistics/HypothesisTest.cpp:331
-#, fuzzy, kde-format
-#| msgid "Goodness of fit"
+#, kde-format
 msgid "Chi-Square Goodness of Fit Test"
-msgstr "Güte der Anpassung"
+msgstr "Chi-Quadrat-Anpassungstest"
 
 #: src/backend/statistics/HypothesisTest.cpp:333
 #, kde-format
 msgid "One-Way ANOVA with Repeated Measures Test"
-msgstr ""
+msgstr "Einfaktorielle ANOVA mit Messwiederholungen"
 
 #: src/backend/statistics/HypothesisTest.cpp:505
 #, kde-format
 msgid "N/A"
-msgstr ""
+msgstr "k.A."
 
 #: src/backend/statistics/HypothesisTest.cpp:509
-#, fuzzy, kde-format
-#| msgid "Device not available."
+#, kde-format
 msgid "Test result is not available."
-msgstr "Gerät nicht verfügbar."
+msgstr "Testergebnis nicht verfügbar."
 
 #: src/backend/statistics/HypothesisTest.cpp:513
 #, kde-format
 msgid "Two columns are required for this test."
-msgstr ""
+msgstr "Für diesen Test werden zwei Spalten benötigt."
 
 #: src/backend/statistics/HypothesisTest.cpp:517
 #, kde-format
 msgid "At least two columns are required."
-msgstr ""
+msgstr "Es werden mindestens zwei Spalten benötigt."
 
 #: src/backend/statistics/HypothesisTest.cpp:521
 #, kde-format
 msgid "Column '%1' requires at least %2 samples."
-msgstr ""
+msgstr "Spalte „%1“ benötigt mindestens %2 Stichproben."
 
 #: src/backend/statistics/HypothesisTest.cpp:525
 #, kde-format
 msgid "The size of each sample must be equal."
-msgstr ""
+msgstr "Die Größe jeder Stichprobe muss gleich sein."
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
 #: src/backend/statistics/HypothesisTest.cpp:529
@@ -7690,59 +7687,52 @@ msgstr "Mittelwert"
 #: src/backend/statistics/HypothesisTest.cpp:544
 #, kde-format
 msgid "Null Hypothesis"
-msgstr ""
+msgstr "Nullhypothese"
 
 #: src/backend/statistics/HypothesisTest.cpp:545
 #, kde-format
 msgid "Alternate Hypothesis"
-msgstr ""
+msgstr "Alternativhypothese"
 
 #: src/backend/statistics/HypothesisTest.cpp:547
-#, fuzzy, kde-format
-#| msgid "t Statistic"
+#, kde-format
 msgid "Descriptive Statistics"
-msgstr "t-Statistik"
+msgstr "Beschreibende Statistik"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
-#, fuzzy, kde-format
-#| msgid "t Statistic"
+#, kde-format
 msgid "Test Statistics"
-msgstr "t-Statistik"
+msgstr "Teststatistik"
 
 #: src/backend/statistics/HypothesisTest.cpp:548
 #, kde-format
 msgid "Significance Level"
-msgstr ""
+msgstr "Signifikanzniveau"
 
 #: src/backend/statistics/HypothesisTest.cpp:549
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "p-Value"
-msgstr "Wert"
+msgstr "p-Wert"
 
 #: src/backend/statistics/HypothesisTest.cpp:552
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees of Freedom Between Groups"
-msgstr "Freiheitsgrade"
+msgstr "Freiheitsgrade zwischen Gruppen"
 
 #: src/backend/statistics/HypothesisTest.cpp:553
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees of Freedom Within Groups"
-msgstr "Freiheitsgrade"
+msgstr "Freiheitsgrade in den Gruppen"
 
 #: src/backend/statistics/HypothesisTest.cpp:555
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees of Freedom Treatment"
-msgstr "Freiheitsgrade"
+msgstr "Freiheitsgradbehandlung"
 
 #: src/backend/statistics/HypothesisTest.cpp:556
-#, fuzzy, kde-format
-#| msgid "Degrees of Freedom"
+#, kde-format
 msgid "Degrees of Freedom Residuals"
-msgstr "Freiheitsgrade"
+msgstr "Freiheitsgradereste"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
 #: src/backend/statistics/HypothesisTest.cpp:558
@@ -7755,239 +7745,212 @@ msgstr "Freiheitsgrade"
 #: src/backend/statistics/HypothesisTest.cpp:567
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/backend/statistics/HypothesisTest.cpp:572
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "t-Value"
-msgstr "Wert"
+msgstr "t-Wert"
 
 #: src/backend/statistics/HypothesisTest.cpp:563
-#, fuzzy, kde-format
-#| msgid "Test"
+#, kde-format
 msgid "Test Mean"
-msgstr "Test"
+msgstr "Testmittelwert"
 
 #: src/backend/statistics/HypothesisTest.cpp:564
 #: src/backend/statistics/HypothesisTest.cpp:568
 #: src/backend/statistics/HypothesisTest.cpp:570
 #: src/backend/statistics/HypothesisTest.cpp:572
-#, fuzzy, kde-format
-#| msgid "Difference"
+#, kde-format
 msgid "Mean Difference"
-msgstr "Differenz"
+msgstr "Mittlere Differenz"
 
 #: src/backend/statistics/HypothesisTest.cpp:567
-#, fuzzy, kde-format
-#| msgid "Variance"
+#, kde-format
 msgid "Pooled Variance"
-msgstr "Varianz"
+msgstr "Gepoolte Varianz"
 
 #: src/backend/statistics/HypothesisTest.cpp:568
 #: src/backend/statistics/HypothesisTest.cpp:573
 #, kde-format
 msgid "Mean Difference Standard Error"
-msgstr ""
+msgstr "Standardfehler der mittleren Differenz"
 
 #: src/backend/statistics/HypothesisTest.cpp:575
 #: src/backend/statistics/HypothesisTest.cpp:581
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "F-Statistic"
-msgstr "Statistik"
+msgstr "F-Statistik"
 
 #: src/backend/statistics/HypothesisTest.cpp:575
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Between Groups"
-msgstr "Summe der quadratischen Fehler"
+msgstr "Summe der Quadrate zwischen Gruppen"
 
 #: src/backend/statistics/HypothesisTest.cpp:576
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Within Groups"
-msgstr "Summe der quadratischen Fehler"
+msgstr "Summe der Quadrate in den Gruppen"
 
 #: src/backend/statistics/HypothesisTest.cpp:577
-#, fuzzy, kde-format
-#| msgid "Mean square error"
+#, kde-format
 msgid "Mean Squares Between Groups"
-msgstr "Mittlerer quadratischer Fehler"
+msgstr "Mittlere Quadrate zwischen den Gruppen"
 
 #: src/backend/statistics/HypothesisTest.cpp:578
-#, fuzzy, kde-format
-#| msgid "Mean square error"
+#, kde-format
 msgid "Mean Squares Within Groups"
-msgstr "Mittlerer quadratischer Fehler"
+msgstr "Mittlere Quadrate innerhalb der Gruppen"
 
 #: src/backend/statistics/HypothesisTest.cpp:581
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Treatment"
-msgstr "Summe der quadratischen Fehler"
+msgstr "Summe der Quadrate Behandlung"
 
 #: src/backend/statistics/HypothesisTest.cpp:582
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Sum of Squares Residuals"
-msgstr "Summe der quadratischen Fehler"
+msgstr "Summe der Quadrate Reste"
 
 #: src/backend/statistics/HypothesisTest.cpp:583
 #, kde-format
 msgid "Sum of Squares Within Subjects"
-msgstr ""
+msgstr "Quadratsumme innerhalb der Versuchspersonen"
 
 #: src/backend/statistics/HypothesisTest.cpp:584
-#, fuzzy, kde-format
-#| msgid "Mean square error"
+#, kde-format
 msgid "Mean Squares Treatment"
-msgstr "Mittlerer quadratischer Fehler"
+msgstr "Mittlere Quadrate der Behandlung"
 
 #: src/backend/statistics/HypothesisTest.cpp:584
-#, fuzzy, kde-format
-#| msgid "Sum of squared residuals"
+#, kde-format
 msgid "Mean Squares Residuals"
-msgstr "Summe der quadratischen Fehler"
+msgstr "Mittlere quadratische Residuen"
 
 #: src/backend/statistics/HypothesisTest.cpp:586
-#, fuzzy, kde-format
-#| msgid "Up"
+#, kde-format
 msgid "U"
-msgstr "Hoch"
+msgstr "U"
 
 #: src/backend/statistics/HypothesisTest.cpp:586
 #: src/backend/statistics/HypothesisTest.cpp:590
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgid "z-Value"
-msgstr "Wert"
+msgstr "z-Wert"
 
 #: src/backend/statistics/HypothesisTest.cpp:587
 #, kde-format
 msgid "Rank Sum 1"
-msgstr ""
+msgstr "Rangsumme 1"
 
 #: src/backend/statistics/HypothesisTest.cpp:587
-#, fuzzy, kde-format
-#| msgid "Mean = 0"
+#, kde-format
 msgid "Mean Rank 1"
-msgstr "Mittelwert = 0"
+msgstr "Mittlerer Rank 1"
 
 #: src/backend/statistics/HypothesisTest.cpp:588
 #, kde-format
 msgid "Rank Sum 2"
-msgstr ""
+msgstr "Rangsumme 2"
 
 #: src/backend/statistics/HypothesisTest.cpp:588
-#, fuzzy, kde-format
-#| msgid "Mean = 0"
+#, kde-format
 msgid "Mean Rank 2"
-msgstr "Mittelwert = 0"
+msgstr "Mittlerer Rank 2"
 
 #: src/backend/statistics/HypothesisTest.cpp:590
 #, kde-format
 msgid "W"
-msgstr ""
+msgstr "W"
 
 #: src/backend/statistics/HypothesisTest.cpp:591
 #, kde-format
 msgid "Positive Rank Sum"
-msgstr ""
+msgstr "Positive Rangsumme"
 
 #: src/backend/statistics/HypothesisTest.cpp:591
-#, fuzzy, kde-format
-#| msgid "Positive Lookahead"
+#, kde-format
 msgid "Positive Rank Mean"
-msgstr "Positive Vorwärtsreferenz"
+msgstr "Mittlerer positiver Rang"
 
 #: src/backend/statistics/HypothesisTest.cpp:592
 #, kde-format
 msgid "Positive Rank Count"
-msgstr ""
+msgstr "Positive Rangzahl"
 
 #: src/backend/statistics/HypothesisTest.cpp:592
-#, fuzzy, kde-format
-#| msgid "Negative Binomial"
+#, kde-format
 msgid "Negative Rank Sum"
-msgstr "Negativ Binomial"
+msgstr "Summe der negativen Ränge"
 
 #: src/backend/statistics/HypothesisTest.cpp:593
-#, fuzzy, kde-format
-#| msgid "Negative lookahead"
+#, kde-format
 msgid "Negative Rank Mean"
-msgstr "Negative Vorwärtsreferenz"
+msgstr "Mittlerer negativer Rang"
 
 #: src/backend/statistics/HypothesisTest.cpp:593
-#, fuzzy, kde-format
-#| msgid "Nonnegative square root"
+#, kde-format
 msgid "Negative Rank Count"
-msgstr "Nicht-negative Quadratwurzel"
+msgstr "Anzahl der negativen Ränge"
 
 #: src/backend/statistics/HypothesisTest.cpp:594
-#, fuzzy, kde-format
-#| msgid "Bin Count:"
+#, kde-format
 msgid "Tie Count"
-msgstr "Anzahl Bins:"
+msgstr "Anzahl der Bindungen"
 
 #: src/backend/statistics/HypothesisTest.cpp:596
 #: src/backend/statistics/HypothesisTest.cpp:604
 #, kde-format
 msgid "H"
-msgstr ""
+msgstr "H"
 
 #: src/backend/statistics/HypothesisTest.cpp:598
-#, fuzzy, kde-format
-#| msgid "Qt"
+#, kde-format
 msgid "Q"
-msgstr "Qt"
+msgstr "Q"
 
 #: src/backend/statistics/HypothesisTest.cpp:600
 #: src/backend/statistics/HypothesisTest.cpp:602
 #, kde-format
 msgid "Chi2"
-msgstr ""
+msgstr "Chi2"
 
 #: src/backend/statistics/HypothesisTest.cpp:604
-#, fuzzy, kde-format
-#| msgid "Sheet count: %1"
+#, kde-format
 msgid "Event Count 1"
-msgstr "Anzahl Blätter: %1"
+msgstr "Ereigniszähler 1"
 
 #: src/backend/statistics/HypothesisTest.cpp:605
 #, kde-format
 msgid "Censored Count 1"
-msgstr ""
+msgstr "Zensierte Anzahl 1"
 
 #: src/backend/statistics/HypothesisTest.cpp:605
 #, kde-format
 msgid "Total Count 1"
-msgstr ""
+msgstr "Gesamtzahl 1"
 
 #: src/backend/statistics/HypothesisTest.cpp:606
-#, fuzzy, kde-format
-#| msgid "Set Column As"
+#, kde-format
 msgid "Event Count 2"
-msgstr "Spalte festlegen als"
+msgstr "Ereigniszähler 2"
 
 #: src/backend/statistics/HypothesisTest.cpp:606
 #, kde-format
 msgid "Censored Count 2"
-msgstr ""
+msgstr "Zensierte Anzahl 2"
 
 #: src/backend/statistics/HypothesisTest.cpp:607
 #, kde-format
 msgid "Total Count 2"
-msgstr ""
+msgstr "Gesamtzahl 2"
 
 #: src/backend/statistics/HypothesisTest.cpp:610
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Conclusion"
-msgstr "Statistik-Plots"
+msgstr "Statistisches Fazit"
 
 #: src/backend/statistics/HypothesisTest.cpp:622
-#, fuzzy, kde-format
-#| msgid "No variable selected."
+#, kde-format
 msgid "No variable columns provided."
-msgstr "Keine Variable ausgewählt."
+msgstr "Es wurden keine Variablen-Spalten angegeben."
 
 #: src/backend/statistics/HypothesisTest.cpp:867
 #, kde-format
@@ -7995,6 +7958,8 @@ msgid ""
 "At the significance level %1, the population mean is significantly different "
 "from %2. Reject the null hypothesis."
 msgstr ""
+"Auf dem Signifikanzniveau %1 ist der Populationsmittelwert signifikant von "
+"%2 verschieden. Die Nullhypothese wird verworfen."
 
 #: src/backend/statistics/HypothesisTest.cpp:871
 #, kde-format
@@ -8002,6 +7967,8 @@ msgid ""
 "At the significance level %1, the population mean is not significantly "
 "different from %2. Fail to reject the null hypothesis."
 msgstr ""
+"Auf dem Signifikanzniveau %1 ist der Populationsmittelwert nicht signifikant "
+"von %2 verschieden. Die Nullhypothese wird beibehalten."
 
 #: src/backend/statistics/HypothesisTest.cpp:955
 #: src/backend/statistics/HypothesisTest.cpp:1023
@@ -8010,6 +7977,8 @@ msgid ""
 "At the significance level %1, the population means are significantly "
 "different. Reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 sind die Populationsmittelwerte signifikant "
+"verschieden. Die Nullhypothese wird verworfen."
 
 #: src/backend/statistics/HypothesisTest.cpp:957
 #: src/backend/statistics/HypothesisTest.cpp:1025
@@ -8018,6 +7987,8 @@ msgid ""
 "At the significance level %1, the population means are not significantly "
 "different. Fail to reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 sind die Populationsmittelwerte nicht "
+"signifikant verschieden. Die Nullhypothese wird beibehalten."
 
 #: src/backend/statistics/HypothesisTest.cpp:1078
 #: src/backend/statistics/HypothesisTest.cpp:1141
@@ -8026,6 +7997,8 @@ msgid ""
 "At the significance level %1, at least one group mean is significantly "
 "different. Reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 ist mindestens ein Gruppenmittelwert "
+"signifikant verschieden. Die Nullhypothese wird verworfen."
 
 #: src/backend/statistics/HypothesisTest.cpp:1081
 #: src/backend/statistics/HypothesisTest.cpp:1144
@@ -8034,6 +8007,8 @@ msgid ""
 "At the significance level %1, no significant difference between group means. "
 "Fail to reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 besteht kein signifikanter Unterschied zwischen "
+"den Gruppenmittelwerten. Die Nullhypothese wird beibehalten."
 
 #: src/backend/statistics/HypothesisTest.cpp:1201
 #: src/backend/statistics/HypothesisTest.cpp:1259
@@ -8043,6 +8018,8 @@ msgid ""
 "At the significance level %1, at least one group distribution is "
 "significantly different. Reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 ist mindestens eine Gruppenverteilung "
+"signifikant unterschiedlich. Die Nullhypothese wird verworfen."
 
 #: src/backend/statistics/HypothesisTest.cpp:1203
 #: src/backend/statistics/HypothesisTest.cpp:1261
@@ -8052,6 +8029,8 @@ msgid ""
 "At the significance level %1, no significant difference between group "
 "distributions. Fail to reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 besteht kein signifikanter Unterschied zwischen "
+"den Gruppenverteilungen. Die Nullhypothese wird beibehalten."
 
 #: src/backend/statistics/HypothesisTest.cpp:1381
 #, kde-format
@@ -8059,6 +8038,8 @@ msgid ""
 "At the significance level %1, at least one group is significantly different. "
 "Reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 ist mindestens eine Gruppe signifikant "
+"unterschiedlich. Die Nullhypothese wird verworfen."
 
 #: src/backend/statistics/HypothesisTest.cpp:1383
 #, kde-format
@@ -8066,12 +8047,14 @@ msgid ""
 "At the significance level %1, no significant difference between groups. Fail "
 "to reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 besteht kein signifikanter Unterschied zwischen "
+"den Gruppen. Die Nullhypothese wird beibehalten."
 
 #: src/backend/statistics/HypothesisTest.cpp:1409
 #: src/backend/statistics/HypothesisTest.cpp:1476
 #, kde-format
 msgid "Column '%1' must be of integer type."
-msgstr ""
+msgstr "Spalte „%1“ muss vom Ganzzahltyp sein."
 
 #: src/backend/statistics/HypothesisTest.cpp:1448
 #, kde-format
@@ -8079,6 +8062,8 @@ msgid ""
 "At the significance level %1, the observed frequencies do not follow the "
 "expected frequency distribution. Reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 folgen die beobachteten Häufigkeiten nicht der "
+"erwarteten Häufigkeitsverteilung. Die Nullhypothese wird verworfen."
 
 #: src/backend/statistics/HypothesisTest.cpp:1452
 #, kde-format
@@ -8086,11 +8071,13 @@ msgid ""
 "At the significance level %1, the observed frequencies follow the expected "
 "frequency distribution. Fail to reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 folgen die beobachteten Häufigkeiten der "
+"erwarteten Häufigkeitsverteilung. Die Nullhypothese wird beibehalten."
 
 #: src/backend/statistics/HypothesisTest.cpp:1496
 #, kde-format
 msgid "The size of each column in the contingency table must be equal."
-msgstr ""
+msgstr "Die Größe jeder Spalte in der Kontingenztabelle muss gleich sein."
 
 #: src/backend/statistics/HypothesisTest.cpp:1512
 #, kde-format
@@ -8098,6 +8085,8 @@ msgid ""
 "At the significance level %1, both categorical variables are dependent. "
 "Reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 sind beide kategorialen Variablen abhängig. Die "
+"Nullhypothese wird verworfen."
 
 #: src/backend/statistics/HypothesisTest.cpp:1515
 #, kde-format
@@ -8105,51 +8094,56 @@ msgid ""
 "At the significance level %1, both categorical variables are independent. "
 "Fail to reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 sind beide kategorialen Variablen unabhängig. "
+"Die Nullhypothese wird beibehalten."
 
 #: src/backend/statistics/HypothesisTest.cpp:1533
 #, kde-format
 msgid "Three columns are required."
-msgstr ""
+msgstr "Drei Spalten werden benötigt."
 
 #: src/backend/statistics/HypothesisTest.cpp:1542
 #, kde-format
 msgid "Status column should be of integer type."
-msgstr ""
+msgstr "Die Statusspalte sollte vom Typ ganzzahlig sein."
 
 #: src/backend/statistics/HypothesisTest.cpp:1547
 #, kde-format
 msgid "Group column should be of integer type."
-msgstr ""
+msgstr "Die Gruppenspalte sollte vom Typ ganzzahlig sein."
 
 #: src/backend/statistics/HypothesisTest.cpp:1552
 #, kde-format
 msgid "Time, Status and Group columns should have equal size."
 msgstr ""
+"Die Spalten „Time“, „Status“ und „Group“ müssen die gleiche Größe haben."
 
 #: src/backend/statistics/HypothesisTest.cpp:1571
 #, kde-format
 msgid "Status column values must be either 0 or 1."
-msgstr ""
+msgstr "Werte der Statusspalte müssen 0 oder 1 sein."
 
 #: src/backend/statistics/HypothesisTest.cpp:1576
 #, kde-format
 msgid "Group column values must be either 0 or 1."
-msgstr ""
+msgstr "Werte der Gruppenspalte müssen 0 oder 1 sein."
 
 #: src/backend/statistics/HypothesisTest.cpp:1592
 #, kde-format
 msgid "Time, Status and Group columns should have equal number of values."
 msgstr ""
+"Die Spalten „Time“, „Status“ und „Group“ müssen die gleiche Anzahl an Werten "
+"enthalten."
 
 #: src/backend/statistics/HypothesisTest.cpp:1600
 #, kde-format
 msgid "Group 1 requires at least %1 samples."
-msgstr ""
+msgstr "Gruppe 1 benötigt mindestens %1 Werte."
 
 #: src/backend/statistics/HypothesisTest.cpp:1605
 #, kde-format
 msgid "Group 2 requires at least %1 samples."
-msgstr ""
+msgstr "Gruppe 2 benötigt mindestens %1 Werte."
 
 #: src/backend/statistics/HypothesisTest.cpp:1617
 #, kde-format
@@ -8157,6 +8151,8 @@ msgid ""
 "At the significance level %1, the survival curves are significantly "
 "different. Reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 unterscheiden sich die Überlebenskurven "
+"signifikant. Die Nullhypothese wird verworfen."
 
 #: src/backend/statistics/HypothesisTest.cpp:1620
 #, kde-format
@@ -8164,6 +8160,8 @@ msgid ""
 "At the significance level %1, no significant difference between survival "
 "curves. Fail to reject the null Hypothesis"
 msgstr ""
+"Auf dem Signifikanzniveau %1 besteht kein signifikanter Unterschied zwischen "
+"den Überlebenskurven. Die Nullhypothese wird beibehalten."
 
 #: src/backend/worksheet/Background.cpp:202
 #, kde-format
@@ -8342,7 +8340,7 @@ msgstr "%1: Untere Auffüllung festlegen"
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:245
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:90
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:88
-#: src/frontend/dockwidgets/XYCurveDock.cpp:517
+#: src/frontend/dockwidgets/XYCurveDock.cpp:516
 #, kde-format
 msgid "Horizontal"
 msgstr "Waagerecht"
@@ -8362,7 +8360,7 @@ msgstr "Waagerecht"
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:246
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:91
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:89
-#: src/frontend/dockwidgets/XYCurveDock.cpp:516
+#: src/frontend/dockwidgets/XYCurveDock.cpp:515
 #, kde-format
 msgid "Vertical"
 msgstr "Senkrecht"
@@ -8386,7 +8384,7 @@ msgstr "Ausrichtung"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:317
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:698
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:124
-#: src/frontend/dockwidgets/XYCurveDock.cpp:478
+#: src/frontend/dockwidgets/XYCurveDock.cpp:477
 #: src/frontend/ui/dockwidgets/axisdock.ui:492
 #: src/frontend/ui/dockwidgets/axisdock.ui:632
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:684
@@ -8785,8 +8783,7 @@ msgid "%1: set whiskers cap size"
 msgstr "%1: Bartkappengröße festlegen"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:574
-#, fuzzy, kde-format
-#| msgid "%1: jitterring changed"
+#, kde-format
 msgid "%1: jittering changed"
 msgstr "%1: Jitter geändert"
 
@@ -9754,10 +9751,9 @@ msgid "%1: legend visibility changed"
 msgstr "%1: Legendensichtbarkeit geändert"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:546
-#, fuzzy, kde-format
-#| msgid "%1: set limits metric"
+#, kde-format
 msgid "%1: set limits type"
-msgstr "%1: Grenzmetrik festlegen"
+msgstr "%1: Grenztyp festlegen"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:553
 #, kde-format
@@ -9790,22 +9786,19 @@ msgid "%1: set minimal lower limit"
 msgstr "%1: minimale Untergrenze festlegen"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:591
-#, fuzzy, kde-format
-#| msgid "%1: set center metric"
+#, kde-format
 msgid "%1: set center specification"
-msgstr "%1: Zentralmetrik festlegen"
+msgstr "%1: Zentralspezifikation festlegen"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:598
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#, kde-format
 msgid "%1: set upper limit specification"
-msgstr "%1: Plotzuordnung festlegen"
+msgstr "%1: Obergrenzen-Spezifikation festlegen"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:605
-#, fuzzy, kde-format
-#| msgid "%1: set plot designation"
+#, kde-format
 msgid "%1: set lower limit specification"
-msgstr "%1: Plotzuordnung festlegen"
+msgstr "%1: Untergrenzen-Spezifikation festlegen"
 
 #: src/backend/worksheet/plots/cartesian/ProcessBehaviorChart.cpp:614
 #, kde-format
@@ -10600,12 +10593,12 @@ msgctxt "Curve Fitting"
 msgid "Fit Results"
 msgstr "Fitergebnisse"
 
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:76
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:77
 #, kde-format
 msgid "%1: set filter options and perform the Fourier filter"
 msgstr "%1: Einstellungen festlegen und den Fourier-Filter durchführen"
 
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:166
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:167
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:122
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:123
 #, kde-format
@@ -11233,15 +11226,14 @@ msgid "Import data from a regular file"
 msgstr "Daten aus einer Datei importieren"
 
 #: src/frontend/ActionsManager.cpp:269
-#, fuzzy, kde-format
-#| msgid "From File..."
+#, kde-format
 msgid "From Directory..."
-msgstr "Aus Datei..."
+msgstr "Aus Verzeichnis..."
 
 #: src/frontend/ActionsManager.cpp:271
 #, kde-format
 msgid "Import multiple files from a directory"
-msgstr ""
+msgstr "Importiere mehrere Dateien aus einem Verzeichnis"
 
 #: src/frontend/ActionsManager.cpp:276
 #, kde-format
@@ -11511,7 +11503,7 @@ msgid "Select Y-Region and Zoom In"
 msgstr "Y-Bereich Auswählen und Vergrößern"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1592
+#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1579
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1429
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
@@ -12239,25 +12231,25 @@ msgstr "Eigenschaften"
 msgid "This option determines how the image is converted when importing."
 msgstr "Diese Option bestimmt, wie das Bild beim Importieren konvertiert wird."
 
-#: src/frontend/datasources/ImportDatasetDialog.cpp:56
+#: src/frontend/datasources/ImportDatasetDialog.cpp:55
 #, kde-format
 msgctxt "@title:window"
 msgid "Import from Dataset Collection"
 msgstr "Aus Datensatzsammlung importieren"
 
-#: src/frontend/datasources/ImportDatasetDialog.cpp:93
-#: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:86
+#: src/frontend/datasources/ImportDatasetDialog.cpp:92
+#: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:85
 #: src/frontend/welcomescreen/WelcomeScreenHelper.cpp:115
 #, kde-format
 msgid "Dataset%1"
 msgstr "Datensatz%1"
 
-#: src/frontend/datasources/ImportDatasetDialog.cpp:103
+#: src/frontend/datasources/ImportDatasetDialog.cpp:102
 #, kde-format
 msgid "Failed to connect within %1 seconds"
 msgstr "Verbinden innerhalb von %1 Sekunden fehlgeschlagen"
 
-#: src/frontend/datasources/ImportDatasetDialog.cpp:128
+#: src/frontend/datasources/ImportDatasetDialog.cpp:127
 #, kde-format
 msgid "Dataset imported in %1 seconds."
 msgstr "Datensatz in %1 Sekunden importiert."
@@ -12288,13 +12280,13 @@ msgstr ""
 "Datensatzsammlung %1 konnte nicht geöffnet werden. Bitte die Installation "
 "überprüfen."
 
-#: src/frontend/datasources/ImportDatasetWidget.cpp:522
+#: src/frontend/datasources/ImportDatasetWidget.cpp:527
 #, kde-format
 msgid "Dataset"
 msgstr "Datensatz"
 
 #. i18n: ectx: property (text), widget (QLabel, lDescription)
-#: src/frontend/datasources/ImportDatasetWidget.cpp:525
+#: src/frontend/datasources/ImportDatasetWidget.cpp:530
 #: src/frontend/ui/datasources/datasetmetadatamanagerwidget.ui:210
 #, kde-format
 msgid "Description"
@@ -12396,8 +12388,7 @@ msgid "Matrix name:"
 msgstr "Matrixname:"
 
 #: src/frontend/datasources/ImportDialog.cpp:148
-#, fuzzy, kde-format
-#| msgid "Add new folder"
+#, kde-format
 msgid "Add a new Folder"
 msgstr "Neuen Ordner hinzufügen"
 
@@ -12408,10 +12399,9 @@ msgid "Folder name:"
 msgstr "Ordnername:"
 
 #: src/frontend/datasources/ImportDialog.cpp:181
-#, fuzzy, kde-format
-#| msgid "Folder"
+#, kde-format
 msgid "New Folder"
-msgstr "Ordner"
+msgstr "Neuer Ordner"
 
 #: src/frontend/datasources/ImportDialog.cpp:185
 #: src/frontend/datasources/ImportDialog.cpp:189
@@ -12485,16 +12475,14 @@ msgid "File %1 imported in %2 seconds."
 msgstr "Die Datei %1 wurde in %2 Sekunden importiert."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:202
-#, fuzzy, kde-format
-#| msgid "The project file %1 doesn't exist."
+#, kde-format
 msgid "The directory %1 doesn't exist."
-msgstr "Die Projektdatei %1 existiert nicht."
+msgstr "Das Verzeichnis %1 existiert nicht."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:233
-#, fuzzy, kde-format
-#| msgid "File %1 imported in %2 seconds."
+#, kde-format
 msgid "%1 files imported in %2 seconds."
-msgstr "Die Datei %1 wurde in %2 Sekunden importiert."
+msgstr "%1 Dateien in %2 Sekunden importiert."
 
 #: src/frontend/datasources/ImportFileDialog.cpp:407
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:151
@@ -12776,32 +12764,30 @@ msgid ""
 msgstr ""
 "Die Anzahl der Reihen wird aus den Werten des Datenbereichsreiters berechnet"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1054
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Select the File Data Source"
+#: src/frontend/datasources/ImportFileWidget.cpp:1055
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the Directory Data Source"
-msgstr "Datenquellendatei auswählen"
+msgstr "Verzeichnisdatenquelle auswählen"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1056
+#: src/frontend/datasources/ImportFileWidget.cpp:1057
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Datenquellendatei auswählen"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1086
+#: src/frontend/datasources/ImportFileWidget.cpp:1087
 #, kde-format
 msgctxt "@title:window"
 msgid "Select the DBC file"
 msgstr "Wählen Sie die DBC Datei"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1086
+#: src/frontend/datasources/ImportFileWidget.cpp:1087
 #, kde-format
 msgid "DBC file (*.dbc)"
 msgstr "DBC-Datei (*.dbc)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1173
+#: src/frontend/datasources/ImportFileWidget.cpp:1174
 #, kde-format
 msgid ""
 "Origin Project files need to be opened with \"Import -> Origin Project\"!"
@@ -12809,7 +12795,7 @@ msgstr ""
 "Origin Projektdateien müssen mittels \"Import -> Origin Projekt\" geöffnet "
 "werden!"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1176
+#: src/frontend/datasources/ImportFileWidget.cpp:1177
 #, kde-format
 msgid ""
 "LabPlot Project files need to be opened with \"Import -> LabPlot Project\"!"
@@ -12818,7 +12804,7 @@ msgstr ""
 "werden!"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/frontend/datasources/ImportFileWidget.cpp:1324
+#: src/frontend/datasources/ImportFileWidget.cpp:1325
 #: src/frontend/ui/datasources/importfilewidget.ui:416
 #, kde-format
 msgid "Data Format"
@@ -12826,7 +12812,7 @@ msgstr "Datenformat"
 
 #. i18n: ectx: property (text), widget (QLabel, lPreview)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/frontend/datasources/ImportFileWidget.cpp:1325
+#: src/frontend/datasources/ImportFileWidget.cpp:1326
 #: src/frontend/ui/datasources/importfilewidget.ui:470
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:158
 #: src/frontend/ui/settingsworksheetpage.ui:134
@@ -12835,155 +12821,153 @@ msgid "Preview"
 msgstr "Vorschau"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/frontend/datasources/ImportFileWidget.cpp:1327
+#: src/frontend/datasources/ImportFileWidget.cpp:1328
 #: src/frontend/ui/datasources/importfilewidget.ui:582
 #: src/frontend/ui/datasources/importsqldatabasewidget.ui:239
 #, kde-format
 msgid "Data Portion to Read"
 msgstr "Zu lesender Datenbereich"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1370
+#: src/frontend/datasources/ImportFileWidget.cpp:1371
 #, kde-format
 msgid "Data format && preview"
 msgstr "Datenformat && Vorschau"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1417
+#: src/frontend/datasources/ImportFileWidget.cpp:1418
 #, kde-format
 msgid "Automatic"
 msgstr "Automatisch"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1664
+#: src/frontend/datasources/ImportFileWidget.cpp:1665
 #, kde-format
 msgid "file command not found"
 msgstr "file-Kommando nicht gefunden"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1675
+#: src/frontend/datasources/ImportFileWidget.cpp:1676
 #, kde-format
 msgid "cannot open"
 msgstr "Fehlschlag beim Öffnen"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1680
+#: src/frontend/datasources/ImportFileWidget.cpp:1681
 #, kde-format
 msgid "<b>File type:</b> %1"
 msgstr "<b>Dateityp:</b> %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1685
-#: src/frontend/datasources/ImportFileWidget.cpp:1773
+#: src/frontend/datasources/ImportFileWidget.cpp:1686
+#: src/frontend/datasources/ImportFileWidget.cpp:1774
 #, kde-format
 msgid "General:"
 msgstr "Allgemein:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1687
 #: src/frontend/datasources/ImportFileWidget.cpp:1688
 #: src/frontend/datasources/ImportFileWidget.cpp:1689
-#: src/frontend/datasources/ImportFileWidget.cpp:1775
+#: src/frontend/datasources/ImportFileWidget.cpp:1690
 #: src/frontend/datasources/ImportFileWidget.cpp:1776
 #: src/frontend/datasources/ImportFileWidget.cpp:1777
+#: src/frontend/datasources/ImportFileWidget.cpp:1778
 #, kde-format
 msgid "yes"
 msgstr "Ja"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1687
 #: src/frontend/datasources/ImportFileWidget.cpp:1688
 #: src/frontend/datasources/ImportFileWidget.cpp:1689
-#: src/frontend/datasources/ImportFileWidget.cpp:1775
+#: src/frontend/datasources/ImportFileWidget.cpp:1690
 #: src/frontend/datasources/ImportFileWidget.cpp:1776
 #: src/frontend/datasources/ImportFileWidget.cpp:1777
+#: src/frontend/datasources/ImportFileWidget.cpp:1778
 #, kde-format
 msgid "no"
 msgstr "Nein"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1687
-#: src/frontend/datasources/ImportFileWidget.cpp:1775
+#: src/frontend/datasources/ImportFileWidget.cpp:1688
+#: src/frontend/datasources/ImportFileWidget.cpp:1776
 #, kde-format
 msgid "Readable: %1"
 msgstr "Lesbar: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1688
-#: src/frontend/datasources/ImportFileWidget.cpp:1776
+#: src/frontend/datasources/ImportFileWidget.cpp:1689
+#: src/frontend/datasources/ImportFileWidget.cpp:1777
 #, kde-format
 msgid "Writable: %1"
 msgstr "Schreibbar: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1689
-#: src/frontend/datasources/ImportFileWidget.cpp:1777
+#: src/frontend/datasources/ImportFileWidget.cpp:1690
+#: src/frontend/datasources/ImportFileWidget.cpp:1778
 #, kde-format
 msgid "Executable: %1"
 msgstr "Ausführbar: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1691
-#: src/frontend/datasources/ImportFileWidget.cpp:1779
+#: src/frontend/datasources/ImportFileWidget.cpp:1692
+#: src/frontend/datasources/ImportFileWidget.cpp:1780
 #, kde-format
 msgid "Birth time: %1"
 msgstr "Geburtszeit: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1692
-#: src/frontend/datasources/ImportFileWidget.cpp:1780
+#: src/frontend/datasources/ImportFileWidget.cpp:1693
+#: src/frontend/datasources/ImportFileWidget.cpp:1781
 #, kde-format
 msgid "Last metadata changed: %1"
 msgstr "Letzte Metadatenänderung: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1693
-#: src/frontend/datasources/ImportFileWidget.cpp:1781
+#: src/frontend/datasources/ImportFileWidget.cpp:1694
+#: src/frontend/datasources/ImportFileWidget.cpp:1782
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Zuletzt geändert: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1694
-#: src/frontend/datasources/ImportFileWidget.cpp:1782
+#: src/frontend/datasources/ImportFileWidget.cpp:1695
+#: src/frontend/datasources/ImportFileWidget.cpp:1783
 #, kde-format
 msgid "Last read: %1"
 msgstr "Letzter Lesezugriff: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1695
-#: src/frontend/datasources/ImportFileWidget.cpp:1783
+#: src/frontend/datasources/ImportFileWidget.cpp:1696
+#: src/frontend/datasources/ImportFileWidget.cpp:1784
 #, kde-format
 msgid "Owner: %1"
 msgstr "Eigentümer: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1696
-#: src/frontend/datasources/ImportFileWidget.cpp:1784
+#: src/frontend/datasources/ImportFileWidget.cpp:1697
+#: src/frontend/datasources/ImportFileWidget.cpp:1785
 #, kde-format
 msgid "Group: %1"
 msgstr "Gruppe: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1697
+#: src/frontend/datasources/ImportFileWidget.cpp:1698
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
 msgstr[0] "%1 cByte"
 msgstr[1] "%1 cBytes"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1700
-#: src/frontend/datasources/ImportFileWidget.cpp:1787
+#: src/frontend/datasources/ImportFileWidget.cpp:1701
+#: src/frontend/datasources/ImportFileWidget.cpp:1788
 #, kde-format
 msgid "Summary:"
 msgstr "Zusammenfassung:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1723
-#: src/frontend/datasources/ImportFileWidget.cpp:1728
+#: src/frontend/datasources/ImportFileWidget.cpp:1724
+#: src/frontend/datasources/ImportFileWidget.cpp:1729
 #, kde-format
 msgid "Content:"
 msgstr "Inhalt:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1759
+#: src/frontend/datasources/ImportFileWidget.cpp:1760
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Die Datei <i>%1</i> kann nicht zum Lesen geöffnet werden."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1789
-#, fuzzy, kde-format
-#| msgid "Number of records: %1"
+#: src/frontend/datasources/ImportFileWidget.cpp:1790
+#, kde-format
 msgid "Number of sub-directories: %1"
-msgstr "Anzahl der Dateneinträge: %1"
+msgstr "Anzahl der Unterverzeichnisse: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1792
-#, fuzzy, kde-format
-#| msgid "Couldn't read the project file %1."
+#: src/frontend/datasources/ImportFileWidget.cpp:1793
+#, kde-format
 msgid "Couldn't read the directory %1."
-msgstr "Die Projektdatei '%1' konnte nicht gelesen werden."
+msgstr "Das Verzeichnis '%1' konnte nicht gelesen werden."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1881
+#: src/frontend/datasources/ImportFileWidget.cpp:1882
 #, kde-format
 msgid ""
 "Invalid number rows. Please check 'End Row' and 'Start Row'. 'End Row' must "
@@ -12992,129 +12976,129 @@ msgstr ""
 "Falsche Reihennummer. Bitte angegebene Start- und Endreihe überprüfen. "
 "Endreihe muss größer als Startreihe sein, oder -1."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1892
+#: src/frontend/datasources/ImportFileWidget.cpp:1893
 #, kde-format
 msgid "Initialization failed: %1"
 msgstr "Initialisierung fehlgeschlagen: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1917
+#: src/frontend/datasources/ImportFileWidget.cpp:1918
 #, kde-format
 msgid "Failed to connect to the local socket: %1"
 msgstr "Keine Verbindung zum lokalen Socket: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1934
+#: src/frontend/datasources/ImportFileWidget.cpp:1935
 #, kde-format
 msgid "Failed to connect to the TCP socket. %1"
 msgstr "Verbindung zum TCP Socket fehlgeschlagen. %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1940
-#: src/frontend/datasources/ImportFileWidget.cpp:1969
+#: src/frontend/datasources/ImportFileWidget.cpp:1941
+#: src/frontend/datasources/ImportFileWidget.cpp:1970
 #, kde-format
 msgid "Socket operation timed out."
 msgstr "Die Socketoperation hatte eine Zeitüberschreitung."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1954
+#: src/frontend/datasources/ImportFileWidget.cpp:1955
 #, kde-format
 msgid "Not ready for read after 2s:"
 msgstr "Nicht bereit fürs Lesen nach 2 Sekunden:"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1973
+#: src/frontend/datasources/ImportFileWidget.cpp:1974
 #, kde-format
 msgid "Unable to bind: "
 msgstr "Fehler beim Zugriff: "
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1990
+#: src/frontend/datasources/ImportFileWidget.cpp:1991
 #, kde-format
 msgid "Parse Error: %1"
 msgstr "Parserfehler: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1992
+#: src/frontend/datasources/ImportFileWidget.cpp:1993
 #, kde-format
 msgid "Not ready for read after 2 sec"
 msgstr "Nicht bereit fürs Lesen nach 2 Sekunden"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:1996
+#: src/frontend/datasources/ImportFileWidget.cpp:1997
 #, kde-format
 msgid "Failed to open serial port. error: %1"
 msgstr "Öffnen des Seriellen Ports fehlgeschlagen. Fehler: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2015
+#: src/frontend/datasources/ImportFileWidget.cpp:2016
 #, kde-format
 msgid "No data arrived yet for the selected topic"
 msgstr "Bisher keine Daten für das ausgewählte Thema angekommen"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2280
+#: src/frontend/datasources/ImportFileWidget.cpp:2281
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr "Keine HDF5 Datei: %1"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2338
+#: src/frontend/datasources/ImportFileWidget.cpp:2339
 #, kde-format
 msgid "Parsing ODS file %1 failed."
 msgstr "Parsen der ODS-Datei %1 fehlgeschlagen."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2746
+#: src/frontend/datasources/ImportFileWidget.cpp:2747
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr "Abonnieren aller verfügbaren Themen ist nicht möglich."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2754
+#: src/frontend/datasources/ImportFileWidget.cpp:2755
 #, kde-format
 msgid "Failed to connect to '%1'. Error %2."
 msgstr "Verbindung zu '%1 fehlgeschlagen. Fehler %2."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2776
+#: src/frontend/datasources/ImportFileWidget.cpp:2777
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr "Verbindung mit %1 beendet."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2842
+#: src/frontend/datasources/ImportFileWidget.cpp:2843
 #, kde-format
 msgid "Available (%1)"
 msgstr "Verfügbar (%1)"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2946
+#: src/frontend/datasources/ImportFileWidget.cpp:2947
 #, kde-format
 msgid "Wrong username or password"
 msgstr "Falscher Benutzername oder Passwort"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2949
+#: src/frontend/datasources/ImportFileWidget.cpp:2950
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr "Die Client-ID wurde nicht akzeptiert"
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2953
+#: src/frontend/datasources/ImportFileWidget.cpp:2954
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr "Der Broker %1 kann nicht erreicht werden."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2956
+#: src/frontend/datasources/ImportFileWidget.cpp:2957
 #, kde-format
 msgid "The client is not authorized to connect."
 msgstr "Der Client ist nicht zum Verbinden authorisiert."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2959
+#: src/frontend/datasources/ImportFileWidget.cpp:2960
 #, kde-format
 msgid "An unknown error occurred."
 msgstr "Ein unbekannter Fehler ist aufgetreten."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2965
-#: src/frontend/datasources/ImportFileWidget.cpp:2968
+#: src/frontend/datasources/ImportFileWidget.cpp:2966
+#: src/frontend/datasources/ImportFileWidget.cpp:2969
 #, kde-format
 msgid "An error occurred."
 msgstr "Ein Fehler ist aufgetreten."
 
-#: src/frontend/datasources/ImportFileWidget.cpp:2982
+#: src/frontend/datasources/ImportFileWidget.cpp:2983
 #, kde-format
 msgid "Connecting to '%1:%2' timed out."
 msgstr "Zeitüberschreitung bei der Verbindung zu „%1:%2“."
 
-#: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:37
+#: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:36
 #, kde-format
 msgid "Toggle Options"
 msgstr "Optionen an/aus"
 
-#: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:57
+#: src/frontend/datasources/ImportKaggleDatasetDialog.cpp:56
 #, kde-format
 msgctxt "@title:window"
 msgid "Import from kaggle.com"
@@ -13361,24 +13345,24 @@ msgstr ""
 "Verbindung zur Datenbank '%1' fehlgeschlagen. Bitte die "
 "Verbindungseinstellungen überprüfen."
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:271
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:273
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:270
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:272
 #, kde-format
 msgid "Failed to execute the query for the preview"
 msgstr "Anfrage ausführen für Vorschau fehlgeschlagen"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:347
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:346
 #, kde-format
 msgid "Refresh the data preview of the selected table"
 msgstr "Erneuert die Datenvorschau der ausgewählten Tabelle"
 
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:353
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:352
 #, kde-format
 msgid "Execute the query and preview its result"
 msgstr "Anfrage ausführen und Ergebnis anzeigen"
 
+#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:472
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:474
-#: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:476
 #, kde-format
 msgid "Failed to execute the query"
 msgstr "Abfrage kann nicht ausgeführt werden"
@@ -13501,25 +13485,25 @@ msgstr ""
 "eines</li><li>1 - Liefere mindestens eines</li><li>2 - Liefere genau eines</"
 "li></ul>"
 
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
-#: src/frontend/MainWin.cpp:2019
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
+#: src/frontend/MainWin.cpp:2006
 #, kde-format
 msgid "Warning"
 msgstr "Warnung"
 
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:825
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #, kde-format
 msgid "You already subscribed to a topic containing this one"
 msgstr "Bereits ein Thema abonniert, dass dieses enthält"
 
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:827
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
 #, kde-format
 msgid "You already subscribed to this topic"
 msgstr "Dieses Thema ist bereits abonniert"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, twTopics)
-#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:979
+#: src/frontend/datasources/MQTTSubscriptionWidget.cpp:980
 #: src/frontend/ui/datasources/mqttsubscriptionwidget.ui:202
 #, kde-format
 msgid "Available"
@@ -13703,7 +13687,7 @@ msgstr "Halb gefüllt, groß"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:129
 #: src/frontend/dockwidgets/ImageDock.cpp:181
 #: src/frontend/dockwidgets/ImageDock.cpp:191
-#: src/frontend/dockwidgets/XYCurveDock.cpp:511
+#: src/frontend/dockwidgets/XYCurveDock.cpp:510
 #: src/frontend/widgets/BackgroundWidget.cpp:118
 #: src/frontend/widgets/LabelWidget.cpp:485
 #: src/frontend/widgets/LabelWidget.cpp:497
@@ -13721,7 +13705,7 @@ msgstr "Links"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:131
 #: src/frontend/dockwidgets/ImageDock.cpp:183
 #: src/frontend/dockwidgets/ImageDock.cpp:193
-#: src/frontend/dockwidgets/XYCurveDock.cpp:512
+#: src/frontend/dockwidgets/XYCurveDock.cpp:511
 #: src/frontend/widgets/BackgroundWidget.cpp:119
 #: src/frontend/widgets/LabelWidget.cpp:487
 #: src/frontend/widgets/LabelWidget.cpp:499
@@ -13731,7 +13715,7 @@ msgid "Right"
 msgstr "Rechts"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:271
-#: src/frontend/dockwidgets/XYCurveDock.cpp:518
+#: src/frontend/dockwidgets/XYCurveDock.cpp:517
 #, kde-format
 msgid "Both"
 msgstr "Beide"
@@ -13883,7 +13867,7 @@ msgstr "%1-Achsen: Vorlage \"%2\" geladen"
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:230
 #: src/frontend/dockwidgets/WorksheetDock.cpp:608
-#: src/frontend/dockwidgets/XYCurveDock.cpp:1036
+#: src/frontend/dockwidgets/XYCurveDock.cpp:1035
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr "%1: Vorlage \"%2\" geladen"
@@ -14327,7 +14311,7 @@ msgstr "%1 Legenden für kartesische Plots: Die Vorlage \"%2\" wurde geladen"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:316
 #: src/frontend/dockwidgets/MatrixDock.cpp:81
-#: src/frontend/dockwidgets/XYCurveDock.cpp:493
+#: src/frontend/dockwidgets/XYCurveDock.cpp:492
 #: src/frontend/widgets/ValueWidget.cpp:41
 #, kde-format
 msgid "Decimal"
@@ -14335,7 +14319,7 @@ msgstr "Dezimal"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:317
 #: src/frontend/dockwidgets/MatrixDock.cpp:82
-#: src/frontend/dockwidgets/XYCurveDock.cpp:494
+#: src/frontend/dockwidgets/XYCurveDock.cpp:493
 #: src/frontend/widgets/ValueWidget.cpp:42
 #, kde-format
 msgid "Scientific (e)"
@@ -14343,21 +14327,21 @@ msgstr "Wissenschaftlich (e)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:318
 #: src/frontend/dockwidgets/MatrixDock.cpp:83
-#: src/frontend/dockwidgets/XYCurveDock.cpp:495
+#: src/frontend/dockwidgets/XYCurveDock.cpp:494
 #: src/frontend/widgets/ValueWidget.cpp:43
 #, kde-format
 msgid "Scientific (E)"
 msgstr "Wissenschaftlich (E)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:319
-#: src/frontend/dockwidgets/XYCurveDock.cpp:496
+#: src/frontend/dockwidgets/XYCurveDock.cpp:495
 #: src/frontend/widgets/ValueWidget.cpp:44
 #, kde-format
 msgid "Automatic (e)"
 msgstr "Automatisch (e)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:320
-#: src/frontend/dockwidgets/XYCurveDock.cpp:497
+#: src/frontend/dockwidgets/XYCurveDock.cpp:496
 #: src/frontend/widgets/ValueWidget.cpp:45
 #, kde-format
 msgid "Automatic (E)"
@@ -14543,6 +14527,15 @@ msgid ""
 "if three or more independent samples have the same mean</li><li><b>%6</b> - "
 "tests if three or more related/repeated measurements have the same mean</li>"
 msgstr ""
+"<ul><li><b>%1</b> – prüft, ob sich der Mittelwert einer Stichprobe "
+"signifikant von einem bekannten Populationsmittelwert unterscheidet</li> "
+"<li><b>%2</b> – prüft, ob zwei unabhängige Stichproben denselben Mittelwert "
+"haben</li><li><b>%3</b> – prüft, ob die mittlere Differenz zwischen zwei "
+"abhängigen Stichproben null ist</li><li><b>%4</b> – prüft, ob zwei "
+"unabhängige Stichproben mit ungleichen Varianzen denselben Mittelwert haben</"
+"li><li><b>%5</b> – prüft, ob drei oder mehr unabhängige Stichproben "
+"denselben Mittelwert haben</li><li><b>%6</b> – prüft, ob drei oder mehr "
+"abhängige/ wiederholte Messungen denselben Mittelwert haben</li>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:131
 #, kde-format
@@ -14557,11 +14550,23 @@ msgid ""
 "li><li><b>%7</b> - tests if observed data follows a specified theoretical "
 "distribution</li></ul>"
 msgstr ""
+"<li><b>%1</b> – prüft Unterschiede der Mediane zwischen zwei unabhängigen "
+"Gruppen</li><li><b>%2</b> – prüft, ob die Median-Differenz zwischen zwei "
+"abhängigen Stichproben null ist</li><li><b>%3</b> – prüft Unterschiede der "
+"Mediane zwischen drei oder mehr unabhängigen Gruppen</li> <li><b>%4</b> – "
+"prüft Unterschiede der Mediane zwischen drei oder mehr abhängigen/"
+"wiederholten Messungen</li><li><b>%5</b> – prüft Unterschiede der "
+"Überlebensverteilungen zwischen zwei oder mehr Gruppen</li> <li><b>%6</b> – "
+"prüft, ob zwei kategoriale Variablen voneinander unabhängig sind</li><li><b>"
+"%7</b> – prüft, ob die beobachteten Daten einer bestimmten theoretischen "
+"Verteilung folgen</li></ul>"
 
 #: src/frontend/dockwidgets/HypothesisTestDock.cpp:312
 #, kde-format
 msgid "Selected test requires at least %1 and at most %2 non-empty variables."
 msgstr ""
+"Der ausgewählte Test erfordert mindestens %1 und höchstens %2 nicht-leere "
+"Variablen."
 
 #: src/frontend/dockwidgets/InfoElementDock.cpp:227
 #, kde-format
@@ -14606,7 +14611,7 @@ msgstr "Eigener Wert für die Bandbreite des Kernel"
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:799
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
-#: src/frontend/dockwidgets/XYCurveDock.cpp:1034
+#: src/frontend/dockwidgets/XYCurveDock.cpp:1033
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr "%1: XY-Kurven: Vorlage \"%2\" wurde geladen"
@@ -14684,16 +14689,14 @@ msgid "File Browser"
 msgstr "Dateibrowser"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:226
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistical"
-msgstr "Statistik"
+msgstr "Statistisch"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:227
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Specification"
-msgstr "Vereinfachung"
+msgstr "Spezifikation"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:230
 #: src/frontend/dockwidgets/RunChartDock.cpp:146
@@ -14813,6 +14816,10 @@ msgid ""
 "properties of the sample.</li><li>Specification - custom user-defined values "
 "are used.</li></ul>"
 msgstr ""
+"Bestimmen Sie, welche Werte für die Mittel- und Grenzlinien verwendet werden "
+"sollen:<ul><li>Statistisch – die Werte werden auf Grundlage der "
+"statistischen Eigenschaften der Stichprobe berechnet.</li> <li>Spezifikation "
+"– es werden benutzerdefinierte Werte verwendet.</li></ul>"
 
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:284
 #, kde-format
@@ -14977,6 +14984,8 @@ msgstr "Berechnungszeit: %1 ms"
 #, kde-format
 msgid "Click this button or press Shift+Enter to recalculate the result."
 msgstr ""
+"Klicken Sie auf diese Schaltfläche oder drücken Sie Shift+Enter, um das "
+"Ergebnis neu zu berechnen."
 
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:75
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:408
@@ -15017,74 +15026,74 @@ msgstr "Dekonvolutionsstatus:  %1"
 msgid "Correlation status: %1"
 msgstr "Korrelationsstatus:  %1"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:479
+#: src/frontend/dockwidgets/XYCurveDock.cpp:478
 #, kde-format
 msgid "Horiz. Start"
 msgstr "Horiz. Start"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:480
+#: src/frontend/dockwidgets/XYCurveDock.cpp:479
 #, kde-format
 msgid "Vert. Start"
 msgstr "Vert. Start"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:481
+#: src/frontend/dockwidgets/XYCurveDock.cpp:480
 #, kde-format
 msgid "Horiz. Midpoint"
 msgstr "Horiz. Mittelpunkt"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:482
+#: src/frontend/dockwidgets/XYCurveDock.cpp:481
 #, kde-format
 msgid "Vert. Midpoint"
 msgstr "Vert. Mittelpunkt"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:483
+#: src/frontend/dockwidgets/XYCurveDock.cpp:482
 #, kde-format
 msgid "2-segments"
 msgstr "2-Abschnitte"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:484
+#: src/frontend/dockwidgets/XYCurveDock.cpp:483
 #, kde-format
 msgid "3-segments"
 msgstr "3-Abschnitte"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:487
+#: src/frontend/dockwidgets/XYCurveDock.cpp:486
 #, kde-format
 msgid "Akima-spline (Natural)"
 msgstr "Akima-Spline (natürlich)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:488
+#: src/frontend/dockwidgets/XYCurveDock.cpp:487
 #, kde-format
 msgid "Akima-spline (Periodic)"
 msgstr "Akima-Spline (periodisch)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:501
+#: src/frontend/dockwidgets/XYCurveDock.cpp:500
 #: src/frontend/widgets/ValueWidget.cpp:31
 #, kde-format
 msgid "No Values"
 msgstr "Keine Werte"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:506
+#: src/frontend/dockwidgets/XYCurveDock.cpp:505
 #: src/frontend/widgets/ValueWidget.cpp:33
 #, kde-format
 msgid "Custom Column"
 msgstr "Benutzerdefinierte Spalte"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:509
+#: src/frontend/dockwidgets/XYCurveDock.cpp:508
 #: src/frontend/widgets/BackgroundWidget.cpp:115
 #: src/frontend/widgets/ValueWidget.cpp:35
 #, kde-format
 msgid "Above"
 msgstr "Über"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:510
+#: src/frontend/dockwidgets/XYCurveDock.cpp:509
 #: src/frontend/widgets/BackgroundWidget.cpp:116
 #: src/frontend/widgets/ValueWidget.cpp:36
 #, kde-format
 msgid "Below"
 msgstr "Unter"
 
+#: src/frontend/dockwidgets/XYCurveDock.cpp:520
 #: src/frontend/dockwidgets/XYCurveDock.cpp:521
-#: src/frontend/dockwidgets/XYCurveDock.cpp:522
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
@@ -15093,8 +15102,8 @@ msgstr ""
 "Wenn aktviert, werden benachbarte Punkte mit Linien verbunden, sogar bei "
 "Lücken (invaliden oder maskierten Werten)"
 
+#: src/frontend/dockwidgets/XYCurveDock.cpp:522
 #: src/frontend/dockwidgets/XYCurveDock.cpp:523
-#: src/frontend/dockwidgets/XYCurveDock.cpp:524
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
@@ -15688,12 +15697,10 @@ msgid "Properties: Data Extractor"
 msgstr "Eingenschaften: Datenextraktor"
 
 #: src/frontend/GuiObserver.cpp:438
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Notes"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hypothesis Test"
-msgstr "Eigenschaften: Notizen"
+msgstr "Eigenschaften: Hypothesistest"
 
 #: src/frontend/GuiObserver.cpp:443
 #, kde-format
@@ -16520,12 +16527,12 @@ msgstr "%1 gedruckt"
 msgid "%1"
 msgstr "%1"
 
-#: src/frontend/MainWin.cpp:1915
+#: src/frontend/MainWin.cpp:1902
 #, kde-format
 msgid "Kaggle CLI tool not found"
 msgstr "Kaggle CLI Werkzeug nicht gefunden"
 
-#: src/frontend/MainWin.cpp:1916
+#: src/frontend/MainWin.cpp:1903
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
@@ -16534,27 +16541,27 @@ msgstr ""
 "Geben Sie den Pfad für das Kagle CLI Werkzeug in den Einstellungen an und "
 "versuchen Sie es erneut."
 
-#: src/frontend/MainWin.cpp:1982
+#: src/frontend/MainWin.cpp:1969
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exportiert"
 
-#: src/frontend/MainWin.cpp:1989
+#: src/frontend/MainWin.cpp:1976
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS-Datei gespeichert"
 
-#: src/frontend/MainWin.cpp:2001
+#: src/frontend/MainWin.cpp:1988
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT-Client%1"
 
-#: src/frontend/MainWin.cpp:2019
+#: src/frontend/MainWin.cpp:2006
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Es gibt bereits einen MQTT Client mit dem Host!"
 
-#: src/frontend/MainWin.cpp:2023
+#: src/frontend/MainWin.cpp:2010
 #, kde-format
 msgid "Live data source%1"
 msgstr "Live-Datenquelle%1"
@@ -17423,6 +17430,8 @@ msgstr ""
 #, kde-format
 msgid "If enabled spreadsheet and matrix data is saved in the project file"
 msgstr ""
+"Wenn aktiviert, werden Tabellen- und Matrixdaten in der Projektdatei "
+"gespeichert."
 
 #: src/frontend/SettingsNotebookPage.cpp:30
 #, kde-format
@@ -17483,25 +17492,25 @@ msgstr "Mittel (5cm x 5cm)"
 msgid "Big (7cm x 7cm)"
 msgstr "Groß (7cm x 7cm)"
 
-#: src/frontend/SettingsWorksheetPage.cpp:152
+#: src/frontend/SettingsWorksheetPage.cpp:151
 #, kde-format
 msgid ""
 "No LaTeX installation found or selected. LaTeX typesetting not possible."
 msgstr ""
 "Keine LaTeX-Installation gefunden oder ausgewählt. LaTeX-Satz nicht möglich."
 
-#: src/frontend/SettingsWorksheetPage.cpp:162
+#: src/frontend/SettingsWorksheetPage.cpp:161
 #, kde-format
 msgid "No 'convert' found. LaTeX typesetting not possible."
 msgstr "'convert' nicht gefunden. LaTeX-Satz nicht möglich."
 
-#: src/frontend/SettingsWorksheetPage.cpp:168
+#: src/frontend/SettingsWorksheetPage.cpp:167
 #, kde-format
 msgid "No 'dvips' found. LaTeX typesetting not possible."
 msgstr "'dvips' nicht gefunden. LaTeX-Satz nicht möglich."
 
-#: src/frontend/SettingsWorksheetPage.cpp:175
-#: src/frontend/SettingsWorksheetPage.cpp:181
+#: src/frontend/SettingsWorksheetPage.cpp:174
+#: src/frontend/SettingsWorksheetPage.cpp:180
 #, kde-format
 msgid "No Ghostscript found. LaTeX typesetting not possible."
 msgstr "Ghostscript nicht gefunden. LaTeX-Satz nicht möglich."
@@ -17824,7 +17833,7 @@ msgstr "Werte überspringen"
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:80
 #, kde-format
 msgid "Delete entire rows in the spreadsheet if the condition is met."
-msgstr ""
+msgstr "Gesamte Zeilen in der Tabelle löschen, wenn die Bedingung erfüllt ist."
 
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:1031
 #: src/frontend/spreadsheet/DropValuesDialog.cpp:1038
@@ -17893,28 +17902,24 @@ msgid "Invalid start value"
 msgstr "Ungültiger Startwert"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:257
-#, fuzzy, kde-format
-#| msgid "Invalid end value, must be bigger than the start value"
+#, kde-format
 msgid "Invalid end value, must be greater than the start value"
 msgstr "Ungültiger Endwert; muss größer als der Startwert sein"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:300
-#, fuzzy, kde-format
-#| msgid "The number of values to be generated must be bigger than one"
+#, kde-format
 msgid "The number of values to be generated must be greater than one"
 msgstr "Die Anzahl der generierten Werte muss größer als eins sein"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:317
-#, fuzzy, kde-format
-#| msgid "Invalid numeric increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid numeric increment value, must be greater than zero"
-msgstr "Ungültiges Inkrement, muss größer als Null sein"
+msgstr "Ungültiger Wert für Inkrement; muss größer als Null sein"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:326
-#, fuzzy, kde-format
-#| msgid "Invalid Date&Time increment value, must be bigger than zero"
+#, kde-format
 msgid "Invalid Date&Time increment value, must be greater than zero"
-msgstr "Ungültiges Datum&Zeit Inkrement, muss größer als 0 sein"
+msgstr "Ungültiger Wert für Datum&Zeit Inkrement; muss größer als 0 sein"
 
 #: src/frontend/spreadsheet/EquidistantValuesDialog.cpp:487
 #, kde-format
@@ -18920,15 +18925,14 @@ msgid "Analyze and Plot Data"
 msgstr "Daten analysieren und darstellen"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:677
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
+#, kde-format
 msgid "Statistical Analysis"
-msgstr "Statistik-Plots"
+msgstr "Statistische Analyse"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:678
 #, kde-format
 msgid "Hypothesis Test"
-msgstr ""
+msgstr "Hypothesentest"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:683
 #, kde-format
@@ -18948,7 +18952,7 @@ msgstr "Leiter von Potenzen"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:951
 #, kde-format
 msgid "Hypothesis Test for %1"
-msgstr ""
+msgstr "Hypothesentest für %1"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1178
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1564
@@ -19342,7 +19346,7 @@ msgstr "Kummulative Prozente"
 #: src/frontend/TemplateHandler.cpp:181
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:447
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:64
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:73
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:86
 #, kde-format
 msgid "Load"
 msgstr "Laden"
@@ -19356,7 +19360,7 @@ msgstr "Eigenschaften aus einer Vorlage laden"
 #: src/frontend/TemplateHandler.cpp:183
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:460
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:77
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:86
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:99
 #, kde-format
 msgid "Save"
 msgstr "Speichern"
@@ -20038,8 +20042,7 @@ msgstr "Bild:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbFileEmbedd)
 #: src/frontend/ui/datapickerimagewidget.ui:701
-#, fuzzy, kde-format
-#| msgid "Embedd"
+#, kde-format
 msgid "Embed"
 msgstr "Einbetten"
 
@@ -22397,15 +22400,16 @@ msgstr "Form"
 
 #. i18n: ectx: property (text), widget (QLabel, lTestMean)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:20
-#, kde-format
-msgid "Test Mean μ₀: "
-msgstr ""
+#, fuzzy, kde-format
+#| msgid "Test Mean μ₀: "
+msgid "Test Mean μ₀:"
+msgstr "Zu prüfender Mittelwert μ₀:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSignificanceLevel)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:50
 #, kde-format
 msgid "Significance Level α:"
-msgstr ""
+msgstr "Signifikanzniveau α:"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:95
@@ -22429,27 +22433,25 @@ msgstr "Neu berechnen"
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:104
 #, kde-format
 msgid "Null:"
-msgstr ""
+msgstr "Null:"
 
 #. i18n: ectx: property (text), widget (QLabel, lH1)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:114
-#, fuzzy, kde-format
-#| msgid "Filter name:"
+#, kde-format
 msgid "Alternate:"
-msgstr "Filtername:"
+msgstr "Alternativ:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHypothesis)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:269
 #, kde-format
 msgid "Hypothesis"
-msgstr ""
+msgstr "Hypothese"
 
 #. i18n: ectx: property (text), widget (QLabel, lTest)
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:289
-#, fuzzy, kde-format
-#| msgid "Test"
+#, kde-format
 msgid "Test:"
-msgstr "Test"
+msgstr "Test:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionY)
 #: src/frontend/ui/dockwidgets/imagedock.ui:136
@@ -22705,24 +22707,21 @@ msgstr "Max. Obere Grenze:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpperLimitSpecification)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:186
-#, fuzzy, kde-format
-#| msgid "Upper Limit"
+#, kde-format
 msgid "Upper Limit:"
-msgstr "Obere Grenze"
+msgstr "Obere Grenze:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLowerLimitSpecification)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:200
-#, fuzzy, kde-format
-#| msgid "Lower Limit"
+#, kde-format
 msgid "Lower Limit:"
-msgstr "Untere Grenze"
+msgstr "Untere Grenze:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLimitsType)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:230
-#, fuzzy, kde-format
-#| msgid "Center/Limits Lines"
+#, kde-format
 msgid "Center/Limits:"
-msgstr "Mittel-/Grenzlinien"
+msgstr "Mittel-/Grenzlinien:"
 
 #. i18n: ectx: property (text), widget (QLabel, lExactLimits)
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:269
@@ -22813,10 +22812,9 @@ msgstr "Version:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: src/frontend/ui/dockwidgets/projectdock.ui:214
-#, fuzzy, kde-format
-#| msgid "Compressed"
+#, kde-format
 msgid "Compress File:"
-msgstr "Komprimiert"
+msgstr "Komprimierte Datei:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/frontend/ui/dockwidgets/projectdock.ui:237
@@ -22849,7 +22847,7 @@ msgstr "Berechnungen speichern:"
 #: src/frontend/ui/dockwidgets/projectdock.ui:305
 #, kde-format
 msgid "Save Data in File:"
-msgstr ""
+msgstr "Speichere Daten in Datei:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistribution)
 #: src/frontend/ui/dockwidgets/qqplotdock.ui:113
@@ -23178,7 +23176,7 @@ msgstr "x=f(t)"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:608
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:70
 #: src/frontend/ui/matrix/matrixfunctionwidget.ui:74
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:169
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:182
 #, kde-format
 msgid "Functions"
 msgstr "Funktionen"
@@ -23191,7 +23189,7 @@ msgstr "Funktionen"
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:621
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:60
 #: src/frontend/ui/matrix/matrixfunctionwidget.ui:84
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:159
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:172
 #, kde-format
 msgid "Constants"
 msgstr "Konstanten"
@@ -23211,20 +23209,18 @@ msgstr "Gleichung"
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbLoadFunction)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:444
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:61
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:70
-#, fuzzy, kde-format
-#| msgid "Clausen function"
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:83
+#, kde-format
 msgid "Load a custom function"
-msgstr "Clausen-Funktion"
+msgstr "Benutzerfunktion laden"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbSaveFunction)
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:457
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:74
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:83
-#, fuzzy, kde-format
-#| msgid "Clausen function"
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:96
+#, kde-format
 msgid "Save a custom function"
-msgstr "Clausen-Funktion"
+msgstr "Benutzer-Funktion speichern"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:93
@@ -23595,7 +23591,7 @@ msgstr "Funktion:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFunction)
 #: src/frontend/ui/dockwidgets/xyfunctioncurvedockgeneraltab.ui:197
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:149
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:162
 #, kde-format
 msgid "f(x) = "
 msgstr "f(x) = "
@@ -24287,24 +24283,21 @@ msgstr "Automatisch speichern:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:273
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Save projects in a compatible format that can be "
-#| "opened in LabPlot versions older than 2.9.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Save projects in a uncompressed xml format that can be "
 "opened in LabPlot versions older than 2.9 and are useful for version "
 "controlled projects</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Speichert Projekte in einem Format, dass von älteren "
-"LabPlot Versionen (vor 2.9) geöffnet werden kann.</p></body></html>"
+"<html><head/><body><p>Speichert Projekte in einem unkomprimiertem XML "
+"Format, dass von älteren LabPlot Versionen (vor 2.9) geöffnet werden kann "
+"und für Versionskontrolle geeignet ist.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCompatible)
 #: src/frontend/ui/settingsgeneralpage.ui:276
-#, fuzzy, kde-format
-#| msgid "Save in compatible format"
+#, kde-format
 msgid "Save in uncompressed format"
-msgstr "In kompatiblem Format speichern"
+msgstr "In inkomprimiertem Format speichern"
 
 #. i18n: ectx: property (text), widget (QLabel, lTracing)
 #: src/frontend/ui/settingsgeneralpage.ui:283
@@ -24314,10 +24307,9 @@ msgstr "Verfolgung:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveCalculations)
 #: src/frontend/ui/settingsgeneralpage.ui:290
-#, fuzzy, kde-format
-#| msgid "Compression"
+#, kde-format
 msgid "Compression:"
-msgstr "Komprimierung"
+msgstr "Komprimierung:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUnits)
 #: src/frontend/ui/settingsgeneralpage.ui:329
@@ -24359,10 +24351,9 @@ msgstr "Dock Widget-Platzierung:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaveData)
 #: src/frontend/ui/settingsgeneralpage.ui:453
-#, fuzzy, kde-format
-#| msgid "Open a project file."
+#, kde-format
 msgid "Save Data in Project file:"
-msgstr "Eine Projektdatei Öffnen."
+msgstr "Daten in Projektdatei speichern:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -24574,10 +24565,9 @@ msgstr "Datum/Zeit-Werte"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbDeleteRows)
 #: src/frontend/ui/spreadsheet/dropvalueswidget.ui:274
-#, fuzzy, kde-format
-#| msgid "Delete"
+#, kde-format
 msgid "Delete Rows"
-msgstr "Löschen"
+msgstr "Reihen Löschen"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/frontend/ui/spreadsheet/equidistantvalueswidget.ui:97
@@ -24701,13 +24691,13 @@ msgid "Colors"
 msgstr "Farben"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdate)
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:182
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:195
 #, kde-format
 msgid "auto update the values"
 msgstr "Werte Automatisch aktualisieren"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoResize)
-#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:192
+#: src/frontend/ui/spreadsheet/functionvalueswidget.ui:205
 #, kde-format
 msgid "auto resize the column"
 msgstr "Spaltengröße automatisch anpassen"
@@ -25369,55 +25359,55 @@ msgstr "Die Datei kann nicht geöffnet werden, sie ist bereits geöffnet."
 msgid "File already opened"
 msgstr "Die Datei ist bereits geöffnet."
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:271
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
 #, kde-format
 msgid "Add New Keyword"
 msgstr "Neues Schlüsselwort hinzufügen"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:272
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:269
 #, kde-format
 msgid "Remove Keyword"
 msgstr "Schlüsselwort entfernen"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:274
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:271
 #, kde-format
 msgid "Add Unit"
 msgstr "Einheit hinzufügen"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:322
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:329
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:319
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:326
 #, kde-format
 msgid "Cannot add keyword, keyword already added"
 msgstr "Schlüsselwort hinzufügen nicht möglich; ist bereits hinzugefügt"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:322
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:329
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:336
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:319
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:326
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:333
 #, kde-format
 msgid "Cannot Add Keyword"
 msgstr "Schlüsselwort hinzufügen nicht möglich"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:336
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:333
 #, kde-format
 msgid "Cannot add mandatory keyword, they are already present"
 msgstr "Pflichtschlüsselwort hinzufügen nicht möglich, da bereits vorhanden"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:380
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:377
 #, kde-format
 msgid "Are you sure you want to delete the keyword '%1'?"
 msgstr "Möchten Sie das ausgewählte Schlüsselwort '%1' wirklich löschen?"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:381
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:378
 #, kde-format
 msgid "Confirm Deletion"
 msgstr "Löschen bestätigen"
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:401
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:398
 #, kde-format
 msgid "Cannot remove mandatory keyword."
 msgstr "Kann Pflicht-Schlüsselwort nicht löschen."
 
-#: src/frontend/widgets/FITSHeaderEditWidget.cpp:401
+#: src/frontend/widgets/FITSHeaderEditWidget.cpp:398
 #, kde-format
 msgid "Removing Keyword"
 msgstr "Schlüsselwort entfernen"

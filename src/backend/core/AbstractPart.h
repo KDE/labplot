@@ -32,7 +32,7 @@ public:
 	bool viewCreated() const;
 	void deleteView() const;
 #ifndef SDK
-	ContentDockWidget* dockWidget() const;
+	virtual ContentDockWidget* dockWidget() const;
 	bool dockWidgetExists() const;
 	bool hasMdiSubWindow() const;
 #endif

@@ -27,8 +27,8 @@
 
 StatisticsSpreadsheet::StatisticsSpreadsheet(Spreadsheet* spreadsheet, bool loading, AspectType type)
 	: Spreadsheet(i18n("Column Statistics"), loading, type)
-	, m_spreadsheet(spreadsheet) {
-	m_metricValues = {
+	, m_spreadsheet(spreadsheet)
+	, m_metricValues{
 		StatisticsSpreadsheet::Metric::Count,
 		StatisticsSpreadsheet::Metric::Minimum,
 		StatisticsSpreadsheet::Metric::Maximum,
@@ -57,8 +57,7 @@ StatisticsSpreadsheet::StatisticsSpreadsheet(Spreadsheet* spreadsheet, bool load
 		StatisticsSpreadsheet::Metric::Skewness,
 		StatisticsSpreadsheet::Metric::Kurtosis,
 		StatisticsSpreadsheet::Metric::Entropy,
-	};
-	m_metricNames = {
+	}, m_metricNames{
 		i18n("Count"),
 		i18n("Minimum"),
 		i18n("Maximum"),
@@ -87,8 +86,7 @@ StatisticsSpreadsheet::StatisticsSpreadsheet(Spreadsheet* spreadsheet, bool load
 		i18n("Skewness"),
 		i18n("Kurtosis"),
 		i18n("Entropy"),
-	};
-
+	} {
 	auto* model = m_spreadsheet->model();
 	connect(model, &SpreadsheetModel::dataChanged, this, &StatisticsSpreadsheet::update);
 	connect(model, &SpreadsheetModel::rowsRemoved, this, &StatisticsSpreadsheet::update);

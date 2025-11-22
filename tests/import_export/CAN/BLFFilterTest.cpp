@@ -59,7 +59,7 @@ Vector::BLF::CanMessage2* BLFFilterTest::createCANMessage(uint32_t id, uint64_t 
 	return canMessage;
 }
 
-void BLFFilterTest::createBLFFile(const QString& filename, QVector<Vector::BLF::CanMessage2*> messages) {
+void BLFFilterTest::createBLFFile(const QString& filename, const QVector<Vector::BLF::CanMessage2*>& messages) {
 	Vector::BLF::File blfFile;
 	blfFile.open(filename.toStdString().c_str(), std::ios_base::out);
 	QVERIFY(blfFile.is_open());

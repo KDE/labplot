@@ -25,6 +25,7 @@ extern "C" {
 }
 
 #include <QDebug> // qWarning()
+#include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
 

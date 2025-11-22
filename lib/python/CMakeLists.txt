@@ -263,7 +263,7 @@ ecm_generate_python_bindings(
 
 if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
     get_target_property(PySide6_INCLUDE_DIRECTORIES PySide6::pyside6 INTERFACE_INCLUDE_DIRECTORIES)
-    target_include_directories(${bindings_library} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../src/3rdparty/shiboken6/include ${Python3_INCLUDE_DIRS} ${PySide6_INCLUDE_DIRECTORIES} ${PYSIDE_PYTHONPATH}/include/QtWidgets ${PYSIDE_PYTHONPATH}/include/QtGui ${PYSIDE_PYTHONPATH}/include/QtCore)
+    target_include_directories(${bindings_library} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../src/3rdparty/shiboken6-6.9/include ${Python3_INCLUDE_DIRS} ${PySide6_INCLUDE_DIRECTORIES} ${PYSIDE_PYTHONPATH}/include/QtWidgets ${PYSIDE_PYTHONPATH}/include/QtGui ${PYSIDE_PYTHONPATH}/include/QtCore)
     target_link_libraries(${bindings_library} PRIVATE Shiboken6::libshiboken PySide6::pyside6)
     if(PySide6_ABI3_LIBRARY)
         target_link_libraries(${bindings_library} PRIVATE ${PySide6_ABI3_LIBRARY})

@@ -415,7 +415,7 @@ int PythonScriptRuntime::getPyErrorLine() {
 		PyObject* p = PyObject_GetAttrString(traceback, "tb_lineno");
 		if (p) {
 			long line = PyLong_AsLong(p);
-			if (line >= INT_MIN && line <= INT_MAX)
+			if (line > INT_MIN && line <= INT_MAX)
 				errorLine = static_cast<int>(line) - 1;
 
 			Py_DECREF(p);
@@ -426,7 +426,7 @@ int PythonScriptRuntime::getPyErrorLine() {
 		PyObject* q = PyObject_GetAttrString(value, "lineno");
 		if (q) {
 			long line = PyLong_AsLong(q);
-			if (line >= INT_MIN && line <= INT_MAX)
+			if (line > INT_MIN && line <= INT_MAX)
 				errorLine = static_cast<int>(line) - 1;
 
 			Py_DECREF(q);

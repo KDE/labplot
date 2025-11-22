@@ -28,7 +28,6 @@
  */
 ImportKaggleDatasetDialog::ImportKaggleDatasetDialog(MainWin* parent)
 	: ImportDialog(parent)
-	, m_mainWin(parent)
 	, m_importKaggleDatasetWidget(new ImportKaggleDatasetWidget(this)) {
 	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Reset);
 	okButton = buttonBox->button(QDialogButtonBox::Ok);

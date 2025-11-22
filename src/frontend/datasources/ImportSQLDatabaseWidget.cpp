@@ -264,8 +264,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 		return;
 	}
 	q.setForwardOnly(true);
-	q.exec();
-	if (!q.isActive() || !q.next()) { // check if query was successful and got to first record
+	if (!q.exec() || !q.isActive() || !q.next()) { // check if query was successful and got to first record
 		RESET_CURSOR;
 		if (!q.lastError().databaseText().isEmpty())
 			Q_EMIT error(i18n("Failed to execute the query for the preview") + QStringLiteral(" \n") + q.lastError().databaseText());
@@ -467,8 +466,7 @@ bool ImportSQLDatabaseWidget::prepareAndExecute(QSqlQuery& q) {
 		q.setForwardOnly(true);
 
 	WAIT_CURSOR;
-	q.prepare(currentQuery());
-	if (!q.exec() || !q.isActive()) {
+	if (!q.prepare(currentQuery()) || !q.exec() || !q.isActive()) {
 		RESET_CURSOR;
 		if (!q.lastError().databaseText().isEmpty())
 			Q_EMIT error(i18n("Failed to execute the query") + QStringLiteral(" \n") + q.lastError().databaseText());

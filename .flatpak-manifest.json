@@ -43,9 +43,6 @@
         "append-path": "/usr/lib/sdk/llvm18/bin",
         "append-ld-library-path": "/usr/lib/sdk/llvm18/lib"
     },
-    "sdk-extensions": [
-        "org.freedesktop.Sdk.Extension.llvm18"
-    ],
     "modules": [
         {
             "name": "eigen",
@@ -54,8 +51,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gitlab.com/libeigen/eigen/-/archive/5.0.0/eigen-5.0.0.tar.bz2",
-                    "sha256": "bdca0ec740fb83be21fe038699923f4c589ead9ab904f4058a9c97752e60d50b"
+                    "url": "https://gitlab.com/libeigen/eigen/-/archive/5.0.1/eigen-5.0.1.tar.bz2",
+                    "sha256": "e4de6b08f33fd8b8985d2f204381408c660bffa6170ac65b68ae1bd3cd575c0a"
                 }
             ]
         },
@@ -76,8 +73,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://poppler.freedesktop.org/poppler-25.10.0.tar.xz",
-                    "sha256": "6b5e9bb64dabb15787a14db1675291c7afaf9387438cc93a4fb7f6aec4ee6fe0"
+                    "url": "https://poppler.freedesktop.org/poppler-25.11.0.tar.xz",
+                    "sha256": "63f155142b77349e2bccaef148e754e7506ab1641e713b83af4f54a8f8b15369"
                 }
             ],
             "modules": [
@@ -118,8 +115,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.08.0/src/analitza-25.08.0.tar.xz",
-			    "sha256": "8d477f0af14bb9f7c15033a9d78987a7067135affc47f19eddda82e76c36d34b"
+			    "url": "https://download.kde.org/stable/release-service/25.08.3/src/analitza-25.08.3.tar.xz",
+			    "sha256": "1abe741c3f189b3d8cb8cf34b516890fd64cf21ba75d0f558b3711956b83e4d1"
 		    }
 	    ]
         },
@@ -129,8 +126,8 @@
             "sources": [
 		    {
 			    "type": "archive",
-			    "url": "https://download.kde.org/stable/release-service/25.08.0/src/cantor-25.08.0.tar.xz",
-			    "sha256": "5c98fa36bac3500a57d07813a101be709c58aa0ab755d4c9c9fa2b3f8836238d"
+			    "url": "https://download.kde.org/stable/release-service/25.08.3/src/cantor-25.08.3.tar.xz",
+			    "sha256": "5635007fb9c50d82e88decf9264ff40fb9f4ee65b27474c5930b1b519eb24b72"
 		    }
 	    ]
         },
@@ -192,8 +189,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v3.2/libcerf-v3.2.tar.gz",
-                    "sha256": "ea8d110d73ec24a643042ca3940461ccbb1b6541e21310ecb70ab4e4dc144aef"
+                    "url": "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v3.3/libcerf-v3.3.tar.gz",
+                    "sha256": "ea2910085448e269b5f0f0fabe51ffd846ac68881904be99669d94dc0cc09765"
                 }
             ]
         },
@@ -272,8 +269,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/tbeu/matio/archive/v1.5.28.tar.gz",
-                    "sha256": "04d14160a637ea822593c336b231227372179f650250c98024a8a2b744afef25"
+                    "url": "https://github.com/tbeu/matio/archive/v1.5.29.tar.gz",
+                    "sha256": "345f18bad65ad4a736ef5b4d660e8587c672939ff88b8551453e03d2146ff8b0"
                 }
             ]
         },
@@ -358,7 +355,9 @@
             "config-opts": [
 		    "-DQt6Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt6Mqtt",
 		    "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF",
-		    "-DENABLE_TESTS=OFF"
+		    "-DENABLE_TESTS=OFF",
+		    "-DENABLE_PYTHON_SDK=OFF",
+		    "-DENABLE_PYTHON_SCRIPTING=OFF"
 	    ],
 	    "sources": [
                 {

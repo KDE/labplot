@@ -43,7 +43,7 @@ public:
 		return m_valuesDouble.at(i);
 	}
 
-	void add(QString value, QString label) {
+	void add(const QString& value, const QString& label) {
 		if (m_valuesInt.size() > 0 || m_valuesDouble.size() > 0) {
 			DEBUG(Q_FUNC_INFO << ", WARNING: can't add string value to integer/double label set");
 			return;
@@ -52,7 +52,7 @@ public:
 		m_valuesString.append(value);
 		m_labels.append(label);
 	}
-	void add(int value, QString label) {
+	void add(int value, const QString& label) {
 		if (m_valuesDouble.size() > 0 || m_valuesString.size() > 0) {
 			DEBUG(Q_FUNC_INFO << ", WARNING: can't add integer value to double/string label set");
 			return;
@@ -61,7 +61,7 @@ public:
 		m_valuesInt.append(value);
 		m_labels.append(label);
 	}
-	void add(double value, QString label) {
+	void add(double value, const QString& label) {
 		if (m_valuesInt.size() > 0 || m_valuesString.size() > 0) {
 			DEBUG(Q_FUNC_INFO << ", WARNING: can't add double value to int/string label set");
 			return;

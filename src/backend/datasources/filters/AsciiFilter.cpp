@@ -655,7 +655,7 @@ Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 		}
 	}
 
-	// TODO: This is dangerous, because it could that now a different dataContainer is used than before.
+	// TODO: This is dangerous, because it could be that now a different dataContainer is used than before.
 	if (m_DataContainer.size() == 0) {
 		std::vector<void*> dataContainer;
 		if (!m_dataSource) {
@@ -673,9 +673,8 @@ Status AsciiFilterPrivate::readFromDevice(QIODevice& device,
 		// wrong data locations.
 		// Update
 		// Initialize m_DataContainer. So m_DataContainer must not free up the data afterwards
-		for (size_t i = 0; i < dataContainer.size(); i++) {
+		for (size_t i = 0; i < dataContainer.size(); i++)
 			m_DataContainer.appendVector(dataContainer.at(i), properties.columnModes.at(i));
-		}
 	}
 
 	qsizetype dataContainerStartIndex = 0;

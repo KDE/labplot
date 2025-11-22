@@ -83,8 +83,8 @@ void ConstantsWidget::filterChanged(const QString& filter) {
 	if (!filter.isEmpty()) {
 		ui.cbGroup->setEnabled(false);
 
-		static const QStringList& names = m_expressionParser->constantsNames();
-		static const QStringList& constants = m_expressionParser->constants();
+		static const auto& names = m_expressionParser->constantsNames();
+		static const auto& constants = m_expressionParser->constants();
 		ui.lwConstants->clear();
 		for (int i = 0; i < names.size(); ++i) {
 			if (names.at(i).contains(filter, Qt::CaseInsensitive) || constants.at(i).contains(filter, Qt::CaseInsensitive))
@@ -106,9 +106,9 @@ void ConstantsWidget::filterChanged(const QString& filter) {
 }
 
 void ConstantsWidget::constantChanged(const QString& text) {
-	static const QStringList& names = m_expressionParser->constantsNames();
-	static const QStringList& values = m_expressionParser->constantsValues();
-	static const QStringList& units = m_expressionParser->constantsUnits();
+	static const auto& names = m_expressionParser->constantsNames();
+	static const auto& values = m_expressionParser->constantsValues();
+	static const auto& units = m_expressionParser->constantsUnits();
 
 	QString name = text.left(text.indexOf(QStringLiteral(" (")));
 	int index = names.indexOf(name);
@@ -120,8 +120,8 @@ void ConstantsWidget::constantChanged(const QString& text) {
 }
 
 void ConstantsWidget::insertClicked() {
-	static const QStringList& constants = m_expressionParser->constants();
-	static const QStringList& names = m_expressionParser->constantsNames();
+	static const auto& constants = m_expressionParser->constants();
+	static const auto& names = m_expressionParser->constantsNames();
 
 	// determine the currently selected constant
 	const QString& text = ui.lwConstants->currentItem()->text();

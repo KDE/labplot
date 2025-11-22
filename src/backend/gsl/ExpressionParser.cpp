@@ -4,7 +4,7 @@
 	Description      : C++ wrapper for the bison generated parser.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2014-2024 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2014-2025 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -71,11 +71,12 @@ void ExpressionParser::initFunctions() {
 
 // TODO: decide whether we want to have i18n here in the backend part of the code
 void ExpressionParser::initConstants() {
+	const auto numberLocale = QLocale();
 	for (int i = 0; i < _number_constants; i++) {
 		const auto& constant = _constants[i];
 		m_constantsDescription << constant.description();
 		m_constants << QLatin1String(constant.name);
-		m_constantsValues << QString::number(constant.value, 'g', 15);
+		m_constantsValues << numberLocale.toString(constant.value, 'g', 15);
 		m_constantsUnits << QLatin1String(constant.unit);
 		m_constantsGroupIndex << constant.group;
 	}

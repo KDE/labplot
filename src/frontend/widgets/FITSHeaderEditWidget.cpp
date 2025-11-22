@@ -227,13 +227,11 @@ bool FITSHeaderEditWidget::save() {
 		const auto& data = it.value();
 		if (data.updates.newKeywords.size() > 0) {
 			m_fitsFilter->addNewKeyword(fileName, data.updates.newKeywords);
-			if (!saved)
-				saved = true;
+			saved = true;
 		}
 		if (data.updates.removedKeywords.size() > 0) {
 			m_fitsFilter->deleteKeyword(fileName, data.updates.removedKeywords);
-			if (!saved)
-				saved = true;
+			saved = true;
 		}
 		if (!saved) {
 			for (const FITSFilter::Keyword& key : data.updates.updatedKeywords) {
@@ -253,8 +251,7 @@ bool FITSHeaderEditWidget::save() {
 
 	if (m_removedExtensions.size() > 0) {
 		m_fitsFilter->removeExtensions(m_removedExtensions);
-		if (!saved)
-			saved = true;
+		saved = true;
 	}
 	if (saved) {
 		// to reset the window title

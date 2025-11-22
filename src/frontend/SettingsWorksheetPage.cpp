@@ -109,7 +109,6 @@ void SettingsWorksheetPage::loadSettings() {
 		ui.cbPreviewThumbnailSize->setCurrentIndex(1); // medium
 
 	QString engine = group.readEntry(QLatin1String("LaTeXEngine"), "");
-	index = -1;
 	if (engine.isEmpty()) {
 		// empty string was found in the settings (either the settings never saved or no tex engine was available during the last save)
 		//->check whether the latex environment was installed in the meantime
