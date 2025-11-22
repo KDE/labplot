@@ -104,54 +104,54 @@ void SeasonalDecomposition::init() {
 	newRect.setHeight(round(newHeight));
 	newRect.setWidth(round(newWidth));
 	d->worksheet->setPageRect(newRect);
-	addChild(d->worksheet);
+	addChildFast(d->worksheet);
 
 	// plot areas
 	d->plotAreaOriginal = new CartesianPlot(i18n("Original"));
 	d->plotAreaOriginal->setFixed(true);
 	d->plotAreaOriginal->setType(CartesianPlot::Type::FourAxes);
 	d->plotAreaOriginal->horizontalAxis()->title()->setText(QString());
-	d->worksheet->addChild(d->plotAreaOriginal);
+	d->worksheet->addChildFast(d->plotAreaOriginal);
 
 	d->plotAreaTrend = new CartesianPlot(i18n("Trend"));
 	d->plotAreaTrend->setFixed(true);
 	d->plotAreaTrend->setType(CartesianPlot::Type::FourAxes);
 	d->plotAreaTrend->title()->setText(i18n("Trend Component"));
 	d->plotAreaTrend->horizontalAxis()->title()->setText(QString());
-	d->worksheet->addChild(d->plotAreaTrend);
+	d->worksheet->addChildFast(d->plotAreaTrend);
 
 	d->plotAreaSeasonal = new CartesianPlot(i18n("Seasonal"));
 	d->plotAreaSeasonal->setFixed(true);
 	d->plotAreaSeasonal->setType(CartesianPlot::Type::FourAxes);
 	d->plotAreaSeasonal->title()->setText(i18n("Seasonal Component"));
 	d->plotAreaSeasonal->horizontalAxis()->title()->setText(QString());
-	d->worksheet->addChild(d->plotAreaSeasonal);
+	d->worksheet->addChildFast(d->plotAreaSeasonal);
 
 	d->plotAreaResidual = new CartesianPlot(i18n("Residual"));
 	d->plotAreaResidual->setFixed(true);
 	d->plotAreaResidual->setType(CartesianPlot::Type::FourAxes);
 	d->plotAreaResidual->title()->setText(i18n("Residual Component"));
-	d->worksheet->addChild(d->plotAreaResidual);
+	d->worksheet->addChildFast(d->plotAreaResidual);
 
 	// curves
 	d->curveOriginal = new XYCurve(i18n("Original"));
 	d->curveOriginal->setFixed(true);
-	d->plotAreaOriginal->addChild(d->curveOriginal);
+	d->plotAreaOriginal->addChildFast(d->curveOriginal);
 
 	d->curveTrend = new XYCurve(i18n("Trend"));
 	d->curveTrend->setFixed(true);
 	d->curveTrend->setYColumn(d->columnTrend);
-	d->plotAreaTrend->addChild(d->curveTrend);
+	d->plotAreaTrend->addChildFast(d->curveTrend);
 
 	d->curveSeasonal = new XYCurve(i18n("Seasonal"));
 	d->curveSeasonal->setFixed(true);
 	d->curveSeasonal->setYColumn(d->columnSeasonal);
-	d->plotAreaSeasonal->addChild(d->curveSeasonal);
+	d->plotAreaSeasonal->addChildFast(d->curveSeasonal);
 
 	d->curveResidual = new XYCurve(i18n("Residual"));
 	d->curveResidual->setFixed(true);
 	d->curveResidual->setYColumn(d->columnResidual);
-	d->plotAreaResidual->addChild(d->curveResidual);
+	d->plotAreaResidual->addChildFast(d->curveResidual);
 
 	// for the seasonal component we create only one plot area and curve by default,
 	// for other algorithms that support multiple seasonal components like MSTL,
@@ -645,7 +645,7 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 
 					auto* curveSeasonal = new XYCurve(i18n("Seasonal"));
 					curveSeasonal->setFixed(true);
-					plotArea->addChild(curveSeasonal);
+					plotArea->addChildFast(curveSeasonal);
 					curvesSeasonal << curveSeasonal;
 				}
 			} else {
