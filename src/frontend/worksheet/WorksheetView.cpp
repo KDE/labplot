@@ -2454,7 +2454,7 @@ void WorksheetView::changePlotNavigation(QAction* action) {
 		if (m_selectedElement->type() == AspectType::CartesianPlot)
 			static_cast<CartesianPlot*>(m_selectedElement)->navigate(-1, op);
 		else {
-			auto parentPlot = static_cast<CartesianPlot*>(m_selectedElement->parent(AspectType::CartesianPlot));
+			auto parentPlot = static_cast<CartesianPlot*>(m_selectedElement->parent<CartesianPlot>());
 			if (parentPlot) // really needed?
 				parentPlot->navigate(cSystemIndex, op);
 		}

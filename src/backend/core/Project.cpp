@@ -417,9 +417,7 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 	updateDependencies<WorksheetElement>({aspect});
 	updateDependencies<Spreadsheet>({aspect});
 
-	if (aspect->inherits(AspectType::Spreadsheet)) {
-		const auto* spreadsheet = static_cast<const Spreadsheet*>(aspect);
-
+	if (const auto* spreadsheet = aspect->derive<const Spreadsheet>()) {
 		// if a new spreadsheet was added, check whether the spreadsheet name match the missing
 		// name in a linked spreadsheet, etc. and update the dependencies
 		connect(spreadsheet, &Spreadsheet::aboutToResize, [this]() {
@@ -957,7 +955,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	// all its children and restore the pointers for all of them. Analysis curves, for example XYFitCurve, can also
 	// children (residuals column, note) but there is no need to check the children, the pointers need to be restored
 	// for the analysis curve itself.
-	bool hasChildren = (aspect->childCount<AbstractAspect>() > 0 && !aspect->inherits(AspectType::XYAnalysisCurve));
+	bool hasChildren = (aspect->childCount<AbstractAspect>() > 0 && !aspect->inherits<XYAnalysisCurve>());
 
 #ifndef SDK
 	// LiveDataSource:
@@ -982,7 +980,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<XYCurve*> curves;
 	if (hasChildren)
 		curves = aspect->children<XYCurve>(ChildIndexFlag::Recursive);
-	else if (aspect->inherits(AspectType::XYCurve) || aspect->inherits(AspectType::XYAnalysisCurve))
+	else if (aspect->inherits<XYCurve>() || aspect->inherits<XYAnalysisCurve>())
 		// the object doesn't have any children -> one single aspect is being pasted.
 		// check whether the object being pasted is a XYCurve and add it to the
 		// list of curves to be retransformed

@@ -11,6 +11,7 @@
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AspectTreeModel.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 #include "backend/lib/macros.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
@@ -327,8 +328,8 @@ bool TreeViewComboBox::isTopLevel(const AbstractAspect* aspect) const {
 			return hasSelectableAspects;
 		}
 
-		if (type == AspectType::XYAnalysisCurve)
-			if (aspect->inherits(AspectType::XYAnalysisCurve))
+		if (type == AspectType::XYAnalysisCurve) // TODO: get rid of this!!!!!!!!!!
+			if (aspect->inherits<XYAnalysisCurve>())
 				return true;
 	}
 	return false;

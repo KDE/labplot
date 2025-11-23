@@ -9,7 +9,7 @@
 */
 
 #include "MainWin.h"
-
+#include "backend/core/AbstractFilter.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
@@ -99,6 +99,7 @@
 #include "frontend/notebook/NotebookView.h"
 #include <cantor/backend.h>
 #endif
+
 
 /*!
 \class MainWin
@@ -1189,7 +1190,7 @@ void MainWin::newSpreadsheet() {
 	// add the new matrix to the workbook
 	auto* workbook = dynamic_cast<Workbook*>(m_currentAspect);
 	if (!workbook)
-		workbook = static_cast<Workbook*>(m_currentAspect->parent(AspectType::Workbook));
+		workbook = static_cast<Workbook*>(m_currentAspect->parent<Workbook>());
 
 	if (workbook)
 		workbook->addChild(spreadsheet);
@@ -1217,7 +1218,7 @@ void MainWin::newMatrix() {
 	// add the new matrix to the workbook
 	auto* workbook = dynamic_cast<Workbook*>(m_currentAspect);
 	if (!workbook)
-		workbook = static_cast<Workbook*>(m_currentAspect->parent(AspectType::Workbook));
+		workbook = static_cast<Workbook*>(m_currentAspect->parent<Workbook>());
 
 	if (workbook)
 		workbook->addChild(matrix);
@@ -1326,7 +1327,7 @@ void MainWin::handleAspectRemoved(const AbstractAspect* parent, const AbstractAs
 	//  - AbstractSimpleFilter
 	//  - columns in the data spreadsheet of a datapicker curve,
 	//    this can only happen when changing the error type and is done on the level of DatapickerImage
-	if (!aspect->inherits(AspectType::AbstractFilter) && !(parent->parentAspect() && parent->parentAspect()->type() == AspectType::DatapickerCurve))
+	if (!aspect->inherits<AbstractFilter>() && !(parent->parentAspect() && parent->parentAspect()->type() == AspectType::DatapickerCurve))
 		m_projectExplorer->setCurrentAspect(parent);
 }
 
@@ -1872,7 +1873,7 @@ void MainWin::importDirDialog(const QString& dir) {
 	if (type == AspectType::Folder || type == AspectType::Workbook)
 		targetAspect = m_currentAspect;
 	else {
-		targetAspect = m_currentAspect->parent(AspectType::Folder);
+		targetAspect = m_currentAspect->parent<Folder>();
 		if (!targetAspect)
 			targetAspect = m_project;
 	}

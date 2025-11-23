@@ -728,7 +728,7 @@ void TextLabelPrivate::updateTeXImage() {
 	if (zoomFactor == -1.0) {
 		// the view was not zoomed after the label was added so the zoom factor is not set yet.
 		// determine the current zoom factor in the view and use it
-		auto* worksheet = static_cast<const Worksheet*>(q->parent(AspectType::Worksheet));
+		auto* worksheet = static_cast<const Worksheet*>(q->parent<Worksheet>());
 		if (!worksheet)
 			return;
 		zoomFactor = worksheet->zoomFactor();

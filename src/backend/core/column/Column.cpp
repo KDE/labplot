@@ -138,12 +138,11 @@ QMenu* Column::createContextMenu() {
 	// later, once we have some actions in the menu also for MQTT topics we'll
 	// need to explicitly to dynamic_cast for MQTTTopic
 	if (firstAction) {
-		if (parentAspect()->inherits(AspectType::Spreadsheet)) {
-			auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect());
+		if (auto* spreadsheet = parentAspect()->derive<Spreadsheet>()) {
 			spreadsheet->fillColumnContextMenu(menu, this);
 		} else if (parentAspect()->type() == AspectType::Notebook) {
 #if defined(HAVE_CANTOR_LIBS) && !defined(SDK)
-			auto* notebook = static_cast<Notebook*>(parentAspect());
+			auto* notebook = parentAspect()->derive<Notebook>()
 			notebook->fillColumnContextMenu(menu, this);
 #endif
 		}

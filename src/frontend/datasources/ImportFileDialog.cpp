@@ -254,19 +254,16 @@ bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 void ImportFileDialog::importFile(const QString& fileName, AbstractAspect* aspect, AbstractFileFilter* filter, AbstractFileFilter::ImportMode mode) const {
 	DEBUG(Q_FUNC_INFO << ", file name: " << fileName.toStdString());
-	if (aspect->inherits(AspectType::Matrix)) {
+	if (auto* matrix = aspect->derive<Matrix>()) {
 		DEBUG(Q_FUNC_INFO << ", to Matrix");
-		auto* matrix = qobject_cast<Matrix*>(aspect);
 		filter->readDataFromFile(fileName, matrix, mode);
-	} else if (aspect->inherits(AspectType::Spreadsheet)) {
+	} else if (auto* spreadsheet = aspect->derive<Spreadsheet>()) {
 		DEBUG(Q_FUNC_INFO << ", to Spreadsheet");
-		auto* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
 		DEBUG("CALLING filter->readDataFromFile()")
 		// TODO: which extension (table) is imported?
 		filter->readDataFromFile(fileName, spreadsheet, mode);
-	} else if (aspect->inherits(AspectType::Workbook)) {
+	} else if (auto* workbook = aspect->derive<Workbook>()) {
 		DEBUG(Q_FUNC_INFO << ", to Workbook");
-		auto* workbook = static_cast<Workbook*>(aspect);
 		workbook->setUndoAware(false);
 		auto sheets = workbook->children<AbstractAspect>();
 
@@ -398,7 +395,7 @@ void ImportFileDialog::enableImportToMatrix(const bool enable) {
 			return;
 		}
 
-		if (aspect->inherits(AspectType::Matrix)) {
+		if (aspect->inherits<Matrix>()) {
 			okButton->setEnabled(enable);
 			if (enable)
 				okButton->setToolTip(i18n("Close the dialog and import the data."));
