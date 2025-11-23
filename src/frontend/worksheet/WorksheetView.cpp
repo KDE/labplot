@@ -2451,7 +2451,7 @@ void WorksheetView::changePlotNavigation(QAction* action) {
 					   || op == CartesianPlot::NavigationOperation::ShiftDownY || op == CartesianPlot::NavigationOperation::ZoomInY
 					   || op == CartesianPlot::NavigationOperation::ZoomOutY))) {
 		int cSystemIndex = CartesianPlot::cSystemIndex(m_selectedElement);
-		if (auto* plot = m_selectedElement->derive<CartesianPlot>())
+		if (auto* plot = m_selectedElement->castTo<CartesianPlot>())
 			plot->navigate(-1, op);
 		else {
 			auto parentPlot = m_selectedElement->parent<CartesianPlot>();

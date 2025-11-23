@@ -887,7 +887,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
 		}
 	} else {
 		QVector<CartesianPlot*> plots;
-		if (auto* plot = aspect->derive<CartesianPlot>())
+		if (auto* plot = aspect->castTo<CartesianPlot>())
 			plots << plot;
 		else if (aspect->inherits<Plot>())
 			plots << static_cast<CartesianPlot*>(aspect->parentAspect());
@@ -898,7 +898,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
 		} else {
 			// worksheet element is being copied alone without its parent plot object
 			// so the plot retransform is not called above. we need to call it for the aspect.
-			if (auto* e = aspect->derive<WorksheetElement>())
+			if (auto* e = aspect->castTo<WorksheetElement>())
 				e->retransform();
 		}
 	}
@@ -979,7 +979,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<XYCurve*> curves;
 	if (hasChildren)
 		curves = aspect->children<XYCurve>(ChildIndexFlag::Recursive);
-	else if (auto* curve = aspect->derive<XYCurve>()) {
+	else if (auto* curve = aspect->castTo<XYCurve>()) {
 		// the object doesn't have any children -> one single aspect is being pasted.
 		// check whether the object being pasted is a XYCurve and add it to the
 		// list of curves to be retransformed
@@ -1020,7 +1020,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 
 	// assign to all markers the curves they need
 	QVector<InfoElement*> elements;
-	if (auto* infoElement = aspect->derive<InfoElement>()) // check for the type first. InfoElement has children, but they are not relevant here
+	if (auto* infoElement = aspect->castTo<InfoElement>()) // check for the type first. InfoElement has children, but they are not relevant here
 		elements << infoElement;
 	else if (hasChildren)
 		elements = aspect->children<InfoElement>(ChildIndexFlag::Recursive);
@@ -1029,7 +1029,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		element->assignCurve(curves);
 
 	QVector<XYFunctionCurve*> functionCurves;
-	if (auto* curve = aspect->derive<XYFunctionCurve>()) // check for the type first. InfoElement has children, but they are not relevant here
+	if (auto* curve = aspect->castTo<XYFunctionCurve>()) // check for the type first. InfoElement has children, but they are not relevant here
 		functionCurves << curve;
 	else if (hasChildren)
 		functionCurves = aspect->children<XYFunctionCurve>(ChildIndexFlag::Recursive);
@@ -1043,7 +1043,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<Axis*> axes;
 	if (hasChildren)
 		axes = aspect->children<Axis>(ChildIndexFlag::Recursive);
-	else if (auto* axis = aspect->derive<Axis>())
+	else if (auto* axis = aspect->castTo<Axis>())
 		axes << axis;
 
 	for (auto* axis : axes) {
@@ -1058,7 +1058,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<Histogram*> hists;
 	if (hasChildren)
 		hists = aspect->children<Histogram>(ChildIndexFlag::Recursive);
-	else if (auto* histogram = aspect->derive<Histogram>())
+	else if (auto* histogram = aspect->castTo<Histogram>())
 		hists << histogram;
 
 	for (auto* hist : hists) {
@@ -1075,7 +1075,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<QQPlot*> qqPlots;
 	if (hasChildren)
 		qqPlots = aspect->children<QQPlot>(ChildIndexFlag::Recursive);
-	else if (auto* qqPlot = aspect->derive<QQPlot>())
+	else if (auto* qqPlot = aspect->castTo<QQPlot>())
 		qqPlots << qqPlot;
 
 	for (auto* plot : qqPlots) {
@@ -1088,7 +1088,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<KDEPlot*> kdePlots;
 	if (hasChildren)
 		kdePlots = aspect->children<KDEPlot>(ChildIndexFlag::Recursive);
-	else if (auto* kdePlot = aspect->derive<KDEPlot>())
+	else if (auto* kdePlot = aspect->castTo<KDEPlot>())
 		kdePlots << kdePlot;
 
 	for (auto* plot : kdePlots) {
@@ -1101,7 +1101,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<BoxPlot*> boxPlots;
 	if (hasChildren)
 		boxPlots = aspect->children<BoxPlot>(ChildIndexFlag::Recursive);
-	else if (auto* boxPlot = aspect->derive<BoxPlot>())
+	else if (auto* boxPlot = aspect->castTo<BoxPlot>())
 		boxPlots << boxPlot;
 
 	for (auto* boxPlot : boxPlots) {
@@ -1135,7 +1135,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<BarPlot*> barPlots;
 	if (hasChildren)
 		barPlots = aspect->children<BarPlot>(ChildIndexFlag::Recursive);
-	else if (auto* barPlot = aspect->derive<BarPlot>())
+	else if (auto* barPlot = aspect->castTo<BarPlot>())
 		barPlots << barPlot;
 
 	for (auto* barPlot : barPlots) {
@@ -1180,7 +1180,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<LollipopPlot*> lollipopPlots;
 	if (hasChildren)
 		lollipopPlots = aspect->children<LollipopPlot>(ChildIndexFlag::Recursive);
-	else if (auto* lollipopPlot = aspect->derive<LollipopPlot>())
+	else if (auto* lollipopPlot = aspect->castTo<LollipopPlot>())
 		lollipopPlots << lollipopPlot;
 
 	for (auto* lollipopPlot : lollipopPlots) {
@@ -1216,7 +1216,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<ProcessBehaviorChart*> pbPlots;
 	if (hasChildren)
 		pbPlots = aspect->children<ProcessBehaviorChart>(ChildIndexFlag::Recursive);
-	else if (auto* pbPlot = aspect->derive<ProcessBehaviorChart>())
+	else if (auto* pbPlot = aspect->castTo<ProcessBehaviorChart>())
 		pbPlots << pbPlot;
 
 	for (auto* plot : pbPlots) {
@@ -1230,7 +1230,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<RunChart*> runPlots;
 	if (hasChildren)
 		runPlots = aspect->children<RunChart>(ChildIndexFlag::Recursive);
-	else if (auto* runPlot = aspect->derive<RunChart>())
+	else if (auto* runPlot = aspect->castTo<RunChart>())
 		runPlots << runPlot;
 
 	for (auto* plot : runPlots) {
@@ -1258,7 +1258,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<HypothesisTest*> tests;
 	if (hasChildren)
 		tests = aspect->children<HypothesisTest>(ChildIndexFlag::Recursive);
-	else if (auto* hypTest = aspect->derive<HypothesisTest>())
+	else if (auto* hypTest = aspect->castTo<HypothesisTest>())
 		tests << hypTest;
 
 	for (auto* test : tests) {

@@ -254,15 +254,15 @@ bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 void ImportFileDialog::importFile(const QString& fileName, AbstractAspect* aspect, AbstractFileFilter* filter, AbstractFileFilter::ImportMode mode) const {
 	DEBUG(Q_FUNC_INFO << ", file name: " << fileName.toStdString());
-	if (auto* matrix = aspect->derive<Matrix>()) {
+	if (auto* matrix = aspect->castTo<Matrix>()) {
 		DEBUG(Q_FUNC_INFO << ", to Matrix");
 		filter->readDataFromFile(fileName, matrix, mode);
-	} else if (auto* spreadsheet = aspect->derive<Spreadsheet>()) {
+	} else if (auto* spreadsheet = aspect->castTo<Spreadsheet>()) {
 		DEBUG(Q_FUNC_INFO << ", to Spreadsheet");
 		DEBUG("CALLING filter->readDataFromFile()")
 		// TODO: which extension (table) is imported?
 		filter->readDataFromFile(fileName, spreadsheet, mode);
-	} else if (auto* workbook = aspect->derive<Workbook>()) {
+	} else if (auto* workbook = aspect->castTo<Workbook>()) {
 		DEBUG(Q_FUNC_INFO << ", to Workbook");
 		workbook->setUndoAware(false);
 		auto sheets = workbook->children<AbstractAspect>();

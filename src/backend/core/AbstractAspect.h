@@ -314,17 +314,22 @@ public:
 		return (dynamic_cast<const Target*>(this) != nullptr);
 	}
 	/*!
-	 * \brief derive
-	 * \return a pointer to the derived Target if this aspect
+	 * \brief castTo
+	 * \return a pointer to the casted Target if this aspect
 	 * derives from Target otherwise a nullptr
 	 */
 	template<typename Target>
-	Target* derive() {
+	Target* castTo() {
 		return dynamic_cast<Target*>(this);
 	}
 
+	/*!
+	 * \brief castTo (const variant)
+	 * \return a pointer to the casted Target if this aspect
+	 * derives from Target otherwise a nullptr
+	 */
 	template<typename Target>
-	Target* derive() const {
+	Target* castTo() const {
 		return dynamic_cast<Target*>(this);
 	}
 
@@ -339,7 +344,7 @@ public:
 		if (!parent)
 			return nullptr;
 
-		if (auto* p = parent->derive<Target>())
+		if (auto* p = parent->castTo<Target>())
 			return p;
 
 		return parent->parent<Target>();

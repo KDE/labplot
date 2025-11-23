@@ -452,7 +452,7 @@ void AbstractAspect::setParentAspect(AbstractAspect* parent) {
  * The returned folder may be the aspect itself if it inherits Folder.
  */
 Folder* AbstractAspect::folder() {
-	if (auto* f = derive<Folder>())
+	if (auto* f = castTo<Folder>())
 		return f;
 	AbstractAspect* parent_aspect = parentAspect();
 	while (parent_aspect && !parent_aspect->inherits<Folder>())
