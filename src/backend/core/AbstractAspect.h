@@ -32,6 +32,9 @@ class QXmlStreamWriter;
 /// returns true if the class inherits from @verbatim base@endverbatim.
 ///
 /// AspectType is used in GuiObserver to select the correct dock widget.
+///
+/// IMPORTANT: Never expose the type value outside of the running application,
+/// because it can change with every labplot version!
 enum class AspectType : quint64 {
 	AbstractAspect,
 
