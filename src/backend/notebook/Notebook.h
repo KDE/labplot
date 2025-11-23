@@ -11,10 +11,11 @@
 #ifndef NOTEBOOK_H
 #define NOTEBOOK_H
 
-#include <backend/core/AbstractPart.h>
 #ifdef HAVE_CANTOR_LIBS
+
+#include <backend/core/AbstractPart.h>
 #include <cantor/session.h>
-#endif
+
 
 namespace Cantor {
 class PanelPlugin;
@@ -86,5 +87,7 @@ Q_SIGNALS:
 	void statusChanged(Cantor::Session::Status);
 #endif
 };
+
+#endif // HAVE_CANTOR_LIBS
 
 #endif // NOTEBOOK_H
