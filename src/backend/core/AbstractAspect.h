@@ -144,7 +144,7 @@ public:
 	// type name for internal use (no translation)
 	// IMPORTANT: This name must match the class name!
 	// It will be used to use the QObject::inherits() function
-	static std::string_view typeName(AspectType type) {
+	static constexpr std::string_view typeName(AspectType type) {
 		switch (type) {
 		case AspectType::AbstractAspect:
 			return std::string_view("AbstractAspect");
