@@ -1108,7 +1108,7 @@ void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 #ifdef HAVE_CANTOR_LIBS
 		&& !parent->inherits<Notebook>()
 #endif
-		)
+	)
 		Q_EMIT this->selected(aspect);
 }
 
@@ -1125,7 +1125,7 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 #ifdef HAVE_CANTOR_LIBS
 		&& !parent->inherits<Notebook>()
 #endif
-		)
+	)
 		Q_EMIT this->deselected(aspect);
 }
 

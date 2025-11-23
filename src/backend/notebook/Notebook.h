@@ -16,7 +16,6 @@
 #include <backend/core/AbstractPart.h>
 #include <cantor/session.h>
 
-
 namespace Cantor {
 class PanelPlugin;
 class WorksheetAccessInterface;

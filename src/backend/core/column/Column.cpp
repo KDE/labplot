@@ -140,9 +140,9 @@ QMenu* Column::createContextMenu() {
 	if (firstAction) {
 		if (auto* spreadsheet = parentAspect()->castTo<Spreadsheet>()) {
 			spreadsheet->fillColumnContextMenu(menu, this);
-		} else if (parentAspect()->type() == AspectType::Notebook) {
+		}
 #if defined(HAVE_CANTOR_LIBS) && !defined(SDK)
-			auto* notebook = parentAspect()->castTo<Notebook>()
+		else if (auto* notebook = parentAspect()->derive<Notebook>()) {
 			notebook->fillColumnContextMenu(menu, this);
 #endif
 		}
