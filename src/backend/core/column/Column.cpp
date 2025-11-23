@@ -144,8 +144,8 @@ QMenu* Column::createContextMenu() {
 #if defined(HAVE_CANTOR_LIBS) && !defined(SDK)
 		else if (auto* notebook = parentAspect()->derive<Notebook>()) {
 			notebook->fillColumnContextMenu(menu, this);
-#endif
 		}
+#endif
 	}
 
 	//"Used in" menu containing all plots where the column is used

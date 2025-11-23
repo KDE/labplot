@@ -1188,9 +1188,9 @@ void MainWin::newSpreadsheet() {
 
 	// if the current active window is a workbook or one of its children,
 	// add the new matrix to the workbook
-	auto* workbook = dynamic_cast<Workbook*>(m_currentAspect);
+	auto* workbook = m_currentAspect->castTo<Workbook>();
 	if (!workbook)
-		workbook = static_cast<Workbook*>(m_currentAspect->parent<Workbook>());
+		workbook = m_currentAspect->parent<Workbook>();
 
 	if (workbook)
 		workbook->addChild(spreadsheet);
@@ -1216,9 +1216,9 @@ void MainWin::newMatrix() {
 
 	// if the current active window is a workbook or one of its children,
 	// add the new matrix to the workbook
-	auto* workbook = dynamic_cast<Workbook*>(m_currentAspect);
+	auto* workbook = m_currentAspect->castTo<Workbook>();
 	if (!workbook)
-		workbook = static_cast<Workbook*>(m_currentAspect->parent<Workbook>());
+		workbook = m_currentAspect->parent<Workbook>();
 
 	if (workbook)
 		workbook->addChild(matrix);
@@ -1255,13 +1255,14 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 		return nullptr;
 
 	Spreadsheet* spreadsheet = nullptr;
-	if (m_currentAspect->type() == AspectType::Spreadsheet)
-		spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect);
+	if (auto* s = m_currentAspect->castTo<Spreadsheet>())
+		spreadsheet = s;
 	else {
 		// check whether one of spreadsheet columns is selected and determine the spreadsheet
-		auto* parent = m_currentAspect->parentAspect();
-		if (parent && parent->type() == AspectType::Spreadsheet)
-			spreadsheet = dynamic_cast<Spreadsheet*>(parent);
+		if (auto* parent = m_currentAspect->parentAspect()) {
+			if (auto* s = parent->castTo<Spreadsheet>())
+				spreadsheet = s;
+		}
 	}
 
 	return spreadsheet;
