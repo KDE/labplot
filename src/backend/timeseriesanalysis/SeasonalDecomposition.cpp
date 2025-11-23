@@ -548,23 +548,49 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 			seasonalData << seasonalDataSingle;
 		} else {
 			// check if we have valid MSTL parameters
+			if (mstlPeriods.empty()) {
+        	    reset(i18n("No periods specified for MSTL."));
+            	return;
+        	}
+
 			for (size_t i = 0; i < mstlPeriods.size(); i++) {
+				if (mstlPeriods.at(i) < 2) {
+            	    reset(i18n("All periods must be at least 2."));
+                	return;
+            	}
 				if (yDataVector.size() < mstlPeriods.at(i) * 2) {
 					reset(i18n("Time-series has less than two periods."));
 					return;
 				}
 			}
 
+            if (mstlIterations <= 0) {
+                reset(i18n("Iterations must be > 0."));
+                return;
+            }
+
 			if (mstlLambda < 0 || mstlLambda > 1) {
 				reset(i18n("Lambda must be between 0 and 1."));
 				return;
+			}
+
+			// check for strictly positive data if Box-Cox transformation is requested
+			if (mstlLambda != 1.0) {
+				bool bad = std::any_of(yDataVector.begin(), yDataVector.end(),
+					[](double v){ return std::isnan(v) || v <= 0.0; });
+				if (bad) {
+					reset(i18n("Box-Cox transformation requires strictly positive data"));
+					return;
+				}
 			}
 
 			WAIT_CURSOR_AUTO_RESET
 			adjustSeasonalComponents(mstlPeriods);
 
 			// perform the decomposition
-			auto mstlParameters = stl::mstl_params().stl_params(stlParameters).iterations(mstlIterations).lambda(mstlLambda);
+			auto mstlParameters = stl::mstl_params().stl_params(stlParameters).iterations(mstlIterations);
+			if (mstlLambda != 1.0)
+				mstlParameters = mstlParameters.lambda(mstlLambda);
 			auto result = mstlParameters.fit(yDataVector, mstlPeriods);
 
 			// copy the result data into the internal column vectors

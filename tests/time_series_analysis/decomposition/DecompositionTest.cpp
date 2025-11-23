@@ -14,9 +14,9 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/WorksheetElementPrivate.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 #include <QUndoStack>
 
