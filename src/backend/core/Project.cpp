@@ -417,7 +417,7 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 	updateDependencies<WorksheetElement>({aspect});
 	updateDependencies<Spreadsheet>({aspect});
 
-	if (const auto* spreadsheet = aspect->derive<const Spreadsheet>()) {
+	if (const auto* spreadsheet = aspect->castTo<const Spreadsheet>()) {
 		// if a new spreadsheet was added, check whether the spreadsheet name match the missing
 		// name in a linked spreadsheet, etc. and update the dependencies
 		connect(spreadsheet, &Spreadsheet::aboutToResize, [this]() {
