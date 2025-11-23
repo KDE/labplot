@@ -369,17 +369,17 @@ void DecompositionTest::testDecompositionPeriodChange() {
 		s.at(0)->view(); // To create the view, otherwise no spreadsheetview and model get not created
 	}
 
-		   // the initial method is STL with three components: Trend, Seasonal, Residual
+	// the initial method is STL with three components: Trend, Seasonal, Residual
 	QCOMPARE(decomposition->method(), SeasonalDecomposition::Method::STL);
 	QCOMPARE(decomposition->stlPeriod(), 12);
 
-	for (const auto* c: project.children(AspectType::WorksheetElement, AbstractAspect::ChildIndexFlag::Recursive)) {
+	for (const auto* c : project.children(AspectType::WorksheetElement, AbstractAspect::ChildIndexFlag::Recursive)) {
 		QCOMPARE(static_cast<const WorksheetElement*>(c)->d_ptr->suppressRetransform, false);
 	}
 
 	decomposition->setSTLPeriod(15);
 
-	for (const auto* c: project.children(AspectType::WorksheetElement, AbstractAspect::ChildIndexFlag::Recursive)) {
+	for (const auto* c : project.children(AspectType::WorksheetElement, AbstractAspect::ChildIndexFlag::Recursive)) {
 		QCOMPARE(static_cast<const WorksheetElement*>(c)->d_ptr->suppressRetransform, false);
 	}
 }
