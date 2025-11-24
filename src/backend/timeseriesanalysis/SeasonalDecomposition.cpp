@@ -605,8 +605,9 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 
 			// check for strictly positive data if Box-Cox transformation is requested
 			if (mstlLambda != 1.0) {
-				bool bad = std::any_of(yDataVector.begin(), yDataVector.end(),
-					[](double v){ return std::isnan(v) || v <= 0.0; });
+				bool bad = std::any_of(yDataVector.begin(), yDataVector.end(), [](double v) {
+					return std::isnan(v) || v <= 0.0;
+				});
 				if (bad) {
 					reset(i18n("Box-Cox transformation requires strictly positive data."));
 					return;
