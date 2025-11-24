@@ -266,7 +266,7 @@ if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
     get_target_property(Shiboken6_INCLUDE_DIRECTORIES Shiboken6::libshiboken INTERFACE_INCLUDE_DIRECTORIES)
     target_include_directories(${bindings_library} PUBLIC ${Python3_INCLUDE_DIRS} ${PySide6_INCLUDE_DIRECTORIES} ${PYSIDE_PYTHONPATH}/include/QtWidgets ${PYSIDE_PYTHONPATH}/include/QtGui ${PYSIDE_PYTHONPATH}/include/QtCore)
     # TODO: check if necessary
-    target_include_directories(${bindings_library} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../src/3rdparty/shiboken6-${QT_VERSION_MAJOR}/include)
+    # target_include_directories(${bindings_library} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../src/3rdparty/shiboken6-${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}/include)
     if(Shiboken6_INCLUDE_DIRECTORIES)
         target_include_directories(${bindings_library} PUBLIC ${Shiboken6_INCLUDE_DIRECTORIES})
     endif()

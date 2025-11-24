@@ -28,7 +28,7 @@ find_library(Shiboken6_ABI3_LIBRARY
 
 find_path(Shiboken6_INCLUDE_DIR
     NAMES sbkversion.h
-    PATHS ${PYSIDE_PYTHONPATH}/../shiboken6/include ${CMAKE_INSTALL_PREFIX}/include ${CMAKE_INSTALL_PREFIX}/include/shiboken6 /usr/include/shiboken6 /usr/local/include/shiboken6
+    PATHS ${PYSIDE_PYTHONPATH}/../shiboken6/include ${PYSIDE_PYTHONPATH}/../shiboken6_generator/include ${CMAKE_INSTALL_PREFIX}/include ${CMAKE_INSTALL_PREFIX}/include/shiboken6 /usr/include/shiboken6 /usr/local/include/shiboken6
 )
 
 
