@@ -29,6 +29,30 @@
 CURVE_COLUMN_CONNECT(SeasonalDecomposition, X, x, recalc)
 CURVE_COLUMN_CONNECT(SeasonalDecomposition, Y, y, recalc)
 
+namespace {
+QString periodsToString(const std::vector<size_t>& periods) {
+	QString str;
+	for (const auto period : periods) {
+		if (!str.isEmpty())
+			str += QLatin1Char(',');
+		str += QString::number(period);
+	}
+	return str;
+}
+
+std::vector<size_t> stringToPeriods(const QString& str) {
+	std::vector<size_t> periods;
+	const auto list = str.split(QLatin1Char(','));
+	for (const auto& s : list) {
+		bool ok;
+		const auto period = s.trimmed().toULongLong(&ok);
+		if (ok)
+			periods.push_back(period);
+	}
+	return periods;
+}
+}
+
 /**
  * \class SeasonalDecomposition
  * \brief Seasonal Decomposition of Time Series
@@ -68,6 +92,11 @@ void SeasonalDecomposition::init() {
 	d->stlSeasonalJump = group.readEntry(QStringLiteral("STLSeasonalJump"), 0);
 	d->stlTrendJump = group.readEntry(QStringLiteral("STLTrendJump"), 0);
 	d->stlLowPassJump = group.readEntry(QStringLiteral("STLLowPassJump"), 0);
+
+	// MSTL parameters
+	d->mstlPeriods = stringToPeriods(group.readEntry("MSTLPeriods", periodsToString(d->mstlPeriods)));
+	d->mstlLambda = group.readEntry(QStringLiteral("MSTLLambda"), 1.);
+	d->mstlIterations = group.readEntry(QStringLiteral("MSTLIterations"), 2);
 
 	// spreadsheet with columns for the result y-data
 	d->resultSpreadsheet = new Spreadsheet(i18n("Result"));
@@ -549,25 +578,25 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 		} else {
 			// check if we have valid MSTL parameters
 			if (mstlPeriods.empty()) {
-        	    reset(i18n("No periods specified for MSTL."));
-            	return;
-        	}
+				reset(i18n("No periods specified for MSTL."));
+				return;
+			}
 
 			for (size_t i = 0; i < mstlPeriods.size(); i++) {
 				if (mstlPeriods.at(i) < 2) {
-            	    reset(i18n("All periods must be at least 2."));
-                	return;
-            	}
+					reset(i18n("Periods must be at least 2."));
+					return;
+				}
 				if (yDataVector.size() < mstlPeriods.at(i) * 2) {
 					reset(i18n("Time-series has less than two periods."));
 					return;
 				}
 			}
 
-            if (mstlIterations <= 0) {
-                reset(i18n("Iterations must be > 0."));
-                return;
-            }
+			if (mstlIterations <= 0) {
+				reset(i18n("Iterations must be > 0."));
+				return;
+			}
 
 			if (mstlLambda < 0 || mstlLambda > 1) {
 				reset(i18n("Lambda must be between 0 and 1."));
@@ -579,7 +608,7 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 				bool bad = std::any_of(yDataVector.begin(), yDataVector.end(),
 					[](double v){ return std::isnan(v) || v <= 0.0; });
 				if (bad) {
-					reset(i18n("Box-Cox transformation requires strictly positive data"));
+					reset(i18n("Box-Cox transformation requires strictly positive data."));
 					return;
 				}
 			}
@@ -708,36 +737,14 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 void SeasonalDecompositionPrivate::reset(const QString& info) const {
 	Q_EMIT q->statusError(info);
 	columnTrend->clear();
-	columnSeasonal->clear();
+	for (auto* column : columnsSeasonal)
+		column->clear();
 	columnResidual->clear();
 }
 
 // ##############################################################################
 // ##################  Serialization/Deserialization  ###########################
 // ##############################################################################
-namespace {
-QString periodsToString(const std::vector<size_t>& periods) {
-	QString str;
-	for (const auto period : periods) {
-		if (!str.isEmpty())
-			str += QLatin1Char(',');
-		str += QString::number(period);
-	}
-	return str;
-}
-
-std::vector<size_t> stringToPeriods(const QString& str) {
-	std::vector<size_t> periods;
-	const auto list = str.split(QLatin1Char(','));
-	for (const auto& s : list) {
-		bool ok;
-		const auto period = s.trimmed().toULongLong(&ok);
-		if (ok)
-			periods.push_back(period);
-	}
-	return periods;
-}
-}
 
 //! Save as XML
 void SeasonalDecomposition::save(QXmlStreamWriter* writer) const {
@@ -866,6 +873,7 @@ bool SeasonalDecomposition::load(XmlStreamReader* reader, bool preview) {
 		return false;
 	d->columnTrend = d->resultSpreadsheet->column(0); // first column for trend
 	d->columnSeasonal = d->resultSpreadsheet->column(1); // second column for seasonal
+	d->columnsSeasonal << d->columnSeasonal;
 	for (int i = 2; i < d->resultSpreadsheet->columnCount() - 1; ++i) // more column for seasonal, if present
 		d->columnsSeasonal << d->resultSpreadsheet->column(i);
 	d->columnResidual = d->resultSpreadsheet->column(d->resultSpreadsheet->columnCount() - 1); // last column for residuals

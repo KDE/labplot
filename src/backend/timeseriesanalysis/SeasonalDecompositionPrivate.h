@@ -82,7 +82,7 @@ public:
 
 	// MSTL parameters
 	std::vector<size_t> mstlPeriods{24, 168};
-	double mstlLambda{0.5};
+	double mstlLambda{1.};
 	int mstlIterations{2};
 
 private:
