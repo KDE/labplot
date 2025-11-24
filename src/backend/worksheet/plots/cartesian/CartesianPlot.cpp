@@ -1456,7 +1456,7 @@ void CartesianPlot::setRange(const Dimension dim, const int index, const Range<d
 		return;
 	}
 
-	auto r = d->checkRange(range);
+	auto r = range.checkRange();
 	if (index >= 0 && index < rangeCount(dim) && r.finite() && r != d->rangeConst(dim, index)) {
 		exec(new CartesianPlotSetRangeIndexCmd(d, dim, r, index));
 	} else if (index < 0 || index >= rangeCount(dim))
@@ -1632,7 +1632,7 @@ void CartesianPlot::setRangeScale(const Dimension dim, const int index, const Ra
 
 	auto newRange = range(Dimension::X, index);
 	newRange.setScale(scale);
-	auto r = d->checkRange(newRange);
+	auto r = newRange.checkRange();
 	if (index >= 0 && index < rangeCount(dim) && r.finite() && r != d->rangeConst(dim, index)) {
 		if (r == newRange) {
 			exec(new CartesianPlotSetScaleIndexCmd(d, dim, scale, index));
@@ -3097,7 +3097,7 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 
 		// check ranges for nonlinear scales
 		if (range.scale() != RangeT::Scale::Linear)
-			range = d->checkRange(range);
+			range = range.checkRange();
 
 		if (range.start() < d->dataRange(dim, index).start())
 			d->dataRange(dim, index).start() = range.start();
@@ -3748,58 +3748,6 @@ bool CartesianPlotPrivate::rangeBreakingEnabled(const Dimension dim) {
 	return false;
 }
 
-/*!
- * helper function for checkXRange() and checkYRange()
- */
-Range<double> CartesianPlotPrivate::checkRange(const Range<double>& range) {
-	double start = range.start(), end = range.end();
-	const auto scale = range.scale();
-	if (scale == RangeT::Scale::Linear || (start > 0 && end > 0)) // nothing to do
-		return range;
-	if (start >= 0 && end >= 0 && scale == RangeT::Scale::Sqrt) // nothing to do
-		return range;
-	// TODO: check if start == end?
-
-	double min = 0.01, max = 1.;
-
-	if (scale == RangeT::Scale::Sqrt) {
-		if (start < 0)
-			start = 0.;
-	} else if (start <= 0)
-		start = min;
-	if (scale == RangeT::Scale::Sqrt) {
-		if (end < 0)
-			end = max;
-	} else if (end <= 0)
-		end = max;
-
-	auto newRange = range;
-	newRange.setStart(start);
-	newRange.setEnd(end);
-	return newRange;
-}
-
-/*!
- * check for negative values in the range when non-linear scalings are used
- */
-void CartesianPlotPrivate::checkRange(Dimension dim, int index) {
-	const auto& range = ranges(dim).at(index).range;
-	DEBUG(Q_FUNC_INFO << ", " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << " range " << index + 1 << " : " << range.toStdString()
-					  << ", scale = " << ENUM_TO_STRING(RangeT, Scale, range.scale()))
-
-	const auto newRange = checkRange(range);
-
-	const double start = newRange.start(), end = newRange.end();
-	if (start != range.start()) {
-		DEBUG(Q_FUNC_INFO << ", old/new start = " << range.start() << "/" << start)
-		q->setMin(dim, index, start);
-	}
-	if (end != range.end()) {
-		DEBUG(Q_FUNC_INFO << ", old/new end = " << range.end() << "/" << end)
-		q->setMax(dim, index, end);
-	}
-}
-
 CartesianScale* CartesianPlotPrivate::createScale(RangeT::Scale scale, const Range<double>& sceneRange, const Range<double>& logicalRange) {
 	QDEBUG(Q_FUNC_INFO << ", scale =" << scale << ", scene range : " << sceneRange.toString() << ", logical range : " << logicalRange.toString());
 
@@ -4041,123 +3989,24 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 bool CartesianPlotPrivate::translateRange(int xIndex, int yIndex, const QPointF& logicalStart, const QPointF& logicalEnd, bool translateX, bool translateY) {
 	// handle the change in x
-	bool translationX = false, translationY = false;
+	bool translatedX = false, translatedY = false;
 	if (translateX && logicalStart.x() - logicalEnd.x() != 0) { // TODO: find better method
-		translationX = true;
-		double start{logicalStart.x()}, end{logicalEnd.x()};
-		switch (range(Dimension::X, xIndex).scale()) {
-		case RangeT::Scale::Linear: {
-			const double delta = (start - end);
-			range(Dimension::X, xIndex).translate(delta);
-			break;
-		}
-		case RangeT::Scale::Log10: {
-			if (end == 0 || start / end <= 0)
-				break;
-			const double delta = log10(start / end);
-			range(Dimension::X, xIndex) *= pow(10, delta);
-			break;
-		}
-		case RangeT::Scale::Log2: {
-			if (end == 0 || start / end <= 0)
-				break;
-			const double delta = log2(start / end);
-			range(Dimension::X, xIndex) *= exp2(delta);
-			break;
-		}
-		case RangeT::Scale::Ln: {
-			if (end == 0 || start / end <= 0)
-				break;
-			const double delta = log(start / end);
-			range(Dimension::X, xIndex) *= exp(delta);
-			break;
-		}
-		case RangeT::Scale::Sqrt: {
-			if (start < 0 || end < 0)
-				break;
-			const double delta = sqrt(start) - sqrt(end);
-			range(Dimension::X, xIndex).translate(delta * delta);
-			break;
-		}
-		case RangeT::Scale::Square: {
-			if (end <= start)
-				break;
-			const double delta = end * end - start * start;
-			range(Dimension::X, xIndex).translate(sqrt(delta));
-			break;
-		}
-		case RangeT::Scale::Inverse: {
-			if (start == 0. || end == 0. || end <= start)
-				break;
-			const double delta = 1. / start - 1. / end;
-			range(Dimension::X, xIndex).translate(1. / delta);
-			break;
-		}
-		}
+		translatedX = true;
+		range(Dimension::X, xIndex).translate(logicalStart.x(), logicalEnd.x());
 	}
 
 	if (translateY && logicalStart.y() - logicalEnd.y() != 0) {
-		translationY = true;
+		translatedY = true;
 		// handle the change in y
-		double start = logicalStart.y();
-		double end = logicalEnd.y();
-		switch (range(Dimension::Y, yIndex).scale()) {
-		case RangeT::Scale::Linear: {
-			const double deltaY = (start - end);
-			range(Dimension::Y, yIndex).translate(deltaY);
-			break;
-		}
-		case RangeT::Scale::Log10: {
-			if (end == 0 || start / end <= 0)
-				break;
-			const double deltaY = log10(start / end);
-			range(Dimension::Y, yIndex) *= pow(10, deltaY);
-			break;
-		}
-		case RangeT::Scale::Log2: {
-			if (end == 0 || start / end <= 0)
-				break;
-			const double deltaY = log2(start / end);
-			range(Dimension::Y, yIndex) *= exp2(deltaY);
-			break;
-		}
-		case RangeT::Scale::Ln: {
-			if (end == 0 || start / end <= 0)
-				break;
-			const double deltaY = log(start / end);
-			range(Dimension::Y, yIndex) *= exp(deltaY);
-			break;
-		}
-		case RangeT::Scale::Sqrt: {
-			if (start < 0 || end < 0)
-				break;
-			const double delta = sqrt(start) - sqrt(end);
-			range(Dimension::Y, yIndex).translate(delta * delta);
-			break;
-		}
-		case RangeT::Scale::Square: {
-			if (end <= start)
-				break;
-			const double delta = end * end - start * start;
-			range(Dimension::Y, yIndex).translate(sqrt(delta));
-			break;
-		}
-		case RangeT::Scale::Inverse: {
-			if (start == 0. || end == 0. || end <= start)
-				break;
-			const double delta = 1. / start - 1. / end;
-			range(Dimension::Y, yIndex).translate(1. / delta);
-			break;
-		}
-		}
+		range(Dimension::Y, yIndex).translate(logicalStart.y(), logicalEnd.y());
 	}
 
 	q->setUndoAware(false);
-	if (translationX) {
+	if (translatedX) {
 		q->enableAutoScale(Dimension::X, xIndex, false);
 		retransformScale(Dimension::X, xIndex);
 	}
-	if (translationY) {
+	if (translatedY) {
 		q->enableAutoScale(Dimension::Y, yIndex, false);
 		retransformScale(Dimension::Y, yIndex);
 	}
@@ -4165,12 +4014,12 @@ bool CartesianPlotPrivate::translateRange(int xIndex, int yIndex, const QPointF&
 
 	// If x or y should not be translated, means, that it was done before
 	// so the ranges must get dirty.
-	if (translationX || translationY || !translateX || !translateY) {
+	if (translatedX || translatedY || !translateX || !translateY) {
 		q->setRangeDirty(Dimension::X, xIndex, true);
 		q->setRangeDirty(Dimension::Y, yIndex, true);
 	}
 
-	return translationX || translationY || !translateX || !translateY;
+	return translatedX || translatedY || !translateX || !translateY;
 }
 
 void CartesianPlotPrivate::mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd) {

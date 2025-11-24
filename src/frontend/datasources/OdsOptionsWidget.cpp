@@ -65,7 +65,7 @@ bool OdsOptionsWidget::updateContent(OdsFilter* filter, const QString& fileName)
 void OdsOptionsWidget::sheetSelectionChanged() {
 	DEBUG(Q_FUNC_INFO)
 #ifdef HAVE_ORCUS
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 
 	const auto& selectedItems = ui.twDataRegions->selectedItems();
 	if (selectedItems.isEmpty()) {
@@ -137,8 +137,6 @@ void OdsOptionsWidget::sheetSelectionChanged() {
 		}
 		ui.twPreview->resizeColumnsToContents();
 	}
-
-	RESET_CURSOR;
 #endif
 }
 

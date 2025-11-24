@@ -97,7 +97,7 @@ clang_format:
     git diff --exit-code
 
 # see above
-flatpak:
+flatpak-amd64:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
       when: manual

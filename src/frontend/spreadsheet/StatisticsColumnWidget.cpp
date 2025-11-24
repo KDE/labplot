@@ -168,7 +168,7 @@ void StatisticsColumnWidget::setCurrentTab(int index) {
 }
 
 void StatisticsColumnWidget::currentTabChanged(int index) {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	if (m_column->isNumeric()) {
 		if (index == 0 && !m_overviewInitialized)
 			showOverview();
@@ -190,7 +190,6 @@ void StatisticsColumnWidget::currentTabChanged(int index) {
 	}
 
 	Q_EMIT tabChanged(index);
-	RESET_CURSOR;
 }
 
 void StatisticsColumnWidget::showOverview() {

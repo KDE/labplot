@@ -51,7 +51,8 @@ QList<AspectType> ProjectParser::topLevelClasses() const {
  * The caller takes over the ownership of the model.
  */
 QAbstractItemModel* ProjectParser::model() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	PERFTRACE(QStringLiteral("project model for preview created"));
 	delete m_previewProject;
 	m_previewProject = new Project();
@@ -63,7 +64,6 @@ QAbstractItemModel* ProjectParser::model() {
 		model->setReadOnly(true);
 	}
 
-	RESET_CURSOR;
 	return model;
 }
 

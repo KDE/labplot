@@ -87,7 +87,7 @@ bool ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	// TODO: error handling
@@ -116,8 +116,6 @@ bool ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
 		}
 	}
 	statusBar->showMessage(i18n("Data imported in %1 seconds.", (float)timer.elapsed() / 1000));
-
-	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
 	return true;
 }

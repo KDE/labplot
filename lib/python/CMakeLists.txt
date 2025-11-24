@@ -32,8 +32,8 @@ set(generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/plot_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.h
+#    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.cpp
+#    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelementcontainer_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelementcontainer_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyanalysiscurve_wrapper.cpp

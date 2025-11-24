@@ -249,10 +249,6 @@ public:
 	bool contains(T value) const {
 		return (qMin(m_start, m_end) <= value && qMax(m_start, m_end) >= value);
 	}
-	void translate(T offset) {
-		m_start += offset;
-		m_end += offset;
-	}
 	void extend(T value) {
 		m_start -= value;
 		m_end += value;
@@ -615,6 +611,86 @@ public:
 				niceShrink();
 			else
 				niceExtend();
+		}
+	}
+
+	Range<T> checkRange() const {
+		if (m_scale == RangeT::Scale::Linear || (m_start > 0 && m_end > 0)) // nothing to do
+			return *this;
+		if (m_start >= 0 && m_end >= 0 && m_scale == RangeT::Scale::Sqrt) // nothing to do
+			return *this;
+		// TODO: check if start == end?
+
+		double start = m_start, end = m_end;
+		double min = 0.01, max = 1.;
+
+		if (m_scale == RangeT::Scale::Sqrt) {
+			if (start < 0)
+				start = 0.;
+		} else if (start <= 0)
+			start = min; // Log10, LogE, ...
+		if (m_scale == RangeT::Scale::Sqrt) {
+			if (end < 0)
+				end = max;
+		} else if (end <= 0)
+			end = max; // Log10, LogE, ...
+
+		auto newRange = *this;
+		newRange.setStart(start);
+		newRange.setEnd(end);
+		return newRange;
+	}
+
+	// Translate starting from \p start and ending at \p end by respecting the scale
+	void translate(T start, T end) {
+		switch (scale()) {
+		case RangeT::Scale::Linear: {
+			const double delta = (start - end);
+			this->operator+=(delta);
+			break;
+		}
+		case RangeT::Scale::Log10: {
+			if (end == 0 || start / end <= 0)
+				break;
+			const double delta = log10(start / end);
+			this->operator*=(pow(10, delta));
+			break;
+		}
+		case RangeT::Scale::Log2: {
+			if (end == 0 || start / end <= 0)
+				break;
+			const double delta = log2(start / end);
+			this->operator*=(exp2(delta));
+			break;
+		}
+		case RangeT::Scale::Ln: {
+			if (end == 0 || start / end <= 0)
+				break;
+			const double delta = log(start / end);
+			this->operator*=(exp(delta));
+			break;
+		}
+		case RangeT::Scale::Sqrt: {
+			if (start < 0 || end < 0)
+				break;
+			const double delta = sqrt(start) - sqrt(end);
+			this->operator+=(delta * delta);
+			break;
+		}
+		case RangeT::Scale::Square: {
+			if (end <= start)
+				break;
+			const double delta = end * end - start * start;
+			this->operator+=(sqrt(delta));
+			break;
+		}
+		case RangeT::Scale::Inverse: {
+			if (start == 0. || end == 0. || end <= start)
+				break;
+			const double delta = 1. / start - 1. / end;
+			this->operator+=(1. / delta);
+			break;
+		}
 		}
 	}
 

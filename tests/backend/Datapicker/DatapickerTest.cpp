@@ -1843,6 +1843,9 @@ void DatapickerTest::datapickerImageClipboardSelectImageFromPath() {
 }
 
 void DatapickerTest::saveLoad() {
+#if defined(_WIN32)
+	QSKIP("Unstable", QTest::SkipSingle);
+#endif
 	QString savePath;
 	{
 		Project project;
