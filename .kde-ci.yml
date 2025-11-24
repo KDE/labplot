@@ -46,7 +46,6 @@ Environment:
 Options:
   use-ccache: True
   ccache-large-cache: True
-  tests-run-in-parallel: True
   per-test-timeout: 120
   require-passing-tests-on: ['@all']
   cmake-options: '-DLOCAL_DBC_PARSER=ON -DLOCAL_VECTOR_BLF=ON'
