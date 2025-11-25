@@ -571,7 +571,15 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 			adjustSeasonalComponents({static_cast<size_t>(stlPeriod)});
 
 			// perform the decomposition
-			auto result = stlParameters.fit(yDataVector, stlPeriod);
+			stl::StlResult<double> result;
+			// the fit function in stl may throw exceptions. even though we have already done parameter checks above,
+			// we better catch them here to be safe.
+			try {
+				result = stlParameters.fit(yDataVector, stlPeriod);
+			} catch (const std::exception& e) {
+				reset(i18n("STL decomposition failed: %1", QString::fromStdString(e.what())));
+				return;
+			}
 
 			// copy the result data into the internal column vectors
 			const auto size = result.trend.size();
@@ -632,7 +640,16 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 			auto mstlParameters = stl::mstl_params().stl_params(stlParameters).iterations(mstlIterations);
 			if (mstlLambda != 1.0)
 				mstlParameters = mstlParameters.lambda(mstlLambda);
-			auto result = mstlParameters.fit(yDataVector, mstlPeriods);
+
+			stl::MstlResult<double> result;
+			// the fit function in stl may throw exceptions. even though we have already done parameter checks above,
+			// we better catch them here to be safe.
+			try {
+				result = mstlParameters.fit(yDataVector, mstlPeriods);
+			} catch (const std::exception& e) {
+				reset(i18n("MSTL decomposition failed: %1", QString::fromStdString(e.what())));
+				return;
+			}
 
 			// copy the result data into the internal column vectors
 			const auto size = result.trend.size();
