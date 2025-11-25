@@ -142,7 +142,7 @@ QMenu* Column::createContextMenu() {
 			spreadsheet->fillColumnContextMenu(menu, this);
 		}
 #if defined(HAVE_CANTOR_LIBS) && !defined(SDK)
-		else if (auto* notebook = parentAspect()->derive<Notebook>()) {
+		else if (auto* notebook = parentAspect()->castTo<Notebook>()) {
 			notebook->fillColumnContextMenu(menu, this);
 		}
 #endif
