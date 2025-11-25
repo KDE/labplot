@@ -89,9 +89,9 @@ void SeasonalDecomposition::init() {
 	d->stlSeasonalDegree = group.readEntry(QStringLiteral("STLSeasonalDegree"), 1);
 	d->stlTrendDegree = group.readEntry(QStringLiteral("STLTrendDegree"), 1);
 	d->stlLowPassDegree = group.readEntry(QStringLiteral("STLLowPassDegree"), 1);
-	d->stlSeasonalJump = group.readEntry(QStringLiteral("STLSeasonalJump"), 0);
-	d->stlTrendJump = group.readEntry(QStringLiteral("STLTrendJump"), 0);
-	d->stlLowPassJump = group.readEntry(QStringLiteral("STLLowPassJump"), 0);
+	d->stlSeasonalJump = group.readEntry(QStringLiteral("STLSeasonalJump"), 1);
+	d->stlTrendJump = group.readEntry(QStringLiteral("STLTrendJump"), 1);
+	d->stlLowPassJump = group.readEntry(QStringLiteral("STLLowPassJump"), 1);
 
 	// MSTL parameters
 	d->mstlPeriods = stringToPeriods(group.readEntry("MSTLPeriods", periodsToString(d->mstlPeriods)));
@@ -548,12 +548,23 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 		stlParameters = stlParameters.seasonal_degree(stlSeasonalDegree).trend_degree(stlTrendDegree).low_pass_degree(stlLowPassDegree);
 
 		// jumps
-		if (!stlSeasonalJumpAuto)
+		// the seasonal/trend/low-pass jump values define the stride when recomputing local LOESS fits. jump = 1 recomputes at every point (slowest, highest accuracy). 
+		// larger jump (e.g. 5, 10) subsamples and interpolates between fits (faster, slight loss of accuracy). Enforce minimum value of 1.
+		if (!stlSeasonalJumpAuto) {
+			if (stlSeasonalJump < 1)
+				stlSeasonalJump = 1;
 			stlParameters = stlParameters.seasonal_jump(stlSeasonalJump);
-		if (!stlTrendJumpAuto)
+		}
+		if (!stlTrendJumpAuto) {
+			if (stlTrendJump < 1)
+				stlTrendJump = 1;
 			stlParameters = stlParameters.trend_jump(stlTrendJump);
-		if (!stlLowPassJumpAuto)
+		}
+		if (!stlLowPassJumpAuto) {
+			if (stlLowPassJump < 1)
+				stlLowPassJump = 1;
 			stlParameters = stlParameters.low_pass_jump(stlLowPassJump);
+		}
 
 		if (method == SeasonalDecomposition::Method::STL) {
 			WAIT_CURSOR_AUTO_RESET
