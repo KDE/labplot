@@ -1293,11 +1293,11 @@ void LiveDataTest::testPlotting() {
 	dataSource->setRowCount(11);
 	project.addChild(dataSource);
 
-	auto* c1 = static_cast<Column*>(dataSource->child<Column>(0));
+	auto* c1 = dataSource->child<Column>(0);
 	QVERIFY(c1 != nullptr);
 	QCOMPARE(c1->name(), QLatin1String("1"));
 	QVERIFY(c1->columnMode() == AbstractColumn::ColumnMode::Double);
-	auto* c2 = static_cast<Column*>(dataSource->child<Column>(1));
+	auto* c2 = dataSource->child<Column>(1);
 	QVERIFY(c2 != nullptr);
 	QCOMPARE(c2->name(), QLatin1String("2"));
 	QVERIFY(c2->columnMode() == AbstractColumn::ColumnMode::Double);

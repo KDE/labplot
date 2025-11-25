@@ -193,7 +193,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	// handle numeric vs. datetime widgets
 	// TODO: we need to react on range format changes in the plot in general,
 	// add signal-slot connection for this
-	const auto* plot = static_cast<const CartesianPlot*>(m_curve->parent(AspectType::CartesianPlot));
+	const auto* plot = static_cast<const CartesianPlot*>(m_curve->parent<CartesianPlot>());
 	ui.dteBinRangesMin->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
 	ui.dteBinRangesMax->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
 	ui.dteBinRangesMin->setMSecsSinceEpochUTC(m_curve->binRangesMin());

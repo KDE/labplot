@@ -296,7 +296,7 @@ Qt::ItemFlags AspectTreeModel::flags(const QModelIndex& index) const {
 
 	if (!m_selectableAspects.isEmpty()) {
 		for (AspectType type : m_selectableAspects) {
-			if (aspect->inherits(type)) {
+			if (aspect->inherits(AbstractAspect::typeName(type).data())) {
 				result = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 				if (index != this->index(0, 0, QModelIndex()) && !m_filterString.isEmpty()) {
 					if (this->containsFilterString(aspect))

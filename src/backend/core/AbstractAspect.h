@@ -32,91 +32,94 @@ class QXmlStreamWriter;
 /// returns true if the class inherits from @verbatim base@endverbatim.
 ///
 /// AspectType is used in GuiObserver to select the correct dock widget.
+///
+/// IMPORTANT: Never expose the type value outside of the running application,
+/// because it can change with every labplot version!
 enum class AspectType : quint64 {
-	AbstractAspect = 0,
+	AbstractAspect,
 
 	// classes without inheriters
-	AbstractFilter = 0x0100001,
-	DatapickerCurve = 0x0100002,
-	DatapickerPoint = 0x0100004,
+	AbstractFilter,
+	DatapickerCurve,
+	DatapickerPoint,
 
-	WorksheetElement = 0x0200000,
-	Axis = 0x0210001,
-	CartesianPlotLegend = 0x0210002,
-	CustomPoint = 0x0210004,
-	PlotArea = 0x0210010,
-	TextLabel = 0x0210020,
-	Image = 0x0210030,
-	ReferenceLine = 0x0210040,
-	ReferenceRange = 0x0210060,
-	InfoElement = 0x0210080,
+	WorksheetElement,
+	Axis,
+	CartesianPlotLegend,
+	CustomPoint,
+	PlotArea,
+	TextLabel,
+	Image,
+	ReferenceLine,
+	ReferenceRange,
+	InfoElement,
 
 	// bar plots
-	BarPlot = 0x0210200,
-	LollipopPlot = 0x0210400,
+	BarPlot,
+	LollipopPlot,
 
 	// statistical plots
-	Histogram = 0x0210008,
-	BoxPlot = 0x0210100,
-	QQPlot = 0x0210800,
-	KDEPlot = 0x0210802,
+	Histogram,
+	BoxPlot,
+	QQPlot,
+	KDEPlot,
 
 	// continuous improvement plots
-	ProcessBehaviorChart = 0x0211000,
-	RunChart = 0x0211001,
+	ProcessBehaviorChart,
+	RunChart,
 
-	WorksheetElementContainer = 0x0220000,
-	AbstractPlot = 0x0221000,
-	CartesianPlot = 0x0221001,
-	WorksheetElementGroup = 0x0222000,
-	XYCurve = 0x0240000,
-	XYEquationCurve = 0x0240001,
+	WorksheetElementContainer,
+	AbstractPlot,
+	CartesianPlot,
+	WorksheetElementGroup,
+	XYCurve,
+	XYEquationCurve,
 
 	// analysis curves
-	XYAnalysisCurve = 0x0280000,
-	XYConvolutionCurve = 0x0280001,
-	XYCorrelationCurve = 0x0280002,
-	XYDataReductionCurve = 0x0280004,
-	XYDifferentiationCurve = 0x0280008,
-	XYFitCurve = 0x0280010,
-	XYFourierFilterCurve = 0x0280020,
-	XYFourierTransformCurve = 0x0280040,
-	XYInterpolationCurve = 0x0280080,
-	XYIntegrationCurve = 0x0280100,
-	XYSmoothCurve = 0x0280200,
-	XYHilbertTransformCurve = 0x0280400,
-	XYFunctionCurve = 0x0280800,
+	XYAnalysisCurve,
+	XYConvolutionCurve,
+	XYCorrelationCurve,
+	XYDataReductionCurve,
+	XYDifferentiationCurve,
+	XYFitCurve,
+	XYFourierFilterCurve,
+	XYFourierTransformCurve,
+	XYInterpolationCurve,
+	XYIntegrationCurve,
+	XYSmoothCurve,
+	XYHilbertTransformCurve,
+	XYFunctionCurve,
 
-	AbstractPart = 0x0400000,
-	AbstractDataSource = 0x0410000,
-	Matrix = 0x0411000,
-	Spreadsheet = 0x0412000,
-	LiveDataSource = 0x0412001,
-	MQTTTopic = 0x0412002,
-	StatisticsSpreadsheet = 0x0412004,
-	Notebook = 0x0420001,
-	Datapicker = 0x0420002,
-	DatapickerImage = 0x0420004,
-	Note = 0x0420008,
-	Workbook = 0x0420010,
-	Worksheet = 0x0420020,
-	Script = 0x0420030,
+	AbstractPart,
+	AbstractDataSource,
+	Matrix,
+	Spreadsheet,
+	LiveDataSource,
+	MQTTTopic,
+	StatisticsSpreadsheet,
+	Notebook,
+	Datapicker,
+	DatapickerImage,
+	Note,
+	Workbook,
+	Worksheet,
+	Script,
 
-	AbstractColumn = 0x1000000,
-	Column = 0x1000001,
-	SimpleFilterColumn = 0x1000002,
-	ColumnStringIO = 0x1000004,
-
-	Folder = 0x2000000,
-	Project = 0x2000001,
-	MQTTClient = 0x2000002,
-	MQTTSubscription = 0x2000004,
+	AbstractColumn,
+	Column,
+	SimpleFilterColumn,
+	ColumnStringIO,
 
 	// statistical analysis
-	HypothesisTest = 0x0420080,
+	HypothesisTest,
 
 	// time series analysis
-	SeasonalDecomposition = 0x0412100
+	SeasonalDecomposition,
+
+	Folder,
+	Project,
+	MQTTClient,
+	MQTTSubscription
 };
 
 #ifdef SDK
@@ -146,139 +149,141 @@ public:
 	};
 
 	// type name for internal use (no translation)
-	static QString typeName(AspectType type) {
+	// IMPORTANT: This name must match the class name!
+	// It will be used to use the QObject::inherits() function
+	static constexpr std::string_view typeName(AspectType type) {
 		switch (type) {
 		case AspectType::AbstractAspect:
-			return QStringLiteral("AbstractAspect");
+			return std::string_view("AbstractAspect");
 		case AspectType::AbstractFilter:
-			return QStringLiteral("AbstractFilter");
+			return std::string_view("AbstractFilter");
 		case AspectType::DatapickerCurve:
-			return QStringLiteral("DatapickerCurve");
+			return std::string_view("DatapickerCurve");
 		case AspectType::DatapickerPoint:
-			return QStringLiteral("DatapickerPoint");
+			return std::string_view("DatapickerPoint");
 		case AspectType::WorksheetElement:
-			return QStringLiteral("WorksheetElement");
+			return std::string_view("WorksheetElement");
 		case AspectType::Axis:
-			return QStringLiteral("Axis");
+			return std::string_view("Axis");
 		case AspectType::CartesianPlotLegend:
-			return QStringLiteral("CartesianPlotLegend");
+			return std::string_view("CartesianPlotLegend");
 		case AspectType::CustomPoint:
-			return QStringLiteral("CustomPoint");
+			return std::string_view("CustomPoint");
 		case AspectType::Histogram:
-			return QStringLiteral("Histogram");
+			return std::string_view("Histogram");
 		case AspectType::PlotArea:
-			return QStringLiteral("PlotArea");
+			return std::string_view("PlotArea");
 		case AspectType::TextLabel:
-			return QStringLiteral("TextLabel");
+			return std::string_view("TextLabel");
 		case AspectType::Image:
-			return QStringLiteral("Image");
+			return std::string_view("Image");
 		case AspectType::ReferenceLine:
-			return QStringLiteral("ReferenceLine");
+			return std::string_view("ReferenceLine");
 		case AspectType::ReferenceRange:
-			return QStringLiteral("ReferenceRange");
+			return std::string_view("ReferenceRange");
 		case AspectType::InfoElement:
-			return QStringLiteral("InfoElement");
+			return std::string_view("InfoElement");
 		case AspectType::WorksheetElementContainer:
-			return QStringLiteral("WorksheetElementContainer");
+			return std::string_view("WorksheetElementContainer");
 		case AspectType::AbstractPlot:
-			return QStringLiteral("AbstractPlot");
+			return std::string_view("AbstractPlot");
 		case AspectType::CartesianPlot:
-			return QStringLiteral("CartesianPlot");
+			return std::string_view("CartesianPlot");
 		case AspectType::WorksheetElementGroup:
-			return QStringLiteral("WorksheetElementGroup");
+			return std::string_view("WorksheetElementGroup");
 		case AspectType::XYCurve:
-			return QStringLiteral("XYCurve");
+			return std::string_view("XYCurve");
 		case AspectType::XYEquationCurve:
-			return QStringLiteral("XYEquationCurve");
+			return std::string_view("XYEquationCurve");
 		case AspectType::XYFunctionCurve:
-			return QStringLiteral("XYFunctionCurve");
+			return std::string_view("XYFunctionCurve");
 		case AspectType::XYAnalysisCurve:
-			return QStringLiteral("XYAnalysisCurve");
+			return std::string_view("XYAnalysisCurve");
 		case AspectType::XYConvolutionCurve:
-			return QStringLiteral("XYConvolutionCurve");
+			return std::string_view("XYConvolutionCurve");
 		case AspectType::XYCorrelationCurve:
-			return QStringLiteral("XYCorrelationCurve");
+			return std::string_view("XYCorrelationCurve");
 		case AspectType::XYDataReductionCurve:
-			return QStringLiteral("XYDataReductionCurve");
+			return std::string_view("XYDataReductionCurve");
 		case AspectType::XYDifferentiationCurve:
-			return QStringLiteral("XYDifferentiationCurve");
+			return std::string_view("XYDifferentiationCurve");
 		case AspectType::XYFitCurve:
-			return QStringLiteral("XYFitCurve");
+			return std::string_view("XYFitCurve");
 		case AspectType::XYFourierFilterCurve:
-			return QStringLiteral("XYFourierFilterCurve");
+			return std::string_view("XYFourierFilterCurve");
 		case AspectType::XYFourierTransformCurve:
-			return QStringLiteral("XYFourierTransformCurve");
+			return std::string_view("XYFourierTransformCurve");
 		case AspectType::XYInterpolationCurve:
-			return QStringLiteral("XYInterpolationCurve");
+			return std::string_view("XYInterpolationCurve");
 		case AspectType::XYIntegrationCurve:
-			return QStringLiteral("XYIntegrationCurve");
+			return std::string_view("XYIntegrationCurve");
 		case AspectType::XYSmoothCurve:
-			return QStringLiteral("XYSmoothCurve");
+			return std::string_view("XYSmoothCurve");
 		case AspectType::XYHilbertTransformCurve:
-			return QStringLiteral("XYHilbertTransformCurve");
+			return std::string_view("XYHilbertTransformCurve");
 		case AspectType::BarPlot:
-			return QStringLiteral("BarPlot");
+			return std::string_view("BarPlot");
 		case AspectType::BoxPlot:
-			return QStringLiteral("BoxPlot");
+			return std::string_view("BoxPlot");
 		case AspectType::QQPlot:
-			return QStringLiteral("QQPlot");
+			return std::string_view("QQPlot");
 		case AspectType::KDEPlot:
-			return QStringLiteral("KDEPlot");
+			return std::string_view("KDEPlot");
 		case AspectType::LollipopPlot:
-			return QStringLiteral("LollipopPlot");
+			return std::string_view("LollipopPlot");
 		case AspectType::ProcessBehaviorChart:
-			return QStringLiteral("ProcessBehaviorChart");
+			return std::string_view("ProcessBehaviorChart");
 		case AspectType::RunChart:
-			return QStringLiteral("RunChart");
+			return std::string_view("RunChart");
 		case AspectType::AbstractPart:
-			return QStringLiteral("AbstractPart");
+			return std::string_view("AbstractPart");
 		case AspectType::AbstractDataSource:
-			return QStringLiteral("AbstractDataSource");
+			return std::string_view("AbstractDataSource");
 		case AspectType::Matrix:
-			return QStringLiteral("Matrix");
+			return std::string_view("Matrix");
 		case AspectType::Spreadsheet:
-			return QStringLiteral("Spreadsheet");
+			return std::string_view("Spreadsheet");
 		case AspectType::StatisticsSpreadsheet:
-			return QStringLiteral("StatisticsSpreadsheet");
+			return std::string_view("StatisticsSpreadsheet");
 		case AspectType::LiveDataSource:
-			return QStringLiteral("LiveDataSource");
+			return std::string_view("LiveDataSource");
 		case AspectType::MQTTTopic:
-			return QStringLiteral("MQTTTopic");
+			return std::string_view("MQTTTopic");
 		case AspectType::Notebook:
-			return QStringLiteral("Notebook");
+			return std::string_view("Notebook");
 		case AspectType::Datapicker:
-			return QStringLiteral("Datapicker");
+			return std::string_view("Datapicker");
 		case AspectType::DatapickerImage:
-			return QStringLiteral("DatapickerImage");
+			return std::string_view("DatapickerImage");
 		case AspectType::Note:
-			return QStringLiteral("Note");
+			return std::string_view("Note");
 		case AspectType::Workbook:
-			return QStringLiteral("Workbook");
+			return std::string_view("Workbook");
 		case AspectType::Worksheet:
-			return QStringLiteral("Worksheet");
+			return std::string_view("Worksheet");
 		case AspectType::Script:
-			return QStringLiteral("Script");
+			return std::string_view("Script");
 		case AspectType::AbstractColumn:
-			return QStringLiteral("AbstractColumn");
+			return std::string_view("AbstractColumn");
 		case AspectType::Column:
-			return QStringLiteral("Column");
+			return std::string_view("Column");
 		case AspectType::SimpleFilterColumn:
-			return QStringLiteral("SimpleFilterColumn");
+			return std::string_view("SimpleFilterColumn");
 		case AspectType::ColumnStringIO:
-			return QStringLiteral("ColumnStringIO");
+			return std::string_view("ColumnStringIO");
 		case AspectType::Folder:
-			return QStringLiteral("Folder");
+			return std::string_view("Folder");
 		case AspectType::Project:
-			return QStringLiteral("Project");
+			return std::string_view("Project");
 		case AspectType::MQTTClient:
-			return QStringLiteral("MQTTClient");
+			return std::string_view("MQTTClient");
 		case AspectType::MQTTSubscription:
-			return QStringLiteral("MQTTSubscription");
+			return std::string_view("MQTTSubscription");
 		case AspectType::HypothesisTest:
-			return QStringLiteral("HypothesisTest");
+			return std::string_view("HypothesisTest");
 			break;
 		case AspectType::SeasonalDecomposition:
-			return QStringLiteral("SeasonalDecomposition");
+			return std::string_view("SeasonalDecomposition");
 			break;
 		}
 
@@ -308,11 +313,55 @@ public:
 	void setProjectChanged(bool);
 
 	AspectType type() const;
-	bool inherits(AspectType type) const;
+	using QObject::inherits;
+	/*!
+	 * \brief inherits
+	 * Checks if the aspect inherits from Target
+	 * \return true if inherits from Target, otherwise false
+	 */
+	template<typename Target>
+	bool inherits() const {
+		return (dynamic_cast<const Target*>(this) != nullptr);
+	}
+	/*!
+	 * \brief castTo
+	 * \return a pointer to the casted Target if this aspect
+	 * derives from Target otherwise a nullptr
+	 */
+	template<typename Target>
+	Target* castTo() {
+		return dynamic_cast<Target*>(this);
+	}
+
+	/*!
+	 * \brief castTo (const variant)
+	 * \return a pointer to the casted Target if this aspect
+	 * derives from Target otherwise a nullptr
+	 */
+	template<typename Target>
+	Target* castTo() const {
+		return dynamic_cast<Target*>(this);
+	}
+
+	/*!
+	 * \brief parent
+	 * In the parent-child hierarchy, return the first parent of type \param Target or null pointer if there is none.
+	 * \return
+	 */
+	template<typename Target>
+	Target* parent() {
+		AbstractAspect* parent = parentAspect();
+		if (!parent)
+			return nullptr;
+
+		if (auto* p = parent->castTo<Target>())
+			return p;
+
+		return parent->parent<Target>();
+	}
 
 	// functions related to the handling of the tree-like project structure
 	AbstractAspect* parentAspect() const;
-	AbstractAspect* parent(AspectType) const;
 	void setParentAspect(AbstractAspect*);
 	Folder* folder();
 	bool isDescendantOf(AbstractAspect* other);
@@ -352,17 +401,17 @@ public:
 		return nullptr;
 	}
 
-	template<class T>
-	QVector<T*> children(ChildIndexFlags flags = {}) const {
-		QVector<T*> result;
+	template<class Target>
+	QVector<Target*> children(ChildIndexFlags flags = {}) const {
+		QVector<Target*> result;
 		for (auto* child : children()) {
 			if (flags & ChildIndexFlag::IncludeHidden || !child->isHidden()) {
-				T* i = dynamic_cast<T*>(child);
+				auto* i = dynamic_cast<Target*>(child);
 				if (i)
 					result << i;
 
 				if (child && flags & ChildIndexFlag::Recursive)
-					result << child->template children<T>(flags);
+					result << child->template children<Target>(flags);
 			}
 		}
 		return result;

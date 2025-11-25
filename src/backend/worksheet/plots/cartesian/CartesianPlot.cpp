@@ -3856,7 +3856,7 @@ void CartesianPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* even
  */
 void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	const auto* cSystem{defaultCoordinateSystem()};
-	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
+	auto* w = static_cast<Worksheet*>(q->parent<Worksheet>())->currentSelection();
 	int index = CartesianPlot::cSystemIndex(w);
 	if (index >= 0)
 		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems.at(index));
@@ -3969,7 +3969,7 @@ void CartesianPlotPrivate::setZoomSelectionBandShow(bool show) {
 
 void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	const auto* cSystem{defaultCoordinateSystem()};
-	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
+	auto* w = static_cast<Worksheet*>(q->parent<Worksheet>())->currentSelection();
 	int index = CartesianPlot::cSystemIndex(w);
 	if (index >= 0)
 		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems.at(index));
@@ -4056,9 +4056,9 @@ bool CartesianPlotPrivate::translateRange(int xIndex, int yIndex, const QPointF&
 
 void CartesianPlotPrivate::mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd) {
 	const bool autoscaleRanges = true; // consumes a lot of power, maybe making an option to turn off/on!
-	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
+	auto* w = static_cast<Worksheet*>(q->parent<Worksheet>())->currentSelection();
 	int index = CartesianPlot::cSystemIndex(w);
-	if (!w || w->parent(AspectType::CartesianPlot) != q)
+	if (!w || w->parent<CartesianPlot>() != q)
 		index = -1;
 
 	bool translated = false;
@@ -4292,10 +4292,10 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 	if (!interactive)
 		return;
 
-	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
+	auto* w = static_cast<Worksheet*>(q->parent<Worksheet>())->currentSelection();
 	int cSystemIndex = CartesianPlot::cSystemIndex(w);
 	int xIndex = -1, yIndex = -1;
-	if (w && w->parent(AspectType::CartesianPlot) == q) {
+	if (w && w->parent<CartesianPlot>() == q) {
 		xIndex = coordinateSystem(cSystemIndex)->index(Dimension::X);
 		yIndex = coordinateSystem(cSystemIndex)->index(Dimension::Y);
 	}
@@ -4431,7 +4431,7 @@ void CartesianPlotPrivate::navigateNextPrevCurve(bool next) const {
 		}
 	}
 
-	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
+	auto* w = static_cast<Worksheet*>(q->parent<Worksheet>());
 
 	// deselect the current curve
 	if (selectedCurve)
@@ -4457,10 +4457,10 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	scenePos = point;
 	QString info;
 	const auto* cSystem{defaultCoordinateSystem()};
-	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
+	auto* w = static_cast<Worksheet*>(q->parent<Worksheet>())->currentSelection();
 	int index = CartesianPlot::cSystemIndex(w);
 	int xIndex = cSystem->index(Dimension::X), yIndex = cSystem->index(Dimension::Y);
-	if (!w || w->parent(AspectType::CartesianPlot) != q) {
+	if (!w || w->parent<CartesianPlot>() != q) {
 		xIndex = -1;
 		yIndex = -1;
 	} else if (index >= 0) {
@@ -4580,9 +4580,9 @@ void CartesianPlotPrivate::mouseHoverZoomSelectionMode(QPointF logicPos, int cSy
 	m_insideDataRect = true;
 
 	const CartesianCoordinateSystem* cSystem;
-	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
+	auto* w = static_cast<Worksheet*>(q->parent<Worksheet>())->currentSelection();
 	int index = CartesianPlot::cSystemIndex(w);
-	if (w && w->parent(AspectType::CartesianPlot) == q && index != -1)
+	if (w && w->parent<CartesianPlot>() == q && index != -1)
 		cSystem = coordinateSystem(index);
 	else if (cSystemIndex == -1 || cSystemIndex >= q->m_coordinateSystems.count())
 		cSystem = defaultCoordinateSystem();

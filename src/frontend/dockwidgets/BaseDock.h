@@ -67,8 +67,8 @@ public:
 		}
 
 		for (auto* aspect : aspects) {
-			if (aspect->inherits(AspectType::AbstractAspect))
-				m_aspects.append(static_cast<AbstractAspect*>(aspect));
+			if (auto* a = dynamic_cast<AbstractAspect*>(aspect))
+				m_aspects.append(a);
 		}
 
 		// delete the potentially available model, will be re-created if needed for the newly set aspects

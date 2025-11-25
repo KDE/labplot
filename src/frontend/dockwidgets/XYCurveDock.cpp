@@ -14,6 +14,7 @@
 #include "backend/core/Settings.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 #include "frontend/GuiTools.h"
 #include "frontend/TemplateHandler.h"
 #include "frontend/widgets/BackgroundWidget.h"
@@ -309,7 +310,7 @@ void XYCurveDock::setModel() {
 	}
 	cbValuesColumn->setTopLevelClasses(list);
 
-	if (m_curve->inherits(AspectType::XYAnalysisCurve))
+	if (m_curve->inherits<XYAnalysisCurve>())
 		// the model is used in the combobox for curve data sources -> allow to also select analysis curves
 		list = {AspectType::Column,
 				AspectType::XYCurve,
