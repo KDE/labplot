@@ -9,7 +9,7 @@
 */
 
 #include "MainWin.h"
-
+#include "backend/core/AbstractFilter.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/core/Settings.h"
@@ -99,6 +99,7 @@
 #include "frontend/notebook/NotebookView.h"
 #include <cantor/backend.h>
 #endif
+
 
 /*!
 \class MainWin
@@ -1187,9 +1188,9 @@ void MainWin::newSpreadsheet() {
 
 	// if the current active window is a workbook or one of its children,
 	// add the new matrix to the workbook
-	auto* workbook = dynamic_cast<Workbook*>(m_currentAspect);
+	auto* workbook = m_currentAspect->castTo<Workbook>();
 	if (!workbook)
-		workbook = static_cast<Workbook*>(m_currentAspect->parent(AspectType::Workbook));
+		workbook = m_currentAspect->parent<Workbook>();
 
 	if (workbook)
 		workbook->addChild(spreadsheet);
@@ -1215,9 +1216,9 @@ void MainWin::newMatrix() {
 
 	// if the current active window is a workbook or one of its children,
 	// add the new matrix to the workbook
-	auto* workbook = dynamic_cast<Workbook*>(m_currentAspect);
+	auto* workbook = m_currentAspect->castTo<Workbook>();
 	if (!workbook)
-		workbook = static_cast<Workbook*>(m_currentAspect->parent(AspectType::Workbook));
+		workbook = m_currentAspect->parent<Workbook>();
 
 	if (workbook)
 		workbook->addChild(matrix);
@@ -1254,13 +1255,14 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 		return nullptr;
 
 	Spreadsheet* spreadsheet = nullptr;
-	if (m_currentAspect->type() == AspectType::Spreadsheet)
-		spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect);
+	if (auto* s = m_currentAspect->castTo<Spreadsheet>())
+		spreadsheet = s;
 	else {
 		// check whether one of spreadsheet columns is selected and determine the spreadsheet
-		auto* parent = m_currentAspect->parentAspect();
-		if (parent && parent->type() == AspectType::Spreadsheet)
-			spreadsheet = dynamic_cast<Spreadsheet*>(parent);
+		if (auto* parent = m_currentAspect->parentAspect()) {
+			if (auto* s = parent->castTo<Spreadsheet>())
+				spreadsheet = s;
+		}
 	}
 
 	return spreadsheet;
@@ -1326,7 +1328,7 @@ void MainWin::handleAspectRemoved(const AbstractAspect* parent, const AbstractAs
 	//  - AbstractSimpleFilter
 	//  - columns in the data spreadsheet of a datapicker curve,
 	//    this can only happen when changing the error type and is done on the level of DatapickerImage
-	if (!aspect->inherits(AspectType::AbstractFilter) && !(parent->parentAspect() && parent->parentAspect()->type() == AspectType::DatapickerCurve))
+	if (!aspect->inherits<AbstractFilter>() && !(parent->parentAspect() && parent->parentAspect()->type() == AspectType::DatapickerCurve))
 		m_projectExplorer->setCurrentAspect(parent);
 }
 
@@ -1872,7 +1874,7 @@ void MainWin::importDirDialog(const QString& dir) {
 	if (type == AspectType::Folder || type == AspectType::Workbook)
 		targetAspect = m_currentAspect;
 	else {
-		targetAspect = m_currentAspect->parent(AspectType::Folder);
+		targetAspect = m_currentAspect->parent<Folder>();
 		if (!targetAspect)
 			targetAspect = m_project;
 	}

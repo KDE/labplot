@@ -62,7 +62,7 @@ void WorksheetElement::finalizeAdd() {
 		// * child CustomPoint in InfoeElement
 		// * child XYCurves in QQPlot
 		// * etc.
-		d->m_plot = dynamic_cast<CartesianPlot*>(parent(AspectType::CartesianPlot));
+		d->m_plot = dynamic_cast<CartesianPlot*>(parent<CartesianPlot>());
 	}
 
 	if (d->m_plot) {
@@ -165,7 +165,7 @@ bool WorksheetElementPrivate::swapVisible(bool on) {
 	// When making a graphics item invisible, it gets deselected in the scene.
 	// In this case we don't want to deselect the item in the project explorer.
 	// We need to suppress the deselection in the view.
-	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
+	auto* worksheet = static_cast<Worksheet*>(q->parent<Worksheet>());
 	if (worksheet) {
 		worksheet->suppressSelectionChangedEvent(true);
 		setVisible(on);
@@ -1056,7 +1056,7 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
  * \return point in PlotArea coordinates
  */
 QPointF WorksheetElementPrivate::mapParentToPlotArea(QPointF point) const {
-	auto* parent = q->parent(AspectType::CartesianPlot);
+	auto* parent = q->parent<CartesianPlot>();
 	if (parent) {
 		auto* plot = static_cast<CartesianPlot*>(parent);
 		// mapping from parent to item coordinates and them to plot area
@@ -1076,7 +1076,7 @@ QPointF WorksheetElementPrivate::mapParentToPlotArea(QPointF point) const {
  * \return point in parent coordinates
  */
 QPointF WorksheetElementPrivate::mapPlotAreaToParent(QPointF point) const {
-	auto* parent = q->parent(AspectType::CartesianPlot);
+	auto* parent = q->parent<CartesianPlot>();
 	if (parent) {
 		auto* plot = static_cast<CartesianPlot*>(parent);
 		// first mapping to item coordinates and from there back to parent

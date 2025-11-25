@@ -617,7 +617,7 @@ void ReferenceRange::loadThemeConfig(const KConfig& config) {
 		if (child == this)
 			break;
 
-		if (child->inherits(AspectType::ReferenceRange))
+		if (child->inherits<ReferenceRange>())
 			++index;
 	}
 

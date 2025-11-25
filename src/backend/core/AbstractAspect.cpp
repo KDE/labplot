@@ -21,6 +21,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#include "backend/notebook/Notebook.h"
 
 #include <KStandardAction>
 #include <QClipboard>
@@ -434,24 +435,6 @@ AspectType AbstractAspect::type() const {
 	return m_type;
 }
 
-bool AbstractAspect::inherits(AspectType type) const {
-	return (static_cast<quint64>(m_type) & static_cast<quint64>(type)) == static_cast<quint64>(type);
-}
-
-/**
- * \brief In the parent-child hierarchy, return the first parent of type \param type or null pointer if there is none.
- */
-AbstractAspect* AbstractAspect::parent(AspectType type) const {
-	AbstractAspect* parent = parentAspect();
-	if (!parent)
-		return nullptr;
-
-	if (parent->inherits(type))
-		return parent;
-
-	return parent->parent(type);
-}
-
 /**
  * \brief Return my parent Aspect or 0 if I currently don't have one.
  */
@@ -469,10 +452,10 @@ void AbstractAspect::setParentAspect(AbstractAspect* parent) {
  * The returned folder may be the aspect itself if it inherits Folder.
  */
 Folder* AbstractAspect::folder() {
-	if (inherits(AspectType::Folder))
-		return static_cast<class Folder*>(this);
+	if (auto* f = castTo<Folder>())
+		return f;
 	AbstractAspect* parent_aspect = parentAspect();
-	while (parent_aspect && !parent_aspect->inherits(AspectType::Folder))
+	while (parent_aspect && !parent_aspect->inherits<Folder>())
 		parent_aspect = parent_aspect->parentAspect();
 	return static_cast<class Folder*>(parent_aspect);
 }
@@ -661,7 +644,7 @@ QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFla
 	QVector<AbstractAspect*> result;
 	for (auto* child : children()) {
 		if (flags & ChildIndexFlag::IncludeHidden || !child->isHidden()) {
-			if (child->inherits(type))
+			if (child->inherits(typeName(type).data()))
 				result << child;
 
 			if (flags & ChildIndexFlag::Recursive)
@@ -748,7 +731,7 @@ void AbstractAspect::copy() {
 	writer.writeEndElement();
 
 	setSuppressWriteUuid(true);
-	const auto& children = this->children(AspectType::AbstractAspect, {ChildIndexFlag::IncludeHidden, ChildIndexFlag::Recursive});
+	const auto& children = this->children<AbstractAspect>({ChildIndexFlag::IncludeHidden, ChildIndexFlag::Recursive});
 	for (const auto& child : children)
 		child->setSuppressWriteUuid(true);
 
@@ -1121,8 +1104,11 @@ void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 	//* XYSmouthCurve with the child column for calculated rough values
 	//* CantorWorksheet with the child columns for CAS variables
 	auto* parent = this->parentAspect();
-	if (parent && !parent->inherits(AspectType::Folder) && !parent->inherits(AspectType::XYFitCurve) && !parent->inherits(AspectType::XYSmoothCurve)
-		&& !parent->inherits(AspectType::Notebook))
+	if (parent && !parent->inherits<Folder>() && !parent->inherits<XYFitCurve>() && !parent->inherits<XYSmoothCurve>()
+#ifdef HAVE_CANTOR_LIBS
+		&& !parent->inherits<Notebook>()
+#endif
+	)
 		Q_EMIT this->selected(aspect);
 }
 
@@ -1135,8 +1121,11 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 	//* XYSmouthCurve with the child column for calculated rough values
 	//* CantorWorksheet with the child columns for CAS variables
 	auto* parent = this->parentAspect();
-	if (parent && !parent->inherits(AspectType::Folder) && !parent->inherits(AspectType::XYFitCurve) && !parent->inherits(AspectType::XYSmoothCurve)
-		&& !parent->inherits(AspectType::Notebook))
+	if (parent && !parent->inherits<Folder>() && !parent->inherits<XYFitCurve>() && !parent->inherits<XYSmoothCurve>()
+#ifdef HAVE_CANTOR_LIBS
+		&& !parent->inherits<Notebook>()
+#endif
+	)
 		Q_EMIT this->deselected(aspect);
 }
 

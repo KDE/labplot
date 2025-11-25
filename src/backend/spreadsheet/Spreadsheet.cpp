@@ -64,6 +64,7 @@
 Spreadsheet::Spreadsheet(const QString& name, bool loading, AspectType type)
 	: AbstractDataSource(name, type)
 	, d_ptr(new SpreadsheetPrivate(this)) {
+	static_assert(AbstractAspect::typeName(AspectType::Spreadsheet) == "Spreadsheet");
 	if (!loading)
 		init();
 
