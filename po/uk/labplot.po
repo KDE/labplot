@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-23 00:39+0000\n"
+"POT-Creation-Date: 2025-11-26 00:39+0000\n"
 "PO-Revision-Date: 2025-11-08 17:54+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -20,40 +20,40 @@ msgstr ""
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Lokalize 23.04.3\n"
 
-#: src/backend/core/AbstractAspect.cpp:233
+#: src/backend/core/AbstractAspect.cpp:234
 #, kde-format
 msgid ""
 "Intended name \"%1\" was changed to \"%2\" in order to avoid name collision."
 msgstr ""
 "Початкову назву, «%1», було змінено на «%2» з метою уникнення конфлікту назв."
 
-#: src/backend/core/AbstractAspect.cpp:247
+#: src/backend/core/AbstractAspect.cpp:248
 #, kde-format
 msgid "%1: change comment"
 msgstr "%1: змінити коментар"
 
-#: src/backend/core/AbstractAspect.cpp:333
+#: src/backend/core/AbstractAspect.cpp:334
 #, kde-format
 msgid "Duplicate Here"
 msgstr "Дублювати сюди"
 
-#: src/backend/core/AbstractAspect.cpp:348
+#: src/backend/core/AbstractAspect.cpp:349
 #, kde-format
 msgid "Paste '%1'"
 msgstr "Вставити «%1»"
 
-#: src/backend/core/AbstractAspect.cpp:360
+#: src/backend/core/AbstractAspect.cpp:361
 #, kde-format
 msgid "Create Data Spreadsheet"
 msgstr "Створити електронну таблицю даних"
 
-#: src/backend/core/AbstractAspect.cpp:408
+#: src/backend/core/AbstractAspect.cpp:409
 #, kde-format
 msgid "Rename"
 msgstr "Перейменувати"
 
-#: src/backend/core/AbstractAspect.cpp:410
-#: src/backend/spreadsheet/Spreadsheet.cpp:711
+#: src/backend/core/AbstractAspect.cpp:411
+#: src/backend/spreadsheet/Spreadsheet.cpp:712
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:487
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
 #: src/frontend/worksheet/WorksheetView.cpp:138
@@ -61,22 +61,22 @@ msgstr "Перейменувати"
 msgid "Delete"
 msgstr "Вилучити"
 
-#: src/backend/core/AbstractAspect.cpp:418
+#: src/backend/core/AbstractAspect.cpp:419
 #, kde-format
 msgid "Move"
 msgstr "Пересунути"
 
-#: src/backend/core/AbstractAspect.cpp:421
+#: src/backend/core/AbstractAspect.cpp:422
 #, kde-format
 msgid "Up"
 msgstr "Вище"
 
-#: src/backend/core/AbstractAspect.cpp:424
+#: src/backend/core/AbstractAspect.cpp:425
 #, kde-format
 msgid "Down"
 msgstr "Нижче"
 
-#: src/backend/core/AbstractAspect.cpp:528
+#: src/backend/core/AbstractAspect.cpp:511
 #: src/backend/core/aspectcommands.h:171
 #: src/backend/datapicker/Datapicker.cpp:227
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2230
@@ -84,59 +84,59 @@ msgstr "Нижче"
 msgid "%1: add %2"
 msgstr "%1: додати %2"
 
-#: src/backend/core/AbstractAspect.cpp:530
-#: src/backend/core/AbstractAspect.cpp:567
+#: src/backend/core/AbstractAspect.cpp:513
+#: src/backend/core/AbstractAspect.cpp:550
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
 msgstr "Перейменовуємо «%1» на «%2» з метою уникнення конфлікту назв."
 
-#: src/backend/core/AbstractAspect.cpp:565
+#: src/backend/core/AbstractAspect.cpp:548
 #, kde-format
 msgid "%1: insert %2 before %3"
 msgstr "%1: вставити %2 перед %3"
 
-#: src/backend/core/AbstractAspect.cpp:565
+#: src/backend/core/AbstractAspect.cpp:548
 #, kde-format
 msgid "%1: insert %2 before end"
 msgstr "%1: вставити %2 перед кінцем"
 
-#: src/backend/core/AbstractAspect.cpp:600
+#: src/backend/core/AbstractAspect.cpp:583
 #: src/backend/core/aspectcommands.h:102
 #, kde-format
 msgid "%1: remove %2"
 msgstr "%1: вилучити %2"
 
-#: src/backend/core/AbstractAspect.cpp:613
+#: src/backend/core/AbstractAspect.cpp:596
 #, kde-format
 msgid "%1: remove all children"
 msgstr "%1: вилучити усі дочірні об'єкти"
 
-#: src/backend/core/AbstractAspect.cpp:725
+#: src/backend/core/AbstractAspect.cpp:708
 #, kde-format
 msgid "%1: pasted"
 msgstr "%1: вставлено"
 
-#: src/backend/core/AbstractAspect.cpp:820
+#: src/backend/core/AbstractAspect.cpp:803
 #, kde-format
 msgid "%1: pasted '%2'"
 msgstr "%1: вставлено «%2»"
 
-#: src/backend/core/AbstractAspect.cpp:822
+#: src/backend/core/AbstractAspect.cpp:805
 #, kde-format
 msgid "%1: duplicated '%2'"
 msgstr "%1: дубльовано «%2»"
 
-#: src/backend/core/AbstractAspect.cpp:823
+#: src/backend/core/AbstractAspect.cpp:806
 #, kde-format
 msgid "Copy of '%1'"
 msgstr "Копія «%1»"
 
-#: src/backend/core/AbstractAspect.cpp:964
+#: src/backend/core/AbstractAspect.cpp:947
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr "Пропущено атрибут «name» або вказано порожнє значення атрибута."
 
-#: src/backend/core/AbstractAspect.cpp:971
+#: src/backend/core/AbstractAspect.cpp:954
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr ""
@@ -178,7 +178,7 @@ msgstr "Дні"
 #: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:274
 #: src/frontend/dockwidgets/AxisDock.cpp:290
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:282
-#: src/frontend/dockwidgets/XYCurveDock.cpp:476 src/frontend/GuiTools.cpp:159
+#: src/frontend/dockwidgets/XYCurveDock.cpp:477 src/frontend/GuiTools.cpp:159
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
 #: src/frontend/widgets/LineWidget.cpp:47
@@ -307,7 +307,7 @@ msgid "UNDEFINED"
 msgstr "НЕ ВИЗНАЧЕНО"
 
 #: src/backend/core/AbstractColumn.cpp:324
-#: src/backend/spreadsheet/Spreadsheet.cpp:310
+#: src/backend/spreadsheet/Spreadsheet.cpp:311
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -317,7 +317,7 @@ msgstr[2] "%1: вставити %2 рядків"
 msgstr[3] "%1: вставити один рядок"
 
 #: src/backend/core/AbstractColumn.cpp:337
-#: src/backend/spreadsheet/Spreadsheet.cpp:293
+#: src/backend/spreadsheet/Spreadsheet.cpp:294
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -415,7 +415,7 @@ msgid "incompatible filter type"
 msgstr "несумісний тип фільтрування"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:157 src/backend/core/Project.cpp:725
+#: src/backend/core/Folder.cpp:157 src/backend/core/Project.cpp:723
 #: src/backend/datasources/MQTTClient.cpp:1368
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:273
@@ -533,22 +533,22 @@ msgstr "Копіювати дані"
 msgid "Paste Data"
 msgstr "Вставити дані"
 
-#: src/backend/core/column/Column.cpp:153
+#: src/backend/core/column/Column.cpp:152
 #, kde-format
 msgid "Used in"
 msgstr "Використано у"
 
-#: src/backend/core/column/Column.cpp:170
+#: src/backend/core/column/Column.cpp:169
 #, kde-format
 msgid "Plots"
 msgstr "Креслення"
 
-#: src/backend/core/column/Column.cpp:188
+#: src/backend/core/column/Column.cpp:187
 #, kde-format
 msgid "Axes"
 msgstr "Вісі"
 
-#: src/backend/core/column/Column.cpp:214
+#: src/backend/core/column/Column.cpp:213
 #, kde-format
 msgid "Calculations"
 msgstr "Обчислення"
@@ -563,7 +563,7 @@ msgstr "Обчислення"
 #. else	// Cancel
 #. return;
 #. }
-#: src/backend/core/column/Column.cpp:339
+#: src/backend/core/column/Column.cpp:338
 #: src/backend/core/column/columncommands.cpp:89
 #: src/frontend/dockwidgets/ColumnDock.cpp:360
 #: src/frontend/dockwidgets/ColumnDock.cpp:384
@@ -572,25 +572,25 @@ msgstr "Обчислення"
 msgid "%1: change column type"
 msgstr "%1: змінити тип стовпчика"
 
-#: src/backend/core/column/Column.cpp:471
+#: src/backend/core/column/Column.cpp:470
 #: src/backend/core/column/columncommands.cpp:578
 #, kde-format
 msgid "%1: clear column"
 msgstr "%1: спорожнити стовпчик"
 
-#: src/backend/core/column/Column.cpp:564
+#: src/backend/core/column/Column.cpp:563
 #, kde-format
 msgid "%1: set random values"
 msgstr "%1: встановити випадкові значення"
 
-#: src/backend/core/column/Column.cpp:1592
+#: src/backend/core/column/Column.cpp:1591
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "номер рядка є некоректним або номер рядка пропущено"
 
-#: src/backend/core/column/Column.cpp:1601
-#: src/backend/core/column/Column.cpp:1610
-#: src/backend/core/column/Column.cpp:1619
+#: src/backend/core/column/Column.cpp:1600
+#: src/backend/core/column/Column.cpp:1609
+#: src/backend/core/column/Column.cpp:1618
 #, kde-format
 msgid "invalid row value"
 msgstr "некоректне значення рядка"
@@ -705,32 +705,32 @@ msgstr "%1: змінено параметр збереження стану па
 msgid "%1: save calculation changed"
 msgstr "%1: збереження зміненого обчислення"
 
-#: src/backend/core/Project.cpp:569 src/backend/core/Project.cpp:599
+#: src/backend/core/Project.cpp:567 src/backend/core/Project.cpp:597
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "Вибачте. Не вдалося відкрити файл для читання."
 
-#: src/backend/core/Project.cpp:580 src/backend/core/Project.cpp:606
+#: src/backend/core/Project.cpp:578 src/backend/core/Project.cpp:604
 #, kde-format
 msgid "The project file is empty."
 msgstr "Файл проєкту є порожнім."
 
-#: src/backend/core/Project.cpp:580 src/backend/core/Project.cpp:606
+#: src/backend/core/Project.cpp:578 src/backend/core/Project.cpp:604
 #, kde-format
 msgid "Error opening project"
 msgstr "Помилка під час відкриття проєкту"
 
-#: src/backend/core/Project.cpp:625
+#: src/backend/core/Project.cpp:623
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "Під час спроби відкрити проєкт %1 сталася невідома помилка."
 
-#: src/backend/core/Project.cpp:626
+#: src/backend/core/Project.cpp:624
 #, kde-format
 msgid "Error when opening the project"
 msgstr "Помилка під час відкриття проєкту"
 
-#: src/backend/core/Project.cpp:646
+#: src/backend/core/Project.cpp:644
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -749,43 +749,43 @@ msgstr ""
 "\n"
 "Хочете продовжити обробку?"
 
-#: src/backend/core/Project.cpp:652
+#: src/backend/core/Project.cpp:650
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "Не вистачає підтримки СКА"
 
-#: src/backend/core/Project.cpp:682
+#: src/backend/core/Project.cpp:680
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "Пропущено атрибут «version»."
 
-#: src/backend/core/Project.cpp:732
+#: src/backend/core/Project.cpp:730
 #, kde-format
 msgid "no project element found"
 msgstr "не виявлено елемента проєкту"
 
-#: src/backend/core/Project.cpp:734
+#: src/backend/core/Project.cpp:732
 #, kde-format
 msgid "no valid XML document found"
 msgstr "не знайдено коректного документа XML"
 
-#: src/backend/core/Project.cpp:784 src/backend/core/Project.cpp:790
-#: src/backend/core/Project.cpp:841
+#: src/backend/core/Project.cpp:782 src/backend/core/Project.cpp:788
+#: src/backend/core/Project.cpp:839
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "Не вдалося відкрити файл «%1»."
 
-#: src/backend/core/Project.cpp:847
+#: src/backend/core/Project.cpp:845
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "Не вдалося обробити вміст файла «%1»."
 
-#: src/backend/core/Project.cpp:850
+#: src/backend/core/Project.cpp:848
 #, kde-format
 msgid "Failed to open project"
 msgstr "Не вдалося відкрити проєкт"
 
-#: src/backend/core/Project.cpp:1334
+#: src/backend/core/Project.cpp:1332
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "Некоректний час внесення змін до проєкту. Використовуємо поточний час."
@@ -1923,7 +1923,7 @@ msgid "Unknown"
 msgstr "Невідомий"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/ActionsManager.cpp:221 src/frontend/MainWin.cpp:1214
+#: src/frontend/ActionsManager.cpp:221 src/frontend/MainWin.cpp:1215
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -6266,7 +6266,7 @@ msgstr[2] "%1: додати %2 стовпчиків"
 msgstr[3] "%1: додати %2 стовпчик"
 
 #: src/backend/matrix/Matrix.cpp:694 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:657
+#: src/backend/spreadsheet/Spreadsheet.cpp:658
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: спорожнити"
@@ -6624,7 +6624,7 @@ msgid "Raw"
 msgstr "Без обробки"
 
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:945
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:943
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:226
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:325
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:484
@@ -6934,12 +6934,12 @@ msgstr "Сімпсона (триточкове)"
 msgid "Simpson's 3/8 (4-point)"
 msgstr "Сімпсона 3/8 (чотириточкове)"
 
-#: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:484
+#: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:485
 #, kde-format
 msgid "Cubic Spline (Natural)"
 msgstr "кубічний сплайн (природний)"
 
-#: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:485
+#: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:486
 #, kde-format
 msgid "Cubic Spline (Periodic)"
 msgstr "кубічний сплайн (періодичний)"
@@ -7353,41 +7353,41 @@ msgctxt "@title:column"
 msgid "Type"
 msgstr "Тип"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:341
+#: src/backend/spreadsheet/Spreadsheet.cpp:342
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr "%1: вилучено рядки з пропущеними значеннями"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:359
+#: src/backend/spreadsheet/Spreadsheet.cpp:360
 #, kde-format
 msgid "%1: mask rows with missing values"
 msgstr "%1: замасковано рядки з пропущеними значеннями"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:416
+#: src/backend/spreadsheet/Spreadsheet.cpp:417
 #, kde-format
 msgid "%1: toggle comments header"
 msgstr "%1: перемкнути заголовок коментарів"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:424
+#: src/backend/spreadsheet/Spreadsheet.cpp:425
 #, kde-format
 msgid "%1: toggle sparklines header"
 msgstr "%1: перемкнути заголовок спарклайнів"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:488
 #: src/backend/spreadsheet/Spreadsheet.cpp:489
-#: src/backend/spreadsheet/Spreadsheet.cpp:493
+#: src/backend/spreadsheet/Spreadsheet.cpp:490
+#: src/backend/spreadsheet/Spreadsheet.cpp:494
 #, kde-format
 msgid "%1: set linking"
 msgstr "%1: встановлення зв'язку"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:511
-#: src/backend/spreadsheet/Spreadsheet.cpp:513
-#: src/backend/spreadsheet/Spreadsheet.cpp:516
+#: src/backend/spreadsheet/Spreadsheet.cpp:512
+#: src/backend/spreadsheet/Spreadsheet.cpp:514
+#: src/backend/spreadsheet/Spreadsheet.cpp:517
 #, kde-format
 msgid "%1: set linked spreadsheet"
 msgstr "%1: встановлення пов'язаної електронної таблиці"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:615
+#: src/backend/spreadsheet/Spreadsheet.cpp:616
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
@@ -7396,7 +7396,7 @@ msgstr[1] "%1: вилучити %2 стовпчики"
 msgstr[2] "%1: вилучити %2 стовпчиків"
 msgstr[3] "%1: вилучити один стовпчик"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:634
+#: src/backend/spreadsheet/Spreadsheet.cpp:635
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
@@ -7405,32 +7405,32 @@ msgstr[1] "%1: вставити %2 стовпчики"
 msgstr[2] "%1: вставити %2 стовпчиків"
 msgstr[3] "%1: вставити один стовпчик"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:679
+#: src/backend/spreadsheet/Spreadsheet.cpp:680
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: спорожнити позначені стовпчики"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:695
+#: src/backend/spreadsheet/Spreadsheet.cpp:696
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: зняти маскування повністю"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:748
+#: src/backend/spreadsheet/Spreadsheet.cpp:749
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: пересунути стовпчик %2 з позиції %3 на позицію %4."
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:801
+#: src/backend/spreadsheet/Spreadsheet.cpp:802
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: упорядкувати стовпчики"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1168
+#: src/backend/spreadsheet/Spreadsheet.cpp:1169
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: вилучено пов'язану електронну таблицю"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1577
+#: src/backend/spreadsheet/Spreadsheet.cpp:1578
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
@@ -7439,7 +7439,7 @@ msgstr[1] "дані подвійної точності, %1 елементи"
 msgstr[2] "дані подвійної точності, %1 елементів"
 msgstr[3] "дані подвійної точності, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1580
+#: src/backend/spreadsheet/Spreadsheet.cpp:1581
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
@@ -7448,7 +7448,7 @@ msgstr[1] "цілочисельні дані, %1 елементи"
 msgstr[2] "цілочисельні дані, %1 елементів"
 msgstr[3] "цілочисельні дані, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1583
+#: src/backend/spreadsheet/Spreadsheet.cpp:1584
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
@@ -7457,7 +7457,7 @@ msgstr[1] "великі цілочисельні дані, %1 елементи"
 msgstr[2] "великі цілочисельні дані, %1 елементів"
 msgstr[3] "великі цілочисельні дані, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1586
+#: src/backend/spreadsheet/Spreadsheet.cpp:1587
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
@@ -7466,7 +7466,7 @@ msgstr[1] "текстові дані, %1 елементи"
 msgstr[2] "текстові дані, %1 елементів"
 msgstr[3] "текстові дані, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1589
+#: src/backend/spreadsheet/Spreadsheet.cpp:1590
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
@@ -7475,7 +7475,7 @@ msgstr[1] "дані щодо місяця, %1 елементи"
 msgstr[2] "дані щодо місяця, %1 елементів"
 msgstr[3] "дані щодо місяця, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1592
+#: src/backend/spreadsheet/Spreadsheet.cpp:1593
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
@@ -7484,7 +7484,7 @@ msgstr[1] "дані щодо дня, %1 елементи"
 msgstr[2] "дані щодо дня, %1 елементів"
 msgstr[3] "дані щодо дня, один елемент"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1595
+#: src/backend/spreadsheet/Spreadsheet.cpp:1596
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -8416,7 +8416,7 @@ msgstr "%1: встановити нижню фаску"
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:245
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:90
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:88
-#: src/frontend/dockwidgets/XYCurveDock.cpp:516
+#: src/frontend/dockwidgets/XYCurveDock.cpp:517
 #, kde-format
 msgid "Horizontal"
 msgstr "Горизонтальне"
@@ -8436,7 +8436,7 @@ msgstr "Горизонтальне"
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:246
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:91
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:89
-#: src/frontend/dockwidgets/XYCurveDock.cpp:515
+#: src/frontend/dockwidgets/XYCurveDock.cpp:516
 #, kde-format
 msgid "Vertical"
 msgstr "Вертикальне"
@@ -8460,7 +8460,7 @@ msgstr "Орієнтація"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:317
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:698
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:124
-#: src/frontend/dockwidgets/XYCurveDock.cpp:477
+#: src/frontend/dockwidgets/XYCurveDock.cpp:478
 #: src/frontend/ui/dockwidgets/axisdock.ui:492
 #: src/frontend/ui/dockwidgets/axisdock.ui:632
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:684
@@ -11207,7 +11207,7 @@ msgstr ""
 msgid "&Open Example"
 msgstr "Від&крити приклад"
 
-#: src/frontend/ActionsManager.cpp:205 src/frontend/MainWin.cpp:1170
+#: src/frontend/ActionsManager.cpp:205 src/frontend/MainWin.cpp:1171
 #, kde-format
 msgid "Workbook"
 msgstr "Робоча книга"
@@ -11218,7 +11218,7 @@ msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
 "Створює робочу книгу для збирання електронних таблиць, матриць та креслень"
 
-#: src/frontend/ActionsManager.cpp:210 src/frontend/MainWin.cpp:1178
+#: src/frontend/ActionsManager.cpp:210 src/frontend/MainWin.cpp:1179
 #, kde-format
 msgid "Data Extractor"
 msgstr "Засіб видобування даних"
@@ -11233,7 +11233,7 @@ msgstr "Створює інструмент для видобування дан
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:74
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:407
-#: src/frontend/MainWin.cpp:1186 src/frontend/SettingsDialog.cpp:66
+#: src/frontend/MainWin.cpp:1187 src/frontend/SettingsDialog.cpp:66
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:125
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -11251,7 +11251,7 @@ msgstr "Створює електронну таблицю для редагув
 msgid "Creates a new matrix for data editing"
 msgstr "Створює матрицю для редагування даних"
 
-#: src/frontend/ActionsManager.cpp:227 src/frontend/MainWin.cpp:1232
+#: src/frontend/ActionsManager.cpp:227 src/frontend/MainWin.cpp:1233
 #: src/frontend/SettingsDialog.cpp:61
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
@@ -11268,7 +11268,7 @@ msgstr "Створює робочий аркуш для креслення гр�
 msgid "Creates a new %1 script"
 msgstr "Створює скрипт %1"
 
-#: src/frontend/ActionsManager.cpp:244 src/frontend/MainWin.cpp:1240
+#: src/frontend/ActionsManager.cpp:244 src/frontend/MainWin.cpp:1241
 #, kde-format
 msgid "Note"
 msgstr "Нотатка"
@@ -11278,7 +11278,7 @@ msgstr "Нотатка"
 msgid "Creates a new note for arbitrary text"
 msgstr "Створює нотатку для довільного тексту"
 
-#: src/frontend/ActionsManager.cpp:249 src/frontend/MainWin.cpp:1162
+#: src/frontend/ActionsManager.cpp:249 src/frontend/MainWin.cpp:1163
 #, kde-format
 msgid "Folder"
 msgstr "Тека"
@@ -11581,7 +11581,7 @@ msgid "Select Y-Region and Zoom In"
 msgstr "Позначити і збільшити область за x"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1571
+#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1573
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1429
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
@@ -12501,7 +12501,7 @@ msgid "New Matrix"
 msgstr "Нова матриця"
 
 #: src/frontend/datasources/ImportDialog.cpp:224
-#: src/frontend/datasources/ImportFileDialog.cpp:404
+#: src/frontend/datasources/ImportFileDialog.cpp:401
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:155
 #, kde-format
 msgid "Close the dialog and import the data."
@@ -12521,7 +12521,7 @@ msgid "Add New Live Data Source"
 msgstr "Додати нове інтерактивне джерело даних"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:106
-#: src/frontend/datasources/ImportFileDialog.cpp:385
+#: src/frontend/datasources/ImportFileDialog.cpp:382
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:138
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:359
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:122
@@ -12531,7 +12531,7 @@ msgid "Hide Options"
 msgstr "Сховати параметри"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:106
-#: src/frontend/datasources/ImportFileDialog.cpp:385
+#: src/frontend/datasources/ImportFileDialog.cpp:382
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:138
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:359
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:122
@@ -12565,36 +12565,36 @@ msgstr "Каталогу %1 не існує."
 msgid "%1 files imported in %2 seconds."
 msgstr "Імпортовано %1 файлів за %2 секунд."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:406
+#: src/frontend/datasources/ImportFileDialog.cpp:403
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:149
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
 msgstr ""
 "Імпортування даних до матриці неможливе, оскільки серед них є нечислові."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:418
+#: src/frontend/datasources/ImportFileDialog.cpp:415
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:133
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr "Виберіть контейнер даних, до якого слід імпортувати дані."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:431
+#: src/frontend/datasources/ImportFileDialog.cpp:428
 #, kde-format
 msgid "No file provided for import."
 msgstr "Не надано файла для імпортування."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:456
+#: src/frontend/datasources/ImportFileDialog.cpp:453
 #, kde-format
 msgid "The provided file doesn't exist."
 msgstr "Вказаного файла не існує."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:476
+#: src/frontend/datasources/ImportFileDialog.cpp:473
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr ""
 "Не вдалося встановити з'єднання із вказаним локальним сокетом. Помилка: %1."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:480
+#: src/frontend/datasources/ImportFileDialog.cpp:477
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
@@ -12602,28 +12602,28 @@ msgstr ""
 "Не вдалося встановити з'єднання із вказаним локальним сокетом. Сокета не "
 "існує."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:495
+#: src/frontend/datasources/ImportFileDialog.cpp:492
 #, kde-format
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr "Не вдалося встановити з'єднання із вказаним сокетом TCP. Помилка: %1."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:499
-#: src/frontend/datasources/ImportFileDialog.cpp:519
+#: src/frontend/datasources/ImportFileDialog.cpp:496
+#: src/frontend/datasources/ImportFileDialog.cpp:516
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr "Не вказано назву вузла або номер порту."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:515
+#: src/frontend/datasources/ImportFileDialog.cpp:512
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Не вдалося встановити з'єднання із вказаним сокетом UDP. Помилка: %1"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:547
+#: src/frontend/datasources/ImportFileDialog.cpp:544
 #, kde-format
 msgid "Serial port number is missing."
 msgstr "Не вказано номер послідовного порту."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:559
+#: src/frontend/datasources/ImportFileDialog.cpp:556
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
@@ -13372,7 +13372,7 @@ msgid "Open LabPlot Project"
 msgstr "Відкрити проєкт LabPlot"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:705
+#: src/frontend/MainWin.cpp:706
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "проєкти LabPlot (%1)"
@@ -13575,7 +13575,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
-#: src/frontend/MainWin.cpp:1996
+#: src/frontend/MainWin.cpp:1998
 #, kde-format
 msgid "Warning"
 msgstr "Попередження"
@@ -13775,7 +13775,7 @@ msgstr "напівзаповнена, велика"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:129
 #: src/frontend/dockwidgets/ImageDock.cpp:181
 #: src/frontend/dockwidgets/ImageDock.cpp:191
-#: src/frontend/dockwidgets/XYCurveDock.cpp:510
+#: src/frontend/dockwidgets/XYCurveDock.cpp:511
 #: src/frontend/widgets/BackgroundWidget.cpp:118
 #: src/frontend/widgets/LabelWidget.cpp:485
 #: src/frontend/widgets/LabelWidget.cpp:497
@@ -13793,7 +13793,7 @@ msgstr "Ліворуч"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:131
 #: src/frontend/dockwidgets/ImageDock.cpp:183
 #: src/frontend/dockwidgets/ImageDock.cpp:193
-#: src/frontend/dockwidgets/XYCurveDock.cpp:511
+#: src/frontend/dockwidgets/XYCurveDock.cpp:512
 #: src/frontend/widgets/BackgroundWidget.cpp:119
 #: src/frontend/widgets/LabelWidget.cpp:487
 #: src/frontend/widgets/LabelWidget.cpp:499
@@ -13803,7 +13803,7 @@ msgid "Right"
 msgstr "Праворуч"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:271
-#: src/frontend/dockwidgets/XYCurveDock.cpp:517
+#: src/frontend/dockwidgets/XYCurveDock.cpp:518
 #, kde-format
 msgid "Both"
 msgstr "Обидва"
@@ -13955,14 +13955,14 @@ msgstr "Вісі %1: завантажено шаблон «%2»"
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:230
 #: src/frontend/dockwidgets/WorksheetDock.cpp:608
-#: src/frontend/dockwidgets/XYCurveDock.cpp:1035
+#: src/frontend/dockwidgets/XYCurveDock.cpp:1036
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr "%1: завантажено шаблон «%2»"
 
 #: src/frontend/dockwidgets/BarPlotDock.cpp:65
 #: src/frontend/dockwidgets/HistogramDock.cpp:76
-#: src/frontend/dockwidgets/XYCurveDock.cpp:75
+#: src/frontend/dockwidgets/XYCurveDock.cpp:76
 #, kde-format
 msgid "Uncertainty Bars"
 msgstr "Смуги невизначеності"
@@ -14403,7 +14403,7 @@ msgstr "Умовні позначення креслення %1: заванта�
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:316
 #: src/frontend/dockwidgets/MatrixDock.cpp:81
-#: src/frontend/dockwidgets/XYCurveDock.cpp:492
+#: src/frontend/dockwidgets/XYCurveDock.cpp:493
 #: src/frontend/widgets/ValueWidget.cpp:41
 #, kde-format
 msgid "Decimal"
@@ -14411,7 +14411,7 @@ msgstr "Десятковий"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:317
 #: src/frontend/dockwidgets/MatrixDock.cpp:82
-#: src/frontend/dockwidgets/XYCurveDock.cpp:493
+#: src/frontend/dockwidgets/XYCurveDock.cpp:494
 #: src/frontend/widgets/ValueWidget.cpp:42
 #, kde-format
 msgid "Scientific (e)"
@@ -14419,21 +14419,21 @@ msgstr "Інженерний запис (e)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:318
 #: src/frontend/dockwidgets/MatrixDock.cpp:83
-#: src/frontend/dockwidgets/XYCurveDock.cpp:494
+#: src/frontend/dockwidgets/XYCurveDock.cpp:495
 #: src/frontend/widgets/ValueWidget.cpp:43
 #, kde-format
 msgid "Scientific (E)"
 msgstr "Інженерний запис (E)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:319
-#: src/frontend/dockwidgets/XYCurveDock.cpp:495
+#: src/frontend/dockwidgets/XYCurveDock.cpp:496
 #: src/frontend/widgets/ValueWidget.cpp:44
 #, kde-format
 msgid "Automatic (e)"
 msgstr "Автоматично (e)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:320
-#: src/frontend/dockwidgets/XYCurveDock.cpp:496
+#: src/frontend/dockwidgets/XYCurveDock.cpp:497
 #: src/frontend/widgets/ValueWidget.cpp:45
 #, kde-format
 msgid "Automatic (E)"
@@ -14701,7 +14701,7 @@ msgstr "Нетипове значення ширини смуги ядра"
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:799
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
-#: src/frontend/dockwidgets/XYCurveDock.cpp:1033
+#: src/frontend/dockwidgets/XYCurveDock.cpp:1034
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr "xy-криві %1: завантажено шаблон «%2»"
@@ -15116,74 +15116,74 @@ msgstr "Стан розгортки: %1"
 msgid "Correlation status: %1"
 msgstr "Стан кореляції: %1"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:478
+#: src/frontend/dockwidgets/XYCurveDock.cpp:479
 #, kde-format
 msgid "Horiz. Start"
 msgstr "початок, гор."
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:479
+#: src/frontend/dockwidgets/XYCurveDock.cpp:480
 #, kde-format
 msgid "Vert. Start"
 msgstr "початок, верт."
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:480
+#: src/frontend/dockwidgets/XYCurveDock.cpp:481
 #, kde-format
 msgid "Horiz. Midpoint"
 msgstr "середня точка, гор."
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:481
+#: src/frontend/dockwidgets/XYCurveDock.cpp:482
 #, kde-format
 msgid "Vert. Midpoint"
 msgstr "середня точка, верт."
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:482
+#: src/frontend/dockwidgets/XYCurveDock.cpp:483
 #, kde-format
 msgid "2-segments"
 msgstr "двосегментні"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:483
+#: src/frontend/dockwidgets/XYCurveDock.cpp:484
 #, kde-format
 msgid "3-segments"
 msgstr "трисегментні"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:486
+#: src/frontend/dockwidgets/XYCurveDock.cpp:487
 #, kde-format
 msgid "Akima-spline (Natural)"
 msgstr "сплайн Акіма (природний)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:487
+#: src/frontend/dockwidgets/XYCurveDock.cpp:488
 #, kde-format
 msgid "Akima-spline (Periodic)"
 msgstr "сплайн Акіма (періодичний)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:500
+#: src/frontend/dockwidgets/XYCurveDock.cpp:501
 #: src/frontend/widgets/ValueWidget.cpp:31
 #, kde-format
 msgid "No Values"
 msgstr "без значень"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:505
+#: src/frontend/dockwidgets/XYCurveDock.cpp:506
 #: src/frontend/widgets/ValueWidget.cpp:33
 #, kde-format
 msgid "Custom Column"
 msgstr "Нетиповий стовпчик"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:508
+#: src/frontend/dockwidgets/XYCurveDock.cpp:509
 #: src/frontend/widgets/BackgroundWidget.cpp:115
 #: src/frontend/widgets/ValueWidget.cpp:35
 #, kde-format
 msgid "Above"
 msgstr "Вище"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:509
+#: src/frontend/dockwidgets/XYCurveDock.cpp:510
 #: src/frontend/widgets/BackgroundWidget.cpp:116
 #: src/frontend/widgets/ValueWidget.cpp:36
 #, kde-format
 msgid "Below"
 msgstr "Нижче"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:520
 #: src/frontend/dockwidgets/XYCurveDock.cpp:521
+#: src/frontend/dockwidgets/XYCurveDock.cpp:522
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
@@ -15192,8 +15192,8 @@ msgstr ""
 "Якщо позначено, з'єднувати сусідні точки лініями, навіть якщо між ними є "
 "видимі прогалини (некоректні або замасковані дані)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:522
 #: src/frontend/dockwidgets/XYCurveDock.cpp:523
+#: src/frontend/dockwidgets/XYCurveDock.cpp:524
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
@@ -15553,7 +15553,7 @@ msgstr ""
 "Не вдалося відкрити файл збірки прикладів %1. Будь ласка, перевірте, чи "
 "правильно встановлено програму."
 
-#: src/frontend/GuiObserver.cpp:184 src/frontend/MainWin.cpp:612
+#: src/frontend/GuiObserver.cpp:184 src/frontend/MainWin.cpp:613
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -16442,13 +16442,13 @@ msgid "&Windows"
 msgstr "&Вікна"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
-#: src/frontend/MainWin.cpp:180 src/frontend/ui/settingsworksheetpage.ui:106
+#: src/frontend/MainWin.cpp:181 src/frontend/ui/settingsworksheetpage.ui:106
 #: src/frontend/worksheet/WorksheetView.cpp:290
 #, kde-format
 msgid "Presenter Mode"
 msgstr "Режим презентації"
 
-#: src/frontend/MainWin.cpp:180
+#: src/frontend/MainWin.cpp:181
 #, kde-format
 msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
@@ -16457,114 +16457,114 @@ msgstr ""
 "У проєкті немає доступних робочих аркушів. Режим презентації не буде "
 "запущено."
 
-#: src/frontend/MainWin.cpp:194
+#: src/frontend/MainWin.cpp:195
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "Вітаємо у LabPlot %1"
 
-#: src/frontend/MainWin.cpp:474
+#: src/frontend/MainWin.cpp:475
 #, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "До поточного проєкту, «%1», внесено зміни. Хочете зберегти ці зміни?"
 
-#: src/frontend/MainWin.cpp:475
+#: src/frontend/MainWin.cpp:476
 #, kde-format
 msgid "Save Project"
 msgstr "Зберегти проєкт"
 
-#: src/frontend/MainWin.cpp:573
+#: src/frontend/MainWin.cpp:574
 #, kde-format
 msgid "%1: created"
 msgstr "%1: створено"
 
-#: src/frontend/MainWin.cpp:599
+#: src/frontend/MainWin.cpp:600
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Навігатор проєктом"
 
-#: src/frontend/MainWin.cpp:624
+#: src/frontend/MainWin.cpp:625
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "Перегляд робочого аркуша"
 
-#: src/frontend/MainWin.cpp:633
+#: src/frontend/MainWin.cpp:634
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "Вміст"
 
-#: src/frontend/MainWin.cpp:710
+#: src/frontend/MainWin.cpp:711
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "проєкти Origin (%1)"
 
-#: src/frontend/MainWin.cpp:716
+#: src/frontend/MainWin.cpp:717
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "проєкти Cantor (.cws)"
 
-#: src/frontend/MainWin.cpp:717
+#: src/frontend/MainWin.cpp:718
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "нотатники Jupyter (*.ipynb)"
 
-#: src/frontend/MainWin.cpp:724
+#: src/frontend/MainWin.cpp:725
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "усі файли, що підтримуються (%1)"
 
-#: src/frontend/MainWin.cpp:728
+#: src/frontend/MainWin.cpp:729
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Відкриття проєкту"
 
-#: src/frontend/MainWin.cpp:745
+#: src/frontend/MainWin.cpp:746
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "Файл проєкту %1 вже відкрито."
 
-#: src/frontend/MainWin.cpp:745 src/frontend/MainWin.cpp:753
-#: src/frontend/MainWin.cpp:758
+#: src/frontend/MainWin.cpp:746 src/frontend/MainWin.cpp:754
+#: src/frontend/MainWin.cpp:759
 #, kde-format
 msgid "Open Project"
 msgstr "Відкриття проєкту"
 
-#: src/frontend/MainWin.cpp:753
+#: src/frontend/MainWin.cpp:754
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "Файла проєкту %1 не існєу."
 
-#: src/frontend/MainWin.cpp:758
+#: src/frontend/MainWin.cpp:759
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "Не вдалося прочитати файл проєкту %1."
 
-#: src/frontend/MainWin.cpp:766
+#: src/frontend/MainWin.cpp:767
 #, kde-format
 msgid "Loading %1..."
 msgstr "Завантажуємо %1…"
 
-#: src/frontend/MainWin.cpp:818
+#: src/frontend/MainWin.cpp:819
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: відкрито"
 
-#: src/frontend/MainWin.cpp:853
+#: src/frontend/MainWin.cpp:854
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "Проєкт успішно відкрито (за %1 секунд)."
 
-#: src/frontend/MainWin.cpp:946
+#: src/frontend/MainWin.cpp:947
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Збереження проєкту із новою назвою"
 
-#: src/frontend/MainWin.cpp:948
+#: src/frontend/MainWin.cpp:949
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -16573,54 +16573,54 @@ msgstr ""
 "проєкти LabPlot (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:975
+#: src/frontend/MainWin.cpp:976
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "Не вдалося відкрити тимчасовий файл для запису."
 
-#: src/frontend/MainWin.cpp:1054
+#: src/frontend/MainWin.cpp:1055
 #, kde-format
 msgid "Project saved"
 msgstr "Проєкт збережено"
 
-#: src/frontend/MainWin.cpp:1069
+#: src/frontend/MainWin.cpp:1070
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "Не вдалося зберегти файл «%1»."
 
-#: src/frontend/MainWin.cpp:1073
+#: src/frontend/MainWin.cpp:1074
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Не вдалося відкрити файл «%1» для запису."
 
-#: src/frontend/MainWin.cpp:1122
+#: src/frontend/MainWin.cpp:1123
 #, kde-format
 msgid "Changed"
 msgstr "Змінено"
 
-#: src/frontend/MainWin.cpp:1137 src/frontend/MainWin.cpp:1149
+#: src/frontend/MainWin.cpp:1138 src/frontend/MainWin.cpp:1150
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "Готуємося до друку %1"
 
-#: src/frontend/MainWin.cpp:1139 src/frontend/MainWin.cpp:1151
+#: src/frontend/MainWin.cpp:1140 src/frontend/MainWin.cpp:1152
 #, kde-format
 msgid "%1 printed"
 msgstr "Надруковано %1"
 
-#: src/frontend/MainWin.cpp:1206
+#: src/frontend/MainWin.cpp:1207
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3741
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3742
 #, kde-format
 msgid "%1"
 msgstr "%1"
 
-#: src/frontend/MainWin.cpp:1892
+#: src/frontend/MainWin.cpp:1894
 #, kde-format
 msgid "Kaggle CLI tool not found"
 msgstr "Не знайдено інструмент командного рядка Kaggle"
 
-#: src/frontend/MainWin.cpp:1893
+#: src/frontend/MainWin.cpp:1895
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
@@ -16629,27 +16629,27 @@ msgstr ""
 "Вкажіть шлях до інструменту командного рядка Kaggle у параметрах програми і "
 "повторіть спробу."
 
-#: src/frontend/MainWin.cpp:1959
+#: src/frontend/MainWin.cpp:1961
 #, kde-format
 msgid "%1 exported"
 msgstr "Експортовано %1"
 
-#: src/frontend/MainWin.cpp:1966
+#: src/frontend/MainWin.cpp:1968
 #, kde-format
 msgid "FITS files saved"
 msgstr "Файли FITS збережено"
 
-#: src/frontend/MainWin.cpp:1978
+#: src/frontend/MainWin.cpp:1980
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Клієнт MQTT%1"
 
-#: src/frontend/MainWin.cpp:1996
+#: src/frontend/MainWin.cpp:1998
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "На цьому вузлі вже є MQTTClient!"
 
-#: src/frontend/MainWin.cpp:2000
+#: src/frontend/MainWin.cpp:2002
 #, kde-format
 msgid "Live data source%1"
 msgstr "Інтерактивне джерело даних%1"
@@ -18382,46 +18382,46 @@ msgid "Distribution Fit to '%1'"
 msgstr "Відповідність розподілу «%1»"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:947
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:945
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:348
 #: src/frontend/ui/plotsurfacestylewidget.ui:23
 #, kde-format
 msgid "Density"
 msgstr "Щільність"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:957
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:955
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:378
 #, kde-format
 msgid "Theoretical Quantiles"
 msgstr "Теоретичні квантилі"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:965
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:963
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:380
 #, kde-format
 msgid "Sample Quantiles"
 msgstr "Квантилі вибірки"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1051
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1049
 #, kde-format
 msgid "Sample"
 msgstr "Вибірка"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1110
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1108
 #, kde-format
 msgid "No data selected to plot."
 msgstr "Не вибрано даних для креслення."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1115
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1113
 #, kde-format
 msgid "An already existing plot area has to be selected."
 msgstr "Слід позначити наявну область креслення."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1120
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1118
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "Слід позначити наявний робочий аркуш."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1126
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1124
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "Закрити діалогове вікно і накреслити дані."
@@ -25718,7 +25718,7 @@ msgstr "Введено некоректне значення. Коректне �
 msgid "Search/Filter text"
 msgstr "Пошук або фільтрування тексту"
 
-#: src/frontend/widgets/TreeViewComboBox.cpp:366
+#: src/frontend/widgets/TreeViewComboBox.cpp:362
 #, kde-format
 msgid ""
 "The aspect \"%1\"\n"
