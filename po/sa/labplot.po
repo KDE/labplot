@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-23 00:39+0000\n"
+"POT-Creation-Date: 2025-11-26 00:39+0000\n"
 "PO-Revision-Date: 2024-12-29 23:07+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -19,39 +19,39 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n>2);\n"
 "X-Generator: Lokalize 24.08.2\n"
 
-#: src/backend/core/AbstractAspect.cpp:233
+#: src/backend/core/AbstractAspect.cpp:234
 #, kde-format
 msgid ""
 "Intended name \"%1\" was changed to \"%2\" in order to avoid name collision."
 msgstr "नामसंघर्षं परिहरितुं अभिप्रेतं नाम \"%1\" \"%2\" इति परिवर्तितम् ।"
 
-#: src/backend/core/AbstractAspect.cpp:247
+#: src/backend/core/AbstractAspect.cpp:248
 #, kde-format
 msgid "%1: change comment"
 msgstr "%1: कथं परिवर्तयतु"
 
-#: src/backend/core/AbstractAspect.cpp:333
+#: src/backend/core/AbstractAspect.cpp:334
 #, kde-format
 msgid "Duplicate Here"
 msgstr "अत्र द्वितीयकं कुरुत"
 
-#: src/backend/core/AbstractAspect.cpp:348
+#: src/backend/core/AbstractAspect.cpp:349
 #, kde-format
 msgid "Paste '%1'"
 msgstr "'%1' चिनोतु।"
 
-#: src/backend/core/AbstractAspect.cpp:360
+#: src/backend/core/AbstractAspect.cpp:361
 #, kde-format
 msgid "Create Data Spreadsheet"
 msgstr "Data Spreadsheet रचयन्तु"
 
-#: src/backend/core/AbstractAspect.cpp:408
+#: src/backend/core/AbstractAspect.cpp:409
 #, kde-format
 msgid "Rename"
 msgstr "पुनर्नाम"
 
-#: src/backend/core/AbstractAspect.cpp:410
-#: src/backend/spreadsheet/Spreadsheet.cpp:711
+#: src/backend/core/AbstractAspect.cpp:411
+#: src/backend/spreadsheet/Spreadsheet.cpp:712
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:487
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
 #: src/frontend/worksheet/WorksheetView.cpp:138
@@ -59,22 +59,22 @@ msgstr "पुनर्नाम"
 msgid "Delete"
 msgstr "लुप्"
 
-#: src/backend/core/AbstractAspect.cpp:418
+#: src/backend/core/AbstractAspect.cpp:419
 #, kde-format
 msgid "Move"
 msgstr "चलनम्"
 
-#: src/backend/core/AbstractAspect.cpp:421
+#: src/backend/core/AbstractAspect.cpp:422
 #, kde-format
 msgid "Up"
 msgstr "उपरि"
 
-#: src/backend/core/AbstractAspect.cpp:424
+#: src/backend/core/AbstractAspect.cpp:425
 #, kde-format
 msgid "Down"
 msgstr "अधः"
 
-#: src/backend/core/AbstractAspect.cpp:528
+#: src/backend/core/AbstractAspect.cpp:511
 #: src/backend/core/aspectcommands.h:171
 #: src/backend/datapicker/Datapicker.cpp:227
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2230
@@ -82,60 +82,60 @@ msgstr "अधः"
 msgid "%1: add %2"
 msgstr "%1: %2 योजयतु"
 
-#: src/backend/core/AbstractAspect.cpp:530
-#: src/backend/core/AbstractAspect.cpp:567
+#: src/backend/core/AbstractAspect.cpp:513
+#: src/backend/core/AbstractAspect.cpp:550
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
 msgstr "नामसंघर्षं परिहरितुं \"%1\" इत्यस्य नामकरणं \"%2\" इति कृत्वा ।"
 
-#: src/backend/core/AbstractAspect.cpp:565
+#: src/backend/core/AbstractAspect.cpp:548
 #, kde-format
 msgid "%1: insert %2 before %3"
 msgstr "%1: %3 इत्यस्मात् पूर्वं %2 सम्मिलितं कुर्वन्तु"
 
-#: src/backend/core/AbstractAspect.cpp:565
+#: src/backend/core/AbstractAspect.cpp:548
 #, kde-format
 msgid "%1: insert %2 before end"
 msgstr "%1: समाप्तेः पूर्वं %2 सम्मिलितं कुर्वन्तु"
 
-#: src/backend/core/AbstractAspect.cpp:600
+#: src/backend/core/AbstractAspect.cpp:583
 #: src/backend/core/aspectcommands.h:102
 #, kde-format
 msgid "%1: remove %2"
 msgstr "%1: %2 निष्कासयन्तु"
 
-#: src/backend/core/AbstractAspect.cpp:613
+#: src/backend/core/AbstractAspect.cpp:596
 #, kde-format
 msgid "%1: remove all children"
 msgstr "%1: सर्वाणि बालकानि निष्कासयन्तु"
 
-#: src/backend/core/AbstractAspect.cpp:725
+#: src/backend/core/AbstractAspect.cpp:708
 #, fuzzy, kde-format
 #| msgid "%1: pasted '%2'"
 msgid "%1: pasted"
 msgstr "%1: '%2' चिनोति।"
 
-#: src/backend/core/AbstractAspect.cpp:820
+#: src/backend/core/AbstractAspect.cpp:803
 #, kde-format
 msgid "%1: pasted '%2'"
 msgstr "%1: '%2' चिनोति।"
 
-#: src/backend/core/AbstractAspect.cpp:822
+#: src/backend/core/AbstractAspect.cpp:805
 #, kde-format
 msgid "%1: duplicated '%2'"
 msgstr "%1: द्वितीयकं '%2'."
 
-#: src/backend/core/AbstractAspect.cpp:823
+#: src/backend/core/AbstractAspect.cpp:806
 #, kde-format
 msgid "Copy of '%1'"
 msgstr "'%1' इत्यस्य प्रतिलिपिः ।"
 
-#: src/backend/core/AbstractAspect.cpp:964
+#: src/backend/core/AbstractAspect.cpp:947
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr "'नाम' इति विशेषणं लुप्तं वा रिक्तं वा अस्ति ।"
 
-#: src/backend/core/AbstractAspect.cpp:971
+#: src/backend/core/AbstractAspect.cpp:954
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr "'%1' कृते अमान्यनिर्माणसमयः । वर्तमानसमयस्य उपयोगेन।"
@@ -176,7 +176,7 @@ msgstr "दिवसाः"
 #: src/backend/nsl/nsl_smooth.c:22 src/frontend/dockwidgets/AxisDock.cpp:274
 #: src/frontend/dockwidgets/AxisDock.cpp:290
 #: src/frontend/dockwidgets/BoxPlotDock.cpp:282
-#: src/frontend/dockwidgets/XYCurveDock.cpp:476 src/frontend/GuiTools.cpp:159
+#: src/frontend/dockwidgets/XYCurveDock.cpp:477 src/frontend/GuiTools.cpp:159
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:198
 #: src/frontend/widgets/BackgroundWidget.cpp:114
 #: src/frontend/widgets/LineWidget.cpp:47
@@ -305,7 +305,7 @@ msgid "UNDEFINED"
 msgstr "अनिर्धारितम्"
 
 #: src/backend/core/AbstractColumn.cpp:324
-#: src/backend/spreadsheet/Spreadsheet.cpp:310
+#: src/backend/spreadsheet/Spreadsheet.cpp:311
 #, kde-format
 msgid "%1: insert 1 row"
 msgid_plural "%1: insert %2 rows"
@@ -313,7 +313,7 @@ msgstr[0] "%1: १ पङ्क्तिं सम्मिलितं कु�
 msgstr[1] "%1: %2 पङ्क्तयः सम्मिलितं कुर्वन्तु"
 
 #: src/backend/core/AbstractColumn.cpp:337
-#: src/backend/spreadsheet/Spreadsheet.cpp:293
+#: src/backend/spreadsheet/Spreadsheet.cpp:294
 #, kde-format
 msgid "%1: remove 1 row"
 msgid_plural "%1: remove %2 rows"
@@ -409,7 +409,7 @@ msgid "incompatible filter type"
 msgstr "असङ्गत फ़िल्टर प्रकार"
 
 #: src/backend/core/AbstractSimpleFilter.cpp:366
-#: src/backend/core/Folder.cpp:157 src/backend/core/Project.cpp:725
+#: src/backend/core/Folder.cpp:157 src/backend/core/Project.cpp:723
 #: src/backend/datasources/MQTTClient.cpp:1368
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:273
@@ -527,22 +527,22 @@ msgstr "Data प्रतिलिपि कुर्वन्तु"
 msgid "Paste Data"
 msgstr "ईस्टर तिथि"
 
-#: src/backend/core/column/Column.cpp:153
+#: src/backend/core/column/Column.cpp:152
 #, kde-format
 msgid "Used in"
 msgstr "प्रयुक्तम्"
 
-#: src/backend/core/column/Column.cpp:170
+#: src/backend/core/column/Column.cpp:169
 #, kde-format
 msgid "Plots"
 msgstr "कथानकम्"
 
-#: src/backend/core/column/Column.cpp:188
+#: src/backend/core/column/Column.cpp:187
 #, kde-format
 msgid "Axes"
 msgstr "अक्षाः"
 
-#: src/backend/core/column/Column.cpp:214
+#: src/backend/core/column/Column.cpp:213
 #, kde-format
 msgid "Calculations"
 msgstr "गणनाः"
@@ -557,7 +557,7 @@ msgstr "गणनाः"
 #. else	// Cancel
 #. return;
 #. }
-#: src/backend/core/column/Column.cpp:339
+#: src/backend/core/column/Column.cpp:338
 #: src/backend/core/column/columncommands.cpp:89
 #: src/frontend/dockwidgets/ColumnDock.cpp:360
 #: src/frontend/dockwidgets/ColumnDock.cpp:384
@@ -566,25 +566,25 @@ msgstr "गणनाः"
 msgid "%1: change column type"
 msgstr "%1: स्तम्भप्रकारं परिवर्तयतु"
 
-#: src/backend/core/column/Column.cpp:471
+#: src/backend/core/column/Column.cpp:470
 #: src/backend/core/column/columncommands.cpp:578
 #, kde-format
 msgid "%1: clear column"
 msgstr "%1: स्तम्भं स्वच्छं कुर्वन्तु"
 
-#: src/backend/core/column/Column.cpp:564
+#: src/backend/core/column/Column.cpp:563
 #, kde-format
 msgid "%1: set random values"
 msgstr "%1: यादृच्छिकमूल्यानि सेट् कुर्वन्तु"
 
-#: src/backend/core/column/Column.cpp:1592
+#: src/backend/core/column/Column.cpp:1591
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "अमान्यः अथवा अनुपलब्धः पङ्क्तिसूचकाङ्कः"
 
-#: src/backend/core/column/Column.cpp:1601
-#: src/backend/core/column/Column.cpp:1610
-#: src/backend/core/column/Column.cpp:1619
+#: src/backend/core/column/Column.cpp:1600
+#: src/backend/core/column/Column.cpp:1609
+#: src/backend/core/column/Column.cpp:1618
 #, kde-format
 msgid "invalid row value"
 msgstr "अमान्य पङ्क्तिमूल्यम्"
@@ -699,32 +699,32 @@ msgstr "%1: save dock स्थितिः परिवर्तिता"
 msgid "%1: save calculation changed"
 msgstr "%1: रक्षणगणना परिवर्तिता"
 
-#: src/backend/core/Project.cpp:569 src/backend/core/Project.cpp:599
+#: src/backend/core/Project.cpp:567 src/backend/core/Project.cpp:597
 #, kde-format
 msgid "Sorry. Could not open file for reading."
 msgstr "क्षम्यताम्‌। पठनार्थं सञ्चिकां उद्घाटयितुं न शक्तवान्।"
 
-#: src/backend/core/Project.cpp:580 src/backend/core/Project.cpp:606
+#: src/backend/core/Project.cpp:578 src/backend/core/Project.cpp:604
 #, kde-format
 msgid "The project file is empty."
 msgstr "परियोजनासञ्चिका रिक्तम् अस्ति ।"
 
-#: src/backend/core/Project.cpp:580 src/backend/core/Project.cpp:606
+#: src/backend/core/Project.cpp:578 src/backend/core/Project.cpp:604
 #, kde-format
 msgid "Error opening project"
 msgstr "परियोजना उद्घाटने त्रुटि"
 
-#: src/backend/core/Project.cpp:625
+#: src/backend/core/Project.cpp:623
 #, kde-format
 msgid "Unknown error when opening the project %1."
 msgstr "परियोजना %1 उद्घाटयति समये अज्ञातदोषः ।"
 
-#: src/backend/core/Project.cpp:626
+#: src/backend/core/Project.cpp:624
 #, kde-format
 msgid "Error when opening the project"
 msgstr "परियोजनां उद्घाटयति समये त्रुटिः"
 
-#: src/backend/core/Project.cpp:646
+#: src/backend/core/Project.cpp:644
 #, kde-format
 msgid ""
 "The project has content written with %1. Your installation of LabPlot lacks "
@@ -743,43 +743,43 @@ msgstr ""
 "\n"
 "किं त्वं निरन्तरं कर्तुम् इच्छसि ?"
 
-#: src/backend/core/Project.cpp:652
+#: src/backend/core/Project.cpp:650
 #, kde-format
 msgid "Missing Support for CAS"
 msgstr "CAS कृते समर्थनं गम्यते"
 
-#: src/backend/core/Project.cpp:682
+#: src/backend/core/Project.cpp:680
 #, kde-format
 msgid "Attribute 'version' is missing."
 msgstr "'संस्करणम्' इति विशेषता लुप्तम् अस्ति ।"
 
-#: src/backend/core/Project.cpp:732
+#: src/backend/core/Project.cpp:730
 #, kde-format
 msgid "no project element found"
 msgstr "कोऽपि परियोजनातत्त्वः न प्राप्तः"
 
-#: src/backend/core/Project.cpp:734
+#: src/backend/core/Project.cpp:732
 #, kde-format
 msgid "no valid XML document found"
 msgstr "कोऽपि वैधः XML दस्तावेजः न प्राप्तः"
 
-#: src/backend/core/Project.cpp:784 src/backend/core/Project.cpp:790
-#: src/backend/core/Project.cpp:841
+#: src/backend/core/Project.cpp:782 src/backend/core/Project.cpp:788
+#: src/backend/core/Project.cpp:839
 #, kde-format
 msgid "Failed to open the file '%1'."
 msgstr "'%1' सञ्चिकां उद्घाटयितुं असफलम् ।"
 
-#: src/backend/core/Project.cpp:847
+#: src/backend/core/Project.cpp:845
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
 msgstr "'%1' सञ्चिकायाः सामग्रीं संसाधितुं असफलम् ।"
 
-#: src/backend/core/Project.cpp:850
+#: src/backend/core/Project.cpp:848
 #, kde-format
 msgid "Failed to open project"
 msgstr "परियोजनां उद्घाटयितुं असफलम्"
 
-#: src/backend/core/Project.cpp:1334
+#: src/backend/core/Project.cpp:1332
 #, kde-format
 msgid "Invalid project modification time. Using current time."
 msgstr "अमान्य परियोजना परिवर्तन समय। वर्तमानसमयस्य उपयोगेन।"
@@ -1899,7 +1899,7 @@ msgid "Unknown"
 msgstr "अज्ञात"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:434
-#: src/frontend/ActionsManager.cpp:221 src/frontend/MainWin.cpp:1214
+#: src/frontend/ActionsManager.cpp:221 src/frontend/MainWin.cpp:1215
 #: src/frontend/workbook/WorkbookView.cpp:53
 #: src/frontend/workbook/WorkbookView.cpp:160
 #, kde-format
@@ -6181,7 +6181,7 @@ msgstr[0] "%1: %2 स्तम्भं योजयन्तु"
 msgstr[1] "%1: %2 स्तम्भान् योजयन्तु"
 
 #: src/backend/matrix/Matrix.cpp:694 src/backend/matrix/matrixcommands.h:131
-#: src/backend/spreadsheet/Spreadsheet.cpp:657
+#: src/backend/spreadsheet/Spreadsheet.cpp:658
 #, kde-format
 msgid "%1: clear"
 msgstr "%1: स्पष्टम्"
@@ -6527,7 +6527,7 @@ msgid "Raw"
 msgstr "अपक्व"
 
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:945
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:943
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:226
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:325
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:484
@@ -6837,12 +6837,12 @@ msgstr "सिम्पसनस्य (३-बिन्दुः)"
 msgid "Simpson's 3/8 (4-point)"
 msgstr "सिम्पसनस्य ३/८ (४-बिन्दुः)"
 
-#: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:484
+#: src/backend/nsl/nsl_interp.c:16 src/frontend/dockwidgets/XYCurveDock.cpp:485
 #, kde-format
 msgid "Cubic Spline (Natural)"
 msgstr "घन स्प्लाइन (प्राकृतिक)"
 
-#: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:485
+#: src/backend/nsl/nsl_interp.c:17 src/frontend/dockwidgets/XYCurveDock.cpp:486
 #, kde-format
 msgid "Cubic Spline (Periodic)"
 msgstr "घन स्प्लाइन (आवधिक)"
@@ -7263,124 +7263,124 @@ msgctxt "@title:column"
 msgid "Type"
 msgstr "प्रकारः"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:341
+#: src/backend/spreadsheet/Spreadsheet.cpp:342
 #, kde-format
 msgid "%1: remove rows with missing values"
 msgstr "%1: लुप्तमूल्यानि सन्ति पङ्क्तयः निष्कासयन्तु"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:359
+#: src/backend/spreadsheet/Spreadsheet.cpp:360
 #, kde-format
 msgid "%1: mask rows with missing values"
 msgstr "%1: लुप्तमूल्यानि सह पङ्क्तयः मास्क कुर्वन्तु"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:416
+#: src/backend/spreadsheet/Spreadsheet.cpp:417
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: toggle comments header"
 msgstr "%1: कथं परिवर्तयतु"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:424
+#: src/backend/spreadsheet/Spreadsheet.cpp:425
 #, fuzzy, kde-format
 #| msgid "Unable to parse header"
 msgid "%1: toggle sparklines header"
 msgstr "शीर्षकं विश्लेषणं कर्तुं असमर्थः"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:488
 #: src/backend/spreadsheet/Spreadsheet.cpp:489
-#: src/backend/spreadsheet/Spreadsheet.cpp:493
+#: src/backend/spreadsheet/Spreadsheet.cpp:490
+#: src/backend/spreadsheet/Spreadsheet.cpp:494
 #, kde-format
 msgid "%1: set linking"
 msgstr "%1: लिङ्किंग् सेट् कुर्वन्तु"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:511
-#: src/backend/spreadsheet/Spreadsheet.cpp:513
-#: src/backend/spreadsheet/Spreadsheet.cpp:516
+#: src/backend/spreadsheet/Spreadsheet.cpp:512
+#: src/backend/spreadsheet/Spreadsheet.cpp:514
+#: src/backend/spreadsheet/Spreadsheet.cpp:517
 #, kde-format
 msgid "%1: set linked spreadsheet"
 msgstr "%1: लिङ्क् कृतं स्प्रेड्शीट् सेट् कुर्वन्तु"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:615
+#: src/backend/spreadsheet/Spreadsheet.cpp:616
 #, kde-format
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
 msgstr[0] "%1: 1 स्तम्भं निष्कासयन्तु"
 msgstr[1] "%1: %2 स्तम्भान् निष्कासयन्तु"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:634
+#: src/backend/spreadsheet/Spreadsheet.cpp:635
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
 msgstr[0] "%1: 1 स्तम्भं सम्मिलितं कुर्वन्तु"
 msgstr[1] "%1: %2 स्तम्भान् सम्मिलितं कुर्वन्तु"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:679
+#: src/backend/spreadsheet/Spreadsheet.cpp:680
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: चयनितस्तम्भान् स्वच्छं कुर्वन्तु"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:695
+#: src/backend/spreadsheet/Spreadsheet.cpp:696
 #, kde-format
 msgid "%1: clear all masks"
 msgstr "%1: सर्वाणि मास्क्स् स्वच्छं कुर्वन्तु"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:748
+#: src/backend/spreadsheet/Spreadsheet.cpp:749
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
 msgstr "%1: %2 स्तम्भं %3 स्थानात् %4 यावत् चालयन्तु ।"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:801
+#: src/backend/spreadsheet/Spreadsheet.cpp:802
 #, kde-format
 msgid "%1: sort columns"
 msgstr "%1: स्तम्भान् क्रमयन्तु"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1168
+#: src/backend/spreadsheet/Spreadsheet.cpp:1169
 #, kde-format
 msgid "%1: linked spreadsheet removed"
 msgstr "%1: लिङ्क् कृतं स्प्रेड्शीट् निष्कासितम्"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1577
+#: src/backend/spreadsheet/Spreadsheet.cpp:1578
 #, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
 msgstr[0] "द्विगुण परिशुद्धता दत्तांशः, %1 तत्त्वम्"
 msgstr[1] "संख्यात्मकदत्तांशः, %1 तत्त्वानि"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1580
+#: src/backend/spreadsheet/Spreadsheet.cpp:1581
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] "पूर्णाङ्कदत्तांशः, %1 तत्त्वम्"
 msgstr[1] "पूर्णाङ्कदत्तांशः, %1 तत्त्वानि"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1583
+#: src/backend/spreadsheet/Spreadsheet.cpp:1584
 #, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
 msgstr[0] "बृहत् पूर्णाङ्कदत्तांशः, %1 तत्त्वम्"
 msgstr[1] "बृहत् पूर्णाङ्कदत्तांशः, %1 तत्त्वानि"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1586
+#: src/backend/spreadsheet/Spreadsheet.cpp:1587
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] "पाठदत्तांशः, %1 तत्त्वम्"
 msgstr[1] "पाठदत्तांशः, %1 तत्त्वानि"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1589
+#: src/backend/spreadsheet/Spreadsheet.cpp:1590
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] "मासस्य दत्तांशः, %1 तत्त्वम्"
 msgstr[1] "मासदत्तांशः, %1 तत्त्वानि"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1592
+#: src/backend/spreadsheet/Spreadsheet.cpp:1593
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] "दिवसदत्तांशः, %1 तत्त्वम्"
 msgstr[1] "दिवसदत्तांशः, %1 तत्त्वानि"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1595
+#: src/backend/spreadsheet/Spreadsheet.cpp:1596
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -8307,7 +8307,7 @@ msgstr "%1: अधः गद्दी सेट् कुर्वन्तु"
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:245
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:90
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:88
-#: src/frontend/dockwidgets/XYCurveDock.cpp:516
+#: src/frontend/dockwidgets/XYCurveDock.cpp:517
 #, kde-format
 msgid "Horizontal"
 msgstr "क्षैतिज"
@@ -8327,7 +8327,7 @@ msgstr "क्षैतिज"
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:246
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:91
 #: src/frontend/dockwidgets/ReferenceRangeDock.cpp:89
-#: src/frontend/dockwidgets/XYCurveDock.cpp:515
+#: src/frontend/dockwidgets/XYCurveDock.cpp:516
 #, kde-format
 msgid "Vertical"
 msgstr "ऊर्ध्वाधर"
@@ -8351,7 +8351,7 @@ msgstr "आभिमुख्य"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:317
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:698
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:124
-#: src/frontend/dockwidgets/XYCurveDock.cpp:477
+#: src/frontend/dockwidgets/XYCurveDock.cpp:478
 #: src/frontend/ui/dockwidgets/axisdock.ui:492
 #: src/frontend/ui/dockwidgets/axisdock.ui:632
 #: src/frontend/ui/dockwidgets/boxplotdock.ui:684
@@ -11117,7 +11117,7 @@ msgstr ""
 msgid "&Open Example"
 msgstr "&उदाहरणं उद्घाटयतु"
 
-#: src/frontend/ActionsManager.cpp:205 src/frontend/MainWin.cpp:1170
+#: src/frontend/ActionsManager.cpp:205 src/frontend/MainWin.cpp:1171
 #, kde-format
 msgid "Workbook"
 msgstr "कार्यपुस्तिका"
@@ -11127,7 +11127,7 @@ msgstr "कार्यपुस्तिका"
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr "संग्रहस्प्रेड्शीट्, मैट्रिक्स, प्लॉट् च कृते नूतनं कार्यपुस्तकं निर्माति"
 
-#: src/frontend/ActionsManager.cpp:210 src/frontend/MainWin.cpp:1178
+#: src/frontend/ActionsManager.cpp:210 src/frontend/MainWin.cpp:1179
 #, kde-format
 msgid "Data Extractor"
 msgstr "डाटा एक्सट्रैक्टर"
@@ -11142,7 +11142,7 @@ msgstr "चित्रात् दत्तांशं प्राप्त�
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:113
 #: src/frontend/dockwidgets/XYAnalysisCurveDock.cpp:74
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:407
-#: src/frontend/MainWin.cpp:1186 src/frontend/SettingsDialog.cpp:66
+#: src/frontend/MainWin.cpp:1187 src/frontend/SettingsDialog.cpp:66
 #: src/frontend/ui/dockwidgets/spreadsheetdock.ui:125
 #: src/frontend/workbook/WorkbookView.cpp:52
 #: src/frontend/workbook/WorkbookView.cpp:165
@@ -11160,7 +11160,7 @@ msgstr "दत्तांशसम्पादनार्थं नूतन�
 msgid "Creates a new matrix for data editing"
 msgstr "दत्तांशसम्पादनार्थं नूतनं मैट्रिक्सं निर्माति"
 
-#: src/frontend/ActionsManager.cpp:227 src/frontend/MainWin.cpp:1232
+#: src/frontend/ActionsManager.cpp:227 src/frontend/MainWin.cpp:1233
 #: src/frontend/SettingsDialog.cpp:61
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:83
 #, kde-format
@@ -11178,7 +11178,7 @@ msgstr "दत्तांशप्लॉटिङ्ग् कृते नू�
 msgid "Creates a new %1 script"
 msgstr "नूतनं %1 नोटबुकं निर्माति"
 
-#: src/frontend/ActionsManager.cpp:244 src/frontend/MainWin.cpp:1240
+#: src/frontend/ActionsManager.cpp:244 src/frontend/MainWin.cpp:1241
 #, kde-format
 msgid "Note"
 msgstr "टीका"
@@ -11188,7 +11188,7 @@ msgstr "टीका"
 msgid "Creates a new note for arbitrary text"
 msgstr "मनमाना पाठस्य कृते नूतनं टिप्पणं निर्माति"
 
-#: src/frontend/ActionsManager.cpp:249 src/frontend/MainWin.cpp:1162
+#: src/frontend/ActionsManager.cpp:249 src/frontend/MainWin.cpp:1163
 #, kde-format
 msgid "Folder"
 msgstr "समुच्चय"
@@ -11496,7 +11496,7 @@ msgid "Select Y-Region and Zoom In"
 msgstr "Y-Region इति चित्वा Zoom In इति चिनोतु"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1571
+#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1573
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1429
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
@@ -12420,7 +12420,7 @@ msgid "New Matrix"
 msgstr "नवीन मैट्रिक्स"
 
 #: src/frontend/datasources/ImportDialog.cpp:224
-#: src/frontend/datasources/ImportFileDialog.cpp:404
+#: src/frontend/datasources/ImportFileDialog.cpp:401
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:155
 #, kde-format
 msgid "Close the dialog and import the data."
@@ -12440,7 +12440,7 @@ msgid "Add New Live Data Source"
 msgstr "New Live Data Source योजयन्तु"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:106
-#: src/frontend/datasources/ImportFileDialog.cpp:385
+#: src/frontend/datasources/ImportFileDialog.cpp:382
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:138
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:359
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:122
@@ -12450,7 +12450,7 @@ msgid "Hide Options"
 msgstr "विकल्पाः गोपयन्तु"
 
 #: src/frontend/datasources/ImportFileDialog.cpp:106
-#: src/frontend/datasources/ImportFileDialog.cpp:385
+#: src/frontend/datasources/ImportFileDialog.cpp:382
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:138
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:359
 #: src/frontend/worksheet/ExportWorksheetDialog.cpp:122
@@ -12486,61 +12486,61 @@ msgstr "परियोजनासञ्चिका %1 नास्ति ।"
 msgid "%1 files imported in %2 seconds."
 msgstr "%1 सञ्चिका %2 सेकेण्ड् मध्ये आयातिता ।"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:406
+#: src/frontend/datasources/ImportFileDialog.cpp:403
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:149
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
 msgstr "दत्तांशे असंख्यात्मकदत्तांशः भवति इति कारणतः मैट्रिक्समध्ये आयातं कर्तुं न शक्यते ।"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:418
+#: src/frontend/datasources/ImportFileDialog.cpp:415
 #: src/frontend/datasources/ImportSQLDatabaseDialog.cpp:133
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr "यत्र दत्तांशः आयातव्यः तत्र दत्तांशपात्रं चिनोतु ।"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:431
+#: src/frontend/datasources/ImportFileDialog.cpp:428
 #, kde-format
 msgid "No file provided for import."
 msgstr "आयातार्थं कोऽपि सञ्चिका न प्रदत्ता ।"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:456
+#: src/frontend/datasources/ImportFileDialog.cpp:453
 #, kde-format
 msgid "The provided file doesn't exist."
 msgstr "प्रदत्तसञ्चिका नास्ति ।"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:476
+#: src/frontend/datasources/ImportFileDialog.cpp:473
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr "प्रदत्तस्थानीयसॉकेट्-सङ्गतिं कर्तुं न शक्तवान् । त्रुटिः %1."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:480
+#: src/frontend/datasources/ImportFileDialog.cpp:477
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
 msgstr "प्रदत्तस्थानीयसॉकेट्-सङ्गतिं कर्तुं न शक्तवान् । सॉकेट् न विद्यते।"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:495
+#: src/frontend/datasources/ImportFileDialog.cpp:492
 #, kde-format
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr "प्रदत्तस्य TCP सॉकेट् इत्यनेन सह सम्बद्धं कर्तुं न शक्तवान् । त्रुटिः %1."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:499
-#: src/frontend/datasources/ImportFileDialog.cpp:519
+#: src/frontend/datasources/ImportFileDialog.cpp:496
+#: src/frontend/datasources/ImportFileDialog.cpp:516
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr "होस्ट्-नाम वा पोर्ट्-सङ्ख्या वा लुप्तम् अस्ति ।"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:515
+#: src/frontend/datasources/ImportFileDialog.cpp:512
 #, kde-format
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "प्रदत्त UDP सॉकेट् इत्यनेन सह सम्बद्धं कर्तुं न शक्तवान् । त्रुटिः %1."
 
-#: src/frontend/datasources/ImportFileDialog.cpp:547
+#: src/frontend/datasources/ImportFileDialog.cpp:544
 #, kde-format
 msgid "Serial port number is missing."
 msgstr "क्रमिकपोर्टसङ्ख्या अनुपलब्धा अस्ति ।"
 
-#: src/frontend/datasources/ImportFileDialog.cpp:559
+#: src/frontend/datasources/ImportFileDialog.cpp:556
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
@@ -13279,7 +13279,7 @@ msgid "Open LabPlot Project"
 msgstr "LabPlot परियोजना उद्घाटयन्तु"
 
 #: src/frontend/datasources/ImportProjectDialog.cpp:438
-#: src/frontend/MainWin.cpp:705
+#: src/frontend/MainWin.cpp:706
 #, kde-format
 msgid "LabPlot Projects (%1)"
 msgstr "LabPlot परियोजना (%1) 1.1."
@@ -13476,7 +13476,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
-#: src/frontend/MainWin.cpp:1996
+#: src/frontend/MainWin.cpp:1998
 #, kde-format
 msgid "Warning"
 msgstr "चेतवानी"
@@ -13672,7 +13672,7 @@ msgstr "अर्धपूरितः, बृहत्"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:129
 #: src/frontend/dockwidgets/ImageDock.cpp:181
 #: src/frontend/dockwidgets/ImageDock.cpp:191
-#: src/frontend/dockwidgets/XYCurveDock.cpp:510
+#: src/frontend/dockwidgets/XYCurveDock.cpp:511
 #: src/frontend/widgets/BackgroundWidget.cpp:118
 #: src/frontend/widgets/LabelWidget.cpp:485
 #: src/frontend/widgets/LabelWidget.cpp:497
@@ -13690,7 +13690,7 @@ msgstr "वामः"
 #: src/frontend/dockwidgets/CustomPointDock.cpp:131
 #: src/frontend/dockwidgets/ImageDock.cpp:183
 #: src/frontend/dockwidgets/ImageDock.cpp:193
-#: src/frontend/dockwidgets/XYCurveDock.cpp:511
+#: src/frontend/dockwidgets/XYCurveDock.cpp:512
 #: src/frontend/widgets/BackgroundWidget.cpp:119
 #: src/frontend/widgets/LabelWidget.cpp:487
 #: src/frontend/widgets/LabelWidget.cpp:499
@@ -13700,7 +13700,7 @@ msgid "Right"
 msgstr "दक्षिणः"
 
 #: src/frontend/dockwidgets/AxisDock.cpp:271
-#: src/frontend/dockwidgets/XYCurveDock.cpp:517
+#: src/frontend/dockwidgets/XYCurveDock.cpp:518
 #, kde-format
 msgid "Both"
 msgstr "उभौ"
@@ -13852,14 +13852,14 @@ msgstr "%1 अक्षाः: टेम्पलेट् \"%2\" लोड् �
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:230
 #: src/frontend/dockwidgets/WorksheetDock.cpp:608
-#: src/frontend/dockwidgets/XYCurveDock.cpp:1035
+#: src/frontend/dockwidgets/XYCurveDock.cpp:1036
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr "%1: टेम्पलेट् \"%2\" लोड् कृतम्"
 
 #: src/frontend/dockwidgets/BarPlotDock.cpp:65
 #: src/frontend/dockwidgets/HistogramDock.cpp:76
-#: src/frontend/dockwidgets/XYCurveDock.cpp:75
+#: src/frontend/dockwidgets/XYCurveDock.cpp:76
 #, kde-format
 msgid "Uncertainty Bars"
 msgstr "अनिश्चितता बार"
@@ -14287,7 +14287,7 @@ msgstr "%1 cartesian plot legends: टेम्पलेट \"%2\" लोड् 
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:316
 #: src/frontend/dockwidgets/MatrixDock.cpp:81
-#: src/frontend/dockwidgets/XYCurveDock.cpp:492
+#: src/frontend/dockwidgets/XYCurveDock.cpp:493
 #: src/frontend/widgets/ValueWidget.cpp:41
 #, kde-format
 msgid "Decimal"
@@ -14295,7 +14295,7 @@ msgstr "दशमलवः"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:317
 #: src/frontend/dockwidgets/MatrixDock.cpp:82
-#: src/frontend/dockwidgets/XYCurveDock.cpp:493
+#: src/frontend/dockwidgets/XYCurveDock.cpp:494
 #: src/frontend/widgets/ValueWidget.cpp:42
 #, kde-format
 msgid "Scientific (e)"
@@ -14303,21 +14303,21 @@ msgstr "वैज्ञानिक (ङ)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:318
 #: src/frontend/dockwidgets/MatrixDock.cpp:83
-#: src/frontend/dockwidgets/XYCurveDock.cpp:494
+#: src/frontend/dockwidgets/XYCurveDock.cpp:495
 #: src/frontend/widgets/ValueWidget.cpp:43
 #, kde-format
 msgid "Scientific (E)"
 msgstr "वैज्ञानिक (ई)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:319
-#: src/frontend/dockwidgets/XYCurveDock.cpp:495
+#: src/frontend/dockwidgets/XYCurveDock.cpp:496
 #: src/frontend/widgets/ValueWidget.cpp:44
 #, kde-format
 msgid "Automatic (e)"
 msgstr "स्वतः (ङ)"
 
 #: src/frontend/dockwidgets/ColumnDock.cpp:320
-#: src/frontend/dockwidgets/XYCurveDock.cpp:496
+#: src/frontend/dockwidgets/XYCurveDock.cpp:497
 #: src/frontend/widgets/ValueWidget.cpp:45
 #, kde-format
 msgid "Automatic (E)"
@@ -14534,7 +14534,7 @@ msgstr ""
 #: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:799
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
-#: src/frontend/dockwidgets/XYCurveDock.cpp:1033
+#: src/frontend/dockwidgets/XYCurveDock.cpp:1034
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr "%1 xy-curves: टेम्पलेट् \"%2\" लोड् कृतम्"
@@ -14955,74 +14955,74 @@ msgstr "विक्षेपस्य स्थितिः %1"
 msgid "Correlation status: %1"
 msgstr "सहसंबन्धस्य स्थितिः %1"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:478
+#: src/frontend/dockwidgets/XYCurveDock.cpp:479
 #, kde-format
 msgid "Horiz. Start"
 msgstr "पीतवर्णे प्रारंभः"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:479
+#: src/frontend/dockwidgets/XYCurveDock.cpp:480
 #, kde-format
 msgid "Vert. Start"
 msgstr "एड. गच्छ"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:480
+#: src/frontend/dockwidgets/XYCurveDock.cpp:481
 #, kde-format
 msgid "Horiz. Midpoint"
 msgstr "पीतवर्णे मध्यबिन्दु"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:481
+#: src/frontend/dockwidgets/XYCurveDock.cpp:482
 #, kde-format
 msgid "Vert. Midpoint"
 msgstr "Vert. मध्यबिन्दु"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:482
+#: src/frontend/dockwidgets/XYCurveDock.cpp:483
 #, kde-format
 msgid "2-segments"
 msgstr "२-खण्डाः"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:483
+#: src/frontend/dockwidgets/XYCurveDock.cpp:484
 #, kde-format
 msgid "3-segments"
 msgstr "३-खण्डाः"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:486
+#: src/frontend/dockwidgets/XYCurveDock.cpp:487
 #, kde-format
 msgid "Akima-spline (Natural)"
 msgstr "अकिमा-स्प्लाइन (प्राकृतिक)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:487
+#: src/frontend/dockwidgets/XYCurveDock.cpp:488
 #, kde-format
 msgid "Akima-spline (Periodic)"
 msgstr "अकिमा-स्प्लाइन (आवधिक)"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:500
+#: src/frontend/dockwidgets/XYCurveDock.cpp:501
 #: src/frontend/widgets/ValueWidget.cpp:31
 #, kde-format
 msgid "No Values"
 msgstr "न मूल्यानि"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:505
+#: src/frontend/dockwidgets/XYCurveDock.cpp:506
 #: src/frontend/widgets/ValueWidget.cpp:33
 #, kde-format
 msgid "Custom Column"
 msgstr "कस्टम स्तम्भ"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:508
+#: src/frontend/dockwidgets/XYCurveDock.cpp:509
 #: src/frontend/widgets/BackgroundWidget.cpp:115
 #: src/frontend/widgets/ValueWidget.cpp:35
 #, kde-format
 msgid "Above"
 msgstr "उपरि"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:509
+#: src/frontend/dockwidgets/XYCurveDock.cpp:510
 #: src/frontend/widgets/BackgroundWidget.cpp:116
 #: src/frontend/widgets/ValueWidget.cpp:36
 #, kde-format
 msgid "Below"
 msgstr "अधः"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:520
 #: src/frontend/dockwidgets/XYCurveDock.cpp:521
+#: src/frontend/dockwidgets/XYCurveDock.cpp:522
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
@@ -15031,8 +15031,8 @@ msgstr ""
 "यदि परीक्षितं तर्हि प्रतिवेशिनः बिन्दून् रेखाभिः सह संयोजयन्तु यद्यपि तयोः मध्ये अन्तरालाः "
 "(अवैधानि अथवा मुखौटितानि मूल्यानि) सन्ति"
 
-#: src/frontend/dockwidgets/XYCurveDock.cpp:522
 #: src/frontend/dockwidgets/XYCurveDock.cpp:523
+#: src/frontend/dockwidgets/XYCurveDock.cpp:524
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
@@ -15385,7 +15385,7 @@ msgid ""
 "installation."
 msgstr "उदाहरणसङ्ग्रहसञ्चिकां %1 उद्घाटयितुं न शक्तवान् । कृपया स्वस्य संस्थापनं पश्यन्तु।"
 
-#: src/frontend/GuiObserver.cpp:184 src/frontend/MainWin.cpp:612
+#: src/frontend/GuiObserver.cpp:184 src/frontend/MainWin.cpp:613
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -16282,127 +16282,127 @@ msgid "&Windows"
 msgstr "&विण्डोज"
 
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode)
-#: src/frontend/MainWin.cpp:180 src/frontend/ui/settingsworksheetpage.ui:106
+#: src/frontend/MainWin.cpp:181 src/frontend/ui/settingsworksheetpage.ui:106
 #: src/frontend/worksheet/WorksheetView.cpp:290
 #, kde-format
 msgid "Presenter Mode"
 msgstr "वर्तमान फैशन"
 
-#: src/frontend/MainWin.cpp:180
+#: src/frontend/MainWin.cpp:181
 #, kde-format
 msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
 "started."
 msgstr "परियोजनायां कार्यपत्रकाणि न उपलभ्यन्ते । प्रस्तोताविधिः न आरभ्यते ।"
 
-#: src/frontend/MainWin.cpp:194
+#: src/frontend/MainWin.cpp:195
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
 msgstr "LabPlot %1 इत्यत्र स्वागतम्"
 
-#: src/frontend/MainWin.cpp:474
+#: src/frontend/MainWin.cpp:475
 #, kde-format
 msgid "The current project \"%1\" has been modified. Do you want to save it?"
 msgstr "वर्तमानपरियोजना \"%1\" परिवर्तिता अस्ति । किं त्वं तत् रक्षितुम् इच्छसि ?"
 
-#: src/frontend/MainWin.cpp:475
+#: src/frontend/MainWin.cpp:476
 #, kde-format
 msgid "Save Project"
 msgstr "परियोजना रक्षतु"
 
-#: src/frontend/MainWin.cpp:573
+#: src/frontend/MainWin.cpp:574
 #, kde-format
 msgid "%1: created"
 msgstr "%1: निर्मितम्"
 
-#: src/frontend/MainWin.cpp:599
+#: src/frontend/MainWin.cpp:600
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "परियोजना अन्वेषक"
 
-#: src/frontend/MainWin.cpp:624
+#: src/frontend/MainWin.cpp:625
 #, kde-format
 msgctxt "@title:window"
 msgid "Worksheet Preview"
 msgstr "कार्यपत्रक पूर्वावलोकनम्"
 
-#: src/frontend/MainWin.cpp:633
+#: src/frontend/MainWin.cpp:634
 #, kde-format
 msgctxt "@title:window"
 msgid "Content"
 msgstr "विषयः"
 
-#: src/frontend/MainWin.cpp:710
+#: src/frontend/MainWin.cpp:711
 #, kde-format
 msgid "Origin Projects (%1)"
 msgstr "उत्पत्ति परियोजना (%1) 1.1."
 
-#: src/frontend/MainWin.cpp:716
+#: src/frontend/MainWin.cpp:717
 #, kde-format
 msgid "Cantor Projects (*.cws)"
 msgstr "कैन्टर परियोजना (*.cws) 1.1."
 
-#: src/frontend/MainWin.cpp:717
+#: src/frontend/MainWin.cpp:718
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr "बृहस्पति नोटबुक (*.ipynb)"
 
-#: src/frontend/MainWin.cpp:724
+#: src/frontend/MainWin.cpp:725
 #, kde-format
 msgid "All supported files (%1)"
 msgstr "सर्वाणि समर्थितसञ्चिकाः (%1)"
 
-#: src/frontend/MainWin.cpp:728
+#: src/frontend/MainWin.cpp:729
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Open Project इति परियोजना"
 
-#: src/frontend/MainWin.cpp:745
+#: src/frontend/MainWin.cpp:746
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr "%1 परियोजनासञ्चिका पूर्वमेव उद्घाटिता अस्ति ।"
 
-#: src/frontend/MainWin.cpp:745 src/frontend/MainWin.cpp:753
-#: src/frontend/MainWin.cpp:758
+#: src/frontend/MainWin.cpp:746 src/frontend/MainWin.cpp:754
+#: src/frontend/MainWin.cpp:759
 #, kde-format
 msgid "Open Project"
 msgstr "Open Project इति परियोजना"
 
-#: src/frontend/MainWin.cpp:753
+#: src/frontend/MainWin.cpp:754
 #, kde-format
 msgid "The project file %1 doesn't exist."
 msgstr "परियोजनासञ्चिका %1 नास्ति ।"
 
-#: src/frontend/MainWin.cpp:758
+#: src/frontend/MainWin.cpp:759
 #, kde-format
 msgid "Couldn't read the project file %1."
 msgstr "%1 परियोजनासञ्चिकां पठितुं न शक्तवान् ।"
 
-#: src/frontend/MainWin.cpp:766
+#: src/frontend/MainWin.cpp:767
 #, kde-format
 msgid "Loading %1..."
 msgstr "%1 लोड् भवति..."
 
-#: src/frontend/MainWin.cpp:818
+#: src/frontend/MainWin.cpp:819
 #, kde-format
 msgid "%1: opened"
 msgstr "%1: उद्घाटितम्"
 
-#: src/frontend/MainWin.cpp:853
+#: src/frontend/MainWin.cpp:854
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr "परियोजना सफलतया उद्घाटिता (%1 सेकेण्ड् मध्ये) ।"
 
-#: src/frontend/MainWin.cpp:946
+#: src/frontend/MainWin.cpp:947
 #, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "परियोजना यथा रक्षन्तु"
 
-#: src/frontend/MainWin.cpp:948
+#: src/frontend/MainWin.cpp:949
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
@@ -16411,82 +16411,82 @@ msgstr ""
 "लैबप्लॉट परियोजनाएँ (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 
-#: src/frontend/MainWin.cpp:975
+#: src/frontend/MainWin.cpp:976
 #, kde-format
 msgid "Couldn't open the temporary file for writing."
 msgstr "लेखनार्थं अस्थायीसञ्चिकां उद्घाटयितुं न शक्तवान्।"
 
-#: src/frontend/MainWin.cpp:1054
+#: src/frontend/MainWin.cpp:1055
 #, kde-format
 msgid "Project saved"
 msgstr "परियोजना रक्षिता"
 
-#: src/frontend/MainWin.cpp:1069
+#: src/frontend/MainWin.cpp:1070
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr "'%1' इति सञ्चिकां रक्षितुं न शक्यते ।"
 
-#: src/frontend/MainWin.cpp:1073
+#: src/frontend/MainWin.cpp:1074
 #, kde-format
 msgid "Couldn't open the file '%1' for writing."
 msgstr "लेखनार्थं '%1' इति सञ्चिकां उद्घाटयितुं न शक्तम् ।"
 
-#: src/frontend/MainWin.cpp:1122
+#: src/frontend/MainWin.cpp:1123
 #, kde-format
 msgid "Changed"
 msgstr "परिवर्तितः"
 
-#: src/frontend/MainWin.cpp:1137 src/frontend/MainWin.cpp:1149
+#: src/frontend/MainWin.cpp:1138 src/frontend/MainWin.cpp:1150
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr "%1 इत्यस्य मुद्रणस्य सज्जीकरणं"
 
-#: src/frontend/MainWin.cpp:1139 src/frontend/MainWin.cpp:1151
+#: src/frontend/MainWin.cpp:1140 src/frontend/MainWin.cpp:1152
 #, kde-format
 msgid "%1 printed"
 msgstr "%1 मुद्रितम्"
 
-#: src/frontend/MainWin.cpp:1206
+#: src/frontend/MainWin.cpp:1207
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3741
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:3742
 #, kde-format
 msgid "%1"
 msgstr "%1"
 
-#: src/frontend/MainWin.cpp:1892
+#: src/frontend/MainWin.cpp:1894
 #, fuzzy, kde-format
 #| msgid "Running Kaggle CLI tool failed"
 msgid "Kaggle CLI tool not found"
 msgstr "Kaggle CLI साधनस्य चालनं विफलम् अभवत्"
 
-#: src/frontend/MainWin.cpp:1893
+#: src/frontend/MainWin.cpp:1895
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
 "again."
 msgstr ""
 
-#: src/frontend/MainWin.cpp:1959
+#: src/frontend/MainWin.cpp:1961
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 निर्यातितम्"
 
-#: src/frontend/MainWin.cpp:1966
+#: src/frontend/MainWin.cpp:1968
 #, kde-format
 msgid "FITS files saved"
 msgstr "FITS सञ्चिकाः रक्षिताः"
 
-#: src/frontend/MainWin.cpp:1978
+#: src/frontend/MainWin.cpp:1980
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "MQTT Client%1"
 
-#: src/frontend/MainWin.cpp:1996
+#: src/frontend/MainWin.cpp:1998
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "अस्मिन् होस्ट् इत्यनेन सह पूर्वमेव MQTTClient अस्ति!"
 
-#: src/frontend/MainWin.cpp:2000
+#: src/frontend/MainWin.cpp:2002
 #, kde-format
 msgid "Live data source%1"
 msgstr "लाइव दत्तांशस्रोतः%1"
@@ -18184,46 +18184,46 @@ msgid "Distribution Fit to '%1'"
 msgstr "वितरणं '%1' कृते उपयुक्तम्।"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:947
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:945
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:348
 #: src/frontend/ui/plotsurfacestylewidget.ui:23
 #, kde-format
 msgid "Density"
 msgstr "घनत्व"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:957
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:955
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:378
 #, kde-format
 msgid "Theoretical Quantiles"
 msgstr "सैद्धांतिक क्वांटाइल"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:965
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:963
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:380
 #, kde-format
 msgid "Sample Quantiles"
 msgstr "नमूना मात्रा"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1051
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1049
 #, kde-format
 msgid "Sample"
 msgstr "प्रतिदर्श"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1110
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1108
 #, kde-format
 msgid "No data selected to plot."
 msgstr "प्लॉट् कर्तुं कोऽपि दत्तांशः चयनितः नास्ति।"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1115
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1113
 #, kde-format
 msgid "An already existing plot area has to be selected."
 msgstr "पूर्वमेव विद्यमानं भूखण्डक्षेत्रं चयनं कर्तव्यम् अस्ति ।"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1120
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1118
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "पूर्वमेव विद्यमानं कार्यपत्रकं चयनं कर्तव्यम् अस्ति ।"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1126
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1124
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "संवादं पिधाय दत्तांशं प्लॉट् कुर्वन्तु ।"
@@ -25514,7 +25514,7 @@ msgstr "अमान्य मूल्यं प्रविष्टम्। 
 msgid "Search/Filter text"
 msgstr "पाठं अन्वेष्टुम्/छनयतु"
 
-#: src/frontend/widgets/TreeViewComboBox.cpp:366
+#: src/frontend/widgets/TreeViewComboBox.cpp:362
 #, kde-format
 msgid ""
 "The aspect \"%1\"\n"
