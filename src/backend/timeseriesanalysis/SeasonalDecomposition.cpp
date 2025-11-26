@@ -760,6 +760,7 @@ void SeasonalDecompositionPrivate::adjustSeasonalComponents(const std::vector<si
 	// the column with the residuals is always the last one, repoint it after spreadsheet size changes
 	columnResidual = resultSpreadsheet->column(resultSpreadsheet->columnCount() - 1);
 	columnResidual->setName(i18n("Residual"));
+	columnResidual->setFixed(true);
 	curveResidual->setYColumn(columnResidual);
 }
 

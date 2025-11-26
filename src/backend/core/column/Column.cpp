@@ -232,13 +232,15 @@ QMenu* Column::createContextMenu() {
 	if (hasValues())
 		menu->insertAction(firstAction, m_copyDataAction);
 
-	// pasting of data is only possible for spreadsheet columns
-	if (parentAspect()->type() == AspectType::Spreadsheet) {
-		const auto* mimeData = QApplication::clipboard()->mimeData();
-		if (mimeData->hasFormat(QStringLiteral("text/plain"))) {
-			const QString& text = QApplication::clipboard()->text();
-			if (!text.startsWith(QLatin1String("<?xml version=\"1.0\"?><!DOCTYPE LabPlotCopyPasteXML>")))
-				menu->insertAction(firstAction, m_pasteDataAction);
+	// pasting of data is only possible for spreadsheet columns that are not read-only
+	if (auto* spreadsheet = parentAspect()->castTo<Spreadsheet>()) {
+		if (!spreadsheet->readOnly()) {
+			const auto* mimeData = QApplication::clipboard()->mimeData();
+			if (mimeData->hasFormat(QStringLiteral("text/plain"))) {
+				const QString& text = QApplication::clipboard()->text();
+				if (!text.startsWith(QLatin1String("<?xml version=\"1.0\"?><!DOCTYPE LabPlotCopyPasteXML>")))
+					menu->insertAction(firstAction, m_pasteDataAction);
+			}
 		}
 	}
 
