@@ -140,6 +140,7 @@ void SeasonalDecomposition::init() {
 	d->plotAreaOriginal->setFixed(true);
 	d->plotAreaOriginal->setType(CartesianPlot::Type::FourAxes);
 	d->plotAreaOriginal->horizontalAxis()->title()->setText(QString());
+	d->plotAreaOriginal->title()->setText(i18n("Original Data"));
 	d->worksheet->addChildFast(d->plotAreaOriginal);
 
 	d->plotAreaTrend = new CartesianPlot(i18n("Trend"));
@@ -476,7 +477,6 @@ void SeasonalDecompositionPrivate::recalc() {
 
 	// in case the y-column was changed, adjust the title of the plots and of the y-axes
 	const auto& name = yColumn->name();
-	plotAreaOriginal->title()->setText(name);
 	plotAreaOriginal->verticalAxis()->title()->setText(name);
 	plotAreaTrend->verticalAxis()->title()->setText(name);
 	for (auto* plotArea : plotAreasSeasonal)
@@ -547,8 +547,8 @@ void SeasonalDecompositionPrivate::recalcDecomposition() {
 		// degrees
 		stlParameters = stlParameters.seasonal_degree(stlSeasonalDegree).trend_degree(stlTrendDegree).low_pass_degree(stlLowPassDegree);
 
-		// jumps
-		// the seasonal/trend/low-pass jump values define the stride when recomputing local LOESS fits. jump = 1 recomputes at every point (slowest, highest accuracy). 
+		// jumps:
+		// jump values define the stride when recomputing local LOESS fits. jump = 1 recomputes at every point (slowest, highest accuracy).
 		// larger jump (e.g. 5, 10) subsamples and interpolates between fits (faster, slight loss of accuracy). Enforce minimum value of 1.
 		if (!stlSeasonalJumpAuto) {
 			if (stlSeasonalJump < 1)
