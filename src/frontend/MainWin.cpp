@@ -1338,19 +1338,16 @@ void MainWin::handleAspectRemoved(const AbstractAspect* parent, const AbstractAs
 
 void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
-	if (!part)
+	if (!part || !part->dockWidget())
 		return;
 
-	const auto* workbook = dynamic_cast<const Workbook*>(aspect->parentAspect());
-	auto* datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect());
-	if (!datapicker)
-		datapicker = dynamic_cast<const Datapicker*>(aspect->parentAspect()->parentAspect());
+	// don't do anything for children of Workbook and Datapicker, the dock widget is assigned to the parent
+	// TODO: everything seems to work correctly also without this check and return. do we really need it?
+	if (aspect->ancestor<Workbook>() || aspect->ancestor<Datapicker>())
+		return;
 
-	if (!workbook && !datapicker && part->dockWidgetExists()) {
-		ContentDockWidget* win = part->dockWidget();
-		if (win)
-			m_dockManagerContent->removeDockWidget(win);
-	}
+	if (auto* win = part->dockWidget())
+		m_dockManagerContent->removeDockWidget(win);
 }
 
 /*!
