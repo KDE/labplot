@@ -21,7 +21,9 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#ifdef HAVE_CANTOR_LIBS
 #include "backend/notebook/Notebook.h"
+#endif
 
 #include <KStandardAction>
 #include <QClipboard>
@@ -1111,7 +1113,7 @@ void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 	auto* parent = this->parentAspect();
 	if (parent && !parent->inherits<Folder>() && !parent->inherits<XYFitCurve>() && !parent->inherits<XYSmoothCurve>()
 #ifdef HAVE_CANTOR_LIBS
-		&& !parent->inherits<Notebook>()
+		&& !parent->inherits(AbstractAspect::typeName(AspectType::Notebook).data())
 #endif
 	)
 		Q_EMIT this->selected(aspect);
@@ -1128,7 +1130,7 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 	auto* parent = this->parentAspect();
 	if (parent && !parent->inherits<Folder>() && !parent->inherits<XYFitCurve>() && !parent->inherits<XYSmoothCurve>()
 #ifdef HAVE_CANTOR_LIBS
-		&& !parent->inherits<Notebook>()
+		&& !parent->inherits(AbstractAspect::typeName(AspectType::Notebook).data())
 #endif
 	)
 		Q_EMIT this->deselected(aspect);
