@@ -92,6 +92,7 @@ private Q_SLOTS:
 	void testRemoveRows();
 	void testInsertColumns();
 	void testRemoveColumns();
+	void testRemoveColumns2();
 
 	void testInsertRowsBegin(); // insert row at the beginning
 	void testRemoveRowsBegin(); // remove first row

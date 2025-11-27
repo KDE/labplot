@@ -2570,6 +2570,48 @@ void SpreadsheetTest::testRemoveColumns() {
 }
 
 /*!
+ * Test Spreadsheet::removeColumns() function explicitly
+ */
+void SpreadsheetTest::testRemoveColumns2() {
+	Project project;
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
+	project.addChild(sheet);
+
+	auto* model = new SpreadsheetModel(sheet);
+
+	int columnsAboutToBeInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsAboutToBeInserted, [&columnsAboutToBeInsertedCounter]() {
+		columnsAboutToBeInsertedCounter++;
+	});
+	int columnsInsertedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsInserted, [&columnsInsertedCounter]() {
+		columnsInsertedCounter++;
+	});
+	int columnsAboutToBeRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsAboutToBeRemoved, [&columnsAboutToBeRemovedCounter]() {
+		columnsAboutToBeRemovedCounter++;
+	});
+	int columnsRemovedCounter = 0;
+	connect(model, &SpreadsheetModel::columnsRemoved, [&columnsRemovedCounter]() {
+		columnsRemovedCounter++;
+	});
+
+	QCOMPARE(sheet->columnCount(), 2);
+	QCOMPARE(model->columnCount(), 2);
+	sheet->setColumnCount(5);
+	QCOMPARE(sheet->columnCount(), 5);
+	QCOMPARE(model->columnCount(), 5);
+
+	sheet->removeColumns(0, 2); // remove columns
+
+	QCOMPARE(sheet->columnCount(), 3);
+	QCOMPARE(model->columnCount(), 3);
+
+	QCOMPARE(columnsRemovedCounter, 1);
+	QCOMPARE(columnsAboutToBeRemovedCounter, 1);
+}
+
+/*!
  * \brief testInsertRowsSuppressUpdate
  * It shall not crash
  * Testing if in the model begin and end are used properly
