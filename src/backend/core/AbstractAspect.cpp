@@ -159,6 +159,11 @@
  */
 
 /**
+ * \fn void AbstractAspect::statusInfo(const QString &text)
+ * \brief Emitted whenever some aspect in the tree wants to notify the user about an error
+ */
+
+/**
  * \fn protected void AbstractAspect::info(const QString &text)
  * \brief Implementations should call this whenever status information should be given to the user.
  *

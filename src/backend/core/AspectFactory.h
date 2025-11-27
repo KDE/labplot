@@ -22,7 +22,6 @@
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
 #include "backend/worksheet/plots/cartesian/plots.h"
-
 #ifndef SDK
 #include "backend/core/Workbook.h"
 #include "backend/datapicker/Datapicker.h"
