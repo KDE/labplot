@@ -279,6 +279,7 @@ KParts::ReadWritePart* Notebook::part() {
 QIcon Notebook::icon() const {
 	if (m_session)
 		return QIcon::fromTheme(m_session->backend()->icon());
+	return {};
 }
 
 QWidget* Notebook::view() const {
