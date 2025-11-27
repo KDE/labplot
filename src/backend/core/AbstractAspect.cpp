@@ -1113,7 +1113,7 @@ void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 	auto* parent = this->parentAspect();
 	if (parent && !parent->inherits<Folder>() && !parent->inherits<XYFitCurve>() && !parent->inherits<XYSmoothCurve>()
 #ifdef HAVE_CANTOR_LIBS
-		&& !parent->inherits<Notebook>()
+		&& !parent->inherits(AbstractAspect::typeName(AbstractType::Notebook).data())
 #endif
 	)
 		Q_EMIT this->selected(aspect);
@@ -1130,7 +1130,7 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 	auto* parent = this->parentAspect();
 	if (parent && !parent->inherits<Folder>() && !parent->inherits<XYFitCurve>() && !parent->inherits<XYSmoothCurve>()
 #ifdef HAVE_CANTOR_LIBS
-		&& !parent->inherits<Notebook>()
+		&& !parent->inherits(AbstractAspect::typeName(AbstractType::Notebook).data())
 #endif
 	)
 		Q_EMIT this->deselected(aspect);
