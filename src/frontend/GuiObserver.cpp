@@ -192,7 +192,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 	}
 
 	const AspectType type{selectedAspects.front()->type()};
-	DEBUG(Q_FUNC_INFO << ", type: " << STDSTRING(AbstractAspect::typeName(type)))
+	DEBUG(Q_FUNC_INFO << ", type: " << AbstractAspect::typeName(type))
 
 	// update cursor dock
 	if (m_mainWindow->cursorWidget) {
@@ -200,7 +200,7 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 			auto* worksheet = static_cast<Worksheet*>(selectedAspects.front());
 			m_mainWindow->cursorWidget->setWorksheet(worksheet);
 		} else {
-			auto* parent = selectedAspects.front()->parent(AspectType::Worksheet);
+			auto* parent = selectedAspects.front()->parent<Worksheet>();
 			if (parent) {
 				auto* worksheet = static_cast<Worksheet*>(parent);
 				m_mainWindow->cursorWidget->setWorksheet(worksheet);

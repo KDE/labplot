@@ -1047,7 +1047,7 @@ void SearchReplaceWidget::findAll() {
 		break;
 	case DataType::DateTime:
 		pattern1 = uiSearchReplace.dteValue1->text();
-		pattern1 = uiSearchReplace.dteValue2->text();
+		pattern2 = uiSearchReplace.dteValue2->text();
 		break;
 	}
 
@@ -1199,7 +1199,7 @@ bool SearchReplaceWidget::checkColumnRow(Column* column,
 										 Operator opNumeric,
 										 Operator opDateTime,
 										 const QString& pattern1,
-										 const QString pattern2,
+										 const QString& pattern2,
 										 Qt::CaseSensitivity cs) {
 	bool match = false;
 	switch (type) {

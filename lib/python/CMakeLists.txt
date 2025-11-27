@@ -32,8 +32,8 @@ set(generated_sources
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/plot_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_wrapper.h
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.h
+#    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.cpp
+#    ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelement_positionwrapper_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelementcontainer_wrapper.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/worksheetelementcontainer_wrapper.h
     ${CMAKE_CURRENT_BINARY_DIR}/pylabplot/xyanalysiscurve_wrapper.cpp
@@ -263,7 +263,14 @@ ecm_generate_python_bindings(
 
 if(ENABLE_PYTHON_SDK OR ENABLE_PYTHON_SCRIPTING)
     get_target_property(PySide6_INCLUDE_DIRECTORIES PySide6::pyside6 INTERFACE_INCLUDE_DIRECTORIES)
-    target_include_directories(${bindings_library} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../src/3rdparty/shiboken6/include ${Python3_INCLUDE_DIRS} ${PySide6_INCLUDE_DIRECTORIES} ${PYSIDE_PYTHONPATH}/include/QtWidgets ${PYSIDE_PYTHONPATH}/include/QtGui ${PYSIDE_PYTHONPATH}/include/QtCore)
+    get_target_property(Shiboken6_INCLUDE_DIRECTORIES Shiboken6::libshiboken INTERFACE_INCLUDE_DIRECTORIES)
+    target_include_directories(${bindings_library} PUBLIC ${Python3_INCLUDE_DIRS} ${PySide6_INCLUDE_DIRECTORIES} ${PYSIDE_PYTHONPATH}/include/QtWidgets ${PYSIDE_PYTHONPATH}/include/QtGui ${PYSIDE_PYTHONPATH}/include/QtCore)
+    # TODO: check if necessary
+    # target_include_directories(${bindings_library} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../src/3rdparty/shiboken6-${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}/include)
+    if(Shiboken6_INCLUDE_DIRECTORIES)
+        target_include_directories(${bindings_library} PUBLIC ${Shiboken6_INCLUDE_DIRECTORIES})
+    endif()
+
     target_link_libraries(${bindings_library} PRIVATE Shiboken6::libshiboken PySide6::pyside6)
     if(PySide6_ABI3_LIBRARY)
         target_link_libraries(${bindings_library} PRIVATE ${PySide6_ABI3_LIBRARY})

@@ -1191,7 +1191,7 @@ void RetransformTest::TestChangePlotRange() {
 	COMPARE_DOUBLE_VECTORS(yAxis->tickLabelValues(), ref);
 
 	int linesUpdatedCounter = 0;
-	connect(curve, &XYCurve::linesUpdated, [&linesUpdatedCounter](const XYCurve*, const QVector<QLineF> lines) {
+	connect(curve, &XYCurve::linesUpdated, [&linesUpdatedCounter](const XYCurve*, const QVector<QLineF>& lines) {
 		// One point before and one point after is used therefore it is not 10, 20
 		// se XYCurvePrivate::updateLines() startIndex--; and endIndex++;
 		QCOMPARE(lines.at(0).p1().x(), 9);

@@ -388,7 +388,7 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 }
 
 void PlotDataDialog::plot() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_parentAspect->project()->setSuppressAspectAddedSignal(true);
 	m_lastAddedCurve = nullptr;
 
@@ -477,7 +477,6 @@ void PlotDataDialog::plot() {
 
 		Q_EMIT m_parentAspect->project()->requestNavigateTo(path);
 	}
-	RESET_CURSOR;
 }
 
 Column* PlotDataDialog::columnFromName(const QString& name) const {
@@ -857,9 +856,7 @@ void PlotDataDialog::adjustWorksheetSize(Worksheet* worksheet) const {
 void PlotDataDialog::setAxesColumnLabels(CartesianPlot* plot, const Column* column) {
 	// Use value labels if possible
 	if (column && column->valueLabelsInitialized()) {
-		auto axes = plot->children(AspectType::Axis);
-		for (auto a : axes) {
-			auto axis = static_cast<Axis*>(a);
+		for (auto axis : plot->children<Axis>()) {
 			if (axis->orientation() == Axis::Orientation::Vertical) {
 				// Use first vertical axis
 				axis->setMajorTicksType(Axis::TicksType::ColumnLabels);

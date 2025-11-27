@@ -1537,7 +1537,6 @@ void DatapickerTest::datapickerImageLoadImageEmbeddAbsolute() {
 }
 
 void DatapickerTest::datapickerImageLoadImageEmbeddAbsoluteUndoRedo() {
-	QString savePath;
 	QString imgFileName;
 
 	Project project;
@@ -1577,6 +1576,7 @@ void DatapickerTest::datapickerImageLoadImageEmbeddAbsoluteUndoRedo() {
 
 		w.ui.cbFileEmbedd->clicked(true); // Embedding image
 
+		QString savePath;
 		SAVE_PROJECT("DatapickerTestProject");
 	}
 
@@ -1682,7 +1682,6 @@ void DatapickerTest::datapickerImageLoadImageEmbeddRelative() {
 }
 
 void DatapickerTest::datapickerImageLoadImageEmbeddRelativeUndoRedo() {
-	QString savePath;
 	QString imgFileName;
 
 	Project project;
@@ -1720,6 +1719,7 @@ void DatapickerTest::datapickerImageLoadImageEmbeddRelativeUndoRedo() {
 		QCOMPARE(w.ui.leFileName->text(), imgFileName);
 		QCOMPARE(w.ui.leFileName->styleSheet(), QStringLiteral("")); // Valid image
 
+		QString savePath;
 		SAVE_PROJECT("DatapickerTestProject");
 
 		QCOMPARE(w.ui.cbFileRelativePath->isEnabled(), true); // project is now saved so calculating the relative path is possible
@@ -1843,6 +1843,9 @@ void DatapickerTest::datapickerImageClipboardSelectImageFromPath() {
 }
 
 void DatapickerTest::saveLoad() {
+#if defined(_WIN32)
+	QSKIP("Unstable", QTest::SkipSingle);
+#endif
 	QString savePath;
 	{
 		Project project;

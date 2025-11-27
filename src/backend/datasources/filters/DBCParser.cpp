@@ -54,7 +54,7 @@ DbcParser::ParseStatus DbcParser::parseMessage(const uint32_t id, const std::vec
  * \param ids Vector with all id's found in a log file
  * \return
  */
-void DbcParser::getSignals(const QVector<uint32_t> ids, PrefixType p, SuffixType s, QHash<uint32_t, int>& idIndex, Signals& out) const {
+void DbcParser::getSignals(const QVector<uint32_t>& ids, PrefixType p, SuffixType s, QHash<uint32_t, int>& idIndex, Signals& out) const {
 	out.signal_names.clear();
 	out.value_descriptions.clear();
 #ifdef HAVE_DBC_PARSER

@@ -146,7 +146,7 @@ void FlattenColumnsDialog::removeReferenceColumn() {
 }
 
 void FlattenColumnsDialog::flattenColumns() const {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	m_spreadsheet->beginMacro(i18n("%1: flatten values", m_spreadsheet->name()));
 
 	// reference columns in the source spreadsheet
@@ -157,7 +157,6 @@ void FlattenColumnsDialog::flattenColumns() const {
 	flatten(m_spreadsheet, m_columns, referenceColumns);
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 /*!

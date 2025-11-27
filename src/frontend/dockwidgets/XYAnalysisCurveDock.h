@@ -19,7 +19,7 @@ protected:
 	void showResult(const XYAnalysisCurve* curve, QTextEdit* teResult);
 	virtual QString customText() const;
 
-	void setAnalysisCurves(QList<XYCurve*>);
+	void setAnalysisCurves(const QList<XYCurve*>&);
 	void setModelCurve(TreeViewComboBox*);
 	void setModel();
 	void setBaseWidgets(TimedLineEdit* nameLabel, ResizableTextEdit* commentLabel, QPushButton* recalculate, QComboBox* cbDataSourceType = nullptr);

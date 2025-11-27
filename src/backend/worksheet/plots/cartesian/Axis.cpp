@@ -1116,7 +1116,7 @@ bool AxisPrivate::swapVisible(bool on) {
 	// When making a graphics item invisible, it gets deselected in the scene.
 	// In this case we don't want to deselect the item in the project explorer.
 	// We need to suppress the deselection in the view.
-	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
+	auto* worksheet = static_cast<Worksheet*>(q->parent<Worksheet>());
 	if (worksheet) {
 		worksheet->suppressSelectionChangedEvent(true);
 		setVisible(on);

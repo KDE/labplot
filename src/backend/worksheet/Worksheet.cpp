@@ -219,9 +219,8 @@ bool Worksheet::exportView() const {
 		const bool background = dlg->exportBackground();
 		const int resolution = dlg->exportResolution();
 
-		WAIT_CURSOR;
+		WAIT_CURSOR_AUTO_RESET;
 		m_view->exportToFile(path, format, area, background, resolution);
-		RESET_CURSOR;
 	}
 	delete dlg;
 	return ret;
@@ -971,7 +970,7 @@ void Worksheet::cartesianPlotMouseHoverZoomSelectionMode(QPointF logicPos) {
 		for (auto* plot : plots)
 			plot->mouseHoverZoomSelectionMode(logicPos, -1);
 	} else {
-		if (m_view->selectedElement()->parent(AspectType::CartesianPlot) == senderPlot)
+		if (m_view->selectedElement()->parent<CartesianPlot>() == senderPlot)
 			senderPlot->mouseHoverZoomSelectionMode(logicPos, CartesianPlot::cSystemIndex(m_view->selectedElement()));
 		else
 			senderPlot->mouseHoverZoomSelectionMode(logicPos, -1);

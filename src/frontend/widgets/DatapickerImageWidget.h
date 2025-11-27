@@ -47,7 +47,7 @@ class DatapickerImageWidget : public BaseDock {
 public:
 	explicit DatapickerImageWidget(QWidget*);
 
-	void setImages(QList<DatapickerImage*>);
+	void setImages(const QList<DatapickerImage*>&);
 	void load();
 	void updateLocale() override;
 	void retranslateUi() override;

@@ -56,7 +56,7 @@ public:
 	 * \param ids Vector with all id's found in a log file
 	 * \return
 	 */
-	void getSignals(const QVector<uint32_t> ids, PrefixType p, SuffixType s, QHash<uint32_t, int>& idIndex, Signals& out) const;
+	void getSignals(const QVector<uint32_t>& ids, PrefixType p, SuffixType s, QHash<uint32_t, int>& idIndex, Signals& out) const;
 
 private:
 	DbcParser::ParseStatus m_parseFileStatus{DbcParser::ParseStatus::ErrorDBCParserUnsupported};

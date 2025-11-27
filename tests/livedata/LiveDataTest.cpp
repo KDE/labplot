@@ -1293,11 +1293,11 @@ void LiveDataTest::testPlotting() {
 	dataSource->setRowCount(11);
 	project.addChild(dataSource);
 
-	auto* c1 = static_cast<Column*>(dataSource->child<Column>(0));
+	auto* c1 = dataSource->child<Column>(0);
 	QVERIFY(c1 != nullptr);
 	QCOMPARE(c1->name(), QLatin1String("1"));
 	QVERIFY(c1->columnMode() == AbstractColumn::ColumnMode::Double);
-	auto* c2 = static_cast<Column*>(dataSource->child<Column>(1));
+	auto* c2 = dataSource->child<Column>(1);
 	QVERIFY(c2 != nullptr);
 	QCOMPARE(c2->name(), QLatin1String("2"));
 	QVERIFY(c2->columnMode() == AbstractColumn::ColumnMode::Double);
@@ -1663,14 +1663,13 @@ void LiveDataTest::testLoadSaveLiveDataLinkedFile_FileNotExists() {
 
 void LiveDataTest::testLoadSaveLiveDataLinkedFile_FileNotExistsRemoveLivedata() {
 	QString savePath;
-	QString importFilename;
 	{
 		// create a temp file and write some data into it
 		QTemporaryFile tempFile;
 		if (!tempFile.open())
 			QFAIL("failed to create the temp file for writing");
 
-		importFilename = tempFile.fileName();
+		QString importFilename = tempFile.fileName();
 		QFile file(importFilename);
 		if (!file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text))
 			QFAIL("failed to open the temp file for writing");

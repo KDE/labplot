@@ -147,7 +147,8 @@ bool Matrix::exportView() const {
 	bool ret;
 	if ((ret = (dlg->exec() == QDialog::Accepted))) {
 		const QString path = dlg->path();
-		WAIT_CURSOR;
+
+		WAIT_CURSOR_AUTO_RESET;
 
 		if (dlg->format() == ExportSpreadsheetDialog::Format::LaTeX) {
 			const bool verticalHeader = dlg->matrixVerticalHeader();
@@ -165,7 +166,6 @@ bool Matrix::exportView() const {
 			const QLocale::Language format = dlg->numberFormat();
 			m_view->exportToFile(path, separator, format);
 		}
-		RESET_CURSOR;
 	}
 	delete dlg;
 
@@ -330,9 +330,8 @@ void Matrix::insertColumns(int before, int count) {
 	Q_D(Matrix);
 	if (count < 1 || before < 0 || before > columnCount())
 		return;
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	exec(new MatrixInsertColumnsCmd(d, before, count));
-	RESET_CURSOR;
 }
 
 void Matrix::appendColumns(int count) {
@@ -343,7 +342,7 @@ void Matrix::removeColumns(int first, int count) {
 	Q_D(Matrix);
 	if (count < 1 || first < 0 || first + count > columnCount())
 		return;
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
 		exec(new MatrixRemoveColumnsCmd<double>(d, first, count));
@@ -363,11 +362,10 @@ void Matrix::removeColumns(int first, int count) {
 		exec(new MatrixRemoveColumnsCmd<QDateTime>(d, first, count));
 		break;
 	}
-	RESET_CURSOR;
 }
 
 void Matrix::clearColumn(int c) {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	Q_D(Matrix);
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
@@ -388,7 +386,6 @@ void Matrix::clearColumn(int c) {
 		exec(new MatrixClearColumnCmd<QDateTime>(d, c));
 		break;
 	}
-	RESET_CURSOR;
 }
 
 // rows
@@ -396,9 +393,8 @@ void Matrix::insertRows(int before, int count) {
 	Q_D(Matrix);
 	if (count < 1 || before < 0 || before > rowCount())
 		return;
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	exec(new MatrixInsertRowsCmd(d, before, count));
-	RESET_CURSOR;
 }
 
 void Matrix::appendRows(int count) {
@@ -408,7 +404,7 @@ void Matrix::appendRows(int count) {
 void Matrix::removeRows(int first, int count) {
 	if (count < 1 || first < 0 || first + count > rowCount())
 		return;
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	Q_D(Matrix);
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
@@ -429,7 +425,6 @@ void Matrix::removeRows(int first, int count) {
 		exec(new MatrixRemoveRowsCmd<QDateTime>(d, first, count));
 		break;
 	}
-	RESET_CURSOR;
 }
 
 void Matrix::clearRow(int r) {
@@ -533,7 +528,7 @@ void Matrix::setDimensions(int rows, int cols) {
 	if ((rows < 0) || (cols < 0) || (rows == rowCount() && cols == columnCount()))
 		return;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	beginMacro(i18n("%1: set matrix size to %2x%3", name(), rows, cols));
 
 	int col_diff = cols - columnCount();
@@ -549,7 +544,6 @@ void Matrix::setDimensions(int rows, int cols) {
 		removeRows(rowCount() + row_diff, -row_diff);
 
 	endMacro();
-	RESET_CURSOR;
 }
 
 void Matrix::addRows() {
@@ -557,12 +551,11 @@ void Matrix::addRows() {
 	Q_D(Matrix);
 	if (!m_view)
 		return;
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	int count = m_view->selectedRowCount(false);
 	beginMacro(i18np("%1: add %2 row", "%1: add %2 rows", name(), count));
 	exec(new MatrixInsertRowsCmd(d, rowCount(), count));
 	endMacro();
-	RESET_CURSOR;
 #endif
 }
 
@@ -571,12 +564,11 @@ void Matrix::addColumns() {
 	Q_D(Matrix);
 	if (!m_view)
 		return;
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	int count = m_view->selectedRowCount(false);
 	beginMacro(i18np("%1: add %2 column", "%1: add %2 columns", name(), count));
 	exec(new MatrixInsertColumnsCmd(d, columnCount(), count));
 	endMacro();
-	RESET_CURSOR;
 #endif
 }
 
@@ -628,10 +620,9 @@ QVector<T> Matrix::columnCells(int col, int first_row, int last_row) {
 //! Set the values in the given cells from a type T vector
 template<typename T>
 void Matrix::setColumnCells(int col, int first_row, int last_row, const QVector<T>& values) {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	Q_D(Matrix);
 	exec(new MatrixSetColumnCellsCmd<T>(d, col, first_row, last_row, values));
-	RESET_CURSOR;
 }
 
 //! Return the values in the given cells as vector (needs explicit instantiation)
@@ -648,10 +639,9 @@ template QVector<QDateTime> Matrix::rowCells<QDateTime>(int row, int first_colum
 //! Set the values in the given cells from a type T vector
 template<typename T>
 void Matrix::setRowCells(int row, int first_column, int last_column, const QVector<T>& values) {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	Q_D(Matrix);
 	exec(new MatrixSetRowCellsCmd<T>(d, row, first_column, last_column, values));
-	RESET_CURSOR;
 }
 
 void Matrix::setData(void* data) {
@@ -697,7 +687,7 @@ QVector<AspectType> Matrix::dropableOn() const {
 // ##############################################################################
 //! Clear the whole matrix (i.e. reset all cells)
 void Matrix::clear() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	if (columnCount() == 0)
 		return; // Nothing to do
 	Q_D(Matrix);
@@ -722,11 +712,10 @@ void Matrix::clear() {
 		break;
 	}
 	endMacro();
-	RESET_CURSOR;
 }
 
 void Matrix::transpose() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	Q_D(Matrix);
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
@@ -747,11 +736,10 @@ void Matrix::transpose() {
 		exec(new MatrixTransposeCmd<QDateTime>(d));
 		break;
 	}
-	RESET_CURSOR;
 }
 
 void Matrix::mirrorHorizontally() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	Q_D(Matrix);
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
@@ -772,11 +760,10 @@ void Matrix::mirrorHorizontally() {
 		exec(new MatrixMirrorHorizontallyCmd<QDateTime>(d));
 		break;
 	}
-	RESET_CURSOR;
 }
 
 void Matrix::mirrorVertically() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	Q_D(Matrix);
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Double:
@@ -797,7 +784,6 @@ void Matrix::mirrorVertically() {
 		exec(new MatrixMirrorVerticallyCmd<QDateTime>(d));
 		break;
 	}
-	RESET_CURSOR;
 }
 
 // ##############################################################################

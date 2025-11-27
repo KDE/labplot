@@ -139,7 +139,8 @@ void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar
 
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
-	WAIT_CURSOR;
+
+	WAIT_CURSOR_AUTO_RESET;
 
 	QElapsedTimer timer;
 	timer.start();
@@ -147,7 +148,6 @@ void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar
 	source->read();
 	statusBar->showMessage(i18n("Live data source created in %1 seconds.", (float)timer.elapsed() / 1000));
 
-	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
 }
 
@@ -186,54 +186,53 @@ bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	statusBar->clearMessage();
 	statusBar->addWidget(progressBar, 1);
 
-	WAIT_CURSOR;
-	QApplication::processEvents(QEventLoop::AllEvents, 100);
-	QElapsedTimer timer;
-	timer.start();
+	{
+		WAIT_CURSOR_AUTO_RESET;
+		QApplication::processEvents(QEventLoop::AllEvents, 100);
+		QElapsedTimer timer;
+		timer.start();
 
-	if (!m_importDir) { // import a single file
-		connect(filter, &AbstractFileFilter::completed, progressBar, &QProgressBar::setValue);
-		const auto mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
-		importFile(path, aspect, filter, mode);
-		statusBar->showMessage(i18n("File %1 imported in %2 seconds.", path, (float)timer.elapsed() / 1000));
-	} else { // import all files from a directory
-		QDir dir(path);
-		if (!dir.exists()) {
-			const_cast<ImportFileDialog*>(this)->showErrorMessage(i18n("The directory %1 doesn't exist.", path));
-			RESET_CURSOR;
-			statusBar->removeWidget(progressBar);
-			return false;
-		}
+		if (!m_importDir) { // import a single file
+			connect(filter, &AbstractFileFilter::completed, progressBar, &QProgressBar::setValue);
+			const auto mode = AbstractFileFilter::ImportMode(cbPosition->currentIndex());
+			importFile(path, aspect, filter, mode);
+			statusBar->showMessage(i18n("File %1 imported in %2 seconds.", path, (float)timer.elapsed() / 1000));
+		} else { // import all files from a directory
+			QDir dir(path);
+			if (!dir.exists()) {
+				const_cast<ImportFileDialog*>(this)->showErrorMessage(i18n("The directory %1 doesn't exist.", path));
+				statusBar->removeWidget(progressBar);
+				return false;
+			}
 
-		const auto files = dir.entryList(QDir::Files | QDir::NoDotAndDotDot);
-		const int totalCount = files.count();
-		int count = 0;
+			const auto files = dir.entryList(QDir::Files | QDir::NoDotAndDotDot);
+			const int totalCount = files.count();
+			int count = 0;
 
-		// iterate over all files in the directory and import them one by one.
-		// we import into spreadsheets only at the moment and re-use existing sheets if the name matches
-		const auto& sheets = aspect->children<Spreadsheet>();
-		for (const auto& fileName : files) {
-			// if there's already a sheet with the same name, use it
-			Spreadsheet* sheet = nullptr;
-			for (const auto& s : sheets) {
-				if (s->name() == fileName) {
-					sheet = s;
-					break;
+			// iterate over all files in the directory and import them one by one.
+			// we import into spreadsheets only at the moment and re-use existing sheets if the name matches
+			const auto& sheets = aspect->children<Spreadsheet>();
+			for (const auto& fileName : files) {
+				// if there's already a sheet with the same name, use it
+				Spreadsheet* sheet = nullptr;
+				for (const auto& s : sheets) {
+					if (s->name() == fileName) {
+						sheet = s;
+						break;
+					}
 				}
+				if (!sheet) {
+					sheet = new Spreadsheet(fileName);
+					aspect->addChild(sheet);
+				}
+				importFile(dir.absoluteFilePath(fileName), sheet, filter);
+				++count;
+				progressBar->setValue(count/totalCount * 100);
 			}
-			if (!sheet) {
-				sheet = new Spreadsheet(fileName);
-				aspect->addChild(sheet);
-			}
-			importFile(dir.absoluteFilePath(fileName), sheet, filter);
-			++count;
-			progressBar->setValue(count/totalCount * 100);
+
+			statusBar->showMessage(i18n("%1 files imported in %2 seconds.", count, (float)timer.elapsed() / 1000));
 		}
-
-		statusBar->showMessage(i18n("%1 files imported in %2 seconds.", count, (float)timer.elapsed() / 1000));
 	}
-
-	RESET_CURSOR;
 
 	// handle errors
 	if (!filter->lastError().isEmpty()) {
@@ -255,19 +254,16 @@ bool ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 void ImportFileDialog::importFile(const QString& fileName, AbstractAspect* aspect, AbstractFileFilter* filter, AbstractFileFilter::ImportMode mode) const {
 	DEBUG(Q_FUNC_INFO << ", file name: " << fileName.toStdString());
-	if (aspect->inherits(AspectType::Matrix)) {
+	if (auto* matrix = aspect->castTo<Matrix>()) {
 		DEBUG(Q_FUNC_INFO << ", to Matrix");
-		auto* matrix = qobject_cast<Matrix*>(aspect);
 		filter->readDataFromFile(fileName, matrix, mode);
-	} else if (aspect->inherits(AspectType::Spreadsheet)) {
+	} else if (auto* spreadsheet = aspect->castTo<Spreadsheet>()) {
 		DEBUG(Q_FUNC_INFO << ", to Spreadsheet");
-		auto* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
 		DEBUG("CALLING filter->readDataFromFile()")
 		// TODO: which extension (table) is imported?
 		filter->readDataFromFile(fileName, spreadsheet, mode);
-	} else if (aspect->inherits(AspectType::Workbook)) {
+	} else if (auto* workbook = aspect->castTo<Workbook>()) {
 		DEBUG(Q_FUNC_INFO << ", to Workbook");
-		auto* workbook = static_cast<Workbook*>(aspect);
 		workbook->setUndoAware(false);
 		auto sheets = workbook->children<AbstractAspect>();
 
@@ -399,7 +395,7 @@ void ImportFileDialog::enableImportToMatrix(const bool enable) {
 			return;
 		}
 
-		if (aspect->inherits(AspectType::Matrix)) {
+		if (aspect->inherits<Matrix>()) {
 			okButton->setEnabled(enable);
 			if (enable)
 				okButton->setToolTip(i18n("Close the dialog and import the data."));

@@ -62,7 +62,7 @@ void XLSXOptionsWidget::updateContent(XLSXFilter* filter, const QString& fileNam
 void XLSXOptionsWidget::dataRegionSelectionChanged() {
 	DEBUG(Q_FUNC_INFO)
 #ifdef HAVE_QXLSX
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 
 	const auto& selectedItems = ui.twDataRegions->selectedItems();
 	if (selectedItems.isEmpty()) {
@@ -163,8 +163,6 @@ void XLSXOptionsWidget::dataRegionSelectionChanged() {
 		}
 		ui.twPreview->resizeColumnsToContents();
 	}
-
-	RESET_CURSOR;
 #endif
 }
 

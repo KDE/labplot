@@ -171,9 +171,8 @@ bool DatapickerImage::exportView() const {
 		const auto format = dlg->exportFormat();
 		const int resolution = dlg->exportResolution();
 
-		WAIT_CURSOR;
+		WAIT_CURSOR_AUTO_RESET;
 		m_view->exportToFile(path, format, resolution);
-		RESET_CURSOR;
 	}
 	delete dlg;
 	return ret;
@@ -598,7 +597,8 @@ DatapickerImagePrivate::~DatapickerImagePrivate() {
 }
 
 void DatapickerImagePrivate::updateImage() {
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
+
 	q->isLoaded = false;
 
 	if (q->originalPlotImage.isNull()) {
@@ -615,7 +615,6 @@ void DatapickerImagePrivate::updateImage() {
 
 	Q_EMIT q->requestUpdate();
 	Q_EMIT q->requestUpdateActions();
-	RESET_CURSOR;
 }
 
 // ##############################################################################

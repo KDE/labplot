@@ -340,7 +340,7 @@ void EquidistantValuesDialog::generate() {
 	bool integerModePossible = false;
 	bool bigIntRequired = false;
 
-	WAIT_CURSOR;
+	WAIT_CURSOR_AUTO_RESET;
 	bool rc = true;
 	if (m_hasNumeric) {
 		int number{0};
@@ -352,7 +352,6 @@ void EquidistantValuesDialog::generate() {
 		const double start = numberLocale.toDouble(ui.leFrom->text(), &ok);
 		if (!ok) {
 			DEBUG("Invalid double value for 'start'!")
-			RESET_CURSOR;
 			return;
 		}
 
@@ -362,7 +361,6 @@ void EquidistantValuesDialog::generate() {
 			end = numberLocale.toDouble(ui.leTo->text(), &ok);
 			if (!ok) {
 				DEBUG("Invalid double value for 'end'!")
-				RESET_CURSOR;
 				return;
 			}
 		}
@@ -373,7 +371,6 @@ void EquidistantValuesDialog::generate() {
 			number = QLocale().toInt(ui.leNumber->text(), &ok);
 			if (!ok || number == 1) {
 				DEBUG("Invalid integer value for 'number'!")
-				RESET_CURSOR;
 				return;
 			}
 
@@ -392,14 +389,12 @@ void EquidistantValuesDialog::generate() {
 			number = QLocale().toInt(ui.leNumber->text(), &ok);
 			if (!ok || number == 1) {
 				DEBUG("Invalid integer value for 'number'!")
-				RESET_CURSOR;
 				return;
 			}
 
 			increment = QLocale().toDouble(ui.leIncrement->text(), &ok);
 			if (!ok) {
 				DEBUG("Invalid integer value for 'increment'!")
-				RESET_CURSOR;
 				return;
 			}
 
@@ -423,14 +418,12 @@ void EquidistantValuesDialog::generate() {
 			}
 
 			if (!rc) {
-				RESET_CURSOR;
 				return;
 			}
 		}
 		if (m_hasDouble || ((m_hasInteger || m_hasBigInteger) && !integerModePossible)) {
 			rc = generateDouble(newDoubleData, start, increment, number);
 			if (!rc) {
-				RESET_CURSOR;
 				return;
 			}
 		}
@@ -478,7 +471,6 @@ void EquidistantValuesDialog::generate() {
 
 		rc = generateDateTime(newDateTimeData, type, start, end, number, increment, unit);
 		if (!rc) {
-			RESET_CURSOR;
 			return;
 		}
 	}
@@ -569,7 +561,6 @@ void EquidistantValuesDialog::generate() {
 	}
 
 	m_spreadsheet->endMacro();
-	RESET_CURSOR;
 }
 
 /*!

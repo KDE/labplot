@@ -14,6 +14,7 @@
 #include "backend/core/Settings.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 #include "frontend/GuiTools.h"
 #include "frontend/TemplateHandler.h"
 #include "frontend/widgets/BackgroundWidget.h"
@@ -309,7 +310,7 @@ void XYCurveDock::setModel() {
 	}
 	cbValuesColumn->setTopLevelClasses(list);
 
-	if (m_curve->inherits(AspectType::XYAnalysisCurve))
+	if (m_curve->inherits<XYAnalysisCurve>())
 		// the model is used in the combobox for curve data sources -> allow to also select analysis curves
 		list = {AspectType::Column,
 				AspectType::XYCurve,
@@ -357,13 +358,12 @@ void XYCurveDock::setModel() {
 	ui.lLineIncreasingXOnly->setVisible(visible);
 	ui.chkLineIncreasingXOnly->setVisible(visible);
 
-	// if it's not a xy-curve, it's an analysis curve and the line widget is always enables since we always draw the line
-	if (!visible)
+	if (!visible) {
+		// if it's not a xy-curve, it's an analysis curve and the line widget is always enables since we always draw the line
 		lineWidget->setEnabled(true);
-
-	// remove the tab "Error bars" for analysis curves
-	if (!visible)
+		// remove the tab "Error bars" for analysis curves
 		ui.tabWidget->removeTab(5);
+	}
 }
 
 /*!
@@ -381,7 +381,7 @@ void XYCurveDock::setCurves(QList<XYCurve*> list) {
 	setSymbols(list);
 }
 
-void XYCurveDock::setSymbols(QList<XYCurve*> curves) {
+void XYCurveDock::setSymbols(const QList<XYCurve*>& curves) {
 	// symbols
 	QList<Symbol*> symbols;
 	QList<Background*> backgrounds;
