@@ -278,7 +278,15 @@ void AbstractAspect::setHidden(bool value) {
 }
 
 /**
- * \brief Set "fixed" property which defines whether the object can be renamed, deleted, etc.
+ * \brief Set "fixed" property which is used to define internal created aspects used by other aspects
+ * It defines whether the object properties can be modified. If false any of the below data shall be 
+ * modifyable (Must be done by the developer):
+ * - renaming
+ * - deleting
+ * - moving (order of the objects)
+ * - data changed (Column: row values changing, XYCurve: Changing the data columns, ...)
+ *
+ * Other properties like appearance properties shall still be modifyable
  */
 void AbstractAspect::setFixed(bool value) {
 	if (value == d->m_fixed)
