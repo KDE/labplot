@@ -9,6 +9,8 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
+#ifdef HAVE_CANTOR_LIBS
+
 #include "Notebook.h"
 #include "VariableParser.h"
 #include "backend/core/Project.h"
@@ -74,7 +76,6 @@ bool Notebook::init(QByteArray* content) {
 		connect(m_worksheetAccess, SIGNAL(modified()), this, SLOT(modified()));
 
 		// Cantor's session
-#ifdef HAVE_CANTOR_LIBS
 		m_session = m_worksheetAccess->session();
 		if (!m_session) {
 			WARN("Could not create the session for backend " << STDSTRING(m_backendName))
@@ -129,7 +130,6 @@ bool Notebook::init(QByteArray* content) {
 
 		// bool value = group.readEntry(QLatin1String("ReevaluateEntries"), false);
 		// value = group.readEntry(QLatin1String("AskConfirmation"), true);
-#endif
 	}
 
 	return true;
@@ -277,11 +277,8 @@ KParts::ReadWritePart* Notebook::part() {
 }
 
 QIcon Notebook::icon() const {
-#ifdef HAVE_CANTOR_LIBS
 	if (m_session)
 		return QIcon::fromTheme(m_session->backend()->icon());
-#endif
-	return {};
 }
 
 QWidget* Notebook::view() const {
@@ -296,7 +293,6 @@ QWidget* Notebook::view() const {
 		// 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 
 		// set the current path in the session to the path of the project file
-#ifdef HAVE_CANTOR_LIBS
 		if (m_session) {
 			const Project* project = const_cast<Notebook*>(this)->project();
 			const QString& fileName = project->fileName();
@@ -305,7 +301,6 @@ QWidget* Notebook::view() const {
 				m_session->setWorksheetPath(fi.filePath());
 			}
 		}
-#endif
 	}
 #endif
 	return m_partView;
@@ -473,3 +468,5 @@ bool Notebook::load(XmlStreamReader* reader, bool preview) {
 
 	return true;
 }
+
+#endif // HAVE_CANTOR_LIBS

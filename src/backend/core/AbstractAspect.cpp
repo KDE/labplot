@@ -21,7 +21,9 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#ifdef HAVE_CANTOR_LIBS
 #include "backend/notebook/Notebook.h"
+#endif
 
 #include <KStandardAction>
 #include <QClipboard>
