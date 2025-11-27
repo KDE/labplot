@@ -171,7 +171,7 @@ bool DatapickerImage::exportView() const {
 		const auto format = dlg->exportFormat();
 		const int resolution = dlg->exportResolution();
 
-		WAIT_CURSOR;
+		WAIT_CURSOR_AUTO_RESET;
 		m_view->exportToFile(path, format, resolution);
 	}
 	delete dlg;
