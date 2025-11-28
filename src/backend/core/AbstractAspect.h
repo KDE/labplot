@@ -502,6 +502,8 @@ protected:
 
 	const AspectType m_type;
 
+	virtual void handleAspectUpdated(const QString& path, const AbstractAspect*);
+
 private:
 	AbstractAspectPrivate* d;
 
@@ -596,6 +598,7 @@ public:
 
 	friend class AbstractAspectTest;
 	friend class InfoElementTest;
+	friend class Project;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractAspect::ChildIndexFlags)

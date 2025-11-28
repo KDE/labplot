@@ -524,22 +524,6 @@ QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const
 	return parentPos;
 }
 
-/*!
- * \brief handleAspectUpdated
- * in some cases one aspect can depend on another, like a XYCurve on Column
- * or InfoElement on XYCurve. This is a generic function called for
- * all Elements when a new aspect will be added even it is not a child of the
- * current element
- *
- * Path is explicit specified, so it must not be recalculated every time when iterating over multiple
- * WorksheetElements. The path is the same as aspect->path()
- * \param path
- */
-void WorksheetElement::handleAspectUpdated(const QString& path, const AbstractAspect* aspect) {
-	Q_UNUSED(path);
-	Q_UNUSED(aspect);
-}
-
 void WorksheetElement::save(QXmlStreamWriter* writer) const {
 	Q_D(const WorksheetElement);
 	writer->writeAttribute(QStringLiteral("x"), QString::number(d->position.point.x()));

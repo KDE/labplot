@@ -1289,6 +1289,16 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	}
 #endif
 
+	QVector<AbstractAspect*> aaaa;
+	aaaa << aspect;
+	if (hasChildren)
+		aaaa = aspect->children<AbstractAspect>(ChildIndexFlag::Recursive);
+	for (auto* aspect: aaaa) {
+		for (auto* column: columns) {
+			aspect->handleAspectUpdated(column->path(), column);
+		}
+	}
+
 	// if a column was calculated via a formula, restore the pointers to the variable columns defining the formula
 	for (auto* col : columns) {
 		for (Column* c : columns)

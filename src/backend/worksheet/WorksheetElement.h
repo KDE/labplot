@@ -153,7 +153,6 @@ private:
 protected Q_SLOTS:
 	void changeVisibility();
 	void changeLocking();
-	virtual void handleAspectUpdated(const QString& path, const AbstractAspect*);
 
 private Q_SLOTS:
 	void prepareDrawingOrderMenu();

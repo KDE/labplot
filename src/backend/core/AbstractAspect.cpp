@@ -1210,6 +1210,22 @@ void AbstractAspect::connectChild(AbstractAspect* child) {
 	connect(child, &AbstractAspect::deselected, this, &AbstractAspect::childDeselected);
 }
 
+/*!
+ * \brief handleAspectUpdated
+ * in some cases one aspect can depend on another, like a XYCurve on Column
+ * or InfoElement on XYCurve. This is a generic function called for
+ * all Elements when a new aspect will be added even it is not a child of the
+ * current element
+ *
+ * Path is explicit specified, so it must not be recalculated every time when iterating over multiple
+ * AbstractAspects. The path is the same as aspect->path()
+ * \param path
+ */
+void AbstractAspect::handleAspectUpdated(const QString& path, const AbstractAspect* aspect) {
+	Q_UNUSED(path);
+	Q_UNUSED(aspect);
+}
+
 // ##############################################################################
 // ######################  Private implementation ###############################
 // ##############################################################################
