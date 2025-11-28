@@ -18,7 +18,11 @@ class DecompositionTest : public CommonTest {
 private Q_SLOTS:
 	void testDecompositionInit();
 	void testDecompositionDuplicate();
+
 	void testDecompositionMethodChange();
 	void testDecompositionPeriodChange();
+
+	void testDecompositionSaveLoadSTL();
+	void testDecompositionSaveLoadMSTL();
 };
 #endif

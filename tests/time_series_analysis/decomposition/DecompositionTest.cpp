@@ -17,6 +17,7 @@
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/WorksheetElementPrivate.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 
 #include <QUndoStack>
 
@@ -381,6 +382,213 @@ void DecompositionTest::testDecompositionPeriodChange() {
 
 	for (const auto* c : project.children(AspectType::WorksheetElement, AbstractAspect::ChildIndexFlag::Recursive)) {
 		QCOMPARE(static_cast<const WorksheetElement*>(c)->d_ptr->suppressRetransform, false);
+	}
+}
+
+/*!
+ * save and load the project with STL and check all objects are properly loaded and all pointers are properly restored after load.
+ */
+void DecompositionTest::testDecompositionSaveLoadSTL() {
+	// create and save
+	QString savePath;
+	{
+		Project project;
+
+		auto* spreadsheet = new Spreadsheet(QStringLiteral("Test"));
+		project.addChild(spreadsheet);
+		spreadsheet->setColumnCount(2);
+		auto columns = spreadsheet->children<Column>();
+		QCOMPARE(columns.size(), 2);
+
+		columns.at(0)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+		columns.at(0)->setIntegers(x);
+
+		columns.at(1)->setColumnMode(AbstractColumn::ColumnMode::Double);
+		columns.at(1)->setValues(y);
+
+		auto* decomposition = new SeasonalDecomposition(QStringLiteral("decomposition"));
+		project.addChild(decomposition);
+		decomposition->setXColumn(columns.at(0));
+		decomposition->setYColumn(columns.at(1));
+
+		SAVE_PROJECT("DecompositionTestProject");
+	}
+
+	// load and check
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true);
+
+		// source spreadsheet
+		const auto* sourceSpreadsheet = project.child<Spreadsheet>(0);
+		QVERIFY(sourceSpreadsheet);
+		QCOMPARE(sourceSpreadsheet->columnCount(), 2);
+		auto* xColumn = sourceSpreadsheet->column(0);
+		auto* yColumn = sourceSpreadsheet->column(1);
+
+		// decomposition and its children
+		const auto* decomposition = project.child<SeasonalDecomposition>(0);
+		QVERIFY(decomposition);
+		QCOMPARE(decomposition->xColumn(), xColumn);
+		QCOMPARE(decomposition->yColumn(), yColumn);
+
+		// result spreadsheet
+		const auto* resultSpreadsheet = decomposition->child<Spreadsheet>(0);
+		QVERIFY(resultSpreadsheet);
+		QCOMPARE(resultSpreadsheet->columnCount(), 3); // trend + seasonal + residual
+
+		// worksheet
+		const auto* worksheet = decomposition->child<Worksheet>(0);
+		QVERIFY(worksheet);
+
+		const auto& plotAreas = worksheet->children<CartesianPlot>();
+		QCOMPARE(plotAreas.count(), 4); // original + trend + seasonal + residual
+
+		// original data
+		auto* plotArea = plotAreas.at(0);
+		QVERIFY(plotArea);
+		auto* curve = plotArea->child<XYCurve>(0);
+		QVERIFY(curve);
+		QCOMPARE(curve->xColumn(), xColumn);
+		QCOMPARE(curve->yColumn(), yColumn);
+
+		// trend component
+		plotArea = plotAreas.at(1);
+		QVERIFY(plotArea);
+		curve = plotArea->child<XYCurve>(0);
+		QVERIFY(curve);
+		QCOMPARE(curve->xColumn(), xColumn);
+		QCOMPARE(curve->yColumn(), resultSpreadsheet->column(0));
+
+		// seasonal component
+		plotArea = plotAreas.at(2);
+		QVERIFY(plotArea);
+		curve = plotArea->child<XYCurve>(0);
+		QVERIFY(curve);
+		QCOMPARE(curve->xColumn(), xColumn);
+		QCOMPARE(curve->yColumn(), resultSpreadsheet->column(1));
+
+		// residual component
+		plotArea = plotAreas.at(3);
+		QVERIFY(plotArea);
+		curve = plotArea->child<XYCurve>(0);
+		QVERIFY(curve);
+		QCOMPARE(curve->xColumn(), xColumn);
+		QCOMPARE(curve->yColumn(), resultSpreadsheet->column(2));
+	}
+}
+
+/*!
+ * save and load the project with MSTL with two default periods and check all objects are properly loaded and all pointers are properly restored after load.
+ */
+void DecompositionTest::testDecompositionSaveLoadMSTL() {
+	// create and save
+	QString savePath;
+	{
+		Project project;
+
+		auto* spreadsheet = new Spreadsheet(QStringLiteral("Test"));
+		project.addChild(spreadsheet);
+		spreadsheet->setColumnCount(2);
+		spreadsheet->setRowCount(1000);
+		auto columns = spreadsheet->children<Column>();
+		QCOMPARE(columns.size(), 2);
+
+		auto* xColumn = columns.at(0);
+		xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+
+		auto* yColumn = columns.at(1);
+		yColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+
+		// generate some test data
+		for (int t = 0; t < 1000; ++t) {
+			xColumn->setIntegerAt(t, t + 1);
+
+			double daily = 5 * sin(2 * M_PI * t / 24);
+			double weekly = 10 * sin(2 * M_PI * t / (24 * 7));
+			double trend = 0.0001 * t * t;
+			double noise = (double)std::rand() / ((double)RAND_MAX + 1);
+			yColumn->setValueAt(t, trend + daily + weekly + noise);
+		}
+
+		auto* decomposition = new SeasonalDecomposition(QStringLiteral("decomposition"));
+		project.addChild(decomposition);
+		decomposition->setXColumn(xColumn);
+		decomposition->setYColumn(yColumn);
+		decomposition->setMethod(SeasonalDecomposition::Method::MSTL);
+
+		SAVE_PROJECT("DecompositionTestProject");
+	}
+
+	// load and check
+	{
+		Project project;
+		QCOMPARE(project.load(savePath), true);
+
+		// source spreadsheet
+		const auto* sourceSpreadsheet = project.child<Spreadsheet>(0);
+		QVERIFY(sourceSpreadsheet);
+		QCOMPARE(sourceSpreadsheet->columnCount(), 2);
+		auto* xColumn = sourceSpreadsheet->column(0);
+		auto* yColumn = sourceSpreadsheet->column(1);
+
+		// decomposition and its children
+		const auto* decomposition = project.child<SeasonalDecomposition>(0);
+		QVERIFY(decomposition);
+		QCOMPARE(decomposition->xColumn(), xColumn);
+		QCOMPARE(decomposition->yColumn(), yColumn);
+
+		// result spreadsheet
+		const auto* resultSpreadsheet = decomposition->child<Spreadsheet>(0);
+		QVERIFY(resultSpreadsheet);
+		QCOMPARE(resultSpreadsheet->columnCount(), 4); // trend + 2 x seasonal + residual
+
+		// worksheet
+		const auto* worksheet = decomposition->child<Worksheet>(0);
+		QVERIFY(worksheet);
+
+		const auto& plotAreas = worksheet->children<CartesianPlot>();
+		QCOMPARE(plotAreas.count(), 5); // original + trend + 2 x seasonal + residual
+
+		// original data
+		auto* plotArea = plotAreas.at(0);
+		QVERIFY(plotArea);
+		auto* curve = plotArea->child<XYCurve>(0);
+		QVERIFY(curve);
+		QCOMPARE(curve->xColumn(), xColumn);
+		QCOMPARE(curve->yColumn(), yColumn);
+
+		// trend component
+		plotArea = plotAreas.at(1);
+		QVERIFY(plotArea);
+		curve = plotArea->child<XYCurve>(0);
+		QVERIFY(curve);
+		QCOMPARE(curve->xColumn(), xColumn);
+		QCOMPARE(curve->yColumn(), resultSpreadsheet->column(0));
+
+		// first seasonal component
+		plotArea = plotAreas.at(2);
+		QVERIFY(plotArea);
+		curve = plotArea->child<XYCurve>(0);
+		QVERIFY(curve);
+		QCOMPARE(curve->xColumn(), xColumn);
+		QCOMPARE(curve->yColumn(), resultSpreadsheet->column(1));
+
+		// second seasonal component
+		plotArea = plotAreas.at(3);
+		QVERIFY(plotArea);
+		curve = plotArea->child<XYCurve>(0);
+		QVERIFY(curve);
+		QCOMPARE(curve->xColumn(), xColumn);
+		QCOMPARE(curve->yColumn(), resultSpreadsheet->column(2));
+
+		// residual component
+		plotArea = plotAreas.at(4);
+		QVERIFY(plotArea);
+		curve = plotArea->child<XYCurve>(0);
+		QVERIFY(curve);
+		QCOMPARE(curve->xColumn(), xColumn);
+		QCOMPARE(curve->yColumn(), resultSpreadsheet->column(3));
 	}
 }
 
