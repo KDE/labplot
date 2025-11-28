@@ -973,51 +973,6 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	const auto& histogramsAll = project->children<Histogram>(ChildIndexFlag::Recursive); // needed for fit curves only.
 	const auto& curvesAll = project->children<XYCurve>(ChildIndexFlag::Recursive);
 
-	// xy-curves
-	//  cannot be removed by the column observer, because it does not react
-	//  on curve changes
-	QVector<XYCurve*> curves;
-	if (hasChildren)
-		curves = aspect->children<XYCurve>(ChildIndexFlag::Recursive);
-	else if (auto* curve = aspect->castTo<XYCurve>()) {
-		// the object doesn't have any children -> one single aspect is being pasted.
-		// check whether the object being pasted is a XYCurve and add it to the
-		// list of curves to be retransformed
-		curves << curve;
-	}
-
-	for (auto* curve : std::as_const(curves)) {
-		if (!curve)
-			continue;
-		curve->setSuppressRetransform(true);
-
-		auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(curve);
-		if (analysisCurve) {
-			RESTORE_COLUMN_POINTER(analysisCurve, xDataColumn, XDataColumn);
-			RESTORE_COLUMN_POINTER(analysisCurve, yDataColumn, YDataColumn);
-			RESTORE_COLUMN_POINTER(analysisCurve, y2DataColumn, Y2DataColumn);
-			auto* fitCurve = dynamic_cast<XYFitCurve*>(curve);
-			if (fitCurve) {
-				RESTORE_COLUMN_POINTER(fitCurve, xErrorColumn, XErrorColumn);
-				RESTORE_COLUMN_POINTER(fitCurve, yErrorColumn, YErrorColumn);
-				RESTORE_POINTER(fitCurve, dataSourceHistogram, DataSourceHistogram, Histogram, histogramsAll);
-			}
-		} else {
-			RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
-			RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
-			RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
-			RESTORE_COLUMN_POINTER(curve->errorBar(), xPlusColumn, XPlusColumn);
-			RESTORE_COLUMN_POINTER(curve->errorBar(), xMinusColumn, XMinusColumn);
-			RESTORE_COLUMN_POINTER(curve->errorBar(), yPlusColumn, YPlusColumn);
-			RESTORE_COLUMN_POINTER(curve->errorBar(), yMinusColumn, YMinusColumn);
-		}
-
-		if (analysisCurve)
-			RESTORE_POINTER(analysisCurve, dataSourceCurve, DataSourceCurve, XYCurve, curvesAll);
-
-		curve->setSuppressRetransform(false);
-	}
-
 	// assign to all markers the curves they need
 	QVector<InfoElement*> elements;
 	if (auto* infoElement = aspect->castTo<InfoElement>()) // check for the type first. InfoElement has children, but they are not relevant here
@@ -1028,274 +983,28 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	for (auto* element : elements)
 		element->assignCurve(curves);
 
-	QVector<XYFunctionCurve*> functionCurves;
-	if (auto* curve = aspect->castTo<XYFunctionCurve>()) // check for the type first. InfoElement has children, but they are not relevant here
-		functionCurves << curve;
-	else if (hasChildren)
-		functionCurves = aspect->children<XYFunctionCurve>(ChildIndexFlag::Recursive);
-
-	for (auto* functionCurve : functionCurves) {
-		for (const auto* curve : std::as_const(curves))
-			functionCurve->setFunctionVariableCurve(curve);
-	}
-
-	// axes
-	QVector<Axis*> axes;
-	if (hasChildren)
-		axes = aspect->children<Axis>(ChildIndexFlag::Recursive);
-	else if (auto* axis = aspect->castTo<Axis>())
-		axes << axis;
-
-	for (auto* axis : axes) {
-		if (!axis)
-			continue;
-		RESTORE_COLUMN_POINTER(axis, majorTicksColumn, MajorTicksColumn);
-		RESTORE_COLUMN_POINTER(axis, minorTicksColumn, MinorTicksColumn);
-		RESTORE_COLUMN_POINTER(axis, labelsTextColumn, LabelsTextColumn);
-	}
-
-	// histograms
-	QVector<Histogram*> hists;
-	if (hasChildren)
-		hists = aspect->children<Histogram>(ChildIndexFlag::Recursive);
-	else if (auto* histogram = aspect->castTo<Histogram>())
-		hists << histogram;
-
-	for (auto* hist : hists) {
-		if (!hist)
-			continue;
-		RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
-		auto* value = hist->value();
-		RESTORE_COLUMN_POINTER(value, column, Column);
-		RESTORE_COLUMN_POINTER(hist->errorBar(), yPlusColumn, YPlusColumn);
-		RESTORE_COLUMN_POINTER(hist->errorBar(), yMinusColumn, YMinusColumn);
-	}
-
-	// QQ-plots
-	QVector<QQPlot*> qqPlots;
-	if (hasChildren)
-		qqPlots = aspect->children<QQPlot>(ChildIndexFlag::Recursive);
-	else if (auto* qqPlot = aspect->castTo<QQPlot>())
-		qqPlots << qqPlot;
-
-	for (auto* plot : qqPlots) {
-		if (!plot)
-			continue;
-		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
-	}
-
-	// KDE-plots
-	QVector<KDEPlot*> kdePlots;
-	if (hasChildren)
-		kdePlots = aspect->children<KDEPlot>(ChildIndexFlag::Recursive);
-	else if (auto* kdePlot = aspect->castTo<KDEPlot>())
-		kdePlots << kdePlot;
-
-	for (auto* plot : kdePlots) {
-		if (!plot)
-			continue;
-		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
-	}
-
-	// box plots
-	QVector<BoxPlot*> boxPlots;
-	if (hasChildren)
-		boxPlots = aspect->children<BoxPlot>(ChildIndexFlag::Recursive);
-	else if (auto* boxPlot = aspect->castTo<BoxPlot>())
-		boxPlots << boxPlot;
-
-	for (auto* boxPlot : boxPlots) {
-		if (!boxPlot)
-			continue;
-
-		// initialize the array for the column pointers
-		const auto& paths = boxPlot->dataColumnPaths();
-		int count = paths.count();
-		QVector<const AbstractColumn*> dataColumns;
-		dataColumns.resize(count);
-
-		// restore the pointers
-		for (int i = 0; i < count; ++i) {
-			dataColumns[i] = nullptr;
-			const auto& path = paths.at(i);
-			for (auto* column : columns) {
-				if (!column)
-					continue;
-				if (column->path() == path) {
-					dataColumns[i] = column;
-					break;
-				}
-			}
-		}
-
-		boxPlot->setDataColumns(std::move(dataColumns));
-	}
-
-	// bar plots
-	QVector<BarPlot*> barPlots;
-	if (hasChildren)
-		barPlots = aspect->children<BarPlot>(ChildIndexFlag::Recursive);
-	else if (auto* barPlot = aspect->castTo<BarPlot>())
-		barPlots << barPlot;
-
-	for (auto* barPlot : barPlots) {
-		if (!barPlot)
-			continue;
-
-		// initialize the array for the column pointers
-		const auto& paths = barPlot->dataColumnPaths();
-		int count = paths.count();
-		QVector<const AbstractColumn*> dataColumns;
-		dataColumns.resize(count);
-
-		// restore the pointers
-		for (int i = 0; i < count; ++i) {
-			// data columns
-			dataColumns[i] = nullptr;
-			const auto& path = paths.at(i);
-			for (auto* column : columns) {
-				if (!column)
-					continue;
-				if (column->path() == path) {
-					dataColumns[i] = column;
-					break;
-				}
-			}
-
-			// error bars
-			if (auto* errorBar = barPlot->errorBarAt(i)) {
-				RESTORE_COLUMN_POINTER(errorBar, yPlusColumn, YPlusColumn);
-				RESTORE_COLUMN_POINTER(errorBar, yMinusColumn, YMinusColumn);
-			} else {
-				DEBUG(Q_FUNC_INFO << ", WARNING error bar " << i << " is missing")
-			}
-		}
-
-		barPlot->setDataColumns(dataColumns);
-
-		RESTORE_COLUMN_POINTER(barPlot, xColumn, XColumn);
-	}
-
-	// lollipop plots
-	QVector<LollipopPlot*> lollipopPlots;
-	if (hasChildren)
-		lollipopPlots = aspect->children<LollipopPlot>(ChildIndexFlag::Recursive);
-	else if (auto* lollipopPlot = aspect->castTo<LollipopPlot>())
-		lollipopPlots << lollipopPlot;
-
-	for (auto* lollipopPlot : lollipopPlots) {
-		if (!lollipopPlot)
-			continue;
-
-		// initialize the array for the column pointers
-		const auto& paths = lollipopPlot->dataColumnPaths();
-		int count = paths.count();
-		QVector<const AbstractColumn*> dataColumns;
-		dataColumns.resize(count);
-
-		// restore the pointers
-		for (int i = 0; i < count; ++i) {
-			dataColumns[i] = nullptr;
-			const auto& path = paths.at(i);
-			for (Column* column : columns) {
-				if (!column)
-					continue;
-				if (column->path() == path) {
-					dataColumns[i] = column;
-					break;
-				}
-			}
-		}
-
-		lollipopPlot->setDataColumns(std::move(dataColumns));
-
-		RESTORE_COLUMN_POINTER(lollipopPlot, xColumn, XColumn);
-	}
-
-	// process behavior charts/plots
-	QVector<ProcessBehaviorChart*> pbPlots;
-	if (hasChildren)
-		pbPlots = aspect->children<ProcessBehaviorChart>(ChildIndexFlag::Recursive);
-	else if (auto* pbPlot = aspect->castTo<ProcessBehaviorChart>())
-		pbPlots << pbPlot;
-
-	for (auto* plot : pbPlots) {
-		if (!plot)
-			continue;
-		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
-		RESTORE_COLUMN_POINTER(plot, data2Column, Data2Column);
-	}
-
-	// run charts/plots
-	QVector<RunChart*> runPlots;
-	if (hasChildren)
-		runPlots = aspect->children<RunChart>(ChildIndexFlag::Recursive);
-	else if (auto* runPlot = aspect->castTo<RunChart>())
-		runPlots << runPlot;
-
-	for (auto* plot : runPlots) {
-		if (!plot)
-			continue;
-		RESTORE_COLUMN_POINTER(plot, dataColumn, DataColumn);
-	}
-
-	// spreadsheet
-	QVector<Spreadsheet*> spreadsheets;
-	if (hasChildren)
-		spreadsheets = aspect->children<Spreadsheet>(ChildIndexFlag::Recursive);
-	for (auto* linkingSpreadsheet : spreadsheets) {
-		if (!linkingSpreadsheet->linking())
-			continue;
-		for (const auto* toLinkedSpreadsheet : spreadsheets) {
-			if (linkingSpreadsheet->linkedSpreadsheetPath() == toLinkedSpreadsheet->path()) {
-				linkingSpreadsheet->setLinkedSpreadsheet(toLinkedSpreadsheet, true);
-			}
-		}
-	}
-
-#ifndef SDK
-	// hypothesis tests
-	QVector<HypothesisTest*> tests;
-	if (hasChildren)
-		tests = aspect->children<HypothesisTest>(ChildIndexFlag::Recursive);
-	else if (auto* hypTest = aspect->castTo<HypothesisTest>())
-		tests << hypTest;
-
-	for (auto* test : tests) {
-		if (!test)
-			continue;
-
-		// initialize the array for the column pointers
-		const auto& paths = test->dataColumnPaths();
-		int count = paths.count();
-		QVector<const AbstractColumn*> dataColumns;
-		dataColumns.resize(count);
-
-		// restore the pointers
-		for (int i = 0; i < count; ++i) {
-			dataColumns[i] = nullptr;
-			const auto& path = paths.at(i);
-			for (auto* column : columns) {
-				if (!column)
-					continue;
-				if (column->path() == path) {
-					dataColumns[i] = column;
-					break;
-				}
-			}
-		}
-
-		test->setDataColumns(std::move(dataColumns));
-	}
-#endif
-
 	QVector<AbstractAspect*> aaaa;
 	aaaa << aspect;
 	if (hasChildren)
-		aaaa = aspect->children<AbstractAspect>(ChildIndexFlag::Recursive);
-	for (auto* aspect : aaaa) {
-		for (auto* column : columns) {
-			aspect->handleAspectUpdated(column->path(), column);
+		aaaa << aspect->children<AbstractAspect>(ChildIndexFlag::Recursive);
+	for (auto* column : columns) {
+		const auto& path = column->path();
+		for (auto* aspect : aaaa) {
+			aspect->handleAspectUpdated(path, column);
+		}
+	}
+
+	for (auto* curve : curves) {
+		const auto& path = curve->path();
+		for (auto* aspect : aaaa) {
+			aspect->handleAspectUpdated(path, curve);
+		}
+	}
+	
+	for (auto* spreadsheet : spreadsheets) {
+		const auto& path = spreadsheet->path();
+		for (auto* aspect : aaaa) {
+			aspect->handleAspectUpdated(path, spreadsheet);
 		}
 	}
 

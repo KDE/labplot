@@ -223,6 +223,9 @@ void BarPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspec
 		return;
 
 	auto dataColumns = d->dataColumns;
+	if (dataColumns.count() != d->dataColumnPaths.count()) {
+		dataColumns.resize(d->dataColumnPaths.count()); // TODO: does it init with nullptrs?
+	}
 	bool changed = false;
 
 	for (int i = 0; i < d->dataColumnPaths.count(); ++i) {
@@ -235,9 +238,18 @@ void BarPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspec
 
 	if (changed) {
 		setUndoAware(false);
-		setDataColumns(dataColumns);
+		setDataColumns(std::move(dataColumns));
 		setUndoAware(true);
 	}
+
+	if (d->errorBar->yPlusColumnPathPath() == aspectPath)
+		d->errorBar->setYPlusColumn(column);
+
+	if (d->errorBar->yMinusColumnPath() == aspectPath)
+		d->errorBar->setYMinusColumn(column);
+
+	if (xColumnPath() == aspectPath)
+		setXColumn(column);
 }
 
 QColor BarPlot::color() const {

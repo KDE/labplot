@@ -1097,6 +1097,12 @@ void Axis::lineColorChanged(QAction* action) {
 	d->line->setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
 }
 
+void Axis::handleAspectUpdated(const QString& path, const AbstractAspect*) {
+	RESTORE_COLUMN_POINTER(axis, majorTicksColumn, MajorTicksColumn);
+	RESTORE_COLUMN_POINTER(axis, minorTicksColumn, MinorTicksColumn);
+	RESTORE_COLUMN_POINTER(axis, labelsTextColumn, LabelsTextColumn);	
+}
+
 // #####################################################################
 // ################### Private implementation ##########################
 // #####################################################################

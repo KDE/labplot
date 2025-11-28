@@ -611,6 +611,33 @@ QString HypothesisTestPrivate::resultTemplate(HypothesisTest::Test test) {
 	return result;
 }
 
+void HypothesisTestPrivate::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override {
+	Q_D(const HypothesisTestPrivate);
+	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
+	if (!column)
+		return;
+
+	auto dataColumns = d->dataColumns;
+	if (dataColumns.count() != d->dataColumnPaths.count()) {
+		dataColumns.resize(d->dataColumnPaths.count()); // TODO: does it init with nullptrs?
+	}
+	bool changed = false;
+
+	for (int i = 0; i < d->dataColumnPaths.count(); ++i) {
+		const auto& path = d->dataColumnPaths.at(i);
+		if (path == aspectPath) {
+			dataColumns[i] = column;
+			changed = true;
+		}
+	}
+
+	if (changed) {
+		setUndoAware(false);
+		setDataColumns(std::move(dataColumns));
+		setUndoAware(true);
+	}
+}
+
 // ##############################################################################
 // ##################  (Re-)Calculation of the tests  ##########################
 // ##############################################################################

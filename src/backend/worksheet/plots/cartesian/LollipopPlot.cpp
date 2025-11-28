@@ -233,6 +233,9 @@ void LollipopPlot::handleAspectUpdated(const QString& aspectPath, const Abstract
 		return;
 
 	auto dataColumns = d->dataColumns;
+	if (dataColumns.count() != d->dataColumnPaths.count()) {
+		dataColumns.resize(d->dataColumnPaths.count()); // TODO: does it init with nullptrs?
+	}
 	bool changed = false;
 
 	for (int i = 0; i < d->dataColumnPaths.count(); ++i) {
@@ -245,9 +248,12 @@ void LollipopPlot::handleAspectUpdated(const QString& aspectPath, const Abstract
 
 	if (changed) {
 		setUndoAware(false);
-		setDataColumns(dataColumns);
+		setDataColumns(std::move(dataColumns));
 		setUndoAware(true);
 	}
+
+	if (xColumnPath() == aspectPath)
+		setXColumn(column);
 }
 
 QColor LollipopPlot::color() const {

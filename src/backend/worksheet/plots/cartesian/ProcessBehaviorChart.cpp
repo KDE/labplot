@@ -457,19 +457,17 @@ bool ProcessBehaviorChart::usingColumn(const AbstractColumn* column, bool) const
 	return (d->dataColumn == column || d->data2Column == column);
 }
 
-void ProcessBehaviorChart::handleAspectUpdated(const QString& aspectPath, const AbstractAspect* aspect) {
-	Q_D(ProcessBehaviorChart);
-
-	const auto column = dynamic_cast<const AbstractColumn*>(aspect);
+void ProcessBehaviorChart::handleAspectUpdated(const QString& path, const AbstractAspect* aspect) {
+	auto* column = aspect->castTo<Column>();
 	if (!column)
 		return;
 
-	if (d->dataColumn == column) // the column is the same and was just renamed -> update the column path
-		d->dataColumnPath = aspectPath;
-	else if (d->dataColumnPath == aspectPath) { // another column was renamed to the current path -> set and connect to the new column
-		setUndoAware(false);
-		setDataColumn(column);
-		setUndoAware(true);
+	if (!dataColumnPath().isEmpty() && path == dataColumnPath()) {
+		setdataColumn(column)
+	}
+
+	if (!dataColumn2Path().isEmpty() && path == dataColumn2Path()) {
+		setdataColumn2(column)
 	}
 }
 

@@ -95,6 +95,7 @@ private:
 	HypothesisTestPrivate* const d_ptr;
 
 protected:
+	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect* element) override;
 	mutable HypothesisTestView* m_view{nullptr};
 };
 

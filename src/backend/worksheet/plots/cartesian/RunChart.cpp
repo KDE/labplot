@@ -125,6 +125,16 @@ void RunChart::renameInternalCurves() {
 	d->centerCurve->setUndoAware(true);
 }
 
+void RunChart::handleAspectUpdated(const QString& path, const AbstractAspect* aspect) {
+	auto* column = aspect->castTo<Column>();
+	if (!column)
+		return;
+
+	if (!dataColumnPath().isEmpty() && path == dataColumnPath()) {
+		setdataColumn(column)
+	}
+}
+
 /*!
   Returns an icon to be used in the project explorer.
   */

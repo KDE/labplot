@@ -194,6 +194,7 @@ public:
 protected:
 	Axis(const QString&, Orientation, AxisPrivate*);
 	TextLabel* m_title{nullptr};
+	void handleAspectUpdated(const QString& path, const AbstractAspect*) override;
 
 private:
 	Q_DECLARE_PRIVATE(Axis)

@@ -71,6 +71,7 @@ public:
 private Q_SLOTS:
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 	void renameInternalCurves();
+	void handleAspectUpdated(const QString& path, const AbstractAspect*) override;
 
 protected:
 	RunChart(const QString& name, RunChartPrivate* dd);

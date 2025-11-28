@@ -459,6 +459,9 @@ void BoxPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspec
 		return;
 
 	auto dataColumns = d->dataColumns;
+	if (dataColumns.count() != d->dataColumnPaths.count()) {
+		dataColumns.resize(d->dataColumnPaths.count()); // TODO: does it init with nullptrs?
+	}
 	bool changed = false;
 
 	for (int i = 0; i < d->dataColumnPaths.count(); ++i) {
@@ -471,7 +474,7 @@ void BoxPlot::handleAspectUpdated(const QString& aspectPath, const AbstractAspec
 
 	if (changed) {
 		setUndoAware(false);
-		setDataColumns(dataColumns);
+		setDataColumns(std::move(dataColumns));
 		setUndoAware(true);
 	}
 }

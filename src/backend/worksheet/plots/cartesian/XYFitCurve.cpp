@@ -867,6 +867,8 @@ void XYFitCurve::handleAspectUpdated(const QString& aspectPath, const AbstractAs
 
 	XYAnalysisCurve::handleAspectUpdated(aspectPath, aspect);
 
+	RESTORE_POINTER(fitCurve, dataSourceHistogram, DataSourceHistogram, Histogram, histogramsAll);
+
 	setUndoAware(true);
 	if (xErrorColumnPath() == aspectPath)
 		setXErrorColumn(column);

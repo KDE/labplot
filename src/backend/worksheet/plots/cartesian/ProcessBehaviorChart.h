@@ -90,7 +90,6 @@ public:
 	double maximum(CartesianCoordinateSystem::Dimension) const override;
 	bool hasData() const override;
 	bool usingColumn(const AbstractColumn*, bool indirect) const override;
-	void handleAspectUpdated(const QString& path, const AbstractAspect*) override;
 	QColor color() const override;
 
 	typedef ProcessBehaviorChartPrivate Private;
@@ -106,6 +105,7 @@ private Q_SLOTS:
 
 protected:
 	ProcessBehaviorChart(const QString& name, ProcessBehaviorChartPrivate* dd);
+	void handleAspectUpdated(const QString& path, const AbstractAspect*) override;
 
 private:
 	Q_DECLARE_PRIVATE(ProcessBehaviorChart)
