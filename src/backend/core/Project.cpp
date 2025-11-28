@@ -1293,8 +1293,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	aaaa << aspect;
 	if (hasChildren)
 		aaaa = aspect->children<AbstractAspect>(ChildIndexFlag::Recursive);
-	for (auto* aspect: aaaa) {
-		for (auto* column: columns) {
+	for (auto* aspect : aaaa) {
+		for (auto* column : columns) {
 			aspect->handleAspectUpdated(column->path(), column);
 		}
 	}
