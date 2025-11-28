@@ -153,7 +153,7 @@ private Q_SLOTS:
 	void initConnectionsRowCountChanges();
 	void linkedSpreadsheetDeleted();
 	void linkedSpreadsheetNewRowCount(int);
-	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*);
+	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*) override;
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
