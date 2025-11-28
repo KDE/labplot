@@ -243,7 +243,7 @@ public Q_SLOTS:
 	QPixmap sparkline();
 
 protected:
-	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*);
+	void handleAspectUpdated(const QString& aspectPath, const AbstractAspect*) override;
 
 private:
 	bool XmlReadInputFilter(XmlStreamReader*);
