@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-26 00:39+0000\n"
+"POT-Creation-Date: 2025-11-28 00:38+0000\n"
 "PO-Revision-Date: 2025-11-09 16:37+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -27,39 +27,39 @@ msgstr ""
 "X-Generator: Lokalize 25.08.3\n"
 "X-Text-Markup: kde4\n"
 
-#: src/backend/core/AbstractAspect.cpp:234
+#: src/backend/core/AbstractAspect.cpp:241
 #, kde-format
 msgid ""
 "Intended name \"%1\" was changed to \"%2\" in order to avoid name collision."
 msgstr ""
 "Le nom prévu « %1 » a été changé en « %2 » pour éviter un conflit de nom."
 
-#: src/backend/core/AbstractAspect.cpp:248
+#: src/backend/core/AbstractAspect.cpp:255
 #, kde-format
 msgid "%1: change comment"
 msgstr "%1 : modifier le commentaire"
 
-#: src/backend/core/AbstractAspect.cpp:334
+#: src/backend/core/AbstractAspect.cpp:341
 #, kde-format
 msgid "Duplicate Here"
 msgstr "Dupliquer ici"
 
-#: src/backend/core/AbstractAspect.cpp:349
+#: src/backend/core/AbstractAspect.cpp:356
 #, kde-format
 msgid "Paste '%1'"
 msgstr "Coller « %1 »"
 
-#: src/backend/core/AbstractAspect.cpp:361
+#: src/backend/core/AbstractAspect.cpp:368
 #, kde-format
 msgid "Create Data Spreadsheet"
 msgstr "Créer une feuille de calcul de données"
 
-#: src/backend/core/AbstractAspect.cpp:409
+#: src/backend/core/AbstractAspect.cpp:416
 #, kde-format
 msgid "Rename"
 msgstr "Renommer"
 
-#: src/backend/core/AbstractAspect.cpp:411
+#: src/backend/core/AbstractAspect.cpp:418
 #: src/backend/spreadsheet/Spreadsheet.cpp:712
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:487
 #: src/frontend/widgets/FITSHeaderEditWidget.cpp:268
@@ -68,22 +68,22 @@ msgstr "Renommer"
 msgid "Delete"
 msgstr "Supprimer"
 
-#: src/backend/core/AbstractAspect.cpp:419
+#: src/backend/core/AbstractAspect.cpp:426
 #, kde-format
 msgid "Move"
 msgstr "Déplacer"
 
-#: src/backend/core/AbstractAspect.cpp:422
+#: src/backend/core/AbstractAspect.cpp:429
 #, kde-format
 msgid "Up"
 msgstr "Haut"
 
-#: src/backend/core/AbstractAspect.cpp:425
+#: src/backend/core/AbstractAspect.cpp:432
 #, kde-format
 msgid "Down"
 msgstr "En bas"
 
-#: src/backend/core/AbstractAspect.cpp:511
+#: src/backend/core/AbstractAspect.cpp:518
 #: src/backend/core/aspectcommands.h:171
 #: src/backend/datapicker/Datapicker.cpp:227
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2230
@@ -91,59 +91,59 @@ msgstr "En bas"
 msgid "%1: add %2"
 msgstr "%1 : ajouter %2"
 
-#: src/backend/core/AbstractAspect.cpp:513
-#: src/backend/core/AbstractAspect.cpp:550
+#: src/backend/core/AbstractAspect.cpp:520
+#: src/backend/core/AbstractAspect.cpp:557
 #, kde-format
 msgid "Renaming \"%1\" to \"%2\" in order to avoid name collision."
 msgstr "Renomme « %1 » vers « %2 » pour éviter un conflit de nom."
 
-#: src/backend/core/AbstractAspect.cpp:548
+#: src/backend/core/AbstractAspect.cpp:555
 #, kde-format
 msgid "%1: insert %2 before %3"
 msgstr "%1 : insérer %2 avant %3"
 
-#: src/backend/core/AbstractAspect.cpp:548
+#: src/backend/core/AbstractAspect.cpp:555
 #, kde-format
 msgid "%1: insert %2 before end"
 msgstr "%1 : insérer %2 avant la fin"
 
-#: src/backend/core/AbstractAspect.cpp:583
+#: src/backend/core/AbstractAspect.cpp:590
 #: src/backend/core/aspectcommands.h:102
 #, kde-format
 msgid "%1: remove %2"
 msgstr "%1 : supprimer %2"
 
-#: src/backend/core/AbstractAspect.cpp:596
+#: src/backend/core/AbstractAspect.cpp:603
 #, kde-format
 msgid "%1: remove all children"
 msgstr "%1 : supprimer tous les enfants"
 
-#: src/backend/core/AbstractAspect.cpp:708
+#: src/backend/core/AbstractAspect.cpp:715
 #, kde-format
 msgid "%1: pasted"
 msgstr "%1 : collé"
 
-#: src/backend/core/AbstractAspect.cpp:803
+#: src/backend/core/AbstractAspect.cpp:810
 #, kde-format
 msgid "%1: pasted '%2'"
 msgstr "%1 : collage de « %2 »"
 
-#: src/backend/core/AbstractAspect.cpp:805
+#: src/backend/core/AbstractAspect.cpp:812
 #, kde-format
 msgid "%1: duplicated '%2'"
 msgstr "%1 : duplicata de « %2 »"
 
-#: src/backend/core/AbstractAspect.cpp:806
+#: src/backend/core/AbstractAspect.cpp:813
 #, kde-format
 msgid "Copy of '%1'"
 msgstr "Copie de « %1 »"
 
-#: src/backend/core/AbstractAspect.cpp:947
+#: src/backend/core/AbstractAspect.cpp:954
 #, kde-format
 msgid "Attribute 'name' is missing or empty."
 msgstr "L'attribut « nom » n'existe pas ou est vide."
 
-#: src/backend/core/AbstractAspect.cpp:954
+#: src/backend/core/AbstractAspect.cpp:961
 #, kde-format
 msgid "Invalid creation time for '%1'. Using current time."
 msgstr ""
@@ -367,23 +367,23 @@ msgctxt "default labels of filter input ports"
 msgid "In%1"
 msgstr "Dans %1"
 
-#: src/backend/core/AbstractPart.cpp:135
+#: src/backend/core/AbstractPart.cpp:129
 #, kde-format
 msgid "Import Data"
 msgstr "Importer des données"
 
-#: src/backend/core/AbstractPart.cpp:136 src/frontend/ActionsManager.cpp:261
+#: src/backend/core/AbstractPart.cpp:130 src/frontend/ActionsManager.cpp:261
 #, kde-format
 msgid "From File..."
 msgstr "Depuis le fichier..."
 
-#: src/backend/core/AbstractPart.cpp:138 src/frontend/ActionsManager.cpp:281
+#: src/backend/core/AbstractPart.cpp:132 src/frontend/ActionsManager.cpp:281
 #, kde-format
 msgid "From SQL Database..."
 msgstr "A partir d'une base de données SQL..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:147
+#: src/backend/core/AbstractPart.cpp:141
 #: src/frontend/spreadsheet/ExportSpreadsheetDialog.cpp:328
 #: src/frontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/frontend/ui/worksheet/exportworksheetwidget.ui:17
@@ -392,22 +392,22 @@ msgstr "A partir d'une base de données SQL..."
 msgid "Export"
 msgstr "Exporter"
 
-#: src/backend/core/AbstractPart.cpp:148
+#: src/backend/core/AbstractPart.cpp:142
 #, kde-format
 msgid "Print"
 msgstr "Imprimer"
 
-#: src/backend/core/AbstractPart.cpp:149
+#: src/backend/core/AbstractPart.cpp:143
 #, kde-format
 msgid "Print Preview"
 msgstr "Aperçu avant impression"
 
-#: src/backend/core/AbstractPart.cpp:157 src/frontend/ActionsManager.cpp:381
+#: src/backend/core/AbstractPart.cpp:151 src/frontend/ActionsManager.cpp:381
 #, kde-format
 msgid "&Close"
 msgstr "&Fermer"
 
-#: src/backend/core/AbstractPart.cpp:162 src/backend/core/AbstractPart.cpp:175
+#: src/backend/core/AbstractPart.cpp:156 src/backend/core/AbstractPart.cpp:169
 #, kde-format
 msgid "Show"
 msgstr "Afficher"
@@ -6403,14 +6403,14 @@ msgstr "%1 : définir une police de texte"
 msgid "no note element found"
 msgstr "Aucun élément note trouvé"
 
-#: src/backend/notebook/Notebook.cpp:62
+#: src/backend/notebook/Notebook.cpp:64
 #, kde-format
 msgid "Couldn't find the plugin for %1. Please check your installation."
 msgstr ""
 "Impossible de trouver le module externe pour %1. Veuillez vérifier votre "
 "installation."
 
-#: src/backend/notebook/Notebook.cpp:81
+#: src/backend/notebook/Notebook.cpp:82
 #, kde-format
 msgid "Couldn't create the sessions for %1. Please check your installation."
 msgstr ""
@@ -11586,7 +11586,7 @@ msgid "Select Y-Region and Zoom In"
 msgstr "Sélectionnez une région en Y et l'agrandir"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
-#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1573
+#: src/frontend/ActionsManager.cpp:610 src/frontend/MainWin.cpp:1574
 #: src/frontend/ui/dockwidgets/cartesianplotdock.ui:1429
 #: src/frontend/worksheet/WorksheetView.cpp:373
 #, kde-format
@@ -13591,7 +13591,7 @@ msgstr ""
 
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:826
 #: src/frontend/datasources/MQTTSubscriptionWidget.cpp:828
-#: src/frontend/MainWin.cpp:1998
+#: src/frontend/MainWin.cpp:1999
 #, kde-format
 msgid "Warning"
 msgstr "Avertissement"
@@ -13967,7 +13967,7 @@ msgstr "%1 axes : modèle « %2 » chargé"
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:375
 #: src/frontend/dockwidgets/LollipopPlotDock.cpp:452
 #: src/frontend/dockwidgets/MatrixDock.cpp:275
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:801
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:806
 #: src/frontend/dockwidgets/QQPlotDock.cpp:286
 #: src/frontend/dockwidgets/ReferenceLineDock.cpp:228
 #: src/frontend/dockwidgets/RunChartDock.cpp:229
@@ -14732,7 +14732,7 @@ msgid "Custom value for the kernel bandwidth"
 msgstr "Valeur personnalisée pour la bande passante du noyau"
 
 #: src/frontend/dockwidgets/KDEPlotDock.cpp:373
-#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:799
+#: src/frontend/dockwidgets/ProcessBehaviorChartDock.cpp:804
 #: src/frontend/dockwidgets/QQPlotDock.cpp:284
 #: src/frontend/dockwidgets/RunChartDock.cpp:227
 #: src/frontend/dockwidgets/XYCurveDock.cpp:1034
@@ -16663,12 +16663,12 @@ msgstr "%1 imprimé"
 msgid "%1"
 msgstr "%1"
 
-#: src/frontend/MainWin.cpp:1894
+#: src/frontend/MainWin.cpp:1895
 #, kde-format
 msgid "Kaggle CLI tool not found"
 msgstr "Il a été impossible de trouver l'outil « Kaggle CLI »"
 
-#: src/frontend/MainWin.cpp:1895
+#: src/frontend/MainWin.cpp:1896
 #, kde-format
 msgid ""
 "Provide the path to the Kaggle CLI tool in the application settings and try "
@@ -16677,27 +16677,27 @@ msgstr ""
 "Veuillez fournir l'emplacement complet d'accès à l'outil « Kaggle CLI » dans "
 "les paramètres de l'application et réessayez."
 
-#: src/frontend/MainWin.cpp:1961
+#: src/frontend/MainWin.cpp:1962
 #, kde-format
 msgid "%1 exported"
 msgstr "%1 exporté"
 
-#: src/frontend/MainWin.cpp:1968
+#: src/frontend/MainWin.cpp:1969
 #, kde-format
 msgid "FITS files saved"
 msgstr "Fichiers « FITS » enregistrés"
 
-#: src/frontend/MainWin.cpp:1980
+#: src/frontend/MainWin.cpp:1981
 #, kde-format
 msgid "MQTT Client%1"
 msgstr "Client « MQTT » %1"
 
-#: src/frontend/MainWin.cpp:1998
+#: src/frontend/MainWin.cpp:1999
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
 msgstr "Il y a déjà un client « MQTT » avec cet hôte !"
 
-#: src/frontend/MainWin.cpp:2002
+#: src/frontend/MainWin.cpp:2003
 #, kde-format
 msgid "Live data source%1"
 msgstr "Source de données en temps réel (%1)"
