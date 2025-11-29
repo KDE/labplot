@@ -222,6 +222,9 @@ private:
 	QActionGroup* addFitActionGroup{nullptr};
 	QActionGroup* addDistributionFitActionGroup{nullptr};
 
+	// time series analysis
+	QAction* tsaSeasonalDecompositionAction{nullptr};
+
 	// hypothesis testing
 	QActionGroup* addHypothesisTestActionGroup{nullptr};
 
@@ -238,8 +241,8 @@ private:
 	QMenu* m_spreadsheetMenu{nullptr};
 	QMenu* m_plotDataMenu{nullptr};
 	QMenu* m_analyzePlotMenu{nullptr};
-	// hypothesis related menu
 	QMenu* m_statisticalAnalysisMenu{nullptr};
+	QMenu* m_timeSeriesAnalysisMenu{nullptr};
 	QMenu* m_hypothesisTestMenu{nullptr};
 
 	bool m_suppressResize{false};
@@ -293,6 +296,8 @@ private Q_SLOTS:
 	void plotData(QAction*);
 	void plotAnalysisData(QAction*);
 	void plotDataDistributionFit(QAction*);
+
+	void addSeasonalDecomposition();
 
 	void fillSelectedCellsWithRowNumbers();
 	void fillSelectedCellsWithRandomNumbers();

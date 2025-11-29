@@ -904,7 +904,7 @@ void ProcessBehaviorChartPrivate::recalc() {
 
 		// notify the dock widget if the sample size is bigger than the number of rows in the data column
 		if (dataColumn && count == 0)
-			Q_EMIT q->statusInfo(i18n("Not enough data provided."));
+			Q_EMIT q->statusError(i18n("Not enough data provided."));
 
 		return;
 	}
@@ -997,7 +997,7 @@ void ProcessBehaviorChartPrivate::updateControlLimits() {
 	lowerLimit = 0.;
 	yColumn->clear();
 	yColumn->resizeTo(xColumn->rowCount());
-	Q_EMIT q->statusInfo(QString()); // reset the previous info message
+	Q_EMIT q->statusError(QString()); // reset the previous message
 	dataCurve->setUndoAware(false);
 
 	// determine the number of labels in the source data to be taken into account

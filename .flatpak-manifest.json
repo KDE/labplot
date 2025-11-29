@@ -22,12 +22,6 @@
         "--system-talk-name=org.freedesktop.UDisks2",
         "--talk-name=org.freedesktop.Flatpak"
     ],
-    "build-args": [
-        "--share=network"
-    ],
-    "extensions": {
-        "org.freedesktop.Sdk.Extension.python3": {}
-    },
     "cleanup": [
         "/include",
         "/lib/cmake",
@@ -39,10 +33,9 @@
         "/share/info",
         "/share/man"
     ],
-    "build-options": {
-        "append-path": "/usr/lib/sdk/llvm18/bin",
-        "append-ld-library-path": "/usr/lib/sdk/llvm18/lib"
-    },
+    "cleanup-commands": [
+        "/app/cleanup-BaseApp.sh"
+    ],
     "modules": [
         {
             "name": "eigen",
@@ -177,8 +170,7 @@
                 {
                     "type": "archive",
                     "url": "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.6.2.tar.gz",
-                    "sha256": "66fd078cc0bea896b0d44b120d46d6805421a5361d3a5ad84d9f397b1b5de2cb",
-		    "disable-http-decompression": true
+                    "sha256": "66fd078cc0bea896b0d44b120d46d6805421a5361d3a5ad84d9f397b1b5de2cb"
                 }
             ]
         },
@@ -214,8 +206,7 @@
                 {
                     "type": "archive",
                     "url": "https://download.kde.org/stable/frameworks/6.13/kuserfeedback-6.13.0.tar.xz",
-                    "sha256": "48c186482fe7a6f1017a7e50b3a16fd7c10c10f7f963c00f32c61bb073404b9a",
-		    "_comment": "requires minimum ecm version provided by runtime"
+                    "sha256": "48c186482fe7a6f1017a7e50b3a16fd7c10c10f7f963c00f32c61bb073404b9a"
                 }
             ]
         },
@@ -347,24 +338,43 @@
         {
             "name": "labplot",
             "buildsystem": "cmake-ninja",
-	    "build-options": {
-		    "env": {
-			    "LLVM_INSTALL_DIR": "/usr/lib/sdk/llvm18"
-		    }
-	    },
             "config-opts": [
 		    "-DQt6Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt6Mqtt",
 		    "-DLOCAL_QT_ADVANCED_DOCK_COPY=OFF",
-		    "-DENABLE_TESTS=OFF",
-		    "-DENABLE_PYTHON_SDK=OFF",
-		    "-DENABLE_PYTHON_SCRIPTING=OFF"
+		    "-DENABLE_TESTS=OFF"
 	    ],
+	    "build-options": {
+		    "env": {
+			    "CLANG_INSTALL_DIR": "/app"
+		    }
+	    },
 	    "sources": [
                 {
                     "type": "dir",
                     "path": "."
                 }
-            ]
+            ],
+	    "modules": [
+                {
+		 "name": "llvm18",
+		    "buildsystem": "simple",
+		    "build-commands": [
+			    "cmake -S llvm -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS=clang -DLLVM_TARGETS_TO_BUILD=Native -DLLVM_INCLUDE_TESTS=OFF -DLLVM_INCLUDE_DOCS=OFF -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_INCLUDE_BENCHMARKS=OFF -DLLVM_ENABLE_ASSERTIONS=OFF -DLLVM_BUILD_TOOLS=OFF -DLLVM_ENABLE_BINDINGS=OFF -DCLANG_BUILD_EXAMPLES=OFF -DLLVM_ENABLE_RTTI=OFF -DLLVM_ENABLE_EH=OFF",
+			    "ninja -C build libclang",
+			    "mkdir -p /app/lib /app/lib/clang/18/include",
+			    "cp -av build/lib/libclang.so.18.1.8 /app/lib",
+                            "ln -s /app/lib/libclang.so.18.1.8 /app/lib/libclang.so.18.1",
+                            "cp -r build/lib/clang/18/include/* /app/lib/clang/18/include/"
+		  ],
+		  "sources": [
+			    {
+			    "type": "archive",
+			    "url": "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/llvm-project-18.1.8.src.tar.xz",
+			    "sha256": "0b58557a6d32ceee97c8d533a59b9212d87e0fc4d2833924eb6c611247db2f2a"
+			}
+		]
+		}
+	    ]
         }
     ]
 }

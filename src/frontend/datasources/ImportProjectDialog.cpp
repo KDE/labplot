@@ -373,7 +373,7 @@ void ImportProjectDialog::showTopLevelOnly(const QModelIndex& index) {
 */
 bool ImportProjectDialog::isTopLevel(const AbstractAspect* aspect) const {
 	for (auto type : m_projectParser->topLevelClasses()) {
-		if (aspect->inherits(type))
+		if (aspect->inherits(AbstractAspect::typeName(type).data()))
 			return true;
 	}
 	return false;

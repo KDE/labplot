@@ -12,6 +12,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/Worksheet.h"
@@ -22,7 +23,6 @@
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/ReferenceRange.h"
 #include "backend/worksheet/plots/cartesian/plots.h"
-
 #ifndef SDK
 #include "backend/core/Workbook.h"
 #include "backend/datapicker/Datapicker.h"
@@ -119,6 +119,9 @@ public:
 		else if (type == AspectType::Column)
 			return new Column(QString());
 
+		/* time series analysis */
+		else if (type == AspectType::SeasonalDecomposition)
+			return new SeasonalDecomposition(QString(), true /*loading*/);
 #ifndef SDK
 		else if (type == AspectType::Matrix)
 			return new Matrix(QString(), true /*loading*/);

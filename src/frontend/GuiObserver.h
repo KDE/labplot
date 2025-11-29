@@ -63,7 +63,7 @@ class DatapickerCurveWidget;
 #ifdef HAVE_SCRIPTING
 class ScriptDock;
 #endif
-
+class SeasonalDecompositionDock;
 #ifdef HAVE_CANTOR_LIBS
 class NotebookDock;
 #endif
@@ -136,8 +136,11 @@ private:
 	XYConvolutionCurveDock* m_xyConvolutionCurveDock{nullptr};
 	XYCorrelationCurveDock* m_xyCorrelationCurveDock{nullptr};
 
-	// hypothesis test
+	// statistical analysis
 	HypothesisTestDock* m_hypothesisTestDock{nullptr};
+
+	// time series analysis
+	SeasonalDecompositionDock* m_seasonalDecompositionDock{nullptr};
 
 #ifdef HAVE_SCRIPTING
 	ScriptDock* m_scriptDock{nullptr};

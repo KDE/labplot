@@ -6,6 +6,8 @@ New features:
 		* Add possibility to skip storing the data from columns and matrices in the saved file
 	* [analysis]
 		* Save and load custom functions for fit, equation curve and function values
+	* [time series analysis]
+		* seasonal decomposition with STL and MSTL methods
 	* [spreadsheet]
 		* Pivot table
 		* allow to drop entire rows in the spreadsheet if the condition was met in the "Drop Values Dialog" for the selected columns

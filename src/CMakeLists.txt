@@ -91,6 +91,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/dockwidgets/ReferenceLineDock.cpp
     ${FRONTEND_DIR}/dockwidgets/ReferenceRangeDock.cpp
     ${FRONTEND_DIR}/dockwidgets/RunChartDock.cpp
+    ${FRONTEND_DIR}/dockwidgets/SeasonalDecompositionDock.cpp
     ${FRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
     ${FRONTEND_DIR}/dockwidgets/StatisticsSpreadsheetDock.cpp
     ${FRONTEND_DIR}/dockwidgets/QQPlotDock.cpp
@@ -267,6 +268,7 @@ set(UI_SOURCES
     ${FRONTEND_DIR}/ui/dockwidgets/referencelinedock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/referencerangedock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/runchartdock.ui
+    ${FRONTEND_DIR}/ui/dockwidgets/seasonaldecompositiondock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/statisticsspreadsheetdock.ui
     ${FRONTEND_DIR}/ui/dockwidgets/qqplotdock.ui
@@ -431,6 +433,8 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
     ${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
     ${BACKEND_DIR}/spreadsheet/StatisticsSpreadsheet.cpp
+    ${BACKEND_DIR}/statistics/HypothesisTest.cpp
+    ${BACKEND_DIR}/timeseriesanalysis/SeasonalDecomposition.cpp
     ${BACKEND_DIR}/worksheet/Background.cpp
     ${BACKEND_DIR}/worksheet/Image.cpp
     ${BACKEND_DIR}/worksheet/Line.cpp
@@ -479,7 +483,6 @@ set(BACKEND_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYConvolutionCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
-    ${BACKEND_DIR}/statistics/HypothesisTest.cpp
 )
 
 if(ENABLE_SCRIPTING)

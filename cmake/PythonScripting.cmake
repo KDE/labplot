@@ -260,7 +260,8 @@ set(python_scripting_link_libraries
 # Hide noisy warnings in shiboken scripting generated sources
 # 1. Wno-missing-include-dirs : pyside6 declares an include directory in the INTERFACE_INCLUDE_DIRECTORIES which doesn't actually exist and thus the compiler complains
 # 2. Wno-cast-function-type: the shiboken6 generated files contain weird but correct function casts which the compiler complains about
-set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_OPTIONS -Wno-cast-function-type -Wno-missing-include-dirs)
+# 3. O to avoid warning: #warning _FORTIFY_SOURCE requires compiling with optimization (-O) [-Wcpp]
+set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_OPTIONS -Wno-cast-function-type -Wno-missing-include-dirs -O)
 
 # Previously, we were adding the python_scripting_includes to the liblabplotbackendlib target, but we can actually restrict things further and add these includes to only the
 # shiboken generated sources since they are the ones who require the includes
@@ -268,7 +269,8 @@ set_property(SOURCE ${shiboken_scripting_generated_sources} ${python_scripting_b
 
 # Shiboken internally defines the Py_LIMITED_API to 3.8 and we also define the Py_LIMITED_API but to 3.9 so the compiler warns about a macro redefinition. Now we apply our
 # definition to only our source files
-set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_DEFINITIONS -DPy_LIMITED_API=0x03090000)
+# Full API needed for PyFunction_Check() and PyRun_String()
+#set_property(SOURCE ${python_scripting_backend_sources} APPEND PROPERTY COMPILE_DEFINITIONS -DPy_LIMITED_API=0x03090000)
 
 # PYTHON3_EXECUTABLE is the python executable path and is needed when initializing the python scripting interpreter
 set_property(SOURCE ${BACKEND_DIR}/script/python/PythonScriptRuntime.cpp APPEND PROPERTY COMPILE_DEFINITIONS -DPYTHON3_EXECUTABLE=${Python3_EXECUTABLE})
