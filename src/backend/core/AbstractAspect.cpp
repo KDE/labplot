@@ -280,7 +280,14 @@ void AbstractAspect::setHidden(bool value) {
 }
 
 /**
- * \brief Set "fixed" property which defines whether the object can be renamed, deleted, etc.
+ * \brief Set "fixed" property which is used to define internal created aspects used by other aspects
+ * It defines whether the object properties can be modified. If false any of the below data shall be
+ * modifyable (Must be done by the developer):
+ * - deleting
+ * - moving (order of the objects)
+ * - data changed (Column: row values changing, XYCurve: Changing the data columns, ...)
+ *
+ * Other properties like appearance properties shall still be modifyable
  */
 void AbstractAspect::setFixed(bool value) {
 	if (value == d->m_fixed)
@@ -936,6 +943,8 @@ bool AbstractAspect::readCommentElement(XmlStreamReader* reader) {
 void AbstractAspect::writeBasicAttributes(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QLatin1String("creation_time"), creationTime().toString(QLatin1String("yyyy-dd-MM hh:mm:ss:zzz")));
 	writer->writeAttribute(QLatin1String("name"), name());
+	writer->writeAttribute(QLatin1String("fixed"), QString::number(isFixed()));
+	writer->writeAttribute(QLatin1String("undoAware"), QString::number(isUndoAware()));
 	if (!d->m_suppressWriteUuid)
 		writer->writeAttribute(QLatin1String("uuid"), uuid().toString());
 }
@@ -952,7 +961,6 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 	QString str = attribs.value(QLatin1String("name")).toString();
 	if (str.isEmpty())
 		reader->raiseWarning(i18n("Attribute 'name' is missing or empty."));
-
 	d->m_name = str;
 
 	// creation time
@@ -968,10 +976,18 @@ bool AbstractAspect::readBasicAttributes(XmlStreamReader* reader) {
 			d->m_creation_time = QDateTime::currentDateTime();
 	}
 
+	str = attribs.value(QLatin1String("fixed")).toString();
+	if (!str.isEmpty())
+		d->m_fixed = static_cast<bool>(str.toInt());
+
+	str = attribs.value(QLatin1String("undoAware")).toString();
+	if (!str.isEmpty())
+		d->m_undoAware = static_cast<bool>(str.toInt());
+
 	str = attribs.value(QLatin1String("uuid")).toString();
-	if (!str.isEmpty()) {
+	if (!str.isEmpty())
 		d->m_uuid = QUuid(str);
-	}
+
 	return true;
 }
 

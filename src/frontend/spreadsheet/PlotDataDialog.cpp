@@ -856,13 +856,10 @@ void PlotDataDialog::adjustWorksheetSize(Worksheet* worksheet) const {
 void PlotDataDialog::setAxesColumnLabels(CartesianPlot* plot, const Column* column) {
 	// Use value labels if possible
 	if (column && column->valueLabelsInitialized()) {
-		for (auto axis : plot->children<Axis>()) {
-			if (axis->orientation() == Axis::Orientation::Vertical) {
-				// Use first vertical axis
-				axis->setMajorTicksType(Axis::TicksType::ColumnLabels);
-				axis->setMajorTicksColumn(column);
-				break;
-			}
+		auto* axis = plot->verticalAxis();
+		if (axis) {
+			axis->setMajorTicksType(Axis::TicksType::ColumnLabels);
+			axis->setMajorTicksColumn(column);
 		}
 	}
 }
@@ -874,7 +871,11 @@ void PlotDataDialog::setAxesColumnLabels(CartesianPlot* plot, const QString& col
 
 void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) const {
 	DEBUG(Q_FUNC_INFO)
-	const auto& axes = plot->children<Axis>();
+	auto* horizontalAxis = plot->horizontalAxis();
+	auto* verticalAxis = plot->verticalAxis();
+	if (!horizontalAxis || !verticalAxis)
+		return;
+
 	switch (m_plotType) {
 	case Plot::PlotType::Line:
 	case Plot::PlotType::LineHorizontalStep:
@@ -889,81 +890,50 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 	case Plot::PlotType::Formula: {
 		// x-axis title
 		const QString& xColumnName = ui->cbXColumn->currentText();
-		// DEBUG(Q_FUNC_INFO << ", x column name = " << STDSTRING(xColumnName))
-
-		for (auto* axis : axes) {
-			if (axis->orientation() == Axis::Orientation::Horizontal) {
-				axis->title()->setText(xColumnName);
-				break;
-			}
-		}
+		horizontalAxis->title()->setText(xColumnName);
 
 		// y-axis title
-		for (auto* axis : axes) {
-			if (axis->orientation() == Axis::Orientation::Vertical) {
-				if (!name.isEmpty()) {
-					// multiple columns are plotted with "one curve per plot",
-					// the function is called with the column name.
-					// use it for the x-axis title
-					axis->title()->setText(name);
-				} else if (m_columnComboBoxes.size() == 2) {
-					// if we only have one single y-column to plot, we can set the title of the y-axes
-					const QString& yColumnName = m_columnComboBoxes[1]->currentText();
-					axis->title()->setText(yColumnName);
-				}
-
-				break;
-			}
+		if (!name.isEmpty()) {
+			// multiple columns are plotted with "one curve per plot",
+			// the function is called with the column name.
+			// use it for the x-axis title
+			verticalAxis->title()->setText(name);
+		} else if (m_columnComboBoxes.size() == 2) {
+			// if we only have one single y-column to plot, we can set the title of the y-axes
+			const QString& yColumnName = m_columnComboBoxes[1]->currentText();
+			verticalAxis->title()->setText(yColumnName);
 		}
+
 		break;
 	}
 	case Plot::PlotType::Histogram:
 	case Plot::PlotType::KDEPlot: {
 		// x-axis title
-		for (auto* axis : axes) {
-			if (axis->orientation() == Axis::Orientation::Horizontal) {
-				if (!name.isEmpty()) {
-					// multiple columns are plotted with "one curve per plot",
-					// the function is called with the column name.
-					// use it for the x-axis title
-					axis->title()->setText(name);
-				} else if (m_columnComboBoxes.size() == 1) {
-					const QString& yColumnName = m_columnComboBoxes.constFirst()->currentText();
-					axis->title()->setText(yColumnName);
-				}
-
-				break;
-			}
+		if (!name.isEmpty()) {
+			// multiple columns are plotted with "one curve per plot",
+			// the function is called with the column name.
+			// use it for the x-axis title
+			horizontalAxis->title()->setText(name);
+		} else if (m_columnComboBoxes.size() == 1) {
+			const QString& yColumnName = m_columnComboBoxes.constFirst()->currentText();
+			horizontalAxis->title()->setText(yColumnName);
 		}
 
 		// y-axis title
-		for (auto* axis : axes) {
-			if (axis->orientation() == Axis::Orientation::Vertical) {
-				if (m_plotType == Plot::PlotType::Histogram)
-					axis->title()->setText(i18n("Frequency"));
-				else
-					axis->title()->setText(i18n("Density"));
-				break;
-			}
-		}
+		if (m_plotType == Plot::PlotType::Histogram)
+			verticalAxis->title()->setText(i18n("Frequency"));
+		else
+			verticalAxis->title()->setText(i18n("Density"));
+
 		break;
 	}
 	case Plot::PlotType::QQPlot: {
 		// x-axis title
-		for (auto* axis : axes) {
-			if (axis->orientation() == Axis::Orientation::Horizontal) {
-				axis->title()->setText(i18n("Theoretical Quantiles"));
-				break;
-			}
-		}
+		horizontalAxis->title()->setText(i18n("Theoretical Quantiles"));
 
 		// y-axis title
-		for (auto* axis : axes) {
-			if (axis->orientation() == Axis::Orientation::Vertical) {
-				axis->title()->setText(i18n("Sample Quantiles"));
-				break;
-			}
-		}
+		verticalAxis->title()->setText(i18n("Sample Quantiles"));
+
 		break;
 	}
 	case Plot::PlotType::BoxPlot: {
@@ -987,6 +957,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		else
 			plot->setRange(Dimension::Y, yIndex, range);
 
+		const auto& axes = plot->children<Axis>();
 		for (auto* axis : axes) {
 			if (axis->orientation() != orientation) {
 				axis->setMajorTicksType(Axis::TicksType::Spacing);
@@ -1027,6 +998,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 
 		plot->setNiceExtend(false);
 
+		const auto& axes = plot->children<Axis>();
 		for (auto* axis : axes) {
 			if (axis->orientation() != orientation) {
 				axis->setMajorTicksType(Axis::TicksType::Spacing);
@@ -1044,30 +1016,18 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		plot->setNiceExtend(false);
 		plot->setRightPadding(plot->horizontalPadding()); // do symmetric padding horizontally to have enough space for values labels in PBC
 		// x-axis title
-		for (auto* axis : axes) {
-			if (axis->orientation() == Axis::Orientation::Horizontal) {
-				axis->title()->setText(i18n("Sample"));
-				break;
-			}
-		}
+		horizontalAxis->title()->setText(i18n("Sample"));
 
 		// y-axis title
-		for (auto* axis : axes) {
-			if (axis->orientation() == Axis::Orientation::Vertical) {
-				if (!name.isEmpty()) {
-					// multiple columns are plotted with "one curve per plot",
-					// the function is called with the column name.
-					// use it for the x-axis title
-					axis->title()->setText(name);
-				} else if (m_columnComboBoxes.size() == 1) {
-					const QString& yColumnName = m_columnComboBoxes.constFirst()->currentText();
-					axis->title()->setText(yColumnName);
-				}
-
-				break;
-			}
+		if (!name.isEmpty()) {
+			// multiple columns are plotted with "one curve per plot",
+			// the function is called with the column name.
+			// use it for the x-axis title
+			verticalAxis->title()->setText(name);
+		} else if (m_columnComboBoxes.size() == 1) {
+			const QString& yColumnName = m_columnComboBoxes.constFirst()->currentText();
+			verticalAxis->title()->setText(yColumnName);
 		}
-		break;
 	}
 	}
 }

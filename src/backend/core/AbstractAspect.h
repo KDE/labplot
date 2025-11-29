@@ -64,8 +64,6 @@ enum class AspectType : quint64 {
 	QQPlot,
 	KDEPlot,
 
-	HypothesisTest,
-
 	// continuous improvement plots
 	ProcessBehaviorChart,
 	RunChart,
@@ -112,10 +110,16 @@ enum class AspectType : quint64 {
 	SimpleFilterColumn,
 	ColumnStringIO,
 
+	// statistical analysis
+	HypothesisTest,
+
+	// time series analysis
+	SeasonalDecomposition,
+
 	Folder,
 	Project,
 	MQTTClient,
-	MQTTSubscription,
+	MQTTSubscription
 };
 
 #ifdef SDK
@@ -277,6 +281,9 @@ public:
 			return std::string_view("MQTTSubscription");
 		case AspectType::HypothesisTest:
 			return std::string_view("HypothesisTest");
+			break;
+		case AspectType::SeasonalDecomposition:
+			return std::string_view("SeasonalDecomposition");
 			break;
 		}
 

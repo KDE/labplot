@@ -163,12 +163,8 @@ SpreadsheetModel* Spreadsheet::model() const {
 QWidget* Spreadsheet::view() const {
 #ifndef SDK
 	if (!m_partView) {
-		bool readOnly = false;
-		if (this->parentAspect()) {
-			const auto type = this->parentAspect()->type();
-			readOnly = (type == AspectType::Spreadsheet || type == AspectType::DatapickerCurve);
-		}
-		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this), readOnly);
+		Q_D(const Spreadsheet);
+		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this), d->readOnly);
 		m_partView = m_view;
 		connect(this, &Spreadsheet::viewAboutToBeDeleted, [this]() {
 			m_view = nullptr;
@@ -210,6 +206,16 @@ bool Spreadsheet::printPreview() const {
 #else
 	return true;
 #endif
+}
+
+void Spreadsheet::setReadOnly(const bool value) {
+	Q_D(Spreadsheet);
+	d->readOnly = value;
+}
+
+bool Spreadsheet::readOnly() const {
+	Q_D(const Spreadsheet);
+	return d->readOnly;
 }
 
 /*!
@@ -1217,6 +1223,7 @@ void Spreadsheet::toggleStatisticsSpreadsheet(bool on) {
 			return;
 
 		d->statisticsSpreadsheet = new StatisticsSpreadsheet(this);
+		d->statisticsSpreadsheet->setReadOnly(true);
 		addChildFast(d->statisticsSpreadsheet);
 	} else {
 		if (!d->statisticsSpreadsheet)
@@ -1242,6 +1249,7 @@ void Spreadsheet::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	writer->writeStartElement(QLatin1String("general"));
+	writer->writeAttribute(QStringLiteral("readOnly"), QString::number(d->readOnly));
 	writer->writeAttribute(QStringLiteral("showComments"), QString::number(d->showComments));
 	writer->writeAttribute(QStringLiteral("showSparklines"), QString::number(d->showSparklines));
 	writer->writeEndElement();
@@ -1287,6 +1295,7 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 					return false;
 			} else if (reader->name() == QLatin1String("general")) {
 				attribs = reader->attributes();
+				READ_INT_VALUE("readOnly", readOnly, bool);
 				READ_INT_VALUE("showComments", showComments, bool);
 				READ_INT_VALUE("showSparklines", showSparklines, bool);
 			} else if (reader->name() == QLatin1String("linking")) {

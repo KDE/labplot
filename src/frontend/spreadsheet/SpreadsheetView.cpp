@@ -24,6 +24,7 @@
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/StatisticsSpreadsheet.h"
 #include "backend/statistics/HypothesisTest.h"
+#include "backend/timeseriesanalysis/SeasonalDecomposition.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "frontend/spreadsheet/SpreadsheetHeaderView.h"
 
@@ -572,6 +573,10 @@ void SpreadsheetView::initActions() {
 	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Binomial"), addDistributionFitActionGroup);
 	fitAction->setData(static_cast<int>(nsl_sf_stats_binomial));
 
+	// time series analysis
+	tsaSeasonalDecompositionAction = new QAction(QIcon::fromTheme(QStringLiteral("preferences-system-time")), i18n("Seasonal Decomposition"), this);
+
+	// statistical analysis
 	addHypothesisTestActionGroup = new QActionGroup(this);
 
 	connectActions();
@@ -679,6 +684,11 @@ void SpreadsheetView::initMenus() {
 	HypothesisTest::fillAddNewHypothesisTest(m_hypothesisTestMenu, addHypothesisTestActionGroup);
 	m_statisticalAnalysisMenu->addMenu(m_hypothesisTestMenu);
 	m_columnMenu->addMenu(m_statisticalAnalysisMenu);
+
+	// time series analysis
+	m_timeSeriesAnalysisMenu = new QMenu(i18n("Time Series Analysis"), this);
+	m_timeSeriesAnalysisMenu->addAction(tsaSeasonalDecompositionAction);
+	m_columnMenu->addMenu(m_timeSeriesAnalysisMenu);
 
 	m_columnSetAsMenu = new QMenu(i18n("Set Column As"), this);
 	m_columnMenu->addSeparator();
@@ -945,6 +955,10 @@ void SpreadsheetView::connectActions() {
 	connect(addFitActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotAnalysisData);
 	connect(addDistributionFitActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::plotDataDistributionFit);
 
+	// time series analysis
+	connect(tsaSeasonalDecompositionAction, &QAction::triggered, this, &SpreadsheetView::addSeasonalDecomposition);
+
+	// statistical analysis
 	connect(addHypothesisTestActionGroup, &QActionGroup::triggered, [=](QAction* action) {
 		const auto& columns = selectedColumns();
 		QString name = (columns.size() == 1) ? columns.constFirst()->name() : m_spreadsheet->name();
@@ -991,6 +1005,7 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 		menu->insertMenu(firstAction, m_plotDataMenu);
 		menu->insertMenu(firstAction, m_analyzePlotMenu);
 		menu->insertMenu(firstAction, m_statisticalAnalysisMenu);
+		menu->insertMenu(firstAction, m_timeSeriesAnalysisMenu);
 		menu->insertSeparator(firstAction);
 	}
 	menu->insertMenu(firstAction, m_selectionMenu);
@@ -1037,6 +1052,7 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	menu->insertMenu(firstAction, m_plotDataMenu);
 	menu->insertMenu(firstAction, m_analyzePlotMenu);
 	menu->insertMenu(firstAction, m_statisticalAnalysisMenu);
+	menu->insertMenu(firstAction, m_timeSeriesAnalysisMenu);
 	menu->insertSeparator(firstAction);
 
 	if (numeric)
@@ -2243,6 +2259,40 @@ void SpreadsheetView::plotDataDistributionFit(QAction* action) {
 	dlg->setSelectedColumns(columns);
 
 	dlg->exec();
+}
+
+void SpreadsheetView::addSeasonalDecomposition() {
+	const auto& columns = selectedColumns(false);
+	if (columns.isEmpty())
+		return;
+
+	auto* decomp = new SeasonalDecomposition(i18n("Seasonal Decomposition"));
+
+	if (columns.size() == 1) {
+		auto* col = columns.constFirst();
+		if (col->plotDesignation() == AbstractColumn::PlotDesignation::X)
+			decomp->setXColumn(col);
+		else {
+			decomp->setYColumn(col);
+			decomp->setName(i18n("Seasonal Decomposition for %1", col->name()));
+		}
+	} else {
+		// more than one column were selected, identifiy the first X and the first Y columns in the selection.
+		AbstractColumn* colX{nullptr};
+		AbstractColumn* colY{nullptr};
+		for (auto* col : columns) {
+			if (!colX && col->plotDesignation() == AbstractColumn::PlotDesignation::X)
+				colX = col;
+			else if (!colY && col->plotDesignation() == AbstractColumn::PlotDesignation::Y) {
+				colY = col;
+				decomp->setName(i18n("Seasonal Decomposition for %1", col->name()));
+			}
+		}
+		decomp->setXColumn(colX);
+		decomp->setYColumn(colY);
+	}
+
+	project()->addChild(decomp);
 }
 
 void SpreadsheetView::fillSelectedCellsWithRowNumbers() {

@@ -65,28 +65,33 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	setAspects(list);
 
 	// check whether we have non-editable columns:
-	// 1. columns in a LiveDataSource
-	// 2. columns in the spreadsheet of a datapicker curve
-	// 3. columns in the statistics spreadsheet
-	// 4. columns for residuals calculated in XYFitCurve (don't have Spreadsheet as the parent)
+	// 1. columns in read-only spreadsheets (LiveDataSource, Datapicker curve results, etc.)
+	// 2. columns for residuals calculated in XYFitCurve (don't have Spreadsheet as the parent)
 	bool nonEditable = false;
-	bool statisticsColumn = false;
 	for (auto* col : m_columnsList) {
 		auto* s = dynamic_cast<Spreadsheet*>(col->parentAspect());
 		if (s) {
-			if (s->type() == AspectType::LiveDataSource || s->parentAspect()->type() == AspectType::DatapickerCurve) {
-				nonEditable = true;
-				break;
-			}
-
-			if (s->type() == AspectType::StatisticsSpreadsheet) {
-				statisticsColumn = true;
+			if (s->readOnly()) {
 				nonEditable = true;
 				break;
 			}
 		} else {
 			nonEditable = true;
 			break;
+		}
+	}
+
+	// check if we need to hide widgets for value labels. no value labels for
+	// * columns in statistics spreadsheets
+	// * columns in the result spreadsheet in SeasonalDecomposition
+	bool enableLabels = true;
+	for (auto* col : m_columnsList) {
+		auto* s = dynamic_cast<Spreadsheet*>(col->parentAspect());
+		if (s) {
+			if (s->type() == AspectType::StatisticsSpreadsheet || s->parentAspect()->type() == AspectType::SeasonalDecomposition) {
+				enableLabels = false;
+				break;
+			}
 		}
 	}
 
@@ -109,22 +114,24 @@ void ColumnDock::setColumns(QList<Column*> list) {
 		}
 	}
 
+	// type and formatting
 	ui.lType->setEnabled(sameMode);
-	ui.cbType->setEnabled(sameMode);
+	ui.cbType->setEnabled(sameMode && !nonEditable); // don't allow to change the column type if there is at least one non-editable column
 	ui.lNumericFormat->setEnabled(sameMode);
 	ui.cbNumericFormat->setEnabled(sameMode);
 	ui.lPrecision->setEnabled(sameMode);
 	ui.sbPrecision->setEnabled(sameMode);
 	ui.lDateTimeFormat->setEnabled(sameMode);
 	ui.cbDateTimeFormat->setEnabled(sameMode);
+
+	// widgets for value labels
 	ui.lLabels->setEnabled(sameMode);
 	ui.twLabels->setEnabled(sameMode);
 	ui.frameLabels->setEnabled(sameMode);
 
-	// no value labels to columns in StatisticsSpreadsheet
-	ui.lLabels->setVisible(!statisticsColumn);
-	ui.twLabels->setVisible(!statisticsColumn);
-	ui.frameLabels->setVisible(!statisticsColumn);
+	ui.lLabels->setVisible(enableLabels);
+	ui.twLabels->setVisible(enableLabels);
+	ui.frameLabels->setVisible(enableLabels);
 
 	ui.leName->setStyleSheet(QString());
 	ui.leName->setToolTip(QString());
@@ -146,10 +153,6 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	connect(m_column->outputFilter(), &AbstractSimpleFilter::formatChanged, this, &ColumnDock::columnFormatChanged);
 	connect(m_column->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &ColumnDock::columnPrecisionChanged);
 	connect(m_column, &AbstractColumn::plotDesignationChanged, this, &ColumnDock::columnPlotDesignationChanged);
-
-	// don't allow to change the column type if there is at least one non-editable column
-	if (sameMode)
-		ui.cbType->setEnabled(!nonEditable);
 }
 
 /*!
