@@ -11,7 +11,6 @@
 #include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "frontend/datasources/ImportSQLDatabaseWidget.h"
-#include "frontend/spreadsheet/SpreadsheetView.h"
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -346,10 +345,9 @@ void ImportSqlDatabaseTest::testExportSpreadsheetToSqlite() {
 	col3->setValueAt(2, 3.3);
 
 	// export to a temp file
-	auto* view = static_cast<SpreadsheetView*>(spreadsheet.view());
 	QTemporaryFile file;
 	QVERIFY(file.open());
-	view->exportToSQLite(file.fileName());
+	spreadsheet.exportToSQLite(file.fileName());
 
 	// check the content of the exported db
 	const QStringList& drivers = QSqlDatabase::drivers();
