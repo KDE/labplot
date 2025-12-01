@@ -25270,16 +25270,3 @@ msgstr "El procés «convert» ha fallat, codi de sortida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Close"
-#~ msgstr "Tanca"
-
-#~ msgid "%1: insert empty column"
-#~ msgid_plural "%1: insert empty columns"
-#~ msgstr[0] "%1: insereix columna buida"
-#~ msgstr[1] "%1: insereix columnes buides"
-
-#~ msgid "%1: insert empty row"
-#~ msgid_plural "%1: insert empty rows"
-#~ msgstr[0] "%1: insereix fila buida"
-#~ msgstr[1] "%1: insereix files buides"
