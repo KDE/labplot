@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-30 00:38+0000\n"
-"PO-Revision-Date: 2025-11-08 11:14+0100\n"
+"PO-Revision-Date: 2025-11-30 09:34+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.08.2\n"
+"X-Generator: Lokalize 25.08.3\n"
 
 #: src/backend/core/AbstractAspect.cpp:241
 #, kde-format
@@ -8180,17 +8180,16 @@ msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:102
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:880
-#, fuzzy, kde-format
-#| msgid "Results:"
+#, kde-format
 msgid "Result"
-msgstr "Resultaten:"
+msgstr "Resultaten"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:111
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:146
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:171
 #, kde-format
 msgid "Trend"
-msgstr ""
+msgstr "Trend"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:117
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:153
@@ -8200,7 +8199,7 @@ msgstr ""
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:730
 #, kde-format
 msgid "Seasonal"
-msgstr ""
+msgstr "Seizoen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:123
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:160
@@ -8226,28 +8225,24 @@ msgid "Original"
 msgstr "Origineel"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:143
-#, fuzzy, kde-format
-#| msgid "Original"
+#, kde-format
 msgid "Original Data"
-msgstr "Origineel"
+msgstr "Oorspronkelijke gegevens"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:149
-#, fuzzy, kde-format
-#| msgid "Components:"
+#, kde-format
 msgid "Trend Component"
-msgstr "Componenten:"
+msgstr "Trendcomponent"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:156
-#, fuzzy, kde-format
-#| msgid "Components:"
+#, kde-format
 msgid "Seasonal Component"
-msgstr "Componenten:"
+msgstr "Seizoenscomponent"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:163
-#, fuzzy, kde-format
-#| msgid "Residual mean square"
+#, kde-format
 msgid "Residual Component"
-msgstr "Restwaarde gemiddeld kwadraat"
+msgstr "Restwaardecomponent"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:267
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:546
@@ -8262,28 +8257,24 @@ msgid "%1: y-data source changed"
 msgstr "%1: y-gegevensbron gewijzigd"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:291
-#, fuzzy, kde-format
-#| msgid "%1: set author"
+#, kde-format
 msgid "%1: set method"
-msgstr "%1: auteur instellen"
+msgstr "%1: methode instellen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:299
-#, fuzzy, kde-format
-#| msgid "%1: set error bar size"
+#, kde-format
 msgid "%1: set period for STL"
-msgstr "%1: grootte foutenbalk instellen"
+msgstr "%1: periode voor STL instellen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:305
-#, fuzzy, kde-format
-#| msgid "%1: set whiskers range parameter"
+#, kde-format
 msgid "%1: set robust parameter for STL"
-msgstr "%1: bereikparameter whiskers instellen"
+msgstr "%1: robuuste parameter voor STL instellen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:311
-#, fuzzy, kde-format
-#| msgid "%1: set axis scaling factor"
+#, kde-format
 msgid "%1: set seasonal length for STL"
-msgstr "%1: schaalfactor as instellen"
+msgstr "%1: seizoenslengte voor STL instellen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:317
 #, fuzzy, kde-format
@@ -23410,13 +23401,13 @@ msgstr "Opties"
 #, fuzzy, kde-format
 #| msgid "Period:"
 msgid "Periods:"
-msgstr "Periode:"
+msgstr "Perioden"
 
 #. i18n: ectx: property (text), widget (QLabel, lMSTLLambda)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:173
-#, kde-format
+#, fuzzy, kde-format
 msgid "Lambda:"
-msgstr ""
+msgstr "Lambda"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter3)
 #. i18n: ectx: property (text), widget (QLabel, lMSTLIterations)
