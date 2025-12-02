@@ -8052,10 +8052,9 @@ msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:102
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:880
-#, fuzzy, kde-format
-#| msgid "Results:"
+#, kde-format
 msgid "Result"
-msgstr "结果："
+msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:111
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:146
@@ -8093,16 +8092,14 @@ msgstr "工作表"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:139
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:167
-#, fuzzy, kde-format
-#| msgid "Original Size"
+#, kde-format
 msgid "Original"
-msgstr "原始大小"
+msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:143
-#, fuzzy, kde-format
-#| msgid "Original Image"
+#, kde-format
 msgid "Original Data"
-msgstr "原始图像"
+msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:149
 #, kde-format
@@ -8132,16 +8129,14 @@ msgid "%1: y-data source changed"
 msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:291
-#, fuzzy, kde-format
-#| msgid "%1: set image"
+#, kde-format
 msgid "%1: set method"
-msgstr "%1：设置图像"
+msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:299
-#, fuzzy, kde-format
-#| msgid "%1: set axis color"
+#, kde-format
 msgid "%1: set period for STL"
-msgstr "%1：设置坐标轴颜色"
+msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:305
 #, kde-format
@@ -8189,28 +8184,24 @@ msgid "%1: set low pass degree for STL"
 msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:359
-#, fuzzy, kde-format
-#| msgid "%1: set heatmap format"
+#, kde-format
 msgid "%1: set seasonal jump for STL"
-msgstr "%1：设置热力图格式"
+msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:365
-#, fuzzy, kde-format
-#| msgid "%1: set heatmap format"
+#, kde-format
 msgid "%1: set seasonal auto-jump for STL"
-msgstr "%1：设置热力图格式"
+msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:371
-#, fuzzy, kde-format
-#| msgid "%1: set heatmap format"
+#, kde-format
 msgid "%1: set trend jump for STL"
-msgstr "%1：设置热力图格式"
+msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:377
-#, fuzzy, kde-format
-#| msgid "%1: set heatmap format"
+#, kde-format
 msgid "%1: set trend auto-jump for STL"
-msgstr "%1：设置热力图格式"
+msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:383
 #, kde-format
@@ -8223,22 +8214,19 @@ msgid "%1: set low pass auto-jump for STL"
 msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:397
-#, fuzzy, kde-format
-#| msgid "%1: set axis color"
+#, kde-format
 msgid "%1: set periods for MSTL"
-msgstr "%1：设置坐标轴颜色"
+msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:403
-#, fuzzy, kde-format
-#| msgid "%1: set heatmap format"
+#, kde-format
 msgid "%1: set Lambda for MSTL"
-msgstr "%1：设置热力图格式"
+msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:409
-#, fuzzy, kde-format
-#| msgid "%1: set axis color"
+#, kde-format
 msgid "%1: set iterations for MSTL"
-msgstr "%1：设置坐标轴颜色"
+msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:499
 #, kde-format
@@ -8281,10 +8269,9 @@ msgid "Time-series has less than two periods."
 msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:616
-#, fuzzy, kde-format
-#| msgid "Iterations"
+#, kde-format
 msgid "Iterations must be > 0."
-msgstr "迭代"
+msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:621
 #, kde-format
@@ -14901,10 +14888,9 @@ msgid "If enabled, uses the smallest odd integer greater than \"Period\"."
 msgstr ""
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:211
-#, fuzzy, kde-format
-#| msgid "Constants"
+#, kde-format
 msgid "0 - Constant"
-msgstr "常量"
+msgstr ""
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:212
 #, kde-format
@@ -14978,10 +14964,9 @@ msgid "Number of iterations used to refine the seasonal component."
 msgstr ""
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:646
-#, fuzzy, kde-format
-#| msgid "%1 spreadsheets: template \"%2\" loaded"
+#, kde-format
 msgid "%1 seasonal decompositions: template \"%2\" loaded"
-msgstr "数据表 %1：加载模板“%2”"
+msgstr ""
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:50
 #, kde-format
@@ -15756,12 +15741,10 @@ msgid "Properties: Hypothesis Test"
 msgstr ""
 
 #: src/frontend/GuiObserver.cpp:448
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Data Reduction"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Seasonal Decomposition"
-msgstr "属性：数据规约"
+msgstr ""
 
 #: src/frontend/GuiObserver.cpp:454
 #, kde-format
@@ -22944,10 +22927,9 @@ msgstr "选项"
 
 #. i18n: ectx: property (text), widget (QLabel, lMSTLPeriods)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:163
-#, fuzzy, kde-format
-#| msgid "Period"
+#, kde-format
 msgid "Periods:"
-msgstr "周期"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMSTLLambda)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:173
@@ -22971,45 +22953,39 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLSeasonalLength)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:248
-#, fuzzy, kde-format
-#| msgid "Length:"
+#, kde-format
 msgid "Seasonal Length:"
-msgstr "长度："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLTrendLength)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:265
-#, fuzzy, kde-format
-#| msgid "Length:"
+#, kde-format
 msgid "Trend Length:"
-msgstr "长度："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLLowPassLength)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:299
-#, fuzzy, kde-format
-#| msgid "Length:"
+#, kde-format
 msgid "Low-Pass Length:"
-msgstr "长度："
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLSeasonalDegree)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:349
-#, fuzzy, kde-format
-#| msgid "Degree:"
+#, kde-format
 msgid "Seasonal Degree:"
-msgstr "度"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLTrendDegree)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:359
-#, fuzzy, kde-format
-#| msgid "Degree:"
+#, kde-format
 msgid "Trend Degree:"
-msgstr "度"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLLowPassDegree)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:369
-#, fuzzy, kde-format
-#| msgid "Degree:"
+#, kde-format
 msgid "Low-Pass Degree:"
-msgstr "度"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLSeasonalJump)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:395

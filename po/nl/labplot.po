@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-30 00:38+0000\n"
-"PO-Revision-Date: 2025-11-30 09:34+0100\n"
+"PO-Revision-Date: 2025-12-01 18:34+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -8207,7 +8207,7 @@ msgstr "Seizoen"
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:762
 #, kde-format
 msgid "Residual"
-msgstr ""
+msgstr "Restwaarde"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:885
@@ -8277,102 +8277,89 @@ msgid "%1: set seasonal length for STL"
 msgstr "%1: seizoenslengte voor STL instellen"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:317
-#, fuzzy, kde-format
-#| msgid "%1: set text for row %2"
+#, kde-format
 msgid "%1: set trend length for STL"
-msgstr "%1: geef tekst voor rij %2"
+msgstr "%1: zet trendlengte voor STL"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:323
 #, kde-format
 msgid "%1: set trend auto-length for STL"
-msgstr ""
+msgstr "%1: zet trend auto-lengte voor STL"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:329
-#, fuzzy, kde-format
-#| msgid "%1: set major ticks length"
+#, kde-format
 msgid "%1: set low pass length for STL"
-msgstr "%1: lengte primaire streepjes instellen"
+msgstr "%1: zet laagdoorlaatlengte voor STL"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:335
-#, fuzzy, kde-format
-#| msgid "%1: set labels datetime format"
+#, kde-format
 msgid "%1: set low pass auto-length for STL"
-msgstr "%1: formaat datetime instellen"
+msgstr "%1: zet laagdoorlaat auto-lengte voor STL"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:341
 #, kde-format
 msgid "%1: set seasonal degree for STL"
-msgstr ""
+msgstr "%1: zet seizoensgraad voor STL"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:347
 #, kde-format
 msgid "%1: set trend degree for STL"
-msgstr ""
+msgstr "%1: zet trendgraad voor STL"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:353
-#, fuzzy, kde-format
-#| msgid "%1: set labels datetime format"
+#, kde-format
 msgid "%1: set low pass degree for STL"
-msgstr "%1: formaat datetime instellen"
+msgstr "%1: zet laagdoorlaatgraad voor STL"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:359
-#, fuzzy, kde-format
-#| msgid "%1: set heatmap format"
+#, kde-format
 msgid "%1: set seasonal jump for STL"
-msgstr "%1: stel formaat heatmap in"
+msgstr "%1: zet seizoenssprong voor STL"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:365
-#, fuzzy, kde-format
-#| msgid "%1: set heatmap format"
+#, kde-format
 msgid "%1: set seasonal auto-jump for STL"
-msgstr "%1: stel formaat heatmap in"
+msgstr "%1: zet seizoens auto-sprong voor STL"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:371
-#, fuzzy, kde-format
-#| msgid "%1: set heatmap format"
+#, kde-format
 msgid "%1: set trend jump for STL"
-msgstr "%1: stel formaat heatmap in"
+msgstr "%1: zet trendsprong voor STL"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:377
-#, fuzzy, kde-format
-#| msgid "%1: set heatmap format"
+#, kde-format
 msgid "%1: set trend auto-jump for STL"
-msgstr "%1: stel formaat heatmap in"
+msgstr "%1: zet trend auto-sprong voor STL"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:383
-#, fuzzy, kde-format
-#| msgid "%1: set labels format"
+#, kde-format
 msgid "%1: set low pass jump for STL"
-msgstr "%1: formaat teksten instellen"
+msgstr "%1: zet laagdoorlaatsprong voor STL"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:389
 #, kde-format
 msgid "%1: set low pass auto-jump for STL"
-msgstr ""
+msgstr "%1: zet laagdoorlaat auto-sprong voor STL"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:397
-#, fuzzy, kde-format
-#| msgid "%1: set labels format"
+#, kde-format
 msgid "%1: set periods for MSTL"
-msgstr "%1: formaat teksten instellen"
+msgstr "%1: zet perioden voor MSTL"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:403
-#, fuzzy, kde-format
-#| msgid "%1: set heatmap format"
+#, kde-format
 msgid "%1: set Lambda for MSTL"
-msgstr "%1: stel formaat heatmap in"
+msgstr "%1: zet Lambda voor MSTL"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:409
-#, fuzzy, kde-format
-#| msgid "%1: set orientation"
+#, kde-format
 msgid "%1: set iterations for MSTL"
-msgstr "%1: oriëntatie instellen"
+msgstr "%1: zet iteraties voor MSTL"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:499
-#, fuzzy, kde-format
-#| msgid "Not enough data provided."
+#, kde-format
 msgid "No valid data provided."
-msgstr "Niet genoeg gegevens geleverd."
+msgstr "Geen geldige gegevens geleverd."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:523
 #, kde-format
@@ -8390,10 +8377,9 @@ msgid "Low-Pass Length must be odd and at least 3."
 msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:580
-#, fuzzy, kde-format
-#| msgid "Initialization failed: %1"
+#, kde-format
 msgid "STL decomposition failed: %1"
-msgstr "Initialisatie is mislukt: %1"
+msgstr "Decompositie van STL is mislukt: %1"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:600
 #, kde-format
@@ -8411,10 +8397,9 @@ msgid "Time-series has less than two periods."
 msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:616
-#, fuzzy, kde-format
-#| msgid "Iterations"
+#, kde-format
 msgid "Iterations must be > 0."
-msgstr "Iteraties"
+msgstr "Iteraties moeten > 0 zijn."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:621
 #, kde-format
@@ -15247,10 +15232,9 @@ msgid "If enabled, uses the smallest odd integer greater than \"Period\"."
 msgstr ""
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:211
-#, fuzzy, kde-format
-#| msgid "Constant"
+#, kde-format
 msgid "0 - Constant"
-msgstr "Constante"
+msgstr "0 - constante"
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:212
 #, kde-format
@@ -15319,16 +15303,14 @@ msgid ""
 msgstr ""
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:266
-#, fuzzy, kde-format
-#| msgid "Number of iterations to perform."
+#, kde-format
 msgid "Number of iterations used to refine the seasonal component."
-msgstr "Aantal uit te voeren iteraties."
+msgstr "Aantal gebruikte iteraties om de seizoenscomponent te verfijnen."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:646
-#, fuzzy, kde-format
-#| msgid "%1 custom points: template \"%2\" loaded"
+#, kde-format
 msgid "%1 seasonal decompositions: template \"%2\" loaded"
-msgstr "%1 cartesische plots: sjabloon \"%2\" ingelezen"
+msgstr "%1 seizoensdecomposities: sjabloon \"%2\" geladen"
 
 #: src/frontend/dockwidgets/SpreadsheetDock.cpp:50
 #, kde-format
@@ -16122,12 +16104,10 @@ msgid "Properties: Hypothesis Test"
 msgstr "Eigenschappen: hypothese test"
 
 #: src/frontend/GuiObserver.cpp:448
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Data Reduction"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Seasonal Decomposition"
-msgstr "Eigenschappen: gegevensvereenvoudiging"
+msgstr "Eigenschappen: seizoensdecomposities"
 
 #: src/frontend/GuiObserver.cpp:454
 #, kde-format
@@ -19377,10 +19357,9 @@ msgid "Hypothesis Test"
 msgstr "Hypothese test"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:689
-#, fuzzy, kde-format
-#| msgid "Statistical Analysis"
+#, kde-format
 msgid "Time Series Analysis"
-msgstr "Statistische analyse"
+msgstr "Analyse van tijdreeksen"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:693
 #, kde-format
@@ -23398,16 +23377,15 @@ msgstr "Opties"
 
 #. i18n: ectx: property (text), widget (QLabel, lMSTLPeriods)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:163
-#, fuzzy, kde-format
-#| msgid "Period:"
+#, kde-format
 msgid "Periods:"
-msgstr "Perioden"
+msgstr "Perioden:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMSTLLambda)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:173
-#, fuzzy, kde-format
+#, kde-format
 msgid "Lambda:"
-msgstr "Lambda"
+msgstr "Lambda:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter3)
 #. i18n: ectx: property (text), widget (QLabel, lMSTLIterations)
@@ -23419,52 +23397,45 @@ msgstr "Iteraties:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLRobust)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:218
-#, fuzzy, kde-format
-#| msgid "Robust fit:"
+#, kde-format
 msgid "Robust:"
-msgstr "Rob. aanp.:"
+msgstr "Robuust:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLSeasonalLength)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:248
-#, fuzzy, kde-format
-#| msgid "Min. Length:"
+#, kde-format
 msgid "Seasonal Length:"
-msgstr "Min. lengte:"
+msgstr "Seizoenslengte:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLTrendLength)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:265
-#, fuzzy, kde-format
-#| msgid "Min. Length:"
+#, kde-format
 msgid "Trend Length:"
-msgstr "Min. lengte:"
+msgstr "Trendlengte:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLLowPassLength)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:299
-#, fuzzy, kde-format
-#| msgid "Length:"
+#, kde-format
 msgid "Low-Pass Length:"
-msgstr "Lengte:"
+msgstr "Laagdoorlaatlengte:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLSeasonalDegree)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:349
-#, fuzzy, kde-format
-#| msgid "Degree:"
+#, kde-format
 msgid "Seasonal Degree:"
-msgstr "Graad:"
+msgstr "Seizoensgraad:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLTrendDegree)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:359
-#, fuzzy, kde-format
-#| msgid "Degree:"
+#, kde-format
 msgid "Trend Degree:"
-msgstr "Graad:"
+msgstr "Trendgraad:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLLowPassDegree)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:369
-#, fuzzy, kde-format
-#| msgid "Degree:"
+#, kde-format
 msgid "Low-Pass Degree:"
-msgstr "Graad:"
+msgstr "Laagdoorlaatgraad:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLSeasonalJump)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:395
@@ -23480,10 +23451,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLLowPassJump)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:463
-#, fuzzy, kde-format
-#| msgid "Low Pass"
+#, kde-format
 msgid "Low-Pass Jump:"
-msgstr "Laag doorlaatfilter"
+msgstr "Laagdoorlaatsprong:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
