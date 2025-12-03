@@ -727,7 +727,7 @@ msgstr "El fitxer de projecte ja es troba obert."
 #: src/backend/core/Project.cpp:554 src/backend/core/Project.cpp:580
 #, kde-format
 msgid "Error opening project"
-msgstr "S'ha produït un error en obrir el projecte"
+msgstr "S'ha produït un error mentre s'obria el projecte"
 
 #: src/backend/core/Project.cpp:599
 #, kde-format
@@ -737,7 +737,7 @@ msgstr "S'ha produït un error desconegut en obrir el projecte %1."
 #: src/backend/core/Project.cpp:600
 #, kde-format
 msgid "Error when opening the project"
-msgstr "Ha succeït un error en obrir el projecte"
+msgstr "Ha succeït un error mentre s'obria el projecte"
 
 #: src/backend/core/Project.cpp:620
 #, kde-format
@@ -782,17 +782,17 @@ msgstr "s'ha trobat un document XML no vàlid"
 #: src/backend/core/Project.cpp:815
 #, kde-format
 msgid "Failed to open the file '%1'."
-msgstr "No s'ha pogut obrir el fitxer «%1»."
+msgstr "Ha fallat mentre s'obria el fitxer «%1»."
 
 #: src/backend/core/Project.cpp:821
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
-msgstr "No s'ha pogut processar el contingut del fitxer «%1»."
+msgstr "Ha fallat mentre es processava el contingut del fitxer «%1»."
 
 #: src/backend/core/Project.cpp:824
 #, kde-format
 msgid "Failed to open project"
-msgstr "No s'ha pogut obrir el projecte"
+msgstr "Ha fallat mentre s'obria el projecte"
 
 #: src/backend/core/Project.cpp:1272
 #, kde-format
@@ -1004,7 +1004,7 @@ msgstr "%1: elimina tots els punts de l'eix"
 #: src/backend/worksheet/Image.cpp:410
 #, kde-format
 msgid "Failed to read image data"
-msgstr "No s'ha pogut llegir les dades de la imatge"
+msgstr "Ha fallat mentre es llegien les dades de la imatge"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:218
 #: src/backend/worksheet/InfoElement.cpp:838
@@ -1067,14 +1067,15 @@ msgid ""
 "Failed to download the dataset from %1.\n"
 "%2."
 msgstr ""
-"No s'ha pogut baixar el conjunt de dades des de %1.\n"
+"Ha fallat mentre es baixava el conjunt de dades des de %1.\n"
 "%2."
 
 #: src/backend/datasources/DatasetHandler.cpp:236
 #, kde-format
 msgid "Failed to create the directory %1 to save the dataset."
 msgstr ""
-"No s'ha pogut crear el directori %1 per a guardar-hi el conjunt de dades."
+"Ha fallat mentre es creava el directori %1 per a guardar-hi el conjunt de "
+"dades."
 
 #: src/backend/datasources/DatasetHandler.cpp:259
 #, kde-format
@@ -1277,7 +1278,7 @@ msgstr "Int64"
 #: src/backend/datasources/filters/SpiceFilter.cpp:183
 #, kde-format
 msgid "Failed to open the device/file."
-msgstr "No s'ha pogut obrir el dispositiu/fitxer."
+msgstr "Ha fallat mentre s'obria el dispositiu o fitxer."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:283
 #, kde-format
@@ -1288,7 +1289,7 @@ msgstr "La selecció de dades està buida."
 #: src/backend/datasources/filters/McapFilter.cpp:188
 #, kde-format
 msgid "Failed to open the device/file or it's empty."
-msgstr "No s'ha pogut obrir el dispositiu/fitxer o està buit."
+msgstr "Ha fallat mentre s'obria el dispositiu o fitxer o està buit."
 
 #: src/backend/datasources/filters/BinaryFilter.cpp:444
 #: src/backend/datasources/filters/CANFilter.cpp:301
@@ -1343,13 +1344,13 @@ msgstr "Taules: %1"
 #: src/backend/datasources/filters/MatioFilter.cpp:647
 #, kde-format
 msgid "Failed to open the file."
-msgstr "No s'ha pogut obrir el fitxer."
+msgstr "Ha fallat mentre s'obria el fitxer."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:288
 #: src/backend/datasources/filters/FITSFilter.cpp:368
 #, kde-format
 msgid "Failed to read the file."
-msgstr "No s'ha pogut llegir el fitxer."
+msgstr "Ha fallat mentre es llegia el fitxer."
 
 #: src/backend/datasources/filters/FITSFilter.cpp:310
 #, kde-format
@@ -1397,12 +1398,12 @@ msgstr "No és cap fitxer HDF5"
 #: src/backend/datasources/filters/HDF5Filter.cpp:174
 #, kde-format
 msgid "Failed checking file"
-msgstr "No s'ha pogut comprovar el fitxer"
+msgstr "Ha fallat mentre es comprovava el fitxer"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:182
 #, kde-format
 msgid "Failed opening HDF5 file"
-msgstr "No s'ha pogut obrir el fitxer HDF5"
+msgstr "Ha fallat mentre s'obria el fitxer HDF5"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:188
 #, kde-format
@@ -1628,7 +1629,7 @@ msgstr "No s'ha trobat «h5dump»."
 #: src/frontend/datasources/ImportFileWidget.cpp:1629
 #, kde-format
 msgid "Reading from file %1 failed."
-msgstr "No s'ha pogut llegir des del fitxer %1."
+msgstr "Ha fallat mentre es llegia des del fitxer %1."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1311
 #, kde-format
@@ -1744,7 +1745,7 @@ msgstr[1] "dades numèriques, %1 elements"
 #: src/backend/datasources/filters/JsonFilter.cpp:189
 #, kde-format
 msgid "Open device failed"
-msgstr "No s'ha pogut obrir el dispositiu"
+msgstr "Ha fallat mentre s'obria el dispositiu"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:192
 #, kde-format
@@ -1808,7 +1809,7 @@ msgstr "Fitxer buit o document JSON no vàlid."
 #: src/backend/datasources/filters/ReadStatFilter.cpp:176
 #, kde-format
 msgid "Error getting file info"
-msgstr "S'ha produït un error en obtindre la informació del fitxer"
+msgstr "S'ha produït un error mentre s'obtenia la informació del fitxer"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:317
 #, kde-format
@@ -2068,7 +2069,7 @@ msgstr "No s'ha trobat cap estadística."
 #: src/backend/datasources/filters/McapFilter.cpp:964
 #, kde-format
 msgid "Failed to read the file. Reason: %1"
-msgstr "No s'ha pogut llegir el fitxer. Motiu: %1"
+msgstr "Ha fallat mentre es llegia el fitxer. Motiu: %1"
 
 #: src/backend/datasources/filters/McapFilter.cpp:477
 #, kde-format
@@ -2078,7 +2079,7 @@ msgstr "No s'ha trobat cap tema codificat en JSON."
 #: src/backend/datasources/filters/NetCDFFilter.cpp:213
 #, kde-format
 msgid "Error opening file"
-msgstr "S'ha produït un error en obrir el fitxer"
+msgstr "S'ha produït un error mentre s'obria el fitxer"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:222
 #, kde-format
@@ -2172,7 +2173,7 @@ msgstr "No hi ha cap variable seleccionada."
 #: src/backend/datasources/filters/NetCDFFilter.cpp:700
 #, kde-format
 msgid "Failed to open the file or it's empty."
-msgstr "No s'ha pogut obrir el fitxer o està buit."
+msgstr "Ha fallat mentre s'obria el fitxer o està buit."
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:938
 #: src/backend/datasources/filters/NetCDFFilter.cpp:1078
@@ -2253,12 +2254,12 @@ msgstr "Mida en bytes"
 #: src/backend/datasources/filters/QJsonModel.cpp:200
 #, kde-format
 msgid "Failed to load the JSON file. Empty JSON document."
-msgstr "No s'ha pogut carregar el fitxer JSON. Document JSON buit."
+msgstr "Ha fallat mentre es carregava el fitxer JSON. Document JSON buit."
 
 #: src/backend/datasources/filters/QJsonModel.cpp:206
 #, kde-format
 msgid "Failed to load JSON document. Error: %1."
-msgstr "No s'ha pogut carregar el document JSON. Error: %1."
+msgstr "Ha fallat mentre es carregava el document JSON. Error: %1."
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:124
 #, kde-format
@@ -2313,13 +2314,13 @@ msgstr "64 bit: %1"
 #: src/backend/datasources/filters/ReadStatFilter.cpp:482
 #, kde-format
 msgid "Error reading file."
-msgstr "S'ha produït un error en llegir el fitxer."
+msgstr "S'ha produït un error mentre es llegia el fitxer."
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:512
 #: src/backend/datasources/filters/ReadStatFilter.cpp:535
 #, kde-format
 msgid "Failed to parse the file."
-msgstr "No s'ha pogut analitzar el fitxer."
+msgstr "Ha fallat durant l'anàlisi sintàctica del fitxer."
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:113
 #: src/backend/datasources/MQTTClient.cpp:1190
@@ -2503,7 +2504,7 @@ msgstr "El dispositiu no està obert."
 #: src/backend/datasources/LiveDataSource.cpp:743
 #, kde-format
 msgid "Failed to read data."
-msgstr "No s'ha pogut llegir les dades."
+msgstr "Ha fallat mentre es llegien les dades."
 
 #: src/backend/datasources/LiveDataSource.cpp:746
 #, kde-format
@@ -3291,7 +3292,7 @@ msgstr "Pèrdua de precisió"
 #: src/backend/gsl/errors.h:58
 #, kde-format
 msgid "Failed because of roundoff error"
-msgstr "Ha fallat per un error en arredonir"
+msgstr "Ha fallat per un error mentre s'arredonia"
 
 #: src/backend/gsl/errors.h:60
 #, kde-format
@@ -6409,7 +6410,7 @@ msgstr "L'exportació ha fallat"
 #: src/backend/note/Note.cpp:115
 #, kde-format
 msgid "Failed to open '%1' for writing."
-msgstr "No s'ha pogut obrir «%1» per a escriptura."
+msgstr "Ha fallat mentre s'obria «%1» per a escriptura."
 
 #: src/backend/note/Note.cpp:138
 #, kde-format
@@ -10811,7 +10812,7 @@ msgstr "Corba"
 #: src/frontend/worksheet/WorksheetView.cpp:2204
 #, kde-format
 msgid "Failed to export"
-msgstr "No s'ha pogut exportar"
+msgstr "Ha fallat mentre s'exportava"
 
 #: src/frontend/datapicker/DatapickerImageView.cpp:887
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4019
@@ -10819,7 +10820,7 @@ msgstr "No s'ha pogut exportar"
 #: src/frontend/worksheet/WorksheetView.cpp:2204
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
-msgstr "No s'ha pogut escriure a «%1». Comproveu el camí."
+msgstr "Ha fallat mentre s'escrivia a «%1». Comproveu el camí."
 
 # skip-rule: t-sc-plot
 #: src/frontend/datasources/AsciiOptionsWidget.cpp:32
@@ -11141,7 +11142,7 @@ msgstr "No s'ha pogut connectar"
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:526
 #, kde-format
 msgid "Failed to connect to the database '%1'."
-msgstr "No s'ha pogut connectar amb la base de dades «%1»."
+msgstr "Ha fallat mentre es connectava amb la base de dades «%1»."
 
 #: src/frontend/datasources/DatabaseManagerWidget.cpp:522
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:643
@@ -11215,7 +11216,7 @@ msgstr "Conjunt de dades%1"
 #: src/frontend/datasources/ImportDatasetDialog.cpp:103
 #, kde-format
 msgid "Failed to connect within %1 seconds"
-msgstr "No s'ha pogut connectar en %1 segons"
+msgstr "Ha fallat mentre es connectava en %1 segons"
 
 #: src/frontend/datasources/ImportDatasetDialog.cpp:128
 #, kde-format
@@ -11893,12 +11894,12 @@ msgstr "Ha fallat la inicialització: %1"
 #: src/frontend/datasources/ImportFileWidget.cpp:1843
 #, kde-format
 msgid "Failed to connect to the local socket: %1"
-msgstr "No s'ha pogut connectar amb el sòcol local: %1"
+msgstr "Ha fallat mentre es connectava amb el sòcol local: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1860
 #, kde-format
 msgid "Failed to connect to the TCP socket. %1"
-msgstr "No s'ha pogut connectar amb el sòcol TCP. %1"
+msgstr "Ha fallat mentre es connectava amb el sòcol TCP. %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1866
 #: src/frontend/datasources/ImportFileWidget.cpp:1895
@@ -11929,7 +11930,7 @@ msgstr "No està preparat per a llegir després de 2 s"
 #: src/frontend/datasources/ImportFileWidget.cpp:1922
 #, kde-format
 msgid "Failed to open serial port. error: %1"
-msgstr "No s'ha pogut obrir el port sèrie. Error: %1"
+msgstr "Ha fallat mentre s'obria el port sèrie. Error: %1"
 
 #: src/frontend/datasources/ImportFileWidget.cpp:1941
 #, kde-format
@@ -11944,7 +11945,7 @@ msgstr "No és cap fitxer HDF5: %1"
 #: src/frontend/datasources/ImportFileWidget.cpp:2264
 #, kde-format
 msgid "Parsing ODS file %1 failed."
-msgstr "No s'ha pogut analitzar el fitxer ODS %1."
+msgstr "Ha fallat durant l'anàlisi del fitxer ODS %1."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2672
 #, kde-format
@@ -11954,7 +11955,7 @@ msgstr "No s'ha pogut realitzar la subscripció a tots els temes disponibles."
 #: src/frontend/datasources/ImportFileWidget.cpp:2680
 #, kde-format
 msgid "Failed to connect to '%1'. Error %2."
-msgstr "No s'ha pogut connectar amb «%1». Error %2."
+msgstr "Ha fallat mentre es connectava amb «%1». Error %2."
 
 #: src/frontend/datasources/ImportFileWidget.cpp:2702
 #, kde-format
@@ -12268,14 +12269,14 @@ msgstr ""
 msgid ""
 "Failed to connect to the database '%1'. Please check the connection settings."
 msgstr ""
-"No s'ha pogut connectar amb la base de dades «%1». Comproveu la configuració "
-"de la connexió."
+"Ha fallat mentre es connectava amb la base de dades «%1». Comproveu la "
+"configuració de la connexió."
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:330
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:332
 #, kde-format
 msgid "Failed to execute the query for the preview"
-msgstr "No s'ha pogut executar la consulta de la vista prèvia"
+msgstr "Ha fallat mentre s'executava la consulta de la vista prèvia"
 
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:406
 #, kde-format
@@ -12291,7 +12292,7 @@ msgstr "Executa la consulta i mostra una vista prèvia del seu resultat"
 #: src/frontend/datasources/ImportSQLDatabaseWidget.cpp:535
 #, kde-format
 msgid "Failed to execute the query"
-msgstr "No s'ha pogut executar la consulta"
+msgstr "Ha fallat mentre s'executava la consulta"
 
 #: src/frontend/datasources/JsonOptionsWidget.cpp:120
 #, kde-format
@@ -12465,7 +12466,7 @@ msgstr "La connexió amb l'agent «%1:%2» ha sigut correcta."
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:656
 #, kde-format
 msgid "Failed to connect to the broker '%1:%2'."
-msgstr "No s'ha pogut connectar amb l'agent «%1:%2»."
+msgstr "Ha fallat mentre es connectava amb l'agent «%1:%2»."
 
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:670
 #, kde-format
@@ -15087,7 +15088,7 @@ msgstr ""
 #: src/frontend/LabPlot.cpp:156
 #, kde-format
 msgid "Failed to Open"
-msgstr "No s'ha pogut obrir"
+msgstr "Ha fallat mentre s'obria"
 
 #. i18n: ectx: ToolBar (main_toolbar)
 #: src/frontend/labplotui.rc:6
@@ -15649,7 +15650,7 @@ msgstr "cursor"
 #: src/frontend/MainWin.cpp:2511
 #, kde-format
 msgid "There was a problem sharing the project: %1"
-msgstr "S'ha produït un problema en compartir el projecte: %1"
+msgstr "S'ha produït un problema mentre es compartia el projecte: %1"
 
 #: src/frontend/MainWin.cpp:2515
 #, kde-format
@@ -15982,7 +15983,7 @@ msgstr "%1: neteja les files seleccionades"
 #: src/frontend/notebook/NotebookView.cpp:41
 #, kde-format
 msgid "Failed to initialize %1."
-msgstr "No s'ha pogut restablir %1."
+msgstr "Ha fallat mentre es restablia %1."
 
 #: src/frontend/notebook/NotebookView.cpp:62
 #, kde-format
@@ -16180,7 +16181,7 @@ msgstr "No s'ha pogut llegir el fitxer"
 #: src/frontend/PlotTemplateDialog.cpp:206
 #, kde-format
 msgid "Failed to load the selected plot template"
-msgstr "No s'ha pogut carregar la plantilla de diagrama seleccionada"
+msgstr "Ha fallat mentre es carregava la plantilla de diagrama seleccionada"
 
 #: src/frontend/PlotTemplateDialog.cpp:197
 #, kde-format
@@ -16553,7 +16554,7 @@ msgid ""
 "The setting can be changed for every project separately in the project "
 "properties."
 msgstr ""
-"Guarda els resultats dels càlculs a les corbes d'anàlisi del fitxer del "
+"Guarda els resultats dels càlculs a les corbes d'anàlisi del fitxer de "
 "projecte. \n"
 "Desmarqueu esta opció per a reduir la mida del fitxer del projecte a "
 "expenses dels temps de càrrega del projecte més llargs. \n"
@@ -18499,12 +18500,12 @@ msgstr "No s'ha pogut crear la base de dades SQLite %1."
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4482
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
-msgstr "No s'ha pogut crear la taula en la base de dades SQLite %1."
+msgstr "Ha fallat mentre es creava la taula a la base de dades SQLite %1."
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:4537
 #, kde-format
 msgid "Failed to insert values into the table."
-msgstr "No s'ha pogut inserir valors a la taula."
+msgstr "Ha fallat mentre s'inserien valors a la taula."
 
 # "Location" es refereix aquí al conjunt de mesures estadístiques generals (mínim, màxim, mitjanes, etc.) d'un conjunt de dades. No pas a una ubicació física.
 #. i18n: ectx: property (text), widget (QLabel, label)
