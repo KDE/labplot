@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-30 00:38+0000\n"
-"PO-Revision-Date: 2025-11-09 16:37+0100\n"
+"PO-Revision-Date: 2025-12-01 18:46+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 25.08.3\n"
+"X-Generator: Lokalize 25.11.90\n"
 "X-Text-Markup: kde4\n"
 
 #: src/backend/core/AbstractAspect.cpp:241
@@ -8238,17 +8238,16 @@ msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:102
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:880
-#, fuzzy, kde-format
-#| msgid "Results:"
+#, kde-format
 msgid "Result"
-msgstr "Résultats :"
+msgstr "Résultat"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:111
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:146
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:171
 #, kde-format
 msgid "Trend"
-msgstr ""
+msgstr "Tendance"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:117
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:153
@@ -8258,7 +8257,7 @@ msgstr ""
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:730
 #, kde-format
 msgid "Seasonal"
-msgstr ""
+msgstr "Saisonnier"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:123
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:160
@@ -8266,7 +8265,7 @@ msgstr ""
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:762
 #, kde-format
 msgid "Residual"
-msgstr ""
+msgstr "Résiduel"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:128
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:885
@@ -8279,22 +8278,19 @@ msgstr "Feuille de travail"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:139
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:167
-#, fuzzy, kde-format
-#| msgid "Original Size"
+#, kde-format
 msgid "Original"
-msgstr "Taille originale"
+msgstr "Original"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:143
-#, fuzzy, kde-format
-#| msgid "Original Size"
+#, kde-format
 msgid "Original Data"
-msgstr "Taille originale"
+msgstr "Donnée originale"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:149
-#, fuzzy, kde-format
-#| msgid "Components:"
+#, kde-format
 msgid "Trend Component"
-msgstr "Composants :"
+msgstr "Composant de tendance"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:156
 #, fuzzy, kde-format
@@ -8321,10 +8317,9 @@ msgid "%1: y-data source changed"
 msgstr "%1 : modification de la source de données en Y"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:291
-#, fuzzy, kde-format
-#| msgid "%1: set author"
+#, kde-format
 msgid "%1: set method"
-msgstr "%1 : définir l'auteur"
+msgstr "%1 : définir la méthode"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:299
 #, fuzzy, kde-format
@@ -15365,10 +15360,9 @@ msgid "If enabled, uses the smallest odd integer greater than \"Period\"."
 msgstr ""
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:211
-#, fuzzy, kde-format
-#| msgid "Constant"
+#, kde-format
 msgid "0 - Constant"
-msgstr "Constant"
+msgstr "0 - Constant"
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:212
 #, kde-format
@@ -23556,16 +23550,15 @@ msgstr "Options"
 
 #. i18n: ectx: property (text), widget (QLabel, lMSTLPeriods)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:163
-#, fuzzy, kde-format
-#| msgid "Period:"
+#, kde-format
 msgid "Periods:"
-msgstr "Période :"
+msgstr "Périodes :"
 
 #. i18n: ectx: property (text), widget (QLabel, lMSTLLambda)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:173
 #, kde-format
 msgid "Lambda:"
-msgstr ""
+msgstr "Lambda :"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter3)
 #. i18n: ectx: property (text), widget (QLabel, lMSTLIterations)
@@ -23577,31 +23570,27 @@ msgstr "Itérations :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLRobust)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:218
-#, fuzzy, kde-format
-#| msgid "Robust fit:"
+#, kde-format
 msgid "Robust:"
-msgstr "Adaptation robuste :"
+msgstr "Robuste :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLSeasonalLength)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:248
-#, fuzzy, kde-format
-#| msgid "Min. Length:"
+#, kde-format
 msgid "Seasonal Length:"
-msgstr "Longueur minimale :"
+msgstr "Longueur saisonnière :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLTrendLength)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:265
-#, fuzzy, kde-format
-#| msgid "Min. Length:"
+#, kde-format
 msgid "Trend Length:"
-msgstr "Longueur minimale :"
+msgstr "Longueur de tendance :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLLowPassLength)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:299
-#, fuzzy, kde-format
-#| msgid "Length:"
+#, kde-format
 msgid "Low-Pass Length:"
-msgstr "Longueur :"
+msgstr "Longueur du passe-bas :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLSeasonalDegree)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:349
@@ -23612,10 +23601,9 @@ msgstr "Degrés :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLTrendDegree)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:359
-#, fuzzy, kde-format
-#| msgid "Degree:"
+#, kde-format
 msgid "Trend Degree:"
-msgstr "Degrés :"
+msgstr "Degrés de tendance :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLLowPassDegree)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:369
@@ -23628,20 +23616,19 @@ msgstr "Degrés :"
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:395
 #, kde-format
 msgid "Seasonal Jump:"
-msgstr ""
+msgstr "Saut saisonnier :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLTrendJump)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:429
 #, kde-format
 msgid "Trend Jump:"
-msgstr ""
+msgstr "Saut de tendance :"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLLowPassJump)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:463
-#, fuzzy, kde-format
-#| msgid "Low Pass"
+#, kde-format
 msgid "Low-Pass Jump:"
-msgstr "Passe-bas"
+msgstr "Saut passe-bas :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveCalculations)
 #. i18n: ectx: property (text), widget (QCheckBox, chkSaveDockStates)
