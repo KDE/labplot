@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-30 00:38+0000\n"
-"PO-Revision-Date: 2025-11-12 18:50+0400\n"
+"PO-Revision-Date: 2025-12-03 17:13+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -8228,17 +8228,16 @@ msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:102
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:880
-#, fuzzy, kde-format
-#| msgid "Results:"
+#, kde-format
 msgid "Result"
-msgstr "النّتائج:"
+msgstr "النتيجة"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:111
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:146
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:171
 #, kde-format
 msgid "Trend"
-msgstr ""
+msgstr "الاتجاه"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:117
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:153
@@ -8248,7 +8247,7 @@ msgstr ""
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:730
 #, kde-format
 msgid "Seasonal"
-msgstr ""
+msgstr "موسمية"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:123
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:160
@@ -8269,16 +8268,14 @@ msgstr "ورقة العمل"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:139
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:167
-#, fuzzy, kde-format
-#| msgid "Original Size"
+#, kde-format
 msgid "Original"
-msgstr "الحجم الأصليّ"
+msgstr "الأصلي"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:143
-#, fuzzy, kde-format
-#| msgid "Original Image"
+#, kde-format
 msgid "Original Data"
-msgstr "الصورة الأصلية"
+msgstr "البيانات الأصلية"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:149
 #, fuzzy, kde-format
@@ -15217,10 +15214,9 @@ msgid "If enabled, uses the smallest odd integer greater than \"Period\"."
 msgstr ""
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:211
-#, fuzzy, kde-format
-#| msgid "Constant"
+#, kde-format
 msgid "0 - Constant"
-msgstr "ثابت"
+msgstr "0 - ثابت"
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:212
 #, kde-format
@@ -23355,16 +23351,15 @@ msgstr "خيارات"
 
 #. i18n: ectx: property (text), widget (QLabel, lMSTLPeriods)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:163
-#, fuzzy, kde-format
-#| msgid "Period:"
+#, kde-format
 msgid "Periods:"
-msgstr "المدة:"
+msgstr "الفترات:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMSTLLambda)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:173
 #, kde-format
 msgid "Lambda:"
-msgstr ""
+msgstr "لامدا:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter3)
 #. i18n: ectx: property (text), widget (QLabel, lMSTLIterations)

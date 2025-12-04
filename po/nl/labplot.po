@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-30 00:38+0000\n"
-"PO-Revision-Date: 2025-12-01 18:34+0100\n"
+"PO-Revision-Date: 2025-12-02 10:35+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -8364,17 +8364,17 @@ msgstr "Geen geldige gegevens geleverd."
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:523
 #, kde-format
 msgid "Seasonal Length must be odd and at least 3."
-msgstr ""
+msgstr "Seizoenslengte moet oneven zijn en minstens 3."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:528
 #, kde-format
 msgid "Trend Length must be odd and at least 3."
-msgstr ""
+msgstr "Trendlengte moet oneven zijn en minstens 3."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:533
 #, kde-format
 msgid "Low-Pass Length must be odd and at least 3."
-msgstr ""
+msgstr "Laagdoorlaatlengte moet oneven zijn en minstens 3."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:580
 #, kde-format
@@ -8384,17 +8384,17 @@ msgstr "Decompositie van STL is mislukt: %1"
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:600
 #, kde-format
 msgid "No periods specified for MSTL."
-msgstr ""
+msgstr "Geen perioden gespecificeerd voor MSTL."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:606
 #, kde-format
 msgid "Periods must be at least 2."
-msgstr ""
+msgstr "Perioden moeten minstens 2 te zijn."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:610
 #, kde-format
 msgid "Time-series has less than two periods."
-msgstr ""
+msgstr "Tijdreeksen hebben minder dan twee perioden."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:616
 #, kde-format
@@ -8404,27 +8404,27 @@ msgstr "Iteraties moeten > 0 zijn."
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:621
 #, kde-format
 msgid "Lambda must be between 0 and 1."
-msgstr ""
+msgstr "Lambda moet tussen 0 en 1 zijn."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:631
 #, kde-format
 msgid "Box-Cox transformation requires strictly positive data."
-msgstr ""
+msgstr "Box-Cox transformatie vereist strict positieve gegevens."
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:650
 #, kde-format
 msgid "MSTL decomposition failed: %1"
-msgstr ""
+msgstr "Decompositie van MSTL is mislukt: %1"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:753
 #, kde-format
 msgid "Seasonal Component (Period: %1)"
-msgstr ""
+msgstr "Seizoenscomponent (periode: %1)"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:754
 #, kde-format
 msgid "Seasonal, Period: %1"
-msgstr ""
+msgstr "Volgens seizoen, periode: %1"
 
 #: src/backend/worksheet/Background.cpp:202
 #, kde-format
@@ -15185,6 +15185,10 @@ msgid ""
 "Seasonal-trend decomposition based on LOESS (\"Locally Estimated Scatterplot "
 "Smoothing\")</li><li>MSTL - STL for multiple seasonalities</li></ul>"
 msgstr ""
+"Gebruikte methode om de decompositie van seizoenstrend te doen:<ul><li>STL - "
+"decompositie gebaseerd op LOESS (\"Locally Estimated Scatterplot Smoothing"
+"\") van seizoenstrend </li><li>MSTL - STL voor meerdere seizoenselementen</"
+"li></ul>"
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:179
 #, kde-format
@@ -15192,6 +15196,8 @@ msgid ""
 "If enabled, uses a data-dependent weighting function to get more robust "
 "result if the data has outliers."
 msgstr ""
+"Indien ingeschakeld, gebruikt een gegevens-onafhankelijk gewichtsfunctie om "
+"een robuuster resultaat te krijgen als de gegevens buitenliggers heeft."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:184
 #, kde-format
@@ -15203,16 +15209,23 @@ msgid ""
 "seasonality</li><li>12 - for monthly data with yearly seasonality (12 "
 "months)</li></ul>"
 msgstr ""
+"Periode van de seizoenscomponent. Voorbeelden:<ul><li>24 - voor gegevens per "
+"uur met dagelijkse seizoenen (24h)</li><li>168 - voor gegevens per uur met "
+"wekelijkse seizoenen (7 * 24h = 168h)</li><li>7 - voor gegevens per dag met "
+"wekelijkse seizoenen (7 dagen)</li><li>365 - voor gegevens per dag "
+"jaarlijkse (365 dagen) seizoenen</li><li>12 - voor gegevens per maand met "
+"jaarlijkse seizoenen (12 maanden)</li></ul>"
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:196
 #, kde-format
 msgid "Length of the seasonal smoother, must be odd and at least 3."
 msgstr ""
+"Lengte van de gladstrijker van seizoenen, moet oneven zijn en minstens 3."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:200
 #, kde-format
 msgid "Length of the trend smoother, must be odd and at least 3."
-msgstr ""
+msgstr "Lengte van de gladstrijker van trend, moet oneven zijn en minstens 3."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:203
 #, kde-format
@@ -15220,16 +15233,20 @@ msgid ""
 "If enabled, uses the smallest odd integer greater than 1.5 * \"Period\" / (1 "
 "- 1.5 / \"Seasonal Length\")."
 msgstr ""
+"Indien ingeschakeld, gebruikt het kleinste oneven getal groter dan 1,5 * "
+"\"Periode\" / (1 - 1,5 / \"Seizoenslengte\")."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:205
 #, kde-format
 msgid "Length of the low-pass filter, must be odd and at least 3."
-msgstr ""
+msgstr "Lengte van het laagdoorlaatfilter, moet oneven zijn en minstens 3."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:208
 #, kde-format
 msgid "If enabled, uses the smallest odd integer greater than \"Period\"."
 msgstr ""
+"Indien ingeschakeld, gebruikt het kleinste oneven getal groter dan \"Periode"
+"\"."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:211
 #, kde-format
@@ -15239,7 +15256,7 @@ msgstr "0 - constante"
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:212
 #, kde-format
 msgid "1 - Constant and Trend"
-msgstr ""
+msgstr "1 - Constante en Trend"
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:225
 #, kde-format
