@@ -778,15 +778,21 @@ void PlotDataDialog::addMultiSourceColumnsPlot(const QVector<const AbstractColum
 	Plot* plot{nullptr};
 	if (m_plotType == Plot::PlotType::BoxPlot) {
 		auto* boxPlot = new BoxPlot(name);
+		boxPlot->setSuppressRetransform(true);
 		boxPlot->setDataColumns(columns);
+		boxPlot->setSuppressRetransform(false);
 		plot = boxPlot;
 	} else if (m_plotType == Plot::PlotType::BarPlot) {
 		auto* barPlot = new BarPlot(name);
+		barPlot->setSuppressRetransform(true);
 		barPlot->setDataColumns(columns);
+		barPlot->setSuppressRetransform(false);
 		plot = barPlot;
 	} else if (m_plotType == Plot::PlotType::LollipopPlot) {
 		auto* lollipopPlot = new LollipopPlot(name);
+		lollipopPlot->setSuppressRetransform(true);
 		lollipopPlot->setDataColumns(columns);
+		lollipopPlot->setSuppressRetransform(false);
 		plot = lollipopPlot;
 	}
 

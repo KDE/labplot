@@ -30,6 +30,7 @@ Bug fixes:
 	* Fix crash when loading a project with a workbook as first child (!787)
 	* Fix updating column count in spreadsheet dock when importing data from file
 	* Fix appending data to spreadsheets from XLSX files
+	* Fix the bar chart with log-scales
 
 -----2.12.1 (2025-08-15) -----
 Bug fixes:
