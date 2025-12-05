@@ -47,7 +47,7 @@ that will be used to build the shared library.
 
 ``DEPENDENCIES`` is the list of dependencies that the bindings uses.
 
-``HOMEPAGE_URL`` is a URL to the project homepage.
+``HOMEPAGE_URL`` is a URL to the proyect homepage.
 
 ``ISSUES_URL` is a URL where users can report bugs and feature requests.
 
@@ -60,12 +60,22 @@ description on the Python Package Index.
 
 set(MODULES_DIR ${CMAKE_CURRENT_LIST_DIR})
 
-function(generate_shiboken_sources)
+function(generate_python_bindings)
     set(options EXPORT_TYPESYSTEM)
     set(oneValueArgs PACKAGE_NAME WRAPPED_HEADER TYPESYSTEM VERSION QT_VERSION HOMEPAGE_URL ISSUES_URL AUTHOR README)
-    set(multiValueArgs GENERATED_SOURCES DEPENDENCIES INCLUDES)
+    set(multiValueArgs GENERATED_SOURCES DEPENDENCIES)
 
     cmake_parse_arguments(PB "${options}" "${oneValueArgs}" "${multiValueArgs}"  ${ARGN})
+
+    if (NOT Python3_EXECUTABLE)
+        message(FATAL_ERROR "Python3_EXECUTABLE not set. Make sure find_package(Python3) is called before including ECMGeneratePythonBindings")
+    endif()
+
+    execute_process(COMMAND ${Python3_EXECUTABLE} -Esc "import build" RESULT_VARIABLE PYTHON_BUILD_CHECK_EXIT_CODE OUTPUT_QUIET ERROR_QUIET)
+
+    if (PYTHON_BUILD_CHECK_EXIT_CODE)
+        message(FATAL_ERROR "The 'build' Python module is needed for ECMGeneratePythonBindings")
+    endif()
 
     # Ugly hacks because PySide6::pyside6 only includes /usr/includes/PySide6 and none of the sub directory
     # Qt bugreport: PYSIDE-2882
@@ -113,86 +123,87 @@ function(generate_shiboken_sources)
         list(APPEND INCLUDES "--include-paths=${_include_dirs}")
     endforeach()
 
-    make_path(PBC_INCLUDES ${PB_INCLUDES})
-
     # Set up the options to pass to shiboken.
     set(shiboken_options --enable-pyside-extensions
-        --keywords=scripting
-        --clang-option=-DSCRIPTING
-        "${INCLUDES}${PATH_SEP}${PBC_INCLUDES}"
+        ${INCLUDES}
         --include-paths=${CMAKE_SOURCE_DIR}
         --typesystem-paths=${CMAKE_SOURCE_DIR}
         --typesystem-paths="${CMAKE_INSTALL_PREFIX}/share/PySide${QT_MAJOR_VERSION}/typesystems"
-        --typesystem-paths="${PYSIDE_TYPESYSTEMS}"
+        --typesystem-paths=${PYSIDE_TYPESYSTEMS}
         --output-directory=${CMAKE_CURRENT_BINARY_DIR})
 
     set(generated_sources_dependencies ${PB_WRAPPED_HEADER} ${PB_TYPESYSTEM})
 
     # Add custom target to run shiboken to generate the binding cpp files.
-    get_target_property(Shiboken6_EXECUTABLE Shiboken6::Executable IMPORTED_LOCATION)
     add_custom_command(
         OUTPUT ${PB_GENERATED_SOURCES}
-        COMMAND ${Shiboken6_EXECUTABLE} ${shiboken_options} ${PB_WRAPPED_HEADER} ${PB_TYPESYSTEM}
+        COMMAND shiboken6 ${shiboken_options} ${PB_WRAPPED_HEADER} ${PB_TYPESYSTEM}
         DEPENDS ${generated_sources_dependencies}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Running generator \"${Shiboken6_EXECUTABLE}\" for ${PB_TYPESYSTEM}"
+        COMMENT "Running generator for ${PB_TYPESYSTEM}"
     )
 
-    # # Set the cpp files which will be used for the bindings library.
-    # set(${PB_PACKAGE_NAME}_sources ${PB_GENERATED_SOURCES})
+    # Set the cpp files which will be used for the bindings library.
+    set(${PB_PACKAGE_NAME}_sources ${PB_GENERATED_SOURCES})
 
-    # # PySide6 uses deprecated code.
-    # get_property(_defs DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS)
-    # list(FILTER _defs EXCLUDE REGEX [[^QT_DISABLE_DEPRECATED_BEFORE=]])
-    # set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS ${_defs})
-    # get_property(_defs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS)
-    # list(FILTER _defs EXCLUDE REGEX [[^QT_DISABLE_DEPRECATED_BEFORE=]])
-    # set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS ${_defs})
+    # PySide6 uses deprecated code.
+    get_property(_defs DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS)
+    list(FILTER _defs EXCLUDE REGEX [[^QT_DISABLE_DEPRECATED_BEFORE=]])
+    set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS ${_defs})
+    get_property(_defs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS)
+    list(FILTER _defs EXCLUDE REGEX [[^QT_DISABLE_DEPRECATED_BEFORE=]])
+    set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS ${_defs})
+    get_property(_defs DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS)
+    list(FILTER _defs EXCLUDE REGEX [[^QT_DISABLE_DEPRECATED_UP_TO=]])
+    set_property(DIRECTORY ${CMAKE_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS ${_defs})
+    get_property(_defs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS)
+    list(FILTER _defs EXCLUDE REGEX [[^QT_DISABLE_DEPRECATED_UP_TO=]])
+    set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY COMPILE_DEFINITIONS ${_defs})
 
-    # # Define and build the bindings library.
-    # add_library(${PB_PACKAGE_NAME} SHARED ${${PB_PACKAGE_NAME}_sources})
+    # Define and build the bindings library.
+    add_library(${PB_PACKAGE_NAME} SHARED ${${PB_PACKAGE_NAME}_sources})
 
-    # target_link_libraries(${PB_PACKAGE_NAME} PRIVATE
-    #     PySide6::pyside6
-    #     Shiboken6::libshiboken
-    #     ${Python3_LIBRARIES}
-    # )
+    target_link_libraries(${PB_PACKAGE_NAME} PRIVATE
+        PySide6::pyside6
+        Shiboken6::libshiboken
+        ${Python3_LIBRARIES}
+    )
 
-    # # Apply relevant include and link flags.
-    # target_include_directories(${PB_PACKAGE_NAME} PRIVATE
-    #     ${PYSIDE_PYTHONPATH}/include
-    #     ${SHIBOKEN_PYTHON_INCLUDE_DIRS}
-    #     $<TARGET_PROPERTY:PySide6::pyside6,INTERFACE_INCLUDE_DIRECTORIES>
-    #     $<TARGET_PROPERTY:Shiboken6::libshiboken,INTERFACE_INCLUDE_DIRECTORIES>
-    # )
+    # Apply relevant include and link flags.
+    target_include_directories(${PB_PACKAGE_NAME} PRIVATE
+        ${PYSIDE_PYTHONPATH}/include
+        ${SHIBOKEN_PYTHON_INCLUDE_DIRS}
+        $<TARGET_PROPERTY:PySide6::pyside6,INTERFACE_INCLUDE_DIRECTORIES>
+        $<TARGET_PROPERTY:Shiboken6::libshiboken,INTERFACE_INCLUDE_DIRECTORIES>
+    )
 
-    # # Hide noisy warnings
-    # target_compile_options(${PB_PACKAGE_NAME} PRIVATE -Wno-cast-function-type -Wno-missing-include-dirs)
+    # Hide noisy warnings
+    target_compile_options(${PB_PACKAGE_NAME} PRIVATE -Wno-cast-function-type -Wno-missing-include-dirs)
 
-    # # Adjust the name of generated module.
-    # set_property(TARGET ${PB_PACKAGE_NAME} PROPERTY PREFIX "")
-    # set_property(TARGET ${PB_PACKAGE_NAME} PROPERTY LIBRARY_OUTPUT_NAME "${PB_PACKAGE_NAME}.${Python3_SOABI}")
-    # set_property(TARGET ${PB_PACKAGE_NAME} PROPERTY LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${PB_PACKAGE_NAME}/build/lib)
+    # Adjust the name of generated module.
+    set_property(TARGET ${PB_PACKAGE_NAME} PROPERTY PREFIX "")
+    set_property(TARGET ${PB_PACKAGE_NAME} PROPERTY LIBRARY_OUTPUT_NAME "${PB_PACKAGE_NAME}.${Python3_SOABI}")
+    set_property(TARGET ${PB_PACKAGE_NAME} PROPERTY LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${PB_PACKAGE_NAME}/build/lib)
 
-    # # Build Python Wheel
-    # file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${PB_PACKAGE_NAME}/${PB_PACKAGE_NAME}")
-    # configure_file("${MODULES_DIR}/ECMGeneratePythonBindings.toml.in" "${CMAKE_CURRENT_BINARY_DIR}/${PB_PACKAGE_NAME}/pyproject.toml")
-    # configure_file(${PB_README} "${CMAKE_CURRENT_BINARY_DIR}/${PB_PACKAGE_NAME}/README.md" COPYONLY)
+    # Build Python Wheel
+    #file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${PB_PACKAGE_NAME}/${PB_PACKAGE_NAME}")
+    #configure_file("${MODULES_DIR}/ECMGeneratePythonBindings.toml.in" "${CMAKE_CURRENT_BINARY_DIR}/${PB_PACKAGE_NAME}/pyproject.toml")
+    #configure_file(${PB_README} "${CMAKE_CURRENT_BINARY_DIR}/${PB_PACKAGE_NAME}/README.md" COPYONLY)
 
-    # add_custom_command(
-    #     TARGET ${PB_PACKAGE_NAME}
-    #     POST_BUILD
-    #     COMMAND Python3::Interpreter -m build --wheel --no-isolation
-    #     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${PB_PACKAGE_NAME}"
-    #     COMMENT "Building Python Wheel"
-    # )
+    #add_custom_command(
+    #    TARGET ${PB_PACKAGE_NAME}
+    #    POST_BUILD
+    #    COMMAND Python3::Interpreter -m build --wheel --no-isolation
+    #    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${PB_PACKAGE_NAME}"
+    #    COMMENT "Building Python Wheel"
+    #)
 
-    # # Export the header and the typesystem XML file
-    # if (PB_EXPORT_TYPESYSTEM)
-    #     string(TOLOWER ${PB_PACKAGE_NAME} lower_package_name)
-    #     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PB_PACKAGE_NAME}/${lower_package_name}_python.h
-    #             DESTINATION "${PYSIDE_INCLUDE_DIR}/${PB_PACKAGE_NAME}/")
-    #     install(FILES "${PB_TYPESYSTEM}" DESTINATION "${CMAKE_INSTALL_PREFIX}/share/PySide${QT_MAJOR_VERSION}/typesystems/")
-    # endif()
+    # Export the header and the typesystem XML file
+    if (PB_EXPORT_TYPESYSTEM)
+        string(TOLOWER ${PB_PACKAGE_NAME} lower_package_name)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PB_PACKAGE_NAME}/${lower_package_name}_python.h
+                DESTINATION "${PYSIDE_INCLUDE_DIR}/${PB_PACKAGE_NAME}/")
+        install(FILES "${PB_TYPESYSTEM}" DESTINATION "${CMAKE_INSTALL_PREFIX}/share/PySide${QT_MAJOR_VERSION}/typesystems/")
+    endif()
 
 endfunction()

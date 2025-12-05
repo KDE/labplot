@@ -248,14 +248,18 @@ set(python_scripting_includes
     ${PySide6_PYTHONPATH}/include/QtGui
     ${PySide6_PYTHONPATH}/include/QtCore
 )
-get_target_property(Shiboken6_LIBRARIES Shiboken6::libshiboken IMPORTED_LOCATION)
 set(python_scripting_link_libraries
     PySide6::pyside6
     Shiboken6::libshiboken
     ${Python3_LIBRARIES}
-    ${PySide6_ABI3_LIBRARY}
-    ${Shiboken6_LIBRARIES}
 )
+if(PySide6_ABI3_LIBRARY)
+    list(APPEND python_scripting_link_libraries ${PySide6_ABI3_LIBRARY})
+endif()
+get_target_property(Shiboken6_LIBRARY Shiboken6::libshiboken IMPORTED_LOCATION)
+if(Shiboken6_LIBRARY)
+    list(APPEND python_scripting_link_libraries ${Shiboken6_LIBRARY})
+endif()
 
 # Hide noisy warnings in shiboken scripting generated sources
 # 1. Wno-missing-include-dirs : pyside6 declares an include directory in the INTERFACE_INCLUDE_DIRECTORIES which doesn't actually exist and thus the compiler complains
