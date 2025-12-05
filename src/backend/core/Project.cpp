@@ -1249,12 +1249,11 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	if (hasChildren)
 		spreadsheets = aspect->children<Spreadsheet>(ChildIndexFlag::Recursive);
 	for (auto* linkingSpreadsheet : spreadsheets) {
-		if (!linkingSpreadsheet->linking())
+		if (linkingSpreadsheet->linkedSpreadsheetPath().isEmpty())
 			continue;
 		for (const auto* toLinkedSpreadsheet : spreadsheets) {
-			if (linkingSpreadsheet->linkedSpreadsheetPath() == toLinkedSpreadsheet->path()) {
+			if (linkingSpreadsheet->linkedSpreadsheetPath() == toLinkedSpreadsheet->path())
 				linkingSpreadsheet->setLinkedSpreadsheet(toLinkedSpreadsheet, true);
-			}
 		}
 	}
 

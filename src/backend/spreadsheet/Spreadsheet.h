@@ -70,7 +70,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, readOnly, ReadOnly)
 	BASIC_D_ACCESSOR_DECL(bool, showComments, ShowComments)
 	BASIC_D_ACCESSOR_DECL(bool, showSparklines, ShowSparklines)
-	BASIC_D_ACCESSOR_DECL(bool, linking, Linking)
+
+	void setLinkedSpreadsheet(const Spreadsheet*, bool skipUndo = false);
+	const Spreadsheet* linkedSpreadsheet() const;
+	QString linkedSpreadsheetPath() const;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -97,18 +100,6 @@ public:
 	void finalizeImport(size_t columnOffset, size_t startColumn, size_t endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
 	int resize(AbstractFileFilter::ImportMode, const QStringList& colNameList, int cols);
 
-	struct Linking {
-		bool linking{false};
-		const Spreadsheet* linkedSpreadsheet{nullptr};
-		QString linkedSpreadsheetPath;
-
-		QString spreadsheetPath() const {
-			if (linkedSpreadsheet)
-				return linkedSpreadsheet->path();
-			return linkedSpreadsheetPath;
-		}
-	};
-
 	typedef SpreadsheetPrivate Private;
 
 public Q_SLOTS:
@@ -123,9 +114,7 @@ public Q_SLOTS:
 	void setColumnCount(int);
 	void setRowCount(int);
 
-	const Spreadsheet* linkedSpreadsheet() const;
-	void setLinkedSpreadsheet(const Spreadsheet*, bool skipUndo = false);
-	QString linkedSpreadsheetPath() const;
+
 
 	void clear();
 	void clear(const QVector<Column*>&);
@@ -182,7 +171,6 @@ Q_SIGNALS:
 
 	void showCommentsChanged(bool);
 	void showSparklinesChanged(bool);
-	void linkingChanged(bool);
 	void linkedSpreadsheetChanged(const Spreadsheet*);
 
 	friend class SpreadsheetSetLinkingCmd;
