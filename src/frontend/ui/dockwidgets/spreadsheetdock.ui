@@ -11,10 +11,51 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="14" column="0" colspan="2">
-    <widget class="QLabel" name="lLinkingEnabled">
+   <item row="8" column="0" colspan="2">
+    <widget class="QLabel" name="lColumnCount">
      <property name="text">
-      <string>Enabled</string>
+      <string>Columns:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="0" colspan="2">
+    <widget class="QLabel" name="lShowComments">
+     <property name="text">
+      <string>Comments:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="0">
+    <widget class="QLabel" name="lShowSparklines">
+     <property name="text">
+      <string>Sparklines:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="3">
+    <widget class="QCheckBox" name="cbShowComments">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="3">
+    <widget class="QSpinBox" name="sbRowCount">
+     <property name="minimum">
+      <number>0</number>
+     </property>
+     <property name="maximum">
+      <number>999999999</number>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="QLabel" name="lLinkedSpreadsheet">
+     <property name="text">
+      <string>Sync Rows With:</string>
      </property>
     </widget>
    </item>
@@ -37,58 +78,40 @@
      </property>
     </widget>
    </item>
-   <item row="11" column="3">
-    <widget class="QCheckBox" name="cbShowSparklines">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="16" column="0" colspan="2">
-    <spacer name="verticalSpacer">
+   <item row="0" column="2">
+    <spacer name="horizontalSpacer_4">
      <property name="orientation">
-      <enum>Qt::Orientation::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>13</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="7" column="3">
-    <widget class="QSpinBox" name="sbColumnCount">
-     <property name="minimum">
-      <number>0</number>
-     </property>
-     <property name="maximum">
-      <number>16777215</number>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="3">
-    <widget class="QCheckBox" name="cbLinkingEnabled">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="12" column="0" colspan="2">
-    <spacer name="verticalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Orientation::Vertical</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="sizeType">
       <enum>QSizePolicy::Policy::Fixed</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>20</width>
-       <height>13</height>
+       <width>10</width>
+       <height>23</height>
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="12" column="3">
+    <widget class="QCheckBox" name="cbShowSparklines">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="2">
+    <widget class="QLabel" name="lDimensions">
+     <property name="font">
+      <font>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Dimensions</string>
+     </property>
+    </widget>
    </item>
    <item row="0" column="0">
     <widget class="QLabel" name="lName">
@@ -97,7 +120,7 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="0" colspan="2">
+   <item row="9" column="0" colspan="2">
     <spacer name="verticalSpacer_4">
      <property name="orientation">
       <enum>Qt::Orientation::Vertical</enum>
@@ -112,19 +135,6 @@
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="15" column="3">
-    <widget class="TreeViewComboBox" name="cbLinkedSpreadsheet"/>
-   </item>
-   <item row="0" column="3">
-    <widget class="TimedLineEdit" name="leName"/>
-   </item>
-   <item row="15" column="0" colspan="2">
-    <widget class="QLabel" name="lLinkedSpreadsheet">
-     <property name="text">
-      <string>Spreadsheet</string>
-     </property>
-    </widget>
    </item>
    <item row="2" column="0" colspan="2">
     <spacer name="verticalSpacer_3">
@@ -142,39 +152,35 @@
      </property>
     </spacer>
    </item>
+   <item row="14" column="0" colspan="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>13</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="7" column="0" colspan="2">
-    <widget class="QLabel" name="lColumnCount">
+    <widget class="QLabel" name="lRowCount">
      <property name="text">
-      <string>Columns:</string>
+      <string>Rows:</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="0" colspan="2">
-    <widget class="QLabel" name="lDimensions">
+   <item row="10" column="0" colspan="2">
+    <widget class="QLabel" name="lFormat">
      <property name="font">
       <font>
        <bold>true</bold>
       </font>
      </property>
      <property name="text">
-      <string>Dimensions</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="3">
-    <widget class="QSpinBox" name="sbRowCount">
-     <property name="minimum">
-      <number>0</number>
-     </property>
-     <property name="maximum">
-      <number>999999999</number>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="0">
-    <widget class="QLabel" name="lShowSparklines">
-     <property name="text">
-      <string>Sparklines:</string>
+      <string>Column Header</string>
      </property>
     </widget>
    </item>
@@ -188,69 +194,21 @@
      </property>
     </widget>
    </item>
-   <item row="9" column="0" colspan="2">
-    <widget class="QLabel" name="lFormat">
-     <property name="font">
-      <font>
-       <bold>true</bold>
-      </font>
+   <item row="8" column="3">
+    <widget class="QSpinBox" name="sbColumnCount">
+     <property name="minimum">
+      <number>0</number>
      </property>
-     <property name="text">
-      <string>Column Header</string>
+     <property name="maximum">
+      <number>16777215</number>
      </property>
     </widget>
    </item>
-   <item row="10" column="3">
-    <widget class="QCheckBox" name="cbShowComments">
-     <property name="text">
-      <string/>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-    </widget>
+   <item row="6" column="3">
+    <widget class="TreeViewComboBox" name="cbLinkedSpreadsheet"/>
    </item>
-   <item row="6" column="0" colspan="2">
-    <widget class="QLabel" name="lRowCount">
-     <property name="text">
-      <string>Rows:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="0" colspan="2">
-    <widget class="QLabel" name="lShowComments">
-     <property name="text">
-      <string>Comments:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="13" column="0" colspan="2">
-    <widget class="QLabel" name="lLinking">
-     <property name="font">
-      <font>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Linking</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2">
-    <spacer name="horizontalSpacer_4">
-     <property name="orientation">
-      <enum>Qt::Orientation::Horizontal</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Policy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>10</width>
-       <height>23</height>
-      </size>
-     </property>
-    </spacer>
+   <item row="0" column="3">
+    <widget class="TimedLineEdit" name="leName"/>
    </item>
   </layout>
  </widget>
@@ -278,8 +236,6 @@
   <tabstop>sbColumnCount</tabstop>
   <tabstop>cbShowComments</tabstop>
   <tabstop>cbShowSparklines</tabstop>
-  <tabstop>cbLinkingEnabled</tabstop>
-  <tabstop>cbLinkedSpreadsheet</tabstop>
  </tabstops>
  <resources/>
  <connections/>
