@@ -42,7 +42,6 @@ private Q_SLOTS:
 	void columnCountChanged(int);
 	void commentsShownChanged(bool);
 	void sparklinesShownChanged(bool);
-	void linkingChanged(bool);
 	void linkedSpreadsheetChanged(const QModelIndex&);
 
 	// SLOTs for changes triggered in Spreadsheet
@@ -50,7 +49,6 @@ private Q_SLOTS:
 	void spreadsheetColumnCountChanged(int);
 	void spreadsheetShowCommentsChanged(bool);
 	void spreadsheetShowSparklinesChanged(bool);
-	void spreadsheetLinkingChanged(bool);
 	void spreadsheetLinkedSpreadsheetChanged(const Spreadsheet*);
 
 	// save/load template

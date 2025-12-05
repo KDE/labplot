@@ -78,7 +78,7 @@ namespace {
 // the project version will be compared with this.
 // if you make any incompatible changes to the xmlfile
 // or the function in labplot, increase this number.
-int buildXmlVersion = 16;
+int buildXmlVersion = 17;
 }
 
 /**
@@ -1245,12 +1245,11 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	if (hasChildren)
 		spreadsheets = aspect->children<Spreadsheet>(ChildIndexFlag::Recursive);
 	for (auto* linkingSpreadsheet : spreadsheets) {
-		if (!linkingSpreadsheet->linking())
+		if (linkingSpreadsheet->linkedSpreadsheetPath().isEmpty())
 			continue;
 		for (const auto* toLinkedSpreadsheet : spreadsheets) {
-			if (linkingSpreadsheet->linkedSpreadsheetPath() == toLinkedSpreadsheet->path()) {
+			if (linkingSpreadsheet->linkedSpreadsheetPath() == toLinkedSpreadsheet->path())
 				linkingSpreadsheet->setLinkedSpreadsheet(toLinkedSpreadsheet, true);
-			}
 		}
 	}
 
