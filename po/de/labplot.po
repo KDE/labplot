@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-30 00:38+0000\n"
+"POT-Creation-Date: 2025-12-05 00:38+0000\n"
 "PO-Revision-Date: 2025-11-02 00:27+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -6579,7 +6579,7 @@ msgid "Raw"
 msgstr "Unverarbeitet"
 
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:924
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:930
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:226
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:325
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:484
@@ -18692,46 +18692,46 @@ msgid "Distribution Fit to '%1'"
 msgstr "Anpassung einer Verteilung an '%1'"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:926
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:932
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:348
 #: src/frontend/ui/plotsurfacestylewidget.ui:23
 #, kde-format
 msgid "Density"
 msgstr "Dichte"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:932
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:938
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:378
 #, kde-format
 msgid "Theoretical Quantiles"
 msgstr "Theoretische Quantile"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:935
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:941
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:380
 #, kde-format
 msgid "Sample Quantiles"
 msgstr "Stichproben-Quantile"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1019
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1025
 #, kde-format
 msgid "Sample"
 msgstr "Auswahl"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1068
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1074
 #, kde-format
 msgid "No data selected to plot."
 msgstr "Kein Datensatz zum darstellen ausgewählt."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1073
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1079
 #, kde-format
 msgid "An already existing plot area has to be selected."
 msgstr "Ein existierender Plotbereich muss ausgewählt sein."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1078
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1084
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "Ein existierendes Arbeitsblatt muss ausgewählt sein."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1084
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1090
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "Schließt den Dialog und zeigt die Daten im Plot an."

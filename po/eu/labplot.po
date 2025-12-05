@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-30 00:38+0000\n"
+"POT-Creation-Date: 2025-12-05 00:38+0000\n"
 "PO-Revision-Date: 2025-07-13 15:35+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -6532,7 +6532,7 @@ msgid "Raw"
 msgstr "RAW"
 
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:924
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:930
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:226
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:325
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:484
@@ -18597,46 +18597,46 @@ msgid "Distribution Fit to '%1'"
 msgstr "%1: ezarri zenbakizko formatua '%2'-ra"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:926
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:932
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:348
 #: src/frontend/ui/plotsurfacestylewidget.ui:23
 #, kde-format
 msgid "Density"
 msgstr "Dentsitatea"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:932
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:938
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:378
 #, kde-format
 msgid "Theoretical Quantiles"
 msgstr "Kuantil teorikoak"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:935
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:941
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:380
 #, kde-format
 msgid "Sample Quantiles"
 msgstr "Lagin-kuantilak"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1019
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1025
 #, kde-format
 msgid "Sample"
 msgstr "Lagina"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1068
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1074
 #, kde-format
 msgid "No data selected to plot."
 msgstr "Ez da trazatu beharreko daturik hautatu."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1073
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1079
 #, kde-format
 msgid "An already existing plot area has to be selected."
 msgstr "Aurretik dagoen grafiko-eremu bat hautatu behar da."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1078
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1084
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "Aurretik dagoen lan-orri bat hautatu behar da."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1084
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1090
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "Itxi elkarrizketa-koadroa eta datuak trazatu."

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-30 00:38+0000\n"
-"PO-Revision-Date: 2025-12-02 10:35+0100\n"
+"POT-Creation-Date: 2025-12-05 00:38+0000\n"
+"PO-Revision-Date: 2025-12-04 10:46+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -6582,7 +6582,7 @@ msgid "Raw"
 msgstr "Raw"
 
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:924
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:930
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:226
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:325
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:484
@@ -15261,47 +15261,47 @@ msgstr "1 - Constante en Trend"
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:225
 #, kde-format
 msgid "The degree of locally-fitted polynomial for the seasonal component."
-msgstr ""
+msgstr "De graad van lokaal gefitte polynoom voor de seizoenscomponent."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:229
 #, kde-format
 msgid "The degree of locally-fitted polynomial for the trend component."
-msgstr ""
+msgstr "De graad van lokaal gefitte polynoom voor de trendcomponent."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:233
 #, kde-format
 msgid "The degree of locally-fitted polynomial for the low-pass component."
-msgstr ""
+msgstr "De graad van lokaal gefitte polynoom voor de laagdoorlaatcomponent."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:238
 #, kde-format
 msgid "The number of jumps to include in the seasonal component."
-msgstr ""
+msgstr "Het aantal in te voegen sprongen in de seizoenscomponent."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:241
 #, kde-format
 msgid "If enabled, uses \"Seasonal Length\" / 10."
-msgstr ""
+msgstr "Indien ingeschakeld, gebruikt \"Seizoenslengte\" / 10."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:243
 #, kde-format
 msgid "The number of jumps to include in the trend component."
-msgstr ""
+msgstr "Het aantal in te voegen sprongen in de trendcomponent."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:246
 #, kde-format
 msgid "If enabled, uses \"Trend Length\" / 10."
-msgstr ""
+msgstr "Indien ingeschakeld, gebruikt \"Trendlengte\" / 10."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:248
 #, kde-format
 msgid "The number of jumps to include in the low-pass component."
-msgstr ""
+msgstr "Het aantal in te voegen sprongen in de laagdoorlaatcomponent."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:251
 #, kde-format
 msgid "If enabled, uses \"Low-Pass Length\" / 10."
-msgstr ""
+msgstr "Indien ingeschakeld, gebruikt \"Laagdoorlaadlengte\" / 10."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:254
 #, kde-format
@@ -15311,6 +15311,10 @@ msgid ""
 "168h) seasonality</li><li>7, 365 - for daily data with weekly (7 days) and "
 "yearly (365 days) seasonality</li></ul>"
 msgstr ""
+"Perioden van de seizoenscomponenten, komma-gescheiden waarden. Voorbeelden:"
+"<ul><li>24, 168 - voor uurgegevens met dagelijkse (24u) en wekelijkse (7 * "
+"24u = 168u) seizoenen</li><li>7, 365 - voor dagelijkse gegevens met "
+"wekelijks (7 days) en jaarlijkse (365 days) seizoenen</li></ul>"
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:262
 #, kde-format
@@ -15318,6 +15322,8 @@ msgid ""
 "The lambda parameter for the Box-Cox transformation applied prior to "
 "decomposition."
 msgstr ""
+"De lambda-parameter voor de Box-Cox transformatie toegepast vóór de "
+"decompositie."
 
 #: src/frontend/dockwidgets/SeasonalDecompositionDock.cpp:266
 #, kde-format
@@ -18708,46 +18714,46 @@ msgid "Distribution Fit to '%1'"
 msgstr "Verdeling aanpassing aan '%1'"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:926
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:932
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:348
 #: src/frontend/ui/plotsurfacestylewidget.ui:23
 #, kde-format
 msgid "Density"
 msgstr "Dichtheid"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:932
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:938
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:378
 #, kde-format
 msgid "Theoretical Quantiles"
 msgstr "Theoretische kwantielen"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:935
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:941
 #: src/frontend/spreadsheet/StatisticsColumnWidget.cpp:380
 #, kde-format
 msgid "Sample Quantiles"
 msgstr "Bemonsteringskwantielen"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1019
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1025
 #, kde-format
 msgid "Sample"
 msgstr "Sample"
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1068
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1074
 #, kde-format
 msgid "No data selected to plot."
 msgstr "Geen te plotten gegevens geselecteerd."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1073
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1079
 #, kde-format
 msgid "An already existing plot area has to be selected."
 msgstr "Een reeds bestaand plotgebied moet worden geselecteerd."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1078
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1084
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "Een reeds bestaand werkblad moet worden geselecteerd."
 
-#: src/frontend/spreadsheet/PlotDataDialog.cpp:1084
+#: src/frontend/spreadsheet/PlotDataDialog.cpp:1090
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "Sluit de dialoog af, en plot de gegevens."
@@ -19345,7 +19351,7 @@ msgstr "Log-normaal"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2269
 #, kde-format
 msgid "Seasonal Decomposition"
-msgstr ""
+msgstr "Seizoensdecompositie"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:623
 #, kde-format
@@ -19439,7 +19445,7 @@ msgstr "%1: geselecteerde cellen demaskeren"
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2288
 #, kde-format
 msgid "Seasonal Decomposition for %1"
-msgstr ""
+msgstr "Seizoensdecompositie voor %1"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:2309
 #, kde-format
@@ -23458,13 +23464,13 @@ msgstr "Laagdoorlaatgraad:"
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:395
 #, kde-format
 msgid "Seasonal Jump:"
-msgstr ""
+msgstr "Seizoenssprong:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLTrendJump)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:429
 #, kde-format
 msgid "Trend Jump:"
-msgstr ""
+msgstr "Trendsprong:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSTLLowPassJump)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:463
