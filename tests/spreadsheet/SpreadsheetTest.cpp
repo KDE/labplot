@@ -3083,7 +3083,6 @@ void SpreadsheetTest::testLinkSpreadsheetRemoveRow() {
 	QCOMPARE(dock.ui.sbRowCount->isEnabled(), true);
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), nullptr);
 
-
 	sheetCalculations->setLinkedSpreadsheet(sheetData);
 
 	QCOMPARE(sheetCalculations->linkedSpreadsheet(), sheetData);

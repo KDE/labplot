@@ -114,8 +114,6 @@ public Q_SLOTS:
 	void setColumnCount(int);
 	void setRowCount(int);
 
-
-
 	void clear();
 	void clear(const QVector<Column*>&);
 	void clearMasks();
