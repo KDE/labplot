@@ -56,10 +56,6 @@ void XYDataReductionCurveDock::setupGeneral() {
 	cbYDataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbYDataColumn, 7, 2, 1, 3);
 
-	for (int i = 0; i < NSL_GEOM_LINESIM_TYPE_COUNT; ++i)
-		uiGeneralTab.cbMethod->addItem(i18n(nsl_geom_linesim_type_name[i]));
-	uiGeneralTab.cbMethod->setItemData(nsl_geom_linesim_type_visvalingam_whyatt, i18n("This method is much slower than any other"), Qt::ToolTipRole);
-
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 	uiGeneralTab.sbTolerance->setRange(0.0, std::numeric_limits<double>::max());
@@ -68,6 +64,9 @@ void XYDataReductionCurveDock::setupGeneral() {
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(generalTab);
+
+	updateLocale();
+	retranslateUi();
 
 	// Slots
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYDataReductionCurveDock::dataSourceTypeChanged);
@@ -175,6 +174,79 @@ void XYDataReductionCurveDock::setCurves(QList<XYCurve*> list) {
 	setSymbols(list);
 
 	updatePlotRangeList();
+}
+
+void XYDataReductionCurveDock::retranslateUi() {
+	CONDITIONAL_LOCK_RETURN;
+	ui.retranslateUi(this);
+
+	uiGeneralTab.cbMethod->clear();
+	for (int i = 0; i < NSL_GEOM_LINESIM_TYPE_COUNT; ++i)
+		uiGeneralTab.cbMethod->addItem(i18n(nsl_geom_linesim_type_name[i]));
+	uiGeneralTab.cbMethod->setItemData(nsl_geom_linesim_type_visvalingam_whyatt, i18n("This method is much slower than any other"), Qt::ToolTipRole);
+
+	// tooltip texts
+	// note for the i18n-team: some algorithm are named after their creators like Douglas and Peucker, Visvalingam and Whyatt, Opheim, Lang
+	QString info = i18n("Method to simplify the line:"
+		"<ul>"
+		"<li>Douglas-Peucker - recursively divides the line and retains only those points that deviate more than a specified threshold from the line segment between the start and end points.</li>"
+		"<li>Visvalingam-Whyatt - iteratively removes the point that contributes the least effective area to the polygon's shape until a desired number of points or area threshold is reached.</li>"
+		"<li>Perpendicular Distance - measures the perpendicular distance of each point from a reference line (e.g., the line connecting the first and last points) and retains only those exceeding a threshold.</li>"
+		"<li>n-th Point - keeps every n-th point only.</li>"
+		"<li>Radial Distance - measures the perpendicular distance of each point from a reference line (e.g., the line connecting the first and last points) and retaining only those exceeding a threshold..</li>"
+		"<li>Interpolation.</li>"
+		"<li>Opheim - uses both distance and angular tolerance to simplify lines. It retains points only if they fall outside a specified distance and angular threshold from the previous retained point.</li>"
+		"<li>Lang - retaines points that are at least a specified distance apart and ensuring no point deviates more than a set tolerance from the simplified line.</li>"
+		"</ul>"
+	);
+
+	uiGeneralTab.lMethod->setToolTip(info);
+	uiGeneralTab.cbMethod->setToolTip(info);
+
+	updateOptionsTexts();
+}
+
+void XYDataReductionCurveDock::updateOptionsTexts() {
+	const auto type = (nsl_geom_linesim_type)uiGeneralTab.cbMethod->currentIndex();
+
+	switch (type) {
+	case nsl_geom_linesim_type_douglas_peucker:
+	case nsl_geom_linesim_type_raddist:
+	case nsl_geom_linesim_type_interp:
+	case nsl_geom_linesim_type_reumann_witkam:
+		uiGeneralTab.lOption->setText(i18n("Tolerance (distance):"));
+		break;
+	case nsl_geom_linesim_type_douglas_peucker_variant:
+		uiGeneralTab.lOption->setText(i18n("Number of points:"));
+		break;
+	case nsl_geom_linesim_type_nthpoint:
+		uiGeneralTab.lOption->setText(i18n("Step size:"));
+		break;
+	case nsl_geom_linesim_type_perpdist:
+		uiGeneralTab.lOption->setText(i18n("Tolerance (distance):"));
+		uiGeneralTab.lOption2->setText(i18n("Repeats:"));
+		break;
+	case nsl_geom_linesim_type_visvalingam_whyatt:
+		uiGeneralTab.lOption->setText(i18n("Tolerance (area):"));
+		break;
+	case nsl_geom_linesim_type_opheim:
+		uiGeneralTab.lOption->setText(i18n("Minimum tolerance:"));
+		uiGeneralTab.lOption2->setText(i18n("Maximum tolerance:"));
+		break;
+	case nsl_geom_linesim_type_lang:
+		uiGeneralTab.lOption->setText(i18n("Tolerance (distance):"));
+		uiGeneralTab.lOption2->setText(i18n("Search region:"));
+		break;
+	}
+}
+
+/*
+ * updates the locale in the widgets. called when the application settings are changed.
+ */
+void XYDataReductionCurveDock::updateLocale() {
+	const auto numberLocale = QLocale();
+	uiGeneralTab.sbTolerance->setLocale(numberLocale);
+	uiGeneralTab.sbTolerance2->setLocale(numberLocale);
 }
 
 //*************************************************************
@@ -355,7 +427,6 @@ void XYDataReductionCurveDock::methodChanged(int index) {
 	case nsl_geom_linesim_type_raddist:
 	case nsl_geom_linesim_type_interp:
 	case nsl_geom_linesim_type_reumann_witkam:
-		uiGeneralTab.lOption->setText(i18n("Tolerance (distance):"));
 		uiGeneralTab.sbTolerance->setDecimals(6);
 		uiGeneralTab.sbTolerance->setMinimum(0);
 		uiGeneralTab.sbTolerance->setSingleStep(0.01);
@@ -366,7 +437,6 @@ void XYDataReductionCurveDock::methodChanged(int index) {
 			updateTolerance();
 		break;
 	case nsl_geom_linesim_type_douglas_peucker_variant:
-		uiGeneralTab.lOption->setText(i18n("Number of points:"));
 		uiGeneralTab.sbTolerance->setDecimals(0);
 		uiGeneralTab.sbTolerance->setMinimum(2);
 		uiGeneralTab.sbTolerance->setSingleStep(1);
@@ -377,7 +447,6 @@ void XYDataReductionCurveDock::methodChanged(int index) {
 			updateTolerance();
 		break;
 	case nsl_geom_linesim_type_nthpoint:
-		uiGeneralTab.lOption->setText(i18n("Step size:"));
 		uiGeneralTab.sbTolerance->setValue(10);
 		uiGeneralTab.sbTolerance->setDecimals(0);
 		uiGeneralTab.sbTolerance->setMinimum(1);
@@ -387,14 +456,12 @@ void XYDataReductionCurveDock::methodChanged(int index) {
 		uiGeneralTab.sbTolerance2->hide();
 		break;
 	case nsl_geom_linesim_type_perpdist: // repeat option
-		uiGeneralTab.lOption->setText(i18n("Tolerance (distance):"));
 		uiGeneralTab.sbTolerance->setDecimals(6);
 		uiGeneralTab.sbTolerance->setMinimum(0);
 		uiGeneralTab.sbTolerance->setSingleStep(0.01);
 		uiGeneralTab.sbTolerance2->show();
 		uiGeneralTab.lOption2->show();
 		uiGeneralTab.chkAuto2->show();
-		uiGeneralTab.lOption2->setText(i18n("Repeats:"));
 		uiGeneralTab.sbTolerance2->setDecimals(0);
 		uiGeneralTab.sbTolerance2->setMinimum(1);
 		uiGeneralTab.sbTolerance2->setSingleStep(1);
@@ -404,7 +471,6 @@ void XYDataReductionCurveDock::methodChanged(int index) {
 			updateTolerance2();
 		break;
 	case nsl_geom_linesim_type_visvalingam_whyatt:
-		uiGeneralTab.lOption->setText(i18n("Tolerance (area):"));
 		uiGeneralTab.sbTolerance->setDecimals(6);
 		uiGeneralTab.sbTolerance->setMinimum(0);
 		uiGeneralTab.sbTolerance->setSingleStep(0.01);
@@ -415,11 +481,9 @@ void XYDataReductionCurveDock::methodChanged(int index) {
 			updateTolerance();
 		break;
 	case nsl_geom_linesim_type_opheim: // min/max tol options
-		uiGeneralTab.lOption->setText(i18n("Minimum tolerance:"));
 		uiGeneralTab.sbTolerance->setDecimals(6);
 		uiGeneralTab.sbTolerance->setMinimum(0);
 		uiGeneralTab.sbTolerance->setSingleStep(0.01);
-		uiGeneralTab.lOption2->setText(i18n("Maximum tolerance:"));
 		uiGeneralTab.lOption2->show();
 		uiGeneralTab.chkAuto2->show();
 		uiGeneralTab.sbTolerance2->show();
@@ -432,11 +496,9 @@ void XYDataReductionCurveDock::methodChanged(int index) {
 			updateTolerance2();
 		break;
 	case nsl_geom_linesim_type_lang: // distance/region
-		uiGeneralTab.lOption->setText(i18n("Tolerance (distance):"));
 		uiGeneralTab.sbTolerance->setDecimals(6);
 		uiGeneralTab.sbTolerance->setMinimum(0);
 		uiGeneralTab.sbTolerance->setSingleStep(0.01);
-		uiGeneralTab.lOption2->setText(i18n("Search region:"));
 		uiGeneralTab.lOption2->show();
 		uiGeneralTab.chkAuto2->show();
 		uiGeneralTab.sbTolerance2->show();
@@ -450,6 +512,7 @@ void XYDataReductionCurveDock::methodChanged(int index) {
 		break;
 	}
 
+	updateOptionsTexts();
 	enableRecalculate();
 }
 
@@ -500,7 +563,7 @@ void XYDataReductionCurveDock::recalculateClicked() {
 	statusBar->removeWidget(progressBar);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	Q_EMIT info(i18n("Data reduction status: %1", m_dataReductionCurve->dataReductionResult().status));
+	Q_EMIT info(i18n("Status: %1", m_dataReductionCurve->dataReductionResult().status));
 }
 
 /*!

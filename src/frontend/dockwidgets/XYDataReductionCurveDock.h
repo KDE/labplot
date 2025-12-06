@@ -27,6 +27,8 @@ public:
 	explicit XYDataReductionCurveDock(QWidget* parent, QStatusBar* sb);
 	void setCurves(QList<XYCurve*>);
 	void setupGeneral() override;
+	void updateLocale() override;
+	void retranslateUi() override;
 
 private:
 	void initGeneralTab() override;
@@ -34,6 +36,7 @@ private:
 	void updateTolerance();
 	void updateTolerance2();
 	void showDataReductionResult();
+	void updateOptionsTexts();
 	virtual QString customText() const override;
 
 	Ui::XYDataReductionCurveDockGeneralTab uiGeneralTab;
