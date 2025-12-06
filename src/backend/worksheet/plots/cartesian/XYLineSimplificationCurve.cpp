@@ -60,7 +60,11 @@ const XYLineSimplificationCurve::LineSimplificationResult& XYLineSimplificationC
 // ##############################################################################
 // #################  setter methods and undo commands ##########################
 // ##############################################################################
-STD_SETTER_CMD_IMPL_F_S(XYLineSimplificationCurve, SetLineSimplificationData, XYLineSimplificationCurve::LineSimplificationData, lineSimplificationData, recalculate)
+STD_SETTER_CMD_IMPL_F_S(XYLineSimplificationCurve,
+						SetLineSimplificationData,
+						XYLineSimplificationCurve::LineSimplificationData,
+						lineSimplificationData,
+						recalculate)
 void XYLineSimplificationCurve::setLineSimplificationData(const XYLineSimplificationCurve::LineSimplificationData& data) {
 	Q_D(XYLineSimplificationCurve);
 	exec(new XYLineSimplificationCurveSetLineSimplificationDataCmd(d, data, ki18n("%1: set options and perform the line simplification")));
