@@ -191,9 +191,9 @@ void XYLineSimplificationCurveDock::retranslateUi() {
 		"<ul>"
 		"<li>Douglas-Peucker - recursively divides the line and retains only those points that deviate more than a specified threshold from the line segment between the start and end points.</li>"
 		"<li>Visvalingam-Whyatt - iteratively removes the point that contributes the least effective area to the polygon's shape until a desired number of points or area threshold is reached.</li>"
-		"<li>Perpendicular Distance - measures the perpendicular distance of each point from a reference line (e.g., the line connecting the first and last points) and retains only those exceeding a threshold.</li>"
+		"<li>Perpendicular Distance - measures the perpendicular distance of each point from a reference line and retains only those exceeding a threshold.</li>"
 		"<li>n-th Point - keeps every n-th point only.</li>"
-		"<li>Radial Distance - measures the perpendicular distance of each point from a reference line (e.g., the line connecting the first and last points) and retaining only those exceeding a threshold..</li>"
+		"<li>Radial Distance - measures the distance of each point from the previous retained point and retains only those exceeding a threshold.</li>"
 		"<li>Interpolation.</li>"
 		"<li>Opheim - uses both distance and angular tolerance to simplify lines. It retains points only if they fall outside a specified distance and angular threshold from the previous retained point.</li>"
 		"<li>Lang - retaines points that are at least a specified distance apart and ensuring no point deviates more than a set tolerance from the simplified line.</li>"
@@ -215,7 +215,13 @@ void XYLineSimplificationCurveDock::updateOptionsTexts() {
 
 	switch (type) {
 	case nsl_geom_linesim_type_douglas_peucker:
+		uiGeneralTab.lOption->setText(i18n("Tolerance (distance):"));
+		uiGeneralTab.sbTolerance->setToolTip(i18n("Maximum perpendicular distance from the connecting line segment"));
+		break;
 	case nsl_geom_linesim_type_raddist:
+		uiGeneralTab.lOption->setText(i18n("Tolerance (distance):"));
+		uiGeneralTab.sbTolerance->setToolTip(i18n("Maximum radial distance from the previous retained point"));
+		break;
 	case nsl_geom_linesim_type_interp:
 	case nsl_geom_linesim_type_reumann_witkam:
 		uiGeneralTab.lOption->setText(i18n("Tolerance (distance):"));
@@ -232,7 +238,7 @@ void XYLineSimplificationCurveDock::updateOptionsTexts() {
 	case nsl_geom_linesim_type_perpdist:
 		uiGeneralTab.lOption->setText(i18n("Tolerance (distance):"));
 		uiGeneralTab.lOption2->setText(i18n("Repeats:"));
-		uiGeneralTab.sbTolerance->setToolTip(i18n("Maximum perpendicular distance threshold"));
+		uiGeneralTab.sbTolerance->setToolTip(i18n("Maximum perpendicular distance from the reference line"));
 		uiGeneralTab.sbTolerance2->setToolTip(i18n("Number of iterations to apply the simplification"));
 		break;
 	case nsl_geom_linesim_type_visvalingam_whyatt:
