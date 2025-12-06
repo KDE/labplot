@@ -206,6 +206,10 @@ void XYLineSimplificationCurveDock::retranslateUi() {
 	updateOptionsTexts();
 }
 
+/*!
+ * updates the names and the tooltip texts for the widgets used for the parameters/options
+ * of the currently selected line simplification method.
+ */
 void XYLineSimplificationCurveDock::updateOptionsTexts() {
 	const auto type = (nsl_geom_linesim_type)uiGeneralTab.cbMethod->currentIndex();
 
@@ -215,27 +219,37 @@ void XYLineSimplificationCurveDock::updateOptionsTexts() {
 	case nsl_geom_linesim_type_interp:
 	case nsl_geom_linesim_type_reumann_witkam:
 		uiGeneralTab.lOption->setText(i18n("Tolerance (distance):"));
+		uiGeneralTab.sbTolerance->setToolTip(i18n("Maximum perpendicular distance from the line segment"));
 		break;
 	case nsl_geom_linesim_type_douglas_peucker_variant:
 		uiGeneralTab.lOption->setText(i18n("Number of points:"));
+		uiGeneralTab.sbTolerance->setToolTip(i18n("Target number of points in the simplified line"));
 		break;
 	case nsl_geom_linesim_type_nthpoint:
 		uiGeneralTab.lOption->setText(i18n("Step size:"));
+		uiGeneralTab.sbTolerance->setToolTip(i18n("Keep every n-th point (n is the step size)"));
 		break;
 	case nsl_geom_linesim_type_perpdist:
 		uiGeneralTab.lOption->setText(i18n("Tolerance (distance):"));
 		uiGeneralTab.lOption2->setText(i18n("Repeats:"));
+		uiGeneralTab.sbTolerance->setToolTip(i18n("Maximum perpendicular distance threshold"));
+		uiGeneralTab.sbTolerance2->setToolTip(i18n("Number of iterations to apply the simplification"));
 		break;
 	case nsl_geom_linesim_type_visvalingam_whyatt:
 		uiGeneralTab.lOption->setText(i18n("Tolerance (area):"));
+		uiGeneralTab.sbTolerance->setToolTip(i18n("Minimum area contribution threshold for retaining points"));
 		break;
 	case nsl_geom_linesim_type_opheim:
 		uiGeneralTab.lOption->setText(i18n("Minimum tolerance:"));
 		uiGeneralTab.lOption2->setText(i18n("Maximum tolerance:"));
+		uiGeneralTab.sbTolerance->setToolTip(i18n("Minimum distance threshold from retained point"));
+		uiGeneralTab.sbTolerance2->setToolTip(i18n("Maximum distance threshold from retained point"));
 		break;
 	case nsl_geom_linesim_type_lang:
 		uiGeneralTab.lOption->setText(i18n("Tolerance (distance):"));
 		uiGeneralTab.lOption2->setText(i18n("Search region:"));
+		uiGeneralTab.sbTolerance->setToolTip(i18n("Minimum point spacing distance"));
+		uiGeneralTab.sbTolerance2->setToolTip(i18n("Search region size in units of points"));
 		break;
 	}
 }
