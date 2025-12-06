@@ -79,7 +79,7 @@ set(PLOT_SOURCES
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYConvolutionCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
-    ${BACKEND_DIR}/worksheet/plots/cartesian/XYDataReductionCurve.cpp
+    ${BACKEND_DIR}/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYDifferentiationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYEquationCurve.cpp
     ${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp

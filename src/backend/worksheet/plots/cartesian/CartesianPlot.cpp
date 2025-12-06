@@ -408,7 +408,7 @@ CartesianPlot::Type CartesianPlot::type() const {
 
 void CartesianPlot::initActions() {
 	// analysis curves, no icons yet
-	addDataReductionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Reduction"), this);
+	addLineSimplificationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Line Simplification"), this);
 	addDifferentiationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiation"), this);
 	addIntegrationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integration"), this);
 	addInterpolationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolation"), this);
@@ -420,7 +420,7 @@ void CartesianPlot::initActions() {
 	addConvolutionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("(De-)Convolution"), this);
 	addCorrelationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto-/Cross-Correlation"), this);
 
-	connect(addDataReductionCurveAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
+	connect(addLineSimplificationCurveAction, &QAction::triggered, this, &CartesianPlot::addLineSimplificationCurve);
 	connect(addDifferentiationCurveAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
 	connect(addIntegrationCurveAction, &QAction::triggered, this, &CartesianPlot::addIntegrationCurve);
 	connect(addInterpolationCurveAction, &QAction::triggered, this, &CartesianPlot::addInterpolationCurve);
@@ -445,7 +445,7 @@ void CartesianPlot::initActions() {
 	connect(addFunctionCurveAction, &QAction::triggered, this, &CartesianPlot::addFunctionCurve);
 
 	// Analysis menu actions, used in the spreadsheet
-	addDataReductionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Reduction"), this);
+	addLineSimplificationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Line Simplification"), this);
 	addDifferentiationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiate"), this);
 	addIntegrationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integrate"), this);
 	addInterpolationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolate"), this);
@@ -501,7 +501,7 @@ void CartesianPlot::initActions() {
 	addFourierTransformAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve")), i18n("Fourier Transform"), this);
 	addHilbertTransformAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Hilbert Transform"), this);
 
-	connect(addDataReductionAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
+	connect(addLineSimplificationAction, &QAction::triggered, this, &CartesianPlot::addLineSimplificationCurve);
 	connect(addDifferentiationAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
 	connect(addIntegrationAction, &QAction::triggered, this, &CartesianPlot::addIntegrationCurve);
 	connect(addInterpolationAction, &QAction::triggered, this, &CartesianPlot::addInterpolationCurve);
@@ -605,7 +605,7 @@ void CartesianPlot::initMenus() {
 	addNewAnalysisMenu->addAction(addConvolutionCurveAction);
 	addNewAnalysisMenu->addAction(addCorrelationCurveAction);
 	addNewAnalysisMenu->addSeparator();
-	addNewAnalysisMenu->addAction(addDataReductionCurveAction);
+	addNewAnalysisMenu->addAction(addLineSimplificationCurveAction);
 	addNewAnalysisMenu->addSeparator();
 	addNewAnalysisMenu->addAction(addFunctionCurveAction);
 	m_addNewMenu->addMenu(addNewAnalysisMenu);
@@ -666,7 +666,7 @@ void CartesianPlot::initMenus() {
 	dataAnalysisMenu->addAction(addCorrelationAction);
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addSeparator();
-	dataAnalysisMenu->addAction(addDataReductionAction);
+	dataAnalysisMenu->addAction(addLineSimplificationAction);
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addFunctionCurveAction);
 
@@ -885,7 +885,7 @@ QVector<AspectType> CartesianPlot::pasteTypes() const {
 							  AspectType::XYFunctionCurve,
 							  AspectType::XYConvolutionCurve,
 							  AspectType::XYCorrelationCurve,
-							  AspectType::XYDataReductionCurve,
+							  AspectType::XYLineSimplificationCurve,
 							  AspectType::XYDifferentiationCurve,
 							  AspectType::XYFitCurve,
 							  AspectType::XYFourierFilterCurve,
@@ -2011,19 +2011,19 @@ const XYCurve* CartesianPlot::currentCurve() const {
 	return nullptr;
 }
 
-void CartesianPlot::addDataReductionCurve() {
-	auto* curve = new XYDataReductionCurve(i18n("Data Reduction"));
+void CartesianPlot::addLineSimplificationCurve() {
+	auto* curve = new XYLineSimplificationCurve(i18n("Line Simplification"));
 	const XYCurve* curCurve = currentCurve();
 	if (curCurve) {
-		beginMacro(i18n("%1: reduce '%2'", name(), curCurve->name()));
-		curve->setName(i18n("Reduction of '%1'", curCurve->name()));
+		beginMacro(i18n("%1: simplify '%2'", name(), curCurve->name()));
+		curve->setName(i18n("Simplification of '%1'", curCurve->name()));
 		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);
 		curve->recalculate();
-		Q_EMIT curve->dataReductionDataChanged(curve->dataReductionData());
+		Q_EMIT curve->lineSimplificationDataChanged(curve->lineSimplificationData());
 	} else {
-		beginMacro(i18n("%1: add data reduction curve", name()));
+		beginMacro(i18n("%1: add line simplification curve", name()));
 		this->addChild(curve);
 	}
 
@@ -5257,8 +5257,8 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete curve;
 				return false;
 			}
-		} else if (reader->name() == QLatin1String("xyDataReductionCurve")) {
-			auto* curve = new XYDataReductionCurve(QString());
+		} else if (reader->name() == QLatin1String("xyLineSimplificationCurve")) {
+			auto* curve = new XYLineSimplificationCurve(QString());
 			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);

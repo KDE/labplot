@@ -373,7 +373,7 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData) {
  */
 void XYFitCurve::initFitData(XYAnalysisCurve::AnalysisAction action) {
 	// TODO: exclude others too?
-	if (action == XYAnalysisCurve::AnalysisAction::DataReduction)
+	if (action == XYAnalysisCurve::AnalysisAction::LineSimplification)
 		return;
 
 	Q_D(XYFitCurve);

@@ -660,8 +660,8 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 
 		XYAnalysisCurve* analysisCurve = nullptr;
 		switch (m_analysisAction) {
-		case XYAnalysisCurve::AnalysisAction::DataReduction:
-			analysisCurve = new XYDataReductionCurve(i18n("Reduction of '%1'", name));
+		case XYAnalysisCurve::AnalysisAction::LineSimplification:
+			analysisCurve = new XYLineSimplificationCurve(i18n("Simplification of '%1'", name));
 			break;
 		case XYAnalysisCurve::AnalysisAction::Differentiation:
 			analysisCurve = new XYDifferentiationCurve(i18n("Derivative of '%1'", name));

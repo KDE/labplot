@@ -68,7 +68,7 @@
 #include "frontend/dockwidgets/XYConvolutionCurveDock.h"
 #include "frontend/dockwidgets/XYCorrelationCurveDock.h"
 #include "frontend/dockwidgets/XYCurveDock.h"
-#include "frontend/dockwidgets/XYDataReductionCurveDock.h"
+#include "frontend/dockwidgets/XYLineSimplificationCurveDock.h"
 #include "frontend/dockwidgets/XYDifferentiationCurveDock.h"
 #include "frontend/dockwidgets/XYEquationCurveDock.h"
 #include "frontend/dockwidgets/XYFitCurveDock.h"
@@ -286,21 +286,21 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		raiseDockSetupConnect(m_xyFunctionCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyFunctionCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
-	case AspectType::XYDataReductionCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Data Reduction"));
-		if (!m_xyDataReductionCurveDock) {
-			m_xyDataReductionCurveDock = new XYDataReductionCurveDock(m_mainWindow->stackedWidget, m_mainWindow->statusBar());
-			m_xyDataReductionCurveDock->setupGeneral();
-			connect(m_xyDataReductionCurveDock, &XYDataReductionCurveDock::info, [&](const QString& text) {
+	case AspectType::XYLineSimplificationCurve:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Line Simplification"));
+		if (!m_xyLineSimplificationCurveDock) {
+			m_xyLineSimplificationCurveDock = new XYLineSimplificationCurveDock(m_mainWindow->stackedWidget, m_mainWindow->statusBar());
+			m_xyLineSimplificationCurveDock->setupGeneral();
+			connect(m_xyLineSimplificationCurveDock, &XYLineSimplificationCurveDock::info, [&](const QString& text) {
 				m_mainWindow->statusBar()->showMessage(text);
 			});
-			m_mainWindow->stackedWidget->addWidget(m_xyDataReductionCurveDock);
+			m_mainWindow->stackedWidget->addWidget(m_xyLineSimplificationCurveDock);
 		}
 
-		initializedDocks << m_xyDataReductionCurveDock;
-		m_xyDataReductionCurveDock->setCurves(castList<XYCurve>(selectedAspects));
+		initializedDocks << m_xyLineSimplificationCurveDock;
+		m_xyLineSimplificationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 
-		m_mainWindow->stackedWidget->setCurrentWidget(m_xyDataReductionCurveDock);
+		m_mainWindow->stackedWidget->setCurrentWidget(m_xyLineSimplificationCurveDock);
 		break;
 	case AspectType::XYDifferentiationCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Differentiation"));

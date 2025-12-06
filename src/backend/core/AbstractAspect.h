@@ -79,7 +79,7 @@ enum class AspectType : quint64 {
 	XYAnalysisCurve,
 	XYConvolutionCurve,
 	XYCorrelationCurve,
-	XYDataReductionCurve,
+	XYLineSimplificationCurve,
 	XYDifferentiationCurve,
 	XYFitCurve,
 	XYFourierFilterCurve,
@@ -203,8 +203,8 @@ public:
 			return std::string_view("XYConvolutionCurve");
 		case AspectType::XYCorrelationCurve:
 			return std::string_view("XYCorrelationCurve");
-		case AspectType::XYDataReductionCurve:
-			return std::string_view("XYDataReductionCurve");
+		case AspectType::XYLineSimplificationCurve:
+			return std::string_view("XYLineSimplificationCurve");
 		case AspectType::XYDifferentiationCurve:
 			return std::string_view("XYDifferentiationCurve");
 		case AspectType::XYFitCurve:

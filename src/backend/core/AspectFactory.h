@@ -72,8 +72,8 @@ public:
 			return new XYConvolutionCurve(QString());
 		else if (type == AspectType::XYCorrelationCurve)
 			return new XYCorrelationCurve(QString());
-		else if (type == AspectType::XYDataReductionCurve)
-			return new XYDataReductionCurve(QString());
+		else if (type == AspectType::XYLineSimplificationCurve)
+			return new XYLineSimplificationCurve(QString());
 		else if (type == AspectType::XYDifferentiationCurve)
 			return new XYDifferentiationCurve(QString());
 		else if (type == AspectType::XYFitCurve)

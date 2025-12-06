@@ -1207,15 +1207,15 @@
         <declare-function signature="setCorrelationData(const XYCorrelationCurve::CorrelationData&amp;)" return-type="void"/>
         <declare-function signature="correlationResult()const" return-type="const XYCorrelationCurve::CorrelationResult&amp;"/>
     </object-type>
-    <rejection class="XYDataReductionCurve" field-name="*"/>
-    <rejection class="XYDataReductionCurve" function-name="*"/>
-    <object-type name="XYDataReductionCurve" disable-wrapper="yes">
-        <value-type name="DataReductionData" disable-wrapper="yes"/>
-        <value-type name="DataReductionResult" disable-wrapper="yes"/>
-        <declare-function signature="XYDataReductionCurve(const QString&amp;)" return-type="void"/>
-        <declare-function signature="dataReductionData()const" return-type="XYDataReductionCurve::DataReductionData"/>
-        <declare-function signature="setDataReductionData(const XYDataReductionCurve::DataReductionData&amp;)" return-type="void"/>
-        <declare-function signature="dataReductionResult()const" return-type="const XYDataReductionCurve::DataReductionResult&amp;"/>
+    <rejection class="XYLineSimplificationCurve" field-name="*"/>
+    <rejection class="XYLineSimplificationCurve" function-name="*"/>
+    <object-type name="XYLineSimplificationCurve" disable-wrapper="yes">
+        <value-type name="LineSimplificationData" disable-wrapper="yes"/>
+        <value-type name="LineSimplificationResult" disable-wrapper="yes"/>
+        <declare-function signature="XYLineSimplificationCurve(const QString&amp;)" return-type="void"/>
+        <declare-function signature="lineSimplificationData()const" return-type="XYLineSimplificationCurve::LineSimplificationData"/>
+        <declare-function signature="setLineSimplificationData(const XYLineSimplificationCurve::LineSimplificationData&amp;)" return-type="void"/>
+        <declare-function signature="lineSimplificationResult()const" return-type="const XYLineSimplificationCurve::LineSimplificationResult&amp;"/>
     </object-type>
     <rejection class="XYDifferentiationCurve" field-name="*"/>
     <rejection class="XYDifferentiationCurve" function-name="*"/>

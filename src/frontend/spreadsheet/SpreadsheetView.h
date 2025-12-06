@@ -213,7 +213,7 @@ private:
 	// analysis and plot data menu actions
 	QActionGroup* plotDataActionGroup{nullptr};
 	QAction* addDataOperationAction{nullptr};
-	QAction* addDataReductionAction{nullptr};
+	QAction* addLineSimplificationAction{nullptr};
 	QAction* addDifferentiationAction{nullptr};
 	QAction* addIntegrationAction{nullptr};
 	QAction* addInterpolationAction{nullptr};

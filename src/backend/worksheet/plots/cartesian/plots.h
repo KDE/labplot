@@ -23,7 +23,7 @@
 
 #include "backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCorrelationCurve.h"
-#include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
+#include "backend/worksheet/plots/cartesian/XYLineSimplificationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"

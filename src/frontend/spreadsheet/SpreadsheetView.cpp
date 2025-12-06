@@ -499,9 +499,9 @@ void SpreadsheetView::initActions() {
 
 	// Analyze and plot menu actions
 	addAnalysisActionGroup = new QActionGroup(this);
-	addDataReductionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Reduce Data"), addAnalysisActionGroup);
-	//	addDataReductionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-data-reduction-curve")), i18n("Reduce Data"), this);
-	addDataReductionAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::DataReduction));
+	addLineSimplificationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Simplify Line"), addAnalysisActionGroup);
+	//	addLineSimplificationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-line-simplification-curve")), i18n("Simplify Line"), this);
+	addLineSimplificationAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::LineSimplification));
 	addDifferentiationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiate"), addAnalysisActionGroup);
 	//	addDifferentiationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-differentiation-curve")), i18n("Differentiate"), this);
 	addDifferentiationAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Differentiation));
@@ -675,7 +675,7 @@ void SpreadsheetView::initMenus() {
 	m_analyzePlotMenu->addSeparator();
 	m_analyzePlotMenu->addAction(addFourierFilterAction);
 	m_analyzePlotMenu->addSeparator();
-	m_analyzePlotMenu->addAction(addDataReductionAction);
+	m_analyzePlotMenu->addAction(addLineSimplificationAction);
 	m_columnMenu->addMenu(m_analyzePlotMenu);
 
 	// statistical analysis

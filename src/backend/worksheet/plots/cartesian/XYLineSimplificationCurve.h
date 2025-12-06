@@ -1,15 +1,15 @@
 /*
-	File                 : XYDataReductionCurve.h
+	File                 : XYLineSimplificationCurve.h
 	Project              : LabPlot
-	Description          : A xy-curve defined by a data reduction
+	Description          : A xy-curve defined by a line simplification
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef XYDATAREDUCTIONCURVE_H
-#define XYDATAREDUCTIONCURVE_H
+#ifndef XYLINESIMPLIFICATIONCURVE_H
+#define XYLINESIMPLIFICATIONCURVE_H
 
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 
@@ -17,19 +17,19 @@ extern "C" {
 #include "backend/nsl/nsl_geom_linesim.h"
 }
 
-class XYDataReductionCurvePrivate;
+class XYLineSimplificationCurvePrivate;
 
 #ifdef SDK
 #include "labplot_export.h"
-class LABPLOT_EXPORT XYDataReductionCurve : public XYAnalysisCurve {
+class LABPLOT_EXPORT XYLineSimplificationCurve : public XYAnalysisCurve {
 #else
-class XYDataReductionCurve : public XYAnalysisCurve {
+class XYLineSimplificationCurve : public XYAnalysisCurve {
 #endif
 	Q_OBJECT
 
 public:
-	struct DataReductionData {
-		DataReductionData() { };
+	struct LineSimplificationData {
+		LineSimplificationData() { };
 
 		nsl_geom_linesim_type type{nsl_geom_linesim_type_douglas_peucker_variant}; // type of simplification
 		bool autoTolerance{true}; // automatic tolerance
@@ -40,35 +40,35 @@ public:
 		// TODO: use Range
 		QVector<double> xRange{0., 0.}; // x range for integration
 	};
-	struct DataReductionResult : public XYAnalysisCurve::Result {
-		DataReductionResult() { };
+	struct LineSimplificationResult : public XYAnalysisCurve::Result {
+		LineSimplificationResult() { };
 
 		size_t npoints{0};
 		double posError{0};
 		double areaError{0};
 	};
 
-	explicit XYDataReductionCurve(const QString& name);
-	~XYDataReductionCurve() override;
+	explicit XYLineSimplificationCurve(const QString& name);
+	~XYLineSimplificationCurve() override;
 
 	const XYAnalysisCurve::Result& result() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-	CLASS_D_ACCESSOR_DECL(DataReductionData, dataReductionData, DataReductionData)
-	const DataReductionResult& dataReductionResult() const;
+	CLASS_D_ACCESSOR_DECL(LineSimplificationData, lineSimplificationData, LineSimplificationData)
+	const LineSimplificationResult& lineSimplificationResult() const;
 
-	typedef XYDataReductionCurvePrivate Private;
+	typedef XYLineSimplificationCurvePrivate Private;
 
 protected:
-	XYDataReductionCurve(const QString& name, XYDataReductionCurvePrivate* dd);
+	XYLineSimplificationCurve(const QString& name, XYLineSimplificationCurvePrivate* dd);
 
 private:
-	Q_DECLARE_PRIVATE(XYDataReductionCurve)
+	Q_DECLARE_PRIVATE(XYLineSimplificationCurve)
 
 Q_SIGNALS:
-	void dataReductionDataChanged(const XYDataReductionCurve::DataReductionData&);
+	void lineSimplificationDataChanged(const XYLineSimplificationCurve::LineSimplificationData&);
 	void completed(int); //!< int ranging from 0 to 100 notifies about the status of the analysis process
 };
 

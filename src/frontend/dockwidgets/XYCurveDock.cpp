@@ -322,7 +322,7 @@ void XYCurveDock::setModel() {
 				AspectType::XYFourierTransformCurve,
 				AspectType::XYConvolutionCurve,
 				AspectType::XYCorrelationCurve,
-				AspectType::XYDataReductionCurve,
+				AspectType::XYLineSimplificationCurve,
 				AspectType::XYEquationCurve,
 				AspectType::XYFunctionCurve};
 	else

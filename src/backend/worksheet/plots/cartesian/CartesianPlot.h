@@ -230,7 +230,7 @@ private:
 	bool m_menusInitialized{false};
 
 	// analysis curves actions
-	QAction* addDataReductionCurveAction{nullptr};
+	QAction* addLineSimplificationCurveAction{nullptr};
 	QAction* addDifferentiationCurveAction{nullptr};
 	QAction* addIntegrationCurveAction{nullptr};
 	QAction* addInterpolationCurveAction{nullptr};
@@ -257,7 +257,7 @@ private:
 
 	// analysis menu actions
 	QAction* addDataOperationAction{nullptr};
-	QAction* addDataReductionAction{nullptr};
+	QAction* addLineSimplificationAction{nullptr};
 	QAction* addDifferentiationAction{nullptr};
 	QAction* addIntegrationAction{nullptr};
 	QAction* addInterpolationAction{nullptr};
@@ -314,7 +314,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 	void addPlot(QAction*);
 
-	void addDataReductionCurve();
+	void addLineSimplificationCurve();
 	void addDifferentiationCurve();
 	void addIntegrationCurve();
 	void addInterpolationCurve();
