@@ -137,7 +137,7 @@ function(generate_python_bindings)
     # Add custom target to run shiboken to generate the binding cpp files.
     add_custom_command(
         OUTPUT ${PB_GENERATED_SOURCES}
-        COMMAND shiboken6 ${shiboken_options} ${PB_WRAPPED_HEADER} ${PB_TYPESYSTEM}
+        COMMAND ${Shiboken6_EXECUTABLE} ${shiboken_options} ${PB_WRAPPED_HEADER} ${PB_TYPESYSTEM}
         DEPENDS ${generated_sources_dependencies}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Running generator for ${PB_TYPESYSTEM}"
