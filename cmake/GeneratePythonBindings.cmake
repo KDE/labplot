@@ -68,13 +68,13 @@ function(generate_python_bindings)
     cmake_parse_arguments(PB "${options}" "${oneValueArgs}" "${multiValueArgs}"  ${ARGN})
 
     if (NOT Python3_EXECUTABLE)
-        message(FATAL_ERROR "Python3_EXECUTABLE not set. Make sure find_package(Python3) is called before including ECMGeneratePythonBindings")
+        message(FATAL_ERROR "Python3_EXECUTABLE not set. Make sure find_package(Python3) is called before including GeneratePythonBindings")
     endif()
 
     execute_process(COMMAND ${Python3_EXECUTABLE} -Esc "import build" RESULT_VARIABLE PYTHON_BUILD_CHECK_EXIT_CODE OUTPUT_QUIET ERROR_QUIET)
 
     if (PYTHON_BUILD_CHECK_EXIT_CODE)
-        message(FATAL_ERROR "The 'build' Python module is needed for ECMGeneratePythonBindings")
+        message(FATAL_ERROR "The 'build' Python module is needed for GeneratePythonBindings")
     endif()
 
     # Ugly hacks because PySide6::pyside6 only includes /usr/includes/PySide6 and none of the sub directory
