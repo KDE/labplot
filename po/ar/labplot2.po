@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 16:18+0000\n"
-"PO-Revision-Date: 2025-10-02 14:13+0400\n"
+"PO-Revision-Date: 2025-12-06 18:31+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -15528,7 +15528,7 @@ msgstr "سجل التراجع/الإعادة..."
 #: src/kdefrontend/MainWin.cpp:755
 #, kde-format
 msgid "Close the active window"
-msgstr "اِغلق النافذة النشطة"
+msgstr "أغلق النافذة النشطة"
 
 #: src/kdefrontend/MainWin.cpp:758
 #, kde-format
@@ -15538,7 +15538,7 @@ msgstr "أغلق الكلّ"
 #: src/kdefrontend/MainWin.cpp:759
 #, kde-format
 msgid "Close all the windows"
-msgstr "اِغلق جميع النوافذ"
+msgstr "أغلق جميع النوافذ"
 
 #: src/kdefrontend/MainWin.cpp:762
 #, kde-format
