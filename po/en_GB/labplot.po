@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-05 00:38+0000\n"
+"POT-Creation-Date: 2025-12-07 00:38+0000\n"
 "PO-Revision-Date: 2024-11-23 12:07+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -843,13 +843,13 @@ msgstr "unknown datapicker element '%1'"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:412
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:71
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:60
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:354
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:313
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:330
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:37
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:65
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:204
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:131
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:354
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:457
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:23
 #, kde-format
@@ -6388,9 +6388,9 @@ msgstr "Circular"
 #. i18n: ectx: property (text), widget (QCheckBox, cbMinorTicksAutoNumber)
 #. i18n: ectx: property (text), widget (QCheckBox, chkLabelsAutoPrecision)
 #. i18n: ectx: property (text), widget (QCheckBox, chkLabelsFormatAuto)
-#. i18n: ectx: property (text), widget (QCheckBox, chkAutoBinRanges)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto2)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAuto)
+#. i18n: ectx: property (text), widget (QCheckBox, chkAutoBinRanges)
 #. i18n: ectx: property (text), widget (QCheckBox, chbSTLTrendLengthAuto)
 #. i18n: ectx: property (text), widget (QCheckBox, chbSTLLowPassLengthAuto)
 #. i18n: ectx: property (text), widget (QCheckBox, chbSTLSeasonalJumpAuto)
@@ -6416,15 +6416,15 @@ msgstr "Circular"
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:488
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:352
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:224
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:118
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:149
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:405
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:361
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:368
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:318
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:50
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:84
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:195
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:118
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:149
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:405
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:112
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:61
 #, kde-format
@@ -9130,9 +9130,10 @@ msgstr "Title"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:411
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:448
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
-#, kde-format
-msgid "Data Reduction"
-msgstr "Data Reduction"
+#, fuzzy, kde-format
+#| msgid "Simplification"
+msgid "Line Simplification"
+msgstr "Simplification"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:412
@@ -9293,7 +9294,6 @@ msgstr "Error Function"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:445
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:399
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:150
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:513
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:419
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:251
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:458
@@ -9303,6 +9303,7 @@ msgstr "Error Function"
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:314
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:397
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:570
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:513
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:582
 #, kde-format
 msgid "Legend"
@@ -9663,20 +9664,23 @@ msgid "Distribution Fit to '%1'"
 msgstr "Distribution Fit to '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2018
-#, kde-format
-msgid "%1: reduce '%2'"
-msgstr "%1: reduce '%2'"
+#, fuzzy, kde-format
+#| msgid "%1: smooth '%2'"
+msgid "%1: simplify '%2'"
+msgstr "%1: smooth '%2'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2019
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:664
-#, kde-format
-msgid "Reduction of '%1'"
-msgstr "Reduction of '%1'"
+#, fuzzy, kde-format
+#| msgid "Simplification"
+msgid "Simplification of '%1'"
+msgstr "Simplification"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2026
-#, kde-format
-msgid "%1: add data reduction curve"
-msgstr "%1: add data reduction curve"
+#, fuzzy, kde-format
+#| msgid "%1: add interpolation curve"
+msgid "%1: add line simplification curve"
+msgstr "%1: add interpolation curve"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2037
 #, kde-format
@@ -10656,10 +10660,10 @@ msgstr "%1: set options and perform the convolution"
 
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:158
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:151
-#: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:114
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:111
 #: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:112
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:132
+#: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:118
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:137
 #, kde-format
 msgid "Not enough data points available."
@@ -10714,11 +10718,6 @@ msgstr "x values must be monotonically increasing."
 #, kde-format
 msgid "Error: %1"
 msgstr "Error: %1"
-
-#: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:66
-#, kde-format
-msgid "%1: set options and perform the data reduction"
-msgstr "%1: set options and perform the data reduction"
 
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:65
 #, kde-format
@@ -11001,6 +11000,12 @@ msgid "interpolation failed since x data is not strictly monotonic increasing!"
 msgstr ""
 "interpolation failed since x data is not strictly monotonic increasing!"
 
+#: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:70
+#, fuzzy, kde-format
+#| msgid "%1: set options and perform the interpolation"
+msgid "%1: set options and perform the line simplification"
+msgstr "%1: set options and perform the interpolation"
+
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:74
 #, kde-format
 msgid "%1: set options and perform the smooth"
@@ -11117,7 +11122,6 @@ msgstr "%1: unlock"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:279
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:353
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:67
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:81
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:246
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:161
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:451
@@ -11127,6 +11131,7 @@ msgstr "%1: unlock"
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:145
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:47
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:103
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:81
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:243
 #: src/frontend/ui/labelwidget.ui:722
 #, kde-format
@@ -14487,7 +14492,6 @@ msgstr "Plot Ranges:"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:262
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:234
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:117
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:470
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:33
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:306
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:878
@@ -14497,6 +14501,7 @@ msgstr "Plot Ranges:"
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:79
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:54
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:86
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:470
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:105
 #, kde-format
 msgid "Plot Range:"
@@ -15567,73 +15572,6 @@ msgid ""
 msgstr ""
 "If ticked, connect data points only for strictly increasing values of X"
 
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:61
-#, kde-format
-msgid "This method is much slower than any other"
-msgstr "This method is much slower than any other"
-
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:358
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:390
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:435
-#, kde-format
-msgid "Tolerance (distance):"
-msgstr "Tolerance (distance):"
-
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:369
-#, kde-format
-msgid "Number of points:"
-msgstr "Number of points:"
-
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:380
-#, kde-format
-msgid "Step size:"
-msgstr "Step size:"
-
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:397
-#, kde-format
-msgid "Repeats:"
-msgstr "Repeats:"
-
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:407
-#, kde-format
-msgid "Tolerance (area):"
-msgstr "Tolerance (area):"
-
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:418
-#, kde-format
-msgid "Minimum tolerance:"
-msgstr "Minimum tolerance:"
-
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:422
-#, kde-format
-msgid "Maximum tolerance:"
-msgstr "Maximum tolerance:"
-
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:439
-#, kde-format
-msgid "Search region:"
-msgstr "Search region:"
-
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:503
-#, kde-format
-msgid "Data reduction status: %1"
-msgstr "Data reduction status: %1"
-
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:518
-#, kde-format
-msgid "number of points: %1"
-msgstr "number of points: %1"
-
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:519
-#, kde-format
-msgid "positional squared error: %1"
-msgstr "positional squared error: %1"
-
-#: src/frontend/dockwidgets/XYDataReductionCurveDock.cpp:520
-#, kde-format
-msgid "area error: %1"
-msgstr "area error: %1"
-
 #: src/frontend/dockwidgets/XYDifferentiationCurveDock.cpp:389
 #, kde-format
 msgid "Differentiation status: %1"
@@ -15717,12 +15655,12 @@ msgstr "t statistic"
 #: src/frontend/dockwidgets/XYFitCurveDock.cpp:445
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:217
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:360
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:453
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:56
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:366
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:480
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:390
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:165
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:453
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:511
 #, kde-format
 msgid "Curve:"
@@ -15901,6 +15839,160 @@ msgstr ""
 msgid "Interpolation status: %1"
 msgstr "Interpolation status: %1"
 
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:186
+#, kde-format
+msgid "This method is much slower than any other"
+msgstr "This method is much slower than any other"
+
+#. i18n-team: some algorithm are named after their creators like Douglas and Peucker, Visvalingam and Whyatt, Opheim, Lang
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:190
+#, kde-format
+msgid ""
+"Method to simplify the line:<ul><li>Douglas-Peucker - recursively divides "
+"the line and retains only those points that deviate more than a specified "
+"threshold from the line segment between the start and end points.</"
+"li><li>Visvalingam-Whyatt - iteratively removes the point that contributes "
+"the least effective area to the polygon's shape until a desired number of "
+"points or area threshold is reached.</li><li>Perpendicular Distance - "
+"measures the perpendicular distance of each point from a reference line and "
+"retains only those exceeding a threshold.</li><li>n-th Point - keeps every n-"
+"th point only.</li><li>Radial Distance - measures the distance of each point "
+"from the previous retained point and retains only those exceeding a "
+"threshold.</li><li>Interpolation.</li><li>Opheim - uses both distance and "
+"angular tolerance to simplify lines. It retains points only if they fall "
+"outside a specified distance and angular threshold from the previous "
+"retained point.</li><li>Lang - retaines points that are at least a specified "
+"distance apart and ensuring no point deviates more than a set tolerance from "
+"the simplified line.</li></ul>"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:218
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:222
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:227
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:239
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:255
+#, kde-format
+msgid "Tolerance (distance):"
+msgstr "Tolerance (distance):"
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:219
+#, kde-format
+msgid "Maximum perpendicular distance from the connecting line segment"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:223
+#, kde-format
+msgid "Maximum radial distance from the previous retained point"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:228
+#, kde-format
+msgid "Maximum perpendicular distance from the line segment"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:231
+#, kde-format
+msgid "Number of points:"
+msgstr "Number of points:"
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:232
+#, fuzzy, kde-format
+#| msgid "The number of vectors in the file"
+msgid "Target number of points in the simplified line"
+msgstr "The number of vectors in the file"
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:235
+#, kde-format
+msgid "Step size:"
+msgstr "Step size:"
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:236
+#, kde-format
+msgid "Keep every n-th point (n is the step size)"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:240
+#, kde-format
+msgid "Repeats:"
+msgstr "Repeats:"
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:241
+#, kde-format
+msgid "Maximum perpendicular distance from the reference line"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:242
+#, fuzzy, kde-format
+#| msgid "Number of iterations to perform."
+msgid "Number of iterations to apply the simplification"
+msgstr "Number of iterations to perform."
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:245
+#, kde-format
+msgid "Tolerance (area):"
+msgstr "Tolerance (area):"
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:246
+#, kde-format
+msgid "Minimum area contribution threshold for retaining points"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:249
+#, kde-format
+msgid "Minimum tolerance:"
+msgstr "Minimum tolerance:"
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:250
+#, kde-format
+msgid "Maximum tolerance:"
+msgstr "Maximum tolerance:"
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:251
+#, kde-format
+msgid "Minimum distance threshold from retained point"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:252
+#, kde-format
+msgid "Maximum distance threshold from retained point"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:256
+#, kde-format
+msgid "Search region:"
+msgstr "Search region:"
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:257
+#, kde-format
+msgid "Minimum point spacing distance"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:258
+#, kde-format
+msgid "Search region size in units of points"
+msgstr ""
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:586
+#, fuzzy, kde-format
+#| msgid "status: %1"
+msgid "Status: %1"
+msgstr "status: %1"
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:601
+#, kde-format
+msgid "number of points: %1"
+msgstr "number of points: %1"
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:602
+#, kde-format
+msgid "positional squared error: %1"
+msgstr "positional squared error: %1"
+
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:603
+#, kde-format
+msgid "area error: %1"
+msgstr "area error: %1"
+
 #: src/frontend/dockwidgets/XYSmoothCurveDock.cpp:410
 #, kde-format
 msgid "Smoothing status: %1"
@@ -16000,10 +16092,12 @@ msgid "Properties: Function Curve"
 msgstr "Properties: Function Curve"
 
 #: src/frontend/GuiObserver.cpp:290
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Properties: Interpolation"
 msgctxt "@title:window"
-msgid "Properties: Data Reduction"
-msgstr "Properties: Data Reduction"
+msgid "Properties: Line Simplification"
+msgstr "Properties: Interpolation"
 
 #: src/frontend/GuiObserver.cpp:306
 #, kde-format
@@ -16511,7 +16605,6 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:162
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:276
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:124
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:443
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:253
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:313
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:288
@@ -16521,6 +16614,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:288
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:130
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:40
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:443
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:525
 #: src/frontend/ui/fitsheadereditnewkeywordwidget.ui:27
 #: src/frontend/ui/labelwidget.ui:326
@@ -19380,9 +19474,10 @@ msgid "Row Statisti&cs"
 msgstr "Row Statisti&cs"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:502
-#, kde-format
-msgid "Reduce Data"
-msgstr "Reduce Data"
+#, fuzzy, kde-format
+#| msgid "Solid Line"
+msgid "Simplify Line"
+msgstr "Solid Line"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:567
 #, kde-format
@@ -20057,7 +20152,6 @@ msgstr "Y-error type:"
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:181
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:292
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:32
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:42
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:341
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:189
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:118
@@ -20067,6 +20161,7 @@ msgstr "Y-error type:"
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:72
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:373
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:260
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:42
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:555
 #: src/frontend/ui/labelwidget.ui:222
 #, kde-format
@@ -20200,6 +20295,8 @@ msgstr "Size:"
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbMajorTicksLength)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbMinorTicksLength)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbLabelsOffset)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbTolerance2)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbTolerance)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbDistance)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbValuesDistance)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbSamplingInterval)
@@ -20215,8 +20312,6 @@ msgstr "Size:"
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbLayoutHorizontalSpacing)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbLayoutTopMargin)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbLayoutVerticalSpacing)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbTolerance2)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbTolerance)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbTension)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbContinuity)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbBias)
@@ -20325,13 +20420,13 @@ msgstr "Size:"
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:694
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:710
 #: src/frontend/ui/dockwidgets/xycurvedock.ui:726
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:134
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:421
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:73
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:240
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:461
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:490
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:519
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:134
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:421
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:196
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:209
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:439
@@ -21215,12 +21310,12 @@ msgstr "Show file info"
 #: src/frontend/ui/dockwidgets/livedatadock.ui:47
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:188
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:217
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:49
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:73
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:324
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:61
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:147
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:419
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:49
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:542
 #, kde-format
 msgid "Source:"
@@ -22805,8 +22900,6 @@ msgstr "Cap size:"
 #: src/frontend/ui/dockwidgets/histogramdock.ui:227
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:395
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:51
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:248
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:267
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:171
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:190
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:138
@@ -22817,6 +22910,8 @@ msgstr "Cap size:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:334
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:363
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:382
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:248
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:267
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:340
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:359
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:94
@@ -22834,8 +22929,8 @@ msgstr "Binning"
 #. i18n: ectx: property (text), widget (QLabel, lBinningMethod)
 #: src/frontend/ui/dockwidgets/histogramdock.ui:173
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:130
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:173
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:140
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:173
 #: src/frontend/ui/spreadsheet/samplevalueswidget.ui:47
 #, kde-format
 msgid "Method:"
@@ -22850,8 +22945,6 @@ msgstr "Method:"
 #: src/frontend/ui/dockwidgets/histogramdock.ui:380
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:86
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:139
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:210
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:229
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:133
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:152
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:160
@@ -22862,6 +22955,8 @@ msgstr "Method:"
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:296
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:325
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:344
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:210
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:229
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:302
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:321
 #: src/frontend/ui/spreadsheet/formattingheatmapwidget.ui:17
@@ -22916,7 +23011,6 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/hypothesistestdock.ui:95
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:241
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:320
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:17
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:412
 #: src/frontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:182
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:354
@@ -22925,6 +23019,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:281
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:123
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:563
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:17
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:229
 #, kde-format
 msgid "Recalculate"
@@ -23412,7 +23507,6 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:131
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:346
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:74
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:159
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:405
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:888
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:361
@@ -23420,6 +23514,7 @@ msgstr ""
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:93
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:166
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:433
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:159
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:518
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:74
 #, kde-format
@@ -23429,7 +23524,6 @@ msgstr "X-Data:"
 #. i18n: ectx: property (text), widget (QLabel, lYColumn)
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:95
 #: src/frontend/ui/dockwidgets/xycurvedockgeneraltab.ui:110
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:506
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:354
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:376
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:308
@@ -23437,6 +23531,7 @@ msgstr "X-Data:"
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:17
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:40
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:151
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:506
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:504
 #: src/frontend/ui/spreadsheet/plotdatawidget.ui:114
 #, kde-format
@@ -23641,13 +23736,13 @@ msgstr "Wrap Response:"
 #. i18n: ectx: property (text), widget (QLabel, lXRange)
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:138
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:299
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:368
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:371
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:17
 #: src/frontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:338
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:238
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:61
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:412
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:368
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:464
 #, kde-format
 msgid "X-Range:"
@@ -23670,7 +23765,6 @@ msgstr "Y-Data Signal:"
 #. i18n: ectx: property (text), widget (QToolButton, tbResults)
 #: src/frontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:339
 #: src/frontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:83
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:61
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:325
 #: src/frontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:495
 #: src/frontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:454
@@ -23678,6 +23772,7 @@ msgstr "Y-Data Signal:"
 #: src/frontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:213
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:106
 #: src/frontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:553
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:61
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:426
 #, kde-format
 msgid "Results:"
@@ -23750,20 +23845,6 @@ msgstr "Connection"
 #, kde-format
 msgid "Monoton incr. X:"
 msgstr "Monoton incr. X:"
-
-#. i18n: ectx: property (text), widget (QLabel, lSimplification)
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:29
-#, kde-format
-msgid "Simplification"
-msgstr "Simplification"
-
-#. i18n: ectx: property (text), widget (QLabel, lOption2)
-#. i18n: ectx: property (text), widget (QLabel, lOption)
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:166
-#: src/frontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:326
-#, kde-format
-msgid "Option:"
-msgstr "Option:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDerivative)
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:291
@@ -24242,6 +24323,20 @@ msgstr "Continuity:"
 #, kde-format
 msgid "Bias:"
 msgstr "Bias:"
+
+#. i18n: ectx: property (text), widget (QLabel, lSimplification)
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:29
+#, kde-format
+msgid "Simplification"
+msgstr "Simplification"
+
+#. i18n: ectx: property (text), widget (QLabel, lOption2)
+#. i18n: ectx: property (text), widget (QLabel, lOption)
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:166
+#: src/frontend/ui/dockwidgets/xylinesimplificationcurvedockgeneraltab.ui:326
+#, kde-format
+msgid "Option:"
+msgstr "Option:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPercentile)
 #: src/frontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:17
@@ -26589,6 +26684,31 @@ msgstr "convert process failed, exit code ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Unable to open file:"
+
+#~ msgid "Data Reduction"
+#~ msgstr "Data Reduction"
+
+#~ msgid "%1: reduce '%2'"
+#~ msgstr "%1: reduce '%2'"
+
+#~ msgid "Reduction of '%1'"
+#~ msgstr "Reduction of '%1'"
+
+#~ msgid "%1: add data reduction curve"
+#~ msgstr "%1: add data reduction curve"
+
+#~ msgid "%1: set options and perform the data reduction"
+#~ msgstr "%1: set options and perform the data reduction"
+
+#~ msgid "Data reduction status: %1"
+#~ msgstr "Data reduction status: %1"
+
+#~ msgctxt "@title:window"
+#~ msgid "Properties: Data Reduction"
+#~ msgstr "Properties: Data Reduction"
+
+#~ msgid "Reduce Data"
+#~ msgstr "Reduce Data"
 
 #~ msgid ""
 #~ "For 'C Format', a period is used for the decimal point character and "
