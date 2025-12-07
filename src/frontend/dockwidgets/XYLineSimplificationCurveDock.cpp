@@ -29,9 +29,8 @@
   \ingroup frontend
 */
 
-XYLineSimplificationCurveDock::XYLineSimplificationCurveDock(QWidget* parent, QStatusBar* sb)
-	: XYAnalysisCurveDock(parent)
-	, statusBar(sb) {
+XYLineSimplificationCurveDock::XYLineSimplificationCurveDock(QWidget* parent)
+	: XYAnalysisCurveDock(parent) {
 }
 
 /*!
@@ -365,6 +364,9 @@ void XYLineSimplificationCurveDock::updateTolerance() {
 	// m_lineSimplificationData.tolerance = nsl_geom_linesim_clip_diag_perpoint(xdataVector.data(), ydataVector.data(), xdataVector.size());
 	uiGeneralTab.sbTolerance->setValue(m_lineSimplificationData.tolerance);
 	DEBUG(Q_FUNC_INFO << ", tolerance value = " << m_lineSimplificationData.tolerance)
+
+	CONDITIONAL_LOCK_RETURN;
+
 	// update data of curves
 	for (auto* curve : m_curvesList)
 		static_cast<XYLineSimplificationCurve*>(curve)->setLineSimplificationData(m_lineSimplificationData);
@@ -569,18 +571,8 @@ void XYLineSimplificationCurveDock::tolerance2Changed(double value) {
 }
 
 void XYLineSimplificationCurveDock::recalculateClicked() {
-	// show a progress bar in the status bar
-	auto* progressBar = new QProgressBar();
-	progressBar->setMinimum(0);
-	progressBar->setMaximum(100);
-	connect(m_curve, SIGNAL(completed(int)), progressBar, SLOT(setValue(int)));
-	statusBar->clearMessage();
-	statusBar->addWidget(progressBar, 1);
-
 	for (auto* curve : m_curvesList)
 		static_cast<XYLineSimplificationCurve*>(curve)->setLineSimplificationData(m_lineSimplificationData);
-
-	statusBar->removeWidget(progressBar);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	Q_EMIT info(i18n("Status: %1", m_lineSimplificationCurve->lineSimplificationResult().status));

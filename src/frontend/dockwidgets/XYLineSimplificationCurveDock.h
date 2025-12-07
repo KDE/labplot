@@ -18,13 +18,12 @@
 
 class XYAnalysisCurve;
 class TreeViewComboBox;
-class QStatusBar;
 
 class XYLineSimplificationCurveDock : public XYAnalysisCurveDock {
 	Q_OBJECT
 
 public:
-	explicit XYLineSimplificationCurveDock(QWidget* parent, QStatusBar* sb);
+	explicit XYLineSimplificationCurveDock(QWidget* parent);
 	void setCurves(QList<XYCurve*>);
 	void setupGeneral() override;
 	void updateLocale() override;
@@ -40,7 +39,6 @@ private:
 	virtual QString customText() const override;
 
 	Ui::XYLineSimplificationCurveDockGeneralTab uiGeneralTab;
-	QStatusBar* statusBar; // main status bar to display progress
 
 	XYLineSimplificationCurve* m_lineSimplificationCurve{nullptr};
 	XYLineSimplificationCurve::LineSimplificationData m_lineSimplificationData;

@@ -288,19 +288,8 @@ void GuiObserver::selectedAspectsChanged(const QList<AbstractAspect*>& selectedA
 		break;
 	case AspectType::XYLineSimplificationCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Line Simplification"));
-		if (!m_xyLineSimplificationCurveDock) {
-			m_xyLineSimplificationCurveDock = new XYLineSimplificationCurveDock(m_mainWindow->stackedWidget, m_mainWindow->statusBar());
-			m_xyLineSimplificationCurveDock->setupGeneral();
-			connect(m_xyLineSimplificationCurveDock, &XYLineSimplificationCurveDock::info, [&](const QString& text) {
-				m_mainWindow->statusBar()->showMessage(text);
-			});
-			m_mainWindow->stackedWidget->addWidget(m_xyLineSimplificationCurveDock);
-		}
-
-		initializedDocks << m_xyLineSimplificationCurveDock;
+		raiseDockSetupConnect(m_xyLineSimplificationCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_xyLineSimplificationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
-
-		m_mainWindow->stackedWidget->setCurrentWidget(m_xyLineSimplificationCurveDock);
 		break;
 	case AspectType::XYDifferentiationCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties: Differentiation"));
