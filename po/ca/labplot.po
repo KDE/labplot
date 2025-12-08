@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-07 00:38+0000\n"
-"PO-Revision-Date: 2025-11-30 12:31+0100\n"
+"POT-Creation-Date: 2025-12-08 00:39+0000\n"
+"PO-Revision-Date: 2025-12-07 16:51+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -275,7 +275,7 @@ msgstr "Enter gran"
 #: src/backend/datasources/filters/AsciiFilter.cpp:557
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:532
 #: src/frontend/ActionsManager.cpp:509
-#: src/frontend/notebook/NotebookView.cpp:95
+#: src/frontend/notebook/NotebookView.cpp:96
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/dockwidgets/axisdock.ui:1528
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:634
@@ -8265,6 +8265,18 @@ msgstr ""
 "Al nivell de significació %1, no hi ha cap diferència significativa entre "
 "les corbes de supervivència. No s'ha pogut rebutjar la hipòtesi nul·la"
 
+#: src/backend/statistics/HypothesisTest.cpp:1716
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:80
+#, kde-format
+msgid "Parametric"
+msgstr "Paramètrica"
+
+#: src/backend/statistics/HypothesisTest.cpp:1746
+#, fuzzy, kde-format
+#| msgid "Parametric"
+msgid "Non-Parametric"
+msgstr "Paramètrica"
+
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:102
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:880
 #, kde-format
@@ -9191,15 +9203,14 @@ msgstr "Títol"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:411
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:448
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Line Simplification"
-msgstr "Simplificació"
+msgstr "Simplificació de línia"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:412
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2034
-#: src/frontend/notebook/NotebookView.cpp:147
+#: src/frontend/notebook/NotebookView.cpp:148
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:268
 #, kde-format
 msgid "Differentiation"
@@ -9208,7 +9219,7 @@ msgstr "Diferenciació"
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:413
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2053
-#: src/frontend/notebook/NotebookView.cpp:153
+#: src/frontend/notebook/NotebookView.cpp:154
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:159
 #, kde-format
 msgid "Integration"
@@ -9385,7 +9396,7 @@ msgstr "Eix vertical"
 #: src/frontend/ActionsManager.cpp:513
 #: src/frontend/datasources/ImportFileWidget.cpp:113
 #: src/frontend/matrix/MatrixView.cpp:133
-#: src/frontend/notebook/NotebookView.cpp:108
+#: src/frontend/notebook/NotebookView.cpp:109
 #: src/frontend/widgets/BackgroundWidget.cpp:123
 #: src/frontend/worksheet/WorksheetView.cpp:241
 #: src/frontend/worksheet/WorksheetView.cpp:1356
@@ -9433,7 +9444,7 @@ msgstr "Àrea de diagrama intercalat amb dades"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:575
 #: src/frontend/ActionsManager.cpp:847
-#: src/frontend/notebook/NotebookView.cpp:166
+#: src/frontend/notebook/NotebookView.cpp:167
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:441
 #, kde-format
@@ -9714,23 +9725,20 @@ msgid "Distribution Fit to '%1'"
 msgstr "Ajust de la distribució a «%1»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2018
-#, fuzzy, kde-format
-#| msgid "%1: smooth '%2'"
+#, kde-format
 msgid "%1: simplify '%2'"
-msgstr "%1: suavitza «%2»"
+msgstr "%1: simplifica «%2»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2019
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:664
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Simplification of '%1'"
-msgstr "Simplificació"
+msgstr "Simplificació de «%1»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2026
-#, fuzzy, kde-format
-#| msgid "%1: add interpolation curve"
+#, kde-format
 msgid "%1: add line simplification curve"
-msgstr "%1: s'ha afegit una corba amb la interpolació"
+msgstr "%1: afegeix una corba de simplificació de línia"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2037
 #, kde-format
@@ -11042,10 +11050,9 @@ msgstr ""
 "estrictament monòton!"
 
 #: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:70
-#, fuzzy, kde-format
-#| msgid "%1: set options and perform the interpolation"
+#, kde-format
 msgid "%1: set options and perform the line simplification"
-msgstr "%1: estableix les opcions i realitza la interpolació"
+msgstr "%1: estableix les opcions i realitza la simplificació de línia"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:74
 #, kde-format
@@ -11897,7 +11904,7 @@ msgstr "Escala Y automàticament"
 #: src/frontend/ActionsManager.cpp:631 src/frontend/ActionsManager.cpp:720
 #: src/frontend/datapicker/DatapickerImageView.cpp:119
 #: src/frontend/matrix/MatrixView.cpp:192
-#: src/frontend/notebook/NotebookView.cpp:52
+#: src/frontend/notebook/NotebookView.cpp:53
 #: src/frontend/worksheet/WorksheetView.cpp:148
 #: src/frontend/worksheet/WorksheetView.cpp:393
 #, kde-format
@@ -11907,7 +11914,7 @@ msgstr "Apropa"
 #: src/frontend/ActionsManager.cpp:635 src/frontend/ActionsManager.cpp:723
 #: src/frontend/datapicker/DatapickerImageView.cpp:122
 #: src/frontend/matrix/MatrixView.cpp:193
-#: src/frontend/notebook/NotebookView.cpp:56
+#: src/frontend/notebook/NotebookView.cpp:57
 #: src/frontend/worksheet/WorksheetView.cpp:151
 #: src/frontend/worksheet/WorksheetView.cpp:397
 #, kde-format
@@ -12035,22 +12042,22 @@ msgid "Sort the selected columns separately in descending order"
 msgstr "Ordena separadament les columnes seleccionades en ordre descendent"
 
 #: src/frontend/ActionsManager.cpp:726
-#: src/frontend/notebook/NotebookView.cpp:60
+#: src/frontend/notebook/NotebookView.cpp:61
 #, kde-format
 msgid "Find"
 msgstr "Cerca"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
 #: src/frontend/ActionsManager.cpp:729
-#: src/frontend/notebook/NotebookView.cpp:68
+#: src/frontend/notebook/NotebookView.cpp:69
 #: src/frontend/ui/dockwidgets/notebookdock.ui:113
 #, kde-format
 msgid "Restart"
 msgstr "Reinicia"
 
 #: src/frontend/ActionsManager.cpp:732
-#: src/frontend/notebook/NotebookView.cpp:71
-#: src/frontend/notebook/NotebookView.cpp:344
+#: src/frontend/notebook/NotebookView.cpp:72
+#: src/frontend/notebook/NotebookView.cpp:354
 #, kde-format
 msgid "Evaluate Notebook"
 msgstr "Avalua el bloc de notes"
@@ -12724,7 +12731,7 @@ msgid "Prepend"
 msgstr "Preposa"
 
 #: src/frontend/datasources/ImportDialog.cpp:106
-#: src/frontend/notebook/NotebookView.cpp:64
+#: src/frontend/notebook/NotebookView.cpp:65
 #, kde-format
 msgid "Replace"
 msgstr "Substitueix"
@@ -15687,11 +15694,6 @@ msgstr "Cartesiana"
 msgid "Polar"
 msgstr "Polar"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:80
-#, kde-format
-msgid "Parametric"
-msgstr "Paramètrica"
-
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:176
 #, kde-format
 msgid "x, min"
@@ -15937,13 +15939,13 @@ msgstr ""
 msgid "Interpolation status: %1"
 msgstr "Estat de la interpolació: %1"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:186
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:185
 #, kde-format
 msgid "This method is much slower than any other"
 msgstr "Aquest mètode és molt més lent que qualsevol altre"
 
 #. i18n-team: some algorithm are named after their creators like Douglas and Peucker, Visvalingam and Whyatt, Opheim, Lang
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:190
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:189
 #, kde-format
 msgid ""
 "Method to simplify the line:<ul><li>Douglas-Peucker - recursively divides "
@@ -15963,130 +15965,141 @@ msgid ""
 "distance apart and ensuring no point deviates more than a set tolerance from "
 "the simplified line.</li></ul>"
 msgstr ""
+"Mètode per simplificar la línia:<ul><li>Douglas-Peucker - divideix "
+"recursivament la línia i només reté aquells punts que es desvien més d'un "
+"llindar especificat del segment de línia entre els punts d'inici i final.</"
+"li><li>Visvalingam-Whyatt - elimina iterativament el punt que contribueix "
+"amb l'àrea menys efectiva a la forma del polígon fins que s'assoleix un "
+"nombre desitjat de punts o llindar d'àrea.</li><li>Punt enèsim - només manté "
+"tots els punts enèsims.</li><li>Distància radial - mesura la distància de "
+"cada punt des del punt retingut anterior i només reté aquells que superen un "
+"llindar.</li> <li>Interpolació.</li><li>Opheim - utilitza tant la distància "
+"com la tolerància angular per a simplificar les línies. Reté punts només si "
+"cauen fora d'una distància especificada i un llindar angular des del punt "
+"retingut anterior.</li><li>Lang - reté els punts que són almenys una "
+"distància especificada apart i assegura que cap punt es desvia més d'una "
+"tolerància especificada des de la línia simplificada.</li></ul>"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:218
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:222
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:227
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:239
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:255
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:217
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:221
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:226
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:238
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:254
 #, kde-format
 msgid "Tolerance (distance):"
 msgstr "Tolerància (distància):"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:219
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:218
 #, kde-format
 msgid "Maximum perpendicular distance from the connecting line segment"
-msgstr ""
+msgstr "Distància perpendicular màxima des del segment de línia de connexió"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:223
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:222
 #, kde-format
 msgid "Maximum radial distance from the previous retained point"
-msgstr ""
+msgstr "Distància radial màxima des del punt retingut anterior"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:228
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:227
 #, kde-format
 msgid "Maximum perpendicular distance from the line segment"
-msgstr ""
+msgstr "Distància perpendicular màxima des del segment de línia"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:231
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:230
 #, kde-format
 msgid "Number of points:"
 msgstr "Nombre de punts:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:232
-#, fuzzy, kde-format
-#| msgid "The number of vectors in the file"
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:231
+#, kde-format
 msgid "Target number of points in the simplified line"
-msgstr "El nombre de vectors al fitxer"
+msgstr "Apunta un nombre de punts en la línia simplificada"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:235
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:234
 #, kde-format
 msgid "Step size:"
 msgstr "Mida del pas:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:236
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:235
 #, kde-format
 msgid "Keep every n-th point (n is the step size)"
-msgstr ""
+msgstr "Manté cada punt enèsim (n és la mida del pas)"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:240
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:239
 #, kde-format
 msgid "Repeats:"
 msgstr "Repeticions:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:241
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:240
 #, kde-format
 msgid "Maximum perpendicular distance from the reference line"
-msgstr ""
+msgstr "Distància perpendicular màxima des de la línia de referència"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:242
-#, fuzzy, kde-format
-#| msgid "Number of iterations to perform."
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:241
+#, kde-format
 msgid "Number of iterations to apply the simplification"
-msgstr "Nombre d'iteracions a realitzar."
+msgstr "Nombre d'iteracions a aplicar la simplificació"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:245
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:244
 #, kde-format
 msgid "Tolerance (area):"
 msgstr "Tolerància (àrea):"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:246
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:245
 #, kde-format
 msgid "Minimum area contribution threshold for retaining points"
-msgstr ""
+msgstr "Llindar mínim de contribució de l'àrea dels punts de retenció"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:249
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:248
 #, kde-format
 msgid "Minimum tolerance:"
 msgstr "Tolerància mínima:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:250
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:249
 #, kde-format
 msgid "Maximum tolerance:"
 msgstr "Tolerància màx.:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:251
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:250
 #, kde-format
 msgid "Minimum distance threshold from retained point"
-msgstr ""
+msgstr "Llindar mínim de distància des del punt retingut"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:252
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:251
 #, kde-format
 msgid "Maximum distance threshold from retained point"
-msgstr ""
+msgstr "Llindar màxim de distància des del punt retingut"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:256
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:255
 #, kde-format
 msgid "Search region:"
 msgstr "Regió de cerca:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:257
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:256
 #, kde-format
 msgid "Minimum point spacing distance"
-msgstr ""
+msgstr "Distància mínima de l'espaiat dels punts"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:258
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:257
 #, kde-format
 msgid "Search region size in units of points"
-msgstr ""
+msgstr "Mida de la regió de cerca en unitats de punts"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:586
-#, fuzzy, kde-format
-#| msgid "status: %1"
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:578
+#, kde-format
 msgid "Status: %1"
-msgstr "estat: %1"
+msgstr "Estat: %1"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:601
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:593
 #, kde-format
 msgid "number of points: %1"
 msgstr "nombre de punts: %1"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:602
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:594
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "error quadràtic posicional: %1"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:603
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:595
 #, kde-format
 msgid "area error: %1"
 msgstr "error de l'àrea: %1"
@@ -16190,233 +16203,231 @@ msgid "Properties: Function Curve"
 msgstr "Propietats: Corba de funció"
 
 #: src/frontend/GuiObserver.cpp:290
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Interpolation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Line Simplification"
-msgstr "Propietats: Interpolació"
+msgstr "Propietats: Simplificació de línia"
 
-#: src/frontend/GuiObserver.cpp:306
+#: src/frontend/GuiObserver.cpp:295
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Differentiation"
 msgstr "Propietats: Diferenciació"
 
-#: src/frontend/GuiObserver.cpp:311
+#: src/frontend/GuiObserver.cpp:300
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Integration"
 msgstr "Propietats: Integració"
 
-#: src/frontend/GuiObserver.cpp:316
+#: src/frontend/GuiObserver.cpp:305
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Interpolation"
 msgstr "Propietats: Interpolació"
 
-#: src/frontend/GuiObserver.cpp:321
+#: src/frontend/GuiObserver.cpp:310
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
 msgstr "Propietats: Suavitzat"
 
-#: src/frontend/GuiObserver.cpp:326
+#: src/frontend/GuiObserver.cpp:315
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fit"
 msgstr "Propietats: Ajust"
 
-#: src/frontend/GuiObserver.cpp:331
+#: src/frontend/GuiObserver.cpp:320
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Transform"
 msgstr "Propietats: Transformada de Fourier"
 
-#: src/frontend/GuiObserver.cpp:336
+#: src/frontend/GuiObserver.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hilbert Transform"
 msgstr "Propietats: Transformada de Hilbert"
 
-#: src/frontend/GuiObserver.cpp:341
+#: src/frontend/GuiObserver.cpp:330
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
 msgstr "Propietats: Filtre de Fourier"
 
-#: src/frontend/GuiObserver.cpp:346
+#: src/frontend/GuiObserver.cpp:335
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Convolution/Deconvolution"
 msgstr "Propietats: Convolució/Desconvolució"
 
-#: src/frontend/GuiObserver.cpp:351
+#: src/frontend/GuiObserver.cpp:340
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
 msgstr "Propietats: Correlació creuada/automàtica"
 
-#: src/frontend/GuiObserver.cpp:356
+#: src/frontend/GuiObserver.cpp:345
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Histogram"
 msgstr "Propietats: Histograma"
 
-#: src/frontend/GuiObserver.cpp:362
+#: src/frontend/GuiObserver.cpp:351
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
 msgstr "Propietats: Diagrama de barres"
 
 # skip-rule: kct-box
-#: src/frontend/GuiObserver.cpp:367
+#: src/frontend/GuiObserver.cpp:356
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Lollipop Plot"
 msgstr "Propietats: Diagrama de piruletes"
 
 # skip-rule: kct-box
-#: src/frontend/GuiObserver.cpp:373
+#: src/frontend/GuiObserver.cpp:362
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
 msgstr "Propietats: Diagrama de caixes"
 
-#: src/frontend/GuiObserver.cpp:378
+#: src/frontend/GuiObserver.cpp:367
 #, kde-format
 msgctxt "@title:window"
 msgid "KDE Plot"
 msgstr "Diagrama del KDE"
 
-#: src/frontend/GuiObserver.cpp:383
+#: src/frontend/GuiObserver.cpp:372
 #, kde-format
 msgctxt "@title:window"
 msgid "Q-Q Plot"
 msgstr "Diagrama Q-Q"
 
-#: src/frontend/GuiObserver.cpp:389
+#: src/frontend/GuiObserver.cpp:378
 #, kde-format
 msgctxt "@title:window"
 msgid "Process Behavior Chart"
 msgstr "Diagrama de comportament de procés"
 
-#: src/frontend/GuiObserver.cpp:394
+#: src/frontend/GuiObserver.cpp:383
 #, kde-format
 msgctxt "@title:window"
 msgid "Run Chart"
 msgstr "Executa el diagrama"
 
-#: src/frontend/GuiObserver.cpp:399
+#: src/frontend/GuiObserver.cpp:388
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Text Label"
 msgstr "Propietats: Etiqueta de text"
 
-#: src/frontend/GuiObserver.cpp:404
+#: src/frontend/GuiObserver.cpp:393
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Image"
 msgstr "Propietats: Imatge"
 
-#: src/frontend/GuiObserver.cpp:409
+#: src/frontend/GuiObserver.cpp:398
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Custom Point"
 msgstr "Propietats: Punt personalitzat"
 
-#: src/frontend/GuiObserver.cpp:414
+#: src/frontend/GuiObserver.cpp:403
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Reference Line"
 msgstr "Propietats: Línia de referència"
 
-#: src/frontend/GuiObserver.cpp:419
+#: src/frontend/GuiObserver.cpp:408
 #, kde-format
 msgctxt "@title:window"
 msgid "Reference Range"
 msgstr "Interval de referència"
 
-#: src/frontend/GuiObserver.cpp:424
+#: src/frontend/GuiObserver.cpp:413
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Datapicker Curve"
 msgstr "Propietats: Corba del selector de dades"
 
-#: src/frontend/GuiObserver.cpp:429
+#: src/frontend/GuiObserver.cpp:418
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Extractor"
 msgstr "Propietats: Extractor de dades"
 
-#: src/frontend/GuiObserver.cpp:441
+#: src/frontend/GuiObserver.cpp:430
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hypothesis Test"
 msgstr "Propietats: Prova d'hipòtesi"
 
-#: src/frontend/GuiObserver.cpp:448
+#: src/frontend/GuiObserver.cpp:437
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Seasonal Decomposition"
 msgstr "Propietats: Descomposició estacional"
 
-#: src/frontend/GuiObserver.cpp:454
+#: src/frontend/GuiObserver.cpp:443
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Project"
 msgstr "Propietats: Projecte"
 
-#: src/frontend/GuiObserver.cpp:464
+#: src/frontend/GuiObserver.cpp:453
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Notebook"
 msgstr "Bloc de notes del %1"
 
-#: src/frontend/GuiObserver.cpp:466
+#: src/frontend/GuiObserver.cpp:455
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notebook"
 msgstr "Propietats: Bloc de notes"
 
-#: src/frontend/GuiObserver.cpp:472
+#: src/frontend/GuiObserver.cpp:461
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notes"
 msgstr "Propietats: Notes"
 
-#: src/frontend/GuiObserver.cpp:477
+#: src/frontend/GuiObserver.cpp:466
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Info Element"
 msgstr "Propietats: Element d'informació"
 
-#: src/frontend/GuiObserver.cpp:484 src/frontend/GuiObserver.cpp:491
-#: src/frontend/GuiObserver.cpp:498
+#: src/frontend/GuiObserver.cpp:473 src/frontend/GuiObserver.cpp:480
+#: src/frontend/GuiObserver.cpp:487
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
 msgstr "Propietats: Origen de dades MQTT"
 
-#: src/frontend/GuiObserver.cpp:504
+#: src/frontend/GuiObserver.cpp:493
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
 msgstr "Propietats: Dades d'origen en viu"
 
-#: src/frontend/GuiObserver.cpp:518
+#: src/frontend/GuiObserver.cpp:507
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Folder"
 msgstr "Propietats: Carpeta"
 
-#: src/frontend/GuiObserver.cpp:525
+#: src/frontend/GuiObserver.cpp:514
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Workbook"
 msgstr "Propietats: Llibre de treball"
 
-#: src/frontend/GuiObserver.cpp:531
+#: src/frontend/GuiObserver.cpp:520
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Script"
@@ -17498,118 +17509,136 @@ msgstr "%1: elimina la/es fila/es seleccionada/es"
 msgid "%1: clear selected rows(s)"
 msgstr "%1: neteja la/es fila/es seleccionada/es"
 
-#: src/frontend/notebook/NotebookView.cpp:39
+#: src/frontend/notebook/NotebookView.cpp:40
 #, kde-format
 msgid "Failed to initialize %1."
 msgstr "Ha fallat en inicialitzar %1."
 
-#: src/frontend/notebook/NotebookView.cpp:83
+#: src/frontend/notebook/NotebookView.cpp:84
 #, kde-format
 msgid "Evaluate Entry"
 msgstr "Avalua l'entrada"
 
-#: src/frontend/notebook/NotebookView.cpp:87
+#: src/frontend/notebook/NotebookView.cpp:88
 #, kde-format
 msgid "Remove Current Entry"
 msgstr "Elimina l'entrada actual"
 
-#: src/frontend/notebook/NotebookView.cpp:91
+#: src/frontend/notebook/NotebookView.cpp:92
 #, kde-format
 msgid "Command"
 msgstr "Ordre"
 
-#: src/frontend/notebook/NotebookView.cpp:101
+#: src/frontend/notebook/NotebookView.cpp:102
 #: src/frontend/widgets/LabelWidget.cpp:480
 #, kde-format
 msgid "Markdown"
 msgstr "Markdown"
 
 #. i18n: ectx: property (text), widget (QLabel, lTex)
-#: src/frontend/notebook/NotebookView.cpp:105
+#: src/frontend/notebook/NotebookView.cpp:106
 #: src/frontend/ui/settingsworksheetpage.ui:65
 #: src/frontend/widgets/LabelWidget.cpp:478
 #, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: src/frontend/notebook/NotebookView.cpp:111
+#: src/frontend/notebook/NotebookView.cpp:112
 #, kde-format
 msgid "Page Break"
 msgstr "Salt de pàgina"
 
-#: src/frontend/notebook/NotebookView.cpp:123
+#: src/frontend/notebook/NotebookView.cpp:124
 #, kde-format
 msgid "Compute Eigenvectors"
 msgstr "Calcula els autovectors"
 
-#: src/frontend/notebook/NotebookView.cpp:129
+#: src/frontend/notebook/NotebookView.cpp:130
 #, kde-format
 msgid "Create Matrix"
 msgstr "Crea una matriu"
 
-#: src/frontend/notebook/NotebookView.cpp:135
+#: src/frontend/notebook/NotebookView.cpp:136
 #, kde-format
 msgid "Compute Eigenvalues"
 msgstr "Calcula els valors propis"
 
-#: src/frontend/notebook/NotebookView.cpp:141
+#: src/frontend/notebook/NotebookView.cpp:142
 #, kde-format
 msgid "Invert Matrix"
 msgstr "Inverteix una matriu"
 
-#: src/frontend/notebook/NotebookView.cpp:159
+#: src/frontend/notebook/NotebookView.cpp:160
 #, kde-format
 msgid "Solve Equations"
 msgstr "Resol les equacions"
 
-#: src/frontend/notebook/NotebookView.cpp:182
+#: src/frontend/notebook/NotebookView.cpp:183
 #, kde-format
 msgid "Linear Algebra"
 msgstr "Àlgebra lineal"
 
-#: src/frontend/notebook/NotebookView.cpp:194
+#: src/frontend/notebook/NotebookView.cpp:195
 #, kde-format
 msgid "Calculate"
 msgstr "Calcula"
 
-#: src/frontend/notebook/NotebookView.cpp:204
+#: src/frontend/notebook/NotebookView.cpp:205
 #, kde-format
 msgid "Settings"
 msgstr "Configuració"
 
-#: src/frontend/notebook/NotebookView.cpp:253
+#: src/frontend/notebook/NotebookView.cpp:254
 #, kde-format
 msgid "Assistants"
 msgstr "Assistents"
 
 # skip-rule: t-sc-plot
-#: src/frontend/notebook/NotebookView.cpp:285
+#: src/frontend/notebook/NotebookView.cpp:286
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:619
 #, kde-format
 msgid "Plot Data"
 msgstr "Dibuixa el diagrama de les dades"
 
-#: src/frontend/notebook/NotebookView.cpp:288
+#: src/frontend/notebook/NotebookView.cpp:290
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:682
+#, kde-format
+msgid "Statistical Analysis"
+msgstr "Anàlisi estadístic"
+
+#: src/frontend/notebook/NotebookView.cpp:291
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:683
+#, kde-format
+msgid "Hypothesis Test"
+msgstr "Prova d'hipòtesi"
+
+#: src/frontend/notebook/NotebookView.cpp:297
 #, kde-format
 msgid "Variable Statistics..."
 msgstr "Estadístiques de les variables..."
 
-#: src/frontend/notebook/NotebookView.cpp:340
+#: src/frontend/notebook/NotebookView.cpp:350
 #, kde-format
 msgid "Interrupt"
 msgstr "Interrupció"
 
-#: src/frontend/notebook/NotebookView.cpp:342
+#: src/frontend/notebook/NotebookView.cpp:352
 #, kde-format
 msgid "Calculating..."
 msgstr "S'està calculant..."
 
-#: src/frontend/notebook/NotebookView.cpp:346
+#: src/frontend/notebook/NotebookView.cpp:356
 #, kde-format
 msgid "Ready"
 msgstr "Llest"
 
-#: src/frontend/notebook/NotebookView.cpp:364
+#: src/frontend/notebook/NotebookView.cpp:375
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:965
+#, kde-format
+msgid "Hypothesis Test for %1"
+msgstr "Prova d'hipòtesi de %1"
+
+#: src/frontend/notebook/NotebookView.cpp:389
 #, kde-format
 msgid "%1: variable statistics"
 msgstr "%1: estadístiques de les variables"
@@ -19586,10 +19615,9 @@ msgid "Row Statisti&cs"
 msgstr "Estadístiques de les &files"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:502
-#, fuzzy, kde-format
-#| msgid "Solid Line"
+#, kde-format
 msgid "Simplify Line"
-msgstr "Línia contínua"
+msgstr "Simplificació de línia"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:567
 #, kde-format
@@ -19619,16 +19647,6 @@ msgstr "Ajusta a la distribució"
 msgid "Analyze and Plot Data"
 msgstr "Analitza i dibuixa el diagrama de les dades"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:682
-#, kde-format
-msgid "Statistical Analysis"
-msgstr "Anàlisi estadístic"
-
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:683
-#, kde-format
-msgid "Hypothesis Test"
-msgstr "Prova d'hipòtesi"
-
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:689
 #, kde-format
 msgid "Time Series Analysis"
@@ -19648,11 +19666,6 @@ msgstr "Normalitza"
 #, kde-format
 msgid "Ladder of Powers"
 msgstr "Escala de potències"
-
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:965
-#, kde-format
-msgid "Hypothesis Test for %1"
-msgstr "Prova d'hipòtesi de %1"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1194
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1580

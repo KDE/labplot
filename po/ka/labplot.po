@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-07 00:38+0000\n"
-"PO-Revision-Date: 2025-11-30 03:34+0100\n"
+"POT-Creation-Date: 2025-12-08 00:39+0000\n"
+"PO-Revision-Date: 2025-12-07 07:07+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -268,7 +268,7 @@ msgstr "დიდი მთელი რიცხვი"
 #: src/backend/datasources/filters/AsciiFilter.cpp:557
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:532
 #: src/frontend/ActionsManager.cpp:509
-#: src/frontend/notebook/NotebookView.cpp:95
+#: src/frontend/notebook/NotebookView.cpp:96
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/dockwidgets/axisdock.ui:1528
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:634
@@ -8182,6 +8182,18 @@ msgstr ""
 "მნიშვნელობის დონეზე %1 გადარჩენის რკალები არ განსხვავდება. ნულოვანი ჰიპოთეზა "
 "უარყოფილი არ იქნება"
 
+#: src/backend/statistics/HypothesisTest.cpp:1716
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:80
+#, kde-format
+msgid "Parametric"
+msgstr "პარამეტრული"
+
+#: src/backend/statistics/HypothesisTest.cpp:1746
+#, fuzzy, kde-format
+#| msgid "Parametric"
+msgid "Non-Parametric"
+msgstr "პარამეტრული"
+
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:102
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:880
 #, kde-format
@@ -9101,15 +9113,14 @@ msgstr "სათაური"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:411
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:448
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Line Simplification"
-msgstr "გამარტივება"
+msgstr "ხაზის გამარტივება"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:412
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2034
-#: src/frontend/notebook/NotebookView.cpp:147
+#: src/frontend/notebook/NotebookView.cpp:148
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:268
 #, kde-format
 msgid "Differentiation"
@@ -9118,7 +9129,7 @@ msgstr "დიფერენციაცია"
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:413
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2053
-#: src/frontend/notebook/NotebookView.cpp:153
+#: src/frontend/notebook/NotebookView.cpp:154
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:159
 #, kde-format
 msgid "Integration"
@@ -9295,7 +9306,7 @@ msgstr "ვერტიკალური ღერძი"
 #: src/frontend/ActionsManager.cpp:513
 #: src/frontend/datasources/ImportFileWidget.cpp:113
 #: src/frontend/matrix/MatrixView.cpp:133
-#: src/frontend/notebook/NotebookView.cpp:108
+#: src/frontend/notebook/NotebookView.cpp:109
 #: src/frontend/widgets/BackgroundWidget.cpp:123
 #: src/frontend/worksheet/WorksheetView.cpp:241
 #: src/frontend/worksheet/WorksheetView.cpp:1356
@@ -9343,7 +9354,7 @@ msgstr "მონაცემების მქონე ჩართული 
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:575
 #: src/frontend/ActionsManager.cpp:847
-#: src/frontend/notebook/NotebookView.cpp:166
+#: src/frontend/notebook/NotebookView.cpp:167
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:441
 #, kde-format
@@ -9619,23 +9630,20 @@ msgid "Distribution Fit to '%1'"
 msgstr "განაწილების ჩატევა '%1'-ზე"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2018
-#, fuzzy, kde-format
-#| msgid "%1: smooth '%2'"
+#, kde-format
 msgid "%1: simplify '%2'"
-msgstr "%1: '%2'-ის მოგლუვება"
+msgstr "%1: '%2'-ის გამარტივება"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2019
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:664
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Simplification of '%1'"
-msgstr "გამარტივება"
+msgstr "'%1'-ის გამარტივება"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2026
-#, fuzzy, kde-format
-#| msgid "%1: add interpolation curve"
+#, kde-format
 msgid "%1: add line simplification curve"
-msgstr "%1: ინტერპოლაციის მრუდის დამატება"
+msgstr "%1: ხაზის გამარტივების მრუდის დამატება"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2037
 #, kde-format
@@ -10938,10 +10946,9 @@ msgstr ""
 "ინტერპოლაცია ჩავარდა, რადგან x მონაცემები ზუსტად მონოტონურად არ იზრდება!"
 
 #: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:70
-#, fuzzy, kde-format
-#| msgid "%1: set options and perform the interpolation"
+#, kde-format
 msgid "%1: set options and perform the line simplification"
-msgstr "%1 პარამეტრების დაყენება და ინტერპოლაციის შესრულება"
+msgstr "%1 პარამეტრების დაყენება და ხაზის გამარტივების შესრულება"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:74
 #, kde-format
@@ -11789,7 +11796,7 @@ msgstr "ავტომასშტაბი Y-ით"
 #: src/frontend/ActionsManager.cpp:631 src/frontend/ActionsManager.cpp:720
 #: src/frontend/datapicker/DatapickerImageView.cpp:119
 #: src/frontend/matrix/MatrixView.cpp:192
-#: src/frontend/notebook/NotebookView.cpp:52
+#: src/frontend/notebook/NotebookView.cpp:53
 #: src/frontend/worksheet/WorksheetView.cpp:148
 #: src/frontend/worksheet/WorksheetView.cpp:393
 #, kde-format
@@ -11799,7 +11806,7 @@ msgstr "გადიდება"
 #: src/frontend/ActionsManager.cpp:635 src/frontend/ActionsManager.cpp:723
 #: src/frontend/datapicker/DatapickerImageView.cpp:122
 #: src/frontend/matrix/MatrixView.cpp:193
-#: src/frontend/notebook/NotebookView.cpp:56
+#: src/frontend/notebook/NotebookView.cpp:57
 #: src/frontend/worksheet/WorksheetView.cpp:151
 #: src/frontend/worksheet/WorksheetView.cpp:397
 #, kde-format
@@ -11927,22 +11934,22 @@ msgid "Sort the selected columns separately in descending order"
 msgstr "მონიშნული სვეტების, სათითაოდ, დაღმავალი მიმდევრობით დალაგება"
 
 #: src/frontend/ActionsManager.cpp:726
-#: src/frontend/notebook/NotebookView.cpp:60
+#: src/frontend/notebook/NotebookView.cpp:61
 #, kde-format
 msgid "Find"
 msgstr "ძებნა"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
 #: src/frontend/ActionsManager.cpp:729
-#: src/frontend/notebook/NotebookView.cpp:68
+#: src/frontend/notebook/NotebookView.cpp:69
 #: src/frontend/ui/dockwidgets/notebookdock.ui:113
 #, kde-format
 msgid "Restart"
 msgstr "თავიდან გაშვება"
 
 #: src/frontend/ActionsManager.cpp:732
-#: src/frontend/notebook/NotebookView.cpp:71
-#: src/frontend/notebook/NotebookView.cpp:344
+#: src/frontend/notebook/NotebookView.cpp:72
+#: src/frontend/notebook/NotebookView.cpp:354
 #, kde-format
 msgid "Evaluate Notebook"
 msgstr "წიგნაკის გადათვლა"
@@ -12613,7 +12620,7 @@ msgid "Prepend"
 msgstr "თავში მიწერა"
 
 #: src/frontend/datasources/ImportDialog.cpp:106
-#: src/frontend/notebook/NotebookView.cpp:64
+#: src/frontend/notebook/NotebookView.cpp:65
 #, kde-format
 msgid "Replace"
 msgstr "ჩანაცვლება"
@@ -15540,11 +15547,6 @@ msgstr "დეკარტის"
 msgid "Polar"
 msgstr "პოლარული"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:80
-#, kde-format
-msgid "Parametric"
-msgstr "პარამეტრული"
-
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:176
 #, kde-format
 msgid "x, min"
@@ -15790,13 +15792,13 @@ msgstr ""
 msgid "Interpolation status: %1"
 msgstr "ინტერპოლაციის სტატუსი: %1"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:186
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:185
 #, kde-format
 msgid "This method is much slower than any other"
 msgstr "ეს მეთოდი ბევრად უფრო ნელია, ვიდრე ნებისმიერი სხვა"
 
 #. i18n-team: some algorithm are named after their creators like Douglas and Peucker, Visvalingam and Whyatt, Opheim, Lang
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:190
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:189
 #, kde-format
 msgid ""
 "Method to simplify the line:<ul><li>Douglas-Peucker - recursively divides "
@@ -15816,130 +15818,143 @@ msgid ""
 "distance apart and ensuring no point deviates more than a set tolerance from "
 "the simplified line.</li></ul>"
 msgstr ""
+"ხაზის გამარტივების მეთოდი:<ul><li>დუგლას-პეკერი - რეკურსიულად ყოფს ხაზს და "
+"ინარჩუნებს მხოლოდ იმ წერტილებს, რომლებიც გადახრილია მითითებულ ზღურბლზე მეტზე "
+"მეტი ხაზის სეგმენტიდან საწყის და დასასრულის წერტილებს შორის.</"
+"li><li>Visvalingam-Whyatt - განმეორებით შლის წერტილს, რომელიც ხელს უწყობს "
+"ყველაზე ნაკლებად ეფექტურ ფართობს პოლიგონის ფორმაში, სანამ არ მიიღწევა "
+"წერტილების სასურველი რაოდენობა ან ფართობის ზღურბლი.</li><li>პერპენდიკულარული "
+"მანძილი - ზომავს თითოეული წერტილის პერპენდიკულარულ მანძილს საცნობარო ხაზიდან "
+"და ინარჩუნებს მხოლოდ ზღურბლს.</li><li>n-th წერტილი - ინახავს მხოლოდ ყველა n-"
+"ე წერტილს.</li><li>რადიალური მანძილი - ზომავს თითოეული წერტილის მანძილს წინა "
+"შენარჩუნებული წერტილიდან და ინარჩუნებს მხოლოდ მათ, ვინც აღემატება ზღურბლს.</"
+"li><li>ინტერპოლაცია.</li><li>Opheim - იყენებს როგორც მანძილს, ასევე კუთხოვან "
+"ტოლერანტობას ხაზების გასამარტივებლად. ის ინარჩუნებს წერტილებს მხოლოდ იმ "
+"შემთხვევაში, თუ ისინი მოხვდებიან მითითებულ მანძილზე და კუთხის ზღურბლს წინა "
+"შენარჩუნებული წერტილიდან.</li><li>Lang - ინარჩუნებს წერტილებს, რომლებიც "
+"მინიმუმ განსაზღვრული მანძილია და უზრუნველყოფს, რომ არცერთი წერტილი არ "
+"გადაუხვევს გამარტივებულ ხაზს დადგენილ ტოლერანტობას.</li></ul>"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:218
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:222
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:227
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:239
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:255
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:217
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:221
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:226
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:238
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:254
 #, kde-format
 msgid "Tolerance (distance):"
 msgstr "დასაშვები გადახრა (მანძილი):"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:219
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:218
 #, kde-format
 msgid "Maximum perpendicular distance from the connecting line segment"
-msgstr ""
+msgstr "მაქსიმალური პერპენდიკულარული მანძილი დამაკავშირებელი ხაზის სეგმენტიდან"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:223
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:222
 #, kde-format
 msgid "Maximum radial distance from the previous retained point"
-msgstr ""
+msgstr "მაქსიმალური რადიალური მანძილი წინა შენარჩუნებული წერტილიდან"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:228
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:227
 #, kde-format
 msgid "Maximum perpendicular distance from the line segment"
-msgstr ""
+msgstr "მაქსიმალური პერპენდიკულარული მანძილი ხაზის სეგმენტიდან"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:231
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:230
 #, kde-format
 msgid "Number of points:"
 msgstr "წერტილების რაოდენობა:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:232
-#, fuzzy, kde-format
-#| msgid "The number of vectors in the file"
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:231
+#, kde-format
 msgid "Target number of points in the simplified line"
-msgstr "ვექტორები რაოდენობა ფაილში"
+msgstr "წერტილების სამიზნე რაოდენობა გამარტივებულ ხაზში"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:235
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:234
 #, kde-format
 msgid "Step size:"
 msgstr "ბიჯის ზომა:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:236
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:235
 #, kde-format
 msgid "Keep every n-th point (n is the step size)"
-msgstr ""
+msgstr "შეინახეთ ყოველი n-ე წერტილი (n არის ნაბიჯის ზომა)"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:240
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:239
 #, kde-format
 msgid "Repeats:"
 msgstr "გამეორება:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:241
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:240
 #, kde-format
 msgid "Maximum perpendicular distance from the reference line"
-msgstr ""
+msgstr "მაქსიმალური პერპენდიკულარული მანძილი მიმართვის ხაზიდან"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:242
-#, fuzzy, kde-format
-#| msgid "Number of iterations to perform."
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:241
+#, kde-format
 msgid "Number of iterations to apply the simplification"
-msgstr "მოსახდენი იტერაციების რიცხვი."
+msgstr "იტერაციების რაოდენობა გამარტივების გადასატარებლად"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:245
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:244
 #, kde-format
 msgid "Tolerance (area):"
 msgstr "დასაშვები გადახრა (ფართობი):"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:246
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:245
 #, kde-format
 msgid "Minimum area contribution threshold for retaining points"
-msgstr ""
+msgstr "მინიმალური ფართობის შენატანის ბარიერი შენარჩუნების წერტილებისთვის"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:249
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:248
 #, kde-format
 msgid "Minimum tolerance:"
 msgstr "მინიმალური დასაშვები გადახრა:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:250
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:249
 #, kde-format
 msgid "Maximum tolerance:"
 msgstr "მაქსიმალური დასაშვები გადახრა:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:251
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:250
 #, kde-format
 msgid "Minimum distance threshold from retained point"
-msgstr ""
+msgstr "მინიმალური მანძილის ბარიერი შენარჩუნებული წერტილიდან"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:252
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:251
 #, kde-format
 msgid "Maximum distance threshold from retained point"
-msgstr ""
+msgstr "მაქსიმალური მანძილის ზღვარი შენარჩუნებული წერტილიდან"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:256
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:255
 #, kde-format
 msgid "Search region:"
 msgstr "ძებნის რეგიონი:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:257
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:256
 #, kde-format
 msgid "Minimum point spacing distance"
-msgstr ""
+msgstr "წერტილების მანძილის მინიმალური მანძილი"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:258
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:257
 #, kde-format
 msgid "Search region size in units of points"
-msgstr ""
+msgstr "რეგიონის ზომის ძებნა წერტილის ერთეულებში"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:586
-#, fuzzy, kde-format
-#| msgid "status: %1"
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:578
+#, kde-format
 msgid "Status: %1"
 msgstr "სტატუსი: %1"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:601
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:593
 #, kde-format
 msgid "number of points: %1"
 msgstr "წერტილების რაოდენობა: %1"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:602
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:594
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "პოზიციური კვადრატის შეცდომა: %1"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:603
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:595
 #, kde-format
 msgid "area error: %1"
 msgstr "შეცდომის ფართობი: %1"
@@ -16042,231 +16057,229 @@ msgid "Properties: Function Curve"
 msgstr "თვისებები: ფუნქციის მრუდი"
 
 #: src/frontend/GuiObserver.cpp:290
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Interpolation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Line Simplification"
-msgstr "თვისებები: ინტერპოლაცია"
+msgstr "თვისებები: ხაზის გამარტივება"
 
-#: src/frontend/GuiObserver.cpp:306
+#: src/frontend/GuiObserver.cpp:295
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Differentiation"
 msgstr "თვისებები: დიფერენციაცია"
 
-#: src/frontend/GuiObserver.cpp:311
+#: src/frontend/GuiObserver.cpp:300
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Integration"
 msgstr "თვისებები: ინტეგრაცია"
 
-#: src/frontend/GuiObserver.cpp:316
+#: src/frontend/GuiObserver.cpp:305
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Interpolation"
 msgstr "თვისებები: ინტერპოლაცია"
 
-#: src/frontend/GuiObserver.cpp:321
+#: src/frontend/GuiObserver.cpp:310
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
 msgstr "თვისებები: მოგლუვება"
 
-#: src/frontend/GuiObserver.cpp:326
+#: src/frontend/GuiObserver.cpp:315
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fit"
 msgstr "თვისებები: ჩატევა"
 
-#: src/frontend/GuiObserver.cpp:331
+#: src/frontend/GuiObserver.cpp:320
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Transform"
 msgstr "თვისებები: ფურიეს გარდაქმნა"
 
-#: src/frontend/GuiObserver.cpp:336
+#: src/frontend/GuiObserver.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hilbert Transform"
 msgstr "თვისებები: ჰილბერდის გარდაქმნა"
 
-#: src/frontend/GuiObserver.cpp:341
+#: src/frontend/GuiObserver.cpp:330
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
 msgstr "თვისებები: ფურიეს ფილტრი"
 
-#: src/frontend/GuiObserver.cpp:346
+#: src/frontend/GuiObserver.cpp:335
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Convolution/Deconvolution"
 msgstr "თვისებები: კონვოლუცია/დეკონვოლუცია"
 
-#: src/frontend/GuiObserver.cpp:351
+#: src/frontend/GuiObserver.cpp:340
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
 msgstr "თვისებები: ავტომატური/ჯვარედინი კორელაცია"
 
-#: src/frontend/GuiObserver.cpp:356
+#: src/frontend/GuiObserver.cpp:345
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Histogram"
 msgstr "თვისებები: ჰისტოგრამა"
 
-#: src/frontend/GuiObserver.cpp:362
+#: src/frontend/GuiObserver.cpp:351
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
 msgstr "თვისებები: არასწორ ნახაზი"
 
-#: src/frontend/GuiObserver.cpp:367
+#: src/frontend/GuiObserver.cpp:356
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Lollipop Plot"
 msgstr "თვისებები: მოწუწნიკის ნახაზი"
 
-#: src/frontend/GuiObserver.cpp:373
+#: src/frontend/GuiObserver.cpp:362
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
 msgstr "თვისებები: ყუთის ნახაზი"
 
-#: src/frontend/GuiObserver.cpp:378
+#: src/frontend/GuiObserver.cpp:367
 #, kde-format
 msgctxt "@title:window"
 msgid "KDE Plot"
 msgstr "KDE Plot"
 
-#: src/frontend/GuiObserver.cpp:383
+#: src/frontend/GuiObserver.cpp:372
 #, kde-format
 msgctxt "@title:window"
 msgid "Q-Q Plot"
 msgstr "Q-Q გრაფიკი"
 
-#: src/frontend/GuiObserver.cpp:389
+#: src/frontend/GuiObserver.cpp:378
 #, kde-format
 msgctxt "@title:window"
 msgid "Process Behavior Chart"
 msgstr "ქცევის გრაფიკის დამუშავება"
 
-#: src/frontend/GuiObserver.cpp:394
+#: src/frontend/GuiObserver.cpp:383
 #, kde-format
 msgctxt "@title:window"
 msgid "Run Chart"
 msgstr "გრაფიკის გაშვება"
 
-#: src/frontend/GuiObserver.cpp:399
+#: src/frontend/GuiObserver.cpp:388
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Text Label"
 msgstr "თვისებები: ტექსტური ჭდე"
 
-#: src/frontend/GuiObserver.cpp:404
+#: src/frontend/GuiObserver.cpp:393
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Image"
 msgstr "თვისებები: გამოსახულება"
 
-#: src/frontend/GuiObserver.cpp:409
+#: src/frontend/GuiObserver.cpp:398
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Custom Point"
 msgstr "თვისებები: მორგებადი წერტილი"
 
-#: src/frontend/GuiObserver.cpp:414
+#: src/frontend/GuiObserver.cpp:403
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Reference Line"
 msgstr "თვისებები: მიმართვის ხაზი"
 
-#: src/frontend/GuiObserver.cpp:419
+#: src/frontend/GuiObserver.cpp:408
 #, kde-format
 msgctxt "@title:window"
 msgid "Reference Range"
 msgstr "მიმართვის დიაპაზონი"
 
-#: src/frontend/GuiObserver.cpp:424
+#: src/frontend/GuiObserver.cpp:413
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Datapicker Curve"
 msgstr "თვისებები: მონაცემების ამრჩევის მრუდი"
 
-#: src/frontend/GuiObserver.cpp:429
+#: src/frontend/GuiObserver.cpp:418
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Extractor"
 msgstr "თვისებები: მონაცემების გამომღები"
 
-#: src/frontend/GuiObserver.cpp:441
+#: src/frontend/GuiObserver.cpp:430
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hypothesis Test"
 msgstr "თვისებები: ჰიპოთეზის შემოწმება"
 
-#: src/frontend/GuiObserver.cpp:448
+#: src/frontend/GuiObserver.cpp:437
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Seasonal Decomposition"
 msgstr "თვისებები: სეზონური დაშლა"
 
-#: src/frontend/GuiObserver.cpp:454
+#: src/frontend/GuiObserver.cpp:443
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Project"
 msgstr "თვისებები: პროექტი"
 
-#: src/frontend/GuiObserver.cpp:464
+#: src/frontend/GuiObserver.cpp:453
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Notebook"
 msgstr "%1 ბლოკნოტი"
 
-#: src/frontend/GuiObserver.cpp:466
+#: src/frontend/GuiObserver.cpp:455
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notebook"
 msgstr "თვისებები: წიგნაკი"
 
-#: src/frontend/GuiObserver.cpp:472
+#: src/frontend/GuiObserver.cpp:461
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notes"
 msgstr "თვისებები: შენიშვნები"
 
-#: src/frontend/GuiObserver.cpp:477
+#: src/frontend/GuiObserver.cpp:466
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Info Element"
 msgstr "თვისებები: საინფორმაციო ელემენტი"
 
-#: src/frontend/GuiObserver.cpp:484 src/frontend/GuiObserver.cpp:491
-#: src/frontend/GuiObserver.cpp:498
+#: src/frontend/GuiObserver.cpp:473 src/frontend/GuiObserver.cpp:480
+#: src/frontend/GuiObserver.cpp:487
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
 msgstr "თვისებები: MQTT მონაცემების წყარო"
 
-#: src/frontend/GuiObserver.cpp:504
+#: src/frontend/GuiObserver.cpp:493
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
 msgstr "თვისებები: ცოცხალი მონაცემთა წყარო"
 
-#: src/frontend/GuiObserver.cpp:518
+#: src/frontend/GuiObserver.cpp:507
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Folder"
 msgstr "თვისებები: საქაღალდე"
 
-#: src/frontend/GuiObserver.cpp:525
+#: src/frontend/GuiObserver.cpp:514
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Workbook"
 msgstr "თვისებები: სამუშაო წიგნი"
 
-#: src/frontend/GuiObserver.cpp:531
+#: src/frontend/GuiObserver.cpp:520
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Script"
@@ -17348,117 +17361,135 @@ msgstr "%1: მონიშნული მწკრივების წაშ
 msgid "%1: clear selected rows(s)"
 msgstr "%1: მონიშნული მწკრივების გასუფთავება"
 
-#: src/frontend/notebook/NotebookView.cpp:39
+#: src/frontend/notebook/NotebookView.cpp:40
 #, kde-format
 msgid "Failed to initialize %1."
 msgstr "%1-ის ინიციალიზაცია ჩავარდა."
 
-#: src/frontend/notebook/NotebookView.cpp:83
+#: src/frontend/notebook/NotebookView.cpp:84
 #, kde-format
 msgid "Evaluate Entry"
 msgstr "გამოსახულების დათვლა"
 
-#: src/frontend/notebook/NotebookView.cpp:87
+#: src/frontend/notebook/NotebookView.cpp:88
 #, kde-format
 msgid "Remove Current Entry"
 msgstr "მიმდინარე ჩანაწერის წაშლა"
 
-#: src/frontend/notebook/NotebookView.cpp:91
+#: src/frontend/notebook/NotebookView.cpp:92
 #, kde-format
 msgid "Command"
 msgstr "ბრძანება"
 
-#: src/frontend/notebook/NotebookView.cpp:101
+#: src/frontend/notebook/NotebookView.cpp:102
 #: src/frontend/widgets/LabelWidget.cpp:480
 #, kde-format
 msgid "Markdown"
 msgstr "მარკდაუნი"
 
 #. i18n: ectx: property (text), widget (QLabel, lTex)
-#: src/frontend/notebook/NotebookView.cpp:105
+#: src/frontend/notebook/NotebookView.cpp:106
 #: src/frontend/ui/settingsworksheetpage.ui:65
 #: src/frontend/widgets/LabelWidget.cpp:478
 #, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: src/frontend/notebook/NotebookView.cpp:111
+#: src/frontend/notebook/NotebookView.cpp:112
 #, kde-format
 msgid "Page Break"
 msgstr "გვერდის გაყოფა"
 
-#: src/frontend/notebook/NotebookView.cpp:123
+#: src/frontend/notebook/NotebookView.cpp:124
 #, kde-format
 msgid "Compute Eigenvectors"
 msgstr "საკუთრივი ვექტორების გამოთვლა"
 
-#: src/frontend/notebook/NotebookView.cpp:129
+#: src/frontend/notebook/NotebookView.cpp:130
 #, kde-format
 msgid "Create Matrix"
 msgstr "მატრიცის შექმნა"
 
-#: src/frontend/notebook/NotebookView.cpp:135
+#: src/frontend/notebook/NotebookView.cpp:136
 #, kde-format
 msgid "Compute Eigenvalues"
 msgstr "საკუთრივი მნიშვნელობების გამოთვლა"
 
-#: src/frontend/notebook/NotebookView.cpp:141
+#: src/frontend/notebook/NotebookView.cpp:142
 #, kde-format
 msgid "Invert Matrix"
 msgstr "მატრიცის ინვერსია"
 
-#: src/frontend/notebook/NotebookView.cpp:159
+#: src/frontend/notebook/NotebookView.cpp:160
 #, kde-format
 msgid "Solve Equations"
 msgstr "ტოლობების ამოხსნა"
 
-#: src/frontend/notebook/NotebookView.cpp:182
+#: src/frontend/notebook/NotebookView.cpp:183
 #, kde-format
 msgid "Linear Algebra"
 msgstr "წრფივი ალგებრა"
 
-#: src/frontend/notebook/NotebookView.cpp:194
+#: src/frontend/notebook/NotebookView.cpp:195
 #, kde-format
 msgid "Calculate"
 msgstr "გამოთვლა"
 
-#: src/frontend/notebook/NotebookView.cpp:204
+#: src/frontend/notebook/NotebookView.cpp:205
 #, kde-format
 msgid "Settings"
 msgstr "მორგება"
 
-#: src/frontend/notebook/NotebookView.cpp:253
+#: src/frontend/notebook/NotebookView.cpp:254
 #, kde-format
 msgid "Assistants"
 msgstr "დამხმარეები"
 
-#: src/frontend/notebook/NotebookView.cpp:285
+#: src/frontend/notebook/NotebookView.cpp:286
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:619
 #, kde-format
 msgid "Plot Data"
 msgstr "გრაფიკები"
 
-#: src/frontend/notebook/NotebookView.cpp:288
+#: src/frontend/notebook/NotebookView.cpp:290
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:682
+#, kde-format
+msgid "Statistical Analysis"
+msgstr "სტატისტიკური ანალიზი"
+
+#: src/frontend/notebook/NotebookView.cpp:291
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:683
+#, kde-format
+msgid "Hypothesis Test"
+msgstr "ჰიპოთეზის შემოწმება"
+
+#: src/frontend/notebook/NotebookView.cpp:297
 #, kde-format
 msgid "Variable Statistics..."
 msgstr "ცვლადის სტატისტიკა..."
 
-#: src/frontend/notebook/NotebookView.cpp:340
+#: src/frontend/notebook/NotebookView.cpp:350
 #, kde-format
 msgid "Interrupt"
 msgstr "შეწყვეტა"
 
-#: src/frontend/notebook/NotebookView.cpp:342
+#: src/frontend/notebook/NotebookView.cpp:352
 #, kde-format
 msgid "Calculating..."
 msgstr "გაანგარიშება..."
 
-#: src/frontend/notebook/NotebookView.cpp:346
+#: src/frontend/notebook/NotebookView.cpp:356
 #, kde-format
 msgid "Ready"
 msgstr "მზადაა"
 
-#: src/frontend/notebook/NotebookView.cpp:364
+#: src/frontend/notebook/NotebookView.cpp:375
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:965
+#, kde-format
+msgid "Hypothesis Test for %1"
+msgstr "ჰიპოთეზის შემოწმება %1-სთვის"
+
+#: src/frontend/notebook/NotebookView.cpp:389
 #, kde-format
 msgid "%1: variable statistics"
 msgstr "%1: ცვლადის სტატისტიკა"
@@ -19403,10 +19434,9 @@ msgid "Row Statisti&cs"
 msgstr "მწკრივის &სტატისტიკა"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:502
-#, fuzzy, kde-format
-#| msgid "Solid Line"
+#, kde-format
 msgid "Simplify Line"
-msgstr "მყარი ხაზი"
+msgstr "ხაზის გამარტივება"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:567
 #, kde-format
@@ -19435,16 +19465,6 @@ msgstr "ჩატევის განაწილება"
 msgid "Analyze and Plot Data"
 msgstr "მონაცემების ანალიზი და დახატვა"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:682
-#, kde-format
-msgid "Statistical Analysis"
-msgstr "სტატისტიკური ანალიზი"
-
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:683
-#, kde-format
-msgid "Hypothesis Test"
-msgstr "ჰიპოთეზის შემოწმება"
-
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:689
 #, kde-format
 msgid "Time Series Analysis"
@@ -19464,11 +19484,6 @@ msgstr "ნორმალიზაცია"
 #, kde-format
 msgid "Ladder of Powers"
 msgstr "ტიუკის ტრანსფორმაცია"
-
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:965
-#, kde-format
-msgid "Hypothesis Test for %1"
-msgstr "ჰიპოთეზის შემოწმება %1-სთვის"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1194
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1580

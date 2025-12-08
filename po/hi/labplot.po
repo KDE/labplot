@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-12-07 00:38+0000\n"
+"POT-Creation-Date: 2025-12-08 00:39+0000\n"
 "PO-Revision-Date: 2024-12-15 19:44+0530\n"
 "Last-Translator: Kali <EMAIL@ADDRESS>\n"
 "Language-Team: Hindi <fedora-trans-hi@redhat.com>\n"
@@ -268,7 +268,7 @@ msgstr "बड़ा पूर्णांक"
 #: src/backend/datasources/filters/AsciiFilter.cpp:557
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:532
 #: src/frontend/ActionsManager.cpp:509
-#: src/frontend/notebook/NotebookView.cpp:95
+#: src/frontend/notebook/NotebookView.cpp:96
 #: src/frontend/spreadsheet/SearchReplaceWidget.cpp:209
 #: src/frontend/ui/dockwidgets/axisdock.ui:1528
 #: src/frontend/ui/dockwidgets/processbehaviorchartdock.ui:634
@@ -8143,6 +8143,18 @@ msgid ""
 "curves. Fail to reject the null Hypothesis"
 msgstr ""
 
+#: src/backend/statistics/HypothesisTest.cpp:1716
+#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:80
+#, kde-format
+msgid "Parametric"
+msgstr "पैरामीट्रिक"
+
+#: src/backend/statistics/HypothesisTest.cpp:1746
+#, fuzzy, kde-format
+#| msgid "Parametric"
+msgid "Non-Parametric"
+msgstr "पैरामीट्रिक"
+
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:102
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:880
 #, fuzzy, kde-format
@@ -9096,7 +9108,7 @@ msgstr "सरलीकरण"
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:412
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2034
-#: src/frontend/notebook/NotebookView.cpp:147
+#: src/frontend/notebook/NotebookView.cpp:148
 #: src/frontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:268
 #, kde-format
 msgid "Differentiation"
@@ -9105,7 +9117,7 @@ msgstr "भेदभाव"
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:413
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2053
-#: src/frontend/notebook/NotebookView.cpp:153
+#: src/frontend/notebook/NotebookView.cpp:154
 #: src/frontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:159
 #, kde-format
 msgid "Integration"
@@ -9282,7 +9294,7 @@ msgstr "ऊर्ध्वाधर अक्ष"
 #: src/frontend/ActionsManager.cpp:513
 #: src/frontend/datasources/ImportFileWidget.cpp:113
 #: src/frontend/matrix/MatrixView.cpp:133
-#: src/frontend/notebook/NotebookView.cpp:108
+#: src/frontend/notebook/NotebookView.cpp:109
 #: src/frontend/widgets/BackgroundWidget.cpp:123
 #: src/frontend/worksheet/WorksheetView.cpp:241
 #: src/frontend/worksheet/WorksheetView.cpp:1356
@@ -9332,7 +9344,7 @@ msgstr "प्रति प्लॉट एक प्लॉट क्षेत�
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:575
 #: src/frontend/ActionsManager.cpp:847
-#: src/frontend/notebook/NotebookView.cpp:166
+#: src/frontend/notebook/NotebookView.cpp:167
 #: src/frontend/workbook/WorkbookView.cpp:135
 #: src/frontend/worksheet/WorksheetView.cpp:441
 #, kde-format
@@ -11813,7 +11825,7 @@ msgstr "ऑटो स्केल वाई"
 #: src/frontend/ActionsManager.cpp:631 src/frontend/ActionsManager.cpp:720
 #: src/frontend/datapicker/DatapickerImageView.cpp:119
 #: src/frontend/matrix/MatrixView.cpp:192
-#: src/frontend/notebook/NotebookView.cpp:52
+#: src/frontend/notebook/NotebookView.cpp:53
 #: src/frontend/worksheet/WorksheetView.cpp:148
 #: src/frontend/worksheet/WorksheetView.cpp:393
 #, kde-format
@@ -11823,7 +11835,7 @@ msgstr "ज़ूम इन"
 #: src/frontend/ActionsManager.cpp:635 src/frontend/ActionsManager.cpp:723
 #: src/frontend/datapicker/DatapickerImageView.cpp:122
 #: src/frontend/matrix/MatrixView.cpp:193
-#: src/frontend/notebook/NotebookView.cpp:56
+#: src/frontend/notebook/NotebookView.cpp:57
 #: src/frontend/worksheet/WorksheetView.cpp:151
 #: src/frontend/worksheet/WorksheetView.cpp:397
 #, kde-format
@@ -11951,22 +11963,22 @@ msgid "Sort the selected columns separately in descending order"
 msgstr "चयनित स्तंभों को अवरोही क्रम में अलग-अलग क्रमबद्ध करें"
 
 #: src/frontend/ActionsManager.cpp:726
-#: src/frontend/notebook/NotebookView.cpp:60
+#: src/frontend/notebook/NotebookView.cpp:61
 #, kde-format
 msgid "Find"
 msgstr "खोजो"
 
 #. i18n: ectx: property (text), widget (QPushButton, bRestart)
 #: src/frontend/ActionsManager.cpp:729
-#: src/frontend/notebook/NotebookView.cpp:68
+#: src/frontend/notebook/NotebookView.cpp:69
 #: src/frontend/ui/dockwidgets/notebookdock.ui:113
 #, kde-format
 msgid "Restart"
 msgstr "पुनः आरंभ करें"
 
 #: src/frontend/ActionsManager.cpp:732
-#: src/frontend/notebook/NotebookView.cpp:71
-#: src/frontend/notebook/NotebookView.cpp:344
+#: src/frontend/notebook/NotebookView.cpp:72
+#: src/frontend/notebook/NotebookView.cpp:354
 #, kde-format
 msgid "Evaluate Notebook"
 msgstr "मूल्यांकन नोटबुक"
@@ -12644,7 +12656,7 @@ msgid "Prepend"
 msgstr "प्रारंभ में लगा"
 
 #: src/frontend/datasources/ImportDialog.cpp:106
-#: src/frontend/notebook/NotebookView.cpp:64
+#: src/frontend/notebook/NotebookView.cpp:65
 #, kde-format
 msgid "Replace"
 msgstr "प्रतिस्थापित करें"
@@ -15490,11 +15502,6 @@ msgstr "काटीज़ियन"
 msgid "Polar"
 msgstr "ध्रुवीय"
 
-#: src/frontend/dockwidgets/XYEquationCurveDock.cpp:80
-#, kde-format
-msgid "Parametric"
-msgstr "पैरामीट्रिक"
-
 #: src/frontend/dockwidgets/XYEquationCurveDock.cpp:176
 #, kde-format
 msgid "x, min"
@@ -15737,13 +15744,13 @@ msgstr "प्रक्षेप बिंदुओं की संख्या
 msgid "Interpolation status: %1"
 msgstr "इंटरपोलेशन स्थिति: %1"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:186
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:185
 #, kde-format
 msgid "This method is much slower than any other"
 msgstr "यह विधि किसी भी अन्य विधि की तुलना में बहुत धीमी है"
 
 #. i18n-team: some algorithm are named after their creators like Douglas and Peucker, Visvalingam and Whyatt, Opheim, Lang
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:190
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:189
 #, kde-format
 msgid ""
 "Method to simplify the line:<ul><li>Douglas-Peucker - recursively divides "
@@ -15764,129 +15771,129 @@ msgid ""
 "the simplified line.</li></ul>"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:218
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:222
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:227
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:239
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:255
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:217
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:221
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:226
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:238
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:254
 #, kde-format
 msgid "Tolerance (distance):"
 msgstr "सहनशीलता (दूरी):"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:219
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:218
 #, kde-format
 msgid "Maximum perpendicular distance from the connecting line segment"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:223
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:222
 #, kde-format
 msgid "Maximum radial distance from the previous retained point"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:228
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:227
 #, kde-format
 msgid "Maximum perpendicular distance from the line segment"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:231
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:230
 #, kde-format
 msgid "Number of points:"
 msgstr "बिंदुओं की संख्या:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:232
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:231
 #, fuzzy, kde-format
 #| msgid "The number of vectors in the file"
 msgid "Target number of points in the simplified line"
 msgstr "फ़ाइल में वैक्टर की संख्या"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:235
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:234
 #, kde-format
 msgid "Step size:"
 msgstr "चरण आकार:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:236
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:235
 #, kde-format
 msgid "Keep every n-th point (n is the step size)"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:240
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:239
 #, kde-format
 msgid "Repeats:"
 msgstr "दोहराता है:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:241
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:240
 #, kde-format
 msgid "Maximum perpendicular distance from the reference line"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:242
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:241
 #, fuzzy, kde-format
 #| msgid "Number of iterations to perform."
 msgid "Number of iterations to apply the simplification"
 msgstr "निष्पादित किए जाने वाले पुनरावृत्तियों की संख्या."
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:245
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:244
 #, kde-format
 msgid "Tolerance (area):"
 msgstr "सहनशीलता (क्षेत्र):"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:246
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:245
 #, kde-format
 msgid "Minimum area contribution threshold for retaining points"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:249
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:248
 #, kde-format
 msgid "Minimum tolerance:"
 msgstr "न्यूनतम सहनशीलता:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:250
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:249
 #, kde-format
 msgid "Maximum tolerance:"
 msgstr "अधिकतम सहनशीलता:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:251
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:250
 #, kde-format
 msgid "Minimum distance threshold from retained point"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:252
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:251
 #, kde-format
 msgid "Maximum distance threshold from retained point"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:256
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:255
 #, kde-format
 msgid "Search region:"
 msgstr "खोज क्षेत्र:"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:257
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:256
 #, kde-format
 msgid "Minimum point spacing distance"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:258
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:257
 #, kde-format
 msgid "Search region size in units of points"
 msgstr ""
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:586
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:578
 #, fuzzy, kde-format
 #| msgid "status: %1"
 msgid "Status: %1"
 msgstr "स्थितिः %1"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:601
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:593
 #, kde-format
 msgid "number of points: %1"
 msgstr "अंकों की संख्या: %1"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:602
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:594
 #, kde-format
 msgid "positional squared error: %1"
 msgstr "स्थितीय वर्ग त्रुटि: %1"
 
-#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:603
+#: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:595
 #, kde-format
 msgid "area error: %1"
 msgstr "क्षेत्र त्रुटि: %1"
@@ -15995,157 +16002,157 @@ msgctxt "@title:window"
 msgid "Properties: Line Simplification"
 msgstr "गुण: प्रक्षेप"
 
-#: src/frontend/GuiObserver.cpp:306
+#: src/frontend/GuiObserver.cpp:295
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Differentiation"
 msgstr "गुण: विभेदन"
 
-#: src/frontend/GuiObserver.cpp:311
+#: src/frontend/GuiObserver.cpp:300
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Integration"
 msgstr "गुण: एकीकरण"
 
-#: src/frontend/GuiObserver.cpp:316
+#: src/frontend/GuiObserver.cpp:305
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Interpolation"
 msgstr "गुण: प्रक्षेप"
 
-#: src/frontend/GuiObserver.cpp:321
+#: src/frontend/GuiObserver.cpp:310
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Smoothing"
 msgstr "गुण: चिकना करना"
 
-#: src/frontend/GuiObserver.cpp:326
+#: src/frontend/GuiObserver.cpp:315
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fit"
 msgstr "गुण: फिट"
 
-#: src/frontend/GuiObserver.cpp:331
+#: src/frontend/GuiObserver.cpp:320
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Transform"
 msgstr "गुण: फ़ूरियर रूपांतरण"
 
-#: src/frontend/GuiObserver.cpp:336
+#: src/frontend/GuiObserver.cpp:325
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Hilbert Transform"
 msgstr "गुण: हिल्बर्ट ट्रांसफ़ॉर्म"
 
-#: src/frontend/GuiObserver.cpp:341
+#: src/frontend/GuiObserver.cpp:330
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Fourier Filter"
 msgstr "गुण: फ़ूरियर फ़िल्टर"
 
-#: src/frontend/GuiObserver.cpp:346
+#: src/frontend/GuiObserver.cpp:335
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Convolution/Deconvolution"
 msgstr "गुण: कनवल्शन/डिकनवल्शन"
 
-#: src/frontend/GuiObserver.cpp:351
+#: src/frontend/GuiObserver.cpp:340
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Auto-/Cross-Correlation"
 msgstr "गुण: ऑटो-/क्रॉस-सहसंबंध"
 
-#: src/frontend/GuiObserver.cpp:356
+#: src/frontend/GuiObserver.cpp:345
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Histogram"
 msgstr "गुण: हिस्टोग्राम"
 
-#: src/frontend/GuiObserver.cpp:362
+#: src/frontend/GuiObserver.cpp:351
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Bar Plot"
 msgstr "गुण: बार प्लॉट"
 
-#: src/frontend/GuiObserver.cpp:367
+#: src/frontend/GuiObserver.cpp:356
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Lollipop Plot"
 msgstr "गुण: लॉलीपॉप प्लॉट"
 
-#: src/frontend/GuiObserver.cpp:373
+#: src/frontend/GuiObserver.cpp:362
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Box Plot"
 msgstr "गुण: बॉक्स प्लॉट"
 
-#: src/frontend/GuiObserver.cpp:378
+#: src/frontend/GuiObserver.cpp:367
 #, kde-format
 msgctxt "@title:window"
 msgid "KDE Plot"
 msgstr "कहाँ बाड़"
 
-#: src/frontend/GuiObserver.cpp:383
+#: src/frontend/GuiObserver.cpp:372
 #, kde-format
 msgctxt "@title:window"
 msgid "Q-Q Plot"
 msgstr "क्यू-क्यू प्लॉट"
 
-#: src/frontend/GuiObserver.cpp:389
+#: src/frontend/GuiObserver.cpp:378
 #, kde-format
 msgctxt "@title:window"
 msgid "Process Behavior Chart"
 msgstr "प्रक्रिया व्यवहार चार्ट"
 
-#: src/frontend/GuiObserver.cpp:394
+#: src/frontend/GuiObserver.cpp:383
 #, kde-format
 msgctxt "@title:window"
 msgid "Run Chart"
 msgstr "रन चार्ट"
 
-#: src/frontend/GuiObserver.cpp:399
+#: src/frontend/GuiObserver.cpp:388
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Text Label"
 msgstr "गुण: पाठ लेबल"
 
-#: src/frontend/GuiObserver.cpp:404
+#: src/frontend/GuiObserver.cpp:393
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Image"
 msgstr "गुण: छवि"
 
-#: src/frontend/GuiObserver.cpp:409
+#: src/frontend/GuiObserver.cpp:398
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Custom Point"
 msgstr "गुण: कस्टम पॉइंट"
 
-#: src/frontend/GuiObserver.cpp:414
+#: src/frontend/GuiObserver.cpp:403
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Reference Line"
 msgstr "गुण: संदर्भ रेखा"
 
-#: src/frontend/GuiObserver.cpp:419
+#: src/frontend/GuiObserver.cpp:408
 #, kde-format
 msgctxt "@title:window"
 msgid "Reference Range"
 msgstr "संदर्भ सीमा"
 
-#: src/frontend/GuiObserver.cpp:424
+#: src/frontend/GuiObserver.cpp:413
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Datapicker Curve"
 msgstr "गुण: डेटापिकर वक्र"
 
-#: src/frontend/GuiObserver.cpp:429
+#: src/frontend/GuiObserver.cpp:418
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Data Extractor"
 msgstr "गुण: डेटा एक्सट्रैक्टर"
 
-#: src/frontend/GuiObserver.cpp:441
+#: src/frontend/GuiObserver.cpp:430
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Properties: Notes"
@@ -16153,7 +16160,7 @@ msgctxt "@title:window"
 msgid "Properties: Hypothesis Test"
 msgstr "गुण: नोट्स"
 
-#: src/frontend/GuiObserver.cpp:448
+#: src/frontend/GuiObserver.cpp:437
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Properties: Data Reduction"
@@ -16161,62 +16168,62 @@ msgctxt "@title:window"
 msgid "Properties: Seasonal Decomposition"
 msgstr "गुण: डेटा रिडक्शन"
 
-#: src/frontend/GuiObserver.cpp:454
+#: src/frontend/GuiObserver.cpp:443
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Project"
 msgstr "गुण: परियोजना"
 
-#: src/frontend/GuiObserver.cpp:464
+#: src/frontend/GuiObserver.cpp:453
 #, kde-format
 msgctxt "@title:window %1 is a Cantor backend"
 msgid "%1 Notebook"
 msgstr "%1 नोटबुक"
 
-#: src/frontend/GuiObserver.cpp:466
+#: src/frontend/GuiObserver.cpp:455
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notebook"
 msgstr "गुण: नोटबुक"
 
-#: src/frontend/GuiObserver.cpp:472
+#: src/frontend/GuiObserver.cpp:461
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Notes"
 msgstr "गुण: नोट्स"
 
-#: src/frontend/GuiObserver.cpp:477
+#: src/frontend/GuiObserver.cpp:466
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Info Element"
 msgstr "गुण: जानकारी तत्व"
 
-#: src/frontend/GuiObserver.cpp:484 src/frontend/GuiObserver.cpp:491
-#: src/frontend/GuiObserver.cpp:498
+#: src/frontend/GuiObserver.cpp:473 src/frontend/GuiObserver.cpp:480
+#: src/frontend/GuiObserver.cpp:487
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: MQTT Data Source"
 msgstr "गुण: MQTT डेटा स्रोत"
 
-#: src/frontend/GuiObserver.cpp:504
+#: src/frontend/GuiObserver.cpp:493
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Live Data Source"
 msgstr "गुण: लाइव डेटा स्रोत"
 
-#: src/frontend/GuiObserver.cpp:518
+#: src/frontend/GuiObserver.cpp:507
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Folder"
 msgstr "गुण: फ़ोल्डर"
 
-#: src/frontend/GuiObserver.cpp:525
+#: src/frontend/GuiObserver.cpp:514
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties: Workbook"
 msgstr "गुण: कार्यपुस्तिका"
 
-#: src/frontend/GuiObserver.cpp:531
+#: src/frontend/GuiObserver.cpp:520
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Properties: Fit"
@@ -17300,117 +17307,136 @@ msgstr "%1: चयनित पंक्तियाँ हटाएं"
 msgid "%1: clear selected rows(s)"
 msgstr "%1: चयनित पंक्तियाँ साफ़ करें"
 
-#: src/frontend/notebook/NotebookView.cpp:39
+#: src/frontend/notebook/NotebookView.cpp:40
 #, kde-format
 msgid "Failed to initialize %1."
 msgstr "%1 आरंभ करने में विफल."
 
-#: src/frontend/notebook/NotebookView.cpp:83
+#: src/frontend/notebook/NotebookView.cpp:84
 #, kde-format
 msgid "Evaluate Entry"
 msgstr "प्रविष्टि का मूल्यांकन करें"
 
-#: src/frontend/notebook/NotebookView.cpp:87
+#: src/frontend/notebook/NotebookView.cpp:88
 #, kde-format
 msgid "Remove Current Entry"
 msgstr "वर्तमान प्रविष्टि हटाएँ"
 
-#: src/frontend/notebook/NotebookView.cpp:91
+#: src/frontend/notebook/NotebookView.cpp:92
 #, kde-format
 msgid "Command"
 msgstr "आज्ञा"
 
-#: src/frontend/notebook/NotebookView.cpp:101
+#: src/frontend/notebook/NotebookView.cpp:102
 #: src/frontend/widgets/LabelWidget.cpp:480
 #, kde-format
 msgid "Markdown"
 msgstr "markdown"
 
 #. i18n: ectx: property (text), widget (QLabel, lTex)
-#: src/frontend/notebook/NotebookView.cpp:105
+#: src/frontend/notebook/NotebookView.cpp:106
 #: src/frontend/ui/settingsworksheetpage.ui:65
 #: src/frontend/widgets/LabelWidget.cpp:478
 #, kde-format
 msgid "LaTeX"
 msgstr "कंडोम"
 
-#: src/frontend/notebook/NotebookView.cpp:111
+#: src/frontend/notebook/NotebookView.cpp:112
 #, kde-format
 msgid "Page Break"
 msgstr "पृष्ठ ब्रेक"
 
-#: src/frontend/notebook/NotebookView.cpp:123
+#: src/frontend/notebook/NotebookView.cpp:124
 #, kde-format
 msgid "Compute Eigenvectors"
 msgstr "आइजेनवेक्टर की गणना करें"
 
-#: src/frontend/notebook/NotebookView.cpp:129
+#: src/frontend/notebook/NotebookView.cpp:130
 #, kde-format
 msgid "Create Matrix"
 msgstr "मैट्रिक्स बनाएं"
 
-#: src/frontend/notebook/NotebookView.cpp:135
+#: src/frontend/notebook/NotebookView.cpp:136
 #, kde-format
 msgid "Compute Eigenvalues"
 msgstr "आइजेनवैल्यू की गणना करें"
 
-#: src/frontend/notebook/NotebookView.cpp:141
+#: src/frontend/notebook/NotebookView.cpp:142
 #, kde-format
 msgid "Invert Matrix"
 msgstr "उलटा मैट्रिक्स"
 
-#: src/frontend/notebook/NotebookView.cpp:159
+#: src/frontend/notebook/NotebookView.cpp:160
 #, kde-format
 msgid "Solve Equations"
 msgstr "समीकरण हल करें"
 
-#: src/frontend/notebook/NotebookView.cpp:182
+#: src/frontend/notebook/NotebookView.cpp:183
 #, kde-format
 msgid "Linear Algebra"
 msgstr "लीनियर अलजेब्रा"
 
-#: src/frontend/notebook/NotebookView.cpp:194
+#: src/frontend/notebook/NotebookView.cpp:195
 #, kde-format
 msgid "Calculate"
 msgstr "गणना"
 
-#: src/frontend/notebook/NotebookView.cpp:204
+#: src/frontend/notebook/NotebookView.cpp:205
 #, kde-format
 msgid "Settings"
 msgstr "सेटिंग्स"
 
-#: src/frontend/notebook/NotebookView.cpp:253
+#: src/frontend/notebook/NotebookView.cpp:254
 #, kde-format
 msgid "Assistants"
 msgstr "सहायकों"
 
-#: src/frontend/notebook/NotebookView.cpp:285
+#: src/frontend/notebook/NotebookView.cpp:286
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:619
 #, kde-format
 msgid "Plot Data"
 msgstr "प्लॉट डेटा"
 
-#: src/frontend/notebook/NotebookView.cpp:288
+#: src/frontend/notebook/NotebookView.cpp:290
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:682
+#, fuzzy, kde-format
+#| msgid "Statistical Plots"
+msgid "Statistical Analysis"
+msgstr "सांख्यिकीय प्लॉट"
+
+#: src/frontend/notebook/NotebookView.cpp:291
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:683
+#, kde-format
+msgid "Hypothesis Test"
+msgstr ""
+
+#: src/frontend/notebook/NotebookView.cpp:297
 #, kde-format
 msgid "Variable Statistics..."
 msgstr "परिवर्तनशील सांख्यिकी..."
 
-#: src/frontend/notebook/NotebookView.cpp:340
+#: src/frontend/notebook/NotebookView.cpp:350
 #, kde-format
 msgid "Interrupt"
 msgstr "रुकावट डालना"
 
-#: src/frontend/notebook/NotebookView.cpp:342
+#: src/frontend/notebook/NotebookView.cpp:352
 #, kde-format
 msgid "Calculating..."
 msgstr "गणना..."
 
-#: src/frontend/notebook/NotebookView.cpp:346
+#: src/frontend/notebook/NotebookView.cpp:356
 #, kde-format
 msgid "Ready"
 msgstr "तैयार"
 
-#: src/frontend/notebook/NotebookView.cpp:364
+#: src/frontend/notebook/NotebookView.cpp:375
+#: src/frontend/spreadsheet/SpreadsheetView.cpp:965
+#, kde-format
+msgid "Hypothesis Test for %1"
+msgstr ""
+
+#: src/frontend/notebook/NotebookView.cpp:389
 #, kde-format
 msgid "%1: variable statistics"
 msgstr "%1: परिवर्तनशील आँकड़े"
@@ -19378,17 +19404,6 @@ msgstr "फिट वितरण"
 msgid "Analyze and Plot Data"
 msgstr "डेटा का विश्लेषण और प्लॉटिंग करें"
 
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:682
-#, fuzzy, kde-format
-#| msgid "Statistical Plots"
-msgid "Statistical Analysis"
-msgstr "सांख्यिकीय प्लॉट"
-
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:683
-#, kde-format
-msgid "Hypothesis Test"
-msgstr ""
-
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:689
 #, fuzzy, kde-format
 #| msgid "Statistical Plots"
@@ -19409,11 +19424,6 @@ msgstr "सामान्य"
 #, kde-format
 msgid "Ladder of Powers"
 msgstr "शक्तियों की सीढ़ी"
-
-#: src/frontend/spreadsheet/SpreadsheetView.cpp:965
-#, kde-format
-msgid "Hypothesis Test for %1"
-msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1194
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:1580
