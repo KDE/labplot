@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-08 00:39+0000\n"
-"PO-Revision-Date: 2025-11-30 12:31+0100\n"
+"PO-Revision-Date: 2025-12-08 12:16+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -8274,10 +8274,9 @@ msgid "Parametric"
 msgstr "Paramètrica"
 
 #: src/backend/statistics/HypothesisTest.cpp:1746
-#, fuzzy, kde-format
-#| msgid "Parametric"
+#, kde-format
 msgid "Non-Parametric"
-msgstr "Paramètrica"
+msgstr "No paramètrica"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:102
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:880
@@ -9205,10 +9204,9 @@ msgstr "Títol"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:411
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:448
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Line Simplification"
-msgstr "Simplificació"
+msgstr "Simplificació de línia"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:412
@@ -9727,23 +9725,20 @@ msgid "Distribution Fit to '%1'"
 msgstr "Ajust de la distribució a «%1»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2018
-#, fuzzy, kde-format
-#| msgid "%1: smooth '%2'"
+#, kde-format
 msgid "%1: simplify '%2'"
-msgstr "%1: suavitza «%2»"
+msgstr "%1: simplifica «%2»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2019
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:664
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Simplification of '%1'"
-msgstr "Simplificació"
+msgstr "Simplificació de «%1»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2026
-#, fuzzy, kde-format
-#| msgid "%1: add interpolation curve"
+#, kde-format
 msgid "%1: add line simplification curve"
-msgstr "%1: s'ha afegit una corba amb la interpolació"
+msgstr "%1: afig una corba de simplificació de línia"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2037
 #, kde-format
@@ -11056,10 +11051,9 @@ msgstr ""
 "estrictament monòton!"
 
 #: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:70
-#, fuzzy, kde-format
-#| msgid "%1: set options and perform the interpolation"
+#, kde-format
 msgid "%1: set options and perform the line simplification"
-msgstr "%1: establix les opcions i realitza la interpolació"
+msgstr "%1: establix les opcions i realitza la simplificació de línia"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:74
 #, kde-format
@@ -15969,6 +15963,20 @@ msgid ""
 "distance apart and ensuring no point deviates more than a set tolerance from "
 "the simplified line.</li></ul>"
 msgstr ""
+"Mètode per simplificar la línia:<ul><li>Douglas-Peucker - dividix "
+"recursivament la línia i només reté aquells punts que es desvien més d'un "
+"llindar especificat del segment de línia entre els punts d'inici i final.</"
+"li><li>Visvalingam-Whyatt - elimina iterativament el punt que contribuïx amb "
+"l'àrea menys efectiva a la forma del polígon fins que s'assolix un nombre "
+"desitjat de punts o llindar d'àrea.</li><li>Punt enèsim - només manté tots "
+"els punts enèsims.</li><li>Distància radial - mesura la distància de cada "
+"punt des del punt retingut anterior i només reté aquells que superen un "
+"llindar.</li> <li>Interpolació.</li><li>Opheim - utilitza tant la distància "
+"com la tolerància angular per a simplificar les línies. Reté punts només si "
+"cauen fora d'una distància especificada i un llindar angular des del punt "
+"retingut anterior.</li><li>Lang - reté els punts que són almenys una "
+"distància especificada apart i assegura que cap punt es desvia més d'una "
+"tolerància especificada des de la línia simplificada.</li></ul>"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:217
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:221
@@ -15982,17 +15990,17 @@ msgstr "Tolerància (distància):"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:218
 #, kde-format
 msgid "Maximum perpendicular distance from the connecting line segment"
-msgstr ""
+msgstr "Distància perpendicular màxima des del segment de línia de connexió"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:222
 #, kde-format
 msgid "Maximum radial distance from the previous retained point"
-msgstr ""
+msgstr "Distància radial màxima des del punt retingut anterior"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:227
 #, kde-format
 msgid "Maximum perpendicular distance from the line segment"
-msgstr ""
+msgstr "Distància perpendicular màxima des del segment de línia"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:230
 #, kde-format
@@ -16000,10 +16008,9 @@ msgid "Number of points:"
 msgstr "Nombre de punts:"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:231
-#, fuzzy, kde-format
-#| msgid "The number of vectors in the file"
+#, kde-format
 msgid "Target number of points in the simplified line"
-msgstr "El nombre de vectors en el fitxer"
+msgstr "Apunta un nombre de punts en la línia simplificada"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:234
 #, kde-format
@@ -16013,7 +16020,7 @@ msgstr "Mida del pas:"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:235
 #, kde-format
 msgid "Keep every n-th point (n is the step size)"
-msgstr ""
+msgstr "Manté cada punt enèsim (n és la mida del pas)"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:239
 #, kde-format
@@ -16023,13 +16030,12 @@ msgstr "Repeticions:"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:240
 #, kde-format
 msgid "Maximum perpendicular distance from the reference line"
-msgstr ""
+msgstr "Distància perpendicular màxima des de la línia de referència"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:241
-#, fuzzy, kde-format
-#| msgid "Number of iterations to perform."
+#, kde-format
 msgid "Number of iterations to apply the simplification"
-msgstr "Nombre d'iteracions que es realitzaran."
+msgstr "Nombre d'iteracions a aplicar la simplificació"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:244
 #, kde-format
@@ -16039,7 +16045,7 @@ msgstr "Tolerància (àrea):"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:245
 #, kde-format
 msgid "Minimum area contribution threshold for retaining points"
-msgstr ""
+msgstr "Llindar mínim de contribució de l'àrea dels punts de retenció"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:248
 #, kde-format
@@ -16054,12 +16060,12 @@ msgstr "Tolerància màx.:"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:250
 #, kde-format
 msgid "Minimum distance threshold from retained point"
-msgstr ""
+msgstr "Llindar mínim de distància des del punt retingut"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:251
 #, kde-format
 msgid "Maximum distance threshold from retained point"
-msgstr ""
+msgstr "Llindar màxim de distància des del punt retingut"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:255
 #, kde-format
@@ -16069,18 +16075,17 @@ msgstr "Regió de busca:"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:256
 #, kde-format
 msgid "Minimum point spacing distance"
-msgstr ""
+msgstr "Distància mínima de l'espaiat dels punts"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:257
 #, kde-format
 msgid "Search region size in units of points"
-msgstr ""
+msgstr "Mida de la regió de busca en unitats de punts"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:578
-#, fuzzy, kde-format
-#| msgid "status: %1"
+#, kde-format
 msgid "Status: %1"
-msgstr "estat: %1"
+msgstr "Estat: %1"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:593
 #, kde-format
@@ -16196,12 +16201,10 @@ msgid "Properties: Function Curve"
 msgstr "Propietats: Corba de funció"
 
 #: src/frontend/GuiObserver.cpp:290
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Interpolation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Line Simplification"
-msgstr "Propietats: Interpolació"
+msgstr "Propietats: Simplificació de línia"
 
 #: src/frontend/GuiObserver.cpp:295
 #, kde-format
@@ -19612,10 +19615,9 @@ msgid "Row Statisti&cs"
 msgstr "Estadístiques de les &files"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:502
-#, fuzzy, kde-format
-#| msgid "Solid Line"
+#, kde-format
 msgid "Simplify Line"
-msgstr "Línia contínua"
+msgstr "Simplificació de línia"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:567
 #, kde-format
@@ -26793,29 +26795,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Data Reduction"
-#~ msgstr "Reducció de les dades"
-
-#~ msgid "%1: reduce '%2'"
-#~ msgstr "%1: reduïx «%2»"
-
-#~ msgid "Reduction of '%1'"
-#~ msgstr "Reducció de «%1»"
-
-#~ msgid "%1: add data reduction curve"
-#~ msgstr "%1: s'ha afegit una corba amb la reducció"
-
-#~ msgid "%1: set options and perform the data reduction"
-#~ msgstr ""
-#~ "%1: establix les opcions de l'ajust i realitza la reducció de les dades"
-
-#~ msgid "Data reduction status: %1"
-#~ msgstr "Estat de la reducció de les dades: %1"
-
-#~ msgctxt "@title:window"
-#~ msgid "Properties: Data Reduction"
-#~ msgstr "Propietats: Reducció de dades"
-
-#~ msgid "Reduce Data"
-#~ msgstr "Reduïx les dades"

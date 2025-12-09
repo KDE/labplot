@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-08 00:39+0000\n"
-"PO-Revision-Date: 2025-12-06 18:31+0400\n"
+"PO-Revision-Date: 2025-12-08 16:54+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -8233,10 +8233,9 @@ msgid "Parametric"
 msgstr "بارامتري"
 
 #: src/backend/statistics/HypothesisTest.cpp:1746
-#, fuzzy, kde-format
-#| msgid "Parametric"
+#, kde-format
 msgid "Non-Parametric"
-msgstr "بارامتري"
+msgstr "لا بارامتري"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:102
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:880
@@ -9157,10 +9156,9 @@ msgstr "العنوان"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:411
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:448
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Line Simplification"
-msgstr "تبسيط"
+msgstr "تبسيط الخط"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:412
@@ -9672,23 +9670,20 @@ msgid "Distribution Fit to '%1'"
 msgstr "مطابقة التوزيع لـ «%1»"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2018
-#, fuzzy, kde-format
-#| msgid "%1: smooth '%2'"
+#, kde-format
 msgid "%1: simplify '%2'"
-msgstr "%1: سَلِس '%2'‏"
+msgstr "%1: بسِّط '%2'‏"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2019
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:664
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Simplification of '%1'"
-msgstr "تبسيط"
+msgstr "تبسيط '%1'"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2026
-#, fuzzy, kde-format
-#| msgid "%1: add interpolation curve"
+#, kde-format
 msgid "%1: add line simplification curve"
-msgstr "%1: أضف منحنى الاستكمال"
+msgstr "%1: أضف منحنى تبسيط الخط"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2037
 #, kde-format
@@ -10988,10 +10983,9 @@ msgid "interpolation failed since x data is not strictly monotonic increasing!"
 msgstr "فشل الاستيفاء لأن بيانات س لا تتزايد بشكل رتيب صارم!"
 
 #: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:70
-#, fuzzy, kde-format
-#| msgid "%1: set options and perform the interpolation"
+#, kde-format
 msgid "%1: set options and perform the line simplification"
-msgstr "%1: اِضبط الخيارات ونفِّذ الاستيفاء"
+msgstr "%1: اضبط الخيارات ونفِّذ تبسيط الخط"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:74
 #, kde-format
@@ -15783,6 +15777,19 @@ msgid ""
 "distance apart and ensuring no point deviates more than a set tolerance from "
 "the simplified line.</li></ul>"
 msgstr ""
+"طريقة تبسيط الخط:<ul><li>دوغلاس-بوكر (Douglas-Peucker) - تقسّم الخط تكراريًا "
+"وتحتفظ فقط بالنقاط التي تنحرف أكثر من عتبة محددة عن مقطع الخط بين نقطتي "
+"البداية والنهاية.</li><li>فيسفالينغام-وايت (Visvalingam-Whyatt) - تزيل بشكل "
+"متكرر النقطة التي تساهم بأقل مساحة فعالة في شكل المضلع حتى يتم الوصول إلى "
+"عدد مرغوب من النقاط أو عتبة للمساحة.</li><li>المسافة العمودية - تقيس المسافة "
+"العمودية لكل نقطة عن خط مرجعي وتحتفظ فقط بالنقاط التي تتجاوز عتبة.</"
+"li><li>النقطة ن (n-th Point) - تبقي على كل نقطة ن فقط.</li><li>المسافة "
+"القطرية - تقيس مسافة كل نقطة عن النقطة المحتفظ بها السابقة وتحتفظ فقط "
+"بالنقاط التي تتجاوز عتبة.</li><li>الاستيفاء.</li><li>أوفايم (Opheim) - "
+"تستخدم كل من التسامح للمسافة والزاوية لتبسيط الخطوط. وتحتفظ بالنقاط فقط إذا "
+"سقطت خارج مسافة محددة وعتبة زاوية من النقطة المحتفظ بها السابقة.</"
+"li><li>لانغ (Lang) - تحتفظ بالنقاط التي تفصل بينها مسافة محددة على الأقل "
+"وتضمن أن لا تنحرف أي نقطة أكثر من تسامح معين عن الخط المبسّط.</li></ul>"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:217
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:221
@@ -15796,17 +15803,17 @@ msgstr "التفاوت (المسافة):"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:218
 #, kde-format
 msgid "Maximum perpendicular distance from the connecting line segment"
-msgstr ""
+msgstr "أقصى مسافة عمودية عن مقطع الخط الواصل"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:222
 #, kde-format
 msgid "Maximum radial distance from the previous retained point"
-msgstr ""
+msgstr "أقصى مسافة قطرية عن النقطة المحتفظ بها السابقة"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:227
 #, kde-format
 msgid "Maximum perpendicular distance from the line segment"
-msgstr ""
+msgstr "أقصى مسافة عمودية عن مقطع الخط"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:230
 #, kde-format
@@ -15814,10 +15821,9 @@ msgid "Number of points:"
 msgstr "عدد النقاط:"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:231
-#, fuzzy, kde-format
-#| msgid "The number of vectors in the file"
+#, kde-format
 msgid "Target number of points in the simplified line"
-msgstr "عدد المُتَّجِهات في الملف"
+msgstr "العدد المستهدف للنقاط في الخط المبسّط"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:234
 #, kde-format
@@ -15827,7 +15833,7 @@ msgstr "حجم الخطوة:"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:235
 #, kde-format
 msgid "Keep every n-th point (n is the step size)"
-msgstr ""
+msgstr "احتفظ بكل نقطة ن (ن هي حجم الخطوة)"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:239
 #, kde-format
@@ -15837,13 +15843,12 @@ msgstr "يتكرّر:"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:240
 #, kde-format
 msgid "Maximum perpendicular distance from the reference line"
-msgstr ""
+msgstr "أقصى مسافة عمودية عن الخط المرجعي"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:241
-#, fuzzy, kde-format
-#| msgid "Number of iterations to perform."
+#, kde-format
 msgid "Number of iterations to apply the simplification"
-msgstr "عدد التكرارات اللازمة للإجراء."
+msgstr "عدد التكرارات لتطبيق التبسيط"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:244
 #, kde-format
@@ -15853,7 +15858,7 @@ msgstr "التفاوت (المساحة):"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:245
 #, kde-format
 msgid "Minimum area contribution threshold for retaining points"
-msgstr ""
+msgstr "الحد الأدنى لعتبة المساهمة في المساحة للاحتفاظ بالنقاط"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:248
 #, kde-format
@@ -15868,12 +15873,12 @@ msgstr "الحد الأقصى للتفاوت:"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:250
 #, kde-format
 msgid "Minimum distance threshold from retained point"
-msgstr ""
+msgstr "الحد الأدنى لعتبة المسافة عن النقطة المحتفظ بها"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:251
 #, kde-format
 msgid "Maximum distance threshold from retained point"
-msgstr ""
+msgstr "الحد الأقصى لعتبة المسافة عن النقطة المحتفظ بها"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:255
 #, kde-format
@@ -15883,16 +15888,15 @@ msgstr "منطقة البحث:"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:256
 #, kde-format
 msgid "Minimum point spacing distance"
-msgstr ""
+msgstr "الحد الأدنى لمسافة تباعد النقاط"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:257
 #, kde-format
 msgid "Search region size in units of points"
-msgstr ""
+msgstr "حجم منطقة البحث بوحدات من النقاط"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:578
-#, fuzzy, kde-format
-#| msgid "status: %1"
+#, kde-format
 msgid "Status: %1"
 msgstr "الحالة: %1"
 
@@ -16008,12 +16012,10 @@ msgid "Properties: Function Curve"
 msgstr "الخصائص: منحنى الدالة"
 
 #: src/frontend/GuiObserver.cpp:290
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Interpolation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Line Simplification"
-msgstr "الخصائص: استيفاء"
+msgstr "الخصائص: تبسيط الخط"
 
 #: src/frontend/GuiObserver.cpp:295
 #, kde-format
@@ -19386,10 +19388,9 @@ msgid "Row Statisti&cs"
 msgstr "إحصاءات الص&ف"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:502
-#, fuzzy, kde-format
-#| msgid "Solid Line"
+#, kde-format
 msgid "Simplify Line"
-msgstr "خط متصل"
+msgstr "بسّط الخط"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:567
 #, kde-format
