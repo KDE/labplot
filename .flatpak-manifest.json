@@ -369,28 +369,7 @@
                     "type": "dir",
                     "path": "."
                 }
-            ],
-	    "modules": [
-                {
-		 "name": "llvm18",
-		    "buildsystem": "simple",
-		    "build-commands": [
-			    "cmake -S llvm -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS=clang -DLLVM_TARGETS_TO_BUILD=Native -DLLVM_INCLUDE_TESTS=OFF -DLLVM_INCLUDE_DOCS=OFF -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_INCLUDE_BENCHMARKS=OFF -DLLVM_ENABLE_ASSERTIONS=OFF -DLLVM_BUILD_TOOLS=OFF -DLLVM_ENABLE_BINDINGS=OFF -DCLANG_BUILD_EXAMPLES=OFF -DLLVM_ENABLE_RTTI=OFF -DLLVM_ENABLE_EH=OFF",
-			    "ninja -C build libclang",
-			    "mkdir -p /app/lib /app/lib/clang/18/include",
-			    "cp -av build/lib/libclang.so.18.1.8 /app/lib",
-                            "ln -s /app/lib/libclang.so.18.1.8 /app/lib/libclang.so.18.1",
-                            "cp -r build/lib/clang/18/include/* /app/lib/clang/18/include/"
-		  ],
-		  "sources": [
-			    {
-			    "type": "archive",
-			    "url": "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/llvm-project-18.1.8.src.tar.xz",
-			    "sha256": "0b58557a6d32ceee97c8d533a59b9212d87e0fc4d2833924eb6c611247db2f2a"
-			}
-		]
-		}
-	    ]
+            ]
         }
     ]
 }
