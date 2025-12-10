@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-08 00:39+0000\n"
-"PO-Revision-Date: 2025-12-05 10:08+0100\n"
+"PO-Revision-Date: 2025-12-08 09:35+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -16004,7 +16004,7 @@ msgstr "Taille du pas :"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:235
 #, kde-format
 msgid "Keep every n-th point (n is the step size)"
-msgstr ""
+msgstr "Conservez chaque n-ième point (n est la taille du pas)"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:239
 #, kde-format
@@ -16060,16 +16060,15 @@ msgstr "Rechercher une région :"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:256
 #, kde-format
 msgid "Minimum point spacing distance"
-msgstr ""
+msgstr "Distance minimale d'espacement des points"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:257
 #, kde-format
 msgid "Search region size in units of points"
-msgstr ""
+msgstr "Taille de la région de recherche en unités de points"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:578
-#, fuzzy, kde-format
-#| msgid "status: %1"
+#, kde-format
 msgid "Status: %1"
 msgstr "État : %1"
 

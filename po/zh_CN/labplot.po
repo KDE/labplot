@@ -8057,10 +8057,9 @@ msgid "Parametric"
 msgstr "参数方程"
 
 #: src/backend/statistics/HypothesisTest.cpp:1746
-#, fuzzy, kde-format
-#| msgid "Parametric"
+#, kde-format
 msgid "Non-Parametric"
-msgstr "参数方程"
+msgstr ""
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:102
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:880
@@ -8981,10 +8980,9 @@ msgstr "标题"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:411
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:448
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
-#, fuzzy, kde-format
-#| msgid "Magnification"
+#, kde-format
 msgid "Line Simplification"
-msgstr "放大镜"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:412
@@ -9496,17 +9494,15 @@ msgid "Distribution Fit to '%1'"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2018
-#, fuzzy, kde-format
-#| msgid "%1: duplicated '%2'"
+#, kde-format
 msgid "%1: simplify '%2'"
-msgstr "%1：创建“%2”的副本"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2019
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:664
-#, fuzzy, kde-format
-#| msgid "Interpolation of '%1'"
+#, kde-format
 msgid "Simplification of '%1'"
-msgstr "'%1' 的插值"
+msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2026
 #, kde-format
@@ -15482,10 +15478,9 @@ msgid "Number of points:"
 msgstr ""
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:231
-#, fuzzy, kde-format
-#| msgid "The number of vectors in the file"
+#, kde-format
 msgid "Target number of points in the simplified line"
-msgstr "文件所表示数据的列数"
+msgstr ""
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:234
 #, kde-format
@@ -15558,10 +15553,9 @@ msgid "Search region size in units of points"
 msgstr ""
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:578
-#, fuzzy, kde-format
-#| msgid "status: %1"
+#, kde-format
 msgid "Status: %1"
-msgstr "状态: %1"
+msgstr ""
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:593
 #, kde-format
@@ -15675,12 +15669,10 @@ msgid "Properties: Function Curve"
 msgstr "属性：函数曲线"
 
 #: src/frontend/GuiObserver.cpp:290
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Interpolation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Line Simplification"
-msgstr "属性：插值"
+msgstr ""
 
 #: src/frontend/GuiObserver.cpp:295
 #, kde-format
@@ -18995,10 +18987,9 @@ msgid "Row Statisti&cs"
 msgstr "行统计(&C)"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:502
-#, fuzzy, kde-format
-#| msgid "Solid Line"
+#, kde-format
 msgid "Simplify Line"
-msgstr "实线"
+msgstr ""
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:567
 #, kde-format
@@ -26081,16 +26072,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
-
-#~ msgid "Data Reduction"
-#~ msgstr "数据规约"
-
-#~ msgid "Reduction of '%1'"
-#~ msgstr "'%1' 的规约"
-
-#~ msgctxt "@title:window"
-#~ msgid "Properties: Data Reduction"
-#~ msgstr "属性：数据规约"
-
-#~ msgid "Reduce Data"
-#~ msgstr "数据规约"

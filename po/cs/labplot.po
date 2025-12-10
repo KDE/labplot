@@ -8076,10 +8076,9 @@ msgstr "Parametrický"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:102
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:880
-#, fuzzy, kde-format
-#| msgid "Results:"
+#, kde-format
 msgid "Result"
-msgstr "Výsledky:"
+msgstr "Výsledek"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:111
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:146
@@ -8117,10 +8116,9 @@ msgstr "Pracovní list"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:139
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:167
-#, fuzzy, kde-format
-#| msgid "Original Size"
+#, kde-format
 msgid "Original"
-msgstr "Původní velikost"
+msgstr "Originál"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:143
 #, fuzzy, kde-format
@@ -15567,10 +15565,9 @@ msgid "Search region size in units of points"
 msgstr ""
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:578
-#, fuzzy, kde-format
-#| msgid "status: %1"
+#, kde-format
 msgid "Status: %1"
-msgstr "stav: %1"
+msgstr "Stav: %1"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:593
 #, kde-format
@@ -23052,7 +23049,7 @@ msgstr "Období:"
 #: src/frontend/ui/dockwidgets/seasonaldecompositiondock.ui:173
 #, kde-format
 msgid "Lambda:"
-msgstr ""
+msgstr "Lambda:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBaselineParameter3)
 #. i18n: ectx: property (text), widget (QLabel, lMSTLIterations)
