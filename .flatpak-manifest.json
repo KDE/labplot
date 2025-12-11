@@ -229,7 +229,8 @@
             "buildsystem": "cmake-ninja",
             "config-opts": [
                 "-DADS_VERSION=4.0.3",
-                "-DQT_VERSION_MAJOR=6"
+                "-DQT_VERSION_MAJOR=6",
+                "-DCMAKE_CXX_FLAGS=-I/usr/include/QtGui/6.10.1/QtGui"
             ],
             "sources": [
                 {
@@ -317,6 +318,9 @@
         },
         {
             "name": "ixion",
+            "config-opts": [
+                "--with-boost=/app"
+            ],
             "sources": [
                 {
                     "type": "archive",
@@ -327,6 +331,9 @@
         },
         {
             "name": "orcus",
+            "config-opts": [
+                "--with-boost=/app"
+            ],
             "sources": [
                 {
                     "type": "archive",
