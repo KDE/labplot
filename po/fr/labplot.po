@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-12-08 00:39+0000\n"
-"PO-Revision-Date: 2025-12-08 09:35+0100\n"
+"PO-Revision-Date: 2025-12-09 18:43+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -8243,10 +8243,9 @@ msgid "Parametric"
 msgstr "Paramétrique"
 
 #: src/backend/statistics/HypothesisTest.cpp:1746
-#, fuzzy, kde-format
-#| msgid "Parametric"
+#, kde-format
 msgid "Non-Parametric"
-msgstr "Paramétrique"
+msgstr "Non paramétrique"
 
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:102
 #: src/backend/timeseriesanalysis/SeasonalDecomposition.cpp:880
@@ -9169,10 +9168,9 @@ msgstr "Titre"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:411
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:448
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2015
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Line Simplification"
-msgstr "Simplification"
+msgstr "Simplification de ligne"
 
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:412
@@ -9688,23 +9686,20 @@ msgid "Distribution Fit to '%1'"
 msgstr "Distribution ajustée à « %1 »"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2018
-#, fuzzy, kde-format
-#| msgid "%1: smooth '%2'"
+#, kde-format
 msgid "%1: simplify '%2'"
-msgstr "%1 : lisser « %2 »"
+msgstr "%1 : simplifier « %2 »"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2019
 #: src/frontend/spreadsheet/PlotDataDialog.cpp:664
-#, fuzzy, kde-format
-#| msgid "Simplification"
+#, kde-format
 msgid "Simplification of '%1'"
-msgstr "Simplification"
+msgstr "Simplification de « %1 »"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2026
-#, fuzzy, kde-format
-#| msgid "%1: add interpolation curve"
+#, kde-format
 msgid "%1: add line simplification curve"
-msgstr "%1 : ajouter une courbe d'interpolation"
+msgstr "%1 : ajouter une courbe de simplification de ligne"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:2037
 #, kde-format
@@ -11016,10 +11011,9 @@ msgstr ""
 "et croissantes !"
 
 #: src/backend/worksheet/plots/cartesian/XYLineSimplificationCurve.cpp:70
-#, fuzzy, kde-format
-#| msgid "%1: set options and perform the interpolation"
+#, kde-format
 msgid "%1: set options and perform the line simplification"
-msgstr "%1 : définir les options et réaliser une interpolation."
+msgstr "%1 : définir les options et réaliser une ligne de simplification"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:74
 #, kde-format
@@ -15960,6 +15954,24 @@ msgid ""
 "distance apart and ensuring no point deviates more than a set tolerance from "
 "the simplified line.</li></ul>"
 msgstr ""
+"Méthode pour simplifier la ligne :<ul><li>Douglas-Peucker - divise la ligne "
+"de manière récursive et conserve uniquement les points qui s'écartent de "
+"plus d'un seuil spécifié du segment de ligne entre les points de début et de "
+"fin,</li><li>Visvalingam-Whatatt - supprime de façon itérative le point qui "
+"contribue à la zone la moins efficace à la forme du polygone jusqu'à ce "
+"qu'un nombre souhaité de points ou un seuil de zone soit atteint,</"
+"li><li>Distance perpendiculaire - mesure la distance perpendiculaire de "
+"chacun point à partir d'une ligne de référence et ne retient que ceux "
+"dépassant un seuil,</li><li>N-ième point - conserve uniquement chaque n-ième "
+"point,</li><li>Distance radiale - mesure la distance de chaque point par "
+"rapport au point précédent retenu et ne retient que ceux dépassant un seuil."
+"</li><li>Interpolation,</li><li>Opheim - utilise à la fois la distance et la "
+"tolérance angulaire pour simplifier les lignes. Il ne retient que des points "
+"que s’ils tombent en dehors d’une distance et d’un seuil angulaire spécifiés "
+"par rapport au point précédent retenu ,<li>Lang - retient des points qui "
+"sont au moins à une distance spécifiée et qui garantissent qu’aucun point ne "
+"s’écarte de plus d’une tolérance définie par rapport à la ligne simplifiée. "
+"</li></ul>"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:217
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:221
@@ -15974,16 +15986,18 @@ msgstr "Tolérance (Distance) :"
 #, kde-format
 msgid "Maximum perpendicular distance from the connecting line segment"
 msgstr ""
+"Distance maximale perpendiculaire à partir du segment de la ligne de "
+"connexion"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:222
 #, kde-format
 msgid "Maximum radial distance from the previous retained point"
-msgstr ""
+msgstr "Distance maximale radiale à partir du point retenu précédent"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:227
 #, kde-format
 msgid "Maximum perpendicular distance from the line segment"
-msgstr ""
+msgstr "Distance maximale perpendiculaire à partir du segment de droite"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:230
 #, kde-format
@@ -15991,10 +16005,9 @@ msgid "Number of points:"
 msgstr "Nombre de points :"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:231
-#, fuzzy, kde-format
-#| msgid "The number of vectors in the file"
+#, kde-format
 msgid "Target number of points in the simplified line"
-msgstr "Le nombre de vecteurs dans le fichier"
+msgstr "Nombre cible de points  dans la ligne simplifiée"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:234
 #, kde-format
@@ -16014,13 +16027,12 @@ msgstr "Répétitions :"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:240
 #, kde-format
 msgid "Maximum perpendicular distance from the reference line"
-msgstr ""
+msgstr "Distance maximale perpendiculaire à partir de la ligne de référence"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:241
-#, fuzzy, kde-format
-#| msgid "Number of iterations to perform."
+#, kde-format
 msgid "Number of iterations to apply the simplification"
-msgstr "Nombre d'itérations à réaliser."
+msgstr "Nombre d'itérations pour appliquer la simplification"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:244
 #, kde-format
@@ -16030,7 +16042,7 @@ msgstr "Tolérance (Zone) :"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:245
 #, kde-format
 msgid "Minimum area contribution threshold for retaining points"
-msgstr ""
+msgstr "Seuil minimal de contribution à la zone pour retenir les points"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:248
 #, kde-format
@@ -16045,12 +16057,12 @@ msgstr "Tolérance maximale :"
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:250
 #, kde-format
 msgid "Minimum distance threshold from retained point"
-msgstr ""
+msgstr "Seuil minimal de distance du point retenu"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:251
 #, kde-format
 msgid "Maximum distance threshold from retained point"
-msgstr ""
+msgstr "Seuil maximal de distance du point retenu"
 
 #: src/frontend/dockwidgets/XYLineSimplificationCurveDock.cpp:255
 #, kde-format
@@ -16186,12 +16198,10 @@ msgid "Properties: Function Curve"
 msgstr "Propriétés : courbe de fonction"
 
 #: src/frontend/GuiObserver.cpp:290
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Properties: Interpolation"
+#, kde-format
 msgctxt "@title:window"
 msgid "Properties: Line Simplification"
-msgstr "Propriétés : interpolation"
+msgstr "Propriétés : simplification de ligne"
 
 #: src/frontend/GuiObserver.cpp:295
 #, kde-format
@@ -19607,10 +19617,9 @@ msgid "Row Statisti&cs"
 msgstr "Statistiques de la ligne"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:502
-#, fuzzy, kde-format
-#| msgid "Solid Line"
+#, kde-format
 msgid "Simplify Line"
-msgstr "Ligne pleine"
+msgstr "Simplifier la ligne"
 
 #: src/frontend/spreadsheet/SpreadsheetView.cpp:567
 #, kde-format
