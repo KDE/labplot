@@ -12451,7 +12451,7 @@ msgstr "Establiu un nom únic."
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:227
 #, kde-format
 msgid "Host name and port must be unique."
-msgstr "El nom d'amfitrió i el port cal que siguen únics."
+msgstr "El nom i el port de l'amfitrió cal que siguen únics."
 
 #: src/frontend/datasources/MQTTConnectionManagerWidget.cpp:208
 #, kde-format
@@ -19698,7 +19698,7 @@ msgstr "Controlador:"
 #: src/frontend/ui/datasources/mqttconnectionmanagerwidget.ui:66
 #, kde-format
 msgid "Host:"
-msgstr "Màquina:"
+msgstr "Amfitrió:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPort)
 #. i18n: ectx: property (text), widget (QLabel, lSerialPort)
