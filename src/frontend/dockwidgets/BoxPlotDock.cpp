@@ -12,9 +12,9 @@
 #include "backend/lib/macros.h"
 #include "frontend/TemplateHandler.h"
 #include "frontend/widgets/BackgroundWidget.h"
+#include "frontend/widgets/DataColumnsWidget.h"
 #include "frontend/widgets/LineWidget.h"
 #include "frontend/widgets/SymbolWidget.h"
-#include "frontend/widgets/TreeViewComboBox.h"
 
 #include <KConfig>
 
@@ -26,18 +26,12 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	setVisibilityWidgets(ui.chkVisible, ui.chkLegendVisible);
 
 	// Tab "General"
-	m_buttonNew = new QPushButton();
-	m_buttonNew->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
-	connect(m_buttonNew, &QPushButton::clicked, this, &BoxPlotDock::addDataColumn);
-
-	m_gridLayout = new QGridLayout(ui.frameDataColumns);
-	m_gridLayout->setContentsMargins(0, 0, 0, 0);
-	m_gridLayout->setHorizontalSpacing(2);
-	m_gridLayout->setVerticalSpacing(2);
-	ui.frameDataColumns->setLayout(m_gridLayout);
+	auto* gridLayout = static_cast<QGridLayout*>(ui.tabGeneral->layout());
+	m_dataColumnsWidget = new DataColumnsWidget(this);
+	gridLayout->addWidget(m_dataColumnsWidget, 4, 2, 1, 1);
 
 	// Tab "Box"
-	auto* gridLayout = static_cast<QGridLayout*>(ui.tabBox->layout());
+	gridLayout = static_cast<QGridLayout*>(ui.tabBox->layout());
 	backgroundWidget = new BackgroundWidget(ui.tabBox);
 	gridLayout->addWidget(backgroundWidget, 5, 0, 1, 3);
 
@@ -80,6 +74,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 
 	// SLOTS
 	// Tab "General"
+	connect(m_dataColumnsWidget, &DataColumnsWidget::dataColumnsChanged, this, &BoxPlotDock::dataColumnsChanged);
 	connect(ui.cbOrdering, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::orderingChanged);
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::orientationChanged);
 	connect(ui.chkVariableWidth, &QCheckBox::toggled, this, &BoxPlotDock::variableWidthChanged);
@@ -153,7 +148,6 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	ui.chkLegendVisible->setChecked(m_boxPlot->legendVisible());
 	ui.chkVisible->setChecked(m_boxPlot->isVisible());
 	load();
-	loadDataColumns();
 
 	updatePlotRangeList();
 
@@ -187,68 +181,6 @@ void BoxPlotDock::setModel() {
 
 	QList<AspectType> list{AspectType::Column};
 	model->setSelectableAspects(list);
-}
-
-void BoxPlotDock::loadDataColumns() {
-	// add the combobox for the first column, is always present
-	if (m_dataComboBoxes.count() == 0)
-		addDataColumn();
-
-	int count = m_boxPlot->dataColumns().count();
-	ui.cbNumber->clear();
-
-	auto* model = aspectModel();
-	if (count != 0) {
-		// box plot has already data columns, make sure we have the proper number of comboboxes
-		int diff = count - m_dataComboBoxes.count();
-		if (diff > 0) {
-			for (int i = 0; i < diff; ++i)
-				addDataColumn();
-		} else if (diff < 0) {
-			for (int i = diff; i != 0; ++i)
-				removeDataColumn();
-		}
-
-		// show the columns in the comboboxes
-		for (int i = 0; i < count; ++i) {
-			m_dataComboBoxes.at(i)->setModel(model); // the model might have changed in-between, reset the current model
-			m_dataComboBoxes.at(i)->setAspect(m_boxPlot->dataColumns().at(i), m_boxPlot->dataColumnPaths().at(i));
-		}
-
-		// show columns names in the combobox for the selection of the box to be modified
-		for (int i = 0; i < count; ++i)
-			if (m_boxPlot->dataColumns().at(i))
-				ui.cbNumber->addItem(m_boxPlot->dataColumns().at(i)->name());
-	} else {
-		// no data columns set in the box plot yet, we show the first combo box only and reset its model
-		m_dataComboBoxes.first()->setModel(model);
-		m_dataComboBoxes.first()->setAspect(nullptr);
-		for (int i = 1; i < m_dataComboBoxes.count(); ++i)
-			removeDataColumn();
-	}
-
-	// disable data column widgets if we're modifying more than one box plot at the same time
-	bool enabled = (m_boxPlots.count() == 1);
-	m_buttonNew->setVisible(enabled);
-	for (auto* cb : m_dataComboBoxes)
-		cb->setEnabled(enabled);
-	for (auto* b : m_removeButtons)
-		b->setVisible(enabled);
-
-	// select the first column after all of them were added to the combobox
-	ui.cbNumber->setCurrentIndex(0);
-}
-
-void BoxPlotDock::setDataColumns() const {
-	QVector<const AbstractColumn*> columns;
-
-	for (auto* cb : m_dataComboBoxes) {
-		auto* aspect = cb->currentAspect();
-		if (aspect && aspect->type() == AspectType::Column)
-			columns << static_cast<AbstractColumn*>(aspect);
-	}
-
-	m_boxPlot->setDataColumns(columns);
 }
 
 /*
@@ -330,62 +262,10 @@ void BoxPlotDock::retranslateUi() {
 }
 
 //**********************************************************
-//*** SLOTs for changes triggered in BoxPlotDock *****
+//***** SLOTs for changes triggered in BoxPlotDock *********
 //**********************************************************
-void BoxPlotDock::addDataColumn() {
-	auto* cb = new TreeViewComboBox(this);
-	cb->setTopLevelClasses(TreeViewComboBox::plotColumnTopLevelClasses());
-	cb->setModel(aspectModel());
-	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &BoxPlotDock::dataColumnChanged);
-
-	int index = m_dataComboBoxes.size();
-
-	if (index == 0) {
-		QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Preferred);
-		sizePolicy1.setHorizontalStretch(0);
-		sizePolicy1.setVerticalStretch(0);
-		sizePolicy1.setHeightForWidth(cb->sizePolicy().hasHeightForWidth());
-		cb->setSizePolicy(sizePolicy1);
-	} else {
-		auto* button = new QPushButton();
-		button->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
-		connect(button, &QPushButton::clicked, this, &BoxPlotDock::removeDataColumn);
-		m_gridLayout->addWidget(button, index, 1, 1, 1);
-		m_removeButtons << button;
-
-		ui.lOrdering->setEnabled(true);
-		ui.cbOrdering->setEnabled(true);
-	}
-
-	m_gridLayout->addWidget(cb, index, 0, 1, 1);
-	m_gridLayout->addWidget(m_buttonNew, index + 1, 1, 1, 1);
-
-	m_dataComboBoxes << cb;
-	ui.lDataColumn->setText(i18n("Columns:"));
-}
-
-void BoxPlotDock::removeDataColumn() {
-	auto* sender = static_cast<QPushButton*>(QObject::sender());
-	if (sender) {
-		// remove button was clicked, determine which one and
-		// delete it together with the corresponding combobox
-		for (int i = 0; i < m_removeButtons.count(); ++i) {
-			if (sender == m_removeButtons.at(i)) {
-				delete m_dataComboBoxes.takeAt(i + 1);
-				delete m_removeButtons.takeAt(i);
-			}
-		}
-	} else {
-		// no sender is available, the function is being called directly in loadDataColumns().
-		// delete the last remove button together with the corresponding combobox
-		int index = m_removeButtons.count() - 1;
-		if (index >= 0) {
-			delete m_dataComboBoxes.takeAt(index + 1);
-			delete m_removeButtons.takeAt(index);
-		}
-	}
-
-	if (!m_removeButtons.isEmpty()) {
+void BoxPlotDock::dataColumnsChanged(QVector<const AbstractColumn*> columns) {
+	if (columns.count() > 1) {
 		ui.lDataColumn->setText(i18n("Columns:"));
 		ui.lOrdering->setEnabled(true);
 		ui.cbOrdering->setEnabled(true);
@@ -395,13 +275,8 @@ void BoxPlotDock::removeDataColumn() {
 		ui.cbOrdering->setEnabled(false);
 	}
 
-	if (!m_initializing)
-		setDataColumns();
-}
-
-void BoxPlotDock::dataColumnChanged(const QModelIndex&) {
 	CONDITIONAL_LOCK_RETURN;
-	setDataColumns();
+	m_boxPlot->setDataColumns(columns);
 }
 
 void BoxPlotDock::orderingChanged(int index) {
@@ -663,6 +538,7 @@ void BoxPlotDock::load() {
 	ui.cbOrientation->setCurrentIndex((int)m_boxPlot->orientation());
 	ui.chkVariableWidth->setChecked(m_boxPlot->variableWidth());
 	ui.chkNotches->setChecked(m_boxPlot->notchesEnabled());
+	loadDataColumns();
 
 	// box
 	ui.sbWidthFactor->setValue(round(m_boxPlot->widthFactor() * 100.));
@@ -683,6 +559,23 @@ void BoxPlotDock::load() {
 	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugWidth(), Worksheet::Unit::Point));
 	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugLength(), Worksheet::Unit::Point));
 	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugOffset(), Worksheet::Unit::Point));
+}
+
+void BoxPlotDock::loadDataColumns() {
+	// show columns names in the combobox for the selection of the box to be modified
+	ui.cbNumber->clear();
+	for (int i = 0; i < m_boxPlot->dataColumns().count(); ++i)
+		if (m_boxPlot->dataColumns().at(i))
+			ui.cbNumber->addItem(m_boxPlot->dataColumns().at(i)->name());
+
+	// select the first column after all of them were added to the combobox
+	ui.cbNumber->setCurrentIndex(0);
+
+	m_dataColumnsWidget->setDataColumns(m_boxPlot->dataColumns(), m_boxPlot->dataColumnPaths(), aspectModel());
+
+	// disable data column widgets if we're modifying more than one box plot at the same time
+	bool enabled = (m_boxPlots.count() == 1);
+	m_dataColumnsWidget->setEnabled(enabled);
 }
 
 void BoxPlotDock::loadConfig(KConfig& config) {
@@ -742,6 +635,7 @@ void BoxPlotDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry(QStringLiteral("Orientation"), ui.cbOrientation->currentIndex());
 	group.writeEntry(QStringLiteral("VariableWidth"), ui.chkVariableWidth->isChecked());
 	group.writeEntry(QStringLiteral("NotchesEnabled"), ui.chkNotches->isChecked());
+	loadDataColumns();
 
 	// box
 	group.writeEntry(QStringLiteral("WidthFactor"), ui.sbWidthFactor->value() / 100.0);
