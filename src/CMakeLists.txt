@@ -148,6 +148,7 @@ set(GUI_SOURCES
     ${FRONTEND_DIR}/statistics/HypothesisTestView.cpp
     ${FRONTEND_DIR}/widgets/BackgroundWidget.cpp
     ${FRONTEND_DIR}/widgets/ConstantsWidget.cpp
+    ${FRONTEND_DIR}/widgets/DataColumnsWidget.cpp
     ${FRONTEND_DIR}/widgets/ThemesComboBox.cpp
     ${FRONTEND_DIR}/widgets/ThemesWidget.cpp
     ${FRONTEND_DIR}/widgets/ExpressionTextEdit.cpp
