@@ -571,6 +571,7 @@ void BoxPlotDock::loadDataColumns() {
 	// select the first column after all of them were added to the combobox
 	ui.cbNumber->setCurrentIndex(0);
 
+	// show the data columns
 	m_dataColumnsWidget->setDataColumns(m_boxPlot->dataColumns(), m_boxPlot->dataColumnPaths(), aspectModel());
 
 	// disable data column widgets if we're modifying more than one box plot at the same time

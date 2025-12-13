@@ -364,9 +364,10 @@ void BarPlotDock::loadDataColumns() {
 	ui.cbNumber->setCurrentIndex(0);
 	ui.cbErrorBarsNumber->setCurrentIndex(0);
 
+	// show the data columns
 	m_dataColumnsWidget->setDataColumns(m_barPlot->dataColumns(), m_barPlot->dataColumnPaths(), aspectModel());
 
-	// disable data column widgets if we're modifying more than one box plot at the same time
+	// disable data column widgets if we're modifying more than one plot at the same time
 	bool enabled = (m_barPlots.count() == 1);
 	m_dataColumnsWidget->setEnabled(enabled);
 }
