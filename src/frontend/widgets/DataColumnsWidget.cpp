@@ -55,7 +55,7 @@ void DataColumnsWidget::setDataColumns(const QVector<const AbstractColumn*>& col
 	int count = columns.count();
 
 	if (count != 0) {
-		// box plot has already data columns, make sure we have the proper number of comboboxes
+		// data columns are present, make sure we have the proper number of comboboxes
 		int diff = count - m_dataComboBoxes.count();
 		if (diff > 0) {
 			for (int i = 0; i < diff; ++i)
@@ -71,7 +71,7 @@ void DataColumnsWidget::setDataColumns(const QVector<const AbstractColumn*>& col
 			m_dataComboBoxes.at(i)->setAspect(columns.at(i), columnPaths.at(i));
 		}
 	} else {
-		// no data columns set in the box plot yet, we show the first combo box only and reset its model
+		// no data columns set yet, we show the first combo box only and reset its model
 		m_dataComboBoxes.first()->setModel(model);
 		m_dataComboBoxes.first()->setAspect(nullptr);
 		for (int i = 1; i < m_dataComboBoxes.count(); ++i)
