@@ -275,6 +275,16 @@ void BoxPlotDock::dataColumnsChanged(QVector<const AbstractColumn*> columns) {
 		ui.cbOrdering->setEnabled(false);
 	}
 
+	// re-populate the combobox with the columns names after columns were changed
+	const int prevIndex = ui.cbNumber->currentIndex();
+	ui.cbNumber->clear();
+	for (int i = 0; i < columns.count(); ++i) {
+		if (columns.at(i))
+			ui.cbNumber->addItem(columns.at(i)->name());
+	}
+	const int newIndex = (prevIndex < columns.count()) ? prevIndex : 0;
+	ui.cbNumber->setCurrentIndex(newIndex);
+
 	CONDITIONAL_LOCK_RETURN;
 	m_boxPlot->setDataColumns(columns);
 }

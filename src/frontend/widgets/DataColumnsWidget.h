@@ -10,7 +10,6 @@
 #ifndef DATACOLUMNWIDGET_H
 #define DATACOLUMNWIDGET_H
 
-#include "backend/worksheet/Background.h"
 #include <QWidget>
 
 class AbstractColumn;
@@ -38,7 +37,7 @@ private:
 
 	void addDataColumn();
 	void removeDataColumn();
-	void setDataColumns();
+	void updateDataColumns();
 
 Q_SIGNALS:
 	void dataColumnsChanged(QVector<const AbstractColumn*>);

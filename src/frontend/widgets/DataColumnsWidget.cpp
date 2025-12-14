@@ -10,6 +10,7 @@
 #include "DataColumnsWidget.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AspectTreeModel.h"
+#include "backend/lib/macros.h"
 #include "frontend/widgets/TreeViewComboBox.h"
 
 #include <QPushButton>
@@ -128,15 +129,15 @@ void DataColumnsWidget::removeDataColumn() {
 	}
 
 	if (!m_initializing)
-		setDataColumns();
+		updateDataColumns();
 }
 
 void DataColumnsWidget::dataColumnChanged(const QModelIndex&) {
 	CONDITIONAL_LOCK_RETURN;
-	setDataColumns();
+	updateDataColumns();
 }
 
-void DataColumnsWidget::setDataColumns() {
+void DataColumnsWidget::updateDataColumns() {
 	QVector<const AbstractColumn*> columns;
 
 	for (auto* cb : m_dataComboBoxes) {

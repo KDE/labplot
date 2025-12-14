@@ -221,18 +221,24 @@ void BarPlotDock::removeXColumn() {
 }
 
 void BarPlotDock::dataColumnsChanged(QVector<const AbstractColumn*> columns) {
-	int newCount = columns.count();
-	int oldCount = m_barPlot->dataColumns().count();
-
-	if (newCount > oldCount) {
-		ui.cbNumber->addItem(QString::number(newCount));
-		ui.cbErrorBarsNumber->addItem(QString::number(newCount));
-	} else {
-		if (newCount != 0) {
-			ui.cbNumber->removeItem(ui.cbNumber->count() - 1);
-			ui.cbErrorBarsNumber->removeItem(ui.cbErrorBarsNumber->count() - 1);
+	// re-populate the combobox with the columns names after columns were changed
+	const int oldIndexNumber = ui.cbNumber->currentIndex();
+	const int oldIndexErrorBarsNumber = ui.cbErrorBarsNumber->currentIndex();
+	ui.cbNumber->clear();
+	ui.cbErrorBarsNumber->clear();
+	const int count = columns.count();
+	for (int i = 0; i < count; ++i) {
+		if (columns.at(i)) {
+			const auto& name = columns.at(i)->name();
+			ui.cbNumber->addItem(name);
+			ui.cbErrorBarsNumber->addItem(name);
 		}
 	}
+
+	const int newIndexNumber = (oldIndexNumber < count) ? oldIndexNumber : 0;
+	const int newIndexErrorBarsNumber = (oldIndexNumber < count) ? oldIndexErrorBarsNumber : 0;
+	ui.cbNumber->setCurrentIndex(newIndexNumber);
+	ui.cbErrorBarsNumber->setCurrentIndex(newIndexErrorBarsNumber);
 
 	CONDITIONAL_LOCK_RETURN;
 	m_barPlot->setDataColumns(columns);

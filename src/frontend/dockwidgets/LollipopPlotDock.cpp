@@ -192,18 +192,24 @@ void LollipopPlotDock::removeXColumn() {
 }
 
 void LollipopPlotDock::dataColumnsChanged(QVector<const AbstractColumn*> columns) {
-	int newCount = columns.count();
-	int oldCount = m_plot->dataColumns().count();
-
-	if (newCount > oldCount) {
-		ui.cbNumberLine->addItem(QString::number(newCount));
-		ui.cbNumberSymbol->addItem(QString::number(newCount));
-	} else {
-		if (newCount != 0) {
-			ui.cbNumberLine->removeItem(ui.cbNumberLine->count() - 1);
-			ui.cbNumberSymbol->removeItem(ui.cbNumberSymbol->count() - 1);
+	// re-populate the combobox with the columns names after columns were changed
+	const int oldIndexLine = ui.cbNumberLine->currentIndex();
+	const int oldIndexSymbol = ui.cbNumberSymbol->currentIndex();
+	ui.cbNumberLine->clear();
+	ui.cbNumberSymbol->clear();
+	const int count = columns.count();
+	for (int i = 0; i < count; ++i) {
+		if (columns.at(i)) {
+			const auto& name = columns.at(i)->name();
+			ui.cbNumberLine->addItem(name);
+			ui.cbNumberSymbol->addItem(name);
 		}
 	}
+
+	const int newIndexLine = (oldIndexLine < count) ? oldIndexLine : 0;
+	const int newIndexSymbol = (oldIndexSymbol < count) ? oldIndexSymbol : 0;
+	ui.cbNumberLine->setCurrentIndex(newIndexLine);
+	ui.cbNumberSymbol->setCurrentIndex(newIndexSymbol);
 
 	CONDITIONAL_LOCK_RETURN;
 	m_plot->setDataColumns(columns);
