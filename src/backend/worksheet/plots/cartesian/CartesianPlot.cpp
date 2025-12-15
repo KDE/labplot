@@ -168,8 +168,10 @@ void CartesianPlot::init(bool loading) {
 
 	m_coordinateSystems << new CartesianCoordinateSystem(this);
 
-	// TODO: load from KConfigGroup
+	KConfig config;
+	KConfigGroup group = config.group(QStringLiteral("CartesianPlot"));
 
+	// TODO: load from KConfigGroup
 	// offset between the plot area and the area defining the coordinate system, in scene units.
 	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
@@ -180,7 +182,11 @@ void CartesianPlot::init(bool loading) {
 	d->cursorLine->setColor(Qt::red); // TODO: use theme specific initial settings
 	d->cursorLine->setWidth(Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point));
 
-	// theme is not set at this point, initialize the color palette with default colors
+	d->plotColorMode = (PlotColorMode)group.readEntry(QStringLiteral("PlotColorMode"), (int)PlotColorMode::Theme);
+	d->theme = group.readEntry(QStringLiteral("Theme"), QString());
+	d->plotColorMap = group.readEntry(QStringLiteral("ColorMap"), QStringLiteral("berlin10"));
+
+	// initialize the color palette with default colors
 	d->updatePlotColorPalette();
 }
 

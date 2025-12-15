@@ -967,8 +967,8 @@ void CartesianPlotDock::plotColorModeChanged(int index) {
 void CartesianPlotDock::selectColorMap() {
 	auto* dlg = new ColorMapsDialog(this);
 	if (dlg->exec() == QDialog::Accepted) {
-		ui.lColorMapPreview->setPixmap(dlg->previewPixmap());
 		auto name = dlg->name();
+		ui.lColorMapPreview->setPixmap(ColorMapsManager::instance()->previewPixmap(name));
 
 		CONDITIONAL_LOCK_RETURN;
 		for (auto* plot : m_plotList)

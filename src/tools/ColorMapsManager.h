@@ -19,22 +19,19 @@ class QPixmap;
 class ColorMapsManager {
 public:
 	static ColorMapsManager* instance();
-	QStringList collectionNames() const;
 
+	QStringList collectionNames() const;
 	QString collectionInfo(const QString& collectionName) const;
 	QStringList colorMapNames(const QString& collectionName);
-
-	QVector<QColor> colors() const;
 	QVector<QColor> colors(const QString& colorMapNname);
-	QPixmap previewPixmap(const QString& colorMapNname) const;
-
-	void render(QPixmap&, const QString& name);
+	QPixmap previewPixmap(const QString& colorMapNname);
 
 private:
 	ColorMapsManager();
 	~ColorMapsManager();
 
 	void loadCollections();
+	void render(QPixmap&, const QString& name);
 
 	static ColorMapsManager* m_instance;
 
@@ -42,7 +39,6 @@ private:
 	QMap<QString, QStringList> m_colorMaps; // color maps in a collection (key = collection name, value = list of color map names)
 	QMap<QString, QStringList> m_colors; // colors (key = color map name, value = list of colors in the string representation)
 	QString m_jsonDir;
-	QVector<QColor> m_colormap;
 };
 
 #endif // COLORMAPSMANAGER_H

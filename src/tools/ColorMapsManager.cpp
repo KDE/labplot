@@ -111,12 +111,10 @@ QVector<QColor> ColorMapsManager::colors(const QString& name) {
 	return colors;
 }
 
-QPixmap ColorMapsManager::previewPixmap(const QString& colorMapNname) const {
-	return QPixmap();
-}
-
-QVector<QColor> ColorMapsManager::colors() const {
-	return m_colormap;
+QPixmap ColorMapsManager::previewPixmap(const QString& name) {
+	QPixmap pixmap;
+	render(pixmap, name);
+	return pixmap;
 }
 
 void ColorMapsManager::render(QPixmap& pixmap, const QString& name) {
@@ -129,23 +127,23 @@ void ColorMapsManager::render(QPixmap& pixmap, const QString& name) {
 	}
 
 	// convert from the string RGB representation to QColor
-	m_colormap.clear();
+	QVector<QColor> colors;
 	for (auto& rgb : m_colors[name]) {
 		QStringList rgbValues = rgb.split(QLatin1Char(','));
 		if (rgbValues.count() == 3)
-			m_colormap << QColor(rgbValues.at(0).toInt(), rgbValues.at(1).toInt(), rgbValues.at(2).toInt());
+			colors << QColor(rgbValues.at(0).toInt(), rgbValues.at(1).toInt(), rgbValues.at(2).toInt());
 		else if (rgbValues.count() == 4)
-			m_colormap << QColor(rgbValues.at(1).toInt(), rgbValues.at(2).toInt(), rgbValues.at(3).toInt());
+			colors << QColor(rgbValues.at(1).toInt(), rgbValues.at(2).toInt(), rgbValues.at(3).toInt());
 	}
 
 	// render the preview pixmap
 	int height = 80;
 	int width = 200;
-	int count = m_colormap.count();
+	int count = colors.count();
 	pixmap = QPixmap(width, height);
 	QPainter p(&pixmap);
 	int i = 0;
-	for (auto& color : m_colormap) {
+	for (auto& color : colors) {
 		p.setPen(color);
 		p.setBrush(color);
 		p.drawRect(i * width / count, 0, width / count, height);
